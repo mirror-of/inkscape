@@ -83,6 +83,8 @@ static GtkWidget * sp_zoom_toolbox_new (  SPDesktop *desktop);
 static GtkWidget * sp_star_toolbox_new (  SPDesktop *desktop);
 static GtkWidget * sp_rect_toolbox_new (  SPDesktop *desktop);
 static GtkWidget * sp_spiral_toolbox_new (SPDesktop *desktop);
+static GtkWidget * sp_calligraphy_toolbox_new (SPDesktop *desktop);
+static GtkWidget * sp_empty_toolbox_new (SPDesktop *desktop);
 
 static const struct {
     const gchar *type_name;
@@ -115,6 +117,10 @@ static const struct {
     { "SPStarContext",   "star_toolbox",   sp_star_toolbox_new },
     { "SPRectContext",   "rect_toolbox",   sp_rect_toolbox_new },
     { "SPSpiralContext", "spiral_toolbox", sp_spiral_toolbox_new },
+    { "SPPencilContext", "pencil_toolbox", NULL },
+    { "SPPenContext", "pen_toolbox", NULL },
+    { "SPDynaDrawContext", "calligraphy_toolbox", sp_calligraphy_toolbox_new },
+    { "SPTextContext", "text_toolbox", NULL },
     { NULL, NULL, NULL }
 };
 
@@ -503,11 +509,15 @@ update_tool_toolbox ( SPDesktop *desktop, SPEventContext *eventcontext, GtkWidge
 static void
 setup_aux_toolbox (GtkWidget *toolbox, SPDesktop *desktop)
 {
-    for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
-        GtkWidget *sub_toolbox=aux_toolboxes[i].create_func (desktop);
-        gtk_container_add (GTK_CONTAINER (toolbox), sub_toolbox);
-        g_object_set_data (G_OBJECT (toolbox), aux_toolboxes[i].data_name, sub_toolbox);
-    }
+	for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
+		GtkWidget *sub_toolbox;
+		if (aux_toolboxes[i].create_func == NULL) 
+			sub_toolbox=sp_empty_toolbox_new (desktop);
+		else 
+			sub_toolbox=aux_toolboxes[i].create_func (desktop);
+		gtk_container_add (GTK_CONTAINER (toolbox), sub_toolbox);
+		g_object_set_data (G_OBJECT (toolbox), aux_toolboxes[i].data_name, sub_toolbox);
+	}
 }
 
 static void
@@ -536,6 +546,22 @@ aux_toolbox_space (GtkWidget *tb, gint space)
 {
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, space);
 }
+
+static GtkWidget *
+sp_empty_toolbox_new (SPDesktop *desktop)
+{
+    GtkWidget *tbl;
+
+    tbl = gtk_hbox_new (FALSE, 0);
+    gtk_object_set_data (GTK_OBJECT (tbl), "dtw", desktop->owner->canvas);
+    gtk_object_set_data (GTK_OBJECT (tbl), "desktop", desktop);
+
+    gtk_widget_show_all (tbl);
+    sp_set_font_size (tbl, AUX_FONT_SIZE);
+
+    return tbl;
+}
+
 
 //########################
 //##       Star         ##
@@ -1363,6 +1389,180 @@ sp_spiral_toolbox_new (SPDesktop *desktop)
 
     g_signal_connect (G_OBJECT (SP_DT_SELECTION (desktop)),
             "changed", G_CALLBACK (sp_spiral_toolbox_selection_changed), tbl);
+
+    return tbl;
+}
+
+
+//########################
+//##     Calligraphy    ##
+//########################
+
+static void
+sp_ddc_mass_value_changed(GtkAdjustment *adj,  SPWidget *tbl)
+{
+	prefs_set_double_attribute ("tools.calligraphic", "mass", adj->value);
+	spinbutton_defocus (GTK_OBJECT (tbl));
+}
+
+static void
+sp_ddc_drag_value_changed(GtkAdjustment *adj, SPWidget *tbl)
+{
+	prefs_set_double_attribute ("tools.calligraphic", "drag", adj->value);
+	spinbutton_defocus (GTK_OBJECT (tbl));
+}
+
+static void
+sp_ddc_angle_value_changed(GtkAdjustment *adj, SPWidget *tbl)
+{
+	prefs_set_double_attribute ("tools.calligraphic", "angle", adj->value);
+	spinbutton_defocus (GTK_OBJECT (tbl));
+}
+
+static void
+sp_ddc_width_value_changed(GtkAdjustment *adj, SPWidget *tbl)
+{
+	prefs_set_double_attribute ("tools.calligraphic", "width", adj->value);
+	spinbutton_defocus (GTK_OBJECT (tbl));
+}
+
+static void sp_ddc_defaults(GtkWidget *, SPWidget *tbl)
+{
+	// FIXME: make defaults settable via Inkscape Options 
+   struct KeyValue {
+        char const *key;
+        double value;
+    } const key_values[] = {
+        {"mass", 0.3},
+        {"drag", 0.5},
+        {"angle", 30.0},
+        {"width", 0.2}
+    };
+
+    for (unsigned i = 0; i < G_N_ELEMENTS(key_values); ++i) {
+        KeyValue const &kv = key_values[i];
+        GtkAdjustment &adj = *static_cast<GtkAdjustment *>(gtk_object_get_data(GTK_OBJECT(tbl), kv.key));
+        gtk_adjustment_set_value(&adj, kv.value);
+    }
+}
+
+static GtkWidget *
+sp_calligraphy_toolbox_new (SPDesktop *desktop)
+{
+    GtkWidget *tbl;
+
+    tbl = gtk_hbox_new (FALSE, 0);
+    gtk_object_set_data (GTK_OBJECT (tbl), "dtw", desktop->owner->canvas);
+    gtk_object_set_data (GTK_OBJECT (tbl), "desktop", desktop);
+
+    GtkTooltips *tt = gtk_tooltips_new ();
+
+    /* Width */
+    {
+			GtkWidget *hb = gtk_hbox_new (FALSE, 1);
+			GtkWidget *l = gtk_label_new(_("Width:"));
+			gtk_widget_show(l);
+			gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
+			gtk_container_add (GTK_CONTAINER (hb), l);
+
+			GtkObject *a = gtk_adjustment_new(prefs_get_double_attribute ("tools.calligraphic", "width", 0.2), 0.01, 1.0, 0.01, 0.1, 0.1);
+			gtk_object_set_data(GTK_OBJECT(tbl), "width", a);
+
+			GtkWidget *sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 0.1, 2);
+			gtk_tooltips_set_tip (tt, sb, _("The width of the calligraphic pen"), NULL);
+			gtk_widget_set_size_request (sb, AUX_SPINBUTTON_WIDTH, AUX_SPINBUTTON_HEIGHT);
+			gtk_widget_show(sb);
+
+			gtk_signal_connect (GTK_OBJECT (sb), "focus-in-event", GTK_SIGNAL_FUNC (spinbutton_focus_in), tbl);
+			gtk_signal_connect (GTK_OBJECT (sb), "key-press-event", GTK_SIGNAL_FUNC (spinbutton_keypress), tbl);
+			gtk_container_add (GTK_CONTAINER (hb), sb);
+			gtk_signal_connect(GTK_OBJECT(a), "value_changed", GTK_SIGNAL_FUNC(sp_ddc_width_value_changed), tbl);
+			gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+    }
+
+    /* Angle */
+    {
+			GtkWidget *hb = gtk_hbox_new (FALSE, 1);
+			GtkWidget *l = gtk_label_new(_("Angle:"));
+			gtk_widget_show(l);
+			gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
+			gtk_container_add (GTK_CONTAINER (hb), l);
+
+			GtkObject *a = gtk_adjustment_new(prefs_get_double_attribute ("tools.calligraphic", "angle", 30), 0.0, 360.0, 1.0, 10.0, 10.0);
+			gtk_object_set_data(GTK_OBJECT(tbl), "angle", a);
+
+			GtkWidget *sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 0.1, 2);
+			gtk_tooltips_set_tip (tt, sb, _("The angle of the calligraphic pen (in degrees)"), NULL);
+			gtk_widget_set_size_request (sb, AUX_SPINBUTTON_WIDTH, AUX_SPINBUTTON_HEIGHT);
+			gtk_widget_show(sb);
+
+			gtk_signal_connect (GTK_OBJECT (sb), "focus-in-event", GTK_SIGNAL_FUNC (spinbutton_focus_in), tbl);
+			gtk_signal_connect (GTK_OBJECT (sb), "key-press-event", GTK_SIGNAL_FUNC (spinbutton_keypress), tbl);
+			gtk_container_add (GTK_CONTAINER (hb), sb);
+			gtk_signal_connect(GTK_OBJECT(a), "value_changed", GTK_SIGNAL_FUNC(sp_ddc_angle_value_changed), tbl);
+			gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+    }
+
+    /* Mass */
+    {
+			GtkWidget *hb = gtk_hbox_new (FALSE, 1);
+			GtkWidget *l = gtk_label_new(_("Mass:"));
+			gtk_widget_show(l);
+			gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
+			gtk_container_add (GTK_CONTAINER (hb), l);
+
+			GtkObject *a = gtk_adjustment_new(prefs_get_double_attribute ("tools.calligraphic", "mass", 0.3), 0.0, 1.0, 0.01, 0.1, 0.1);
+			gtk_object_set_data(GTK_OBJECT(tbl), "mass", a);
+
+			GtkWidget *sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 0.1, 2);
+			gtk_tooltips_set_tip (tt, sb, _("How much inertia affects the movement of the pen"), NULL);
+			gtk_widget_set_size_request (sb, AUX_SPINBUTTON_WIDTH, AUX_SPINBUTTON_HEIGHT);
+			gtk_widget_show(sb);
+
+			gtk_signal_connect (GTK_OBJECT (sb), "focus-in-event", GTK_SIGNAL_FUNC (spinbutton_focus_in), tbl);
+			gtk_signal_connect (GTK_OBJECT (sb), "key-press-event", GTK_SIGNAL_FUNC (spinbutton_keypress), tbl);
+			gtk_container_add (GTK_CONTAINER (hb), sb);
+			gtk_signal_connect(GTK_OBJECT(a), "value_changed", GTK_SIGNAL_FUNC(sp_ddc_mass_value_changed), tbl);
+			gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+    }
+
+    /* Drag */
+    {
+			GtkWidget *hb = gtk_hbox_new (FALSE, 1);
+			GtkWidget *l = gtk_label_new(_("Drag:"));
+			gtk_widget_show(l);
+			gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
+			gtk_container_add (GTK_CONTAINER (hb), l);
+
+			GtkObject *a = gtk_adjustment_new(prefs_get_double_attribute ("tools.calligraphic", "drag", 0.5), 0.0, 1.0, 0.01, 0.1, 0.1);
+			gtk_object_set_data(GTK_OBJECT(tbl), "drag", a);
+
+			GtkWidget *sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 0.1, 2);
+			gtk_tooltips_set_tip (tt, sb, _("How much resistance affects the movement of the pen"), NULL);
+			gtk_widget_set_size_request (sb, AUX_SPINBUTTON_WIDTH, AUX_SPINBUTTON_HEIGHT);
+			gtk_widget_show(sb);
+
+			gtk_signal_connect (GTK_OBJECT (sb), "focus-in-event", GTK_SIGNAL_FUNC (spinbutton_focus_in), tbl);
+			gtk_signal_connect (GTK_OBJECT (sb), "key-press-event", GTK_SIGNAL_FUNC (spinbutton_keypress), tbl);
+			gtk_container_add (GTK_CONTAINER (hb), sb);
+			gtk_signal_connect(GTK_OBJECT(a), "value_changed", GTK_SIGNAL_FUNC(sp_ddc_drag_value_changed), tbl);
+			gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+    }
+
+
+    /* Reset */
+    {
+	GtkWidget *hb = gtk_hbox_new (FALSE, 1);
+        GtkWidget *b = gtk_button_new_with_label(_("Defaults"));
+        gtk_widget_show(b);
+    gtk_container_add (GTK_CONTAINER (hb), b);
+        gtk_signal_connect(GTK_OBJECT(b), "clicked", GTK_SIGNAL_FUNC(sp_ddc_defaults), tbl);
+    gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    }
+
+    gtk_widget_show_all (tbl);
+    sp_set_font_size (tbl, AUX_FONT_SIZE);
 
     return tbl;
 }
