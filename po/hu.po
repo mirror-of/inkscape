@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-09-17 17:48+1000\n"
-"PO-Revision-Date: 2004-10-03 19:21+0200\n"
+"PO-Revision-Date: 2004-10-03 23:49+0200\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -2668,7 +2668,7 @@ msgstr "A dokumentum exportálása PNG formátumú képbe"
 #: src/main.cpp:173
 msgid "The resolution used for exporting SVG into bitmap (default 72)"
 msgstr ""
-"Az SVG-dokumentum bitképbe való konvertálásához használt felbontás "
+"Az SVG-dokumentum bitképbe való exportálásához használt felbontás "
 "(alapértelmezés: 72)"
 
 #: src/main.cpp:174
@@ -2688,10 +2688,9 @@ msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
 #: src/main.cpp:183
-#, fuzzy
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
-"A létrehozott bitkép szélessége képpontban (felülbírálja az export-dpi "
+"Az exportált bitkép szélessége képpontban (felülbírálja az export-dpi "
 "értéket)"
 
 #: src/main.cpp:184
@@ -2699,10 +2698,9 @@ msgid "WIDTH"
 msgstr "SZÉLESSÉG"
 
 #: src/main.cpp:188
-#, fuzzy
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
-"A létrehozott bitkép magassága képpontban (felülbírálja az export-dpi "
+"Az exportált bitkép magassága képpontban (felülbírálja az export-dpi "
 "értéket)"
 
 #: src/main.cpp:189
@@ -2710,37 +2708,36 @@ msgid "HEIGHT"
 msgstr "MAGASSÁG"
 
 #: src/main.cpp:193
-#, fuzzy
 msgid "The ID of the object to export (overrides export-area)"
 msgstr ""
-"A létrehozott bitkép szélessége képpontban (felülbírálja az export-dpi "
+"Az exportálandó objektum azonosítója (felülbírálja az export-area "
 "értéket)"
 
 #: src/main.cpp:198
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
+"Tárolt fájlnév és DPI-információk használata exportáláskor (csak "
+"export-id esetén)"
 
 #: src/main.cpp:203
-#, fuzzy
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
-"A bitkép háttérszíne (bármilyen, az SVG formátum által támogatott "
-"színmegadás)"
+"Az exportált bitkép háttérszíne (bármilyen, az SVG formátum által "
+"támogatott színmegadás)"
 
 #: src/main.cpp:204
 msgid "COLOR"
 msgstr "SZÍN"
 
 #: src/main.cpp:208
-#, fuzzy
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr ""
-"A bitkép háttérszíne (bármilyen, az SVG formátum által támogatott "
-"színmegadás)"
+"Az exportált bitkép hátterének átlátszatlansága (vagy 0,0 és 1,0 közt, "
+"vagy 1 és 255 közt)"
 
 #: src/main.cpp:209
 msgid "VALUE"
-msgstr ""
+msgstr "ÉRTÉK"
 
 #: src/main.cpp:213
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
@@ -2790,6 +2787,9 @@ msgid ""
 "<b>Node:</b> drag to edit the path; with <b>Ctrl</b> to snap to horizontal/"
 "vertical; with <b>Ctrl+Alt</b> to snap to handles' directions"
 msgstr ""
+"<b>Csomópont</b>. Lánc szerkesztése: húzással; vízszintes/függőleges "
+"illesztés: <b>Ctrl</b>; illesztés a vezérlőelemek irányában: "
+"<b>Ctrl+Alt</b>."
 
 #: src/nodepath.cpp:2701 src/nodepath.cpp:2725
 msgid ""
@@ -2797,6 +2797,9 @@ msgid ""
 "with <b>Alt</b> to lock length, with <b>Shift</b> to rotate the opposite "
 "handle in sync"
 msgstr ""
+"<b>Csomópont-vezérlőelem</b>. Ív alakítása: húzással; szöghöz való "
+"illesztés: <b>Ctrl</b>; hossz zárolása: <b>Alt</b>; túlsó vezérlőelem "
+"forgatása szinkronban: <b>Shift</b>."
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
 #: src/nodepath.cpp:2851
@@ -2812,9 +2815,10 @@ msgid "symmetric"
 msgstr "szimmetrikus"
 
 #: src/nodepath.cpp:2865
-#, fuzzy
 msgid "Drag nodes or node handles to edit the path"
-msgstr "A lánc szerkesztéséhez helyezze át a csomópontokat vagy a kontrollpontokat"
+msgstr ""
+"A lánc szerkesztéséhez helyezze át a csomópontokat vagy a "
+"csomópont-vezérlőelemeket"
 
 #: src/nodepath.cpp:2884
 msgid "Select one path object with selector first, then switch back to node tool."
@@ -2823,62 +2827,71 @@ msgstr ""
 "csomóponteszközre."
 
 #: src/nodepath.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> nodes selected. Click, Shift+click, or drag around "
 "nodes to select."
 msgstr ""
-"%i csomópontból 0 van kijelölve. Kijelölés: kattintással (ha szükséges, "
-"Shifttel) vagy egy terület kijelölésével."
+"<b>%i</b> csomópontból <b>0</b> van kijelölve. Kijelölés: kattintással "
+"(ha szükséges, Shifttel) vagy egy terület kijelölésével."
 
 #: src/nodepath.cpp:2891
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
-msgstr "%i csomópont kijelölve (összesen: %i); %s. %s."
+msgstr "<b>%i</b> csomópont kijelölve (összesen: <b>%i</b>); %s. %s."
 
 #: src/nodepath.cpp:2894
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%i</b> of <b>%i</b> nodes selected. %s."
-msgstr "%i csomópont kijelölve (összesen: %i). %s."
+msgstr "<b>%i</b> csomópont kijelölve (összesen: <b>%i</b>). %s."
 
 #: src/object-edit.cpp:299
 msgid ""
 "Adjust the horizontal rounding radius; with Ctrl to make the vertical radius "
 "the same"
 msgstr ""
+"A vízszintes lekerekítési sugár beállítása. A függőleges sugár ugyanerre "
+"való beállítása: Ctrl."
 
 #: src/object-edit.cpp:301
 msgid ""
 "Adjust the vertical rounding radius; with Ctrl to make the horizontal radius "
 "the same"
 msgstr ""
+"A függőleges lekerekítési sugár beállítása. A vízszintes sugár ugyanerre "
+"való beállítása: Ctrl."
 
 #: src/object-edit.cpp:303
-#, fuzzy
 msgid "Adjust the width and height of the rectangle"
-msgstr "A szélesség és a magasság azonos arányban való módosítása"
+msgstr "A téglalap szélességének és magasságának beállítása"
 
 #: src/object-edit.cpp:394
 msgid ""
 "Position the start point of the arc or segment; with Ctrl to snap angle; "
 "drag inside the ellipse for arc, outside for segment"
 msgstr ""
+"Ellipszisív vagy -cikk kezdőpontjának elhelyezése. Szöghöz való illesztés: "
+"Ctrl; ív: az ellipszisen belül való húzás; cikk: kívül való húzás."
 
 #: src/object-edit.cpp:396
 msgid ""
 "Position the end point of the arc or segment; with Ctrl to snap angle; drag "
 "inside the ellipse for arc, outside for segment"
 msgstr ""
+"Ellipszisív vagy -cikk végpontjának elhelyezése. Szöghöz való illesztés: "
+"Ctrl; ív: az ellipszisen belül való húzás; cikk: kívül való húzás."
 
 #: src/object-edit.cpp:474
 msgid "Adjust the tip radius of the star or polygon"
-msgstr ""
+msgstr "A csillag vagy sokszög csúcsponti sugarának beállítása"
 
 #: src/object-edit.cpp:477
 msgid ""
 "Adjust the base radius of the star; with Ctrl to keep star rays radial (no "
 "skew)"
 msgstr ""
+"A csillag alapponti sugarának beállítása. A csillag ágainak sugárirányban "
+"való tartása (nyírás elkerülése): Ctrl."
 
 #: src/object-edit.cpp:570
 msgid "Position the inner end of the spiral; with Ctrl to snap angle"
