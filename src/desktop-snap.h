@@ -109,8 +109,9 @@ std::pair<NR::Coord, bool> namedview_dim_snap_list(SPNamedView const *nv,
                                                    Snapper::PointType t, const std::vector<NR::Point> &p,
                                                    double const dx, NR::Dim2 const dim);
 
-NR::Coord namedview_dim_snap_list_scale(SPNamedView const *nv, Snapper::PointType t, const std::vector<NR::Point> &p,
-                                        NR::Point const &norm, double const sx, NR::Dim2 const dim);
+std::pair<double, bool> namedview_dim_snap_list_scale(SPNamedView const *nv,
+                                                      Snapper::PointType t, const std::vector<NR::Point> &p,
+                                                      NR::Point const &norm, double const sx, NR::Dim2 const dim);
 
 NR::Coord namedview_dim_snap_list_skew(SPNamedView const *nv, Snapper::PointType t, const std::vector<NR::Point> &p,
                                        NR::Point const &norm, double const sx, NR::Dim2 const dim);
