@@ -8,6 +8,29 @@
 	  unrecognized filetype: show a CRITICAL warning instead of
 	  segfaulting due to uninitialized var.
 
+	* src/document.c (sp_document_new), file.c (file_open_ok,
+	  sp_file_open_dialog, sp_file_save_dialog, sp_file_do_import),
+	  main.c (sp_main_console), src/module.c (sp_module_finalize,
+	  sp_module_input_finalize, sp_module_input_build,
+	  sp_module_output_finalize, sp_module_output_build),
+	  src/sp-anchor.c (sp_anchor_set), src/sp-image.c (sp_image_set),
+	  src/sp-text.c (sp_string_release, sp_string_read_content,
+	  sp_string_set_shape), src/sp-use.c (sp_use_release), src/style.c
+	  (sp_style_unref, sp_style_merge_property,
+	  sp_style_merge_from_parent, sp_text_style_unref,
+	  sp_style_read_istring), src/bonobo/embeddable-document.c
+	  (sp_bonobo_stream_read, sp_embeddable_document_ps_save),
+	  src/dialogs/stroke-style.c (sp_stroke_style_scale_line),
+	  src/dialogs/text-edit.c (sp_text_edit_dialog_text_changed),
+	  src/helper/sodipodi-ctrl.c (sp_ctrl_build_cache),
+	  src/modules/ps.c (sp_ps_print_image),
+	  src/widgets/font-selector.c (sp_font_preview_set_phrase),
+	  src/widgets/gradient-image.c (sp_gradient_image_size_allocate),
+	  src/xml/repr-action.c (coalesce_chgattr, coalesce_chgcontent,
+	  free_action), src/xml/repr.c (repr_finalize, sp_repr_merge):
+	  Minor cleanup: replace `if (POINTER_EXPR) g_free (POINTER_EXPR)'
+	  with the simpler (more readable) `g_free (POINTER_EXPR)'.
+
 2003-11-29 Kees Cook <inkscape@outflux.net>
 
 	* src/utest/.cvsignore: adding "Makefile"

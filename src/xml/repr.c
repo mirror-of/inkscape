@@ -175,7 +175,7 @@ repr_finalize (SPRepr *repr)
 	}
 	while (repr->children) sp_repr_remove_child (repr, repr->children);
 	while (repr->attributes) sp_repr_remove_attribute (repr, repr->attributes);
-	if (repr->content) g_free (repr->content);
+	g_free (repr->content);
 	while (repr->listeners) sp_repr_remove_listener (repr, repr->listeners);
 }
 
@@ -861,10 +861,10 @@ sp_repr_merge (SPRepr *repr, const SPRepr *src, const gchar *key)
 	g_return_val_if_fail (key != NULL, FALSE);
 
 	if (src->content) {
-		if (repr->content) g_free (repr->content);
+		g_free (repr->content);
 		repr->content = g_strdup (src->content);
 	} else {
-		if (repr->content) g_free (repr->content);
+		g_free (repr->content);
 		repr->content = NULL;
 	}
 	

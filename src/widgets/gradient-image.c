@@ -151,7 +151,7 @@ sp_gradient_image_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 	widget->allocation = *allocation;
 
 	if (GTK_WIDGET_REALIZED (widget)) {
-		if (image->px) g_free (image->px);
+		g_free (image->px);
 		image->px = g_new (guchar, 3 * VBLOCK * allocation->width);
 	}
 

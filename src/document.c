@@ -336,8 +336,8 @@ sp_document_new (const gchar *uri, unsigned int advertize, unsigned int keepaliv
 
 	doc = sp_document_create (rdoc, uri, base, name, advertize, keepalive);
 
-	if (base) g_free (base);
-	if (name) g_free (name);
+	g_free (base);
+	g_free (name);
 
 	return doc;
 }

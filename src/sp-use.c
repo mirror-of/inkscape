@@ -149,7 +149,7 @@ sp_use_release (SPObject *object)
 		use->child = sp_object_detach_unref (SP_OBJECT (object), use->child);
 	}
 
-	if (use->href) g_free (use->href);
+	g_free (use->href);
 
 	if (((SPObjectClass *) parent_class)->release)
 		((SPObjectClass *) parent_class)->release (object);

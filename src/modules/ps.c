@@ -856,8 +856,8 @@ sp_ps_print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int heigh
 	g_free (data);
 #endif
 
-	if (packb != NULL) g_free (packb);
-	if (plane != NULL) g_free (plane);
+	g_free (packb);
+	g_free (plane);
 
 #if 0
 	if (ferror (ofp))

@@ -1103,7 +1103,7 @@ sp_stroke_style_scale_line (SPWidget *spw)
 			/* Set dash */
 			sp_stroke_style_set_scaled_dash (css, ndash, dash, offset, dist);
 			sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
-			if (dash) g_free (dash);
+			g_free (dash);
 		}
 	} else {
 		for (r = reprs; r != NULL; r = r->next) {
@@ -1117,7 +1117,7 @@ sp_stroke_style_scale_line (SPWidget *spw)
 			sp_repr_css_set_property (css, "stroke-width", c);
 			sp_stroke_style_set_scaled_dash (css, ndash, dash, offset, length);
 			sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
-			if (dash) g_free (dash);
+			g_free (dash);
 		}
 	}
 

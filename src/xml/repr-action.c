@@ -230,8 +230,7 @@ coalesce_chgattr (SPReprAction *action)
 			if (strcmp(action->act.chgattr.oldval, 
 			           iter->act.chgattr.newval)) break;
 
-			if (action->act.chgattr.oldval)
-			  g_free (action->act.chgattr.oldval);
+			g_free (action->act.chgattr.oldval);
 
 			action->act.chgattr.oldval = iter->act.chgattr.oldval;
 			iter->act.chgattr.oldval = NULL;
@@ -264,8 +263,7 @@ coalesce_chgcontent (SPReprAction *action)
 			if (strcmp(action->act.chgcontent.oldval, 
 			           iter->act.chgcontent.newval)) break;
 
-			if (action->act.chgcontent.oldval)
-			  g_free (action->act.chgcontent.oldval);
+			g_free (action->act.chgcontent.oldval);
 
 			action->act.chgcontent.oldval =
 			  iter->act.chgcontent.oldval;
@@ -431,16 +429,12 @@ free_action (SPReprAction *action)
 		  sp_repr_unref (action->act.del.ref);
 		break;
 	case SP_REPR_ACTION_CHGATTR:
-		if (action->act.chgattr.oldval)
-		  g_free (action->act.chgattr.oldval);
-		if (action->act.chgattr.newval)
-		  g_free (action->act.chgattr.newval);
+		g_free (action->act.chgattr.oldval);
+		g_free (action->act.chgattr.newval);
 		break;
 	case SP_REPR_ACTION_CHGCONTENT:
-		if (action->act.chgcontent.oldval)
-		  g_free (action->act.chgcontent.oldval);
-		if (action->act.chgcontent.newval)
-		  g_free (action->act.chgcontent.newval);
+		g_free (action->act.chgcontent.oldval);
+		g_free (action->act.chgcontent.newval);
 		break;
 	case SP_REPR_ACTION_CHGORDER:
 		sp_repr_unref (action->act.chgorder.child);

@@ -300,7 +300,7 @@ sp_ctrl_build_cache (SPCtrl *ctrl)
 
  	side = (ctrl->span * 2 +1);
 	c = ctrl->span ;
-	if (ctrl->cache) g_free (ctrl->cache);
+	g_free (ctrl->cache);
 	size = (side) * (side) * 4;
 	ctrl->cache = (guchar*)g_malloc (size);
 	if (side < 2) return;

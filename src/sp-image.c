@@ -173,7 +173,7 @@ sp_image_set (SPObject *object, unsigned int key, const gchar *value)
 
 	switch (key) {
 	case SP_ATTR_XLINK_HREF:
-		if (image->href) g_free (image->href);
+		g_free (image->href);
 		image->href = (value) ? g_strdup (value) : NULL;
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_IMAGE_HREF_MODIFIED_FLAG);
 		break;

@@ -619,7 +619,7 @@ sp_font_preview_set_rgba32 (SPFontPreview *fprev, guint32 rgba)
 void
 sp_font_preview_set_phrase (SPFontPreview *fprev, const gchar *phrase)
 {
-	if (fprev->phrase) g_free (fprev->phrase);
+	g_free (fprev->phrase);
 	if (phrase) {
 		fprev->phrase = g_strdup (phrase);
 	} else {

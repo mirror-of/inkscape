@@ -132,7 +132,7 @@ sp_anchor_set (SPObject *object, unsigned int key, const gchar *value)
 
 	switch (key) {
 	case SP_ATTR_XLINK_HREF:
-		if (anchor->href) g_free (anchor->href);
+		g_free (anchor->href);
 		anchor->href = g_strdup (value);
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;

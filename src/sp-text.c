@@ -134,8 +134,8 @@ sp_string_release (SPObject *object)
 
 	string = SP_STRING (object);
 
-	if (string->p) g_free (string->p);
-	if (string->text) g_free (string->text);
+	g_free (string->p);
+	g_free (string->text);
 
 	if (((SPObjectClass *) string_parent_class)->release)
 		((SPObjectClass *) string_parent_class)->release (object);
@@ -151,9 +151,9 @@ sp_string_read_content (SPObject *object)
 
 	string = SP_STRING (object);
 
-	if (string->p) g_free (string->p);
+	g_free (string->p);
 	string->p = NULL;
-	if (string->text) g_free (string->text);
+	g_free (string->text);
 	t = sp_repr_content (object->repr);
 	string->text = (t) ? g_strdup (t) : NULL;
 
@@ -297,7 +297,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean 
 	if (!string->text || !*string->text) return;
 	len = g_utf8_strlen (string->text, -1);
 	if (!len) return;
-	if (string->p) g_free (string->p);
+	g_free (string->p);
 	string->p = g_new (NRPointF, len + 1);
 
 	/* fixme: Adjusted value (Lauris) */

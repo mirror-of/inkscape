@@ -374,7 +374,7 @@ sp_main_console (int argc, const char **argv)
 		fl = g_slist_remove (fl, fl->data);
 	}
 
-	if (printer) g_free (printer);
+	g_free (printer);
 
 	inkscape_unref ();
 

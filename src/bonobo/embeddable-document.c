@@ -134,7 +134,7 @@ sp_bonobo_stream_read (Bonobo_Stream stream, gchar ** buffer)
 		Bonobo_Stream_read (stream, STREAM_CHUNK_SIZE, &iobuf, &ev);
 
 		if (ev._major != CORBA_NO_EXCEPTION) {
-			if (* buffer != NULL) g_free (* buffer);
+			g_free (* buffer);
 			len = -1;
 			break;
 		}
@@ -206,7 +206,7 @@ sp_embeddable_document_ps_save (BonoboPersistStream *ps,
 
 	/* FIXME: super dirty but functional */
 	do {
-		if (filename) g_free (filename);
+		g_free (filename);
 		filename = g_strdup ("inkscapeXXXXXX");
 		fd = mkstemp (filename);
 

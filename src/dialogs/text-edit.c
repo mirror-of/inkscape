@@ -639,7 +639,7 @@ sp_text_edit_dialog_text_changed (GtkTextBuffer *tb, GtkWidget *dlg)
 	} else {
 		sp_font_preview_set_phrase (SP_FONT_PREVIEW (preview), NULL);
 	}
-	if (str) g_free (str);
+	g_free (str);
 
 	if (text) {
 		gtk_widget_set_sensitive (apply, TRUE);

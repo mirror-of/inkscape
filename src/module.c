@@ -29,16 +29,6 @@
 
 #include "modules/db.h"
 
-/**
-	\def IF_NOT_NULL_FREE
-
-	This is a quick little macro to check if a value is null, and
-    if it is not, then free the data.  It's used in most of the
-	finalize functions, and then also when updating values.  It
-	doesn't do that much, but it makes the code easier to read
-*/
-#define IF_NOT_NULL_FREE(x)   if ((x) != NULL) g_free((x))
-
 /* SPModule */
 
 static void sp_module_class_init (SPModuleClass *klass);
@@ -54,7 +44,7 @@ static SPModule * sp_module_new (GType type, SPRepr *repr);
 	\var module_parent_class
 
 	This is the parent class for the modules.  It should be
-    GObject - but no promises */
+	GObject - but no promises */
 static GObjectClass * module_parent_class;
 
 /**
@@ -159,8 +149,8 @@ sp_module_finalize (GObject *object)
 
 	if (module->repr) sp_repr_unref (module->repr);
 
-	IF_NOT_NULL_FREE(module->name);
-	IF_NOT_NULL_FREE(module->id);
+	g_free (module->name);
+	g_free (module->id);
 
 	G_OBJECT_CLASS (module_parent_class)->finalize (object);
 
@@ -287,7 +277,7 @@ sp_module_unload_default (SPModule * module)
 
 	This function is used to build an SPModule (really a subclass of that
 	though) from an XML description stored in a SPRepr tree.  If the class
-	has it's own build function, then that function is used.  Otherwise
+	has its own build function, then that function is used.  Otherwise
 	the generic 'sp_module_private_build' function is used.
 
 	A reference to the SPRepr structure is added in this function so it
@@ -426,10 +416,10 @@ sp_module_input_finalize (GObject *object)
 
 	imod = (SPModuleInput *) object;
 	
-	IF_NOT_NULL_FREE(imod->mimetype);
-	IF_NOT_NULL_FREE(imod->extension);
-	IF_NOT_NULL_FREE(imod->filetypename);
-	IF_NOT_NULL_FREE(imod->filetypetooltip);
+	g_free (imod->mimetype);
+	g_free (imod->extension);
+	g_free (imod->filetypename);
+	g_free (imod->filetypetooltip);
 
 	G_OBJECT_CLASS (input_parent_class)->finalize (object);
 
@@ -472,19 +462,19 @@ sp_module_input_build (SPModule *module, SPRepr *repr)
 				child_repr = sp_repr_children(child_repr);
 				while (child_repr != NULL) {
 					if (!strcmp(sp_repr_name(child_repr), "extension")) {
-						IF_NOT_NULL_FREE(imod->extension);
+						g_free (imod->extension);
 						imod->extension = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
 					}
 					if (!strcmp(sp_repr_name(child_repr), "mimetype")) {
-						IF_NOT_NULL_FREE(imod->mimetype);
+						g_free (imod->mimetype);
 						imod->mimetype = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
 					}
 					if (!strcmp(sp_repr_name(child_repr), "filetypename")) {
-						IF_NOT_NULL_FREE(imod->filetypename);
+						g_free (imod->filetypename);
 						imod->filetypename = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
 					}
 					if (!strcmp(sp_repr_name(child_repr), "filetypetooltip")) {
-						IF_NOT_NULL_FREE(imod->filetypetooltip);
+						g_free (imod->filetypetooltip);
 						imod->filetypetooltip = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
 					}
 
@@ -625,10 +615,10 @@ sp_module_output_finalize (GObject *object)
 
 	omod = (SPModuleOutput *) object;
 
-	IF_NOT_NULL_FREE(omod->mimetype);
-	IF_NOT_NULL_FREE(omod->extension);
-	IF_NOT_NULL_FREE(omod->filetypename);
-	IF_NOT_NULL_FREE(omod->filetypetooltip);
+	g_free (omod->mimetype);
+	g_free (omod->extension);
+	g_free (omod->filetypename);
+	g_free (omod->filetypetooltip);
 	
 	G_OBJECT_CLASS (output_parent_class)->finalize (object);
 }
@@ -669,19 +659,19 @@ sp_module_output_build (SPModule *module, SPRepr *repr)
 				child_repr = sp_repr_children(child_repr);
 				while (child_repr != NULL) {
 					if (!strcmp(sp_repr_name(child_repr), "extension")) {
-						IF_NOT_NULL_FREE(omod->extension);
+						g_free (omod->extension);
 						omod->extension = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
 					}
 					if (!strcmp(sp_repr_name(child_repr), "mimetype")) {
-						IF_NOT_NULL_FREE(omod->mimetype);
+						g_free (omod->mimetype);
 						omod->mimetype = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
 					}
 					if (!strcmp(sp_repr_name(child_repr), "filetypename")) {
-						IF_NOT_NULL_FREE(omod->filetypename);
+						g_free (omod->filetypename);
 						omod->filetypename = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
 					}
 					if (!strcmp(sp_repr_name(child_repr), "filetypetooltip")) {
-						IF_NOT_NULL_FREE(omod->filetypetooltip);
+						g_free (omod->filetypetooltip);
 						omod->filetypetooltip = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
 					}
 

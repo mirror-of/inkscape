@@ -101,7 +101,7 @@ file_open_ok (GtkWidget *widget, GtkFileSelection *fs)
 	filename = g_strdup (gtk_file_selection_get_filename (fs));
 
 	if (filename && g_file_test (filename, G_FILE_TEST_IS_DIR)) {
-		if (open_path) g_free (open_path);
+		g_free (open_path);
 		if (filename[strlen(filename) - 1] != G_DIR_SEPARATOR) {
 			open_path = g_strconcat (filename, G_DIR_SEPARATOR_S, NULL);
 			g_free (filename);
@@ -114,7 +114,7 @@ file_open_ok (GtkWidget *widget, GtkFileSelection *fs)
 
 	if (filename != NULL) {
 		gchar* key;
-		if (open_path) g_free (open_path);
+		g_free (open_path);
 		open_path = g_dirname (filename);
 		if (open_path) open_path = g_strconcat (open_path, G_DIR_SEPARATOR_S, NULL);
 		key = (gchar*)g_object_get_data (G_OBJECT (fs), "type-key");
@@ -144,7 +144,7 @@ sp_file_open_dialog (gpointer object, gpointer data)
 	char *filename;
 	filename = sp_win32_get_open_filename (open_path, "SVG files\0*.svg;*.svgz\0All files\0*\0", _("Select file to open"));
 	if (filename) {
-		if (open_path) g_free (open_path);
+		g_free (open_path);
 		open_path = g_dirname (filename);
 		if (open_path) open_path = g_strconcat (open_path, G_DIR_SEPARATOR_S, NULL);
 		sp_file_open (filename, NULL);
@@ -201,7 +201,7 @@ sp_file_save_dialog (SPDocument *doc)
 	filename = sp_win32_get_save_filename (save_path, &spns);
 	if (filename && *filename) {
 		sp_file_do_save (doc, filename, (spns) ? SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE : SP_MODULE_KEY_OUTPUT_SVG);
-		if (save_path) g_free (save_path);
+		g_free (save_path);
 		save_path = g_dirname (filename);
 		save_path = g_strdup (save_path);
 		g_free (filename);
@@ -322,7 +322,7 @@ sp_file_do_import (SPDocument *doc, const gchar *filename)
 	SPReprDoc * rnewdoc;
 
 	if (filename && g_file_test (filename, G_FILE_TEST_IS_DIR)) {
-		if (import_path) g_free (import_path);
+		g_free (import_path);
 		if (filename[strlen(filename) - 1] != G_DIR_SEPARATOR) {
 			import_path = g_strconcat (filename, G_DIR_SEPARATOR_S, NULL);
 		} else {

@@ -261,9 +261,7 @@ sp_style_unref (SPStyle *style)
 		if (style->text) sp_text_style_unref (style->text);
 		sp_style_paint_clear (style, &style->fill, TRUE, FALSE);
 		sp_style_paint_clear (style, &style->stroke, TRUE, FALSE);
-		if (style->stroke_dash.dash) {
-			g_free (style->stroke_dash.dash);
-		}
+		g_free (style->stroke_dash.dash);
 		g_free (style);
 	}
 
@@ -474,7 +472,7 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 	case SP_PROP_FONT:
 		if (!style->text_private) sp_style_privatize_text (style);
 		if (!style->text->font.set) {
-			if (style->text->font.value) g_free (style->text->font.value);
+			g_free (style->text->font.value);
 			style->text->font.value = g_strdup (val);
 			style->text->font.set = TRUE;
 			style->text->font.inherit = (val && !strcmp (val, "inherit"));
@@ -829,7 +827,7 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
 
 	if (style->text && parent->text) {
 		if (!style->text->font_family.set || style->text->font_family.inherit) {
-			if (style->text->font_family.value) g_free (style->text->font_family.value);
+			g_free (style->text->font_family.value);
 			style->text->font_family.value = g_strdup (parent->text->font_family.value);
 		}
 	}
@@ -1239,8 +1237,8 @@ sp_text_style_unref (SPTextStyle *st)
 	st->refcount -= 1;
 
 	if (st->refcount < 1) {
-		if (st->font.value) g_free (st->font.value);
-		if (st->font_family.value) g_free (st->font_family.value);
+		g_free (st->font.value);
+		g_free (st->font_family.value);
 		g_free (st);
 	}
 
@@ -1333,7 +1331,7 @@ sp_style_read_ienum (SPIEnum *val, const gchar *str, const SPStyleEnum *dict, un
 static void
 sp_style_read_istring (SPIString *val, const gchar *str)
 {
-	if (val->value) g_free (val->value);
+	g_free (val->value);
 
 	if (!strcmp (str, "inherit")) {
 		val->set = TRUE;
