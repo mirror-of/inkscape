@@ -10,8 +10,12 @@
 #include "repr-private.h"
 #include <xml/sp-repr-attr.h>
 
-struct SPCSSAttr {
-	SPRepr repr;
+struct SPCSSAttr : public SPRepr {
+public:
+	SPCSSAttr() : SPRepr(SP_XML_ELEMENT_NODE, g_quark_from_static_string("css")) {}
+
+protected:
+	SPRepr *_duplicate() const { return new SPCSSAttr(*this); }
 };
 
 static void sp_repr_css_add_components (SPCSSAttr * css, SPRepr * repr, const gchar * attr);
@@ -19,10 +23,7 @@ static void sp_repr_css_add_components (SPCSSAttr * css, SPRepr * repr, const gc
 SPCSSAttr *
 sp_repr_css_attr_new (void)
 {
-	SPRepr * css;
-	css = sp_repr_new ("css");
-	g_return_val_if_fail (css != NULL, NULL);
-	return (SPCSSAttr *) css;
+	return new SPCSSAttr();
 }
 
 void

@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <glib/gtypes.h>
+#include "refcounted.h"
 
 #include <xml/xml-forward.h>
 
@@ -105,13 +106,6 @@ moved to the position after newref.  Can veto by returning FALSE.
 
 Called once the child has been moved to its new position in the child
 order.
-
-NOTE!!!!! the veto callbacks are currently not useful because some
-functions SPObjects register for callbacks have side-effects -- by the
-time the veto was made, other callbacks might already have modified
-things...
-
--- MenTaLguY, Dec 5, 2003
 
  */
 

@@ -18,20 +18,13 @@
 
 #include "repr.h"
 #include "repr-action.h"
+#include "refcounted.h"
 #include "xml/xml-forward.h"
 
 struct SPReprClass;
 struct SPReprAttr;
 struct SPReprListener;
 struct SPReprEventVector;
-
-struct SPReprClass {
-	size_t size;
-	SPRepr *pool;
-	void (*init)(SPRepr *repr);
-	void (*copy)(SPRepr *to, const SPRepr *from);
-	void (*finalize)(SPRepr *repr);
-};
 
 struct SPReprListener {
 	SPReprListener *next;
@@ -54,9 +47,17 @@ struct SPReprEventVector {
 	void (* order_changed) (SPRepr *repr, SPRepr *child, SPRepr *oldref, SPRepr *newref, void * data);
 };
 
-struct SPRepr {
-	SPReprClass *type;
-	int refcount;
+enum SPReprType {
+	SP_XML_DOCUMENT_NODE,
+	SP_XML_ELEMENT_NODE,
+	SP_XML_TEXT_NODE,
+	SP_XML_COMMENT_NODE
+};
+
+struct SPRepr : public Inkscape::Refcounted {
+	SPReprType type;
+
+	~SPRepr();
 
 	int name;
 
@@ -69,12 +70,51 @@ struct SPRepr {
 	SPReprListener *listeners;
 	SPReprListener *last_listener;
 	gchar *content;
+
+	SPRepr *duplicate() const { return _duplicate(); }
+
+protected:
+	SPRepr(SPReprType t, int code);
+	SPRepr(SPRepr const &repr);
+
+	virtual SPRepr *_duplicate() const=0;
+
+private:
+	void operator=(SPRepr const &); // no assign
 };
 
-struct SPReprDoc {
-	SPRepr repr;
+struct SPReprElement : public SPRepr {
+	explicit SPReprElement(int code) : SPRepr(SP_XML_ELEMENT_NODE, code) {}
+
+protected:
+	SPRepr *_duplicate() const { return new SPReprElement(*this); }
+};
+
+struct SPReprText : public SPRepr {
+	explicit SPReprText(int code) : SPRepr(SP_XML_TEXT_NODE, code) {}
+
+protected:
+	SPRepr *_duplicate() const { return new SPReprText(*this); }
+};
+
+struct SPReprComment : public SPRepr {
+	explicit SPReprComment(int code) : SPRepr(SP_XML_COMMENT_NODE, code) {}
+
+protected:
+	SPRepr *_duplicate() const { return new SPReprComment(*this); }
+};
+
+struct SPReprDoc : public SPRepr {
+	explicit SPReprDoc(int code);
+	~SPReprDoc();
+
 	bool is_logging;
 	SPReprAction *log;
+
+protected:
+	SPReprDoc(SPReprDoc const &doc);
+
+	SPRepr *_duplicate() const { return new SPReprDoc(*this); }
 };
 
 struct SPXMLNs {
@@ -85,16 +125,6 @@ struct SPXMLNs {
 #define SP_REPR_NAME(r) g_quark_to_string ((r)->name)
 #define SP_REPR_TYPE(r) ((r)->type)
 #define SP_REPR_CONTENT(r) ((r)->content)
-
-extern SPReprClass _sp_repr_xml_document_class;
-extern SPReprClass _sp_repr_xml_element_class;
-extern SPReprClass _sp_repr_xml_text_class;
-extern SPReprClass _sp_repr_xml_comment_class;
-
-#define SP_XML_DOCUMENT_NODE &_sp_repr_xml_document_class
-#define SP_XML_ELEMENT_NODE &_sp_repr_xml_element_class
-#define SP_XML_TEXT_NODE &_sp_repr_xml_text_class
-#define SP_XML_COMMENT_NODE &_sp_repr_xml_comment_class
 
 unsigned int sp_repr_change_order (SPRepr *repr, SPRepr *child, SPRepr *ref);
 

@@ -31,71 +31,36 @@
 
 typedef struct SPReprListener SPListener;
 
-static void repr_init(SPRepr *repr);
-static void repr_doc_init(SPRepr *repr);
-
-static void repr_copy(SPRepr *to, SPRepr const *from);
-static void repr_doc_copy(SPRepr *to, SPRepr const *from);
-
-static void repr_finalize(SPRepr *repr);
-static void repr_doc_finalize(SPRepr *repr);
-
 static void bind_document(SPReprDoc *doc, SPRepr *repr);
 
-SPReprClass _sp_repr_xml_document_class = {
-    sizeof(SPReprDoc),
-    NULL,
-    repr_doc_init,
-    repr_doc_copy,
-    repr_doc_finalize
-};
-
-SPReprClass _sp_repr_xml_element_class = {
-    sizeof(SPRepr),
-    NULL,
-    repr_init,
-    repr_copy,
-    repr_finalize
-};
-
-SPReprClass _sp_repr_xml_text_class = {
-    sizeof(SPRepr),
-    NULL,
-    repr_init,
-    repr_copy,
-    repr_finalize
-};
-
-SPReprClass _sp_repr_xml_comment_class = {
-    sizeof(SPRepr),
-    NULL,
-    repr_init,
-    repr_copy,
-    repr_finalize
-};
-
-static SPRepr *sp_repr_new_from_code(SPReprClass *type, int code);
+static SPRepr *sp_repr_new_from_code(SPReprType type, int code);
 static void sp_repr_remove_attribute(SPRepr *repr, SPReprAttr *attr);
 static void sp_repr_remove_listener(SPRepr *repr, SPListener *listener);
 
 static SPReprAttr *sp_attribute_duplicate(SPReprAttr const *attr);
 static SPReprAttr *sp_attribute_new_from_code(GQuark key, gchar const *value);
 
-static SPRepr *sp_repr_alloc(SPReprClass *type);
-static void sp_repr_free(SPRepr *repr);
 static SPReprAttr *sp_attribute_alloc(void);
 static void sp_attribute_free(SPReprAttr *attribute);
 static SPListener *sp_listener_alloc(void);
 static void sp_listener_free(SPListener *listener);
 
 static SPRepr *
-sp_repr_new_from_code(SPReprClass *type, int code)
+sp_repr_new_from_code(SPReprType type, int code)
 {
-    SPRepr *repr = sp_repr_alloc(type);
-    repr->name = code;
-    repr->type->init(repr);
-
-    return repr;
+    switch (type) {
+    case SP_XML_ELEMENT_NODE:
+        return new SPReprElement(code);
+    case SP_XML_TEXT_NODE:
+        return new SPReprText(code);
+    case SP_XML_COMMENT_NODE:
+        return new SPReprComment(code);
+    case SP_XML_DOCUMENT_NODE:
+        return new SPReprDoc(code);
+    default:
+        g_assert_not_reached();
+        return NULL;
+    }
 }
 
 SPRepr *
@@ -125,83 +90,50 @@ sp_repr_new_comment(gchar const *comment)
     return repr;
 }
 
-static void
-repr_init(SPRepr *repr)
-{
-    repr->refcount = 1;
-    repr->doc = NULL;
-    repr->parent = repr->next = repr->children = NULL;
-    repr->attributes = NULL;
-    repr->last_listener = repr->listeners = NULL;
-    repr->content = NULL;
+SPRepr::SPRepr(SPReprType t, int code) : type(t), name(code) {
+    this->doc = NULL;
+    this->parent = this->next = this->children = NULL;
+    this->attributes = NULL;
+    this->last_listener = this->listeners = NULL;
+    this->content = NULL;
 }
 
-static void
-repr_doc_init(SPRepr *repr)
-{
-    SPReprDoc *doc = (SPReprDoc *) repr;
-
-    repr_init(repr);
-
-    repr->doc = doc;
-    doc->log = NULL;
-    doc->is_logging = false;
+SPReprDoc::SPReprDoc(int code) : SPRepr(SP_XML_DOCUMENT_NODE, code) {
+    this->doc = this;
+    this->log = NULL;
+    this->is_logging = false;
 }
 
-SPRepr *
-sp_repr_ref(SPRepr *repr)
-{
-    g_return_val_if_fail(repr != NULL, NULL);
-    g_return_val_if_fail(repr->refcount > 0, NULL);
-
-    repr->refcount += 1;
-
-    return repr;
-}
-
-SPRepr *
-sp_repr_unref(SPRepr *repr)
-{
-    g_return_val_if_fail(repr != NULL, NULL);
-    g_return_val_if_fail(repr->refcount > 0, NULL);
-
-    repr->refcount -= 1;
-
-    if (repr->refcount < 1) {
-        repr->type->finalize(repr);
-        sp_repr_free(repr);
-    }
-
-    return NULL;
-}
-
-static void
-repr_finalize(SPRepr *repr)
-{
+SPRepr::~SPRepr() {
     SPReprListener *rl;
     /* Parents reference children */
-    g_assert(repr->parent == NULL);
-    g_assert(repr->next == NULL);
-    repr->doc = NULL;
+    g_assert(this->parent == NULL);
+    g_assert(this->next == NULL);
+    this->doc = NULL;
 
-    for (rl = repr->listeners; rl; rl = rl->next) {
-        if (rl->vector->destroy) (* rl->vector->destroy)(repr, rl->data);
+    for (rl = this->listeners; rl; rl = rl->next) {
+        if (rl->vector->destroy) (* rl->vector->destroy)(this, rl->data);
     }
-    while (repr->children) sp_repr_remove_child(repr, repr->children);
-    while (repr->attributes) sp_repr_remove_attribute(repr, repr->attributes);
-    g_free(repr->content);
-    while (repr->listeners) sp_repr_remove_listener(repr, repr->listeners);
+    while (this->children) sp_repr_remove_child(this, this->children);
+    while (this->attributes) sp_repr_remove_attribute(this, this->attributes);
+    g_free(this->content);
+    while (this->listeners) sp_repr_remove_listener(this, this->listeners);
 }
 
-static void
-repr_doc_finalize(SPRepr *repr)
-{
-    SPReprDoc *doc = (SPReprDoc *) repr;
-    if (doc->log) {
-        sp_repr_free_log(doc->log);
-        doc->log = NULL;
+SPReprDoc::~SPReprDoc() {
+    if (this->log) {
+        sp_repr_free_log(this->log);
+        this->log = NULL;
     }
-    repr_finalize(repr);
+}
+
+SPRepr *sp_repr_ref(SPRepr *repr) {
+    return Inkscape::Refcounted::claim(repr);
+}
+
+SPRepr *sp_repr_unref(SPRepr *repr) {
+    Inkscape::Refcounted::release(repr);
+    return NULL;
 }
 
 static SPRepr *
@@ -220,46 +152,39 @@ sp_repr_attach(SPRepr *parent, SPRepr *child)
 SPRepr *
 sp_repr_duplicate(SPRepr const *repr)
 {
-    SPRepr *new_repr = sp_repr_new_from_code(repr->type, repr->name);
-    repr->type->copy(new_repr, repr);
-    return new_repr;
+    g_assert(repr != NULL);
+    return repr->duplicate();
 }
 
-void
-repr_copy(SPRepr *to, SPRepr const *from)
+SPRepr::SPRepr(SPRepr const &repr)
+: Refcounted(), type(repr.type), name(repr.name)
 {
-    g_return_if_fail(from != NULL);
-
-    if (from->content != NULL) {
-        to->content = g_strdup(from->content);
+    if (repr.content != NULL) {
+        this->content = g_strdup(repr.content);
     }
 
     SPRepr *lastchild = NULL;
-    for (SPRepr *child = from->children; child != NULL; child = child->next) {
+    for (SPRepr *child = repr.children; child != NULL; child = child->next) {
         if (lastchild) {
-            lastchild = lastchild->next = sp_repr_attach(to, sp_repr_duplicate(child));
+            lastchild = lastchild->next = sp_repr_attach(this, sp_repr_duplicate(child));
         } else {
-            lastchild = to->children = sp_repr_attach(to, sp_repr_duplicate(child));
+            lastchild = this->children = sp_repr_attach(this, sp_repr_duplicate(child));
         }
     }
 
     SPReprAttr *lastattr = NULL;
-    for (SPReprAttr *attr = from->attributes; attr != NULL; attr = attr->next) {
+    for (SPReprAttr *attr = repr.attributes; attr != NULL; attr = attr->next) {
         if (lastattr) {
             lastattr = lastattr->next = sp_attribute_duplicate(attr);
         } else {
-            lastattr = to->attributes = sp_attribute_duplicate(attr);
+            lastattr = this->attributes = sp_attribute_duplicate(attr);
         }
     }
 }
 
-void
-repr_doc_copy(SPRepr *to, SPRepr const *from)
-{
-    SPReprDoc *to_doc = (SPReprDoc *) to;
-    repr_copy(to, from);
-    to_doc->log = NULL;
-    to_doc->is_logging = false;
+SPReprDoc::SPReprDoc(SPReprDoc const &doc) : SPRepr(doc) {
+    this->log = NULL;
+    this->is_logging = false;
 }
 
 gchar const *
@@ -823,19 +748,19 @@ sp_repr_document_new(char const *rootname)
 {
     SPReprDoc *doc = (SPReprDoc *) sp_repr_new_from_code(SP_XML_DOCUMENT_NODE, g_quark_from_static_string("xml"));
     if (!strcmp(rootname, "svg")) {
-        sp_repr_set_attr(&doc->repr, "version", "1.0");
-        sp_repr_set_attr(&doc->repr, "standalone", "no");
-        sp_repr_set_attr(&doc->repr, "doctype",
+        sp_repr_set_attr(doc, "version", "1.0");
+        sp_repr_set_attr(doc, "standalone", "no");
+        sp_repr_set_attr(doc, "doctype",
                          "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\"\n"
                          "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n");
 
         SPRepr *comment = sp_repr_new_comment(" Created with Inkscape (http://www.inkscape.org/) ");
-        sp_repr_append_child(&doc->repr, comment);
+        sp_repr_append_child(doc, comment);
         sp_repr_unref(comment);
     }
 
     SPRepr *root = sp_repr_new(rootname);
-    sp_repr_append_child(&doc->repr, root);
+    sp_repr_append_child(doc, root);
     sp_repr_unref(root);
 
     return doc;
@@ -859,11 +784,11 @@ sp_repr_document_new_list(GSList *reprs)
     g_assert(reprs != NULL);
 
     SPReprDoc *doc = sp_repr_document_new("void");
-    sp_repr_remove_child(&doc->repr, doc->repr.children);
+    sp_repr_remove_child(doc, doc->children);
 
     for ( GSList *iter = reprs ; iter ; iter = iter->next ) {
         SPRepr *repr = (SPRepr *) iter->data;
-        sp_repr_append_child(&doc->repr, repr);
+        sp_repr_append_child(doc, repr);
     }
 
     g_assert(sp_repr_document_root(doc) != NULL);
@@ -874,7 +799,7 @@ sp_repr_document_new_list(GSList *reprs)
 SPRepr *
 sp_repr_document_first_child(SPReprDoc const *doc)
 {
-    return doc->repr.children;
+    return doc->children;
 }
 
 SPReprDoc *
@@ -888,7 +813,7 @@ SPRepr *sp_repr_document_root(SPReprDoc const *doc)
     g_assert( doc != NULL );
 
     /* We can have comments before the root node. */
-    for (SPRepr *repr = doc->repr.children ; repr ; repr = repr->next ) {
+    for (SPRepr *repr = doc->children ; repr ; repr = repr->next ) {
         if ( repr->type == SP_XML_ELEMENT_NODE ) {
             return repr;
         }
@@ -974,45 +899,6 @@ sp_attribute_new_from_code(GQuark const key, gchar const *value)
     new_attr->value = g_strdup(value);
 
     return new_attr;
-}
-
-#define SP_REPR_CHUNK_SIZE 32
-
-static SPRepr *
-sp_repr_alloc(SPReprClass *type)
-{
-    SPRepr *repr;
-    if (type->pool) {
-        repr = type->pool;
-        type->pool = repr->next;
-    } else {
-        char *chunk = (char *) g_malloc( type->size * SP_REPR_CHUNK_SIZE );
-
-        size_t max = type->size * ( SP_REPR_CHUNK_SIZE - 1 );
-        size_t offset;
-        for ( offset = type->size ;
-              offset < max ;
-              offset += type->size )
-        {
-            repr = (SPRepr *)(chunk+offset);
-            repr->next = (SPRepr *)(chunk+offset+type->size);
-        }
-
-        ((SPRepr *) (chunk + offset))->next = NULL;
-        type->pool = (SPRepr *) (chunk+type->size);
-
-        repr = (SPRepr *) chunk;
-    }
-    repr->type = type;
-
-    return repr;
-}
-
-static void
-sp_repr_free(SPRepr *repr)
-{
-    repr->next = repr->type->pool;
-    repr->type->pool = repr;
 }
 
 #define SP_ATTRIBUTE_ALLOC_SIZE 32
