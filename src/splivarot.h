@@ -38,6 +38,11 @@ void sp_selected_path_outline ();
 
 // simplifies a path (removes small segments and the like)
 void sp_selected_path_simplify ();
+// treshhold= like the name says
+// justCoalesce= only tries to merge successive path elements
+// angleLimit= treshhold when breakableAngles=true (not implemented)
+// breakableAngles= make angles less than angleLimit easier to create a control point (not implemented)
+void sp_selected_path_simplify_withparams (float treshhold,bool justCoalesce,float angleLimit,bool breakableAngles);
 
 #endif
 

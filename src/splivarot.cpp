@@ -1213,7 +1213,12 @@ sp_selected_path_do_offset (bool expand)
 }
 
 void
-sp_selected_path_simplify ()
+sp_selected_path_simplify (void)
+{
+  sp_selected_path_simplify_withparams (1.0,true,0.0,false);
+}
+void
+sp_selected_path_simplify_withparams (float treshhold,bool justCoalesce,float angleLimit,bool breakableAngles)
 {
   SPSelection *selection;
   SPRepr *repr;
@@ -1264,9 +1269,11 @@ sp_selected_path_simplify ()
   sp_curve_unref (curve);
   sp_repr_unparent (SP_OBJECT_REPR (item));
   
-  {
-    orig->ConvertEvenLines (1.0);
-    orig->Simplify (0.5);
+  if ( justCoalesce ) {
+    orig->Coalesce (treshhold);
+  } else {
+    orig->ConvertEvenLines (treshhold);
+    orig->Simplify (treshhold);
   }
   
   {

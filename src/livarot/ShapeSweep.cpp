@@ -83,7 +83,7 @@ Shape::Reoriente (Shape * a)
       maxAr = nbAr;
       aretes = (dg_arete *) realloc (aretes, maxAr * sizeof (dg_arete));
       if (HasEdgesData ())
-	eData = (edge_data *) realloc (eData, maxPt * sizeof (edge_data));
+	eData = (edge_data *) realloc (eData, maxAr * sizeof (edge_data));
       if (HasSweepSrcData ())
 	swsData =
 	  (sweep_src_data *) realloc (swsData,

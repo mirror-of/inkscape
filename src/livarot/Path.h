@@ -446,7 +446,7 @@ private:
 			   double nextL, int &rightStNo, int &rightEnNo,int pathID=-1,int pieceID=0,double tID=0.0);
   static void RecRound (Shape * dest, int sNo, int eNo, NR::Point const &iPt,
 			NR::Point const &iS, NR::Point const &iE, double tresh,
-			int lev);
+			int lev,NR::Point &origine,float width);
   static void DashTo (Shape * dest, dashTo_info * dTo, double &dashAbs,
 		      int &dashNo, double &dashPos, bool & inGap,
 		      int &lastLeft, int &lastRight, int nbDash,

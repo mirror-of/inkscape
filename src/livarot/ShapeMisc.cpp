@@ -621,6 +621,10 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
         usePathID=a->ebData[i].pathID;
         usePieceID=a->ebData[i].pieceID;
         useT=a->ebData[i].tSt;
+      } else {
+        usePathID=a->ebData[i].pathID;
+        usePieceID=0;
+        useT=0;
       }
     }
     if (dec > 0)

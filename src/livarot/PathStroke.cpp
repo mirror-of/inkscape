@@ -8,7 +8,11 @@
 
 #include "Path.h"
 #include "Shape.h"
+#include <libnr/nr-point.h>
 #include <libnr/nr-point-fns.h>
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-rotate.h>
+#include <libnr/nr-rotate-ops.h>
 #include <math.h>
 
 /*
@@ -19,6 +23,11 @@
  * to set up a supersampled buffer, raster each polyline stroke's part (one part per segment in the polyline, plus 
  * each join) because these are all convex polygons, then transform in alpha values
  */
+
+
+// to make round caps and joins really arcs
+// otherwise it's approximated with a (faster) quadratic bezier
+//#define joli_recround
 
 // until i find something better
 NR::Point StrokeNormalize(const NR::Point v) {
@@ -299,9 +308,9 @@ Path::DoButt (Shape * dest, double width, ButtType butt, NR::Point pos, NR::Poin
 		int midNo = dest->AddPoint (mx);
     
 		NR::Point dx = pos - width * nor + width * dir;
-		RecRound (dest, rightNo, midNo, dx, ex, mx, 5.0, 8);
+		RecRound (dest, rightNo, midNo, dx, ex, mx, 5.0, 8,pos,width);
 		dx = pos + width * nor + width * dir;
-		RecRound (dest, midNo, leftNo, dx, mx, sx, 5.0, 8);
+		RecRound (dest, midNo, leftNo, dx, mx, sx, 5.0, 8,pos,width);
 	}
 	else
 	{
@@ -409,7 +418,7 @@ Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Poin
 			if (typ >= 0)
 			{
 				RecRound (dest, rightStNo, rightEnNo, pos - l * biss, 
-						  sx, ex, 5.0, 8);
+						  sx, ex, 5.0, 8,pos,width);
 			}
 			else
 			{
@@ -422,9 +431,9 @@ Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Poin
 				NR::Point mx = pos - width * biss;
 				int midNo = dest->AddPoint (mx);
 				RecRound (dest, rightStNo, midNo, nsx, sx, mx, 5.0,
-						  8);
+						  8,pos,width);
 				RecRound (dest, midNo, rightEnNo, nex, mx, ex, 5.0,
-						  8);
+						  8,pos,width);
 			}
 		}
 		else
@@ -504,7 +513,7 @@ Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Poin
 			if (typ >= 0)
 			{
 				RecRound (dest, leftEnNo, leftStNo, 
-						  pos + l * biss, ex, sx, 5.0, 8);
+						  pos + l * biss, ex, sx, 5.0, 8,pos,width);
 			}
 			else
 			{
@@ -512,15 +521,14 @@ Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Poin
 				double dec = (l - width) * c2 / s2;
 				NR::Point tbiss=biss.cw();
         
-				NR::Point mx = pos + width * biss;
-				int midNo = dest->AddPoint (mx);
-        
 				NR::Point nsx = pos + width * biss + dec * tbiss;
 				NR::Point nex = pos + width * biss - dec * tbiss;
-				RecRound (dest, leftEnNo, midNo, nex, ex, mx, 5.0,
-						  8);
+				NR::Point mx = pos + width * biss;
+				int midNo = dest->AddPoint (mx);
+        RecRound (dest, leftEnNo, midNo, nex, ex, mx, 5.0,
+						  8,pos,width);
 				RecRound (dest, midNo, leftStNo, nsx, mx, sx, 5.0,
-						  8);
+						  8,pos,width);
 			}
 		}
 		else
@@ -665,23 +673,22 @@ Path::DoLeftJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 			if (typ >= 0)
 			{
 				RecRound (dest, leftEnNo, leftStNo, pos + l * biss, ex, sx, 5.0,
-						  8);
+						  8,pos,width);
 			}
 			else
 			{
-				const double s2 = cross (biss, nnor);
-				const double dec = (l - width) * c2 / s2;
-				const NR::Point tbiss=biss.ccw();
+				double s2 = cross (biss, nnor);
+				double dec = (l - width) * c2 / s2;
+				NR::Point tbiss=biss.cw();
         
-				const NR::Point mx = pos + width * biss;
+				NR::Point nsx = pos + width * biss + dec * tbiss;
+				NR::Point nex = pos + width * biss - dec * tbiss;
+				NR::Point mx = pos + width * biss;
 				const int midNo = dest->AddPoint (mx);
-        
-				const NR::Point nsx = pos + width * biss + dec * tbiss;
-				const NR::Point nex = pos + width * biss - dec * tbiss;
-				RecRound (dest, leftEnNo, midNo, nex, ex, mx, 5.0,
-						  8);
+        RecRound (dest, leftEnNo, midNo, nex, ex, mx, 5.0,
+						  8,pos,width);
 				RecRound (dest, midNo, leftStNo, nsx, mx, sx, 5.0,
-						  8);
+						  8,pos,width);
 			}
 		}
 		else
@@ -798,22 +805,22 @@ Path::DoRightJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 			if (typ >= 0)
 			{
 				RecRound (dest, rightStNo, rightEnNo, pos - l*biss, 
-						  sx, ex, 5.0, 8);
+						  sx, ex, 5.0, 8,pos,width);
 			}
 			else
 			{
 				double s2 = cross (biss, nnor);
 				double dec = (l - width) * c2 / s2;
-				const NR::Point tbiss=biss.ccw();
+				NR::Point tbiss=biss.cw();
         
-				const NR::Point nsx = pos - width * biss - dec * tbiss;
-				const NR::Point nex = pos - width * biss + dec * tbiss;
-				const NR::Point mx = pos - width * biss;
+				NR::Point nsx = pos - width * biss - dec * tbiss;
+				NR::Point nex = pos - width * biss + dec * tbiss;
+				NR::Point mx = pos - width * biss;
 				int midNo = dest->AddPoint (mx);
 				RecRound (dest, rightStNo, midNo, nsx, sx, mx, 5.0,
-						  8);
+						  8,pos,width);
 				RecRound (dest, midNo, rightEnNo, nex, mx, ex, 5.0,
-						  8);
+						  8,pos,width);
 			}
 		}
 		else
@@ -866,8 +873,34 @@ Path::DoRightJoin (Shape * dest, double width, JoinType join, NR::Point pos,
 // a very ugly way to produce round joins: doing one (or two, depend on the angle of the join) quadratic bezier curves
 // but since most joins are going to be small, nobody will notice
 void
-Path::RecRound (Shape * dest, int sNo, int eNo, NR::Point const &iP, NR::Point const &iS,NR::Point const &iE, double tresh, int lev)
+Path::RecRound (Shape * dest, int sNo, int eNo, NR::Point const &iP, NR::Point const &iS,NR::Point const &iE, double tresh, int lev,NR::Point &origine,float width)
 {
+#ifdef joli_recround
+  NR::Point  stN=iS-origine;
+  NR::Point  enN=iE-origine;
+  stN=StrokeNormalize(stN);
+  enN=StrokeNormalize(enN);
+  double  coa=dot(stN,enN);
+  double  sia=cross(stN,enN);
+  double  ang=acos(coa);
+  if ( coa >= 1 ) ang=0;
+  if ( coa <= -1 ) ang=M_PI;
+  ang/=0.1;
+  int   nbS=(int)floor(ang);
+  NR::rotate    omega(((sia>0)?-0.1:0.1));
+  NR::Point     cur=iS-origine;
+//  StrokeNormalize(cur);
+//  cur*=width;
+  int lastNo=sNo;
+  for (int i=1;i<nbS;i++) {
+    cur=cur*omega;
+    NR::Point   m=origine+cur;
+    int mNo = dest->AddPoint (m);
+    dest->AddEdge (lastNo, mNo);
+    lastNo=mNo;
+  }
+  dest->AddEdge (lastNo, eNo);
+#else
 	if (lev <= 0)
 	{
 		dest->AddEdge (sNo, eNo);
@@ -883,8 +916,9 @@ Path::RecRound (Shape * dest, int sNo, int eNo, NR::Point const &iP, NR::Point c
 	const NR::Point m = (iS + iE + 2 * iP) / 4;
 	int mNo = dest->AddPoint (m);
   
-	RecRound (dest, sNo, mNo, (iS + iP) / 2, iS, m, tresh, lev - 1);
-	RecRound (dest, mNo, eNo, (iE + iP) / 2, m, iE, tresh, lev - 1);
+	RecRound (dest, sNo, mNo, (iS + iP) / 2, iS, m, tresh, lev - 1,origine,width);
+	RecRound (dest, mNo, eNo, (iE + iP) / 2, m, iE, tresh, lev - 1,origine,width);
+#endif
 }
 
 /*

@@ -139,53 +139,58 @@ Path::DoSimplify (double treshhold)
     
     path_descr_cubicto res;
     bool contains_forced = false;
-    int  forced_pt=-1;
-    do
-    {
-      if (back)
-	    {
+    int step=64;
+    while ( step > 0 ) {   
+      int  forced_pt=-1;
+      do
       {
-        path_lineto_b *tp = (path_lineto_b *) savPts;
-        if ((tp + lastP)->isMoveTo == polyline_forced)
-          contains_forced = true;
-        forced_pt=lastP;
+        if (back)
+        {
+        {
+          path_lineto_b *tp = (path_lineto_b *) savPts;
+          if ((tp + lastP)->isMoveTo == polyline_forced)
+            contains_forced = true;
+          forced_pt=lastP;
+        }
+        }
+        else
+        {
+        {
+          path_lineto *tp = (path_lineto *) savPts;
+          if ((tp + lastP)->isMoveTo == polyline_forced)
+            contains_forced = true;
+          forced_pt=lastP;
+        }
+        }
+        lastP+=step;
+        nbPt+=step;
+        //        if (kissGoodbye)
+        //          break;
       }
-	    }
+      while (lastP < savNbPt
+             && AttemptSimplify ((contains_forced) ? 0.1 * treshhold : treshhold,
+                                 res));
+      
+      if (lastP >= savNbPt)
+      {
+        //                      printf("o");
+        lastP-=step;
+        nbPt-=step;
+      }
       else
-	    {
       {
-        path_lineto *tp = (path_lineto *) savPts;
-        if ((tp + lastP)->isMoveTo == polyline_forced)
-          contains_forced = true;
-        forced_pt=lastP;
+        // le dernier a echoué
+        lastP-=step;
+        nbPt-=step;
+        if ( contains_forced ) {
+          lastP=forced_pt;
+          nbPt=lastP-curP+1;
+          AttemptSimplify (treshhold,res);       // ca passe forcement
+        }
       }
-	    }
-      lastP++;
-      nbPt++;
-      //        if (kissGoodbye)
-      //          break;
+      step/=2;
     }
-    while (lastP < savNbPt
-           && AttemptSimplify ((contains_forced) ? 0.1 * treshhold : treshhold,
-                               res));
     
-    if (lastP >= savNbPt)
-    {
-      //                      printf("o");
-      lastP--;
-      nbPt--;
-    }
-    else
-    {
-      // le dernier a echoué
-      lastP--;
-      nbPt--;
-      if ( contains_forced ) {
-        lastP=forced_pt;
-        nbPt=lastP-curP+1;
-        AttemptSimplify (treshhold,res);       // ca passe forcement
-      }
-    }
     if (back)
     {
     {

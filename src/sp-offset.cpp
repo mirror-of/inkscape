@@ -98,7 +98,7 @@ SPReprEventVector offset_source_child_event_vector = {
   NULL
 };
 
-
+static bool   use_slow_but_correct_offset_method=true;
 
 static SPShapeClass *parent_class;
 
@@ -569,7 +569,7 @@ sp_offset_set_shape (SPShape * shape)
   Path *orig = new Path;
   orig->Copy ((Path *) offset->originalPath);
   
-    {
+  if ( use_slow_but_correct_offset_method == false ) {
     // version par outline
     Shape *theShape = new Shape;
   Shape *theRes = new Shape;
@@ -622,8 +622,7 @@ sp_offset_set_shape (SPShape * shape)
   delete theShape;
   delete theRes;
   delete res;
-  } 
- /* {
+  } else {
     // version par makeoffset
     Shape *theShape = new Shape;
     Shape *theRes = new Shape;
@@ -667,7 +666,7 @@ sp_offset_set_shape (SPShape * shape)
     
     delete theShape;
     delete theRes;
-  }     */
+  } 
   {
     char *res_d = NULL;
     if (orig->descr_nb <= 1)
