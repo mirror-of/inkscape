@@ -1185,6 +1185,158 @@ sp_marker_select(GtkOptionMenu *mnu, GtkWidget *spw)
     sp_document_done(SP_WIDGET_DOCUMENT(spw));
 }
 
+/** Determine average stroke width */
+gdouble
+stroke_average_width (GSList const *objects)
+{
+    if (g_slist_length ((GSList *) objects) == 0)
+        return NR_HUGE;
+
+    gdouble avgwidth = 0.0;
+    bool notstroked = true;
+
+    for (GSList const *l = objects; l != NULL; l = l->next) {
+        if (!SP_IS_ITEM (l->data))
+            continue;
+
+        NR::Matrix i2d = sp_item_i2d_affine (SP_ITEM(l->data));
+
+        SPObject *object = SP_OBJECT(l->data);
+
+        if ( object->style->stroke.type == SP_PAINT_TYPE_NONE ) {
+            continue;            
+        } else {
+            notstroked = false;
+        }
+
+        avgwidth += SP_OBJECT_STYLE (object)->stroke_width.computed * i2d.expansion();
+    }
+
+    if (notstroked)
+        return NR_HUGE;
+
+    return avgwidth / g_slist_length ((GSList *) objects);
+}
+
+bool
+stroke_width_varying (GSList const *objects)
+{
+    if (g_slist_length ((GSList *) objects) <= 1)
+        return false;
+
+    gdouble width = NR_HUGE;
+
+    for (GSList const *l = objects; l != NULL; l = l->next) {
+
+        if (!SP_IS_ITEM (l->data))
+            continue;
+
+        SPObject *object = SP_OBJECT(l->data);
+
+        if ( SP_OBJECT_STYLE (object)->stroke.type == SP_PAINT_TYPE_NONE ) {
+            continue;
+        }
+
+        NR::Matrix i2d = sp_item_i2d_affine (SP_ITEM(l->data));
+
+        if (width == NR_HUGE) {
+            width = SP_OBJECT_STYLE (object)->stroke_width.computed * i2d.expansion();
+        } else {
+            if (fabs (width - SP_OBJECT_STYLE (object)->stroke_width.computed * i2d.expansion()) > 1e-3)
+                return true;
+        }
+
+    }
+
+    return false;
+}
+
+/** Determine average miterlimit */
+gdouble
+stroke_average_miterlimit (GSList const *objects)
+{
+    if (g_slist_length ((GSList *)objects) == 0)
+        return NR_HUGE;
+
+    gdouble avgml = 0.0;
+    bool notstroked = true;
+
+    for (GSList const *l = objects; l != NULL; l = l->next) {
+        if (!SP_IS_ITEM (l->data))
+            continue;
+
+        SPObject *object = SP_OBJECT(l->data);
+
+        avgml += object->style->stroke_miterlimit.value;
+
+        if ( object->style->stroke.type != SP_PAINT_TYPE_NONE ) {
+            notstroked = false;
+        }
+    }
+
+    if (notstroked)
+        return NR_HUGE;
+
+    return avgml / g_slist_length ((GSList *) objects);
+}
+
+static gboolean stroke_width_set_unit(SPUnitSelector *,
+                                                 SPUnit const *old,
+                                                 SPUnit const *new_units,
+                                                 GObject *dlg)
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    
+    if (!desktop) {
+        return FALSE;
+    }
+    
+    SPSelection *selection = SP_DT_SELECTION (desktop);
+    
+    if (selection->isEmpty())
+        return FALSE;
+
+    GSList const *objects = selection->itemList();
+
+    if ((old->base == SP_UNIT_ABSOLUTE) && 
+       (new_units->base == SP_UNIT_DIMENSIONLESS)) {
+       
+        /* Absolute to percentage */
+        g_object_set_data (dlg, "update", GUINT_TO_POINTER (TRUE));
+ 
+        GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data (dlg, "width"));
+        float w = sp_units_get_points (a->value, old);
+
+        gdouble average = stroke_average_width (objects);
+
+        if (average == NR_HUGE || average == 0)
+            return FALSE;
+
+        gtk_adjustment_set_value (a, 100.0 * w / average);
+
+        g_object_set_data (dlg, "update", GUINT_TO_POINTER (FALSE));
+        return TRUE;
+        
+    } else if ((old->base == SP_UNIT_DIMENSIONLESS) && 
+              (new_units->base == SP_UNIT_ABSOLUTE)) {
+              
+        /* Percentage to absolute */
+        g_object_set_data (dlg, "update", GUINT_TO_POINTER (TRUE));
+
+        GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data (dlg, "width"));
+
+        gdouble average = stroke_average_width (objects);
+
+        gtk_adjustment_set_value (a, sp_points_get_units (0.01 * a->value * average, new_units));
+
+        g_object_set_data (dlg, "update", GUINT_TO_POINTER (FALSE));
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+
 /**
  * \brief  Creates a new widget for the line stroke style.
  *
@@ -1217,7 +1369,7 @@ sp_stroke_style_line_widget_new(void)
 
     hb = spw_hbox(t, 3, 1, i);
 
-    a = gtk_adjustment_new(1.0, 0.0, 100.0, 0.1, 10.0, 10.0);
+    a = gtk_adjustment_new(1.0, 0.0, 1000.0, 0.1, 10.0, 10.0);
     gtk_object_set_data(GTK_OBJECT(spw), "width", a);
     sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 0.1, 2);
     gtk_tooltips_set_tip(tt, sb, _("Stroke width"), NULL);
@@ -1227,14 +1379,14 @@ sp_stroke_style_line_widget_new(void)
 
     gtk_box_pack_start(GTK_BOX(hb), sb, FALSE, FALSE, 0);
     us = sp_unit_selector_new(SP_UNIT_ABSOLUTE);
+    sp_unit_selector_add_unit ( SP_UNIT_SELECTOR (us), sp_unit_get_by_abbreviation ("%"), 0 );
+    g_signal_connect ( G_OBJECT (us), "set_unit", G_CALLBACK (stroke_width_set_unit), spw );
     gtk_widget_show(us);
-    sp_unit_selector_add_adjustment( SP_UNIT_SELECTOR(us),
-                                     GTK_ADJUSTMENT(a) );
+    sp_unit_selector_add_adjustment( SP_UNIT_SELECTOR(us), GTK_ADJUSTMENT(a) );
     gtk_box_pack_start(GTK_BOX(hb), us, FALSE, FALSE, 0);
     gtk_object_set_data(GTK_OBJECT(spw), "units", us);
 
-    gtk_signal_connect( GTK_OBJECT(a), "value_changed",
-                        GTK_SIGNAL_FUNC(sp_stroke_style_width_changed), spw );
+    gtk_signal_connect( GTK_OBJECT(a), "value_changed", GTK_SIGNAL_FUNC(sp_stroke_style_width_changed), spw );
     i++;
 
     /* Join type */
@@ -1551,7 +1703,7 @@ sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel)
     GtkWidget *sset = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), "stroke"));
     GtkObject *width = GTK_OBJECT(gtk_object_get_data(GTK_OBJECT(spw), "width"));
     GtkObject *ml = GTK_OBJECT(gtk_object_get_data(GTK_OBJECT(spw), "miterlimit"));
-    GtkWidget *units = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), "units"));
+    GtkWidget *us = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), "units"));
     GtkWidget *dsel = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), "dash"));
 
     if ( !sel || sel->isEmpty() ) {
@@ -1562,47 +1714,33 @@ sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel)
         return;
     }
 
-    GSList const * const objects = sel->itemList();
+    GSList const *objects = sel->itemList();
 
-    /* Determine average stroke width and miterlimit */
-    gdouble avgwidth = 0.0;
-    gdouble avgml = 0.0;
-    bool stroked = true;
-    for (GSList const *l = objects; l != NULL; l = l->next) {
-        NRMatrix i2d;
-        sp_item_i2d_affine(SP_ITEM(l->data), &i2d);
+    gdouble avgwidth = stroke_average_width (objects);
+    gdouble avgml = stroke_average_miterlimit (objects);
 
-        SPObject *object = SP_OBJECT(l->data);
-
-        gdouble dist = object->style->stroke_width.computed * NR_MATRIX_DF_EXPANSION(&i2d);
-        gdouble ml = object->style->stroke_miterlimit.value;
-
-#ifdef SP_SS_VERBOSE
-        g_print("%g in user is %g on desktop\n",
-                object->style->stroke_width.computed, dist);
-#endif
-        avgwidth += dist;
-        avgml += ml;
-        if ( object->style->stroke.type == SP_PAINT_TYPE_NONE ) {
-            stroked = false;
-        }
-    }
-
-    if (stroked) {
+    if (avgwidth != NR_HUGE) {
         gtk_widget_set_sensitive(sset, TRUE);
     } else {
-        /* Some objects not stroked, set insensitive */
+        /* No objects stroked, set insensitive */
         gtk_widget_set_sensitive(sset, FALSE);
-        gtk_object_set_data(GTK_OBJECT(spw), "update",
-                            GINT_TO_POINTER(FALSE));
+
+        gtk_object_set_data(GTK_OBJECT(spw), "update", GINT_TO_POINTER(FALSE));
         return;
     }
 
-    avgwidth /= g_slist_length(const_cast<GSList *>(objects));
-    sp_convert_distance(&avgwidth, SP_PS_UNIT, sp_unit_selector_get_unit(SP_UNIT_SELECTOR(units)));
-    gtk_adjustment_set_value(GTK_ADJUSTMENT(width), avgwidth);
+    if (stroke_width_varying (objects)) {
+        sp_unit_selector_set_unit (SP_UNIT_SELECTOR (us), sp_unit_get_by_abbreviation ("%"));
+    }
 
-    avgml /= g_slist_length(const_cast<GSList *>(objects));
+    const SPUnit *unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
+    if (unit->base == SP_UNIT_ABSOLUTE) {
+        sp_convert_distance(&avgwidth, SP_PS_UNIT, sp_unit_selector_get_unit(SP_UNIT_SELECTOR(us)));
+        gtk_adjustment_set_value(GTK_ADJUSTMENT(width), avgwidth);
+    } else {
+        gtk_adjustment_set_value(GTK_ADJUSTMENT(width), 100);
+    }
+
     gtk_adjustment_set_value(GTK_ADJUSTMENT(ml), avgml);
 
     /* Join & Cap */
@@ -1733,6 +1871,12 @@ sp_stroke_style_set_scaled_dash(SPCSSAttr *css,
 static void
 sp_stroke_style_scale_line(SPWidget *spw)
 {
+    if (gtk_object_get_data(GTK_OBJECT(spw), "update")) {
+        return;
+    }
+
+    gtk_object_set_data(GTK_OBJECT(spw), "update", GINT_TO_POINTER(TRUE));
+
     GtkAdjustment *wadj = GTK_ADJUSTMENT(gtk_object_get_data(GTK_OBJECT(spw), "width"));
     SPUnitSelector *us = SP_UNIT_SELECTOR(gtk_object_get_data(GTK_OBJECT(spw), "units"));
     SPDashSelector *dsel = SP_DASH_SELECTOR(gtk_object_get_data(GTK_OBJECT(spw), "dash"));
@@ -1759,24 +1903,31 @@ sp_stroke_style_scale_line(SPWidget *spw)
     SPCSSAttr *css = sp_repr_css_attr_new();
 
     if (items) {
-        for (GSList const *i = items; i != NULL; i = i->next) {
-            double length = wadj->value;
-            double const miterlimit = ml->value;
-            double *dash, offset;
-            int ndash;
-            sp_dash_selector_get_dash(dsel, &ndash, &dash, &offset);
 
+        double width_typed = wadj->value;
+        double const miterlimit = ml->value;
+
+        const SPUnit *unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
+
+        double *dash, offset;
+        int ndash;
+        sp_dash_selector_get_dash(dsel, &ndash, &dash, &offset);
+
+        for (GSList const *i = items; i != NULL; i = i->next) {
             /* Set stroke width */
-            sp_convert_distance( &length, sp_unit_selector_get_unit(us),
-                                 SP_PS_UNIT );
-            NRMatrix i2d, d2i;
-            sp_item_i2d_affine(SP_ITEM(i->data), &i2d);
-            nr_matrix_invert(&d2i, &i2d);
-            double const dist = length * NR_MATRIX_DF_EXPANSION(&d2i);
+            double width;
+            if (unit->base == SP_UNIT_ABSOLUTE) {
+                sp_convert_distance( &width_typed, sp_unit_selector_get_unit(us), SP_PS_UNIT );
+                NR::Matrix i2d = sp_item_i2d_affine (SP_ITEM(i->data));
+                width = width_typed * i2d.inverse().expansion();
+            } else { // percentage
+                gdouble old_w = SP_OBJECT_STYLE (i->data)->stroke_width.computed;
+                width = old_w * width_typed / 100;
+            }
 
             {
                 Inkscape::SVGOStringStream os_width;
-                os_width << dist;
+                os_width << width;
                 sp_repr_css_set_property(css, "stroke-width", os_width.str().c_str());
             }
 
@@ -1787,13 +1938,21 @@ sp_stroke_style_scale_line(SPWidget *spw)
             }
 
             /* Set dash */
-            sp_stroke_style_set_scaled_dash(css, ndash, dash, offset, dist);
+            sp_stroke_style_set_scaled_dash(css, ndash, dash, offset, width);
 
-            sp_repr_css_change_recursive(SP_OBJECT_REPR(i->data), css,
-                                         "style");
+            sp_repr_css_change_recursive(SP_OBJECT_REPR(i->data), css, "style");
             g_free(dash);
         }
+
+        if (unit->base != SP_UNIT_ABSOLUTE) {
+            // reset to 100 percent 
+            gtk_adjustment_set_value (wadj, 100.0);
+        }
+
     } else {
+
+         // FIXME: seems like this reprs list can only contain one repr, that of the selected tool's pref when you "apply to" some tool.
+         // That stupidity will be eliminated when we have current style in SPDesktop.
         for (GSList const *r = reprs; r != NULL; r = r->next) {
             double length = wadj->value;
             double const miterlimit = ml->value;
@@ -1833,6 +1992,7 @@ sp_stroke_style_scale_line(SPWidget *spw)
 
     g_slist_free(reprs);
 
+    gtk_object_set_data(GTK_OBJECT(spw), "update", GINT_TO_POINTER(FALSE));
 }
 
 
