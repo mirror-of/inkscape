@@ -128,10 +128,10 @@ object {
 
     translate<-AllShapes_CENTER_X, 0, -AllShapes_CENTER_Y>
     scale  <  1,  60,   1>
-    rotate < 90,   0,   0>   //x first
+    rotate <-90,   0,   0>   //x first
     rotate <  0,   0,   0>   //z second
     rotate < 20,   0,   0>   //whatever else
-    rotate <  0,  20,   0>   //whatever else
+    rotate <  0,  -20,   0>   //whatever else
 
 }//object
 

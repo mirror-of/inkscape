@@ -103,11 +103,22 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
     unsigned int indx;
     for (indx = 0; indx < results.size() ; indx++)
         {
+        //### Fetch the object from the repr info
         SPRepr *rpath = results[indx];
         gchar *id  = (gchar *)sp_repr_attr(rpath, "id");
         SPObject *reprobj = SP_ACTIVE_DOCUMENT->getObjectByRepr(rpath);
         if (!reprobj)
             continue;
+
+        //### Get the transform of the item
+        if (!SP_IS_ITEM(reprobj))
+            {
+            continue;
+            }
+        SPItem *item = SP_ITEM(reprobj);
+        NR::Matrix tf = sp_item_i2d_affine(item);
+
+        //### Get the Shape
         if (!SP_IS_SHAPE(reprobj))//Bulia's suggestion.  Allow all shapes
             {
             continue;
@@ -170,6 +181,23 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
         int segmentNr = 0;
         for (bp = curve->bpath, curveNr=0 ; curveNr<curve->length ; curveNr++, bp++)
             {
+            /*
+            double x1 = bp->x1;
+            double y1 = bp->y1;
+            double x2 = bp->x2;
+            double y2 = bp->y2;
+            double x3 = bp->x3;
+            double y3 = bp->y3;
+            */
+            /**/
+            double x1 = NR_MATRIX_DF_TRANSFORM_X(tf,bp->x1, bp->y1);
+            double y1 = NR_MATRIX_DF_TRANSFORM_Y(tf,bp->x1, bp->y1);
+            double x2 = NR_MATRIX_DF_TRANSFORM_X(tf,bp->x2, bp->y2);
+            double y2 = NR_MATRIX_DF_TRANSFORM_Y(tf,bp->x2, bp->y2);
+            double x3 = NR_MATRIX_DF_TRANSFORM_X(tf,bp->x3, bp->y3);
+            double y3 = NR_MATRIX_DF_TRANSFORM_Y(tf,bp->x3, bp->y3);
+            /**/
+
             switch (bp->code)
                 {
                 case NR_MOVETO:
@@ -177,13 +205,15 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
                     //fprintf(f, "moveto: %f %f\n", bp->x3, bp->y3);
                 break;
                 case NR_CURVETO:
+
                     fprintf(f, "    /*%4d*/ <%f, %f>, <%f, %f>, <%f,%f>, <%f,%f>",
-                        segmentNr++, lastx, lasty, bp->x1, bp->y1, 
-                        bp->x2, bp->y2, bp->x3, bp->y3);
+                        segmentNr++, lastx, lasty, x1, y1, x2, y2, x3, y3);
+
                     if (segmentNr < segmentCount)
                         fprintf(f, ",\n");
                     else
                         fprintf(f, "\n");
+
                     if (lastx < cminx)
                         cminx = lastx;
                     if (lastx > cmaxx)
@@ -194,13 +224,15 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
                         cmaxy = lasty;
                 break;
                 case NR_LINETO:
+
                     fprintf(f, "    /*%4d*/ <%f, %f>, <%f, %f>, <%f,%f>, <%f,%f>",
-                        segmentNr++, lastx, lasty, lastx, lasty, 
-                        bp->x3, bp->y3, bp->x3, bp->y3);
+                        segmentNr++, lastx, lasty, lastx, lasty, x3, y3, x3, y3);
+
                     if (segmentNr < segmentCount)
                         fprintf(f, ",\n");
                     else
                         fprintf(f, "\n");
+
                     //fprintf(f, "lineto\n");
                     if (lastx < cminx)
                         cminx = lastx;
@@ -215,8 +247,8 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
                     //fprintf(f, "end\n");
                 break;
                 }
-            lastx = bp->x3;
-            lasty = bp->y3;
+            lastx = x3;
+            lasty = y3;
             }
         fprintf(f, "}\n");
         fprintf(f, "#declare %s_MIN_X    = %4.3f;\n", id, cminx);
