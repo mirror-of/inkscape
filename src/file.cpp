@@ -198,8 +198,11 @@ file_save (SPDocument *doc, const gchar *uri, Inkscape::Extension::Extension *ke
 {
     if (!doc || !uri) //Safety check
         return FALSE;
+
+	sp_document_set_uri (doc, uri);
+
 	try {
-		sp_module_system_save (key, doc, uri);
+		sp_module_system_save (key, doc, uri, true); // save officially, with inkscape: attributes set
 	} catch (Inkscape::Extension::Output::no_extension_found &e) {
 		gchar * text;
 		text = g_strdup_printf(_("No Inkscape extension found to save document (%s).  This may have been caused by an unknown filename extension."), uri);
