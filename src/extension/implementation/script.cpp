@@ -85,10 +85,8 @@ Script::Script() :
     free what they are given (and should do it too!).
 */
 gchar *
-Script::solve_reldir (Inkscape::XML::Node * reprin) {
-    const gchar * reldir;
-
-    reldir = reprin->attribute("reldir");
+Script::solve_reldir(Inkscape::XML::Node *reprin) {
+    gchar const *reldir = reprin->attribute("reldir");
 
     if (reldir == NULL) {
         return g_strdup(sp_repr_children(reprin)->content());
@@ -120,18 +118,15 @@ Script::solve_reldir (Inkscape::XML::Node * reprin) {
     then a FALSE is returned, the command could not be found.
 */
 bool
-Script::check_existance (const gchar * command)
+Script::check_existance(gchar const *command)
 {
-    gchar * path;
-    gchar * orig_path;
-
     if (*command == '\0') {
         /* We check the simple case first. */
         return FALSE;
     }
 
-    if (g_utf8_strchr (command, -1, G_DIR_SEPARATOR) != NULL) {
-        /* Don't search when it contains a slash.  */
+    if (g_utf8_strchr(command, -1, G_DIR_SEPARATOR) != NULL) {
+        /* Don't search when it contains a slash. */
         if (Inkscape::IO::file_test(command, G_FILE_TEST_EXISTS))
             return TRUE;
         else
@@ -139,18 +134,17 @@ Script::check_existance (const gchar * command)
     }
 
 
-    path = g_strdup(g_getenv("PATH"));
-
+    gchar *path = g_strdup(g_getenv("PATH"));
     if (path == NULL) {
         /* There is no `PATH' in the environment.
            The default search path is the current directory */
         path = g_strdup(G_SEARCHPATH_SEPARATOR_S);
     }
-    orig_path = path;
+    gchar *orig_path = path;
 
     for (; path != NULL;) {
-        gchar * local_path;
-        gchar * final_name;
+        gchar *local_path;
+        gchar *final_name;
 
         local_path = path;
         path = g_utf8_strchr(path, -1, G_SEARCHPATH_SEPARATOR);
@@ -204,10 +198,10 @@ Script::check_existance (const gchar * command)
 */
 
 bool
-Script::load (Inkscape::Extension::Extension * module)
+Script::load(Inkscape::Extension::Extension *module)
 {
-    Inkscape::XML::Node * child_repr;
-    gchar * command_text = NULL;
+    Inkscape::XML::Node *child_repr;
+    gchar *command_text = NULL;
 
     if (module->loaded()) {
         return TRUE;
@@ -252,7 +246,7 @@ Script::load (Inkscape::Extension::Extension * module)
     command if it has been allocated.
 */
 void
-Script::unload (Inkscape::Extension::Extension * module)
+Script::unload(Inkscape::Extension::Extension *module)
 {
     g_free(command);
     g_free(helper_extension);
@@ -266,25 +260,20 @@ Script::unload (Inkscape::Extension::Extension * module)
 
 */
 bool
-Script::check (Inkscape::Extension::Extension * module)
+Script::check(Inkscape::Extension::Extension *module)
 {
-    Inkscape::XML::Node * child_repr;
-    gchar * command_text;
-
-    child_repr = sp_repr_children(module->get_repr());
+    Inkscape::XML::Node *child_repr = sp_repr_children(module->get_repr());
     while (child_repr != NULL) {
         if (!strcmp(child_repr->name(), "script")) {
             child_repr = sp_repr_children(child_repr);
             while (child_repr != NULL) {
                 if (!strcmp(child_repr->name(), "check")) {
-                    command_text = solve_reldir(child_repr);
-                    
+                    gchar *command_text = solve_reldir(child_repr);
                     if (command_text != NULL) {
-                    /* I've got the command */
+                        /* I've got the command */
                         bool existance;
 
                         existance = check_existance(command_text);
-                                                // printf("%s exists %s\n", command_text, existance ? "TRUE" : "FALSE");
                         g_free(command_text);
                         if (!existance)
                             return FALSE;
@@ -292,11 +281,8 @@ Script::check (Inkscape::Extension::Extension * module)
                 }
 
                 if (!strcmp(child_repr->name(), "helper_extension")) {
-                    const gchar * helper;
-
-                    helper = sp_repr_children(child_repr)->content();
+                    gchar const *helper = sp_repr_children(child_repr)->content();
                     if (Inkscape::Extension::db.get(helper) == NULL) {
-                        //printf("Couldn't find helper\n");
                         return FALSE;
                     }
                 }
@@ -321,7 +307,7 @@ Script::check (Inkscape::Extension::Extension * module)
     This function should really do something, right now it doesn't.
 */
 GtkDialog *
-Script::prefs_input (Inkscape::Extension::Input * module, const gchar * filename)
+Script::prefs_input(Inkscape::Extension::Input *module, gchar const *filename)
 {
     /* Sad, this should really do something... */
     return NULL;
@@ -335,7 +321,7 @@ Script::prefs_input (Inkscape::Extension::Input * module, const gchar * filename
     This function should really do something, right now it doesn't.
 */
 GtkDialog *
-Script::prefs_output (Inkscape::Extension::Output * module)
+Script::prefs_output(Inkscape::Extension::Output *module)
 {
     /* Sad, this should really do something... */
     return NULL;
@@ -349,7 +335,7 @@ Script::prefs_output (Inkscape::Extension::Output * module)
     This function should really do something, right now it doesn't.
 */
 Gtk::Widget *
-Script::prefs_effect (Inkscape::Extension::Effect * module, SPView * view)
+Script::prefs_effect(Inkscape::Extension::Effect *module, SPView *view)
 {
     /* Sad, this should really do something... */
     return 0;
@@ -377,19 +363,19 @@ Script::prefs_effect (Inkscape::Extension::Effect * module, SPView * view)
     That document is then returned from this function.
 */
 SPDocument *
-Script::open (Inkscape::Extension::Input * module, const gchar * filename)
+Script::open(Inkscape::Extension::Input *module, gchar const *filename)
 {
-    gchar * tempfilename_out;
-    SPDocument * mydoc;
+    gchar *tempfilename_out;
+    SPDocument *mydoc;
     gint tempfd;
 
     // FIXME: process the GError instead of passing NULL
-    if ((tempfd=g_file_open_tmp("ink_ext_XXXXXX",&tempfilename_out,NULL)) == -1) {
+    if ((tempfd = g_file_open_tmp("ink_ext_XXXXXX", &tempfilename_out, NULL)) == -1) {
         /* Error, couldn't create temporary filename */
         if (errno == EINVAL) {
             /* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
             perror("Extension::Script:  template for filenames is misconfigured.\n");
-            exit(-1);        
+            exit(-1);
         } else if (errno == EEXIST) {
             /* Now the  contents of template are undefined. */
             perror("Extension::Script:  Could not create a unique temporary filename\n");
@@ -402,9 +388,9 @@ Script::open (Inkscape::Extension::Input * module, const gchar * filename)
 
     gsize bytesRead = 0;
     gsize bytesWritten = 0;
-    GError* error = NULL;
-    gchar* local_filename = g_filename_from_utf8 ( filename,
-                                 -1,  &bytesRead,  &bytesWritten, &error);
+    GError *error = NULL;
+    gchar *local_filename = g_filename_from_utf8( filename,
+                                                  -1,  &bytesRead,  &bytesWritten, &error);
 
     execute(command, local_filename, tempfilename_out);
     g_free(local_filename);
@@ -415,7 +401,7 @@ Script::open (Inkscape::Extension::Input * module, const gchar * filename)
         mydoc = Inkscape::Extension::open(Inkscape::Extension::db.get(helper_extension), tempfilename_out);
     }
 
-    sp_document_set_uri(mydoc, (const gchar *)filename);
+    sp_document_set_uri(mydoc, filename);
 
     // make sure we don't leak file descriptors from g_file_open_tmp
     close(tempfd);
@@ -451,18 +437,18 @@ Script::open (Inkscape::Extension::Input * module, const gchar * filename)
     delete the temporary file.
 */
 void
-Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gchar * filename)
+Script::save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *filename)
 {
-    gchar * tempfilename_in;
+    gchar *tempfilename_in;
     gint tempfd;
 
     // FIXME: process the GError instead of passing NULL
-    if ((tempfd=g_file_open_tmp("ink_ext_XXXXXX",&tempfilename_in,NULL)) == -1) {
+    if ((tempfd = g_file_open_tmp("ink_ext_XXXXXX", &tempfilename_in, NULL)) == -1) {
         /* Error, couldn't create temporary filename */
         if (errno == EINVAL) {
             /* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
             perror("Extension::Script:  template for filenames is misconfigured.\n");
-            exit(-1);        
+            exit(-1);
         } else if (errno == EEXIST) {
             /* Now the  contents of template are undefined. */
             perror("Extension::Script:  Could not create a unique temporary filename\n");
@@ -481,9 +467,9 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
 
     gsize bytesRead = 0;
     gsize bytesWritten = 0;
-    GError* error = NULL;
-    gchar* local_filename = g_filename_from_utf8 ( filename,
-                                 -1,  &bytesRead,  &bytesWritten, &error);
+    GError *error = NULL;
+    gchar *local_filename = g_filename_from_utf8( filename,
+                                                  -1,  &bytesRead,  &bytesWritten, &error);
 
     execute(command, tempfilename_in, local_filename);
 
@@ -527,20 +513,20 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
     point both should be full, and the second one is loaded.
 */
 void
-Script::effect (Inkscape::Extension::Effect * module, SPView * doc)
+Script::effect(Inkscape::Extension::Effect *module, SPView *doc)
 {
-    gchar * tempfilename_in;
-    gchar * tempfilename_out;
-    SPDocument * mydoc;
+    gchar *tempfilename_in;
+    gchar *tempfilename_out;
+    SPDocument *mydoc;
     gint tempfd_in, tempfd_out;
 
     // FIXME: process the GError instead of passing NULL
-    if ((tempfd_in=g_file_open_tmp("ink_ext_XXXXXX",&tempfilename_in,NULL)) == -1) {
+    if ((tempfd_in = g_file_open_tmp("ink_ext_XXXXXX", &tempfilename_in, NULL)) == -1) {
         /* Error, couldn't create temporary filename */
         if (errno == EINVAL) {
             /* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
             perror("Extension::Script:  template for filenames is misconfigured.\n");
-            exit(-1);        
+            exit(-1);
         } else if (errno == EEXIST) {
             /* Now the  contents of template are undefined. */
             perror("Extension::Script:  Could not create a unique temporary filename\n");
@@ -552,12 +538,12 @@ Script::effect (Inkscape::Extension::Effect * module, SPView * doc)
     }
 
     // FIXME: process the GError instead of passing NULL
-    if ((tempfd_out=g_file_open_tmp("ink_ext_XXXXXX",&tempfilename_out,NULL)) == -1) {
+    if ((tempfd_out = g_file_open_tmp("ink_ext_XXXXXX", &tempfilename_out, NULL)) == -1) {
         /* Error, couldn't create temporary filename */
         if (errno == EINVAL) {
             /* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
             perror("Extension::Script:  template for filenames is misconfigured.\n");
-            exit(-1);        
+            exit(-1);
         } else if (errno == EEXIST) {
             /* Now the  contents of template are undefined. */
             perror("Extension::Script:  Could not create a unique temporary filename\n");
@@ -574,7 +560,7 @@ Script::effect (Inkscape::Extension::Effect * module, SPView * doc)
 
     /** \todo Should be some sort of checking here.. don't know how to
               do this with structs instead of classes */
-    SPDesktop * desktop = (SPDesktop *)doc;
+    SPDesktop *desktop = (SPDesktop *)doc;
     if (desktop != NULL) {
         std::list<SPItem *> selected;
         desktop->selection->list(selected);
@@ -608,13 +594,13 @@ Script::effect (Inkscape::Extension::Effect * module, SPView * doc)
     if (1) {
         SPViewWidget *dtw;
 
-        g_return_if_fail (mydoc != NULL);
+        g_return_if_fail(mydoc != NULL);
 
-        dtw = sp_desktop_widget_new (sp_document_namedview (mydoc, NULL));
-        sp_document_unref (mydoc);
-        g_return_if_fail (dtw != NULL);
+        dtw = sp_desktop_widget_new(sp_document_namedview(mydoc, NULL));
+        sp_document_unref(mydoc);
+        g_return_if_fail(dtw != NULL);
 
-        sp_create_window (dtw, TRUE);
+        sp_create_window(dtw, TRUE);
     }
 
     return;
@@ -623,30 +609,30 @@ Script::effect (Inkscape::Extension::Effect * module, SPView * doc)
 /* Helper class used by Script::execute */
 class pipe_t {
 public:
-  /* These functions set errno if they return false.
-     I'm not sure whether that's a good idea or not, but it should be reasonably
-     straightforward to change it if needed. */
-  bool open(char* command, int mode);
-  bool close();
+    /* These functions set errno if they return false.
+       I'm not sure whether that's a good idea or not, but it should be reasonably
+       straightforward to change it if needed. */
+    bool open(char *command, int mode);
+    bool close();
 
-  /* These return the number of bytes read/written. */
-  size_t read(void* buffer, size_t size);
-  size_t write(const void* buffer, size_t size);
+    /* These return the number of bytes read/written. */
+    size_t read(void *buffer, size_t size);
+    size_t write(void const *buffer, size_t size);
 
-  enum {
-    mode_read  = 1<<0,
-    mode_write = 1<<1,
-  };
+    enum {
+        mode_read  = 1<<0,
+        mode_write = 1<<1,
+    };
 
 private:
 #ifdef WIN32
-  /* This is used to translate win32 errors into errno errors.
-     It only recognizes a few win32 errors for the moment though. */
-  static int translate_error(DWORD err);
+    /* This is used to translate win32 errors into errno errors.
+       It only recognizes a few win32 errors for the moment though. */
+    static int translate_error(DWORD err);
 
-  HANDLE hpipe;
+    HANDLE hpipe;
 #else
-  FILE* ppipe;
+    FILE *ppipe;
 #endif
 };
 
@@ -679,12 +665,12 @@ private:
     are closed, and we return to what we were doing.
 */
 void
-Script::execute (const gchar * in_command, const gchar * filein, const gchar * fileout)
+Script::execute(gchar const *in_command, gchar const *filein, gchar const *fileout)
 {
     pipe_t pipe;
-    FILE * pfile;
+    FILE *pfile;
     char buf[BUFSIZE];
-    char  * command;
+    char *command;
     int num_read;
 
     g_return_if_fail(in_command != NULL);
@@ -700,28 +686,28 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
 
     /* Run script */
     if (!open_success) {
-      /* Error - could not open pipe - check errno */
-      if (errno == EINVAL) {
-        perror("Extension::Script:  Invalid mode argument in popen\n");
-      } else if (errno == ECHILD) {
-        perror("Extension::Script:  Cannot obtain child extension status in popen\n");
-      } else {
-        perror("Extension::Script:  Unknown error for popen\n");
-      }
-      return;
+        /* Error - could not open pipe - check errno */
+        if (errno == EINVAL) {
+            perror("Extension::Script:  Invalid mode argument in popen\n");
+        } else if (errno == ECHILD) {
+            perror("Extension::Script:  Cannot obtain child extension status in popen\n");
+        } else {
+            perror("Extension::Script:  Unknown error for popen\n");
+        }
+        return;
     }
 
-        Inkscape::IO::dump_fopen_call(fileout, "J");
+    Inkscape::IO::dump_fopen_call(fileout, "J");
     pfile = Inkscape::IO::fopen_utf8name(fileout, "w");
 
     if (pfile == NULL) {
-      /* Error - could not open file */
-      if (errno == EINVAL) {
-        perror("Extension::Script:  The mode provided to fopen was invalid\n");
-      } else {
-        perror("Extension::Script:  Unknown error attempting to open temporary file\n");
-      }
-      return;
+        /* Error - could not open file */
+        if (errno == EINVAL) {
+            perror("Extension::Script:  The mode provided to fopen was invalid\n");
+        } else {
+            perror("Extension::Script:  Unknown error attempting to open temporary file\n");
+        }
+        return;
     }
 
     /* Copy pipe output to a temporary file */
@@ -731,23 +717,23 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
 
     /* Close file */
     if (fclose(pfile) == EOF) {
-      if (errno == EBADF) {
-        perror("Extension::Script:  The filedescriptor for the temporary file is invalid\n");
-        return;
-      } else {
-        perror("Extension::Script:  Unknown error closing temporary file\n");
-      }
+        if (errno == EBADF) {
+            perror("Extension::Script:  The filedescriptor for the temporary file is invalid\n");
+            return;
+        } else {
+            perror("Extension::Script:  Unknown error closing temporary file\n");
+        }
     }
 
     /* Close pipe */
     if (!pipe.close()) {
-      if (errno == EINVAL) {
-        perror("Extension::Script:  Invalid mode set for pclose\n");
-      } else if (errno == ECHILD) {
-        perror("Extension::Script:  Could not obtain child status for pclose\n");
-      } else {
-        perror("Extension::Script:  Unknown error for pclose\n");
-      }
+        if (errno == EINVAL) {
+            perror("Extension::Script:  Invalid mode set for pclose\n");
+        } else if (errno == ECHILD) {
+            perror("Extension::Script:  Could not obtain child status for pclose\n");
+        } else {
+            perror("Extension::Script:  Unknown error for pclose\n");
+        }
     }
 
     return;
@@ -755,120 +741,120 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
 
 #ifdef WIN32
 
-bool pipe_t::open(char* command, int mode_p) {
-  HANDLE pipe_write;
+bool pipe_t::open(char *command, int mode_p) {
+    HANDLE pipe_write;
 
-  // Create pipe
-  {
-    SECURITY_ATTRIBUTES secattrs;
-    ZeroMemory(&secattrs,sizeof(secattrs));
-    secattrs.nLength=sizeof(secattrs);
-    secattrs.lpSecurityDescriptor=0;
-    secattrs.bInheritHandle=TRUE;
-    HANDLE t_pipe_read=0;
-    if ( !CreatePipe(&t_pipe_read, &pipe_write, &secattrs, 0) ) {
-      errno = translate_error(GetLastError());
-      return false;
+    // Create pipe
+    {
+        SECURITY_ATTRIBUTES secattrs;
+        ZeroMemory(&secattrs, sizeof(secattrs));
+        secattrs.nLength = sizeof(secattrs);
+        secattrs.lpSecurityDescriptor = 0;
+        secattrs.bInheritHandle = TRUE;
+        HANDLE t_pipe_read = 0;
+        if ( !CreatePipe(&t_pipe_read, &pipe_write, &secattrs, 0) ) {
+            errno = translate_error(GetLastError());
+            return false;
+        }
+        // This duplicate handle makes the read pipe uninheritable
+        if ( !DuplicateHandle(GetCurrentProcess(), t_pipe_read, GetCurrentProcess(), &hpipe, 0, FALSE, DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS) ) {
+            int en = translate_error(GetLastError());
+            CloseHandle(t_pipe_read);
+            CloseHandle(pipe_write);
+            errno = en;
+            return false;
+        }
     }
-    // This duplicate handle makes the read pipe uninheritable
-    if ( !DuplicateHandle(GetCurrentProcess(), t_pipe_read, GetCurrentProcess(), &hpipe, 0, FALSE, DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS) ) {
-      int en = translate_error(GetLastError());
-      CloseHandle(t_pipe_read);
-      CloseHandle(pipe_write);
-      errno = en;
-      return false;
+
+    // Create process
+    {
+        PROCESS_INFORMATION procinfo;
+        STARTUPINFO startupinfo;
+        ZeroMemory(&procinfo, sizeof(procinfo));
+        ZeroMemory(&startupinfo, sizeof(startupinfo));
+        startupinfo.cb = sizeof(startupinfo);
+        //startupinfo.lpReserved = 0;
+        //startupinfo.lpDesktop = 0;
+        //startupinfo.lpTitle = 0;
+        startupinfo.dwFlags = STARTF_USESTDHANDLES;
+        startupinfo.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
+        startupinfo.hStdOutput = pipe_write;
+
+        if ( !CreateProcess(NULL, command, NULL, NULL, TRUE, 0, NULL, NULL, &startupinfo, &procinfo) ) {
+            errno = translate_error(GetLastError());
+            return false;
+        }
+        CloseHandle(procinfo.hThread);
+        CloseHandle(procinfo.hProcess);
     }
-  }
 
-  // Create process
-  {
-    PROCESS_INFORMATION procinfo;
-    STARTUPINFO startupinfo;
-    ZeroMemory(&procinfo,sizeof(procinfo));
-    ZeroMemory(&startupinfo,sizeof(startupinfo));
-    startupinfo.cb=sizeof(startupinfo);
-    //startupinfo.lpReserved=0;
-    //startupinfo.lpDesktop=0;
-    //startupinfo.lpTitle=0;
-    startupinfo.dwFlags=STARTF_USESTDHANDLES;
-    startupinfo.hStdInput=GetStdHandle(STD_INPUT_HANDLE);
-    startupinfo.hStdOutput=pipe_write;
+    // Close our copy of the write handle
+    CloseHandle(pipe_write);
 
-    if ( !CreateProcess(NULL, command, NULL, NULL, TRUE, 0, NULL, NULL, &startupinfo, &procinfo) ) {
-      errno = translate_error(GetLastError());
-      return false;
-    }
-    CloseHandle(procinfo.hThread);
-    CloseHandle(procinfo.hProcess);
-  }
-
-  // Close our copy of the write handle
-  CloseHandle(pipe_write);
-
-  return true;
+    return true;
 }
 
 bool pipe_t::close() {
-  BOOL retval = CloseHandle(hpipe);
-  if ( !retval ) {
-    errno = translate_error(GetLastError());
-  }
-  return retval != FALSE;
+    BOOL retval = CloseHandle(hpipe);
+    if ( !retval ) {
+        errno = translate_error(GetLastError());
+    }
+    return retval != FALSE;
 }
 
-size_t pipe_t::read(void* buffer, size_t size) {
-  DWORD bytes_read = 0;
-  ReadFile(hpipe, buffer, size, &bytes_read, 0);
-  return bytes_read;
+size_t pipe_t::read(void *buffer, size_t size) {
+    DWORD bytes_read = 0;
+    ReadFile(hpipe, buffer, size, &bytes_read, 0);
+    return bytes_read;
 }
 
-size_t pipe_t::write(const void* buffer, size_t size) {
-  DWORD bytes_written = 0;
-  WriteFile(hpipe, buffer, size, &bytes_written, 0);
-  return bytes_written;
+size_t pipe_t::write(void const *buffer, size_t size) {
+    DWORD bytes_written = 0;
+    WriteFile(hpipe, buffer, size, &bytes_written, 0);
+    return bytes_written;
 }
 
 int pipe_t::translate_error(DWORD err) {
-  switch(err) {
-  case ERROR_FILE_NOT_FOUND:
-    return ENOENT;
-  case ERROR_INVALID_HANDLE:
-  case ERROR_INVALID_PARAMETER:
-    return EINVAL;
-  default:
-    return 0;
-  }
+    switch (err) {
+        case ERROR_FILE_NOT_FOUND:
+            return ENOENT;
+        case ERROR_INVALID_HANDLE:
+        case ERROR_INVALID_PARAMETER:
+            return EINVAL;
+        default:
+            return 0;
+    }
 }
 
 #else // Win32
 
-bool pipe_t::open(char* command, int mode_p) {
-  char popen_mode[4] = {0,0,0,0};
-  char* popen_mode_cur = popen_mode;
+bool pipe_t::open(char *command, int mode_p) {
+    char popen_mode[4] = {0,0,0,0};
+    char *popen_mode_cur = popen_mode;
 
-  if ( (mode_p & mode_read) != 0 ) {
-    *popen_mode_cur++ = 'r';
-  }
+    if ( (mode_p & mode_read) != 0 ) {
+        *popen_mode_cur++ = 'r';
+    }
 
-  if ( (mode_p & mode_write) != 0 ) {
-    *popen_mode_cur++ = 'w';
-  }
+    if ( (mode_p & mode_write) != 0 ) {
+        *popen_mode_cur++ = 'w';
+    }
 
-  ppipe = popen(command, popen_mode);
+    ppipe = popen(command, popen_mode);
 
-  return ppipe != NULL;
+    return ppipe != NULL;
 }
 
 bool pipe_t::close() {
-  return fclose(ppipe) == 0;
+    return fclose(ppipe) == 0;
 }
 
-size_t pipe_t::read(void* buffer, size_t size) {
-  return fread(buffer, 1, size, ppipe);
+size_t pipe_t::read(void *buffer, size_t size) {
+    return fread(buffer, 1, size, ppipe);
 }
 
-size_t pipe_t::write(const void* buffer, size_t size) {
-  return fwrite(buffer, 1, size, ppipe);
+size_t pipe_t::write(void const *buffer, size_t size) {
+    return fwrite(buffer, 1, size, ppipe);
 }
 
 #endif // (Non-)Win32
@@ -877,13 +863,14 @@ size_t pipe_t::write(const void* buffer, size_t size) {
 }  /* module  */
 }  /* Implementation  */
 
+
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
