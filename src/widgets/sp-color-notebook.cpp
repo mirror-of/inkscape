@@ -209,7 +209,7 @@ void ColorNotebook::init()
 	_book = gtk_notebook_new ();
 	gtk_widget_show (_book);
 
-	_id = g_signal_connect(GTK_OBJECT (_book), "switch-page",
+	_switchId = g_signal_connect(GTK_OBJECT (_book), "switch-page",
 								GTK_SIGNAL_FUNC (sp_color_notebook_switch_page), SP_COLOR_NOTEBOOK(_csel));
 
 	selector_types = g_type_children (SP_TYPE_COLOR_SELECTOR, &selector_type_count);
@@ -330,7 +330,7 @@ void ColorNotebook::init()
 	gtk_table_attach (GTK_TABLE (table), _p, 2, 3, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
 #endif
 
-	gtk_signal_connect (GTK_OBJECT (_rgbae), "changed", GTK_SIGNAL_FUNC (ColorNotebook::_rgbaEntryChangedHook), _csel);
+	_entryId = gtk_signal_connect (GTK_OBJECT (_rgbae), "changed", GTK_SIGNAL_FUNC (ColorNotebook::_rgbaEntryChangedHook), _csel);
 }
 
 static void
@@ -348,12 +348,12 @@ ColorNotebook::~ColorNotebook()
 		_trackerList = 0;
 	}
 
-	if ( _id )
+	if ( _switchId )
 	{
 		if ( _book )
 		{
-			g_signal_handler_disconnect (_book, _id);
-			_id = 0;
+			g_signal_handler_disconnect (_book, _switchId);
+			_switchId = 0;
 		}
 	}
 }
@@ -415,10 +415,7 @@ void ColorNotebook::_colorChanged(const SPColor& color, gfloat alpha)
 		cselPage->base->setColorAlpha( color, alpha );
 	}
 
-    gboolean oldState = _updatingrgba;
-    _updatingrgba = TRUE;
     _updateRgbaEntry( color, alpha );
-    _updatingrgba = oldState;
 }
 
 void ColorNotebook::_rgbaEntryChangedHook(GtkEntry *entry, SPColorNotebook *colorbook)
@@ -459,17 +456,23 @@ void ColorNotebook::_rgbaEntryChanged(GtkEntry* entry)
 
 void ColorNotebook::_updateRgbaEntry( const SPColor& color, gfloat alpha )
 {
-	if ( !_updatingrgba )
-	{
-		gchar s[32];
-		guint32 rgba;
+    if ( !_updatingrgba )
+    {
+        gchar s[32];
+        guint32 rgba;
 
-		/* Update RGBA entry */
-		rgba = sp_color_get_rgba32_falpha (&color, alpha);
+        /* Update RGBA entry */
+        rgba = sp_color_get_rgba32_falpha (&color, alpha);
 
-		g_snprintf (s, 32, "%08x", rgba);
-		gtk_entry_set_text (GTK_ENTRY (_rgbae), s);
-	}
+        g_snprintf (s, 32, "%08x", rgba);
+        const gchar* oldText = gtk_entry_get_text( GTK_ENTRY( _rgbae ) );
+        if ( strcmp( oldText, s ) != 0 )
+        {
+            g_signal_handler_block( _rgbae, _entryId );
+            gtk_entry_set_text( GTK_ENTRY(_rgbae), s );
+            g_signal_handler_unblock( _rgbae, _entryId );
+        }
+    }
 }
 
 void ColorNotebook::_entryGrabbed (SPColorSelector *csel, SPColorNotebook *colorbook)

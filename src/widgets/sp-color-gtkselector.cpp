@@ -95,7 +95,7 @@ void ColorGtkselector::init()
 	_gtkThing = GTK_COLOR_SELECTION (gtksel);
 	gtk_box_pack_start (GTK_BOX (_csel), gtksel, TRUE, TRUE, 0);
 
-	gtk_signal_connect (GTK_OBJECT (gtksel), "color-changed", GTK_SIGNAL_FUNC (_gtkChanged), _csel);
+	_sigId = g_signal_connect( GTK_OBJECT(gtksel), "color-changed", GTK_SIGNAL_FUNC( _gtkChanged ), _csel);
 }
 
 static void
@@ -153,11 +153,11 @@ void ColorGtkselector::_colorChanged( const SPColor& color, gfloat alpha )
     gcolor.green = INK_STATIC_CAST (guint16, rgb[1] * 65535);
     gcolor.blue = INK_STATIC_CAST (guint16, rgb[2] * 65535);
 
-//     g_message( "_colorChanged %04x %04x %04x", gcolor.red, gcolor.green, gcolor.blue );
-    g_signal_handlers_block_by_func( _gtkThing, (gpointer)(_gtkChanged), _csel );
+//     g_message( "*****  _colorChanged %04x %04x %04x", gcolor.red, gcolor.green, gcolor.blue );
+    g_signal_handler_block( _gtkThing, _sigId );
     gtk_color_selection_set_current_alpha (_gtkThing, (guint16)(65535 * alpha));
     gtk_color_selection_set_current_color (_gtkThing, &gcolor);
-    g_signal_handlers_unblock_by_func(_gtkThing, (gpointer)(_gtkChanged), _csel );
+    g_signal_handler_unblock(_gtkThing, _sigId );
 }
 
 void ColorGtkselector::_gtkChanged( GtkColorSelection *colorselection, SPColorGtkselector *gtksel )
@@ -172,7 +172,7 @@ void ColorGtkselector::_gtkChanged( GtkColorSelection *colorselection, SPColorGt
 
     sp_color_set_rgb_float (&ourColor, (color.red / 65535.0), (color.green / 65535.0), (color.blue / 65535.0));
 
-//     g_message( "_gtkChanged   %04x %04x %04x", color.red, color.green, color.blue );
+//     g_message( "*****  _gtkChanged   %04x %04x %04x", color.red, color.green, color.blue );
 
     gtkInst->_updateInternals( ourColor, INK_STATIC_CAST(gfloat, alpha / 65535.0), FALSE );
 }

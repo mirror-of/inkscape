@@ -28,6 +28,7 @@ protected:
     virtual void _colorChanged( const SPColor& color, gfloat alpha );
 
     GtkColorSelection* _gtkThing;
+    gulong _sigId;
 };
 
 G_BEGIN_DECLS

@@ -61,7 +61,8 @@ protected:
     gboolean _updating : 1;
     gboolean _updatingrgba : 1;
     gboolean _dragging : 1;
-    gulong _id;
+    gulong _switchId;
+    gulong _entryId;
     GtkWidget *_book;
     GtkWidget *_rgbal, *_rgbae; /* RGBA entry */
     GtkWidget *_p; /* Color preview */

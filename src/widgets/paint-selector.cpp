@@ -278,6 +278,11 @@ void
 sp_paint_selector_set_color_alpha (SPPaintSelector *psel, const SPColor *color, float alpha)
 {
 	SPColorSelector *csel;
+	SPColor oldColor;
+	gfloat oldAlpha;
+	guint32 oldRgba;
+	guint32 rgba;
+
 	if ( sp_color_get_colorspace_type (color) == SP_COLORSPACE_TYPE_CMYK )
 	{
 #ifdef SP_PS_VERBOSE
@@ -294,8 +299,13 @@ sp_paint_selector_set_color_alpha (SPPaintSelector *psel, const SPColor *color, 
 	}
 
 	csel = (SPColorSelector*)gtk_object_get_data (GTK_OBJECT (psel->selector), "color-selector");
-
-	csel->base->setColorAlpha( *color, alpha );
+	csel->base->getColorAlpha( oldColor, &oldAlpha );
+	oldRgba = sp_color_get_rgba32_falpha( &oldColor, oldAlpha );
+	rgba = sp_color_get_rgba32_falpha( &*color, alpha );
+	if ( rgba != oldRgba )
+	{
+		csel->base->setColorAlpha( *color, alpha );
+	}
 }
 
 void
