@@ -8,139 +8,154 @@
  */
 
 #include "Ligne.h"
-//#include "Buffer.h"
 #include "BitLigne.h"
 
 #include <math.h>
 #include <glib/gmem.h>
 
 
-
-//int   showCopy=0;
-//#define faster_flatten 1
-
-FloatLigne::FloatLigne(void)
+FloatLigne::FloatLigne()
 {
-	nbBord=maxBord=0;
-	bords=NULL;
+    nbBord = maxBord = 0;
+    bords = NULL;
 
-	nbRun=maxRun=0;
-	runs=NULL;
+    nbRun = maxRun = 0;
+    runs = NULL;
 
-	firstAc=lastAc=-1;
-	s_first=s_last=-1;
-}
-FloatLigne::~FloatLigne(void)
-{
-	if ( maxBord > 0 ) {
-		g_free(bords);
-		nbBord=maxBord=0;
-		bords=NULL;
-	}
-	if ( maxRun > 0 ) {
-		g_free(runs);
-		nbRun=maxRun=0;
-		runs=NULL;
-	}
+    firstAc = lastAc = -1;
+    s_first = s_last = -1;
 }
 
-void             FloatLigne::Reset(void)
+
+FloatLigne::~FloatLigne()
 {
-	nbBord=0;
-	nbRun=0;
-	firstAc=lastAc=-1;
-	s_first=s_last=-1;
+    if ( maxBord > 0 ) {
+        g_free(bords);
+        nbBord = maxBord = 0;
+        bords = NULL;
+    }
+    if ( maxRun > 0 ) {
+        g_free(runs);
+        nbRun = maxRun = 0;
+        runs = NULL;
+    }
 }
-int              FloatLigne::AddBord(float spos,float sval,float epos,float eval,int guess)
+
+
+void FloatLigne::Reset()
+{
+    nbBord = 0;
+    nbRun = 0;
+    firstAc = lastAc = -1;
+    s_first = s_last = -1;
+}
+
+
+int FloatLigne::AddBord(float spos, float sval, float epos, float eval, int guess)
 {
 //  if ( showCopy ) printf("b= %f %f -> %f %f \n",spos,sval,epos,eval);
-	if ( spos >= epos ) return -1;
-  // allocate the boundaries in the array
-	if ( nbBord+1 >= maxBord ) {
-		maxBord=2*nbBord+2;
-		bords=(float_ligne_bord*)g_realloc(bords,maxBord*sizeof(float_ligne_bord));
-	}
-  float pente=(eval-sval)/(epos-spos);
+    if ( spos >= epos ) {
+        return -1;
+    }
+    // allocate the boundaries in the array
+    if ( nbBord+1 >= maxBord ) {
+        maxBord = 2 * nbBord + 2;
+        bords = (float_ligne_bord *) g_realloc(bords, maxBord * sizeof(float_ligne_bord));
+    }
+    
+    float pente = (eval - sval) / (epos-spos);
+    
 #ifdef faster_flatten
-  if ( fabsf(epos-spos) < 0.001 || fabsf(pente) > 1000 ) {
-    return;
-    epos=spos;
-    pente=0;
-  }
+    if ( fabsf(epos-spos) < 0.001 || fabsf(pente) > 1000 ) {
+        return;
+        epos = spos;
+        pente = 0;
+    }
 #endif
   
-  if ( guess >= nbBord ) guess=-1;
-  
-  // add the left boundary
-	int n=nbBord++;
-	bords[n].pos=spos;
-	bords[n].val=sval;
-	bords[n].start=true;
-	bords[n].other=n+1;
-	bords[n].pente=pente;
-	bords[n].prev=bords[n].next=-1;
-	bords[n].s_prev=bords[n].s_next=-1;
+    if ( guess >= nbBord ) {
+        guess = -1;
+    }
+    
+    // add the left boundary
+    int n = nbBord++;
+    bords[n].pos = spos;
+    bords[n].val = sval;
+    bords[n].start = true;
+    bords[n].other = n+1;
+    bords[n].pente = pente;
+    bords[n].prev = bords[n].next = -1;
+    bords[n].s_prev = bords[n].s_next = -1;
 //	bords[n].delta=sval-eval;
 
-  // insert it in the doubly-linked list
-	InsertBord(n,spos,guess);
-
-  // add the right boundary
-	n=nbBord++;
-	bords[n].pos=epos;
-	bords[n].val=eval;
-	bords[n].start=false;
-	bords[n].other=n-1;
-	bords[n].pente=bords[n-1].pente;
-	bords[n].prev=bords[n].next=-1;
-	bords[n].s_prev=bords[n].s_next=-1;
+    // insert it in the doubly-linked list
+    InsertBord(n, spos, guess);
+    
+    // add the right boundary
+    n = nbBord++;
+    bords[n].pos = epos;
+    bords[n].val = eval;
+    bords[n].start = false;
+    bords[n].other = n-1;
+    bords[n].pente = bords[n-1].pente;
+    bords[n].prev = bords[n].next = -1;
+    bords[n].s_prev = bords[n].s_next = -1;
 //	bords[n].delta=eval-sval;
 
   // insert it in the doubly-linked list, knowing that boundary at index n-1 is not too far before me
-	InsertBord(n,epos,n-1);
+    InsertBord(n,epos,n-1);
   	
-	return n;
+    return n;
 }
-int              FloatLigne::AddBord(float spos,float sval,float epos,float eval,float pente,int guess)
+
+
+int FloatLigne::AddBord(float spos, float sval, float epos, float eval, float pente, int guess)
 {
 //  if ( showCopy ) printf("b= %f %f -> %f %f \n",spos,sval,epos,eval);
-	if ( spos >= epos ) return -1;
-	if ( nbBord+1 >= maxBord ) {
-		maxBord=2*nbBord+2;
-		bords=(float_ligne_bord*)g_realloc(bords,maxBord*sizeof(float_ligne_bord));
-	}
+    if ( spos >= epos ) {
+        return -1;
+    }
+
+    if ( nbBord + 1 >= maxBord ) {
+        maxBord = 2 * nbBord + 2;
+        bords = (float_ligne_bord*) g_realloc(bords, maxBord * sizeof(float_ligne_bord));
+    }
+    
 #ifdef faster_flatten
-  if ( fabsf(epos-spos) < 0.001 || fabsf(pente) > 1000 ) {
-    return;
-    epos=spos;
-    pente=0;
-  }
+    if ( fabsf(epos-spos) < 0.001 || fabsf(pente) > 1000 ) {
+        return;
+        epos = spos;
+        pente = 0;
+    }
 #endif
-  if ( guess >= nbBord ) guess=-1;
+    
+    if ( guess >= nbBord ) {
+        guess=-1;
+    }
   
-  int n=nbBord++;
-	bords[n].pos=spos;
-	bords[n].val=sval;
-	bords[n].start=true;
-	bords[n].other=n+1;
-	bords[n].pente=pente;
-	bords[n].prev=bords[n].next=-1;
-	bords[n].s_prev=bords[n].s_next=-1;
+    int n = nbBord++;
+    bords[n].pos = spos;
+    bords[n].val = sval;
+    bords[n].start = true;
+    bords[n].other = n+1;
+    bords[n].pente = pente;
+    bords[n].prev = bords[n].next = -1;
+    bords[n].s_prev = bords[n].s_next = -1;
 	//	bords[n].delta=sval-eval;
 
 
-	n=nbBord++;
-	bords[n].pos=epos;
-	bords[n].val=eval;
-	bords[n].start=false;
-	bords[n].other=n-1;
-	bords[n].pente=bords[n-1].pente;
-	bords[n].prev=bords[n].next=-1;
-	bords[n].s_prev=bords[n].s_next=-1;
+    n = nbBord++;
+    bords[n].pos = epos;
+    bords[n].val = eval;
+    bords[n].start = false;
+    bords[n].other = n-1;
+    bords[n].pente = bords[n-1].pente;
+    bords[n].prev = bords[n].next = -1;
+    bords[n].s_prev = bords[n].s_next = -1;
 	//	bords[n].delta=eval-sval;
 
-	InsertBord(n-1,spos,guess);
-	InsertBord(n,epos,n-1);
+    InsertBord(n - 1, spos, guess);
+    InsertBord(n, epos, n - 1);
 /*	if ( bords[n-1].s_next < 0 ) {
 		bords[n].s_next=-1;
 		s_last=n;
@@ -169,49 +184,55 @@ int              FloatLigne::AddBord(float spos,float sval,float epos,float eval
 		}
 
 	}*/
-	return n;
+    return n;
 }
-int              FloatLigne::AddBordR(float spos,float sval,float epos,float eval,float pente,int guess)
+
+
+int FloatLigne::AddBordR(float spos, float sval, float epos, float eval, float pente, int guess)
 {
 //  if ( showCopy ) printf("br= %f %f -> %f %f \n",spos,sval,epos,eval);
 //	return AddBord(spos,sval,epos,eval,pente,guess);
-	if ( spos >= epos ) return -1;
-	if ( nbBord+1 >= maxBord ) {
-		maxBord=2*nbBord+2;
-		bords=(float_ligne_bord*)g_realloc(bords,maxBord*sizeof(float_ligne_bord));
-	}
+    if ( spos >= epos ){
+        return -1;
+    }
+    
+    if ( nbBord + 1 >= maxBord ) {
+        maxBord= 2 * nbBord + 2;
+        bords = (float_ligne_bord *) g_realloc(bords, maxBord * sizeof(float_ligne_bord));
+    }
 
 #ifdef faster_flatten
-  if ( fabsf(epos-spos) < 0.001 || fabsf(pente) > 1000 ) {
-    return;
-    epos=spos;
-    pente=0;
-  }
+    if ( fabsf(epos-spos) < 0.001 || fabsf(pente) > 1000 ) {
+        return;
+        epos = spos;
+        pente = 0;
+    }
 #endif
 
-  if ( guess >= nbBord ) guess=-1;
+    if ( guess >= nbBord ) {
+        guess=-1;
+    }
   
-  int n=nbBord++;
-	bords[n].pos=spos;
-	bords[n].val=sval;
-	bords[n].start=true;
-	bords[n].other=n+1;
-	bords[n].pente=pente;
-	bords[n].prev=bords[n].next=-1;
-	bords[n].s_prev=bords[n].s_next=-1;
+    int n = nbBord++;
+    bords[n].pos = spos;
+    bords[n].val = sval;
+    bords[n].start = true;
+    bords[n].other = n+1;
+    bords[n].pente = pente;
+    bords[n].prev = bords[n].next = -1;
+    bords[n].s_prev = bords[n].s_next = -1;
 
-
-	n=nbBord++;
-	bords[n].pos=epos;
-	bords[n].val=eval;
-	bords[n].start=false;
-	bords[n].other=n-1;
-	bords[n].pente=bords[n-1].pente;
-	bords[n].prev=bords[n].next=-1;
-	bords[n].s_prev=bords[n].s_next=-1;
-
-	InsertBord(n,epos,guess);
-	InsertBord(n-1,spos,n);
+    n = nbBord++;
+    bords[n].pos = epos;
+    bords[n].val = eval;
+    bords[n].start = false;
+    bords[n].other = n-1;
+    bords[n].pente = bords[n-1].pente;
+    bords[n].prev = bords[n].next = -1;
+    bords[n].s_prev = bords[n].s_next = -1;
+    
+    InsertBord(n, epos, guess);
+    InsertBord(n - 1, spos, n);
 /*	if ( bords[n].s_prev < 0 ) {
 		bords[n-1].s_prev=-1;
 		s_first=n-1;
@@ -239,131 +260,166 @@ int              FloatLigne::AddBordR(float spos,float sval,float epos,float eva
 			bords[c].s_next=n-1;
 		}
 		
-	}*/
-	return n-1;
+                }*/
+    return n - 1;
 }
+
+
 // variant where insertion is known to be trivial: just append to the list
-int            FloatLigne::AppendBord(float spos,float sval,float epos,float eval,float pente)
+int FloatLigne::AppendBord(float spos, float sval, float epos, float eval, float pente)
 {
 //  if ( showCopy ) printf("b= %f %f -> %f %f \n",spos,sval,epos,eval);
 //	return AddBord(spos,sval,epos,eval,pente,s_last);
-	if ( spos >= epos ) return -1;
-	if ( nbBord+1 >= maxBord ) {
-		maxBord=2*nbBord+2;
-		bords=(float_ligne_bord*)g_realloc(bords,maxBord*sizeof(float_ligne_bord));
-	}
+    if ( spos >= epos ) {
+        return -1;
+    }
+    
+    if ( nbBord+1 >= maxBord ) {
+        maxBord = 2 * nbBord + 2;
+        bords = (float_ligne_bord*) g_realloc(bords, maxBord * sizeof(float_ligne_bord));
+    }
 
 #ifdef faster_flatten
-  if ( fabsf(epos-spos) < 0.001 || fabsf(pente) > 1000 ) {
-    return;
-    epos=spos;
-    pente=0;
-  }
-#endif
-	int n=nbBord++;
-	bords[n].pos=spos;
-	bords[n].val=sval;
-	bords[n].start=true;
-	bords[n].other=n+1;
-	bords[n].pente=pente;
-	bords[n].prev=bords[n].next=-1;
-	bords[n].s_prev=s_last;
-	bords[n].s_next=n+1;
-
-	if ( s_last >= 0 ) bords[s_last].s_next=n;
-	if ( s_first < 0 ) s_first=n;
-
-	n=nbBord++;
-	bords[n].pos=epos;
-	bords[n].val=eval;
-	bords[n].start=false;
-	bords[n].other=n-1;
-	bords[n].pente=bords[n-1].pente;
-	bords[n].prev=bords[n].next=-1;
-	bords[n].s_prev=n-1;
-	bords[n].s_next=-1;
-
-	s_last=n;
-
-	return n;
-}
-// insertion in a boubly-linked list. nothing interesting here
-void             FloatLigne::InsertBord(int no,float p,int guess)
-{
-  if ( no < 0 || no >= nbBord ) return;
-  if ( s_first < 0 ) {
-    s_first=s_last=no;
-    bords[no].s_prev=-1;
-    bords[no].s_next=-1;
-    return;
-  }
-  if ( guess < 0 || guess >= nbBord ) {
-    int c=s_first;
-    while ( c >= 0 && c < nbBord && CmpBord(bords+c,bords+no) < 0 ) c=bords[c].s_next;
-    if ( c < 0 || c >= nbBord ) {
-      bords[no].s_prev=s_last;
-      bords[s_last].s_next=no;
-      s_last=no;
-    } else {
-      bords[no].s_prev=bords[c].s_prev;
-      if ( bords[no].s_prev >= 0 ) {
-        bords[bords[no].s_prev].s_next=no;
-      } else {
-        s_first=no;
-      }
-      bords[no].s_next=c;
-      bords[c].s_prev=no;
+    if ( fabsf(epos-spos) < 0.001 || fabsf(pente) > 1000 ) {
+        return;
+        epos=spos;
+        pente=0;
     }
-	} else {
-		int c=guess;
-    int stTst=CmpBord(bords+c,bords+no);
-		if ( stTst == 0 ) {
-			bords[no].s_prev=bords[c].s_prev;
-			if ( bords[no].s_prev >= 0 ) {
-				bords[bords[no].s_prev].s_next=no;
-			} else {
-				s_first=no;
-			}
-			bords[no].s_next=c;
-			bords[c].s_prev=no;
-		} else if ( stTst > 0 ) {
-			while ( c >= 0 && c < nbBord && CmpBord(bords+c,bords+no) > 0 ) c=bords[c].s_prev;
-			if ( c < 0 || c >= nbBord ) {
-				bords[no].s_next=s_first;
-				bords[s_first].s_prev=no; // s_first != -1
-				s_first=no;
-			} else {
-				bords[no].s_next=bords[c].s_next;
-				if ( bords[no].s_next >= 0 ) {
-					bords[bords[no].s_next].s_prev=no;
-				} else {
-					s_last=no;
-				}
-				bords[no].s_prev=c;
-				bords[c].s_next=no;
-			}
-		} else {
-			while ( c >= 0 && c < nbBord && CmpBord(bords+c,bords+no) < 0 ) c=bords[c].s_next;
-			if ( c < 0 || c >= nbBord ) {
-				bords[no].s_prev=s_last;
-				bords[s_last].s_next=no;
-				s_last=no;
-			} else {
-				bords[no].s_prev=bords[c].s_prev;
-				if ( bords[no].s_prev >= 0 ) {
-					bords[bords[no].s_prev].s_next=no;
-				} else {
-					s_first=no;
-				}
-				bords[no].s_next=c;
-				bords[c].s_prev=no;
-			}
-		}
-	}
+#endif
+    
+    int n = nbBord++;
+    bords[n].pos = spos;
+    bords[n].val = sval;
+    bords[n].start = true;
+    bords[n].other = n + 1;
+    bords[n].pente = pente;
+    bords[n].prev = bords[n].next = -1;
+    bords[n].s_prev = s_last;
+    bords[n].s_next = n + 1;
+ 
+    if ( s_last >=  0 ) {
+        bords[s_last].s_next = n;
+    }
+    
+    if ( s_first < 0 ) {
+        s_first = n;
+    }
+
+    n = nbBord++;
+    bords[n].pos = epos;
+    bords[n].val = eval;
+    bords[n].start = false;
+    bords[n].other = n - 1;
+    bords[n].pente = bords[n - 1].pente;
+    bords[n].prev = bords[n].next = -1;
+    bords[n].s_prev = n - 1;
+    bords[n].s_next = -1;
+
+    s_last = n;
+
+    return n;
 }
-float            FloatLigne::RemainingValAt(float at,int pending)
+
+
+
+// insertion in a boubly-linked list. nothing interesting here
+void FloatLigne::InsertBord(int no, float p, int guess)
 {
-	float   sum=0;
+    if ( no < 0 || no >= nbBord ) {
+        return;
+    }
+    
+    if ( s_first < 0 ) {
+        s_first = s_last = no;
+        bords[no].s_prev = -1;
+        bords[no].s_next = -1;
+        return;
+    }
+    
+    if ( guess < 0 || guess >= nbBord ) {
+        int c = s_first;
+        while ( c >= 0 && c < nbBord && CmpBord(bords+c,bords+no) < 0 ) {
+            c = bords[c].s_next;
+        }
+        
+        if ( c < 0 || c >= nbBord ) {
+            bords[no].s_prev = s_last;
+            bords[s_last].s_next = no;
+            s_last = no;
+        } else {
+            bords[no].s_prev = bords[c].s_prev;
+            if ( bords[no].s_prev >= 0 ) {
+                bords[bords[no].s_prev].s_next = no;
+            } else {
+                s_first = no;
+            }
+            bords[no].s_next = c;
+            bords[c].s_prev = no;
+        }
+    } else {
+        int c = guess;
+        int stTst = CmpBord(bords + c,bords + no);
+
+        if ( stTst == 0 ) {
+
+            bords[no].s_prev = bords[c].s_prev;
+            if ( bords[no].s_prev >= 0 ) {
+                bords[bords[no].s_prev].s_next = no;
+            } else {
+                s_first = no;
+            }
+            bords[no].s_next = c;
+            bords[c].s_prev = no;
+            
+        } else if ( stTst > 0 ) {
+            
+            while ( c >= 0 && c < nbBord && CmpBord(bords+c,bords+no) > 0 ) {
+                c = bords[c].s_prev;
+            }
+            
+            if ( c < 0 || c >= nbBord ) {
+                bords[no].s_next = s_first;
+                bords[s_first].s_prev =no; // s_first != -1
+                s_first = no; 
+            } else {
+                bords[no].s_next = bords[c].s_next;
+                if ( bords[no].s_next >= 0 ) {
+                    bords[bords[no].s_next].s_prev = no;
+                } else {
+                    s_last = no;
+                }
+                bords[no].s_prev = c;
+                bords[c].s_next = no;
+            }
+            
+        } else {
+
+            while ( c >= 0 && c < nbBord && CmpBord(bords+c,bords+no) < 0 ) {
+                c = bords[c].s_next;
+            }
+            
+            if ( c < 0 || c >= nbBord ) {
+                bords[no].s_prev = s_last;
+                bords[s_last].s_next = no;
+                s_last = no;
+            } else {
+                bords[no].s_prev = bords[c].s_prev;
+                if ( bords[no].s_prev >= 0 ) {
+                    bords[bords[no].s_prev].s_next = no;
+                } else {
+                    s_first = no;
+                }
+                bords[no].s_next = c;
+                bords[c].s_prev = no;
+            }
+        }
+    }
+}
+
+
+float FloatLigne::RemainingValAt(float at, int pending)
+{
+    float sum = 0;
 /*	int     no=firstAc;
 	while ( no >= 0 && no < nbBord ) {
 		int   nn=bords[no].other;
@@ -376,124 +432,155 @@ float            FloatLigne::RemainingValAt(float at,int pending)
   // we could simply compute the sum of portion coverages as a "f(x)=ux+y" and evaluate it at "x=at",
   // but there are numerical problems with this approach, and it produces ugly lines of incorrectly 
   // computed alpha values, so i reverted to this "safe but slow" version
-  for (int i=0;i<pending;i++) {
-		int   nn=bords[i].pend_ind;
-		sum+=bords[nn].val+(at-bords[nn].pos)*bords[nn].pente;
-  }
-	return sum;
+    
+    for (int i=0; i < pending; i++) {
+        int const nn = bords[i].pend_ind;
+        sum += bords[nn].val + (at - bords[nn].pos) * bords[nn].pente;
+    }
+    
+    return sum;
 }
+
+
 // sorting
-void             FloatLigne::SwapBords(int a,int b)
+void FloatLigne::SwapBords(int a, int b)
 {
-  int   oa=bords[a].other;
-  int   ob=bords[b].other;
+    int oa = bords[a].other;
+    int ob = bords[b].other;
   
-  float_ligne_bord swap=bords[a];
-  bords[a]=bords[b];
-  bords[b]=swap;
+    float_ligne_bord swap = bords[a];
+    bords[a] = bords[b];
+    bords[b] = swap;
   
-  if ( oa == b ) bords[b].other=a; else bords[oa].other=b;
-  if ( ob == a ) bords[a].other=b; else bords[ob].other=a;
-}
-void             FloatLigne::SwapBords(int a,int b,int c)
-{
-  if (a == b || b == c || a == c) return;
-  SwapBords (a, b);
-  SwapBords (b, c);
-}
-void             FloatLigne::SortBords(int s,int e)
-{
-  if (s >= e) return;
-  if (e == s + 1)  {
-    if ( CmpBord(bords+s,bords+e) > 0 ) SwapBords (s, e);
-    return;
-  }
-  
-  int ppos = (s + e) / 2;
-  int plast = ppos;
-  float_ligne_bord pval = bords[ppos];
-  
-  int le = s, ri = e;
-  while (le < ppos || ri > plast) {
-    if (le < ppos) {
-      do {
-	      int test = CmpBord(bords+le,&pval);
-	      if (test == 0) {
-          // on colle les valeurs egales au pivot ensemble
-          if (le < ppos - 1) {
-            SwapBords (le, ppos - 1, ppos);
-            ppos--;
-            continue;	// sans changer le
-          } else if (le == ppos - 1) {
-            ppos--;
-            break;
-          } else {
-            // oupsie
-            break;
-          }
-        }
-	      if (test > 0) {
-          break;
-        }
-	      le++;
-	    } while (le < ppos);
-    }
-    if (ri > plast) {
-      do {
-	      int test = CmpBord(bords+ri,&pval);
-	      if (test == 0) {
-          // on colle les valeurs egales au pivot ensemble
-          if (ri > plast + 1) {
-            SwapBords (ri, plast + 1, plast);
-            plast++;
-            continue;	// sans changer ri
-          } else if (ri == plast + 1) {
-            plast++;
-            break;
-          } else {
-            // oupsie
-            break;
-          }
-        }
-	      if (test < 0) {
-          break;
-        }
-	      ri--;
-	    } while (ri > plast);
-    }
-    if (le < ppos) {
-      if (ri > plast)  {
-	      SwapBords (le, ri);
-	      le++;
-	      ri--;
-	    } else {
-	      if (le < ppos - 1) {
-          SwapBords (ppos - 1, plast, le);
-          ppos--;
-          plast--;
-        } else if (le == ppos - 1) {
-          SwapBords (plast, le);
-          ppos--;
-          plast--;
-        }
-	    }
+    if ( oa == b ) {
+        bords[b].other = a;
     } else {
-      if (ri > plast + 1) {
-	      SwapBords (plast + 1, ppos, ri);
-	      ppos++;
-	      plast++;
-	    }  else if (ri == plast + 1) {
-	      SwapBords (ppos, ri);
-	      ppos++;
-	      plast++;
-	    } else {
-	      break;
-	    }
+        bords[oa].other = b;
     }
-  }
-  SortBords (s, ppos - 1);
-  SortBords (plast + 1, e);
+    
+    if ( ob == a ) {
+        bords[a].other = b;
+    } else {
+        bords[ob].other = a;
+    }
 }
+
+
+void FloatLigne::SwapBords(int a, int b, int c)
+{
+    if (a == b || b == c || a == c) {
+        return;
+    }
+    
+    SwapBords(a, b);
+    SwapBords(b, c);
+}
+
+void FloatLigne::SortBords(int s, int e)
+{
+    if (s >= e) {
+        return;
+    }
+    
+    if (e == s + 1)  {
+        if ( CmpBord(bords+s,bords+e) > 0 ) {
+            SwapBords (s, e);
+        }
+        return;
+    }
+  
+    int ppos = (s + e) / 2;
+    int plast = ppos;
+    float_ligne_bord pval = bords[ppos];
+  
+    int le = s;
+    int ri = e;
+    while (le < ppos || ri > plast) {
+        if (le < ppos) {
+            do {
+                int const test = CmpBord(bords+le,&pval);
+                if (test == 0) {
+                    // on colle les valeurs egales au pivot ensemble
+                    if (le < ppos - 1) {
+                        SwapBords (le, ppos - 1, ppos);
+                        ppos--;
+                        continue;	// sans changer le
+                    } else if (le == ppos - 1) {
+                        ppos--;
+                        break;
+                    } else {
+                        // oupsie
+                        break;
+                    }
+                }
+                if (test > 0) {
+                    break;
+                }
+                le++;
+	    } while (le < ppos);
+        }
+        
+        if (ri > plast) {
+            do {
+                int const test = CmpBord(bords+ri,&pval);
+                if (test == 0) {
+                    // on colle les valeurs egales au pivot ensemble
+                    if (ri > plast + 1) {
+                        SwapBords (ri, plast + 1, plast);
+                        plast++;
+                        continue;	// sans changer ri
+                    } else if (ri == plast + 1) {
+                        plast++;
+                        break;
+                    } else {
+                        // oupsie
+                        break;
+                    }
+                }
+                if (test < 0) {
+                    break;
+                }
+                ri--;
+	    } while (ri > plast);
+        }
+        
+        if (le < ppos) {
+            if (ri > plast)  {
+                SwapBords(le, ri);
+                le++;
+                ri--;
+	    } else {
+                if (le < ppos - 1) {
+                    SwapBords (ppos - 1, plast, le);
+                    ppos--;
+                    plast--;
+                } else if (le == ppos - 1) {
+                    SwapBords (plast, le);
+                    ppos--;
+                    plast--;
+                }
+	    }
+        } else {
+            if (ri > plast + 1) {
+                SwapBords (plast + 1, ppos, ri);
+                ppos++;
+                plast++;
+	    }  else if (ri == plast + 1) {
+                SwapBords (ppos, ri);
+                ppos++;
+                plast++;
+	    } else {
+                break;
+	    }
+        }
+    }
+
+    SortBords(s, ppos - 1);
+    SortBords(plast + 1, e);
+}
+
+
+
 // computation of non-overlapping runs of coverage
 void             FloatLigne::Flatten(void)
 {
@@ -1950,3 +2037,13 @@ void        IntLigne::Raster(raster_info &dest,void* color,RasterInRunFunc worke
 
 
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
