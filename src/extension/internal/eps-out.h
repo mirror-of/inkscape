@@ -21,6 +21,7 @@ namespace Internal {
 class EpsOutput : Inkscape::Extension::Implementation::Implementation {
 	GtkDialog * dialog;
 	static void pageBoxToggle (GtkWidget * widget, Inkscape::Extension::Output * omod);
+    static void textToPathToggle(GtkWidget *widget, Inkscape::Extension::Output *omod);
 
 public:
 	EpsOutput();

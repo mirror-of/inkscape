@@ -39,11 +39,17 @@ EpsOutput::pageBoxToggle (GtkWidget * widget, Inkscape::Extension::Output * omod
 	return;
 }
 
+void
+EpsOutput::textToPathToggle (GtkWidget * widget, Inkscape::Extension::Output * omod)
+{
+  omod->set_param("textToPath",
+		  (bool) gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
+}
+
 GtkDialog *
 EpsOutput::prefs (Inkscape::Extension::Output * module)
 {
 	GtkWidget * checkbox;
-	bool pageBox;
 
 	if (dialog != NULL)
 		return dialog;
@@ -62,9 +68,21 @@ EpsOutput::prefs (Inkscape::Extension::Output * module)
 	sp_transientize(GTK_WIDGET(dialog));
 
 	checkbox = gtk_check_button_new_with_label(_("Make bounding box around full page"));
+        bool pageBox;
 	module->get_param("pageBoundingBox", &pageBox);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox), pageBox);
 	g_signal_connect(G_OBJECT(checkbox), "toggled", G_CALLBACK(pageBoxToggle), (gpointer)module);
+	gtk_widget_show(checkbox);
+	gtk_box_pack_start(GTK_BOX(dialog->vbox), checkbox, FALSE, FALSE, 5);
+
+	checkbox = gtk_check_button_new_with_label(_("Convert text to path"));
+        bool textToPath;
+	module->get_param("textToPath", &textToPath);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(checkbox), textToPath);
+	g_signal_connect(G_OBJECT(checkbox),
+			 "toggled",
+			 G_CALLBACK(textToPathToggle),
+			 (gpointer) module);
 	gtk_widget_show(checkbox);
 	gtk_box_pack_start(GTK_BOX(dialog->vbox), checkbox, FALSE, FALSE, 5);
 
@@ -85,23 +103,30 @@ void
 EpsOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
 {
 	gchar * final_name;
-	bool old_val;
-	bool new_val;
 	Inkscape::Extension::Extension * ext;
 
 	ext = Inkscape::Extension::db.get(SP_MODULE_KEY_PRINT_PS);
 	if (ext == NULL)
-		return;
+            return;
 
-	ext->get_param("pageBoundingBox", (bool *)&old_val);
-	mod->get_param("pageBoundingBox", (bool *)&new_val);
-	ext->set_param("pageBoundingBox", (bool)new_val);
+        bool old_pageBoundingBox;
+        bool old_textToPath;
+        bool new_val;
+
+	ext->get_param("pageBoundingBox", &old_pageBoundingBox);
+	mod->get_param("pageBoundingBox", &new_val);
+	ext->set_param("pageBoundingBox", new_val);
+
+	ext->get_param("textToPath", &old_textToPath);
+	mod->get_param("textToPath", &new_val);
+	ext->set_param("textToPath", new_val);
 
 	final_name = g_strdup_printf("> %s", uri);
 	sp_print_document_to_file(doc, final_name);
 	g_free(final_name);
 
-	ext->set_param("pageBoundingBox", (bool)old_val);
+	ext->set_param("pageBoundingBox", old_pageBoundingBox);
+	ext->set_param("textToPath", old_textToPath);
 
 	return;
 }
@@ -121,6 +146,7 @@ EpsOutput::init (void)
 			"<name>Encapsulated Postscript Output</name>\n"
 			"<id>module.output.eps</id>\n"
 			"<param name=\"pageBoundingBox\" type=\"boolean\">FALSE</param>\n"
+			"<param name=\"textToPath\" type=\"boolean\">TRUE</param>\n"
 			"<output>\n"
 				"<extension>.eps</extension>\n"
 				"<mimetype>image/x-e-postscript</mimetype>\n"
@@ -133,3 +159,14 @@ EpsOutput::init (void)
 }
 
 };};}; /* namespace Inkscape, Extension, Implementation */
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
