@@ -157,19 +157,15 @@ event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, 
 		gtktext = NULL;
 	}
 
-	if (old_value) {
-		row = gtk_clist_find_row_from_data (GTK_CLIST (list), GINT_TO_POINTER (g_quark_from_string (name)));
-		g_assert (row != -1);
-
+	row = gtk_clist_find_row_from_data (GTK_CLIST (list), GINT_TO_POINTER (g_quark_from_string (name)));
+	if (row != -1) {
 		if (new_value) {
 			gtk_clist_set_text (GTK_CLIST (list), row, 1, gtktext);
 		} else {
 			gtk_clist_remove (GTK_CLIST (list), row);
 		}
-	} else {
+	} else if (new_value != NULL) {
 		const gchar * text[2];
-
-		g_assert (new_value != NULL);
 
 		text[0] = name;
 		text[1] = gtktext;
