@@ -57,6 +57,7 @@ sp_metric_to_metric_string (gdouble length,  const SPMetric metric_src, const SP
   gdouble len = sp_absolute_metric_to_metric (length, metric_src, metric_dst);
   GString *str = g_string_new ("");
   Inkscape::SVGOStringStream os;
+  os.precision(5);
   
   switch (metric_dst) {
   case SP_MM:
