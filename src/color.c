@@ -54,8 +54,8 @@ sp_color_copy (SPColor *dst, const SPColor *src)
 	*dst = *src;
 }
 
-unsigned int
-sp_color_is_equal (SPColor *c0, SPColor *c1)
+gboolean
+sp_color_is_equal (const SPColor *c0, const SPColor *c1)
 {
 	g_return_val_if_fail (c0 != NULL, TRUE);
 	g_return_val_if_fail (c1 != NULL, TRUE);
@@ -65,6 +65,21 @@ sp_color_is_equal (SPColor *c0, SPColor *c1)
 	if (c0->v.c[1] != c1->v.c[1]) return FALSE;
 	if (c0->v.c[2] != c1->v.c[2]) return FALSE;
 	if ((c0->colorspace == &CMYK) && (c0->v.c[3] != c1->v.c[3])) return FALSE;
+
+	return TRUE;
+}
+
+gboolean
+sp_color_is_close (const SPColor *c0, const SPColor *c1, float epsilon)
+{
+	g_return_val_if_fail (c0 != NULL, TRUE);
+	g_return_val_if_fail (c1 != NULL, TRUE);
+
+	if (c0->colorspace != c1->colorspace) return FALSE;
+	if (fabs ((c0->v.c[0]) - (c1->v.c[0])) >= epsilon) return FALSE;
+	if (fabs ((c0->v.c[1]) - (c1->v.c[1])) >= epsilon) return FALSE;
+	if (fabs ((c0->v.c[2]) - (c1->v.c[2])) >= epsilon) return FALSE;
+	if ((c0->colorspace == &CMYK) && (fabs ((c0->v.c[3]) - (c1->v.c[3])) >= epsilon)) return FALSE;
 
 	return TRUE;
 }
@@ -84,6 +99,7 @@ sp_color_set_rgb_float (SPColor *color, float r, float g, float b)
 	color->v.c[0] = r;
 	color->v.c[1] = g;
 	color->v.c[2] = b;
+	color->v.c[3] = 0;
 }
 
 void
@@ -95,6 +111,7 @@ sp_color_set_rgb_rgba32 (SPColor *color, NRULong value)
 	color->v.c[0] = (value >> 24) / 255.0F;
 	color->v.c[1] = ((value >> 16) & 0xff) / 255.0F;
 	color->v.c[2] = ((value >> 8) & 0xff) / 255.0F;
+	color->v.c[3] = 0;
 }
 
 void
