@@ -37,14 +37,14 @@ static void load_module (SPModule * in_mod);
 	\param    key       Identifier of which module to use
 	\param    filename  The file that should be opened
 
-	First things first, are we looking at an autodetection?  We'll if
+	First things first, are we looking at an autodetection?  Well if
 	that's the case then the module needs to be found, and that is done
 	with a database lookup through the module DB.  The foreach function
 	is called, with the parameter being a gpointer array.  It contains
-	both the filename (to find it's extension) and where to write the
+	both the filename (to find its extension) and where to write the
 	module when it is found.
 
-	If there is no autodetection the module database is queried with
+	If there is no autodetection, then the module database is queried with
 	the key given.
 
 	If everything is cool at this point, the module is loaded, and
@@ -112,6 +112,7 @@ open_internal (SPModule * in_plug, gpointer in_data)
 		const gchar * ext;
 		gpointer * parray;
 		const gchar * filename;
+		size_t filename_len, ext_len;
 		SPModuleInput ** pimod;
 
 		parray = (gpointer *)in_data;
@@ -120,11 +121,13 @@ open_internal (SPModule * in_plug, gpointer in_data)
 
 		ext = SP_MODULE_INPUT(in_plug)->extension;
 
-		if (strlen(filename) < strlen(ext)) {
+		filename_len = strlen (filename);
+		ext_len = strlen (ext);
+		if (filename_len < ext_len) {
 			return;
 		}
 
-		if (strcmp(ext, filename + (strlen(filename) - strlen(ext)))) {
+		if (memcmp (ext, filename + filename_len - ext_len, ext_len)) {
 			return;
 		}
 
@@ -218,6 +221,7 @@ save_internal (SPModule * in_plug, gpointer in_data)
 		gpointer * parray;
 		const gchar * filename;
 		SPModuleOutput ** pomod;
+		size_t filename_len, ext_len;
 
 		parray = (gpointer *)in_data;
 		filename = (const gchar *)parray[0];
@@ -225,11 +229,13 @@ save_internal (SPModule * in_plug, gpointer in_data)
 
 		ext = SP_MODULE_OUTPUT(in_plug)->extension;
 
-		if (strlen(filename) < strlen(ext)) {
+		ext_len = strlen (ext);
+		filename_len = strlen (filename);
+		if (filename_len < ext_len) {
 			return;
 		}
 
-		if (strcmp(ext, filename + (strlen(filename) - strlen(ext)))) {
+		if (memcmp (ext, filename + filename_len - ext_len, ext_len)) {
 			return;
 		}
 
