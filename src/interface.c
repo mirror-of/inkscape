@@ -38,7 +38,6 @@
 #include "selection-chemistry.h"
 #include "path-chemistry.h"
 #include "zoom-context.h"
-#include "event-broker.h"
 #include "svg-view.h"
 #include "sp-namedview.h"
 

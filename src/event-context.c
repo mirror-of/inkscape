@@ -30,7 +30,6 @@
 #include "desktop-affine.h"
 #include "selection.h"
 #include "event-context.h"
-#include "event-broker.h"
 #include "sp-item.h"
 #include "zoom-context.h"
 #include "select-context.h"
