@@ -1117,23 +1117,16 @@ void FileSaveDialogImpl::createFileTypeMenu()
     FileType inkscapeType;
     inkscapeType.name = _("Inkscape SVG");
     inkscapeType.pattern = "*.svg";
+    inkscapeType.extension = Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE);
     fileTypeComboBox.append_text(inkscapeType.name);
     fileTypes.push_back(inkscapeType);
 
     FileType plainType;
     plainType.name = _("Plain SVG");
     plainType.pattern = "*.svg";
-    plainType.extension = NULL;
+    plainType.extension = Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG);
     fileTypeComboBox.append_text(plainType.name);
     fileTypes.push_back(plainType);
-
-    FileType guessType;
-    guessType.name = _("Guess from extension");
-    guessType.pattern = "*";
-    guessType.extension = NULL;
-    fileTypeComboBox.append_text(guessType.name);
-    fileTypes.push_back(guessType);
-
 
     GSList *extension_list = Inkscape::Extension::db.get_output_list();
     if (extension_list == NULL) {
@@ -1151,8 +1144,7 @@ void FileSaveDialogImpl::createFileTypeMenu()
         if ( ( strcmp(".svg",  ioext->file_extension)==0 ||
                strcmp(".svgz", ioext->file_extension)==0   ))
             {
-            fileTypes[0].extension = ioext->extension;
-            fileTypes[1].extension = ioext->extension;
+            //Skip these. we already did them
             }
         else
             {
@@ -1167,6 +1159,15 @@ void FileSaveDialogImpl::createFileTypeMenu()
         }
 
     Inkscape::Extension::db.free_list(extension_list);
+
+    //#Let user choose
+    FileType guessType;
+    guessType.name = _("Guess from extension");
+    guessType.pattern = "*";
+    guessType.extension = NULL;
+    fileTypeComboBox.append_text(guessType.name);
+    fileTypes.push_back(guessType);
+
 
     fileTypeComboBox.set_active(0);
     fileTypeChangedCallback(); //call at least once to set the filter
