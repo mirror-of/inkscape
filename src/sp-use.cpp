@@ -58,7 +58,7 @@ static void sp_use_delete_self(SPObject *deleted, SPUse *self);
 
 static SPItemClass * parent_class;
 
-//void mm_print (gchar *say, NR::Matrix m)
+//void m_print (gchar *say, NR::Matrix m)
 //{ g_print ("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]); }
 
 GType
@@ -120,10 +120,11 @@ sp_use_init (SPUse * use)
 	sp_svg_length_unset (&use->width, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 	sp_svg_length_unset (&use->height, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 	use->href = NULL;
-	use->original_repr_changed = false;
 
 	new (&use->_delete_connection) SigC::Connection();
 	new (&use->_changed_connection) SigC::Connection();
+
+	new (&use->_transformed_connection) SigC::Connection();
 
 	use->ref = new SPUseReference(SP_OBJECT(use));
 
@@ -139,6 +140,8 @@ sp_use_finalize(GObject *obj)
 
 	use->_delete_connection.~Connection();
 	use->_changed_connection.~Connection();
+
+	use->_transformed_connection.~Connection();
 }
 
 static void
@@ -168,17 +171,12 @@ sp_use_release (SPObject *object)
 
 	use->_delete_connection.disconnect();
 	use->_changed_connection.disconnect();
+	use->_transformed_connection.disconnect();
 
 	g_free (use->href);
 	use->href = NULL;
 
 	use->ref->detach();
-
-      if (use->repr) { 	 
-           sp_repr_remove_listener_by_data (use->repr, use); 	 
-           sp_repr_unref (use->repr); 	 
-           use->repr = NULL; 	 
-      } 	 
 
 	if (((SPObjectClass *) parent_class)->release)
 		((SPObjectClass *) parent_class)->release (object);
@@ -432,131 +430,52 @@ sp_use_get_parent_transform (SPUse *use)
 	return t;
 }
 
-
-using NR::X;
-using NR::Y;
-
-inline bool point_equalp(NR::Point const &a, NR::Point const &b)
-{
-	return ( NR_DF_TEST_CLOSE(a[X], b[X], 1e-5) &&
-		 NR_DF_TEST_CLOSE(a[Y], b[Y], 1e-5) );
-}
-
 /**
 Sensing a movement of the original, this function attempts to compensate for it in such a way
 that the clone stays unmoved or moves in parallel (depending on user setting) regardless of the clone's transform.
 */
-static void sp_use_move_compensation (SPUse *use)
+static void 
+sp_use_move_compensate (const NR::Matrix *mp, SPItem *original, SPUse *self)
 {
-	guint mode = prefs_get_int_attribute ("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL);
+	// the clone is orphaned; or this is not a real use, but a clone of another use; 
+	// we skip it, otherwise duplicate compensation will occur
+	if (SP_OBJECT_IS_CLONED (self)) {
+		return;
+	}
 
+	guint mode = prefs_get_int_attribute ("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL);
 	// user wants no compensation
 	if (mode == SP_CLONE_COMPENSATION_NONE)
 		return;
 
-	SPItem *ref = use->ref->getObject();
+	NR::Matrix m(*mp);
 
-	// the clone is orphaned; or this is not a real use, but a clone of another use; 
-	// we skip it, otherwise duplicate compensation will occur
-	if (!ref || SP_OBJECT_IS_CLONED (use)) {
+	// this is not a simple move, do not try to compensate
+	if (!(m.is_translation()))
 		return;
+
+	NR::Matrix t = sp_use_get_parent_transform (self);
+	NR::Matrix clone_move = t.inverse() * m * t;
+
+	// calculate the compensation matrix and the advertized movement matrix
+	NR::Matrix advertized_move;
+	if (mode == SP_CLONE_COMPENSATION_PARALLEL) {
+		clone_move = clone_move.inverse() * m;
+		advertized_move = m;
+	} else if (mode == SP_CLONE_COMPENSATION_UNMOVED) { 
+		clone_move = clone_move.inverse();
+		advertized_move.set_identity();
+	} else {
+		g_assert_not_reached();
 	}
-
-	//	g_print ("=====%s, %p\n", sp_repr_attr(SP_OBJECT_REPR (use), "id"), use);
-
-	// parent's update was not accompanied by writing to its repr (e.g. selector drag before mouse release).
-	// in this case, we do not want any compensation yet.
-	if (!use->original_repr_changed) {
-		return;
-	}
-
-	// find out the current bbox of the original
-	NRRect bbox;
-	NRMatrix i2doc;
-	sp_item_i2doc_affine(ref, &i2doc);
-	sp_item_invoke_bbox(ref, &bbox, &i2doc, TRUE);
-	
-	// remember it
-	NR::Rect n = bbox;
-	NR::Rect o = use->original;
-	use->original = n;
-
-	// 	mm_print ("old", NR::Matrix (NR::translate (o.midpoint())));
-	// 	mm_print ("new", NR::Matrix (NR::translate (n.midpoint())));
-
-	// 	mm_print ("dim diff", NR::Matrix (NR::translate (n.dimensions() - o.dimensions())));
-	// 	mm_print ("mid diff", NR::Matrix (NR::translate (n.midpoint() - o.midpoint())));
-
-	// if dimensions changed, this is not pure move, so quit
-	if (!point_equalp (n.dimensions(), o.dimensions())) {
-		return;
-	}
-
-	// find out midpoints
-	NR::Point np = (n.midpoint());
-	NR::Point op = (o.midpoint());
-
-	// if midpoint is the same, no need to compensate, so quit
-	if (point_equalp (op, np)) {
-		return;
-	}
-
-	// 	mm_print ("par", NR::Matrix (NR::translate (op - np)));
-
-	NR::Point original_move (np - op);
-
-	// transform both old and new midpoints
-	NR::Matrix t = sp_use_get_parent_transform (use);
-	np *= t;
-	op *= t;
-
-	// np - op is how the clone would move, if we allow it to
-	NRMatrix clone_move;
-	if (mode == SP_CLONE_COMPENSATION_PARALLEL)
-		clone_move = NR::Matrix (NR::translate (op - np + original_move));
-	else 
-		clone_move = NR::Matrix (NR::translate (op - np));
 
 	// commit the compensation
-	SPItem *item = SP_ITEM(use);
-	nr_matrix_multiply (&item->transform, &item->transform, &clone_move);
-	sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
-
-	// ugly hack: with chained <use>s, the transform= may not change at all, 
-	// therefore the above write_transform may fail to change the repr 
-	// and the parent_repr_changed flag on its clones will not be set. 
-	// So we set and remove a dummy attr to assert that we did indeed change the repr.
-	sp_repr_set_attr (SP_OBJECT_REPR (item), "inkscape:dummy", "1");
-	sp_repr_set_attr (SP_OBJECT_REPR (item), "inkscape:dummy", NULL);
-
-	// having changed the repr, we need to finish transaction.
-	// FIXME: we should really try to sneak under the previous transaction, not create a new one.
-	sp_document_done(SP_OBJECT_DOCUMENT (item));
-
-	// no more compensation until parent's repr changes again
-	use->original_repr_changed = false;
+	SPItem *item = SP_ITEM(self);
+	NRMatrix clone_move_nr = clone_move;
+	nr_matrix_multiply (&item->transform, &item->transform, &clone_move_nr);
+	sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform, &advertized_move);
+	sp_object_request_update (SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG);
 }
-
-static void sp_use_original_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
-{
-	SPUse *use = SP_USE (data);
-	// set the flag telling the _compensation function that the original's repr changed
-	use->original_repr_changed = true;
-}
-
-static SPReprEventVector use_repr_events = { 	 
-         NULL, /* destroy */ 	 
-         NULL, /* add_child */ 	 
-         NULL, /* child_added */ 	 
-         NULL, /* remove_child */ 	 
-         NULL, /* child_removed */ 	 
-         NULL, /* change_attr */ 	 
-         sp_use_original_attr_changed, 	 
-         NULL, /* change_list */ 	 
-         NULL, /* content_changed */ 	 
-         NULL, /* change_order */ 	 
-         NULL  /* order_changed */ 	 
- };
 
 static void
 sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use)
@@ -564,6 +483,7 @@ sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use)
 	SPItem *item = SP_ITEM (use);
 
 	use->_delete_connection.disconnect();
+	use->_transformed_connection.disconnect();
 
 	if (use->child) {
 		sp_object_detach_unref (SP_OBJECT (use), use->child);
@@ -592,22 +512,9 @@ sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use)
 
 			}
 			use->_delete_connection = SP_OBJECT(refobj)->connectDelete(SigC::bind(SigC::slot(&sp_use_delete_self), use));
+			use->_transformed_connection = SP_ITEM(refobj)->connectTransformed(SigC::bind(SigC::slot(&sp_use_move_compensate), use));
 		}
 	}
-
-        // connect signal callback for setting the original_repr_changed flag, used by _compensation
-         if (old_ref && use->repr) { 	 
-                 sp_repr_remove_listener_by_data (use->repr, use); 	 
-                 sp_repr_unref (use->repr); 	 
-                 use->repr = NULL; 	 
-         } 	 
-         SPItem *refobj = use->ref->getObject(); 	 
-         if (SP_IS_ITEM (refobj) && SP_OBJECT_REPR (refobj)) { 	 
-                 use->repr = SP_OBJECT_REPR (refobj); 	 
-                 sp_repr_ref (use->repr); 	 
-                 sp_repr_add_listener (use->repr, &use_repr_events, use); 	 
-                 sp_repr_synthesize_events (use->repr, &use_repr_events, use); 	 
-         }
 }
 
 static void
@@ -634,16 +541,6 @@ sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	use = SP_USE (object);
 	ictx = (SPItemCtx *) ctx;
 	cctx = *ictx;
-
-	// remember the original's bbox, if it's not yet set
-	SPItem *refobj = use->ref->getObject();
- 	if (SP_IS_ITEM (refobj) && use->original.isEmpty()) {
-		NRRect bbox;
-		NRMatrix i2doc;
-		sp_item_i2doc_affine(SP_ITEM(refobj), &i2doc);
-		sp_item_invoke_bbox(SP_ITEM(refobj), &bbox, &i2doc, TRUE);
-		use->original = bbox;
- 	}
 
 	if (((SPObjectClass *) (parent_class))->update)
 		((SPObjectClass *) (parent_class))->update (object, ctx, flags);
@@ -693,9 +590,6 @@ sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		nr_matrix_set_translate (&t, use->x.computed, use->y.computed);
 		nr_arena_group_set_child_transform (NR_ARENA_GROUP (v->arenaitem), &t);
 	}
-
-	// see if any move compensation is needed, and if so, do it
-	sp_use_move_compensation (use);
 }
 
 static void
@@ -728,7 +622,6 @@ sp_use_unlink (SPUse *use)
 	if (!repr) return NULL;
 
 	SPRepr *parent = sp_repr_parent (repr);
-	gint pos = sp_repr_position (repr);
 	SPDocument *document = SP_OBJECT(use)->document;
 
 	//track the ultimate source of a chain of uses
@@ -764,8 +657,10 @@ sp_use_unlink (SPUse *use)
 	SPItem *item = SP_ITEM(unlinked);
 	// set the accummulated transform
 	{
+		NR::Matrix nomove(NR::identity());
 		NRMatrix ctrans = t.operator const NRMatrix&();
-		sp_item_write_transform (item, SP_OBJECT_REPR (item), &ctrans);
+		// advertise ourselves as not moving
+		sp_item_write_transform (item, SP_OBJECT_REPR (item), &ctrans, &nomove);
 	}
 	return item;
 }

@@ -72,14 +72,8 @@ struct SPUse {
 	SigC::Connection _delete_connection;
 	SigC::Connection _changed_connection;
 
-	// the bbox of the original, for sensing its movements and compensation
-	NR::Rect original;
-
-	// original's repr changed, so compensation may write to repr too
-	bool original_repr_changed;
-
-	// original's repr that we are listening to
-	SPRepr *repr;
+	// a sigc connection for transformed signal, used to do move compensation
+	SigC::Connection _transformed_connection;
 };
 
 struct SPUseClass {
