@@ -75,7 +75,7 @@ nr_arena_image_init (NRArenaImage *image)
 	image->width = 256.0;
 	image->height = 256.0;
 
-	nr_matrix_f_set_identity (&image->grid2px);
+	nr_matrix_set_identity (&image->grid2px);
 }
 
 static void
@@ -103,7 +103,7 @@ nr_arena_image_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int 
 	nr_arena_item_request_render (item);
 
 	/* Copy affine */
-	nr_matrix_d_invert (&grid2px, &gc->transform);
+	nr_matrix_invert (&grid2px, &gc->transform);
 	if (image->px) {
 		hscale = image->pxw / image->width;
 		vscale = image->pxh / image->height;

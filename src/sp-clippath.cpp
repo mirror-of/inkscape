@@ -234,7 +234,7 @@ sp_clippath_update (SPObject *object, SPCtx *ctx, guint flags)
 	for (v = cp->display; v != NULL; v = v->next) {
 		if (cp->clipPathUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX) {
 			NRMatrix t;
-			nr_matrix_f_set_scale (&t, v->bbox.x1 - v->bbox.x0, v->bbox.y1 - v->bbox.y0);
+			nr_matrix_set_scale (&t, v->bbox.x1 - v->bbox.x0, v->bbox.y1 - v->bbox.y0);
 			t.c[4] = v->bbox.x0;
 			t.c[5] = v->bbox.y0;
 			nr_arena_group_set_child_transform (NR_ARENA_GROUP (v->arenaitem), &t);
@@ -318,7 +318,7 @@ sp_clippath_show (SPClipPath *cp, NRArena *arena, unsigned int key)
 
 	if (cp->clipPathUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX) {
 		NRMatrix t;
-		nr_matrix_f_set_scale (&t, cp->display->bbox.x1 - cp->display->bbox.x0, cp->display->bbox.y1 - cp->display->bbox.y0);
+		nr_matrix_set_scale (&t, cp->display->bbox.x1 - cp->display->bbox.x0, cp->display->bbox.y1 - cp->display->bbox.y0);
 		t.c[4] = cp->display->bbox.x0;
 		t.c[5] = cp->display->bbox.y0;
 		nr_arena_group_set_child_transform (NR_ARENA_GROUP (ai), &t);

@@ -104,10 +104,10 @@ sp_root_init (SPRoot *root)
 	sp_svg_length_unset (&root->width, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 	sp_svg_length_unset (&root->height, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 
-	/* nr_matrix_d_set_identity (&root->viewbox); */
+	/* nr_matrix_set_identity (&root->viewbox); */
 	root->viewBox_set = FALSE;
 
-	nr_matrix_d_set_identity (&root->c2p);
+	nr_matrix_set_identity (&root->c2p);
 
 	/* root->namedviews = NULL; */
 	root->defs = NULL;
@@ -458,7 +458,7 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 	rctx = *ictx;
 
 	/* Calculate child to parent transformation */
-	nr_matrix_d_set_identity (&root->c2p);
+	nr_matrix_set_identity (&root->c2p);
 
 	if (object->parent) {
 		/*
@@ -468,7 +468,7 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 		 * fixme: height seems natural, as this makes the inner svg element
 		 * fixme: self-contained. The spec is vague here.
 		 */
-		nr_matrix_d_set_translate (&root->c2p, root->x.computed, root->y.computed);
+		nr_matrix_set_translate (&root->c2p, root->x.computed, root->y.computed);
 	}
 
 	if (root->viewBox_set) {
@@ -540,10 +540,10 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 		q.c[4] = -root->viewBox.x0 * q.c[0] + x;
 		q.c[5] = -root->viewBox.y0 * q.c[3] + y;
 		/* Append viewbox transformation */
-		nr_matrix_multiply_ddd (&root->c2p, &q, &root->c2p);
+		nr_matrix_multiply (&root->c2p, &q, &root->c2p);
 	}
 
-	nr_matrix_multiply_ddd (&rctx.i2doc, &root->c2p, &rctx.i2doc);
+	nr_matrix_multiply (&rctx.i2doc, &root->c2p, &rctx.i2doc);
 
 	/* Initialize child viewport */
 	if (root->viewBox_set) {
@@ -564,7 +564,7 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 		rctx.vp.y1 = root->height.computed;
 	}
 
-	nr_matrix_d_set_identity (&rctx.i2vp);
+	nr_matrix_set_identity (&rctx.i2vp);
 
 	/* And invoke parent method */
 	if (((SPObjectClass *) (parent_class))->update)
@@ -665,7 +665,7 @@ sp_root_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned in
 
 	root = SP_ROOT (item);
 
-	nr_matrix_multiply_ddd (a, &root->c2p, transform);
+	nr_matrix_multiply (a, &root->c2p, transform);
 
 	if (((SPItemClass *) (parent_class))->bbox) {
 		((SPItemClass *) (parent_class))->bbox (item, bbox, a, flags);

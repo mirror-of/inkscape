@@ -357,7 +357,7 @@ sp_module_print_win32_finish (SPModulePrint *mod)
 		bbox.x1 = bbox.x0 + width;
 		bbox.y1 = bbox.y0 + num_rows;
 		/* Update to renderable state */
-		nr_matrix_d_set_identity (&gc.transform);
+		nr_matrix_set_identity (&gc.transform);
 		nr_arena_item_invoke_update (mod->root, &bbox, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
 
 		nr_pixblock_setup_extern (&pb, NR_PIXBLOCK_MODE_R8G8B8A8N, bbox.x0, bbox.y0, bbox.x1, bbox.y1, px, 4 * (bbox.x1 - bbox.x0), FALSE, FALSE);

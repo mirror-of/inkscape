@@ -136,7 +136,7 @@ nr_font_generic_glyph_outline_get (NRFont *font, unsigned int glyph, NRBPath *d,
 		NRBPath tfgol;
 		if (nr_typeface_glyph_outline_get (font->face, glyph, font->metrics, &tfgol, 0)) {
 			NRMatrix scale;
-			nr_matrix_f_set_scale (&scale, font->size / 1000.0, font->size / 1000.0);
+			nr_matrix_set_scale (&scale, font->size / 1000.0, font->size / 1000.0);
 			nr_path_duplicate_transform (&fg->outlines[glyph], &tfgol, &scale);
 		}
 	}

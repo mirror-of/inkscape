@@ -53,7 +53,7 @@ sp_desktop_dt2doc_affine (SPDesktop *desktop, NRMatrix *dt2doc)
 	g_return_val_if_fail (SP_IS_DESKTOP (desktop), NULL);
 	g_return_val_if_fail (dt2doc != NULL, NULL);
 
-	nr_matrix_d_invert (dt2doc, (NRMatrix *) desktop->doc2dt);
+	nr_matrix_invert (dt2doc, (NRMatrix *) desktop->doc2dt);
 
 	return dt2doc;
 }
@@ -81,8 +81,8 @@ sp_desktop_w2doc_affine (SPDesktop *desktop, NRMatrix *w2doc)
 	g_return_val_if_fail (SP_IS_DESKTOP (desktop), NULL);
 	g_return_val_if_fail (w2doc != NULL, NULL);
 
-	nr_matrix_d_invert (&dt2doc, (NRMatrix *) desktop->doc2dt);
-	nr_matrix_multiply_ddd (w2doc, (NRMatrix *) desktop->w2d, &dt2doc);
+	nr_matrix_invert (&dt2doc, (NRMatrix *) desktop->doc2dt);
+	nr_matrix_multiply (w2doc, (NRMatrix *) desktop->w2d, &dt2doc);
 
 	return w2doc;
 }
@@ -94,7 +94,7 @@ sp_desktop_doc2w_affine (SPDesktop * desktop, NRMatrix *doc2w)
 	g_return_val_if_fail (SP_IS_DESKTOP (desktop), NULL);
 	g_return_val_if_fail (doc2w != NULL, NULL);
 
-	nr_matrix_multiply_ddd (doc2w, (NRMatrix *) desktop->doc2dt, (NRMatrix *) desktop->d2w);
+	nr_matrix_multiply (doc2w, (NRMatrix *) desktop->doc2dt, (NRMatrix *) desktop->d2w);
 
 	return doc2w;
 }
@@ -106,7 +106,7 @@ sp_desktop_root2dt_affine (SPDesktop *dt, NRMatrix *root2dt)
 
 	root = SP_ROOT (SP_DOCUMENT_ROOT (SP_VIEW_DOCUMENT (dt)));
 
-	nr_matrix_multiply_ddd (root2dt, &root->c2p, (NRMatrix *) dt->doc2dt);
+	nr_matrix_multiply (root2dt, &root->c2p, (NRMatrix *) dt->doc2dt);
 
 	return root2dt;
 }
@@ -118,7 +118,7 @@ sp_desktop_dt2root_affine (SPDesktop *dt, NRMatrix *dt2root)
 
 	sp_desktop_root2dt_affine (dt, &root2dt);
 
-	nr_matrix_d_invert (dt2root, &root2dt);
+	nr_matrix_invert (dt2root, &root2dt);
 
 	return dt2root;
 }
@@ -158,7 +158,7 @@ sp_desktop_d2doc_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
 	g_return_val_if_fail (SP_IS_DESKTOP (dt), NULL);
 	g_return_val_if_fail (p != NULL, NULL);
 
-	nr_matrix_d_invert (&dt2doc, (NRMatrix *) dt->doc2dt);
+	nr_matrix_invert (&dt2doc, (NRMatrix *) dt->doc2dt);
 
 	p->x = NR_MATRIX_DF_TRANSFORM_X (&dt2doc, x, y);
 	p->y = NR_MATRIX_DF_TRANSFORM_Y (&dt2doc, x, y);
@@ -189,7 +189,7 @@ sp_desktop_w2doc_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
 	g_return_val_if_fail (SP_IS_DESKTOP (dt), NULL);
 	g_return_val_if_fail (p != NULL, NULL);
 
-	nr_matrix_d_invert (&dt2doc, (NRMatrix *) dt->doc2dt);
+	nr_matrix_invert (&dt2doc, (NRMatrix *) dt->doc2dt);
 
 	dtx = NR_MATRIX_DF_TRANSFORM_X ((NRMatrix *) dt->w2d, x, y);
 	dty = NR_MATRIX_DF_TRANSFORM_Y ((NRMatrix *) dt->w2d, x, y);

@@ -100,7 +100,7 @@ sp_marker_init (SPMarker *marker)
 {
 	marker->viewBox_set = FALSE;
 
-	nr_matrix_d_set_identity (&marker->c2p);
+	nr_matrix_set_identity (&marker->c2p);
 }
 
 static void
@@ -322,8 +322,8 @@ sp_marker_update (SPObject *object, SPCtx *ctx, guint flags)
 	/* Copy parent context */
 	rctx.ctx = *ctx;
 	/* Initialize tranformations */
-	nr_matrix_d_set_identity (&rctx.i2doc);
-	nr_matrix_d_set_identity (&rctx.i2vp);
+	nr_matrix_set_identity (&rctx.i2doc);
+	nr_matrix_set_identity (&rctx.i2vp);
 	/* Set up viewport */
 	rctx.vp.x0 = 0.0;
 	rctx.vp.y0 = 0.0;
@@ -331,7 +331,7 @@ sp_marker_update (SPObject *object, SPCtx *ctx, guint flags)
 	rctx.vp.y1 = marker->markerHeight.computed;
 
 	/* Start with identity transform */
-	nr_matrix_d_set_identity (&marker->c2p);
+	nr_matrix_set_identity (&marker->c2p);
 
 	/* Viewbox is always present, either implicitly or explicitly */
 	if (marker->viewBox_set) {
@@ -406,16 +406,16 @@ sp_marker_update (SPObject *object, SPCtx *ctx, guint flags)
 	q.c[4] = -vb->x0 * q.c[0] + x;
 	q.c[5] = -vb->y0 * q.c[3] + y;
 	/* Append viewbox transformation */
-	nr_matrix_multiply_ddd (&marker->c2p, &q, &marker->c2p);
+	nr_matrix_multiply (&marker->c2p, &q, &marker->c2p);
 
 
 	/* Append reference translation */
 	/* fixme: lala (Lauris) */
-	nr_matrix_d_set_translate (&q, -marker->refX.computed, -marker->refY.computed);
-	nr_matrix_multiply_ddd (&marker->c2p, &q, &marker->c2p);
+	nr_matrix_set_translate (&q, -marker->refX.computed, -marker->refY.computed);
+	nr_matrix_multiply (&marker->c2p, &q, &marker->c2p);
 
 
-	nr_matrix_multiply_ddd (&rctx.i2doc, &marker->c2p, &rctx.i2doc);
+	nr_matrix_multiply (&rctx.i2doc, &marker->c2p, &rctx.i2doc);
 
 	/* If viewBox is set reinitialize child viewport */
 	/* Otherwise it already correct */
@@ -424,7 +424,7 @@ sp_marker_update (SPObject *object, SPCtx *ctx, guint flags)
 		rctx.vp.y0 = marker->viewBox.y0;
 		rctx.vp.x1 = marker->viewBox.x1;
 		rctx.vp.y1 = marker->viewBox.y1;
-		nr_matrix_d_set_identity (&rctx.i2vp);
+		nr_matrix_set_identity (&rctx.i2vp);
 	}
 
 	/* And invoke parent method */
@@ -586,7 +586,7 @@ sp_marker_show_instance (SPMarker *marker, NRArenaItem *parent,
 					m = *base;
 				} else {
 					/* fixme: Orient units (Lauris) */
-					nr_matrix_f_set_rotate (&m, marker->orient * M_PI / 180.0);
+					nr_matrix_set_rotate (&m, marker->orient * M_PI / 180.0);
 					m.c[4] = base->c[4];
 					m.c[5] = base->c[5];
 				}

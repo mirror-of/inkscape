@@ -48,7 +48,7 @@ sp_svg_transform_read (const gchar *str, NRMatrix *transform)
 
 	if (str == NULL) return 0;
 
-	nr_matrix_d_set_identity (&a);
+	nr_matrix_set_identity (&a);
 
 	idx = 0;
 	while (str[idx]) {
@@ -102,23 +102,23 @@ sp_svg_transform_read (const gchar *str, NRMatrix *transform)
 		/* ok, have parsed keyword and args, now modify the transform */
 		if (!strcmp (keyword, "matrix")) {
 			if (n_args != 6) return 0;
-			nr_matrix_multiply_ddd (&a, NR_MATRIX_D_FROM_DOUBLE (args), &a);
+			nr_matrix_multiply (&a, NR_MATRIX_D_FROM_DOUBLE (args), &a);
 		} else if (!strcmp (keyword, "translate")) {
 			if (n_args == 1) {
 				args[1] = 0;
 			} else if (n_args != 2) {
 				return 0;
 			}
-			nr_matrix_d_set_translate (&m, args[0], args[1]);
-			nr_matrix_multiply_ddd (&a, &m, &a);
+			nr_matrix_set_translate (&m, args[0], args[1]);
+			nr_matrix_multiply (&a, &m, &a);
 		} else if (!strcmp (keyword, "scale")) {
 			if (n_args == 1) {
 				args[1] = args[0];
 			} else if (n_args != 2) {
 				return 0;
 			}
-			nr_matrix_d_set_scale (&m, args[0], args[1]);
-			nr_matrix_multiply_ddd (&a, &m, &a);
+			nr_matrix_set_scale (&m, args[0], args[1]);
+			nr_matrix_multiply (&a, &m, &a);
 		} else if (!strcmp (keyword, "rotate")) {
 			double s, c;
 			if (n_args != 1) return 0;
@@ -130,7 +130,7 @@ sp_svg_transform_read (const gchar *str, NRMatrix *transform)
 			m.c[3] = c;
 			m.c[4] = 0.0;
 			m.c[5] = 0.0;
-			nr_matrix_multiply_ddd (&a, &m, &a);
+			nr_matrix_multiply (&a, &m, &a);
 		} else if (!strcmp (keyword, "skewX")) {
 			if (n_args != 1) return 0;
 			m.c[0] = 1;
@@ -139,7 +139,7 @@ sp_svg_transform_read (const gchar *str, NRMatrix *transform)
 			m.c[3] = 1;
 			m.c[4] = 0.0;
 			m.c[5] = 0.0;
-			nr_matrix_multiply_ddd (&a, &m, &a);
+			nr_matrix_multiply (&a, &m, &a);
 		} else if (!strcmp (keyword, "skewY")) {
 			if (n_args != 1) return 0;
 			m.c[0] = 1;
@@ -148,7 +148,7 @@ sp_svg_transform_read (const gchar *str, NRMatrix *transform)
 			m.c[3] = 1;
 			m.c[4] = 0.0;
 			m.c[5] = 0.0;
-			nr_matrix_multiply_ddd (&a, &m, &a);
+			nr_matrix_multiply (&a, &m, &a);
 		} else {
 			return 0; /* unknown keyword */
 		}

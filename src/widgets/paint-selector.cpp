@@ -498,8 +498,8 @@ sp_paint_selector_write_lineargradient (SPPaintSelector *psel, SPLinearGradient 
 	sp_item_i2doc_affine (item, &fctm);
 	sp_paint_selector_get_gradient_gs2d_matrix_f (psel, &gs2d);
 	sp_gradient_get_g2d_matrix_f (SP_GRADIENT (lg), &fctm, &fbb, &g2d);
-	nr_matrix_f_invert (&d2g, &g2d);
-	nr_matrix_multiply_fff (&gs2g, &gs2d, &d2g);
+	nr_matrix_invert (&d2g, &g2d);
+	nr_matrix_multiply (&gs2g, &gs2d, &d2g);
 	/* Normalize transform */
 	gp[0] = NR_MATRIX_DF_TRANSFORM_X (&gs2g, p[0], p[1]);
 	gp[1] = NR_MATRIX_DF_TRANSFORM_Y (&gs2g, p[0], p[1]);
@@ -513,9 +513,9 @@ sp_paint_selector_write_lineargradient (SPPaintSelector *psel, SPLinearGradient 
 	gs2g.c[3] /= e;
 	gs2g.c[4] = 0.0;
 	gs2g.c[5] = 0.0;
-	nr_matrix_multiply_fff (&gs2d, &gs2g, &g2d);
+	nr_matrix_multiply (&gs2d, &gs2g, &g2d);
 	sp_gradient_set_gs2d_matrix_f (SP_GRADIENT (lg), &fctm, &fbb, &gs2d);
-	nr_matrix_f_invert (&g2gs, &gs2g);
+	nr_matrix_invert (&g2gs, &gs2g);
 	p[0] = NR_MATRIX_DF_TRANSFORM_X (&g2gs, gp[0], gp[1]);
 	p[1] = NR_MATRIX_DF_TRANSFORM_Y (&g2gs, gp[0], gp[1]);
 	p[2] = NR_MATRIX_DF_TRANSFORM_X (&g2gs, gp[2], gp[3]);
@@ -545,8 +545,8 @@ sp_paint_selector_write_radialgradient (SPPaintSelector *psel, SPRadialGradient 
 	sp_item_i2doc_affine (item, &fctm);
 	sp_paint_selector_get_gradient_gs2d_matrix_f (psel, &gs2d);
 	sp_gradient_get_g2d_matrix_f (SP_GRADIENT (rg), &fctm, &fbb, &g2d);
-	nr_matrix_f_invert (&d2g, &g2d);
-	nr_matrix_multiply_fff (&gs2g, &gs2d, &d2g);
+	nr_matrix_invert (&d2g, &g2d);
+	nr_matrix_multiply (&gs2g, &gs2d, &d2g);
 	/* Normalize transform */
 	gp[0] = NR_MATRIX_DF_TRANSFORM_X (&gs2g, p[0], p[1]);
 	gp[1] = NR_MATRIX_DF_TRANSFORM_Y (&gs2g, p[0], p[1]);
@@ -566,9 +566,9 @@ sp_paint_selector_write_radialgradient (SPPaintSelector *psel, SPRadialGradient 
 	gs2g.c[4] = 0.0;
 	gs2g.c[5] = 0.0;
 #endif
-	nr_matrix_multiply_fff (&gs2d, &gs2g, &g2d);
+	nr_matrix_multiply (&gs2d, &gs2g, &g2d);
 	sp_gradient_set_gs2d_matrix_f (SP_GRADIENT (rg), &fctm, &fbb, &gs2d);
-	nr_matrix_f_invert (&g2gs, &gs2g);
+	nr_matrix_invert (&g2gs, &gs2g);
 	p[0] = NR_MATRIX_DF_TRANSFORM_X (&g2gs, gp[0], gp[1]);
 	p[1] = NR_MATRIX_DF_TRANSFORM_Y (&g2gs, gp[0], gp[1]);
 	p[2] = NR_MATRIX_DF_TRANSFORM_X (&g2gs, gp[2], gp[3]);

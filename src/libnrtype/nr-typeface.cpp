@@ -146,7 +146,7 @@ nr_font_new_default (NRTypeFace *tf, unsigned int metrics, float size)
 {
 	NRMatrix scale;
 
-	nr_matrix_f_set_scale (&scale, size, size);
+	nr_matrix_set_scale (&scale, size, size);
 
 	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->font_new (tf, metrics, &scale);
 }

@@ -186,7 +186,7 @@ sp_guideline_set_position (SPGuideLine *gl, double position)
 {
 	NRMatrix i2b;
 
-	nr_matrix_d_set_translate (&i2b, position, position);
+	nr_matrix_set_translate (&i2b, position, position);
 
 	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (gl), NR_MATRIX_D_TO_DOUBLE (&i2b));
 }

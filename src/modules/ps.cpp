@@ -390,7 +390,7 @@ sp_module_print_plain_finish (SPModulePrint *mod)
 			bbox.x1 = width;
 			bbox.y1 = MIN (height, y + 64);
 			/* Update to renderable state */
-			nr_matrix_d_set_identity (&gc.transform);
+			nr_matrix_set_identity (&gc.transform);
 			nr_arena_item_invoke_update (mod->root, &bbox, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
 			/* Render */
 			/* This should take guchar* instead of unsigned char*) */

@@ -320,7 +320,7 @@ sp_module_print_gnome_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMa
 			ibox.x1 = (long) (cbox.x1 + 0.9999);
 			ibox.y1 = (long) (cbox.y1 + 0.9999);
 
-			nr_matrix_f_invert (&d2i, ctm);
+			nr_matrix_invert (&d2i, ctm);
 
 			gnome_print_gsave (gpmod->gpc);
 

@@ -332,7 +332,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean 
 	y = cp->y;
 
 	/* fixme: SPChars should do this upright instead */
-	nr_matrix_f_set_scale (&a, 1.0, -1.0);
+	nr_matrix_set_scale (&a, 1.0, -1.0);
 
 	intext = FALSE;
 	preserve = (((SPObject*)string)->xml_space.value == SP_XML_SPACE_PRESERVE);
@@ -1230,7 +1230,7 @@ sp_text_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned in
 	for (o = text->children; o != NULL; o = o->next) {
 		NRMatrix a;
 		child = SP_ITEM (o);
-		nr_matrix_multiply_dfd (&a, &child->transform, transform);
+		nr_matrix_multiply (&a, &child->transform, transform);
 		sp_item_invoke_bbox_full (child, bbox, &a, flags, FALSE);
 	}
 }
@@ -1570,7 +1570,7 @@ sp_text_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
 	i2p = *t;
 	i2p.c[4] = 0.0;
 	i2p.c[5] = 0.0;
-	nr_matrix_f_invert (&p2i, &i2p);
+	nr_matrix_invert (&p2i, &i2p);
 
 	px = NR_MATRIX_DF_TRANSFORM_X (t, text->ly.x.computed, text->ly.y.computed);
 	py = NR_MATRIX_DF_TRANSFORM_Y (t, text->ly.x.computed, text->ly.y.computed);

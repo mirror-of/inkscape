@@ -217,7 +217,7 @@ nr_arena_item_invoke_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigne
 	/* Set up local gc */
 	childgc = *gc;
 	if (item->transform) {
-		nr_matrix_multiply_dfd (&childgc.transform, item->transform, &childgc.transform);
+		nr_matrix_multiply (&childgc.transform, item->transform, &childgc.transform);
 	}
 
 	/* Invoke the real method */
@@ -589,7 +589,7 @@ nr_arena_item_set_transform (NRArenaItem *item, const NRMatrix *transform)
 
 	if (!NR_MATRIX_DF_TEST_CLOSE (md, ms, NR_EPSILON_F)) {
 		nr_arena_item_request_render (item);
-		if (!transform || nr_matrix_f_test_identity (transform, NR_EPSILON_F)) {
+		if (!transform || nr_matrix_test_identity (transform, NR_EPSILON_F)) {
 			/* Set to identity affine */
 			if (item->transform) nr_free (item->transform);
 			item->transform = NULL;

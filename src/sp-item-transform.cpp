@@ -35,15 +35,15 @@ sp_item_rotate_rel (SPItem * item, double angle)
   y = b.y0 + (b.y1 - b.y0)/2;
 
   art_affine_rotate (rotate,angle);
-  nr_matrix_d_set_translate (NR_MATRIX_D_FROM_DOUBLE (s),x,y);
-  nr_matrix_d_set_translate (NR_MATRIX_D_FROM_DOUBLE (t),-x,-y);
+  nr_matrix_set_translate (NR_MATRIX_D_FROM_DOUBLE (s),x,y);
+  nr_matrix_set_translate (NR_MATRIX_D_FROM_DOUBLE (t),-x,-y);
 
 
   tstr[79] = '\0';
 
   // rotate item
   sp_item_i2d_affine (item, &curaff);
-  nr_matrix_multiply_dfd (NR_MATRIX_D_FROM_DOUBLE (u), &curaff, NR_MATRIX_D_FROM_DOUBLE (t));
+  nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (u), &curaff, NR_MATRIX_D_FROM_DOUBLE (t));
   art_affine_multiply (v, u, rotate);
   art_affine_multiply (newaff, v, s);
   nr_matrix_f_from_d (&f, NR_MATRIX_D_FROM_DOUBLE (newaff));
@@ -71,17 +71,17 @@ sp_item_scale_rel (SPItem *item, double dx, double dy)
 	x = b.x0 + (b.x1 - b.x0) / 2;
 	y = b.y0 + (b.y1 - b.y0) / 2;
 
-	nr_matrix_d_set_scale (&scale, dx, dy);
-	nr_matrix_d_set_translate (&s, x, y);
-	nr_matrix_d_set_translate (&t, -x, -y);
+	nr_matrix_set_scale (&scale, dx, dy);
+	nr_matrix_set_translate (&s, x, y);
+	nr_matrix_set_translate (&t, -x, -y);
 
 	tstr[79] = '\0';
 
 	// scale item
 	sp_item_i2d_affine (item, &curaff);
-	nr_matrix_multiply_dfd (&u, &curaff, &t);
-	nr_matrix_multiply_ddd (&v, &u, &scale);
-	nr_matrix_multiply_ddd (&u, &v, &s);
+	nr_matrix_multiply (&u, &curaff, &t);
+	nr_matrix_multiply (&v, &u, &scale);
+	nr_matrix_multiply (&u, &v, &s);
 	nr_matrix_f_from_d (&new_transform, &u);
 
 	sp_item_set_i2d_affine (item, &new_transform);
@@ -126,7 +126,7 @@ sp_item_skew_rel (SPItem *item, double dx, double dy)
 
 	// skew item
 	sp_item_i2d_affine (item, &cur);
-	nr_matrix_multiply_dfd (NR_MATRIX_D_FROM_DOUBLE (u), &cur, NR_MATRIX_D_FROM_DOUBLE (t));
+	nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (u), &cur, NR_MATRIX_D_FROM_DOUBLE (t));
 	art_affine_multiply (v, u, skew);
 	art_affine_multiply (newaff, v, s);
 	nr_matrix_f_from_d (&new_transform, NR_MATRIX_D_FROM_DOUBLE (newaff));
@@ -151,7 +151,7 @@ sp_item_move_rel (SPItem * item, double dx, double dy)
 	// move item
 	art_affine_translate (move, dx, dy);
 	sp_item_i2d_affine (item, &cur);
-	nr_matrix_multiply_ffd (&new_transform, &cur, NR_MATRIX_D_FROM_DOUBLE (move));
+	nr_matrix_multiply (&new_transform, &cur, NR_MATRIX_D_FROM_DOUBLE (move));
 	sp_item_set_i2d_affine (item, &new_transform);
 
 	//update repr

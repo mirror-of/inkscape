@@ -187,7 +187,7 @@ static void sp_genericellipse_set_shape (SPShape *shape)
 		slice = TRUE;
 	}
 
-	nr_matrix_d_set_scale (NR_MATRIX_D_FROM_DOUBLE (affine), rx, ry);
+	nr_matrix_set_scale (NR_MATRIX_D_FROM_DOUBLE (affine), rx, ry);
 	affine[4] = ellipse->cx.computed;
 	affine[5] = ellipse->cy.computed;
 

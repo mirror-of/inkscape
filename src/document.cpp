@@ -521,13 +521,13 @@ sp_document_ensure_up_to_date (SPDocument *doc)
 		if (doc->root->uflags) {
 			SPItemCtx ctx;
 			ctx.ctx.flags = 0;
-			nr_matrix_d_set_identity (&ctx.i2doc);
+			nr_matrix_set_identity (&ctx.i2doc);
 			/* Set up viewport in case svg has it defined as percentages */
 			ctx.vp.x0 = 0.0;
 			ctx.vp.y0 = 0.0;
 			ctx.vp.x1 = 21.0 / 2.54 * 72.0 * 1.25;
 			ctx.vp.y1 = 29.7 / 2.54 * 72.0 * 1.25;
-			nr_matrix_d_set_identity (&ctx.i2vp);
+			nr_matrix_set_identity (&ctx.i2vp);
 			sp_object_invoke_update (doc->root, (SPCtx *) &ctx, 0);
 		}
 		/* Emit "modified" signal on objects */
@@ -560,13 +560,13 @@ sp_document_idle_handler (gpointer data)
 	if (doc->root->uflags) {
 		SPItemCtx ctx;
 		ctx.ctx.flags = 0;
-		nr_matrix_d_set_identity (&ctx.i2doc);
+		nr_matrix_set_identity (&ctx.i2doc);
 		/* Set up viewport in case svg has it defined as percentages */
 		ctx.vp.x0 = 0.0;
 		ctx.vp.y0 = 0.0;
 		ctx.vp.x1 = 21.0 / 2.54 * 72.0 * 1.25;
 		ctx.vp.y1 = 29.7 / 2.54 * 72.0 * 1.25;
-		nr_matrix_d_set_identity (&ctx.i2vp);
+		nr_matrix_set_identity (&ctx.i2vp);
 		sp_object_invoke_update (doc->root, (SPCtx *) &ctx, 0);
 		/* if (doc->root->uflags & SP_OBJECT_MODIFIED_FLAG) return TRUE; */
 	}

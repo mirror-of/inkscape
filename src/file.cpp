@@ -523,7 +523,7 @@ sp_export_get_rows (const guchar **rows, int row, int num_rows, void *data)
 	bbox.x1 = ebp->width;
 	bbox.y1 = row + num_rows;
 	/* Update to renderable state */
-	nr_matrix_d_set_identity (&gc.transform);
+	nr_matrix_set_identity (&gc.transform);
 	nr_arena_item_invoke_update (ebp->root, &bbox, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
 
 	nr_pixblock_setup_extern (&pb, NR_PIXBLOCK_MODE_R8G8B8A8N, bbox.x0, bbox.y0, bbox.x1, bbox.y1, ebp->px, 4 * ebp->width, FALSE, FALSE);

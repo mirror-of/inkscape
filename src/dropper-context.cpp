@@ -150,7 +150,7 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			sp_desktop_w2d_xy_point (ec->desktop, &cd, dc->centre.x, dc->centre.y);
 			sp_desktop_w2dt_affine (ec->desktop, &w2dt);
 			scale = rw * NR_MATRIX_DF_EXPANSION (&w2dt);
-			nr_matrix_d_set_scale (&sm, scale, scale);
+			nr_matrix_set_scale (&sm, scale, scale);
 			sm.c[4] = cd.x;
 			sm.c[5] = cd.y;
 			sp_canvas_item_affine_absolute (dc->area, NR_MATRIX_D_TO_DOUBLE (&sm));

@@ -618,7 +618,7 @@ sp_selection_moveto (SPSelTrans * seltrans, double x, double y, guint state)
 		}
 	}
 
-	nr_matrix_d_set_translate (&move, dx, dy);
+	nr_matrix_set_translate (&move, dx, dy);
 	sp_sel_trans_transform (seltrans, &move, &norm);
 
 	// status text

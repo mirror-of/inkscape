@@ -1080,7 +1080,7 @@ sp_stroke_style_scale_line (SPWidget *spw)
 			/* Set stroke width */
 			sp_convert_distance (&length, sp_unit_selector_get_unit (us), SP_PS_UNIT);
 			sp_item_i2d_affine (SP_ITEM (i->data), &i2d);
-			nr_matrix_f_invert (&d2i, &i2d);
+			nr_matrix_invert (&d2i, &i2d);
 			dist = length * NR_MATRIX_DF_EXPANSION (&d2i);
 			g_snprintf (c, 32, "%g", dist);
 			sp_repr_css_set_property (css, "stroke-width", c);

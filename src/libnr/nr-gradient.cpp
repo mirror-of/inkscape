@@ -51,7 +51,7 @@ nr_rgradient_renderer_setup (NRRGradientRenderer *rgr,
 		   NR_DF_TEST_CLOSE (cy, fy, NR_EPSILON_F)) {
 		rgr->renderer.render = nr_rgradient_render_block_symmetric;
 
-		nr_matrix_f_invert (&rgr->px2gs, gs2px);
+		nr_matrix_invert (&rgr->px2gs, gs2px);
 		rgr->px2gs.c[0] *= (NR_GRADIENT_VECTOR_LENGTH / r);
 		rgr->px2gs.c[1] *= (NR_GRADIENT_VECTOR_LENGTH / r);
 		rgr->px2gs.c[2] *= (NR_GRADIENT_VECTOR_LENGTH / r);
@@ -85,8 +85,8 @@ nr_rgradient_renderer_setup (NRRGradientRenderer *rgr,
 		n2gs.c[4] = fx;
 		n2gs.c[5] = fy;
 
-		nr_matrix_multiply_fff (&n2px, &n2gs, gs2px);
-		nr_matrix_f_invert (&rgr->px2gs, &n2px);
+		nr_matrix_multiply (&n2px, &n2gs, gs2px);
+		nr_matrix_invert (&rgr->px2gs, &n2px);
 
 		rgr->cx = 1.0;
 		rgr->cy = 0.0;

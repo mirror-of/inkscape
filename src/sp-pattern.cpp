@@ -114,7 +114,7 @@ sp_pattern_init (SPPattern *pat)
 	pat->patternUnits = SP_PATTERN_UNITS_OBJECTBOUNDINGBOX;
 	pat->patternUnits = SP_PATTERN_UNITS_USERSPACEONUSE;
 
-	nr_matrix_d_set_identity (&pat->patternTransform);
+	nr_matrix_set_identity (&pat->patternTransform);
 
 	sp_svg_length_unset (&pat->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
 	sp_svg_length_unset (&pat->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
@@ -226,7 +226,7 @@ sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 			for (i = 0; i < 6; i++) pat->patternTransform.c[i] = t.c[i];
 			pat->patternTransform_set = TRUE;
 		} else {
-			nr_matrix_d_set_identity (&pat->patternTransform);
+			nr_matrix_set_identity (&pat->patternTransform);
 			pat->patternTransform_set = FALSE;
 		}
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
@@ -502,8 +502,8 @@ sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRect *bbo
 		bbox2user.c[5] = bbox->y0;
 
 		/* fixme: (Lauris) */
-		nr_matrix_multiply_fdf (&ps2user, &pat->patternTransform, &bbox2user);
-		nr_matrix_multiply_ffd (&pp->ps2px, &ps2user, (NRMatrix *) ctm);
+		nr_matrix_multiply (&ps2user, &pat->patternTransform, &bbox2user);
+		nr_matrix_multiply (&pp->ps2px, &ps2user, (NRMatrix *) ctm);
 	} else {
 		/* Problem: What to do, if we have mixed lengths and percentages? */
 		/* Currently we do ignore percentages at all, but that is not good (lauris) */
@@ -511,10 +511,10 @@ sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRect *bbo
 		/* fixme: We may try to normalize here too, look at linearGradient (Lauris) */
 
 		/* fixme: (Lauris) */
-		nr_matrix_multiply_fdd (&pp->ps2px, &pat->patternTransform, (NRMatrix *) ctm);
+		nr_matrix_multiply (&pp->ps2px, &pat->patternTransform, (NRMatrix *) ctm);
 	}
 
-	nr_matrix_f_invert (&pp->px2ps, &pp->ps2px);
+	nr_matrix_invert (&pp->px2ps, &pp->ps2px);
 
 	/*
 	 * The order should be:
@@ -533,8 +533,8 @@ sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRect *bbo
 		/* Problem: What to do, if we have mixed lengths and percentages? (Lauris) */
 		/* Currently we do ignore percentages at all, but that is not good (Lauris) */
 		/* fixme: (Lauris) */
-		nr_matrix_multiply_ffd (&vb2us, &vb2ps, &pat->patternTransform);
-		nr_matrix_multiply_ffd (&pp->pcs2px, &vb2us, (NRMatrix *) ctm);
+		nr_matrix_multiply (&vb2us, &vb2ps, &pat->patternTransform);
+		nr_matrix_multiply (&pp->pcs2px, &vb2us, (NRMatrix *) ctm);
 	} else {
 		NRMatrix t;
 
@@ -554,18 +554,18 @@ sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRect *bbo
 			bbox2user.c[5] = bbox->y0;
 
 			/* fixme: (Lauris) */
-			nr_matrix_multiply_fdf (&pcs2user, &pat->patternTransform, &bbox2user);
-			nr_matrix_multiply_ffd (&pp->pcs2px, &pcs2user, (NRMatrix *) ctm);
+			nr_matrix_multiply (&pcs2user, &pat->patternTransform, &bbox2user);
+			nr_matrix_multiply (&pp->pcs2px, &pcs2user, (NRMatrix *) ctm);
 		} else {
 			/* Problem: What to do, if we have mixed lengths and percentages? */
 			/* Currently we do ignore percentages at all, but that is not good (lauris) */
 			/* fixme: (Lauris) */
-			nr_matrix_multiply_fdd (&pp->pcs2px, &pat->patternTransform, (NRMatrix *) ctm);
+			nr_matrix_multiply (&pp->pcs2px, &pat->patternTransform, (NRMatrix *) ctm);
 		}
 
-		nr_matrix_f_set_translate (&t, pat->x.computed, pat->y.computed);
+		nr_matrix_set_translate (&t, pat->x.computed, pat->y.computed);
 		/* fixme: Think about it (Lauris) */
-		nr_matrix_multiply_fff (&pp->pcs2px, &t, &pp->pcs2px);
+		nr_matrix_multiply (&pp->pcs2px, &t, &pp->pcs2px);
 	}
 
 	/* fixme: Create arena */

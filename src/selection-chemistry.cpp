@@ -633,7 +633,7 @@ sp_selection_apply_affine (SPSelection * selection, double affine[6]) {
 		item = SP_ITEM (l->data);
 
 		sp_item_i2d_affine_d (item, &curaff);
-		nr_matrix_multiply_ddd (&newaff, &curaff, NR_MATRIX_D_FROM_DOUBLE (affine));
+		nr_matrix_multiply (&newaff, &curaff, NR_MATRIX_D_FROM_DOUBLE (affine));
 		/* fixme: This is far from elegant (Lauris) */
 		sp_item_set_i2d_affine_d (item, &newaff);
 		/* update repr -  needed for undo */
@@ -679,18 +679,18 @@ sp_selection_scale_absolute (SPSelection *selection, double x0, double x1, doubl
 
 	sp_selection_bbox (selection, &bbox);
 
-	nr_matrix_d_set_translate (&p2o, -bbox.x0, -bbox.y0);
+	nr_matrix_set_translate (&p2o, -bbox.x0, -bbox.y0);
 
 	dx = (x1-x0) / (bbox.x1 - bbox.x0);
 	dy = (y1-y0) / (bbox.y1 - bbox.y0);
-	nr_matrix_d_set_scale (&scale, dx, dy);
+	nr_matrix_set_scale (&scale, dx, dy);
 
 	nx = x0;
 	ny = y0;
-	nr_matrix_d_set_translate (&o2n, nx, ny);
+	nr_matrix_set_translate (&o2n, nx, ny);
 
-	nr_matrix_multiply_ddd (&s, &p2o, &scale);
-	nr_matrix_multiply_ddd (&final, &s, &o2n);
+	nr_matrix_multiply (&s, &p2o, &scale);
+	nr_matrix_multiply (&final, &s, &o2n);
 
 	sp_selection_apply_affine (selection, NR_MATRIX_D_TO_DOUBLE (&final));
 }
@@ -701,12 +701,12 @@ sp_selection_scale_relative (SPSelection *selection, NRPoint *align, double dx, 
 {
 	NRMatrix scale, n2d, d2n, final, s;
 
-	nr_matrix_d_set_translate (&n2d, -align->x, -align->y);
-	nr_matrix_d_set_translate (&d2n, align->x, align->y);
-	nr_matrix_d_set_scale (&scale, dx, dy);
+	nr_matrix_set_translate (&n2d, -align->x, -align->y);
+	nr_matrix_set_translate (&d2n, align->x, align->y);
+	nr_matrix_set_scale (&scale, dx, dy);
 
-	nr_matrix_multiply_ddd (&s, &n2d, &scale);
-	nr_matrix_multiply_ddd (&final, &s, &d2n);
+	nr_matrix_multiply (&s, &n2d, &scale);
+	nr_matrix_multiply (&final, &s, &d2n);
 
 	sp_selection_apply_affine (selection, NR_MATRIX_D_TO_DOUBLE (&final));
 }
@@ -717,12 +717,12 @@ sp_selection_rotate_relative (SPSelection *selection, NRPoint *center, gdouble a
 {
 	NRMatrix rotate, n2d, d2n, final, s;
   
-	nr_matrix_d_set_translate (&n2d, -center->x, -center->y);
-	nr_matrix_d_invert (&d2n, &n2d);
+	nr_matrix_set_translate (&n2d, -center->x, -center->y);
+	nr_matrix_invert (&d2n, &n2d);
 	sp_matrix_d_set_rotate (&rotate, angle);
 
-	nr_matrix_multiply_ddd (&s, &n2d, &rotate);
-	nr_matrix_multiply_ddd (&final, &s, &d2n);
+	nr_matrix_multiply (&s, &n2d, &rotate);
+	nr_matrix_multiply (&final, &s, &d2n);
 
 	sp_selection_apply_affine (selection, NR_MATRIX_D_TO_DOUBLE (&final));
 }
@@ -733,8 +733,8 @@ sp_selection_skew_relative (SPSelection *selection, NRPoint *align, double dx, d
 {
 	NRMatrix skew, n2d, d2n, final, s;
   
-	nr_matrix_d_set_translate (&n2d, -align->x, -align->y);
-	nr_matrix_d_invert (&d2n, &n2d);
+	nr_matrix_set_translate (&n2d, -align->x, -align->y);
+	nr_matrix_invert (&d2n, &n2d);
 
 	skew.c[0] = 1;
 	skew.c[1] = dy;
@@ -743,8 +743,8 @@ sp_selection_skew_relative (SPSelection *selection, NRPoint *align, double dx, d
 	skew.c[4] = 0;
 	skew.c[5] = 0;
 
-	nr_matrix_multiply_ddd (&s, &n2d, &skew);
-	nr_matrix_multiply_ddd (&final, &s, &d2n);
+	nr_matrix_multiply (&s, &n2d, &skew);
+	nr_matrix_multiply (&final, &s, &d2n);
 
 	sp_selection_apply_affine (selection, NR_MATRIX_D_TO_DOUBLE (&final));
 }
@@ -755,7 +755,7 @@ sp_selection_move_relative (SPSelection * selection, double dx, double dy)
 {
 	NRMatrix move;
   
-	nr_matrix_d_set_translate (&move, dx, dy);
+	nr_matrix_set_translate (&move, dx, dy);
 
 	sp_selection_apply_affine (selection, NR_MATRIX_D_TO_DOUBLE (&move));
 }

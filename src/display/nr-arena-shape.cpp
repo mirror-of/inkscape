@@ -99,7 +99,7 @@ nr_arena_shape_init (NRArenaShape *shape)
 	shape->paintbox.x0 = shape->paintbox.y0 = 0.0F;
 	shape->paintbox.x1 = shape->paintbox.y1 = 256.0F;
 
-	nr_matrix_d_set_identity (&shape->ctm);
+	nr_matrix_set_identity (&shape->ctm);
 	shape->fill_painter = NULL;
 	shape->stroke_painter = NULL;
 	shape->fill_svp = NULL;
@@ -254,7 +254,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 	}
 
 	/* Release state data */
-	if (TRUE || !nr_matrix_d_test_transform_equal (&gc->transform, &shape->ctm, NR_EPSILON_D)) {
+	if (TRUE || !nr_matrix_test_transform_equal (&gc->transform, &shape->ctm, NR_EPSILON_D)) {
 		/* Concept test */
 		if (shape->fill_svp) {
 			nr_svp_free (shape->fill_svp);

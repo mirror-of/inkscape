@@ -237,7 +237,7 @@ nr_bpath_stroke (const NRBPath *path, NRMatrix *transform,
 	if (transform) {
 		svlb.transform = *transform;
 	} else {
-		nr_matrix_f_set_identity (&svlb.transform);
+		nr_matrix_set_identity (&svlb.transform);
 	}
 	svlb.closed = FALSE;
 	svlb.width_2 = width / 2.0;
@@ -330,7 +330,7 @@ nr_vpath_stroke (const ArtVpath *path, NRMatrix *transform,
 	if (transform) {
 		svlb.transform = *transform;
 	} else {
-		nr_matrix_f_set_identity (&svlb.transform);
+		nr_matrix_set_identity (&svlb.transform);
 	}
 	svlb.closed = FALSE;
 	svlb.width_2 = width / 2.0;

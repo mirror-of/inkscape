@@ -603,7 +603,7 @@ sp_font_preview_set_font (SPFontPreview *fprev, NRFont *font)
 	}
 	if (fprev->font) {
 		NRMatrix flip;
-		nr_matrix_f_set_scale (&flip, 1.0, -1.0);
+		nr_matrix_set_scale (&flip, 1.0, -1.0);
 		fprev->rfont = nr_rasterfont_new (fprev->font, &flip);
 	}
 	if (GTK_WIDGET_DRAWABLE (fprev)) gtk_widget_queue_draw (GTK_WIDGET (fprev));

@@ -159,7 +159,7 @@ knot_moved_handler (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 			NRPoint q;
 
 			sp_item_i2d_affine(item, &i2d);
-			nr_matrix_f_invert (&d2i, &i2d);
+			nr_matrix_invert (&d2i, &i2d);
 			q.x = NR_MATRIX_DF_TRANSFORM_X (&d2i, p->x, p->y);
 			q.y = NR_MATRIX_DF_TRANSFORM_Y (&d2i, p->x, p->y);
 

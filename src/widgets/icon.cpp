@@ -436,9 +436,9 @@ sp_icon_image_load_svg (const gchar *name, unsigned int size, unsigned int scale
 				int width, height, dx, dy;
 				/* Update to renderable state */
 				sf = 0.8 * size / scale;
-				nr_matrix_f_set_scale (&t, sf, sf);
+				nr_matrix_set_scale (&t, sf, sf);
 				nr_arena_item_set_transform (root, &t);
-				nr_matrix_d_set_identity (&gc.transform);
+				nr_matrix_set_identity (&gc.transform);
 				nr_arena_item_invoke_update (root, NULL, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
 				/* Item integer bbox in points */
 				ibox.x0 = (int) floor (sf * dbox.x0 + 0.5);

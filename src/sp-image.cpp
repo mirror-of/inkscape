@@ -350,12 +350,12 @@ sp_image_print (SPItem *item, SPPrintContext *ctx)
 	rs = gdk_pixbuf_get_rowstride (image->pixbuf);
 
 	/* fixme: (Lauris) */
-	nr_matrix_f_set_translate (&tp, image->x.computed, image->y.computed);
-	nr_matrix_f_set_scale (&s, image->width.computed, -image->height.computed);
-	nr_matrix_f_set_translate (&ti, 0.0, -1.0);
+	nr_matrix_set_translate (&tp, image->x.computed, image->y.computed);
+	nr_matrix_set_scale (&s, image->width.computed, -image->height.computed);
+	nr_matrix_set_translate (&ti, 0.0, -1.0);
 
-	nr_matrix_multiply_fff (&t, &s, &tp);
-	nr_matrix_multiply_fff (&t, &ti, &t);
+	nr_matrix_multiply (&t, &s, &tp);
+	nr_matrix_multiply (&t, &ti, &t);
 
 	sp_print_image_R8G8B8A8_N (ctx, px, w, h, rs, &t, SP_OBJECT_STYLE (item));
 }
@@ -593,7 +593,7 @@ sp_image_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
 	sp_repr_set_double_attribute (repr, "height", image->height.computed * sh);
 
 	/* Find start in item coords */
-	nr_matrix_f_invert (&rev, t);
+	nr_matrix_invert (&rev, t);
 	sp_repr_set_double_attribute (repr, "x", px * rev.c[0] + py * rev.c[2]);
 	sp_repr_set_double_attribute (repr, "y", px * rev.c[1] + py * rev.c[3]);
 

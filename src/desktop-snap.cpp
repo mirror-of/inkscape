@@ -703,11 +703,11 @@ sp_desktop_circular_snap_list (SPDesktop *desktop, NRPoint *p, int length, NRPoi
 		r1.c[0] = q1.x;  r1.c[1] = -q1.y;  r1.c[2] =  q1.y;  r1.c[3] = q1.x;  r1.c[4] = 0;  r1.c[5] = 0;
 		r2.c[0] = q2.x;  r2.c[1] =  q2.y;  r2.c[2] = -q2.y;  r2.c[3] = q2.x;  r2.c[4] = 0;  r2.c[5] = 0;
 
-		nr_matrix_f_set_translate (&n2p, norm->x, norm->y);
-		nr_matrix_f_invert (&p2n, &n2p);
-		nr_matrix_multiply_fff (rotate, &p2n, &r1);
-		nr_matrix_multiply_fff (rotate, rotate, &r2);
-		nr_matrix_multiply_fff (rotate, rotate, &n2p);
+		nr_matrix_set_translate (&n2p, norm->x, norm->y);
+		nr_matrix_invert (&p2n, &n2p);
+		nr_matrix_multiply (rotate, &p2n, &r1);
+		nr_matrix_multiply (rotate, rotate, &r2);
+		nr_matrix_multiply (rotate, rotate, &n2p);
 	}
 
 	return rotate;

@@ -269,7 +269,7 @@ sp_sel_trans_grab (SPSelTrans * seltrans, NRPoint *p, gdouble x, gdouble y, gboo
 		n += 1;
 	}
 
-	nr_matrix_d_set_identity (&seltrans->current);
+	nr_matrix_set_identity (&seltrans->current);
 
 	seltrans->point.x = p->x;
 	seltrans->point.y = p->y;
@@ -304,17 +304,17 @@ sp_sel_trans_transform (SPSelTrans * seltrans, NRMatrix *affine, NRPoint *norm)
 	g_return_if_fail (seltrans->grabbed);
 	g_return_if_fail (!seltrans->empty);
 
-	nr_matrix_d_set_translate (&n2p, norm->x, norm->y);
-	nr_matrix_d_set_translate (&p2n, -norm->x, -norm->y);
-	nr_matrix_multiply_ddd (affine, &p2n, affine);
-	nr_matrix_multiply_ddd (affine, affine, &n2p);
+	nr_matrix_set_translate (&n2p, norm->x, norm->y);
+	nr_matrix_set_translate (&p2n, -norm->x, -norm->y);
+	nr_matrix_multiply (affine, &p2n, affine);
+	nr_matrix_multiply (affine, affine, &n2p);
 
 	if (seltrans->show == SP_SELTRANS_SHOW_CONTENT) {
 	        // update the content
 		int i;
 		for (i = 0; i < seltrans->nitems; i++) {
 			NRMatrix i2dnew;
-			nr_matrix_multiply_ffd (&i2dnew, &seltrans->transforms[i], affine);
+			nr_matrix_multiply (&i2dnew, &seltrans->transforms[i], affine);
 			sp_item_set_i2d_affine (seltrans->items[i], &i2dnew);
 		}
 	} else {
@@ -365,7 +365,7 @@ sp_sel_trans_ungrab (SPSelTrans * seltrans)
 			if (seltrans->show == SP_SELTRANS_SHOW_OUTLINE) {
 				NRMatrix i2d, i2dnew;
 				sp_item_i2d_affine (item, &i2d);
-				nr_matrix_multiply_ffd (&i2dnew, &i2d, &seltrans->current);
+				nr_matrix_multiply (&i2dnew, &i2d, &seltrans->current);
 				sp_item_set_i2d_affine (item, &i2dnew);
 			}
 			if (seltrans->transform == SP_SELTRANS_TRANSFORM_OPTIMIZE) {
@@ -471,7 +471,7 @@ sp_sel_trans_stamp (SPSelTrans * seltrans)
 			
 			if (seltrans->show == SP_SELTRANS_SHOW_OUTLINE) {
 				sp_item_i2d_affine (original_item, &i2d);
-				nr_matrix_multiply_ffd (&i2dnew, &i2d, &seltrans->current);
+				nr_matrix_multiply (&i2dnew, &i2d, &seltrans->current);
 				sp_item_set_i2d_affine (copy_item, &i2dnew);
 				new_affine = &copy_item->transform;
 			} else {
@@ -598,7 +598,7 @@ sp_sel_trans_update_volatile_state (SPSelTrans * seltrans)
 		return;
 	}
 
-	nr_matrix_d_set_identity (&seltrans->current);
+	nr_matrix_set_identity (&seltrans->current);
 }
 
 static void
@@ -1038,11 +1038,11 @@ sp_sel_trans_rotate_request (SPSelTrans * seltrans, SPSelTransHandle * handle, N
 
 	r1.c[0] = q1.x;  r1.c[1] = -q1.y;  r1.c[2] =  q1.y;  r1.c[3] = q1.x;  r1.c[4] = 0;  r1.c[5] = 0;
 	r2.c[0] = q2.x;  r2.c[1] =  q2.y;  r2.c[2] = -q2.y;  r2.c[3] = q2.x;  r2.c[4] = 0;  r2.c[5] = 0;
-	nr_matrix_d_set_translate (&n2p, norm.x, norm.y);
-	nr_matrix_d_invert (&p2n, &n2p);
-	nr_matrix_multiply_fdd (&rotate, &p2n, &r1);
-	nr_matrix_multiply_ffd (&rotate, &rotate, &r2);
-	nr_matrix_multiply_ffd (&rotate, &rotate, &n2p);
+	nr_matrix_set_translate (&n2p, norm.x, norm.y);
+	nr_matrix_invert (&p2n, &n2p);
+	nr_matrix_multiply (&rotate, &p2n, &r1);
+	nr_matrix_multiply (&rotate, &rotate, &r2);
+	nr_matrix_multiply (&rotate, &rotate, &n2p);
 
 #if 0
 	/* Snap */
@@ -1142,7 +1142,7 @@ sp_sel_trans_stretch (SPSelTrans * seltrans, SPSelTransHandle * handle, NRPoint 
 
 	if (fabs (sx) < 1e-15) sx = 1e-15; 
 	if (fabs (sy) < 1e-15) sy = 1e-15;
-	nr_matrix_d_set_scale (&stretch, sx, sy);
+	nr_matrix_set_scale (&stretch, sx, sy);
 	sp_sel_trans_transform (seltrans, &stretch, &norm);
 }
 
@@ -1171,7 +1171,7 @@ sp_sel_trans_scale (SPSelTrans * seltrans, SPSelTransHandle * handle, NRPoint * 
 	if (fabs (sx) < 1e-9) sx = 1e-9; 
 	if (fabs (sy) < 1e-9) sy = 1e-9;
 
-	nr_matrix_d_set_scale (&scale, sx, sy);
+	nr_matrix_set_scale (&scale, sx, sy);
 	sp_sel_trans_transform (seltrans, &scale, &norm);
 }
 
@@ -1232,7 +1232,7 @@ sp_sel_trans_rotate (SPSelTrans *seltrans, SPSelTransHandle *handle, NRPoint *p,
 	r1.c[0] = q1.x;  r1.c[1] = -q1.y;  r1.c[2] =  q1.y;  r1.c[3] = q1.x;  r1.c[4] = 0;  r1.c[5] = 0;
 	r2.c[0] = q2.x;  r2.c[1] =  q2.y;  r2.c[2] = -q2.y;  r2.c[3] = q2.x;  r2.c[4] = 0;  r2.c[5] = 0;
 
-	nr_matrix_multiply_ddd (&rotate, &r1, &r2);
+	nr_matrix_multiply (&rotate, &r1, &r2);
 	sp_sel_trans_transform (seltrans, &rotate, &norm);
 }
 

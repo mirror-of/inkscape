@@ -244,9 +244,9 @@ sp_use_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int
 		SPItem *child;
 		NRMatrix ct, t;
 		child = SP_ITEM (use->child);
-		nr_matrix_d_set_translate (&t, use->x.computed, use->y.computed);
-		nr_matrix_multiply_ddd (&ct, &t, transform);
-		nr_matrix_multiply_dfd (&ct, &child->transform, &ct);
+		nr_matrix_set_translate (&t, use->x.computed, use->y.computed);
+		nr_matrix_multiply (&ct, &t, transform);
+		nr_matrix_multiply (&ct, &child->transform, &ct);
 		sp_item_invoke_bbox_full (SP_ITEM (use->child), bbox, &ct, flags, FALSE);
 	}
 }
@@ -292,7 +292,7 @@ sp_use_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags)
 			nr_arena_item_add_child (ai, ac, NULL);
 			nr_arena_item_unref (ac);
 		}
-		nr_matrix_f_set_translate (&t, use->x.computed, use->y.computed);
+		nr_matrix_set_translate (&t, use->x.computed, use->y.computed);
 		nr_arena_group_set_child_transform (NR_ARENA_GROUP (ai), &t);
 		return ai;
 	}
@@ -384,7 +384,7 @@ sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	cctx.vp.y0 = 0.0;
 	cctx.vp.x1 = use->width.computed;
 	cctx.vp.y1 = use->height.computed;
-	nr_matrix_d_set_identity (&cctx.i2vp);
+	nr_matrix_set_identity (&cctx.i2vp);
 
 	if (use->child) {
 		g_object_ref (G_OBJECT (use->child));
@@ -392,8 +392,8 @@ sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 			if (SP_IS_ITEM (use->child)) {
 				SPItem *chi;
 				chi = SP_ITEM (use->child);
-				nr_matrix_multiply_dfd (&cctx.i2doc, &chi->transform, &ictx->i2doc);
-				nr_matrix_multiply_dfd (&cctx.i2vp, &chi->transform, &ictx->i2vp);
+				nr_matrix_multiply (&cctx.i2doc, &chi->transform, &ictx->i2doc);
+				nr_matrix_multiply (&cctx.i2vp, &chi->transform, &ictx->i2vp);
 				sp_object_invoke_update (use->child, (SPCtx *) &cctx, flags);
 			} else {
 				sp_object_invoke_update (use->child, ctx, flags);
@@ -405,7 +405,7 @@ sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	/* As last step set additional transform of arena group */
 	for (v = item->display; v != NULL; v = v->next) {
 		NRMatrix t;
-		nr_matrix_f_set_translate (&t, use->x.computed, use->y.computed);
+		nr_matrix_set_translate (&t, use->x.computed, use->y.computed);
 		nr_arena_group_set_child_transform (NR_ARENA_GROUP (v->arenaitem), &t);
 	}
 }

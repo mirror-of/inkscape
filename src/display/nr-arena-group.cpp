@@ -79,7 +79,7 @@ nr_arena_group_init (NRArenaGroup *group)
 	group->transparent = FALSE;
 	group->children = NULL;
 	group->last = NULL;
-	nr_matrix_f_set_identity (&group->child_transform);
+	nr_matrix_set_identity (&group->child_transform);
 }
 
 static void
@@ -187,7 +187,7 @@ nr_arena_group_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int 
 
 	for (child = group->children; child != NULL; child = child->next) {
 		NRGC cgc;
-		nr_matrix_multiply_dfd (&cgc.transform, &group->child_transform, &gc->transform);
+		nr_matrix_multiply (&cgc.transform, &group->child_transform, &gc->transform);
 		newstate = nr_arena_item_invoke_update (child, area, &cgc, state, reset);
 		beststate = beststate & newstate;
 	}

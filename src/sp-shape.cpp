@@ -328,7 +328,7 @@ sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai)
 				m.c[4] = bp->x3;
 				m.c[5] = bp->y3;
 			} else {
-				nr_matrix_f_set_translate (&m, bp->x3, bp->y3);
+				nr_matrix_set_translate (&m, bp->x3, bp->y3);
 			}
 			sp_marker_show_instance ((SPMarker *) shape->marker[SP_MARKER_LOC_START], ai,
 						 NR_ARENA_ITEM_GET_KEY (ai) + SP_MARKER_LOC_START
@@ -356,7 +356,7 @@ sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai)
 				m.c[4] = bp->x3;
 				m.c[5] = bp->y3;
 			} else {
-				nr_matrix_f_set_translate (&m, bp->x3, bp->y3);
+				nr_matrix_set_translate (&m, bp->x3, bp->y3);
 			}
 			sp_marker_show_instance ((SPMarker *) shape->marker[SP_MARKER_LOC_END], ai,
 						 NR_ARENA_ITEM_GET_KEY (ai) + SP_MARKER_LOC_END
@@ -364,7 +364,7 @@ sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai)
 						 &m, style->stroke_width.computed);
 			nend += 1;
 		} else if (shape->marker[SP_MARKER_LOC_MID]) {
-			nr_matrix_f_set_translate (&m, bp->x3, bp->y3);
+			nr_matrix_set_translate (&m, bp->x3, bp->y3);
 			sp_marker_show_instance ((SPMarker *) shape->marker[SP_MARKER_LOC_MID], ai,
 						 NR_ARENA_ITEM_GET_KEY (ai) + SP_MARKER_LOC_MID
 						 - SP_MARKER_LOC, nmid,

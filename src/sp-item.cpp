@@ -104,7 +104,7 @@ sp_item_init (SPItem *item)
 	item->sensitive = TRUE;
 	item->printable = TRUE;
 
-	nr_matrix_f_set_identity (&item->transform);
+	nr_matrix_set_identity (&item->transform);
 
 	item->display = NULL;
 
@@ -480,7 +480,7 @@ sp_item_invoke_print (SPItem *item, SPPrintContext *ctx)
 {
 	if (item->printable) {
 		if (((SPItemClass *) G_OBJECT_GET_CLASS (item))->print) {
-			if (!nr_matrix_f_test_identity (&item->transform, NR_EPSILON_F) ||
+			if (!nr_matrix_test_identity (&item->transform, NR_EPSILON_F) ||
 			    SP_OBJECT_STYLE (item)->opacity.value != SP_SCALE24_MAX) {
 				sp_print_bind (ctx, &item->transform, SP_SCALE24_TO_FLOAT (SP_OBJECT_STYLE (item)->opacity.value));
 				((SPItemClass *) G_OBJECT_GET_CLASS (item))->print (item, ctx);
@@ -665,10 +665,10 @@ sp_item_i2doc_affine_d (SPItem const *item, NRMatrix *affine_d)
 	g_return_val_if_fail (SP_IS_ITEM (item), NULL);
 	g_return_val_if_fail (affine_d != NULL, NULL);
 
-	nr_matrix_d_set_identity (affine_d);
+	nr_matrix_set_identity (affine_d);
 
 	while (SP_OBJECT_PARENT (item)) {
-		nr_matrix_multiply_ddf (affine_d, affine_d, &item->transform);
+		nr_matrix_multiply (affine_d, affine_d, &item->transform);
 		item = (SPItem *) SP_OBJECT_PARENT (item);
 	}
 
@@ -677,8 +677,8 @@ sp_item_i2doc_affine_d (SPItem const *item, NRMatrix *affine_d)
 	root = SP_ROOT (item);
 
 	/* fixme: (Lauris) */
-	nr_matrix_multiply_ddd (affine_d, affine_d, &root->c2p);
-	nr_matrix_multiply_ddf (affine_d, affine_d, &item->transform);
+	nr_matrix_multiply (affine_d, affine_d, &root->c2p);
+	nr_matrix_multiply (affine_d, affine_d, &item->transform);
 
 	return affine_d;
 }
@@ -702,10 +702,10 @@ sp_item_i2root_affine (SPItem const *item, NRMatrix *affine)
 	g_return_val_if_fail (SP_IS_ITEM (item), NULL);
 	g_return_val_if_fail (affine != NULL, NULL);
 
-	nr_matrix_d_set_identity (&td);
+	nr_matrix_set_identity (&td);
 
 	while (SP_OBJECT_PARENT (item)) {
-		nr_matrix_multiply_ddf (&td, &td, &item->transform);
+		nr_matrix_multiply (&td, &td, &item->transform);
 		item = (SPItem *) SP_OBJECT_PARENT (item);
 	}
 
@@ -714,8 +714,8 @@ sp_item_i2root_affine (SPItem const *item, NRMatrix *affine)
 	root = SP_ROOT (item);
 
 	/* fixme: (Lauris) */
-	nr_matrix_multiply_ddd (&td, &td, &root->c2p);
-	nr_matrix_multiply_ddf (&td, &td, &item->transform);
+	nr_matrix_multiply (&td, &td, &root->c2p);
+	nr_matrix_multiply (&td, &td, &item->transform);
 	/* fixme: The above line looks strange to me (pjrm).  I'd have thought
 	   it should either be removed or moved to before the c2p multiply.
 	   Can someone pls add a comment?  Similarly for i2doc_affine. */
@@ -737,13 +737,13 @@ sp_item_i2vp_affine (SPItem const *item, NRMatrix *affine)
 	g_return_val_if_fail (SP_IS_ITEM (item), NULL);
 	g_return_val_if_fail (affine != NULL, NULL);
 
-	nr_matrix_d_set_identity (&td);
+	nr_matrix_set_identity (&td);
 
 	while (SP_OBJECT_PARENT (item)) {
 		if (!SP_IS_ITEM (item)) {
 			g_print ("Lala\n");
 		}
-		nr_matrix_multiply_ddf (&td, &td, &item->transform);
+		nr_matrix_multiply (&td, &td, &item->transform);
 		item = (SPItem *) SP_OBJECT_PARENT (item);
 	}
 
@@ -752,7 +752,7 @@ sp_item_i2vp_affine (SPItem const *item, NRMatrix *affine)
 	root = SP_ROOT (item);
 
 	/* fixme: (Lauris) */
-	nr_matrix_multiply_ddd (&td, &td, &root->c2p);
+	nr_matrix_multiply (&td, &td, &root->c2p);
 
 	td.c[0] /= root->width.computed;
 	td.c[1] /= root->height.computed;
@@ -776,9 +776,9 @@ sp_item_i2d_affine_d (SPItem const *item, NRMatrix *affine_d)
 	g_return_val_if_fail (affine_d != NULL, NULL);
 
 	sp_item_i2doc_affine_d (item, affine_d);
-	nr_matrix_d_set_scale (&doc2dt, 0.8, -0.8);
+	nr_matrix_set_scale (&doc2dt, 0.8, -0.8);
 	doc2dt.c[5] = sp_document_height (SP_OBJECT_DOCUMENT (item));
-	nr_matrix_multiply_ddd (affine_d, affine_d, &doc2dt);
+	nr_matrix_multiply (affine_d, affine_d, &doc2dt);
 
 	return affine_d;
 }
@@ -806,13 +806,13 @@ sp_item_set_i2d_affine_d (SPItem *item, NRMatrix const *affine_d)
 	if (SP_OBJECT_PARENT (item)) {
 		sp_item_i2d_affine_d ((SPItem *) SP_OBJECT_PARENT (item), &p2dt);
 	} else {
-		nr_matrix_d_set_scale (&p2dt, 0.8, -0.8);
+		nr_matrix_set_scale (&p2dt, 0.8, -0.8);
 		p2dt.c[5] = sp_document_height (SP_OBJECT_DOCUMENT (item));
 	}
 
-	nr_matrix_d_invert (&dt2p, &p2dt);
+	nr_matrix_invert (&dt2p, &p2dt);
 
-	nr_matrix_multiply_fdd (&i2p, affine_d, &dt2p);
+	nr_matrix_multiply (&i2p, affine_d, &dt2p);
 
 	sp_item_set_item_transform (item, &i2p);
 }
@@ -834,7 +834,7 @@ sp_item_dt2i_affine_d (SPItem const *item, SPDesktop *dt, NRMatrix *affine_d)
 
 	/* fixme: Implement the right way (Lauris) */
 	sp_item_i2d_affine_d (item, &i2dt);
-	nr_matrix_d_invert (affine_d, &i2dt);
+	nr_matrix_invert (affine_d, &i2dt);
 
 	return affine_d;
 }

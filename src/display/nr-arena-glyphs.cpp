@@ -150,7 +150,7 @@ nr_arena_glyphs_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state,
 
 	if (glyphs->style->fill.type != SP_PAINT_TYPE_NONE) {
 		NRRect area;
-		nr_matrix_multiply_ffd (&t, &glyphs->transform, &gc->transform);
+		nr_matrix_multiply (&t, &glyphs->transform, &gc->transform);
 		rfont = nr_rasterfont_new (glyphs->font, &t);
 		if (glyphs->rfont) glyphs->rfont = nr_rasterfont_unref (glyphs->rfont);
 		glyphs->rfont = rfont;
@@ -272,7 +272,7 @@ nr_arena_glyphs_set_path (NRArenaGlyphs *glyphs, SPCurve *curve, unsigned int li
 		} else {
 			glyphs->curve = curve;
 			sp_curve_ref (curve);
-			nr_matrix_f_set_identity (&glyphs->transform);
+			nr_matrix_set_identity (&glyphs->transform);
 		}
 	}
 

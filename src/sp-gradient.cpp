@@ -240,7 +240,7 @@ sp_gradient_init (SPGradient *gr)
 	gr->state = SP_GRADIENT_STATE_UNKNOWN;
 
 	gr->units = SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX;
-	nr_matrix_d_set_identity (NR_MATRIX_D_FROM_DOUBLE (gr->transform));
+	nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (gr->transform));
 
 	gr->spread = SP_GRADIENT_SPREAD_PAD;
 	gr->spread_set = FALSE;
@@ -363,7 +363,7 @@ sp_gradient_set (SPObject *object, unsigned int key, const gchar *value)
 			for (i = 0; i < 6; i++) gr->transform[i] = t.c[i];
 			gr->transform_set = TRUE;
 		} else {
-			nr_matrix_d_set_identity (NR_MATRIX_D_FROM_DOUBLE (gr->transform));
+			nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (gr->transform));
 			gr->transform_set = FALSE;
 		}
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
@@ -1067,7 +1067,7 @@ sp_gradient_get_g2d_matrix_f (SPGradient *gr, NRMatrix *ctm, NRRect *bbox, NRMat
 		bb2u.c[4] = bbox->x0;
 		bb2u.c[5] = bbox->y0;
 
-		nr_matrix_multiply_fff (g2d, &bb2u, ctm);
+		nr_matrix_multiply (g2d, &bb2u, ctm);
 	} else {
 		*g2d = *ctm;
 	}
@@ -1088,10 +1088,10 @@ sp_gradient_get_gs2d_matrix_f (SPGradient *gr, NRMatrix *ctm, NRRect *bbox, NRMa
 		bb2u.c[4] = bbox->x0;
 		bb2u.c[5] = bbox->y0;
 
-		nr_matrix_multiply_fdf (&gs2u, (NRMatrix *) gr->transform, &bb2u);
-		nr_matrix_multiply_fff (gs2d, &gs2u, ctm);
+		nr_matrix_multiply (&gs2u, (NRMatrix *) gr->transform, &bb2u);
+		nr_matrix_multiply (gs2d, &gs2u, ctm);
 	} else {
-		nr_matrix_multiply_fdf (gs2d, (NRMatrix *) gr->transform, ctm);
+		nr_matrix_multiply (gs2d, (NRMatrix *) gr->transform, ctm);
 	}
 
 	return gs2d;
@@ -1116,22 +1116,22 @@ sp_gradient_set_gs2d_matrix_f (SPGradient *gr, NRMatrix *ctm, NRRect *bbox, NRMa
 
 		SP_PRINT_MATRIX ("* BB2U:", &bb2u);
 
-		nr_matrix_multiply_fff (&g2d, &bb2u, ctm);
+		nr_matrix_multiply (&g2d, &bb2u, ctm);
 	} else {
 		g2d = *ctm;
 	}
 
 	SP_PRINT_MATRIX ("* G2D:", &g2d);
 
-	nr_matrix_f_invert (&d2g, &g2d);
+	nr_matrix_invert (&d2g, &g2d);
 	SP_PRINT_MATRIX ("* D2G:", &d2g);
 	SP_PRINT_MATRIX ("* G2D:", &g2d);
-	nr_matrix_f_invert (&g2d, &d2g);
+	nr_matrix_invert (&g2d, &d2g);
 	SP_PRINT_MATRIX ("* D2G:", &d2g);
 	SP_PRINT_MATRIX ("* G2D:", &g2d);
 
 
-	nr_matrix_multiply_fff (&gs2g, gs2d, &d2g);
+	nr_matrix_multiply (&gs2g, gs2d, &d2g);
 	SP_PRINT_MATRIX ("* GS2G:", &gs2g);
 
 	gr->transform[0] = gs2g.c[0];
@@ -1165,10 +1165,10 @@ sp_gradient_from_position_xy (SPGradient *gr, gdouble *ctm, NRRect *bbox, NRPoin
 		bb2u.c[4] = bbox->x0;
 		bb2u.c[5] = bbox->y0;
 
-		nr_matrix_multiply_fdf (&gs2u, (NRMatrix *) gr->transform, &bb2u);
-		nr_matrix_multiply_ffd (&gs2d, &gs2u, (NRMatrix *) ctm);
+		nr_matrix_multiply (&gs2u, (NRMatrix *) gr->transform, &bb2u);
+		nr_matrix_multiply (&gs2d, &gs2u, (NRMatrix *) ctm);
 	} else {
-		nr_matrix_multiply_fdd (&gs2d, (NRMatrix *) gr->transform, (NRMatrix *) ctm);
+		nr_matrix_multiply (&gs2d, (NRMatrix *) gr->transform, (NRMatrix *) ctm);
 	}
 
 	p->x = gs2d.c[0] * x + gs2d.c[2] * y + gs2d.c[4];
@@ -1194,13 +1194,13 @@ sp_gradient_to_position_xy (SPGradient *gr, gdouble *ctm, NRRect *bbox, NRPoint 
 		bb2u.c[4] = bbox->x0;
 		bb2u.c[5] = bbox->y0;
 
-		nr_matrix_multiply_fdf (&gs2u, (NRMatrix *) gr->transform, &bb2u);
-		nr_matrix_multiply_ffd (&gs2d, &gs2u, (NRMatrix *) ctm);
+		nr_matrix_multiply (&gs2u, (NRMatrix *) gr->transform, &bb2u);
+		nr_matrix_multiply (&gs2d, &gs2u, (NRMatrix *) ctm);
 	} else {
-		nr_matrix_multiply_fdd (&gs2d, (NRMatrix *) gr->transform, (NRMatrix *) ctm);
+		nr_matrix_multiply (&gs2d, (NRMatrix *) gr->transform, (NRMatrix *) ctm);
 	}
 
-	nr_matrix_f_invert (&d2gs, &gs2d);
+	nr_matrix_invert (&d2gs, &gs2d);
 
 	p->x = d2gs.c[0] * x + d2gs.c[2] * y + d2gs.c[4];
 	p->y = d2gs.c[1] * x + d2gs.c[3] * y + d2gs.c[5];
@@ -1402,7 +1402,7 @@ sp_lineargradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRe
 	SP_PRINT_TRANSFORM ("color2norm", color2norm);
 	/* Now we have normalized vector */
 #else
-	nr_matrix_d_set_identity (NR_MATRIX_D_FROM_DOUBLE (color2norm));
+	nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (color2norm));
 #endif
 
 	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
@@ -1420,7 +1420,7 @@ sp_lineargradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRe
 		norm2pos[5] = lg->y1.computed;
 		SP_PRINT_TRANSFORM ("norm2pos", norm2pos);
 #else
-		nr_matrix_d_set_identity (NR_MATRIX_D_FROM_DOUBLE (norm2pos));
+		nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (norm2pos));
 #endif
 
 		/* gradientTransform goes here (Lauris) */
@@ -1438,13 +1438,13 @@ sp_lineargradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRe
 		/* CTM goes here */
 		SP_PRINT_TRANSFORM ("ctm", ctm);
 
-		nr_matrix_multiply_ddd (NR_MATRIX_D_FROM_DOUBLE (color2pos), NR_MATRIX_D_FROM_DOUBLE (color2norm), NR_MATRIX_D_FROM_DOUBLE (norm2pos));
+		nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (color2pos), NR_MATRIX_D_FROM_DOUBLE (color2norm), NR_MATRIX_D_FROM_DOUBLE (norm2pos));
 		SP_PRINT_TRANSFORM ("color2pos", color2pos);
-		nr_matrix_multiply_ddd (NR_MATRIX_D_FROM_DOUBLE (color2tpos), NR_MATRIX_D_FROM_DOUBLE (color2pos), NR_MATRIX_D_FROM_DOUBLE (gr->transform));
+		nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (color2tpos), NR_MATRIX_D_FROM_DOUBLE (color2pos), NR_MATRIX_D_FROM_DOUBLE (gr->transform));
 		SP_PRINT_TRANSFORM ("color2tpos", color2tpos);
-		nr_matrix_multiply_ddd (NR_MATRIX_D_FROM_DOUBLE (color2user), NR_MATRIX_D_FROM_DOUBLE (color2tpos), NR_MATRIX_D_FROM_DOUBLE (bbox2user));
+		nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (color2user), NR_MATRIX_D_FROM_DOUBLE (color2tpos), NR_MATRIX_D_FROM_DOUBLE (bbox2user));
 		SP_PRINT_TRANSFORM ("color2user", color2user);
-		nr_matrix_multiply_ddd (NR_MATRIX_D_FROM_DOUBLE (color2px), NR_MATRIX_D_FROM_DOUBLE (color2user), NR_MATRIX_D_FROM_DOUBLE (ctm));
+		nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (color2px), NR_MATRIX_D_FROM_DOUBLE (color2user), NR_MATRIX_D_FROM_DOUBLE (ctm));
 		SP_PRINT_TRANSFORM ("color2px", color2px);
 	} else {
 		gdouble norm2pos[6];
@@ -1462,7 +1462,7 @@ sp_lineargradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRe
 		norm2pos[5] = lg->y1.computed;
 		SP_PRINT_TRANSFORM ("norm2pos", norm2pos);
 #else
-		nr_matrix_d_set_identity (NR_MATRIX_D_FROM_DOUBLE (norm2pos));
+		nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (norm2pos));
 #endif
 
 		/* gradientTransform goes here (Lauris) */
@@ -1471,11 +1471,11 @@ sp_lineargradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRe
 		/* CTM goes here */
 		SP_PRINT_TRANSFORM ("ctm", ctm);
 
-		nr_matrix_multiply_ddd (NR_MATRIX_D_FROM_DOUBLE (color2pos), NR_MATRIX_D_FROM_DOUBLE (color2norm), NR_MATRIX_D_FROM_DOUBLE (norm2pos));
+		nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (color2pos), NR_MATRIX_D_FROM_DOUBLE (color2norm), NR_MATRIX_D_FROM_DOUBLE (norm2pos));
 		SP_PRINT_TRANSFORM ("color2pos", color2pos);
-		nr_matrix_multiply_ddd (NR_MATRIX_D_FROM_DOUBLE (color2tpos), NR_MATRIX_D_FROM_DOUBLE (color2pos), NR_MATRIX_D_FROM_DOUBLE (gr->transform));
+		nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (color2tpos), NR_MATRIX_D_FROM_DOUBLE (color2pos), NR_MATRIX_D_FROM_DOUBLE (gr->transform));
 		SP_PRINT_TRANSFORM ("color2tpos", color2tpos);
-		nr_matrix_multiply_ddd (NR_MATRIX_D_FROM_DOUBLE (color2px), NR_MATRIX_D_FROM_DOUBLE (color2tpos), NR_MATRIX_D_FROM_DOUBLE (ctm));
+		nr_matrix_multiply (NR_MATRIX_D_FROM_DOUBLE (color2px), NR_MATRIX_D_FROM_DOUBLE (color2tpos), NR_MATRIX_D_FROM_DOUBLE (ctm));
 		SP_PRINT_TRANSFORM ("color2px", color2px);
 	}
 
@@ -1759,8 +1759,8 @@ sp_radialgradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRe
 		bbox2user.c[5] = bbox->y0;
 
 		/* fixme: (Lauris) */
-		nr_matrix_multiply_fdf (&gs2user, (NRMatrix *) gr->transform, &bbox2user);
-		nr_matrix_multiply_ffd (&gs2px, &gs2user, (NRMatrix *) ctm);
+		nr_matrix_multiply (&gs2user, (NRMatrix *) gr->transform, &bbox2user);
+		nr_matrix_multiply (&gs2px, &gs2user, (NRMatrix *) ctm);
 	} else {
 		/* Problem: What to do, if we have mixed lengths and percentages? */
 		/* Currently we do ignore percentages at all, but that is not good (lauris) */
@@ -1768,7 +1768,7 @@ sp_radialgradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRe
 		/* fixme: We may try to normalize here too, look at linearGradient (Lauris) */
 
 		/* fixme: (Lauris) */
-		nr_matrix_multiply_fdd (&gs2px, (NRMatrix *) gr->transform, (NRMatrix *) ctm);
+		nr_matrix_multiply (&gs2px, (NRMatrix *) gr->transform, (NRMatrix *) ctm);
 	}
 
 	nr_rgradient_renderer_setup (&rgp->rgr, gr->color, gr->spread,

@@ -320,8 +320,8 @@ sp_group_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 			if (SP_IS_ITEM (child)) {
 				SPItem *chi;
 				chi = SP_ITEM (child);
-				nr_matrix_multiply_dfd (&cctx.i2doc, &chi->transform, &ictx->i2doc);
-				nr_matrix_multiply_dfd (&cctx.i2vp, &chi->transform, &ictx->i2vp);
+				nr_matrix_multiply (&cctx.i2doc, &chi->transform, &ictx->i2doc);
+				nr_matrix_multiply (&cctx.i2vp, &chi->transform, &ictx->i2vp);
 				sp_object_invoke_update (child, (SPCtx *) &cctx, flags);
 			} else {
 				sp_object_invoke_update (child, ctx, flags);
@@ -439,7 +439,7 @@ sp_group_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned i
 		if (SP_IS_ITEM (o)) {
 			NRMatrix ct;
 			child = SP_ITEM (o);
-			nr_matrix_multiply_dfd (&ct, &child->transform, transform);
+			nr_matrix_multiply (&ct, &child->transform, transform);
 			sp_item_invoke_bbox_full (child, bbox, &ct, flags, FALSE);
 		}
 	}
@@ -566,7 +566,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children)
 
 			citem = SP_ITEM (child);
 
-			nr_matrix_multiply_fff (&ctrans, &citem->transform, &gitem->transform);
+			nr_matrix_multiply (&ctrans, &citem->transform, &gitem->transform);
 			if (sp_svg_transform_write (affinestr, 79, &ctrans)) {
 				sp_repr_set_attr (nrepr, "transform", affinestr);
 			} else {

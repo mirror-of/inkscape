@@ -448,7 +448,7 @@ sp_rect_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
 	if (rect->ry.set) sp_repr_set_double (repr, "ry", rect->ry.computed * sh);
 
 	/* Find start in item coords */
-	nr_matrix_f_invert (&rev, t);
+	nr_matrix_invert (&rev, t);
 	sp_repr_set_double_attribute (repr, "x", px * rev.c[0] + py * rev.c[2]);
 	sp_repr_set_double_attribute (repr, "y", px * rev.c[1] + py * rev.c[3]);
 

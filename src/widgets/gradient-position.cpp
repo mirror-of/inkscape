@@ -145,7 +145,7 @@ sp_gradient_position_init (SPGradientPosition *pos)
 	pos->bbox.x0 = pos->bbox.y0 = pos->bbox.x1 = pos->bbox.y1 = 0.0;
 	pos->spread = NR_GRADIENT_SPREAD_PAD;
 
-	nr_matrix_f_set_identity (&pos->gs2d);
+	nr_matrix_set_identity (&pos->gs2d);
 
 	pos->gc = NULL;
 	pos->px = NULL;
@@ -414,9 +414,9 @@ sp_gradient_position_motion_notify (GtkWidget *widget, GdkEventMotion *event)
 				n2gs.c[3] = x1 - x2;
 				n2gs.c[4] = x1;
 				n2gs.c[5] = y1;
-				nr_matrix_f_invert (&gs2n, &n2gs);
-				nr_matrix_multiply_fff (&n2w, &n2gs, &pos->gs2w);
-				nr_matrix_f_invert (&w2n, &n2w);
+				nr_matrix_invert (&gs2n, &n2gs);
+				nr_matrix_multiply (&n2w, &n2gs, &pos->gs2w);
+				nr_matrix_invert (&w2n, &n2w);
 
 				cx = (x1 + x2) / 2.0;
 				cy = (y1 + y2) / 2.0;
@@ -434,12 +434,12 @@ sp_gradient_position_motion_notify (GtkWidget *widget, GdkEventMotion *event)
 				s2n.c[4] = 0.0;
 				s2n.c[5] = 0.0;
 
-				nr_matrix_multiply_fff (&gs2n, &gs2n, &s2n);
-				nr_matrix_multiply_fff (&gs2n, &gs2n, &n2gs);
-				nr_matrix_multiply_fff (&pos->gs2w, &gs2n, &pos->gs2w);
+				nr_matrix_multiply (&gs2n, &gs2n, &s2n);
+				nr_matrix_multiply (&gs2n, &gs2n, &n2gs);
+				nr_matrix_multiply (&pos->gs2w, &gs2n, &pos->gs2w);
 
-				nr_matrix_f_invert (&pos->w2gs, &pos->gs2w);
-				nr_matrix_multiply_fff (&pos->gs2d, &pos->gs2w, &pos->w2d);
+				nr_matrix_invert (&pos->w2gs, &pos->gs2w);
+				nr_matrix_multiply (&pos->gs2d, &pos->gs2w, &pos->w2d);
 #else
 				pos->gdata.linear.x2 = NR_MATRIX_DF_TRANSFORM_X (&pos->w2gs, event->x, event->y);
 				pos->gdata.linear.y2 = NR_MATRIX_DF_TRANSFORM_Y (&pos->w2gs, event->x, event->y);
@@ -492,8 +492,8 @@ sp_gradient_position_motion_notify (GtkWidget *widget, GdkEventMotion *event)
 						pos->w2gs.c[3],
 						pos->w2gs.c[4],
 						pos->w2gs.c[5]);
-					nr_matrix_f_invert (&pos->gs2w, &pos->w2gs);
-					nr_matrix_multiply_fff (&pos->gs2d, &pos->gs2w, &pos->w2d);
+					nr_matrix_invert (&pos->gs2w, &pos->w2gs);
+					nr_matrix_multiply (&pos->gs2d, &pos->gs2w, &pos->w2d);
 					pos->gdata.radial.cx = NR_MATRIX_DF_TRANSFORM_X (&pos->w2gs, cxw, cyw);
 					pos->gdata.radial.cy = NR_MATRIX_DF_TRANSFORM_Y (&pos->w2gs, cxw, cyw);
 					pos->gdata.radial.fx = NR_MATRIX_DF_TRANSFORM_X (&pos->w2gs, fxw, fyw);
@@ -711,15 +711,15 @@ sp_gradient_position_update (SPGradientPosition *pos)
 	pos->w2d.c[4] = pos->bbox.x0 - (pos->vbox.x0 * pos->w2d.c[0]);
 	pos->w2d.c[5] = pos->bbox.y0 - (pos->vbox.y0 * pos->w2d.c[3]);
 	/* Calculate d2w */
-	nr_matrix_f_invert (&pos->d2w, &pos->w2d);
+	nr_matrix_invert (&pos->d2w, &pos->w2d);
 	/* Calculate wbox */
 	pos->wbox.x0 = pos->w2d.c[4];
 	pos->wbox.x0 = pos->w2d.c[5];
 	pos->wbox.x1 = pos->wbox.x0 + pos->w2d.c[0] * width;
 	pos->wbox.y1 = pos->wbox.y0 + pos->w2d.c[1] * height;
 	/* w2gs and gs2w */
-	nr_matrix_multiply_fff (&pos->gs2w, &pos->gs2d, &pos->d2w);
-	nr_matrix_f_invert (&pos->w2gs, &pos->gs2w);
+	nr_matrix_multiply (&pos->gs2w, &pos->gs2d, &pos->d2w);
+	nr_matrix_invert (&pos->w2gs, &pos->gs2w);
 
 	if (!pos->cv) pos->cv = g_new (guchar, 4 * NR_GRADIENT_VECTOR_LENGTH);
 	sp_gradient_render_vector_line_rgba (pos->gradient, pos->cv, NR_GRADIENT_VECTOR_LENGTH, 0 , NR_GRADIENT_VECTOR_LENGTH);

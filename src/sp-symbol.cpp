@@ -93,7 +93,7 @@ sp_symbol_init (SPSymbol *symbol)
 {
 	symbol->viewBox_set = FALSE;
 
-	nr_matrix_d_set_identity (&symbol->c2p);
+	nr_matrix_set_identity (&symbol->c2p);
 }
 
 static void
@@ -276,7 +276,7 @@ sp_symbol_update (SPObject *object, SPCtx *ctx, guint flags)
 
 		/* Calculate child to parent transformation */
 		/* Apply parent <use> translation (set up as vewport) */
-		nr_matrix_d_set_translate (&symbol->c2p, rctx.vp.x0, rctx.vp.y0);
+		nr_matrix_set_translate (&symbol->c2p, rctx.vp.x0, rctx.vp.y0);
 
 		if (symbol->viewBox_set) {
 			double x, y, width, height;
@@ -347,10 +347,10 @@ sp_symbol_update (SPObject *object, SPCtx *ctx, guint flags)
 			q.c[4] = -symbol->viewBox.x0 * q.c[0] + x;
 			q.c[5] = -symbol->viewBox.y0 * q.c[3] + y;
 			/* Append viewbox transformation */
-			nr_matrix_multiply_ddd (&symbol->c2p, &q, &symbol->c2p);
+			nr_matrix_multiply (&symbol->c2p, &q, &symbol->c2p);
 		}
 
-		nr_matrix_multiply_ddd (&rctx.i2doc, &symbol->c2p, &rctx.i2doc);
+		nr_matrix_multiply (&rctx.i2doc, &symbol->c2p, &rctx.i2doc);
 
 		/* If viewBox is set initialize child viewport */
 		/* Otherwise <use> has set it up already */
@@ -359,7 +359,7 @@ sp_symbol_update (SPObject *object, SPCtx *ctx, guint flags)
 			rctx.vp.y0 = symbol->viewBox.y0;
 			rctx.vp.x1 = symbol->viewBox.x1;
 			rctx.vp.y1 = symbol->viewBox.y1;
-			nr_matrix_d_set_identity (&rctx.i2vp);
+			nr_matrix_set_identity (&rctx.i2vp);
 		}
 
 		/* And invoke parent method */
@@ -462,7 +462,7 @@ sp_symbol_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned 
 	if (SP_OBJECT_IS_CLONED (symbol)) {
 		/* Cloned <symbol> is actually renderable */
 
-		nr_matrix_multiply_ddd (a, &symbol->c2p, transform);
+		nr_matrix_multiply (a, &symbol->c2p, transform);
 
 		if (((SPItemClass *) (parent_class))->bbox) {
 			((SPItemClass *) (parent_class))->bbox (item, bbox, a, flags);
