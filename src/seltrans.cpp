@@ -477,20 +477,14 @@ static void sp_sel_trans_update_handles(SPSelTrans *seltrans)
 
 static void sp_sel_trans_update_volatile_state(SPSelTrans *seltrans)
 {
-	SPSelection *selection;
-	NRRect b;
+	g_return_if_fail( seltrans != NULL );
 
-	g_return_if_fail (seltrans != NULL);
-
-	selection = SP_DT_SELECTION (seltrans->desktop);
-
-	seltrans->empty = sp_selection_is_empty (selection);
+	SPSelection *selection = SP_DT_SELECTION(seltrans->desktop);
+	seltrans->empty = sp_selection_is_empty(selection);
 
 	if (seltrans->empty) return;
 
-	sp_selection_bbox (SP_DT_SELECTION (seltrans->desktop), &b);
-	seltrans->box = b;
-
+	seltrans->box = sp_selection_bbox(selection);
 	if (seltrans->box.empty()) {
 		seltrans->empty = TRUE;
 		return;

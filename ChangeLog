@@ -1,5 +1,8 @@
 2004-02-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/seltrans.cpp (sp_sel_trans_update_volatile_state):
+	Minor cleanups.
+
 	* src/desktop-snap.h, src/desktop-snap.cpp
 	(sp_desktop_horizontal_snap, sp_desktop_vertical_snap,
 	sp_desktop_horizontal_snap_list_scale,
