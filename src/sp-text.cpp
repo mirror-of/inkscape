@@ -2990,8 +2990,6 @@ sp_adjust_tspan_letterspacing_screen (SPText *text, gint pos, SPDesktop *desktop
 void
 sp_adjust_linespacing_screen (SPText *text, SPDesktop *desktop, gdouble by)
 {
-    NR::Rect bbox = sp_item_bbox_desktop (SP_ITEM (text));
-
     SPStyle *style = SP_OBJECT_STYLE (text);
 
 	// the value is stored as multiple of font size (i.e. in em)
