@@ -154,7 +154,7 @@ sp_object_init (SPObject * object)
 static void
 sp_object_finalize (GObject * object)
 {
-	SPObject *spobject=(SPObject *)object;
+	SPObject *spobject = (SPObject *)object;
 
 	if (spobject->_successor) {
 		sp_object_unref(spobject->_successor, NULL);
@@ -222,7 +222,8 @@ sp_object_hunref (SPObject *object, gpointer owner)
 	return NULL;
 }
 
-void SPObject::deleteObject(bool propagate) {
+void SPObject::deleteObject(bool propagate)
+{
 	if (propagate) {
 		_delete_signal.emit(this);
 	}
@@ -268,7 +269,8 @@ sp_object_attach_reref (SPObject *parent, SPObject *object, SPObject *next)
 	*ref = object;
 }
 
-void sp_object_reorder(SPObject *object, SPObject *next) {
+void sp_object_reorder(SPObject *object, SPObject *next)
+{
 	g_return_if_fail(object != NULL);
 	g_return_if_fail(SP_IS_OBJECT(object));
 	g_return_if_fail(object->parent != NULL);
@@ -276,9 +278,10 @@ void sp_object_reorder(SPObject *object, SPObject *next) {
 	g_return_if_fail(!next || SP_IS_OBJECT(next));
 	g_return_if_fail(!next || next->parent == object->parent);
 
-	SPObject *parent=object->parent;
-	SPObject **ref, **old_ref, **new_ref;
-	old_ref = new_ref = NULL;
+	SPObject *parent = object->parent;
+	SPObject **ref;
+	SPObject **old_ref = NULL;
+	SPObject **new_ref = NULL;
 	for ( ref = &parent->children ; *ref ; ref = &(*ref)->next ) {
 		if ( *ref == object ) {
 			old_ref = ref;
@@ -298,7 +301,8 @@ void sp_object_reorder(SPObject *object, SPObject *next) {
 	*new_ref = object;
 }
 
-static void detach_object(SPObject *parent, SPObject *object, bool unref) {
+static void detach_object(SPObject *parent, SPObject *object, bool unref)
+{
 	g_return_if_fail (parent != NULL);
 	g_return_if_fail (SP_IS_OBJECT (parent));
 	g_return_if_fail (object != NULL);
@@ -324,25 +328,28 @@ static void detach_object(SPObject *parent, SPObject *object, bool unref) {
 	}
 }
 
-void sp_object_detach (SPObject *parent, SPObject *object) {
+void sp_object_detach (SPObject *parent, SPObject *object)
+{
 	detach_object(parent, object, false);
 }
 
-void sp_object_detach_unref (SPObject *parent, SPObject *object) {
+void sp_object_detach_unref (SPObject *parent, SPObject *object)
+{
 	detach_object(parent, object, true);
 }
 
-SPObject *sp_object_first_child(SPObject *parent) {
+SPObject *sp_object_first_child(SPObject *parent)
+{
 	return parent->children;
 }
 
-SPObject *sp_object_get_child_by_repr(SPObject *object, SPRepr *repr) {
+SPObject *sp_object_get_child_by_repr(SPObject *object, SPRepr *repr)
+{
 	g_return_val_if_fail(object != NULL, NULL);
 	g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
 	g_return_val_if_fail(repr != NULL, NULL);
 
-	SPObject *child;
-	for ( child = object->children ; child ; child = child->next ) {
+	for ( SPObject *child = object->children ; child ; child = child->next ) {
 		if ( SP_OBJECT_REPR(child) == repr ) {
 			return child;
 		}
@@ -351,9 +358,9 @@ SPObject *sp_object_get_child_by_repr(SPObject *object, SPRepr *repr) {
 	return NULL;
 }
 
-static void sp_object_child_added (SPObject * object, SPRepr * child, SPRepr * ref) {
-	GType type;
-	type = sp_repr_type_lookup(child);
+static void sp_object_child_added (SPObject * object, SPRepr * child, SPRepr * ref)
+{
+	GType type = sp_repr_type_lookup(child);
 	if (!type) {
 		return;
 	}
@@ -371,13 +378,16 @@ static void sp_object_child_added (SPObject * object, SPRepr * child, SPRepr * r
 	sp_object_invoke_build(ochild, object->document, child, SP_OBJECT_IS_CLONED(object));
 }
 
-static void sp_object_remove_child (SPObject * object, SPRepr * child) {
+static void sp_object_remove_child (SPObject * object, SPRepr * child)
+{
 	SPObject *ochild = sp_object_get_child_by_repr(object, child);
 	g_return_if_fail(ochild != NULL);
 	sp_object_detach_unref(object, ochild);
 }
 
-static void sp_object_order_changed (SPObject * object, SPRepr * child, SPRepr * old_ref, SPRepr * new_ref) {
+static void sp_object_order_changed (SPObject * object, SPRepr * child, SPRepr * old_ref,
+				     SPRepr * new_ref)
+{
 	SPObject *ochild = sp_object_get_child_by_repr(object, child);
 	g_return_if_fail(ochild != NULL);
 	SPObject *prev = new_ref ? sp_object_get_child_by_repr(object, new_ref) : NULL;
@@ -391,7 +401,8 @@ static void sp_object_order_changed (SPObject * object, SPRepr * child, SPRepr *
 	}
 }
 
-static void sp_object_release(SPObject *object) {
+static void sp_object_release(SPObject *object)
+{
 	while (object->children) {
 		sp_object_detach_unref(object, object->children);
 	}
@@ -411,15 +422,12 @@ sp_object_build (SPObject * object, SPDocument * document, SPRepr * repr)
 
 	sp_object_read_attr (object, "xml:space");
 
-	SPRepr * rchild;
-        for (rchild = repr->children; rchild != NULL; rchild = rchild->next) {
-		GType type;
-		SPObject * child;
-		type = sp_repr_type_lookup (rchild);
+        for (SPRepr *rchild = repr->children; rchild != NULL; rchild = rchild->next) {
+		GType type = sp_repr_type_lookup (rchild);
 		if (!type) {
 			continue;
 		}
-		child = SP_OBJECT(g_object_new (type, 0));
+		SPObject *child = SP_OBJECT(g_object_new (type, 0));
 		sp_object_attach_reref (object, child, NULL);
 		sp_object_invoke_build (child, document, rchild, SP_OBJECT_IS_CLONED (object));
 	}
@@ -450,11 +458,8 @@ sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr,
 
 	/* If we are not cloned, force unique id */
 	if (!SP_OBJECT_IS_CLONED (object)) {
-		const gchar * id;
-		gchar * realid;
-
-		id = sp_repr_attr (object->repr, "id");
-		realid = sp_object_get_unique_id (object, id);
+		const gchar *id = sp_repr_attr (object->repr, "id");
+		gchar *realid = sp_object_get_unique_id (object, id);
 		g_assert (realid != NULL);
 
 		sp_document_def_id (object->document, realid, object);
@@ -462,8 +467,7 @@ sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr,
 
 		/* Redefine ID, if required */
 		if ((id == NULL) || (strcmp (id, realid) != 0)) {
-			int ret;
-			ret = sp_repr_set_attr (object->repr, "id", realid);
+			int ret = sp_repr_set_attr (object->repr, "id", realid);
 			if (!ret) {
 				g_error ("Cannot change id %s -> %s - probably there is stale ref", id, realid);
 			}
@@ -523,9 +527,7 @@ sp_object_invoke_release (SPObject *object)
 static void
 sp_object_repr_child_added (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer data)
 {
-	SPObject * object; 
-
-	object = SP_OBJECT (data);
+	SPObject *object = SP_OBJECT (data);
 
 	if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->child_added)
 		(*((SPObjectClass *)G_OBJECT_GET_CLASS(object))->child_added) (object, child, ref);
@@ -534,9 +536,7 @@ sp_object_repr_child_added (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer d
 static void
 sp_object_repr_child_removed (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer data)
 {
-	SPObject * object;
-
-	object = SP_OBJECT (data);
+	SPObject *object = SP_OBJECT (data);
 
 	if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->remove_child) {
 		(* ((SPObjectClass *)G_OBJECT_GET_CLASS(object))->remove_child) (object, child);
@@ -548,9 +548,7 @@ sp_object_repr_child_removed (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer
 static void
 sp_object_repr_order_changed (SPRepr * repr, SPRepr * child, SPRepr * old, SPRepr * newer, gpointer data)
 {
-	SPObject * object;
-
-	object = SP_OBJECT (data);
+	SPObject * object = SP_OBJECT (data);
 
 	if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->order_changed) {
 		(* ((SPObjectClass *)G_OBJECT_GET_CLASS(object))->order_changed) (object, child, old, newer);
@@ -615,8 +613,6 @@ sp_object_set (SPObject *object, unsigned int key, const gchar *value)
 void
 sp_object_read_attr (SPObject *object, const gchar *key)
 {
-	unsigned int keyid;
-
 	g_assert (object != NULL);
 	g_assert (SP_IS_OBJECT (object));
 	g_assert (key != NULL);
@@ -626,11 +622,10 @@ sp_object_read_attr (SPObject *object, const gchar *key)
 	/* fixme: rething that cloning issue */
 	g_assert (SP_OBJECT_IS_CLONED (object) || object->id != NULL);
 
-	keyid = sp_attribute_lookup (key);
+	unsigned int keyid = sp_attribute_lookup (key);
 	if (keyid != SP_ATTR_INVALID) {
-		const gchar *value;
 		/* Retrieve the 'key' attribute from the object's XML representation */
-		value = sp_repr_attr (object->repr, key);
+		const gchar *value = sp_repr_attr (object->repr, key);
 
 		sp_object_set (object, keyid, value);
 	}
@@ -639,16 +634,19 @@ sp_object_read_attr (SPObject *object, const gchar *key)
 static unsigned int
 sp_object_repr_change_attr (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data)
 {
-	SPObject * object;
-	gpointer defid;
-
-	object = SP_OBJECT (data);
+	SPObject *object = SP_OBJECT (data);
 
 	if (strcmp ((const char*)key, "id") == 0) {
-		if (!newval) return FALSE;
-		defid = sp_document_lookup_id (object->document, newval);
-		if (defid == object) return TRUE;
-		if (defid) return FALSE;
+		if (!newval) {
+			return FALSE;
+		}
+		gpointer defid = sp_document_lookup_id (object->document, newval);
+		if (defid == object) {
+			return TRUE;
+		}
+		if (defid) {
+			return FALSE;
+		}
 	}
 
 	return TRUE;
@@ -657,9 +655,7 @@ sp_object_repr_change_attr (SPRepr *repr, const gchar *key, const gchar *oldval,
 static void
 sp_object_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data)
 {
-	SPObject * object;
-
-	object = SP_OBJECT (data);
+	SPObject *object = SP_OBJECT (data);
 
 	sp_object_read_attr (object, key);
 
@@ -673,9 +669,7 @@ sp_object_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval
 static void
 sp_object_repr_content_changed (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, gpointer data)
 {
-	SPObject * object;
-
-	object = SP_OBJECT (data);
+	SPObject * object = SP_OBJECT (data);
 
 	if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->read_content)
 		(*((SPObjectClass *) G_OBJECT_GET_CLASS(object))->read_content) (object);
@@ -743,8 +737,6 @@ sp_object_invoke_write (SPObject *object, SPRepr *repr, guint flags)
 void
 sp_object_request_update (SPObject *object, unsigned int flags)
 {
-	unsigned int propagate;
-
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (SP_IS_OBJECT (object));
 	g_return_if_fail (!(flags & SP_OBJECT_PARENT_MODIFIED_FLAG));
@@ -753,7 +745,7 @@ sp_object_request_update (SPObject *object, unsigned int flags)
 
 	/* Check for propagate before we set any flags */
 	/* Propagate means, that object is not passed through by modification request cascade yet */
-	propagate = (!(object->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG)));
+	unsigned int propagate = (!(object->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG)));
 
 	/* Just set object flags safe even if some have been set before */
 	object->uflags |= flags;
@@ -804,8 +796,6 @@ sp_object_invoke_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 void
 sp_object_request_modified (SPObject *object, unsigned int flags)
 {
-	unsigned int propagate;
-
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (SP_IS_OBJECT (object));
 	g_return_if_fail (!(flags & SP_OBJECT_PARENT_MODIFIED_FLAG));
@@ -814,7 +804,7 @@ sp_object_request_modified (SPObject *object, unsigned int flags)
 
 	/* Check for propagate before we set any flags */
 	/* Propagate means, that object is not passed through by modification request cascade yet */
-	propagate = (!(object->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG)));
+	unsigned int propagate = (!(object->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG)));
 
 	/* Just set object flags safe even if some have been set before */
 	object->mflags |= flags;
@@ -883,7 +873,9 @@ const gchar *
 sp_object_tagName_get (const SPObject *object, SPException *ex)
 {
 	/* If exception is not clear, return */
-	if (!SP_EXCEPTION_IS_OK (ex)) return NULL;
+	if (!SP_EXCEPTION_IS_OK (ex)) {
+		return NULL;
+	}
 
 	/* fixme: Exception if object is NULL? */
 	return sp_repr_name (object->repr);
@@ -893,7 +885,9 @@ const gchar *
 sp_object_getAttribute (const SPObject *object, const gchar *key, SPException *ex)
 {
 	/* If exception is not clear, return */
-	if (!SP_EXCEPTION_IS_OK (ex)) return NULL;
+	if (!SP_EXCEPTION_IS_OK (ex)) {
+		return NULL;
+	}
 
 	/* fixme: Exception if object is NULL? */
 	return (const gchar *) sp_repr_attr (object->repr, key);
@@ -929,29 +923,24 @@ static gchar *
 sp_object_get_unique_id (SPObject * object, const gchar * id)
 {
 	static gint count = 0;
-	const gchar * name;
-	const gchar * local;
-	gchar * realid;
-	gchar * b;
-	gint len;
 
 	g_assert (SP_IS_OBJECT (object));
 	g_assert (SP_IS_DOCUMENT (object->document));
 
 	count++;
 
-	name = sp_repr_name (object->repr);
+	const gchar *name = sp_repr_name (object->repr);
 	g_assert (name != NULL);
 
-	local = strchr (name, ':');
+	const gchar *local = strchr (name, ':');
 	if (local) {
 		name = local + 1;
 	}
 
-	len = strlen (name) + 17;
-	b = (gchar*) alloca (len);
+	gint len = strlen (name) + 17;
+	gchar *b = (gchar*) alloca (len);
 	g_assert (b != NULL);
-	realid = NULL;
+	gchar *realid = NULL;
 
 	if (id != NULL) {
 		if (sp_document_lookup_id (object->document, id) == NULL) {
@@ -978,19 +967,14 @@ sp_object_get_unique_id (SPObject * object, const gchar * id)
 const gchar *
 sp_object_get_style_property (SPObject *object, const gchar *key, const gchar *def)
 {
-	const gchar *style;
-	const gchar *val;
-
 	g_return_val_if_fail (object != NULL, NULL);
 	g_return_val_if_fail (SP_IS_OBJECT (object), NULL);
 	g_return_val_if_fail (key != NULL, NULL);
 
-	style = sp_repr_attr (object->repr, "style");
+	const gchar *style = sp_repr_attr (object->repr, "style");
 	if (style) {
-		gchar *p;
-		gint len;
-		len = strlen (key);
-		for (p = strstr (style, key); p; p = strstr (style, key)) {
+		gint len = strlen (key);
+		for (gchar *p = strstr (style, key); p; p = strstr (style, key)) {
 			p += len;
 			while ((*p <= ' ') && *p) p++;
 			if (*p++ != ':') break;
@@ -998,8 +982,10 @@ sp_object_get_style_property (SPObject *object, const gchar *key, const gchar *d
 			if (*p) return p;
 		}
 	}
-	val = sp_repr_attr (object->repr, key);
-	if (val) return val;
+	const gchar *val = sp_repr_attr (object->repr, key);
+	if (val) {
+		return val;
+	}
 	if (object->parent) {
 		return sp_object_get_style_property (object->parent, key, def);
 	}
