@@ -255,7 +255,7 @@ sp_ui_shortcut_string (unsigned int shortcut, gchar* c)
 	as = (shortcut & SP_SHORTCUT_ALT_MASK) ? "Alt+" : "";
 	cs = (shortcut & SP_SHORTCUT_CONTROL_MASK) ? "Ctrl+" : "";
 	ss = (shortcut & SP_SHORTCUT_SHIFT_MASK) ? "Shift+" : "";
-	g_snprintf (c, 256, "%s%s%s%s", as, cs, ss, sp_key_name (shortcut & 0xffffff));
+	g_snprintf (c, 256, "%s%s%s%s", ss, cs, as, sp_key_name (shortcut & 0xffffff));
 }
 
 void
@@ -475,7 +475,7 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
 	sp_ui_menu_append_item (menu, NULL, _("_New View"), G_CALLBACK(sp_ui_new_view), NULL);
 	/* View:New Preview*/
-	sp_ui_menu_append_item (menu, NULL, _("N_ew Preview"), G_CALLBACK(sp_ui_new_view_preview), NULL);
+	sp_ui_menu_append_item (menu, NULL, _("New _Preview"), G_CALLBACK(sp_ui_new_view_preview), NULL);
 }
 
 static void
