@@ -101,10 +101,6 @@ static void sp_stop_build(SPObject *object, SPDocument *document, SPRepr *repr)
 static void
 sp_stop_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	guint32 color;
-	gdouble opacity;
-	const gchar *p;
-
 	SPStop *stop = SP_STOP (object);
 
 	switch (key) {
@@ -112,26 +108,33 @@ sp_stop_set (SPObject *object, unsigned int key, const gchar *value)
 		/* fixme: We are reading simple values 3 times during
 		 *        build (Lauris) */
 		/* fixme: We need presentation attributes etc. */
-		p = sp_object_get_style_property (object, "stop-color", "black");
-		color = sp_svg_read_color (p, sp_color_get_rgba32_ualpha (&stop->color, 0x00));
+
+		{
+		const gchar *p = sp_object_get_style_property (object, "stop-color", "black");
+		guint32 color = sp_svg_read_color (p, sp_color_get_rgba32_ualpha (&stop->color, 0x00));
 		sp_color_set_rgb_rgba32 (&stop->color, color);
-		p = sp_object_get_style_property (object, "stop-opacity", "1");
-		opacity = sp_svg_read_percentage (p, stop->opacity);
+		}
+		{
+		const gchar *p = sp_object_get_style_property (object, "stop-opacity", "1");
+		gdouble opacity = sp_svg_read_percentage (p, stop->opacity);
 		stop->opacity = opacity;
+		}
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 		break;
 	case SP_PROP_STOP_COLOR:
-		/* fixme: We need presentation attributes etc. */
-		p = sp_object_get_style_property (object, "stop-color", "black");
-		color = sp_svg_read_color (p, sp_color_get_rgba32_ualpha (&stop->color, 0x00));
+		{
+		const gchar *p = sp_object_get_style_property (object, "stop-color", "black");
+		guint32 color = sp_svg_read_color (p, sp_color_get_rgba32_ualpha (&stop->color, 0x00));
 		sp_color_set_rgb_rgba32 (&stop->color, color);
+		}
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 		break;
 	case SP_PROP_STOP_OPACITY:
-		/* fixme: We need presentation attributes etc. */
-		p = sp_object_get_style_property (object, "stop-opacity", "1");
-		opacity = sp_svg_read_percentage (p, stop->opacity);
+		{
+		const gchar *p = sp_object_get_style_property (object, "stop-opacity", "1");
+		gdouble opacity = sp_svg_read_percentage (p, stop->opacity);
 		stop->opacity = opacity;
+		}
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_OFFSET:
@@ -148,16 +151,16 @@ sp_stop_set (SPObject *object, unsigned int key, const gchar *value)
 static SPRepr *
 sp_stop_write (SPObject *object, SPRepr *repr, guint flags)
 {
-	gchar c[64];
-	Inkscape::SVGOStringStream os;	
-
 	SPStop *stop = SP_STOP (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 		repr = sp_repr_new ("stop");
 	}
 
+	gchar c[64];
 	sp_svg_write_color (c, 64, sp_color_get_rgba32_ualpha (&stop->color, 255));
+
+	Inkscape::SVGOStringStream os;	
 	os << "stop-color:" << c << ";stop-opacity:" << stop->opacity << ";";
 	sp_repr_set_attr (repr, "style", os.str().c_str());
 	sp_repr_set_attr (repr, "stop-color", NULL);
@@ -241,7 +244,10 @@ sp_gradient_init (SPGradient *gr)
 	gr->state = SP_GRADIENT_STATE_UNKNOWN;
 
 	gr->units = SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX;
+	gr->units_set = FALSE;
+
 	nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (gr->transform));
+	gr->transform_set = FALSE;
 
 	gr->spread = SP_GRADIENT_SPREAD_PAD;
 	gr->spread_set = FALSE;
@@ -249,8 +255,8 @@ sp_gradient_init (SPGradient *gr)
 	gr->has_stops = FALSE;
 
 	gr->vector = NULL;
-	gr->color = NULL;
 
+	gr->color = NULL;
 	gr->len = 0.0;
 }
 
@@ -294,6 +300,9 @@ sp_gradient_release (SPObject *object)
 	}
 
 	if (gradient->ref) {
+		if (gradient->ref->getObject()) {
+			sp_signal_disconnect_by_data(gradient->ref->getObject(), gradient);
+		}
 		gradient->ref->detach();
 		delete gradient->ref;
 		gradient->ref = NULL;
@@ -318,7 +327,6 @@ sp_gradient_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPGradient *gr = SP_GRADIENT (object);
 
-	/* fixme: We should unset properties, if val == NULL */
 	switch (key) {
 	case SP_ATTR_GRADIENTUNITS:
 		if (value) {
@@ -333,11 +341,12 @@ sp_gradient_set (SPObject *object, unsigned int key, const gchar *value)
 		}
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_GRADIENTTRANSFORM: {
+	case SP_ATTR_GRADIENTTRANSFORM: 
 		NRMatrix t;
 		if (value && sp_svg_transform_read (value, &t)) {
 			int i;
-			for (i = 0; i < 6; i++) gr->transform[i] = t.c[i];
+			for (i = 0; i < 6; i++) 
+				gr->transform[i] = t.c[i];
 			gr->transform_set = TRUE;
 		} else {
 			nr_matrix_set_identity (NR_MATRIX_D_FROM_DOUBLE (gr->transform));
@@ -345,7 +354,6 @@ sp_gradient_set (SPObject *object, unsigned int key, const gchar *value)
 		}
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
-	}
 	case SP_ATTR_SPREADMETHOD:
 		if (value) {
 			if (!strcmp (value, "reflect")) {
@@ -361,7 +369,7 @@ sp_gradient_set (SPObject *object, unsigned int key, const gchar *value)
 		}
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_XLINK_HREF: {
+	case SP_ATTR_XLINK_HREF: 
 		if (value) {
 			try {
 				gr->ref->attach(Inkscape::URI(value));
@@ -373,7 +381,6 @@ sp_gradient_set (SPObject *object, unsigned int key, const gchar *value)
 			gr->ref->detach();
 		}
 		break;
-	}
 	default:
 		if (((SPObjectClass *) gradient_parent_class)->set)
 			((SPObjectClass *) gradient_parent_class)->set (object, key, value);
@@ -381,6 +388,9 @@ sp_gradient_set (SPObject *object, unsigned int key, const gchar *value)
 	}
 }
 
+/**
+Gets called when the gradient is (re)attached to another gradient
+*/
 static void
 gradient_ref_changed(SPObject *old_ref, SPObject *ref, SPGradient *gr)
 {
@@ -423,7 +433,6 @@ sp_gradient_remove_child (SPObject *object, SPRepr *child)
 	if (((SPObjectClass *) gradient_parent_class)->remove_child)
 		(* ((SPObjectClass *) gradient_parent_class)->remove_child) (object, child);
 
-	/* Fixme: (Lauris) */
 	gr->has_stops = FALSE;
 	SPObject *ochild;
 	for ( ochild = sp_object_first_child(object) ; ochild != NULL ; ochild = SP_OBJECT_NEXT(ochild) ) {
@@ -449,6 +458,7 @@ sp_gradient_modified (SPObject *object, guint flags)
 	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 
+	// FIXME: climb up the ladder of hrefs
 	GSList *l = NULL;
 	for (SPObject *child = sp_object_first_child(object) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
 		g_object_ref (G_OBJECT (child));

@@ -109,6 +109,8 @@ sp_pattern_class_init (SPPatternClass *klass)
 	sp_object_class->update = sp_pattern_update;
 	sp_object_class->modified = sp_pattern_modified;
 
+	// do we need _write? seems to work without it
+
 	ps_class->painter_new = sp_pattern_painter_new;
 	ps_class->painter_free = sp_pattern_painter_free;
 }
@@ -185,7 +187,6 @@ sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPPattern *pat = SP_PATTERN (object);
 
-	/* fixme: We should unset properties, if val == NULL */
 	switch (key) {
 	case SP_ATTR_PATTERNUNITS:
 		if (value) {
