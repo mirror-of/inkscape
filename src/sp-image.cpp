@@ -736,49 +736,19 @@ sp_image_repr_read_image (SPRepr * repr)
 			docbase = sp_repr_attr (sp_repr_document_root (sp_repr_document (repr)), "sodipodi:docbase");
 			if (!docbase) docbase = ".";
 			fullname = g_build_filename(docbase, filename, NULL);
-			// TODO: bulia, please look over
-			gsize bytesRead = 0;
-			gsize bytesWritten = 0;
-			GError* error = NULL;
-			gchar* localFilename = g_filename_from_utf8 ( fullname,
-														  -1,
-														  &bytesRead,
-														  &bytesWritten,
-														  &error);
-			pixbuf = Inkscape::IO::pixbuf_new_from_file (localFilename, NULL);
-			g_free (localFilename);
+			pixbuf = Inkscape::IO::pixbuf_new_from_file( fullname, NULL );
 			g_free (fullname);
 			if (pixbuf != NULL) return pixbuf;
 		} else {
 			/* try absolute filename */
-			// TODO: bulia, please look over
-			gsize bytesRead = 0;
-			gsize bytesWritten = 0;
-			GError* error = NULL;
-			gchar* localFilename = g_filename_from_utf8 ( filename,
-														  -1,
-														  &bytesRead,
-														  &bytesWritten,
-														  &error);
-			pixbuf = Inkscape::IO::pixbuf_new_from_file (localFilename, NULL);
-			g_free (localFilename);
+			pixbuf = Inkscape::IO::pixbuf_new_from_file( filename, NULL );
 			if (pixbuf != NULL) return pixbuf;
 		}
 	}
 	/* at last try to load from sp absolute path name */
 	filename = sp_repr_attr (repr, "sodipodi:absref");
 	if (filename != NULL) {
-		// TODO: bulia, please look over
-		gsize bytesRead = 0;
-		gsize bytesWritten = 0;
-		GError* error = NULL;
-		gchar* localFilename = g_filename_from_utf8 ( filename,
-													  -1,
-													  &bytesRead,
-													  &bytesWritten,
-													  &error);
-		pixbuf = Inkscape::IO::pixbuf_new_from_file (localFilename, NULL);
-		g_free (localFilename);
+		pixbuf = Inkscape::IO::pixbuf_new_from_file( filename, NULL );
 		if (pixbuf != NULL) return pixbuf;
 	}
 	/* Nope: We do not find any valid pixmap file :-( */
