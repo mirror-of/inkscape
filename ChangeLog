@@ -1,5 +1,9 @@
 2003-11-24 bulia byak <bulia@dr.com>
 
+	* src/dialogs/display-settings.c src/display/canvas-arena.c: cursor tolerance now stored in preferences, default changed to 2.0
+
+2003-11-24 bulia byak <bulia@dr.com>
+
 	* src/preferences-skeleton.h: new group for global interface options
 	* src/prefs-utils.h src/prefs-utils.c: new functions for double attributes
 	* src/select-context.c src/node-context.c: nudge distance (without alt) is taken from preferences (default 1 mm)

@@ -25,6 +25,7 @@
 #include "helper/sp-intl.h"
 #include "helper/window.h"
 #include "../inkscape.h"
+#include "../prefs-utils.h"
 #include "dialog-events.h"
 
 #include "display-settings.h"
@@ -80,6 +81,7 @@ static void
 sp_display_dialog_cursor_tolerance_changed (GtkAdjustment *adj, gpointer data)
 {
 	nr_arena_global_delta = adj->value;
+	prefs_set_double_attribute ("options.cursortolerance", "value", nr_arena_global_delta);
 }
 
 static GtkWidget *

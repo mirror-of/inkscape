@@ -21,13 +21,14 @@
 #include "nr-arena.h"
 #include "nr-arena-group.h"
 #include "canvas-arena.h"
+#include "../prefs-utils.h"
 
 enum {
 	ARENA_EVENT,
 	LAST_SIGNAL
 };
 
-gdouble nr_arena_global_delta = 1.0;
+gdouble nr_arena_global_delta;
 
 static void sp_canvas_arena_class_init (SPCanvasArenaClass * klass);
 static void sp_canvas_arena_init (SPCanvasArena * group);
@@ -79,6 +80,8 @@ sp_canvas_arena_class_init (SPCanvasArenaClass *klass)
 {
 	GtkObjectClass *object_class;
 	SPCanvasItemClass *item_class;
+
+	nr_arena_global_delta = prefs_get_double_attribute ("options.cursortolerance", "value", 1.0); // default is 1 px
 
 	object_class = (GtkObjectClass *) klass;
 	item_class = (SPCanvasItemClass *) klass;
