@@ -1,0 +1,564 @@
+#define __sp_typeset_layout_C__
+
+/*
+ * layout routines for the typeset element
+ */
+
+#include <config.h>
+#include <string.h>
+
+#include "display/nr-arena-group.h"
+#include "xml/repr-private.h"
+#include "xml/repr.h"
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point.h>
+#include <libnr/nr-point-fns.h>
+#include <libnr/nr-point-ops.h>
+#include "sp-object-repr.h"
+#include "svg/svg.h"
+#include "inkscape.h"
+#include "desktop-handles.h"
+#include "document.h"
+#include "style.h"
+#include "attributes.h"
+
+#include "sp-root.h"
+#include "sp-use.h"
+#include "sp-typeset.h"
+#include "sp-typeset-utils.h"
+#include "helper/sp-intl.h"
+
+#include "sp-text.h"
+#include "sp-shape.h"
+
+#include "display/curve.h"
+#include "livarot/Path.h"
+#include "livarot/Ligne.h"
+#include "livarot/Shape.h"
+#include "livarot/LivarotDefs.h"
+
+#include <pango/pango.h>
+//#include <pango/pangoxft.h>
+#include <gdk/gdk.h>
+
+void   sp_typeset_rekplayout(SPTypeset *typeset);
+
+typedef struct one_break {
+  int          start_ind,end_ind;
+  box_solution pos;
+  bool         no_justification;
+  
+  int          prev;
+  double       score_to_prev;
+  
+  int          next_for_ind;
+} one_break;
+
+class break_holder {
+public:
+  int              nb_brk,max_brk;
+  one_break*       brks;
+  
+  int              nb_pot;
+  int*             pot_first;
+  
+  break_holder(int nb_potential) {
+    nb_brk=max_brk=0;
+    brks=NULL;
+    nb_pot=nb_potential;
+    pot_first=(int*)malloc((nb_pot+1)*sizeof(int));
+    for (int i=0;i<=nb_pot;i++) pot_first[i]=-1;
+  };
+  ~break_holder(void) {
+    if ( brks ) free(brks);
+    if ( pot_first ) free(pot_first);
+  };
+  
+  double           Score(int of);
+  int              PrevLine(int of);
+  int              AddBrk(int st,int en,const box_solution &pos,int after,double delta,bool noJust);
+};
+double           break_holder::Score(int of)
+{
+  double res=0;
+  for (int cur=of;cur > 0;cur=brks[cur].prev) res+=brks[cur].score_to_prev;
+  return res;
+}
+int              break_holder::PrevLine(int of)
+{
+  if ( of < 0 ) return -1;
+  double theY=brks[of].pos.y;
+  for (int cur=of;cur >= 0;cur=brks[cur].prev) {
+    if ( fabs(brks[cur].pos.y-theY) > 0.001 ) return cur;
+  }
+  return -1;
+}
+int              break_holder::AddBrk(int st,int en,const box_solution &pos,int after,double delta,bool noJust)
+{
+  double nScore=Score(after)+delta;
+  if ( en < 0 ) {
+    if ( nb_brk >= max_brk ) {
+      max_brk=2*nb_brk+1;
+      brks=(one_break*)realloc(brks,max_brk*sizeof(one_break));
+    }
+    int n=nb_brk;
+    brks[n].start_ind=st;
+    brks[n].end_ind=en;
+    brks[n].pos=pos;
+    brks[n].score_to_prev=delta;
+    brks[n].prev=-1;
+    brks[n].next_for_ind=-1;
+    brks[n].no_justification=noJust;
+    nb_brk++;
+    return n;
+  }
+  for (int cur=pot_first[en];cur >= 0;cur=brks[cur].next_for_ind) {
+    if ( brks[cur].end_ind == en && fabs(pos.y-brks[cur].pos.y) < 0.001 && fabs(pos.x_end-brks[cur].pos.x_end) < 0.001 ) {
+      if ( nScore < Score(cur) ) {
+        brks[cur].prev=after;
+        brks[cur].pos=pos;
+        brks[cur].start_ind=st;
+        brks[cur].end_ind=en;
+        brks[cur].score_to_prev=delta;
+        brks[cur].no_justification=noJust;
+        return -1;
+      } else {
+        return -1;
+      }
+    }
+  }
+  {
+    if ( nb_brk >= max_brk ) {
+      max_brk=2*nb_brk+1;
+      brks=(one_break*)realloc(brks,max_brk*sizeof(one_break));
+    }
+    int n=nb_brk;
+    brks[n].start_ind=st;
+    brks[n].end_ind=en;
+    brks[n].pos=pos;
+    brks[n].score_to_prev=delta;
+    brks[n].prev=after;
+    brks[n].next_for_ind=pot_first[en];
+    brks[n].no_justification=noJust;
+    pot_first[en]=n;
+    nb_brk++;
+    return n;
+  }
+} 
+
+class pending_holder {
+public:
+  typedef struct pooled {
+    int          brk;
+    double       nAsc,nDesc;
+    bool         jump;
+  } pooled;
+  
+  int            nb_pending,max_pending;
+  pooled*        pending;
+  
+  pending_holder(void);
+  ~pending_holder(void);
+  
+  void           AddPending(int after,double nA,double nD,bool jump);
+  bool           Pop(int &after,double &nA,double &nD,bool &jump);
+};
+pending_holder::pending_holder(void)
+{
+  nb_pending=max_pending=0;
+  pending=NULL;
+}
+pending_holder::~pending_holder(void)
+{
+  if ( pending ) free(pending);
+  nb_pending=max_pending=0;
+  pending=NULL;
+}
+
+void           pending_holder::AddPending(int after,double nA,double nD,bool jump)
+{
+  if ( after < 0 ) return;
+  if ( nb_pending >= max_pending ) {
+    max_pending=2*nb_pending+1;
+    pending=(pooled*)realloc(pending,max_pending*sizeof(pooled));
+  }
+  pending[nb_pending].brk=after;
+  pending[nb_pending].nAsc=nA;
+  pending[nb_pending].nDesc=nD;
+  pending[nb_pending].jump=jump;
+  nb_pending++;
+}
+bool           pending_holder::Pop(int &after,double &nA,double &nD,bool &jump)
+{
+  if ( nb_pending <= 0 ) return false;
+  int i=random()%nb_pending;
+  if ( i < 0 ) i=-i;
+  after=pending[i].brk;
+  nA=pending[i].nAsc;
+  nD=pending[i].nDesc;
+  jump=pending[i].jump;
+  pending[i]=pending[--nb_pending];
+  return true;
+}
+
+
+typedef struct typeset_step {
+  box_solution      box;
+  int               start_ind,end_ind;
+  bool              no_justification;
+} typeset_step;
+
+void   sp_typeset_rekplayout(SPTypeset *typeset)
+{
+  if ( typeset == NULL || typeset->layoutDirty == false ) return;
+  typeset->layoutDirty=false;
+  
+  if ( typeset->theDst ) delete typeset->theDst;
+  typeset->theDst=NULL;
+  if ( typeset->dstType == has_shape_dest ) {
+    GSList* l=typeset->dstElems;
+    dest_shape_chunker* nd=new dest_shape_chunker();
+    typeset->theDst=nd;
+    while ( l && l->data ) {
+      shape_dest* theData=(shape_dest*)l->data;
+      if ( theData->theShape ) nd->AppendShape(theData->theShape);
+      l=l->next;
+    }
+  } else if ( typeset->dstType == has_path_dest ) {
+  } else if ( typeset->dstType == has_box_dest ) {
+    GSList* l=typeset->dstElems;
+    dest_box_chunker* nd=new dest_box_chunker();
+    typeset->theDst=nd;
+    while ( l && l->data ) {
+      box_dest* theData=(box_dest*)l->data;
+      nd->AppendBox(theData->box);
+      l=l->next;
+    }
+  } else if ( typeset->dstType == has_col_dest ) {
+    if ( typeset->dstElems && typeset->dstElems->data ) {
+      column_dest* theData=(column_dest*)typeset->dstElems->data;
+      typeset->theDst=new dest_col_chunker(theData->width);
+    }
+  }
+  if ( typeset->theSrc ) delete typeset->theSrc;
+  typeset->theSrc=NULL;
+  if ( typeset->srcType == has_std_txt ) {
+    SPCSSAttr *css;
+    css = sp_repr_css_attr (SP_OBJECT_REPR (SP_OBJECT(typeset)), "style");
+    const gchar *val_size = sp_repr_css_property (css, "font-size", NULL);
+    double  fsize=12.0;
+    if ( val_size ) fsize = sp_repr_css_double_property (css, "font-size", 12.0);
+    const gchar *val_family = sp_repr_css_property (css, "font-family", NULL);
+    if ( val_family ) {
+      typeset->theSrc = new pango_text_chunker(typeset->srcText, (gchar *) val_family, fsize, p_t_c_none,false);
+    } else {
+      typeset->theSrc = new pango_text_chunker(typeset->srcText, "Luxi Sans", fsize, p_t_c_none,false);
+    }
+  } else if ( typeset->srcType == has_pango_txt ) {
+    SPCSSAttr *css;
+    css = sp_repr_css_attr (SP_OBJECT_REPR (SP_OBJECT(typeset)), "style");
+    const gchar *val_size = sp_repr_css_property (css, "font-size", NULL);
+    double  fsize=12.0;
+    if ( val_size ) fsize = sp_repr_css_double_property (css, "font-size", 12.0);
+    const gchar *val_family = sp_repr_css_property (css, "font-family", NULL);
+    if ( val_family ) {
+      typeset->theSrc = new pango_text_chunker(typeset->srcText, (gchar *) val_family, fsize, p_t_c_none,true);
+    } else {
+      typeset->theSrc = new pango_text_chunker(typeset->srcText, "Luxi Sans", fsize, p_t_c_none,true);
+    }
+  }
+  
+  
+  // kill children
+  {
+    GSList *l=NULL;
+    for (	SPObject * child = sp_object_first_child(SP_OBJECT(typeset)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+      l=g_slist_prepend(l,child);
+    }
+    while ( l ) {
+      SPObject *child=(SPObject*)l->data;
+      child->deleteObject();
+//      sp_object_unref(child, SP_OBJECT(typeset));
+      l=g_slist_remove(l,child);
+    }
+  }
+  // do layout
+  typeset_step  *steps=NULL;
+  int           nb_step=0;
+
+  if ( typeset->theSrc && typeset->theDst ) {
+    // dumb layout: stuff 'til it's too big    
+    double nAscent=0.0,nDescent=0.0;
+    typeset->theSrc->InitialMetricsAt(0,nAscent,nDescent);
+    int           maxIndex=typeset->theSrc->MaxIndex();
+    if ( nAscent < 0.0001 && nDescent < 0.0001 ) {
+      // nothing to stuff?
+    } else {
+      box_solution    cur_box;
+      break_holder*   brk_list=new break_holder(maxIndex);
+      pending_holder* pen_list=new pending_holder();
+      
+      cur_box=typeset->theDst->VeryFirst();
+      int           cur_brk=brk_list->AddBrk(-1,-1,cur_box,-1,0,true);
+      pen_list->AddPending(cur_brk,nAscent,nDescent,false);
+      
+      int      best_brk=-1;
+      double   best_score=0;
+      
+      do {
+        bool          sameLine=false;
+        bool          jump_to_next_line=false;
+        if ( pen_list->Pop(cur_brk,nAscent,nDescent,jump_to_next_line) == false ) {
+          break;
+        }
+        
+        int    cur_pos=brk_list->brks[cur_brk].end_ind+1;
+//        printf("traite: %i: %i %f %f %i: s=%f\n",cur_brk,cur_pos,nAscent,nDescent,(jump_to_next_line)?1:0,brk_list->Score(cur_brk));
+        
+        if ( cur_pos >= maxIndex ) {
+          if ( brk_list->brks[cur_brk].end_ind >= 0 ) {
+            double  ns=brk_list->Score(cur_brk)/(1+brk_list->brks[cur_brk].end_ind);
+            if ( best_brk < 0 || ns < best_score ) {
+              best_brk=cur_brk;
+              best_score=ns;
+            }
+          }
+          continue;
+        }
+        
+        if ( jump_to_next_line ) {
+//          printf("it's just a jump to the left\n");
+          cur_box=typeset->theDst->NextLine(brk_list->brks[cur_brk].pos,nAscent,nDescent,0.0);
+        } else {
+          cur_box=typeset->theDst->NextBox(brk_list->brks[cur_brk].pos,nAscent,nDescent,0.0,sameLine);
+        }
+        if ( cur_box.finished ) {
+          if ( brk_list->brks[cur_brk].end_ind >= 0 ) {
+            double  ns=brk_list->Score(cur_brk)/(1+brk_list->brks[cur_brk].end_ind);
+            if ( best_brk < 0 || ns < best_score ) {
+              best_brk=cur_brk;
+              best_score=ns;
+            }
+          }
+          continue;
+        }
+        
+        double nLen=cur_box.x_end-cur_box.x_start;
+        text_chunk_solution* sol=typeset->theSrc->StuffThatBox(cur_pos,0.8*nLen,nLen,1.2*nLen,false);
+
+        if ( sol == NULL ) {
+          if ( brk_list->brks[cur_brk].end_ind >= 0 ) {
+            double  ns=brk_list->Score(cur_brk)/(1+brk_list->brks[cur_brk].end_ind);
+            if ( best_brk < 0 || ns < best_score ) {
+              best_brk=cur_brk;
+              best_score=ns;
+            }
+          }
+          continue;
+        }
+        if ( sol[0].end_of_array ) {
+          free(sol);
+          if ( brk_list->brks[cur_brk].end_ind >= 0 ) {
+            double  ns=brk_list->Score(cur_brk)/(1+brk_list->brks[cur_brk].end_ind);
+            if ( best_brk < 0 || ns < best_score ) {
+              best_brk=cur_brk;
+              best_score=ns;
+            }
+          }
+          continue;
+        }
+        
+        for (int i=0;sol[i].end_of_array==false;i++) {
+          if ( sol[i].end_ind >= sol[i].start_ind ) {
+            if ( sol[i].ascent > nAscent || sol[i].descent > nDescent ) {
+              int p_line=(sameLine)?brk_list->PrevLine(cur_brk):cur_brk;
+              if ( p_line >= 0 ) {
+                pen_list->AddPending(p_line,sol[i].ascent,sol[i].descent,true);
+              }
+            } else {
+              if ( sol[i].length < 0.001 ) {
+                if ( sol[i].endOfParagraph ) {
+                  int n_brk=brk_list->AddBrk(sol[i].start_ind,sol[i].end_ind,cur_box,cur_brk,0,true);
+                  if ( n_brk >= 0 ) {
+                    double    a,d;
+                    typeset->theSrc->InitialMetricsAt(sol[i].end_ind+1,a,d);
+                    pen_list->AddPending(n_brk,a,d,true);
+                  }
+                } else {
+                  printf("qu'est ce que c'est que cette longueur nulle: %i %i \n",sol[i].start_ind,sol[i].end_ind);
+                }
+              } else if ( sol[i].length > 1.5*1.2*nLen ) {
+                int n_brk=brk_list->AddBrk(brk_list->brks[cur_brk].end_ind+1,brk_list->brks[cur_brk].end_ind,cur_box,cur_brk,0,true);
+                if ( n_brk >= 0 ) {
+                  double    a,d;
+                  typeset->theSrc->InitialMetricsAt(brk_list->brks[cur_brk].end_ind+1,a,d);
+                  pen_list->AddPending(n_brk,a,d,true);
+                }
+              } else {
+                double   delta=0;
+                if ( sol[i].length > nLen ) {
+                  delta=(sol[i].length/nLen)-1;
+                } else {
+                  delta=(nLen/sol[i].length)-1;
+                }
+                int n_brk=brk_list->AddBrk(sol[i].start_ind,sol[i].end_ind,cur_box,cur_brk,delta,false);
+                if ( n_brk >= 0 ) {
+                  double    a,d;
+                  typeset->theSrc->InitialMetricsAt(sol[i].end_ind+1,a,d);
+                  pen_list->AddPending(n_brk,a,d,false);
+                }
+              }
+            }
+          }
+        }
+                
+        free(sol);
+      } while ( 1 );
+      
+      if ( best_brk >= 0 ) {
+        for (cur_brk=best_brk;cur_brk>=0;cur_brk=brk_list->brks[cur_brk].prev) {
+          if ( brk_list->brks[cur_brk].start_ind <= brk_list->brks[cur_brk].end_ind ) {
+//            printf("bk=%i (->p=%i): s=%i e=%i l=%f\n",cur_brk,brk_list->brks[cur_brk].prev,brk_list->brks[cur_brk].start_ind,brk_list->brks[cur_brk].end_ind
+//                   ,brk_list->brks[cur_brk].pos.x_end-brk_list->brks[cur_brk].pos.x_start);
+            steps=(typeset_step*)realloc(steps,(nb_step+1)*sizeof(typeset_step));
+            if ( nb_step > 0 ) memmove(steps+1,steps,nb_step*sizeof(typeset_step));
+            steps[0].box=brk_list->brks[cur_brk].pos;
+            steps[0].start_ind=brk_list->brks[cur_brk].start_ind;
+            steps[0].end_ind=brk_list->brks[cur_brk].end_ind;
+            steps[0].no_justification=brk_list->brks[cur_brk].no_justification;
+            nb_step++;
+          }
+        }
+      }
+      
+      delete brk_list;
+      delete pen_list;
+    }
+  }
+  // create offspring
+  {
+    int           maxIndex=(typeset->theSrc)?typeset->theSrc->MaxIndex():0;
+
+    SPRepr *parent = SP_OBJECT_REPR(SP_OBJECT(typeset));
+    char const *style = sp_repr_attr (parent, "style");
+    if (!style) {
+	    style = "font-family:Sans;font-size:12;";
+    }
+    
+    SPRepr* text_repr = sp_repr_new ("text");
+    sp_repr_set_attr (text_repr, "style", style);
+    sp_repr_append_child (parent, text_repr);
+    sp_repr_unref (text_repr);
+
+    for (int i=0;i<nb_step;i++) {
+      if ( steps[i].start_ind >= 0 && steps[i].end_ind >= steps[i].start_ind ) {
+        int              nbS=0;
+        glyphs_for_span  *span_info=NULL;
+        typeset->theSrc->GlyphsAndPositions(steps[i].start_ind,steps[i].end_ind,nbS,span_info);
+        double spacing=steps[i].box.x_end-steps[i].box.x_start;
+        int    nbSrcChar=0;
+        for (int k=0;k<nbS;k++) {
+          if ( span_info[k].nbG > 0 ) {
+            spacing-=span_info[k].g_pos[span_info[k].nbG][0]-span_info[k].g_pos[0][0];
+            for (int j=0;j<span_info[k].nbG;j++) nbSrcChar+=span_info[k].g_end[j]-span_info[k].g_start[j]+1;
+          }
+        }
+        if ( nbSrcChar > 1 ) {
+          if ( ( steps[i].end_ind < maxIndex-1 && steps[i].no_justification == false ) || spacing < 0 ) {
+            spacing/=(nbSrcChar-1);
+          } else {
+            spacing=0;
+          }
+        } else {
+          spacing=0;
+        }
+        
+        for (int k=0;k<nbS;k++) {
+          SPRepr* span_repr = sp_repr_new ("tspan");
+          
+          if ( span_info[k].style[0] != 0 ) {
+            sp_repr_set_attr (span_repr, "style", span_info[k].style);
+          }
+          
+          if ( span_info[k].g_pos && span_info[k].g_start && span_info[k].g_end && span_info[k].nbG > 0 ) {
+            NR::Point   textPos(steps[i].box.x_start,steps[i].box.y);
+            textPos+=span_info[k].g_pos[0];
+            int nbPrevChar=span_info[k].g_start[0]-span_info[0].g_start[0];
+            sp_repr_set_double (span_repr, "x", textPos[0]+spacing*((double)(nbPrevChar)));
+            sp_repr_set_double (span_repr, "y", textPos[1]);
+            
+            {
+              SPCSSAttr *ocss;
+              ocss = sp_repr_css_attr (span_repr, "style");              
+              sp_repr_set_double ((SPRepr*)ocss, "letter-spacing", spacing);
+              sp_repr_css_change (span_repr, ocss, "style");
+              sp_repr_css_attr_unref (ocss);
+            }
+            bool  do_dy=false;
+            for (int j = 0; j < span_info[k].nbG ; j ++) {
+              if ( fabs(span_info[k].g_pos[j][1]) > 0.001 ) {
+                do_dy=true;
+                break;
+              }
+            }
+            if ( do_dy ) {
+              gchar c[32];
+              gchar *s = NULL;
+              double    lastY=span_info[k].g_pos[0][1];
+              for (int j = 0; j < span_info[k].nbG ; j ++) {
+                int     t_st=span_info[k].g_start[j];
+                int     t_en=span_info[k].g_end[j];
+                for (int g=t_st;g<=t_en;g++) {
+                  g_ascii_formatd (c, sizeof (c), "%.8g", span_info[k].g_pos[j][1]-lastY);
+                  lastY=span_info[k].g_pos[j][1];
+                  if (s == NULL) {
+                    s = g_strdup (c);
+                  }  else {
+                    s = g_strjoin (" ", s, c, NULL);
+                  }
+                }
+              }
+              sp_repr_set_attr (span_repr, "dy", s);
+              g_free(s);
+            }
+          } else {
+            sp_repr_set_double (span_repr, "x", steps[i].box.x_start);
+            sp_repr_set_double (span_repr, "y", steps[i].box.y);
+          }
+          
+          int   content_length=0;
+          char* temp_content=NULL;
+          for (int j = 0; j < span_info[k].nbG ; j ++) {
+            int     t_st=span_info[k].g_start[j];
+            int     t_en=span_info[k].g_end[j];
+            if ( t_en >= t_st ) {
+              temp_content=(char*)realloc(temp_content,(content_length+t_en-t_st+1)*sizeof(char));
+              memcpy(temp_content+content_length,span_info[k].g_text+t_st,(t_en-t_st+1)*sizeof(char));
+              content_length+=t_en-t_st+1;
+            }
+          }
+          temp_content=(char*)realloc(temp_content,(content_length+1)*sizeof(char));
+          temp_content[content_length]=0;
+          SPRepr* rstr = sp_xml_document_createTextNode (sp_repr_document (parent), temp_content);
+          sp_repr_append_child (span_repr, rstr);
+          sp_repr_unref (rstr);
+          free(temp_content);
+          
+          sp_repr_append_child (text_repr, span_repr);
+          sp_repr_unref (span_repr);
+        }
+        for (int k=0;k<nbS;k++) {
+          if ( span_info[k].g_start ) free(span_info[k].g_start);
+          if ( span_info[k].g_end ) free(span_info[k].g_end);
+          if ( span_info[k].g_pos ) free(span_info[k].g_pos);
+        }
+        if ( span_info ) free(span_info);
+      }
+    }
+    free(steps);
+    
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    sp_document_done (SP_DT_DOCUMENT (desktop));
+  }
+}
