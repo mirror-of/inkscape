@@ -1,3 +1,36 @@
+2004-01-11  bulia byak <bulia@users.sourceforge.net>
+
+	* src/desktop.cpp,h: New functions and SPDesktop members for maintaining lists of past
+	and future zooms. New commands for toggling rulers and scrollbars, removed old and
+	unused toggle_borders. Zoom spinbutton editable again, coord_status uses gtk_label
+	instead of statusbar, misc cosmetics. Reduced sizes of the window bottom
+	stuff. Save/restore the status of rulers and scrollbars in preferences.
+
+src/preferences-skeleton.h: New options: showrulers, showscrollbars. Added default namedview for a 640x480 new document window.
+
+src/widgets/spinbutton-events.cpp,h: Common spinbutton callbacks.
+
+src/widgets/Makefile.am: Added spinbutton-events.
+
+src/select-toolbar.cpp: Remove code into spinbutton-events.
+
+src/widgets/widget-sizes.h: Added sizes for bottom stuff: zoom field, coord status, statusbar. Misc cosmetic changes.
+
+src/verbs.cpp,h: New verbs for next/prev zoom. New verbs for toggling rulers and scrollbars.
+
+src/sp-namedview.cpp: Cancel past zooms at the end of window_from_document.
+
+src/shortcuts.cpp: `, shift-` to navigate the history of zooms. Ctrl-r, Ctrl-b to toggle rulers and scrollbars.  
+
+src/interface.cpp: Added next/prev zoom commands in the view menu. Added three toggle commands (grid, rulers, scrollbars) in the view menu. 
+
+src/widgets/ruler.cpp: Use fixed smaller font size, defined in widget-sizes. 
+
+2004-01-10  bulia byak <bulia@users.sourceforge.net>
+
+src/draw-context.cpp: Changed alt to shift for one-handle drag.
+
+
 2004-01-10  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/desktop-events.cpp, src/desktop-snap.cpp, src/draw-context.cpp,
