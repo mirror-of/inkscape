@@ -490,8 +490,8 @@ void SPFlowtext::convert_to_text()
             Glib::ustring::iterator span_text_start_iter;
             group->layout.getSourceOfCharacter(it, (void**)&source_obj, &span_text_start_iter);
             gchar *style_text = sp_style_write_difference((SP_IS_STRING(source_obj) ? source_obj->parent : source_obj)->style, group->style);
-            if (style_text) {
-                span_tspan->setAttribute("style", *style_text ? NULL : style_text);
+            if (style_text && *style_text) {
+                span_tspan->setAttribute("style", style_text);
                 g_free(style_text);
             }
 
