@@ -27,6 +27,7 @@ include extension/Makefile_insert
 include extension/implementation/Makefile_insert
 include extension/internal/Makefile_insert
 include extension/plugin/Makefile_insert
+include extension/script/Makefile_insert
 include helper/Makefile_insert
 include inkjar/Makefile_insert
 include libnr/Makefile_insert
@@ -50,6 +51,7 @@ noinst_LIBRARIES =	\
 	extension/implementation/libimplementation.a	\
 	extension/internal/libinternal.a	\
 	extension/libextension.a	\
+	extension/script/libscript.a	\
 	helper/libspchelp.a	\
 	util/libinkutil.a \
 	$(inkjar_libs)	\

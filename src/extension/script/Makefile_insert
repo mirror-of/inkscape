@@ -5,12 +5,28 @@ extension/script/all: extension/script/libscript.a
 extension/script/clean:
 	rm -f extension/script/libscript.a
 	rm -f $(extension_script_libscript_a_OBJECTS)
+        
+#########################################################
+# NOTE that we are using the interpreters themselves, to
+# discover the settings for compiling and linking
+#########################################################
+
+PERL_CFLAGS  = `perl -MExtUtils::Embed -e ccopts`
+PERL_LDFLAGS = `perl -MExtUtils::Embed -e ldopts`
+
+#INCLUDEPY, LIBPL, LIBRARY
+PYTHON_CFLAGS := -I`python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('INCLUDEPY')"`
+PYTHON_LDPATH := `python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('LIBPL')"`
+PYTHON_LIB    := `python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('LIBRARY')"`
+PYTHON_LDFLAGS = $(PYTHON_LDPATH)/$(PYTHON_LIB)
+
+
+extension_script_libscript_a_CXXFLAGS = $(PERL_CFLAGS) $(PYTHON_CFLAGS)
+AM_LDFLAGS = $(PERL_LDFLAGS) $(PYTHON_LDFLAGS)
 
 extension_script_libscript_a_SOURCES =	\
 	extension/script/InkscapeBinding.h \
 	extension/script/InkscapeBinding.cpp \
-	extension/script/InkscapeExtension.h \
-	extension/script/InkscapeExtension.cpp \
 	extension/script/InkscapeInterpreter.h \
 	extension/script/InkscapeInterpreter.cpp \
 	extension/script/InkscapePerl.h \

@@ -231,6 +231,7 @@ inkscape_private_libs =	\
 	extension/libextension.a	\
 	extension/implementation/libimplementation.a	\
 	extension/internal/libinternal.a	\
+	extension/script/libscript.a	\
 	$(inkjar_libs)	\
 	libinkpost.a
 
