@@ -79,7 +79,7 @@ DB::get (const gchar *key)
 
 	mod = (*moduledict.find(key)).second;
 
-	if (mod->deactivated())
+	if ( !mod || mod->deactivated() )
 		return NULL;
 
 	return mod;
