@@ -15,6 +15,7 @@ libnr_mmx_sources =	\
 endif
 
 libnr_libnr_a_SOURCES =	\
+	libnr/n-art-bpath.h	\
 	libnr/nr-blit.cpp	\
 	libnr/nr-blit.h	\
 	libnr/nr-compose-transform.cpp	\
@@ -41,6 +42,7 @@ libnr_libnr_a_SOURCES =	\
 	libnr/nr-object.h	\
 	libnr/nr-path.cpp	\
 	libnr/nr-path.h	\
+	libnr/nr-path-code.h	\
 	libnr/nr-pixblock-line.cpp	\
 	libnr/nr-pixblock-line.h	\
 	libnr/nr-pixblock-pattern.cpp	\
