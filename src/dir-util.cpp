@@ -39,9 +39,9 @@ sp_extension_from_path (const gchar * path)
 	if (path == NULL) return NULL;
 
 	p = path;
-	while (* p != '\0') p++;
+	while (*p != '\0') p++;
 
-	while ((* p != G_DIR_SEPARATOR) && (* p != '.') && (p >= path)) p--;
+	while ((p >= path) && (*p != G_DIR_SEPARATOR) && (*p != '.')) p--;
 	if (* p != '.') return NULL;
 	p++;
 
