@@ -33,6 +33,7 @@ display/testnr.cpp
 display/bezier-utils-test.cpp
 ecma/ecmatest.cpp
 ecma/svgview.cpp
+ecma/SVGViewer.cpp
 extension/menu.h
 extension/menu.cpp
 ink-snprintf.cpp

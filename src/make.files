@@ -6,6 +6,7 @@ attributes.h
 color-rgba.h
 color.cpp
 color.h
+decimal-round.h
 desktop-affine.cpp
 desktop-affine.h
 desktop-events.cpp
@@ -108,7 +109,6 @@ dyna-draw-context.cpp
 dyna-draw-context.h
 ecma/EcmaBinding.cpp
 ecma/EcmaBinding.h
-ecma/SVGViewer.cpp
 ecma/SVGViewer.h
 enums.h
 event-context.cpp
@@ -508,6 +508,7 @@ rect-context.h
 refcounted.h
 remove-last.h
 require-config.h
+round.h
 rubberband.cpp
 rubberband.h
 satisfied-guide-cns.cpp

@@ -2298,28 +2298,6 @@ ecma/EcmaBinding.o: \
 	xml/repr.h \
 	xml/xml-forward.h
 
-ecma/SVGViewer.o: \
-	ecma/SVGViewer.cpp \
-	document.h \
-	ecma/EcmaBinding.h \
-	ecma/SVGViewer.h \
-	forward.h \
-	helper/helper-forward.h \
-	inkscape.h \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-point.h \
-	message-context.h \
-	message-stack.h \
-	message.h \
-	refcounted.h \
-	svg-view.h \
-	uri.h \
-	uri.h \
-	view.h \
-	xml/xml-forward.h
-
 event-context.o: \
 	event-context.cpp \
 	color.h \
@@ -7811,6 +7789,7 @@ sp-offset.o: \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
@@ -7831,6 +7810,7 @@ sp-offset.o: \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
 	livarot/livarot-forward.h \
+	prefs-utils.h \
 	require-config.h \
 	sp-chars.h \
 	sp-item-group.h \
@@ -7840,6 +7820,7 @@ sp-offset.o: \
 	sp-offset.h \
 	sp-shape.h \
 	sp-text.h \
+	sp-use-reference.h \
 	svg/ftos.h \
 	svg/stringstream.h \
 	svg/svg-types.h \

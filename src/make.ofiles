@@ -54,7 +54,6 @@ OBJECTS = \
 	dropper-context.o \
 	dyna-draw-context.o \
 	ecma/EcmaBinding.o \
-	ecma/SVGViewer.o \
 	event-context.o \
 	extension/db.o \
 	extension/extension.o \
@@ -445,7 +444,6 @@ LINTS = \
 	dropper-context.lint \
 	dyna-draw-context.lint \
 	ecma/EcmaBinding.lint \
-	ecma/SVGViewer.lint \
 	event-context.lint \
 	extension/db.lint \
 	extension/extension.lint \
