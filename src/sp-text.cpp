@@ -778,7 +778,14 @@ sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
 
     /* This function takes care of scaling & translation only, we return whatever parts we can't
        handle. */
-    double const ex = fontsize_expansion(xform);
+
+// TODO: pjrm tried to use fontsize_expansion(xform) here and it works for text in that font size
+// is scaled more intuitively when scaling non-uniformly; however this necessitated using
+// fontsize_expansion instead of expansion in other places too, where it was not appropriate
+// (e.g. it broke stroke width on copy/pasting of style from horizontally stretched to vertically
+// stretched shape). Using fontsize_expansion only here broke setting the style via font
+// dialog. This needs to be investigated further.
+    double const ex = NR::expansion(xform); 
     if (ex == 0) {
         return xform;
     }

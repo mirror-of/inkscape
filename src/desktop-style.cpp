@@ -97,7 +97,7 @@ sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines)
         // Scale the style by the inverse of the accumulated parent transform in the paste context.
         {
             NR::Matrix const local(sp_item_i2doc_affine(SP_ITEM(o)));
-            double const ex(fontsize_expansion(local));
+            double const ex(NR::expansion(local));
             if ( ( ex != 0. )
                  && ( ex != 1. ) ) {
                 sp_css_attr_scale(css_set, 1/ex);
