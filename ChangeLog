@@ -1,6 +1,9 @@
 2004-04-25  Carl Hetherington <inkscape@carlh.net>
 
-	* src/verbs.cpp: SPSelection OO-ification.
+	* src/verbs.cpp, src/rect-context.cpp, src/spiral-context.cpp,
+	src/event-context.cpp, src/text-context.cpp,
+	src/dialogs/stroke-style.cpp, src/xml-tree.cpp, src/widgets/sp-widget.cpp:
+	SPSelection OO-ification.
 
 	* src/display/curve.cpp: Don't raise a critical error if a new
 	curve cannot be created in sp_curve_new_from_bpath().  This can
@@ -16,6 +19,32 @@
 	added asserts for calls to sp_curve_new_from_bpath() which look
 	like they might not expect it to return NULL.
 
+	* src/desktop.h: add a comment about how SPDesktop::selection
+	should never generally be NULL.
+
+	* src/desktop-handles.cpp: ensure that sp_desktop_selection never
+	returns NULL, so that we don't have to check for this eventuality
+	elsewhere.
+
+	* src/arc-context.cpp, src/seltrans.cpp, src/desktop.cpp: be less defensive about
+	SPDesktop::selection being NULL.
+
+	* src/path-chemistry.cpp, src/select-context.cpp,
+	src/selection-chemistry.cpp, src/star-context.cpp,
+	src/dialogs/align.cpp, src/dialogs/item-properties.cpp, src/dialogs/text-edit.cpp:
+	SPSelection OO-ification.  Also some coding style and
+	declaration-to-first-use cleanups.
+
+	* src/toolbox.cpp: SPSelection OO-ification.  Various cleanups.
+
+	* src/selection.h: remove deprecated access functions.
+
+	* src/dialogs/fill-style.cpp: declaration-to-first-use cleanups.
+
+	* src/selection.cpp: add vim and Emacs mode blocks.
+
+	* src/object-ui.cpp: very minor coding style fix.
+	
 2004-04-24  MenTaLguY <mental@rydia.net>
 
 	* src/arc-context.cpp, src/dyna-draw-context.cpp, src/object-ui.cpp,
