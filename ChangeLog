@@ -1,3 +1,8 @@
+2004-05-05 Nathan Hurst <njh@mail.csse.monash.edu.au>
+
+	* src/dialogs/text-edit.cpp, configure.in: Added support for spell
+	checking in text dialog.
+	
 2004-05-04  MenTaLguY <mental@rydia.net>
 
 	* src/display/nr-arena-glyphs.h: fixed cut-and-paste error in
