@@ -37,7 +37,7 @@
 #include "uri-references.h"
 #include "sp-paint-server.h"
 #include "style.h"
-#include "stringstream.h"
+#include "svg/stringstream.h"
 
 namespace Inkscape {
 

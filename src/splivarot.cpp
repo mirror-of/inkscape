@@ -17,7 +17,7 @@
 
 #include "xml/repr.h"
 #include "svg/svg.h"
-#include "stringstream.h"
+#include "svg/stringstream.h"
 #include "sp-path.h"
 #include "sp-text.h"
 #include "style.h"

@@ -18,7 +18,7 @@
 #include "attributes.h"
 #include "sp-polygon.h"
 #include "helper/sp-intl.h"
-#include "stringstream.h"
+#include "svg/stringstream.h"
 
 static void sp_polygon_class_init (SPPolygonClass *klass);
 static void sp_polygon_init (SPPolygon *polygon);
