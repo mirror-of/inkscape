@@ -43,6 +43,7 @@ struct SPUse {
 	SPItem item;
 
 	// item built from the original's repr (the visible clone)
+	// relative to the SPUse itself, it is treated as a child, similar to a grouped item relative to its group
 	SPObject *child;
 
 	// SVG attrs
@@ -54,6 +55,12 @@ struct SPUse {
 
 	// the reference to the original object
 	SPUseReference *ref;
+
+	// the bbox of the original, for sensing its movements and adjusting
+	NR::Rect original;
+
+	// the original's repr that we listen to
+	SPRepr *repr;
 };
 
 struct SPUseClass {

@@ -23,6 +23,9 @@
 #include "document.h"
 #include "sp-object-repr.h"
 #include "uri-references.h"
+#include "macros.h"
+#include "xml/repr.h"
+#include "xml/repr-private.h"
 
 #include "sp-use.h"
 
@@ -110,6 +113,7 @@ sp_use_init (SPUse * use)
 	sp_svg_length_unset (&use->width, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 	sp_svg_length_unset (&use->height, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 	use->href = NULL;
+	use->repr = NULL;
 }
 
 static void
@@ -128,6 +132,8 @@ sp_use_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	// We don't need to create child here: 
 	// reading xlink:href will attach ref, and that will cause the changed signal to be emitted,
 	// which will call sp_use_href_changed, and that will take care of the child
+
+	//g_print ("built!\n");
 }
 
 static void
@@ -322,6 +328,158 @@ sp_use_hide (SPItem * item, unsigned int key)
 		((SPItemClass *) parent_class)->hide (item, key);
 }
 
+/**
+Returns the ultimate original of a SPUse (i.e. the first object in the chain of its originals which is not an SPUse).
+Note that the returned is the clone object, i.e. the child of an SPUse (of the argument one for the trivial case) and not the "true original".
+*/
+SPItem *
+sp_use_root (SPUse *use)
+{
+	SPObject *orig = use->child;
+	while (SP_IS_USE(orig)) {
+		orig = SP_USE(orig)->child;
+	}
+	g_assert (SP_IS_ITEM (orig));
+	return SP_ITEM (orig);
+}
+
+/**
+Returns the effective transform that goes from the ultimate original to given SPUse, both ends included
+ */
+NR::Matrix
+sp_use_complete_transform (SPUse *use)
+{
+	//track the ultimate source of a chain of uses
+	SPObject *orig = use->child;
+	GSList *chain = NULL;
+	chain = g_slist_prepend (chain, use);
+	while (SP_IS_USE(orig)) {
+		chain = g_slist_prepend (chain, orig);
+		orig = SP_USE(orig)->child;
+	}
+	chain = g_slist_prepend (chain, orig);
+
+
+	//calculate the accummulated transform, starting from the original
+	NR::Matrix t;
+	t.set_identity();
+	for (GSList *i = chain; i != NULL; i = i->next) {
+		SPItem *i_tem = SP_ITEM(i->data);
+
+		// "An additional transformation translate(x,y) is appended to the end (i.e.,
+		// right-side) of the transform attribute on the generated 'g', where x and y
+		// represent the values of the x and y attributes on the 'use' element." - http://www.w3.org/TR/SVG11/struct.html#UseElement
+		if (SP_IS_USE(i_tem)) {
+			SPUse *i_use = SP_USE(i_tem);
+			if ((i_use->x.set && i_use->x.computed != 0) || (i_use->y.set && i_use->y.computed != 0)) {
+				t = t * NR::translate (i_use->x.set ? i_use->x.computed : 0, i_use->y.set ? i_use->y.computed : 0);
+			}
+		}
+
+		t = t * NR::Matrix (&i_tem->transform);
+	}
+
+	g_slist_free (chain);
+	return t;
+}
+
+
+NR::Matrix
+sp_use_parent_transform (SPUse *use)
+{
+	NR::Matrix t;
+	t.set_identity();
+
+	if ((use->x.set && use->x.computed != 0) || (use->y.set && use->y.computed != 0)) {
+		t = t * NR::translate (use->x.set ? use->x.computed : 0, use->y.set ? use->y.computed : 0);
+	}
+
+	t = t * NR::Matrix (&(SP_ITEM(use)->transform));
+	return t;
+}
+
+
+//void m_print (gchar *say, NRMatrix *m)
+//{ g_print ("%s %g %g %g %g %g %g\n", say, m->c[0], m->c[1], m->c[2], m->c[3], m->c[4], m->c[5]); }
+
+void mm_print (gchar *say, NR::Matrix m)
+{ g_print ("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]); }
+
+using NR::X;
+using NR::Y;
+
+inline bool point_equalp(NR::Point const &a, NR::Point const &b)
+{
+	return ( NR_DF_TEST_CLOSE(a[X], b[X], 1e-5) &&
+		 NR_DF_TEST_CLOSE(a[Y], b[Y], 1e-5) );
+}
+
+static void sp_use_original_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
+{
+	SPUse *use = SP_USE (data);
+	SPItem *ref = use->ref->getObject();
+ 	//SPItem *ref = SP_ITEM(use->child);
+
+	//	if (SP_IS_OBJECT (use) && SP_OBJECT_DOCUMENT (use))
+	//	sp_document_ensure_up_to_date (SP_OBJECT_DOCUMENT (use));
+
+	NRRect bbox;
+	NRMatrix i2doc;
+	sp_item_i2doc_affine(ref, &i2doc);
+	sp_item_invoke_bbox(ref, &bbox, &i2doc, TRUE);
+	
+
+	NR::Rect n = bbox;//sp_item_bbox_desktop (ref);//bbox;
+	NR::Rect o = use->original;
+	use->original = n;
+
+	// if dimensions changed, this is not pure move, so quit
+	if (!point_equalp (n.dimensions(), o.dimensions())) 
+		return;
+
+	NR::Point np = (n.midpoint());
+	NR::Point op = (o.midpoint());
+
+	// if midpoint is the same, no need to adjust, so quit
+	if (point_equalp (op, np))
+		return;
+
+// 	g_print ("=====%s, %p\n", sp_repr_attr(SP_OBJECT_REPR (use), "id"), use);
+// 	g_print ("%s: %s/%s\n", name, old_value, new_value);
+// 	mm_print ("o", NR::Matrix (NR::translate (op)));
+// 	mm_print ("n", NR::Matrix (NR::translate (np)));
+// 	mm_print ("moved", NR::Matrix (NR::translate (op - np)));
+
+	NR::Matrix t = sp_use_parent_transform (use);
+	np *= t;
+	op *= t;
+	NR::Matrix affine (NR::translate ((op - np)));
+	//affine = affine.inverse();
+
+//	mm_print ("moved_t", affine);
+
+	SPItem *item = SP_ITEM(use);
+	NRMatrix affine_n = affine;
+	//sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
+	nr_matrix_multiply (&item->transform, &item->transform, &affine_n);
+	sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
+}
+
+static SPReprEventVector use_repr_events = {
+	NULL, /* destroy */
+	NULL, /* add_child */
+	NULL, /* child_added */
+	NULL, /* remove_child */
+	NULL, /* child_removed */
+	NULL, /* change_attr */
+	sp_use_original_attr_changed,
+	NULL, /* change_list */
+	NULL, /* content_changed */
+	NULL, /* change_order */
+	NULL  /* order_changed */
+};
+
+
 static void
 sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use)
 {
@@ -356,14 +514,26 @@ sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use)
 		}
 	}
 
-	//TODO: use this sample to code signal callbacks for adjusting use's transform when the original is moved,
+	// connect signal callbacks for adjusting use's transform when the original is moved,
 	// to implement "stays unmoved" and "preserves relative distance" modes (user-selectable)
-// 	if (old_ref) {
-// 		sp_signal_disconnect_by_data(old_ref, gr);
-// 	}
-// 	if (SP_IS_GRADIENT (ref)) {
-// 		g_signal_connect(G_OBJECT (ref), "modified", G_CALLBACK (gradient_ref_modified), gr);
-// 	}
+ 	if (old_ref && use->repr) {
+		sp_repr_remove_listener_by_data (use->repr, use);
+		sp_repr_unref (use->repr);
+		use->repr = NULL;
+ 	}
+ 	if (SP_IS_ITEM (ref) && SP_OBJECT_REPR (ref)) {
+
+	NRRect bbox;
+	NRMatrix i2doc;
+	sp_item_i2doc_affine(SP_ITEM(ref), &i2doc);
+	sp_item_invoke_bbox(SP_ITEM(ref), &bbox, &i2doc, TRUE);
+	use->original = bbox;
+
+		use->repr = SP_OBJECT_REPR (ref);
+		sp_repr_ref (use->repr);
+		sp_repr_add_listener (use->repr, &use_repr_events, use);
+		sp_repr_synthesize_events (use->repr, &use_repr_events, use);
+ 	}
 }
 
 
@@ -451,12 +621,6 @@ sp_use_modified (SPObject *object, guint flags)
 	}
 }
 
-//void m_print (gchar *say, NRMatrix *m)
-//{ g_print ("%s %g %g %g %g %g %g\n", say, m->c[0], m->c[1], m->c[2], m->c[3], m->c[4], m->c[5]); }
-
-//void mm_print (gchar *say, NR::Matrix m)
-//{ g_print ("%s %g %g %g %g %g %g\n", say, m[0], m[1], m[2], m[3], m[4], m[5]); }
-
 SPItem *
 sp_use_unlink (SPUse *use)
 {
@@ -467,34 +631,10 @@ sp_use_unlink (SPUse *use)
 	SPDocument *document = SP_OBJECT(use)->document;
 
 	//track the ultimate source of a chain of uses
-	SPObject *orig = use->child;
-	GSList *chain = NULL;
-	chain = g_slist_prepend (chain, use);
-	while (SP_IS_USE(orig)) {
-		chain = g_slist_prepend (chain, orig);
-		orig = SP_USE(orig)->child;
-	}
-	chain = g_slist_prepend (chain, orig);
-
+	SPItem *orig = sp_use_root (use);
 
 	//calculate the accummulated transform, starting from the original
-	NR::Matrix t;
-	t.set_identity();
-	for (GSList *i = chain; i != NULL; i = i->next) {
-		SPItem *i_tem = SP_ITEM(i->data);
-
-		// "An additional transformation translate(x,y) is appended to the end (i.e.,
-		// right-side) of the transform attribute on the generated 'g', where x and y
-		// represent the values of the x and y attributes on the 'use' element." - http://www.w3.org/TR/SVG11/struct.html#UseElement
-		if (SP_IS_USE(i_tem)) {
-			SPUse *i_use = SP_USE(i_tem);
-			if ((i_use->x.set && i_use->x.computed != 0) || (i_use->y.set && i_use->y.computed != 0)) {
-				t = t * NR::translate (i_use->x.set ? i_use->x.computed : 0, i_use->y.set ? i_use->y.computed : 0);
-			}
-		}
-
-		t = t * NR::Matrix (&i_tem->transform);
-	}
+	NR::Matrix t = sp_use_complete_transform (use);
  
 	// create copy of the original
 	SPRepr *copy = sp_repr_duplicate (SP_OBJECT_REPR(orig));
