@@ -9,7 +9,7 @@ CC  = gcc
 CXX = g++
 
 
-INC = -I.
+INC = -I. -I..
 
 XSLT_CFLAGS = `pkg-config --cflags libxslt`
 XSLT_LIBS   = `pkg-config --libs libxslt`
