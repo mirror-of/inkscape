@@ -3,6 +3,7 @@
 
 #include <libnr/nr-point-ops.h>
 #include <libnr/nr-dim2.h>
+#include <libnr/nr-macros.h>
 
 namespace NR {
 
@@ -11,7 +12,13 @@ extern double L2(Point const &p);
 extern double LInfty(Point const &p);
 extern double atan2(Point const p);
 
-/** Return NR::rotate(pi/2)*p.  This is much more efficient. */
+inline bool point_equalp(NR::Point const &a, NR::Point const &b, double const eps)
+{
+    return ( NR_DF_TEST_CLOSE(a[X], b[X], eps) &&
+             NR_DF_TEST_CLOSE(a[Y], b[Y], eps) );
+}
+
+/** Returns p * NR::rotate(pi/2), but more efficient. */
 inline Point rot90(Point const &p)
 {
     return Point(-p[Y], p[X]);

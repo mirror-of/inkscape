@@ -1,5 +1,7 @@
 2004-05-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-point-fns.h (point_equalp): New function.
+
 	* src/radial.h: Remove this unused header.
 
 	* src/xml/xml-forward.h: New file.
