@@ -133,10 +133,14 @@ sp_xml_dtoa (gchar *buf, double val, unsigned int tprec, unsigned int fprec, uns
 
 static SPXMLNs *namespaces=NULL;
 
+/*
+ * There are the default XML namespaces to use for the URIs defined
+ * in repr.h
+ */
 static void
 sp_xml_ns_register_defaults ()
 {
-    static SPXMLNs defaults[5];
+    static SPXMLNs defaults[7];
 
     defaults[0].uri = g_quark_from_static_string (SP_SODIPODI_NS_URI);
     defaults[0].prefix = g_quark_from_static_string ("sodipodi");
@@ -156,7 +160,15 @@ sp_xml_ns_register_defaults ()
 
     defaults[4].uri = g_quark_from_static_string (SP_RDF_NS_URI);
     defaults[4].prefix = g_quark_from_static_string ("rdf");
-    defaults[4].next = NULL;
+    defaults[4].next = &defaults[5];
+
+    defaults[5].uri = g_quark_from_static_string (SP_CC_NS_URI);
+    defaults[5].prefix = g_quark_from_static_string ("cc");
+    defaults[5].next = &defaults[6];
+
+    defaults[6].uri = g_quark_from_static_string (SP_DC_NS_URI);
+    defaults[6].prefix = g_quark_from_static_string ("dc");
+    defaults[6].next = NULL;
 
     namespaces = &defaults[0];
 }

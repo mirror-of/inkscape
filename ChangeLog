@@ -2,6 +2,11 @@
 
 	* src/sp-path.cpp: Move some declarations to first use.
 
+2004-06-13  Kees Cook  <kees@outflux.net>
+
+	* src/xml/repr.h, src/xml/repr-utils.cpp: adding additional RDF URIs
+	to the default namespace prefix list.
+
 2004-06-13  MenTaLguY  <mental@rydia.net>
 
 	* src/arc-context.cpp, src/desktop.cpp, src/desktop.h, src/document.cpp,

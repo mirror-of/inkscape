@@ -23,6 +23,8 @@
 #define SP_XLINK_NS_URI "http://www.w3.org/1999/xlink"
 #define SP_SVG_NS_URI "http://www.w3.org/2000/svg"
 #define SP_RDF_NS_URI "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+#define SP_CC_NS_URI "http://web.resource.org/cc/"
+#define SP_DC_NS_URI "http://purl.org/dc/elements/1.1/"
 
 /*
  * NB! Unless explicitly stated all methods are noref/nostrcpy
