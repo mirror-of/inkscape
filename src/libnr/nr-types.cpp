@@ -53,11 +53,3 @@ void NR::Point::normalize() {
 		}
 	}
 }
-
-NR::Point abs(NR::Point const &b) {
-	NR::Point ret;
-	for ( int i = 0 ; i < 2 ; i++ ) {
-		ret[i] = fabs(b[i]);
-	}
-	return ret;
-}
