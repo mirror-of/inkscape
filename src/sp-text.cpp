@@ -2160,21 +2160,14 @@ sp_text_set_shape (SPText *text)
 
 
 
-/**
- *
- */
-static std::vector<NR::Point>
-sp_text_snappoints(SPItem *item)
+static std::vector<NR::Point> sp_text_snappoints(SPItem *item)
 {
-    /* We use corners of item. */
-    /* (An older version of this file added a snappoint at the baseline of the first line.
-       Maybe we should have a snappoint at the baseline of each line?) */
      std::vector<NR::Point> p;
-   
+    
      if (((SPItemClass *) text_parent_class)->snappoints) {
          p = ((SPItemClass *) text_parent_class)->snappoints (item);
      }
-     
+
      return p;
 }
 
