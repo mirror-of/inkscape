@@ -165,7 +165,7 @@ sp_namedview_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	sp_object_read_attr (object, "inkscape:window-height");
 	sp_object_read_attr (object, "inkscape:window-x");
 	sp_object_read_attr (object, "inkscape:window-y");
-	sp_object_read_attr (object, "inkscake:grid-bbox");
+	sp_object_read_attr (object, "inkscape:grid-bbox");
 	sp_object_read_attr (object, "inkscape:guide-bbox");
 	sp_object_read_attr (object, "inkscape:grid-points");
 	sp_object_read_attr (object, "inkscape:guide-points");
@@ -402,28 +402,20 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_GRID_BBOX:
-		if (value) {
-			nv->grid_snapper.setSnapTo(Snapper::BBOX_POINT, sp_str_to_bool(value));
-			sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
-		}
+		nv->grid_snapper.setSnapTo(Snapper::BBOX_POINT, sp_str_to_bool(value));
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_GUIDE_BBOX:
-		if (value) {
-			nv->guide_snapper.setSnapTo(Snapper::BBOX_POINT, sp_str_to_bool(value));
-			sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
-		}
+		nv->guide_snapper.setSnapTo(Snapper::BBOX_POINT, sp_str_to_bool(value));
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_GRID_POINTS:
-		if (value) {
-			nv->grid_snapper.setSnapTo(Snapper::SNAP_POINT, sp_str_to_bool(value));
-			sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
-		}
+		nv->grid_snapper.setSnapTo(Snapper::SNAP_POINT, sp_str_to_bool(value));
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_GUIDE_POINTS:
-		if (value) {
-			nv->guide_snapper.setSnapTo(Snapper::SNAP_POINT, sp_str_to_bool(value));
-			sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
-		}
+		nv->guide_snapper.setSnapTo(Snapper::SNAP_POINT, sp_str_to_bool(value));
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
 		if (((SPObjectClass *) (parent_class))->set)
