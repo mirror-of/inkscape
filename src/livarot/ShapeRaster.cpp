@@ -92,6 +92,7 @@ void              Shape::BeginQuickRaster(float &pos,int &curPt,float /*step*/)
 		pData[i].rx[1]=Round(pts[i].x[1]);
 	}
 	for (int i=0;i<nbAr;i++) {
+	  swrData[i].misc = NULL;
     qrsData[i].ind=-1;
 		eData[i].rdx=pData[aretes[i].en].rx-pData[aretes[i].st].rx;
 	}
