@@ -751,7 +751,7 @@ sp_find_dialog_old (void)
         }
     }
 
-
+    gtk_widget_show((GtkWidget *) dlg);
     gtk_window_present ((GtkWindow *) dlg);
     sp_find_dialog_reset (NULL, G_OBJECT (dlg));
     

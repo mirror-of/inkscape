@@ -535,7 +535,7 @@ void TraceDialogImpl::show()
     Gtk::Dialog::show();
     //sp_transientize((GtkWidget *)gobj());  //Make transient
     raise();
-
+    Gtk::Dialog::present();
 }
 
 void TraceDialogImpl::showF12()

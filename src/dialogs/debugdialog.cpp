@@ -111,11 +111,6 @@ class DebugDialogImpl : public DebugDialog, public Gtk::Dialog
     guint handlerGdkmm;
     guint handlerGtkmm;
 
-
-
-
-
-
 };
 
 
@@ -209,7 +204,7 @@ void DebugDialogImpl::show()
     Gtk::Dialog::show();
     //sp_transientize((GtkWidget *)gobj());  //Make transient
     raise();
-
+    Gtk::Dialog::present();
 }
 
 

@@ -24,6 +24,7 @@
 #include "helper/sp-intl.h"
 #include "inkscape.h"
 #include "desktop.h"
+#include "document.h"
 #include "desktop-handles.h"
 #include "selection.h"
 
@@ -39,10 +40,6 @@ LayerPropertiesDialog::LayerPropertiesDialog()
     g_assert(dlg);
 
     set_title(_("Layer Properties"));
-
-    sp_transientize(dlg);
-
-//    set_size_request(200,200);
 
     Gtk::VBox *mainVBox = get_vbox();
 
@@ -60,6 +57,8 @@ LayerPropertiesDialog::LayerPropertiesDialog()
         .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::apply));
     add_button(_("Close"), Gtk::RESPONSE_CLOSE)->signal_clicked()
         .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::close));
+
+    sp_transientize(dlg);
 
     show_all_children();
 }
@@ -119,6 +118,7 @@ void LayerPropertiesDialog::showInstance()
     LayerPropertiesDialog *dlg = getInstance();
     g_assert(dlg);
     dlg->show();
+    dlg->present();
 }
 
 void
@@ -134,6 +134,10 @@ LayerPropertiesDialog::setLayerName(gchar const * name)
 
     // Set they layer's label to the retrieved text
     layer->setLabel(name);
+
+    // Notify that we've made a change
+    sp_document_done(SP_DT_DOCUMENT(desktop));
+    desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Renamed layer"));
 }
 
 gchar const *

@@ -840,7 +840,6 @@ SelectionVerb::perform (SPAction *action, void * data, void * pdata)
             sp_selected_path_reverse ();
             break;
         case SP_VERB_SELECTION_POTRACE:
-            //Inkscape::Trace::staticShowTraceDialog();
             Inkscape::UI::Dialogs::TraceDialog::showInstance();
             break;
         case SP_VERB_SELECTION_CREATE_BITMAP:

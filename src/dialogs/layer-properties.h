@@ -56,9 +56,7 @@ class LayerPropertiesDialog : public Gtk::Dialog {
 };
 
 } // namespace
-
 } // namespace
-
 } // namespace
 
 
