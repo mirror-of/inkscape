@@ -670,6 +670,11 @@ clonetiler_apply (GtkWidget *widget, void *)
     int alternate_scale = prefs_get_int_attribute ("dialogs.clonetiler", "alternate_scale", 0);
     double rand_scale = prefs_get_double_attribute_limited ("dialogs.clonetiler", "rand_scale", 0, 0, 1);
 
+    double d_opacity_per_y = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_opacity_per_y", 0, 0, 1);
+    double d_opacity_per_x = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_opacity_per_x", 0, 0, 1);
+    int alternate_opacity = prefs_get_int_attribute ("dialogs.clonetiler", "alternate_opacity", 0);
+    double rand_opacity = prefs_get_double_attribute_limited ("dialogs.clonetiler", "rand_opacity", 0, 0, 1);
+
     int xmax = prefs_get_int_attribute ("dialogs.clonetiler", "xmax", 2);
     int ymax = prefs_get_int_attribute ("dialogs.clonetiler", "ymax", 2);
 
@@ -729,6 +734,14 @@ clonetiler_apply (GtkWidget *widget, void *)
                 sp_repr_set_attr (clone, "transform", affinestr);
             } else {
                 sp_repr_set_attr (clone, "transform", NULL);
+            }
+
+            int eff_x = (alternate_opacity? (x%2) : (x));
+            int eff_y = (alternate_opacity? (y%2) : (y));
+            double d_opacity = 1 - (d_opacity_per_x * eff_x + d_opacity_per_y * eff_y + rand_opacity * g_random_double_range (-1, 1));
+            d_opacity = CLAMP (d_opacity, 0, 1);
+            if (d_opacity < 1.0) {
+                sp_repr_set_double (clone, "opacity", d_opacity);
             }
 
             // add the new clone to the top of the original's parent
@@ -1136,6 +1149,57 @@ clonetiler_dialog (void)
 
             {
                 GtkWidget *l = clonetiler_percent_spinbox (_("Randomize:"), tt, _("How much to randomize tile rotation"),"rand_rot", true);
+                gtk_container_set_border_width (GTK_CONTAINER (l), 4);
+                gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
+            }
+        }
+
+
+        {
+            GtkWidget *vb = clonetiler_new_tab (nb, _("Opacity"));
+
+            GtkWidget *table = gtk_hbox_new (TRUE, 4);
+            gtk_container_set_border_width (GTK_CONTAINER (table), 4);
+            gtk_box_pack_start (GTK_BOX (vb), table, FALSE, FALSE, 0);
+
+            {
+                GtkWidget *f = gtk_frame_new (_("Per row:"));
+                gtk_box_pack_start (GTK_BOX (table), f, TRUE, TRUE, 0);
+
+                GtkWidget *fvbox = gtk_vbox_new (FALSE, 0);
+                gtk_container_set_border_width (GTK_CONTAINER (fvbox), 4);
+                gtk_container_add(GTK_CONTAINER(f), fvbox);
+
+                {
+                    GtkWidget *l = clonetiler_percent_spinbox (_("Dissolve:"), tt, _("Decrease opacity by this percentage for each row"), "d_opacity_per_y", true);
+                    gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
+                }
+            }
+
+            {
+                GtkWidget *f = gtk_frame_new (_("Per column:"));
+                gtk_box_pack_start (GTK_BOX (table), f, TRUE, TRUE, 0);
+
+
+                GtkWidget *fvbox = gtk_vbox_new (FALSE, 0);
+                gtk_container_set_border_width (GTK_CONTAINER (fvbox), 4);
+                gtk_container_add(GTK_CONTAINER(f), fvbox);
+
+                {
+                    GtkWidget *l = clonetiler_percent_spinbox (_("Dissolve:"), tt, _("Decrease opacity by this percentage for each column"), "d_opacity_per_x", true);
+                    gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
+                }
+            }
+
+
+            {
+                GtkWidget *l = clonetiler_checkbox (_("Alternate sign"), tt, _("Alternate the sign of opacity changes for each row or column"), "alternate_opacity");
+                gtk_container_set_border_width (GTK_CONTAINER (l), 4);
+                gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
+            }
+
+            {
+                GtkWidget *l = clonetiler_percent_spinbox (_("Randomize:"), tt, _("How much to randomize tile opacity"),"rand_opacity", true);
                 gtk_container_set_border_width (GTK_CONTAINER (l), 4);
                 gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
             }
