@@ -471,7 +471,7 @@ sp_canvas_item_grab (SPCanvasItem *item, guint event_mask, GdkCursor *cursor, gu
 	/* fixme: But Canvas actualle does get key events, so all we need is routing these here */
 	gdk_pointer_grab (SP_CANVAS_WINDOW (item->canvas), FALSE,
 			  (GdkEventMask)(event_mask & (~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK))),
-			  NULL, cursor, etime);
+			  NULL, cursor, etime);   
 
 	item->canvas->grabbed_item = item;
 	item->canvas->grabbed_event_mask = event_mask;

@@ -147,10 +147,10 @@ private:
   raster_data;
   typedef struct quick_raster_data
   {
-    double x;			// x-position on the sweepline
-    int bord;			// index of the edge
-    int ind;
-    bool process;
+    double x;			    // x-position on the sweepline
+    int    bord;			// index of the edge
+    int    ind;       // index of qrsData elem for edge (ie inverse of the bord)
+    int    next,prev; // dbl linkage
   }
   quick_raster_data;
   typedef struct point_data
@@ -225,6 +225,7 @@ public:
 
   //private:
   int nbQRas;
+  int firstQRas,lastQRas;
   quick_raster_data *qrsData;
   // these ones are dynamically allocated
   int nbChgt, maxChgt;
@@ -398,6 +399,7 @@ public:
   int MakeOffset (Shape * of, double dec, JoinType join, double miter);
   
   bool DistanceLE(NR::Point thePt, double const max_dist);
+  double  Distance(NR::Point thePt);
   int               PtWinding (const NR::Point px) const ; // plus rapide
   int               Winding (const NR::Point px) const ;
   
@@ -553,6 +555,20 @@ private:
 			   Path * dest, int inBezier, int nbInterm,
 			   Path * from, int p, double ts, double te);
 
+  int              QuickRasterChgEdge(int oBord,int nbord,double x);
+  int              QuickRasterAddEdge(int bord,double x,int guess);
+  void             QuickRasterSubEdge(int bord);
+  void             QuickRasterSwapEdge(int a,int b);
+  void             QuickRasterSort(void);
+  static int       CmpQRs(const void * p1, const void * p2) {
+		quick_raster_data* d1=(quick_raster_data*)p1;
+		quick_raster_data* d2=(quick_raster_data*)p2;
+		if ( fabs(d1->x-d2->x) < 0.00001 ) {
+			return 0;
+		}
+		return (( d1->x < d2->x )?-1:1);
+  };
+  
 };
 
 #endif

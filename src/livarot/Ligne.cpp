@@ -1520,13 +1520,13 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
     // special case for 4*4 supersampling, to avoid a few loops
 		uint32_t  c_full[4];
 		c_full[0]=as[0]->fullB[(curMin-theSt)>>3] | as[0]->partB[(curMin-theSt)>>3];
-		c_full[0]<<=4*((curMin-theSt)&0x00000007);
+		c_full[0]<<=4*((curMin-theSt)&7);
 		c_full[1]=as[1]->fullB[(curMin-theSt)>>3] | as[1]->partB[(curMin-theSt)>>3];
-		c_full[1]<<=4*((curMin-theSt)&0x00000007);
+		c_full[1]<<=4*((curMin-theSt)&7);
 		c_full[2]=as[2]->fullB[(curMin-theSt)>>3] | as[2]->partB[(curMin-theSt)>>3];
-		c_full[2]<<=4*((curMin-theSt)&0x00000007);
+		c_full[2]<<=4*((curMin-theSt)&7);
 		c_full[3]=as[3]->fullB[(curMin-theSt)>>3] | as[3]->partB[(curMin-theSt)>>3];
-		c_full[3]<<=4*((curMin-theSt)&0x00000007);
+		c_full[3]<<=4*((curMin-theSt)&7);
 
 		spA=1.0/(4*4);
 		for (int i=curMin;i<=curMax;i++) {
@@ -1536,7 +1536,7 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
 					AddRun(lastStart,i,((float)lastVal)*spA,((float)lastVal)*spA);
 				}
 				startExists=false;
-				i=theSt+(((i-theSt)&0xFFFFFFF8)+7);
+				i=theSt+(((i-theSt)&(~7))+7);
 			} else if ( c_full[0] == 0xFFFFFFFF && c_full[1] == 0xFFFFFFFF &&
 							 c_full[2] == 0xFFFFFFFF && c_full[3] == 0xFFFFFFFF ) {
 				if ( startExists ) {
@@ -1550,7 +1550,7 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
 				}
 				lastVal=4*4;
 				startExists=true;
-				i=theSt+(((i-theSt)&0xFFFFFFF8)+7);
+				i=theSt+(((i-theSt)&(~7))+7);
 			} else {
 				nbBit+=masks[c_full[0]>>28];
 				nbBit+=masks[c_full[1]>>28];
@@ -1578,7 +1578,7 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
 					startExists=false;
 				}
 			}
-			int chg=(i+1-theSt)&0x00000007;
+			int chg=(i+1-theSt)&7;
 			if ( chg == 0 ) {
 				c_full[0]=as[0]->fullB[(i+1-theSt)>>3] | as[0]->partB[(i+1-theSt)>>3];
 				c_full[1]=as[1]->fullB[(i+1-theSt)>>3] | as[1]->partB[(i+1-theSt)>>3];
@@ -1599,9 +1599,9 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
     // start by putting the bits of the nbSub BitLignes in as[] in their respective c_full
 		for (int i=0;i<nbSub;i++) {
 			c_full[i]=as[i]->fullB[(curMin-theSt)>>3] | as[i]->partB[(curMin-theSt)>>3]; // fullB and partB treated equally
-			c_full[i]<<=4*((curMin-theSt)&0x00000007);
+			c_full[i]<<=4*((curMin-theSt)&7);
 			/*		c_part[i]=as[i]->partB[(curMin-theSt)>>3];
-			c_part[i]<<=4*((curMin-theSt)&0x00000007);*/
+			c_part[i]<<=4*((curMin-theSt)&7);*/
 		}
 
 		spA=1.0/(4*nbSub); // contribution to the alpha value of a single bit of the supersampled data
@@ -1619,7 +1619,7 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
 					AddRun(lastStart,i,((float)lastVal)*spA,((float)lastVal)*spA);
 				}
 				startExists=false;
-				i=theSt+(((i-theSt)&0xFFFFFFF8)+7);
+				i=theSt+(((i-theSt)&(~7))+7);
 			} else {
 				for (int j=0;j<nbSub;j++) if ( c_full[j] != 0xFFFFFFFF ) {allFull=false;break;}
 				if ( allFull ) {
@@ -1635,7 +1635,7 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
 					}
 					lastVal=4*nbSub;
 					startExists=true;
-					i=theSt+(((i-theSt)&0xFFFFFFF8)+7);
+					i=theSt+(((i-theSt)&(~7))+7);
 				} else {
           // alpha values will be between 0 and 1, so we have more work to do
           // compute how many bit this pixel holds
@@ -1670,7 +1670,7 @@ void             IntLigne::Copy(int nbSub,BitLigne* *as)
 				}
 			}
         // move to the right: shift bits in the c_full[], and if we shifted everything, load the next c_full[]
-			int chg=(i+1-theSt)&0x00000007;
+			int chg=(i+1-theSt)&7;
 			if ( chg == 0 ) {
 				for (int j=0;j<nbSub;j++) {
 					c_full[j]=as[j]->fullB[(i+1-theSt)>>3] | as[j]->partB[(i+1-theSt)>>3];

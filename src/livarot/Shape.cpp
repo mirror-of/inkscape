@@ -2219,60 +2219,103 @@ Shape::GetFlag (int nFlag)
 }
 
 /** Returns true iff the L2 distance from \a thePt to this shape is <= \a max_l2.
- *  Distance = the min of distance to its points and distance to its edges.
- *  Points without edges are considered, which is maybe unwanted...
- */
+*  Distance = the min of distance to its points and distance to its edges.
+*  Points without edges are considered, which is maybe unwanted...
+*/
 bool Shape::DistanceLE(NR::Point const thePt, double const max_l2)
 {
   if ( nbPt <= 0 ) {
     return false;
   }
-
+  
   /* TODO: Consider using bbox to return early, perhaps conditional on nbPt or nbAr. */
-
+  
   /* Test thePt against pts[i].x for all i. */
   {
     /* effic: In one test case (scribbling with the freehand tool to create a small number of long
-     * path elements), changing from a Distance method to a DistanceLE method reduced this
-     * function's CPU time from about 21% of total inkscape CPU time to 14-15% of total inkscape
-     * CPU time, due to allowing early termination.  I don't know how much the L1 test helps, it
-     * may well be a case of premature optimization.  Consider testing dot(offset, offset)
-     * instead.
-     */
+    * path elements), changing from a Distance method to a DistanceLE method reduced this
+* function's CPU time from about 21% of total inkscape CPU time to 14-15% of total inkscape
+* CPU time, due to allowing early termination.  I don't know how much the L1 test helps, it
+* may well be a case of premature optimization.  Consider testing dot(offset, offset)
+* instead.
+*/
     double const max_l1 = max_l2 * M_SQRT2;
     for (int i = 0; i < nbPt; i++) {
       NR::Point const offset( thePt - pts[i].x );
       double const l1 = NR::L1(offset);
       if ( ( l1 <= max_l2 )
-	   || ( ( l1 <= max_l1 )
-		&& ( NR::L2(offset) <= max_l2 ) ) )
-	{
-	  return true;
-	}
+           || ( ( l1 <= max_l1 )
+                && ( NR::L2(offset) <= max_l2 ) ) )
+      {
+        return true;
+      }
     }
   }
-
+  
   for (int i = 0; i < nbAr; i++) {
     if ( aretes[i].st >= 0 &&
-	 aretes[i].en >= 0 ) {
+         aretes[i].en >= 0 ) {
       NR::Point const st(pts[aretes[i].st].x);
       NR::Point const en(pts[aretes[i].en].x);
       NR::Point const d( thePt - st );
       NR::Point const e( en - st );
       double const el = NR::L2(e);
       if ( el > 0.001 ) {
-	NR::Point const e_unit( e / el );
+        NR::Point const e_unit( e / el );
         double const npr = NR::dot(d, e_unit);
         if ( npr > 0 && npr < el ) {
-	  double const nl = fabs( NR::cross(d, e_unit) );
+          double const nl = fabs( NR::cross(d, e_unit) );
           if ( nl <= max_l2 ) {
-	    return true;
+            return true;
           }
         }
       }
     }
   }
   return false;
+}
+/** Returns true iff the L2 distance from \a thePt to this shape is <= \a max_l2.
+*  Distance = the min of distance to its points and distance to its edges.
+*  Points without edges are considered, which is maybe unwanted...
+*/
+double Shape::Distance(NR::Point const thePt)
+{
+  if ( nbPt <= 0 ) {
+    return 0.0;
+  }
+  
+  double bdot=NR::dot(thePt-pts[0].x,thePt-pts[0].x);
+  {
+    for (int i = 0; i < nbPt; i++) {
+      NR::Point const offset( thePt - pts[i].x );
+      double ndot=NR::dot(offset,offset);
+      if ( ndot < bdot ) {
+        bdot=ndot;
+      }
+    }
+  }
+  
+  for (int i = 0; i < nbAr; i++) {
+    if ( aretes[i].st >= 0 &&
+         aretes[i].en >= 0 ) {
+      NR::Point const st(pts[aretes[i].st].x);
+      NR::Point const en(pts[aretes[i].en].x);
+      NR::Point const d( thePt - st );
+      NR::Point const e( en - st );
+      double const el = NR::dot(e,e);
+      if ( el > 0.001 ) {
+        double const npr = NR::dot(d, e);
+        if ( npr > 0 && npr < el ) {
+          double const nl = fabs( NR::cross(d, e) );
+          double ndot=nl*nl/el;
+          if ( ndot < bdot ) {
+            bdot=ndot;
+          }
+        }
+      }
+    }
+  }
+  return sqrt(bdot);
 }
 
 // winding of a point with respect to the Shape

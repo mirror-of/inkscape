@@ -21,11 +21,12 @@ BitLigne::BitLigne(int ist,int ien,float iScale)
 	stBit=(int)floorf(((float)st)*invScale); // round to pixel boundaries in the canvas
 	enBit=(int)ceilf(((float)en)*invScale);
 	int  nbBit=enBit-stBit;
-	if ( nbBit&0x0000001F ) {
+	if ( nbBit&31 ) {
 		nbInt=nbBit/32+1;
 	} else {
 		nbInt=nbBit/32;
 	}
+  nbInt+=1;
 	fullB=(uint32_t*)malloc(nbInt*sizeof(uint32_t));
 	partB=(uint32_t*)malloc(nbInt*sizeof(uint32_t));
 
@@ -41,7 +42,7 @@ BitLigne::~BitLigne(void)
 void             BitLigne::Reset(void)
 {
 	curMin=en;
-	curMax=st;
+	curMax=st+1;
 	memset(fullB,0,nbInt*sizeof(uint32_t));
 	memset(partB,0,nbInt*sizeof(uint32_t));
 }
@@ -60,7 +61,7 @@ int              BitLigne::AddBord(float spos,float epos,bool full)
 	lpBit=(int)(ceilf(invScale*epos));
   
   // update curMin and curMax to reflect the start and end pixel that need to be updated on the canvas
-	if ( spos < curMin ) curMin=(int)spos;
+	if ( floorf(spos) < curMin ) curMin=(int)floorf(spos);
 	if ( ceilf(epos) > curMax ) curMax=(int)ceilf(epos);
 
   // clamp to the line
@@ -85,10 +86,10 @@ int              BitLigne::AddBord(float spos,float epos,bool full)
 	int   fpPos=fpBit>>5;
 	int   lpPos=lpBit>>5;
   // get bit numbers in the last and first changed elements of the fullB and partB arrays
-	int   ffRem=ffBit&0x0000001F;
-	int   lfRem=lfBit&0x0000001F;
-	int   fpRem=fpBit&0x0000001F;
-	int   lpRem=lpBit&0x0000001F;
+	int   ffRem=ffBit&31;
+	int   lfRem=lfBit&31;
+	int   fpRem=fpBit&31;
+	int   lpRem=lpBit&31;
   // add the coverage
   // note that the "full" bits are always a subset of the "not empty" bits, ie of the partial bits
   // the function is a bit lame: since there is at most one bit that is partial but not full, or no full bit,
@@ -96,20 +97,16 @@ int              BitLigne::AddBord(float spos,float epos,bool full)
 	if ( fpPos == lpPos ) { // only one element of the arrays is modified
     // compute the vector of changed bits in the element
 		uint32_t  add=0xFFFFFFFF;
-		add>>=32-lpRem;
-		add<<=32-lpRem;
-		add<<=fpRem;
-		add>>=fpRem;
+		if ( lpRem < 32 ) {add>>=32-lpRem;add<<=32-lpRem; }
+		if ( fpRem > 0) {add<<=fpRem;add>>=fpRem;}
     // and put it in the line
     fullB[fpPos]&=~(add); // partial is exclusive from full, so partial bits are removed from fullB
     partB[fpPos]|=add;    // and added to partB
     if ( full ) { // if the coverage is full, add the vector of full bits
       if ( ffBit <= lfBit ) {
         add=0xFFFFFFFF;
-        add>>=32-lfRem;
-        add<<=32-lfRem;
-        add<<=ffRem;
-        add>>=ffRem;
+        if ( lfRem < 32 ) {add>>=32-lfRem;add<<=32-lfRem;}
+        if ( ffRem > 0 ) {add<<=ffRem;add>>=ffRem;}
         fullB[ffPos]|=add;
         partB[ffPos]&=~(add);
       }
@@ -117,46 +114,40 @@ int              BitLigne::AddBord(float spos,float epos,bool full)
 	} else {
     // first and last elements are differents, so add what appropriate to each
 		uint32_t  add=0xFFFFFFFF;
-		add<<=fpRem;
-		add>>=fpRem;
+		if ( fpRem > 0 ) {add<<=fpRem;add>>=fpRem;}
     fullB[fpPos]&=~(add);
     partB[fpPos]|=add;
-		
+
 		add=0xFFFFFFFF;
-		add>>=32-lpRem;
-		add<<=32-lpRem;
+		if ( lpRem < 32 ) {add>>=32-lpRem;add<<=32-lpRem; }
     fullB[lpPos]&=~(add);
     partB[lpPos]|=add;
-    
+
     // and fill what's in between with partial bits
-    memset(fullB+(fpPos+1),0x00,(lpPos-fpPos-1)*sizeof(uint32_t));
-    memset(partB+(fpPos+1),0xFF,(lpPos-fpPos-1)*sizeof(uint32_t));
+    if ( lpPos > fpPos+1 ) memset(fullB+(fpPos+1),0x00,(lpPos-fpPos-1)*sizeof(uint32_t));
+    if ( lpPos > fpPos+1 ) memset(partB+(fpPos+1),0xFF,(lpPos-fpPos-1)*sizeof(uint32_t));
 
 		if ( full ) { // is the coverage is full, do your magic
       if ( ffBit <= lfBit ) {
         if ( ffPos == lfPos ) {
           add=0xFFFFFFFF;
-          add>>=32-lfRem;
-          add<<=32-lfRem;
-          add<<=ffRem;
-          add>>=ffRem;
+          if ( lfRem < 32 ) {add>>=32-lfRem;add<<=32-lfRem;}
+          if ( ffRem > 0 ) {add<<=ffRem;add>>=ffRem;}
           fullB[ffPos]|=add;
           partB[ffPos]&=~(add);
         } else {
           add=0xFFFFFFFF;
-          add<<=ffRem;
-          add>>=ffRem;
+          if ( ffRem > 0 ) {add<<=ffRem;add>>=ffRem;}
           fullB[ffPos]|=add;
           partB[ffPos]&=~add;
           
           add=0xFFFFFFFF;
-          add>>=32-lfRem;
-          add<<=32-lfRem;
+          if ( lfRem < 32 ) {add>>=32-lfRem;add<<=32-lfRem;}
           fullB[lfPos]|=add;
           partB[lfPos]&=~add;
           
-          memset(fullB+(ffPos+1),0xFF,(lfPos-ffPos-1)*sizeof(uint32_t));
-          memset(partB+(ffPos+1),0x00,(lfPos-ffPos-1)*sizeof(uint32_t));
+          if ( lfPos > ffPos+1 ) memset(fullB+(ffPos+1),0xFF,(lfPos-ffPos-1)*sizeof(uint32_t));
+          if ( lfPos > ffPos+1 ) memset(partB+(ffPos+1),0x00,(lfPos-ffPos-1)*sizeof(uint32_t));
         }
       }
     }

@@ -1242,8 +1242,8 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
   delete theI;
   delete theIL;
   
-/*  // version par BitLigne
-  int    curPt;
+  /*  // version par BitLigne
+    int    curPt;
   float  curY;
   theS->BeginRaster(curY,curPt,1.0);
   
@@ -1281,6 +1281,48 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
     ligStart=((uint32_t*)(((char*)ligStart)+m.rs));
   }
   theS->EndRaster();
+  for (int i=0;i<4;i++) delete theI[i];
+  delete theIL;*/
+  
+/*  // version par BitLigne directe
+  int    curPt;
+  float  curY;
+  theS->BeginQuickRaster(curY,curPt,1.0);
+  
+  BitLigne*   theI[4];
+  for (int i=0;i<4;i++) theI[i]=new BitLigne(il,ir);
+  IntLigne*   theIL=new IntLigne();
+  
+  theS->QuickScan(curY,curPt,(float)(it),true,0.25);
+  
+  char* mdata=(char*)m.data.px;
+  if ( m.size == NR_PIXBLOCK_SIZE_TINY ) mdata=(char*)m.data.p;
+  uint32_t* ligStart=((uint32_t*)(mdata+((il-m.area.x0)+m.rs*(it-m.area.y0))));
+  for (int y=it;y<ib;y++) {
+    for (int i=0;i<4;i++) theI[i]->Reset();
+    if ( y&0x00000003 ) {
+      theS->QuickScan(curY,curPt,((float)(y+0.25)),fill_oddEven,theI[0],false,0.25);
+      theS->QuickScan(curY,curPt,((float)(y+0.5)),fill_oddEven,theI[1],false,0.25);
+      theS->QuickScan(curY,curPt,((float)(y+0.75)),fill_oddEven,theI[2],false,0.25);
+      theS->QuickScan(curY,curPt,((float)(y+1.0)),fill_oddEven,theI[3],false,0.25);
+    } else {
+      theS->QuickScan(curY,curPt,((float)(y+0.25)),fill_oddEven,theI[0],true,0.25);
+      theS->QuickScan(curY,curPt,((float)(y+0.5)),fill_oddEven,theI[1],true,0.25);
+      theS->QuickScan(curY,curPt,((float)(y+0.75)),fill_oddEven,theI[2],true,0.25);
+      theS->QuickScan(curY,curPt,((float)(y+1.0)),fill_oddEven,theI[3],true,0.25);
+    }
+    theIL->Copy(4,theI);
+    
+    raster_info  dest;
+    dest.startPix=il;
+    dest.endPix=ir;
+    dest.sth=il;
+    dest.stv=y;
+    dest.buffer=ligStart;
+    theIL->Raster(dest,NULL,shape_run_A8_OR);
+    ligStart=((uint32_t*)(((char*)ligStart)+m.rs));
+  }
+  theS->EndQuickRaster();
   for (int i=0;i<4;i++) delete theI[i];
   delete theIL;*/
 }

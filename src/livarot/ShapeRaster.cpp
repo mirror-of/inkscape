@@ -76,6 +76,7 @@ void              Shape::BeginQuickRaster(float &pos,int &curPt,float /*step*/)
 	MakeRasterData(true);
 	MakeQuickRasterData(true);
 	nbQRas=0;
+  firstQRas=lastQRas=-1;
 	MakePointData(true);
 	MakeEdgeData(true);
 
@@ -334,19 +335,16 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			if ( nbDn <= 0 ) {
 				upNo=-1;
 			}
-/*			if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+			if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
 				upNo=-1;
-			}*/
+			}
 
 			if ( nbUp > 0 ) {
 				cb=pts[nPt].firstA;
 				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != upNo ) {
-							int ind=qrsData[cb].ind;
-							qrsData[ind].bord=qrsData[--nbQRas].bord;
-							if ( nbQRas > 0 ) qrsData[qrsData[ind].bord].ind=ind;
-
+              QuickRasterSubEdge(cb);
 							DestroyEdge(cb,to,step);
 						}
 					}
@@ -355,18 +353,14 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			}
 
 			// traitement du "upNo devient dnNo"
+      int  ins_guess=-1;
 			if ( dnNo >= 0 ) {
 				if ( upNo >= 0 ) {
-					int ind=qrsData[upNo].ind;
-					qrsData[ind].bord=dnNo;
-					qrsData[dnNo].ind=ind;
+          ins_guess=QuickRasterChgEdge(upNo,dnNo,pts[nPt].x[0]);
 					DestroyEdge(upNo,to,step);
-
 					CreateEdge(dnNo,to,step);
 				} else {
-					int ind=nbQRas++;
-					qrsData[ind].bord=dnNo;
-					qrsData[dnNo].ind=ind;
+          ins_guess=QuickRasterAddEdge(dnNo,pts[nPt].x[0],ins_guess);
 					CreateEdge(dnNo,to,step);
 				}
 			}
@@ -376,9 +370,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != dnNo ) {
-							int ind=nbQRas++;
-							qrsData[ind].bord=cb;
-							qrsData[cb].ind=ind;
+              ins_guess=QuickRasterAddEdge(cb,pts[nPt].x[0],ins_guess);
 							CreateEdge(cb,to,step);
 						}
 					}
@@ -413,18 +405,16 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			if ( nbDn <= 0 ) {
 				upNo=-1;
 			}
-/*			if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+			if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
 				upNo=-1;
-			}*/
+			}
 
 			if ( nbUp > 0 ) {
 				cb=pts[nPt].firstA;
 				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != upNo ) {
-							int ind=qrsData[cb].ind;
-							qrsData[ind].bord=qrsData[--nbQRas].bord;
-							if ( nbQRas > 0 ) qrsData[qrsData[ind].bord].ind=ind;
+              QuickRasterSubEdge(cb);
 							DestroyEdge(cb,to,step);
 						}
 					}
@@ -433,18 +423,15 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			}
 
 			// traitement du "upNo devient dnNo"
+      int  ins_guess=-1;
 			if ( dnNo >= 0 ) {
 				if ( upNo >= 0 ) {
-					int ind=qrsData[upNo].ind;
-					qrsData[ind].bord=dnNo;
-					qrsData[dnNo].ind=ind;
+          ins_guess=QuickRasterChgEdge(upNo,dnNo,pts[nPt].x[0]);
 					DestroyEdge(upNo,to,step);
 
 					CreateEdge(dnNo,to,step);
 				} else {
-					int ind=nbQRas++;
-					qrsData[ind].bord=dnNo;
-					qrsData[dnNo].ind=ind;
+          ins_guess=QuickRasterAddEdge(dnNo,pts[nPt].x[0],ins_guess);
 					CreateEdge(dnNo,to,step);
 				}
 			}
@@ -454,9 +441,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != dnNo ) {
-							int ind=nbQRas++;
-							qrsData[ind].bord=cb;
-							qrsData[cb].ind=ind;
+              ins_guess=QuickRasterAddEdge(cb,pts[nPt].x[0],ins_guess);
 							CreateEdge(cb,to,step);
 						}
 					}
@@ -472,11 +457,185 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 		AvanceEdge(cb,to,true,step);
 		qrsData[i].x=swrData[cb].curX;
 	}
-	if ( nbQRas > 1 && doSort) {
+  QuickRasterSort();
+/*	if ( nbQRas > 1 && doSort) {
 		qsort(qrsData,nbQRas,sizeof(quick_raster_data),CmpQuickRaster);
 		for (int i=0;i<nbQRas;i++) qrsData[qrsData[i].bord].ind=i;
-	}
+	}*/
 }
+int               Shape::QuickRasterChgEdge(int oBord,int nBord,double x)
+{
+  if ( oBord == nBord ) {
+//    printf("ob == nb \n");
+    return -1;
+  }
+  int no=qrsData[oBord].ind;
+  if ( no >= 0 ) {
+    qrsData[no].bord=nBord;
+    qrsData[no].x=x;
+    qrsData[oBord].ind=-1;
+    qrsData[nBord].ind=no;
+  } else {
+//    printf("chg: no < 0\n");
+  }
+  return no;
+}
+int               Shape::QuickRasterAddEdge(int bord,double x,int guess)
+{
+/*  int ind=nbQRas++;
+  qrsData[ind].bord=dnNo;
+  qrsData[dnNo].ind=ind;*/
+
+  int no=nbQRas++;
+  qrsData[no].bord=bord;
+  qrsData[no].x=x;
+  qrsData[bord].ind=no;
+  qrsData[no].prev=-1;
+  qrsData[no].next=-1;
+  
+  if ( no < 0 || no >= nbQRas ) return -1;
+  
+  if ( firstQRas < 0 ) {
+    firstQRas=lastQRas=no;
+    qrsData[no].prev=-1;
+    qrsData[no].next=-1;
+    return no;
+  }
+  if ( guess < 0 || guess >= nbQRas ) {
+    int c=firstQRas;
+    while ( c >= 0 && c < nbQRas && CmpQRs(qrsData+c,qrsData+no) < 0 ) c=qrsData[c].next;
+    if ( c < 0 || c >= nbQRas ) {
+      qrsData[no].prev=lastQRas;
+      qrsData[lastQRas].next=no;
+      lastQRas=no;
+    } else {
+      qrsData[no].prev=qrsData[c].prev;
+      if ( qrsData[no].prev >= 0 ) {
+        qrsData[qrsData[no].prev].next=no;
+      } else {
+        firstQRas=no;
+      }
+      qrsData[no].next=c;
+      qrsData[c].prev=no;
+    }
+	} else {
+		int c=guess;
+    int stTst=CmpQRs(qrsData+c,qrsData+no);
+		if ( stTst == 0 ) {
+			qrsData[no].prev=qrsData[c].prev;
+			if ( qrsData[no].prev >= 0 ) {
+				qrsData[qrsData[no].prev].next=no;
+			} else {
+				firstQRas=no;
+			}
+			qrsData[no].next=c;
+			qrsData[c].prev=no;
+		} else if ( stTst > 0 ) {
+			while ( c >= 0 && c < nbQRas && CmpQRs(qrsData+c,qrsData+no) > 0 ) c=qrsData[c].prev;
+			if ( c < 0 || c >= nbQRas ) {
+				qrsData[no].next=firstQRas;
+				qrsData[firstQRas].prev=no; // firstQRas != -1
+				firstQRas=no;
+			} else {
+				qrsData[no].next=qrsData[c].next;
+				if ( qrsData[no].next >= 0 ) {
+					qrsData[qrsData[no].next].prev=no;
+				} else {
+					lastQRas=no;
+				}
+				qrsData[no].prev=c;
+				qrsData[c].next=no;
+			}
+		} else {
+			while ( c >= 0 && c < nbQRas && CmpQRs(qrsData+c,qrsData+no) < 0 ) c=qrsData[c].next;
+			if ( c < 0 || c >= nbQRas ) {
+				qrsData[no].prev=lastQRas;
+				qrsData[lastQRas].next=no;
+				lastQRas=no;
+			} else {
+				qrsData[no].prev=qrsData[c].prev;
+				if ( qrsData[no].prev >= 0 ) {
+					qrsData[qrsData[no].prev].next=no;
+				} else {
+					firstQRas=no;
+				}
+				qrsData[no].next=c;
+				qrsData[c].prev=no;
+			}
+		}
+	}
+  
+  return no;
+}
+void              Shape::QuickRasterSubEdge(int bord)
+{
+/*  int ind=qrsData[cb].ind;
+  qrsData[ind].bord=qrsData[--nbQRas].bord;
+  if ( nbQRas > 0 ) qrsData[qrsData[ind].bord].ind=ind;*/
+
+  int no=qrsData[bord].ind;
+  if ( no < 0 || no >= nbQRas ) {
+//    printf("sub: no< 0\n");
+    return; // euuhHHH
+  }
+  if ( qrsData[no].prev >= 0 ) qrsData[qrsData[no].prev].next=qrsData[no].next;
+  if ( qrsData[no].next >= 0 ) qrsData[qrsData[no].next].prev=qrsData[no].prev;
+  if ( no == firstQRas ) firstQRas=qrsData[no].next;
+  if ( no == lastQRas ) lastQRas=qrsData[no].prev;
+  qrsData[no].prev=qrsData[no].next=-1;
+  
+  int savInd=qrsData[no].ind;
+  qrsData[no]=qrsData[--nbQRas];
+  qrsData[no].ind=savInd;
+  qrsData[qrsData[no].bord].ind=no;
+  
+  if ( nbQRas > 0 ) {
+    if ( firstQRas == nbQRas ) firstQRas=no;
+    if ( lastQRas == nbQRas ) lastQRas=no;
+    if ( qrsData[no].prev >= 0 ) qrsData[qrsData[no].prev].next=no;
+    if ( qrsData[no].next >= 0 ) qrsData[qrsData[no].next].prev=no;
+  }  
+}
+void              Shape::QuickRasterSwapEdge(int a,int b)
+{
+  if ( a == b ) {
+//    printf("swap: a==b\n");
+    return;
+  }
+  int na=qrsData[a].ind;
+  int nb=qrsData[b].ind;
+  if ( na < 0 || na >= nbQRas || nb < 0 || nb >= nbQRas ) return; // errrm
+  
+  qrsData[na].bord=b;
+  qrsData[nb].bord=a;
+  qrsData[a].ind=nb;
+  qrsData[b].ind=na;
+  double swd=qrsData[na].x;qrsData[na].x=qrsData[nb].x;qrsData[nb].x=swd;  
+}
+void              Shape::QuickRasterSort(void)
+{
+  if ( nbQRas <= 1 ) return;
+  int    cb=qrsData[firstQRas].bord;
+  while ( cb >= 0 ) {
+    int bI=qrsData[cb].ind;
+    int nI=qrsData[bI].next;
+    if ( nI < 0 ) break;
+    int ncb=qrsData[nI].bord;
+    if ( CmpQRs(qrsData+nI,qrsData+bI) < 0 ) {
+      QuickRasterSwapEdge(cb,ncb);
+      int pI=qrsData[bI].prev; // ca reste bI, puisqu'on a juste echange les contenus
+      if ( pI < 0 ) {
+        cb=ncb; // en fait inutile; mais bon...
+      } else {
+        int pcb=qrsData[pI].bord;
+        cb=pcb;
+      }
+    } else {
+      cb=ncb;
+    }
+  }
+}
+
 // scan and compute coverage, FloatLigne version
 // coverage of the line is bult in 2 parts: first a set of rectangles of height the height of the line (here: "step")
 // one rectangle for each portion of the sweepline that is in the polygon at the beginning of the scan. then a set ot trapezoids
@@ -1045,9 +1204,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != upNo ) {
-							int ind=qrsData[cb].ind;
-							qrsData[ind].bord=qrsData[--nbQRas].bord;
-							if ( nbQRas > 0 ) qrsData[qrsData[ind].bord].ind=ind;
+              QuickRasterSubEdge(cb);
 
 							swrData[cb].lastX=swrData[cb].curX;
 							swrData[cb].lastY=swrData[cb].curY;
@@ -1062,11 +1219,11 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 			}
 
 			// traitement du "upNo devient dnNo"
+      int  ins_guess=-1;
 			if ( dnNo >= 0 ) {
 				if ( upNo >= 0 ) {
-					int ind=qrsData[upNo].ind;
-					qrsData[ind].bord=dnNo;
-					qrsData[dnNo].ind=ind;
+          ins_guess=QuickRasterChgEdge(upNo,dnNo,pts[nPt].x[0]);
+
 					swrData[upNo].lastX=swrData[upNo].curX;
 					swrData[upNo].lastY=swrData[upNo].curY;
 					swrData[upNo].curX=pts[nPt].x[0];
@@ -1077,9 +1234,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 					CreateEdge(dnNo,to,step);
 					swrData[dnNo].guess=swrData[upNo].guess;
 				} else {
-					int ind=nbQRas++;
-					qrsData[ind].bord=dnNo;
-					qrsData[dnNo].ind=ind;
+          ins_guess=QuickRasterAddEdge(dnNo,pts[nPt].x[0],ins_guess);
 					CreateEdge(dnNo,to,step);
 				}
 			}
@@ -1089,9 +1244,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != dnNo ) {
-							int ind=nbQRas++;
-							qrsData[ind].bord=cb;
-							qrsData[cb].ind=ind;
+              ins_guess=QuickRasterAddEdge(cb,pts[nPt].x[0],ins_guess);
 							CreateEdge(cb,to,step);
 						}
 					}
@@ -1107,10 +1260,11 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 		AvanceEdge(cb,to,line,true,step);
 		qrsData[i].x=swrData[cb].curX;
 	}
-	if ( nbQRas > 1 ) {
+  QuickRasterSort();
+/*	if ( nbQRas > 1 ) {
 		qsort(qrsData,nbQRas,sizeof(quick_raster_data),CmpQuickRaster);
 		for (int i=0;i<nbQRas;i++) qrsData[qrsData[i].bord].ind=i;
-	}
+	}*/
 }
 void              Shape::QuickScan(float &pos,int &curP,float to,FillRule directed,BitLigne* line,bool /*exact*/,float step)
 {
@@ -1121,11 +1275,12 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 			int curW=0;
 			float  lastX=0;
 			if ( directed == fill_oddEven ) {
-				for (int i=0;i<nbQRas;i++) {
+//				for (int i=0;i<nbQRas;i++) {
+        for (int i=firstQRas;i>= 0 && i<nbQRas;i=qrsData[i].next) {
 					int   cb=qrsData[i].bord;
 					//					int   oW=curW;
 					curW++;
-					curW&=0x00000001;
+					curW&=1;
 					if ( curW == 0 ) {
 						line->AddBord(lastX,swrData[cb].curX,true);
 					} else {
@@ -1134,7 +1289,8 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 				}
 			} else if ( directed == fill_positive ) {
 				// doesn't behave correctly; no way i know to do this without a ConvertToShape()
-				for (int i=0;i<nbQRas;i++) {
+//				for (int i=0;i<nbQRas;i++) {
+        for (int i=firstQRas;i>= 0 && i<nbQRas;i=qrsData[i].next) {
 					int   cb=qrsData[i].bord;
 					int   oW=curW;
 					if ( swrData[cb].sens ) curW++; else curW--;
@@ -1146,7 +1302,8 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 					}
 				}
 			} else if ( directed == fill_nonZero ) {
-				for (int i=0;i<nbQRas;i++) {
+//				for (int i=0;i<nbQRas;i++) {
+        for (int i=firstQRas;i>= 0 && i<nbQRas;i=qrsData[i].next) {
 					int   cb=qrsData[i].bord;
 					int   oW=curW;
 					if ( swrData[cb].sens ) curW++; else curW--;
@@ -1214,9 +1371,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != upNo ) {
-							int ind=qrsData[cb].ind;
-							qrsData[ind].bord=qrsData[--nbQRas].bord;
-							if ( nbQRas > 0 ) qrsData[qrsData[ind].bord].ind=ind;
+              QuickRasterSubEdge(cb);
 
 							swrData[cb].lastX=swrData[cb].curX;
 							swrData[cb].lastY=swrData[cb].curY;
@@ -1231,11 +1386,10 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 			}
 
 			// traitement du "upNo devient dnNo"
+      int  ins_guess=-1;
 			if ( dnNo >= 0 ) {
 				if ( upNo >= 0 ) {
-					int ind=qrsData[upNo].ind;
-					qrsData[ind].bord=dnNo;
-					qrsData[dnNo].ind=ind;
+          ins_guess=QuickRasterChgEdge(upNo,dnNo,pts[nPt].x[0]);
 					swrData[upNo].lastX=swrData[upNo].curX;
 					swrData[upNo].lastY=swrData[upNo].curY;
 					swrData[upNo].curX=pts[nPt].x[0];
@@ -1245,9 +1399,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 
 					CreateEdge(dnNo,to,step);
 				} else {
-					int ind=nbQRas++;
-					qrsData[ind].bord=dnNo;
-					qrsData[dnNo].ind=ind;
+          ins_guess=QuickRasterAddEdge(dnNo,pts[nPt].x[0],ins_guess);
 					CreateEdge(dnNo,to,step);
 				}
 			}
@@ -1257,9 +1409,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != dnNo ) {
-							int ind=nbQRas++;
-							qrsData[ind].bord=cb;
-							qrsData[cb].ind=ind;
+              ins_guess=QuickRasterAddEdge(cb,pts[nPt].x[0],ins_guess);
 							CreateEdge(cb,to,step);
 						}
 					}
@@ -1275,10 +1425,11 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 		AvanceEdge(cb,to,line,true,step);
 		qrsData[i].x=swrData[cb].curX;
 	}
-	if ( nbQRas > 1 ) {
+  QuickRasterSort();
+/*	if ( nbQRas > 1 ) {
 		qsort(qrsData,nbQRas,sizeof(quick_raster_data),CmpQuickRaster);
 		for (int i=0;i<nbQRas;i++) qrsData[qrsData[i].bord].ind=i;
-	}
+	}*/
 }
 
 void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* line,bool /*exact*/,float step)
@@ -1360,9 +1511,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != upNo ) {
-							int ind=qrsData[cb].ind;
-							qrsData[ind].bord=qrsData[--nbQRas].bord;
-							if ( nbQRas > 0 ) qrsData[qrsData[ind].bord].ind=ind;
+              QuickRasterSubEdge(cb);
 
 							swrData[cb].lastX=swrData[cb].curX;
 							swrData[cb].lastY=swrData[cb].curY;
@@ -1377,11 +1526,10 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 			}
 
 			// traitement du "upNo devient dnNo"
+      int  ins_guess=-1;
 			if ( dnNo >= 0 ) {
 				if ( upNo >= 0 ) {
-					int ind=qrsData[upNo].ind;
-					qrsData[ind].bord=dnNo;
-					qrsData[dnNo].ind=ind;
+          ins_guess=QuickRasterChgEdge(upNo,dnNo,pts[nPt].x[0]);
 					swrData[upNo].lastX=swrData[upNo].curX;
 					swrData[upNo].lastY=swrData[upNo].curY;
 					swrData[upNo].curX=pts[nPt].x[0];
@@ -1392,9 +1540,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 					CreateEdge(dnNo,to,step);
 					swrData[dnNo].guess=swrData[upNo].guess;
 				} else {
-					int ind=nbQRas++;
-					qrsData[ind].bord=dnNo;
-					qrsData[dnNo].ind=ind;
+          ins_guess=QuickRasterAddEdge(dnNo,pts[nPt].x[0],ins_guess);
 					CreateEdge(dnNo,to,step);
 				}
 			}
@@ -1404,9 +1550,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != dnNo ) {
-							int ind=nbQRas++;
-							qrsData[ind].bord=cb;
-							qrsData[cb].ind=ind;
+              ins_guess=QuickRasterAddEdge(cb,pts[nPt].x[0],ins_guess);
 							CreateEdge(cb,to,step);
 						}
 					}
@@ -1422,10 +1566,11 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 		AvanceEdge(cb,to,line,true,step);
 		qrsData[i].x=swrData[cb].curX;
 	}
-	if ( nbQRas > 1 ) {
+  QuickRasterSort();
+/*	if ( nbQRas > 1 ) {
 		qsort(qrsData,nbQRas,sizeof(quick_raster_data),CmpQuickRaster);
 		for (int i=0;i<nbQRas;i++) qrsData[qrsData[i].bord].ind=i;
-	}
+	}*/
 }
 
 

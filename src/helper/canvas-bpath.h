@@ -34,6 +34,11 @@ typedef struct _SPCanvasBPathClass SPCanvasBPathClass;
 #include "sp-canvas.h"
 #include "curve.h"
 
+#define bpath_liv
+
+#ifdef bpath_liv
+class Shape;
+#endif
 
 /* stroke-linejoin */
 
@@ -81,8 +86,13 @@ struct _SPCanvasBPath {
 	gdouble stroke_miterlimit;
 
 	/* State */
+#ifdef bpath_liv
+  Shape  *fill_shp;
+  Shape  *stroke_shp;
+#else
 	ArtSVP *fill_svp;
 	ArtSVP *stroke_svp;
+#endif
 };
 
 struct _SPCanvasBPathClass {
