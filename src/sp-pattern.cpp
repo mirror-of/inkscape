@@ -313,25 +313,22 @@ sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 static void
 sp_pattern_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 {
-	SPPattern *pat;
-
-	pat = SP_PATTERN (object);
+	SPPattern *pat = SP_PATTERN (object);
 
 	if (((SPObjectClass *) (pattern_parent_class))->child_added)
 		(* ((SPObjectClass *) (pattern_parent_class))->child_added) (object, child, ref);
 
 	SPObject *ochild = sp_object_get_child_by_repr(object, child);
 	if (SP_IS_ITEM (ochild)) {
-		SPPaintServer *ps;
-		SPPainter *p;
+
+		SPPaintServer *ps = SP_PAINT_SERVER (pat);
 		unsigned position = sp_item_pos_in_parent(SP_ITEM(ochild));
-		/* Huh (Lauris) */
-		ps = SP_PAINT_SERVER (pat);
-		for (p = ps->painters; p != NULL; p = p->next) {
-			SPPatPainter *pp;
-			NRArenaItem *ai;
-			pp = (SPPatPainter *) p;
-			ai = sp_item_invoke_show (SP_ITEM (ochild), pp->arena, pp->dkey, SP_ITEM_REFERENCE_FLAGS);
+
+		for (SPPainter *p = ps->painters; p != NULL; p = p->next) {
+
+			SPPatPainter *pp = (SPPatPainter *) p;
+			NRArenaItem *ai = sp_item_invoke_show (SP_ITEM (ochild), pp->arena, pp->dkey, SP_ITEM_REFERENCE_FLAGS);
+
 			if (ai) {
 				nr_arena_item_add_child (pp->root, ai, NULL);
 				nr_arena_item_set_order (ai, position);
@@ -345,28 +342,37 @@ sp_pattern_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
  
 /* fixme: We need ::order_changed handler too (Lauris) */
 
-/* fixme: Transformation and stuff (Lauris) */
+GSList *
+pattern_getchildren (SPPattern *pat)
+{
+	GSList *l = NULL;
+
+	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+		if (sp_object_first_child(SP_OBJECT(pat_i))) { // find the first one with children
+			for (SPObject *child = sp_object_first_child(SP_OBJECT (pat)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+				l = g_slist_prepend (l, child);
+			}
+			break; // do not go further up the chain if children are found
+		}
+	}
+
+	return l;
+}
 
 static void
 sp_pattern_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 {
-	SPPattern *pat;
-	SPObject *child;
-	GSList *l;
-
-	pat = SP_PATTERN (object);
+	SPPattern *pat = SP_PATTERN (object);
 
 	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-	l = NULL;
-	for (child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-		sp_object_ref (child, NULL);
-		l = g_slist_prepend (l, child);
-	}
+	GSList *l = pattern_getchildren (pat);
 	l = g_slist_reverse (l);
+
 	while (l) {
-		child = SP_OBJECT (l->data);
+		SPObject *child = SP_OBJECT (l->data);
+		sp_object_ref (child, NULL);
 		l = g_slist_remove (l, child);
 		if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
 			sp_object_invoke_update (child, ctx, flags);
@@ -378,23 +384,17 @@ sp_pattern_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 static void
 sp_pattern_modified (SPObject *object, guint flags)
 {
-	SPPattern *pat;
-	SPObject *child;
-	GSList *l;
-
-	pat = SP_PATTERN (object);
+	SPPattern *pat = SP_PATTERN (object);
 
 	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-	l = NULL;
-	for (child = sp_object_first_child(object) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-		sp_object_ref (child, NULL);
-		l = g_slist_prepend (l, child);
-	}
+	GSList *l = pattern_getchildren (pat);
 	l = g_slist_reverse (l);
+
 	while (l) {
-		child = SP_OBJECT (l->data);
+		SPObject *child = SP_OBJECT (l->data);
+		sp_object_ref (child, NULL);
 		l = g_slist_remove (l, child);
 		if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
 			sp_object_invoke_modified (child, flags);
@@ -425,7 +425,8 @@ Gets called when the referenced <pattern> is changed
 static void
 pattern_ref_modified (SPObject *ref, guint flags, SPPattern *pattern)
 {
-	sp_object_request_modified (SP_OBJECT (pattern), SP_OBJECT_MODIFIED_FLAG);
+	if (SP_IS_OBJECT (pattern))
+		sp_object_request_modified (SP_OBJECT (pattern), SP_OBJECT_MODIFIED_FLAG);
 }
 
 guint
@@ -634,13 +635,16 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 
 	/* Show items */
 	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-		for (child = sp_object_first_child(SP_OBJECT(pat_i)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-			if (SP_IS_ITEM (child)) {
-				NRArenaItem *cai;
-				cai = sp_item_invoke_show (SP_ITEM (child), pp->arena, pp->dkey, SP_ITEM_REFERENCE_FLAGS);
-				nr_arena_item_append_child (pp->root, cai);
-				nr_arena_item_unref (cai);
+		if (sp_object_first_child(SP_OBJECT(pat_i))) { // find the first one with children
+			for (child = sp_object_first_child(SP_OBJECT(pat_i)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+				if (SP_IS_ITEM (child)) {
+					NRArenaItem *cai;
+					cai = sp_item_invoke_show (SP_ITEM (child), pp->arena, pp->dkey, SP_ITEM_REFERENCE_FLAGS);
+					nr_arena_item_append_child (pp->root, cai);
+					nr_arena_item_unref (cai);
+				}
 			}
+			break; // do not go further up the chain if children are found
 		}
 	}
 
@@ -662,19 +666,14 @@ sp_pattern_painter_free (SPPaintServer *ps, SPPainter *painter)
 	pat = pp->pat;
 
 	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
-		for (child = sp_object_first_child(SP_OBJECT(pat_i)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-			if (SP_IS_ITEM (child)) {
-				sp_item_invoke_hide (SP_ITEM (child), pp->dkey);
+		if (pat_i && SP_IS_OBJECT (pat_i) && sp_object_first_child(SP_OBJECT(pat_i))) { // find the first one with children
+			for (child = sp_object_first_child(SP_OBJECT(pat_i)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+				if (SP_IS_ITEM (child)) {
+						sp_item_invoke_hide (SP_ITEM (child), pp->dkey);
+				}
 			}
+			break; // do not go further up the chain if children are found
 		}
-	}
-
-	if (pp->root) {
-		nr_arena_item_unref (pp->root);
-	}
-
-	if (pp->arena) {
-		nr_object_unref ((NRObject *) pp->arena);
 	}
 
 	g_free (pp);
