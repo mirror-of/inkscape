@@ -14,6 +14,8 @@
 
 #include <string.h>
 #include <glib.h>
+#include <gtk/gtk.h>
+#include <gtk/gtkaccelgroup.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtkselection.h>
 #include <gtk/gtktable.h>
@@ -179,36 +181,127 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 		art_affine_multiply (s , p2o, scale);
 		art_affine_multiply (t , s, o2n);
 		sp_selection_apply_affine (sel, t);
-#if 1
-		sp_document_done (SP_WIDGET_DOCUMENT (spw));
-#endif
-	}
 
-	// defocus spinbuttons by moving focus to the canvas
- 	canvas = (GtkWidget *) gtk_object_get_data (GTK_OBJECT (spw), "dtw");
-	if (canvas) {
-		gtk_widget_grab_focus (GTK_WIDGET(canvas));
+		sp_document_done (SP_WIDGET_DOCUMENT (spw));
+
+		// defocus spinbuttons by moving focus to the canvas, unless "stay" is on 
+		gboolean tab = GPOINTER_TO_INT(gtk_object_get_data (GTK_OBJECT (spw), "stay"));
+		if (tab) {
+			gtk_object_set_data (GTK_OBJECT (spw), "stay", GINT_TO_POINTER (FALSE));
+		} else {
+			canvas = (GtkWidget *) gtk_object_get_data (GTK_OBJECT (spw), "dtw");
+			if (canvas) {
+				gtk_widget_grab_focus (GTK_WIDGET(canvas));
+			}
+		}
 	}
 
 	gtk_object_set_data (GTK_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
 }
 
 gboolean 
+spinbutton_focus_in (GtkWidget *w, GdkEventKey *event, gpointer data)
+{
+	SPWidget *spw = (SPWidget *) data;
+
+	gchar *ini; 
+
+	ini = (gchar *) gtk_object_get_data (GTK_OBJECT (w), "ini");
+	if (ini) g_free (ini); // free the old value if any
+
+	// retrieve the text
+	ini = gtk_editable_get_chars (GTK_EDITABLE(w), 0, -1);
+
+	// remember it
+	gtk_object_set_data (GTK_OBJECT (w), "ini", g_strdup(ini));
+
+	if (ini) g_free (ini);
+
+	return FALSE; // I didn't consume the event
+}
+
+void
+spinbutton_undo (GtkWidget *w)
+{
+	gdouble v;
+
+	gchar *ini = (gchar *) gtk_object_get_data (GTK_OBJECT (w), "ini");
+	if (ini) {
+		v = atof (ini);
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(w), v);
+	}
+}
+
+gboolean 
 spinbutton_keypress (GtkWidget *w, GdkEventKey *event, gpointer data)
 {
-	if (event->keyval == GDK_Escape) { // defocus
-		SPWidget *spw = (SPWidget *) data;
-		GtkWidget *canvas = (GtkWidget *) gtk_object_get_data (GTK_OBJECT (spw), "dtw");
+	SPWidget *spw = (SPWidget *) data;
+	GtkWidget *canvas = (GtkWidget *) gtk_object_get_data (GTK_OBJECT (spw), "dtw");
+	gdouble v;
+
+	switch (event->keyval) {
+	case GDK_Escape: // defocus
+		spinbutton_undo (w);
 		if (canvas) {
 			gtk_widget_grab_focus (GTK_WIDGET(canvas));
 		}
 		return TRUE; // I consumed the event
+		break;
+	case GDK_Tab: 
+	case GDK_ISO_Left_Tab:
+		// set the flag meaning "do not leave toolbar when changing value"
+		gtk_object_set_data (GTK_OBJECT (spw), "stay", GINT_TO_POINTER(TRUE));
+		return FALSE; // I didn't consume the event
+		break;
+	case GDK_Up:
+	case GDK_KP_Up: 
+		gtk_object_set_data (GTK_OBJECT (spw), "stay", GINT_TO_POINTER(TRUE));
+		v = gtk_spin_button_get_value(GTK_SPIN_BUTTON (w));
+		v += SPIN_STEP;
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(w), v);
+		return TRUE; // I consumed the event
+		break;
+	case GDK_Down:
+	case GDK_KP_Down: 
+		gtk_object_set_data (GTK_OBJECT (spw), "stay", GINT_TO_POINTER(TRUE));
+		v = gtk_spin_button_get_value(GTK_SPIN_BUTTON (w));
+		v -= SPIN_STEP;
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(w), v);
+		return TRUE; // I consumed the event
+		break;
+	case GDK_Page_Up:
+	case GDK_KP_Page_Up: 
+		gtk_object_set_data (GTK_OBJECT (spw), "stay", GINT_TO_POINTER(TRUE));
+		v = gtk_spin_button_get_value(GTK_SPIN_BUTTON (w));
+		v += SPIN_PAGE_STEP;
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(w), v);
+		return TRUE; // I consumed the event
+		break;
+	case GDK_Page_Down:
+	case GDK_KP_Page_Down: 
+		gtk_object_set_data (GTK_OBJECT (spw), "stay", GINT_TO_POINTER(TRUE));
+		v = gtk_spin_button_get_value(GTK_SPIN_BUTTON (w));
+		v -= SPIN_PAGE_STEP;
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(w), v);
+		return TRUE; // I consumed the event
+		break;
+	case GDK_z: 
+	case GDK_Z: 
+		gtk_object_set_data (GTK_OBJECT (spw), "stay", GINT_TO_POINTER(TRUE));
+		if (event->state & GDK_CONTROL_MASK) {
+			spinbutton_undo (w);
+			return TRUE; // I consumed the event
+		}
+		break;
+	default: 
+		return FALSE; 
+		break;
 	}
 	return FALSE; // I didn't consume the event
 }
 
 GtkWidget *
-sp_select_toolbox_spinbutton (gchar *label, gchar *data, float lower_limit, GtkWidget *us, GtkWidget *spw, gchar *tooltip)
+sp_select_toolbox_spinbutton (gchar *label, gchar *data, float lower_limit, GtkWidget *us, GtkWidget *spw, gchar *tooltip, gboolean altx)
 {
 	GtkTooltips *tt;
 	GtkWidget *hb, *l, *sb;
@@ -223,19 +316,23 @@ sp_select_toolbox_spinbutton (gchar *label, gchar *data, float lower_limit, GtkW
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
 	gtk_container_add (GTK_CONTAINER (hb), l);
 
-	a = gtk_adjustment_new (0.0, lower_limit, 1e6, 0.1, 7.0, 7.0);
+	a = gtk_adjustment_new (0.0, lower_limit, 1e6, SPIN_STEP, SPIN_PAGE_STEP, SPIN_PAGE_STEP);
 	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (a));
 	gtk_object_set_data (GTK_OBJECT (spw), data, a);
 
-	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
+	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), SPIN_STEP, 2);
 	gtk_tooltips_set_tip (tt, sb, tooltip, NULL);
 	gtk_widget_set_size_request (sb, AUX_SPINBUTTON_WIDTH, AUX_SPINBUTTON_HEIGHT);
 	gtk_widget_show (sb);
+	gtk_signal_connect (GTK_OBJECT (sb), "focus-in-event", GTK_SIGNAL_FUNC (spinbutton_focus_in), spw);
 	gtk_signal_connect (GTK_OBJECT (sb), "key-press-event", GTK_SIGNAL_FUNC (spinbutton_keypress), spw);
-	gtk_signal_connect (GTK_OBJECT (sb), "key-release-event", GTK_SIGNAL_FUNC (spinbutton_keypress), spw);
 
 	gtk_container_add (GTK_CONTAINER (hb), sb);
 	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_object_layout_any_value_changed), spw);
+
+	if (altx) { // this spinbutton will be activated by alt-x
+		gtk_object_set_data (GTK_OBJECT (sb), "altx", sb);
+	}
 
 	return hb;
 }
@@ -244,7 +341,7 @@ sp_select_toolbox_spinbutton (gchar *label, gchar *data, float lower_limit, GtkW
 GtkWidget *
 sp_select_toolbox_new (SPDesktop *desktop)
 {
-	GtkWidget *tb;
+	GtkWidget *tb, *sb;
 	GtkTooltips *tt;
 	SPView *view=SP_VIEW (desktop);
 
@@ -287,17 +384,18 @@ sp_select_toolbox_new (SPDesktop *desktop)
 	us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
 
 	// four spinbuttons
+
 	gtk_container_add (GTK_CONTAINER (vb), 
-		sp_select_toolbox_spinbutton ("X", "X", -1e6, us, spw, _("The horizontal coordinate of selection")));
+		sp_select_toolbox_spinbutton ("X", "X", -1e6, us, spw, _("Horizontal coordinate of selection"), TRUE));
 	aux_toolbox_space (vb, AUX_BETWEEN_SPINBUTTONS);
 	gtk_container_add (GTK_CONTAINER (vb), 
-		sp_select_toolbox_spinbutton ("Y", "Y", -1e6, us, spw, _("The vertical coordinate of selection")));
+		sp_select_toolbox_spinbutton ("Y", "Y", -1e6, us, spw, _("Vertical coordinate of selection"), FALSE));
 	aux_toolbox_space (vb, AUX_BETWEEN_SPINBUTTONS);
 	gtk_container_add (GTK_CONTAINER (vb), 
-		sp_select_toolbox_spinbutton ("W", "width", 1e-3, us, spw, _("The width of selection")));
+		sp_select_toolbox_spinbutton ("W", "width", 1e-3, us, spw, _("Width of selection"), FALSE));
 	aux_toolbox_space (vb, AUX_BETWEEN_SPINBUTTONS);
 	gtk_container_add (GTK_CONTAINER (vb), 
-		sp_select_toolbox_spinbutton ("H", "height", 1e-3, us, spw, _("The height of selection")));
+		sp_select_toolbox_spinbutton ("H", "height", 1e-3, us, spw, _("Height of selection"), FALSE));
 
 	// add the units menu
 	gtk_widget_show (us);
