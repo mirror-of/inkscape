@@ -194,7 +194,6 @@ void init() {
 
         GC_INIT();
 
-        GC_set_free_space_divisor(8);
         GC_set_warn_proc(&display_warning);
     }
 }

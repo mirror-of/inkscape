@@ -1,3 +1,9 @@
+2004-01-14  MenTaLguY  <mental@rydia.net>
+
+	* src/gc.cpp: leave the free space multiplier at the default, which
+	  will hopefully (according to Hans) avoid some of the odd gc issues
+	  we've had, if nothing else does
+
 2004-01-14  Kees Cook  <kees@outflux.net>
 
     * share/icons/Makefile.am, share/icons/icons.svg, src/inkscape-stock.cpp,
