@@ -45,6 +45,10 @@ dist:
 	$(CP) icons$(S)*.xpm inkscape$(S)pixmaps
 	$(CP) icons$(S)*.png inkscape$(S)pixmaps
 	$(CP) icons$(S)*.svg inkscape$(S)pixmaps
+	$(MKDIR) inkscape$(S)fonts
+	$(CP) $(GTKDOS)$(S)fonts$(S)*.ttf inkscape$(S)fonts
+	$(MKDIR) inkscape$(S)doc
+	$(CP) doc$(S)* inkscape$(S)doc
 	$(MKDIR) inkscape$(S)data
 	$(MKDIR) inkscape$(S)extensions
 	$(MKDIR) inkscape$(S)locale
