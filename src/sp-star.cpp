@@ -37,7 +37,7 @@ static void sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 static void sp_star_update (SPObject *object, SPCtx *ctx, guint flags);
 
 static gchar * sp_star_description (SPItem * item);
-static int sp_star_snappoints (SPItem *item, NR::Point *p, int size);
+static int sp_star_snappoints(SPItem *item, NR::Point p[], int size);
 
 static void sp_star_set_shape (SPShape *shape);
 
@@ -284,8 +284,7 @@ sp_star_position_set (SPStar *star, gint sides, NR::Point center, gdouble r1, gd
 
 /* fixme: We should use all corners of star (Lauris) */
 
-static int
-sp_star_snappoints (SPItem *item, NR::Point *p, int size)
+static int sp_star_snappoints(SPItem *item, NR::Point p[], int size)
 {
 	if (((SPItemClass *) parent_class)->snappoints)
 		return ((SPItemClass *) parent_class)->snappoints (item, p, size);

@@ -39,7 +39,7 @@ static void sp_rect_update (SPObject *object, SPCtx *ctx, guint flags);
 static SPRepr *sp_rect_write (SPObject *object, SPRepr *repr, guint flags);
 
 static gchar * sp_rect_description (SPItem * item);
-static int sp_rect_snappoints (SPItem *item, NR::Point *p, int size);
+static int sp_rect_snappoints(SPItem *item, NR::Point p[], int size);
 static void sp_rect_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
 
 static void sp_rect_set_shape (SPShape *shape);
@@ -355,35 +355,30 @@ sp_rect_set_ry (SPRect * rect, gboolean set, gdouble value)
 	sp_object_request_update (SP_OBJECT (rect), SP_OBJECT_MODIFIED_FLAG);
 }
 
-static int
-sp_rect_snappoints (SPItem *item, NR::Point *p, int size)
+static int sp_rect_snappoints(SPItem *item, NR::Point p[], int size)
 {
-	SPRect *rect = SP_RECT (item);
+	SPRect *rect = SP_RECT(item);
 
-	/* we use corners of rect only */
-	NR::Coord x0 = rect->x.computed;
-	NR::Coord y0 = rect->y.computed;
-	NR::Coord x1 = x0 + rect->width.computed;
-	NR::Coord y1 = y0 + rect->height.computed;
+	/* We use corners of rect only. */
+	NR::Coord const x0 = rect->x.computed;
+	NR::Coord const y0 = rect->y.computed;
+	NR::Coord const x1 = x0 + rect->width.computed;
+	NR::Coord const y1 = y0 + rect->height.computed;
 
-	NR::Matrix i2d = sp_item_i2d_affine (item);
+	NR::Matrix const i2d(sp_item_i2d_affine(item));
 
 	int i = 0;
 	if (i < size) {
-		p[i] = i2d * NR::Point(x0, y0);
-		i += 1;
+		p[i++] = i2d * NR::Point(x0, y0);
 	}
 	if (i < size) {
-		p[i] = i2d * NR::Point(x1, y0);
-		i += 1;
+		p[i++] = i2d * NR::Point(x1, y0);
 	}
 	if (i < size) {
-		p[i] = i2d * NR::Point(x1, y1);
-		i += 1;
+		p[i++] = i2d * NR::Point(x1, y1);
 	}
 	if (i < size) {
-		p[i] = i2d * NR::Point(x0, y1);
-		i += 1;
+		p[i++] = i2d * NR::Point(x0, y1);
 	}
 
 	return i;
