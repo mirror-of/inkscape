@@ -125,8 +125,6 @@ sp_icon_size_request (GtkWidget *widget, GtkRequisition *requisition)
 static void
 sp_icon_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 {
-	SPIcon *icon=SP_ICON (widget);
-
 	widget->allocation = *allocation;
 
 	if (GTK_WIDGET_DRAWABLE (widget)) {
