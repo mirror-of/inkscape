@@ -61,6 +61,8 @@
 #include "sp-namedview.h"
 #include "prefs-utils.h"
 #include "sp-offset.h"
+#include "file.h"
+#include "dir-util.h"
 using NR::X;
 using NR::Y;
 
@@ -1719,9 +1721,80 @@ sp_selection_untile()
     }
 }
 
+void
+sp_selection_create_bitmap_copy ()
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop == NULL)
+        return;
 
+    SPDocument *document = SP_DT_DOCUMENT(desktop);
 
+    SPSelection *selection = SP_DT_SELECTION(desktop);
 
+    // check if something is selected
+    if (selection->isEmpty()) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to make a bitmap copy."));
+        return;
+    }
+
+    GSList *items = g_slist_copy ((GSList *) selection->itemList());
+
+    GTimeVal cu;
+    g_get_current_time (&cu);
+    uint current = (int) (cu.tv_sec * 1000000 + cu.tv_usec) % 1024; 
+
+    gchar const *filename = g_strdup_printf ("%s-%s-%u.png", document->name, sp_repr_attr (SP_OBJECT_REPR(items->data), "id"), current);
+    gchar const *filepath = g_build_filename (document->base?document->base:"", filename, NULL);
+
+    //g_print ("%s\n", filepath);
+
+    NRRect bbox;
+    sp_document_ensure_up_to_date (document);
+    selection->bounds(&bbox);
+
+    double res = 300 / MIN ((bbox.x1 - bbox.x0), (bbox.y1 - bbox.y0));
+    int width = (int) floor ((bbox.x1 - bbox.x0) * res);
+    int height =(int) floor ((bbox.y1 - bbox.y0) * res);
+
+    NR::Matrix eek = NR::scale(0.8, -0.8) * NR::translate(0, sp_document_height(document));
+
+    NR::Matrix t = NR::scale (1/res, -1/res) * NR::translate (bbox.x0, bbox.y1) * eek.inverse(); 
+
+    sp_export_png_file(document, filepath,
+                   bbox.x0, bbox.y0, bbox.x1, bbox.y1,
+                   width, height,
+                   (guint32) 0xffffff00,
+                   NULL, NULL,
+                   true,  /*bool force_overwrite,*/
+                   items);
+
+    g_slist_free (items);
+
+    GdkPixbuf *pb = gdk_pixbuf_new_from_file (filepath, NULL);
+    if (pb) {
+        SPRepr * repr = sp_repr_new ("image");
+        sp_repr_set_attr (repr, "xlink:href", filename);
+        sp_repr_set_attr (repr, "sodipodi:absref", filepath);
+        sp_repr_set_double (repr, "width", gdk_pixbuf_get_width (pb));
+        sp_repr_set_double (repr, "height", gdk_pixbuf_get_height (pb));
+
+        gchar c[256];
+        if (sp_svg_transform_write(c, 256, t)) {
+            sp_repr_set_attr(repr, "transform", c);
+        } 
+
+        desktop->currentLayer()->appendChildRepr(repr);
+
+        selection->clear();
+        selection->addRepr(repr);
+
+        sp_repr_unref (repr);
+        sp_document_done (document);
+        gdk_pixbuf_unref (pb);
+    }
+
+}
 
 
 /*

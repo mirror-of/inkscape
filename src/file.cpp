@@ -737,7 +737,7 @@ sp_file_export_dialog(void *widget)
 struct SPEBP {
     int width, height, sheight;
     guchar r, g, b, a;
-    GSList *arenaitems; // list of NRArenaItem * to show; if NULL, show document root (i.e. everything)
+    NRArenaItem *root; // the root arena item to show; it is assumed that all unneeded items are hidden
     guchar *px;
     unsigned (*status) (float, void *);
     void *data;
@@ -769,9 +769,7 @@ sp_export_get_rows(guchar const **rows, int row, int num_rows, void *data)
     NRGC gc(NULL);
     nr_matrix_set_identity(&gc.transform);
 
-    for (GSList *i = ebp->arenaitems; i; i = i->next) {
-        nr_arena_item_invoke_update(NR_ARENA_ITEM (i->data), &bbox, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
-    }
+    nr_arena_item_invoke_update(ebp->root, &bbox, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
 
     NRPixBlock pb;
     nr_pixblock_setup_extern(&pb, NR_PIXBLOCK_MODE_R8G8B8A8N,
@@ -789,9 +787,7 @@ sp_export_get_rows(guchar const **rows, int row, int num_rows, void *data)
     }
 
     /* Render */
-    for (GSList *i = ebp->arenaitems; i; i = i->next) {
-        nr_arena_item_invoke_render(NR_ARENA_ITEM (i->data), &bbox, &pb, 0);
-    }
+    nr_arena_item_invoke_render(ebp->root, &bbox, &pb, 0);
 
     for (int r = 0; r < num_rows; r++) {
         rows[r] = NR_PIXBLOCK_PX(&pb) + r * pb.rs;
@@ -802,6 +798,23 @@ sp_export_get_rows(guchar const **rows, int row, int num_rows, void *data)
     return num_rows;
 }
 
+/**
+Hide all items which are not listed in list, recursively, skipping groups and defs
+*/
+void
+hide_other_items_recursively (SPObject *o, GSList *list, unsigned dkey)
+{
+    if (SP_IS_ITEM(o) && !SP_IS_DEFS(o) && !SP_IS_ROOT(o) && !SP_IS_GROUP(o) && !g_slist_find (list, o)) {
+        sp_item_invoke_hide(SP_ITEM(o), dkey);
+    }
+
+     // recurse
+    if (!g_slist_find (list, o)) {
+        for (SPObject *child = sp_object_first_child(o) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+            hide_other_items_recursively (child, list, dkey);
+        }
+    }
+}
 
 
 /**
@@ -872,18 +885,14 @@ sp_export_png_file(SPDocument *doc, gchar const *filename,
     NRArena *arena = NRArena::create();
     unsigned dkey = sp_item_display_key_new(1);
 
-    /* Create ArenaItem(s) and set transform */
-    ebp.arenaitems = NULL;
+    /* Create ArenaItems and set transform */
+    ebp.root = sp_item_invoke_show(SP_ITEM(sp_document_root(doc)), arena, dkey, SP_ITEM_SHOW_PRINT);
+    nr_arena_item_set_transform(NR_ARENA_ITEM (ebp.root), NR::Matrix (&affine));
+
+    // We show all and then hide all items we don't want, instead of showing only requested items,
+    // because that would not work if the shown item references something in defs
     if (items_only) {
-        for (GSList *i = items_only; i; i = i->next) {
-            if (!SP_IS_ITEM(i->data))
-                continue;
-            ebp.arenaitems = g_slist_prepend (ebp.arenaitems, sp_item_invoke_show(SP_ITEM(i->data), arena, dkey, SP_ITEM_SHOW_PRINT));
-            nr_arena_item_set_transform(NR_ARENA_ITEM (ebp.arenaitems->data), &affine);
-        }
-    } else {
-        ebp.arenaitems = g_slist_prepend (ebp.arenaitems, sp_item_invoke_show(SP_ITEM(sp_document_root(doc)), arena, dkey, SP_ITEM_SHOW_PRINT));
-        nr_arena_item_set_transform(NR_ARENA_ITEM (ebp.arenaitems->data), &affine);
+        hide_other_items_recursively (sp_document_root(doc), items_only, dkey);
     }
 
     ebp.status = status;
@@ -902,21 +911,10 @@ sp_export_png_file(SPDocument *doc, gchar const *filename,
     }
 
     // Hide items
-    if (items_only) {
-        for (GSList *i = items_only; i; i = i->next) {
-            if (!SP_IS_ITEM(i->data))
-                continue;
-            sp_item_invoke_hide(SP_ITEM(i->data), dkey);
-        }
-    } else {
-        sp_item_invoke_hide(SP_ITEM(sp_document_root(doc)), dkey);
-    }
+    sp_item_invoke_hide(SP_ITEM(sp_document_root(doc)), dkey);
 
-    /* Free Arena and ArenaItem(s) */
-    for (GSList *i = ebp.arenaitems; i; i = i->next) {
-        nr_arena_item_unref(NR_ARENA_ITEM(i->data));
-    }
-
+    /* Free Arena and ArenaItem */
+    nr_arena_item_unref(ebp.root);
     nr_object_unref((NRObject *) arena);
 }
 

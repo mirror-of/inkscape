@@ -666,6 +666,8 @@ sp_do_export_png(SPDocument *doc)
     } else {
         g_warning("Calculated bitmap dimensions %d %d are out of range (1 - 65535). Nothing exported.", width, height);
     }
+
+    g_slist_free (items);
 }
 
 static GSList *

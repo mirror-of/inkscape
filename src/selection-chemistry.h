@@ -74,6 +74,8 @@ void scroll_to_show_item(SPDesktop *desktop, SPItem *item);
 void sp_undo (SPDesktop *desktop, SPDocument *doc);
 void sp_redo (SPDesktop *desktop, SPDocument *doc);
 
+void sp_selection_create_bitmap_copy ();
+
 /* selection cycling */
 
 typedef enum

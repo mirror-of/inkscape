@@ -843,6 +843,9 @@ SelectionVerb::perform (SPAction *action, void * data, void * pdata)
             //Inkscape::Trace::staticShowTraceDialog();
             Inkscape::UI::Dialogs::TraceDialog::showInstance();
             break;
+        case SP_VERB_SELECTION_CREATE_BITMAP:
+            sp_selection_create_bitmap_copy ();
+            break;
 
         case SP_VERB_SELECTION_COMBINE:
             sp_selected_path_combine ();
@@ -1531,6 +1534,8 @@ Verb * Verb::_base_verbs[] = {
         N_("Reverses the direction of selected path(s); useful for flipping markers"), NULL),
     new SelectionVerb(SP_VERB_SELECTION_POTRACE, "SelectionPotrace", N_("_Trace bitmap"),
         N_("Convert bitmap object to paths"), NULL),
+    new SelectionVerb(SP_VERB_SELECTION_CREATE_BITMAP, "SelectionCreateBitmap", N_("_Make a bitmap copy"),
+        N_("Export selection to a bitmap and insert it into document"), NULL),
     new SelectionVerb(SP_VERB_SELECTION_COMBINE, "SelectionCombine", N_("_Combine"),
         N_("Combine several paths into one"), "selection_combine"),
     new SelectionVerb(SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break _Apart"),
