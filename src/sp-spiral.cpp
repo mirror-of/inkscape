@@ -138,13 +138,13 @@ sp_spiral_write (SPObject *object, SPRepr *repr, guint flags)
 		 * sodipodi:spiral="cx cy exp revo rad arg t0"
 		 */
 		sp_repr_set_attr (repr, "sodipodi:type", "spiral");
-		sp_repr_set_double_attribute (repr, "sodipodi:cx", spiral->cx);
-		sp_repr_set_double_attribute (repr, "sodipodi:cy", spiral->cy);
-		sp_repr_set_double_attribute (repr, "sodipodi:expansion", spiral->exp);
-		sp_repr_set_double_attribute (repr, "sodipodi:revolution", spiral->revo);
-		sp_repr_set_double_attribute (repr, "sodipodi:radius", spiral->rad);
-		sp_repr_set_double_attribute (repr, "sodipodi:argument", spiral->arg);
-		sp_repr_set_double_attribute (repr, "sodipodi:t0", spiral->t0);
+		sp_repr_set_double (repr, "sodipodi:cx", spiral->cx);
+		sp_repr_set_double (repr, "sodipodi:cy", spiral->cy);
+		sp_repr_set_double (repr, "sodipodi:expansion", spiral->exp);
+		sp_repr_set_double (repr, "sodipodi:revolution", spiral->revo);
+		sp_repr_set_double (repr, "sodipodi:radius", spiral->rad);
+		sp_repr_set_double (repr, "sodipodi:argument", spiral->arg);
+		sp_repr_set_double (repr, "sodipodi:t0", spiral->t0);
 	}
 
 	d = sp_svg_write_path (((SPShape *) spiral)->curve->bpath);

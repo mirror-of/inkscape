@@ -809,15 +809,15 @@ sp_selected_path_create_offset_object (int expand,bool updating)
     sp_repr_set_attr (repr, "sodipodi:type", "inkscape:offset");
     if (expand > 0)
       {
-	sp_repr_set_double_attribute (repr, "inkscape:radius", o_width);
+	sp_repr_set_double (repr, "inkscape:radius", o_width);
       }
     else if (expand < 0)
       {
-	sp_repr_set_double_attribute (repr, "inkscape:radius", -o_width);
+	sp_repr_set_double (repr, "inkscape:radius", -o_width);
       }
     else 
       {
-	sp_repr_set_double_attribute (repr, "inkscape:radius",  0);
+	sp_repr_set_double (repr, "inkscape:radius",  0);
       }
 
     str = liv_svg_dump_path (res);

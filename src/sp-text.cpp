@@ -659,11 +659,11 @@ sp_tspan_write (SPObject *object, SPRepr *repr, guint flags)
 		repr = sp_repr_new ("tspan");
 	}
 
-	if (tspan->ly.x.set) sp_repr_set_double_attribute (repr, "x", tspan->ly.x.computed);
-	if (tspan->ly.y.set) sp_repr_set_double_attribute (repr, "y", tspan->ly.y.computed);
-	if (tspan->ly.dx.set) sp_repr_set_double_attribute (repr, "dx", tspan->ly.dx.computed);
-	if (tspan->ly.dy.set) sp_repr_set_double_attribute (repr, "dy", tspan->ly.dy.computed);
-	if (tspan->ly.rotate_set) sp_repr_set_double_attribute (repr, "rotate", tspan->ly.rotate);
+	if (tspan->ly.x.set) sp_repr_set_double (repr, "x", tspan->ly.x.computed);
+	if (tspan->ly.y.set) sp_repr_set_double (repr, "y", tspan->ly.y.computed);
+	if (tspan->ly.dx.set) sp_repr_set_double (repr, "dx", tspan->ly.dx.computed);
+	if (tspan->ly.dy.set) sp_repr_set_double (repr, "dy", tspan->ly.dy.computed);
+	if (tspan->ly.rotate_set) sp_repr_set_double (repr, "rotate", tspan->ly.rotate);
 	if (flags & SP_OBJECT_WRITE_EXT) {
 		sp_repr_set_attr (repr, "sodipodi:role", (tspan->role != SP_TSPAN_ROLE_UNSPECIFIED) ? "line" : NULL);
 	}
@@ -1152,15 +1152,15 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
 	}
 
 	if (text->ly.x.set)
-		sp_repr_set_double_attribute (repr, "x", text->ly.x.computed);
+		sp_repr_set_double (repr, "x", text->ly.x.computed);
 	if (text->ly.y.set)
-		sp_repr_set_double_attribute (repr, "y", text->ly.y.computed);
+		sp_repr_set_double (repr, "y", text->ly.y.computed);
 	if (text->ly.dx.set)
-		sp_repr_set_double_attribute (repr, "dx", text->ly.dx.computed);
+		sp_repr_set_double (repr, "dx", text->ly.dx.computed);
 	if (text->ly.dy.set)
-		sp_repr_set_double_attribute (repr, "dy", text->ly.dy.computed);
+		sp_repr_set_double (repr, "dy", text->ly.dy.computed);
 	if (text->ly.rotate_set)
-		sp_repr_set_double_attribute (repr, "rotate", text->ly.rotate);
+		sp_repr_set_double (repr, "rotate", text->ly.rotate);
 
 	if (((SPObjectClass *) (text_parent_class))->write)
 		((SPObjectClass *) (text_parent_class))->write (object, repr, flags);

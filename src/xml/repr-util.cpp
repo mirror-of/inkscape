@@ -353,35 +353,6 @@ int sp_repr_get_int_attribute (SPRepr * repr, const char * key, int def)
 	return atoi (result);
 }
 
-unsigned int
-sp_repr_set_double_attribute (SPRepr * repr, const char * key, double value)
-{
-	char c[32];
-
-	g_return_val_if_fail (repr != NULL, FALSE);
-	g_return_val_if_fail (key != NULL, FALSE);
-
-	g_snprintf (c, 32, "%.8f", value);
-    /* Suggest replacing with this locale-portable call
-	sp_xml_dtoa (c, val, 8, 0, FALSE);
-    */
-
-	return sp_repr_set_attr (repr, key, c);
-}
-
-unsigned int
-sp_repr_set_int_attribute (SPRepr * repr, const char * key, int value)
-{
-	char c[32];
-
-	g_return_val_if_fail (repr != NULL, FALSE);
-	g_return_val_if_fail (key != NULL, FALSE);
-
-	g_snprintf (c, 32, "%d", value);
-
-	return sp_repr_set_attr (repr, key, c);
-}
-
 const char *
 sp_repr_doc_attr (SPRepr * repr, const char * key)
 {
@@ -667,7 +638,7 @@ sp_repr_set_double (SPRepr *repr, const gchar *key, double val)
 	g_return_val_if_fail (repr != NULL, FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 
-	sp_xml_dtoa (c, val, 8, 0, FALSE);
+	g_snprintf (c, 32, "%.8f", val);
 
 	return sp_repr_set_attr (repr, key, c);
 }

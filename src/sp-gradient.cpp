@@ -649,7 +649,7 @@ sp_gradient_repr_set_vector (SPGradient *gr, SPRepr *repr, SPGradientVector *vec
 		for (int i = 0; i < vector->nstops; i++) {
 			gchar c[64], s[256];
 			SPRepr *child = sp_repr_new ("stop");
-			sp_repr_set_double_attribute (child, "offset",
+			sp_repr_set_double (child, "offset",
 						      vector->stops[i].offset * (vector->end - vector->start) + vector->start);
 			sp_svg_write_color (c, 64, sp_color_get_rgba32_ualpha (&vector->stops[i].color, 0x00));
 			g_snprintf (s, 256, "stop-color:%s;stop-opacity:%g;", c, vector->stops[i].opacity);
@@ -1223,13 +1223,13 @@ sp_lineargradient_write (SPObject *object, SPRepr *repr, guint flags)
 	}
 
 	if ((flags & SP_OBJECT_WRITE_ALL) || lg->x1.set)
-		sp_repr_set_double_attribute (repr, "x1", lg->x1.computed);
+		sp_repr_set_double (repr, "x1", lg->x1.computed);
 	if ((flags & SP_OBJECT_WRITE_ALL) || lg->y1.set)
-		sp_repr_set_double_attribute (repr, "y1", lg->y1.computed);
+		sp_repr_set_double (repr, "y1", lg->y1.computed);
 	if ((flags & SP_OBJECT_WRITE_ALL) || lg->x2.set)
-		sp_repr_set_double_attribute (repr, "x2", lg->x2.computed);
+		sp_repr_set_double (repr, "x2", lg->x2.computed);
 	if ((flags & SP_OBJECT_WRITE_ALL) || lg->y2.set)
-		sp_repr_set_double_attribute (repr, "y2", lg->y2.computed);
+		sp_repr_set_double (repr, "y2", lg->y2.computed);
 
 	if (((SPObjectClass *) lg_parent_class)->write)
 		(* ((SPObjectClass *) lg_parent_class)->write) (object, repr, flags);
@@ -1537,11 +1537,11 @@ sp_radialgradient_write (SPObject *object, SPRepr *repr, guint flags)
 		repr = sp_repr_new ("radialGradient");
 	}
 
-	if ((flags & SP_OBJECT_WRITE_ALL) || rg->cx.set) sp_repr_set_double_attribute (repr, "cx", rg->cx.computed);
-	if ((flags & SP_OBJECT_WRITE_ALL) || rg->cy.set) sp_repr_set_double_attribute (repr, "cy", rg->cy.computed);
-	if ((flags & SP_OBJECT_WRITE_ALL) || rg->r.set) sp_repr_set_double_attribute (repr, "r", rg->r.computed);
-	if ((flags & SP_OBJECT_WRITE_ALL) || rg->fx.set) sp_repr_set_double_attribute (repr, "fx", rg->fx.computed);
-	if ((flags & SP_OBJECT_WRITE_ALL) || rg->fy.set) sp_repr_set_double_attribute (repr, "fy", rg->fy.computed);
+	if ((flags & SP_OBJECT_WRITE_ALL) || rg->cx.set) sp_repr_set_double (repr, "cx", rg->cx.computed);
+	if ((flags & SP_OBJECT_WRITE_ALL) || rg->cy.set) sp_repr_set_double (repr, "cy", rg->cy.computed);
+	if ((flags & SP_OBJECT_WRITE_ALL) || rg->r.set) sp_repr_set_double (repr, "r", rg->r.computed);
+	if ((flags & SP_OBJECT_WRITE_ALL) || rg->fx.set) sp_repr_set_double (repr, "fx", rg->fx.computed);
+	if ((flags & SP_OBJECT_WRITE_ALL) || rg->fy.set) sp_repr_set_double (repr, "fy", rg->fy.computed);
 
 	if (((SPObjectClass *) rg_parent_class)->write)
 		(* ((SPObjectClass *) rg_parent_class)->write) (object, repr, flags);

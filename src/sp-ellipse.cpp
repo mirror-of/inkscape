@@ -289,10 +289,10 @@ static SPRepr *sp_genericellipse_write (SPObject *object, SPRepr *repr, guint fl
 			repr = sp_repr_new ("path");
 		}
 
-		sp_repr_set_double_attribute (repr, "sodipodi:cx", ellipse->cx.computed);
-		sp_repr_set_double_attribute (repr, "sodipodi:cy", ellipse->cy.computed);
-		sp_repr_set_double_attribute (repr, "sodipodi:rx", ellipse->rx.computed);
-		sp_repr_set_double_attribute (repr, "sodipodi:ry", ellipse->ry.computed);
+		sp_repr_set_double (repr, "sodipodi:cx", ellipse->cx.computed);
+		sp_repr_set_double (repr, "sodipodi:cy", ellipse->cy.computed);
+		sp_repr_set_double (repr, "sodipodi:rx", ellipse->rx.computed);
+		sp_repr_set_double (repr, "sodipodi:ry", ellipse->ry.computed);
 
 		sp_arc_set_elliptical_path_attribute (SP_ARC (object), SP_OBJECT_REPR (object));
 	}
@@ -380,10 +380,10 @@ sp_ellipse_write (SPObject *object, SPRepr *repr, guint flags)
 		repr = sp_repr_new ("ellipse");
 	}
 
-	sp_repr_set_double_attribute (repr, "cx", ellipse->cx.computed);
-	sp_repr_set_double_attribute (repr, "cy", ellipse->cy.computed);
-	sp_repr_set_double_attribute (repr, "rx", ellipse->rx.computed);
-	sp_repr_set_double_attribute (repr, "ry", ellipse->ry.computed);
+	sp_repr_set_double (repr, "cx", ellipse->cx.computed);
+	sp_repr_set_double (repr, "cy", ellipse->cy.computed);
+	sp_repr_set_double (repr, "rx", ellipse->rx.computed);
+	sp_repr_set_double (repr, "ry", ellipse->ry.computed);
 
 	sp_arc_set_elliptical_path_attribute (SP_ARC (object), repr);
 	
@@ -533,9 +533,9 @@ sp_circle_write (SPObject *object, SPRepr *repr, guint flags)
 		repr = sp_repr_new ("circle");
 	}
 
-	sp_repr_set_double_attribute (repr, "cx", ellipse->cx.computed);
-	sp_repr_set_double_attribute (repr, "cy", ellipse->cy.computed);
-	sp_repr_set_double_attribute (repr, "r", ellipse->rx.computed);
+	sp_repr_set_double (repr, "cx", ellipse->cx.computed);
+	sp_repr_set_double (repr, "cy", ellipse->cy.computed);
+	sp_repr_set_double (repr, "r", ellipse->rx.computed);
 	
 	if (((SPObjectClass *) circle_parent_class)->write)
 		((SPObjectClass *) circle_parent_class)->write (object, repr, flags);
@@ -745,17 +745,17 @@ sp_arc_write (SPObject *object, SPRepr *repr, guint flags)
 			repr = sp_repr_new ("path");
 		}
 		sp_repr_set_attr (repr, "sodipodi:type", "arc");
-		sp_repr_set_double_attribute (repr, "sodipodi:cx", ge->cx.computed);
-		sp_repr_set_double_attribute (repr, "sodipodi:cy", ge->cy.computed);
-		sp_repr_set_double_attribute (repr, "sodipodi:rx", ge->rx.computed);
-		sp_repr_set_double_attribute (repr, "sodipodi:ry", ge->ry.computed);
+		sp_repr_set_double (repr, "sodipodi:cx", ge->cx.computed);
+		sp_repr_set_double (repr, "sodipodi:cy", ge->cy.computed);
+		sp_repr_set_double (repr, "sodipodi:rx", ge->rx.computed);
+		sp_repr_set_double (repr, "sodipodi:ry", ge->ry.computed);
 
 		// write start and end only if they are non-trivial; otherwise remove
 		len = fmod (ge->end - ge->start, SP_2PI);
 		if (len < 0.0) len += SP_2PI;
 		if (!(fabs (len) < 1e-8 || fabs (len - SP_2PI) < 1e-8)) {
-			sp_repr_set_double_attribute (repr, "sodipodi:start", ge->start);
-			sp_repr_set_double_attribute (repr, "sodipodi:end", ge->end);
+			sp_repr_set_double (repr, "sodipodi:start", ge->start);
+			sp_repr_set_double (repr, "sodipodi:end", ge->end);
 			sp_repr_set_attr (repr, "sodipodi:open", (!ge->closed) ? "true" : NULL);
 		} else {
 			sp_repr_set_attr (repr, "sodipodi:end", NULL);
@@ -772,10 +772,10 @@ sp_arc_write (SPObject *object, SPRepr *repr, guint flags)
 			if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 				repr = sp_repr_new ("ellipse");
 			}
-			sp_repr_set_double_attribute (repr, "cx", ge->cx.computed);
-			sp_repr_set_double_attribute (repr, "cy", ge->cy.computed);
-			sp_repr_set_double_attribute (repr, "rx", ge->rx.computed);
-			sp_repr_set_double_attribute (repr, "ry", ge->ry.computed);
+			sp_repr_set_double (repr, "cx", ge->cx.computed);
+			sp_repr_set_double (repr, "cy", ge->cy.computed);
+			sp_repr_set_double (repr, "rx", ge->rx.computed);
+			sp_repr_set_double (repr, "ry", ge->ry.computed);
 		} else {
 			if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 				repr = sp_repr_new ("path");

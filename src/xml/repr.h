@@ -239,8 +239,6 @@ unsigned int sp_repr_set_double_default (SPRepr *repr, const  gchar *key, double
 /* Deprecated */
 double sp_repr_get_double_attribute (SPRepr * repr, const gchar * key, double def);
 int sp_repr_get_int_attribute (SPRepr * repr, const gchar * key, int def);
-unsigned int sp_repr_set_double_attribute (SPRepr * repr, const gchar * key, double value);
-unsigned int sp_repr_set_int_attribute (SPRepr * repr, const gchar * key, int value);
 
 int sp_repr_compare_position (SPRepr * first, SPRepr * second);
 

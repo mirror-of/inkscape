@@ -1,3 +1,8 @@
+2004-02-12  MenTaLguY <mental@rydia.net>
+
+	* src/xml/repr-util.cpp, src/xml/repr.h: pruned some obsolete
+	  functions
+
 2004-02-12  Johan Ceuppens  <jceuppen@easynet.be>
 	
 	* configure.in src/Makefile.am: --with-inkjar (default no)

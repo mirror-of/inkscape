@@ -429,15 +429,15 @@ sp_rect_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
 		t->c[3] = 1.0;
 	}
 	/* fixme: Would be nice to preserve units here */
-	sp_repr_set_double_attribute (repr, "width", rect->width.computed * sw);
-	sp_repr_set_double_attribute (repr, "height", rect->height.computed * sh);
+	sp_repr_set_double (repr, "width", rect->width.computed * sw);
+	sp_repr_set_double (repr, "height", rect->height.computed * sh);
 	if (rect->rx.set) sp_repr_set_double (repr, "rx", rect->rx.computed * sw);
 	if (rect->ry.set) sp_repr_set_double (repr, "ry", rect->ry.computed * sh);
 
 	/* Find start in item coords */
 	nr_matrix_invert (&rev, t);
-	sp_repr_set_double_attribute (repr, "x", px * rev.c[0] + py * rev.c[2]);
-	sp_repr_set_double_attribute (repr, "y", px * rev.c[1] + py * rev.c[3]);
+	sp_repr_set_double (repr, "x", px * rev.c[0] + py * rev.c[2]);
+	sp_repr_set_double (repr, "y", px * rev.c[1] + py * rev.c[3]);
 
 	if (sp_svg_transform_write (c, 80, t)) {
 		sp_repr_set_attr (SP_OBJECT_REPR (item), "transform", c);

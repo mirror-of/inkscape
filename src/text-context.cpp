@@ -251,8 +251,8 @@ sp_text_context_setup_text (SPTextContext *tc)
 		sp_repr_css_set (rtext, css, "style");
 		sp_repr_css_attr_unref (css);
 	}
-	sp_repr_set_double_attribute (rtext, "x", tc->pdoc[NR::X]);
-	sp_repr_set_double_attribute (rtext, "y", tc->pdoc[NR::Y]);
+	sp_repr_set_double (rtext, "x", tc->pdoc[NR::X]);
+	sp_repr_set_double (rtext, "y", tc->pdoc[NR::Y]);
 
 	/* Create <tspan> */
 	SPRepr *rtspan = sp_repr_new ("tspan");

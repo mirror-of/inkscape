@@ -275,7 +275,7 @@ void sp_guide_position_set(SPGuide *guide, double position)
 	g_assert (SP_IS_GUIDE (guide));
 
 	sp_guide_moveto(guide, position);
-	sp_repr_set_double_attribute(SP_OBJECT(guide)->repr,
+	sp_repr_set_double(SP_OBJECT(guide)->repr,
 				     "position", position);
 }
 

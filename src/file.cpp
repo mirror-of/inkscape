@@ -490,8 +490,8 @@ file_import (SPDocument *doc, const gchar *filename)
 			repr = sp_repr_new ("image");
 			sp_repr_set_attr (repr, "xlink:href", relname);
 			sp_repr_set_attr (repr, "sodipodi:absref", filename);
-			sp_repr_set_double_attribute (repr, "width", gdk_pixbuf_get_width (pb));
-			sp_repr_set_double_attribute (repr, "height", gdk_pixbuf_get_height (pb));
+			sp_repr_set_double (repr, "width", gdk_pixbuf_get_width (pb));
+			sp_repr_set_double (repr, "height", gdk_pixbuf_get_height (pb));
 			sp_document_add_repr (doc, repr);
 			sp_repr_unref (repr);
 			sp_document_done (doc);

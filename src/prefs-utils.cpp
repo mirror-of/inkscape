@@ -41,7 +41,7 @@ prefs_set_int_attribute (gchar const *path, gchar const *attr, gint value)
 	SPRepr *repr;
 	repr = inkscape_get_repr (INKSCAPE, path);
 	if (repr) {
-		sp_repr_set_int_attribute (repr, attr, value);
+		sp_repr_set_int (repr, attr, value);
 	}
 }
 
@@ -82,7 +82,7 @@ prefs_set_double_attribute (gchar const *path, gchar const *attr, double value)
 	SPRepr *repr;
 	repr = inkscape_get_repr (INKSCAPE, path);
 	if (repr) {
-		sp_repr_set_double_attribute (repr, attr, value);
+		sp_repr_set_double (repr, attr, value);
 	}
 }
 

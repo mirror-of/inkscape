@@ -546,10 +546,10 @@ sp_namedview_document_from_window (SPDesktop *desktop)
 	if (save_geometry && win) {
 		gtk_window_get_size (win, &w, &h);
 		gtk_window_get_position (win, &x, &y);
-		sp_repr_set_int_attribute (view, "inkscape:window-width", w);
-		sp_repr_set_int_attribute (view, "inkscape:window-height", h);
-		sp_repr_set_int_attribute (view, "inkscape:window-x", x);
-		sp_repr_set_int_attribute (view, "inkscape:window-y", y);
+		sp_repr_set_int (view, "inkscape:window-width", w);
+		sp_repr_set_int (view, "inkscape:window-height", h);
+		sp_repr_set_int (view, "inkscape:window-x", x);
+		sp_repr_set_int (view, "inkscape:window-y", y);
 	}
 
 	// restore undoability

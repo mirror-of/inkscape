@@ -576,13 +576,13 @@ sp_image_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
 		t->c[2] = 0.0;
 		t->c[3] = 1.0;
 	}
-	sp_repr_set_double_attribute (repr, "width", image->width.computed * sw);
-	sp_repr_set_double_attribute (repr, "height", image->height.computed * sh);
+	sp_repr_set_double (repr, "width", image->width.computed * sw);
+	sp_repr_set_double (repr, "height", image->height.computed * sh);
 
 	/* Find start in item coords */
 	nr_matrix_invert (&rev, t);
-	sp_repr_set_double_attribute (repr, "x", px * rev.c[0] + py * rev.c[2]);
-	sp_repr_set_double_attribute (repr, "y", px * rev.c[1] + py * rev.c[3]);
+	sp_repr_set_double (repr, "x", px * rev.c[0] + py * rev.c[2]);
+	sp_repr_set_double (repr, "y", px * rev.c[1] + py * rev.c[3]);
 
 	if (sp_svg_transform_write (c, 80, t)) {
 		sp_repr_set_attr (SP_OBJECT_REPR (item), "transform", c);
