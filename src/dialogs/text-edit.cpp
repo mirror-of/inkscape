@@ -347,8 +347,13 @@ sp_text_edit_dialog (void)
             gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
             gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
 
-            GtkWidget *f = gtk_frame_new (NULL);
-            gtk_frame_set_shadow_type (GTK_FRAME (f), GTK_SHADOW_IN);
+            GtkWidget *scroller = gtk_scrolled_window_new ( NULL, NULL );
+            gtk_scrolled_window_set_policy ( GTK_SCROLLED_WINDOW (scroller),
+                                             GTK_POLICY_AUTOMATIC,
+                                             GTK_POLICY_AUTOMATIC );
+            gtk_scrolled_window_set_shadow_type ( GTK_SCROLLED_WINDOW(scroller), GTK_SHADOW_IN );
+            gtk_widget_show (scroller);
+
             GtkTextBuffer *tb = gtk_text_buffer_new (NULL);
             GtkWidget *txt = gtk_text_view_new_with_buffer (tb);
 #ifdef WITH_GTKSPELL
@@ -367,8 +372,8 @@ sp_text_edit_dialog (void)
 #endif
             gtk_widget_set_size_request (txt, -1, 64);
             gtk_text_view_set_editable (GTK_TEXT_VIEW (txt), TRUE);
-            gtk_container_add (GTK_CONTAINER (f), txt);
-            gtk_box_pack_start (GTK_BOX (vb), f, TRUE, TRUE, 0);
+            gtk_container_add (GTK_CONTAINER (scroller), txt);
+            gtk_box_pack_start (GTK_BOX (vb), scroller, TRUE, TRUE, 0);
             g_signal_connect ( G_OBJECT (tb), "changed", 
                                G_CALLBACK (sp_text_edit_dialog_text_changed), dlg );
             g_signal_connect (G_OBJECT (txt), "focus-in-event", G_CALLBACK (text_view_focus_in), dlg);
