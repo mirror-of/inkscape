@@ -5,6 +5,11 @@
 	introduced when the code was copied from the gimp.  They caused
 	problems when exporting bitmap images to PS.
 
+	* src/file.cpp: fix bug whereby the first file loaded in a session
+	would not have its modified status checked when closed.  Hence if
+	you modified the first file you loaded and then closed it, you
+	would not be asked to confirm the close.
+
 2004-04-19  MenTaLguY <mental@rydia.net>
 
     * src/arc-context.cpp, src/desktop-handles.h, src/desktop.h,

@@ -131,6 +131,7 @@ sp_file_open (const gchar *uri, Inkscape::Extension::Extension * key)
         SPDocument *existing = desktop ? SP_DT_DOCUMENT (desktop) : NULL;
         if (existing && existing->virgin) {
             sp_desktop_change_document (desktop, doc);
+            sp_document_unref (doc);
             /* in situations where the document is marked virgin, but there
              * are things in it (like for a "revert"), unselect everything
              * after we load
