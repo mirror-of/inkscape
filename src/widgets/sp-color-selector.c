@@ -60,7 +60,7 @@ sp_color_selector_get_type (void)
 static void
 sp_color_selector_class_init (SPColorSelectorClass *klass)
 {
-	static const gchar* nameset[] = {_("Unnamed"), 0};
+	static const gchar* nameset[] = {N_("Unnamed"), 0};
 	GtkObjectClass *object_class;
 	GtkWidgetClass *widget_class;
 

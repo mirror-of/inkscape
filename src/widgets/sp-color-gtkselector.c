@@ -70,7 +70,7 @@ sp_color_gtkselector_get_type (void)
 static void
 sp_color_gtkselector_class_init (SPColorGtkselectorClass *klass)
 {
-	static const gchar* nameset[] = {_("GTK+"), 0};
+	static const gchar* nameset[] = {N_("GTK+"), 0};
 	GtkObjectClass *object_class;
 	GtkWidgetClass *widget_class;
 	SPColorSelectorClass *selector_class;

@@ -103,7 +103,7 @@ sp_color_scales_get_type (void)
 static void
 sp_color_scales_class_init (SPColorScalesClass *klass)
 {
-	static const gchar* nameset[] = {_("RGB"), _("HSV"), _("CMYK"), 0};
+	static const gchar* nameset[] = {N_("RGB"), N_("HSV"), N_("CMYK"), 0};
 	GtkObjectClass *object_class;
 	GtkWidgetClass *widget_class;
 	SPColorSelectorClass *selector_class;
