@@ -636,6 +636,7 @@ sp_namedview_document_from_window (SPDesktop *desktop)
 	sp_desktop_get_display_area (desktop, &r);
 
 	// saving window geometry is not undoable
+	gboolean saved = sp_document_get_undo_sensitive(SP_DT_DOCUMENT (desktop));
 	sp_document_set_undo_sensitive (SP_DT_DOCUMENT (desktop), FALSE);
 
 	sp_repr_set_double (view, "inkscape:zoom", SP_DESKTOP_ZOOM (desktop));
@@ -654,7 +655,7 @@ sp_namedview_document_from_window (SPDesktop *desktop)
 	sp_repr_set_attr(view, "inkscape:current-layer", SP_OBJECT_ID(desktop->currentLayer()));
 
 	// restore undoability
-	sp_document_set_undo_sensitive (SP_DT_DOCUMENT (desktop), TRUE);
+	sp_document_set_undo_sensitive (SP_DT_DOCUMENT (desktop), saved);
 }
 
 void
@@ -735,13 +736,14 @@ sp_namedview_toggle_guides (SPDocument *doc, SPRepr *repr)
 		v = !v;
 	}
 
+	gboolean saved = sp_document_get_undo_sensitive(doc);
 	sp_document_set_undo_sensitive(doc, FALSE);
 
 	sp_repr_set_boolean (repr, "showguides", v);
 	sp_repr_set_boolean (repr, "inkscape:guide-bbox", v);
 
 	sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
-	sp_document_set_undo_sensitive(doc, TRUE);
+	sp_document_set_undo_sensitive(doc, saved);
 }
 
 void
@@ -751,13 +753,14 @@ sp_namedview_toggle_grid (SPDocument *doc, SPRepr *repr)
 	sp_repr_get_boolean (repr, "showgrid", &v);
 	v = !v;
 
+	gboolean saved = sp_document_get_undo_sensitive(doc);
 	sp_document_set_undo_sensitive(doc, FALSE);
 
 	sp_repr_set_boolean (repr, "showgrid", v);
 	sp_repr_set_boolean (repr, "inkscape:grid-bbox", v);
 
 	sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
-	sp_document_set_undo_sensitive(doc, TRUE);
+	sp_document_set_undo_sensitive(doc, saved);
 }
 
 static void

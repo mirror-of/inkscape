@@ -33,6 +33,13 @@
 
 /*
  * Undo & redo
+ *
+ *   Since undo sensitivity needs to be nested, setting undo sensitivity
+ *   should be done like this:
+ *      gboolean saved = sp_document_get_undo_sensitive(document);
+ *      sp_document_set_undo_sensitive(document, FALSE);
+ *      ... do stuff ...
+ *      sp_document_set_undo_sensitive(document, saved);
  */
 
 void

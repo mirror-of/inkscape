@@ -536,12 +536,13 @@ void sp_document_set_uri(SPDocument *document, gchar const *uri)
 	// Update saveable repr attributes.
 	SPRepr *repr = sp_document_repr_root(document);
 	// changing uri in the document repr must not be not undoable
+	gboolean saved = sp_document_get_undo_sensitive(document);
 	sp_document_set_undo_sensitive (document, FALSE);
 	if (document->base)
             sp_repr_set_attr (repr, "sodipodi:docbase", document->base);
 
 	sp_repr_set_attr (repr, "sodipodi:docname", document->name);
-	sp_document_set_undo_sensitive (document, TRUE);
+	sp_document_set_undo_sensitive (document, saved);
 
 	g_signal_emit (G_OBJECT (document), signals [URI_SET], 0, document->uri);
 }

@@ -562,10 +562,11 @@ sp_text_set_shape (SPText *text)
             tspan->y.computed=cur_y;
             tspan->y.set=1;
             // this was labeled as 'evil' in the old sp-text.cpp
+            gboolean saved = sp_document_get_undo_sensitive(SP_OBJECT_DOCUMENT (tspan));
             sp_document_set_undo_sensitive (SP_OBJECT_DOCUMENT (tspan), FALSE);
             sp_repr_set_double (SP_OBJECT_REPR (tspan), "x", cur_x);
             sp_repr_set_double (SP_OBJECT_REPR (tspan), "y", cur_y);
-            sp_document_set_undo_sensitive (SP_OBJECT_DOCUMENT (tspan), TRUE);
+            sp_document_set_undo_sensitive (SP_OBJECT_DOCUMENT (tspan), saved);
         }
         // the layout was done with lines all starting at (0,0) -> translate to the correct position, according to the start of each chunk
         cur_x=cur_y=0;

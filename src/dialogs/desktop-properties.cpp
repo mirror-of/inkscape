@@ -199,10 +199,11 @@ sp_dtw_whatever_toggled(GtkToggleButton *tb, GtkWidget *dialog)
     SPRepr *repr = SP_OBJECT_REPR(dt->namedview);
     gchar const *key = (gchar const *)gtk_object_get_data(GTK_OBJECT(tb), "key");
 
+    gboolean saved = sp_document_get_undo_sensitive(doc);
     sp_document_set_undo_sensitive(doc, FALSE);
     sp_repr_set_boolean(repr, key, gtk_toggle_button_get_active(tb));
     sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
-    sp_document_set_undo_sensitive(doc, TRUE);
+    sp_document_set_undo_sensitive(doc, saved);
     sp_document_done(doc);
 }
 
@@ -223,11 +224,12 @@ sp_dtw_border_layer_toggled(GtkToggleButton *tb, GtkWidget *dialog)
 
     SPRepr *repr = SP_OBJECT_REPR(dt->namedview);
 
+    gboolean saved = sp_document_get_undo_sensitive(doc);
     sp_document_set_undo_sensitive(doc, FALSE);
     sp_repr_set_attr(repr, "borderlayer",
                      gtk_toggle_button_get_active(tb) ? "top" : NULL);
     sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
-    sp_document_set_undo_sensitive(doc, TRUE);
+    sp_document_set_undo_sensitive(doc, saved);
     sp_document_done(doc);
 }
 
@@ -260,10 +262,11 @@ sp_dtw_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
     if (us != NULL)
         os << sp_unit_selector_get_unit(us)->abbr;
 
+    gboolean saved = sp_document_get_undo_sensitive(doc);
     sp_document_set_undo_sensitive(doc, FALSE);
     sp_repr_set_attr(repr, key, os.str().c_str());
     sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
-    sp_document_set_undo_sensitive(doc, TRUE);
+    sp_document_set_undo_sensitive(doc, saved);
     sp_document_done(doc);
 }
 

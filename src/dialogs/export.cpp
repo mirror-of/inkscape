@@ -1027,6 +1027,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
             bool modified = FALSE;
             const gchar * temp_string;
 
+            gboolean saved = sp_document_get_undo_sensitive(doc);
             sp_document_set_undo_sensitive(doc, FALSE);
 
             temp_string = sp_repr_attr(repr, "inkscape:export-filename");
@@ -1047,7 +1048,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
             
             if (modified)
                 sp_repr_set_attr(repr, "sodipodi:modified", "TRUE");
-            sp_document_set_undo_sensitive(doc, TRUE);
+            sp_document_set_undo_sensitive(doc, saved);
             break;
         }
         case SELECTION_SELECTION: {
@@ -1055,6 +1056,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
             SPDocument * doc = SP_ACTIVE_DOCUMENT;
             bool modified = FALSE;
 
+            gboolean saved = sp_document_get_undo_sensitive(doc);
             sp_document_set_undo_sensitive(doc, FALSE);
             reprlst = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->reprList();
 
@@ -1089,7 +1091,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
                 sp_repr_set_attr(repr, "sodipodi:modified", "TRUE");
             }
 
-            sp_document_set_undo_sensitive(doc, TRUE);
+            sp_document_set_undo_sensitive(doc, saved);
             break;
         }
         default:

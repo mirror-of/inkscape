@@ -1,4 +1,14 @@
-2004-10-18  MenTaLguY  <mental@rydia.net>
+2004-10-28  Kees Cook  <kees@outflux.net>
+
+	* src/document-undo.cpp, src/document.cpp, src/sp-namedview.cpp,
+	  src/sp-text.cpp, src/dialogs/desktop-properties.cpp,
+	  src/dialogs/export.cpp, src/extension/input.cpp, 
+	  src/extension/output.cpp, src/extension/system.cpp:
+	  Fixing calls to sp_document_set_undo_sensitive to correct allow for
+	  nesting, as suggested by mental.  Found while tracking down bug
+	  #1030436.
+
+2004-10-28  MenTaLguY  <mental@rydia.net>
 
 	* src/util/list.h: cleanups of list class.  I think, aside from
 	  documentation and maybe fixes for g++ 3.4 (if required), this
