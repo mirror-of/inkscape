@@ -53,7 +53,7 @@ DISTCLEANFILES = inkscape.desktop \
 # $(srcdir).
 inkscape.1: inkscape.pod fix-roff-punct Makefile.am
 	set -e; \
-	d=`sed -n 's,/,-,g;s,.*\$$Date: \(..........\).*,\1,p' $(srcdir)/inkscape.pod`; \
+	d=`sed -n 's,/,-,g;s,.*\$$[D]ate: \(..........\).*,\1,p' $(srcdir)/inkscape.pod`; \
 	pod2man $(srcdir)/inkscape.pod \
 	  | sed 's/^\.TH .*/.TH INKSCAPE 1 "'"$$d"'" "Inkscape-$(VERSION)" "User Commands"/' \
 	  | perl -pe 'if (/^\[\% .*INCLUDE.*AUTHORS.* \%\]/) { open(FOO, "$(srcdir)/AUTHORS");$$_ = join(",\n", map { chomp; $$_ } <FOO>) . "\n"; }' \
