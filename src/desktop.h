@@ -31,6 +31,7 @@ class SPDesktopWidgetClass;
 #include "helper/helper-forward.h"
 #include "forward.h"
 #include "view.h"
+#include "desktop-snap.h"
 
 enum ColorComponent {
   COMPONENT_R,
@@ -112,9 +113,10 @@ struct SPDesktop : public SPView {
 
         gint number;
 	gboolean active;
-	/* Normalized snap distances */
-	gdouble gridsnap;
-	gdouble guidesnap;
+
+	GridSnapper grid_snapper;
+	GuideSnapper guide_snapper;
+  
 	/* fixme: This has to be implemented in different way */
 	guint guides_active : 1;
 
