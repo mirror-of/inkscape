@@ -30,6 +30,8 @@
 # include <windows.h>
 #endif
 
+#include <glib.h>
+
 size_t  font_style_hash::operator()(const font_style &x) const {
 	int      h=0,n;
 	for (int i=0;i<6;i++) {
@@ -323,6 +325,8 @@ unsigned int font_instance::Attribute(const gchar *key, gchar *str, unsigned int
 
 void font_instance::InstallFace(PangoFont* iFace)
 {
+        if ( !iFace )
+            return;
 	pFont=iFace;
 #ifdef WITH_XFT
 	theFace=pango_ft2_font_get_face(pFont);
