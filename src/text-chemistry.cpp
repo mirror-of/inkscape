@@ -73,23 +73,36 @@ text_put_on_path (void)
 		return;
 	}
 
+	// fixme: check that the text is not textpath already
+
+	// fixme: remove transform from text, but scale fontsize by expansion
+
+	// fixme in transform_selectiion: treat textpath and its path the same as clone and its original
+
+	// make a list of text children
 	GSList *text_reprs = NULL;
 	for (SPObject *o = SP_OBJECT(text)->children; o != NULL; o = o->next) {
 		text_reprs = g_slist_prepend (text_reprs, SP_OBJECT_REPR (o));
 	}
 
+	// create textPath and put it into the text
 	SPRepr *textpath = sp_repr_new ("textPath");
+	// reference the shape
 	sp_repr_set_attr (textpath, "xlink:href", g_strdup_printf ("#%s", sp_repr_attr (SP_OBJECT_REPR(shape), "id")));
 	sp_repr_add_child (SP_OBJECT_REPR(text), textpath, NULL);
 
 	for ( GSList *i = text_reprs ; i ; i = i->next ) {
+		// make a copy of each text children
 		SPRepr *copy = sp_repr_duplicate((SPRepr *) i->data);
+		// We cannot have multiline in textpath, so remove line attrs from tspans
 		if (!strcmp (sp_repr_name (copy), "tspan")) {
 			sp_repr_set_attr (copy, "sodipodi:role", NULL);
 			sp_repr_set_attr (copy, "x", NULL);
 			sp_repr_set_attr (copy, "y", NULL);
 		}
+		// remove the old repr from under text
 		sp_repr_remove_child(SP_OBJECT_REPR(text), (SPRepr *) i->data); 
+		// put its copy into under textPath
 		sp_repr_add_child (textpath, copy, NULL); // fixme: copy id
 	}
 
