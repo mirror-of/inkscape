@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <errno.h>
+#include <math.h>
 
 #include <libnr/nr-macros.h>
 #include <libnr/nr-matrix.h>
@@ -49,6 +50,7 @@
 #include "helper/canvas-bpath.h"
 #include "enums.h"
 #include "document.h"
+#include "inkscape.h"
 #include "style.h"
 
 #include "ps.h"
@@ -104,14 +106,17 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 	tt = gtk_tooltips_new ();
 	g_object_ref ((GObject *) tt);
 	gtk_object_sink ((GtkObject *) tt);
-       dlg = gtk_dialog_new_with_buttons (_("Print Destination"), NULL,
-                                          (GtkDialogFlags) (GTK_DIALOG_MODAL |
-                                          GTK_DIALOG_NO_SEPARATOR),
-                                          GTK_STOCK_CANCEL,
-                                          GTK_RESPONSE_CANCEL,
-                                          GTK_STOCK_PRINT,
-                                          GTK_RESPONSE_OK,
-                                          NULL);
+  
+     dlg = gtk_dialog_new_with_buttons (_("Print Destination"), 
+						 (GtkWindow *) g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window"),
+                                       (GtkDialogFlags) (GTK_DIALOG_MODAL | GTK_DIALOG_NO_SEPARATOR | GTK_DIALOG_DESTROY_WITH_PARENT),
+                                       GTK_STOCK_CANCEL,
+                                       GTK_RESPONSE_CANCEL,
+                                       GTK_STOCK_PRINT,
+                                       GTK_RESPONSE_OK,
+                                       NULL);
+
+	gtk_dialog_set_default_response (GTK_DIALOG (dlg), GTK_RESPONSE_OK);
 
 	vbox = GTK_DIALOG (dlg)->vbox;
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 4);
@@ -128,7 +133,7 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 	gtk_tooltips_set_tip ((GtkTooltips *) tt, rb,
 						  _("Use PostScript vector operators, resulting image will be (usually) smaller "
 						    "and can be arbitrarily scaled, but alpha transparency, "
-							"markers and patterns will be lost"), NULL);
+							"gradients, markers, and patterns will be lost"), NULL);
 	if (!p2bm) gtk_toggle_button_set_active ((GtkToggleButton *) rb, TRUE);
 	gtk_box_pack_start (GTK_BOX (vb), rb, FALSE, FALSE, 0);
 	rb = gtk_radio_button_new_with_label (gtk_radio_button_get_group ((GtkRadioButton *) rb), _("Print as bitmap"));
@@ -184,6 +189,9 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 		gtk_entry_set_text (GTK_ENTRY (e), val);
 	}
 	gtk_box_pack_start (GTK_BOX (vb), e, FALSE, FALSE, 0);
+
+	// pressing enter in the destination field is the same as clicking Print:
+	gtk_entry_set_activates_default (GTK_ENTRY(e), TRUE);
 
 	gtk_widget_show_all (vbox);
 	
@@ -254,7 +262,7 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 {
 	int res;
 
-	res = fprintf (_stream, "%%!\n");
+	res = fprintf (_stream, "%%!PS-Adobe-2.0\n");
 	/* flush this to test output stream as early as possible */
 	if (fflush(_stream)) {
 /*		g_print("caught error in sp_module_print_plain_begin\n");*/
@@ -273,6 +281,15 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 	_height = sp_document_height (doc);
 
 	if (_bitmap) return 0;
+
+	if (res >= 0) res = fprintf (_stream, "%%%%BoundingBox: %i %i %i %i\n",
+															 0, 0,
+															 (int) ceil (sp_document_width (doc)),
+															 (int) ceil (sp_document_height (doc)));
+	if (res >= 0) res = fprintf (_stream, "%%%%HiResBoundingBox: %g %g %g %g\n",
+															 0.0, 0.0,
+															 sp_document_width (doc),
+															 sp_document_height (doc));
 
 	if (res >= 0) res = fprintf (_stream, "%g %g translate\n", 0.0, sp_document_height (doc));
 	if (res >= 0) res = fprintf (_stream, "0.8 -0.8 scale\n");
@@ -351,6 +368,13 @@ PrintPS::finish (Inkscape::Extension::Print *mod)
 	}
 
 	res = fprintf (_stream, "showpage\n");
+
+	/* Flush stream to be sure */
+	(void) fflush (_stream);
+
+	/* fixme: should really use pclose for popen'd streams */
+	fclose (_stream);
+	_stream = 0;
 
 	return res;
 }
