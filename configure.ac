@@ -223,11 +223,11 @@ AC_ARG_WITH(perl,
             [with_perl=$withval], [with_perl=no])
 
 if test "x$with_perl" = "xyes"; then
-    PERL_CFLAGS=`perl -MExtUtils::Embed -e ccopts 2>/dev/null`
+    checkPERL_CFLAGS=`perl -MExtUtils::Embed -e ccopts 2>/dev/null`
     if test "$?" -gt "0"; then
         with_perl="no"
     else
-        PERL_LDFLAGS=`perl -MExtUtils::Embed -e ldopts 2>/dev/null`
+        checkPERL_LDFLAGS=`perl -MExtUtils::Embed -e ldopts 2>/dev/null`
         if test "$?" -gt "0"; then
             with_perl="no"
         else
@@ -238,15 +238,19 @@ fi
 AC_MSG_RESULT([$with_perl])
 if test "x$with_perl" = "xyes"; then
     # Test that we actually have the perl libraries installed
-    oldLDFLAGS="$LDFLAGS"
     oldCFLAGS="$CFLAGS"
-    LDFLAGS="$LDFLAGS $PERL_LDFLAGS"
-    CFLAGS="$CFLAGS $PERL_CFLAGS"
+    oldLDFLAGS="$LDFLAGS"
+    CFLAGS="$CFLAGS $checkPERL_CFLAGS"
+    LDFLAGS="$LDFLAGS $checkPERL_LDFLAGS"
     AC_CHECK_FUNC([perl_run],[
+	PERL_CFLAGS="$checkPERL_CFLAGS"
+	PERL_LDFLAGS="$checkPERL_LDFLAGS"
         AC_DEFINE(WITH_PERL, 1, [use Perl for embedded scripting])
         AC_SUBST(PERL_CFLAGS)
         AC_SUBST(PERL_LDFLAGS)
-        ],[with_perl="no"])
+        ],[
+	with_perl="no"
+	])
     LDFLAGS="$oldLDFLAGS"
     CFLAGS="$oldCFLAGS"
 fi
@@ -262,15 +266,16 @@ AC_ARG_WITH(python,
             [with_python=$withval], [with_python=no])
 
 if test "x$with_python" = "xyes"; then
-    PYTHON_CFLAGS=`python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('INCLUDEPY')" 2>/dev/null`
+    checkPYTHON_CFLAGS=`python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('INCLUDEPY')" 2>/dev/null`
     if test "$?" -gt "0"; then
         with_python="no"
     else
-        PYTHON_LIBS=`python -c "import distutils.sysconfig ; print '%s/%s' % (distutils.sysconfig.get_config_var('LIBPL'),distutils.sysconfig.get_config_var('LIBRARY'))" 2>/dev/null`
+        checkPYTHON_LIBS=`python -c "import distutils.sysconfig ; print '%s/%s' % (distutils.sysconfig.get_config_var('LIBPL'),distutils.sysconfig.get_config_var('LIBRARY'))" 2>/dev/null`
         if test "$?" -gt "0"; then
             with_python="no"
         else
-            PYTHON_CFLAGS="-I$PYTHON_CFLAGS"
+            PYTHON_CFLAGS="-I$checkPYTHON_CFLAGS"
+            PYTHON_LIBS="$checkPYTHON_LIBS"
             AC_DEFINE(WITH_PYTHON, 1, [use Python for embedded scripting])
             AC_SUBST(PYTHON_CFLAGS)
             AC_SUBST(PYTHON_LIBS)
@@ -425,6 +430,16 @@ if test "$GCC" = "yes"; then
   # as a callback or similar function pointer use).
 
   CXXFLAGS="-Wall -W -Wpointer-arith -Wcast-align -Wsign-compare -Woverloaded-virtual -Wswitch  $CXXFLAGS"
+
+  dnl Test for arch-specific situations.
+  case "$host_cpu" in
+    mips|mipsel)
+      dnl Symbol tables can get too large: this uses alternate tables
+      dnl See http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=283476
+      CXXFLAGS="$CXXFLAGS -Wa,-xgot"
+      CFLAGS="$CFLAGS -Wa,-xgot"
+      ;;
+  esac
 fi
 
 dnl ******************************
