@@ -365,6 +365,9 @@ GdkPixbuf *gdkCanny(GdkPixbuf *img, double lowThreshold, double highThreshold)
 #########################################################################*/
 typedef struct OctreeNode_def OctreeNode;
 
+/**
+ * The basic octree node
+ */
 struct OctreeNode_def
 {
     unsigned long r;
@@ -378,6 +381,9 @@ struct OctreeNode_def
 };
 
 
+/**
+ * create an octree node, and initialize it
+ */
 OctreeNode *octreeNodeCreate()
 {
     OctreeNode *node = (OctreeNode *)malloc(sizeof(OctreeNode));
@@ -395,6 +401,9 @@ OctreeNode *octreeNodeCreate()
     return node;
 }
 
+/**
+ *  delete an octree node and its children
+ */
 void octreeNodeDelete(OctreeNode *node)
 {
     if (!node)
@@ -405,6 +414,9 @@ void octreeNodeDelete(OctreeNode *node)
 }
 
 
+/**
+ *  delete the children of an octree node
+ */
 void octreeNodeDeleteChildren(OctreeNode *node)
 {
     if (!node)
@@ -420,6 +432,10 @@ void octreeNodeDeleteChildren(OctreeNode *node)
 
 
 
+/**
+ *  insert an RGB value into an octree node according to its
+ *  high-order rgb vector bits
+ */
 int octreeNodeInsert(OctreeNode *root, RGB rgb, int bitsPerSample)
 {
     OctreeNode *node = root;
@@ -459,6 +475,10 @@ int octreeNodeInsert(OctreeNode *root, RGB rgb, int bitsPerSample)
 
 
 
+/**
+ *  find an exact match for an RGB value, at the given bits
+ *  per sample.  if not found, return -1
+ */
 int octreeNodeFind(OctreeNode *root, RGB rgb, int bitsPerSample)
 {
     OctreeNode *node = root;
@@ -475,13 +495,15 @@ int octreeNodeFind(OctreeNode *root, RGB rgb, int bitsPerSample)
 
         OctreeNode *child = node->children[index];
         if (!child)
-            return node->index;
+            return -1;
         node = child; /*next level*/
         shift--;
         }
     printf("error.  this should not happen\n");
-    return 0;
+    return -1;
 }
+
+
 
 static void spaces(int nr)
 {
@@ -489,6 +511,9 @@ static void spaces(int nr)
         printf(" ");
 }
 
+/**
+ *  pretty-print an octree node and its children
+ */
 void octreeNodePrint(OctreeNode *node, int indent)
 {
     spaces(indent); printf("####Node###\n");
@@ -506,7 +531,12 @@ void octreeNodePrint(OctreeNode *node, int indent)
         }
 }
 
-/* Count all of the leaf nodes in the octree */
+
+
+
+/**
+ * Count all of the leaf nodes in the octree
+ */
 static void octreeLeafArray(OctreeNode *node, OctreeNode **array, int arraySize, int *len)
 {
     if (!node)
@@ -520,7 +550,11 @@ static void octreeLeafArray(OctreeNode *node, OctreeNode **array, int arraySize,
         octreeLeafArray(node->children[i], array, arraySize, len);
 }
 
-/* Count all of the leaf nodes in the octree */
+
+
+/**
+ *  Count all of the leaf nodes in the octree
+ */
 static int octreeLeafCount(OctreeNode *node)
 {
     if (!node)
@@ -533,7 +567,9 @@ static int octreeLeafCount(OctreeNode *node)
     return leaves;
 }
 
-/* Mark all of the leaf nodes in the octree with an index nr*/
+/**
+ * Mark all of the leaf nodes in the octree with an index nr
+ */
 static void octreeLeafIndex(OctreeNode *node, int *index)
 {
     if (!node)
@@ -548,7 +584,12 @@ static void octreeLeafIndex(OctreeNode *node, int *index)
         octreeLeafIndex(node->children[i], index);
 }
 
-/* Find a node that has children, and that also has the lowest pixel count */
+
+
+/**
+ * Find a node that has children, and that also
+ * has the lowest pixel count
+ */
 static void octreefindLowestLeaf(OctreeNode *node, OctreeNode **lowestLeaf)
 {
     if (!node)
@@ -565,7 +606,9 @@ static void octreefindLowestLeaf(OctreeNode *node, OctreeNode **lowestLeaf)
 }
 
 
-/* return the actual nr of colors in palette */
+/**
+ * reduce the leaves on an octree to a given number
+ */
 int octreePrune(OctreeNode *root, int nrColors)
 {
     int leafCount = octreeLeafCount(root);
@@ -614,7 +657,9 @@ int octreePrune(OctreeNode *root, int nrColors)
 
 
 
-
+/**
+ *
+ */
 OctreeNode *octreeBuild(RgbMap *rgbMap, int bitsPerSample, int nrColors)
 {
     OctreeNode *root = octreeNodeCreate();
@@ -643,6 +688,9 @@ OctreeNode *octreeBuild(RgbMap *rgbMap, int bitsPerSample, int nrColors)
 
 
 
+/**
+ *
+ */
 RGB *makeRGBPalette(OctreeNode *root, int nrColors)
 {
 
@@ -683,6 +731,35 @@ RGB *makeRGBPalette(OctreeNode *root, int nrColors)
 }
 
 
+/**
+ *  Return the closest color in the palette to the request
+ */
+RGB lookupQuantizedRGB(RGB *rgbpalette, int paletteSize, RGB candidate)
+{
+    /* slow method */
+    unsigned long closestMatch = 10000000;
+    RGB closestRGB = { 0 , 0, 0 };
+    for (int i=0 ; i<paletteSize ; i++)
+        {
+        RGB entry = rgbpalette[i];
+        unsigned long dr    = candidate.r - entry.r;
+        unsigned long dg    = candidate.g - entry.g;
+        unsigned long db    = candidate.b - entry.b;
+        unsigned long match = dr * dr + dg * dg + db * db;
+        if (match < closestMatch)
+            {
+            closestMatch = match;
+            closestRGB   = entry;
+            }
+        }
+
+    return closestRGB;
+}
+
+
+/**
+ *
+ */
 RgbMap *rgbMapQuantize(RgbMap *rgbMap, int bitsPerSample, int nrColors)
 {
     if (!rgbMap)
@@ -715,9 +792,10 @@ RgbMap *rgbMapQuantize(RgbMap *rgbMap, int bitsPerSample, int nrColors)
         for (int x=0 ; x<rgbMap->width ; x++)
             {
             RGB rgb = rgbMap->getPixel(rgbMap, x, y);
-            int indexNr = octreeNodeFind(otree, rgb, bitsPerSample);
+            //int indexNr = octreeNodeFind(otree, rgb, bitsPerSample);
             //printf("i:%d\n", indexNr);
-            RGB quantRgb = rgbpal[indexNr];
+            //RGB quantRgb = rgbpal[indexNr];
+            RGB quantRgb = lookupQuantizedRGB(rgbpal, nrColors, rgb);
             newMap->setPixelRGB(newMap, x, y, quantRgb); 
             }
         }
@@ -729,6 +807,10 @@ RgbMap *rgbMapQuantize(RgbMap *rgbMap, int bitsPerSample, int nrColors)
 }
 
 
+
+/**
+ *  Experimental
+ */
 GrayMap *rgbToIndexMap(OctreeNode *root, RgbMap *rgbMap, int bitsPerSample)
 {  
     GrayMap *gm = GrayMapCreate(rgbMap->width, rgbMap->height);
@@ -748,6 +830,9 @@ GrayMap *rgbToIndexMap(OctreeNode *root, RgbMap *rgbMap, int bitsPerSample)
 }
 
 
+/**
+ *
+ */
 GrayMap *quantizeBand(RgbMap *rgbMap, int nrColors)
 {
     int bitsPerSample = 4;
