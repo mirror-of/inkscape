@@ -24,11 +24,11 @@
 #include "../xml/repr-private.h"
 #include "sp-xmlview-tree.h"
 
-typedef struct _NodeData {
+struct NodeData {
 	SPXMLViewTree * tree;
 	GtkCTreeNode * node;
 	SPRepr * repr;
-} NodeData;
+};
 
 #define NODE_DATA(node) ((NodeData *)(GTK_CTREE_ROW ((node))->row.data))
 

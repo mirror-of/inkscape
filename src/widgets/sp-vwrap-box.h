@@ -38,13 +38,8 @@
 #define SP_VWRAP_BOX_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), SP_TYPE_VWRAP_BOX, SPVWrapBoxClass))
 
 
-/* --- typedefs --- */
-typedef struct _SPVWrapBox      SPVWrapBox;
-typedef struct _SPVWrapBoxClass SPVWrapBoxClass;
-
-
 /* --- SPVWrapBox --- */
-struct _SPVWrapBox
+struct SPVWrapBox
 {
   SPWrapBox parent_widget;
   
@@ -54,7 +49,7 @@ struct _SPVWrapBox
   /*<h2v-on>*/
 };
 
-struct _SPVWrapBoxClass
+struct SPVWrapBoxClass
 {
   SPWrapBoxClass parent_class;
 };

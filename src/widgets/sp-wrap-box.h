@@ -38,13 +38,11 @@
 #define SP_WRAP_BOX_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), SP_TYPE_WRAP_BOX, SPWrapBoxClass))
 
 
-/* --- typedefs --- */
-typedef struct _SPWrapBox      SPWrapBox;
-typedef struct _SPWrapBoxClass SPWrapBoxClass;
-typedef struct _SPWrapBoxChild SPWrapBoxChild;
+/* --- forward --- */
+struct SPWrapBoxChild;
 
 /* --- SPWrapBox --- */
-struct _SPWrapBox
+struct SPWrapBox
 {
   GtkContainer     container;
   
@@ -59,7 +57,7 @@ struct _SPWrapBox
   guint            child_limit;
 };
 
-struct _SPWrapBoxClass
+struct SPWrapBoxClass
 {
   GtkContainerClass parent_class;
 
@@ -70,7 +68,7 @@ struct _SPWrapBoxClass
 				  gboolean         *expand_line);
 };
 
-struct _SPWrapBoxChild
+struct SPWrapBoxChild
 {
   GtkWidget *widget;
   guint      hexpand : 1;

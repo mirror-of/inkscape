@@ -28,15 +28,12 @@ void sp_ruler_set_metric (GtkRuler * ruler, SPMetric  metric);
 #define SP_IS_HRULER(obj)       GTK_CHECK_TYPE (obj, sp_hruler_get_type ())
 
 
-typedef struct _SPHRuler       SPHRuler;
-typedef struct _SPHRulerClass  SPHRulerClass;
-
-struct _SPHRuler
+struct SPHRuler
 {
   GtkRuler ruler;
 };
 
-struct _SPHRulerClass
+struct SPHRulerClass
 {
   GtkRulerClass parent_class;
 };
@@ -56,15 +53,12 @@ GtkWidget* sp_hruler_new      (void);
 #define SP_IS_VRULER(obj)       GTK_CHECK_TYPE (obj, sp_vruler_get_type ())
 
 
-typedef struct _SPVRuler       SPVRuler;
-typedef struct _SPVRulerClass  SPVRulerClass;
-
-struct _SPVRuler
+struct SPVRuler
 {
   GtkRuler ruler;
 };
 
-struct _SPVRulerClass
+struct SPVRulerClass
 {
   GtkRulerClass parent_class;
 };

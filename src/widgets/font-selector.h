@@ -16,13 +16,8 @@
 
 #include <glib.h>
 
-
-
-typedef struct _SPFontSelector SPFontSelector;
-typedef struct _SPFontSelectorClass SPFontSelectorClass;
-
-typedef struct _SPFontPreview SPFontPreview;
-typedef struct _SPFontPreviewClass SPFontPreviewClass;
+struct SPFontSelector;
+struct SPFontPreview;
 
 #define SP_TYPE_FONT_SELECTOR (sp_font_selector_get_type ())
 #define SP_FONT_SELECTOR(o) (GTK_CHECK_CAST ((o), SP_TYPE_FONT_SELECTOR, SPFontSelector))

@@ -28,18 +28,16 @@
 
 #include "dash-selector.h"
 
-typedef struct _SPDashSelectorClass SPDashSelectorClass;
-
 enum {CHANGED, LAST_SIGNAL};
 
-struct _SPDashSelector {
+struct SPDashSelector {
 	GtkHBox hbox;
 
 	GtkWidget *dash;
 	GtkObject *offset;
 };
 
-struct _SPDashSelectorClass {
+struct SPDashSelectorClass {
 	GtkHBoxClass parent_class;
 
 	void (* changed) (SPDashSelector *dsel);

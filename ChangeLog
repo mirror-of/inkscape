@@ -1,3 +1,9 @@
+2004-04-26 Nathan Hurst <njh@mail.csse.monash.edu.au>
+
+	* src/{libnr,libnrtype,widgets,display,helper,.}*.{h,cpp}: moved
+	from typedef _name name; to C++ style struct name; forward
+	references.
+	
 2004-04-25  Ted Gould  <ted@gould.cx>
 
 	* share/extensions/ai_output.inkmod, share/extensions/dia.inkmod,

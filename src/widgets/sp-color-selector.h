@@ -9,10 +9,7 @@
 
 
 
-typedef struct _SPColorSelector SPColorSelector;
-typedef struct _SPColorSelectorClass SPColorSelectorClass;
-
-
+struct SPColorSelector;
 
 class ColorSelector
 {
@@ -68,13 +65,13 @@ private:
 #define SP_IS_COLOR_SELECTOR_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_COLOR_SELECTOR))
 #define SP_COLOR_SELECTOR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), SP_TYPE_COLOR_SELECTOR, SPColorSelectorClass))
 
-struct _SPColorSelector {
+struct SPColorSelector {
     GtkVBox vbox;
 
     ColorSelector* base;
 };
 
-struct _SPColorSelectorClass {
+struct SPColorSelectorClass {
 	GtkVBoxClass parent_class;
 
 	const gchar **name;

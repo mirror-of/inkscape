@@ -50,7 +50,7 @@
 
 /* SPFontSelector */
 
-struct _SPFontSelector
+struct SPFontSelector
 {
 	GtkHBox hbox;
   
@@ -69,7 +69,7 @@ struct _SPFontSelector
 };
 
 
-struct _SPFontSelectorClass
+struct SPFontSelectorClass
 {
 	GtkHBoxClass parent_class;
 
@@ -386,7 +386,7 @@ sp_font_selector_get_font (SPFontSelector *fsel)
 
 /* SPFontPreview */
 
-struct _SPFontPreview
+struct SPFontPreview
 {
 	GtkDrawingArea darea;
 
@@ -397,7 +397,7 @@ struct _SPFontPreview
 };
 
 
-struct _SPFontPreviewClass
+struct SPFontPreviewClass
 {
 	GtkDrawingAreaClass parent_class;
 };

@@ -444,8 +444,7 @@ layout_col (SPWrapBox    *wbox,
     }
 }
 
-typedef struct _Line Line;
-struct _Line
+struct Line
 {
   GSList  *children;
   guint16  min_size;

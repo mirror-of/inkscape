@@ -9,8 +9,7 @@
 
 
 
-typedef struct _SPColorGtkselector SPColorGtkselector;
-typedef struct _SPColorGtkselectorClass SPColorGtkselectorClass;
+struct SPColorGtkselector;
 
 
 
@@ -39,11 +38,11 @@ protected:
 #define SP_IS_COLOR_GTKSELECTOR(o) (GTK_CHECK_TYPE ((o), SP_TYPE_COLOR_GTKSELECTOR))
 #define SP_IS_COLOR_GTKSELECTOR_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_COLOR_GTKSELECTOR))
 
-struct _SPColorGtkselector {
+struct SPColorGtkselector {
 	SPColorSelector base;
 };
 
-struct _SPColorGtkselectorClass {
+struct SPColorGtkselectorClass {
 	SPColorSelectorClass parent_class;
 };
 

@@ -10,8 +10,8 @@
 
 
 
-typedef struct _SPColorScales SPColorScales;
-typedef struct _SPColorScalesClass SPColorScalesClass;
+struct SPColorScales;
+struct SPColorScalesClass;
 
 typedef enum {
 	SP_COLOR_SCALES_MODE_NONE = 0,
@@ -74,11 +74,11 @@ private:
 #define SP_IS_COLOR_SCALES(o) (GTK_CHECK_TYPE ((o), SP_TYPE_COLOR_SCALES))
 #define SP_IS_COLOR_SCALES_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_COLOR_SCALES))
 
-struct _SPColorScales {
+struct SPColorScales {
 	SPColorSelector parent;
 };
 
-struct _SPColorScalesClass {
+struct SPColorScalesClass {
 	SPColorSelectorClass parent_class;
 };
 

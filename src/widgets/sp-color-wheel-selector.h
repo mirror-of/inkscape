@@ -11,8 +11,8 @@
 
 
 
-typedef struct _SPColorWheelSelector SPColorWheelSelector;
-typedef struct _SPColorWheelSelectorClass SPColorWheelSelectorClass;
+struct SPColorWheelSelector;
+struct SPColorWheelSelectorClass;
 
 
 class ColorWheelSelector: public ColorSelector
@@ -65,11 +65,11 @@ namespace Inkscape {
     }
 }
 
-struct _SPColorWheelSelector {
+struct SPColorWheelSelector {
     SPColorSelector parent;
 };
 
-struct _SPColorWheelSelectorClass {
+struct SPColorWheelSelectorClass {
     SPColorSelectorClass parent_class;
 };
 

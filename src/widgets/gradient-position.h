@@ -23,8 +23,8 @@
 #define SP_IS_GRADIENT_POSITION(o) (GTK_CHECK_TYPE ((o), SP_TYPE_GRADIENT_POSITION))
 #define SP_IS_GRADIENT_POSITION_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_GRADIENT_POSITION))
 
-typedef struct _SPGradientPosition SPGradientPosition;
-typedef struct _SPGradientPositionClass SPGradientPositionClass;
+struct SPGradientPosition;
+struct SPGradientPositionClass;
 
 #include <libnr/nr-gradient.h>
 #include <gtk/gtkwidget.h>
@@ -47,7 +47,7 @@ class SPGPRGData {
 	double r;
 };
 
-struct _SPGradientPosition {
+struct SPGradientPosition {
 	GtkWidget widget;
 	guint need_update : 1;
 	guint dragging; /* 0 for no dragging, or the index of the node
@@ -85,7 +85,7 @@ struct _SPGradientPosition {
 	NRMatrix gs2w;
 };
 
-struct _SPGradientPositionClass {
+struct SPGradientPositionClass {
 	GtkWidgetClass parent_class;
 
 	void (* grabbed) (SPGradientPosition *pos);

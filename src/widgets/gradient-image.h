@@ -19,23 +19,19 @@
 #include <glib.h>
 
 
-
-typedef struct _SPGradientImage SPGradientImage;
-typedef struct _SPGradientImageClass SPGradientImageClass;
-
 #define SP_TYPE_GRADIENT_IMAGE (sp_gradient_image_get_type ())
 #define SP_GRADIENT_IMAGE(o) (GTK_CHECK_CAST ((o), SP_TYPE_GRADIENT_IMAGE, SPGradientImage))
 #define SP_GRADIENT_IMAGE_CLASS(k) (GTK_CHECK_CLASS_CAST ((k), SP_TYPE_GRADIENT_IMAGE, SPGradientImageClass))
 #define SP_IS_GRADIENT_IMAGE(o) (GTK_CHECK_TYPE ((o), SP_TYPE_GRADIENT_IMAGE))
 #define SP_IS_GRADIENT_IMAGE_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_GRADIENT_IMAGE))
 
-struct _SPGradientImage {
+struct SPGradientImage {
 	GtkWidget widget;
 	SPGradient *gradient;
 	guchar *px;
 };
 
-struct _SPGradientImageClass {
+struct SPGradientImageClass {
 	GtkWidgetClass parent_class;
 };
 

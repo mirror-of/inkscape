@@ -40,7 +40,7 @@
 #include "sp-color-wheel-selector.h"
 #include "sp-color-gtkselector.h"
 
-struct _SPColorNotebookTracker {
+struct SPColorNotebookTracker {
 	const gchar* name;
 	const gchar* className;
 	GType type;

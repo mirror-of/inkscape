@@ -19,22 +19,19 @@
 
 
 
-typedef struct _SPColorPreview SPColorPreview;
-typedef struct _SPColorPreviewClass SPColorPreviewClass;
-
 #define SP_TYPE_COLOR_PREVIEW (sp_color_preview_get_type ())
 #define SP_COLOR_PREVIEW(o) (GTK_CHECK_CAST ((o), SP_TYPE_COLOR_PREVIEW, SPColorPreview))
 #define SP_COLOR_PREVIEW_CLASS(k) (GTK_CHECK_CLASS_CAST ((k), SP_TYPE_COLOR_PREVIEW, SPColorPreviewClass))
 #define SP_IS_COLOR_PREVIEW(o) (GTK_CHECK_TYPE ((o), SP_TYPE_COLOR_PREVIEW))
 #define SP_IS_COLOR_PREVIEW_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_COLOR_PREVIEW))
 
-struct _SPColorPreview {
+struct SPColorPreview {
 	GtkWidget widget;
 
 	guint32 rgba;
 };
 
-struct _SPColorPreviewClass {
+struct SPColorPreviewClass {
 	GtkWidgetClass parent_class;
 };
 

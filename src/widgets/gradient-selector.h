@@ -17,9 +17,6 @@
 
 
 
-typedef struct _SPGradientSelector SPGradientSelector;
-typedef struct _SPGradientSelectorClass SPGradientSelectorClass;
-
 #define SP_TYPE_GRADIENT_SELECTOR (sp_gradient_selector_get_type ())
 #define SP_GRADIENT_SELECTOR(o) (GTK_CHECK_CAST ((o), SP_TYPE_GRADIENT_SELECTOR, SPGradientSelector))
 #define SP_GRADIENT_SELECTOR_CLASS(k) (GTK_CHECK_CLASS_CAST ((k), SP_TYPE_GRADIENT_SELECTOR, SPGradientSelectorClass))
@@ -35,7 +32,7 @@ enum {
 	SP_GRADIENT_SELECTOR_MODE_RADIAL
 };
 
-struct _SPGradientSelector {
+struct SPGradientSelector {
 	GtkVBox vbox;
 
 	guint mode : 1;
@@ -55,7 +52,7 @@ struct _SPGradientSelector {
 	GtkWidget *spread;
 };
 
-struct _SPGradientSelectorClass {
+struct SPGradientSelectorClass {
 	GtkVBoxClass parent_class;
 
 	void (* grabbed) (SPGradientSelector *sel);

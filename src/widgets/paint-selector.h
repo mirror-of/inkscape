@@ -20,9 +20,6 @@
 #define SP_IS_PAINT_SELECTOR(o) (GTK_CHECK_TYPE ((o), SP_TYPE_PAINT_SELECTOR))
 #define SP_IS_PAINT_SELECTOR_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_PAINT_SELECTOR))
 
-typedef struct _SPPaintSelector SPPaintSelector;
-typedef struct _SPPaintSelectorClass SPPaintSelectorClass;
-
 #include <gtk/gtkvbox.h>
 
 #include "../forward.h"
@@ -37,7 +34,7 @@ typedef enum {
 	SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL
 } SPPaintSelectorMode;
 
-struct _SPPaintSelector {
+struct SPPaintSelector {
 	GtkVBox vbox;
 
 	guint update : 1;
@@ -52,7 +49,7 @@ struct _SPPaintSelector {
 	float alpha;
 };
 
-struct _SPPaintSelectorClass {
+struct SPPaintSelectorClass {
 	GtkVBoxClass parent_class;
 
 	void (* mode_changed) (SPPaintSelector *psel, SPPaintSelectorMode mode);

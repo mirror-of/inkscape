@@ -20,16 +20,13 @@
 #include "color.h"
 
 
-typedef struct _SPColorWheel SPColorWheel;
-typedef struct _SPColorWheelClass SPColorWheelClass;
-
 #define SP_TYPE_COLOR_WHEEL (sp_color_wheel_get_type ())
 #define SP_COLOR_WHEEL(o) (GTK_CHECK_CAST ((o), SP_TYPE_COLOR_WHEEL, SPColorWheel))
 #define SP_COLOR_WHEEL_CLASS(k) (GTK_CHECK_CLASS_CAST ((k), SP_TYPE_COLOR_WHEEL, SPColorWheelClass))
 #define SP_IS_COLOR_WHEEL(o) (GTK_CHECK_TYPE ((o), SP_TYPE_COLOR_WHEEL))
 #define SP_IS_COLOR_WHEEL_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_COLOR_WHEEL))
 
-struct _SPColorWheel {
+struct SPColorWheel {
     GtkWidget widget;
 
     gboolean dragging : 1;
@@ -54,7 +51,7 @@ struct _SPColorWheel {
     gint _center;
 };
 
-struct _SPColorWheelClass {
+struct SPColorWheelClass {
     GtkWidgetClass parent_class;
 
     void (* changed) (SPColorWheel *wheel);

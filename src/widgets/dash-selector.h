@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-typedef struct _SPDashSelector SPDashSelector;
+struct SPDashSelector;
 
 #include <gtk/gtkwidget.h>
 #include "../xml/repr.h"

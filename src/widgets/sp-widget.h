@@ -23,16 +23,13 @@ class SPSelection;
 #define SP_IS_WIDGET(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_WIDGET))
 #define SP_IS_WIDGET_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_WIDGET))
 
-typedef struct _SPWidget SPWidget;
-typedef struct _SPWidgetClass SPWidgetClass;
-
 #include <gtk/gtkbin.h>
 #include "../forward.h"
 #include "../xml/repr.h"
 #include "../inkscape.h"
 #include "../desktop-handles.h"
 
-struct _SPWidget {
+struct SPWidget {
 	GtkBin bin;
 
 	Inkscape::Application *inkscape;
@@ -45,7 +42,7 @@ struct _SPWidget {
 	guint autoupdate : 1;
 };
 
-struct _SPWidgetClass {
+struct SPWidgetClass {
 	GtkBinClass bin_class;
 	void (* construct) (SPWidget *spw);
 	/* Selection change handlers */

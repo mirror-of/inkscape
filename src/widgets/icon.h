@@ -16,9 +16,6 @@
 
 
 
-typedef struct _SPIcon SPIcon;
-typedef struct _SPIconClass SPIconClass;
-
 #define SP_TYPE_ICON (sp_icon_get_type ())
 #define SP_ICON(o) (GTK_CHECK_CAST ((o), SP_TYPE_ICON, SPIcon))
 #define SP_IS_ICON(o) (GTK_CHECK_TYPE ((o), SP_TYPE_ICON))
@@ -31,7 +28,7 @@ typedef struct _SPIconClass SPIconClass;
 
 #include <gtk/gtkwidget.h>
 
-struct _SPIcon {
+struct SPIcon {
 	GtkWidget widget;
 
 	int size;
@@ -39,7 +36,7 @@ struct _SPIcon {
 	GdkPixbuf *pb;
 };
 
-struct _SPIconClass {
+struct SPIconClass {
 	GtkWidgetClass parent_class;
 };
 

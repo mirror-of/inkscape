@@ -22,11 +22,7 @@
 
 
 
-typedef struct _SPColorNotebook SPColorNotebook;
-typedef struct _SPColorNotebookClass SPColorNotebookClass;
-typedef struct _SPColorNotebookTracker SPColorNotebookTracker;
-
-
+struct SPColorNotebook;
 
 class ColorNotebook: public ColorSelector
 {
@@ -84,11 +80,11 @@ private:
 #define SP_IS_COLOR_NOTEBOOK(o) (GTK_CHECK_TYPE ((o), SP_TYPE_COLOR_NOTEBOOK))
 #define SP_IS_COLOR_NOTEBOOK_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_COLOR_NOTEBOOK))
 
-struct _SPColorNotebook {
+struct SPColorNotebook {
 	SPColorSelector parent;    /* Parent */
 };
 
-struct _SPColorNotebookClass {
+struct SPColorNotebookClass {
 	SPColorSelectorClass parent_class;
 
 	void (* grabbed) (SPColorNotebook *rgbsel);

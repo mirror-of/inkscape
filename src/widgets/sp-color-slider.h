@@ -18,8 +18,8 @@
 
 
 
-typedef struct _SPColorSlider SPColorSlider;
-typedef struct _SPColorSliderClass SPColorSliderClass;
+struct SPColorSlider;
+struct SPColorSliderClass;
 
 #define SP_TYPE_COLOR_SLIDER (sp_color_slider_get_type ())
 #define SP_COLOR_SLIDER(o) (GTK_CHECK_CAST ((o), SP_TYPE_COLOR_SLIDER, SPColorSlider))
@@ -27,7 +27,7 @@ typedef struct _SPColorSliderClass SPColorSliderClass;
 #define SP_IS_COLOR_SLIDER(o) (GTK_CHECK_TYPE ((o), SP_TYPE_COLOR_SLIDER))
 #define SP_IS_COLOR_SLIDER_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_COLOR_SLIDER))
 
-struct _SPColorSlider {
+struct SPColorSlider {
 	GtkWidget widget;
 
 	guint dragging : 1;
@@ -44,7 +44,7 @@ struct _SPColorSlider {
 	guchar *map;
 };
 
-struct _SPColorSliderClass {
+struct SPColorSliderClass {
 	GtkWidgetClass parent_class;
 
 	void (* grabbed) (SPColorSlider *slider);
