@@ -6,7 +6,14 @@
         src/makefile.msc src/nodepath.cpp src/rect-context.cpp src/select-context.cpp
         src/selection-chemistry.cpp src/seltrans.cpp src/sp-namedview.h
         src/spiral-context.cpp src/star-context.cpp: renamed
-	desktop-snap.* to snap.* since it has nothing to do with the desktop any more.
+	desktop-snap.* to snap.* since it has nothing to do with the
+	desktop any more.
+
+	* src/draw-context.cpp: Temporary hack to prevent snapping
+	completely failing to work when snapping to bbox points.
+
+	* src/snap.cpp, src/snap.h: Added some temporary methods to assist
+	with hacks elsewhere.
 
 2004-07-01  Kees Cook  <kees@outflux.net>
 
