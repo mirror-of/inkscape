@@ -5,8 +5,37 @@ ui/dialog/all: ui/dialog/libuidialog.a
 ui/dialog/clean:
 	rm -f ui/dialog/libuidialog.a $(ui_libuidialog_a_OBJECTS)
 
-ui_dialog_libuidialog_a_SOURCES =	\
-	ui/dialog/dialog-manager.cpp	\
-	ui/dialog/dialog-manager.h	\
-	ui/dialog/dialog.cpp		\
-	ui/dialog/dialog.h
+ui_dialog_libuidialog_a_SOURCES =		\
+	ui/dialog/dialog-manager.cpp		\
+	ui/dialog/dialog-manager.h		\
+	ui/dialog/dialog.cpp			\
+	ui/dialog/dialog.h			\
+	\
+	ui/dialog/align-and-distribute.cpp	\
+	ui/dialog/align-and-distribute.h	\
+	ui/dialog/dialog-manager.cpp		\
+	ui/dialog/dialog-manager.h		\
+	ui/dialog/dialog.cpp			\
+	ui/dialog/dialog.h			\
+	ui/dialog/document-preferences.cpp	\
+	ui/dialog/document-preferences.h	\
+	ui/dialog/export.cpp			\
+	ui/dialog/export.h			\
+	ui/dialog/extension-editor.cpp		\
+	ui/dialog/extension-editor.h		\
+	ui/dialog/fill-and-stroke.cpp		\
+	ui/dialog/fill-and-stroke.h		\
+	ui/dialog/find.cpp			\
+	ui/dialog/find.h			\
+	ui/dialog/inkscape-preferences.cpp	\
+	ui/dialog/inkscape-preferences.h	\
+	ui/dialog/layer-editor.cpp		\
+	ui/dialog/layer-editor.h		\
+	ui/dialog/messages.cpp			\
+	ui/dialog/messages.h			\
+	ui/dialog/text-properties.cpp		\
+	ui/dialog/text-properties.h		\
+	ui/dialog/tree-editor.cpp		\
+	ui/dialog/tree-editor.h			\
+	ui/dialog/xml-editor.cpp		\
+	ui/dialog/xml-editor.h

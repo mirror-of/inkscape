@@ -16,10 +16,9 @@
 
 #include "dialog-manager.h"
 
-/*
 #include "align-and-distribute.h"
 #include "inkscape-preferences.h"
-#include "document-properties.h"
+#include "document-preferences.h"
 #include "export.h"
 #include "extension-editor.h"
 #include "fill-and-stroke.h"
@@ -27,9 +26,9 @@
 #include "layer-editor.h"
 #include "messages.h"
 #include "text-properties.h"
-#include "transformation.h"
+//#include "transformation.h"
 #include "xml-editor.h"
-*/
+
 
 namespace Inkscape {
 namespace UI {
@@ -71,7 +70,7 @@ DialogManager::DialogManager()
     : _about_dialog(NULL),
       _align_and_distribute_dialog(NULL),
       _inkscape_preferences_dialog(NULL),
-      _document_properties_dialog(NULL),
+      _document_preferences_dialog(NULL),
       _export_dialog(NULL),
       _extension_editor_dialog(NULL),
       _fill_and_stroke_dialog(NULL),
@@ -141,19 +140,19 @@ Dialog* DialogManager::getInkscapePreferencesDialog() {
 }
 
 
-Dialog* DialogManager::getDocumentPropertiesDialog() {
-    if (_document_properties_dialog == NULL) {
-        _document_properties_dialog = new DocumentProperties;
-        hide_dialogs.connect(sigc::mem_fun(*_document_properties_dialog, 
+Dialog* DialogManager::getDocumentPreferencesDialog() {
+    if (_document_preferences_dialog == NULL) {
+        _document_preferences_dialog = new DocumentProperties;
+        hide_dialogs.connect(sigc::mem_fun(*_document_preferences_dialog, 
                                            &DocumentProperties::onHideDialogs));
-        hide_f12.connect(sigc::mem_fun(*_document_properties_dialog, 
+        hide_f12.connect(sigc::mem_fun(*_document_preferences_dialog, 
                                        &DocumentProperties::onHideF12));
-        show_dialogs.connect(sigc::mem_fun(*_document_properties_dialog, 
+        show_dialogs.connect(sigc::mem_fun(*_document_preferences_dialog, 
                                            &DocumentProperties::onShowDialogs));
-        show_f12.connect(sigc::mem_fun(*_document_properties_dialog, 
+        show_f12.connect(sigc::mem_fun(*_document_preferences_dialog, 
                                        &DocumentProperties::onShowF12));
     }
-    return _document_properties_dialog;
+    return _document_preferences_dialog;
 }
 
 Dialog* DialogManager::getExportDialog() {

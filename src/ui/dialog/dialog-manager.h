@@ -30,6 +30,16 @@ public:
     sigc::signal<void> hide_f12;
     sigc::signal<void> transientize;
 
+    /* TODO:  Implement these.  These are provided to enable us to 
+              dynamically add/remove dialogs at run time (this might
+              be useful for extensions that wish to add or replace
+              the standard dialogs. */
+    /*
+    Dialog* getDialog(gchar const* dlgName); 
+    void    addDialog(gchar const* dlgName, Dialog * dlg);
+    void    deleteDialog(gchar const* dlgName);
+    */
+
     Dialog* getAboutDialog();
     Dialog* getAlignAndDistributeDialog();
     Dialog* getInkscapePreferencesDialog();
@@ -51,10 +61,12 @@ protected:
     DialogManager(DialogManager const &d);
     DialogManager& operator=(DialogManager const &d);
 
+    /* map<gchar const*, Dialog*>    _dialog_map; */
+
     Dialog            *_about_dialog;
     Dialog            *_align_and_distribute_dialog;
     Dialog            *_inkscape_preferences_dialog;
-    Dialog            *_document_properties_dialog;
+    Dialog            *_document_preferences_dialog;
     Dialog            *_export_dialog;
     Dialog            *_extension_editor_dialog;
     Dialog            *_fill_and_stroke_dialog;
