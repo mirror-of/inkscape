@@ -369,7 +369,7 @@ PrintGNOME::init (void)
 	Inkscape::Extension::Extension * ext;
 	
 	/* SVG in */
-    ext = sp_module_system_build_from_mem(
+    ext = Inkscape::Extension::build_from_mem(
 		"<spmodule>\n"
 			"<name>GNOME Print</name>\n"
 			"<id>" SP_MODULE_KEY_PRINT_GNOME "</id>\n"

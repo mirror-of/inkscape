@@ -845,7 +845,7 @@ PrintPS::init (void)
 	Inkscape::Extension::Extension * ext;
 	
 	/* SVG in */
-    ext = sp_module_system_build_from_mem(
+    ext = Inkscape::Extension::build_from_mem(
 		"<spmodule>\n"
 			"<name>Postscript Print</name>\n"
 			"<id>" SP_MODULE_KEY_PRINT_PS "</id>\n"

@@ -59,7 +59,7 @@ EpsOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
 void
 EpsOutput::init (void)
 {
-    sp_module_system_build_from_mem(
+	Inkscape::Extension::build_from_mem(
 		"<spmodule>\n"
 			"<name>Encapsulated Postscript Output</name>\n"
 			"<id>module.output.eps</id>\n"

@@ -1,3 +1,17 @@
+2004-04-11  Ted Gould <ted@gould.cx>
+
+	* src/file.cpp, src/main.cpp, src/print.cpp, src/extension/init.cpp,
+      src/extension/init.h, src/extension/system.cpp, src/extension/system.h,
+      src/extension/implementation/script.cpp, src/extension/internal/eps-out.cpp,
+      src/extension/internal/gnome.cpp, src/extension/internal/ps-out.cpp,
+      src/extension/internal/ps.cpp, src/extension/internal/svg.cpp,
+      src/extension/internal/win32.cpp:
+    Change alot of files, but small changes.  Basically just took
+	system.cpp and init.cpp and finally ported them to the Inkscape::
+	Extension namespace.  Cleaned up the code in them a bunch, it is
+	much easier to read now!  All the other files are just referencing
+	these changes.
+
 2004-04-11  Kees Cook <kees@outflux.net>
 
 	* src/verbs.h, src/verbs.cpp, src/interface.cpp, src/interface.h: replaced

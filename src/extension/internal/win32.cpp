@@ -479,7 +479,7 @@ PrintWin32::init (void)
 	Inkscape::Extension::Extension * ext;
 	
 	/* SVG in */
-    ext = sp_module_system_build_from_mem(
+    ext = Inkscape::Extension::build_from_mem(
 		"<spmodule>\n"
 			"<name>Windows 32-bit Print</name>\n"
 			"<id>" SP_MODULE_KEY_PRINT_WIN32 "</id>\n"

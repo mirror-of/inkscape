@@ -48,7 +48,7 @@ PsOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *
 void
 PsOutput::init (void)
 {
-    sp_module_system_build_from_mem(
+	Inkscape::Extension::build_from_mem(
 		"<spmodule>\n"
 			"<name>Postscript Output</name>\n"
 			"<id>module.output.ps</id>\n"

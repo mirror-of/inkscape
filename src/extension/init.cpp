@@ -7,7 +7,7 @@
  * Authors:
  *   Ted Gould <ted@gould.cx>
  *
- * Copyright (C) 2002-2003 Authors
+ * Copyright (C) 2002-2004 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -33,6 +33,9 @@
 #include "internal/ps-out.h"
 #include "internal/eps-out.h"
 
+namespace Inkscape {
+namespace Extension {
+
 /** This is the extention that all files are that are pulled from
     the extension directory and parsed */
 #define SP_MODULE_EXTENSION  "inkmod"
@@ -52,18 +55,18 @@ static void check_extensions (void);
 	directory.
 */
 void
-sp_modules_init (void)
+init (void)
 {
 	/* TODO: Change to Internal */
-	Inkscape::Extension::Internal::Svg::init();
-	Inkscape::Extension::Internal::PsOutput::init();
-	Inkscape::Extension::Internal::EpsOutput::init();
-	Inkscape::Extension::Internal::PrintPS::init();
+	Internal::Svg::init();
+	Internal::PsOutput::init();
+	Internal::EpsOutput::init();
+	Internal::PrintPS::init();
 #ifdef WITH_GNOME_PRINT
-	Inkscape::Extension::Internal::PrintGNOME::init();
+	Internal::PrintGNOME::init();
 #endif
 #ifdef WIN32
-	Inkscape::Extension::Internal::PrintWin32::init();
+	Internal::PrintWin32::init();
 #endif
 	build_module_from_dir(INKSCAPE_MODULESDIR);
 
@@ -81,7 +84,7 @@ sp_modules_init (void)
 
 	Here is just a basic function that moves through a directory.  It
 	looks at every entry, and compares its filename with SP_MODULE_EXTENSION.
-	Of those that pass, sp_module_system_build_from_file is called
+	Of those that pass, build_from_file is called
 	with their filenames.
 */
 static void
@@ -108,7 +111,7 @@ build_module_from_dir (const gchar * dirname)
 		}
 
 		filename = g_strdup_printf("%s/%s", INKSCAPE_MODULESDIR, dentry->d_name);
-		sp_module_system_build_from_file (filename, NULL);
+		build_from_file (filename, NULL);
 		g_free(filename);
 	}
 
@@ -124,3 +127,4 @@ check_extensions (void)
 
 }
 
+}; }; /* namespace Inkscape::Extension */

@@ -237,7 +237,7 @@ sp_main_gui (int argc, const char **argv)
 	
 	gtk_init(&argc, const_cast<char ***>(&argv));
 
-	sp_modules_init();
+	Inkscape::Extension::init();
 
 	/* fixme: Move these to some centralized location (Lauris) */
 	sp_object_type_register ("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
@@ -283,7 +283,7 @@ sp_main_gui (int argc, const char **argv)
 				SPDocument *doc;
 
 				try {
-					doc = sp_module_system_open(NULL, (gchar *)fl->data);
+					doc = Inkscape::Extension::open(NULL, (gchar *)fl->data);
 				} catch (Inkscape::Extension::Input::no_extension_found &e) {
 					doc = NULL;
 				} catch (Inkscape::Extension::Input::open_failed &e) {
@@ -354,7 +354,7 @@ sp_main_console (int argc, const char **argv)
 	gdk_init (&argc, (char ***) &argv);
 #endif
 
-	sp_modules_init();
+	Inkscape::Extension::init();
 
 	/* fixme: Move these to some centralized location (Lauris) */
 	sp_object_type_register ("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
@@ -405,9 +405,9 @@ sp_main_console (int argc, const char **argv)
 	while (fl) {
 		SPDocument *doc;
 
-		doc = sp_module_system_open(NULL, (gchar *)fl->data);
+		doc = Inkscape::Extension::open(NULL, (gchar *)fl->data);
 		if (doc == NULL) {
-			doc = sp_module_system_open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), (gchar *)fl->data);
+			doc = Inkscape::Extension::open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), (gchar *)fl->data);
 		}
 		if (doc == NULL) {
 			g_warning ("Specified document %s cannot be opened (is it valid SVG file?)", (gchar *) fl->data);

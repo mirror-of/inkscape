@@ -100,7 +100,7 @@ sp_print_preview_document (SPDocument *doc)
 
 	sp_document_ensure_up_to_date (doc);
 
-	mod = sp_module_system_get_print(SP_MODULE_KEY_PRINT_DEFAULT);
+	mod = Inkscape::Extension::get_print(SP_MODULE_KEY_PRINT_DEFAULT);
 
 	ret = mod->set_preview ();
 
@@ -139,9 +139,9 @@ sp_print_document (SPDocument *doc, unsigned int direct)
 	sp_document_ensure_up_to_date (doc);
 
 	if (direct) {
-		mod = sp_module_system_get_print(SP_MODULE_KEY_PRINT_PS);
+		mod = Inkscape::Extension::get_print(SP_MODULE_KEY_PRINT_PS);
 	} else {
-		mod = sp_module_system_get_print(SP_MODULE_KEY_PRINT_DEFAULT);
+		mod = Inkscape::Extension::get_print(SP_MODULE_KEY_PRINT_DEFAULT);
 	}
 
 	ret = mod->setup();
@@ -182,7 +182,7 @@ sp_print_document_to_file (SPDocument *doc, const gchar *filename)
 
 	sp_document_ensure_up_to_date (doc);
 
-	mod = sp_module_system_get_print(SP_MODULE_KEY_PRINT_PS);
+	mod = Inkscape::Extension::get_print(SP_MODULE_KEY_PRINT_PS);
 	mod->get_param("destination", (gchar **)&oldoutput);
 	oldoutput = g_strdup(oldoutput);
 	mod->set_param("destination", (gchar *)filename);

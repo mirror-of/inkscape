@@ -7,19 +7,22 @@
  * Authors:
  *   Ted Gould <ted@gould.cx>
  *
- * Copyright (C) 2002-2003 Authors
+ * Copyright (C) 2002-2004 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifndef __MODULES_INIT_H__
-#define __MODULES_INIT_H__
+#ifndef INKSCAPE_EXTENSION_INIT_H__
+#define INKSCAPE_EXTENSION_INIT_H__
 
+namespace Inkscape {
+namespace Extension {
 
-void sp_modules_init (void);
+void init (void);
 
+}; }; /* namespace Inkscape::Extension */
 
-#endif /* SP_MODULES_INIT_H__ */
+#endif /* INKSCAPE_EXTENSION_INIT_H__ */
 
 /*
   Local Variables:

@@ -27,9 +27,12 @@
 #include "db.h"
 #include "implementation/script.h"
 
+namespace Inkscape {
+namespace Extension {
+
 static void open_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data);
 static void save_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data);
-static Inkscape::Extension::Extension * build_from_reprdoc (SPReprDoc * doc, Inkscape::Extension::Implementation::Implementation * in_imp);
+static Extension * build_from_reprdoc (SPReprDoc * doc, Implementation::Implementation * in_imp);
 
 /**
 	\return   A new document created from the filename passed in
@@ -56,10 +59,10 @@ static Inkscape::Extension::Extension * build_from_reprdoc (SPReprDoc * doc, Ink
 	Lastly, the open function is called in the module itself.
 */
 SPDocument *
-sp_module_system_open (Inkscape::Extension::Extension * key, const gchar * filename)
+open (Extension * key, const gchar * filename)
 {
 	gpointer parray[2];
-	Inkscape::Extension::Input * imod = NULL;
+	Input * imod = NULL;
 	GtkDialog * prefs = NULL;
 	SPDocument * doc;
 	SPRepr * repr;
@@ -68,24 +71,24 @@ sp_module_system_open (Inkscape::Extension::Extension * key, const gchar * filen
 	if (key == NULL) {
 		parray[0] = (gpointer)filename;
 		parray[1] = (gpointer)&imod;
-		Inkscape::Extension::db.foreach(open_internal, (gpointer)&parray);
+		db.foreach(open_internal, (gpointer)&parray);
 	} else {
-		imod = dynamic_cast<Inkscape::Extension::Input *>(key);
+		imod = dynamic_cast<Input *>(key);
 	}
 
 	if (key == NULL && imod == NULL) {
 		last_chance_svg = TRUE;
-		imod = dynamic_cast<Inkscape::Extension::Input *>(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG));
+		imod = dynamic_cast<Input *>(db.get(SP_MODULE_KEY_INPUT_SVG));
 	}
 
 	if (imod == NULL) {
-		throw Inkscape::Extension::Input::no_extension_found();
+		throw Input::no_extension_found();
 	}
 
-	imod->set_state(Inkscape::Extension::Extension::STATE_LOADED);
+	imod->set_state(Extension::STATE_LOADED);
 
 	if (!imod->loaded()) {
-		throw Inkscape::Extension::Input::open_failed();
+		throw Input::open_failed();
 	}
 
 	prefs = imod->prefs(filename);
@@ -137,26 +140,26 @@ sp_module_system_open (Inkscape::Extension::Extension * key, const gchar * filen
 	module.
 */
 static void
-open_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
+open_internal (Extension * in_plug, gpointer in_data)
 {
-	if (dynamic_cast<Inkscape::Extension::Input *>(in_plug)) {
+	if (dynamic_cast<Input *>(in_plug)) {
 		const gchar * ext;
 		gpointer * parray;
 		const gchar * filename;
-		Inkscape::Extension::Input ** pimod;
+		Input ** pimod;
 		gchar * filenamelower, * extensionlower;
 
 		parray = (gpointer *)in_data;
 		filename = (const gchar *)parray[0];
-		pimod = (Inkscape::Extension::Input **)parray[1];
+		pimod = (Input **)parray[1];
 
-		ext = dynamic_cast<Inkscape::Extension::Input *>(in_plug)->get_extension();
+		ext = dynamic_cast<Input *>(in_plug)->get_extension();
 
 		filenamelower = g_utf8_strdown (filename, -1);
 		extensionlower = g_utf8_strdown (ext, -1);
 
 		if (g_str_has_suffix(filenamelower, extensionlower)) {
-			*pimod = dynamic_cast<Inkscape::Extension::Input *>(in_plug);
+			*pimod = dynamic_cast<Input *>(in_plug);
 		}
 
 		g_free(filenamelower);
@@ -194,9 +197,9 @@ open_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
 	Lastly, the save function is called in the module itself.
 */
 void
-sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, const gchar * filename, bool setextension, bool check_overwrite, bool official)
+save (Extension * key, SPDocument * doc, const gchar * filename, bool setextension, bool check_overwrite, bool official)
 {
-	Inkscape::Extension::Output * omod;
+	Output * omod;
 	gpointer parray[2];
 	GtkDialog * prefs;
 	gchar * fileName = NULL;
@@ -205,31 +208,31 @@ sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, c
 		parray[0] = (gpointer)filename;
 		parray[1] = (gpointer)&omod;
 		omod = NULL;
-		Inkscape::Extension::db.foreach(save_internal, (gpointer)&parray);
+		db.foreach(save_internal, (gpointer)&parray);
 
 		/* This is a nasty hack, but it is required to ensure that
 		   autodetect will always save with the Inkscape extensions
 		   if they are available. */
 		if (omod != NULL && !strcmp(omod->get_id(), SP_MODULE_KEY_OUTPUT_SVG)) {
-			omod = dynamic_cast<Inkscape::Extension::Output *>(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
+			omod = dynamic_cast<Output *>(db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
 		}
 		/* If autodetect fails, save as Inkscape SVG */
 		if (omod == NULL) {
-			omod = dynamic_cast<Inkscape::Extension::Output *>(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
+			omod = dynamic_cast<Output *>(db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
 		}
 	} else {
-		omod = dynamic_cast<Inkscape::Extension::Output *>(key);
+		omod = dynamic_cast<Output *>(key);
 	}
 
-	if (!dynamic_cast<Inkscape::Extension::Output *>(omod)) {
+	if (!dynamic_cast<Output *>(omod)) {
 		g_warning ("Unable to find output module to handle file: %s\n", filename);
-		throw Inkscape::Extension::Output::no_extension_found();
+		throw Output::no_extension_found();
 		return;
 	}
 
-	omod->set_state(Inkscape::Extension::Extension::STATE_LOADED);
+	omod->set_state(Extension::STATE_LOADED);
 	if (!omod->loaded()) {
-		throw Inkscape::Extension::Output::save_failed();
+		throw Output::save_failed();
 	}
 
 	prefs = omod->prefs();
@@ -255,7 +258,7 @@ sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, c
 
 	if (check_overwrite && !sp_ui_overwrite_file(fileName)) {
 		g_free(fileName);
-		throw Inkscape::Extension::Output::no_overwrite();
+		throw Output::no_overwrite();
 	}
 
 	if (official)
@@ -290,26 +293,26 @@ sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, c
 	module.
 */
 static void
-save_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
+save_internal (Extension * in_plug, gpointer in_data)
 {
-	if (dynamic_cast<Inkscape::Extension::Output *>(in_plug)) {
+	if (dynamic_cast<Output *>(in_plug)) {
 		const gchar * ext;
 		gpointer * parray;
 		const gchar * filename;
-		Inkscape::Extension::Output ** pomod;
+		Output ** pomod;
 		gchar * filenamelower, * extensionlower;
 
 		parray = (gpointer *)in_data;
 		filename = (const gchar *)parray[0];
-		pomod = (Inkscape::Extension::Output **)parray[1];
+		pomod = (Output **)parray[1];
 
-		ext = dynamic_cast<Inkscape::Extension::Output *>(in_plug)->get_extension();
+		ext = dynamic_cast<Output *>(in_plug)->get_extension();
 
 		filenamelower = g_utf8_strdown (filename, -1);
 		extensionlower = g_utf8_strdown (ext, -1);
 
 		if (g_str_has_suffix(filenamelower, extensionlower)) {
-			*pomod = dynamic_cast<Inkscape::Extension::Output *>(in_plug);
+			*pomod = dynamic_cast<Output *>(in_plug);
 		}
 
 		g_free(filenamelower);
@@ -332,17 +335,17 @@ save_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
 	function.
 */
 void
-sp_module_system_filter (GtkObject * object, const gchar * key)
+filter (GtkObject * object, const gchar * key)
 {
-	Inkscape::Extension::Effect * fmod;
+	Effect * fmod;
 	SPDocument * doc;
 
 	g_return_if_fail(key != NULL);
 
-	fmod = dynamic_cast<Inkscape::Extension::Effect *>(Inkscape::Extension::db.get(key));
+	fmod = dynamic_cast<Effect *>(db.get(key));
 	g_return_if_fail(fmod != NULL);
 
-	fmod->set_state(Inkscape::Extension::Extension::STATE_LOADED);
+	fmod->set_state(Extension::STATE_LOADED);
 	g_return_if_fail(fmod->loaded());
 
 	doc = SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP);
@@ -351,10 +354,10 @@ sp_module_system_filter (GtkObject * object, const gchar * key)
 	return fmod->effect(doc);
 }
 
-Inkscape::Extension::Print *
-sp_module_system_get_print (const gchar * key)
+Print *
+get_print (const gchar * key)
 {
-	return dynamic_cast<Inkscape::Extension::Print *>(Inkscape::Extension::db.get(key));
+	return dynamic_cast<Print *>(db.get(key));
 }
 /**
 	\return   The built module
@@ -375,12 +378,12 @@ sp_module_system_get_print (const gchar * key)
 	these are not set.  This case could apply to modules that are
 	built in (like the SVG load/save functions).
 */
-static Inkscape::Extension::Extension *
-build_from_reprdoc (SPReprDoc * doc, Inkscape::Extension::Implementation::Implementation * in_imp)
+static Extension *
+build_from_reprdoc (SPReprDoc * doc, Implementation::Implementation * in_imp)
 {
 	SPRepr * repr;
-	Inkscape::Extension::Extension * module = NULL;
-	Inkscape::Extension::Implementation::Implementation * imp;
+	Extension * module = NULL;
+	Implementation::Implementation * imp;
 	enum {
 		MODULE_EXTENSION,
 		MODULE_UNKNOWN_IMP
@@ -433,10 +436,10 @@ build_from_reprdoc (SPReprDoc * doc, Inkscape::Extension::Implementation::Implem
 	if (in_imp == NULL) {
 		switch (module_implementation_type) {
 			case MODULE_EXTENSION:
-				Inkscape::Extension::Implementation::Script * script;
+				Implementation::Script * script;
 
-				script = new Inkscape::Extension::Implementation::Script();
-				imp = dynamic_cast<Inkscape::Extension::Implementation::Implementation *>(script);
+				script = new Implementation::Script();
+				imp = dynamic_cast<Implementation::Implementation *>(script);
 				break;
 			default:
 				imp = NULL;
@@ -450,22 +453,22 @@ build_from_reprdoc (SPReprDoc * doc, Inkscape::Extension::Implementation::Implem
 	{
 		case MODULE_INPUT:
 			{
-				module = new Inkscape::Extension::Input(repr, imp);
+				module = new Input(repr, imp);
 				break;
 			}
 		case MODULE_OUTPUT:
 			{
-				module = new Inkscape::Extension::Output(repr, imp);
+				module = new Output(repr, imp);
 				break;
 			}
 		case MODULE_FILTER:
 			{
-				module = new Inkscape::Extension::Effect(repr, imp);
+				module = new Effect(repr, imp);
 				break;
 			}
 		case MODULE_PRINT:
 			{
-				module = new Inkscape::Extension::Print(repr, imp);
+				module = new Print(repr, imp);
 				break;
 			}
 		default:
@@ -485,11 +488,11 @@ build_from_reprdoc (SPReprDoc * doc, Inkscape::Extension::Implementation::Implem
 	This function calls build_from_reprdoc with using sp_repr_read_file
 	to create the reprdoc.
 */
-Inkscape::Extension::Extension *
-sp_module_system_build_from_file (const gchar * filename, Inkscape::Extension::Implementation::Implementation * in_imp)
+Extension *
+build_from_file (const gchar * filename, Implementation::Implementation * in_imp)
 {
 	SPReprDoc * doc;
-	Inkscape::Extension::Extension * ext;
+	Extension * ext;
 
 	/* TODO: Need to define namespace here, need to write the
 	         DTD in general for this stuff */
@@ -508,14 +511,16 @@ sp_module_system_build_from_file (const gchar * filename, Inkscape::Extension::I
 	This function calls build_from_reprdoc with using sp_repr_read_mem
 	to create the reprdoc.  It finds the length of the buffer using strlen.
 */
-Inkscape::Extension::Extension *
-sp_module_system_build_from_mem (const gchar * buffer, Inkscape::Extension::Implementation::Implementation * in_imp)
+Extension *
+build_from_mem (const gchar * buffer, Implementation::Implementation * in_imp)
 {
 	SPReprDoc * doc;
-	Inkscape::Extension::Extension * ext;
+	Extension * ext;
 
 	doc = sp_repr_read_mem(buffer, strlen(buffer), NULL);
 	ext = build_from_reprdoc (doc, in_imp);
 	sp_repr_document_unref(doc);
 	return ext;
 }
+
+}; }; /* namespace Inkscape::Extension */

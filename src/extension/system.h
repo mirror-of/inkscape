@@ -7,40 +7,40 @@
  * Authors:
  *   Ted Gould <ted@gould.cx>
  *
- * Copyright (C) 2002-2003 Authors
+ * Copyright (C) 2002-2004 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifndef __MODULES_SYSTEM_H__
-#define __MODULES_SYSTEM_H__
+#ifndef INKSCAPE_EXTENSION_SYSTEM_H__
+#define INKSCAPE_EXTENSION_SYSTEM_H__
 
 #include <gtk/gtk.h>
 #include <document.h>
 #include <extension/extension.h>
 
+namespace Inkscape {
+namespace Extension {
 
-SPDocument * sp_module_system_open                (Inkscape::Extension::Extension * key,
-                                                   const gchar *  filename);
-void         sp_module_system_save                (Inkscape::Extension::Extension * key,
-                                                   SPDocument *   doc,
-                                                   const gchar *  filename,
-												   bool setextension,
-												   bool check_overwrite,
-												   bool official);
-void         sp_module_system_filter              (GtkObject * object,
-                                                   const gchar *  key);
-Inkscape::Extension::Print * sp_module_system_get_print (const gchar * key);
+SPDocument *  open                (Extension * key,
+                                   const gchar *  filename);
+void          save                (Extension * key,
+                                   SPDocument *   doc,
+                                   const gchar *  filename,
+                                   bool setextension,
+                                   bool check_overwrite,
+                                   bool official);
+void          filter              (GtkObject * object,
+                                   const gchar *  key);
+Print *       get_print           (const gchar * key);
+Extension *   build_from_file     (const gchar  * filename,
+                                   Implementation::Implementation * in_imp);
+Extension *   build_from_mem      (const gchar *  buffer,
+                                   Implementation::Implementation * in_imp);
 
-Inkscape::Extension::Extension *   sp_module_system_build_from_file     (const gchar  * filename, Inkscape::Extension::Implementation::Implementation * in_imp);
-Inkscape::Extension::Extension *   sp_module_system_build_from_mem      (const gchar *  buffer, Inkscape::Extension::Implementation::Implementation * in_imp);
+}; }; /* namespace Inkscape::Extension */
 
-Inkscape::Extension::Extension *sp_module_system_get (const unsigned char *key);
-
-void sp_module_system_menu_open (SPMenu *menu);
-void sp_module_system_menu_save (SPMenu *menu);
-
-#endif /* __MODULES_SYSTEM_H__ */
+#endif /* INKSCAPE_EXTENSION_SYSTEM_H__ */
 
 /*
   Local Variables:

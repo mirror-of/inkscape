@@ -31,7 +31,7 @@ namespace Internal {
 	\brief    What would an SVG editor be without loading/saving SVG
 	          files.  This function sets that up.
 
-	For each module there is a call to sp_module_system_build_from_mem
+	For each module there is a call to Inkscape::Extension::build_from_mem
 	with a rather large XML file passed in.  This is a constant string
 	that describes the module.  At the end of this call a module is
 	returned that is basically filled out.  The one thing that it doesn't
@@ -44,7 +44,7 @@ Svg::init(void)
 	Inkscape::Extension::Extension * ext;
 	
 	/* SVG in */
-    ext = sp_module_system_build_from_mem(
+    ext = Inkscape::Extension::build_from_mem(
 		"<spmodule>\n"
 			"<name>SVG Input</name>\n"
 			"<id>" SP_MODULE_KEY_INPUT_SVG "</id>\n"
@@ -58,7 +58,7 @@ Svg::init(void)
 		"</spmodule>", new Svg());
 
 	/* SVG out Inkscape */
-    ext = sp_module_system_build_from_mem(
+    ext = Inkscape::Extension::build_from_mem(
 		"<spmodule>\n"
 			"<name>SVG Output Inkscape</name>\n"
 			"<id>" SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "</id>\n"
@@ -72,7 +72,7 @@ Svg::init(void)
 		"</spmodule>", new Svg());
 
 	/* SVG out */
-    ext = sp_module_system_build_from_mem(
+    ext = Inkscape::Extension::build_from_mem(
 		"<spmodule>\n"
 			"<name>SVG Output</name>\n"
 			"<id>" SP_MODULE_KEY_OUTPUT_SVG "</id>\n"

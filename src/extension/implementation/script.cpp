@@ -315,9 +315,9 @@ Script::open (Inkscape::Extension::Input * module, const gchar * filename)
 	g_free(local_filename);
 
 	if (helper_extension == NULL) {
-		mydoc = sp_module_system_open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
+		mydoc = Inkscape::Extension::open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
 	} else {
-		mydoc = sp_module_system_open(Inkscape::Extension::db.get(helper_extension), tempfilename_out);
+		mydoc = Inkscape::Extension::open(Inkscape::Extension::db.get(helper_extension), tempfilename_out);
 	}
 
 	sp_document_set_uri(mydoc, (const gchar *)filename);
@@ -376,9 +376,9 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
 	}
 
 	if (helper_extension == NULL) {
-		sp_module_system_save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE), doc, tempfilename_in, FALSE, FALSE, FALSE);
+		Inkscape::Extension::save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE), doc, tempfilename_in, FALSE, FALSE, FALSE);
 	} else {
-		sp_module_system_save(Inkscape::Extension::db.get(helper_extension), doc, tempfilename_in, FALSE, FALSE, FALSE);
+		Inkscape::Extension::save(Inkscape::Extension::db.get(helper_extension), doc, tempfilename_in, FALSE, FALSE, FALSE);
 	}
 
 	gsize bytesRead = 0;
@@ -471,7 +471,7 @@ Script::effect (Inkscape::Extension::Effect * module, SPDocument * doc)
 		}
 	}
 
-	sp_module_system_save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE), doc, tempfilename_in, FALSE, FALSE, FALSE);
+	Inkscape::Extension::save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE), doc, tempfilename_in, FALSE, FALSE, FALSE);
 
 	/* TODO: I don't think this is the best way to do this, plus,
 	         it needs to handle all of the cases where there is more
@@ -490,7 +490,7 @@ Script::effect (Inkscape::Extension::Effect * module, SPDocument * doc)
 	execute(command, tempfilename_in, tempfilename_out);
 	g_free(command);
 
-	mydoc = sp_module_system_open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
+	mydoc = Inkscape::Extension::open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
 
 	unlink(tempfilename_in);
 	unlink(tempfilename_out);
