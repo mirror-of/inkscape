@@ -191,6 +191,18 @@ sp_nodepath_destroy (SPNodePath * np)
 
 
 /**
+ *  Return the node count of a given NodeSubPath
+ */
+gint
+sp_nodepath_subpath_get_node_count(SPNodeSubPath * subpath)
+{
+  if (!subpath)
+    return 0;
+  gint nodeCount = g_list_length(subpath->nodes);
+  return nodeCount;
+}
+
+/**
  *  Return the node count of a given NodePath
  */
 gint
@@ -206,6 +218,36 @@ sp_nodepath_get_node_count(SPNodePath * np)
     }
   return nodeCount;
 }
+
+
+/**
+ * Clean up a nodepath after editing.
+ * Currently we are deleting trivial subpaths
+ */
+void
+sp_nodepath_cleanup(SPNodePath *nodepath)
+{
+	GList *badSubPaths = NULL;
+
+	//Check all subpaths to be >=2 nodes
+	for (GList *l = nodepath->subpaths; l ; l=l->next) {
+		SPNodeSubPath *sp = (SPNodeSubPath *)l->data;
+		if (sp_nodepath_subpath_get_node_count(sp)<2)
+			badSubPaths = g_list_append(badSubPaths, sp);
+	}
+
+	//Delete them.  This second step is because sp_nodepath_subpath_destroy()
+	//also removes the subpath from nodepath->subpaths
+	for (GList *l = badSubPaths; l ; l=l->next) {
+		SPNodeSubPath *sp = (SPNodeSubPath *)l->data;
+		sp_nodepath_subpath_destroy(sp);
+	}
+
+	g_list_free(badSubPaths);
+
+}
+
+
 
 /**
 \brief Returns true if the argument nodepath and the d attribute in its repr do not match. 
@@ -1341,6 +1383,10 @@ sp_node_selected_delete (void)
 		sp_nodepath_node_destroy (node);
 	}
 
+
+	//clean up the nodepath (such as for trivial subpaths)
+	sp_nodepath_cleanup(nodepath);
+
 	sp_nodepath_ensure_ctrls (nodepath);
 
 	update_repr (nodepath);
@@ -1494,6 +1540,9 @@ sp_node_selected_delete_segment (void)
 	//###########################################
 	//# END EDITS
 	//###########################################
+
+	//clean up the nodepath (such as for trivial subpaths)
+	sp_nodepath_cleanup(nodepath);
 
 	sp_nodepath_ensure_ctrls (nodepath);
 
