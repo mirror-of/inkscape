@@ -1,5 +1,10 @@
 2003-12-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-macros.h (CLAMP): Change the behaviour if the first
+	  argument is NaN: previously it would return NaN, now it returns the
+	  requested lower bound.  Document the behaviour.  Add an assertion that
+	  the requested lower bound <= the requested upper bound.
+
 	* src/libnrtype/nr-type-ft2.cpp (nr_typeface_ft2_lookup): Change apparently-erroneous
 	  arguments to CLAMP, and add a FIXME comment indicating that the new arguments are
 	  just a guess as to the original intent.

@@ -17,6 +17,7 @@
 #if HAVE_STDLIB_H
 #include <stdlib.h>
 #endif
+#include <assert.h>
 
 #include <libnr/nr-types.h>
 
@@ -36,8 +37,19 @@
 #ifndef MIN
 #define MIN(a,b) (((a) > (b)) ? (b) : (a))
 #endif
+
 #ifndef CLAMP
-#define CLAMP(v,a,b) (((v) < (a)) ? (a) : ((v) > (b)) ? (b) : (v))
+/** Returns v bounded to within [a, b].  If v is NaN then returns a. 
+ *
+ *  Requires: a <= b.
+ */
+# define CLAMP(v,a,b)	\
+	(assert (a <= b),	\
+	 ((v) >= (a))	\
+	 ? (((v) > (b))	\
+	    ? (b)	\
+	    : (v))	\
+	 : (a))
 #endif
 
 #define NR_DF_TEST_CLOSE(a,b,e) (fabs ((a) - (b)) <= (e))
