@@ -340,6 +340,12 @@ gr_tb_selection_changed (SPSelection *sel_sender, gpointer data)
 }
 
 static void
+gr_tb_selection_modified (SPSelection *selection, guint flags, gpointer data)
+{
+    gr_tb_selection_changed (selection, data);
+}
+
+static void
 gr_defs_release (SPObject *defs, GtkWidget *widget)
 {
     gr_tb_selection_changed (NULL, (gpointer) widget);
@@ -374,9 +380,14 @@ gr_change_widget (SPDesktop *desktop)
   
     gtk_box_pack_start (GTK_BOX (widget), om, TRUE, TRUE, 0);
 
-    sigc::connection conn = selection->connectChanged(
+    sigc::connection conn1 = selection->connectChanged(
         sigc::bind (
             sigc::ptr_fun(&gr_tb_selection_changed),
+            (gpointer)widget )
+        );
+    sigc::connection conn2 = selection->connectModified(
+        sigc::bind (
+            sigc::ptr_fun(&gr_tb_selection_modified),
             (gpointer)widget )
         );
 
