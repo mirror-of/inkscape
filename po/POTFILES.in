@@ -69,7 +69,6 @@ src/helper/sodipodi-ctrlrect.cpp
 src/helper/sp-canvas-util.cpp
 src/helper/sp-canvas.cpp
 src/helper/sp-ctrlline.cpp
-src/helper/sp-marshal.cpp
 src/helper/unit-menu.cpp
 src/helper/units.cpp
 src/helper/window.cpp

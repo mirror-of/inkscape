@@ -1,3 +1,8 @@
+2004-02-22  Ted Gould <ted@gould.cx>
+
+	* doc/Makefile.am, po/POTFILES.in: keeping these up to date
+	for distchecks.
+
 2004-02-21  Ted Gould <ted@gould.cx>
 
 	* extensions/txt2svg.inkmod, extensions/txt2svg.pl:
