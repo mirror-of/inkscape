@@ -936,25 +936,27 @@ gboolean sp_sel_trans_rotate_request(SPSelTrans *seltrans, SPSelTransHandle cons
     NR::Point const d1 = point - norm;
     NR::Point const d2 = pt    - norm;
 
-    NR::Coord h1 = NR::L2(d1);
+    NR::Coord const h1 = NR::L2(d1);
     if (h1 < 1e-15) return FALSE;
     NR::Point q1 = d1 / h1;
-    NR::Coord h2 = NR::L2(d2);
+    NR::Coord const h2 = NR::L2(d2);
     if (fabs(h2) < 1e-15) return FALSE;
     NR::Point q2 = d2 / h2;
 
-    double theta = 0.0;
-
+    double radians;
     if (state & GDK_CONTROL_MASK) {
         /* Have to restrict movement. */
         double cos_t = NR::dot(q1, q2);
         double sin_t = NR::dot(NR::rot90(q1), q2);
-        theta = atan2(sin_t, cos_t);
+        radians = atan2(sin_t, cos_t);
         if (snaps) {
-            theta = ( M_PI / snaps ) * floor( theta * snaps / M_PI + .5 );
+            radians = ( M_PI / snaps ) * floor( radians * snaps / M_PI + .5 );
         }
         q1 = NR::Point(1, 0);
-        q2 = NR::Point(cos(theta), sin(theta));
+        q2 = NR::Point(cos(radians), sin(radians));
+    } else {
+        radians = atan2(NR::dot(NR::rot90(d1), d2),
+                        NR::dot(d1, d2));
     }
 
     NR::rotate const r1(q1);
@@ -962,19 +964,13 @@ gboolean sp_sel_trans_rotate_request(SPSelTrans *seltrans, SPSelTransHandle cons
     pt = point * NR::translate(-norm) * ( r2 / r1 ) * NR::translate(norm);
 
     /* status text */
-    double angle;
-    if (state & GDK_CONTROL_MASK) {
-        angle = 180 / M_PI * theta;
-    } else {
-        angle = 180 / M_PI * atan2(NR::dot(NR::rot90(d1), d2), NR::dot(d1, d2));
-    }
-
-    if (angle > 180) angle -= 360;
-    if (angle < -180) angle += 360;
+    double degrees = 180 / M_PI * radians;
+    if (degrees > 180) degrees -= 360;
+    if (degrees < -180) degrees += 360;
 
     seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE,
                                     // TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
-                                    _("<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"), angle);
+                                    _("<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"), degrees);
 
     return TRUE;
 }
