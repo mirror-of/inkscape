@@ -752,8 +752,7 @@ sp_shape_set_marker (SPObject *object, unsigned int key, const gchar *value)
 	    g_signal_connect (G_OBJECT (shape->marker[key]), "modified",
 			      G_CALLBACK (sp_shape_marker_modified), shape);
 	  }
-	  object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-	}
+  }
 }
 
 
