@@ -630,9 +630,9 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                     /* No vector in paint selector should mean that we just
                      * changed mode
                      */
-                    vector = sp_document_default_gradient_vector(SP_WIDGET_DOCUMENT(spw));
 
                     for (GSList const *i = items; i != NULL; i = i->next) {
+                        vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (i->data), false);
                         lg = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, false);
                         SP_OBJECT(lg)->updateRepr();
                     }
@@ -657,8 +657,8 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                     /* No vector in paint selector should mean that we just
                      * changed mode
                      */
-                    vector = sp_document_default_gradient_vector(SP_WIDGET_DOCUMENT(spw));
                     for (GSList const *i = items; i != NULL; i = i->next) {
+                        vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (i->data), false);
                         sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, false);
                     }
                 } else {

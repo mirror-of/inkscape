@@ -825,11 +825,12 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                     /* No vector in paint selector should mean that we just
                      * changed mode
                      */
-                    vector = sp_document_default_gradient_vector (SP_WIDGET_DOCUMENT (spw));
 
                     for (const GSList *i = items; i != NULL; i = i->next) {
                         //FIXME: see above
                         sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
+
+                        vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (i->data), true);
 
                         sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
                     }
@@ -861,16 +862,15 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
 
                 SPGradient *vector = sp_paint_selector_get_gradient_vector (psel);
                 if (!vector) {
-
                     /* No vector in paint selector should mean that we just
                      * changed mode
                      */
-                    vector = sp_document_default_gradient_vector
-                                 (SP_WIDGET_DOCUMENT (spw));
 
                     for (const GSList *i = items; i != NULL; i = i->next) {
                         //FIXME: see above
                         sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
+
+                        vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (i->data), true);
 
                         sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, true);
                     }

@@ -116,6 +116,22 @@ sp_desktop_get_style (SPDesktop *desktop, bool with_text)
 	}
 }
 
+guint32 
+sp_desktop_get_color (SPDesktop *desktop, bool is_fill)
+{
+    guint32 r = 0; // if there's no color, return black
+    const gchar *property = sp_repr_css_property (desktop->current, is_fill? "fill" : "stroke", "#000");
+
+    if (desktop->current && property) { // if there is style and the property in it,
+        if (strncmp(property, "url", 3)) { // and if it's not url,
+             // read it
+            r = sp_svg_read_color (property, r);
+        }
+    }
+
+    return r;
+}
+
 void
 sp_desktop_apply_style_tool (SPDesktop *desktop, SPRepr *repr, const char *tool, bool with_text)
 {

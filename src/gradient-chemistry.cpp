@@ -18,6 +18,7 @@
 #include "xml/repr-private.h"
 #include "style.h"
 #include "document-private.h"
+#include "desktop-style.h"
 #include "sp-gradient.h"
 #include "sp-gradient-reference.h"
 #include "sp-linear-gradient.h"
@@ -513,36 +514,45 @@ sp_item_repr_set_style_gradient (SPRepr *repr, const gchar *property, SPGradient
  */
 
 SPGradient *
-sp_document_default_gradient_vector (SPDocument *document)
+sp_document_default_gradient_vector (SPDocument *document, guint32 color)
 {
 	SPDefs *defs = (SPDefs *) SP_DOCUMENT_DEFS (document);
 
-	for (SPObject *child = sp_object_first_child(SP_OBJECT(defs)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-		if (SP_IS_GRADIENT (child)) {
-			SPGradient *gr;
-			gr = SP_GRADIENT (child);
-			if (gr->state == SP_GRADIENT_STATE_VECTOR) return gr;
-			if (gr->state == SP_GRADIENT_STATE_PRIVATE) continue;
-			sp_gradient_ensure_vector (gr);
-			if (gr->has_stops) {
-				/* We have everything, but push it through normalization testing to be sure */
-				return sp_gradient_ensure_vector_normalized (gr);
-			}
-		}
+	SPRepr *repr = sp_repr_new ("linearGradient");
+
+	//sp_repr_set_attr(repr, "inkscape:collect", "always"); 
+      // perhaps we should set it here but remove when it's edited in the gradient editor
+	// however this breaks the list of dialogs in fill&stroke which crashes when a gradient vector is deleted from under it
+	// alternatively, to reduce clutter, we could 
+	// (1) here, search gradients by color and return what is found without duplication
+	// (2) in fill & stroke, show only one copy of each gradient in list
+
+	SPRepr *stop = sp_repr_new ("stop");
+
+	gchar b[64];
+	sp_svg_write_color (b, 64, color);
+
+	{
+	gchar *t = g_strdup_printf ("stop-color:%s;stop-opacity:1;", b);
+	sp_repr_set_attr (stop, "style", t);
+	g_free (t);
 	}
 
-	/* There were no suitable vector gradients - create one */
-	SPRepr *repr, *stop;
-	repr = sp_repr_new ("linearGradient");
-	//sp_repr_set_attr(repr, "inkscape:collect", "always");
-	stop = sp_repr_new ("stop");
-	sp_repr_set_attr (stop, "style", "stop-color:#000;stop-opacity:1;");
 	sp_repr_set_attr (stop, "offset", "0");
+
 	sp_repr_append_child (repr, stop);
 	sp_repr_unref (stop);
+
 	stop = sp_repr_new ("stop");
-	sp_repr_set_attr (stop, "style", "stop-color:#fff;stop-opacity:1;");
+
+	{
+	gchar *t = g_strdup_printf ("stop-color:%s;stop-opacity:0;", b);
+	sp_repr_set_attr (stop, "style", t);
+	g_free (t);
+	}
+
 	sp_repr_set_attr (stop, "offset", "1");
+
 	sp_repr_append_child (repr, stop);
 	sp_repr_unref (stop);
 
@@ -559,6 +569,29 @@ sp_document_default_gradient_vector (SPDocument *document)
 
 	return gr;
 }
+
+/**
+Return the preferred vector for an object, made from its current color or from desktop style if none
+*/
+SPGradient *
+sp_gradient_vector_for_object (SPDocument *doc, SPDesktop *desktop, SPObject *o, bool is_fill)
+{
+    SPGradient *vector;
+
+    // take the color of the object
+    guint type = is_fill ? SP_OBJECT_STYLE (o)->fill.type : SP_OBJECT_STYLE (o)->stroke.type;
+    if (type == SP_PAINT_TYPE_COLOR) {
+        gfloat d[4];
+        sp_color_get_rgb_floatv (is_fill ? &(SP_OBJECT_STYLE (o)->fill.value.color) : &(SP_OBJECT_STYLE (o)->stroke.value.color), d);
+        guint32 rgba = SP_RGBA32_F_COMPOSE(d[0], d[1], d[2], 1.0);
+        vector = sp_document_default_gradient_vector (doc, rgba);
+    } else { // if none, take current color of the desktop
+        vector = sp_document_default_gradient_vector (doc, sp_desktop_get_color (desktop, is_fill));
+    }
+
+    return vector;
+}
+
 
 /*
  * Get private vector of given gradient
