@@ -49,11 +49,10 @@
 #include "xml/repr-private.h"
 #include "helper/gnome-utils.h"
 #include "helper/sp-intl.h"
-
 #include "widgets/sp-widget.h"
-#include "helper/sp-intl.h"
-#include "helper/window.h"
 #include "helper/unit-menu.h"
+#include "helper/units.h"
+#include "helper/window.h"
 #include "widgets/sp-widget.h"
 #include "macros.h"
 #include "inkscape.h"
@@ -92,9 +91,10 @@ sp_selection_layout_widget_update(SPWidget *spw, SPSelection *sel)
 
             if (unit.base == SP_UNIT_DIMENSIONLESS) {
                 char const * const keys[] = {"X", "Y", "width", "height"};
+                double const val = 1. / unit.unittobase;
                 for (unsigned i = 0; i < G_N_ELEMENTS(keys); ++i) {
                     GtkAdjustment *a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), keys[i]);
-                    gtk_adjustment_set_value(a, 100.0);
+                    gtk_adjustment_set_value(a, val);
                 }
             } else {
                 struct { char const *key; double val; } const keyval[] = {
