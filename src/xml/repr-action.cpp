@@ -227,7 +227,7 @@ coalesce_chgattr (SPReprAction *action)
 		     action->act.chgattr.key == iter->act.chgattr.key )
 		{
 			/* ensure changes are continuous */
-			if (strcmp(action->act.chgattr.oldval, 
+			if (action->act.chgattr.oldval && iter->act.chgattr.newval && strcmp(action->act.chgattr.oldval, 
 			           iter->act.chgattr.newval)) break;
 
 			g_free (action->act.chgattr.oldval);
