@@ -1,5 +1,9 @@
 2004-01-01  bulia byak <bulia@dr.com>
 
+	* src/desktop.cpp: Pass keyboard events from desktop widget to event contexts (if
+	there is no current item on the canvas); now all keys work regardless of mouse
+	position, so long as the document window has focus.
+
 	* src/verbs.cpp src/verbs.h: New verbs for switching desktops
 
 	* src/inkscape.cpp src/inkscape.h: New functions for switching desktops
