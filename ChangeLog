@@ -13,7 +13,8 @@
 
 2003-11-27 Bryce <bryce@osdl.org>
 	* doc/architecture.svg: Added architecture.svg to try to capture
-	  the subsystems at a block layer level.
+	  the subsystems at a block layer level.  Defining colors, working
+	  up basic structure, etc.
 	* Adding defines, functions, etc. for allowing markers into
 	  inkscape-stock.h, sp-marker.*, sp-path.c, sp-shape.h, style.*,
 	  and dialogs/stroke-style.c
