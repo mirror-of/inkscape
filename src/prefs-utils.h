@@ -25,6 +25,8 @@ double prefs_get_double_attribute_limited(gchar const *path, gchar const *attr, 
 gchar const *prefs_get_string_attribute(gchar const *path, gchar const *attr);
 void prefs_set_string_attribute(gchar const *path, gchar const *attr, gchar const *value);
 
+void prefs_set_recent_file(const gchar * uri, const gchar * name);
+const gchar ** prefs_get_recent_files(void);
 
 #endif /* !SEEN_PREFS_UTILS_H */
 

@@ -148,6 +148,9 @@ sp_file_open (const gchar *uri, Inkscape::Extension::Extension * key)
         //  section above)
         sp_namedview_window_from_document (desktop);
         doc->virgin = FALSE;
+
+        prefs_set_recent_file(SP_DOCUMENT_URI(doc), SP_DOCUMENT_NAME(doc));
+
         return TRUE;
     } else {
         gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), uri);
@@ -398,9 +401,15 @@ sp_file_save_dialog (SPDocument *doc)
 
         sucess = file_save (doc, fileName, selectionType, TRUE);
         g_free (save_path);
+
+        if (sucess)
+            prefs_set_recent_file(SP_DOCUMENT_URI(doc), SP_DOCUMENT_NAME(doc));
+
         save_path = g_dirname (fileName);
+
         if (save_path)
-			save_path = g_strconcat (save_path, G_DIR_SEPARATOR_S, NULL);
+            save_path = g_strconcat (save_path, G_DIR_SEPARATOR_S, NULL);
+
         g_free (fileName);
         return sucess;
     } else {

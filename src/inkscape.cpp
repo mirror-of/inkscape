@@ -1048,34 +1048,8 @@ inkscape_remove_document (SPDocument *document)
 
     inkscape->documents = g_slist_remove (inkscape->documents, document);
 
-    int max_documents = prefs_get_int_attribute ("options.maxrecentdocuments", "value", 20);
-
-    if (document->advertize && SP_DOCUMENT_URI (document)) {
-        SPRepr *recent;
-        recent = inkscape_get_repr (INKSCAPE, "documents.recent");
-        if (recent) {
-            SPRepr *child;
-            child = sp_repr_lookup_child (recent, "uri", SP_DOCUMENT_URI (document));
-            if (child) {
-                sp_repr_change_order (recent, child, NULL);
-            } else {
-                if (sp_repr_n_children (recent) >= max_documents) {
-                    child = recent->children;
-                    // count to the last
-                    for (i = 0; i < max_documents - 2; i ++) child = child->next;
-                    // remove all after the last
-                    while (child->next) sp_repr_unparent (child->next);
-                }
-                child = sp_repr_new ("document");
-                sp_repr_set_attr (child, "uri", SP_DOCUMENT_URI (document));
-                sp_repr_add_child (recent, child, NULL);
-            }
-            sp_repr_set_attr (child, "name", SP_DOCUMENT_NAME (document));
-        }
-    }
+    return;
 }
-
-
 
 SPDesktop *
 inkscape_active_desktop (void)
@@ -1084,8 +1058,6 @@ inkscape_active_desktop (void)
 
     return (SPDesktop *) inkscape->desktops->data;
 }
-
-
 
 SPDocument *
 inkscape_active_document (void)

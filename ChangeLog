@@ -1,3 +1,14 @@
+2004-06-11  Ted Gould  <ted@gould.cx>
+
+	* src/file.cpp, src/inkscape.cpp, src/interface.cpp, src/prefs-utils.cpp,
+	src/prefs-utils.h:
+
+	Moving the recent document setting and getting code into the prefs-utils
+	files so that they'll be with the preferences (which they really kinda
+	are).  Then, moved the place where they are set from the removing of the
+	document to where the files are opened and 'save as'd.  (yes, I made up a
+	word/contraction).
+
 2004-06-10  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/desktop-snap.cpp, src/desktop-snap.h,

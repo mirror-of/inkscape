@@ -935,24 +935,28 @@ sp_recent_open (GtkWidget *widget, const gchar *uri)
 void
 sp_menu_append_recent_documents (GtkWidget *menu)
 {
-	SPRepr *recent;
-	recent = inkscape_get_repr (INKSCAPE, "documents.recent");
-	if (recent) {
-		SPRepr *child;
-		for (child = recent->children; child != NULL; child = child->next) {
-			GtkWidget *item;
-			const gchar *uri, *name;
-			uri = sp_repr_attr (child, "uri");
-			name = sp_repr_attr (child, "name");
+	const gchar ** recent;
 
-			item = gtk_menu_item_new_with_label (name);
-			gtk_widget_show(item);
-			g_signal_connect(G_OBJECT(item),
-					"activate",
-					G_CALLBACK(sp_recent_open),
-					(gpointer)uri);
-			gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-		}
+	recent = prefs_get_recent_files();
+	if (recent) {
+            int i;
+
+            for (i = 0; recent[i] != NULL; i += 2) {
+                GtkWidget *item;
+                const gchar *uri, *name;
+                uri = recent[i];
+                name = recent[i + 1];
+
+                item = gtk_menu_item_new_with_label (name);
+                gtk_widget_show(item);
+                g_signal_connect(G_OBJECT(item),
+                                "activate",
+                                G_CALLBACK(sp_recent_open),
+                                (gpointer)uri);
+                gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+            }
+
+            g_free(recent);
 	} else {
 		GtkWidget *item = gtk_menu_item_new_with_label(_("None"));
 		gtk_widget_show(item);

@@ -13,29 +13,11 @@
 
 #include <config.h>
 
-#include "inkscape-private.h"
-#include "file.h"
-#include "document.h"
-#include "desktop.h"
-#include "selection.h"
-#include "selection-chemistry.h"
-#include "path-chemistry.h"
-#include "shortcuts.h"
-#include "verbs.h"
+#include "inkscape.h"
+#include "xml/repr.h"
+#include "xml/repr-private.h"
 
-#include "node-context.h"
-#include "rect-context.h"
-#include "arc-context.h"
-#include "star-context.h"
-#include "spiral-context.h"
-#include "draw-context.h"
-#include "dyna-draw-context.h"
-#include "text-context.h"
-#include "zoom-context.h"
-#include "dropper-context.h"
-#include "select-context.h"
-
-#include "tools-switch.h"
+#include "prefs-utils.h"
 
 void
 prefs_set_int_attribute (gchar const *path, gchar const *attr, gint value)
@@ -138,4 +120,68 @@ prefs_set_string_attribute (gchar const *path, gchar const *attr, gchar const *v
 	if (repr) {
 		sp_repr_set_attr (repr, attr, value);
 	}
+}
+
+void
+prefs_set_recent_file (const gchar * uri, const gchar * name) {
+	int i;
+    int max_documents = prefs_get_int_attribute ("options.maxrecentdocuments", "value", 20);
+
+    if (uri != NULL) {
+        SPRepr *recent;
+        recent = inkscape_get_repr (INKSCAPE, "documents.recent");
+        if (recent) {
+            SPRepr *child;
+            child = sp_repr_lookup_child (recent, "uri", uri);
+            if (child) {
+                sp_repr_change_order (recent, child, NULL);
+            } else {
+                if (sp_repr_n_children (recent) >= max_documents) {
+                    child = recent->children;
+                    // count to the last
+                    for (i = 0; i < max_documents - 2; i ++) child = child->next;
+                    // remove all after the last
+                    while (child->next) sp_repr_unparent (child->next);
+                }
+                child = sp_repr_new ("document");
+                sp_repr_set_attr (child, "uri", uri);
+                sp_repr_add_child (recent, child, NULL);
+            }
+            sp_repr_set_attr (child, "name", name);
+        }
+    }
+
+	return;
+}
+
+const gchar **
+prefs_get_recent_files(void) {
+	SPRepr *recent;
+
+	recent = inkscape_get_repr (INKSCAPE, "documents.recent");
+
+	if (recent) {
+		SPRepr *child;
+		const gchar ** datalst;
+		gint i;
+		gint docs = sp_repr_n_children (recent);
+
+		datalst = (const gchar **)g_malloc(sizeof(gchar *) * (docs * 2) + 1);
+
+		for (i = 0, child = recent->children;
+				child != NULL;
+				child = child->next, i += 2) {
+			const gchar *uri, *name;
+			uri = sp_repr_attr (child, "uri");
+			name = sp_repr_attr (child, "name");
+
+			datalst[i]     = uri;
+			datalst[i + 1] = name;
+		}
+
+		datalst[i] = NULL;
+		return datalst;
+	}
+
+	return NULL;
 }
