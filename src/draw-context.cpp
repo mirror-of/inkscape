@@ -1212,7 +1212,6 @@ static void spdc_pen_finish_segment(SPPenContext *pc, NR::Point p, guint state);
 static void spdc_pen_finish(SPPenContext *pc, gboolean closed);
 
 static gint xp = 0, yp = 0; // where drag started
-static gint tolerance = 0;
 static bool within_tolerance = false;
 
 static SPDrawContextClass *pen_parent_class;
@@ -1367,7 +1366,6 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
 
     gint ret = FALSE;
 
-    tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);
     switch (event->type) {
         case GDK_BUTTON_PRESS:
             ret = pen_handle_button_press(pc, event->button);
@@ -1495,10 +1493,13 @@ static gint
 pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion const &mevent)
 {
         gint ret = FALSE;
-        if ( within_tolerance
-             && ( abs( (gint) mevent.x - xp ) < tolerance )
-             && ( abs( (gint) mevent.y - yp ) < tolerance ) ) {
-            return FALSE; // do not drag if we're within tolerance from origin
+        if (within_tolerance) {
+            gint const tolerance = prefs_get_int_attribute_limited("options.dragtolerance",
+                                                                   "value", 0, 0, 100);
+            if ( ( abs( (gint) mevent.x - xp ) < tolerance ) &&
+                 ( abs( (gint) mevent.y - yp ) < tolerance )   ) {
+                return FALSE;   // Do not drag if we're within tolerance from origin.
+            }
         }
         // Once the user has moved farther than tolerance from the original location 
         // (indicating they intend to move the object, not click), then always process the 

@@ -2,7 +2,10 @@
 
 	* src/draw-context.cpp (sp_pen_context_root_handler):
 	  Split into many routines.  Fix some illegal union member aliasing.
-	  Minor code cleanups in backspace handling.
+	  (pen_handle_key_press): Minor code cleanups in backspace handling.
+	  (pen_handle_motion_notify): Make tolerance var local instead of
+	  file-global.  (This transformation is applicable to many
+	  dragtolerance users.)
 
 	* src/draw-context.cpp (spdc_endpoint_snap_handle):
 	  Change argument type from SPDrawContext to SPPenContext, and
