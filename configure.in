@@ -189,7 +189,7 @@ dnl libinkjar checking
 dnl ******************************
 
 AC_ARG_WITH(inkjar,
-	AC_HELP_STRING([--with-inkjar], [enable openoffice files (SVG jars)]),[with_ij=$withval], [with_ij=auto])
+	AC_HELP_STRING([--without-inkjar], [disable openoffice files (SVG jars)]),[with_ij=$withval], [with_ij=yes])
 
 if test "x$with_ij" = "xyes"; then
 	AC_DEFINE(WITH_INKJAR, 1, [enable openoffice files (SVG jars)])
