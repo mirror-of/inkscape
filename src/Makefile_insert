@@ -116,8 +116,11 @@ libinkpre_a_SOURCES =	\
 	sp-desktop-widget.h	\
 	sp-ellipse.cpp sp-ellipse.h	\
 	sp-gradient.cpp sp-gradient.h	\
+	sp-gradient-fns.h	\
 	sp-gradient-reference.cpp	\
 	sp-gradient-reference.h	\
+	sp-gradient-spread.h	\
+	sp-gradient-units.h	\
 	sp-gradient-vector.h	\
 	sp-guide-attachment.h	\
 	sp-guide-constraint.h	\
