@@ -455,8 +455,7 @@ sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
     gdouble r1 = NR::L2 (d);
     gdouble arg1 = atan2 (d);
     if (state & GDK_CONTROL_MASK) {
-        arg1 = ( rint( arg1 / (M_PI/snaps) )
-                 * (M_PI/snaps) );
+        arg1 = sp_round(arg1, M_PI/snaps);
     }
     bool isflat = sc->isflatsided;
     double rounded = sc->rounded;
