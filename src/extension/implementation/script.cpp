@@ -40,6 +40,10 @@
 #include "implementation.h"
 #include "script.h"
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 /** This is the command buffer that gets allocated from the stack */
 #define BUFSIZE (255)
 
@@ -606,6 +610,36 @@ Script::effect (Inkscape::Extension::Effect * module, SPDocument * doc)
 	return;
 }
 
+/* Helper class used by Script::execute */
+class pipe_t {
+public:
+  /* These functions set errno if they return false.
+     I'm not sure whether that's a good idea or not, but it should be reasonably
+     straightforward to change it if needed. */
+  bool open(char* command, int mode);
+  bool close();
+
+  /* These return the number of bytes read/written. */
+  size_t read(void* buffer, size_t size);
+  size_t write(const void* buffer, size_t size);
+
+  enum {
+    mode_read  = 1<<0,
+    mode_write = 1<<1,
+  };
+
+private:
+#ifdef WIN32
+  /* This is used to translate win32 errors into errno errors.
+     It only recognizes a few win32 errors for the moment though. */
+  static int translate_error(DWORD err);
+
+  HANDLE hpipe;
+#else
+  FILE* ppipe;
+#endif
+};
+
 /**
 	\return   none
 	\brief    This is the core of the extension file as it actually does
@@ -637,7 +671,7 @@ Script::effect (Inkscape::Extension::Effect * module, SPDocument * doc)
 void
 Script::execute (const gchar * in_command, const gchar * filein, const gchar * fileout)
 {
-	FILE * ppipe;
+	pipe_t pipe;
 	FILE * pfile;
 	char buf[BUFSIZE];
 	char  * command;
@@ -649,16 +683,17 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
 	/* TODO:  Perhaps replace with a sprintf? */
 	command = g_strdup_printf("%s \"%s\"", in_command, filein);
 
+        bool open_success = pipe.open(command, pipe_t::mode_read);
+        g_free(command);
 	/* Run script */
-	ppipe = popen(command, "r");
-	g_free(command);
-
-	if (ppipe == NULL) {
+	if (!open_success) {
 	  /* Error - could not open pipe - check errno */
 	  if (errno == EINVAL) {
 	    perror("Extension::Script:  Invalid mode argument in popen\n");
 	  } else if (errno == ECHILD) {
 	    perror("Extension::Script:  Cannot obtain child extension status in popen\n");
+	  } else {
+	    perror("Extension::Script:  Unknown error for popen\n");
 	  }
 	  return;
 	}
@@ -677,7 +712,7 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
 	}
 
 	/* Copy pipe output to a temporary file */
-	while ((num_read = fread(buf, 1, BUFSIZE, ppipe)) != 0) {
+	while ((num_read = pipe.read(buf, BUFSIZE)) != 0) {
 		fwrite(buf, 1, num_read, pfile);
 	}
 
@@ -692,7 +727,7 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
 	}
 
 	/* Close pipe */
-	if (pclose(ppipe) == -1) {
+	if (!pipe.close()) {
 	  if (errno == EINVAL) {
 	    perror("Extension::Script:  Invalid mode set for pclose\n");
 	  } else if (errno == ECHILD) {
@@ -704,6 +739,126 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
 
 	return;
 }
+
+#ifdef WIN32
+
+bool pipe_t::open(char* command, int mode_p) {
+  HANDLE pipe_write;
+
+  // Create pipe
+  {
+    SECURITY_ATTRIBUTES secattrs;
+    ZeroMemory(&secattrs,sizeof(secattrs));
+    secattrs.nLength=sizeof(secattrs);
+    secattrs.lpSecurityDescriptor=0;
+    secattrs.bInheritHandle=TRUE;
+    HANDLE t_pipe_read=0;
+    if ( !CreatePipe(&t_pipe_read, &pipe_write, &secattrs, 0) ) {
+      errno = translate_error(GetLastError());
+      return false;
+    }
+    // This duplicate handle makes the read pipe uninheritable
+    if ( !DuplicateHandle(GetCurrentProcess(), t_pipe_read, GetCurrentProcess(), &hpipe, 0, FALSE, DUPLICATE_CLOSE_SOURCE | DUPLICATE_SAME_ACCESS) ) {
+      int en = translate_error(GetLastError());
+      CloseHandle(t_pipe_read);
+      CloseHandle(pipe_write);
+      errno = en;
+      return false;
+    }
+  }
+
+  // Create process
+  {
+    PROCESS_INFORMATION procinfo;
+    STARTUPINFO startupinfo;
+    ZeroMemory(&procinfo,sizeof(procinfo));
+    ZeroMemory(&startupinfo,sizeof(startupinfo));
+    startupinfo.cb=sizeof(startupinfo);
+    //startupinfo.lpReserved=0;
+    //startupinfo.lpDesktop=0;
+    //startupinfo.lpTitle=0;
+    startupinfo.dwFlags=STARTF_USESTDHANDLES;
+    startupinfo.hStdInput=GetStdHandle(STD_INPUT_HANDLE);
+    startupinfo.hStdOutput=pipe_write;
+
+    if ( !CreateProcess(NULL, command, NULL, NULL, TRUE, 0, NULL, NULL, &startupinfo, &procinfo) ) {
+      errno = translate_error(GetLastError());
+      return false;
+    }
+    CloseHandle(procinfo.hThread);
+    CloseHandle(procinfo.hProcess);
+  }
+
+  // Close our copy of the write handle
+  CloseHandle(pipe_write);
+
+  return true;
+}
+
+bool pipe_t::close() {
+  BOOL retval = CloseHandle(hpipe);
+  if ( !retval ) {
+    errno = translate_error(GetLastError());
+  }
+  return retval != FALSE;
+}
+
+size_t pipe_t::read(void* buffer, size_t size) {
+  DWORD bytes_read = 0;
+  ReadFile(hpipe, buffer, size, &bytes_read, 0);
+  return bytes_read;
+}
+
+size_t pipe_t::write(const void* buffer, size_t size) {
+  DWORD bytes_written = 0;
+  WriteFile(hpipe, buffer, size, &bytes_written, 0);
+  return bytes_written;
+}
+
+int pipe_t::translate_error(DWORD err) {
+  switch(err) {
+  case ERROR_FILE_NOT_FOUND:
+    return ENOENT;
+  case ERROR_INVALID_HANDLE:
+  case ERROR_INVALID_PARAMETER:
+    return EINVAL;
+  default:
+    return 0;
+  }
+}
+
+#else // Win32
+
+bool pipe_t::open(char* command, int mode_p) {
+  char popen_mode[4] = {0,0,0,0};
+  char* popen_mode_cur = popen_mode;
+
+  if ( (mode_p & mode_read) != 0 ) {
+    *popen_mode_cur++ = 'r';
+  }
+
+  if ( (mode_p & mode_write) != 0 ) {
+    *popen_mode_cur++ = 'w';
+  }
+
+  ppipe = popen(command, popen_mode);
+
+  return ppipe != NULL;
+}
+
+bool pipe_t::close() {
+  return fclose(ppipe) == 0;
+}
+
+size_t pipe_t::read(void* buffer, size_t size) {
+  return fread(buffer, 1, size, ppipe);
+}
+
+size_t pipe_t::write(const void* buffer, size_t size) {
+  return fwrite(buffer, 1, size, ppipe);
+}
+
+#endif // (Non-)Win32
 
 }; /* Inkscape  */
 }; /* module  */
