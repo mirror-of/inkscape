@@ -635,7 +635,6 @@ sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
         SP_VERB_EDIT_DESELECT,
 
         SP_VERB_NONE,
-       SP_VERB_DIALOG_TEXT,
        SP_VERB_DIALOG_XML_EDITOR,
 
         SP_VERB_LAST
@@ -650,6 +649,7 @@ sp_ui_object_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
     static const sp_verb_t selection[] = {
         SP_VERB_DIALOG_FILL_STROKE,
         SP_VERB_DIALOG_ITEM,
+        SP_VERB_DIALOG_TEXT,
         SP_VERB_NONE,
 
         SP_VERB_SELECTION_GROUP,
