@@ -324,31 +324,19 @@ sp_fill_style_widget_attr_changed ( SPWidget *spw, const gchar *key,
 
 
 
+/**
+* \param sel Selection to use, or NULL.
+*/
 static void
 sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
 {
-
-    SPPaintSelector *psel;
-    GtkWidget *fillrule;
-    SPPaintSelectorMode pselmode;
-    const GSList *objects, *l;
-    SPObject *object;
-    SPGradient *vector;
-    SPColor color;
-    gfloat c[5];
-    SPLinearGradient *lg;
-    SPRadialGradient *rg;
-    NRMatrix fctm, gs2d;
-    NRRect fbb;
-
-    
     if (g_object_get_data (G_OBJECT (spw), "update"))
         return;
 
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
-    psel = SP_PAINT_SELECTOR (g_object_get_data ( G_OBJECT (spw), 
-                                                  "paint-selector"));
+    SPPaintSelector *psel = SP_PAINT_SELECTOR (g_object_get_data ( G_OBJECT (spw), 
+                                                                   "paint-selector"));
 
     if ( !sel || sel->isEmpty() ) {
         /* No objects, set empty */
@@ -357,17 +345,14 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
         return;
     }
 
-    objects = sp_selection_item_list (sel);
-    object = SP_OBJECT (objects->data);
-    pselmode = 
-        (SPPaintSelectorMode)sp_fill_style_determine_paint_selector_mode 
-            (SP_OBJECT_STYLE (object));
+    const GSList *objects = sel->itemList();
+    SPObject *object = SP_OBJECT (objects->data);
+    SPPaintSelectorMode pselmode =
+        sp_fill_style_determine_paint_selector_mode(SP_OBJECT_STYLE (object));
 
-    for (l = objects->next; l != NULL; l = l->next) {
-        SPPaintSelectorMode nextmode;
-        nextmode = 
-            sp_fill_style_determine_paint_selector_mode 
-                (SP_OBJECT_STYLE (l->data));
+    for (const GSList *l = objects->next; l != NULL; l = l->next) {
+        SPPaintSelectorMode nextmode = 
+            sp_fill_style_determine_paint_selector_mode(SP_OBJECT_STYLE (l->data));
                 
         if (nextmode != pselmode) {
             /* Multiple styles */
@@ -390,33 +375,41 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
             break;
             
         case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
+        {
             sp_paint_selector_set_mode ( psel, 
                                          SP_PAINT_SELECTOR_MODE_COLOR_RGB);
+            gfloat c[5];
             sp_fill_style_get_average_color_rgba (objects, c);
+            SPColor color;
             sp_color_set_rgb_float (&color, c[0], c[1], c[2]);
             sp_paint_selector_set_color_alpha (psel, &color, c[3]);
             break;
+        }
         
         case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
+        {
             sp_paint_selector_set_mode ( psel, 
                                          SP_PAINT_SELECTOR_MODE_COLOR_CMYK);
+            gfloat c[5];
             sp_fill_style_get_average_color_cmyka (objects, c);
+            SPColor color;
             sp_color_set_cmyk_float (&color, c[0], c[1], c[2], c[3]);
             sp_paint_selector_set_color_alpha (psel, &color, c[4]);
             break;
+        }
         
         case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
-            object = SP_OBJECT (objects->data);
+        {
+            SPObject *object = SP_OBJECT (objects->data);
             /* We know that all objects have lineargradient fill style */
-            vector = 
+            SPGradient *vector = 
                 sp_gradient_get_vector ( SP_GRADIENT 
                                             (SP_OBJECT_STYLE_FILL_SERVER 
                                                 (object)), 
                                          FALSE );
             
-            for (l = objects->next; l != NULL; l = l->next) {
-                SPObject *next;
-                next = SP_OBJECT (l->data);
+            for (const GSList *l = objects->next; l != NULL; l = l->next) {
+                const SPObject *next = SP_OBJECT (l->data);
                 
                 if (sp_gradient_get_vector ( SP_GRADIENT 
                                              (SP_OBJECT_STYLE_FILL_SERVER 
@@ -437,14 +430,17 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
             
             /* TODO: Probably we should set multiple mode here too */
             sp_paint_selector_set_gradient_linear (psel, vector);
-            sp_selection_bbox_document (sel, &fbb);
+            NRRect fbb;
+            sel->boundsInDocument(&fbb);
             sp_paint_selector_set_gradient_bbox ( psel, fbb.x0, fbb.y0, 
                                                   fbb.x1, fbb.y1 );
 
             /* TODO: This is plain wrong */
-            lg = SP_LINEARGRADIENT (SP_OBJECT_STYLE_FILL_SERVER (object));
+            SPLinearGradient *lg = SP_LINEARGRADIENT (SP_OBJECT_STYLE_FILL_SERVER (object));
             sp_item_invoke_bbox (SP_ITEM (object), &fbb, NULL, TRUE);
+            NRMatrix fctm;
             sp_item_i2doc_affine (SP_ITEM (object), &fctm);
+            NRMatrix gs2d;
             sp_gradient_get_gs2d_matrix_f ( SP_GRADIENT (lg), &fctm, &fbb, 
                                             &gs2d);
             sp_paint_selector_set_gradient_gs2d_matrix_f (psel, &gs2d);
@@ -457,20 +453,21 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
                                                        lg->x2.computed, 
                                                        lg->y2.computed );
             break;
+        }
             
         case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
-            object = SP_OBJECT (objects->data);
+        {
+            SPObject *object = SP_OBJECT (objects->data);
             
             /* We know that all objects have radialgradient fill style */
-            vector = 
+            SPGradient *vector = 
                 sp_gradient_get_vector ( SP_GRADIENT 
                                             (SP_OBJECT_STYLE_FILL_SERVER 
                                                 (object)), 
                                          FALSE );
                                          
-            for (l = objects->next; l != NULL; l = l->next) {
-                SPObject *next;
-                next = SP_OBJECT (l->data);
+            for (const GSList *l = objects->next; l != NULL; l = l->next) {
+                const SPObject *next = SP_OBJECT (l->data);
                 if (sp_gradient_get_vector ( SP_GRADIENT 
                                                 (SP_OBJECT_STYLE_FILL_SERVER 
                                                     (next)), 
@@ -488,14 +485,17 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
             
             /* TODO: Probably we should set multiple mode here too */
             sp_paint_selector_set_gradient_radial (psel, vector);
-            sp_selection_bbox_document (sel, &fbb);
+            NRRect fbb;
+            sel->boundsInDocument(&fbb);
             sp_paint_selector_set_gradient_bbox ( psel, fbb.x0, fbb.y0, 
                                                   fbb.x1, fbb.y1);
             
             /* TODO: This is plain wrong */
-            rg = SP_RADIALGRADIENT (SP_OBJECT_STYLE_FILL_SERVER (object));
+            SPRadialGradient *rg = SP_RADIALGRADIENT (SP_OBJECT_STYLE_FILL_SERVER (object));
             sp_item_invoke_bbox (SP_ITEM (object), &fbb, NULL, TRUE);
+            NRMatrix fctm;
             sp_item_i2doc_affine (SP_ITEM (object), &fctm);
+            NRMatrix gs2d;
             sp_gradient_get_gs2d_matrix_f ( SP_GRADIENT (rg), &fctm, 
                                             &fbb, &gs2d);
             sp_paint_selector_set_gradient_gs2d_matrix_f (psel, &gs2d);
@@ -511,6 +511,7 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
                                                        rg->r.computed );
             
             break;
+        }
             
         default:
             sp_paint_selector_set_mode ( psel, 
@@ -519,7 +520,7 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
     
     } // end of switch
 
-    fillrule = GTK_WIDGET(g_object_get_data (G_OBJECT (spw), "fill-rule"));
+    GtkWidget *fillrule = GTK_WIDGET(g_object_get_data (G_OBJECT (spw), "fill-rule"));
     gtk_option_menu_set_history ( GTK_OPTION_MENU (fillrule), 
             (SP_OBJECT_STYLE 
                 (object)->fill_rule.computed == ART_WIND_RULE_NONZERO) ? 0 : 1);
