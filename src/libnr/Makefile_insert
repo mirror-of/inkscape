@@ -29,6 +29,8 @@ libnr_libnr_a_SOURCES =	\
 	libnr/nr-gradient.h	\
 	libnr/nr-i-coord.h	\
 	libnr/nr-macros.h	\
+	libnr/nr-matrix-div.cpp	\
+	libnr/nr-matrix-div.h	\
 	libnr/nr-matrix-fns.cpp	\
 	libnr/nr-matrix-fns.h	\
 	libnr/nr-matrix-ops.h	\

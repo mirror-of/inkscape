@@ -1,5 +1,9 @@
 2004-08-08  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-matrix-div.h, src/libnr/nr-matrix-div.cpp:
+	  operator/(NR::Point, NR::Matrix), operator/(NR::Matrix, NR::Matrix):
+	  new functions, new files.
+
 	* src/algorithms/longest-common-suffix.h:
 	  Handle in O(1) time the common case of equal tails.
 	  Documentation.
