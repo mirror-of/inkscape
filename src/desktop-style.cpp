@@ -228,13 +228,13 @@ sp_desktop_get_font_size_tool(SPDesktop *desktop)
         }
     }
 
-    SPStyle *style = sp_style_new();
     double ret = 12;
     if (style_str) {
+        SPStyle *style = sp_style_new();
         sp_style_merge_from_style_string(style, style_str);
         ret = style->font_size.computed;
+        sp_style_unref(style);
     }
-    sp_style_unref(style);
     return ret;
 }
 
