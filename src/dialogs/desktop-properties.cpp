@@ -836,15 +836,15 @@ sp_desktop_dialog(void)
 
         cb = G_CALLBACK(sp_dtw_whatever_changed);
 
-        GtkWidget *us = sp_unit_selector_new(SP_UNIT_ABSOLUTE);
+        GtkWidget *us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
         int row = 0;
         spw_dropdown(dlg, t, _("Grid units:"), "grid_units", row++, us);
 
         spw_unit_selector(dlg, t, _("Origin X:"), "gridoriginx",
-                          row++, us, cb);
+                          row++, us, cb, true);
 
         spw_unit_selector(dlg, t, _("Origin Y:"), "gridoriginy",
-                          row++, us, cb);
+                          row++, us, cb, true);
 
         spw_unit_selector(dlg, t, _("Spacing X:"), "gridspacingx",
                           row++, us, cb);
@@ -1041,7 +1041,7 @@ sp_desktop_dialog(void)
         gtk_table_set_col_spacings(GTK_TABLE(tt), 4);
         gtk_container_add(GTK_CONTAINER(f), tt);
 
-        us = sp_unit_selector_new(SP_UNIT_ABSOLUTE);
+        us = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
         spw_dropdown(dlg, tt, _("Units:"), "units", 0, us);
 
         l = gtk_label_new(_("Width:"));
