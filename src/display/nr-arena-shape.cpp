@@ -43,6 +43,7 @@
 #include "../livarot/AlphaLigne.h"
 #include "../livarot/Ligne.h"
 
+//int  showRuns=0;
 void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS);
 #endif
 
@@ -347,113 +348,113 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 	}
 
 	if (style->stroke.type != SP_PAINT_TYPE_NONE) {
-
-#ifndef test_liv
-		NRBPath bp;
-    NRSVL *svl;
-#else
-    Path*  thePath=new Path;
-    Shape* theShape=new Shape;    
-    if ( shape->stroke_shp == NULL ) shape->stroke_shp=new Shape;
-#endif
 		float width, scale;
+
 		scale = NR_MATRIX_DF_EXPANSION (&gc->transform);
-		width = MAX (0.125, style->stroke_width.computed * scale);
+    if ( fabsf(style->stroke_width.computed * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
+      width = MAX (0.125, style->stroke_width.computed * scale);
 #ifndef test_liv
-		bp.path = art_bpath_affine_transform (shape->curve->bpath, NR_MATRIX_D_TO_DOUBLE (&gc->transform));
+      NRBPath bp;
+      NRSVL *svl;
+      bp.path = art_bpath_affine_transform (shape->curve->bpath, NR_MATRIX_D_TO_DOUBLE (&gc->transform));
 #else
-    {
-      NR::Matrix   tempMat(gc->transform);
-      thePath->LoadArtBPath(shape->curve->bpath,tempMat,true);
-    }
-    thePath->Convert(1.0);
+      Path*  thePath=new Path;
+      Shape* theShape=new Shape;    
+      if ( shape->stroke_shp == NULL ) shape->stroke_shp=new Shape;
+      {
+        NR::Matrix   tempMat(gc->transform);
+        thePath->LoadArtBPath(shape->curve->bpath,tempMat,true);
+      }
+      thePath->Convert(1.0);
 #endif
-		if (!style->stroke_dash.n_dash) {      
+      
+      if (!style->stroke_dash.n_dash) {      
 #ifndef test_liv
-			svl = nr_bpath_stroke (&bp, NULL, width,
-					       shape->style->stroke_linecap.value,
-					       shape->style->stroke_linejoin.value,
-					       shape->style->stroke_miterlimit.value * M_PI / 180.0,
-					       0.25);
+        svl = nr_bpath_stroke (&bp, NULL, width,
+                               shape->style->stroke_linecap.value,
+                               shape->style->stroke_linejoin.value,
+                               shape->style->stroke_miterlimit.value * M_PI / 180.0,
+                               0.25);
 #else
-      JoinType join=join_straight;
-      ButtType butt=butt_straight;
-      if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_BUTT ) butt=butt_straight;
-      if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_ROUND ) butt=butt_round;
-      if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_SQUARE ) butt=butt_square;
-      if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_MITER ) join=join_pointy;
-      if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_ROUND ) join=join_round;
-      if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_BEVEL ) join=join_straight;
-      thePath->Stroke(theShape,false,0.5*width, join,butt,width*shape->style->stroke_miterlimit.value );
+        JoinType join=join_straight;
+        ButtType butt=butt_straight;
+        if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_BUTT ) butt=butt_straight;
+        if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_ROUND ) butt=butt_round;
+        if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_SQUARE ) butt=butt_square;
+        if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_MITER ) join=join_pointy;
+        if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_ROUND ) join=join_round;
+        if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_BEVEL ) join=join_straight;
+        thePath->Stroke(theShape,false,0.5*width, join,butt,width*shape->style->stroke_miterlimit.value );
 #endif
-		} else {
-			double dlen;
+      } else {
+        double dlen;
 #ifndef test_liv
-			ArtVpath *vp, *pvp;
-			ArtSVP *asvp;
-			vp = art_bez_path_to_vec (bp.path, 0.25);
-			pvp = art_vpath_perturb (vp);
-			art_free (vp);
+        ArtVpath *vp, *pvp;
+        ArtSVP *asvp;
+        vp = art_bez_path_to_vec (bp.path, 0.25);
+        pvp = art_vpath_perturb (vp);
+        art_free (vp);
 #endif
-			dlen = 0.0;
-			for (int i = 0; i < style->stroke_dash.n_dash; i++) {
-				dlen += style->stroke_dash.dash[i] * scale;
-			}
-			if (dlen >= 1.0) {
-				ArtVpathDash dash;
-				dash.offset = style->stroke_dash.offset * scale;
-				dash.n_dash = style->stroke_dash.n_dash;
-				dash.dash = g_new (double, dash.n_dash);
-				for (int i = 0; i < dash.n_dash; i++) {
-					dash.dash[i] = style->stroke_dash.dash[i] * scale;
-				}
-#ifndef test_liv       
-				vp = art_vpath_dash (pvp, &dash);
-				art_free (pvp);
-				pvp = vp;
-#else
-        int    nbD=dash.n_dash;
-        float  *dashs=(float*)malloc(nbD*sizeof(float));
-        dashs[0]=dash.dash[0]-dash.offset;
-        for (int i=1;i<nbD;i++) {
-          dashs[i]=dashs[i-1]+dash.dash[i];
+        dlen = 0.0;
+        for (int i = 0; i < style->stroke_dash.n_dash; i++) {
+          dlen += style->stroke_dash.dash[i] * scale;
         }
-        thePath->DashPolyline(0.0,0.0,dlen,nbD-1,dashs,true);
-        free(dashs);
-#endif
-				g_free (dash.dash);
-			}
-#ifndef test_liv
-			asvp = art_svp_vpath_stroke (pvp,
-						     (ArtPathStrokeJoinType)shape->style->stroke_linejoin.value,
-						     (ArtPathStrokeCapType)shape->style->stroke_linecap.value,
-						     width,
-						     shape->style->stroke_miterlimit.value, 0.25);
-			art_free (pvp);
-			svl = nr_svl_from_art_svp (asvp);
-			art_svp_free (asvp);
+        if (dlen >= 1.0) {
+          ArtVpathDash dash;
+          dash.offset = style->stroke_dash.offset * scale;
+          dash.n_dash = style->stroke_dash.n_dash;
+          dash.dash = g_new (double, dash.n_dash);
+          for (int i = 0; i < dash.n_dash; i++) {
+            dash.dash[i] = style->stroke_dash.dash[i] * scale;
+          }
+#ifndef test_liv       
+          vp = art_vpath_dash (pvp, &dash);
+          art_free (pvp);
+          pvp = vp;
 #else
-      JoinType join=join_straight;
-      ButtType butt=butt_straight;
-      if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_BUTT ) butt=butt_straight;
-      if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_ROUND ) butt=butt_round;
-      if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_SQUARE ) butt=butt_square;
-      if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_MITER ) join=join_pointy;
-      if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_ROUND ) join=join_round;
-      if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_BEVEL ) join=join_straight;
-      thePath->Stroke(theShape,false,0.5*width, join,butt,width*shape->style->stroke_miterlimit.value);
+          int    nbD=dash.n_dash;
+          float  *dashs=(float*)malloc(nbD*sizeof(float));
+          dashs[0]=dash.dash[0]-dash.offset;
+          for (int i=1;i<nbD;i++) {
+            dashs[i]=dashs[i-1]+dash.dash[i];
+          }
+          thePath->DashPolyline(0.0,0.0,dlen,nbD-1,dashs,true);
+          free(dashs);
 #endif
-		}
+          g_free (dash.dash);
+        }
 #ifndef test_liv
-		shape->stroke_svp = nr_svp_from_svl (svl, NULL);
-		nr_svl_free_list (svl);
-		art_free (bp.path);
+        asvp = art_svp_vpath_stroke (pvp,
+                                     (ArtPathStrokeJoinType)shape->style->stroke_linejoin.value,
+                                     (ArtPathStrokeCapType)shape->style->stroke_linecap.value,
+                                     width,
+                                     shape->style->stroke_miterlimit.value, 0.25);
+        art_free (pvp);
+        svl = nr_svl_from_art_svp (asvp);
+        art_svp_free (asvp);
 #else
-    shape->stroke_shp->ConvertToShape(theShape,fill_nonZero);
-    delete thePath;
-    delete theShape;
+        JoinType join=join_straight;
+        ButtType butt=butt_straight;
+        if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_BUTT ) butt=butt_straight;
+        if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_ROUND ) butt=butt_round;
+        if ( shape->style->stroke_linecap.value == SP_STROKE_LINECAP_SQUARE ) butt=butt_square;
+        if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_MITER ) join=join_pointy;
+        if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_ROUND ) join=join_round;
+        if ( shape->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_BEVEL ) join=join_straight;
+        thePath->Stroke(theShape,false,0.5*width, join,butt,width*shape->style->stroke_miterlimit.value);
 #endif
-	}
+      }
+#ifndef test_liv
+      shape->stroke_svp = nr_svp_from_svl (svl, NULL);
+      nr_svl_free_list (svl);
+      art_free (bp.path);
+#else
+      shape->stroke_shp->ConvertToShape(theShape,fill_nonZero);
+      delete thePath;
+      delete theShape;
+#endif
+    }
+  }
 
 	bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
 #ifndef test_liv
@@ -933,6 +934,9 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
   for (int y=it;y<ib;y++) {
     theI->Reset();
 //    theIL->Reset();
+/*    if ( y == -1661 && il == 5424 ) {
+      printf("o");
+    }*/
     if ( y&0x00000003 ) {
       theS->Scan(curY,curPt,((float)(y+1)),theI,false,1.0);
     } else {
@@ -940,7 +944,16 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
     }
     theI->Flatten();
     theIL->Copy(theI);
-//    theI->Affiche();
+/*    {
+      bool   bug=false;
+      for (int i=1;i<theI->nbRun;i++) {
+        if ( theI->runs[i].st < theI->runs[i-1].en-0.1 ) bug=true;
+      }
+      if ( bug ) {
+//        theI->Affiche();
+      }
+    }
+    if ( showRuns ) theIL->Affiche();*/
     
     raster_info  dest;
     dest.startPix=il;
