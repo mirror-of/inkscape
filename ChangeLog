@@ -1,3 +1,8 @@
+2004-01-26  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* configure.in: Adjust some things for our C to C++ transition.
+	  Add warning flags to CXXFLAGS if the compiler is g++.
+
 2004-01-26 MenTaLguY <mental@rydia.net>
 
 	* src/sp-marker.h: added a URIReference subclass for markers

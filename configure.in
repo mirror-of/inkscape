@@ -10,8 +10,8 @@ AM_CONFIG_HEADER(config.h)
 AC_PROG_INTLTOOL(0.22)
 
 AC_CANONICAL_HOST
+AC_LANG(C++)
 AC_ISC_POSIX
-AC_PROG_CC
 AC_PROG_CXX
 AM_PROG_CC_STDC
 AM_PROG_AS
@@ -214,6 +214,35 @@ AC_TYPE_SIGNAL
 
 
 dnl ******************************
+dnl   Compilation warnings
+dnl ******************************
+if test "$GCC" = "yes"; then
+  # Enable some warnings from g++.
+
+  # Rationale: a number of bugs in inkscape have been fixed by enabling g++
+  # warnings and addressing the produced warnings.  Usually the committing
+  # developer is the best person to address the warnings.
+
+  CFLAGS="-Wall -W -Wstrict-prototypes $CFLAGS"
+
+  ink_svd_CXXFLAGS="$CXXFLAGS"
+  CXXFLAGS="-Wno-unused-parameter $CXXFLAGS"
+  # -Wno-unused-parameter isn't accepted by gcc 2.95.
+  AC_COMPILE_IFELSE([int dummy;
+], , CXXFLAGS="$ink_svd_CXXFLAGS",)
+  # Note: At least one bug has been caught from unused parameter warnings,
+  # so it might be worth trying not to disable it.
+  # One way of selectively disabling the warnings (i.e. only where the
+  # programmer deliberately isn't using the parameter, e.g. for a callback)
+  # is to use a UNUSED macro that trivially uses the variable (to silence the
+  # warning) and indicates that the programmer is deliberately not using the
+  # parameter.  A sufficient definition would be:
+  #   #define UNUSED(_var) (static_cast<void> (_var))
+
+  CXXFLAGS="-Wall -W -Wpointer-arith -Wcast-align -Wsign-compare -Woverloaded-virtual -Wswitch -Wstrict-prototypes $CXXFLAGS"
+fi
+
+dnl ******************************
 dnl   Plugin Support
 dnl ******************************
 dnl
@@ -342,8 +371,8 @@ echo "
 Configuration:
 
         Source code location:     ${srcdir}
-        Compiler:                 ${CC} 
-        CFLAGS:                   ${CFLAGS}
+        Compiler:                 ${CXX}
+        CXXFLAGS:                 ${CXXFLAGS}
 
         Use POPT argument parser: ${popt_ok}
         Use Xft font database:    ${xft_ok}
