@@ -468,8 +468,8 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
         p0 = 2 * rc.center - p1;
         for (unsigned d = 0 ; d < 2 ; ++d) {
             double snap_movement[2];
-            snap_movement[0] = sp_desktop_dim_snap(desktop, p0, d);
-            snap_movement[1] = sp_desktop_dim_snap(desktop, p1, d);
+            snap_movement[0] = sp_desktop_dim_snap(desktop, p0, NR::Dim2(d));
+            snap_movement[1] = sp_desktop_dim_snap(desktop, p1, NR::Dim2(d));
             if ( snap_movement[0] <
                  snap_movement[1] )
             {

@@ -784,7 +784,7 @@ static void sp_nodepath_selected_nodes_move(Path::Path *nodepath, gdouble dx, gd
 		Path::Node *n = (Path::Node *) l->data;
 		NR::Point p = n->pos + delta;
 		for(int dim = 0; dim < 2; dim++) {
-			dist = sp_desktop_dim_snap (nodepath->desktop, p, dim);
+			dist = sp_desktop_dim_snap (nodepath->desktop, p, NR::Dim2(dim));
 			if (dist < best[dim]) {
 				g_message("Snapping %d", dim);
 				best[dim] = dist;
