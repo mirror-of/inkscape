@@ -1117,6 +1117,7 @@ sp_rect_toolbox_new (SPDesktop *desktop)
     /* Reset */
     hb = gtk_hbox_new (FALSE, 1);
     b = gtk_button_new_with_label (_("Not rounded"));
+    gtk_tooltips_set_tip (tt, b, _("Make corners sharp"), NULL);
     gtk_widget_show (b);
     gtk_container_add (GTK_CONTAINER (hb), b);
     gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_rtb_defaults), tbl);
@@ -1381,7 +1382,8 @@ sp_spiral_toolbox_new (SPDesktop *desktop)
 
     /* Reset */
     hb = gtk_hbox_new (FALSE, 1);
-    b = gtk_button_new_with_label (_("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults"));
+    b = gtk_button_new_with_label (_("Defaults"));
+    gtk_tooltips_set_tip (tt, b, _("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults"), NULL);
     gtk_widget_show (b);
     gtk_container_add (GTK_CONTAINER (hb), b);
     gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_spl_tb_defaults), tbl);
@@ -1556,7 +1558,8 @@ sp_calligraphy_toolbox_new (SPDesktop *desktop)
     /* Reset */
     {
 	GtkWidget *hb = gtk_hbox_new (FALSE, 1);
-        GtkWidget *b = gtk_button_new_with_label(_("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults"));
+        GtkWidget *b = gtk_button_new_with_label(_("Defaults"));
+        gtk_tooltips_set_tip (tt, b, _("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults"), NULL);
         gtk_widget_show(b);
     gtk_container_add (GTK_CONTAINER (hb), b);
         gtk_signal_connect(GTK_OBJECT(b), "clicked", GTK_SIGNAL_FUNC(sp_ddc_defaults), tbl);
@@ -1597,8 +1600,10 @@ static void arc_tb_event_attr_changed (SPRepr * repr, const gchar * name, const 
     const char *openstr = NULL;
     openstr = sp_repr_attr(repr,"sodipodi:open");
 
-    if (adj1->value==0 && adj2->value==0) gtk_widget_set_sensitive (GTK_WIDGET (ocb), FALSE);
-    else gtk_widget_set_sensitive (GTK_WIDGET (ocb), TRUE);
+    if (adj1->value == 0 && adj2->value == 0) 
+			gtk_widget_set_sensitive (GTK_WIDGET (ocb), FALSE);
+    else 
+			gtk_widget_set_sensitive (GTK_WIDGET (ocb), TRUE);
 
     if (openstr) {
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (ocb),  TRUE);
@@ -1794,6 +1799,7 @@ static GtkWidget *
 sp_arc_toolbox_new (SPDesktop *desktop)
 {
     GtkWidget *tbl;
+    GtkAdjustment *adj1, *adj2;
 
     tbl = gtk_hbox_new (FALSE, 0);
     gtk_object_set_data (GTK_OBJECT (tbl), "dtw", desktop->owner->canvas);
@@ -1811,9 +1817,10 @@ sp_arc_toolbox_new (SPDesktop *desktop)
 
             GtkObject *a = gtk_adjustment_new(prefs_get_double_attribute ("tools.shapes.arc", "start", 0.0), -360.0, 360.0, 1.0, 10.0, 10.0);
             gtk_object_set_data(GTK_OBJECT(tbl), "start", a);
+            adj1 = GTK_ADJUSTMENT (a);
 
             GtkWidget *sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 0.1, 2);
-            gtk_tooltips_set_tip (tt, sb, _("The angle (in degrees) from the horizontal of the start point"), NULL);
+            gtk_tooltips_set_tip (tt, sb, _("The angle (in degrees) from the horizontal to the arc's start point"), NULL);
             gtk_widget_set_size_request (sb, AUX_SPINBUTTON_WIDTH, AUX_SPINBUTTON_HEIGHT);
             gtk_widget_show(sb);
 
@@ -1834,9 +1841,10 @@ sp_arc_toolbox_new (SPDesktop *desktop)
 
             GtkObject *a = gtk_adjustment_new(prefs_get_double_attribute ("tools.shapes.arc", "end", 0.0), -360.0, 360.0, 1.0, 10.0, 10.0);
             gtk_object_set_data(GTK_OBJECT(tbl), "end", a);
+            adj2 = GTK_ADJUSTMENT (a);
 
             GtkWidget *sb = gtk_spin_button_new(GTK_ADJUSTMENT(a), 0.1, 2);
-            gtk_tooltips_set_tip (tt, sb, _("The angle (in degrees) from the horizontal of the end point"), NULL);
+            gtk_tooltips_set_tip (tt, sb, _("The angle (in degrees) from the horizontal to the arc's end point"), NULL);
             gtk_widget_set_size_request (sb, AUX_SPINBUTTON_WIDTH, AUX_SPINBUTTON_HEIGHT);
             gtk_widget_show(sb);
 
@@ -1851,14 +1859,20 @@ sp_arc_toolbox_new (SPDesktop *desktop)
      {
         GtkWidget *hb = gtk_hbox_new (FALSE, 1);
         GtkWidget *fscb = gtk_check_button_new_with_label (_("Open arc"));
-        gtk_widget_set_sensitive (GTK_WIDGET (fscb), TRUE);
+        gtk_tooltips_set_tip (tt, fscb, _("Switch between arc (unclosed shape) and segment (closed shape with two radii)"), NULL);
+
         const gchar *openstr = NULL;
         openstr = prefs_get_string_attribute ("tools.shapes.arc", "open");
         if (!openstr || (openstr && !strcmp (openstr, "false")))
             gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  FALSE);
         else
             gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  TRUE);
-        gtk_tooltips_set_tip (tt, fscb, _("Switch between arc (unclosed shape) and segment (closed shape with two radii)"), NULL);
+
+        if (adj1->value == 0 && adj2->value == 0) 
+		gtk_widget_set_sensitive (GTK_WIDGET (fscb), FALSE);
+        else 
+		gtk_widget_set_sensitive (GTK_WIDGET (fscb), TRUE);
+
         gtk_widget_show (fscb);
         gtk_object_set_data (GTK_OBJECT (tbl), "open_checkbox", fscb);
         gtk_container_add (GTK_CONTAINER (hb), fscb);
@@ -1871,7 +1885,8 @@ sp_arc_toolbox_new (SPDesktop *desktop)
     /* Make Whole */
     {
     GtkWidget *hb = gtk_hbox_new (FALSE, 1);
-        GtkWidget *b = gtk_button_new_with_label(_("Make Whole"));
+        GtkWidget *b = gtk_button_new_with_label(_("Make whole"));
+        gtk_tooltips_set_tip (tt, b, _("Make the shape a whole ellipse, not arc or segment"), NULL);
         gtk_widget_show(b);
     gtk_container_add (GTK_CONTAINER (hb), b);
         gtk_signal_connect(GTK_OBJECT(b), "clicked", GTK_SIGNAL_FUNC(sp_arctb_defaults), tbl);

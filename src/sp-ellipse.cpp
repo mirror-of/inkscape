@@ -873,11 +873,12 @@ sp_arc_position_set (SPArc *arc, gdouble x, gdouble y, gdouble rx, gdouble ry)
 	ge->cx.computed = x;
 	ge->cy.computed = y;
 	ge->rx.computed = rx;
-    ge->ry.computed = ry;
-    if (prefs_get_double_attribute ("tools.shapes.arc", "start", 0.0) > 0)ge->start = prefs_get_double_attribute ("tools.shapes.arc", "start", 0.0);
-    if (prefs_get_double_attribute ("tools.shapes.arc", "end", 0.0) > 0) ge->end = prefs_get_double_attribute ("tools.shapes.arc", "end", 0.0);
-    if (!prefs_get_string_attribute ("tools.shapes.arc", "open")) ge->closed = 1;
-
+	ge->ry.computed = ry;
+	if (prefs_get_double_attribute ("tools.shapes.arc", "start", 0.0) != 0)
+		ge->start = prefs_get_double_attribute ("tools.shapes.arc", "start", 0.0);
+	if (prefs_get_double_attribute ("tools.shapes.arc", "end", 0.0) != 0) 
+		ge->end = prefs_get_double_attribute ("tools.shapes.arc", "end", 0.0);
+	if (!prefs_get_string_attribute ("tools.shapes.arc", "open")) ge->closed = 1;
 
 	sp_object_request_update ((SPObject *) arc, SP_OBJECT_MODIFIED_FLAG);
 }
