@@ -516,6 +516,7 @@ sp_export_selection_changed ( Inkscape::Application *inkscape,
                               SPDesktop *desktop, 
                               GtkObject *base )
 {
+    // std::cout << "Selection Changed" << std::endl;
     if (inkscape && SP_IS_INKSCAPE (inkscape) && desktop) {
         int i;
 
@@ -538,18 +539,26 @@ sp_export_selection_changed ( Inkscape::Application *inkscape,
 static void
 sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
 {
-    /* We're going to have to toggle the other buttons, but we
-       only care about the one that is depressed */
-    if (!gtk_toggle_button_get_active (tb) )
-        return;
-        
     selection_type key;
     key = (selection_type)((int)gtk_object_get_data (GTK_OBJECT (tb), "key"));
-/*
-    if (key == (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"))) {
+
+    /* We're going to have to toggle the other buttons, but we
+       only care about the one that is depressed */
+    if (!gtk_toggle_button_get_active (tb) ) {
+        selection_type current_key;
+        current_key = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
+
+        /* Don't let the current selection be deactived - but rerun the
+           activate to allow the user to renew the values */
+        if (key == current_key) {
+            gtk_toggle_button_set_active 
+                ( GTK_TOGGLE_BUTTON ( gtk_object_get_data (base, selection_names[key])), 
+                  TRUE );
+        }
+
         return;
     }
-*/
+        
     gtk_object_set_data(GTK_OBJECT(base), "selection-type", (gpointer)key);
 
     for (int i = 0; i < SELECTION_NUMBER_OF; i++) {
@@ -943,8 +952,8 @@ sp_export_detect_size(GtkObject * base) {
     selection_type key = SELECTION_NUMBER_OF;
 
     NR::Point x(sp_export_value_get_pt (base, "x0"),
-                sp_export_value_get_pt (base, "x1"));
-    NR::Point y(sp_export_value_get_pt (base, "y0"),
+                sp_export_value_get_pt (base, "y0"));
+    NR::Point y(sp_export_value_get_pt (base, "x1"),
                 sp_export_value_get_pt (base, "y1"));
     NR::Rect current_bbox(x, y);
     current_bbox.round(2);
@@ -955,9 +964,8 @@ sp_export_detect_size(GtkObject * base) {
 
         doc = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
 
-        NR::Point x(0.0,
-                    sp_document_width(doc));
-        NR::Point y(0.0,
+        NR::Point x(0.0, 0.0);
+        NR::Point y(sp_document_width(doc),
                     sp_document_height(doc));
         NR::Rect bbox(x, y);
         bbox.round(2);
@@ -1007,7 +1015,7 @@ sp_export_detect_size(GtkObject * base) {
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(gtk_object_get_data(base, selection_names[key])), TRUE);
 
     return;
-}
+} /* sp_export_detect_size */
 
 static void
 sp_export_area_x_value_changed (GtkAdjustment *adj, GtkObject *base)
@@ -1133,8 +1141,6 @@ sp_export_area_width_value_changed (GtkAdjustment *adj, GtkObject *base)
     sp_export_value_set_pt (base, "x1", x0 + width);
     sp_export_value_set (base, "bmwidth", bmwidth);
 
-    sp_export_detect_size(base);
-
     gtk_object_set_data (base, "update", GUINT_TO_POINTER (FALSE));
 
     return;
@@ -1171,8 +1177,6 @@ sp_export_area_height_value_changed (GtkAdjustment *adj, GtkObject *base)
 
     sp_export_value_set_pt (base, "y1", y0 + height);
     sp_export_value_set (base, "bmheight", bmheight);
-
-    sp_export_detect_size(base);
 
     gtk_object_set_data (base, "update", GUINT_TO_POINTER (FALSE));
     
@@ -1290,9 +1294,13 @@ sp_export_xdpi_value_changed (GtkAdjustment *adj, GtkObject *base)
 static void
 sp_export_set_area ( GtkObject *base, float x0, float y0, float x1, float y1 )
 {
+    // std::cout << "Setting X1" << std::endl;
     sp_export_value_set_pt (base, "x1", x1);
+    // std::cout << "Setting Y1" << std::endl;
     sp_export_value_set_pt (base, "y1", y1);
+    // std::cout << "Setting X0" << std::endl;
     sp_export_value_set_pt (base, "x0", x0);
+    // std::cout << "Setting Y0" << std::endl;
     sp_export_value_set_pt (base, "y0", y0);
 
     return;
