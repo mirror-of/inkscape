@@ -57,6 +57,8 @@ static NRArenaItem *sp_shape_show (SPItem *item, NRArena *arena, unsigned int ke
 static void sp_shape_hide (SPItem *item, unsigned int key);
 
 static void sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai);
+static int sp_shape_has_markers (SPShape* shape);
+static int sp_shape_number_of_markers (SPShape* Shape, int type);
 
 static SPItemClass *parent_class;
 
@@ -189,11 +191,8 @@ sp_shape_release (SPObject *object)
 static void
 sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 {
-	SPItem *item;
-	SPShape *shape;
-
-	item = (SPItem *) object;
-	shape = (SPShape *) object;
+    SPItem *item = (SPItem *) object;
+    SPShape *shape = (SPShape *) object;
 
 	if (((SPObjectClass *) (parent_class))->update) {
 	  (* ((SPObjectClass *) (parent_class))->update) (object, ctx, flags);
@@ -226,12 +225,11 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	}
 
 	if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG)) {
-		SPItemView *v;
 		NRRect paintbox;
 		/* This is suboptimal, because changing parent style schedules recalculation */
 		/* But on the other hand - how can we know that parent does not tie style and transform */
 		sp_item_invoke_bbox (SP_ITEM (object), &paintbox, NULL, TRUE);
-		for (v = SP_ITEM (shape)->display; v != NULL; v = v->next) {
+		for (SPItemView *v = SP_ITEM (shape)->display; v != NULL; v = v->next) {
 			if (flags & SP_OBJECT_MODIFIED_FLAG) {
 				nr_arena_shape_set_path(NR_ARENA_SHAPE(v->arenaitem), shape->curve,(flags & SP_OBJECT_USER_MODIFIED_FLAG_B));
 			}
@@ -239,53 +237,35 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		}
 	}
 
-	/* Note, we're ignoring 'marker' settings, which technically should apply for
-	   all three settings.  This should be fixed later such that if 'marker' is
-	   specified, then all three should appear. */
-	if (shape->curve && (shape->marker[SP_MARKER_LOC_START]
-			     || shape->marker[SP_MARKER_LOC_MID]
-			     || shape->marker[SP_MARKER_LOC_END])) {
-		SPItemView *v;
-		NArtBpath *bp;
-		int nmarker[SP_MARKER_LOC_QTY];
-		/* Determine the number of markers needed */
-		nmarker[SP_MARKER_LOC_START] = 0;
-		nmarker[SP_MARKER_LOC_MID] = 0;
-		nmarker[SP_MARKER_LOC_END] = 0;
-		for (bp = shape->curve->bpath; bp->code != ART_END; bp++) {
-			if ((bp[0].code == ART_MOVETO) || (bp[0].code == ART_MOVETO_OPEN)) {
-				nmarker[SP_MARKER_LOC_START] += 1;
-			} else if ((bp[1].code != ART_LINETO) && (bp[1].code != ART_CURVETO)) {
-				nmarker[SP_MARKER_LOC_END] += 1;
-			} else {
-				nmarker[SP_MARKER_LOC_MID] += 1;
-			}
-		}
-		/* Dimension marker views */
-		for (v = item->display; v != NULL; v = v->next) {
 
-		  if (!v->arenaitem->key) {
+        if (sp_shape_has_markers (shape)) {
+            
+            /* Dimension marker views */
+            for (SPItemView *v = item->display; v != NULL; v = v->next) {
+
+                if (!v->arenaitem->key) {
 		    /* Get enough keys for all, start, mid and end marker types,
 		    ** and set this view's arenaitem key to the first of these keys.
 		    */
 		    NR_ARENA_ITEM_SET_KEY (
-		      v->arenaitem,
-		      sp_item_display_key_new (SP_MARKER_LOC_QTY)
-		      );
-		  }
+                        v->arenaitem,
+                        sp_item_display_key_new (SP_MARKER_LOC_QTY)
+                        );
+                }
 
-		  for (int i = 0 ; i < SP_MARKER_LOC_QTY ; i++) {
-			  if (shape->marker[i]) {
-			    sp_marker_show_dimension ((SPMarker *) shape->marker[i],
-						NR_ARENA_ITEM_GET_KEY (v->arenaitem) + i-SP_MARKER_LOC,
-						      nmarker[i]);
-			  }
-			}
+                for (int i = 0 ; i < SP_MARKER_LOC_QTY ; i++) {
+                    if (shape->marker[i]) {
+                        sp_marker_show_dimension ((SPMarker *) shape->marker[i],
+                                                  NR_ARENA_ITEM_GET_KEY (v->arenaitem) + i - SP_MARKER_LOC,
+                                                  sp_shape_number_of_markers (shape, i));
+                    }
 		}
-		/* Update marker views */
-		for (v = item->display; v != NULL; v = v->next) {
-			sp_shape_update_marker_view (shape, v->arenaitem);
-		}
+            }
+                
+            /* Update marker views */
+            for (SPItemView *v = item->display; v != NULL; v = v->next) {
+                sp_shape_update_marker_view (shape, v->arenaitem);
+            }
 	}
 }
 
@@ -460,57 +440,37 @@ sp_shape_marker_get_transform (SPShape* shape, int m, NArtBpath* bp)
 static void
 sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai)
 {
-	SPStyle *style;
-	int nstart, nmid, nend;
-	NArtBpath *bp;
-
-	style = ((SPObject *) shape)->style;
+	SPStyle *style = ((SPObject *) shape)->style;
 
 	marker_status("sp_shape_update_marker_view:  Updating views of markers");
-	nstart = 0;
-	nmid = 0;
-	nend = 0;
-	for (bp = shape->curve->bpath; bp->code != ART_END; bp++) {
-		NRMatrix m;
-                if (sp_shape_marker_required (shape, SP_MARKER_LOC_START, bp)) {
-                    m = sp_shape_marker_get_transform (shape, SP_MARKER_LOC_START, bp);
-                    sp_marker_show_instance ((SPMarker *) shape->marker[SP_MARKER_LOC_START], ai,
-                                             NR_ARENA_ITEM_GET_KEY (ai) + SP_MARKER_LOC_START,
-                                             nstart,
-                                             &m, style->stroke_width.computed);
-                    nstart += 1;
-		} else if (sp_shape_marker_required (shape, SP_MARKER_LOC_END, bp)) {
-                    m = sp_shape_marker_get_transform (shape, SP_MARKER_LOC_END, bp);
-			sp_marker_show_instance ((SPMarker *) shape->marker[SP_MARKER_LOC_END], ai,
-						 NR_ARENA_ITEM_GET_KEY (ai) + SP_MARKER_LOC_END
-						 - SP_MARKER_LOC, nend,
-						 &m, style->stroke_width.computed);
-			nend += 1;
-		} else if (sp_shape_marker_required (shape, SP_MARKER_LOC_MID, bp)) {
-                    m = sp_shape_marker_get_transform (shape, SP_MARKER_LOC_MID, bp);
-			sp_marker_show_instance ((SPMarker *) shape->marker[SP_MARKER_LOC_MID], ai,
-						 NR_ARENA_ITEM_GET_KEY (ai) + SP_MARKER_LOC_MID
-						 - SP_MARKER_LOC, nmid,
-						 &m, style->stroke_width.computed);
-			nmid += 1;
-		}
+
+        for (int i = SP_MARKER_LOC_START; i < SP_MARKER_LOC_QTY; i++) {
+
+            int n = 0;
+            
+            for (NArtBpath *bp = shape->curve->bpath; bp->code != ART_END; bp++) {
+                if (sp_shape_marker_required (shape, i, bp)) {
+                    NRMatrix m = sp_shape_marker_get_transform (shape, i, bp);
+                    sp_marker_show_instance ((SPMarker* ) shape->marker[i], ai,
+                                             NR_ARENA_ITEM_GET_KEY (ai) + i, n, &m,
+                                             style->stroke_width.computed);
+                    n++;
+                }
+            }
 	}
 }
 
 static void
 sp_shape_modified (SPObject *object, unsigned int flags)
 {
-	SPShape *shape;
-
-	shape = SP_SHAPE (object);
+	SPShape *shape = SP_SHAPE (object);
 
 	if (((SPObjectClass *) (parent_class))->modified) {
 	  (* ((SPObjectClass *) (parent_class))->modified) (object, flags);
 	}
 
 	if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
-		SPItemView *v;
-		for (v = SP_ITEM (shape)->display; v != NULL; v = v->next) {
+		for (SPItemView *v = SP_ITEM (shape)->display; v != NULL; v = v->next) {
 			nr_arena_shape_set_style (NR_ARENA_SHAPE (v->arenaitem), object->style);
 		}
 	}
@@ -627,48 +587,24 @@ sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 	sp_item_invoke_bbox (item, &paintbox, NULL, TRUE);
 	nr_arena_shape_set_paintbox (NR_ARENA_SHAPE (arenaitem), &paintbox);
 
-	if (shape->curve && (shape->marker[SP_MARKER_LOC_START] ||
-			     shape->marker[SP_MARKER_LOC_MID] ||
-			     shape->marker[SP_MARKER_LOC_END])) {
-		NArtBpath *bp;
-		int nstart, nmid, nend;
-		/* Determine the number of markers needed */
-		nstart = 0;
-		nmid = 0;
-		nend = 0;
-		for (bp = shape->curve->bpath; bp->code != ART_END; bp++) {
-			if ((bp[0].code == ART_MOVETO) || (bp[0].code == ART_MOVETO_OPEN)) {
-				nstart += 1;
-			} else if ((bp[1].code != ART_LINETO) && (bp[1].code != ART_CURVETO)) {
-				nend += 1;
-			} else {
-				nmid += 1;
-			}
+        if (sp_shape_has_markers (shape)) {
+
+            /* Dimension marker views */
+            if (!arenaitem->key) {
+                NR_ARENA_ITEM_SET_KEY (arenaitem, sp_item_display_key_new (SP_MARKER_LOC_QTY));
+            }
+
+            for (int i = 0; i < SP_MARKER_LOC_QTY; i++) {
+                if (shape->marker[i]) {
+                    sp_marker_show_dimension ((SPMarker *) shape->marker[i],
+                                              NR_ARENA_ITEM_GET_KEY (arenaitem) + i - SP_MARKER_LOC,
+                                              sp_shape_number_of_markers (shape, i));
 		}
-		/* Dimension marker views */
-		if (!arenaitem->key) {
-		  NR_ARENA_ITEM_SET_KEY (arenaitem, sp_item_display_key_new (3));
-		}
-		if (shape->marker[SP_MARKER_LOC_START]) {
-		  sp_marker_show_dimension ((SPMarker *) shape->marker[SP_MARKER_LOC_START],
-					    NR_ARENA_ITEM_GET_KEY (arenaitem)
-					    + SP_MARKER_LOC_START - SP_MARKER_LOC,
-					    nstart);
-		}
-		if (shape->marker[SP_MARKER_LOC_MID]) {
-		  sp_marker_show_dimension ((SPMarker *) shape->marker[SP_MARKER_LOC_MID],
-					    NR_ARENA_ITEM_GET_KEY (arenaitem)
-					    + SP_MARKER_LOC_MID - SP_MARKER_LOC,
-					    nmid);
-		}
-		if (shape->marker[SP_MARKER_LOC_END]) {
-		  sp_marker_show_dimension ((SPMarker *) shape->marker[SP_MARKER_LOC_END],
-					    NR_ARENA_ITEM_GET_KEY (arenaitem)
-					    + SP_MARKER_LOC_END - SP_MARKER_LOC,
-					    nend);
-		}
-		/* Update marker views */
-		sp_shape_update_marker_view (shape, arenaitem);
+            }
+                   
+                    
+            /* Update marker views */
+            sp_shape_update_marker_view (shape, arenaitem);
 	}
 
 	return arenaitem;
@@ -701,6 +637,44 @@ sp_shape_hide (SPItem *item, unsigned int key)
 
 /* Marker stuff */
 
+/**
+* \param shape Shape.
+* \return TRUE if the shape has any markers, or FALSE if not.
+*/
+static int
+sp_shape_has_markers (SPShape* shape)
+{
+    /* Note, we're ignoring 'marker' settings, which technically should apply for
+       all three settings.  This should be fixed later such that if 'marker' is
+       specified, then all three should appear. */
+    
+    return (
+        shape->curve &&
+        (shape->marker[SP_MARKER_LOC_START] ||
+         shape->marker[SP_MARKER_LOC_MID] ||
+         shape->marker[SP_MARKER_LOC_END])
+        );
+}
+
+
+/**
+* \param shape Shape.
+* \param type Marker type (e.g. SP_MARKER_LOC_START)
+* \return Number of markers that the shape has of this type.
+*/
+static int
+sp_shape_number_of_markers (SPShape *shape, int type)
+{
+    int n = 0;
+    for (NArtBpath* bp = shape->curve->bpath; bp->code != ART_END; bp++) {
+        if (sp_shape_marker_required (shape, type, bp)) {
+            n++;
+        }
+    }
+
+    return n;
+}
+    
 static void
 sp_shape_marker_release (SPObject *marker, SPShape *shape)
 {

@@ -13,6 +13,9 @@
 	* src/seltrans.cpp: Slightly improve placement of the bounding
 	box selection cue.
 	
+	* src/sp-shape.cpp: various marker-related cleanups, mostly factoring out
+	common code into functions.
+	
 2004-04-17  MenTaLguY <mental@rydia.net>
 	* src/inkscape.cpp, src/node-context.cpp, src/selection-chemistry.cpp,
 	  src/selection.cpp, src/selection.h, src/seltrans.cpp, src/sp-gradient.cpp,
