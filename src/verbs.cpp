@@ -587,11 +587,11 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_SELECTION_UNION, "SelectionUnion", N_("_Union"), N_("Union of selected objects"), NULL},
 	{SP_VERB_SELECTION_INTERSECT, "SelectionIntersect", N_("_Intersection"), N_("Intersection of selected objects"), NULL},
 	{SP_VERB_SELECTION_DIFF, "SelectionDiff", N_("_Difference"), N_("Difference of selected objects"), NULL},
-	{SP_VERB_SELECTION_SYMDIFF, "SelectionSymDiff", N_("_Exclusion"), N_("Exclusive OR of selected objects"), NULL},
+	{SP_VERB_SELECTION_SYMDIFF, "SelectionSymDiff", N_("E_xclusion"), N_("Exclusive OR of selected objects"), NULL},
 	{SP_VERB_SELECTION_OFFSET, "SelectionOffset", N_("O_utset Path"), N_("Outset selected paths"), NULL},
 	{SP_VERB_SELECTION_INSET, "SelectionInset", N_("I_nset Path"), N_("Inset selected paths"), NULL},
 	{SP_VERB_SELECTION_OUTLINE, "SelectionOutline", N_("_Stroke to Path"), N_("Convert selected stroke to path"), NULL},
-	{SP_VERB_SELECTION_SIMPLIFY, "SelectionSimplify", N_("Simplify _Path"), N_("Simplify selected path"), NULL},
+	{SP_VERB_SELECTION_SIMPLIFY, "SelectionSimplify", N_("Simp_lify Path"), N_("Simplify selected path"), NULL},
 	{SP_VERB_SELECTION_COMBINE, "SelectionCombine", N_("_Combine"), N_("Combine multiple paths"), "selection_combine"},
 	{SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break _Apart"), N_("Break selected path to subpaths"), "selection_break"},
 	/* Object */
