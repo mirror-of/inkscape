@@ -166,11 +166,17 @@ sp_quick_align_dialog_destroy (void)
 
 
 
-static gboolean
-sp_align_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
+static gboolean sp_align_dialog_delete(GtkObject *, GdkEvent *, gpointer data)
 {
-    gtk_window_get_position ((GtkWindow *) dlg, &x, &y);
-    gtk_window_get_size ((GtkWindow *) dlg, &w, &h);
+    if ( data != static_cast<gpointer>(dlg) ) {
+        g_warning("Possible bug: different dlg value from passed data");
+        /* E.g. use of global x,y,w,h may also be wrong, or maybe we should use dlg instead of
+         * dead_dlg below. */
+    }
+    GtkWindow &dead_dlg = *static_cast<GtkWindow *>(data);
+
+    gtk_window_get_position(&dead_dlg, &x, &y);
+    gtk_window_get_size(&dead_dlg, &w, &h);
 
     prefs_set_int_attribute (prefs_path, "x", x);
     prefs_set_int_attribute (prefs_path, "y", y);
@@ -466,16 +472,14 @@ sp_align_dialog_create_base_menu (void)
 
 
 
-static void
-set_base (GtkMenuItem *menuitem, gpointer data)
+static void set_base(GtkMenuItem *, gpointer data)
 {
     base = GPOINTER_TO_UINT (data);
 }
 
 
 
-static void
-sp_align_arrange_clicked (GtkWidget *widget, gconstpointer data)
+static void sp_align_arrange_clicked(GtkWidget *, gconstpointer data)
 {
     AlignCoeffs const &a = *static_cast<AlignCoeffs const *>(data);
 
@@ -666,10 +670,8 @@ sp_align_bbox_sort ( const void *a, const void *b )
 
 
 
-static void
-sp_align_distribute_h_clicked ( GtkWidget *widget, const gchar *layout )
+static void sp_align_distribute_h_clicked(GtkWidget *, gchar const *layout)
 {
-
     SPDesktop *desktop;
     SPSelection *selection;
     const GSList *slist, *l;
@@ -760,10 +762,8 @@ sp_align_distribute_h_clicked ( GtkWidget *widget, const gchar *layout )
 
 
 
-static void
-sp_align_distribute_v_clicked ( GtkWidget *widget, const gchar *layout )
+static void sp_align_distribute_v_clicked(GtkWidget *, gchar const *layout)
 {
-
     SPDesktop *desktop;
     SPSelection *selection;
     const GSList *slist, *l;

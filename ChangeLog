@@ -1,5 +1,7 @@
 2004-03-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/dialogs/align.cpp: Cleanups.
+
 	* src/display/nr-arena-shape.cpp (nr_arena_shape_set_path):
 	Remove affine argument (all current callers were passing NULL) and
 	unused `lieutenant' argument.  Update callers.
