@@ -47,6 +47,7 @@
 #include "help.h"
 #include "document.h"
 #include "desktop.h"
+#include "desktop-handles.h"
 #include "selection.h"
 #include "selection-chemistry.h"
 #include "path-chemistry.h"
@@ -60,20 +61,7 @@
 #include "sp-namedview.h"
 #include "sp-flowtext.h"
 #include "layer-fns.h"
-
-#include "select-context.h"
 #include "node-context.h"
-#include "nodepath.h"
-#include "rect-context.h"
-#include "arc-context.h"
-#include "star-context.h"
-#include "spiral-context.h"
-#include "draw-context.h"
-#include "dyna-draw-context.h"
-#include "text-context.h"
-#include "zoom-context.h"
-#include "dropper-context.h"
-
 #include "verbs.h"
 
 
