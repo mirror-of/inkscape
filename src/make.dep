@@ -11,7 +11,9 @@ arc-context.o: \
 	desktop-handles.h \
 	desktop-snap.h \
 	desktop.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
+	display/sp-canvas.h \
 	document.h \
 	enums.h \
 	event-context.h \
@@ -20,10 +22,7 @@ arc-context.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	inkscape.h \
@@ -123,7 +122,9 @@ desktop-events.o: \
 	desktop-handles.h \
 	desktop.h \
 	dialogs/dialog-events.h \
+	display/guideline.h \
 	display/nr-arena-forward.h \
+	display/sp-canvas.h \
 	document.h \
 	event-context.h \
 	extension/extension.h \
@@ -131,10 +132,7 @@ desktop-events.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/guideline.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/unit-menu.h \
 	helper/units.h \
@@ -176,10 +174,9 @@ desktop-handles.o: \
 	desktop-handles.cpp \
 	desktop-handles.h \
 	desktop.h \
+	display/sp-canvas.h \
 	forward.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/units.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
@@ -242,9 +239,13 @@ desktop.o: \
 	desktop.h \
 	dialogs/dialog-events.h \
 	display/canvas-arena.h \
+	display/gnome-canvas-acetate.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-item.h \
+	display/sodipodi-ctrlrect.h \
+	display/sp-canvas.h \
+	display/sp-canvas.h \
 	document.h \
 	enums.h \
 	event-context.h \
@@ -256,12 +257,7 @@ desktop.o: \
 	file.h \
 	forward.h \
 	helper/action.h \
-	helper/gnome-canvas-acetate.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sodipodi-ctrlrect.h \
-	helper/sp-canvas.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/sp-marshal.h \
 	helper/units.h \
@@ -571,6 +567,7 @@ dialogs/filedialog-win32.o: \
 	extension/extension.h \
 	extension/implementation/implementation.h \
 	forward.h \
+	libnr/nr-coord.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	widgets/menu.h \
@@ -761,14 +758,13 @@ dialogs/object-properties.o: \
 	dialogs/fill-style.h \
 	dialogs/object-properties.h \
 	dialogs/stroke-style.h \
+	display/canvas-bpath.h \
+	display/curve.h \
+	display/sp-canvas.h \
 	forward.h \
 	forward.h \
 	helper/action.h \
-	helper/canvas-bpath.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/window.h \
 	inkscape-stock.h \
@@ -818,10 +814,13 @@ dialogs/stroke-style.o: \
 	desktop-handles.h \
 	dialogs/dialog-events.h \
 	dialogs/stroke-style.h \
+	display/canvas-bpath.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-item.h \
 	display/nr-arena.h \
+	display/sp-canvas.h \
 	document-private.h \
 	document.h \
 	enums.h \
@@ -832,11 +831,7 @@ dialogs/stroke-style.o: \
 	forward.h \
 	forward.h \
 	gradient-chemistry.h \
-	helper/canvas-bpath.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/unit-menu.h \
 	helper/units.h \
@@ -900,13 +895,13 @@ dialogs/text-edit.o: \
 	desktop-handles.h \
 	dialogs/dialog-events.h \
 	dialogs/text-edit.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
 	forward.h \
 	forward.h \
 	helper/action.h \
-	helper/curve.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
@@ -1014,12 +1009,12 @@ dialogs/xml-tree.o: \
 	desktop-handles.h \
 	dialogs/dialog-events.h \
 	dialogs/in-dt-coordsys.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
 	forward.h \
 	helper/action.h \
-	helper/curve.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
@@ -1083,6 +1078,16 @@ dir-util.o: \
 	dir-util.cpp \
 	dir-util.h
 
+display/bezier-utils.o: \
+	display/bezier-utils.cpp \
+	display/bezier-utils.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h
+
 display/canvas-arena.o: \
 	display/canvas-arena.cpp \
 	display/canvas-arena.h \
@@ -1090,10 +1095,10 @@ display/canvas-arena.o: \
 	display/nr-arena-group.h \
 	display/nr-arena-item.h \
 	display/nr-arena.h \
+	display/sp-canvas-util.h \
+	display/sp-canvas.h \
+	display/sp-canvas.h \
 	helper/helper-forward.h \
-	helper/sp-canvas-util.h \
-	helper/sp-canvas.h \
-	helper/sp-canvas.h \
 	helper/sp-marshal.h \
 	libnr/nr-blit.h \
 	libnr/nr-coord.h \
@@ -1116,22 +1121,138 @@ display/canvas-arena.o: \
 	libnr/nr-values.h \
 	prefs-utils.h
 
+display/canvas-bpath.o: \
+	display/canvas-bpath.cpp \
+	display/canvas-bpath.h \
+	display/curve.h \
+	display/sp-canvas-util.h \
+	display/sp-canvas.h \
+	helper/helper-forward.h \
+	libnr/nr-compose.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
+	libnr/nr-matrix.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-pixops.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rect-l.h \
+	libnr/nr-rect.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-values.h \
+	livarot/AVL.h \
+	livarot/AlphaLigne.h \
+	livarot/BitLigne.h \
+	livarot/DblLinked.h \
+	livarot/Ligne.h \
+	livarot/LivarotDefs.h \
+	livarot/Path.h \
+	livarot/Shape.h \
+	livarot/ShapeUtils.h
+
+display/canvas-grid.o: \
+	display/canvas-grid.cpp \
+	display/canvas-grid.h \
+	display/sp-canvas-util.h \
+	display/sp-canvas.h \
+	helper/helper-forward.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
+	libnr/nr-matrix.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rect.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-values.h
+
+display/curve.o: \
+	display/curve.cpp \
+	display/curve.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-point.h
+
+display/gnome-canvas-acetate.o: \
+	display/gnome-canvas-acetate.cpp \
+	display/gnome-canvas-acetate.h \
+	display/sp-canvas.h \
+	helper/helper-forward.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rect.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-values.h
+
+display/guideline.o: \
+	display/guideline.cpp \
+	display/guideline.h \
+	display/sp-canvas-util.h \
+	display/sp-canvas.h \
+	helper/helper-forward.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-pixops.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rect.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-values.h
+
 display/nr-arena-glyphs.o: \
 	display/nr-arena-glyphs.cpp \
 	color.h \
+	display/canvas-bpath.h \
+	display/curve.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-glyphs.h \
 	display/nr-arena-group.h \
 	display/nr-arena-item.h \
 	display/nr-arena.h \
+	display/sp-canvas.h \
 	enums.h \
 	forward.h \
-	helper/canvas-bpath.h \
-	helper/curve.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/units.h \
 	libnr/nr-blit.h \
 	libnr/nr-coord.h \
@@ -1216,6 +1337,9 @@ display/nr-arena-image.o: \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
+	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-object.h \
@@ -1261,18 +1385,18 @@ display/nr-arena-item.o: \
 display/nr-arena-shape.o: \
 	display/nr-arena-shape.cpp \
 	color.h \
+	display/canvas-bpath.h \
+	display/curve.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-item.h \
 	display/nr-arena-shape.h \
 	display/nr-arena.h \
+	display/sp-canvas.h \
 	enums.h \
 	forward.h \
-	helper/canvas-bpath.h \
-	helper/curve.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/units.h \
 	libnr/nr-blit.h \
 	libnr/nr-coord.h \
@@ -1296,10 +1420,6 @@ display/nr-arena-shape.o: \
 	libnr/nr-rect.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
-	libnr/nr-stroke.h \
-	libnr/nr-svp-private.h \
-	libnr/nr-svp-render.h \
-	libnr/nr-svp.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	livarot/AVL.h \
@@ -1309,6 +1429,7 @@ display/nr-arena-shape.o: \
 	livarot/Ligne.h \
 	livarot/LivarotDefs.h \
 	livarot/Path.h \
+	livarot/Shape.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
 	sp-item-group.h \
@@ -1348,6 +1469,179 @@ display/nr-arena.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h
+
+display/nr-gradient-gpl.o: \
+	display/nr-gradient-gpl.cpp \
+	display/nr-gradient-gpl.h \
+	libnr/nr-blit.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-gradient.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-pixblock-pixel.h \
+	libnr/nr-pixblock.h \
+	libnr/nr-pixops.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rect-l.h \
+	libnr/nr-rect.h \
+	libnr/nr-render.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-values.h
+
+display/nr-plain-stuff-gdk.o: \
+	display/nr-plain-stuff-gdk.cpp \
+	display/nr-plain-stuff-gdk.h \
+	display/nr-plain-stuff.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-pixblock-pattern.h \
+	libnr/nr-pixblock.h \
+	libnr/nr-rect-l.h
+
+display/nr-plain-stuff.o: \
+	display/nr-plain-stuff.cpp \
+	display/nr-plain-stuff.h \
+	libnr/nr-compose.h \
+	libnr/nr-pixops.h
+
+display/sodipodi-ctrl.o: \
+	display/sodipodi-ctrl.cpp \
+	display/sodipodi-ctrl.h \
+	display/sp-canvas-util.h \
+	display/sp-canvas.h \
+	helper/helper-forward.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rect.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-values.h
+
+display/sodipodi-ctrlrect.o: \
+	display/sodipodi-ctrlrect.cpp \
+	display/sodipodi-ctrlrect.h \
+	display/sp-canvas-util.h \
+	display/sp-canvas.h \
+	helper/helper-forward.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rect.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-values.h
+
+display/sp-canvas-util.o: \
+	display/sp-canvas-util.cpp \
+	display/sp-canvas-util.h \
+	display/sp-canvas.h \
+	helper/helper-forward.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
+	libnr/nr-matrix.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rect.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-values.h
+
+display/sp-canvas.o: \
+	display/sp-canvas.cpp \
+	display/sp-canvas.h \
+	helper/helper-forward.h \
+	helper/sp-marshal.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
+	libnr/nr-matrix.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-pixblock.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rect-l.h \
+	libnr/nr-rect.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-values.h
+
+display/sp-ctrlline.o: \
+	display/sp-ctrlline.cpp \
+	display/sp-canvas-util.h \
+	display/sp-canvas.h \
+	display/sp-ctrlline.h \
+	helper/helper-forward.h \
+	libnr/nr-compose.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
+	libnr/nr-matrix.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-pixops.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rect-l.h \
+	libnr/nr-rect.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-values.h \
+	livarot/AVL.h \
+	livarot/AlphaLigne.h \
+	livarot/BitLigne.h \
+	livarot/DblLinked.h \
+	livarot/Ligne.h \
+	livarot/LivarotDefs.h \
+	livarot/Path.h \
+	livarot/Shape.h \
+	livarot/ShapeUtils.h
 
 document-undo.o: \
 	document-undo.cpp \
@@ -1397,13 +1691,12 @@ document.o: \
 	display/nr-arena-item.h \
 	display/nr-arena-item.h \
 	display/nr-arena.h \
+	display/sp-canvas.h \
 	document-private.h \
 	document.h \
 	enums.h \
 	forward.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/sp-marshal.h \
 	helper/units.h \
@@ -1451,7 +1744,14 @@ draw-context.o: \
 	desktop-handles.h \
 	desktop-snap.h \
 	desktop.h \
+	display/bezier-utils.h \
+	display/canvas-bpath.h \
+	display/curve.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
+	display/sodipodi-ctrl.h \
+	display/sp-canvas.h \
+	display/sp-ctrlline.h \
 	document.h \
 	draw-context.h \
 	enums.h \
@@ -1461,15 +1761,7 @@ draw-context.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/bezier-utils.h \
-	helper/canvas-bpath.h \
-	helper/curve.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sodipodi-ctrl.h \
-	helper/sp-canvas.h \
-	helper/sp-ctrlline.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	inkscape.h \
@@ -1516,18 +1808,17 @@ dropper-context.o: \
 	desktop-affine.h \
 	desktop-handles.h \
 	display/canvas-arena.h \
+	display/canvas-bpath.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-item.h \
+	display/sp-canvas.h \
+	display/sp-canvas.h \
 	dropper-context.h \
 	enums.h \
 	event-context.h \
 	forward.h \
-	helper/canvas-bpath.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
-	helper/sp-canvas.h \
 	inkscape-private.h \
 	inkscape.h \
 	libnr/nr-coord.h \
@@ -1561,7 +1852,13 @@ dyna-draw-context.o: \
 	desktop-handles.h \
 	desktop-snap.h \
 	desktop.h \
+	display/bezier-utils.h \
+	display/canvas-bpath.h \
+	display/curve.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
+	display/sodipodi-ctrl.h \
+	display/sp-canvas.h \
 	document.h \
 	dyna-draw-context.h \
 	enums.h \
@@ -1571,14 +1868,7 @@ dyna-draw-context.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/bezier-utils.h \
-	helper/canvas-bpath.h \
-	helper/curve.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sodipodi-ctrl.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	inkscape.h \
@@ -1614,6 +1904,7 @@ event-context.o: \
 	desktop.h \
 	dialogs/desktop-properties.h \
 	display/nr-arena-forward.h \
+	display/sp-canvas.h \
 	event-context.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
@@ -1621,8 +1912,6 @@ event-context.o: \
 	forward.h \
 	helper/action.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	interface.h \
@@ -1675,6 +1964,7 @@ extension/db.o: \
 	extension/implementation/implementation.h \
 	forward.h \
 	helper/sp-intl.h \
+	libnr/nr-coord.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	widgets/menu.h \
@@ -1692,6 +1982,7 @@ extension/extension.o: \
 	forward.h \
 	helper/sp-intl.h \
 	inkscape.h \
+	libnr/nr-coord.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	prefs-utils.h \
@@ -1708,6 +1999,7 @@ extension/implementation/implementation.o: \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	forward.h \
+	libnr/nr-coord.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	widgets/menu.h \
@@ -1786,6 +2078,7 @@ extension/init.o: \
 	extension/system.h \
 	forward.h \
 	helper/sp-intl.h \
+	libnr/nr-coord.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	widgets/menu.h \
@@ -1804,6 +2097,7 @@ extension/internal/eps-out.o: \
 	extension/system.h \
 	forward.h \
 	helper/sp-intl.h \
+	libnr/nr-coord.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	print.h \
@@ -1820,6 +2114,7 @@ extension/internal/ps-out.o: \
 	extension/internal/ps-out.h \
 	extension/system.h \
 	forward.h \
+	libnr/nr-coord.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	print.h \
@@ -1829,9 +2124,12 @@ extension/internal/ps-out.o: \
 extension/internal/ps.o: \
 	extension/internal/ps.cpp \
 	color.h \
+	display/canvas-bpath.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-item.h \
+	display/sp-canvas.h \
 	document.h \
 	enums.h \
 	extension/extension.h \
@@ -1840,10 +2138,7 @@ extension/internal/ps.o: \
 	extension/internal/ps.h \
 	extension/system.h \
 	forward.h \
-	helper/canvas-bpath.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	inkscape.h \
@@ -1891,6 +2186,7 @@ extension/internal/svg.o: \
 	extension/system.h \
 	forward.h \
 	helper/sp-intl.h \
+	libnr/nr-coord.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	sp-object.h \
@@ -2097,6 +2393,7 @@ gradient-chemistry.o: \
 
 help.o: \
 	help.cpp \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	document.h \
 	extension/extension.h \
@@ -2104,7 +2401,6 @@ help.o: \
 	file.h \
 	forward.h \
 	help.h \
-	helper/curve.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
@@ -2164,307 +2460,13 @@ helper/action.o: \
 	libnr/nr-values.h \
 	view.h
 
-helper/bezier-utils.o: \
-	helper/bezier-utils.cpp \
-	helper/bezier-utils.h \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h
-
-helper/canvas-bpath.o: \
-	helper/canvas-bpath.cpp \
-	helper/canvas-bpath.h \
-	helper/curve.h \
-	helper/helper-forward.h \
-	helper/sp-canvas-util.h \
-	helper/sp-canvas.h \
-	libnr/nr-compose.h \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix-fns.h \
-	libnr/nr-matrix-ops.h \
-	libnr/nr-matrix.h \
-	libnr/nr-matrix.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
-	libnr/nr-pixops.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-point.h \
-	libnr/nr-rect-l.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h \
-	livarot/AVL.h \
-	livarot/AlphaLigne.h \
-	livarot/BitLigne.h \
-	livarot/DblLinked.h \
-	livarot/Ligne.h \
-	livarot/LivarotDefs.h \
-	livarot/Path.h \
-	livarot/Shape.h \
-	livarot/ShapeUtils.h
-
-helper/canvas-grid.o: \
-	helper/canvas-grid.cpp \
-	helper/canvas-grid.h \
-	helper/helper-forward.h \
-	helper/sp-canvas-util.h \
-	helper/sp-canvas.h \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h
-
-helper/curve.o: \
-	helper/curve.cpp \
-	helper/curve.h \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-point.h
-
-helper/gnome-canvas-acetate.o: \
-	helper/gnome-canvas-acetate.cpp \
-	helper/gnome-canvas-acetate.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h
-
 helper/gnome-utils.o: \
 	helper/gnome-utils.cpp \
 	helper/gnome-utils.h
 
-helper/guideline.o: \
-	helper/guideline.cpp \
-	helper/guideline.h \
-	helper/helper-forward.h \
-	helper/sp-canvas-util.h \
-	helper/sp-canvas.h \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
-	libnr/nr-pixops.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h
-
-helper/nr-gradient-gpl.o: \
-	helper/nr-gradient-gpl.cpp \
-	helper/nr-gradient-gpl.h \
-	libnr/nr-blit.h \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-gradient.h \
-	libnr/nr-i-coord.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
-	libnr/nr-pixblock-pixel.h \
-	libnr/nr-pixblock.h \
-	libnr/nr-pixops.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-rect-l.h \
-	libnr/nr-rect.h \
-	libnr/nr-render.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h
-
-helper/nr-plain-stuff-gdk.o: \
-	helper/nr-plain-stuff-gdk.cpp \
-	helper/nr-plain-stuff-gdk.h \
-	helper/nr-plain-stuff.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
-	libnr/nr-pixblock-pattern.h \
-	libnr/nr-pixblock.h \
-	libnr/nr-rect-l.h
-
-helper/nr-plain-stuff.o: \
-	helper/nr-plain-stuff.cpp \
-	helper/nr-plain-stuff.h \
-	libnr/nr-compose.h \
-	libnr/nr-pixops.h
-
 helper/png-write.o: \
 	helper/png-write.cpp \
 	helper/png-write.h
-
-helper/sodipodi-ctrl.o: \
-	helper/sodipodi-ctrl.cpp \
-	helper/helper-forward.h \
-	helper/sodipodi-ctrl.h \
-	helper/sp-canvas-util.h \
-	helper/sp-canvas.h \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h
-
-helper/sodipodi-ctrlrect.o: \
-	helper/sodipodi-ctrlrect.cpp \
-	helper/helper-forward.h \
-	helper/sodipodi-ctrlrect.h \
-	helper/sp-canvas-util.h \
-	helper/sp-canvas.h \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h
-
-helper/sp-canvas-util.o: \
-	helper/sp-canvas-util.cpp \
-	helper/helper-forward.h \
-	helper/sp-canvas-util.h \
-	helper/sp-canvas.h \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h
-
-helper/sp-canvas.o: \
-	helper/sp-canvas.cpp \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
-	helper/sp-marshal.h \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
-	libnr/nr-pixblock.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-rect-l.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h
-
-helper/sp-ctrlline.o: \
-	helper/sp-ctrlline.cpp \
-	helper/helper-forward.h \
-	helper/sp-canvas-util.h \
-	helper/sp-canvas.h \
-	helper/sp-ctrlline.h \
-	libnr/nr-compose.h \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix-fns.h \
-	libnr/nr-matrix-ops.h \
-	libnr/nr-matrix.h \
-	libnr/nr-matrix.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
-	libnr/nr-pixops.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-point.h \
-	libnr/nr-rect-l.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h \
-	livarot/AVL.h \
-	livarot/AlphaLigne.h \
-	livarot/BitLigne.h \
-	livarot/DblLinked.h \
-	livarot/Ligne.h \
-	livarot/LivarotDefs.h \
-	livarot/Path.h \
-	livarot/Shape.h \
-	livarot/ShapeUtils.h
 
 helper/sp-marshal.o: \
 	helper/sp-marshal.cpp \
@@ -2625,13 +2627,12 @@ knot.o: \
 	desktop-events.h \
 	desktop-handles.h \
 	desktop.h \
+	display/sodipodi-ctrl.h \
+	display/sp-canvas-util.h \
+	display/sp-canvas.h \
 	document.h \
 	forward.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sodipodi-ctrl.h \
-	helper/sp-canvas-util.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/sp-marshal.h \
 	helper/units.h \
@@ -2664,11 +2665,11 @@ knot.o: \
 knotholder.o: \
 	knotholder.cpp \
 	desktop.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
 	helper/units.h \
 	knot.h \
@@ -2989,31 +2990,6 @@ libnr/nr-scale-test.o: \
 	libnr/nr-scale-ops.h \
 	libnr/nr-scale.h \
 	utest/utest.h
-
-libnr/nr-stroke.o: \
-	libnr/nr-stroke.cpp \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
-	libnr/nr-path.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-rect.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-stroke.h \
-	libnr/nr-svp-private.h \
-	libnr/nr-svp-uncross.h \
-	libnr/nr-svp.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h
 
 libnr/nr-svp-render.o: \
 	libnr/nr-svp-render.cpp \
@@ -3577,10 +3553,10 @@ livarot/PathConversion.o: \
 
 livarot/PathCutting.o: \
 	livarot/PathCutting.cpp \
-	helper/canvas-bpath.h \
-	helper/curve.h \
+	display/canvas-bpath.h \
+	display/curve.h \
+	display/sp-canvas.h \
 	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -3785,7 +3761,10 @@ node-context.o: \
 	desktop-affine.h \
 	desktop-handles.h \
 	desktop.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
+	display/sp-canvas-util.h \
+	display/sp-canvas.h \
 	document.h \
 	enums.h \
 	event-context.h \
@@ -3794,11 +3773,7 @@ node-context.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas-util.h \
-	helper/sp-canvas.h \
 	helper/units.h \
 	knot.h \
 	knotholder.h \
@@ -3852,7 +3827,12 @@ nodepath.o: \
 	desktop-handles.h \
 	desktop-snap.h \
 	desktop.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
+	display/sodipodi-ctrl.h \
+	display/sp-canvas-util.h \
+	display/sp-canvas.h \
+	display/sp-ctrlline.h \
 	document.h \
 	enums.h \
 	event-context.h \
@@ -3861,13 +3841,7 @@ nodepath.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sodipodi-ctrl.h \
-	helper/sp-canvas-util.h \
-	helper/sp-canvas.h \
-	helper/sp-ctrlline.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	inkscape.h \
@@ -3918,10 +3892,10 @@ nodepath.o: \
 
 object-edit.o: \
 	object-edit.cpp \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	enums.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
 	helper/units.h \
 	knot.h \
@@ -3970,12 +3944,12 @@ object-ui.o: \
 	dialogs/item-properties.h \
 	dialogs/object-attributes.h \
 	dialogs/object-properties.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
 	forward.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
@@ -4022,6 +3996,7 @@ path-chemistry.o: \
 	color.h \
 	desktop-handles.h \
 	desktop.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
@@ -4030,7 +4005,6 @@ path-chemistry.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
@@ -4087,6 +4061,7 @@ prefs-utils.o: \
 	arc-context.h \
 	desktop-handles.h \
 	desktop.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	document.h \
 	draw-context.h \
@@ -4099,7 +4074,6 @@ prefs-utils.o: \
 	file.h \
 	forward.h \
 	helper/action.h \
-	helper/curve.h \
 	helper/helper-forward.h \
 	helper/units.h \
 	inkscape-private.h \
@@ -4215,7 +4189,9 @@ rect-context.o: \
 	desktop-handles.h \
 	desktop-snap.h \
 	desktop.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
+	display/sp-canvas.h \
 	document.h \
 	enums.h \
 	event-context.h \
@@ -4224,10 +4200,7 @@ rect-context.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	inkscape.h \
@@ -4279,11 +4252,10 @@ rubberband.o: \
 	rubberband.cpp \
 	desktop-handles.h \
 	desktop.h \
+	display/sodipodi-ctrlrect.h \
+	display/sp-canvas.h \
 	forward.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sodipodi-ctrlrect.h \
-	helper/sp-canvas.h \
 	helper/units.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
@@ -4349,6 +4321,9 @@ select-context.o: \
 	desktop.h \
 	dialogs/object-properties.h \
 	display/nr-arena-forward.h \
+	display/sodipodi-ctrl.h \
+	display/sp-canvas-util.h \
+	display/sp-canvas.h \
 	document.h \
 	event-context.h \
 	extension/extension.h \
@@ -4357,10 +4332,6 @@ select-context.o: \
 	extension/internal/svg.h \
 	forward.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sodipodi-ctrl.h \
-	helper/sp-canvas-util.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	inkscape-private.h \
@@ -4479,7 +4450,9 @@ selection-chemistry.o: \
 	desktop-affine.h \
 	desktop-handles.h \
 	desktop.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
+	display/sp-canvas.h \
 	document-private.h \
 	document.h \
 	enums.h \
@@ -4488,10 +4461,7 @@ selection-chemistry.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	inkscape.h \
@@ -4588,11 +4558,10 @@ selection.o: \
 seltrans-handles.o: \
 	seltrans-handles.cpp \
 	desktop-handles.h \
+	display/sodipodi-ctrl.h \
+	display/sp-canvas.h \
 	forward.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sodipodi-ctrl.h \
-	helper/sp-canvas.h \
 	knot.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
@@ -4619,6 +4588,10 @@ seltrans.o: \
 	desktop-snap.h \
 	desktop.h \
 	display/nr-arena-forward.h \
+	display/sodipodi-ctrl.h \
+	display/sodipodi-ctrlrect.h \
+	display/sp-canvas.h \
+	display/sp-ctrlline.h \
 	document.h \
 	event-context.h \
 	extension/extension.h \
@@ -4627,11 +4600,6 @@ seltrans.o: \
 	extension/internal/svg.h \
 	forward.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sodipodi-ctrl.h \
-	helper/sodipodi-ctrlrect.h \
-	helper/sp-canvas.h \
-	helper/sp-ctrlline.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	inkscape-private.h \
@@ -4688,10 +4656,10 @@ shortcuts.o: \
 
 slideshow.o: \
 	slideshow.cpp \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	document.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
@@ -4732,11 +4700,10 @@ sp-anchor.o: \
 	attributes.h \
 	dialogs/object-attributes.h \
 	display/nr-arena-forward.h \
+	display/sp-canvas.h \
 	forward.h \
 	forward.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -4775,6 +4742,7 @@ sp-animation.o: \
 sp-chars.o: \
 	sp-chars.cpp \
 	color.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-glyphs.h \
@@ -4782,7 +4750,6 @@ sp-chars.o: \
 	display/nr-arena-item.h \
 	enums.h \
 	forward.h \
-	helper/curve.h \
 	helper/units.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
@@ -4882,6 +4849,7 @@ sp-ellipse.o: \
 	sp-ellipse.cpp \
 	attributes.h \
 	color.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	enums.h \
 	extension/extension.h \
@@ -4889,7 +4857,6 @@ sp-ellipse.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/curve.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -4934,6 +4901,7 @@ sp-gradient.o: \
 	attributes.h \
 	color.h \
 	display/nr-arena-forward.h \
+	display/nr-gradient-gpl.h \
 	document-private.h \
 	document.h \
 	enums.h \
@@ -4942,7 +4910,6 @@ sp-gradient.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/nr-gradient-gpl.h \
 	helper/units.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
@@ -4990,16 +4957,15 @@ sp-gradient.o: \
 sp-guide.o: \
 	sp-guide.cpp \
 	attributes.h \
+	display/guideline.h \
 	display/nr-arena-forward.h \
+	display/sp-canvas.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/guideline.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -5343,6 +5309,7 @@ sp-line.o: \
 	sp-line.cpp \
 	attributes.h \
 	color.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	enums.h \
 	extension/extension.h \
@@ -5350,7 +5317,6 @@ sp-line.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/curve.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -5487,6 +5453,7 @@ sp-metrics.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
+	libnr/nr-coord.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	sp-metrics.h \
@@ -5501,17 +5468,16 @@ sp-namedview.o: \
 	desktop-events.h \
 	desktop-handles.h \
 	desktop.h \
+	display/canvas-grid.h \
 	display/nr-arena-forward.h \
+	display/sp-canvas.h \
 	document.h \
 	extension/extension.h \
 	extension/implementation/implementation.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/canvas-grid.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/units.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
@@ -5558,11 +5524,11 @@ sp-object-group.o: \
 sp-object-repr.o: \
 	sp-object-repr.cpp \
 	color.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -5675,6 +5641,8 @@ sp-offset.o: \
 	sp-offset.cpp \
 	attributes.h \
 	dialogs/object-attributes.h \
+	display/bezier-utils.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
@@ -5684,8 +5652,6 @@ sp-offset.o: \
 	extension/internal/svg.h \
 	forward.h \
 	forward.h \
-	helper/bezier-utils.h \
-	helper/curve.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -5756,6 +5722,7 @@ sp-path.o: \
 	sp-path.cpp \
 	attributes.h \
 	color.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	enums.h \
 	extension/extension.h \
@@ -5763,7 +5730,6 @@ sp-path.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/curve.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -5848,10 +5814,10 @@ sp-pattern.o: \
 sp-polygon.o: \
 	sp-polygon.cpp \
 	attributes.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	enums.h \
 	forward.h \
-	helper/curve.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -5887,10 +5853,10 @@ sp-polygon.o: \
 sp-polyline.o: \
 	sp-polyline.cpp \
 	attributes.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	enums.h \
 	forward.h \
-	helper/curve.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -5926,6 +5892,7 @@ sp-rect.o: \
 	attributes.h \
 	color.h \
 	dialogs/object-attributes.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
@@ -5935,7 +5902,6 @@ sp-rect.o: \
 	extension/internal/svg.h \
 	forward.h \
 	forward.h \
-	helper/curve.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -6031,10 +5997,14 @@ sp-shape.o: \
 	color.h \
 	desktop-handles.h \
 	desktop.h \
+	display/canvas-bpath.h \
+	display/curve.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-item.h \
 	display/nr-arena-shape.h \
+	display/sp-canvas.h \
 	document.h \
 	enums.h \
 	extension/extension.h \
@@ -6042,12 +6012,7 @@ sp-shape.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/canvas-bpath.h \
-	helper/curve.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -6069,7 +6034,6 @@ sp-shape.o: \
 	libnr/nr-rect.h \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
-	libnr/nr-svp.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	livarot/AVL.h \
@@ -6106,6 +6070,8 @@ sp-spiral.o: \
 	sp-spiral.cpp \
 	attributes.h \
 	dialogs/object-attributes.h \
+	display/bezier-utils.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	enums.h \
 	extension/extension.h \
@@ -6114,8 +6080,6 @@ sp-spiral.o: \
 	extension/internal/svg.h \
 	forward.h \
 	forward.h \
-	helper/bezier-utils.h \
-	helper/curve.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -6154,6 +6118,7 @@ sp-star.o: \
 	desktop-affine.h \
 	desktop.h \
 	dialogs/object-attributes.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	enums.h \
 	extension/extension.h \
@@ -6162,7 +6127,6 @@ sp-star.o: \
 	extension/internal/svg.h \
 	forward.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
@@ -6257,6 +6221,7 @@ sp-text.o: \
 	attributes.h \
 	color.h \
 	desktop.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-glyphs.h \
@@ -6270,7 +6235,6 @@ sp-text.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
@@ -6379,7 +6343,9 @@ spiral-context.o: \
 	desktop-handles.h \
 	desktop-snap.h \
 	desktop.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
+	display/sp-canvas.h \
 	document.h \
 	enums.h \
 	event-context.h \
@@ -6388,10 +6354,7 @@ spiral-context.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	inkscape.h \
@@ -6444,7 +6407,11 @@ splivarot.o: \
 	color.h \
 	desktop-handles.h \
 	desktop.h \
+	display/canvas-bpath.h \
+	display/curve.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
+	display/sp-canvas.h \
 	document.h \
 	enums.h \
 	extension/extension.h \
@@ -6452,12 +6419,7 @@ splivarot.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/canvas-bpath.h \
-	helper/curve.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	inkscape.h \
@@ -6525,7 +6487,9 @@ star-context.o: \
 	desktop-handles.h \
 	desktop-snap.h \
 	desktop.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
+	display/sp-canvas.h \
 	document.h \
 	enums.h \
 	event-context.h \
@@ -6534,10 +6498,7 @@ star-context.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	inkscape.h \
@@ -6619,7 +6580,10 @@ style.o: \
 	style.cpp \
 	attributes.h \
 	color.h \
+	display/canvas-bpath.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
+	display/sp-canvas.h \
 	document.h \
 	enums.h \
 	extension/extension.h \
@@ -6628,10 +6592,7 @@ style.o: \
 	extension/internal/svg.h \
 	extract-uri.h \
 	forward.h \
-	helper/canvas-bpath.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/units.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
@@ -6674,11 +6635,10 @@ svg-view.o: \
 	display/nr-arena-forward.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-item.h \
+	display/sp-canvas.h \
 	document.h \
 	forward.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sp-canvas.h \
 	helper/units.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
@@ -6754,6 +6714,7 @@ svg/svg-color.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
+	libnr/nr-coord.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	widgets/menu.h \
@@ -6767,6 +6728,7 @@ svg/svg-length.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
+	libnr/nr-coord.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	svg/ftos.h \
@@ -6782,6 +6744,7 @@ svg/svg-path.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
+	libnr/nr-coord.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	svg/ftos.h \
@@ -6796,17 +6759,16 @@ text-context.o: \
 	desktop-affine.h \
 	desktop-handles.h \
 	desktop.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
+	display/sodipodi-ctrlrect.h \
+	display/sp-canvas.h \
+	display/sp-ctrlline.h \
 	document.h \
 	enums.h \
 	event-context.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/helper-forward.h \
-	helper/sodipodi-ctrlrect.h \
-	helper/sp-canvas.h \
-	helper/sp-ctrlline.h \
 	helper/units.h \
 	inkscape.h \
 	libnr/nr-coord.h \
@@ -6863,6 +6825,7 @@ toolbox.o: \
 	dialogs/object-properties.h \
 	dialogs/text-edit.h \
 	dialogs/transformation.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	document-private.h \
 	document.h \
@@ -6874,7 +6837,6 @@ toolbox.o: \
 	forward.h \
 	forward.h \
 	helper/action.h \
-	helper/curve.h \
 	helper/gnome-utils.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
@@ -6959,6 +6921,7 @@ tools-switch.o: \
 	arc-context.h \
 	desktop-handles.h \
 	desktop.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	document.h \
 	draw-context.h \
@@ -6971,7 +6934,6 @@ tools-switch.o: \
 	file.h \
 	forward.h \
 	helper/action.h \
-	helper/curve.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
@@ -7059,6 +7021,7 @@ verbs.o: \
 	dialogs/text-edit.h \
 	dialogs/transformation.h \
 	dialogs/xml-tree.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
 	document.h \
 	draw-context.h \
@@ -7073,7 +7036,6 @@ verbs.o: \
 	forward.h \
 	help.h \
 	helper/action.h \
-	helper/curve.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
@@ -7227,7 +7189,7 @@ widgets/dash-selector.o: \
 
 widgets/font-selector.o: \
 	widgets/font-selector.cpp \
-	helper/nr-plain-stuff-gdk.h \
+	display/nr-plain-stuff-gdk.h \
 	helper/sp-intl.h \
 	libnr/nr-blit.h \
 	libnr/nr-coord.h \
@@ -7260,9 +7222,9 @@ widgets/font-selector.o: \
 widgets/gradient-image.o: \
 	widgets/gradient-image.cpp \
 	color.h \
+	display/nr-plain-stuff-gdk.h \
+	display/nr-plain-stuff.h \
 	forward.h \
-	helper/nr-plain-stuff-gdk.h \
-	helper/nr-plain-stuff.h \
 	libnr/nr-forward.h \
 	libnr/nr-i-coord.h \
 	libnr/nr-pixblock-pattern.h \
@@ -7284,14 +7246,14 @@ widgets/gradient-position.o: \
 	widgets/gradient-position.cpp \
 	color.h \
 	desktop-handles.h \
+	display/curve.h \
 	display/nr-arena-forward.h \
+	display/nr-gradient-gpl.h \
+	display/nr-plain-stuff-gdk.h \
+	display/nr-plain-stuff.h \
 	enums.h \
 	forward.h \
-	helper/curve.h \
 	helper/helper-forward.h \
-	helper/nr-gradient-gpl.h \
-	helper/nr-plain-stuff-gdk.h \
-	helper/nr-plain-stuff.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	knot.h \
@@ -7341,6 +7303,7 @@ widgets/gradient-selector.o: \
 	widgets/gradient-selector.cpp \
 	color.h \
 	display/nr-arena-forward.h \
+	display/nr-gradient-gpl.h \
 	document-private.h \
 	document.h \
 	document.h \
@@ -7348,7 +7311,6 @@ widgets/gradient-selector.o: \
 	forward.h \
 	forward.h \
 	gradient-chemistry.h \
-	helper/nr-gradient-gpl.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -7559,6 +7521,7 @@ widgets/ruler.o: \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	forward.h \
+	libnr/nr-coord.h \
 	libnr/nr-forward.h \
 	libnr/nr-path.h \
 	sp-metrics.h \
@@ -7594,7 +7557,7 @@ widgets/sp-color-notebook.o: \
 
 widgets/sp-color-preview.o: \
 	widgets/sp-color-preview.cpp \
-	helper/nr-plain-stuff-gdk.h \
+	display/nr-plain-stuff-gdk.h \
 	widgets/sp-color-preview.h
 
 widgets/sp-color-scales.o: \

@@ -27,13 +27,27 @@ OBJECTS = \
 	dialogs/transformation.o \
 	dialogs/xml-tree.o \
 	dir-util.o \
+	display/bezier-utils.o \
 	display/canvas-arena.o \
+	display/canvas-bpath.o \
+	display/canvas-grid.o \
+	display/curve.o \
+	display/gnome-canvas-acetate.o \
+	display/guideline.o \
 	display/nr-arena-glyphs.o \
 	display/nr-arena-group.o \
 	display/nr-arena-image.o \
 	display/nr-arena-item.o \
 	display/nr-arena-shape.o \
 	display/nr-arena.o \
+	display/nr-gradient-gpl.o \
+	display/nr-plain-stuff-gdk.o \
+	display/nr-plain-stuff.o \
+	display/sodipodi-ctrl.o \
+	display/sodipodi-ctrlrect.o \
+	display/sp-canvas-util.o \
+	display/sp-canvas.o \
+	display/sp-ctrlline.o \
 	document-undo.o \
 	document.o \
 	draw-context.o \
@@ -58,22 +72,8 @@ OBJECTS = \
 	gradient-chemistry.o \
 	help.o \
 	helper/action.o \
-	helper/bezier-utils.o \
-	helper/canvas-bpath.o \
-	helper/canvas-grid.o \
-	helper/curve.o \
-	helper/gnome-canvas-acetate.o \
 	helper/gnome-utils.o \
-	helper/guideline.o \
-	helper/nr-gradient-gpl.o \
-	helper/nr-plain-stuff-gdk.o \
-	helper/nr-plain-stuff.o \
 	helper/png-write.o \
-	helper/sodipodi-ctrl.o \
-	helper/sodipodi-ctrlrect.o \
-	helper/sp-canvas-util.o \
-	helper/sp-canvas.o \
-	helper/sp-ctrlline.o \
 	helper/sp-marshal.o \
 	helper/unit-menu.o \
 	helper/units.o \
@@ -102,7 +102,6 @@ OBJECTS = \
 	libnr/nr-rect.o \
 	libnr/nr-rotate-test.o \
 	libnr/nr-scale-test.o \
-	libnr/nr-stroke.o \
 	libnr/nr-svp-render.o \
 	libnr/nr-svp-uncross.o \
 	libnr/nr-svp.o \
@@ -301,13 +300,27 @@ LINTS = \
 	dialogs/transformation.lint \
 	dialogs/xml-tree.lint \
 	dir-util.lint \
+	display/bezier-utils.lint \
 	display/canvas-arena.lint \
+	display/canvas-bpath.lint \
+	display/canvas-grid.lint \
+	display/curve.lint \
+	display/gnome-canvas-acetate.lint \
+	display/guideline.lint \
 	display/nr-arena-glyphs.lint \
 	display/nr-arena-group.lint \
 	display/nr-arena-image.lint \
 	display/nr-arena-item.lint \
 	display/nr-arena-shape.lint \
 	display/nr-arena.lint \
+	display/nr-gradient-gpl.lint \
+	display/nr-plain-stuff-gdk.lint \
+	display/nr-plain-stuff.lint \
+	display/sodipodi-ctrl.lint \
+	display/sodipodi-ctrlrect.lint \
+	display/sp-canvas-util.lint \
+	display/sp-canvas.lint \
+	display/sp-ctrlline.lint \
 	document-undo.lint \
 	document.lint \
 	draw-context.lint \
@@ -332,22 +345,8 @@ LINTS = \
 	gradient-chemistry.lint \
 	help.lint \
 	helper/action.lint \
-	helper/bezier-utils.lint \
-	helper/canvas-bpath.lint \
-	helper/canvas-grid.lint \
-	helper/curve.lint \
-	helper/gnome-canvas-acetate.lint \
 	helper/gnome-utils.lint \
-	helper/guideline.lint \
-	helper/nr-gradient-gpl.lint \
-	helper/nr-plain-stuff-gdk.lint \
-	helper/nr-plain-stuff.lint \
 	helper/png-write.lint \
-	helper/sodipodi-ctrl.lint \
-	helper/sodipodi-ctrlrect.lint \
-	helper/sp-canvas-util.lint \
-	helper/sp-canvas.lint \
-	helper/sp-ctrlline.lint \
 	helper/sp-marshal.lint \
 	helper/unit-menu.lint \
 	helper/units.lint \
@@ -376,7 +375,6 @@ LINTS = \
 	libnr/nr-rect.lint \
 	libnr/nr-rotate-test.lint \
 	libnr/nr-scale-test.lint \
-	libnr/nr-stroke.lint \
 	libnr/nr-svp-render.lint \
 	libnr/nr-svp-uncross.lint \
 	libnr/nr-svp.lint \
