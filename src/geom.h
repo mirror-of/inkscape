@@ -10,111 +10,144 @@
 #ifndef my_math
 #define my_math
 
-typedef double vec2d[2];
+enum dimT { X, Y };
 
 class Point{
  public:
 	double pt[2];
-	
-	Point ccw(Point a) {
-		Point r;
-		for(int i = 0; i < 2; i++) {
-			double t = pt[1-i];
-			r.pt[i] = i?-t:t;
-		}
-		return r;
+
+	Point() {
 	}
 
-	Point cw(Point a) {
-		Point r;
-		r.pt[0] = -pt[1];
-		r.pt[1] = pt[0];
-		return r;
+	Point(double x, double y) {
+		pt[X] = x;
+		pt[Y] = y;
 	}
-	
+
+	/** Return a point like this point but rotated -90 degrees.
+	    (If the y axis grows downwards and the x axis grows to the
+	    right, then this is 90 degrees counter-clockwise.)
+	 **/
+	Point ccw() const {
+		return Point(pt[Y], -pt[X]);
+	}
+
+	/** Return a point like this point but rotated +90 degrees.
+	    (If the y axis grows downwards and the x axis grows to the
+	    right, then this is 90 degrees clockwise.)
+	 **/
+	Point cw() {
+		return Point(-pt[Y], pt[X]);
+	}
+
 	double L2();
 /** Compute the L2 or euclidean norm of this vector */
 };
 
-typedef struct mat2 {
-	float     xx,xy,yx,yy;
-} mat2;
-
-Point operator+(Point a, Point b) {
+Point
+operator+(Point const &a, Point const &b) {
 	Point r;
-	for(int i = 0; i < 2; i++)
-		r.pt[i] = a.pt[i]+b.pt[i];
+	for(int i = 0; i < 2; i++) {
+		r.pt[i] = a.pt[i] + b.pt[i];
+	}
 	return r;
 }
 
-Point operator-(Point a, Point b) {
+Point
+operator-(Point const &a, Point const &b) {
 	Point r;
-	for(int i = 0; i < 2; i++)
-		r.pt[i] = a.pt[i]-b.pt[i];
+	for(int i = 0; i < 2; i++) {
+		r.pt[i] = a.pt[i] - b.pt[i];
+	}
 	return r;
 }
 
-Point operator*(Point a, Point b) {
+Point
+operator*(Point const &a, Point const &b) {
 	Point r;
 	for(int i = 0; i < 2; i++)
 		r.pt[i] = a.pt[i]*b.pt[i];
 	return r;
 }
 
-Point operator*(double s, Point b) {
-	Point r;
-	for(int i = 0; i < 2; i++)
-		r.pt[i] = s*b.pt[i];
-	return r;
+Point
+operator*(double s, Point const &b) {
+	Point ret;
+	for(int i = 0; i < 2; i++) {
+		ret.pt[i] = s * b.pt[i];
+	}
+	return ret;
 }
 
-inline double dot(Point a, Point b) {
-	double d = 0;
-	for(int i = 0; i < 2; i++)
-		d += a.pt[i]*b.pt[i];
-	
-	return d;
+inline double
+dot(Point const &a, Point const &b) {
+	double ret = 0;
+	for(int i = 0; i < 2; i++) {
+		ret += a.pt[i] * b.pt[i];
+	}
+	return ret;
 }
 
-inline double cross(Point a, Point b) {
-	double d = 0;
+inline double
+cross(Point const &a, Point const &b) {
+	double ret = 0;
 	for(int i = 0; i < 2; i++)
-		d = d - a.pt[i]*b.pt[1-i];
-	return d;
+		ret -= a.pt[i] * b.pt[1-i];
+	return ret;
 }
 
+/* FIXME: What's this?  Is it intended to be yet another sp_vector_normalize variant?
+   If so, shouldn't we be dividing by the length instead of multiplying? */
 Point::Normalize() {
 	d = L2();
 	if(d > 0.0001)
 		*this = d**this;
 }
 
-#define L_VEC_AddMul(a,b,c,r) { \
+
+typedef double vec2d[2];
+
+typedef struct mat2 {
+	float     xx,xy,yx,yy;
+} mat2;
+
+#define L_VEC_AddMul(a,b,c,r) do { \
 	r.x=a.x+b.x*c.x; \
 		r.y=a.y+b.y*c.y; \
-}
+} while(0)
 
-#define L_VEC_SubMul(a,b,c,r) { \
+#define L_VEC_SubMul(a,b,c,r) do { \
 	r.x=a.x-b.x*c.x; \
 		r.y=a.y-b.y*c.y; \
-}
+} while(0)
 
 
-#define L_VEC_Cmp(a,b) ((fabs(a.y-b.y)<0.0000001)? \
-												((fabs(a.x-b.x)<0.0000001)?0:((a.x > b.x)?1:-1)): \
-												((a.y > b.y)?1:-1)) 
-	
-#define L_VAL_Cmp(a,b) ((fabs(a-b)<0.0000001)?0:((a>b)?1:-1)) 
+#define L_VEC_Cmp(a,b) ((fabs(a.y - b.y) < 1e-7) \
+			? ((fabs(a.x - b.x) < 1e-7)	\
+			   ? 0		\
+			   : ((a.x > b.x)	\
+			      ? 1	\
+			      : -1))	\
+			: ((a.y > b.y)	\
+			   ? 1		\
+			   : -1))
 
-#define L_VEC_Normalize(d) { \
-	double l=sqrt(d.x*d.x+d.y*d.y); \
-		if ( l < 0.00000001 ) { \
-			d.x=d.y=0; \
-		} else { \
-			d.x/=l; \
-				d.y/=l; \
-		} \
-}
+#define L_VAL_Cmp(a,b) ((fabs(a - b) < 1e-7)	\
+			? 0		\
+			:((a > b)	\
+			  ? 1		\
+			  : -1))
+
+/** See also sp_vector_normalize. */
+#define L_VEC_Normalize(d) do { \
+	double len = sqrt(d.x * d.x + d.y * d.y); \
+	if (len < 0.00000001) { \
+		d.x = d.y = 0; \
+	} else { \
+		d.x /= len; \
+		d.y /= len; \
+	} \
+} while(0)
 
 #define L_VEC_Distance(a,b,d) { \
 	d=sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y)); \
@@ -207,18 +240,16 @@ Point::Normalize() {
 	
 #define L_MAT_MulV(m,v,r) { \
 	vec2d t; \
-		t.x=m.xx*v.x+m.xy*v.y; \
-			t.y=m.yx*v.x+m.yy*v.y; \
-				r=t; \
+	t.x=m.xx*v.x+m.xy*v.y; \
+	t.y=m.yx*v.x+m.yy*v.y; \
+	r=t; \
 };
 
 #define L_MAT_TMulV(m,v,r) { \
 	vec2d t; \
-		t.x=m.xx*v.x+m.yx*v.y; \
-			t.y=m.xy*v.x+m.yy*v.y; \
-				r=t; \
+	t.x=m.xx*v.x+m.yx*v.y; \
+	t.y=m.xy*v.x+m.yy*v.y; \
+	r=t; \
 };
-	
-
 
 #endif
