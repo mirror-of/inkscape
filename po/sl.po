@@ -3,13 +3,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-05-04 22:41+0200\n"
+"POT-Creation-Date: 2004-06-05 19:14+0200\n"
 "PO-Revision-Date: 2004-05-31 19:27+0200\n"
 "Last-Translator: Boštjan Špetič <igzebedze@cyberpipe.org>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: inkscape.desktop.in.h:1
 msgid "Inkscape"
@@ -19,7 +19,7 @@ msgstr "Inkscape"
 msgid "SVG Vector Illustrator"
 msgstr "Ilustrator vektorjev"
 
-#: src/arc-context.cpp:458
+#: src/arc-context.cpp:464
 #, c-format
 msgid "Draw arc: %s x %s"
 msgstr "Riši lok: %s x %s"
@@ -39,17 +39,22 @@ msgstr "%s pri %s"
 msgid "Move %s"
 msgstr "Premakni %s"
 
-#: src/desktop.cpp:797 src/verbs.cpp:950
+#: src/desktop.cpp:785
+#, fuzzy
+msgid "Zoom drawing if window size changes"
+msgstr "Približaj na velikost risbe"
+
+#: src/desktop.cpp:807 src/dialogs/display-settings.cpp:925 src/verbs.cpp:954
 msgid "Zoom"
 msgstr "Povečava"
 
 #. FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
-#: src/desktop.cpp:820
+#: src/desktop.cpp:830
 msgid "Cursor coordinates"
 msgstr "Koordinate kazalca"
 
 #. display the initial welcome message in the statusbar
-#: src/desktop.cpp:830
+#: src/desktop.cpp:840
 msgid ""
 "Welcome to Inkscape! Use shape or freehand tools to create objects; use "
 "selector (arrow) to move or transform them."
@@ -67,7 +72,7 @@ msgstr "%s: %d - Inkscape"
 msgid "%s - Inkscape"
 msgstr "%s - Inkscape"
 
-#: src/desktop.cpp:1019
+#: src/desktop.cpp:1018
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -80,11 +85,11 @@ msgstr ""
 "\n"
 "Če zaprete brez shranjevanja, bodo spremembe izgubljene."
 
-#: src/desktop.cpp:1033 src/desktop.cpp:1092
+#: src/desktop.cpp:1032 src/desktop.cpp:1091
 msgid "Close _without saving"
 msgstr "Zapri brez shranjevanja"
 
-#: src/desktop.cpp:1077
+#: src/desktop.cpp:1076
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -97,826 +102,1170 @@ msgstr ""
 "\n"
 "Ali želite shraniti dokument v kaki drugi obliki?"
 
-#: src/desktop.cpp:1388
+#: src/desktop.cpp:1449
 msgid "No previous zoom."
 msgstr "Brez prejšnje povečave."
 
-#: src/desktop.cpp:1417
+#: src/desktop.cpp:1478
 msgid "No next zoom."
 msgstr "Brez naslednje povečave."
 
 #. Page page
-#: src/desktop.cpp:1814 src/dialogs/align.cpp:452
-#: src/dialogs/desktop-properties.cpp:516 src/dialogs/export.cpp:273
+#: src/desktop.cpp:1875 src/dialogs/align.cpp:445
+#: src/dialogs/desktop-properties.cpp:600 src/dialogs/export.cpp:276
 msgid "Page"
 msgstr "Stran"
 
-#: src/desktop.cpp:1818 src/dialogs/align.cpp:455 src/dialogs/export.cpp:280
+#: src/desktop.cpp:1879 src/dialogs/align.cpp:448 src/dialogs/export.cpp:283
 msgid "Drawing"
 msgstr "Risanje"
 
-#: src/desktop.cpp:1822 src/dialogs/align.cpp:458 src/dialogs/export.cpp:287
+#: src/desktop.cpp:1883 src/dialogs/align.cpp:451 src/dialogs/export.cpp:290
 msgid "Selection"
 msgstr "Izbira"
 
-#: src/dialogs/align.cpp:289
+#: src/dialogs/align.cpp:286
 msgid "Right side of aligned objects to left side of anchor"
 msgstr "Desni rob poravnanih predmetov na levi rob vodila"
 
-#: src/dialogs/align.cpp:291
+#: src/dialogs/align.cpp:288
 msgid "Left side of aligned objects to left side of anchor"
 msgstr "Levi rob poravnanih predmetov na levi rob vodila"
 
-#: src/dialogs/align.cpp:293
+#: src/dialogs/align.cpp:290
 msgid "Center horizontally"
 msgstr "Vodoravna sredina"
 
-#: src/dialogs/align.cpp:295
+#: src/dialogs/align.cpp:292
 msgid "Right side of aligned objects to right side of anchor"
 msgstr "Desni rob poravnanih predmetov na desni rob vodila"
 
-#: src/dialogs/align.cpp:297
+#: src/dialogs/align.cpp:294
 msgid "Left side of aligned objects to right side of anchor"
 msgstr "Levi rob poravnanih predmetov na desni rob vodila"
 
-#: src/dialogs/align.cpp:300
+#: src/dialogs/align.cpp:297
 msgid "Bottom of aligned objects to top of anchor"
 msgstr "Dno poravnanih predmetov na vrh vodila"
 
-#: src/dialogs/align.cpp:302
+#: src/dialogs/align.cpp:299
 msgid "Top of aligned objects to top of anchor"
 msgstr "Vrh poravnanih predmetov na vrh vodila"
 
-#: src/dialogs/align.cpp:304
+#: src/dialogs/align.cpp:301
 msgid "Center vertically"
 msgstr "Navpična sredina"
 
-#: src/dialogs/align.cpp:306
+#: src/dialogs/align.cpp:303
 msgid "Bottom of aligned objects to bottom of anchor"
 msgstr "Dno poravnanih predmetov na dno vodila"
 
-#: src/dialogs/align.cpp:308
+#: src/dialogs/align.cpp:305
 msgid "Top of aligned objects to bottom of anchor"
 msgstr "Vrh poravnanih predmetov na dno vodila"
 
-#: src/dialogs/align.cpp:323
+#: src/dialogs/align.cpp:320
 msgid "Align"
 msgstr "Poravnava"
 
-#: src/dialogs/align.cpp:344
+#: src/dialogs/align.cpp:341
 msgid "Distribute left sides of objects at even distances"
 msgstr "Enakomerno razporedi leve robove predmetov"
 
-#: src/dialogs/align.cpp:352
+#: src/dialogs/align.cpp:349
 msgid "Distribute centers of objects at even distances horizontally"
 msgstr "Enakomerno vodoravno razporedi središča predmetov"
 
-#: src/dialogs/align.cpp:359
+#: src/dialogs/align.cpp:356
 msgid "Distribute right sides of objects at even distances"
 msgstr "Enakomerno razporedi desne robove predmetov"
 
-#: src/dialogs/align.cpp:366
+#: src/dialogs/align.cpp:363
 msgid "Distribute horizontal distance between objects equally"
 msgstr "Enakomerno raporedi vodoravne razdalje med predmeti"
 
-#: src/dialogs/align.cpp:373
+#: src/dialogs/align.cpp:370
 msgid "Distribute top sides of objects at even distances"
 msgstr "Enakomerno razporedi zgornje robove predmetov"
 
-#: src/dialogs/align.cpp:381
+#: src/dialogs/align.cpp:378
 msgid "Distribute centers of objects at even distances vertically"
 msgstr "Enakomerno navpično razporedi središča predmetov"
 
-#: src/dialogs/align.cpp:388
+#: src/dialogs/align.cpp:385
 msgid "Distribute bottom sides of objects at even distances"
 msgstr "Enakomerno razporedi spodnje robove predmetov"
 
-#: src/dialogs/align.cpp:395
+#: src/dialogs/align.cpp:392
 msgid "Distribute vertical distance between objects equally"
 msgstr "Enakomerno razporedi navpične razmake med predmeti"
 
-#: src/dialogs/align.cpp:399
+#: src/dialogs/align.cpp:396
 msgid "Distribute"
 msgstr "Porazdeli"
 
-#: src/dialogs/align.cpp:440
+#: src/dialogs/align.cpp:433
 msgid "Last selected"
 msgstr "Zadnja izbira"
 
-#: src/dialogs/align.cpp:443
+#: src/dialogs/align.cpp:436
 msgid "First selected"
 msgstr "Prva izbira"
 
-#: src/dialogs/align.cpp:446
+#: src/dialogs/align.cpp:439
 msgid "Biggest item"
 msgstr "Največji predmet"
 
-#: src/dialogs/align.cpp:449
+#: src/dialogs/align.cpp:442
 msgid "Smallest item"
 msgstr "Najmanjši predmet"
 
 #. Grid settings
 #. Notebook tab
-#: src/dialogs/desktop-properties.cpp:424
+#: src/dialogs/desktop-properties.cpp:508
 msgid "Grid"
 msgstr "Mreža"
 
-#: src/dialogs/desktop-properties.cpp:437
+#: src/dialogs/desktop-properties.cpp:521
 msgid "Show grid"
 msgstr "Kaži mrežo"
 
-#: src/dialogs/desktop-properties.cpp:438
+#: src/dialogs/desktop-properties.cpp:522
 msgid "Snap to grid"
 msgstr "Preskakuj do mreže"
 
-#: src/dialogs/desktop-properties.cpp:441
+#: src/dialogs/desktop-properties.cpp:525
 msgid "Horizontal lines"
 msgstr "Vodoravne črte"
 
-#: src/dialogs/desktop-properties.cpp:443
+#: src/dialogs/desktop-properties.cpp:527
 msgid "Vertical lines"
 msgstr "Navpične črte"
 
-#: src/dialogs/desktop-properties.cpp:454
+#: src/dialogs/desktop-properties.cpp:538
 msgid "Grid units:"
 msgstr "Enote mreže:"
 
-#: src/dialogs/desktop-properties.cpp:456
+#: src/dialogs/desktop-properties.cpp:540
 msgid "Origin X:"
 msgstr "Izhodišče X:"
 
-#: src/dialogs/desktop-properties.cpp:459
+#: src/dialogs/desktop-properties.cpp:543
 msgid "Origin Y:"
 msgstr "Izhodišče Y:"
 
-#: src/dialogs/desktop-properties.cpp:462
+#: src/dialogs/desktop-properties.cpp:546
 msgid "Spacing X:"
 msgstr "Presledek X:"
 
-#: src/dialogs/desktop-properties.cpp:465
+#: src/dialogs/desktop-properties.cpp:549
 msgid "Spacing Y:"
 msgstr "Presledek Y:"
 
-#: src/dialogs/desktop-properties.cpp:469
-#: src/dialogs/desktop-properties.cpp:500
+#: src/dialogs/desktop-properties.cpp:553
+#: src/dialogs/desktop-properties.cpp:584
 msgid "Snap units:"
 msgstr "Enote preskoka:"
 
-#: src/dialogs/desktop-properties.cpp:472
-#: src/dialogs/desktop-properties.cpp:503
+#: src/dialogs/desktop-properties.cpp:556
+#: src/dialogs/desktop-properties.cpp:587
 msgid "Snap distance:"
 msgstr "Dolžina preskokov:"
 
-#: src/dialogs/desktop-properties.cpp:475
+#: src/dialogs/desktop-properties.cpp:559
 msgid "Grid color:"
 msgstr "Barva mreže:"
 
-#: src/dialogs/desktop-properties.cpp:476
+#: src/dialogs/desktop-properties.cpp:560
 msgid "Grid color"
 msgstr "Barva mreže"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:482
+#: src/dialogs/desktop-properties.cpp:566
 msgid "Guides"
 msgstr "Vodniške črte"
 
-#: src/dialogs/desktop-properties.cpp:493
+#: src/dialogs/desktop-properties.cpp:577
 msgid "Show guides"
 msgstr "Kaži vodniške črte"
 
-#: src/dialogs/desktop-properties.cpp:495
+#: src/dialogs/desktop-properties.cpp:579
 msgid "Snap to guides"
 msgstr "Preskakuj do vodniških črt"
 
-#: src/dialogs/desktop-properties.cpp:507
+#: src/dialogs/desktop-properties.cpp:591
 msgid "Guides color:"
 msgstr "Barva vodniških črt:"
 
-#: src/dialogs/desktop-properties.cpp:508
+#: src/dialogs/desktop-properties.cpp:592
 msgid "Guideline color"
 msgstr "Barva vodniških črt"
 
-#: src/dialogs/desktop-properties.cpp:510
+#: src/dialogs/desktop-properties.cpp:594
 msgid "Highlight color:"
 msgstr "Osvetljena barva:"
 
-#: src/dialogs/desktop-properties.cpp:511
+#: src/dialogs/desktop-properties.cpp:595
 msgid "Highlighted guideline color"
 msgstr "Barva osvetljenih vodil"
 
-#: src/dialogs/desktop-properties.cpp:525
+#: src/dialogs/desktop-properties.cpp:609
 msgid "Background (also for export):"
 msgstr "Ozadje (tudi pri izvozu):"
 
-#: src/dialogs/desktop-properties.cpp:526
+#: src/dialogs/desktop-properties.cpp:610
 msgid "Background color"
 msgstr "Barva ozadja"
 
-#: src/dialogs/desktop-properties.cpp:530
+#: src/dialogs/desktop-properties.cpp:614
 msgid "Show canvas border"
 msgstr "Kaži rob strani"
 
-#: src/dialogs/desktop-properties.cpp:533
+#: src/dialogs/desktop-properties.cpp:617
 msgid "Border on top of drawing"
 msgstr "Rob nad risbo"
 
-#: src/dialogs/desktop-properties.cpp:543
+#: src/dialogs/desktop-properties.cpp:627
 msgid "Border color:"
 msgstr "Barva robu:"
 
-#: src/dialogs/desktop-properties.cpp:544
+#: src/dialogs/desktop-properties.cpp:628
 msgid "Canvas border color"
 msgstr "Barva robu polja"
 
-#: src/dialogs/desktop-properties.cpp:564
+#: src/dialogs/desktop-properties.cpp:644
 msgid "Paper size:"
 msgstr "Velikost papirja:"
 
-#: src/dialogs/desktop-properties.cpp:576
+#: src/dialogs/desktop-properties.cpp:668
 msgid "Custom"
 msgstr "Poljubno"
 
+#: src/dialogs/desktop-properties.cpp:679
+#, fuzzy
+msgid "Paper orientation:"
+msgstr "Usmerjenost:"
+
+#: src/dialogs/desktop-properties.cpp:691
+#, fuzzy
+msgid "Landscape"
+msgstr "Inkscape"
+
+#: src/dialogs/desktop-properties.cpp:697
+#, fuzzy
+msgid "Portrait"
+msgstr "Pika"
+
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:585
+#: src/dialogs/desktop-properties.cpp:706
 msgid "Custom paper"
 msgstr "Papir po meri"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:597 src/dialogs/export.cpp:301
-#: src/dialogs/transformation.cpp:534 src/dialogs/transformation.cpp:757
+#: src/dialogs/desktop-properties.cpp:718 src/dialogs/export.cpp:304
+#: src/dialogs/transformation.cpp:518 src/dialogs/transformation.cpp:715
 msgid "Units:"
 msgstr "Enote:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:611 src/dialogs/export.cpp:317
-#: src/dialogs/export.cpp:352 src/dialogs/object-attributes.cpp:76
-#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1188
-#: src/toolbox.cpp:1525
+#: src/dialogs/desktop-properties.cpp:720 src/dialogs/export.cpp:320
+#: src/dialogs/export.cpp:355 src/dialogs/object-attributes.cpp:76
+#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1198
+#: src/toolbox.cpp:1572
 msgid "Width:"
 msgstr "Širina:"
 
-#: src/dialogs/desktop-properties.cpp:633 src/dialogs/export.cpp:333
-#: src/dialogs/export.cpp:367 src/dialogs/object-attributes.cpp:77
+#: src/dialogs/desktop-properties.cpp:742 src/dialogs/export.cpp:336
+#: src/dialogs/export.cpp:370 src/dialogs/object-attributes.cpp:77
 #: src/dialogs/object-attributes.cpp:85
 msgid "Height:"
 msgstr "Višina:"
 
-#: src/dialogs/desktop-properties.cpp:1061
+#: src/dialogs/desktop-properties.cpp:1205
 msgid "Close"
 msgstr "Zapri"
 
-#: src/dialogs/display-settings.cpp:192
+#: src/dialogs/display-settings.cpp:201
 msgid "When transforming, show:"
 msgstr "Ob preoblikovanju kaži:"
 
-#: src/dialogs/display-settings.cpp:203
+#: src/dialogs/display-settings.cpp:212
 msgid "Objects"
 msgstr "Predmete"
 
-#: src/dialogs/display-settings.cpp:203
+#: src/dialogs/display-settings.cpp:212
 msgid "Show the actual objects when moving or transforming"
 msgstr "Ob premikanju in spreminjanju prikazuj dejanske predmete"
 
-#: src/dialogs/display-settings.cpp:209
+#: src/dialogs/display-settings.cpp:218
 msgid "Box outline"
 msgstr "Zgolj obroba"
 
-#: src/dialogs/display-settings.cpp:209
+#: src/dialogs/display-settings.cpp:218
 msgid "Show only a box outline of the objects when moving or transforming"
 msgstr "Pri premikanju in spreminjanju kaži le obrise predmetov"
 
-#: src/dialogs/display-settings.cpp:214
+#: src/dialogs/display-settings.cpp:223
 msgid "Per-object selection cue:"
 msgstr "Točka izbire na predmet"
 
 #. sorationsnapsperpi == 0 means no snapping
-#: src/dialogs/display-settings.cpp:225 src/dialogs/display-settings.cpp:370
-#: src/dialogs/display-settings.cpp:425 src/dialogs/display-settings.cpp:1108
-#: src/interface.cpp:828 src/verbs.cpp:784
+#: src/dialogs/display-settings.cpp:234 src/dialogs/display-settings.cpp:367
+#: src/dialogs/display-settings.cpp:422 src/dialogs/display-settings.cpp:1200
+#: src/interface.cpp:949 src/verbs.cpp:788
 msgid "None"
 msgstr "Brez"
 
-#: src/dialogs/display-settings.cpp:225
+#: src/dialogs/display-settings.cpp:234
 msgid "No per-object selection indication"
 msgstr "Brez kazalca izbire na predmet"
 
-#: src/dialogs/display-settings.cpp:231
+#: src/dialogs/display-settings.cpp:240
 msgid "Mark"
 msgstr "Oznaka"
 
-#: src/dialogs/display-settings.cpp:231
+#: src/dialogs/display-settings.cpp:240
 msgid "Each selected object has a diamond mark in the top left corner"
 msgstr "Vsak izbran predmet ima v zgornjem levem kotu karo oznako"
 
-#: src/dialogs/display-settings.cpp:237
+#: src/dialogs/display-settings.cpp:246
 msgid "Box"
 msgstr "Okvir"
 
-#: src/dialogs/display-settings.cpp:237
+#: src/dialogs/display-settings.cpp:246
 msgid "Each selected object displays its bounding box"
 msgstr "Vsak izbran predmet pokaže svoj okvir"
 
-#. gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
-#: src/dialogs/display-settings.cpp:256
-msgid "Picking colors:"
-msgstr "Izberi barvo:"
+#: src/dialogs/display-settings.cpp:251
+msgid "Default action when moving with grid enabled:"
+msgstr ""
 
-#: src/dialogs/display-settings.cpp:267
-msgid "Pick visible color (no alpha)"
-msgstr "Izberi vidno barvo (brez prosojnosti)"
+#: src/dialogs/display-settings.cpp:262
+#, fuzzy
+msgid "Snap points to the grid"
+msgstr "Preskakuj do mreže"
 
-#: src/dialogs/display-settings.cpp:267
+#: src/dialogs/display-settings.cpp:263
 msgid ""
-"Pick the visible color under cursor, taking into account the page background "
-"and disregarding the transparency of objects"
-msgstr "Izbere barvo pod kazalcem, upoštevajoč barvo ozadja in ne upoštevajoč prosojnosti predmetov"
+"Default action is to snap the points of objects to the grid, even if the "
+"object was not previously snapped.  Shift-drag selects the alternative "
+"behaviour."
+msgstr ""
 
-#: src/dialogs/display-settings.cpp:274
-msgid "Pick objects' color (including alpha)"
-msgstr "Izberi barvo predmeta (vključno s prosojnostjo)"
+#: src/dialogs/display-settings.cpp:270
+msgid "Snap objects to their current grid offset"
+msgstr ""
 
-#: src/dialogs/display-settings.cpp:274
+#: src/dialogs/display-settings.cpp:271
 msgid ""
-"Pick the actual color of object(s) under cursor, including their accumulated "
-"transparency"
-msgstr "Izbere dejansko barvo predmeta pod kazalcem, vključno s skupno prosojnostjo"
+"Default action is to snap objects to having the same offset from the grid as "
+"they did before the move.  Shift-drag selects the alternative behaviour."
+msgstr ""
 
-#: src/dialogs/display-settings.cpp:326
+#: src/dialogs/display-settings.cpp:323
 msgid "degrees"
 msgstr "stopinj"
 
-#: src/dialogs/display-settings.cpp:335
+#: src/dialogs/display-settings.cpp:332
 msgid ""
 "Rotating with Ctrl pressed snaps every that much degrees; also, pressing "
 "[ or ] rotates by this amount"
-msgstr "Vrtenje ob držanju tipke Ctrl se ustavlja na vsakih toliko stopinj; tudi pritiskanje [ or ] zavrti za toliko stopinj. "
+msgstr ""
+"Vrtenje ob držanju tipke Ctrl se ustavlja na vsakih toliko stopinj; tudi "
+"pritiskanje [ or ] zavrti za toliko stopinj. "
 
-#: src/dialogs/display-settings.cpp:391
+#: src/dialogs/display-settings.cpp:388
 msgid "Rotation snaps every:"
 msgstr "Vrtenje se ustavi vsakih:"
 
-#: src/dialogs/display-settings.cpp:414
+#: src/dialogs/display-settings.cpp:411
 msgid ""
 "None: dialogs are treated as regular windows; Normal: dialogs stay on top of "
 "document windows; Aggressive: same as Normal but may work better with some "
 "window managers."
-msgstr "Brez: okna se odnašajo kot običajna okna; Običajno: okna ostajajo nad okni z dokumenti; Agresivno: enako kot Običajno, toda dela bolje z nekaterimi upravljalniki oken."
+msgstr ""
+"Brez: okna se odnašajo kot običajna okna; Običajno: okna ostajajo nad okni z "
+"dokumenti; Agresivno: enako kot Običajno, toda dela bolje z nekaterimi "
+"upravljalniki oken."
 
-#: src/dialogs/display-settings.cpp:435
+#: src/dialogs/display-settings.cpp:432
 msgid "Normal"
 msgstr "Običajno"
 
-#: src/dialogs/display-settings.cpp:445
+#: src/dialogs/display-settings.cpp:442
 msgid "Aggressive"
 msgstr "Agresivno"
 
-#: src/dialogs/display-settings.cpp:459
+#: src/dialogs/display-settings.cpp:456
 msgid "Dialogs on top:"
 msgstr "Pogovorna okna:"
 
+#: src/dialogs/display-settings.cpp:626
+#, fuzzy
+msgid "Show selection cue"
+msgstr "Točka izbire na predmet"
+
+#: src/dialogs/display-settings.cpp:627
+msgid ""
+"Whether selected objects display a selection cue (the same as in selector)"
+msgstr ""
+
+#: src/dialogs/display-settings.cpp:644
+msgid "Picking colors:"
+msgstr "Izberi barvo:"
+
+#: src/dialogs/display-settings.cpp:655
+msgid "Pick visible color (no alpha)"
+msgstr "Izberi vidno barvo (brez prosojnosti)"
+
+#: src/dialogs/display-settings.cpp:655
+msgid ""
+"Pick the visible color under cursor, taking into account the page background "
+"and disregarding the transparency of objects"
+msgstr ""
+"Izbere barvo pod kazalcem, upoštevajoč barvo ozadja in ne upoštevajoč "
+"prosojnosti predmetov"
+
+#: src/dialogs/display-settings.cpp:662
+msgid "Pick objects' color (including alpha)"
+msgstr "Izberi barvo predmeta (vključno s prosojnostjo)"
+
+#: src/dialogs/display-settings.cpp:662
+msgid ""
+"Pick the actual color of object(s) under cursor, including their accumulated "
+"transparency"
+msgstr ""
+"Izbere dejansko barvo predmeta pod kazalcem, vključno s skupno prosojnostjo"
+
 #. Mouse
-#: src/dialogs/display-settings.cpp:691
+#: src/dialogs/display-settings.cpp:754
 msgid "Mouse"
 msgstr "Miška"
 
-#: src/dialogs/display-settings.cpp:699
+#: src/dialogs/display-settings.cpp:757
 msgid "Grab sensitivity:"
 msgstr "Občutljivost oprijema:"
 
-#: src/dialogs/display-settings.cpp:700
+#: src/dialogs/display-settings.cpp:758
 msgid ""
 "How close you need to be to an object to be able to grab it with mouse (in "
 "pixels)"
-msgstr "Kako blizu predmetu morate priti s kazalcem, da ga lahko zagrabite (v pikah)."
+msgstr ""
+"Kako blizu predmetu morate priti s kazalcem, da ga lahko zagrabite (v pikah)."
 
-#: src/dialogs/display-settings.cpp:701 src/dialogs/display-settings.cpp:712
-#: src/dialogs/display-settings.cpp:732 src/dialogs/display-settings.cpp:750
-#: src/dialogs/display-settings.cpp:790 src/helper/units.cpp:42
+#: src/dialogs/display-settings.cpp:759 src/dialogs/display-settings.cpp:770
+#: src/dialogs/display-settings.cpp:785 src/dialogs/display-settings.cpp:803
+#: src/dialogs/display-settings.cpp:843 src/helper/units.cpp:42
 msgid "px"
 msgstr "pik"
 
-#: src/dialogs/display-settings.cpp:710
+#: src/dialogs/display-settings.cpp:768
 msgid "Click/drag threshold:"
 msgstr "Natančnost miške"
 
-#: src/dialogs/display-settings.cpp:711
+#: src/dialogs/display-settings.cpp:769
 msgid "Maximum mouse drag (in pixels) which is considered a click, not a drag"
-msgstr "Najdaljši poteg kazalca (v pikah), ki se še obravnava kot klik in še ne poteg."
+msgstr ""
+"Najdaljši poteg kazalca (v pikah), ki se še obravnava kot klik in še ne "
+"poteg."
 
 #. Scrolling
-#: src/dialogs/display-settings.cpp:722
+#: src/dialogs/display-settings.cpp:780
 msgid "Scrolling"
 msgstr "Kolešček"
 
-#: src/dialogs/display-settings.cpp:730
+#: src/dialogs/display-settings.cpp:783
 msgid "Mouse wheel scrolls by:"
 msgstr "Kolešček premika po:"
 
-#: src/dialogs/display-settings.cpp:731
+#: src/dialogs/display-settings.cpp:784
 msgid ""
 "One mouse wheel notch scrolls by this distance in pixels (horizontally with "
 "Shift)"
-msgstr "Vsak premik koleščka povzroči premik v tem obsegu navpično (skupaj s Shiftom vodoravno)"
+msgstr ""
+"Vsak premik koleščka povzroči premik v tem obsegu navpično (skupaj s Shiftom "
+"vodoravno)"
 
-#: src/dialogs/display-settings.cpp:740
+#: src/dialogs/display-settings.cpp:793
 msgid "Ctrl+arrows"
 msgstr "Ctrl+smerniki"
 
-#: src/dialogs/display-settings.cpp:748
+#: src/dialogs/display-settings.cpp:801
 msgid "Scroll by:"
 msgstr "Preskakuj po:"
 
-#: src/dialogs/display-settings.cpp:749
+#: src/dialogs/display-settings.cpp:802
 msgid "Pressing Ctrl+arrow key scrolls by this distance (in pixels)"
 msgstr "Pritiskanje Ctrl in smernih tipk premika po sliki za toliko točk"
 
-#: src/dialogs/display-settings.cpp:759
+#: src/dialogs/display-settings.cpp:812
 msgid "Acceleration:"
 msgstr "Pospeševanje:"
 
-#: src/dialogs/display-settings.cpp:760
+#: src/dialogs/display-settings.cpp:813
 msgid ""
 "Pressing and holding Ctrl+arrow will gradually speed up scrolling (0 for no "
 "acceleration)"
-msgstr "Tiščanje Ctrl in smerne tipke bo sčasoma pospeševalo premikanje (0 za izklop tega)"
+msgstr ""
+"Tiščanje Ctrl in smerne tipke bo sčasoma pospeševalo premikanje (0 za izklop "
+"tega)"
 
-#: src/dialogs/display-settings.cpp:769
+#: src/dialogs/display-settings.cpp:822
 msgid "Autoscrolling"
 msgstr "Samosledenje"
 
-#: src/dialogs/display-settings.cpp:777
+#: src/dialogs/display-settings.cpp:830
 msgid "Speed:"
 msgstr "Hitrost:"
 
-#: src/dialogs/display-settings.cpp:778
+#: src/dialogs/display-settings.cpp:831
 msgid ""
 "How fast the canvas autoscrolls when you drag beyond canvas edge (0 to turn "
 "autoscroll off)"
-msgstr "Kako hitro po dosegu robu, se bo slika sledila kazalcu (0 izključi to možnost)"
+msgstr ""
+"Kako hitro po dosegu robu, se bo slika sledila kazalcu (0 izključi to "
+"možnost)"
 
-#: src/dialogs/display-settings.cpp:788
+#: src/dialogs/display-settings.cpp:841
 msgid "Threshold:"
 msgstr "Doseg:"
 
-#: src/dialogs/display-settings.cpp:789
+#: src/dialogs/display-settings.cpp:842
 msgid ""
 "How far (in pixels) you need to be from the canvas edge to trigger "
 "autoscroll; positive is outside the canvas, negative is within the canvas"
-msgstr "Kako daleč (v točkah) od roba mora biti kazalec, da sproži samosledenje; "
+msgstr ""
+"Kako daleč (v točkah) od roba mora biti kazalec, da sproži samosledenje; "
 "pozitivno za zunaj polja, negativno za znotraj."
 
 #. Steps
-#: src/dialogs/display-settings.cpp:799
+#: src/dialogs/display-settings.cpp:852
 msgid "Steps"
 msgstr "Korakov"
 
-#: src/dialogs/display-settings.cpp:807
+#: src/dialogs/display-settings.cpp:855
 msgid "Arrow keys move by:"
 msgstr "Smerne tipke premikajo za:"
 
-#: src/dialogs/display-settings.cpp:808
+#: src/dialogs/display-settings.cpp:856
 msgid ""
 "Pressing an arrow key moves selected object(s) or node(s) by this distance "
 "(in points)"
-msgstr "Pritisk smerne tipke bo izbrane predmete ali vozlišča premaknil ta toliko točk."
+msgstr ""
+"Pritisk smerne tipke bo izbrane predmete ali vozlišča premaknil ta toliko "
+"točk."
 
-#: src/dialogs/display-settings.cpp:809 src/dialogs/display-settings.cpp:820
-#: src/dialogs/display-settings.cpp:831 src/helper/units.cpp:41
+#: src/dialogs/display-settings.cpp:857 src/dialogs/display-settings.cpp:868
+#: src/dialogs/display-settings.cpp:879 src/helper/units.cpp:41
 msgid "pt"
 msgstr "pik"
 
-#: src/dialogs/display-settings.cpp:818
+#: src/dialogs/display-settings.cpp:866
 msgid "> and < scale by:"
 msgstr "> in < raztegneta:"
 
-#: src/dialogs/display-settings.cpp:819
+#: src/dialogs/display-settings.cpp:867
 msgid ""
 "Pressing > or < scales selection up or down by this increment (in points)"
 msgstr "Pritiskanje na < ali > raztegne ali skrči izbrano za toliko točk."
 
-#: src/dialogs/display-settings.cpp:829
+#: src/dialogs/display-settings.cpp:877
 msgid "Inset/Outset by:"
 msgstr "Razširi/zoži za:"
 
-#: src/dialogs/display-settings.cpp:830
+#: src/dialogs/display-settings.cpp:878
 msgid ""
 "Inset and Outset commands displace the path by this distance (in points)"
 msgstr "Ukaza razširi in zoži bosta na črto delovala za toliko točk"
 
-#: src/dialogs/display-settings.cpp:842
+#: src/dialogs/display-settings.cpp:890
 msgid "Zoom in/out by:"
 msgstr "Povečava:"
 
-#: src/dialogs/display-settings.cpp:843
+#: src/dialogs/display-settings.cpp:891
 msgid ""
 "Zoom tool click, +/- keys, and middle click zoom in and out by this "
 "multiplier"
-msgstr "Orodje za povečavo, pritisk na +/-, približevanje s srednjim gumbom miške, bodo delovali s tem faktorjem"
+msgstr ""
+"Orodje za povečavo, pritisk na +/-, približevanje s srednjim gumbom miške, "
+"bodo delovali s tem faktorjem"
 
-#: src/dialogs/display-settings.cpp:844 src/helper/units.cpp:46
+#: src/dialogs/display-settings.cpp:892 src/helper/units.cpp:46
 msgid "%"
 msgstr "%"
 
 #. Tools
-#: src/dialogs/display-settings.cpp:853
+#: src/dialogs/display-settings.cpp:901
 msgid "Tools"
 msgstr "Orodja"
 
-#: src/dialogs/display-settings.cpp:866
+#: src/dialogs/display-settings.cpp:909
 msgid "Selector"
 msgstr "Izbirnik"
 
-#: src/dialogs/display-settings.cpp:880 src/verbs.cpp:942
+#: src/dialogs/display-settings.cpp:918
+#, fuzzy
+msgid "Node"
+msgstr "Brez"
+
+#. The 4 shape tools
+#: src/dialogs/display-settings.cpp:931
+#, fuzzy
+msgid "Shapes"
+msgstr "Ostrina:"
+
+#: src/dialogs/display-settings.cpp:939
+#, fuzzy
+msgid "Rect"
+msgstr "Pravokotnik"
+
+#: src/dialogs/display-settings.cpp:944 src/sp-ellipse.cpp:438
+#: src/verbs.cpp:940
+msgid "Ellipse"
+msgstr "Elipsa"
+
+#: src/dialogs/display-settings.cpp:949 src/verbs.cpp:942
+msgid "Star"
+msgstr "Zvezda"
+
+#: src/dialogs/display-settings.cpp:954 src/sp-spiral.cpp:258
+#: src/verbs.cpp:944
+msgid "Spiral"
+msgstr "Spirala"
+
+#: src/dialogs/display-settings.cpp:963 src/verbs.cpp:946
 msgid "Pencil"
 msgstr "Svinčnik"
 
-#: src/dialogs/display-settings.cpp:888
+#: src/dialogs/display-settings.cpp:966
 msgid "Tolerance:"
 msgstr "Strpnost:"
 
-#: src/dialogs/display-settings.cpp:889
+#: src/dialogs/display-settings.cpp:967
 msgid ""
 "This value affects the amount of smoothing applied to freehand lines; lower "
 "values produce more uneven paths with more nodes"
-msgstr "To določa količino mehčanja prostoročnih črt; manjša količina pomeni manj enotne črte z več vozlišči"
+msgstr ""
+"To določa količino mehčanja prostoročnih črt; manjša količina pomeni manj "
+"enotne črte z več vozlišči"
 
-#: src/dialogs/display-settings.cpp:901 src/verbs.cpp:952
+#: src/dialogs/display-settings.cpp:981 src/verbs.cpp:948
+msgid "Pen"
+msgstr "Pero"
+
+#: src/dialogs/display-settings.cpp:988 src/dialogs/object-properties.cpp:287
+#: src/verbs.cpp:952
+msgid "Text"
+msgstr "Besedilo"
+
+#: src/dialogs/display-settings.cpp:995 src/verbs.cpp:956
 msgid "Dropper"
 msgstr "Povzem"
 
 #. Windows
-#: src/dialogs/display-settings.cpp:915
+#: src/dialogs/display-settings.cpp:1004
 msgid "Windows"
 msgstr "Okna"
 
-#: src/dialogs/display-settings.cpp:925
+#: src/dialogs/display-settings.cpp:1009
 msgid "Save window geometry"
 msgstr "Shrani obliko okna"
 
-#: src/dialogs/display-settings.cpp:926
+#: src/dialogs/display-settings.cpp:1010
 msgid ""
 "Save the window size and position with each document (only for Inkscape SVG "
 "format)"
-msgstr "Shrani velikost in položaj okna za vsak dokument (samo v Inkscape SVG formatu)"
+msgstr ""
+"Shrani velikost in položaj okna za vsak dokument (samo v Inkscape SVG "
+"formatu)"
 
-#: src/dialogs/display-settings.cpp:933
+#: src/dialogs/display-settings.cpp:1017
 msgid "Dialogs are hidden in taskbar"
 msgstr "Skria pogovorna okna"
 
-#: src/dialogs/display-settings.cpp:934
+#: src/dialogs/display-settings.cpp:1018
 msgid "Whether dialog windows are to be hidden in the window manager taskbar"
 msgstr "Ali se pogovorna okna vidijo v opravilni vrstici upravljalnika oken"
 
-#: src/dialogs/display-settings.cpp:941
+#: src/dialogs/display-settings.cpp:1025
 msgid "Zoom when window is resized"
 msgstr "Približaj ob spremembi velikosti"
 
-#: src/dialogs/display-settings.cpp:942
+#: src/dialogs/display-settings.cpp:1026
 msgid ""
-"Zoom the drawing when document window is resized, to keep the same area "
-"visible"
-msgstr "Če se spremeni okno programa, prilagodi pogled tako, da bo še vedno vidno enako območje"
+"Zoom drawing when document window is resized, to keep the same area visible "
+"(this is the default which can be changed in any window using the button "
+"above the right scrollbar)"
+msgstr ""
 
 #. Clones
-#: src/dialogs/display-settings.cpp:950
+#: src/dialogs/display-settings.cpp:1034 src/dialogs/find.cpp:556
 msgid "Clones"
 msgstr "Kloni"
 
-#: src/dialogs/display-settings.cpp:959
+#: src/dialogs/display-settings.cpp:1038
 msgid "When the original moves, its clones:"
 msgstr "Če premaknem izvirnik, se kloni:"
 
-#: src/dialogs/display-settings.cpp:971
+#: src/dialogs/display-settings.cpp:1050
 msgid "Move in parallel"
 msgstr "Premaknejo vzporedno"
 
-#: src/dialogs/display-settings.cpp:971
+#: src/dialogs/display-settings.cpp:1050
 msgid "Clones are translated by the same vector as their original."
 msgstr "Kloni se premaknejo po istem vektorju kot izvirnik"
 
-#: src/dialogs/display-settings.cpp:977
+#: src/dialogs/display-settings.cpp:1056
 msgid "Stay unmoved"
 msgstr "Ostanejo pri miru"
 
-#: src/dialogs/display-settings.cpp:977
+#: src/dialogs/display-settings.cpp:1056
 msgid "Clones preserve their positions when their original is moved."
 msgstr "Kloni se ne premikajo, čeprav se njihov izvirnik"
 
-#: src/dialogs/display-settings.cpp:983
+#: src/dialogs/display-settings.cpp:1062
 msgid "Move according to transform"
 msgstr "Premaknejo v skladu s preobrazbo"
 
-#: src/dialogs/display-settings.cpp:983
+#: src/dialogs/display-settings.cpp:1062
 msgid ""
 "Each clone moves according to the value of its transform= attribute. For "
 "example, a rotated clone will move in a different direction than its "
 "original."
 msgstr "Vsak klon se premakne v skladu s svojo"
 
-#: src/dialogs/display-settings.cpp:991
+#: src/dialogs/display-settings.cpp:1070
 msgid "When the original is deleted, its clones:"
 msgstr "Če pobrišem izvirnik, se kloni:"
 
-#: src/dialogs/display-settings.cpp:1003
+#: src/dialogs/display-settings.cpp:1082
 msgid "Are unlinked"
 msgstr "Odvežejo"
 
-#: src/dialogs/display-settings.cpp:1003
+#: src/dialogs/display-settings.cpp:1082
 msgid "Orphaned clones are converted to regular objects."
 msgstr "Kloni-sirote se pretvorijo v običajne predmete"
 
-#: src/dialogs/display-settings.cpp:1009
+#: src/dialogs/display-settings.cpp:1088
 msgid "Are deleted"
 msgstr "so izbrisani"
 
-#: src/dialogs/display-settings.cpp:1009
+#: src/dialogs/display-settings.cpp:1088
 msgid "Orphaned clones are deleted along with their original."
 msgstr "Kloni-sirote se pobrišejo skupaj z zvirnikom"
 
+#. Transforms
+#: src/dialogs/display-settings.cpp:1103
+#, fuzzy
+msgid "Transforms"
+msgstr "Preoblikuj..."
+
+#: src/dialogs/display-settings.cpp:1106
+#, fuzzy
+msgid "Scale stroke width"
+msgstr "Debelina črte"
+
+#: src/dialogs/display-settings.cpp:1107
+msgid "When scaling objects, scale the stroke width by the same proportion"
+msgstr ""
+
+#: src/dialogs/display-settings.cpp:1114
+msgid "Scale rounded corners in rects"
+msgstr ""
+
+#: src/dialogs/display-settings.cpp:1115
+msgid "When scaling rectangles, scale the radii of rounded corners"
+msgstr ""
+
+#: src/dialogs/display-settings.cpp:1123
+msgid "Store transformation:"
+msgstr "Shrani preoblikovanje"
+
+#: src/dialogs/display-settings.cpp:1134
+msgid "Optimized"
+msgstr "Učinkovite"
+
+#: src/dialogs/display-settings.cpp:1134
+msgid ""
+"If possible, apply transformation to objects without adding a transform= "
+"attribute"
+msgstr ""
+"Če je mogoče, preoblikuje predmete, ne da bi spreminjal lastnost "
+"preoblikovanje"
+
+#: src/dialogs/display-settings.cpp:1140
+msgid "Preserved"
+msgstr "Ohranjene"
+
+#: src/dialogs/display-settings.cpp:1140
+msgid "Always store transformation as a transform= attribute on objects"
+msgstr "Vedno shrani preoblikovanja kot predmetovo lastnost preoblikovanje="
+
 #. To be broken into: Display, Save, Export, SVG, Commands
-#: src/dialogs/display-settings.cpp:1025
+#: src/dialogs/display-settings.cpp:1148
 msgid "Misc"
 msgstr "Razno"
 
-#: src/dialogs/display-settings.cpp:1033
+#: src/dialogs/display-settings.cpp:1151
 msgid "Default export resolution:"
 msgstr "Privzeta ločljivost pri izvažanju"
 
-#: src/dialogs/display-settings.cpp:1034
+#: src/dialogs/display-settings.cpp:1152
 msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
 msgstr "Privzeta ločljivost slik (v DPI) v pogovornem oknu Izvoz"
 
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
-#: src/dialogs/display-settings.cpp:1035 src/dialogs/export.cpp:362
-#: src/dialogs/export.cpp:378
+#: src/dialogs/display-settings.cpp:1153 src/dialogs/export.cpp:365
+#: src/dialogs/export.cpp:381
 msgid "dpi"
 msgstr "pik na palec"
 
-#: src/dialogs/display-settings.cpp:1044
+#: src/dialogs/display-settings.cpp:1162
 msgid "Max recent documents:"
 msgstr "Nedavnih dokumentov:"
 
-#: src/dialogs/display-settings.cpp:1045
+#: src/dialogs/display-settings.cpp:1163
 msgid "The maximum length of the Open Recent list in the File menu"
 msgstr "Dolžina spiska nedavno odprtih dokumentov v meniju Datoteka"
 
-#: src/dialogs/display-settings.cpp:1055
+#: src/dialogs/display-settings.cpp:1173
 msgid "Simplification threshold:"
 msgstr "Doseg poenostavljanja"
 
-#: src/dialogs/display-settings.cpp:1056
+#: src/dialogs/display-settings.cpp:1174
 msgid ""
 "How strong is the Simplify command by default. If you invoke this command "
 "several times in quick succession, it will act more and more aggressively; "
 "invoking it again after a pause restores the default threshold."
-msgstr "Kako močen je privzeto ukaz poenostavi. Če ga izberete večkrat zaporedoma, se bo obnašal agresivneje. Če ga izberete po krajšem premoru, bo spet privzeto močen."
+msgstr ""
+"Kako močen je privzeto ukaz poenostavi. Če ga izberete večkrat zaporedoma, "
+"se bo obnašal agresivneje. Če ga izberete po krajšem premoru, bo spet "
+"privzeto močen."
 
-#: src/dialogs/display-settings.cpp:1068
-msgid "Store transformation:"
-msgstr "Shrani preoblikovanje"
-
-#: src/dialogs/display-settings.cpp:1079
-msgid "Optimized"
-msgstr "Učinkovite"
-
-#: src/dialogs/display-settings.cpp:1079
-msgid ""
-"If possible, apply transformation to objects without adding a transform= "
-"attribute"
-msgstr "Če je mogoče, preoblikuje predmete, ne da bi spreminjal lastnost preoblikovanje"
-
-#: src/dialogs/display-settings.cpp:1085
-msgid "Preserved"
-msgstr "Ohranjene"
-
-#: src/dialogs/display-settings.cpp:1085
-msgid "Always store transformation as a transform= attribute on objects"
-msgstr "Vedno shrani preoblikovanja kot predmetovo lastnost preoblikovanje="
-
-#: src/dialogs/display-settings.cpp:1097
+#: src/dialogs/display-settings.cpp:1189
 msgid "Oversample bitmaps:"
 msgstr "Prevzorči rastrske slike:"
 
-#: src/dialogs/display-settings.cpp:1114
+#: src/dialogs/display-settings.cpp:1206
 msgid "2x2"
 msgstr "2x2"
 
-#: src/dialogs/display-settings.cpp:1120
+#: src/dialogs/display-settings.cpp:1212
 msgid "4x4"
 msgstr "4x4"
 
-#: src/dialogs/display-settings.cpp:1126
+#: src/dialogs/display-settings.cpp:1218
 msgid "8x8"
 msgstr "8x8"
 
-#: src/dialogs/display-settings.cpp:1132
+#: src/dialogs/display-settings.cpp:1224
 msgid "16x16"
 msgstr "16x16"
 
 #. Export area frame
-#: src/dialogs/export.cpp:260
+#: src/dialogs/export.cpp:263
 msgid "Export area"
 msgstr "Območje izvoza"
 
-#: src/dialogs/export.cpp:307
+#: src/dialogs/export.cpp:310
 msgid "x0:"
 msgstr "x0:"
 
-#: src/dialogs/export.cpp:312
+#: src/dialogs/export.cpp:315
 msgid "x1:"
 msgstr "x1:"
 
-#: src/dialogs/export.cpp:323
+#: src/dialogs/export.cpp:326
 msgid "y0:"
 msgstr "y0:"
 
-#: src/dialogs/export.cpp:328
+#: src/dialogs/export.cpp:331
 msgid "y1:"
 msgstr "y1:"
 
 #. Bitmap size frame
-#: src/dialogs/export.cpp:342
+#: src/dialogs/export.cpp:345
 msgid "Bitmap size"
 msgstr "Velikost slike"
 
-#: src/dialogs/export.cpp:352 src/dialogs/export.cpp:367
+#: src/dialogs/export.cpp:355 src/dialogs/export.cpp:370
 msgid "pixels"
 msgstr "pikslov"
 
 #. File entry
-#: src/dialogs/export.cpp:384
+#: src/dialogs/export.cpp:387
 msgid "Filename"
 msgstr "Ime datoteke"
 
-#: src/dialogs/export.cpp:419
+#: src/dialogs/export.cpp:422
 msgid "Browse..."
 msgstr "Išči..."
 
-#: src/dialogs/export.cpp:436
+#: src/dialogs/export.cpp:439
 msgid "Export"
 msgstr "Izvozi"
 
-#: src/dialogs/export.cpp:701
+#: src/dialogs/export.cpp:704
 msgid "You have to enter a filename"
 msgstr "Vpisati morate ime datoteke"
 
-#: src/dialogs/export.cpp:714
+#: src/dialogs/export.cpp:717
 msgid "Export in progress"
 msgstr "Izvažam"
 
-#: src/dialogs/export.cpp:720
+#: src/dialogs/export.cpp:723
 #, c-format
 msgid "Exporting [%d x %d] %s"
 msgstr "Izvažam [%d x %d] %s"
 
-#: src/dialogs/export.cpp:751
+#: src/dialogs/export.cpp:754
 msgid "The chosen area to be exported is invalid"
 msgstr "Območje izbrano za izvoz ni veljavno"
 
-#: src/dialogs/export.cpp:768
+#: src/dialogs/export.cpp:771
 msgid "Select a filename for exporting"
 msgstr "Izberi ime datoteke za izvoz"
 
-#: src/dialogs/filedialog.cpp:109 src/dialogs/filedialog.cpp:246
+#: src/dialogs/filedialog.cpp:187 src/dialogs/filedialog.cpp:327
 #: src/extension/db.cpp:180 src/extension/db.cpp:193
 msgid "Autodetect"
 msgstr "Samodejno"
 
-#: src/dialogs/filedialog.cpp:134 src/dialogs/filedialog.cpp:285
+#: src/dialogs/filedialog.cpp:212 src/dialogs/filedialog.cpp:366
 msgid "File type:"
 msgstr "Vrsta datoteke:"
 
-#: src/dialogs/filedialog.cpp:289
+#: src/dialogs/filedialog.cpp:370
 msgid "Append filename extension automatically"
 msgstr "Samodejno dodaj končnico datoteki"
 
-#: src/dialogs/filedialog.cpp:333
+#: src/dialogs/filedialog.cpp:420
 msgid "No filename specified.  Unable to save."
 msgstr "Ni podano ime datoteke. Ne morem shraniti."
 
-#: src/dialogs/fill-style.cpp:125
+#: src/dialogs/fill-style.cpp:119
 msgid "Fill style"
 msgstr "Vrsta polnitve"
 
-#: src/dialogs/fill-style.cpp:175
+#: src/dialogs/fill-style.cpp:167
 msgid "Fill:"
 msgstr "Polnilo:"
 
-#: src/dialogs/fill-style.cpp:186
+#: src/dialogs/fill-style.cpp:178
 msgid ""
 "Specifies the method of filling overlapping areas when an object intersects "
 "itself. With the \"winding fill\" method (fill-rule:nonzero), all "
 "overlapping areas are filled; with the \"alternating fill\" method (fill-"
 "rule:evenodd), every other of them is filled."
-msgstr "Določi način polnjenja prekrivnih območij znotraj istega predmeta. \"vijugasto\" (pravilo ne-nič), zapolnjena so vsa takšna območja; pri \"izmeničnem\" polnjenju (pravilo sodo/liho) se zapolni vsako drugo območje."
+msgstr ""
+"Določi način polnjenja prekrivnih območij znotraj istega predmeta. "
+"\"vijugasto\" (pravilo ne-nič), zapolnjena so vsa takšna območja; pri "
+"\"izmeničnem\" polnjenju (pravilo sodo/liho) se zapolni vsako drugo območje."
 
-#: src/dialogs/fill-style.cpp:194
+#: src/dialogs/fill-style.cpp:186
 msgid "winding"
 msgstr "vijugasto"
 
-#: src/dialogs/fill-style.cpp:202
+#: src/dialogs/fill-style.cpp:194
 msgid "alternating"
 msgstr "spremenljivo"
+
+#: src/dialogs/find.cpp:315
+#, c-format
+msgid "%d object(s) found (out of %d), %s match."
+msgstr ""
+
+#: src/dialogs/find.cpp:316
+#, fuzzy
+msgid "exact"
+msgstr "Besedilo"
+
+#: src/dialogs/find.cpp:316
+#, fuzzy
+msgid "partial"
+msgstr "Spirala"
+
+#: src/dialogs/find.cpp:322
+#, fuzzy
+msgid "No objects found."
+msgstr "Ni predmetov"
+
+#: src/dialogs/find.cpp:480
+#, fuzzy
+msgid "T_ype: "
+msgstr "Vrsta:"
+
+#: src/dialogs/find.cpp:487
+msgid "Search in all object types"
+msgstr ""
+
+#: src/dialogs/find.cpp:487
+#, fuzzy
+msgid "All types"
+msgstr "Vrsta polnitve"
+
+#: src/dialogs/find.cpp:498
+msgid "Search all shapes"
+msgstr ""
+
+#: src/dialogs/find.cpp:498
+#, fuzzy
+msgid "All shapes"
+msgstr "Risanje oblik"
+
+#: src/dialogs/find.cpp:515
+#, fuzzy
+msgid "Search rectangles"
+msgstr "Pravokotnik"
+
+#: src/dialogs/find.cpp:515
+#, fuzzy
+msgid "Rects"
+msgstr "Predmete"
+
+#: src/dialogs/find.cpp:520
+msgid "Search ellipses, arcs, circles"
+msgstr ""
+
+#: src/dialogs/find.cpp:520
+#, fuzzy
+msgid "Ellipses"
+msgstr "Elipsa"
+
+#: src/dialogs/find.cpp:525
+#, fuzzy
+msgid "Search stars and polygons"
+msgstr "Riši zvezde in poligone (*)"
+
+#: src/dialogs/find.cpp:525
+#, fuzzy
+msgid "Stars"
+msgstr "Zvezda"
+
+#: src/dialogs/find.cpp:530
+#, fuzzy
+msgid "Search spirals"
+msgstr "Riši spirale (F9)"
+
+#: src/dialogs/find.cpp:530
+#, fuzzy
+msgid "Spirals"
+msgstr "Spirala"
+
+#: src/dialogs/find.cpp:541
+msgid "Search paths, lines, polylines"
+msgstr ""
+
+#: src/dialogs/find.cpp:541
+#, fuzzy
+msgid "Paths"
+msgstr "Črte"
+
+#: src/dialogs/find.cpp:546
+#, fuzzy
+msgid "Search text objects"
+msgstr "Izbrani predmeti"
+
+#: src/dialogs/find.cpp:546
+#, fuzzy
+msgid "Texts"
+msgstr "Besedilo"
+
+#: src/dialogs/find.cpp:551
+msgid "Search groups"
+msgstr ""
+
+#: src/dialogs/find.cpp:551
+#, fuzzy
+msgid "Groups"
+msgstr "Skupaj"
+
+#: src/dialogs/find.cpp:556
+msgid "Search clones"
+msgstr ""
+
+#: src/dialogs/find.cpp:561
+msgid "Search images"
+msgstr ""
+
+#: src/dialogs/find.cpp:561
+#, fuzzy
+msgid "Images"
+msgstr "Slika"
+
+#: src/dialogs/find.cpp:566
+#, fuzzy
+msgid "Search offset objects"
+msgstr "Ustvari razširitev kot predmet"
+
+#: src/dialogs/find.cpp:566
+#, fuzzy
+msgid "Offsets"
+msgstr "Zamik:"
+
+#: src/dialogs/find.cpp:626
+#, fuzzy
+msgid "_Text: "
+msgstr "Besedilo"
+
+#: src/dialogs/find.cpp:626
+msgid "Find objects by their text content (exact or partial match)"
+msgstr ""
+
+#: src/dialogs/find.cpp:627
+msgid "_ID: "
+msgstr ""
+
+#: src/dialogs/find.cpp:627
+msgid "Find objects by the value of the id attribute (exact or partial match)"
+msgstr ""
+
+#: src/dialogs/find.cpp:628
+#, fuzzy
+msgid "_Style: "
+msgstr "Slog"
+
+#: src/dialogs/find.cpp:628
+msgid ""
+"Find objects by the value of the style attribute (exact or partial match)"
+msgstr ""
+
+#: src/dialogs/find.cpp:629
+#, fuzzy
+msgid "_Attribute: "
+msgstr "Lastnost"
+
+#: src/dialogs/find.cpp:629
+msgid "Find objects by the name of an attribute (exact or partial match)"
+msgstr ""
+
+#: src/dialogs/find.cpp:642
+#, fuzzy
+msgid "Search in s_election"
+msgstr "Višina izbire"
+
+#: src/dialogs/find.cpp:646
+msgid "Limit search to the current selection"
+msgstr ""
+
+#: src/dialogs/find.cpp:655
+#, fuzzy
+msgid "_Clear"
+msgstr "Zapri"
+
+#: src/dialogs/find.cpp:655
+#, fuzzy
+msgid "Clear values"
+msgstr "Počisti vse"
+
+#: src/dialogs/find.cpp:656
+#, fuzzy
+msgid "_Find"
+msgstr "Mreža"
+
+#: src/dialogs/find.cpp:656
+msgid "Select objects matching all of the fields you filled in"
+msgstr ""
 
 #: src/dialogs/item-properties.cpp:121 src/dialogs/item-properties.cpp:395
 #: src/dialogs/item-properties.cpp:532 src/dialogs/item-properties.cpp:538
@@ -1079,95 +1428,87 @@ msgstr "RY:"
 msgid "%s attributes"
 msgstr "Lastnosti %s"
 
-#: src/dialogs/object-properties.cpp:248
+#: src/dialogs/object-properties.cpp:207
 msgid "Fill"
 msgstr "Zapolni"
 
-#: src/dialogs/object-properties.cpp:253
+#: src/dialogs/object-properties.cpp:212
 msgid "Stroke paint"
 msgstr "Barva črte"
 
-#: src/dialogs/object-properties.cpp:258
+#: src/dialogs/object-properties.cpp:217
 msgid "Stroke style"
 msgstr "Slog črte"
 
-#: src/dialogs/object-properties.cpp:270
+#: src/dialogs/object-properties.cpp:229
 msgid "Apply to:"
 msgstr "Se nanaša:"
 
-#: src/dialogs/object-properties.cpp:280
+#: src/dialogs/object-properties.cpp:239
 msgid "Selected objects"
 msgstr "Izbrani predmeti"
 
-#: src/dialogs/object-properties.cpp:286
+#: src/dialogs/object-properties.cpp:245
 msgid "All shape tools"
 msgstr "Risanje oblik"
 
-#: src/dialogs/object-properties.cpp:292
+#: src/dialogs/object-properties.cpp:251
 msgid "Rectangle tool"
 msgstr "Pravokotniki"
 
-#: src/dialogs/object-properties.cpp:298
+#: src/dialogs/object-properties.cpp:257
 msgid "Arc tool"
 msgstr "Krogi"
 
-#: src/dialogs/object-properties.cpp:304
+#: src/dialogs/object-properties.cpp:263
 msgid "Star tool"
 msgstr "Zvezde"
 
-#: src/dialogs/object-properties.cpp:310
+#: src/dialogs/object-properties.cpp:269
 msgid "Spiral tool"
 msgstr "Spirale"
 
-#: src/dialogs/object-properties.cpp:316
+#: src/dialogs/object-properties.cpp:275
 msgid "Freehand and pen"
 msgstr "Prostoročno"
 
-#: src/dialogs/object-properties.cpp:322
+#: src/dialogs/object-properties.cpp:281
 msgid "Calligraphic line"
 msgstr "Riši kaligrafske črte"
 
-#: src/dialogs/object-properties.cpp:328 src/verbs.cpp:948
-msgid "Text"
-msgstr "Besedilo"
-
-#: src/dialogs/stroke-style.cpp:1037 src/widgets/gradient-vector.cpp:262
+#: src/dialogs/stroke-style.cpp:1048 src/widgets/gradient-vector.cpp:262
 msgid "No document selected"
 msgstr "Izbran ni noben dokument"
 
-#: src/dialogs/stroke-style.cpp:1173
-msgid "Stroke settings"
-msgstr "Barva črte"
-
-#: src/dialogs/stroke-style.cpp:1195
+#: src/dialogs/stroke-style.cpp:1205
 msgid "Stroke width"
 msgstr "Debelina črte"
 
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
-#: src/dialogs/stroke-style.cpp:1215
+#: src/dialogs/stroke-style.cpp:1225
 msgid "Join:"
 msgstr "Spoj:"
 
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1227
+#: src/dialogs/stroke-style.cpp:1239
 msgid "Miter join"
 msgstr "Spoj pod kotom"
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1235
+#: src/dialogs/stroke-style.cpp:1249
 msgid "Round join"
 msgstr "Zaobljen spoj"
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1243
+#: src/dialogs/stroke-style.cpp:1259
 msgid "Bevel join"
 msgstr "Nagnjen spoj"
 
@@ -1178,182 +1519,181 @@ msgstr "Nagnjen spoj"
 #. spike that extends well beyond the connection point. The purpose of the
 #. miter limit is to cut off such spikes (i.e. convert them into bevels)
 #. when they become too long.
-#: src/dialogs/stroke-style.cpp:1254
+#: src/dialogs/stroke-style.cpp:1270
 msgid "Miter limit:"
 msgstr "Spoj pod kotom:"
 
-#: src/dialogs/stroke-style.cpp:1262
+#: src/dialogs/stroke-style.cpp:1278
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr "Najdaljša črta (v enotah kot debelina)"
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
-#: src/dialogs/stroke-style.cpp:1275
+#: src/dialogs/stroke-style.cpp:1291
 msgid "Cap:"
 msgstr "Konec:"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1285
+#: src/dialogs/stroke-style.cpp:1304
 msgid "Butt cap"
 msgstr "Kvadratast konec"
 
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: src/dialogs/stroke-style.cpp:1292
+#: src/dialogs/stroke-style.cpp:1313
 msgid "Round cap"
 msgstr "Zaobljen konec"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1299
+#: src/dialogs/stroke-style.cpp:1322
 msgid "Square cap"
 msgstr "Kvadraten konec"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:1305
+#: src/dialogs/stroke-style.cpp:1328
 msgid "Pattern:"
 msgstr "Vzorec:"
 
-#. Drop down marker selectors
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
-#: src/dialogs/stroke-style.cpp:1322
+#: src/dialogs/stroke-style.cpp:1349
 msgid "Start Markers:"
 msgstr "Začetne oznake:"
 
-#: src/dialogs/stroke-style.cpp:1332
+#: src/dialogs/stroke-style.cpp:1359
 msgid "Mid Markers:"
 msgstr "Vmesne oznake"
 
-#: src/dialogs/stroke-style.cpp:1343
+#: src/dialogs/stroke-style.cpp:1370
 msgid "End Markers:"
 msgstr "Končne oznake:"
 
 #. Layout
-#: src/dialogs/text-edit.cpp:233
+#: src/dialogs/text-edit.cpp:250
 msgid "Layout"
 msgstr "Postavitev"
 
-#: src/dialogs/text-edit.cpp:242
+#: src/dialogs/text-edit.cpp:259
 msgid "Alignment:"
 msgstr "Poravnava:"
 
-#: src/dialogs/text-edit.cpp:277
+#: src/dialogs/text-edit.cpp:294
 msgid "Orientation:"
 msgstr "Usmerjenost:"
 
-#: src/dialogs/text-edit.cpp:302
+#: src/dialogs/text-edit.cpp:319
 msgid "Line spacing:"
 msgstr "Razmik vrstic:"
 
-#: src/dialogs/text-edit.cpp:333
+#: src/dialogs/text-edit.cpp:350
 msgid "Text and font"
 msgstr "Besedilo in pisava"
 
-#: src/dialogs/text-edit.cpp:344
+#: src/dialogs/text-edit.cpp:361
 msgid "Set as default"
 msgstr "Naj bo privzeto"
 
 #. Move page
-#: src/dialogs/transformation.cpp:333 src/dialogs/transformation.cpp:482
+#: src/dialogs/transformation.cpp:320 src/dialogs/transformation.cpp:466
 msgid "Move"
 msgstr "Premakni"
 
 #. Scale page
-#: src/dialogs/transformation.cpp:341 src/dialogs/transformation.cpp:707
+#: src/dialogs/transformation.cpp:328 src/dialogs/transformation.cpp:665
 msgid "Scale"
 msgstr "Spremeni velikost"
 
 #. Rotate page
-#: src/dialogs/transformation.cpp:349 src/dialogs/transformation.cpp:854
+#: src/dialogs/transformation.cpp:336 src/dialogs/transformation.cpp:805
 msgid "Rotate"
 msgstr "Zasukaj"
 
 #. Relative moves
-#: src/dialogs/transformation.cpp:543
+#: src/dialogs/transformation.cpp:527
 msgid "Relative move"
 msgstr "Relativni premik"
 
-#: src/dialogs/transformation.cpp:877
+#: src/dialogs/transformation.cpp:828
 msgid "deg"
 msgstr "stopinj"
 
-#: src/dialogs/xml-tree.cpp:227
+#: src/dialogs/xml-tree.cpp:214
 msgid "Drag to reorder nodes"
 msgstr "Povlecite in preuredite vozlišča"
 
-#: src/dialogs/xml-tree.cpp:248
+#: src/dialogs/xml-tree.cpp:235
 msgid "New element node"
 msgstr "Novo vozlišče"
 
-#: src/dialogs/xml-tree.cpp:270
+#: src/dialogs/xml-tree.cpp:257
 msgid "New text node"
 msgstr "Novo besedilno vozlišče"
 
-#: src/dialogs/xml-tree.cpp:291
+#: src/dialogs/xml-tree.cpp:278
 msgid "Duplicate node"
 msgstr "Podvoji vozlišče"
 
-#: src/dialogs/xml-tree.cpp:312
+#: src/dialogs/xml-tree.cpp:299
 msgid "Delete node"
 msgstr "Zbriši vozlišče"
 
-#: src/dialogs/xml-tree.cpp:328
+#: src/dialogs/xml-tree.cpp:315
 msgid "Unindent node"
 msgstr "Primakni vozlišče"
 
-#: src/dialogs/xml-tree.cpp:343
+#: src/dialogs/xml-tree.cpp:330
 msgid "Indent node"
 msgstr "Zamakni vozlišče"
 
-#: src/dialogs/xml-tree.cpp:355
+#: src/dialogs/xml-tree.cpp:342
 msgid "Raise node"
 msgstr "Dvigni vozlišče"
 
-#: src/dialogs/xml-tree.cpp:367
+#: src/dialogs/xml-tree.cpp:354
 msgid "Lower node"
 msgstr "Spusti vozlišče"
 
-#: src/dialogs/xml-tree.cpp:410
+#: src/dialogs/xml-tree.cpp:397
 msgid "Delete attribute"
 msgstr "Zbriši atribut"
 
-#: src/dialogs/xml-tree.cpp:454
+#: src/dialogs/xml-tree.cpp:441
 msgid "Attribute name"
 msgstr "Ime lastnosti"
 
-#: src/dialogs/xml-tree.cpp:473
+#: src/dialogs/xml-tree.cpp:460
 msgid "Set attribute"
 msgstr "Nastavi lastnost"
 
-#: src/dialogs/xml-tree.cpp:494
+#: src/dialogs/xml-tree.cpp:481
 msgid "Attribute value"
 msgstr "Lastnost"
 
-#: src/dialogs/xml-tree.cpp:1203
+#: src/dialogs/xml-tree.cpp:1175
 msgid "New element node..."
 msgstr "Novo vozlišče..."
 
-#: src/dialogs/xml-tree.cpp:1223
+#: src/dialogs/xml-tree.cpp:1196
 msgid "Cancel"
 msgstr "Prekliči"
 
-#: src/dialogs/xml-tree.cpp:1229
+#: src/dialogs/xml-tree.cpp:1202
 msgid "Create"
 msgstr "Ustvari"
 
-#: src/document.cpp:393
+#: src/document.cpp:394
 #, c-format
 msgid "New document %d"
 msgstr "Nov dokument %d"
 
-#: src/document.cpp:422
+#: src/document.cpp:423
 #, c-format
 msgid "Memory document %d"
 msgstr "Pomnilniški dokument %d"
 
-#: src/document.cpp:509
+#: src/document.cpp:510
 #, c-format
 msgid "Unnamed document %d"
 msgstr "Neimenovan dokument %d"
@@ -1372,48 +1712,54 @@ msgid "Creating anchor at (%g,%g)"
 msgstr "Ustvarjam poravnavo pri (%g,%g)"
 
 #. Write curves to object
-#: src/draw-context.cpp:1052
+#: src/draw-context.cpp:1066
 msgid "Finishing freehand"
 msgstr "Dokončaj prostoročno"
 
-#: src/draw-context.cpp:1816
+#: src/draw-context.cpp:1835
 msgid "Finishing pen"
 msgstr "Dokončaj s peresom"
 
 #. alpha of color under cursor, to show in the statusbar
 #. locale-sensitive printf is OK, since this goes to the UI, not into SVG
-#: src/dropper-context.cpp:238
+#: src/dropper-context.cpp:259
 #, c-format
 msgid " alpha %.3g"
 msgstr " prosojnost %.3g"
 
 #. where the color is picked, to show in the statusbar
-#: src/dropper-context.cpp:240
+#: src/dropper-context.cpp:261
 #, c-format
 msgid ", averaged with radius %d"
 msgstr ", povprečno s polmerom %d"
 
-#: src/dropper-context.cpp:240
+#: src/dropper-context.cpp:261
 msgid " under cursor"
 msgstr " pod kazalcem"
 
 #. message, to show in the statusbar
-#: src/dropper-context.cpp:242
+#: src/dropper-context.cpp:263
 msgid "Release mouse to set color."
 msgstr "Za izbiro barve spustite miško."
 
-#: src/dropper-context.cpp:242
-msgid "Click to pick, click and drag to pick the average color of an area."
-msgstr "Pritisnite miško za izbiro, pritisnite in vlecite za izbiro povprečne barve na omočju."
+#: src/dropper-context.cpp:263
+#, fuzzy
+msgid ""
+"Click to pick fill color, Shift+click to pick stroke color. Drag to pick the "
+"average color of an area."
+msgstr ""
+"Pritisnite z miško za izbiro barve, pritisnite in vlecite da izberete "
+"povprečno barvo na območju."
 
-#: src/extension/init.cpp:99
+#: src/extension/init.cpp:101
 #, c-format
 msgid ""
 "Modules directory (%s) is unavailable.  External modules in that directory "
 "will not be loaded."
-msgstr "Mapa z dodatki (%s) ni dostopna. Dodatki iz te mape se ne bodo naložili."
+msgstr ""
+"Mapa z dodatki (%s) ni dostopna. Dodatki iz te mape se ne bodo naložili."
 
-#: src/extension/system.cpp:105
+#: src/extension/system.cpp:97
 msgid "Format autodetect failed. The file is being opened as SVG."
 msgstr "Ne morem zaznati formata datoteke. Odpiram kot SVG."
 
@@ -1456,7 +1802,9 @@ msgid ""
 "Use PostScript vector operators. The resulting image is usually smaller in "
 "file size and can be arbitrarily scaled, but alpha transparency, gradients "
 "and patterns will be lost."
-msgstr "Uporabi Postscript opise vektorjev. Tako bo datoteka manjša, dalo se jo bo poljubno preoblikovati, izgubljni pa bodo prelivi, prosojnosti in vzorci."
+msgstr ""
+"Uporabi Postscript opise vektorjev. Tako bo datoteka manjša, dalo se jo bo "
+"poljubno preoblikovati, izgubljni pa bodo prelivi, prosojnosti in vzorci."
 
 #: src/extension/internal/ps.cpp:139
 msgid "Print as bitmap"
@@ -1467,7 +1815,9 @@ msgid ""
 "Print everything as bitmap. The resulting image is usually larger in file "
 "size and cannot be arbitrarily scaled without quality loss, but all objects "
 "will be rendered exactly as displayed."
-msgstr "Tiskaj kot sliko. Datoteka bo večja, ob preoblikovanjih bo prišlo do izgube kvalitete, bo pa vse izrisano natanko tako, kot je sedaj na zaslonu."
+msgstr ""
+"Tiskaj kot sliko. Datoteka bo večja, ob preoblikovanjih bo prišlo do izgube "
+"kvalitete, bo pa vse izrisano natanko tako, kot je sedaj na zaslonu."
 
 #: src/extension/internal/ps.cpp:155
 msgid "Preferred resolution (dots per inch) of bitmap"
@@ -1486,81 +1836,94 @@ msgstr "Cilj tiskanja"
 msgid ""
 "Use '> filename' to print to file.\n"
 "Use '| prog arg...' to pipe to a program."
-msgstr "Uporabite '> ime' za tisk v datoteko.\n"
+msgstr ""
+"Uporabite '> ime' za tisk v datoteko.\n"
 "Uporabite '| prog arg...' za preusmeritev v program."
 
-#: src/extension/internal/ps.cpp:866
+#: src/extension/internal/ps.cpp:892
 msgid "write error occurred"
 msgstr "napaka pri pisanju"
 
-#: src/file.cpp:150
+#: src/file.cpp:153 src/file.cpp:554
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "Ne morem naložiti željene datoteke %s"
 
-#: src/file.cpp:174
+#: src/file.cpp:177
 msgid "Document not saved yet.  Cannot revert."
 msgstr "Dokument še ni shranjen.  Ne morem se vrniti."
 
-#: src/file.cpp:183
+#: src/file.cpp:186
 #, c-format
 msgid "Changes will be lost!  Are you sure you want to reload document %s?"
-msgstr "Spremembe bodo izgubljene. Ali zares želite ponovno naložiti dokument %s?"
+msgstr ""
+"Spremembe bodo izgubljene. Ali zares želite ponovno naložiti dokument %s?"
 
-#: src/file.cpp:202
+#: src/file.cpp:205
 msgid "Document reverted."
 msgstr "Dokument povrnjen."
 
-#: src/file.cpp:205
+#: src/file.cpp:208
 msgid "Document not reverted."
 msgstr "Dokument ni povrnjen."
 
-#: src/file.cpp:209
+#: src/file.cpp:212
 msgid "Document not modified.  No need to revert."
 msgstr "Ni sprememb, zato ni treba povračati."
 
-#: src/file.cpp:224
+#: src/file.cpp:227
 msgid "Select file to open"
 msgstr "Izberi datoteko za odprtje"
 
-#: src/file.cpp:288
+#: src/file.cpp:292
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
-msgstr "Ne najdem načina za shraniti dokument (%s). To se lahko zgodi, zaradi neznane končnice datoteke."
+msgstr ""
+"Ne najdem načina za shraniti dokument (%s). To se lahko zgodi, zaradi "
+"neznane končnice datoteke."
 
-#: src/file.cpp:289 src/file.cpp:296
+#: src/file.cpp:293 src/file.cpp:300
 msgid "Document not saved."
 msgstr "Dokument ni shranjen."
 
-#: src/file.cpp:295
+#: src/file.cpp:299
 #, c-format
 msgid "File %s could not be saved."
 msgstr "Na morem shraniti datoteke %s"
 
-#: src/file.cpp:304
+#: src/file.cpp:308
 msgid "Document saved."
 msgstr "Dokument shranjen."
 
-#: src/file.cpp:332
+#: src/file.cpp:343
+#, fuzzy, c-format
+msgid "drawing%s"
+msgstr "Risanje"
+
+#: src/file.cpp:349
+#, fuzzy, c-format
+msgid "drawing-%d%s"
+msgstr "Risanje"
+
+#: src/file.cpp:361
 msgid "Select file to save"
 msgstr "Izberi datoteko za shranjevanje"
 
-#: src/file.cpp:407
+#: src/file.cpp:437
 msgid "No changes need to be saved."
 msgstr "Ni sprememb za shranjevanje."
 
-#: src/file.cpp:542
-#, c-format
-msgid "Unable to import image '%s': %s"
-msgstr "Ne morem uvoziti slike '%s\". %s"
-
-#: src/file.cpp:572
+#: src/file.cpp:578
 msgid "Select file to import"
 msgstr "Izberi datoteko za uvoz"
 
-#: src/help.cpp:70 src/verbs.cpp:1012
+#: src/help.cpp:55
+msgid "about.svg"
+msgstr ""
+
+#: src/help.cpp:71 src/verbs.cpp:1018
 msgid "About Inkscape"
 msgstr "O Inkscape-u"
 
@@ -1693,133 +2056,209 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "Kvadrati ex"
 
-#: src/inkscape.cpp:471
+#: src/inkscape.cpp:462
 msgid "Untitled document"
 msgstr "Neimenovan dokument"
 
 #. Show nice dialog box
-#: src/inkscape.cpp:502
+#: src/inkscape.cpp:493
 msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr "Inkscape se je spotaknil ob notranjo napako in se bo zato zaprl.\n"
 
-#: src/inkscape.cpp:503
+#: src/inkscape.cpp:494
 msgid ""
 "Automatic backups of unsaved documents were done to following locations:\n"
-msgstr "Samodejno shranjevanje neshranjenih dokumentov je bilo opravljeno, na sledeče lokacije:\n"
+msgstr ""
+"Samodejno shranjevanje neshranjenih dokumentov je bilo opravljeno, na "
+"sledeče lokacije:\n"
 
-#: src/inkscape.cpp:504
+#: src/inkscape.cpp:495
 msgid "Automatic backup of following documents failed:\n"
 msgstr "Samodejno shranjevanje sledečih dokumentov ni uspelo:\n"
 
-#: src/inkscape.cpp:661
+#: src/inkscape.cpp:652
 #, c-format
 msgid ""
 "%s is not a regular file.\n"
 "%s"
-msgstr "%s ni običajna datoteka.\n"
+msgstr ""
+"%s ni običajna datoteka.\n"
 "%s"
 
-#: src/inkscape.cpp:662
+#: src/inkscape.cpp:653
 #, c-format
 msgid ""
 "%s not a valid XML file, or\n"
 "you don't have read permissions on it.\n"
 "%s"
-msgstr "%s ni veljavna XML datoteka, ali\n"
+msgstr ""
+"%s ni veljavna XML datoteka, ali\n"
 "pa zanjo nimate pravice branja.\n"
 "%s"
 
-#: src/inkscape.cpp:664
+#: src/inkscape.cpp:655
 #, c-format
 msgid ""
 "%s is not valid preferences file.\n"
 "%s"
-msgstr "Datoteka %s ne vsebuje nastavitev.\n"
+msgstr ""
+"Datoteka %s ne vsebuje nastavitev.\n"
 "%s"
 
-#: src/inkscape.cpp:665
+#: src/inkscape.cpp:656
 msgid ""
 "Inkscape will run with default settings.\n"
 "New settings will not be saved."
-msgstr "Inkscape se bo zagnal s privzetimi nastavitvami.\n"
+msgstr ""
+"Inkscape se bo zagnal s privzetimi nastavitvami.\n"
 "Nove nastavitve ne bodo shranjene."
 
-#: src/inkscape.cpp:1194
+#: src/inkscape.cpp:1177
 #, c-format
 msgid ""
 "Cannot create directory %s.\n"
 "%s"
-msgstr "Ne morem ustvariti mape %s.\n"
+msgstr ""
+"Ne morem ustvariti mape %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1195
+#: src/inkscape.cpp:1178
 #, c-format
 msgid ""
 "%s is not a valid directory.\n"
 "%s"
-msgstr "Mapa %s ni veljavna.\n"
+msgstr ""
+"Mapa %s ni veljavna.\n"
 "%s"
 
-#: src/inkscape.cpp:1196
+#: src/inkscape.cpp:1179
 #, c-format
 msgid ""
 "Cannot create file %s.\n"
 "%s"
-msgstr "Ne morem ustvariti datoteke %s.\n"
+msgstr ""
+"Ne morem ustvariti datoteke %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1197
+#: src/inkscape.cpp:1180
 #, c-format
 msgid ""
 "Cannot write file %s.\n"
 "%s"
-msgstr "Ne morem zapisati datoteke %s.\n"
+msgstr ""
+"Ne morem zapisati datoteke %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1198
+#: src/inkscape.cpp:1181
 msgid ""
 "Although Inkscape will run, it will use default settings,\n"
 "and any changes made in preferences will not be saved."
-msgstr "Inkscape bo sicer deloval, a z privzetimi nastavitvami.\n"
+msgstr ""
+"Inkscape bo sicer deloval, a z privzetimi nastavitvami.\n"
 "Spremembe nastavitev se ne bodo shranile."
 
-#: src/interface.cpp:502
+#: src/interface.cpp:599
 msgid "Open _Recent"
 msgstr "Odpri Nedavno"
 
-#: src/interface.cpp:502
+#: src/interface.cpp:599
 msgid "Open one of the recently visited documents"
 msgstr "Odpri nedavno uporabljan dokument"
+
+#: src/interface.cpp:762
+#, fuzzy
+msgid "_Show/Hide"
+msgstr "Kaži vodniške črte"
+
+#: src/interface.cpp:762
+msgid ""
+"Show or hide parts of the document window (differently for normal and "
+"fullscreen modes)"
+msgstr ""
+
+#: src/interface.cpp:765
+#, fuzzy
+msgid "_Menu"
+msgstr "Počisti"
+
+#: src/interface.cpp:765
+#, fuzzy
+msgid "Show or hide the menu bar"
+msgstr "Kaži ali skrij ravnila"
+
+#: src/interface.cpp:767
+msgid "Top _Panel"
+msgstr ""
+
+#: src/interface.cpp:767
+msgid "Show or hide the top panel (under the menu)"
+msgstr ""
+
+#: src/interface.cpp:769
+#, fuzzy
+msgid "_Toolbox"
+msgstr "Orodja"
+
+#: src/interface.cpp:769
+msgid "Show or hide the main toolbox (on the left)"
+msgstr ""
+
+#: src/interface.cpp:771
+#, fuzzy
+msgid "_Rulers"
+msgstr "Ravnila"
+
+#: src/interface.cpp:771
+#, fuzzy
+msgid "Show or hide the canvas rulers"
+msgstr "Kaži ali skrij ravnila"
+
+#: src/interface.cpp:773 src/verbs.cpp:963
+msgid "Scroll_bars"
+msgstr "Drsniki"
+
+#: src/interface.cpp:773
+#, fuzzy
+msgid "Show or hide the canvas scrollbars"
+msgstr "Kaži ali skrij gibalo"
+
+#: src/interface.cpp:775
+msgid "_Statusbar"
+msgstr ""
+
+#: src/interface.cpp:775
+msgid "Show or hide the statusbar (at the bottom of the window)"
+msgstr ""
 
 #. There isn't a way to handle "sub menus" (which could really be seen as a
 #. * list of verb arguments) in the verb system right now, so we have to build
 #. * the submenu by hand.  Luckily, we can populate it using the same verb system.
 #.
-#: src/interface.cpp:693
+#: src/interface.cpp:814
 msgid "_Tutorials"
 msgstr "Navodila"
 
-#: src/interface.cpp:693
+#: src/interface.cpp:814
 msgid "Interactive Inkscape tutorials"
 msgstr "Navodila za uporabo"
 
-#: src/interface.cpp:719
+#: src/interface.cpp:840
 msgid "_File"
 msgstr "Datoteka"
 
-#: src/interface.cpp:725
+#: src/interface.cpp:846
 msgid "_Edit"
 msgstr "Uredi"
 
-#: src/interface.cpp:731
+#: src/interface.cpp:852
 msgid "_View"
 msgstr "Pogled"
 
-#: src/interface.cpp:737
+#: src/interface.cpp:858
 msgid "_Object"
 msgstr "Predmet"
 
-#: src/interface.cpp:743
+#: src/interface.cpp:864
 msgid "_Path"
 msgstr "Črte"
 
@@ -1828,111 +2267,122 @@ msgstr "Črte"
 #. sp_ui_dialogs_menu (GTK_MENU (menu), NULL, view);
 #. gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
 #. gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
-#: src/interface.cpp:755
+#: src/interface.cpp:876
 msgid "_Help"
 msgstr "Pomoč"
 
-#: src/interface.cpp:864
+#: src/interface.cpp:985
 msgid "Could not parse SVG data"
 msgstr "Ne morem uvoziti podatkov SVG"
 
-#: src/interface.cpp:1026
+#: src/interface.cpp:1147
 #, c-format
 msgid "Overwrite %s"
 msgstr "Prepiši %s"
 
-#: src/interface.cpp:1044
+#: src/interface.cpp:1165
 #, c-format
 msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "
 "current document?"
-msgstr "Datoteka %s že obstaja. Ali jo želite prepisati s trenutnim dokumentom?"
+msgstr ""
+"Datoteka %s že obstaja. Ali jo želite prepisati s trenutnim dokumentom?"
 
 #: src/knot.cpp:563
 msgid "Node or handle drag cancelled."
 msgstr "Preklican premik vozlišča ali ročice."
 
-#: src/main.cpp:131
+#: src/main.cpp:126
 msgid "Do not use X server (only process files from console)"
 msgstr "Ne uporabi strežnika X (datoteke obdeluj iz konzole)"
 
-#: src/main.cpp:134
+#: src/main.cpp:129
 msgid "Try to use X server (even if $DISPLAY is not set)"
-msgstr "Poskusi uporabiti strežnik X (četudi spremenljivka $DISPLAY ni nastavljena)"
+msgstr ""
+"Poskusi uporabiti strežnik X (četudi spremenljivka $DISPLAY ni nastavljena)"
 
-#: src/main.cpp:137
+#: src/main.cpp:132
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "Odpri izbrano datoteko (niz možnosti je lahko izključen)"
 
-#: src/main.cpp:138 src/main.cpp:141 src/main.cpp:144 src/main.cpp:158
+#: src/main.cpp:133 src/main.cpp:136 src/main.cpp:139 src/main.cpp:153
 msgid "FILENAME"
 msgstr "IME DATOTEKE"
 
-#: src/main.cpp:140
+#: src/main.cpp:135
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "Natisni datoteke v izbrano izhodno datoteko (uporabite '| program' za "
 "preusmeritev)"
 
-#: src/main.cpp:143
+#: src/main.cpp:138
 msgid "Export document to png file"
 msgstr "Izvozi dokument v PNG sliko"
 
-#: src/main.cpp:146
+#: src/main.cpp:141
 msgid "The resolution used for converting SVG into bitmap (default 72.0)"
 msgstr "Ločljivost pri pretvarjanju iz SVG v rastersko sliko (privzeto 72.0)"
 
-#: src/main.cpp:147
+#: src/main.cpp:142
 msgid "DPI"
 msgstr "DPI"
 
-#: src/main.cpp:149
+#: src/main.cpp:144
 msgid ""
 "Exported area in millimeters (default is full document, 0,0 is lower-left "
 "corner)"
-msgstr "Območje za izvoz v milimetrih (privzet je cel dokument, 0,0 pomeni spodnji levi kot)"
+msgstr ""
+"Območje za izvoz v milimetrih (privzet je cel dokument, 0,0 pomeni spodnji "
+"levi kot)"
 
-#: src/main.cpp:150
+#: src/main.cpp:145
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: src/main.cpp:152
+#: src/main.cpp:147
 msgid "The width of generated bitmap in pixels (overwrites dpi)"
 msgstr "Širina ustvarjene slike v pikah (spremeni dpi)"
 
-#: src/main.cpp:152
+#: src/main.cpp:147
 msgid "WIDTH"
 msgstr "ŠIRINA"
 
-#: src/main.cpp:154
+#: src/main.cpp:149
 msgid "The height of generated bitmap in pixels (overwrites dpi)"
 msgstr "Višina ustvarjene slike v pikah (spremeni dpi)"
 
-#: src/main.cpp:154
+#: src/main.cpp:149
 msgid "HEIGHT"
 msgstr "VIŠINA"
 
-#: src/main.cpp:156
+#: src/main.cpp:151
 msgid "Background color of exported bitmap (any SVG supported color string)"
 msgstr "Barva ozadja izvoženih slik (kakršnakoli oblika podprta v SVGju)"
 
-#: src/main.cpp:156
+#: src/main.cpp:151
 msgid "COLOR"
 msgstr "BARVA"
 
-#: src/main.cpp:158
+#: src/main.cpp:153
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr "Izvozi dokument v čisti SVG (brez dodatnih Sodiopi in Inkscape polj)"
 
-#: src/main.cpp:160
+#: src/main.cpp:155
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "Kaži podane datoteke vsako posebaj, preklopi na naslednjo ob kateremkoli "
 "miškinem ali tipkovničnem dogodku."
 
-#: src/main.cpp:162
+#: src/main.cpp:157
 msgid "Prefer bitmap (xpm) icons to SVG ones"
 msgstr "Naredi raje rasterske (xpm) ikone, kot pa vektorske (svg)"
+
+#: src/main.cpp:252 src/main.cpp:343
+msgid ""
+"[OPTIONS...] [FILE...]\n"
+"\n"
+"Available options:"
+msgstr ""
 
 #: src/nodepath.cpp:1001 src/nodepath.cpp:1013 src/nodepath.cpp:1093
 #: src/nodepath.cpp:1105
@@ -1950,39 +2400,42 @@ msgid "Cannot find path between nodes."
 msgstr "Ne najdem poti med vozlišči."
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
-#: src/nodepath.cpp:2711
+#: src/nodepath.cpp:2712
 msgid "cusp"
 msgstr "ostro"
 
-#: src/nodepath.cpp:2713
+#: src/nodepath.cpp:2714
 msgid "smooth"
 msgstr "gladka"
 
-#: src/nodepath.cpp:2715
+#: src/nodepath.cpp:2716
 msgid "symmetric"
 msgstr "simetrična"
 
-#: src/nodepath.cpp:2725
+#: src/nodepath.cpp:2726
 msgid "Drag nodes or control points to edit the path"
 msgstr "Za urejanje črte povleci vozlišča ali kontrolne točke"
 
-#: src/nodepath.cpp:2739
+#: src/nodepath.cpp:2740
 msgid ""
 "Select one path object with selector first, then switch back to node tool."
-msgstr "Najprej izberite črto z izbirnikom, nato ponovno izberite orodje za vozlišča."
+msgstr ""
+"Najprej izberite črto z izbirnikom, nato ponovno izberite orodje za vozlišča."
 
-#: src/nodepath.cpp:2741
+#: src/nodepath.cpp:2742
 #, c-format
 msgid ""
 "0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."
-msgstr "Nobeno od %i vozlišč ni izbrano. Izberite jih s klikom, Shift+klikom ali potegom okrog njih."
+msgstr ""
+"Nobeno od %i vozlišč ni izbrano. Izberite jih s klikom, Shift+klikom ali "
+"potegom okrog njih."
 
-#: src/nodepath.cpp:2743
+#: src/nodepath.cpp:2744
 #, c-format
 msgid "%i of %i nodes selected; %s. %s."
 msgstr "%i of %i izbrana vozlišča; %s. %s."
 
-#: src/nodepath.cpp:2745
+#: src/nodepath.cpp:2746
 #, c-format
 msgid "%i of %i nodes selected. %s."
 msgstr "Izbranih %i od %i vozlišč. %s."
@@ -2016,52 +2469,52 @@ msgid "_Create Link"
 msgstr "Ustvari povezavo"
 
 #. "Ungroup"
-#: src/object-ui.cpp:243 src/verbs.cpp:858
+#: src/object-ui.cpp:242 src/verbs.cpp:862
 msgid "_Ungroup"
 msgstr "Narazen"
 
 #. Link dialog
-#: src/object-ui.cpp:285
+#: src/object-ui.cpp:284
 msgid "Link _Properties"
 msgstr "Lastnosti povezave"
 
 #. Select item
-#: src/object-ui.cpp:295
+#: src/object-ui.cpp:294
 msgid "_Follow Link"
 msgstr "Sledi povezavi"
 
 #. Reset transformations
-#: src/object-ui.cpp:300
+#: src/object-ui.cpp:299
 msgid "_Remove Link"
 msgstr "Odstrani povezavo"
 
 #. Link dialog
-#: src/object-ui.cpp:349
+#: src/object-ui.cpp:348
 msgid "Image _Properties"
 msgstr "Lastnosti slike"
 
 #. Autotrace dialog
-#: src/object-ui.cpp:357
+#: src/object-ui.cpp:356
 msgid "_Trace"
 msgstr "Preriši"
 
 #. Item dialog
-#: src/object-ui.cpp:398
+#: src/object-ui.cpp:397
 msgid "_Fill and Stroke"
 msgstr "Polnila in črte"
 
 #. Link dialog
-#: src/object-ui.cpp:418
+#: src/object-ui.cpp:417
 msgid "Rect _Properties"
 msgstr "Lastnosti pravokotnika"
 
 #. Link dialog
-#: src/object-ui.cpp:444
+#: src/object-ui.cpp:443
 msgid "Star _Properties"
 msgstr "Lastnosti zvezde"
 
 #. Link dialog
-#: src/object-ui.cpp:470
+#: src/object-ui.cpp:469
 msgid "Spiral _Properties"
 msgstr "Lastnosti spirale"
 
@@ -2077,175 +2530,181 @@ msgstr "Ne morem združiti, ker eden od predmetov ni črta."
 msgid "You cannot combine objects from different groups or layers."
 msgstr "Ne morete združevati predmetov iz različnih skupin ali slojev."
 
-#: src/path-chemistry.cpp:147
+#: src/path-chemistry.cpp:154
 msgid "Select some path(s) to break apart."
 msgstr "Izberite nekaj črt za razlom."
 
-#: src/path-chemistry.cpp:221
+#: src/path-chemistry.cpp:230
 msgid "No paths to break apart in the selection."
 msgstr "V izbiri ni poti, ki bi jih lahko razstavil."
 
-#: src/path-chemistry.cpp:244
+#: src/path-chemistry.cpp:253
 msgid "Select some object(s) to convert to path."
 msgstr "Izberite nekaj predmetov za pretvorbo v črte."
 
-#: src/path-chemistry.cpp:287
+#: src/path-chemistry.cpp:298
 msgid "No objects to convert to path in the selection."
 msgstr "Med izbiro ni predmetov, ki bi jih lahko pretvoril v črte."
 
-#: src/rect-context.cpp:515
+#: src/rect-context.cpp:517
 #, c-format
 msgid "Draw rectangle: %s x %s"
 msgstr "Nariši pravokotnik: %s x %s"
 
-#: src/select-context.cpp:663
+#: src/select-context.cpp:643
 msgid "Move cancelled."
 msgstr "Premik preklican"
 
-#: src/select-context.cpp:670
+#: src/select-context.cpp:650
 msgid "Selection cancelled."
 msgstr "Prekliči izbiro"
 
-#: src/select-context.cpp:807
+#: src/select-context.cpp:797
 #, c-format
 msgid "Move by %s, %s"
 msgstr "Premakni za %s, %s"
 
-#: src/select-context.cpp:816
+#: src/select-context.cpp:806
 msgid "Click selection to toggle scale/rotation handles"
-msgstr "Z miško pritisnite na izbiro, da zamenjate ročke za povečevanje ali vrtenje"
+msgstr ""
+"Z miško pritisnite na izbiro, da zamenjate ročke za povečevanje ali vrtenje"
 
 #. no items
-#: src/select-context.cpp:819
+#: src/select-context.cpp:809
 msgid "No objects selected. Click, Shift+click, drag around objects to select."
 msgstr "Ni izbranih predmetov. "
 
 #. multiple items
-#: src/select-context.cpp:823
+#: src/select-context.cpp:813
 #, c-format
 msgid "%i objects selected. %s."
 msgstr "%i izbrani predmeti %s."
 
-#: src/select-toolbar.cpp:299
+#: src/select-toolbar.cpp:400
 msgid "Horizontal coordinate of selection"
 msgstr "Vodoravna koordinata izbire"
 
-#: src/select-toolbar.cpp:302
+#: src/select-toolbar.cpp:403
 msgid "Vertical coordinate of selection"
 msgstr "Navpična koordinata izbire"
 
-#: src/select-toolbar.cpp:305
+#: src/select-toolbar.cpp:407
 msgid "Width of selection"
 msgstr "Širina izbire"
 
-#: src/select-toolbar.cpp:308
+#: src/select-toolbar.cpp:415
+msgid "Change both width and height by the same proportion"
+msgstr ""
+
+#: src/select-toolbar.cpp:422
 msgid "Height of selection"
 msgstr "Višina izbire"
 
-#: src/selection-chemistry.cpp:64
+#: src/selection-chemistry.cpp:66
 msgid "Nothing was deleted."
 msgstr "Nič nisem izbrisal."
 
-#: src/selection-chemistry.cpp:96
+#: src/selection-chemistry.cpp:98
 msgid "Select some objects to duplicate."
 msgstr "Izberite nekaj objektov za podvojevanje."
 
-#: src/selection-chemistry.cpp:236
+#: src/selection-chemistry.cpp:237
 msgid "Select two or more objects to group."
 msgstr "Za skupinjenje izberite vsaj dva predmeta."
 
-#: src/selection-chemistry.cpp:244
+#: src/selection-chemistry.cpp:245
 msgid "Select at least two objects to group."
 msgstr "Za skupinjenje izberite vsaj dva predmeta."
 
-#: src/selection-chemistry.cpp:253
+#: src/selection-chemistry.cpp:254
 msgid "You cannot group objects from different groups or layers."
 msgstr "Ne morete združevati predmetov iz različnih skupin ali slojev."
 
-#: src/selection-chemistry.cpp:301
+#: src/selection-chemistry.cpp:302
 msgid "Select a group to ungroup."
 msgstr "Izberite skupino za razdruženje"
 
-#: src/selection-chemistry.cpp:335
+#: src/selection-chemistry.cpp:336
 msgid "No groups to ungroup in the selection."
 msgstr "Med izbranimi predmeti ni skupin, ki bi jih lahko razdružili."
 
-#: src/selection-chemistry.cpp:393
+#: src/selection-chemistry.cpp:403
 msgid "Select some objects to raise."
 msgstr "Za dvig izberite kak objekt."
 
-#: src/selection-chemistry.cpp:399 src/selection-chemistry.cpp:477
+#: src/selection-chemistry.cpp:409 src/selection-chemistry.cpp:487
 msgid "You cannot raise/lower objects from different groups or layers."
-msgstr "Ne morete dvigati ali spuščati predmetov iz različnih skupin ali slojev."
+msgstr ""
+"Ne morete dvigati ali spuščati predmetov iz različnih skupin ali slojev."
 
-#: src/selection-chemistry.cpp:443
+#: src/selection-chemistry.cpp:453
 msgid "Select some objects to raise to top."
 msgstr "Za dvig na vrh izberite kak objekt."
 
-#: src/selection-chemistry.cpp:471
+#: src/selection-chemistry.cpp:481
 msgid "Select some objects to lower."
 msgstr "Za spust izberite kak objekt."
 
-#: src/selection-chemistry.cpp:527
+#: src/selection-chemistry.cpp:537
 msgid "Select some objects to lower to bottom."
 msgstr "Za spust na dno izberite kak objekt."
 
-#: src/selection-chemistry.cpp:561
+#: src/selection-chemistry.cpp:571
 msgid "Nothing to undo."
 msgstr "Nič za popraviti"
 
-#: src/selection-chemistry.cpp:570
+#: src/selection-chemistry.cpp:580
 msgid "Nothing to redo."
 msgstr "Nič za ponoviti"
 
-#: src/selection-chemistry.cpp:590
+#: src/selection-chemistry.cpp:656
 msgid "Nothing was copied."
 msgstr "Nič nisem presnel"
 
-#: src/selection-chemistry.cpp:685 src/selection-chemistry.cpp:743
+#: src/selection-chemistry.cpp:718 src/selection-chemistry.cpp:779
 msgid "Nothing in the clipboard."
 msgstr "Nič ni na odložišču"
 
-#: src/selection-chemistry.cpp:749
+#: src/selection-chemistry.cpp:785
 msgid "Select objects to paste style to."
 msgstr "Izberite objekt, za preno sloga."
 
-#: src/selection-chemistry.cpp:1256
+#: src/selection-chemistry.cpp:1266
 msgid "Select an object to clone."
 msgstr "Izberite predmet za kloniranje."
 
-#: src/selection-chemistry.cpp:1262
+#: src/selection-chemistry.cpp:1272
 msgid "If you want to clone several objects, group them and clone the group."
 msgstr "Če želite klonirati več predmetov jih skupinite in klonirajte skupino."
 
-#: src/selection-chemistry.cpp:1294
+#: src/selection-chemistry.cpp:1304
 msgid "Select a clone to unlink."
 msgstr "Izberite dvojnika za razvez."
 
-#: src/selection-chemistry.cpp:1325
+#: src/selection-chemistry.cpp:1335
 msgid "No clones to unlink in the selection."
 msgstr "Med izbranimi predmeti ni klonov, ki bi jih lahko odvezali."
 
-#: src/selection-chemistry.cpp:1342
+#: src/selection-chemistry.cpp:1352
 msgid "Select a single clone to go to its original."
 msgstr "Izberite enega klona, da vas popelje do izvirnika."
 
-#: src/seltrans.cpp:761 src/seltrans.cpp:824
+#: src/seltrans.cpp:752 src/seltrans.cpp:815
 #, c-format
 msgid "Scale %0.2f%%, %0.2f%%"
 msgstr "Razteg %0.2f%%, %0.2f%%"
 
-#: src/seltrans.cpp:891
+#: src/seltrans.cpp:882
 #, c-format
 msgid "Skew %0.2f%c %0.2f%c"
 msgstr "Ukrivi %0.2f%c %0.2f%c"
 
-#: src/seltrans.cpp:938
+#: src/seltrans.cpp:929
 #, c-format
 msgid "Rotate by %0.2f deg"
 msgstr "Zavrti za %0.2f stopinj"
 
-#: src/seltrans.cpp:967
+#: src/seltrans.cpp:958
 #, c-format
 msgid "Center at (%s,%s)"
 msgstr "Središče na (%s,%s)"
@@ -2258,10 +2717,6 @@ msgstr "Inkscape projekcija"
 #, c-format
 msgid "Link to %s"
 msgstr "Povezava do %s"
-
-#: src/sp-ellipse.cpp:438 src/verbs.cpp:936
-msgid "Ellipse"
-msgstr "Elipsa"
 
 #: src/sp-ellipse.cpp:583
 msgid "Circle"
@@ -2279,42 +2734,42 @@ msgstr "navpično vodilo"
 msgid "horizontal guideline"
 msgstr "vodoravno vodilo"
 
-#: src/sp-image.cpp:349
+#: src/sp-image.cpp:324
 #, c-format
 msgid "Image with bad reference: %s"
 msgstr "Slika s slabo povezavo: %s"
 
-#: src/sp-image.cpp:351
+#: src/sp-image.cpp:326
 #, c-format
 msgid "Color image %d x %d: %s"
 msgstr "Barvna slika %d x %d: %s"
 
-#: src/sp-image.cpp:774
+#: src/sp-image.cpp:749
 msgid "Trace"
 msgstr "Preriši"
 
-#: src/sp-image.cpp:920
+#: src/sp-image.cpp:895
 #, c-format
 msgid "Error to write %s: %s"
 msgstr "Napaka pri pisanju %s: %s"
 
-#: src/sp-image.cpp:954
+#: src/sp-image.cpp:929
 msgid "Untitled"
 msgstr "Neimenovana"
 
-#: src/sp-image.cpp:959
+#: src/sp-image.cpp:934
 msgid "Document Name:"
 msgstr "Ime dokumenta:"
 
-#: src/sp-image.cpp:972
+#: src/sp-image.cpp:947
 msgid "Unknown"
 msgstr "Neznana"
 
-#: src/sp-image.cpp:978
+#: src/sp-image.cpp:953
 msgid "Image URI:"
 msgstr "URI Slike:"
 
-#: src/sp-item-group.cpp:351
+#: src/sp-item-group.cpp:344
 #, c-format
 msgid "Group of %d objects"
 msgstr "Skupina %d predmetov"
@@ -2328,13 +2783,9 @@ msgstr "Predmet"
 msgid "Path (%i nodes)"
 msgstr "Črta (%i vozlišč)"
 
-#: src/sp-rect.cpp:258 src/verbs.cpp:934
+#: src/sp-rect.cpp:260 src/verbs.cpp:938
 msgid "Rectangle"
 msgstr "Pravokotnik"
-
-#: src/sp-spiral.cpp:258 src/verbs.cpp:940
-msgid "Spiral"
-msgstr "Spirala"
 
 #: src/sp-star.cpp:252
 #, c-format
@@ -2346,21 +2797,26 @@ msgstr "Zvezda z %d kraki"
 msgid "Polygon of %d sides"
 msgstr "%d-kotnik (poligon)"
 
-#: src/sp-text.cpp:1979
+#: src/sp-text.cpp:1981
 #, c-format
 msgid "Text (%s, %.5gpt)"
 msgstr "Besedilo (%s, %.5gpt)"
 
-#: src/sp-use.cpp:320
+#: src/sp-typeset.cpp:387
+#, fuzzy
+msgid "typeset object"
+msgstr "Izbrani predmeti"
+
+#: src/sp-use.cpp:303
 #, c-format
 msgid "Clone of: %s. Use Shift+D to look up original"
 msgstr "Klon predmeta %s. Pritisnite Shift+D da vidite izvirnik"
 
-#: src/sp-use.cpp:322
+#: src/sp-use.cpp:306
 msgid "Orphaned clone"
 msgstr "Klon-sirota"
 
-#: src/spiral-context.cpp:431
+#: src/spiral-context.cpp:437
 #, c-format
 msgid "Draw spiral at (%s,%s)"
 msgstr "Nariši spiralo s središčem (%s,%s)"
@@ -2372,260 +2828,265 @@ msgstr "Za logične operacije izberite vsaj dve črti."
 #: src/splivarot.cpp:110
 msgid ""
 "Select exactly 2 paths to perform difference, XOR, division, or path cut."
-msgstr "Za dejanje razlike, ALI, radelitve ali razreza izberite natanko dve črti."
+msgstr ""
+"Za dejanje razlike, ALI, radelitve ali razreza izberite natanko dve črti."
 
 #: src/splivarot.cpp:127 src/splivarot.cpp:142
 msgid ""
 "Unable to determine the z-order of the objects selected for difference, XOR, "
 "division, or path cut."
-msgstr "Ne morem ugotoviti reda-z predmetov izbranih za razliko, ALI, delitev ali razrez."
+msgstr ""
+"Ne morem ugotoviti reda-z predmetov izbranih za razliko, ALI, delitev ali "
+"razrez."
 
 #: src/splivarot.cpp:172
 msgid "One of the objects is not a path, cannot perform boolean operation."
 msgstr "Ne morem napraviti logične operacije, ker en predmet ni črta."
 
-#: src/splivarot.cpp:531
+#: src/splivarot.cpp:536
 msgid "Select some paths to outline."
 msgstr "Izberite nekaj črt za obrisanje."
 
-#: src/splivarot.cpp:728
+#: src/splivarot.cpp:733
 msgid "No stroked paths to outline in the selection."
 msgstr "Med izbiro ni potez, ki bi jih lahko obrisal."
 
-#: src/splivarot.cpp:815
+#: src/splivarot.cpp:820
 msgid "Selected object is not a path, cannot inset/outset."
 msgstr "Ne morem razširiti ali zožati, ker izbran predmet ni črta."
 
-#: src/splivarot.cpp:1014
+#: src/splivarot.cpp:1019
 msgid "Select some paths to inset/outset."
 msgstr "Izberite nekaj črt za zamikanje."
 
-#: src/splivarot.cpp:1220
+#: src/splivarot.cpp:1225
 msgid "No paths to inset/outset in the selection."
 msgstr "Med izbiro ni črt, ki bi jih lahko razširil ali zožal."
 
-#: src/splivarot.cpp:1264
+#: src/splivarot.cpp:1269
 msgid "Select some paths to simplify."
 msgstr "Izberite nekaj črt za poenostavljanje."
 
-#: src/splivarot.cpp:1357
+#: src/splivarot.cpp:1362
 msgid "No paths to simplify in the selection."
 msgstr "Med izbiro ni črt, ki bi jih lahko poenostavil."
 
-#: src/star-context.cpp:460
+#: src/star-context.cpp:465
 #, c-format
 msgid "Draw polygon at (%s,%s)"
 msgstr "Nariši poligon na (%s,%s)"
 
-#: src/star-context.cpp:461
+#: src/star-context.cpp:466
 #, c-format
 msgid "Draw star at (%s,%s)"
 msgstr "Nariši zvezdo na (%s,%s)"
 
-#: src/text-context.cpp:368
+#: src/text-context.cpp:376
 msgid "No-break space"
 msgstr "Presledek brez preloma"
 
-#: src/text-context.cpp:379
+#: src/text-context.cpp:387
 msgid "Unicode: "
 msgstr "Unicode: "
 
-#: src/text-context.cpp:393
+#: src/text-context.cpp:401
 #, c-format
 msgid "Unicode: %c%c%c%c"
 msgstr "Unicode: %c%c%c%c"
 
-#: src/text-context.cpp:406
+#: src/text-context.cpp:414
 msgid "Non-printable character"
 msgstr "Neizpisljiva črka"
 
-#: src/toolbox.cpp:343
+#: src/toolbox.cpp:344
 msgid "Insert new nodes into selected segments"
 msgstr "Vstavi vozlišča v izbrane segmente"
 
-#: src/toolbox.cpp:345
+#: src/toolbox.cpp:346
 msgid "Delete selected nodes"
 msgstr "Zbriši izbrane točke"
 
-#: src/toolbox.cpp:350
+#: src/toolbox.cpp:351
 msgid "Join paths at selected nodes"
 msgstr "Združi črti ob izbranih vozliščih"
 
-#: src/toolbox.cpp:352
+#: src/toolbox.cpp:353
 msgid "Join paths at selected nodes with new segment"
 msgstr "Združi črti ob izbranih vozliščih z novim odsekom"
 
-#: src/toolbox.cpp:355
+#: src/toolbox.cpp:356
 msgid "Split path between two non-endpoint nodes"
 msgstr "Razcepi pot med dvema srednjima vozliščema"
 
-#: src/toolbox.cpp:358
+#: src/toolbox.cpp:359
 msgid "Break path at selected nodes"
 msgstr "Prelomi črto po izbranih vozliščih"
 
-#: src/toolbox.cpp:363
+#: src/toolbox.cpp:364
 msgid "Make selected nodes corner"
 msgstr "Naj bodo izbrana vozlišča koti"
 
-#: src/toolbox.cpp:366
+#: src/toolbox.cpp:367
 msgid "Make selected nodes smooth"
 msgstr "Naj bodo izbrana vozlišča mehkejša"
 
-#: src/toolbox.cpp:369
+#: src/toolbox.cpp:370
 msgid "Make selected nodes symmetric"
 msgstr "Naj bodo izbrana vozlišča simetrična"
 
-#: src/toolbox.cpp:374
+#: src/toolbox.cpp:375
 msgid "Make selected segments lines"
 msgstr "Pretvori izbrane odseke v črte"
 
-#: src/toolbox.cpp:377
+#: src/toolbox.cpp:378
 msgid "Make selected segments curves"
 msgstr "Pretvori izbrane odseke v krivulje"
 
-#: src/toolbox.cpp:848
+#: src/toolbox.cpp:925
 msgid "Corners:"
 msgstr "Oglišča:"
 
-#: src/toolbox.cpp:858
+#: src/toolbox.cpp:925 src/toolbox.cpp:1455
 msgid "Number of corners of a polygon or star"
 msgstr "Število kotov poligona ali zvezde"
 
-#: src/toolbox.cpp:869
+#: src/toolbox.cpp:938
 msgid "Polygon"
 msgstr "Poligon"
 
-#: src/toolbox.cpp:876
+#: src/toolbox.cpp:945
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr "Običajen poligon (z eno ročico) namesto zvezde"
 
-#: src/toolbox.cpp:885
+#. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
+#. Base radius is the same for the closest handle.
+#: src/toolbox.cpp:957
 msgid "Sharpness:"
 msgstr "Ostrina:"
 
-#. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
-#. Base radius is the same for the closest handle.
-#: src/toolbox.cpp:894
+#: src/toolbox.cpp:957
 msgid "Base radius to tip radius ratio"
 msgstr "Razmerje med bližnjo in oddaljeno točko"
 
-#: src/toolbox.cpp:910 src/toolbox.cpp:1438 src/toolbox.cpp:1622
+#: src/toolbox.cpp:973 src/toolbox.cpp:1486 src/toolbox.cpp:1614
 msgid "Defaults"
 msgstr "Privzeto"
 
-#: src/toolbox.cpp:913 src/toolbox.cpp:1439 src/toolbox.cpp:1623
+#: src/toolbox.cpp:976 src/toolbox.cpp:1487 src/toolbox.cpp:1615
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
-msgstr "Povrni lastnosti oblike na privzete (uporabite Nastavitve Inkscapea >Orodja za nastavitev privzetih vrednosti)"
+msgstr ""
+"Povrni lastnosti oblike na privzete (uporabite Nastavitve Inkscapea >Orodja "
+"za nastavitev privzetih vrednosti)"
 
-#: src/toolbox.cpp:1135
+#: src/toolbox.cpp:1211
 msgid "Rx:"
 msgstr "Rx:"
 
-#: src/toolbox.cpp:1145
-msgid "Corner radius to half-width ratio"
-msgstr "Polmer kota v razmerje polovice širine"
+#: src/toolbox.cpp:1211
+#, fuzzy
+msgid "Horizontal radius of rounded corner"
+msgstr "Vodoravna koordinata izbire"
 
-#: src/toolbox.cpp:1156
+#: src/toolbox.cpp:1221
 msgid "Ry:"
 msgstr "Ry:"
 
-#: src/toolbox.cpp:1163
-msgid "Corner radius to half-height ratio"
-msgstr "Polmer kota v razmerje polovice višine"
+#: src/toolbox.cpp:1221
+#, fuzzy
+msgid "Vertical radius of rounded corner"
+msgstr "Navpična koordinata izbire"
 
-#: src/toolbox.cpp:1174
+#: src/toolbox.cpp:1237
 msgid "Not rounded"
 msgstr "Nezaobljeno"
 
-#: src/toolbox.cpp:1175
+#: src/toolbox.cpp:1238
 msgid "Make corners sharp"
 msgstr "Naj bodo koti ostri"
 
-#: src/toolbox.cpp:1381
+#: src/toolbox.cpp:1455
 msgid "Turns:"
 msgstr "Obrati:"
 
-#: src/toolbox.cpp:1391
-msgid "Number of revolutions"
-msgstr "Število obhodov"
-
-#: src/toolbox.cpp:1402
+#: src/toolbox.cpp:1465
 msgid "Divergence:"
 msgstr "Divergenca:"
 
-#: src/toolbox.cpp:1409
+#: src/toolbox.cpp:1465
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr "Zgoščevanje ali zredčevanje obhodov navzven; 1 = enakomerno"
 
-#: src/toolbox.cpp:1420
+#: src/toolbox.cpp:1475
 msgid "Inner radius:"
 msgstr "Notranji radij:"
 
-#: src/toolbox.cpp:1427
-msgid "Radius of the innermost revolution"
+#: src/toolbox.cpp:1475
+#, fuzzy
+msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "Polmer najmanjšega obhoda"
 
-#: src/toolbox.cpp:1537
+#: src/toolbox.cpp:1572
 msgid "The width of the calligraphic pen"
 msgstr "Debelina kaligrafskega peresa"
 
-#: src/toolbox.cpp:1551
+#: src/toolbox.cpp:1582
 msgid "Angle:"
 msgstr "Kot:"
 
-#: src/toolbox.cpp:1560
+#: src/toolbox.cpp:1582
 msgid "The angle of the calligraphic pen (in degrees)"
 msgstr "Kot kaligrafskega peresa (v stopinjah)"
 
-#: src/toolbox.cpp:1574
+#: src/toolbox.cpp:1592
 msgid "Mass:"
 msgstr "Masa:"
 
-#: src/toolbox.cpp:1583
+#: src/toolbox.cpp:1592
 msgid "How much inertia affects the movement of the pen"
 msgstr "Koliko vztrajnost vpliva na gibanje peresa"
 
-#. TRANSLATORS: "drag" means "resistance" here
-#: src/toolbox.cpp:1598
+#: src/toolbox.cpp:1602
 msgid "Drag:"
 msgstr "Upor:"
 
-#: src/toolbox.cpp:1607
+#: src/toolbox.cpp:1602
 msgid "How much resistance affects the movement of the pen"
 msgstr "Koliko upor vpliva na gibanje peresa"
 
-#: src/toolbox.cpp:1903
+#: src/toolbox.cpp:1914
 msgid "Start:"
 msgstr "Začetek:"
 
-#: src/toolbox.cpp:1916
+#: src/toolbox.cpp:1914
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "Kot med vodoravnico in začetno točko loka."
 
-#: src/toolbox.cpp:1930
+#: src/toolbox.cpp:1924
 msgid "End:"
 msgstr "Konec:"
 
-#: src/toolbox.cpp:1940
+#: src/toolbox.cpp:1924
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr "Kot med vodoravnico in končno točko loka."
 
-#: src/toolbox.cpp:1954
+#: src/toolbox.cpp:1935
 msgid "Open arc"
 msgstr "Odpri krog"
 
-#: src/toolbox.cpp:1955
+#: src/toolbox.cpp:1936
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
-msgstr "Izberi med lokom (nezaključena oblika) in odsekom (zaprta oblika z dvema polmeroma)"
+msgstr ""
+"Izberi med lokom (nezaključena oblika) in odsekom (zaprta oblika z dvema "
+"polmeroma)"
 
-#: src/toolbox.cpp:1981
+#: src/toolbox.cpp:1963
 msgid "Make whole"
 msgstr "Celota"
 
-#: src/toolbox.cpp:1982
+#: src/toolbox.cpp:1964
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Naj bo predmet cela elipsa in ne le odsek ali lok"
 
@@ -2633,33 +3094,48 @@ msgstr "Naj bo predmet cela elipsa in ne le odsek ali lok"
 msgid ""
 "To edit a path, click, Shift+click, drag around nodes to select. To edit a "
 "shape, drag its controls."
-msgstr "Za urejevanje črte: pritisk miške, Shift+miška, poteg okrog vozlišč za izbiro. Za urejanje oblike, povlecite ročice."
+msgstr ""
+"Za urejevanje črte: pritisk miške, Shift+miška, poteg okrog vozlišč za "
+"izbiro. Za urejanje oblike, povlecite ročice."
 
 #: src/tools-switch.cpp:123
 msgid "Drag to create a rectangle. Use node tool to round corners."
-msgstr "Povlecite in ustvarite pravokotnik. Uporabite orodje za vozlišča, za mehčanje kotov."
+msgstr ""
+"Povlecite in ustvarite pravokotnik. Uporabite orodje za vozlišča, za "
+"mehčanje kotov."
 
 #: src/tools-switch.cpp:129
 msgid "Drag to create an ellipse. Use node tool to make an arc or segment."
-msgstr "Povlecite in narišite elipso. Uporabite orodje za vozlišča, če želite le krožni lok."
+msgstr ""
+"Povlecite in narišite elipso. Uporabite orodje za vozlišča, če želite le "
+"krožni lok."
 
 #: src/tools-switch.cpp:135
 msgid "Drag to create a star. Use node tool to edit the star shape."
-msgstr "Povlecite da narišete zvezdo. Uporabite orodje za vozlišča, da ji spremenite obliko."
+msgstr ""
+"Povlecite da narišete zvezdo. Uporabite orodje za vozlišča, da ji spremenite "
+"obliko."
 
 #: src/tools-switch.cpp:141
 msgid "Drag to create a spiral. Use node tool to edit the spiral shape."
-msgstr "Povlecite da narišete spiralo. Uporabite orodje za vozlišča, da ji spremenite oblike."
+msgstr ""
+"Povlecite da narišete spiralo. Uporabite orodje za vozlišča, da ji "
+"spremenite oblike."
 
 #: src/tools-switch.cpp:147
 msgid "Drag to create a freehand line. Press 'a' to toggle Append/New."
-msgstr "Povlecite in narišite prostoročno črto. Pritisnite \"a\" za izbiro med Dodaj in Ustvari"
+msgstr ""
+"Povlecite in narišite prostoročno črto. Pritisnite \"a\" za izbiro med Dodaj "
+"in Ustvari"
 
 #: src/tools-switch.cpp:153
 msgid ""
 "Click to create a node, click and drag to create a smooth node. Press 'a' to "
 "toggle Append/New."
-msgstr "Pritisnite z miško, da ustvarite vozlišče, pritisnite in vlecite da ustvarite zmehčano vozlišče. Pritisnite \"a\", da izberete med Dodaj in Ustvari"
+msgstr ""
+"Pritisnite z miško, da ustvarite vozlišče, pritisnite in vlecite da "
+"ustvarite zmehčano vozlišče. Pritisnite \"a\", da izberete med Dodaj in "
+"Ustvari"
 
 #: src/tools-switch.cpp:159
 msgid "Drag to paint a calligraphic stroke."
@@ -2667,852 +3143,882 @@ msgstr "Potegni in nariši kaligrafsko potezo"
 
 #: src/tools-switch.cpp:165
 msgid "Click to select or create text object, then type."
-msgstr "Pritisnite z miško, da izberete ali ustvarite besedilo, nato lahko pišete."
+msgstr ""
+"Pritisnite z miško, da izberete ali ustvarite besedilo, nato lahko pišete."
 
 #: src/tools-switch.cpp:171
 msgid ""
 "Click to zoom in, Shift+click to zoom out, drag around the area to zoom in."
-msgstr "Pritisnite z miško za povečavo, Shift+pritisk za pomanjšanje, povlecite okrog območja za povečavo."
+msgstr ""
+"Pritisnite z miško za povečavo, Shift+pritisk za pomanjšanje, povlecite "
+"okrog območja za povečavo."
 
 #: src/tools-switch.cpp:177
+#, fuzzy
 msgid ""
-"Click to pick a color, click and drag to pick the average color of an area."
-msgstr "Pritisnite z miško za izbiro barve, pritisnite in vlecite da izberete povprečno barvo na območju."
+"Click to set fill color, Shift+click to set stroke color. Click and drag to "
+"pick the average color of an area."
+msgstr ""
+"Pritisnite z miško za izbiro barve, pritisnite in vlecite da izberete "
+"povprečno barvo na območju."
 
-#: src/verbs.cpp:784
+#: src/verbs.cpp:667
+msgid "keys.svg"
+msgstr ""
+
+#: src/verbs.cpp:682
+msgid "tutorial-basic.svg"
+msgstr ""
+
+#: src/verbs.cpp:685
+msgid "tutorial-advanced.svg"
+msgstr ""
+
+#: src/verbs.cpp:688
+#, fuzzy
+msgid "elementsofdesign.svg"
+msgstr "Osnov_e oblikovanja"
+
+#: src/verbs.cpp:691
+#, fuzzy
+msgid "tipsandtricks.svg"
+msgstr "Namigi in _triki"
+
+#: src/verbs.cpp:788
 msgid "Does nothing"
 msgstr "Ne naredi ničesar"
 
 #. File
-#: src/verbs.cpp:787
+#: src/verbs.cpp:791
 msgid "_New"
 msgstr "Nova"
 
-#: src/verbs.cpp:787
+#: src/verbs.cpp:791
 msgid "Create new document"
 msgstr "Ustvari nov dokument"
 
-#: src/verbs.cpp:789
+#: src/verbs.cpp:793
 msgid "_Open..."
 msgstr "Odpri..."
 
-#: src/verbs.cpp:790
+#: src/verbs.cpp:794
 msgid "Open existing document"
 msgstr "Odpri obstoječ dokument"
 
-#: src/verbs.cpp:791
+#: src/verbs.cpp:795
 msgid "Re_vert"
 msgstr "Povrni"
 
-#: src/verbs.cpp:792
+#: src/verbs.cpp:796
 msgid "Revert to the last saved version of document (changes will be lost)"
 msgstr "Povrni zadnjo shranjeno inačico dokumenta (spremembe bodo izgubljene)"
 
-#: src/verbs.cpp:793
+#: src/verbs.cpp:797
 msgid "_Save"
 msgstr "Shrani"
 
-#: src/verbs.cpp:793
+#: src/verbs.cpp:797
 msgid "Save document"
 msgstr "Shrani dokument"
 
-#: src/verbs.cpp:795
+#: src/verbs.cpp:799
 msgid "Save _As..."
 msgstr "Shrani kot..."
 
-#: src/verbs.cpp:796
+#: src/verbs.cpp:800
 msgid "Save document under new name"
 msgstr "Shrani dokument v novo datoteko"
 
-#: src/verbs.cpp:797
+#: src/verbs.cpp:801
 msgid "_Print..."
 msgstr "Natisni..."
 
-#: src/verbs.cpp:797
+#: src/verbs.cpp:801
 msgid "Print document"
 msgstr "Natisni dokument"
 
-#: src/verbs.cpp:799
+#: src/verbs.cpp:803
 msgid "Print _Direct"
 msgstr "Tiskaj neposredno"
 
-#: src/verbs.cpp:800
+#: src/verbs.cpp:804
 msgid "Print directly to file or pipe"
 msgstr "Tiskaj neposredno v datoteko ali program"
 
-#: src/verbs.cpp:801
+#: src/verbs.cpp:805
 msgid "Print Previe_w"
 msgstr "Predogled tiskanja"
 
-#: src/verbs.cpp:802
+#: src/verbs.cpp:806
 msgid "Preview document printout"
 msgstr "Predogled tiskanja risbe"
 
-#: src/verbs.cpp:803
+#: src/verbs.cpp:807
 msgid "_Import..."
 msgstr "Uvozi..."
 
-#: src/verbs.cpp:804
+#: src/verbs.cpp:808
 msgid "Import bitmap or SVG image into document"
 msgstr "V dokument uvozi sliko ali SVG"
 
-#: src/verbs.cpp:805
+#: src/verbs.cpp:809
 msgid "_Export Bitmap..."
 msgstr "Izvozi kot sliko..."
 
-#: src/verbs.cpp:806
+#: src/verbs.cpp:810
 msgid "Export document or selection as PNG bitmap"
 msgstr "Izvozi dokument ali izbiro kot sliko v PNG"
 
-#: src/verbs.cpp:807
+#: src/verbs.cpp:811
 msgid "N_ext window"
 msgstr "Naslednje okno"
 
-#: src/verbs.cpp:808
+#: src/verbs.cpp:812
 msgid "Switch to the next document window"
 msgstr "Preskoči v okno z naslednjim dokumentom"
 
-#: src/verbs.cpp:809
+#: src/verbs.cpp:813
 msgid "P_rev window"
 msgstr "Prejšnje okno"
 
-#: src/verbs.cpp:810
+#: src/verbs.cpp:814
 msgid "Switch to the previous document window"
 msgstr "Preskoči v okno s prejšnjim dokumentom"
 
-#: src/verbs.cpp:811
+#: src/verbs.cpp:815
 msgid "_Close"
 msgstr "Zapri"
 
-#: src/verbs.cpp:812
+#: src/verbs.cpp:816
 msgid "Close window"
 msgstr "Zapri okno"
 
-#: src/verbs.cpp:813
+#: src/verbs.cpp:817
 msgid "_Quit"
 msgstr "Izhod"
 
-#: src/verbs.cpp:813
+#: src/verbs.cpp:817
 msgid "Quit Inkscape"
 msgstr "Zapri Inkscape"
 
 #. Edit
-#: src/verbs.cpp:816
+#: src/verbs.cpp:820
 msgid "_Undo"
 msgstr "Razveljavi"
 
-#: src/verbs.cpp:816
+#: src/verbs.cpp:820
 msgid "Undo last action"
 msgstr "Prekliči zadnje dejanje"
 
-#: src/verbs.cpp:818
+#: src/verbs.cpp:822
 msgid "_Redo"
 msgstr "Ponovi"
 
-#: src/verbs.cpp:819
+#: src/verbs.cpp:823
 msgid "Do again last undone action"
 msgstr "Spet naredi razveljavljeno"
 
-#: src/verbs.cpp:820
+#: src/verbs.cpp:824
 msgid "Cu_t"
 msgstr "Izreži"
 
-#: src/verbs.cpp:821
+#: src/verbs.cpp:825
 msgid "Cut selection to clipboard"
 msgstr "Izreži izbrano v odložišče"
 
-#: src/verbs.cpp:822
+#: src/verbs.cpp:826
 msgid "_Copy"
 msgstr "Kopiraj"
 
-#: src/verbs.cpp:823
+#: src/verbs.cpp:827
 msgid "Copy selection to clipboard"
 msgstr "Kopiraj izbrano na odložišče"
 
-#: src/verbs.cpp:824
+#: src/verbs.cpp:828
 msgid "_Paste"
 msgstr "Prilepi"
 
-#: src/verbs.cpp:825
+#: src/verbs.cpp:829
 msgid "Paste object(s) from clipboard to mouse point"
 msgstr "Prilepi iz odložišča pod kazalec"
 
-#: src/verbs.cpp:826
+#: src/verbs.cpp:830
 msgid "Paste _Style"
 msgstr "Slog lepljenja"
 
-#: src/verbs.cpp:827
+#: src/verbs.cpp:831
 msgid "Apply style of the copied object to selection"
 msgstr "Dodaj slog kopiranega predmeta na izbiro"
 
-#: src/verbs.cpp:828
+#: src/verbs.cpp:832
 msgid "Paste _In Place"
 msgstr "Prilepi naravnost"
 
-#: src/verbs.cpp:829
+#: src/verbs.cpp:833
 msgid "Paste object(s) from clipboard to the original location"
 msgstr "Prilepi predmet(e) z odložišča na izvirno mesto"
 
-#: src/verbs.cpp:830
+#: src/verbs.cpp:834
 msgid "_Delete"
 msgstr "Zbriši"
 
-#: src/verbs.cpp:831
+#: src/verbs.cpp:835
 msgid "Delete selection"
 msgstr "Izbriši izbiro"
 
-#: src/verbs.cpp:832
+#: src/verbs.cpp:836
 msgid "Duplic_ate"
 msgstr "Podvoji"
 
-#: src/verbs.cpp:833
+#: src/verbs.cpp:837
 msgid "Duplicate selected object(s)"
 msgstr "Podvoji izbran(e) predmet(e)"
 
-#: src/verbs.cpp:834
+#: src/verbs.cpp:838
 msgid "Clo_ne"
 msgstr "Kloniraj"
 
-#: src/verbs.cpp:835
+#: src/verbs.cpp:839
 msgid "Create a clone of selected object (a copy linked to the original)"
 msgstr "Ustvari klon izbranega predmeta (dvojnik povezan z izvirnikom)"
 
-#: src/verbs.cpp:836
+#: src/verbs.cpp:840
 msgid "Unlin_k Clone"
 msgstr "Odveži klona"
 
-#: src/verbs.cpp:837
+#: src/verbs.cpp:841
 msgid "Cut the clone's link to its original"
 msgstr "Prereži povezavo klona in izvirnika"
 
-#: src/verbs.cpp:838
+#: src/verbs.cpp:842
 msgid "Select _Original"
 msgstr "Izberi izvirnik"
 
-#: src/verbs.cpp:839
+#: src/verbs.cpp:843
 msgid "Select the object to which the clone is linked"
 msgstr "Izberi predmet, k kateremu je povezan dvojnik"
 
-#: src/verbs.cpp:840
+#: src/verbs.cpp:844
 msgid "Clea_r All"
 msgstr "Počisti vse"
 
-#: src/verbs.cpp:841
+#: src/verbs.cpp:845
 msgid "Delete all objects from document"
 msgstr "Izbriši vse predmete iz dokumenta"
 
-#: src/verbs.cpp:842
+#: src/verbs.cpp:846
 msgid "Select Al_l"
 msgstr "Izberi vse"
 
-#: src/verbs.cpp:843
+#: src/verbs.cpp:847
 msgid "Select all objects or all nodes"
 msgstr "Izberi vse predmete ali vozlišča"
 
-#: src/verbs.cpp:844
+#: src/verbs.cpp:848
 msgid "D_eselect"
 msgstr "Prekliči izbiro"
 
-#: src/verbs.cpp:845
+#: src/verbs.cpp:849
 msgid "Deselect any selected objects or nodes"
 msgstr "Prekliči izbiro vseh predmetov ali vozlišč"
 
 #. Selection
-#: src/verbs.cpp:848
+#: src/verbs.cpp:852
 msgid "Raise to _Top"
 msgstr "Dvigni na vrh"
 
-#: src/verbs.cpp:849
+#: src/verbs.cpp:853
 msgid "Raise selection to top"
 msgstr "Dvigni izbrane predmete na vrh"
 
-#: src/verbs.cpp:850
+#: src/verbs.cpp:854
 msgid "Lower to _Bottom"
 msgstr "Spusti na dno"
 
-#: src/verbs.cpp:851
+#: src/verbs.cpp:855
 msgid "Lower selection to bottom"
 msgstr "Spusti izbrano na dno"
 
-#: src/verbs.cpp:852
+#: src/verbs.cpp:856
 msgid "_Raise"
 msgstr "Dvigni"
 
-#: src/verbs.cpp:853
+#: src/verbs.cpp:857
 msgid "Raise selection one step"
 msgstr "Dvigni izbrano za en sloj"
 
-#: src/verbs.cpp:854
+#: src/verbs.cpp:858
 msgid "_Lower"
 msgstr "Spusti"
 
-#: src/verbs.cpp:855
+#: src/verbs.cpp:859
 msgid "Lower selection one step"
 msgstr "Spusti izbrano za en sloj"
 
-#: src/verbs.cpp:856
+#: src/verbs.cpp:860
 msgid "_Group"
 msgstr "Skupaj"
 
-#: src/verbs.cpp:857
+#: src/verbs.cpp:861
 msgid "Group selected objects"
 msgstr "Poveži izbrane predmete v skupino"
 
-#: src/verbs.cpp:859
+#: src/verbs.cpp:863
 msgid "Ungroup selected group(s)"
 msgstr "Loči izbrano skupino predmetov"
 
-#: src/verbs.cpp:861
+#: src/verbs.cpp:865
 msgid "_Union"
 msgstr "Združi"
 
-#: src/verbs.cpp:862
+#: src/verbs.cpp:866
 msgid "Union of selected objects"
 msgstr "Unija izbranih predmetov"
 
-#: src/verbs.cpp:863
+#: src/verbs.cpp:867
 msgid "_Intersection"
 msgstr "Presek"
 
-#: src/verbs.cpp:864
+#: src/verbs.cpp:868
 msgid "Intersection of selected objects"
 msgstr "Presek izbranih predmetov"
 
-#: src/verbs.cpp:865
+#: src/verbs.cpp:869
 msgid "_Difference"
 msgstr "Razlika"
 
-#: src/verbs.cpp:866
+#: src/verbs.cpp:870
 msgid "Difference of selected objects (bottom minus top)"
 msgstr "Razlika izbranih predmetov (dno minus vrh)"
 
-#: src/verbs.cpp:867
+#: src/verbs.cpp:871
 msgid "E_xclusion"
 msgstr "Odvzem"
 
-#: src/verbs.cpp:868
+#: src/verbs.cpp:872
 msgid "Exclusive OR of selected objects"
 msgstr "Natančen ALI izbranih predmetov"
 
-#: src/verbs.cpp:869
+#: src/verbs.cpp:873
 msgid "Di_vision"
 msgstr "Deljenje"
 
-#: src/verbs.cpp:870
+#: src/verbs.cpp:874
 msgid "Cut the bottom object into pieces"
 msgstr "Razreži spodnji predmet na koščke"
 
-#: src/verbs.cpp:871
+#: src/verbs.cpp:875
 msgid "Cut _Path"
 msgstr "Izreži črto"
 
-#: src/verbs.cpp:872
+#: src/verbs.cpp:876
 msgid "Cut the bottom object's stroke into pieces, removing fill"
 msgstr "Razreži črto spodnjega predmeta na koščke in odstrani polnila"
 
 #. TRANSLATORS: "outset": expand a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
 #. See also the Advanced Tutorial for explanation.
-#: src/verbs.cpp:876
+#: src/verbs.cpp:880
 msgid "Ou_tset"
 msgstr "Razširi"
 
-#: src/verbs.cpp:877
+#: src/verbs.cpp:881
 msgid "Outset selected path(s)"
 msgstr "Razširi izbrane črte"
 
-#: src/verbs.cpp:879
+#: src/verbs.cpp:883
 msgid "O_utset Path by 1px"
 msgstr "Razširi črto za 1 točko"
 
-#: src/verbs.cpp:880
+#: src/verbs.cpp:884
 msgid "Outset selected path(s) by 1px"
 msgstr "Razširi izbrane črte za 1 točko"
 
-#: src/verbs.cpp:882
+#: src/verbs.cpp:886
 msgid "O_utset Path by 10px"
 msgstr "Razširi črto za 10 točk"
 
-#: src/verbs.cpp:883
+#: src/verbs.cpp:887
 msgid "Outset selected path(s) by 10px"
 msgstr "Razširi izbrane črte za 10 točk"
 
 #. TRANSLATORS: "inset": contract a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
 #. See also the Advanced Tutorial for explanation.
-#: src/verbs.cpp:887
+#: src/verbs.cpp:891
 msgid "I_nset"
 msgstr "Zožaj"
 
-#: src/verbs.cpp:888
+#: src/verbs.cpp:892
 msgid "Inset selected path(s)"
 msgstr "Zoži izbrane črte"
 
-#: src/verbs.cpp:890
+#: src/verbs.cpp:894
 msgid "I_nset Path by 1px"
 msgstr "Razširi črto za 1 točko"
 
-#: src/verbs.cpp:891
+#: src/verbs.cpp:895
 msgid "Inset selected path(s) by 1px"
 msgstr "Zoži izbrane črte za 1 točko"
 
-#: src/verbs.cpp:893
+#: src/verbs.cpp:897
 msgid "I_nset Path by 10px"
 msgstr "Razširi črto za 10 točk"
 
-#: src/verbs.cpp:894
+#: src/verbs.cpp:898
 msgid "Inset selected path(s) by 10px"
 msgstr "Zoži izbrane črte za 10 točk"
 
-#: src/verbs.cpp:896
+#: src/verbs.cpp:900
 msgid "D_ynamic Offset"
 msgstr "Dinamičen odmik"
 
-#: src/verbs.cpp:896
+#: src/verbs.cpp:900
 msgid "Create a dynamic offset object"
 msgstr "Ustvari razširitev kot predmet"
 
-#: src/verbs.cpp:898
+#: src/verbs.cpp:902
 msgid "_Linked Offset"
 msgstr "Povezan zamik"
 
-#: src/verbs.cpp:899
+#: src/verbs.cpp:903
 msgid "Create a dynamic offset object linked to the original path"
 msgstr "Ustvari razširitev kot predmet, povezan z izvirno črto"
 
-#: src/verbs.cpp:901
+#: src/verbs.cpp:905
 msgid "_Stroke to Path"
 msgstr "Barva črte"
 
-#: src/verbs.cpp:902
+#: src/verbs.cpp:906
 msgid "Convert selected stroke(s) to path(s)"
 msgstr "Pretvori izbrane poteze v črte"
 
-#: src/verbs.cpp:903
+#: src/verbs.cpp:907
 msgid "Si_mplify"
 msgstr "Poenostavi"
 
-#: src/verbs.cpp:904
+#: src/verbs.cpp:908
 msgid "Simplify selected path(s) by removing extra nodes"
 msgstr "Poenostavi izbrane črte z odstranjevanjem vozlišč"
 
-#: src/verbs.cpp:905
+#: src/verbs.cpp:909
 msgid "Cl_eanup"
 msgstr "Počisti"
 
-#: src/verbs.cpp:906
+#: src/verbs.cpp:910
 msgid "Clean up selected path(s)"
 msgstr "Počisti izbrane črte"
 
-#: src/verbs.cpp:907
+#: src/verbs.cpp:911
 msgid "_Combine"
 msgstr "Združi"
 
-#: src/verbs.cpp:908
+#: src/verbs.cpp:912
 msgid "Combine several paths into one"
 msgstr "Združi več črt v eno"
 
-#: src/verbs.cpp:909
+#: src/verbs.cpp:913
 msgid "Break _Apart"
 msgstr "Razstavi"
 
-#: src/verbs.cpp:910
+#: src/verbs.cpp:914
 msgid "Break selected path(s) into subpaths"
 msgstr "Razstavi izbrane črte na manjše enote"
 
 #. Object
-#: src/verbs.cpp:913
+#: src/verbs.cpp:917
 msgid "Rotate _90 deg CW"
 msgstr "Zavrti za 90 stopinj v desno"
 
-#: src/verbs.cpp:914
+#: src/verbs.cpp:918
 msgid "Rotate selection 90 degrees clockwise"
 msgstr "Zavrti izbrano za 90 stopinj v desno"
 
-#: src/verbs.cpp:915
+#: src/verbs.cpp:919
 msgid "Rotate 9_0 deg CCW"
 msgstr "Zavrti za 90 stopinj v levo"
 
-#: src/verbs.cpp:916
+#: src/verbs.cpp:920
 msgid "Rotate selection 90 degrees counter-clockwise"
 msgstr "Zavrti izbrano za 90 stopinj v levo"
 
-#: src/verbs.cpp:917
+#: src/verbs.cpp:921
 msgid "Remove _Transformations"
 msgstr "Odstrani preoblikovanja"
 
-#: src/verbs.cpp:918
+#: src/verbs.cpp:922
 msgid "Remove transformations from object"
 msgstr "Odstrani preoblikovanja predmeta"
 
-#: src/verbs.cpp:919
+#: src/verbs.cpp:923
 msgid "_Object to Path"
 msgstr "Predmet v črte"
 
-#: src/verbs.cpp:920
+#: src/verbs.cpp:924
 msgid "Convert selected object(s) to path(s)"
 msgstr "Pretvori izbrane predmete v krivulje"
 
-#: src/verbs.cpp:922
+#: src/verbs.cpp:926
 msgid "Flip _Horizontally"
 msgstr "Prevrni vodoravno"
 
-#: src/verbs.cpp:922
+#: src/verbs.cpp:926
 msgid "Flip selection horizontally"
 msgstr "Prevrni izbrano vodoravno"
 
-#: src/verbs.cpp:925
+#: src/verbs.cpp:929
 msgid "Flip _Vertically"
 msgstr "Prevrni navpično"
 
-#: src/verbs.cpp:925
+#: src/verbs.cpp:929
 msgid "Flip selection vertically"
 msgstr "Prevrni izbrano navpično"
 
 #. Event contexts
 #. TODO: add shortcuts to tooltips automatically!
-#: src/verbs.cpp:930
+#: src/verbs.cpp:934
 msgid "Select"
 msgstr "Izberi"
 
-#: src/verbs.cpp:931
+#: src/verbs.cpp:935
 msgid "Select and transform objects (F1)"
 msgstr "Izberi in preoblikuj predmete (F1)"
 
-#: src/verbs.cpp:932
+#: src/verbs.cpp:936
 msgid "Node Edit"
 msgstr "Urejanje vozlišč"
 
-#: src/verbs.cpp:933
+#: src/verbs.cpp:937
 msgid "Edit path nodes or control handles (F2)"
 msgstr "Uredite vozlišča ali kotrolne ročice (F2)"
 
-#: src/verbs.cpp:935
+#: src/verbs.cpp:939
 msgid "Create rectangles and squares (F4)"
 msgstr "Riši kvadrate in pravokotnike (F4)"
 
-#: src/verbs.cpp:937
+#: src/verbs.cpp:941
 msgid "Create circles, ellipses, and arcs (F5)"
 msgstr "Riši kroge, elipse, loke (F5)"
 
-#: src/verbs.cpp:938
-msgid "Star"
-msgstr "Zvezda"
-
-#: src/verbs.cpp:939
+#: src/verbs.cpp:943
 msgid "Create stars and polygons (*)"
 msgstr "Riši zvezde in poligone (*)"
 
-#: src/verbs.cpp:941
+#: src/verbs.cpp:945
 msgid "Create spirals (F9)"
 msgstr "Riši spirale (F9)"
 
-#: src/verbs.cpp:943
+#: src/verbs.cpp:947
 msgid "Draw freehand lines (F6)"
 msgstr "Riši prostoročno (F6)"
 
-#: src/verbs.cpp:944
-msgid "Pen"
-msgstr "Pero"
-
-#: src/verbs.cpp:945
+#: src/verbs.cpp:949
 msgid "Draw Bezier curves and straight lines (Shift+F6)"
 msgstr "Riši krivulje in ravne črte (Shift+F6)"
 
-#: src/verbs.cpp:946
+#: src/verbs.cpp:950
 msgid "Calligraphy"
 msgstr "Kaligrafija"
 
-#: src/verbs.cpp:947
+#: src/verbs.cpp:951
 msgid "Draw calligraphic lines (Ctrl+F6)"
 msgstr "Riši kaligrafske poteze (Ctr+F6)"
 
-#: src/verbs.cpp:949
+#: src/verbs.cpp:953
 msgid "Create and edit text objects (F8)"
 msgstr "Ustvari in urejaj besedilo (F8)"
 
-#: src/verbs.cpp:951
+#: src/verbs.cpp:955
 msgid "Zoom in or out (F3)"
 msgstr "Približaj ali oddalji (F3)"
 
-#: src/verbs.cpp:953
+#: src/verbs.cpp:957
 msgid "Pick averaged colors from image (F7)"
 msgstr "Iz slike izberi povprečne barve (F7)"
 
 #. Zooming
-#: src/verbs.cpp:956
+#: src/verbs.cpp:960
 msgid "Zoom In"
 msgstr "Približaj"
 
-#: src/verbs.cpp:956
+#: src/verbs.cpp:960
 msgid "Zoom in"
 msgstr "Približaj"
 
-#: src/verbs.cpp:957
+#: src/verbs.cpp:961
 msgid "Zoom Out"
 msgstr "Oddalji"
 
-#: src/verbs.cpp:957
+#: src/verbs.cpp:961
 msgid "Zoom out"
 msgstr "Oddalji"
 
-#: src/verbs.cpp:958
+#: src/verbs.cpp:962
 msgid "Ru_lers"
 msgstr "Ravnila"
 
-#: src/verbs.cpp:958
+#: src/verbs.cpp:962
 msgid "Show or hide rulers"
 msgstr "Kaži ali skrij ravnila"
 
-#: src/verbs.cpp:959
-msgid "Scroll_bars"
-msgstr "Drsniki"
-
-#: src/verbs.cpp:959
+#: src/verbs.cpp:963
 msgid "Show or hide scrollbars"
 msgstr "Kaži ali skrij gibalo"
 
-#: src/verbs.cpp:960
+#: src/verbs.cpp:964
 msgid "_Grid"
 msgstr "Mreža"
 
-#: src/verbs.cpp:960
+#: src/verbs.cpp:964
 msgid "Show or hide grid"
 msgstr "Kaži ali skrij mrežo"
 
-#: src/verbs.cpp:961
+#: src/verbs.cpp:965
 msgid "G_uides"
 msgstr "Vodila"
 
-#: src/verbs.cpp:961
+#: src/verbs.cpp:965
 msgid "Show or hide guides"
 msgstr "Kaži ali skrij vodila"
 
-#: src/verbs.cpp:962
+#: src/verbs.cpp:966
 msgid "Nex_t zoom"
 msgstr "Naslednja povečava"
 
-#: src/verbs.cpp:962
+#: src/verbs.cpp:966
 msgid "Next zoom (from the history of zooms)"
 msgstr "Naslednja povečava (iz zgodovine povečav)"
 
-#: src/verbs.cpp:964
+#: src/verbs.cpp:968
 msgid "Pre_v zoom"
 msgstr "Prejšnja povečava"
 
-#: src/verbs.cpp:964
+#: src/verbs.cpp:968
 msgid "Previous zoom (from the history of zooms)"
 msgstr "Prejšnja povečava (iz zgodovine povečav)"
 
-#: src/verbs.cpp:966
+#: src/verbs.cpp:970
 msgid "Zoom 1:_1"
 msgstr "Približaj na 1:1"
 
-#: src/verbs.cpp:966
+#: src/verbs.cpp:970
 msgid "Zoom to 1:1"
 msgstr "Približaj na 1:1"
 
-#: src/verbs.cpp:968
+#: src/verbs.cpp:972
 msgid "Zoom 1:_2"
 msgstr "Približaj na 1:2"
 
-#: src/verbs.cpp:968
+#: src/verbs.cpp:972
 msgid "Zoom to 1:2"
 msgstr "Približaj na 1:2"
 
-#: src/verbs.cpp:970
+#: src/verbs.cpp:974
 msgid "_Zoom 2:1"
 msgstr "Približaj na 2:1"
 
-#: src/verbs.cpp:970
+#: src/verbs.cpp:974
 msgid "Zoom to 2:1"
 msgstr "Približaj na 2:1"
 
-#: src/verbs.cpp:973
+#: src/verbs.cpp:977
 msgid "_Fullscreen"
 msgstr "Celozaslonsko"
 
-#: src/verbs.cpp:973
+#: src/verbs.cpp:977
 msgid "Stretch this document window to full screen"
 msgstr "Razpni to okno čez ves zaslon"
 
-#: src/verbs.cpp:976
-msgid "_New Window"
-msgstr "Novo okno"
+#: src/verbs.cpp:980
+#, fuzzy
+msgid "D_uplicate Window"
+msgstr "Podvoji vozlišče"
 
-#: src/verbs.cpp:976
+#: src/verbs.cpp:980
 msgid "Open a new window with the same document"
 msgstr "Odpri novo okno z istim dokumentom"
 
-#: src/verbs.cpp:978
+#: src/verbs.cpp:982
 msgid "_New View Preview"
 msgstr "Nov predogled"
 
-#: src/verbs.cpp:979
+#: src/verbs.cpp:983
 msgid "New View Preview"
 msgstr "Nov predogled"
 
 #. "view_new_preview"
-#: src/verbs.cpp:980
+#: src/verbs.cpp:984
 msgid "_Page"
 msgstr "Stran"
 
-#: src/verbs.cpp:981
+#: src/verbs.cpp:985
 msgid "Zoom to fit page in window"
 msgstr "Približaj na celo stran"
 
-#: src/verbs.cpp:982
+#: src/verbs.cpp:986
 msgid "Page _Width"
 msgstr "Širina strani"
 
-#: src/verbs.cpp:983
+#: src/verbs.cpp:987
 msgid "Zoom to fit page width in window"
 msgstr "Približaj na širino strani"
 
-#: src/verbs.cpp:984
+#: src/verbs.cpp:988
 msgid "_Drawing"
 msgstr "Risanje"
 
-#: src/verbs.cpp:985
+#: src/verbs.cpp:989
 msgid "Zoom to fit drawing in window"
 msgstr "Približaj na velikost risbe"
 
-#: src/verbs.cpp:986
+#: src/verbs.cpp:990
 msgid "_Selection"
 msgstr "Izbira"
 
-#: src/verbs.cpp:987
+#: src/verbs.cpp:991
 msgid "Zoom to fit selection in window"
 msgstr "Približaj na velikost izbire"
 
 #. Dialogs
-#: src/verbs.cpp:989
+#: src/verbs.cpp:993
 msgid "In_kscape Preferences..."
 msgstr "Nastavitve Inkscape..."
 
-#: src/verbs.cpp:990
+#: src/verbs.cpp:994
 msgid "Global Inkscape preferences"
 msgstr "Splošne nastavitve Inkscape-a"
 
-#: src/verbs.cpp:991
+#: src/verbs.cpp:995
 msgid "_Document Preferences..."
 msgstr "Nastavitve dokumenta..."
 
-#: src/verbs.cpp:992
+#: src/verbs.cpp:996
 msgid "Preferences saved with the document"
 msgstr "Nastavitve so shranjene v dokumentu"
 
-#: src/verbs.cpp:993
+#: src/verbs.cpp:997
 msgid "_Fill and Stroke..."
 msgstr "Polnenje in obroba..."
 
-#: src/verbs.cpp:994
+#: src/verbs.cpp:998
 msgid "Fill and Stroke dialog"
 msgstr "Okno polnenje in obroba"
 
-#: src/verbs.cpp:995
+#: src/verbs.cpp:999
 msgid "Transfor_m..."
 msgstr "Preoblikuj..."
 
-#: src/verbs.cpp:996
+#: src/verbs.cpp:1000
 msgid "Transform dialog"
 msgstr "Okno preoblikovanja"
 
-#: src/verbs.cpp:997
+#: src/verbs.cpp:1001
 msgid "_Align and Distribute..."
 msgstr "Poravnava in rapored"
 
-#: src/verbs.cpp:998
+#: src/verbs.cpp:1002
 msgid "Align and Distribute dialog"
 msgstr "Okno poravnave in raporejanja"
 
-#: src/verbs.cpp:999
+#: src/verbs.cpp:1003
 msgid "Text and _Font..."
 msgstr "Besedilo in pisava"
 
-#: src/verbs.cpp:1000
+#: src/verbs.cpp:1004
 msgid "Text and Font dialog"
 msgstr "Okno besedila in pisave"
 
-#: src/verbs.cpp:1001
+#: src/verbs.cpp:1005
 msgid "_XML Editor..."
 msgstr "Urejevalnik XML..."
 
-#: src/verbs.cpp:1002
+#: src/verbs.cpp:1006
 msgid "XML Editor"
 msgstr "Urejevalnik XML"
 
-#: src/verbs.cpp:1003
-msgid "_Hide/View dialogs"
+#: src/verbs.cpp:1007
+#, fuzzy
+msgid "_Find..."
+msgstr "Natisni..."
+
+#: src/verbs.cpp:1008
+#, fuzzy
+msgid "Find objects in document"
+msgstr "V dokumentu ni prelivov"
+
+#: src/verbs.cpp:1009
+#, fuzzy
+msgid "Show/_Hide Dialogs"
 msgstr "Skrij / pokaži pogovorna okna"
 
-#: src/verbs.cpp:1004
+#: src/verbs.cpp:1010
 msgid "Show or hide all active dialogs"
 msgstr "Pokaži ali skrij uporabljena pogovorna okna"
 
-#: src/verbs.cpp:1005
+#: src/verbs.cpp:1011
 msgid "_Object Properties..."
 msgstr "Lastnosti predmeta..."
 
-#: src/verbs.cpp:1006
+#: src/verbs.cpp:1012
 msgid "Object Properties dialog"
 msgstr "Okno lastnosti predmeta"
 
 #. Help
-#: src/verbs.cpp:1009
+#: src/verbs.cpp:1015
 msgid "_Keys and Mouse"
 msgstr "Miška in tipkovnica"
 
-#: src/verbs.cpp:1010
+#: src/verbs.cpp:1016
 msgid "Key and mouse shortcuts reference"
 msgstr "Spisek bližnjic tipkovnice in miške"
 
-#: src/verbs.cpp:1011
+#: src/verbs.cpp:1017
 msgid "_About Inkscape"
 msgstr "O Inkscape-u"
 
 #. "help_about"
 #. Tutorials
-#: src/verbs.cpp:1015
+#: src/verbs.cpp:1021
 msgid "Inkscape: _Basic"
 msgstr "Inkscape: Osnove"
 
-#: src/verbs.cpp:1016
+#: src/verbs.cpp:1022
 msgid "Basic Inkscape tutorial"
 msgstr "Osnovna navodila"
 
 #. "tutorial_basic"
-#: src/verbs.cpp:1017
+#: src/verbs.cpp:1023
 msgid "Inkscape: _Advanced"
 msgstr "Inkscape: Napredno"
 
-#: src/verbs.cpp:1018
+#: src/verbs.cpp:1024
 msgid "Advanced Inkscape tutorial"
 msgstr "Napredena navodila za uporabo"
 
 #. "tutorial_advanced"
-#: src/verbs.cpp:1019
+#: src/verbs.cpp:1025
 msgid "_Elements of Design"
 msgstr "Osnov_e oblikovanja"
 
-#: src/verbs.cpp:1020
+#: src/verbs.cpp:1026
 msgid "Elements of Design tutorial"
 msgstr "Osnove oblikovanja"
 
 #. "tutorial_design"
-#: src/verbs.cpp:1021
+#: src/verbs.cpp:1027
 msgid "_Tips and Tricks"
 msgstr "Namigi in _triki"
 
-#: src/verbs.cpp:1022
+#: src/verbs.cpp:1028
 msgid "Miscellaneous Tips and Tricks"
 msgstr "Razni namigi in triki"
 
-#: src/widgets/dash-selector.cpp:103
-msgid "Stroke pattern"
+#: src/widgets/dash-selector.cpp:104
+#, fuzzy
+msgid "Dash pattern"
 msgstr "Vzorec črte"
 
-#: src/widgets/dash-selector.cpp:118
+#: src/widgets/dash-selector.cpp:119
 msgid "Pattern offset"
 msgstr "Zamik vzorca"
 
@@ -3626,117 +4132,156 @@ msgstr "Barva za konec"
 msgid "Gradient editor"
 msgstr "Urejevalnik preliva"
 
-#: src/widgets/paint-selector.cpp:599
-msgid "No objects"
-msgstr "Ni predmetov"
-
-#: src/widgets/paint-selector.cpp:613
-msgid "Multiple styles"
-msgstr "Več slogov"
-
-#: src/widgets/paint-selector.cpp:627
+#: src/widgets/paint-selector.cpp:156 src/widgets/paint-selector.cpp:608
 msgid "No paint"
 msgstr "Ni barve"
 
-#. Label
-#: src/widgets/paint-selector.cpp:690
-msgid "Mode:"
-msgstr "Način:"
+#: src/widgets/paint-selector.cpp:158 src/widgets/paint-selector.cpp:679
+#, fuzzy
+msgid "Flat color"
+msgstr "Osvetljena barva:"
 
-#: src/widgets/paint-selector.cpp:700 src/widgets/sp-color-scales.cpp:81
-msgid "RGB"
-msgstr "RGB"
-
-#: src/widgets/paint-selector.cpp:700
-msgid "RGB Colorspace"
-msgstr "Paleta RGB"
-
-#. sp_menu_append (SP_MENU (m), _("HSV"), _("RGB Colorspace"), GUINT_TO_POINTER (SP_PAINT_SELECTOR_MODE_HSV));
-#: src/widgets/paint-selector.cpp:702 src/widgets/sp-color-scales.cpp:81
-msgid "CMYK"
-msgstr "CMYK"
-
-#: src/widgets/paint-selector.cpp:702
-msgid "CMYK Colorspace"
-msgstr "Paleta CMYK"
-
-#. Use dropper
-#: src/widgets/paint-selector.cpp:709
-msgid "Get from dropper"
-msgstr "Povzemi"
-
-#: src/widgets/paint-selector.cpp:742
-msgid "Color paint"
-msgstr "Barva"
-
-#: src/widgets/paint-selector.cpp:812
+#: src/widgets/paint-selector.cpp:160 src/widgets/paint-selector.cpp:749
 msgid "Linear gradient"
 msgstr "Raven preliv"
 
-#: src/widgets/paint-selector.cpp:815
+#: src/widgets/paint-selector.cpp:162 src/widgets/paint-selector.cpp:752
 msgid "Radial gradient"
 msgstr "Krožen preliv"
+
+#: src/widgets/paint-selector.cpp:580
+msgid "No objects"
+msgstr "Ni predmetov"
+
+#: src/widgets/paint-selector.cpp:594
+msgid "Multiple styles"
+msgstr "Več slogov"
 
 #: src/widgets/sp-color-gtkselector.cpp:60
 msgid "System"
 msgstr "Sistem"
 
-#: src/widgets/sp-color-scales.cpp:81
+#: src/widgets/sp-color-scales.cpp:75
+msgid "RGB"
+msgstr "RGB"
+
+#: src/widgets/sp-color-scales.cpp:75
 msgid "HSV"
 msgstr "HSV"
 
-#: src/widgets/sp-color-scales.cpp:373
-msgid "Red:"
+#: src/widgets/sp-color-scales.cpp:75
+msgid "CMYK"
+msgstr "CMYK"
+
+#: src/widgets/sp-color-scales.cpp:379
+msgid "_R"
+msgstr ""
+
+#: src/widgets/sp-color-scales.cpp:380 src/widgets/sp-color-scales.cpp:381
+#, fuzzy
+msgid "Red"
 msgstr "Rdeča:"
 
-#: src/widgets/sp-color-scales.cpp:374
-msgid "Green:"
+#: src/widgets/sp-color-scales.cpp:382
+msgid "_G"
+msgstr ""
+
+#: src/widgets/sp-color-scales.cpp:383 src/widgets/sp-color-scales.cpp:384
+#, fuzzy
+msgid "Green"
 msgstr "Zelena:"
 
-#: src/widgets/sp-color-scales.cpp:375
-msgid "Blue:"
+#: src/widgets/sp-color-scales.cpp:385
+msgid "_B"
+msgstr ""
+
+#: src/widgets/sp-color-scales.cpp:386 src/widgets/sp-color-scales.cpp:387
+#, fuzzy
+msgid "Blue"
 msgstr "Modra:"
 
 #. Label
-#: src/widgets/sp-color-scales.cpp:376 src/widgets/sp-color-scales.cpp:393
-#: src/widgets/sp-color-scales.cpp:413
-#: src/widgets/sp-color-wheel-selector.cpp:136
-msgid "Alpha:"
-msgstr "Prosojnost:"
+#: src/widgets/sp-color-scales.cpp:388 src/widgets/sp-color-scales.cpp:413
+#: src/widgets/sp-color-scales.cpp:443
+#: src/widgets/sp-color-wheel-selector.cpp:140
+msgid "_A"
+msgstr ""
 
-#: src/widgets/sp-color-scales.cpp:390
-msgid "Hue:"
+#: src/widgets/sp-color-scales.cpp:389 src/widgets/sp-color-scales.cpp:390
+#: src/widgets/sp-color-scales.cpp:414 src/widgets/sp-color-scales.cpp:415
+#: src/widgets/sp-color-scales.cpp:444 src/widgets/sp-color-scales.cpp:445
+#: src/widgets/sp-color-wheel-selector.cpp:150
+#: src/widgets/sp-color-wheel-selector.cpp:161
+msgid "Alpha (opacity)"
+msgstr ""
+
+#: src/widgets/sp-color-scales.cpp:404
+msgid "_H"
+msgstr ""
+
+#: src/widgets/sp-color-scales.cpp:405 src/widgets/sp-color-scales.cpp:406
+#, fuzzy
+msgid "Hue"
 msgstr "Odtenek:"
 
-#: src/widgets/sp-color-scales.cpp:391
-msgid "Saturation:"
+#: src/widgets/sp-color-scales.cpp:407
+msgid "_S"
+msgstr ""
+
+#: src/widgets/sp-color-scales.cpp:408 src/widgets/sp-color-scales.cpp:409
+#, fuzzy
+msgid "Saturation"
 msgstr "Nasičenost:"
 
-#: src/widgets/sp-color-scales.cpp:392
-msgid "Value:"
-msgstr "Vrednost:"
+#: src/widgets/sp-color-scales.cpp:410
+msgid "_V"
+msgstr ""
 
-#: src/widgets/sp-color-scales.cpp:409
-msgid "Cyan:"
+#: src/widgets/sp-color-scales.cpp:411 src/widgets/sp-color-scales.cpp:412
+msgid "Value (brightness)"
+msgstr ""
+
+#: src/widgets/sp-color-scales.cpp:431
+msgid "_C"
+msgstr ""
+
+#: src/widgets/sp-color-scales.cpp:432 src/widgets/sp-color-scales.cpp:433
+#, fuzzy
+msgid "Cyan"
 msgstr "Cijan:"
 
-#: src/widgets/sp-color-scales.cpp:410
-msgid "Magenta:"
+#: src/widgets/sp-color-scales.cpp:434
+msgid "_M"
+msgstr ""
+
+#: src/widgets/sp-color-scales.cpp:435 src/widgets/sp-color-scales.cpp:436
+#, fuzzy
+msgid "Magenta"
 msgstr "Magenta:"
 
-#: src/widgets/sp-color-scales.cpp:411
-msgid "Yellow:"
+#: src/widgets/sp-color-scales.cpp:437
+msgid "_Y"
+msgstr ""
+
+#: src/widgets/sp-color-scales.cpp:438 src/widgets/sp-color-scales.cpp:439
+#, fuzzy
+msgid "Yellow"
 msgstr "Rumena:"
 
-#: src/widgets/sp-color-scales.cpp:412
-msgid "Black:"
+#: src/widgets/sp-color-scales.cpp:440
+msgid "_K"
+msgstr ""
+
+#: src/widgets/sp-color-scales.cpp:441 src/widgets/sp-color-scales.cpp:442
+#, fuzzy
+msgid "Black"
 msgstr "Črna:"
 
 #: src/widgets/sp-color-selector.cpp:66
 msgid "Unnamed"
 msgstr "Brezimen"
 
-#: src/widgets/sp-color-wheel-selector.cpp:65
+#: src/widgets/sp-color-wheel-selector.cpp:67
 msgid "Wheel"
 msgstr "Kolešček"
 
@@ -3748,39 +4293,86 @@ msgstr "Lastnost"
 msgid "Value"
 msgstr "Vrednost"
 
-msgid "Input"
-msgstr "Vnos"
+#~ msgid ""
+#~ "Zoom the drawing when document window is resized, to keep the same area "
+#~ "visible"
+#~ msgstr ""
+#~ "Če se spremeni okno programa, prilagodi pogled tako, da bo še vedno vidno "
+#~ "enako območje"
 
-msgid "Position and size"
-msgstr "Položaj in velikost"
+#~ msgid "Stroke settings"
+#~ msgstr "Barva črte"
 
-msgid "Angle"
-msgstr "Kot"
+#~ msgid "Click to pick, click and drag to pick the average color of an area."
+#~ msgstr ""
+#~ "Pritisnite miško za izbiro, pritisnite in vlecite za izbiro povprečne "
+#~ "barve na omočju."
 
-msgid "Order"
-msgstr "Urejenost"
+#~ msgid "Unable to import image '%s': %s"
+#~ msgstr "Ne morem uvoziti slike '%s\". %s"
 
-msgid "Link"
-msgstr "Povezava"
+#~ msgid "Corner radius to half-width ratio"
+#~ msgstr "Polmer kota v razmerje polovice širine"
 
-msgid "Image"
-msgstr "Slika"
+#~ msgid "Corner radius to half-height ratio"
+#~ msgstr "Polmer kota v razmerje polovice višine"
 
-msgid "Draw"
-msgstr "Risanje"
+#~ msgid "Number of revolutions"
+#~ msgstr "Število obhodov"
 
-msgid "In"
-msgstr "Pal"
+#~ msgid "_New Window"
+#~ msgstr "Novo okno"
 
-msgid "1:1"
-msgstr "1:1"
+#~ msgid "Mode:"
+#~ msgstr "Način:"
 
-msgid "Display"
-msgstr "Pogled"
+#~ msgid "RGB Colorspace"
+#~ msgstr "Paleta RGB"
 
-msgid "Page layout"
-msgstr "Postavitev strani"
+#~ msgid "CMYK Colorspace"
+#~ msgstr "Paleta CMYK"
 
-msgid "Size and Position"
-msgstr "Velikost in položaj"
+#~ msgid "Get from dropper"
+#~ msgstr "Povzemi"
 
+#~ msgid "Color paint"
+#~ msgstr "Barva"
+
+#~ msgid "Alpha:"
+#~ msgstr "Prosojnost:"
+
+#~ msgid "Value:"
+#~ msgstr "Vrednost:"
+
+#~ msgid "Input"
+#~ msgstr "Vnos"
+
+#~ msgid "Position and size"
+#~ msgstr "Položaj in velikost"
+
+#~ msgid "Angle"
+#~ msgstr "Kot"
+
+#~ msgid "Order"
+#~ msgstr "Urejenost"
+
+#~ msgid "Link"
+#~ msgstr "Povezava"
+
+#~ msgid "Draw"
+#~ msgstr "Risanje"
+
+#~ msgid "In"
+#~ msgstr "Pal"
+
+#~ msgid "1:1"
+#~ msgstr "1:1"
+
+#~ msgid "Display"
+#~ msgstr "Pogled"
+
+#~ msgid "Page layout"
+#~ msgstr "Postavitev strani"
+
+#~ msgid "Size and Position"
+#~ msgstr "Velikost in položaj"

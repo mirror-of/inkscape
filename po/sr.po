@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.39cvs20040603\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-03 19:36+0200\n"
+"POT-Creation-Date: 2004-06-05 19:14+0200\n"
 "PO-Revision-Date: 2004-06-03 19:37+0200\n"
 "Last-Translator: Александар Урошевић <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -810,7 +810,7 @@ msgstr ""
 "сваки прозор помоћу дугмета у десном углу изнад траке за померање)"
 
 #. Clones
-#: src/dialogs/display-settings.cpp:1034
+#: src/dialogs/display-settings.cpp:1034 src/dialogs/find.cpp:556
 msgid "Clones"
 msgstr "Клонови"
 
@@ -886,7 +886,8 @@ msgstr "Промена величине заобљених углова за п�
 
 #: src/dialogs/display-settings.cpp:1115
 msgid "When scaling rectangles, scale the radii of rounded corners"
-msgstr "Када се мења величина правоугаоника, мења се и полупречник заобљених углова"
+msgstr ""
+"Када се мења величина правоугаоника, мења се и полупречник заобљених углова"
 
 #: src/dialogs/display-settings.cpp:1123
 msgid "Store transformation:"
@@ -1040,20 +1041,20 @@ msgstr "Одабрана површина за извоз је нерегула�
 msgid "Select a filename for exporting"
 msgstr "Одаберите назив датотеке за извоз"
 
-#: src/dialogs/filedialog.cpp:109 src/dialogs/filedialog.cpp:246
+#: src/dialogs/filedialog.cpp:187 src/dialogs/filedialog.cpp:327
 #: src/extension/db.cpp:180 src/extension/db.cpp:193
 msgid "Autodetect"
 msgstr "Аутоматско препознавање"
 
-#: src/dialogs/filedialog.cpp:134 src/dialogs/filedialog.cpp:285
+#: src/dialogs/filedialog.cpp:212 src/dialogs/filedialog.cpp:366
 msgid "File type:"
 msgstr "Врста датотеке:"
 
-#: src/dialogs/filedialog.cpp:289
+#: src/dialogs/filedialog.cpp:370
 msgid "Append filename extension automatically"
 msgstr "Аутоматски додај екстензију датотеке"
 
-#: src/dialogs/filedialog.cpp:333
+#: src/dialogs/filedialog.cpp:420
 msgid "No filename specified.  Unable to save."
 msgstr "Нисте одредили назив датотеке. Не могу да сачувам документ."
 
@@ -1065,7 +1066,6 @@ msgstr "Стил попуне"
 msgid "Fill:"
 msgstr "Попуна:"
 
-#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
 #: src/dialogs/fill-style.cpp:178
 msgid ""
 "Specifies the method of filling overlapping areas when an object intersects "
@@ -1085,6 +1085,203 @@ msgstr "Пуна попуна"
 #: src/dialogs/fill-style.cpp:194
 msgid "alternating"
 msgstr "Делимична попуна"
+
+#: src/dialogs/find.cpp:315
+#, c-format
+msgid "%d object(s) found (out of %d), %s match."
+msgstr ""
+
+#: src/dialogs/find.cpp:316
+#, fuzzy
+msgid "exact"
+msgstr "Текст"
+
+#: src/dialogs/find.cpp:316
+#, fuzzy
+msgid "partial"
+msgstr "Спирала"
+
+#: src/dialogs/find.cpp:322
+#, fuzzy
+msgid "No objects found."
+msgstr "Нема објеката"
+
+#: src/dialogs/find.cpp:480
+#, fuzzy
+msgid "T_ype: "
+msgstr "Врста:"
+
+#: src/dialogs/find.cpp:487
+msgid "Search in all object types"
+msgstr ""
+
+#: src/dialogs/find.cpp:487
+#, fuzzy
+msgid "All types"
+msgstr "Стил попуне"
+
+#: src/dialogs/find.cpp:498
+msgid "Search all shapes"
+msgstr ""
+
+#: src/dialogs/find.cpp:498
+#, fuzzy
+msgid "All shapes"
+msgstr "Све алате за облике"
+
+#: src/dialogs/find.cpp:515
+#, fuzzy
+msgid "Search rectangles"
+msgstr "Правоугаоник"
+
+#: src/dialogs/find.cpp:515
+#, fuzzy
+msgid "Rects"
+msgstr "Правоугаоник"
+
+#: src/dialogs/find.cpp:520
+msgid "Search ellipses, arcs, circles"
+msgstr ""
+
+#: src/dialogs/find.cpp:520
+#, fuzzy
+msgid "Ellipses"
+msgstr "Елипса"
+
+#: src/dialogs/find.cpp:525
+#, fuzzy
+msgid "Search stars and polygons"
+msgstr "Исцртавање звезди и полигона (*)"
+
+#: src/dialogs/find.cpp:525
+#, fuzzy
+msgid "Stars"
+msgstr "Звезда"
+
+#: src/dialogs/find.cpp:530
+#, fuzzy
+msgid "Search spirals"
+msgstr "Исцртавање спирала (F9)"
+
+#: src/dialogs/find.cpp:530
+#, fuzzy
+msgid "Spirals"
+msgstr "Спирала"
+
+#: src/dialogs/find.cpp:541
+msgid "Search paths, lines, polylines"
+msgstr ""
+
+#: src/dialogs/find.cpp:541
+#, fuzzy
+msgid "Paths"
+msgstr "_Линија"
+
+#: src/dialogs/find.cpp:546
+#, fuzzy
+msgid "Search text objects"
+msgstr "Изабране објекте"
+
+#: src/dialogs/find.cpp:546
+#, fuzzy
+msgid "Texts"
+msgstr "Текст"
+
+#: src/dialogs/find.cpp:551
+msgid "Search groups"
+msgstr ""
+
+#: src/dialogs/find.cpp:551
+#, fuzzy
+msgid "Groups"
+msgstr "_Групиши"
+
+#: src/dialogs/find.cpp:556
+msgid "Search clones"
+msgstr ""
+
+#: src/dialogs/find.cpp:561
+msgid "Search images"
+msgstr ""
+
+#: src/dialogs/find.cpp:561
+#, fuzzy
+msgid "Images"
+msgstr "Адреса слике:"
+
+#: src/dialogs/find.cpp:566
+#, fuzzy
+msgid "Search offset objects"
+msgstr "Прављење објекта који се може динамички померати"
+
+#: src/dialogs/find.cpp:566
+#, fuzzy
+msgid "Offsets"
+msgstr "Размак:"
+
+#: src/dialogs/find.cpp:626
+#, fuzzy
+msgid "_Text: "
+msgstr "Текст"
+
+#: src/dialogs/find.cpp:626
+msgid "Find objects by their text content (exact or partial match)"
+msgstr ""
+
+#: src/dialogs/find.cpp:627
+msgid "_ID: "
+msgstr ""
+
+#: src/dialogs/find.cpp:627
+msgid "Find objects by the value of the id attribute (exact or partial match)"
+msgstr ""
+
+#: src/dialogs/find.cpp:628
+#, fuzzy
+msgid "_Style: "
+msgstr "Стил"
+
+#: src/dialogs/find.cpp:628
+msgid ""
+"Find objects by the value of the style attribute (exact or partial match)"
+msgstr ""
+
+#: src/dialogs/find.cpp:629
+#, fuzzy
+msgid "_Attribute: "
+msgstr "Особина"
+
+#: src/dialogs/find.cpp:629
+msgid "Find objects by the name of an attribute (exact or partial match)"
+msgstr ""
+
+#: src/dialogs/find.cpp:642
+#, fuzzy
+msgid "Search in s_election"
+msgstr "Висина избора"
+
+#: src/dialogs/find.cpp:646
+msgid "Limit search to the current selection"
+msgstr ""
+
+#: src/dialogs/find.cpp:655
+#, fuzzy
+msgid "_Clear"
+msgstr "_Затвори"
+
+#: src/dialogs/find.cpp:655
+#, fuzzy
+msgid "Clear values"
+msgstr "О_чисти све"
+
+#: src/dialogs/find.cpp:656
+#, fuzzy
+msgid "_Find"
+msgstr "_Тражи..."
+
+#: src/dialogs/find.cpp:656
+msgid "Select objects matching all of the fields you filled in"
+msgstr ""
 
 #: src/dialogs/item-properties.cpp:121 src/dialogs/item-properties.cpp:395
 #: src/dialogs/item-properties.cpp:532 src/dialogs/item-properties.cpp:538
@@ -1376,6 +1573,8 @@ msgstr "Квадратни завршетак"
 msgid "Pattern:"
 msgstr "Образац:"
 
+#. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
+#. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
 #: src/dialogs/stroke-style.cpp:1349
 msgid "Start Markers:"
 msgstr "Почетна ознака:"
@@ -1666,7 +1865,7 @@ msgstr ""
 msgid "write error occurred"
 msgstr "грешка при писању"
 
-#: src/file.cpp:153 src/file.cpp:533
+#: src/file.cpp:153 src/file.cpp:554
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "Не моћу да учитам захтевану датотеку %s"
@@ -1720,19 +1919,25 @@ msgstr "Датотека %s не може бити сачувана."
 msgid "Document saved."
 msgstr "Документ је сачуван."
 
-#: src/file.cpp:330 src/file.cpp:332
-msgid "untitled.svg"
-msgstr "неименовано.svg"
+#: src/file.cpp:343
+#, fuzzy, c-format
+msgid "drawing%s"
+msgstr "Цртеж"
 
-#: src/file.cpp:340
+#: src/file.cpp:349
+#, fuzzy, c-format
+msgid "drawing-%d%s"
+msgstr "Цртеж"
+
+#: src/file.cpp:361
 msgid "Select file to save"
 msgstr "Изаберите коју датотеку желите да сачувате"
 
-#: src/file.cpp:416
+#: src/file.cpp:437
 msgid "No changes need to be saved."
 msgstr "Нема измена потребних за снимање."
 
-#: src/file.cpp:557
+#: src/file.cpp:578
 msgid "Select file to import"
 msgstr "Одаберите датотеку за увоз"
 
@@ -2625,6 +2830,11 @@ msgstr "Полигон са %d страна"
 #, c-format
 msgid "Text (%s, %.5gpt)"
 msgstr "Текст (%s, %.5gpt)"
+
+#: src/sp-typeset.cpp:387
+#, fuzzy
+msgid "typeset object"
+msgstr "Изабране објекте"
 
 #: src/sp-use.cpp:303
 #, c-format
@@ -3863,7 +4073,6 @@ msgstr "Уређивање"
 msgid "Add"
 msgstr "Додај"
 
-#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientUnitsAttribute
 #: src/widgets/gradient-selector.cpp:166
 msgid ""
 "Whether the gradient vector is defined in the user space coordinates "
@@ -3886,7 +4095,6 @@ msgstr "кориснички простор"
 msgid "Coordinates:"
 msgstr "Координате:"
 
-#. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
 #: src/widgets/gradient-selector.cpp:196
 msgid ""
 "Whether to fill with flat color beyond the ends of the gradient vector "
@@ -4107,6 +4315,9 @@ msgstr "Особина"
 #: src/widgets/sp-xmlview-attr-list.cpp:56
 msgid "Value"
 msgstr "Вредност"
+
+#~ msgid "untitled.svg"
+#~ msgstr "неименовано.svg"
 
 #~ msgid "Corner radius to half-width ratio"
 #~ msgstr "Однос полупречника угла до половине ширине"
