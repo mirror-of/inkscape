@@ -234,11 +234,12 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			sp_svg_write_color (c, 64, c32);
 
 			// alpha of color under cursor, to show in the statusbar
+			// locale-sensitive printf is OK, since this goes to the UI, not into SVG
 			gchar *alpha = g_strdup_printf (_(" alpha %.3g"), A);
 			// where the color is picked, to show in the statusbar
 			gchar *where = dc->dragging ? g_strdup_printf (_(", averaged with radius %d"), (int) rw) : g_strdup_printf (_(" under cursor"));
 			// message, to show in the statusbar
-			gchar *message = dc->dragging ? _("Release mouse to set color.") : _("Click to pick, click and drag to pick the average color of an area.");
+			const gchar *message = dc->dragging ? _("Release mouse to set color.") : _("Click to pick, click and drag to pick the average color of an area.");
 
 			gchar *status = g_strdup_printf ("%s%s%s. %s", 
 										 c, 
