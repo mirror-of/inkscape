@@ -6,12 +6,12 @@
 SweepTreeList::SweepTreeList(int s) :
     nbTree(0),
     maxTree(s),
+    trees((SweepTree *) g_malloc(s * sizeof(SweepTree))),
     racine(NULL)
 {
-    /* FIXME: Use new[] here, but watch out for bad things happening when
-    ** SweepTree::~SweepTree is called.
-    */
-    trees = (SweepTree *) g_malloc(maxTree * sizeof(SweepTree));
+    /* FIXME: Use new[] for trees initializer above, but watch out for bad things happening when
+     * SweepTree::~SweepTree is called.
+     */
 }
 
 
