@@ -56,6 +56,9 @@ SPDocument * inkscape_active_document (void);
 #define SP_ACTIVE_DESKTOP inkscape_active_desktop ()
 SPDesktop * inkscape_active_desktop (void);
 
+void inkscape_switch_desktops_next ();
+void inkscape_switch_desktops_prev ();
+
 /*
  * fixme: This has to be rethought
  */

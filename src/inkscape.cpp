@@ -419,7 +419,9 @@ inkscape_segv_handler (int signum)
 		inkscape_save_preferences (inkscape);
 	}
 
-	g_warning ("Emergency save completed, now crashing...");
+	g_print ("Emergency save completed. Inkscape will close now.\n");
+	g_print ("If you can reproduce this crash, please file a bug at www.inkscape.org\n");
+      	g_print ("with a detailed description of the steps leading to the crash, so we can fix it.\n");
 
 	/* Show nice dialog box */
 
@@ -763,7 +765,9 @@ inkscape_activate_desktop (SPDesktop * desktop)
 	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, SP_DT_SELECTION (desktop));
 }
 
-// resend ACTIVATE_DESKTOP for current desktop; needed when a new desktop has got its window that dialogs will transientize to
+/**
+\brief  Resends ACTIVATE_DESKTOP for current desktop; needed when a new desktop has got its window that dialogs will transientize to
+*/
 void
 inkscape_reactivate_desktop (SPDesktop * desktop)
 {
@@ -775,8 +779,103 @@ inkscape_reactivate_desktop (SPDesktop * desktop)
 		g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, desktop);
 }
 
-/* fixme: These need probably signals too */
+SPDesktop *
+inkscape_find_desktop_by_dkey (unsigned int dkey)
+{
+	GSList *r;
 
+	for (r = inkscape->desktops; r; r = r->next) {
+		if (((SPDesktop *) r->data)->dkey == dkey)
+			return ((SPDesktop *) r->data);
+	}
+	return NULL;
+}
+
+unsigned int
+inkscape_maximum_dkey()
+{
+	GSList *r;
+	unsigned int dkey = 0;
+
+	for (r = inkscape->desktops; r; r = r->next) {
+		if (((SPDesktop *) r->data)->dkey > dkey)
+			dkey = ((SPDesktop *) r->data)->dkey;
+	}
+
+	g_assert (dkey > 0);
+
+	return dkey;
+}
+
+SPDesktop *
+inkscape_next_desktop ()
+{
+	SPDesktop *d = NULL;
+	unsigned int dkey_current = ((SPDesktop *) inkscape->desktops->data)->dkey;
+	unsigned int i;
+
+	if (dkey_current < inkscape_maximum_dkey()) {
+		// find next existing
+		for (i = dkey_current + 1; i <= inkscape_maximum_dkey(); i++) {
+			d = inkscape_find_desktop_by_dkey (i);
+			if (d) break;
+		}
+	} else {
+		// find first existing
+		for (i = 1; i <= inkscape_maximum_dkey(); i++) {
+			d = inkscape_find_desktop_by_dkey (i);
+			if (d) break;
+		}
+	}
+
+	g_assert (d);
+
+	return d;
+}
+
+SPDesktop *
+inkscape_prev_desktop ()
+{
+	SPDesktop *d = NULL;
+	unsigned int dkey_current = ((SPDesktop *) inkscape->desktops->data)->dkey;
+	unsigned int i;
+
+	if (dkey_current > 1) {
+		// find prev existing
+		for (i = dkey_current - 1; i >= 1; i--) {
+			d = inkscape_find_desktop_by_dkey (i);
+			if (d) break;
+		}
+	} 
+	if (!d) {
+		// find last existing
+		d = inkscape_find_desktop_by_dkey (inkscape_maximum_dkey());
+	}
+
+	g_assert (d);
+
+	return d;
+}
+
+void 
+inkscape_switch_desktops_next ()
+{
+	GtkWindow *w;
+
+	w = (GtkWindow *) g_object_get_data (G_OBJECT (inkscape_next_desktop ()), "window");
+	gtk_window_present (w);
+}
+
+void 
+inkscape_switch_desktops_prev ()
+{
+	GtkWindow *w;
+
+	w = (GtkWindow *) g_object_get_data (G_OBJECT (inkscape_prev_desktop ()), "window");
+	gtk_window_present (w);
+}
+
+/* fixme: These need probably signals too */
 void
 inkscape_add_document (SPDocument *document)
 {
