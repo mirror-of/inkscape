@@ -70,6 +70,8 @@ class SVGPreview : public Gtk::VBox
 
         bool setFromMem(const char *xmlBuffer);
 
+        bool set(const char *fileName, int dialogType);
+
         bool setURI(URI &uri);
 
     private:
@@ -138,11 +140,111 @@ bool SVGPreview::setFromMem(const char *xmlBuffer)
 
 
 
-bool SVGPreview::setURI(URI &uri)
-{ 
-    return setFileName(uri.toString());
-}
+bool SVGPreview::set(const char *fName, int dialogType)
+{
 
+    if (!g_file_test(fName, G_FILE_TEST_EXISTS))
+        return false;
+
+    if (dialogType == SVG_TYPES &&
+           (g_str_has_suffix(fName, ".svg") ||   g_str_has_suffix(fName, ".svgz"))
+         )
+        {
+        bool retval = setFileName(fName);
+        return retval;
+        }
+    else if ((dialogType == IMPORT_TYPES || dialogType == EXPORT_TYPES) &&
+                 (
+                  g_str_has_suffix(fName, ".bmp" ) ||
+                  g_str_has_suffix(fName, ".gif" ) ||
+                  g_str_has_suffix(fName, ".jpg" ) ||
+                  g_str_has_suffix(fName, ".jpeg") ||
+                  g_str_has_suffix(fName, ".png" ) ||
+                  g_str_has_suffix(fName, ".tif" ) ||
+                  g_str_has_suffix(fName, ".tiff")
+                 )
+             )
+        {
+
+        /*#####################################
+        # LET'S HAVE SOME FUN WITH SVG!
+        # Instead of just loading an image, why
+        # don't we make a lovely little svg and
+        # display it nicely?
+        #####################################*/
+
+        //Arbitrary size of svg doc -- rather 'portrait' shaped
+        gint previewWidth  = 400;
+        gint previewHeight = 600;
+
+        //Get some image info. Smart pointer does not need to be deleted
+        Glib::RefPtr<Gdk::Pixbuf> img = Gdk::Pixbuf::create_from_file(fName);
+        gint imgWidth  = img->get_width();
+        gint imgHeight = img->get_height();
+
+        //Find the minimum scale to fit the image inside the preview area
+        double scaleFactorX = (0.9 *(double)previewWidth)  / ((double)imgWidth);
+        double scaleFactorY = (0.9 *(double)previewHeight) / ((double)imgHeight);
+        double scaleFactor = scaleFactorX;
+        if (scaleFactorX > scaleFactorY)
+            scaleFactor = scaleFactorY;
+
+        //Now get the resized values
+        gint scaledImgWidth  = (int) (scaleFactor * (double)imgWidth);
+        gint scaledImgHeight = (int) (scaleFactor * (double)imgHeight);
+
+        //center the image on the area
+        gint imgX = (previewWidth  - scaledImgWidth)  / 2;        
+        gint imgY = (previewHeight - scaledImgHeight) / 2;
+
+        //wrap a rectangle around the image
+        gint rectX      = imgX-1;        
+        gint rectY      = imgY-1;        
+        gint rectWidth  = scaledImgWidth +2;        
+        gint rectHeight = scaledImgHeight+2;        
+
+        //Our template.  Modify to taste
+        gchar *xformat =
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+          "<svg\n"
+          "xmlns=\"http://www.w3.org/2000/svg\"\n"
+          "xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n"
+          "width=\"%d\" height=\"%d\">\n"
+          "<image x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\"\n"
+          "xlink:href=\"%s\"/>\n"
+          "<rect\n"
+            "style=\"fill:none;fill-opacity:0.75000000;fill-rule:evenodd;"
+              "stroke:#000000;stroke-width:4.0;stroke-linecap:butt;"
+              "stroke-linejoin:miter;stroke-opacity:1.0000000;"
+              "stroke-miterlimit:4.0000000;stroke-dasharray:none;\"\n"
+            "x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\"/>\n"
+          "<text\n"
+            "style=\"font-size:24.000000;font-style:normal;font-weight:normal;"
+              "fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;"
+              "stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;"
+              "font-family:Bitstream Vera Sans;\"\n"
+            "x=\"10\" y=\"26\">%dw x %dh</text>\n"
+          "</svg>\n\n";
+
+        //Fill in the template
+        gchar *xmlBuffer = g_strdup_printf(xformat, 
+               previewWidth, previewHeight,
+               imgX, imgY, scaledImgWidth, scaledImgHeight,
+               fName,
+               rectX, rectY, rectWidth, rectHeight,
+               imgWidth, imgHeight);
+
+        //g_message("%s\n", xmlBuffer);
+
+        //now show it!
+        bool retval = setFromMem(xmlBuffer);
+        g_free(xmlBuffer);
+        return retval;
+        }
+
+    return false;
+
+}
 
 
 SVGPreview::SVGPreview()
@@ -252,110 +354,9 @@ void FileOpenDialogImpl::updatePreviewCallback()
     gchar *fName = (gchar *)get_preview_filename().c_str();
     if (!fName)
         return;
-    //g_message("User hit return.  Text is '%s'\n", fName);
 
-    if (!g_file_test(fName, G_FILE_TEST_EXISTS))
-        return;
-
-    if (dialogType == SVG_TYPES &&
-           (g_str_has_suffix(fName, ".svg") ||   g_str_has_suffix(fName, ".svgz"))
-         )
-        {
-        bool retval = svgPreview.setFileName(fName);
-        set_preview_widget_active(retval);
-        return;
-        }
-    else if (dialogType == IMPORT_TYPES &&
-                 (
-                  g_str_has_suffix(fName, ".bmp" ) ||
-                  g_str_has_suffix(fName, ".gif" ) ||
-                  g_str_has_suffix(fName, ".jpg" ) ||
-                  g_str_has_suffix(fName, ".jpeg") ||
-                  g_str_has_suffix(fName, ".png" ) ||
-                  g_str_has_suffix(fName, ".tif" ) ||
-                  g_str_has_suffix(fName, ".tiff")
-                 )
-             )
-        {
-
-        /*#####################################
-        # LET'S HAVE SOME FUN WITH SVG!
-        # Instead of just loading an image, why
-        # don't we make a lovely little svg and
-        # display it nicely?
-        #####################################*/
-
-        //Arbitrary size of svg doc -- rather 'portrait' shaped
-        gint previewWidth  = 400;
-        gint previewHeight = 600;
-
-        //Get some image info. Smart pointer does not need to be deleted
-        Glib::RefPtr<Gdk::Pixbuf> img = Gdk::Pixbuf::create_from_file(fName);
-        gint imgWidth  = img->get_width();
-        gint imgHeight = img->get_height();
-
-        //Find the minimum scale to fit the image inside the preview area
-        double scaleFactorX = (0.9 *(double)previewWidth)  / ((double)imgWidth);
-        double scaleFactorY = (0.9 *(double)previewHeight) / ((double)imgHeight);
-        double scaleFactor = scaleFactorX;
-        if (scaleFactorX > scaleFactorY)
-            scaleFactor = scaleFactorY;
-
-        //Now get the resized values
-        gint scaledImgWidth  = (int) (scaleFactor * (double)imgWidth);
-        gint scaledImgHeight = (int) (scaleFactor * (double)imgHeight);
-
-        //center the image on the area
-        gint imgX = (previewWidth  - scaledImgWidth)  / 2;        
-        gint imgY = (previewHeight - scaledImgHeight) / 2;
-
-        //wrap a rectangle around the image
-        gint rectX      = imgX-1;        
-        gint rectY      = imgY-1;        
-        gint rectWidth  = scaledImgWidth +2;        
-        gint rectHeight = scaledImgHeight+2;        
-
-        //Our template.  Modify to taste
-        gchar *xformat =
-          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-          "<svg\n"
-          "xmlns=\"http://www.w3.org/2000/svg\"\n"
-          "xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n"
-          "width=\"%d\" height=\"%d\">\n"
-          "<image x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\"\n"
-          "xlink:href=\"%s\"/>\n"
-          "<rect\n"
-            "style=\"fill:none;fill-opacity:0.75000000;fill-rule:evenodd;"
-              "stroke:#000000;stroke-width:4.0;stroke-linecap:butt;"
-              "stroke-linejoin:miter;stroke-opacity:1.0000000;"
-              "stroke-miterlimit:4.0000000;stroke-dasharray:none;\"\n"
-            "x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\"/>\n"
-          "<text\n"
-            "style=\"font-size:24.000000;font-style:normal;font-weight:normal;"
-              "fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;"
-              "stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;"
-              "font-family:Bitstream Vera Sans;\"\n"
-            "x=\"10\" y=\"26\">%d x %d</text>\n"
-          "</svg>\n\n";
-
-        //Fill in the template
-        gchar *xmlBuffer = g_strdup_printf(xformat, 
-               previewWidth, previewHeight,
-               imgX, imgY, scaledImgWidth, scaledImgHeight,
-               fName,
-               rectX, rectY, rectWidth, rectHeight,
-               imgWidth, imgHeight);
-
-        //g_message("%s\n", xmlBuffer);
-
-        //now show it!
-        bool retval = svgPreview.setFromMem(xmlBuffer);
-        set_preview_widget_active(retval);
-        g_free(xmlBuffer);
-        return;
-        }
-
-    set_preview_widget_active(false);
+    bool retval = svgPreview.set(fName, dialogType);
+    set_preview_widget_active(retval);
 
 }
 
@@ -410,6 +411,8 @@ FileOpenDialogImpl::FileOpenDialogImpl(const char *dir,
                                        const char *title) :
                                        Gtk::FileChooserDialog(Glib::ustring(title)) {
 
+    /* One file at a time */
+    set_select_multiple(false);
 
     /* Initalize to Autodetect */
     extension = NULL;
@@ -607,6 +610,16 @@ class FileSaveDialogImpl : public FileSaveDialog, public Gtk::FileChooserDialog
         FileDialogType dialogType;
 
         /**
+         * Our svg preview widget
+         */
+        SVGPreview svgPreview;
+
+        /**
+         * Callback for seeing if the preview needs to be drawn
+         */
+        void updatePreviewCallback();
+
+        /**
          * Filter name->extension lookup
          */
         std::map<Glib::ustring, Inkscape::Extension::Extension *> extensionMap;
@@ -630,6 +643,22 @@ class FileSaveDialogImpl : public FileSaveDialog, public Gtk::FileChooserDialog
 
 
 /**
+ * Callback for checking if the preview needs to be redrawn
+ */
+void FileSaveDialogImpl::updatePreviewCallback()
+{
+    gchar *fName = (gchar *)get_preview_filename().c_str();
+    if (!fName)
+        return;
+
+    bool retval = svgPreview.set(fName, dialogType);
+    set_preview_widget_active(retval);
+
+}
+
+
+
+/**
  * Constructor
  */
 FileSaveDialogImpl::FileSaveDialogImpl(const char *dir, 
@@ -641,6 +670,9 @@ FileSaveDialogImpl::FileSaveDialogImpl(const char *dir,
 
 
     append_extension = (bool)prefs_get_int_attribute("dialogs.save_as", "append_extension", 1);
+
+    /* One file at a time */
+    set_select_multiple(false);
 
     /* Initalize to Autodetect */
     extension = NULL;
@@ -691,6 +723,15 @@ FileSaveDialogImpl::FileSaveDialogImpl(const char *dir,
     checkbox.set_active(append_extension);
     checkbox.show();
     get_vbox()->pack_end (checkbox, FALSE, FALSE, 0);
+
+    //###### Add a preview widget
+    set_preview_widget(svgPreview);
+    set_preview_widget_active(false);
+
+    //Catch selection-changed events, so we can adjust the text widget
+    signal_update_preview().connect( 
+         sigc::mem_fun(*this, &FileSaveDialogImpl::updatePreviewCallback) );
+
 
     //if (extension == NULL)
     //    checkbox.set_sensitive(FALSE);
