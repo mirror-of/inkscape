@@ -69,7 +69,6 @@ static void sp_item_release(SPObject *object);
 static void sp_item_set(SPObject *object, unsigned key, gchar const *value);
 static void sp_item_update(SPObject *object, SPCtx *ctx, guint flags);
 static SPRepr *sp_item_write(SPObject *object, SPRepr *repr, guint flags);
-static void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform);
 
 static gchar *sp_item_private_description(SPItem *item);
 static void sp_item_private_snappoints(SPItem const *item, SnapPointsIter p);
@@ -932,8 +931,12 @@ sp_item_event(SPItem *item, SPEvent *event)
     return FALSE;
 }
 
-/** Sets item private transform (not propagated to repr). */
-static void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform)
+/**
+ * Sets item private transform (not propagated to repr), without compensating stroke widths,
+ * gradients, patterns as sp_item_write_transform does.
+ */
+void
+sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform)
 {
     g_return_if_fail(item != NULL);
     g_return_if_fail(SP_IS_ITEM(item));

@@ -30,6 +30,7 @@
 #include "sp-use.h"
 #include "sp-item-group.h"
 #include "helper/sp-intl.h"
+#include "prefs-utils.h"
 
 static void sp_group_class_init (SPGroupClass *klass);
 static void sp_group_init (SPGroup *group);
@@ -480,15 +481,24 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 			SPItem *citem = SP_ITEM (child);
 
 			NR::Matrix ctrans;
-			if (SP_IS_USE(citem) && (SP_OBJECT_PARENT (sp_use_get_original (SP_USE(citem))) == SP_OBJECT(group))) {
+			NR::Matrix const g(gitem->transform);
+			if (SP_IS_USE(citem) && SP_OBJECT_PARENT (sp_use_get_original (SP_USE(citem))) == SP_OBJECT(group)) {
 				// make sure a clone's effective transform is the same as was under group
-				NR::Matrix const g(gitem->transform);
 				ctrans = g.inverse() * citem->transform * g;
 			} else {
-				ctrans = citem->transform * gitem->transform;
+				ctrans = citem->transform * g;
 			}
 
-			// FIXME: cannot call sp_item_write_transform here - the repr is unattached at this point, has no item. rethink!
+			// FIXME: constructing a transform that would fully preserve the appearance of a
+			// textpath if it is ungrouped with its path seems to be impossible in general
+			// case. E.g. if the group was squeezed, to keep the ungrouped textpath squeezed
+			// as well, we'll need to relink it to some "virtual" path which is inversely
+			// stretched relative to the actual path, and then squeeze the textpath back so it
+			// would both fit the actual path _and_ be squeezed as before. It's a bummer.
+
+			// This is just a way to temporarily remember the transform in repr. When repr is
+			// reattached outside of the group, the transform will be written more properly
+			// (i.e. optimized into the object if the corresponding preference is set)
 			if (sp_svg_transform_write(affinestr, 79, ctrans)) {
 				sp_repr_set_attr (nrepr, "transform", affinestr);
 			} else {
@@ -527,6 +537,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 	}
 
 	/* Step 4 - add items */
+	gint const preserve = prefs_get_int_attribute("options.preservetransform", "value", 0);
 	while (items) {
 		SPRepr *repr = (SPRepr *) items->data;
 		// add item
@@ -534,6 +545,17 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 
 		// fill in the children list if non-null
 		SPItem *nitem = (SPItem *) doc->getObjectByRepr(repr);
+
+		/* Optimize the transform matrix if requested. */
+		// No compensations are required because this is supposed to be a non-transformation visually.
+		if (!preserve) {
+			NR::Matrix (*set_transform)(SPItem *, NR::Matrix const &) = ((SPItemClass *) G_OBJECT_GET_CLASS(nitem))->set_transform;
+			if (set_transform) {
+				sp_item_set_item_transform(nitem, set_transform(nitem, nitem->transform));
+				nitem->updateRepr();
+			}
+		}
+
 		sp_repr_unref (repr);
 		if (children && SP_IS_ITEM (nitem)) 
 			*children = g_slist_prepend (*children, nitem);

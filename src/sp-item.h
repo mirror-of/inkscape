@@ -184,6 +184,8 @@ void sp_item_snappoints(SPItem const *item, SnapPointsIter p);
 void sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix const *transform, NR::Matrix const *adv = NULL);
 void sp_item_write_transform(SPItem *item, SPRepr *repr, NR::Matrix const &transform, NR::Matrix const *adv = NULL);
 
+void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform);
+
 gint sp_item_event (SPItem *item, SPEvent *event);
 
 /* Utility */
