@@ -200,22 +200,28 @@ static gint
 sp_text_context_item_handler (SPEventContext *ec, SPItem *item, GdkEvent *event)
 {
 	SPTextContext *tc = SP_TEXT_CONTEXT (ec);
+	SPDesktop *desktop = ec->desktop;
+	SPItem *item_ungrouped;
 
 	gint ret = FALSE;
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
-			if (SP_IS_TEXT (item)) {
-				sp_selection_set_item (SP_DT_SELECTION (ec->desktop), item);
+			// find out clicked item, disregarding groups
+			item_ungrouped = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
+			if (SP_IS_TEXT (item_ungrouped)) {
+				sp_selection_set_item (SP_DT_SELECTION (ec->desktop), item_ungrouped);
 				ret = TRUE;
 			}
 		}
 		break;
 	case GDK_MOTION_NOTIFY:
-		if (SP_IS_TEXT (item)) {
+		// find out item under mouse, disregarding groups
+		item_ungrouped = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
+		if (SP_IS_TEXT (item_ungrouped)) {
 			NRRect bbox;
-			sp_item_bbox_desktop(item, &bbox);
+			sp_item_bbox_desktop(item_ungrouped, &bbox);
 			sp_canvas_item_show (tc->indicator);
 			sp_ctrlrect_set_area (SP_CTRLRECT (tc->indicator), 
 					      bbox.x0, bbox.y0, 

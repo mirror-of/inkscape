@@ -340,6 +340,7 @@ sp_node_context_item_handler (SPEventContext * event_context, SPItem * item, Gdk
 	SPNodeContext *nc;
 	SPDesktop * desktop;
 	gint ret;
+	SPItem *item_ungrouped;
 
 	ret = FALSE;
 
@@ -351,7 +352,9 @@ sp_node_context_item_handler (SPEventContext * event_context, SPItem * item, Gdk
 		case GDK_BUTTON_RELEASE:
 			if (event->button.button == 1) {
 				if (!nc->drag) {
-					sp_selection_set_item (SP_DT_SELECTION (desktop), item);
+					// find out clicked item, disregarding groups
+					item_ungrouped = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
+					sp_selection_set_item (SP_DT_SELECTION (desktop), item_ungrouped);
 					ret = FALSE;
 				}
 				break;
