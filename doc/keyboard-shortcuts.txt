@@ -4,9 +4,9 @@ Keyboard shortcuts
    digits)  are  supposed to work the same as corresponding regular keys.
    Some  of  the  keys  (e.g.  arrows)  currently  only work if the mouse
    pointer is over the document canvas; hopefully this will be fixed in a
-   later  version.  See also [7]KeyboardShortcutsToDo for a discussion of
-   other  shortcuts we're planning to implement; you can leave your ideas
-   and requests there.
+   later  version.  See also KeyboardShortcutsToDo on Inkscape Wiki for a 
+   discussion of other shortcuts we're planning  to  implement;  you  can 
+   leave your ideas and requests there.
 
 Tool switching
 
