@@ -278,9 +278,9 @@ sp_text_edit_dialog (void)
 		g_signal_connect (G_OBJECT (INKSCAPE), "modify_selection", G_CALLBACK (sp_text_edit_dialog_modify_selection), dlg);
 		g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (sp_text_edit_dialog_change_selection), dlg);
 
-		sp_text_edit_dialog_read_selection (dlg, TRUE, TRUE);
-
 		gtk_widget_show_all (dlg);
+
+		sp_text_edit_dialog_read_selection (dlg, TRUE, TRUE);
 	}
 
 	gtk_window_present ((GtkWindow *) dlg);
@@ -413,21 +413,26 @@ sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg)
 	items = 0;
 	item = sp_selection_item_list(SP_DT_SELECTION (SP_ACTIVE_DESKTOP));
 	
-	for (; item != NULL; item = item->next) {
+	for (; item != NULL; item = item->next) { 
+		// apply style to the reprs of all text objects in the selection
 		if (!SP_IS_TEXT (item->data)) continue;
 		text = SP_TEXT(item->data);
 		repr = SP_OBJECT_REPR (text);
 		sp_text_edit_dialog_update_object (NULL, repr);
 		++items;
 	}
-	
-	if (items == 0) {
+	if (items == 0) { 
+		// no text objects; apply style to new objects
 		repr = inkscape_get_repr (INKSCAPE, "tools.text");
 		sp_text_edit_dialog_update_object (NULL, repr);
 		gtk_widget_set_sensitive (def, FALSE);
-	} else {
+	} else if (items == 1) {
+		// exactly one text object; now set its text, too (this will also complete the transaction)
 		sp_text_edit_dialog_update_object (text, NULL);
-	} 
+	} else {
+		// many text objects; do not change text, simply complete the transaction
+		sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
+	}
 
 	gtk_widget_set_sensitive (apply, FALSE);
 
