@@ -522,11 +522,12 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			break;
 		case GDK_R:
 		case GDK_r:
-			// FIXME: add top panel button
-			sp_selected_path_reverse ();
-			ret = TRUE;
+			if (!MOD__CTRL && !MOD__ALT) {
+				// FIXME: add top panel button
+				sp_selected_path_reverse ();
+				ret = TRUE;
+			}
 			break;
-
 		case GDK_Left: // move selection left
 		case GDK_KP_Left: 
 		case GDK_KP_4: 
