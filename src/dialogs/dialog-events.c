@@ -67,9 +67,14 @@ sp_transientize (GtkWidget *dialog)
 void
 sp_transientize_callback (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog)
 {
+	GtkWindow *w;
+	gboolean has_focus;
+
 	//	g_warning (gtk_window_get_title (g_object_get_data (G_OBJECT (desktop), "window")));
-	if (g_object_get_data (G_OBJECT (desktop), "window")) {
-		gtk_window_set_transient_for ((GtkWindow *) dialog, (GtkWindow *) g_object_get_data (G_OBJECT (desktop), "window"));
-		gtk_window_present ((GtkWindow *) g_object_get_data (G_OBJECT (desktop), "window"));
+	w = (GtkWindow *) g_object_get_data (G_OBJECT (desktop), "window"); 
+	//	if (w) g_object_get (G_OBJECT (w), "has-toplevel-focus", &has_focus, NULL);
+	if (w) {
+		gtk_window_set_transient_for ((GtkWindow *) dialog, w);
+		gtk_window_present (w);
 	}
 }
