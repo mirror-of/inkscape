@@ -12,7 +12,9 @@
 	flags in OPENFILENAME structs.  This prevents the open / save
 	boxes from changing the current directory.  Any change to the
 	current directory causes problems for subsequent attempts to
-	load icons from pixmaps.
+	load icons from pixmaps.  Also, fix a bug whereby the save
+	dialogue would sometimes not open due to being passed a filename
+	it didn't like.
 
 2004-04-19  bulia byak <bulia@users.sourceforge.net>
 
