@@ -12,6 +12,7 @@
 
 #include "config.h"
 
+#include <gdk/gdktypes.h>
 #include <glib.h>
 #include <math.h>
 
@@ -253,7 +254,8 @@ static NR::Point sp_rect_wh_get (SPItem *item)
 {
 	SPRect *rect = SP_RECT(item);
 
-	return NR::Point(rect->x.computed + rect->width.computed, rect->y.computed + rect->height.computed);
+	return NR::Point(rect->x.computed + rect->width.computed,
+			 rect->y.computed + rect->height.computed);
 }
 
 static void

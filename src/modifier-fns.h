@@ -1,9 +1,16 @@
 #ifndef SEEN_MODIFIER_FNS_H
 #define SEEN_MODIFIER_FNS_H
 
-/** \file Functions on GdkEventKey.state that test modifier keys. 
+/** \file Functions on GdkEventKey.state that test modifier keys.
  *    The MOD__SHIFT macro in macros.h is equivalent to mod_shift(event-\>key.state).
  */
+
+/*
+ * Hereby placed in public domain.
+ */
+
+#include <gdk/gdktypes.h>
+#include <glib/gtypes.h>
 
 inline bool
 mod_shift(guint const state)

@@ -33,6 +33,7 @@
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
+#include "knot.h"
 #include "snap.h"
 #include "selection.h"
 #include "select-context.h"
