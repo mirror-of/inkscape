@@ -17,6 +17,7 @@
 #include <glib.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
+#include "macros.h"
 #include "helper/sp-canvas-util.h"
 #include "rubberband.h"
 #include "inkscape-private.h"
@@ -57,6 +58,8 @@ static SPEventContextClass * parent_class;
 static GdkCursor *CursorSelectMouseover = NULL;
 static GdkCursor *CursorSelectDragging = NULL;
 GdkPixbuf * handles[13];
+
+int rb_escaped = 0; // if non-zero, rubberband was canceled by esc, so the next button release should not deselect
 
 GtkType
 sp_select_context_get_type (void)
@@ -412,7 +415,9 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					}
 				} else {
 					if (!sp_selection_is_empty (selection)) {
-						sp_selection_empty (selection);
+						if (!(rb_escaped))
+							sp_selection_empty (selection);
+						rb_escaped = 0;
 						ret = TRUE;
 					}
 				}
@@ -429,13 +434,13 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
           switch (event->key.keyval) {  
 					case GDK_Left: // move selection left
 					case GDK_KP_Left: 
-						if (!(event->key.state & GDK_CONTROL_MASK)) { // not ctrl
-							if (event->key.state & GDK_MOD1_MASK) { // alt
-								if (event->key.state & GDK_SHIFT_MASK) sp_selection_move_screen (-10, 0); // shift
+						if (!MOD__CTRL) { // not ctrl
+							if (MOD__ALT) { // alt
+								if (MOD__SHIFT) sp_selection_move_screen (-10, 0); // shift
 								else sp_selection_move_screen (-1, 0); // no shift
 							}
 							else { // no alt
-								if (event->key.state & GDK_SHIFT_MASK) sp_selection_move (-10, 0); // shift
+								if (MOD__SHIFT) sp_selection_move (-10, 0); // shift
 								else sp_selection_move (-1, 0); // no shift
 							}
 							ret = TRUE;
@@ -443,13 +448,13 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 						break;
 					case GDK_Up: // move selection up
 					case GDK_KP_Up: 
-						if (!(event->key.state & GDK_CONTROL_MASK)) { // not ctrl
-							if (event->key.state & GDK_MOD1_MASK) { // alt
-								if (event->key.state & GDK_SHIFT_MASK) sp_selection_move_screen (0, 10); // shift
+						if (!MOD__CTRL) { // not ctrl
+							if (MOD__ALT) { // alt
+								if (MOD__SHIFT) sp_selection_move_screen (0, 10); // shift
 								else sp_selection_move_screen (0, 1); // no shift
 							}
 							else { // no alt
-								if (event->key.state & GDK_SHIFT_MASK) sp_selection_move (0, 10); // shift
+								if (MOD__SHIFT) sp_selection_move (0, 10); // shift
 								else sp_selection_move (0, 1); // no shift
 							}
 							ret = TRUE;
@@ -457,13 +462,13 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 						break;
 					case GDK_Right: // move selection right
 					case GDK_KP_Right: 
-						if (!(event->key.state & GDK_CONTROL_MASK)) { // not ctrl
-							if (event->key.state & GDK_MOD1_MASK) { // alt
-								if (event->key.state & GDK_SHIFT_MASK) sp_selection_move_screen (10, 0); // shift
+						if (!MOD__CTRL) { // not ctrl
+							if (MOD__ALT) { // alt
+								if (MOD__SHIFT) sp_selection_move_screen (10, 0); // shift
 								else sp_selection_move_screen (1, 0); // no shift
 							}
 							else { // no alt
-								if (event->key.state & GDK_SHIFT_MASK) sp_selection_move (10, 0); // shift
+								if (MOD__SHIFT) sp_selection_move (10, 0); // shift
 								else sp_selection_move (1, 0); // no shift
 							}
 							ret = TRUE;
@@ -471,23 +476,32 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 						break;
 					case GDK_Down: // move selection down
 					case GDK_KP_Down: 
-						if (!(event->key.state & GDK_CONTROL_MASK)) { // not ctrl
-							if (event->key.state & GDK_MOD1_MASK) { // alt
-								if (event->key.state & GDK_SHIFT_MASK) sp_selection_move_screen (0, -10); // shift
+						if (!MOD__CTRL) { // not ctrl
+							if (MOD__ALT) { // alt
+								if (MOD__SHIFT) sp_selection_move_screen (0, -10); // shift
 								else sp_selection_move_screen (0, -1); // no shift
 							}
 							else { // no alt
-								if (event->key.state & GDK_SHIFT_MASK) sp_selection_move (0, -10); // shift
+								if (MOD__SHIFT) sp_selection_move (0, -10); // shift
 								else sp_selection_move (0, -1); // no shift
 							}
 							ret = TRUE;
 						}
 						break;
+					case GDK_Escape:
+						if (sp_rubberband_rect (&b)) {
+							sp_rubberband_stop ();
+							rb_escaped = 1;
+						} else {
+							sp_selection_empty (selection);
+						}
+						ret = TRUE;
+						break;
 	  case GDK_Tab: // Tab - cycle selection forward
 	    sp_selection_item_next ();
 	    ret = TRUE;
 	    break;
-	  case GDK_ISO_Left_Tab: // Tab - cycle selection backward
+	  case GDK_ISO_Left_Tab: // Shift Tab - cycle selection backward
 	    sp_selection_item_prev ();
 	    ret = TRUE;
 	    break;
