@@ -1056,8 +1056,8 @@ sp_style_merge_from_style_string (SPStyle *style, const gchar *p)
 
         gint const idx = sp_attribute_lookup(property);
         if (idx > 0) {
-            size_t const value_len = value_end - value_begin;
-            if (value_len != 0) {
+            if (value_begin < value_end) {
+                size_t const value_len = value_end - value_begin;
                 memcpy(value, value_begin, value_len);
                 value[value_len] = '\0';
                 sp_style_merge_property(style, idx, value);
