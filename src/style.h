@@ -339,6 +339,9 @@ struct _SPTextStyle {
 	unsigned int direction : 2;
 	unsigned int text_decoration : 3;
 	unsigned int unicode_bidi : 2;
+
+	unsigned int letterspacing_set : 1;
+	SPILength letterspacing;
 };
 
 #endif
