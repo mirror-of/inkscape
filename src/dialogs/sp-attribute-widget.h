@@ -1,8 +1,8 @@
 #ifndef __SP_ATTRIBUTE_WIDGET_H__
 #define __SP_ATTRIBUTE_WIDGET_H__
 
-/*
- * SPAttributeWidget
+/**
+ * \brief  SPAttributeWidget
  *
  * Widget, that listens and modifies repr attributes
  *
@@ -42,54 +42,68 @@ typedef struct _SPAttributeTableClass SPAttributeTableClass;
 #include "../forward.h"
 
 struct _SPAttributeWidget {
-	GtkEntry entry;
-	guint blocked : 1;
-	guint hasobj : 1;
-	union {
-		SPObject *object;
-		SPRepr *repr;
-	} src;
-	gchar *attribute;
+    GtkEntry entry;
+    guint blocked : 1;
+    guint hasobj : 1;
+    union {
+        SPObject *object;
+        SPRepr *repr;
+    } src;
+    gchar *attribute;
 };
 
 struct _SPAttributeWidgetClass {
-	GtkEntryClass entry_class;
+    GtkEntryClass entry_class;
 };
 
 GtkType sp_attribute_widget_get_type (void);
 
 GtkWidget *sp_attribute_widget_new (SPObject *object, const gchar *attribute);
 GtkWidget *sp_attribute_widget_new_repr (SPRepr *repr, const gchar *attribute);
-void sp_attribute_widget_set_object (SPAttributeWidget *spw, SPObject *object, const gchar *attribute);
-void sp_attribute_widget_set_repr (SPAttributeWidget *spw, SPRepr *repr, const gchar *attribute);
+
+void sp_attribute_widget_set_object ( SPAttributeWidget *spw, 
+                                      SPObject *object, 
+                                      const gchar *attribute );
+void sp_attribute_widget_set_repr ( SPAttributeWidget *spw, 
+                                    SPRepr *repr, 
+                                    const gchar *attribute );
 
 /* SPAttributeTable */
 
 struct _SPAttributeTable {
-	GtkVBox vbox;
-	guint blocked : 1;
-	guint hasobj : 1;
-	GtkWidget *table;
-	union {
-		SPObject *object;
-		SPRepr *repr;
-	} src;
-	gint num_attr;
-	gchar **attributes;
-	GtkWidget **entries;
+    GtkVBox vbox;
+    guint blocked : 1;
+    guint hasobj : 1;
+    GtkWidget *table;
+    union {
+        SPObject *object;
+        SPRepr *repr;
+    } src;
+    gint num_attr;
+    gchar **attributes;
+    GtkWidget **entries;
 };
 
 struct _SPAttributeTableClass {
-	GtkEntryClass entry_class;
+    GtkEntryClass entry_class;
 };
 
 GtkType sp_attribute_table_get_type (void);
 
-GtkWidget *sp_attribute_table_new (SPObject *object, gint num_attr, const gchar **labels, const gchar **attributes);
-GtkWidget *sp_attribute_table_new_repr (SPRepr *repr, gint num_attr, const gchar **labels, const gchar **attributes);
-void sp_attribute_table_set_object (SPAttributeTable *spw, SPObject *object, gint num_attr, const gchar **labels, const gchar **attrs);
-void sp_attribute_table_set_repr (SPAttributeTable *spw, SPRepr *repr, gint num_attr, const gchar **labels, const gchar **attrs);
-
+GtkWidget *sp_attribute_table_new ( SPObject *object, gint num_attr, 
+                                    const gchar **labels, 
+                                    const gchar **attributes );
+GtkWidget *sp_attribute_table_new_repr ( SPRepr *repr, gint num_attr, 
+                                         const gchar **labels, 
+                                         const gchar **attributes );
+void sp_attribute_table_set_object ( SPAttributeTable *spw, 
+                                     SPObject *object, gint num_attr, 
+                                     const gchar **labels, 
+                                     const gchar **attrs );
+void sp_attribute_table_set_repr ( SPAttributeTable *spw, 
+                                   SPRepr *repr, gint num_attr, 
+                                   const gchar **labels, 
+                                   const gchar **attrs );
 
 
 #endif

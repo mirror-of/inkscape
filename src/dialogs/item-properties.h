@@ -1,8 +1,8 @@
 #ifndef __SP_ITEM_PROPERTIES_H__
 #define __SP_ITEM_PROPERTIES_H__
 
-/*
- * Display settings dialog
+/**
+ * \brief  Display settings dialog
  *
  * Author:
  *   Lauris Kaplinski <lauris@ximian.com>

@@ -1,8 +1,8 @@
 #ifndef __SP_OBJECT_ATTRIBUTES_H__
 #define __SP_OBJECT_ATTRIBUTES_H__
 
-/*
- * Generic object attribute editor
+/**
+ * \brief  Generic object attribute editor
  *
  * Author:
  *   Lauris Kaplinski <lauris@ximian.com>
