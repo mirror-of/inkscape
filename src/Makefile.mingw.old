@@ -9,8 +9,7 @@ include ../Makefile.mingw.common
 
 
 #Check for 'generated' files
-all: helper/sp-marshal.h helper/sp-marshal.cpp inkscape_version.h \
-inkscape.exe inkview.exe
+all: helper/sp-marshal.h helper/sp-marshal.cpp inkscape_version.h inkscape.exe
 
 helper/sp-marshal.h: helper/sp-marshal.h.mingw
 	$(CP) $(subst /,$(S), $<) $(subst /,$(S), $@)
@@ -30,25 +29,17 @@ OBJ = $(OBJECTS)
 
 RES=inkres.o
 
-inkscape.exe: inkscape.dll main.o winmain.o $(RES) 
-	$(CXX) -o inkscape.exe main.o winmain.o $(RES) libinkscapedll.a $(LIBS)
-	strip inkscape.exe
+inkscape.exe: libinkscape.a main.o winmain.o $(RES) 
+	$(CXX) -o inkscape.exe main.o winmain.o $(RES) libinkscape.a $(LIBS)
+#	strip inkscape.exe
 
-inkview.exe: inkscape.dll inkview.o $(RES) 
-	$(CXX) -o inkview.exe inkview.o $(RES) libinkscapedll.a $(LIBS)
+inkview.exe: libinkscape.a inkview.o $(RES) 
+	$(CXX) -o inkview.exe inkview.o $(RES) libinkscape.a $(LIBS)
 	strip inkview.exe
 
 inkres.o: inkscape.rc
 	$(WINDRES) inkscape.rc $(RES)
 
-inkscape.dll: libinkscape.a inkscape.def
-	$(DLLWRAP) --output-lib=libinkscapedll.a \
-	--def=inkscape.def --driver-name=g++ \
-	-o inkscape.dll libinkscape.a $(LIBS)
-
-inkscape.def: libinkscape.a
-	perl makedef.pl
-	
 libinkscape.a: $(OBJ)
 	$(RM) libinkscape.a
 	ar crv libinkscape.a $(OBJ)
@@ -58,7 +49,5 @@ libinkscape.a: $(OBJ)
 clean:
 	$(foreach a, $(OBJ), $(shell $(RM) $(subst /,$(S), $(a))))
 	$(RM) *.a
-	$(RM) *.def
-	$(RM) *.dll
 
 
