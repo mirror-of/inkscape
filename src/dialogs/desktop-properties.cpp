@@ -601,6 +601,7 @@ sp_doc_dialog_add_work_entity( struct rdf_work_entity_t * entity,
             gtk_widget_show (scroller);
 
             view = gtk_text_view_new ();
+            gtk_widget_set_size_request (view, -1, 3);
             gtk_text_view_set_wrap_mode ( GTK_TEXT_VIEW (view), GTK_WRAP_WORD );
 // FIXME: available from GTK 2.4 on...
 //            gtk_text_view_set_accepts_tab ( GTK_TEXT_VIEW (view), FALSE );
