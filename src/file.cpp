@@ -1254,7 +1254,7 @@ FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
     else
     {
         DEBUG_MESSAGE( dumpOne, "           is_os_wide() false  ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-        gchar *filename = Inkscape::URI::to_native_filename(utf8name);
+        gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
         DEBUG_MESSAGE( dumpOne, "           STEP 1              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
         fp = std::fopen(filename, how.c_str());
         DEBUG_MESSAGE( dumpOne, "           STEP 2              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
