@@ -1,4 +1,5 @@
 #include <libnr/nr-point-fns.h>
+#include <libnr/nr-dim2.h>
 #include <cmath>
 #include <algorithm>
 
@@ -35,5 +36,14 @@ Point NR::unit_vector(Point const &a)
 {
 	Point ret(a);
 	ret.normalize();
+	return ret;
+}
+
+NR::Point abs(NR::Point const &b)
+{
+	NR::Point ret;
+	for ( int i = 0 ; i < 2 ; i++ ) {
+		ret[i] = fabs(b[i]);
+	}
 	return ret;
 }
