@@ -1,3 +1,16 @@
+2004-01-24  bulia byak <bulia@users.sourceforge.net>
+
+	* src/document.cpp src/sp-namedview.cpp: Desensitize undo for changing document uri
+	and for saving window geometry/viewarea into namedview
+
+	* src/xml/repr-util.cpp: Increase precision in set_double_attr
+ 
+	* src/arc-context.cpp: Call invoke_write when finishing arc, instead of setting attrs
+	manually
+ 
+	* src/sp-ellipse.cpp: Add write method to genericellipse; fix handling of start and
+	end attrs; fix undo bug (877238)
+
 2004-01-24  MenTaLguY <mental@rydia.net>
 
 	* src/xml/repr-action.h, src/xml/repr-action.c: made the
