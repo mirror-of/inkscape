@@ -41,7 +41,7 @@ creates a child text object with the text properly 'typeset'
 
 #include "sp-item-group.h"
 #include "livarot/livarot-forward.h"
-#include "xml/repr.h"
+#include "xml/xml-forward.h"
 
 #define SP_TYPE_TYPESET          (sp_typeset_get_type ())
 #define SP_TYPESET(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_TYPESET, SPTypeset))

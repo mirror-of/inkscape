@@ -19,7 +19,7 @@
 
 #include <glib-object.h>
 #include <gtk/gtkwidget.h>
-#include "xml/repr.h"
+#include "xml/xml-forward.h"
 #include "selcue.h"
 #include "forward.h"
 

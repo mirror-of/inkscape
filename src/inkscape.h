@@ -12,8 +12,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "xml/repr.h"
 #include "forward.h"
+#include "xml/xml-forward.h"
 
 #define INKSCAPE inkscape_get_instance()
 

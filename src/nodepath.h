@@ -10,10 +10,10 @@
  * This code is in public domain
  */
 
-#include "xml/repr.h"
 #include "knot.h"
 #include "sp-path.h"
 #include "desktop-handles.h"
+#include "xml/xml-forward.h"
 
 
 /** Radial objects are represented by an angle and a distance from

@@ -13,10 +13,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "xml/repr.h"
 #include "color.h"
 #include "forward.h"
 #include "sp-marker.h"
+#include "xml/xml-forward.h"
 
 namespace Inkscape {
 

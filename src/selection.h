@@ -17,9 +17,9 @@
 
 #include <sigc++/sigc++.h>
 #include "forward.h"
-#include "xml/repr.h"
 #include "sp-item.h"
 #include "libnr/nr-rect.h"
+#include "xml/xml-forward.h"
 
 /**
  * @brief The set of selected SPObjects for a given desktop.

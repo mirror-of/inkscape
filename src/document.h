@@ -18,9 +18,10 @@
 #include <gtk/gtksignal.h>
 #include <sigc++/sigc++.h>
 #include <sigc++/class_slot.h>
-#include "xml/repr.h"
+
 #include "forward.h"
 #include "libnr/nr-forward.h"
+#include "xml/xml-forward.h"
 
 class SPDocumentPrivate;
 

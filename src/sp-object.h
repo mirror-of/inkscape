@@ -57,9 +57,10 @@
 
 #include <sigc++/sigc++.h>
 #include <glib-object.h>
-#include "xml/repr.h"
+
 #include "forward.h"
 #include "version.h"
+#include "xml/xml-forward.h"
 
 typedef void (* SPObjectMethod) (SPObject *object, gpointer data);
 

@@ -12,8 +12,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <xml/repr.h>
 #include "forward.h"
+#include <xml/xml-forward.h>
 
 SPObject *sp_object_repr_build_tree (SPDocument *document, SPRepr *repr);
 
