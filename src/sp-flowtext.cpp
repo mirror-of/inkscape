@@ -628,6 +628,9 @@ void convert_to_text(void)
                 {
                     char *savFam = curSPS->text->font_family.value;
                     curS->with_style->text->font_family.value = (gchar*)curFam;
+                    /* TODO: Decide what to do wrt 0.0 vs normal.  Which should we prefer?  (Their
+                       rendering behaviour differs only when doing justification, which inkscape
+                       currently never does.) */
                     SPILength sav_spc = curSPS->text->letterspacing;
                     SPIEnum sav_anc = curSPS->text_anchor;
                     curSPS->text->letterspacing.set = 1;

@@ -156,6 +156,8 @@ NR::Point
 sp_letterspacing_advance (const SPStyle *style)
 {
 	NR::Point letterspacing_adv;
+	/* TODO: Consider making this stuff unconditional (see comment near similar code
+	   in sp-text.cpp). */
 	if (style->text->letterspacing.value != 0 && style->text->letterspacing.computed == 0) { // set in em or ex
 		if (style->text->letterspacing.unit == SP_CSS_UNIT_EM) {
 			if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
@@ -164,8 +166,7 @@ sp_letterspacing_advance (const SPStyle *style)
 				letterspacing_adv = NR::Point(style->font_size.computed * style->text->letterspacing.value, 0.0);
 			}
 		} else if (style->text->letterspacing.unit == SP_CSS_UNIT_EX) {
-			// I did not invent this 0.5 multiplier; it's what lauris uses in style.cpp
-			// Someone knowledgeable must find out how to extract the real em and ex values from the font!
+			// fixme: Get x height from libnrtype or pango.
 			if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
 				letterspacing_adv = NR::Point(0.0, style->font_size.computed * style->text->letterspacing.value * 0.5);
 			} else {
