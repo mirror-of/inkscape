@@ -1,3 +1,11 @@
+2005-03-07  Kees Cook  <kees@outflux.net>
+
+	* src/libnr/have_mmx.S, src/libnr/nr_mmx_R8G8B8A8_P_EMPTY_A8_RGBAP.S,
+	  src/libnr/nr_mmx_R8G8B8A8_P_R8G8B8A8_P_A8_RGBAP.S,
+	  src/libnr/nr_mmx_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM.S,
+	  src/libnr/nr_mmx_R8G8B8_R8G8B8_R8G8B8A8_P.S: execstack patch
+	  from Mike Hearn.
+
 2005-03-07  Jon A. Cruz  <jon@joncruz.org>
 	* src/interface.cpp, src/verbs.h, src.verbs.cpp, src/widgets/icon.cpp,
 	  src/dialogs/iconpreview.h, src/dialogs/iconpreview.cpp,

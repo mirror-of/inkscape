@@ -1,4 +1,9 @@
 	.file "have_mmx.S"
+
+# Ensure Inkscape is execshield protected
+	.section .note.GNU-stack
+	.previous
+	
 	.version "01.01"
 gcc2_compiled.:
 .text
