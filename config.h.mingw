@@ -17,8 +17,6 @@
 
 #define GETTEXT_PACKAGE "inkscape"
 
-#define WITH_POPT                  1
-
 #define HAVE_STRING_H              1
 #define HAVE_MALLOC_H              1
 #define HAVE_STDLIB_H              1

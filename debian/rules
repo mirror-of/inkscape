@@ -22,7 +22,7 @@ build: build-stamp
 build-stamp:
 	dh_testdir
 	CFLAGS="$(CFLAGS)" ./configure --prefix=/usr --sysconfdir=/etc --with-gtk-prefix=/usr --mandir=$(tmp)/usr/share/man \
-	--with-xft --with-popt --without-gnome-print --with-inkjar
+	--with-xft --without-gnome-print --with-inkjar
 	$(MAKE) $(PARALLEL)
 	touch build-stamp
 

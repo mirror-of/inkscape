@@ -31,12 +31,10 @@
 #include <string.h>
 #include <locale.h>
 
-#ifdef WITH_POPT
 #include <popt.h>
 #ifndef POPT_TABLEEND
 #define POPT_TABLEEND { NULL, '\0', 0, 0, 0, NULL, NULL }
 #endif /* Not def: POPT_TABLEEND */
-#endif
 
 #include <libxml/tree.h>
 #include <glib-object.h>
@@ -84,7 +82,6 @@
 #define gtk_window_set_default_icon_from_file(f,v)
 #endif
 
-#ifdef WITH_POPT
 enum {
 	SP_ARG_NONE,
 	SP_ARG_NOGUI,
@@ -102,7 +99,6 @@ enum {
 	SP_ARG_BITMAP_ICONS,
 	SP_ARG_LAST
 };
-#endif
 
 /** This is located in inkscape.cpp
  * this really needs to be removed.. Bob
@@ -124,7 +120,6 @@ static gchar *sp_export_height = NULL;
 static gchar *sp_export_background = NULL;
 static gchar *sp_export_svg = NULL;
 
-#ifdef WITH_POPT
 static GSList *sp_process_args (poptContext ctx);
 struct poptOption options[] = {
 	{"without-gui", 'z', POPT_ARG_NONE, NULL, SP_ARG_NOGUI,
@@ -163,7 +158,6 @@ struct poptOption options[] = {
 	 NULL},
 	POPT_AUTOHELP POPT_TABLEEND
 };
-#endif
 
 int
 main (int argc, const char **argv)
@@ -249,7 +243,6 @@ sp_main_gui (int argc, const char **argv)
 	sp_object_type_register ("sodipodi:guide", SP_TYPE_GUIDE);
 
 
-#if WITH_POPT
 	// temporarily switch gettext encoding to locale, so that help messages can be output properly
 	const gchar *charset;
 	g_get_charset(&charset);
@@ -264,7 +257,6 @@ sp_main_gui (int argc, const char **argv)
 
 	// now switch gettext back to UTF-8 (for GUI)
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-#endif
 
 
 #ifdef WIN32
@@ -321,9 +313,7 @@ sp_main_gui (int argc, const char **argv)
 int
 sp_main_console (int argc, const char **argv)
 {
-#ifdef WITH_POPT
 	poptContext ctx = NULL;
-#endif
 	GSList * fl = NULL;
 	gchar *printer;
 
@@ -344,7 +334,6 @@ sp_main_console (int argc, const char **argv)
 	sp_object_type_register ("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
 	sp_object_type_register ("sodipodi:guide", SP_TYPE_GUIDE);
 
-#ifdef WITH_POPT
 	// temporarily switch gettext encoding to locale, so that help messages can be output properly
 	const gchar *charset;
 	g_get_charset(&charset);
@@ -358,7 +347,6 @@ sp_main_console (int argc, const char **argv)
 
 	// now switch gettext back to UTF-8 (for GUI)
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-#endif
 
 	if (fl == NULL) {
 		g_print ("Nothing to do!\n");
@@ -514,7 +502,6 @@ sp_do_export_png (SPDocument *doc)
 	}
 }
 
-#ifdef WITH_POPT
 static GSList *
 sp_process_args (poptContext ctx)
 {
@@ -564,5 +551,4 @@ sp_process_args (poptContext ctx)
 
 	return fl;
 }
-#endif
 

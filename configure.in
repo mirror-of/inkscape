@@ -93,37 +93,6 @@ AC_MSG_RESULT([$platform_win32])
 AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
 
 dnl ******************************
-dnl Popt checking
-dnl ******************************
-
-AC_ARG_WITH(popt,
-            AC_HELP_STRING([--with-popt], [use popt argument parsing library (default is auto)]),
-            [with_popt=$withval], [with_popt=auto])
-
-if test "x$with_popt" != "xno"; then
-	dnl Have to test popt presence
-	AC_CHECK_HEADER(popt.h, popt_ok=yes, popt_ok=no)
-	if test "x$popt_ok" != "xyes"; then
-		dnl No popt found
-		if test "x$with_popt" = "xyes"; then
-			dnl Popt was explicitly asked, so stop
-			AC_MSG_ERROR([--with-popt was specified, but appropriate development packages could not be found])
-		fi
-	else
-		dnl Found popt
-		POPT_LIBS="-lpopt"
-	fi
-else
-	dnl Asked to ignore popt
-	popt_ok=no
-fi
-
-AM_CONDITIONAL(USE_POPT, test "x$popt_ok" = "xyes")
-if test "x$popt_ok" = "xyes"; then
-	AC_DEFINE(WITH_POPT, 1, [Use popt argument parsing library])
-fi
-
-dnl ******************************
 dnl Xft checking
 dnl ******************************
 
@@ -234,7 +203,13 @@ dnl   Unconditional dependencies
 dnl ******************************
 
 PKG_CHECK_MODULES(INKSCAPE, gtk+-2.0 >= 2.0.0  libxml-2.0 >= 2-2.4.24  sigc++-1.2  $ink_gtkmm_pkg $ink_spell_pkg)
-INKSCAPE_LIBS="$INKSCAPE_LIBS $POPT_LIBS -lpng -lz"
+
+dnl Shouldn't we test for libpng and libz?
+INKSCAPE_LIBS="$INKSCAPE_LIBS -lpng -lz"
+
+AC_CHECK_HEADER(popt.h,
+		[INKSCAPE_LIBS="$INKSCAPE_LIBS -lpopt"],
+		AC_MSG_ERROR([libpopt is required]))
 
 dnl Check for bind_textdomain_codeset, including -lintl if GLib brings it in.
 sp_save_LIBS=$LIBS
@@ -487,7 +462,6 @@ Configuration:
         CXXFLAGS:                 ${CXXFLAGS}
         LDFLAGS:                  ${LDFLAGS}
 
-        Use POPT argument parser: ${popt_ok}
         Use Xft font database:    ${xft_ok}
         Use gnome-print:          ${gp}
         Use openoffice files:     ${ij}

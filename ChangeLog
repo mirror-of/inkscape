@@ -1,3 +1,8 @@
+2004-05-13  Kees Cook <kees@outflux.net>
+
+	* configure.in, src/main.cpp, config.h.mingw, debian/rules:
+      made popt a requirement instead of an option.
+
 2004-05-13  Carl Hetherington  <cth103@houllier.home>
 
 	* sp-color-notebook.cpp: Fix uninitialised value spotted by valgrind.
