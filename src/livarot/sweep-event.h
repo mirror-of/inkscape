@@ -1,40 +1,13 @@
 #ifndef INKSCAPE_LIVAROT_SWEEP_EVENT_H
 #define INKSCAPE_LIVAROT_SWEEP_EVENT_H
+/** \file */
 
-class SweepEvent;
+#include <libnr/nr-point.h>
+#include <livarot/sweep-event-queue.h>  /* TODO: Remove this #include. */
 class SweepTree;
 
-// the structure to hold the intersections events encountered during the sweep
-// it's an array of SweepEvent (not allocated with "new SweepEvent[n]" but with a malloc)
-// there's a list of indices because it's a binary heap: inds[i] tell that events[inds[i]] has position i in the
-// heap
-// each SweepEvent has a field to store its index in the heap, too
-class SweepEventQueue
-{
-public:
-  SweepEventQueue(int s);
-  ~SweepEventQueue();
 
-  int size() const { return nbEvt; }
-
-  // look for the topmost intersection in the heap
-  bool peek(SweepTree * &iLeft, SweepTree * &iRight, NR::Point &oPt, double &itl, double &itr);
-  // extract the topmost intersection from the heap
-  bool extract(SweepTree * &iLeft, SweepTree * &iRight, NR::Point &oPt, double &itl, double &itr);
-  // add one intersection in the binary heap
-  SweepEvent *add(SweepTree *iLeft, SweepTree *iRight, NR::Point &iPt, double itl, double itr);
-
-  void remove(SweepEvent *e);
-  void relocate(SweepEvent *e, int to);
-  
-private:
-  int nbEvt;            ///< number of events currently in the heap
-  int maxEvt;		///< allocated size of the heap
-  int *inds;		///< indices
-  SweepEvent *events;	///< events
-};
-
-// one intersection event
+/** One intersection event. */
 class SweepEvent
 {
 public:
@@ -56,4 +29,16 @@ public:
   void MakeDelete (void);
 };
 
-#endif
+
+#endif /* !INKSCAPE_LIVAROT_SWEEP_EVENT_H */
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
