@@ -185,19 +185,14 @@ NR::Point nr_rasterfont_generic_glyph_advance_get (NRRasterFont *rf, unsigned in
 	return rf->transform * nr_font_glyph_advance_get (rf->font, glyph);
 }
 
-NRRFGlyphSlot *
-ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph)
-{
-	glyph = MIN(glyph, rf->nglyphs);
-	return nr_rasterfont_ensure_glyph_slot (rf, glyph, NR_RASTERFONT_BBOX_FLAG | NR_RASTERFONT_GMAP_FLAG);
-}
-
 NRRect *
 nr_rasterfont_generic_glyph_area_get (NRRasterFont *rf, unsigned int glyph, NRRect *area)
 {
 	NRRFGlyphSlot *slot;
 
-	slot = ensure_glyph_slot (rf, glyph);
+	glyph = MIN(glyph, rf->nglyphs);
+
+	slot = nr_rasterfont_ensure_glyph_slot (rf, glyph, NR_RASTERFONT_BBOX_FLAG | NR_RASTERFONT_GMAP_FLAG);
 
 	switch (slot->type) {
 	case NRRF_TYPE_TINY:
@@ -227,7 +222,9 @@ nr_rasterfont_generic_glyph_mask_render (NRRasterFont *rf, unsigned int glyph, N
 	int srs = 0;
 	NRPixBlock spb;
 
-	slot = ensure_glyph_slot (rf, glyph);
+	glyph = MIN(glyph, rf->nglyphs);
+
+	slot = nr_rasterfont_ensure_glyph_slot (rf, glyph, NR_RASTERFONT_BBOX_FLAG | NR_RASTERFONT_GMAP_FLAG);
 
 	sx = (int) floor (x + 0.5);
 	sy = (int) floor (y + 0.5);
