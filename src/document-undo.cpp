@@ -119,10 +119,11 @@ sp_document_cancel (SPDocument *doc)
 	sp_repr_begin_transaction (doc->rdoc);
 }
 
-void
+gboolean
 sp_document_undo (SPDocument *doc)
 {
 	SPReprAction *log;
+	gboolean ret;
 
 	g_assert (doc != NULL);
 	g_assert (SP_IS_DOCUMENT (doc));
@@ -135,20 +136,27 @@ sp_document_undo (SPDocument *doc)
 	if (log || doc->priv->partial) {
 		g_warning ("Undo aborted: last operation did not complete transaction");
 		doc->priv->partial = sp_repr_coalesce_log (doc->priv->partial, log);
+		ret = FALSE;
 	} else if (doc->priv->undo) {
 		log = (SPReprAction *) doc->priv->undo->data;
 		doc->priv->undo = g_slist_remove (doc->priv->undo, log);
 		sp_repr_undo_log (log);
 		doc->priv->redo = g_slist_prepend (doc->priv->redo, log);
+		ret = TRUE;
+	} else {
+		ret = FALSE;
 	}
 
 	sp_repr_begin_transaction (doc->rdoc);
+
+	return ret;
 }
 
-void
+gboolean
 sp_document_redo (SPDocument *doc)
 {
 	SPReprAction *log;
+	gboolean ret;
 
 	g_assert (doc != NULL);
 	g_assert (SP_IS_DOCUMENT (doc));
@@ -161,14 +169,20 @@ sp_document_redo (SPDocument *doc)
 	if (log || doc->priv->partial) {
 		g_warning ("Redo aborted: last operation did not complete transaction");
 		doc->priv->partial = sp_repr_coalesce_log (doc->priv->partial, log);
+		ret = FALSE;
 	} else if (doc->priv->redo) {
 		log = (SPReprAction *) doc->priv->redo->data;
 		doc->priv->redo = g_slist_remove (doc->priv->redo, log);
 		sp_repr_replay_log (log);
 		doc->priv->undo = g_slist_prepend (doc->priv->undo, log);
+		ret = TRUE;
+	} else {
+		ret = FALSE;
 	}
 
 	sp_repr_begin_transaction (doc->rdoc);
+
+	return ret;
 }
 
 void

@@ -112,8 +112,8 @@ void sp_document_maybe_done (SPDocument *document, const gchar *key);
 void sp_document_cancel (SPDocument *document);
 
 /* Undo and redo */
-void sp_document_undo (SPDocument * document);
-void sp_document_redo (SPDocument * document);
+gboolean sp_document_undo (SPDocument * document);
+gboolean sp_document_redo (SPDocument * document);
 
 /* Adds repr to document, returning created object (if any) */
 /* Items will be added to root (fixme: should be namedview root) */
