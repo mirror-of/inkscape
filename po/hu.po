@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-06 19:54-0800\n"
+"POT-Creation-Date: 2005-02-07 19:14-0800\n"
 "PO-Revision-Date: 2005-02-04 23:53+0100\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
@@ -6356,15 +6356,15 @@ msgstr "Fázis színe"
 msgid "Gradient editor"
 msgstr "Színátmenet-szerkesztő"
 
-#: src/widgets/layer-selector.cpp:118
+#: src/widgets/layer-selector.cpp:119
 msgid "Toggle current layer visibility"
 msgstr "Az aktuális réteg láthatóságának átkapcsolása"
 
-#: src/widgets/layer-selector.cpp:138
+#: src/widgets/layer-selector.cpp:139
 msgid "Lock or unlock current layer"
 msgstr "Az aktuális réteg zárolása illetve feloldása"
 
-#: src/widgets/layer-selector.cpp:141
+#: src/widgets/layer-selector.cpp:142
 msgid "Current layer"
 msgstr "Aktuális réteg"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-06 19:54-0800\n"
+"POT-Creation-Date: 2005-02-07 19:14-0800\n"
 "PO-Revision-Date: 2002-01-15 13:30+0100\n"
 "Last-Translator: Keld Simonsen <keld@dkuug.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -6472,17 +6472,17 @@ msgstr "Startfarve"
 msgid "Gradient editor"
 msgstr "Gradientvektor"
 
-#: src/widgets/layer-selector.cpp:118
+#: src/widgets/layer-selector.cpp:119
 #, fuzzy
 msgid "Toggle current layer visibility"
 msgstr "Dokument"
 
-#: src/widgets/layer-selector.cpp:138
+#: src/widgets/layer-selector.cpp:139
 #, fuzzy
 msgid "Lock or unlock current layer"
 msgstr "Dokument"
 
-#: src/widgets/layer-selector.cpp:141
+#: src/widgets/layer-selector.cpp:142
 #, fuzzy
 msgid "Current layer"
 msgstr "Dokument"

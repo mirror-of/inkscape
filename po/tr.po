@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-06 19:54-0800\n"
+"POT-Creation-Date: 2005-02-07 19:14-0800\n"
 "PO-Revision-Date: 2003-02-03 02:18+0200\n"
 "Last-Translator: Arman Aksoy (Armish) <armish@linux-sevenler.de>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -6463,17 +6463,17 @@ msgstr "Başlangıç rengi"
 msgid "Gradient editor"
 msgstr "Geçiş vektörü"
 
-#: src/widgets/layer-selector.cpp:118
+#: src/widgets/layer-selector.cpp:119
 #, fuzzy
 msgid "Toggle current layer visibility"
 msgstr "Döküman Adı:"
 
-#: src/widgets/layer-selector.cpp:138
+#: src/widgets/layer-selector.cpp:139
 #, fuzzy
 msgid "Lock or unlock current layer"
 msgstr "Döküman Adı:"
 
-#: src/widgets/layer-selector.cpp:141
+#: src/widgets/layer-selector.cpp:142
 #, fuzzy
 msgid "Current layer"
 msgstr "Döküman Adı:"

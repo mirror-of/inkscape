@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape-sk-0.40\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-06 19:54-0800\n"
+"POT-Creation-Date: 2005-02-07 19:14-0800\n"
 "PO-Revision-Date: 2004-11-16 16:35+0100\n"
 "Last-Translator: Zdenko Podobný <zdpo@mailbox.sk>\n"
 "Language-Team: Slovak <<sk-i18n@lists.linux.sk>>\n"
@@ -6176,17 +6176,17 @@ msgstr "Koncová farby"
 msgid "Gradient editor"
 msgstr "Editor prechodov"
 
-#: src/widgets/layer-selector.cpp:118
+#: src/widgets/layer-selector.cpp:119
 #, fuzzy
 msgid "Toggle current layer visibility"
 msgstr "Neexistuje aktuálna vrstva."
 
-#: src/widgets/layer-selector.cpp:138
+#: src/widgets/layer-selector.cpp:139
 #, fuzzy
 msgid "Lock or unlock current layer"
 msgstr "Znížiť aktuálnu vrstvu"
 
-#: src/widgets/layer-selector.cpp:141
+#: src/widgets/layer-selector.cpp:142
 #, fuzzy
 msgid "Current layer"
 msgstr "Neexistuje aktuálna vrstva."

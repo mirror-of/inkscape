@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-06 19:54-0800\n"
+"POT-Creation-Date: 2005-02-07 19:14-0800\n"
 "PO-Revision-Date: 2005-01-30 16:25+0100\n"
 "Last-Translator: Frederic Rodrigo <f.rodrigo free.fr>\n"
 "Language-Team: Français\n"
@@ -6315,15 +6315,15 @@ msgstr "Couleur du contrôle"
 msgid "Gradient editor"
 msgstr "Éditeur de dégradé"
 
-#: src/widgets/layer-selector.cpp:118
+#: src/widgets/layer-selector.cpp:119
 msgid "Toggle current layer visibility"
 msgstr "Rendre (in)visible le calque courant"
 
-#: src/widgets/layer-selector.cpp:138
+#: src/widgets/layer-selector.cpp:139
 msgid "Lock or unlock current layer"
 msgstr "(Dé)verrouiller le calque courant"
 
-#: src/widgets/layer-selector.cpp:141
+#: src/widgets/layer-selector.cpp:142
 msgid "Current layer"
 msgstr "Calque courant"
 

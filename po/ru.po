@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-06 19:54-0800\n"
+"POT-Creation-Date: 2005-02-07 19:14-0800\n"
 "PO-Revision-Date: 2005-01-16 11:29+0300\n"
 "Last-Translator: Alexandre Prokoudine <avp@lrn.ru>\n"
 "Language-Team:  <ru@li.org>\n"
@@ -6258,15 +6258,15 @@ msgstr "Цвет опорной точки"
 msgid "Gradient editor"
 msgstr "Редактор градиентов"
 
-#: src/widgets/layer-selector.cpp:118
+#: src/widgets/layer-selector.cpp:119
 msgid "Toggle current layer visibility"
 msgstr "Скрыть или открыть текущий слой"
 
-#: src/widgets/layer-selector.cpp:138
+#: src/widgets/layer-selector.cpp:139
 msgid "Lock or unlock current layer"
 msgstr "Запереть или отпереть текущий слой"
 
-#: src/widgets/layer-selector.cpp:141
+#: src/widgets/layer-selector.cpp:142
 msgid "Current layer"
 msgstr "Текущий слой"
 

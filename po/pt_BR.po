@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-06 19:54-0800\n"
+"POT-Creation-Date: 2005-02-07 19:14-0800\n"
 "PO-Revision-Date: 2004-07-12 11:55+00:00\n"
 "Last-Translator: Juarez Rudsatz <juarez@correio.com>\n"
 "Language-Team: Brazillian Portuguese <ldp-br@bazar.conectiva.com.br>\n"
@@ -6305,17 +6305,17 @@ msgstr "Cor da Parada"
 msgid "Gradient editor"
 msgstr "Editor de Gradiente"
 
-#: src/widgets/layer-selector.cpp:118
+#: src/widgets/layer-selector.cpp:119
 #, fuzzy
 msgid "Toggle current layer visibility"
 msgstr "Nenhuma camada no desenho."
 
-#: src/widgets/layer-selector.cpp:138
+#: src/widgets/layer-selector.cpp:139
 #, fuzzy
 msgid "Lock or unlock current layer"
 msgstr "Abaixar a camada atual"
 
-#: src/widgets/layer-selector.cpp:141
+#: src/widgets/layer-selector.cpp:142
 #, fuzzy
 msgid "Current layer"
 msgstr "Nenhuma camada no desenho."

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-06 19:54-0800\n"
+"POT-Creation-Date: 2005-02-07 19:14-0800\n"
 "PO-Revision-Date: 2004-04-05 01:29-0600\n"
 "Last-Translator: Daniel Díaz <yosoy@danieldiaz.org>\n"
 "Language-Team: none <none>\n"
@@ -6466,17 +6466,17 @@ msgstr "Color de parada"
 msgid "Gradient editor"
 msgstr "Editor de gradiente"
 
-#: src/widgets/layer-selector.cpp:118
+#: src/widgets/layer-selector.cpp:119
 #, fuzzy
 msgid "Toggle current layer visibility"
 msgstr "Documento guardado."
 
-#: src/widgets/layer-selector.cpp:138
+#: src/widgets/layer-selector.cpp:139
 #, fuzzy
 msgid "Lock or unlock current layer"
 msgstr "Documento guardado."
 
-#: src/widgets/layer-selector.cpp:141
+#: src/widgets/layer-selector.cpp:142
 #, fuzzy
 msgid "Current layer"
 msgstr "Documento guardado."

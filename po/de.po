@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.41\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-06 19:54-0800\n"
+"POT-Creation-Date: 2005-02-07 19:14-0800\n"
 "PO-Revision-Date: 2005-02-01 17:32+0100\n"
 "Last-Translator: Jörg Müller <jfm@ram-brand.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -6329,15 +6329,15 @@ msgstr "Farbe des Verlaufsschritts"
 msgid "Gradient editor"
 msgstr "Farbverlaufs-Editor"
 
-#: src/widgets/layer-selector.cpp:118
+#: src/widgets/layer-selector.cpp:119
 msgid "Toggle current layer visibility"
 msgstr "Sichbarkeit der aktuellen Ebene umschalten"
 
-#: src/widgets/layer-selector.cpp:138
+#: src/widgets/layer-selector.cpp:139
 msgid "Lock or unlock current layer"
 msgstr "Sperren o. Entsperren der aktuellen Ebene"
 
-#: src/widgets/layer-selector.cpp:141
+#: src/widgets/layer-selector.cpp:142
 msgid "Current layer"
 msgstr "Aktuelle Ebene"
 
