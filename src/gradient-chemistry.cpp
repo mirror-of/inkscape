@@ -410,7 +410,7 @@ sp_gradient_transform_multiply(SPGradient *gradient, NR::Matrix postmul, bool se
 }
 
 void
-sp_gradient_set_coords(SPGradient *gradient, guint point_num, NR::Point p, bool write_repr)
+sp_gradient_set_coords (SPGradient *gradient, guint point_num, NR::Point p, bool write_repr, NR::Matrix i2d)
 {
     g_return_if_fail(SP_IS_GRADIENT(gradient));
 
@@ -419,34 +419,114 @@ sp_gradient_set_coords(SPGradient *gradient, guint point_num, NR::Point p, bool 
     SPRepr *repr = SP_OBJECT_REPR(gradient);
 
     if (SP_IS_LINEARGRADIENT(gradient)) {
-        switch (point_num) {
-            case POINT_LG_P1:
-                if (write_repr) {
-                    sp_repr_set_double(repr, "x1", p[NR::X]);
-                    sp_repr_set_double(repr, "y1", p[NR::Y]);
-                } else {
-                    SP_LINEARGRADIENT(gradient)->x1.computed = p[NR::X];
-                    SP_LINEARGRADIENT(gradient)->y1.computed = p[NR::Y];
-                    SP_OBJECT(gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
-                }
-                break;
-            case POINT_LG_P2:
-                if (write_repr) {
-                    sp_repr_set_double(repr, "x2", p[NR::X]);
-                    sp_repr_set_double(repr, "y2", p[NR::Y]);
-                } else {
-                    SP_LINEARGRADIENT(gradient)->x2.computed = p[NR::X];
-                    SP_LINEARGRADIENT(gradient)->y2.computed = p[NR::Y];
-                    SP_OBJECT(gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
-                }
-                break;
-            default:
-                break;
-        }
-    } else { // radial: TODO
-    }
+		switch (point_num) {
+		case POINT_LG_P1:
+			if (write_repr) {
+				sp_repr_set_double (repr, "x1", p[NR::X]);
+				sp_repr_set_double (repr, "y1", p[NR::Y]);
+			} else {
+				SP_LINEARGRADIENT(gradient)->x1.computed = p[NR::X];
+				SP_LINEARGRADIENT(gradient)->y1.computed = p[NR::Y];
+				SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+			}
+			break;
+		case POINT_LG_P2:
+			if (write_repr) {
+				sp_repr_set_double (repr, "x2", p[NR::X]);
+				sp_repr_set_double (repr, "y2", p[NR::Y]);
+			} else {
+				SP_LINEARGRADIENT(gradient)->x2.computed = p[NR::X];
+				SP_LINEARGRADIENT(gradient)->y2.computed = p[NR::Y];
+				SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+			}
+			break;
+		default:
+			break;
+		}
+	} else if (SP_IS_RADIALGRADIENT(gradient)) {
+
+		SPRadialGradient *rg = SP_RADIALGRADIENT(gradient);
+		NR::Point c (rg->cx.computed, rg->cy.computed);
+		NR::Point c_w = c * gradient->gradientTransform * i2d;
+		NR::Point p_w = p * gradient->gradientTransform * i2d;
+		NR::Matrix new_transform;
+		bool transform_set = false;
+
+		switch (point_num) {
+		case POINT_RG_CENTER:
+			rg->fx.computed = p[NR::X] + (rg->fx.computed - rg->cx.computed);
+			rg->fy.computed = p[NR::Y] + (rg->fy.computed - rg->cy.computed);
+			rg->cx.computed = p[NR::X];
+			rg->cy.computed = p[NR::Y];
+			if (write_repr) {
+				sp_repr_set_double (repr, "fx", rg->fx.computed);
+				sp_repr_set_double (repr, "fy", rg->fy.computed);
+				sp_repr_set_double (repr, "cx", rg->cx.computed);
+				sp_repr_set_double (repr, "cy", rg->cy.computed);
+			} else {
+				SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+			}
+			break;
+		case POINT_RG_R1:
+			{
+				NR::Point r1_w = (c + NR::Point(rg->r.computed, 0)) * gradient->gradientTransform * i2d;
+				double r1_angle = NR::atan2(r1_w - c_w);
+				double move_angle = NR::atan2(p_w - c_w) - r1_angle;
+				double move_stretch = NR::L2(p_w - c_w) / NR::L2(r1_w - c_w);
+
+				NR::Matrix move (NR::Matrix (NR::translate (-c_w)) *
+												 NR::Matrix (NR::rotate(-r1_angle)) * 
+												 NR::Matrix (NR::scale(move_stretch, 1)) *
+												 NR::Matrix (NR::rotate(r1_angle)) * 
+												 NR::Matrix (NR::rotate(move_angle)) * 
+												 NR::Matrix (NR::translate (c_w)));
+
+				new_transform = gradient->gradientTransform * i2d * move * i2d.inverse(); 
+				transform_set = true;
+
+				break;
+			}
+		case POINT_RG_R2:
+			{
+				NR::Point r2_w = (c + NR::Point(0, -rg->r.computed)) * gradient->gradientTransform * i2d;
+				double r2_angle = NR::atan2(r2_w - c_w);
+				double move_angle = NR::atan2(p_w - c_w) - r2_angle;
+				double move_stretch = NR::L2(p_w - c_w) / NR::L2(r2_w - c_w);
+
+				NR::Matrix move (NR::Matrix (NR::translate (-c_w)) *
+												 NR::Matrix (NR::rotate(-r2_angle)) * 
+												 NR::Matrix (NR::scale(move_stretch, 1)) *
+												 NR::Matrix (NR::rotate(r2_angle)) * 
+												 NR::Matrix (NR::rotate(move_angle)) * 
+												 NR::Matrix (NR::translate (c_w)));
+
+				new_transform = gradient->gradientTransform * i2d * move * i2d.inverse(); 
+				transform_set = true;
+
+				break;
+			}
+		}
+
+		if (transform_set) {
+				gradient->gradientTransform = new_transform; 
+				gradient->gradientTransform_set = TRUE;
+				if (write_repr) {
+					gchar s[256];
+					if (sp_svg_transform_write(s, 256, gradient->gradientTransform)) {
+						sp_repr_set_attr(SP_OBJECT_REPR(gradient), "gradientTransform", s);
+					} else {
+						sp_repr_set_attr(SP_OBJECT_REPR(gradient), "gradientTransform", NULL);
+					}
+				} else {
+					SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+				}
+		}
+	}
 }
 
+
+/** Returns the first point of a linear gradient \a lg (as applied to the \item) in desktop coordinates
+ */
 NR::Point
 sp_lg_get_p1(SPItem *item, SPLinearGradient *lg)
 {
@@ -461,6 +541,8 @@ sp_lg_get_p1(SPItem *item, SPLinearGradient *lg)
     return p1;
 }
 
+/** Returns the second point of a linear gradient \a lg (as applied to the \item) in desktop coordinates
+ */
 NR::Point
 sp_lg_get_p2(SPItem *item, SPLinearGradient *lg)
 {
@@ -474,6 +556,55 @@ sp_lg_get_p2(SPItem *item, SPLinearGradient *lg)
     p2 *= NR::Matrix(lg->gradientTransform) * sp_item_i2d_affine(item);
     return p2;
 }
+
+/** Returns the center of a radial gradient \a rg (as applied to the \item) in desktop coordinates
+ */
+NR::Point
+sp_rg_get_center (SPItem *item, SPRadialGradient *rg)
+{
+	NR::Point p (rg->cx.computed, rg->cy.computed);
+	if (SP_GRADIENT(rg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
+		NRRect bbox;
+		sp_document_ensure_up_to_date (SP_OBJECT_DOCUMENT(item));
+		sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
+		p *= NR::Matrix (bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
+	}
+	p *= NR::Matrix (rg->gradientTransform) * sp_item_i2d_affine (item);
+	return p;
+}
+
+/** Returns the first radius of a radial gradient \a rg (as applied to the \item) in desktop coordinates
+ */
+NR::Point
+sp_rg_get_r1 (SPItem *item, SPRadialGradient *rg)
+{
+	NR::Point p (rg->cx.computed + rg->r.computed, rg->cy.computed);
+	if (SP_GRADIENT(rg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
+		NRRect bbox;
+		sp_document_ensure_up_to_date (SP_OBJECT_DOCUMENT(item));
+		sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
+		p *= NR::Matrix (bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
+	}
+	p *= NR::Matrix (rg->gradientTransform) * sp_item_i2d_affine (item);
+	return p;
+}
+
+/** Returns the second radius of a radial gradient \a rg (as applied to the \item) in desktop coordinates
+ */
+NR::Point
+sp_rg_get_r2 (SPItem *item, SPRadialGradient *rg)
+{
+	NR::Point p (rg->cx.computed, rg->cy.computed -  + rg->r.computed);
+	if (SP_GRADIENT(rg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
+		NRRect bbox;
+		sp_document_ensure_up_to_date (SP_OBJECT_DOCUMENT(item));
+		sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
+		p *= NR::Matrix (bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
+	}
+	p *= NR::Matrix (rg->gradientTransform) * sp_item_i2d_affine (item);
+	return p;
+}
+
 
 /*
  * Sets item fill or stroke to the gradient of the specified type with given vector, creating

@@ -9,8 +9,8 @@
 
 enum {
     POINT_RG_CENTER,
-    POINT_RG_RADIUS_BIG,
-    POINT_RG_RADIUS_SMALL,
+    POINT_RG_R1,
+    POINT_RG_R2,
     POINT_RG_FOCUS
 };
 

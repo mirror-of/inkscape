@@ -827,7 +827,7 @@ sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p, bool fi
             SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
             if (SP_IS_GRADIENT (server)) {
                 SPGradient *gradient = sp_gradient_convert_to_userspace (SP_GRADIENT (server), item, "fill");
-                sp_gradient_set_coords (gradient, point_num, p, write_repr);
+                sp_gradient_set_coords (gradient, point_num, p, write_repr, sp_item_i2d_affine (item));
             }
         }
     } else {
@@ -835,7 +835,7 @@ sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p, bool fi
             SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER(item);
             if (SP_IS_GRADIENT (server)) {
                 SPGradient *gradient = sp_gradient_convert_to_userspace (SP_GRADIENT (server), item, "stroke");
-                sp_gradient_set_coords (gradient, point_num, p, write_repr);
+                sp_gradient_set_coords (gradient, point_num, p, write_repr, sp_item_i2d_affine (item));
             }
         }
     }

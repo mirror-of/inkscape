@@ -29,6 +29,7 @@
 #include "knot.h"
 #include "sp-gradient.h"
 #include "sp-linear-gradient.h"
+#include "sp-radial-gradient.h"
 #include "gradient-chemistry.h"
 #include "gradient-drag.h"
 
@@ -330,6 +331,11 @@ GrDrag::updateDraggers ()
 
                 addDragger (sp_lg_get_p1 (item, lg), new GrDraggable (item, POINT_LG_P1, true));
                 addDragger (sp_lg_get_p2 (item, lg), new GrDraggable (item, POINT_LG_P2, true));
+            } else if (SP_IS_RADIALGRADIENT (server)) {
+                SPRadialGradient *rg = SP_RADIALGRADIENT (server);
+                addDragger (sp_rg_get_center (item, rg), new GrDraggable (item, POINT_RG_CENTER, true));
+                addDragger (sp_rg_get_r1(item, rg), new GrDraggable (item, POINT_RG_R1, true));
+                addDragger (sp_rg_get_r2(item, rg), new GrDraggable (item, POINT_RG_R2, true));
             }
         }
 
@@ -368,8 +374,12 @@ GrDrag::updateLines ()
             SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (item);
             if (SP_IS_LINEARGRADIENT (server)) {
                 SPLinearGradient *lg = SP_LINEARGRADIENT (server);
-
                 this->addLine (sp_lg_get_p1 (item, lg), sp_lg_get_p2 (item, lg));
+            } else if (SP_IS_RADIALGRADIENT (server)) {
+                SPRadialGradient *rg = SP_RADIALGRADIENT (server);
+                NR::Point center = sp_rg_get_center (item, rg);
+                this->addLine (center, sp_rg_get_r1 (item, rg));
+                this->addLine (center, sp_rg_get_r2 (item, rg));
             }
         }
 
@@ -379,6 +389,11 @@ GrDrag::updateLines ()
                 SPLinearGradient *lg = SP_LINEARGRADIENT (server);
 
                 this->addLine (sp_lg_get_p1 (item, lg), sp_lg_get_p2 (item, lg));
+            } else if (SP_IS_RADIALGRADIENT (server)) {
+                SPRadialGradient *rg = SP_RADIALGRADIENT (server);
+                NR::Point center = sp_rg_get_center (item, rg);
+                this->addLine (center, sp_rg_get_r1 (item, rg));
+                this->addLine (center, sp_rg_get_r2 (item, rg));
             }
         }
     }
