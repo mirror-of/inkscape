@@ -1,3 +1,12 @@
+2004-10-07  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/sp-object-repr.cpp (sp_repr_type_lookup): Distinguish between XML
+	  element name and sodipodi:type attribute value: use a separate table
+	  for each.
+	* src/sp-object-repr.h, src/sp-object-repr.cpp (sp_object_type_lookup):
+	  Don't export this function.  (Also rename it to name_to_gtype and
+	  change its definition for separate tables.)
+
 2004-10-03  Kees Cook  <kees@outflux.net>
 
 	* src/dialogs/rdf.cpp, src/dialogs/repr-util.cpp, src/dialogs/repr.h:
