@@ -149,6 +149,19 @@ sp_repr_css_set (Node * repr, SPCSSAttr * css, const gchar * attr)
 }
 
 void
+sp_repr_css_print (SPCSSAttr * css)
+{
+	for ( List<AttributeRecord const> iter = css->attributeList() ;
+	      iter ; ++iter )
+	{
+		g_print (g_quark_to_string(iter->key));
+		g_print (":\t");
+		g_print (iter->value);
+		g_print ("\n");
+	}
+}
+
+void
 sp_repr_css_merge (SPCSSAttr * dst, SPCSSAttr * src)
 {
 	g_assert (dst != NULL);
