@@ -430,6 +430,7 @@ struct SPObject : public GObject {
 	SPObject *_successor;
 	CollectionPolicy _collection_policy;
 	gchar *_label;
+	mutable gchar *_default_label;
 };
 
 struct SPObjectClass {

@@ -158,12 +158,16 @@ sp_object_init (SPObject * object)
 	object->_successor = NULL;
 
 	object->_label = NULL;
+	object->_default_label = NULL;
 }
 
 static void
 sp_object_finalize (GObject * object)
 {
 	SPObject *spobject = (SPObject *)object;
+
+	g_free(spobject->_label);
+	g_free(spobject->_default_label);
 
 	if (spobject->_successor) {
 		sp_object_unref(spobject->_successor, NULL);
@@ -293,20 +297,25 @@ SPObject *SPObject::appendChildRepr(SPRepr *repr) {
  */
 gchar const *
 SPObject::label() const {
-    gchar const *text = sp_repr_attr(SP_OBJECT_REPR(this), "inkscape:label");
-    if (text == NULL) {
-	return defaultLabel();
-    }
-    return text;
+    return _label;
 }
 
 /** Returns a default label property for the object */
 gchar const *
 SPObject::defaultLabel() const {
-    if (SP_OBJECT_ID(this) == NULL) {
-	return "(unnamed)";
-    }
-    return g_markup_printf_escaped("(#%s)", SP_OBJECT_ID(this));
+	if (_label) {
+		return _label;
+	} else {
+		if (_default_label) {
+			gchar const *id=SP_OBJECT_ID(this);
+			if (id) {
+				_default_label = g_strdup_printf("#%s", SP_OBJECT_ID(this));
+			} else {
+				_default_label = g_strdup_printf("<%s>", sp_repr_name(SP_OBJECT_REPR(this)));
+			}
+		}
+		return _default_label;
+	}
 }
 
 /** Sets the label property for the object */
@@ -721,6 +730,8 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 			g_free (object->id);
 			object->id = g_strdup ((const char*)value);
 			sp_document_def_id (object->document, object->id, object);
+			g_free(object->_default_label);
+			object->_default_label = NULL;
 		} else {
 			// This warning fires when the id is changed on the original of an SPUse, because the SPUse is updated from the same repr.
 			// The child of an SPUse has a cloned flag set - I have little idea of what it is used for.
@@ -735,6 +746,8 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			object->_label = NULL;
 		}
+		g_free(object->_default_label);
+		object->_default_label = NULL;
 		break;
 	case SP_ATTR_INKSCAPE_COLLECT:
 		if ( value && !strcmp(value, "always") ) {

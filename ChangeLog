@@ -27,6 +27,8 @@
 
 2004-10-29  MenTaLguY  <mental@rydia.net>
 
+	* src/sp-object.h, src/sp-object.cpp: more inkscape:label stuff
+
 	* src/widgets/layer-selector.cpp, src/verbs.cpp:
 	  unselect objects when layer is manually switched
 
