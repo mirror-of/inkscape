@@ -138,11 +138,11 @@ round_to_nearest_multiple_plus(double x, double const c1, double const c0)
  * They return the updated transformation parameter. 
  */
 
-double sp_desktop_dim_snap_list(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
-				double const dx, NR::Dim2 const dim)
+NR::Coord sp_desktop_dim_snap_list(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
+                                   NR::Coord const dx, NR::Dim2 const dim)
 {
-    gdouble dist = NR_HUGE;
-    gdouble xdist = dx;
+    NR::Coord dist = NR_HUGE;
+    NR::Coord xdist = dx;
     
     if (desktop_will_snap_something(dt)) {
         for (std::vector<NR::Point>::const_iterator i = p.begin(); i != p.end(); i++) {
