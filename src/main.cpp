@@ -252,29 +252,29 @@ sp_main_gui (int argc, const char **argv)
 		inkscape = inkscape_application_new ();
 		inkscape_load_preferences (inkscape);
 
-		if (!fl) // no documents on command line, create empty
-			sp_file_new();
-		else while (fl) {
-			SPDocument *doc;
-			doc = sp_document_new ((const gchar *) fl->data, TRUE, TRUE);
-			if (doc) {
-				if (sp_export_png) {
-					sp_do_export_png (doc);
+		if (fl) { // no documents on command line
+			while (fl) {
+				SPDocument *doc;
+				doc = sp_document_new ((const gchar *) fl->data, TRUE, TRUE);
+				if (doc) {
+					if (sp_export_png) {
+						sp_do_export_png (doc);
+					} else {
+						SPViewWidget *dtw;
+						dtw = sp_desktop_widget_new (sp_document_namedview (doc, NULL));
+						if (dtw) sp_create_window (dtw, TRUE);
+						sp_namedview_window_from_document (SP_DESKTOP(dtw->view));
+						create_new = FALSE;
+					}
+					sp_document_unref (doc);
 				} else {
-					SPViewWidget *dtw;
-					dtw = sp_desktop_widget_new (sp_document_namedview (doc, NULL));
-					if (dtw) sp_create_window (dtw, TRUE);
-					sp_namedview_window_from_document (SP_DESKTOP(dtw->view));
-					create_new = FALSE;
+					gchar *text = g_strdup_printf (_("Failed to load the requested file %s"), 
+							(const gchar *) fl->data);
+					sp_ui_error_dialog (text);
+					g_free (text);
 				}
-				sp_document_unref (doc);
-			} else {
-				gchar *text = g_strdup_printf (_("Failed to load the requested file %s"), 
-						(const gchar *) fl->data);
-				sp_ui_error_dialog (text);
-				g_free (text);
+				fl = g_slist_remove (fl, fl->data);
 			}
-			fl = g_slist_remove (fl, fl->data);
 		}
 		if (create_new == TRUE) {
 			sp_file_new ();
