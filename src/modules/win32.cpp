@@ -79,6 +79,37 @@ sp_win32_timer (HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime)
 	gtk_main_iteration_do (FALSE);
 }
 
+
+/* Platform detection */
+
+gboolean
+sp_win32_is_os_wide()
+{
+	static gboolean initialized = FALSE;
+	static gboolean is_wide = FALSE;
+	static OSVERSIONINFOA osver;
+
+	if ( !initialized )
+	{
+		BOOL result;
+
+		initialized = TRUE;
+
+		memset (&osver, 0, sizeof(OSVERSIONINFOA));
+		osver.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
+		result = GetVersionExA (&osver);
+		if (result)
+		{
+			if (osver.dwPlatformId == VER_PLATFORM_WIN32_NT)
+				is_wide = TRUE;
+		}
+		// If we can't even call to get the version, fall back to ANSI API
+	}
+
+	return is_wide;
+}
+
+
 /* Printing */
 
 static void sp_module_print_win32_class_init (SPModulePrintWin32Class *klass);

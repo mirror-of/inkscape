@@ -28,6 +28,10 @@
 void sp_win32_init (int argc, char **argv, const char *name);
 void sp_win32_finish (void);
 
+/* Platform detection */
+gboolean sp_win32_is_os_wide();
+
+
 /* Printing */
 
 #define SP_TYPE_MODULE_PRINT_WIN32 (sp_module_print_win32_get_type())
