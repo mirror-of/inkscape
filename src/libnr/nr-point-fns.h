@@ -8,8 +8,8 @@
 namespace NR {
 
 /** Compute the L1 norm, or manhattan distance, of \a p. */
-inline NR::Coord NR::L1(Point const &p) {
-	NR::Coord d = 0;
+inline Coord L1(Point const &p) {
+	Coord d = 0;
 	for ( int i = 0 ; i < 2 ; i++ ) {
 		d += fabs(p[i]);
 	}
@@ -17,7 +17,7 @@ inline NR::Coord NR::L1(Point const &p) {
 }
 
 /** Compute the L2, or euclidean, norm of \a p. */
-inline NR::Coord NR::L2(Point const &p) {
+inline Coord L2(Point const &p) {
 	return hypot(p[0], p[1]);
 }
 
@@ -29,7 +29,7 @@ bool is_unit_vector(Point const &p);
 
 extern double atan2(Point const p);
 
-inline bool point_equalp(NR::Point const &a, NR::Point const &b, double const eps)
+inline bool point_equalp(Point const &a, Point const &b, double const eps)
 {
     return ( NR_DF_TEST_CLOSE(a[X], b[X], eps) &&
              NR_DF_TEST_CLOSE(a[Y], b[Y], eps) );

@@ -88,8 +88,8 @@ static gchar *import_path = NULL;
 //#define INK_DUMP_FOPEN 1
 #undef INK_DUMP_FOPEN
 
-void ::dump_str( const gchar* str, const gchar* prefix );
-void ::dump_ustr( const Glib::ustring& ustr );
+void dump_str(gchar const *str, gchar const *prefix);
+void dump_ustr(Glib::ustring const &ustr);
 
 
 extern guint update_in_progress;
@@ -294,7 +294,7 @@ void dump_str(gchar const *str, gchar const *prefix)
     g_message(tmp.c_str());
 }
 
-void ::dump_ustr( const Glib::ustring& ustr )
+void dump_ustr(Glib::ustring const &ustr)
 {
     char const *cstr = ustr.c_str();
     char const *data = ustr.data();
