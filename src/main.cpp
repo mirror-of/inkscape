@@ -671,15 +671,16 @@ sp_process_args(poptContext ctx)
             case SP_ARG_FILE: {
                 gchar const *fn = poptGetOptArg(ctx);
                 if (fn != NULL) {
-                    // TODO: bulia, please look over
-                    gsize bytesRead = 0;
-                    gsize bytesWritten = 0;
                     GError *error = NULL;
-                    gchar *newFileName = g_filename_to_utf8(fn,
-                                                            -1,
-                                                            &bytesRead,
-                                                            &bytesWritten,
-                                                            &error);
+                    gchar *newFileName = NULL;
+                    if ( g_utf8_validate(fn, -1, NULL) ) {
+                        newFileName = g_strdup(fn);
+                    } else {
+                        newFileName = g_filename_to_utf8(fn, -1, NULL, NULL, &error);
+                        if ( newFileName && !g_utf8_validate(newFileName, -1, NULL) ) {
+                            g_warning( "input filename conversion failed" );
+                        }
+                    }
                     fl = g_slist_append(fl, ( (newFileName != NULL)
                                               ? newFileName
                                               : g_strdup(fn) ));
