@@ -1,4 +1,4 @@
-#define TOOL_BUTTON_SIZE 28
+// #define TOOL_BUTTON_SIZE 28
 
 // GTK uses 24 for icon sizes by default.  Spacing adjust to keep the
 // toolbar the same as other GTK applications.  If we want that, use

@@ -301,7 +301,7 @@ sp_xml_tree_dialog (void)
                 NULL,
                 _("New element node"),
                 NULL,
-                sp_icon_new_scaled( SP_ICON_SIZE_NOTEBOOK, 
+                sp_icon_new_scaled( GTK_ICON_SIZE_LARGE_TOOLBAR, 
                                     INKSCAPE_STOCK_ADD_XML_ELEMENT_NODE ),
                 G_CALLBACK (cmd_new_element_node),
                 NULL);
@@ -322,7 +322,7 @@ sp_xml_tree_dialog (void)
 
         button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
                 NULL, _("New text node"), NULL,
-                sp_icon_new_scaled( SP_ICON_SIZE_NOTEBOOK, 
+                sp_icon_new_scaled( GTK_ICON_SIZE_LARGE_TOOLBAR, 
                              INKSCAPE_STOCK_ADD_XML_TEXT_NODE ),
                 G_CALLBACK (cmd_new_text_node),
                 NULL);
@@ -343,7 +343,7 @@ sp_xml_tree_dialog (void)
 
         button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
                 NULL, _("Duplicate node"), NULL,
-                sp_icon_new_scaled( SP_ICON_SIZE_NOTEBOOK, 
+                sp_icon_new_scaled( GTK_ICON_SIZE_LARGE_TOOLBAR, 
                              INKSCAPE_STOCK_DUPLICATE_XML_NODE ),
                 G_CALLBACK (cmd_duplicate_node),
                 NULL);
@@ -364,7 +364,7 @@ sp_xml_tree_dialog (void)
 
         button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
                 NULL, _("Delete node"), NULL,
-                sp_icon_new_scaled( SP_ICON_SIZE_NOTEBOOK, 
+                sp_icon_new_scaled( GTK_ICON_SIZE_LARGE_TOOLBAR, 
                              INKSCAPE_STOCK_DELETE_XML_NODE ),
                                            G_CALLBACK (cmd_delete_node), NULL );
 
@@ -464,7 +464,7 @@ sp_xml_tree_dialog (void)
 
         button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
                 NULL, _("Delete attribute"), NULL,
-                sp_icon_new_scaled( SP_ICON_SIZE_NOTEBOOK, 
+                sp_icon_new_scaled( GTK_ICON_SIZE_LARGE_TOOLBAR, 
                              INKSCAPE_STOCK_DELETE_XML_ATTRIBUTE ),
                 (GCallback) cmd_delete_attr, NULL);
 

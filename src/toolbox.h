@@ -31,7 +31,7 @@ void sp_commands_toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop);
 void show_aux_toolbox(GtkWidget *toolbox);
 
 GtkWidget *sp_toolbox_button_normal_new_from_verb(GtkWidget *t,
-                                                  unsigned size,
+                                                  GtkIconSize size,
                                                   Inkscape::Verb * verb,
                                                   SPView *view,
                                                   GtkTooltips *tt);

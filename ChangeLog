@@ -1,3 +1,15 @@
+2005-03-02  Jon A. Cruz  <jon@joncruz.org>
+	* src/desktop-events.cpp, src/desktop.cpp, src/gradient-toolbar.cpp,
+	  src/interface.cpp, src/select-toolbar.cpp, src/toolbox.cpp,
+	  src/toolbox.h, src/dialogs/find.cpp,
+	  src/dialogs/object-properties.cpp, src/dialogs/stroke-style.cpp,
+	  src/dialogs/text-edit.cpp, src/dialogs/transformation.cpp,
+	  src/dialogs/xml-tree.cpp, src/widgets/button.cpp,
+	  src/widgets/button.h, src/widgets/icon.cpp, src/widgets/icon.h,
+	  src/widgets/layer-selector.cpp, src/widgets/paint-selector.cpp,
+	  src/widgets/widget-sizes.h:
+	  Initial pass removing hardcoded icon sizes.
+
 2005-03-01  MenTaLguY  <mental@rydia.net>
 
 	* src/extensions/internal/ps.cpp: apply patch from Michael Forbes

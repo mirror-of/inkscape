@@ -29,6 +29,8 @@
 
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkiconfactory.h>
+#include <gtk/gtkstock.h>
+
 
 #include "forward.h"
 #include "inkscape-private.h"
@@ -51,8 +53,13 @@ static int sp_icon_expose (GtkWidget *widget, GdkEventExpose *event);
 
 static void sp_icon_paint(SPIcon *icon, GdkRectangle const *area);
 
-static guchar *sp_icon_image_load_pixmap (const gchar *name, unsigned int size, unsigned int scale);
-static guchar *sp_icon_image_load_svg (const gchar *name, unsigned int size, unsigned int scale);
+static guchar *sp_icon_image_load_pixmap (const gchar *name, unsigned int lsize, unsigned int psize);
+static guchar *sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psize );
+
+static guchar *sp_icon_image_load ( SPIcon* icon, const gchar *name );
+static guchar *sp_icon_image_load_gtk( SPIcon* icon, const gchar *name );
+
+static int sp_icon_get_phys_size( int size );
 
 static GtkWidgetClass *parent_class;
 
@@ -124,8 +131,8 @@ sp_icon_size_request (GtkWidget *widget, GtkRequisition *requisition)
 
 	icon = SP_ICON (widget);
 
-	requisition->width = icon->size;
-	requisition->height = icon->size;
+	requisition->width = icon->psize;
+	requisition->height = icon->psize;
 }
 
 static void
@@ -148,7 +155,7 @@ static int sp_icon_expose(GtkWidget *widget, GdkEventExpose *event)
 }
 
 static GtkWidget *
-sp_icon_new_full (unsigned int size, unsigned int scale, const gchar *name)
+sp_icon_new_full( GtkIconSize lsize, const gchar *name )
 {
 	SPIcon *icon;
 	guchar *pixels;
@@ -156,22 +163,24 @@ sp_icon_new_full (unsigned int size, unsigned int scale, const gchar *name)
 
 	icon = (SPIcon *)g_object_new (SP_TYPE_ICON, NULL);
 
-	icon->size = CLAMP (size, 1, 128);
-        //g_warning ("loading '%s' (%d:%d)", name, icon->size, scale);
-	pixels = sp_icon_image_load_gtk ((GtkWidget *) icon, name, icon->size, scale);
+	icon->lsize = lsize;
+	icon->psize = sp_icon_get_phys_size(lsize);
+
+        //g_warning ("loading '%s' (%d:%d)", name, icon->psize, scale);
+	pixels = sp_icon_image_load_gtk( icon, name );
 
 	if (pixels) {
 		// don't pass the nr_free because we're caching the pixel
 		// space loaded through sp_icon_image_load_gtk
-		icon->pb = gdk_pixbuf_new_from_data(pixels, GDK_COLORSPACE_RGB, TRUE, 8, icon->size, icon->size, icon->size * 4, /*(GdkPixbufDestroyNotify)nr_free*/NULL, NULL);
+		icon->pb = gdk_pixbuf_new_from_data(pixels, GDK_COLORSPACE_RGB, TRUE, 8, icon->psize, icon->psize, icon->psize * 4, /*(GdkPixbufDestroyNotify)nr_free*/NULL, NULL);
 		icon->pb_faded = gdk_pixbuf_copy(icon->pb);
 
 		pixels = gdk_pixbuf_get_pixels(icon->pb_faded);
 		size_t stride = gdk_pixbuf_get_rowstride(icon->pb_faded);
 		pixels += 3; // alpha
-		for ( int row = 0 ; row < icon->size ; row++ ) {
+		for ( int row = 0 ; row < icon->psize ; row++ ) {
 			guchar *row_pixels=pixels;
-			for ( int column = 0 ; column < icon->size ; column++ )
+			for ( int column = 0 ; column < icon->psize ; column++ )
 			{
 				*row_pixels = *row_pixels >> 1;
 				row_pixels += 4;
@@ -188,40 +197,25 @@ sp_icon_new_full (unsigned int size, unsigned int scale, const gchar *name)
 }
 
 GtkWidget *
-sp_icon_new (unsigned int size, const gchar *name)
+sp_icon_new( GtkIconSize lsize, const gchar *name )
 {
-	return sp_icon_new_full (size, size, name);
+        return sp_icon_new_full( lsize, name );
 }
 
 GtkWidget *
-sp_icon_new_scaled (unsigned int size, const gchar *name)
+sp_icon_new_scaled( GtkIconSize lsize, const gchar *name )
 {
-	return sp_icon_new_full (size, 24, name);
-}
-
-GtkWidget *
-sp_icon_new_from_data (unsigned int size, const guchar *px)
-{
-	SPIcon *icon;
-
-	icon = (SPIcon *)g_object_new (SP_TYPE_ICON, NULL);
-
-	icon->size = CLAMP (size, 1, 128);
-
-	/* we lose const -- bad */
-	icon->pb = gdk_pixbuf_new_from_data((guchar *)px, GDK_COLORSPACE_RGB, TRUE, 8, icon->size, icon->size, icon->size * 4, NULL, NULL);
-
-	return (GtkWidget *) icon;
+	return sp_icon_new_full( lsize, name );
 }
 
 // Try to load the named svg, falling back to pixmaps
 guchar *
-sp_icon_image_load (const gchar *name, unsigned int size, unsigned int scale)
+sp_icon_image_load( SPIcon* icon, const gchar *name )
 {
 	guchar *px;
 
-	px = sp_icon_image_load_svg (name, size, scale);
-	if (!px) px = sp_icon_image_load_pixmap (name, size, scale);
+	px = sp_icon_image_load_svg( name, icon->lsize, icon->psize );
+	if (!px) px = sp_icon_image_load_pixmap (name, icon->lsize, icon->psize);
 
 	return px;
 }
@@ -240,29 +234,101 @@ sp_icon_get_gtk_size (int size)
 	return map[size];
 }
 
+int sp_icon_get_phys_size( int size )
+{
+  static bool init = false;
+  static int vals[GTK_ICON_SIZE_DIALOG];
+
+  size = CLAMP( size, GTK_ICON_SIZE_MENU, GTK_ICON_SIZE_DIALOG );
+
+  if ( !init ) {
+    memset( vals, 0, sizeof(vals) );
+    GtkIconSize gtkSizes[] = {
+      GTK_ICON_SIZE_MENU,
+      GTK_ICON_SIZE_SMALL_TOOLBAR,
+      GTK_ICON_SIZE_LARGE_TOOLBAR,
+      GTK_ICON_SIZE_BUTTON,
+      GTK_ICON_SIZE_DND,
+      GTK_ICON_SIZE_DIALOG
+    };
+
+    GtkWidget *icon = (GtkWidget *)g_object_new (SP_TYPE_ICON, NULL);
+
+    for ( int i = 0; i < (int)(sizeof(gtkSizes)/sizeof(gtkSizes[0])); i++ ) {
+      gint width = 0;
+      gint height = 0;
+      if ( gtk_icon_size_lookup(gtkSizes[i], &width, &height ) ) {
+	vals[(int)gtkSizes[i]] = std::max( width, height );
+      }
+      gchar const * id = GTK_STOCK_OPEN;
+      GdkPixbuf* pb = gtk_widget_render_icon( icon, id, gtkSizes[i], NULL);
+      if ( pb ) {
+	width = gdk_pixbuf_get_width(pb);
+	height = gdk_pixbuf_get_height(pb);
+	vals[(int)gtkSizes[i]] = std::max( vals[(int)gtkSizes[i]], std::max( width, height ) );
+	g_object_unref (G_OBJECT (pb));
+      }
+    }
+    //g_object_unref(icon);
+    init = true;
+  }
+
+  return vals[size];
+}
+
 guchar *
-sp_icon_image_load_gtk (GtkWidget *widget, const gchar *name, unsigned int size, unsigned int scale)
+sp_icon_image_load_gtk( SPIcon* icon, const gchar *name )
 {
 	/* fixme: Make stock/nonstock configurable */
 	if (!strncmp (name, "gtk-", 4)) {
+	  GtkWidget * host = gtk_button_new();
+//  	  g_warning ("loading '%s' (%d:%d)", name, icon->lsize, icon->psize);
 		GdkPixbuf *pb;
 		guchar *px, *spx; // pixel data is unsigned
-		GtkIconSize gtksize;
 		int srs;
-		unsigned int y;
-		gtksize = sp_icon_get_gtk_size (size);
-		pb = gtk_widget_render_icon (widget, name, gtksize, NULL);
+		int y;
+		pb = gtk_widget_render_icon( host, name, icon->lsize, NULL );
+
+		int width = gdk_pixbuf_get_width(pb);
+		int height = gdk_pixbuf_get_height(pb);
+// 		g_warning ("      --'%s' (%d,%d)", name, width, height);
+		icon->psize = std::max( width, height );
+
 		if (!gdk_pixbuf_get_has_alpha (pb)) gdk_pixbuf_add_alpha (pb, FALSE, 0, 0, 0);
 		spx = gdk_pixbuf_get_pixels (pb);
 		srs = gdk_pixbuf_get_rowstride (pb);
-		px = nr_new (guchar, 4 * size * size);
-		for (y = 0; y < size; y++) {
-			memcpy (px + 4 * y * size, spx + y * srs, 4 * size);
+		size_t howBig = 4 * icon->psize * icon->psize;
+		px = nr_new (guchar, howBig);
+		memset( px, 0, howBig );
+		int dstStride = 4 * icon->psize;
+		for (y = 0; y < height; y++) {
+			memcpy( px + y * dstStride, spx + y * srs, 4 * width );
 		}
+
+		if ( false ) {
+		  guchar *ptr = px;
+		  ptr[4] = 0xff;
+		  ptr[5] = 0x00;
+		  ptr[6] = 0x00;
+		  ptr[7] = 0xff;
+		  ptr[0+dstStride] = 0xff;
+		  ptr[1+dstStride] = 0x00;
+		  ptr[2+dstStride] = 0x00;
+		  ptr[3+dstStride] = 0xff;
+		  for ( int ii = 0; ii < icon->psize; ii++ )
+		    {
+		      ptr[0] = 0xff;
+		      ptr[1] = 0x00;
+		      ptr[2] = 0xff;
+		      ptr[3] = 0xff;
+		      ptr += 4 * (icon->psize + 1);
+		    }
+		}
+
 		g_object_unref ((GObject *) pb);
 		return px;
 	} else {
-		return sp_icon_image_load (name, size, scale);
+		return sp_icon_image_load( icon, name );
 	}
 }
 
@@ -270,21 +336,20 @@ static void sp_icon_paint(SPIcon *icon, GdkRectangle const *area)
 {
 	GtkWidget &widget = *GTK_WIDGET(icon);
 
-	GdkPixbuf *image;
-	image = GTK_WIDGET_IS_SENSITIVE(&widget) ? icon->pb : icon->pb_faded;
+	GdkPixbuf *image = GTK_WIDGET_IS_SENSITIVE(&widget) ? icon->pb : icon->pb_faded;
 
 	if (image) {
-		int const padx = ( ( widget.allocation.width > icon->size )
-				   ? ( widget.allocation.width - icon->size ) / 2
+		int const padx = ( ( widget.allocation.width > icon->psize )
+				   ? ( widget.allocation.width - icon->psize ) / 2
 				   : 0 );
-		int const pady = ( ( widget.allocation.height > icon->size )
-				   ? ( widget.allocation.height - icon->size ) / 2
+		int const pady = ( ( widget.allocation.height > icon->psize )
+				   ? ( widget.allocation.height - icon->psize ) / 2
 				   : 0 );
 
 		int const x0 = std::max(area->x, widget.allocation.x + padx);
 		int const y0 = std::max(area->y, widget.allocation.y + pady);
-		int const x1 = std::min(area->x + area->width,  widget.allocation.x + padx + static_cast<int>(icon->size) );
-		int const y1 = std::min(area->y + area->height, widget.allocation.y + pady + static_cast<int>(icon->size) );
+		int const x1 = std::min(area->x + area->width,  widget.allocation.x + padx + static_cast<int>(icon->psize) );
+		int const y1 = std::min(area->y + area->height, widget.allocation.y + pady + static_cast<int>(icon->psize) );
 
 		gdk_draw_pixbuf(GDK_DRAWABLE(widget.window), NULL, image,
 				x0 - widget.allocation.x - padx,
@@ -296,7 +361,7 @@ static void sp_icon_paint(SPIcon *icon, GdkRectangle const *area)
 }
 
 static guchar *
-sp_icon_image_load_pixmap (const gchar *name, unsigned int size, unsigned int scale)
+sp_icon_image_load_pixmap (const gchar *name, unsigned int lsize, unsigned int psize)
 {
 	gchar *path;
 	guchar *px;
@@ -336,18 +401,18 @@ sp_icon_image_load_pixmap (const gchar *name, unsigned int size, unsigned int sc
 		unsigned int y;
 		if (!gdk_pixbuf_get_has_alpha (pb))
 			gdk_pixbuf_add_alpha (pb, FALSE, 0, 0, 0);
-		if (  (static_cast< unsigned int > (gdk_pixbuf_get_width(pb))  != size)
-			||(static_cast< unsigned int > (gdk_pixbuf_get_height(pb)) != size)) {
+		if (  (static_cast< unsigned int > (gdk_pixbuf_get_width(pb))  != psize)
+			||(static_cast< unsigned int > (gdk_pixbuf_get_height(pb)) != psize)) {
 			GdkPixbuf *spb;
-			spb = gdk_pixbuf_scale_simple (pb, size, size, GDK_INTERP_HYPER);
+			spb = gdk_pixbuf_scale_simple (pb, psize, psize, GDK_INTERP_HYPER);
 			g_object_unref (G_OBJECT (pb));
 			pb = spb;
 		}
 		spx = gdk_pixbuf_get_pixels (pb);
 		srs = gdk_pixbuf_get_rowstride (pb);
-		px = nr_new (guchar, 4 * size * size);
-		for (y = 0; y < size; y++) {
-			memcpy (px + 4 * y * size, spx + y * srs, 4 * size);
+		px = nr_new (guchar, 4 * psize * psize);
+		for (y = 0; y < psize; y++) {
+			memcpy (px + 4 * y * psize, spx + y * srs, 4 * psize);
 		}
 		g_object_unref (G_OBJECT (pb));
 
@@ -357,11 +422,10 @@ sp_icon_image_load_pixmap (const gchar *name, unsigned int size, unsigned int sc
 	return NULL;
 }
 
-// takes doc, root, icon name, size, and scale to produce pixels
+// takes doc, root, icon, and icon name to produce pixels
 static guchar *
-sp_icon_doc_icon ( SPDocument *doc, NRArenaItem *root,
-		   const gchar *name,
-		   unsigned int size, unsigned int scale )
+sp_icon_doc_icon( SPDocument *doc, NRArenaItem *root,
+		  const gchar *name, unsigned int lsize, unsigned int psize )
 {
     guchar *px = NULL;
 
@@ -383,7 +447,7 @@ sp_icon_doc_icon ( SPDocument *doc, NRArenaItem *root,
                 double sf;
                 int width, height, dx, dy;
                 /* Update to renderable state */
-                sf = 0.8 * size / scale;
+                sf = 0.8;
                 nr_matrix_set_scale (&t, sf, sf);
                 nr_arena_item_set_transform (root, &t);
                 nr_matrix_set_identity (&gc.transform);
@@ -398,29 +462,29 @@ sp_icon_doc_icon ( SPDocument *doc, NRArenaItem *root,
                 /* Find button visible area */
                 width = ibox.x1 - ibox.x0;
                 height = ibox.y1 - ibox.y0;
-                //dx = (size - width) / 2;
-                //dy = (size - height) / 2;
-                dx=dy=size;
-                dx=(dx-width)/2; // watch out for size, since 'unsigned'-'signed' can cause problems if the result is negative
+                //dx = (psize - width) / 2;
+                //dy = (psize - height) / 2;
+                dx=dy=psize;
+                dx=(dx-width)/2; // watch out for psize, since 'unsigned'-'signed' can cause problems if the result is negative
                 dy=(dy-height)/2;
                 area.x0 = ibox.x0 - dx;
                 area.y0 = ibox.y0 - dy;
-                area.x1 = area.x0 + size;
-                area.y1 = area.y0 + size;
+                area.x1 = area.x0 + psize;
+                area.y1 = area.y0 + psize;
                 /* Actual renderable area */
                 ua.x0 = MAX (ibox.x0, area.x0);
                 ua.y0 = MAX (ibox.y0, area.y0);
                 ua.x1 = MIN (ibox.x1, area.x1);
                 ua.y1 = MIN (ibox.y1, area.y1);
                 /* Set up pixblock */
-                px = nr_new (guchar, 4 * size * size);
-                memset (px, 0x00, 4 * size * size);
+                px = nr_new (guchar, 4 * psize * psize);
+                memset (px, 0x00, 4 * psize * psize);
                 /* Render */
                 nr_pixblock_setup_extern ( &B, NR_PIXBLOCK_MODE_R8G8B8A8N,
                                            ua.x0, ua.y0, ua.x1, ua.y1,
-                                           px + 4 * size * (ua.y0 - area.y0) + 
+                                           px + 4 * psize * (ua.y0 - area.y0) + 
                                            4 * (ua.x0 - area.x0),
-                                           4 * size, FALSE, FALSE );
+                                           4 * psize, FALSE, FALSE );
                 nr_arena_item_invoke_render ( root, &ua, &B, 
                                               NR_ARENA_ITEM_RENDER_NO_CACHE );
                 nr_pixblock_release (&B);
@@ -441,9 +505,7 @@ struct svg_doc_cache_t
 
 
 static guchar *
-sp_icon_image_load_svg ( const gchar *name, 
-                         unsigned int size, 
-                         unsigned int scale )
+sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psize )
 {
     // it would be nice to figure out how to attach "desctructors" to
     // these maps to keep mem-watching tools like valgrind happy.
@@ -455,9 +517,9 @@ sp_icon_image_load_svg ( const gchar *name,
 
     Glib::ustring icon_index = name;
     icon_index += ":";
-    icon_index += size;
+    icon_index += lsize;
     icon_index += ":";
-    icon_index += scale;
+    icon_index += psize;
 
     // did we already load this icon at this scale/size?
     guchar *px = px_cache[icon_index];
@@ -517,7 +579,7 @@ sp_icon_image_load_svg ( const gchar *name,
         // move on to the next document
         if (!info && !doc) continue;
 
-        px = sp_icon_doc_icon( doc, root, name, size, scale );
+        px = sp_icon_doc_icon( doc, root, name, lsize, psize );
         if (px) {
             px_cache[icon_index] = px;
             break;
@@ -527,6 +589,13 @@ sp_icon_image_load_svg ( const gchar *name,
     return px;
 } // end of sp_icon_image_load_svg()
 
+
+PixBufFactory::ID::ID(Glib::ustring id, GtkIconSize size , unsigned int psize ):
+    _id(id),
+    _size(size),
+    _psize( sp_icon_get_phys_size(psize) )
+{
+}
 
 
 PixBufFactory::PixBufFactory()
@@ -538,6 +607,20 @@ PixBufFactory & PixBufFactory::get()
   return pbf;
 }
 
+const Glib::RefPtr<Gdk::Pixbuf> PixBufFactory::getIcon(const Glib::ustring &oid)
+{
+    ID id (oid, GTK_ICON_SIZE_SMALL_TOOLBAR, sp_icon_get_phys_size( GTK_ICON_SIZE_SMALL_TOOLBAR ) );
+
+    return getIcon(id);
+}
+
+const Glib::RefPtr<Gdk::Pixbuf> PixBufFactory::getIcon(const Glib::ustring &oid, GtkIconSize size) {
+    ID id (oid, size, sp_icon_get_phys_size(size) );
+
+    return getIcon(id);
+}
+
+
 const Glib::RefPtr<Gdk::Pixbuf> PixBufFactory::getIcon(const ID &id)
 {
   Glib::RefPtr<Gdk::Pixbuf> inMap = _map[id];
@@ -546,7 +629,7 @@ const Glib::RefPtr<Gdk::Pixbuf> PixBufFactory::getIcon(const ID &id)
 
   //not cached, loading
   int size(id.size());
-  guchar *data = sp_icon_image_load_svg(id.id().c_str(), size, id.scale());
+  guchar *data = sp_icon_image_load_svg(id.id().c_str(), size, sp_icon_get_phys_size(size));
   Glib::RefPtr<Gdk::Pixbuf> pixbuf = 
     Gdk::Pixbuf::create_from_data (
 				   data, 

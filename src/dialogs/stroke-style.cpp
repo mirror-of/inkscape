@@ -799,7 +799,7 @@ sp_stroke_radio_button(GtkWidget *tb, char const *icon,
     gtk_signal_connect(GTK_OBJECT(tb), "toggled",
                        GTK_SIGNAL_FUNC(sp_stroke_style_any_toggled),
                        spw);
-    GtkWidget *px = sp_icon_new_scaled(SP_ICON_SIZE_NOTEBOOK, icon);
+    GtkWidget *px = sp_icon_new_scaled(GTK_ICON_SIZE_LARGE_TOOLBAR, icon);
     g_assert(px != NULL);
     gtk_widget_show(px);
     gtk_container_add(GTK_CONTAINER(tb), px);

@@ -154,7 +154,7 @@ sp_gradient_toolbox_new(SPDesktop *desktop)
     GtkWidget *cbox = gtk_hbox_new (FALSE, 0);
 
     {
-    GtkWidget *button = sp_button_new_from_data(11,
+    GtkWidget *button = sp_button_new_from_data( GTK_ICON_SIZE_SMALL_TOOLBAR,
                                               SP_BUTTON_TYPE_TOGGLE,
                                               NULL,
                                               "fill_gradient",
@@ -168,7 +168,7 @@ sp_gradient_toolbox_new(SPDesktop *desktop)
     }
 
     {
-    GtkWidget *button = sp_button_new_from_data(11,
+    GtkWidget *button = sp_button_new_from_data( GTK_ICON_SIZE_SMALL_TOOLBAR,
                                               SP_BUTTON_TYPE_TOGGLE,
                                               NULL,
                                               "fill_radial",
@@ -196,7 +196,7 @@ sp_gradient_toolbox_new(SPDesktop *desktop)
     GtkWidget *cbox = gtk_hbox_new (FALSE, 0);
 
     {
-    GtkWidget *button = sp_button_new_from_data(11,
+    GtkWidget *button = sp_button_new_from_data( GTK_ICON_SIZE_SMALL_TOOLBAR,
                                               SP_BUTTON_TYPE_TOGGLE,
                                               NULL,
                                               "controls_fill",
@@ -210,7 +210,7 @@ sp_gradient_toolbox_new(SPDesktop *desktop)
     }
 
     {
-    GtkWidget *button = sp_button_new_from_data(11,
+    GtkWidget *button = sp_button_new_from_data( GTK_ICON_SIZE_SMALL_TOOLBAR,
                                               SP_BUTTON_TYPE_TOGGLE,
                                               NULL,
                                               "controls_stroke",

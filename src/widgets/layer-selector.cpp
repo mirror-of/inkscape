@@ -45,7 +45,7 @@ namespace {
 
 class AlternateIcons : public Gtk::HBox {
 public:
-    AlternateIcons(unsigned size, gchar const *a, gchar const *b)
+    AlternateIcons(GtkIconSize size, gchar const *a, gchar const *b)
     : _a(NULL), _b(NULL)
     {
         if (a) {
@@ -99,7 +99,7 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
 {
     AlternateIcons *label;
 
-    label = Gtk::manage(new AlternateIcons(11, "visible", "hidden"));
+    label = Gtk::manage(new AlternateIcons(GTK_ICON_SIZE_MENU, "visible", "hidden"));
     _visibility_toggle.add(*label);
     _visibility_toggle.signal_toggled().connect(
         sigc::compose(
@@ -119,7 +119,7 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
     _tooltips.set_tip(_visibility_toggle, _("Toggle current layer visibility"));
     pack_start(_visibility_toggle, Gtk::PACK_EXPAND_PADDING);
 
-    label = Gtk::manage(new AlternateIcons(11, "lock_unlocked", "width_height_lock"));
+    label = Gtk::manage(new AlternateIcons(GTK_ICON_SIZE_MENU, "lock_unlocked", "width_height_lock"));
     _lock_toggle.add(*label);
     _lock_toggle.signal_toggled().connect(
         sigc::compose(

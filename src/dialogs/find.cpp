@@ -72,7 +72,7 @@ DialogFind::DialogFind():
     _fieldsTable(5, 4, true),
     _pDocker(0)
 {
-    PixBufFactory::ID id ("inkscape_options", 60, 20);
+    PixBufFactory::ID id ("inkscape_options", GTK_ICON_SIZE_LARGE_TOOLBAR, 20);
     Gtk::Image*  pImage = 
         Gtk::manage( new Gtk::Image(
                          PixBufFactory::get().

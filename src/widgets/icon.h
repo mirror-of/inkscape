@@ -20,18 +20,13 @@
 #define SP_ICON(o) (GTK_CHECK_CAST ((o), SP_TYPE_ICON, SPIcon))
 #define SP_IS_ICON(o) (GTK_CHECK_TYPE ((o), SP_TYPE_ICON))
 
-#define SP_ICON_SIZE_BORDER 8
-#define SP_ICON_SIZE_BUTTON 16
-#define SP_ICON_SIZE_MENU 12
-#define SP_ICON_SIZE_TITLEBAR 12
-#define SP_ICON_SIZE_NOTEBOOK 20
-
 #include <gtk/gtkwidget.h>
 
 struct SPIcon {
 	GtkWidget widget;
 
-	int size;
+	GtkIconSize lsize;
+	int psize;
 
 	GdkPixbuf *pb;
 	GdkPixbuf *pb_faded;
@@ -43,14 +38,8 @@ struct SPIconClass {
 
 GType sp_icon_get_type (void);
 
-GtkWidget *sp_icon_new (unsigned int size, const gchar *name);
-GtkWidget *sp_icon_new_scaled (unsigned int size, const gchar *name);
-GtkWidget *sp_icon_new_from_data (unsigned int size, const guchar *px);
-
-/* This is unrelated, but can as well be here */
-
-guchar *sp_icon_image_load (const gchar *name, unsigned int size, unsigned int scale);
-guchar *sp_icon_image_load_gtk (GtkWidget *widget, const gchar *name, unsigned int size, unsigned int scale);
+GtkWidget *sp_icon_new( GtkIconSize size, const gchar *name );
+GtkWidget *sp_icon_new_scaled( GtkIconSize size, const gchar *name );
 
 
 #include <glibmm/ustring.h>
@@ -63,26 +52,19 @@ public :
   static PixBufFactory &get();
   class ID {
   public :
-    ID(Glib::ustring id, unsigned int size , unsigned int scale ):
-      _id(id), _size(size), _scale(scale) {}
+    ID(Glib::ustring id, GtkIconSize size , unsigned int psize );
     Glib::ustring id() const {return _id;}
     int size() const {return _size;}
-    int scale() const {return _scale;}
+    int psize() const {return _psize;}
   private :
     Glib::ustring _id;
-    unsigned int _size;
-    unsigned int _scale;
+    GtkIconSize _size;
+    unsigned int _psize;
   };
 
 
-  const Glib::RefPtr<Gdk::Pixbuf> getIcon(const Glib::ustring &oid) {
-    ID id (oid, SP_ICON_SIZE_NOTEBOOK, SP_ICON_SIZE_NOTEBOOK);
-    return getIcon(id);
-  }
-  const Glib::RefPtr<Gdk::Pixbuf> getIcon(const Glib::ustring &oid, unsigned int size) {
-    ID id (oid, size, size);
-    return getIcon(id);
-  }
+  const Glib::RefPtr<Gdk::Pixbuf> getIcon(const Glib::ustring &oid);
+  const Glib::RefPtr<Gdk::Pixbuf> getIcon(const Glib::ustring &oid, GtkIconSize size);
   const Glib::RefPtr<Gdk::Pixbuf> getIcon(const ID &id);
 
 private :
@@ -94,7 +76,7 @@ private :
       int cmp = i1.id().compare(i2.id());
       if (cmp == 0)
 	{
-	  if (i1.size() == i2.size()) return i1.scale() < i2.scale() ;
+	  if (i1.size() == i2.size()) return i1.psize() < i2.psize() ;
 	  return i1.size() < i2.size();
 	}
       return cmp < 0;

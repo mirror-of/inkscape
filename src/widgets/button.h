@@ -38,7 +38,8 @@ struct SPBChoiceData {
 struct SPButton {
 	GtkToggleButton widget;
 	SPButtonType type;
-	unsigned int size;
+	GtkIconSize lsize;
+	unsigned int psize;
 	SPAction *action;
 	SPAction *doubleclick_action;
 	GtkTooltips *tooltips;
@@ -52,12 +53,13 @@ struct SPButtonClass {
 
 GType sp_button_get_type (void);
 
-GtkWidget *sp_button_new (unsigned int size, SPButtonType type, SPAction *action, SPAction *doubleclick_action, GtkTooltips *tooltips);
+GtkWidget *sp_button_new (GtkIconSize size, SPButtonType type, SPAction *action, SPAction *doubleclick_action, GtkTooltips *tooltips);
 
 void sp_button_toggle_set_down (SPButton *button, gboolean down);
 
-GtkWidget *sp_button_new_from_data (unsigned int size, SPButtonType type,
-                                    SPView *view,
+GtkWidget *sp_button_new_from_data (GtkIconSize size,
+				    SPButtonType type,
+				    SPView *view,
 				    const gchar *name,
 				    const gchar *tip,
 				    GtkTooltips *tooltips);

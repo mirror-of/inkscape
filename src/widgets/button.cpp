@@ -189,14 +189,14 @@ sp_button_perform_action (SPButton *button, gpointer data)
 
 
 GtkWidget *
-sp_button_new (unsigned int size, SPButtonType type, SPAction *action, SPAction *doubleclick_action, GtkTooltips *tooltips)
+sp_button_new( GtkIconSize size, SPButtonType type, SPAction *action, SPAction *doubleclick_action, GtkTooltips *tooltips )
 {
 	SPButton *button;
 
 	button = (SPButton *)g_object_new (SP_TYPE_BUTTON, NULL);
 
 	button->type = type;
-	button->size = CLAMP (size, 4, 64);
+	button->lsize = CLAMP( size, GTK_ICON_SIZE_MENU, GTK_ICON_SIZE_DIALOG );
 	button->tooltips = tooltips;
 
 	if (tooltips) g_object_ref ((GObject *) tooltips);
@@ -250,7 +250,7 @@ sp_button_set_action (SPButton *button, SPAction *action)
 		button->action = (SPAction *) nr_object_ref ((NRObject *) action);
 		nr_active_object_add_listener ((NRActiveObject *) action, (NRObjectEventVector *) &button_event_vector, sizeof (SPActionEventVector), button);
 		if (action->image) {
-			child = sp_icon_new (button->size, action->image);
+			child = sp_icon_new (button->lsize, action->image);
 			gtk_widget_show (child);
 			gtk_container_add (GTK_CONTAINER (button), child);
 		}
@@ -317,12 +317,12 @@ sp_button_set_composed_tooltip (GtkTooltips *tooltips, GtkWidget *widget, SPActi
 }
 
 GtkWidget *
-sp_button_new_from_data (unsigned int size,
+sp_button_new_from_data( GtkIconSize size,
 			 SPButtonType type,
-                         SPView *view,
+			 SPView *view,
 			 const gchar *name,
 			 const gchar *tip,
-			 GtkTooltips *tooltips)
+			 GtkTooltips *tooltips )
 {
 	GtkWidget *button;
 	SPAction *action=sp_action_new(view, name, name, tip, name, 0);

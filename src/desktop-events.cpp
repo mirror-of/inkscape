@@ -387,7 +387,7 @@ sp_dt_simple_guide_dialog (SPGuide *guide, SPDesktop *desktop)
 		gtk_widget_show (b2);
     
 		//pixmap
-		pix = sp_icon_new (32, "guide_dialog");
+		pix = sp_icon_new (GTK_ICON_SIZE_LARGE_TOOLBAR, "guide_dialog");
 		gtk_box_pack_start (GTK_BOX (b1), pix, TRUE, TRUE, 0);
 		gtk_widget_show (pix);
 		//labels

@@ -267,7 +267,7 @@ sp_text_edit_dialog (void)
 
                     // horizontal
                     {
-                        GtkWidget *px = sp_icon_new_scaled ( SP_ICON_SIZE_NOTEBOOK,
+                        GtkWidget *px = sp_icon_new_scaled ( GTK_ICON_SIZE_LARGE_TOOLBAR,
                                                       INKSCAPE_STOCK_WRITING_MODE_LR );
                         GtkWidget *b = group = gtk_radio_button_new (NULL);
                         gtk_tooltips_set_tip (tt, b, _("Horizontal text"), NULL);
@@ -281,7 +281,7 @@ sp_text_edit_dialog (void)
 
                     // vertical
                     {
-                        GtkWidget *px = sp_icon_new_scaled ( SP_ICON_SIZE_NOTEBOOK,
+                        GtkWidget *px = sp_icon_new_scaled ( GTK_ICON_SIZE_LARGE_TOOLBAR,
                                                       INKSCAPE_STOCK_WRITING_MODE_TB );
                         GtkWidget *b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (group)));
                         gtk_tooltips_set_tip (tt, b, _("Vertical text"), NULL);
