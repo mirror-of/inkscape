@@ -73,43 +73,6 @@ sp_display_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
 
 
 
-static void
-sp_display_dialog_set_oversample (GtkMenuItem *item, gpointer data)
-{
-    gint os;
-
-    os = GPOINTER_TO_INT (data);
-
-    g_return_if_fail (os >= 0);
-    g_return_if_fail (os <= 4);
-
-    nr_arena_image_x_sample = os;
-    nr_arena_image_y_sample = os;
-
-    inkscape_refresh_display (INKSCAPE);
-    
-} // end of sp_display_dialog_set_oversample()
-
-
-
-static void
-sp_display_dialog_cursor_tolerance_changed (GtkAdjustment *adj, gpointer data)
-{
-
-    nr_arena_global_delta = adj->value;
-    prefs_set_double_attribute ( "options.cursortolerance", "value", 
-                                 nr_arena_global_delta );
-
-} // end of sp_display_dialog_cursor_tolerance_changed()
-
-
-
-
-
-
-
-
-
 
 static void
 options_selector_show_toggled (GtkToggleButton *button)
@@ -262,14 +225,77 @@ options_selector ()
 }
 
 
+static void
+sp_display_dialog_set_oversample (GtkMenuItem *item, gpointer data)
+{
+    gint os;
 
+    os = GPOINTER_TO_INT (data);
+
+    g_return_if_fail (os >= 0);
+    g_return_if_fail (os <= 4);
+
+    nr_arena_image_x_sample = os;
+    nr_arena_image_y_sample = os;
+
+    inkscape_refresh_display (INKSCAPE);
+    
+} // end of sp_display_dialog_set_oversample()
+
+
+
+static void
+sp_display_dialog_cursor_tolerance_changed (GtkAdjustment *adj, gpointer data)
+{
+
+    nr_arena_global_delta = adj->value;
+    prefs_set_double_attribute ( "options.cursortolerance", "value", 
+                                 nr_arena_global_delta );
+
+} // end of sp_display_dialog_cursor_tolerance_changed()
+
+
+static void
+options_changed_double (GtkAdjustment *adj, gpointer data)
+{
+    const gchar *prefs_path = (const gchar *) data;
+    prefs_set_double_attribute (prefs_path, "value",  adj->value);
+}
+
+void 
+options_sb_double (
+    gchar const *label, 
+    gchar const *tooltip, GtkTooltips *tt,
+    GtkWidget *box,
+    gdouble lower, gdouble upper, gdouble step_increment, gdouble page_increment, gdouble page_size,
+    gchar const *prefs_path, gchar const *attr, gdouble def,
+    void (*changed)(GtkAdjustment *, gpointer)
+)
+{
+        GtkWidget *l = gtk_label_new (label);
+        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+        gtk_widget_show (l);
+        gtk_box_pack_start (GTK_BOX (box), l, TRUE, TRUE, 0);
+
+        GtkObject *a = gtk_adjustment_new (0.0, lower, upper, step_increment, page_increment, page_size);
+        gdouble value = prefs_get_double_attribute_limited (prefs_path, attr, def, lower, upper);
+        gtk_adjustment_set_value (GTK_ADJUSTMENT (a), value);
+
+        GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 1);
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, tooltip, NULL);
+        gtk_entry_set_width_chars (GTK_ENTRY (sb), 6);
+        gtk_widget_set_usize (sb, 100, -1);
+        gtk_widget_show (sb);
+        gtk_box_pack_end (GTK_BOX (box), sb, FALSE, FALSE, 0);
+
+        gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (changed), (gpointer) prefs_path);
+}
 
 void
 sp_display_dialog (void)
 {
 
-    GtkWidget *nb, *l, *vb, *hb, *om, *m, *i, *sb;
-    GtkObject *a;
+    GtkWidget *nb, *l, *vb, *hb, *om, *m, *i;
 
     if (!dlg)
     {
@@ -404,22 +430,49 @@ sp_display_dialog (void)
         gtk_widget_show (hb);
         gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
 
-        l = gtk_label_new (_("Grab sensitivity:"));
-        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+options_sb_double (
+    _("Grab sensitivity:"), 
+    _("How close you need to be to an object to be able to grab it with mouse (in pixels)"), tt,
+    hb,
+    0.0, 30.0, 0.1, 1.0, 1.0,
+    "options.cursortolerance", "value", 8.0,
+    sp_display_dialog_cursor_tolerance_changed
+    );
+
+        hb = gtk_hbox_new (FALSE, 4);
+        gtk_widget_show (hb);
+        gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
+
+options_sb_double (
+    _("Click/drag threshold:"), 
+    _("Maximum mouse drag (in pixels) which is considered a click, not a drag"), tt,
+    hb,
+    0.0, 20.0, 0.1, 1.0, 1.0,
+    "options.dragtolerance", "value", 4.0,
+    options_changed_double
+    );
+
+
+// Scrolling
+        l = gtk_label_new (_("Scrolling"));
         gtk_widget_show (l);
-        gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
+        vb = gtk_vbox_new (FALSE, 4);
+        gtk_widget_show (vb);
+        gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
+        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
 
-        a = gtk_adjustment_new (0.0, 0.0, 10.0, 0.1, 1.0, 1.0);
-        gtk_adjustment_set_value (GTK_ADJUSTMENT (a), nr_arena_global_delta);
-        sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 1);
-        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, _("How close you need to be to an object to be able to grab it with mouse (in pixels)"), NULL);
-        gtk_widget_show (sb);
-        gtk_box_pack_start (GTK_BOX (hb), sb, TRUE, TRUE, 0);
+        hb = gtk_hbox_new (FALSE, 4);
+        gtk_widget_show (hb);
+        gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
 
-        gtk_signal_connect ( GTK_OBJECT (a), "value_changed",
-                             GTK_SIGNAL_FUNC 
-                                (sp_display_dialog_cursor_tolerance_changed), 
-                             NULL);
+options_sb_double (
+    _("Mouse wheel scrolls by:"), 
+    _("One mouse wheel notch scrolls by this distance in pixels (horizontally with Shift)"), tt,
+    hb,
+    0.0, 1000.0, 0.1, 1.0, 1.0,
+    "options.wheelscroll", "value", 40.0,
+    options_changed_double
+    );
 
 
 // Tools
