@@ -1661,28 +1661,24 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
                 ret = TRUE;
                 break;
             } else {
-                NR::Point pt;
-                NArtBpath *p;
-                gint e;
                 /* Reset red curve */
                 sp_curve_reset(dc->red_curve);
                 /* Destroy topmost green bpath */
                 gtk_object_destroy(GTK_OBJECT(dc->green_bpaths->data));
                 dc->green_bpaths = g_slist_remove(dc->green_bpaths, dc->green_bpaths->data);
+
                 /* Get last segment */
-                p = SP_CURVE_BPATH(dc->green_curve);
-                e = SP_CURVE_LENGTH(dc->green_curve);
+                NArtBpath const *const p = SP_CURVE_BPATH(dc->green_curve);
+                gint const e = SP_CURVE_LENGTH(dc->green_curve);
                 if ( e < 2 ) {
                     g_warning("Green curve length is %d", e);
                     break;
                 }
-                dc->p[0] = NR::Point(p[e - 2].x3, p[e - 2].y3);
-                dc->p[1] = NR::Point(p[e - 1].x1, p[e - 1].y1);
-                if ( dc->npoints < 4 ) {
-                    pt = NR::Point(p[e - 1].x3, p[e - 1].y3);
-                } else {
-                    pt = dc->p[3];
-                }
+                dc->p[0] = p[e - 2].c(3);
+                dc->p[1] = p[e - 1].c(1);
+                NR::Point const pt(( dc->npoints < 4
+                                     ? p[e - 1].c(3)
+                                     : dc->p[3] ));
                 dc->npoints = 2;
                 sp_curve_backspace(dc->green_curve);
                 sp_canvas_item_hide(pc->c0);

@@ -1,5 +1,8 @@
 2004-10-10  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/draw-context.cpp (sp_pen_context_root_handler):
+	  Minor code cleanups in backspace handling.
+
 	* src/draw-context.cpp (spdc_endpoint_snap_handle):
 	  Change argument type from SPDrawContext to SPPenContext, and
 	  specialize definition accordingly.  Caller updated.
