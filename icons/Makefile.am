@@ -107,16 +107,6 @@ pixmaps = \
     marker_triangle_end.xpm \
     marker_triangle_start.xpm \
     move.xpm \
-    node.xpm \
-    node_break.xpm \
-    node_curve.xpm \
-    node_cusp.xpm \
-    node_delete.xpm \
-    node_insert.xpm \
-    node_join.xpm \
-    node_line.xpm \
-    node_smooth.xpm \
-    node_symmetric.xpm \
     object_align.xpm \
     object_fill.xpm \
     object_flip_hor.xpm \
