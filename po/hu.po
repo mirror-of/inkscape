@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-26 15:27+0100\n"
-"PO-Revision-Date: 2005-01-28 00:06+0100\n"
+"PO-Revision-Date: 2005-01-29 14:48+0100\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -2466,13 +2466,12 @@ msgid "Brightness"
 msgstr "Fényesség"
 
 #: src/dialogs/tracedialog.cpp:399
-#, fuzzy
 msgid "Trace by a given brightness level"
-msgstr "vektorizál"
+msgstr "Vektorizálás egy adott fényességszinttel"
 
 #: src/dialogs/tracedialog.cpp:406
 msgid "Brightness cutoff for black/white"
-msgstr ""
+msgstr "Fényesség-levágás fekete-fehér esetén"
 
 #: src/dialogs/tracedialog.cpp:413
 msgid "Image Brightness"
@@ -2485,13 +2484,12 @@ msgid "Optimal Edge Detection (Canny)"
 msgstr "Optimális élkeresés (Canny-módszer)"
 
 #: src/dialogs/tracedialog.cpp:423
-#, fuzzy
 msgid "Trace with edge detection by J. Canny's algorithm"
-msgstr "vektorizál"
+msgstr "Vektorizálás J. Canny módszere alapján végzett élkereséssel"
 
 #: src/dialogs/tracedialog.cpp:439
 msgid "Brightness cutoff for adjacent pixels (determines edge thickness)"
-msgstr ""
+msgstr "Fényesség-levágás a szomszédos képpontoknál (meghatározza az élvastagságot)"
 
 #: src/dialogs/tracedialog.cpp:446
 msgid "Edge Detection"
@@ -2506,14 +2504,12 @@ msgid "Color Quantization"
 msgstr "Színek számának csökkentése"
 
 #: src/dialogs/tracedialog.cpp:458
-#, fuzzy
 msgid "Trace along the boundaries of reduced colors"
-msgstr "vektorizál"
+msgstr "Vektorizálás a csökkentett színek határai mentén"
 
 #: src/dialogs/tracedialog.cpp:465
-#, fuzzy
 msgid "The number of reduced colors"
-msgstr "A körbefordulások száma"
+msgstr "A csökkentett színek száma"
 
 #: src/dialogs/tracedialog.cpp:467
 msgid "Colors:"
@@ -2524,61 +2520,56 @@ msgid "Quantization / Reduction"
 msgstr "Szín-csökkentés"
 
 #: src/dialogs/tracedialog.cpp:482
-#, fuzzy
 msgid "Trace the given number of brightness levels"
-msgstr "vektorizál"
+msgstr "A megadott számú fényességszint vektorizálása"
 
 #: src/dialogs/tracedialog.cpp:489
-#, fuzzy
 msgid "Scans:"
-msgstr "Hegyesség:"
+msgstr "Képek:"
 
 #: src/dialogs/tracedialog.cpp:491
 msgid "The desired number of scans"
-msgstr ""
+msgstr "Az elkészítendő képek száma"
 
 #. ----Hbox2
 #: src/dialogs/tracedialog.cpp:496
-#, fuzzy
 msgid "Color"
-msgstr "Színek:"
+msgstr "Szín"
 
 #: src/dialogs/tracedialog.cpp:499
-#, fuzzy
 msgid "Trace the given number of reduced colors"
-msgstr "vektorizál"
+msgstr "A megadott számú csökkentett szín vektorizálása"
 
 #. ---Hbox3
 #: src/dialogs/tracedialog.cpp:505
 msgid "Monochrome"
-msgstr ""
+msgstr "Egyszínű"
 
 #: src/dialogs/tracedialog.cpp:508
 msgid "Same as Color, but convert result to grayscale"
-msgstr ""
+msgstr "Megegyezik a Színnel, de az eredmény szürkeárnyalatossá lesz alakítva"
 
 #: src/dialogs/tracedialog.cpp:510
-#, fuzzy
 msgid "Stack"
-msgstr "Csillag"
+msgstr "Egymásra"
 
 #: src/dialogs/tracedialog.cpp:513
 msgid "Stack scans vertically (no gaps) or tile horizontally (usually with gaps)"
 msgstr ""
+"A képek függőleges egymásra helyezése (nincsenek rések) vagy "
+"vízszintes csempézése (általában vannak rések)"
 
 #: src/dialogs/tracedialog.cpp:515
-#, fuzzy
 msgid "Smooth"
-msgstr "íves"
+msgstr "Simítás"
 
 #: src/dialogs/tracedialog.cpp:518
-#, fuzzy
 msgid "Apply Gaussian blur to the bitmap before tracing"
-msgstr "vektorizál"
+msgstr "Gauss-elmosás alkalmazása a bitképre a vektorizálás előtt"
 
 #: src/dialogs/tracedialog.cpp:522
 msgid "Multiple Scanning"
-msgstr ""
+msgstr "Többszörös feldolgozás"
 
 #. #### Preview ####
 #: src/dialogs/tracedialog.cpp:528 src/dialogs/tracedialog.cpp:538
@@ -2587,9 +2578,8 @@ msgstr "Előnézet"
 
 #. do not expand
 #: src/dialogs/tracedialog.cpp:532
-#, fuzzy
 msgid "Preview the result without actual tracing"
-msgstr "vektorizál"
+msgstr "Az eredmény előnézetének megjelenítése a vektorizálás végrehajtása nélkül"
 
 #. #### swap black and white ####
 #: src/dialogs/tracedialog.cpp:544
@@ -2597,13 +2587,12 @@ msgid "Invert"
 msgstr "Invertálás"
 
 #: src/dialogs/tracedialog.cpp:548
-#, fuzzy
 msgid "Invert black and white regions for single traces"
-msgstr "vektorizál"
+msgstr "Fekete-fehér területek invertálása egyszeri vektorizáláshoz"
 
 #: src/dialogs/tracedialog.cpp:552
 msgid "Thanks to Peter Selinger, http://potrace.sourceforge.net"
-msgstr ""
+msgstr "Köszönet Peter Selingernek, http://potrace.sourceforge.net"
 
 #: src/dialogs/tracedialog.cpp:555
 msgid "Credits"
@@ -2617,14 +2606,12 @@ msgid "Potrace"
 msgstr "Potrace"
 
 #: src/dialogs/tracedialog.cpp:576
-#, fuzzy
 msgid "Abort a trace in progress"
-msgstr "vektorizál Exportálás folyamatban"
+msgstr "Folyamatban levő vektorizálás megszakítása"
 
 #: src/dialogs/tracedialog.cpp:580
-#, fuzzy
 msgid "Execute the trace"
-msgstr "vektorizál"
+msgstr "A vektorizálás végrehajtása"
 
 #. Move page
 #: src/dialogs/transformation.cpp:321 src/dialogs/transformation.cpp:464
