@@ -14,8 +14,9 @@ tutorial_DATA = \
     tutorial-basic.nn.svg \
     tutorial-basic.ru.svg \
     tutorial-basic.sl.svg \
-    tutorial-shapes.svg
-
+    tutorial-shapes.svg \
+    tutorial-tracing.svg potrace.png oldguitar.jpg tux.png \
+    tutorial-calligraphy.svg
 
 
 EXTRA_DIST = $(tutorial_DATA)
