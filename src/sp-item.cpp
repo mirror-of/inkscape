@@ -670,11 +670,10 @@ NR::Matrix sp_item_i2doc_affine(SPItem const *item)
 	g_assert(SP_IS_ROOT(item));
 	SPRoot const *root = SP_ROOT(item);
 
+	/* Viewbox is relative to root's transform
+	   (http://www.w3.org/TR/SVG11/coords.html#ViewBoxAttributeEffectOnSiblingAttributes). */
 	ret *= root->c2p;
 	ret *= NR::Matrix(&item->transform);
-	/* fixme: The above line looks strange to me (pjrm).  I'd have thought
-	   it should either be removed or moved to before the c2p multiply.
-	   Can someone pls add a comment? */
 
 	return ret;
 }
