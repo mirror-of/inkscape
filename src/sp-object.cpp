@@ -351,6 +351,7 @@ sp_object_invoke_release (SPObject *object)
 
 	g_signal_emit (G_OBJECT (object), object_signals[RELEASE], 0);
 
+	/* all hrefs should be released by the "release" handler */
 	g_assert (object->hrefcount == 0);
 
 	if (!SP_OBJECT_IS_CLONED (object)) {
