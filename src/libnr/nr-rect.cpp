@@ -13,18 +13,24 @@
 #include "nr-rect-l.h"
 #include "nr-matrix.h"
 
-NRRectL *
-nr_rect_l_intersect (NRRectL *d, const NRRectL *r0, const NRRectL *r1)
+/**
+ *    \param r0 Rectangle.
+ *    \param r1 Another rectangle.
+ *    \param d Filled in with the intersection of r0 and r1.
+ *    \return d.
+ */
+
+NRRectL *nr_rect_l_intersect(NRRectL *d, const NRRectL *r0, const NRRectL *r1)
 {
-	NR::ICoord t;
-	t = MAX (r0->x0, r1->x0);
-	d->x1 = MIN (r0->x1, r1->x1);
-	d->x0 = t;
-	t = MAX (r0->y0, r1->y0);
-	d->y1 = MIN (r0->y1, r1->y1);
-	d->y0 = t;
+  NR::ICoord t;
+  t = std::max(r0->x0, r1->x0);
+  d->x1 = std::min(r0->x1, r1->x1);
+  d->x0 = t;
+  t = std::max(r0->y0, r1->y0);
+  d->y1 = std::min(r0->y1, r1->y1);
+  d->y0 = t;
 	
-	return d;
+  return d;
 }
 
 NRRect *
@@ -215,3 +221,15 @@ Rect Rect::union_bounds(const Rect &a, const Rect &b) {
 }
 
 };
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
