@@ -755,7 +755,7 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord, int curBor
                 int  swai=prevEdge;prevEdge=nextEdge;nextEdge=swai;
               }
               if ( ebData[prevEdge].pieceID == ebData[nextEdge].pieceID  && ebData[prevEdge].pathID == ebData[nextEdge].pathID ) {
-                if ( fabsf(ebData[prevEdge].tEn-ebData[nextEdge].tSt) < 0.05 ) {
+                if ( fabs(ebData[prevEdge].tEn-ebData[nextEdge].tSt) < 0.05 ) {
                 } else {
                   dest->ForcePoint ();
                 }

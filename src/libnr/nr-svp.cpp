@@ -13,6 +13,9 @@
 
 #define NR_SVP_LENGTH_MAX 128
 
+#ifdef HAVE_IEEEFP_H
+#include <ieeefp.h>
+#endif
 #include <assert.h>
 #include <stdio.h>
 #include <glib.h>

@@ -57,9 +57,6 @@ bool  font_descr_equal::operator()( PangoFontDescription* const&a, PangoFontDesc
 static bool
 ink_strstr (const char *haystack, const char *pneedle)
 {
-#ifndef WIN32
-	return (strcasestr(haystack, pneedle) != NULL);
-#else
 	// windows has no strcasestr implementation, so here is ours...
 	// stolen from nmap
         /* FIXME: This is broken for e.g. ink_strstr("aab", "ab").  Report to nmap.
@@ -92,7 +89,6 @@ ink_strstr (const char *haystack, const char *pneedle)
 		} else foundto = needle;
 	}
 	return false;
-#endif
 }
 
 /**

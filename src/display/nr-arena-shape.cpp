@@ -271,7 +271,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 	    float width, scale;
 	    scale = NR_MATRIX_DF_EXPANSION (&gc->transform);
 	    width = MAX (0.125, shape->_stroke.width * scale);
-	    if ( fabsf(shape->_stroke.width * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
+	    if ( fabs(shape->_stroke.width * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
 		bbox.x0-=width;
 		bbox.x1+=width;
 		bbox.y0-=width;
@@ -472,7 +472,7 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
 
     if (shape->_stroke.paint.type() != NRArenaShape::Paint::NONE) {
 	const float scale = NR_MATRIX_DF_EXPANSION (&gc->transform);
-	if ( fabsf(shape->_stroke.width * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
+	if ( fabs(shape->_stroke.width * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
 	    const float width = MAX (0.125, shape->_stroke.width * scale);
 	    NR::Matrix cached_to_new;
 	    int isometry = 0;
@@ -578,10 +578,10 @@ nr_arena_shape_add_bboxes(NRArenaShape* shape, NRRect &bbox)
 {
     if ( shape->stroke_shp ) {
 	shape->stroke_shp->CalcBBox();
-	shape->stroke_shp->leftX=floorf(shape->stroke_shp->leftX);
-	shape->stroke_shp->rightX=ceilf(shape->stroke_shp->rightX);
-	shape->stroke_shp->topY=floorf(shape->stroke_shp->topY);
-	shape->stroke_shp->bottomY=ceilf(shape->stroke_shp->bottomY);
+	shape->stroke_shp->leftX=floor(shape->stroke_shp->leftX);
+	shape->stroke_shp->rightX=ceil(shape->stroke_shp->rightX);
+	shape->stroke_shp->topY=floor(shape->stroke_shp->topY);
+	shape->stroke_shp->bottomY=ceil(shape->stroke_shp->bottomY);
 	if ( bbox.x0 >= bbox.x1 ) {
 	    if ( shape->stroke_shp->leftX < shape->stroke_shp->rightX ) {
 		bbox.x0=shape->stroke_shp->leftX;
@@ -607,10 +607,10 @@ nr_arena_shape_add_bboxes(NRArenaShape* shape, NRRect &bbox)
     }
     if ( shape->fill_shp ) {
 	shape->fill_shp->CalcBBox();
-	shape->fill_shp->leftX=floorf(shape->fill_shp->leftX);
-	shape->fill_shp->rightX=ceilf(shape->fill_shp->rightX);
-	shape->fill_shp->topY=floorf(shape->fill_shp->topY);
-	shape->fill_shp->bottomY=ceilf(shape->fill_shp->bottomY);
+	shape->fill_shp->leftX=floor(shape->fill_shp->leftX);
+	shape->fill_shp->rightX=ceil(shape->fill_shp->rightX);
+	shape->fill_shp->topY=floor(shape->fill_shp->topY);
+	shape->fill_shp->bottomY=ceil(shape->fill_shp->bottomY);
 	if ( bbox.x0 >= bbox.x1 ) {
 	    if ( shape->fill_shp->leftX < shape->fill_shp->rightX ) {
 		bbox.x0=shape->fill_shp->leftX;
@@ -1096,7 +1096,7 @@ shape_run_A8_OR (raster_info &dest,void */*data*/,int st,float vst,int en,float 
     int     len=en-st;
     unsigned char*   d=(unsigned char*)dest.buffer;
     d+=(st-dest.startPix);
-    if ( fabsf(dv) < 0.001 ) {
+    if ( fabs(dv) < 0.001 ) {
 	if ( vst > 0.999 ) {
 	    /* Simple copy */
 	    while (len > 0) {
@@ -1156,10 +1156,10 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
     theS->CalcBBox();
     float  l=theS->leftX,r=theS->rightX,t=theS->topY,b=theS->bottomY;
     int    il,ir,it,ib;
-    il=(int)floorf(l);
-    ir=(int)ceilf(r);
-    it=(int)floorf(t);
-    ib=(int)ceilf(b);
+    il=(int)floor(l);
+    ir=(int)ceil(r);
+    it=(int)floor(t);
+    ib=(int)ceil(b);
 
     if ( il >= m.area.x1 || ir <= m.area.x0 || it >= m.area.y1 || ib <= m.area.y0 ) return;
     if ( il < m.area.x0 ) il=m.area.x0;

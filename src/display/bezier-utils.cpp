@@ -25,6 +25,9 @@
 #define noBEZIER_DEBUG
 
 #include <math.h>
+#ifdef HAVE_IEEEFP_H
+#include <ieeefp.h>
+#endif
 #include <stdlib.h>
 #include "bezier-utils.h"
 #include <libnr/nr-point-fns.h>
@@ -444,7 +447,7 @@ NewtonRaphsonRootFind(BezierCurve const Q, NR::Point const &P, gdouble const u)
         }
     }
 
-    if (!isfinite(improved_u)) {
+    if (!finite(improved_u)) {
         improved_u = u;
     } else if ( improved_u < 0.0 ) {
         improved_u = 0.0;
@@ -606,7 +609,7 @@ chord_length_parameterize(NR::Point const d[], gdouble u[], unsigned const len)
     /* Then scale to [0.0 .. 1.0]. */
     gdouble tot_len = u[len - 1];
     g_return_if_fail( tot_len != 0 );
-    if (isfinite(tot_len)) {
+    if (finite(tot_len)) {
         for (unsigned i = 1; i < len; ++i) {
             u[i] /= tot_len;
         }

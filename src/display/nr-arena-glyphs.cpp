@@ -202,7 +202,7 @@ nr_arena_glyphs_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state,
     t.c[4]=0;
     t.c[5]=0;
 	  const float scale = NR_MATRIX_DF_EXPANSION (&gc->transform);
-	  if ( fabsf(glyphs->style->stroke_width.computed * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
+	  if ( fabs(glyphs->style->stroke_width.computed * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
       font_style nstyl;
       nstyl.transform=t;
       nstyl.stroke_width=MAX (0.125, glyphs->style->stroke_width.computed * scale);

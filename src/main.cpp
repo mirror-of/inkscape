@@ -25,7 +25,7 @@
 
 #include <config.h>
 
-#ifdef HAVE_FPSETMASK
+#ifdef HAVE_IEEEFP_H
 #include <ieeefp.h>
 #endif
 #include <string.h>

@@ -18,8 +18,8 @@ BitLigne::BitLigne(int ist,int ien,float iScale)
 	st=ist;
 	en=ien;
 	if ( en <= st ) en=st+1;
-	stBit=(int)floorf(((float)st)*invScale); // round to pixel boundaries in the canvas
-	enBit=(int)ceilf(((float)en)*invScale);
+	stBit=(int)floor(((float)st)*invScale); // round to pixel boundaries in the canvas
+	enBit=(int)ceil(((float)en)*invScale);
 	int  nbBit=enBit-stBit;
 	if ( nbBit&31 ) {
 		nbInt=nbBit/32+1;
@@ -54,15 +54,15 @@ int              BitLigne::AddBord(float spos,float epos,bool full)
   // the goal is to obtain a set of bits that are "on the edges" of the polygon, so that their coverage
   // will be 1/2 on the average. in practice it's useless for anything but the even-odd fill rule
 	int   ffBit,lfBit; // first and last bit of the portion of the line that is entirely covered
-	ffBit=(int)(ceilf(invScale*spos));
-	lfBit=(int)(floorf(invScale*epos));
+	ffBit=(int)(ceil(invScale*spos));
+	lfBit=(int)(floor(invScale*epos));
 	int   fpBit,lpBit; // first and last bit of the portion of the line that is not entirely but partially covered
-	fpBit=(int)(floorf(invScale*spos));
-	lpBit=(int)(ceilf(invScale*epos));
+	fpBit=(int)(floor(invScale*spos));
+	lpBit=(int)(ceil(invScale*epos));
   
   // update curMin and curMax to reflect the start and end pixel that need to be updated on the canvas
-	if ( floorf(spos) < curMin ) curMin=(int)floorf(spos);
-	if ( ceilf(epos) > curMax ) curMax=(int)ceilf(epos);
+	if ( floor(spos) < curMin ) curMin=(int)floor(spos);
+	if ( ceil(epos) > curMax ) curMax=(int)ceil(epos);
 
   // clamp to the line
 	if ( ffBit < stBit ) ffBit=stBit;

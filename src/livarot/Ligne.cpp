@@ -1739,7 +1739,7 @@ void             IntLigne::Copy(FloatLigne* a)
 	nbRun=0;
 	firstAc=lastAc=-1;
 	bool  pixExists=false;
-	int   curPos=(int)floorf(a->runs[0].st)-1;
+	int   curPos=(int)floor(a->runs[0].st)-1;
 	float lastSurf=0;
 	
   // we take each run of the FloatLigne in sequence and make single-pixel runs of its boundaries as needed
@@ -1748,8 +1748,8 @@ void             IntLigne::Copy(FloatLigne* a)
   // int_ligne_run, we just add the coverage to that run.
 	for (int i=0;i<a->nbRun;i++) {
 		float_ligne_run   runA=a->runs[i];
-		float curStF=floorf(runA.st);
-		float curEnF=floorf(runA.en);
+		float curStF=floor(runA.st);
+		float curEnF=floor(runA.en);
 		int  curSt=(int)curStF;
 		int  curEn=(int)curEnF;
 

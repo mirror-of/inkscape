@@ -310,7 +310,7 @@ sp_font_selector_size_changed (GtkEditable *editable, SPFontSelector *fsel)
 	sstr = gtk_entry_get_text (GTK_ENTRY (GTK_COMBO (fsel->size)->entry));
 	gfloat  old_size=fsel->fontsize;
 	fsel->fontsize = MAX (atof (sstr), 0.1);
-	if ( fabsf(fsel->fontsize-old_size) > 0.001) fsel->fontsize_dirty=true;
+	if ( fabs(fsel->fontsize-old_size) > 0.001) fsel->fontsize_dirty=true;
 	
 	sp_font_selector_emit_set (fsel);
 }

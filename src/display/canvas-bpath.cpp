@@ -348,7 +348,7 @@ bpath_run_A8_OR (raster_info &dest,void *data,int st,float vst,int en,float ven)
     uint8_t*   d=(uint8_t*)dest.buffer;
 
     d+=3*(st-dest.startPix);
-    if ( fabsf(dv) < 0.001 ) {
+    if ( fabs(dv) < 0.001 ) {
 	if ( sv > 249.999 ) {
 	    /* Simple copy */
 	    while (len > 0) {
@@ -407,10 +407,10 @@ void nr_pixblock_render_bpath_rgba (Shape* theS,uint32_t color,NRRectL &area,cha
     theS->CalcBBox();
     float  l=theS->leftX,r=theS->rightX,t=theS->topY,b=theS->bottomY;
     int    il,ir,it,ib;
-    il=(int)floorf(l);
-    ir=(int)ceilf(r);
-    it=(int)floorf(t);
-    ib=(int)ceilf(b);
+    il=(int)floor(l);
+    ir=(int)ceil(r);
+    it=(int)floor(t);
+    ib=(int)ceil(b);
 
     if ( il >= area.x1 || ir <= area.x0 || it >= area.y1 || ib <= area.y0 ) return;
     if ( il < area.x0 ) il=area.x0;

@@ -332,10 +332,10 @@ void      raster_glyph::LoadSubPixelPosition(int no)
 
   float  l=polygon->leftX,r=polygon->rightX,t=polygon->topY,b=polygon->bottomY;
   int    il,ir,it,ib;
-  il=(int)floorf(l);
-  ir=(int)ceilf(r);
-  it=(int)floorf(t);
-  ib=(int)ceilf(b);
+  il=(int)floor(l);
+  ir=(int)ceil(r);
+  it=(int)floor(t);
+  ib=(int)ceil(b);
   
   // version par FloatLigne
   int    curPt;
@@ -366,7 +366,7 @@ void      raster_glyph::Blit(const NR::Point &at,NRPixBlock &over)
   if ( nb_sub_pixel <= 0 ) return;
 	NR::Point   nat=at;
   nat[1]*=nb_sub_pixel;
-  int pv=(int)round(nat[1]);
+  int pv=(int)rint(nat[1]);
   int no=pv%nb_sub_pixel;
   if ( no < 0 ) no=-no;
   sub_pixel[no].Blit(nat[0],pv/nb_sub_pixel,over);
@@ -387,7 +387,7 @@ glyph_run_A8_OR (raster_info &dest,void */*data*/,int st,float vst,int en,float 
   int     len=en-st;
   unsigned char*   d=(unsigned char*)dest.buffer;
   d+=(st-dest.startPix);
-  if ( fabsf(dv) < 0.001 ) {
+  if ( fabs(dv) < 0.001 ) {
     if ( vst > 0.999 ) {
 	    /* Simple copy */
 	    while (len > 0) {

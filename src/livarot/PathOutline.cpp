@@ -863,8 +863,8 @@ Path::IsNulCurve (path_descr const * curD, NR::Point const &curX,NR::Point* ddat
 		path_descr_arcto* nData=(path_descr_arcto*)(ddata+curD->dStart);
 		if ( NR::LInfty(nData->p - curX) < 0.00001) {
 			if ((nData->large == false) 
-				|| (fabsf (nData->rx) < 0.00001
-					|| fabsf (nData->ry) < 0.00001)) {
+				|| (fabs (nData->rx) < 0.00001
+					|| fabs (nData->ry) < 0.00001)) {
 				return true;
 			}
 		}
@@ -1277,11 +1277,11 @@ Path::RecStdCubicTo (outline_callback_data * data, double tol, double width,
 	double stGue = 1, miGue = 1, enGue = 1;
   // correction of the lengths of the tangent to the offset
   // if you don't see why i wrote that, draw a little figure and everything will be clear
-	if (fabsf (stRad) > 0.01)
+	if (fabs (stRad) > 0.01)
 		stGue += width / stRad;
-	if (fabsf (miRad) > 0.01)
+	if (fabs (miRad) > 0.01)
 		miGue += width / miRad;
-	if (fabsf (enRad) > 0.01)
+	if (fabs (enRad) > 0.01)
 		enGue += width / enRad;
 	stGue *= stTle;
 	miGue *= miTle;
@@ -1413,11 +1413,11 @@ Path::RecStdArcTo (outline_callback_data * data, double tol, double width,
 	}
   
 	double stGue = 1, miGue = 1, enGue = 1;
-	if (fabsf (stRad) > 0.01)
+	if (fabs (stRad) > 0.01)
 		stGue += width / stRad;
-	if (fabsf (miRad) > 0.01)
+	if (fabs (miRad) > 0.01)
 		miGue += width / miRad;
-	if (fabsf (enRad) > 0.01)
+	if (fabs (enRad) > 0.01)
 		enGue += width / enRad;
 	stGue *= stTle;
 	miGue *= miTle;

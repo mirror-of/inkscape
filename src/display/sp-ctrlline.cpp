@@ -250,7 +250,7 @@ ctrl_run_A8_OR (raster_info &dest,void *data,int st,float vst,int en,float ven)
     uint8_t*   d=(uint8_t*)dest.buffer;
   
     d+=3*(st-dest.startPix);
-    if ( fabsf(dv) < 0.001 ) {
+    if ( fabs(dv) < 0.001 ) {
         if ( sv > 249.999 ) {
             /* Simple copy */
             while (len > 0) {
@@ -309,10 +309,10 @@ void nr_pixblock_render_ctrl_rgba (Shape* theS,uint32_t color,NRRectL &area,char
     theS->CalcBBox();
     float  l=theS->leftX,r=theS->rightX,t=theS->topY,b=theS->bottomY;
     int    il,ir,it,ib;
-    il=(int)floorf(l);
-    ir=(int)ceilf(r);
-    it=(int)floorf(t);
-    ib=(int)ceilf(b);
+    il=(int)floor(l);
+    ir=(int)ceil(r);
+    it=(int)floor(t);
+    ib=(int)ceil(b);
   
 //  printf("bbox %i %i %i %i  render %i %i %i %i\n",il,it,ir,ib,area.x0,area.y0,area.x1,area.y1);
   

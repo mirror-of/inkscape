@@ -57,8 +57,8 @@ int              AlphaLigne::AddBord(float spos,float sval,float epos,float eval
 //	printf("%f %f -> %f %f / %f\n",spos,sval,epos,eval,tPente);
 	if ( sval == eval ) return 0;
   // compute the footprint of [spos,epos] on the line of pixels
-	float  curStF=floorf(spos);
-	float  curEnF=floorf(epos);
+	float  curStF=floor(spos);
+	float  curEnF=floor(epos);
 	int   curSt=(int)curStF;
 	int   curEn=(int)curEnF;
 	
@@ -69,7 +69,7 @@ int              AlphaLigne::AddBord(float spos,float sval,float epos,float eval
     return 0;
   }
 	if ( curSt < curMin ) curMin=curSt;
-	if ( ceilf(epos) > curMax ) curMax=(int)ceilf(epos);
+	if ( ceil(epos) > curMax ) curMax=(int)ceil(epos);
 	
   // clamp the changed portion to [min,max], no need for bigger
 	if ( curMax > max ) curMax=max;
@@ -215,8 +215,8 @@ int              AlphaLigne::AddBord(float spos,float sval,float epos,float eval
 	// pas de pente dans ce cas; on ajoute le delta au premier pixel
 	float   tPente=(eval-sval);
 
-	float curStF=floorf(spos);
-	float curEnF=floorf(epos);
+	float curStF=floor(spos);
+	float curEnF=floor(epos);
 	int   curSt=(int)curStF;
 	int   curEn=(int)curEnF;
 	
@@ -231,7 +231,7 @@ int              AlphaLigne::AddBord(float spos,float sval,float epos,float eval
 	
 	if ( curSt < curMin ) curMin=curSt;
 //	int   curEn=(int)curEnF;
-	if ( ceilf(epos) > curMax-1 ) curMax=1+(int)ceilf(epos);
+	if ( ceil(epos) > curMax-1 ) curMax=1+(int)ceil(epos);
 	if ( curSt < min ) {
 		before.delta+=eval-sval;
 	} else {

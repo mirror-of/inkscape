@@ -3,6 +3,18 @@
 	* src/seltrans.cpp: slight change to make showing/hiding center
 	  mark easier later on
 
+	* configure.in, src/main.cpp, src/star-context.cpp,
+	  src/display/bezier-utils.cpp, src/display/canvas-bpath.cpp,
+	  src/display/nr-arena-glyphs.cpp, src/display/nr-arena-shape.cpp,
+	  src/display/sp-ctrlline.cpp, src/libnr/nr-svp.cpp,
+	  src/libnrtype/FontFactory.cpp, src/libnrtype/RasterFont.cpp,
+	  src/livarot/AlphaLigne.cpp, src/livarot/BitLigne.cpp,
+	  src/livarot/Ligne.cpp, src/livarot/PathOutline.cpp,
+	  src/livarot/ShapeMisc.cpp, src/widgets/font-selector.cpp:
+
+	  fixes for floating-point portability issues, courtesy of
+	  Colin Marquardt.
+
 2004-06-23  MenTaLguY  <mental@rydia.net>
 
 	* src/Makefile_insert, src/desktop.cpp, src/managed.h,
