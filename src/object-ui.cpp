@@ -93,17 +93,14 @@ static void sp_item_create_link (GtkMenuItem *menuitem, SPItem *item);
 /* Generate context menu item section */
 
 static void
-sp_item_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
+sp_item_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
 {
 	SPItem *item;
-	GtkWidget *i, *m, *w;
+	GtkWidget *w;
 	gboolean insensitive;
 
 	item = (SPItem *) object;
 
-	/* Create toplevel menuitem */
-	i = gtk_menu_item_new_with_mnemonic (_("_Item"));
-	m = gtk_menu_new ();
 	/* Item dialog */
 	w = gtk_menu_item_new_with_mnemonic (_("Item _Properties"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
@@ -142,13 +139,6 @@ sp_item_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 	gtk_widget_set_sensitive (w, !SP_IS_ANCHOR (item));
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
-	/* Show menu */
-	gtk_widget_show (m);
-
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (i), m);
-
-	gtk_menu_append (menu, i);
-	gtk_widget_show (i);
 }
 
 static void
@@ -305,16 +295,13 @@ static void sp_anchor_link_follow (GtkMenuItem *menuitem, SPAnchor *anchor);
 static void sp_anchor_link_remove (GtkMenuItem *menuitem, SPAnchor *anchor);
 
 static void
-sp_anchor_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
+sp_anchor_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
 {
 	SPItem *item;
-	GtkWidget *i, *m, *w;
+	GtkWidget *w;
 
 	item = (SPItem *) object;
 
-	/* Create toplevel menuitem */
-	i = gtk_menu_item_new_with_mnemonic (_("_Link"));
-	m = gtk_menu_new ();
 	/* Link dialog */
 	w = gtk_menu_item_new_with_mnemonic (_("Link _Properties"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
@@ -336,13 +323,6 @@ sp_anchor_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_anchor_link_remove), item);
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
-	/* Show menu */
-	gtk_widget_show (m);
-
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (i), m);
-
-	gtk_menu_append (menu, i);
-	gtk_widget_show (i);
 }
 
 static void
@@ -386,16 +366,13 @@ sp_anchor_link_remove (GtkMenuItem *menuitem, SPAnchor *anchor)
 static void sp_image_image_properties (GtkMenuItem *menuitem, SPAnchor *anchor);
 
 static void
-sp_image_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
+sp_image_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
 {
 	SPItem *item;
-	GtkWidget *i, *m, *w;
+	GtkWidget *w;
 
 	item = (SPItem *) object;
 
-	/* Create toplevel menuitem */
-	i = gtk_menu_item_new_with_mnemonic (_("_Image"));
-	m = gtk_menu_new ();
 	/* Link dialog */
 	w = gtk_menu_item_new_with_mnemonic (_("Image _Properties"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
@@ -411,14 +388,6 @@ sp_image_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
 #endif /* Def: ENABLE_AUTOTRACE */
-
-	/* Show menu */
-	gtk_widget_show (m);
-
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (i), m);
-
-	gtk_menu_append (menu, i);
-	gtk_widget_show (i);
 }
 
 static void
@@ -446,29 +415,19 @@ sp_shape_fill_settings (GtkMenuItem *menuitem, SPItem *item)
 }
 
 static void
-sp_shape_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
+sp_shape_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
 {
 	SPItem *item;
-	GtkWidget *i, *m, *w;
+	GtkWidget *w;
 
 	item = (SPItem *) object;
 
-	/* Create toplevel menuitem */
-	i = gtk_menu_item_new_with_mnemonic (_("_Shape"));
-	m = gtk_menu_new ();
 	/* Item dialog */
 	w = gtk_menu_item_new_with_mnemonic (_("_Fill Settings"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_shape_fill_settings), item);
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
-	/* Show menu */
-	gtk_widget_show (m);
-
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (i), m);
-
-	gtk_menu_append (menu, i);
-	gtk_widget_show (i);
 }
 
 /* SPRect */
@@ -476,29 +435,19 @@ sp_shape_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
 static void sp_rect_rect_properties (GtkMenuItem *menuitem, SPAnchor *anchor);
 
 static void
-sp_rect_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
+sp_rect_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
 {
 	SPItem *item;
-	GtkWidget *i, *m, *w;
+	GtkWidget *w;
 
 	item = (SPItem *) object;
 
-	/* Create toplevel menuitem */
-	i = gtk_menu_item_new_with_mnemonic (_("_Rect"));
-	m = gtk_menu_new ();
 	/* Link dialog */
 	w = gtk_menu_item_new_with_mnemonic (_("Rect _Properties"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_rect_rect_properties), item);
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
-	/* Show menu */
-	gtk_widget_show (m);
-
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (i), m);
-
-	gtk_menu_append (menu, i);
-	gtk_widget_show (i);
 }
 
 static void
@@ -512,29 +461,19 @@ sp_rect_rect_properties (GtkMenuItem *menuitem, SPAnchor *anchor)
 static void sp_star_star_properties (GtkMenuItem *menuitem, SPAnchor *anchor);
 
 static void
-sp_star_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
+sp_star_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
 {
 	SPItem *item;
-	GtkWidget *i, *m, *w;
+	GtkWidget *w;
 
 	item = (SPItem *) object;
 
-	/* Create toplevel menuitem */
-	i = gtk_menu_item_new_with_mnemonic (_("_Star"));
-	m = gtk_menu_new ();
 	/* Link dialog */
 	w = gtk_menu_item_new_with_mnemonic (_("Star _Properties"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_star_star_properties), item);
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
-	/* Show menu */
-	gtk_widget_show (m);
-
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (i), m);
-
-	gtk_menu_append (menu, i);
-	gtk_widget_show (i);
 }
 
 static void
@@ -548,29 +487,19 @@ sp_star_star_properties (GtkMenuItem *menuitem, SPAnchor *anchor)
 static void sp_spiral_spiral_properties (GtkMenuItem *menuitem, SPAnchor *anchor);
 
 static void
-sp_spiral_menu (SPObject *object, SPDesktop *desktop, GtkMenu *menu)
+sp_spiral_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
 {
 	SPItem *item;
-	GtkWidget *i, *m, *w;
+	GtkWidget *w;
 
 	item = (SPItem *) object;
 
-	/* Create toplevel menuitem */
-	i = gtk_menu_item_new_with_mnemonic (_("_Spiral"));
-	m = gtk_menu_new ();
 	/* Link dialog */
 	w = gtk_menu_item_new_with_mnemonic (_("Spiral _Properties"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_spiral_spiral_properties), item);
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
-	/* Show menu */
-	gtk_widget_show (m);
-
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (i), m);
-
-	gtk_menu_append (menu, i);
-	gtk_widget_show (i);
 }
 
 static void
