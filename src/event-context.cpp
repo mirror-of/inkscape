@@ -16,6 +16,7 @@
 #include <config.h>
 
 #include <gdk/gdkkeysyms.h>
+#include <gtk/gtkmain.h>
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenuitem.h>
 
