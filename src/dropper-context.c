@@ -59,7 +59,7 @@ sp_dropper_context_get_type (void)
 			4,
 			(GInstanceInitFunc) sp_dropper_context_init,
 		};
-		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPDropperContext", &info, 0);
+		type = g_type_register_static (SP_TYPE_EVENT_CONTEXT, "SPDropperContext", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -73,7 +73,7 @@ sp_dropper_context_class_init (SPDropperContextClass * klass)
 	object_class = (GObjectClass *) klass;
 	ec_class = (SPEventContextClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
 
 	ec_class->setup = sp_dropper_context_setup;
 	ec_class->finish = sp_dropper_context_finish;
@@ -102,7 +102,7 @@ sp_dropper_context_setup (SPEventContext *ec)
 	c = sp_curve_new_from_static_bpath ((ArtBpath *) spdc_circle);
 	dc->area = sp_canvas_bpath_new (SP_DT_CONTROLS (ec->desktop), c);
 	sp_curve_unref (c);
-	sp_canvas_bpath_set_fill (SP_CANVAS_BPATH (dc->area), 0x00000000, 0);
+	sp_canvas_bpath_set_fill (SP_CANVAS_BPATH (dc->area), 0x00000000, (ArtWindRule)0);
 	sp_canvas_bpath_set_stroke (SP_CANVAS_BPATH (dc->area), 0x0000007f, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 	sp_canvas_item_hide (dc->area);
 }
