@@ -259,6 +259,7 @@ src/widgets/gradient-position.cpp
 src/widgets/gradient-selector.cpp
 src/widgets/gradient-vector.cpp
 src/widgets/icon.cpp
+src/widgets/layer-selector.cpp
 src/widgets/menu.cpp
 src/widgets/paint-selector.cpp
 src/widgets/ruler.cpp
