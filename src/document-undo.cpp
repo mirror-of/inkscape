@@ -156,10 +156,13 @@ sp_document_undo (SPDocument *doc)
 	log = sp_repr_commit_undoable (doc->rdoc);
 
 	if (log || doc->priv->partial) {
-		g_warning ("Undo aborted: last operation did not complete transaction");
+		g_warning ("Last operation did not complete transaction");
 		doc->priv->partial = sp_repr_coalesce_log (doc->priv->partial, log);
-		ret = FALSE;
-	} else if (doc->priv->undo) {
+		doc->priv->undo = g_slist_prepend(doc->priv->undo, doc->priv->partial);
+		doc->priv->partial = NULL;
+	}
+
+	if (doc->priv->undo) {
 		log = (Inkscape::XML::Event *) doc->priv->undo->data;
 		doc->priv->undo = g_slist_remove (doc->priv->undo, log);
 		sp_repr_undo_log (log);
