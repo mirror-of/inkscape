@@ -389,6 +389,16 @@ gr_fork (GtkWidget *button, GtkWidget *widget)
     }
 }
 
+static void gr_disconnect_sigc (GObject *obj, sigc::connection *connection) {
+    connection->disconnect();
+    delete connection;
+}
+
+static void gr_disconnect_gsignal (GObject *widget, gpointer defs) {
+    sp_signal_disconnect_by_data (defs, widget);
+}
+
+
 static void
 gr_edit (GtkWidget *button, GtkWidget *widget)
 {
@@ -459,21 +469,29 @@ gr_change_widget (SPDesktop *desktop)
     gtk_widget_set_sensitive (buttons, (gr_selected && !gr_multi));
     }
 
-    sigc::connection conn1 = selection->connectChanged(
+    // connect to selection modified and changed signals
+    sigc::connection *conn1 = new sigc::connection (selection->connectChanged(
         sigc::bind (
             sigc::ptr_fun(&gr_tb_selection_changed),
             (gpointer)widget )
-        );
-    sigc::connection conn2 = selection->connectModified(
+    ));
+    sigc::connection *conn2 = new sigc::connection (selection->connectModified(
         sigc::bind (
             sigc::ptr_fun(&gr_tb_selection_modified),
             (gpointer)widget )
-        );
+    ));
 
-//    g_signal_connect(G_OBJECT(widget), "destroy", G_CALLBACK(delete_connection), connection);
+    // when widget is destroyed, disconnect
+    g_signal_connect(G_OBJECT(widget), "destroy", G_CALLBACK(gr_disconnect_sigc), conn1);
+    g_signal_connect(G_OBJECT(widget), "destroy", G_CALLBACK(gr_disconnect_sigc), conn2);
 
-	g_signal_connect (G_OBJECT (SP_DOCUMENT_DEFS (document)), "release", G_CALLBACK (gr_defs_release), widget);
-	g_signal_connect (G_OBJECT (SP_DOCUMENT_DEFS (document)), "modified", G_CALLBACK (gr_defs_modified), widget);
+    // connect to release and modified signals of the defs (i.e. when someone changes gradient)
+    g_signal_connect (G_OBJECT (SP_DOCUMENT_DEFS (document)), "release", G_CALLBACK (gr_defs_release), widget);
+    g_signal_connect (G_OBJECT (SP_DOCUMENT_DEFS (document)), "modified", G_CALLBACK (gr_defs_modified), widget);
+
+    // when widget is destroyed, disconnect
+    g_signal_connect(G_OBJECT(widget), "destroy", G_CALLBACK(gr_disconnect_gsignal), G_OBJECT (SP_DOCUMENT_DEFS (document)));
+    g_signal_connect(G_OBJECT(widget), "destroy", G_CALLBACK(gr_disconnect_gsignal), G_OBJECT (SP_DOCUMENT_DEFS (document)));
 
     gtk_widget_show_all (widget);
     return widget;
