@@ -1119,6 +1119,8 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
         style->stroke_miterlimit.value = parent->stroke_miterlimit.value;
     }
     if (!style->stroke_dasharray_set && parent->stroke_dasharray_set) {
+        /* TODO: This code looks wrong.  Why does the logic differ from the above properties?
+         * Similarly dashoffset below. */
         style->stroke_dash.n_dash = parent->stroke_dash.n_dash;
         if (style->stroke_dash.n_dash > 0) {
             style->stroke_dash.dash = g_new (gdouble, style->stroke_dash.n_dash);
@@ -1310,19 +1312,24 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
     p += sp_style_write_ifloat (p, c + BMAX - p, "stroke-miterlimit", &style->stroke_miterlimit, NULL, flags);
 
     /* fixme: */
-    if (style->stroke_dasharray_set) {
+    if ((flags & SP_STYLE_FLAG_ALWAYS)
+        || (style->stroke_dasharray_set
+            && (flags & SP_STYLE_FLAG_IFSET)))
+    {
         if (style->stroke_dash.n_dash && style->stroke_dash.dash) {
-            gint i;
             p += g_snprintf (p, c + BMAX - p, "stroke-dasharray:");
+            gint i;
             for (i = 0; i < style->stroke_dash.n_dash; i++) {
 				Inkscape::SVGOStringStream os;
                 os << style->stroke_dash.dash[i] << " ";
 				p += g_strlcpy (p, os.str().c_str(), c + BMAX - p);
             }
-            p += g_snprintf (p, c + BMAX - p, ";");
+            if (p < c + BMAX) {
+                *p++ = ';';
+            }
+        } else {
+            p += g_snprintf(p, c + BMAX - p, "stroke-dasharray:none;");
         }
-    } else if (flags == SP_STYLE_FLAG_ALWAYS) {
-        p += g_snprintf (p, c + BMAX - p, "stroke-dasharray:none;");
     }
 
     /* fixme: */
