@@ -1,3 +1,11 @@
+2003-12-17  bulia byak <bulia@dr.com>
+
+	* src/xml/repr-io.cpp src/xml/repr.h: fix to suppress formatting whitespace when
+	serializing text and its children
+
+	* src/select-context.cpp: shift now prevents dragging objects, creating rubberband
+	instead
+
 2003-12-17 Nathan Hurst <njh@csse.monash.edu.au>
 
 	* provided some initial though on how to do Points uniformly across inkscape.  geom.h
