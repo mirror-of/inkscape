@@ -20,7 +20,8 @@ typedef struct _NRTypeFaceFT2Class NRTypeFaceFT2Class;
 typedef struct _NRTypeFaceDefFT2 NRTypeFaceDefFT2;
 typedef struct _NRTypeFaceGlyphFT2 NRTypeFaceGlyphFT2;
 
-#include <freetype/freetype.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 #include <libnrtype/nr-typeface.h>
 
 struct _NRTypeFaceDefFT2 {

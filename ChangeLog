@@ -7,6 +7,7 @@
 	* SF Patch #842955: additional Darwin updates from Peter
 	* Fixed stroke style literal string bug that caused warnings
 	* SF Patch #842958: updated inkscape.desktop.in slightly
+	* SF Patch #843170: freetype include corrections
 
 2003-11-16  MenTaLguY <mental@rydia.net>
 
