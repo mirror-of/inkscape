@@ -409,12 +409,40 @@ sp_gradient_transform_multiply(SPGradient *gradient, NR::Matrix postmul, bool se
     }
 }
 
+
+/**
+Set the position of point point_num of the gradient applied to item (either fill_or_stroke) to
+p_w (in desktop coordinates). Write_repr if you want the change to become permanent.
+*/
 void
-sp_gradient_set_coords (SPGradient *gradient, guint point_num, NR::Point p, bool write_repr, NR::Matrix i2d)
+sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool fill_or_stroke, bool write_repr)
 {
-    g_return_if_fail(SP_IS_GRADIENT(gradient));
+    SPStyle *style = SP_OBJECT_STYLE (item);
+    NR::Matrix i2d = sp_item_i2d_affine (item);
+    NR::Point p = p_w * i2d.inverse();
+    SPGradient *gradient = NULL;
+
+    if (fill_or_stroke) {
+        if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) {
+            SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
+            if (SP_IS_GRADIENT (server)) {
+                gradient = sp_gradient_convert_to_userspace (SP_GRADIENT (server), item, "fill");
+            }
+        }
+    } else {
+        if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) {
+            SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER(item);
+            if (SP_IS_GRADIENT (server)) {
+                gradient = sp_gradient_convert_to_userspace (SP_GRADIENT (server), item, "stroke");
+            }
+        }
+    }
+
+    if (!gradient || !SP_IS_GRADIENT(gradient))
+        return;
 
     p *= (gradient->gradientTransform).inverse();
+    // now p is in gradient's original coordinates
 
     SPRepr *repr = SP_OBJECT_REPR(gradient);
 
@@ -447,8 +475,9 @@ sp_gradient_set_coords (SPGradient *gradient, guint point_num, NR::Point p, bool
 
 		SPRadialGradient *rg = SP_RADIALGRADIENT(gradient);
 		NR::Point c (rg->cx.computed, rg->cy.computed);
-		NR::Point c_w = c * gradient->gradientTransform * i2d;
-		NR::Point p_w = p * gradient->gradientTransform * i2d;
+		NR::Point c_w = c * gradient->gradientTransform * i2d; // in desktop coords
+           if (NR::L2 (p_w - c_w) < 1e-3)
+               return;
 		NR::Matrix new_transform;
 		bool transform_set = false;
 

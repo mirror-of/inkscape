@@ -368,7 +368,8 @@ gr_knot_ungrabbed_handler (SPKnot *knot, unsigned int state, gpointer data)
     // draggers because moving this one affects positions of others. BAD because 1) others will not
     // be updated until mouse is released, 2) we'll need to clumsily save and restore selected
     // dragger, 3) others will unsnap without warning; 4) the order of draggables may change which
-    // affects knot shape. However, this is by far the simplest method.
+    // will affect knot shape of the dragger has different draggables. However, this is by far the
+    // simplest method.
     if (dragger->isA(POINT_RG_R1) || dragger->isA(POINT_RG_R2) || dragger->isA(POINT_RG_CENTER)) {
         // only if this is center or one of the radii; focus does not affect other draggers
         dragger->parent->updateDraggersReselect();

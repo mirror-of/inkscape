@@ -816,32 +816,6 @@ sp_item_adjust_gradient (SPItem *item, NR::Matrix const &postmul, bool set)
 }
 
 void
-sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p, bool fill_or_stroke, bool write_repr)
-{
-    SPStyle *style = SP_OBJECT_STYLE (item);
-
-    p *= (sp_item_i2d_affine (item)).inverse();
-
-    if (fill_or_stroke) {
-        if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) {
-            SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
-            if (SP_IS_GRADIENT (server)) {
-                SPGradient *gradient = sp_gradient_convert_to_userspace (SP_GRADIENT (server), item, "fill");
-                sp_gradient_set_coords (gradient, point_num, p, write_repr, sp_item_i2d_affine (item));
-            }
-        }
-    } else {
-        if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) {
-            SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER(item);
-            if (SP_IS_GRADIENT (server)) {
-                SPGradient *gradient = sp_gradient_convert_to_userspace (SP_GRADIENT (server), item, "stroke");
-                sp_gradient_set_coords (gradient, point_num, p, write_repr, sp_item_i2d_affine (item));
-            }
-        }
-    }
-}
-
-void
 sp_item_adjust_stroke (SPItem *item, gdouble ex)
 {
     SPStyle *style = SP_OBJECT_STYLE (item);
