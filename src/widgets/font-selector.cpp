@@ -401,6 +401,7 @@ sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font, double siz
 		gchar s[8];
 		g_snprintf (s, 8, "%.5g", size); // UI, so printf is ok
 		gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (fsel->size)->entry), s);
+		fsel->fontsize = size;
 	}
 }
 
@@ -542,8 +543,6 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 			} else {
 				p = _("AaBbCcIiPpQq12368.;/()");
 			}
-			float px = 0.0;
-			float py = 0.0;
 			int len = 0;
 			
 			NRRect bbox;
@@ -612,7 +611,6 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 					guchar *ps;
 					NRPixBlock pb, m;
 					int x0, y0, x1, y1;
-					int i;
 					x0 = x;
 					y0 = y;
 					x1 = MIN (x0 + 64, event->area.x + event->area.width);
