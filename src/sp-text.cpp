@@ -527,7 +527,12 @@ static int BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Inks
         //div_src = &SP_TEXT(root)->contents;
         // text elements don't read vectors properly. See lauris' fixme above.
     }
-    else if (SP_IS_TSPAN(root) && SP_TSPAN(root)->role == SP_TSPAN_ROLE_UNSPECIFIED) div_src = &SP_TSPAN(root)->contents;
+    else if (SP_IS_TSPAN(root)) {
+        SPTSpan *tspan = SP_TSPAN(root);
+        div_src = &tspan->contents;
+        if (tspan->role != SP_TSPAN_ROLE_UNSPECIFIED && div_src->nb_x <= 1 && div_src->nb_y <= 1 && div_src->nb_dx == 0 && div_src->nb_dy == 0 && div_src->nb_rot == 0)
+            div_src = NULL;
+    }
     else if (SP_IS_TEXTPATH(root)) div_src = &SP_TEXTPATH(root)->contents;
 
     if (div_src) {
