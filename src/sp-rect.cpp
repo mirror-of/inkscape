@@ -172,7 +172,7 @@ sp_rect_set (SPObject *object, unsigned int key, const gchar *value)
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_HEIGHT:
-		if (!sp_svg_length_read (value, &rect->height) || (rect->width.value < 0.0)) {
+		if (!sp_svg_length_read (value, &rect->height) || (rect->height.value < 0.0)) {
 			sp_svg_length_unset (&rect->height, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
