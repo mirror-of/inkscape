@@ -2,6 +2,7 @@
 #define SEEN_PREFERENCES_SKELETON_H
 
 #include <inkscape_version.h>
+#include <extension/extension.h>
 
 static char const preferences_skeleton[] =
 "<inkscape version=\"" INKSCAPE_VERSION "\"\n"
@@ -126,7 +127,7 @@ static char const preferences_skeleton[] =
 "      <group id=\"exportarea\"/>\n"
 "      <group id=\"defaultxdpi\"/>\n"
 "    </group>\n"
-"    <group id=\"save_as\" default=\"modules.output.SVG.sodipodi\" append_extension=\"1\" path=\"\"/>\n"
+"    <group id=\"save_as\" default=\"" SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "\" append_extension=\"1\" path=\"\"/>\n"
 "    <group id=\"open\" path=\"\"/>\n"
 "  </group>\n"
 "  <group id=\"printing\">\n"

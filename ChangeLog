@@ -1,3 +1,10 @@
+2004-07-11  Kees Cook  <kees@outflux.net>
+
+	* src/preferences-skeleton.h: with simarilius tracked down the cause
+	  of bug #988445.  Hooked pref up to extension name #define.
+	* src/dialogs/filedialog-win32.cpp: corrected an assert test, and
+	  changed dialog to take the passed window title.
+
 2004-07-11  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/attributes.cpp, src/attributes.h: remove confusing

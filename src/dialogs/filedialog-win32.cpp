@@ -266,7 +266,7 @@ FileSaveDialog::FileSaveDialog(
       N -= w + 1;
       p += w + 1;
 
-      g_assert (N < UNSAFE_SCRATCH_BUFFER_SIZE);
+      g_assert (N >= 0);
 
       /* Look to see if this extension is the default */
       if (default_key &&
@@ -307,7 +307,7 @@ FileSaveDialog::FileSaveDialog(
         NULL,                       // lpstrFileTitle
         0,                          // nMaxFileTitle
         (const CHAR *)dir,          // lpstrInitialDir
-        "Save document to file",    // lpstrTitle
+        (const CHAR *)title,        // lpstrTitle
         OFN_HIDEREADONLY | OFN_NOCHANGEDIR,           // Flags
         0,                          // nFileOffset
         0,                          // nFileExtension
