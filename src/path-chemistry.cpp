@@ -83,6 +83,9 @@ sp_selected_path_combine (void)
 	// remember the position of the topmost object
 	gint topmost = sp_repr_position (SP_OBJECT_REPR ((SPItem *) g_slist_last(items)->data));
 
+	// remember the id of the bottomost object
+	const char *id = sp_repr_attr (SP_OBJECT_REPR ((SPItem *) items->data), "id");
+
 	// FIXME: merge styles of combined objects instead of using the first one's style
 	gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR ((SPItem *) items->data), "style"));
 
@@ -100,6 +103,7 @@ sp_selected_path_combine (void)
 		dstring = g_string_append(dstring, str);
 		g_free (str);
 
+		// FIXME: use megakill API
 		sp_repr_unparent (SP_OBJECT_REPR (path));
 		topmost --;
 	}
@@ -107,6 +111,9 @@ sp_selected_path_combine (void)
 	g_slist_free (items);
 
 	SPRepr *repr = sp_repr_new ("path");
+
+	// restore id
+	sp_repr_set_attr (repr, "id", id);
 
 	sp_repr_set_attr (repr, "style", style);
 	g_free (style);
@@ -137,7 +144,7 @@ sp_selected_path_break_apart (void)
 	SPSelection *selection = SP_DT_SELECTION (desktop);
 
 	if (selection->isEmpty()) {
-		sp_view_set_statusf_flash (SP_VIEW(desktop), _("Select some paths to break apart."));
+		sp_view_set_statusf_flash (SP_VIEW(desktop), _("Select some path(s) to break apart."));
 		return;
 	}
 
@@ -162,6 +169,7 @@ sp_selected_path_break_apart (void)
 
 		SPRepr *parent = SP_OBJECT_REPR (item)->parent;
 		gint pos = sp_repr_position (SP_OBJECT_REPR (item));
+		const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
 
 		gchar *style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
 
@@ -177,7 +185,7 @@ sp_selected_path_break_apart (void)
 
 		sp_curve_unref (curve);
 
-		for (GSList *l = list; l != NULL; l = l->next) {
+		for (GSList *l = g_slist_reverse(list); l != NULL; l = l->next) {
 			curve = (SPCurve *) l->data;
 
 			SPRepr *repr = sp_repr_new ("path");
@@ -192,6 +200,10 @@ sp_selected_path_break_apart (void)
 
 			// move to the saved position 
 			sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+
+			// if it's the first one, restore id
+			if (l == list)
+				sp_repr_set_attr (repr, "id", id);
 
 			selection->addRepr(repr);
 
@@ -219,33 +231,63 @@ sp_selected_path_to_curves (void)
 }
 
 static void
-sp_selected_path_to_curves0 (gboolean do_document_done, guint32 text_grouping_policy)
+sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 {
-	SPDesktop *dt = SP_ACTIVE_DESKTOP;
-	if (!dt)
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+	if (!SP_IS_DESKTOP(desktop))
 	  return;
 
-	GSList *il = (GSList *) SP_DT_SELECTION(dt)->itemList();
-	if (!il)
-	  return;
+	SPSelection *selection = SP_DT_SELECTION (desktop);
 
-	GSList *l = il;
-	while (l) {
-		SPItem *item = (SPItem *)l->data;
-		l    = l->next;
+	if (selection->isEmpty()) {
+		if (interactive)
+			sp_view_set_statusf_flash (SP_VIEW(desktop), _("Select some object(s) to convert to path."));
+		return;
+	}
+
+	bool did = false;
+
+	for (GSList *items = g_slist_copy((GSList *) selection->itemList());
+			 items != NULL;
+			 items = items->next) {
+
+		SPItem *item = SP_ITEM (items->data);
+
 		SPRepr *repr = sp_selected_item_to_curved_repr (item, 0);
 		if (!repr)
-		  continue;
+			continue;
 		
-		SPObject *parent = SP_OBJECT_PARENT (item);
-		sp_repr_add_child (SP_OBJECT_REPR (parent), 
-				   repr, SP_OBJECT_REPR (item));
+		did = true;
+
+		// remember the position of the item
+		gint pos = sp_repr_position (SP_OBJECT_REPR (item));
+		// remember parent
+		SPRepr *parent = SP_OBJECT_REPR (item)->parent;
+		// remember id
+		const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
+
+		selection->removeItem (item);
 		sp_repr_unparent (SP_OBJECT_REPR (item));
-		SP_DT_SELECTION(dt)->addRepr(repr);
+
+		// restore id
+		sp_repr_set_attr (repr, "id", id);
+		// add the new repr to the parent
+		sp_repr_append_child (parent, repr);
+		// move to the saved position 
+		sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+
+		selection->addRepr(repr);
 		sp_repr_unref(repr);
 	}
-	if (do_document_done)
-		sp_document_done (SP_DT_DOCUMENT (dt));
+
+	if (interactive) {
+		if (did) {
+			sp_document_done (SP_DT_DOCUMENT (desktop));
+		} else {
+			sp_view_set_statusf_flash (SP_VIEW(desktop), _("No objects to convert to path in the selection."));
+			return;
+		}
+	}
 }
 
 static SPRepr *
