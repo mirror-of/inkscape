@@ -509,7 +509,7 @@ src/xml/makefile
 src/traits/makefile
 src/algorithms/makefile
 src/util/makefile
-src/potrace/makefile
+src/trace/makefile
 doc/Makefile
 po/Makefile.in
 share/Makefile
