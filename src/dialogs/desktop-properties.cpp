@@ -868,6 +868,8 @@ sp_desktop_dialog(void)
             GtkWidget * sb = gtk_spin_button_new (GTK_ADJUSTMENT(a), 1.0, 0);
             gtk_widget_show(sb);
 
+            // TRANSLATORS: This belongs to the "Major grid line spacing:" string,
+            //  see grid settings in the "Document Preferences" dialog
             GtkWidget * label = gtk_label_new(_("lines"));
             gtk_widget_show(label);
 
