@@ -92,7 +92,7 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 #ifdef TED
 	SPRepr *repr;
 #endif
-	unsigned int p2bm;
+	bool p2bm;
 
 #ifdef TED
 	repr = ((SPModule *) mod)->repr;
@@ -123,9 +123,7 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 	gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
 	/* Print type */
 	p2bm = FALSE;
-#ifdef TED
-	if (repr) sp_repr_get_boolean (repr, "bitmap", &p2bm);
-#endif
+	mod->get_param("bitmap", &p2bm);
 	rb = gtk_radio_button_new_with_label (NULL, _("Print using PostScript operators"));
 	gtk_tooltips_set_tip ((GtkTooltips *) tt, rb,
 						  _("Use PostScript vector operators, resulting image will be (usually) smaller "
@@ -158,15 +156,11 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 	sl = g_list_reverse (sl);
 	gtk_combo_set_popdown_strings (GTK_COMBO (combo), sl);
 	g_list_free (sl);
-#ifdef TED
-	if (repr) {
-		const gchar *val;
-		val = sp_repr_attr (repr, "resolution");
+	if (1) {
+		gchar * val = NULL;
+		mod->get_param("resolution", &val);
 		gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry), val);
 	}
-#else
-	gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry), NULL);
-#endif
 	gtk_box_pack_end (GTK_BOX (hb), combo, FALSE, FALSE, 0);
 	l = gtk_label_new (_("Resolution:"));
 	gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
@@ -184,17 +178,11 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 	gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
 
 	e = gtk_entry_new ();
-#ifdef TED
-	if (repr && sp_repr_attr (repr, "destination")) {
-		const gchar *val;
-		val = sp_repr_attr (repr, "destination");
+	if (1) {
+		gchar *val;
+		mod->get_param("destination", &val);
 		gtk_entry_set_text (GTK_ENTRY (e), val);
-	} else {
-		gtk_entry_set_text (GTK_ENTRY (e), "lp");
 	}
-#else
-	gtk_entry_set_text (GTK_ENTRY (e), "lp");
-#endif
 	gtk_box_pack_start (GTK_BOX (vb), e, FALSE, FALSE, 0);
 
 	gtk_widget_show_all (vbox);
@@ -213,13 +201,11 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 		/* Arrgh, have to do something */
 		fn = gtk_entry_get_text (GTK_ENTRY (e));
 		/* g_print ("Printing to %s\n", fn); */
-#ifdef TED
-		if (repr) {
-			sp_repr_set_attr (repr, "bitmap", (_bitmap) ? "true" : "false");
-			sp_repr_set_attr (repr, "resolution", sstr);
-			sp_repr_set_attr (repr, "destination", fn);
-		}
-#endif
+
+		mod->set_param("bitmap", (_bitmap) ? (bool)TRUE : (bool)FALSE);
+		mod->set_param("resolution", (gchar *)sstr);
+		mod->set_param("destination", (gchar *)fn);
+
 		osf = NULL;
 		osp = NULL;
 		if (fn) {
@@ -810,6 +796,9 @@ PrintPS::init (void)
 		"<spmodule>\n"
 			"<name>Postscript Print</name>\n"
 			"<id>" SP_MODULE_KEY_PRINT_PS "</id>\n"
+			"<param name=\"bitmap\" type=\"boolean\">FALSE</param>\n"
+			"<param name=\"resolution\" type=\"string\">72</param>\n"
+			"<param name=\"destination\" type=\"string\">lp</param>\n"
 			"<print/>\n"
 		"</spmodule>", new PrintPS());
 

@@ -1,3 +1,11 @@
+2004-03-14  Ted Gould <ted@gould.cx>
+
+	* src/extension/extension.cpp, src/extension/extension.h,
+      src/extension/internal/ps.cpp: Adding in parameters for extensions.
+	  This will make it so that extensions can have easy settings that
+	  are used.  They are not currently persistent - but that will be
+	  a future feature.
+
 2004-03-14  MenTaLguY <mental@rydia.net>
 
 	* src/xml/repr.cpp: existing listeners were getting dropped when new
