@@ -15,6 +15,7 @@ ast
 bonobo
 
 dialogs/filedialog-win32.cpp
+dialogs/debugdialog.cpp
 display/nr-uta.cpp
 display/testnr.cpp
 display/bezier-utils-test.cpp
