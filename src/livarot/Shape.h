@@ -15,7 +15,7 @@
 #include <inttypes.h>
 #include <string.h>
 #include <vector>
-#include <glib/gmessages.h>
+//#include <iostream.h>
 
 #include "ShapeUtils.h"
 #include "libnr/nr-point.h"
@@ -73,9 +73,6 @@ public:
   // topological information: who links who?
   struct dg_point
   {
-    explicit dg_point(NR::Point const &pt=NR::Point(0,0))
-    : x(pt), dI(0), dO(0), firstA(-1), lastA(-1), oldDegree(0) {}
-
     NR::Point x;			// position
     int dI, dO;			// indegree and outdegree
     int firstA, lastA;		// first and last incident edge
@@ -83,9 +80,6 @@ public:
   };
   struct dg_arete
   {
-    explicit dg_arete(NR::Point const &vec=NR::Point(0,0))
-    : dx(vec), st(-1), en(-1), nextS(-1), prevS(-1), nextE(-1), prevE(-1) {}
-
     NR::Point dx;		// edge vector
     int st, en;			// start and end points of the edge
     int nextS, prevS;		// next and previous edge in the double-linked list at the start point
@@ -93,7 +87,9 @@ public:
   };
 
   // lists of the nodes and edges
-  std::vector<dg_point> pts;
+  int nbPt, maxPt;
+  dg_point *pts;
+  int nbAr, maxAr;
   std::vector<dg_arete> aretes;
 
   // flags
@@ -104,11 +100,6 @@ private:
   // temporary data for the various algorithms
   struct edge_data
   {
-    explicit edge_data(NR::Point const &rvec=NR::Point(0, 0))
-    : weight(1), rdx(rvec),
-      length(0), sqlength(0), ilength(0), isqlength(0),
-      siEd(0), coEd(0) {}
-
     int weight;			// weight of the edge (to handle multiple edges)
     NR::Point rdx;		// rounded edge vector
     double length, sqlength, ilength, isqlength;	// length^2, length, 1/length^2, 1/length
@@ -117,9 +108,6 @@ private:
   };
   struct sweep_src_data
   {
-    explicit sweep_src_data()
-    : misc(NULL), firstLinkedPoint(-1) {}
-
     void *misc;			// pointer to the SweepTree* in the sweepline
     int firstLinkedPoint;	// not used
     int stPt, enPt;		// start- end end- points for this edge in the resulting polygon
@@ -135,9 +123,6 @@ private:
   };
   struct sweep_dest_data
   {
-    explicit sweep_dest_data()
-    : misc(NULL), suivParc(-1), precParc(-1), leW(0), riW(0), ind(0) {}
-
     void *misc;			// used to check if an edge has already been seen during the depth-first search
     int suivParc, precParc;	// previous and current next edge in the depth-first search
     int leW, riW;		// left and right winding numbers for this edge
@@ -156,9 +141,6 @@ private:
   };
   struct quick_raster_data
   {
-    explicit quick_raster_data(double pos=0)
-    : x(pos), bord(-1), ind(-1), next(-1), prev(-1) {}
-
     double x;			    // x-position on the sweepline
     int    bord;			// index of the edge
     int    ind;       // index of qrsData elem for edge (ie inverse of the bord)
@@ -166,11 +148,6 @@ private:
   };
   struct point_data
   {
-    explicit point_data(NR::Point const &p=NR::Point(0,0))
-    : oldInd(-1), newInd(-1), pending(0),
-      edgeOnLeft(-1), nextLinkedPoint(-1), 
-      askForWindingS(NULL), askForWindingB(-1), rx(p) {}
-
     int oldInd, newInd;		// back and forth indices used when sorting the points, to know where they have
     // been relocated in the array
     int pending;		// number of intersection attached to this edge, and also used when sorting arrays
@@ -205,47 +182,38 @@ private:
   };
   struct back_data
   {
-    explicit back_data()
-    : pathID(-1), pieceID(-1), tSt(0), tEn(0) {}
-
     int pathID, pieceID;
     double tSt, tEn;
   };
   struct voronoi_point
   {				// info for points treated as points of a voronoi diagram (obtained by MakeShape())
-    explicit voronoi_point()
-    : value(0.0), winding(-2) {}
-
     double value;		// distance to source
     int winding;		// winding relatively to source
   };
   struct voronoi_edge
   {				// info for edges, treated as approximation of edges of the voronoi diagram
-    explicit voronoi_edge(int left=-1, int right=-1)
-    : leF(left), riF(right),
-      leStX(0), leStY(0), riStX(0), riStY(0),
-      leEnX(0), leEnY(0), riEnX(0), riEnY(0) {}
-
     int leF, riF;		// left and right site
     double leStX, leStY, riStX, riStY;	// on the left side: (leStX,leStY) is the smallest vector from the source to st
     // etc...
     double leEnX, leEnY, riEnX, riEnY;
   };
 
-  std::vector<edge_data> eData;
-  std::vector<sweep_src_data> swsData;
-  std::vector<sweep_dest_data> swdData;
-  std::vector<raster_data> swrData;
-  std::vector<point_data> pData;
+  // the arrays of temporary data
+  // these ones are dynamically kept at a length of maxPt or maxAr
+  edge_data *eData;
+  sweep_src_data *swsData;
+  sweep_dest_data *swdData;
+  raster_data *swrData;
+  point_data *pData;
 public:
-  std::vector<back_data> ebData;
-  std::vector<voronoi_point> vorpData;
-  std::vector<voronoi_edge> voreData;
+    back_data * ebData;
+  voronoi_point *vorpData;
+  voronoi_edge *voreData;
 
   //private:
   int nbQRas;
   int firstQRas,lastQRas;
-  std::vector<quick_raster_data> qrsData;
+  quick_raster_data *qrsData;
   // these ones are dynamically allocated
   int nbChgt, maxChgt;
   sTreeChange *chgts;
@@ -256,7 +224,9 @@ public:
   SweepEventQueue sEvts;
 
 public:
-  Shape (void);
+    Shape (void);
+   ~Shape (void);
+
 
   void MakeBackData (bool nVal);
   void MakeVoronoiData (bool nVal);
@@ -267,7 +237,6 @@ public:
   void Copy (Shape * a);
   // -reset the graph, and ensure there's room for n points and m edges
   void Reset (int n = 0, int m = 0);
-  void _resizeAuxVectors();
   //  -points:
   int AddPoint (const NR::Point x);	// as the function name says
   // returns the index at which the point has been added in the array
@@ -296,9 +265,8 @@ public:
       return aretes[b].en;
     return aretes[b].st;
   };
-  inline int NextAt (int const p, unsigned const b)	// next edge (after edge b) in the double-linked list at point p
+  inline int NextAt (int p, int b)	// next edge (after edge b) in the double-linked list at point p
   {
-    g_assert( b < aretes.size() );
     if (p == aretes[b].st)
       {
 	return aretes[b].nextS;
@@ -309,9 +277,8 @@ public:
       }
     return -1;
   };
-  inline int PrevAt (int const p, unsigned const b)	// previous edge
+  inline int PrevAt (int p, int b)	// previous edge
   {
-    g_assert( b < aretes.size() );
     if (p == aretes[b].st)
       {
 	return aretes[b].prevS;
@@ -322,9 +289,8 @@ public:
       }
     return -1;
   };
-  inline int CycleNextAt (int const p, unsigned const b)	// same as NextAt, but the list is considered circular
+  inline int CycleNextAt (int p, int b)	// same as NextAt, but the list is considered circular
   {
-    g_assert( b < aretes.size() );
     if (p == aretes[b].st)
       {
 	if (aretes[b].nextS < 0)
@@ -339,9 +305,8 @@ public:
       }
     return -1;
   };
-  inline int CyclePrevAt (int const p, unsigned const b)	// same as PrevAt, but the list is considered circular
+  inline int CyclePrevAt (int p, int b)	// same as PrevAt, but the list is considered circular
   {
-    g_assert( b < aretes.size() );
     if (p == aretes[b].st)
       {
 	if (aretes[b].prevS < 0)

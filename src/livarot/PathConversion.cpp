@@ -1244,7 +1244,7 @@ void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool inve
 		dest->Reset(nbPt,nbPt);
 	}
 	if ( nbPt <= 1 ) return;
-	unsigned   first=dest->pts.size();
+	int   first=dest->nbPt;
   //	bool  startIsEnd=false;
 	
 	if ( back ) dest->MakeBackData(true);

@@ -24,7 +24,7 @@
 
 void              Shape::BeginRaster(float &pos,int &curPt,float /*step*/)
 {
-	if ( pts.size() <= 1 || aretes.size() <= 1 ) {
+	if ( nbPt <= 1 || nbAr <= 1 ) {
 		curPt=0;
 		pos=0;
 		return;
@@ -34,8 +34,8 @@ void              Shape::BeginRaster(float &pos,int &curPt,float /*step*/)
 	MakeEdgeData(true);
 	if ( GetFlag(has_sweep_data) ) {
 	} else {
-SweepTree::CreateList(sTree,aretes.size());
-SweepEvent::CreateQueue(sEvts,aretes.size());
+SweepTree::CreateList(sTree,nbAr);
+SweepEvent::CreateQueue(sEvts,nbAr);
 		SetFlag(has_sweep_data,true);
 	}
 
@@ -44,14 +44,14 @@ SweepEvent::CreateQueue(sEvts,aretes.size());
 	curPt=0;
 	pos=pts[0].x[1]-1.0;
 
-	for (unsigned i=0;i<pts.size();i++) {
+	for (int i=0;i<nbPt;i++) {
 		pData[i].pending=0;
 		pData[i].edgeOnLeft=-1;
 		pData[i].nextLinkedPoint=-1;
 		pData[i].rx[0]=/*Round(*/pts[i].x[0]/*)*/;
 		pData[i].rx[1]=/*Round(*/pts[i].x[1]/*)*/;
 	}
-	for (unsigned i=0;i<aretes.size();i++) {
+	for (int i=0;i<nbAr;i++) {
     swrData[i].misc=NULL;
 		eData[i].rdx=pData[aretes[i].en].rx-pData[aretes[i].st].rx;
 	}
@@ -69,7 +69,7 @@ SweepEvent::DestroyQueue(sEvts);
 }
 void              Shape::BeginQuickRaster(float &pos,int &curPt,float /*step*/)
 {
-	if ( pts.size() <= 1 || aretes.size() <= 1 ) {
+	if ( nbPt <= 1 || nbAr <= 1 ) {
 		curPt=0;
 		pos=0;
 		return;
@@ -84,14 +84,14 @@ void              Shape::BeginQuickRaster(float &pos,int &curPt,float /*step*/)
 	curPt=0;
 	pos=pts[0].x[1]-1.0;
 
-	for (unsigned i=0;i<pts.size();i++) {
+	for (int i=0;i<nbPt;i++) {
 		pData[i].pending=0;
 		pData[i].edgeOnLeft=-1;
 		pData[i].nextLinkedPoint=-1;
 		pData[i].rx[0]=Round(pts[i].x[0]);
 		pData[i].rx[1]=Round(pts[i].x[1]);
 	}
-	for (unsigned i=0;i<aretes.size();i++) {
+	for (int i=0;i<nbAr;i++) {
 	  swrData[i].misc = NULL;
     qrsData[i].ind=-1;
 		eData[i].rdx=pData[aretes[i].en].rx-pData[aretes[i].st].rx;
@@ -110,26 +110,26 @@ void              Shape::EndQuickRaster(void)
 // 2 versions of the Scan() series to move the scanline to a given position withou actually computing coverages
 void              Shape::Scan(float &pos,int &curP,float to,float step)
 {
-  if ( aretes.size() <= 1 ) return;
+  if ( nbAr <= 1 ) return;
 	if ( pos == to ) return;
 	if ( pos < to ) {
     // we're moving downwards
     // points of the polygon are sorted top-down, so we take them in order, starting with the one at index curP,
     // until we reach the wanted position to.
     // don't forget to update curP and pos when we're done
-		unsigned curPt=curP;
-		while ( curPt < pts.size() && pts[curPt].x[1] <= to ) {
+		int    curPt=curP;
+		while ( curPt < nbPt && pts[curPt].x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
       
       // treat a new point: remove and add edges incident to it
-			unsigned    cb;
+			int    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
 			cb=pts[nPt].firstA;
       // count the number of edge coming in nPt from above if nbUp, and the number of edge exiting nPt to go below in nbDn
       // upNo and dnNo are one of these edges, if any exist
-			while ( cb < aretes.size() ) {
+			while ( cb >= 0 && cb < nbAr ) {
 				if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 					upNo=cb;
 					nbUp++;
@@ -151,9 +151,9 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 			if ( nbUp > 0 ) {
         // first remove edges coming from above
 				cb=pts[nPt].firstA;
-				while ( cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
-						if ( cb != unsigned(upNo) ) { // we salvage the edge upNo to plug the edges we'll be addingat its place
+						if ( cb != upNo ) { // we salvage the edge upNo to plug the edges we'll be addingat its place
                                 // but the other edge don't have this chance
 							SweepTree* node=swrData[cb].misc;
 							if ( node ) {
@@ -193,9 +193,9 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
       // add the remaining edges
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
 				cb=pts[nPt].firstA;
-				while ( cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
-						if ( cb != unsigned(dnNo) ) {
+						if ( cb != dnNo ) {
 							SweepTree* node=SweepTree::AddInList(this,cb,1,nPt,sTree,this);
 							swrData[cb].misc=node;
 							node->InsertAt(sTree,sEvts,this,insertionNode,nPt,true);
@@ -215,11 +215,11 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 			int           nPt=-1;
 			nPt=--curPt;
       
-			unsigned    cb;
+			int    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
 			cb=pts[nPt].firstA;
-			while ( cb < aretes.size() ) {
+			while ( cb >= 0 && cb < nbAr ) {
 				if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
 					upNo=cb;
 					nbUp++;
@@ -240,9 +240,9 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
       
 			if ( nbUp > 0 ) {
 				cb=pts[nPt].firstA;
-				while ( cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
-						if ( cb != unsigned(upNo) ) {
+						if ( cb != upNo ) {
 							SweepTree* node=swrData[cb].misc;
 							if ( node ) {
 								swrData[cb].misc=NULL;
@@ -280,9 +280,9 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
       
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
 				cb=pts[nPt].firstA;
-				while ( cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
-						if ( cb != unsigned(dnNo) ) {
+						if ( cb != dnNo ) {
 							SweepTree* node=SweepTree::AddInList(this,cb,1,nPt,sTree,this);
 							swrData[cb].misc=node;
 							node->InsertAt(sTree,sEvts,this,insertionNode,nPt,true,false);
@@ -312,11 +312,11 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 
 void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,float step)
 {
-  if ( aretes.size() <= 1 ) return;
+  if ( nbAr <= 1 ) return;
 	if ( pos == to ) return;
 	if ( pos < to ) {
-		unsigned    curPt=curP;
-		while ( curPt < pts.size() && pts[curPt].x[1] <= to ) {
+		int    curPt=curP;
+		while ( curPt < nbPt && pts[curPt].x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
 
@@ -324,7 +324,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
 			cb=pts[nPt].firstA;
-			while ( cb >= 0 && cb < aretes.size() ) {
+			while ( cb >= 0 && cb < nbAr ) {
 				if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 					upNo=cb;
 					nbUp++;
@@ -345,7 +345,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 
 			if ( nbUp > 0 ) {
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != upNo ) {
               QuickRasterSubEdge(cb);
@@ -371,7 +371,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != dnNo ) {
               ins_guess=QuickRasterAddEdge(cb,pts[nPt].x[0],ins_guess);
@@ -383,7 +383,6 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			}
 		}
 		curP=curPt;
-		g_assert(curPt <= pts.size());
 		if ( curPt > 0 ) pos=pts[curPt-1].x[1]; else pos=to;
 	} else {
 		int    curPt=curP;
@@ -395,7 +394,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
 			cb=pts[nPt].firstA;
-			while ( cb >= 0 && cb < aretes.size() ) {
+			while ( cb >= 0 && cb < nbAr ) {
 				if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
 					upNo=cb;
 					nbUp++;
@@ -416,7 +415,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 
 			if ( nbUp > 0 ) {
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != upNo ) {
               QuickRasterSubEdge(cb);
@@ -443,7 +442,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != dnNo ) {
               ins_guess=QuickRasterAddEdge(cb,pts[nPt].x[0],ins_guess);
@@ -509,7 +508,7 @@ int               Shape::QuickRasterAddEdge(int bord,double x,int guess)
   }
   if ( guess < 0 || guess >= nbQRas ) {
     int c=firstQRas;
-    while ( c >= 0 && c < nbQRas && CmpQRs(&qrsData[c],&qrsData[no]) < 0 ) c=qrsData[c].next;
+    while ( c >= 0 && c < nbQRas && CmpQRs(qrsData+c,qrsData+no) < 0 ) c=qrsData[c].next;
     if ( c < 0 || c >= nbQRas ) {
       qrsData[no].prev=lastQRas;
       qrsData[lastQRas].next=no;
@@ -526,7 +525,7 @@ int               Shape::QuickRasterAddEdge(int bord,double x,int guess)
     }
 	} else {
 		int c=guess;
-    int stTst=CmpQRs(&qrsData[c],&qrsData[no]);
+    int stTst=CmpQRs(qrsData+c,qrsData+no);
 		if ( stTst == 0 ) {
 			qrsData[no].prev=qrsData[c].prev;
 			if ( qrsData[no].prev >= 0 ) {
@@ -537,7 +536,7 @@ int               Shape::QuickRasterAddEdge(int bord,double x,int guess)
 			qrsData[no].next=c;
 			qrsData[c].prev=no;
 		} else if ( stTst > 0 ) {
-			while ( c >= 0 && c < nbQRas && CmpQRs(&qrsData[c],&qrsData[no]) > 0 ) c=qrsData[c].prev;
+			while ( c >= 0 && c < nbQRas && CmpQRs(qrsData+c,qrsData+no) > 0 ) c=qrsData[c].prev;
 			if ( c < 0 || c >= nbQRas ) {
 				qrsData[no].next=firstQRas;
 				qrsData[firstQRas].prev=no; // firstQRas != -1
@@ -553,7 +552,7 @@ int               Shape::QuickRasterAddEdge(int bord,double x,int guess)
 				qrsData[c].next=no;
 			}
 		} else {
-			while ( c >= 0 && c < nbQRas && CmpQRs(&qrsData[c],&qrsData[no]) < 0 ) c=qrsData[c].next;
+			while ( c >= 0 && c < nbQRas && CmpQRs(qrsData+c,qrsData+no) < 0 ) c=qrsData[c].next;
 			if ( c < 0 || c >= nbQRas ) {
 				qrsData[no].prev=lastQRas;
 				qrsData[lastQRas].next=no;
@@ -637,7 +636,7 @@ void              Shape::QuickRasterSort(void)
     int nI=qrsData[bI].next;
     if ( nI < 0 ) break;
     int ncb=qrsData[nI].bord;
-    if ( CmpQRs(&qrsData[nI],&qrsData[bI]) < 0 ) {
+    if ( CmpQRs(qrsData+nI,qrsData+bI) < 0 ) {
       QuickRasterSwapEdge(cb,ncb);
       int pI=qrsData[bI].prev; // ca reste bI, puisqu'on a juste echange les contenus
       if ( pI < 0 ) {
@@ -655,7 +654,7 @@ void              Shape::QuickRasterSort(void)
 // good for initial setup of scanline algo, bad for incremental changes
 void              Shape::DirectScan(float &pos,int &curP,float to,float step)
 {
-  if ( aretes.size() <= 1 ) return;
+  if ( nbAr <= 1 ) return;
 	if ( pos == to ) return;
 	if ( pos < to ) {
     // we're moving downwards
@@ -663,8 +662,8 @@ void              Shape::DirectScan(float &pos,int &curP,float to,float step)
     // until we reach the wanted position to.
     // don't forget to update curP and pos when we're done
 		int    curPt=curP;
-		while ( unsigned(curPt) < pts.size() && pts[curPt].x[1] <= to ) curPt++;
-    for (unsigned i=0;i<aretes.size();i++) {
+		while ( curPt < nbPt && pts[curPt].x[1] <= to ) curPt++;
+    for (int i=0;i<nbAr;i++) {
       if ( swrData[i].misc ) {
         SweepTree* node=swrData[i].misc;
         swrData[i].misc=NULL;
@@ -672,7 +671,7 @@ void              Shape::DirectScan(float &pos,int &curP,float to,float step)
         DestroyEdge(i,to,step);
       }
     }
-    for (unsigned i=0;i<aretes.size();i++) {
+    for (int i=0;i<nbAr;i++) {
       if ( ( aretes[i].st < curPt && aretes[i].en >= curPt ) || ( aretes[i].en < curPt && aretes[i].st >= curPt )) {
         // crosses sweepline
         int nPt=(aretes[i].st<curPt)?aretes[i].st:aretes[i].en;
@@ -690,7 +689,7 @@ void              Shape::DirectScan(float &pos,int &curP,float to,float step)
 		int    curPt=curP;
 		while ( curPt > 0 && pts[curPt-1].x[1] >= to ) curPt--;
 
-    for (unsigned i=0;i<aretes.size();i++) {
+    for (int i=0;i<nbAr;i++) {
       if ( swrData[i].misc ) {
         SweepTree* node=swrData[i].misc;
         swrData[i].misc=NULL;
@@ -698,7 +697,7 @@ void              Shape::DirectScan(float &pos,int &curP,float to,float step)
         DestroyEdge(i,to,step);
       }
     }
-    for (unsigned i=0;i<aretes.size();i++) {
+    for (int i=0;i<nbAr;i++) {
       if ( ( aretes[i].st > curPt-1 && aretes[i].en <= curPt-1 ) || ( aretes[i].en > curPt-1 && aretes[i].st <= curPt-1 )) {
         // crosses sweepline
         int nPt=(aretes[i].st>curPt)?aretes[i].st:aretes[i].en;
@@ -727,7 +726,7 @@ void              Shape::DirectScan(float &pos,int &curP,float to,float step)
 }
 void              Shape::DirectQuickScan(float &pos,int &curP,float to,bool doSort,float step)
 {
-  if ( aretes.size() <= 1 ) return;
+  if ( nbAr <= 1 ) return;
 	if ( pos == to ) return;
 	if ( pos < to ) {
     // we're moving downwards
@@ -735,14 +734,14 @@ void              Shape::DirectQuickScan(float &pos,int &curP,float to,bool doSo
     // until we reach the wanted position to.
     // don't forget to update curP and pos when we're done
 		int    curPt=curP;
-		while ( unsigned(curPt) < pts.size() && pts[curPt].x[1] <= to ) curPt++;
-    for (unsigned i=0;i<aretes.size();i++) {
+		while ( curPt < nbPt && pts[curPt].x[1] <= to ) curPt++;
+    for (int i=0;i<nbAr;i++) {
       if ( qrsData[i].ind < 0 ) {
         QuickRasterSubEdge(i);
         DestroyEdge(i,to,step);
       }
     }
-    for (unsigned i=0;i<aretes.size();i++) {
+    for (int i=0;i<nbAr;i++) {
       if ( ( aretes[i].st < curPt && aretes[i].en >= curPt ) || ( aretes[i].en < curPt && aretes[i].st >= curPt )) {
         // crosses sweepline
         int nPt=(aretes[i].st<aretes[i].en)?aretes[i].st:aretes[i].en;
@@ -758,13 +757,13 @@ void              Shape::DirectQuickScan(float &pos,int &curP,float to,bool doSo
 		int    curPt=curP;
 		while ( curPt > 0 && pts[curPt-1].x[1] >= to ) curPt--;
     
-    for (unsigned i=0;i<aretes.size();i++) {
+    for (int i=0;i<nbAr;i++) {
       if ( qrsData[i].ind < 0 ) {
         QuickRasterSubEdge(i);
         DestroyEdge(i,to,step);
       }
     }
-    for (unsigned i=0;i<aretes.size();i++) {
+    for (int i=0;i<nbAr;i++) {
       if ( ( aretes[i].st < curPt-1 && aretes[i].en >= curPt-1 ) || ( aretes[i].en < curPt-1 && aretes[i].st >= curPt-1 )) {
         // crosses sweepline
         int nPt=(aretes[i].st>aretes[i].en)?aretes[i].st:aretes[i].en;
@@ -797,7 +796,7 @@ void              Shape::DirectQuickScan(float &pos,int &curP,float to,bool doSo
 // it as a refinement of the coverage by rectangles
 void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,bool exact,float step)
 {
-  if ( aretes.size() <= 1 ) return;
+  if ( nbAr <= 1 ) return;
 	if ( pos >= to ) return;
 	if ( pos < to ) {
     // first step: the rectangles
@@ -823,7 +822,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 			//			printf("\n");
 		}
 		int    curPt=curP;
-		while ( curPt < pts.size() && pts[curPt].x[1] <= to ) {
+		while ( curPt < nbPt && pts[curPt].x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
 
@@ -853,7 +852,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 
 			} else {
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						upNo=cb;
 						nbUp++;
@@ -875,7 +874,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 
 			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != upNo ) {
 							SweepTree* node=swrData[cb].misc;
@@ -924,7 +923,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != dnNo ) {
 							SweepTree* node=SweepTree::AddInList(this,cb,1,nPt,sTree,this);
@@ -953,7 +952,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 }
 void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,BitLigne* line,bool exact,float step)
 {
-  if ( aretes.size() <= 1 ) return;
+  if ( nbAr <= 1 ) return;
 	if ( pos >= to ) return;
 	if ( pos < to ) {
 		if ( sTree.racine ) {
@@ -1006,7 +1005,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 			}
 		}
 		int    curPt=curP;
-		while ( curPt < pts.size() && pts[curPt].x[1] <= to ) {
+		while ( curPt < nbPt && pts[curPt].x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
 
@@ -1035,7 +1034,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 
 			} else {
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						upNo=cb;
 						nbUp++;
@@ -1057,7 +1056,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 
 			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != upNo ) {
 							SweepTree* node=swrData[cb].misc;
@@ -1105,7 +1104,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != dnNo ) {
 							SweepTree* node=SweepTree::AddInList(this,cb,1,nPt,sTree,this);
@@ -1133,7 +1132,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 }
 void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,bool exact,float step)
 {
-  if ( aretes.size() <= 1 ) return;
+  if ( nbAr <= 1 ) return;
 	if ( pos >= to ) return;
 	if ( pos < to ) {
 		// pas de trapezes dans le cas de l'alphaline
@@ -1152,7 +1151,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 			//			printf("\n");
 		}*/
 		int    curPt=curP;
-		while ( curPt < pts.size() && pts[curPt].x[1] <= to ) {
+		while ( curPt < nbPt && pts[curPt].x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
 
@@ -1181,7 +1180,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 
 			} else {
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						upNo=cb;
 						nbUp++;
@@ -1203,7 +1202,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 
 			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != upNo ) {
 							SweepTree* node=swrData[cb].misc;
@@ -1252,7 +1251,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != dnNo ) {
 							SweepTree* node=SweepTree::AddInList(this,cb,1,nPt,sTree,this);
@@ -1280,7 +1279,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 }
 void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* line,bool /*exact*/,float step)
 {
-  if ( aretes.size() <= 1 ) return;
+  if ( nbAr <= 1 ) return;
 	if ( pos >= to ) return;
 	if ( pos < to ) {
 		if ( nbQRas > 1 ) {
@@ -1307,7 +1306,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 			}
 		}
 		int    curPt=curP;
-		while ( curPt < pts.size() && pts[curPt].x[1] <= to ) {
+		while ( curPt < nbPt && pts[curPt].x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
 
@@ -1336,7 +1335,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 
 			} else {
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						upNo=cb;
 						nbUp++;
@@ -1358,7 +1357,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 
 			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != upNo ) {
               QuickRasterSubEdge(cb);
@@ -1398,7 +1397,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != dnNo ) {
               ins_guess=QuickRasterAddEdge(cb,pts[nPt].x[0],ins_guess);
@@ -1426,7 +1425,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 }
 void              Shape::QuickScan(float &pos,int &curP,float to,FillRule directed,BitLigne* line,bool /*exact*/,float step)
 {
-  if ( aretes.size() <= 1 ) return;
+  if ( nbAr <= 1 ) return;
 	if ( pos >= to ) return;
 	if ( pos < to ) {
 		if ( nbQRas > 1 ) {
@@ -1475,7 +1474,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 			}
 		}
 		int    curPt=curP;
-		while ( curPt < pts.size() && pts[curPt].x[1] <= to ) {
+		while ( curPt < nbPt && pts[curPt].x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
 
@@ -1504,7 +1503,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 
 			} else {
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						upNo=cb;
 						nbUp++;
@@ -1526,7 +1525,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 
 			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != upNo ) {
               QuickRasterSubEdge(cb);
@@ -1564,7 +1563,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != dnNo ) {
               ins_guess=QuickRasterAddEdge(cb,pts[nPt].x[0],ins_guess);
@@ -1593,7 +1592,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 
 void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* line,bool /*exact*/,float step)
 {
-  if ( aretes.size() <= 1 ) return;
+  if ( nbAr <= 1 ) return;
 	if ( pos >= to ) return;
 	if ( pos < to ) {
 		// pas de trapezes dans le cas de l'alphaline
@@ -1616,7 +1615,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 			}
 		}*/
 		int    curPt=curP;
-		while ( curPt < pts.size() && pts[curPt].x[1] <= to ) {
+		while ( curPt < nbPt && pts[curPt].x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
 
@@ -1645,7 +1644,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 
 			} else {
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						upNo=cb;
 						nbUp++;
@@ -1667,7 +1666,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 
 			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != upNo ) {
               QuickRasterSubEdge(cb);
@@ -1706,7 +1705,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
 				cb=pts[nPt].firstA;
-				while ( cb >= 0 && cb < aretes.size() ) {
+				while ( cb >= 0 && cb < nbAr ) {
 					if ( ( aretes[cb].st > aretes[cb].en && nPt == aretes[cb].en ) || ( aretes[cb].st < aretes[cb].en && nPt == aretes[cb].st ) ) {
 						if ( cb != dnNo ) {
               ins_guess=QuickRasterAddEdge(cb,pts[nPt].x[0],ins_guess);

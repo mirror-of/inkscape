@@ -319,7 +319,7 @@ sp_selected_path_boolop (bool_op bop)
         if ( theShape->HasBackData() ) {
             // should always be the case, but ya never know
             {
-                for (unsigned i=0;i<theShape->pts.size();i++) {
+                for (int i=0;i<theShape->nbPt;i++) {
                     if ( theShape->pts[i].dI+theShape->pts[i].dO > 2 ) { 
                         // possibly an intersection
                         // we need to check that at least one edge from the source path is incident to it
@@ -329,11 +329,11 @@ sp_selected_path_boolop (bool_op bop)
                         int   nbOther=0;
                         int   piece=-1;
                         float t=0.0;
-                        while ( unsigned(cb) < theShape->aretes.size() ) {
+                        while ( cb >= 0 && cb < theShape->nbAr ) {
                             if ( theShape->ebData[cb].pathID == 0 ) {
                                 // the source has an edge incident to the point, get its position on the path
                                 piece=theShape->ebData[cb].pieceID;
-                                if ( unsigned(theShape->aretes[cb].st) == i ) {
+                                if ( theShape->aretes[cb].st == i ) {
                                     t=theShape->ebData[cb].tSt;
                                 } else {
                                     t=theShape->ebData[cb].tEn;
@@ -357,7 +357,8 @@ sp_selected_path_boolop (bool_op bop)
             }
             {
                 // i think it's useless now
-                for (unsigned i = theShape->aretes.size(); i--;) {
+                int i=theShape->nbAr-1;
+                for (;i>=0;i--) {
                     if ( theShape->ebData[i].pathID == 1 ) {
                         theShape->SubEdge(i);
                     }

@@ -442,16 +442,16 @@ nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
 		} else if ( isometry != 0 ) {
 		    if ( shape->fill_shp == NULL )
 			shape->fill_shp=new Shape;
-		    shape->fill_shp->Reset(shape->cached_fill->pts.size(),
-					   shape->cached_fill->aretes.size());
-		    for (unsigned i = 0; i < shape->cached_fill->pts.size(); i++)
+		    shape->fill_shp->Reset(shape->cached_fill->nbPt,
+					   shape->cached_fill->nbAr);
+		    for (int i = 0; i < shape->cached_fill->nbPt; i++)
 			shape->fill_shp->AddPoint(shape->cached_fill->pts[i].x * cached_to_new);
 		    if ( isometry == 1 ) {
-			for (unsigned i = 0; i < shape->cached_fill->aretes.size(); i++) 
+			for (int i = 0; i < shape->cached_fill->nbAr; i++) 
 			    shape->fill_shp->AddEdge(shape->cached_fill->aretes[i].st,
 						     shape->cached_fill->aretes[i].en);
 		    } else if ( isometry == -1 ) { // need to flip poly.
-			for (unsigned i = 0; i < shape->cached_fill->aretes.size(); i++)
+			for (int i = 0; i < shape->cached_fill->nbAr; i++)
 			    shape->fill_shp->AddEdge(shape->cached_fill->aretes[i].en,
 						     shape->cached_fill->aretes[i].st);
 		    }
@@ -554,15 +554,15 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
 	    } else if ( isometry != 0 ) {
 		if ( shape->stroke_shp == NULL )
 		    shape->stroke_shp=new Shape;
-		shape->stroke_shp->Reset(shape->cached_stroke->pts.size(), shape->cached_stroke->aretes.size());
-		for (unsigned i=0;i<shape->cached_stroke->pts.size();i++)
+		shape->stroke_shp->Reset(shape->cached_stroke->nbPt, shape->cached_stroke->nbAr);
+		for (int i=0;i<shape->cached_stroke->nbPt;i++)
 		    shape->stroke_shp->AddPoint(shape->cached_stroke->pts[i].x*cached_to_new);
 		if ( isometry == 1 ) {
-		    for (unsigned i = 0; i < shape->cached_stroke->aretes.size(); i++)
+		    for (int i = 0; i < shape->cached_stroke->nbAr; i++)
 			shape->stroke_shp->AddEdge(shape->cached_stroke->aretes[i].st,
 						   shape->cached_stroke->aretes[i].en);
 		} else if ( isometry == -1 ) {
-		    for (unsigned i = 0; i < shape->cached_stroke->aretes.size(); i++)
+		    for (int i = 0; i < shape->cached_stroke->nbAr; i++)
 			shape->stroke_shp->AddEdge(shape->cached_stroke->aretes[i].en,
 						   shape->cached_stroke->aretes[i].st);
 		}

@@ -1,3 +1,14 @@
+2004-08-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/sp-flowregion.cpp, src/sp-flowtext.cpp, src/sp-offset.cpp,
+	src/splivarot.cpp, src/display/nr-arena-shape.cpp,
+	src/livarot/PathConversion.cpp, src/livarot/Shape.cpp,
+	src/livarot/Shape.h, src/livarot/ShapeDraw.cpp, src/livarot/ShapeMisc.cpp,
+	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp,
+	src/livarot/ShapeSweepUtils.cpp:
+	  Revert these files to their state prior to mental's "2004-08-08"
+	  entry (the change made in 2004-08-09 02:23 UTC).
+
 2004-08-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/algorithms/longest-common-suffix.h: Fix bug I introduced three

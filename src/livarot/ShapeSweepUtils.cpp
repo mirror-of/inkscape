@@ -871,9 +871,9 @@ SweepTree::Relocate (SweepTree * to)
   to->leftEvt = leftEvt;
   to->rightEvt = rightEvt;
   to->startPoint = startPoint;
-  if (!src->swsData.empty())
+  if (src->swsData)
     src->swsData[bord].misc = to;
-  if (!src->swrData.empty())
+  if (src->swrData)
     src->swrData[bord].misc = to;
   if (leftEvt)
     leftEvt->rightSweep = to;

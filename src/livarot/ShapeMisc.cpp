@@ -34,7 +34,7 @@
 void
 Shape::ConvertToForme (Path * dest)
 {
-  if (pts.size() <= 1 || aretes.size() <= 1)
+  if (nbPt <= 1 || nbAr <= 1)
     return;
   if (Eulerian (true) == false)
     return;
@@ -46,12 +46,12 @@ Shape::ConvertToForme (Path * dest)
   MakeEdgeData (true);
   MakeSweepDestData (true);
   
-  for (unsigned i = 0; i < pts.size(); i++)
+  for (int i = 0; i < nbPt; i++)
   {
     pData[i].rx[0] = Round (pts[i].x[0]);
     pData[i].rx[1] = Round (pts[i].x[1]);
   }
-  for (unsigned i = 0; i < aretes.size(); i++)
+  for (int i = 0; i < nbAr; i++)
   {
     eData[i].rdx = pData[aretes[i].en].rx - pData[aretes[i].st].rx;
   }
@@ -63,7 +63,7 @@ Shape::ConvertToForme (Path * dest)
   // depth-first search implies: we make a stack of edges traversed.
   // precParc: previous in the stack
   // suivParc: next in the stack
-  for (unsigned i = 0; i < aretes.size(); i++)
+  for (int i = 0; i < nbAr; i++)
   {
     swdData[i].misc = 0;
     swdData[i].precParc = swdData[i].suivParc = -1;
@@ -71,7 +71,7 @@ Shape::ConvertToForme (Path * dest)
   
   int searchInd = 0;
   
-  unsigned lastPtUsed = 0;
+  int lastPtUsed = 0;
   do
   {
     // first get a starting point, and a starting edge
@@ -79,17 +79,17 @@ Shape::ConvertToForme (Path * dest)
     // points traversed have swdData[].misc != 0, so it's easy
     int startBord = -1;
     {
-      unsigned fi;
-      for (fi = lastPtUsed; fi < pts.size(); fi++)
+      int fi = 0;
+      for (fi = lastPtUsed; fi < nbPt; fi++)
       {
         if (pts[fi].firstA >= 0 && swdData[pts[fi].firstA].misc == 0)
           break;
       }
       lastPtUsed = fi + 1;
-      if (fi < pts.size())
+      if (fi < nbPt)
       {
         int bestB = pts[fi].firstA;
-        while (bestB >= 0 && unsigned(aretes[bestB].st) != fi)
+        while (bestB >= 0 && aretes[bestB].st != fi)
           bestB = NextAt (fi, bestB);
         if (bestB >= 0)
 	      {
@@ -166,7 +166,7 @@ Shape::ConvertToForme (Path * dest)
       // fin du cas non-oriente
     }
   }
-  while (lastPtUsed < pts.size());
+  while (lastPtUsed < nbPt);
   
   MakePointData (false);
   MakeEdgeData (false);
@@ -179,7 +179,7 @@ Shape::ConvertToForme (Path * dest)
 void
 Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
 {
-  if (pts.size() <= 1 || aretes.size() <= 1)
+  if (nbPt <= 1 || nbAr <= 1)
     return;
 //  if (Eulerian (true) == false)
 //    return;
@@ -196,19 +196,19 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
   MakeEdgeData (true);
   MakeSweepDestData (true);
   
-  for (unsigned i = 0; i < pts.size(); i++)
+  for (int i = 0; i < nbPt; i++)
   {
     pData[i].rx[0] = Round (pts[i].x[0]);
     pData[i].rx[1] = Round (pts[i].x[1]);
   }
-  for (unsigned i = 0; i < aretes.size(); i++)
+  for (int i = 0; i < nbAr; i++)
   {
     eData[i].rdx = pData[aretes[i].en].rx - pData[aretes[i].st].rx;
   }
   
   SortEdges ();
   
-  for (unsigned i = 0; i < aretes.size(); i++)
+  for (int i = 0; i < nbAr; i++)
   {
     swdData[i].misc = 0;
     swdData[i].precParc = swdData[i].suivParc = -1;
@@ -216,27 +216,27 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
   
   int searchInd = 0;
   
-  unsigned lastPtUsed = 0;
+  int lastPtUsed = 0;
   do
   {
     int startBord = -1;
     {
-      unsigned fi = 0;
-      for (fi = lastPtUsed; fi < pts.size(); fi++)
+      int fi = 0;
+      for (fi = lastPtUsed; fi < nbPt; fi++)
       {
         if (pts[fi].firstA >= 0 && swdData[pts[fi].firstA].misc == 0)
           break;
       }
       lastPtUsed = fi + 1;
-      if (fi < pts.size())
+      if (fi < nbPt)
       {
         int bestB = pts[fi].firstA;
-        while (bestB >= 0 && unsigned(aretes[bestB].st) != fi)
+        while (bestB >= 0 && aretes[bestB].st != fi)
           bestB = NextAt (fi, bestB);
         if (bestB >= 0)
-          {
-	    startBord = bestB;
-          }
+	      {
+          startBord = bestB;
+	      }
       }
     }
     if (startBord >= 0)
@@ -319,7 +319,7 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
       // fin du cas non-oriente
     }
   }
-  while (lastPtUsed < pts.size());
+  while (lastPtUsed < nbPt);
   
   MakePointData (false);
   MakeEdgeData (false);
@@ -332,7 +332,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
   contStart=NULL;
   nbNest=0;
 
-  if (pts.size() <= 1 || aretes.size() <= 1)
+  if (nbPt <= 1 || nbAr <= 1)
     return;
   //  if (Eulerian (true) == false)
   //    return;
@@ -349,19 +349,19 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
   MakeEdgeData (true);
   MakeSweepDestData (true);
   
-  for (unsigned i = 0; i < pts.size(); i++)
+  for (int i = 0; i < nbPt; i++)
   {
     pData[i].rx[0] = Round (pts[i].x[0]);
     pData[i].rx[1] = Round (pts[i].x[1]);
   }
-  for (unsigned i = 0; i < aretes.size(); i++)
+  for (int i = 0; i < nbAr; i++)
   {
     eData[i].rdx = pData[aretes[i].en].rx - pData[aretes[i].st].rx;
   }
   
   SortEdges ();
   
-  for (unsigned i = 0; i < aretes.size(); i++)
+  for (int i = 0; i < nbAr; i++)
   {
     swdData[i].misc = 0;
     swdData[i].precParc = swdData[i].suivParc = -1;
@@ -369,21 +369,21 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
   
   int searchInd = 0;
   
-  unsigned lastPtUsed = 0;
+  int lastPtUsed = 0;
   do
   {
     int dadContour=-1;
     int startBord = -1;
     {
-      unsigned fi;
-      for (fi = lastPtUsed; fi < pts.size(); fi++)
+      int fi = 0;
+      for (fi = lastPtUsed; fi < nbPt; fi++)
       {
         if (pts[fi].firstA >= 0 && swdData[pts[fi].firstA].misc == 0)
           break;
       }
       {
         int askTo = pData[fi].askForWindingB;
-        if (askTo < 0 || askTo >= aretes.size() ) {
+        if (askTo < 0 || askTo >= nbAr ) {
           dadContour=-1;
         } else {
           dadContour = (int) swdData[askTo].misc;
@@ -391,15 +391,15 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
         }
       }
       lastPtUsed = fi + 1;
-      if (fi < pts.size())
+      if (fi < nbPt)
       {
         int bestB = pts[fi].firstA;
-        while (bestB >= 0 && unsigned(aretes[bestB].st) != fi)
+        while (bestB >= 0 && aretes[bestB].st != fi)
           bestB = NextAt (fi, bestB);
         if (bestB >= 0)
-          {
-            startBord = bestB;
-          }
+	      {
+          startBord = bestB;
+	      }
       }
     }
     if (startBord >= 0)
@@ -445,7 +445,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
             {
               bool escapePath=false;
               int tb=curBord;
-              while ( tb >= 0 && tb < aretes.size() ) {
+              while ( tb >= 0 && tb < nbAr ) {
                 if ( ebData[tb].pathID == wildPath ) {
                   escapePath=true;
                   break;
@@ -485,7 +485,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
               
               bool escapePath=false;
               int tb=curBord;
-              while ( tb >= 0 && tb < aretes.size() ) {
+              while ( tb >= 0 && tb < nbAr ) {
                 if ( ebData[tb].pathID == wildPath ) {
                   escapePath=true;
                   break;
@@ -518,7 +518,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
       // fin du cas non-oriente
     }
   }
-  while (lastPtUsed < pts.size());
+  while (lastPtUsed < nbPt);
   
   MakePointData (false);
   MakeEdgeData (false);
@@ -534,15 +534,46 @@ int
 Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
 {
   Reset (0, 0);
-  MakeBackData(a->HasBackData());
+  if ( a->HasBackData() ) MakeBackData(true); else MakeBackData (false);
   if (dec == 0)
   {
-    pts = a->pts;
+    nbPt = a->nbPt;
+    if (nbPt > maxPt)
+    {
+      maxPt = nbPt;
+      pts = (dg_point *) realloc (pts, maxPt * sizeof (dg_point));
+      if (HasPointsData ())
+        pData =
+          (point_data *) realloc (pData, maxPt * sizeof (point_data));
+    }
+    memcpy (pts, a->pts, nbPt * sizeof (dg_point));
+    
+    nbAr = a->nbAr;
+    if (nbAr > maxAr)
+    {
+      maxAr = nbAr;
+      aretes.reserve(maxAr);
+      if (HasEdgesData ())
+        eData = (edge_data *) realloc (eData, maxAr * sizeof (edge_data));
+      if (HasSweepSrcData ())
+        swsData =
+          (sweep_src_data *) realloc (swsData,
+                                      maxAr * sizeof (sweep_src_data));
+      if (HasSweepDestData ())
+        swdData =
+          (sweep_dest_data *) realloc (swdData,
+                                       maxAr * sizeof (sweep_dest_data));
+      if (HasRasterData ())
+        swrData =
+          (raster_data *) realloc (swrData, maxAr * sizeof (raster_data));
+      if (HasBackData ())
+        ebData =
+          (back_data *) realloc (ebData, maxAr * sizeof (back_data));
+    }
     aretes = a->aretes;
-    _resizeAuxVectors();
     return 0;
   }
-  if (a->pts.size() <= 1 || a->aretes.size() <= 1 || a->type != shape_polygon)
+  if (a->nbPt <= 1 || a->nbAr <= 1 || a->type != shape_polygon)
     return shape_input_err;
   
   a->SortEdges ();
@@ -550,7 +581,7 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
   a->MakeSweepDestData (true);
   a->MakeSweepSrcData (true);
   
-  for (unsigned i = 0; i < a->aretes.size(); i++)
+  for (int i = 0; i < a->nbAr; i++)
   {
     //              int    stP=a->swsData[i].stPt/*,enP=a->swsData[i].enPt*/;
     int stB = -1, enB = -1;
@@ -613,17 +644,17 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
   }
   if (dec < 0)
   {
-    for (unsigned i = 0; i < aretes.size(); i++)
+    for (int i = 0; i < nbAr; i++)
       Inverse (i);
   }
   if ( HasBackData() ) {
-    for (unsigned i = 0; i < a->aretes.size(); i++)
+    for (int i = 0; i < a->nbAr; i++)
     {
       int nEd=AddEdge (a->swsData[i].stPt, a->swsData[i].enPt);
       ebData[nEd]=a->ebData[i];
     }
   } else {
-    for (unsigned i = 0; i < a->aretes.size(); i++)
+    for (int i = 0; i < a->nbAr; i++)
     {
       AddEdge (a->swsData[i].stPt, a->swsData[i].enPt);
     }

@@ -648,9 +648,9 @@ sp_offset_set_shape (SPShape * shape)
             parts[i]=NULL;
           } else {
           }
-/*          unsigned  firstP=theShape->pts.size();
-          for (unsigned j=0;j<onePart->pts.size();j++) theShape->AddPoint(onePart->pts[j].x);
-          for (unsigned j=0;j<onePart->aretes.size();j++) theShape->AddEdge(firstP+onePart->aretes[j].st,firstP+onePart->aretes[j].en);*/
+/*          int  firstP=theShape->nbPt;
+          for (int j=0;j<onePart->nbPt;j++) theShape->AddPoint(onePart->pts[j].x);
+          for (int j=0;j<onePart->nbAr;j++) theShape->AddEdge(firstP+onePart->aretes[j].st,firstP+onePart->aretes[j].en);*/
         } else {
           // trou
           holes[i]=1;
@@ -658,7 +658,7 @@ sp_offset_set_shape (SPShape * shape)
           onePart->ConvertToShape(oneCleanPart,fill_positive);
           oneCleanPart->MakeOffset(onePart,-offset->rad,join_round,20.0);
           onePart->ConvertToShape(oneCleanPart,fill_positive);
-//          for (unsigned j=0;j<onePart->aretes.size();j++) onePart->Inverse(j); // pas oublier de reinverser
+//          for (int j=0;j<onePart->nbAr;j++) onePart->Inverse(j); // pas oublier de reinverser
           
           onePart->CalcBBox();
           double  typicalSize=0.5*((onePart->rightX-onePart->leftX)+(onePart->bottomY-onePart->topY));
@@ -676,9 +676,9 @@ sp_offset_set_shape (SPShape * shape)
           } else {
           }
           
- /*         unsigned  firstP=theShape->pts.size();
-          for (unsigned j=0;j<onePart->pts.size();j++) theShape->AddPoint(onePart->pts[j].x);
-          for (unsigned j=0;j<onePart->aretes.size();j++) theShape->AddEdge(firstP+onePart->aretes[j].en,firstP+onePart->aretes[j].st);*/
+ /*         int  firstP=theShape->nbPt;
+          for (int j=0;j<onePart->nbPt;j++) theShape->AddPoint(onePart->pts[j].x);
+          for (int j=0;j<onePart->nbAr;j++) theShape->AddEdge(firstP+onePart->aretes[j].en,firstP+onePart->aretes[j].st);*/
         }
 //        delete parts[i];
       }
@@ -837,14 +837,18 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
   ((Path *) offset->originalPath)->Fill (theShape, 0);
   theRes->ConvertToShape (theShape, fill_oddEven);
   
-  if (theRes->aretes.size() > 1)
+  if (theRes->nbAr <= 1)
+  {
+    
+  }
+  else
   {
     double ptDist = -1.0;
     bool ptSet = false;
     double arDist = -1.0;
     bool arSet = false;
     // first get the minimum distance to the points
-    for (unsigned i = 0; i < theRes->pts.size(); i++)
+    for (int i = 0; i < theRes->nbPt; i++)
     {
       if (theRes->pts[i].dI + theRes->pts[i].dO > 0)
 	    {
@@ -872,11 +876,11 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
             nex = theRes->aretes[cb].dx;
             nlen = sqrt (dot(nex , nex));
             nex /= nlen;
-            if (theRes->aretes[pb].en == (int)i)
+            if (theRes->aretes[pb].en == i)
             {
               prx = -prx;
             }
-            if (theRes->aretes[cb].en == (int)i)
+            if (theRes->aretes[cb].en == i)
             {
               nex = -nex;
             }
@@ -884,7 +888,7 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
             if (vectors_are_clockwise (nex, nx, prx))
             {
               // we're in that angle. set the sign, and exit that loop
-              if (theRes->aretes[cb].st == (int)i)
+              if (theRes->aretes[cb].st == i)
               {
                 ptDist = -ndist;
                 ptSet = true;
@@ -904,7 +908,7 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
 	    }
     }
     // loop over the edges to try to improve the distance
-    for (unsigned i = 0; i < theRes->aretes.size(); i++)
+    for (int i = 0; i < theRes->nbAr; i++)
     {
       NR::Point sx = theRes->pts[theRes->aretes[i].st].x;
       NR::Point ex = theRes->pts[theRes->aretes[i].en].x;
@@ -982,7 +986,7 @@ sp_offset_top_point (SPOffset * offset, NR::Point *px)
   finalPath->Convert (1.0);
   finalPath->Fill (theShape, 0);
   
-  if (theShape->pts.size() > 0)
+  if (theShape->nbPt > 0)
   {
     theShape->SortPoints ();
     *px = theShape->pts[0].x;
