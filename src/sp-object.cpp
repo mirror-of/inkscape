@@ -825,9 +825,15 @@ static SPRepr *
 sp_object_private_write (SPObject *object, SPRepr *repr, guint flags)
 {
 	if (!repr && (flags & SP_OBJECT_WRITE_BUILD)) {
-		repr = sp_repr_duplicate (SP_OBJECT_REPR (object));
-		if (!( flags & SP_OBJECT_WRITE_EXT )) {
-			sp_repr_set_attr(repr, "inkscape:collect", NULL);
+		/* Nasty hack to avoid exporting RDF metadata.  This will
+		 * go away once a proper SPObject is made for the "metadata"
+		 * tag
+		 */
+		if (strcmp(sp_repr_name(SP_OBJECT_REPR (object)),"metadata")) {
+			repr = sp_repr_duplicate (SP_OBJECT_REPR (object));
+			if (!( flags & SP_OBJECT_WRITE_EXT )) {
+				sp_repr_set_attr(repr, "inkscape:collect", NULL);
+			}
 		}
 	} else {
 		sp_repr_set_attr (repr, "id", object->id);

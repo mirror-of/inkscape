@@ -3,6 +3,11 @@
 	* src/livarot/PathCutting.cpp: fix a couple of bugs that I
 	introduced that cause crashes on cut path.
 
+2004-10-25  Kees Cook  <kees@outflux.net>
+
+    * src/sp-object.cpp: nasty hack to not export metadata on "Plain SVG".
+      I promise I'll fix this with a proper SPObject soon.
+
 2004-10-25  Jon A. Cruz  <jon@joncruz.org>
 	* src/file.cpp, src/file.h, src/inkscape.cpp, src/sp-image.cpp,
 	src/uri.cpp, src/uri.h, src/dialogs/filedialog.cpp,
@@ -13,23 +18,6 @@
 
 	Refactoring filenames and file opening
 
-
-2004-10-24  MenTaLguY  <mental@rydia.net>
-
-	* src/Makefile.am: added/removed files
-
-	* src/util/copy-list.h: nobody's using it right now, get rid of it
-
-	* src/traits/copy.h, src/traits/list-copy.h:
-	  traits for determining the type to make a copy of a value
-
-	* src/sp-item.cpp, src/util/filter-list.h src/util/map-list.h,
-	  src/util/reverse-list.h, src/widgets/layer-selector.cpp
-	  src/xml/sp-repr-action.cpp:
-
-	  let the list functions infer their own result type (where possible)
-
-	* src/util/forward-pointer-iterator.h: its value type is a reference
 
 2004-10-24  MenTaLguY  <mental@rydia.net>
 
