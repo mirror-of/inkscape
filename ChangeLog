@@ -1,3 +1,14 @@
+2004-11-18  Bryce <bryce@bryceharrington.org>
+
+	* src/dialogs/Makefile_insert, src/dialogs/makefile.msc,
+  	  src/dialogs/layer-properties.h, src/dialogs/layer-properties.h:
+	  Adding a layer properties dialog for renaming layers 
+
+	* src/desktop.cpp src/interface.cpp, src/verbs.cpp,
+	  src/verbs.h src/dialogs/layer-properties.cpp,
+	  src/dialogs/layer-properties.h,
+	  src/widgets/layer-selector.cpp:  Hooking in layer props dialog.
+	
 2004-11-16  MenTaLguY  <mental@rydia.net>
 
 	* src/widgets/document-tree-model.cpp, src/widgets/document-tree-model.h,

@@ -32,6 +32,7 @@
 #include "sp-item.h"
 #include "desktop.h"
 #include "document.h"
+#include "dialogs/layer-properties.h"
 
 #include "xml/repr.h"
 #include "xml/sp-repr-event-vector.h"

@@ -64,7 +64,6 @@
 #include "sp-item-group.h"
 #include "sp-root.h"
 #include "interface.h"
-#include "dialogs/dialog-events.h"
 #include "toolbox.h"
 #include "prefs-utils.h"
 #include "color.h"

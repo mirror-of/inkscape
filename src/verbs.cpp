@@ -43,6 +43,7 @@
 #include "dialogs/find.h"
 #include "dialogs/debugdialog.h"
 #include "dialogs/tracedialog.h"
+#include "dialogs/layer-properties.h"
 
 #include "tools-switch.h"
 #include "inkscape-private.h"
@@ -878,8 +879,9 @@ LayerVerb::perform (SPAction *action, void *data, void *pdata)
             dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("New layer created."));
             break;
         }
-        case SP_VERB_RENAME_LAYER: {
+        case SP_VERB_LAYER_RENAME: {
             dt->startRenameLayer();
+            Inkscape::UI::Dialogs::LayerPropertiesDialog::showInstance();
             break;
         }
         case SP_VERB_LAYER_NEXT: {
@@ -1577,7 +1579,7 @@ Verb * Verb::_base_verbs[] = {
     /* Layer */
     new LayerVerb(SP_VERB_LAYER_NEW, "LayerNew", N_("New Layer"),
         N_("Create a new layer"), NULL),
-    new LayerVerb(SP_VERB_RENAME_LAYER, "RenameLayer", N_("Rename Layer"),
+    new LayerVerb(SP_VERB_LAYER_RENAME, "LayerRename", N_("Rename Layer"),
         N_("Rename the current layer"), NULL),
     new LayerVerb(SP_VERB_LAYER_NEXT, "LayerNext", N_("Move to Next Layer"),
         N_("Switch to the next layer in the document"), NULL),

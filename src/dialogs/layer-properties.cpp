@@ -89,6 +89,25 @@ LayerPropertiesDialog::update()
     }
 }
 
+/* static instance, like done in DebugDialog */
+static LayerPropertiesDialog *layerPropertiesDialogInstance = NULL;
+
+LayerPropertiesDialog *LayerPropertiesDialog::getInstance()
+{
+    if ( !layerPropertiesDialogInstance )
+    {
+        layerPropertiesDialogInstance = new LayerPropertiesDialog();
+    }
+    return layerPropertiesDialogInstance;
+}
+
+void LayerPropertiesDialog::showInstance()
+{
+    LayerPropertiesDialog *dlg = getInstance();
+    g_assert(dlg);
+    dlg->show();
+}
+
 SPSelection *
 LayerPropertiesDialog::getSelection()
 {

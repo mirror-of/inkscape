@@ -762,6 +762,7 @@ sp_ui_layer_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
     static Inkscape::Verb * layer_verbs[] = {
         Inkscape::Verb::get(SP_VERB_LAYER_NEW),
+        Inkscape::Verb::get(SP_VERB_LAYER_RENAME),
 
         Inkscape::Verb::get(SP_VERB_NONE),
 

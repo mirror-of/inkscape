@@ -32,6 +32,9 @@ class LayerPropertiesDialog : public Gtk::Dialog {
 
     Glib::ustring     getName() const { return "LayerPropertiesDialog"; }
 
+    static LayerPropertiesDialog *getInstance();
+    static void showInstance();
+
  protected:
     LayerPropertiesDialog(const LayerPropertiesDialog&);
     LayerPropertiesDialog& operator=(const LayerPropertiesDialog&);
