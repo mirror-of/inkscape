@@ -42,7 +42,7 @@ struct _SPImage {
 	SPSVGLength width;
 	SPSVGLength height;
 
-	guchar *href;
+	gchar *href;
 
 	GdkPixbuf *pixbuf;
 };

@@ -34,12 +34,13 @@
  * SPImage
  */
 
-static void sp_image_class_init (SPImageClass * class);
+
+static void sp_image_class_init (SPImageClass * klass);
 static void sp_image_init (SPImage * image);
 
 static void sp_image_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static void sp_image_release (SPObject * object);
-static void sp_image_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_image_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_image_update (SPObject *object, SPCtx *ctx, unsigned int flags);
 static SPRepr *sp_image_write (SPObject *object, SPRepr *repr, guint flags);
 
@@ -79,7 +80,7 @@ sp_image_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_image_init,
 		};
-		image_type = g_type_register_static (sp_item_get_type (), "SPImage", &image_info, 0);
+		image_type = g_type_register_static (sp_item_get_type (), "SPImage", &image_info, (GTypeFlags)0);
 	}
 	return image_type;
 }
@@ -95,7 +96,7 @@ sp_image_class_init (SPImageClass * klass)
 	sp_object_class = (SPObjectClass *) klass;
 	item_class = (SPItemClass *) klass;
 
-	parent_class = g_type_class_ref (sp_item_get_type ());
+	parent_class = (SPItemClass*)g_type_class_ref (sp_item_get_type ());
 
 	sp_object_class->build = sp_image_build;
 	sp_object_class->release = sp_image_release;
@@ -163,7 +164,7 @@ sp_image_release (SPObject *object)
 }
 
 static void
-sp_image_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_image_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPImage *image;
 	gulong unit;
@@ -335,7 +336,7 @@ sp_image_print (SPItem *item, SPPrintContext *ctx)
 {
 	SPImage *image;
 	NRMatrixF tp, ti, s, t;
-	unsigned char *px;
+	guchar *px;
 	int w, h, rs;
 
 	image = SP_IMAGE (item);
@@ -559,7 +560,7 @@ sp_image_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *t)
 	SPImage *image;
 	NRMatrixF rev;
 	gdouble px, py, sw, sh;
-	guchar c[80];
+	gchar c[80];
 
 	image = SP_IMAGE (item);
 

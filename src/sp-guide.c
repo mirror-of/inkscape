@@ -31,7 +31,7 @@ static void sp_guide_get_property (GObject * object, guint prop_id, GValue *valu
 
 static void sp_guide_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static void sp_guide_release (SPObject *object);
-static void sp_guide_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_guide_set (SPObject *object, unsigned int key, const gchar *value);
 
 static SPObjectClass * parent_class;
 
@@ -49,7 +49,7 @@ sp_guide_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_guide_init,
 		};
-		guide_type = g_type_register_static (SP_TYPE_OBJECT, "SPGuide", &guide_info, 0);
+		guide_type = g_type_register_static (SP_TYPE_OBJECT, "SPGuide", &guide_info, (GTypeFlags)0);
 	}
 	return guide_type;
 }
@@ -63,7 +63,7 @@ sp_guide_class_init (SPGuideClass * klass)
 	gobject_class = (GObjectClass *) klass;
 	sp_object_class = (SPObjectClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_OBJECT);
+	parent_class = (SPObjectClass*)g_type_class_ref (SP_TYPE_OBJECT);
 
 	gobject_class->set_property = sp_guide_set_property;
 	gobject_class->get_property = sp_guide_get_property;
@@ -78,14 +78,14 @@ sp_guide_class_init (SPGuideClass * klass)
 							    0,
 							    0xffffffff,
 							    0xff000000,
-							    G_PARAM_READWRITE));
+							    (GParamFlags)G_PARAM_READWRITE));
 	g_object_class_install_property (gobject_class,
 					 PROP_HICOLOR,
 					 g_param_spec_uint ("hicolor", "HiColor", "HiColor",
 							    0,
 							    0xffffffff,
 							    0xff000000,
-							    G_PARAM_READWRITE));
+							    (GParamFlags)G_PARAM_READWRITE));
 }
 
 static void
@@ -163,7 +163,7 @@ sp_guide_release (SPObject *object)
 }
 
 static void
-sp_guide_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_guide_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPGuide *guide;
 
