@@ -1,3 +1,11 @@
+2004-08-07  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/libnrtype/RasterFont.h, src/libnrtype/RasterFont.cpp:
+	  Get rid of argumentless constructor (which was leaving
+	  style.transform as random bits), replace with constructor taking
+	  style argument.  Caller updated.
+	  Disable default copy constructor and operator=.
+
 2004-08-06  MenTaLguY <mental@rydia.net>
 
 	* configure.in, src/gc-core.h, src/gc-object.h,

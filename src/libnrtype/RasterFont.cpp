@@ -47,24 +47,18 @@ void          font_style::Apply(Path* src,Shape* dest) {
 	}
 }
 
-raster_font::raster_font(void)
+raster_font::raster_font(font_style const &fstyle) :
+	daddy(NULL),
+	refCount(0),
+	style(fstyle),
+	glyph_id_to_raster_glyph_no(),
+	nbBase(0),
+	maxBase(0),
+	bases(NULL)
 {
-//  printf("raster font born\n");
-
-  refCount=0;
-  daddy=NULL;
-	
-	style.transform=NR::Matrix();
-	style.stroke_width=0;
-	style.stroke_cap=butt_straight;
-	style.stroke_join=join_straight;
-	style.nbDash=0;
-	style.dash_offset=0;
-	style.dashes=NULL;
-  
-  nbBase=maxBase=0;
-  bases=NULL;
+	//  printf("raster font born\n");
 }
+
 raster_font::~raster_font(void)
 {
 //  printf("raster font death\n");

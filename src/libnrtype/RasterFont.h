@@ -29,7 +29,7 @@ public:
     int                           nbBase,maxBase;
     raster_glyph**                bases;
 
-    raster_font(void);
+    explicit raster_font(font_style const &fstyle);
     ~raster_font(void);
    
     void                          Unref(void);
@@ -44,7 +44,11 @@ public:
 		// utility
     void           LoadRasterGlyph(int glyph_id); // refreshes outline/polygon if needed
     void           RemoveRasterGlyph(raster_glyph* who);
-  
+
+private:
+    /* Disable the default copy constructor and operator=: they do the wrong thing for refCount. */
+    raster_font(raster_font const &);
+    raster_font &operator=(raster_font const &);
 };
 
 #endif

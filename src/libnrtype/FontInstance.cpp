@@ -705,8 +705,7 @@ raster_font* font_instance::RasterFont(const font_style &inStyle)
 		memcpy(nStyle.dashes,savDashes,nStyle.nbDash*sizeof(double));
 	}
 	if ( loadedStyles.find(nStyle) == loadedStyles.end() ) {
-		raster_font  *nR=new raster_font;
-		nR->style=nStyle;
+                raster_font *nR = new raster_font(nStyle);
 		nR->Ref();
 		nR->daddy=this;
 		loadedStyles[nStyle]=nR;
