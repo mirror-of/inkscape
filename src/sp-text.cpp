@@ -752,7 +752,7 @@ static void sp_text_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform,
 static NRArenaItem *sp_text_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_text_hide (SPItem *item, unsigned int key);
 static char * sp_text_description (SPItem *item);
-static int sp_text_snappoints (SPItem *item, NR::Point *p, int size);
+static int sp_text_snappoints(SPItem *item, NR::Point p[], int size);
 static void sp_text_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
 static void sp_text_print (SPItem *item, SPPrintContext *gpc);
 
@@ -1395,18 +1395,18 @@ sp_text_set_shape (SPText *text)
 	}
 }
 
-static int
-sp_text_snappoints (SPItem *item, NR::Point *p, int size)
+static int sp_text_snappoints(SPItem *item, NR::Point p[], int size)
 {
-	/* we use corners of item and x,y coordinates of ellipse */
+	/* We use corners of item and x,y coordinates of ellipse. */
+	/* FIXME: Update above comment once we work out what it does.  Also add changelog entry for pos++. */
 	int pos = 0;
 	if (((SPItemClass *) text_parent_class)->snappoints)
 		pos = ((SPItemClass *) text_parent_class)->snappoints (item, p, size);
 
 	if (pos < size) {
-		SPLayoutData *ly = &SP_TEXT (item)->ly;
-
-		p[pos] = sp_item_i2d_affine (item)* NR::Point(ly->x.computed, ly->y.computed);
+		SPLayoutData *ly = &SP_TEXT(item)->ly;
+		p[pos++] = sp_item_i2d_affine(item) * NR::Point(ly->x.computed,
+								ly->y.computed);
 	}
 
 	return pos;
