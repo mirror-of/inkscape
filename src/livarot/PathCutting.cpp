@@ -806,6 +806,7 @@ Path::cut_position*  Path::CurvilignToPosition(int nbCv,double* cvAbs,int &nbCut
   NR::Point  lastM;
   NR::Point  lastP;
   double     lastT=0;
+  int        lastPiece=-1;
   lastM=((path_lineto_b *) pts)[0].p;
   
   lastP=lastM;
@@ -815,6 +816,7 @@ Path::cut_position*  Path::CurvilignToPosition(int nbCv,double* cvAbs,int &nbCut
     if ( cur.isMoveTo == polyline_moveto ) {
       lastP=lastM=cur.p;
       lastT=cur.t;
+      lastPiece=cur.piece;
     } else {
       double add=NR::L2(cur.p-lastP);
       double curPos=len,curAdd=add;
@@ -822,13 +824,14 @@ Path::cut_position*  Path::CurvilignToPosition(int nbCv,double* cvAbs,int &nbCut
         double theta=(cvAbs[curCv]-len)/add;
         res=(cut_position*)realloc(res,(nbCut+1)*sizeof(cut_position));
         res[nbCut].piece=cur.piece;
-        res[nbCut].t=theta*cur.t+(1-theta)*lastT;
+        res[nbCut].t=theta*cur.t+(1-theta)*((lastPiece!=cur.piece)?0:lastT);
         nbCut++;
         curAdd-=cvAbs[curCv]-curPos;
         curPos=cvAbs[curCv];
         curCv++;
       }
       len+=add;
+      lastPiece=cur.piece;
       lastP=cur.p;
       lastT=cur.t;
     }

@@ -1445,19 +1445,22 @@ void            path_to_SVG_context::SetLetterSpacing(double n_spc)
   letter_spacing=n_spc;
 }
 
-void            path_to_SVG_context::AddGlyph(int f_c,int l_c,const NR::Point &oat,double /*advance*/)
+void            path_to_SVG_context::AddGlyph(int f_c,int l_c,const NR::Point &oat,double advance)
 {
   if ( l_c < f_c ) return;
   
   NR::Point at=oat;
   if ( st >= 0 ) at[0]+=((double)(f_c-st))*letter_spacing;
   int              nbp=0;
-  Path::cut_position*    cup=thePath->CurvilignToPosition(1,&at[0],nbp);
-
+  double           mid_glyph=at[0]+0.5*advance;
+  Path::cut_position*    cup=thePath->CurvilignToPosition(1,&mid_glyph,nbp);
+  
   if ( cup ) {
     NR::Point        ts_pos,ts_tgt,ts_nor;
     thePath->PointAndTangentAt(cup[0].piece,cup[0].t,ts_pos,ts_tgt);
+
     ts_nor=ts_tgt.cw();
+    ts_pos-=0.5*advance*ts_tgt;
     ts_pos+=at[1]*ts_nor;
     double ang=0;
     if ( ts_tgt[0] >= 1 ) {

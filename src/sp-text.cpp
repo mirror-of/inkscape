@@ -30,6 +30,7 @@
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-fns.h>
+#include <libnr/nr-rotate.h>
 #include <libnrtype/nr-type-directory.h>
 #include <libnrtype/nr-font.h>
 #include <libnrtype/font-style-to-pos.h>
@@ -983,7 +984,9 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
                 pt = pt + NR::Point(spadv[NR::X], -spadv[NR::Y]);
             }
 
-            NR::Matrix const a( NR::Matrix(flip_y)
+            NR::Matrix add_rot=NR::identity();
+            if ( ly->rotate_set ) add_rot=NR::identity()*NR::rotate(ly->rotate);
+            NR::Matrix const a( NR::Matrix(flip_y) * add_rot
                         * NR::translate(pt)
                         * NR::translate(sp_char_dx(dx, dx_offset + pos),
                                 sp_char_dy(dy, dy_offset + pos)) );

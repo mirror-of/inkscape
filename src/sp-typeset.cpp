@@ -590,7 +590,7 @@ static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
                                bool /*is_interactive*/, void * data)
 {
   SPTypeset *typeset = (SPTypeset *) data;
-  printf("attrchg %x of %x to %s\n",(int)repr,(int)typeset,newval);
+//  printf("attrchg %x of %x to %s\n",(int)repr,(int)typeset,newval);
   if ( typeset == NULL || repr == NULL ) return;
   
   if ( strcmp(key,"point") != 0 && strcmp(key,"d") != 0 && strcmp(key,"transform") != 0 ) return;
@@ -608,7 +608,7 @@ static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
       sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
     } else {
       // repr not used in this typeset
-      printf("not fount\n");
+//      printf("not fount\n");
     }
   } else if ( typeset->dstType == has_path_dest ) {
     GSList *l=typeset->dstElems;
@@ -623,7 +623,7 @@ static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
       sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
     } else {
       // repr not used in this typeset
-      printf("not fount\n");
+//      printf("not fount\n");
     }
   }
 }
@@ -631,7 +631,7 @@ static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
 static void sp_typeset_source_destroy (SPRepr * repr, void *data)
 {
   SPTypeset *typeset = (SPTypeset *) data;
-  printf("destroy %x of %x\n",(int)repr,(int)typeset);
+//  printf("destroy %x of %x\n",(int)repr,(int)typeset);
 //  printf("destroy %x tps=%x\n",repr,data);
   if ( typeset == NULL ) return;
   if ( repr == NULL ) return;
@@ -653,7 +653,7 @@ static void sp_typeset_source_destroy (SPRepr * repr, void *data)
       sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
     } else {
       // repr not used in this typeset
-      printf("not fount\n");
+//      printf("not fount\n");
     }
   } else if ( typeset->dstType == has_path_dest ) {
     GSList *l=typeset->dstElems;
@@ -673,7 +673,7 @@ static void sp_typeset_source_destroy (SPRepr * repr, void *data)
       sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
     } else {
       // repr not used in this typeset
-      printf("not fount\n");
+//      printf("not fount\n");
     }
   }
 }
