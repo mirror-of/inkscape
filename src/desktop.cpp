@@ -970,7 +970,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     dtw->select_status = gtk_label_new (NULL);//gtk_statusbar_new ();
     gtk_misc_set_alignment (GTK_MISC (dtw->select_status), 0.0, 0.5);
     gtk_widget_set_size_request (dtw->select_status, 1, -1);
-    sp_set_font_size (dtw->select_status, STATUS_BAR_FONT_SIZE);
+    //sp_set_font_size (dtw->select_status, STATUS_BAR_FONT_SIZE);  // setting absolute size is bad, in some themes it ends up being larger!
     // display the initial welcome message in the statusbar
     gtk_label_set_markup (GTK_LABEL (dtw->select_status), _("<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; use selector (arrow) to move or transform them."));
     // space label 2 pixels from left edge
