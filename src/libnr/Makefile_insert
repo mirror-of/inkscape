@@ -15,6 +15,7 @@ libnr_mmx_sources =	\
 endif
 
 libnr_libnr_a_SOURCES =	\
+	libnr/in-svg-plane.h	\
 	libnr/n-art-bpath.h	\
 	libnr/nr-blit.cpp	\
 	libnr/nr-blit.h	\
@@ -95,6 +96,9 @@ libnr_testnr_SOURCES =	\
 libnr_testnr_LDADD =	\
 	libnr/libnr.a	\
 	-lglib-2.0
+
+libnr_in_svg_plane_test_SOURCES = libnr/in-svg-plane-test.cpp
+libnr_in_svg_plane_test_LDADD = libnr/libnr.a -lglib-2.0
 
 libnr_nr_types_test_SOURCES = libnr/nr-types-test.cpp
 libnr_nr_types_test_LDADD = libnr/libnr.a -lglib-2.0
