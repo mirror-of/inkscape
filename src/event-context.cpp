@@ -308,7 +308,7 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 			ret = TRUE;
 			break;
 		case 3:
-			if (event->button.state & GDK_SHIFT_MASK) {
+			if (event->button.state & GDK_SHIFT_MASK || event->button.state & GDK_CONTROL_MASK) {
 				s.x = event->button.x;
 				s.y = event->button.y;
 				panning = 3;
@@ -317,7 +317,6 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 						     NULL, event->button.time);
 				ret = TRUE;
 			} else {
-				/* fixme: */
 				sp_event_root_menu_popup (desktop, NULL, event);
 			}
 			break;
