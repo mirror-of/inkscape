@@ -16,12 +16,6 @@
 
 #define noSP_SS_VERBOSE
 
-/* TODO:  This is a kludge to get the code to compile; for some
- *        reason, on Linux INKSCAPE_MARKERSDIR isn't getting
- *        defined properly...  This needs to be fixed.
- */
-#define INKSCAPE_MARKERSDIR "/usr/share/inkscape/markers"
-
 #include <config.h>
 
 #include <string.h>
@@ -1026,9 +1020,9 @@ sp_marker_defaultlist_from_svg ( GtkWidget *m, SPDocument *current_doc )
                                 g_object_set_data (G_OBJECT (i), "marker", markid);
                                 GtkWidget *hb = gtk_hbox_new (FALSE, 4);
                                 gtk_widget_show (hb);
-                                GtkWidget *prv = sp_marker_prev_new (32, markid);
-                                gtk_widget_show (prv);
-                                gtk_box_pack_start (GTK_BOX (hb), prv, FALSE, FALSE, 0);
+    //                            GtkWidget *prv = sp_marker_prev_new (32, markid);
+    //                            gtk_widget_show (prv);
+    //                            gtk_box_pack_start (GTK_BOX (hb), prv, FALSE, FALSE, 0);
                                 GtkWidget *l = gtk_label_new (sp_repr_attr(repr,"id"));
                                 gtk_widget_show (l);
                                 gtk_misc_set_alignment (GTK_MISC (l), 0.0, 0.5);
