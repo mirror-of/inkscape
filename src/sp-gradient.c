@@ -893,7 +893,7 @@ sp_gradient_ensure_colors (SPGradient *gr)
  */
 
 void
-sp_gradient_render_vector_line_rgba (SPGradient *gradient, gchar *buf, gint len, gint pos, gint span)
+sp_gradient_render_vector_line_rgba (SPGradient *gradient, guchar *buf, gint len, gint pos, gint span)
 {
 	gint x, idx, didx;
 
@@ -922,7 +922,7 @@ sp_gradient_render_vector_line_rgba (SPGradient *gradient, gchar *buf, gint len,
 }
 
 void
-sp_gradient_render_vector_line_rgb (SPGradient *gradient, gchar *buf, gint len, gint pos, gint span)
+sp_gradient_render_vector_line_rgb (SPGradient *gradient, guchar *buf, gint len, gint pos, gint span)
 {
 	gint x, idx, didx;
 
@@ -959,7 +959,7 @@ sp_gradient_render_vector_line_rgb (SPGradient *gradient, gchar *buf, gint len, 
 }
 
 void
-sp_gradient_render_vector_block_rgba (SPGradient *gradient, gchar *buf, gint width, gint height, gint rowstride,
+sp_gradient_render_vector_block_rgba (SPGradient *gradient, guchar *buf, gint width, gint height, gint rowstride,
 				      gint pos, gint span, gboolean horizontal)
 {
 	g_return_if_fail (gradient != NULL);
@@ -997,7 +997,7 @@ sp_gradient_render_vector_block_rgba (SPGradient *gradient, gchar *buf, gint wid
 }
 
 void
-sp_gradient_render_vector_block_rgb (SPGradient *gradient, gchar *buf, gint width, gint height, gint rowstride,
+sp_gradient_render_vector_block_rgb (SPGradient *gradient, guchar *buf, gint width, gint height, gint rowstride,
 				     gint pos, gint span, gboolean horizontal)
 {
 	g_return_if_fail (gradient != NULL);
