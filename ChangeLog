@@ -1,3 +1,8 @@
+2005-03-31 Jean-François Lemaire <jflemaire@skynet.be>
+    * share/icons/David_icons.svg: new icon theme by David Christian Berg
+
+    * share/icons/README.icons: explanations on how to use the theme
+
 2005-03-30  Jean-François Lemaire <jflemaire@skynet.be>
     * share/icons/icons.svg: included the layer menu icons
 
