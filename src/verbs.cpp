@@ -920,7 +920,7 @@ static const SPVerbActionDef props[] = {
     {SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("_Hide/View dialogs"),
         N_("Toggle visibility of all active dialogs"), NULL},
     {SP_VERB_DIALOG_ITEM, "DialogItem", N_("Item _Properties"),
-        N_("Item properties"), "item_properties"},
+        N_("Item properties"), NULL},
 
     /* Footer */
     {SP_VERB_LAST, NULL, NULL, NULL, NULL}
