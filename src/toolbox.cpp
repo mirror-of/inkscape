@@ -1778,6 +1778,20 @@ sp_ddc_width_value_changed(GtkAdjustment *adj, SPWidget *tbl)
 	spinbutton_defocus (GTK_OBJECT (tbl));
 }
 
+static void
+sp_ddc_velthin_value_changed(GtkAdjustment *adj, SPWidget *tbl)
+{
+	prefs_set_double_attribute ("tools.calligraphic", "thinning", adj->value);
+	spinbutton_defocus (GTK_OBJECT (tbl));
+}
+
+static void
+sp_ddc_flatness_value_changed(GtkAdjustment *adj, SPWidget *tbl)
+{
+	prefs_set_double_attribute ("tools.calligraphic", "flatness", adj->value);
+	spinbutton_defocus (GTK_OBJECT (tbl));
+}
+
 static void sp_ddc_defaults(GtkWidget *, SPWidget *tbl)
 {
 	// FIXME: make defaults settable via Inkscape Options
@@ -1785,10 +1799,12 @@ static void sp_ddc_defaults(GtkWidget *, SPWidget *tbl)
         char const *key;
         double value;
     } const key_values[] = {
-        {"mass", 0.3},
-        {"drag", 0.5},
+        {"mass", 0.02},
+        {"drag", 1.0},
         {"angle", 30.0},
-        {"width", 0.2}
+        {"width", 0.2},
+        {"thinning", 0.25},
+        {"flatness", 0.9}
     };
 
     for (unsigned i = 0; i < G_N_ELEMENTS(key_values); ++i) {
@@ -1812,7 +1828,7 @@ sp_calligraphy_toolbox_new (SPDesktop *desktop)
 
     /* Width */
     {
-        GtkWidget *hb = sp_tb_spinbutton (_("Width:"), _("The width of the calligraphic pen"), 
+        GtkWidget *hb = sp_tb_spinbutton (_("Width:"), _("The width of the calligraphic pen (relative to the visible canvas area)"), 
                                           "tools.calligraphic", "width", 0.2,
                                           NULL, (SPWidget *) tbl, TRUE, "altx-calligraphy",
                                           0.01, 1.0, 0.01, 0.1, 
@@ -1820,20 +1836,40 @@ sp_calligraphy_toolbox_new (SPDesktop *desktop)
         gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
     }
 
+    /* Thinning */
+    {
+        GtkWidget *hb = sp_tb_spinbutton (_("Thinning:"), _("How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 makes them broader, 0 makes width independent of velocity)"), 
+                                          "tools.calligraphic", "thinning", 0.25,
+                                          NULL, (SPWidget *) tbl, FALSE, NULL,
+                                          -1.0, 1.0, 0.01, 0.1, 
+                                          sp_ddc_velthin_value_changed);
+        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+    }
+
+    /* Flatness */
+    {
+        GtkWidget *hb = sp_tb_spinbutton (_("Flatness:"), _("How flat is the pen's nib (0 = round, 1 = flat)"), 
+                                          "tools.calligraphic", "flatness", 0.9,
+                                          NULL, (SPWidget *) tbl, FALSE, NULL,
+                                          0.0, 1.0, 0.01, 0.1, 
+                                          sp_ddc_flatness_value_changed);
+        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+    }
+
     /* Angle */
     {
-        GtkWidget *hb = sp_tb_spinbutton (_("Angle:"), _("The angle of the calligraphic pen (in degrees)"), 
+        GtkWidget *hb = sp_tb_spinbutton (_("Angle:"), _("The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if flatness = 0)"), 
                                           "tools.calligraphic", "angle", 30,
                                           NULL, (SPWidget *) tbl, FALSE, NULL,
-                                          0.0, 360.0, 1.0, 10.0,
-                                          sp_ddc_angle_value_changed);
+                                          -90.0, 90.0, 5.0, 15.0,
+                                          sp_ddc_angle_value_changed, 1, 0);
         gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
     }
 
     /* Mass */
     {
         GtkWidget *hb = sp_tb_spinbutton (_("Mass:"), _("How much inertia affects the movement of the pen"), 
-                                          "tools.calligraphic", "mass", 0.3,
+                                          "tools.calligraphic", "mass", 0.02,
                                           NULL, (SPWidget *) tbl, FALSE, NULL,
                                           0.0, 1.0, 0.01, 0.1,
                                           sp_ddc_mass_value_changed);
@@ -1844,7 +1880,7 @@ sp_calligraphy_toolbox_new (SPDesktop *desktop)
     {
         // TRANSLATORS: "drag" means "resistance" here
         GtkWidget *hb = sp_tb_spinbutton (_("Drag:"), _("How much resistance affects the movement of the pen"), 
-                                          "tools.calligraphic", "drag", 0.5,
+                                          "tools.calligraphic", "drag", 1,
                                           NULL, (SPWidget *) tbl, FALSE, NULL,
                                           0.0, 1.0, 0.01, 0.1,
                                           sp_ddc_drag_value_changed);

@@ -73,6 +73,9 @@ struct SPDynaDrawContext
     double mass, drag;
     double angle;
     double width;
+
+    double vel_thin;
+    double flatness;
 };
 
 struct SPDynaDrawContextClass

@@ -76,7 +76,7 @@
 #define DYNA_MIN_WIDTH 1.0e-6
 
 #define DRAG_MIN 0.0
-#define DRAG_DEFAULT 0.5
+#define DRAG_DEFAULT 1.0
 #define DRAG_MAX 1.0
 
 static void sp_dyna_draw_context_class_init(SPDynaDrawContextClass *klass);
@@ -161,7 +161,7 @@ sp_dyna_draw_context_init(SPDynaDrawContext *ddc)
     ddc->del = NR::Point(0,0);
 
     /* attributes */
-    ddc->fixed_angle = FALSE;
+    ddc->fixed_angle = TRUE;   
     ddc->use_timeout = FALSE;
     ddc->use_calligraphic = TRUE;
     ddc->timer_id = 0;
@@ -172,6 +172,9 @@ sp_dyna_draw_context_init(SPDynaDrawContext *ddc)
     ddc->drag = DRAG_DEFAULT;
     ddc->angle = 30.0;
     ddc->width = 0.2;
+
+    ddc->vel_thin = 0.1;
+    ddc->flatness = 0.9;
 }
 
 static void
@@ -225,6 +228,8 @@ sp_dyna_draw_context_setup(SPEventContext *ec)
     sp_event_context_read(ec, "drag");
     sp_event_context_read(ec, "angle");
     sp_event_context_read(ec, "width");
+    sp_event_context_read(ec, "thinning");
+    sp_event_context_read(ec, "flatness");
 }
 
 static void
@@ -246,6 +251,12 @@ sp_dyna_draw_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
     } else if (!strcmp(key, "width")) {
         double const dval = ( val ? g_ascii_strtod (val, NULL) : 0.1 );
         ddc->width = CLAMP(dval, -1000.0, 1000.0);
+    } else if (!strcmp(key, "thinning")) {
+        double const dval = ( val ? g_ascii_strtod (val, NULL) : 0.1 );
+        ddc->vel_thin = CLAMP(dval, -1.0, 1.0);
+    } else if (!strcmp(key, "flatness")) {
+        double const dval = ( val ? g_ascii_strtod (val, NULL) : 1.0 );
+        ddc->flatness = CLAMP(dval, 0, 1.0);
     }
 
     //g_print("DDC: %g %g %g %g\n", ddc->mass, ddc->drag, ddc->angle, ddc->width);
@@ -317,18 +328,37 @@ sp_dyna_draw_apply(SPDynaDrawContext *dc, NR::Point p)
     dc->vel += dc->acc;
 
     /* Calculate angle of drawing tool */
-    if (dc->fixed_angle) {
-        double const radians = ( dc->angle / 180.0 ) * M_PI;
-        // should this be -sin, cos?
-        dc->ang = NR::Point(cos(radians),
-                            -sin(radians));
-    } else {
-        gdouble const mag_vel = NR::L2(dc->vel);
-        if ( mag_vel < DYNA_EPSILON ) {
-            return FALSE;
-        }
-        dc->ang = NR::rot90(dc->vel) / mag_vel;
+
+    // 1. fixed dc->angle (absolutely flat nib):
+    double const radians = ( (dc->angle - 90) / 180.0 ) * M_PI;
+    NR::Point ang1 = NR::Point(-sin(radians),  cos(radians));
+
+    // 2. perpendicular to dc->vel (absolutely non-flat nib):
+    gdouble const mag_vel = NR::L2(dc->vel);
+    if ( mag_vel < DYNA_EPSILON ) {
+        return FALSE;
     }
+    NR::Point ang2 = NR::rot90(dc->vel) / mag_vel;
+
+    // 3. Average them using flatness parameter:
+    // calculate angles
+    double a1 = atan2(ang1);
+    double a2 = atan2(ang2);
+    // flip a2 to force it to be in the same half-circle as a1
+    bool flipped = false;
+    if (fabs (a2-a1) > 0.5*M_PI) {
+        a2 += M_PI;
+        flipped = true;
+    }
+    // normalize a2
+    if (a2 > M_PI)
+        a2 -= 2*M_PI;
+    if (a2 < -M_PI)
+        a2 += 2*M_PI;
+    // find the flatness-weighted bisector angle, unflip if a2 was flipped
+    double new_ang = a1 + (1 - dc->flatness) * (a2 - a1) - (flipped? M_PI : 0);
+    // convert to point
+    dc->ang = NR::Point (cos (new_ang), sin (new_ang));
 
     /* Apply drag */
     dc->vel *= 1.0 - drag;
@@ -348,12 +378,15 @@ sp_dyna_draw_brush(SPDynaDrawContext *dc)
     if (dc->use_calligraphic) {
         /* calligraphics */
 
-        /* fixme: */
-        double width = ( 0.05 - NR::L2(dc->vel) ) * dc->width;
-        if ( width < DYNA_MIN_WIDTH ) {
-            width = DYNA_MIN_WIDTH;
+        // How much velocity thins strokestyle
+        double vel_thin = flerp (0, 20, dc->vel_thin);
+
+        double width = ( 1 - vel_thin * NR::L2(dc->vel) ) * dc->width;
+        if ( width < 0.1 * dc->width ) {
+            width = 0.1 * dc->width;
         }
-        NR::Point del = width * dc->ang;
+
+        NR::Point del = 0.05 * width * dc->ang;
 
         dc->point1[dc->npoints] = sp_dyna_draw_get_vpoint(dc, dc->cur + del);
         dc->point2[dc->npoints] = sp_dyna_draw_get_vpoint(dc, dc->cur - del);
@@ -715,7 +748,8 @@ fit_and_split_calligraphics(SPDynaDrawContext *dc, gboolean release)
     g_print("[F&S:R=%c]", release?'T':'F');
 #endif
 
-    g_assert( dc->npoints > 0 && dc->npoints < SAMPLING_SIZE );
+    if (!( dc->npoints > 0 && dc->npoints < SAMPLING_SIZE ))
+        return; // just clicked
 
     if ( dc->npoints == SAMPLING_SIZE - 1 || release ) {
 #define BEZIER_SIZE       4
