@@ -718,27 +718,15 @@ sp_desktop_dialog (void)
         gtk_widget_show (f);
         gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
 
-        GtkWidget *tt = gtk_table_new (9, 2, FALSE);
+        GtkWidget *tt = gtk_table_new (4, 2, FALSE);
         gtk_widget_show (tt);
         gtk_container_set_border_width (GTK_CONTAINER (tt), 4);
         gtk_table_set_row_spacings (GTK_TABLE (tt), 4);
         gtk_table_set_col_spacings (GTK_TABLE (tt), 4);
         gtk_container_add (GTK_CONTAINER (f), tt);
         
-        
-        l = gtk_label_new (_("Units:"));
-        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-        gtk_widget_show (l);
-        gtk_table_attach ( GTK_TABLE (tt), l, 0, 1, 0, 1, 
-                           (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
-                           (GtkAttachOptions)0, 0, 0 );
         us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
-        gtk_widget_show (us);
-        gtk_table_attach ( GTK_TABLE (tt), us, 1, 2, 0, 1, 
-                           (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
-                           (GtkAttachOptions)0, 0, 0);
-        gtk_object_set_data (GTK_OBJECT (dlg), "units", us);
-        
+	spw_dropdown (dlg, tt, _("Units:"), "units", 0, us);
         
         l = gtk_label_new (_("Width:"));
         gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
