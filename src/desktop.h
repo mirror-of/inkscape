@@ -19,9 +19,9 @@
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
+#include "display/display-forward.h"
 #include "helper/helper-forward.h"
 #include "forward.h"
-#include "sp-desktop-widget.h"
 #include "style.h"
 #include "view.h"
 #include "verbs.h"
