@@ -1,3 +1,11 @@
+2003-11-29 Kees Cook <inkscape@outflux.net>
+
+	* src/utest/.cvsignore: adding "Makefile"
+	* src/desktop.c: sp_desktop_pop_event_context could use uninit'd *ec
+	* src/desktop.h: missing declaration of sp_desktop_zoom_page_width
+	* src/libnrtype/nr-rasterfont.c: give *spx and srs default values
+	* dialogs/dialog-events.c: remove unused *w and *dtw
+
 2003-11-29 MenTaLguY <mental@rydia.net>
 
 	* src/interface.c: switched to GNOME HIG menu style
