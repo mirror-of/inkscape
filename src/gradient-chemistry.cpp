@@ -25,6 +25,7 @@
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
 #include "sp-stop.h"
+#include "widgets/gradient-vector.h"
 
 #include "sp-root.h"
 #include "sp-tspan.h"
@@ -554,6 +555,39 @@ sp_last_stop(SPGradient *gradient)
 		return stop;
   }
   return NULL;
+}
+
+
+void
+sp_item_gradient_edit_stop (SPItem *item, guint point_num, bool fill_or_stroke)
+{
+    SPGradient *gradient = sp_item_gradient (item, fill_or_stroke);
+
+    if (!gradient || !SP_IS_GRADIENT(gradient))
+        return;
+
+    SPGradient *vector = sp_gradient_get_vector (gradient, false);
+    switch (point_num) {
+        case POINT_LG_P1:
+        case POINT_RG_CENTER:
+        case POINT_RG_FOCUS:
+        {
+            GtkWidget *dialog = sp_gradient_vector_editor_new (vector, sp_first_stop (vector));
+            gtk_widget_show (dialog);
+        }
+        break;
+
+        case POINT_LG_P2:
+        case POINT_RG_R1:
+        case POINT_RG_R2:
+        {
+            GtkWidget *dialog = sp_gradient_vector_editor_new (vector, sp_last_stop (vector));
+            gtk_widget_show (dialog);
+        }
+        break;
+        default:
+            break;
+    }
 }
 
 void
