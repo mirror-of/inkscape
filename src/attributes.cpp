@@ -230,7 +230,7 @@ static const SPStyleProp props[] = {
 	{SP_PROP_DIRECTION, "direction"},
 	{SP_PROP_BLOCK_PROGRESSION, "block-progression"},
 	{SP_PROP_WRITING_MODE, "writing-mode"},
-	{SP_PROP_UNICODE_BIDI, "unicode_bidi"},
+	{SP_PROP_UNICODE_BIDI, "unicode-bidi"},
 	{SP_PROP_ALIGNMENT_BASELINE, "alignment-baseline"},
 	{SP_PROP_BASELINE_SHIFT, "baseline-shift"},
 	{SP_PROP_DOMINANT_BASELINE, "dominant-baseline"},
