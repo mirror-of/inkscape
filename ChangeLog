@@ -1,5 +1,15 @@
 2004-01-22  MenTaLguY  <mental@rydia.net>
 
+	* src/xml/Makefile_insert, src/xml/repr-private.h, src/xml/repr.cpp,
+	  src/xml/session.h, src/xml/simple-session.cpp, src/xml/simple-session.h,
+	  src/xml/sp-repr-action.cpp, src/xml/transaction-logger.h:
+
+	  added Inkscape::XML::Session and Inkscape::XML::TransactionLogger
+	  to provide a new interface for transactions, rather than doing it from
+	  SPReprDoc
+
+2004-01-22  MenTaLguY  <mental@rydia.net>
+
 	* src/xml/Makefile_insert, src/xml/node-observer.h,
 	  src/xml/repr-private.h, src/xml/repr.cpp:
 

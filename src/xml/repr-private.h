@@ -6,11 +6,9 @@
  */
 
 /*
- * Authors:
- *   Lauris Kaplinski <lauris@kaplinski.com>
- *   Frank Felfe <innerspace@iname.com>
- *
- * Copyright (C) 1999-2002 authors
+ * Copyright (C) 2004-2005 MenTaLguY
+ * Copyright (C) 1999-2002 Frank Felfe
+ * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2002 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -26,6 +24,8 @@
 #include "gc-anchored.h"
 #include "xml/xml-forward.h"
 #include "xml/node-observer.h"
+#include "xml/session.h"
+#include "xml/transaction-logger.h"
 #include "util/shared-c-string-ptr.h"
 
 struct SPReprClass;
@@ -46,10 +46,14 @@ class SPRepr : public Inkscape::GC::Managed<>, public Inkscape::GC::Anchored {
 public:
 	SPReprType type() const { return _type; }
 
+	Inkscape::XML::Session *session() {
+		return ( _logger ? &_logger->session() : NULL );
+	}
+
 	gchar const *name() const;
 	int code() const { return _name; }
 	void setCodeUnsafe(int code) {
-		g_assert(!_document && !_listeners);
+		g_assert(!_logger && !_listeners);
 		_name = code;
 	}
 
@@ -118,6 +122,7 @@ protected:
 	void _setParent(SPRepr *parent) { _parent = parent; }
 	void _setNext(SPRepr *next) { _next = next; }
 	void _bindDocument(SPReprDoc &document);
+	void _bindLogger(Inkscape::XML::TransactionLogger &logger);
 
 	unsigned _childPosition(SPRepr const &child) const;
 	unsigned _cachedPosition() const { return _cached_position; }
@@ -135,6 +140,8 @@ private:
 
 	SPReprDoc *_document;
 
+	Inkscape::XML::TransactionLogger *_logger;
+
 	SPReprType _type;
 	SPReprAttr *_attributes;
 	Inkscape::Util::SharedCStringPtr _content;
@@ -148,8 +155,6 @@ private:
 
 	SPReprListener *_listeners;
 	SPReprListener *_last_listener;
-
-	friend class SPReprDoc;
 };
 
 struct SPReprElement : public SPRepr {
@@ -184,46 +189,10 @@ protected:
 struct SPReprDoc : public SPRepr {
 	explicit SPReprDoc(int code);
 
-	void beginTransaction();
-	void commit();
-	SPReprAction *commitUndoable();
-	void rollback();
-
-	bool inTransaction() { return _log->is_logging; }
-
 protected:
-	struct Log : public Inkscape::GC::Managed<Inkscape::GC::ATOMIC>,
-	             public Inkscape::GC::Finalized,
-		     public Inkscape::XML::NodeObserver
-        {
-		Log() : is_logging(false), actions(NULL) {}
-		~Log();
-
-		bool is_logging;
-		SPReprAction *actions;
-
-		void notifyChildAdded(SPRepr &parent, SPRepr &child,
-				      SPRepr *prev);
-		void notifyChildRemoved(SPRepr &parent, SPRepr &child,
-				        SPRepr *prev);
-		void notifyChildOrderChanged(SPRepr &parent, SPRepr &child,
-                                             SPRepr *old_prev,
-					     SPRepr *new_prev);
-		void notifyContentChanged(SPRepr &node,
-				          Inkscape::Util::SharedCStringPtr old_content,
-					  Inkscape::Util::SharedCStringPtr new_content);
-		void notifyAttributeChanged(SPRepr &node, GQuark name,
-				            Inkscape::Util::SharedCStringPtr old_value,
-					    Inkscape::Util::SharedCStringPtr new_value);
-	};
-
-	Log *_log;
-
 	SPReprDoc(SPReprDoc const &doc);
 
 	SPRepr *_duplicate() const { return new SPReprDoc(*this); }
-
-	friend class SPRepr;
 };
 
 struct SPXMLNs {

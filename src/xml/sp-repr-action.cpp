@@ -25,71 +25,42 @@ using Inkscape::Util::reverse_list;
 
 int SPReprAction::_next_serial=0;
 
-void SPReprDoc::beginTransaction() {
-	if (_log->is_logging) {
-		/* FIXME !!! rethink discarding the existing log? */
-		sp_repr_free_log (_log->actions);
-		_log->actions = NULL;
-	} else {
-		_log->is_logging = true;
-	}
-}
+using Inkscape::XML::Session;
 
 void
 sp_repr_begin_transaction (SPReprDoc *doc)
 {
 	g_assert(doc != NULL);
-	doc->beginTransaction();
-}
-
-void SPReprDoc::rollback() {
-	if (_log->is_logging) {
-		_log->is_logging = false;
-		sp_repr_undo_log (_log->actions);
-		sp_repr_free_log (_log->actions);
-		_log->actions = NULL;
-	}
+	Session *session=doc->session();
+	g_assert(session != NULL);
+	session->beginTransaction();
 }
 
 void
 sp_repr_rollback (SPReprDoc *doc)
 {
 	g_assert(doc != NULL);
-	doc->rollback();
-}
-
-void SPReprDoc::commit() {
-	if (_log->is_logging) {
-		_log->is_logging = false;
-		sp_repr_free_log (_log->actions);
-		_log->actions = NULL;
-	}
+	Session *session=doc->session();
+	g_assert(session != NULL);
+	session->rollback();
 }
 
 void
 sp_repr_commit (SPReprDoc *doc)
 {
 	g_assert(doc != NULL);
-	doc->commit();
-}
-
-SPReprAction *SPReprDoc::commitUndoable() {
-	SPReprAction *log=NULL;
-
-	if (_log->is_logging) {
-		log = _log->actions;
-		_log->actions = NULL;
-		_log->is_logging = false;
-	}
-
-	return log;
+	Session *session=doc->session();
+	g_assert(session != NULL);
+	session->commit();
 }
 
 SPReprAction *
 sp_repr_commit_undoable (SPReprDoc *doc)
 {
 	g_assert(doc != NULL);
-	return doc->commitUndoable();
+	Session *session=doc->session();
+	g_assert(session != NULL);
+	return session->commitUndoable();
 }
 
 void
@@ -98,7 +69,7 @@ sp_repr_undo_log (SPReprAction *log)
 	SPReprAction *action;
 
 	if (log) {
-		g_assert(!log->repr->document()->inTransaction());
+		g_assert(!log->repr->session()->inTransaction());
 	}
 
 	for ( action = log ; action ; action = action->next ) {
@@ -130,7 +101,7 @@ void
 sp_repr_replay_log (SPReprAction *log)
 {
 	if (log) {
-		g_assert(!log->repr->document()->inTransaction());
+		g_assert(!log->repr->session()->inTransaction());
 	}
 
 	List<SPReprAction &> reversed(

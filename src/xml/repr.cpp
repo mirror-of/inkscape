@@ -35,6 +35,7 @@
 #include "xml/sp-repr-attr.h"
 #include "xml/sp-repr-action.h"
 #include "xml/sp-repr-action-fns.h"
+#include "xml/simple-session.h"
 
 using Inkscape::Util::SharedCStringPtr;
 
@@ -65,6 +66,7 @@ SPRepr::SPRepr(SPReprType t, int code)
 : _name(code), _type(t), _child_count(0),
   _cached_positions_valid(false)
 {
+    this->_logger = NULL;
     this->_document = NULL;
     this->_parent = this->_next = this->_children = NULL;
     this->_attributes = NULL;
@@ -72,54 +74,8 @@ SPRepr::SPRepr(SPReprType t, int code)
 }
 
 SPReprDoc::SPReprDoc(int code) : SPRepr(SP_XML_DOCUMENT_NODE, code) {
-    this->_log = new Log();
-    this->_document = this;
-}
-
-SPReprDoc::Log::~Log() {
-    sp_repr_free_log(actions);
-}
-
-void SPReprDoc::Log::notifyChildAdded(SPRepr &parent, SPRepr &child,
-                                      SPRepr *prev)
-{
-    if (is_logging) {
-        actions = (new SPReprActionAdd(&parent, &child, prev, actions))->optimizeOne();
-    }
-}
-
-void SPReprDoc::Log::notifyChildRemoved(SPRepr &parent, SPRepr &child,
-                                        SPRepr *prev)
-{
-    if (is_logging) {
-        actions = (new SPReprActionDel(&parent, &child, prev, actions))->optimizeOne();
-    }
-}
-
-void SPReprDoc::Log::notifyChildOrderChanged(SPRepr &parent, SPRepr &child,
-                                             SPRepr *old_prev, SPRepr *new_prev)
-{
-    if (is_logging) {
-        actions = (new SPReprActionChgOrder(&parent, &child, old_prev, new_prev, actions))->optimizeOne();
-    }
-}
-
-void SPReprDoc::Log::notifyContentChanged(SPRepr &node,
-                                          SharedCStringPtr old_content,
-                                          SharedCStringPtr new_content)
-{
-    if (is_logging) {
-        actions = (new SPReprActionChgContent(&node, old_content, new_content, actions))->optimizeOne();
-    }
-}
-
-void SPReprDoc::Log::notifyAttributeChanged(SPRepr &node, GQuark name,
-                                            SharedCStringPtr old_value,
-                                            SharedCStringPtr new_value)
-{
-    if (is_logging) {
-        actions = (new SPReprActionChgAttr(&node, name, old_value, new_value, actions))->optimizeOne();
-    }
+    _bindDocument(*this);
+    _bindLogger(*(new Inkscape::XML::SimpleSession()));
 }
 
 SPRepr *sp_repr_ref(SPRepr *repr) {
@@ -145,6 +101,7 @@ SPRepr::SPRepr(SPRepr const &repr)
   _cached_positions_valid(repr._cached_positions_valid),
   _cached_position(repr._cached_position)
 {
+    this->_logger = NULL;
     this->_document = NULL;
     this->_parent = this->_next = this->_children = NULL;
     this->_attributes = NULL;
@@ -160,10 +117,10 @@ SPRepr::SPRepr(SPRepr const &repr)
         } else {
             this->_children = child_copy;
         }
-        sp_repr_unref(child_copy); // even duplicates are created with a refcount
-                                   // of one; unref here to avoid a leak: reprs
-                                   // in the child list are managed by the
-                                   // garbage collector
+        sp_repr_unref(child_copy); // even duplicates are created with a
+                                   // refcount of one; unref here to avoid a
+                                   // leak; the ref from the child list
+                                   // suffices
 
         prev_child_copy = child_copy;
     }
@@ -183,7 +140,8 @@ SPRepr::SPRepr(SPRepr const &repr)
 }
 
 SPReprDoc::SPReprDoc(SPReprDoc const &doc) : SPRepr(doc) {
-    this->_log = new Log();
+    _bindDocument(*this);
+    _bindLogger(*(new Inkscape::XML::SimpleSession()));
 }
 
 gchar const *SPRepr::name() const {
@@ -271,8 +229,8 @@ SPRepr::setContent(gchar const *newcontent)
     } else {
         this->_content = SharedCStringPtr();
     }
-    if (_document) {
-        _document->_log->notifyContentChanged(*this, oldcontent, this->_content);
+    if (_logger) {
+        _logger->notifyContentChanged(*this, oldcontent, this->_content);
     }
 
     for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {
@@ -308,8 +266,8 @@ SPRepr::_deleteAttribute(gchar const *key, bool is_interactive)
         } else {
             this->_attributes = attr->next;
         }
-        if (_document) {
-            _document->_log->notifyAttributeChanged(*this, q, attr->value, SharedCStringPtr());
+        if (_logger) {
+            _logger->notifyAttributeChanged(*this, q, attr->value, SharedCStringPtr());
         }
 
         for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {
@@ -349,8 +307,8 @@ SPRepr::_changeAttribute(gchar const *key, gchar const *value, bool is_interacti
             this->_attributes = attr;
         }
     }
-    if (_document) {
-        _document->_log->notifyAttributeChanged(*this, q, oldval, attr->value);
+    if (_logger) {
+        _logger->notifyAttributeChanged(*this, q, oldval, attr->value);
     }
 
     for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {
@@ -423,8 +381,11 @@ SPRepr::addChild(SPRepr *child, SPRepr *ref)
     _child_count++;
 
     if (_document) {
-        if (!child->document()) child->_bindDocument(*_document);
-        _document->_log->notifyChildAdded(*this, *child, ref);
+        child->_bindDocument(*_document);
+    }
+    if (_logger) {
+        child->_bindLogger(*_logger);
+        _logger->notifyChildAdded(*this, *child, ref);
     }
 
     for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {
@@ -449,13 +410,26 @@ sp_repr_add_child(SPRepr *repr, SPRepr *child, SPRepr *ref)
     return true;
 }
 
-void
-SPRepr::_bindDocument(SPReprDoc &document) {
-    g_assert(!_document);
-    _document = &document;
+void SPRepr::_bindDocument(SPReprDoc &document) {
+    g_assert(!_document || _document == &document);
+    if (!_document) {
+        _document = &document;
 
-    for ( SPRepr *child = _children ; child != NULL ; child = child->next() ) {
-        child->_bindDocument(document);
+        for ( SPRepr *child = _children ; child != NULL ; child = child->next() ) {
+            child->_bindDocument(document);
+        }
+    }
+}
+
+void SPRepr::_bindLogger(Inkscape::XML::TransactionLogger &logger) {
+    g_assert(!_logger || _logger == &logger);
+
+    if (!_logger) {
+        _logger = &logger;
+
+        for ( SPRepr *child = _children ; child != NULL ; child = child->next() ) {
+            child->_bindLogger(logger);
+        }
     }
 }
 
@@ -478,7 +452,7 @@ void SPRepr::removeChild(SPRepr *child) {
         this->_children = next;
     }
     if (next) {
-        // removing any child other than the last invalidates
+        // removing any child, save the last, invalidates
         // the cached positions
         _cached_positions_valid = false;
     }
@@ -487,8 +461,8 @@ void SPRepr::removeChild(SPRepr *child) {
     child->_setParent(NULL);
     _child_count--;
 
-    if (_document) {
-        _document->_log->notifyChildRemoved(*this, *child, ref);
+    if (_logger) {
+        _logger->notifyChildRemoved(*this, *child, ref);
     }
 
     for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {
@@ -533,8 +507,8 @@ void SPRepr::changeOrder(SPRepr *child, SPRepr *ref) {
 
     this->_cached_positions_valid = false;
 
-    if (_document) {
-        _document->_log->notifyChildOrderChanged(*this, *child, prev, ref);
+    if (_logger) {
+        _logger->notifyChildOrderChanged(*this, *child, prev, ref);
     }
 
     for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {

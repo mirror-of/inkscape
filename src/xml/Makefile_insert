@@ -15,10 +15,6 @@ xml/clean:
 
 xml_libspxml_a_SOURCES =	\
 	xml/node-observer.h \
-	xml/sp-repr-action.cpp	\
-	xml/sp-repr-action.h	\
-	xml/sp-repr-action-fns.h	\
-	xml/sp-repr-iterators.h	\
 	xml/quote.cpp	\
 	xml/quote.h	\
 	xml/repr-css.cpp	\
@@ -29,10 +25,18 @@ xml_libspxml_a_SOURCES =	\
 	xml/repr-util.cpp	\
 	xml/repr.cpp	\
 	xml/repr.h	\
-	xml/xml-forward.h \
-	xml/sp-repr-listener.h \
+	xml/session.h \
+	xml/simple-session.cpp \
+	xml/simple-session.h \
+	xml/sp-repr-attr.h \
+	xml/sp-repr-action.cpp	\
+	xml/sp-repr-action.h	\
+	xml/sp-repr-action-fns.h	\
 	xml/sp-repr-event-vector.h \
-	xml/sp-repr-attr.h 
+	xml/sp-repr-iterators.h	\
+	xml/sp-repr-listener.h \
+	xml/transaction-logger.h \
+	xml/xml-forward.h
 
 xml_repr_action_test_SOURCES = xml/repr-action-test.cpp
 xml_repr_action_test_LDADD = gc.o xml/libspxml.a util/libinkutil.a libinkpost.a $(INKSCAPE_LIBS)
