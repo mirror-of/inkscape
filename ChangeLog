@@ -1,3 +1,29 @@
+2003-12-23  bulia byak <bulia@dr.com>
+
+	* src/helper/sp-canvas.h: float-to-double fix
+
+	* src/sp-namedview.h src/sp-namedview.cpp: New namedview attributes for zoom and
+	window geometry; functions for updating them from a desktop and for setting up a
+	desktop from these attributes
+
+	* src/preferences-skeleton.h: new options.savewindowgeometry 
+
+	* src/attributes.h src/attributes.cpp: New namedview attributes
+
+	* src/desktop.cpp: Remove/comment out extraneous code. Float-to-double fixes, prevent
+	sliding when zooming in at max zoom.
+
+	* src/file.cpp src/main.cpp src/interface.cpp: Added document_from_window and
+	window_from_document hooks to file opening and saving functions
+
+	* src/document.cpp: New: inkscape_rel2abs() (based on g_rel2abs by Shigio Yamaguchi),
+	store absolute filenames in document->uri. Fixed reading namedview template from
+	preferences, fixed namedview template id, added comments.
+
+	* src/nodepath.cpp: Ctrl + click node: delete node
+
+	* src/desktop.cpp src/file.cpp src/file.h: New save confirm dialog (patch by spark)
+
 2003-12-23  MenTaLguY <mental@rydia.net>
 
 	* src/desktop.cpp: shortened rulers to canvas dimensions for now
