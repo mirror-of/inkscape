@@ -721,7 +721,7 @@ sp_paint_selector_set_mode_color (SPPaintSelector *psel, SPPaintSelectorMode mod
 		csel = sp_color_selector_new (SP_TYPE_COLOR_NOTEBOOK, SP_COLORSPACE_TYPE_NONE);
 		gtk_widget_show (csel);
 		gtk_object_set_data (GTK_OBJECT (vb), "color-selector", csel);
-		gtk_box_pack_start (GTK_BOX (vb), csel, FALSE, FALSE, 0);
+		gtk_box_pack_start (GTK_BOX (vb), csel, TRUE, TRUE, 0);
 		gtk_signal_connect (GTK_OBJECT (csel), "grabbed", GTK_SIGNAL_FUNC (sp_paint_selector_color_grabbed), psel);
 		gtk_signal_connect (GTK_OBJECT (csel), "dragged", GTK_SIGNAL_FUNC (sp_paint_selector_color_dragged), psel);
 		gtk_signal_connect (GTK_OBJECT (csel), "released", GTK_SIGNAL_FUNC (sp_paint_selector_color_released), psel);
