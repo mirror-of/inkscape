@@ -183,7 +183,7 @@ sp_draw_context_setup(SPEventContext *ec)
     /* No green anchor by default */
     dc->green_anchor = NULL;
 
-    spdc_set_attach(dc, FALSE);
+    spdc_set_attach(dc, TRUE);
 }
 
 static void
