@@ -1,9 +1,0 @@
-<spmodule>
-    <name>Dropshadow</name>
-    <id>modules.filter.dropshadow</id>
-    <filter>
-    </filter>
-    <extension>
-        <command reldir="extensions">svg_dropshadow --opacity=0.9 --color=black</command>
-    </extension>
-</spmodule>
