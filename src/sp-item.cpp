@@ -159,13 +159,12 @@ bool SPItem::isHidden() const {
     return !style->visibility;
 }
 
-void SPItem::setHidden(bool hidden) {
+void SPItem::setHidden(bool hide) {
     // this isn't necessarily right from a CSS point of view, since
     // visibility isn't an inherited property, but it sort of is for
     // our purposes here, maybe..
-    bool parent_visibility = ( SP_OBJECT_PARENT(this) ? SP_OBJECT_STYLE(SP_OBJECT_PARENT(this))->visibility : true );
-    style->visibility_set = hidden;
-    style->visibility = !hidden || parent_visibility;
+    style->visibility_set = TRUE;
+    style->visibility = !hide;
     updateRepr();
 }
 
