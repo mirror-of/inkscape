@@ -219,6 +219,9 @@ sp_gradient_fork_private_if_necessary(SPGradient *gr, SPGradient *vector,
     g_return_val_if_fail(vector != NULL, NULL);
     g_return_val_if_fail(SP_IS_GRADIENT(vector), NULL);
 
+    // Orphaned gradient, no vector with stops at the end of the line; this used to be an assert
+    // but i think we should not abort on this - maybe just write a validity warning into some sort
+    // of log
     if (!SP_GRADIENT_HAS_STOPS(vector))
         return (gr);
 
