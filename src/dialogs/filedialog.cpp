@@ -9,6 +9,7 @@
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/menu.h>
+#include <gtkmm/entry.h>
 
 #include <map>
 
@@ -57,9 +58,25 @@ class FileOpenDialogImpl : public FileOpenDialog, public Gtk::FileChooserDialog
 
     protected:
 
-        //# Child widgets
+
 
     private:
+
+        /**
+         * Fix to allow typing of the file name 
+         */
+        Gtk::Entry fileNameEntry;
+
+        /**
+         * Callback for user input into fileNameEntry
+         */
+        void fileNameEntryChangedCallback();
+
+        /**
+         * Callback for user input into fileNameEntry
+         */
+        void fileSelectedCallback();
+
 
         /**
          * Filter name->extension lookup
@@ -78,6 +95,35 @@ class FileOpenDialogImpl : public FileOpenDialog, public Gtk::FileChooserDialog
 
 };
 
+/**
+ * Callback for fileNameEntry widget
+ */
+void FileOpenDialogImpl::fileNameEntryChangedCallback()
+{
+    gchar *fName = (gchar *)fileNameEntry.get_text().c_str();
+    //g_message("User hit return.  Text is '%s'\n", fName);
+
+    if (g_file_test(fName, G_FILE_TEST_EXISTS))
+       {
+       //dialog with either (1) select a regular file or (2) cd to dir
+       set_filename(fileNameEntry.get_text());
+       //is it a regular file? do the same as 'OK'
+       if (g_file_test(fName, G_FILE_TEST_IS_REGULAR))
+           response(GTK_RESPONSE_OK);
+       }
+
+}
+
+/**
+ * Callback for fileNameEntry widget
+ */
+void FileOpenDialogImpl::fileSelectedCallback()
+{
+    //g_message("User selected '%s'\n",
+    //       get_filename().c_str());
+
+    fileNameEntry.set_text(get_filename());
+}
 
 
 
@@ -98,12 +144,12 @@ FileOpenDialogImpl::FileOpenDialogImpl(const char *dir,
 
     /* Set the pwd and/or the filename */
     if (dir != NULL)
-        set_filename(dir);
+        set_current_folder(dir);
 
     Gtk::FileFilter topFilter;
-    topFilter.set_name(Glib::ustring(_("Autodetect")));
+    topFilter.set_name(_("Autodetect"));
     extensionMap[Glib::ustring(_("Autodetect"))]=NULL;
-    topFilter.add_pattern(Glib::ustring("*"));
+    topFilter.add_pattern("*");
     add_filter(topFilter);
 
     GSList *extension_list = Inkscape::Extension::db.get_input_list();
@@ -128,6 +174,22 @@ FileOpenDialogImpl::FileOpenDialogImpl(const char *dir,
     }
 
     Inkscape::Extension::db.free_list(extension_list);
+
+    //#####Add a text entry bar, and tie it to file chooser events
+    fileNameEntry.set_text(get_current_folder());
+    set_extra_widget(fileNameEntry);
+    fileNameEntry.grab_focus();
+
+    //Catch when user hits [return] on the text field
+    fileNameEntry.signal_activate().connect( 
+         sigc::mem_fun(*this, &FileOpenDialogImpl::fileNameEntryChangedCallback) );
+
+    //Catch selection-changed events, so we can adjust the text widget
+    signal_selection_changed().connect( 
+         sigc::mem_fun(*this, &FileOpenDialogImpl::fileSelectedCallback) );
+
+
+    
 
     add_button(Gtk::Stock::OPEN,   GTK_RESPONSE_OK);
     add_button(Gtk::Stock::CANCEL, GTK_RESPONSE_CANCEL);
@@ -285,7 +347,7 @@ FileSaveDialogImpl::FileSaveDialogImpl(const char *dir,
 
     /* Set the pwd and/or the filename */
     if (dir != NULL)
-        set_filename(dir);
+        set_current_folder(dir);
 
     Gtk::FileFilter topFilter;
     topFilter.set_name(Glib::ustring(_("Autodetect")));
