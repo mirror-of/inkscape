@@ -36,13 +36,19 @@ gr_drag_sel_changed(SPSelection *selection, gpointer data)
 {
 	GrDrag *drag = (GrDrag *) data;
 	drag->updateDraggers ();
+	drag->updateLines ();
 }
 
 static void
 gr_drag_sel_modified (SPSelection *selection, guint flags, gpointer data)
 {
-	GrDrag *drag = (GrDrag *) data;
-	drag->updateDraggers ();
+    GrDrag *drag = (GrDrag *) data;
+    if (drag->local_change) {
+        drag->local_change = false;
+    } else {
+        drag->updateDraggers ();
+    }
+    drag->updateLines ();
 }
 
 
@@ -54,6 +60,8 @@ GrDrag::GrDrag(SPDesktop *desktop) {
 
         this->draggers = NULL;
         this->lines = NULL;
+
+        this->local_change = false;
 
 	this->sel_changed_connection = this->selection->connectChanged(
             sigc::bind (
@@ -68,6 +76,7 @@ GrDrag::GrDrag(SPDesktop *desktop) {
 	);
 
 	this->updateDraggers ();
+	this->updateLines ();
 }
 
 GrDrag::~GrDrag() {
@@ -123,11 +132,38 @@ GrDraggable::~GrDraggable ()
 	g_object_unref (G_OBJECT (this->item));
 }
 
-GrDragger::GrDragger (SPDesktop *desktop, NR::Point p, gchar const *tip, GrDraggable *draggable) 
+static void
+gr_knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer data)
+{
+    GrDragger *dragger = (GrDragger *) data;
+
+    for (GSList const* l = dragger->draggables; l != NULL; l = l->next) {
+        GrDraggable *draggable = (GrDraggable *) l->data;
+        dragger->parent->local_change = true;
+        sp_item_gradient_set_coords (draggable->item, draggable->point_num, *p, false);
+    }
+}
+
+static void
+gr_knot_ungrabbed_handler (SPKnot *knot, unsigned int state, gpointer data)
+{
+    GrDragger *dragger = (GrDragger *) data;
+
+    for (GSList const* l = dragger->draggables; l != NULL; l = l->next) {
+        GrDraggable *draggable = (GrDraggable *) l->data;
+        dragger->parent->local_change = true;
+        sp_item_gradient_set_coords (draggable->item, draggable->point_num, knot->pos, true);
+    }
+}
+
+
+GrDragger::GrDragger (GrDrag *parent, NR::Point p, gchar const *tip, GrDraggable *draggable) 
 {
     this->draggables = NULL;
 
-	this->knot = sp_knot_new (desktop, tip);
+    this->parent = parent;
+
+	this->knot = sp_knot_new (parent->desktop, tip);
 	g_object_set (G_OBJECT (this->knot->item), "shape", SP_KNOT_SHAPE_SQUARE, NULL);
 	g_object_set (G_OBJECT (this->knot->item), "mode", SP_KNOT_MODE_XOR, NULL);
 
@@ -135,7 +171,11 @@ GrDragger::GrDragger (SPDesktop *desktop, NR::Point p, gchar const *tip, GrDragg
 	sp_knot_set_position (this->knot, &p, SP_KNOT_STATE_NORMAL);
 	sp_knot_show (this->knot);
 
-  this->draggables = g_slist_prepend (this->draggables, draggable);
+	this->handler_id = g_signal_connect (G_OBJECT (this->knot), "moved", G_CALLBACK (gr_knot_moved_handler), this);
+
+	g_signal_connect (G_OBJECT (this->knot), "ungrabbed", G_CALLBACK (gr_knot_ungrabbed_handler), this);
+
+      this->draggables = g_slist_prepend (this->draggables, draggable);
 }
 
 GrDragger::~GrDragger ()
@@ -171,6 +211,33 @@ GrDrag::updateDraggers ()
     g_slist_free (this->draggers);
     this->draggers = NULL;
 
+    g_return_if_fail (this->selection != NULL);
+
+    for (GSList const* l = this->selection->itemList(); l != NULL; l = l->next) {
+
+        SPItem *item = SP_ITEM(l->data);
+
+        SPStyle *style = SP_OBJECT_STYLE (item);
+
+        if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
+            SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (item);
+            if (SP_IS_LINEARGRADIENT (server)) {
+                SPLinearGradient *lg = SP_LINEARGRADIENT (server);
+
+                this->draggers = g_slist_prepend (this->draggers, 
+                                                  new GrDragger(this, sp_lg_get_p1 (item, lg), "drag1", 
+                                                                new GrDraggable (item, POINT_LG_P1, true)));
+                this->draggers = g_slist_prepend (this->draggers, 
+                                                  new GrDragger(this, sp_lg_get_p2 (item, lg), "drag2", 
+                                                                new GrDraggable (item, POINT_LG_P2, true)));
+            }
+        }
+    }
+}
+
+void
+GrDrag::updateLines ()
+{
 	for (GSList *l = this->lines; l != NULL; l = l->next) {
          gtk_object_destroy( GTK_OBJECT (l->data));
 	}
@@ -189,14 +256,8 @@ GrDrag::updateDraggers ()
             SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (item);
             if (SP_IS_LINEARGRADIENT (server)) {
                 SPLinearGradient *lg = SP_LINEARGRADIENT (server);
-                NR::Point p1 (lg->x1.computed, lg->y1.computed);
-                NR::Point p2 (lg->x2.computed, lg->y2.computed);
-                p1 *= NR::Matrix (lg->gradientTransform) * sp_item_i2d_affine (item);
-                p2 *= NR::Matrix (lg->gradientTransform) * sp_item_i2d_affine (item);
 
-                this->draggers = g_slist_prepend (this->draggers, new GrDragger(this->desktop, p1, "drag1", new GrDraggable (item, POINT_LG_P1, true)));
-                this->draggers = g_slist_prepend (this->draggers, new GrDragger(this->desktop, p2, "drag2", new GrDraggable (item, POINT_LG_P2, true)));
-                this->addLine (p1, p2);
+                this->addLine (sp_lg_get_p1 (item, lg), sp_lg_get_p2 (item, lg));
             }
         }
     }

@@ -398,7 +398,7 @@ sp_gradient_transform_multiply (SPGradient *gradient, NR::Matrix postmul, bool s
 }
 
 void
-sp_gradient_set_coords (SPGradient *gradient, guint point_num, NR::Point p)
+sp_gradient_set_coords (SPGradient *gradient, guint point_num, NR::Point p, bool write_repr)
 {
 	g_return_if_fail (SP_IS_GRADIENT (gradient));
 
@@ -409,18 +409,58 @@ sp_gradient_set_coords (SPGradient *gradient, guint point_num, NR::Point p)
 	if (SP_IS_LINEARGRADIENT(gradient)) {
 		switch (point_num) {
 		case POINT_LG_P1:
-			sp_repr_set_double (repr, "x1", p[NR::X]);
-			sp_repr_set_double (repr, "y1", p[NR::Y]);
+			if (write_repr) {
+				sp_repr_set_double (repr, "x1", p[NR::X]);
+				sp_repr_set_double (repr, "y1", p[NR::Y]);
+			} else {
+				SP_LINEARGRADIENT(gradient)->x1.computed = p[NR::X];
+				SP_LINEARGRADIENT(gradient)->y1.computed = p[NR::Y];
+				SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+			}
 			break;
 		case POINT_LG_P2:
-			sp_repr_set_double (repr, "x2", p[NR::X]);
-			sp_repr_set_double (repr, "y2", p[NR::Y]);
+			if (write_repr) {
+				sp_repr_set_double (repr, "x2", p[NR::X]);
+				sp_repr_set_double (repr, "y2", p[NR::Y]);
+			} else {
+				SP_LINEARGRADIENT(gradient)->x2.computed = p[NR::X];
+				SP_LINEARGRADIENT(gradient)->y2.computed = p[NR::Y];
+				SP_OBJECT (gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+			}
 			break;
 		default:
 			break;
 		}
 	} else { // radial: TODO
 	}
+}
+
+NR::Point
+sp_lg_get_p1 (SPItem *item, SPLinearGradient *lg)
+{
+	NR::Point p1 (lg->x1.computed, lg->y1.computed);
+	if (SP_GRADIENT(lg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
+		NRRect bbox;
+		sp_document_ensure_up_to_date (SP_OBJECT_DOCUMENT(item));
+		sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
+		p1 *= NR::Matrix (bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
+	}
+	p1 *= NR::Matrix (lg->gradientTransform) * sp_item_i2d_affine (item);
+	return p1;
+}
+
+NR::Point
+sp_lg_get_p2 (SPItem *item, SPLinearGradient *lg)
+{
+	NR::Point p2 (lg->x2.computed, lg->y2.computed);
+	if (SP_GRADIENT(lg)->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
+		NRRect bbox;
+		sp_document_ensure_up_to_date (SP_OBJECT_DOCUMENT(item));
+		sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
+		p2 *= NR::Matrix (bbox.x1 - bbox.x0, 0, 0, bbox.y1 - bbox.y0, bbox.x0, bbox.y0);
+	}
+	p2 *= NR::Matrix (lg->gradientTransform) * sp_item_i2d_affine (item);
+	return p2;
 }
 
 /*

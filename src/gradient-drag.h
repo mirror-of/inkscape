@@ -32,8 +32,10 @@ struct GrDraggable {
 	bool fill_or_stroke;
 };
 
+struct GrDrag;
+
 struct GrDragger {
-	GrDragger (SPDesktop *desktop, NR::Point p, gchar const *tip, GrDraggable *draggable);
+	GrDragger (GrDrag *parent, NR::Point p, gchar const *tip, GrDraggable *draggable);
 	~GrDragger();
 
     SPKnot *knot;
@@ -42,6 +44,8 @@ struct GrDragger {
     guint   handler_id;
 
 	GSList *draggables;
+
+	GrDrag *parent;
 
 	void addDraggable(GrDraggable *draggable);
 
@@ -69,6 +73,9 @@ struct GrDrag {
 	void addLine (NR::Point p1, NR::Point p2);
 
 	void updateDraggers ();
+	void updateLines ();
+
+	bool local_change;
 
 	SPDesktop *desktop;
 	SPSelection *selection;

@@ -816,17 +816,17 @@ sp_item_adjust_gradient (SPItem *item, NR::Matrix const &postmul, bool set)
 }
 
 void
-sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p)
+sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p, bool write_repr)
 {
     SPStyle *style = SP_OBJECT_STYLE (item);
 
-    p *= (sp_item_i2doc_affine (item)).inverse();
+    p *= (sp_item_i2d_affine (item)).inverse();
 
     if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) {
         SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
         if (SP_IS_GRADIENT (server)) {
             SPGradient *gradient = sp_gradient_convert_to_userspace (SP_GRADIENT (server), item, "fill");
-            sp_gradient_set_coords (gradient, point_num, p);
+            sp_gradient_set_coords (gradient, point_num, p, write_repr);
         }
     }
     // TODO: add the same for stroke!
