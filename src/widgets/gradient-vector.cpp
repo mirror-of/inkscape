@@ -149,7 +149,7 @@ sp_gradient_vector_selector_new (SPDocument *doc, SPGradient *gr)
 {
 	GtkWidget *gvs;
 
-	g_return_val_if_fail (!doc || SP_IS_DOCUMENT (doc), NULL);
+	g_return_val_if_fail (!doc, NULL);
 	g_return_val_if_fail (!gr || (doc != NULL), NULL);
 	g_return_val_if_fail (!gr || SP_IS_GRADIENT (gr), NULL);
 	g_return_val_if_fail (!gr || (SP_OBJECT_DOCUMENT (gr) == doc), NULL);
@@ -172,7 +172,7 @@ sp_gradient_vector_selector_set_gradient (SPGradientVectorSelector *gvs, SPDocum
 
 	g_return_if_fail (gvs != NULL);
 	g_return_if_fail (SP_IS_GRADIENT_VECTOR_SELECTOR (gvs));
-	g_return_if_fail (!doc || SP_IS_DOCUMENT (doc));
+	g_return_if_fail (!doc);
 	g_return_if_fail (!gr || (doc != NULL));
 	g_return_if_fail (!gr || SP_IS_GRADIENT (gr));
 	g_return_if_fail (!gr || (SP_OBJECT_DOCUMENT (gr) == doc));

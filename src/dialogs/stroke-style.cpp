@@ -1127,7 +1127,7 @@ sp_marker_select(GtkOptionMenu *mnu, GtkWidget *spw)
 
     SPDesktop *desktop = inkscape_active_desktop();
     SPDocument *doc = SP_DT_DOCUMENT(desktop);
-    if (!SP_IS_DOCUMENT(doc)) {
+    if (!doc) {
         return;
     }
 

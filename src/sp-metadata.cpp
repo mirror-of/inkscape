@@ -203,7 +203,6 @@ sp_document_metadata (SPDocument *document)
     SPObject *nv;
 
     g_return_val_if_fail (document != NULL, NULL);
-    g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
 
     nv = sp_item_group_get_child_by_name ((SPGroup *) document->root, NULL,
                                         "metadata");

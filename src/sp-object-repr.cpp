@@ -56,7 +56,6 @@ SPObject *
 sp_object_repr_build_tree (SPDocument *document, SPRepr *repr)
 {
 	g_assert (document != NULL);
-	g_assert (SP_IS_DOCUMENT (document));
 	g_assert (repr != NULL);
 
 	gchar const * const name = sp_repr_name(repr);

@@ -608,7 +608,6 @@ sp_desktop_change_document (SPDesktop *desktop, SPDocument *document)
     g_return_if_fail (desktop != NULL);
     g_return_if_fail (SP_IS_DESKTOP (desktop));
     g_return_if_fail (document != NULL);
-    g_return_if_fail (SP_IS_DOCUMENT (document));
 
     /* unselect everything before switching documents */
     SP_DT_SELECTION (desktop)->clear();

@@ -451,7 +451,6 @@ SPDocument *
 sp_document_ref (SPDocument *doc)
 {
 	g_return_val_if_fail (doc != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (doc), NULL);
 
 	g_object_ref (G_OBJECT (doc));
 
@@ -462,7 +461,6 @@ SPDocument *
 sp_document_unref (SPDocument *doc)
 {
 	g_return_val_if_fail (doc != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (doc), NULL);
 
 	g_object_unref (G_OBJECT (doc));
 
@@ -472,7 +470,6 @@ sp_document_unref (SPDocument *doc)
 gdouble sp_document_width(SPDocument *document)
 {
 	g_return_val_if_fail (document != NULL, 0.0);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), 0.0);
 	g_return_val_if_fail (document->priv != NULL, 0.0);
 	g_return_val_if_fail (document->root != NULL, 0.0);
 
@@ -482,7 +479,6 @@ gdouble sp_document_width(SPDocument *document)
 gdouble sp_document_height(SPDocument *document)
 {
 	g_return_val_if_fail (document != NULL, 0.0);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), 0.0);
 	g_return_val_if_fail (document->priv != NULL, 0.0);
 	g_return_val_if_fail (document->root != NULL, 0.0);
 
@@ -492,7 +488,6 @@ gdouble sp_document_height(SPDocument *document)
 void sp_document_set_uri(SPDocument *document, gchar const *uri)
 {
 	g_return_if_fail (document != NULL);
-	g_return_if_fail (SP_IS_DOCUMENT (document));
 
 	if (document->name) {
 		g_free (document->name);
@@ -544,7 +539,6 @@ void
 sp_document_set_size_px (SPDocument *doc, gdouble width, gdouble height)
 {
 	g_return_if_fail (doc != NULL);
-	g_return_if_fail (SP_IS_DOCUMENT (doc));
 
 	g_signal_emit (G_OBJECT (doc), signals [RESIZED], 0, width, height);
 }
@@ -884,7 +878,6 @@ GSList *
 sp_document_items_in_box (SPDocument *document, unsigned int dkey, NRRect const *box)
 {
 	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
 	g_return_val_if_fail (document->priv != NULL, NULL);
 	g_return_val_if_fail (box != NULL, NULL);
 
@@ -903,7 +896,6 @@ GSList *
 sp_document_partial_items_in_box (SPDocument *document, unsigned int dkey, NRRect const *box)
 {
 	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
 	g_return_val_if_fail (document->priv != NULL, NULL);
 	g_return_val_if_fail (box != NULL, NULL);
 
@@ -916,7 +908,6 @@ sp_document_item_at_point(SPDocument *document, unsigned const key, NR::Point co
 			  gboolean const into_groups, SPItem *upto)
 {
 	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
 	g_return_val_if_fail (document->priv != NULL, NULL);
 
  	return find_item_at_point (key, SP_GROUP (document->root), p, into_groups, false, upto);
@@ -926,7 +917,6 @@ SPItem*
 sp_document_group_at_point (SPDocument *document, unsigned int key, NR::Point const p)
 {
 	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
 	g_return_val_if_fail (document->priv != NULL, NULL);
 
  	return find_group_at_point (key, SP_GROUP (document->root), p);
@@ -942,7 +932,6 @@ sp_document_add_resource (SPDocument *document, const gchar *key, SPObject *obje
 	GQuark q=g_quark_from_string(key);
 
 	g_return_val_if_fail (document != NULL, FALSE);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (*key != '\0', FALSE);
 	g_return_val_if_fail (object != NULL, FALSE);
@@ -965,7 +954,6 @@ sp_document_remove_resource (SPDocument *document, const gchar *key, SPObject *o
 	GQuark q=g_quark_from_string(key);
 
 	g_return_val_if_fail (document != NULL, FALSE);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
 	g_return_val_if_fail (*key != '\0', FALSE);
 	g_return_val_if_fail (object != NULL, FALSE);
@@ -986,7 +974,6 @@ const GSList *
 sp_document_get_resource_list (SPDocument *document, const gchar *key)
 {
 	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
 	g_return_val_if_fail (key != NULL, NULL);
 	g_return_val_if_fail (*key != '\0', NULL);
 

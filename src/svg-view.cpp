@@ -420,7 +420,6 @@ sp_svg_view_widget_new (SPDocument *doc)
 	GtkWidget *widget;
 
 	g_return_val_if_fail (doc != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (doc), NULL);
 
 	widget = (GtkWidget*)gtk_type_new (SP_TYPE_SVG_VIEW_WIDGET);
 

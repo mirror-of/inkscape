@@ -261,7 +261,7 @@ sp_gradient_selector_set_vector (SPGradientSelector *sel, SPDocument *doc, SPGra
 {
 	g_return_if_fail (sel != NULL);
 	g_return_if_fail (SP_IS_GRADIENT_SELECTOR (sel));
-	g_return_if_fail (!doc || SP_IS_DOCUMENT (doc));
+	g_return_if_fail (!doc);
 	g_return_if_fail (!vector || (doc != NULL));
 	g_return_if_fail (!vector || SP_IS_GRADIENT (vector));
 	g_return_if_fail (!vector || (SP_OBJECT_DOCUMENT (vector) == doc));

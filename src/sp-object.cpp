@@ -620,7 +620,6 @@ sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr,
 	g_assert (object != NULL);
 	g_assert (SP_IS_OBJECT (object));
 	g_assert (document != NULL);
-	g_assert (SP_IS_DOCUMENT (document));
 	g_assert (repr != NULL);
 
 	g_assert (object->document == NULL);
@@ -746,7 +745,6 @@ sp_object_repr_order_changed (SPRepr * repr, SPRepr * child, SPRepr * old, SPRep
 static void
 sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	g_assert (SP_IS_DOCUMENT (object->document));
 	g_assert (key != SP_ATTR_INVALID);
 
 	switch (key) {
@@ -838,7 +836,6 @@ sp_object_read_attr (SPObject *object, const gchar *key)
 	g_assert (SP_IS_OBJECT (object));
 	g_assert (key != NULL);
 
-	g_assert (SP_IS_DOCUMENT (object->document));
 	g_assert (object->repr != NULL);
 
 	unsigned int keyid = sp_attribute_lookup (key);
@@ -1160,7 +1157,6 @@ sp_object_get_unique_id (SPObject * object, const gchar * id)
 	static unsigned long count = 0;
 
 	g_assert (SP_IS_OBJECT (object));
-	g_assert (SP_IS_DOCUMENT (object->document));
 
 	count ++;
 

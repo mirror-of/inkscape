@@ -1038,7 +1038,6 @@ inkscape_add_document (SPDocument *document)
 {
     g_return_if_fail (inkscape != NULL);
     g_return_if_fail (document != NULL);
-    g_return_if_fail (SP_IS_DOCUMENT (document));
 
     g_assert (!g_slist_find (inkscape->documents, document));
 
@@ -1054,7 +1053,6 @@ inkscape_remove_document (SPDocument *document)
 {
     g_return_if_fail (inkscape != NULL);
     g_return_if_fail (document != NULL);
-    g_return_if_fail (SP_IS_DOCUMENT (document));
 
     g_assert (g_slist_find (inkscape->documents, document));
 

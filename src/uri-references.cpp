@@ -129,7 +129,6 @@ uri_to_id(SPDocument *document, const gchar *uri)
 	gint len;
 
 	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
 
 	if (!uri) return NULL;
 	/* fixme: xpointer, everything */

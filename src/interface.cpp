@@ -1309,7 +1309,7 @@ static void
 sp_ui_import_one_file(char const *filename)
 {
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
-    if (!SP_IS_DOCUMENT(doc)) return;
+    if (!doc) return;
 
     if (filename == NULL) return;
 

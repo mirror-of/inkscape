@@ -939,7 +939,6 @@ sp_document_namedview (SPDocument *document, const gchar *id)
 	SPObject *nv;
 
 	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
 
 	nv = sp_item_group_get_child_by_name ((SPGroup *) document->root, NULL, "sodipodi:namedview");
 	g_assert (nv != NULL);

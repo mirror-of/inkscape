@@ -1,12 +1,24 @@
 2004-02-10  MenTaLguY  <mental@rydia.net>
 
+	* src/desktop.cpp, src/document-undo.cpp, src/document.cpp, src/file.cpp,
+	  src/gradient-chemistry.cpp, src/inkscape.cpp, src/interface.cpp,
+	  src/sp-metadata.cpp, src/sp-namedview.cpp, src/sp-object-repr.cpp,
+	  src/sp-object.cpp, src/svg-view.cpp, src/uri-references.cpp,
+	  src/view.cpp, src/dialogs/stroke-style.cpp,
+	  src/widgets/gradient-selector.cpp, src/widgets/gradient-vector.cpp:
+
+	  get rid needless uses of SP_IS_DOCUMENT (if we can't trust the
+	  compiler's type checking, what can we trust?)
+
+2004-02-10  MenTaLguY  <mental@rydia.net>
+
 	* src/desktop-style.h, src/desktop.h, src/document.h, src/event-context.h,
 	  src/inkscape.h, src/knotholder.h, src/nodepath.h,
 	  src/selection-chemistry.h, src/selection.h, src/sp-conn-end-pair.h,
 	  src/sp-object-repr.h, src/sp-object.h, src/style.h,
 	  src/dialogs/sp-attribute-widget.h, src/extension/implementation/script.h,
 	  src/xml/repr-get-children.h, src/xml/repr.h, src/xml/sp-repr-action.h,
-	  src/xml/sp-repr-attr.h R src/xml/xml-forward.h:
+	  src/xml/sp-repr-attr.h, src/xml/xml-forward.h:
 
 	  got rid of xml-forward.h
 

@@ -837,7 +837,7 @@ void
 sp_file_import(GtkWidget *widget)
 {
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
-    if (!SP_IS_DOCUMENT(doc))
+    if (!doc)
         return;
 
     if (!importDialogInstance) {
@@ -1017,7 +1017,6 @@ sp_export_png_file(SPDocument *doc, gchar const *filename,
 {
     int write_status = TRUE;
     g_return_val_if_fail(doc != NULL, FALSE);
-    g_return_val_if_fail(SP_IS_DOCUMENT(doc), FALSE);
     g_return_val_if_fail(filename != NULL, FALSE);
     g_return_val_if_fail(width >= 1, FALSE);
     g_return_val_if_fail(height >= 1, FALSE);

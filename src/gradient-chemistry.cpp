@@ -133,7 +133,6 @@ static SPGradient *
 sp_gradient_get_private_normalized (SPDocument *document, SPGradient *vector, SPGradientType type)
 {
 	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
 	g_return_val_if_fail (vector != NULL, NULL);
 	g_return_val_if_fail (SP_IS_GRADIENT (vector), NULL);
 	g_return_val_if_fail (SP_GRADIENT_HAS_STOPS(vector), NULL);
