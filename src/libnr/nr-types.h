@@ -293,6 +293,11 @@ private:
 	Point _min, _max;
 };
 
+Rect least_bound(Rect r, Matrix m);
+/** Returns a rectangle that contains all the points p*m such that p
+  is in r.  Warning: for rotation and shear transforms this rectangle
+  is not the same as a rectangular path transformed. */
+
 } /* namespace NR */
 
 #endif
