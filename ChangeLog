@@ -1,3 +1,13 @@
+2004-07-02  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/desktop-snap.cpp, src/desktop-snap.h, src/snap.cpp,
+	src/snap.h, src/Makefile_insert src/arc-context.cpp src/draw-context.cpp
+        src/dyna-draw-context.cpp src/make.dep src/make.files src/make.ofiles
+        src/makefile.msc src/nodepath.cpp src/rect-context.cpp src/select-context.cpp
+        src/selection-chemistry.cpp src/seltrans.cpp src/sp-namedview.h
+        src/spiral-context.cpp src/star-context.cpp: renamed
+	desktop-snap.* to snap.* since it has nothing to do with the desktop any more.
+
 2004-07-01  Kees Cook  <kees@outflux.net>
 
 	* src/xml/repr.h, src/xml/repr-util.h, src/dialogs/rdf.cpp:
