@@ -24,6 +24,9 @@ static void nr_typeface_setup (NRTypeFace *tface, NRTypeFaceDef *def);
 
 static NRObjectClass *parent_class;
 
+/**
+ * Gets the typeface type, and registers it if it hasn't been registered yet
+ */
 NRType
 nr_typeface_get_type (void)
 {
@@ -39,6 +42,10 @@ nr_typeface_get_type (void)
 	return type;
 }
 
+/**
+ * Initializes the typeface class by setting up all of its 
+ * virtual functions.
+ */
 static void
 nr_typeface_class_init (NRTypeFaceClass *klass)
 {
@@ -65,6 +72,10 @@ nr_typeface_class_init (NRTypeFaceClass *klass)
 	klass->rasterfont_glyph_mask_render = nr_rasterfont_generic_glyph_mask_render;
 }
 
+/**
+ * Initializes the typeface object by giving it a null definition and
+ * no glyphs
+ */
 static void
 nr_typeface_init (NRTypeFace *tface)
 {
@@ -72,6 +83,9 @@ nr_typeface_init (NRTypeFace *tface)
 	tface->nglyphs = 0;
 }
 
+/**
+ * Does the finalization of the object prior to destroying it
+ */
 static void
 nr_typeface_finalize (NRObject *object)
 {
@@ -84,12 +98,18 @@ nr_typeface_finalize (NRObject *object)
 	((NRObjectClass *) (parent_class))->finalize (object);
 }
 
+/**
+ * Sets the definition object for the typeface to def
+ */
 static void
 nr_typeface_setup (NRTypeFace *tface, NRTypeFaceDef *def)
 {
 	tface->def = def;
 }
 
+/**
+ * Creates a new typeface object from the given typeface definition
+ */
 NRTypeFace *
 nr_typeface_new (NRTypeFaceDef *def)
 {
@@ -102,47 +122,75 @@ nr_typeface_new (NRTypeFaceDef *def)
 	return tface;
 }
 
+/**
+ * Gets the name matching str of the given typeface
+ */
 unsigned int
 nr_typeface_name_get (NRTypeFace *tf, gchar *str, unsigned int size)
 {
 	return nr_typeface_attribute_get (tf, "name", str, size);
 }
 
+/**
+ * Gets the familyname matching str for the given typeface
+ */
 unsigned int
 nr_typeface_family_name_get (NRTypeFace *tf, gchar *str, unsigned int size)
 {
 	return nr_typeface_attribute_get (tf, "family", str, size);
 }
 
+/**
+ * Gets the value of an attribute named key with value str from the typeface
+ */
 unsigned int
 nr_typeface_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size)
 {
 	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->attribute_get (tf, key, str, size);
 }
 
+/**
+ * Gets the outline for the glyph for the typeface with the given metrics and path
+ */
 NRBPath *
 nr_typeface_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref)
 {
 	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->glyph_outline_get (tf, glyph, metrics, d, ref);
 }
 
+/**
+ * Dereferences the given glyph and metrics from the typeface
+ */
 void
 nr_typeface_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned int metrics)
 {
 	((NRTypeFaceClass *) ((NRObject *) tf)->klass)->glyph_outline_unref (tf, glyph, metrics);
 }
 
+/**
+ * Retrieves the horizontal positional advancement for the glyph in the
+ * given font.
+ */
 NR::Point nr_typeface_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics)
 {
 	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->glyph_advance_get (tf, glyph, metrics);
 }
 
+/**
+ * Looks up something for the given typeface and unival
+ *
+ * Q:  What is unival?
+ * Q:  What data is looked up and returned?
+ */
 unsigned int
 nr_typeface_lookup_default (NRTypeFace *tf, unsigned int unival)
 {
 	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->lookup (tf, NR_TYPEFACE_LOOKUP_RULE_DEFAULT, unival);
 }
 
+/**
+ * Creates a new default font object from the given typeface, metrics, and size
+ */
 NRFont *
 nr_font_new_default (NRTypeFace *tf, unsigned int metrics, float size)
 {
@@ -155,10 +203,20 @@ nr_font_new_default (NRTypeFace *tf, unsigned int metrics, float size)
 
 #define NR_TYPE_TYPEFACE_EMPTY (nr_typeface_empty_get_type ())
 
+/**
+ * This structure is the instance of an empty typeface.
+ * 
+ * Q:  Why is this necessary?
+ */
 struct NRTypeFaceEmpty {
 	NRTypeFace typeface;
 };
 
+/**
+ * This structure defines a class for empty typefaces.
+ *
+ * Q:  What is an empty typeface and why is a class for it needed?
+ */
 struct NRTypeFaceEmptyClass {
 	NRTypeFaceClass typeface_class;
 };
@@ -180,6 +238,9 @@ static void nr_typeface_empty_font_free (NRFont *font);
 
 static NRTypeFaceClass *empty_parent_class;
 
+/**
+ * Gets the NRType for empty typefaces, registering it if necessary
+ */
 static NRType
 nr_typeface_empty_get_type (void)
 {
@@ -195,6 +256,10 @@ nr_typeface_empty_get_type (void)
 	return type;
 }
 
+/**
+ * Initializes the empty typeface by assigning all of its virtual functions
+ * as appropriate.
+ */
 static void
 nr_typeface_empty_class_init (NRTypeFaceEmptyClass *klass)
 {
@@ -218,6 +283,9 @@ nr_typeface_empty_class_init (NRTypeFaceEmptyClass *klass)
 	tface_class->font_free = nr_typeface_empty_font_free;
 }
 
+/**
+ * Initializes an empty typeface by setting its nglyphs member to 1.
+ */
 static void
 nr_typeface_empty_init (NRTypeFaceEmpty *tfe)
 {
@@ -228,6 +296,11 @@ nr_typeface_empty_init (NRTypeFaceEmpty *tfe)
 	tface->nglyphs = 1;
 }
 
+/**
+ * Finalizes the object
+ *
+ * Q:  What does 'finalize' mean in this context?
+ */
 static void
 nr_typeface_empty_finalize (NRObject *object)
 {
@@ -240,6 +313,11 @@ nr_typeface_empty_finalize (NRObject *object)
 
 static NRFont *empty_fonts = NULL;
 
+/**
+ * Gets an attribute for an empty typeface
+ * 
+ * Q:  Why is this function needed?
+ */
 static unsigned int
 nr_typeface_empty_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size)
 {
@@ -269,6 +347,9 @@ nr_typeface_empty_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, u
 	return strlen (val);
 }
 
+/**
+ * Gets the outline path for an empty glyph
+ */
 static NRBPath *
 nr_typeface_empty_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref)
 {
@@ -291,11 +372,18 @@ nr_typeface_empty_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigne
 	return d;
 }
 
+/**
+ * Q:  Why does this function exist?
+ */
 static void
 nr_typeface_empty_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned int metrics)
 {
 }
 
+/**
+ * Retrieves the horizontal positional advancement for the glyph in the
+ * given font.
+ */
 static NR::Point nr_typeface_empty_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics)
 {
 	if (metrics == NR_TYPEFACE_METRICS_VERTICAL) {
@@ -304,12 +392,18 @@ static NR::Point nr_typeface_empty_glyph_advance_get (NRTypeFace *tf, unsigned i
 	return NR::Point(1000.0, 0.0);
 }
 
+/**
+ * Q:  Why does this function exist?
+ */
 static unsigned int
 nr_typeface_empty_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival)
 {
 	return 0;
 }
 
+/**
+ * Q:  What does this function do?
+ */
 static NRFont *
 nr_typeface_empty_font_new (NRTypeFace *tf, unsigned int metrics, NR::Matrix const transform)
 {
@@ -331,6 +425,9 @@ nr_typeface_empty_font_new (NRTypeFace *tf, unsigned int metrics, NR::Matrix con
 	return font;
 }
 
+/**
+ * Empties and frees the font object
+ */
 static void
 nr_typeface_empty_font_free (NRFont *font)
 {
@@ -348,6 +445,12 @@ nr_typeface_empty_font_free (NRFont *font)
 	nr_font_generic_free (font);
 }
 
+/**
+ * Fills in the def item with the name and family, and sets the
+ * type to indicate it is empty, and the typeface to NULL.
+ *
+ * Q:  Does this leave dangling pointers?
+ */
 void
 nr_type_empty_build_def (NRTypeFaceDef *def, const gchar *name, const gchar *family)
 {
