@@ -384,7 +384,7 @@ sp_dyna_draw_timeout_handler (gpointer data)
 	p = sp_dyna_draw_get_curr_vpoint (dc);
 	sp_desktop_free_snap (desktop, p);
 	// something's not right here
-	if ((dc->cur[NR::X] != dc->last[NR::X]) || (dc->cur[NR::Y] != dc->last[NR::Y])) {
+	if (dc->cur != dc->last) {
 		sp_dyna_draw_brush (dc);
 		g_assert (dc->npoints > 0);
 		fit_and_split (dc, FALSE);
@@ -405,11 +405,15 @@ sp_dyna_draw_context_root_handler (SPEventContext * event_context,
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
-			NR::Point p = sp_desktop_w2d_xy_point (desktop,NR::Point(event->button.x, event->button.y));
-			sp_dyna_draw_reset (dc, p);
-			sp_dyna_draw_apply (dc, p);
-			p = sp_dyna_draw_get_curr_vpoint (dc);
+			NR::Point const button_w(event->button.x,
+						 event->button.y);
+			NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
+			sp_dyna_draw_reset(dc, button_dt);
+			sp_dyna_draw_apply(dc, button_dt);
+			NR::Point p = sp_dyna_draw_get_curr_vpoint (dc);
 			sp_desktop_free_snap (desktop, p);
+			/* TODO: p isn't subsequently used; we should probably get rid of the last
+			   1-2 statements (or use p).  Same for MOTION_NOTIFY below. */
 			sp_curve_reset (dc->accumulated);
 			if (dc->repr) {
 				dc->repr = NULL;
@@ -442,17 +446,19 @@ sp_dyna_draw_context_root_handler (SPEventContext * event_context,
 			dc->dragging = TRUE;
 			dc->dynahand = TRUE;
 
-			NR::Point p = sp_desktop_w2d_xy_point (desktop, NR::Point(event->motion.x, event->motion.y));
+			NR::Point const motion_w(event->motion.x,
+						 event->motion.y);
+			NR::Point const motion_dt(sp_desktop_w2d_xy_point(desktop, motion_w));
 
-			if (! sp_dyna_draw_apply (dc, p)) {
+			if (!sp_dyna_draw_apply(dc, motion_dt)) {
 				ret = TRUE;
 				break;
 			}
-			p = sp_dyna_draw_get_curr_vpoint (dc);
-			
+			NR::Point p = sp_dyna_draw_get_curr_vpoint (dc);
 			sp_desktop_free_snap (desktop, p);
+			/* p unused; see comments above in BUTTON_PRESS. */
 
-			if ((dc->cur[NR::X] != dc->last[NR::X]) || (dc->cur[NR::Y] != dc->last[NR::Y])) {
+			if (dc->cur != dc->last) {
 				sp_dyna_draw_brush (dc);
 				g_assert (dc->npoints > 0);
 				fit_and_split (dc, FALSE);
@@ -651,18 +657,21 @@ fit_and_split (SPDynaDrawContext *dc,
 	}
 }
 
+static double square(double const x)
+{
+	return x * x;
+}
+
 static void
 fit_and_split_line (SPDynaDrawContext *dc,
                     gboolean           release)
 {
+	double const tolerance_sq = square( NR::expansion(SP_EVENT_CONTEXT(dc)->desktop->w2d) * TOLERANCE_LINE );
+
 	NR::Point b[4];
-	gdouble tolerance;
-
-	tolerance = SP_EVENT_CONTEXT (dc)->desktop->w2d[0] * TOLERANCE_LINE;
-	tolerance = tolerance * tolerance;
-
-	if (sp_bezier_fit_cubic (b, dc->point1, dc->npoints, tolerance) > 0
-	    && dc->npoints < SAMPLING_SIZE)
+	double const n_segs = sp_bezier_fit_cubic(b, dc->point1, dc->npoints, tolerance_sq);
+	if ( n_segs > 0
+	     && dc->npoints < SAMPLING_SIZE )
 	{
 		/* Fit and draw and reset state */
 #ifdef DYNA_DRAW_VERBOSE
@@ -675,8 +684,6 @@ fit_and_split_line (SPDynaDrawContext *dc,
 	}
 	else
 	{
-		SPCurve *curve;
-		SPCanvasItem *cbp;
 		/* Fit and draw and copy last point */
 #ifdef DYNA_DRAW_VERBOSE
 		g_print ("[%d]Yup\n", dc->npoints);
@@ -684,8 +691,10 @@ fit_and_split_line (SPDynaDrawContext *dc,
 		g_assert (!sp_curve_empty (dc->currentcurve));
 		concat_current_line (dc);
 
-		cbp = sp_canvas_item_new (SP_DT_SKETCH (SP_EVENT_CONTEXT (dc)->desktop), SP_TYPE_CANVAS_BPATH, NULL);
-		curve = sp_curve_copy (dc->currentcurve);
+		SPCanvasItem *cbp = sp_canvas_item_new(SP_DT_SKETCH(SP_EVENT_CONTEXT(dc)->desktop),
+						       SP_TYPE_CANVAS_BPATH,
+						       NULL);
+		SPCurve *curve = sp_curve_copy(dc->currentcurve);
 		sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (cbp), curve);
 		sp_curve_unref (curve);
 		/* fixme: We have to parse style color somehow */
@@ -703,8 +712,7 @@ fit_and_split_line (SPDynaDrawContext *dc,
 static void
 fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 {
-	gdouble tolerance = SP_EVENT_CONTEXT (dc)->desktop->w2d[0] * TOLERANCE_CALLIGRAPHIC;
-	tolerance = tolerance * tolerance;
+	double const tolerance_sq = square( NR::expansion(SP_EVENT_CONTEXT(dc)->desktop->w2d) * TOLERANCE_CALLIGRAPHIC );
 
 #ifdef DYNA_DRAW_VERBOSE
 	g_print ("[F&S:R=%c]", release?'T':'F');
@@ -716,9 +724,6 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 #define BEZIER_SIZE       4
 #define BEZIER_MAX_DEPTH  4
 #define BEZIER_MAX_LENGTH (BEZIER_SIZE << (BEZIER_MAX_DEPTH-1))
-		SPCurve *curve;
-		NR::Point b1[BEZIER_MAX_LENGTH], b2[BEZIER_MAX_LENGTH];
-		gint nb1, nb2;            /* number of blocks */
 
 #ifdef DYNA_DRAW_VERBOSE
 		g_print ("[F&S:#] dc->npoints:%d, release:%s\n",
@@ -736,14 +741,17 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 			sp_curve_moveto (dc->cal2, dc->point2[0]);
 		}
 
-		nb1 = sp_bezier_fit_cubic_r (b1, dc->point1, dc->npoints,
-					     tolerance, BEZIER_MAX_DEPTH);
+		NR::Point b1[BEZIER_MAX_LENGTH];
+		gint const nb1 = sp_bezier_fit_cubic_r(b1, dc->point1, dc->npoints,
+						       tolerance_sq, BEZIER_MAX_DEPTH);
 		g_assert (nb1 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b1)));
-		nb2 = sp_bezier_fit_cubic_r (b2, dc->point2, dc->npoints,
-					     tolerance, BEZIER_MAX_DEPTH);
+
+		NR::Point b2[BEZIER_MAX_LENGTH];
+		gint const nb2 = sp_bezier_fit_cubic_r(b2, dc->point2, dc->npoints,
+						       tolerance_sq, BEZIER_MAX_DEPTH);
 		g_assert (nb2 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b2)));
+
 		if (nb1 != -1 && nb2 != -1) {
-			NR::Point *bp1, *bp2;
 			/* Fit and draw and reset state */
 #ifdef DYNA_DRAW_VERBOSE
 			g_print ("nb1:%d nb2:%d\n", nb1, nb2);
@@ -752,38 +760,39 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 			if (! release) {
 				sp_curve_reset (dc->currentcurve);
 				sp_curve_moveto (dc->currentcurve, b1[0]);
-				for (bp1 = b1; bp1 < b1 + BEZIER_SIZE*nb1; bp1 += BEZIER_SIZE) {
+				for (NR::Point *bp1 = b1; bp1 < b1 + BEZIER_SIZE * nb1; bp1 += BEZIER_SIZE) {
 					sp_curve_curveto (dc->currentcurve, bp1[1],
 							  bp1[2], bp1[3]);
 				}
 				sp_curve_lineto (dc->currentcurve,
 						 b2[BEZIER_SIZE*(nb2-1) + 3]);
-				for (bp2 = b2 + BEZIER_SIZE*(nb2-1); bp2 >= b2; bp2 -= BEZIER_SIZE) {
+				for (NR::Point *bp2 = b2 + BEZIER_SIZE * ( nb2 - 1 ); bp2 >= b2; bp2 -= BEZIER_SIZE) {
 					sp_curve_curveto (dc->currentcurve, bp2[2], bp2[1], bp2[0]);
 				}
 				sp_curve_closepath (dc->currentcurve);
 				sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (dc->currentshape), dc->currentcurve);
 			}
-          
+
 			/* Current calligraphic */
-			for (bp1 = b1; bp1 < b1 + BEZIER_SIZE*nb1; bp1 += BEZIER_SIZE) {
+			for (NR::Point *bp1 = b1; bp1 < b1 + BEZIER_SIZE * nb1; bp1 += BEZIER_SIZE) {
 				sp_curve_curveto (dc->cal1, bp1[1], bp1[2], bp1[3]);
 			}
-			for (bp2 = b2; bp2 < b2 + BEZIER_SIZE*nb2; bp2 += BEZIER_SIZE) {
+			for (NR::Point *bp2 = b2; bp2 < b2 + BEZIER_SIZE * nb2; bp2 += BEZIER_SIZE) {
 				sp_curve_curveto (dc->cal2, bp2[1], bp2[2], bp2[3]);
 			}
 		} else {
-			gint  i;
 			/* fixme: ??? */
 #ifdef DYNA_DRAW_VERBOSE
 			g_print ("[fit_and_split_calligraphics] failed to fit-cubic.\n");
 #endif
 			draw_temporary_box (dc);
 
-			for (i = 1; i < dc->npoints; i++)
+			for (gint i = 1; i < dc->npoints; i++) {
 				sp_curve_lineto (dc->cal1, dc->point1[i]);
-			for (i = 1; i < dc->npoints; i++)
+			}
+			for (gint i = 1; i < dc->npoints; i++) {
 				sp_curve_lineto (dc->cal2, dc->point2[i]);
+			}
 		}
 
 		/* Fit and draw and copy last point */
@@ -793,8 +802,10 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 		if (!release) {
 			g_assert (!sp_curve_empty (dc->currentcurve));
 
-			SPCanvasItem *cbp = sp_canvas_item_new (SP_DT_SKETCH (SP_EVENT_CONTEXT (dc)->desktop), SP_TYPE_CANVAS_BPATH, NULL);
-			curve = sp_curve_copy (dc->currentcurve);
+			SPCanvasItem *cbp = sp_canvas_item_new(SP_DT_SKETCH(SP_EVENT_CONTEXT(dc)->desktop),
+							       SP_TYPE_CANVAS_BPATH,
+							       NULL);
+			SPCurve *curve = sp_curve_copy(dc->currentcurve);
 			sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (cbp), curve);
 			sp_curve_unref (curve);
 			sp_canvas_bpath_set_fill (SP_CANVAS_BPATH (cbp), 0x000000ff, SP_WIND_RULE_EVENODD);

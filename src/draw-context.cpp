@@ -638,15 +638,24 @@ static SPDrawAnchor *test_inside(SPDrawContext *dc, NR::Point p)
 	return active;
 }
 
+static inline double square(double const x)
+{
+	return x * x;
+}
+
 static void fit_and_split(SPDrawContext *dc)
 {
 	g_assert (dc->npoints > 1);
 
-	gdouble tolerance = SP_EVENT_CONTEXT(dc)->desktop->w2d[0] * prefs_get_double_attribute_limited("tools.freehand.pencil", "tolerance", 10.0, 1.0, 100.0);
-	tolerance = tolerance * tolerance;
+	double const tolerance_sq = square( NR::expansion(SP_EVENT_CONTEXT(dc)->desktop->w2d)
+					    * prefs_get_double_attribute_limited("tools.freehand.pencil",
+										 "tolerance", 10.0, 1.0, 100.0) );
 
 	NR::Point b[4];
-	if (sp_bezier_fit_cubic (b, dc->p, dc->npoints, tolerance) > 0 && dc->npoints < SP_DRAW_POINTS_MAX) {
+	int const n_segs = sp_bezier_fit_cubic(b, dc->p, dc->npoints, tolerance_sq);
+	if ( n_segs > 0
+	     && dc->npoints < SP_DRAW_POINTS_MAX )
+	{
 		/* Fit and draw and reset state */
 		sp_curve_reset (dc->red_curve);
 		sp_curve_moveto (dc->red_curve, b[0]);
@@ -895,27 +904,22 @@ sp_pencil_context_dispose (GObject *object)
 gint
 sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 {
-	SPDrawContext *dc;
-	SPPencilContext *pc;
-	SPDesktop *dt;
-	gint ret;
-	SPDrawAnchor *anchor;
+	SPDrawContext *dc = SP_DRAW_CONTEXT(ec);
+	SPPencilContext *pc = SP_PENCIL_CONTEXT(ec);
+	SPDesktop *dt = ec->desktop;
 
-	dc = SP_DRAW_CONTEXT (ec);
-	pc = SP_PENCIL_CONTEXT (ec);
-	dt = ec->desktop;
-
-	ret = FALSE;
+	gint ret = FALSE;
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
-
+			NR::Point const button_w(event->button.x,
+						 event->button.y);
 			/* Find desktop coordinates */
-			NR::Point p = sp_desktop_w2d_xy_point (dt, NR::Point(event->button.x, event->button.y));
+			NR::Point p = sp_desktop_w2d_xy_point(dt, button_w);
 
 			/* Test whether we hit any anchor. */
-			anchor = test_inside (dc, NR::Point(event->button.x, event->button.y));
+			SPDrawAnchor *anchor = test_inside(dc, button_w);
 
 			switch (pc->state) {
 			case SP_PENCIL_CONTEXT_ADDLINE:
@@ -947,7 +951,7 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		NR::Point p = sp_desktop_w2d_xy_point (dt, NR::Point(event->motion.x, event->motion.y));
 
 		/* Test whether we hit any anchor. */
-		anchor = test_inside (dc, NR::Point(event->button.x, event->button.y));
+		SPDrawAnchor *anchor = test_inside(dc, NR::Point(event->button.x, event->button.y));
 
 		switch (pc->state) {
 		case SP_PENCIL_CONTEXT_ADDLINE:
@@ -987,7 +991,8 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			NR::Point p = sp_desktop_w2d_xy_point (dt, NR::Point(event->motion.x, event->motion.y));
 
 			/* Test whether we hit any anchor. */
-			anchor = test_inside (dc, NR::Point(event->button.x, event->button.y));
+			SPDrawAnchor *anchor = test_inside(dc, NR::Point(event->button.x,
+									 event->button.y));
 
 			switch (pc->state) {
 			case SP_PENCIL_CONTEXT_IDLE:
@@ -1158,10 +1163,8 @@ spdc_add_freehand_point (SPPencilContext *pc, NR::Point p, guint state)
 {
 	SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
 
-	/* fixme: Cleanup following (Lauris) */
 	g_assert (dc->npoints > 0);
-	if ((p[NR::X] != dc->p[dc->npoints - 1][NR::X]) ||
-	    (p[NR::Y] != dc->p[dc->npoints - 1][NR::Y])) {
+	if ( p != dc->p[ dc->npoints - 1 ] ) {
 		dc->p[dc->npoints++] = p;
 		fit_and_split (dc);
 	}

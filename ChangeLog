@@ -1,5 +1,12 @@
 2004-03-05  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/draw-context.cpp (fit_and_split,
+	sp_pencil_context_root_handler, spdc_add_freehand_point):
+	* src/dyna-draw-context.cpp (sp_dyna_draw_timeout_handler,
+	sp_dyna_draw_context_root_handler, fit_and_split_line,
+	fit_and_split_calligraphics):
+	Cleanups.
+
 	* src/Makefile.am: Fix missing backslash at end of line.
 
 2004-03-05  Ted Gould  <ted@gould.cx>
