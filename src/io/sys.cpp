@@ -155,7 +155,9 @@ FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
         else
         {
             DEBUG_MESSAGE( dumpOne, "           STEP A              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
-            g_message("Unable to convert filename from UTF-8 to UTF-16");
+            gchar *safe = Inkscape::IO::sanitizeString(utf8name);
+            g_message("Unable to convert filename from UTF-8 to UTF-16 [%s]", safe);
+            g_free(safe);
         }
     }
     else
@@ -215,7 +217,9 @@ int Inkscape::IO::mkdir_utf8name( char const *utf8name )
         else
         {
             DEBUG_MESSAGE( dumpMk, "           STEP 5              ( '%s' )[%d]", utf8name, (counter++) );
-            g_message("Unable to convert filename from UTF-8 to UTF-16");
+            gchar *safe = Inkscape::IO::sanitizeString(utf8name);
+            g_message("Unable to convert directory name from UTF-8 to UTF-16 [%s]", safe);
+            g_free(safe);
         }
     }
     else

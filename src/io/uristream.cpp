@@ -71,7 +71,9 @@ static FILE *fopen_utf8name( char const *utf8name, int mode )
                 fp = _wfopen( (wchar_t*)wideName, L"wb" );
             g_free( wideName );
         } else {
-            g_message("Unable to convert filename from UTF-8 to UTF-16");
+            gchar *safe = Inkscape::IO::sanitizeString(utf8name);
+            g_message("Unable to convert filename from UTF-8 to UTF-16 [%s]", safe);
+            g_free(safe);
         }
     } else {
         gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
