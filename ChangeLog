@@ -1,3 +1,7 @@
+2004-02-09  MenTaLguY <mental@rydia.net>
+
+    * src/interface.cpp: disabled the autoraise checkbox on Windows
+
 2004-02-09  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/widgets/sp-color-wheel.h, src/widgets/sp-color-wheel.cpp,
