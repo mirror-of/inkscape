@@ -889,7 +889,7 @@ trim_space (const gchar *str, gint length, gint *left, gint *right)
     if (right) {
         for (i = length - 1, p = str + i; p && isspace (*p) && i >= 0; i--, p--)
             {}
-        *right = i + 1;
+        *right = i + 1 - *left;
     }
 }
 
@@ -901,7 +901,8 @@ trim_space (const gchar *str, gint length, gint *left, gint *right)
 void
 sp_style_merge_from_style_string (SPStyle *style, const gchar *p)
 {
-    gchar c[BMAX];
+    gchar property [BMAX];
+    gchar value [BMAX];
 
     while (*p) {
         const gchar *s, *e;
@@ -921,8 +922,8 @@ sp_style_merge_from_style_string (SPStyle *style, const gchar *p)
         e = strchr (p, ';');
         if (!e) {
             e = p + strlen (p);
-            /* fixme: What on earth is this "if p[strlen(p)]" test?  It will never succeed. */
-            if (*e) g_warning ("No end marker at style at: %s", p);
+            // i think this is legal, so no need to warn
+            //g_warning ("No end marker at style at: %s", p);
         }
         len = MIN (s - p, 4095);
         if (len < 1) {
@@ -930,22 +931,17 @@ sp_style_merge_from_style_string (SPStyle *style, const gchar *p)
             return;
         }
         trim_space (p, len, &left, &right);
-        memcpy (c, &p[left], right);
-        c[right] = '\0';
-        //        memcpy (c, p, len);
-        //        c[len] = '\0';
+        memcpy (property, &p[left], right);
+        property[right] = '\0';
 
-        idx = sp_attribute_lookup (c);
+        idx = sp_attribute_lookup (property);
         if (idx > 0) {
             len = MIN (e - s - 1, 4095);
-            //            if (len > 0) memcpy (c, s + 1, len);
-            //            c[len] = '\0';
-            //            sp_style_merge_property (style, idx, c);
             if (len > 0) {
                 trim_space (s + 1, len, &left, &right);
-                memcpy (c, s + 1 + left, right);
-                c[right] = '\0';
-                sp_style_merge_property (style, idx, c);
+                memcpy (value, s + 1 + left, right);
+                value[right] = '\0';
+                sp_style_merge_property (style, idx, value);
             } else {
                 g_warning ("Strange style property value at: %s", p);
             }
@@ -1430,11 +1426,11 @@ sp_style_clear (SPStyle *style)
     style->font_style.set = FALSE;
     style->font_style.computed = SP_CSS_FONT_STYLE_NORMAL;
     style->font_variant.set = FALSE;
-    style->font_variant.value = SP_CSS_FONT_VARIANT_NORMAL;
+    style->font_variant.computed = SP_CSS_FONT_VARIANT_NORMAL;
     style->font_weight.set = FALSE;
-    style->font_weight.value = SP_CSS_FONT_WEIGHT_400;
+    style->font_weight.computed = SP_CSS_FONT_WEIGHT_400;
     style->font_stretch.set = FALSE;
-    style->font_stretch.value = SP_CSS_FONT_STRETCH_NORMAL;
+    style->font_stretch.computed = SP_CSS_FONT_STRETCH_NORMAL;
 
     style->opacity.value = SP_SCALE24_MAX;
     style->display = TRUE;
@@ -1595,8 +1591,8 @@ sp_text_style_new (void)
 
     sp_text_style_clear (ts);
 
-    ts->font.value = g_strdup ("Bitstream Cyberbit 12");
-    ts->font_family.value = g_strdup ("Bitstream Cyberbit");
+    ts->font.value = g_strdup ("Bitstream Vera Sans");
+    ts->font_family.value = g_strdup ("Bitstream Vera Sans");
 
     return ts;
 }
