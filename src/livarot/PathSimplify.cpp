@@ -177,7 +177,7 @@ void Path::DoSimplify(int off, int N, double treshhold)
         // remettre a zero
         data.inPt = data.nbPt = 0;
 
-        path_descr_cubicto res;
+        path_descr_cubicto res(NR::Point(0, 0), NR::Point(0, 0), NR::Point(0, 0));
         bool contains_forced = false;
         int step = 64;
         
@@ -1188,28 +1188,32 @@ void Path::Coalesce(double tresh)
     int lastA = descr_cmd[0]->associated;
     int prevA = lastA;
     NR::Point firstP;
-    path_descr lastAddition;
+
+    /* FIXME: the use of this variable probably causes a leak or two.
+    ** It's a hack anyway, and probably only needs to be a type rather than
+    ** a full path_descr.
+    */
+    path_descr *lastAddition = new path_descr_moveto(NR::Point(0, 0));
     bool containsForced = false;
-    path_descr_cubicto pending_cubic;
+    path_descr_cubicto pending_cubic(NR::Point(0, 0), NR::Point(0, 0), NR::Point(0, 0));
   
-    lastAddition.flags = descr_moveto;
     for (int curP = 0; curP < int(descr_cmd.size()); curP++) {
         int typ = descr_cmd[curP]->getType();
         int nextA = lastA;
 
         if (typ == descr_moveto) {
 
-            if (lastAddition.flags != descr_moveto) {
-                FlushPendingAddition(tempDest,&lastAddition,pending_cubic,lastAP);
+            if (lastAddition->flags != descr_moveto) {
+                FlushPendingAddition(tempDest,lastAddition,pending_cubic,lastAP);
             }
-            lastAddition = *descr_cmd[curP];
+            lastAddition = descr_cmd[curP];
             lastAP = curP;
-            FlushPendingAddition(tempDest, &lastAddition, pending_cubic, lastAP);
+            FlushPendingAddition(tempDest, lastAddition, pending_cubic, lastAP);
             // Added automatically (too bad about multiple moveto's).
             // [fr: (tant pis pour les moveto multiples)]
             containsForced = false;
       
-            path_descr_moveto *nData = (path_descr_moveto *) (descr_data + descr_cmd[curP]->dStart);
+            path_descr_moveto *nData = dynamic_cast<path_descr_moveto *>(descr_cmd[curP]);
             firstP = nData->p;
             lastA = descr_cmd[curP]->associated;
             prevA = lastA;
@@ -1217,17 +1221,19 @@ void Path::Coalesce(double tresh)
             
         } else if (typ == descr_close) {
             nextA = descr_cmd[curP]->associated;
-            if (lastAddition.flags != descr_moveto) {
+            if (lastAddition->flags != descr_moveto) {
         
-                path_descr_cubicto res;
+                path_descr_cubicto res(NR::Point(0, 0), NR::Point(0, 0), NR::Point(0, 0));
                 int worstP = -1;
                 if (AttemptSimplify(lastA, nextA - lastA + 1, (containsForced) ? 0.05 * tresh : tresh, res, worstP)) {
-                    lastAddition.flags = descr_cubicto;
+                    lastAddition = new path_descr_cubicto(NR::Point(0, 0),
+                                                          NR::Point(0, 0),
+                                                          NR::Point(0, 0));
                     pending_cubic = res;
                     lastAP = -1;
                 }
 
-                FlushPendingAddition(tempDest, &lastAddition, pending_cubic, lastAP);
+                FlushPendingAddition(tempDest, lastAddition, pending_cubic, lastAP);
                 FlushPendingAddition(tempDest, descr_cmd[curP], pending_cubic, curP);
         
 	    } else {
@@ -1235,7 +1241,7 @@ void Path::Coalesce(double tresh)
 	    }
             
             containsForced = false;
-            lastAddition.flags = descr_moveto;
+            lastAddition = new path_descr_moveto(NR::Point(0, 0));
             prevA = lastA = nextA;
             lastP = curP;
             lastAP = curP;
@@ -1243,9 +1249,9 @@ void Path::Coalesce(double tresh)
         } else if (typ == descr_forced) {
             
             nextA = descr_cmd[curP]->associated;
-            if (lastAddition.flags != descr_moveto) {
+            if (lastAddition->flags != descr_moveto) {
                 
-                path_descr_cubicto res;
+                path_descr_cubicto res(NR::Point(0, 0), NR::Point(0, 0), NR::Point(0, 0));
                 int worstP = -1;
                 if (AttemptSimplify(lastA, nextA - lastA + 1, 0.05 * tresh, res, worstP)) {
                     // plus sensible parce que point force
@@ -1253,8 +1259,8 @@ void Path::Coalesce(double tresh)
                     containsForced = true;
                 } else  {
                     // on force l'addition
-                    FlushPendingAddition(tempDest, &lastAddition, pending_cubic, lastAP);
-                    lastAddition.flags = descr_moveto;
+                    FlushPendingAddition(tempDest, lastAddition, pending_cubic, lastAP);
+                    lastAddition = new path_descr_moveto(NR::Point(0, 0));
                     prevA = lastA = nextA;
                     lastP = curP;
                     lastAP = curP;
@@ -1265,22 +1271,24 @@ void Path::Coalesce(double tresh)
         } else if (typ == descr_lineto || typ == descr_cubicto || typ == descr_arcto) {
             
             nextA = descr_cmd[curP]->associated;
-            if (lastAddition.flags != descr_moveto) {
+            if (lastAddition->flags != descr_moveto) {
                 
-                path_descr_cubicto res;
+                path_descr_cubicto res(NR::Point(0, 0), NR::Point(0, 0), NR::Point(0, 0));
                 int worstP = -1;
                 if (AttemptSimplify(lastA, nextA - lastA + 1, tresh, res, worstP)) {
-                    lastAddition.flags = descr_cubicto;
+                    lastAddition = new path_descr_cubicto(NR::Point(0, 0),
+                                                          NR::Point(0, 0),
+                                                          NR::Point(0, 0));
                     pending_cubic = res;
-                    lastAddition.associated = lastA;
+                    lastAddition->associated = lastA;
                     lastP = curP;
                     lastAP = -1;
                 }  else {
                     lastA = descr_cmd[lastP]->associated;	// pourrait etre surecrit par la ligne suivante
-                    FlushPendingAddition(tempDest, &lastAddition, pending_cubic, lastAP);
-                    lastAddition = *descr_cmd[curP];
+                    FlushPendingAddition(tempDest, lastAddition, pending_cubic, lastAP);
+                    lastAddition = descr_cmd[curP];
                     if ( typ == descr_cubicto ) {
-                        pending_cubic = *((path_descr_cubicto*) (descr_data + descr_cmd[curP]->dStart));
+                        pending_cubic = *(dynamic_cast<path_descr_cubicto*>(descr_cmd[curP]));
                     }
                     lastAP = curP;
                     containsForced = false;
@@ -1288,9 +1296,9 @@ void Path::Coalesce(double tresh)
         
 	    } else {
                 lastA = prevA /*descr_cmd[curP-1]->associated */ ;
-                lastAddition = *descr_cmd[curP];
+                lastAddition = descr_cmd[curP];
                 if ( typ == descr_cubicto ) {
-                    pending_cubic = *((path_descr_cubicto*) (descr_data + descr_cmd[curP]->dStart));
+                    pending_cubic = *(dynamic_cast<path_descr_cubicto*>(descr_cmd[curP]));
                 }
                 lastAP = curP;
                 containsForced = false;
@@ -1299,14 +1307,14 @@ void Path::Coalesce(double tresh)
             
         } else if (typ == descr_bezierto) {
 
-            if (lastAddition.flags != descr_moveto) {
-                FlushPendingAddition(tempDest, &lastAddition, pending_cubic, lastAP);
-                lastAddition.flags = descr_moveto;
+            if (lastAddition->flags != descr_moveto) {
+                FlushPendingAddition(tempDest, lastAddition, pending_cubic, lastAP);
+                lastAddition = new path_descr_moveto(NR::Point(0, 0));
 	    }
             lastAP = -1;
             lastA = descr_cmd[curP]->associated;
             lastP = curP;
-            path_descr_bezierto *nBData = (path_descr_bezierto*) (descr_data + descr_cmd[curP]->dStart);
+            path_descr_bezierto *nBData = dynamic_cast<path_descr_bezierto*>(descr_cmd[curP]);
             for (int i = 1; i <= nBData->nb; i++) {
                 FlushPendingAddition(tempDest, descr_cmd[curP + i], pending_cubic, curP + i);
             }
@@ -1320,8 +1328,8 @@ void Path::Coalesce(double tresh)
         }
     }
     
-    if (lastAddition.flags != descr_moveto) {
-        FlushPendingAddition(tempDest, &lastAddition, pending_cubic, lastAP);
+    if (lastAddition->flags != descr_moveto) {
+        FlushPendingAddition(tempDest, lastAddition, pending_cubic, lastAP);
     }
   
     Copy(tempDest);
@@ -1336,7 +1344,7 @@ void Path::FlushPendingAddition(Path *dest, path_descr *lastAddition,
 
     case descr_moveto:
         if ( lastAP >= 0 ) {
-            path_descr_moveto* nData = (path_descr_moveto *) (descr_data + descr_cmd[lastAP]->dStart);
+            path_descr_moveto* nData = dynamic_cast<path_descr_moveto *>(descr_cmd[lastAP]);
             dest->MoveTo(nData->p);
         }
         break;
@@ -1351,28 +1359,28 @@ void Path::FlushPendingAddition(Path *dest, path_descr *lastAddition,
 
     case descr_lineto:
         if ( lastAP >= 0 ) {
-            path_descr_lineto *nData = (path_descr_lineto *)(descr_data + descr_cmd[lastAP]->dStart);
+            path_descr_lineto *nData = dynamic_cast<path_descr_lineto *>(descr_cmd[lastAP]);
             dest->LineTo(nData->p);
         }
         break;
 
     case descr_arcto:
         if ( lastAP >= 0 ) {
-            path_descr_arcto *nData = (path_descr_arcto *)(descr_data + descr_cmd[lastAP]->dStart);
+            path_descr_arcto *nData = dynamic_cast<path_descr_arcto *>(descr_cmd[lastAP]);
             dest->ArcTo(nData->p, nData->rx, nData->ry, nData->angle, nData->large, nData->clockwise);
         }
         break;
 
     case descr_bezierto:
         if ( lastAP >= 0 ) {
-            path_descr_bezierto *nData = (path_descr_bezierto *)(descr_data + descr_cmd[lastAP]->dStart);
+            path_descr_bezierto *nData = dynamic_cast<path_descr_bezierto *>(descr_cmd[lastAP]);
             dest->BezierTo(nData->p);
         }
         break;
 
     case descr_interm_bezier:
         if ( lastAP >= 0 ) {
-            path_descr_intermbezierto *nData = (path_descr_intermbezierto*)(descr_data + descr_cmd[lastAP]->dStart);
+            path_descr_intermbezierto *nData = dynamic_cast<path_descr_intermbezierto*>(descr_cmd[lastAP]);
             dest->IntermBezierTo(nData->p);
         }
         break;

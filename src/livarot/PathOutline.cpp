@@ -101,7 +101,7 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
                         curX = nextX;
                         curD--;
                     } else if (typ == descr_cubicto) {
-                        path_descr_cubicto* nData=(path_descr_cubicto*)(descr_data+descr_cmd[curD]->dStart);
+                        path_descr_cubicto* nData = dynamic_cast<path_descr_cubicto*>(descr_cmd[curD]);
                         nextX = PrevPoint (curD - 1);
                         NR::Point  isD=-nData->stD;
                         NR::Point  ieD=-nData->enD;
@@ -109,7 +109,7 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
                         curX = nextX;
                         curD--;
                     } else if (typ == descr_arcto) {
-                        path_descr_arcto* nData=(path_descr_arcto*)(descr_data+descr_cmd[curD]->dStart);
+                        path_descr_arcto* nData = dynamic_cast<path_descr_arcto*>(descr_cmd[curD]);
                         nextX = PrevPoint (curD - 1);
                         rev->ArcTo (nextX, nData->rx,nData->ry,nData->angle,nData->large,nData->clockwise);
                         curX = nextX;
@@ -132,7 +132,7 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
                             nextX = PrevPoint (nD - 1);
                             rev->BezierTo (nextX);
                             for (int i = curD; i > nD; i--) {
-                                path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(descr_data+descr_cmd[i]->dStart);
+                                path_descr_intermbezierto* nData = dynamic_cast<path_descr_intermbezierto*>(descr_cmd[i]);
                                 rev->IntermBezierTo (nData->p);
                             }
                             rev->EndBezierTo ();
@@ -281,7 +281,7 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 						curX = nextX;
 						curD--;
 					}  else if (typ == descr_cubicto) {
-						path_descr_cubicto* nData=(path_descr_cubicto*)(descr_data+descr_cmd[curD]->dStart);
+                                            path_descr_cubicto *nData = dynamic_cast<path_descr_cubicto*>(descr_cmd[curD]);
 						nextX = PrevPoint (curD - 1);
 						NR::Point  isD=-nData->stD;
 						NR::Point  ieD=-nData->enD;
@@ -289,7 +289,7 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 						curX = nextX;
 						curD--;
 					} else if (typ == descr_arcto) {
-						path_descr_arcto* nData=(path_descr_arcto*)(descr_data+descr_cmd[curD]->dStart);
+                                            path_descr_arcto* nData = dynamic_cast<path_descr_arcto*>(descr_cmd[curD]);
 						nextX = PrevPoint (curD - 1);
 						rev->ArcTo (nextX, nData->rx,nData->ry,nData->angle,nData->large,nData->clockwise);
 						curX = nextX;
@@ -311,7 +311,7 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 							nextX = PrevPoint (nD - 1);
 							rev->BezierTo (nextX);
 							for (int i = curD; i > nD; i--) {
-								path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(descr_data+descr_cmd[i]->dStart);
+                                                            path_descr_intermbezierto* nData = dynamic_cast<path_descr_intermbezierto*>(descr_cmd[i]);
 								rev->IntermBezierTo (nData->p);
 							}
 							rev->EndBezierTo ();
@@ -370,7 +370,7 @@ void Path::SubContractOutline(int off, int num_pd,
             curX[0] = curX[1] = 0;
             curP = 0;
         } else {
-            path_descr_moveto* nData = (path_descr_moveto*) (descr_data + descr_cmd[off]->dStart);
+            path_descr_moveto* nData = dynamic_cast<path_descr_moveto*>(descr_cmd[off]);
             curX = nData->p;
         }
     }
@@ -391,7 +391,7 @@ void Path::SubContractOutline(int off, int num_pd,
 		if (nType == descr_forced)  {
 			curP++;
 		} else if (nType == descr_moveto) {
-			path_descr_moveto* nData=(path_descr_moveto*)(descr_data+descr_cmd[curD]->dStart);
+			path_descr_moveto* nData = dynamic_cast<path_descr_moveto*>(descr_cmd[curD]);
 			nextX = nData->p;
 			// et on avance
 			if (doFirst) {
@@ -402,8 +402,7 @@ void Path::SubContractOutline(int off, int num_pd,
 									 miter);
 						dest->Close ();
 					}  else {
-						path_descr_lineto temp;
-						temp.p = firstP;
+                                            path_descr_lineto temp(firstP);
             
 						TangentOnSegAt (0.0, curX, temp, stPos, stTgt,
 										stTle);
@@ -447,8 +446,7 @@ void Path::SubContractOutline(int off, int num_pd,
 				}
 				else
 				{
-					path_descr_lineto temp;
-					temp.p = firstP;
+                                    path_descr_lineto temp(firstP);
 					nextX = firstP;
           
 					TangentOnSegAt (0.0, curX, temp, stPos, stTgt, stTle);
@@ -477,10 +475,10 @@ void Path::SubContractOutline(int off, int num_pd,
 		}
 		else if (nType == descr_lineto)
 		{
-			path_descr_lineto* nData=(path_descr_lineto*)(descr_data+descr_cmd[curD]->dStart);
+			path_descr_lineto* nData = dynamic_cast<path_descr_lineto*>(descr_cmd[curD]);
 			nextX = nData->p;
 			// test de nullité du segment
-			if (IsNulCurve (descr_cmd, curD, curX,descr_data))
+			if (IsNulCurve (descr_cmd, curD, curX))
 			{
 				curP++;
 				continue;
@@ -525,10 +523,10 @@ void Path::SubContractOutline(int off, int num_pd,
 		}
 		else if (nType == descr_cubicto)
 		{
-			path_descr_cubicto* nData=(path_descr_cubicto*)(descr_data+descr_cmd[curD]->dStart);
+			path_descr_cubicto* nData = dynamic_cast<path_descr_cubicto*>(descr_cmd[curD]);
 			nextX = nData->p;
 			// test de nullite du segment
-			if (IsNulCurve (descr_cmd, curD, curX,descr_data))
+			if (IsNulCurve (descr_cmd, curD, curX))
 			{
 				curP++;
 				continue;
@@ -581,10 +579,10 @@ void Path::SubContractOutline(int off, int num_pd,
 		}
 		else if (nType == descr_arcto)
 		{
-			path_descr_arcto* nData=(path_descr_arcto*)(descr_data+descr_cmd[curD]->dStart);
+			path_descr_arcto* nData = dynamic_cast<path_descr_arcto*>(descr_cmd[curD]);
 			nextX = nData->p;
 			// test de nullité du segment
-			if (IsNulCurve (descr_cmd, curD, curX,descr_data))
+			if (IsNulCurve (descr_cmd, curD, curX))
 			{
 				curP++;
 				continue;
@@ -638,25 +636,25 @@ void Path::SubContractOutline(int off, int num_pd,
 		}
 		else if (nType == descr_bezierto)
 		{
-			path_descr_bezierto* nBData=(path_descr_bezierto*)(descr_data+descr_cmd[curD]->dStart);
+			path_descr_bezierto* nBData = dynamic_cast<path_descr_bezierto*>(descr_cmd[curD]);
 			int nbInterm = nBData->nb;
 			nextX = nBData->p;
       
-			if (IsNulCurve (descr_cmd, curD, curX,descr_data)) {
+			if (IsNulCurve (descr_cmd, curD, curX)) {
 				curP += nbInterm + 1;
 				continue;
 			}
       
 //      path_descr *bezStart = curD;
 			curP++;
+
 			curD = off + curP;
                         int ip = curD;
-			path_descr_intermbezierto* nData = (path_descr_intermbezierto*)(descr_data+descr_cmd[ip]->dStart);
+			path_descr_intermbezierto* nData = dynamic_cast<path_descr_intermbezierto*>(descr_cmd[ip]);
      
 			if (nbInterm <= 0) {
 				// et on avance
-				path_descr_lineto temp;
-				temp.p = nextX;
+                            path_descr_lineto temp(nextX);
 				TangentOnSegAt (0.0, curX, temp, stPos, stTgt, stTle);
 				TangentOnSegAt (1.0, curX, temp, enPos, enTgt, enTle);
 				stNor=stTgt.cw();
@@ -731,7 +729,7 @@ void Path::SubContractOutline(int off, int num_pd,
 				stNor=stTgt.cw();
         
 				ip++;
-				nData=(path_descr_intermbezierto*)(descr_data+descr_cmd[ip]->dStart);       
+				nData = dynamic_cast<path_descr_intermbezierto*>(descr_cmd[ip]);
 				// et on avance
 				if (stTle > 0) {
 					if (doFirst) {
@@ -757,15 +755,12 @@ void Path::SubContractOutline(int off, int num_pd,
           
 					dx = nData->p;
                                         ip++;
-					nData=(path_descr_intermbezierto*)(descr_data+descr_cmd[ip]->dStart);         
+					nData = dynamic_cast<path_descr_intermbezierto*>(descr_cmd[ip]);
 					NR::Point stx = (bx + cx) / 2;
 					//                                      double  stw=(bw+cw)/2;
           
-					path_descr_bezierto tempb;
-					path_descr_intermbezierto tempi;
-					tempb.nb = 1;
-					tempb.p = (cx + dx) / 2;
-					tempi.p = cx;
+					path_descr_bezierto tempb((cx + dx) / 2, 1);
+					path_descr_intermbezierto tempi(cx);
 					TangentOnBezAt (1.0, stx, tempi, tempb, true, enPos, enTgt, enTle, enRad);
 					enNor=enTgt.cw();
           
@@ -793,11 +788,8 @@ void Path::SubContractOutline(int off, int num_pd,
 					NR::Point stx = (bx + cx) / 2;
 					//                                      double  stw=(bw+cw)/2;
           
-					path_descr_bezierto tempb;
-					path_descr_intermbezierto tempi;
-					tempb.nb = 1;
-					tempb.p = (cx + dx) / 2;
-					tempi.p = cx;
+					path_descr_bezierto tempb((cx + dx) / 2, 1);
+					path_descr_intermbezierto tempi(cx);
 					TangentOnBezAt (1.0, stx, tempi, tempb, true, enPos,
 									enTgt, enTle, enRad);
 					enNor=enTgt.cw();
@@ -842,12 +834,12 @@ void Path::SubContractOutline(int off, int num_pd,
 
 // like the name says: check whether the path command is actually more than a dumb point.
 bool
-Path::IsNulCurve (std::vector<path_descr*> const &cmd, int curD, NR::Point const &curX,NR::Point* ddata)
+Path::IsNulCurve (std::vector<path_descr*> const &cmd, int curD, NR::Point const &curX)
 {
 	switch(cmd[curD]->getType()) {
     case descr_lineto:
     {
-		path_descr_lineto* nData=(path_descr_lineto*)(ddata+cmd[curD]->dStart);
+		path_descr_lineto *nData = dynamic_cast<path_descr_lineto*>(cmd[curD]);
 		if (NR::LInfty(nData->p - curX) < 0.00001) {
 			return true;
 		}
@@ -855,7 +847,7 @@ Path::IsNulCurve (std::vector<path_descr*> const &cmd, int curD, NR::Point const
     }
 	case descr_cubicto:
     {
-		path_descr_cubicto* nData=(path_descr_cubicto*)(ddata+cmd[curD]->dStart);
+		path_descr_cubicto *nData = dynamic_cast<path_descr_cubicto*>(cmd[curD]);
 		NR::Point A = nData->stD + nData->enD + 2*(curX - nData->p);
 		NR::Point B = 3*(nData->p - curX) - 2*nData->stD - nData->enD;
 		NR::Point C = nData->stD;
@@ -868,7 +860,7 @@ Path::IsNulCurve (std::vector<path_descr*> const &cmd, int curD, NR::Point const
     }
     case descr_arcto:
     {
-		path_descr_arcto* nData=(path_descr_arcto*)(ddata+cmd[curD]->dStart);
+		path_descr_arcto* nData = dynamic_cast<path_descr_arcto*>(cmd[curD]);
 		if ( NR::LInfty(nData->p - curX) < 0.00001) {
 			if ((nData->large == false) 
 				|| (fabs (nData->rx) < 0.00001
@@ -880,7 +872,7 @@ Path::IsNulCurve (std::vector<path_descr*> const &cmd, int curD, NR::Point const
     }
     case descr_bezierto:
     {
-		path_descr_bezierto* nBData=(path_descr_bezierto*)(ddata+cmd[curD]->dStart);
+		path_descr_bezierto* nBData = dynamic_cast<path_descr_bezierto*>(cmd[curD]);
 		if (nBData->nb <= 0)
 		{
 			if (NR::LInfty(nBData->p - curX) < 0.00001) {
@@ -892,7 +884,7 @@ Path::IsNulCurve (std::vector<path_descr*> const &cmd, int curD, NR::Point const
 		{
 			if (NR::LInfty(nBData->p - curX) < 0.00001) {
 				int ip = curD + 1;
-				path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(ddata+cmd[ip]->dStart);
+				path_descr_intermbezierto* nData = dynamic_cast<path_descr_intermbezierto*>(cmd[ip]);
 				if (NR::LInfty(nData->p - curX) < 0.00001) {
 					return true;
 				}
@@ -901,7 +893,7 @@ Path::IsNulCurve (std::vector<path_descr*> const &cmd, int curD, NR::Point const
 		} else if (NR::LInfty(nBData->p - curX) < 0.00001) {
 			for (int i = 1; i <= nBData->nb; i++) {
 				int ip = curD + i;
-				path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(ddata+cmd[ip]->dStart);
+				path_descr_intermbezierto* nData = dynamic_cast<path_descr_intermbezierto*>(cmd[ip]);
 				if (NR::LInfty(nData->p - curX) > 0.00001) {
 					return false;
 				}
@@ -917,13 +909,12 @@ Path::IsNulCurve (std::vector<path_descr*> const &cmd, int curD, NR::Point const
 // tangents and cuvarture computing, for the different path command types.
 // the need for tangent is obvious: it gives the normal, along which we offset points
 // curvature is used to do strength correction on the length of the tangents to the offset (see cubic offset)
-void
-Path::TangentOnSegAt (double at, NR::Point const &iS, path_descr_lineto & fin,
-                      NR::Point & pos, NR::Point & tgt, double &len)
+void Path::TangentOnSegAt(double at, NR::Point const &iS, path_descr_lineto const &fin,
+                          NR::Point &pos, NR::Point &tgt, double &len)
 {
-	NR::Point iE = fin.p;
-	NR::Point seg = iE - iS;
-	double l = L2(seg);
+	NR::Point const iE = fin.p;
+	NR::Point const seg = iE - iS;
+	double const l = L2(seg);
 	if (l <= 0.000001) {
 		pos = iS;
 		tgt = NR::Point(0, 0);
@@ -936,43 +927,43 @@ Path::TangentOnSegAt (double at, NR::Point const &iS, path_descr_lineto & fin,
 }
 
 // barf
-void
-Path::TangentOnArcAt (double at, const NR::Point &iS, path_descr_arcto & fin,
-                      NR::Point & pos, NR::Point & tgt, double &len, double &rad)
+void Path::TangentOnArcAt(double at, const NR::Point &iS, path_descr_arcto const &fin,
+                          NR::Point &pos, NR::Point &tgt, double &len, double &rad)
 {
-	NR::Point iE;
-	iE = fin.p;
-	double rx, ry, angle;
-	rx = fin.rx;
-	ry = fin.ry;
-	angle = fin.angle;
-	bool large, wise;
-	large = fin.large;
-	wise = fin.clockwise;
+	NR::Point const iE  = fin.p;
+	double const rx = fin.rx;
+	double const ry = fin.ry;
+	double const angle = fin.angle;
+	bool const large = fin.large;
+	bool const wise = fin.clockwise;
   
 	pos = iS;
 	tgt[0] = tgt[1] = 0;
 	if (rx <= 0.0001 || ry <= 0.0001)
 		return;
   
-	double sex = iE[0] - iS[0], sey = iE[1] - iS[1];
-	double ca = cos (angle), sa = sin (angle);
-	double csex = ca * sex + sa * sey, csey = -sa * sex + ca * sey;
+	double const sex = iE[0] - iS[0], sey = iE[1] - iS[1];
+	double const ca = cos (angle), sa = sin (angle);
+	double csex =  ca * sex + sa * sey;
+        double csey = -sa * sex + ca * sey;
 	csex /= rx;
 	csey /= ry;
 	double l = csex * csex + csey * csey;
 	if (l >= 4)
 		return;
-	const double d = sqrt(std::max(1 - l / 4, 0.0));
-	double csdx = csey, csdy = -csex;
-	l = sqrt (l);
+	double const d = sqrt(std::max(1 - l / 4, 0.0));
+	double csdx = csey;
+        double csdy = -csex;
+	l = sqrt(l);
 	csdx /= l;
 	csdy /= l;
 	csdx *= d;
 	csdy *= d;
   
-	double sang, eang;
-	double rax = -csdx - csex / 2, ray = -csdy - csey / 2;
+	double sang;
+        double eang;
+	double rax = -csdx - csex / 2;
+        double ray = -csdy - csey / 2;
 	if (rax < -1)
 	{
 		sang = M_PI;
@@ -1006,7 +997,8 @@ Path::TangentOnArcAt (double at, const NR::Point &iS, path_descr_arcto & fin,
   
 	csdx *= rx;
 	csdy *= ry;
-	double drx = ca * csdx - sa * csdy, dry = sa * csdx + ca * csdy;
+	double drx = ca * csdx - sa * csdy;
+        double dry = sa * csdx + ca * csdy;
   
 	if (wise)
 	{
@@ -1080,9 +1072,8 @@ Path::TangentOnArcAt (double at, const NR::Point &iS, path_descr_arcto & fin,
 	}
 }
 void
-Path::TangentOnCubAt (double at, NR::Point const &iS, path_descr_cubicto & fin,
-                      bool before, NR::Point & pos, NR::Point & tgt, double &len,
-                      double &rad)
+Path::TangentOnCubAt (double at, NR::Point const &iS, path_descr_cubicto const &fin, bool before,
+                      NR::Point &pos, NR::Point &tgt, double &len, double &rad)
 {
 	const NR::Point E = fin.p;
 	const NR::Point Sd = fin.stD;
@@ -1266,10 +1257,10 @@ Path::RecStdCubicTo (outline_callback_data * data, double tol, double width,
 	double stTle, miTle, enTle;
 	// un cubic
 	{
-		path_descr_cubicto temp;
-		temp.p = NR::Point(data->x2, data->y2);
-		temp.stD = NR::Point(data->d.c.dx1, data->d.c.dy1);
-		temp.enD = NR::Point(data->d.c.dx2, data->d.c.dy2);
+            path_descr_cubicto temp(NR::Point(data->x2, data->y2),
+                                    NR::Point(data->d.c.dx1, data->d.c.dy1),
+                                    NR::Point(data->d.c.dx2, data->d.c.dy2));
+            
 		NR::Point initial_point(data->x1, data->y1);
 		TangentOnCubAt (0.0, initial_point, temp, false, stPos, stTgt, stTle,
 						stRad);
@@ -1311,12 +1302,11 @@ Path::RecStdCubicTo (outline_callback_data * data, double tol, double width,
 	NR::Point chk;
 	const NR::Point req = miPos + width * miNor;
 	{
-		path_descr_cubicto temp;
+            path_descr_cubicto temp(enPos + width * enNor,
+                                    stGue * stTgt,
+                                    enGue * enTgt);
 		double chTle, chRad;
 		NR::Point chTgt;
-		temp.p = enPos + width * enNor;
-		temp.stD = stGue * stTgt;
-		temp.enD = enGue * enTgt;
 		TangentOnCubAt (0.5, stPos+width*stNor,
 						temp, false, chk, chTgt, chTle, chRad);
 	}
@@ -1371,11 +1361,8 @@ Path::StdCubicTo (Path::outline_callback_data * data, double tol, double width)
 void
 Path::StdBezierTo (Path::outline_callback_data * data, double tol, double width)
 {
-	path_descr_bezierto tempb;
-	path_descr_intermbezierto tempi;
-	tempb.nb = 1;
-	tempb.p = NR::Point(data->x2, data->y2);
-	tempi.p = NR::Point(data->d.b.mx, data->d.b.my);
+    path_descr_bezierto tempb(NR::Point(data->x2, data->y2), 1);
+    path_descr_intermbezierto tempi(NR::Point(data->d.b.mx, data->d.b.my));
 	NR::Point stPos, enPos, stTgt, enTgt;
 	double stRad, enRad, stTle, enTle;
 	NR::Point  tmp(data->x1,data->y1);
@@ -1400,14 +1387,10 @@ Path::RecStdArcTo (outline_callback_data * data, double tol, double width,
 	double stTle, miTle, enTle;
 	// un cubic
 	{
-		path_descr_arcto temp;
-		temp.p[0] = data->x2;
-		temp.p[1] = data->y2;
-		temp.rx = data->d.a.rx;
-		temp.ry = data->d.a.ry;
-		temp.angle = data->d.a.angle;
-		temp.clockwise = data->d.a.clock;
-		temp.large = data->d.a.large;
+            path_descr_arcto temp(NR::Point(data->x2, data->y2),
+                                  data->d.a.rx, data->d.a.ry,
+                                  data->d.a.angle, data->d.a.large, data->d.a.clock);
+                                  
 		NR::Point tmp(data->x1,data->y1);
 		TangentOnArcAt (data->d.a.stA, tmp, temp, stPos, stTgt,
 						stTle, stRad);
@@ -1460,12 +1443,9 @@ Path::RecStdArcTo (outline_callback_data * data, double tol, double width,
 	NR::Point chk;
 	const NR::Point req = miPos + width*miNor;
 	{
-		path_descr_cubicto temp;
+            path_descr_cubicto temp(enPos + width * enNor, stGue * scal * stTgt, enGue * scal * enTgt);
 		double chTle, chRad;
 		NR::Point chTgt;
-		temp.p = enPos + width * enNor;
-		temp.stD = stGue * scal * stTgt;
-		temp.enD = enGue * scal * enTgt;
 		TangentOnCubAt (0.5, stPos+width*stNor,
 						temp, false, chk, chTgt, chTle, chRad);
 	}
