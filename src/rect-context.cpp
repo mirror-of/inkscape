@@ -154,7 +154,7 @@ static void shape_event_attr_changed(SPRepr *repr,
 
     SPDesktop *desktop = ec->desktop;
 
-    SPItem *item = sp_selection_item(SP_DT_SELECTION(desktop));
+    SPItem *item = SP_DT_SELECTION(desktop)->singleItem();
 
     if (item) {
         rc->knot_holder = sp_item_knot_holder(item, desktop);
@@ -195,7 +195,7 @@ void sp_rect_context_selection_changed(SPSelection *selection, gpointer data)
         rc->repr = 0;
     }
 
-    SPItem *item = sp_selection_item(selection);
+    SPItem *item = selection->singleItem();
     if (item) {
         rc->knot_holder = sp_item_knot_holder(item, ec->desktop);
         SPRepr *repr = SP_OBJECT_REPR(item);
@@ -216,7 +216,7 @@ static void sp_rect_context_setup(SPEventContext *ec)
         ((SPEventContextClass *) parent_class)->setup(ec);
     }
 
-    SPItem *item = sp_selection_item(SP_DT_SELECTION(ec->desktop));
+    SPItem *item = SP_DT_SELECTION(ec->desktop)->singleItem();
     if (item) {
         rc->knot_holder = sp_item_knot_holder(item, ec->desktop);
         SPRepr *repr = SP_OBJECT_REPR(item);
@@ -362,7 +362,7 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
                 SP_DT_SELECTION(desktop)->setItem(event_context->item_to_select);
             } else {
                 // click in an empty space
-                sp_selection_empty(SP_DT_SELECTION(desktop));
+                SP_DT_SELECTION(desktop)->clear();
             }
 
             event_context->item_to_select = NULL;
@@ -382,7 +382,7 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
                 ret = TRUE;
             break;
         case GDK_Escape:
-            sp_selection_empty(SP_DT_SELECTION(desktop)); // deselect
+            SP_DT_SELECTION(desktop)->clear();
             //TODO: make dragging escapable by Esc
         default:
             break;
