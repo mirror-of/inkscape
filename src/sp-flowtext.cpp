@@ -633,6 +633,7 @@ void convert_to_text(void)
                     SPILength sav_spc = curSPS->text->letterspacing;
                     SPIEnum sav_anc = curSPS->text_anchor;
                     curSPS->text->letterspacing.set = 1;
+                    curSPS->text->letterspacing_normal = 0;
                     curSPS->text->letterspacing.inherit = 0;
                     curSPS->text->letterspacing.unit = SP_CSS_UNIT_PX;
                     if ( comp->spans[j].rtl == comp->chunks[i].rtl ) {
