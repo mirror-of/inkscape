@@ -22,6 +22,7 @@
 #include <gtk/gtk.h>
 
 #include "display/canvas-grid.h"
+#include "helper/units.h"
 #include "svg/svg.h"
 #include "attributes.h"
 #include "document.h"
@@ -207,9 +208,9 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 
 	nv = SP_NAMEDVIEW (object);
 
-	if (!pt) pt = sp_unit_get_by_abbreviation ("pt");
-	if (!px) px = sp_unit_get_by_abbreviation ("px");
-	if (!mm) mm = sp_unit_get_by_abbreviation ("mm");
+	if (!pt) pt = &sp_unit_get_by_id(SP_UNIT_PT);
+	if (!px) px = &sp_unit_get_by_id(SP_UNIT_PX);
+	if (!mm) mm = &sp_unit_get_by_id(SP_UNIT_MM);
 
 	switch (key) {
 	case SP_ATTR_VIEWONLY:
