@@ -234,6 +234,7 @@ sp_item_create_text_shape (GtkMenuItem *menuitem, SPItem *item)
     }
 
     Inkscape::XML::Node *div_repr = sp_repr_new ("svg:flowDiv");
+	sp_repr_set_attr (div_repr, "xml:space", "preserve"); // we preserve spaces in the text objects we create
     root_repr->appendChild(div_repr);
     SPObject *div_object = doc->getObjectByRepr(div_repr);
     g_return_if_fail (SP_IS_FLOWDIV (div_object));
