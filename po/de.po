@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.39\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-24 00:12+0200\n"
+"POT-Creation-Date: 2004-06-26 00:36+0200\n"
 "PO-Revision-Date: 2004-06-19 19:06+0200\n"
 "Last-Translator: Colin Marquardt <colin@marquardt-home.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -50,7 +50,7 @@ msgstr "Verschiebe %s"
 msgid "Zoom drawing if window size changes"
 msgstr "Zeichnungsgröße ändern, sobald die Fenstergröße verändert wird"
 
-#: src/desktop.cpp:824 src/dialogs/display-settings.cpp:890 src/verbs.cpp:969
+#: src/desktop.cpp:824 src/dialogs/display-settings.cpp:923 src/verbs.cpp:969
 msgid "Zoom"
 msgstr "Ansichtsgröße"
 
@@ -115,7 +115,7 @@ msgstr "Kein nächster Größenfaktor."
 
 #. Page page
 #: src/desktop.cpp:1884 src/dialogs/align.cpp:445
-#: src/dialogs/desktop-properties.cpp:609 src/dialogs/export.cpp:277
+#: src/dialogs/desktop-properties.cpp:690 src/dialogs/export.cpp:277
 msgid "Page"
 msgstr "Seite"
 
@@ -230,545 +230,583 @@ msgid "Smallest item"
 msgstr "Kleinstes Objekt"
 
 #. Notebook tab
-#: src/dialogs/desktop-properties.cpp:516
+#: src/dialogs/desktop-properties.cpp:597
 msgid "Grid"
 msgstr "Raster"
 
 #. Checkbuttons
-#: src/dialogs/desktop-properties.cpp:524
+#: src/dialogs/desktop-properties.cpp:605
 msgid "Show grid"
 msgstr "Raster anzeigen"
 
-#: src/dialogs/desktop-properties.cpp:525
+#: src/dialogs/desktop-properties.cpp:606
 msgid "Snap to grid"
 msgstr "Im Raster einrasten"
 
-#: src/dialogs/desktop-properties.cpp:526
+#: src/dialogs/desktop-properties.cpp:607
 #, fuzzy
 msgid "Snap bounding boxes to grid"
 msgstr "Im Raster einrasten"
 
-#: src/dialogs/desktop-properties.cpp:527
+#: src/dialogs/desktop-properties.cpp:608
 #, fuzzy
 msgid "Snap points to grid"
 msgstr "Im Raster einrasten"
 
-#: src/dialogs/desktop-properties.cpp:545
+#: src/dialogs/desktop-properties.cpp:626
 msgid "Grid units:"
 msgstr "Rastereinheit:"
 
-#: src/dialogs/desktop-properties.cpp:547
+#: src/dialogs/desktop-properties.cpp:628
 msgid "Origin X:"
 msgstr "Ursprung X:"
 
-#: src/dialogs/desktop-properties.cpp:550
+#: src/dialogs/desktop-properties.cpp:631
 msgid "Origin Y:"
 msgstr "Ursprung Y:"
 
-#: src/dialogs/desktop-properties.cpp:553
+#: src/dialogs/desktop-properties.cpp:634
 msgid "Spacing X:"
 msgstr "Abstand X:"
 
-#: src/dialogs/desktop-properties.cpp:556
+#: src/dialogs/desktop-properties.cpp:637
 msgid "Spacing Y:"
 msgstr "Abstand Y:"
 
-#: src/dialogs/desktop-properties.cpp:560
-#: src/dialogs/desktop-properties.cpp:593
+#: src/dialogs/desktop-properties.cpp:641
+#: src/dialogs/desktop-properties.cpp:674
 msgid "Snap units:"
 msgstr "Einrasteinheit:"
 
-#: src/dialogs/desktop-properties.cpp:563
-#: src/dialogs/desktop-properties.cpp:596
+#: src/dialogs/desktop-properties.cpp:644
+#: src/dialogs/desktop-properties.cpp:677
 msgid "Snap distance:"
 msgstr "Einrastabstand:"
 
-#: src/dialogs/desktop-properties.cpp:566
+#: src/dialogs/desktop-properties.cpp:647
 msgid "Grid color:"
 msgstr "Rasterfarbe:"
 
-#: src/dialogs/desktop-properties.cpp:567
+#: src/dialogs/desktop-properties.cpp:648
 msgid "Grid color"
 msgstr "Rasterfarbe"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:571
+#: src/dialogs/desktop-properties.cpp:652
 msgid "Guides"
 msgstr "Führungen"
 
-#: src/dialogs/desktop-properties.cpp:579
+#: src/dialogs/desktop-properties.cpp:660
 msgid "Show guides"
 msgstr "Führungen anzeigen"
 
-#: src/dialogs/desktop-properties.cpp:580
+#: src/dialogs/desktop-properties.cpp:661
 msgid "Snap to guides"
 msgstr "In Führungen einrasten"
 
-#: src/dialogs/desktop-properties.cpp:581
+#: src/dialogs/desktop-properties.cpp:662
 #, fuzzy
 msgid "Snap bounding boxes to guides"
 msgstr "In Führungen einrasten"
 
-#: src/dialogs/desktop-properties.cpp:582
+#: src/dialogs/desktop-properties.cpp:663
 #, fuzzy
 msgid "Snap points to guides"
 msgstr "Im Raster einrasten"
 
-#: src/dialogs/desktop-properties.cpp:600
+#: src/dialogs/desktop-properties.cpp:681
 #, fuzzy
 msgid "Guide color:"
 msgstr "Führungsfarbe:"
 
-#: src/dialogs/desktop-properties.cpp:601
+#: src/dialogs/desktop-properties.cpp:682
 msgid "Guideline color"
 msgstr "Farbe der Führungslinien"
 
-#: src/dialogs/desktop-properties.cpp:603
+#: src/dialogs/desktop-properties.cpp:684
 msgid "Highlight color:"
 msgstr "Hervorhebungsfarbe:"
 
-#: src/dialogs/desktop-properties.cpp:604
+#: src/dialogs/desktop-properties.cpp:685
 msgid "Highlighted guideline color"
 msgstr "Farbe der hervorgehobenen Führungslinien"
 
-#: src/dialogs/desktop-properties.cpp:618
+#: src/dialogs/desktop-properties.cpp:699
 msgid "Background (also for export):"
 msgstr "Hintergrund (auch für das Exportieren)"
 
-#: src/dialogs/desktop-properties.cpp:619
+#: src/dialogs/desktop-properties.cpp:700
 msgid "Background color"
 msgstr "Hintergrundfarbe"
 
-#: src/dialogs/desktop-properties.cpp:623
+#: src/dialogs/desktop-properties.cpp:704
 msgid "Show canvas border"
 msgstr "Rand der Zeichenfläche anzeigen"
 
-#: src/dialogs/desktop-properties.cpp:626
+#: src/dialogs/desktop-properties.cpp:707
 msgid "Border on top of drawing"
 msgstr "Rand am oberen Ende der Zeichnung"
 
-#: src/dialogs/desktop-properties.cpp:636
+#: src/dialogs/desktop-properties.cpp:717
 msgid "Border color:"
 msgstr "Randfarbe:"
 
-#: src/dialogs/desktop-properties.cpp:637
+#: src/dialogs/desktop-properties.cpp:718
 msgid "Canvas border color"
 msgstr "Randfarbe der Zeichenfläche"
 
-#: src/dialogs/desktop-properties.cpp:653
+#: src/dialogs/desktop-properties.cpp:734
 msgid "Paper size:"
 msgstr "Papiergröße:"
 
-#: src/dialogs/desktop-properties.cpp:677
+#: src/dialogs/desktop-properties.cpp:758
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
-#: src/dialogs/desktop-properties.cpp:688
+#: src/dialogs/desktop-properties.cpp:769
 msgid "Paper orientation:"
 msgstr "Papierausrichtung:"
 
-#: src/dialogs/desktop-properties.cpp:700
+#: src/dialogs/desktop-properties.cpp:781
 msgid "Landscape"
 msgstr "Querformat"
 
-#: src/dialogs/desktop-properties.cpp:706
+#: src/dialogs/desktop-properties.cpp:787
 msgid "Portrait"
 msgstr "Hochformat"
 
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:715
+#: src/dialogs/desktop-properties.cpp:796
 msgid "Custom paper"
 msgstr "Benutzerdefiniertes Papier"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:727 src/dialogs/export.cpp:305
+#: src/dialogs/desktop-properties.cpp:808 src/dialogs/export.cpp:305
 #: src/dialogs/transformation.cpp:519 src/dialogs/transformation.cpp:716
 msgid "Units:"
 msgstr "Einheit:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:729 src/dialogs/export.cpp:321
+#: src/dialogs/desktop-properties.cpp:810 src/dialogs/export.cpp:321
 #: src/dialogs/export.cpp:356 src/dialogs/object-attributes.cpp:76
-#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1361
+#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1371
 #: src/toolbox.cpp:1626
 msgid "Width:"
 msgstr "Breite:"
 
-#: src/dialogs/desktop-properties.cpp:751 src/dialogs/export.cpp:337
+#: src/dialogs/desktop-properties.cpp:832 src/dialogs/export.cpp:337
 #: src/dialogs/export.cpp:371 src/dialogs/object-attributes.cpp:77
 #: src/dialogs/object-attributes.cpp:85
 msgid "Height:"
 msgstr "Höhe:"
 
-#: src/dialogs/desktop-properties.cpp:1219
+#. end of former "document settings" stuff
+#.
+#. * Ownership metadata tab
+#.
+#: src/dialogs/desktop-properties.cpp:858
+msgid "Metadata"
+msgstr ""
+
+#: src/dialogs/desktop-properties.cpp:884
+msgid "License:"
+msgstr ""
+
+#: src/dialogs/desktop-properties.cpp:906
+msgid "Proprietary"
+msgstr ""
+
+#: src/dialogs/desktop-properties.cpp:1379
 msgid "Close"
 msgstr "Schließen"
 
-#: src/dialogs/display-settings.cpp:192
+#: src/dialogs/display-settings.cpp:201
 msgid "When transforming, show:"
 msgstr "Zeige beim Verändern:"
 
-#: src/dialogs/display-settings.cpp:203
+#: src/dialogs/display-settings.cpp:212
 msgid "Objects"
 msgstr "Objekte"
 
-#: src/dialogs/display-settings.cpp:203
+#: src/dialogs/display-settings.cpp:212
 msgid "Show the actual objects when moving or transforming"
 msgstr "Zeige Objekte mit Inhalt beim Verschieben oder Verändern"
 
-#: src/dialogs/display-settings.cpp:209
+#: src/dialogs/display-settings.cpp:218
 msgid "Box outline"
 msgstr "Objektumrisse"
 
-#: src/dialogs/display-settings.cpp:209
+#: src/dialogs/display-settings.cpp:218
 msgid "Show only a box outline of the objects when moving or transforming"
 msgstr "Zeige rechteckige Objektumrisse beim Verschieben oder Verändern"
 
-#: src/dialogs/display-settings.cpp:214
+#: src/dialogs/display-settings.cpp:223
 msgid "Per-object selection cue:"
 msgstr ""
 
 # CHECK
 #. sorationsnapsperpi == 0 means no snapping
-#: src/dialogs/display-settings.cpp:225 src/dialogs/display-settings.cpp:332
-#: src/dialogs/display-settings.cpp:387 src/dialogs/display-settings.cpp:1173
+#: src/dialogs/display-settings.cpp:234 src/dialogs/display-settings.cpp:365
+#: src/dialogs/display-settings.cpp:420 src/dialogs/display-settings.cpp:1206
 #: src/interface.cpp:964 src/verbs.cpp:797
 msgid "None"
 msgstr "Deaktiviert"
 
-#: src/dialogs/display-settings.cpp:225
+#: src/dialogs/display-settings.cpp:234
 msgid "No per-object selection indication"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:231
+#: src/dialogs/display-settings.cpp:240
 msgid "Mark"
 msgstr "Markierung"
 
-#: src/dialogs/display-settings.cpp:231
+#: src/dialogs/display-settings.cpp:240
 msgid "Each selected object has a diamond mark in the top left corner"
 msgstr ""
 "Jedes ausgewählte Objekt hat eine diamantförmige Markierung in der linken "
 "oberen Ecke"
 
-#: src/dialogs/display-settings.cpp:237
+#: src/dialogs/display-settings.cpp:246
 msgid "Box"
 msgstr "Umschließendes Rechteck"
 
-#: src/dialogs/display-settings.cpp:237
+#: src/dialogs/display-settings.cpp:246
 msgid "Each selected object displays its bounding box"
 msgstr "Jedes gewählte Objekt zeigt sein umschließendes Rechteck"
 
-#: src/dialogs/display-settings.cpp:288
+#: src/dialogs/display-settings.cpp:251
+#, fuzzy
+msgid "Default scale origin:"
+msgstr "Voreingestellte Zeigertoleranz:"
+
+#: src/dialogs/display-settings.cpp:262
+#, fuzzy
+msgid "On bounding box"
+msgstr "Im Raster einrasten"
+
+#: src/dialogs/display-settings.cpp:263
+msgid "Default scale origin will be on the bounding box of the item"
+msgstr ""
+
+#: src/dialogs/display-settings.cpp:269
+msgid "On outermost point"
+msgstr ""
+
+#: src/dialogs/display-settings.cpp:270
+msgid "Default scale origin will be on the bounding box of the item's points"
+msgstr ""
+
+#: src/dialogs/display-settings.cpp:321
 msgid "degrees"
 msgstr "Grad"
 
-#: src/dialogs/display-settings.cpp:297
+#: src/dialogs/display-settings.cpp:330
 msgid ""
 "Rotating with Ctrl pressed snaps every that much degrees; also, pressing "
 "[ or ] rotates by this amount"
 msgstr ""
 
 # !!! need %s
-#: src/dialogs/display-settings.cpp:353
+#: src/dialogs/display-settings.cpp:386
 msgid "Rotation snaps every:"
 msgstr "Rotation rastet ein alle:"
 
-#: src/dialogs/display-settings.cpp:376
+#: src/dialogs/display-settings.cpp:409
 msgid ""
 "None: dialogs are treated as regular windows; Normal: dialogs stay on top of "
 "document windows; Aggressive: same as Normal but may work better with some "
 "window managers."
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:397
+#: src/dialogs/display-settings.cpp:430
 msgid "Normal"
 msgstr "Normal"
 
-#: src/dialogs/display-settings.cpp:407
+#: src/dialogs/display-settings.cpp:440
 msgid "Aggressive"
 msgstr "Aggressiv"
 
-#: src/dialogs/display-settings.cpp:421
+#: src/dialogs/display-settings.cpp:454
 msgid "Dialogs on top:"
 msgstr "Dialoge im Vordergrund:"
 
-#: src/dialogs/display-settings.cpp:591
+#: src/dialogs/display-settings.cpp:624
 #, fuzzy
 msgid "Show selection cue"
 msgstr "Die gewählten Objekte eine Stufe nach unten absenken"
 
-#: src/dialogs/display-settings.cpp:592
+#: src/dialogs/display-settings.cpp:625
 msgid ""
 "Whether selected objects display a selection cue (the same as in selector)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:609
+#: src/dialogs/display-settings.cpp:642
 #, fuzzy
 msgid "Picking colors:"
 msgstr "Hervorhebungsfarbe:"
 
-#: src/dialogs/display-settings.cpp:620
+#: src/dialogs/display-settings.cpp:653
 msgid "Pick visible color (no alpha)"
 msgstr "Sichtbare Farbe aufnehmen (keine Transparenz)"
 
-#: src/dialogs/display-settings.cpp:620
+#: src/dialogs/display-settings.cpp:653
 msgid ""
 "Pick the visible color under cursor, taking into account the page background "
 "and disregarding the transparency of objects"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:627
+#: src/dialogs/display-settings.cpp:660
 msgid "Pick objects' color (including alpha)"
 msgstr "Objektfarbe aufnehmen (inklusive Transparenz)"
 
-#: src/dialogs/display-settings.cpp:627
+#: src/dialogs/display-settings.cpp:660
 msgid ""
 "Pick the actual color of object(s) under cursor, including their accumulated "
 "transparency"
 msgstr ""
 
 #. Mouse
-#: src/dialogs/display-settings.cpp:719
+#: src/dialogs/display-settings.cpp:752
 msgid "Mouse"
 msgstr "Maus"
 
-#: src/dialogs/display-settings.cpp:722
+#: src/dialogs/display-settings.cpp:755
 #, fuzzy
 msgid "Grab sensitivity:"
 msgstr "Empfindlich machen"
 
-#: src/dialogs/display-settings.cpp:723
+#: src/dialogs/display-settings.cpp:756
 msgid ""
 "How close you need to be to an object to be able to grab it with mouse (in "
 "pixels)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:724 src/dialogs/display-settings.cpp:735
-#: src/dialogs/display-settings.cpp:750 src/dialogs/display-settings.cpp:768
-#: src/dialogs/display-settings.cpp:808 src/helper/units.cpp:36
+#: src/dialogs/display-settings.cpp:757 src/dialogs/display-settings.cpp:768
+#: src/dialogs/display-settings.cpp:783 src/dialogs/display-settings.cpp:801
+#: src/dialogs/display-settings.cpp:841 src/helper/units.cpp:36
 msgid "px"
 msgstr "Px"
 
-#: src/dialogs/display-settings.cpp:733
+#: src/dialogs/display-settings.cpp:766
 msgid "Click/drag threshold:"
 msgstr "Schwellwert für Klicken/Ziehen:"
 
-#: src/dialogs/display-settings.cpp:734
+#: src/dialogs/display-settings.cpp:767
 msgid "Maximum mouse drag (in pixels) which is considered a click, not a drag"
 msgstr ""
 
 #. Scrolling
-#: src/dialogs/display-settings.cpp:745
+#: src/dialogs/display-settings.cpp:778
 msgid "Scrolling"
 msgstr "Rollen"
 
-#: src/dialogs/display-settings.cpp:748
+#: src/dialogs/display-settings.cpp:781
 msgid "Mouse wheel scrolls by:"
 msgstr "Mausrad rollt um:"
 
-#: src/dialogs/display-settings.cpp:749
+#: src/dialogs/display-settings.cpp:782
 msgid ""
 "One mouse wheel notch scrolls by this distance in pixels (horizontally with "
 "Shift)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:758
+#: src/dialogs/display-settings.cpp:791
 msgid "Ctrl+arrows"
 msgstr "Strg+Pfeile"
 
-#: src/dialogs/display-settings.cpp:766
+#: src/dialogs/display-settings.cpp:799
 msgid "Scroll by:"
 msgstr "Rolle um:"
 
-#: src/dialogs/display-settings.cpp:767
+#: src/dialogs/display-settings.cpp:800
 msgid "Pressing Ctrl+arrow key scrolls by this distance (in pixels)"
 msgstr "Strg+Pfeiltasten rollen um diese Distanz (in Pixeln)"
 
-#: src/dialogs/display-settings.cpp:777
+#: src/dialogs/display-settings.cpp:810
 msgid "Acceleration:"
 msgstr "Beschleunigung:"
 
-#: src/dialogs/display-settings.cpp:778
+#: src/dialogs/display-settings.cpp:811
 msgid ""
 "Pressing and holding Ctrl+arrow will gradually speed up scrolling (0 for no "
 "acceleration)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:787
+#: src/dialogs/display-settings.cpp:820
 msgid "Autoscrolling"
 msgstr "Automatisches Rollen"
 
-#: src/dialogs/display-settings.cpp:795
+#: src/dialogs/display-settings.cpp:828
 msgid "Speed:"
 msgstr "Geschwindigkeit:"
 
-#: src/dialogs/display-settings.cpp:796
+#: src/dialogs/display-settings.cpp:829
 msgid ""
 "How fast the canvas autoscrolls when you drag beyond canvas edge (0 to turn "
 "autoscroll off)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:806
+#: src/dialogs/display-settings.cpp:839
 msgid "Threshold:"
 msgstr "Schwellwert:"
 
-#: src/dialogs/display-settings.cpp:807
+#: src/dialogs/display-settings.cpp:840
 msgid ""
 "How far (in pixels) you need to be from the canvas edge to trigger "
 "autoscroll; positive is outside the canvas, negative is within the canvas"
 msgstr ""
 
 #. Steps
-#: src/dialogs/display-settings.cpp:817
+#: src/dialogs/display-settings.cpp:850
 msgid "Steps"
 msgstr "Schritte"
 
-#: src/dialogs/display-settings.cpp:820
+#: src/dialogs/display-settings.cpp:853
 msgid "Arrow keys move by:"
 msgstr "Pfeiltasten bewegen um:"
 
-#: src/dialogs/display-settings.cpp:821
+#: src/dialogs/display-settings.cpp:854
 msgid ""
 "Pressing an arrow key moves selected object(s) or node(s) by this distance "
 "(in points)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:822 src/dialogs/display-settings.cpp:833
-#: src/dialogs/display-settings.cpp:844 src/helper/units.cpp:35
+#: src/dialogs/display-settings.cpp:855 src/dialogs/display-settings.cpp:866
+#: src/dialogs/display-settings.cpp:877 src/helper/units.cpp:35
 msgid "pt"
 msgstr "Pkt"
 
-#: src/dialogs/display-settings.cpp:831
+#: src/dialogs/display-settings.cpp:864
 msgid "> and < scale by:"
 msgstr "> und < skalieren um:"
 
-#: src/dialogs/display-settings.cpp:832
+#: src/dialogs/display-settings.cpp:865
 msgid ""
 "Pressing > or < scales selection up or down by this increment (in points)"
 msgstr ""
 
 # !!! maybe not the best translation
-#: src/dialogs/display-settings.cpp:842
+#: src/dialogs/display-settings.cpp:875
 msgid "Inset/Outset by:"
 msgstr "Schrumpfen/Vergrößern um:"
 
-#: src/dialogs/display-settings.cpp:843
+#: src/dialogs/display-settings.cpp:876
 msgid ""
 "Inset and Outset commands displace the path by this distance (in points)"
 msgstr ""
 "Schrumpfungs- und Vergrößerungsbefehle verändern den Pfad um diese Distanz "
 "(in Punkten)"
 
-#: src/dialogs/display-settings.cpp:855
+#: src/dialogs/display-settings.cpp:888
 msgid "Zoom in/out by:"
 msgstr "Ansichtsgröße vergrößern/vermindern um:"
 
-#: src/dialogs/display-settings.cpp:856
+#: src/dialogs/display-settings.cpp:889
 msgid ""
 "Zoom tool click, +/- keys, and middle click zoom in and out by this "
 "multiplier"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:857 src/helper/units.cpp:39
+#: src/dialogs/display-settings.cpp:890 src/helper/units.cpp:39
 msgid "%"
 msgstr "%"
 
 #. Tools
-#: src/dialogs/display-settings.cpp:866
+#: src/dialogs/display-settings.cpp:899
 msgid "Tools"
 msgstr "Werkzeuge"
 
-#: src/dialogs/display-settings.cpp:874
+#: src/dialogs/display-settings.cpp:907
 msgid "Selector"
 msgstr "Auswahlwerkzeug"
 
-#: src/dialogs/display-settings.cpp:883
+#: src/dialogs/display-settings.cpp:916
 msgid "Node"
 msgstr "Knoten"
 
 #. The 4 shape tools
-#: src/dialogs/display-settings.cpp:896
+#: src/dialogs/display-settings.cpp:929
 msgid "Shapes"
 msgstr "Formen"
 
 #. Rect
-#: src/dialogs/display-settings.cpp:903 src/sp-rect.cpp:259 src/verbs.cpp:953
+#: src/dialogs/display-settings.cpp:936 src/sp-rect.cpp:259 src/verbs.cpp:953
 msgid "Rectangle"
 msgstr "Rechteck"
 
 #. Ellipse
-#: src/dialogs/display-settings.cpp:906 src/sp-ellipse.cpp:443
+#: src/dialogs/display-settings.cpp:939 src/sp-ellipse.cpp:443
 #: src/verbs.cpp:955
 msgid "Ellipse"
 msgstr "Ellipse"
 
 #. Star
-#: src/dialogs/display-settings.cpp:909 src/verbs.cpp:957
+#: src/dialogs/display-settings.cpp:942 src/verbs.cpp:957
 msgid "Star"
 msgstr "Stern"
 
 #. Spiral
-#: src/dialogs/display-settings.cpp:912 src/sp-spiral.cpp:259
+#: src/dialogs/display-settings.cpp:945 src/sp-spiral.cpp:268
 #: src/verbs.cpp:959
 msgid "Spiral"
 msgstr "Spirale"
 
-#: src/dialogs/display-settings.cpp:920 src/verbs.cpp:961
+#: src/dialogs/display-settings.cpp:953 src/verbs.cpp:961
 msgid "Pencil"
 msgstr "Bleistift"
 
 # CHECK
-#: src/dialogs/display-settings.cpp:923
+#: src/dialogs/display-settings.cpp:956
 msgid "Tolerance:"
 msgstr "Toleranz:"
 
-#: src/dialogs/display-settings.cpp:924
+#: src/dialogs/display-settings.cpp:957
 msgid ""
 "This value affects the amount of smoothing applied to freehand lines; lower "
 "values produce more uneven paths with more nodes"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:938 src/verbs.cpp:963
+#: src/dialogs/display-settings.cpp:971 src/verbs.cpp:963
 msgid "Pen"
 msgstr "Füller"
 
-#: src/dialogs/display-settings.cpp:945 src/dialogs/object-properties.cpp:287
+#: src/dialogs/display-settings.cpp:978 src/dialogs/object-properties.cpp:287
 #: src/verbs.cpp:967
 msgid "Text"
 msgstr "Text"
 
-#: src/dialogs/display-settings.cpp:952 src/verbs.cpp:971
+#: src/dialogs/display-settings.cpp:985 src/verbs.cpp:971
 msgid "Dropper"
 msgstr "Ableger"
 
 #. Windows
-#: src/dialogs/display-settings.cpp:961
+#: src/dialogs/display-settings.cpp:994
 msgid "Windows"
 msgstr "Fenster"
 
-#: src/dialogs/display-settings.cpp:966
+#: src/dialogs/display-settings.cpp:999
 msgid "Save window geometry"
 msgstr "Fenstergeometrie speichern"
 
-#: src/dialogs/display-settings.cpp:967
+#: src/dialogs/display-settings.cpp:1000
 msgid ""
 "Save the window size and position with each document (only for Inkscape SVG "
 "format)"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:974
+#: src/dialogs/display-settings.cpp:1007
 msgid "Dialogs are hidden in taskbar"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:975
+#: src/dialogs/display-settings.cpp:1008
 msgid "Whether dialog windows are to be hidden in the window manager taskbar"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:982
+#: src/dialogs/display-settings.cpp:1015
 msgid "Zoom when window is resized"
 msgstr "Zeichnungsgröße ändern, sobald die Fenstergröße verändert wird"
 
-#: src/dialogs/display-settings.cpp:983
+#: src/dialogs/display-settings.cpp:1016
 msgid ""
 "Zoom drawing when document window is resized, to keep the same area visible "
 "(this is the default which can be changed in any window using the button "
@@ -776,36 +814,36 @@ msgid ""
 msgstr ""
 
 #. Clones
-#: src/dialogs/display-settings.cpp:991 src/dialogs/find.cpp:561
+#: src/dialogs/display-settings.cpp:1024 src/dialogs/find.cpp:561
 msgid "Clones"
 msgstr "Klone"
 
-#: src/dialogs/display-settings.cpp:995
+#: src/dialogs/display-settings.cpp:1028
 msgid "When the original moves, its clones:"
 msgstr "Wenn das Original verschoben wird, werden die Klone:"
 
-#: src/dialogs/display-settings.cpp:1007
+#: src/dialogs/display-settings.cpp:1040
 msgid "Move in parallel"
 msgstr "sich parallel verschieben"
 
-#: src/dialogs/display-settings.cpp:1007
+#: src/dialogs/display-settings.cpp:1040
 msgid "Clones are translated by the same vector as their original."
 msgstr "Klone werden mit demselben Vektor wie das Original verschoben."
 
-#: src/dialogs/display-settings.cpp:1013
+#: src/dialogs/display-settings.cpp:1046
 msgid "Stay unmoved"
 msgstr "unbewegt bleiben"
 
-#: src/dialogs/display-settings.cpp:1013
+#: src/dialogs/display-settings.cpp:1046
 msgid "Clones preserve their positions when their original is moved."
 msgstr ""
 "Klone bleiben an ihren Positionen, während das Original verschoben wird."
 
-#: src/dialogs/display-settings.cpp:1019
+#: src/dialogs/display-settings.cpp:1052
 msgid "Move according to transform"
 msgstr "sich entsprechend des transform=-Attributs bewegen"
 
-#: src/dialogs/display-settings.cpp:1019
+#: src/dialogs/display-settings.cpp:1052
 msgid ""
 "Each clone moves according to the value of its transform= attribute. For "
 "example, a rotated clone will move in a different direction than its "
@@ -815,69 +853,69 @@ msgstr ""
 "Attributs. Ein rotierter Klon wird sich zum Beispiel in eine andere Richtung "
 "als das Original drehen."
 
-#: src/dialogs/display-settings.cpp:1027
+#: src/dialogs/display-settings.cpp:1060
 msgid "When the original is deleted, its clones:"
 msgstr "Wenn das Original gelöscht wird, werden die Klone:"
 
-#: src/dialogs/display-settings.cpp:1039
+#: src/dialogs/display-settings.cpp:1072
 msgid "Are unlinked"
 msgstr "ihre Verbindung zum Original verlieren"
 
-#: src/dialogs/display-settings.cpp:1039
+#: src/dialogs/display-settings.cpp:1072
 msgid "Orphaned clones are converted to regular objects."
 msgstr "Klone ohne Original werden zu regulären Objekten umgewandelt."
 
-#: src/dialogs/display-settings.cpp:1045
+#: src/dialogs/display-settings.cpp:1078
 msgid "Are deleted"
 msgstr "ebenso gelöscht"
 
-#: src/dialogs/display-settings.cpp:1045
+#: src/dialogs/display-settings.cpp:1078
 msgid "Orphaned clones are deleted along with their original."
 msgstr "Klone werden zusammen mit ihrem Original gelöscht."
 
 #. Transforms
-#: src/dialogs/display-settings.cpp:1060
+#: src/dialogs/display-settings.cpp:1093
 msgid "Transforms"
 msgstr "Transformationen"
 
-#: src/dialogs/display-settings.cpp:1063
+#: src/dialogs/display-settings.cpp:1096
 msgid "Scale stroke width"
 msgstr "Strichbreite mitskalieren"
 
-#: src/dialogs/display-settings.cpp:1064
+#: src/dialogs/display-settings.cpp:1097
 msgid "When scaling objects, scale the stroke width by the same proportion"
 msgstr ""
 "Wenn Objekte skaliert werden, dann wird die Strichbreite ebenso mitskaliert."
 
-#: src/dialogs/display-settings.cpp:1071
+#: src/dialogs/display-settings.cpp:1104
 #, fuzzy
 msgid "Scale rounded corners in rectangles"
 msgstr "Abgerundete Ecken in Rechtecken mitskalieren"
 
-#: src/dialogs/display-settings.cpp:1072
+#: src/dialogs/display-settings.cpp:1105
 msgid "When scaling rectangles, scale the radii of rounded corners"
 msgstr ""
 "Wenn Rechtecke skaliert werden, dann werden die Radien von abgerundeten "
 "Ecken ebenso mitskaliert."
 
-#: src/dialogs/display-settings.cpp:1079
+#: src/dialogs/display-settings.cpp:1112
 #, fuzzy
 msgid "Transform pattern fill"
 msgstr "Abbildungsmatrix"
 
-#: src/dialogs/display-settings.cpp:1080
+#: src/dialogs/display-settings.cpp:1113
 msgid "Apply the transform of an object to its pattern fill"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1088
+#: src/dialogs/display-settings.cpp:1121
 msgid "Store transformation:"
 msgstr "Transformationen speichern"
 
-#: src/dialogs/display-settings.cpp:1099
+#: src/dialogs/display-settings.cpp:1132
 msgid "Optimized"
 msgstr "Optimiert"
 
-#: src/dialogs/display-settings.cpp:1099
+#: src/dialogs/display-settings.cpp:1132
 msgid ""
 "If possible, apply transformation to objects without adding a transform= "
 "attribute"
@@ -885,59 +923,59 @@ msgstr ""
 "Wenn möglich, dann werden Transformationen auf Objekte angewendet, ohne ein "
 "transform=-Attribut hinzuzufügen."
 
-#: src/dialogs/display-settings.cpp:1105
+#: src/dialogs/display-settings.cpp:1138
 msgid "Preserved"
 msgstr "Behalten"
 
-#: src/dialogs/display-settings.cpp:1105
+#: src/dialogs/display-settings.cpp:1138
 msgid "Always store transformation as a transform= attribute on objects"
 msgstr "Transformationen immer als transform=-Attribute speichern."
 
 #. To be broken into: Display, Save, Export, SVG, Commands
-#: src/dialogs/display-settings.cpp:1113
+#: src/dialogs/display-settings.cpp:1146
 msgid "Misc"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1116
+#: src/dialogs/display-settings.cpp:1149
 msgid "Default export resolution:"
 msgstr "Bevorzugte Auflösung für das Exportieren:"
 
-#: src/dialogs/display-settings.cpp:1117
+#: src/dialogs/display-settings.cpp:1150
 msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
 msgstr ""
 "Bevorzugte Auflösung des Bitmaps (Punkt pro Zoll) im Exportieren-Dialog"
 
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
-#: src/dialogs/display-settings.cpp:1118 src/dialogs/export.cpp:366
+#: src/dialogs/display-settings.cpp:1151 src/dialogs/export.cpp:366
 #: src/dialogs/export.cpp:382
 msgid "dpi"
 msgstr "DPI"
 
-#: src/dialogs/display-settings.cpp:1127
+#: src/dialogs/display-settings.cpp:1160
 #, fuzzy
 msgid "Import bitmap as <image>"
 msgstr "Ein Bitmap oder SVG-Bild in das Dokument importieren"
 
-#: src/dialogs/display-settings.cpp:1128
+#: src/dialogs/display-settings.cpp:1161
 msgid ""
 "When on, an imported bitmap creates an <image> element; otherwise it is a "
 "rectangle with bitmap fill"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1135
+#: src/dialogs/display-settings.cpp:1168
 msgid "Max recent documents:"
 msgstr "Maximale Länge der Liste zuletzt geöffneter Dokumente:"
 
-#: src/dialogs/display-settings.cpp:1136
+#: src/dialogs/display-settings.cpp:1169
 msgid "The maximum length of the Open Recent list in the File menu"
 msgstr ""
 "Die maximale Länge der Liste zuletzt geöffneter Dokumente im Menü »Datei«."
 
-#: src/dialogs/display-settings.cpp:1146
+#: src/dialogs/display-settings.cpp:1179
 msgid "Simplification threshold:"
 msgstr "Schwellwert für Vereinfachungen:"
 
-#: src/dialogs/display-settings.cpp:1147
+#: src/dialogs/display-settings.cpp:1180
 msgid ""
 "How strong is the Simplify command by default. If you invoke this command "
 "several times in quick succession, it will act more and more aggressively; "
@@ -945,23 +983,23 @@ msgid ""
 msgstr ""
 
 # CHECK
-#: src/dialogs/display-settings.cpp:1162
+#: src/dialogs/display-settings.cpp:1195
 msgid "Oversample bitmaps:"
 msgstr "Oversampling von Bitmaps:"
 
-#: src/dialogs/display-settings.cpp:1179
+#: src/dialogs/display-settings.cpp:1212
 msgid "2x2"
 msgstr "2x2"
 
-#: src/dialogs/display-settings.cpp:1185
+#: src/dialogs/display-settings.cpp:1218
 msgid "4x4"
 msgstr "4x4"
 
-#: src/dialogs/display-settings.cpp:1191
+#: src/dialogs/display-settings.cpp:1224
 msgid "8x8"
 msgstr "8x8"
 
-#: src/dialogs/display-settings.cpp:1197
+#: src/dialogs/display-settings.cpp:1230
 msgid "16x16"
 msgstr "16x16"
 
@@ -1459,40 +1497,83 @@ msgstr "Freihändig und Stift"
 msgid "Calligraphic line"
 msgstr "Kalligraphische Linie"
 
-#: src/dialogs/stroke-style.cpp:1058 src/widgets/gradient-vector.cpp:262
+#: src/dialogs/rdf.cpp:149
+#, fuzzy
+msgid "Title"
+msgstr "Titel:"
+
+#: src/dialogs/rdf.cpp:150
+#, fuzzy
+msgid "Date"
+msgstr "E_infügen"
+
+#. these are "agent" tags actually...
+#: src/dialogs/rdf.cpp:153
+#, fuzzy
+msgid "Creator"
+msgstr "Erstellen"
+
+#: src/dialogs/rdf.cpp:154
+msgid "Owner"
+msgstr ""
+
+#: src/dialogs/rdf.cpp:155
+msgid "Publisher"
+msgstr ""
+
+#: src/dialogs/rdf.cpp:157
+msgid "Source"
+msgstr ""
+
+#: src/dialogs/rdf.cpp:158
+msgid "Keywords"
+msgstr ""
+
+#. this is a multi-line tag
+#: src/dialogs/rdf.cpp:161
+#, fuzzy
+msgid "Description"
+msgstr "Auswahl"
+
+#. this uses an element
+#: src/dialogs/rdf.cpp:164
+msgid "License"
+msgstr ""
+
+#: src/dialogs/stroke-style.cpp:1068 src/widgets/gradient-vector.cpp:262
 #: src/widgets/paint-selector.cpp:812
 msgid "No document selected"
 msgstr "Kein Dokument gewählt"
 
-#: src/dialogs/stroke-style.cpp:1368
+#: src/dialogs/stroke-style.cpp:1378
 msgid "Stroke width"
 msgstr "Strichbreite"
 
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
-#: src/dialogs/stroke-style.cpp:1388
+#: src/dialogs/stroke-style.cpp:1398
 msgid "Join:"
 msgstr "Verbinden:"
 
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1402
+#: src/dialogs/stroke-style.cpp:1412
 msgid "Miter join"
 msgstr "Spitze Verbindung"
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1412
+#: src/dialogs/stroke-style.cpp:1422
 msgid "Round join"
 msgstr "Abgerundete Verbindung"
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1422
+#: src/dialogs/stroke-style.cpp:1432
 msgid "Bevel join"
 msgstr "Abgeschrägte Verbindung"
 
@@ -1503,55 +1584,55 @@ msgstr "Abgeschrägte Verbindung"
 #. spike that extends well beyond the connection point. The purpose of the
 #. miter limit is to cut off such spikes (i.e. convert them into bevels)
 #. when they become too long.
-#: src/dialogs/stroke-style.cpp:1433
+#: src/dialogs/stroke-style.cpp:1443
 msgid "Miter limit:"
 msgstr "Maximale Länge der Spitze:"
 
-#: src/dialogs/stroke-style.cpp:1441
+#: src/dialogs/stroke-style.cpp:1451
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr ""
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
-#: src/dialogs/stroke-style.cpp:1454
+#: src/dialogs/stroke-style.cpp:1464
 msgid "Cap:"
 msgstr "Aufsatz:"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1467
+#: src/dialogs/stroke-style.cpp:1477
 msgid "Butt cap"
 msgstr ""
 
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: src/dialogs/stroke-style.cpp:1476
+#: src/dialogs/stroke-style.cpp:1486
 msgid "Round cap"
 msgstr "Abgerundetes Ende"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1485
+#: src/dialogs/stroke-style.cpp:1495
 msgid "Square cap"
 msgstr "Quadratisches Ende"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:1491
+#: src/dialogs/stroke-style.cpp:1501
 msgid "Pattern:"
 msgstr "Muster:"
 
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
-#: src/dialogs/stroke-style.cpp:1512
+#: src/dialogs/stroke-style.cpp:1522
 #, fuzzy
 msgid "Start Markers:"
 msgstr "Sterneigenschaften"
 
-#: src/dialogs/stroke-style.cpp:1522
+#: src/dialogs/stroke-style.cpp:1532
 msgid "Mid Markers:"
 msgstr ""
 
-#: src/dialogs/stroke-style.cpp:1533
+#: src/dialogs/stroke-style.cpp:1543
 msgid "End Markers:"
 msgstr ""
 
@@ -1746,7 +1827,7 @@ msgid ""
 "average color of an area."
 msgstr ""
 
-#: src/extension/init.cpp:104
+#: src/extension/init.cpp:105
 #, c-format
 msgid ""
 "Modules directory (%s) is unavailable.  External modules in that directory "
@@ -2257,7 +2338,7 @@ msgstr ""
 "Dokument überschreiben?"
 
 #: src/knot.cpp:567
-msgid "Node or handle drag cancelled."
+msgid "Node or handle drag canceled."
 msgstr ""
 
 #: src/main.cpp:128
@@ -2571,11 +2652,13 @@ msgid "Draw rectangle: %s x %s"
 msgstr ""
 
 #: src/select-context.cpp:646
-msgid "Move cancelled."
+#, fuzzy
+msgid "Move canceled."
 msgstr "Verschieben abgebrochen."
 
 #: src/select-context.cpp:652
-msgid "Selection cancelled."
+#, fuzzy
+msgid "Selection canceled."
 msgstr "Auswahl abgebrochen."
 
 #: src/select-context.cpp:801
@@ -2740,23 +2823,23 @@ msgid "%i objects selected. %s."
 msgstr "%i Objekte ausgewählt. %s."
 
 #. status text
-#: src/seltrans.cpp:764 src/seltrans.cpp:824
+#: src/seltrans.cpp:781 src/seltrans.cpp:843
 #, c-format
 msgid "Scale %0.2f%%, %0.2f%%"
 msgstr "Skaliere %0.2f%%, %0.2f%%"
 
 # !!!
-#: src/seltrans.cpp:892
+#: src/seltrans.cpp:911
 #, c-format
 msgid "Skew %0.2f%c %0.2f%c"
 msgstr "Verzerre %0.2f%c %0.2f%c"
 
-#: src/seltrans.cpp:939
+#: src/seltrans.cpp:958
 #, c-format
 msgid "Rotate by %0.2f deg"
 msgstr "Rotiere um %0.2f Grad"
 
-#: src/seltrans.cpp:968
+#: src/seltrans.cpp:987
 #, c-format
 msgid "Center at (%s,%s)"
 msgstr "Zentriere bei (%s,%s)"
@@ -2933,12 +3016,12 @@ msgstr "Wählen Sie einige Pfade zum Vereinfachen."
 msgid "No paths to simplify in the selection."
 msgstr "Die Auswahl enthält keine Pfade zum Vereinfachen."
 
-#: src/star-context.cpp:471
+#: src/star-context.cpp:470
 #, c-format
 msgid "Draw polygon at (%s,%s)"
 msgstr "Zeichne Polygon bei (%s,%s)"
 
-#: src/star-context.cpp:472
+#: src/star-context.cpp:471
 #, c-format
 msgid "Draw star at (%s,%s)"
 msgstr "Zeichne Stern bei (%s,%s)"
@@ -3753,7 +3836,7 @@ msgstr "Filter"
 
 #: src/verbs.cpp:925
 #, fuzzy
-msgid "Reverse direction of selected path(s)"
+msgid "Reverses the direction of selected path(s); useful for flipping markers"
 msgstr "Die gewählten Objekte löschen"
 
 #: src/verbs.cpp:926
@@ -4626,9 +4709,6 @@ msgstr "Wert"
 
 #~ msgid "Input"
 #~ msgstr "Eingabe"
-
-#~ msgid "Default cursor tolerance:"
-#~ msgstr "Voreingestellte Zeigertoleranz:"
 
 #~ msgid "Fill Rule"
 #~ msgstr "Füllregel"
