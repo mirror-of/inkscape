@@ -193,12 +193,7 @@ sp_export_spinbutton_new ( gchar *key, float val, float min, float max,
                            int digits, unsigned int sensitive,
                            GCallback cb, GtkWidget *dlg )
 {
-
-    GtkWidget *l, *sb;
-    GtkObject *a;
-    int pos;
-
-    a = gtk_adjustment_new (val, min, max, step, page, page);
+    GtkObject *a = gtk_adjustment_new (val, min, max, step, page, page);
     gtk_object_set_data (a, "key", key);
     gtk_object_set_data (GTK_OBJECT (dlg), (const gchar *)key, a);
     
@@ -207,7 +202,9 @@ sp_export_spinbutton_new ( gchar *key, float val, float min, float max,
                                           GTK_ADJUSTMENT (a) );
     }
     
-    pos = 0;
+    int pos = 0;
+
+    GtkWidget *l = NULL;
 
     if (ll) {
     
@@ -220,7 +217,7 @@ sp_export_spinbutton_new ( gchar *key, float val, float min, float max,
     
     }
 
-    sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, digits);
+    GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, digits);
     gtk_table_attach ( GTK_TABLE (t), sb, x + pos, x + pos + 1, y, y + 1, 
                        (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
     gtk_widget_set_usize (sb, 64, -1);
