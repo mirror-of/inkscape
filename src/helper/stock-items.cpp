@@ -46,6 +46,10 @@ static SPObject *sp_marker_load_from_svg(gchar const *name, SPDocument *current_
 static SPObject *sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc);
 
 
+// FIXME: these should be merged with the icon loading code so they
+// can share a common file/doc cache.  This function should just 
+// take the dir to look in, and the file to check for, and cache
+// against that, rather than the existing copy/paste code seen here.
 
 static SPObject * sp_marker_load_from_svg(gchar const *name, SPDocument *current_doc)
 {
@@ -56,15 +60,9 @@ static SPObject * sp_marker_load_from_svg(gchar const *name, SPDocument *current
     }
     /* Try to load from document */
     if (!edoc && !doc) {
-        char *markers = g_build_filename(INKSCAPE_MARKERSDIR, "/markers.svg", NULL);
+        gchar *markers = g_build_filename(INKSCAPE_MARKERSDIR, "/markers.svg", NULL);
         if (Inkscape::IO::file_test(markers, G_FILE_TEST_IS_REGULAR)) {
             doc = sp_document_new(markers, FALSE, FALSE);
-        }
-        if ( !doc && Inkscape::IO::file_test( markers,
-                                  G_FILE_TEST_IS_REGULAR) )
-        {
-            doc = sp_document_new( markers,
-                                   FALSE, FALSE );
         }
         g_free(markers);
         if (doc) {
@@ -99,15 +97,9 @@ sp_pattern_load_from_svg(gchar const *name, SPDocument *current_doc)
     }
     /* Try to load from document */
     if (!edoc && !doc) {
-        char *patterns = g_build_filename(INKSCAPE_PATTERNSDIR, "/patterns.svg", NULL);
+        gchar *patterns = g_build_filename(INKSCAPE_PATTERNSDIR, "/patterns.svg", NULL);
         if (Inkscape::IO::file_test(patterns, G_FILE_TEST_IS_REGULAR)) {
             doc = sp_document_new(patterns, FALSE, FALSE);
-        }
-        if ( !doc && Inkscape::IO::file_test( patterns,
-                                  G_FILE_TEST_IS_REGULAR) )
-        {
-            doc = sp_document_new( patterns,
-                                   FALSE, FALSE );
         }
         g_free(patterns);
         if (doc) {
@@ -141,15 +133,9 @@ sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc)
     }
     /* Try to load from document */
     if (!edoc && !doc) {
-        char *gradients = g_build_filename(INKSCAPE_GRADIENTSDIR, "/gradients.svg", NULL);
+        gchar *gradients = g_build_filename(INKSCAPE_GRADIENTSDIR, "/gradients.svg", NULL);
         if (Inkscape::IO::file_test(gradients, G_FILE_TEST_IS_REGULAR)) {
             doc = sp_document_new(gradients, FALSE, FALSE);
-        }
-        if ( !doc && Inkscape::IO::file_test( gradients,
-                                  G_FILE_TEST_IS_REGULAR) )
-        {
-            doc = sp_document_new( gradients,
-                                   FALSE, FALSE );
         }
         g_free(gradients);
         if (doc) {
@@ -185,7 +171,7 @@ SPObject *get_stock_item(gchar const *urn)
 
         gchar const *e = urn + 13;
         int a = 0;
-        gchar * const name = g_strdup(e);
+        gchar * name = g_strdup(e);
         gchar *name_p = name;
         while (*name_p != ':' && *name_p != '\0'){
             name_p++;
@@ -196,7 +182,7 @@ SPObject *get_stock_item(gchar const *urn)
             name_p++;
         }
         
-        gchar * const base = g_strndup(e, a);
+        gchar * base = g_strndup(e, a);
 
         SPDesktop *desktop = inkscape_active_desktop();
         SPDocument *doc = SP_DT_DOCUMENT(desktop);

@@ -377,6 +377,7 @@ private:
 	NR::Point rdx;		// rounded edge vector
 	double length, sqlength, ilength, isqlength;	// length^2, length, 1/length^2, 1/length
 	double siEd, coEd;		// siEd=abs(rdy/length) and coEd=rdx/length
+	edge_data() : weight(0), length(0.0), sqlength(0.0), ilength(0.0), isqlength(0.0), siEd(0.0), coEd(0.0) {}
 	// used to determine the "most horizontal" edge between 2 edges
     };
     

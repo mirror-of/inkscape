@@ -24,7 +24,7 @@ class Matrix;
 class Point {
 public:
     inline Point()
-    { }
+    { _pt[X] = _pt[Y] = 0; }
 
     inline Point(Coord x, Coord y) {
         _pt[X] = x;
