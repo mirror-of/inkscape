@@ -1,0 +1,30 @@
+#ifndef _CONFIG_H_
+#define _CONFIG_H_
+
+#ifndef WIN32
+#define WIN32
+#endif
+ 
+#define VERSION "0.37cvs"
+
+#define INK_STATIC_CAST( type, ptr )static_cast< type >((ptr))
+#define INK_REINTERPRET_CAST( type, ptr ) reinterpret_cast< type >((ptr))
+
+#define INKSCAPE_VERSION      VERSION
+#define PACKAGE_LOCALE_DIR    "locale"
+#define INKSCAPE_DATADIR      "data"
+#define INKSCAPE_PIXMAPDIR    "pixmaps"
+#define INKSCAPE_EXTENSIONDIR "extensions"
+#define INKSCAPE_MODULESDIR   "modules"
+#define INKSCAPE_GLADEDIR     "pixmaps"
+
+#define GETTEXT_PACKAGE "inkscape"
+
+#undef WITH_POPT
+
+#define HAVE_STRING_H 1
+#define HAVE_MALLOC_H 1
+#define HAVE_STDLIB_H 1
+#define HAVE_SYS_STAT_H 1
+
+#endif /* _CONFIG_H_ */
