@@ -332,7 +332,7 @@ double sp_repr_get_double_attribute (SPRepr * repr, const char * key, double def
 
     if (result == NULL) return def;
 
-    return atof (result);
+    return g_ascii_strtod (result, NULL);
 }
 
 int sp_repr_get_int_attribute (SPRepr * repr, const char * key, int def)
@@ -600,7 +600,7 @@ sp_repr_get_double (SPRepr *repr, const gchar *key, double *val)
     v = sp_repr_attr (repr, key);
 
     if (v != NULL) {
-        *val = atof (v);
+        *val = g_ascii_strtod (v, NULL);
         return TRUE;
     }
 
