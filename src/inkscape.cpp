@@ -17,11 +17,15 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+
 #ifndef WIN32
 #include <unistd.h>
 #else
 #include <direct.h>
+#define _WIN32_IE 0x0400
+#include <shlobj.h> //to get appdata path
 #endif
+
 #include <time.h>
 #include <fcntl.h>
 #include <signal.h>
@@ -799,7 +803,7 @@ inkscape_reactivate_desktop (SPDesktop * desktop)
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
-	if (DESKTOP_IS_ACTIVE (desktop)) 
+	if (DESKTOP_IS_ACTIVE (desktop))
 		g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, desktop);
 }
 
@@ -870,7 +874,7 @@ inkscape_prev_desktop ()
 			d = inkscape_find_desktop_by_dkey (i);
 			if (d) break;
 		}
-	} 
+	}
 	if (!d) {
 		// find last existing
 		d = inkscape_find_desktop_by_dkey (inkscape_maximum_dkey());
@@ -881,7 +885,7 @@ inkscape_prev_desktop ()
 	return d;
 }
 
-void 
+void
 inkscape_switch_desktops_next ()
 {
 	GtkWindow *w;
@@ -890,7 +894,7 @@ inkscape_switch_desktops_next ()
 	gtk_window_present (w);
 }
 
-void 
+void
 inkscape_switch_desktops_prev ()
 {
 	GtkWindow *w;
@@ -922,7 +926,7 @@ inkscape_dialogs_toggle ()
 {
 	if (inkscape->dialogs_toggle)
 		inkscape_dialogs_hide ();
-	else 
+	else
 		inkscape_dialogs_unhide ();
 }
 
@@ -967,8 +971,8 @@ inkscape_remove_document (SPDocument *document)
 			if (child) {
 				sp_repr_change_order (recent, child, NULL);
 			} else {
-				if (sp_repr_n_children (recent) >= MAX_RECENT_DOCUMENTS) { 
-					child = recent->children;					
+				if (sp_repr_n_children (recent) >= MAX_RECENT_DOCUMENTS) {
+					child = recent->children;
 					// count to the last
 					for (i = 0; i < MAX_RECENT_DOCUMENTS - 2; i ++) child = child->next;
 					// remove all after the last
@@ -1121,6 +1125,13 @@ profile_path(const char *filename)
 	static const gchar *homedir=NULL;
 	if (!homedir) {
 		homedir = g_get_home_dir();
+#ifdef WIN32
+		if (!homedir) { //only try this is previous attempt fails
+			char pathBuf[MAX_PATH];
+			if (SHGetSpecialFolderPath(NULL, pathBuf, CSIDL_APPDATA, 1))
+				homedir = g_strdup(pathBuf);
+		}
+#endif
 		if (!homedir) {
 			homedir = g_path_get_dirname(INKSCAPE->argv0);
 		}
