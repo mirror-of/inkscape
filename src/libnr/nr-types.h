@@ -39,7 +39,7 @@ struct NRPoint {
 
 namespace NR {
 
-enum dimT { X, Y };
+enum dimT { X=0, Y };
 
 class Point{
  public:
