@@ -881,22 +881,22 @@ clonetiler_apply (GtkWidget *widget, void *)
 
             if (initial_color) {
                 guint32 rgba = sp_svg_read_color (initial_color, 0x000000ff);
-                float hsv[3];
-                sp_color_rgb_to_hsv_floatv (hsv, SP_RGBA32_R_F(rgba), SP_RGBA32_G_F(rgba), SP_RGBA32_B_F(rgba));
+                float hsl[3];
+                sp_color_rgb_to_hsl_floatv (hsl, SP_RGBA32_R_F(rgba), SP_RGBA32_G_F(rgba), SP_RGBA32_B_F(rgba));
 
                 double eff_x = (alternate_color_x? (x%2) : (x));
                 double eff_y = (alternate_color_y? (y%2) : (y));
 
-                hsv[0] += d_hue_per_x * eff_x + d_hue_per_y * eff_y + rand_hue * g_random_double_range (-1, 1);
-                if (hsv[0] < 0) hsv[0] += 1;
-                if (hsv[0] > 1) hsv[0] -= 1;
-                hsv[1] += d_saturation_per_x * eff_x + d_saturation_per_y * eff_y + rand_saturation * g_random_double_range (-1, 1);
-                hsv[1] = CLAMP (hsv[1], 0, 1);
-                hsv[2] += d_value_per_x * eff_x + d_value_per_y * eff_y + rand_value * g_random_double_range (-1, 1);
-                hsv[2] = CLAMP (hsv[2], 0, 1);
+                hsl[0] += d_hue_per_x * eff_x + d_hue_per_y * eff_y + rand_hue * g_random_double_range (-1, 1);
+                if (hsl[0] < 0) hsl[0] += 1;
+                if (hsl[0] > 1) hsl[0] -= 1;
+                hsl[1] += d_saturation_per_x * eff_x + d_saturation_per_y * eff_y + rand_saturation * g_random_double_range (-1, 1);
+                hsl[1] = CLAMP (hsl[1], 0, 1);
+                hsl[2] += d_value_per_x * eff_x + d_value_per_y * eff_y + rand_value * g_random_double_range (-1, 1);
+                hsl[2] = CLAMP (hsl[2], 0, 1);
 
                 float rgb[3];
-                sp_color_hsv_to_rgb_floatv (rgb, hsv[0], hsv[1], hsv[2]);
+                sp_color_hsl_to_rgb_floatv (rgb, hsl[0], hsl[1], hsl[2]);
                 gchar c[32];
                 sp_svg_write_color(c, 32, SP_RGBA32_F_COMPOSE(rgb[0], rgb[1], rgb[2], 1.0));
    
@@ -1579,30 +1579,30 @@ clonetiler_dialog (void)
                 clonetiler_table_attach (table, l, 0, 3, 4);
             }
 
-            // Value
+            // Lightness
             {
                 GtkWidget *l = gtk_label_new ("");
-                gtk_label_set_markup (GTK_LABEL(l), _("<b>V:</b>"));
+                gtk_label_set_markup (GTK_LABEL(l), _("<b>L:</b>"));
                 clonetiler_table_attach (table, l, 1, 4, 1);
             }
 
             {
                 GtkWidget *l = clonetiler_spinbox ("", tt, 
-                                                   _("Change the color value (brightness) by this percentage for each row"), "d_value_per_y",
+                                                   _("Change the color lightness by this percentage for each row"), "d_value_per_y",
                                                    -100, 100, "%");
                 clonetiler_table_attach (table, l, 0, 4, 2);
             }
 
             {
                 GtkWidget *l = clonetiler_spinbox ("", tt, 
-                                                   _("Change the color value (brightness) by this percentage for each column"), "d_value_per_x",
+                                                   _("Change the color lightness by this percentage for each column"), "d_value_per_x",
                                                    -100, 100, "%");
                 clonetiler_table_attach (table, l, 0, 4, 3);
             }
 
             {
                 GtkWidget *l = clonetiler_spinbox ("", tt, 
-                                                   _("Randomize the color value (brightness) by this percentage"), "rand_value",
+                                                   _("Randomize the color lightness by this percentage"), "rand_value",
                                                    0, 100, "%");
                 clonetiler_table_attach (table, l, 0, 4, 4);
             }
