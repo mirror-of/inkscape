@@ -22,23 +22,23 @@ typedef struct _NRSVP NRSVP;
 #include <glib.h>
 
 struct _NRSVPSegment {
-	gint16 wind;
-	guint16 length;
-	guint32 start;
-	float x0, x1;
+    gint16 wind;
+    guint16 length;
+    guint32 start;
+    float x0, x1;
 };
 
 struct _NRSVPFlat {
-	gint16 wind;
-	guint16 length;
-	float y;
-	float x0, x1;
+    gint16 wind;
+    guint16 length;
+    float y;
+    float x0, x1;
 };
 
 struct _NRSVP {
-	unsigned int length;
-	NRPoint *points;
-	NRSVPSegment segments[1];
+    unsigned int length;
+    NRPoint *points;
+    NRSVPSegment segments[1];
 };
 
 #define NR_SVPSEG_LENGTH(s,i) ((s)->segments[i].length)
@@ -66,21 +66,21 @@ typedef struct _NRSVL NRSVL;
 typedef struct _NRFlat NRFlat;
 
 struct _NRVertex {
-	NRVertex *next;
-	NR::Coord x, y;
+    NRVertex *next;
+    NR::Coord x, y;
 };
 
 struct _NRSVL {
-	NRSVL *next;
-	NRVertex *vertex;
-	NRRect bbox;
-	gint16 dir;
-	gint16 wind;
+    NRSVL *next;
+    NRVertex *vertex;
+    NRRect bbox;
+    gint16 dir;
+    gint16 wind;
 };
 
 struct _NRFlat {
-	NRFlat *next;
-	NR::Coord y, x0, x1;
+    NRFlat *next;
+    NR::Coord y, x0, x1;
 };
 
 NRSVP *nr_svp_from_svl (NRSVL *svl, NRFlat *flat);

@@ -21,13 +21,13 @@
 typedef struct _NRSVLBuild NRSVLBuild;
 
 struct _NRSVLBuild {
-	NRSVL **svl;
-	NRFlat **flats;
-	NRVertex *refvx;
-	int dir;
-	int reverse;
-	NR::Coord sx, sy;
-	NRRect bbox;
+    NRSVL **svl;
+    NRFlat **flats;
+    NRVertex *refvx;
+    int dir;
+    int reverse;
+    NR::Coord sx, sy;
+    NRRect bbox;
 };
 
 void nr_svl_build_finish_segment (NRSVLBuild *svlb);
@@ -63,7 +63,7 @@ void nr_svl_free_one (NRSVL *svl);
 void nr_svl_free_list (NRSVL *svl);
 
 NRSVL *nr_svl_remove (NRSVL *start, NRSVL *svp);
-NRSVL *nr_svl_insert_sorted (NRSVL *start, NRSVL *svp);
+NRSVL *nr_svl_insort (NRSVL *start, NRSVL *svp);
 NRSVL *nr_svl_move_sorted (NRSVL *start, NRSVL *svp);
 int nr_svl_compare (NRSVL *l, NRSVL *r);
 
@@ -75,6 +75,6 @@ NRFlat *nr_flat_new_full (NR::Coord y, NR::Coord x0, NR::Coord x1);
 void nr_flat_free_one (NRFlat *flat);
 void nr_flat_free_list (NRFlat *flat);
 
-NRFlat *nr_flat_insert_sorted (NRFlat *start, NRFlat *flat);
+NRFlat *nr_flat_insort (NRFlat *start, NRFlat *flat);
 
 #endif
