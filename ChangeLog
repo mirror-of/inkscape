@@ -18,7 +18,7 @@
 	* src/dialogs/xml-tree.cpp: fixing logic bug in identability checker.
 	  Added immutability test to actually close 1069772.
 	* share/icons/icons.svg, src/verbs.cpp, src/interface.cpp: adding
-	  icons for the "new" menu, vacuum, reverse, and trace.
+	  icons for the "new" menu, vacuum, reverse, make bitmap, and trace.
 
 2004-11-20  Jon A. Cruz  <jon@joncruz.org>
 

@@ -1567,7 +1567,7 @@ Verb * Verb::_base_verbs[] = {
     new SelectionVerb(SP_VERB_SELECTION_POTRACE, "SelectionPotrace", N_("_Trace Bitmap"),
         N_("Convert bitmap object to paths"), "selection_trace"),
     new SelectionVerb(SP_VERB_SELECTION_CREATE_BITMAP, "SelectionCreateBitmap", N_("_Make a Bitmap Copy"),
-        N_("Export selection to a bitmap and insert it into document"), NULL),
+        N_("Export selection to a bitmap and insert it into document"), "selection_bitmap" ),
     new SelectionVerb(SP_VERB_SELECTION_COMBINE, "SelectionCombine", N_("_Combine"),
         N_("Combine several paths into one"), "selection_combine"),
     // TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
