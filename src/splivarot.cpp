@@ -105,7 +105,7 @@ sp_selected_path_boolop (bool_op bop)
         return;
     selection = SP_DT_SELECTION (desktop);
   
-    il = (GSList *) sp_selection_item_list (selection);
+    il = (GSList *) selection->itemList();
   
     if (g_slist_length (il) < 2) {
         sp_view_set_statusf_error(SP_VIEW(desktop), _("Select at least 2 paths to perform a boolean operation."));
@@ -403,7 +403,7 @@ sp_selected_path_boolop (bool_op bop)
             sp_repr_unparent (SP_OBJECT_REPR (l->data));
         }
         sp_document_done (SP_DT_DOCUMENT (desktop));
-        sp_selection_empty (selection);
+        selection->clear();
     
         delete res;
         g_slist_free (il);
@@ -432,7 +432,7 @@ sp_selected_path_boolop (bool_op bop)
   
     g_slist_free (il);
   
-    sp_selection_empty (selection);
+    selection->clear();
 
     if ( bop == bool_op_cut || bop == bool_op_slice ) {
         int    nbRP=0;
@@ -464,7 +464,7 @@ sp_selected_path_boolop (bool_op bop)
             item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
             sp_repr_unref (repr);
       
-            sp_selection_add_item (selection, item);
+            selection->addItem (item);
       
             if (bop == bool_op_slice) {
                 SPCSSAttr *css;        
@@ -493,7 +493,7 @@ sp_selected_path_boolop (bool_op bop)
         sp_document_done (SP_DT_DOCUMENT (desktop));
         sp_repr_unref (repr);
   
-        sp_selection_set_item (selection, item);
+        selection->setItem (item);
     }
     delete res;
 }
@@ -508,14 +508,14 @@ sp_selected_path_outline ()
 
     SPSelection *selection = SP_DT_SELECTION (desktop);
 
-    if (sp_selection_is_empty (selection)) {
+    if (selection->isEmpty()) {
         sp_view_set_statusf_flash (SP_VIEW(desktop), _("Select some paths to outline."));
         return;
     }
 
     bool did = false;
 
-    for (GSList *items = g_slist_copy((GSList *) sp_selection_item_list(SP_DT_SELECTION(desktop)));
+    for (GSList *items = g_slist_copy((GSList *) selection->itemList());
          items != NULL;
          items = items->next) {
 
@@ -664,7 +664,7 @@ sp_selected_path_outline ()
         // remember parent
         SPRepr *parent = SP_OBJECT_REPR (item)->parent;
 
-        sp_selection_remove_item (selection, item);
+        selection->removeItem (item);
         sp_repr_unparent (SP_OBJECT_REPR (item));
 
         if (res->descr_nb > 1) { // if there's 0 or 1 node left, drop this path altogether
@@ -702,7 +702,7 @@ sp_selected_path_outline ()
             // move to the saved position 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
 
-            sp_selection_add_repr (selection, repr);
+            selection->addRepr (repr);
 
             sp_repr_unref (repr);
         }
@@ -800,7 +800,7 @@ sp_selected_path_create_offset_object (int expand,bool updating)
   
     selection = SP_DT_SELECTION (desktop);
   
-    item = sp_selection_item (selection);
+    item = selection->singleItem();
   
     if (item == NULL || ( !SP_IS_SHAPE (item) && !SP_IS_TEXT (item) ) ) {
         sp_view_set_statusf_error(SP_VIEW(desktop), _("Selected object is not a path, cannot inset/outset."));
@@ -921,7 +921,7 @@ sp_selected_path_create_offset_object (int expand,bool updating)
         // pas vraiment de points sur le resultat
         // donc il ne reste rien
         sp_document_done (SP_DT_DOCUMENT (desktop));
-        sp_selection_empty (selection);
+        selection->clear();
     
         delete res;
         delete orig;
@@ -973,13 +973,14 @@ sp_selected_path_create_offset_object (int expand,bool updating)
     
         sp_repr_set_attr (repr, "style", style);
         SPItem* nitem = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
+
         // The object just created from a temporary repr is only a seed. 
         // We need to invoke its write which will update its real repr (in particular adding d=)
         sp_object_invoke_write (SP_OBJECT (nitem), SP_OBJECT_REPR (nitem), SP_OBJECT_WRITE_EXT);
+
         sp_repr_unref (repr);
-        sp_selection_empty (selection);
-        sp_selection_add_item (selection, nitem);
-  
+
+        selection->setItem (nitem);
     }
   
     sp_document_done (SP_DT_DOCUMENT (desktop));
@@ -1010,14 +1011,14 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 
     SPSelection *selection = SP_DT_SELECTION (desktop);
 
-    if (sp_selection_is_empty (selection)) {
+    if (selection->isEmpty()) {
         sp_view_set_statusf_flash (SP_VIEW(desktop), _("Select some paths to inset/outset."));
         return;
     }
 
     bool did = false;
 
-    for (GSList *items = g_slist_copy((GSList *) sp_selection_item_list(SP_DT_SELECTION(desktop)));
+    for (GSList *items = g_slist_copy((GSList *) selection->itemList());
          items != NULL;
          items = items->next) {
 
@@ -1185,7 +1186,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
         // remember parent
         SPRepr *parent = SP_OBJECT_REPR (item)->parent;
 
-        sp_selection_remove_item (selection, item);
+        selection->removeItem (item);
         sp_repr_unparent (SP_OBJECT_REPR (item));
 
         if (res->descr_nb > 1) { // if there's 0 or 1 node left, drop this path altogether
@@ -1208,7 +1209,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
             // move to the saved position 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
 
-            sp_selection_add_repr (selection, repr);
+            selection->addRepr (repr);
 
             sp_repr_unref (repr);
         }
@@ -1260,18 +1261,18 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
 
     SPSelection *selection = SP_DT_SELECTION (desktop);
 
-    if (sp_selection_is_empty (selection)) {
+    if (selection->isEmpty()) {
         sp_view_set_statusf_flash (SP_VIEW(desktop), _("Select some paths to simplify."));
         return;
     }
 
     // remember selection size
-    NR::Rect bbox = sp_selection_bbox (selection);
+    NR::Rect bbox = selection->bounds();
     gdouble size = L2(bbox.dimensions());
 
     bool did = false;
 
-    for (GSList *items = g_slist_copy((GSList *) sp_selection_item_list(SP_DT_SELECTION(desktop)));
+    for (GSList *items = g_slist_copy((GSList *) selection->itemList());
          items != NULL;
          items = items->next) {
 
@@ -1309,8 +1310,10 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
         gint pos = sp_repr_position (SP_OBJECT_REPR (item));
         // remember parent
         SPRepr *parent = SP_OBJECT_REPR (item)->parent;
+        // remember id
+        const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
 
-        sp_selection_remove_item (selection, item);
+        selection->removeItem (item);
         sp_repr_unparent (SP_OBJECT_REPR (item));
 
         {
@@ -1342,13 +1345,16 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
             sp_repr_set_attr (repr, "d", str);
             g_free (str);
 
+            // restore id
+            sp_repr_set_attr (repr, "id", id);
+
             // add the new repr to the parent
             sp_repr_append_child (parent, repr);
 
             // move to the saved position 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
 
-            sp_selection_add_repr (selection, repr);
+            selection->addRepr (repr);
 
             sp_repr_unref (repr);
         }
