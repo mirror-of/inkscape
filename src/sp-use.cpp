@@ -604,7 +604,13 @@ sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use)
 static void
 sp_use_delete_self(SPObject *deleted, SPUse *self)
 {
-	SP_OBJECT(self)->deleteObject();
+	guint mode = prefs_get_int_attribute ("options.cloneorphans", "value", SP_CLONE_ORPHANS_UNLINK);
+
+	if (mode == SP_CLONE_ORPHANS_UNLINK) {
+		sp_use_unlink (self);
+	} else if (mode == SP_CLONE_ORPHANS_DELETE) {
+		SP_OBJECT(self)->deleteObject();
+	}
 }
 
 static void
@@ -707,7 +713,11 @@ sp_use_modified (SPObject *object, guint flags)
 SPItem *
 sp_use_unlink (SPUse *use)
 {
+	if (!use) return NULL;
+
 	SPRepr *repr = SP_OBJECT_REPR(use);
+	if (!repr) return NULL;
+
 	SPRepr *parent = sp_repr_parent (repr);
 	gchar *id = g_strdup (sp_repr_attr (repr, "id"));
       gint pos = sp_repr_position (repr);
