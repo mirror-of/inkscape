@@ -512,46 +512,44 @@ static void sp_image_snappoints(SPItem const *item, SnapPointsIter p)
  */
 
 static NR::Matrix
-sp_image_set_transform (SPItem *item, NR::Matrix const &xform)
+sp_image_set_transform(SPItem *item, NR::Matrix const &xform)
 {
-	SPImage *image=SP_IMAGE (item);
+	SPImage *image = SP_IMAGE(item);
 
-	/* Calculate position in parent coords */
-	NR::Point pos = NR::Point(image->x.computed, image->y.computed) * xform;
+	/* Calculate position in parent coords. */
+	NR::Point pos( NR::Point(image->x.computed, image->y.computed) * xform );
 
-	NR::Matrix remaining=xform;
-	remaining[4] = remaining[5] = 0.0;
-
-	/* Remove scaling factor */
-	NR::Point scale(sqrt(xform[0]*xform[0]+xform[1]*xform[1]),
-			sqrt(xform[2]*xform[2]+xform[3]*xform[3]));
-
+	/* This function takes care of translation and scaling, we return whatever parts we can't
+	   handle. */
+	NR::Matrix ret(NR::transform(xform));
+	NR::Point const scale(hypot(ret[0], ret[1]),
+			      hypot(ret[2], ret[3]));
 	if ( scale[NR::X] > 1e-9 ) {
-		remaining[0] /= scale[NR::X];
-		remaining[1] /= scale[NR::X];
+		ret[0] /= scale[NR::X];
+		ret[1] /= scale[NR::X];
 	} else {
-		remaining[0] = 1.0;
-		remaining[1] = 0.0;
+		ret[0] = 1.0;
+		ret[1] = 0.0;
 	}
 	if ( scale[NR::Y] > 1e-9 ) {
-		remaining[2] /= scale[NR::Y];
-		remaining[3] /= scale[NR::Y];
+		ret[2] /= scale[NR::Y];
+		ret[3] /= scale[NR::Y];
 	} else {
-		remaining[2] = 0.0;
-		remaining[3] = 1.0;
+		ret[2] = 0.0;
+		ret[3] = 1.0;
 	}
 
 	image->width = image->width.computed * scale[NR::X];
 	image->height = image->height.computed * scale[NR::Y];
 
 	/* Find position in item coords */
-	pos = pos * remaining.inverse();
+	pos = pos * ret.inverse();
 	image->x = pos[NR::X];
 	image->y = pos[NR::Y];
 
-	SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+	item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
-	return remaining;
+	return ret;
 }
 
 #ifdef ENABLE_AUTOTRACE
