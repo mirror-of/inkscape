@@ -1,0 +1,41 @@
+## Makefile.am fragment sourced by src/Makefile.am.
+
+trace/all: trace/libtrace.a
+
+trace/clean:
+	rm -f trace/libtrace.a $(trace_libtrace_a_OBJECTS)
+
+trace_libtrace_a_CPPFLAGS =	\
+	-I$(srcdir)/trace	 \
+	-I$(srcdir)/trace/potrace \
+	-DPOTRACE=\"potrace\"
+
+trace_libtrace_a_SOURCES =	\
+	trace/trace.h \
+	trace/trace.cpp \
+	trace/potrace/backend_eps.h	\
+	trace/potrace/bitmap.cpp \
+	trace/potrace/bitmap.h \
+	trace/potrace/bits.cpp \
+	trace/potrace/bits.h \
+	trace/potrace/curve.cpp \
+	trace/potrace/curve.h \
+	trace/potrace/flate.cpp \
+	trace/potrace/flate.h \
+	trace/potrace/greymap.cpp \
+	trace/potrace/greymap.h \
+	trace/potrace/lists.h \
+	trace/potrace/lzw.h	\
+	trace/potrace/main.h	\
+	trace/potrace/path.cpp \
+	trace/potrace/path.h \
+	trace/potrace/render.cpp \
+	trace/potrace/render.h \
+	trace/potrace/inkscape-potrace.cpp	\
+	trace/potrace/inkscape-potrace.h	\
+	trace/potrace/imagemap-gdk.cpp	\
+	trace/potrace/imagemap-gdk.h	\
+	trace/potrace/imagemap.cpp	\
+	trace/potrace/imagemap.h	\
+	trace/potrace/filterset.cpp	\
+	trace/potrace/filterset.h
