@@ -176,7 +176,7 @@ double namedview_vector_snap_list(SPNamedView const *nv, Snapper::PointType t, c
         NR::Point check = ( q - norm ) * s + norm;
         if (NR::LInfty( q - norm ) > MIN_DIST_NORM) {
             NR::Coord d = namedview_vector_snap(nv, t, check, check - norm);
-            if ((d < NR_HUGE) && (d < dist)) {
+            if (d < dist) {
                 dist = d;
                 NR::Dim2 const dominant = ( ( fabs( q[X] - norm[X] )  >
                                               fabs( q[Y] - norm[Y] ) )
@@ -191,6 +191,10 @@ double namedview_vector_snap_list(SPNamedView const *nv, Snapper::PointType t, c
     return ratio;
 }
 
+
+/* Try to snap points in `p' after they have been scaled by `sx' with respect to
+** the origin `norm'.
+*/
 double namedview_dim_snap_list_scale(SPNamedView const *nv, Snapper::PointType t, const std::vector<NR::Point> &p,
 				      NR::Point const &norm, double const sx, NR::Dim2 dim)
 {
@@ -209,7 +213,7 @@ double namedview_dim_snap_list_scale(SPNamedView const *nv, Snapper::PointType t
         check[dim] = (sx * (q - norm) + norm)[dim];
         if (fabs (q[dim] - norm[dim]) > MIN_DIST_NORM) {
             const gdouble d = namedview_dim_snap (nv, t, check, dim);
-            if (d < NR_HUGE && d < dist) {
+            if (d < dist) {
                 dist = d;
                 scale = (check[dim] - norm[dim]) / (q[dim] - norm[dim]);
             }
@@ -238,7 +242,7 @@ double namedview_dim_snap_list_skew(SPNamedView const *nv, Snapper::PointType t,
         check[dim] += sx * (q[!dim] - norm[!dim]);
         if (fabs (q[!dim] - norm[!dim]) > MIN_DIST_NORM) {
             const gdouble d = namedview_dim_snap (nv, t, check, dim);
-            if (d < NR_HUGE && d < fabs (dist)) {
+            if (d < fabs (dist)) {
                 dist = d;
                 skew = (check[dim] - q[dim]) / (q[!dim] - norm[!dim]);
             }
