@@ -1106,7 +1106,15 @@ options_checkbox (
     _("Scale stroke width"), 
     _("When scaling objects, scale the stroke width by the same proportion"), tt,
     vb,
-    "options.scalestroke", "value", 1,
+    "options.transform", "stroke", 1,
+    options_changed_boolean
+    );
+
+options_checkbox (
+    _("Scale rounded corners in rects"), 
+    _("When scaling rectangles, scale the radii of rounded corners"), tt,
+    vb,
+    "options.transform", "rectcorners", 0,
     options_changed_boolean
     );
 

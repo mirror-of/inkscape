@@ -692,13 +692,15 @@ sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Mat
     NR::Matrix xform(transform);
 
     // compensate for stroke scaling, depending on user preference
-    if (prefs_get_int_attribute("options.scalestroke", "value", 1) == 0) {
+    if (prefs_get_int_attribute("options.transform", "stroke", 1) == 0) {
         double expansion = NR::expansion(advertized_transform.inverse());
         sp_item_adjust_stroke_width_recursive(item, expansion);
     }
 
     // compensate rx/ry of a rect if possible
-    sp_item_adjust_rects_recursive(item, advertized_transform);
+    if (prefs_get_int_attribute("options.transform", "rectcorners", 1) == 0) {
+        sp_item_adjust_rects_recursive(item, advertized_transform);
+    }
 
     // run the object's set_transform if transforms are stored optimized
     gint preserve = prefs_get_int_attribute("options.preservetransform", "value", 0);
