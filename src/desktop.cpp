@@ -957,7 +957,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     gtk_box_pack_start (GTK_BOX (dtw->statusbar), coord_box, FALSE, FALSE, 1);
 
     dtw->layer_selector = gtk_option_menu_new();
-    gtk_tooltips_set_tip(tt, dtw->layer_selector, _("Active group"), NULL);
+    gtk_tooltips_set_tip(tt, dtw->layer_selector, _("Select layer"), NULL);
     gtk_widget_set_usize(dtw->layer_selector, -1, SP_ICON_SIZE_BUTTON);
     gtk_box_pack_start(GTK_BOX(dtw->statusbar), dtw->layer_selector, FALSE, FALSE, 1);
 

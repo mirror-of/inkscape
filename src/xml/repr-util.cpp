@@ -439,15 +439,38 @@ sp_repr_position(SPRepr const *repr)
 int
 sp_repr_n_children(SPRepr *repr)
 {
-    SPRepr * child;
-    int n;
-
-    g_assert (repr != NULL);
-
-    n = 0;
-    for (child = repr->children; child != NULL; child = child->next) n++;
-
+    int n=0;
+    g_assert(repr != NULL);
+    for ( SPRepr *child=repr->children ; child ; child = child->next )
+    {
+        n++;
+    }
     return n;
+}
+
+SPRepr *sp_repr_nth_child(SPRepr *repr, int n) {
+    g_assert(repr != NULL);
+
+    SPRepr *child=repr->children;
+    for ( ; n > 0 && child ; child = child->next ) {
+        n--;
+    }
+
+    return child;
+}
+
+int sp_repr_pos_of(SPRepr *repr) {
+    g_assert(repr != NULL);
+    g_assert(repr->parent != NULL);
+
+    SPRepr *sibling=repr->parent->children;
+
+    int n=0;
+    for ( ; sibling && sibling != repr ; sibling = sibling->next ) {
+        n++;
+    }
+
+    return ( sibling ? n : 0 );
 }
 
 void

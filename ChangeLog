@@ -13,6 +13,18 @@
 	* src/xml/repr.cpp: SPRepr's copy constructor needs to properly
 	  initialize its fields
 
+	* src/xml/repr-util.cpp, src/xml/repr-private.h,
+	  src/xml/repr.h, src/xml/repr.cpp:
+	  
+	  new child-count-related routines, and added mutation signals
+	  to SPReprDoc
+
+	* src/widgets/Makefile_insert, src/widgets/document-tree-model.cpp,
+	  src/widgets/document-tree-model.h, src/widgets/layer-selector.cpp,
+	  src/widgets/layer-selector.h:
+
+	  very cursory start on new layers UI
+
 2004-09-08  Carl Hetherington <inkscape@carlh.net>
 
 	* src/helper/stock-items.cpp: fix a bad free().  Improve coding

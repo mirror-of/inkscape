@@ -15,6 +15,8 @@ widgets_libspwidgets_a_SOURCES =	\
 	widgets/button.h	\
 	widgets/dash-selector.cpp	\
 	widgets/dash-selector.h	\
+	widgets/document-tree-model.cpp	\
+	widgets/document-tree-model.h	\
 	widgets/font-selector.cpp	\
 	widgets/font-selector.h	\
 	widgets/gradient-image.cpp	\
@@ -27,6 +29,8 @@ widgets_libspwidgets_a_SOURCES =	\
 	widgets/gradient-vector.h	\
 	widgets/icon.cpp	\
 	widgets/icon.h	\
+	widgets/layer-selector.h \
+	widgets/layer-selector.cpp \
 	widgets/menu.cpp	\
 	widgets/menu.h	\
 	widgets/paint-selector.cpp	\

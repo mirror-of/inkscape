@@ -15,6 +15,8 @@
  */
 
 #include <glib/gslist.h>
+#include <sigc++/signal.h>
+#include <sigc++/connection.h>
 
 #include "repr.h"
 #include "gc-managed.h"
@@ -89,10 +91,38 @@ struct SPReprDoc : public SPRepr, public Inkscape::GC::Finalized {
 	explicit SPReprDoc(int code);
 	~SPReprDoc();
 
+	typedef sigc::signal<void, SPRepr *, SPRepr *, SPRepr *, SPRepr *, SPRepr *> NodeMovedSignal;
+	typedef sigc::signal<void, SPRepr *, gchar const *, gchar const *, gchar const *> AttrChangedSignal;
+	typedef sigc::signal<void, SPRepr *, gchar const *, gchar const *> ContentChangedSignal;
+
+	sigc::connection connectNodeMoved(NodeMovedSignal::slot_type slot) {
+		return _node_moved_signal.connect(slot);
+	}
+	sigc::connection connectAttrChanged(AttrChangedSignal::slot_type slot) {
+		return _attr_changed_signal.connect(slot);
+	}
+	sigc::connection connectContentChanged(ContentChangedSignal::slot_type slot) {
+		return _content_changed_signal.connect(slot);
+	}
+
+	void _emitNodeMoved(SPRepr *node, SPRepr *old_parent, SPRepr *old_ref, SPRepr *new_parent, SPRepr *new_ref) {
+		_node_moved_signal.emit(node, old_parent, old_ref, new_parent, new_ref);
+	}
+	void _emitAttrChanged(SPRepr *node, gchar const *name, gchar const *old_value, gchar const *new_value) {
+		_attr_changed_signal.emit(node, name, old_value, new_value);
+	}
+	void _emitContentChanged(SPRepr *node, gchar const *old_content, gchar const *new_content) {
+		_content_changed_signal.emit(node, old_content, new_content);
+	}
+
 	bool is_logging;
 	SPReprAction *log;
 
 protected:
+	NodeMovedSignal _node_moved_signal;
+	AttrChangedSignal _attr_changed_signal;
+	ContentChangedSignal _content_changed_signal;
+
 	SPReprDoc(SPReprDoc const &doc);
 
 	SPRepr *_duplicate() const { return new SPReprDoc(*this); }

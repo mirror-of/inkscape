@@ -252,6 +252,8 @@ unsigned int sp_repr_add_child(SPRepr *repr, SPRepr *child, SPRepr *ref);
 unsigned int sp_repr_remove_child(SPRepr *repr, SPRepr *child);
 
 int sp_repr_n_children(SPRepr *repr);
+SPRepr *sp_repr_nth_child(SPRepr *repr, int n);
+int sp_repr_pos_of(SPRepr *repr);
 
 /* IO */
 
