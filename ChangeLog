@@ -5,8 +5,8 @@
 	* doc/class-hierarchy.dia: added first shot at documenting the
 	  class hierarchy in Dia
 
-	* src/modules/svg.c: change "...with xmlns:sodipodi namespace" to
-	  "...with extension namespaces"
+	* src/modules/svg.c, src/modules/win32.c: change "...with
+	  xmlns:sodipodi namespace" to "...with extension namespaces"
 
 	* src/xml/repr-action.c: fixed log optimizer to check
 	  SPReprAction::type before coalescing adjacent actions
