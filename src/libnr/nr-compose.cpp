@@ -771,7 +771,7 @@ nr_R8G8B8A8_P_R8G8B8A8_P_A8_RGBA32 (unsigned char *px, int w, int h, int rs, con
 	unsigned int r, g, b, a;
 	int x, y;
 
-	if (!rgba & 0xff) return;
+	if (!(rgba & 0xff)) return;
 
 	r = NR_RGBA32_R (rgba);
 	g = NR_RGBA32_G (rgba);
