@@ -78,7 +78,11 @@ void               flow_res::AfficheOutput(void)
 				char  savC=chars[letters[k].t_en];
 				chars[letters[k].t_en]=0;
 				printf("   letter %i : no=%i text=(%i->%i utf8 %d)", k, letters[k].no, letters[k].t_st, letters[k].t_en, letters[k].utf8_offset);
-				if ( chars[letters[k].t_st] == '\n' ) printf("\\n "); else printf("%s ", chars[letters[k].t_st]);
+				if ( chars[letters[k].t_st] == '\n' ) {
+					printf("\\n ");
+				} else {
+					printf("%s ", &chars[letters[k].t_st]);
+				}
 				printf("p=(%f:%f/%f) k=(%f:%f)\n",letters[k].x_st,letters[k].x_en,letters[k].y,letters[k].kern_x,letters[k].kern_y);
 				chars[letters[k].t_en]=savC;
 			}
