@@ -213,21 +213,28 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 		break;
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
+			/* Left mousebutton */
 
 			// save drag origin
 			xp = (gint) event->button.x; 
 			yp = (gint) event->button.y;
 
-			/* Left mousebutton */
-			sc->dragging = TRUE;
-			sc->moved = FALSE;
-			sc->item = item;
-			sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->drawing),
-					     GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-					     GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
-					     NULL, event->button.time);
-			sc->grabbed = SP_CANVAS_ITEM (desktop->drawing);
-			ret = TRUE;
+			if (!(event->button.state & GDK_SHIFT_MASK)) {
+				// if shift was pressed, do not move objects; 
+				// pass the event to root handler which will create a rubberband
+
+				sc->dragging = TRUE;
+				sc->moved = FALSE;
+				sc->item = item;
+
+				sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->drawing),
+						 GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+						 GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
+						 NULL, event->button.time);
+				sc->grabbed = SP_CANVAS_ITEM (desktop->drawing);
+			
+				ret = TRUE;
+			}
 		}
 		break;
 	case GDK_MOTION_NOTIFY:
