@@ -82,6 +82,10 @@ static const SPStyleProp props[] = {
 	{SP_ATTR_INKSCAPE_WINDOW_HEIGHT, "inkscape:window-height"},
 	{SP_ATTR_INKSCAPE_WINDOW_X, "inkscape:window-x"},
 	{SP_ATTR_INKSCAPE_WINDOW_Y, "inkscape:window-y"},
+	{SP_ATTR_INKSCAPE_GRID_BBOX, "inkscape:grid-bbox"},
+	{SP_ATTR_INKSCAPE_GUIDE_BBOX, "inkscape:guide-bbox"},
+	{SP_ATTR_INKSCAPE_GRID_POINTS, "inkscape:grid-points"},
+	{SP_ATTR_INKSCAPE_GUIDE_POINTS, "inkscape:guide-points"},
 	/* SPGuide */
 	{SP_ATTR_ORIENTATION, "orientation"},
 	{SP_ATTR_POSITION, "position"},
