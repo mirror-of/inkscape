@@ -134,16 +134,25 @@ sp_node_context_dispose (GObject *object)
 	nc->sel_changed_connection.disconnect();
 	nc->sel_changed_connection.~connection();
 
+	SPRepr *repr = NULL;
 	if (nc->nodepath) {
-		sp_repr_remove_listener_by_data (nc->nodepath->repr, ec);
-		sp_repr_unref (nc->nodepath->repr);
+		repr = nc->nodepath->repr;
+	} 
+	if (!repr && nc->knot_holder) {
+		repr = nc->knot_holder->repr;
+	}
+
+	if (repr) {
+		sp_repr_remove_listener_by_data (repr, ec);
+		sp_repr_unref (repr);
+	}
+
+	if (nc->nodepath) {
 		sp_nodepath_destroy (nc->nodepath);
 		nc->nodepath = NULL;
 	}
 
 	if (nc->knot_holder) {
-		sp_repr_remove_listener_by_data (nc->knot_holder->repr, ec);
-		sp_repr_unref (nc->knot_holder->repr);
 		sp_knot_holder_destroy (nc->knot_holder);
 		nc->knot_holder = NULL;
 	}
@@ -177,9 +186,8 @@ sp_node_context_setup (SPEventContext *ec)
 		if ( nc->nodepath) {
 			//point pack to parent in case nodepath is deleted
 			nc->nodepath->nodeContext = nc;
-		} else {
-			nc->knot_holder = sp_item_knot_holder (item, ec->desktop);
-		}
+		} 
+		nc->knot_holder = sp_item_knot_holder (item, ec->desktop);
 
 		if (nc->nodepath || nc->knot_holder) {
 			// setting listener
@@ -235,9 +243,8 @@ sp_node_context_selection_changed (SPSelection * selection, gpointer data)
 		nc->nodepath = sp_nodepath_new (desktop, item);
 		if (nc->nodepath) {
 			nc->nodepath->nodeContext = nc;
-		} else {
-			nc->knot_holder = sp_item_knot_holder (item, desktop);
 		}
+		nc->knot_holder = sp_item_knot_holder (item, desktop);
 
 		if (nc->nodepath || nc->knot_holder) {
 			// setting new listener
@@ -281,9 +288,7 @@ sp_nodepath_update_from_item (SPNodeContext *nc, SPItem *item)
 	nc->knot_holder = NULL;
 	if (item) {
 		nc->nodepath = sp_nodepath_new (desktop, item);
-		if (! nc->nodepath) {
-			nc->knot_holder = sp_item_knot_holder (item, desktop);
-		}
+         	nc->knot_holder = sp_item_knot_holder (item, desktop);
 	}
 	sp_nodepath_update_statusbar (nc->nodepath);
 }
