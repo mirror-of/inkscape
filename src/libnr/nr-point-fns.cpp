@@ -7,11 +7,11 @@ using NR::Point;
 
 /** Compute the L infinity, or maximum, norm of \a p. */
 NR::Coord NR::LInfty(Point const &p) {
-	NR::Coord d=0;
-	for ( int i = 0 ; i < 2 ; i++ ) {
-		d = std::max(d, fabs(p[i]));
-	}
-	return d;
+	NR::Coord const a(fabs(p[NR::X]));
+	NR::Coord const b(fabs(p[NR::Y]));
+	return ( a < b || isnan(b)
+		 ? b
+		 : a );
 }
 
 NR::Coord NR::atan2(Point const p) {

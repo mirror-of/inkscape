@@ -1,5 +1,8 @@
 2004-10-22  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-point-fns.cpp (LInfty): Fix bug with NaN coordinates:
+	  return NaN (rather than unspecified behaviour).
+
 	* src/pencil-context.cpp: Fix bug: undesirable interaction between
 	  snapping and snap-to-anchor.
 
