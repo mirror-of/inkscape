@@ -2,6 +2,12 @@
 
 	* src/sp-image.cpp: prospective fix for bug #979858
 
+	* src/select-context.cpp, src/select-context.h,
+	  src/seltrans.cpp, src/seltrans.h:
+
+	  gave SPSelTrans its own Inkscape::MessageContext, fixing
+	  bug #977971
+
 2004-07-10  Kees Cook  <kees@outflux.net>
 
 	* src/knot.cpp: solved bug #988513: knot could stay grabbed in

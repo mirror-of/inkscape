@@ -36,7 +36,6 @@ struct SPSelectContext : public SPEventContext {
 	SPCanvasItem *grabbed;
 	SPSelTrans *_seltrans;
 	Inkscape::SelectionDescriber *_describer;
-	Inkscape::MessageContext *_message_context;
 };
 
 struct SPSelectContextClass {

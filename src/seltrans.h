@@ -20,6 +20,7 @@
 #include "forward.h"
 #include "knot.h"
 #include "selcue.h"
+#include "message-context.h"
 #include <vector>
 
 class SPSelTrans;
@@ -72,8 +73,13 @@ struct SPSelTrans {
 
 	SPSelCue selcue;
 
+	Inkscape::MessageContext &messageContext() {
+		return _message_context;
+	}
+
 	SigC::Connection _sel_changed_connection;
 	SigC::Connection _sel_modified_connection;
+	Inkscape::MessageContext _message_context;
 };
 
 /*

@@ -94,7 +94,7 @@ sp_seltrans_handle_event(SPKnot *knot, GdkEvent *event, gpointer)
 
 SPSelTrans::SPSelTrans(SPDesktop *desktop)
 : box(NR::Point(0,0), NR::Point(0,0)),
-  selcue(desktop)
+  selcue(desktop), _message_context(desktop->messageStack())
 {
 	gint i;
 
@@ -386,6 +386,8 @@ void sp_sel_trans_ungrab(SPSelTrans *seltrans)
 		g_slist_free(seltrans->stamp_cache);
 		seltrans->stamp_cache = NULL;
 	}
+
+        seltrans->_message_context.clear();
 }
 
 /* fixme: This is really bad, as we compare positoons for each stamp (Lauris) */
@@ -764,8 +766,9 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
     pt = ( point - norm ) * s + norm;
     
     /* Status text */
-    desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,
-                                    _("Scale %0.2f%%, %0.2f%%"), 100 * s[NR::X], 100 * s[NR::Y]);
+    seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE,
+                                    _("Scale %0.2f%%, %0.2f%%"),
+                                    100 * s[NR::X], 100 * s[NR::Y]);
     
     return TRUE;
 }
@@ -827,7 +830,9 @@ gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle con
 	}
 
 	// status text
-        desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, _("Scale %0.2f%%, %0.2f%%"), 100 * s[NR::X], 100 * s[NR::Y]);
+        seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE,
+                                        _("Scale %0.2f%%, %0.2f%%"),
+                                        100 * s[NR::X], 100 * s[NR::Y]);
 
 	return TRUE;
 }
@@ -894,8 +899,10 @@ gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const 
     skew[dim_b] = 0;
 
     // status text
-    desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE, 
-                                    _("Skew %0.2f%c %0.2f%c"), 100 * fabs(skew[1]), '%', 100 * fabs(skew[0]), '%');
+    seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE, 
+                                    _("Skew %0.2f%c %0.2f%c"),
+                                    100 * fabs(skew[1]), '%',
+                                    100 * fabs(skew[0]), '%');
     
     return TRUE;
 }
