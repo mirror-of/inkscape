@@ -17,7 +17,7 @@
 #include "color.h"
 
 struct _SPColorSpace {
-	unsigned char *name;
+	gchar *name;
 };
 
 static const SPColorSpace RGB = {"RGB"};
