@@ -36,7 +36,7 @@ public:
 
     virtual void init();
 
-    SPColorSelector* ColorNotebook::getCurrentSelector();
+    SPColorSelector* getCurrentSelector();
     void switchPage( GtkNotebook *notebook, GtkNotebookPage *page, guint page_num );
 
     GtkWidget* addPage( GType page_type, guint submode );
