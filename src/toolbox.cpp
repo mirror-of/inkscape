@@ -1138,6 +1138,20 @@ sp_stb_defaults (GtkWidget *widget,  SPWidget *tbl)
 	spinbutton_defocus (GTK_OBJECT (tbl));
 }
 
+
+void
+sp_toolbox_add_label (GtkWidget * tbl, const gchar * title)
+{
+    GtkWidget *boxl = gtk_hbox_new (FALSE, 0);
+    gtk_widget_set_size_request (boxl, MODE_LABEL_WIDTH, -1);
+    GtkWidget *l = gtk_label_new (NULL);
+    gtk_label_set_markup (GTK_LABEL(l), title);
+    gtk_box_pack_end (GTK_BOX (boxl), l, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (tbl), boxl, FALSE, FALSE, 0);
+    gtk_object_set_data (GTK_OBJECT (tbl), "mode_label", l);
+}
+
+
 static GtkWidget *
 sp_star_toolbox_new (SPDesktop *desktop)
 {
@@ -1148,15 +1162,7 @@ sp_star_toolbox_new (SPDesktop *desktop)
 
     GtkTooltips *tt = gtk_tooltips_new ();
 
-    {
-        GtkWidget *boxl = gtk_hbox_new (FALSE, 0);
-        gtk_widget_set_size_request (boxl, MODE_LABEL_WIDTH, -1);
-        GtkWidget *l = gtk_label_new (NULL);
-        gtk_label_set_markup (GTK_LABEL(l), _("<b>New:</b>"));
-        gtk_box_pack_end (GTK_BOX (boxl), l, FALSE, FALSE, 0);
-        gtk_box_pack_start (GTK_BOX (tbl), boxl, FALSE, FALSE, 0);
-        gtk_object_set_data (GTK_OBJECT (tbl), "mode_label", l);
-    }
+    sp_toolbox_add_label(tbl, _("<b>New:</b>"));
 
     /* Magnitude */
     {
@@ -1230,9 +1236,9 @@ sp_star_toolbox_new (SPDesktop *desktop)
     {
     GtkWidget *hb = gtk_hbox_new (FALSE, 1);
     GtkWidget *b = gtk_button_new_with_label (_("Defaults"));
+    gtk_tooltips_set_tip (tt, b, _("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults)"), NULL);
     gtk_widget_show (b);
     gtk_container_add (GTK_CONTAINER (hb), b);
-    gtk_tooltips_set_tip (tt, b, _("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults)"), NULL);
     gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_stb_defaults), tbl);
     gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
     }
@@ -1433,15 +1439,7 @@ sp_rect_toolbox_new (SPDesktop *desktop)
 
     GtkTooltips *tt = gtk_tooltips_new ();
 
-    {
-        GtkWidget *boxl = gtk_hbox_new (FALSE, 0);
-        gtk_widget_set_size_request (boxl, MODE_LABEL_WIDTH, -1);
-        GtkWidget *l = gtk_label_new (NULL);
-        gtk_label_set_markup (GTK_LABEL(l), _("<b>New:</b>"));
-        gtk_box_pack_end (GTK_BOX (boxl), l, FALSE, FALSE, 0);
-        gtk_box_pack_start (GTK_BOX (tbl), boxl, FALSE, FALSE, 0);
-        gtk_object_set_data (GTK_OBJECT (tbl), "mode_label", l);
-    }
+    sp_toolbox_add_label(tbl, _("<b>New:</b>"));
 
     // rx/ry units menu: create
     GtkWidget *us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
@@ -1683,15 +1681,7 @@ sp_spiral_toolbox_new (SPDesktop *desktop)
 
     GtkTooltips *tt = gtk_tooltips_new ();
 
-    {
-        GtkWidget *boxl = gtk_hbox_new (FALSE, 0);
-        gtk_widget_set_size_request (boxl, MODE_LABEL_WIDTH, -1);
-        GtkWidget *l = gtk_label_new (NULL);
-        gtk_label_set_markup (GTK_LABEL(l), _("<b>New:</b>"));
-        gtk_box_pack_end (GTK_BOX (boxl), l, FALSE, FALSE, 0);
-        gtk_box_pack_start (GTK_BOX (tbl), boxl, FALSE, FALSE, 0);
-        gtk_object_set_data (GTK_OBJECT (tbl), "mode_label", l);
-    }
+    sp_toolbox_add_label(tbl, _("<b>New:</b>"));
 
     /* Revolution */
     {
@@ -2175,15 +2165,7 @@ sp_arc_toolbox_new (SPDesktop *desktop)
 
     GtkTooltips *tt = gtk_tooltips_new ();
 
-    {
-        GtkWidget *boxl = gtk_hbox_new (FALSE, 0);
-        gtk_widget_set_size_request (boxl, MODE_LABEL_WIDTH, -1);
-        GtkWidget *l = gtk_label_new (NULL);
-        gtk_label_set_markup (GTK_LABEL(l), _("<b>New:</b>"));
-        gtk_box_pack_end (GTK_BOX (boxl), l, FALSE, FALSE, 0);
-        gtk_box_pack_start (GTK_BOX (tbl), boxl, FALSE, FALSE, 0);
-        gtk_object_set_data (GTK_OBJECT (tbl), "mode_label", l);
-    }
+    sp_toolbox_add_label(tbl, _("<b>New:</b>"));
 
     /* Start */
     {

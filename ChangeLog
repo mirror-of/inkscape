@@ -2,6 +2,7 @@
 
 	* src/dialogs/xml-tree.cpp: added better context to the status bar.
 	  added warning flash for id conflicts.
+	* src/toolbox.cpp: killed some copy/paste code while bug hunting.
 
 2004-11-08  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
