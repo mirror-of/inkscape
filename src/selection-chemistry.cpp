@@ -826,6 +826,9 @@ void sp_selection_paste_style()
 
 void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine)
 {
+    if (selection->isEmpty())
+        return;
+
     for (GSList const *l = selection->itemList(); l != NULL; l = l-> next) {
         SPItem *item = SP_ITEM(l->data);
 
@@ -862,6 +865,9 @@ sp_selection_scale_absolute(SPSelection *selection,
                             double const x0, double const x1,
                             double const y0, double const y1)
 {
+    if (selection->isEmpty())
+        return;
+
     NR::Rect const bbox(selection->bounds());
 
     NR::translate const p2o(-bbox.min());
@@ -878,6 +884,9 @@ sp_selection_scale_absolute(SPSelection *selection,
 
 void sp_selection_scale_relative(SPSelection *selection, NR::Point const &align, NR::scale const &scale)
 {
+    if (selection->isEmpty())
+        return;
+
     // don't try to scale above 1 Mpt, it won't display properly and will crash sooner or later anyway
     NR::Rect const bbox(selection->bounds());
     if ( bbox.extent(NR::X) * scale[NR::X] > 1e6  ||
@@ -980,6 +989,9 @@ void sp_selection_rotate_90_ccw()
 void
 sp_selection_rotate(SPSelection *selection, gdouble const angle_degrees)
 {
+    if (selection->isEmpty())
+        return;
+
     NR::Point const center(selection->bounds().midpoint());
 
     sp_selection_rotate_relative(selection, center, angle_degrees);
@@ -996,6 +1008,9 @@ sp_selection_rotate(SPSelection *selection, gdouble const angle_degrees)
 void
 sp_selection_rotate_screen(SPSelection *selection, gdouble angle)
 {
+    if (selection->isEmpty())
+        return;
+
     NR::Rect const bbox(selection->bounds());
     NR::Point const center(bbox.midpoint());
 
@@ -1016,6 +1031,9 @@ sp_selection_rotate_screen(SPSelection *selection, gdouble angle)
 void
 sp_selection_scale(SPSelection *selection, gdouble grow)
 {
+    if (selection->isEmpty())
+        return;
+
     NR::Rect const bbox(selection->bounds());
     NR::Point const center(bbox.midpoint());
     double const max_len = bbox.maxExtent();
@@ -1044,6 +1062,9 @@ sp_selection_scale_screen(SPSelection *selection, gdouble grow_pixels)
 void
 sp_selection_scale_times(SPSelection *selection, gdouble times)
 {
+    if (selection->isEmpty())
+        return;
+
     NR::Point const center(selection->bounds().midpoint());
     sp_selection_scale_relative(selection, center, NR::scale(times, times));
     sp_document_done(SP_DT_DOCUMENT(selection->desktop()));
