@@ -31,6 +31,7 @@
 
 //Another hack
 #include <gtk/gtkentry.h>
+#include <gtk/gtkexpander.h>
 
 
 #include <vector>
@@ -1116,6 +1117,23 @@ void findEntryWidgets(Gtk::Container *parent, std::vector<Gtk::Entry *> &result)
 
 }
 
+void findExpanderWidgets(Gtk::Container *parent, std::vector<Gtk::Expander *> &result)
+{
+    if (!parent)
+        return;
+    std::vector<Gtk::Widget *> children = parent->get_children();
+    for (unsigned int i=0; i<children.size() ; i++)
+        {
+        Gtk::Widget *child = children[i];
+        GtkWidget *wid = child->gobj();
+        if (GTK_IS_EXPANDER(wid))
+           result.push_back((Gtk::Expander *)child);
+        else if (GTK_IS_CONTAINER(wid))
+            findExpanderWidgets((Gtk::Container *)child, result);
+        }
+
+}
+
 
 /**
  * Constructor
@@ -1165,15 +1183,26 @@ FileSaveDialogImpl::FileSaveDialogImpl(char const *dir,
     //Let's do some customization
     fileNameEntry = NULL;
     Gtk::Container *cont = get_toplevel();
-    std::vector<Gtk::Entry *> result;
-    findEntryWidgets(cont, result);
-    //g_message("Found %d entry widgets\n", result.size());
-    if (result.size() >=1 )
+    std::vector<Gtk::Entry *> entries;
+    findEntryWidgets(cont, entries);
+    //g_message("Found %d entry widgets\n", entries.size());
+    if (entries.size() >=1 )
         {
         //Catch when user hits [return] on the text field
-        fileNameEntry = result[0];
+        fileNameEntry = entries[0];
         fileNameEntry->signal_activate().connect( 
              sigc::mem_fun(*this, &FileSaveDialogImpl::fileNameEntryChangedCallback) );
+        }
+
+    //Let's do more customization
+    std::vector<Gtk::Expander *> expanders;
+    findExpanderWidgets(cont, expanders);
+    //g_message("Found %d expander widgets\n", expanders.size());
+    if (expanders.size() >=1 )
+        {
+        //Always show the file list
+        Gtk::Expander *expander = expanders[0];
+        expander->set_expanded(true);
         }
 
 
