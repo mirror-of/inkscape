@@ -27,6 +27,7 @@
 #include "print.h"
 #include "document.h"
 #include "desktop.h"
+#include "marker-status.h"
 #include "selection.h"
 #include "desktop-handles.h"
 #include "sp-paint-server.h"
@@ -288,9 +289,7 @@ sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai)
 
 	style = ((SPObject *) shape)->style;
 
-#ifdef DEBUG_MARKERS
-	g_message("sp_shape_update_marker_view:  Updating views of markers");
-#endif
+	marker_status("sp_shape_update_marker_view:  Updating views of markers");
 	nstart = 0;
 	nmid = 0;
 	nend = 0;
@@ -525,9 +524,7 @@ sp_shape_marker_release (SPObject *marker, SPShape *shape)
 
 	item = (SPItem *) shape;
 
-#ifdef DEBUG_MARKERS
-	g_message("sp_shape_marker_release:  Releasing markers");
-#endif
+	marker_status("sp_shape_marker_release:  Releasing markers");
 	for (i=0; i<SP_MARKER_LOC_QTY; i++) {
 	  if (marker == shape->marker[i]) {
 	    SPItemView *v;
