@@ -382,9 +382,9 @@ sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font, double siz
 			PangoFontDescription *descr_ = pango_font_description_from_string (descr);
 
 			PangoFontDescription *best_ = pango_font_description_from_string ((fsel->styles.records)[0].descr);
-			uint best_i = 0;
+			guint best_i = 0;
 
-			for (uint i = 0; i < fsel->styles.length; i++) {
+			for (guint i = 0; i < fsel->styles.length; i++) {
 				PangoFontDescription *try_ = pango_font_description_from_string ((fsel->styles.records)[i].descr);
 				if (pango_font_description_better_match (descr_, best_, try_)) {
 					pango_font_description_free (best_);
