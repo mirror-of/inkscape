@@ -11,6 +11,9 @@
 	  src/libnrtype/FlowStyle.h, src/libnrtype/FlowUtils.h:
 	  remove stdint.h which isn't being used here
 
+	* src/widgets/icon.h, src/widgets/icon.cpp:
+	  icon greys out when insensitive
+
 2004-11-11  Kees Cook  <kees@outflux.net>
 
     * src/seltrans.cpp, src/select-context.cpp: ref counting SPObjects

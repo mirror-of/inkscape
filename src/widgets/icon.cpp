@@ -105,6 +105,10 @@ sp_icon_destroy (GtkObject *object)
 		g_object_unref(G_OBJECT(icon->pb));
 		icon->pb = NULL;
 	}
+	if (icon->pb_faded) {
+		g_object_unref(G_OBJECT(icon->pb_faded));
+		icon->pb_faded = NULL;
+	}
 
 	((GtkObjectClass *) (parent_class))->destroy (object);
 }
@@ -153,9 +157,24 @@ sp_icon_new_full (unsigned int size, unsigned int scale, const gchar *name)
 	g_snprintf (c, 256, "%d:%d:%s", icon->size, scale, name);
 	pixels = sp_icon_image_load_gtk ((GtkWidget *) icon, name, icon->size, scale);
 
-	/* TODO: If pixels == NULL then write to stderr that we couldn't find NAME.xpm,
-	   and suggest doing `make install'. */
-	icon->pb = gdk_pixbuf_new_from_data(pixels, GDK_COLORSPACE_RGB, TRUE, 8, icon->size, icon->size, icon->size * 4, (GdkPixbufDestroyNotify)nr_free, NULL);
+	if (pixels) {
+		icon->pb = gdk_pixbuf_new_from_data(pixels, GDK_COLORSPACE_RGB, TRUE, 8, icon->size, icon->size, icon->size * 4, (GdkPixbufDestroyNotify)nr_free, NULL);
+		icon->pb_faded = gdk_pixbuf_copy(icon->pb);
+
+		pixels = gdk_pixbuf_get_pixels(icon->pb_faded);
+		size_t stride = gdk_pixbuf_get_rowstride(icon->pb_faded);
+		pixels += 3; // alpha
+		for ( int row = 0 ; row < icon->size ; row++ ) {
+			guchar *row_pixels=pixels;
+			for ( int column = 0 ; column < icon->size ; column++ )
+			{
+				*row_pixels = *row_pixels >> 1;
+				row_pixels += 4;
+			}
+			pixels += stride;
+		}
+	}
+	/* we should do something useful if we can't load the image */
 
 	return (GtkWidget *) icon;
 }
@@ -242,20 +261,23 @@ static void sp_icon_paint(SPIcon *icon, GdkRectangle const *area)
 {
 	GtkWidget &widget = *GTK_WIDGET(icon);
 
-	int const padx = ( ( widget.allocation.width > icon->size )
-			   ? ( widget.allocation.width - icon->size ) / 2
-			   : 0 );
-	int const pady = ( ( widget.allocation.height > icon->size )
-			   ? ( widget.allocation.height - icon->size ) / 2
-			   : 0 );
+	GdkPixbuf *image;
+	image = GTK_WIDGET_IS_SENSITIVE(&widget) ? icon->pb : icon->pb_faded;
 
-	int const x0 = std::max(area->x, widget.allocation.x + padx);
-	int const y0 = std::max(area->y, widget.allocation.y + pady);
-	int const x1 = std::min(area->x + area->width,  widget.allocation.x + padx + static_cast<int>(icon->size) );
-	int const y1 = std::min(area->y + area->height, widget.allocation.y + pady + static_cast<int>(icon->size) );
+	if (image) {
+		int const padx = ( ( widget.allocation.width > icon->size )
+				   ? ( widget.allocation.width - icon->size ) / 2
+				   : 0 );
+		int const pady = ( ( widget.allocation.height > icon->size )
+				   ? ( widget.allocation.height - icon->size ) / 2
+				   : 0 );
 
-	if (icon->pb) {
-		gdk_draw_pixbuf(GDK_DRAWABLE(widget.window), NULL, icon->pb,
+		int const x0 = std::max(area->x, widget.allocation.x + padx);
+		int const y0 = std::max(area->y, widget.allocation.y + pady);
+		int const x1 = std::min(area->x + area->width,  widget.allocation.x + padx + static_cast<int>(icon->size) );
+		int const y1 = std::min(area->y + area->height, widget.allocation.y + pady + static_cast<int>(icon->size) );
+
+		gdk_draw_pixbuf(GDK_DRAWABLE(widget.window), NULL, image,
 				x0 - widget.allocation.x - padx,
 				y0 - widget.allocation.y - pady,
 				x0, y0,

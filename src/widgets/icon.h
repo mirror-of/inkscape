@@ -34,6 +34,7 @@ struct SPIcon {
 	int size;
 
 	GdkPixbuf *pb;
+	GdkPixbuf *pb_faded;
 };
 
 struct SPIconClass {
