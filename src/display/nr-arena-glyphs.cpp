@@ -199,12 +199,12 @@ nr_arena_glyphs_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state,
       font_style nstyl;
       nstyl.transform=t;
       nstyl.stroke_width=MAX (0.125, glyphs->style->stroke_width.computed * scale);
-      if ( glyphs->style->stroke_linecap.value == SP_STROKE_LINECAP_BUTT ) nstyl.stroke_cap=butt_straight;
-      if ( glyphs->style->stroke_linecap.value == SP_STROKE_LINECAP_ROUND ) nstyl.stroke_cap=butt_round;
-      if ( glyphs->style->stroke_linecap.value == SP_STROKE_LINECAP_SQUARE ) nstyl.stroke_cap=butt_square;
-      if ( glyphs->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_MITER ) nstyl.stroke_join=join_pointy;
-      if ( glyphs->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_ROUND ) nstyl.stroke_join=join_round;
-      if ( glyphs->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_BEVEL ) nstyl.stroke_join=join_straight;
+      if ( glyphs->style->stroke_linecap.computed == SP_STROKE_LINECAP_BUTT ) nstyl.stroke_cap=butt_straight;
+      if ( glyphs->style->stroke_linecap.computed == SP_STROKE_LINECAP_ROUND ) nstyl.stroke_cap=butt_round;
+      if ( glyphs->style->stroke_linecap.computed == SP_STROKE_LINECAP_SQUARE ) nstyl.stroke_cap=butt_square;
+      if ( glyphs->style->stroke_linejoin.computed == SP_STROKE_LINEJOIN_MITER ) nstyl.stroke_join=join_pointy;
+      if ( glyphs->style->stroke_linejoin.computed == SP_STROKE_LINEJOIN_ROUND ) nstyl.stroke_join=join_round;
+      if ( glyphs->style->stroke_linejoin.computed == SP_STROKE_LINEJOIN_BEVEL ) nstyl.stroke_join=join_straight;
       nstyl.nbDash=0;
       nstyl.dashes=NULL;
 		  if ( glyphs->style->stroke_dash.n_dash > 0 ) {

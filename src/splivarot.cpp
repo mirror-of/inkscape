@@ -625,8 +625,8 @@ sp_selected_path_outline ()
             SPStyle *i_style = SP_OBJECT (item)->style;
             int jointype, captype;
 
-            jointype = i_style->stroke_linejoin.value;
-            captype = i_style->stroke_linecap.value;
+            jointype = i_style->stroke_linejoin.computed;
+            captype = i_style->stroke_linecap.computed;
             o_width = i_style->stroke_width.computed;
 
             switch (jointype) {
