@@ -119,6 +119,9 @@ Inkscape *inkscape = NULL;
 
 static void (* segv_handler) (int) = NULL;
 
+const gchar* preferences_file = "preferences.xml";
+const gchar* extensions_file = "extensions.xml";
+
 GType
 inkscape_get_type (void)
 {
@@ -418,6 +421,10 @@ inkscape_segv_handler (int signum)
 		}
 	}
 
+	if (inkscape->preferences) {
+		inkscape_save_preferences (inkscape);
+	}
+
 	g_warning ("Emergency save completed, now crashing...");
 
 	/* Show nice dialog box */
@@ -514,7 +521,7 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
 	if (stat (fn, &s)) {
 		/* No such file */
 		/* fixme: Think out something (Lauris) */
-		if (!strcmp ((char*)filename, "extensions")) {
+		if (!strcmp ((char*)filename, extensions_file)) {
 			inkscape_init_extensions (INKSCAPE);
 		} else {
 			inkscape_init_preferences (INKSCAPE);
@@ -562,7 +569,7 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
 void
 inkscape_load_preferences (Inkscape *inkscape)
 {
-	inkscape_load_config ("preferences", inkscape->preferences, preferences_skeleton, PREFERENCES_SKELETON_SIZE,
+	inkscape_load_config (preferences_file, inkscape->preferences, preferences_skeleton, PREFERENCES_SKELETON_SIZE,
 			      _("%s is not regular file.\n"
 				"Although inkscape will run, you can\n"
 				"neither load nor save preferences\n"),
@@ -582,7 +589,7 @@ inkscape_load_preferences (Inkscape *inkscape)
 void
 inkscape_load_extensions (Inkscape *inkscape)
 {
-	inkscape_load_config ("extensions", inkscape->extensions, extensions_skeleton, EXTENSIONS_SKELETON_SIZE,
+	inkscape_load_config (extensions_file, inkscape->extensions, extensions_skeleton, EXTENSIONS_SKELETON_SIZE,
 			      _("%s is not regular file.\n"
 				"Although inkscape will run, you are\n"
 				"not able to use extensions (plugins)\n"),
@@ -601,9 +608,12 @@ inkscape_save_preferences (Inkscape * inkscape)
 	gchar * fn;
 
 #ifdef WIN32
-	fn = g_strdup ("inkscape/preferences");
+	//FIXME: find out if this works on windows:
+	//fn = g_build_filename (g_get_home_dir (), ".inkscape/", preferences_file, NULL);
+	//this is the old code storing in current dir:
+	fn = g_strdup ("inkscape/preferences.xml");
 #else
-	fn = g_build_filename (g_get_home_dir (), ".inkscape/preferences", NULL);
+	fn = g_build_filename (g_get_home_dir (), ".inkscape/", preferences_file, NULL);
 #endif
 
 	sp_repr_save_file (inkscape->preferences, fn);
@@ -947,7 +957,7 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 static void
 inkscape_init_preferences (Inkscape *inkscape)
 {
-	inkscape_init_config (inkscape->preferences, "preferences", preferences_skeleton, PREFERENCES_SKELETON_SIZE,
+	inkscape_init_config (inkscape->preferences, preferences_file, preferences_skeleton, PREFERENCES_SKELETON_SIZE,
 			      _("Cannot create directory %s.\n"
 				"Although inkscape will run, you\n"
 				"are neither able to load nor save\n"
@@ -969,7 +979,7 @@ inkscape_init_preferences (Inkscape *inkscape)
 static void
 inkscape_init_extensions (Inkscape *inkscape)
 {
-	inkscape_init_config (inkscape->extensions, "extensions", extensions_skeleton, EXTENSIONS_SKELETON_SIZE,
+	inkscape_init_config (inkscape->extensions, extensions_file, extensions_skeleton, EXTENSIONS_SKELETON_SIZE,
 			      _("Cannot create directory %s.\n"
 				"Although inkscape will run, you are\n"
 				"not able to use extensions (plugins)\n"),
@@ -997,6 +1007,12 @@ inkscape_refresh_display (Inkscape *inkscape)
 void
 inkscape_exit (Inkscape *inkscape)
 {
+	//FIXME: emit here shutdown signal so that dialogs could remember layout
+
+	if (inkscape->preferences) {
+		inkscape_save_preferences (inkscape);
+	}
+
 	gtk_main_quit ();
 }
 
