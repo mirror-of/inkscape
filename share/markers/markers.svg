@@ -20,7 +20,8 @@
        id="Club"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="Club">
       <path transform="scale(0.6)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:0.74587913pt;marker-start:none;"
          d="M -1.5971367,-7.0977635 C -3.4863874,-7.0977635 -5.0235187,-5.5606321 -5.0235187,-3.6713813 C -5.0235187,-3.0147015 -4.7851656,-2.4444556 -4.4641095,-1.9232271 C -4.5028609,-1.8911157 -4.5437814,-1.8647646 -4.5806531,-1.8299921 C -5.2030765,-2.6849849 -6.1700514,-3.2751330 -7.3077730,-3.2751330 C -9.1970245,-3.2751331 -10.734155,-1.7380016 -10.734155,0.15124914 C -10.734155,2.0404999 -9.1970245,3.5776313 -7.3077730,3.5776313 C -6.3143268,3.5776313 -5.4391540,3.1355702 -4.8137404,2.4588126 C -4.9384274,2.8137041 -5.0235187,3.1803000 -5.0235187,3.5776313 C -5.0235187,5.4668819 -3.4863874,7.0040135 -1.5971367,7.0040135 C 0.29211394,7.0040135 1.8292454,5.4668819 1.8292454,3.5776313 C 1.8292454,2.7842354 1.5136868,2.0838028 1.0600576,1.5031550 C 2.4152718,1.7663868 3.7718375,2.2973711 4.7661444,3.8340272 C 4.0279463,3.0958289 3.5540908,1.7534117 3.5540908,-0.058529361 L 2.9247554,-0.10514681 L 3.5074733,-0.12845553 C 3.5074733,-1.9403966 3.9580199,-3.2828138 4.6962183,-4.0210121 C 3.7371277,-2.5387813 2.4390549,-1.9946496 1.1299838,-1.7134486 C 1.5341802,-2.2753578 1.8292454,-2.9268556 1.8292454,-3.6713813 C 1.8292454,-5.5606319 0.29211394,-7.0977635 -1.5971367,-7.0977635 z "
@@ -31,7 +32,8 @@
        id="Torso"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="Torso">
   <g transform="scale(0.7)"
      id="g2045">
     <path
@@ -92,7 +94,8 @@
        id="Legs"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="Legs">
   <g transform="scale(0.7)"
      id="g1163">
     <g
@@ -128,7 +131,8 @@
        id="CurvyCross"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="CurvyCross">
       <g id="g948"
          transform="scale(0.6)">
         <path
@@ -147,7 +151,8 @@
        id="CurveOut"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="CurveOut">
       <path
          transform="scale(0.6)"
          style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none;"
@@ -159,7 +164,8 @@
        id="CurveIn"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="CurveIn">
       <path
          transform="scale(0.6)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none;fill:none;"
@@ -174,7 +180,8 @@
        id="SemiCircleOut"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="SemiCircleOut">
       <path
          transform="scale(0.6) translate(7.125493,0.763446)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none;"
@@ -186,7 +193,8 @@
        id="SemiCircleIn"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="SemiCircleIn">
       <path
          transform="scale(0.6)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none;"
@@ -201,7 +209,8 @@
        id="StopS"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="StopS">
       <path
          transform="scale(0.2)"
          style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;"
@@ -212,7 +221,8 @@
        id="StopM"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="StopM">
       <path
          transform="scale(0.4)"
          style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;"
@@ -223,7 +233,8 @@
        id="StopL"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="StopL">
       <path
          transform="scale(0.8)"
          style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;"
@@ -240,7 +251,8 @@
        id="TriangleOutS"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="TriangleOutS">
       <path
          transform="scale(0.2)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
@@ -252,7 +264,8 @@
        id="TriangleOutM"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="TriangleOutM">
       <path
          transform="scale(0.4)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
@@ -264,7 +277,8 @@
        id="TriangleOutL"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="TriangleOutL">
       <path
          transform="scale(0.8)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
@@ -276,7 +290,8 @@
        id="TriangleInS"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="TriangleInS">
       <path
          transform="scale(-0.2)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
@@ -288,7 +303,8 @@
        id="TriangleInM"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="TriangleInM">
       <path
          transform="scale(-0.4)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
@@ -300,7 +316,8 @@
        id="TriangleInL"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="TriangleInL">
       <path
          transform="scale(-0.8)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
@@ -317,7 +334,8 @@
        id="DiamondS"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="DiamondS">
       <path
          transform="scale(0.2)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
@@ -328,7 +346,8 @@
        id="DiamondM"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="DiamondM">
       <path
          transform="scale(0.4)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
@@ -339,7 +358,8 @@
        id="DiamondL"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="DiamondL">       
       <path
          transform="scale(0.8)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
@@ -354,7 +374,8 @@
        id="SquareS"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="SquareS">
       <path
          transform="scale(0.2)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
@@ -366,7 +387,8 @@
        id="SquareM"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="SquareM">
       <path
          transform="scale(0.4)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
@@ -378,7 +400,8 @@
        id="SquareL"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="SquareL">
       <path
          transform="scale(0.8)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
@@ -393,7 +416,8 @@
        id="Dot_s"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="Dot_s">
       <path
          transform="scale(0.2) translate(7.125493, 1)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none;"
@@ -404,7 +428,8 @@
        id="Dot_m"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="Dot_m">
       <path
          transform="scale(0.4) translate(7.125493, 1)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none;"
@@ -415,7 +440,8 @@
        id="Dot_l"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="Dot_l">
       <path
          transform="scale(0.8) translate(7.125493, 1)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none;"
@@ -432,7 +458,8 @@
        id="DistanceRight"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="DistanceRight">
       <g
          id="g990"
          transform="scale(0.6,-0.6) translate(8,0)">
@@ -452,7 +479,8 @@
        id="DistanceLeft"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="DistanceLeft">
       <g
          id="g987"
          transform="scale(0.6,0.6) translate(8,0)">
@@ -474,7 +502,8 @@
        id="Tail"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="Tail">
       <g          transform="scale(1.2)"
          id="g1087">
   <path
@@ -511,7 +540,8 @@
        id="Arrow2S"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="Arrow2S">
       <path
          transform="scale(0.3) translate(-5,0)"
          d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
@@ -523,7 +553,8 @@
        id="Arrow2M"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="Arrow2M">
       <path
          transform="scale(0.6) translate(-5,0)"
          d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
@@ -535,7 +566,8 @@
        id="Arrow2L"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="Arrow2L">
       <path
          transform="scale(1.1) translate(-5,0)"
          d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
@@ -550,7 +582,8 @@
        id="Arrow1S"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="Arrow1S">
       <path
          transform="scale(0.2)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
@@ -562,7 +595,8 @@
        id="Arrow1M"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="Arrow1M">
       <path
          transform="scale(0.4)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
@@ -574,7 +608,8 @@
        id="Arrow1L"
        refX="0.0"
        refY="0.0"
-       orient="auto">
+       orient="auto"
+       inscape:stockid="Arrow1L">
       <path
          transform="scale(0.8)"
          style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
