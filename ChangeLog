@@ -2,6 +2,8 @@
 
     * configure.in, src/svg/ftos.cpp: fix for OS X build
 
+	* src/extensions/internal.ps.cpp: crash fix
+
 2004-04-07  MenTaLguY <mental@rydia.net>
 
 	* src/xml/repr.cpp: adjusted the advertising comment in the default
