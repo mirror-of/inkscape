@@ -10,5 +10,10 @@
  */
 
 #include "nr-values.h"
+#include <math.h>
 
 int vla;
+
+double NR::Point::L2() {
+	return hypot(pt[0], pt[1]);
+}
