@@ -1,3 +1,7 @@
+2004-04-08  MenTaLguY <mental@rydia.net>
+
+    * configure.in, src/svg/ftos.cpp: fix for OS X build
+
 2004-04-07  MenTaLguY <mental@rydia.net>
 
 	* src/xml/repr.cpp: adjusted the advertising comment in the default
