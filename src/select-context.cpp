@@ -272,7 +272,8 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 						if (!sp_selection_item_selected (selection, sc->item))
 							sp_selection_set_item (selection, sc->item);
 					} // otherwise, do not change selection so that dragging selected-within-group items is possible
-					sp_sel_trans_grab (seltrans, &p, -1, -1, FALSE);
+					NR::Point pp = p;
+					sp_sel_trans_grab (seltrans, pp, -1, -1, FALSE);
 					sc->moved = TRUE;
 				}
 				sp_selection_moveto (seltrans, p.x, p.y, event->button.state);
@@ -436,7 +437,8 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 							if (item_at_point && !sp_selection_item_selected (selection, item_at_point))
 								sp_selection_set_item (selection, item_at_point);
 						} // otherwise, do not change selection so that dragging selected-within-group items is possible
-						sp_sel_trans_grab (seltrans, &p, -1, -1, FALSE);
+						NR::Point pp = p;
+						sp_sel_trans_grab (seltrans, pp, -1, -1, FALSE);
 						sc->moved = TRUE;
 					} 
 					sp_selection_moveto (seltrans, p.x, p.y, event->button.state);

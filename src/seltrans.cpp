@@ -224,13 +224,9 @@ sp_sel_trans_set_center (SPSelTrans * seltrans, NR::Point p)
 }
 
 void
-sp_sel_trans_grab (SPSelTrans * seltrans, NRPoint *p, gdouble x, gdouble y, gboolean show_handles)
+sp_sel_trans_grab (SPSelTrans * seltrans, const NR::Point p, gdouble x, gdouble y, gboolean show_handles)
 {
-	SPSelection *selection;
-	const GSList *l;
-	int n;
-
-	selection = SP_DT_SELECTION (seltrans->desktop);
+	SPSelection *selection = SP_DT_SELECTION (seltrans->desktop);
 
 	g_return_if_fail (!seltrans->grabbed);
 
@@ -242,11 +238,11 @@ sp_sel_trans_grab (SPSelTrans * seltrans, NRPoint *p, gdouble x, gdouble y, gboo
 
 	if (seltrans->empty) return;
 
-	l = sp_selection_item_list (selection);
+	const GSList *l = sp_selection_item_list (selection);
 	seltrans->nitems = g_slist_length ((GSList *) l);
 	seltrans->items = nr_new (SPItem *, seltrans->nitems);
 	seltrans->transforms = nr_new (NRMatrix, seltrans->nitems);
-	n = 0;
+	int n = 0;
 	while (l) {
 		seltrans->items[n] = (SPItem *) sp_object_ref (SP_OBJECT (l->data), NULL);
 		sp_item_i2d_affine (seltrans->items[n], &seltrans->transforms[n]);
@@ -256,8 +252,7 @@ sp_sel_trans_grab (SPSelTrans * seltrans, NRPoint *p, gdouble x, gdouble y, gboo
 
 	seltrans->current.set_identity();
 
-	seltrans->point.x = p->x;
-	seltrans->point.y = p->y;
+	seltrans->point = p;
 
 	seltrans->spp_length = sp_selection_snappoints (selection, seltrans->spp, SP_SELTRANS_SPP_SIZE);
 
@@ -472,8 +467,8 @@ sp_sel_trans_point_desktop (SPSelTrans *seltrans, NRPoint *p)
 {
 	g_return_val_if_fail (p != NULL, NULL);
 
-	p->x = seltrans->point.x;
-	p->y = seltrans->point.y;
+	p->x = seltrans->point[0];
+	p->y = seltrans->point[1];
 
 	return p;
 }
@@ -483,8 +478,8 @@ sp_sel_trans_origin_desktop (SPSelTrans *seltrans, NRPoint *p)
 {
 	g_return_val_if_fail (p != NULL, NULL);
 
-	p->x = seltrans->origin.x;
-	p->y = seltrans->origin.y;
+	p->x = seltrans->origin[0];
+	p->y = seltrans->origin[1];
 
 	return p;
 }
@@ -541,9 +536,7 @@ sp_sel_trans_update_handles (SPSelTrans * seltrans)
 			    G_CALLBACK (sp_sel_trans_handle_ungrab), (gpointer) &handle_center);
 	}
 	sp_knot_show (seltrans->chandle);
-	p.x = seltrans->center.x;
-	p.y = seltrans->center.y;
-	sp_knot_set_position (seltrans->chandle, &p, 0);
+	sp_knot_set_position (seltrans->chandle, seltrans->center, 0);
 }
 
 static void
@@ -637,8 +630,6 @@ sp_sel_trans_handle_grab (SPKnot * knot, guint state, gpointer data)
 	SPDesktop * desktop;
 	SPSelTrans * seltrans;
 	SPSelTransHandle * handle;
-	NRPoint p;
-	NRPoint pf;
 
 	desktop = knot->desktop;
 	seltrans = &SP_SELECT_CONTEXT (desktop->event_context)->seltrans;
@@ -663,11 +654,7 @@ sp_sel_trans_handle_grab (SPKnot * knot, guint state, gpointer data)
 	  break;
 	}
 
-	sp_knot_position (knot, &p);
-
-	pf.x = p.x;
-	pf.y = p.y;
-	sp_sel_trans_grab (seltrans, &pf, handle->x, handle->y, FALSE);
+	sp_sel_trans_grab (seltrans, sp_knot_position (knot), handle->x, handle->y, FALSE);
 }
 
 static void
@@ -738,7 +725,7 @@ sp_sel_trans_handle_request (SPKnot * knot, NRPoint *position, guint state, gboo
 		*position = p;
 		sp_knot_set_position (knot, position, state);
 		sp_ctrl_moveto (SP_CTRL (seltrans->grip), position->x, position->y);
-		sp_ctrl_moveto (SP_CTRL (seltrans->norm), seltrans->origin.x, seltrans->origin.y);
+		sp_ctrl_moveto (SP_CTRL (seltrans->norm), seltrans->origin[NR::X], seltrans->origin[NR::Y]);
 	}
 	
 	return TRUE;

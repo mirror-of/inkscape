@@ -58,10 +58,10 @@ struct _SPSelTrans {
 
 	NR::Rect box;
         NR::Matrix current;
-        NRPoint opposit;
-        NRPoint origin;
-	NRPoint point;
-	NRPoint center;
+        NR::Point opposit;
+        NR::Point origin;
+	NR::Point point;
+	NR::Point center;
 	SPKnot *shandle[8];
 	SPKnot *rhandle[8];
 	SPKnot *chandle;
@@ -90,7 +90,7 @@ void sp_sel_trans_reset_state (SPSelTrans * seltrans);
 void sp_sel_trans_increase_state (SPSelTrans * seltrans);
 void sp_sel_trans_set_center (SPSelTrans * seltrans, gdouble x, gdouble y);
 
-void sp_sel_trans_grab (SPSelTrans * seltrans, NRPoint *p, gdouble x, gdouble y, gboolean show_handles);
+void sp_sel_trans_grab (SPSelTrans * seltrans, const NR::Point p, gdouble x, gdouble y, gboolean show_handles);
 void sp_sel_trans_transform (SPSelTrans * seltrans, NRMatrix *affine, NRPoint *norm);
 void sp_sel_trans_ungrab (SPSelTrans * seltrans);
 void sp_sel_trans_stamp (SPSelTrans * seltrans);
