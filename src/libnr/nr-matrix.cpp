@@ -239,8 +239,8 @@ bool Matrix::is_translation(const Coord eps) const {
              fabs(_c[2]) < eps );
 }
 
-explicit Matrix::operator NR::translate() const {
-	g_assert(is_translation());
+Matrix::operator NR::translate() const {
+	//g_assert(is_translation()); // assume they know what they're doing.
 	return NR::translate(_c[4], _c[5]);
 }
 
