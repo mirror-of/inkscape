@@ -16,6 +16,7 @@
 #include <glib-object.h>
 #include <gtk/gtksignal.h>
 #include <gdk/gdkkeysyms.h>
+#include "helper/sp-intl.h"
 #include "helper/sp-marshal.h"
 #include "helper/sp-canvas-util.h"
 #include "helper/sodipodi-ctrl.h"
