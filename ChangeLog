@@ -1,4 +1,12 @@
+2003-11-24 bulia byak <bulia@dr.com>
+
+	New keys in node editor:	
+	* esc deselects and cancels rubberband and node dragging
+	* ctrl-a selects all nodes
+	* tab and shift-tab cycle through nodes of the current shape
+
 2003-11-23 Bryce Harrington <bryce@osdl.org>
+
 	* Added include for document.h to knot.c for declaring
   	  sp_document_undo, as g++ didn't like not having it declared. 
 
