@@ -51,16 +51,16 @@ ErrorFileNotice::ErrorFileNotice (void) :
 
 {
     /* This is some filler text, needs to change before relase */
-    Glib::ustring dialog_text(_("One or more extensions failed to load.  This is probably due to you having bad karma.  Some things that could improve your karma are: walking an old lady across the street, helping out at a homeless shelter, or stop sleeping with your best friend's wife.  No, I don't care if you you think you love her.  You can find a slightly more technical description of the errors here: "));
+    Glib::ustring dialog_text(_("<span weight=\"bold\" size=\"larger\">One or more extensions failed to load.</span>\n\nThe failed extensions have been skipped.  Inkscape will continue to run normally but those extensions will be unavailable.  For details to troubleshoot this problem, please refer to the error log located at:"));
     gchar * ext_error_file = profile_path(EXTENSION_ERROR_LOG_FILENAME);
     dialog_text += ext_error_file;
     g_free(ext_error_file);
-    set_message(dialog_text, false);
+    set_message(dialog_text, true);
 
     Gtk::VBox * vbox = get_vbox();
 
     /* This is some filler text, needs to change before relase */
-    checkbutton = new Gtk::CheckButton(_("Abuse me on the next startup"));
+    checkbutton = new Gtk::CheckButton(_("Show dialog on startup"));
     vbox->pack_start(*checkbutton, true, true, 5);
     checkbutton->show();
     checkbutton->set_active(prefs_get_int_attribute(PREFERENCE_ID, 1) == 0 ? false : true);
