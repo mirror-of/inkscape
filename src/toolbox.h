@@ -16,11 +16,6 @@
 
 #include "forward.h"
 
-#define TOOL_BUTTON_SIZE 28
-#define AUX_BUTTON_SIZE 20
-#define AUX_BETWEEN_BUTTON_GROUPS 5
-#define AUX_FONT_SIZE 8000
-
 GtkWidget *sp_tool_toolbox_new (void);
 void sp_tool_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop);
 

@@ -31,6 +31,7 @@
 #include "helper/window.h"
 #include "widgets/icon.h"
 #include "widgets/button.h"
+#include "widgets/widget-sizes.h"
 
 #include "prefs-utils.h"
 #include "inkscape-stock.h"
@@ -388,3 +389,4 @@ aux_toolbox_space (GtkWidget *tb, gint space)
 {
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, space);
 }
+
