@@ -6,7 +6,7 @@
 //#define AUX_BUTTON_SIZE 24
 //#define AUX_SPACING 2
 
-#define AUX_BUTTON_SIZE 20
+// #define AUX_BUTTON_SIZE 20
 #define AUX_SPACING 3
 
 #define AUX_BETWEEN_BUTTON_GROUPS 7
