@@ -74,6 +74,10 @@ nr_arena_image_class_init (NRArenaImageClass *klass)
 static void
 nr_arena_image_init (NRArenaImage *image)
 {
+	image->px = NULL;
+
+	image->pxw = image->pxh = image->pxrs = NULL;
+	image->x = image->y = 0.0;
 	image->width = 256.0;
 	image->height = 256.0;
 

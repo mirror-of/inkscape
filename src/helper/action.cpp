@@ -55,6 +55,11 @@ sp_action_class_init (SPActionClass *klass)
 static void
 sp_action_init (SPAction *action)
 {
+	action->sensitive = 0;
+	action->active = 0;
+	action->view = NULL;
+	action->id = action->name = action->tip = NULL;
+	action->image = NULL;
 }
 
 static void
@@ -73,14 +78,13 @@ sp_action_finalize (NRObject *object)
 }
 
 SPAction *
-sp_action_setup (SPAction *action,
-                 SPView *view,
-		 const gchar *id,
-		 const gchar *name,
-		 const gchar *tip,
-		 const gchar *image)
+sp_action_new(SPView *view,
+              const gchar *id,
+              const gchar *name,
+              const gchar *tip,
+              const gchar *image)
 {
-	nr_object_setup ((NRObject *) action, SP_TYPE_ACTION);
+	SPAction *action = (SPAction *)nr_object_new(SP_TYPE_ACTION);
 
 	action->view = view;
 	action->sensitive = TRUE;

@@ -90,8 +90,20 @@ nr_typeface_ft2_init (NRTypeFaceFT2 *tff)
 	NRTypeFace *tface;
 
 	tface = (NRTypeFace *) tff;
-
 	tface->nglyphs = 1;
+
+	tff->ft2ps = 0.0;
+
+	tff->unimap = FALSE;
+	tff->freelo = FALSE;
+
+	tff->fonts = NULL;
+	tff->hgidx = NULL;
+	tff->vgidx = NULL;
+
+	tff->slots = NULL;
+	tff->slots_length = 0;
+	tff->slots_size = 0;
 }
 
 static void

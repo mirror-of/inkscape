@@ -1030,10 +1030,9 @@ static const SPVerbActionDef props[] = {
 static SPAction *
 make_action (sp_verb_t verb, SPView *view)
 {
-    SPAction *action=nr_new (SPAction, 1);
     assert (props[verb].code == verb);
-    sp_action_setup ( action, view, props[verb].id, _(props[verb].name),
-                      _(props[verb].tip), props[verb].image );
+    SPAction *action=sp_action_new(view, props[verb].id, _(props[verb].name),
+                                   _(props[verb].tip), props[verb].image);
 
     /* TODO: Make more elegant (Lauris) */
     if (SP_VERB_IS_FILE (verb)) {

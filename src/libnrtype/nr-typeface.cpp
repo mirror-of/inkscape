@@ -68,6 +68,8 @@ nr_typeface_class_init (NRTypeFaceClass *klass)
 static void
 nr_typeface_init (NRTypeFace *tface)
 {
+	tface->def = NULL;
+	tface->nglyphs = 0;
 }
 
 static void

@@ -57,9 +57,31 @@ NRType nr_object_register_type (NRType parent,
 
 /* NRObject */
 
-struct NRObject {
+class NRObject {
+public:
+	NRObject() : klass(NULL), _refcount(0) {}
+	virtual ~NRObject() {}
+
 	NRObjectClass *klass;
-	unsigned int refcount;
+
+	static NRObject *alloc(NRType type);
+	static NRObject *free(NRObject *object);
+
+	NRObject *reference() {
+		_refcount++;
+		return this;
+	}
+	NRObject *unreference() {
+		if (!--_refcount) {
+			NRObject::free(this);
+		}
+		return NULL;
+	}
+
+private:
+	NRObject(NRObject const &);
+	void operator=(NRObject const &);
+	unsigned int _refcount;
 };
 
 struct NRObjectClass {
@@ -71,24 +93,27 @@ struct NRObjectClass {
 	unsigned int isize;
 	void (* cinit) (NRObjectClass *);
 	void (* iinit) (NRObject *);
-
 	void (* finalize) (NRObject *object);
+	void (*cpp_ctor)(NRObject *object);
 };
 
 NRType nr_object_get_type (void);
 
 /* Dynamic lifecycle */
 
-NRObject *nr_object_new (NRType type);
-NRObject *nr_object_delete (NRObject *object);
+inline NRObject *nr_object_new (NRType type) {
+	return NRObject::alloc(type);
+}
+inline NRObject *nr_object_delete (NRObject *object) {
+	return NRObject::free(object);
+}
 
-NRObject *nr_object_ref (NRObject *object);
-NRObject *nr_object_unref (NRObject *object);
-
-/* Automatic lifecycle */
-
-NRObject *nr_object_setup (NRObject *object, NRType type);
-NRObject *nr_object_release (NRObject *object);
+inline NRObject *nr_object_ref (NRObject *object) {
+	return object->reference();
+}
+inline NRObject *nr_object_unref (NRObject *object) {
+	return object->unreference();
+}
 
 /* NRActiveObject */
 
@@ -109,6 +134,7 @@ struct NRObjectCallbackBlock {
 };
 
 struct NRActiveObject : public NRObject {
+	NRActiveObject() : callbacks(NULL) {}
 	NRObjectCallbackBlock *callbacks;
 };
 

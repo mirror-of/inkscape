@@ -279,9 +279,7 @@ sp_button_new_from_data (unsigned int size,
 			 GtkTooltips *tooltips)
 {
 	GtkWidget *button;
-	SPAction *action;
-	action = (SPAction *) nr_object_new (SP_TYPE_ACTION);
-	sp_action_setup (action, view, name, name, tip, name);
+	SPAction *action=sp_action_new(view, name, name, tip, name);
 	button = sp_button_new (size, type, action, tooltips);
 	nr_object_unref ((NRObject *) action);
 	return button;

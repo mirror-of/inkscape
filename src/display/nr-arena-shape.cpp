@@ -93,9 +93,6 @@ nr_arena_shape_class_init (NRArenaShapeClass *klass)
 static void
 nr_arena_shape_init (NRArenaShape *shape)
 {
-    new (&shape->_fill) NRArenaShape::FillStyle();
-    new (&shape->_stroke) NRArenaShape::StrokeStyle();
-
     shape->curve = NULL;
     shape->style = NULL;
     shape->paintbox.x0 = shape->paintbox.y0 = 0.0F;
@@ -108,6 +105,15 @@ nr_arena_shape_init (NRArenaShape *shape)
     shape->cached_stroke = NULL;
     shape->fill_shp = NULL;
     shape->stroke_shp = NULL;
+
+    shape->delayed_shp = false;
+
+    shape->approx_bbox.x0 = shape->approx_bbox.y0 = 0.0;
+    shape->approx_bbox.x1 = shape->approx_bbox.y1 = 0.0;
+    nr_matrix_set_identity(&shape->cached_fctm);
+    nr_matrix_set_identity(&shape->cached_sctm);
+
+    shape->markers = NULL;
 }
 
 static void

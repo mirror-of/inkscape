@@ -84,11 +84,19 @@ nr_arena_glyphs_init (NRArenaGlyphs *glyphs)
 {
 	glyphs->curve = NULL;
 	glyphs->style = NULL;
+	nr_matrix_set_identity(&glyphs->transform);
+	glyphs->font = NULL;
+	glyphs->glyph = 0;
 
-	glyphs->stroke_shp=NULL;
+	glyphs->rfont = NULL;
+	glyphs->x = glyphs->y = 0.0;
+
+	nr_matrix_set_identity(&glyphs->cached_tr);
 	glyphs->cached_shp=NULL;
 	glyphs->cached_shp_dirty=false;
 	glyphs->cached_style_dirty=false;
+
+	glyphs->stroke_shp=NULL;
 }
 
 static void

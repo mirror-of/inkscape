@@ -72,18 +72,31 @@ nr_arena_item_class_init (NRArenaItemClass *klass)
 static void
 nr_arena_item_init (NRArenaItem *item)
 {
+	item->arena = NULL;
+	item->parent = NULL;
+	item->next = item->prev = NULL;
+
+	item->key = 0;
+
 	item->state = 0;
 	item->sensitive = TRUE;
 	item->visible = TRUE;
 
-	/* fixme: Initialize bbox */
+	memset(&item->bbox, 0, sizeof(item->bbox));
 	item->transform = NULL;
 	item->opacity = 255;
+	item->render_opacity = FALSE;
 
 #ifdef arena_item_tile_cache
   item->activity=0.0;
   item->skipCaching=false;
 #endif
+
+  	item->transform = NULL;
+	item->clip = NULL;
+	item->mask = NULL;
+	item->px = NULL;
+	item->data = NULL;
 }
 
 static void

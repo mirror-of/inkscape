@@ -73,6 +73,41 @@
 
 	  transition to C++ inheritance
 
+	* src/verbs.cpp, src/helper/action.h, src/helper/action.cpp,
+	  src/widgets/button.cpp, src/libnr/nr-object.cpp, src/libnr/nr-object.h:
+	  
+	  removed barely-used "in-place construction" facility for NRObject
+
+	* src/helper/action.h, src/helper/action.cpp,
+	  src/display/nr-arena-glyphs.cpp, src/display/nr-arena-glyphs.h,
+	  src/display/nr-arena-image.cpp, src/display/nr-arena-image.h,
+	  src/display/nr-arena-item.cpp, src/display/nr-arena-shape.cpp,
+	  src/helper/action.cpp, src/helper/action.h, src/libnr/nr-object.cpp,
+	  src/libnr/nr-object.h, src/libnrtype/nr-type-ft2.cpp,
+	  src/libnrtype/nr-type-gnome.cpp, src/libnrtype/nr-type-w32.cpp,
+	  src/libnrtype/nr-typeface.cpp:
+
+	  Made NRObject "C++-compatible".  All C++ features including virtual
+	  methods and RTTI should now be available to NRObject subclasses 
+	  _provided_:
+
+	   a) there is an unbroken chain of _C++_ inheritance from the subclass
+	      back to NRObject
+
+	   b) the NRObject-derived inheritance chain is always first in cases
+	      of multiple inheritance (the NRObject must be first in the memory
+		  layout)
+
+       c) The subclass in question overrides NRObjectClass::cpp_ctor in its
+	      own class_init function, with a pointer to a function that calls
+		  the specific subclass' constructor (via placement new -- you will
+		  need to #include <new> for this to work)
+
+		  n.b. Objects of classes which do not override cpp_ctor will appear
+		  to the C++ runtime system (RTTI and virtual dispatch, at least) as
+		  objects of the closest ancestor class which does override it
+		  (NRObject or NRActiveObject if nothing else).
+
 2004-05-15  MenTaLguY  <mental@rydia.net>
 
 	* src/display/nr-arena-shape.h, src/display/nr-arena-shape.cpp:

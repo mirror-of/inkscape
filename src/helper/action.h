@@ -41,8 +41,7 @@ struct SPActionEventVector {
 /** All the data that is required to be an action.  This
     structure identifies the action and has the data to
 	create menus and toolbars for the action */
-struct SPAction {
-	NRActiveObject object;       /**< Parent Object */
+struct SPAction : public NRActiveObject {
 	unsigned int sensitive : 1;  /**< Value to track whether the action is sensitive */
 	unsigned int active : 1;     /**< Value to track whether the action is active */
 	SPView *view;                /**< The SPView to which this action is attached */
@@ -59,12 +58,11 @@ struct SPActionClass {
 
 NRType sp_action_get_type (void);
 
-SPAction *sp_action_setup (SPAction *action,
-                           SPView *view,
-			   const gchar *id,
-			   const gchar *name,
-			   const gchar *tip,
-			   const gchar *image);
+SPAction *sp_action_new(SPView *view,
+			const gchar *id,
+			const gchar *name,
+			const gchar *tip,
+			const gchar *image);
 
 void sp_action_perform (SPAction *action, void * data);
 void sp_action_set_active (SPAction *action, unsigned int active);

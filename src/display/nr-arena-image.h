@@ -22,7 +22,7 @@
 
 NRType nr_arena_image_get_type (void);
 
-struct NRArenaImage : public NRArenaItem{
+struct NRArenaImage : public NRArenaItem {
 	unsigned char *px;
 	unsigned int pxw;
 	unsigned int pxh;

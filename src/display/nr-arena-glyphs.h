@@ -30,7 +30,7 @@ class Shape;
 
 NRType nr_arena_glyphs_get_type (void);
 
-struct NRArenaGlyphs : public NRArenaItem{
+struct NRArenaGlyphs : public NRArenaItem {
 	/* Glyphs data */
 	SPCurve *curve;
 	SPStyle *style;

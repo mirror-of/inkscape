@@ -83,6 +83,10 @@ nr_typeface_gnome_init (NRTypeFaceGnome *tfg)
     NRTypeFace *tface;
 
     tface = (NRTypeFace *) tfg;
+
+    tface->face = NULL;
+    tface->fonts = NULL;
+    tface->voutlines = NULL;
 }
 
 static void

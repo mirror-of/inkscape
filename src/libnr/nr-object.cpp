@@ -9,6 +9,7 @@
  * This code is in public domain
  */
 
+#include <new>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -86,7 +87,7 @@ nr_object_register_type (NRType parent,
 	type = classes_len;
 	classes_len += 1;
 
-	classes[type] = (NRObjectClass*)malloc (csize);
+	classes[type] = (NRObjectClass*)new char[csize];
 	klass = classes[type];
 	memset (klass, 0, csize);
 
@@ -110,6 +111,7 @@ nr_object_register_type (NRType parent,
 static void nr_object_class_init (NRObjectClass *klass);
 static void nr_object_init (NRObject *object);
 static void nr_object_finalize (NRObject *object);
+static void nr_object_cpp_ctor (NRObject *object);
 
 NRType
 nr_object_get_type (void)
@@ -130,6 +132,7 @@ static void
 nr_object_class_init (NRObjectClass *klass)
 {
 	klass->finalize = nr_object_finalize;
+	klass->cpp_ctor = nr_object_cpp_ctor;
 }
 
 static void nr_object_init (NRObject *object)
@@ -140,49 +143,12 @@ static void nr_object_finalize (NRObject *object)
 {
 }
 
+static void nr_object_cpp_ctor (NRObject *object)
+{
+	object = new (object) NRObject();
+}
+
 /* Dynamic lifecycle */
-
-NRObject *
-nr_object_new (NRType type)
-{
-	NRObjectClass *klass;
-	NRObject *object;
-
-	nr_return_val_if_fail (type < classes_len, NULL);
-
-	klass = classes[type];
-	object = (NRObject*)malloc (klass->isize);
-	nr_object_setup (object, type);
-
-	return object;
-}
-
-NRObject *
-nr_object_delete (NRObject *object)
-{
-	nr_object_release (object);
-	free (object);
-	return NULL;
-}
-
-NRObject *
-nr_object_ref (NRObject *object)
-{
-	object->refcount += 1;
-	return object;
-}
-
-NRObject *
-nr_object_unref (NRObject *object)
-{
-	object->refcount -= 1;
-	if (object->refcount < 1) {
-		nr_object_delete (object);
-	}
-	return NULL;
-}
-
-/* Automatic lifecycle */
 
 static void
 nr_class_tree_object_invoke_init (NRObjectClass *klass, NRObject *object)
@@ -194,17 +160,21 @@ nr_class_tree_object_invoke_init (NRObjectClass *klass, NRObject *object)
 }
 
 NRObject *
-nr_object_setup (NRObject *object, NRType type)
+NRObject::alloc(NRType type)
 {
 	NRObjectClass *klass;
+	NRObject *object;
 
 	nr_return_val_if_fail (type < classes_len, NULL);
 
 	klass = classes[type];
 
-	memset (object, 0, klass->isize);
+	object = (NRObject *)new char[klass->isize];
+	memset(object, 0xfe, klass->isize);
+	klass->cpp_ctor(object);
+
 	object->klass = klass;
-	object->refcount = 1;
+	object->_refcount = 1;
 
 	nr_class_tree_object_invoke_init (klass, object);
 
@@ -212,9 +182,11 @@ nr_object_setup (NRObject *object, NRType type)
 }
 
 NRObject *
-nr_object_release (NRObject *object)
+NRObject::free(NRObject *object)
 {
 	object->klass->finalize (object);
+	object->~NRObject();
+	delete [] (char *)object;
 	return NULL;
 }
 
@@ -223,6 +195,7 @@ nr_object_release (NRObject *object)
 static void nr_active_object_class_init (NRActiveObjectClass *klass);
 static void nr_active_object_init (NRActiveObject *object);
 static void nr_active_object_finalize (NRObject *object);
+static void nr_active_object_cpp_ctor(NRObject *object);
 
 static NRObjectClass *parent_class;
 
@@ -251,6 +224,7 @@ nr_active_object_class_init (NRActiveObjectClass *klass)
 	parent_class = ((NRObjectClass *) klass)->parent;
 
 	object_class->finalize = nr_active_object_finalize;
+	object_class->cpp_ctor = nr_active_object_cpp_ctor;
 }
 
 static void
@@ -276,6 +250,10 @@ nr_active_object_finalize (NRObject *object)
 	}
 
 	((NRObjectClass *) (parent_class))->finalize (object);
+}
+
+void nr_active_object_cpp_ctor(NRObject *object) {
+	new (object) NRActiveObject();
 }
 
 void
