@@ -221,13 +221,13 @@
      showgrid="false"
      snaptogrid="false"
      gridtolerance="1.02pt"
-     inkscape:zoom="2.0000001"
-     inkscape:cx="151.96824"
-     inkscape:cy="104.33734"
-     inkscape:window-width="1022"
-     inkscape:window-height="740"
-     inkscape:window-x="99"
-     inkscape:window-y="108"
+     inkscape:zoom="1.9605263"
+     inkscape:cx="325.45588"
+     inkscape:cy="235.01046"
+     inkscape:window-width="1268"
+     inkscape:window-height="1002"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      showguides="true"
      snaptoguides="true"
      pagecolor="#e8e8e4"
@@ -1245,9 +1245,9 @@
   </g>
   <g
      id="object_flip_hor"
-     transform="translate(279.0566,-183.9103)">
+     transform="translate(275.1178,-184.3789)">
     <rect
-       style="font-size:12;fill:none;fill-rule:evenodd;stroke:none;stroke-width:0.0520834;"
+       style="font-size:12;fill:none;fill-rule:evenodd;stroke:none;stroke-width:0.0520834;stroke-opacity:1.0000000;"
        id="rect1056"
        width="25.000004"
        height="24.999990"
@@ -3874,27 +3874,27 @@
   </g>
   <g
      id="object_rotate_90_CW"
-     transform="translate(211.0472,-156.1932)">
+     transform="translate(211.1011,-154.5423)">
     <rect
-       style="fill:none;fill-rule:evenodd;stroke-width:0.0520834;"
+       style="fill:none;fill-rule:evenodd;stroke-width:0.0520834;stroke:none;stroke-opacity:1.0000000;"
        id="rect1419"
        width="25.000004"
        height="24.999990"
-       x="188.70065"
-       y="164.94077" />
+       x="188.92163"
+       y="165.16175" />
     <path
        style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-linejoin:round;"
-       d="M 200.40087,186.81576 L 192.90087,186.81576 L 200.40087,168.06576 L 200.40087,186.81576 z "
+       d="M 200.40087,187.06938 L 192.90087,187.06938 L 200.40087,168.31938 L 200.40087,187.06938 z "
        id="path1422"
        sodipodi:nodetypes="cccc" />
     <path
        style="fill:#d7ff17;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-linejoin:round;fill-opacity:1;"
-       d="M 191.95660,182.20180 L 191.95660,174.70180 L 210.70660,182.20180 L 191.95660,182.20180 z "
+       d="M 191.95660,182.45542 L 191.95660,174.95542 L 210.70660,182.45542 L 191.95660,182.45542 z "
        id="path1423"
        sodipodi:nodetypes="cccc" />
     <path
        style="fill:#ff0016;fill-rule:evenodd;stroke-width:0.883883;stroke-linecap:round;stroke-linejoin:round;"
-       d="M 212.11161,175.38299 L 209.00734,180.38299 L 205.90307,175.38299 L 212.11161,175.38299 z "
+       d="M 212.11161,175.63661 L 209.00734,180.63661 L 205.90307,175.63661 L 212.11161,175.63661 z "
        id="path1424"
        sodipodi:nodetypes="cccc" />
     <path
@@ -3906,7 +3906,7 @@
        sodipodi:cy="203.437500"
        sodipodi:rx="7.187500"
        sodipodi:ry="7.187500"
-       transform="matrix(1.000000,0.000000,0.000000,-1.000000,68.39334,379.8162)"
+       transform="matrix(1.000000,0.000000,0.000000,-1.000000,68.39334,380.0700)"
        sodipodi:start="6.249085"
        sodipodi:end="7.983039"
        sodipodi:open="true" />
@@ -4257,7 +4257,7 @@
      id="object_rotate_90_CCW"
      transform="matrix(-1.000000,0.000000,0.000000,1.000000,588.6404,-154.3182)">
     <rect
-       style="fill:none;fill-rule:evenodd;stroke-width:0.0520834;"
+       style="fill:none;fill-rule:evenodd;stroke-width:0.0520834;stroke:none;stroke-opacity:1.0000000;"
        id="rect1563"
        width="25.000004"
        height="24.999990"
@@ -4265,17 +4265,17 @@
        y="164.94077" />
     <path
        style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-linejoin:round;"
-       d="M 200.40087,186.81576 L 192.90087,186.81576 L 200.40087,168.06576 L 200.40087,186.81576 z "
+       d="M 200.40087,186.84394 L 192.90087,186.84394 L 200.40087,168.09394 L 200.40087,186.84394 z "
        id="path1564"
        sodipodi:nodetypes="cccc" />
     <path
        style="fill:#d7ff17;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-linejoin:round;fill-opacity:1;"
-       d="M 191.95660,182.20180 L 191.95660,174.70180 L 210.70660,182.20180 L 191.95660,182.20180 z "
+       d="M 191.95660,182.22998 L 191.95660,174.72998 L 210.70660,182.22998 L 191.95660,182.22998 z "
        id="path1565"
        sodipodi:nodetypes="cccc" />
     <path
        style="fill:#ff0016;fill-rule:evenodd;stroke-width:0.883883;stroke-linecap:round;stroke-linejoin:round;"
-       d="M 212.11161,175.38299 L 209.00734,180.38299 L 205.90307,175.38299 L 212.11161,175.38299 z "
+       d="M 212.11161,175.41117 L 209.00734,180.41117 L 205.90307,175.41117 L 212.11161,175.41117 z "
        id="path1566"
        sodipodi:nodetypes="cccc" />
     <path
