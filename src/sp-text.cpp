@@ -1307,9 +1307,9 @@ sp_text_get_child_by_position (SPText *text, gint i_ucs4_pos)
  	int utf8_pos=text->contents.Do_UCS4_2_UTF8(i_ucs4_pos);
    if ( text->f_res == NULL ) return NULL;
     int   ucs4_pos=0;
-    one_flow_src *into = text->contents.Locate(utf8_pos,ucs4_pos,true,false,true);
+    one_flow_src *into = text->contents.Locate(utf8_pos,ucs4_pos, true, true, true);
     //printf("ucs4 at offset %i = %i -> txt=%x",utf8_pos,ucs4_pos,into);
-    if ( into->Type() == flw_text ) {
+    if ( into && into->Type() == flw_text ) {
         if ( into->dad ) return into->dad->me;
     }
     return NULL;
@@ -1368,24 +1368,22 @@ sp_adjust_kerning_screen (SPText *text, gint i_position, SPDesktop *desktop, NR:
 void
 sp_adjust_tspan_letterspacing_screen(SPText *text, gint i_position, SPDesktop *desktop, gdouble by)
 {
-	int pos=text->contents.Do_UCS4_2_UTF8(i_position);
     gdouble val;
     int     nb_let=0;
-    SPObject *child = sp_text_get_child_by_position (text, pos);
-    if (!child) return; //FIXME: we should be able to set lspacing on non-Inkscape text that has no tspans, too
+    SPObject *child = sp_text_get_child_by_position (text, i_position);
+    if (!child) return;
     {
         int    c_p=-1,s_p=-1,l_p=-1;
         bool   l_start=false,l_end=false;
         //printf("letter at offset %i : ",pos);
-        text->f_res->OffsetToLetter(pos,c_p,s_p,l_p,l_start,l_end);
+        text->f_res->OffsetToLetter(i_position, c_p, s_p, l_p, l_start, l_end);
         //printf(" c=%i s=%i l=%i st=%i en=%i ",c_p,s_p,l_p,(l_start)?1:0,(l_end)?1:0);
         if ( c_p >= 0 ) {
-            nb_let=text->f_res->chunks[c_p].l_en-text->f_res->chunks[c_p].l_st;
+            nb_let = text->f_res->chunks[c_p].l_en - text->f_res->chunks[c_p].l_st;
             // printf(" -> nblet %i \n",nb_let);
         } else {
             //printf("none\n");
         }
-				return;
     }
     SPStyle *style = SP_OBJECT_STYLE (child);
 

@@ -375,15 +375,15 @@ int               one_flow_src::UTF8_2_UCS4(int /*ucs4_pos*/)
 {
 	return ucs4_st;
 }
-one_flow_src*     one_flow_src::Locate(int utf8_pos,int &ucs4_pos,bool src_start,bool src_end,bool must_be_text)
+one_flow_src*     one_flow_src::Locate(int utf8_pos, int &ucs4_pos, bool src_start, bool src_end, bool must_be_text)
 {
-	one_flow_src* res=NULL;
-	one_flow_src* cur=this;
+	one_flow_src* res = NULL;
+	one_flow_src* cur = this;
 	while ( cur ) {
 		if ( utf8_pos < cur->utf8_st ) break; // no need to look further
-		bool at_start=(utf8_pos==cur->utf8_st);
-		bool at_end=(utf8_pos==cur->utf8_en);
-		bool inside=(utf8_pos>cur->utf8_st&&utf8_pos<cur->utf8_en);
+		bool at_start = (utf8_pos == cur->utf8_st);
+		bool at_end = (utf8_pos == cur->utf8_en);
+		bool inside = (utf8_pos > cur->utf8_st && utf8_pos < cur->utf8_en);
 		if ( inside || at_start || at_end ) {
 			if ( must_be_text == false || cur->Type() == flw_text ) {
 				if ( inside ) {
