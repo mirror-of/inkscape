@@ -78,7 +78,7 @@ typedef struct NRArenaGlyphsGroupClass NRArenaGlyphsGroupClass;
 
 NRType nr_arena_glyphs_group_get_type (void);
 
-struct NRArenaGlyphsGroup : public NRArenaGroup{
+struct NRArenaGlyphsGroup : public NRArenaGroup {
 	SPStyle *style;
 	NRRect paintbox;
 	/* State data */
@@ -86,7 +86,7 @@ struct NRArenaGlyphsGroup : public NRArenaGroup{
 	SPPainter *stroke_painter;
 
 	static NRArenaGlyphsGroup *create(NRArena *arena) {
-		NRArenaGlyphsGroup *obj=reinterpret_cast<NRArenaGlyphsGroup *>(nr_object_new(NR_TYPE_ARENA_GLYPHS));
+		NRArenaGlyphsGroup *obj=reinterpret_cast<NRArenaGlyphsGroup *>(nr_object_new(NR_TYPE_ARENA_GLYPHS_GROUP));
 		obj->init(arena);
 		return obj;
 	}
