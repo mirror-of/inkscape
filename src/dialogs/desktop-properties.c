@@ -482,7 +482,7 @@ sp_color_picker_window_destroy (GtkObject *object, GObject *cp)
 	GtkWidget *w;
 
 	/* remove window object */
-	w = g_object_get_data (G_OBJECT (cp), "window");
+	w = (GtkWidget*) g_object_get_data (G_OBJECT (cp), "window");
 	if (w) gtk_widget_destroy(GTK_WIDGET (w));
 
 	g_object_set_data (G_OBJECT (cp), "window", NULL);
