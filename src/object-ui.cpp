@@ -423,7 +423,7 @@ sp_shape_fill_settings (GtkMenuItem *menuitem, SPItem *item)
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
-	SP_DT_SELECTION(desktop)->set(item);
+    if (SP_DT_SELECTION(desktop)->isEmpty() ) SP_DT_SELECTION(desktop)->set(item);
 
 	sp_object_properties_dialog ();
 }
