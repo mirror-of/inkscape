@@ -120,7 +120,7 @@ sp_selected_path_combine (void)
 
 	g_slist_free (items);
 
-	SPRepr *repr = sp_repr_new ("path");
+	SPRepr *repr = sp_repr_new ("svg:path");
 
 	// restore id
 	sp_repr_set_attr (repr, "id", id);
@@ -200,7 +200,7 @@ sp_selected_path_break_apart (void)
 		for (GSList *l = g_slist_reverse(list); l != NULL; l = l->next) {
 			curve = (SPCurve *) l->data;
 
-			SPRepr *repr = sp_repr_new ("path");
+			SPRepr *repr = sp_repr_new ("svg:path");
 			sp_repr_set_attr (repr, "style", style);
 
 			gchar *str = sp_svg_write_path (curve->bpath);
@@ -320,7 +320,7 @@ sp_selected_item_to_curved_repr(SPItem * item, guint32 text_grouping_policy)
 	if (!curve)
 	  return NULL;
 	
-	SPRepr *repr = sp_repr_new ("path");
+	SPRepr *repr = sp_repr_new ("svg:path");
 	/* Transformation */
 	sp_repr_set_attr (repr, "transform", 
 			  sp_repr_attr (SP_OBJECT_REPR (item), "transform"));
@@ -341,7 +341,7 @@ sp_selected_item_to_curved_repr(SPItem * item, guint32 text_grouping_policy)
 void
 sp_path_cleanup (SPPath *path)
 {
-	if (strcmp (sp_repr_name (SP_OBJECT_REPR (path)), "path"))
+	if (strcmp (sp_repr_name (SP_OBJECT_REPR (path)), "svg:path"))
 	  return;
 
 	SPStyle *style = SP_OBJECT_STYLE (path);

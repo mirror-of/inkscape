@@ -289,7 +289,7 @@ static SPRepr *sp_genericellipse_write (SPObject *object, SPRepr *repr, guint fl
 
 	if (flags & SP_OBJECT_WRITE_EXT) {
 		if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-			repr = sp_repr_new ("path");
+			repr = sp_repr_new ("svg:path");
 		}
 
 		sp_repr_set_double (repr, "sodipodi:cx", ellipse->cx.computed);
@@ -381,7 +381,7 @@ sp_ellipse_write (SPObject *object, SPRepr *repr, guint flags)
 	ellipse = SP_GENERICELLIPSE (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("ellipse");
+		repr = sp_repr_new ("svg:ellipse");
 	}
 
 	sp_repr_set_double (repr, "cx", ellipse->cx.computed);
@@ -532,7 +532,7 @@ sp_circle_write (SPObject *object, SPRepr *repr, guint flags)
 	ellipse = SP_GENERICELLIPSE (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("circle");
+		repr = sp_repr_new ("svg:circle");
 	}
 
 	sp_repr_set_double (repr, "cx", ellipse->cx.computed);
@@ -734,7 +734,7 @@ sp_arc_write (SPObject *object, SPRepr *repr, guint flags)
 	SPArc *arc = SP_ARC (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("path");
+		repr = sp_repr_new ("svg:path");
 	}
 
 	if (flags & SP_OBJECT_WRITE_EXT) {

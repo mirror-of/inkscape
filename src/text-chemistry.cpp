@@ -113,7 +113,7 @@ text_put_on_path (void)
 	}
 
 	// create textPath and put it into the text
-	SPRepr *textpath = sp_repr_new ("textPath");
+	SPRepr *textpath = sp_repr_new ("svg:textPath");
 	// reference the shape
 	sp_repr_set_attr (textpath, "xlink:href", g_strdup_printf ("#%s", sp_repr_attr (SP_OBJECT_REPR(shape), "id")));
 	sp_repr_add_child (SP_OBJECT_REPR(text), textpath, NULL);
@@ -122,7 +122,7 @@ text_put_on_path (void)
 		// make a copy of each text child
 		SPRepr *copy = sp_repr_duplicate((SPRepr *) i->data);
 		// We cannot have multiline in textpath, so remove line attrs from tspans
-		if (!strcmp (sp_repr_name (copy), "tspan")) {
+		if (!strcmp (sp_repr_name (copy), "svg:tspan")) {
 			sp_repr_set_attr (copy, "sodipodi:role", NULL);
 			sp_repr_set_attr (copy, "x", NULL);
 			sp_repr_set_attr (copy, "y", NULL);

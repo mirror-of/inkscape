@@ -60,7 +60,7 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
 
         if (prefs_get_int_attribute("options.importbitmapsasimages", "value", 1) == 1) {
             // import as <image>
-            repr = sp_repr_new ("image");
+            repr = sp_repr_new ("svg:image");
             sp_repr_set_attr (repr, "xlink:href", relname);
             sp_repr_set_attr (repr, "sodipodi:absref", uri);
 
@@ -69,7 +69,7 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
 
         } else {
             // import as pattern-filled rect
-            SPRepr *pat = sp_repr_new ("pattern");
+            SPRepr *pat = sp_repr_new ("svg:pattern");
             sp_repr_set_attr(pat, "inkscape:collect", "always");
             sp_repr_set_attr (pat, "patternUnits", "userSpaceOnUse");
             sp_repr_set_double (pat, "width", width);
@@ -78,14 +78,14 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
             const gchar *pat_id = sp_repr_attr(pat, "id");
             SPObject *pat_object = doc->getObjectById(pat_id);
 
-            SPRepr *im = sp_repr_new ("image");
+            SPRepr *im = sp_repr_new ("svg:image");
             sp_repr_set_attr (im, "xlink:href", relname);
             sp_repr_set_attr (im, "sodipodi:absref", uri);
             sp_repr_set_double (im, "width", width);
             sp_repr_set_double (im, "height", height);
             sp_repr_add_child (SP_OBJECT_REPR(pat_object), im, NULL);
 
-            repr = sp_repr_new ("rect");
+            repr = sp_repr_new ("svg:rect");
             sp_repr_set_attr (repr, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
             sp_repr_set_double (repr, "width", width);
             sp_repr_set_double (repr, "height", height);

@@ -298,7 +298,7 @@ static SPRepr *
 sp_flowtext_write(SPObject *object, SPRepr *repr, guint flags)
 {
     if ( flags & SP_OBJECT_WRITE_BUILD ) {
-        if ( repr == NULL ) repr = sp_repr_new("flowRoot");
+        if ( repr == NULL ) repr = sp_repr_new("svg:flowRoot");
         GSList *l = NULL;
         for (SPObject *child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
             SPRepr *c_repr = NULL;
@@ -608,7 +608,7 @@ void convert_to_text(void)
     selection->clear();
 
     SPRepr *parent = SP_OBJECT_REPR(object)->parent;
-    SPRepr *repr = sp_repr_new("text");
+    SPRepr *repr = sp_repr_new("svg:text");
     sp_repr_set_attr(repr, "style", sp_repr_attr(SP_OBJECT_REPR(object), "style"));
     sp_repr_append_child(parent, repr);
     // add a tspan for each chunk of the flow
@@ -618,7 +618,7 @@ void convert_to_text(void)
         if ( comp->chunks[i].rtl ) chunk_spc = -chunk_spc;
         for (int j = comp->chunks[i].s_st; j < comp->chunks[i].s_en; j++) {
             if ( comp->spans[j].l_st < comp->spans[j].l_en && comp->spans[j].c_style && comp->spans[j].c_style->with_style ) {
-                SPRepr *srepr = sp_repr_new("tspan");
+                SPRepr *srepr = sp_repr_new("svg:tspan");
                 // set the good font family (may differ if pango needed a different one)
                 gchar *nstyle = NULL;
                 text_style *curS = comp->spans[j].c_style;

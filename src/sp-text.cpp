@@ -357,7 +357,7 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
 
     if (flags & SP_OBJECT_WRITE_BUILD) {
         if (!repr)
-            repr = sp_repr_new ("text");
+            repr = sp_repr_new ("svg:text");
         GSList *l = NULL;
         for (SPObject *child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
             SPRepr *crepr = NULL;
@@ -830,7 +830,7 @@ sp_text_set_repr_text_multiline(SPText *text, gchar const *str)
             if (e) *e = ' '; // no lines for textpath, replace newlines with spaces
         } else {
             if (e) *e = '\0'; // create a tspan for each line
-            SPRepr *rtspan = sp_repr_new ("tspan");
+            SPRepr *rtspan = sp_repr_new ("svg:tspan");
             sp_repr_set_double (rtspan, "x", cp[NR::X]);
             sp_repr_set_double (rtspan, "y", cp[NR::Y]);
             if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
@@ -903,7 +903,7 @@ sp_text_append_line(SPText *text)
     }
 
     /* Create <tspan> */
-    SPRepr *rtspan = sp_repr_new ("tspan");
+    SPRepr *rtspan = sp_repr_new ("svg:tspan");
     if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
         /* fixme: real line height */
         /* fixme: What to do with mixed direction tspans? */
@@ -945,7 +945,7 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
 
     if ( into == NULL ) {
         // it's a 'append line' in fact
-        SPRepr*   rtspan = sp_repr_new ("tspan");
+        SPRepr*   rtspan = sp_repr_new ("svg:tspan");
         sp_repr_set_attr (rtspan, "sodipodi:role", "line");
         SPRepr*   rstring = sp_xml_document_createTextNode (sp_repr_document (rtspan), "");
         sp_repr_add_child (rtspan, rstring, NULL);
@@ -968,7 +968,7 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
                     // just in case
                     //sp_repr_set_attr (into_repr, "sodipodi:role", "line");
                     // create the new tspan
-                    SPRepr*   rtspan = sp_repr_new ("tspan");
+                    SPRepr*   rtspan = sp_repr_new ("svg:tspan");
                     sp_repr_set_attr (rtspan, "sodipodi:role", "line");
                     SPRepr*   rstring = NULL;
                     if ( into_obj->utf8_st < into_obj->utf8_en ) {
@@ -1051,8 +1051,8 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
 
             } else if ( into->dad->Type() == txt_text ) {
                 // special case
-                SPRepr*   firstspan = sp_repr_new ("tspan");
-                SPRepr*   rtspan = sp_repr_new ("tspan");
+                SPRepr*   firstspan = sp_repr_new ("svg:tspan");
+                SPRepr*   rtspan = sp_repr_new ("svg:tspan");
                 sp_repr_set_attr (firstspan, "sodipodi:role", "line");
                 sp_repr_set_attr (rtspan, "sodipodi:role", "line");
                 SPRepr*   firststring =NULL;
@@ -1090,7 +1090,7 @@ sp_text_insert_line (SPText *text, gint i_ucs4_pos)
         } else if ( into->Type() == txt_firstline || into->Type() == txt_tline ) {
             // insert a new empty tspan in front of this one
             if ( into->dad ) {
-                SPRepr*   rtspan = sp_repr_new ("tspan");
+                SPRepr*   rtspan = sp_repr_new ("svg:tspan");
                 sp_repr_set_attr (rtspan, "sodipodi:role", "line");
                 SPRepr*   rstring = sp_xml_document_createTextNode (sp_repr_document (rtspan), "");
                 SPObject* prec=NULL;

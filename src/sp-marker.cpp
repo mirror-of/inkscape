@@ -455,7 +455,7 @@ sp_marker_write (SPObject *object, SPRepr *repr, guint flags)
 	marker = SP_MARKER (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("marker");
+		repr = sp_repr_new ("svg:marker");
 	}
 
 	if (marker->markerUnits_set) {

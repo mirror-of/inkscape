@@ -435,7 +435,7 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
         }
 
         /* Create object */
-        SPRepr *repr = sp_repr_new("path");
+        SPRepr *repr = sp_repr_new("svg:path");
         sp_repr_set_attr(repr, "sodipodi:type", "arc");
 
         /* Set style */

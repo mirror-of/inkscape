@@ -1,3 +1,28 @@
+2004-12-23  MenTaLguY  <mental@rydia.net>
+
+	* src/arc-context.cpp, src/document.cpp, src/draw-context.cpp,
+	  src/dyna-draw-context.cpp, src/file.cpp, src/gradient-chemistry.cpp,
+	  src/interface.cpp, src/layer-fns.cpp, src/main.cpp, src/object-ui.cpp,
+	  src/path-chemistry.cpp, src/rect-context.cpp,
+	  src/selection-chemistry.cpp, src/sp-anchor.cpp, src/sp-clippath.cpp,
+	  src/sp-defs.cpp, src/sp-ellipse.cpp, src/sp-flowdiv.cpp,
+	  src/sp-flowregion.cpp, src/sp-flowtext.cpp, src/sp-gradient-test.cpp,
+	  src/sp-gradient.cpp, src/sp-image.cpp, src/sp-item-group.cpp,
+	  src/sp-line.cpp, src/sp-marker.cpp, src/sp-mask.cpp,
+	  src/sp-object-group.cpp, src/sp-object-repr.cpp, src/sp-offset.cpp,
+	  src/sp-path.cpp, src/sp-pattern.cpp, src/sp-polygon.cpp,
+	  src/sp-polyline.cpp, src/sp-rect.cpp, src/sp-root.cpp,
+	  src/sp-spiral.cpp, src/sp-star.cpp, src/sp-symbol.cpp, src/sp-text.cpp,
+	  src/sp-tspan.cpp, src/sp-use.cpp, src/spiral-context.cpp,
+	  src/splivarot.cpp, src/star-context.cpp, src/text-chemistry.cpp,
+	  src/text-context.cpp, src/dialogs/find.cpp, src/dialogs/rdf.cpp,
+	  src/dialogs/xml-tree.cpp, src/ecma/EcmaBinding.cpp,
+	  src/extension/internal/gdkpixbuf-input.cpp,
+	  src/extension/internal/svg.cpp, src/livarot/ShapeDraw.cpp,
+	  src/xml/repr-io.cpp, src/xml/repr-util.cpp, src/xml/repr.cpp:
+	  
+	  use normalized qnames for SVG elements too
+
 2004-12-23  Kees Cook  <kees@outflux.net>
 
 	* configure.ac, src/Makefile_insert, src/extension/script/Makefile_insert:

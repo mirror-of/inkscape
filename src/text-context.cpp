@@ -304,7 +304,7 @@ sp_text_context_setup_text (SPTextContext *tc)
 	SPEventContext *ec = SP_EVENT_CONTEXT (tc);
 
 	/* Create <text> */
-	SPRepr *rtext = sp_repr_new ("text");
+	SPRepr *rtext = sp_repr_new ("svg:text");
 	sp_repr_set_attr (rtext, "xml:space", "preserve"); // we preserve spaces in the text objects we create
 
 	/* Set style */
@@ -314,7 +314,7 @@ sp_text_context_setup_text (SPTextContext *tc)
 	sp_repr_set_double (rtext, "y", tc->pdoc[NR::Y]);
 
 	/* Create <tspan> */
-	SPRepr *rtspan = sp_repr_new ("tspan");
+	SPRepr *rtspan = sp_repr_new ("svg:tspan");
 	sp_repr_set_attr (rtspan, "sodipodi:role", "line"); // otherwise, why bother creating the tspan?
 	sp_repr_add_child (rtext, rtspan, NULL);
 	sp_repr_unref (rtspan);

@@ -280,7 +280,7 @@ sp_path_write(SPObject *object, SPRepr *repr, guint flags)
     SPShape *shape = (SPShape *) object;
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-        repr = sp_repr_new("path");
+        repr = sp_repr_new("svg:path");
     }
 
     if ( shape->curve != NULL ) {

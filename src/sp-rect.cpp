@@ -221,7 +221,7 @@ sp_rect_write(SPObject *object, SPRepr *repr, guint flags)
     SPRect *rect = SP_RECT(object);
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-        repr = sp_repr_new("rect");
+        repr = sp_repr_new("svg:rect");
     }
 
     sp_repr_set_double(repr, "width", rect->width.computed);

@@ -472,7 +472,7 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
         }
 
         /* Create object */
-        SPRepr *repr = sp_repr_new("rect");
+        SPRepr *repr = sp_repr_new("svg:rect");
 
         /* Set style */
         sp_desktop_apply_style_tool (desktop, repr, "tools.shapes.rect", false);

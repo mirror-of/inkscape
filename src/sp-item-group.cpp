@@ -283,7 +283,7 @@ sp_group_write (SPObject *object, SPRepr *repr, guint flags)
 
 	if (flags & SP_OBJECT_WRITE_BUILD) {
 		GSList *l;
-		if (!repr) repr = sp_repr_new ("g");
+		if (!repr) repr = sp_repr_new ("svg:g");
 		l = NULL;
 		for (child = sp_object_first_child(object); child != NULL; child = SP_OBJECT_NEXT(child) ) {
 			crepr = child->updateRepr(NULL, flags);
@@ -466,7 +466,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 	SPItem *pitem = SP_ITEM (SP_OBJECT_PARENT (gitem));
 	SPRepr *prepr = SP_OBJECT_REPR (pitem);
 
-	g_return_if_fail (!strcmp (sp_repr_name (grepr), "g") || !strcmp (sp_repr_name (grepr), "a") || !strcmp (sp_repr_name (grepr), "switch"));
+	g_return_if_fail (!strcmp (sp_repr_name (grepr), "svg:g") || !strcmp (sp_repr_name (grepr), "svg:a") || !strcmp (sp_repr_name (grepr), "svg:switch"));
 
 	/* Step 1 - generate lists of children objects */
 	GSList *items = NULL;

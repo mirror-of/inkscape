@@ -149,7 +149,7 @@ static SPRepr *sp_anchor_write(SPObject *object, SPRepr *repr, guint flags)
     SPAnchor *anchor = SP_ANCHOR(object);
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-        repr = sp_repr_new("a");
+        repr = sp_repr_new("svg:a");
     }
 
     sp_repr_set_attr(repr, "xlink:href", anchor->href);

@@ -177,7 +177,7 @@ sp_line_write (SPObject *object, SPRepr *repr, guint flags)
 	SPLine *line  = SP_LINE (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("line");
+		repr = sp_repr_new ("svg:line");
 	}
 
 	if (repr != SP_OBJECT_REPR (object)) {

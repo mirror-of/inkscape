@@ -259,7 +259,7 @@ static SPRepr *
 sp_mask_write (SPObject *object, SPRepr *repr, guint flags)
 {
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("mask");
+		repr = sp_repr_new ("svg:mask");
 	}
 
 	if (((SPObjectClass *) (parent_class))->write)

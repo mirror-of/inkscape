@@ -133,7 +133,7 @@ static SPRepr *sp_defs_write(SPObject *object, SPRepr *repr, guint flags)
     if (flags & SP_OBJECT_WRITE_BUILD) {
         
         if (!repr) {
-            repr = sp_repr_new("defs");
+            repr = sp_repr_new("svg:defs");
         }
         
         GSList *l = NULL;

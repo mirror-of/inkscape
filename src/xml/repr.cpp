@@ -492,7 +492,7 @@ sp_repr_remove_child(SPRepr *repr, SPRepr *child)
             // added a check that the namedview is top-level (child of svg),
             // otherwise this freezes when trying to ungroup imported group   --bb
             if ( !strcmp(sp_repr_name(child), "sodipodi:namedview")  &&
-                 !strcmp(sp_repr_name(sp_repr_parent(child)), "svg") )
+                 !strcmp(sp_repr_name(sp_repr_parent(child)), "svg:svg") )
             {
                 allowed = FALSE;
             } else {
@@ -708,7 +708,7 @@ SPReprDoc *
 sp_repr_document_new(char const *rootname)
 {
     SPReprDoc *doc = (SPReprDoc *) sp_repr_new_from_code(SP_XML_DOCUMENT_NODE, g_quark_from_static_string("xml"));
-    if (!strcmp(rootname, "svg")) {
+    if (!strcmp(rootname, "svg:svg")) {
         sp_repr_set_attr(doc, "version", "1.0");
         sp_repr_set_attr(doc, "standalone", "no");
         sp_repr_set_attr(doc, "doctype",

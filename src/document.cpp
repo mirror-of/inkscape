@@ -296,7 +296,7 @@ sp_document_create (SPReprDoc *rdoc,
 	/* fixme: Again, I moved these here to allow version determining in ::build (Lauris) */
 
 	/* A quick hack to get namespaces into doc */
-	sp_repr_set_attr (rroot, "xmlns", SP_SVG_NS_URI);
+	sp_repr_set_attr (rroot, "xmlns:svg", SP_SVG_NS_URI);
 	sp_repr_set_attr (rroot, "xmlns:sodipodi", SP_SODIPODI_NS_URI);
 	sp_repr_set_attr (rroot, "xmlns:inkscape", SP_INKSCAPE_NS_URI);
 	sp_repr_set_attr (rroot, "xmlns:xlink", SP_XLINK_NS_URI);
@@ -351,7 +351,7 @@ sp_document_create (SPReprDoc *rdoc,
 	// Create metadata if it doesn't already exist
 	if (!sp_item_group_get_child_by_name ((SPGroup *) document->root, NULL, "metadata")) {
 		// create repr
-		SPRepr * rnew = sp_repr_new ("metadata");
+		SPRepr * rnew = sp_repr_new ("svg:metadata");
 		// insert into the document
 		sp_repr_add_child (rroot, rnew, NULL);
 		// clean up
@@ -361,7 +361,7 @@ sp_document_create (SPReprDoc *rdoc,
 	/* Defs */
 	if (!SP_ROOT (document->root)->defs) {
 		SPRepr *r;
-		r = sp_repr_new ("defs");
+		r = sp_repr_new ("svg:defs");
 		sp_repr_add_child (rroot, r, NULL);
 		sp_repr_unref (r);
 		g_assert (SP_ROOT (document->root)->defs);
@@ -406,7 +406,7 @@ sp_document_new (const gchar *uri, unsigned int advertize, unsigned int keepaliv
 		rroot = sp_repr_document_root (rdoc);
 		/* If xml file is not svg, return NULL without warning */
 		/* fixme: destroy document */
-		if (strcmp (sp_repr_name (rroot), "svg") != 0) return NULL;
+		if (strcmp (sp_repr_name (rroot), "svg:svg") != 0) return NULL;
 		s = g_strdup (uri);
 		p = strrchr (s, '/');
 		if (p) {
@@ -419,7 +419,7 @@ sp_document_new (const gchar *uri, unsigned int advertize, unsigned int keepaliv
 		}
 		g_free (s);
 	} else {
-		rdoc = sp_repr_document_new ("svg");
+		rdoc = sp_repr_document_new ("svg:svg");
 	}
 
 	if (make_new) {
@@ -455,7 +455,7 @@ sp_document_new_from_mem (const gchar *buffer, gint length, unsigned int adverti
 	rroot = sp_repr_document_root (rdoc);
 	/* If xml file is not svg, return NULL without warning */
 	/* fixme: destroy document */
-	if (strcmp (sp_repr_name (rroot), "svg") != 0) return NULL;
+	if (strcmp (sp_repr_name (rroot), "svg:svg") != 0) return NULL;
 
 	name = g_strdup_printf (_("Memory document %d"), ++doc_count);
 

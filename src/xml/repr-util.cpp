@@ -137,7 +137,7 @@ sp_xml_dtoa (gchar *buf, double val, unsigned int tprec, unsigned int fprec, uns
 static SPXMLNs *namespaces=NULL;
 
 /*
- * There are the default XML namespaces to use for the URIs defined
+ * There are the prefixes to use for the XML namespaces defined
  * in repr.h
  */
 static void

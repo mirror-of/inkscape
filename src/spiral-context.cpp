@@ -431,7 +431,7 @@ sp_spiral_drag (SPSpiralContext * sc, NR::Point p, guint state)
         }
 
 		/* Create object */
-		SPRepr *repr = sp_repr_new ("path");
+		SPRepr *repr = sp_repr_new ("svg:path");
              sp_repr_set_attr (repr, "sodipodi:type", "spiral");
 
 		/* Set style */

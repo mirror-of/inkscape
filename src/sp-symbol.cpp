@@ -388,7 +388,7 @@ sp_symbol_write (SPObject *object, SPRepr *repr, guint flags)
 	symbol = SP_SYMBOL (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("symbol");
+		repr = sp_repr_new ("svg:symbol");
 	}
 
 	sp_repr_set_attr (repr, "viewBox", sp_repr_attr (object->repr, "viewBox"));

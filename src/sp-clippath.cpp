@@ -271,7 +271,7 @@ sp_clippath_write (SPObject *object, SPRepr *repr, guint flags)
 	cp = SP_CLIPPATH (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("clipPath");
+		repr = sp_repr_new ("svg:clipPath");
 	}
 
 	if (((SPObjectClass *) (parent_class))->write)

@@ -108,7 +108,7 @@ sp_objectgroup_write (SPObject *object, SPRepr *repr, guint flags)
 
 	if (flags & SP_OBJECT_WRITE_BUILD) {
 		GSList *l;
-		if (!repr) repr = sp_repr_new ("g");
+		if (!repr) repr = sp_repr_new ("svg:g");
 		l = NULL;
 		for ( child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
 			crepr = child->updateRepr(NULL, flags);

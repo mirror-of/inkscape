@@ -1180,7 +1180,7 @@ sp_ui_drag_data_received (GtkWidget * widget,
 		repr = sp_repr_document_root (rnewdoc);
 		style = sp_repr_attr (repr, "style");
 
-		newgroup = sp_repr_new ("g");
+		newgroup = sp_repr_new ("svg:g");
 		sp_repr_set_attr (newgroup, "style", style);
 
 		for (child = repr->children; child != NULL; child = child->next) {
@@ -1316,7 +1316,7 @@ sp_ui_import_one_file(char const *filename)
 		repr = sp_repr_document_root (rnewdoc);
 		style = sp_repr_attr (repr, "style");
 
-		newgroup = sp_repr_new ("g");
+		newgroup = sp_repr_new ("svg:g");
 		sp_repr_set_attr (newgroup, "style", style);
 
 		for (child = repr->children; child != NULL; child = child->next) {
@@ -1348,7 +1348,7 @@ sp_ui_import_one_file(char const *filename)
 		pb = gdk_pixbuf_new_from_file (localFilename, NULL);
 		if (pb) {
 			/* We are readable */
-			repr = sp_repr_new ("image");
+			repr = sp_repr_new ("svg:image");
 			sp_repr_set_attr (repr, "xlink:href", relname);
 			sp_repr_set_attr (repr, "sodipodi:absref", filename);
 			sp_repr_set_double (repr, "width", gdk_pixbuf_get_width (pb));

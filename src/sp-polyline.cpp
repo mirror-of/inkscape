@@ -160,7 +160,7 @@ sp_polyline_write (SPObject *object, SPRepr *repr, guint flags)
 	polyline = SP_POLYLINE (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("polyline");
+		repr = sp_repr_new ("svg:polyline");
 	}
 
 	if (repr != SP_OBJECT_REPR (object)) {

@@ -77,7 +77,7 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 		SP_OBJECT(gr)->updateRepr(((SPObject *) gr)->repr, SP_OBJECT_WRITE_EXT | SP_OBJECT_WRITE_ALL);
 
 		/* Step 2 - create new empty gradient and prepend it to <defs> */
-		repr = sp_repr_new ("linearGradient");
+		repr = sp_repr_new ("svg:linearGradient");
 		//sp_repr_set_attr(repr, "inkscape:collect", "always");
 		sp_repr_add_child (SP_OBJECT_REPR (defs), repr, NULL);
 		spnew = (SPGradient *) doc->getObjectByRepr(repr);
@@ -143,9 +143,9 @@ sp_gradient_get_private_normalized (SPDocument *document, SPGradient *vector, SP
 	// create a new private gradient of the requested type
 	SPRepr *repr;
 	if (type == SP_GRADIENT_TYPE_LINEAR) {
-		repr = sp_repr_new ("linearGradient");
+		repr = sp_repr_new ("svg:linearGradient");
 	} else {
-		repr = sp_repr_new ("radialGradient");
+		repr = sp_repr_new ("svg:radialGradient");
 	}
 
 	// privates are garbage-collectable
@@ -523,7 +523,7 @@ sp_document_default_gradient_vector (SPDocument *document, guint32 color)
 {
 	SPDefs *defs = (SPDefs *) SP_DOCUMENT_DEFS (document);
 
-	SPRepr *repr = sp_repr_new ("linearGradient");
+	SPRepr *repr = sp_repr_new ("svg:linearGradient");
 
 	sp_repr_set_attr(repr, "inkscape:collect", "always"); 
       // set here, but removed when it's edited in the gradient editor
@@ -531,7 +531,7 @@ sp_document_default_gradient_vector (SPDocument *document, guint32 color)
 	// (1) here, search gradients by color and return what is found without duplication
 	// (2) in fill & stroke, show only one copy of each gradient in list
 
-	SPRepr *stop = sp_repr_new ("stop");
+	SPRepr *stop = sp_repr_new ("svg:stop");
 
 	gchar b[64];
 	sp_svg_write_color (b, 64, color);
@@ -547,7 +547,7 @@ sp_document_default_gradient_vector (SPDocument *document, guint32 color)
 	sp_repr_append_child (repr, stop);
 	sp_repr_unref (stop);
 
-	stop = sp_repr_new ("stop");
+	stop = sp_repr_new ("svg:stop");
 
 	{
 	gchar *t = g_strdup_printf ("stop-color:%s;stop-opacity:0;", b);

@@ -310,7 +310,7 @@ sp_tspan_write (SPObject *object, SPRepr *repr, guint flags)
 	SPTSpan *tspan = SP_TSPAN (object);
 	
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("tspan");
+		repr = sp_repr_new ("svg:tspan");
 	}
 	
 	bool  became_empty=false;
@@ -641,7 +641,7 @@ sp_textpath_write (SPObject *object, SPRepr *repr, guint flags)
 	SPTextPath *textpath = SP_TEXTPATH (object);
 	
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("textpath");
+		repr = sp_repr_new ("svg:textpath");
 	}
 	
 	char* nlist=NULL;

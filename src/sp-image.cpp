@@ -592,7 +592,7 @@ sp_image_write (SPObject *object, SPRepr *repr, guint flags)
 	image = SP_IMAGE (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("image");
+		repr = sp_repr_new ("svg:image");
 	}
 
 	sp_repr_set_attr (repr, "xlink:href", image->href);

@@ -214,7 +214,7 @@ struct rdf_license_t rdf_licenses [] = {
     { NULL, NULL, rdf_license_empty, }
 };
 
-#define XML_TAG_NAME_METADATA "metadata"
+#define XML_TAG_NAME_METADATA "svg:metadata"
 #define XML_TAG_NAME_RDF      "rdf:RDF"
 #define XML_TAG_NAME_WORK     "cc:Work"
 #define XML_TAG_NAME_LICENSE  "cc:License"

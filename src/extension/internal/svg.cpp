@@ -147,7 +147,7 @@ Svg::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
 	if (spns) {
 		repr = sp_document_repr_root (doc);
 	} else {
-		rdoc = sp_repr_document_new ("svg");
+		rdoc = sp_repr_document_new ("svg:svg");
 		repr = sp_repr_document_root (rdoc);
 		repr = sp_document_root (doc)->updateRepr(repr, SP_OBJECT_WRITE_BUILD);
 	}

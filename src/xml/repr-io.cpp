@@ -150,17 +150,19 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
     SPReprDoc *rdoc=NULL;
 
     if (root != NULL) {
-        if (default_ns) {
-            sp_repr_set_attr (root, "xmlns", default_ns);
-        }
         g_hash_table_foreach (prefix_map, (GHFunc)sp_repr_set_xmlns_attr, root);
-        /* always include Sodipodi and Inkscape namespaces */
+
+        /* always include SVG, Sodipodi and Inkscape namespaces */
+        sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_SVG_NS_URI, "svg"), SP_SVG_NS_URI, root);
         sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_SODIPODI_NS_URI, "sodipodi"), SP_SODIPODI_NS_URI, root);
         sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_INKSCAPE_NS_URI, "inkscape"), SP_INKSCAPE_NS_URI, root);
 
         rdoc = sp_repr_document_new_list(reprs);
 
-        if (!strcmp (sp_repr_name (root), "svg") && default_ns && !strcmp (default_ns, SP_SVG_NS_URI)) {
+        /* TODO: if the root is just "svg", go through and "promote" all the
+         *       names without prefixes into the SVG namespace */
+
+        if (!strcmp (sp_repr_name (root), "svg:svg") && default_ns && !strcmp (default_ns, SP_SVG_NS_URI)) {
             sp_repr_set_attr ((SPRepr *) rdoc, "doctype", sp_svg_doctype_str);
             /* always include XLink namespace */
             sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_XLINK_NS_URI, "xlink"), SP_XLINK_NS_URI, root);
@@ -191,15 +193,9 @@ gint
 sp_repr_qualified_name (gchar *p, gint len, xmlNsPtr ns, const xmlChar *name, const gchar *default_ns, GHashTable *prefix_map)
 {
     const xmlChar *prefix;
-    if (ns) {
-        if (!ns->href) {
-            prefix = ns->prefix;
-        } else if (default_ns && !strcmp ((gchar*)ns->href, default_ns)) {
-            prefix = NULL;
-        } else {
-            prefix = (xmlChar*)sp_xml_ns_uri_prefix ((gchar*)ns->href, (char*)ns->prefix);
-            g_hash_table_insert (prefix_map, (gpointer)prefix, (gpointer)ns->href);
-        }
+    if ( ns && ns->href ) {
+        prefix = (xmlChar*)sp_xml_ns_uri_prefix ((gchar*)ns->href, (char*)ns->prefix);
+        g_hash_table_insert (prefix_map, (gpointer)prefix, (gpointer)ns->href);
     } else {
         prefix = NULL;
     }
@@ -248,11 +244,13 @@ sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *pre
 
     sp_repr_qualified_name (c, 256, node->ns, node->name, default_ns, prefix_map);
     repr = sp_repr_new (c);
+    /* TODO remember node->ns->prefix if node->ns != NULL */
 
     for (prop = node->properties; prop != NULL; prop = prop->next) {
         if (prop->children) {
             sp_repr_qualified_name (c, 256, prop->ns, prop->name, default_ns, prefix_map);
             sp_repr_set_attr (repr, c, (gchar*)prop->children->content);
+            /* TODO remember prop->ns->prefix if prop->ns != NULL */
         }
     }
 
@@ -384,7 +382,7 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
     // if this is a <text> element, suppress formatting whitespace
     // for its content and children:
 
-    if (!strcmp(sp_repr_name(repr), "text")) {
+    if (!strcmp(sp_repr_name(repr), "svg:text")) {
         add_whitespace = FALSE;
     }
 
@@ -429,7 +427,7 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
     // text elements cannot nest, so we can output newline
     // after closing text
 
-    if (add_whitespace || !strcmp (sp_repr_name (repr), "text")) {
+    if (add_whitespace || !strcmp (sp_repr_name (repr), "svg:text")) {
         fputs("\n", file);
     }
 }

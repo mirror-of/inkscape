@@ -542,7 +542,7 @@ spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
         if (dc->white_item) {
             repr = SP_OBJECT_REPR(dc->white_item);
         } else {
-            repr = sp_repr_new("path");
+            repr = sp_repr_new("svg:path");
             /* Set style */
             sp_desktop_apply_style_tool(desktop, repr, tool_name(dc), false);
         }

@@ -594,10 +594,10 @@ sp_root_write (SPObject *object, SPRepr *repr, guint flags)
 	SPRoot *root = SP_ROOT (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("svg");
+		repr = sp_repr_new ("svg:svg");
 	}
 
-	sp_repr_set_attr (repr, "xmlns", "http://www.w3.org/2000/svg");
+	sp_repr_set_attr (repr, "xmlns:svg", "http://www.w3.org/2000/svg");
 	sp_repr_set_attr (repr, "xmlns:xlink", "http://www.w3.org/1999/xlink");
 
 	if (flags & SP_OBJECT_WRITE_EXT) {

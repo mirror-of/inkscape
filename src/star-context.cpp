@@ -443,7 +443,7 @@ sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
         }
 
         /* Create object */
-        SPRepr *repr = sp_repr_new ("path");
+        SPRepr *repr = sp_repr_new ("svg:path");
         sp_repr_set_attr (repr, "sodipodi:type", "star");
 
         /* Set style */

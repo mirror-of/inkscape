@@ -472,7 +472,7 @@ sp_selected_path_boolop (bool_op bop)
         for (int i=0;i<nbRP;i++) {
             gchar *d = resPath[i]->svg_dump_path ();
       
-            SPRepr *repr = sp_repr_new ("path");
+            SPRepr *repr = sp_repr_new ("svg:path");
             sp_repr_set_attr (repr, "style", style);
             sp_repr_set_attr (repr, "d", d);
             g_free (d);
@@ -510,7 +510,7 @@ sp_selected_path_boolop (bool_op bop)
     } else {
         gchar *d = res->svg_dump_path ();
 
-        SPRepr *repr = sp_repr_new ("path");
+        SPRepr *repr = sp_repr_new ("svg:path");
         sp_repr_set_attr (repr, "style", style);
 
         sp_repr_set_attr (repr, "d", d);
@@ -702,7 +702,7 @@ sp_selected_path_outline ()
 
         if (res->descr_cmd.size() > 1) { // if there's 0 or 1 node left, drop this path altogether
 
-            SPRepr *repr = sp_repr_new ("path");
+            SPRepr *repr = sp_repr_new ("svg:path");
 
             // restore old style
             sp_repr_set_attr (repr, "style", style);
@@ -964,7 +964,7 @@ sp_selected_path_create_offset_object (int expand, bool updating)
     
         tstr[79] = '\0';
     
-        repr = sp_repr_new ("path");
+        repr = sp_repr_new ("svg:path");
         sp_repr_set_attr (repr, "sodipodi:type", "inkscape:offset");
         if (expand > 0)
         {
@@ -1237,7 +1237,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 
             tstr[79] = '\0';
 
-            SPRepr *repr = sp_repr_new ("path");
+            SPRepr *repr = sp_repr_new ("svg:path");
 
             sp_repr_set_attr (repr, "style", style);
 
@@ -1381,7 +1381,7 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
         }
 
         {
-            SPRepr *repr = sp_repr_new ("path");
+            SPRepr *repr = sp_repr_new ("svg:path");
 
             sp_repr_set_attr (repr, "style", style);
 

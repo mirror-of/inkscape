@@ -168,7 +168,7 @@ sp_stop_write (SPObject *object, SPRepr *repr, guint flags)
 	SPStop *stop = SP_STOP (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("stop");
+		repr = sp_repr_new ("svg:stop");
 	}
 
 	gchar c[64];
@@ -625,7 +625,7 @@ sp_gradient_repr_set_vector (SPGradient *gr, SPRepr *repr, SPGradientVector *vec
 		for (int i = 0; i < vector->nstops; i++) {
 			gchar c[64];
 			Inkscape::SVGOStringStream os;
-			SPRepr *child = sp_repr_new ("stop");
+			SPRepr *child = sp_repr_new ("svg:stop");
 			sp_repr_set_double (child, "offset",
 						      vector->stops[i].offset * (vector->end - vector->start) + vector->start);
 			sp_svg_write_color (c, 64, sp_color_get_rgba32_ualpha (&vector->stops[i].color, 0x00));
@@ -639,7 +639,7 @@ sp_gradient_repr_set_vector (SPGradient *gr, SPRepr *repr, SPGradientVector *vec
 	/* Now collect stops from original repr */
 	GSList *sl = NULL;
 	for (SPRepr *child = repr->children; child != NULL; child = child->next) {
-		if (!strcmp (sp_repr_name (child), "stop")) {
+		if (!strcmp (sp_repr_name (child), "svg:stop")) {
 			sl = g_slist_prepend (sl, child);
 		}
 	}
@@ -1165,7 +1165,7 @@ sp_lineargradient_write (SPObject *object, SPRepr *repr, guint flags)
 	SPLinearGradient *lg = SP_LINEARGRADIENT (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("linearGradient");
+		repr = sp_repr_new ("svg:linearGradient");
 	}
 
 	if ((flags & SP_OBJECT_WRITE_ALL) || lg->x1.set)
@@ -1286,7 +1286,7 @@ sp_lineargradient_build_repr (SPLinearGradient *lg, gboolean vector)
 	g_return_val_if_fail (lg != NULL, NULL);
 	g_return_val_if_fail (SP_IS_LINEARGRADIENT (lg), NULL);
 
-	SPRepr *repr = sp_repr_new ("linearGradient");
+	SPRepr *repr = sp_repr_new ("svg:linearGradient");
 
 	SP_OBJECT(lg)->updateRepr(repr, SP_OBJECT_WRITE_EXT | SP_OBJECT_WRITE_ALL);
 
@@ -1447,7 +1447,7 @@ sp_radialgradient_write (SPObject *object, SPRepr *repr, guint flags)
 	SPRadialGradient *rg = SP_RADIALGRADIENT (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-		repr = sp_repr_new ("radialGradient");
+		repr = sp_repr_new ("svg:radialGradient");
 	}
 
 	if ((flags & SP_OBJECT_WRITE_ALL) || rg->cx.set) sp_repr_set_double (repr, "cx", rg->cx.computed);
@@ -1540,7 +1540,7 @@ sp_radialgradient_build_repr (SPRadialGradient *rg, gboolean vector)
 	g_return_val_if_fail (rg != NULL, NULL);
 	g_return_val_if_fail (SP_IS_RADIALGRADIENT (rg), NULL);
 
-	SPRepr *repr = sp_repr_new ("radialGradient");
+	SPRepr *repr = sp_repr_new ("svg:radialGradient");
 
 	SP_OBJECT(rg)->updateRepr(repr, SP_OBJECT_WRITE_EXT | SP_OBJECT_WRITE_ALL);
 

@@ -254,7 +254,7 @@ sp_use_write(SPObject *object, SPRepr *repr, guint flags)
     SPUse *use = SP_USE(object);
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-        repr = sp_repr_new("use");
+        repr = sp_repr_new("svg:use");
     }
 
     if (((SPObjectClass *) (parent_class))->write) {

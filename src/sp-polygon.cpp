@@ -123,7 +123,7 @@ static SPRepr *sp_polygon_write(SPObject *object, SPRepr *repr, guint flags)
     sp_shape_set_shape(shape);
 
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-        repr = sp_repr_new("polygon");
+        repr = sp_repr_new("svg:polygon");
     }
 
     /* We can safely write points here, because all subclasses require it too (Lauris) */

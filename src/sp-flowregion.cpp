@@ -254,7 +254,7 @@ sp_flowregion_write (SPObject *object, SPRepr *repr, guint flags)
 	group = SP_FLOWREGION (object);
 	
 	if ( flags&SP_OBJECT_WRITE_BUILD ) {
-		if ( repr == NULL ) repr = sp_repr_new ("flowRegion");
+		if ( repr == NULL ) repr = sp_repr_new ("svg:flowRegion");
 	}
 
 	if (((SPObjectClass *) (flowregion_parent_class))->write)
@@ -458,7 +458,7 @@ sp_flowregionexclude_write (SPObject *object, SPRepr *repr, guint flags)
 	group = SP_FLOWREGIONEXCLUDE (object);
 	
 	if ( flags&SP_OBJECT_WRITE_BUILD ) {
-		if ( repr == NULL ) repr = sp_repr_new ("flowRegionExclude");
+		if ( repr == NULL ) repr = sp_repr_new ("svg:flowRegionExclude");
 	}
 	
 	if (((SPObjectClass *) (flowregionexclude_parent_class))->write)

@@ -269,7 +269,7 @@ EcmaObject *EcmaBinding::processNode(SPRepr *node, EcmaObject *parent)
 
     g_message("node:<%s>\n", name);
 
-    if (strcmp("script", name)==0)
+    if (strcmp("svg:script", name)==0)
         {
         //we are a <script> node
         //#1 check for 'javascript' or 'ecmascript'

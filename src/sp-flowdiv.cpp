@@ -249,7 +249,7 @@ sp_flowdiv_write (SPObject *object, SPRepr *repr, guint flags)
 //	SPFlowdiv *group = SP_FLOWDIV (object);
 	
 	if ( flags&SP_OBJECT_WRITE_BUILD ) {
-		if ( repr == NULL ) repr = sp_repr_new ("flowDiv");
+		if ( repr == NULL ) repr = sp_repr_new ("svg:flowDiv");
 		GSList *l = NULL;
 		for (SPObject* child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
 			SPRepr* c_repr=NULL;
@@ -467,7 +467,7 @@ sp_flowtspan_write (SPObject *object, SPRepr *repr, guint flags)
 //	SPFlowtspan *group = SP_FLOWTSPAN (object);
 	
 	if ( flags&SP_OBJECT_WRITE_BUILD ) {
-		if ( repr == NULL ) repr = sp_repr_new ("flowSpan");
+		if ( repr == NULL ) repr = sp_repr_new ("svg:flowSpan");
 		GSList *l = NULL;
 		for (SPObject* child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
 			SPRepr* c_repr=NULL;
@@ -688,7 +688,7 @@ sp_flowpara_write (SPObject *object, SPRepr *repr, guint flags)
 	//	SPFlowpara *group = SP_FLOWPARA (object);
 	
 	if ( flags&SP_OBJECT_WRITE_BUILD ) {
-		if ( repr == NULL ) repr = sp_repr_new ("flowPara");
+		if ( repr == NULL ) repr = sp_repr_new ("svg:flowPara");
 		GSList *l = NULL;
 		for (SPObject* child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
 			SPRepr* c_repr=NULL;
@@ -800,7 +800,7 @@ sp_flowline_write (SPObject *object, SPRepr *repr, guint flags)
 	//	SPFlowline *group = SP_FLOWLINE (object);
 	
 	if ( flags&SP_OBJECT_WRITE_BUILD ) {
-		if ( repr == NULL ) repr = sp_repr_new ("flowLine");
+		if ( repr == NULL ) repr = sp_repr_new ("svg:flowLine");
 	} else {
 	}
 		
@@ -886,7 +886,7 @@ sp_flowregionbreak_write (SPObject *object, SPRepr *repr, guint flags)
 	//	SPFlowregionbreak *group = SP_FLOWREGIONBREAK (object);
 	
 	if ( flags&SP_OBJECT_WRITE_BUILD ) {
-		if ( repr == NULL ) repr = sp_repr_new ("flowLine");
+		if ( repr == NULL ) repr = sp_repr_new ("svg:flowLine");
 	} else {
 	}
 		

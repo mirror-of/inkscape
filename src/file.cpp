@@ -803,7 +803,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
 
         if (style || items_count > 1) {
             // create group
-            SPRepr *newgroup = sp_repr_new("g");
+            SPRepr *newgroup = sp_repr_new("svg:g");
             sp_repr_set_attr(newgroup, "style", style);
 
             for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {

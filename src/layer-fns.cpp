@@ -38,7 +38,7 @@ SPObject *create_layer(SPObject *root, SPObject *layer) {
         id = g_strdup_printf("layer%d", layer_suffix++);
     } while (document->getObjectById(id));
 
-    SPRepr *repr=sp_repr_new("g");
+    SPRepr *repr=sp_repr_new("svg:g");
     sp_repr_set_attr(repr, "inkscape:groupmode", "layer");
     sp_repr_set_attr(repr, "id", id);
     g_free(id);

@@ -279,7 +279,7 @@ sp_group_cleanup(SPGroup *group)
     }
 
 
-    if (!strcmp(sp_repr_name(SP_OBJECT_REPR(group)), "g")) {
+    if (!strcmp(sp_repr_name(SP_OBJECT_REPR(group)), "svg:g")) {
         gint numitems;
         numitems = 0;
         for (SPObject *child = sp_object_first_child(SP_OBJECT(group)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
@@ -348,7 +348,7 @@ void sp_selection_group()
     // Remember the position of the topmost object.
     gint topmost = sp_repr_position((SPRepr *) g_slist_last(p)->data);
 
-    SPRepr *group = sp_repr_new("g");
+    SPRepr *group = sp_repr_new("svg:g");
 
     while (p) {
         SPRepr *spnew;
@@ -396,7 +396,7 @@ void sp_selection_ungroup()
         SPItem *group = (SPItem *) items->data;
 
         /* We do not allow ungrouping <svg> etc. (lauris) */
-        if (strcmp(sp_repr_name(SP_OBJECT_REPR(group)), "g") && strcmp(sp_repr_name(SP_OBJECT_REPR(group)), "switch")) {
+        if (strcmp(sp_repr_name(SP_OBJECT_REPR(group)), "svg:g") && strcmp(sp_repr_name(SP_OBJECT_REPR(group)), "svg:switch")) {
             // keep the non-group item in the new selection
             new_select = g_slist_prepend(new_select, group);
             continue;
@@ -1607,7 +1607,7 @@ sp_selection_clone()
     SPRepr *sel_repr = SP_OBJECT_REPR(selection->singleItem());
     SPRepr *parent = sp_repr_parent(sel_repr);
 
-    SPRepr *clone = sp_repr_new("use");
+    SPRepr *clone = sp_repr_new("svg:use");
     sp_repr_set_attr(clone, "x", "0");
     sp_repr_set_attr(clone, "y", "0");
     sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", sp_repr_attr(sel_repr, "id")));
@@ -1774,7 +1774,7 @@ sp_selection_tile(bool apply)
             item->deleteObject (false);
         }
 
-        SPRepr *rect = sp_repr_new ("rect");
+        SPRepr *rect = sp_repr_new ("svg:rect");
         sp_repr_set_attr (rect, "style", g_strdup_printf("stroke:none;fill:url(#%s)", pat_id));
         sp_repr_set_double (rect, "width", bounds.extent(NR::X));
         sp_repr_set_double (rect, "height", bounds.extent(NR::Y));
@@ -1977,7 +1977,7 @@ sp_selection_create_bitmap_copy ()
     GdkPixbuf *pb = gdk_pixbuf_new_from_file (filepath, NULL);
     if (pb) {
         // Create the repr for the image
-        SPRepr * repr = sp_repr_new ("image");
+        SPRepr * repr = sp_repr_new ("svg:image");
         sp_repr_set_attr (repr, "xlink:href", filename);
         sp_repr_set_attr (repr, "sodipodi:absref", filepath);
         sp_repr_set_double (repr, "width", gdk_pixbuf_get_width (pb));

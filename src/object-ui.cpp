@@ -205,12 +205,12 @@ sp_item_create_text_shape (GtkMenuItem *menuitem, SPItem *item)
 		return;
 	}
 
-    SPRepr *root_repr = sp_repr_new ("flowRoot");
+    SPRepr *root_repr = sp_repr_new ("svg:flowRoot");
     sp_repr_append_child (SP_OBJECT_REPR (SP_OBJECT_PARENT (item)), root_repr);
     SPObject *root_object = doc->getObjectByRepr(root_repr);
     g_return_if_fail (SP_IS_FLOWTEXT (root_object));
 
-    SPRepr *region_repr = sp_repr_new ("flowRegion");
+    SPRepr *region_repr = sp_repr_new ("svg:flowRegion");
     sp_repr_append_child (root_repr, region_repr);
     SPObject *object = doc->getObjectByRepr(region_repr);
     g_return_if_fail (SP_IS_FLOWREGION (object));
@@ -222,7 +222,7 @@ sp_item_create_text_shape (GtkMenuItem *menuitem, SPItem *item)
     GSList *reprs = g_slist_copy((GSList *) selection->reprList());
     for (GSList *i = reprs; i; i = i->next) {
          if (!SP_IS_IMAGE(doc->getObjectByRepr((SPRepr *)i->data))){
-            clone = sp_repr_new("use");
+            clone = sp_repr_new("svg:use");
             sp_repr_set_attr(clone, "x", "0");
             sp_repr_set_attr(clone, "y", "0");
             sp_repr_set_attr(clone, "xlink:href", g_strdup_printf("#%s", sp_repr_attr((SPRepr *)i->data, "id")));
@@ -233,12 +233,12 @@ sp_item_create_text_shape (GtkMenuItem *menuitem, SPItem *item)
 
     }
 
-    SPRepr *div_repr = sp_repr_new ("flowDiv");
+    SPRepr *div_repr = sp_repr_new ("svg:flowDiv");
     sp_repr_append_child (root_repr, div_repr);
     SPObject *div_object = doc->getObjectByRepr(div_repr);
     g_return_if_fail (SP_IS_FLOWDIV (div_object));
 
-    SPRepr *para_repr = sp_repr_new ("flowPara");
+    SPRepr *para_repr = sp_repr_new ("svg:flowPara");
     sp_repr_append_child (div_repr, para_repr);
     object = doc->getObjectByRepr(para_repr);
     g_return_if_fail (SP_IS_FLOWPARA (object));
@@ -263,7 +263,7 @@ sp_item_create_link (GtkMenuItem *menuitem, SPItem *item)
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
-	SPRepr *repr = sp_repr_new ("a");
+	SPRepr *repr = sp_repr_new ("svg:a");
 	sp_repr_add_child (SP_OBJECT_REPR (SP_OBJECT_PARENT (item)), repr, SP_OBJECT_REPR (item));
 	SPObject *object = SP_OBJECT_DOCUMENT (item)->getObjectByRepr(repr);
 	g_return_if_fail (SP_IS_ANCHOR (object));
