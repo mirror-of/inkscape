@@ -476,7 +476,8 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			} else return TRUE; // return the "I took care of it" value if it was consumed by the IM
 		} else { // do nothing if there's no object to type in - the key will be sent to parent context, 
 			    // except up/down that are swallowed to prevent the zoom field from activation
-			if ((event->key.keyval == GDK_Up || event->key.keyval == GDK_Down) && !MOD__CTRL_ONLY) 
+			if ((event->key.keyval == GDK_Up || event->key.keyval == GDK_Down || 
+					 event->key.keyval == GDK_KP_Up || event->key.keyval == GDK_KP_Down) && !MOD__CTRL_ONLY) 
 				return TRUE;
 		}
 		break;

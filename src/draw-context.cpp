@@ -256,6 +256,8 @@ sp_draw_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			break;
 		case GDK_Up: 
 		case GDK_Down: 
+		case GDK_KP_Up: 
+		case GDK_KP_Down: 
 			// prevent the zoom field from activation
 			if (!MOD__CTRL_ONLY)
 				ret = TRUE;
@@ -1075,6 +1077,8 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		switch (event->key.keyval) {
 		case GDK_Up: 
 		case GDK_Down: 
+		case GDK_KP_Up: 
+		case GDK_KP_Down: 
 			// prevent the zoom field from activation
 			if (!MOD__CTRL_ONLY)
 				ret = TRUE;
