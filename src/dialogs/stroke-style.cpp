@@ -878,6 +878,7 @@ sp_marker_preview_from_svg(gchar const *name,
     }
     return NULL;
 
+
 } // end of sp_marker_preview_from_svg()
 
 
@@ -885,7 +886,7 @@ GtkWidget *
 sp_marker_prev_new(unsigned int size, gchar const *name)
 {
     gchar *prevname = g_strconcat(name, "_prev", NULL);
-    guchar *pixels = sp_marker_preview_from_svg(prevname, size, 1);
+    guchar *pixels = sp_marker_preview_from_svg(prevname, size, size);
     /* TODO: If pixels == NULL then write to stderr that we couldn't find NAME.xpm,
        and suggest doing `make install'. */
     GtkWidget *pb = gtk_image_new_from_pixbuf(gdk_pixbuf_new_from_data(pixels,
@@ -986,9 +987,9 @@ sp_marker_defaultlist_from_svg(GtkWidget *m, SPDocument *current_doc)
                     g_object_set_data(G_OBJECT(i), "marker", markid);
                     GtkWidget *hb = gtk_hbox_new(FALSE, 4);
                     gtk_widget_show(hb);
-                    //GtkWidget *prv = sp_marker_prev_new(32, markid);
-                    //gtk_widget_show(prv);
-                    //gtk_box_pack_start(GTK_BOX(hb), prv, FALSE, FALSE, 0);
+                    GtkWidget *prv = sp_marker_prev_new(20, markid);
+                    gtk_widget_show(prv);
+                    gtk_box_pack_start(GTK_BOX(hb), prv, FALSE, FALSE, 0);
                     GtkWidget *l = gtk_label_new(sp_repr_attr(repr,"id"));
                     gtk_widget_show(l);
                     gtk_misc_set_alignment(GTK_MISC(l), 0.0, 0.5);
