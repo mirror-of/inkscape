@@ -18,7 +18,13 @@
 
 /* Returns TRUE is action was performed */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 unsigned int sp_shortcut_run (unsigned int shortcut);
+#ifdef __cplusplus
+}
+#endif
 
 /* Loads named shortcut table */
 
