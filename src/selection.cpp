@@ -128,7 +128,9 @@ bool SPSelection::includes(SPObject *obj) const {
 void SPSelection::add(SPObject *obj) {
     g_return_if_fail(obj != NULL);
     g_return_if_fail(SP_IS_OBJECT(obj));
-    g_return_if_fail(!includes(obj));
+
+    if (includes(obj))
+	return;
 
     _invalidateCachedLists();
     _add(obj);
