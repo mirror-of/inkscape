@@ -122,7 +122,7 @@ sp_object_properties_dialog (void)
 	if (!dlg) {
 		GtkWidget *vb, *nb, *hb, *l, *px, *page, *hs, *om, *m, *mi;
 
-		dlg = sp_window_new (_("Object style"), TRUE);
+		dlg = sp_window_new (_("Fill and stroke"), TRUE);
 		gtk_window_move ((GtkWindow *) dlg, x, y);
 		if (w && h) gtk_window_resize ((GtkWindow *) dlg, w, h);
 		sp_transientize (dlg);
