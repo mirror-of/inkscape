@@ -136,22 +136,34 @@ writePaths(PotraceTracingEngine *engine, path_t *plist,
         if (!node->fm)
             continue;
         dpoint_t *pt = node->fcurve[node->fm -1].c;
-        data << "M " << pt[2].x << " " << pt[2].y << " ";
+        double x0 = 0.0;
+        double y0 = 0.0;
+        double x1 = 0.0;
+        double y1 = 0.0;
+        double x2 = pt[2].x;
+        double y2 = pt[2].y;
+        data << "M " << x2 << " " << y2 << " ";
         for (int i=0 ; i<node->fm ; i++)
             {
             if (!potraceStatus("wp", (void *)engine))
                 return;
             pt = node->fcurve[i].c;
+            x0 = pt[0].x;
+            y0 = pt[0].y;
+            x1 = pt[1].x;
+            y1 = pt[1].y;
+            x2 = pt[2].x;
+            y2 = pt[2].y;
             switch (node->fcurve[i].tag)
                 {
                 case CORNER:
-                    data << "L " << pt[1].x << " " << pt[1].y << " " ;
-                    data << "L " << pt[2].x << " " << pt[2].y << " " ;
+                    data << "L " << x1 << " " << y1 << " " ;
+                    data << "L " << x2 << " " << y2 << " " ;
                 break;
                 case CURVETO:
-                    data << "C " << pt[0].x << " " << pt[0].y << " "
-                                 << pt[1].x << " " << pt[1].y << " "
-                                 << pt[2].x << " " << pt[2].y << " ";
+                    data << "C " << x0 << " " << y0 << " "
+                                 << x1 << " " << y1 << " "
+                                 << x2 << " " << y2 << " ";
 
                 break;
                 default:
