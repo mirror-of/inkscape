@@ -1,6 +1,6 @@
 
 
-include ./Makefile.mingw.common
+include ./Makefile.mingw.common.old
 
 
 all:	config.h
@@ -15,15 +15,8 @@ dist:
 	-$(RMDIR) inkscape
 	$(MKDIR) inkscape
 	$(CP) src$(S)inkscape.exe inkscape
-	$(CP) src$(S)inkview.exe inkscape
-	$(CP) src$(S)inkscape.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)libgtkmm-2.4-1.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)libgdkmm-2.4-1.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)libglibmm-2.4-1.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)libatkmm-1.6-1.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)libpangomm-1.4-1.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)libsigc-2.0-0.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)freetype6.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libsigc-1.2-5.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)freetype-6.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libart_lgpl_2-2.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libatk-1.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libgdk-win32-2.0-0.dll inkscape
@@ -33,14 +26,16 @@ dist:
 	$(CP) $(GTKDOS)$(S)bin$(S)libgobject-2.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libgtk-win32-2.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libgthread-2.0-0.dll inkscape
-	# $(CP) $(GTKDOS)$(S)bin$(S)libiconv-2.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libiconv-2.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libpango-1.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libpangowin32-1.0-0.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)libxml2-2.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)jpeg62.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)jpeg-62.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libpng12.dll inkscape
+# Fixme.. this dependency comes from gdk-pixbuf PNG loader
+	$(CP) $(GTKDOS)$(S)bin$(S)libpng12.dll inkscape$(S)libpng.dll
 	$(CP) $(GTKDOS)$(S)bin$(S)msvcr70.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)zlib1.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)zlib-1.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)zlib.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)iconv.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)intl.dll inkscape
 	$(CPDIR) $(GTKDOS)$(S)etc inkscape$(S)etc
@@ -48,9 +43,6 @@ dist:
 	echo "gtk-font-name=\"verdana 6.5\""           >> inkscape$(S)etc$(S)gtk-2.0$(S)gtkrc
 	echo ""                                        >> inkscape$(S)etc$(S)gtk-2.0$(S)gtkrc
 	$(MKDIR) inkscape$(S)lib
-	$(CPDIR) $(GTKDOS)$(S)lib$(S)gtkmm-2.4 inkscape$(S)lib$(S)gtkmm-2.4
-	$(CPDIR) $(GTKDOS)$(S)lib$(S)gdkmm-2.4 inkscape$(S)lib$(S)gdkmm-2.4
-	$(CPDIR) $(GTKDOS)$(S)lib$(S)glibmm-2.4 inkscape$(S)lib$(S)glibmm-2.4
 	$(CPDIR) $(GTKDOS)$(S)lib$(S)gtk-2.0 inkscape$(S)lib$(S)gtk-2.0
 	$(CPDIR) $(GTKDOS)$(S)lib$(S)glib-2.0 inkscape$(S)lib$(S)glib-2.0
 	$(CPDIR) $(GTKDOS)$(S)lib$(S)locale inkscape$(S)lib$(S)locale
@@ -58,12 +50,16 @@ dist:
 	$(MKDIR) inkscape$(S)fonts
 	$(CP) $(GTKDOS)$(S)fonts$(S)*.ttf inkscape$(S)fonts
 	$(CPDIR) share inkscape$(S)share
+	$(RM) inkscape$(S)share$(S)extensions$(S)ai_input.inkmod
+	$(RM) inkscape$(S)share$(S)extensions$(S)ai_output.inkmod
+	$(RM) inkscape$(S)share$(S)extensions$(S)epsi_output.inkmod
+	$(RM) inkscape$(S)share$(S)extensions$(S)svgz_input.inkmod
+	$(RM) inkscape$(S)share$(S)extensions$(S)svgz_output.inkmod
 	$(CPDIR) $(GTKDOS)$(S)share$(S)themes inkscape$(S)share
 	$(CPDIR) doc inkscape$(S)doc
 	$(MKDIR) inkscape$(S)data
 	$(MKDIR) inkscape$(S)locale
 	$(MAKE) -C po -f Makefile.mingw dist
-	$(MKDIR) inkscape$(S)modules
 	@echo "##################### D O N E ####################"
 
 clean:
