@@ -540,6 +540,8 @@ SPObject *sp_object_get_child_by_repr(SPObject *object, Inkscape::XML::Node *rep
 	g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
 	g_return_val_if_fail(repr != NULL, NULL);
 
+    if (object->_last_child && SP_OBJECT_REPR(object->_last_child) == repr)
+        return object->_last_child;   // optimization for common scenario
 	for ( SPObject *child = object->children ; child ; child = child->next ) {
 		if ( SP_OBJECT_REPR(child) == repr ) {
 			return child;
