@@ -19,6 +19,7 @@
 #include "sp-text.h"
 #include "svg-view.h"
 #include "help.h"
+#include "file.h"
 #include "helper/sp-intl.h"
 #include "libnr/nr-macros.h"
 
@@ -90,3 +91,8 @@ sp_help_about (void)
 
 } // close sp_help_about()
 
+void
+sp_help_tutorial (void)
+{
+	sp_file_open (INKSCAPE_PIXMAPDIR "/tutorial.svg", NULL);
+}
