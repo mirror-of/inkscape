@@ -340,7 +340,7 @@ sp_selected_item_to_curved_repr(SPItem * item, guint32 text_grouping_policy)
 void
 sp_path_cleanup (SPPath *path)
 {
-	if (strcmp (sp_repr_name (SP_OBJECT_REPR (path)), "svg:path"))
+	if (strcmp (SP_OBJECT_REPR (path)->name(), "svg:path"))
 	  return;
 
 	SPStyle *style = SP_OBJECT_STYLE (path);

@@ -361,15 +361,15 @@ build_from_reprdoc(SPReprDoc *doc, Implementation::Implementation *in_imp)
 
     /* sp_repr_print(repr); */
 
-    if (strcmp(sp_repr_name(repr), "inkscape-extension")) {
-        g_warning("Extension definition started with <%s> instead of <inkscape-extension>.  Extension will not be created.\n", sp_repr_name(repr));
+    if (strcmp(repr->name(), "inkscape-extension")) {
+        g_warning("Extension definition started with <%s> instead of <inkscape-extension>.  Extension will not be created.\n", repr->name());
         return NULL;
     }
 
     SPRepr *child_repr = sp_repr_children(repr);
     while (child_repr != NULL) {
-        char const *element_name = sp_repr_name(child_repr);
-        /* printf("Child: %s\n", sp_repr_name(child_repr)); */
+        char const *element_name = child_repr->name();
+        /* printf("Child: %s\n", child_repr->name()); */
         if (!strcmp(element_name, "input")) {
             module_functional_type = MODULE_INPUT;
         } else if (!strcmp(element_name, "output")) {

@@ -77,17 +77,17 @@ Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
         SPRepr *child_repr = sp_repr_children(repr);
         /* TODO: Handle what happens if we don't have these two */
         while (child_repr != NULL) {
-            if (!strcmp(sp_repr_name(child_repr), "id")) {
+            if (!strcmp(child_repr->name(), "id")) {
                 gchar const *val = sp_repr_content(sp_repr_children(child_repr));
                 id = g_strdup (val);
             } /* id */
-            if (!strcmp(sp_repr_name(child_repr), "name")) {
+            if (!strcmp(child_repr->name(), "name")) {
                 name = g_strdup (sp_repr_content(sp_repr_children(child_repr)));
             } /* name */
-            if (!strcmp(sp_repr_name(child_repr), "param")) {
+            if (!strcmp(child_repr->name(), "param")) {
                 make_param(child_repr);
             } /* param */
-            if (!strcmp(sp_repr_name(child_repr), "dependency")) {
+            if (!strcmp(child_repr->name(), "dependency")) {
                 _deps.push_back(new Dependency(child_repr));
             } /* param */
             child_repr = sp_repr_next(child_repr);
@@ -824,4 +824,3 @@ Extension::error_file_close (void)
 
 }  /* namespace Extension */
 }  /* namespace Inkscape */
-

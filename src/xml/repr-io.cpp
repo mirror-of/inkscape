@@ -373,7 +373,7 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
         /* promote elements of SVG documents that don't use namespaces
          * into the SVG namespace */
         if ( default_ns && !strcmp(default_ns, SP_SVG_NS_URI)
-             && !strcmp(sp_repr_name(root), "svg") )
+             && !strcmp(root->name(), "svg") )
         {
             promote_to_svg_namespace(root);
         }
@@ -728,7 +728,7 @@ sp_repr_write_stream_element (SPRepr * repr, Writer & out, gint indent_level,
     // if this is a <text> element, suppress formatting whitespace
     // for its content and children:
 
-    if (!strcmp(sp_repr_name(repr), "svg:text")) {
+    if (!strcmp(repr->name(), "svg:text")) {
         add_whitespace = FALSE;
     }
 
@@ -773,7 +773,7 @@ sp_repr_write_stream_element (SPRepr * repr, Writer & out, gint indent_level,
     // text elements cannot nest, so we can output newline
     // after closing text
 
-    if (add_whitespace || !strcmp (sp_repr_name (repr), "svg:text")) {
+    if (add_whitespace || !strcmp (repr->name(), "svg:text")) {
         out.writeString( "\n" );
     }
 }

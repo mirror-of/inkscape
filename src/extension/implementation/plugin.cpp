@@ -71,10 +71,10 @@ Plugin::load(Inkscape::Extension::Extension *module)
     SPRepr * child_repr = sp_repr_children(module->get_repr());
     const gchar * name = NULL;
     while (child_repr != NULL) {
-        if (!strcmp(sp_repr_name(child_repr), "plugin")) {
+        if (!strcmp(child_repr->name(), "plugin")) {
             child_repr = sp_repr_children(child_repr);
             while (child_repr != NULL) {
-                if (!strcmp(sp_repr_name(child_repr), "name")) {
+                if (!strcmp(child_repr->name(), "name")) {
                     name = sp_repr_content(sp_repr_children(child_repr));
                 }
                 child_repr = sp_repr_next(child_repr);
@@ -155,10 +155,10 @@ Plugin::check(Inkscape::Extension::Extension *module)
     SPRepr * child_repr = sp_repr_children(module->get_repr());
     const gchar * name = NULL;
     while (child_repr != NULL) {
-        if (!strcmp(sp_repr_name(child_repr), "plugin")) {
+        if (!strcmp(child_repr->name(), "plugin")) {
             child_repr = sp_repr_children(child_repr);
             while (child_repr != NULL) {
-                if (!strcmp(sp_repr_name(child_repr), "name")) {
+                if (!strcmp(child_repr->name(), "name")) {
                     name = sp_repr_content(sp_repr_children(child_repr));
                 }
                 child_repr = sp_repr_next(child_repr);

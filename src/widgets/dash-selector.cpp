@@ -132,7 +132,7 @@ sp_dash_selector_new (SPRepr *drepr)
 		int ndashes = 0;
 		if (drepr) {
 			for (SPRepr *dr = drepr->firstChild(); dr; dr = dr->next()) {
-				if (!strcmp (sp_repr_name (dr), "dash"))
+				if (!strcmp (dr->name(), "dash"))
 					ndashes += 1;
 			}
 		}
@@ -142,7 +142,7 @@ sp_dash_selector_new (SPRepr *drepr)
 			SPStyle *style = sp_style_new ();
 			dashes = g_new (double *, ndashes + 1);
 			for (SPRepr *dr = drepr->firstChild(); dr; dr = dr->next()) {
-				if (!strcmp (sp_repr_name (dr), "dash")) {
+				if (!strcmp (dr->name(), "dash")) {
 					sp_style_read_from_repr (style, dr);
 					if (style->stroke_dash.n_dash > 0) {
 						dashes[pos] = g_new (double, style->stroke_dash.n_dash + 1);

@@ -268,9 +268,9 @@ element_attr_changed (SPRepr * repr, const gchar * key, const gchar * old_value,
 	if (strcmp (key, "id")) return;
 	
 	if (new_value) {
-		label = g_strdup_printf ("<%s id=\"%s\">", sp_repr_name(repr), new_value);
+		label = g_strdup_printf ("<%s id=\"%s\">", repr->name(), new_value);
 	} else {
-		label = g_strdup_printf ("<%s>", sp_repr_name(repr));
+		label = g_strdup_printf ("<%s>", repr->name());
 	}
 	gtk_ctree_node_set_text (GTK_CTREE (data->tree), data->node, 0, label);
 	g_free (label);
@@ -435,4 +435,3 @@ match_node_data_by_repr(gconstpointer data_p, gconstpointer repr)
 {
 	return ((const NodeData *)data_p)->repr != (const SPRepr *)repr;
 }
-

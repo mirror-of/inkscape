@@ -639,7 +639,7 @@ sp_gradient_repr_set_vector (SPGradient *gr, SPRepr *repr, SPGradientVector *vec
 	/* Now collect stops from original repr */
 	GSList *sl = NULL;
 	for (SPRepr *child = repr->firstChild() ; child != NULL; child = child->next() ) {
-		if (!strcmp (sp_repr_name (child), "svg:stop")) {
+		if (!strcmp (child->name(), "svg:stop")) {
 			sl = g_slist_prepend (sl, child);
 		}
 	}
@@ -1559,4 +1559,3 @@ sp_rg_fill (SPPainter *painter, NRPixBlock *pb)
 
 	nr_render ((NRRenderer *) &rgp->rgr, pb, NULL);
 }
-

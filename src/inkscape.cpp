@@ -649,7 +649,7 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
     }
 
     SPRepr *root = sp_repr_document_root (doc);
-    if (strcmp (sp_repr_name (root), "inkscape")) {
+    if (strcmp (root->name(), "inkscape")) {
         gchar *safeFn = Inkscape::IO::sanitizeString(fn);
         GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notsp, safeFn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
@@ -715,7 +715,7 @@ inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key)
     }
 
     SPRepr *repr = sp_repr_document_root (inkscape->preferences);
-    g_assert (!(strcmp (sp_repr_name (repr), "inkscape")));
+    g_assert (!(strcmp (repr->name(), "inkscape")));
 
     gchar const *s = key;
     while ((s) && (*s)) {

@@ -218,13 +218,13 @@ Script::load (Inkscape::Extension::Extension * module)
     /* This should probably check to find the executable... */
     child_repr = sp_repr_children(module->get_repr());
     while (child_repr != NULL) {
-        if (!strcmp(sp_repr_name(child_repr), "script")) {
+        if (!strcmp(child_repr->name(), "script")) {
             child_repr = sp_repr_children(child_repr);
             while (child_repr != NULL) {
-                if (!strcmp(sp_repr_name(child_repr), "command")) {
+                if (!strcmp(child_repr->name(), "command")) {
                     command_text = solve_reldir(child_repr);
                 }
-                if (!strcmp(sp_repr_name(child_repr), "helper_extension")) {
+                if (!strcmp(child_repr->name(), "helper_extension")) {
                     helper_extension = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
                 }
                 child_repr = sp_repr_next(child_repr);
@@ -273,10 +273,10 @@ Script::check (Inkscape::Extension::Extension * module)
 
     child_repr = sp_repr_children(module->get_repr());
     while (child_repr != NULL) {
-        if (!strcmp(sp_repr_name(child_repr), "script")) {
+        if (!strcmp(child_repr->name(), "script")) {
             child_repr = sp_repr_children(child_repr);
             while (child_repr != NULL) {
-                if (!strcmp(sp_repr_name(child_repr), "check")) {
+                if (!strcmp(child_repr->name(), "check")) {
                     command_text = solve_reldir(child_repr);
                     
                     if (command_text != NULL) {
@@ -291,7 +291,7 @@ Script::check (Inkscape::Extension::Extension * module)
                     }
                 }
 
-                if (!strcmp(sp_repr_name(child_repr), "helper_extension")) {
+                if (!strcmp(child_repr->name(), "helper_extension")) {
                     const gchar * helper;
 
                     helper = sp_repr_content(sp_repr_children(child_repr));

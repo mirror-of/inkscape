@@ -469,7 +469,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 	SPItem *pitem = SP_ITEM (SP_OBJECT_PARENT (gitem));
 	SPRepr *prepr = SP_OBJECT_REPR (pitem);
 
-	g_return_if_fail (!strcmp (sp_repr_name (grepr), "svg:g") || !strcmp (sp_repr_name (grepr), "svg:a") || !strcmp (sp_repr_name (grepr), "svg:switch"));
+	g_return_if_fail (!strcmp (grepr->name(), "svg:g") || !strcmp (grepr->name(), "svg:a") || !strcmp (grepr->name(), "svg:switch"));
 
 	/* Step 1 - generate lists of children objects */
 	GSList *items = NULL;
@@ -604,7 +604,7 @@ sp_item_group_get_child_by_name (SPGroup *group, SPObject *ref, const gchar *nam
 {
 	SPObject *child;
 	child = (ref) ? SP_OBJECT_NEXT(ref) : sp_object_first_child(SP_OBJECT(group));
-	while ( child && strcmp (sp_repr_name (SP_OBJECT_REPR(child)), name) ) {
+	while ( child && strcmp (SP_OBJECT_REPR(child)->name(), name) ) {
 		child = SP_OBJECT_NEXT(child);
 	}
 	return child;
@@ -650,4 +650,3 @@ void SPGroup::_updateLayerMode(unsigned int display_key) {
 		}
 	}
 }
-

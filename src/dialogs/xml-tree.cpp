@@ -1023,8 +1023,8 @@ xml_tree_node_mutable ( GtkCTreeNode * node )
     g_assert (repr);
 
     // don't let "defs" or "namedview" disappear
-    if ( !strcmp(sp_repr_name(repr),"svg:defs") ||
-         !strcmp(sp_repr_name(repr),"sodipodi:namedview") ) {
+    if ( !strcmp(repr->name(),"svg:defs") ||
+         !strcmp(repr->name(),"sodipodi:namedview") ) {
         return false;
     }
 

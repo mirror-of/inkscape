@@ -358,7 +358,7 @@ SPObject::defaultLabel() const {
 			if (id) {
 				_default_label = g_strdup_printf("#%s", id);
 			} else {
-				_default_label = g_strdup_printf("<%s>", sp_repr_name(SP_OBJECT_REPR(this)));
+				_default_label = g_strdup_printf("<%s>", SP_OBJECT_REPR(this)->name());
 			}
 		}
 		return _default_label;
@@ -1110,7 +1110,7 @@ sp_object_tagName_get (const SPObject *object, SPException *ex)
 	}
 
 	/* fixme: Exception if object is NULL? */
-	return sp_repr_name (object->repr);
+	return object->repr->name();
 }
 
 const gchar *
@@ -1160,7 +1160,7 @@ sp_object_get_unique_id (SPObject * object, const gchar * id)
 
 	count ++;
 
-	const gchar *name = sp_repr_name (object->repr);
+	const gchar *name = object->repr->name();
 	g_assert (name != NULL);
 
 	const gchar *local = strchr (name, ':');

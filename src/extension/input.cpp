@@ -47,26 +47,26 @@ Input::Input (SPRepr * in_repr, Implementation::Implementation * in_imp) : Exten
         child_repr = sp_repr_children(repr);
 
         while (child_repr != NULL) {
-            if (!strcmp(sp_repr_name(child_repr), "input")) {
+            if (!strcmp(child_repr->name(), "input")) {
                 child_repr = sp_repr_children(child_repr);
                 while (child_repr != NULL) {
-                    if (!strcmp(sp_repr_name(child_repr), "extension")) {
+                    if (!strcmp(child_repr->name(), "extension")) {
                         g_free (extension);
                         extension = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
                     }
-                    if (!strcmp(sp_repr_name(child_repr), "mimetype")) {
+                    if (!strcmp(child_repr->name(), "mimetype")) {
                         g_free (mimetype);
                         mimetype = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
                     }
-                    if (!strcmp(sp_repr_name(child_repr), "filetypename")) {
+                    if (!strcmp(child_repr->name(), "filetypename")) {
                         g_free (filetypename);
                         filetypename = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
                     }
-                    if (!strcmp(sp_repr_name(child_repr), "filetypetooltip")) {
+                    if (!strcmp(child_repr->name(), "filetypetooltip")) {
                         g_free (filetypetooltip);
                         filetypetooltip = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
                     }
-                    if (!strcmp(sp_repr_name(child_repr), "output_extension")) {
+                    if (!strcmp(child_repr->name(), "output_extension")) {
                         g_free (output_extension);
                         output_extension = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
                     }

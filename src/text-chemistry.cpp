@@ -121,7 +121,7 @@ text_put_on_path (void)
 		// make a copy of each text child
 		SPRepr *copy = sp_repr_duplicate((SPRepr *) i->data);
 		// We cannot have multiline in textpath, so remove line attrs from tspans
-		if (!strcmp (sp_repr_name (copy), "svg:tspan")) {
+		if (!strcmp (copy->name(), "svg:tspan")) {
 			sp_repr_set_attr (copy, "sodipodi:role", NULL);
 			sp_repr_set_attr (copy, "x", NULL);
 			sp_repr_set_attr (copy, "y", NULL);

@@ -306,7 +306,7 @@ sp_document_new (const gchar *uri, unsigned int keepalive, bool make_new)
 		rroot = sp_repr_document_root (rdoc);
 		/* If xml file is not svg, return NULL without warning */
 		/* fixme: destroy document */
-		if (strcmp (sp_repr_name (rroot), "svg:svg") != 0) return NULL;
+		if (strcmp (rroot->name(), "svg:svg") != 0) return NULL;
 		s = g_strdup (uri);
 		p = strrchr (s, '/');
 		if (p) {
@@ -355,7 +355,7 @@ sp_document_new_from_mem (const gchar *buffer, gint length, unsigned int keepali
 	rroot = sp_repr_document_root (rdoc);
 	/* If xml file is not svg, return NULL without warning */
 	/* fixme: destroy document */
-	if (strcmp (sp_repr_name (rroot), "svg:svg") != 0) return NULL;
+	if (strcmp (rroot->name(), "svg:svg") != 0) return NULL;
 
 	name = g_strdup_printf (_("Memory document %d"), ++doc_count);
 
@@ -920,5 +920,3 @@ sp_document_resource_list_free (gpointer key, gpointer value, gpointer data)
 	g_slist_free ((GSList *) value);
 	return TRUE;
 }
-
-

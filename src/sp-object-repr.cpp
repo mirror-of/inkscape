@@ -58,7 +58,7 @@ sp_object_repr_build_tree (SPDocument *document, SPRepr *repr)
 	g_assert (document != NULL);
 	g_assert (repr != NULL);
 
-	gchar const * const name = sp_repr_name(repr);
+	gchar const * const name = repr->name();
 	g_assert (name != NULL);
 	GType const type = name_to_gtype(REPR_NAME, name);
 	g_assert (g_type_is_a (type, SP_TYPE_ROOT));
@@ -80,7 +80,7 @@ sp_repr_type_lookup (SPRepr *repr)
 		gchar const * const type_name = sp_repr_attr(repr, "sodipodi:type");
 		return ( type_name
 			 ? name_to_gtype(SODIPODI_TYPE, type_name)
-			 : name_to_gtype(REPR_NAME, sp_repr_name(repr)) );
+			 : name_to_gtype(REPR_NAME, repr->name()) );
 	} else {
 		return 0;
 	}

@@ -358,7 +358,7 @@ all_items (SPObject *r, GSList *l, bool hidden, bool locked)
     if (SP_IS_DEFS(r))
         return l; // we're not interested in items in defs 
 
-    if (!strcmp (sp_repr_name (SP_OBJECT_REPR (r)), "svg:metadata"))
+    if (!strcmp (SP_OBJECT_REPR (r)->name(), "svg:metadata"))
         return l; // we're not interested in metadata
 
     for (SPObject *child = sp_object_first_child(r); child; child = SP_OBJECT_NEXT (child)) {

@@ -314,7 +314,7 @@ sp_group_cleanup(SPGroup *group)
     }
 
 
-    if (!strcmp(sp_repr_name(SP_OBJECT_REPR(group)), "svg:g")) {
+    if (!strcmp(SP_OBJECT_REPR(group)->name(), "svg:g")) {
         gint numitems;
         numitems = 0;
         for (SPObject *child = sp_object_first_child(SP_OBJECT(group)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
@@ -431,7 +431,7 @@ void sp_selection_ungroup()
         SPItem *group = (SPItem *) items->data;
 
         /* We do not allow ungrouping <svg> etc. (lauris) */
-        if (strcmp(sp_repr_name(SP_OBJECT_REPR(group)), "svg:g") && strcmp(sp_repr_name(SP_OBJECT_REPR(group)), "svg:switch")) {
+        if (strcmp(SP_OBJECT_REPR(group)->name(), "svg:g") && strcmp(SP_OBJECT_REPR(group)->name(), "svg:switch")) {
             // keep the non-group item in the new selection
             new_select = g_slist_prepend(new_select, group);
             continue;

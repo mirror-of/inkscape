@@ -263,7 +263,7 @@ EcmaObject *EcmaBinding::processNode(SPRepr *node, EcmaObject *parent)
     //Create an EcmaObject
     EcmaObject *obj = new EcmaObject(this, parent);
     
-    char *name = (char *) sp_repr_name(node);
+    char *name = (char *) node->name();
     if (!name)
         throw EcmaException("processNode: unnamed node");
 

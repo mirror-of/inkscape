@@ -487,7 +487,7 @@ rdf_get_repr_text ( SPRepr * repr, struct rdf_work_entity_t * entity )
             for ( temp = sp_repr_children(temp) ;
                   temp ;
                   temp = sp_repr_next(temp) ) {
-                if (!strcmp(sp_repr_name(temp),"rdf:li") &&
+                if (!strcmp(temp->name(),"rdf:li") &&
                     temp->firstChild()) {
                     const gchar * str = temp->firstChild()->content();
                     if (bag) {
@@ -665,7 +665,7 @@ rdf_get_rdf_root_repr ( SPDocument * doc, bool build )
      */
     SPRepr * want_metadata = sp_repr_parent ( rdf );
     g_return_val_if_fail (want_metadata != NULL, NULL);
-    if (strcmp( sp_repr_name(want_metadata), XML_TAG_NAME_METADATA )) {
+    if (strcmp( want_metadata->name(), XML_TAG_NAME_METADATA )) {
             SPRepr * metadata = sp_repr_new( XML_TAG_NAME_METADATA );
             g_return_val_if_fail (metadata != NULL, NULL);
 
@@ -821,7 +821,7 @@ rdf_match_license ( SPRepr * repr, struct rdf_license_t * license )
         if ( attr == NULL ) continue;
 
 #ifdef DEBUG_MATCH
-        printf("\texamining '%s' => '%s'\n", sp_repr_name ( current ), attr);
+        printf("\texamining '%s' => '%s'\n", current->name(), attr);
 #endif
 
         bool found_match=FALSE;
@@ -830,11 +830,11 @@ rdf_match_license ( SPRepr * repr, struct rdf_license_t * license )
             if (matched[i]) continue;
 
 #ifdef DEBUG_MATCH
-            printf("\t\t'%s' vs '%s'\n", sp_repr_name ( current ), license->details[i].name);
+            printf("\t\t'%s' vs '%s'\n", current->name(), license->details[i].name);
             printf("\t\t'%s' vs '%s'\n", attr, license->details[i].resource);
 #endif
 
-            if (!strcmp( sp_repr_name ( current ),
+            if (!strcmp( current->name(),
                          license->details[i].name ) &&
                 !strcmp( attr,
                          license->details[i].resource )) {

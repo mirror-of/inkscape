@@ -179,10 +179,6 @@ inline unsigned int sp_repr_merge(SPRepr *repr, SPRepr const *src, gchar const *
 }
 
 /* Contents */
-
-inline const char *sp_repr_name(SPRepr const *repr) {
-	return repr->name();
-}
 inline const char *sp_repr_content(SPRepr const *repr) {
 	return repr->content();
 }
