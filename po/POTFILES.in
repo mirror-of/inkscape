@@ -116,15 +116,8 @@ src/libnrtype/cp936.cpp
 src/libnrtype/cp949.cpp
 src/libnrtype/cp950.cpp
 src/libnrtype/font-style-to-pos.cpp
-src/libnrtype/nr-font.cpp
-src/libnrtype/nr-rasterfont.cpp
-src/libnrtype/nr-type-directory.cpp
-src/libnrtype/nr-type-ft2.cpp
 src/libnrtype/nr-type-pos-def.cpp
 src/libnrtype/nr-type-primitives.cpp
-src/libnrtype/nr-type-w32.cpp
-src/libnrtype/nr-type-xft.cpp
-src/libnrtype/nr-typeface.cpp
 src/livarot/AVL.cpp
 src/livarot/DblLinked.cpp
 src/livarot/MySeg.cpp
