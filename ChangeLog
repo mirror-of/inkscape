@@ -4,7 +4,17 @@
 	#976703.
 	
 	* src/desktop-snap.cpp: default to snapping to bounding boxes when
-	snapping is first enabled.
+	snapping is first enabled.  Rework in terms of SPNamedView rather
+	than SPDesktop.
+
+	* src/desktop-snap.h: rework in terms of SPNamedView rather than
+	SPDesktop.
+
+	* src/arc-context.cpp, src/draw-context.cpp,
+	src/dyna-draw-context.cpp, src/nodepath.cpp src/rect-context.cpp,
+	src/select-context.cpp, src/selection-chemistry.cpp,
+	src/seltrans.cpp, src/sp-namedview.cpp, src/spiral-context.cpp,
+	src/star-context.cpp: Adapt for changes to snap code naming.
 
 2004-06-20  Ted Gould  <ted@gould.cx>
 
