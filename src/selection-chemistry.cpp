@@ -725,7 +725,7 @@ void sp_copy_gradient (SPGradient *gradient)
     while (ref) { 
         // climb up the refs, copying each one in the chain
         SPRepr *grad_repr =sp_repr_duplicate (SP_OBJECT_REPR(ref));
-        defs_clipboard = g_slist_prepend(defs_clipboard, grad_repr);
+        defs_clipboard = g_slist_prepend (defs_clipboard, grad_repr);
 
         ref = ref->ref->getObject();
     }
@@ -738,7 +738,7 @@ void sp_copy_pattern (SPPattern *pattern)
     while (ref) {
         // climb up the refs, copying each one in the chain
         SPRepr *pattern_repr = sp_repr_duplicate(SP_OBJECT_REPR(ref));
-        defs_clipboard = g_slist_prepend(defs_clipboard, pattern_repr);
+        defs_clipboard = g_slist_prepend (defs_clipboard, pattern_repr);
 
         // items in the pattern may also use gradients and other patterns, so we need to recurse here as well
         for (SPObject *child = sp_object_first_child(SP_OBJECT(ref)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
@@ -754,7 +754,7 @@ void sp_copy_pattern (SPPattern *pattern)
 void sp_copy_marker (SPMarker *marker)
 {
     SPRepr *marker_repr = sp_repr_duplicate(SP_OBJECT_REPR(marker));
-    defs_clipboard = g_slist_prepend(defs_clipboard, marker_repr);
+    defs_clipboard = g_slist_prepend (defs_clipboard, marker_repr);
 }
 
 
@@ -948,8 +948,8 @@ paste_defs (SPDocument *doc)
     for (GSList *gl = defs_clipboard; gl != NULL; gl = gl->next) {
         SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(doc);
         SPRepr *repr = (SPRepr *) gl->data;
-        SPObject *exists = doc->getObjectByRepr(repr);
-        if (!exists){
+        gchar const *id = sp_repr_attr(repr, "id");
+        if (!id || !doc->getObjectById(id)) {
             SPRepr *copy = sp_repr_duplicate(repr);
             sp_repr_add_child(SP_OBJECT_REPR(defs), copy, NULL);
             sp_repr_unref(copy);
