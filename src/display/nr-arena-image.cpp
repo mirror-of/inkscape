@@ -76,7 +76,7 @@ nr_arena_image_init (NRArenaImage *image)
 {
 	image->px = NULL;
 
-	image->pxw = image->pxh = image->pxrs = NULL;
+	image->pxw = image->pxh = image->pxrs = 0;
 	image->x = image->y = 0.0;
 	image->width = 256.0;
 	image->height = 256.0;
