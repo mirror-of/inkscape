@@ -25,3 +25,7 @@ NR::Coord NR::LInfty(Point const &p) {
 		d = std::max(d, fabs(p.pt[i]));
 	return d;
 }
+
+NR::Coord NR::atan2(Point const p) {
+	return std::atan2(p[NR::Y], p[NR::X]);
+}

@@ -99,17 +99,15 @@ static void
 sp_star_init (SPStar * star)
 {
 	star->sides = 5;
-	star->cx = 0.0;
-	star->cy = 0.0;
-	star->r1 = 1.0;
-	star->r2 = 0.001;
-	star->arg1 = star->arg2 = 0.0;
+	star->center = NR::Point(0, 0);
+	star->r[0] = 1.0;
+	star->r[1] = 0.001;
+	star->arg[0] = star->arg[1] = 0.0;
 }
 
 static void
 sp_star_build (SPObject * object, SPDocument * document, SPRepr * repr)
 {
-
 	if (((SPObjectClass *) parent_class)->build)
 		((SPObjectClass *) parent_class)->build (object, document, repr);
 
@@ -125,9 +123,7 @@ sp_star_build (SPObject * object, SPDocument * document, SPRepr * repr)
 static SPRepr *
 sp_star_write (SPObject *object, SPRepr *repr, guint flags)
 {
-	SPStar *star;
-
-	star = SP_STAR (object);
+	SPStar *star = SP_STAR (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 		repr = sp_repr_new ("polygon");
@@ -136,12 +132,12 @@ sp_star_write (SPObject *object, SPRepr *repr, guint flags)
 	if (flags & SP_OBJECT_WRITE_EXT) {
 		sp_repr_set_attr (repr, "sodipodi:type", "star");
 		sp_repr_set_int (repr, "sodipodi:sides", star->sides);
-		sp_repr_set_double (repr, "sodipodi:cx", star->cx);
-		sp_repr_set_double (repr, "sodipodi:cy", star->cy);
-		sp_repr_set_double (repr, "sodipodi:r1", star->r1);
-		sp_repr_set_double (repr, "sodipodi:r2", star->r2);
-		sp_repr_set_double (repr, "sodipodi:arg1", star->arg1);
-		sp_repr_set_double (repr, "sodipodi:arg2", star->arg2);
+		sp_repr_set_double (repr, "sodipodi:cx", star->center[NR::X]);
+		sp_repr_set_double (repr, "sodipodi:cy", star->center[NR::Y]);
+		sp_repr_set_double (repr, "sodipodi:r1", star->r[0]);
+		sp_repr_set_double (repr, "sodipodi:r2", star->r[1]);
+		sp_repr_set_double (repr, "sodipodi:arg1", star->arg[0]);
+		sp_repr_set_double (repr, "sodipodi:arg2", star->arg[1]);
 	}
 
 	if (((SPObjectClass *) (parent_class))->write)
@@ -153,12 +149,10 @@ sp_star_write (SPObject *object, SPRepr *repr, guint flags)
 static void
 sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	SPShape *shape;
-	SPStar *star;
 	gulong unit;
 
-	shape = SP_SHAPE (object);
-	star = SP_STAR (object);
+	SPShape *shape = SP_SHAPE (object);
+	SPStar *star = SP_STAR (object);
 
 	/* fixme: we should really collect updates */
 	switch (key) {
@@ -172,55 +166,55 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_CX:
-		if (!sp_svg_length_read_lff (value, &unit, NULL, &star->cx) ||
+		if (!sp_svg_length_read_ldd (value, &unit, NULL, &star->center[NR::X]) ||
 		    (unit == SP_SVG_UNIT_EM) ||
 		    (unit == SP_SVG_UNIT_EX) ||
 		    (unit == SP_SVG_UNIT_PERCENT)) {
-			star->cx = 0.0;
+			star->center[NR::X] = 0.0;
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_CY:
-		if (!sp_svg_length_read_lff (value, &unit, NULL, &star->cy) ||
+		if (!sp_svg_length_read_ldd (value, &unit, NULL, &star->center[NR::Y]) ||
 		    (unit == SP_SVG_UNIT_EM) ||
 		    (unit == SP_SVG_UNIT_EX) ||
 		    (unit == SP_SVG_UNIT_PERCENT)) {
-			star->cy = 0.0;
+			star->center[NR::Y] = 0.0;
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_R1:
-		if (!sp_svg_length_read_lff (value, &unit, NULL, &star->r1) ||
+		if (!sp_svg_length_read_ldd (value, &unit, NULL, &star->r[0]) ||
 		    (unit == SP_SVG_UNIT_EM) ||
 		    (unit == SP_SVG_UNIT_EX) ||
 		    (unit == SP_SVG_UNIT_PERCENT)) {
-			star->r1 = 1.0;
+			star->r[0] = 1.0;
 		}
 		/* fixme: Need CLAMP (Lauris) */
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_R2:
-		if (!sp_svg_length_read_lff (value, &unit, NULL, &star->r2) ||
+		if (!sp_svg_length_read_ldd (value, &unit, NULL, &star->r[1]) ||
 		    (unit == SP_SVG_UNIT_EM) ||
 		    (unit == SP_SVG_UNIT_EX) ||
 		    (unit == SP_SVG_UNIT_PERCENT)) {
-			star->r2 = 0.0;
+			star->r[1] = 0.0;
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		return;
 	case SP_ATTR_SODIPODI_ARG1:
 		if (value) {
-			star->arg1 = atof (value);
+			star->arg[0] = atof (value);
 		} else {
-			star->arg1 = 0.0;
+			star->arg[0] = 0.0;
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_ARG2:
 		if (value) {
-			star->arg2 = atof (value);
+			star->arg[1] = atof (value);
 		} else {
-			star->arg2 = 0.0;
+			star->arg[1] = 0.0;
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
@@ -234,11 +228,11 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 static void
 sp_star_update (SPObject *object, SPCtx *ctx, guint flags)
 {
-	SPStar *star;
+	SPStar *star = (SPStar *) object;
 
-	star = (SPStar *) object;
-
-	if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
+	if (flags & (SP_OBJECT_MODIFIED_FLAG | 
+		     SP_OBJECT_STYLE_MODIFIED_FLAG | 
+		     SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
 		sp_shape_set_shape ((SPShape *) object);
 	}
 
@@ -249,9 +243,7 @@ sp_star_update (SPObject *object, SPCtx *ctx, guint flags)
 static gchar *
 sp_star_description (SPItem *item)
 {
-	SPStar *star;
-
-	star = SP_STAR (item);
+	SPStar *star = SP_STAR (item);
 
 	return g_strdup_printf ("Star of %d sides", star->sides);
 }
@@ -259,29 +251,20 @@ sp_star_description (SPItem *item)
 static void
 sp_star_set_shape (SPShape *shape)
 {
-	SPStar *star;
-	gint i;
-	gint sides;
-	SPCurve *c;
-	NRPoint p;
+	SPStar *star = SP_STAR (shape);
+
+	SPCurve *c = sp_curve_new ();
 	
-	star = SP_STAR (shape);
+	gint sides = star->sides;
 
-	c = sp_curve_new ();
+	sp_curve_moveto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0));
+	sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 0));
 	
-	sides = star->sides;
-
-	/* i = 0 */
-	sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0, &p);
-	sp_curve_moveto (c, p.x, p.y);
-	sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 0, &p);
-	sp_curve_lineto (c, p.x, p.y);
-
-	for (i = 1; i < sides; i++) {
-		sp_star_get_xy (star, SP_STAR_POINT_KNOT1, i, &p);
-		sp_curve_lineto (c, p.x, p.y);
-		sp_star_get_xy (star, SP_STAR_POINT_KNOT2, i, &p);
-		sp_curve_lineto (c, p.x, p.y);
+	for (gint i = 1; i < sides; i++) {
+		sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 
+						    i));
+		sp_curve_lineto (c, sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 
+						    i));
 	}
 	
 	sp_curve_closepath (c);
@@ -290,18 +273,17 @@ sp_star_set_shape (SPShape *shape)
 }
 
 void
-sp_star_position_set (SPStar *star, gint sides, gdouble cx, gdouble cy, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2)
+sp_star_position_set (SPStar *star, gint sides, NR::Point center, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2)
 {
 	g_return_if_fail (star != NULL);
 	g_return_if_fail (SP_IS_STAR (star));
 	
 	star->sides = CLAMP (sides, 3, 32);
-	star->cx = cx;
-	star->cy = cy;
-	star->r1 = MAX (r1, 0.001);
-	star->r2 = CLAMP (r2, 0.0, star->r1);
-	star->arg1 = arg1;
-	star->arg2 = arg2;
+	star->center = center;
+	star->r[0] = MAX (r1, 0.001);
+	star->r[1] = CLAMP (r2, 0.0, star->r[0]);
+	star->arg[0] = arg1;
+	star->arg[1] = arg2;
 	
 	sp_object_request_update ((SPObject *) star, SP_OBJECT_MODIFIED_FLAG);
 }
@@ -327,24 +309,13 @@ sp_star_snappoints (SPItem *item, NRPoint *p, int size)
  * Initial item coordinate system is same as document coordinate system.
  */
 
-void
-sp_star_get_xy (SPStar *star, SPStarPoint point, gint index, NRPoint *p)
+NR::Point
+sp_star_get_xy (SPStar *star, SPStarPoint point, gint index)
 {
-	gdouble arg, darg;
+	gdouble darg = 2.0 * M_PI / (double) star->sides;
 
-	darg = 2.0 * M_PI / (double) star->sides;
-
-	switch (point) {
-	case SP_STAR_POINT_KNOT1:
-		arg = star->arg1 + index * darg;
-		p->x = star->r1 * cos (arg) + star->cx;
-		p->y = star->r1 * sin (arg) + star->cy;
-		break;
-	case SP_STAR_POINT_KNOT2:
-		arg = star->arg2 + index * darg;
-		p->x = star->r2 * cos (arg) + star->cx;
-		p->y = star->r2 * sin (arg) + star->cy;
-		break;
-	}
+	double arg = star->arg[point];
+	arg += index * darg;
+	return star->r[point] * NR::Point(cos(arg), sin(arg)) + star->center;
 }
 

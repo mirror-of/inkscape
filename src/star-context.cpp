@@ -35,6 +35,7 @@
 #include "helper/sp-intl.h"
 
 #include "star-context.h"
+#include <libnr/nr-point-fns.h>
 
 static void sp_star_context_class_init (SPStarContextClass * klass);
 static void sp_star_context_init (SPStarContext * star_context);
@@ -167,10 +168,9 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			dragging = TRUE;
 			/* Position center */
 			sp_desktop_w2d_xy_point (event_context->desktop, &fp, event->button.x, event->button.y);
-			sc->center.x = fp.x;
-			sc->center.y = fp.y;
+			sc->center = fp;
 			/* Snap center to nearest magnetic point */
-			sp_desktop_free_snap (event_context->desktop, &sc->center);
+			sp_desktop_free_snap (event_context->desktop, sc->center);
 			sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
 						GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,
 						NULL, event->button.time);
@@ -210,11 +210,8 @@ sp_star_drag (SPStarContext * sc, double x, double y, guint state)
 {
 	SPStar *star;
 	SPDesktop * desktop;
-	NRPoint p0, p1;
-	gdouble sides, dx, dy, r1, arg1;
 	GString * xs, * ys;
 	gchar status[80];
-	NRPoint fp;
 
 	desktop = SP_EVENT_CONTEXT (sc)->desktop;
 
@@ -241,31 +238,25 @@ sp_star_drag (SPStarContext * sc, double x, double y, guint state)
 /*  	} else if (state & GDK_SHIFT_MASK) { */
 
 	/* Free movement for corner point */
-	sp_desktop_dt2root_xy_point (desktop, &fp, sc->center.x, sc->center.y);
-	p0.x = fp.x;
-	p0.y = fp.y;
+	NRPoint fp;
+	sp_desktop_dt2root_xy_point (desktop, &fp, sc->center[NR::X], sc->center[NR::Y]);
+	NR::Point p0 = fp;
 	sp_desktop_dt2root_xy_point (desktop, &fp, x, y);
-	p1.x = fp.x;
-	p1.y = fp.y;
-	sp_desktop_free_snap (desktop, &p1);
+	NR::Point p1 = fp;
+	sp_desktop_free_snap (desktop, p1);
 
 	star = SP_STAR(sc->item);
 
-	sides = (gdouble) sc->magnitude;
-	dx = p1.x - p0.x;
-	dy = p1.y - p0.y;
-	r1 = hypot (dx, dy);
-	arg1 = atan2 (dy, dx);
+	gdouble sides = (gdouble) sc->magnitude;
+	NR::Point d = p1 - p0;
+	gdouble r1 = NR::L2 (d);
+	gdouble arg1 = atan2 (d);
 	
-#if 0
-	sp_star_set (star, sc->magnitude, p0.x, p0.y, r1, r1 * (sides-2.0)/sides, arg1, arg1 + M_PI/sides);
-#else
-	sp_star_position_set (star, sc->magnitude, p0.x, p0.y, r1, r1 * sc->proportion, arg1, arg1 + M_PI / sides);
-#endif
+	sp_star_position_set (star, sc->magnitude, p0, r1, r1 * sc->proportion, arg1, arg1 + M_PI / sides);
 
 	/* status text */
-	xs = SP_PT_TO_METRIC_STRING (fabs(p0.x), SP_DEFAULT_METRIC);
-	ys = SP_PT_TO_METRIC_STRING (fabs(p0.y), SP_DEFAULT_METRIC);
+	xs = SP_PT_TO_METRIC_STRING (fabs(p0[NR::X]), SP_DEFAULT_METRIC);
+	ys = SP_PT_TO_METRIC_STRING (fabs(p0[NR::Y]), SP_DEFAULT_METRIC);
 	sprintf (status, "Draw star at (%s,%s)", xs->str, ys->str);
 	sp_view_set_status (SP_VIEW (desktop), status, FALSE);
 	g_string_free (xs, FALSE);

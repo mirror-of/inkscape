@@ -22,6 +22,8 @@
 
 #include "object-edit.h"
 
+#include <libnr/nr-point-fns.h>
+
 #define sp_round(v,m) (((v) < 0.0) ? ((ceil ((v) / (m) - 0.5)) * (m)) : ((floor ((v) / (m) + 0.5)) * (m)))
 
 static SPKnotHolder *sp_rect_knot_holder (SPItem *item, SPDesktop *desktop);
@@ -239,46 +241,38 @@ sp_arc_knot_holder (SPItem *item, SPDesktop *desktop)
 /* SPStar */
 
 static void
-sp_star_knot1_set (SPItem *item, const NRPoint *p, guint state)
+sp_star_knot1_set (SPItem *item, const NRPoint* p, guint state)
 {
-	SPStar *star;
-	gdouble dx, dy, arg1, darg1;
+	SPStar *star = SP_STAR (item);
 
-	star = SP_STAR (item);
+	NR::Point d = NR::Point(*p) - star->center;
 
-	dx = p->x - star->cx;
-	dy = p->y - star->cy;
-
-        arg1 = atan2 (dy, dx);
-	darg1 = arg1 - star->arg1;
+        double arg1 = atan2(d);
+	double darg1 = arg1 - star->arg[0];
         
 	if (state & GDK_CONTROL_MASK) {
-		star->r1    = hypot(dx, dy);
+		star->r[0]    = L2(d);
 	} else {		
-		star->r1    = hypot(dx, dy);
-		star->arg1  = arg1;
-		star->arg2 += darg1;
+		star->r[0]    = L2(d);
+		star->arg[0]  = arg1;
+		star->arg[1] += darg1;
 	}
 	sp_object_request_update ((SPObject *) star, SP_OBJECT_MODIFIED_FLAG);
 }
 
 static void
-sp_star_knot2_set (SPItem *item, const NRPoint *p, guint state)
+sp_star_knot2_set (SPItem *item, const NRPoint* p, guint state)
 {
-	SPStar *star;
-	gdouble dx, dy;
+	SPStar *star = SP_STAR (item);
 
-	star = SP_STAR (item);
-
-	dx = p->x - star->cx;
-	dy = p->y - star->cy;
+	NR::Point d = NR::Point(*p) - star->center;
 
 	if (state & GDK_CONTROL_MASK) {
-		star->r2   = hypot (dx, dy);
-		star->arg2 = star->arg1 + M_PI / star->sides;
+		star->r[1]   = L2(d);
+		star->arg[1] = star->arg[0] + M_PI / star->sides;
 	} else {
-		star->r2   = hypot (dx, dy);
-		star->arg2 = atan2 (dy, dx);
+		star->r[1]   = L2(d);
+		star->arg[1] = atan2 (d);
 	}
 	sp_object_request_update ((SPObject *) star, SP_OBJECT_MODIFIED_FLAG);
 }
@@ -286,27 +280,23 @@ sp_star_knot2_set (SPItem *item, const NRPoint *p, guint state)
 static void
 sp_star_knot1_get (SPItem *item, NRPoint *p)
 {
-	SPStar *star;
-
 	g_return_if_fail (item != NULL);
 	g_return_if_fail (p != NULL);
 
-	star = SP_STAR(item);
+	SPStar *star = SP_STAR(item);
 
-	sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0, p);
+	*p = NRPoint(sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0));
 }
 
 static void
 sp_star_knot2_get (SPItem *item, NRPoint *p)
 {
-	SPStar *star;
-
 	g_return_if_fail (item != NULL);
 	g_return_if_fail (p != NULL);
 
-	star = SP_STAR(item);
+	SPStar *star = SP_STAR(item);
 
-	sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 0, p);
+	*p = NRPoint(sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 0));
 }
 
 static SPKnotHolder *
@@ -317,14 +307,8 @@ sp_star_knot_holder (SPItem *item, SPDesktop *desktop)
 	
 	star = SP_STAR(item);
 
-#if 0
-	/* if you want to get parent knot_holder, do it */
-	if (SP_ITEM_CLASS(parent_class)->knot_holder)
-		knot_holder = (* SP_ITEM_CLASS(parent_class)->knot_holder) (item);
-#else
 	/* we don't need to get parent knot_holder */
 	knot_holder = sp_knot_holder_new (desktop, item, NULL);
-#endif
 
 	sp_knot_holder_add (knot_holder,
 			    sp_star_knot1_set,

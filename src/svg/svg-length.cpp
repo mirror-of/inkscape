@@ -253,6 +253,14 @@ sp_svg_length_read_lff (const gchar *str, unsigned long *unit, float *val, float
 	return 0;
 }
 
+unsigned int sp_svg_length_read_ldd (const gchar *str, unsigned long *unit, double *value, double *computed) {
+	float a, b;
+	unsigned int r = sp_svg_length_read_lff (str, unit, &a, &b);
+	if(value) *value = a;
+	if(computed) *computed = b;
+	return r;
+}
+
 void
 sp_svg_length_set (SPSVGLength *length, unsigned long unit, float value, float computed)
 {

@@ -11,6 +11,7 @@ EXPORTS
 	sp_svg_boolean_read
 	sp_svg_length_read
 	sp_svg_length_read_lff
+	sp_svg_length_read_ldd
 	sp_svg_length_unset
 	sp_svg_length_update
 	sp_svg_number_read_d
