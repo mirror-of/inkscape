@@ -112,6 +112,7 @@ private:
     enum param_type_t {
         PARAM_BOOL,   /**< Boolean parameter */
         PARAM_INT,    /**< Integer parameter */
+        PARAM_FLOAT,  /**< Float parameter */
         PARAM_STRING, /**< String parameter */
         PARAM_CNT     /**< How many types are there? */
     };
@@ -121,6 +122,7 @@ private:
     union param_switch_t {
         bool t_bool;      /**< To get a boolean use this */
         int  t_int;       /**< If you want an integer this is your variable */
+        float t_float;    /**< This guy stores the floating point numbers */
         gchar * t_string; /**< Strings are here */
     };
     /** The class that actually stores the value and type of the
@@ -150,6 +152,8 @@ public:
                                        const SPReprDoc *   doc = NULL);
     int              get_param_int    (const gchar * name,
                                        const SPReprDoc *   doc = NULL);
+    float            get_param_float  (const gchar * name,
+                                       const SPReprDoc *   doc = NULL);
     const gchar *    get_param_string (const gchar * name,
                                        const SPReprDoc *   doc = NULL);
     bool             set_param_bool   (const gchar * name,
@@ -157,6 +161,9 @@ public:
                                        SPReprDoc *   doc = NULL);
     int              set_param_int    (const gchar * name,
                                        int           value,
+                                       SPReprDoc *   doc = NULL);
+    float            set_param_float  (const gchar * name,
+                                       float         value,
                                        SPReprDoc *   doc = NULL);
     const gchar *    set_param_string (const gchar * name,
                                        const gchar * value,

@@ -368,6 +368,16 @@ Extension::make_param (SPRepr * paramrepr)
             param->val.t_int = 0;
         }
 		param->val.t_int = prefs_get_int_attribute("extensions", param_name, (gint)param->val.t_int);
+    } else if (!strcmp(type, "float")) { 
+        param->type = Extension::PARAM_FLOAT;
+		// std::cout << "Float value: " << defaultval;
+        if (defaultval != NULL) {
+            param->val.t_float = atof(defaultval);
+        } else {
+            param->val.t_float = 0.0;
+        }
+		param->val.t_float = prefs_get_double_attribute("extensions", param_name, (gfloat)param->val.t_float);
+		// std::cout << " after: " << param->val.t_float << std::endl;
     } else if (!strcmp(type, "string")) { 
 		const gchar * temp_str;
         param->type = Extension::PARAM_STRING;
@@ -536,6 +546,40 @@ Extension::get_param_int (const gchar * name, const SPReprDoc * doc)
 }
 
 /**
+    \return   The float value for the parameter specified
+    \brief    Gets a parameter identified by name with the float placed
+              in value.
+    \param    name    The name of the parameter to get
+	\param    doc    The document to look in for document specific parameters
+
+    To get the parameter to be used the function param_shared is called.
+    This function is inline so it shouldn't cause the stack to build
+    or anything like that.  If it can't find the parameter, it will
+    throw and exception - we aren't catching that because we want
+    the calling function to catch it.
+
+    Next up, the parameter that we got, we're making sure that it is
+    a float parameter.  If it isn't, then we throw a param_wrong_type
+    exception.
+    
+    Finally, if everything is okay, the float value that is stored in
+    the parameter is placed in value.
+*/
+float
+Extension::get_param_float (const gchar * name, const SPReprDoc * doc)
+{
+    Extension::param_t * param;
+    
+    param = Extension::param_shared(name, parameters);
+
+    if (param->type != Extension::PARAM_FLOAT) {
+        throw Extension::param_wrong_type();
+    }
+
+    return param->val.t_float;
+}
+
+/**
     \return   The passed in value
     \brief    Sets a parameter identified by name with the boolean
               in the parameter value.
@@ -614,6 +658,48 @@ Extension::set_param_int (const gchar * name, int value, SPReprDoc * doc)
 
 	param_name = g_strdup_printf("%s.%s", id, name);
 	prefs_set_int_attribute("extensions", param_name, value);
+	g_free(param_name);
+
+    return value;
+}
+
+/**
+    \return   The passed in value
+    \brief    Sets a parameter identified by name with the integer
+              in the parameter value.
+    \param    name    The name of the parameter to set
+    \param    value   The value to set the parameter to
+	\param    doc    The document to look in for document specific parameters
+
+    To get the parameter to be used the function param_shared is called.
+    This function is inline so it shouldn't cause the stack to build
+    or anything like that.  If it can't find the parameter, it will
+    throw and exception - we aren't catching that because we want
+    the calling function to catch it.
+
+    Next up, the parameter that we got, we're making sure that it is
+    a integer parameter.  If it isn't, then we throw a param_wrong_type
+    exception.
+    
+    Finally, if everything is okay, the integer value that was passed
+	in is placed in the param.
+*/
+float
+Extension::set_param_float (const gchar * name, float value, SPReprDoc * doc)
+{
+    Extension::param_t * param;
+	gchar * param_name;
+    
+    param = Extension::param_shared(name, parameters);
+
+    if (param->type != Extension::PARAM_FLOAT) {
+        throw Extension::param_wrong_type();
+    }
+
+    param->val.t_float = value;
+
+	param_name = g_strdup_printf("%s.%s", id, name);
+	prefs_set_double_attribute("extensions", param_name, value);
 	g_free(param_name);
 
     return value;

@@ -1,5 +1,15 @@
 2004-12-25  Ted Gould  <ted@gould.cx>
 
+	* share/extensions/grid.inx, src/extension/extension.cpp,
+	src/extension/extension.h, src/extension/plugin/grid.cpp:
+
+	Futher improvements to the grid plugin.  This involves mostly adding in
+	parameters at this time, but, ofcourse, I never implemented floating
+	point parameters -- so that had to be done first.  More modular code so
+	that things can be adjusted externally better.
+
+2004-12-25  Ted Gould  <ted@gould.cx>
+
 	* share/extensions/Makefile.am, share/extensions/grid.inx,
 	src/extension/implementation/plugin-link.h,
 	src/extension/implementation/plugin.cpp,

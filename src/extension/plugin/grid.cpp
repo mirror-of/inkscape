@@ -9,6 +9,8 @@
 #include <svg/ftos.h>
 
 #include <extension/implementation/implementation.h>
+#include <extension/extension.h>
+#include <extension/effect.h>
 
 namespace Inkscape {
 namespace Extension {
@@ -32,7 +34,7 @@ public:
 bool
 Grid::load (Inkscape::Extension::Extension *module)
 {
-    std::cout << "Hey, I'm Grid, I'm loading!" << std::endl;
+    // std::cout << "Hey, I'm Grid, I'm loading!" << std::endl;
     return TRUE;
 }
 
@@ -49,31 +51,42 @@ Grid::effect (Inkscape::Extension::Effect *module, SPView *document)
     NR::Rect bounding_area = NR::Rect(NR::Point(0,0), NR::Point(100,100));
     if (selection->isEmpty()) {
         /* get page size */
+        SPDocument * doc = document->doc;
+        bounding_area = NR::Rect(NR::Point(0,0),
+                                 NR::Point(sp_document_width(doc),
+                                           sp_document_height(doc)));
     } else {
         bounding_area = selection->bounds();
     }
 
 
-    float spacing = 10.0;
-    float line_width = 1.0;
+    float xspacing = module->get_param_float("xspacing");
+    float yspacing = module->get_param_float("yspacing");
+    float line_width = module->get_param_float("lineWidth");
+    float xoffset = module->get_param_float("xoffset");
+    float yoffset = module->get_param_float("yoffset");
+
+    // std::cout << "Spacing: " << spacing;
+    // std::cout << " Line Width: " << line_width;
+    // std::cout << " Offset: " << offset << std::endl;
 
     Glib::ustring path_data;
 
     for (NR::Point start_point = bounding_area.min();
-            start_point[NR::X] <= (bounding_area.max())[NR::X];
-            start_point[NR::X] += spacing) {
+            start_point[NR::X] + xoffset <= (bounding_area.max())[NR::X];
+            start_point[NR::X] += xspacing) {
         NR::Point end_point = start_point;
         end_point[NR::Y] = (bounding_area.max())[NR::Y];
         gchar floatstring[64];
 
         path_data += "M ";
-        sprintf(floatstring, "%f", start_point[NR::X]);
+        sprintf(floatstring, "%f", start_point[NR::X] + xoffset);
         path_data += floatstring;
         path_data += " ";
         sprintf(floatstring, "%f", start_point[NR::Y]);
         path_data += floatstring;
         path_data += " L ";
-        sprintf(floatstring, "%f", end_point[NR::X]);
+        sprintf(floatstring, "%f", end_point[NR::X] + xoffset);
         path_data += floatstring;
         path_data += " ";
         sprintf(floatstring, "%f", end_point[NR::Y]);
@@ -82,8 +95,8 @@ Grid::effect (Inkscape::Extension::Effect *module, SPView *document)
     }
 
     for (NR::Point start_point = bounding_area.min();
-            start_point[NR::Y] <= (bounding_area.max())[NR::Y];
-            start_point[NR::Y] += spacing) {
+            start_point[NR::Y] + yoffset <= (bounding_area.max())[NR::Y];
+            start_point[NR::Y] += yspacing) {
         NR::Point end_point = start_point;
         end_point[NR::X] = (bounding_area.max())[NR::X];
         gchar floatstring[64];
@@ -92,13 +105,13 @@ Grid::effect (Inkscape::Extension::Effect *module, SPView *document)
         sprintf(floatstring, "%f", start_point[NR::X]);
         path_data += floatstring;
         path_data += " ";
-        sprintf(floatstring, "%f", start_point[NR::Y]);
+        sprintf(floatstring, "%f", start_point[NR::Y] + yoffset);
         path_data += floatstring;
         path_data += " L ";
         sprintf(floatstring, "%f", end_point[NR::X]);
         path_data += floatstring;
         path_data += " ";
-        sprintf(floatstring, "%f", end_point[NR::Y]);
+        sprintf(floatstring, "%f", end_point[NR::Y] + yoffset);
         path_data += floatstring;
         path_data += " ";
     }
@@ -110,8 +123,16 @@ Grid::effect (Inkscape::Extension::Effect *module, SPView *document)
 
     sp_repr_set_attr(path, "d", path_data.c_str());
 
-    Glib::ustring style("fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000");
+    Glib::ustring style("fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000");
+    style += ";stroke-width:";
+    gchar floatstring[64];
+    sprintf(floatstring, "%f", (line_width * 4.0) / 5.0);
+    style += floatstring;
+    style += "pt";
     sp_repr_set_attr(path, "style", style.c_str());
+
+    Glib::ustring transform("scale(1.25 1.25)");
+    sp_repr_set_attr(path, "transform", transform.c_str());
 
     sp_repr_append_child(current_layer, path);
 
