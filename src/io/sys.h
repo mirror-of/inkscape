@@ -30,6 +30,8 @@ int mkdir_utf8name( char const *utf8name );
 
 bool file_test( char const *utf8name, GFileTest test );
 
+gchar *sanitizeString( gchar const * str );
+
 }
 }
 

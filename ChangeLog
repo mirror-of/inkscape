@@ -1,3 +1,7 @@
+2005-01-30  Jon A. Cruz  <jon@joncruz.org>
+	* src/io/sys.h, src/io/sys.cpp: added utility routine to cleanup
+	  strings with invalid UTF-8 for display.
+
 2004-01-30  Kees Cook  <kees@outflux.net>
 
 	* src/make.dep, src/make.exclude, src/make.files, src/make.ofiles,

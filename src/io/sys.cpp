@@ -252,6 +252,36 @@ bool Inkscape::IO::file_test( char const *utf8name, GFileTest test )
     return exists;
 }
 
+
+gchar* Inkscape::IO::sanitizeString( gchar const * str )
+{
+    gchar *result = NULL;
+    if ( str ) {
+        if ( g_utf8_validate(str, -1, NULL) ) {
+            result = g_strdup(str);
+        } else {
+            guchar scratch[8];
+            Glib::ustring buf;
+            guchar const *ptr = (guchar const*)str;
+            while ( *ptr )
+            {
+                if ( *ptr == '\\' )
+                {
+                    buf.append("\\\\");
+                } else if ( *ptr < 0x80 ) {
+                    buf += (char)(*ptr);
+                } else {
+                    g_snprintf((gchar*)scratch, sizeof(scratch), "\\x%02x", *ptr);
+                    buf.append((const char*)scratch);
+                }
+                ptr++;
+            }
+            result = g_strdup(buf.c_str());
+        }
+    }
+    return result;
+}
+
 /*
   Local Variables:
   mode:c++
