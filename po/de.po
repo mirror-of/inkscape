@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: inkscape 0.41\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-23 00:20+0100\n"
-"PO-Revision-Date: 2005-02-23 18:24+0100\n"
+"PO-Revision-Date: 2005-02-28 00:57+0100\n"
 "Last-Translator: Jörg Müller <jfm@ram-brand.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1112,7 +1112,7 @@ msgstr "Rand der Zeichenfläche anzeigen"
 
 #: src/dialogs/desktop-properties.cpp:1048
 msgid "Border on top of drawing"
-msgstr "Rand am oberen Ende der Zeichnung"
+msgstr "Rand im Vordergrund anzeigen"
 
 #: src/dialogs/desktop-properties.cpp:1051
 msgid "Border color:"
@@ -6070,7 +6070,7 @@ msgstr "Ebene <b>%s</b> abgesenkt."
 
 #: src/verbs.cpp:992
 msgid "Can't move layer any further."
-msgstr "Kann Ebene nicht weiter verschieben."
+msgstr "Ebene nicht weiter verschiebbar."
 
 #. TRANSLATORS: this means "The layer has been deleted."
 #: src/verbs.cpp:1016
