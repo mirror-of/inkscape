@@ -17,12 +17,6 @@ dist:
 	$(CP) src$(S)inkscape.exe inkscape
 #	$(CP) src$(S)inkview.exe inkscape
 #	$(CP) src$(S)inkscape.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)libgtkmm-2.4-1.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)libgdkmm-2.4-1.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)libglibmm-2.4-1.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)libatkmm-1.6-1.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)libpangomm-1.4-1.dll inkscape
-	$(CP) $(GTKDOS)$(S)bin$(S)libsigc-2.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)freetype6.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libatk-1.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libgdk-win32-2.0-0.dll inkscape
@@ -47,9 +41,6 @@ dist:
 	echo "gtk-font-name=\"verdana 6.5\""           >> inkscape$(S)etc$(S)gtk-2.0$(S)gtkrc
 	echo ""                                        >> inkscape$(S)etc$(S)gtk-2.0$(S)gtkrc
 	$(MKDIR) inkscape$(S)lib
-	$(CPDIR) $(GTKDOS)$(S)lib$(S)gtkmm-2.4 inkscape$(S)lib$(S)gtkmm-2.4
-	$(CPDIR) $(GTKDOS)$(S)lib$(S)gdkmm-2.4 inkscape$(S)lib$(S)gdkmm-2.4
-	$(CPDIR) $(GTKDOS)$(S)lib$(S)glibmm-2.4 inkscape$(S)lib$(S)glibmm-2.4
 	$(CPDIR) $(GTKDOS)$(S)lib$(S)gtk-2.0 inkscape$(S)lib$(S)gtk-2.0
 	$(CPDIR) $(GTKDOS)$(S)lib$(S)glib-2.0 inkscape$(S)lib$(S)glib-2.0
 	$(CPDIR) $(GTKDOS)$(S)lib$(S)locale inkscape$(S)lib$(S)locale
