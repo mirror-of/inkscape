@@ -1,7 +1,7 @@
 
 =head1 NAME
 
-Inkscape - an SVG (Scalable Vector Graphics) vector editor.
+Inkscape - an SVG (Scalable Vector Graphics) editing program.
 
 =head1 SYNOPSIS
 
@@ -39,7 +39,7 @@ options:
 B<Inkscape> is a GUI editor for B<Scalable Vector Graphics (SVG)> format
 drawing files, with capabilities similar to B<Adobe Illustrator>,
 B<CorelDraw>, B<Visio>, etc. Inkscape features include versatile
-shapes, bezier paths, freehand drawing, multiline text, 
+shapes, bezier paths, freehand drawing, multi-line text, 
 alpha blending, transforms, gradients, node
 editing, SVG-to-PNG export, grouping, patterns, and more.  The interface is
 designed to be comfortable and efficient for skilled users, while
@@ -50,7 +50,7 @@ B<SVG> is a W3C standard XML format for 2D vector drawing. It allows
 defining objects in the drawing using points, paths, and primitive
 shapes.  Colors, fonts, stroke width, and so forth are specified as
 `style' attributes to these objects.  The intent is that since SVG is a
-standard, and since its files are text/xml instead of binary, it will be
+standard, and since its files are text/xml, it will be
 possible to use SVG files in a sizeable number of programs and for a
 wide range of uses.
 
@@ -69,24 +69,32 @@ Show help message
 
 =item B<-a> I<x0:y0:x1:y1>, B<--export-area>=I<x0:y0:x1:y1>
 
-Exported area in SVG pixels (anonymous length units normally used in Inkscape SVG). The default is to export the entire document page. The 0,0 is
-the lower-left corner.
+Exported area in SVG pixels (anonymous length units normally used in Inkscape SVG).
+The default is to export the entire document page.
+The point (0,0) is the lower-left corner.
 
 =item B<-b> I<COLOR>, B<--export-background>=I<COLOR>
 
-Background color of exported PNG. This may be any SVG supported color string, for example "#ff007f" or "rgb(255, 0, 128)". If not set, the page color set in Inkscape in the Document Options dialog will be used (stored in the pagecolor= attribute of sodipodi:namedview).
+Background color of exported PNG.
+This may be any SVG supported color string, for example "#ff007f" or "rgb(255, 0, 128)".
+If not set,
+then the page color set in Inkscape in the Document Options dialog will be used (stored in the pagecolor= attribute of sodipodi:namedview).
 
 =item B<-d> I<DPI>, B<--export-dpi>=I<DPI>
 
-The resolution used for bitmap export. The default is 72 which corresponds to 1 SVG pixel exporting to 1 bitmap pixel. This value overrides the DPI hint if used with --export-use-hints.
+The resolution used for bitmap export.
+The default is 72, which corresponds to 1 SVG point (pt) exporting to 1 bitmap pixel.
+This value overrides the DPI hint if used with --export-use-hints.
 
 =item B<-e> I<FILENAME>, B<--export-png>=I<FILENAME>
 
-Specify the filename for PNG export. If exists, the file will be overwritten without asking.
+Specify the filename for PNG export.
+If it already exists, the file will be overwritten without asking.
 
 =item B<-f> I<FILENAME>, B<--file>=I<FILENAME>
 
-Open specified document(s). Option string may be omitted, i.e. you can list the filenames without -f.
+Open specified document(s).
+Option string may be omitted, i.e. you can list the filenames without -f.
 
 =item B<-g>, B<--with-gui>
 
@@ -94,11 +102,13 @@ Try to use the GUI (on Unix, use the X server even if $DISPLAY is not set).
 
 =item B<-h> I<HEIGHT>, B<--export-height>=I<HEIGHT>
 
-The height of generated bitmap in pixels. This value overrides the --export-dpi setting (or the DPI hint if used with --export-use-hints). 
+The height of generated bitmap in pixels.
+This value overrides the --export-dpi setting (or the DPI hint if used with --export-use-hints). 
 
 =item B<-i> I<ID>, B<--export-id>=I<ID>
 
-The id attribute value of the object that you want to export from the document. Exported is the bounding box of the object, so with this option, --export-area is ignored. 
+The id attribute value of the object that you want to export from the document.
+Exported is the bounding box of the object, so with this option, --export-area is ignored. 
 
 =item B<-l>, B<--export-plain-svg>=I<FILENAME>
 
@@ -119,28 +129,42 @@ Show given files one by one, switching to the next one by any key or mouse event
 
 =item B<-t>, B<--export-use-hints>
 
-Use export filename and DPI hints stored in the exported object (only with --export-id). These hints are set automatically when you export selection from within Inkscape. So, for example, if you export a shape with id="path231" as /home/me/shape.png at 300 dpi from document.svg using Inkscape GUI and then save the document, later you will be able to reexport that shape to the same file with the same resolution simply with 
+Use export filename and DPI hints stored in the exported object (only with --export-id).
+These hints are set automatically when you export selection from within Inkscape.
+So, for example, if you export a shape with id="path231" as /home/me/shape.png at 300 dpi from document.svg using Inkscape GUI, and save the document,
+then later you will be able to reexport that shape to the same file with the same resolution simply with 
 
-inkscape -i path231 -t document.svg 
+inkscape -i path231 -t document.svg
 
-If you use --export-dpi, --export-width, or --export-height with this option, the DPI hint will be ignored and the value from the command line will be used. If you use --export-png with this option, the filename hint will be ignored and the filename from the command line will be used. 
+If you use --export-dpi, --export-width, or --export-height with this option,
+then the DPI hint will be ignored and the value from the command line will be used.
+If you use --export-png with this option,
+then the filename hint will be ignored and the filename from the command line will be used. 
 
 =item B<-w> I<WIDTH>, B<--export-width>=I<WIDTH>
 
-The width of generated bitmap in pixels. This value overrides the --export-dpi setting (or the DPI hint if used with --export-use-hints). 
+The width of generated bitmap in pixels.
+This value overrides the --export-dpi setting (or the DPI hint if used with --export-use-hints). 
 
 =item B<-x>, B<--bitmap-icons>
 
-Use bitmap (XPM) icons instead of SVG ones. By default, Inkscape raterizes icons on-the-fly 
-from share/inkscape/icons/icons.svg. Use this option to turn this off if there is any problem with SVG icons. 
+Use bitmap (XPM) icons in the GUI instead of SVG ones.
+By default, Inkscape raterizes icons on-the-fly from share/inkscape/icons/icons.svg.
+Use this option to turn this off if there is any problem with SVG icons. 
 
 =item B<-y> I<VALUE>, B<--export-background-opacity>=I<VALUE>
 
-Opacity of the background of exported PNG. This may be a value either between 0.0 and 1.0 (0.0 meaning full transparency, 1.0 full opacity) or between 1 and 255 (255 meaning full opacity). If not set and the -b option is not used, the page opacity set in Inkscape in the Document Options dialog will be used (stored in the inkscape:pageopacity= attribute of sodipodi:namedview). If not set but the -b option is used, the value of 255 (full opacity) will be used. 
+Opacity of the background of exported PNG.
+This may be a value either between 0.0 and 1.0 (0.0 meaning full transparency, 1.0 full opacity) or between 1 and 255 (255 meaning full opacity).
+If not set and the -b option is not used,
+then the page opacity set in Inkscape in the Document Options dialog will be used (stored in the inkscape:pageopacity= attribute of sodipodi:namedview).
+If not set but the -b option is used,
+then the value of 255 (full opacity) will be used. 
 
 =item B<-z>, B<--without-gui>
 
-Do not open the GUI (on Unix, do not use X server); only process the files from console. This is assumed for -p, -e, and -l options. 
+Do not open the GUI (on Unix, do not use X server); only process the files from console.
+This is assumed for -p, -e, and -l options. 
 
 =item B<--usage>
 
@@ -360,3 +384,5 @@ B<Inkscape> is free software; you can redistribute it and/or modify it
 under the terms of the GPL.  
 
 
+=for comment
+$Date$
