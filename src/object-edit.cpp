@@ -519,15 +519,86 @@ static NR::Point sp_arc_end_get (SPItem *item)
 	return sp_arc_get_xy (arc, ge->end);
 }
 
+static void
+sp_arc_rx_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+{
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
+	SPArc *arc = SP_ARC(item);
+
+	ge->rx.computed = fabs( ge->cx.computed - p[NR::X] );
+
+	if ( state & GDK_CONTROL_MASK ) {
+		ge->ry.computed = ge->rx.computed;
+	}
+
+	((SPObject *)arc)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
+static NR::Point sp_arc_rx_get (SPItem *item)
+{
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
+
+	return (NR::Point(ge->cx.computed, ge->cy.computed) -  NR::Point(ge->rx.computed, 0));
+}
+
+static void
+sp_arc_ry_set (SPItem *item, const NR::Point &p, const NR::Point &origin, guint state)
+{
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
+	SPArc *arc = SP_ARC(item);
+
+	ge->ry.computed = fabs( ge->cy.computed - p[NR::Y] );
+
+	if ( state & GDK_CONTROL_MASK ) {
+		ge->rx.computed = ge->ry.computed;
+	}
+
+	((SPObject *)arc)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
+static NR::Point sp_arc_ry_get (SPItem *item)
+{
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
+
+	return (NR::Point(ge->cx.computed, ge->cy.computed) -  NR::Point(0, ge->ry.computed));
+}
+
+static void
+sp_arc_rx_click (SPItem *item, guint state)
+{
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
+
+	if (state & GDK_CONTROL_MASK) {
+		ge->ry.computed = ge->rx.computed;
+		((SPObject *)ge)->updateRepr();
+	}
+}
+
+static void
+sp_arc_ry_click (SPItem *item, guint state)
+{
+	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
+
+	if (state & GDK_CONTROL_MASK) {
+		ge->rx.computed = ge->ry.computed;
+		((SPObject *)ge)->updateRepr();
+	}
+}
+
 static SPKnotHolder *
 sp_arc_knot_holder (SPItem *item, SPDesktop *desktop)
 {
 	SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
 
+	sp_knot_holder_add (knot_holder, sp_arc_rx_set, sp_arc_rx_get, sp_arc_rx_click,
+					_("Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"));
+	sp_knot_holder_add (knot_holder, sp_arc_ry_set, sp_arc_ry_get, sp_arc_ry_click,
+					_("Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"));
 	sp_knot_holder_add (knot_holder, sp_arc_start_set, sp_arc_start_get, NULL,
 					_("Position the <b>start point</b> of the arc or segment; with <b>Ctrl</b> to snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for segment"));
 	sp_knot_holder_add (knot_holder, sp_arc_end_set, sp_arc_end_get, NULL,
 					_("Position the <b>end point</b> of the arc or segment; with <b>Ctrl</b> to snap angle; drag <b>inside</b> the ellipse for arc, <b>outside</b> for segment"));
+
 	sp_pat_knot_holder (item, knot_holder);
 
 	return knot_holder;
