@@ -416,12 +416,12 @@ sp_color_slider_adjustment_value_changed (GtkAdjustment *adjustment, SPColorSlid
 			gfloat value;
 			value = slider->value;
 			slider->value = adjustment->value;
-			ax = (int)(cx + value * cw - ARROW_SIZE / 2 - 1);
-			ay = (int)(ch - ARROW_SIZE + cy * 2 - 1);
-			gtk_widget_queue_draw_area (widget, ax, ay, ARROW_SIZE + 2, ARROW_SIZE + 2);
-			ax = (int)(cx + slider->value * cw - ARROW_SIZE / 2 - 1);
-			ay = (int)(ch - ARROW_SIZE + cy * 2 - 1);
-			gtk_widget_queue_draw_area (widget, ax, ay, ARROW_SIZE + 2, ARROW_SIZE + 2);
+			ax = (int)(cx + value * cw - ARROW_SIZE / 2 - 2);
+			ay = cy;
+			gtk_widget_queue_draw_area (widget, ax, ay, ARROW_SIZE + 4, ch);
+			ax = (int)(cx + slider->value * cw - ARROW_SIZE / 2 - 2);
+			ay = cy;
+			gtk_widget_queue_draw_area (widget, ax, ay, ARROW_SIZE + 4, ch);
 		} else {
 			slider->value = adjustment->value;
 		}
@@ -435,7 +435,7 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 	GdkRectangle warea, carea, aarea;
 	GdkRectangle wpaint, cpaint, apaint;
 	const guchar *b;
-	gint x1, x2, y1, yb, xm;
+	gint w, x, y;
 
 	widget = GTK_WIDGET (slider);
 
@@ -454,8 +454,8 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 	/* Arrow area */
 	aarea.x = (int)(slider->value * carea.width - ARROW_SIZE / 2 + carea.x);
 	aarea.width = ARROW_SIZE;
-	aarea.y = (int)(carea.height - ARROW_SIZE + carea.y * 2);
-	aarea.height = ARROW_SIZE;
+	aarea.y = carea.y;
+	aarea.height = carea.height;
 
 	/* Actual paintable area */
 	if (!gdk_rectangle_intersect (area, &warea, &wpaint)) return;
@@ -506,25 +506,30 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 
 	if (gdk_rectangle_intersect (area, &aarea, &apaint)) {
 		/* Draw arrow */
-		y1 = aarea.y + 1;
-		yb = aarea.y + ARROW_SIZE - 1;
-		x1 = aarea.x + 1;
-		x2 = aarea.x + ARROW_SIZE - 2;
-		xm = (x1 + x2) / 2;
+		gdk_rectangle_intersect (&carea, &apaint, &apaint);
+		gdk_gc_set_clip_rectangle (widget->style->white_gc, &apaint);
+		gdk_gc_set_clip_rectangle (widget->style->black_gc, &apaint);
 
-		/* Center fill */
-		while ( x2 > x1 && yb > y1 ) {
-			gdk_draw_line (widget->window, widget->style->black_gc, x1, yb, xm, y1);
-			gdk_draw_line (widget->window, widget->style->black_gc, x2, yb, xm, y1);
-			x1++;
-			x2--;
-			y1++;
+		x = aarea.x;
+		y = carea.y;
+		for ( w = aarea.width; w > 0; w -= 2 )
+		{
+			gdk_draw_line (widget->window, widget->style->white_gc, x, y, x + w - 1, y );
+			x++;
+			y++;
 		}
 
-		/* Outer contrast line */
-		gdk_draw_line (widget->window, widget->style->black_gc, xm, yb, xm, y1);
-		gdk_draw_line (widget->window, widget->style->white_gc, aarea.x, yb, xm, aarea.y);
-		gdk_draw_line (widget->window, widget->style->white_gc, aarea.x + ARROW_SIZE - 1, yb, xm, aarea.y);
+		x = aarea.x;
+		y = aarea.y + aarea.height - 1;
+		for ( w = aarea.width; w > 0; w -= 2 )
+		{
+			gdk_draw_line (widget->window, widget->style->black_gc, x, y, x + w - 1, y );
+			x++;
+			y--;
+		}
+
+		gdk_gc_set_clip_rectangle (widget->style->white_gc, NULL);
+		gdk_gc_set_clip_rectangle (widget->style->black_gc, NULL);
 	}
 }
 
