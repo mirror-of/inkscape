@@ -13,6 +13,7 @@
  *   Michael Meeks <michael@helixcode.com>
  *   Chema Celorio <chema@celorio.com>
  *   Pawel Palucha
+ *   Johan Ceuppens
  * ... and various people who have worked with various projects
  *
  * Copyright (C) 1999-2002 authors
@@ -42,6 +43,8 @@
 #include "document.h"
 #include "svg-view.h"
 
+#include <iostream>
+
 #ifndef HAVE_BIND_TEXTDOMAIN_CODESET
 #define bind_textdomain_codeset(p,c)
 #endif
@@ -53,11 +56,21 @@ struct _SPSlideShow {
 	int current;
 	SPDocument *doc;
 	GtkWidget *view;
+	bool fullscreen;
 };
 
 static GtkWidget *sp_svgview_control_show (struct _SPSlideShow *ss);
 static void sp_svgview_show_next (struct _SPSlideShow *ss);
 static void sp_svgview_show_prev (struct _SPSlideShow *ss);
+static void sp_svgview_goto_first (struct _SPSlideShow *ss);
+static void sp_svgview_goto_last (struct _SPSlideShow *ss);
+
+static int sp_svgview_show_next_cb (GtkWidget *widget, void *data);
+static int sp_svgview_show_prev_cb (GtkWidget *widget, void *data);
+static int sp_svgview_goto_first_cb (GtkWidget *widget, void *data);
+static int sp_svgview_goto_last_cb (GtkWidget *widget, void *data);
+
+static GtkWidget *ctrlwin = NULL;
 
 static int
 sp_svgview_main_delete (GtkWidget *widget, GdkEvent *event, struct _SPSlideShow *ss)
@@ -70,14 +83,24 @@ static int
 sp_svgview_main_key_press (GtkWidget *widget, GdkEventKey *event, struct _SPSlideShow *ss)
 {
 	switch (event->keyval) {
- 	case GDK_space:
- 	case GDK_f:
+	case GDK_Up:
+		sp_svgview_goto_first(ss);
+		break;
+	case GDK_Down:
+		sp_svgview_goto_last(ss);
+		break;
  	case GDK_F11:
-		if (event->state & GDK_SHIFT_MASK) {
+#ifdef HAVE_GTK_WINDOW_FULLSCREEN
+		if (ss->fullscreen) {
 			gtk_window_unfullscreen ((GtkWindow *) widget);
+			ss->fullscreen = false;
 		} else {
 			gtk_window_fullscreen ((GtkWindow *) widget);
+			ss->fullscreen = true;
 		}
+#else
+		std::cout<<"Your GTK+ does not support fullscreen mode. Upgrade to 2.2."<<std::endl;
+#endif
 		break;
 	case GDK_Return:
 		sp_svgview_control_show (ss);
@@ -88,6 +111,9 @@ sp_svgview_main_key_press (GtkWidget *widget, GdkEventKey *event, struct _SPSlid
 	case GDK_Left:
 		sp_svgview_show_prev (ss);
 		break;
+	case GDK_Escape:
+		gtk_main_quit();
+		break;
 	default:
 		break;
 	}
@@ -97,7 +123,8 @@ sp_svgview_main_key_press (GtkWidget *widget, GdkEventKey *event, struct _SPSlid
 int
 main (int argc, const char **argv)
 {
-	struct _SPSlideShow ss;
+	struct _SPSlideShow ss; 
+	
 	GtkWidget *w;
 	int i;
 
@@ -126,6 +153,7 @@ main (int argc, const char **argv)
 	ss.current = 0;
 	ss.doc = NULL;
 	ss.view = NULL;
+	ss.fullscreen = false;
 
 	for (i = 1; i < argc; i++) {
 		struct stat st;
@@ -172,8 +200,6 @@ main (int argc, const char **argv)
 	return 0;
 }
 
-static GtkWidget *ctrlwin = NULL;
-
 static int
 sp_svgview_ctrlwin_delete (GtkWidget *widget, GdkEvent *event, void *data)
 {
@@ -195,28 +221,59 @@ sp_svgview_control_show (struct _SPSlideShow *ss)
 				  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
 				  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
 				  0, 0);
-		/* g_signal_connect ((GObject *) b, "clicked", (GCallback) sp_svgview_goto_first, ss); */
+		g_signal_connect ((GObject *) b, "clicked", (GCallback) sp_svgview_goto_first_cb, ss); 
 		b = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);
 		gtk_table_attach ((GtkTable *) t, b, 1, 2, 0, 1,
 				  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
 				  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
 				  0, 0);
+		g_signal_connect (G_OBJECT(b), "clicked", (GCallback) sp_svgview_show_prev_cb, ss); 
 		b = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);
 		gtk_table_attach ((GtkTable *) t, b, 2, 3, 0, 1,
 				  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
 				  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
 				  0, 0);
+		g_signal_connect (G_OBJECT(b), "clicked", (GCallback) sp_svgview_show_next_cb, ss); 
 		b = gtk_button_new_from_stock (GTK_STOCK_GOTO_LAST);
 		gtk_table_attach ((GtkTable *) t, b, 3, 4, 0, 1,
 				  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
 				  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
 				  0, 0);
+		g_signal_connect (G_OBJECT(b), "clicked", (GCallback) sp_svgview_goto_last_cb, ss); 
 		gtk_widget_show_all (ctrlwin);
 	} else {
 		gtk_window_present ((GtkWindow *) ctrlwin);
 	}
 
 	return NULL;
+}
+
+static int 
+sp_svgview_show_next_cb (GtkWidget *widget, void *data)
+{
+	sp_svgview_show_next(static_cast<_SPSlideShow *>(data));
+	return FALSE;
+}
+
+static int 
+sp_svgview_show_prev_cb (GtkWidget *widget, void *data)
+{
+	sp_svgview_show_prev(static_cast<struct _SPSlideShow *>(data));
+	return FALSE;
+}
+
+static int 
+sp_svgview_goto_first_cb (GtkWidget *widget, void *data)
+{
+	sp_svgview_goto_first(static_cast<struct _SPSlideShow *>(data));
+	return FALSE;
+}
+
+static int 
+sp_svgview_goto_last_cb (GtkWidget *widget, void *data)
+{
+	sp_svgview_goto_last(static_cast<struct _SPSlideShow *>(data));
+	return FALSE;
 }
 
 static void
@@ -226,7 +283,7 @@ sp_svgview_show_next (struct _SPSlideShow *ss)
 	int current;
 	doc = NULL;
 	current = ss->current;
-	while (!doc && (current < (ss->length - 1))) {
+	while (!doc && (current < ss->length - 1)) {
 		doc = sp_document_new (ss->slides[++current], TRUE, TRUE);
 	}
 	if (doc) {
@@ -255,8 +312,39 @@ sp_svgview_show_prev (struct _SPSlideShow *ss)
 	}
 }
 
-Inkscape::Application *inkscape;
+static void
+sp_svgview_goto_first (struct _SPSlideShow *ss)
+{
+	SPDocument *doc = NULL;
+	int current = 0;
+	for ( ; !doc && (current < ss->length); current++) {
+		doc = sp_document_new (ss->slides[current], TRUE, TRUE);
+	}
+	if (doc) {
+		sp_view_set_document (SP_VIEW_WIDGET_VIEW (ss->view), doc);
+		sp_document_ensure_up_to_date (doc);
+		ss->doc = doc;
+		ss->current = current;
+	}
+}
 
+static void
+sp_svgview_goto_last (struct _SPSlideShow *ss)
+{
+	SPDocument *doc = NULL;
+	int current = ss->length - 1;
+	for ( ; !doc && (current >= 0); current--) {
+		doc = sp_document_new (ss->slides[current], TRUE, TRUE);
+	}
+	if (doc) {
+		sp_view_set_document (SP_VIEW_WIDGET_VIEW (ss->view), doc);
+		sp_document_ensure_up_to_date (doc);
+		ss->doc = doc;
+		ss->current = current;
+	}
+}
+
+Inkscape::Application *inkscape;
 void inkscape_ref (void) {}
 void inkscape_unref (void) {}
 void inkscape_add_document (SPDocument *document) {}
