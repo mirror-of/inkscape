@@ -1,3 +1,8 @@
+2004-10-18  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/livarot/Path.h, src/livarot/PathSimplify.cpp: coding style
+	and const cleanups.
+
 2004-10-17  MenTaLguY  <mental@rydia.net>
 
 	* share/templates/Makefile.am, share/templates/layers.svg:
@@ -5,6 +10,11 @@
 
 	* src/widgets/layer-selector.h, src/widgets/layer-selector.cpp:
 	  more layer selector work
+
+2004-10-15  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/livarot/PathSimplify.cpp: remove #ifdef
+	pseudo_douglas_pecker code that wasn't being used.
 
 2004-10-15  MenTaLguY  <mental@rydia.net>
 
