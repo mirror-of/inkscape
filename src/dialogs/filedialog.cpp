@@ -316,11 +316,11 @@ FileOpenDialogImpl::FileOpenDialogImpl(const char *dir,
 
     //###### Add a preview widget
     set_preview_widget(svgPreview);
+    set_preview_widget_active(false);
 
     //Catch selection-changed events, so we can adjust the text widget
     signal_update_preview().connect( 
          sigc::mem_fun(*this, &FileOpenDialogImpl::updatePreviewCallback) );
-
 
 
     //###### Add a text entry bar, and tie it to file chooser events
