@@ -743,6 +743,7 @@ static void sp_nodepath_set_line_type(Path::Node *end, NRPathcode code)
     sp_node_ensure_ctrls(end);
 }
 
+
 static Path::Node *sp_nodepath_set_node_type(Path::Node *node, Path::NodeType type)
 {
     g_assert(node);
@@ -771,6 +772,41 @@ static Path::Node *sp_nodepath_set_node_type(Path::Node *node, Path::NodeType ty
 
     return node;
 }
+
+/**
+Same as set_node_type, but also converts, if necessary, adjacent segments from lines to curves
+*/
+void sp_nodepath_convert_node_type (Path::Node *node, Path::NodeType type)
+{
+    if (type == Path::NODE_SYMM || type == Path::NODE_SMOOTH) {
+        if ((node->p.other != NULL) && (node->code == NR_LINETO || node->pos == node->p.pos)) {
+            // convert adjacent segment BEFORE to curve
+            node->code = NR_CURVETO;
+            NR::Point delta;
+            if (node->n.other != NULL)
+                delta = node->n.other->pos - node->p.other->pos;
+            else 
+                delta = node->pos - node->p.other->pos;
+            node->p.pos = node->pos - delta / 3;
+            sp_node_ensure_ctrls(node);
+        }
+
+        if ((node->n.other != NULL) && (node->n.other->code == NR_LINETO || node->pos == node->n.pos)) {
+            // convert adjacent segment AFTER to curve
+            node->n.other->code = NR_CURVETO;
+            NR::Point delta;
+            if (node->p.other != NULL)
+                delta = node->p.other->pos - node->n.other->pos;
+            else 
+                delta = node->pos - node->n.other->pos;
+            node->n.pos = node->pos - delta / 3;
+            sp_node_ensure_ctrls(node);
+        }
+    }
+
+    sp_nodepath_set_node_type (node, type);
+}
+
 
 void sp_node_moveto(Path::Node *node, NR::Point p)
 {
@@ -1536,7 +1572,7 @@ sp_node_selected_set_type(Path::NodeType type)
     if (nodepath == NULL) return;
 
     for (GList *l = nodepath->selected; l != NULL; l = l->next) {
-        sp_nodepath_set_node_type((Path::Node *) l->data, type);
+        sp_nodepath_convert_node_type((Path::Node *) l->data, type);
     }
 
     update_repr(nodepath);
@@ -2019,16 +2055,20 @@ static void node_clicked(SPKnot *knot, guint state, gpointer data)
     Path::Node *n = (Path::Node *) data;
 
     if (state & GDK_CONTROL_MASK) {
+        Path::Path *nodepath = n->subpath->nodepath;
+
         if (!(state & GDK_MOD1_MASK)) { // ctrl+click: toggle node type
             if (n->type == Path::NODE_CUSP) {
-                sp_nodepath_set_node_type(n, Path::NODE_SMOOTH);
+                sp_nodepath_convert_node_type (n, Path::NODE_SMOOTH);
             } else if (n->type == Path::NODE_SMOOTH) {
-                sp_nodepath_set_node_type(n, Path::NODE_SYMM);
+                sp_nodepath_convert_node_type (n, Path::NODE_SYMM);
             } else {
-                sp_nodepath_set_node_type(n, Path::NODE_CUSP);
+                sp_nodepath_convert_node_type (n, Path::NODE_CUSP);
             }
+            update_repr(nodepath);
+            sp_nodepath_update_statusbar(nodepath);
+
         } else { //ctrl+alt+click: delete node
-            Path::Path *nodepath = n->subpath->nodepath;
             sp_nodepath_node_destroy(n);
             if (nodepath->subpaths == NULL) { // if the entire nodepath is removed, delete the selected object.
                 sp_nodepath_destroy(nodepath);
@@ -2039,6 +2079,7 @@ static void node_clicked(SPKnot *knot, guint state, gpointer data)
                 sp_nodepath_update_statusbar(nodepath);
             }
         }
+
     } else {
         sp_nodepath_node_select(n, (state & GDK_SHIFT_MASK), FALSE);
     }
