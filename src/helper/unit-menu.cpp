@@ -107,7 +107,6 @@ sp_unit_selector_init (SPUnitSelector *us)
     us->plural = TRUE;
 
     us->menu = gtk_option_menu_new ();
-    gtk_widget_set_size_request (us->menu, AUX_OPTION_MENU_WIDTH, AUX_OPTION_MENU_HEIGHT);
 
     gtk_widget_show (us->menu);
     gtk_box_pack_start (GTK_BOX (us), us->menu, TRUE, TRUE, 0);
@@ -148,6 +147,12 @@ sp_unit_selector_new (guint bases)
     sp_unit_selector_set_bases (us, bases);
 
     return (GtkWidget *) us;
+}
+
+void
+sp_unit_selector_setsize (GtkWidget *us, guint w, guint h)
+{
+    gtk_widget_set_size_request (((SPUnitSelector *) us)->menu, w, h);
 }
 
 const SPUnit *
@@ -241,8 +246,8 @@ spus_rebuild_menu (SPUnitSelector *us)
         gtk_object_set_data (GTK_OBJECT (i), "unit", (gpointer) u);
         gtk_signal_connect (GTK_OBJECT (i), "activate", GTK_SIGNAL_FUNC (spus_unit_activate), us);
 
+        // fixme: hardwiring the font size here is evil, but it does not work elsewhere
         sp_set_font_size (i, AUX_FONT_SIZE);
-        gtk_widget_set_size_request (i, AUX_MENU_ITEM_WIDTH, AUX_MENU_ITEM_HEIGHT);
 
         gtk_widget_show (i);
 

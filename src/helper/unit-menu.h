@@ -30,6 +30,7 @@ struct SPUnitSelectorClass;
 GType sp_unit_selector_get_type (void);
 
 GtkWidget *sp_unit_selector_new (guint bases);
+void sp_unit_selector_setsize (GtkWidget *us, guint w, guint h);
 
 const SPUnit *sp_unit_selector_get_unit (SPUnitSelector *selector);
 
