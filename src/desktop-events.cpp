@@ -272,7 +272,7 @@ guide_dialog_mode_changed (GtkWidget * widget)
 static void
 guide_dialog_close (GtkWidget * widget, GtkDialog * d)
 {
-	gtk_object_destroy (GTK_OBJECT(d));
+	gtk_widget_hide(GTK_WIDGET(d));
 }
 
 static void guide_dialog_apply(SPGuide &guide)

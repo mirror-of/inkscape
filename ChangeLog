@@ -1,3 +1,8 @@
+2004-02-24  Alexander Clausen <alex@skip86.com>
+	
+	* src/desktop-events.cpp: Fix crash when opening the guide dialog for
+	the second time
+
 2004-02-24  bulia byak <bulia@users.sourceforge.net>
 
         * src/helper/sodipodi-ctrlrect.cpp: A smart always-visible inversion for ctrlrect border 
