@@ -538,6 +538,7 @@ static void rsvg_parse_path_data(RSVGParsePathCtx *ctx, const char *data)
                     } else {
                         val += ctx->cpx; /* even param, x */
                     }
+		    break;
                 case 'a':
                     /* rule: sixth and seventh are x and y, rest are not
                        relative */
