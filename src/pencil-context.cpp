@@ -449,7 +449,7 @@ fit_and_split(SPPencilContext *pc)
     g_assert(is_zero(pc->req_tangent)
              || is_unit_vector(pc->req_tangent));
     NR::Point const tHatEnd(0, 0);
-    int const n_segs = sp_bezier_fit_cubic_full(b, pc->p, pc->npoints,
+    int const n_segs = sp_bezier_fit_cubic_full(b, NULL, pc->p, pc->npoints,
                                                 pc->req_tangent, tHatEnd, tolerance_sq, 0);
     if ( n_segs > 0
          && unsigned(pc->npoints) < G_N_ELEMENTS(pc->p) )

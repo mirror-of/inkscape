@@ -66,7 +66,7 @@ src/display/bezier-utils.cpp:sp_bezier_fit_cubic_full
 Proof of `nsegs1 != 0' assertion: nsegs1 is const.  Have already
 returned in the (nsegs1 < 0) case, so !(nsegs1 < 0), i.e. nsegs1 >= 0
 (given that nsegs1 is gint).  nsegs1 is set to
-sp_bezier_fit_cubic_full(_, _, splitPoint + 1, ...).  We will show
+sp_bezier_fit_cubic_full(_, _, _, splitPoint + 1, ...).  We will show
 that sp_bezier_fit_cubic_full ensures len < 2 || ret != 0.  splitPoint
 > 0 from compute_max_error postcondition combined with error >=
 precondition and thus having handled the compute_max_error returning 0

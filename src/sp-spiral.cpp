@@ -325,7 +325,7 @@ sp_spiral_fit_and_draw (SPSpiral const *spiral,
 	/* Fixme:
 	   we should use better algorithm to specify maximum error.
 	*/
-	depth = sp_bezier_fit_cubic_full (bezier, darray, SAMPLE_SIZE,
+	depth = sp_bezier_fit_cubic_full (bezier, NULL, darray, SAMPLE_SIZE,
 					  hat1, hat2,
 					  SPIRAL_TOLERANCE*SPIRAL_TOLERANCE,
 					  FITTING_LG_MAX_BEZIERS);
