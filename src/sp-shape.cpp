@@ -15,6 +15,7 @@
 
 #include <config.h>
 
+#include <glib/gmessages.h>
 #include <string.h>
 
 #include <libnr/n-art-bpath.h>
@@ -285,105 +286,193 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 * \param bp Path segment.
 * \return 1 if a marker is required here, otherwise 0.
 */
-static int
-sp_shape_marker_required (SPShape* shape, int m, NArtBpath* bp)
+static bool
+sp_shape_marker_required(SPShape *shape, int const m, NArtBpath *bp)
 {
-    if (shape->marker[m] == NULL)
-        return 0;
+    if (shape->marker[m] == NULL) {
+        return false;
+    }
 
     if (bp == shape->curve->bpath)
         return m == SP_MARKER_LOC_START;
-
-    if (bp[1].code == NR_END)
+    else if (bp[1].code == NR_END)
         return m == SP_MARKER_LOC_END;
-
-    return m == SP_MARKER_LOC_MID;
-
-    return 0;
-}
-
-static bool 
-sp_bpath_closed (NArtBpath const *bpath)
-{
-
-    for (const NArtBpath *bp = bpath; bp->code != NR_END; bp++) {
-        if (bp->code == NR_MOVETO) return true;
-        if (bp->code == NR_MOVETO_OPEN) return false;
-    }
-
-    return false;
+    else
+        return m == SP_MARKER_LOC_MID;
 }
 
 static bool
-first_segment_in_subpath (SPShape const* shape, NArtBpath const* bp)
+is_moveto(NRPathcode const c)
 {
-    return bp == shape->curve->bpath || bp->code == NR_MOVETO || bp->code == NR_MOVETO_OPEN;
+    return c == NR_MOVETO || c == NR_MOVETO_OPEN;
 }
 
-static bool
-last_segment_in_path (SPShape const* shape, NArtBpath const* bp)
+/** \pre The bpath[] containing bp begins with a moveto. */
+static NArtBpath const *
+first_seg_in_subpath(NArtBpath const *bp)
 {
-    return bp [1].code == NR_END || bp [1].code == NR_MOVETO || bp [1].code == NR_MOVETO_OPEN;
+    while (!is_moveto(bp->code)) {
+        --bp;
+    }
+    return bp;
 }
 
-/*fixme: handle zero-length paths */
-static float 
-angle_for_seg (SPShape const * shape, NArtBpath const * bp, int which)
+static NArtBpath const *
+last_seg_in_subpath(NArtBpath const *bp)
 {
+    for(;;) {
+        ++bp;
+        switch (bp->code) {
+            case NR_MOVETO:
+            case NR_MOVETO_OPEN:
+            case NR_END:
+                --bp;
+                return bp;
 
-    float dx = 0, dy = 0;
-    switch (bp->code) {
-    case NR_LINETO:
-    case NR_MOVETO:
-        dx = bp[0].x3 - bp[-1].x3;
-        dy = bp[0].y3 - bp[-1].y3; 
-        break;
-    case NR_CURVETO:
-        if (which == 0) {
-            dx = bp->x3 - bp->x2;
-            dy = bp->y3 - bp->y2;
-        } else {
-            dx = bp->x1 - bp[-1].x3;
-            dy = bp->y1 - bp[-1].y3;
+            default: continue;
+        }
+    }
+}
+
+
+/* A subpath begins with a moveto and ends immediately before the next moveto or NR_END.
+ * (`moveto' here means either NR_MOVETO or NR_MOVETO_OPEN.)  I'm assuming that non-empty
+ * paths always begin with a moveto.
+ *
+ * The control points of the subpath are the control points of the path elements of the subpath.
+ *
+ * As usual, the control points of a moveto or NR_LINETO are {c(3)}, and
+ * the control points of a NR_CURVETO are {c(1), c(2), c(3)}.
+ * (It follows from the definition that NR_END isn't part of a subpath.)
+ *
+ * The initial control point is bpath[bi0].c(3).
+ *
+ * Reference: http://www.w3.org/TR/SVG11/painting.html#MarkerElement, the `orient' attribute.
+ * Reference for behaviour of zero-length segments:
+ * http://www.w3.org/TR/SVG11/implnote.html#PathElementImplementationNotes
+ */
+
+static double const no_tangent = 128.0;  /* arbitrarily-chosen value outside the range of atan2, i.e. outside of [-pi, pi]. */
+
+/** \pre The bpath[] containing bp0 begins with a moveto. */
+static double
+outgoing_tangent(NArtBpath const *bp0)
+{
+    /* See notes in comment block above. */
+
+    g_assert(bp0->code != NR_END);
+    NR::Point const &p0 = bp0->c(3);
+    NR::Point other;
+    for (NArtBpath const *bp = bp0;;) {
+        ++bp;
+        switch (bp->code) {
+            case NR_LINETO:
+                other = bp->c(3);
+                if (other != p0) {
+                    goto found;
+                }
+                break;
+
+            case NR_CURVETO:
+                for (unsigned ci = 1; ci <= 3; ++ci) {
+                    other = bp->c(ci);
+                    if (other != p0) {
+                        goto found;
+                    }
+                }
+                break;
+
+            case NR_MOVETO_OPEN:
+            case NR_END:
+            case NR_MOVETO:
+                bp = first_seg_in_subpath(bp0);
+                if (bp == bp0) {
+                    /* Gone right around the subpath without finding any different point since the
+                     * initial moveto. */
+                    return no_tangent;
+                }
+                if (bp->code != NR_MOVETO) {
+                    /* Open subpath. */
+                    return no_tangent;
+                }
+                other = bp->c(3);
+                if (other != p0) {
+                    goto found;
+                }
+                break;
         }
 
-        /*The control point is the same as the end point, fall back to the previous control point */
-        /*Chris Lilley at W3C said this procedure made sense */
-        if (dx == 0 && dy == 0) {
-            if (which == 0) {
-                dx = bp->x3 - bp->x1;
-                dy = bp->y3 - bp->y1;
-            } else {
-                dx = bp->x2 - bp[-1].x3;
-                dy = bp->y2 - bp[-1].y3;
-            }
+        if (bp == bp0) {
+            /* Back where we started, so zero-length subpath. */
+            return no_tangent;
 
-            /* The second control point is the same, fall back to end point */
-            if (dx == 0 && dy == 0) {
-                if (which == 0) {
-                    dx = bp->x3 - bp[1].x3;
-                    dy = bp->y3 - bp[1].y3;
-                } else {
-                    dx = bp->x3 - bp[-1].x3;
-                    dy = bp->y3 - bp[-1].y3;
-                }
-                if (dx == 0 && dy == 0) {
-                    /*Fixme: Implement zero-length path directionality rules (which make no sense)*/
-                    dx = 1;
-                }
-            }
+            /* Note: this test must come after we've looked at element bp, in case bp0 is a curve:
+             * we must look at c(1) and c(2).  (E.g. single-curve subpath.)
+             */
         }
-        break;
-    case NR_MOVETO_OPEN:
-    case NR_END:
-        /*Open and end segments have no directionality*/
-        g_warning ("Open and end segments have no directionality\n");
-        dx = 1;
-        break;
     }
 
-    return atan2 (dy, dx);
+found:
+    return atan2( other - p0 );
 }
+
+/** \pre The bpath[] containing bp0 begins with a moveto. */
+static double
+incoming_tangent(NArtBpath const *bp0)
+{
+    /* See notes in comment block before outgoing_tangent. */
+
+    g_assert(bp0->code != NR_END);
+    NR::Point const &p0 = bp0->c(3);
+    NR::Point other;
+    for (NArtBpath const *bp = bp0;;) {
+        switch (bp->code) {
+            case NR_LINETO:
+                other = bp->c(3);
+                if (other != p0) {
+                    goto found;
+                }
+                --bp;
+                break;
+
+            case NR_CURVETO:
+                for (unsigned ci = 3; ci != 0; --ci) {
+                    other = bp->c(ci);
+                    if (other != p0) {
+                        goto found;
+                    }
+                }
+                --bp;
+                break;
+
+            case NR_MOVETO:
+            case NR_MOVETO_OPEN:
+                other = bp->c(3);
+                if (other != p0) {
+                    goto found;
+                }
+                if (bp->code != NR_MOVETO) {
+                    /* Open subpath. */
+                    return no_tangent;
+                }
+                bp = last_seg_in_subpath(bp0);
+                break;
+
+            default: /* includes NR_END */
+                g_error("Found invalid path code %u in middle of path.", bp->code);
+                return no_tangent;
+        }
+
+        if (bp == bp0) {
+            /* Back where we started from: zero-length subpath. */
+            return no_tangent;
+        }
+    }
+
+found:
+    return atan2( p0 - other );
+}
+
 
 /**
 * Calculate the transform required to get a marker's path object in the
@@ -399,68 +488,45 @@ angle_for_seg (SPShape const * shape, NArtBpath const * bp, int which)
 * \return Transform matrix.
 */
 
-static NRMatrix
-sp_shape_marker_get_transform (SPShape const * shape, int m, NArtBpath const * bp)
+static NR::Matrix
+sp_shape_marker_get_transform(SPShape const *shape, NArtBpath const *bp)
 {
+    g_return_val_if_fail(( is_moveto(shape->curve->bpath[0].code)
+                           && ( 0 < shape->curve->end )
+                           && ( shape->curve->bpath[shape->curve->end].code == NR_END ) ),
+                         NR::Matrix(NR::translate(bp->c(3))));
+    double const angle1 = incoming_tangent(bp);
+    double const angle2 = outgoing_tangent(bp);
 
-    NRMatrix t;
+    /* angle1 and angle2 are now each either unset (i.e. still 100 from their initialization) or in
+       [-pi, pi] from atan2. */
+    g_assert((-3.15 < angle1 && angle1 < 3.15) || (angle1 == no_tangent));
+    g_assert((-3.15 < angle2 && angle2 < 3.15) || (angle2 == no_tangent));
 
-    float angle1 = 100.0, angle2 = 100.0;
-    
-    bool closed = sp_bpath_closed (bp);
-
-    if (first_segment_in_subpath (shape, bp)) {
-        /*this is first segment in subpath */
-        if (closed) {
-            /*find last segment*/
-            NArtBpath const *lastseg;
-            for (lastseg = bp + 1; lastseg->code != NR_END; lastseg++) {
-                if (lastseg->code == NR_MOVETO) {
-                    break;
-                }
-                g_assert (lastseg->code != NR_MOVETO_OPEN);
-            }
-            lastseg -= 1;
-            /* for closed paths, first angle is angle of last seg */
-            angle1 = angle_for_seg (shape, lastseg, 0);
-        }
-        angle2 = angle_for_seg (shape, bp + 1, 1);
-    } else if (last_segment_in_path (shape, bp)) {
-        angle1 = angle_for_seg (shape, bp, 0);
-        if (closed) {
-            /* find first segment */
-            NArtBpath const *firstseg;
-            for (firstseg = bp; firstseg != shape->curve->bpath; firstseg--) {
-                if (firstseg->code == NR_MOVETO || firstseg->code == NR_MOVETO_OPEN) break;
-            }
-            firstseg ++;
-            angle2 = angle_for_seg (shape, firstseg, 1);
-        }
+    double ret_angle;
+    if (angle1 == no_tangent) {
+        /* First vertex of an open subpath. */
+        ret_angle = ( angle2 == no_tangent
+                      ? 0.
+                      : angle2 );
+    } else if (angle2 == no_tangent) {
+        /* Last vertex of an open subpath. */
+        ret_angle = angle1;
     } else {
-        /* midpoint */
-        angle1 = angle_for_seg (shape, bp, 0);
-        angle2 = angle_for_seg (shape, bp + 1, 1);
+        ret_angle = .5 * (angle1 + angle2);
+
+        if ( fabs( angle2 - angle1 ) > M_PI ) {
+            /* ret_angle is in the middle of the larger of the two sectors between angle1 and
+             * angle2, so flip it by 180degrees to force it to the middle of the smaller sector.
+             *
+             * (Imagine a circle with rays drawn at angle1 and angle2 from the centre of the
+             * circle.  Those two rays divide the circle into two sectors.)
+             */
+            ret_angle += M_PI;
+        }
     }
 
-    if (angle1 > 10) {
-        nr_matrix_set_rotate (&t, angle2);
-    } else if (angle2 > 10) {
-        nr_matrix_set_rotate (&t, angle1);
-    } else {
-        /*
-          from a1 -- if i have to go less than 180 cw to hit a2, inner ab.  else, outer ab
-        */
-        if (angle1 > angle2) angle2 += M_PI * 2;
-        if (angle2 - angle1 > M_PI)
-            nr_matrix_set_rotate (&t, M_PI + (angle1 + angle2) / 2);
-        else
-            nr_matrix_set_rotate (&t, (angle1 + angle2) / 2);
-    }
-
-    t.c[4] = bp->x3;
-    t.c[5] = bp->y3;
-
-    return t;
+    return NR::Matrix(NR::rotate(ret_angle)) * NR::translate(bp->c(3));
 }
 
 /* Marker views have to be scaled already */
@@ -471,14 +537,17 @@ sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai)
 	SPStyle *style = ((SPObject *) shape)->style;
 
 	marker_status("sp_shape_update_marker_view:  Updating views of markers");
-        
+
         for (int i = SP_MARKER_LOC_START; i < SP_MARKER_LOC_QTY; i++) {
+            if (shape->marker[i] == NULL) {
+                continue;
+            }
 
             int n = 0;
 
             for (NArtBpath *bp = shape->curve->bpath; bp->code != NR_END; bp++) {
                 if (sp_shape_marker_required (shape, i, bp)) {
-                    NRMatrix m = sp_shape_marker_get_transform (shape, i, bp);
+                    NRMatrix m(sp_shape_marker_get_transform(shape, bp));
                     sp_marker_show_instance ((SPMarker* ) shape->marker[i], ai,
                                              NR_ARENA_ITEM_GET_KEY (ai) + i, n, &m,
                                              style->stroke_width.computed);
@@ -580,7 +649,7 @@ sp_shape_print (SPItem *item, SPPrintContext *ctx)
                     SPMarker* marker = SP_MARKER (shape->marker[m]);
                     SPItem* marker_path = SP_ITEM (shape->marker[m]->children);
 
-                    NR::Matrix tr(sp_shape_marker_get_transform(shape, m, bp));
+                    NR::Matrix tr(sp_shape_marker_get_transform(shape, bp));
 
                     if (marker->markerUnits == SP_MARKER_UNITS_STROKEWIDTH) {
                         tr = NR::scale(style->stroke_width.computed) * tr;
@@ -914,20 +983,19 @@ static void sp_shape_snappoints(SPItem const *item, SnapPointsIter p)
     /* Use the end points of each segment of the path */
     NArtBpath const *bp = shape->curve->bpath;
     while (bp->code != NR_END) {
-        *p = NR::Point(bp->x3, bp->y3) * i2d;
+        *p = bp->c(3) * i2d;
         bp++;
     }
 }
-
 
 
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
