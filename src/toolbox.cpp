@@ -615,13 +615,11 @@ setup_commands_toolbox (GtkWidget *toolbox, SPDesktop *desktop)
     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_OPEN, view, tt);
     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_SAVE, view, tt);
     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_PRINT, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_QUIT, view, tt);
 
     aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
 
     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_IMPORT, view, tt);
     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_EXPORT, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_VACUUM, view, tt);
 
     aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
 
@@ -636,33 +634,27 @@ setup_commands_toolbox (GtkWidget *toolbox, SPDesktop *desktop)
 
     aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
 
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_SELECTION, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_DRAWING, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_PAGE, view, tt);
+
+    aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
+
     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_DUPLICATE, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_CLONE, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_UNLINK_CLONE, view, tt);
 
     aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
 
     sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_SELECTION_GROUP, view, tt);
     sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_SELECTION_UNGROUP, view, tt);
 
-
 // disabled until we have icons for them:
 
 //     find
 
-//     gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
-
-//     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_CLONE, view, tt);
-//     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_UNLINK_CLONE, view, tt);
-
-//     gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
-
 //     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_TILE, view, tt);
 //     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_UNTILE, view, tt);
-
-    aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
-
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_SELECTION, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_DRAWING, view, tt);
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_PAGE, view, tt);
 
     aux_toolbox_space(tb, AUX_BETWEEN_BUTTON_GROUPS);
 

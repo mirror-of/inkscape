@@ -859,9 +859,9 @@ static const SPVerbActionDef props[] = {
     {SP_VERB_EDIT_DUPLICATE, "EditDuplicate", N_("Duplic_ate"),
         N_("Duplicate selected object(s)"), "edit_duplicate"},
     {SP_VERB_EDIT_CLONE, "EditClone", N_("Clo_ne"),
-        N_("Create a clone of selected object (a copy linked to the original)"), NULL},
+        N_("Create a clone of selected object (a copy linked to the original)"), "edit_clone"},
     {SP_VERB_EDIT_UNLINK_CLONE, "EditUnlinkClone", N_("Unlin_k Clone"),
-        N_("Cut the clone's link to its original"), NULL},
+        N_("Cut the clone's link to its original"), "edit_unlink_clone"},
     {SP_VERB_EDIT_CLONE_ORIGINAL, "EditCloneOriginal", N_("Select _Original"),
         N_("Select the object to which the clone is linked"), NULL},
     {SP_VERB_EDIT_TILE, "EditTile", N_("_Tile"),
@@ -873,7 +873,7 @@ static const SPVerbActionDef props[] = {
     {SP_VERB_EDIT_SELECT_ALL, "EditSelectAll", N_("Select Al_l"),
         N_("Select all objects or all nodes"), "selection_select_all"},
     {SP_VERB_EDIT_DESELECT, "EditDeselect", N_("D_eselect"),
-        N_("Deselect any selected objects or nodes"), "selection_deselect"},
+        N_("Deselect any selected objects or nodes"), NULL},
 
     /* Selection */
     {SP_VERB_SELECTION_TO_FRONT, "SelectionToFront", N_("Raise to _Top"),
