@@ -358,7 +358,7 @@ static int
 sp_rect_snappoints (SPItem *item, NRPoint *p, int size)
 {
 	SPRect *rect;
-	float x0, y0, x1, y1;
+	NR::Coord x0, y0, x1, y1;
 	NRMatrix i2d;
 	int i;
 

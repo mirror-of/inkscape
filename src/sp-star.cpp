@@ -267,11 +267,6 @@ sp_star_set_shape (SPShape *shape)
 	
 	star = SP_STAR (shape);
 
-#if 0
-	if ((star->r1 < 1e-12) || (star->r2 < 1e-12)) return;
-	if (star->sides < 3) return;
-#endif
-	
 	c = sp_curve_new ();
 	
 	sides = star->sides;
@@ -316,31 +311,8 @@ sp_star_position_set (SPStar *star, gint sides, gdouble cx, gdouble cy, gdouble 
 static int
 sp_star_snappoints (SPItem *item, NRPoint *p, int size)
 {
-#if 0
-	SPStar *star;
-	gdouble affine[6];
-	
-	star = SP_STAR(item);
-	
-	/* we use two points of star */
-	sp_star_get_xy (star, SP_STAR_POINT_KNOT1, 0, &p1);
-	sp_star_get_xy (star, SP_STAR_POINT_KNOT2, 0, &p2);
-	p3.x = star->cx; p3.y = star->cy;
-	sp_item_i2d_affine (item, affine);
-	
-	p = g_new (ArtPoint,1);
-	art_affine_point (p, &p1, affine);
-	points = g_slist_append (points, p);
-	p = g_new (ArtPoint,1);
-	art_affine_point (p, &p2, affine);
-	points = g_slist_append (points, p);
-	p = g_new (ArtPoint,1);
-	art_affine_point (p, &p3, affine);
-	points = g_slist_append (points, p);
-#else
 	if (((SPItemClass *) parent_class)->snappoints)
 		return ((SPItemClass *) parent_class)->snappoints (item, p, size);
-#endif
 	
 	return 0;
 }
