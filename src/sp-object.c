@@ -643,7 +643,7 @@ sp_object_invoke_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	g_return_if_fail (!(flags & ~SP_OBJECT_MODIFIED_CASCADE));
 
 #ifdef SP_OBJECT_DEBUG_CASCADE
-	g_print("Update %s:%s %x %x\n", g_type_name_from_instance ((GTypeInstance *) object), SP_OBJECT_ID (object), flags, object->flags);
+	g_print("Update %s:%s %x %x %x\n", g_type_name_from_instance ((GTypeInstance *) object), SP_OBJECT_ID (object), flags, object->uflags, object->mflags);
 #endif
 
 	/* Get object flags */
@@ -704,7 +704,7 @@ sp_object_invoke_modified (SPObject *object, unsigned int flags)
 	g_return_if_fail (!(flags & ~SP_OBJECT_MODIFIED_CASCADE));
 
 #ifdef SP_OBJECT_DEBUG_CASCADE
-	g_print("Modified %s:%s %x %x\n", g_type_name_from_instance ((GTypeInstance *) object), SP_OBJECT_ID (object), flags, object->flags);
+	g_print("Modified %s:%s %x %x %x\n", g_type_name_from_instance ((GTypeInstance *) object), SP_OBJECT_ID (object), flags, object->uflags, object->mflags);
 #endif
 
 	/* Get object flags */
