@@ -180,6 +180,8 @@ bool SVGPreview::setFromMem(char const *xmlBuffer)
 
     setDocument(doc);
 
+    sp_document_unref(doc);
+
     return true;
 }
 

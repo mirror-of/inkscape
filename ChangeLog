@@ -1,3 +1,9 @@
+2004-11-09  MenTaLguY  <mental@rydia.net>
+
+	* src/dialogs/fileselector.cpp: fixed cut-and-paste refcount bug
+	  between SVGPreview::setFileName and SVGPreview::setFromMem that
+	  was leaking bitmap image preview SPDocuments
+
 2004-11-09  Bryce Harrington <bryce@bryceharrington.org>
 
 	* src/dialogs/item-properties.cpp
