@@ -50,7 +50,7 @@ static void sp_pattern_init (SPPattern *gr);
 
 static void sp_pattern_build (SPObject *object, SPDocument *document, SPRepr *repr);
 static void sp_pattern_release (SPObject *object);
-static void sp_pattern_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_pattern_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_pattern_child_added (SPObject *object, SPRepr *child, SPRepr *ref);
 static void sp_pattern_remove_child (SPObject *object, SPRepr *child);
 static void sp_pattern_update (SPObject *object, SPCtx *ctx, unsigned int flags);
@@ -80,7 +80,7 @@ sp_pattern_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_pattern_init,
 		};
-		pattern_type = g_type_register_static (SP_TYPE_PAINT_SERVER, "SPPattern", &pattern_info, 0);
+		pattern_type = g_type_register_static (SP_TYPE_PAINT_SERVER, "SPPattern", &pattern_info, (GTypeFlags)0);
 	}
 	return pattern_type;
 }
@@ -94,7 +94,7 @@ sp_pattern_class_init (SPPatternClass *klass)
 	sp_object_class = (SPObjectClass *) klass;
 	ps_class = (SPPaintServerClass *) klass;
 
-	pattern_parent_class = g_type_class_ref (SP_TYPE_PAINT_SERVER);
+	pattern_parent_class = (SPPaintServerClass*)g_type_class_ref (SP_TYPE_PAINT_SERVER);
 
 	sp_object_class->build = sp_pattern_build;
 	sp_object_class->release = sp_pattern_release;
@@ -139,7 +139,7 @@ sp_pattern_build (SPObject *object, SPDocument *document, SPRepr *repr)
 		GType type;
 		SPObject * child;
 		type = sp_repr_type_lookup (rchild);
-		child = g_object_new (type, NULL);
+		child = (SPObject*)g_object_new (type, NULL);
 		if (last) {
 			last->next = sp_object_attach_reref (object, child, NULL);
 		} else {
@@ -185,7 +185,7 @@ sp_pattern_release (SPObject *object)
 }
 
 static void
-sp_pattern_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPPattern *pat;
 
@@ -335,7 +335,7 @@ sp_pattern_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 	}
 
 	type = sp_repr_type_lookup (child);
-	ochild = g_object_new (type, NULL);
+	ochild = (SPObject*)g_object_new (type, NULL);
 	if (prev) {
 		prev->next = sp_object_attach_reref (object, ochild, prev->next);
 	} else {
@@ -659,8 +659,8 @@ sp_pat_fill (SPPainter *painter, NRPixBlock *pb)
 			psx = x * pp->pat->width.computed;
 			psy = y * pp->pat->height.computed;
 
-			area.x0 = pb->area.x0 - (pp->ps2px.c[0] * psx + pp->ps2px.c[2] * psy);
-			area.y0 = pb->area.y0 - (pp->ps2px.c[1] * psx + pp->ps2px.c[3] * psy);
+			area.x0 = (NRLong)(pb->area.x0 - (pp->ps2px.c[0] * psx + pp->ps2px.c[2] * psy));
+			area.y0 = (NRLong)(pb->area.y0 - (pp->ps2px.c[1] * psx + pp->ps2px.c[3] * psy));
 			area.x1 = area.x0 + pb->area.x1 - pb->area.x0;
 			area.y1 = area.y0 + pb->area.y1 - pb->area.y0;
 
