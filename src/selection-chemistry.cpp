@@ -612,7 +612,7 @@ void sp_selection_cut()
     sp_selection_delete();
 }
 
-void sp_copy_stuff_used_by_item (SPItem *item);
+static void sp_copy_stuff_used_by_item(SPItem *item);
 
 void sp_copy_gradient (SPGradient *gradient)
 {
