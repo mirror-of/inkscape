@@ -155,6 +155,7 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
 
     Gtk::HBox             potraceMultiScanLowerBox;
     Gtk::CheckButton      potraceMultiScanStackButton;
+    Gtk::CheckButton      potraceMultiScanSmoothButton;
 
 
     //preview
@@ -233,6 +234,8 @@ void TraceDialogImpl::potraceProcess(bool do_i_trace)
     pte.setMultiScanNrColors(multiScanNrColors);
     bool do_i_stack = potraceMultiScanStackButton.get_active();
     pte.setMultiScanStack(do_i_stack);
+    bool do_i_smooth = potraceMultiScanSmoothButton.get_active();
+    pte.setMultiScanSmooth(do_i_smooth);
 
     //##### Get intermediate bitmap image
     GdkPixbuf *pixbuf = tracer.getSelectedImage();
@@ -490,6 +493,10 @@ TraceDialogImpl::TraceDialogImpl()
     potraceMultiScanStackButton.set_label(_("Stack"));
     potraceMultiScanStackButton.set_active(true);
     potraceMultiScanLowerBox.pack_end(potraceMultiScanStackButton, false, false, MARGIN);
+
+    potraceMultiScanSmoothButton.set_label(_("Smooth"));
+    potraceMultiScanSmoothButton.set_active(true);
+    potraceMultiScanLowerBox.pack_end(potraceMultiScanSmoothButton, false, false, MARGIN);
 
     potraceMultiScanVBox.pack_start(potraceMultiScanLowerBox, false, false, MARGIN);
 

@@ -146,6 +146,18 @@ class PotraceTracingEngine : public TracingEngine
         return multiScanStack;
         }
 
+    /**
+     * Sets whether we want gaussian smoothing of bitmaps before quantizing
+     */
+    void setMultiScanSmooth(bool val)
+        {
+        multiScanSmooth = val;
+        }
+    bool getMultiScanSmooth()
+        {
+        return multiScanSmooth;
+        }
+
 
     /**
      *  This is the working method of this implementing class, and all
@@ -191,7 +203,8 @@ class PotraceTracingEngine : public TracingEngine
 
     //## Color-->multiscan quantization
     int multiScanNrColors;
-    bool multiScanStack;//do we tile or stack?
+    bool multiScanStack; //do we tile or stack?
+    bool multiScanSmooth;//do we use gaussian filter?
 
     char *grayMapToPath(GrayMap *gm);
     

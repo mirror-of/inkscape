@@ -324,9 +324,16 @@ filterIndexed(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
     if (engine.getTraceType() == TRACE_QUANT_COLOR)
         {
         RgbMap *gm = gdkPixbufToRgbMap(pixbuf);
-        RgbMap *gaussMap = rgbMapGaussian(gm);
-        newGm = rgbMapQuantize(gaussMap, 4, engine.getMultiScanNrColors());
-        gaussMap->destroy(gaussMap);
+        if (engine.getMultiScanSmooth())
+            {
+            RgbMap *gaussMap = rgbMapGaussian(gm);
+            newGm = rgbMapQuantize(gaussMap, 4, engine.getMultiScanNrColors());
+            gaussMap->destroy(gaussMap);
+            }
+        else
+            {
+            newGm = rgbMapQuantize(gm, 4, engine.getMultiScanNrColors());
+            }
         gm->destroy(gm);
         }
 
@@ -334,9 +341,16 @@ filterIndexed(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
     else if (engine.getTraceType() == TRACE_QUANT_MONO)
         {
         RgbMap *gm = gdkPixbufToRgbMap(pixbuf);
-        RgbMap *gaussMap = rgbMapGaussian(gm);
-        newGm = rgbMapQuantize(gaussMap, 4, engine.getMultiScanNrColors());
-        gaussMap->destroy(gaussMap);
+        if (engine.getMultiScanSmooth())
+            {
+            RgbMap *gaussMap = rgbMapGaussian(gm);
+            newGm = rgbMapQuantize(gaussMap, 4, engine.getMultiScanNrColors());
+            gaussMap->destroy(gaussMap);
+            }
+        else
+            {
+            newGm = rgbMapQuantize(gm, 4, engine.getMultiScanNrColors());
+            }
         gm->destroy(gm);
 
         //Turn to grays
