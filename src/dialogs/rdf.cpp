@@ -59,86 +59,117 @@
 
 
 struct rdf_license_t rdf_licenses [] = {
-	{ "Creative Commons Attribution", 
+    { "Creative Commons Attribution", 
           "http://creativecommons.org/licenses/by/2.0/",
-	  "\
+      "\
    <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
    <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
    <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
    <requires rdf:resource=\"http://web.resource.org/cc/Attribution\" />\
    <permits rdf:resource=\"http://web.resource.org/cc/DerivativeWorks\" />\
 ",
-	},
+    },
 
-	{ "Creative Commons Attribution-ShareAlike", 
+    { "Creative Commons Attribution-ShareAlike", 
           "http://creativecommons.org/licenses/by/2.0/",
-	  "\
+      "\
    <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
    <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
    <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
    <requires rdf:resource=\"http://web.resource.org/cc/Attribution\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/DerivativeWorks\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/ShareAlike\" />\
-",
-	},
-
-	{ "Creative Commons Attribution-NoDerivs", 
-          "http://creativecommons.org/licenses/by/2.0/",
-	  "\
-   <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Attribution\" />\
-",
-	},
-
-	{ "Creative Commons Attribution-NonCommercial", 
-          "http://creativecommons.org/licenses/by/2.0/",
-	  "\
-   <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Attribution\" />\
-   <prohibits rdf:resource=\"http://web.resource.org/cc/CommercialUse\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/DerivativeWorks\" />\
-",
-	},
-
-	{ "Creative Commons Attribution-NonCommercial-ShareAlike", 
-          "http://creativecommons.org/licenses/by/2.0/",
-	  "\
-   <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
-   <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
-   <requires rdf:resource=\"http://web.resource.org/cc/Attribution\" />\
-   <prohibits rdf:resource=\"http://web.resource.org/cc/CommercialUse\" />\
    <permits rdf:resource=\"http://web.resource.org/cc/DerivativeWorks\" />\
    <requires rdf:resource=\"http://web.resource.org/cc/ShareAlike\" />\
 ",
-	},
+    },
 
-	{ "Creative Commons Attribution-NonCommercial-NoDerivs", 
+    { "Creative Commons Attribution-NoDerivs", 
           "http://creativecommons.org/licenses/by/2.0/",
-	  "\
+      "\
+   <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
+   <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
+   <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
+   <requires rdf:resource=\"http://web.resource.org/cc/Attribution\" />\
+",
+    },
+
+    { "Creative Commons Attribution-NonCommercial", 
+          "http://creativecommons.org/licenses/by/2.0/",
+      "\
+   <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
+   <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
+   <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
+   <requires rdf:resource=\"http://web.resource.org/cc/Attribution\" />\
+   <prohibits rdf:resource=\"http://web.resource.org/cc/CommercialUse\" />\
+   <permits rdf:resource=\"http://web.resource.org/cc/DerivativeWorks\" />\
+",
+    },
+
+    { "Creative Commons Attribution-NonCommercial-ShareAlike", 
+          "http://creativecommons.org/licenses/by/2.0/",
+      "\
+   <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
+   <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
+   <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
+   <requires rdf:resource=\"http://web.resource.org/cc/Attribution\" />\
+   <prohibits rdf:resource=\"http://web.resource.org/cc/CommercialUse\" />\
+   <permits rdf:resource=\"http://web.resource.org/cc/DerivativeWorks\" />\
+   <requires rdf:resource=\"http://web.resource.org/cc/ShareAlike\" />\
+",
+    },
+
+    { "Creative Commons Attribution-NonCommercial-NoDerivs", 
+          "http://creativecommons.org/licenses/by/2.0/",
+      "\
    <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
    <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
    <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
    <requires rdf:resource=\"http://web.resource.org/cc/Attribution\" />\
    <prohibits rdf:resource=\"http://web.resource.org/cc/CommercialUse\" />\
 ",
-	},
+    },
 
-	{ "Public Domain",
-	  "http://web.resource.org/cc/PublicDomain",
-	  "\
+    { "Public Domain",
+      "http://web.resource.org/cc/PublicDomain",
+      "\
      <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
      <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
      <permits rdf:resource=\"http://web.resource.org/cc/DerivativeWorks\" />\
 ",
-	},
+    },
 
-	{ NULL, NULL, NULL }
+    { NULL, NULL, NULL }
 };
+
+struct rdf_work_entity_t rdf_work_entities [] = {
+    { "title", N_("Title"), "dc:title" },
+    { "date", N_("Date"), "dc:date" },
+    { "source", N_("Source"), "dc:source" },
+    { "keywords", N_("Keywords"), "dc:subject" },
+
+    /* these are "agent" tags actually... */
+    { "creator", N_("Creator"), "dc:creator" },
+    { "owner", N_("Owner"), "dc:owner" },
+    { "publisher", N_("Publisher"), "dc:publisher" },
+
+    /* this is a multi-line tag */
+    { "description", N_("Description"), "dc:description" },
+
+    /* this uses an element */
+    { "license", N_("License"), "dc:license" },
+    
+    { NULL, NULL, NULL }
+};
+
+struct rdf_work_entity_t *
+rdf_find_entity(char * name)
+{
+    struct rdf_work_entity_t *entity;
+    for (entity=rdf_work_entities; entity->name; entity++) {
+        if (strcmp(entity->name,name)==0) break;
+    }
+    if (entity->name) return entity;
+    return NULL;
+}
 
 /*
  * Takes the inkscape rdf struct and spits out a static RDF, which is only
@@ -176,47 +207,47 @@ rdf_string(struct rdf_t * rdf)
     if (rdf && rdf->work_title && rdf->work_title[0]) {
         work_title=g_markup_printf_escaped("   <dc:title>%s</dc:title>\n",
             rdf->work_title);
-	overall+=strlen(work_title);
+    overall+=strlen(work_title);
     }
     if (rdf && rdf->work_date && rdf->work_date[0]) {
         work_date=g_markup_printf_escaped("   <dc:date>%s</dc:date>\n",
             rdf->work_date);
-	overall+=strlen(work_date);
+    overall+=strlen(work_date);
     }
     if (rdf && rdf->work_description && rdf->work_description[0]) {
         work_description=g_markup_printf_escaped("   <dc:description>%s</dc:description>\n",
             rdf->work_description);
-	overall+=strlen(work_description);
+    overall+=strlen(work_description);
     }
     if (rdf && rdf->work_creator && rdf->work_creator[0]) {
         work_creator=g_markup_printf_escaped("   <dc:creator><Agent>\
       <dc:title>%s</dc:title>\
    </Agent></dc:creator>\n",
             rdf->work_creator);
-	overall+=strlen(work_creator);
+    overall+=strlen(work_creator);
     }
     if (rdf && rdf->work_owner && rdf->work_owner[0]) {
         work_owner=g_markup_printf_escaped("   <dc:rights><Agent>\
       <dc:title>%s</dc:title>\
    </Agent></dc:rights>\n",
             rdf->work_owner);
-	overall+=strlen(work_owner);
+    overall+=strlen(work_owner);
     }
     if (rdf && rdf->work_source && rdf->work_source[0]) {
         work_source=g_markup_printf_escaped("   <dc:source rdf:resource=\"%s\" />\n",
             rdf->work_source);
-	overall+=strlen(work_source);
+    overall+=strlen(work_source);
     }
     if (rdf && rdf->license && rdf->license->work_rdf && rdf->license->work_rdf[0]) {
         work_license=g_markup_printf_escaped("   <license rdf:resource=\"%s\" />\n",
             rdf->license->work_rdf);
-	overall+=strlen(work_license);
+    overall+=strlen(work_license);
 
-	license_head=g_markup_printf_escaped("<License rdf:about=\"%s\">\n",
-			rdf->license->work_rdf);
-	overall+=strlen(license_head);
-	overall+=strlen(rdf->license->license_rdf);
-	overall+=strlen(license_end);
+    license_head=g_markup_printf_escaped("<License rdf:about=\"%s\">\n",
+            rdf->license->work_rdf);
+    overall+=strlen(license_head);
+    overall+=strlen(rdf->license->license_rdf);
+    overall+=strlen(license_end);
     }
 
     overall+=strlen(rdf_head)+strlen(rdf_end);
@@ -243,11 +274,43 @@ rdf_string(struct rdf_t * rdf)
     strcat(string,work_end);
     if (license_head) {
         strcat(string,license_head);
-	strcat(string,rdf->license->license_rdf);
-	strcat(string,license_end);
+    strcat(string,rdf->license->license_rdf);
+    strcat(string,license_end);
     }
     strcat(string,rdf_end);
 
     return string;
 }
 
+gchar *
+rdf_get_work_string(char * name)
+{
+    return "";
+}
+
+void
+rdf_set_work_string(char * name, gchar * string)
+{
+}
+
+struct rdf_license_t *
+rdf_get_license()
+{
+    return NULL;
+}
+
+void
+rdf_set_license(struct rdf_license_t * license)
+{
+}
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

@@ -287,8 +287,13 @@ sp_doc_dialog_text_changed ( GtkWidget *widget, gpointer data )
     char * name = (char*)data;
 
     GtkWidget *e = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg), name));
+    struct rdf_work_entity_t * entity = rdf_find_entity (name);
+    g_assert ( entity != NULL );
 
-    printf("changed '%s' to '%s'\n",name,gtk_entry_get_text ( GTK_ENTRY(e) ));
+    printf("changed '%s' (%s) to '%s'\n",
+            entity->title,
+            entity->tag,
+            gtk_entry_get_text ( GTK_ENTRY(e) ));
 }
 
 
@@ -498,17 +503,26 @@ sp_doc_dialog_paper_orientation_selected(GtkWidget *widget, gpointer data)
 }
 
 static void
-sp_doc_dialog_add_entry( gchar * label, char * name,
+sp_doc_dialog_add_entry( char * name,
                          GtkWidget * t, int row )
 {
-    if (dlg && t && label && name) {
-        /*
-        GtkWidget * hb = gtk_hbox_new (FALSE, 4);
-        gtk_widget_show (hb);
-        gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
+    g_assert ( t != NULL );
+    g_assert ( name != NULL );
+
+    if (dlg) {
+        struct rdf_work_entity_t * entity = rdf_find_entity(name);
+
+        g_assert ( entity != NULL );
+
+        /* translation code for including a ":" 
+        gchar * sep = _(":"); // label separator, the colon in "title:"
+        gint label_length=strlen(entity->title)+strlen(sep)+1;
+        gchar * label_text;
+        label_text = (gchar*)g_malloc(label_length);
+        snprintf(label_text,label_length,_("%s%s"),entity->title,sep);
         */
 
-        GtkWidget *l = gtk_label_new (label);
+        GtkWidget *l = gtk_label_new (entity->title);
         gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
         gtk_widget_show (l);
         //gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
@@ -839,9 +853,9 @@ sp_desktop_dialog(void)
 
         // end of former "document settings" stuff
 
-	/*
-	 * Ownership metadata tab
-	 */
+        /*
+         * Ownership metadata tab
+         */
         l = gtk_label_new (_("Metadata"));
         gtk_widget_show (l);
         t = gtk_table_new (5, 2, FALSE);
@@ -852,16 +866,16 @@ sp_desktop_dialog(void)
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
 
         row=0;
-        sp_doc_dialog_add_entry( _("Title:"), "title", t, row++ );
-        sp_doc_dialog_add_entry( _("Date:"), "date", t, row++ );
-        sp_doc_dialog_add_entry( _("Creator:"), "creator", t, row++ );
-        sp_doc_dialog_add_entry( _("Owner:"), "owner", t, row++ );
-        sp_doc_dialog_add_entry( _("Publisher:"), "publisher", t, row++ );
-        sp_doc_dialog_add_entry( _("Source (URL):"), "source", t, row++ );
-        sp_doc_dialog_add_entry( _("Keywords:"), "keywords", t, row++ );
+        sp_doc_dialog_add_entry( "title", t, row++ );
+        sp_doc_dialog_add_entry( "date", t, row++ );
+        sp_doc_dialog_add_entry( "creator", t, row++ );
+        sp_doc_dialog_add_entry( "owner", t, row++ );
+        sp_doc_dialog_add_entry( "publisher", t, row++ );
+        sp_doc_dialog_add_entry( "source", t, row++ );
+        sp_doc_dialog_add_entry( "keywords", t, row++ );
 
         /* this needs to be multi-line text entry */
-        sp_doc_dialog_add_entry( _("Description:"), "description", t, row++ );
+        sp_doc_dialog_add_entry( "description", t, row++ );
 
         vb = gtk_vbox_new (FALSE, 4);
         gtk_widget_show (vb);
@@ -894,7 +908,7 @@ sp_desktop_dialog(void)
                 G_CALLBACK (sp_doc_dialog_license_selected),
                 (gpointer)(license));
             gtk_menu_append (GTK_MENU (m), i);
-	}
+        }
         i = gtk_menu_item_new_with_label (_("Proprietary"));
         gtk_widget_show (i);
         g_signal_connect ( G_OBJECT (i), "activate", 
