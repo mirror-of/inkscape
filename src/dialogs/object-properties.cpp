@@ -87,47 +87,6 @@ sp_object_properties_dialog_delete ( GtkObject *object,
 }
 
 
-
-
-static void
-sp_object_properties_style_activate ( GtkMenuItem *menuitem, const gchar *key )
-{
-    GtkWidget *fs, *sp, *sl;
-
-    fs = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "fill");
-    sp = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "stroke-paint");
-    sl = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "stroke-line");
-
-    if (key) {
-        SPRepr *repr;
-        repr = inkscape_get_repr (INKSCAPE, key);
-        if (repr) {
-            sp_widget_construct_repr (SP_WIDGET (fs), repr);
-            sp_widget_construct_repr (SP_WIDGET (sp), repr);
-            sp_widget_construct_repr (SP_WIDGET (sl), repr);
-            gtk_widget_set_sensitive (GTK_WIDGET (fs), TRUE);
-            gtk_widget_set_sensitive (GTK_WIDGET (sp), TRUE);
-            gtk_widget_set_sensitive (GTK_WIDGET (sl), TRUE);
-        } else {
-            /* Big trouble */
-            gtk_widget_set_sensitive (GTK_WIDGET (fs), FALSE);
-            gtk_widget_set_sensitive (GTK_WIDGET (sp), FALSE);
-            gtk_widget_set_sensitive (GTK_WIDGET (sl), FALSE);
-        }
-    } else {
-        sp_widget_construct_global (SP_WIDGET (fs), INKSCAPE);
-        sp_widget_construct_global (SP_WIDGET (sp), INKSCAPE);
-        sp_widget_construct_global (SP_WIDGET (sl), INKSCAPE);
-        gtk_widget_set_sensitive (GTK_WIDGET (fs), TRUE);
-        gtk_widget_set_sensitive (GTK_WIDGET (sp), TRUE);
-        gtk_widget_set_sensitive (GTK_WIDGET (sl), TRUE);
-    
-    } // end of if()
-
-}
-
-
-
 int
 sp_object_properties_page( GtkWidget *nb, 
                            GtkWidget *page,
@@ -161,10 +120,7 @@ sp_object_properties_page( GtkWidget *nb,
 void
 sp_object_properties_dialog (void)
 {
-
     if (!dlg) {
-        GtkWidget *vb, *nb, *hb, *l, *page, *hs, *om, *m, *mi;
-
         gchar title[500];
         sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_DIALOG_FILL_STROKE), title);
 
@@ -197,107 +153,35 @@ sp_object_properties_dialog (void)
         g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg );
         g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg );
 
-        vb = gtk_vbox_new (FALSE, 0);
+        GtkWidget *vb = gtk_vbox_new (FALSE, 0);
         gtk_widget_show (vb);
         gtk_container_add (GTK_CONTAINER (dlg), vb); 
 
-        nb = gtk_notebook_new ();
+        GtkWidget *nb = gtk_notebook_new ();
         gtk_widget_show (nb);
         gtk_box_pack_start (GTK_BOX (vb), nb, TRUE, TRUE, 0);
         gtk_object_set_data (GTK_OBJECT (dlg), "notebook", nb);
 
         /* Fill page */
-        page = sp_fill_style_widget_new ();
+        {
+        GtkWidget *page = sp_fill_style_widget_new ();
         sp_object_properties_page(nb, page, _("Fill"), "fill",
                     INKSCAPE_STOCK_PROPERTIES_FILL_PAGE);
+        }
 
         /* Stroke paint page */
-        page = sp_stroke_style_paint_widget_new ();
+        {
+        GtkWidget *page = sp_stroke_style_paint_widget_new ();
         sp_object_properties_page(nb, page, _("Stroke paint"), "stroke-paint",
                     INKSCAPE_STOCK_PROPERTIES_STROKE_PAINT_PAGE);
+        }
 
         /* Stroke line page */
-        page = sp_stroke_style_line_widget_new ();
+        {
+        GtkWidget *page = sp_stroke_style_line_widget_new ();
         sp_object_properties_page(nb, page, _("Stroke style"), "stroke-line",
                     INKSCAPE_STOCK_PROPERTIES_STROKE_PAGE);
-
-        /* Modify style selector */
-        hs = gtk_hseparator_new ();
-        gtk_widget_show (hs);
-        gtk_box_pack_start (GTK_BOX (vb), hs, FALSE, FALSE, 0);
-
-        hb = gtk_hbox_new (FALSE, 4);
-        gtk_widget_show (hb);
-        gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
-
-        l = gtk_label_new (_("Apply to:"));
-        gtk_widget_show (l);
-        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-        gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 4);
-        om = gtk_option_menu_new ();
-        gtk_widget_show (om);
-        gtk_box_pack_start (GTK_BOX (hb), om, TRUE, TRUE, 0);
-
-        m = gtk_menu_new ();
-
-        mi = gtk_menu_item_new_with_label (_("Selected objects"));
-        gtk_menu_append (GTK_MENU (m), mi);
-        gtk_signal_connect ( GTK_OBJECT (mi), "activate", 
-                             GTK_SIGNAL_FUNC 
-                                 (sp_object_properties_style_activate), 
-                             NULL);
-        mi = gtk_menu_item_new_with_label (_("All shape tools"));
-        gtk_menu_append (GTK_MENU (m), mi);
-        gtk_signal_connect ( GTK_OBJECT (mi), "activate", 
-                             GTK_SIGNAL_FUNC 
-                                 (sp_object_properties_style_activate), 
-                             (void *)"tools.shapes" );
-        mi = gtk_menu_item_new_with_label (_("Rectangle tool"));
-        gtk_menu_append (GTK_MENU (m), mi);
-        gtk_signal_connect ( GTK_OBJECT (mi), "activate", 
-                             GTK_SIGNAL_FUNC 
-                                 (sp_object_properties_style_activate), 
-                             (void *)"tools.shapes.rect" );
-        mi = gtk_menu_item_new_with_label (_("Arc tool"));
-        gtk_menu_append (GTK_MENU (m), mi);
-        gtk_signal_connect ( GTK_OBJECT (mi), "activate", 
-                             GTK_SIGNAL_FUNC 
-                                 (sp_object_properties_style_activate), 
-                             (void *)"tools.shapes.arc" );
-        mi = gtk_menu_item_new_with_label (_("Star tool"));
-        gtk_menu_append (GTK_MENU (m), mi);
-        gtk_signal_connect ( GTK_OBJECT (mi), "activate", 
-                             GTK_SIGNAL_FUNC 
-                                 (sp_object_properties_style_activate), 
-                             (void *)"tools.shapes.star" );
-        mi = gtk_menu_item_new_with_label (_("Spiral tool"));
-        gtk_menu_append (GTK_MENU (m), mi);
-        gtk_signal_connect ( GTK_OBJECT (mi), "activate", 
-                             GTK_SIGNAL_FUNC 
-                                 (sp_object_properties_style_activate), 
-                             (void *)"tools.shapes.spiral");
-        mi = gtk_menu_item_new_with_label (_("Freehand and pen"));
-        gtk_menu_append (GTK_MENU (m), mi);
-        gtk_signal_connect ( GTK_OBJECT (mi), "activate", 
-                             GTK_SIGNAL_FUNC 
-                                 (sp_object_properties_style_activate), 
-                             (void *)"tools.freehand");
-        mi = gtk_menu_item_new_with_label (_("Calligraphic line"));
-        gtk_menu_append (GTK_MENU (m), mi);
-        gtk_signal_connect ( GTK_OBJECT (mi), "activate", 
-                             GTK_SIGNAL_FUNC 
-                                 (sp_object_properties_style_activate), 
-                             (void *)"tools.calligraphic");
-        mi = gtk_menu_item_new_with_label (_("Text"));
-        gtk_menu_append (GTK_MENU (m), mi);
-        gtk_signal_connect ( GTK_OBJECT (mi), "activate", 
-                             GTK_SIGNAL_FUNC 
-                                 (sp_object_properties_style_activate), 
-                             (void *)"tools.text");
-
-        gtk_widget_show_all (m);
-
-        gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
+        }
 
         gtk_widget_show (dlg);
         
