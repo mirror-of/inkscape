@@ -768,11 +768,19 @@ sp_adjust_tspan_letterspacing_screen(SPText *text, gint i_position, SPDesktop *d
     gdouble val;
     Inkscape::Text::Layout::iterator it = text->layout.charIndexToIterator(i_position);
     SPObject *source_obj;
+    unsigned nb_let;
     text->layout.getSourceOfCharacter(it, (void**)&source_obj);
-    if (!SP_IS_STRING(source_obj)) return;   // FIXME? we could take a guess at which side the user wants
-
-    int nb_let = SP_STRING(source_obj)->string.length();
-    SPStyle *style = SP_OBJECT_STYLE (source_obj->parent);
+    if (source_obj == NULL) {    // end of text
+        source_obj = text->lastChild();
+        nb_let = sp_text_get_length(source_obj);
+    } else if (SP_IS_STRING(source_obj)) {
+        nb_let = SP_STRING(source_obj)->string.length();
+        source_obj = source_obj->parent;
+    } else {  // line break
+        if (SP_OBJECT_PREV(source_obj)) source_obj = SP_OBJECT_PREV(source_obj);
+        nb_let = sp_text_get_length(source_obj);
+    }
+    SPStyle *style = SP_OBJECT_STYLE (source_obj);
 
     // calculate real value
     /* TODO: Consider calculating val unconditionally, i.e. drop the first `if' line, and
@@ -794,7 +802,7 @@ sp_adjust_tspan_letterspacing_screen(SPText *text, gint i_position, SPDesktop *d
     gdouble const zoom = SP_DESKTOP_ZOOM(desktop);
     gdouble const zby = (by
                          / (zoom * (nb_let > 1 ? nb_let - 1 : 1))
-                         / NR::expansion(sp_item_i2doc_affine(SP_ITEM(source_obj->parent))));
+                         / NR::expansion(sp_item_i2doc_affine(SP_ITEM(source_obj))));
     val += zby;
 
     // set back value
