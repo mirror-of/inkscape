@@ -116,6 +116,9 @@ libinkpre_a_SOURCES =	\
 	sp-desktop-widget.h	\
 	sp-ellipse.cpp sp-ellipse.h	\
 	sp-gradient.cpp sp-gradient.h	\
+	sp-gradient-reference.cpp	\
+	sp-gradient-reference.h	\
+	sp-gradient-vector.h	\
 	sp-guide-attachment.h	\
 	sp-guide-constraint.h	\
 	sp-guide.cpp sp-guide.h	\
@@ -128,6 +131,7 @@ libinkpre_a_SOURCES =	\
 	sp-item-transform.cpp sp-item-transform.h	\
 	sp-item-update-cns.cpp sp-item-update-cns.h	\
 	sp-line.cpp sp-line.h	\
+	sp-linear-gradient.h	\
 	splivarot.cpp splivarot.h	\
 	sp-marker.cpp sp-marker.h	\
 	sp-marker-loc.h	\
@@ -143,11 +147,13 @@ libinkpre_a_SOURCES =	\
 	sp-pattern.cpp sp-pattern.h	\
 	sp-polygon.cpp sp-polygon.h	\
 	sp-polyline.cpp sp-polyline.h	\
+	sp-radial-gradient.h	\
 	sp-rect.cpp sp-rect.h	\
 	sp-root.cpp sp-root.h	\
 	sp-shape.cpp sp-shape.h	\
 	sp-spiral.cpp sp-spiral.h	\
 	sp-star.cpp sp-star.h	\
+	sp-stop.h	\
 	sp-symbol.cpp sp-symbol.h	\
 	sp-text.cpp sp-text.h	\
 	sp-string.cpp sp-string.h	\

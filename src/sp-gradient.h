@@ -15,57 +15,17 @@
 
 #include <glib.h>
 
-#define SP_TYPE_STOP (sp_stop_get_type ())
-#define SP_STOP(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_STOP, SPStop))
-#define SP_STOP_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), SP_TYPE_STOP, SPStopClass))
-#define SP_IS_STOP(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_STOP))
-#define SP_IS_STOP_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), SP_TYPE_STOP))
-
 #define SP_TYPE_GRADIENT (sp_gradient_get_type ())
 #define SP_GRADIENT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_GRADIENT, SPGradient))
 #define SP_GRADIENT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_GRADIENT, SPGradientClass))
 #define SP_IS_GRADIENT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_GRADIENT))
 #define SP_IS_GRADIENT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_GRADIENT))
 
-#define SP_TYPE_LINEARGRADIENT (sp_lineargradient_get_type ())
-#define SP_LINEARGRADIENT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_LINEARGRADIENT, SPLinearGradient))
-#define SP_LINEARGRADIENT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_LINEARGRADIENT, SPLinearGradientClass))
-#define SP_IS_LINEARGRADIENT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_LINEARGRADIENT))
-#define SP_IS_LINEARGRADIENT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_LINEARGRADIENT))
-
-#define SP_TYPE_RADIALGRADIENT (sp_radialgradient_get_type ())
-#define SP_RADIALGRADIENT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_RADIALGRADIENT, SPRadialGradient))
-#define SP_RADIALGRADIENT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_RADIALGRADIENT, SPRadialGradientClass))
-#define SP_IS_RADIALGRADIENT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_RADIALGRADIENT))
-#define SP_IS_RADIALGRADIENT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_RADIALGRADIENT))
-
 #include "libnr/nr-matrix.h"
-#include "svg/svg-types.h"
 #include "forward.h"
-#include "color.h"
 #include "sp-paint-server.h"
-#include "uri-references.h"
-
-/*
- * Gradient Stop
- */
-
-struct SPStop {
-	SPObject object;
-
-	/* fixme: Should be SPSVGPercentage */
-	gfloat offset;
-
-	SPColor color;
-	/* fixme: Implement SPSVGNumber or something similar */
-	gfloat opacity;
-};
-
-struct SPStopClass {
-	SPObjectClass parent_class;
-};
-
-GType sp_stop_get_type (void);
+#include "sp-stop.h"             /* TODO: Remove this #include. */
+#include "sp-gradient-vector.h"	 /* TODO: Remove this #include. */
 
 /*
  * Gradient
@@ -76,18 +36,6 @@ GType sp_stop_get_type (void);
 
 class SPGradientStop;
 class SPGradientVector;
-
-struct SPGradientStop {
-	gdouble offset;
-	SPColor color;
-	gfloat opacity;
-};
-
-struct SPGradientVector {
-	gint nstops;
-	gdouble start, end;
-	SPGradientStop stops[1];
-};
 
 typedef enum {
 	SP_GRADIENT_TYPE_UNKNOWN,
@@ -150,18 +98,6 @@ struct SPGradientClass {
 
 GType sp_gradient_get_type (void);
 
-class SPGradientReference : public Inkscape::URIReference {
-public:
-	SPGradientReference(SPObject *obj) : URIReference(obj) {}
-	SPGradient *getObject() const {
-		return (SPGradient *)URIReference::getObject();
-	}
-protected:
-	virtual bool _acceptObject(SPObject *obj) const {
-		return SP_IS_GRADIENT(obj);
-	}
-};
-
 /* Forces vector to be built, if not present (i.e. changed) */
 void sp_gradient_ensure_vector (SPGradient *gradient);
 /* Ensures that color array is populated */
@@ -196,57 +132,20 @@ NRMatrix *sp_gradient_get_gs2d_matrix_f(SPGradient const *gr, NRMatrix const *ct
 					NRMatrix *gs2d);
 void sp_gradient_set_gs2d_matrix_f(SPGradient *gr, NRMatrix const *ctm, NRRect const *bbox, NRMatrix const *gs2d);
 
-/*
- * Linear Gradient
- */
 
-struct SPLinearGradient {
-	SPGradient gradient;
+#include "sp-gradient-reference.h"  /* TODO: Get rid of this #include. */
+#include "sp-linear-gradient.h"  /* TODO: Get rid of this #include. */
+#include "sp-radial-gradient.h"  /* TODO: Get rid of this #include. */
 
-	SPSVGLength x1;
-	SPSVGLength y1;
-	SPSVGLength x2;
-	SPSVGLength y2;
-};
-
-struct SPLinearGradientClass {
-	SPGradientClass parent_class;
-};
-
-GType sp_lineargradient_get_type (void);
-
-void sp_lineargradient_set_position (SPLinearGradient *lg, gdouble x1, gdouble y1, gdouble x2, gdouble y2);
-
-/* Builds flattened repr tree of gradient - i.e. no href */
-
-SPRepr *sp_lineargradient_build_repr (SPLinearGradient *lg, gboolean vector);
+#endif /* !__SP_GRADIENT_H__ */
 
 /*
- * Radial Gradient
- */
-
-struct SPRadialGradient {
-	SPGradient gradient;
-
-	SPSVGLength cx;
-	SPSVGLength cy;
-	SPSVGLength r;
-	SPSVGLength fx;
-	SPSVGLength fy;
-};
-
-struct SPRadialGradientClass {
-	SPGradientClass parent_class;
-};
-
-GType sp_radialgradient_get_type (void);
-
-void sp_radialgradient_set_position (SPRadialGradient *rg, gdouble cx, gdouble cy, gdouble fx, gdouble fy, gdouble r);
-
-/* Builds flattened repr tree of gradient - i.e. no href */
-
-SPRepr *sp_radialgradient_build_repr (SPRadialGradient *lg, gboolean vector);
-
-
-
-#endif
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
