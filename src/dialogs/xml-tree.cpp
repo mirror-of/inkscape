@@ -574,6 +574,7 @@ sp_xml_tree_dialog (void)
         gtk_scrolled_window_set_policy ( GTK_SCROLLED_WINDOW (sw),
                                          GTK_POLICY_AUTOMATIC,
                                          GTK_POLICY_AUTOMATIC );
+        gtk_scrolled_window_set_shadow_type ( GTK_SCROLLED_WINDOW(sw), GTK_SHADOW_IN );
         gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET (sw), TRUE, TRUE, 0);
 
         content = SP_XMLVIEW_CONTENT (sp_xmlview_content_new (NULL));
