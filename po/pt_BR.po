@@ -3075,8 +3075,8 @@ msgid ""
 "Select <b>two non-endpoint nodes</b> on a path between which to delete "
 "segments."
 msgstr ""
-"Você precisa selecionar <b>dois pontos não finais</b> num caminho para apagar "
-"os segmentos"
+"Você precisa selecionar <b>dois pontos não finais</b> num caminho para "
+"apagar os segmentos"
 
 #: src/nodepath.cpp:1464
 msgid "Cannot find path between nodes."
@@ -3820,8 +3820,8 @@ msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, XOR, division, or path "
 "cut."
 msgstr ""
-"Selecione <b>exatamente dois caminhos</b> para fazer diferença, ou-exclusivo, "
-"divisão ou corte de caminho."
+"Selecione <b>exatamente dois caminhos</b> para fazer diferença, ou-"
+"exclusivo, divisão ou corte de caminho."
 
 #: src/splivarot.cpp:134 src/splivarot.cpp:149
 msgid ""
