@@ -105,6 +105,7 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
     void potracePreviewCallback();
 
     Gtk::Notebook   notebook;
+    Gtk::Tooltips   tips;
 
     //########## Potrace items
     Gtk::VBox             potraceBox;
@@ -146,15 +147,18 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
     Gtk::Frame            potraceMultiScanFrame;
     Gtk::VBox             potraceMultiScanVBox;
 
-    Gtk::HBox             potraceMultiScanUpperBox;
+    Gtk::HBox             potraceMultiScanHBox1;
     Gtk::RadioButton      potraceMultiScanBrightnessRadioButton;
-    Gtk::RadioButton      potraceMultiScanColorRadioButton;
-    Gtk::RadioButton      potraceMultiScanMonoRadioButton;
-    Gtk::Label            potraceMultiScanNrColorLabel;
     Gtk::SpinButton       potraceMultiScanNrColorSpinner;
 
-    Gtk::HBox             potraceMultiScanLowerBox;
+    Gtk::HBox             potraceMultiScanHBox2;
+    Gtk::RadioButton      potraceMultiScanColorRadioButton;
     Gtk::CheckButton      potraceMultiScanStackButton;
+
+    Gtk::HBox             potraceMultiScanHBox3;
+    Gtk::RadioButton      potraceMultiScanMonoRadioButton;
+    Gtk::Label            potraceMultiScanNrColorLabel;
+
     Gtk::CheckButton      potraceMultiScanSmoothButton;
 
 
@@ -392,12 +396,14 @@ TraceDialogImpl::TraceDialogImpl()
     potraceBrightnessRadioButton.set_label(_("Brightness"));
     potraceGroup = potraceBrightnessRadioButton.get_group();
     potraceBrightnessBox.pack_start(potraceBrightnessRadioButton, false, false, MARGIN);
+    tips.set_tip(potraceBrightnessRadioButton, _("Select tracing by a given brightness level"));
 
     potraceBrightnessSpinner.set_digits(3);
     potraceBrightnessSpinner.set_increments(0.01, 0.1);
     potraceBrightnessSpinner.set_range(0.0, 1.0);
     potraceBrightnessSpinner.set_value(0.45);
     potraceBrightnessBox.pack_end(potraceBrightnessSpinner, false, false, MARGIN);
+    tips.set_tip(potraceBrightnessSpinner, _("Adjust brightness cutoff for black/white"));
 
     potraceBrightnessSpinnerLabel.set_label(_("Threshold:"));
     potraceBrightnessBox.pack_end(potraceBrightnessSpinnerLabel, false, false, MARGIN);
@@ -414,6 +420,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceCannyRadioButton.set_label(_("Optimal Edge Detection (Canny)"));
     potraceCannyRadioButton.set_group(potraceGroup);
     potraceCannyBox.pack_start(potraceCannyRadioButton, false, false, MARGIN);
+    tips.set_tip(potraceCannyRadioButton, _("Select tracing by J. Canny's algorithm"));
     /*
     potraceCannyBox.pack_start(potraceCannySeparator);
     potraceCannyLoSpinnerLabel.set_label(_("Low"));
@@ -429,6 +436,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceCannyHiSpinner.set_range(0.0, 1.0);
     potraceCannyHiSpinner.set_value(0.65);
     potraceCannyBox.pack_end(potraceCannyHiSpinner, false, false, MARGIN);
+    tips.set_tip(potraceCannyHiSpinner, _("Brightness cutoff for adjacent pixels (adjusts thickness)"));
 
     potraceCannyHiSpinnerLabel.set_label(_("Threshold:"));
     potraceCannyBox.pack_end(potraceCannyHiSpinnerLabel, false, false, MARGIN);
@@ -447,12 +455,14 @@ TraceDialogImpl::TraceDialogImpl()
     potraceQuantRadioButton.set_label(_("Color Quantization"));
     potraceQuantRadioButton.set_group(potraceGroup);
     potraceQuantBox.pack_start(potraceQuantRadioButton, false, false, MARGIN);
+    tips.set_tip(potraceQuantRadioButton, _("Select tracing along the borders of reduced colors"));
 
     potraceQuantNrColorSpinner.set_digits(2);
     potraceQuantNrColorSpinner.set_increments(1.0, 4.0);
     potraceQuantNrColorSpinner.set_range(2.0, 64.0);
     potraceQuantNrColorSpinner.set_value(8.0);
     potraceQuantBox.pack_end(potraceQuantNrColorSpinner, false, false, MARGIN);
+    tips.set_tip(potraceQuantNrColorSpinner, _("Adjust the reduced number of colors"));
 
     potraceQuantNrColorLabel.set_label(_("Colors:"));
     potraceQuantBox.pack_end(potraceQuantNrColorLabel, false, false, MARGIN);
@@ -465,40 +475,49 @@ TraceDialogImpl::TraceDialogImpl()
     potraceBox.pack_start(potraceQuantFrame, false, false, 0);
   
     /*#### Multiple scanning####*/
-    //----Upper hbox
+    //----Hbox1
     potraceMultiScanBrightnessRadioButton.set_label(_("Brightness"));
     potraceMultiScanBrightnessRadioButton.set_group(potraceGroup);
-    potraceMultiScanUpperBox.pack_start(potraceMultiScanBrightnessRadioButton, false, false, MARGIN);
-
-    potraceMultiScanColorRadioButton.set_label(_("Color"));
-    potraceMultiScanColorRadioButton.set_group(potraceGroup);
-    potraceMultiScanUpperBox.pack_start(potraceMultiScanColorRadioButton, false, false, MARGIN);
-
-    potraceMultiScanMonoRadioButton.set_label(_("Monochrome"));
-    potraceMultiScanMonoRadioButton.set_group(potraceGroup);
-    potraceMultiScanUpperBox.pack_start(potraceMultiScanMonoRadioButton, false, false, MARGIN);
+    potraceMultiScanHBox1.pack_start(potraceMultiScanBrightnessRadioButton, false, false, MARGIN);
+    tips.set_tip(potraceMultiScanBrightnessRadioButton, _("Repeated scanning with different brightness bands"));
 
     potraceMultiScanNrColorSpinner.set_digits(2);
     potraceMultiScanNrColorSpinner.set_increments(1.0, 4.0);
     potraceMultiScanNrColorSpinner.set_range(2.0, 64.0);
     potraceMultiScanNrColorSpinner.set_value(8.0);
-    potraceMultiScanUpperBox.pack_end(potraceMultiScanNrColorSpinner, false, false, MARGIN);
+    potraceMultiScanHBox1.pack_end(potraceMultiScanNrColorSpinner, false, false, MARGIN);
+    potraceMultiScanNrColorLabel.set_label(_("Scans:"));
+    potraceMultiScanHBox1.pack_end(potraceMultiScanNrColorLabel, false, false, MARGIN);
+    tips.set_tip(potraceMultiScanNrColorSpinner, _("Adjust desired number of scans"));
 
-    potraceMultiScanNrColorLabel.set_label(_("Colors:"));
-    potraceMultiScanUpperBox.pack_end(potraceMultiScanNrColorLabel, false, false, MARGIN);
+    potraceMultiScanVBox.pack_start(potraceMultiScanHBox1, false, false, MARGIN);
 
-    potraceMultiScanVBox.pack_start(potraceMultiScanUpperBox, false, false, MARGIN);
+    //----Hbox2
+    potraceMultiScanColorRadioButton.set_label(_("Color"));
+    potraceMultiScanColorRadioButton.set_group(potraceGroup);
+    potraceMultiScanHBox2.pack_start(potraceMultiScanColorRadioButton, false, false, MARGIN);
+    tips.set_tip(potraceMultiScanColorRadioButton, _("Repeated scanning, once for each reduced color"));
 
-    //---Lower hbox
+
+    potraceMultiScanVBox.pack_start(potraceMultiScanHBox2, false, false, MARGIN);
+
+    //---Hbox3
+    potraceMultiScanMonoRadioButton.set_label(_("Monochrome"));
+    potraceMultiScanMonoRadioButton.set_group(potraceGroup);
+    potraceMultiScanHBox3.pack_start(potraceMultiScanMonoRadioButton, false, false, MARGIN);
+    tips.set_tip(potraceMultiScanMonoRadioButton, _("Same as Color, but convert result to grayscale"));
+
     potraceMultiScanStackButton.set_label(_("Stack"));
     potraceMultiScanStackButton.set_active(true);
-    potraceMultiScanLowerBox.pack_end(potraceMultiScanStackButton, false, false, MARGIN);
+    potraceMultiScanHBox3.pack_end(potraceMultiScanStackButton, false, false, MARGIN);
+    tips.set_tip(potraceMultiScanStackButton, _("Stack scans vertically or tile horizontally"));
 
     potraceMultiScanSmoothButton.set_label(_("Smooth"));
     potraceMultiScanSmoothButton.set_active(true);
-    potraceMultiScanLowerBox.pack_end(potraceMultiScanSmoothButton, false, false, MARGIN);
+    potraceMultiScanHBox3.pack_end(potraceMultiScanSmoothButton, false, false, MARGIN);
+    tips.set_tip(potraceMultiScanSmoothButton, _("Gaussian blur on bitmap before tracing"));
 
-    potraceMultiScanVBox.pack_start(potraceMultiScanLowerBox, false, false, MARGIN);
+    potraceMultiScanVBox.pack_start(potraceMultiScanHBox3, false, false, MARGIN);
 
     potraceMultiScanFrame.set_label(_("Multiple Scanning"));
     //potraceQuantFrame.set_shadow_type(Gtk::SHADOW_NONE);
@@ -510,6 +529,9 @@ TraceDialogImpl::TraceDialogImpl()
     potracePreviewButton.signal_clicked().connect( 
          sigc::mem_fun(*this, &TraceDialogImpl::potracePreviewCallback) );
     potracePreviewBox.pack_end(potracePreviewButton, false, false, 0);//do not expand
+    tips.set_tip(potracePreviewButton, _("Show intermediate bitmap without tracing"));
+
+
     potracePreviewImage.set_size_request(100,100);
     //potracePreviewImage.set_alignment (Gtk::ALIGN_CENTER, Gtk::ALIGN_CENTER);
     potracePreviewBox.pack_start(potracePreviewImage, true, true, 0);
@@ -523,6 +545,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceInvertButton.set_active(false);
     potraceInvertBox.pack_end(potraceInvertButton, false, false, MARGIN);
     potraceBox.pack_start(potraceInvertBox, false, false, MARGIN);
+    tips.set_tip(potraceInvertButton, _("Invert black and white regions for single traces"));
 
     /*#### Credits ####*/
     potraceCreditsLabel.set_text(
@@ -549,8 +572,12 @@ TraceDialogImpl::TraceDialogImpl()
     //## The OK button
     potraceCancelButton = add_button(Gtk::Stock::STOP, GTK_RESPONSE_CANCEL);
     if (potraceCancelButton)
+        {
+        tips.set_tip((*potraceCancelButton), _("Abort a trace in progress"));
         potraceCancelButton->set_sensitive(false);
+        }
     potraceOkButton     = add_button(Gtk::Stock::OK,   GTK_RESPONSE_OK);
+    tips.set_tip((*potraceOkButton), _("Execute the trace"));
 
     show_all_children();
 
