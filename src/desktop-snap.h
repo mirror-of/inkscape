@@ -24,7 +24,7 @@ gdouble sp_desktop_dim_snap(SPDesktop const *dt, NR::Point& req, unsigned const 
 /* List of points methods */
 
 double sp_desktop_vector_snap_list(SPDesktop const *desktop, NR::Point const p[], int const length,
-				   NR::Point const &norm, NR::Point const &s);
+				   NR::Point const &norm, NR::scale const &s);
 
 double sp_desktop_dim_snap_list(SPDesktop const *desktop, NR::Point const p[], int const length,
 				double const dx, unsigned const dim);

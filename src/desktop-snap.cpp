@@ -188,7 +188,7 @@ double sp_desktop_dim_snap_list(SPDesktop const *desktop, NR::Point const p[], i
 }
 
 double sp_desktop_vector_snap_list(SPDesktop const *desktop, NR::Point const p[], int const length,
-				   NR::Point const &norm, NR::Point const &s)
+				   NR::Point const &norm, NR::scale const &s)
 {
 	using NR::X;
 	using NR::Y;
@@ -201,7 +201,7 @@ double sp_desktop_vector_snap_list(SPDesktop const *desktop, NR::Point const p[]
 	double ratio = fabs(s[X]);
 	for (int i = 0 ; i < length ; i++) {
 		NR::Point const &q = p[i];
-		NR::Point check = ( q - norm ) * NR::scale(s) + norm;
+		NR::Point check = ( q - norm ) * s + norm;
 		if (NR::LInfty( q - norm ) > MIN_DIST_NORM) {
 			double d = sp_desktop_vector_snap(desktop, check, check - norm);
 			if ((d < 1e18) && (d < dist)) {

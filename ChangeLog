@@ -1,3 +1,14 @@
+2004-03-03  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/seltrans.cpp (sign):
+	New function to replace `FOO / fabs(FOO)' expressions in various places.
+	* src/seltrans.cpp (sp_sel_trans_stretch_request, sp_sel_trans_stretch):
+	Fix #906221.  Also change the behaviour to allow growing.
+
+	* src/desktop-snap.h, src/desktop-snap.cpp
+	(sp_desktop_vector_snap_list):
+	Change final arg from NR::Point to NR::scale.  Update callers.
+
 2004-03-02  Ted Gould  <ted@gould.cx>
 
 	* src/Makefile.am, src/print.cpp,
@@ -16,7 +27,7 @@
 	  src/extension/internal/win32.cpp, src/extension/internal/win32.h:
 
 	  Turning the extensions stuff into having C++ objects instead
-	  of GTK+ objects.  This effected alot of files.
+	  of GTK+ objects.  This affected a lot of files.
 
 2004-03-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
