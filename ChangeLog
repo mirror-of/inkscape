@@ -13,6 +13,9 @@
 	path description structs into their own files, and rename a few
 	member variables.
 
+	* src/livarot/Path.h, src/livarot/PathConversion.cpp,
+	src/livarot/PathOutline.cpp: remove some unused functions.
+
 2004-10-20  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/livarot/Path.cpp: fix for 1050379, and probably lots of
