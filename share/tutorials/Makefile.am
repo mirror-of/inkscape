@@ -1,5 +1,5 @@
 
-tutorialssdir = $(datadir)/inkscape/tutorials
+tutorialsdir = $(datadir)/inkscape/tutorials
 
 tutorials_DATA = \
     tutorial.svg \
