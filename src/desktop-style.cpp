@@ -156,7 +156,7 @@ double
 sp_desktop_get_font_size_tool (SPDesktop *desktop)
 {
     const gchar *desktop_style = sp_repr_attr (inkscape_get_repr (INKSCAPE, "desktop"), "style");
-    const gchar *style_str;
+    const gchar *style_str = NULL;
     if ((prefs_get_int_attribute ("tools.text", "usecurrent", 0) != 0) && desktop_style) {
         style_str = desktop_style;
     } else {
