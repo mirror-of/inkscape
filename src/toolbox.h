@@ -16,10 +16,10 @@
 
 #include "forward.h"
 
-GtkWidget *sp_tool_toolbox_new ();
+GtkWidget *sp_tool_toolbox_new (void);
 void sp_tool_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop);
 
-GtkWidget *sp_aux_toolbox_new ();
+GtkWidget *sp_aux_toolbox_new (void);
 void sp_aux_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop);
 
 #endif

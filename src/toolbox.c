@@ -59,9 +59,9 @@
 #define TOOL_BUTTON_SIZE 24
 #define COMMAND_BUTTON_SIZE 24
 
-static GtkWidget * sp_select_toolbox_new ();
-static GtkWidget * sp_node_toolbox_new ();
-static GtkWidget * sp_zoom_toolbox_new ();
+static GtkWidget * sp_select_toolbox_new (void);
+static GtkWidget * sp_node_toolbox_new (void);
+static GtkWidget * sp_zoom_toolbox_new (void);
 
 static const struct {
 	const gchar *type_name;
