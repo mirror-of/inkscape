@@ -260,7 +260,7 @@ if test "$GCC" = "yes"; then
   # warnings and addressing the produced warnings.  Usually the committing
   # developer is the best person to address the warnings.
 
-  CFLAGS="-Wall -W -Wstrict-prototypes $CFLAGS"
+  CFLAGS="-Wall -W $CFLAGS"
 
   ink_svd_CXXFLAGS="$CXXFLAGS"
   CXXFLAGS="-Wno-unused-parameter $CXXFLAGS"
@@ -276,7 +276,7 @@ if test "$GCC" = "yes"; then
   # programmer deliberately has an unused parameter (e.g. because it's used
   # as a callback or similar function pointer use).
 
-  CXXFLAGS="-Wall -W -Wpointer-arith -Wcast-align -Wsign-compare -Woverloaded-virtual -Wswitch -Wstrict-prototypes $CXXFLAGS"
+  CXXFLAGS="-Wall -W -Wpointer-arith -Wcast-align -Wsign-compare -Woverloaded-virtual -Wswitch  $CXXFLAGS"
 fi
 
 dnl ******************************
