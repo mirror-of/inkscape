@@ -11,12 +11,18 @@
 #endif
 
 #define INKSCAPE_VERSION      VERSION
-#define PACKAGE_LOCALE_DIR    "locale"
-#define INKSCAPE_DATADIR      "."
-#define INKSCAPE_PIXMAPDIR    "icons"
-#define INKSCAPE_EXTENSIONDIR "extensions"
-#define INKSCAPE_MODULESDIR   "modules"
-#define INKSCAPE_ICONS_DIR     "icons"
+
+/*######################################
+#### RESOURCE DIRECTORIES
+######################################*/
+
+#define PACKAGE_LOCALE_DIR     "locale"
+#define INKSCAPE_DATADIR       "."
+#define INKSCAPE_MODULESDIR    "modules"
+#define INKSCAPE_EXTENSIONDIR  "share\\extensions"
+#define INKSCAPE_PIXMAPDIR     "share\\icons"
+#define INKSCAPE_ICONS_DIR     "share\\icons"
+#define INKSCAPE_SCREENSDIR    "share\\screens"
 
 #define GETTEXT_PACKAGE "inkscape"
 
