@@ -16,6 +16,8 @@ void sp_selected_path_union ();
 void sp_selected_path_intersect ();
 void sp_selected_path_diff ();
 void sp_selected_path_symdiff ();
+void sp_selected_path_cut ();
+void sp_selected_path_slice ();
 
 // offset/inset of a curve
 // takes the fill-rule in consideration
