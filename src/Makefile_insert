@@ -143,10 +143,6 @@ libinkpre_a_SOURCES =	\
 	sp-star.cpp sp-star.h	\
 	sp-symbol.cpp sp-symbol.h	\
 	sp-text.cpp sp-text.h	\
-	sp-typeset.cpp sp-typeset.h	\
-	sp-typeset-layout.cpp sp-typeset.h	\
-	sp-typeset-kplayout.cpp sp-typeset.h	\
-	sp-typeset-utils.cpp sp-typeset-utils.h	\
 	sp-use.cpp sp-use.h	\
 	sp-use-reference.cpp sp-use-reference.h	\
 	star-context.cpp star-context.h	\
