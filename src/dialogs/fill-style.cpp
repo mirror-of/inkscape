@@ -827,8 +827,12 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
         case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
 
             if (items) {
-                SPGradient *vector = sp_paint_selector_get_gradient_vector (psel);
 
+                // HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider for all tabs
+                SPCSSAttr *css = sp_repr_css_attr_new ();
+                sp_repr_css_set_property (css, "fill-opacity", "1.0");
+
+                SPGradient *vector = sp_paint_selector_get_gradient_vector (psel);
                 if (!vector) {
                     /* No vector in paint selector should mean that we just
                      * changed mode
@@ -839,6 +843,8 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                     for (const GSList *i = items; i != NULL; i = i->next) {
                         sp_item_force_fill_lineargradient_vector
                             (SP_ITEM (i->data), vector );
+                        //FIXME: see above
+                        sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
                     }
                 } else {
 
@@ -849,8 +855,11 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                         sp_paint_selector_write_lineargradient ( psel,
                                 SP_LINEARGRADIENT (lg), SP_ITEM (i->data));
                         SP_OBJECT(lg)->updateRepr();
+                        //FIXME: see above
+                        sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
                     }
                 }
+
                 sp_document_done (SP_WIDGET_DOCUMENT (spw));
             }
             break;
@@ -858,6 +867,10 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
         case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
 
             if (items) {
+
+                // HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider for all tabs
+                SPCSSAttr *css = sp_repr_css_attr_new ();
+                sp_repr_css_set_property (css, "fill-opacity", "1.0");
 
                 SPGradient *vector = sp_paint_selector_get_gradient_vector (psel);
                 if (!vector) {
@@ -871,6 +884,8 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                     for (const GSList *i = items; i != NULL; i = i->next) {
                         sp_item_force_fill_radialgradient_vector
                             (SP_ITEM (i->data), vector );
+                        //FIXME: see above
+                        sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
                     }
 
                 } else {
@@ -881,11 +896,13 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                         sp_paint_selector_write_radialgradient (psel,
                                 SP_RADIALGRADIENT (rg), SP_ITEM (i->data));
                         SP_OBJECT(rg)->updateRepr();
+                        //FIXME: see above
+                        sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
                     }
-                } // end if
+                } 
 
                 sp_document_done (SP_WIDGET_DOCUMENT (spw));
-            } // end if
+            } 
 
             break;
 
