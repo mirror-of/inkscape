@@ -504,9 +504,9 @@ void               flow_res::LetterToOffset(int /*c*/,int /*s*/,int l,bool /*l_s
 		return;
 	}
 	if ( l_end ) {
-		offset=offset=letters[l].utf8_offset+letters[l].t_en-letters[l].t_st;
+		offset = letters[l].utf8_offset + letters[l].t_en - letters[l].t_st;
 	} else {
-		offset=offset=letters[l].utf8_offset;
+		offset = letters[l].utf8_offset;
 	}
 }
 void               flow_res::PositionToLetter(double px,double py,int &c,int &s,int &l,bool &l_start,bool &l_end)

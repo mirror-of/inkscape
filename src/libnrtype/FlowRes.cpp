@@ -94,7 +94,7 @@ void               flow_res::AfficheOutput(void)
 			for (int k=spans[j].l_st;k<spans[j].l_en;k++) {
 				char  savC=chars[letters[k].t_en];
 				chars[letters[k].t_en]=0;
-				printf("   letter %i : no=%i text=(%i -> %i)",k,letters[k].no,letters[k].t_st,letters[k].t_en);
+				printf("   letter %i : no=%i text=(%i->%i utf8 %d)", k, letters[k].no, letters[k].t_st, letters[k].t_en, letters[k].utf8_offset);
 				if ( chars[letters[k].t_st] == '\n' ) printf("\\n "); else printf("%s ",chars+letters[k].t_st);
 				printf("p=(%f:%f/%f) k=(%f:%f)\n",letters[k].x_st,letters[k].x_en,letters[k].y,letters[k].kern_x,letters[k].kern_y);
 				chars[letters[k].t_en]=savC;
@@ -142,7 +142,6 @@ void               flow_res::AddGlyph(int g_id,double g_x,double g_y,double g_w)
 
 void               flow_res::StartChunk(double i_x_st,double i_x_en,double i_y,bool i_rtl,double spacing)
 {
-	//printf("start_chunk %f %f\n",i_x_st,i_y);
 	if ( nbChunk >= maxChunk ) {
 		maxChunk=2*nbChunk+1;
 		chunks=(flow_styled_chunk*)realloc(chunks,maxChunk*sizeof(flow_styled_chunk));
@@ -177,7 +176,6 @@ void               flow_res::SetSourcePos(int i_pos)
 
 void               flow_res::StartSpan(text_style* i_style,bool i_rtl)
 {
-	//printf("start_style %x %i\n",i_style,(i_rtl)?1:0);
 	if ( nbSpan >= maxSpan ) {
 		maxSpan=2*nbSpan+1;
 		spans=(flow_styled_span*)realloc(spans,maxSpan*sizeof(flow_styled_span));
@@ -196,7 +194,7 @@ void               flow_res::EndWord(void)
 }
 void               flow_res::StartLetter(text_style* i_style,bool i_rtl,double k_x,double k_y,double p_x,double p_y,double rot,int i_no,int i_utf8_offset)
 {
-	//printf("start_letter %x %i o=%i\n",i_style,(i_rtl)?1:0,i_utf8_offset);
+	//printf("start_letter %d   style %x   rtl %i   cur_offset %i utf8 %i\n", nbLetter, i_style, (i_rtl)?1:0, cur_offset, i_utf8_offset);
 	//if ( i_style == NULL ) i_style=last_c_style; // no adding letters without style
 	if ( last_style_set == false || i_style != last_c_style || i_rtl != last_rtl) {
 		StartSpan(i_style,i_rtl);
@@ -346,18 +344,18 @@ void               flow_res::ComputeLetterOffsets(void)
 	for (int i=0;i<nbChunk;i++) {
 		text_holder* th=chunks[i].mommy;
 		if ( th == NULL ) continue;
-		for (int j=chunks[i].l_st;j<chunks[i].l_en;j++) {
+		for (int j=chunks[i].l_st; j<chunks[i].l_en; j++) {
 			// fill missing fields
 			letters[j].ucs4_offset=th->raw_text.UTF8_2_UCS4(letters[j].utf8_offset);
 			// from the internal text used by the text_holder to the one it was given
 			int u8p=letters[j].utf8_offset;
 			int u4p=letters[j].ucs4_offset;
 			partial_text* l_owner=NULL;
-			th->flow_to_me.DestToSource(u8p,u4p,letters[j].utf8_offset,letters[j].ucs4_offset,l_owner,false);
+			th->flow_to_me.DestToSource(u8p, u4p, letters[j].utf8_offset, letters[j].ucs4_offset, l_owner, false);
 			if ( l_owner && l_owner->f_owner ) {
 				// and from the text given to the text_holder to the position in the whole layout
-				letters[j].utf8_offset+=l_owner->f_owner->utf8_st;
-				letters[j].ucs4_offset+=l_owner->f_owner->ucs4_st;
+				letters[j].utf8_offset += l_owner->f_owner->utf8_st;
+				letters[j].ucs4_offset += l_owner->f_owner->ucs4_st;
 			}
 		}
 	}

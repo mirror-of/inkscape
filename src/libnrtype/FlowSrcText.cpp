@@ -189,7 +189,7 @@ void             correspondance::EndAdding(void)
 {
 	dst->SetWhiteEnds();
 }
-void             correspondance::PrepareForText(bool preserve,bool &after_white)
+void             correspondance::PrepareForText(bool preserve, bool &after_white)
 {
 	StartAdding();
 	bool  in_white=after_white;

@@ -62,8 +62,8 @@ void           text_holder::LastAddition(int &d_utf8_st,int &d_ucs4_st,int &d_ut
 		return;
 	}
 	correspondance::corresp_src* last=flow_to_me.src+(flow_to_me.nbSrc-1);
-	flow_to_me.SourceToDest(0,0,last->txt,d_utf8_st,d_ucs4_st,false);
-	flow_to_me.SourceToDest(last->txt->utf8_length,last->txt->ucs4_length,last->txt,d_utf8_en,d_ucs4_en,true);
+	flow_to_me.SourceToDest(0, 0, last->txt, d_utf8_st, d_ucs4_st, false);
+	flow_to_me.SourceToDest(last->txt->utf8_length, last->txt->ucs4_length, last->txt, d_utf8_en, d_ucs4_en, true);
 }
 void					 text_holder::DoText(void)
 {
