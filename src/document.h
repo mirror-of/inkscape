@@ -154,7 +154,7 @@ const GSList *sp_document_get_resource_list (SPDocument *document, const gchar *
 
 GSList * sp_document_items_in_box (SPDocument *document, NRRect *box);
 GSList * sp_document_partial_items_in_box (SPDocument *document, NRRect *box);
-SPItem * sp_document_item_at_point (SPDocument *document, double x, double y);
+SPItem * sp_document_item_at_point (SPDesktop *desktop, SPDocument *document, double x, double y);
 
 void sp_document_set_uri (SPDocument *document, const gchar *uri);
 void sp_document_set_size_px (SPDocument *doc, gdouble width, gdouble height);
