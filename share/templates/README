@@ -1,5 +1,6 @@
-This new folder is part of the Inkscape 0.38 directory reorganization. Please place the appropriate files into this folder.
-
-Thank You!
-
-Inkscape Developers
+This folder contains the templates for new documents created in Inkscape. You will
+normally see them listed in the File > New submenu. A template may store any
+document-specific settings (such as initial zoom and view, paper size, background and
+borders, metadata, window geometry, grid and guide settings, export hints) as well as
+any objects. To add a new template, simply save or copy it in this folder; nothing else
+is required.
