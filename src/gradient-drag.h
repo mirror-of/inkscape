@@ -53,7 +53,10 @@ struct GrDragger {
 
 	SPKnot *knot;
 
+	// position of the knot, desktop coords
 	NR::Point point;
+	// position of the knot before it began to drag; updated when released
+	NR::Point point_original;
 
 	/** Connection to \a knot's "moved" signal, for blocking it (unused?). */
 	guint   handler_id;

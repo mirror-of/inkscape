@@ -149,8 +149,10 @@ GrDraggable::~GrDraggable ()
 NR::Point *
 get_snap_vector (NR::Point p, NR::Point o, double snap, double initial)
 {
-    double angle = NR::atan2 (p - o);
     double r = NR::L2 (p - o);
+    if (r < 1e-3) 
+        return NULL;
+    double angle = NR::atan2 (p - o);
     // snap angle to snaps increments, starting from initial:
     double a_snapped = initial + floor((angle - initial)/snap + 0.5) * snap;
     // calculate the new position and subtract p to get the vector:
@@ -174,7 +176,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
         for (GSList const* i = dragger->draggables; i != NULL; i = i->next) {
             GrDraggable *draggable = (GrDraggable *) i->data;
 
-            GrDragger *dr_snap = NULL;
+            NR::Point *dr_snap = NULL;
 
             if (draggable->point_num == POINT_LG_P1 || draggable->point_num == POINT_LG_P2) {
                 for (GSList *di = dragger->parent->draggers; di != NULL; di = di->next) {
@@ -185,10 +187,10 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
                                     draggable->point_num == POINT_LG_P1? POINT_LG_P2 : POINT_LG_P1,
                                     draggable->fill_or_stroke)) {
                         // found the other end of the linear gradient;
-                        dr_snap = d_new;
+                        dr_snap = &(d_new->point);
                     }
                 }
-            } else if (draggable->point_num == POINT_RG_R1 || draggable->point_num == POINT_RG_R2) {
+            } else if (draggable->point_num == POINT_RG_R1 || draggable->point_num == POINT_RG_R2 || draggable->point_num == POINT_RG_FOCUS) {
                 for (GSList *di = dragger->parent->draggers; di != NULL; di = di->next) {
                     GrDragger *d_new = (GrDragger *) di->data;
                     if (d_new == dragger)
@@ -197,19 +199,22 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
                                     POINT_RG_CENTER,
                                     draggable->fill_or_stroke)) {
                         // found the center of the radial gradient;
-                        dr_snap = d_new;
+                        dr_snap = &(d_new->point);
                     }
                 }
+            } else if (draggable->point_num == POINT_RG_CENTER) {
+                // radial center snaps to hor/vert relative to its original position
+                dr_snap = &(dragger->point_original);
             }
 
             NR::Point *snap_vector = NULL;
             if (dr_snap) {
                 if (state & GDK_MOD1_MASK) {
                     // with Alt, snap to the original angle and its perpendiculars
-                    snap_vector = get_snap_vector (p, dr_snap->point, M_PI/2, NR::atan2 (p - dr_snap->point));
+                    snap_vector = get_snap_vector (p, *dr_snap, M_PI/2, NR::atan2 (dragger->point_original - *dr_snap));
                 } else {
                     // with Ctrl, snap to M_PI/snaps
-                    snap_vector = get_snap_vector (p, dr_snap->point, M_PI/snaps, 0);
+                    snap_vector = get_snap_vector (p, *dr_snap, M_PI/snaps, 0);
                 }
             }
             if (snap_vector) {
@@ -312,6 +317,8 @@ gr_knot_ungrabbed_handler (SPKnot *knot, unsigned int state, gpointer data)
 {
     GrDragger *dragger = (GrDragger *) data;
 
+    dragger->point_original = dragger->point;
+
     // Act upon all draggables of the dragger:
     for (GSList const* i = dragger->draggables; i != NULL; i = i->next) {
         GrDraggable *draggable = (GrDraggable *) i->data;
@@ -345,6 +352,8 @@ static void
 gr_knot_clicked_handler(SPKnot *knot, guint state, gpointer data)
 {
    GrDragger *dragger = (GrDragger *) data;
+
+   dragger->point_original = dragger->point;
 
    dragger->parent->setSelected (dragger);
 }
@@ -419,6 +428,7 @@ GrDragger::GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable, SPKno
     this->parent = parent;
 
     this->point = p;
+    this->point_original = p;
 
     // create the knot
     this->knot = sp_knot_new (parent->desktop, NULL);
