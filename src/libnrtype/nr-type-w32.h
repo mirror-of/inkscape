@@ -43,14 +43,14 @@ enum {
     NR_TYPE_W32_CP_LAST
 };
 
-struct _NRTypeFaceGlyphW32 {
+struct NRTypeFaceGlyphW32 {
 	NRRect area;
 	NR::Point advance;
 	int olref;
 	NRBPath outline;
 };
 
-struct _NRTypeFaceW32 {
+struct NRTypeFaceW32 {
 	NRTypeFace typeface;
 
 	NRFont *fonts;
@@ -67,7 +67,7 @@ struct _NRTypeFaceW32 {
 	LPOUTLINETEXTMETRIC otm;
 };
 
-struct _NRTypeFaceW32Class {
+struct NRTypeFaceW32Class {
 	NRTypeFaceClass typeface_class;
 };
 
