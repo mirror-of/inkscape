@@ -312,6 +312,7 @@ sp_ui_menu_append (GtkMenu *menu, const unsigned int *verbs)
 static void
 sp_ui_file_menu (GtkMenu *fm, SPDocument *doc)
 {
+ 	GtkWidget *item_recent, *menu_recent;
 	static const unsigned int file_verbs_one[] = {
 		SP_VERB_FILE_NEW, SP_VERB_FILE_OPEN, SP_VERB_LAST
         };
@@ -327,8 +328,8 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc)
 
 	sp_ui_menu_append (fm, file_verbs_one);
 
- 	GtkWidget *item_recent = sp_ui_menu_append_item (fm, NULL, _("Open Recent"), NULL, NULL);
- 	GtkWidget *menu_recent = gtk_menu_new ();
+ 	item_recent = sp_ui_menu_append_item (fm, NULL, _("Open Recent"), NULL, NULL);
+ 	menu_recent = gtk_menu_new ();
  	sp_menu_append_recent_documents (GTK_WIDGET (menu_recent));
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (item_recent), menu_recent);
 
@@ -501,11 +502,12 @@ sp_ui_dialog_menu (GtkMenu *menu, SPDocument *doc)
 static void
 sp_ui_populate_main_menu(GtkWidget *m)
 {
+	GtkWidget *item_recent, *menu_recent;
 	sp_ui_menu_append_item (GTK_MENU (m), GTK_STOCK_NEW, _("New"), G_CALLBACK(sp_file_new), NULL);
 	sp_ui_menu_append_item (GTK_MENU (m), GTK_STOCK_OPEN, _("Open"), G_CALLBACK(sp_file_open_dialog), NULL);
         
-	GtkWidget *item_recent = sp_ui_menu_append_item (GTK_MENU (m), NULL, _("Open Recent"), NULL, NULL);
-	GtkWidget *menu_recent = gtk_menu_new ();
+	item_recent = sp_ui_menu_append_item (GTK_MENU (m), NULL, _("Open Recent"), NULL, NULL);
+	menu_recent = gtk_menu_new ();
 
 	sp_menu_append_recent_documents (GTK_WIDGET (menu_recent));
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (item_recent), menu_recent); 
