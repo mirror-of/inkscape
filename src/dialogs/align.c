@@ -246,7 +246,7 @@ sp_quick_align_dialog (void)
 				     _("Bottom of aligned objects to bottom of anchor"),
 				     tt);
 		sp_align_add_button (t, 4, 1, G_CALLBACK (sp_align_arrange_clicked), aligns[SP_ALIGN_BOTTOM_OUT], "al_bottom_out",
-				     _("Top of aligned objects to top of anchor"),
+				     _("Top of aligned objects to bottom of anchor"),
 				     tt);
 
 		l = gtk_label_new (_("Align"));
