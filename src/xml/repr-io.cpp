@@ -129,19 +129,19 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
 
     for ( node = doc->children ; node != NULL ; node = node->next ) {
         if (node->type == XML_ELEMENT_NODE) {
-	    SPRepr *repr=sp_repr_svg_read_node (node, default_ns, prefix_map);
-	    reprs = g_slist_append(reprs, repr);
+            SPRepr *repr=sp_repr_svg_read_node (node, default_ns, prefix_map);
+            reprs = g_slist_append(reprs, repr);
 
-	    if (!root) {
-	        root = repr;
-	    } else {
-		root = NULL;
-		break;
-	    }
+            if (!root) {
+                root = repr;
+            } else {
+                root = NULL;
+                break;
+            }
         } else if ( node->type == XML_COMMENT_NODE ) {
-	    SPRepr *comment=sp_repr_svg_read_node(node, default_ns, prefix_map);
-	    reprs = g_slist_append(reprs, comment);
-	}
+            SPRepr *comment=sp_repr_svg_read_node(node, default_ns, prefix_map);
+            reprs = g_slist_append(reprs, comment);
+        }
     }
 
     SPReprDoc *rdoc=NULL;
@@ -155,10 +155,9 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
         sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_SODIPODI_NS_URI, "sodipodi"), SP_SODIPODI_NS_URI, root);
         sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_INKSCAPE_NS_URI, "inkscape"), SP_INKSCAPE_NS_URI, root);
 
-	rdoc = sp_repr_document_new_list(reprs);
+        rdoc = sp_repr_document_new_list(reprs);
 
         if (!strcmp (sp_repr_name (root), "svg") && default_ns && !strcmp (default_ns, SP_SVG_NS_URI)) {
-            
             sp_repr_set_attr ((SPRepr *) rdoc, "doctype", sp_svg_doctype_str);
             /* always include XLink namespace */
             sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_XLINK_NS_URI, "xlink"), SP_XLINK_NS_URI, root);
@@ -167,7 +166,7 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
 
     for ( GSList *iter = reprs ; iter ; iter = iter->next ) {
         SPRepr *repr=(SPRepr *)iter->data;
-	sp_repr_unref(repr);
+        sp_repr_unref(repr);
     }
     g_slist_free(reprs);
 
@@ -287,9 +286,9 @@ sp_repr_save_stream (SPReprDoc *doc, FILE *fp)
           repr ; repr = sp_repr_next(repr) )
     {
         sp_repr_write_stream(repr, fp, 0, TRUE);
-	if ( repr->type == SP_XML_COMMENT_NODE ) {
-	    fputc('\n', fp);
-	}
+        if ( repr->type == SP_XML_COMMENT_NODE ) {
+            fputc('\n', fp);
+        }
     }
 }
 
@@ -298,10 +297,8 @@ sp_repr_save_stream (SPReprDoc *doc, FILE *fp)
 gboolean
 sp_repr_save_file (SPReprDoc *doc, const gchar *filename)
 {
-    FILE * file;
-
     if (filename == NULL) {
-	return FALSE;
+        return FALSE;
     }
 
     // TODO: bulia, please look over
@@ -311,15 +308,15 @@ sp_repr_save_file (SPReprDoc *doc, const gchar *filename)
     gchar* localFilename = g_filename_from_utf8 ( filename,
                 -1,&bytesRead,&bytesWritten,&error);
 
-    file = fopen (localFilename, "w");
+    FILE *file = fopen(localFilename, "w");
     if (file == NULL) {
-	return FALSE;
+        return FALSE;
     }
 
     sp_repr_save_stream (doc, file);
 
     if (fclose (file) != 0) {
-	return FALSE;
+        return FALSE;
     }
 
     if ( localFilename != NULL ) {
@@ -361,9 +358,9 @@ sp_repr_write_stream (SPRepr *repr, FILE *file, gint indent_level,
     } else if (repr->type == SP_XML_COMMENT_NODE) {
         fprintf (file, "<!--%s-->", sp_repr_content (repr));
     } else if (repr->type == SP_XML_ELEMENT_NODE) {
-        sp_repr_write_stream_element (repr, file, indent_level, add_whitespace); 
+        sp_repr_write_stream_element(repr, file, indent_level, add_whitespace);
     } else {
-	g_assert_not_reached();
+        g_assert_not_reached();
     }
 }
 
@@ -393,8 +390,9 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
     // if this is a <text> element, suppress formatting whitespace
     // for its content and children:
 
-    if (!strcmp (sp_repr_name (repr), "text"))
-        add_whitespace = FALSE; 
+    if (!strcmp(sp_repr_name(repr), "text")) {
+        add_whitespace = FALSE;
+    }
 
     for ( attr = repr->attributes ; attr != NULL ; attr = attr->next ) {
         gchar const * const key = SP_REPR_ATTRIBUTE_KEY(attr);
@@ -421,9 +419,9 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
             fputs ("\n", file);
         }
         for (child = repr->children; child != NULL; child = child->next) {
-            sp_repr_write_stream (child, file, (loose) ? (indent_level + 1) : 0, add_whitespace); 
+            sp_repr_write_stream (child, file, (loose) ? (indent_level + 1) : 0, add_whitespace);
         }
-        
+
         if (loose && add_whitespace) {
             for (i = 0; i < indent_level; i++) {
                 fputs ("  ", file);
@@ -438,7 +436,18 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
     // after closing text
 
     if (add_whitespace || !strcmp (sp_repr_name (repr), "text")) {
-        fputs ("\n", file); 
+        fputs("\n", file);
     }
 }
 
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
