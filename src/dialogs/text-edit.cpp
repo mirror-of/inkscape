@@ -109,6 +109,27 @@ sp_text_edit_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
 }
 
 
+/**
+    These callbacks set the eatkeys flag when the text editor is entered and cancel it when it's left.
+    This flag is used to prevent passing keys from the dialog to canvas, so that the text editor
+    can handle keys like Esc and Ctrl+Z itself.
+ */
+gboolean
+text_view_focus_in (GtkWidget *w, GdkEventKey *event, gpointer data)
+{
+    GObject *dlg = (GObject *) data;
+    g_object_set_data (dlg, "eatkeys", GINT_TO_POINTER (TRUE));
+    return FALSE;
+}
+
+gboolean
+text_view_focus_out (GtkWidget *w, GdkEventKey *event, gpointer data)
+{
+    GObject *dlg = (GObject *) data;
+    g_object_set_data (dlg, "eatkeys", GINT_TO_POINTER (FALSE));
+    return FALSE;
+}
+
 
 void
 sp_text_edit_dialog (void)
@@ -151,8 +172,7 @@ sp_text_edit_dialog (void)
         g_signal_connect ( G_OBJECT (INKSCAPE), "activate_desktop", 
                            G_CALLBACK (sp_transientize_callback), &wd );
                            
-        gtk_signal_connect ( GTK_OBJECT (dlg), "event", 
-                             GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
+        gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
                              
         gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", 
                              G_CALLBACK (sp_text_edit_dialog_destroy), dlg );
@@ -193,6 +213,8 @@ sp_text_edit_dialog (void)
         gtk_box_pack_start (GTK_BOX (vb), f, TRUE, TRUE, 0);
         g_signal_connect ( G_OBJECT (tb), "changed", 
                            G_CALLBACK (sp_text_edit_dialog_text_changed), dlg );
+        g_signal_connect (G_OBJECT (txt), "focus-in-event", G_CALLBACK (text_view_focus_in), dlg);
+        g_signal_connect (G_OBJECT (txt), "focus-out-event", G_CALLBACK (text_view_focus_out), dlg);
         g_object_set_data (G_OBJECT (dlg), "text", tb);
         g_object_set_data (G_OBJECT (dlg), "textw", txt);
 

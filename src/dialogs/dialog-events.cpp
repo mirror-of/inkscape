@@ -38,11 +38,9 @@
 gboolean 
 sp_allow_again (gpointer *wd) 
 {
-    
     ((win_data *) wd)->stop = 0;
     return FALSE; // so that it is only called once
-
-} // end of sp_allow_again()
+}
 
 
 
@@ -53,7 +51,6 @@ sp_allow_again (gpointer *wd)
 void
 sp_dialog_defocus (GtkWindow *win)
 {
-
     GtkWindow *w;
     //find out the document window we're transient for
     w = gtk_window_get_transient_for ((GtkWindow *) win);
@@ -62,8 +59,7 @@ sp_dialog_defocus (GtkWindow *win)
     if (w) {
         gtk_window_present (w);
     }
-    
-} // end of sp_dialog_defocus()
+}
 
 
 
@@ -74,28 +70,30 @@ sp_dialog_defocus (GtkWindow *win)
 void
 sp_dialog_defocus_callback (GtkWindow *win, gpointer data)
 {
-    
     sp_dialog_defocus ((GtkWindow *) 
         gtk_widget_get_toplevel ((GtkWidget *) data));
-
-} // end of sp_dialog_defocus_callback()
+}
 
 
 
 void
 sp_dialog_defocus_on_enter (GtkWidget *w)
 {
-    
     g_signal_connect ( G_OBJECT (w), "activate", 
                        G_CALLBACK (sp_dialog_defocus_callback), w );
-
-} // end of sp_dialog_defocus_on_enter()
+}
 
 
 
 gboolean
 sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 {
+
+// if the focus is inside the Text and Font textview, do nothing
+    GObject *dlg = (GObject *) data;
+    if (g_object_get_data (dlg, "eatkeys")) {
+        return FALSE;
+    }
 
     gboolean ret = FALSE; 
 
@@ -140,7 +138,7 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
     
     return ret; 
     
-} // end of sp_dialog_event_handler()
+}
 
 
 
@@ -240,22 +238,20 @@ sp_transientize_callback ( Inkscape::Application *inkscape,
     gtk_timeout_add (6, (GtkFunction) sp_allow_again, (gpointer) wd);  
 #endif
 
-} // end of sp_transientize_callback()
+}
 
 
 
 gboolean
 sp_dialog_hide (GtkObject *object, gpointer data)
 {
-
     GtkWidget *dlg = (GtkWidget *) data;
     
     if (dlg)
         gtk_widget_hide_all (dlg);
     
     return TRUE;
-
-} //end of sp_dialog_hide()
+}
 
 
 
@@ -268,8 +264,7 @@ sp_dialog_unhide (GtkObject *object, gpointer data)
         gtk_widget_show_all (dlg);
     
     return TRUE;
-    
-} // end of sp_dialog_unhide()
+}
 
 
 /*
