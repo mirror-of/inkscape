@@ -40,6 +40,10 @@ static xmlDocPtr sp_wmf_convert (const char * file_name);
 static char * sp_wmf_image_name (void * context);
 #endif /* HAVE_LIBWMF */
 
+/**
+ * Reads XML from a file, including WMF files, and returns the SPReprDoc.
+ * The default namespace can also be specified, if desired.
+ */
 SPReprDoc *
 sp_repr_read_file (const gchar * filename, const gchar *default_ns)
 {
@@ -72,6 +76,9 @@ sp_repr_read_file (const gchar * filename, const gchar *default_ns)
 	return rdoc;
 }
 
+/**
+ * Reads and parses XML from a buffer, returning it as an SPReprDoc
+ */
 SPReprDoc *
 sp_repr_read_mem (const gchar * buffer, gint length, const gchar *default_ns)
 {
@@ -91,6 +98,9 @@ sp_repr_read_mem (const gchar * buffer, gint length, const gchar *default_ns)
 	return rdoc;
 }
 
+/**
+ * Reads in a XML file to create a SPReprDoc
+ */
 SPReprDoc *
 sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
 {
@@ -223,8 +233,9 @@ sp_repr_svg_read_node (SPXMLDocument *doc, xmlNodePtr node, const gchar *default
 		}
 	}
 
-	if (node->content)
+	if (node->content) {
 		sp_repr_set_content (repr, (gchar*)node->content);
+	}
 
 	child = node->xmlChildrenNode;
 	for (child = node->xmlChildrenNode; child != NULL; child = child->next) {
