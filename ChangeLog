@@ -6,6 +6,13 @@
 	src/livarot/ShapeMisc.cpp: excise separate path description data
 	structure.
 
+	* src/livarot/Path.h, src/livarot/Path.cpp,
+	src/livarot/PathConversion.cpp, src/livarot/PathCutting.cpp,
+	src/livarot/PathOutline.cpp, src/livarot/PathSimplify.cpp,
+	src/livarot/ShapeMisc.cpp, src/livarot/livarot-forward.h: move
+	path description structs into their own files, and rename a few
+	member variables.
+
 2004-10-20  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/livarot/Path.cpp: fix for 1050379, and probably lots of

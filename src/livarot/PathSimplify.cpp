@@ -12,6 +12,7 @@
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-point-fns.h>
 #include "livarot/Path.h"
+#include "livarot/path-description.h"
 
 /*
  * Reassembling polyline segments into cubic bezier patches
@@ -118,7 +119,7 @@ double RecDistanceToCubic(NR::Point const &iS, NR::Point const &isD,
 }
 
 
-double DistanceToCubic(NR::Point const &start, Path::path_descr_cubicto res, NR::Point &pt)
+double DistanceToCubic(NR::Point const &start, PathDescrCubicTo res, NR::Point &pt)
 {
     NR::Point const sp = pt - start;
     NR::Point const ep = pt - res.p;
@@ -177,7 +178,7 @@ void Path::DoSimplify(int off, int N, double treshhold)
         // remettre a zero
         data.inPt = data.nbPt = 0;
 
-        path_descr_cubicto res(NR::Point(0, 0), NR::Point(0, 0), NR::Point(0, 0));
+        PathDescrCubicTo res(NR::Point(0, 0), NR::Point(0, 0), NR::Point(0, 0));
         bool contains_forced = false;
         int step = 64;
         
@@ -219,7 +220,7 @@ void Path::DoSimplify(int off, int N, double treshhold)
         if (M <= 2) {
             LineTo(endToPt);
         } else {
-            CubicTo(endToPt, res.stD, res.enD);
+            CubicTo(endToPt, res.start, res.end);
         }
         
         curP = lastP;
@@ -248,7 +249,7 @@ void Path::DoSimplify(int off, int N, double treshhold)
 // primitive= calc the cubic bezier patche that fits Xk and Yk best
 // Qk est deja alloue
 // retourne false si probleme (matrice non-inversible)
-bool Path::FitCubic(NR::Point const &start, path_descr_cubicto &res,
+bool Path::FitCubic(NR::Point const &start, PathDescrCubicTo &res,
                     double *Xk, double *Yk, double *Qk, double *tk, int nbPt)
 {
     NR::Point const end = res.p;
@@ -264,8 +265,8 @@ bool Path::FitCubic(NR::Point const &start, path_descr_cubicto &res,
   
     double const det = M.det();
     if (fabs(det) < 0.000001) {
-        res.stD[0]=res.stD[1]=0.0;
-        res.enD[0]=res.enD[1]=0.0;
+        res.start[0]=res.start[1]=0.0;
+        res.end[0]=res.end[1]=0.0;
         return false;
     }
     
@@ -312,14 +313,14 @@ bool Path::FitCubic(NR::Point const &start, path_descr_cubicto &res,
     cp1[NR::Y] = P[NR::X];
     cp2[NR::Y] = P[NR::Y];
   
-    res.stD = 3.0 * (cp1 - start);
-    res.enD = 3.0 * (end - cp2 );
+    res.start = 3.0 * (cp1 - start);
+    res.end = 3.0 * (end - cp2 );
 
     return true;
 }
 
 
-bool Path::ExtendFit(int off, int N, fitting_tables &data, double treshhold, path_descr_cubicto &res, int &worstP)
+bool Path::ExtendFit(int off, int N, fitting_tables &data, double treshhold, PathDescrCubicTo &res, int &worstP)
 {
     if ( N >= data.maxPt ) {
         data.maxPt = 2 * N + 1;
@@ -390,8 +391,8 @@ bool Path::ExtendFit(int off, int N, fitting_tables &data, double treshhold, pat
   
     res.p[0] = data.Xk[data.nbPt - 1];
     res.p[1] = data.Yk[data.nbPt - 1];
-    res.stD[0] = res.stD[1] = 0;
-    res.enD[0] = res.enD[1] = 0;
+    res.start[0] = res.start[1] = 0;
+    res.end[0] = res.end[1] = 0;
     worstP = 1;
     if ( N <= 2 ) {
         return true;
@@ -433,7 +434,7 @@ bool Path::ExtendFit(int off, int N, fitting_tables &data, double treshhold, pat
 
 // fit a polyline to a bezier patch, return true is treshhold not exceeded (ie: you can continue)
 // version that uses tables from the previous iteration, to minimize amount of work done
-bool Path::AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cubicto & res,int &worstP)
+bool Path::AttemptSimplify (fitting_tables &data,double treshhold, PathDescrCubicTo & res,int &worstP)
 {
     NR::Point start,end;
     // pour une coordonnee
@@ -454,15 +455,15 @@ bool Path::AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cu
   
     if (pts.size()  == 3) {
         // start -> cp1 -> end
-        res.stD = cp1 - start;
-        res.enD = end - cp1;
+        res.start = cp1 - start;
+        res.end = end - cp1;
         worstP = 1;
         return true;
     }
   
     if ( FitCubic(start, res, data.Xk, data.Yk, data.Qk, data.tk, data.nbPt) ) {
-        cp1 = start + res.stD / 3;
-        cp2 = end - res.enD / 3;
+        cp1 = start + res.start / 3;
+        cp2 = end - res.end / 3;
     } else {
         // aie, non-inversible
         double worstD = 0;
@@ -610,8 +611,8 @@ bool Path::AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cu
     
         if ( FitCubic(start, res, data.Xk, data.Yk, data.Qk, data.tk, data.nbPt) == false) {
             // ca devrait jamais arriver, mais bon
-            res.stD = 3.0 * (cp1 - start);
-            res.enD = 3.0 * (end - cp2 );
+            res.start = 3.0 * (cp1 - start);
+            res.end = 3.0 * (end - cp2 );
             return true;
         }
         
@@ -725,8 +726,8 @@ bool Path::AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cu
             return true;
         } else {
             // nothing better to do
-            res.stD = 3.0 * (cp1 - start);
-            res.enD = 3.0 * (end - cp2 );
+            res.start = 3.0 * (cp1 - start);
+            res.end = 3.0 * (end - cp2 );
         }
         
         return true;
@@ -736,7 +737,7 @@ bool Path::AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cu
 }
 
 
-bool Path::AttemptSimplify(int off, int N, double treshhold, path_descr_cubicto &res,int &worstP)
+bool Path::AttemptSimplify(int off, int N, double treshhold, PathDescrCubicTo &res,int &worstP)
 {
     NR::Point start;
     NR::Point end;
@@ -762,12 +763,12 @@ bool Path::AttemptSimplify(int off, int N, double treshhold, path_descr_cubicto 
     end = pts[off + N - 1].p;
   
     res.p = end;
-    res.stD[0] = res.stD[1] = 0;
-    res.enD[0] = res.enD[1] = 0;
+    res.start[0] = res.start[1] = 0;
+    res.end[0] = res.end[1] = 0;
     if (N == 3) {
         // start -> cp1 -> end
-        res.stD = cp1 - start;
-        res.enD = end - cp1;
+        res.start = cp1 - start;
+        res.end = end - cp1;
         worstP = 1;
         return true;
     }
@@ -805,8 +806,8 @@ bool Path::AttemptSimplify(int off, int N, double treshhold, path_descr_cubicto 
     
     if (tk[N - 1] < 0.00001) {
         // longueur nulle 
-        res.stD[0] = res.stD[1] = 0;
-        res.enD[0] = res.enD[1] = 0;
+        res.start[0] = res.start[1] = 0;
+        res.end[0] = res.end[1] = 0;
         double worstD = 0;
         worstP = -1;
         for (int i = 1; i < N; i++) {
@@ -847,12 +848,12 @@ bool Path::AttemptSimplify(int off, int N, double treshhold, path_descr_cubicto 
   
     res.p = end;
     if ( FitCubic(start, res, Xk, Yk, Qk, tk, N) ) {
-        cp1 = start + res.stD / 3;
-        cp2 = end + res.enD / 3;
+        cp1 = start + res.start / 3;
+        cp2 = end + res.end / 3;
     } else {
         // aie, non-inversible
-        res.stD[0] = res.stD[1] = 0;
-        res.enD[0] = res.enD[1] = 0;
+        res.start[0] = res.start[1] = 0;
+        res.end[0] = res.end[1] = 0;
         double worstD = 0;
         worstP = -1;
         for (int i = 1; i < N; i++) {
@@ -970,8 +971,8 @@ bool Path::AttemptSimplify(int off, int N, double treshhold, path_descr_cubicto 
   if (delta < treshhold * treshhold)
   {
     // premier jet
-    res.stD = 3.0 * (cp1 - start);
-    res.enD = -3.0 * (cp2 - end);
+    res.start = 3.0 * (cp1 - start);
+    res.end = -3.0 * (cp2 - end);
     res.p = end;
     
     // Refine a little.
@@ -992,8 +993,8 @@ bool Path::AttemptSimplify(int off, int N, double treshhold, path_descr_cubicto 
     if ( FitCubic(start,res,Xk,Yk,Qk,tk,N) ) {
     } else {
       // ca devrait jamais arriver, mais bon
-      res.stD = 3.0 * (cp1 - start);
-      res.enD = -3.0 * (cp2 - end);
+      res.start = 3.0 * (cp1 - start);
+      res.end = -3.0 * (cp2 - end);
       g_free(tk);
       g_free(Qk);
       g_free(Xk);
@@ -1098,8 +1099,8 @@ bool Path::AttemptSimplify(int off, int N, double treshhold, path_descr_cubicto 
       return true;
     } else {
       // nothing better to do
-      res.stD = 3.0 * (cp1 - start);
-      res.enD = -3.0 * (cp2 - end);
+      res.start = 3.0 * (cp1 - start);
+      res.end = -3.0 * (cp2 - end);
     }
     return true;
   } else {    
@@ -1191,11 +1192,11 @@ void Path::Coalesce(double tresh)
 
     /* FIXME: the use of this variable probably causes a leak or two.
     ** It's a hack anyway, and probably only needs to be a type rather than
-    ** a full path_descr.
+    ** a full PathDescr.
     */
-    path_descr *lastAddition = new path_descr_moveto(NR::Point(0, 0));
+    PathDescr *lastAddition = new PathDescrMoveTo(NR::Point(0, 0));
     bool containsForced = false;
-    path_descr_cubicto pending_cubic(NR::Point(0, 0), NR::Point(0, 0), NR::Point(0, 0));
+    PathDescrCubicTo pending_cubic(NR::Point(0, 0), NR::Point(0, 0), NR::Point(0, 0));
   
     for (int curP = 0; curP < int(descr_cmd.size()); curP++) {
         int typ = descr_cmd[curP]->getType();
@@ -1213,7 +1214,7 @@ void Path::Coalesce(double tresh)
             // [fr: (tant pis pour les moveto multiples)]
             containsForced = false;
       
-            path_descr_moveto *nData = dynamic_cast<path_descr_moveto *>(descr_cmd[curP]);
+            PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo *>(descr_cmd[curP]);
             firstP = nData->p;
             lastA = descr_cmd[curP]->associated;
             prevA = lastA;
@@ -1223,10 +1224,10 @@ void Path::Coalesce(double tresh)
             nextA = descr_cmd[curP]->associated;
             if (lastAddition->flags != descr_moveto) {
         
-                path_descr_cubicto res(NR::Point(0, 0), NR::Point(0, 0), NR::Point(0, 0));
+                PathDescrCubicTo res(NR::Point(0, 0), NR::Point(0, 0), NR::Point(0, 0));
                 int worstP = -1;
                 if (AttemptSimplify(lastA, nextA - lastA + 1, (containsForced) ? 0.05 * tresh : tresh, res, worstP)) {
-                    lastAddition = new path_descr_cubicto(NR::Point(0, 0),
+                    lastAddition = new PathDescrCubicTo(NR::Point(0, 0),
                                                           NR::Point(0, 0),
                                                           NR::Point(0, 0));
                     pending_cubic = res;
@@ -1241,7 +1242,7 @@ void Path::Coalesce(double tresh)
 	    }
             
             containsForced = false;
-            lastAddition = new path_descr_moveto(NR::Point(0, 0));
+            lastAddition = new PathDescrMoveTo(NR::Point(0, 0));
             prevA = lastA = nextA;
             lastP = curP;
             lastAP = curP;
@@ -1251,7 +1252,7 @@ void Path::Coalesce(double tresh)
             nextA = descr_cmd[curP]->associated;
             if (lastAddition->flags != descr_moveto) {
                 
-                path_descr_cubicto res(NR::Point(0, 0), NR::Point(0, 0), NR::Point(0, 0));
+                PathDescrCubicTo res(NR::Point(0, 0), NR::Point(0, 0), NR::Point(0, 0));
                 int worstP = -1;
                 if (AttemptSimplify(lastA, nextA - lastA + 1, 0.05 * tresh, res, worstP)) {
                     // plus sensible parce que point force
@@ -1260,7 +1261,7 @@ void Path::Coalesce(double tresh)
                 } else  {
                     // on force l'addition
                     FlushPendingAddition(tempDest, lastAddition, pending_cubic, lastAP);
-                    lastAddition = new path_descr_moveto(NR::Point(0, 0));
+                    lastAddition = new PathDescrMoveTo(NR::Point(0, 0));
                     prevA = lastA = nextA;
                     lastP = curP;
                     lastAP = curP;
@@ -1273,10 +1274,10 @@ void Path::Coalesce(double tresh)
             nextA = descr_cmd[curP]->associated;
             if (lastAddition->flags != descr_moveto) {
                 
-                path_descr_cubicto res(NR::Point(0, 0), NR::Point(0, 0), NR::Point(0, 0));
+                PathDescrCubicTo res(NR::Point(0, 0), NR::Point(0, 0), NR::Point(0, 0));
                 int worstP = -1;
                 if (AttemptSimplify(lastA, nextA - lastA + 1, tresh, res, worstP)) {
-                    lastAddition = new path_descr_cubicto(NR::Point(0, 0),
+                    lastAddition = new PathDescrCubicTo(NR::Point(0, 0),
                                                           NR::Point(0, 0),
                                                           NR::Point(0, 0));
                     pending_cubic = res;
@@ -1288,7 +1289,7 @@ void Path::Coalesce(double tresh)
                     FlushPendingAddition(tempDest, lastAddition, pending_cubic, lastAP);
                     lastAddition = descr_cmd[curP];
                     if ( typ == descr_cubicto ) {
-                        pending_cubic = *(dynamic_cast<path_descr_cubicto*>(descr_cmd[curP]));
+                        pending_cubic = *(dynamic_cast<PathDescrCubicTo*>(descr_cmd[curP]));
                     }
                     lastAP = curP;
                     containsForced = false;
@@ -1298,7 +1299,7 @@ void Path::Coalesce(double tresh)
                 lastA = prevA /*descr_cmd[curP-1]->associated */ ;
                 lastAddition = descr_cmd[curP];
                 if ( typ == descr_cubicto ) {
-                    pending_cubic = *(dynamic_cast<path_descr_cubicto*>(descr_cmd[curP]));
+                    pending_cubic = *(dynamic_cast<PathDescrCubicTo*>(descr_cmd[curP]));
                 }
                 lastAP = curP;
                 containsForced = false;
@@ -1309,12 +1310,12 @@ void Path::Coalesce(double tresh)
 
             if (lastAddition->flags != descr_moveto) {
                 FlushPendingAddition(tempDest, lastAddition, pending_cubic, lastAP);
-                lastAddition = new path_descr_moveto(NR::Point(0, 0));
+                lastAddition = new PathDescrMoveTo(NR::Point(0, 0));
 	    }
             lastAP = -1;
             lastA = descr_cmd[curP]->associated;
             lastP = curP;
-            path_descr_bezierto *nBData = dynamic_cast<path_descr_bezierto*>(descr_cmd[curP]);
+            PathDescrBezierTo *nBData = dynamic_cast<PathDescrBezierTo*>(descr_cmd[curP]);
             for (int i = 1; i <= nBData->nb; i++) {
                 FlushPendingAddition(tempDest, descr_cmd[curP + i], pending_cubic, curP + i);
             }
@@ -1337,14 +1338,14 @@ void Path::Coalesce(double tresh)
 }
 
 
-void Path::FlushPendingAddition(Path *dest, path_descr *lastAddition,
-                                path_descr_cubicto &lastCubic, int lastAP)
+void Path::FlushPendingAddition(Path *dest, PathDescr *lastAddition,
+                                PathDescrCubicTo &lastCubic, int lastAP)
 {
     switch (lastAddition->getType()) {
 
     case descr_moveto:
         if ( lastAP >= 0 ) {
-            path_descr_moveto* nData = dynamic_cast<path_descr_moveto *>(descr_cmd[lastAP]);
+            PathDescrMoveTo* nData = dynamic_cast<PathDescrMoveTo *>(descr_cmd[lastAP]);
             dest->MoveTo(nData->p);
         }
         break;
@@ -1354,33 +1355,33 @@ void Path::FlushPendingAddition(Path *dest, path_descr *lastAddition,
         break;
 
     case descr_cubicto:
-        dest->CubicTo(lastCubic.p, lastCubic.stD, lastCubic.enD);
+        dest->CubicTo(lastCubic.p, lastCubic.start, lastCubic.end);
         break;
 
     case descr_lineto:
         if ( lastAP >= 0 ) {
-            path_descr_lineto *nData = dynamic_cast<path_descr_lineto *>(descr_cmd[lastAP]);
+            PathDescrLineTo *nData = dynamic_cast<PathDescrLineTo *>(descr_cmd[lastAP]);
             dest->LineTo(nData->p);
         }
         break;
 
     case descr_arcto:
         if ( lastAP >= 0 ) {
-            path_descr_arcto *nData = dynamic_cast<path_descr_arcto *>(descr_cmd[lastAP]);
+            PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[lastAP]);
             dest->ArcTo(nData->p, nData->rx, nData->ry, nData->angle, nData->large, nData->clockwise);
         }
         break;
 
     case descr_bezierto:
         if ( lastAP >= 0 ) {
-            path_descr_bezierto *nData = dynamic_cast<path_descr_bezierto *>(descr_cmd[lastAP]);
+            PathDescrBezierTo *nData = dynamic_cast<PathDescrBezierTo *>(descr_cmd[lastAP]);
             dest->BezierTo(nData->p);
         }
         break;
 
     case descr_interm_bezier:
         if ( lastAP >= 0 ) {
-            path_descr_intermbezierto *nData = dynamic_cast<path_descr_intermbezierto*>(descr_cmd[lastAP]);
+            PathDescrIntermBezierTo *nData = dynamic_cast<PathDescrIntermBezierTo*>(descr_cmd[lastAP]);
             dest->IntermBezierTo(nData->p);
         }
         break;

@@ -38,7 +38,9 @@ livarot_libvarot_a_SOURCES =	\
 	livarot/sweep-event.cpp \
 	livarot/sweep-event.h	\
 	livarot/sweep-event-queue.h	\
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	livarot/path-description.h \
+	livarot/path-description.cpp
 
 livarot_Path_test_SOURCES = livarot/Path-test.cpp
 livarot_Path_test_LDADD = livarot/libvarot.a libnr/libnr.a -lglib-2.0

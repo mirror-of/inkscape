@@ -13,7 +13,6 @@
 #include "LivarotDefs.h"
 #include "livarot/livarot-forward.h"
 #include "libnr/nr-point.h"
-#include "svg/stringstream.h"
 
 /*
  * the Path class: a structure to hold path description and their polyline approximation (not kept in sync)
@@ -24,22 +23,6 @@
  * ConvertWithBackData() for this. after this call, it's easy to rewind the polyline: sequences of points
  * of the same path command can be reassembled in a command
  */
-
-// path description commands
-enum
-{
-  descr_moveto = 0,         // a moveto
-  descr_lineto = 1,         // a (guess what) lineto
-  descr_cubicto = 2,
-  descr_bezierto = 3,       // "beginning" of a quadratic bezier spline, will contain its endpoint (i know, it's bad...)
-  descr_arcto = 4,
-  descr_close = 5,
-  descr_interm_bezier = 6,  // control point of the bezier spline
-  descr_forced = 7,
-
-  descr_type_mask = 15      // the command no will be stored in a "flags" field, potentially with other info, so we need 
-                            // a mask to AND the field and extract the command
-};
 
 // polyline description commands
 enum
@@ -75,129 +58,6 @@ class Path
   friend class Shape;
 public:
 
-  // command list structures
-
-  struct path_descr
-  {
-    path_descr() : flags(0), associated(-1), tSt(0), tEn(1) {}
-    path_descr(int f) : flags(f), associated(-1), tSt(0), tEn(1) {}
-
-    int getType() const { return flags & descr_type_mask; }
-    void setType(int t) {
-      flags &= ~descr_type_mask;
-      flags |= t;
-    }
-
-    virtual void dumpSVG(Inkscape::SVGOStringStream &s, NR::Point const &last) const {};
-    virtual path_descr *clone() const = 0;
-    
-    int    flags;         // most notably contains the path command no
-    int    associated;		// index in the polyline of the point that ends the path portion of this command
-    double tSt;
-    double tEn;
-  };
-
-  // lineto: a point
-  struct path_descr_moveto : public path_descr
-  {
-    path_descr_moveto(NR::Point const &pp)
-      : path_descr(descr_moveto), p(pp) {}
-    void dumpSVG(Inkscape::SVGOStringStream &s, NR::Point const &last) const;
-    path_descr *clone() const;
-
-    NR::Point  p;
-  };
-
-  // lineto: a point
-  // MoveTos fit in this category
-  struct path_descr_lineto : public path_descr
-  {
-    path_descr_lineto(NR::Point const &pp)
-      : path_descr(descr_lineto), p(pp) {}
-    void dumpSVG(Inkscape::SVGOStringStream &s, NR::Point const &last) const;
-    path_descr *clone() const;
-
-    NR::Point  p;
-  };
-
-  // quadratic bezier curves: a set of control points, and an endpoint
-  struct path_descr_bezierto : public path_descr
-  {
-    path_descr_bezierto(NR::Point const &pp, int n)
-      : path_descr(descr_bezierto), p(pp), nb(n) {}
-    
-    path_descr *clone() const;
-
-    NR::Point    p;			// the endpoint's coordinates
-    int nb;             // number of control points, stored in the next path description commands
-  };
-  
-  struct path_descr_intermbezierto : public path_descr
-  {
-    path_descr_intermbezierto()
-      : path_descr(descr_interm_bezier) , p(0, 0) {}
-    path_descr_intermbezierto(NR::Point const &pp)
-      : path_descr(descr_interm_bezier), p(pp) {}
-
-    path_descr *clone() const;
-
-    NR::Point    p;			// control point coordinates
-  };
-
-  // cubic spline curve: 2 tangents and one endpoint
-  struct path_descr_cubicto : public path_descr
-  {
-    path_descr_cubicto(NR::Point const &pp, NR::Point const &s, NR::Point const& e)
-      : path_descr(descr_cubicto), p(pp), stD(s), enD(e) {}
-    
-    void dumpSVG(Inkscape::SVGOStringStream &s, NR::Point const &last) const;
-    path_descr *clone() const;
-
-    NR::Point    p;
-    NR::Point    stD;
-    NR::Point    enD;
-  };
-
-  // arc: endpoint, 2 radii and one angle, plus 2 booleans to choose the arc (svg style)
-  struct path_descr_arcto : public path_descr
-  {
-    path_descr_arcto(NR::Point const &pp, double x, double y, double a, bool l, bool c)
-      : path_descr(descr_arcto), p(pp), rx(x), ry(y), angle(a), large(l), clockwise(c) {}
-    
-    void dumpSVG(Inkscape::SVGOStringStream &s, NR::Point const &last) const;
-    path_descr *clone() const;
-
-    NR::Point    p;
-    double       rx,ry;
-    double       angle;
-    bool         large, clockwise;
-  };
-
-  struct path_descr_forced : public path_descr
-  {
-    path_descr_forced() : path_descr(descr_forced), p(0, 0) {}
-
-    path_descr *clone() const;
-
-    /* FIXME: not sure whether _forced should have a point associated with it;
-    ** Path::ConvertForcedToMoveTo suggests that maybe it should.
-    */
-    NR::Point p;
-  };
-
-  struct path_descr_close : public path_descr
-  {
-    path_descr_close() : path_descr(descr_close) {}
-
-    void dumpSVG(Inkscape::SVGOStringStream &s, NR::Point const &last) const;
-    path_descr *clone() const;
-
-    /* FIXME: not sure whether _forced should have a point associated with it;
-    ** Path::ConvertForcedToMoveTo suggests that maybe it should.
-    */
-    NR::Point p;
-  };
-
   // flags for the path construction
   enum
   {
@@ -214,8 +74,8 @@ public:
   int         pending_bezier_data;
   int         pending_moveto_cmd;
   int         pending_moveto_data;
-  // the path description:
-  std::vector<path_descr*> descr_cmd;
+  // the path description
+  std::vector<PathDescr*> descr_cmd;
 
   // polyline storage: a series of coordinates (and maybe weights)
   // also back data: info on where this polyline's segment comes from, ie wich command in the path description: "piece"
@@ -464,20 +324,20 @@ private:
 		ButtType butt, double miter, int nbDash, one_dash *dashs,
 		bool justAdd = false);
 
-  static void TangentOnSegAt(double at, NR::Point const &iS, path_descr_lineto const &fin,
+  static void TangentOnSegAt(double at, NR::Point const &iS, PathDescrLineTo const &fin,
 			     NR::Point &pos, NR::Point &tgt, double &len);
-  static void TangentOnArcAt(double at, NR::Point const &iS, path_descr_arcto const &fin,
+  static void TangentOnArcAt(double at, NR::Point const &iS, PathDescrArcTo const &fin,
 			     NR::Point &pos, NR::Point &tgt, double &len, double &rad);
-  static void TangentOnCubAt (double at, NR::Point const &iS, path_descr_cubicto const &fin, bool before,
+  static void TangentOnCubAt (double at, NR::Point const &iS, PathDescrCubicTo const &fin, bool before,
 			      NR::Point &pos, NR::Point &tgt, double &len, double &rad);
   static void TangentOnBezAt (double at, NR::Point const &iS,
-			      path_descr_intermbezierto & mid,
-			      path_descr_bezierto & fin, bool before,
+			      PathDescrIntermBezierTo & mid,
+			      PathDescrBezierTo & fin, bool before,
 			      NR::Point & pos, NR::Point & tgt, double &len, double &rad);
   static void OutlineJoin (Path * dest, NR::Point pos, NR::Point stNor, NR::Point enNor,
 			   double width, JoinType join, double miter);
 
-  static bool IsNulCurve (std::vector<path_descr*> const &cmd, int curD, NR::Point const &curX);
+  static bool IsNulCurve (std::vector<PathDescr*> const &cmd, int curD, NR::Point const &curX);
 
   static void RecStdCubicTo (outline_callback_data * data, double tol,
 			     double width, int lev);
@@ -512,9 +372,9 @@ private:
 		      one_dash * dashs);
 
   void DoSimplify(int off, int N, double treshhold);
-  bool AttemptSimplify(int off, int N, double treshhold, path_descr_cubicto &res, int &worstP);
+  bool AttemptSimplify(int off, int N, double treshhold, PathDescrCubicTo &res, int &worstP);
   static bool FitCubic(NR::Point const &start,
-		       path_descr_cubicto &res,
+		       PathDescrCubicTo &res,
 		       double *Xk, double *Yk, double *Qk, double *tk, int nbPt);
   
   struct fitting_tables {
@@ -527,9 +387,9 @@ private:
     char     *fk;
     double   totLen;
   };
-  bool   AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cubicto & res,int &worstP);
-  bool   ExtendFit(int off, int N, fitting_tables &data,double treshhold, path_descr_cubicto & res,int &worstP);
+  bool   AttemptSimplify (fitting_tables &data,double treshhold, PathDescrCubicTo & res,int &worstP);
+  bool   ExtendFit(int off, int N, fitting_tables &data,double treshhold, PathDescrCubicTo & res,int &worstP);
   double RaffineTk (NR::Point pt, NR::Point p0, NR::Point p1, NR::Point p2, NR::Point p3, double it);
-  void   FlushPendingAddition(Path* dest,path_descr *lastAddition,path_descr_cubicto &lastCubic,int lastAD);
+  void   FlushPendingAddition(Path* dest,PathDescr *lastAddition,PathDescrCubicTo &lastCubic,int lastAD);
 };
 #endif

@@ -6,6 +6,12 @@ class Shape;
 struct float_ligne_run;
 class FloatLigne;
 class BitLigne;
+class PathDescr;
+class PathDescrLineTo;
+class PathDescrArcTo;
+class PathDescrCubicTo;
+class PathDescrBezierTo;
+class PathDescrIntermBezierTo;
 
 
 #endif /* !SEEN_LIVAROT_FORWARD_H */

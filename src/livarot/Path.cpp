@@ -8,6 +8,7 @@
 
 #include <glib.h>
 #include "Path.h"
+#include "livarot/path-description.h"
 #include <libnr/nr-point.h>
 #include <libnr/nr-point-ops.h>
 #include <libnr/nr-matrix-ops.h>
@@ -31,7 +32,7 @@ Path::Path()
 
 Path::~Path()
 {
-    for (std::vector<path_descr*>::iterator i = descr_cmd.begin(); i != descr_cmd.end(); i++) {
+    for (std::vector<PathDescr*>::iterator i = descr_cmd.begin(); i != descr_cmd.end(); i++) {
         delete *i;
     }
 }
@@ -47,37 +48,37 @@ Path::Affiche()
     switch ( typ ) {
       case descr_lineto:
       {
-        path_descr_lineto *nData = dynamic_cast<path_descr_lineto *>(descr_cmd[i]);
+        PathDescrLineTo *nData = dynamic_cast<PathDescrLineTo *>(descr_cmd[i]);
         printf("  l %f %f",nData->p[0],nData->p[1]); // localizing ok
       }
         break;
       case descr_moveto:
       {
-        path_descr_moveto *nData = dynamic_cast<path_descr_moveto *>(descr_cmd[i]);
+        PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo *>(descr_cmd[i]);
         printf("  m %f %f",nData->p[0],nData->p[1]); // localizing ok
       }
         break;
       case descr_arcto:
       {
-        path_descr_arcto *nData = dynamic_cast<path_descr_arcto *>(descr_cmd[i]);
+        PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[i]);
         printf("  a %f %f %f %f %f %i %i",nData->p[0],nData->p[1],nData->rx,nData->ry,nData->angle,((nData->clockwise)?1:0),((nData->large)?1:0)); // localizing ok
       }
         break;
       case descr_cubicto:
       {
-        path_descr_cubicto *nData = dynamic_cast<path_descr_cubicto *>(descr_cmd[i]);
-        printf("  c %f %f %f %f %f %f",nData->p[0],nData->p[1],nData->stD[0],nData->stD[1],nData->enD[0],nData->enD[1]); // localizing ok
+        PathDescrCubicTo *nData = dynamic_cast<PathDescrCubicTo *>(descr_cmd[i]);
+        printf("  c %f %f %f %f %f %f",nData->p[0],nData->p[1],nData->start[0],nData->start[1],nData->end[0],nData->end[1]); // localizing ok
       }
         break;
       case descr_bezierto:
       {
-        path_descr_bezierto *nData = dynamic_cast<path_descr_bezierto *>(descr_cmd[i]);
+        PathDescrBezierTo *nData = dynamic_cast<PathDescrBezierTo *>(descr_cmd[i]);
         printf("  b %f %f %i",nData->p[0],nData->p[1],nData->nb); // localizing ok
       }
         break;
       case descr_interm_bezier:
       {
-        path_descr_intermbezierto *nData = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[i]);
+        PathDescrIntermBezierTo *nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[i]);
         printf("  i %f %f",nData->p[0],nData->p[1]); // localizing ok
       }
         break;
@@ -90,7 +91,7 @@ Path::Affiche()
 void
 Path::Reset()
 {
-    for (std::vector<path_descr*>::iterator i = descr_cmd.begin(); i != descr_cmd.end(); i++) {
+    for (std::vector<PathDescr*>::iterator i = descr_cmd.begin(); i != descr_cmd.end(); i++) {
         delete *i;
     }
 	descr_cmd.clear();
@@ -104,13 +105,13 @@ Path::Copy (Path * who)
 {
     ResetPoints();
 
-    for (std::vector<path_descr*>::iterator i = descr_cmd.begin(); i != descr_cmd.end(); i++) {
+    for (std::vector<PathDescr*>::iterator i = descr_cmd.begin(); i != descr_cmd.end(); i++) {
         delete *i;
     }
         
     descr_cmd.clear();
         
-    for (std::vector<path_descr*>::const_iterator i = who->descr_cmd.begin();
+    for (std::vector<PathDescr*>::const_iterator i = who->descr_cmd.begin();
          i != who->descr_cmd.end();
          i++)
     {
@@ -139,7 +140,7 @@ int Path::ForcePoint()
         return -1;
     }
 
-    descr_cmd.push_back(new path_descr_forced);
+    descr_cmd.push_back(new PathDescrForced);
     return descr_cmd.size() - 1;
 }
 
@@ -152,7 +153,7 @@ void Path::InsertForcePoint(int at)
     return;
   }
 
-  descr_cmd.insert(descr_cmd.begin() + at, new path_descr_forced);
+  descr_cmd.insert(descr_cmd.begin() + at, new PathDescrForced);
 }
 
 int
@@ -168,7 +169,7 @@ Path::Close()
         return -1;
     }
 
-    descr_cmd.push_back(new path_descr_close);
+    descr_cmd.push_back(new PathDescrClose);
     
     descr_flags &= ~(descr_doing_subpath);
     pending_moveto_cmd = -1;
@@ -187,7 +188,7 @@ Path::MoveTo (NR::Point const &iPt)
 	}
 	pending_moveto_cmd = descr_cmd.size();
 
-        descr_cmd.push_back(new path_descr_moveto(iPt));
+        descr_cmd.push_back(new PathDescrMoveTo(iPt));
 
 	descr_flags |= descr_doing_subpath;
 	return descr_cmd.size() - 1;
@@ -205,7 +206,7 @@ Path::InsertMoveTo (NR::Point const &iPt,int at)
         return;
     }
 
-  descr_cmd.insert(descr_cmd.begin() + at, new path_descr_moveto(iPt));
+  descr_cmd.insert(descr_cmd.begin() + at, new PathDescrMoveTo(iPt));
 }
 
 int
@@ -218,7 +219,7 @@ Path::LineTo (NR::Point const &iPt)
 		return MoveTo (iPt);
 	}
 
-        descr_cmd.push_back(new path_descr_lineto(iPt));
+        descr_cmd.push_back(new PathDescrLineTo(iPt));
 	return descr_cmd.size() - 1;
 }
 
@@ -233,7 +234,7 @@ void Path::InsertLineTo(NR::Point const &iPt, int at)
         return;
     }
     
-    descr_cmd.insert(descr_cmd.begin() + at, new path_descr_lineto(iPt));
+    descr_cmd.insert(descr_cmd.begin() + at, new PathDescrLineTo(iPt));
 }
 
 int
@@ -245,7 +246,7 @@ Path::CubicTo (NR::Point const &iPt, NR::Point const &iStD, NR::Point const &iEn
 		return MoveTo (iPt);
 	}
 
-        descr_cmd.push_back(new path_descr_cubicto(iPt, iStD, iEnD));
+        descr_cmd.push_back(new PathDescrCubicTo(iPt, iStD, iEnD));
 	return descr_cmd.size() - 1;
 }
 void
@@ -257,7 +258,7 @@ Path::InsertCubicTo (NR::Point const &iPt, NR::Point const &iStD, NR::Point cons
     return;
   }
   
-  descr_cmd.insert(descr_cmd.begin() + at, new path_descr_cubicto(iPt, iStD, iEnD));
+  descr_cmd.insert(descr_cmd.begin() + at, new PathDescrCubicTo(iPt, iStD, iEnD));
 }
 
 int
@@ -270,7 +271,7 @@ Path::ArcTo (NR::Point const &iPt, double iRx, double iRy, double angle,
 		return MoveTo (iPt);
 	}
 
-        descr_cmd.push_back(new path_descr_arcto(iPt, iRx, iRy, angle, iLargeArc, iClockwise));
+        descr_cmd.push_back(new PathDescrArcTo(iPt, iRx, iRy, angle, iLargeArc, iClockwise));
 	return descr_cmd.size() - 1;
 }
 void
@@ -283,7 +284,7 @@ Path::InsertArcTo (NR::Point const &iPt, double iRx, double iRy, double angle,
     return;
   }
   
-  descr_cmd.insert(descr_cmd.begin() + at, new path_descr_arcto(iPt, iRx, iRy,
+  descr_cmd.insert(descr_cmd.begin() + at, new PathDescrArcTo(iPt, iRx, iRy,
                                                                 angle, iLargeArc, iClockwise));
 }
 
@@ -298,7 +299,7 @@ Path::TempBezierTo()
 	}
 	pending_bezier_cmd = descr_cmd.size();
 
-        descr_cmd.push_back(new path_descr_bezierto(NR::Point(0, 0), 0));
+        descr_cmd.push_back(new PathDescrBezierTo(NR::Point(0, 0), 0));
 	descr_flags |= descr_adding_bezier;
 	descr_flags |= descr_delayed_bezier;
 	return descr_cmd.size() - 1;
@@ -344,7 +345,7 @@ Path::EndBezierTo (NR::Point const &iPt)
 	} else {
 		return EndBezierTo ();
 	}
-        path_descr_bezierto *nData = dynamic_cast<path_descr_bezierto *>(descr_cmd[pending_bezier_cmd]);
+        PathDescrBezierTo *nData = dynamic_cast<PathDescrBezierTo *>(descr_cmd[pending_bezier_cmd]);
 	nData->p = iPt;
 	pending_bezier_cmd = -1;
 	descr_flags &= ~(descr_adding_bezier);
@@ -366,9 +367,9 @@ Path::IntermBezierTo (NR::Point const &iPt)
 	}
 	{
 
-            descr_cmd.push_back(new path_descr_intermbezierto(iPt));
+            descr_cmd.push_back(new PathDescrIntermBezierTo(iPt));
                 
-            path_descr_bezierto *nBData = dynamic_cast<path_descr_bezierto *>(descr_cmd[pending_bezier_cmd]);
+            PathDescrBezierTo *nBData = dynamic_cast<PathDescrBezierTo *>(descr_cmd[pending_bezier_cmd]);
             nBData->nb++;
             return descr_cmd.size() - 1;
 	}
@@ -388,7 +389,7 @@ Path::InsertIntermBezierTo (NR::Point const &iPt,int at)
         return;
     }
   
-    descr_cmd.insert(descr_cmd.begin() + at, new path_descr_intermbezierto(iPt));
+    descr_cmd.insert(descr_cmd.begin() + at, new PathDescrIntermBezierTo(iPt));
 }
 
 int
@@ -401,7 +402,7 @@ Path::BezierTo (NR::Point const &iPt)
 	}
 	pending_bezier_cmd = descr_cmd.size();
 
-        descr_cmd.push_back(new path_descr_bezierto(iPt, 0));
+        descr_cmd.push_back(new PathDescrBezierTo(iPt, 0));
 	descr_flags |= descr_adding_bezier;
 	descr_flags &= ~(descr_delayed_bezier);
 	return descr_cmd.size() - 1;
@@ -416,7 +417,7 @@ Path::InsertBezierTo (NR::Point const &iPt,int iNb,int at)
     return;
   }
   
-        descr_cmd.insert(descr_cmd.begin() + at, new path_descr_bezierto(iPt, iNb));
+        descr_cmd.insert(descr_cmd.begin() + at, new PathDescrBezierTo(iPt, iNb));
 }
 
 /*
@@ -545,7 +546,7 @@ Path::PointAt (int piece, double at, NR::Point & pos)
 		pos = NR::Point(0,0);
 		return;
 	}
-	path_descr const *theD = descr_cmd[piece];
+	PathDescr const *theD = descr_cmd[piece];
 	int typ = theD->getType();
 	NR::Point tgt;
 	double len, rad;
@@ -554,13 +555,13 @@ Path::PointAt (int piece, double at, NR::Point & pos)
 	} else if (typ == descr_close || typ == descr_forced) {
 		return PointAt (piece - 1, 1.0, pos);
 	} else if (typ == descr_lineto) {
-		path_descr_lineto const *nData = dynamic_cast<path_descr_lineto const *>(theD);
+		PathDescrLineTo const *nData = dynamic_cast<PathDescrLineTo const *>(theD);
 		TangentOnSegAt (at, PrevPoint (piece - 1), *nData, pos, tgt, len);
 	} else if (typ == descr_arcto) {
-		path_descr_arcto const *nData = dynamic_cast<path_descr_arcto const *>(theD);
+		PathDescrArcTo const *nData = dynamic_cast<PathDescrArcTo const *>(theD);
 		TangentOnArcAt (at,PrevPoint (piece - 1), *nData, pos, tgt, len, rad);
 	} else if (typ == descr_cubicto) {
-		path_descr_cubicto const *nData = dynamic_cast<path_descr_cubicto const *>(theD);
+		PathDescrCubicTo const *nData = dynamic_cast<PathDescrCubicTo const *>(theD);
 		TangentOnCubAt (at, PrevPoint (piece - 1), *nData, false, pos, tgt, len, rad);
 	} else if (typ == descr_bezierto || typ == descr_interm_bezier) {
 		int bez_st = piece;
@@ -576,7 +577,7 @@ Path::PointAt (int piece, double at, NR::Point & pos)
 			return PointAt(piece - 1, 1.0, pos);
 		}
     
-		path_descr_bezierto *stB = dynamic_cast<path_descr_bezierto *>(descr_cmd[bez_st]);
+		PathDescrBezierTo *stB = dynamic_cast<PathDescrBezierTo *>(descr_cmd[bez_st]);
 		if ( piece > bez_st + stB->nb ) {
 			// The spline goes past the authorized number of commands (bad).
 			// [la spline sort du nombre de commandes autorisé (mauvais)]
@@ -586,26 +587,26 @@ Path::PointAt (int piece, double at, NR::Point & pos)
 		int k = piece - bez_st;
 		NR::Point const bStPt = PrevPoint(bez_st - 1);
 		if (stB->nb == 1 || k <= 0) {
-			path_descr_intermbezierto *nData = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[bez_st + 1]);
+			PathDescrIntermBezierTo *nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[bez_st + 1]);
 			TangentOnBezAt(at, bStPt, *nData, *stB, false, pos, tgt, len, rad);
 		} else {
 			// forcement plus grand que 1
 			if (k == 1) {
-				path_descr_intermbezierto *nextI = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[bez_st + 1]);
-				path_descr_intermbezierto *nnextI = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[bez_st + 2]);
-				path_descr_bezierto fin(0.5 * (nextI->p + nnextI->p), 1);
+				PathDescrIntermBezierTo *nextI = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[bez_st + 1]);
+				PathDescrIntermBezierTo *nnextI = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[bez_st + 2]);
+				PathDescrBezierTo fin(0.5 * (nextI->p + nnextI->p), 1);
 				TangentOnBezAt(at, bStPt, *nextI,  fin, false, pos, tgt, len, rad);
 			} else if (k == stB->nb) {
-				path_descr_intermbezierto *nextI = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[bez_st + k]);
-				path_descr_intermbezierto *prevI = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[bez_st + k - 1]);
+				PathDescrIntermBezierTo *nextI = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[bez_st + k]);
+				PathDescrIntermBezierTo *prevI = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[bez_st + k - 1]);
 				NR::Point stP = 0.5 * ( prevI->p + nextI->p );
 				TangentOnBezAt(at, stP, *nextI, *stB, false, pos, tgt, len, rad);
 			} else {
-				path_descr_intermbezierto *nextI = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[bez_st + k]);
-				path_descr_intermbezierto *prevI = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[bez_st + k - 1]);
-				path_descr_intermbezierto *nnextI = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[bez_st + k + 1]);
+				PathDescrIntermBezierTo *nextI = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[bez_st + k]);
+				PathDescrIntermBezierTo *prevI = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[bez_st + k - 1]);
+				PathDescrIntermBezierTo *nnextI = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[bez_st + k + 1]);
 				NR::Point stP = 0.5 * ( prevI->p + nextI->p );
-				path_descr_bezierto fin(0.5 * (nextI->p + nnextI->p), 1);
+				PathDescrBezierTo fin(0.5 * (nextI->p + nnextI->p), 1);
 				TangentOnBezAt(at, stP, *nextI, fin, false, pos, tgt, len, rad);
 			}
 		}
@@ -620,7 +621,7 @@ Path::PointAndTangentAt (int piece, double at, NR::Point & pos, NR::Point & tgt)
 		pos = NR::Point(0, 0);
 		return;
 	}
-	path_descr const *theD = descr_cmd[piece];
+	PathDescr const *theD = descr_cmd[piece];
 	int typ = theD->getType();
 	double len, rad;
 	if (typ == descr_moveto) {
@@ -630,20 +631,20 @@ Path::PointAndTangentAt (int piece, double at, NR::Point & pos, NR::Point & tgt)
     while ( cp >= 0 && (descr_cmd[cp]->getType()) != descr_moveto ) cp--;
     if ( cp < 0 ) {
     } else {
-      path_descr_moveto *nData = dynamic_cast<path_descr_moveto *>(descr_cmd[cp]);
-      path_descr_lineto dst(nData->p);
+      PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo *>(descr_cmd[cp]);
+      PathDescrLineTo dst(nData->p);
       TangentOnSegAt (at, PrevPoint (piece - 1), dst, pos, tgt, len);
     }
   } else if ( typ == descr_forced) {
 		return PointAndTangentAt (piece - 1, 1.0, pos,tgt);
 	} else if (typ == descr_lineto) {
-		path_descr_lineto const *nData = dynamic_cast<path_descr_lineto const *>(theD);
+		PathDescrLineTo const *nData = dynamic_cast<PathDescrLineTo const *>(theD);
 		TangentOnSegAt (at, PrevPoint (piece - 1), *nData, pos, tgt, len);
 	} else if (typ == descr_arcto) {
-		path_descr_arcto const *nData = dynamic_cast<path_descr_arcto const *>(theD);
+		PathDescrArcTo const *nData = dynamic_cast<PathDescrArcTo const *>(theD);
 		TangentOnArcAt (at,PrevPoint (piece - 1), *nData, pos, tgt, len, rad);
 	} else if (typ == descr_cubicto) {
-		path_descr_cubicto const *nData = dynamic_cast<path_descr_cubicto const *>(theD);
+		PathDescrCubicTo const *nData = dynamic_cast<PathDescrCubicTo const *>(theD);
 		TangentOnCubAt (at, PrevPoint (piece - 1), *nData, false, pos, tgt, len, rad);
 	} else if (typ == descr_bezierto || typ == descr_interm_bezier) {
 		int bez_st = piece;
@@ -658,7 +659,7 @@ Path::PointAndTangentAt (int piece, double at, NR::Point & pos, NR::Point & tgt)
 			// [pas trouvé le dubut de la spline (mauvais)]
 		}
     
-		path_descr_bezierto* stB = dynamic_cast<path_descr_bezierto*>(descr_cmd[bez_st]);
+		PathDescrBezierTo* stB = dynamic_cast<PathDescrBezierTo*>(descr_cmd[bez_st]);
 		if ( piece > bez_st + stB->nb ) {
 			return PointAndTangentAt(piece - 1, 1.0, pos, tgt);
 			// The spline goes past the number of authorized commands (bad).
@@ -668,26 +669,26 @@ Path::PointAndTangentAt (int piece, double at, NR::Point & pos, NR::Point & tgt)
 		int k = piece - bez_st;
 		NR::Point const bStPt(PrevPoint( bez_st - 1 ));
 		if (stB->nb == 1 || k <= 0) {
-			path_descr_intermbezierto* nData = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[bez_st + 1]);
+			PathDescrIntermBezierTo* nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[bez_st + 1]);
 			TangentOnBezAt (at, bStPt, *nData, *stB, false, pos, tgt, len, rad);
 		} else {
 			// forcement plus grand que 1
 			if (k == 1) {
-				path_descr_intermbezierto *nextI = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[bez_st + 1]);
-				path_descr_intermbezierto *nnextI = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[bez_st + 2]);
-				path_descr_bezierto fin(0.5 * (nextI->p + nnextI->p), 1);
+				PathDescrIntermBezierTo *nextI = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[bez_st + 1]);
+				PathDescrIntermBezierTo *nnextI = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[bez_st + 2]);
+				PathDescrBezierTo fin(0.5 * (nextI->p + nnextI->p), 1);
 				TangentOnBezAt(at, bStPt, *nextI, fin, false, pos, tgt, len, rad);
 			} else if (k == stB->nb) {
-				path_descr_intermbezierto *prevI = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[bez_st + k - 1]);
-				path_descr_intermbezierto *nextI = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[bez_st + k]);
+				PathDescrIntermBezierTo *prevI = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[bez_st + k - 1]);
+				PathDescrIntermBezierTo *nextI = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[bez_st + k]);
 				NR::Point stP = 0.5 * ( prevI->p + nextI->p );
 				TangentOnBezAt(at, stP, *nextI, *stB, false, pos, tgt, len, rad);
 			} else {
-				path_descr_intermbezierto *prevI = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[bez_st + k - 1]);
-				path_descr_intermbezierto *nextI = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[bez_st + k]);
-				path_descr_intermbezierto *nnextI = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[bez_st + k + 1]);
+				PathDescrIntermBezierTo *prevI = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[bez_st + k - 1]);
+				PathDescrIntermBezierTo *nextI = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[bez_st + k]);
+				PathDescrIntermBezierTo *nnextI = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[bez_st + k + 1]);
 				NR::Point stP = 0.5 * ( prevI->p + nextI->p );
-				path_descr_bezierto fin(0.5 * (nnextI->p + nnextI->p), 1);
+				PathDescrBezierTo fin(0.5 * (nnextI->p + nnextI->p), 1);
 				TangentOnBezAt(at, stP, *nextI, fin, false, pos, tgt, len, rad);
 			}
 		}
@@ -705,44 +706,44 @@ void Path::Transform(const NR::Matrix &trans)
       
             case descr_lineto:
             {
-                path_descr_lineto *nData = dynamic_cast<path_descr_lineto *>(descr_cmd[i]);
+                PathDescrLineTo *nData = dynamic_cast<PathDescrLineTo *>(descr_cmd[i]);
                 nData->p = nData->p * trans;
             }
             break;
             
             case descr_moveto:
             {
-                path_descr_moveto *nData = dynamic_cast<path_descr_moveto *>(descr_cmd[i]);
+                PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo *>(descr_cmd[i]);
                 nData->p = nData->p * trans;
             }
             break;
             
             case descr_arcto:
             {
-                path_descr_arcto *nData = dynamic_cast<path_descr_arcto *>(descr_cmd[i]);
+                PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[i]);
                 nData->p = nData-> p * trans;
             }
             break;
             
             case descr_cubicto:
             {
-                path_descr_cubicto *nData = dynamic_cast<path_descr_cubicto *>(descr_cmd[i]);
-                nData->stD = nData->stD * trTrans;
-                nData->enD = nData->enD * trTrans;
+                PathDescrCubicTo *nData = dynamic_cast<PathDescrCubicTo *>(descr_cmd[i]);
+                nData->start = nData->start * trTrans;
+                nData->end = nData->end * trTrans;
                 nData->p = nData->p * trans;
             }
             break;
 
             case descr_bezierto:
             {
-                path_descr_bezierto *nData = dynamic_cast<path_descr_bezierto *>(descr_cmd[i]);
+                PathDescrBezierTo *nData = dynamic_cast<PathDescrBezierTo *>(descr_cmd[i]);
                 nData->p = nData->p * trans;
             }
             break;
 
             case descr_interm_bezier:
             {
-                path_descr_intermbezierto *nData = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[i]);
+                PathDescrIntermBezierTo *nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[i]);
                 nData->p = nData->p * trans;
             }
             break;
@@ -760,7 +761,7 @@ void        Path::FastBBox(double &l,double &t,double &r,double &b)
     switch ( typ ) {
       case descr_lineto:
       {
-        path_descr_lineto *nData = dynamic_cast<path_descr_lineto *>(descr_cmd[i]);
+        PathDescrLineTo *nData = dynamic_cast<PathDescrLineTo *>(descr_cmd[i]);
 				if ( empty ) {
 					l=r=nData->p[0];
 					t=b=nData->p[1];
@@ -776,7 +777,7 @@ void        Path::FastBBox(double &l,double &t,double &r,double &b)
         break;
       case descr_moveto:
       {
-        path_descr_moveto *nData = dynamic_cast<path_descr_moveto *>(descr_cmd[i]);
+        PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo *>(descr_cmd[i]);
 				if ( empty ) {
 					l=r=nData->p[0];
 					t=b=nData->p[1];
@@ -792,7 +793,7 @@ void        Path::FastBBox(double &l,double &t,double &r,double &b)
         break;
       case descr_arcto:
       {
-        path_descr_arcto *nData = dynamic_cast<path_descr_arcto *>(descr_cmd[i]);
+        PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[i]);
 				if ( empty ) {
 					l=r=nData->p[0];
 					t=b=nData->p[1];
@@ -808,7 +809,7 @@ void        Path::FastBBox(double &l,double &t,double &r,double &b)
         break;
       case descr_cubicto:
       {
-        path_descr_cubicto *nData = dynamic_cast<path_descr_cubicto *>(descr_cmd[i]);
+        PathDescrCubicTo *nData = dynamic_cast<PathDescrCubicTo *>(descr_cmd[i]);
 				if ( empty ) {
 					l=r=nData->p[0];
 					t=b=nData->p[1];
@@ -819,12 +820,12 @@ void        Path::FastBBox(double &l,double &t,double &r,double &b)
 					if ( nData->p[1] < t ) t=nData->p[1];
 					if ( nData->p[1] > b ) b=nData->p[1];
 				}
-				NR::Point np=nData->p-nData->enD;
+				NR::Point np=nData->p-nData->end;
 				if ( np[0] < l ) l=np[0];
 				if ( np[0] > r ) r=np[0];
 				if ( np[1] < t ) t=np[1];
 				if ( np[1] > b ) b=np[1];
-				np=lastP+nData->stD;
+				np=lastP+nData->start;
 				if ( np[0] < l ) l=np[0];
 				if ( np[0] > r ) r=np[0];
 				if ( np[1] < t ) t=np[1];
@@ -834,7 +835,7 @@ void        Path::FastBBox(double &l,double &t,double &r,double &b)
         break;
       case descr_bezierto:
       {
-        path_descr_bezierto *nData = dynamic_cast<path_descr_bezierto *>(descr_cmd[i]);
+        PathDescrBezierTo *nData = dynamic_cast<PathDescrBezierTo *>(descr_cmd[i]);
 				if ( empty ) {
 					l=r=nData->p[0];
 					t=b=nData->p[1];
@@ -850,7 +851,7 @@ void        Path::FastBBox(double &l,double &t,double &r,double &b)
         break;
       case descr_interm_bezier:
       {
-        path_descr_intermbezierto *nData = dynamic_cast<path_descr_intermbezierto *>(descr_cmd[i]);
+        PathDescrIntermBezierTo *nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[i]);
 				if ( empty ) {
 					l=r=nData->p[0];
 					t=b=nData->p[1];
@@ -878,94 +879,3 @@ char *Path::svg_dump_path() const
   
     return g_strdup (os.str().c_str());
 }
-
-Path::path_descr *Path::path_descr_moveto::clone() const
-{
-    return new path_descr_moveto(*this);
-}
-
-void Path::path_descr_moveto::dumpSVG(Inkscape::SVGOStringStream& s, NR::Point const &last) const
-{
-    s << "M " << p[0] << " " << p[1] << " ";
-}
-
-void Path::path_descr_lineto::dumpSVG(Inkscape::SVGOStringStream& s, NR::Point const &last) const
-{
-    s << "L " << p[0] << " " << p[1] << " ";
-}
-
-Path::path_descr *Path::path_descr_lineto::clone() const
-{
-    return new path_descr_lineto(*this);
-}
-
-Path::path_descr *Path::path_descr_bezierto::clone() const
-{
-    return new path_descr_bezierto(*this);
-}
-
-Path::path_descr *Path::path_descr_intermbezierto::clone() const
-{
-    return new path_descr_intermbezierto(*this);
-}
-
-void Path::path_descr_cubicto::dumpSVG(Inkscape::SVGOStringStream& s, NR::Point const &last) const
-{
-    s << "C "
-      << last[NR::X] + stD[0] / 3 << " "
-      << last[NR::Y] + stD[1] / 3 << " "
-      << p[0] - enD[0] / 3 << " "
-      << p[1] - enD[1] / 3 << " "
-      << p[0] << " "
-      << p[1] << " ";
-}
-
-Path::path_descr *Path::path_descr_cubicto::clone() const
-{
-    return new path_descr_cubicto(*this);
-}
-
-void Path::path_descr_arcto::dumpSVG(Inkscape::SVGOStringStream& s, NR::Point const &last) const
-{
-    s << "A "
-      << rx << " "
-      << ry << " "
-      << angle << " "
-      << (large ? "1" : "0") << " "
-      << (clockwise ? "0" : "1") << " "
-      << p[NR::X] << " "
-      << p[NR::Y] << " ";
-}
-
-Path::path_descr *Path::path_descr_arcto::clone() const
-{
-    return new path_descr_arcto(*this);
-}
-
-
-Path::path_descr *Path::path_descr_forced::clone() const
-{
-    return new path_descr_forced(*this);
-}
-
-void Path::path_descr_close::dumpSVG(Inkscape::SVGOStringStream& s, NR::Point const &last) const
-{
-    s << "z ";
-}
-
-Path::path_descr *Path::path_descr_close::clone() const
-{
-    return new path_descr_close(*this);
-}
-
-
-/*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
-  indent-tabs-mode:nil
-  fill-column:99
-  End:
-*/
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
