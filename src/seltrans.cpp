@@ -106,8 +106,7 @@ sp_sel_trans_init (SPSelTrans * seltrans, SPDesktop * desktop)
 
 	sp_sel_trans_update_volatile_state (seltrans);
 	
-	seltrans->center.x = (seltrans->box.x0 + seltrans->box.x1) / 2;
-	seltrans->center.y = (seltrans->box.y0 + seltrans->box.y1) / 2;
+	seltrans->center = seltrans->box.centre();
 
 	sp_sel_trans_update_handles (seltrans);
 
@@ -141,15 +140,11 @@ sp_sel_trans_init (SPSelTrans * seltrans, SPDesktop * desktop)
 		NULL);
 	sp_canvas_item_hide (seltrans->grip);
 	sp_canvas_item_hide (seltrans->norm);
-
-	seltrans->l1 = sp_canvas_item_new (SP_DT_CONTROLS (desktop), SP_TYPE_CTRLLINE, NULL);
-	sp_canvas_item_hide (seltrans->l1);
-	seltrans->l2 = sp_canvas_item_new (SP_DT_CONTROLS (desktop), SP_TYPE_CTRLLINE, NULL);
-	sp_canvas_item_hide (seltrans->l2);
-	seltrans->l3 = sp_canvas_item_new (SP_DT_CONTROLS (desktop), SP_TYPE_CTRLLINE, NULL);
-	sp_canvas_item_hide (seltrans->l3);
-	seltrans->l4 = sp_canvas_item_new (SP_DT_CONTROLS (desktop), SP_TYPE_CTRLLINE, NULL);
-	sp_canvas_item_hide (seltrans->l4);
+	
+	for(int i = 0;  i < 4; i++) {
+		seltrans->l[i] = sp_canvas_item_new (SP_DT_CONTROLS (desktop), SP_TYPE_CTRLLINE, NULL);
+		sp_canvas_item_hide (seltrans->l[i]);
+	}
 
 	seltrans->stamp_cache = NULL;
 }
@@ -180,21 +175,11 @@ sp_sel_trans_shutdown (SPSelTrans *seltrans)
 		gtk_object_destroy (GTK_OBJECT (seltrans->grip));
 		seltrans->grip = NULL;
 	}
-	if (seltrans->l1) {
-		gtk_object_destroy (GTK_OBJECT (seltrans->l1));
-		seltrans->l1 = NULL;
-	}
-	if (seltrans->l2) {
-		gtk_object_destroy (GTK_OBJECT (seltrans->l2));
-		seltrans->l2 = NULL;
-	}
-	if (seltrans->l3) {
-		gtk_object_destroy (GTK_OBJECT (seltrans->l3));
-		seltrans->l3 = NULL;
-	}
-	if (seltrans->l4) {
-		gtk_object_destroy (GTK_OBJECT (seltrans->l4));
-		seltrans->l4 = NULL;
+	for(int i = 0; i < 4; i++) {
+		if (seltrans->l[i]) {
+			gtk_object_destroy (GTK_OBJECT (seltrans->l[i]));
+			seltrans->l[i] = NULL;
+		}
 	}
 
 	if (seltrans->selection) {
@@ -269,15 +254,14 @@ sp_sel_trans_grab (SPSelTrans * seltrans, NRPoint *p, gdouble x, gdouble y, gboo
 		n += 1;
 	}
 
-	nr_matrix_set_identity (&seltrans->current);
+	seltrans->current.set_identity();
 
 	seltrans->point.x = p->x;
 	seltrans->point.y = p->y;
 
 	seltrans->spp_length = sp_selection_snappoints (selection, seltrans->spp, SP_SELTRANS_SPP_SIZE);
 
-	seltrans->opposit.x = seltrans->box.x0 + (1 - x) * fabs (seltrans->box.x1 - seltrans->box.x0);
-	seltrans->opposit.y = seltrans->box.y0 + (1 - y) * fabs (seltrans->box.y1 - seltrans->box.y0);
+	seltrans->opposit = seltrans->box.topleft() + NR::scale(NR::Point(1-x, 1-y)) * (seltrans->box.dimensions());
 
 	if ((x != -1) && (y != -1)) {
 		sp_canvas_item_show (seltrans->norm);
@@ -285,10 +269,8 @@ sp_sel_trans_grab (SPSelTrans * seltrans, NRPoint *p, gdouble x, gdouble y, gboo
 	}
 
 	if (seltrans->show == SP_SELTRANS_SHOW_OUTLINE) {
-		sp_canvas_item_show (seltrans->l1);
-		sp_canvas_item_show (seltrans->l2);
-		sp_canvas_item_show (seltrans->l3);
-		sp_canvas_item_show (seltrans->l4);
+		for(int i = 0; i < 4; i++)
+			sp_canvas_item_show (seltrans->l[i]);
 	}
 
 
@@ -297,55 +279,47 @@ sp_sel_trans_grab (SPSelTrans * seltrans, NRPoint *p, gdouble x, gdouble y, gboo
 }
 
 void
-sp_sel_trans_transform (SPSelTrans * seltrans, NRMatrix *affine, NRPoint *norm)
+sp_sel_trans_transform (SPSelTrans * seltrans, NR::Matrix& affine, NR::Point& norm)
 {
-	NRMatrix n2p, p2n;
-
 	g_return_if_fail (seltrans->grabbed);
 	g_return_if_fail (!seltrans->empty);
 
-	nr_matrix_set_translate (&n2p, norm->x, norm->y);
-	nr_matrix_set_translate (&p2n, -norm->x, -norm->y);
-	nr_matrix_multiply (affine, &p2n, affine);
-	nr_matrix_multiply (affine, affine, &n2p);
+	NR::Matrix n2p = NR::translate(norm);
+	NR::Matrix p2n = NR::translate(-norm);
+	affine = (p2n * affine) * n2p;
 
 	if (seltrans->show == SP_SELTRANS_SHOW_CONTENT) {
 	        // update the content
-		int i;
-		for (i = 0; i < seltrans->nitems; i++) {
-			NRMatrix i2dnew;
-			nr_matrix_multiply (&i2dnew, &seltrans->transforms[i], affine);
-			sp_item_set_i2d_affine (seltrans->items[i], &i2dnew);
+		for (int i = 0; i < seltrans->nitems; i++) {
+			sp_item_set_i2d_affine (seltrans->items[i], 
+						NR::Matrix(&seltrans->transforms[i]) * affine);
 		}
 	} else {
-		NRPoint p[4];
+		NR::Point p[4];
         	/* update the outline */
-		p[0].x = NR_MATRIX_DF_TRANSFORM_X (affine, seltrans->box.x0, seltrans->box.y0);
-		p[0].y = NR_MATRIX_DF_TRANSFORM_Y (affine, seltrans->box.x0, seltrans->box.y0);
-		p[1].x = NR_MATRIX_DF_TRANSFORM_X (affine, seltrans->box.x1, seltrans->box.y0);
-		p[1].y = NR_MATRIX_DF_TRANSFORM_Y (affine, seltrans->box.x1, seltrans->box.y0);
-		p[2].x = NR_MATRIX_DF_TRANSFORM_X (affine, seltrans->box.x1, seltrans->box.y1);
-		p[2].y = NR_MATRIX_DF_TRANSFORM_Y (affine, seltrans->box.x1, seltrans->box.y1);
-		p[3].x = NR_MATRIX_DF_TRANSFORM_X (affine, seltrans->box.x0, seltrans->box.y1);
-		p[3].y = NR_MATRIX_DF_TRANSFORM_Y (affine, seltrans->box.x0, seltrans->box.y1);
-		sp_ctrlline_set_coords (SP_CTRLLINE (seltrans->l1), p[0].x, p[0].y, p[1].x, p[1].y);
-		sp_ctrlline_set_coords (SP_CTRLLINE (seltrans->l2), p[1].x, p[1].y, p[2].x, p[2].y);
-		sp_ctrlline_set_coords (SP_CTRLLINE (seltrans->l3), p[2].x, p[2].y, p[3].x, p[3].y);
-		sp_ctrlline_set_coords (SP_CTRLLINE (seltrans->l4), p[3].x, p[3].y, p[0].x, p[0].y);
+		for(int i = 0; i < 4; i++)
+			p[i] = affine * seltrans->box.corner(i);
+		for(int i = 0; i < 4; i++)
+			sp_ctrlline_set_coords (SP_CTRLLINE (seltrans->l[i]), 
+						p[i], p[(i+1)%4]);
 	}
 
-	
-	seltrans->current = *affine;
+	seltrans->current = affine;
 
 	seltrans->changed = TRUE;
 
 	sp_sel_trans_update_handles (seltrans);
 }
 void
-sp_sel_trans_transform (SPSelTrans * seltrans, const NR::Matrix& affine, NR::Point& norm) {
-	NRPoint n = norm;
-	sp_sel_trans_transform (seltrans, affine, &n);
-	norm = n;
+sp_sel_trans_transform (SPSelTrans * seltrans, NRMatrix* affine, NRPoint* norm) {
+	NR::Point n = *norm;
+	NR::Matrix a;
+	for(int i = 0; i < 6; i++)
+		a.c[i] = affine->c[i];
+	sp_sel_trans_transform (seltrans, a, n);
+	for(int i = 0; i < 6; i++)
+		affine->c[i] = a.c[i];
+	*norm = n;
 }
 
 void
@@ -371,7 +345,7 @@ sp_sel_trans_ungrab (SPSelTrans * seltrans)
 			if (seltrans->show == SP_SELTRANS_SHOW_OUTLINE) {
 				NRMatrix i2d, i2dnew;
 				sp_item_i2d_affine (item, &i2d);
-				nr_matrix_multiply (&i2dnew, &i2d, &seltrans->current);
+				nr_matrix_multiply (&i2dnew, &i2d, seltrans->current);
 				sp_item_set_i2d_affine (item, &i2dnew);
 			}
 			if (seltrans->transform == SP_SELTRANS_TRANSFORM_OPTIMIZE) {
@@ -390,8 +364,7 @@ sp_sel_trans_ungrab (SPSelTrans * seltrans)
 			l = l->next;
 		}
 		p = seltrans->center;
-		seltrans->center.x = NR_MATRIX_DF_TRANSFORM_X (&seltrans->current, p.x, p.y);
-		seltrans->center.y = NR_MATRIX_DF_TRANSFORM_Y (&seltrans->current, p.x, p.y);
+		seltrans->center = seltrans->current * p;
 		
 		sp_document_done (SP_DT_DOCUMENT (seltrans->desktop));
 		sp_selection_changed (SP_DT_SELECTION (seltrans->desktop));
@@ -418,10 +391,8 @@ sp_sel_trans_ungrab (SPSelTrans * seltrans)
 	sp_canvas_item_hide (seltrans->grip);
 
         if (seltrans->show == SP_SELTRANS_SHOW_OUTLINE) {
-		sp_canvas_item_hide (seltrans->l1);
-		sp_canvas_item_hide (seltrans->l2);
-		sp_canvas_item_hide (seltrans->l3);
-		sp_canvas_item_hide (seltrans->l4);
+		for(int i = 0; i < 4; i++)
+			sp_canvas_item_hide (seltrans->l[i]);
 	}
 
 	sp_sel_trans_update_volatile_state (seltrans);
@@ -477,7 +448,7 @@ sp_sel_trans_stamp (SPSelTrans * seltrans)
 			
 			if (seltrans->show == SP_SELTRANS_SHOW_OUTLINE) {
 				sp_item_i2d_affine (original_item, &i2d);
-				nr_matrix_multiply (&i2dnew, &i2d, &seltrans->current);
+				nr_matrix_multiply (&i2dnew, &i2d, seltrans->current);
 				sp_item_set_i2d_affine (copy_item, &i2dnew);
 				new_affine = &copy_item->transform;
 			} else {
@@ -590,17 +561,14 @@ sp_sel_trans_update_volatile_state (SPSelTrans * seltrans)
 	if (seltrans->empty) return;
 
 	sp_selection_bbox (SP_DT_SELECTION (seltrans->desktop), &b);
-	seltrans->box.x0 = b.x0;
-	seltrans->box.y0 = b.y0;
-	seltrans->box.x1 = b.x1;
-	seltrans->box.y1 = b.y1;
+	seltrans->box = b;
 
-	if ((seltrans->box.x0 > seltrans->box.x1) || (seltrans->box.y0 > seltrans->box.y1)) {
+	if (seltrans->box.empty()) {
 		seltrans->empty = TRUE;
 		return;
 	}
 
-	nr_matrix_set_identity (&seltrans->current);
+	seltrans->current.set_identity();
 }
 
 static void
@@ -652,8 +620,7 @@ sp_show_handles (SPSelTrans * seltrans, SPKnot * knot[], const SPSelTransHandle 
 		}
 		sp_knot_show (knot[i]);
 
-		p.x = seltrans->box.x0 + handle[i].x * fabs (seltrans->box.x1 - seltrans->box.x0);
-		p.y = seltrans->box.y0 + handle[i].y * fabs (seltrans->box.y1 - seltrans->box.y0);
+		p = seltrans->box.topleft() + NR::scale(NR::Point(handle[i].x, handle[i].y)) * (seltrans->box.dimensions());
 
 		//gtk_signal_handler_block_by_func (GTK_OBJECT (knot[i]),
 		//				  GTK_SIGNAL_FUNC (sp_sel_trans_handle_new_event), &handle[i]);
@@ -786,8 +753,7 @@ sp_sel_trans_sel_changed (SPSelection * selection, gpointer data)
 
 	if (!seltrans->grabbed) {
 		sp_sel_trans_update_volatile_state (seltrans);
-		seltrans->center.x = (seltrans->box.x0 + seltrans->box.x1) / 2;
-		seltrans->center.y = (seltrans->box.y0 + seltrans->box.y1) / 2;
+		seltrans->center = seltrans->box.centre();
 		sp_sel_trans_update_handles (seltrans);
 	}
 
@@ -802,8 +768,7 @@ sp_sel_trans_sel_modified (SPSelection *selection, guint flags, gpointer data)
 
 	if (!seltrans->grabbed) {
 		sp_sel_trans_update_volatile_state (seltrans);
-		seltrans->center.x = (seltrans->box.x0 + seltrans->box.x1) / 2;
-		seltrans->center.y = (seltrans->box.y0 + seltrans->box.y1) / 2;
+		seltrans->center = seltrans->box.centre();
 		sp_sel_trans_update_handles (seltrans);
 	}
 
@@ -1081,8 +1046,7 @@ sp_sel_trans_center_request (SPSelTrans * seltrans, SPSelTransHandle * handle, N
 	}
 
 	if (state & GDK_SHIFT_MASK) {
-		  pp.x = (seltrans->box.x0 + seltrans->box.x1) / 2;
-		  pp.y = (seltrans->box.y0 + seltrans->box.y1) / 2;
+		pp = seltrans->box.centre();
 	}
 
 	// status text

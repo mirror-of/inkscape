@@ -26,6 +26,10 @@ typedef double Coord;
 /** an integer type with sufficient precision for coordinates */
 typedef gint32 ICoord;
 
+class Point;
+class Rect;
+class Matrix;
+
 } /* namespace NR */
 
 struct NRMatrix {
@@ -37,6 +41,22 @@ struct NRPoint {
 };
 
 #define NR_POINT_DF_TEST_CLOSE(a,b,e) (NR_DF_TEST_CLOSE ((a)->x, (b)->x, e) && NR_DF_TEST_CLOSE ((a)->y, (b)->y, e))
+
+struct NRRect {
+	NR::Coord x0, y0, x1, y1;
+};
+
+inline bool empty(const NRRect &r) {
+	return ( r.x0 > r.x1 ) || ( r.y0 > r.y1 );
+}
+
+struct NRPointL {
+	NR::ICoord x, y;
+};
+
+struct NRRectL {
+	NR::ICoord x0, y0, x1, y1;
+};
 
 namespace NR {
 
@@ -226,6 +246,10 @@ Point abs(Point const &b);
  * points).  Infinities are allowed.*/
 class Rect {
 public:
+	Rect() {}
+	Rect(NRRect& r) : _min(r.x0, r.y0), _max(r.x1, r.y1) {}
+	Rect(Rect& r) : _min(r._min), _max(r._max) {}
+	
 	const Point &topleft() const { return _min; }
 	Point topright() const { return Point(_max[X], _min[Y]); }
 	Point bottomleft() const { return Point(_min[X], _max[Y]); }
@@ -262,21 +286,5 @@ private:
 };
 
 } /* namespace NR */
-
-struct NRRect {
-	NR::Coord x0, y0, x1, y1;
-};
-
-inline bool empty(const NRRect &r) {
-	return ( r.x0 > r.x1 ) || ( r.y0 > r.y1 );
-}
-
-struct NRPointL {
-	NR::ICoord x, y;
-};
-
-struct NRRectL {
-	NR::ICoord x0, y0, x1, y1;
-};
 
 #endif

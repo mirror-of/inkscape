@@ -13,6 +13,7 @@
  */
 
 #include <libnr/nr-types.h>
+#include <libnr/nr-matrix.h>
 #include "knot.h"
 #include "desktop-handles.h"
 
@@ -55,8 +56,8 @@ struct _SPSelTrans {
 	NRPoint *spp;
 	int spp_length;
 
-	NRRect box;
-        NRMatrix current;
+	NR::Rect box;
+        NR::Matrix current;
         NRPoint opposit;
         NRPoint origin;
 	NRPoint point;
@@ -66,7 +67,7 @@ struct _SPSelTrans {
 	SPKnot *chandle;
         SPCanvasItem *norm;
         SPCanvasItem *grip;
-        SPCanvasItem *l1, *l2, *l3, *l4;
+        SPCanvasItem *l[4];
 	guint sel_changed_id;
 	guint sel_modified_id;
 	GSList *stamp_cache;

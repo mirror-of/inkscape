@@ -150,6 +150,9 @@ inline Point operator*(const NRMatrix& nrm, const Point &p) {
 		      NR_MATRIX_DF_TRANSFORM_Y(&nrm, p[X], p[Y]));
 }
 
+/** find the smallest rectangle that contains the transformed Rect r. */
+Rect operator*(const Matrix& nrm, const Rect &r);
+
 };
 
 #endif

@@ -698,6 +698,12 @@ sp_knot_set_position (SPKnot * knot, NRPoint * p, guint state)
 		       state);
 }
 
+void
+sp_knot_set_position (SPKnot * knot, NR::Point const pp, guint state) {
+	NRPoint p = pp;
+	sp_knot_set_position(knot, &p, state);
+}
+
 NRPoint *
 sp_knot_position (SPKnot * knot, NRPoint * p)
 {
@@ -709,6 +715,14 @@ sp_knot_position (SPKnot * knot, NRPoint * p)
 	p->y = knot->y;
 
 	return p;
+}
+
+NR::Point sp_knot_position (SPKnot const * knot)
+{
+	g_assert(knot != NULL);
+	g_assert(SP_IS_KNOT (knot));
+
+	return NR::Point(knot->x, knot->y);
 }
 
 static void

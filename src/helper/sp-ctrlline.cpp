@@ -217,3 +217,9 @@ sp_ctrlline_set_coords (SPCtrlLine *cl, gdouble x0, gdouble y0, gdouble x1, gdou
 		sp_canvas_item_request_update (SP_CANVAS_ITEM (cl));
 	}
 }
+
+void
+sp_ctrlline_set_coords (SPCtrlLine *cl, const NR::Point start, const NR::Point end)
+{
+	sp_ctrlline_set_coords(cl, start[0], start[1], end[0], end[1]);
+}
