@@ -317,6 +317,7 @@ sp_text_context_setup_text (SPTextContext *tc)
 
 	/* Create <tspan> */
 	SPRepr *rtspan = sp_repr_new ("tspan");
+	sp_repr_set_attr (rtspan, "sodipodi:role", "line"); // otherwise, why bother creating the tspan?
 	sp_repr_add_child (rtext, rtspan, NULL);
 	sp_repr_unref (rtspan);
 
