@@ -1,3 +1,8 @@
+2004-02-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/desktop.h (sp_desktop_set_coordinate_status):
+	Add NR::Point version.
+
 2004-02-09  bulia byak <bulia@users.sourceforge.net>
 
     * doc/keys.xml doc/keys-svg.xsl: Keys and Mouse Reference: source, SVG stylesheet
