@@ -543,7 +543,9 @@ sp_repr_lookup_child (SPRepr       *repr,
     return NULL;
 }
 
-/* Convenience */
+/**
+Parses the boolean value of an attribute "key" in repr and sets val accordingly, or to FALSE if the attr is not set. Returns TRUE if the attr was set, FALSE otherwise.
+ */
 unsigned int
 sp_repr_get_boolean (SPRepr *repr, const gchar *key, unsigned int *val)
 {
@@ -565,9 +567,10 @@ sp_repr_get_boolean (SPRepr *repr, const gchar *key, unsigned int *val)
             *val = FALSE;
         }
         return TRUE;
+    } else {
+        *val = FALSE;
+        return FALSE;
     }
-
-    return FALSE;
 }
 
 unsigned int
