@@ -478,13 +478,6 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
           delete thePath;*/
 #endif
 				} else {
-#ifdef  test_rf_liv
-          NRSVL *svl;
-          
-          svl = nr_svl_from_art_bpath (gbp.path, &a, NR_WIND_RULE_NONZERO, TRUE, 0.25);
-          svp = nr_svp_from_svl (svl, NULL);
-          nr_svl_free_list (svl);
-#endif
 					NRPixBlock spb;
 					slot->glyph.ig.bbox.x0 = MAX (x0, -32768);
 					slot->glyph.ig.bbox.y0 = MAX (y0, -32768);
@@ -492,15 +485,42 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 					slot->glyph.ig.bbox.y1 = MIN (y1, 32767);
 					slot->glyph.ig.px = nr_new (unsigned char, w * h);
 					nr_pixblock_setup_extern (&spb, NR_PIXBLOCK_MODE_A8,
-								  NRRF_COORD_INT_LOWER (x0),
-								  NRRF_COORD_INT_LOWER (y0),
-								  NRRF_COORD_INT_UPPER (x1),
-								  NRRF_COORD_INT_UPPER (y1),
-								  slot->glyph.ig.px, w,
-								  TRUE, TRUE);
+                                    NRRF_COORD_INT_LOWER (x0),
+                                    NRRF_COORD_INT_LOWER (y0),
+                                    NRRF_COORD_INT_UPPER (x1),
+                                    NRRF_COORD_INT_UPPER (y1),
+                                    slot->glyph.ig.px, w,
+                                    TRUE, TRUE);
+
+#ifdef  test_rf_liv
+          Path*  thePath=new Path;
+          Shape* theShape=new Shape;
+          {
+            NR::Matrix   tempMat(&a);
+            thePath->LoadArtBPath(gbp.path,tempMat,true);
+          }
+          thePath->Convert(0.25);
+          thePath->Fill(theShape,0);
+          
+          Shape* temp=new Shape;
+          temp->ConvertToShape(theShape,fill_nonZero);
+          delete theShape;
+          delete thePath;
+          
+          nrrf_pixblock_render_shape_mask_or (spb, temp);
+
+          delete temp;
+#else
+          NRSVL *svl;
+          
+          svl = nr_svl_from_art_bpath (gbp.path, &a, NR_WIND_RULE_NONZERO, TRUE, 0.25);
+          svp = nr_svp_from_svl (svl, NULL);
+          nr_svl_free_list (svl);
 					nr_pixblock_render_svp_mask_or (&spb, svp);
-					nr_pixblock_release (&spb);
 					nr_svp_free (svp);
+#endif
+          
+					nr_pixblock_release (&spb);
 					slot->type = NRRF_TYPE_IMAGE;
 				}
 			}
