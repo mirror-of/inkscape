@@ -420,8 +420,11 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 if (sc->dragging) {
                     /* User has dragged fast, so we get events on root (lauris)*/
                     // not only that; we will end up here when ctrl-dragging as well
+                    // and also when we started within tolerance, but trespassed tolerance outside of item
                     sp_rubberband_stop();
                     item_at_point = sp_desktop_item_at_point(desktop, NR::Point(event->button.x, event->button.y), FALSE);
+                    if (!item_at_point) // if no item at this point, try at the click point (bug 1012200)
+                        item_at_point = sp_desktop_item_at_point(desktop, NR::Point(xp, yp), FALSE);
                     if (item_at_point || sc->moved) { // drag only if starting from a point, or if something is already grabbed
                         if (!sc->moved) {
                             item_in_group = sp_desktop_item_at_point(desktop, NR::Point(event->button.x, event->button.y), TRUE);
