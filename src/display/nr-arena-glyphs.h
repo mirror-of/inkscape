@@ -17,8 +17,7 @@
 #define NR_ARENA_GLYPHS(obj) (NR_CHECK_INSTANCE_CAST ((obj), NR_TYPE_ARENA_GLYPHS, NRArenaGlyphs))
 #define NR_IS_ARENA_GLYPHS(obj) (NR_CHECK_INSTANCE_TYPE ((obj), NR_TYPE_ARENA_GLYPHS))
 
-#include <libnrtype/FontInstance.h>
-#include <libnrtype/RasterFont.h>
+#include <libnrtype/nrtype-forward.h>
 
 #include <display/curve.h>
 #include <forward.h>
