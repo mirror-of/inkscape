@@ -35,8 +35,6 @@ namespace UI {
 namespace Dialogs {
 
 LayerPropertiesDialog::LayerPropertiesDialog()
-    : _button_apply(Gtk::Stock::APPLY),
-      _button_close(Gtk::Stock::CLOSE)
 {
     GtkWidget *dlg = GTK_WIDGET(gobj());
     g_assert(dlg);
@@ -59,19 +57,15 @@ LayerPropertiesDialog::LayerPropertiesDialog()
     mainVBox->pack_start(_layer_name_hbox, false, false, 4);
 
     // Buttons
-    _button_apply.signal_clicked()
+    add_button(Gtk::Stock::APPLY, Gtk::RESPONSE_APPLY)
+        ->signal_clicked()
         .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::apply));
-    _button_close.signal_clicked()
+    add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE)
+        ->signal_clicked()
         .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::close));
-    add_action_widget(_button_apply, Gtk::RESPONSE_APPLY);
-    add_action_widget(_button_close, Gtk::RESPONSE_CLOSE);
 
-    // TODO:  This gives an error...
-//    set_default_response(Gtk::RESPONSE_APPLY);
-
-    g_warning("Transientizing");
+    set_default_response(Gtk::RESPONSE_APPLY);
     sp_transientize(dlg);
-
     show_all_children();
 }
 
@@ -107,10 +101,10 @@ LayerPropertiesDialog::update()
     if (name != NULL) {
         // update based on the currently selected layer
         _layer_name_entry.set_text(name);
-        _button_apply.set_sensitive( true );
+//        _button_apply.set_sensitive( true );
     } else {
         _layer_name_entry.set_text("");
-        _button_apply.set_sensitive( false );
+//        _button_apply.set_sensitive( false );
     }
 }
 

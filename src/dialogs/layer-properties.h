@@ -44,8 +44,6 @@ class LayerPropertiesDialog : public Gtk::Dialog {
     Gtk::HBox         _layer_name_hbox;
     Gtk::Label        _layer_name_label;
     Gtk::Entry        _layer_name_entry;
-    Gtk::Button       _button_apply;
-    Gtk::Button       _button_close;
 
     void apply();
     void close();
