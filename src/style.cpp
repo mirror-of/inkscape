@@ -578,7 +578,7 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 	case SP_PROP_LETTER_SPACING:
 		if (!style->text_private) sp_style_privatize_text (style);
 		sp_style_read_ilength (&style->text->letterspacing, val);
-		style->text->letterspacing_set = TRUE;
+		style->text->letterspacing.set = TRUE;
 		break;
 		break;
 	case SP_PROP_TEXT_DECORATION:
@@ -1071,7 +1071,7 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
 			g_free (style->text->font_family.value);
 			style->text->font_family.value = g_strdup (parent->text->font_family.value);
 		}
-		if (!style->text->letterspacing_set || style->text->letterspacing.inherit) {
+		if (!style->text->letterspacing.set || style->text->letterspacing.inherit) {
 			style->text->letterspacing.value = parent->text->letterspacing.value;
 			style->text->letterspacing.computed = parent->text->letterspacing.computed;
 			style->text->letterspacing.unit = parent->text->letterspacing.unit;
@@ -1339,7 +1339,7 @@ sp_style_clear (SPStyle *style)
 
 	style->text->letterspacing.value = 0.0;
 	style->text->letterspacing.computed = 0.0;
-	style->text->letterspacing_set = FALSE;
+	style->text->letterspacing.set = FALSE;
 
 	style->font_size.set = FALSE;
 	style->font_size.type = SP_FONT_SIZE_LITERAL;
@@ -1541,6 +1541,9 @@ sp_text_style_write (gchar *p, guint len, SPTextStyle *st)
 
 	if (st->font_family.set) {
 		d += sp_style_write_istring (p + d, len - d, "font-family", &st->font_family, NULL, SP_STYLE_FLAG_IFSET);
+	}
+	if (st->letterspacing.set) {
+		d += sp_style_write_ilength (p + d, len - d, "letter-spacing", &st->letterspacing, NULL, SP_STYLE_FLAG_IFSET);
 	}
 
 	return d;
