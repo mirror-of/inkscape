@@ -15,7 +15,7 @@ OBJEXT="@OBJEXT@"
 config_h_dir=..
 
 check_compile () {
-	(echo "#include <$1>"; echo "int header_tst_dummy;") > header-tst.cpp
+	(echo "#include <config.h>"; echo "#include <$1>"; echo "int header_tst_dummy;") > header-tst.cpp
 	$CXX -c -I. -I"$srcdir" -I$config_h_dir $INKSCAPE_CFLAGS header-tst.cpp
 }
 
