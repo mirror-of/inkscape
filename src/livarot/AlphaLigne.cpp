@@ -27,7 +27,7 @@ AlphaLigne::AlphaLigne(int iMin,int iMax)
 }
 AlphaLigne::~AlphaLigne(void)
 {
-	if ( steps ) g_free(steps);
+	g_free(steps);
 	steps=NULL;
 	nbStep=maxStep=0;
 }

@@ -37,18 +37,12 @@ Path::Path (void)
 
 Path::~Path (void)
 {
-	if (descr_cmd) {
-		g_free(descr_cmd);
-		descr_cmd = NULL;
-	}
-	if (descr_data) {
-		g_free(descr_data);
-		descr_data = NULL;
-	}
-	if (pts) {
-		g_free(pts);
-		pts = NULL;
-	}
+	g_free(descr_cmd);
+	descr_cmd = NULL;
+	g_free(descr_data);
+	descr_data = NULL;
+	g_free(pts);
+	pts = NULL;
 	ddata_max = ddata_nb = 0;
 	descr_max = descr_nb = 0;
 	nbPt = maxPt = sizePt = 0;

@@ -90,10 +90,8 @@ SweepEvent::CreateQueue (SweepEventQueue & queue, int size)
 void
 SweepEvent::DestroyQueue (SweepEventQueue & queue)
 {
-  if (queue.events)
-    g_free(queue.events);
-  if (queue.inds)
-    g_free(queue.inds);
+  g_free(queue.events);
+  g_free(queue.inds);
   queue.nbEvt = queue.maxEvt = 0;
   queue.inds = NULL;
   queue.events = NULL;
@@ -388,8 +386,7 @@ SweepTree::CreateList (SweepTreeList & list, int size)
 void
 SweepTree::DestroyList (SweepTreeList & list)
 {
-  if (list.trees)
-    g_free(list.trees);
+  g_free(list.trees);
   list.trees = NULL;
   list.nbTree = list.maxTree = 0;
   list.racine = NULL;

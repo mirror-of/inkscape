@@ -343,12 +343,12 @@ Path::DoSimplify (double treshhold,int /*recLevel*/)
   
   if (NR::LInfty (endToPt - moveToPt) < 0.00001) Close ();
   
-  if ( data.Xk ) g_free(data.Xk);
-  if ( data.Yk ) g_free(data.Yk);
-  if ( data.Qk ) g_free(data.Qk);
-  if ( data.tk ) g_free(data.tk);
-  if ( data.lk ) g_free(data.lk);
-  if ( data.fk ) g_free(data.fk);
+  g_free(data.Xk);
+  g_free(data.Yk);
+  g_free(data.Qk);
+  g_free(data.tk);
+  g_free(data.lk);
+  g_free(data.fk);
   pts = savPts;
   nbPt = savNbPt;
 #endif

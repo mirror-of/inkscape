@@ -51,24 +51,15 @@ Shape::~Shape (void)
 {
   nbPt = maxPt = 0;
   nbAr = maxAr = 0;
-  if (eData)
-    g_free(eData);
-  if (ebData)
-    g_free(ebData);
-  if (swsData)
-    g_free(swsData);
-  if (swdData)
-    g_free(swdData);
-  if (swrData)
-    g_free(swrData);
-  if (qrsData)
-    g_free(qrsData);
-  if (pData)
-    g_free(pData);
-  if (vorpData)
-    g_free(vorpData);
-  if (voreData)
-    g_free(voreData);
+  g_free(eData);
+  g_free(ebData);
+  g_free(swsData);
+  g_free(swdData);
+  g_free(swrData);
+  g_free(qrsData);
+  g_free(pData);
+  g_free(vorpData);
+  g_free(voreData);
 }
 
 void Shape::Affiche(void)
@@ -90,8 +81,7 @@ Shape::MakePointData (bool nVal)
       if (_has_points_data == false)
 	{
 	  _has_points_data = true;
-	  if (pData)
-	    g_free(pData);
+	  g_free(pData);
 	  pData = (point_data *) g_malloc(maxPt * sizeof (point_data));
 	}
     }
@@ -100,11 +90,8 @@ Shape::MakePointData (bool nVal)
       if (_has_points_data)
 	{
 	  _has_points_data = false;
-	  if (pData)
-	    {
-	      g_free(pData);
-	      pData = NULL;
-	    }
+	  g_free(pData);
+	  pData = NULL;
 	}
     }
 }
@@ -116,8 +103,7 @@ Shape::MakeEdgeData (bool nVal)
       if (_has_edges_data == false)
 	{
 	  _has_edges_data = true;
-	  if (eData)
-	    g_free(eData);
+	  g_free(eData);
 	  eData = (edge_data *) g_malloc(maxAr * sizeof (edge_data));
 	}
     }
@@ -126,11 +112,8 @@ Shape::MakeEdgeData (bool nVal)
       if (_has_edges_data)
 	{
 	  _has_edges_data = false;
-	  if (eData)
-	    {
-	      g_free(eData);
-	      eData = NULL;
-	    }
+	  g_free(eData);
+	  eData = NULL;
 	}
     }
 }
@@ -142,8 +125,7 @@ Shape::MakeRasterData (bool nVal)
       if (_has_raster_data == false)
 	{
 	  _has_raster_data = true;
-	  if (swrData)
-	    g_free(swrData);
+	  g_free(swrData);
 	  swrData = (raster_data *) g_malloc(maxAr * sizeof (raster_data));
 	}
     }
@@ -152,11 +134,8 @@ Shape::MakeRasterData (bool nVal)
       if (_has_raster_data)
 	{
 	  _has_raster_data = false;
-	  if (swrData)
-	    {
-	      g_free(swrData);
-	      swrData = NULL;
-	    }
+	  g_free(swrData);
+	  swrData = NULL;
 	}
     }
 }
@@ -168,8 +147,7 @@ Shape::MakeQuickRasterData (bool nVal)
       if (_has_quick_raster_data == false)
 	{
 	  _has_quick_raster_data = true;
-	  if (qrsData)
-	    g_free(qrsData);
+	  g_free(qrsData);
 	  qrsData =
 	    (quick_raster_data *) g_malloc(maxAr * sizeof (quick_raster_data));
 	}
@@ -179,14 +157,8 @@ Shape::MakeQuickRasterData (bool nVal)
       if (_has_quick_raster_data)
 	{
 	  _has_quick_raster_data = false;
-	  if (qrsData)
-	    {
-	      g_free(qrsData);
-	      qrsData = NULL;
-	    }
-	}
-      else
-	{
+	  g_free(qrsData);
+	  qrsData = NULL;
 	}
     }
 }
@@ -198,8 +170,7 @@ Shape::MakeSweepSrcData (bool nVal)
       if (_has_sweep_src_data == false)
 	{
 	  _has_sweep_src_data = true;
-	  if (swsData)
-	    g_free(swsData);
+	  g_free(swsData);
 	  swsData =
 	    (sweep_src_data *) g_malloc(maxAr * sizeof (sweep_src_data));
 	}
@@ -209,11 +180,8 @@ Shape::MakeSweepSrcData (bool nVal)
       if (_has_sweep_src_data)
 	{
 	  _has_sweep_src_data = false;
-	  if (swsData)
-	    {
-	      g_free(swsData);
-	      swsData = NULL;
-	    }
+	  g_free(swsData);
+	  swsData = NULL;
 	}
     }
 }
@@ -225,8 +193,7 @@ Shape::MakeSweepDestData (bool nVal)
       if (_has_sweep_dest_data == false)
 	{
 	  _has_sweep_dest_data = true;
-	  if (swdData)
-	    g_free(swdData);
+	  g_free(swdData);
 	  swdData =
 	    (sweep_dest_data *) g_malloc(maxAr * sizeof (sweep_dest_data));
 	}
@@ -236,11 +203,8 @@ Shape::MakeSweepDestData (bool nVal)
       if (_has_sweep_dest_data)
 	{
 	  _has_sweep_dest_data = false;
-	  if (swdData)
-	    {
-	      g_free(swdData);
-	      swdData = NULL;
-	    }
+	  g_free(swdData);
+	  swdData = NULL;
 	}
     }
 }
@@ -252,8 +216,7 @@ Shape::MakeBackData (bool nVal)
       if (_has_back_data == false)
 	{
 	  _has_back_data = true;
-	  if (ebData)
-	    g_free(ebData);
+	  g_free(ebData);
 	  ebData = (back_data *) g_malloc(maxAr * sizeof (back_data));
 	}
     }
@@ -262,11 +225,8 @@ Shape::MakeBackData (bool nVal)
       if (_has_back_data)
 	{
 	  _has_back_data = false;
-	  if (ebData)
-	    {
-	      g_free(ebData);
-	      ebData = NULL;
-	    }
+	  g_free(ebData);
+	  ebData = NULL;
 	}
     }
 }
@@ -278,10 +238,8 @@ Shape::MakeVoronoiData (bool nVal)
       if (_has_voronoi_data == false)
 	{
 	  _has_voronoi_data = true;
-	  if (vorpData)
-	    g_free(vorpData);
-	  if (voreData)
-	    g_free(voreData);
+	  g_free(vorpData);
+	  g_free(voreData);
 	  vorpData =
 	    (voronoi_point *) g_malloc(maxPt * sizeof (voronoi_point));
 	  voreData = (voronoi_edge *) g_malloc(maxAr * sizeof (voronoi_edge));
@@ -292,16 +250,10 @@ Shape::MakeVoronoiData (bool nVal)
       if (_has_voronoi_data)
 	{
 	  _has_voronoi_data = false;
-	  if (vorpData)
-	    {
-	      g_free(vorpData);
-	      vorpData = NULL;
-	    }
-	  if (voreData)
-	    {
-	      g_free(voreData);
-	      voreData = NULL;
-	    }
+	  g_free(vorpData);
+	  vorpData = NULL;
+	  g_free(voreData);
+	  voreData = NULL;
 	}
     }
 }
