@@ -558,7 +558,7 @@ GtkWidget* ColorNotebook::addPage(GType page_type, guint submode)
         int index = csel->base ? csel->base->getSubmode() : 0;
         const gchar* str = _(SP_COLOR_SELECTOR_GET_CLASS (csel)->name[index]);
 //         g_message( "Hitting up for tab for '%s'", str );
-		tab_label = gtk_label_new( str );
+		tab_label = gtk_label_new(_(str));
 		gtk_notebook_append_page( GTK_NOTEBOOK (_book), page, tab_label );
 		gtk_signal_connect (GTK_OBJECT (page), "grabbed", GTK_SIGNAL_FUNC (_entryGrabbed), _csel);
 		gtk_signal_connect (GTK_OBJECT (page), "dragged", GTK_SIGNAL_FUNC (_entryDragged), _csel);
