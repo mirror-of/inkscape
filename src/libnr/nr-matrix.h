@@ -10,9 +10,25 @@
  * This code is in public domain
  */
 
+#include <glib.h>
+
 #include <libnr/nr-macros.h>
 #include <libnr/nr-values.h>
-#include <libnr/nr-types.h>
+#include <libnr/nr-point.h>
+#include <libnr/nr-point-fns.h>
+#include <libnr/nr-rotate.h>
+#include <libnr/nr-rotate-ops.h>
+#include <libnr/nr-translate.h>
+#include <libnr/nr-translate-ops.h>
+#include <libnr/nr-scale.h>
+#include <libnr/nr-scale-ops.h>
+
+struct NRMatrix {
+	NR::Coord c[6];
+
+	NR::Coord &operator[](int i) { return c[i]; }
+	NR::Coord operator[](int i) const { return c[i]; }
+};
 
 #define nr_matrix_set_identity(m) (*(m) = NR_MATRIX_IDENTITY)
 
@@ -41,122 +57,6 @@ NRMatrix *nr_matrix_set_rotate (NRMatrix *m, const NR::Coord theta);
 #define NR_MATRIX_DF_EXPANSION(m) (sqrt (NR_MATRIX_DF_EXPANSION2 (m)))
 
 namespace NR {
-
-class scale {
-private:
-	Point _p;
-
-private:
-	scale();
-
-public:
-	explicit scale(Point const &p) : _p(p) {}
-	scale(double const x, double const y) : _p(x, y) {}
-	inline Coord operator[](Dim2 const d) const { return _p[d]; }
-	inline Coord operator[](unsigned const d) const { return _p[d]; }
-
-	bool operator==(scale const &o) const {
-		return _p == o._p;
-	}
-
-	bool operator!=(scale const &o) const {
-		return _p != o._p;
-	}
-	scale inverse() const {
-		return scale(1/_p[0], 1/_p[1]);
-	}
-};
-
-inline Point operator*(Point const &p, scale const &s)
-{
-	return Point(s[X] * p[X],
-		     s[Y] * p[Y]);
-}
-
-inline scale operator*(scale const &a, scale const &b)
-{
-	return scale(a[X] * b[X],
-		     a[Y] * b[Y]);
-}
-
-inline scale operator/(scale const &numer, scale const &denom)
-{
-	return scale(numer[X] / denom[X],
-		     numer[Y] / denom[Y]);
-}
-
-class rotate {
-public:
-	Point vec;
-
-private:
-	rotate();
-
-public:
-	explicit rotate(Coord theta);
-	explicit rotate(Point const &p) : vec(p) {}
-
-	bool operator==(rotate const &o) const {
-		return vec == o.vec;
-	}
-
-	bool operator!=(rotate const &o) const {
-		return vec != o.vec;
-	}
-
-	rotate inverse() const {
-		/* TODO: In the usual case that vec is a unit vector (within rounding error),
-		   dividing by len_sq is either a noop or numerically harmful.
-		   Make a unit_rotate class (or the like) that knows its length is 1. */
-		double const len_sq = dot(vec, vec);
-		return rotate( Point(vec[X], -vec[Y])
-			       / len_sq );
-	}
-};
-
-inline Point operator*(Point const &v, rotate const &r)
-{
-	return Point(r.vec[X] * v[X] - r.vec[Y] * v[Y],
-		     r.vec[Y] * v[X] + r.vec[X] * v[Y]);
-}
-
-inline rotate operator*(rotate const &a, rotate const &b)
-{
-	return rotate( a.vec * b );
-}
-
-inline rotate operator/(rotate const &numer, rotate const &denom)
-{
-	return numer * denom.inverse();
-}
-
-
-class translate {
-public:
-	Point offset;
-private:
-	translate();
-public:
-	explicit translate(Point const &p) : offset(p) {}
-	explicit translate(Coord const x, Coord const y) : offset(x, y) {}
-	Coord operator[](Dim2 const dim) const { return offset[dim]; }
-	Coord operator[](unsigned const dim) const { return offset[dim]; }
-};
-
-inline bool operator==(translate const &a, translate const &b)
-{
-	return a.offset == b.offset;
-}
-
-inline translate operator*(translate const &a, translate const &b)
-{
-	return translate( a.offset + b.offset );
-}
-
-inline Point operator*(Point const &v, translate const &t)
-{
-	return t.offset + v;
-}
 
 /*
  * For purposes of multiplication, points should be thought of as row vectors
@@ -272,91 +172,14 @@ private:
 	NR::Coord _c[6];
 };
 
-inline bool operator==(Matrix const &a, Matrix const &b)
-{
-	for(unsigned i = 0; i < 6; ++i) {
-		if (a[i] != b[i]) {
-			return false;
-		}
-	}
-	return true;
-}
 
-inline bool operator!=(Matrix const &a, Matrix const &b)
-{
-	return !(a == b);
-}
+extern void assert_close(Matrix const &a, Matrix const &b);
 
-// Matrix factories
-Matrix from_basis(const Point x_basis, const Point y_basis, const Point offset=Point(0,0));
+} /* namespace NR */
 
-Matrix identity();
-//Matrix translate(const Point p);
-//Matrix scale(const Point s);
-//Matrix rotate(const NR::Coord angle);
 
-double expansion(Matrix const &m);
-
-Matrix operator*(Matrix const &a, Matrix const &b);
-
-bool transform_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilon);
-bool translate_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilon);
-bool matrix_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilon);
-
-void assert_close(Matrix const &a, Matrix const &b);
-
-inline Point operator*(Point const &v, Matrix const &m)
-{
-	NR::Point const m_xform_col_0(m[0], m[2]);
-	NR::Point const m_xform_col_1(m[1], m[3]);
-	NR::Point const m_xlate(m[4], m[5]);
-	return ( Point(dot(v, m_xform_col_0),
-		       dot(v, m_xform_col_1))
-		 + m_xlate );
-/*
-	return Point(v[X] * m[0]  +  v[Y] * m[2]  +  m[4],
-		     v[X] * m[1]  +  v[Y] * m[3]  +  m[5]);
-*/
-}
-
-inline Point &Point::operator*=(Matrix const &m)
-{
-	*this = *this * m;
-	return *this;
-}
-
-inline Matrix operator*(Matrix const &m, translate const &t)
-{
-	Matrix ret(m);
-	ret[4] += t[X];
-	ret[5] += t[Y];
-	assert_close( ret, m * Matrix(t) );
-	return ret;
-}
-
-inline Matrix operator*(translate const &t, Matrix const &m)
-{
-	Matrix ret(m);
-	ret[4] += m[0] * t[X] + m[2] * t[Y];
-	ret[5] += m[1] * t[X] + m[3] * t[Y];
-	assert_close( ret, Matrix(t) * m );
-	return ret;
-}
-
-inline Matrix operator*(scale const &s, Matrix const &m)
-{
-	Matrix ret(m);
-	ret[0] *= s[X];
-	ret[1] *= s[X];
-	ret[2] *= s[Y];
-	ret[3] *= s[Y];
-	assert_close( ret, Matrix(s) * m );
-	return ret;
-}
-
-/** find the smallest rectangle that contains the transformed Rect r. */
-//Rect operator*(const Matrix& nrm, const Rect &r);
-
-};
+/* fixme: get rid of these includes */
+#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-matrix-fns.h>
 
 #endif

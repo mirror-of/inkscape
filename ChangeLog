@@ -4,7 +4,10 @@
 	nr-coord.h nr-dim2.h nr-i-coord.h nr-matrix-ops.h nr-point-l.h
 	nr-point-ops.h nr-point.h nr-rect-l.h nr-rotate.h nr-rotate-ops.h
 	nr-scale-ops.h nr-scale.h nr-translate-ops.h nr-translate.h:
-	New files.
+	New files; code moved from nr-types.h and nr-matrix.h.
+	* src/libnr/nr-matrix.h:
+	* src/libnr/nr-types.h:
+	#include the new files.
 
 	* src/desktop-affine.h, src/desktop-affine.cpp
 	(sp_desktop_w2d_xy_point, sp_desktop_d2w_xy_point,
