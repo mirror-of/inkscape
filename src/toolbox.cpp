@@ -219,25 +219,35 @@ sp_node_toolbox_new (SPDesktop *desktop)
 
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_insert", GTK_SIGNAL_FUNC (sp_node_path_edit_add), tt, _("Insert new nodes into selected segments"));
-	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_delete", GTK_SIGNAL_FUNC (sp_node_path_edit_delete), tt, _("Delete selected nodes"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_insert",
+		GTK_SIGNAL_FUNC (sp_node_path_edit_add), tt, _("Insert new nodes into selected segments"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_delete",
+		GTK_SIGNAL_FUNC (sp_node_path_edit_delete), tt, _("Delete selected nodes"));
 
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_join", GTK_SIGNAL_FUNC (sp_node_path_edit_join), tt, _("Join lines at selected nodes"));
-	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_join_segment", GTK_SIGNAL_FUNC (sp_node_path_edit_join_segment), tt, _("Join lines at selected nodes with new segment"));
-	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_delete_segment", GTK_SIGNAL_FUNC (sp_node_path_edit_delete_segment), tt, _("Split a path between two or more nodes"));
-	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_break", GTK_SIGNAL_FUNC (sp_node_path_edit_break), tt, _("Break line at selected nodes"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_join",
+		 GTK_SIGNAL_FUNC(sp_node_path_edit_join), tt, _("Join paths at selected nodes"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_join_segment",
+		GTK_SIGNAL_FUNC (sp_node_path_edit_join_segment), tt, _("Join paths at selected nodes with new segment"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_delete_segment",
+		GTK_SIGNAL_FUNC (sp_node_path_edit_delete_segment), tt, _("Split path between two or more nodes"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_break",
+		GTK_SIGNAL_FUNC (sp_node_path_edit_break), tt, _("Break path at selected nodes"));
 
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_cusp", GTK_SIGNAL_FUNC (sp_node_path_edit_cusp), tt, _("Make selected nodes corner"));
-	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_smooth", GTK_SIGNAL_FUNC (sp_node_path_edit_smooth), tt, _("Make selected nodes smooth"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_cusp",
+		GTK_SIGNAL_FUNC (sp_node_path_edit_cusp), tt, _("Make selected nodes corner"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_smooth",
+		GTK_SIGNAL_FUNC (sp_node_path_edit_smooth), tt, _("Make selected nodes smooth"));
 
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_line", GTK_SIGNAL_FUNC (sp_node_path_edit_toline), tt, _("Make selected segments lines"));
-	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_curve", GTK_SIGNAL_FUNC (sp_node_path_edit_tocurve), tt, _("Make selected segments curves"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_line",
+		GTK_SIGNAL_FUNC (sp_node_path_edit_toline), tt, _("Make selected segments lines"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_curve",
+		GTK_SIGNAL_FUNC (sp_node_path_edit_tocurve), tt, _("Make selected segments curves"));
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
 	sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_TO_CURVE, view, tt);
