@@ -338,7 +338,7 @@ FileSaveDialog::show() {
 		if (extension != NULL)
 			prefs_set_string_attribute("dialogs.save_as", "default", extension->get_id());
 		else
-			prefs_set_string_attribute("dialogs.save_as", "default", NULL);
+			prefs_set_string_attribute("dialogs.save_as", "default", "");
 
 		return TRUE;
 	} else {
