@@ -227,7 +227,7 @@ void TraceDialogImpl::potraceProcess(bool do_i_trace)
             potraceCancelButton->set_sensitive(true);
         if (potraceOkButton)
             potraceOkButton->set_sensitive(false);
-        tracer.convertImageToPath(&pte);
+        tracer.trace(&pte);
         if (potraceCancelButton)
             potraceCancelButton->set_sensitive(false);
         if (potraceOkButton)
