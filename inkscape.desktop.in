@@ -6,7 +6,8 @@ Encoding=UTF-8
 Version=1.0
 
 Type=Application
-Categories=Application;Graphics
+Categories=Application;Graphics;VectorGraphics;GTK;
+
 MimeType=image/svg+xml
 
 FilePattern=inkscape

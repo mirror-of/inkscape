@@ -6,6 +6,7 @@
 	* SF Patch #842953: small color picker update from John Bintz
 	* SF Patch #842955: additional Darwin updates from Peter
 	* Fixed stroke style literal string bug that caused warnings
+	* SF Patch #842958: updated inkscape.desktop.in slightly
 
 2003-11-16  MenTaLguY <mental@rydia.net>
 
