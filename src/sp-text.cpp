@@ -151,7 +151,7 @@ sp_text_class_init (SPTextClass *classname)
     item_class->hide = sp_text_hide;
     item_class->description = sp_text_description;
     item_class->snappoints = sp_text_snappoints;
-    item_class->set_transform = sp_text_set_transform;
+//    item_class->set_transform = sp_text_set_transform;
     item_class->print = sp_text_print;
 }
 
