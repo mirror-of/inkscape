@@ -416,7 +416,7 @@ sp_star_knot1_set (SPItem *item, const NR::Point &p, guint state)
 	if (state & GDK_MOD1_MASK) {
 		star->randomized = darg1/(star->arg[0] - star->arg[1]); 
 	} else if (state & GDK_SHIFT_MASK) {
-		star->rounded = fabs (darg1/(star->arg[0] - star->arg[1])); 
+		star->rounded = darg1/(star->arg[0] - star->arg[1]); 
 	} else if (state & GDK_CONTROL_MASK) {
 		star->r[0]    = L2(d);
 	} else {
