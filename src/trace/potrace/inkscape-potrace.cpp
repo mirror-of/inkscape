@@ -8,7 +8,6 @@
 #include "path.h"
 #include "bitmap.h"
 
-//## New stuff - bob
 #include "filterset.h"
 #include "imagemap-gdk.h"
 
@@ -22,6 +21,39 @@
 #include <xml/repr.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
+#include <gtkmm.h>
+
+/** BOB added these two small items **/
+PotraceStatusFunc potraceStatusFunc = NULL;
+void   *potraceStatusUserData       = NULL;
+
+static void updateGui()
+{
+   //## Allow the GUI to update
+   Gtk::Main::iteration(false); //at least once, non-blocking
+   while( Gtk::Main::events_pending() )
+       Gtk::Main::iteration();
+
+}
+
+
+static int potraceStatus(char *msg, void *userData)
+{
+    updateGui();
+
+    if (!msg || !userData)
+        return 0;
+
+    //g_message("msg:%s\n", msg);
+
+    Inkscape::Potrace::PotraceTracingEngine *engine =
+          (Inkscape::Potrace::PotraceTracingEngine *)userData;
+    
+    return engine->keepGoing;
+
+}
+
+
 
 
 //required by potrace
@@ -31,6 +63,7 @@ namespace Inkscape
 {
 namespace Potrace
 {
+
 
 /**
  *
@@ -91,9 +124,9 @@ PotraceTracingEngine::PotraceTracingEngine()
 
 
 
-
 static void
-writePaths(path_t *plist, Inkscape::SVGOStringStream& data)
+writePaths(PotraceTracingEngine *engine, path_t *plist,
+            Inkscape::SVGOStringStream& data)
 {
 
     path_t *node;
@@ -106,6 +139,8 @@ writePaths(path_t *plist, Inkscape::SVGOStringStream& data)
         data << "M " << pt[2].x << " " << pt[2].y << " ";
         for (int i=0 ; i<node->fm ; i++)
             {
+            if (!potraceStatus("wp", (void *)engine))
+                return;
             pt = node->fcurve[i].c;
             switch (node->fcurve[i].tag)
                 {
@@ -127,10 +162,12 @@ writePaths(path_t *plist, Inkscape::SVGOStringStream& data)
 
         for (path_t *child=node->childlist; child ; child=child->sibling)
             {
-            writePaths(child, data);
+            writePaths(engine, child, data);
             }
         }
 }
+
+
 
 
 
@@ -234,12 +271,18 @@ PotraceTracingEngine::preview(GdkPixbuf * pixbuf)
 char *
 PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * thePixbuf)
 {
+
     if (!thePixbuf)
         return NULL;
 
     GrayMap *grayMap = filter(*this, thePixbuf);
     if (!grayMap)
         return NULL;
+
+    //Set up for messages
+    keepGoing            = 1;
+    potraceStatusFunc     = potraceStatus;
+    potraceStatusUserData = (void *)this;
 
     bitmap_t *bm = bm_new(grayMap->width, grayMap->height);
     bm_clear(bm, 0);
@@ -262,13 +305,19 @@ PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * thePixbuf)
     fclose(f);
     */
 
+    if (!keepGoing)
+        {
+        g_warning("aborted");
+        return NULL;
+        }
+
     /* process the image */
     path_t *plist;
     int ret = bm_to_pathlist(bm, &plist);
     if (ret)
         {
         g_warning("Potrace::convertImageToPath: trouble tracing temp image\n");
-        return false;
+        return NULL;
         }
 
     //## Free the Potrace bitmap
@@ -278,24 +327,33 @@ PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * thePixbuf)
     if (ret)
         {
         g_warning("Potrace::convertImageToPath: trouble processing trace\n");
-        return false;
+        return NULL;
         }
 
+
+    if (!keepGoing)
+        {
+        g_warning("aborted");
+        pathlist_free(plist);
+        return NULL;
+        }
 
     Inkscape::SVGOStringStream data;
 
     data << "";
 
     //## copy the path information into our d="" attribute string
-    writePaths(plist, data);
+    writePaths(this, plist, data);
 
     //# we are done with the pathlist
     pathlist_free(plist);
 
+    if (!keepGoing)
+        return NULL;
+
     //# get the svg <path> 'd' attribute
     char *d = strdup(data.str().c_str());
     //g_message("### GOT '%s' \n", d);
-
 
     return d;
 }
@@ -306,7 +364,8 @@ PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * thePixbuf)
 void
 PotraceTracingEngine::abort()
 {
-    g_message("PotraceTracingEngine::abort() soon to be implemented\n");
+    g_message("PotraceTracingEngine::abort()\n");
+    keepGoing = 0;
 }
 
 

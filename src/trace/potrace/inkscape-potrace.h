@@ -155,7 +155,12 @@ class PotraceTracingEngine : public TracingEngine
      */
     GdkPixbuf *preview(GdkPixbuf * pixbuf);
 
+    /**
+     *
+     */
+    int keepGoing;
 
+    
 
     private:
 

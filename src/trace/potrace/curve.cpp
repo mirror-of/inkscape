@@ -1234,6 +1234,11 @@ int process_path(path_t *plist) {
 
   /* call downstream function with each path */
   list_forall (p, plist) {
+    if (potraceStatusFunc)
+        {
+        if (!(*potraceStatusFunc)("pp", potraceStatusUserData))
+            break;
+        }
     TRY(calc_sums(p));
     TRY(calc_lon(p));
     TRY(bestpolygon(p));

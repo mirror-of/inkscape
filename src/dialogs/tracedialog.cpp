@@ -103,6 +103,8 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
     Gtk::VBox             potraceBox;
     Gtk::RadioButtonGroup potraceGroup;
     Gtk::ToggleButton     potraceInvertButton;
+    Gtk::Button           *potraceOkButton;
+    Gtk::Button           *potraceCancelButton;
 
     //brightness
     Gtk::Frame            potraceBrightnessFrame;
@@ -209,7 +211,15 @@ void TraceDialogImpl::potraceProcess(bool do_i_trace)
     //##### Convert
     if (do_i_trace)
         {
+        if (potraceCancelButton)
+            potraceCancelButton->set_sensitive(true);
+        if (potraceOkButton)
+            potraceOkButton->set_sensitive(false);
         tracer.convertImageToPath(&pte);
+        if (potraceCancelButton)
+            potraceCancelButton->set_sensitive(false);
+        if (potraceOkButton)
+            potraceOkButton->set_sensitive(true);
         }
 
 }
@@ -380,8 +390,10 @@ TraceDialogImpl::TraceDialogImpl()
     mainVBox->pack_start(notebook);
 
     //## The OK button
-    //add_button(Gtk::Stock::STOP, GTK_RESPONSE_CANCEL);
-    add_button(Gtk::Stock::OK,   GTK_RESPONSE_OK);
+    potraceCancelButton = add_button(Gtk::Stock::STOP, GTK_RESPONSE_CANCEL);
+    if (potraceCancelButton)
+        potraceCancelButton->set_sensitive(false);
+    potraceOkButton     = add_button(Gtk::Stock::OK,   GTK_RESPONSE_OK);
 
     show_all_children();
 

@@ -131,6 +131,12 @@ path_t *findpath(bitmap_t *bm, int x0, int y0, int sign) {
   area = 0;
   
   while (1) {
+    if (potraceStatusFunc)
+        {
+        if (!(*potraceStatusFunc)("fp", potraceStatusUserData))
+            break;
+        }
+
     /* add point to path */
     if (len>=size) {
       size+=100;
@@ -243,6 +249,11 @@ static void pathlist_to_tree(path_t *plist, bitmap_t *mask) {
      pathlists which still need to be transformed. */
 
   while (heap) {
+    if (potraceStatusFunc)
+        {
+        if (!(*potraceStatusFunc)("ptt", potraceStatusUserData))
+            break;
+        }
     /* unlink first sublist */
     cur = heap;
     heap = heap->childlist;
@@ -360,6 +371,11 @@ int bm_to_pathlist(bitmap_t *bm, path_t **plistp) {
   /* iterate through components */
   y = bm1->h - 1;
   while (bm_findnext(bm1, &x, &y) == 0) { 
+    if (potraceStatusFunc)
+        {
+        if (!(*potraceStatusFunc)("bmtp", potraceStatusUserData))
+            break;
+        }
     /* calculate the sign by looking at the original */
     sign = BM_GET(bm, x, y) ? '+' : '-';
 

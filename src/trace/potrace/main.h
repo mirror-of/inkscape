@@ -108,4 +108,15 @@ struct imginfo_s {
 };
 typedef struct imginfo_s imginfo_t;
 
+/** BOB -- added these three small items .  Look in inkscape-potrace.cpp **/
+/*This is just temporary.  I hate globals  ;-)  */
+/**
+ * Call this function with userData set to potraceStatusUserData
+ * return 1 to keep going, 0 to abort
+ */
+typedef int  (*PotraceStatusFunc) (char *msg, void *userData);
+extern        PotraceStatusFunc potraceStatusFunc;
+extern void   *potraceStatusUserData;
+
+
 #endif /* MAIN_H */
