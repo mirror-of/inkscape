@@ -338,9 +338,11 @@ sp_root_set (SPObject *object, unsigned int key, const gchar *value)
 		}
 		break;
 	default:
-		if (((SPObjectClass *) parent_class)->set)
-			((SPObjectClass *) parent_class)->set (object, key, value);
-		break;
+	  /* Pass the set event to the parent */
+	  if (((SPObjectClass *) parent_class)->set) {
+	    ((SPObjectClass *) parent_class)->set (object, key, value);
+	  }
+	  break;
 	}
 }
 
