@@ -19,6 +19,7 @@
 #include <gtkmm.h>
 #include <glibmm.h>
 
+#include <extension/script/InkscapeScript.h>
 
 #include <dialogs/dialog-events.h>
 #include "helper/sp-intl.h"
@@ -67,6 +68,16 @@ class ScriptDialogImpl : public ScriptDialog, public Gtk::Dialog
      */
     void clear();
 
+    /**
+     * Execute the script
+     */
+    void executePython();
+
+    /**
+     * Execute the script
+     */
+    void executePerl();
+
 
 
     private:
@@ -83,6 +94,11 @@ class ScriptDialogImpl : public ScriptDialog, public Gtk::Dialog
  
 };
 
+static char *defaultPythonCodeStr =
+    "desktop  = inkscape.getDesktop()\n"
+    "document = desktop.getDocument()\n"
+    "document.hello()\n"
+    "";
 
 
 
@@ -97,6 +113,32 @@ void ScriptDialogImpl::clear()
 {
     Glib::RefPtr<Gtk::TextBuffer> buffer = scriptText.get_buffer();
     buffer->erase(buffer->begin(), buffer->end());
+}
+
+/**
+ * Execute the script in the dialog
+ */
+void ScriptDialogImpl::executePython()
+{
+    Glib::RefPtr<Gtk::TextBuffer> buffer = scriptText.get_buffer();
+    Glib::ustring text = buffer->get_text(true);
+    char *ctext = (char *)text.raw().c_str();
+    Inkscape::Extension::Script::InkscapeScript engine;
+    engine.interpretScript(ctext, 
+       Inkscape::Extension::Script::InkscapeScript::PYTHON);
+}
+
+/**
+ * Execute the script in the dialog
+ */
+void ScriptDialogImpl::executePerl()
+{
+    Glib::RefPtr<Gtk::TextBuffer> buffer = scriptText.get_buffer();
+    Glib::ustring text = buffer->get_text(true);
+    char *ctext = (char *)text.raw().c_str();
+    Inkscape::Extension::Script::InkscapeScript engine;
+    engine.interpretScript(ctext, 
+       Inkscape::Extension::Script::InkscapeScript::PERL);
 }
 
 
@@ -117,11 +159,16 @@ ScriptDialogImpl::ScriptDialogImpl()
     menuBar.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_File"), fileMenu) );
     fileMenu.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Clear"),
            sigc::mem_fun(*this, &ScriptDialogImpl::clear) ) );
+    fileMenu.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Execute Python"),
+           sigc::mem_fun(*this, &ScriptDialogImpl::executePython) ) );
+    fileMenu.items().push_back( Gtk::Menu_Helpers::MenuElem(_("_Execute Perl"),
+           sigc::mem_fun(*this, &ScriptDialogImpl::executePerl) ) );
     mainVBox->pack_start(menuBar, Gtk::PACK_SHRINK);
     
 
     //### Set up the text widget
-    scriptText.set_editable(false);
+    scriptText.set_editable(true);
+    scriptText.get_buffer()->set_text(defaultPythonCodeStr);
     scriptTextScroll.add(scriptText);
     scriptTextScroll.set_policy(Gtk::POLICY_ALWAYS, Gtk::POLICY_ALWAYS);
     mainVBox->pack_start(scriptTextScroll);

@@ -48,18 +48,22 @@ InkscapePython::~InkscapePython()
 
     
     
-
+static bool initialized = false;
 /*
  *  Interpret an in-memory string
  */
 bool InkscapePython::interpretScript(char *codeStr)
 {
-    Py_Initialize();
-    init_inkscape_py();
+    if (!initialized)
+        {
+        Py_Initialize();
+        init_inkscape_py();
+        initialized = true;
+        }
     PyRun_SimpleString(inkscape_module_script);
     PyRun_SimpleString("inkscape = _inkscape_py.getInkscape()\n");
     PyRun_SimpleString(codeStr);
-    Py_Finalize();
+    //Py_Finalize();
     return true;
 }
 
@@ -71,14 +75,18 @@ bool InkscapePython::interpretScript(char *codeStr)
  */
 bool InkscapePython::interpretFile(char *fileName)
 {
-    Py_Initialize();
-    init_inkscape_py();
+    if (!initialized)
+        {
+        Py_Initialize();
+        init_inkscape_py();
+        initialized = true;
+        }
     PyRun_SimpleString(inkscape_module_script);
     PyRun_SimpleString("inkscape = _inkscape_py.getInkscape()\n");
     FILE *f = fopen(fileName, "r");
     PyRun_SimpleFile(f, fileName);
     fclose(f);
-    Py_Finalize();
+    //Py_Finalize();
     return true;
 }
 
