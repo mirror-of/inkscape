@@ -13,7 +13,8 @@
 	* src/desktop.h (SP_DESKTOP_ZOOM): Define in terms of expansion()
 	function instead of implicit casting.
 
-	* src/arc-context.cpp, src/selection.cpp, src/selection.h:
+	* src/arc-context.cpp, src/selection.cpp, src/selection.h,
+	src/sp-ellipse.cpp:
 	Cleanups: greater conformance to Coding_Style, combine declaration
 	and first assignment of some vars.
 

@@ -64,7 +64,7 @@ static void sp_genericellipse_init (SPGenericEllipse *ellipse);
 
 static void sp_genericellipse_update (SPObject *object, SPCtx *ctx, guint flags);
 
-static int sp_genericellipse_snappoints (SPItem *item, NR::Point *p, int size);
+static int sp_genericellipse_snappoints(SPItem *item, NR::Point p[], int size);
 
 static void sp_genericellipse_set_shape (SPShape *shape);
 static SPRepr *sp_genericellipse_write (SPObject *object, SPRepr *repr, guint flags);
@@ -258,19 +258,19 @@ g_print ("step %d s %f e %f coords %f %f %f %f %f %f\n",
 	sp_curve_unref (c);
 }
 
-static int
-sp_genericellipse_snappoints (SPItem *item, NR::Point *p, int size)
+static int sp_genericellipse_snappoints(SPItem *item, NR::Point p[], int size)
 {
 	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
 
-	/* we use corners of item and center of ellipse */
+	/* We use corners of item and center of ellipse. */
 	int pos = 0;
-	if (((SPItemClass *) ge_parent_class)->snappoints)
+	if (((SPItemClass *) ge_parent_class)->snappoints) {
 		pos = ((SPItemClass *) ge_parent_class)->snappoints (item, p, size);
-
+	}
 	if (pos < size) {
-		NR::Matrix i2d = sp_item_i2d_affine (item);
-		p[pos] = i2d * NR::Point(ge->cx.computed, ge->cy.computed);
+		p[pos++] = ( sp_item_i2d_affine(item)
+			     * NR::Point(ge->cx.computed,
+					 ge->cy.computed) );
 	}
 
 	return pos;

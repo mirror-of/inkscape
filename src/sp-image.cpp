@@ -47,7 +47,7 @@ static SPRepr *sp_image_write (SPObject *object, SPRepr *repr, guint flags);
 static void sp_image_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
 static void sp_image_print (SPItem * item, SPPrintContext *ctx);
 static gchar * sp_image_description (SPItem * item);
-static int sp_image_snappoints (SPItem *item, NR::Point *p, int size);
+static int sp_image_snappoints(SPItem *item, NR::Point p[], int size);
 static NRArenaItem *sp_image_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_image_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
 
@@ -507,12 +507,11 @@ sp_image_update_canvas_image (SPImage *image)
 	}
 }
 
-static int
-sp_image_snappoints (SPItem *item, NR::Point *p, int size)
+static int sp_image_snappoints (SPItem *item, NR::Point p[], int size)
 {
-	SPImage *image = SP_IMAGE (item);
+	SPImage *image = SP_IMAGE(item);
 
-	NR::Matrix i2d = sp_item_i2d_affine (item);
+	NR::Matrix const i2d(sp_item_i2d_affine(item));
 
 	/* we use corners of image only */
 	NR::Coord x0 = image->x.computed;
@@ -522,20 +521,16 @@ sp_image_snappoints (SPItem *item, NR::Point *p, int size)
 
 	int i = 0;
 	if (i < size) {
-		p[i] = i2d * NR::Point(x0, y0);
-		i += 1;
+		p[i++] = i2d * NR::Point(x0, y0);
 	}
 	if (i < size) {
-		p[i] = i2d * NR::Point(x1, y0);
-		i += 1;
+		p[i++] = i2d * NR::Point(x1, y0);
 	}
 	if (i < size) {
-		p[i] = i2d * NR::Point(x1, y1);
-		i += 1;
+		p[i++] = i2d * NR::Point(x1, y1);
 	}
 	if (i < size) {
-		p[i] = i2d * NR::Point(x0, y1);
-		i += 1;
+		p[i++] = i2d * NR::Point(x0, y1);
 	}
 
 	return i;
