@@ -174,15 +174,6 @@ operator!=(Point const &a, Point const &b) {
 		(a.pt[Y] != b.pt[Y]));
 }
 
-inline Coord
-cross(Point const &a, Point const &b) {
-	Coord ret = 0;
-	for(int i = 0; i < 2; i++)
-		ret = a.pt[1-i] * b.pt[i] - ret;
-	return ret;
-}
-
-
 Point abs(Point const &b);
 
 } /* namespace NR */

@@ -1,3 +1,7 @@
+2004-01-07  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/libnr/nr-types.h: Move cross to its sole user, src/geom.cpp.
+
 2004-01-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/desktop-snap.cpp: Make the `horizontal' and `vertical'
