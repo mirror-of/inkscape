@@ -472,7 +472,7 @@ Known issues
        without converting it to path first. This will be fixed in a future
        version.
      * Extensions that rely on external programs do not work on Windows.
-     * Inkscape users running Suse 9.x may finding installing either from
+     * Inkscape users running Suse 9.x may find installing either from
        source or the supplied RPM difficult. First, start by installing the
        updated GNOME 2.6 from the Suse supplementary GNOME download location.
        Then you will need third party gtkmm2 2.4 RPMs to support Inkscape
