@@ -29,15 +29,16 @@ class flow_src;
 class SPObject;
 
 /*
- * classes to collect the text from the SPObject tree
+ * Classes to collect the text from the SPObject tree
+ *
  * 2 steps:
  *	- one_flow_src variants are included in each element that can contribute text, that is in SPText, SPTspan, SPTextpath, SPString,
- * SPFlowdiv, SPFlowpara, SPFlowspan, SPFlowLine SPFlowRegionBreak. before the flow is collected, this one_flow_src instances are
+ * SPFlowdiv, SPFlowpara, SPFlowspan, SPFlowLine SPFlowRegionBreak. Before the flow is collected, this one_flow_src instances are
  * linked in a doubly-linked list by sp-text and sp-flowtext.
- *  - this linked list is then converted in a 'flat' flow_src, which is basically an array of text control elements and text paragraphs.
+ *  - This linked list is then converted to a 'flat' flow_src, which is basically an array of text control elements and text paragraphs.
  * paragraphs are stored in text_holder instances.
  *
- * additionnally, one_flow_src instances contain utf8_st and utf8_en fields representing the interval they take in the text
+ * additionally, one_flow_src instances contain utf8_st and utf8_en fields representing the interval they take in the text
  * element. these values are computed before the flow, and used when the text is modified.
  */
 
@@ -46,44 +47,47 @@ class div_flow_src;
 // lightweight class to be included in those filling the flow source
 class one_flow_src {
 public:
-	SPObject*        me;
+	SPObject*        me; // The SPObject from thich this ofc is created; this may be any text element or SPString
+
 	// the text interval held by this object
-	int              ucs4_st,ucs4_en;
-	int              utf8_st,utf8_en;
+      // the range is: for SPString, the number of chars; for line tspan, 1; for other elements 0
+	int              ucs4_st, ucs4_en;
+	int              utf8_st, utf8_en; 
+
 	// linking in the flow; 
-	one_flow_src     *next,*prev;
-	one_flow_src		 *dad,*chunk; // chunk=NULL means it's a flow start, a paragraph or a sodipodi:role=line tspan
+	one_flow_src     *next, *prev; // the chain is a serialization of the text source tree, e.g. text->tspan1->string1->tspan2->string2
+	one_flow_src		 *dad, *chunk; // chunk=NULL means it's a flow start, a paragraph or a sodipodi:role=line tspan
 	
 	one_flow_src(SPObject* i_me);
 	virtual ~one_flow_src(void);
 	
-	void              Link(one_flow_src* after,one_flow_src* inside);
+	void              Link(one_flow_src* after, one_flow_src* inside);
 	void              DoPositions(bool for_text);
 	void              DoFill(flow_src* what);
-	one_flow_src*     Locate(int utf8_pos,int &ucs4_pos,bool src_start,bool src_end,bool must_be_text);
+	one_flow_src*     Locate(int utf8_pos, int &ucs4_pos, bool src_start, bool src_end, bool must_be_text);
 	int               Do_UCS4_2_UTF8(int ucs4_pos);
-	int               Do_UTF8_2_UCS4(int ucs4_pos);
+	int               Do_UTF8_2_UCS4(int utf8_pos);
 	
 	// introspection
 	virtual int       Type(void) {return flw_none;};
 	// asks for kerning info to be pushed in the text_holder. st/ en /offset are ucs4 positions
 	virtual void      PushInfo(int st,int en,int offset,text_holder* into);
 	// tells the element to remove the info such as x/y/dx/dy/rotate stuff it might hold for the specified portion
-	virtual void      DeleteInfo(int i_utf8_st,int i_utf8_en,int i_ucs4_st,int i_ucs4_en);
+	virtual void      DeleteInfo(int i_utf8_st, int i_utf8_en, int i_ucs4_st, int i_ucs4_en);
 	// returns a text_style for this element. the caller should take care of deallocating it
 	virtual text_style*  GetStyle(void);
 	// function called after SetPosition to fill the flow_src instance
 	virtual void      Fill(flow_src* what);
 	// function used to prepare the element, most notably to computed the interval in the text it represents
-	virtual void      SetPositions(bool for_text,int &last_utf8,int &last_ucs4,bool &in_white);
+	virtual void      SetPositions(bool for_text, int &last_utf8, int &last_ucs4, bool &in_white);
 	// insert some text 'n_text' at positoin utf8_pos in the text. 'done' is set if this call actually inserted all the text
-	virtual void      Insert(int utf8_pos,int ucs4_pos,const char* n_text,int n_utf8_len,int n_ucs4_len,bool &done); 
+	virtual void      Insert(int utf8_pos, int ucs4_pos, const char* n_text, int n_utf8_len, int n_ucs4_len, bool &done); 
 	// delete a portion of the text
-	virtual void      Delete(int i_utf8_st,int i_utf8_en);
+	virtual void      Delete(int i_utf8_st, int i_utf8_en);
 	// set/ add some value at the given position. v_type=0 -> set the 'x' value; 1->'y'; 2->'dx'; 3->'dy'; 4->'rotate'
-	virtual void      AddValue(int utf8_pos,SPSVGLength &val,int v_type,bool increment);
+	virtual void      AddValue(int utf8_pos, SPSVGLength &val, int v_type, bool increment);
 	virtual int       UCS4_2_UTF8(int ucs4_pos);
-	virtual int       UTF8_2_UCS4(int ucs4_pos);
+	virtual int       UTF8_2_UCS4(int utf8_pos);
 };
 // text variant
 class text_flow_src : public one_flow_src {
@@ -98,26 +102,26 @@ public:
 			
 	virtual int       Type(void) {return flw_text;};
 	virtual void      Fill(flow_src* what);
-	virtual void      SetPositions(bool for_text,int &last_utf8,int &last_ucs4,bool &in_white);
-	virtual void      Insert(int utf8_pos,int ucs4_pos,const char* n_text,int n_utf8_len,int n_ucs4_len,bool &done); 
-	virtual void      Delete(int i_utf8_st,int i_utf8_en);
-	virtual void      AddValue(int utf8_pos,SPSVGLength &val,int v_type,bool increment);
+	virtual void      SetPositions(bool for_text, int &last_utf8, int &last_ucs4, bool &in_white);
+	virtual void      Insert(int utf8_pos, int ucs4_pos, const char* n_text, int n_utf8_len, int n_ucs4_len, bool &done); 
+	virtual void      Delete(int i_utf8_st, int i_utf8_en);
+	virtual void      AddValue(int utf8_pos, SPSVGLength &val, int v_type, bool increment);
 	virtual int       UCS4_2_UTF8(int ucs4_pos);
-	virtual int       UTF8_2_UCS4(int ucs4_pos);
+	virtual int       UTF8_2_UCS4(int utf8_pos);
 };
 // control stuff in the flow, like line and region breaks
 class control_flow_src : public one_flow_src {
 public:
 	int               type;
 	
-	control_flow_src(SPObject* i_me,int i_type);
+	control_flow_src(SPObject* i_me, int i_type);
 	virtual ~control_flow_src(void);
 	
 	virtual int       Type(void) {return type;};
 	virtual void      Fill(flow_src* what);
-	virtual void      SetPositions(bool for_text,int &last_utf8,int &last_ucs4,bool &in_white);
+	virtual void      SetPositions(bool for_text, int &last_utf8, int &last_ucs4, bool &in_white);
 	virtual int       UCS4_2_UTF8(int ucs4_pos);
-	virtual int       UTF8_2_UCS4(int ucs4_pos);
+	virtual int       UTF8_2_UCS4(int utf8_pos);
 };
 // object variant, to hold placement info. it's a text/ tspan/ textpath/ flowdiv/ flowspan/ flowpara
 class div_flow_src : public one_flow_src {
@@ -129,10 +133,10 @@ public:
 	SPStyle           *style; // only for simplicity
 	                          // this has to last as long as the flow_res we're going to derive from it
 	                          // hence the style_holder class
-	int               nb_x,nb_y,nb_rot,nb_dx,nb_dy;
+	int               nb_x, nb_y, nb_rot, nb_dx, nb_dy;
 	SPSVGLength       *x_s,*y_s,*rot_s,*dx_s,*dy_s;
 	
-	div_flow_src(SPObject* i_me,int i_type);
+	div_flow_src(SPObject* i_me, int i_type);
 	virtual ~div_flow_src(void);
 	
 	// general purpose functions for manipulating the various attributes
@@ -171,7 +175,7 @@ public:
 	virtual void      Insert(int utf8_pos,int ucs4_pos,const char* n_text,int n_utf8_len,int n_ucs4_len,bool &done); 
 	virtual void      Delete(int i_utf8_st,int i_utf8_en);
 	virtual int       UCS4_2_UTF8(int ucs4_pos);
-	virtual int       UTF8_2_UCS4(int ucs4_pos);
+	virtual int       UTF8_2_UCS4(int utf8_pos);
 };
 
 /*
@@ -185,7 +189,7 @@ public:
 		text_holder*      text;
 		one_flow_src*     obj;
 	} one_elem;
-	int                 nbElem,maxElem;
+	int                 nbElem, maxElem;
 	one_elem*           elems;
 	
 	text_holder*        cur_holder;

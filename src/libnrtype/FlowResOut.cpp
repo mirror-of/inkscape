@@ -214,7 +214,7 @@ void flow_res::ApplyPath(int no, Path *i_path)
             //letters[j].x_en=charwidth; // special case...
         }
         
-        {
+        { // Now set the coords for the current tspan
             double glyph_a = 0;
             int nb_glyph_p = 0;
             Path::cut_position *glyph_p = i_path->CurvilignToPosition(1, &glyph_a, nb_glyph_p);
