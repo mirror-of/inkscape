@@ -20,8 +20,9 @@ display/bezier-utils-test.cpp
 ecma
 extension/api.cpp
 extension/internal/gnome.cpp
-extension/script
-#extension/script/js/js.c
+extension/script/js
+extension/script/bindtest.cpp
+extension/script/cpptest.cpp
 extension/plugin
 extract-uri-test.cpp
 helper/units-test.cpp
@@ -38,9 +39,6 @@ livarot/Path-test.cpp
 main.cpp
 mod360-test.cpp
 trace/potrace/potest.cpp
-
-render
-
 round-test.cpp
 svg/ftos.cpp
 utest
@@ -48,5 +46,5 @@ widgets/test-widgets.cpp
 winmain.cpp
 xml/quote-test.cpp
 xml/repr-action-test.cpp
-xpath/xtest.cpp
+xpath
 
