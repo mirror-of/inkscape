@@ -1,5 +1,8 @@
 2004-05-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/xml/repr-get-children.h, src/xml/repr-get-children.cpp: New files.
+	* src/xml/Makefile_insert (xml_libspxml_a_SOURCES): Add the new files.
+
 	* src/xml/repr-private.h, src/xml/repr.cpp (sp_repr_nth_child):
 	  Remove this unused function.
 

@@ -17,6 +17,8 @@ xml_libspxml_a_SOURCES =	\
 	xml/repr-action.cpp	\
 	xml/repr-action.h	\
 	xml/repr-css.cpp	\
+	xml/repr-get-children.cpp	\
+	xml/repr-get-children.h	\
 	xml/repr-io.cpp	\
 	xml/repr-private.h	\
 	xml/repr-util.cpp	\
