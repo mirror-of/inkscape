@@ -1,3 +1,9 @@
+2003-11-17 Kees Cook <inkscape@outflux.net>
+
+	* SF Patch #841940: autoconf update from joncruz
+	* SF Patch #842949: lpr fixes from Lynn Kerby
+	* SF Patch #842951: variable declaration fixes in interface.c
+
 2003-11-16  MenTaLguY <mental@rydia.net>
 
 	* src/document.c: reworked sp_desktop_items_*in_box family to be layer-aware
