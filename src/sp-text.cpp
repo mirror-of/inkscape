@@ -540,7 +540,7 @@ sp_text_set_shape (SPText *text)
             for (int j = 0; j < text->f_res->nbChunk; j++) {
                 if ( text->f_res->chunks[j].mommy == text->f_src->elems[i].text ) {
                     // found
-                    cur=text->f_res->chunks+j;
+                    cur=&(text->f_res->chunks[j]);
                     break;
                 }
             }
@@ -593,7 +593,7 @@ sp_text_set_shape (SPText *text)
             for (int j = 0; j < text->f_res->nbChunk; j++) {
                 if ( text->f_res->chunks[j].mommy == text->f_src->elems[i].text ) {
                     // found
-                    cur = text->f_res->chunks + j;
+                    cur = &(text->f_res->chunks[j]);
                     cur_no = j;
                     break;
                 }

@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <vector>
+
 #include "FlowDefs.h"
 
 #include "../display/nr-arena-forward.h"
@@ -27,6 +29,23 @@ class Path;
 class div_flow_src;
 
 struct SPPrintContext;
+
+
+// To debug out-of-bounds array access errors, temporarily replace std::vector in your class with checked_vector
+template<typename T>
+class checked_vector : public std::vector<T> {
+ public:
+	typename std::vector<T>::reference operator[](int index) {
+		g_assert(index >= 0 && index < (int) size());
+		//			g_print ("%d ", index);
+    return std::vector<T>::operator[](index);
+  }
+	typename std::vector<T>::const_reference operator[](int index) const {
+    g_assert(index >= 0 && index < (int) size());
+    return std::vector<T>::operator[](index);
+  }
+};
+
 
 /*
  * class to hold the result of a text flow
@@ -87,17 +106,23 @@ public:
 	
 	// the arrays
 	int               nbGroup, maxGroup;
-	flow_glyph_group*   groups;
+	std::vector<flow_glyph_group>   groups;
+
 	int               nbGlyph, maxGlyph;
-	flow_glyph*       glyphs;
+	std::vector<flow_glyph>       glyphs;
+
 	int               nbChar, maxChar;
-	char*             chars;
+	std::vector<char>             chars;
+
 	int               nbChunk, maxChunk;
-	flow_styled_chunk*  chunks;
+	std::vector<flow_styled_chunk>  chunks;
+
 	int               nbLetter, maxLetter;
-	flow_styled_letter* letters;
+	std::vector<flow_styled_letter> letters;
+
 	int               nbSpan, maxSpan;
-	flow_styled_span*   spans;
+	std::vector<flow_styled_span>   spans;
+
 	// temporary variables
 	bool              last_style_set;
 	text_style*       last_c_style;

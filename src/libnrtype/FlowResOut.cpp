@@ -395,7 +395,7 @@ void flow_res::Print(SPPrintContext *ctx,
 					g_tr[3]=-cos(ang);
 					g_tr[4]=px;
 					g_tr[5]=py;
-					char*       g_txt=chars+letters[j].t_st;
+					char*       g_txt=&(chars[letters[j].t_st]);
 					int         g_len=letters[j].t_en-letters[j].t_st;
 					char savC=g_txt[g_len];
 					g_txt[g_len]=0;
@@ -619,6 +619,7 @@ void               flow_res::LetterToPosition(int c,int s,int l,bool /*l_start*/
 		text_style*     curS=spans[s].c_style;
 		size=(curS)?curS->theSize:chunks[c].ascent; // just the ascent, it's nicer
 	}
+
 	if ( ChunkType(c) == txt_textpath ) {
   		if ( l_end ) {
 			double width = fabs (letters[l].x_en - letters[l].x_st);

@@ -23,19 +23,20 @@ class font_instance;
 class text_style;
 
 struct SPFlowtext : public SPItem {
-	flow_dest*        f_dst;
-	flow_dest*        f_excl;
-	flow_src*					f_src;
-	flow_res*         f_res;
-	
 	div_flow_src      contents;
-	
+
 	// layout options
 	bool              justify;
 	double            par_indent;
 	int               algo;
 	double            min_scale,max_scale;
-	
+
+	flow_src*	   f_src;
+	flow_res*         f_res;
+
+	flow_dest*        f_dst;
+	flow_dest*        f_excl;
+
 	void              UpdateFlowSource(void);
 	void              UpdateFlowDest(void);
 	void              ComputeFlowRes(void);
