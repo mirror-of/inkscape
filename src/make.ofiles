@@ -107,7 +107,6 @@ OBJECTS = \
 	libnr/nr-svp.o \
 	libnr/nr-translate-test.o \
 	libnr/nr-types.o \
-	libnr/nr-uta.o \
 	libnr/nr-values.o \
 	libnr/nr_mmx_R8G8B8A8_P_EMPTY_A8_RGBAP.o \
 	libnr/nr_mmx_R8G8B8A8_P_R8G8B8A8_P_A8_RGBAP.o \
@@ -380,7 +379,6 @@ LINTS = \
 	libnr/nr-svp.lint \
 	libnr/nr-translate-test.lint \
 	libnr/nr-types.lint \
-	libnr/nr-uta.lint \
 	libnr/nr-values.lint \
 	libnr/nr_mmx_R8G8B8A8_P_EMPTY_A8_RGBAP.lint \
 	libnr/nr_mmx_R8G8B8A8_P_R8G8B8A8_P_A8_RGBAP.lint \

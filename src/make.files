@@ -1,3 +1,4 @@
+ResourceManager.h
 application.cpp
 application.h
 approx-equal.h
@@ -85,7 +86,6 @@ display/nr-plain-stuff-gdk.cpp
 display/nr-plain-stuff-gdk.h
 display/nr-plain-stuff.cpp
 display/nr-plain-stuff.h
-display/nr-uta.h
 display/sodipodi-ctrl.cpp
 display/sodipodi-ctrl.h
 display/sodipodi-ctrlrect.cpp
@@ -160,6 +160,7 @@ helper/units.cpp
 helper/units.h
 helper/window.cpp
 helper/window.h
+ink-snprintf.h
 inkjar/jar.cpp
 inkjar/jar.h
 inkscape-private.h
@@ -237,8 +238,6 @@ libnr/nr-translate-test.cpp
 libnr/nr-translate.h
 libnr/nr-types.cpp
 libnr/nr-types.h
-libnr/nr-uta.cpp
-libnr/nr-uta.h
 libnr/nr-values.cpp
 libnr/nr-values.h
 libnr/nr_mmx_R8G8B8A8_P_EMPTY_A8_RGBAP.S

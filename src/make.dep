@@ -477,6 +477,8 @@ dialogs/display-settings.o: \
 	desktop-handles.h \
 	dialogs/dialog-events.h \
 	dialogs/display-settings.h \
+	dropper-context.h \
+	event-context.h \
 	forward.h \
 	helper/action.h \
 	helper/helper-forward.h \
@@ -1877,9 +1879,11 @@ dropper-context.o: \
 	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
+	desktop.h \
 	display/canvas-arena.h \
 	display/canvas-bpath.h \
 	display/curve.h \
+	display/nr-arena-forward.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-item.h \
 	display/sp-canvas.h \
@@ -1887,8 +1891,14 @@ dropper-context.o: \
 	dropper-context.h \
 	enums.h \
 	event-context.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
+	extension/internal/svg.h \
 	forward.h \
 	helper/helper-forward.h \
+	helper/sp-intl.h \
+	helper/units.h \
 	inkscape-private.h \
 	inkscape.h \
 	libnr/nr-coord.h \
@@ -1915,6 +1925,13 @@ dropper-context.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
 	macros.h \
+	prefs-utils.h \
+	sp-namedview.h \
+	sp-object-group.h \
+	sp-object.h \
+	version.h \
+	view.h \
+	widgets/menu.h \
 	xml/repr.h
 
 dyna-draw-context.o: \
@@ -3225,26 +3242,6 @@ libnr/nr-types.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-types.h \
-	libnr/nr-values.h
-
-libnr/nr-uta.o: \
-	libnr/nr-uta.cpp \
-	display/nr-uta.h \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
-	libnr/nr-macros.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
 	libnr/nr-values.h
 
 libnr/nr-values.o: \
@@ -4642,6 +4639,7 @@ selection-chemistry.o: \
 	sp-pattern.h \
 	sp-root.h \
 	sp-shape.h \
+	sp-use.h \
 	style.h \
 	svg/svg-types.h \
 	uri-references.h \
@@ -6497,6 +6495,7 @@ sp-use.o: \
 	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
@@ -6518,6 +6517,9 @@ sp-use.o: \
 	sp-object.h \
 	sp-use.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	widgets/menu.h \

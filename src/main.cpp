@@ -64,6 +64,7 @@
 #include "sp-namedview.h"
 #include "sp-guide.h"
 #include "sp-object-repr.h"
+#include "xml/repr.h"
 
 #include <extension/extension.h>
 #include <extension/system.h>
@@ -235,7 +236,7 @@ sp_main_gui (int argc, const char **argv)
 	poptContext ctx;
 #endif
 	GSList *fl = NULL;
-	
+
 	gtk_init(&argc, const_cast<char ***>(&argv));
 
 	Inkscape::Extension::init();
@@ -263,19 +264,19 @@ sp_main_gui (int argc, const char **argv)
 
 
 #ifdef WIN32
-	Inkscape::Extension::Internal::PrintWin32::init(); 
+	Inkscape::Extension::Internal::PrintWin32::init();
 #endif
 
     inkscape_gtk_stock_init();
-   
+
 	/* Set default icon */
 	if (g_file_test (INKSCAPE_DATADIR "/pixmaps/inkscape.png", (GFileTest)(G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))) {
 		gtk_window_set_default_icon_from_file (INKSCAPE_DATADIR "/pixmaps/inkscape.png", NULL);
 	}
 
 	if (!sp_global_slideshow) {
-		gboolean create_new = TRUE; 
-		
+		gboolean create_new = TRUE;
+
 		// FIXME BROKEN - non-UTF-8 sneaks in here.
 		inkscape_application_init (argv[0]);
 
