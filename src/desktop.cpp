@@ -40,6 +40,8 @@
 #include "widgets/button.h"
 #include "widgets/ruler.h"
 #include "widgets/icon.h"
+#include "widgets/widget-sizes.h"
+#include "widgets/spw-utilities.h"
 #include "display/canvas-arena.h"
 #include "forward.h"
 #include "inkscape-private.h"
@@ -800,9 +802,10 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 
 	dtw->zoom_status = gtk_spin_button_new_with_range (log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
 	gtk_tooltips_set_tip (tt, dtw->zoom_status, _("Zoom"), _("Zoom"));
-	gtk_widget_set_usize (dtw->zoom_status, 75, -1);
+	gtk_widget_set_usize (dtw->zoom_status, STATUS_ZOOM_WIDTH, -1);
 	gtk_entry_set_width_chars (GTK_ENTRY (dtw->zoom_status), 6);
 
+	// fixme
 	gtk_editable_set_editable (GTK_EDITABLE (dtw->zoom_status), FALSE);
 	g_object_set (G_OBJECT (dtw->zoom_status), "can-focus", (gboolean) FALSE, NULL);
 
@@ -812,6 +815,9 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	g_signal_connect (G_OBJECT (dtw->zoom_status), "output", G_CALLBACK (sp_dtw_zoom_output), dtw);
 	dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "value_changed", G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
 	dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "populate_popup", G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
+
+	sp_set_font_size (dtw->zoom_status, STATUS_ZOOM_FONT_SIZE);
+
 	gtk_box_pack_start (GTK_BOX (sbar), dtw->zoom_status, FALSE, FALSE, 0);
 
 	/* connecting canvas, scrollbars, rulers, statusbar */
@@ -819,12 +825,18 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	g_signal_connect (G_OBJECT (dtw->vadj), "value-changed", G_CALLBACK (sp_desktop_widget_adjustment_value_changed), dtw);
 
 	dtw->coord_status = gtk_statusbar_new ();
-	gtk_widget_set_usize (dtw->coord_status, 128, 0);
+	gtk_widget_set_usize (dtw->coord_status, STATUS_COORD_WIDTH, SP_ICON_SIZE_BUTTON);
 	gtk_statusbar_push (GTK_STATUSBAR (dtw->coord_status), 0, "");
 	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (dtw->coord_status), FALSE);
+
+	sp_set_font_size (dtw->coord_status, STATUS_COORD_FONT_SIZE);
+
 	gtk_box_pack_start (GTK_BOX (sbar), dtw->coord_status, FALSE, FALSE, 2);
 
 	dtw->select_status = gtk_statusbar_new ();
+
+	sp_set_font_size (dtw->select_status, STATUS_BAR_FONT_SIZE);
+
 	// display the initial welcome message in the statusbar
 	gtk_statusbar_push (GTK_STATUSBAR (dtw->select_status), 0, _("Welcome to Inkscape! Use shape or freehand tools to create objects; use selector (arrow) to move or transform them."));
 	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (dtw->select_status), TRUE);
