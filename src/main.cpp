@@ -463,10 +463,10 @@ sp_do_export_png (SPDocument *doc)
 
 	g_print ("Exporting %g %g %g %g to %d x %d rectangle\n", area.x0, area.y0, area.x1, area.y1, width, height);
 
-	if ((width >= 16) || (height >= 16) || (width < 65536) || (height < 65536)) {
-		sp_export_png_file (doc, sp_export_png, area.x0, area.y0, area.x1, area.y1, width, height, bgcolor);
+	if ((width >= 1) || (height >= 1) || (width < 65536) || (height < 65536)) {
+		sp_export_png_file (doc, sp_export_png, area.x0, area.y0, area.x1, area.y1, width, height, bgcolor, NULL, NULL);
 	} else {
-		g_warning ("Calculated bitmap dimensions %d %d out of range (16 - 65535)", width, height);
+		g_warning ("Calculated bitmap dimensions %d %d out of range (1 - 65535)", width, height);
 	}
 }
 

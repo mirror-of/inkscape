@@ -501,6 +501,8 @@ struct SPEBP {
 	guchar r, g, b, a;
 	NRArenaItem *root;
 	guchar *px;
+	unsigned int (*status) (float, void *);
+	void *data;
 };
 
 static int
@@ -513,6 +515,10 @@ sp_export_get_rows (const guchar **rows, int row, int num_rows, void *data)
 	int r, c;
 
 	ebp = (struct SPEBP *) data;
+
+	if (ebp->status) {
+		if (!ebp->status ((float) row / ebp->height, ebp->data)) return 0;
+	}
 
 	num_rows = MIN (num_rows, ebp->sheight);
 	num_rows = MIN (num_rows, ebp->height - row);
@@ -557,7 +563,8 @@ void
 sp_export_png_file (SPDocument *doc, const gchar *filename,
 		    double x0, double y0, double x1, double y1,
 		    unsigned int width, unsigned int height,
-		    unsigned long bgcolor)
+		    unsigned long bgcolor,
+			 unsigned int (*status) (float, void*), void *data)
 {
 	NRMatrix affine;
 	gdouble t;
@@ -616,6 +623,9 @@ sp_export_png_file (SPDocument *doc, const gchar *filename,
 	/* Create ArenaItem and set transform */
 	ebp.root = sp_item_invoke_show (SP_ITEM (sp_document_root (doc)), arena, dkey, SP_ITEM_SHOW_PRINT);
 	nr_arena_item_set_transform (ebp.root, &affine);
+
+	ebp.status = status;
+	ebp.data = data;
 
 	if ((width < 256) || ((width * height) < 32768)) {
 		ebp.px = nr_pixelstore_64K_new (FALSE, 0);

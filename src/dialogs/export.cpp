@@ -26,11 +26,13 @@
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtkhseparator.h>
+#include <gtk/gtkprogressbar.h>
 
 #include "helper/sp-intl.h"
 #include "helper/window.h"
 #include "helper/unit-menu.h"
 #include "inkscape.h"
+#include "dir-util.h"
 #include "document.h"
 #include "desktop-handles.h"
 #include "sp-item.h"
@@ -49,6 +51,8 @@
 
 static void sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base);
 static void sp_export_export_clicked (GtkButton *button, GtkObject *base);
+static void sp_export_browse_clicked (GtkButton *button, gpointer userdata);
+static void sp_export_browse_store (GtkButton *button, gpointer userdata);
 
 static void sp_export_area_x_value_changed (GtkAdjustment *adj, GtkObject *base);
 static void sp_export_area_y_value_changed (GtkAdjustment *adj, GtkObject *base);
@@ -257,15 +261,18 @@ sp_export_dialog (void)
 		/* File entry */
 		f = gtk_frame_new (_("Filename"));
 		gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
-		/* fixme: add browse button, make the direcrory of the document current */
 		fe = gtk_entry_new ();
 
-		// set the default filename to be that of the current document with .png extension
+		// set the default filename to be that of the current path + document with .png extension
 		if (SP_ACTIVE_DOCUMENT && SP_DOCUMENT_URI (SP_ACTIVE_DOCUMENT)) {
-			const gchar *name, *dot;
+			gchar *name, *dot;
+			gchar *path;
 			gchar c[1024];
 			int len;
-			name = SP_DOCUMENT_NAME (SP_ACTIVE_DOCUMENT);
+			const gchar *uri = SP_DOCUMENT_URI (SP_ACTIVE_DOCUMENT);
+			
+			name = g_strdup(uri);
+			
 			len = strlen (name);
 			dot = strrchr (name, '.');
 			if (dot && (dot > name)) len = dot - name;
@@ -274,9 +281,19 @@ sp_export_dialog (void)
 			memcpy (c + len, ".png", 4);
 			c[len + 4] = 0;
 			gtk_entry_set_text (GTK_ENTRY (fe), c);
+
+			g_free(name);
 		}
 
-		gtk_container_add (GTK_CONTAINER (f), fe);
+		hb = gtk_hbox_new (FALSE, 5);
+		gtk_container_add (GTK_CONTAINER (f), hb);
+		gtk_container_set_border_width (GTK_CONTAINER (hb), 4);
+
+		b = gtk_button_new_with_label (_("Browse..."));
+		gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 4);
+		g_signal_connect (G_OBJECT (b), "clicked", G_CALLBACK (sp_export_browse_clicked), NULL);
+		
+		gtk_box_pack_start (GTK_BOX (hb), fe, TRUE, TRUE, 0);
 		gtk_object_set_data (GTK_OBJECT (dlg), "filename", fe);
 		gtk_widget_show_all (f);
 		// enter in filename field is the same as clicking export:
@@ -335,10 +352,46 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
 	}
 }
 
+static gint
+sp_export_progress_delete (GtkWidget *widget, GdkEvent *event, GObject *base)
+{
+      g_object_set_data (base, "cancel", (gpointer) 1);
+      //g_print ("_progress_delete\n");
+      return TRUE;
+}
+
+static void
+sp_export_progress_cancel (GtkWidget *widget, GObject *base)
+{
+      g_object_set_data (base, "cancel", (gpointer) 1);
+      //g_print ("_progress_cancel\n");
+}
+
+static unsigned int
+sp_export_progress_callback (float value, void *data)
+{
+      GtkWidget *prg;
+      int evtcount;
+      if (g_object_get_data ((GObject *) data, "cancel")) return FALSE;
+      prg = (GtkWidget *) g_object_get_data ((GObject *) data, "progress");
+      gtk_progress_bar_set_fraction ((GtkProgressBar *) prg, value);
+      evtcount = 0;
+      while ((evtcount < 16) && gdk_events_pending ()) {
+              //g_print ("Iteration %d\n", evtcount);
+              gtk_main_iteration_do (FALSE);
+              evtcount += 1;
+      }
+      gtk_main_iteration_do (FALSE);
+
+      //g_print ("Done.\n");
+
+      return TRUE;
+}
+
 static void
 sp_export_export_clicked (GtkButton *button, GtkObject *base)
 {
-	GtkWidget *fe;
+	GtkWidget *fe, *msg;
 	const gchar *filename;
 	float x0, y0, x1, y1;
 	int width, height;
@@ -359,9 +412,102 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
 	width = (int) (sp_export_value_get (base, "bmwidth") + 0.5);
 	height = (int) (sp_export_value_get (base, "bmheight") + 0.5);
 
-	if ((x1 > x0) && (y1 > y0) && (width > 0) && (height > 0)) {
-		sp_export_png_file (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP), filename, x0, y0, x1, y1, width, height, 0x00000000);
+	if (strlen (filename) == 0) {
+		msg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
+				GTK_BUTTONS_CLOSE, 
+				_("You have to enter a filename"));
+		gtk_dialog_run (GTK_DIALOG (msg));
+		gtk_widget_destroy (msg);
+	} else {
+		if ((x1 > x0) && (y1 > y0) && (width > 0) && (height > 0)) {
+			GtkWidget *dlg, *prg, *btn; /* progressbar-stuff */
+			const char *fn;
+			gchar *text;
+			
+			dlg = gtk_dialog_new ();
+			gtk_window_set_title (GTK_WINDOW (dlg), _("Export in progress"));
+			prg = gtk_progress_bar_new ();
+			g_object_set_data ((GObject *) base, "progress", prg);
+			fn = sp_filename_from_path (filename);
+			text = g_strdup_printf (_("Exporting [%d x %d] %s"), width, height, fn);
+			gtk_progress_bar_set_text ((GtkProgressBar *) prg, text);
+			g_free (text);
+			gtk_progress_bar_set_orientation ((GtkProgressBar *) prg, GTK_PROGRESS_LEFT_TO_RIGHT);
+			gtk_box_pack_start ((GtkBox *) ((GtkDialog *) dlg)->vbox, prg, FALSE, FALSE, 4);
+			btn = gtk_dialog_add_button (GTK_DIALOG (dlg), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+			g_signal_connect ((GObject *) dlg, "delete_event", (GCallback) sp_export_progress_delete, base);
+			g_signal_connect ((GObject *) btn, "clicked", (GCallback) sp_export_progress_cancel, base);
+			gtk_window_set_modal ((GtkWindow *) dlg, TRUE);
+			gtk_widget_show_all (dlg);
+			/* Do export */
+			sp_export_png_file (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP), filename, 
+					x0, y0, x1, y1, width, height, 
+					0x00000000, 
+					sp_export_progress_callback, base);
+			gtk_widget_destroy (dlg);
+			g_object_set_data (G_OBJECT (base), "cancel", (gpointer) 0);
+		} else {
+			msg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
+					GTK_BUTTONS_CLOSE, 
+					_("The chosen area to be exported is invalid"));
+			gtk_dialog_run (GTK_DIALOG (msg));
+			gtk_widget_destroy (msg);
+		}
 	}
+}
+
+static void
+sp_export_browse_clicked (GtkButton *button, gpointer userdata)
+{
+	GtkWidget *fs, *fe;
+	SPDocument *doc = SP_ACTIVE_DOCUMENT;
+	gchar *path, *suffix;
+	const gchar *filename;
+	
+	fs = gtk_file_selection_new (_("Select a filename for exporting"));
+	fe = (GtkWidget *)g_object_get_data (G_OBJECT (dlg), "filename");
+
+	gtk_window_set_modal(GTK_WINDOW (fs), true);
+	
+	filename = gtk_entry_get_text (GTK_ENTRY (fe));
+	
+	if(strlen(filename) == 0) {
+		filename = g_build_filename (g_get_home_dir(), "/", NULL);
+	}	
+
+	gtk_file_selection_set_filename (GTK_FILE_SELECTION (fs), filename);
+	
+	g_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (fs)->ok_button),
+				"clicked",
+				G_CALLBACK (sp_export_browse_store),
+				(gpointer) fs);
+
+	g_signal_connect_swapped (GTK_OBJECT (GTK_FILE_SELECTION (fs)->ok_button),
+				"clicked",
+				G_CALLBACK (gtk_widget_destroy),
+				(gpointer) fs);
+	
+	g_signal_connect_swapped (GTK_OBJECT (GTK_FILE_SELECTION (fs)->cancel_button),
+				"clicked",
+				G_CALLBACK (gtk_widget_destroy),
+				(gpointer) fs);
+
+	gtk_widget_show (fs);
+}
+
+static void
+sp_export_browse_store (GtkButton *button, gpointer userdata)
+{
+	GtkWidget *fs = (GtkWidget *)userdata, *fe;
+	const gchar *file;
+
+	fe = (GtkWidget *)g_object_get_data (G_OBJECT (dlg), "filename");
+	
+	file = gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs));
+
+	gtk_entry_set_text (GTK_ENTRY (fe), file);
+	
+	g_object_set_data (G_OBJECT (dlg), "filename", fe);
 }
 
 static void
