@@ -61,6 +61,9 @@
 
 #include "file.h"
 
+#include <extension/extension.h>
+#include <extension/db.h>
+
 enum {
     ACTIVATE,
     DEACTIVATE,
@@ -1097,9 +1100,10 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
             gchar *markup;
             /* FIXME !!! obviously this will have problems if the document name contains markup characters */
             markup = g_strdup_printf(
-                _("<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a format that may cause data loss!</span>\n\n"
+                _("<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a format (%s) that may cause data loss!</span>\n\n"
                   "Do you want to save this file in another format?"),
-                SP_DOCUMENT_NAME(doc));
+                SP_DOCUMENT_NAME(doc),
+				Inkscape::Extension::db.get(sp_repr_attr(sp_document_repr_root(doc), "inkscape:output_extension"))->get_name());
 
             /* FIXME !!! Gtk 2.3+ gives us
 	       gtk_message_dialog_set_markup() (and actually even
