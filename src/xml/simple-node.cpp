@@ -390,7 +390,7 @@ void SimpleNode::setPosition(int pos) {
         }
     }
 
-    changeOrder(this, ref);
+    _parent->changeOrder(this, ref);
 }
 
 void SimpleNode::synthesizeEvents(SPReprEventVector const *vector, void *data) {

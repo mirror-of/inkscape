@@ -1,3 +1,7 @@
+2004-01-25  MenTaLguY  <mental@rydia.net>
+
+	* src/xml/simple-node.cpp: fixed bug #1108231
+
 2005-01-25  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/dialogs/desktop-properties.cpp: Changed set of paper sizes offered:
