@@ -45,7 +45,7 @@ sp_svg_view_get_type (void)
 			4,
 			(GInstanceInitFunc) sp_svg_view_init,
 		};
-		type = g_type_register_static (SP_TYPE_VIEW, "SPSVGView", &info, 0);
+		type = g_type_register_static (SP_TYPE_VIEW, "SPSVGView", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -59,7 +59,7 @@ sp_svg_view_class_init (SPSVGViewClass *klass)
 	object_class = G_OBJECT_CLASS (klass);
 	view_class = (SPViewClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (SPViewClass*)g_type_class_peek_parent (klass);
 
 	object_class->dispose = sp_svg_view_dispose;
 
@@ -105,7 +105,7 @@ arena_handler (SPCanvasArena *arena, NRArenaItem *ai, GdkEvent *event, SPSVGView
 	SPItem *spitem;
 	SPEvent spev;
 
-	spitem = (ai) ? NR_ARENA_ITEM_GET_DATA (ai) : NULL;
+	spitem = (ai) ? (SPItem*)NR_ARENA_ITEM_GET_DATA (ai) : NULL;
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
@@ -190,7 +190,7 @@ sp_svg_view_new (SPCanvasGroup *parent)
 	g_return_val_if_fail (parent != NULL, NULL);
 	g_return_val_if_fail (SP_IS_CANVAS_GROUP (parent), NULL);
 
-	svgview = g_object_new (SP_TYPE_SVG_VIEW, NULL);
+	svgview = (SPSVGView*)g_object_new (SP_TYPE_SVG_VIEW, NULL);
 
 	svgview->parent = parent;
 
@@ -307,7 +307,7 @@ sp_svg_view_widget_class_init (SPSVGViewWidgetClass *klass)
 	widget_class = GTK_WIDGET_CLASS (klass);
 	vw_class = SP_VIEW_WIDGET_CLASS (klass);
 
-	widget_parent_class = gtk_type_class (SP_TYPE_VIEW_WIDGET);
+	widget_parent_class = (SPViewWidgetClass*)gtk_type_class (SP_TYPE_VIEW_WIDGET);
 
 	object_class->destroy = sp_svg_view_widget_destroy;
 
@@ -447,7 +447,7 @@ sp_svg_view_widget_view_resized (SPViewWidget *vw, SPView *view, gdouble width, 
 	}
 
 	if (svgvw->resize) {
-		gtk_widget_set_usize (svgvw->canvas, width, height);
+		gtk_widget_set_usize (svgvw->canvas, (int)width, (int)height);
 		gtk_widget_queue_resize (GTK_WIDGET (vw));
 	}
 }
@@ -460,7 +460,7 @@ sp_svg_view_widget_new (SPDocument *doc)
 	g_return_val_if_fail (doc != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (doc), NULL);
 
-	widget = gtk_type_new (SP_TYPE_SVG_VIEW_WIDGET);
+	widget = (GtkWidget*)gtk_type_new (SP_TYPE_SVG_VIEW_WIDGET);
 
 	sp_view_set_document (SP_VIEW_WIDGET_VIEW (widget), doc);
 
