@@ -49,8 +49,8 @@ main (int argc, char **argv)
 	}
 
 	if (sizeof (short) == 2) {
-		printf ("typedef signed short NRShort;\n");
-		printf ("typedef unsigned short NRUShort;\n");
+		printf ("typedef signed int NRShort;\n");
+		printf ("typedef unsigned int NRUShort;\n");
 	} else {
 		die ("sizeof (short) != 2");
 	}

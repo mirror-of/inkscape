@@ -29,7 +29,7 @@ static NRObjectClass **classes = NULL;
 static unsigned int classes_len = 0;
 static unsigned int classes_size = 0;
 
-unsigned int
+NRType
 nr_type_is_a (NRType type, NRType test)
 {
 	NRObjectClass *klass;
@@ -48,7 +48,7 @@ nr_type_is_a (NRType type, NRType test)
 }
 
 void *
-nr_object_check_instance_cast (void *ip, unsigned int tc)
+nr_object_check_instance_cast (void *ip, NRType tc)
 {
 	nr_return_val_if_fail (ip != NULL, NULL);
 	nr_return_val_if_fail (nr_type_is_a (((NRObject *) ip)->klass->type, tc), ip);

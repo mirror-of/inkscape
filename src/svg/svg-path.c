@@ -1110,12 +1110,12 @@ sp_svg_write_path (const ArtBpath * bpath)
 	for (i = 0; bpath[i].code != ART_END; i++){
 		switch (bpath [i].code){
 		case ART_LINETO:
-			g_string_sprintfa (result, "L %g %g ", bpath [i].x3, bpath [i].y3);
+			g_string_sprintfa (result, "L %.8g %.8g ", bpath [i].x3, bpath [i].y3);
 			break;
 
 		case ART_CURVETO:
 			g_string_sprintfa (
-				result, "C %g %g %g %g %g %g ",
+				result, "C %.8g %.8g %.8g %.8g %.8g %.8g ",
 				bpath [i].x1, bpath [i].y1,
 				bpath [i].x2, bpath [i].y2,
 				bpath [i].x3, bpath [i].y3);
@@ -1126,7 +1126,7 @@ sp_svg_write_path (const ArtBpath * bpath)
 			if (closed)
 				g_string_append  (result, "z ");
 			closed = (bpath [i].code == ART_MOVETO);
-			g_string_sprintfa (result, "M %g %g ", bpath [i].x3, bpath [i].y3);
+			g_string_sprintfa (result, "M %.8g %.8g ", bpath [i].x3, bpath [i].y3);
 			break;
 		default:
 			g_assert_not_reached ();

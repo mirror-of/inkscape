@@ -28,7 +28,7 @@ struct _NRMatrixD {
 };
 
 struct _NRMatrixF {
-	float c[6];
+	double c[6];
 };
 
 struct _NRPointD {
@@ -36,7 +36,7 @@ struct _NRPointD {
 };
 
 struct _NRPointF {
-	float x, y;
+	double x, y;
 };
 
 struct _NRPointL {
@@ -52,7 +52,7 @@ struct _NRRectD {
 };
 
 struct _NRRectF {
-	float x0, y0, x1, y1;
+	double x0, y0, x1, y1;
 };
 
 struct _NRRectL {
