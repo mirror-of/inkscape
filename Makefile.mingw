@@ -50,7 +50,11 @@ dist:
 	$(CP) icons$(S)*.svg inkscape$(S)pixmaps
 	$(MKDIR) inkscape$(S)fonts
 	$(CP) $(GTKDOS)$(S)fonts$(S)*.ttf inkscape$(S)fonts
-	$(CPDIR) doc inkscape
+	$(CPDIR) share inkscape$(S)share
+	$(RMDIR) inkscape$(S)share$(S)CVS
+	$(RMDIR) inkscape$(S)share$(S)clipart$(S)CVS
+	$(RMDIR) inkscape$(S)share$(S)clipart$(S)road_signs$(S)CVS
+	$(CPDIR) doc inkscape$(S)doc
 	$(RMDIR) inkscape$(S)doc$(S)CVS
 	$(MKDIR) inkscape$(S)data
 	$(MKDIR) inkscape$(S)extensions
