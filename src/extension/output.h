@@ -12,8 +12,9 @@
 #ifndef INKSCAPE_EXTENSION_OUTPUT_H__
 #define INKSCAPE_EXTENSION_OUTPUT_H__
 
+#include <gtk/gtkdialog.h>
 #include "extension.h"
-#include "document.h"
+struct SPDocument;
 
 namespace Inkscape {
 namespace Extension {
