@@ -54,7 +54,7 @@ static Path::cut_position PointToCurvilignPosition(Path const &path, NR::Point c
 {
     unsigned bestSeg = 0;
     double bestRangeSquared = DBL_MAX;
-    double bestT = 0.0;
+    double bestT = 0.0; // you need a sentinel, or make sure that you prime with correct values.
 
     for (unsigned i = 1 ; i < path.pts.size() ; i++) {
         if (path.pts[i].isMoveTo == polyline_moveto) continue;
@@ -69,9 +69,10 @@ static Path::cut_position PointToCurvilignPosition(Path const &path, NR::Point c
             p2 = NR::Point(path.pts[i].p[1], path.pts[i].p[0]);
             localPos = NR::Point(pos[1], pos[0]);
         }
+	// There is a proper line intersector already in the code which does this without issues around vertical.
         double gradient = (p2[0] - p1[0]) / (p2[1] - p1[1]);
         double intersection = p1[0] - gradient * p1[1];
-        double orthogonalGradient = -1.0 / gradient;
+        double orthogonalGradient = -1.0 / gradient; // you are going to have numerical problems here.
         double orthogonalIntersection = localPos[0] - orthogonalGradient * localPos[1];
         double nearestY = (orthogonalIntersection - intersection) / (gradient - orthogonalGradient);
         double t = (nearestY - p1[1]) / (p2[1] - p1[1]);
@@ -310,19 +311,14 @@ Shape* Layout::createSelectionShape(iterator const &it_start, iterator const &it
     for (iterator it = it_start ; it < it_end ; it.nextCharacter()) {
         NR::Rect box = characterBoundingBox(it, &rotation_angle);
         Path rect_path;
-        NR::Matrix rotation_matrix(NR::rotate(sin(rotation_angle), cos(rotation_angle)));
-        NR::Point top_left = box.min();
-        NR::Point bottom_right = box.max();
-        NR::Point top_right(bottom_right[0], top_left[1]);
-        NR::Point bottom_left(top_left[0], bottom_right[1]);
-        top_left *= rotation_matrix;
-        bottom_right *= rotation_matrix;
-        top_right *= rotation_matrix;
-        bottom_left *= rotation_matrix;
-        rect_path.MoveTo(top_left);
-        rect_path.LineTo(top_right);
-        rect_path.LineTo(bottom_right);
-        rect_path.LineTo(bottom_left);
+	NR::rotate transform(rotation_angle);
+	for(int i = 0; i < 4; i ++) {
+		NR::Point corner = box.corner(i) * transform;
+		if(i == 0)
+			rect_path.MoveTo(corner);
+		else
+			rect_path.LineTo(corner);
+	}
         rect_path.Close();
         Shape rect_shape;
         rect_path.Fill(&rect_shape);
@@ -376,7 +372,7 @@ void Layout::queryCursorShape(iterator const &it, NR::Point *position, double *h
             NR::Point point;
             NR::Point tangent;
             const_cast<Path*>(_path_fitted)->PointAndTangentAt(path_parameter.piece, path_parameter.t, point, tangent);
-            *rotation = atan2(tangent[1], tangent[0]);
+            *rotation = atan2(tangent);
             (*position)[0] = point[0] - tangent[1] * span->chunk(this).baseline_shift;
             (*position)[1] = point[1] + tangent[0] * span->chunk(this).baseline_shift;
         } else {
