@@ -1,3 +1,8 @@
+2004-06-25  MenTaLguY  <mental@rydia.net>
+
+	* src/display/sp-canvas.cpp: enabled win32 current item workaround on
+  	  all platforms
+
 2004-06-25  Kees Cook  <kees@outflux.net>
 
 	* src/dialogs/rdf.h, src/dialogs/rdf.cpp, src/dialogs/Makefile_insert,
