@@ -15,18 +15,11 @@ even be possible to avoid forward references for recursive/looping code.)
 
 src/pencil-context.cpp:fit_and_split
 
-Very loose proof of !sp_curve_empty (dc->red_curve) assertion:
+Very loose proof of !sp_curve_empty (pc->red_curve) assertion:
 fit_and_split is called successively with its input varying only by appending a point.
-For the n_segs > 0 && dc->npoints < G_N_ELEMENTS(pc->p) condition to fail,
+For the n_segs > 0 && unsigned(pc->npoints) < G_N_ELEMENTS(pc->p) condition to fail,
 we must have at least 3 distinct points, which means that a previous call had 2 distinct points,
-in which case we'd have filled in dc->red_curve to a non-empty curve.
-
-
-src/pencil-context.cpp:fit_and_split
-
-Loose proof of 2 <= dc->npoints:
-Was true at top of function if "dc->npoints > 1" assertion holds.
-We don't pass dc to anything in the meantime.
+in which case we'd have filled in pc->red_curve to a non-empty curve.
 
 
 src/pencil-context.cpp:fit_and_split
@@ -38,11 +31,11 @@ function.
 
 src/pencil-context.cpp:spdc_add_freehand_point
 
-Proof of fit_and_split `dc->npoints > 1' requirement:
-It initially unconditionally asserts `dc->npoints > 0'.  There are no function calls or modifications
-of dc or dc->npoints other than incrementing dc->npoints after that assertion.
+Proof of fit_and_split `pc->npoints > 1' requirement:
+It initially unconditionally asserts `pc->npoints > 0'.  There are no function calls or modifications
+of pc or pc->npoints other than incrementing pc->npoints after that assertion.
 We assume that integer overflow doesn't occur during that increment,
-so we get dc->npoints > 1.
+so we get pc->npoints > 1.
 
 
 src/display/bezier-utils.cpp:compute_max_error
@@ -194,3 +187,10 @@ Loose proof of requirements for sp_spiral_fit_and_draw:
   Initially guaranteed by sp_spiral_get_tangent Ensures.
   For subsequent calls, hat1 is set from negated hat2 as set by sp_spiral_fit_and_draw,
   which Ensures is_unit_vector(hat2).
+
+
+# Local Variables:
+# mode:indented-text
+# fill-column:99
+# End:
+# vim: filetype=text:tabstop=8:encoding=utf-8:textwidth=99 :
