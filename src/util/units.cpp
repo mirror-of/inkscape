@@ -1,5 +1,3 @@
-
-
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
@@ -8,8 +6,9 @@
 #include <cerrno>
 #include <glib/gmessages.h>
 
-#include "units.h"
 #include "io/simple-sax.h"
+#include "util/units.h"
+#include "streq.h"
 
 namespace Inkscape {
 namespace Util {
@@ -17,13 +16,13 @@ namespace Util {
 class UnitsSAXHandler : public Inkscape::IO::FlatSaxHandler
 {
 public:
-    UnitsSAXHandler(UnitTable* table) : FlatSaxHandler(), tbl(table) {}
+    UnitsSAXHandler(UnitTable *table) : FlatSaxHandler(), tbl(table) {}
     virtual ~UnitsSAXHandler() {}
 
-    virtual void _startElement(const xmlChar *name, const xmlChar **attrs);
-    virtual void _endElement(const xmlChar *name);
+    virtual void _startElement(xmlChar const *name, xmlChar const **attrs);
+    virtual void _endElement(xmlChar const *name);
 
-    UnitTable* tbl;
+    UnitTable *tbl;
     bool primary;
     bool skip;
     Unit unit;
@@ -69,7 +68,7 @@ UnitTable::~UnitTable() {
 
 /** Add a new unit to the table */
 void
-UnitTable::addUnit(Unit const& u, bool primary) {
+UnitTable::addUnit(Unit const &u, bool primary) {
     _unit_map[u.abbr] = new Unit(u);
     if (primary) {
 	_primary_unit[u.type] = u.abbr;
@@ -78,7 +77,7 @@ UnitTable::addUnit(Unit const& u, bool primary) {
 
 /** Retrieve a given unit based on its string identifier */
 Unit
-UnitTable::getUnit(Glib::ustring const& unit_abbr) const {
+UnitTable::getUnit(Glib::ustring const &unit_abbr) const {
     UnitMap::const_iterator iter = _unit_map.find(unit_abbr);
     if (iter != _unit_map.end()) {
 	return *((*iter).second);
@@ -89,7 +88,7 @@ UnitTable::getUnit(Glib::ustring const& unit_abbr) const {
 
 /** Remove a unit definition from the given unit type table */
 bool 
-UnitTable::deleteUnit(Unit const& u) {
+UnitTable::deleteUnit(Unit const &u) {
     if (u.abbr == _primary_unit[u.type]) {
 	// Cannot delete the primary unit type since it's
 	// used for conversions
@@ -114,15 +113,14 @@ UnitTable::hasUnit(Glib::ustring const &unit) const {
 
 /** Provides an iteratable list of items in the given unit table */
 UnitTable::UnitMap 
-UnitTable::units(UnitType type) const {
+UnitTable::units(UnitType type) const
+{
     UnitMap submap;
-
-    UnitMap::const_iterator iter = _unit_map.begin();
-    while (iter != _unit_map.end()) {
+    for (UnitMap::const_iterator iter = _unit_map.begin();
+         iter != _unit_map.end(); ++iter) {
 	if (((*iter).second)->type == type) {
 	    submap.insert(UnitMap::value_type((*iter).first, new Unit(*((*iter).second))));
 	}
-	++iter;
     }
 
     return submap;
@@ -177,13 +175,13 @@ UnitTable::loadText(Glib::ustring const &filename) {
 	u.description = desc;
 	u.factor = factor;
 
-	if (strcmp(type, "DIMENSIONLESS") == 0) {
+	if (streq(type, "DIMENSIONLESS")) {
 	    u.type = UNIT_TYPE_DIMENSIONLESS;
-	} else if (strcmp(type, "LINEAR") == 0) {
+	} else if (streq(type, "LINEAR")) {
 	    u.type = UNIT_TYPE_LINEAR;
-	} else if (strcmp(type, "RADIAL") == 0) {
+	} else if (streq(type, "RADIAL")) {
 	    u.type = UNIT_TYPE_RADIAL;
-	} else if (strcmp(type, "FONT_HEIGHT") == 0) {
+	} else if (streq(type, "FONT_HEIGHT")) {
 	    u.type = UNIT_TYPE_FONT_HEIGHT;
 	} else {
 	    g_warning("Skipping unknown unit type '%s' for %s.\n", 
@@ -211,8 +209,7 @@ UnitTable::load(Glib::ustring const &filename) {
     UnitsSAXHandler handler(this);
 
     int result = handler.parseFile( filename.c_str() );
-    if ( result != 0 )
-    {
+    if ( result != 0 ) {
         // perhaps
 	g_warning("Problem loading units file '%s':  %d\n", 
 		  filename.c_str(), result);
@@ -257,10 +254,9 @@ UnitTable::save(Glib::ustring const &filename) {
 }
 
 
-void UnitsSAXHandler::_startElement(const xmlChar *name, const xmlChar **attrs)
+void UnitsSAXHandler::_startElement(xmlChar const *name, xmlChar const **attrs)
 {
-    if ( strcmp("unit", (const char*)name) == 0 )
-    {
+    if (streq("unit", (char const *)name)) {
         // reset for next use
         unit.name.clear();
         unit.name_plural.clear();
@@ -271,59 +267,45 @@ void UnitsSAXHandler::_startElement(const xmlChar *name, const xmlChar **attrs)
         primary = false;
         skip = false;
 
-        for ( int i = 0; attrs[i]; i += 2 )
-        {
-            if ( strcmp("type", (const char*)attrs[i]) == 0 )
-            {
-                const char* type = (const char*)attrs[i+1];
-                if (strcmp(type, "DIMENSIONLESS") == 0) {
+        for ( int i = 0; attrs[i]; i += 2 ) {
+            char const *const key = (char const *)attrs[i];
+            if (streq("type", key)) {
+                char const *type = (char const*)attrs[i+1];
+                if (streq(type, "DIMENSIONLESS")) {
                     unit.type = UNIT_TYPE_DIMENSIONLESS;
-                } else if (strcmp(type, "LINEAR") == 0) {
+                } else if (streq(type, "LINEAR")) {
                     unit.type = UNIT_TYPE_LINEAR;
-                } else if (strcmp(type, "RADIAL") == 0) {
+                } else if (streq(type, "RADIAL")) {
                     unit.type = UNIT_TYPE_RADIAL;
-                } else if (strcmp(type, "FONT_HEIGHT") == 0) {
+                } else if (streq(type, "FONT_HEIGHT")) {
                     unit.type = UNIT_TYPE_FONT_HEIGHT;
                 } else {
                     g_warning("Skipping unknown unit type '%s' for %s.\n", type, name);
                     skip = true;
                 }
-            }
-            else if ( strcmp("pri", (const char*)attrs[i]) == 0 )
-            {
+            } else if (streq("pri", key)) {
                 primary = attrs[i+1][0] == 'y' || attrs[i+1][0] == 'Y';
             }
         }
     }
 }
 
-void UnitsSAXHandler::_endElement(const xmlChar *name)
+void UnitsSAXHandler::_endElement(xmlChar const *xname)
 {
-    if ( strcmp("name", (const char*)name) == 0 )
-    {
+    char const *const name = (char const *) xname;
+    if (streq("name", name)) {
         unit.name = data;
-    }
-    else if ( strcmp("plural", (const char*)name) == 0 )
-    {
+    } else if (streq("plural", name)) {
         unit.name_plural = data;
-    }
-    else if ( strcmp("abbr", (const char*)name) == 0 )
-    {
+    } else if (streq("abbr", name)) {
         unit.abbr = data;
-    }
-    else if ( strcmp("factor", (const char*)name) == 0 )
-    {
+    } else if (streq("factor", name)) {
         // TODO make sure we use the right conversion
         unit.factor = atol(data.c_str());
-    }
-    else if ( strcmp("description", (const char*)name) == 0 )
-    {
+    } else if (streq("description", name)) {
         unit.description = data;
-    }
-    else if ( strcmp("unit", (const char*)name) == 0 )
-    {
-        if ( !skip )
-        {
+    } else if (streq("unit", name)) {
+        if (!skip) {
             tbl->addUnit(unit, primary);
         }
     }
@@ -331,3 +313,15 @@ void UnitsSAXHandler::_endElement(const xmlChar *name)
 
 } // namespace Util
 } // namespace Inkscape
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
