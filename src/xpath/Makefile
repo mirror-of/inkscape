@@ -3,7 +3,7 @@ CXX = g++
 
 CFLAGS = -g -Wall -DYYDEBUG
 
-INC =
+INC = -I.
 
 LIBS =
 

@@ -12,12 +12,7 @@
 
 // File: http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/dom.idl
 
-#ifndef ___DOM_H___
-#define __DOM_H__
-
-#include "dom.h"
-
-
+#include "domimpl.h"
 
 
 namespace w3c
@@ -28,6 +23,7 @@ namespace dom
 {
 
 
+
 typedef struct
 {
     char *sval; //String value
@@ -35,397 +31,11 @@ typedef struct
 } SymTableEntry;
 
 
-/*#########################################################################
-## I M P L E M E N T A T I O N    C L A S S    D E C L A R A T I O N S
-#########################################################################*/
-
-class DOMImplementationImpl : public DOMImplementation
-{
-    public:
-
-    bool hasFeature(DOMString& feature, DOMString& version);
-
-    DocumentType *createDocumentType( DOMString& qualifiedName, 
-                                     DOMString& publicId, 
-                                     DOMString& systemId)
-                                     throw(DOMException);
-
-    Document *createDocument(DOMString& namespaceURI, 
-                             DOMString& qualifiedName, 
-                             DocumentType *doctype)
-                             throw(DOMException);
-
-};
-
-
-class NodeImpl : public Node
-{
-    public:
-
-    DOMString getNodeName();
-
-    DOMString getNodeValue() throw (DOMException);
-
-    void setNodeValue(DOMString& val) throw (DOMException);
-
-
-    unsigned short getNodeType();
-
-
-    Node *getParentNode();
-
-    NodeList *getChildNodes();
-
-    Node *getFirstChild();
-
-    Node *getLastChild();
-
-
-    Node *getPreviousSibling();
-
-    Node *getNextSibling();
-
-
-    NamedNodeMap *getAttributes();
-
-
-
-    Document *getOwnerDocument();
-
-
-    Node *insertBefore(Node *newChild, 
-                       Node *refChild)
-                       throw(DOMException);
-
-
-    Node *replaceChild(Node *newChild, 
-                       Node *oldChild)
-                       throw(DOMException);
-
-
-    Node *removeChild(Node *oldChild)
-                      throw(DOMException);
-
-
-    Node *appendChild(Node *newChild)
-                      throw(DOMException);
-
-
-    bool hasChildNodes();
-
-    Node *cloneNode(bool deep);
-
-    void normalize();
-
-    bool isSupported(DOMString& feature, 
-                     DOMString& version);
-
-    DOMString getNamespaceURI();
-
-    DOMString getPrefix();
-
-    void setPrefix(DOMString& val) throw(DOMException);
-
-    DOMString getLocalName();
-
-    bool hasAttributes();
-
-};
-
-
-class NodeListImpl : public NodeList
-{
-    public:
-
-    Node *item(unsigned long index);
-
-    unsigned long getLength();
-
-};
-
-
-class NamedNodeMapImpl : public NamedNodeMap
-{
-    public:
-
-    Node *getNamedItem(DOMString& name);
-
-    Node *setNamedItem(Node *arg) throw(DOMException);
-
-    Node *removeNamedItem(DOMString& name) throw(DOMException);
-
-    Node *item(unsigned long index);
-
-    unsigned long getLength();
-
-    Node *getNamedItemNS(DOMString& namespaceURI, 
-                         DOMString& localName);
-
-    Node *setNamedItemNS(Node *arg) throw(DOMException);
-
-    Node *removeNamedItemNS(DOMString& namespaceURI, 
-                            DOMString& localName)
-                            throw(DOMException);
-};
-
-
-class CharacterDataImpl : public CharacterData
-{
-    public:
-
-    DOMString getData() throw(DOMException);
-
-    void setData(DOMString& val) throw(DOMException);
-
-    unsigned long getLength();
-
-    DOMString substringData(unsigned long offset, 
-                            unsigned long count)
-                            throw(DOMException);
-
-    void appendData(DOMString& arg) throw(DOMException);
-
-    void insertData(unsigned long offset, 
-                    DOMString& arg)
-                    throw(DOMException);
-
-    void deleteData(unsigned long offset, 
-                    unsigned long count)
-                    throw(DOMException);
-
-    void  replaceData(unsigned long offset, 
-                      unsigned long count, 
-                      DOMString& arg)
-                      throw(DOMException);
-
-};
-
-
-
-class AttrImpl : public Attr
-{
-    public:
-
-    DOMString getName();
-
-    bool getSpecified();
-
-    DOMString getValue();
-
-    void setValue(DOMString& val) throw(DOMException);
-
-    Element *getOwnerElement();
-
-};
-
-
-class ElementImpl : public Element
-{
-    public:
-
-    DOMString getTagName();
-
-    DOMString getAttribute(DOMString& name);
-
-    void setAttribute(DOMString& name, 
-                      DOMString& value)
-                      throw(DOMException);
-
-    void removeAttribute(DOMString& name)
-                         throw(DOMException);
-
-    Attr *getAttributeNode(DOMString& name);
-
-    Attr *setAttributeNode(Attr *newAttr)
-                          throw(DOMException);
-
-    Attr *removeAttributeNode(Attr *oldAttr)
-                             throw(DOMException);
-
-    NodeList *getElementsByTagName(DOMString& name);
-
-
-    DOMString getAttributeNS(DOMString& namespaceURI, 
-                             DOMString& localName);
-
-    void setAttributeNS(DOMString& namespaceURI, 
-                        DOMString& qualifiedName, 
-                        DOMString& value)
-                        throw(DOMException);
-
-
-    void removeAttributeNS(DOMString& namespaceURI, 
-                           DOMString& localName)
-                           throw(DOMException);
- 
-
-    Attr *getAttributeNodeNS(DOMString& namespaceURI, 
-                            DOMString& localName);
-
-    Attr *setAttributeNodeNS(Attr *newAttr)
-                            throw(DOMException);
-
-    NodeList *getElementsByTagNameNS(DOMString& namespaceURI, 
-                                    DOMString& localName);
-
-
-    bool hasAttribute(DOMString& name);
-
-    bool hasAttributeNS(DOMString& namespaceURI, 
-                        DOMString& localName);
-};
-
-
-
-class TextImpl : public Text
-{
-    public:
-
-    Text *splitText(unsigned long offset) throw(DOMException);
-};
-
-
-class CommentImpl : public Comment
-{
-};
-
-
-class CDATASectionImpl : public CDATASection
-{
-};
-
-class DocumentTypeImpl : public DocumentType
-{
-    public:
-
-    DocumentTypeImpl(DOMString& qualifiedName, 
-                     DOMString& publicId, DOMString& systemId);
-
-    DOMString getName();
-
-
-    NamedNodeMap *getEntities();
-
-
-    NamedNodeMap *getNotations();
-
-
-    DOMString getPublicId();
-
-
-    DOMString getSystemId();
-
-    DOMString getInternalSubset();
-
-};
-
-
-class NotationImpl : public Notation
-{
-    public:
-
-    DOMString getPublicId();
-
-    DOMString getSystemId();
-
-};
-
-class EntityImpl : public Entity
-{
-    public:
-
-    DOMString getPublicId();
-
-    DOMString getSystemId();
-
-    DOMString getNotationName();
-
-};
-
-
-class EntityReferenceImpl : public EntityReference
-{
-};
-
-
-class ProcessingInstructionImpl : public ProcessingInstruction
-{
-    public:
-
-    DOMString getTarget();
-
-    DOMString getData();
-
-    void setData(DOMString& val) throw(DOMException);
-};
-
-
-
-class DocumentFragmentImpl : public DocumentFragment
-{
-};
-
-
-
-class DocumentImpl : public Document
-{
-    public:
-
-    DocumentType *DocumentImpl::getDoctype();
-
-    DOMImplementation *DocumentImpl::getImplementation();
-
-    Element *DocumentImpl::getDocumentElement();
-
-    Element *DocumentImpl::createElement(DOMString& tagName) throw(DOMException);
-
-    DocumentFragment *DocumentImpl::createDocumentFragment();
-
-    Text *DocumentImpl::createTextNode(DOMString& data);
-
-    Comment  *DocumentImpl::createComment(DOMString& data);
-
-    CDATASection *DocumentImpl::createCDATASection(DOMString& data)
-                                     throw(DOMException);
-
-    ProcessingInstruction *DocumentImpl::createProcessingInstruction(DOMString& target, 
-                                                       DOMString& data)
-                                                       throw(DOMException);
-
-
-    Attr *DocumentImpl::createAttribute(DOMString& name)
-                          throw(DOMException);
-
-
-    EntityReference *DocumentImpl::createEntityReference(DOMString& name)
-                                           throw(DOMException);
-
-
-    NodeList *DocumentImpl::getElementsByTagName(DOMString& tagname);
-
-    Node *DocumentImpl::importNode(Node *importedNode, bool deep)
-                                 throw(DOMException);
-
-    Element *DocumentImpl::createElementNS(DOMString& namespaceURI, 
-                             DOMString& qualifiedName)
-                             throw(DOMException);
-
-    Attr *DocumentImpl::createAttributeNS(DOMString& namespaceURI, 
-                            DOMString& qualifiedName)
-                            throw(DOMException);
-
-    NodeList *DocumentImpl::getElementsByTagNameNS(DOMString& namespaceURI, 
-                                     DOMString& localName);
-
-    Element *DocumentImpl::getElementById(DOMString& elementId);
-
-};
-
-
 
 /*#########################################################################
 ## DOMException
 #########################################################################*/
+
 static SymTableEntry exceptionCodes[] =
 {
 
@@ -447,7 +57,6 @@ static SymTableEntry exceptionCodes[] =
     { NULL,                          0                           }
 };
 
-
 const char *DOMException::what() const throw()
 {
     SymTableEntry *entry;
@@ -460,6 +69,7 @@ const char *DOMException::what() const throw()
         }
     return "Not defined";
 }
+
 
 
 
@@ -492,7 +102,7 @@ DocumentType *DOMImplementationImpl::createDocumentType(
                                      DOMString& systemId)
                                      throw(DOMException)
 {
-   DocumentTypeImpl *type = new DocumentTypeImpl(qualifiedName, 
+   DocumentType *type = new DocumentTypeImpl(qualifiedName, 
                                   publicId, systemId);
    return type;
 }
@@ -507,12 +117,11 @@ Document *DOMImplementationImpl::createDocument(DOMString& namespaceURI,
                              DocumentType *doctype)
                              throw(DOMException)
 {
-    DocumentImpl *doc = new DocumentImpl(namespaceURI, qualifiedName,
+    Document *doc = new DocumentImpl(namespaceURI, qualifiedName,
                                           doctype);
     return doc;
 
 }
-
 
 
 
@@ -523,20 +132,40 @@ Document *DOMImplementationImpl::createDocument(DOMString& namespaceURI,
 
 static SymTableEntry nodeTypes[] =
 {
-    { "ELEMENT_NODE",                ELEMENT_NODE                 },
-    { "ATTRIBUTE_NODE",              ATTRIBUTE_NODE               },
-    { "TEXT_NODE",                   TEXT_NODE                    },
-    { "CDATA_SECTION_NODE",          CDATA_SECTION_NODE           },
-    { "ENTITY_REFERENCE_NODE",       ENTITY_REFERENCE_NODE        },
-    { "ENTITY_NODE",                 ENTITY_NODE                  },
-    { "PROCESSING_INSTRUCTION_NODE", PROCESSING_INSTRUCTION_NODE  },
-    { "COMMENT_NODE",                COMMENT_NODE                 },
-    { "DOCUMENT_NODE",               DOCUMENT_NODE                },
-    { "DOCUMENT_TYPE_NODE",          DOCUMENT_TYPE_NODE           },
-    { "DOCUMENT_FRAGMENT_NODE",      DOCUMENT_FRAGMENT_NODE       },
-    { "NOTATION_NODE",               NOTATION_NODE                },
-    { NULL,                          0                            }
+    { "ELEMENT_NODE",                Node::ELEMENT_NODE                 },
+    { "ATTRIBUTE_NODE",              Node::ATTRIBUTE_NODE               },
+    { "TEXT_NODE",                   Node::TEXT_NODE                    },
+    { "CDATA_SECTION_NODE",          Node::CDATA_SECTION_NODE           },
+    { "ENTITY_REFERENCE_NODE",       Node::ENTITY_REFERENCE_NODE        },
+    { "ENTITY_NODE",                 Node::ENTITY_NODE                  },
+    { "PROCESSING_INSTRUCTION_NODE", Node::PROCESSING_INSTRUCTION_NODE  },
+    { "COMMENT_NODE",                Node::COMMENT_NODE                 },
+    { "DOCUMENT_NODE",               Node::DOCUMENT_NODE                },
+    { "DOCUMENT_TYPE_NODE",          Node::DOCUMENT_TYPE_NODE           },
+    { "DOCUMENT_FRAGMENT_NODE",      Node::DOCUMENT_FRAGMENT_NODE       },
+    { "NOTATION_NODE",               Node::NOTATION_NODE                },
+    { NULL,                          0                                  }
 };
+
+
+NodeImpl::NodeImpl()
+{
+    childNodes      = new NodeListImpl();
+    parentNode      = NULL;
+    previousSibling = NULL;
+    nextSibling     = NULL;
+    attributes      = new NamedNodeMapImpl();
+}
+
+NodeImpl::~NodeImpl()
+{
+    for (unsigned int i = 0 ; i<childNodes->getLength() ; i++)
+        delete (childNodes->item(i));
+
+    delete childNodes;
+
+    delete attributes;
+}
 
 
 /**
@@ -552,7 +181,7 @@ DOMString NodeImpl::getNodeName()
  */
 DOMString NodeImpl::getNodeValue() throw (DOMException)
 {
-
+    return nodeValue;
 }
 
 
@@ -561,7 +190,7 @@ DOMString NodeImpl::getNodeValue() throw (DOMException)
  */
 void NodeImpl::setNodeValue(DOMString& val) throw (DOMException)
 {
-
+    nodeValue = val;
 }
 
 
@@ -570,7 +199,7 @@ void NodeImpl::setNodeValue(DOMString& val) throw (DOMException)
  */
 unsigned short NodeImpl::getNodeType()
 {
-
+    return nodeType;
 }
 
 
@@ -579,7 +208,7 @@ unsigned short NodeImpl::getNodeType()
  */
 Node *NodeImpl::getParentNode()
 {
-
+    return parentNode;
 }
 
 
@@ -588,7 +217,7 @@ Node *NodeImpl::getParentNode()
  */
 NodeList *NodeImpl::getChildNodes()
 {
-
+    return childNodes;  
 }
 
 
@@ -597,7 +226,10 @@ NodeList *NodeImpl::getChildNodes()
  */
 Node *NodeImpl::getFirstChild()
 {
-
+    if (childNodes->getLength() > 0)
+        return childNodes->item(0);
+    else
+        return NULL;
 }
 
 
@@ -606,7 +238,10 @@ Node *NodeImpl::getFirstChild()
  */
 Node *NodeImpl::getLastChild()
 {
-
+    if (childNodes->getLength() > 0)
+        return childNodes->item(childNodes->getLength()-1);
+    else
+        return NULL;
 }
 
 
@@ -615,7 +250,7 @@ Node *NodeImpl::getLastChild()
  */
 Node *NodeImpl::getPreviousSibling()
 {
-
+    return previousSibling;
 }
 
 
@@ -624,7 +259,7 @@ Node *NodeImpl::getPreviousSibling()
  */
 Node *NodeImpl::getNextSibling()
 {
-
+    return nextSibling;
 }
 
 
@@ -633,7 +268,7 @@ Node *NodeImpl::getNextSibling()
  */
 NamedNodeMap *NodeImpl::getAttributes()
 {
-
+    return attributes;
 }
 
 
@@ -643,7 +278,7 @@ NamedNodeMap *NodeImpl::getAttributes()
  */
 Document *NodeImpl::getOwnerDocument()
 {
-
+    return ownerDocument;
 }
 
 
@@ -654,8 +289,13 @@ Node *NodeImpl::insertBefore(Node *newChild,
                          Node *refChild)
                          throw(DOMException)
 {
-
-}
+    NodeListImpl *nl = (NodeListImpl *)childNodes;
+    if (!nl->insert(refChild, newChild))
+        {
+        throw (DOMException(NOT_FOUND_ERR));
+        }
+    return newChild;
+} 
 
 
 /**
@@ -665,7 +305,12 @@ Node *NodeImpl::replaceChild(Node *newChild,
                          Node *oldChild)
                          throw(DOMException)
 {
-
+    NodeListImpl *nl = (NodeListImpl *)childNodes;
+    if (!nl->insert(oldChild, newChild))
+        {
+        throw (DOMException(NOT_FOUND_ERR));
+        }
+    return newChild;
 }
 
 
@@ -675,7 +320,12 @@ Node *NodeImpl::replaceChild(Node *newChild,
 Node *NodeImpl::removeChild(Node *oldChild)
                         throw(DOMException)
 {
-
+    NodeListImpl *nl = (NodeListImpl *)childNodes;
+    if (!nl->remove(oldChild))
+        {
+        throw DOMException(NOT_FOUND_ERR);
+        }
+    return oldChild;
 }
 
 
@@ -685,7 +335,9 @@ Node *NodeImpl::removeChild(Node *oldChild)
 Node *NodeImpl::appendChild(Node *newChild)
                         throw(DOMException)
 {
-
+    NodeListImpl *nl = (NodeListImpl *)childNodes;
+    nl->append(newChild);
+    return newChild;
 }
 
 
@@ -694,7 +346,7 @@ Node *NodeImpl::appendChild(Node *newChild)
  */
 bool NodeImpl::hasChildNodes()
 {
-
+    return (childNodes->getLength() > 0);
 }
 
 
@@ -703,7 +355,19 @@ bool NodeImpl::hasChildNodes()
  */
 Node *NodeImpl::cloneNode(bool deep)
 {
-
+    NodeImpl *newNode  = new NodeImpl();
+    newNode->nodeName  = nodeName;
+    newNode->nodeValue = nodeValue;
+    if (deep)
+        {
+        int len = childNodes->getLength();
+        for (int i=0 ; i<len ; i++)
+            {
+            Node *newChild = childNodes->item(i)->cloneNode(true);
+            newNode->appendChild(newChild);
+            }
+        }
+    return newNode;
 }
 
 
@@ -722,7 +386,7 @@ void NodeImpl::normalize()
 bool NodeImpl::isSupported(DOMString& feature, 
                        DOMString& version)
 {
-
+    return false;
 }
 
 
@@ -731,7 +395,7 @@ bool NodeImpl::isSupported(DOMString& feature,
  */
 DOMString NodeImpl::getNamespaceURI()
 {
-
+    return namespaceURI;
 }
 
 
@@ -740,7 +404,7 @@ DOMString NodeImpl::getNamespaceURI()
  */
 DOMString NodeImpl::getPrefix()
 {
-
+    return prefix;
 }
 
 
@@ -749,7 +413,7 @@ DOMString NodeImpl::getPrefix()
  */
 void NodeImpl::setPrefix(DOMString& val) throw(DOMException)
 {
-
+    prefix = val;
 }
 
 
@@ -758,6 +422,7 @@ void NodeImpl::setPrefix(DOMString& val) throw(DOMException)
  */
 DOMString NodeImpl::getLocalName()
 {
+    return DOMString("");
 
 }
 
@@ -767,7 +432,13 @@ DOMString NodeImpl::getLocalName()
  */
 bool NodeImpl::hasAttributes()
 {
+    return (nodeType==ELEMENT_NODE);
+}
 
+/*not in api*/
+void NodeImpl::setNodeName(DOMString& val)
+{
+    nodeName = val;
 }
 
 
@@ -781,8 +452,7 @@ bool NodeImpl::hasAttributes()
  */
 Node *NodeListImpl::item(unsigned long index)
 {
-    Node *node;
-    return node;
+    return nodes[index];
 }
 
 /**
@@ -790,10 +460,75 @@ Node *NodeListImpl::item(unsigned long index)
  */
 unsigned long NodeListImpl::getLength()
 {
-    return 0;
+    return (unsigned long)nodes.size();
 }
 
 
+/*
+not part of the api
+*/
+bool NodeListImpl::insert(int position, Node *newNode)
+{
+    if (position < 0 || position >= (int)nodes.size())
+        return false;
+    std::vector<Node *>::iterator iter = nodes.begin() + position;
+    nodes.insert(iter, newNode);
+    return true;
+}
+
+bool NodeListImpl::insert(Node *current, Node *newNode)
+{
+    bool retVal=false;
+    std::vector<Node *>::iterator iter;
+    for (iter = nodes.begin() ; iter!=nodes.end(); iter++)
+        {
+        if (current == *iter)
+            {
+            nodes.insert(iter, newNode);
+            retVal = true;
+            }
+        }
+    return retVal;
+}
+
+bool NodeListImpl::replace(Node *current, Node *newNode)
+{
+    bool retVal=false;
+    std::vector<Node *>::iterator iter;
+    for (iter = nodes.begin() ; iter!=nodes.end(); iter++)
+        {
+        if (current == *iter)
+            {
+            *iter = newNode;
+            retVal = true;
+            }
+        }
+    return retVal;
+
+}
+
+
+bool NodeListImpl::remove(Node *node)
+{
+    bool retVal=false;
+    std::vector<Node *>::iterator iter;
+    for (iter = nodes.begin() ; iter!=nodes.end(); iter++)
+        {
+        if (node == *iter)
+            {
+            nodes.erase(iter);
+            retVal = true;
+            }
+        }
+    return retVal;
+}
+
+
+void NodeListImpl::append(Node *newNode)
+{
+    nodes.push_back(newNode);
+
+}
 
 
 
@@ -806,16 +541,18 @@ unsigned long NodeListImpl::getLength()
  */
 Node *NamedNodeMapImpl::getNamedItem(DOMString& name)
 {
-
+    Node *item = table[name];
+    return item;
 }
 
 
 /**
  *
  */
-Node *NamedNodeMapImpl::setNamedItem(Node *arg) throw(DOMException)
+Node *NamedNodeMapImpl::setNamedItem(Node *node) throw(DOMException)
 {
-
+    table[node->getNodeName()] = node;
+    return node;
 }
 
 
@@ -825,7 +562,9 @@ Node *NamedNodeMapImpl::setNamedItem(Node *arg) throw(DOMException)
  */
 Node *NamedNodeMapImpl::removeNamedItem(DOMString& name) throw(DOMException)
 {
-
+    Node *node = table[name];
+    table.erase(name);
+    return node;
 }
 
 
@@ -834,7 +573,12 @@ Node *NamedNodeMapImpl::removeNamedItem(DOMString& name) throw(DOMException)
  */
 Node *NamedNodeMapImpl::item(unsigned long index)
 {
-
+    if (index > table.size())
+        return NULL;
+    std::map<DOMString, Node *, MapComparator>::iterator iter = table.begin();
+    for (unsigned long i=0 ; i<index ; i++)
+        iter++;
+    return iter->second;
 }
 
 
@@ -843,7 +587,7 @@ Node *NamedNodeMapImpl::item(unsigned long index)
  */
 unsigned long NamedNodeMapImpl::getLength()
 {
-
+    return table.size();
 }
 
 
@@ -853,16 +597,18 @@ unsigned long NamedNodeMapImpl::getLength()
 Node *NamedNodeMapImpl::getNamedItemNS(DOMString& namespaceURI, 
                                    DOMString& localName)
 {
-
+    return table[localName];
 }
 
 
 /**
  * L2
  */
-Node *NamedNodeMapImpl::setNamedItemNS(Node *arg) throw(DOMException)
+Node *NamedNodeMapImpl::setNamedItemNS(Node *node) throw(DOMException)
 {
-
+    table[node->getNodeName()] = node;
+    return node;
+    
 }
 
 
@@ -873,7 +619,9 @@ Node *NamedNodeMapImpl::removeNamedItemNS(DOMString& namespaceURI,
                                       DOMString& localName)
                                       throw(DOMException)
 {
-
+    Node *node = table[localName];
+    table.erase(localName);
+    return node;
 }
 
 
@@ -890,7 +638,7 @@ Node *NamedNodeMapImpl::removeNamedItemNS(DOMString& namespaceURI,
  */
 DOMString CharacterDataImpl::getData() throw(DOMException)
 {
-
+    return nodeValue;
 }
 
 
@@ -899,7 +647,7 @@ DOMString CharacterDataImpl::getData() throw(DOMException)
  */
 void CharacterDataImpl::setData(DOMString& val) throw(DOMException)
 {
-
+    nodeValue = val;
 }
 
 
@@ -908,7 +656,7 @@ void CharacterDataImpl::setData(DOMString& val) throw(DOMException)
  */
 unsigned long CharacterDataImpl::getLength()
 {
-
+    return nodeValue.size();
 }
 
 
@@ -919,7 +667,7 @@ DOMString CharacterDataImpl::substringData(unsigned long offset,
                                        unsigned long count)
                                        throw(DOMException)
 {
-
+     return nodeValue.substr(offset, count);
 }
 
 
@@ -928,7 +676,7 @@ DOMString CharacterDataImpl::substringData(unsigned long offset,
  */
 void CharacterDataImpl::appendData(DOMString& arg) throw(DOMException)
 {
-
+    nodeValue += arg;
 }
 
 
@@ -939,7 +687,7 @@ void CharacterDataImpl::insertData(unsigned long offset,
                                DOMString& arg)
                                throw(DOMException)
 {
-
+    nodeValue.insert(offset, arg);
 }
 
 
@@ -950,7 +698,7 @@ void CharacterDataImpl::deleteData(unsigned long offset,
                                unsigned long count)
                                throw(DOMException)
 {
-
+    nodeValue.erase(offset, count);
 }
 
 
@@ -962,7 +710,7 @@ void  CharacterDataImpl::replaceData(unsigned long offset,
                                  DOMString& arg)
                                  throw(DOMException)
 {
-
+    nodeValue.replace(offset, count, arg);
 }
 
 
@@ -981,7 +729,7 @@ void  CharacterDataImpl::replaceData(unsigned long offset,
  */
 DOMString AttrImpl::getName()
 {
-
+    return nodeName;
 }
 
 
@@ -990,7 +738,7 @@ DOMString AttrImpl::getName()
  */
 bool AttrImpl::getSpecified()
 {
-
+    return false;
 }
 
 
@@ -999,7 +747,7 @@ bool AttrImpl::getSpecified()
  */
 DOMString AttrImpl::getValue()
 {
-
+    return nodeValue;
 }
 
 
@@ -1008,7 +756,7 @@ DOMString AttrImpl::getValue()
  */
 void AttrImpl::setValue(DOMString& val) throw(DOMException)
 {
-
+    nodeValue = val;
 }
 
 
@@ -1019,7 +767,7 @@ void AttrImpl::setValue(DOMString& val) throw(DOMException)
  */
 Element *AttrImpl::getOwnerElement()
 {
-
+    return ownerElement;
 }
 
 
@@ -1036,7 +784,7 @@ Element *AttrImpl::getOwnerElement()
  */
 DOMString ElementImpl::getTagName()
 {
-
+    return nodeName;
 }
 
 
@@ -1045,7 +793,10 @@ DOMString ElementImpl::getTagName()
  */
 DOMString ElementImpl::getAttribute(DOMString& name)
 {
-
+    Node *node = attributes->getNamedItem(name);
+    if (!node)
+        return "";
+    return node->getNodeValue();
 }
 
 
@@ -1056,7 +807,17 @@ void ElementImpl::setAttribute(DOMString& name,
                       DOMString& value)
                       throw(DOMException)
 {
-
+    AttrImpl *attr = reinterpret_cast<AttrImpl *>(attributes->getNamedItem(name));
+    if (attr)
+        attr->setNodeValue(value);
+    else
+        {
+        attr = new AttrImpl();
+        attr->setNodeName(name);
+        attr->setNodeValue(value);
+        attr->ownerElement = this;
+        attributes->setNamedItem(attr);
+        }
 }
 
 
@@ -1066,7 +827,7 @@ void ElementImpl::setAttribute(DOMString& name,
 void ElementImpl::removeAttribute(DOMString& name)
                          throw(DOMException)
 {
-
+    attributes->removeNamedItem(name);
 }
 
 
@@ -1075,7 +836,8 @@ void ElementImpl::removeAttribute(DOMString& name)
  */
 Attr *ElementImpl::getAttributeNode(DOMString& name)
 {
-
+    AttrImpl *attr = reinterpret_cast<AttrImpl *>(attributes->getNamedItem(name));
+    return attr;
 }
 
 
@@ -1085,7 +847,9 @@ Attr *ElementImpl::getAttributeNode(DOMString& name)
 Attr *ElementImpl::setAttributeNode(Attr *newAttr)
                           throw(DOMException)
 {
-
+    removeAttributeNode(newAttr);
+    attributes->setNamedItem(newAttr);
+    return newAttr;
 }
 
 
@@ -1095,7 +859,8 @@ Attr *ElementImpl::setAttributeNode(Attr *newAttr)
 Attr *ElementImpl::removeAttributeNode(Attr *oldAttr)
                              throw(DOMException)
 {
-
+    attributes->removeNamedItem(oldAttr);
+    delete oldAttr;
 }
 
 
@@ -1104,7 +869,8 @@ Attr *ElementImpl::removeAttributeNode(Attr *oldAttr)
  */
 NodeList *ElementImpl::getElementsByTagName(DOMString& name)
 {
-
+    NodeList *list = new NodeList();
+    /***START HERE***/
 }
 
 
@@ -1200,7 +966,7 @@ bool ElementImpl::hasAttributeNS(DOMString& namespaceURI,
 /**
  *
  */
-Text *TextImpl::splitText(unsigned long offset)
+Text *TextImpl::splitText(unsigned long offset) throw(DOMException)
 {
 
 }
@@ -1366,9 +1132,9 @@ DOMString EntityImpl::DocumentTypeImpl::getNotationName()
 /**
  *
  */
-DOMString ProcessingInstructionImpl::DocumentTypeImpl::getTarget()
+DOMString ProcessingInstructionImpl:getTarget()
 {
-
+    return target;
 }
 
 
@@ -1377,7 +1143,7 @@ DOMString ProcessingInstructionImpl::DocumentTypeImpl::getTarget()
  */
 DOMString ProcessingInstructionImpl::getData()
 {
-
+    return piData;
 }
 
 
@@ -1386,7 +1152,7 @@ DOMString ProcessingInstructionImpl::getData()
  */
 void ProcessingInstructionImpl::setData(DOMString& val) throw(DOMException)
 {
-
+    piData = val;
 }
 
 
@@ -1412,20 +1178,22 @@ void ProcessingInstructionImpl::setData(DOMString& val) throw(DOMException)
 
 
 
+DocumentImpl::DocumentImpl(DOMString &namespaceURI,DOMString &qualifiedName,
+                   DocumentType *doctype)
+{
 
+    this->namespaceURI  = namespaceURI;
+    this->qualifiedName = qualifiedName;
+    this->docType       = docType;
 
-
-
-
-
-
+}
 
 /**
  *
  */
 DocumentType *DocumentImpl::getDoctype()
 {
-
+    return docType;
 }
 
 
@@ -1434,7 +1202,7 @@ DocumentType *DocumentImpl::getDoctype()
  */
 DOMImplementation *DocumentImpl::getImplementation()
 {
-
+    return domImplementation;
 }
 
 
@@ -1443,7 +1211,7 @@ DOMImplementation *DocumentImpl::getImplementation()
  */
 Element *DocumentImpl::getDocumentElement()
 {
-
+    return documentElement;
 }
 
 
@@ -1453,7 +1221,8 @@ Element *DocumentImpl::getDocumentElement()
 Element *DocumentImpl::createElement(DOMString& tagName)
                            throw(DOMException)
 {
-
+    Element *elem = new ElementImpl(tagName);
+    return element;
 }
 
 
@@ -1462,7 +1231,8 @@ Element *DocumentImpl::createElement(DOMString& tagName)
  */
 DocumentFragment *DocumentImpl::createDocumentFragment()
 {
-
+    DocumentFragment *fragment = new DocumentFragmentImpl();
+    return fragment;
 }
 
 
@@ -1471,7 +1241,8 @@ DocumentFragment *DocumentImpl::createDocumentFragment()
  */
 Text *DocumentImpl::createTextNode(DOMString& data)
 {
-
+    Text *text = new TextImpl(data);
+    return text;
 }
 
 
@@ -1480,7 +1251,8 @@ Text *DocumentImpl::createTextNode(DOMString& data)
  */
 Comment  *DocumentImpl::createComment(DOMString& data)
 {
-
+    Comment *comment = new CommentImpl(data);
+    return comment;
 }
 
 
@@ -1490,7 +1262,8 @@ Comment  *DocumentImpl::createComment(DOMString& data)
 CDATASection *DocumentImpl::createCDATASection(DOMString& data)
                                      throw(DOMException)
 {
-
+    CDATASection *cds = new CDATASectionImpl(data);
+    return cds;
 }
 
 
@@ -1501,7 +1274,8 @@ ProcessingInstruction *DocumentImpl::createProcessingInstruction(DOMString& targ
                                                        DOMString& data)
                                                        throw(DOMException)
 {
-
+    ProcessingInstruction *pi = new ProcessingInstructionImpl();
+    return pi;
 }
 
 
@@ -1511,7 +1285,8 @@ ProcessingInstruction *DocumentImpl::createProcessingInstruction(DOMString& targ
 Attr *DocumentImpl::createAttribute(DOMString& name)
                           throw(DOMException)
 {
-
+    Attr attr = new AttrImpl(name);
+    return attr;
 }
 
 
@@ -1521,7 +1296,8 @@ Attr *DocumentImpl::createAttribute(DOMString& name)
 EntityReference *DocumentImpl::createEntityReference(DOMString& name)
                                            throw(DOMException)
 {
-
+    EntityReference *er = new EntityReferenceImpl(name);
+    return er;
 }
 
 
@@ -1600,7 +1376,6 @@ Element *DocumentImpl::getElementById(DOMString& elementId)
 };//namespace w3c
 
 
-#endif // __DOM_H__
 
 /*#########################################################################
 ## E N D    O F    F I L E

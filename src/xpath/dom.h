@@ -12,7 +12,7 @@
 
 // File: http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/dom.idl
 
-#ifndef ___DOM_H___
+#ifndef __DOM_H__
 #define __DOM_H__
 
 #include <string>
@@ -240,7 +240,7 @@ class Node
      *
      */
     virtual Node *insertBefore(Node *newChild, 
-                       Node& refChild)
+                       Node *refChild)
                        throw(DOMException) = 0;
 
     /**
@@ -403,7 +403,7 @@ class NamedNodeMap
 /**
  *
  */
-class CharacterData : public Node
+class CharacterData : virtual public Node
 {
     public:
 
@@ -470,7 +470,7 @@ class CharacterData : public Node
 /**
  *
  */
-class Attr : public Node
+class Attr : virtual public Node
 {
     public:
 
@@ -514,7 +514,7 @@ class Attr : public Node
 /**
  *
  */
-class Element : public Node
+class Element : virtual public Node
 {
     public:
 
@@ -625,7 +625,7 @@ class Element : public Node
 /**
  *
  */
-class Text : public CharacterData
+class Text : virtual public CharacterData
 {
     public:
 
@@ -646,7 +646,7 @@ class Text : public CharacterData
 /**
  *
  */
-class Comment : public CharacterData
+class Comment : virtual public CharacterData
 {
 };//class Comment
 
@@ -660,7 +660,7 @@ class Comment : public CharacterData
 /**
  *
  */
-class CDATASection : public Text
+class CDATASection : virtual public Text
 {
 };//class CDATASection
 
@@ -674,7 +674,7 @@ class CDATASection : public Text
 /**
  *
  */
-class DocumentType : public Node
+class DocumentType : virtual public Node
 {
     public:
 
@@ -721,7 +721,7 @@ class DocumentType : public Node
 /**
  *
  */
-class Notation : public Node
+class Notation : virtual public Node
 {
     public:
 
@@ -749,7 +749,7 @@ class Notation : public Node
 /**
  *
  */
-class Entity : public Node
+class Entity : virtual public Node
 {
     public:
 
@@ -780,7 +780,7 @@ class Entity : public Node
 /**
  *
  */
-class EntityReference : public Node
+class EntityReference : virtual public Node
 {
 };//class EntityReference
 
@@ -795,7 +795,7 @@ class EntityReference : public Node
 /**
  *
  */
-class ProcessingInstruction : public Node
+class ProcessingInstruction : virtual public Node
 {
     public:
 
@@ -826,7 +826,7 @@ class ProcessingInstruction : public Node
 /**
  *
  */
-class DocumentFragment : public Node
+class DocumentFragment : virtual public Node
 {
 };//class DocumentFragment
 
@@ -842,7 +842,7 @@ class DocumentFragment : public Node
 /**
  *
  */
-class Document : public Node
+class Document : virtual public Node
 {
     public:
 
