@@ -1,3 +1,8 @@
+2004-02-10  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/inkscape.cpp: Changed from SHGetSpecialFolderPath to
+	  SHGetSpecialFolderLocation. Fixes bug #1085641
+
 2004-02-10  MenTaLguY  <mental@rydia.net>
 
 	* src/document.h, src/document.cpp: get rid of casting macro uses

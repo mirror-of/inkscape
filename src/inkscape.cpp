@@ -34,7 +34,8 @@ using Inkscape::Extension::Internal::PrintWin32;
 
 #include <direct.h>
 #define _WIN32_IE 0x0400
-#define HAS_SHGetSpecialFolderPath
+//#define HAS_SHGetSpecialFolderPath
+#define HAS_SHGetSpecialFolderLocation
 #define HAS_GetModuleFileName
 #include <shlobj.h> //to get appdata path
 #endif
@@ -1276,32 +1277,46 @@ profile_path(const char *filename)
 {
     static const gchar *prefdir = NULL;
     if (!prefdir) {
-#ifdef HAS_SHGetSpecialFolderPath
+#ifdef HAS_SHGetSpecialFolderLocation
         // prefer c:\Documents and Settings\UserName\Application Data\ to
-        // c:\Documents and Settings\userName\; this
-        // closes bug #933461
+        // c:\Documents and Settings\userName\;
         if (!prefdir) {
-            gchar * utf8Path = NULL;
-            if ( PrintWin32::is_os_wide() )
-            {
-                wchar_t pathBuf[MAX_PATH+1];
-                g_assert(sizeof(wchar_t) == sizeof(gunichar2));
-                if (SHGetSpecialFolderPathW(NULL, pathBuf, CSIDL_APPDATA, 1))
-                {
-                    utf8Path = g_utf16_to_utf8( (gunichar2*)(&pathBuf[0]), -1, NULL, NULL, NULL );
+            ITEMIDLIST *pidl = 0;
+            if ( SHGetSpecialFolderLocation( NULL, CSIDL_APPDATA, &pidl ) == NOERROR ) {
+                gchar * utf8Path = NULL;
+
+                if ( PrintWin32::is_os_wide() ) {
+                    wchar_t pathBuf[MAX_PATH+1];
+                    g_assert(sizeof(wchar_t) == sizeof(gunichar2));
+
+                    if ( SHGetPathFromIDListW( pidl, pathBuf ) ) {
+                        utf8Path = g_utf16_to_utf8( (gunichar2*)(&pathBuf[0]), -1, NULL, NULL, NULL );
+                    }
+                } else {
+                    char pathBuf[MAX_PATH+1];
+
+                    if ( SHGetPathFromIDListA( pidl, pathBuf ) ) {
+                        utf8Path = g_filename_to_utf8( pathBuf, -1, NULL, NULL, NULL );
+                    }
                 }
-            }
-            else
-            {
-                char pathBuf[MAX_PATH+1];
-                if (SHGetSpecialFolderPathA(NULL, pathBuf, CSIDL_APPDATA, 1))
-                {
-                    utf8Path = g_filename_to_utf8( pathBuf, -1, NULL, NULL, NULL );
+
+                if ( utf8Path ) {
+                    if (!g_utf8_validate(utf8Path, -1, NULL)) {
+                        g_warning( "SHGetPathFromIDList%c() resulted in invalid UTF-8", (PrintWin32::is_os_wide() ? 'W' : 'A') );
+                        g_free( utf8Path );
+                        utf8Path = 0;
+                    } else {
+                        prefdir = utf8Path;
+                    }
                 }
-            }
-            if ( utf8Path )
-            {
-                prefdir = utf8Path;
+
+
+                // Remember to free the list pointer
+                IMalloc * imalloc = 0;
+                if ( SHGetMalloc(&imalloc) == NOERROR) {
+                    imalloc->lpVtbl->Free( imalloc, pidl );
+                    imalloc->lpVtbl->Release( imalloc );
+                }
             }
         }
 #endif
