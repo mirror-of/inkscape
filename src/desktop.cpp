@@ -84,8 +84,6 @@ static void sp_desktop_document_resized (SPView *view, SPDocument *doc, gdouble 
 
 static SPView *sp_desktop_new (SPNamedView *nv, SPCanvas *canvas);
 
-static void sp_desktop_prepare_shutdown (SPDesktop *dt);
-
 static void sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop);
 static void sp_desktop_selection_modified (SPSelection *selection, guint flags, SPDesktop *desktop);
 
@@ -380,40 +378,6 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
     desktop->inkscape = INKSCAPE;
 
     return SP_VIEW (desktop);
-}
-
-static void
-sp_desktop_prepare_shutdown (SPDesktop *dt)
-{
-    while (dt->event_context) {
-        SPEventContext *ec = dt->event_context;
-        dt->event_context = ec->next;
-        sp_event_context_finish (ec);
-        g_object_unref (G_OBJECT (ec));
-    }
-
-    dt->sel_modified_connection.disconnect();
-
-    if (dt->selection) {
-        dt->selection->unreference();
-        dt->selection = NULL;
-    }
-
-    if (dt->namedview) {
-        sp_signal_disconnect_by_data (dt->namedview, dt);
-        sp_namedview_hide (dt->namedview, dt);
-        dt->namedview = NULL;
-    }
-
-    if (dt->drawing) {
-        sp_item_invoke_hide (SP_ITEM (sp_document_root (SP_VIEW_DOCUMENT (dt))), dt->dkey);
-        dt->drawing = NULL;
-    }
-
-    if (dt->inkscape) {
-        inkscape_remove_desktop (dt);
-        dt->inkscape = NULL;
-    }
 }
 
 static void
@@ -1156,8 +1120,6 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
             }
         }
     }
-
-    sp_desktop_prepare_shutdown (SP_DESKTOP (view));
 
     return FALSE;
 }

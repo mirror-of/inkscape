@@ -820,8 +820,7 @@ inkscape_remove_desktop (SPDesktop * desktop)
             g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, SP_DT_SELECTION (new_desktop));
         } else {
             g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, NULL);
-            g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, NULL);
-            g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, NULL);
+	    desktop->selection->clear();
         }
     }
 
@@ -898,7 +897,7 @@ unsigned int
 inkscape_maximum_dkey()
 {
     GSList *r;
-    gint dkey = 0;
+    unsigned int dkey = 0;
 
     for (r = inkscape->desktops; r; r = r->next) {
         if (((SPDesktop *) r->data)->dkey > dkey)
