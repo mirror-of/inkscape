@@ -2,6 +2,7 @@
 #define SEEN_SP_GRADIENT_VECTOR_H
 
 #include <glib/gtypes.h>
+#include <vector>
 #include "color.h"
 
 struct SPGradientStop {
@@ -11,9 +12,8 @@ struct SPGradientStop {
 };
 
 struct SPGradientVector {
-    gint nstops;
-    gdouble start, end;
-    SPGradientStop stops[1];
+    bool built;
+    std::vector<SPGradientStop> stops;
 };
 
 

@@ -38,14 +38,12 @@ void sp_gradient_ensure_vector(SPGradient *gradient);
 /** Ensures that color array is populated */
 void sp_gradient_ensure_colors(SPGradient *gradient);
 
-/** Sets gradient vector to given value, does not update reprs */
-void sp_gradient_set_vector(SPGradient *gradient, SPGradientVector *vector);
-
 void sp_gradient_set_units(SPGradient *gr, SPGradientUnits units);
 void sp_gradient_set_spread(SPGradient *gr, SPGradientSpread spread);
 
 /* Gradient repr methods */
-void sp_gradient_repr_set_vector(SPGradient *gradient, Inkscape::XML::Node *repr, SPGradientVector *vector);
+void sp_gradient_repr_write_vector(SPGradient *gr);
+void sp_gradient_repr_clear_vector(SPGradient *gr);
 
 /**
  * Renders gradient vector to buffer

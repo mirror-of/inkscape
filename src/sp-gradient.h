@@ -20,8 +20,7 @@
 #include "sp-gradient-spread.h"
 #include "sp-gradient-units.h"
 #include "sp-paint-server.h"
-class SPGradientStop;
-class SPGradientVector;
+#include "sp-gradient-vector.h"
 
 /*
  * Gradient
@@ -68,11 +67,9 @@ struct SPGradient : public SPPaintServer {
 	/* Gradient stops */
 	guint has_stops : 1;
 	/* Composed vector */
-	SPGradientVector *vector;
-	/* Rendered color array (4 * 1024 bytes at moment) */
+	SPGradientVector vector;
+	/* Rendered color array (4 * 1024 bytes) */
 	guchar *color;
-	/* Length of vector */
-	gdouble len;
 };
 
 struct SPGradientClass {

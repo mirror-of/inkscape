@@ -1087,8 +1087,6 @@ static void sp_gradient_vector_color_dragged(SPColorSelector *csel, GtkObject *o
 static void
 sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 {
-	SPGradient *gradient, *ngr;
-	gdouble start, end;
 	SPObject *child;
 	SPColor color;
 	float alpha;
@@ -1096,21 +1094,18 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 
 	if (blocked) return;
 
-	gradient = (SPGradient*)g_object_get_data (G_OBJECT (object), "gradient");
+	SPGradient *gradient = (SPGradient*)g_object_get_data (G_OBJECT (object), "gradient");
 	if (!gradient) return;
 
 	blocked = TRUE;
 
-	ngr = sp_gradient_ensure_vector_normalized (gradient);
+	SPGradient *ngr = sp_gradient_ensure_vector_normalized (gradient);
 	if (ngr != gradient) {
 		/* Our master gradient has changed */
 		sp_gradient_vector_widget_load_gradient (GTK_WIDGET (object), ngr);
 	}
 
 	sp_gradient_ensure_vector (ngr);
-
-	start = ngr->vector->start;
-	end = ngr->vector->end;
 
 	/* Set start parameters */
 	/* We rely on normalized vector, i.e. stops HAVE to exist */

@@ -48,8 +48,6 @@ static void sp_gradient_repr_set_link(Inkscape::XML::Node *repr, SPGradient *gr)
 static void sp_item_repr_set_style_gradient(Inkscape::XML::Node *repr, gchar const *property,
                                             SPGradient *gr, bool recursive);
 
-/* fixme: One more step is needed - normalization vector to 0-1 (not sure 100% still) */
-
 SPGradient *
 sp_gradient_ensure_vector_normalized(SPGradient *gr)
 {
@@ -75,7 +73,7 @@ sp_gradient_ensure_vector_normalized(SPGradient *gr)
         /* Lonely gradient */
         /* Ensure vector, so we can know some our metadata */
         sp_gradient_ensure_vector(gr);
-        g_assert(gr->vector);
+        g_assert(gr->vector.built);
         /* NOTICE */
         /* We are in some lonely place in tree, so clone EVERYTHING */
         /* And do not forget to flatten original */
@@ -92,7 +90,7 @@ sp_gradient_ensure_vector_normalized(SPGradient *gr)
         g_assert(SP_IS_GRADIENT(gr));
 
         /* Step 3 - set vector of new gradient */
-        sp_gradient_repr_set_vector(spnew, SP_OBJECT_REPR(spnew), gr->vector);
+        sp_gradient_repr_write_vector (spnew);
 
         /* Step 4 - set state flag */
         spnew->state = SP_GRADIENT_STATE_VECTOR;
@@ -101,7 +99,7 @@ sp_gradient_ensure_vector_normalized(SPGradient *gr)
         sp_gradient_repr_set_link(SP_OBJECT_REPR(gr), spnew);
 
         /* Step 6 - clear stops of old gradient */
-        sp_gradient_repr_set_vector(gr, SP_OBJECT_REPR(gr), NULL);
+        sp_gradient_repr_clear_vector (gr);
 
         /* Now we have successfully created new normalized vector, and cleared old stops */
         return spnew;
@@ -112,9 +110,9 @@ sp_gradient_ensure_vector_normalized(SPGradient *gr)
         if (!gr->has_stops) {
             /* We do not have stops ourselves, so flatten stops as well */
             sp_gradient_ensure_vector(gr);
-            g_assert(gr->vector);
+            g_assert(gr->vector.built);
             // this adds stops from gr->vector as children to gr
-            sp_gradient_repr_set_vector(gr, SP_OBJECT_REPR(gr), gr->vector);
+            sp_gradient_repr_write_vector (gr);
             //g_print("GVECTORNORM: Added stops to %s\n", SP_OBJECT_ID(gr));
         }
 
@@ -220,7 +218,9 @@ sp_gradient_fork_private_if_necessary(SPGradient *gr, SPGradient *vector,
     g_return_val_if_fail(gr != NULL, NULL);
     g_return_val_if_fail(vector != NULL, NULL);
     g_return_val_if_fail(SP_IS_GRADIENT(vector), NULL);
-    g_return_val_if_fail(SP_GRADIENT_HAS_STOPS(vector), NULL);
+
+    if (!SP_GRADIENT_HAS_STOPS(vector))
+        return (gr);
 
     // user is the object that uses this gradient; normally it's item but for tspans, we
     // check its ancestor text so that tspans don't get different gradients from their
