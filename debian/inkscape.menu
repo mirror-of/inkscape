@@ -1,0 +1,2 @@
+?package(inkscape): needs=X11 section="Apps/Graphics" title="Inkscape" \
+  hints="Vector" longtitle="Vector based drawing program" command="inkscape"

@@ -2,8 +2,8 @@
  * there shouldn't be any more issues  */
 #include "sp-module.h"
 
-#ifndef __SODIPODI_MODULE_EXEC_H__
-#define __SODIPODI_MODULE_EXEC_H__
+#ifndef __INKSCAPE_MODULE_EXEC_H__
+#define __INKSCAPE_MODULE_EXEC_H__
 
 #include "sp-module-doc.h"
 
@@ -76,4 +76,4 @@ void                  sp_module_exec_builtin_set_exec   (SPModuleExecBuiltin * o
                                                          gpointer in_data);
 
 
-#endif /* __SODIPODI_MODULE_EXEC_H__ */
+#endif /* __INKSCAPE_MODULE_EXEC_H__ */

@@ -1,5 +1,5 @@
-#ifndef SODIPODI_CTRL_H
-#define SODIPODI_CTRL_H
+#ifndef INKSCAPE_CTRL_H
+#define INKSCAPE_CTRL_H
 
 /* sodipodi-ctrl
  *

@@ -31,7 +31,7 @@
 #include "helper/window.h"
 #include "../svg/svg.h"
 #include "../widgets/sp-widget.h"
-#include "../sodipodi.h"
+#include "../inkscape.h"
 #include "../document.h"
 #include "../desktop-handles.h"
 #include "../selection.h"
@@ -62,7 +62,7 @@ sp_item_widget_new (void)
 	GtkObject *a;
 
 	/* Create container widget */
-	spw = sp_widget_new_global (SODIPODI);
+	spw = sp_widget_new_global (INKSCAPE);
 	gtk_signal_connect (GTK_OBJECT (spw), "modify_selection", GTK_SIGNAL_FUNC (sp_item_widget_modify_selection), spw);
 	gtk_signal_connect (GTK_OBJECT (spw), "change_selection", GTK_SIGNAL_FUNC (sp_item_widget_change_selection), spw);
 

@@ -15,7 +15,7 @@
 #include <gtk/gtksignal.h>
 #include "macros.h"
 #include "../xml/repr-private.h"
-#include "../sodipodi.h"
+#include "../inkscape.h"
 #include "../desktop.h"
 #include "../desktop-handles.h"
 #include "../selection.h"
@@ -44,9 +44,9 @@ static gint sp_widget_expose (GtkWidget *widget, GdkEventExpose *event);
 static void sp_widget_size_request (GtkWidget *widget, GtkRequisition *requisition);
 static void sp_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation);
 
-static void sp_widget_modify_selection (Sodipodi *sodipodi, SPSelection *selection, guint flags, SPWidget *spw);
-static void sp_widget_change_selection (Sodipodi *sodipodi, SPSelection *selection, SPWidget *spw);
-static void sp_widget_set_selection (Sodipodi *sodipodi, SPSelection *selection, SPWidget *spw);
+static void sp_widget_modify_selection (Inkscape *inkscape, SPSelection *selection, guint flags, SPWidget *spw);
+static void sp_widget_change_selection (Inkscape *inkscape, SPSelection *selection, SPWidget *spw);
+static void sp_widget_set_selection (Inkscape *inkscape, SPSelection *selection, SPWidget *spw);
 
 static GtkBinClass *parent_class;
 static guint signals[LAST_SIGNAL] = {0};
@@ -167,7 +167,7 @@ sp_widget_class_init (SPWidgetClass *klass)
 static void
 sp_widget_init (SPWidget *spw)
 {
-	spw->sodipodi = NULL;
+	spw->inkscape = NULL;
 	spw->repr = NULL;
 
 	spw->dirty = FALSE;
@@ -181,14 +181,14 @@ sp_widget_destroy (GtkObject *object)
 
 	spw = (SPWidget *) object;
 
-	if (spw->sodipodi) {
+	if (spw->inkscape) {
 #if 1
 		/* This happens in ::hide (Lauris) */
 		/* It seems it does not (Lauris) */
 		/* Disconnect signals */
-		sp_signal_disconnect_by_data (sodipodi, spw);
+		sp_signal_disconnect_by_data (inkscape, spw);
 #endif
-		spw->sodipodi = NULL;
+		spw->inkscape = NULL;
 	}
 
 	if (spw->repr) {
@@ -212,11 +212,11 @@ sp_widget_show (GtkWidget *widget)
 
 	spw = SP_WIDGET (widget);
 
-	if (spw->sodipodi) {
+	if (spw->inkscape) {
 		/* Connect signals */
-		g_signal_connect (G_OBJECT (sodipodi), "modify_selection", G_CALLBACK (sp_widget_modify_selection), spw);
-		g_signal_connect (G_OBJECT (sodipodi), "change_selection", G_CALLBACK (sp_widget_change_selection), spw);
-		g_signal_connect (G_OBJECT (sodipodi), "set_selection", G_CALLBACK (sp_widget_set_selection), spw);
+		g_signal_connect (G_OBJECT (inkscape), "modify_selection", G_CALLBACK (sp_widget_modify_selection), spw);
+		g_signal_connect (G_OBJECT (inkscape), "change_selection", G_CALLBACK (sp_widget_change_selection), spw);
+		g_signal_connect (G_OBJECT (inkscape), "set_selection", G_CALLBACK (sp_widget_set_selection), spw);
 	}
 
 	if (spw->repr) {
@@ -234,9 +234,9 @@ sp_widget_hide (GtkWidget *widget)
 
 	spw = SP_WIDGET (widget);
 
-	if (spw->sodipodi) {
+	if (spw->inkscape) {
 		/* Disconnect signals */
-		sp_signal_disconnect_by_data (sodipodi, spw);
+		sp_signal_disconnect_by_data (inkscape, spw);
 	}
 
 	if (spw->repr) {
@@ -294,13 +294,13 @@ sp_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 /* Methods */
 
 GtkWidget *
-sp_widget_new_global (Sodipodi *sodipodi)
+sp_widget_new_global (Inkscape *inkscape)
 {
 	SPWidget *spw;
 
 	spw = gtk_type_new (SP_TYPE_WIDGET);
 
-	if (!sp_widget_construct_global (spw, sodipodi)) {
+	if (!sp_widget_construct_global (spw, inkscape)) {
 		gtk_object_unref (GTK_OBJECT (spw));
 		return NULL;
 	}
@@ -326,9 +326,9 @@ sp_widget_new_repr (SPRepr *repr)
 }
 
 GtkWidget *
-sp_widget_construct_global (SPWidget *spw, Sodipodi *sodipodi)
+sp_widget_construct_global (SPWidget *spw, Inkscape *inkscape)
 {
-	g_return_val_if_fail (!spw->sodipodi, NULL);
+	g_return_val_if_fail (!spw->inkscape, NULL);
 
 	if (spw->repr) {
 		if (GTK_WIDGET_VISIBLE (spw)) {
@@ -338,11 +338,11 @@ sp_widget_construct_global (SPWidget *spw, Sodipodi *sodipodi)
 		spw->repr = NULL;
 	}
 
-	spw->sodipodi = sodipodi;
+	spw->inkscape = inkscape;
 	if (GTK_WIDGET_VISIBLE (spw)) {
-		g_signal_connect (G_OBJECT (sodipodi), "modify_selection", G_CALLBACK (sp_widget_modify_selection), spw);
-		g_signal_connect (G_OBJECT (sodipodi), "change_selection", G_CALLBACK (sp_widget_change_selection), spw);
-		g_signal_connect (G_OBJECT (sodipodi), "set_selection", G_CALLBACK (sp_widget_set_selection), spw);
+		g_signal_connect (G_OBJECT (inkscape), "modify_selection", G_CALLBACK (sp_widget_modify_selection), spw);
+		g_signal_connect (G_OBJECT (inkscape), "change_selection", G_CALLBACK (sp_widget_change_selection), spw);
+		g_signal_connect (G_OBJECT (inkscape), "set_selection", G_CALLBACK (sp_widget_set_selection), spw);
 	}
 
 	g_signal_emit (G_OBJECT (spw), signals[CONSTRUCT], 0);
@@ -365,11 +365,11 @@ sp_widget_construct_repr (SPWidget *spw, SPRepr *repr)
 		sp_repr_unref (spw->repr);
 		spw->repr = NULL;
 	}
-	if (spw->sodipodi) {
+	if (spw->inkscape) {
 		if (GTK_WIDGET_VISIBLE (spw)) {
-			sp_signal_disconnect_by_data (sodipodi, spw);
+			sp_signal_disconnect_by_data (inkscape, spw);
 		}
-		spw->sodipodi = NULL;
+		spw->inkscape = NULL;
 	}
 	spw->repr = repr;
 	sp_repr_ref (spw->repr);
@@ -383,23 +383,23 @@ sp_widget_construct_repr (SPWidget *spw, SPRepr *repr)
 }
 
 static void
-sp_widget_modify_selection (Sodipodi *sodipodi, SPSelection *selection, guint flags, SPWidget *spw)
+sp_widget_modify_selection (Inkscape *inkscape, SPSelection *selection, guint flags, SPWidget *spw)
 {
 	g_signal_emit (G_OBJECT (spw), signals[MODIFY_SELECTION], 0, selection, flags);
 }
 
 static void
-sp_widget_change_selection (Sodipodi *sodipodi, SPSelection *selection, SPWidget *spw)
+sp_widget_change_selection (Inkscape *inkscape, SPSelection *selection, SPWidget *spw)
 {
 	g_signal_emit (G_OBJECT (spw), signals[CHANGE_SELECTION], 0, selection);
 }
 
 static void
-sp_widget_set_selection (Sodipodi *sodipodi, SPSelection *selection, SPWidget *spw)
+sp_widget_set_selection (Inkscape *inkscape, SPSelection *selection, SPWidget *spw)
 {
 	/* Emit "set_selection" signal */
 	g_signal_emit (G_OBJECT (spw), signals[SET_SELECTION], 0, selection);
-	/* Sodipodi will force "change_selection" anyways */
+	/* Inkscape will force "change_selection" anyways */
 }
 
 void
@@ -431,7 +431,7 @@ sp_widget_get_item_list (SPWidget *spw)
 	g_return_val_if_fail (spw != NULL, NULL);
 	g_return_val_if_fail (SP_IS_WIDGET (spw), NULL);
 
-	if (spw->sodipodi) {
+	if (spw->inkscape) {
 		return sp_selection_item_list (SP_DT_SELECTION (SP_ACTIVE_DESKTOP));
 	}
 

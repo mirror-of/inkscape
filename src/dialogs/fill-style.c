@@ -51,7 +51,7 @@
 #include "../selection.h"
 #include "../sp-item.h"
 #include "../sp-gradient.h"
-#include "../sodipodi.h"
+#include "../inkscape.h"
 
 #include "fill-style.h"
 
@@ -102,7 +102,7 @@ sp_fill_style_widget_new (void)
 {
 	GtkWidget *spw, *vb, *psel, *hb, *l, *om, *m, *mi;
 
-	spw = sp_widget_new_global (SODIPODI);
+	spw = sp_widget_new_global (INKSCAPE);
 
 	vb = gtk_vbox_new (FALSE, 0);
 	gtk_widget_show (vb);
@@ -179,9 +179,9 @@ static void
 sp_fill_style_widget_construct (SPWidget *spw, SPPaintSelector *psel)
 {
 #ifdef SP_FS_VERBOSE
-	g_print ("Fill style widget constructed: sodipodi %p repr %p\n", spw->sodipodi, spw->repr);
+	g_print ("Fill style widget constructed: inkscape %p repr %p\n", spw->inkscape, spw->repr);
 #endif
-	if (spw->sodipodi) {
+	if (spw->inkscape) {
 		sp_fill_style_widget_update (spw, SP_ACTIVE_DESKTOP ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL);
 	} else if (spw->repr) {
 		sp_fill_style_widget_update_repr (spw, spw->repr);
@@ -417,7 +417,7 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
 	SPGradient *vector;
 	gfloat c[5];
 
-	if (!spw->sodipodi) return;
+	if (!spw->inkscape) return;
 	if (g_object_get_data (G_OBJECT (spw), "update")) return;
 	g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 #ifdef SP_FS_VERBOSE
@@ -485,7 +485,7 @@ sp_fill_style_widget_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 #ifdef SP_FS_VERBOSE
 	g_print ("FillStyleWidget: paint changed\n");
 #endif
-	if (spw->sodipodi) {
+	if (spw->inkscape) {
 		/* fixme: */
 		if (!SP_WIDGET_DOCUMENT (spw)) {
 			g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
@@ -514,7 +514,7 @@ sp_fill_style_widget_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 			sp_repr_set_attr_recursive ((SPRepr *) r->data, "sodipodi:fill-cmyk", NULL);
 		}
 		sp_repr_css_attr_unref (css);
-		if (spw->sodipodi) sp_document_done (SP_WIDGET_DOCUMENT (spw));
+		if (spw->inkscape) sp_document_done (SP_WIDGET_DOCUMENT (spw));
 		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
 		css = sp_repr_css_attr_new ();
@@ -528,7 +528,7 @@ sp_fill_style_widget_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 			sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
 		}
 		sp_repr_css_attr_unref (css);
-		if (spw->sodipodi) sp_document_done (SP_WIDGET_DOCUMENT (spw));
+		if (spw->inkscape) sp_document_done (SP_WIDGET_DOCUMENT (spw));
 		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
 		css = sp_repr_css_attr_new ();
@@ -544,7 +544,7 @@ sp_fill_style_widget_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 			sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
 		}
 		sp_repr_css_attr_unref (css);
-		if (spw->sodipodi) sp_document_done (SP_WIDGET_DOCUMENT (spw));
+		if (spw->inkscape) sp_document_done (SP_WIDGET_DOCUMENT (spw));
 		break;
 	case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
 		if (items) {
@@ -561,7 +561,7 @@ sp_fill_style_widget_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 					SPGradient *lg;
 					lg = sp_item_force_fill_lineargradient_vector (SP_ITEM (i->data), vector);
 					sp_paint_selector_write_lineargradient (psel, SP_LINEARGRADIENT (lg), SP_ITEM (i->data));
-					sp_object_invoke_write (SP_OBJECT (lg), SP_OBJECT_REPR (lg), SP_OBJECT_WRITE_SODIPODI);
+					sp_object_invoke_write (SP_OBJECT (lg), SP_OBJECT_REPR (lg), SP_OBJECT_WRITE_INKSCAPE);
 				}
 			}
 			sp_document_done (SP_WIDGET_DOCUMENT (spw));
@@ -582,7 +582,7 @@ sp_fill_style_widget_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 					SPGradient *rg;
 					rg = sp_item_force_fill_radialgradient_vector (SP_ITEM (i->data), vector);
 					sp_paint_selector_write_radialgradient (psel, SP_RADIALGRADIENT (rg), SP_ITEM (i->data));
-					sp_object_invoke_write (SP_OBJECT (rg), SP_OBJECT_REPR (rg), SP_OBJECT_WRITE_SODIPODI);
+					sp_object_invoke_write (SP_OBJECT (rg), SP_OBJECT_REPR (rg), SP_OBJECT_WRITE_INKSCAPE);
 				}
 			}
 			sp_document_done (SP_WIDGET_DOCUMENT (spw));
@@ -607,7 +607,7 @@ sp_fill_style_widget_fill_rule_activate (GtkWidget *w, SPWidget *spw)
 
 	if (g_object_get_data (G_OBJECT (spw), "update")) return;
 
-	if (spw->sodipodi) {
+	if (spw->inkscape) {
 		reprs = NULL;
 		items = sp_widget_get_item_list (spw);
 		for (i = items; i != NULL; i = i->next) {
@@ -624,7 +624,7 @@ sp_fill_style_widget_fill_rule_activate (GtkWidget *w, SPWidget *spw)
 		sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
 	}
 	sp_repr_css_attr_unref (css);
-	if (spw->sodipodi) sp_document_done (SP_WIDGET_DOCUMENT (spw));
+	if (spw->inkscape) sp_document_done (SP_WIDGET_DOCUMENT (spw));
 
 	g_slist_free (reprs);
 }

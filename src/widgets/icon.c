@@ -26,7 +26,7 @@
 #include <gtk/gtkiconfactory.h>
 
 #include "forward.h"
-#include "sodipodi-private.h"
+#include "inkscape-private.h"
 #include "document.h"
 #include "sp-item.h"
 #include "display/nr-arena.h"
@@ -221,7 +221,7 @@ sp_icon_get_gtk_size (int size)
 	if (!map[size]) {
 		static int count = 0;
 		char c[64];
-		g_snprintf (c, 64, "SodipodiIcon%d", count++);
+		g_snprintf (c, 64, "InkscapeIcon%d", count++);
 		map[size] = gtk_icon_size_register (c, size, size);
 	}
 	return map[size];
@@ -323,11 +323,11 @@ sp_icon_image_load_pixmap (const unsigned char *name, unsigned int size, unsigne
 	unsigned char *px;
 	GdkPixbuf *pb;
 
-	path = (unsigned char *) g_strdup_printf ("%s/%s.png", SODIPODI_PIXMAPDIR, name);
+	path = (unsigned char *) g_strdup_printf ("%s/%s.png", INKSCAPE_PIXMAPDIR, name);
 	pb = gdk_pixbuf_new_from_file ((const char *) path, NULL);
 	g_free (path);
 	if (!pb) {
-		path = (unsigned char *) g_strdup_printf ("%s/%s.xpm", SODIPODI_PIXMAPDIR, name);
+		path = (unsigned char *) g_strdup_printf ("%s/%s.xpm", INKSCAPE_PIXMAPDIR, name);
 		pb = gdk_pixbuf_new_from_file ((const char *) path, NULL);
 		g_free (path);
 	}
@@ -370,8 +370,8 @@ sp_icon_image_load_svg (const unsigned char *name, unsigned int size, unsigned i
 		if (!stat ("glade/icons.svg", &st) && S_ISREG (st.st_mode)) {
 			doc = sp_document_new ("glade/icons.svg", FALSE, FALSE);
 		}
-		if (!doc && !stat (SODIPODI_PIXMAPDIR "/icons.svg", &st) && S_ISREG (st.st_mode)) {
-			doc = sp_document_new (SODIPODI_PIXMAPDIR "/icons.svg", FALSE, FALSE);
+		if (!doc && !stat (INKSCAPE_PIXMAPDIR "/icons.svg", &st) && S_ISREG (st.st_mode)) {
+			doc = sp_document_new (INKSCAPE_PIXMAPDIR "/icons.svg", FALSE, FALSE);
 		}
 		if (doc) {
 			unsigned int visionkey;

@@ -1,23 +1,23 @@
 [Project]
-FileName=Sodipodi.dev
-Name=Sodipodi
+FileName=Inkscape.dev
+Name=Inkscape
 UnitCount=3
 Type=1
 Ver=1
 ObjFiles=
 Includes=
 Libs=
-PrivateResource=Sodipodi_private.rc
+PrivateResource=Inkscape_private.rc
 ResourceIncludes=
 MakeIncludes=
 Compiler=-Isrc -I/dev-cpp/include/glib-2.0 -I/dev-cpp/lib/glib-2.0/include -I/dev-cpp/include/atk-1.0 -I/dev-cpp/include/pango-1.0 -I/dev-cpp/include/gtk-2.0 -I/dev-cpp/lib/gtk-2.0/include
 Linker=libspmodules.a libspdialogs.a libspwidgets.a libspsvg.a libspxml.a libart_lgpl.a libspbase.a libspdisplay.a libsphelper.a libnrtype.a libnr.a -lintl -lxml2 -lglib-2.0 -lgobject-2.0 -latk-1.0 -lpango-1.0 -lgdk-win32-2.0 -lgtk-win32-2.0 -lgdk_pixbuf-2.0 -lpng
 IsCpp=0
-Icon=Sodipodi.ico
+Icon=Inkscape.ico
 ExeOutput=
 ObjectOutput=
 OverrideOutput=0
-OverrideOutputName=Sodipodi.exe
+OverrideOutputName=Inkscape.exe
 HostApplication=
 Folders=
 CommandLine=
@@ -29,7 +29,7 @@ CppCompiler=
 
 [Unit6]
 FileName=src\sp-animation.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -39,7 +39,7 @@ Priority=1000
 
 [Unit11]
 FileName=src\sp-clippath.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -49,7 +49,7 @@ Priority=1000
 
 [Unit12]
 FileName=src\sp-cursor.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -59,7 +59,7 @@ Priority=1000
 
 [Unit13]
 FileName=src\sp-cursor.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -69,7 +69,7 @@ Priority=1000
 
 [Unit15]
 FileName=src\sp-defs.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -79,7 +79,7 @@ Priority=1000
 
 [Unit16]
 FileName=src\sp-ellipse.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -89,7 +89,7 @@ Priority=1000
 
 [Unit17]
 FileName=src\sp-ellipse.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -99,7 +99,7 @@ Priority=1000
 
 [Unit18]
 FileName=src\sp-gradient.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -109,7 +109,7 @@ Priority=1000
 
 [Unit19]
 FileName=src\sp-gradient.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -119,7 +119,7 @@ Priority=1000
 
 [Unit20]
 FileName=src\sp-guide.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -129,7 +129,7 @@ Priority=1000
 
 [Unit21]
 FileName=src\sp-guide.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -139,7 +139,7 @@ Priority=1000
 
 [Unit22]
 FileName=src\sp-image.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -149,7 +149,7 @@ Priority=1000
 
 [Unit23]
 FileName=src\sp-image.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -159,7 +159,7 @@ Priority=1000
 
 [Unit26]
 FileName=src\sp-item.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -169,7 +169,7 @@ Priority=1000
 
 [Unit27]
 FileName=src\sp-item.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -179,7 +179,7 @@ Priority=1000
 
 [Unit28]
 FileName=src\sp-item-group.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -189,7 +189,7 @@ Priority=1000
 
 [Unit29]
 FileName=src\sp-item-group.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -199,7 +199,7 @@ Priority=1000
 
 [Unit30]
 FileName=src\sp-item-transform.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -209,7 +209,7 @@ Priority=1000
 
 [Unit32]
 FileName=src\sp-line.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -219,7 +219,7 @@ Priority=1000
 
 [Unit33]
 FileName=src\sp-line.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -229,7 +229,7 @@ Priority=1000
 
 [Unit34]
 FileName=src\sp-marker.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -239,7 +239,7 @@ Priority=1000
 
 [Unit35]
 FileName=src\sp-marker.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -249,7 +249,7 @@ Priority=1000
 
 [Unit38]
 FileName=src\sp-metrics.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -259,7 +259,7 @@ Priority=1000
 
 [Unit39]
 FileName=src\sp-metrics.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -269,7 +269,7 @@ Priority=1000
 
 [Unit40]
 FileName=src\sp-namedview.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -279,7 +279,7 @@ Priority=1000
 
 [Unit41]
 FileName=src\sp-namedview.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -289,7 +289,7 @@ Priority=1000
 
 [Unit42]
 FileName=src\sp-object.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -299,7 +299,7 @@ Priority=1000
 
 [Unit43]
 FileName=src\sp-object.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -309,7 +309,7 @@ Priority=1000
 
 [Unit44]
 FileName=src\sp-object-group.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -319,7 +319,7 @@ Priority=1000
 
 [Unit46]
 FileName=src\sp-object-repr.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -329,7 +329,7 @@ Priority=1000
 
 [Unit49]
 FileName=src\sp-paint-server.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -339,7 +339,7 @@ Priority=1000
 
 [Unit51]
 FileName=src\sp-path.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -349,7 +349,7 @@ Priority=1000
 
 [Unit53]
 FileName=src\sp-pattern.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -359,7 +359,7 @@ Priority=1000
 
 [Unit54]
 FileName=src\sp-polygon.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -369,7 +369,7 @@ Priority=1000
 
 [Unit57]
 FileName=src\sp-polyline.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -379,7 +379,7 @@ Priority=1000
 
 [Unit58]
 FileName=src\sp-rect.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -389,7 +389,7 @@ Priority=1000
 
 [Unit59]
 FileName=src\sp-rect.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -399,7 +399,7 @@ Priority=1000
 
 [Unit60]
 FileName=src\sp-root.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -409,7 +409,7 @@ Priority=1000
 
 [Unit61]
 FileName=src\sp-root.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -419,7 +419,7 @@ Priority=1000
 
 [Unit62]
 FileName=src\sp-shape.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -429,7 +429,7 @@ Priority=1000
 
 [Unit64]
 FileName=src\sp-spiral.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -439,7 +439,7 @@ Priority=1000
 
 [Unit65]
 FileName=src\sp-spiral.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -449,7 +449,7 @@ Priority=1000
 
 [Unit66]
 FileName=src\sp-star.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -459,7 +459,7 @@ Priority=1000
 
 [Unit68]
 FileName=src\sp-symbol.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -469,7 +469,7 @@ Priority=1000
 
 [Unit70]
 FileName=src\sp-text.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -479,7 +479,7 @@ Priority=1000
 
 [Unit71]
 FileName=src\sp-text.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -489,7 +489,7 @@ Priority=1000
 
 [Unit72]
 FileName=src\sp-use.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -499,7 +499,7 @@ Priority=1000
 
 [Unit74]
 FileName=src\application.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -507,7 +507,7 @@ BuildCmd=
 
 [Unit75]
 FileName=src\dialogs\desktop-properties.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -515,7 +515,7 @@ BuildCmd=
 
 [Unit76]
 FileName=src\dialogs\desktop-properties.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -523,7 +523,7 @@ BuildCmd=
 
 [Unit77]
 FileName=src\modules\sp-module.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -531,7 +531,7 @@ BuildCmd=
 
 [Unit78]
 FileName=src\modules\sp-module.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -547,7 +547,7 @@ BuildCmd=
 
 [Unit80]
 FileName=src\winmain.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -555,7 +555,7 @@ BuildCmd=
 
 [Unit81]
 FileName=src\slideshow.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -563,7 +563,7 @@ BuildCmd=
 
 [Unit83]
 FileName=src\sodipodi.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -571,7 +571,7 @@ BuildCmd=
 
 [Unit84]
 FileName=src\sodipodi-private.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -579,7 +579,7 @@ BuildCmd=
 
 [Unit86]
 FileName=src\sp-cursor.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -587,7 +587,7 @@ BuildCmd=
 
 [Unit88]
 FileName=src\spiral-context.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -595,7 +595,7 @@ BuildCmd=
 
 [Unit90]
 FileName=src\sp-item-transform.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -603,7 +603,7 @@ BuildCmd=
 
 [Unit92]
 FileName=src\sp-object-repr.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -611,7 +611,7 @@ BuildCmd=
 
 [Unit94]
 FileName=src\star-context.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -619,7 +619,7 @@ BuildCmd=
 
 [Unit95]
 FileName=src\style.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -627,7 +627,7 @@ BuildCmd=
 
 [Unit96]
 FileName=src\style.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -635,7 +635,7 @@ BuildCmd=
 
 [Unit97]
 FileName=src\zoom-context.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -643,7 +643,7 @@ BuildCmd=
 
 [Unit98]
 FileName=src\zoom-context.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -651,7 +651,7 @@ BuildCmd=
 
 [Unit99]
 FileName=src\text-context.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -659,7 +659,7 @@ BuildCmd=
 
 [Unit100]
 FileName=src\text-context.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -667,7 +667,7 @@ BuildCmd=
 
 [Unit101]
 FileName=src\toolbox.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -675,7 +675,7 @@ BuildCmd=
 
 [Unit102]
 FileName=src\toolbox.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -683,7 +683,7 @@ BuildCmd=
 
 [Unit103]
 FileName=src\uri-references.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -691,7 +691,7 @@ BuildCmd=
 
 [Unit104]
 FileName=src\uri-references.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -699,7 +699,7 @@ BuildCmd=
 
 [Unit105]
 FileName=src\view.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -707,7 +707,7 @@ BuildCmd=
 
 [Unit106]
 FileName=src\application.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -715,7 +715,7 @@ BuildCmd=
 
 [Unit107]
 FileName=src\dialogs\desktop-properties.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -723,7 +723,7 @@ BuildCmd=
 
 [Unit108]
 FileName=src\dialogs\desktop-properties.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -731,7 +731,7 @@ BuildCmd=
 
 [Unit109]
 FileName=src\modules\sp-module.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -739,7 +739,7 @@ BuildCmd=
 
 [Unit110]
 FileName=src\modules\sp-module.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -755,7 +755,7 @@ BuildCmd=
 
 [Unit112]
 FileName=src\winmain.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -763,7 +763,7 @@ BuildCmd=
 
 [Unit113]
 FileName=src\sp-line.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -771,7 +771,7 @@ BuildCmd=
 
 [Unit114]
 FileName=src\sp-line.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -779,7 +779,7 @@ BuildCmd=
 
 [Unit115]
 FileName=src\sp-marker.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -787,7 +787,7 @@ BuildCmd=
 
 [Unit116]
 FileName=src\sp-marker.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -795,7 +795,7 @@ BuildCmd=
 
 [Unit117]
 FileName=src\sp-mask.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -803,7 +803,7 @@ BuildCmd=
 
 [Unit118]
 FileName=src\sp-mask.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -811,7 +811,7 @@ BuildCmd=
 
 [Unit120]
 FileName=src\sp-namedview.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -819,7 +819,7 @@ BuildCmd=
 
 [Unit121]
 FileName=src\sp-object.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -827,7 +827,7 @@ BuildCmd=
 
 [Unit122]
 FileName=src\sp-object.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -835,7 +835,7 @@ BuildCmd=
 
 [Unit123]
 FileName=src\sp-object-group.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -843,7 +843,7 @@ BuildCmd=
 
 [Unit124]
 FileName=src\sp-object-group.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -851,7 +851,7 @@ BuildCmd=
 
 [Unit125]
 FileName=src\sp-object-repr.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -859,7 +859,7 @@ BuildCmd=
 
 [Unit126]
 FileName=src\sp-object-repr.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -867,7 +867,7 @@ BuildCmd=
 
 [Unit127]
 FileName=src\sp-paint-server.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -875,7 +875,7 @@ BuildCmd=
 
 [Unit128]
 FileName=src\sp-paint-server.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -883,7 +883,7 @@ BuildCmd=
 
 [Unit129]
 FileName=src\sp-path.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -891,7 +891,7 @@ BuildCmd=
 
 [Unit130]
 FileName=src\sp-path.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -899,7 +899,7 @@ BuildCmd=
 
 [Unit131]
 FileName=src\sp-pattern.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -907,7 +907,7 @@ BuildCmd=
 
 [Unit132]
 FileName=src\sp-pattern.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -915,7 +915,7 @@ BuildCmd=
 
 [Unit133]
 FileName=src\sp-polygon.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -923,7 +923,7 @@ BuildCmd=
 
 [Unit134]
 FileName=src\sp-polygon.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -931,7 +931,7 @@ BuildCmd=
 
 [Unit135]
 FileName=src\sp-polyline.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -939,7 +939,7 @@ BuildCmd=
 
 [Unit136]
 FileName=src\sp-polyline.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -947,7 +947,7 @@ BuildCmd=
 
 [Unit137]
 FileName=src\sp-rect.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -955,7 +955,7 @@ BuildCmd=
 
 [Unit138]
 FileName=src\sp-rect.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -963,7 +963,7 @@ BuildCmd=
 
 [Unit139]
 FileName=src\sp-root.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -971,7 +971,7 @@ BuildCmd=
 
 [Unit140]
 FileName=src\sp-root.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -979,7 +979,7 @@ BuildCmd=
 
 [Unit141]
 FileName=src\sp-shape.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -987,7 +987,7 @@ BuildCmd=
 
 [Unit142]
 FileName=src\sp-shape.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -995,7 +995,7 @@ BuildCmd=
 
 [Unit143]
 FileName=src\sp-spiral.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1003,7 +1003,7 @@ BuildCmd=
 
 [Unit144]
 FileName=src\sp-spiral.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1011,7 +1011,7 @@ BuildCmd=
 
 [Unit145]
 FileName=src\sp-star.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1019,7 +1019,7 @@ BuildCmd=
 
 [Unit146]
 FileName=src\sp-star.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1027,7 +1027,7 @@ BuildCmd=
 
 [Unit147]
 FileName=src\sp-symbol.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1035,7 +1035,7 @@ BuildCmd=
 
 [Unit148]
 FileName=src\sp-symbol.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1043,7 +1043,7 @@ BuildCmd=
 
 [Unit149]
 FileName=src\sp-text.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1051,7 +1051,7 @@ BuildCmd=
 
 [Unit150]
 FileName=src\sp-text.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1059,7 +1059,7 @@ BuildCmd=
 
 [Unit151]
 FileName=src\sp-use.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1067,7 +1067,7 @@ BuildCmd=
 
 [Unit152]
 FileName=src\sp-use.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1075,7 +1075,7 @@ BuildCmd=
 
 [Unit153]
 FileName=src\star-context.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1083,7 +1083,7 @@ BuildCmd=
 
 [Unit154]
 FileName=src\star-context.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1091,7 +1091,7 @@ BuildCmd=
 
 [Unit155]
 FileName=src\style.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1099,7 +1099,7 @@ BuildCmd=
 
 [Unit156]
 FileName=src\style.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1107,7 +1107,7 @@ BuildCmd=
 
 [Unit157]
 FileName=src\zoom-context.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1115,7 +1115,7 @@ BuildCmd=
 
 [Unit158]
 FileName=src\zoom-context.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1123,7 +1123,7 @@ BuildCmd=
 
 [Unit159]
 FileName=src\text-context.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1131,7 +1131,7 @@ BuildCmd=
 
 [Unit160]
 FileName=src\text-context.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1139,7 +1139,7 @@ BuildCmd=
 
 [Unit162]
 FileName=src\toolbox.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1147,7 +1147,7 @@ BuildCmd=
 
 [Unit163]
 FileName=src\uri-references.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1155,7 +1155,7 @@ BuildCmd=
 
 [Unit164]
 FileName=src\uri-references.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1163,7 +1163,7 @@ BuildCmd=
 
 [Unit165]
 FileName=src\view.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1171,7 +1171,7 @@ BuildCmd=
 
 [Unit166]
 FileName=src\application.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1179,7 +1179,7 @@ BuildCmd=
 
 [Unit167]
 FileName=src\dialogs\desktop-properties.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1187,7 +1187,7 @@ BuildCmd=
 
 [Unit168]
 FileName=src\dialogs\desktop-properties.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1195,7 +1195,7 @@ BuildCmd=
 
 [Unit177]
 FileName=src\helper\units.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1203,7 +1203,7 @@ BuildCmd=
 
 [Unit179]
 FileName=src\helper\bezier-utils.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1211,7 +1211,7 @@ BuildCmd=
 
 [Unit182]
 FileName=src\helper\canvas-grid.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1219,7 +1219,7 @@ BuildCmd=
 
 [Unit183]
 FileName=src\helper\curve.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1227,7 +1227,7 @@ BuildCmd=
 
 [Unit184]
 FileName=src\helper\curve.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1235,7 +1235,7 @@ BuildCmd=
 
 [Unit185]
 FileName=src\helper\gnome-canvas-acetate.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1243,7 +1243,7 @@ BuildCmd=
 
 [Unit186]
 FileName=src\helper\gnome-canvas-acetate.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1251,7 +1251,7 @@ BuildCmd=
 
 [Unit187]
 FileName=src\helper\gnome-utils.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1259,7 +1259,7 @@ BuildCmd=
 
 [Unit188]
 FileName=src\helper\gnome-utils.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1267,7 +1267,7 @@ BuildCmd=
 
 [Unit189]
 FileName=src\helper\guideline.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1275,7 +1275,7 @@ BuildCmd=
 
 [Unit190]
 FileName=src\helper\guideline.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1283,7 +1283,7 @@ BuildCmd=
 
 [Unit191]
 FileName=src\helper\helper-forward.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1291,7 +1291,7 @@ BuildCmd=
 
 [Unit192]
 FileName=src\helper\nr-plain-stuff-gdk.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1299,7 +1299,7 @@ BuildCmd=
 
 [Unit193]
 FileName=src\helper\nr-plain-stuff-gdk.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1307,7 +1307,7 @@ BuildCmd=
 
 [Unit194]
 FileName=src\helper\png-write.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1315,7 +1315,7 @@ BuildCmd=
 
 [Unit197]
 FileName=src\helper\sodipodi-ctrl.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1323,7 +1323,7 @@ BuildCmd=
 
 [Unit198]
 FileName=src\helper\sodipodi-ctrlrect.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1331,7 +1331,7 @@ BuildCmd=
 
 [Unit199]
 FileName=src\helper\sodipodi-ctrlrect.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1339,7 +1339,7 @@ BuildCmd=
 
 [Unit200]
 FileName=src\helper\sp-canvas.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1347,7 +1347,7 @@ BuildCmd=
 
 [Unit202]
 FileName=src\helper\sp-canvas-util.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1355,7 +1355,7 @@ BuildCmd=
 
 [Unit203]
 FileName=src\helper\sp-canvas-util.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1363,7 +1363,7 @@ BuildCmd=
 
 [Unit204]
 FileName=src\helper\sp-ctrlline.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1371,7 +1371,7 @@ BuildCmd=
 
 [Unit205]
 FileName=src\helper\sp-ctrlline.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1379,7 +1379,7 @@ BuildCmd=
 
 [Unit207]
 FileName=src\helper\unit-menu.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1387,7 +1387,7 @@ BuildCmd=
 
 [Unit208]
 FileName=src\helper\unit-menu.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1395,7 +1395,7 @@ BuildCmd=
 
 [Unit209]
 FileName=src\helper\units.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1403,7 +1403,7 @@ BuildCmd=
 
 [Unit210]
 FileName=src\modules\sp-module.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1411,7 +1411,7 @@ BuildCmd=
 
 [Unit211]
 FileName=src\modules\sp-module.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1419,7 +1419,7 @@ BuildCmd=
 
 [Unit212]
 FileName=src\svg\gnome-canvas-bpath-util.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1427,7 +1427,7 @@ BuildCmd=
 
 [Unit213]
 FileName=src\svg\gnome-canvas-bpath-util.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1435,7 +1435,7 @@ BuildCmd=
 
 [Unit214]
 FileName=src\svg\svg.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1443,7 +1443,7 @@ BuildCmd=
 
 [Unit215]
 FileName=src\widgets\sp-toolbox.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1451,7 +1451,7 @@ BuildCmd=
 
 [Unit216]
 FileName=src\widgets\sp-toolbox.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1459,7 +1459,7 @@ BuildCmd=
 
 [Unit217]
 FileName=src\helper\sp-marshal.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1467,7 +1467,7 @@ BuildCmd=
 
 [Unit220]
 FileName=src\helper\canvas-bpath.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1475,7 +1475,7 @@ BuildCmd=
 
 [Unit222]
 FileName=src\display\nr-arena-shape.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1483,7 +1483,7 @@ BuildCmd=
 
 [Unit223]
 FileName=src\display\canvas-arena.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1491,7 +1491,7 @@ BuildCmd=
 
 [Unit230]
 FileName=src\helper\canvas-grid.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1499,7 +1499,7 @@ BuildCmd=
 
 [Unit231]
 FileName=src\helper\curve.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1507,7 +1507,7 @@ BuildCmd=
 
 [Unit232]
 FileName=src\helper\curve.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1515,7 +1515,7 @@ BuildCmd=
 
 [Unit233]
 FileName=src\helper\gnome-canvas-acetate.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1523,7 +1523,7 @@ BuildCmd=
 
 [Unit234]
 FileName=src\helper\gnome-canvas-acetate.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1531,7 +1531,7 @@ BuildCmd=
 
 [Unit235]
 FileName=src\helper\gnome-utils.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1539,7 +1539,7 @@ BuildCmd=
 
 [Unit236]
 FileName=src\helper\gnome-utils.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1547,7 +1547,7 @@ BuildCmd=
 
 [Unit238]
 FileName=src\helper\guideline.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1555,7 +1555,7 @@ BuildCmd=
 
 [Unit239]
 FileName=src\helper\helper-forward.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1563,7 +1563,7 @@ BuildCmd=
 
 [Unit240]
 FileName=src\helper\kde-private.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1571,7 +1571,7 @@ BuildCmd=
 
 [Unit242]
 FileName=src\helper\nr-plain-stuff-gdk.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1579,7 +1579,7 @@ BuildCmd=
 
 [Unit244]
 FileName=src\helper\png-write.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1587,7 +1587,7 @@ BuildCmd=
 
 [Unit245]
 FileName=src\helper\sodipodi-ctrl.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1595,7 +1595,7 @@ BuildCmd=
 
 [Unit246]
 FileName=src\helper\sodipodi-ctrl.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1603,7 +1603,7 @@ BuildCmd=
 
 [Unit247]
 FileName=src\helper\sodipodi-ctrlrect.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1611,7 +1611,7 @@ BuildCmd=
 
 [Unit248]
 FileName=src\helper\sodipodi-ctrlrect.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1619,7 +1619,7 @@ BuildCmd=
 
 [Unit249]
 FileName=src\helper\sp-canvas.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1627,7 +1627,7 @@ BuildCmd=
 
 [Unit250]
 FileName=src\helper\sp-canvas.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1635,7 +1635,7 @@ BuildCmd=
 
 [Unit251]
 FileName=src\helper\sp-canvas-util.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1643,7 +1643,7 @@ BuildCmd=
 
 [Unit252]
 FileName=src\helper\sp-canvas-util.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1651,7 +1651,7 @@ BuildCmd=
 
 [Unit253]
 FileName=src\helper\sp-ctrlline.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1659,7 +1659,7 @@ BuildCmd=
 
 [Unit254]
 FileName=src\helper\sp-ctrlline.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1667,7 +1667,7 @@ BuildCmd=
 
 [Unit255]
 FileName=src\helper\sp-intl.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1675,7 +1675,7 @@ BuildCmd=
 
 [Unit256]
 FileName=src\helper\unit-menu.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1683,7 +1683,7 @@ BuildCmd=
 
 [Unit257]
 FileName=src\helper\unit-menu.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1691,7 +1691,7 @@ BuildCmd=
 
 [Unit258]
 FileName=src\helper\units.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1699,7 +1699,7 @@ BuildCmd=
 
 [Unit264]
 FileName=src\libnrtype\nr-type-directory.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1707,7 +1707,7 @@ BuildCmd=
 
 [Unit265]
 FileName=src\libnrtype\nr-type-directory.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1715,7 +1715,7 @@ BuildCmd=
 
 [Unit266]
 FileName=src\libnrtype\nr-typeface.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1723,7 +1723,7 @@ BuildCmd=
 
 [Unit270]
 FileName=src\libnrtype\nr-type-primitives.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1731,7 +1731,7 @@ BuildCmd=
 
 [Unit271]
 FileName=src\libnrtype\nr-type-primitives.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1739,7 +1739,7 @@ BuildCmd=
 
 [Unit272]
 FileName=src\libnrtype\nr-type-w32.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1747,7 +1747,7 @@ BuildCmd=
 
 [Unit274]
 FileName=src\libnrtype\codepages.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1755,7 +1755,7 @@ BuildCmd=
 
 [Unit275]
 FileName=src\modules\sp-module-sys.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1763,7 +1763,7 @@ BuildCmd=
 
 [Unit276]
 FileName=src\modules\sp-module.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1771,7 +1771,7 @@ BuildCmd=
 
 [Unit278]
 FileName=src\modules\sp-module-doc.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1779,7 +1779,7 @@ BuildCmd=
 
 [Unit279]
 FileName=src\modules\sp-module-exec.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1787,7 +1787,7 @@ BuildCmd=
 
 [Unit281]
 FileName=src\modules\sp-module-exec-ext.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1795,7 +1795,7 @@ BuildCmd=
 
 [Unit282]
 FileName=src\modules\sp-module-exec-ext.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1803,7 +1803,7 @@ BuildCmd=
 
 [Unit283]
 FileName=src\modules\sp-module-sys.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1811,7 +1811,7 @@ BuildCmd=
 
 [Unit284]
 FileName=src\modules\sp-module.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1819,7 +1819,7 @@ BuildCmd=
 
 [Unit285]
 FileName=src\svg\gnome-canvas-bpath-util.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1827,7 +1827,7 @@ BuildCmd=
 
 [Unit287]
 FileName=src\svg\svg.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1835,7 +1835,7 @@ BuildCmd=
 
 [Unit288]
 FileName=src\svg\svg-affine.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1843,7 +1843,7 @@ BuildCmd=
 
 [Unit289]
 FileName=src\svg\svg-color.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1851,7 +1851,7 @@ BuildCmd=
 
 [Unit291]
 FileName=src\svg\svg-path.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1859,7 +1859,7 @@ BuildCmd=
 
 [Unit292]
 FileName=src\svg\svg-types.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1867,7 +1867,7 @@ BuildCmd=
 
 [Unit293]
 FileName=src\widgets\test-wrapbox.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1875,7 +1875,7 @@ BuildCmd=
 
 [Unit294]
 FileName=src\widgets\button.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1883,7 +1883,7 @@ BuildCmd=
 
 [Unit295]
 FileName=src\widgets\dash-selector.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1891,7 +1891,7 @@ BuildCmd=
 
 [Unit296]
 FileName=src\widgets\dash-selector.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1899,7 +1899,7 @@ BuildCmd=
 
 [Unit297]
 FileName=src\widgets\font-selector.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1907,7 +1907,7 @@ BuildCmd=
 
 [Unit298]
 FileName=src\widgets\font-selector.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1915,7 +1915,7 @@ BuildCmd=
 
 [Unit299]
 FileName=src\widgets\gradient-image.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1923,7 +1923,7 @@ BuildCmd=
 
 [Unit300]
 FileName=src\widgets\gradient-image.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1931,7 +1931,7 @@ BuildCmd=
 
 [Unit301]
 FileName=src\widgets\gradient-position.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1939,7 +1939,7 @@ BuildCmd=
 
 [Unit302]
 FileName=src\widgets\gradient-position.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1947,7 +1947,7 @@ BuildCmd=
 
 [Unit303]
 FileName=src\widgets\gradient-selector.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1955,7 +1955,7 @@ BuildCmd=
 
 [Unit304]
 FileName=src\widgets\gradient-selector.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1963,7 +1963,7 @@ BuildCmd=
 
 [Unit305]
 FileName=src\widgets\gradient-vector.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1971,7 +1971,7 @@ BuildCmd=
 
 [Unit306]
 FileName=src\widgets\gradient-vector.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1979,7 +1979,7 @@ BuildCmd=
 
 [Unit307]
 FileName=src\widgets\icon.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1987,7 +1987,7 @@ BuildCmd=
 
 [Unit308]
 FileName=src\widgets\icon.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -1995,7 +1995,7 @@ BuildCmd=
 
 [Unit309]
 FileName=src\widgets\menu.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2003,7 +2003,7 @@ BuildCmd=
 
 [Unit310]
 FileName=src\widgets\menu.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2011,7 +2011,7 @@ BuildCmd=
 
 [Unit311]
 FileName=src\widgets\paint-selector.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2019,7 +2019,7 @@ BuildCmd=
 
 [Unit312]
 FileName=src\widgets\paint-selector.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2027,7 +2027,7 @@ BuildCmd=
 
 [Unit313]
 FileName=src\widgets\ruler.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2035,7 +2035,7 @@ BuildCmd=
 
 [Unit314]
 FileName=src\widgets\ruler.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2043,7 +2043,7 @@ BuildCmd=
 
 [Unit315]
 FileName=src\widgets\sp-color-preview.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2051,7 +2051,7 @@ BuildCmd=
 
 [Unit316]
 FileName=src\widgets\sp-color-preview.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2059,7 +2059,7 @@ BuildCmd=
 
 [Unit317]
 FileName=src\widgets\sp-color-selector.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2067,7 +2067,7 @@ BuildCmd=
 
 [Unit318]
 FileName=src\widgets\sp-color-selector.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2075,7 +2075,7 @@ BuildCmd=
 
 [Unit319]
 FileName=src\widgets\sp-color-slider.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2083,7 +2083,7 @@ BuildCmd=
 
 [Unit320]
 FileName=src\widgets\sp-color-slider.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2091,7 +2091,7 @@ BuildCmd=
 
 [Unit321]
 FileName=src\widgets\sp-hwrap-box.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2099,7 +2099,7 @@ BuildCmd=
 
 [Unit322]
 FileName=src\widgets\sp-hwrap-box.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2107,7 +2107,7 @@ BuildCmd=
 
 [Unit323]
 FileName=src\widgets\sp-toolbox.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2115,7 +2115,7 @@ BuildCmd=
 
 [Unit324]
 FileName=src\widgets\sp-toolbox.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2123,7 +2123,7 @@ BuildCmd=
 
 [Unit325]
 FileName=src\widgets\sp-widget.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2131,7 +2131,7 @@ BuildCmd=
 
 [Unit326]
 FileName=src\widgets\sp-widget.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2139,7 +2139,7 @@ BuildCmd=
 
 [Unit327]
 FileName=src\widgets\sp-wrap-box.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2147,7 +2147,7 @@ BuildCmd=
 
 [Unit328]
 FileName=src\widgets\sp-wrap-box.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2155,7 +2155,7 @@ BuildCmd=
 
 [Unit329]
 FileName=src\widgets\sp-vwrap-box.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2163,7 +2163,7 @@ BuildCmd=
 
 [Unit330]
 FileName=src\widgets\sp-vwrap-box.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2171,7 +2171,7 @@ BuildCmd=
 
 [Unit331]
 FileName=src\widgets\sp-xmlview-attr-list.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2179,7 +2179,7 @@ BuildCmd=
 
 [Unit332]
 FileName=src\widgets\sp-xmlview-attr-list.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2187,7 +2187,7 @@ BuildCmd=
 
 [Unit333]
 FileName=src\widgets\sp-xmlview-content.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2195,7 +2195,7 @@ BuildCmd=
 
 [Unit335]
 FileName=src\widgets\sp-xmlview-tree.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2203,7 +2203,7 @@ BuildCmd=
 
 [Unit336]
 FileName=src\widgets\sp-xmlview-tree.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2211,7 +2211,7 @@ BuildCmd=
 
 [Unit338]
 FileName=src\widgets\button.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2219,7 +2219,7 @@ BuildCmd=
 
 [Unit339]
 FileName=src\xml\repr-util.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2227,7 +2227,7 @@ BuildCmd=
 
 [Unit340]
 FileName=src\xml\repr.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2235,7 +2235,7 @@ BuildCmd=
 
 [Unit341]
 FileName=src\xml\repr-css.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2243,7 +2243,7 @@ BuildCmd=
 
 [Unit342]
 FileName=src\xml\repr-io.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2251,7 +2251,7 @@ BuildCmd=
 
 [Unit343]
 FileName=src\xml\repr-private.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2259,7 +2259,7 @@ BuildCmd=
 
 [Unit344]
 FileName=src\xml\repr.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2267,7 +2267,7 @@ BuildCmd=
 
 [Unit345]
 FileName=src\helper\sp-marshal.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2275,7 +2275,7 @@ BuildCmd=
 
 [Unit346]
 FileName=src\helper\sp-marshal.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2291,7 +2291,7 @@ BuildCmd=
 
 [Unit348]
 FileName=src\libnr\nr-macros.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2299,7 +2299,7 @@ BuildCmd=
 
 [Unit349]
 FileName=src\libnr\nr-matrix.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2307,7 +2307,7 @@ BuildCmd=
 
 [Unit350]
 FileName=src\libnr\nr-matrix.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2315,7 +2315,7 @@ BuildCmd=
 
 [Unit351]
 FileName=src\libnr\nr-path.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2323,7 +2323,7 @@ BuildCmd=
 
 [Unit352]
 FileName=src\libnr\nr-path.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2331,7 +2331,7 @@ BuildCmd=
 
 [Unit353]
 FileName=src\libnr\nr-pixblock.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2339,7 +2339,7 @@ BuildCmd=
 
 [Unit354]
 FileName=src\libnr\nr-pixblock.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2347,7 +2347,7 @@ BuildCmd=
 
 [Unit355]
 FileName=src\libnr\nr-pixblock-line.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2355,7 +2355,7 @@ BuildCmd=
 
 [Unit356]
 FileName=src\libnr\nr-pixblock-line.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2363,7 +2363,7 @@ BuildCmd=
 
 [Unit357]
 FileName=src\libnr\nr-pixblock-pattern.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2371,7 +2371,7 @@ BuildCmd=
 
 [Unit358]
 FileName=src\libnr\nr-pixblock-pattern.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2379,7 +2379,7 @@ BuildCmd=
 
 [Unit359]
 FileName=src\libnr\nr-pixblock-pixel.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2387,7 +2387,7 @@ BuildCmd=
 
 [Unit360]
 FileName=src\libnr\nr-pixblock-pixel.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2395,7 +2395,7 @@ BuildCmd=
 
 [Unit361]
 FileName=src\libnr\nr-pixops.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2403,7 +2403,7 @@ BuildCmd=
 
 [Unit362]
 FileName=src\libnr\nr-rect.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2411,7 +2411,7 @@ BuildCmd=
 
 [Unit363]
 FileName=src\libnr\nr-rect.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2419,7 +2419,7 @@ BuildCmd=
 
 [Unit364]
 FileName=src\libnr\nr-render.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2427,7 +2427,7 @@ BuildCmd=
 
 [Unit365]
 FileName=src\libnr\nr-types.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2435,7 +2435,7 @@ BuildCmd=
 
 [Unit366]
 FileName=src\libnr\nr-values.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2443,7 +2443,7 @@ BuildCmd=
 
 [Unit367]
 FileName=src\libnr\nr-values.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2451,7 +2451,7 @@ BuildCmd=
 
 [Unit369]
 FileName=src\libnrtype\nr-font.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2459,7 +2459,7 @@ BuildCmd=
 
 [Unit370]
 FileName=src\libnrtype\nr-rasterfont.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2467,7 +2467,7 @@ BuildCmd=
 
 [Unit371]
 FileName=src\libnrtype\nr-rasterfont.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2475,7 +2475,7 @@ BuildCmd=
 
 [Unit372]
 FileName=src\libnrtype\nr-type-directory.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2483,7 +2483,7 @@ BuildCmd=
 
 [Unit373]
 FileName=src\libnrtype\nr-type-directory.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2491,7 +2491,7 @@ BuildCmd=
 
 [Unit374]
 FileName=src\libnrtype\nr-typeface.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2499,7 +2499,7 @@ BuildCmd=
 
 [Unit376]
 FileName=src\libnrtype\nr-type-ft2.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2507,7 +2507,7 @@ BuildCmd=
 
 [Unit377]
 FileName=src\libnrtype\nr-type-ft2.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2515,7 +2515,7 @@ BuildCmd=
 
 [Unit378]
 FileName=src\libnrtype\nr-type-primitives.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2523,7 +2523,7 @@ BuildCmd=
 
 [Unit380]
 FileName=src\libnrtype\nr-type-w32.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2531,7 +2531,7 @@ BuildCmd=
 
 [Unit381]
 FileName=src\libnrtype\nr-type-w32.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2539,7 +2539,7 @@ BuildCmd=
 
 [Unit382]
 FileName=src\libnrtype\codepages.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2547,7 +2547,7 @@ BuildCmd=
 
 [Unit384]
 FileName=src\modules\sp-module.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2555,7 +2555,7 @@ BuildCmd=
 
 [Unit385]
 FileName=src\modules\sp-module-doc.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2563,7 +2563,7 @@ BuildCmd=
 
 [Unit386]
 FileName=src\modules\sp-module-doc.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2571,7 +2571,7 @@ BuildCmd=
 
 [Unit387]
 FileName=src\modules\sp-module-exec.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2579,7 +2579,7 @@ BuildCmd=
 
 [Unit388]
 FileName=src\modules\sp-module-exec.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2587,7 +2587,7 @@ BuildCmd=
 
 [Unit389]
 FileName=src\modules\sp-module-exec-ext.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2595,7 +2595,7 @@ BuildCmd=
 
 [Unit390]
 FileName=src\modules\sp-module-exec-ext.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2603,7 +2603,7 @@ BuildCmd=
 
 [Unit391]
 FileName=src\modules\sp-module-sys.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2611,7 +2611,7 @@ BuildCmd=
 
 [Unit392]
 FileName=src\modules\sp-module.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2619,7 +2619,7 @@ BuildCmd=
 
 [Unit393]
 FileName=src\svg\gnome-canvas-bpath-util.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2627,7 +2627,7 @@ BuildCmd=
 
 [Unit394]
 FileName=src\svg\gnome-canvas-bpath-util.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2635,7 +2635,7 @@ BuildCmd=
 
 [Unit395]
 FileName=src\svg\svg.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2643,7 +2643,7 @@ BuildCmd=
 
 [Unit396]
 FileName=src\svg\svg-affine.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2651,7 +2651,7 @@ BuildCmd=
 
 [Unit397]
 FileName=src\svg\svg-color.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2659,7 +2659,7 @@ BuildCmd=
 
 [Unit398]
 FileName=src\svg\svg-length.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2667,7 +2667,7 @@ BuildCmd=
 
 [Unit399]
 FileName=src\svg\svg-path.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2675,7 +2675,7 @@ BuildCmd=
 
 [Unit400]
 FileName=src\svg\svg-types.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2683,7 +2683,7 @@ BuildCmd=
 
 [Unit401]
 FileName=src\widgets\test-wrapbox.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2691,7 +2691,7 @@ BuildCmd=
 
 [Unit402]
 FileName=src\widgets\button.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2699,7 +2699,7 @@ BuildCmd=
 
 [Unit403]
 FileName=src\widgets\dash-selector.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2707,7 +2707,7 @@ BuildCmd=
 
 [Unit404]
 FileName=src\widgets\dash-selector.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2715,7 +2715,7 @@ BuildCmd=
 
 [Unit405]
 FileName=src\widgets\font-selector.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2723,7 +2723,7 @@ BuildCmd=
 
 [Unit406]
 FileName=src\widgets\font-selector.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2731,7 +2731,7 @@ BuildCmd=
 
 [Unit407]
 FileName=src\widgets\gradient-image.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2739,7 +2739,7 @@ BuildCmd=
 
 [Unit408]
 FileName=src\widgets\gradient-image.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2747,7 +2747,7 @@ BuildCmd=
 
 [Unit409]
 FileName=src\widgets\gradient-position.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2755,7 +2755,7 @@ BuildCmd=
 
 [Unit410]
 FileName=src\widgets\gradient-position.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2763,7 +2763,7 @@ BuildCmd=
 
 [Unit411]
 FileName=src\widgets\gradient-selector.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2771,7 +2771,7 @@ BuildCmd=
 
 [Unit412]
 FileName=src\widgets\gradient-selector.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2779,7 +2779,7 @@ BuildCmd=
 
 [Unit413]
 FileName=src\widgets\gradient-vector.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2787,7 +2787,7 @@ BuildCmd=
 
 [Unit414]
 FileName=src\widgets\gradient-vector.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2795,7 +2795,7 @@ BuildCmd=
 
 [Unit415]
 FileName=src\widgets\icon.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2803,7 +2803,7 @@ BuildCmd=
 
 [Unit416]
 FileName=src\widgets\icon.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2811,7 +2811,7 @@ BuildCmd=
 
 [Unit417]
 FileName=src\widgets\menu.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2819,7 +2819,7 @@ BuildCmd=
 
 [Unit418]
 FileName=src\widgets\menu.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2827,7 +2827,7 @@ BuildCmd=
 
 [Unit419]
 FileName=src\widgets\paint-selector.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2835,7 +2835,7 @@ BuildCmd=
 
 [Unit420]
 FileName=src\widgets\paint-selector.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2843,7 +2843,7 @@ BuildCmd=
 
 [Unit421]
 FileName=src\widgets\ruler.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2851,7 +2851,7 @@ BuildCmd=
 
 [Unit422]
 FileName=src\widgets\ruler.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2859,7 +2859,7 @@ BuildCmd=
 
 [Unit423]
 FileName=src\widgets\sp-color-preview.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2867,7 +2867,7 @@ BuildCmd=
 
 [Unit424]
 FileName=src\widgets\sp-color-preview.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2875,7 +2875,7 @@ BuildCmd=
 
 [Unit425]
 FileName=src\widgets\sp-color-selector.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2883,7 +2883,7 @@ BuildCmd=
 
 [Unit426]
 FileName=src\widgets\sp-color-selector.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2891,7 +2891,7 @@ BuildCmd=
 
 [Unit427]
 FileName=src\widgets\sp-color-slider.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2899,7 +2899,7 @@ BuildCmd=
 
 [Unit428]
 FileName=src\widgets\sp-color-slider.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2907,7 +2907,7 @@ BuildCmd=
 
 [Unit429]
 FileName=src\widgets\sp-hwrap-box.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2915,7 +2915,7 @@ BuildCmd=
 
 [Unit430]
 FileName=src\widgets\sp-hwrap-box.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2923,7 +2923,7 @@ BuildCmd=
 
 [Unit431]
 FileName=src\widgets\sp-toolbox.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2931,7 +2931,7 @@ BuildCmd=
 
 [Unit432]
 FileName=src\widgets\sp-toolbox.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2939,7 +2939,7 @@ BuildCmd=
 
 [Unit433]
 FileName=src\widgets\sp-widget.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2947,7 +2947,7 @@ BuildCmd=
 
 [Unit434]
 FileName=src\widgets\sp-widget.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2955,7 +2955,7 @@ BuildCmd=
 
 [Unit435]
 FileName=src\widgets\sp-wrap-box.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2963,7 +2963,7 @@ BuildCmd=
 
 [Unit436]
 FileName=src\widgets\sp-wrap-box.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2971,7 +2971,7 @@ BuildCmd=
 
 [Unit437]
 FileName=src\widgets\sp-vwrap-box.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2979,7 +2979,7 @@ BuildCmd=
 
 [Unit438]
 FileName=src\widgets\sp-vwrap-box.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2987,7 +2987,7 @@ BuildCmd=
 
 [Unit439]
 FileName=src\widgets\sp-xmlview-attr-list.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -2995,7 +2995,7 @@ BuildCmd=
 
 [Unit440]
 FileName=src\widgets\sp-xmlview-attr-list.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3003,7 +3003,7 @@ BuildCmd=
 
 [Unit441]
 FileName=src\widgets\sp-xmlview-content.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3011,7 +3011,7 @@ BuildCmd=
 
 [Unit442]
 FileName=src\widgets\sp-xmlview-content.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3019,7 +3019,7 @@ BuildCmd=
 
 [Unit443]
 FileName=src\widgets\sp-xmlview-tree.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3027,7 +3027,7 @@ BuildCmd=
 
 [Unit444]
 FileName=src\widgets\sp-xmlview-tree.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3035,7 +3035,7 @@ BuildCmd=
 
 [Unit445]
 FileName=src\widgets\test-widgets.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3043,7 +3043,7 @@ BuildCmd=
 
 [Unit446]
 FileName=src\widgets\button.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3051,7 +3051,7 @@ BuildCmd=
 
 [Unit447]
 FileName=src\xml\repr-util.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3059,7 +3059,7 @@ BuildCmd=
 
 [Unit448]
 FileName=src\xml\repr.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3067,7 +3067,7 @@ BuildCmd=
 
 [Unit449]
 FileName=src\xml\repr-css.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3075,7 +3075,7 @@ BuildCmd=
 
 [Unit450]
 FileName=src\xml\repr-io.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3083,7 +3083,7 @@ BuildCmd=
 
 [Unit451]
 FileName=src\xml\repr-private.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3091,7 +3091,7 @@ BuildCmd=
 
 [Unit452]
 FileName=src\xml\repr.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3107,7 +3107,7 @@ BuildCmd=
 
 [Unit454]
 FileName=src\helper\sp-marshal.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3115,7 +3115,7 @@ BuildCmd=
 
 [Unit455]
 FileName=src\helper\sp-marshal.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3131,7 +3131,7 @@ BuildCmd=
 
 [Unit457]
 FileName=src\helper\sp-marshal.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3147,7 +3147,7 @@ BuildCmd=
 
 [Unit459]
 FileName=src\helper\sp-marshal.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3189,7 +3189,7 @@ AutoIncBuildNr=0
 
 [Unit462]
 FileName=src\helper\sp-marshal.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3205,7 +3205,7 @@ BuildCmd=
 
 [Unit464]
 FileName=src\helper\sp-marshal.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3221,7 +3221,7 @@ BuildCmd=
 
 [Unit82]
 FileName=src\sodipodi.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3229,7 +3229,7 @@ BuildCmd=
 
 [Unit379]
 FileName=src\libnrtype\nr-type-primitives.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3237,7 +3237,7 @@ BuildCmd=
 
 [Unit368]
 FileName=src\libnrtype\nr-font.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3245,7 +3245,7 @@ BuildCmd=
 
 [Unit383]
 FileName=src\modules\sp-module-sys.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3253,7 +3253,7 @@ BuildCmd=
 
 [Unit241]
 FileName=src\helper\nr-plain-stuff-gdk.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3261,7 +3261,7 @@ BuildCmd=
 
 [Unit259]
 FileName=src\libnr\nr-types.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3269,7 +3269,7 @@ BuildCmd=
 
 [Unit260]
 FileName=src\libnrtype\nr-font.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3277,7 +3277,7 @@ BuildCmd=
 
 [Unit261]
 FileName=src\libnrtype\nr-font.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3285,7 +3285,7 @@ BuildCmd=
 
 [Unit262]
 FileName=src\libnrtype\nr-rasterfont.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3293,7 +3293,7 @@ BuildCmd=
 
 [Unit263]
 FileName=src\libnrtype\nr-rasterfont.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3301,7 +3301,7 @@ BuildCmd=
 
 [Unit337]
 FileName=src\widgets\test-widgets.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3309,7 +3309,7 @@ BuildCmd=
 
 [Unit161]
 FileName=src\toolbox.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3317,7 +3317,7 @@ BuildCmd=
 
 [Unit195]
 FileName=src\helper\png-write.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3325,7 +3325,7 @@ BuildCmd=
 
 [Unit196]
 FileName=src\helper\sodipodi-ctrl.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3333,7 +3333,7 @@ BuildCmd=
 
 [Unit206]
 FileName=src\helper\sp-intl.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3349,7 +3349,7 @@ BuildCmd=
 
 [Unit221]
 FileName=src\winmain.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3357,7 +3357,7 @@ BuildCmd=
 
 [Unit55]
 FileName=src\sp-polygon.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3367,7 +3367,7 @@ Priority=1000
 
 [Unit119]
 FileName=src\sp-namedview.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3375,7 +3375,7 @@ BuildCmd=
 
 [Unit169]
 FileName=src\modules\sp-module.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3383,7 +3383,7 @@ BuildCmd=
 
 [Unit170]
 FileName=src\modules\sp-module.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3399,7 +3399,7 @@ BuildCmd=
 
 [Unit172]
 FileName=src\winmain.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3407,7 +3407,7 @@ BuildCmd=
 
 [Unit85]
 FileName=src\sp-cursor.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3415,7 +3415,7 @@ BuildCmd=
 
 [Unit87]
 FileName=src\spiral-context.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3423,7 +3423,7 @@ BuildCmd=
 
 [Unit89]
 FileName=src\sp-item-transform.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3431,7 +3431,7 @@ BuildCmd=
 
 [Unit91]
 FileName=src\sp-object-repr.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3439,7 +3439,7 @@ BuildCmd=
 
 [Unit93]
 FileName=src\star-context.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3447,7 +3447,7 @@ BuildCmd=
 
 [Unit3]
 FileName=src\config.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3457,7 +3457,7 @@ Priority=1000
 
 [Unit24]
 FileName=src\spiral-context.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3467,7 +3467,7 @@ Priority=1000
 
 [Unit25]
 FileName=src\spiral-context.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3477,7 +3477,7 @@ Priority=1000
 
 [Unit45]
 FileName=src\sp-object-group.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3487,7 +3487,7 @@ Priority=1000
 
 [Unit50]
 FileName=src\sp-path.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3497,7 +3497,7 @@ Priority=1000
 
 [Unit52]
 FileName=src\sp-pattern.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3507,7 +3507,7 @@ Priority=1000
 
 [Unit56]
 FileName=src\sp-polyline.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3517,7 +3517,7 @@ Priority=1000
 
 [Unit63]
 FileName=src\sp-shape.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3527,7 +3527,7 @@ Priority=1000
 
 [Unit69]
 FileName=src\sp-symbol.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3537,7 +3537,7 @@ Priority=1000
 
 [Unit9]
 FileName=src\sp-chars.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3547,7 +3547,7 @@ Priority=1000
 
 [Unit37]
 FileName=src\sp-mask.h
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3557,7 +3557,7 @@ Priority=1000
 
 [Unit1]
 FileName=src\main.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3567,7 +3567,7 @@ Priority=1000
 
 [Unit2]
 FileName=src\winmain.c
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 CompileCpp=0
 OverrideBuildCmd=0
@@ -3578,7 +3578,7 @@ Priority=1000
 [Unit7]
 FileName=src\sp-animation.h
 CompileCpp=0
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 Link=1
 Priority=1000
@@ -3588,7 +3588,7 @@ BuildCmd=
 [Unit8]
 FileName=src\sp-chars.c
 CompileCpp=0
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 Link=1
 Priority=1000
@@ -3598,7 +3598,7 @@ BuildCmd=
 [Unit10]
 FileName=src\sp-clippath.c
 CompileCpp=0
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 Link=1
 Priority=1000
@@ -3608,7 +3608,7 @@ BuildCmd=
 [Unit14]
 FileName=src\sp-defs.c
 CompileCpp=0
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 Link=1
 Priority=1000
@@ -3618,7 +3618,7 @@ BuildCmd=
 [Unit31]
 FileName=src\sp-item-transform.h
 CompileCpp=0
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 Link=1
 Priority=1000
@@ -3628,7 +3628,7 @@ BuildCmd=
 [Unit36]
 FileName=src\sp-mask.c
 CompileCpp=0
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 Link=1
 Priority=1000
@@ -3638,7 +3638,7 @@ BuildCmd=
 [Unit47]
 FileName=src\sp-object-repr.h
 CompileCpp=0
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 Link=1
 Priority=1000
@@ -3648,7 +3648,7 @@ BuildCmd=
 [Unit48]
 FileName=src\sp-paint-server.c
 CompileCpp=0
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 Link=1
 Priority=1000
@@ -3658,7 +3658,7 @@ BuildCmd=
 [Unit67]
 FileName=src\sp-star.h
 CompileCpp=0
-Folder=Sodipodi
+Folder=Inkscape
 Compile=1
 Link=1
 Priority=1000

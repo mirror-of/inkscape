@@ -19,7 +19,7 @@
 #include "svg/svg.h"
 #include "xml/repr-private.h"
 #include "document.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "desktop.h"
 #include "selection.h"
 #include "desktop-handles.h"

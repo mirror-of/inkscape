@@ -19,14 +19,14 @@
 #include "helper/sp-intl.h"
 #include "helper/window.h"
 #include "forward.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "desktop-handles.h"
 #include "event-context.h"
 
 #include "tool-options.h"
 
 static void sp_tool_options_dialog_destroy (GtkObject *object, gpointer data);
-static void sp_tool_options_dialog_set_eventcontext (Sodipodi *sodipodi, SPEventContext *ec, gpointer data);
+static void sp_tool_options_dialog_set_eventcontext (Inkscape *inkscape, SPEventContext *ec, gpointer data);
 
 static void sp_tool_options_dialog_setup (SPEventContext *ec);
 
@@ -46,7 +46,7 @@ sp_tool_options_dialog (void)
 
 		sp_tool_options_dialog_setup (ec);
 
-		g_signal_connect (G_OBJECT (SODIPODI), "set_eventcontext", G_CALLBACK (sp_tool_options_dialog_set_eventcontext), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "set_eventcontext", G_CALLBACK (sp_tool_options_dialog_set_eventcontext), dlg);
 
 		gtk_widget_show (dlg);
 	}
@@ -55,14 +55,14 @@ sp_tool_options_dialog (void)
 static void
 sp_tool_options_dialog_destroy (GtkObject *object, gpointer data)
 {
-	sp_signal_disconnect_by_data (SODIPODI, dlg);
+	sp_signal_disconnect_by_data (INKSCAPE, dlg);
 
 	dlg = NULL;
 	tbl = NULL;
 }
 
 static void
-sp_tool_options_dialog_set_eventcontext (Sodipodi *sodipodi, SPEventContext *ec, gpointer data)
+sp_tool_options_dialog_set_eventcontext (Inkscape *inkscape, SPEventContext *ec, gpointer data)
 {
 	g_assert (dlg != NULL);
 	g_assert (tbl != NULL);

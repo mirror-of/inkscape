@@ -139,7 +139,7 @@ sp_spiral_write (SPObject *object, SPRepr *repr, guint flags)
 		repr = sp_repr_new ("path");
 	}
 
-	if (flags & SP_OBJECT_WRITE_SODIPODI) {
+	if (flags & SP_OBJECT_WRITE_INKSCAPE) {
 		/* Fixme: we may replace these attributes by
 		 * sodipodi:spiral="cx cy exp revo rad arg t0"
 		 */
@@ -175,7 +175,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const unsigned char *value)
 
 	/* fixme: we should really collect updates */
 	switch (key) {
-	case SP_ATTR_SODIPODI_CX:
+	case SP_ATTR_INKSCAPE_CX:
 		if (!sp_svg_length_read_lff (value, &unit, NULL, &spiral->cx) ||
 		    (unit == SP_SVG_UNIT_EM) ||
 		    (unit == SP_SVG_UNIT_EX) ||
@@ -184,7 +184,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const unsigned char *value)
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_SODIPODI_CY:
+	case SP_ATTR_INKSCAPE_CY:
 		if (!sp_svg_length_read_lff (value, &unit, NULL, &spiral->cy) ||
 		    (unit == SP_SVG_UNIT_EM) ||
 		    (unit == SP_SVG_UNIT_EX) ||
@@ -193,7 +193,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const unsigned char *value)
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_SODIPODI_EXPANSION:
+	case SP_ATTR_INKSCAPE_EXPANSION:
 		if (value) {
 			spiral->exp = atof (value);
 			spiral->exp = CLAMP (spiral->exp, 0.0, 1000.0);
@@ -202,7 +202,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const unsigned char *value)
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_SODIPODI_REVOLUTION:
+	case SP_ATTR_INKSCAPE_REVOLUTION:
 		if (value) {
 			spiral->revo = atof (value);
 			spiral->revo = CLAMP (spiral->revo, 0.05, 20.0);
@@ -211,7 +211,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const unsigned char *value)
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_SODIPODI_RADIUS:
+	case SP_ATTR_INKSCAPE_RADIUS:
 		if (!sp_svg_length_read_lff (value, &unit, NULL, &spiral->rad) ||
 		    (unit != SP_SVG_UNIT_EM) ||
 		    (unit != SP_SVG_UNIT_EX) ||
@@ -220,7 +220,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const unsigned char *value)
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_SODIPODI_ARGUMENT:
+	case SP_ATTR_INKSCAPE_ARGUMENT:
 		if (value) {
 			spiral->arg = atof (value);
 		} else {
@@ -228,7 +228,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const unsigned char *value)
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_SODIPODI_T0:
+	case SP_ATTR_INKSCAPE_T0:
 		if (value) {
 			spiral->t0 = atof (value);
 			spiral->t0 = CLAMP (spiral->t0, -1.0, 0.999);

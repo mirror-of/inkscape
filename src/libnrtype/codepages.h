@@ -13,8 +13,8 @@
 /*
  * You need actual codepage files
  *
- * These can be downloaded from sodipodi project webpage
- * http://www.sodipodi.com/
+ * These can be downloaded from inkscape project webpage
+ * http://www.inkscape.com/
  * These go away, once I got unicode layer working
  */
 

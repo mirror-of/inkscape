@@ -19,7 +19,7 @@
 #include <gtk/gtk.h>
 #include "helper/sp-canvas-util.h"
 #include "rubberband.h"
-#include "sodipodi-private.h"
+#include "inkscape-private.h"
 #include "document.h"
 #include "selection.h"
 #include "desktop-affine.h"

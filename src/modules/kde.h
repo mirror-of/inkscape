@@ -2,7 +2,7 @@
 #define __SP_KDE_H__
 
 /*
- * KDE utilities for Sodipodi
+ * KDE utilities for Inkscape
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>

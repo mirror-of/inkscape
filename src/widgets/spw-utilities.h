@@ -2,7 +2,7 @@
 #define __SPW_UTILITIES_H__
 
 /*
- * Sodipodi Widget Utilities
+ * Inkscape Widget Utilities
  *
  * Author:
  *   Bryce W. Harrington <brycehar@bryceharrington.com>
@@ -12,8 +12,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-/* The following are helper routines for making Sodipodi dialog widgets.
-   All are prefixed with spw_, short for sodipodi_widget.  This is not to
+/* The following are helper routines for making Inkscape dialog widgets.
+   All are prefixed with spw_, short for inkscape_widget.  This is not to
    be confused with SPWidget, an existing datatype associated with SPRepr/
    SPObject, that reacts to modification.
 */

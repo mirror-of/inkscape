@@ -19,7 +19,7 @@
 #include <gtk/gtkeditable.h>
 
 #include "rubberband.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "document.h"
 #include "selection.h"
 #include "desktop.h"

@@ -1,7 +1,7 @@
 #define __SPSVGVIEW_C__
 
 /*
- * Sodipodi - an ambitious vector drawing program
+ * Inkscape - an ambitious vector drawing program
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -239,12 +239,12 @@ sp_svgview_show_prev (struct _SPSlideShow *ss)
 	}
 }
 
-Sodipodi *sodipodi;
+Inkscape *inkscape;
 
-void sodipodi_ref (void) {}
-void sodipodi_unref (void) {}
-void sodipodi_add_document (SPDocument *document) {}
-void sodipodi_remove_document (SPDocument *document) {}
-SPRepr *sodipodi_get_repr (Sodipodi *sodipodi, const unsigned char *key) {return NULL;}
+void inkscape_ref (void) {}
+void inkscape_unref (void) {}
+void inkscape_add_document (SPDocument *document) {}
+void inkscape_remove_document (SPDocument *document) {}
+SPRepr *inkscape_get_repr (Inkscape *inkscape, const unsigned char *key) {return NULL;}
 #include "widgets/menu.h"
 void sp_menu_append (SPMenu *menu, const unsigned char *name, const unsigned char *tip, const void *data) {}

@@ -9,7 +9,7 @@
 INCLUDES = \
 	-I.. \
 	-I$(top_srcdir)/src \
-	$(SODIPODI_CFLAGS) \
+	$(INKSCAPE_CFLAGS) \
 	-I$(includedir)
 
 noinst_LIBRARIES = libspsvg.a

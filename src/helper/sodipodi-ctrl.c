@@ -1,4 +1,4 @@
-#define SODIPODI_CTRL_C
+#define INKSCAPE_CTRL_C
 
 /*
  * SPCtrl

@@ -32,7 +32,7 @@
 #include "helper/canvas-bpath.h"
 
 #include "enums.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "document.h"
 #include "sp-path.h"
 #include "selection.h"
@@ -568,7 +568,7 @@ spdc_flush_white (SPDrawContext *dc, SPCurve *gc)
 			SPRepr *style;
 			repr = sp_repr_new ("path");
 			/* fixme: Pen and pencil need separate style (Lauris) */
-			style = sodipodi_get_repr (SODIPODI, "tools.freehand");
+			style = inkscape_get_repr (INKSCAPE, "tools.freehand");
 			if (style) {
 				SPCSSAttr *css;
 				css = sp_repr_css_attr_inherited (style, "style");

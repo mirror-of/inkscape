@@ -25,7 +25,7 @@
 #include "helper/sp-intl.h"
 #include "helper/window.h"
 
-#include "../sodipodi.h"
+#include "../inkscape.h"
 #include "display-settings.h"
 
 static GtkWidget *dialog = NULL;
@@ -67,7 +67,7 @@ sp_display_dialog_set_oversample (GtkMenuItem *item, gpointer data)
 	nr_arena_image_x_sample = os;
 	nr_arena_image_y_sample = os;
 
-	sodipodi_refresh_display (SODIPODI);
+	inkscape_refresh_display (INKSCAPE);
 }
 
 static void

@@ -35,7 +35,7 @@
 #include "helper/png-write.h"
 #include "dialogs/export.h"
 #include "helper/sp-intl.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "desktop.h"
 #include "sp-image.h"
 #include "interface.h"
@@ -187,7 +187,7 @@ void sp_file_open_dialog (gpointer object, gpointer data)
 #ifdef WITH_MODULES
 	sp_module_system_menu_open (SP_MENU (m));
 #else
-	sp_menu_append (SP_MENU (m), _("Scalable Vector Graphic (SVG)"), _("Sodipodi native file format and W3C standard"), NULL);
+	sp_menu_append (SP_MENU (m), _("Scalable Vector Graphic (SVG)"), _("Inkscape native file format and W3C standard"), NULL);
 	gtk_widget_set_sensitive (m, FALSE);
 #endif
 	g_object_set_data (G_OBJECT (fsel), "type-key", ((SPMenu *) m)->activedata);
@@ -218,7 +218,7 @@ sp_file_do_save (SPDocument *doc, const unsigned char *uri, const unsigned char 
 	if (mod) sp_module_output_document_save (SP_MODULE_OUTPUT (mod), doc, uri);
 	sp_module_unref (mod);
 #else
-	spns = (!key || !strcmp (key, SP_MODULE_KEY_OUTPUT_SVG_SODIPODI));
+	spns = (!key || !strcmp (key, SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
 	if (spns) {
 		char *dirname;
 		rdoc = NULL;
@@ -268,7 +268,7 @@ sp_file_save_dialog (SPDocument *doc)
 	unsigned int spns;
 	filename = sp_kde_get_save_filename (save_path, &spns);
 	if (filename && *filename) {
-		sp_file_do_save (doc, filename, (spns) ? SP_MODULE_KEY_OUTPUT_SVG_SODIPODI : SP_MODULE_KEY_OUTPUT_SVG);
+		sp_file_do_save (doc, filename, (spns) ? SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE : SP_MODULE_KEY_OUTPUT_SVG);
 		if (save_path) g_free (save_path);
 		save_path = g_dirname (filename);
 		save_path = g_strdup (save_path);
@@ -280,7 +280,7 @@ sp_file_save_dialog (SPDocument *doc)
 	unsigned int spns;
 	filename = sp_win32_get_save_filename (save_path, &spns);
 	if (filename && *filename) {
-		sp_file_do_save (doc, filename, (spns) ? SP_MODULE_KEY_OUTPUT_SVG_SODIPODI : SP_MODULE_KEY_OUTPUT_SVG);
+		sp_file_do_save (doc, filename, (spns) ? SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE : SP_MODULE_KEY_OUTPUT_SVG);
 		if (save_path) g_free (save_path);
 		save_path = g_dirname (filename);
 		save_path = g_strdup (save_path);
@@ -532,7 +532,7 @@ sp_file_print_preview (gpointer object, gpointer data)
 void sp_file_exit (void)
 {
 	if (sp_ui_close_all ()) {
-		sodipodi_exit (SODIPODI);
+		inkscape_exit (INKSCAPE);
 	}
 }
 

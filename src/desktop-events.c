@@ -22,7 +22,7 @@
 #include "helper/guideline.h"
 #include "helper/unit-menu.h"
 #include "widgets/icon.h"
-#include "sodipodi-private.h"
+#include "inkscape-private.h"
 #include "desktop.h"
 #include "document.h"
 #include "sp-guide.h"
@@ -71,7 +71,7 @@ sp_desktop_item_handler (SPCanvasItem * item, GdkEvent * event, gpointer data)
 gint
 sp_desktop_enter_notify (GtkWidget * widget, GdkEventCrossing * event)
 {
-  	sodipodi_activate_desktop (SP_DESKTOP (widget));
+  	inkscape_activate_desktop (SP_DESKTOP (widget));
 	return FALSE;
 }
 

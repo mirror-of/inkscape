@@ -6,7 +6,7 @@ INCLUDES = \
 	-I.. \
 	-I$(top_srcdir)/src \
 	$(cflags) \
-	$(SODIPODI_CFLAGS)
+	$(INKSCAPE_CFLAGS)
 
 if USE_MMX
 mmx_sources = \

@@ -20,7 +20,7 @@
 #include <gtk/gtk.h>
 #include "helper/sp-canvas.h"
 #include "sp-rect.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "document.h"
 #include "selection.h"
 #include "desktop-handles.h"
@@ -237,7 +237,7 @@ sp_rect_drag (SPRectContext * rc, double x, double y, guint state)
 		/* Create object */
 		repr = sp_repr_new ("rect");
 		/* Set style */
-		style = sodipodi_get_repr (SODIPODI, "tools.shapes.rect");
+		style = inkscape_get_repr (INKSCAPE, "tools.shapes.rect");
 		if (style) {
 			css = sp_repr_css_attr_inherited (style, "style");
 			sp_repr_css_set (repr, css, "style");
@@ -348,7 +348,7 @@ sp_rect_finish (SPRectContext *rc)
 
 		dt = SP_EVENT_CONTEXT_DESKTOP (rc);
 
-		sp_object_invoke_write (SP_OBJECT (rc->item), SP_OBJECT_REPR (rc->item), SP_OBJECT_WRITE_SODIPODI);
+		sp_object_invoke_write (SP_OBJECT (rc->item), SP_OBJECT_REPR (rc->item), SP_OBJECT_WRITE_INKSCAPE);
 
 		sp_selection_set_item (SP_DT_SELECTION (dt), rc->item);
 		sp_document_done (SP_DT_DOCUMENT (dt));

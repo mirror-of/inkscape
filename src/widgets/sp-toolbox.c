@@ -324,7 +324,7 @@ sp_toolbox_new (GtkWidget * contents, const gchar * name, const gchar * internal
 	gtk_window_set_title (GTK_WINDOW (t->window), t->name);
 	gtk_window_set_policy (GTK_WINDOW (t->window), FALSE, FALSE, FALSE);
 	g_snprintf (c, 256, "toolbox_%s", t->internalname);
-	gtk_window_set_wmclass (GTK_WINDOW (t->window), c, "Sodipodi");
+	gtk_window_set_wmclass (GTK_WINDOW (t->window), c, "Inkscape");
 /*  	gnome_window_icon_set_from_default (GTK_WINDOW (t->window)); */
 	gtk_signal_connect (GTK_OBJECT (t->window), "delete_event", GTK_SIGNAL_FUNC (sp_toolbox_delete), t);
 	/* Window vbox */

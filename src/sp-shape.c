@@ -112,7 +112,7 @@ sp_shape_find_version (SPObject *object)
 
 	while (object) {
 		if (SP_IS_ROOT (object)) {
-			return SP_ROOT (object)->sodipodi;
+			return SP_ROOT (object)->inkscape;
 		}
 		object = SP_OBJECT_PARENT (object);
 	}

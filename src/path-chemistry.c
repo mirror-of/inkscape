@@ -19,7 +19,7 @@
 #include "sp-path.h"
 #include "sp-text.h"
 #include "style.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "document.h"
 #include "selection.h"
 #include "desktop-handles.h"

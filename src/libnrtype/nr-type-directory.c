@@ -425,7 +425,7 @@ nr_type_distance_position_better (NRTypePosDef *ask, NRTypePosDef *bid, float be
 	return MIN (dist, best);
 }
 
-static unsigned char privatename[] = "/.sodipodi/private-fonts";
+static unsigned char privatename[] = "/.inkscape/private-fonts";
 
 #if 0
 static unsigned int

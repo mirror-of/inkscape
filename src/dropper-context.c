@@ -18,7 +18,7 @@
 #include "display/canvas-arena.h"
 #include "enums.h"
 #include "color.h"
-#include "sodipodi-private.h"
+#include "inkscape-private.h"
 #include "desktop-affine.h"
 #include "desktop-handles.h"
 
@@ -194,7 +194,7 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				B = CLAMP (B, 0.0, 1.0);
 				A = CLAMP (A, 0.0, 1.0);
 				sp_color_set_rgb_float (&color, R, G, B);
-				sodipodi_set_color (&color, A);
+				inkscape_set_color (&color, A);
 			}
 			ret = TRUE;
 		}

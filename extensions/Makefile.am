@@ -1,7 +1,7 @@
 
-extensiondir = $(libdir)/sodipodi/extensions
+extensiondir = $(libdir)/inkscape/extensions
 
-otherstuffdir = $(datadir)/sodipodi/extensions
+otherstuffdir = $(datadir)/inkscape/extensions
 
 extensions = \
 	roundhole \

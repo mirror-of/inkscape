@@ -15,7 +15,7 @@
 #include "helper/sp-canvas-util.h"
 #include "helper/sp-ctrlline.h"
 #include "knot.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "document.h"
 #include "desktop.h"
 #include "desktop-handles.h"

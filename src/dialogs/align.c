@@ -28,7 +28,7 @@
 #include "helper/sp-intl.h"
 #include "helper/window.h"
 #include "widgets/button.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "document.h"
 #include "desktop-handles.h"
 #include "sp-item-transform.h"

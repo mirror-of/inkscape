@@ -9,14 +9,14 @@ sp_svg_factory (BonoboGenericFactory *factory,
 		const char           *component_id,
 		gpointer              closure)
 {
-	if (!strcmp (component_id, "OAFIID:GNOME_Sodipodi_Embeddable"))
+	if (!strcmp (component_id, "OAFIID:GNOME_Inkscape_Embeddable"))
 		return sp_embeddable_document_new ();
 
-	else if (!strcmp (component_id, "OAFIID:GNOME_Sodipodi_CanvasItem"))
+	else if (!strcmp (component_id, "OAFIID:GNOME_Inkscape_CanvasItem"))
 		g_warning ("SodiPodi's canvas item code is dysfunctional");
 	
 	else
-		g_warning ("Sodipodi cannot activate unknown id '%s'",
+		g_warning ("Inkscape cannot activate unknown id '%s'",
 			   component_id);
 
 	return NULL;
@@ -28,7 +28,7 @@ sp_svg_doc_factory_init (void)
 	static BonoboGenericFactory *doc_factory = NULL;
 
 	doc_factory = bonobo_generic_factory_new_multi (
-		"OAFIID:GNOME_Sodipodi_ComponentFactory",
+		"OAFIID:GNOME_Inkscape_ComponentFactory",
 		sp_svg_factory, NULL);
 
 	if (doc_factory == NULL)

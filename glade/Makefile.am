@@ -1,5 +1,5 @@
 
-gladedir = $(datadir)/sodipodi
+gladedir = $(datadir)/inkscape
 
 images = about.svg icons.svg
 

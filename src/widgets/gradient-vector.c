@@ -25,7 +25,7 @@
 #include "macros.h"
 #include "../helper/sp-intl.h"
 #include "../widgets/gradient-image.h"
-#include "../sodipodi.h"
+#include "../inkscape.h"
 #include "../document-private.h"
 #include "../sp-gradient.h"
 #include "../gradient-chemistry.h"

@@ -87,7 +87,7 @@ sp_path_find_version (SPObject *object)
 {
 	while (object) {
 		if (SP_IS_ROOT (object)) {
-			return SP_ROOT (object)->sodipodi;
+			return SP_ROOT (object)->inkscape;
 		}
 		object = SP_OBJECT_PARENT (object);
 	}
@@ -107,9 +107,9 @@ sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 
 	if ((version > 0) && (version < 25)) {
 		const guchar *str;
-		str = sp_repr_attr (repr, "SODIPODI-PATH-NODE-TYPES");
+		str = sp_repr_attr (repr, "INKSCAPE-PATH-NODE-TYPES");
 		sp_repr_set_attr (repr, "sodipodi:nodetypes", str);
-		sp_repr_set_attr (repr, "SODIPODI-PATH-NODE-TYPES", NULL);
+		sp_repr_set_attr (repr, "INKSCAPE-PATH-NODE-TYPES", NULL);
 	}
 
 	sp_object_read_attr (object, "d");
@@ -125,7 +125,7 @@ sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 		gboolean changed;
 		gboolean open;
 		shape = (SPShape *) path;
-		/* Remove fill from open paths for compatibility with sodipodi < 0.25 */
+		/* Remove fill from open paths for compatibility with inkscape < 0.25 */
 		/* And set fill-rule of closed paths to evenodd */
 		/* We force style rewrite at moment (Lauris) */
 		changed = TRUE;

@@ -1,18 +1,18 @@
-Name:		sodipodi
+Name:		inkscape
 Summary:	A Vector Drawing Application
 Version:	@VERSION@
 Release:	CVS
 Copyright:	GPL
 Group:		Applications/Graphics
-Source:		sodipodi-%{version}.tar.gz
-URL:		http://sodipodi.sourceforge.net/
+Source:		inkscape-%{version}.tar.gz
+URL:		http://inkscape.sourceforge.net/
 Prefix:		%{_prefix}
 Packager:	Automatic
 Vendor:		%{packager}
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 
 %description
-Sodipodi is a SVG based generic vector-drawing program for Linux/Unix/Windows.
+Inkscape is a SVG based generic vector-drawing program for Linux/Unix/Windows.
 
 %prep
 %setup
@@ -38,12 +38,12 @@ rm -rf %{buildroot}
 %files
 %defattr(-, root, root)
 %doc AUTHORS COPYING ChangeLog NEWS README TODO
-%{_bindir}/sodipodi
-%{_libdir}/sodipodi/extensions/*
-%{_datadir}/applications/sodipodi.desktop
-%{_datadir}/locale/*/LC_MESSAGES/sodipodi.mo
+%{_bindir}/inkscape
+%{_libdir}/inkscape/extensions/*
+%{_datadir}/applications/inkscape.desktop
+%{_datadir}/locale/*/LC_MESSAGES/inkscape.mo
 %{_datadir}/pixmaps/*
-%{_datadir}/sodipodi/*
+%{_datadir}/inkscape/*
 %{_mandir}/man1/*
 
 %changelog

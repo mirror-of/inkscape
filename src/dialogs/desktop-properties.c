@@ -29,7 +29,7 @@
 #include "svg/svg.h"
 #include "widgets/sp-color-selector.h"
 #include "widgets/sp-color-preview.h"
-#include "../sodipodi.h"
+#include "../inkscape.h"
 #include "../document.h"
 #include "../desktop.h"
 #include "../desktop-handles.h"
@@ -40,8 +40,8 @@
 
 static GtkWidget *sp_desktop_dialog_new (void);
 
-static void sp_dtw_activate_desktop (Sodipodi *sodipodi, SPDesktop *desktop, GtkWidget *dialog);
-static void sp_dtw_desactivate_desktop (Sodipodi *sodipodi, SPDesktop *desktop, GtkWidget *dialog);
+static void sp_dtw_activate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog);
+static void sp_dtw_desactivate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog);
 static void sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop);
 
 static GtkWidget *sp_color_picker_new (unsigned char *colorkey, unsigned char *alphakey, unsigned char *title, guint32 rgba);
@@ -54,7 +54,7 @@ static GtkWidget *dlg = NULL;
 static void
 sp_dtw_dialog_destroy (GtkObject *object, gpointer data)
 {
-	sp_signal_disconnect_by_data (SODIPODI, dlg);
+	sp_signal_disconnect_by_data (INKSCAPE, dlg);
 
 	dlg = NULL;
 }
@@ -284,21 +284,21 @@ sp_desktop_dialog_new (void)
 	g_signal_connect (G_OBJECT (b), "toggled", G_CALLBACK (sp_dtw_border_layer_toggled), dialog);
 
 	/* fixme: We should listen namedview changes here as well */
-	g_signal_connect (G_OBJECT (SODIPODI), "activate_desktop", G_CALLBACK (sp_dtw_activate_desktop), dialog);
-	g_signal_connect (G_OBJECT (SODIPODI), "desactivate_desktop", G_CALLBACK (sp_dtw_desactivate_desktop), dialog);
+	g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_dtw_activate_desktop), dialog);
+	g_signal_connect (G_OBJECT (INKSCAPE), "desactivate_desktop", G_CALLBACK (sp_dtw_desactivate_desktop), dialog);
 	sp_dtw_update (dialog, SP_ACTIVE_DESKTOP);
 
 	return dialog;
 }
 
 static void
-sp_dtw_activate_desktop (Sodipodi *sodipodi, SPDesktop *desktop, GtkWidget *dialog)
+sp_dtw_activate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog)
 {
 	sp_dtw_update (dialog, desktop);
 }
 
 static void
-sp_dtw_desactivate_desktop (Sodipodi *sodipodi, SPDesktop *desktop, GtkWidget *dialog)
+sp_dtw_desactivate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog)
 {
 	sp_dtw_update (dialog, NULL);
 }

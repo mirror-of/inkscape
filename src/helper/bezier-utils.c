@@ -1,7 +1,7 @@
 #define __SP_BEZIER_UTILS_C__
 
 /*
- * Bezier interpolation for sodipodi drawing code
+ * Bezier interpolation for inkscape drawing code
  *
  * Original code published in:
  *   An Algorithm for Automatically Fitting Digitized Curves

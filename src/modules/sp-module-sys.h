@@ -1,5 +1,5 @@
-#ifndef __SODIPODI_MODULE_SYS_H__
-#define __SODIPODI_MODULE_SYS_H__
+#ifndef __INKSCAPE_MODULE_SYS_H__
+#define __INKSCAPE_MODULE_SYS_H__
 
 #include <gtk/gtk.h>
 
@@ -27,4 +27,4 @@ SPModule *   sp_modulesys_get_save_module (void);
 void sp_module_sys_prefs_complete (SPModule * object, SPModuleDoc * doc, gboolean success);
 
 
-#endif /* __SODIPODI_MODULE_SYS_H__ */
+#endif /* __INKSCAPE_MODULE_SYS_H__ */

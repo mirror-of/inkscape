@@ -2,7 +2,7 @@
 #define __SP_RULER_H__
 
 /*
- * Customized ruler class for sodipodi
+ * Customized ruler class for inkscape
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>

@@ -24,7 +24,7 @@
 #include <gtk/gtklabel.h>
 #include "helper/sp-canvas.h"
 #include "sp-spiral.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "document.h"
 #include "selection.h"
 #include "desktop-handles.h"
@@ -230,7 +230,7 @@ sp_spiral_drag (SPSpiralContext * sc, double x, double y, guint state)
 		repr = sp_repr_new ("path");
                 sp_repr_set_attr (repr, "sodipodi:type", "spiral");
 		/* Set style */
-		style = sodipodi_get_repr (SODIPODI, "tools.shapes.spiral");
+		style = inkscape_get_repr (INKSCAPE, "tools.shapes.spiral");
 		if (style) {
 			css = sp_repr_css_attr_inherited (style, "style");
 			sp_repr_css_set (repr, css, "style");
@@ -291,7 +291,7 @@ sp_spiral_finish (SPSpiralContext * sc)
 		spiral = SP_SPIRAL (sc->item);
 
 		sp_shape_set_shape(SP_SHAPE(spiral));
-		sp_object_invoke_write (SP_OBJECT (spiral), NULL, SP_OBJECT_WRITE_SODIPODI);
+		sp_object_invoke_write (SP_OBJECT (spiral), NULL, SP_OBJECT_WRITE_INKSCAPE);
 
 		sp_selection_set_item (SP_DT_SELECTION (desktop), sc->item);
 		sp_document_done (SP_DT_DOCUMENT (desktop));

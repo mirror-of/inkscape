@@ -7,14 +7,14 @@
 # replaced by selection 'changed' signal handlers
 #
 
-gladedir = $(datadir)/sodipodi
+gladedir = $(datadir)/inkscape
 
 INCLUDES = \
 	-I.. \
 	-I$(top_srcdir)/src \
-	-DSODIPODI_GLADEDIR=\""$(gladedir)"\" \
-	-DSODIPODI_PIXMAPDIR=\""$(gladedir)"\" \
-	$(SODIPODI_CFLAGS)
+	-DINKSCAPE_GLADEDIR=\""$(gladedir)"\" \
+	-DINKSCAPE_PIXMAPDIR=\""$(gladedir)"\" \
+	$(INKSCAPE_CFLAGS)
 
 noinst_LIBRARIES = libspdialogs.a
 

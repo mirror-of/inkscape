@@ -1,7 +1,7 @@
 #define __SP_GUIDE_C__
 
 /*
- * Sodipodi guideline implementation
+ * Inkscape guideline implementation
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>

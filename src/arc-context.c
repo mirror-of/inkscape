@@ -17,7 +17,7 @@
 
 #include <math.h>
 #include "helper/sp-canvas.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "sp-ellipse.h"
 #include "document.h"
 #include "selection.h"
@@ -209,7 +209,7 @@ sp_arc_drag (SPArcContext * ac, double x, double y, guint state)
 		repr = sp_repr_new ("path");
 		sp_repr_set_attr (repr, "sodipodi:type", "arc");
 		/* Set style */
-		style = sodipodi_get_repr (SODIPODI, "tools.shapes.arc");
+		style = inkscape_get_repr (INKSCAPE, "tools.shapes.arc");
 		if (style) {
 			css = sp_repr_css_attr_inherited (style, "style");
 			sp_repr_css_set (repr, css, "style");

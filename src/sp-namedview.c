@@ -424,7 +424,7 @@ sp_namedview_write (SPObject *object, SPRepr *repr, guint flags)
 
 	nv = SP_NAMEDVIEW (object);
 
-	if (flags & SP_OBJECT_WRITE_SODIPODI) {
+	if (flags & SP_OBJECT_WRITE_INKSCAPE) {
 		if (repr) {
 			sp_repr_merge (repr, SP_OBJECT_REPR (object), "id");
 		} else {

@@ -1,4 +1,4 @@
-#define __SODIPODI_CTRLLINE_C__
+#define __INKSCAPE_CTRLLINE_C__
 
 /*
  * Simple straight line

@@ -1,3 +1,3 @@
-#define SODIPODI_BONOBO_C
+#define INKSCAPE_BONOBO_C
 
 #include "sodipodi-bonobo.h"

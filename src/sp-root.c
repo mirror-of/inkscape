@@ -95,7 +95,7 @@ sp_root_init (SPRoot *root)
 	root->version = 1.0;
 
 	root->svg = 100;
-	root->sodipodi = 0;
+	root->inkscape = 0;
 	root->original = 0;
 
 	sp_svg_length_unset (&root->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
@@ -193,11 +193,11 @@ sp_root_set (SPObject *object, unsigned int key, const unsigned char *value)
 			root->version = 1.0;
 		}
 		break;
-	case SP_ATTR_SODIPODI_VERSION:
+	case SP_ATTR_INKSCAPE_VERSION:
 		if (value) {
-			root->sodipodi = (guint) (atof (value) * 100.0 + 0.5);
+			root->inkscape = (guint) (atof (value) * 100.0 + 0.5);
 		} else {
-			root->sodipodi = root->original;
+			root->inkscape = root->original;
 		}
 		break;
 	case SP_ATTR_X:
@@ -611,9 +611,9 @@ sp_root_write (SPObject *object, SPRepr *repr, guint flags)
 	sp_repr_set_attr (repr, "xmlns", "http://www.w3.org/2000/svg");
 	sp_repr_set_attr (repr, "xmlns:xlink", "http://www.w3.org/1999/xlink");
 
-	if (flags & SP_OBJECT_WRITE_SODIPODI) {
-		sp_repr_set_attr (repr, "xmlns:sodipodi", "http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd");
-		sp_repr_set_double (repr, "sodipodi:version", (double) root->sodipodi / 100.0);
+	if (flags & SP_OBJECT_WRITE_INKSCAPE) {
+		sp_repr_set_attr (repr, "xmlns:sodipodi", "http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd");
+		sp_repr_set_double (repr, "sodipodi:version", (double) root->inkscape / 100.0);
 	}
 
 	sp_repr_set_attr (repr, "version", "1.0");

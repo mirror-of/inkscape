@@ -1,5 +1,5 @@
-#ifndef __SODIPODI_CTRLLINE_H__
-#define __SODIPODI_CTRLLINE_H__
+#ifndef __INKSCAPE_CTRLLINE_H__
+#define __INKSCAPE_CTRLLINE_H__
 
 /*
  * Simple straight line

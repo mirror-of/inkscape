@@ -17,8 +17,8 @@
 #define SP_MODULE_KEY_INPUT_AI "modules.input.AdobeIllustrator"
 #define SP_MODULE_KEY_INPUT_DEFAULT SP_MODULE_KEY_INPUT_SVG
 #define SP_MODULE_KEY_OUTPUT_SVG "modules.output.SVG.plain"
-#define SP_MODULE_KEY_OUTPUT_SVG_SODIPODI "modules.output.SVG.sodipodi"
-#define SP_MODULE_KEY_OUTPUT_DEFAULT SP_MODULE_KEY_OUTPUT_SVG_SODIPODI
+#define SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "modules.output.SVG.inkscape"
+#define SP_MODULE_KEY_OUTPUT_DEFAULT SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE
 
 #define SP_TYPE_MODULE (sp_module_get_type ())
 #define SP_MODULE(o)  (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_MODULE, SPModule))

@@ -12,7 +12,7 @@ INCLUDES = \
 	-I.. \
 	-I$(top_srcdir)/src \
 	$(FREETYPE_CFLAGS) \
-	$(SODIPODI_CFLAGS) \
+	$(INKSCAPE_CFLAGS) \
 	$(GNOME_PRINT_CFLAGS) \
 	$(XFT_CFLAGS)
 

@@ -270,7 +270,7 @@ sp_knot_class_init (SPKnotClass * klass)
 					    G_TYPE_DOUBLE, 2,
 					    G_TYPE_POINTER, G_TYPE_UINT);
 
-	nograbenv = getenv ("SODIPODI_NO_GRAB");
+	nograbenv = getenv ("INKSCAPE_NO_GRAB");
 	nograb = (nograbenv && *nograbenv && (*nograbenv != '0'));
 }
 

@@ -1,7 +1,7 @@
 #define __SP_CANVAS_C__
 
 /*
- * Port of GnomeCanvas for Sodipodi needs
+ * Port of GnomeCanvas for Inkscape needs
  *
  * Authors:
  *   Federico Mena <federico@nuclecu.unam.mx>

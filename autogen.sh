@@ -10,9 +10,9 @@
 # directly.
 
 
-PROJECT="Sodipodi"
+PROJECT="Inkscape"
 TEST_TYPE=-f
-FILE=sodipodi.spec.in
+FILE=inkscape.spec.in
 
 AUTOCONF_REQUIRED_VERSION=2.52
 AUTOMAKE_REQUIRED_VERSION=1.6

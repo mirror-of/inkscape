@@ -3,10 +3,10 @@
 SUBDIRS = src glade po extensions
 
 appicondir = $(datadir)/pixmaps
-appicon_DATA = sodipodi.png
+appicon_DATA = inkscape.png
 
 Graphicsdir = $(datadir)/applications
-Graphics_in_files = sodipodi.desktop.in
+Graphics_in_files = inkscape.desktop.in
 Graphics_DATA = $(Graphics_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
@@ -16,17 +16,17 @@ dist-hook:
 	cp $(srcdir)/samples/*png $(distdir)/samples
 
 
-man_MANS = sodipodi.1
+man_MANS = inkscape.1
 
 EXTRA_DIST = \
 	intltool-extract.in	\
 	intltool-merge.in	\
 	intltool-update.in	\
 	$(Graphics_in_files)	\
-	sodipodi.spec.in	\
-	sodipodi.spec		\
+	inkscape.spec.in	\
+	inkscape.spec		\
 	README HACKING		\
-	sodipodi.png \
-	sodipodi.ico
+	inkscape.png \
+	inkscape.ico
 
 #ACLOCAL_AMFLAGS = -I m4

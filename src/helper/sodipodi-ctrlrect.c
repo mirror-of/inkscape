@@ -1,4 +1,4 @@
-#define __SODIPODI_CTRLRECT_C__
+#define __INKSCAPE_CTRLRECT_C__
 
 /*
  * Simple non-transformed rectangle, usable for rubberband

@@ -30,7 +30,7 @@
 #include "helper/unit-menu.h"
 #include "widgets/icon.h"
 #include "macros.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "document.h"
 #include "desktop.h"
 #include "selection.h"
@@ -96,7 +96,7 @@ sp_transformation_dialog_skew (void)
 static void
 sp_transformation_dialog_destroy (GtkObject *object, gpointer data)
 {
-	sp_signal_disconnect_by_data (SODIPODI, object);
+	sp_signal_disconnect_by_data (INKSCAPE, object);
 
 	dlg = NULL;
 }
@@ -150,7 +150,7 @@ sp_transformation_dialog_update_selection (GObject *dlg, unsigned int page, SPSe
 }
 
 static void
-sp_transformation_dialog_selection_changed (Sodipodi *sodipodi, SPSelection *selection, GObject *obj)
+sp_transformation_dialog_selection_changed (Inkscape *inkscape, SPSelection *selection, GObject *obj)
 {
 	GObject *notebook;
 	int page;
@@ -162,7 +162,7 @@ sp_transformation_dialog_selection_changed (Sodipodi *sodipodi, SPSelection *sel
 }
 
 static void
-sp_transformation_dialog_selection_modified (Sodipodi *sodipodi, SPSelection *selection, unsigned int flags, GObject *obj)
+sp_transformation_dialog_selection_modified (Inkscape *inkscape, SPSelection *selection, unsigned int flags, GObject *obj)
 {
 	GObject *notebook;
 	int page;
@@ -251,8 +251,8 @@ sp_transformation_dialog_new (void)
 
 	/* Connect signals */
 	g_signal_connect (G_OBJECT (dlg), "destroy", G_CALLBACK (sp_transformation_dialog_destroy), NULL);
-	g_signal_connect (G_OBJECT (SODIPODI), "change_selection", G_CALLBACK (sp_transformation_dialog_selection_changed), dlg);
-	g_signal_connect (G_OBJECT (SODIPODI), "modify_selection", G_CALLBACK (sp_transformation_dialog_selection_modified), dlg);
+	g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (sp_transformation_dialog_selection_changed), dlg);
+	g_signal_connect (G_OBJECT (INKSCAPE), "modify_selection", G_CALLBACK (sp_transformation_dialog_selection_modified), dlg);
 	g_signal_connect (G_OBJECT (nbook), "switch_page", G_CALLBACK (sp_transformation_dialog_switch_page), dlg);
 
 	sel = (SP_ACTIVE_DESKTOP) ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL;
@@ -808,7 +808,7 @@ SPMetric sp_transformation_get_scale_metric (void);
 SPMetric sp_transformation_get_skew_metric (void);
 SPMetric sp_transformation_get_center_metric (void);
 //handlers
-static void sp_transformation_selection_changed (Sodipodi * sodipodi, SPSelection * selection);
+static void sp_transformation_selection_changed (Inkscape * inkscape, SPSelection * selection);
 void sp_transformation_dialog_apply (void);
 void sp_transformation_display_position (ArtDRect * bbox, SPMetric metric);
 void sp_transformation_display_dimension (ArtDRect * bbox, SPMetric metric);
@@ -839,7 +839,7 @@ sp_transformation_dialog_close (void) {
 
   gtk_widget_hide (transformation_dialog);
   if (sel_changed_id > 0) {
-    gtk_signal_disconnect (GTK_OBJECT (sodipodi), sel_changed_id);
+    gtk_signal_disconnect (GTK_OBJECT (inkscape), sel_changed_id);
     sel_changed_id = 0;
   }
 }
@@ -848,7 +848,7 @@ sp_transformation_dialog_close (void) {
 void 
 sp_transformation_dialog (void)
 {
-  transformation_xml = glade_xml_new (SODIPODI_GLADEDIR "/transformation.glade", NULL, PACKAGE);
+  transformation_xml = glade_xml_new (INKSCAPE_GLADEDIR "/transformation.glade", NULL, PACKAGE);
   glade_xml_signal_autoconnect (transformation_xml);
   transformation_dialog = glade_xml_get_widget (transformation_xml, "transform_dialog_small");
   

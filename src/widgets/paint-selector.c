@@ -201,7 +201,7 @@ sp_paint_selector_style_button_add (SPPaintSelector *psel, const guchar *pixmap,
 	gtk_widget_show (b);
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
 	gtk_object_set_data (GTK_OBJECT (b), "mode", GUINT_TO_POINTER (mode));
-	path = g_build_filename (SODIPODI_PIXMAPDIR, pixmap, NULL);
+	path = g_build_filename (INKSCAPE_PIXMAPDIR, pixmap, NULL);
 	w = gtk_image_new_from_file (path);
 	g_free (path);
 	gtk_widget_show (w);

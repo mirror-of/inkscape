@@ -85,7 +85,7 @@ sp_slideshow_new (const GSList *files)
 	g_return_val_if_fail (doc != NULL, NULL);
 
 	w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title (GTK_WINDOW (w), _("Sodipodi slideshow"));
+	gtk_window_set_title (GTK_WINDOW (w), _("Inkscape slideshow"));
 	gtk_window_set_default_size (GTK_WINDOW (w), 480, 360);
 	gtk_window_set_policy (GTK_WINDOW (w), TRUE, TRUE, FALSE);
 

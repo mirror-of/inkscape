@@ -29,13 +29,13 @@ typedef struct _SPWidgetClass SPWidgetClass;
 #include <gtk/gtkbin.h>
 #include "../forward.h"
 #include "../xml/repr.h"
-#include "../sodipodi.h"
+#include "../inkscape.h"
 #include "../desktop-handles.h"
 
 struct _SPWidget {
 	GtkBin bin;
 
-	Sodipodi *sodipodi;
+	Inkscape *inkscape;
 	SPObject *object;
 	SPRepr *repr;
 
@@ -61,8 +61,8 @@ GtkType sp_widget_get_type (void);
 
 /* fixme: Think (Lauris) */
 /* Generic constructor for global widget */
-GtkWidget *sp_widget_new_global (Sodipodi *sodipodi);
-GtkWidget *sp_widget_construct_global (SPWidget *spw, Sodipodi *sodipodi);
+GtkWidget *sp_widget_new_global (Inkscape *inkscape);
+GtkWidget *sp_widget_construct_global (SPWidget *spw, Inkscape *inkscape);
 /* Generic constructor for global widget */
 GtkWidget *sp_widget_new_repr (SPRepr *repr);
 GtkWidget *sp_widget_construct_repr (SPWidget *spw, SPRepr *repr);

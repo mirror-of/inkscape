@@ -34,7 +34,7 @@
 #include "widgets/icon.h"
 #include "display/canvas-arena.h"
 #include "forward.h"
-#include "sodipodi-private.h"
+#include "inkscape-private.h"
 #include "desktop.h"
 #include "desktop-events.h"
 #include "desktop-affine.h"
@@ -183,9 +183,9 @@ sp_desktop_dispose (GObject *object)
 
 	dt = SP_DESKTOP (object);
 
-	if (dt->sodipodi) {
-		sodipodi_remove_desktop (dt);
-		dt->sodipodi = NULL;
+	if (dt->inkscape) {
+		inkscape_remove_desktop (dt);
+		dt->inkscape = NULL;
 	}
 
 	while (dt->event_context) {
@@ -351,8 +351,8 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 
 	// ?
 	// sp_active_desktop_set (desktop);
-	sodipodi_add_desktop (desktop);
-	desktop->sodipodi = SODIPODI;
+	inkscape_add_desktop (desktop);
+	desktop->inkscape = INKSCAPE;
 
 	return SP_VIEW (desktop);
 }
@@ -360,9 +360,9 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 static void
 sp_desktop_prepare_shutdown (SPDesktop *dt)
 {
-	if (dt->sodipodi) {
-		sodipodi_remove_desktop (dt);
-		dt->sodipodi = NULL;
+	if (dt->inkscape) {
+		inkscape_remove_desktop (dt);
+		dt->inkscape = NULL;
 	}
 
 	while (dt->event_context) {
@@ -502,7 +502,7 @@ sp_desktop_set_event_context (SPDesktop *dt, GtkType type, const unsigned char *
 		g_object_unref (G_OBJECT (ec));
 	}
 
-	repr = (config) ? sodipodi_get_repr (SODIPODI, config) : NULL;
+	repr = (config) ? inkscape_get_repr (INKSCAPE, config) : NULL;
 	ec = sp_event_context_new (type, dt, repr, SP_EVENT_CONTEXT_STATIC);
 	ec->next = dt->event_context;
 	dt->event_context = ec;
@@ -526,7 +526,7 @@ sp_desktop_push_event_context (SPDesktop *dt, GtkType type, const unsigned char 
 	}
 
 	if (dt->event_context) sp_event_context_desactivate (dt->event_context);
-	repr = (config) ? sodipodi_get_repr (SODIPODI, config) : NULL;
+	repr = (config) ? inkscape_get_repr (INKSCAPE, config) : NULL;
 	ec = sp_event_context_new (type, dt, repr, key);
 	ec->next = dt->event_context;
 	dt->event_context = ec;
@@ -827,7 +827,7 @@ sp_desktop_widget_set_title (SPDesktopWidget *dtw)
 		if (SPShowFullFielName) fname = uri;
 		else fname = g_basename (uri);
 		name = g_string_new ("");
-		g_string_sprintf (name, _("Sodipodi: %s: %s: %d"), fname, nv_name, dtw->desktop->number);
+		g_string_sprintf (name, _("Inkscape: %s: %s: %d"), fname, nv_name, dtw->desktop->number);
 		gtk_window_set_title (window, name->str);
 		g_string_free (name, TRUE);
 	}
@@ -1092,7 +1092,7 @@ sp_desktop_widget_adjustment_value_changed (GtkAdjustment *adj, SPDesktopWidget 
 gint
 sp_desktop_widget_set_focus (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 {
-	sodipodi_activate_desktop (dtw->desktop);
+	inkscape_activate_desktop (dtw->desktop);
 
 	/* give focus to canvas widget */
 	gtk_widget_grab_focus (GTK_WIDGET (dtw->canvas));

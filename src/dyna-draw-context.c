@@ -63,7 +63,7 @@
 #include "helper/bezier-utils.h"
 
 #include "enums.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "document.h"
 #include "selection.h"
 #include "desktop-events.h"
@@ -688,12 +688,12 @@ set_to_accumulated (SPDynaDrawContext * dc)
 	  /* Set style */
 #if 1
           if (dc->use_calligraphic)
-            style = sodipodi_get_repr (SODIPODI, "tools.calligraphic");
+            style = inkscape_get_repr (INKSCAPE, "tools.calligraphic");
           else
-            style = sodipodi_get_repr (SODIPODI, "tools.freehand");
+            style = inkscape_get_repr (INKSCAPE, "tools.freehand");
 #else
-/*  	  style = sodipodi_get_repr (SODIPODI, "paint.dynahand"); */
-	  style = sodipodi_get_repr (SODIPODI, "tools.freehand");
+/*  	  style = inkscape_get_repr (INKSCAPE, "paint.dynahand"); */
+	  style = inkscape_get_repr (INKSCAPE, "tools.freehand");
 #endif
 	  if (style)
 	    {

@@ -1,7 +1,7 @@
 #define __NR_ARENA_IMAGE_C__
 
 /*
- * RGBA display list system for sodipodi
+ * RGBA display list system for inkscape
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>

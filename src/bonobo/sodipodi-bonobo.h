@@ -1,12 +1,12 @@
-#ifndef SODIPODI_BONOBO_H
-#define SODIPODI_BONOBO_H
+#ifndef INKSCAPE_BONOBO_H
+#define INKSCAPE_BONOBO_H
 
 #include <config.h>
 #include <gnome.h>
 #include <libgnorba/gnorba.h>
 #include <bonobo.h>
 
-#ifndef SODIPODI_BONOBO_C
+#ifndef INKSCAPE_BONOBO_C
 extern CORBA_Environment ev;
 extern CORBA_ORB orb;
 extern gint sp_bonobo_objects;

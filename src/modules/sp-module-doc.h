@@ -1,6 +1,6 @@
 
-#ifndef __SODIPODI_MODULE_DOC_H__
-#define __SODIPODI_MODULE_DOC_H__
+#ifndef __INKSCAPE_MODULE_DOC_H__
+#define __INKSCAPE_MODULE_DOC_H__
 
 #include "document.h"
 #include "sp-module.h"
@@ -31,4 +31,4 @@ SPDocument *    sp_module_doc_set_document (SPModuleDoc * doc,
                                             SPDocument * sp_doc);
 SPDocument *    sp_module_doc_get_document (SPModuleDoc * doc);
 
-#endif /* __SODIPODI_MODULE_DOC_H__ */
+#endif /* __INKSCAPE_MODULE_DOC_H__ */

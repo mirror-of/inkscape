@@ -1,5 +1,5 @@
-#ifndef __SODIPODI_CTRLRECT_H__
-#define __SODIPODI_CTRLRECT_H__
+#ifndef __INKSCAPE_CTRLRECT_H__
+#define __INKSCAPE_CTRLRECT_H__
 
 /*
  * Simple non-transformed rectangle, usable for rubberband

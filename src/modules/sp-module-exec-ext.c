@@ -25,7 +25,7 @@
 #include "interface.h"
 #include "document.h"
 #include "sp-namedview.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "selection.h"
@@ -153,10 +153,10 @@ sp_extension(SPModule * in_plug, SPModuleDoc * in_doc)
 	  return;
 	}
 
-	/* Can I get things out of the sodipodi object, globally? */
-	/* Answer:  Yes.  This shows getting an item from .sodipodi/preferences */
+	/* Can I get things out of the inkscape object, globally? */
+	/* Answer:  Yes.  This shows getting an item from .inkscape/preferences */
 	if (!SP_IS_MODULE_INPUT(in_plug)) {
-	repr = sodipodi_get_repr (SODIPODI, "toolboxes.node");
+	repr = inkscape_get_repr (INKSCAPE, "toolboxes.node");
 	if (repr) {
 	  gint state;
 	  state = sp_repr_get_int_attribute (repr, "state", 0);
@@ -318,7 +318,7 @@ sp_extension(SPModule * in_plug, SPModuleDoc * in_doc)
 
 /*
 <lauris> btw,
-<lauris> I'd like more the idea sodipodi writing file, then executing
+<lauris> I'd like more the idea inkscape writing file, then executing
 <lauris> my-script -f tmpfile_name
 <lauris> and reading script stdout
 <bryce> yup

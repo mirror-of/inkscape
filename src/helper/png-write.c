@@ -149,7 +149,7 @@ sp_png_write_rgba (const unsigned char *filename, const unsigned char *px, int w
 
 	/* Optionally write comments into the image */
 	text_ptr[0].key = "Title";
-	text_ptr[0].text = "Made with Sodipodi";
+	text_ptr[0].text = "Made with Inkscape";
 	text_ptr[0].compression = PNG_TEXT_COMPRESSION_NONE;
 	text_ptr[1].key = "Author";
 	text_ptr[1].text = "Unknown";
@@ -303,7 +303,7 @@ sp_png_write_rgba_striped (const unsigned char *filename, int width, int height,
 
 	/* Optionally write comments into the image */
 	text_ptr[0].key = "Title";
-	text_ptr[0].text = "Made with Sodipodi";
+	text_ptr[0].text = "Made with Inkscape";
 	text_ptr[0].compression = PNG_TEXT_COMPRESSION_NONE;
 	text_ptr[1].key = "Author";
 	text_ptr[1].text = "Unknown";

@@ -1,0 +1,18 @@
+[Desktop Entry]
+_Name=Inkscape
+_Comment=SVG Vector Illustrator
+
+Encoding=UTF-8
+Version=1.0
+
+Type=Application
+Categories=Application;Graphics
+MimeType=image/svg+xml
+
+FilePattern=inkscape
+Exec=inkscape %U
+TryExec=inkscape
+Terminal=false
+StartupNotify=true
+
+Icon=inkscape.png

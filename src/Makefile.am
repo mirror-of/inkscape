@@ -11,21 +11,21 @@ endif
 SUBDIRS = libarikkei libnr libnrtype xml svg helper widgets dialogs display modules
 
 AM_CPPFLAGS = \
-	-DSODIPODI_VERSION=\""$(VERSION)"\"
+	-DINKSCAPE_VERSION=\""$(VERSION)"\"
 
 INCLUDES = \
 	-DPACKAGE_LOCALE_DIR=\""$(datadir)/locale"\" \
-	-DSODIPODI_PIXMAPDIR=\""$(datadir)/sodipodi"\" \
+	-DINKSCAPE_PIXMAPDIR=\""$(datadir)/inkscape"\" \
 	-DDATADIR=\""$(datadir)"\" \
 	-I$(srcdir) \
 	-I$(srcdir/xml) \
 	-I$(srcdir/svg) \
-	$(SODIPODI_CFLAGS) \
+	$(INKSCAPE_CFLAGS) \
 	$(GNOME_PRINT_CFLAGS)
 
-bin_PROGRAMS = sodipodi
+bin_PROGRAMS = inkscape
 
-sodipodilib_src = \
+inkscapelib_src = \
 	macros.h \
 	forward.h \
 	enums.h \
@@ -68,14 +68,14 @@ sodipodilib_src = \
 	uri-references.c uri-references.h \
 	extension.h
 
-noinst_LTLIBRARIES = libsodipodi.la
-libsodipodi_la_SOURCES = $(sodipodilib_src)
-spproglibs = libsodipodi.la
+noinst_LTLIBRARIES = libinkscape.la
+libinkscape_la_SOURCES = $(inkscapelib_src)
+spproglibs = libinkscape.la
 
-sodipodi_SOURCES = \
+inkscape_SOURCES = \
 	$(spprogsrc) \
 	\
-	sodipodi.c sodipodi.h sodipodi-private.h \
+	inkscape.c inkscape.h inkscape-private.h \
 	\
 	sp-namedview.c sp-namedview.h \
 	sp-guide.c sp-guide.h \
@@ -136,7 +136,7 @@ sodipodi_SOURCES = \
 	preferences-skeleton.h \
 	extensions-skeleton.h
 
-sodipodi_private_libs = \
+inkscape_private_libs = \
 	$(spproglibs) \
 	dialogs/libspdialogs.a \
 	xml/libspxml.a \
@@ -150,15 +150,15 @@ sodipodi_private_libs = \
 	$(module_libs)
 
 
-sodipodi_LDADD = \
-	$(sodipodi_private_libs) \
-	$(SODIPODI_LIBS) \
+inkscape_LDADD = \
+	$(inkscape_private_libs) \
+	$(INKSCAPE_LIBS) \
 	$(GNOME_PRINT_LIBS) \
 	$(XFT_LIBS) \
 	$(FREETYPE_LIBS) \
 	$(kdeldadd)
 
-sodipodi_LDFLAGS = -Wl,--export-dynamic $(kdeldflags)
+inkscape_LDFLAGS = -Wl,--export-dynamic $(kdeldflags)
 
 noinst_PROGRAMS = spsvgview
 
@@ -181,7 +181,7 @@ spsvgview_LDADD = \
 	libnrtype/libnrtype.a \
 	libnr/libnr.a \
 	libarikkei/libarikkei.a \
-	$(SODIPODI_LIBS) \
+	$(INKSCAPE_LIBS) \
 	$(GNOME_PRINT_LIBS) \
 	$(XFT_LIBS) \
 	$(FREETYPE_LIBS) \

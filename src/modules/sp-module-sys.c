@@ -67,19 +67,19 @@ static void sp_modulesys_ext_init (void) {
 
 	ext = sp_module_exec_ext_new();
 	sp_module_set_exec(this_plug, SP_MODULE_EXEC(ext));
-	sp_module_exec_ext_set_command(ext, SODIPODI_EXTENSIONDIR "/ill2svg.pl -l \"mac\"");
+	sp_module_exec_ext_set_command(ext, INKSCAPE_EXTENSIONDIR "/ill2svg.pl -l \"mac\"");
 	sp_modulesys_list_add(this_plug);
 
 	r = sp_repr_new ("filter");
 	sp_repr_set_attr (r, "id", "modules.filters.Roundhole");
 	sp_repr_set_attr (r, "name", "Roundhole");
 	sp_repr_set_attr (r, "toolbox", "true");
-	sp_repr_set_attr (r, "icon", SODIPODI_EXTENSIONDATADIR "/roundhole.xpm");
+	sp_repr_set_attr (r, "icon", INKSCAPE_EXTENSIONDATADIR "/roundhole.xpm");
 	this_plug = sp_module_filter_new(r);
 	sp_repr_unref (r);
 
 	ext = sp_module_exec_ext_new();
-	sp_module_exec_ext_set_command(ext, SODIPODI_EXTENSIONDIR "/roundhole");
+	sp_module_exec_ext_set_command(ext, INKSCAPE_EXTENSIONDIR "/roundhole");
 	sp_module_set_exec(this_plug, SP_MODULE_EXEC(ext));
 	sp_modulesys_list_add(this_plug);
 
@@ -527,7 +527,7 @@ static void svg_in_exec (SPModule * in_module, SPModuleDoc * in_doc,  gpointer i
 	return;
 }
 
-/* SVG out Sodipodi Namespace */
+/* SVG out Inkscape Namespace */
 #include "sp-object-repr.h"
 
 static void svg_out_exec (SPModule *, SPModuleDoc *,  gpointer data);
@@ -537,8 +537,8 @@ static void sp_modulesys_init_svg_out(void) {
 	SPRepr *r;
 
 	r = sp_repr_new ("output");
-	sp_repr_set_attr (r, "id", SP_MODULE_KEY_OUTPUT_SVG_SODIPODI);
-	sp_repr_set_attr (r, "name", "Scalar Vector Graphics (Sodipodi Namespace)");
+	sp_repr_set_attr (r, "id", SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE);
+	sp_repr_set_attr (r, "name", "Scalar Vector Graphics (Inkscape Namespace)");
 	sp_repr_set_attr (r, "extension", "svg");
 	sp_repr_set_attr (r, "mimetype", "image/x-svg");
 	this_plug = sp_module_output_new (r);
@@ -601,7 +601,7 @@ svg_out_exec (SPModule * in_module, SPModuleDoc * in_doc,  gpointer in_data) {
 	return;
 }
 
-/* SVG out non-Sodipodi Namespace */
+/* SVG out non-Inkscape Namespace */
 static void svg_nons_out_exec (SPModule *, SPModuleDoc *,  gpointer data);
 static void sp_modulesys_init_svg_nons_out(void) {
 	SPModule * this_plug;

@@ -30,7 +30,7 @@ struct _SPRoot {
 	float version;
 
 	guint svg : 8;
-	guint sodipodi : 8;
+	guint inkscape : 8;
 	guint original : 8;
 
 	SPSVGLength x;

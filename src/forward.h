@@ -17,8 +17,8 @@
 
 /* Generic containers */
 
-typedef struct _Sodipodi Sodipodi;
-typedef struct _SodipodiClass SodipodiClass;
+typedef struct _Inkscape Inkscape;
+typedef struct _InkscapeClass InkscapeClass;
 
 /* Editing window */
 

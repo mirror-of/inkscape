@@ -24,7 +24,7 @@
 #include <gtk/gtkimmulticontext.h>
 #include "macros.h"
 #include "sp-text.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "document.h"
 #include "style.h"
 #include "selection.h"
@@ -274,7 +274,7 @@ sp_text_context_setup_text (SPTextContext *tc)
 	/* Create <text> */
 	rtext = sp_repr_new ("text");
 	/* Set style */
-	style = sodipodi_get_repr (SODIPODI, "tools.text");
+	style = inkscape_get_repr (INKSCAPE, "tools.text");
 	if (style) {
 		SPCSSAttr *css;
 		css = sp_repr_css_attr_inherited (style, "style");

@@ -1,4 +1,4 @@
-#define __SODIPODI_C__
+#define __INKSCAPE_C__
 
 /*
  * Interface to main application
@@ -43,8 +43,8 @@
 #include "desktop-handles.h"
 #include "selection.h"
 #include "event-context.h"
-#include "sodipodi.h"
-#include "sodipodi-private.h"
+#include "inkscape.h"
+#include "inkscape-private.h"
 
 /* Backbones of configuration xml data */
 #include "preferences-skeleton.h"
@@ -65,26 +65,26 @@ enum {
 	LAST_SIGNAL
 };
 
-#define DESKTOP_IS_ACTIVE(d) ((d) == sodipodi->desktops->data)
+#define DESKTOP_IS_ACTIVE(d) ((d) == inkscape->desktops->data)
 
-static void sodipodi_class_init (SodipodiClass *klass);
-static void sodipodi_init (SPObject *object);
-static void sodipodi_dispose (GObject *object);
+static void inkscape_class_init (InkscapeClass *klass);
+static void inkscape_init (SPObject *object);
+static void inkscape_dispose (GObject *object);
 
-static void sodipodi_activate_desktop_private (Sodipodi *sodipodi, SPDesktop *desktop);
-static void sodipodi_desactivate_desktop_private (Sodipodi *sodipodi, SPDesktop *desktop);
+static void inkscape_activate_desktop_private (Inkscape *inkscape, SPDesktop *desktop);
+static void inkscape_desactivate_desktop_private (Inkscape *inkscape, SPDesktop *desktop);
 
-static void sodipodi_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, int skel_size,
+static void inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, int skel_size,
 				  const unsigned char *e_mkdir,
 				  const unsigned char *e_notdir,
 				  const unsigned char *e_ccf,
 				  const unsigned char *e_cwf);
-static void sodipodi_init_preferences (Sodipodi *sodipodi);
-static void sodipodi_init_extensions (Sodipodi *sodipodi);
+static void inkscape_init_preferences (Inkscape *inkscape);
+static void inkscape_init_extensions (Inkscape *inkscape);
 
-static void sodipodi_init_preferences (Sodipodi * sodipodi);
+static void inkscape_init_preferences (Inkscape * inkscape);
 
-struct _Sodipodi {
+struct _Inkscape {
 	GObject object;
 	SPReprDoc *preferences;
 	SPReprDoc *extensions;
@@ -92,52 +92,52 @@ struct _Sodipodi {
 	GSList *desktops;
 };
 
-struct _SodipodiClass {
+struct _InkscapeClass {
 	GObjectClass object_class;
 
 	/* Signals */
-	void (* change_selection) (Sodipodi * sodipodi, SPSelection * selection);
-	void (* modify_selection) (Sodipodi * sodipodi, SPSelection * selection, guint flags);
-	void (* set_selection) (Sodipodi * sodipodi, SPSelection * selection);
-	void (* set_eventcontext) (Sodipodi * sodipodi, SPEventContext * eventcontext);
-	void (* new_desktop) (Sodipodi * sodipodi, SPDesktop * desktop);
-	void (* destroy_desktop) (Sodipodi * sodipodi, SPDesktop * desktop);
-	void (* activate_desktop) (Sodipodi * sodipodi, SPDesktop * desktop);
-	void (* desactivate_desktop) (Sodipodi * sodipodi, SPDesktop * desktop);
-	void (* new_document) (Sodipodi *sodipodi, SPDocument *doc);
-	void (* destroy_document) (Sodipodi *sodipodi, SPDocument *doc);
+	void (* change_selection) (Inkscape * inkscape, SPSelection * selection);
+	void (* modify_selection) (Inkscape * inkscape, SPSelection * selection, guint flags);
+	void (* set_selection) (Inkscape * inkscape, SPSelection * selection);
+	void (* set_eventcontext) (Inkscape * inkscape, SPEventContext * eventcontext);
+	void (* new_desktop) (Inkscape * inkscape, SPDesktop * desktop);
+	void (* destroy_desktop) (Inkscape * inkscape, SPDesktop * desktop);
+	void (* activate_desktop) (Inkscape * inkscape, SPDesktop * desktop);
+	void (* desactivate_desktop) (Inkscape * inkscape, SPDesktop * desktop);
+	void (* new_document) (Inkscape *inkscape, SPDocument *doc);
+	void (* destroy_document) (Inkscape *inkscape, SPDocument *doc);
 
-	void (* color_set) (Sodipodi *sodipodi, SPColor *color, double opacity);
+	void (* color_set) (Inkscape *inkscape, SPColor *color, double opacity);
 };
 
 static GObjectClass * parent_class;
-static guint sodipodi_signals[LAST_SIGNAL] = {0};
+static guint inkscape_signals[LAST_SIGNAL] = {0};
 
-Sodipodi *sodipodi = NULL;
+Inkscape *inkscape = NULL;
 
 static void (* segv_handler) (int) = NULL;
 
 GType
-sodipodi_get_type (void)
+inkscape_get_type (void)
 {
 	static GType type = 0;
 	if (!type) {
 		GTypeInfo info = {
-			sizeof (SodipodiClass),
+			sizeof (InkscapeClass),
 			NULL, NULL,
-			(GClassInitFunc) sodipodi_class_init,
+			(GClassInitFunc) inkscape_class_init,
 			NULL, NULL,
-			sizeof (Sodipodi),
+			sizeof (Inkscape),
 			4,
-			(GInstanceInitFunc) sodipodi_init,
+			(GInstanceInitFunc) inkscape_init,
 		};
-		type = g_type_register_static (G_TYPE_OBJECT, "Sodipodi", &info, 0);
+		type = g_type_register_static (G_TYPE_OBJECT, "Inkscape", &info, 0);
 	}
 	return type;
 }
 
 static void
-sodipodi_class_init (SodipodiClass * klass)
+inkscape_class_init (InkscapeClass * klass)
 {
 	GObjectClass * object_class;
 
@@ -145,144 +145,144 @@ sodipodi_class_init (SodipodiClass * klass)
 
 	parent_class = g_type_class_peek_parent (klass);
 
-	sodipodi_signals[MODIFY_SELECTION] = g_signal_new ("modify_selection",
+	inkscape_signals[MODIFY_SELECTION] = g_signal_new ("modify_selection",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (SodipodiClass, modify_selection),
+							   G_STRUCT_OFFSET (InkscapeClass, modify_selection),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER_UINT,
 							   G_TYPE_NONE, 2,
 							   G_TYPE_POINTER, G_TYPE_UINT);
-	sodipodi_signals[CHANGE_SELECTION] = g_signal_new ("change_selection",
+	inkscape_signals[CHANGE_SELECTION] = g_signal_new ("change_selection",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (SodipodiClass, change_selection),
+							   G_STRUCT_OFFSET (InkscapeClass, change_selection),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
 							   G_TYPE_POINTER);
-	sodipodi_signals[SET_SELECTION] =    g_signal_new ("set_selection",
+	inkscape_signals[SET_SELECTION] =    g_signal_new ("set_selection",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (SodipodiClass, set_selection),
+							   G_STRUCT_OFFSET (InkscapeClass, set_selection),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
 							   G_TYPE_POINTER);
-	sodipodi_signals[SET_EVENTCONTEXT] = g_signal_new ("set_eventcontext",
+	inkscape_signals[SET_EVENTCONTEXT] = g_signal_new ("set_eventcontext",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (SodipodiClass, set_eventcontext),
+							   G_STRUCT_OFFSET (InkscapeClass, set_eventcontext),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
 							   G_TYPE_POINTER);
-	sodipodi_signals[NEW_DESKTOP] =      g_signal_new ("new_desktop",
+	inkscape_signals[NEW_DESKTOP] =      g_signal_new ("new_desktop",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (SodipodiClass, new_desktop),
+							   G_STRUCT_OFFSET (InkscapeClass, new_desktop),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
 							   G_TYPE_POINTER);
-	sodipodi_signals[DESTROY_DESKTOP] =  g_signal_new ("destroy_desktop",
+	inkscape_signals[DESTROY_DESKTOP] =  g_signal_new ("destroy_desktop",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (SodipodiClass, destroy_desktop),
+							   G_STRUCT_OFFSET (InkscapeClass, destroy_desktop),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
 							   G_TYPE_POINTER);
-	sodipodi_signals[ACTIVATE_DESKTOP] = g_signal_new ("activate_desktop",
+	inkscape_signals[ACTIVATE_DESKTOP] = g_signal_new ("activate_desktop",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (SodipodiClass, activate_desktop),
+							   G_STRUCT_OFFSET (InkscapeClass, activate_desktop),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
 							   G_TYPE_POINTER);
-	sodipodi_signals[DESACTIVATE_DESKTOP] = g_signal_new ("desactivate_desktop",
+	inkscape_signals[DESACTIVATE_DESKTOP] = g_signal_new ("desactivate_desktop",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (SodipodiClass, desactivate_desktop),
+							   G_STRUCT_OFFSET (InkscapeClass, desactivate_desktop),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
 							   G_TYPE_POINTER);
-	sodipodi_signals[NEW_DOCUMENT] =     g_signal_new ("new_document",
+	inkscape_signals[NEW_DOCUMENT] =     g_signal_new ("new_document",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (SodipodiClass, new_document),
+							   G_STRUCT_OFFSET (InkscapeClass, new_document),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
 							   G_TYPE_POINTER);
-	sodipodi_signals[DESTROY_DOCUMENT] = g_signal_new ("destroy_document",
+	inkscape_signals[DESTROY_DOCUMENT] = g_signal_new ("destroy_document",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (SodipodiClass, destroy_document),
+							   G_STRUCT_OFFSET (InkscapeClass, destroy_document),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER,
 							   G_TYPE_NONE, 1,
 							   G_TYPE_POINTER);
-	sodipodi_signals[COLOR_SET] =        g_signal_new ("color_set",
+	inkscape_signals[COLOR_SET] =        g_signal_new ("color_set",
 							   G_TYPE_FROM_CLASS (klass),
 							   G_SIGNAL_RUN_FIRST,
-							   G_STRUCT_OFFSET (SodipodiClass, color_set),
+							   G_STRUCT_OFFSET (InkscapeClass, color_set),
 							   NULL, NULL,
 							   sp_marshal_NONE__POINTER_DOUBLE,
 							   G_TYPE_NONE, 2,
 							   G_TYPE_POINTER, G_TYPE_DOUBLE);
 
-	object_class->dispose = sodipodi_dispose;
+	object_class->dispose = inkscape_dispose;
 
-	klass->activate_desktop = sodipodi_activate_desktop_private;
-	klass->desactivate_desktop = sodipodi_desactivate_desktop_private;
+	klass->activate_desktop = inkscape_activate_desktop_private;
+	klass->desactivate_desktop = inkscape_desactivate_desktop_private;
 }
 
 static void
-sodipodi_init (SPObject * object)
+inkscape_init (SPObject * object)
 {
-	if (!sodipodi) {
-		sodipodi = (Sodipodi *) object;
+	if (!inkscape) {
+		inkscape = (Inkscape *) object;
 	} else {
 		g_assert_not_reached ();
 	}
 
-	sodipodi->preferences = sp_repr_read_mem (preferences_skeleton, PREFERENCES_SKELETON_SIZE, NULL);
+	inkscape->preferences = sp_repr_read_mem (preferences_skeleton, PREFERENCES_SKELETON_SIZE, NULL);
 
-	sodipodi->extensions = sp_repr_read_mem (extensions_skeleton, EXTENSIONS_SKELETON_SIZE, NULL);
+	inkscape->extensions = sp_repr_read_mem (extensions_skeleton, EXTENSIONS_SKELETON_SIZE, NULL);
 
 	/* Initialize shortcuts */
 	sp_shortcut_table_load (NULL);
 
-	sodipodi->documents = NULL;
-	sodipodi->desktops = NULL;
+	inkscape->documents = NULL;
+	inkscape->desktops = NULL;
 }
 
 static void
-sodipodi_dispose (GObject *object)
+inkscape_dispose (GObject *object)
 {
-	Sodipodi *sodipodi;
+	Inkscape *inkscape;
 
-	sodipodi = (Sodipodi *) object;
+	inkscape = (Inkscape *) object;
 
-	while (sodipodi->documents) {
-		g_object_unref (G_OBJECT (sodipodi->documents->data));
+	while (inkscape->documents) {
+		g_object_unref (G_OBJECT (inkscape->documents->data));
 	}
 
-	g_assert (!sodipodi->desktops);
+	g_assert (!inkscape->desktops);
 
-	if (sodipodi->extensions) {
-		sp_repr_document_unref (sodipodi->extensions);
-		sodipodi->extensions = NULL;
+	if (inkscape->extensions) {
+		sp_repr_document_unref (inkscape->extensions);
+		inkscape->extensions = NULL;
 	}
 
-	if (sodipodi->preferences) {
+	if (inkscape->preferences) {
 		/* fixme: This is not the best place */
-		sodipodi_save_preferences (sodipodi);
-		sp_repr_document_unref (sodipodi->preferences);
-		sodipodi->preferences = NULL;
+		inkscape_save_preferences (inkscape);
+		sp_repr_document_unref (inkscape->preferences);
+		inkscape->preferences = NULL;
 	}
 
 	G_OBJECT_CLASS (parent_class)->dispose (object);
@@ -291,25 +291,25 @@ sodipodi_dispose (GObject *object)
 }
 
 void
-sodipodi_ref (void)
+inkscape_ref (void)
 {
-	g_object_ref (G_OBJECT (sodipodi));
+	g_object_ref (G_OBJECT (inkscape));
 }
 
 void
-sodipodi_unref (void)
+inkscape_unref (void)
 {
-	g_object_unref (G_OBJECT (sodipodi));
+	g_object_unref (G_OBJECT (inkscape));
 }
 
 static void
-sodipodi_activate_desktop_private (Sodipodi *sodipodi, SPDesktop *desktop)
+inkscape_activate_desktop_private (Inkscape *inkscape, SPDesktop *desktop)
 {
 	sp_desktop_set_active (desktop, TRUE);
 }
 
 static void
-sodipodi_desactivate_desktop_private (Sodipodi *sodipodi, SPDesktop *desktop)
+inkscape_desactivate_desktop_private (Inkscape *inkscape, SPDesktop *desktop)
 {
 	sp_desktop_set_active (desktop, FALSE);
 }
@@ -319,7 +319,7 @@ sodipodi_desactivate_desktop_private (Sodipodi *sodipodi, SPDesktop *desktop)
 #define SP_INDENT 8
 
 static void
-sodipodi_segv_handler (int signum)
+inkscape_segv_handler (int signum)
 {
 	static gint recursion = FALSE;
 	GSList *savednames, *failednames, *l;
@@ -345,7 +345,7 @@ sodipodi_segv_handler (int signum)
 	count = 0;
 	savednames = NULL;
 	failednames = NULL;
-	for (l = sodipodi->documents; l != NULL; l = l->next) {
+	for (l = inkscape->documents; l != NULL; l = l->next) {
 		SPDocument *doc;
 		SPRepr *repr;
 		doc = (SPDocument *) l->data;
@@ -379,14 +379,14 @@ sodipodi_segv_handler (int signum)
 			}
 #endif
 			if (!docname || !*docname) docname = "emergency";
-			g_snprintf (c, 1024, "%s/.sodipodi/%.256s.%s.%d", home, docname, sptstr, count);
+			g_snprintf (c, 1024, "%s/.inkscape/%.256s.%s.%d", home, docname, sptstr, count);
 			file = fopen (c, "w");
 			if (!file) {
-				g_snprintf (c, 1024, "%s/sodipodi-%.256s.%s.%d", home, docname, sptstr, count);
+				g_snprintf (c, 1024, "%s/inkscape-%.256s.%s.%d", home, docname, sptstr, count);
 				file = fopen (c, "w");
 			}
 			if (!file) {
-				g_snprintf (c, 1024, "/tmp/sodipodi-%.256s.%s.%d", docname, sptstr, count);
+				g_snprintf (c, 1024, "/tmp/inkscape-%.256s.%s.%d", docname, sptstr, count);
 				file = fopen (c, "w");
 			}
 			if (file) {
@@ -420,7 +420,7 @@ sodipodi_segv_handler (int signum)
 
 	/* Show nice dialog box */
 
-	istr = N_("Sodipodi encountered an internal error and will close now.\n");
+	istr = N_("Inkscape encountered an internal error and will close now.\n");
 	sstr = N_("Automatic backups of unsaved documents were done to following locations:\n");
 	fstr = N_("Automatic backup of following documents failed:\n");
 	nllen = strlen ("\n");
@@ -474,18 +474,18 @@ sodipodi_segv_handler (int signum)
 	(* segv_handler) (signum);
 }
 
-Sodipodi *
-sodipodi_application_new (void)
+Inkscape *
+inkscape_application_new (void)
 {
-	Sodipodi *sp;
+	Inkscape *sp;
 
-	sp = g_object_new (SP_TYPE_SODIPODI, NULL);
+	sp = g_object_new (SP_TYPE_INKSCAPE, NULL);
 	/* fixme: load application defaults */
 
 #ifndef WIN32
-	segv_handler = signal (SIGSEGV, sodipodi_segv_handler);
-	signal (SIGFPE, sodipodi_segv_handler);
-	signal (SIGILL, sodipodi_segv_handler);
+	segv_handler = signal (SIGSEGV, inkscape_segv_handler);
+	signal (SIGFPE, inkscape_segv_handler);
+	signal (SIGILL, inkscape_segv_handler);
 #endif
 
 	return sp;
@@ -495,7 +495,7 @@ sodipodi_application_new (void)
 /* We use '.' as separator */
 
 static void
-sodipodi_load_config (const unsigned char *filename, SPReprDoc *config, const unsigned char *skeleton, unsigned int skel_size,
+inkscape_load_config (const unsigned char *filename, SPReprDoc *config, const unsigned char *skeleton, unsigned int skel_size,
 		      const unsigned char *e_notreg, const unsigned char *e_notxml, const unsigned char *e_notsp)
 {
 	gchar *fn;
@@ -505,17 +505,17 @@ sodipodi_load_config (const unsigned char *filename, SPReprDoc *config, const un
 	SPRepr * root;
 
 #ifdef WIN32
-	fn = g_strdup_printf ("sodipodi/%s", filename);
+	fn = g_strdup_printf ("inkscape/%s", filename);
 #else
-	fn = g_build_filename (g_get_home_dir (), ".sodipodi", filename, NULL);
+	fn = g_build_filename (g_get_home_dir (), ".inkscape", filename, NULL);
 #endif
 	if (stat (fn, &s)) {
 		/* No such file */
 		/* fixme: Think out something (Lauris) */
 		if (!strcmp (filename, "extensions")) {
-			sodipodi_init_extensions (SODIPODI);
+			inkscape_init_extensions (INKSCAPE);
 		} else {
-			sodipodi_init_preferences (SODIPODI);
+			inkscape_init_preferences (INKSCAPE);
 		}
 		g_free (fn);
 		return;
@@ -541,7 +541,7 @@ sodipodi_load_config (const unsigned char *filename, SPReprDoc *config, const un
 	}
 
 	root = sp_repr_document_root (doc);
-	if (strcmp (sp_repr_name (root), "sodipodi")) {
+	if (strcmp (sp_repr_name (root), "inkscape")) {
 		w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notsp, fn);
 		gtk_dialog_run (GTK_DIALOG (w));
 		gtk_widget_destroy (w);
@@ -558,19 +558,19 @@ sodipodi_load_config (const unsigned char *filename, SPReprDoc *config, const un
 /* Preferences management */
 
 void
-sodipodi_load_preferences (Sodipodi *sodipodi)
+inkscape_load_preferences (Inkscape *inkscape)
 {
-	sodipodi_load_config ("preferences", sodipodi->preferences, preferences_skeleton, PREFERENCES_SKELETON_SIZE,
+	inkscape_load_config ("preferences", inkscape->preferences, preferences_skeleton, PREFERENCES_SKELETON_SIZE,
 			      _("%s is not regular file.\n"
-				"Although sodipodi will run, you can\n"
+				"Although inkscape will run, you can\n"
 				"neither load nor save preferences\n"),
 			      _("%s either is not valid xml file or\n"
 				"you do not have read premissions on it.\n"
-				"Although sodipodi will run, you\n"
+				"Although inkscape will run, you\n"
 				"are neither able to load nor save\n"
 				"preferences."),
-			      _("%s is not valid sodipodi preferences file.\n"
-				"Although sodipodi will run, you\n"
+			      _("%s is not valid inkscape preferences file.\n"
+				"Although inkscape will run, you\n"
 				"are neither able to load nor save\n"
 				"preferences."));
 }
@@ -578,40 +578,40 @@ sodipodi_load_preferences (Sodipodi *sodipodi)
 /* Extensions management */
 
 void
-sodipodi_load_extensions (Sodipodi *sodipodi)
+inkscape_load_extensions (Inkscape *inkscape)
 {
-	sodipodi_load_config ("extensions", sodipodi->extensions, extensions_skeleton, EXTENSIONS_SKELETON_SIZE,
+	inkscape_load_config ("extensions", inkscape->extensions, extensions_skeleton, EXTENSIONS_SKELETON_SIZE,
 			      _("%s is not regular file.\n"
-				"Although sodipodi will run, you are\n"
+				"Although inkscape will run, you are\n"
 				"not able to use extensions (plugins)\n"),
 			      _("%s either is not valid xml file or\n"
 				"you do not have read premissions on it.\n"
-				"Although sodipodi will run, you are\n"
+				"Although inkscape will run, you are\n"
 				"not able to use extensions (plugins)\n"),
-			      _("%s is not valid sodipodi extensions file.\n"
-				"Although sodipodi will run, you are\n"
+			      _("%s is not valid inkscape extensions file.\n"
+				"Although inkscape will run, you are\n"
 				"not able to use extensions (plugins)\n"));
 }
 
 void
-sodipodi_save_preferences (Sodipodi * sodipodi)
+inkscape_save_preferences (Inkscape * inkscape)
 {
 	gchar * fn;
 
 #ifdef WIN32
-	fn = g_strdup ("sodipodi/preferences");
+	fn = g_strdup ("inkscape/preferences");
 #else
-	fn = g_build_filename (g_get_home_dir (), ".sodipodi/preferences", NULL);
+	fn = g_build_filename (g_get_home_dir (), ".inkscape/preferences", NULL);
 #endif
 
-	sp_repr_save_file (sodipodi->preferences, fn);
+	sp_repr_save_file (inkscape->preferences, fn);
 
 	g_free (fn);
 }
 
 /* We use '.' as separator */
 SPRepr *
-sodipodi_get_repr (Sodipodi *sodipodi, const unsigned char *key)
+inkscape_get_repr (Inkscape *inkscape, const unsigned char *key)
 {
 	SPRepr * repr;
 	const gchar * id, * s, * e;
@@ -620,11 +620,11 @@ sodipodi_get_repr (Sodipodi *sodipodi, const unsigned char *key)
 	if (key == NULL) return NULL;
 
 	if (!strncmp (key, "extensions", 10) && (!key[10] || (key[10] == '.'))) {
-		repr = sp_repr_document_root (sodipodi->extensions);
+		repr = sp_repr_document_root (inkscape->extensions);
 	} else {
-		repr = sp_repr_document_root (sodipodi->preferences);
+		repr = sp_repr_document_root (inkscape->preferences);
 	}
-	g_assert (!(strcmp (sp_repr_name (repr), "sodipodi")));
+	g_assert (!(strcmp (sp_repr_name (repr), "inkscape")));
 
 	s = key;
 	while ((s) && (*s)) {
@@ -648,165 +648,165 @@ sodipodi_get_repr (Sodipodi *sodipodi, const unsigned char *key)
 }
 
 void
-sodipodi_selection_modified (SPSelection *selection, guint flags)
+inkscape_selection_modified (SPSelection *selection, guint flags)
 {
-	g_return_if_fail (sodipodi != NULL);
+	g_return_if_fail (inkscape != NULL);
 	g_return_if_fail (selection != NULL);
 	g_return_if_fail (SP_IS_SELECTION (selection));
 
 	if (DESKTOP_IS_ACTIVE (selection->desktop)) {
-		g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[MODIFY_SELECTION], 0, selection, flags);
+		g_signal_emit (G_OBJECT (inkscape), inkscape_signals[MODIFY_SELECTION], 0, selection, flags);
 	}
 }
 
 void
-sodipodi_selection_changed (SPSelection * selection)
+inkscape_selection_changed (SPSelection * selection)
 {
-	g_return_if_fail (sodipodi != NULL);
+	g_return_if_fail (inkscape != NULL);
 	g_return_if_fail (selection != NULL);
 	g_return_if_fail (SP_IS_SELECTION (selection));
 
 	if (DESKTOP_IS_ACTIVE (selection->desktop)) {
-		g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[CHANGE_SELECTION], 0, selection);
+		g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, selection);
 	}
 }
 
 void
-sodipodi_selection_set (SPSelection * selection)
+inkscape_selection_set (SPSelection * selection)
 {
-	g_return_if_fail (sodipodi != NULL);
+	g_return_if_fail (inkscape != NULL);
 	g_return_if_fail (selection != NULL);
 	g_return_if_fail (SP_IS_SELECTION (selection));
 
 	if (DESKTOP_IS_ACTIVE (selection->desktop)) {
-		g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[SET_SELECTION], 0, selection);
-		g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[CHANGE_SELECTION], 0, selection);
+		g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, selection);
+		g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, selection);
 	}
 }
 
 void
-sodipodi_eventcontext_set (SPEventContext * eventcontext)
+inkscape_eventcontext_set (SPEventContext * eventcontext)
 {
-	g_return_if_fail (sodipodi != NULL);
+	g_return_if_fail (inkscape != NULL);
 	g_return_if_fail (eventcontext != NULL);
 	g_return_if_fail (SP_IS_EVENT_CONTEXT (eventcontext));
 
 	if (DESKTOP_IS_ACTIVE (eventcontext->desktop)) {
-		g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[SET_EVENTCONTEXT], 0, eventcontext);
+		g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, eventcontext);
 	}
 }
 
 void
-sodipodi_add_desktop (SPDesktop * desktop)
+inkscape_add_desktop (SPDesktop * desktop)
 {
-	g_return_if_fail (sodipodi != NULL);
+	g_return_if_fail (inkscape != NULL);
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
-	g_assert (!g_slist_find (sodipodi->desktops, desktop));
+	g_assert (!g_slist_find (inkscape->desktops, desktop));
 
-	sodipodi->desktops = g_slist_append (sodipodi->desktops, desktop);
+	inkscape->desktops = g_slist_append (inkscape->desktops, desktop);
 
-	g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[NEW_DESKTOP], 0, desktop);
+	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[NEW_DESKTOP], 0, desktop);
 
 	if (DESKTOP_IS_ACTIVE (desktop)) {
-		g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[ACTIVATE_DESKTOP], 0, desktop);
-		g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[SET_EVENTCONTEXT], 0, SP_DT_EVENTCONTEXT (desktop));
-		g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[SET_SELECTION], 0, SP_DT_SELECTION (desktop));
-		g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[CHANGE_SELECTION], 0, SP_DT_SELECTION (desktop));
+		g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, desktop);
+		g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, SP_DT_EVENTCONTEXT (desktop));
+		g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, SP_DT_SELECTION (desktop));
+		g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, SP_DT_SELECTION (desktop));
 	}
 }
 
 void
-sodipodi_remove_desktop (SPDesktop * desktop)
+inkscape_remove_desktop (SPDesktop * desktop)
 {
-	g_return_if_fail (sodipodi != NULL);
+	g_return_if_fail (inkscape != NULL);
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
-	g_assert (g_slist_find (sodipodi->desktops, desktop));
+	g_assert (g_slist_find (inkscape->desktops, desktop));
 
 	if (DESKTOP_IS_ACTIVE (desktop)) {
-		g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[DESACTIVATE_DESKTOP], 0, desktop);
-		if (sodipodi->desktops->next != NULL) {
+		g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DESACTIVATE_DESKTOP], 0, desktop);
+		if (inkscape->desktops->next != NULL) {
 			SPDesktop * new;
-			new = (SPDesktop *) sodipodi->desktops->next->data;
-			sodipodi->desktops = g_slist_remove (sodipodi->desktops, new);
-			sodipodi->desktops = g_slist_prepend (sodipodi->desktops, new);
-			g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[ACTIVATE_DESKTOP], 0, new);
-			g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[SET_EVENTCONTEXT], 0, SP_DT_EVENTCONTEXT (new));
-			g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[SET_SELECTION], 0, SP_DT_SELECTION (new));
-			g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[CHANGE_SELECTION], 0, SP_DT_SELECTION (new));
+			new = (SPDesktop *) inkscape->desktops->next->data;
+			inkscape->desktops = g_slist_remove (inkscape->desktops, new);
+			inkscape->desktops = g_slist_prepend (inkscape->desktops, new);
+			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, new);
+			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, SP_DT_EVENTCONTEXT (new));
+			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, SP_DT_SELECTION (new));
+			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, SP_DT_SELECTION (new));
 		} else {
-			g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[SET_EVENTCONTEXT], 0, NULL);
-			g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[SET_SELECTION], 0, NULL);
-			g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[CHANGE_SELECTION], 0, NULL);
+			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, NULL);
+			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, NULL);
+			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, NULL);
 		}
 	}
 
-	g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[DESTROY_DESKTOP], 0, desktop);
+	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DESTROY_DESKTOP], 0, desktop);
 
-	sodipodi->desktops = g_slist_remove (sodipodi->desktops, desktop);
+	inkscape->desktops = g_slist_remove (inkscape->desktops, desktop);
 }
 
 void
-sodipodi_activate_desktop (SPDesktop * desktop)
+inkscape_activate_desktop (SPDesktop * desktop)
 {
 	SPDesktop * current;
 
-	g_return_if_fail (sodipodi != NULL);
+	g_return_if_fail (inkscape != NULL);
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
 	if (DESKTOP_IS_ACTIVE (desktop)) return;
 
-	g_assert (g_slist_find (sodipodi->desktops, desktop));
+	g_assert (g_slist_find (inkscape->desktops, desktop));
 
-	current = (SPDesktop *) sodipodi->desktops->data;
+	current = (SPDesktop *) inkscape->desktops->data;
 
-	g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[DESACTIVATE_DESKTOP], 0, current);
+	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DESACTIVATE_DESKTOP], 0, current);
 
-	sodipodi->desktops = g_slist_remove (sodipodi->desktops, desktop);
-	sodipodi->desktops = g_slist_prepend (sodipodi->desktops, desktop);
+	inkscape->desktops = g_slist_remove (inkscape->desktops, desktop);
+	inkscape->desktops = g_slist_prepend (inkscape->desktops, desktop);
 
-	g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[ACTIVATE_DESKTOP], 0, desktop);
-	g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[SET_EVENTCONTEXT], 0, SP_DT_EVENTCONTEXT (desktop));
-	g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[SET_SELECTION], 0, SP_DT_SELECTION (desktop));
-	g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[CHANGE_SELECTION], 0, SP_DT_SELECTION (desktop));
+	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, desktop);
+	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, SP_DT_EVENTCONTEXT (desktop));
+	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, SP_DT_SELECTION (desktop));
+	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, SP_DT_SELECTION (desktop));
 }
 
 /* fixme: These need probably signals too */
 
 void
-sodipodi_add_document (SPDocument *document)
+inkscape_add_document (SPDocument *document)
 {
-	g_return_if_fail (sodipodi != NULL);
+	g_return_if_fail (inkscape != NULL);
 	g_return_if_fail (document != NULL);
 	g_return_if_fail (SP_IS_DOCUMENT (document));
 
-	g_assert (!g_slist_find (sodipodi->documents, document));
+	g_assert (!g_slist_find (inkscape->documents, document));
 
-	sodipodi->documents = g_slist_append (sodipodi->documents, document);
+	inkscape->documents = g_slist_append (inkscape->documents, document);
 
-	g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[NEW_DOCUMENT], 0, document);
+	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[NEW_DOCUMENT], 0, document);
 }
 
 void
-sodipodi_remove_document (SPDocument *document)
+inkscape_remove_document (SPDocument *document)
 {
-	g_return_if_fail (sodipodi != NULL);
+	g_return_if_fail (inkscape != NULL);
 	g_return_if_fail (document != NULL);
 	g_return_if_fail (SP_IS_DOCUMENT (document));
 
-	g_assert (g_slist_find (sodipodi->documents, document));
+	g_assert (g_slist_find (inkscape->documents, document));
 
-	g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[DESTROY_DOCUMENT], 0, document);
+	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DESTROY_DOCUMENT], 0, document);
 
-	sodipodi->documents = g_slist_remove (sodipodi->documents, document);
+	inkscape->documents = g_slist_remove (inkscape->documents, document);
 
 	if (document->advertize && SP_DOCUMENT_URI (document)) {
 		SPRepr *recent;
-		recent = sodipodi_get_repr (SODIPODI, "documents.recent");
+		recent = inkscape_get_repr (INKSCAPE, "documents.recent");
 		if (recent) {
 			SPRepr *child;
 			child = sp_repr_lookup_child (recent, "uri", SP_DOCUMENT_URI (document));
@@ -827,21 +827,21 @@ sodipodi_remove_document (SPDocument *document)
 }
 
 void
-sodipodi_set_color (SPColor *color, float opacity)
+inkscape_set_color (SPColor *color, float opacity)
 {
-	g_signal_emit (G_OBJECT (sodipodi), sodipodi_signals[COLOR_SET], 0, color, (double) opacity);
+	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[COLOR_SET], 0, color, (double) opacity);
 }
 
 SPDesktop *
-sodipodi_active_desktop (void)
+inkscape_active_desktop (void)
 {
-	if (sodipodi->desktops == NULL) return NULL;
+	if (inkscape->desktops == NULL) return NULL;
 
-	return (SPDesktop *) sodipodi->desktops->data;
+	return (SPDesktop *) inkscape->desktops->data;
 }
 
 SPDocument *
-sodipodi_active_document (void)
+inkscape_active_document (void)
 {
 	if (SP_ACTIVE_DESKTOP) return SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
 
@@ -849,7 +849,7 @@ sodipodi_active_document (void)
 }
 
 SPEventContext *
-sodipodi_active_event_context (void)
+inkscape_active_event_context (void)
 {
 	if (SP_ACTIVE_DESKTOP) return SP_DT_EVENTCONTEXT (SP_ACTIVE_DESKTOP);
 
@@ -859,7 +859,7 @@ sodipodi_active_event_context (void)
 /* Helpers */
 
 static void
-sodipodi_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, int skel_size,
+inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, int skel_size,
 		      const unsigned char *e_mkdir, const unsigned char *e_notdir, const unsigned char *e_ccf, const unsigned char *e_cwf)
 {
 	gchar * dn, *fn;
@@ -868,9 +868,9 @@ sodipodi_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 	GtkWidget * w;
 
 #ifdef WIN32
-	dn = g_strdup ("sodipodi");
+	dn = g_strdup ("inkscape");
 #else
-	dn = g_build_filename (g_get_home_dir (), ".sodipodi", NULL);
+	dn = g_build_filename (g_get_home_dir (), ".inkscape", NULL);
 #endif
 	if (stat (dn, &s)) {
 		if (mkdir (dn, S_IRWXU | S_IRGRP | S_IXGRP))
@@ -893,10 +893,10 @@ sodipodi_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 	g_free (dn);
 
 #ifdef WIN32
-	fn = g_strdup_printf ("sodipodi/%s", config_name);
+	fn = g_strdup_printf ("inkscape/%s", config_name);
 	fh = creat (fn, S_IREAD | S_IWRITE);
 #else
-	fn = g_build_filename (g_get_home_dir (), ".sodipodi", config_name, NULL);
+	fn = g_build_filename (g_get_home_dir (), ".inkscape", config_name, NULL);
 	fh = creat (fn, S_IRUSR | S_IWUSR | S_IRGRP);
 #endif
 	if (fh < 0) {
@@ -924,57 +924,57 @@ sodipodi_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 /* This routine should be obsoleted in favor of the generic version */
 
 static void
-sodipodi_init_preferences (Sodipodi *sodipodi)
+inkscape_init_preferences (Inkscape *inkscape)
 {
-	sodipodi_init_config (sodipodi->preferences, "preferences", preferences_skeleton, PREFERENCES_SKELETON_SIZE,
+	inkscape_init_config (inkscape->preferences, "preferences", preferences_skeleton, PREFERENCES_SKELETON_SIZE,
 			      _("Cannot create directory %s.\n"
-				"Although sodipodi will run, you\n"
+				"Although inkscape will run, you\n"
 				"are neither able to load nor save\n"
 				"%s."),
 			      _("%s is not a valid directory.\n"
-				"Although sodipodi will run, you\n"
+				"Although inkscape will run, you\n"
 				"are neither able to load nor save\n"
 				"preferences."),
 			      _("Cannot create file %s.\n"
-				"Although sodipodi will run, you\n"
+				"Although inkscape will run, you\n"
 				"are neither able to load nor save\n"
 				"preferences."),
 			      _("Cannot write file %s.\n"
-				"Although sodipodi will run, you\n"
+				"Although inkscape will run, you\n"
 				"are neither able to load nor save\n"
 				"preferences."));
 }
 
 static void
-sodipodi_init_extensions (Sodipodi *sodipodi)
+inkscape_init_extensions (Inkscape *inkscape)
 {
-	sodipodi_init_config (sodipodi->extensions, "extensions", extensions_skeleton, EXTENSIONS_SKELETON_SIZE,
+	inkscape_init_config (inkscape->extensions, "extensions", extensions_skeleton, EXTENSIONS_SKELETON_SIZE,
 			      _("Cannot create directory %s.\n"
-				"Although sodipodi will run, you are\n"
+				"Although inkscape will run, you are\n"
 				"not able to use extensions (plugins)\n"),
 			      _("%s is not a valid directory.\n"
-				"Although sodipodi will run, you are\n"
+				"Although inkscape will run, you are\n"
 				"not able to use extensions (plugins)\n"),
 			      _("Cannot create file %s.\n"
-				"Although sodipodi will run, you are\n"
+				"Although inkscape will run, you are\n"
 				"not able to use extensions (plugins)\n"),
 			      _("Cannot write file %s.\n"
-				"Although sodipodi will run, you are\n"
+				"Although inkscape will run, you are\n"
 				"not able to use extensions (plugins)\n"));
 }
 
 void
-sodipodi_refresh_display (Sodipodi *sodipodi)
+inkscape_refresh_display (Inkscape *inkscape)
 {
 	GSList *l;
 
-	for (l = sodipodi->desktops; l != NULL; l = l->next) {
+	for (l = inkscape->desktops; l != NULL; l = l->next) {
 		sp_view_request_redraw (SP_VIEW (l->data));
 	}
 }
 
 void
-sodipodi_exit (Sodipodi *sodipodi)
+inkscape_exit (Inkscape *inkscape)
 {
 	gtk_main_quit ();
 }

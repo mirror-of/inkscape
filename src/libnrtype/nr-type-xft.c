@@ -72,7 +72,7 @@ nr_type_read_xft_list (void)
 	int debug;
 	int i, j;
 
-	debugenv = getenv ("SODIPODI_DEBUG_XFT");
+	debugenv = getenv ("INKSCAPE_DEBUG_XFT");
 	debug = (debugenv && *debugenv && (*debugenv != '0'));
 
 	nr_type_xft_typefaces_get (&gnames);
@@ -116,7 +116,7 @@ nr_type_xft_init (void)
 	int debug, ret;
 	int i, pos, fpos;
 
-	debugenv = getenv ("SODIPODI_DEBUG_XFT");
+	debugenv = getenv ("INKSCAPE_DEBUG_XFT");
 	debug = (debugenv && *debugenv && (*debugenv != '0'));
 
 	ret = XftInit (NULL);

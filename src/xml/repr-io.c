@@ -28,7 +28,7 @@ static const unsigned char *sp_svg_doctype_str =
 "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\"\n"
 "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n";
 static const unsigned char *sp_comment_str =
-"<!-- Created with Sodipodi (\"http://www.sodipodi.com/\") -->\n";
+"<!-- Created with Inkscape (\"http://www.inkscape.org/\") -->\n";
 
 static SPReprDoc *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns);
 static SPRepr * sp_repr_svg_read_node (SPXMLDocument *doc, xmlNodePtr node, const gchar *default_ns, GHashTable *prefix_map);
@@ -379,7 +379,7 @@ sp_wmf_convert (const char * file_name)
 
 	char * buffer = 0;
 
-	static char * Default_Description = "sodipodi";
+	static char * Default_Description = "inkscape";
 
 	SPImageContext IC;
 

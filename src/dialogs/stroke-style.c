@@ -50,7 +50,7 @@
 #include "../selection.h"
 #include "../sp-item.h"
 #include "../sp-gradient.h"
-#include "../sodipodi.h"
+#include "../inkscape.h"
 
 #include "stroke-style.h"
 
@@ -76,7 +76,7 @@ sp_stroke_style_paint_widget_new (void)
 {
 	GtkWidget *spw, *psel;
 
-	spw = sp_widget_new_global (SODIPODI);
+	spw = sp_widget_new_global (INKSCAPE);
 
 	psel = sp_paint_selector_new ();
 	gtk_widget_show (psel);
@@ -119,9 +119,9 @@ static void
 sp_stroke_style_paint_construct (SPWidget *spw, SPPaintSelector *psel)
 {
 #ifdef SP_SS_VERBOSE
-	g_print ("Stroke style widget constructed: sodipodi %p repr %p\n", spw->sodipodi, spw->repr);
+	g_print ("Stroke style widget constructed: inkscape %p repr %p\n", spw->inkscape, spw->repr);
 #endif
-	if (spw->sodipodi) {
+	if (spw->inkscape) {
 		sp_stroke_style_paint_update (spw, SP_ACTIVE_DESKTOP ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL);
 	} else if (spw->repr) {
 		sp_stroke_style_paint_update_repr (spw, spw->repr);
@@ -408,7 +408,7 @@ sp_stroke_style_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 #ifdef SP_SS_VERBOSE
 	g_print ("StrokeStyleWidget: paint changed\n");
 #endif
-	if (spw->sodipodi) {
+	if (spw->inkscape) {
 		/* fixme: */
 		if (!SP_WIDGET_DOCUMENT (spw)) return;
 		reprs = NULL;
@@ -434,7 +434,7 @@ sp_stroke_style_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 			sp_repr_set_attr_recursive ((SPRepr *) r->data, "sodipodi:stroke-cmyk", NULL);
 		}
 		sp_repr_css_attr_unref (css);
-		if (spw->sodipodi) sp_document_done (SP_WIDGET_DOCUMENT (spw));
+		if (spw->inkscape) sp_document_done (SP_WIDGET_DOCUMENT (spw));
 		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
 		css = sp_repr_css_attr_new ();
@@ -448,7 +448,7 @@ sp_stroke_style_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 			sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
 		}
 		sp_repr_css_attr_unref (css);
-		if (spw->sodipodi) sp_document_done (SP_WIDGET_DOCUMENT (spw));
+		if (spw->inkscape) sp_document_done (SP_WIDGET_DOCUMENT (spw));
 		break;
 	case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
 		css = sp_repr_css_attr_new ();
@@ -464,7 +464,7 @@ sp_stroke_style_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 			sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
 		}
 		sp_repr_css_attr_unref (css);
-		if (spw->sodipodi) sp_document_done (SP_WIDGET_DOCUMENT (spw));
+		if (spw->inkscape) sp_document_done (SP_WIDGET_DOCUMENT (spw));
 		break;
 	case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
 		if (items) {
@@ -481,7 +481,7 @@ sp_stroke_style_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 					SPGradient *lg;
 					lg = sp_item_force_stroke_lineargradient_vector (SP_ITEM (i->data), vector);
 					sp_paint_selector_write_lineargradient (psel, SP_LINEARGRADIENT (lg), SP_ITEM (i->data));
-					sp_object_invoke_write (SP_OBJECT (lg), SP_OBJECT_REPR (lg), SP_OBJECT_WRITE_SODIPODI);
+					sp_object_invoke_write (SP_OBJECT (lg), SP_OBJECT_REPR (lg), SP_OBJECT_WRITE_INKSCAPE);
 				}
 			}
 			sp_document_done (SP_WIDGET_DOCUMENT (spw));
@@ -502,7 +502,7 @@ sp_stroke_style_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 					SPGradient *lg;
 					lg = sp_item_force_stroke_radialgradient_vector (SP_ITEM (i->data), vector);
 					sp_paint_selector_write_radialgradient (psel, SP_RADIALGRADIENT (lg), SP_ITEM (i->data));
-					sp_object_invoke_write (SP_OBJECT (lg), SP_OBJECT_REPR (lg), SP_OBJECT_WRITE_SODIPODI);
+					sp_object_invoke_write (SP_OBJECT (lg), SP_OBJECT_REPR (lg), SP_OBJECT_WRITE_INKSCAPE);
 				}
 			}
 			sp_document_done (SP_WIDGET_DOCUMENT (spw));
@@ -538,7 +538,7 @@ sp_stroke_style_line_widget_new (void)
 	GtkWidget *spw, *f, *t, *l, *hb, *sb, *us, *tb, *px, *ds;
 	GtkObject *a;
 
-	spw = sp_widget_new_global (SODIPODI);
+	spw = sp_widget_new_global (INKSCAPE);
 
 	f = gtk_frame_new (_("Stroke settings"));
 	gtk_widget_show (f);
@@ -592,7 +592,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_object_set_data (GTK_OBJECT (spw), "join-miter", tb);
 	gtk_object_set_data (GTK_OBJECT (tb), "join", "miter");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_file (SODIPODI_GLADEDIR "/join_miter.xpm");
+        px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/join_miter.xpm");
 	gtk_widget_show (px);
 	gtk_container_add (GTK_CONTAINER (tb), px);
 
@@ -603,7 +603,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_object_set_data (GTK_OBJECT (spw), "join-round", tb);
 	gtk_object_set_data (GTK_OBJECT (tb), "join", "round");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_file (SODIPODI_GLADEDIR "/join_round.xpm");
+        px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/join_round.xpm");
 	gtk_widget_show (px);
 	gtk_container_add (GTK_CONTAINER (tb), px);
 
@@ -614,7 +614,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_object_set_data (GTK_OBJECT (spw), "join-bevel", tb);
 	gtk_object_set_data (GTK_OBJECT (tb), "join", "bevel");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_file (SODIPODI_GLADEDIR "/join_bevel.xpm");
+        px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/join_bevel.xpm");
 	gtk_widget_show (px);
 	gtk_container_add (GTK_CONTAINER (tb), px);
 
@@ -635,7 +635,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_object_set_data (GTK_OBJECT (spw), "cap-butt", tb);
 	gtk_object_set_data (GTK_OBJECT (tb), "cap", "butt");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_file (SODIPODI_GLADEDIR "/cap_butt.xpm");
+        px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/cap_butt.xpm");
 	gtk_widget_show (px);
 	gtk_container_add (GTK_CONTAINER (tb), px);
 
@@ -646,7 +646,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_object_set_data (GTK_OBJECT (spw), "cap-round", tb);
 	gtk_object_set_data (GTK_OBJECT (tb), "cap", "round");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_file (SODIPODI_GLADEDIR "/cap_round.xpm");
+        px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/cap_round.xpm");
 	gtk_widget_show (px);
 	gtk_container_add (GTK_CONTAINER (tb), px);
 
@@ -657,7 +657,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_object_set_data (GTK_OBJECT (spw), "cap-square", tb);
 	gtk_object_set_data (GTK_OBJECT (tb), "cap", "square");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
-        px = gtk_image_new_from_file (SODIPODI_GLADEDIR "/cap_square.xpm");
+        px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/cap_square.xpm");
 	gtk_widget_show (px);
 	gtk_container_add (GTK_CONTAINER (tb), px);
 
@@ -667,7 +667,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
 	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 3, 4, GTK_FILL, 0, 4, 0);
 
-	ds = sp_dash_selector_new (sodipodi_get_repr (SODIPODI, "palette.dashes"));
+	ds = sp_dash_selector_new (inkscape_get_repr (INKSCAPE, "palette.dashes"));
 	gtk_widget_show (ds);
 	gtk_table_attach (GTK_TABLE (t), ds, 1, 4, 3, 4, GTK_EXPAND | GTK_FILL, 0, 0, 0);
 	gtk_object_set_data (GTK_OBJECT (spw), "dash", ds);
@@ -687,9 +687,9 @@ static void
 sp_stroke_style_line_construct (SPWidget *spw, gpointer data)
 {
 #ifdef SP_SS_VERBOSE
-	g_print ("Stroke style widget constructed: sodipodi %p repr %p\n", spw->sodipodi, spw->repr);
+	g_print ("Stroke style widget constructed: inkscape %p repr %p\n", spw->inkscape, spw->repr);
 #endif
-	if (spw->sodipodi) {
+	if (spw->inkscape) {
 		sp_stroke_style_line_update (spw, SP_ACTIVE_DESKTOP ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL);
 	} else if (spw->repr) {
 		sp_stroke_style_line_update_repr (spw, spw->repr);
@@ -968,7 +968,7 @@ sp_stroke_style_scale_line (SPWidget *spw)
 	us = gtk_object_get_data (GTK_OBJECT (spw), "units");
 	dsel = gtk_object_get_data (GTK_OBJECT (spw), "dash");
 
-	if (spw->sodipodi) {
+	if (spw->inkscape) {
 		/* fixme: */
 		if (!SP_WIDGET_DOCUMENT (spw)) return;
 		reprs = NULL;
@@ -1021,7 +1021,7 @@ sp_stroke_style_scale_line (SPWidget *spw)
 	}
 
 	sp_repr_css_attr_unref (css);
-	if (spw->sodipodi) sp_document_done (SP_WIDGET_DOCUMENT (spw));
+	if (spw->inkscape) sp_document_done (SP_WIDGET_DOCUMENT (spw));
 
 	g_slist_free (reprs);
 }
@@ -1057,7 +1057,7 @@ sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw)
 		join = gtk_object_get_data (GTK_OBJECT (tb), "join");
 		cap = gtk_object_get_data (GTK_OBJECT (tb), "cap");
 
-		if (spw->sodipodi) {
+		if (spw->inkscape) {
 			reprs = NULL;
 			items = sp_widget_get_item_list (spw);
 			for (i = items; i != NULL; i = i->next) {
@@ -1086,7 +1086,7 @@ sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw)
 		}
 
 		sp_repr_css_attr_unref (css);
-		if (spw->sodipodi) sp_document_done (SP_WIDGET_DOCUMENT (spw));
+		if (spw->inkscape) sp_document_done (SP_WIDGET_DOCUMENT (spw));
 
 		g_slist_free (reprs);
 	}

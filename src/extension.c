@@ -17,7 +17,7 @@
 #include "svg/svg.h"
 #include "xml/repr-private.h"
 #include "document.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "selection.h"
@@ -82,7 +82,7 @@ void sp_extension(GtkWidget * widget)
 	}
 
 	path = g_strdup_printf ("extensions.%s", extension_name);
-	repr = sodipodi_get_repr (SODIPODI, path);
+	repr = inkscape_get_repr (INKSCAPE, path);
 	g_free (path);
 	if (! repr) {
 	  printf("Error: invalid extension %s\n", extension_name);
@@ -271,7 +271,7 @@ void sp_extension(GtkWidget * widget)
 
 /*
 <lauris> btw,
-<lauris> I'd like more the idea sodipodi writing file, then executing
+<lauris> I'd like more the idea inkscape writing file, then executing
 <lauris> my-script -f tmpfile_name
 <lauris> and reading script stdout
 <bryce> yup

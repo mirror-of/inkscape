@@ -2,7 +2,7 @@
 #define __MACROS_H__
 
 /*
- * Useful macros for sodipodi
+ * Useful macros for inkscape
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>

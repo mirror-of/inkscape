@@ -20,14 +20,14 @@
 #include "helper/window.h"
 
 #include "forward.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "desktop-handles.h"
 #include "sp-attribute-widget.h"
 
 #include "tool-attributes.h"
 
 static void sp_tool_attributes_dialog_destroy (GtkObject *object, gpointer data);
-static void sp_tool_attributes_dialog_set_eventcontext (Sodipodi *sodipodi, SPEventContext *ec, gpointer data);
+static void sp_tool_attributes_dialog_set_eventcontext (Inkscape *inkscape, SPEventContext *ec, gpointer data);
 
 static void sp_tool_attributes_dialog_setup (SPEventContext *ec);
 
@@ -47,7 +47,7 @@ sp_tool_attributes_dialog (void)
 
 		sp_tool_attributes_dialog_setup (ec);
 
-		g_signal_connect (G_OBJECT (SODIPODI), "set_eventcontext", G_CALLBACK (sp_tool_attributes_dialog_set_eventcontext), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "set_eventcontext", G_CALLBACK (sp_tool_attributes_dialog_set_eventcontext), dlg);
 
 		gtk_widget_show (dlg);
 	}
@@ -56,14 +56,14 @@ sp_tool_attributes_dialog (void)
 static void
 sp_tool_attributes_dialog_destroy (GtkObject *object, gpointer data)
 {
-	sp_signal_disconnect_by_data (SODIPODI, dlg);
+	sp_signal_disconnect_by_data (INKSCAPE, dlg);
 
 	dlg = NULL;
 	tbl = NULL;
 }
 
 static void
-sp_tool_attributes_dialog_set_eventcontext (Sodipodi *sodipodi, SPEventContext *ec, gpointer data)
+sp_tool_attributes_dialog_set_eventcontext (Inkscape *inkscape, SPEventContext *ec, gpointer data)
 {
 	g_assert (dlg != NULL);
 	g_assert (tbl != NULL);
@@ -85,7 +85,7 @@ sp_tool_attributes_dialog_setup (SPEventContext *ec)
 		typename = gtk_type_name (GTK_OBJECT_TYPE (ec));
 		if (!strcmp (typename, "SPSpiralContext")) {
 			SPRepr *repr;
-			repr = sodipodi_get_repr (SODIPODI, "tools.shapes.spiral");
+			repr = inkscape_get_repr (INKSCAPE, "tools.shapes.spiral");
 			if (repr) {
 				guchar *labels[] = {N_("Revolution:"), N_("Expansion"), N_("Inner radius")};
 				guchar *attrs[] = {"revolution", "expansion", "t0"};
@@ -95,7 +95,7 @@ sp_tool_attributes_dialog_setup (SPEventContext *ec)
 			}
 		} else if (!strcmp (typename, "SPStarContext")) {
 			SPRepr *repr;
-			repr = sodipodi_get_repr (SODIPODI, "tools.shapes.star");
+			repr = inkscape_get_repr (INKSCAPE, "tools.shapes.star");
 			if (repr) {
 				guchar *labels[] = {N_("Corners:"), N_("Proportion")};
 				guchar *attrs[] = {"magnitude", "proportion"};
@@ -105,7 +105,7 @@ sp_tool_attributes_dialog_setup (SPEventContext *ec)
 			}
 		} else if (!strcmp (typename, "SPSelectContext")) {
 			SPRepr *repr;
-			repr = sodipodi_get_repr (SODIPODI, "tools.select");
+			repr = inkscape_get_repr (INKSCAPE, "tools.select");
 			if (repr) {
 				guchar *labels[] = {N_("Show:"), N_("Transform:")};
 				guchar *attrs[] = {"show", "transform"};
@@ -115,7 +115,7 @@ sp_tool_attributes_dialog_setup (SPEventContext *ec)
 			}
 		} else if (!strcmp (typename, "SPDynaDrawContext")) {
 			SPRepr *repr;
-			repr = sodipodi_get_repr (SODIPODI, "tools.calligraphic");
+			repr = inkscape_get_repr (INKSCAPE, "tools.calligraphic");
 			if (repr) {
 				guchar *labels[] = {N_("Mass:"), N_("Drag:"), N_("Angle"), N_("Width:")};
 				guchar *attrs[] = {"mass", "drag", "angle", "width"};

@@ -3,7 +3,7 @@
 /*
  * Desktop configuration dialog
  *
- * This file is part of Sodipodi http://www.sodipodi.com
+ * This file is part of Inkscape http://www.inkscape.com
  * Licensed under GNU General Public License, see file
  * COPYING for details
  *
@@ -25,7 +25,7 @@
 #include "helper/window.h"
 #include "helper/unit-menu.h"
 
-#include "../sodipodi.h"
+#include "../inkscape.h"
 #include "../document.h"
 #include "../desktop.h"
 #include "../desktop-handles.h"
@@ -44,14 +44,14 @@ static GList *papers = NULL;
 #endif
 
 static GtkWidget *sp_doc_dialog_new (void);
-static void sp_doc_dialog_activate_desktop (Sodipodi *sodipodi, SPDesktop *desktop, GtkWidget *dialog);
-static void sp_doc_dialog_desactivate_desktop (Sodipodi *sodipodi, SPDesktop *desktop, GtkWidget *dialog);
+static void sp_doc_dialog_activate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog);
+static void sp_doc_dialog_desactivate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog);
 static void sp_doc_dialog_update (GtkWidget *dialog, SPDocument *doc);
 
 static void
 sp_doc_dialog_destroy (GObject *object, gpointer data)
 {
-	sp_signal_disconnect_by_data (SODIPODI, object);
+	sp_signal_disconnect_by_data (INKSCAPE, object);
 
 	dialog = NULL;
 }
@@ -251,21 +251,21 @@ sp_doc_dialog_new (void)
 	g_signal_connect (G_OBJECT (a), "value_changed", G_CALLBACK (sp_doc_dialog_whatever_changed), dialog);
 
 	/* fixme: We should listen namedview changes here as well */
-	g_signal_connect (G_OBJECT (SODIPODI), "activate_desktop", G_CALLBACK (sp_doc_dialog_activate_desktop), dialog);
-	g_signal_connect (G_OBJECT (SODIPODI), "desactivate_desktop", G_CALLBACK (sp_doc_dialog_desactivate_desktop), dialog);
+	g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_doc_dialog_activate_desktop), dialog);
+	g_signal_connect (G_OBJECT (INKSCAPE), "desactivate_desktop", G_CALLBACK (sp_doc_dialog_desactivate_desktop), dialog);
 	sp_doc_dialog_update (dialog, SP_ACTIVE_DOCUMENT);
 
 	return dialog;
 }
 
 static void
-sp_doc_dialog_activate_desktop (Sodipodi *sodipodi, SPDesktop *desktop, GtkWidget *dialog)
+sp_doc_dialog_activate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog)
 {
 	sp_doc_dialog_update (dialog, (desktop) ? SP_DT_DOCUMENT (desktop) : NULL);
 }
 
 static void
-sp_doc_dialog_desactivate_desktop (Sodipodi *sodipodi, SPDesktop *desktop, GtkWidget *dialog)
+sp_doc_dialog_desactivate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog)
 {
 	sp_doc_dialog_update (dialog, NULL);
 }

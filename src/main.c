@@ -1,7 +1,7 @@
 #define __MAIN_C__
 
 /*
- * Sodipodi - an ambitious vector drawing program
+ * Inkscape - an ambitious vector drawing program
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -56,7 +56,7 @@
 
 #include "svg/svg.h"
 
-#include "sodipodi-private.h"
+#include "inkscape-private.h"
 
 #include "sp-namedview.h"
 #include "sp-guide.h"
@@ -241,23 +241,23 @@ sp_main_gui (int argc, const char **argv)
 #endif
 
 #ifdef WITH_KDE
-	sp_kde_init (argc, (char **) argv, "Sodipodi");
+	sp_kde_init (argc, (char **) argv, "Inkscape");
 #endif
 #ifdef WIN32
-	sp_win32_init (0, NULL, "Sodipodi");
+	sp_win32_init (0, NULL, "Inkscape");
 #endif
 
 	/* Set default icon */
-	if (g_file_test (DATADIR "/pixmaps/sodipodi.png", G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK)) {
-		gtk_window_set_default_icon_from_file (DATADIR "/pixmaps/sodipodi.png", NULL);
+	if (g_file_test (DATADIR "/pixmaps/inkscape.png", G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK)) {
+		gtk_window_set_default_icon_from_file (DATADIR "/pixmaps/inkscape.png", NULL);
 	}
 
 	if (!sp_global_slideshow) {
-		sodipodi = sodipodi_application_new ();
-		sodipodi_load_preferences (sodipodi);
-		sodipodi_load_extensions (sodipodi);
+		inkscape = inkscape_application_new ();
+		inkscape_load_preferences (inkscape);
+		inkscape_load_extensions (inkscape);
 		sp_maintoolbox_create_toplevel ();
-		sodipodi_unref ();
+		inkscape_unref ();
 
 		while (fl) {
 			SPDocument *doc;
@@ -277,12 +277,12 @@ sp_main_gui (int argc, const char **argv)
 	} else {
 		if (fl) {
 			GtkWidget *ss;
-			sodipodi = sodipodi_application_new ();
-			sodipodi_load_preferences (sodipodi);
-			sodipodi_load_extensions (sodipodi);
+			inkscape = inkscape_application_new ();
+			inkscape_load_preferences (inkscape);
+			inkscape_load_extensions (inkscape);
 			ss = sp_slideshow_new (fl);
 			if (ss) gtk_widget_show (ss);
-			sodipodi_unref ();
+			inkscape_unref ();
 		} else {
 			fprintf (stderr, "No slides to display\n");
 			exit (0);
@@ -354,9 +354,9 @@ sp_main_console (int argc, const char **argv)
 
 	/* Start up g type system, without requiring X */
 	g_type_init();
-	sodipodi = sodipodi_application_new ();
-	sodipodi_load_preferences (sodipodi);
-	sodipodi_load_extensions (sodipodi);
+	inkscape = inkscape_application_new ();
+	inkscape_load_preferences (inkscape);
+	inkscape_load_extensions (inkscape);
 
 	while (fl) {
 		SPDocument *doc;
@@ -384,7 +384,7 @@ sp_main_console (int argc, const char **argv)
 
 	if (printer) g_free (printer);
 
-	sodipodi_unref ();
+	inkscape_unref ();
 
 	return 0;
 }

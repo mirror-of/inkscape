@@ -133,7 +133,7 @@ sp_star_write (SPObject *object, SPRepr *repr, guint flags)
 		repr = sp_repr_new ("polygon");
 	}
 
-	if (flags & SP_OBJECT_WRITE_SODIPODI) {
+	if (flags & SP_OBJECT_WRITE_INKSCAPE) {
 		sp_repr_set_attr (repr, "sodipodi:type", "star");
 		sp_repr_set_int (repr, "sodipodi:sides", star->sides);
 		sp_repr_set_double (repr, "sodipodi:cx", star->cx);
@@ -162,7 +162,7 @@ sp_star_set (SPObject *object, unsigned int key, const unsigned char *value)
 
 	/* fixme: we should really collect updates */
 	switch (key) {
-	case SP_ATTR_SODIPODI_SIDES:
+	case SP_ATTR_INKSCAPE_SIDES:
 		if (value) {
 			star->sides = atoi (value);
 			star->sides = CLAMP (star->sides, 3, 32);
@@ -171,7 +171,7 @@ sp_star_set (SPObject *object, unsigned int key, const unsigned char *value)
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_SODIPODI_CX:
+	case SP_ATTR_INKSCAPE_CX:
 		if (!sp_svg_length_read_lff (value, &unit, NULL, &star->cx) ||
 		    (unit == SP_SVG_UNIT_EM) ||
 		    (unit == SP_SVG_UNIT_EX) ||
@@ -180,7 +180,7 @@ sp_star_set (SPObject *object, unsigned int key, const unsigned char *value)
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_SODIPODI_CY:
+	case SP_ATTR_INKSCAPE_CY:
 		if (!sp_svg_length_read_lff (value, &unit, NULL, &star->cy) ||
 		    (unit == SP_SVG_UNIT_EM) ||
 		    (unit == SP_SVG_UNIT_EX) ||
@@ -189,7 +189,7 @@ sp_star_set (SPObject *object, unsigned int key, const unsigned char *value)
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_SODIPODI_R1:
+	case SP_ATTR_INKSCAPE_R1:
 		if (!sp_svg_length_read_lff (value, &unit, NULL, &star->r1) ||
 		    (unit == SP_SVG_UNIT_EM) ||
 		    (unit == SP_SVG_UNIT_EX) ||
@@ -199,7 +199,7 @@ sp_star_set (SPObject *object, unsigned int key, const unsigned char *value)
 		/* fixme: Need CLAMP (Lauris) */
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_SODIPODI_R2:
+	case SP_ATTR_INKSCAPE_R2:
 		if (!sp_svg_length_read_lff (value, &unit, NULL, &star->r2) ||
 		    (unit == SP_SVG_UNIT_EM) ||
 		    (unit == SP_SVG_UNIT_EX) ||
@@ -208,7 +208,7 @@ sp_star_set (SPObject *object, unsigned int key, const unsigned char *value)
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		return;
-	case SP_ATTR_SODIPODI_ARG1:
+	case SP_ATTR_INKSCAPE_ARG1:
 		if (value) {
 			star->arg1 = atof (value);
 		} else {
@@ -216,7 +216,7 @@ sp_star_set (SPObject *object, unsigned int key, const unsigned char *value)
 		}
 		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_SODIPODI_ARG2:
+	case SP_ATTR_INKSCAPE_ARG2:
 		if (value) {
 			star->arg2 = atof (value);
 		} else {

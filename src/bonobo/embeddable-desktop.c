@@ -1,6 +1,6 @@
 #define SP_EMBEDDABLE_DESKTOP_C
 
-#include "../sodipodi.h"
+#include "../inkscape.h"
 #include "../document.h"
 #include "../desktop.h"
 #include "embeddable-desktop.h"
@@ -79,7 +79,7 @@ sp_embeddable_desktop_factory (BonoboEmbeddable * embeddable,
 	gtk_widget_show (GTK_WIDGET (desktop->desktop));
 
 #if 0
-	gnome_mdi_register (SODIPODI, GTK_OBJECT (desktop));
+	gnome_mdi_register (INKSCAPE, GTK_OBJECT (desktop));
 #endif
 
 	gtk_signal_connect (GTK_OBJECT (desktop), "destroy",
@@ -94,7 +94,7 @@ static void
 sp_embeddable_desktop_destroyed (SPEmbeddableDesktop * desktop)
 {
 #if 0
-	gnome_mdi_unregister (SODIPODI, GTK_OBJECT (desktop));
+	gnome_mdi_unregister (INKSCAPE, GTK_OBJECT (desktop));
 #endif
 }
 

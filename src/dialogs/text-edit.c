@@ -38,7 +38,7 @@
 #include "helper/window.h"
 #include "../widgets/font-selector.h"
 #include "../forward.h"
-#include "../sodipodi.h"
+#include "../inkscape.h"
 #include "../document.h"
 #include "../desktop-handles.h"
 #include "../selection.h"
@@ -47,8 +47,8 @@
 
 #include "text-edit.h"
 
-static void sp_text_edit_dialog_modify_selection (Sodipodi *sodipodi, SPSelection *sel, guint flags, GtkWidget *dlg);
-static void sp_text_edit_dialog_change_selection (Sodipodi *sodipodi, SPSelection *sel, GtkWidget *dlg);
+static void sp_text_edit_dialog_modify_selection (Inkscape *inkscape, SPSelection *sel, guint flags, GtkWidget *dlg);
+static void sp_text_edit_dialog_change_selection (Inkscape *inkscape, SPSelection *sel, GtkWidget *dlg);
 
 static void sp_text_edit_dialog_set_default (GtkButton *button, GtkWidget *dlg);
 static void sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg);
@@ -72,7 +72,7 @@ static GtkWidget *dlg = NULL;
 static void
 sp_text_edit_dialog_destroy (GtkObject *object, gpointer data)
 {
-	sp_signal_disconnect_by_data (SODIPODI, dlg);
+	sp_signal_disconnect_by_data (INKSCAPE, dlg);
 	dlg = NULL;
 }
 
@@ -167,14 +167,14 @@ sp_text_edit_dialog (void)
 		l = gtk_label_new (_("Orientation:"));
 		gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
 		gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 1, 2, 0, 0, 4, 0);
-		px = gtk_image_new_from_file (SODIPODI_GLADEDIR "/writing_mode_lr.xpm");
+		px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/writing_mode_lr.xpm");
 		b = gtk_radio_button_new (NULL);
 		g_signal_connect (G_OBJECT (b), "toggled", G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg);
 		gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
 		gtk_container_add (GTK_CONTAINER (b), px);
 		gtk_table_attach (GTK_TABLE (tbl), b, 1, 2, 1, 2, 0, 0, 0, 0);
 		g_object_set_data (G_OBJECT (dlg), "writing_mode_lr", b);
-		px = gtk_image_new_from_file (SODIPODI_GLADEDIR "/writing_mode_tb.xpm");
+		px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/writing_mode_tb.xpm");
 		b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (b)));
 		g_signal_connect (G_OBJECT (b), "toggled", G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg);
 		gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
@@ -232,8 +232,8 @@ sp_text_edit_dialog (void)
 		gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
 		g_object_set_data (G_OBJECT (dlg), "apply", b);
 
-		g_signal_connect (G_OBJECT (SODIPODI), "modify_selection", G_CALLBACK (sp_text_edit_dialog_modify_selection), dlg);
-		g_signal_connect (G_OBJECT (SODIPODI), "change_selection", G_CALLBACK (sp_text_edit_dialog_change_selection), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "modify_selection", G_CALLBACK (sp_text_edit_dialog_modify_selection), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (sp_text_edit_dialog_change_selection), dlg);
 
 		sp_text_edit_dialog_read_selection (dlg, TRUE, TRUE);
 
@@ -244,7 +244,7 @@ sp_text_edit_dialog (void)
 }
 
 static void
-sp_text_edit_dialog_modify_selection (Sodipodi *sodipodi, SPSelection *sel, guint flags, GtkWidget *dlg)
+sp_text_edit_dialog_modify_selection (Inkscape *inkscape, SPSelection *sel, guint flags, GtkWidget *dlg)
 {
 	gboolean style, content;
 
@@ -254,7 +254,7 @@ sp_text_edit_dialog_modify_selection (Sodipodi *sodipodi, SPSelection *sel, guin
 }
 
 static void
-sp_text_edit_dialog_change_selection (Sodipodi *sodipodi, SPSelection *sel, GtkWidget *dlg)
+sp_text_edit_dialog_change_selection (Inkscape *inkscape, SPSelection *sel, GtkWidget *dlg)
 {
 	sp_text_edit_dialog_read_selection (dlg, TRUE, TRUE);
 }
@@ -346,7 +346,7 @@ sp_text_edit_dialog_set_default (GtkButton *button, GtkWidget *dlg)
 
 	def = g_object_get_data (G_OBJECT (dlg), "default");
 
-	repr = sodipodi_get_repr (SODIPODI, "tools.text");
+	repr = inkscape_get_repr (INKSCAPE, "tools.text");
 
 	sp_text_edit_dialog_update_object (NULL, repr);
 
@@ -382,7 +382,7 @@ sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg)
 	if (items == 1) {
 		sp_text_edit_dialog_update_object (text, NULL);
 	} else if (items == 0) {
-		repr = sodipodi_get_repr (SODIPODI, "tools.text");
+		repr = inkscape_get_repr (INKSCAPE, "tools.text");
 		sp_text_edit_dialog_update_object (NULL, repr);
 		gtk_widget_set_sensitive (def, FALSE);
 	}
@@ -524,7 +524,7 @@ sp_text_edit_dialog_read_selection (GtkWidget *dlg, gboolean dostyle, gboolean d
 		gtk_widget_set_sensitive (textw, FALSE);
 		gtk_widget_set_sensitive (apply, FALSE);
 		gtk_widget_set_sensitive (def, FALSE);
-		repr = sodipodi_get_repr (SODIPODI, "tools.text");
+		repr = inkscape_get_repr (INKSCAPE, "tools.text");
 		if (repr) {
 			gtk_widget_set_sensitive (notebook, TRUE);
 			style = sp_style_new ();

@@ -1,15 +1,15 @@
 #
-# Widgets for sodipodi
+# Widgets for inkscape
 # Author: Lauris Kaplinski <lauris@ximian.com>
 #
 
-gladedir = $(datadir)/sodipodi
+gladedir = $(datadir)/inkscape
 
 INCLUDES = \
 	-I.. \
 	-I$(top_srcdir)/src \
-	$(SODIPODI_CFLAGS) \
-	-DSODIPODI_PIXMAPDIR=\""$(gladedir)"\"
+	$(INKSCAPE_CFLAGS) \
+	-DINKSCAPE_PIXMAPDIR=\""$(gladedir)"\"
 
 noinst_LIBRARIES = libspwidgets.a
 
@@ -47,7 +47,7 @@ libspwidgets_a_SOURCES = \
 #	sp-color-slider.c sp-color-slider.h \
 #	sp-color-selector.c sp-color-selector.h
 
-#test_widgets_LDADD = $(SODIPODI_LIBS)
+#test_widgets_LDADD = $(INKSCAPE_LIBS)
 
 #test_wrapbox_SOURCES = \
 #	test-wrapbox.c \
@@ -55,4 +55,4 @@ libspwidgets_a_SOURCES = \
 #	sp-hwrap-box.c sp-hwrap-box.h \
 #	sp-vwrap-box.c sp-vwrap-box.h
 
-#test_wrapbox_LDADD = $(SODIPODI_LIBS)
+#test_wrapbox_LDADD = $(INKSCAPE_LIBS)

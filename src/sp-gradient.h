@@ -114,7 +114,7 @@ struct _SPGradient {
 	SPPaintServer paint_server;
 	/* Reference (href) */
 	SPGradient *href;
-	/* State in Sodipodi gradient system */
+	/* State in Inkscape gradient system */
 	guint state : 2;
 	/* gradientUnits attribute */
 	SPGradientUnits units;

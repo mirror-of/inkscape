@@ -15,7 +15,7 @@
 #include <gtk/gtkmain.h>
 #include "macros.h"
 #include "helper/sp-marshal.h"
-#include "sodipodi-private.h"
+#include "inkscape-private.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "document.h"
@@ -121,7 +121,7 @@ sp_selection_dispose (GObject *object)
 static void
 sp_selection_private_changed (SPSelection * selection)
 {
-	sodipodi_selection_changed (selection);
+	inkscape_selection_changed (selection);
 }
 
 static void
@@ -174,8 +174,8 @@ sp_selection_idle_handler (gpointer data)
 	/* Emit our own "modified" signal */
 	g_signal_emit (G_OBJECT (selection), selection_signals [MODIFIED], 0, flags);
 
-	/* Request "selection_modified" signal on Sodipodi */
-	sodipodi_selection_modified (selection, flags);
+	/* Request "selection_modified" signal on Inkscape */
+	inkscape_selection_modified (selection, flags);
 
 	return FALSE;
 }

@@ -24,7 +24,7 @@
 #include <gtk/gtklabel.h>
 #include "helper/sp-canvas.h"
 #include "sp-star.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "document.h"
 #include "selection.h"
 #include "desktop-handles.h"
@@ -225,7 +225,7 @@ sp_star_drag (SPStarContext * sc, double x, double y, guint state)
 		repr = sp_repr_new ("polygon");
                 sp_repr_set_attr (repr, "sodipodi:type", "star");
 		/* Set style */
-		style = sodipodi_get_repr (SODIPODI, "tools.shapes.star");
+		style = inkscape_get_repr (INKSCAPE, "tools.shapes.star");
 		if (style) {
 			css = sp_repr_css_attr_inherited (style, "style");
 			sp_repr_css_set (repr, css, "style");
@@ -284,7 +284,7 @@ sp_star_finish (SPStarContext * sc)
 		
                 sp_shape_set_shape (SP_SHAPE (sc->item));
 
-		sp_object_invoke_write (object, NULL, SP_OBJECT_WRITE_SODIPODI);
+		sp_object_invoke_write (object, NULL, SP_OBJECT_WRITE_INKSCAPE);
 
 		sp_selection_set_item (SP_DT_SELECTION (desktop), sc->item);
 		sp_document_done (SP_DT_DOCUMENT (desktop));

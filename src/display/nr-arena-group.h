@@ -2,7 +2,7 @@
 #define __NR_ARENA_GROUP_H__
 
 /*
- * RGBA display list system for sodipodi
+ * RGBA display list system for inkscape
  *
  * Author:
  *   Lauris Kaplinski <lauris@ximian.com>

@@ -14,7 +14,7 @@
 #include "../forward.h"
 #include "../sp-object.h"
 #include "../sp-item.h"
-#include "../sodipodi.h"
+#include "../inkscape.h"
 #include "../document.h"
 #include "sodipodi-bonobo.h"
 #include "embeddable-desktop.h"
@@ -207,7 +207,7 @@ sp_embeddable_document_ps_save (BonoboPersistStream *ps,
 	/* FIXME: super dirty but functional */
 	do {
 		if (filename) g_free (filename);
-		filename = g_strdup ("sodipodiXXXXXX");
+		filename = g_strdup ("inkscapeXXXXXX");
 		fd = mkstemp (filename);
 
 	} while (fd == -1);
@@ -354,7 +354,7 @@ sp_embeddable_document_new (void)
 #if 0
 	sp_bonobo_objects++;
 #else
-	sodipodi_ref ();
+	inkscape_ref ();
 #endif
 #endif
 	gtk_signal_connect (GTK_OBJECT (document), "destroy",

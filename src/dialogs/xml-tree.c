@@ -33,7 +33,7 @@
 #include "helper/sp-intl.h"
 #include "helper/window.h"
 #include "macros.h"
-#include "../sodipodi.h"
+#include "../inkscape.h"
 #include "../document.h"
 #include "../desktop-handles.h"
 #include "../selection.h"
@@ -170,7 +170,7 @@ sp_xml_tree_dialog (void)
 						  NULL,
 						  _("New element node"),
 						  NULL,
-						  gtk_image_new_from_file (SODIPODI_PIXMAPDIR "/add_xml_element_node.xpm"),
+						  gtk_image_new_from_file (INKSCAPE_PIXMAPDIR "/add_xml_element_node.xpm"),
 						  G_CALLBACK (cmd_new_element_node),
 						  NULL);
 		gtk_signal_connect_while_alive (GTK_OBJECT (tree),
@@ -187,7 +187,7 @@ sp_xml_tree_dialog (void)
 
 		button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 						  NULL, _("New text node"), NULL,
-						  gtk_image_new_from_file (SODIPODI_PIXMAPDIR "/add_xml_text_node.xpm"),
+						  gtk_image_new_from_file (INKSCAPE_PIXMAPDIR "/add_xml_text_node.xpm"),
 						  G_CALLBACK (cmd_new_text_node),
 						  NULL);
 		gtk_signal_connect_while_alive (GTK_OBJECT (tree),
@@ -204,7 +204,7 @@ sp_xml_tree_dialog (void)
 
 		button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
 						  NULL, _("Duplicate node"), NULL,
-						  gtk_image_new_from_file (SODIPODI_PIXMAPDIR "/duplicate_xml_node.xpm"),
+						  gtk_image_new_from_file (INKSCAPE_PIXMAPDIR "/duplicate_xml_node.xpm"),
 						  G_CALLBACK (cmd_duplicate_node),
 						  NULL);
 		gtk_signal_connect_while_alive (GTK_OBJECT (tree),
@@ -220,7 +220,7 @@ sp_xml_tree_dialog (void)
 		gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
 
 		button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), NULL, _("Delete node"), NULL,
-						  gtk_image_new_from_file (SODIPODI_PIXMAPDIR "/delete_xml_node.xpm"),
+						  gtk_image_new_from_file (INKSCAPE_PIXMAPDIR "/delete_xml_node.xpm"),
 						  G_CALLBACK (cmd_delete_node), NULL);
 		gtk_signal_connect_while_alive (GTK_OBJECT (tree), "tree_select_row",
 						G_CALLBACK (on_tree_select_row_enable_if_non_root),
@@ -302,7 +302,7 @@ sp_xml_tree_dialog (void)
 		gtk_container_set_border_width (GTK_CONTAINER (toolbar), 0);
 
 		button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), NULL, _("Delete attribute"), NULL,
-						  gtk_image_new_from_file (SODIPODI_PIXMAPDIR "/delete_xml_attribute.xpm"),
+						  gtk_image_new_from_file (INKSCAPE_PIXMAPDIR "/delete_xml_attribute.xpm"),
 						  (GCallback) cmd_delete_attr, NULL);
 
 		gtk_signal_connect_while_alive (GTK_OBJECT (attributes), "select_row",
@@ -339,7 +339,7 @@ sp_xml_tree_dialog (void)
 
 		set_attr = gtk_button_new ();
 		gtk_tooltips_set_tip (tooltips, GTK_WIDGET (set_attr), _("Set attribute"), NULL);
-		gtk_container_add (GTK_CONTAINER (set_attr), gtk_image_new_from_file (SODIPODI_PIXMAPDIR "/set.xpm"));
+		gtk_container_add (GTK_CONTAINER (set_attr), gtk_image_new_from_file (INKSCAPE_PIXMAPDIR "/set.xpm"));
 		gtk_signal_connect (GTK_OBJECT (set_attr), "clicked", (GCallback) cmd_set_attr, NULL);
 		gtk_signal_connect (GTK_OBJECT (attr_name), "changed", (GCallback) on_editable_changed_enable_if_valid_xml_name, set_attr);
 		gtk_widget_set_sensitive (GTK_WIDGET (set_attr), FALSE);
@@ -823,7 +823,7 @@ void
 on_document_uri_set (SPDocument * document, const guchar * uri, gpointer data)
 {
 	guchar * title;
-	title = g_strdup_printf (_("Sodipodi: %s : XML View"), SP_DOCUMENT_NAME (document));
+	title = g_strdup_printf (_("Inkscape: %s : XML View"), SP_DOCUMENT_NAME (document));
 	gtk_window_set_title (GTK_WINDOW (dialog), title);
 	g_free (title);
 }

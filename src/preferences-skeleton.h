@@ -1,7 +1,7 @@
 #define __PREFERENCES_SKELETON_H__
 
 static const char preferences_skeleton[] =
-"<sodipodi version=\"" VERSION "\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\">"
+"<inkscape version=\"" VERSION "\" xmlns:sodipodi=\"http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd\">"
 "  <interface id=\"toolboxes\">"
 "    <interface id=\"file\" state=\"1\"/>"
 "    <interface id=\"edit\" state=\"1\"/>"
@@ -58,6 +58,6 @@ static const char preferences_skeleton[] =
 "  <group id=\"printing\">"
 "    <settings id=\"ps\"/>"
 "  </group>"
-"</sodipodi>";
+"</inkscape>";
 
 #define PREFERENCES_SKELETON_SIZE (sizeof (preferences_skeleton) - 1)

@@ -18,8 +18,8 @@
 #include <gtk/gtksignal.h>
 #include "macros.h"
 #include "svg/svg.h"
-#include "sodipodi-private.h"
-#include "sodipodi.h"
+#include "inkscape-private.h"
+#include "inkscape.h"
 #include "document.h"
 #include "desktop.h"
 #include "desktop-handles.h"

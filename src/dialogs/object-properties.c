@@ -31,7 +31,7 @@
 #include "helper/window.h"
 #include "widgets/sp-widget.h"
 #include "macros.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "fill-style.h"
 #include "stroke-style.h"
 
@@ -42,7 +42,7 @@ static GtkWidget *dlg = NULL;
 static void
 sp_object_properties_dialog_destroy (GtkObject *object, gpointer data)
 {
-	sp_signal_disconnect_by_data (SODIPODI, dlg);
+	sp_signal_disconnect_by_data (INKSCAPE, dlg);
 	dlg = NULL;
 }
 
@@ -57,7 +57,7 @@ sp_object_properties_style_activate (GtkMenuItem *menuitem, const guchar *key)
 
 	if (key) {
 		SPRepr *repr;
-		repr = sodipodi_get_repr (SODIPODI, key);
+		repr = inkscape_get_repr (INKSCAPE, key);
 		if (repr) {
 			sp_widget_construct_repr (SP_WIDGET (fs), repr);
 			sp_widget_construct_repr (SP_WIDGET (sp), repr);
@@ -72,9 +72,9 @@ sp_object_properties_style_activate (GtkMenuItem *menuitem, const guchar *key)
 			gtk_widget_set_sensitive (GTK_WIDGET (sl), FALSE);
 		}
 	} else {
-		sp_widget_construct_global (SP_WIDGET (fs), SODIPODI);
-		sp_widget_construct_global (SP_WIDGET (sp), SODIPODI);
-		sp_widget_construct_global (SP_WIDGET (sl), SODIPODI);
+		sp_widget_construct_global (SP_WIDGET (fs), INKSCAPE);
+		sp_widget_construct_global (SP_WIDGET (sp), INKSCAPE);
+		sp_widget_construct_global (SP_WIDGET (sl), INKSCAPE);
 		gtk_widget_set_sensitive (GTK_WIDGET (fs), TRUE);
 		gtk_widget_set_sensitive (GTK_WIDGET (sp), TRUE);
 		gtk_widget_set_sensitive (GTK_WIDGET (sl), TRUE);
@@ -82,7 +82,7 @@ sp_object_properties_style_activate (GtkMenuItem *menuitem, const guchar *key)
 }
 
 static void
-sp_object_properties_color_set (Sodipodi *sodipodi, SPColor *color, double opacity, GObject *dlg)
+sp_object_properties_color_set (Inkscape *inkscape, SPColor *color, double opacity, GObject *dlg)
 {
 	GtkNotebook *nb;
 	int pnum;
@@ -125,7 +125,7 @@ sp_object_properties_dialog (void)
 		l = gtk_label_new (_("Fill"));
 		gtk_widget_show (l);
 		gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
-		px = gtk_image_new_from_file (SODIPODI_GLADEDIR "/properties_fill.xpm");
+		px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/properties_fill.xpm");
 		gtk_widget_show (px);
 		gtk_box_pack_start (GTK_BOX (hb), px, FALSE, FALSE, 0);
 		page = sp_fill_style_widget_new ();
@@ -139,7 +139,7 @@ sp_object_properties_dialog (void)
 		l = gtk_label_new (_("Stroke paint"));
 		gtk_widget_show (l);
 		gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
-		px = gtk_image_new_from_file (SODIPODI_GLADEDIR "/properties_stroke.xpm");
+		px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/properties_stroke.xpm");
 		gtk_widget_show (px);
 		gtk_box_pack_start (GTK_BOX (hb), px, FALSE, FALSE, 0);
 		page = sp_stroke_style_paint_widget_new ();
@@ -153,7 +153,7 @@ sp_object_properties_dialog (void)
 		l = gtk_label_new (_("Stroke style"));
 		gtk_widget_show (l);
 		gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
-		px = gtk_image_new_from_file (SODIPODI_GLADEDIR "/properties_stroke.xpm");
+		px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/properties_stroke.xpm");
 		gtk_widget_show (px);
 		gtk_box_pack_start (GTK_BOX (hb), px, FALSE, FALSE, 0);
 		page = sp_stroke_style_line_widget_new ();
@@ -212,7 +212,7 @@ sp_object_properties_dialog (void)
 
 		gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
 
-		g_signal_connect (G_OBJECT (SODIPODI), "color_set", G_CALLBACK (sp_object_properties_color_set), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "color_set", G_CALLBACK (sp_object_properties_color_set), dlg);
 
 		gtk_widget_show (dlg);
 	} else {
@@ -254,7 +254,7 @@ void sp_object_properties_fill (void)
 
 #include "../helper/unit-menu.h"
 #include "../widgets/sp-widget.h"
-#include "../sodipodi.h"
+#include "../inkscape.h"
 #include "../document.h"
 #include "../desktop-handles.h"
 #include "../selection.h"
@@ -296,7 +296,7 @@ sp_selection_layout_widget_new (void)
 	GtkWidget *spw, *vb, *f, *t, *l, *us, *px, *sb;
 	GtkObject *a;
 
-	spw = sp_widget_new_global (SODIPODI);
+	spw = sp_widget_new_global (INKSCAPE);
 
 	vb = gtk_vbox_new (FALSE, 4);
 	gtk_widget_show (vb);
@@ -324,7 +324,7 @@ sp_selection_layout_widget_new (void)
 	gtk_table_attach (GTK_TABLE (t), us, 2, 3, 0, 1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
 	gtk_object_set_data (GTK_OBJECT (spw), "units", us);
 
-	px = gtk_image_new_from_file (SODIPODI_GLADEDIR "/arrows_hor.xpm");
+	px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/arrows_hor.xpm");
 	gtk_widget_show (px);
 	gtk_table_attach (GTK_TABLE (t), px, 0, 1, 1, 2, 0, 0, 0, 0);
 	l = gtk_label_new (_("X:"));
@@ -339,7 +339,7 @@ sp_selection_layout_widget_new (void)
 	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 1, 2, GTK_EXPAND | GTK_FILL, 0, 0, 0);
 	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_object_layout_any_value_changed), spw);
 
-	px = gtk_image_new_from_file (SODIPODI_GLADEDIR "/arrows_ver.xpm");
+	px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/arrows_ver.xpm");
 	gtk_widget_show (px);
 	gtk_table_attach (GTK_TABLE (t), px, 0, 1, 2, 3, 0, 0, 0, 0);
 	l = gtk_label_new (_("Y:"));
@@ -354,7 +354,7 @@ sp_selection_layout_widget_new (void)
 	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 2, 3, GTK_EXPAND | GTK_FILL, 0, 0, 0);
 	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_object_layout_any_value_changed), spw);
 
-	px = gtk_image_new_from_file (SODIPODI_GLADEDIR "/dimension_hor.xpm");
+	px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/dimension_hor.xpm");
 	gtk_widget_show (px);
 	gtk_table_attach (GTK_TABLE (t), px, 0, 1, 3, 4, 0, 0, 0, 0);
 	l = gtk_label_new (_("Width:"));
@@ -369,7 +369,7 @@ sp_selection_layout_widget_new (void)
 	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 3, 4, GTK_EXPAND | GTK_FILL, 0, 0, 0);
 	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_object_layout_any_value_changed), spw);
 
-	px = gtk_image_new_from_file (SODIPODI_GLADEDIR "/dimension_ver.xpm");
+	px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/dimension_ver.xpm");
 	gtk_widget_show (px);
 	gtk_table_attach (GTK_TABLE (t), px, 0, 1, 4, 5, 0, 0, 0, 0);
 	l = gtk_label_new (_("Height:"));

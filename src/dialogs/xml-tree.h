@@ -2,14 +2,14 @@
 #define SP_XML_TREE_H
 
 /*
- * XML tree editing dialog for Sodipodi
+ * XML tree editing dialog for Inkscape
  *
  * Copyright Lauris Kaplinski, 2000
  *
  * Released under GNU General Public License.
  *
  * This is XML tree editor, which allows direct modifying of all elements
- *   of Sodipodi document, including foreign ones.
+ *   of Inkscape document, including foreign ones.
  *
  */
 

@@ -1529,7 +1529,7 @@ sp_lineargradient_build_repr (SPLinearGradient *lg, gboolean vector)
 
 	repr = sp_repr_new ("linearGradient");
 
-	sp_object_invoke_write ((SPObject *) lg, repr, SP_OBJECT_WRITE_SODIPODI | SP_OBJECT_WRITE_ALL);
+	sp_object_invoke_write ((SPObject *) lg, repr, SP_OBJECT_WRITE_INKSCAPE | SP_OBJECT_WRITE_ALL);
 
 	if (vector) {
 		sp_gradient_ensure_vector ((SPGradient *) lg);
@@ -1819,7 +1819,7 @@ sp_radialgradient_build_repr (SPRadialGradient *rg, gboolean vector)
 
 	repr = sp_repr_new ("radialGradient");
 
-	sp_object_invoke_write ((SPObject *) rg, repr, SP_OBJECT_WRITE_SODIPODI | SP_OBJECT_WRITE_ALL);
+	sp_object_invoke_write ((SPObject *) rg, repr, SP_OBJECT_WRITE_INKSCAPE | SP_OBJECT_WRITE_ALL);
 
 	if (vector) {
 		sp_gradient_ensure_vector ((SPGradient *) rg);

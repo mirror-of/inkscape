@@ -2,7 +2,7 @@
 #define __SP_ACTION_H__
 
 /*
- * Sodipodi UI action implementation
+ * Inkscape UI action implementation
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>

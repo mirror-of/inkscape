@@ -10,7 +10,7 @@ INCLUDES = \
 	-I.. \
 	-I$(top_srcdir)/src \
 	$(cflags) \
-	$(SODIPODI_CFLAGS)
+	$(INKSCAPE_CFLAGS)
 
 libspchelp_a_SOURCES = \
 	sp-intl.h \

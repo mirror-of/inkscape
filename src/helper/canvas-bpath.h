@@ -2,7 +2,7 @@
 #define __SP_CANVAS_BPATH_H__
 
 /*
- * Simple bezier bpath CanvasItem for sodipodi
+ * Simple bezier bpath CanvasItem for inkscape
  *
  * Authors:
  *   Lauris Kaplinski <lauris@ximian.com>

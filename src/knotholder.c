@@ -199,7 +199,7 @@ knot_ungrabbed_handler (SPKnot *knot, unsigned int state, SPKnotHolder *kh)
 	} else {
 		SPObject *object;
 		object = (SPObject *) kh->item;
-		sp_object_invoke_write (object, object->repr, SP_OBJECT_WRITE_SODIPODI);
+		sp_object_invoke_write (object, object->repr, SP_OBJECT_WRITE_INKSCAPE);
 		sp_document_done (SP_OBJECT_DOCUMENT (kh->item));
 	}
 }

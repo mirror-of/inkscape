@@ -22,7 +22,7 @@
 #include <xml/repr.h>
 #include "helper/sp-marshal.h"
 #include "helper/sp-intl.h"
-#include "sodipodi-private.h"
+#include "inkscape-private.h"
 #include "sp-object-repr.h"
 #include "sp-root.h"
 #include "sp-namedview.h"
@@ -30,7 +30,7 @@
 #include "desktop.h"
 
 #define SP_NAMESPACE_SVG "http://www.w3.org/2000/svg"
-#define SP_NAMESPACE_SODIPODI "http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+#define SP_NAMESPACE_INKSCAPE "http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
 #define SP_NAMESPACE_XLINK "http://www.w3.org/1999/xlink"
 
 #define A4_WIDTH_STR "210mm"
@@ -159,7 +159,7 @@ sp_document_dispose (GObject *object)
 	priv = doc->priv;
 
 	if (priv) {
-		sodipodi_remove_document (doc);
+		inkscape_remove_document (doc);
 
 		if (priv->partial) {
 			sp_repr_free_log (priv->partial);
@@ -206,7 +206,7 @@ sp_document_dispose (GObject *object)
 	}
 
 	if (doc->keepalive) {
-		sodipodi_unref ();
+		inkscape_unref ();
 		doc->keepalive = FALSE;
 	}
 
@@ -246,14 +246,14 @@ sp_document_create (SPReprDoc *rdoc,
 	sp_document_ensure_up_to_date (document);
 #endif
 
-	version = SP_ROOT (document->root)->sodipodi;
+	version = SP_ROOT (document->root)->inkscape;
 
 	/* fixme: Not sure about this, but lets assume ::build updates */
 	sp_repr_set_attr (rroot, "sodipodi:version", VERSION);
 	/* fixme: Again, I moved these here to allow version determining in ::build (Lauris) */
 	/* A quick hack to get namespaces into doc */
 	sp_repr_set_attr (rroot, "xmlns", SP_NAMESPACE_SVG);
-	sp_repr_set_attr (rroot, "xmlns:sodipodi", SP_NAMESPACE_SODIPODI);
+	sp_repr_set_attr (rroot, "xmlns:sodipodi", SP_NAMESPACE_INKSCAPE);
 	sp_repr_set_attr (rroot, "xmlns:xlink", SP_NAMESPACE_XLINK);
 	/* End of quick hack */
 	/* Quick hack 2 - get default image size into document */
@@ -278,7 +278,7 @@ sp_document_create (SPReprDoc *rdoc,
 	/* Namedviews */
 	if (!sp_item_group_get_child_by_name ((SPGroup *) document->root, NULL, "sodipodi:namedview")) {
 		SPRepr *r;
-		r = sodipodi_get_repr (SODIPODI, "template.sodipodi:namedview");
+		r = inkscape_get_repr (INKSCAPE, "template.sodipodi:namedview");
 		if (!r) r = sp_repr_new ("sodipodi:namedview");
 		sp_repr_set_attr (r, "id", "base");
 		sp_repr_add_child (rroot, r, NULL);
@@ -295,12 +295,12 @@ sp_document_create (SPReprDoc *rdoc,
 	}
 
 	if (keepalive) {
-		sodipodi_ref ();
+		inkscape_ref ();
 	}
 
 	sp_document_set_undo_sensitive (document, TRUE);
 
-	sodipodi_add_document (document);
+	inkscape_add_document (document);
 
 	return document;
 }

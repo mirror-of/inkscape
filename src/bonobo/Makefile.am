@@ -5,8 +5,8 @@
 
 INCLUDES = \
 	-I$(includedir) \
-	$(SODIPODI_BONOBO_CFLAGS) \
-	$(SODIPODI_CFLAGS)
+	$(INKSCAPE_BONOBO_CFLAGS) \
+	$(INKSCAPE_CFLAGS)
 
 noinst_LIBRARIES = libspbonobo.a
 

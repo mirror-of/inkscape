@@ -43,9 +43,9 @@
 #include "file.h"
 #include "selection-chemistry.h"
 #include "path-chemistry.h"
-#include "sodipodi-private.h"
+#include "inkscape-private.h"
 #include "document.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #if 0
 #include "event-broker.h"
 #include "zoom-context.h"
@@ -82,7 +82,7 @@ static void sp_maintoolbox_drag_data_received (GtkWidget * widget,
 					       gpointer user_data);
 
 /* fixme: Move this to some sensible place (Lauris) */
-static void sp_update_draw_toolbox (Sodipodi * sodipodi, SPEventContext * eventcontext, GObject *toolbox);
+static void sp_update_draw_toolbox (Inkscape * inkscape, SPEventContext * eventcontext, GObject *toolbox);
 
 #if 0
 static void sp_toolbox_object_flip_clicked (SPButton *button, gpointer data);
@@ -106,8 +106,8 @@ static void sp_maintoolbox_open_one_file_with_check(gpointer filename, gpointer 
 static void
 sp_maintoolbox_destroy (GtkObject *object, gpointer data)
 {
-	sp_signal_disconnect_by_data (sodipodi, object);
-	sodipodi_unref ();
+	sp_signal_disconnect_by_data (inkscape, object);
+	inkscape_unref ();
 }
 
 void
@@ -116,7 +116,7 @@ sp_maintoolbox_create_toplevel (void)
 	GtkWidget *window, *toolbox;
 
 	/* Create window */
-	window = sp_window_new (_("Sodipodi"), FALSE);
+	window = sp_window_new (_("Inkscape"), FALSE);
 
 	toolbox = sp_maintoolbox_new ();
 	gtk_widget_show (toolbox);
@@ -137,7 +137,7 @@ sp_maintoolbox_new (void)
 	gtk_widget_show (mbar);
 	gtk_box_pack_start (GTK_BOX (vbox), mbar, FALSE, FALSE, 0);
 
-	mi = gtk_menu_item_new_with_label (_("Sodipodi"));
+	mi = gtk_menu_item_new_with_label (_("Inkscape"));
 	gtk_widget_show (mi);
 	gtk_menu_bar_append (GTK_MENU_BAR (mbar), mi);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM(mi), sp_ui_main_menu ());
@@ -177,7 +177,7 @@ sp_maintoolbox_new (void)
 		}
 	}
 
-	g_signal_connect (G_OBJECT (SODIPODI), "set_eventcontext", G_CALLBACK (sp_update_draw_toolbox), toolbox);
+	g_signal_connect (G_OBJECT (INKSCAPE), "set_eventcontext", G_CALLBACK (sp_update_draw_toolbox), toolbox);
 
 #ifndef WITH_MODULES
 #ifdef WITH_EXTENSIONS_TOOLBOX
@@ -207,8 +207,8 @@ sp_maintoolbox_new (void)
 	/* g_signal_connect (G_OBJECT (toolbox), "delete_event", G_CALLBACK (sp_maintoolbox_delete_event), NULL); */
 	g_signal_connect (G_OBJECT (toolbox), "drag_data_received", G_CALLBACK (sp_maintoolbox_drag_data_received), NULL);
 
-	/* Reference our sodipodi engine */
-	sodipodi_ref ();
+	/* Reference our inkscape engine */
+	inkscape_ref ();
 
 	return toolbox;
 }
@@ -379,7 +379,7 @@ sp_toolbox_file_create (void)
 	sp_toolbox_button_new_from_verb (t, 3, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_IMPORT, tt);
 	sp_toolbox_button_new_from_verb (t, 7, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_EXPORT, tt);
 
-	repr = sodipodi_get_repr (SODIPODI, "toolboxes.file");
+	repr = inkscape_get_repr (INKSCAPE, "toolboxes.file");
 	if (repr) {
 		gint state;
 		state = sp_repr_get_int_attribute (repr, "state", 0);
@@ -412,7 +412,7 @@ sp_toolbox_edit_create (void)
 	sp_toolbox_button_new_from_verb (t, 6, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_PASTE, tt);
 	sp_toolbox_button_new_from_verb (t, 7, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_DUPLICATE, tt);
 
-	repr = sodipodi_get_repr (SODIPODI, "toolboxes.edit");
+	repr = inkscape_get_repr (INKSCAPE, "toolboxes.edit");
 	if (repr) {
 		gint state;
 		state = sp_repr_get_int_attribute (repr, "state", 0);
@@ -459,7 +459,7 @@ sp_toolbox_object_create (void)
 	sp_toolbox_button_new_from_verb (t, 8, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_FLATTEN, tt);
 	sp_toolbox_button_new_from_verb (t, 9, SP_BUTTON_TYPE_NORMAL, SP_VERB_OBJECT_TO_CURVE, tt);
 
-	repr = sodipodi_get_repr (SODIPODI, "toolboxes.object");
+	repr = inkscape_get_repr (INKSCAPE, "toolboxes.object");
 	if (repr) {
 		gint state;
 		state = sp_repr_get_int_attribute (repr, "state", 0);
@@ -493,7 +493,7 @@ sp_toolbox_selection_create (void)
 	sp_toolbox_button_new_from_verb (t, 6, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_BREAK_APART, tt);
 	sp_toolbox_button_new_from_verb (t, 7, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_UNGROUP, tt);
 
-	repr = sodipodi_get_repr (SODIPODI, "toolboxes.selection");
+	repr = inkscape_get_repr (INKSCAPE, "toolboxes.selection");
 	if (repr) {
 		gint state;
 		state = sp_repr_get_int_attribute (repr, "state", 0);
@@ -537,7 +537,7 @@ sp_toolbox_draw_create (void)
 	sp_toolbox_button_new_from_verb (t, 5, SP_BUTTON_TYPE_TOGGLE, SP_VERB_CONTEXT_ZOOM, tt);
 	sp_toolbox_button_new_from_verb (t, 6, SP_BUTTON_TYPE_TOGGLE, SP_VERB_CONTEXT_DROPPER, tt);
 	
-	repr = sodipodi_get_repr (SODIPODI, "toolboxes.draw");
+	repr = inkscape_get_repr (INKSCAPE, "toolboxes.draw");
 	if (repr) {
 		gint state;
 		state = sp_repr_get_int_attribute (repr, "state", 0);
@@ -571,10 +571,10 @@ sp_toolbox_extension_create (void)
 	/* Create the extension toolbox */
 	/* Todo: Make it able to create required boxes dynamically */
 	tt = gtk_tooltips_new ();
-	tb = sp_toolbox_new (t, _("Extension"), "extension", SODIPODI_PIXMAPDIR "/toolbox_zoom.xpm", tt);
+	tb = sp_toolbox_new (t, _("Extension"), "extension", INKSCAPE_PIXMAPDIR "/toolbox_zoom.xpm", tt);
 
 	/* Loop over the list of extensions in spx structure */
-	extensions_repr = sodipodi_get_repr (SODIPODI, "extensions");
+	extensions_repr = inkscape_get_repr (INKSCAPE, "extensions");
 	for (ext = extensions_repr->children; ext != NULL; ext = ext->next) {
 	  if (strcmp(sp_repr_attr(ext, "state"),"active")==0) {
 	    printf("Loading extension:  %s\n", sp_repr_attr(ext, "id"));
@@ -588,7 +588,7 @@ sp_toolbox_extension_create (void)
 	  }
 	}
 
-	repr = sodipodi_get_repr (SODIPODI, "toolboxes.extension");
+	repr = inkscape_get_repr (INKSCAPE, "toolboxes.extension");
 
 	if (repr) {
 		gint state;
@@ -625,7 +625,7 @@ sp_toolbox_zoom_create (void)
 	sp_toolbox_button_new_from_verb (t, 6, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_DRAWING, tt);
 	sp_toolbox_button_new_from_verb (t, 7, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_SELECTION, tt);
 
-	repr = sodipodi_get_repr (SODIPODI, "toolboxes.zoom");
+	repr = inkscape_get_repr (INKSCAPE, "toolboxes.zoom");
 	if (repr) {
 		gint state;
 		state = sp_repr_get_int_attribute (repr, "state", 0);
@@ -660,7 +660,7 @@ sp_toolbox_node_create (void)
 	sp_toolbox_button_new (t, 7, "node_smooth", GTK_SIGNAL_FUNC (sp_node_path_edit_smooth), tt, _("Make selected nodes smooth"));
 	sp_toolbox_button_new (t, 8, "node_curve", GTK_SIGNAL_FUNC (sp_node_path_edit_tocurve), tt, _("Make selected segments curves"));
 
-	repr = sodipodi_get_repr (SODIPODI, "toolboxes.node");
+	repr = inkscape_get_repr (INKSCAPE, "toolboxes.node");
 	if (repr) {
 		gint state;
 		state = sp_repr_get_int_attribute (repr, "state", 0);
@@ -738,7 +738,7 @@ sp_toolbox_verb_activate (unsigned int verb, const unsigned char *tname, const u
 }
 
 static void 
-sp_update_draw_toolbox (Sodipodi *sodipodi, SPEventContext *eventcontext, GObject *toolbox)
+sp_update_draw_toolbox (Inkscape *inkscape, SPEventContext *eventcontext, GObject *toolbox)
 {
 	const unsigned char *tname;
 

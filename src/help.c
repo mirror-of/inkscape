@@ -34,19 +34,19 @@ sp_help_about (void)
 	SPObject *title;
 	GtkWidget *w, *v;
 
-	doc = sp_document_new (SODIPODI_PIXMAPDIR "/about.svg", FALSE, TRUE);
+	doc = sp_document_new (INKSCAPE_PIXMAPDIR "/about.svg", FALSE, TRUE);
 	g_return_if_fail (doc != NULL);
 	title = sp_document_lookup_id (doc, "title");
 	if (title && SP_IS_TEXT (title)) {
 		gchar *t;
-		t = g_strdup_printf ("Sodipodi %s", SODIPODI_VERSION);
+		t = g_strdup_printf ("Inkscape %s", INKSCAPE_VERSION);
 		sp_text_set_repr_text_multiline (SP_TEXT (title), t);
 		g_free (t);
 	}
 	sp_document_ensure_up_to_date (doc);
 
 	w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title (GTK_WINDOW (w), _("About sodipodi"));
+	gtk_window_set_title (GTK_WINDOW (w), _("About inkscape"));
 	gtk_window_set_default_size (GTK_WINDOW (w), sp_document_width (doc), sp_document_height (doc));
 #if 1
 	gtk_window_set_policy (GTK_WINDOW (w), TRUE, TRUE, FALSE);

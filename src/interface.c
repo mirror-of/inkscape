@@ -19,7 +19,7 @@
 #include <glib.h>
 #include <glib-object.h>
 #include <gtk/gtk.h>
-#include "sodipodi.h"
+#include "inkscape.h"
 #ifdef WITH_MODULES
 #include "modules/sp-module-sys.h"
 #endif /* WITH_MODULES */
@@ -323,7 +323,7 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc)
 	sp_ui_menu_append_item (fm, GTK_STOCK_CLOSE, _("Close View"), G_CALLBACK (sp_ui_close_view), NULL);
 	sp_ui_menu_append_item (fm, GTK_STOCK_QUIT, _("Exit Program"), G_CALLBACK (sp_file_exit), NULL);
 	sp_ui_menu_append_item (fm, NULL, NULL, NULL, NULL);
-	sp_ui_menu_append_item (fm, NULL, _("About Sodipodi"), G_CALLBACK(sp_help_about), NULL);
+	sp_ui_menu_append_item (fm, NULL, _("About Inkscape"), G_CALLBACK(sp_help_about), NULL);
 #ifdef WITH_MODULES
 	/* Modules need abouts too */
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM(sp_ui_menu_append_item (GTK_MENU (fm), NULL, _("About Modules"), NULL, NULL)),
@@ -484,7 +484,7 @@ sp_ui_populate_main_menu(GtkWidget *m)
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (item_recent), menu_recent); 
 
 	sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL);
-	sp_ui_menu_append_item (GTK_MENU (m), NULL, _("About Sodipodi"), G_CALLBACK(sp_help_about), NULL);
+	sp_ui_menu_append_item (GTK_MENU (m), NULL, _("About Inkscape"), G_CALLBACK(sp_help_about), NULL);
 #ifdef lalaWITH_MODULES
 	/* Modules need abouts too */
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM(sp_ui_menu_append_item (GTK_MENU (m), NULL, _("About Modules"), NULL, NULL)),
@@ -609,7 +609,7 @@ void
 sp_menu_append_recent_documents (GtkWidget *menu)
 {
 	SPRepr *recent;
-	recent = sodipodi_get_repr (SODIPODI, "documents.recent");
+	recent = inkscape_get_repr (INKSCAPE, "documents.recent");
 	if (recent) {
 		SPRepr *child;
 		for (child = recent->children; child != NULL; child = child->next) {

@@ -11,15 +11,15 @@ kde-private.cpp: kde-private.h
 	$(MOC) kde-private.h -o kde-private.cpp
 endif
 
-extdir = $(libdir)/sodipodi/extensions
-extdatadir = $(datadir)/sodipodi/extensions
+extdir = $(libdir)/inkscape/extensions
+extdatadir = $(datadir)/inkscape/extensions
 
 INCLUDES = \
 	-I.. \
 	-I$(top_srcdir)/src \
-	-DSODIPODI_EXTENSIONDIR=\""$(extdir)"\" \
-	-DSODIPODI_EXTENSIONDATADIR=\""$(extdatadir)"\" \
-	$(SODIPODI_CFLAGS) \
+	-DINKSCAPE_EXTENSIONDIR=\""$(extdir)"\" \
+	-DINKSCAPE_EXTENSIONDATADIR=\""$(extdatadir)"\" \
+	$(INKSCAPE_CFLAGS) \
 	$(GNOME_PRINT_CFLAGS) \
 	$(kdeincludes)
 

@@ -2,12 +2,12 @@
 # Sodipodi xml wrapper
 # Author: Lauris Kaplinski <lauris@ariman.ee>
 #
-# Implements xml backbone of sodipodi document. In future will be
+# Implements xml backbone of inkscape document. In future will be
 # repaced with (wrapper of?) DOM
 #
 
 INCLUDES = \
-	$(SODIPODI_CFLAGS) \
+	$(INKSCAPE_CFLAGS) \
 	-I$(includedir)
 
 noinst_LIBRARIES = libspxml.a

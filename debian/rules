@@ -29,7 +29,7 @@ clean:
 	-test -r /usr/share/misc/config.guess && \
 	cp -f /usr/share/misc/config.guess $(CURDIR)/config.guess
 	rm -f conftest.o po/*.gmo po/messages config.log src/bonobo/Makefile src/display/nr/Makefile
-	rm -f sodipodi.spec sodipodi.desktop intltool-extract intltool-merge intltool-update GNOME_Sodipodi.oaf
+	rm -f inkscape.spec inkscape.desktop intltool-extract intltool-merge intltool-update GNOME_Sodipodi.oaf
 	rm -f config.status intl/Makefile po/Makefile.in po/POTFILES po/.intltool-merge-cache
 	dh_clean 
 

@@ -19,7 +19,7 @@
 
 #include "helper/sp-intl.h"
 #include "dir-util.h"
-#include "sodipodi.h"
+#include "inkscape.h"
 #include "sp-object.h"
 #include "document.h"
 #include "module.h"
@@ -141,7 +141,7 @@ sp_module_new_from_path (GType type, const unsigned char *path)
 {
 	SPRepr *repr;
 
-	repr = sodipodi_get_repr (SODIPODI, path);
+	repr = inkscape_get_repr (INKSCAPE, path);
 
 	return sp_module_new (type, repr);
 }
@@ -380,7 +380,7 @@ sp_module_output_document_save (SPModuleOutput *mod, SPDocument *doc, const unsi
 
 	save_path = g_dirname (uri);
 
-	spns = (!SP_MODULE_ID (mod) || !strcmp (SP_MODULE_ID (mod), SP_MODULE_KEY_OUTPUT_SVG_SODIPODI));
+	spns = (!SP_MODULE_ID (mod) || !strcmp (SP_MODULE_ID (mod), SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
 	if (spns) {
 		rdoc = NULL;
 		repr = sp_document_repr_root (doc);
@@ -545,7 +545,7 @@ sp_module_system_get (const unsigned char *key)
 void
 sp_module_system_menu_open (SPMenu *menu)
 {
-	sp_menu_append (menu, _("Scalable Vector Graphic (SVG)"), _("Sodipodi native file format and W3C standard"),
+	sp_menu_append (menu, _("Scalable Vector Graphic (SVG)"), _("Inkscape native file format and W3C standard"),
 			SP_MODULE_KEY_INPUT_SVG);
 }
 
@@ -554,8 +554,8 @@ sp_module_system_menu_save (SPMenu *menu)
 {
 	sp_menu_append (menu,
 			_("SVG with \"xmlns:sodipodi\" namespace"),
-			_("Scalable Vector Graphics format with sodipodi extensions"),
-			SP_MODULE_KEY_OUTPUT_SVG_SODIPODI);
+			_("Scalable Vector Graphics format with inkscape extensions"),
+			SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE);
 	sp_menu_append (menu,
 			_("Plain SVG"),
 			_("Scalable Vector Graphics format"),
