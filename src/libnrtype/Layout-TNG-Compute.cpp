@@ -670,6 +670,7 @@ class Layout::Calculator
                 new_chunk.x += new_chunk.text_width;
                 new_chunk.text_width = 0.0;
                 new_chunk.whitespace_count = 0;
+                new_chunk.broken_spans.clear();
                 if (new_span.start.iter_span->x.set) new_chunk.x = new_span.start.iter_span->x.computed;
                 // y doesn't need to be done until output time
             }
