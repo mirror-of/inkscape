@@ -36,6 +36,7 @@
 #include "fill-style.h"
 #include "stroke-style.h"
 #include "dialog-events.h"
+#include "verbs.h"
 
 #include "object-properties.h"
 
@@ -122,7 +123,10 @@ sp_object_properties_dialog (void)
 	if (!dlg) {
 		GtkWidget *vb, *nb, *hb, *l, *px, *page, *hs, *om, *m, *mi;
 
-		dlg = sp_window_new (_("Fill and stroke"), TRUE);
+		gchar c[500];
+		sp_ui_dialog_title_string (SP_VERB_DIALOG_FILL_STROKE, c);
+
+		dlg = sp_window_new (c, TRUE);
 		gtk_window_move ((GtkWindow *) dlg, x, y);
 		if (w && h) gtk_window_resize ((GtkWindow *) dlg, w, h);
 		sp_transientize (dlg);
