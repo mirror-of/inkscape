@@ -78,6 +78,19 @@ GSList *clipboard = NULL;
 GSList *defs_clipboard = NULL;
 SPCSSAttr *style_clipboard = NULL;
 
+bool
+items_are_siblings (const GSList *list)
+{
+    SPObject *parent = SP_OBJECT_PARENT (list->data);
+    bool sort = true;
+    for (GSList *i = (GSList *) list->next; i; i = i->next) {
+        if (SP_OBJECT_PARENT(i->data) != parent) {
+            sort = false;
+        }
+    }
+    return sort;
+}
+
 void sp_selection_delete()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
@@ -860,27 +873,17 @@ void sp_selection_copy()
         sp_copy_stuff_used_by_item (SP_ITEM (i->data), items);
     }
 
-    GSList *reprs = g_slist_copy ((GSList *) selection->reprList());
-
     // 2.  Store style:
     if (style_clipboard) {
         sp_repr_css_attr_unref (style_clipboard);
     }
-    SPItem *item = SP_ITEM (items->data);
+    SPItem *item = SP_ITEM (items->data); // take from the first selected item
     style_clipboard = take_style_from_item (item);
 
     // 3.  Sort items:
-    SPRepr *parent = ((SPRepr *) reprs->data)->parent;
-    gboolean sort = TRUE;
-    for (GSList *i = reprs->next; i; i = i->next) {
-         if ((((SPRepr *) i->data)->parent) != parent) {
-             // We can copy items from different parents, but we cannot do sorting in this case
-             sort = FALSE;
-         }
-     }
-
-     if (sort)
-        reprs = g_slist_sort(reprs, (GCompareFunc) sp_repr_compare_position);
+    // We can copy items from different parents, but we cannot do sorting in this case
+    if (items_are_siblings (items))
+        items = g_slist_sort((GSList *) items, (GCompareFunc) sp_item_repr_compare_position);
 
     // 4.  Copy item reprs:
     //clear old clipboard 
@@ -889,13 +892,26 @@ void sp_selection_copy()
         clipboard = g_slist_remove(clipboard, clipboard->data);
     }
 
-    while (reprs != NULL) {
-        SPRepr *repr = (SPRepr *) reprs->data;
-        reprs = g_slist_remove (reprs, repr);
-        SPCSSAttr *css = sp_repr_css_attr_inherited(repr, "style");
+    for (GSList *i = (GSList *) items; i != NULL; i = i->next) {
+
+        SPRepr *repr = SP_OBJECT_REPR (i->data);
+
         SPRepr *copy = sp_repr_duplicate(repr);
+
+        // copy complete inherited style
+        SPCSSAttr *css = sp_repr_css_attr_inherited(repr, "style");
         sp_repr_css_set(copy, css, "style");
         sp_repr_css_attr_unref(css);
+
+        // copy complete accummulated transform
+        NR::Matrix full_t = sp_item_i2doc_affine(SP_ITEM(i->data));
+        // (we're dealing with unattached repr, so we write to its attr instead of using sp_item_set_transform)
+        gchar affinestr[80]; 
+        if (sp_svg_transform_write(affinestr, 79, full_t)) {
+            sp_repr_set_attr (copy, "transform", affinestr);
+        } else {
+            sp_repr_set_attr (copy, "transform", NULL);
+        }
 
         clipboard = g_slist_prepend(clipboard, copy);
     }
@@ -960,6 +976,24 @@ void sp_selection_paste(bool in_place)
     for (GSList *l = clipboard; l != NULL; l = l->next) {
         SPRepr *repr = (SPRepr *) l->data;
         SPRepr *copy = sp_repr_duplicate(repr);
+
+        // premultiply the item transform by the accumulated parent transform in the paste layer
+        NR::Matrix local = sp_item_i2doc_affine(SP_ITEM(desktop->currentLayer()));
+        if (!local.test_identity()) {
+            gchar const *t_str = sp_repr_attr (copy, "transform");
+            NR::Matrix item_t (NR::identity());
+            if (t_str)
+                sp_svg_transform_read(t_str, &item_t);
+            item_t *= local.inverse();
+            // (we're dealing with unattached repr, so we write to its attr instead of using sp_item_set_transform)
+            gchar affinestr[80];
+            if (sp_svg_transform_write(affinestr, 79, item_t)) {
+                sp_repr_set_attr (copy, "transform", affinestr);
+            } else {
+                sp_repr_set_attr (copy, "transform", NULL);
+            }
+        }
+
         desktop->currentLayer()->appendChildRepr(copy);
         copied = g_slist_append(copied, copy);
         sp_repr_unref(copy);
