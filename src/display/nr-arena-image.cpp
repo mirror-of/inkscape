@@ -157,7 +157,7 @@ static unsigned int
 nr_arena_image_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigned int flags)
 {
 	NRArenaImage *image;
-	NRULong Falpha;
+	guint32 Falpha;
 	unsigned char *spx, *dpx;
 	int dw, dh, drs, sw, sh, srs;
 	NRMatrix d2s;

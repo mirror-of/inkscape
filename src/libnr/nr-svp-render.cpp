@@ -50,7 +50,7 @@ nr_pixblock_render_svl_mask_or (NRPixBlock *d, NRSVL *svl)
 /* Renders colored SVL into buffer (has to be RGB/RGBA) */
 
 void
-nr_pixblock_render_svl_rgba (NRPixBlock *dpb, NRSVL *svl, NRULong rgba)
+nr_pixblock_render_svl_rgba (NRPixBlock *dpb, NRSVL *svl, guint32 rgba)
 {
 	unsigned char c[4];
 

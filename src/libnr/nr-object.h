@@ -10,10 +10,13 @@
  * This code is in public domain
  */
 
-#include <libnr/nr_config.h>
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #include <glib.h>
 
-typedef NRULong NRType;
+typedef guint32 NRType;
 
 #define NR_TYPE_OBJECT (nr_object_get_type ())
 #define NR_OBJECT(o) (NR_CHECK_INSTANCE_CAST ((o), NR_TYPE_OBJECT, NRObject))

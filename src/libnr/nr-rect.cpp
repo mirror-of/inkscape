@@ -61,7 +61,7 @@ nr_rect_l_intersect (NRRectL *d, const NRRectL *r0, const NRRectL *r1)
 		if (!r1) {
 			*d = *r0;
 		} else {
-			NRLong t;
+			gint32 t;
 			t = MAX (r0->x0, r1->x0);
 			d->x1 = MIN (r0->x1, r1->x1);
 			d->x0 = t;
@@ -89,7 +89,7 @@ nr_rect_s_intersect (NRRectS *d, const NRRectS *r0, const NRRectS *r1)
 		if (!r1) {
 			*d = *r0;
 		} else {
-			NRShort t;
+			gint16 t;
 			t = MAX (r0->x0, r1->x0);
 			d->x1 = MIN (r0->x1, r1->x1);
 			d->x0 = t;
@@ -155,7 +155,7 @@ nr_rect_l_union (NRRectL *d, const NRRectL *r0, const NRRectL *r1)
 		if (NR_RECT_DFLS_TEST_EMPTY (r1)) {
 			*d = *r0;
 		} else {
-			NRLong t;
+			gint32 t;
 			t = MIN (r0->x0, r1->x0);
 			d->x1 = MAX (r0->x1, r1->x1);
 			d->x0 = t;
@@ -185,7 +185,7 @@ nr_rect_s_union (NRRectS *d, const NRRectS *r0, const NRRectS *r1)
 		if (NR_RECT_DFLS_TEST_EMPTY (r1)) {
 			*d = *r0;
 		} else {
-			NRShort t;
+			gint16 t;
 			t = MIN (r0->x0, r1->x0);
 			d->x1 = MAX (r0->x1, r1->x1);
 			d->x0 = t;
@@ -221,7 +221,7 @@ nr_rect_f_union_xy (NRRect *d, float x, float y)
 }
 
 NRRectL *
-nr_rect_l_union_xy (NRRectL *d, NRLong x, NRLong y)
+nr_rect_l_union_xy (NRRectL *d, gint32 x, gint32 y)
 {
 	if (d) {
 		if ((d->x0 <= d->x1) && (d->y0 <= d->y1)) {
@@ -238,7 +238,7 @@ nr_rect_l_union_xy (NRRectL *d, NRLong x, NRLong y)
 }
 
 NRRectS *
-nr_rect_s_union_xy (NRRectS *d, NRShort x, NRShort y)
+nr_rect_s_union_xy (NRRectS *d, gint16 x, gint16 y)
 {
 	if (d) {
 		if ((d->x0 <= d->x1) && (d->y0 <= d->y1)) {

@@ -35,7 +35,7 @@ nr_uta_mark_area (NRUTA *uta, int x0, int y0, int x1, int y1)
 	for (by = by0; by < by1; by++) {
 		for (bx = bx0; bx < bx1; bx++) {
 			int cx0, cx1, cy0, cy1;
-			NRULong *u;
+			guint32 *u;
 			u = uta->utiles + (by - uta->y0) * (uta->x1 - uta->x0) + (bx - uta->x0);
 			cx0 = x0 - (bx << NR_UTILE_SHIFT);
 			cy0 = y0 - (by << NR_UTILE_SHIFT);
@@ -59,8 +59,8 @@ void
 nr_uta_move_resize (NRUTA *uta, int x0, int y0, int x1, int y1)
 {
 	int x, y;
-	NRULong *nutiles;
-	nutiles = nr_new (NRULong, (y1 - y0) * (x1 - x0));
+	guint32 *nutiles;
+	nutiles = nr_new (guint32, (y1 - y0) * (x1 - x0));
 	for (y = y0; y < y1; y++) {
 		for (x = x0; x < x1; x++) {
 			if ((x >= uta->x0) && (y >= uta->y0) && (x < uta->x1) && (y < uta->y1)) {
@@ -82,7 +82,7 @@ void
 nr_uta_clear_block (NRUTA *uta, int x, int y)
 {
 	if ((x >= uta->x0) && (y >= uta->y0) && (x < uta->x1) && (y < uta->y1)) {
-		NRULong *u;
+		guint32 *u;
 		u = uta->utiles + (y - uta->y0) * (uta->x1 - uta->x0) + (x - uta->x0);
 		NR_UTILE_SET (u, NR_UTILE_SIZE, NR_UTILE_SIZE, 0, 0);
 	}

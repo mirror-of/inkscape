@@ -19,16 +19,18 @@ typedef struct _NRSVP NRSVP;
 #include <libnr/nr-types.h>
 #include <libnr/nr-path.h>
 
+#include <glib.h>
+
 struct _NRSVPSegment {
-	NRShort wind;
-	NRUShort length;
-	NRULong start;
+	gint16 wind;
+	guint16 length;
+	guint32 start;
 	float x0, x1;
 };
 
 struct _NRSVPFlat {
-	NRShort wind;
-	NRUShort length;
+	gint16 wind;
+	guint16 length;
 	float y;
 	float x0, x1;
 };
@@ -75,8 +77,8 @@ struct _NRSVL {
 	NRSVL *next;
 	NRVertex *vertex;
 	NRRect bbox;
-	NRShort dir;
-	NRShort wind;
+	gint16 dir;
+	gint16 wind;
 };
 
 struct _NRFlat {

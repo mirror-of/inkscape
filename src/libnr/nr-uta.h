@@ -9,6 +9,7 @@
  *
  * This code is in public domain
  */
+#include <glib.h>
 
 typedef struct _NRUTA NRUTA;
 
@@ -26,7 +27,7 @@ typedef struct _NRUTA NRUTA;
 struct _NRUTA {
 	/* All distances are in blocks */
 	int x0, y0, x1, y1;
-	NRULong *utiles;
+	guint32 *utiles;
 };
 
 /* This takes area as pixels */

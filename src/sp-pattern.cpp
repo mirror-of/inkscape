@@ -659,8 +659,8 @@ sp_pat_fill (SPPainter *painter, NRPixBlock *pb)
 			psx = x * pp->pat->width.computed;
 			psy = y * pp->pat->height.computed;
 
-			area.x0 = (NRLong)(pb->area.x0 - (pp->ps2px.c[0] * psx + pp->ps2px.c[2] * psy));
-			area.y0 = (NRLong)(pb->area.y0 - (pp->ps2px.c[1] * psx + pp->ps2px.c[3] * psy));
+			area.x0 = (gint32)(pb->area.x0 - (pp->ps2px.c[0] * psx + pp->ps2px.c[2] * psy));
+			area.y0 = (gint32)(pb->area.y0 - (pp->ps2px.c[1] * psx + pp->ps2px.c[3] * psy));
 			area.x1 = area.x0 + pb->area.x1 - pb->area.x0;
 			area.y1 = area.y0 + pb->area.y1 - pb->area.y0;
 

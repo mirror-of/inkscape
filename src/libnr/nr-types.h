@@ -11,7 +11,11 @@
  * This code is in public domain
  */
 
-#include <libnr/nr_config.h>
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#include <glib.h>
 
 typedef struct _NRMatrix {
 	double c[6];
@@ -147,24 +151,27 @@ Point abs(Point const &b);
 
 }
 
-typedef struct _NRPointL {
-	NRLong x, y;
-} NRPointL;
-
-typedef struct _NRPointS {
-	NRShort x, y;
-} NRPointS;
-
 typedef struct _NRRect {
 	double x0, y0, x1, y1;
 } NRRect;
 
+
+typedef struct _NRPointL {
+	gint32 x, y;
+} NRPointL;
+
+typedef struct _NRPointS {
+	gint16 x, y;
+} NRPointS;
+
 typedef struct _NRRectL {
-	NRLong x0, y0, x1, y1;
+	gint32 x0, y0, x1, y1;
 } NRRectL;
 
 typedef struct _NRRectS {
-	NRShort x0, y0, x1, y1;
+	gint16 x0, y0, x1, y1;
 } NRRectS;
+
+
 
 #endif

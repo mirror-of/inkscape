@@ -29,13 +29,10 @@ svg-view.o text-context.o toolbox.o tools-switch.o uri-references.o \
 verbs.o version.o view.o zoom-context.o
 
 #Check for 'generated' files
-all: libnr/nr_config.h helper/sp-marshal.h inkscape.exe
+all: helper/sp-marshal.h inkscape.exe
 
 helper/sp-marshal.h:
 	make -C helper     -f Makefile.mingw
-
-libnr/nr_config.h:
-	make -C libnr      -f Makefile.mingw
 
 
 #INKLIBS = libinkscape.a dialogs/libdialogs.a display/libdisplay.a  helper/libhelper.a \

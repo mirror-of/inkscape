@@ -231,10 +231,10 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 				nr_matrix_f_from_d (&ctm, &gc->transform);
 				bp.path = shape->curve->bpath;
 				nr_path_matrix_f_bbox_f_union (&bp, &ctm, &bbox, 1.0);
-				item->bbox.x0 = (NRLong)(bbox.x0 - 1.0F);
-				item->bbox.y0 = (NRLong)(bbox.y0 - 1.0F);
-				item->bbox.x1 = (NRLong)(bbox.x1 + 1.9999F);
-				item->bbox.y1 = (NRLong)(bbox.y1 + 1.9999F);
+				item->bbox.x0 = (gint32)(bbox.x0 - 1.0F);
+				item->bbox.y0 = (gint32)(bbox.y0 - 1.0F);
+				item->bbox.x1 = (gint32)(bbox.x1 + 1.9999F);
+				item->bbox.y1 = (gint32)(bbox.y1 + 1.9999F);
 			}
 			if (beststate & NR_ARENA_ITEM_STATE_BBOX) {
 				for (child = shape->markers; child != NULL; child = child->next) {
@@ -366,10 +366,10 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 	}
 	if (nr_rect_f_test_empty (&bbox)) return NR_ARENA_ITEM_STATE_ALL;
 
-	item->bbox.x0 = (NRLong)(bbox.x0 - 1.0F);
-	item->bbox.y0 = (NRLong)(bbox.y0 - 1.0F);
-	item->bbox.x1 = (NRLong)(bbox.x1 + 1.0F);
-	item->bbox.y1 = (NRLong)(bbox.y1 + 1.0F);
+	item->bbox.x0 = (gint32)(bbox.x0 - 1.0F);
+	item->bbox.y0 = (gint32)(bbox.y0 - 1.0F);
+	item->bbox.x1 = (gint32)(bbox.x1 + 1.0F);
+	item->bbox.y1 = (gint32)(bbox.y1 + 1.0F);
 	nr_arena_request_render_rect (item->arena, &item->bbox);
 
 	item->render_opacity = TRUE;

@@ -1,6 +1,6 @@
 noinst_LIBRARIES = libnr.a
 
-noinst_PROGRAMS = gen_nr_config testnr
+noinst_PROGRAMS = testnr
 
 INCLUDES = \
 	-I.. \
@@ -17,12 +17,9 @@ mmx_sources = \
 	nr_mmx_R8G8B8_R8G8B8_R8G8B8A8_P.S
 endif
 
-BUILT_SOURCES = nr_config.h
+BUILT_SOURCES =
 
-DISTCLEANFILES = nr_config.h
-
-nr_config.h: gen_nr_config
-	./gen_nr_config > nr_config.h
+DISTCLEANFILES =
 
 libnr_a_SOURCES = \
 	nr-types.h \

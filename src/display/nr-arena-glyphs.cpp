@@ -188,10 +188,10 @@ nr_arena_glyphs_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state,
 	if (glyphs->stroke_svp) art_drect_svp_union (&bbox, glyphs->stroke_svp);
 	if (art_drect_empty (&bbox)) return NR_ARENA_ITEM_STATE_ALL;
 
-	item->bbox.x0 = (NRLong)(bbox.x0 - 1.0);
-	item->bbox.y0 = (NRLong)(bbox.y0 - 1.0);
-	item->bbox.x1 = (NRLong)(bbox.x1 + 1.0);
-	item->bbox.y1 = (NRLong)(bbox.y1 + 1.0);
+	item->bbox.x0 = (gint32)(bbox.x0 - 1.0);
+	item->bbox.y0 = (gint32)(bbox.y0 - 1.0);
+	item->bbox.x1 = (gint32)(bbox.x1 + 1.0);
+	item->bbox.y1 = (gint32)(bbox.y1 + 1.0);
 	nr_arena_request_render_rect (item->arena, &item->bbox);
 
 	return NR_ARENA_ITEM_STATE_ALL;

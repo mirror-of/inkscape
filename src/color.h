@@ -67,12 +67,12 @@ gboolean sp_color_is_equal (const SPColor *c0, const SPColor *c1);
 gboolean sp_color_is_close (const SPColor *c0, const SPColor *c1, float epsilon);
 
 void sp_color_set_rgb_float (SPColor *color, float r, float g, float b);
-void sp_color_set_rgb_rgba32 (SPColor *color, NRULong value);
+void sp_color_set_rgb_rgba32 (SPColor *color, guint32 value);
 
 void sp_color_set_cmyk_float (SPColor *color, float c, float m, float y, float k);
 
-NRULong sp_color_get_rgba32_ualpha (const SPColor *color, NRULong alpha);
-NRULong sp_color_get_rgba32_falpha (const SPColor *color, float alpha);
+guint32 sp_color_get_rgba32_ualpha (const SPColor *color, guint32 alpha);
+guint32 sp_color_get_rgba32_falpha (const SPColor *color, float alpha);
 
 void sp_color_get_rgb_floatv (const SPColor *color, float *rgb);
 void sp_color_get_cmyk_floatv (const SPColor *color, float *cmyk);
