@@ -22,8 +22,8 @@
 #include "path.h"
 #include "bitmap.h"
 
-#include "filterset.h"
-#include "imagemap-gdk.h"
+#include "trace/filterset.h"
+#include "trace/imagemap-gdk.h"
 
 #include <inkscape.h>
 #include <desktop.h>

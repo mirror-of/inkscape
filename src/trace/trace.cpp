@@ -13,9 +13,8 @@
 
 #include <glibmm.h>
 
-#include <trace.h>
-
-#include <potrace/inkscape-potrace.h>
+#include "trace/trace.h"
+#include "trace/potrace/inkscape-potrace.h"
 #include <dialogs/tracedialog.h>
 
 #include <inkscape.h>
