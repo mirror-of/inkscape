@@ -1281,14 +1281,18 @@ sp_style_write_string (SPStyle *style)
             gint i;
             p += g_snprintf (p, c + BMAX - p, "stroke-dasharray:");
             for (i = 0; i < style->stroke_dash.n_dash; i++) {
-                p += g_snprintf (p, c + BMAX - p, "%g ", style->stroke_dash.dash[i]);
+				Inkscape::SVGOStringStream os;
+                os << style->stroke_dash.dash[i] << " ";
+				p += g_strlcpy (p, os.str().c_str(), c + BMAX - p);
             }
             p += g_snprintf (p, c + BMAX - p, ";");
         }
     }
     /* fixme: */
     if (style->stroke_dashoffset_set) {
-        p += g_snprintf (p, c + BMAX - p, "stroke-dashoffset:%g;", style->stroke_dash.offset);
+		Inkscape::SVGOStringStream os;
+        os << "stroke-dashoffset:" << style->stroke_dash.offset << ";";
+		p += g_strlcpy (p, os.str().c_str(), c + BMAX - p);
     }
     p += sp_style_write_iscale24 (p, c + BMAX - p, "stroke-opacity", &style->stroke_opacity, NULL, SP_STYLE_FLAG_IFSET);
 
@@ -1347,14 +1351,18 @@ sp_style_write_difference (SPStyle *from, SPStyle *to)
             gint i;
             p += g_snprintf (p, c + BMAX - p, "stroke-dasharray:");
             for (i = 0; i < from->stroke_dash.n_dash; i++) {
-                p += g_snprintf (p, c + BMAX - p, "%g ", from->stroke_dash.dash[i]);
+				Inkscape::SVGOStringStream os;
+                os << from->stroke_dash.dash[i] << " ";
+				p += g_strlcpy (p, os.str().c_str(), c + BMAX - p);
             }
             p += g_snprintf (p, c + BMAX - p, ";");
         }
     }
     /* fixme: */
     if (from->stroke_dashoffset_set) {
-        p += g_snprintf (p, c + BMAX - p, "stroke-dashoffset:%g;", from->stroke_dash.offset);
+		Inkscape::SVGOStringStream os;
+        os << "stroke-dashoffset:" << from->stroke_dash.offset << ";";
+		p += g_strlcpy (p, os.str().c_str(), c + BMAX - p);
     }
     p += sp_style_write_iscale24 (p, c + BMAX - p, "stroke-opacity", &from->stroke_opacity, &to->stroke_opacity, SP_STYLE_FLAG_IFDIFF);
 
@@ -2146,6 +2154,8 @@ sp_length_differ (SPILength *a, SPILength *b)
 static gint
 sp_style_write_ilength (gchar *p, gint len, const gchar *key, SPILength *val, SPILength *base, guint flags)
 {
+	Inkscape::SVGOStringStream os;
+
     if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
         ((flags & SP_STYLE_FLAG_IFDIFF) && val->set && sp_length_differ (val, base))) {
         if (val->inherit) {
@@ -2153,34 +2163,44 @@ sp_style_write_ilength (gchar *p, gint len, const gchar *key, SPILength *val, SP
         } else {
             switch (val->unit) {
             case SP_CSS_UNIT_NONE:
-                return g_snprintf (p, len, "%s:%g;", key, val->computed);
+                os << key << ":" << val->computed << ";";
+				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             case SP_CSS_UNIT_PX:
-                return g_snprintf (p, len, "%s:%gpx;", key, val->computed);
+                os << key << ":" << val->computed << "px;";
+				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             case SP_CSS_UNIT_PT:
-                return g_snprintf (p, len, "%s:%gpt;", key, val->computed / 1.25);
+                os << key << ":" << val->computed / 1.25 << "pt;";
+				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             case SP_CSS_UNIT_PC:
-                return g_snprintf (p, len, "%s:%gpc;", key, val->computed / 15.0);
+                os << key << ":" << val->computed / 15.0 << "pc;";
+				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             case SP_CSS_UNIT_MM:
-                return g_snprintf (p, len, "%s:%gmm;", key, val->computed / 3.543307);
+                os << key << ":" << val->computed / 3.543307 << "mm;";
+				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             case SP_CSS_UNIT_CM:
-                return g_snprintf (p, len, "%s:%gmm;", key, val->computed / 35.43307);
+                os << key << ":" << val->computed / 35.43307 << "cm;";
+				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             case SP_CSS_UNIT_IN:
-                return g_snprintf (p, len, "%s:%gin;", key, val->computed / 90.0);
+                os << key << ":" << val->computed / 90 << "in;";
+				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             case SP_CSS_UNIT_EM:
-                return g_snprintf (p, len, "%s:%gem;", key, val->value);
+                os << key << ":" << val->value << "em;";
+				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             case SP_CSS_UNIT_EX:
-                return g_snprintf (p, len, "%s:%gex;", key, val->value);
+                os << key << ":" << val->value << "ex;";
+				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             case SP_CSS_UNIT_PERCENT:
-                return g_snprintf (p, len, "%s:%g%%;", key, val->value);
+                os << key << ":" << val->value << "%;";
+				return g_strlcpy (p, os.str().c_str(), len);
                 break;
             default:
                 /* Invalid */
@@ -2280,9 +2300,13 @@ sp_style_write_ifontsize (gchar *p, gint len, const gchar *key, SPIFontSize *val
                 }
             }
         } else if (val->type == SP_FONT_SIZE_LENGTH) {
-            return g_snprintf (p, len, "%s:%g;", key, val->computed);
+			Inkscape::SVGOStringStream os;
+		    os << key << ":" << val->computed << ";";
+			return g_strlcpy (p, os.str().c_str(), len);
         } else if (val->type == SP_FONT_SIZE_PERCENTAGE) {
-            return g_snprintf (p, len, "%s:%g%%;", key, SP_F8_16_TO_FLOAT (val->value) * 100.0);
+			Inkscape::SVGOStringStream os;
+		    os << key << ":" << (SP_F8_16_TO_FLOAT (val->value) * 100.0) << "%;";
+			return g_strlcpy (p, os.str().c_str(), len);
         }
     }
     return 0;

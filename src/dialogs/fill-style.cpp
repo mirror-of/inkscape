@@ -42,6 +42,7 @@
 #include "../helper/sp-intl.h"
 #include "../helper/window.h"
 #include "../svg/svg.h"
+#include "../svg/stringstream.h"
 #include "../widgets/sp-widget.h"
 #include "../sp-gradient.h"
 #include "../widgets/paint-selector.h"
@@ -712,6 +713,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
     gfloat cmyk[4];
     SPGradient *vector;
     gchar b[64];
+	Inkscape::SVGOStringStream osalpha, oscolour;
 
     
     if (g_object_get_data (G_OBJECT (spw), "update")) return;
@@ -764,8 +766,8 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
             rgba = sp_color_get_rgba32_falpha (&color, alpha);
             sp_svg_write_color (b, 64, rgba);
             sp_repr_css_set_property (css, "fill", b);
-            g_snprintf (b, 64, "%g", alpha);
-            sp_repr_css_set_property (css, "fill-opacity", b);
+            osalpha << alpha;
+            sp_repr_css_set_property (css, "fill-opacity", osalpha.str().c_str());
             for (r = reprs; r != NULL; r = r->next) {
                 sp_repr_set_attr_recursive ( (SPRepr *) r->data, 
                                              "sodipodi:fill-cmyk", NULL);
@@ -781,15 +783,14 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
             rgba = sp_color_get_rgba32_falpha (&color, alpha);
             sp_svg_write_color (b, 64, rgba);
             sp_repr_css_set_property (css, "fill", b);
-            g_snprintf (b, 64, "%g", alpha);
-            sp_repr_css_set_property (css, "fill-opacity", b);
+            osalpha << alpha;
+            sp_repr_css_set_property (css, "fill-opacity", osalpha.str().c_str());
             sp_color_get_cmyk_floatv (&color, cmyk);
-            g_snprintf ( b, 64, "(%g %g %g %g)", 
-                         cmyk[0], cmyk[1], cmyk[2], cmyk[3]);
+            oscolour << "(" << cmyk[0] << " " << cmyk[1] << " " << cmyk[2] << " " << cmyk[3] << ")";
                          
             for (r = reprs; r != NULL; r = r->next) {
                 sp_repr_set_attr_recursive ( (SPRepr *) r->data, 
-                                             "sodipodi:fill-cmyk", b );
+                                             "sodipodi:fill-cmyk", oscolour.str().c_str() );
                 sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
             }
             sp_repr_css_attr_unref (css);

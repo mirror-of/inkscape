@@ -39,6 +39,7 @@
 #include "helper/sp-intl.h"
 #include "helper/unit-menu.h"
 #include "../svg/svg.h"
+#include "../svg/stringstream.h"
 #include "../widgets/sp-widget.h"
 #include "../widgets/spw-utilities.h"
 #include "../sp-gradient.h"
@@ -557,7 +558,8 @@ sp_stroke_style_paint_changed ( SPPaintSelector *psel, SPWidget *spw )
     SPGradient *vector;
     gchar b[64];
     gchar *p;
-
+	Inkscape::SVGOStringStream osalpha, oscolour;
+            
     if (gtk_object_get_data (GTK_OBJECT (spw), "update"))
         return;
 
@@ -607,24 +609,25 @@ sp_stroke_style_paint_changed ( SPPaintSelector *psel, SPWidget *spw )
             sp_svg_write_color ( b, 64, 
                                  sp_color_get_rgba32_falpha (&color, alpha) );
             sp_repr_css_set_property (css, "stroke", b);
-            g_snprintf (b, 64, "%g", alpha);
-            sp_repr_css_set_property (css, "stroke-opacity", b);
-            if (sp_color_get_colorspace_type (&color) == 
+            osalpha << alpha;
+            sp_repr_css_set_property (css, "stroke-opacity", osalpha.str().c_str());
+            
+	     if (sp_color_get_colorspace_type (&color) == 
                     SP_COLORSPACE_TYPE_CMYK)
             {
                 gfloat cmyk[4];
                 sp_color_get_cmyk_floatv (&color, cmyk);
-                g_snprintf ( b, 64, "(%g %g %g %g)", 
-                             cmyk[0], cmyk[1], cmyk[2], cmyk[3] );
-                p = b;
-                
-            } else {
-                p = NULL;
+				oscolour << "(" << cmyk[0] << " " << cmyk[1] << " " << cmyk[2] << " " << cmyk[3] << ")";
             }
             
             for (r = reprs; r != NULL; r = r->next) {
-                sp_repr_set_attr_recursive ( (SPRepr *) r->data, 
-                                             "sodipodi:stroke-cmyk", p );
+                if(oscolour.str().length() > 0)
+					sp_repr_set_attr_recursive ( (SPRepr *) r->data, 
+                                             "sodipodi:stroke-cmyk", oscolour.str().c_str() );
+				else
+					sp_repr_set_attr_recursive ( (SPRepr *) r->data, 
+                                             "sodipodi:stroke-cmyk", NULL );
+											 
                 sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
             }
             sp_repr_css_attr_unref (css);
@@ -1363,20 +1366,17 @@ sp_stroke_style_set_scaled_dash ( SPCSSAttr *css,
 {
 
     if (ndash > 0) {
-        gchar c[1024];
-        int i, pos;
-        pos = 0;
-        for (i = 0; i < ndash; i++) {
-            pos += g_snprintf (c + pos, 1022 - pos, "%g", dash[i] * scale);
-            if ((i < (ndash - 1)) && (pos < 1020)) {
-                c[pos] = ',';
-                pos += 1;
+        int i;
+        Inkscape::SVGOStringStream osoffset, osarray;
+	 for (i = 0; i < ndash; i++) {
+	     osarray << dash[i] * scale;
+            if (i < (ndash - 1)) {
+		osarray << ",";
             }
         }
-        c[pos] = 0;
-        sp_repr_css_set_property (css, "stroke-dasharray", c);
-        g_snprintf (c, 1024, "%g", offset * scale);
-        sp_repr_css_set_property (css, "stroke-dashoffset", c);
+        sp_repr_css_set_property (css, "stroke-dasharray", osarray.str().c_str());
+        osoffset << offset * scale;
+	 sp_repr_css_set_property (css, "stroke-dashoffset", osoffset.str().c_str());
         
     } else {
         sp_repr_css_set_property (css, "stroke-dasharray", "none");
@@ -1396,7 +1396,6 @@ sp_stroke_style_scale_line (SPWidget *spw)
     const GSList *items, *i, *r;
     GSList *reprs;
     SPCSSAttr *css;
-    gchar c[32];
 
     wadj = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "width"));
     us = SP_UNIT_SELECTOR(gtk_object_get_data (GTK_OBJECT (spw), "units"));
@@ -1426,6 +1425,8 @@ sp_stroke_style_scale_line (SPWidget *spw)
             double length, dist;
             double *dash, offset;
             int ndash;
+	     Inkscape::SVGOStringStream os;
+
             length = wadj->value;
             sp_dash_selector_get_dash (dsel, &ndash, &dash, &offset);
             /* Set stroke width */
@@ -1434,8 +1435,8 @@ sp_stroke_style_scale_line (SPWidget *spw)
             sp_item_i2d_affine (SP_ITEM (i->data), &i2d);
             nr_matrix_invert (&d2i, &i2d);
             dist = length * NR_MATRIX_DF_EXPANSION (&d2i);
-            g_snprintf (c, 32, "%g", dist);
-            sp_repr_css_set_property (css, "stroke-width", c);
+            os << dist;
+            sp_repr_css_set_property (css, "stroke-width", os.str().c_str());
             /* Set dash */
             sp_stroke_style_set_scaled_dash (css, ndash, dash, offset, dist);
             sp_repr_css_change_recursive ( SP_OBJECT_REPR (i->data), css, 
@@ -1447,12 +1448,13 @@ sp_stroke_style_scale_line (SPWidget *spw)
             double length;
             double *dash, offset;
             int ndash;
+            Inkscape::SVGOStringStream os;
             length = wadj->value;
             sp_dash_selector_get_dash (dsel, &ndash, &dash, &offset);
             sp_convert_distance ( &length, sp_unit_selector_get_unit (us), 
                                   SP_PS_UNIT );
-            g_snprintf (c, 32, "%g", length * 1.25);
-            sp_repr_css_set_property (css, "stroke-width", c);
+            os << length * 1.25;
+            sp_repr_css_set_property (css, "stroke-width", os.str().c_str());
             sp_stroke_style_set_scaled_dash (css, ndash, dash, offset, length);
             sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
             g_free (dash);

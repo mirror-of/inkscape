@@ -19,6 +19,7 @@
 #include <ctype.h>
 
 #include "svg.h"
+#include "stringstream.h"
 
 #include <glib.h>
 
@@ -396,6 +397,8 @@ sp_svg_read_percentage (const char * str, double def)
 int
 sp_svg_write_percentage (char * buf, int buflen, double val)
 {
-	return g_snprintf (buf, buflen, "%g%%", val * 100.0);
+	Inkscape::SVGOStringStream os;
+       os << val * 100.0 << "%";
+	return g_strlcpy (buf, os.str().c_str(), buflen);
 }
 

@@ -51,6 +51,7 @@
 #include "../prefs-utils.h"
 #include "../verbs.h"
 #include "../interface.h"
+#include "../svg/stringstream.h"
 
 #include "text-edit.h"
 
@@ -436,6 +437,7 @@ sp_text_edit_dialog_update_object ( SPText *text, SPRepr *repr )
         SPCSSAttr *css;
         NRFont *font;
         gchar c[256];
+	 Inkscape::SVGOStringStream os;	
         const char *sstr;
 
         fontsel = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "fontsel");
@@ -465,8 +467,8 @@ sp_text_edit_dialog_update_object ( SPText *text, SPRepr *repr )
         g_strdown (c);
         sp_repr_css_set_property (css, "font-variant", c);
 
-        g_snprintf (c, 64, "%g", NR_FONT_SIZE (font));
-        sp_repr_css_set_property (css, "font-size", c);
+        os << NR_FONT_SIZE (font);
+        sp_repr_css_set_property (css, "font-size", os.str().c_str());
 
         nr_font_unref (font);
         

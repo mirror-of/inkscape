@@ -24,6 +24,7 @@
 
 #include "helper/nr-gradient-gpl.h"
 #include "svg/svg.h"
+#include "svg/stringstream.h"
 #include "xml/repr-private.h"
 #include "attributes.h"
 #include "document-private.h"
@@ -145,7 +146,8 @@ sp_stop_set (SPObject *object, unsigned int key, const gchar *value)
 static SPRepr *
 sp_stop_write (SPObject *object, SPRepr *repr, guint flags)
 {
-	gchar c[64], s[1024];
+	gchar c[64];
+	Inkscape::SVGOStringStream os;	
 
 	SPStop *stop = SP_STOP (object);
 
@@ -154,8 +156,8 @@ sp_stop_write (SPObject *object, SPRepr *repr, guint flags)
 	}
 
 	sp_svg_write_color (c, 64, sp_color_get_rgba32_ualpha (&stop->color, 255));
-	g_snprintf (s, 1024, "stop-color:%s;stop-opacity:%g;", c, stop->opacity);
-	sp_repr_set_attr (repr, "style", s);
+	os << "stop-color:" << c << ";stop-opacity:" << stop->opacity << ";";
+	sp_repr_set_attr (repr, "style", os.str().c_str());
 	sp_repr_set_attr (repr, "stop-color", NULL);
 	sp_repr_set_attr (repr, "stop-opacity", NULL);
 	sp_repr_set_double (repr, "offset", stop->offset);
@@ -598,13 +600,14 @@ sp_gradient_repr_set_vector (SPGradient *gr, SPRepr *repr, SPGradientVector *vec
 	GSList *cl = NULL;
 	if (vector) {
 		for (int i = 0; i < vector->nstops; i++) {
-			gchar c[64], s[256];
+			gchar c[64];
+			Inkscape::SVGOStringStream os;
 			SPRepr *child = sp_repr_new ("stop");
 			sp_repr_set_double (child, "offset",
 						      vector->stops[i].offset * (vector->end - vector->start) + vector->start);
 			sp_svg_write_color (c, 64, sp_color_get_rgba32_ualpha (&vector->stops[i].color, 0x00));
-			g_snprintf (s, 256, "stop-color:%s;stop-opacity:%g;", c, vector->stops[i].opacity);
-			sp_repr_set_attr (child, "style", s);
+			os << "stop-color:" << c << ";stop-opacity:" << vector->stops[i].opacity << ";";
+			sp_repr_set_attr (child, "style", os.str().c_str());
 			/* Order will be reversed here */
 			cl = g_slist_prepend (cl, child);
 		}

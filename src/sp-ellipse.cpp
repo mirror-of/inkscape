@@ -21,6 +21,7 @@
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-ops.h"
 #include "svg/svg.h"
+#include "svg/stringstream.h"
 #include "attributes.h"
 #include "style.h"
 #include "version.h"
@@ -689,10 +690,9 @@ sp_arc_build (SPObject *object, SPDocument *document, SPRepr *repr)
 static gboolean
 sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr)
 {
-#define ARC_BUFSIZE 256
 	gint fa, fs;
 	gdouble  dt;
-	gchar c[ARC_BUFSIZE];
+	Inkscape::SVGOStringStream os;
 
 	SPGenericEllipse *ge = SP_GENERICELLIPSE (arc);
 
@@ -702,14 +702,11 @@ sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr)
 	dt = fmod (ge->end - ge->start, SP_2PI);
 	if (fabs (dt) < 1e-6) {
 		NR::Point ph = sp_arc_get_xy (arc, (ge->start + ge->end) / 2.0);
-		g_snprintf (c, ARC_BUFSIZE, "M %f %f A %f %f 0 %d %d %f,%f A %g %g 0 %d %d %g %g z",
-			    p1[NR::X], p1[NR::Y],
-			    ge->rx.computed, ge->ry.computed,
-			    1, (dt > 0),
-			    ph[NR::X], ph[NR::Y],
-			    ge->rx.computed, ge->ry.computed,
-			    1, (dt > 0),
-			    p2[NR::X], p2[NR::Y]);
+		os << "M " << p1[NR::X] << " " <<  p1[NR::Y]
+			<< " A " << ge->rx.computed << " " << ge->ry.computed
+			<< " 0 1 " << ((dt > 0)?1:0) << " " << ph[NR::X] << "," << ph[NR::Y]
+			<< " A " << ge->rx.computed << " " << ge->ry.computed
+			<< " 0 1 " << ((dt > 0)?1:0) << " " << p2[NR::X] << " " << p2[NR::Y] << " z";
 	} else {
 		fa = (fabs (dt) > M_PI) ? 1 : 0;
 		fs = (dt > 0) ? 1 : 0;
@@ -717,20 +714,18 @@ sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr)
 		g_print ("start:%g end:%g fa=%d fs=%d\n", ge->start, ge->end, fa, fs);
 #endif
 		if (ge->closed) {
-			g_snprintf (c, ARC_BUFSIZE, "M %f,%f A %f,%f 0 %d %d %f,%f L %f,%f z",
-				    p1[NR::X], p1[NR::Y],
-				    ge->rx.computed, ge->ry.computed,
-				    fa, fs,
-				    p2[NR::X], p2[NR::Y],
-				    ge->cx.computed, ge->cy.computed);
+			os << "M " << p1[NR::X] << "," << p1[NR::Y]
+				<< " A " << ge->rx.computed << "," << ge->ry.computed
+				<< " 0 " << fa << " " << fs << " " << p2[NR::X] << "," << p2[NR::Y]
+				<< " L " << ge->cx.computed << "," << ge->cy.computed << " z";
 		} else {
-			g_snprintf (c, ARC_BUFSIZE, "M %f,%f A %f,%f 0 %d %d %f,%f",
-				    p1[NR::X], p1[NR::Y],
-				    ge->rx.computed, ge->ry.computed,
-				    fa, fs, p2[NR::X], p2[NR::Y]);
+			os << "M " << p1[NR::X] << "," << p1[NR::Y]
+				<< " A " << ge->rx.computed << "," << ge->ry.computed
+				<< " 0 " << fa << " " << fs << " " << p2[NR::X] << "," << p2[NR::Y];
+			
 		}
 	}
-	return sp_repr_set_attr (repr, "d", c);
+	return sp_repr_set_attr (repr, "d", os.str().c_str());
 }
 
 static SPRepr *

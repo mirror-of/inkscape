@@ -30,6 +30,7 @@
 #include "helper/sp-intl.h"
 #include "helper/window.h"
 #include "../svg/svg.h"
+#include "../svg/stringstream.h"
 #include "../widgets/sp-widget.h"
 #include "../inkscape.h"
 #include "../document.h"
@@ -537,7 +538,7 @@ sp_item_widget_opacity_value_changed (GtkAdjustment *a, SPWidget *spw)
 {
     SPItem *item;
     SPCSSAttr *css;
-    gchar c[32];
+	Inkscape::SVGOStringStream os;	
 
     if (gtk_object_get_data (GTK_OBJECT (spw), "blocked"))
         return;
@@ -548,8 +549,8 @@ sp_item_widget_opacity_value_changed (GtkAdjustment *a, SPWidget *spw)
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
     css = sp_repr_css_attr_new ();
-    g_snprintf (c, 32, "%f", CLAMP (a->value, 0.0, 1.0));
-    sp_repr_css_set_property (css, "opacity", c);
+    os << CLAMP (a->value, 0.0, 1.0);
+    sp_repr_css_set_property (css, "opacity", os.str().c_str());
     sp_repr_css_change (SP_OBJECT_REPR (item), css, "style");
     sp_repr_css_attr_unref (css);
 

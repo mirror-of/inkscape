@@ -1,4 +1,5 @@
 #include "sp-metrics.h"
+#include "svg/stringstream.h"
 
 /*
  * SPMetric handling and stuff
@@ -52,21 +53,26 @@ GString *
 sp_metric_to_metric_string (gdouble length,  const SPMetric metric_src, const SPMetric metric_dst, gboolean m) {
   GString * str;
   gdouble len;
+  Inkscape::SVGOStringStream os;	
 
   len = sp_absolute_metric_to_metric (length, metric_src, metric_dst);
   str = g_string_new ("");
   switch (metric_dst) {
   case SP_MM:
-    g_string_sprintf (str, "%0.2f%s", len, m?" mm":"");
+    os << len << (m?" mm":"");
+	g_string_sprintf (str, os.str().c_str());
     break;
   case SP_CM:
-    g_string_sprintf (str, "%0.2f%s", len, m?" cm":"");
+    os << len << (m?" cm":"");
+	g_string_sprintf (str, os.str().c_str());
     break;
   case SP_IN:
-    g_string_sprintf (str, "%0.2f%s", len, m?" \"":"");
+    os << len << (m?" \"":"");
+	g_string_sprintf (str, os.str().c_str());
     break;
   case SP_PT:
-    g_string_sprintf (str, "%0.2f%s", len, m?" pt":"");
+	os << len << (m?" pt":"");
+	g_string_sprintf (str, os.str().c_str());
     break;
   case NONE:
     g_string_sprintf (str, "%s", "ups!");

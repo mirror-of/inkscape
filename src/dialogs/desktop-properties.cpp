@@ -198,7 +198,7 @@ sp_dtw_whatever_changed (GtkAdjustment *adjustment, GtkWidget *dialog)
     SPRepr *repr;
     SPUnitSelector *us;
     const gchar *key;
-    gchar c[32];
+	Inkscape::SVGOStringStream os;
 
     if (gtk_object_get_data (GTK_OBJECT (dialog), "update")) return;
 
@@ -211,11 +211,10 @@ sp_dtw_whatever_changed (GtkAdjustment *adjustment, GtkWidget *dialog)
     us = (SPUnitSelector *)gtk_object_get_data ( GTK_OBJECT (adjustment), 
                                                  "unit_selector" );
 
-    g_snprintf ( c, 32, "%g%s", adjustment->value, 
-                 sp_unit_selector_get_unit (us)->abbr );
+    os << adjustment->value << sp_unit_selector_get_unit (us)->abbr;
 
     sp_document_set_undo_sensitive (doc, FALSE);
-    sp_repr_set_attr (repr, key, c);
+    sp_repr_set_attr (repr, key, os.str().c_str());
     sp_document_set_undo_sensitive (doc, TRUE);
 }
 
@@ -285,7 +284,7 @@ sp_dtw_grid_snap_distance_changed ( GtkAdjustment *adjustment,
 {
     SPRepr *repr;
     SPUnitSelector *us;
-    gchar c[32];
+	Inkscape::SVGOStringStream os;
 
     if (gtk_object_get_data (GTK_OBJECT (dialog), "update")) {
         return;
@@ -299,10 +298,9 @@ sp_dtw_grid_snap_distance_changed ( GtkAdjustment *adjustment,
     us = (SPUnitSelector *)gtk_object_get_data ( GTK_OBJECT (dialog), 
                                                  "grid_snap_units" );
 
-    g_snprintf ( c, 32, "%g%s", adjustment->value, 
-                 sp_unit_selector_get_unit (us)->abbr );
+    os << adjustment->value << sp_unit_selector_get_unit (us)->abbr;
     
-    sp_repr_set_attr (repr, "gridtolerance", c);
+    sp_repr_set_attr (repr, "gridtolerance", os.str().c_str());
 }
 
 
@@ -312,7 +310,7 @@ sp_dtw_guides_snap_distance_changed ( GtkAdjustment *adjustment,
 {
     SPRepr *repr;
     SPUnitSelector *us;
-    gchar c[32];
+    Inkscape::SVGOStringStream os;
 
     if (gtk_object_get_data (GTK_OBJECT (dialog), "update")) {
         return;
@@ -326,10 +324,9 @@ sp_dtw_guides_snap_distance_changed ( GtkAdjustment *adjustment,
     us = (SPUnitSelector *)gtk_object_get_data ( GTK_OBJECT (dialog), 
                                                  "guide_snap_units" );
 
-    g_snprintf ( c, 32, "%g%s", adjustment->value, 
-                 sp_unit_selector_get_unit (us)->abbr );
+    os << adjustment->value << sp_unit_selector_get_unit (us)->abbr;
 
-    sp_repr_set_attr (repr, "guidetolerance", c);
+    sp_repr_set_attr (repr, "guidetolerance", os.str().c_str());
 }
 
 

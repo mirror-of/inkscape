@@ -21,6 +21,7 @@
 #include "macros.h"
 #include "helper/sp-intl.h"
 #include "svg/svg.h"
+#include "svg/stringstream.h"
 #include "display/nr-arena-shape.h"
 #include "uri-references.h"
 #include "attributes.h"
@@ -117,7 +118,6 @@ sp_shape_build (SPObject *object, SPDocument *document, SPRepr *repr)
 		SPCSSAttr *css;
 		const gchar *val;
 		gdouble dval;
-		gchar c[32];
 		gboolean changed;
 		/* Have to check for percentage opacities */
 		css = sp_repr_css_attr (repr, "style");
@@ -125,23 +125,23 @@ sp_shape_build (SPObject *object, SPDocument *document, SPRepr *repr)
 		changed = TRUE;
 		val = sp_repr_css_property (css, "opacity", NULL);
 		if (val && strchr (val, '%')) {
-			dval = sp_svg_read_percentage (val, 1.0);
-			g_snprintf (c, 32, "%g", dval);
-			sp_repr_css_set_property (css, "opacity", c);
+			Inkscape::SVGOStringStream os;
+			os << sp_svg_read_percentage (val, 1.0);
+			sp_repr_css_set_property (css, "opacity", os.str().c_str());
 			changed = TRUE;
 		}
 		val = sp_repr_css_property (css, "fill-opacity", NULL);
 		if (val && strchr (val, '%')) {
-			dval = sp_svg_read_percentage (val, 1.0);
-			g_snprintf (c, 32, "%g", dval);
-			sp_repr_css_set_property (css, "fill-opacity", c);
+			Inkscape::SVGOStringStream os;
+			os << sp_svg_read_percentage (val, 1.0);
+			sp_repr_css_set_property (css, "fill-opacity", os.str().c_str());
 			changed = TRUE;
 		}
 		val = sp_repr_css_property (css, "stroke-opacity", NULL);
 		if (val && strchr (val, '%')) {
-			dval = sp_svg_read_percentage (val, 1.0);
-			g_snprintf (c, 32, "%g", dval);
-			sp_repr_css_set_property (css, "stroke-opacity", c);
+			Inkscape::SVGOStringStream os;
+			os << sp_svg_read_percentage (val, 1.0);
+			sp_repr_css_set_property (css, "stroke-opacity", os.str().c_str());
 			changed = TRUE;
 		}
 		if (changed) {
