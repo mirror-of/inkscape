@@ -792,12 +792,16 @@ inkscape_add_document (SPDocument *document)
 	g_signal_emit (G_OBJECT (inkscape), inkscape_signals[NEW_DOCUMENT], 0, document);
 }
 
+//TODO: make settable in preferences
+#define MAX_RECENT_DOCUMENTS 15
+
 void
 inkscape_remove_document (SPDocument *document)
 {
 	g_return_if_fail (inkscape != NULL);
 	g_return_if_fail (document != NULL);
 	g_return_if_fail (SP_IS_DOCUMENT (document));
+	gint i;
 
 	g_assert (g_slist_find (inkscape->documents, document));
 
@@ -814,8 +818,11 @@ inkscape_remove_document (SPDocument *document)
 			if (child) {
 				sp_repr_change_order (recent, child, NULL);
 			} else {
-				if (sp_repr_n_children (recent) >= 4) {
-					child = recent->children->next->next;
+				if (sp_repr_n_children (recent) >= MAX_RECENT_DOCUMENTS) { 
+					child = recent->children;					
+					// count to the last
+					for (i = 0; i < MAX_RECENT_DOCUMENTS - 2; i ++) child = child->next;
+					// remove all after the last
 					while (child->next) sp_repr_unparent (child->next);
 				}
 				child = sp_repr_new ("document");
