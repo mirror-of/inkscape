@@ -33,6 +33,7 @@
 #include "helper/unit-menu.h"
 #include "widgets/spw-utilities.h"
 #include "inkscape.h"
+#include "inkscape-private.h"
 #include "dir-util.h"
 #include "document.h"
 #include "desktop-handles.h"
@@ -40,6 +41,8 @@
 #include "selection.h"
 #include "file.h"
 #include "macros.h"
+#include "desktop.h"
+#include "sp-namedview.h"
 
 #include "dialog-events.h"
 #include "../prefs-utils.h"
@@ -345,15 +348,17 @@ sp_export_dialog (void)
 static void
 sp_export_selection_changed (Inkscape::Application *inkscape, SPDesktop *desktop, GtkObject *base)
 {
-	GtkWidget *button_sel = sp_search_by_value_recursive ((GtkWidget *) base, "key", "selection");
-	GtkWidget *button_dra = sp_search_by_value_recursive ((GtkWidget *) base, "key", "drawing");
-	GtkWidget *button_pag = sp_search_by_value_recursive ((GtkWidget *) base, "key", "page");
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_sel)))
+	if (inkscape && SP_IS_INKSCAPE (inkscape) && desktop) {
+		GtkWidget *button_sel = sp_search_by_value_recursive ((GtkWidget *) base, "key", "selection");
+		GtkWidget *button_dra = sp_search_by_value_recursive ((GtkWidget *) base, "key", "drawing");
+		GtkWidget *button_pag = sp_search_by_value_recursive ((GtkWidget *) base, "key", "page");
+		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_sel)))
 			sp_export_area_toggled (GTK_TOGGLE_BUTTON (button_sel), base);
-	else 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_dra)))
+		else 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_dra)))
 			sp_export_area_toggled (GTK_TOGGLE_BUTTON (button_dra), base);
-	else 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_pag)))
+		else 	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_pag)))
 			sp_export_area_toggled (GTK_TOGGLE_BUTTON (button_pag), base);
+	}
 }
 
 static void
@@ -476,6 +481,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
 		sp_ui_error_dialog (_("You have to enter a filename"));
 	} else {
 		if ((x1 > x0) && (y1 > y0) && (width > 0) && (height > 0)) {
+			SPNamedView *nv = (SP_ACTIVE_DESKTOP)->namedview;
 			GtkWidget *dlg, *prg, *btn; /* progressbar-stuff */
 			char *fn;
 			gchar *text;
@@ -501,7 +507,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
 			/* Do export */
 			sp_export_png_file (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP), filename, 
 					x0, y0, x1, y1, width, height, 
-					0x00000000, 
+					nv->pagecolor, 
 					sp_export_progress_callback, base);
 			gtk_widget_destroy (dlg);
 			g_object_set_data (G_OBJECT (base), "cancel", (gpointer) 0);
