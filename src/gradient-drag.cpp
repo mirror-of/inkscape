@@ -192,8 +192,8 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
             dragger->updateKnotShape();
             dragger->updateTip();
         }
-    } else {
-        // without Shift; see if we need to snap to another dragger
+    } else if (!(state & GDK_CONTROL_MASK)) {
+        // without Shift or Ctrl; see if we need to snap to another dragger
         for (GList *di = dragger->parent->draggers; di != NULL; di = di->next) {
             GrDragger *d_new = (GrDragger *) di->data;
             if (dragger->mayMerge(d_new) && NR::L2 (d_new->point - p) < snap_dist) {
@@ -219,6 +219,22 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
                 d_new->updateDependencies(true);
                 sp_document_done (SP_DT_DOCUMENT (d_new->parent->desktop));
                 return;
+            }
+        }
+    }
+
+    if (!((state & GDK_SHIFT_MASK) || ((state & GDK_CONTROL_MASK) && (state & GDK_MOD1_MASK)))) { 
+        // See if we need to snap to any of the levels
+        for (guint i = 0; i < dragger->parent->hor_levels.size(); i++) {
+            if (fabs(p[NR::Y] - dragger->parent->hor_levels[i]) < snap_dist) {
+                p[NR::Y] = dragger->parent->hor_levels[i];
+                sp_knot_moveto (knot, &p);
+            }
+        }
+        for (guint i = 0; i < dragger->parent->vert_levels.size(); i++) {
+            if (fabs(p[NR::X] - dragger->parent->vert_levels[i]) < snap_dist) {
+                p[NR::X] = dragger->parent->vert_levels[i];
+                sp_knot_moveto (knot, &p);
             }
         }
     }
@@ -296,22 +312,6 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
         if (move[NR::X] < 9999) {
             p += move;
             sp_knot_moveto (knot, &p);
-        }
-    }
-
-    if (!((state & GDK_SHIFT_MASK) || ((state & GDK_CONTROL_MASK) && (state & GDK_MOD1_MASK)))) { 
-        // See if we need to snap to any of the levels
-        for (guint i = 0; i < dragger->parent->hor_levels.size(); i++) {
-            if (fabs(p[NR::Y] - dragger->parent->hor_levels[i]) < snap_dist) {
-                p[NR::Y] = dragger->parent->hor_levels[i];
-                sp_knot_moveto (knot, &p);
-            }
-        }
-        for (guint i = 0; i < dragger->parent->vert_levels.size(); i++) {
-            if (fabs(p[NR::X] - dragger->parent->vert_levels[i]) < snap_dist) {
-                p[NR::X] = dragger->parent->vert_levels[i];
-                sp_knot_moveto (knot, &p);
-            }
         }
     }
 
