@@ -10,7 +10,8 @@ extensions = \
 	ill2svg.pl \
 	SpSVG.pm \
 	svg_dropshadow \
-	dia2svg.sh
+	dia2svg.sh \
+	txt2svg.pl
 
 otherstuff = \
 	roundhole.xpm
@@ -21,7 +22,8 @@ modules = \
 	ai_input.inkmod \
 	roundhole.inkmod \
 	dropshadow.inkmod \
-	dia.inkmod
+	dia.inkmod \
+	txt2svg.inkmod
 
 extension_SCRIPTS = \
 	$(extensions)

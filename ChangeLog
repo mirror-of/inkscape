@@ -1,3 +1,10 @@
+2004-02-21  Ted Gould <ted@gould.cx>
+
+	* extensions/txt2svg.inkmod, extensions/txt2svg.pl:
+	Adding a script that Bryce wrote that will take in text.  Plus
+	the inkscape module file to make it so that you can open text
+	files in Inkscape.
+
 2004-02-21  MenTaLguY <mental@rydia.net>
 
     * src/xml/repr-util.cpp, src/xml/repr.h: added RDF namespace by default
