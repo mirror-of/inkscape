@@ -638,9 +638,9 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 case GDK_Meta_L:  // Meta is when you press Shift+Alt (at least on my machine)
                 case GDK_Meta_R:
                     sp_event_show_modifier_tip (event_context->defaultMessageContext(), event,
-                                                _("<b>Ctrl:</b> select in groups, move hor/vert"),
-                                                _("<b>Shift:</b> toggle select, force rubberband, disable snapping"),
-                                                _("<b>Alt:</b> select under, move selected"));
+                                                _("<b>Ctrl</b>: select in groups, move hor/vert"),
+                                                _("<b>Shift</b>: toggle select, force rubberband, disable snapping"),
+                                                _("<b>Alt</b>: select under, move selected"));
                     break;
                 case GDK_Left: // move selection left
                 case GDK_KP_Left:
@@ -880,7 +880,7 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
     // status text
     GString *xs = SP_PT_TO_METRIC_STRING(dxy[X], SP_DEFAULT_METRIC);
     GString *ys = SP_PT_TO_METRIC_STRING(dxy[Y], SP_DEFAULT_METRIC);
-    seltrans->messageContext().setF(Inkscape::NORMAL_MESSAGE, _("<b>Move</b> by %s x %s; with <b>Ctrl</b> to restrict to horizontal/vertical; with <b>Shift</b> to disable snapping"), xs->str, ys->str);
+    seltrans->messageContext().setF(Inkscape::NORMAL_MESSAGE, _("<b>Move</b> by %s, %s; with <b>Ctrl</b> to restrict to horizontal/vertical; with <b>Shift</b> to disable snapping"), xs->str, ys->str);
     g_string_free(xs, TRUE);
     g_string_free(ys, TRUE);
 }
