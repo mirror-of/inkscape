@@ -162,6 +162,11 @@ static char const preferences_skeleton[] =
 "  <group id=\"extensions\">"
 "  </group>\n"
 "\n"
+"  <group id=\"desktop\""
+"         style=\"fill:none;fill-opacity:0.75;fill:blue;\n"
+"                 stroke:black;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;\">\n"
+"  </group>\n"
+"\n"
 "</inkscape>\n";
 
 #define PREFERENCES_SKELETON_SIZE (sizeof(preferences_skeleton) - 1)

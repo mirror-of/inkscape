@@ -205,6 +205,8 @@ sp_desktop_init (SPDesktop *desktop)
     new (&desktop->sel_modified_connection) SigC::Connection();
 
     desktop->_guides_message_context = new Inkscape::MessageContext(desktop->messageStack());
+
+    desktop->current = sp_repr_css_attr_inherited (inkscape_get_repr (INKSCAPE, "desktop"), "style");
 }
 
 static void
@@ -1958,51 +1960,56 @@ fullscreen(SPDesktop *dt)
 }
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
 
-// color signals
+// style management
 
 void
 sp_desktop_set_color (SPDesktop *desktop, const ColorRGBA &color, bool is_relative, bool fill)
 {
-
-// 1. Set internal values
-
     if (is_relative) {
-       // FIXME: relative setting not yet implemented
+        g_warning ("FIXME: relative color setting not yet implemented");
         return;
     }
 
+    guint32 rgba = SP_RGBA32_F_COMPOSE(color[0], color[1], color[2], color[3]);
+    gchar b[64];
+    sp_svg_write_color (b, 64, rgba);
+    SPCSSAttr *css = sp_repr_css_attr_new ();
     if (fill) {
-        desktop->fill_color = color;
+        sp_repr_css_set_property (css, "fill", b);
+        Inkscape::SVGOStringStream osalpha;
+        osalpha << color[3];
+        sp_repr_css_set_property (css, "fill-opacity", osalpha.str().c_str());
     } else {
-        desktop->stroke_color = color;
+        sp_repr_css_set_property (css, "stroke", b);
+        Inkscape::SVGOStringStream osalpha;
+        osalpha << color[3];
+        sp_repr_css_set_property (css, "stroke-opacity", osalpha.str().c_str());
     }
+
+    sp_desktop_set_style (desktop, css);
+
+    sp_repr_css_attr_unref (css);
+}
+
+void
+sp_desktop_set_style (SPDesktop *desktop, SPCSSAttr *css)
+{
+// 1. Set internal value, write to prefs
+    sp_repr_css_merge (desktop->current, css);
+    sp_repr_css_change (inkscape_get_repr (INKSCAPE, "desktop"), css, "style");
 
 // 2. Emit signal
-    bool intercepted = desktop->_set_color_signal.emit(color, is_relative, fill);
+    bool intercepted = desktop->_set_style_signal.emit (css);
 
-// 3. If nobody has intercepted the signal, apply the color to the selection
+// FIXME: in set_style, compensate pattern and gradient fills, stroke style, rect corners for the object's own transform so that pasting fills does not depend on preserve/optimize
+
+// 3. If nobody has intercepted the signal, apply the style to the selection
     if (!intercepted) {
-        guint32 rgba = SP_RGBA32_F_COMPOSE(color[0], color[1], color[2], color[3]);
-        gchar b[64];
-        sp_svg_write_color (b, 64, rgba);
-        SPCSSAttr *css = sp_repr_css_attr_new ();
-        if (fill) {
-            sp_repr_css_set_property (css, "fill", b);
-            Inkscape::SVGOStringStream osalpha;
-            osalpha << color[3];
-            sp_repr_css_set_property (css, "fill-opacity", osalpha.str().c_str());
-        } else {
-            sp_repr_css_set_property (css, "stroke", b);
-            Inkscape::SVGOStringStream osalpha;
-            osalpha << color[3];
-            sp_repr_css_set_property (css, "stroke-opacity", osalpha.str().c_str());
-        }
         for (const GSList *i = desktop->selection->itemList(); i != NULL; i = i->next) {
+            // FIXME: prevent _recursive from changing tspans with sodipodi:role="line" ?
             sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
         }
-        sp_repr_css_attr_unref (css);
     }
-
 }
 
 

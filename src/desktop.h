@@ -31,6 +31,7 @@ class SPDesktopWidgetClass;
 #include "helper/helper-forward.h"
 #include "forward.h"
 #include "view.h"
+#include "style.h"
 
 enum ColorComponent {
   COMPONENT_R,
@@ -127,9 +128,7 @@ struct SPDesktop : public SPView {
 	gboolean is_fullscreen;
 
 	// current values
-	ColorRGBA fill_color;
-	ColorRGBA stroke_color;
-	gdouble stroke_width;
+	SPCSSAttr *current;
 
 	SPObject *currentRoot();
 	SPObject *currentLayer();
@@ -137,7 +136,7 @@ struct SPDesktop : public SPView {
 	static void _set_status_message(SPView *view, Inkscape::MessageType type, gchar const *message);
 
 	SigC::Signal4<bool, ColorComponent, float, bool, bool> _set_colorcomponent_signal;
-	SigC::Signal3<bool, const ColorRGBA &, bool, bool, StopOnTrue> _set_color_signal;
+	SigC::Signal1<bool, const SPCSSAttr *, StopOnTrue> _set_style_signal;
 
 	Inkscape::MessageContext *_guides_message_context;
 };
@@ -279,5 +278,6 @@ void fullscreen(SPDesktop *dt);
 void sp_desktop_widget_layout (SPDesktopWidget *dtw);
 
 void sp_desktop_set_color (SPDesktop *desktop, const ColorRGBA &color, bool is_relative, bool fill);
+void sp_desktop_set_style (SPDesktop *desktop, SPCSSAttr *css);
 
 #endif
