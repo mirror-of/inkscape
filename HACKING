@@ -3,6 +3,17 @@ Compiling the CVS version
 grep Build-Depends debian/control to see a list of (Debian) packages needed for
 compilation.
 
+inkscape.spec.in has a partial list of requirements: 
+
+  grep Requires inkscape.spec.in
+
+At the time of writing, it contains only one package; if you use an RPM-based
+distribution, then please consider updating the Requires/BuildRequires lines to
+help other users of your distribution.  If you don't have CVS write access,
+then you can submit a patch to the patch tracker
+<http://sourceforge.net/tracker/?group_id=93438&atid=604308>.
+
+
 See http://www.inkscape.org/cgi-bin/wiki.pl?CompilingInkscape for more general
 remarks about compiling, including how to find some of the needed packages for
 your distribution, and suggestions for developers.
