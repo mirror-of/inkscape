@@ -203,12 +203,17 @@ sp_text_context_setup (SPEventContext *ec)
 	if (prefs_get_int_attribute("tools.text", "selcue", 0) != 0) {
 		ec->enableSelectionCue();
 	}
+    if (prefs_get_int_attribute("tools.text", "gradientdrag", 0) != 0) {
+        ec->enableGrDrag();
+    }
 }
 
 static void
 sp_text_context_finish (SPEventContext *ec)
 {
 	SPTextContext *tc = SP_TEXT_CONTEXT (ec);
+
+	ec->enableGrDrag(false);
 
 	tc->sel_changed_connection.disconnect();
 	tc->sel_modified_connection.disconnect();

@@ -37,6 +37,7 @@
 static void sp_zoom_context_class_init(SPZoomContextClass *klass);
 static void sp_zoom_context_init(SPZoomContext *zoom_context);
 static void sp_zoom_context_setup(SPEventContext *ec);
+static void sp_zoom_context_finish (SPEventContext *ec);
 
 static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent *event);
 static gint sp_zoom_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
@@ -76,6 +77,7 @@ static void sp_zoom_context_class_init(SPZoomContextClass *klass)
     parent_class = (SPEventContextClass*) g_type_class_peek_parent(klass);
     
     event_context_class->setup = sp_zoom_context_setup;
+    event_context_class->finish = sp_zoom_context_finish;
 
     event_context_class->root_handler = sp_zoom_context_root_handler;
     event_context_class->item_handler = sp_zoom_context_item_handler;
@@ -90,12 +92,21 @@ static void sp_zoom_context_init (SPZoomContext *zoom_context)
     event_context->hot_y = 6;
 }
 
+static void
+sp_zoom_context_finish (SPEventContext *ec)
+{
+	ec->enableGrDrag(false);
+}
+
 static void sp_zoom_context_setup(SPEventContext *ec)
 {
     if (prefs_get_int_attribute("tools.zoom", "selcue", 0) != 0) {
         ec->enableSelectionCue();
     }
-    
+    if (prefs_get_int_attribute("tools.zoom", "gradientdrag", 0) != 0) {
+        ec->enableGrDrag();
+    }
+
     if (((SPEventContextClass *) parent_class)->setup) {
         ((SPEventContextClass *) parent_class)->setup(ec);
     }

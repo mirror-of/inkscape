@@ -659,6 +659,18 @@ selcue_checkbox (GtkWidget *vb, GtkTooltips *tt, const gchar *path)
         );
 }
 
+void
+gradientdrag_checkbox (GtkWidget *vb, GtkTooltips *tt, const gchar *path)
+{
+    options_checkbox (
+        _("Enable gradient editing"), 
+        _("Whether selected objects display gradient editing controls"), tt,
+        vb,
+        path, "gradientdrag", 1,
+        options_changed_boolean
+        );
+}
+
 
 /**
 * Helper function for new_objects_style
@@ -832,6 +844,7 @@ options_dropper ()
     }
 
     selcue_checkbox (vb, tt, "tools.dropper");
+    gradientdrag_checkbox (vb, tt, "tools.dropper");
 
     return vb;
 }
@@ -1070,6 +1083,8 @@ sp_display_dialog (void)
             GtkWidget *selector_page = options_selector ();
             gtk_widget_show (selector_page);
             gtk_container_add (GTK_CONTAINER (vb_tool), selector_page);
+
+            gradientdrag_checkbox (vb_tool, tt, "tools.select");
         }
 
         // Node
@@ -1077,6 +1092,7 @@ sp_display_dialog (void)
             GtkWidget *vb_tool = new_tab (nb_tools, _("Node"));
 
             selcue_checkbox (vb_tool, tt, "tools.nodes");
+            gradientdrag_checkbox (vb_tool, tt, "tools.nodes");
         }
 
         // Zoom
@@ -1084,6 +1100,7 @@ sp_display_dialog (void)
             GtkWidget *vb_tool = new_tab (nb_tools, _("Zoom"));
 
             selcue_checkbox (vb_tool, tt, "tools.zoom");
+            gradientdrag_checkbox (vb_tool, tt, "tools.zoom");
         }
 
         { // The 4 shape tools
@@ -1119,6 +1136,7 @@ sp_display_dialog (void)
 
             // common for all shapes
             selcue_checkbox (vb_shapes, tt, "tools.shapes");
+            gradientdrag_checkbox (vb_shapes, tt, "tools.shapes");
 
             g_signal_connect(GTK_OBJECT (nb_shapes), "switch-page", GTK_SIGNAL_FUNC (prefs_switch_page), (void *) "page_shapes");
             gtk_notebook_set_current_page (GTK_NOTEBOOK (nb_shapes), prefs_get_int_attribute ("dialogs.preferences", "page_shapes", 0));
@@ -1167,6 +1185,7 @@ sp_display_dialog (void)
             new_objects_style (vb_tool, tt, "tools.text");
 
             selcue_checkbox (vb_tool, tt, "tools.text");
+            gradientdrag_checkbox (vb_tool, tt, "tools.text");
         }
 
         // Dropper
@@ -1176,6 +1195,7 @@ sp_display_dialog (void)
             GtkWidget *dropper_page = options_dropper ();
             gtk_widget_show (dropper_page);
             gtk_container_add (GTK_CONTAINER (vb_tool), dropper_page);
+            gradientdrag_checkbox (vb_tool, tt, "tools.dropper");
         }
 
         g_signal_connect(GTK_OBJECT (nb_tools), "switch-page", GTK_SIGNAL_FUNC (prefs_switch_page), (void *) "page_tools");
