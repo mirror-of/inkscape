@@ -166,9 +166,6 @@ void Path::DoSimplify(double treshhold)
     
     int curP = 0;
   
-    char * const savPts = pts;
-    int const savNbPt = nbPt;
-    
     fitting_tables data;
     data.Xk = data.Yk = data.Qk = NULL;
     data.tk = data.lk = NULL;
@@ -176,18 +173,15 @@ void Path::DoSimplify(double treshhold)
     data.totLen = 0;
     data.nbPt = data.maxPt = data.inPt = 0;
   
-    NR::Point const moveToPt = ((path_lineto *) savPts)[0].p;
+    NR::Point const moveToPt = ((path_lineto *) pts)[0].p;
     MoveTo(moveToPt);
     NR::Point endToPt = moveToPt;
   
-    while (curP < savNbPt - 1) {
+    while (curP < nbPt - 1) {
 
         int lastP = curP + 1;
-        nbPt = 2;
+        int N = 2;
 
-        /* FIXME: pts munged */
-        pts = (char *) ( ((path_lineto *) savPts) + curP);
-    
         // remettre a zero
         data.inPt = data.nbPt = 0;
 
@@ -200,48 +194,47 @@ void Path::DoSimplify(double treshhold)
             int worstP = -1;
             
             do {
-                if ((((path_lineto *) savPts) + lastP)->isMoveTo == polyline_forced) {
+                if ((((path_lineto *) pts) + lastP)->isMoveTo == polyline_forced) {
                     contains_forced = true;
                 }
                 forced_pt = lastP;
                 lastP += step;
-                nbPt += step;
-            } while (lastP < savNbPt && ExtendFit(data,
-                                                  (contains_forced) ? 0.05 * treshhold : treshhold,
-                                                  res, worstP) ); // cth103: uses pts
-            if (lastP >= savNbPt) {
+                N += step;
+            } while (lastP < nbPt && ExtendFit(curP, N, data,
+                                               (contains_forced) ? 0.05 * treshhold : treshhold,
+                                               res, worstP) );
+            if (lastP >= nbPt) {
 
                 lastP -= step;
-                nbPt -= step;
+                N -= step;
                 
             } else {
                 // le dernier a echoue
                 lastP -= step;
-                nbPt -= step;
+                N -= step;
                 
                 if ( contains_forced ) {
                     lastP = forced_pt;
-                    nbPt = lastP - curP + 1;
+                    N = lastP - curP + 1;
                 }
 
-                // cth103: uses pts
-                AttemptSimplify(treshhold, res, worstP);       // ca passe forcement
+                AttemptSimplify(curP, N, treshhold, res, worstP);       // ca passe forcement
             }
             step /= 2;
         }
     
-        endToPt = ((path_lineto *) savPts)[lastP].p;
-        if (nbPt <= 2) {
-            LineTo(endToPt); /* cth103: does not use pts */
+        endToPt = ((path_lineto *) pts)[lastP].p;
+        if (N <= 2) {
+            LineTo(endToPt);
         } else {
-            CubicTo(endToPt, res.stD, res.enD); /* cth103: does not use pts */
+            CubicTo(endToPt, res.stD, res.enD);
         }
         
         curP = lastP;
     }
   
     if (NR::LInfty(endToPt - moveToPt) < 0.00001) {
-        Close(); /* cth103: does not use pts */
+        Close();
     }
   
     g_free(data.Xk);
@@ -250,10 +243,6 @@ void Path::DoSimplify(double treshhold)
     g_free(data.tk);
     g_free(data.lk);
     g_free(data.fk);
-
-    /* FIXME: pts restored */
-    pts = savPts;
-    nbPt = savNbPt;
 }
 
 
@@ -342,10 +331,10 @@ bool Path::FitCubic(NR::Point const &start, path_descr_cubicto &res,
  *    Uses pts.
  */
 
-bool Path::ExtendFit(fitting_tables &data, double treshhold, path_descr_cubicto &res, int &worstP)
+bool Path::ExtendFit(int off, int N, fitting_tables &data, double treshhold, path_descr_cubicto &res, int &worstP)
 {
-    if ( nbPt >= data.maxPt ) {
-        data.maxPt = 2 * nbPt + 1;
+    if ( N >= data.maxPt ) {
+        data.maxPt = 2 * N + 1;
         data.Xk = (double *) g_realloc(data.Xk, data.maxPt * sizeof(double));
         data.Yk = (double *) g_realloc(data.Yk, data.maxPt * sizeof(double));
         data.Qk = (double *) g_realloc(data.Qk, data.maxPt * sizeof(double));
@@ -354,9 +343,9 @@ bool Path::ExtendFit(fitting_tables &data, double treshhold, path_descr_cubicto 
         data.fk = (char *) g_realloc(data.fk, data.maxPt * sizeof(char));
     }
     
-    if ( nbPt > data.inPt ) {
-        path_lineto const *tp = (path_lineto *) pts;
-        for (int i = data.inPt; i < nbPt; i++) {
+    if ( N > data.inPt ) {
+        path_lineto const *tp = ((path_lineto *) pts) + off;
+        for (int i = data.inPt; i < N; i++) {
             data.Xk[i] = tp[i].p[NR::X];
             data.Yk[i] = tp[i].p[NR::Y];
             data.fk[i] = ( tp[i].isMoveTo == polyline_forced ) ? 0x01 : 0x00;        
@@ -370,7 +359,7 @@ bool Path::ExtendFit(fitting_tables &data, double treshhold, path_descr_cubicto 
         }
         data.totLen = prevLen;
         
-        for (int i = ( (data.inPt > 0) ? data.inPt : 1); i < nbPt; i++) {
+        for (int i = ( (data.inPt > 0) ? data.inPt : 1); i < N; i++) {
             NR::Point diff;
             diff[NR::X] = data.Xk[i] - data.Xk[i - 1];
             diff[NR::Y] = data.Yk[i] - data.Yk[i - 1];
@@ -384,29 +373,29 @@ bool Path::ExtendFit(fitting_tables &data, double treshhold, path_descr_cubicto 
             data.tk[i] /= data.totLen;
         }
         
-        for (int i = data.inPt; i < nbPt; i++) {
+        for (int i = data.inPt; i < N; i++) {
             data.tk[i] /= data.totLen;
         }
-        data.inPt = nbPt;
+        data.inPt = N;
     }
     
-    if ( nbPt < data.nbPt ) {
+    if ( N < data.nbPt ) {
         // on est allŽ trop loin
         // faut recalculer les tk
         data.totLen = 0;
         data.tk[0] = 0;
         data.lk[0] = 0;
-        for (int i = 1; i < nbPt; i++) {
+        for (int i = 1; i < N; i++) {
             data.totLen += data.lk[i];
             data.tk[i] = data.totLen;
         }
         
-        for (int i = 1; i < nbPt; i++) {
+        for (int i = 1; i < N; i++) {
             data.tk[i] /= data.totLen;
         }
     }
   
-    data.nbPt = nbPt;
+    data.nbPt = N;
     
     if ( data.nbPt <= 0 ) {
         return false;
@@ -417,7 +406,7 @@ bool Path::ExtendFit(fitting_tables &data, double treshhold, path_descr_cubicto 
     res.stD[0] = res.stD[1] = 0;
     res.enD[0] = res.enD[1] = 0;
     worstP = 1;
-    if ( nbPt <= 2 ) {
+    if ( N <= 2 ) {
         return true;
     }
   
@@ -427,7 +416,7 @@ bool Path::ExtendFit(fitting_tables &data, double treshhold, path_descr_cubicto 
         worstP = -1;
         start[0] = data.Xk[0];
         start[1] = data.Yk[0];
-        for (int i = 1; i < nbPt; i++) {
+        for (int i = 1; i < N; i++) {
             NR::Point nPt;
             bool isForced = data.fk[i];
             nPt[0] = data.Xk[i];
@@ -764,7 +753,7 @@ bool Path::AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cu
  *    Uses pts.
  */
 
-bool Path::AttemptSimplify(double treshhold, path_descr_cubicto &res,int &worstP)
+bool Path::AttemptSimplify(int off, int N, double treshhold, path_descr_cubicto &res,int &worstP)
 {
     NR::Point start;
     NR::Point end;
@@ -780,20 +769,20 @@ bool Path::AttemptSimplify(double treshhold, path_descr_cubicto &res,int &worstP
     NR::Point cp1;
     NR::Point cp2;
   
-    if (nbPt == 2) {
+    if (N == 2) {
         worstP = 1;
         return true;
     }
   
-    path_lineto const *tp = (path_lineto *) pts;
+    path_lineto const *tp = ((path_lineto *) pts) + off;
     start = tp[0].p;
     cp1 = tp[1].p;
-    end = tp[nbPt - 1].p;
+    end = tp[N - 1].p;
   
     res.p = end;
     res.stD[0] = res.stD[1] = 0;
     res.enD[0] = res.enD[1] = 0;
-    if (nbPt == 3) {
+    if (N == 3) {
         // start -> cp1 -> end
         res.stD = cp1 - start;
         res.enD = end - cp1;
@@ -802,20 +791,20 @@ bool Path::AttemptSimplify(double treshhold, path_descr_cubicto &res,int &worstP
     }
   
     // Totally inefficient, allocates & deallocates all the time.
-    tk = (double *) g_malloc(nbPt * sizeof(double));
-    Qk = (double *) g_malloc(nbPt * sizeof(double));
-    Xk = (double *) g_malloc(nbPt * sizeof(double));
-    Yk = (double *) g_malloc(nbPt * sizeof(double));
-    lk = (double *) g_malloc(nbPt * sizeof(double));
-    fk = (char *) g_malloc(nbPt * sizeof(char));
+    tk = (double *) g_malloc(N * sizeof(double));
+    Qk = (double *) g_malloc(N * sizeof(double));
+    Xk = (double *) g_malloc(N * sizeof(double));
+    Yk = (double *) g_malloc(N * sizeof(double));
+    lk = (double *) g_malloc(N * sizeof(double));
+    fk = (char *) g_malloc(N * sizeof(char));
   
     // chord length method
     tk[0] = 0.0;
     lk[0] = 0.0;
     {
         NR::Point prevP = start;
-        for (int i = 1; i < nbPt; i++) {
-            path_lineto const *tp = (path_lineto *) pts;
+        for (int i = 1; i < N; i++) {
+            path_lineto const *tp = ((path_lineto *) pts) + off;
             Xk[i] = tp[i].p[NR::X];
             Yk[i] = tp[i].p[NR::Y];
             
@@ -833,13 +822,13 @@ bool Path::AttemptSimplify(double treshhold, path_descr_cubicto &res,int &worstP
         }
     }
     
-    if (tk[nbPt - 1] < 0.00001) {
+    if (tk[N - 1] < 0.00001) {
         // longueur nulle 
         res.stD[0] = res.stD[1] = 0;
         res.enD[0] = res.enD[1] = 0;
         double worstD = 0;
         worstP = -1;
-        for (int i = 1; i < nbPt; i++) {
+        for (int i = 1; i < N; i++) {
             NR::Point nPt;
             bool isForced = fk[i];
             nPt[0] = Xk[i];
@@ -870,13 +859,13 @@ bool Path::AttemptSimplify(double treshhold, path_descr_cubicto &res,int &worstP
         return false;
     }
     
-    double totLen = tk[nbPt - 1];
-    for (int i = 1; i < nbPt - 1; i++) {
+    double totLen = tk[N - 1];
+    for (int i = 1; i < N - 1; i++) {
         tk[i] /= totLen;
     }
   
     res.p = end;
-    if ( FitCubic(start, res, Xk, Yk, Qk, tk, nbPt) ) {
+    if ( FitCubic(start, res, Xk, Yk, Qk, tk, N) ) {
         cp1 = start + res.stD / 3;
         cp2 = end + res.enD / 3;
     } else {
@@ -885,7 +874,7 @@ bool Path::AttemptSimplify(double treshhold, path_descr_cubicto &res,int &worstP
         res.enD[0] = res.enD[1] = 0;
         double worstD = 0;
         worstP = -1;
-        for (int i = 1; i < nbPt; i++) {
+        for (int i = 1; i < N; i++) {
             NR::Point nPt(Xk[i], Yk[i]);
             bool isForced = fk[i];
             double nle = DistanceToCubic(start, res, nPt);
@@ -925,8 +914,8 @@ bool Path::AttemptSimplify(double treshhold, path_descr_cubicto &res,int &worstP
     prevAppP = prevP; // le premier seulement
     prevDist = 0;
 #ifdef with_splotch_killer
-    if ( nbPt <= 20 ) {
-      for (int i = 1; i < nbPt - 1; i++)
+    if ( N <= 20 ) {
+      for (int i = 1; i < N - 1; i++)
       {
         NR::Point curAppP;
         NR::Point curP;
@@ -935,12 +924,12 @@ bool Path::AttemptSimplify(double treshhold, path_descr_cubicto &res,int &worstP
         NR::Point midP;
         double    midDist;
         
-        curAppP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0] + N03 (tk[i]) * Xk[0] + N33 (tk[i]) * Xk[nbPt - 1];
-        curAppP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1] + N03 (tk[i]) * Yk[0] + N33 (tk[i]) * Yk[nbPt - 1];
+        curAppP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0] + N03 (tk[i]) * Xk[0] + N33 (tk[i]) * Xk[N - 1];
+        curAppP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1] + N03 (tk[i]) * Yk[0] + N33 (tk[i]) * Yk[N - 1];
         curP[0] = Xk[i];
         curP[1] = Yk[i];
-        midAppP[0] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[0] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[0] + N03 (0.5*(tk[i]+tk[i-1])) * Xk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Xk[nbPt - 1];
-        midAppP[1] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[1] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[1] + N03 (0.5*(tk[i]+tk[i-1])) * Yk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Yk[nbPt - 1];
+        midAppP[0] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[0] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[0] + N03 (0.5*(tk[i]+tk[i-1])) * Xk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Xk[N - 1];
+        midAppP[1] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[1] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[1] + N03 (0.5*(tk[i]+tk[i-1])) * Yk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Yk[N - 1];
         midP=0.5*(curP+prevP);
         
         NR::Point diff;
@@ -966,14 +955,14 @@ bool Path::AttemptSimplify(double treshhold, path_descr_cubicto &res,int &worstP
       delta/=totLen;
     } else {
 #endif
-      for (int i = 1; i < nbPt - 1; i++)
+      for (int i = 1; i < N - 1; i++)
       {
         NR::Point curAppP;
         NR::Point curP;
         double    curDist;
         
-        curAppP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0] + N03 (tk[i]) * Xk[0] + N33 (tk[i]) * Xk[nbPt - 1];
-        curAppP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1] + N03 (tk[i]) * Yk[0] + N33 (tk[i]) * Yk[nbPt - 1];
+        curAppP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0] + N03 (tk[i]) * Xk[0] + N33 (tk[i]) * Xk[N - 1];
+        curAppP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1] + N03 (tk[i]) * Yk[0] + N33 (tk[i]) * Yk[N - 1];
         curP[0] = Xk[i];
         curP[1] = Yk[i];
         
@@ -1005,7 +994,7 @@ bool Path::AttemptSimplify(double treshhold, path_descr_cubicto &res,int &worstP
     res.p = end;
     
     // Refine a little.
-    for (int i = 1; i < nbPt - 1; i++)
+    for (int i = 1; i < N - 1; i++)
     {
       NR::Point
 	    pt;
@@ -1019,7 +1008,7 @@ bool Path::AttemptSimplify(double treshhold, path_descr_cubicto &res,int &worstP
 	    }
     }
     
-    if ( FitCubic(start,res,Xk,Yk,Qk,tk,nbPt) ) {
+    if ( FitCubic(start,res,Xk,Yk,Qk,tk,N) ) {
     } else {
       // ca devrait jamais arriver, mais bon
       res.stD = 3.0 * (cp1 - start);
@@ -1044,8 +1033,8 @@ bool Path::AttemptSimplify(double treshhold, path_descr_cubicto &res,int &worstP
       prevAppP = prevP; // le premier seulement
       prevDist = 0;
 #ifdef with_splotch_killer
-      if ( nbPt <= 20 ) {
-        for (int i = 1; i < nbPt - 1; i++)
+      if ( N <= 20 ) {
+        for (int i = 1; i < N - 1; i++)
         {
           NR::Point curAppP;
           NR::Point curP;
@@ -1054,12 +1043,12 @@ bool Path::AttemptSimplify(double treshhold, path_descr_cubicto &res,int &worstP
           NR::Point midP;
           double    midDist;
           
-          curAppP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0] + N03 (tk[i]) * Xk[0] + N33 (tk[i]) * Xk[nbPt - 1];
-          curAppP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1] + N03 (tk[i]) * Yk[0] + N33 (tk[i]) * Yk[nbPt - 1];
+          curAppP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0] + N03 (tk[i]) * Xk[0] + N33 (tk[i]) * Xk[N - 1];
+          curAppP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1] + N03 (tk[i]) * Yk[0] + N33 (tk[i]) * Yk[N - 1];
           curP[0] = Xk[i];
           curP[1] = Yk[i];
-          midAppP[0] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[0] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[0] + N03 (0.5*(tk[i]+tk[i-1])) * Xk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Xk[nbPt - 1];
-          midAppP[1] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[1] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[1] + N03 (0.5*(tk[i]+tk[i-1])) * Yk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Yk[nbPt - 1];
+          midAppP[0] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[0] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[0] + N03 (0.5*(tk[i]+tk[i-1])) * Xk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Xk[N - 1];
+          midAppP[1] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[1] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[1] + N03 (0.5*(tk[i]+tk[i-1])) * Yk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Yk[N - 1];
           midP = 0.5*(curP+prevP);
           
           NR::Point diff;
@@ -1084,14 +1073,14 @@ bool Path::AttemptSimplify(double treshhold, path_descr_cubicto &res,int &worstP
         ndelta /= totLen;
       } else {
 #endif
-        for (int i = 1; i < nbPt - 1; i++)
+        for (int i = 1; i < N - 1; i++)
         {
           NR::Point curAppP;
           NR::Point curP;
           double    curDist;
           
-          curAppP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0] + N03 (tk[i]) * Xk[0] + N33 (tk[i]) * Xk[nbPt - 1];
-          curAppP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1] + N03 (tk[i]) * Yk[0] + N33 (tk[i]) * Yk[nbPt - 1];
+          curAppP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0] + N03 (tk[i]) * Xk[0] + N33 (tk[i]) * Xk[N - 1];
+          curAppP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1] + N03 (tk[i]) * Yk[0] + N33 (tk[i]) * Yk[N - 1];
           curP[0]=Xk[i];
           curP[1]=Yk[i];
           
@@ -1256,7 +1245,7 @@ void Path::Coalesce(double tresh)
         
                 path_descr_cubicto res;
                 int worstP = -1;
-                if (AttemptSimplify((containsForced) ? 0.05 * tresh : tresh, res, worstP)) {
+                if (AttemptSimplify(lastA, nextA - lastA + 1, (containsForced) ? 0.05 * tresh : tresh, res, worstP)) {
                     lastAddition.flags = descr_cubicto;
                     pending_cubic = res;
                     lastAP = -1;
@@ -1289,7 +1278,7 @@ void Path::Coalesce(double tresh)
                 
                 path_descr_cubicto res;
                 int worstP = -1;
-                if (AttemptSimplify(0.05 * tresh, res, worstP)) {
+                if (AttemptSimplify(lastA, nextA - lastA + 1, 0.05 * tresh, res, worstP)) {
                     // plus sensible parce que point force
                     // ca passe
                     containsForced = true;
@@ -1319,7 +1308,7 @@ void Path::Coalesce(double tresh)
                 
                 path_descr_cubicto res;
                 int worstP = -1;
-                if (AttemptSimplify(tresh, res, worstP)) {
+                if (AttemptSimplify(lastA, nextA - lastA + 1, tresh, res, worstP)) {
                     lastAddition.flags = descr_cubicto;
                     pending_cubic = res;
                     lastAddition.associated = lastA;

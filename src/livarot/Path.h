@@ -462,7 +462,7 @@ private:
 		      one_dash * dashs);
 
   void DoSimplify(double treshhold);
-  bool AttemptSimplify (double treshhold, path_descr_cubicto & res,int &worstP);
+  bool AttemptSimplify(int off, int N, double treshhold, path_descr_cubicto &res, int &worstP);
   static bool FitCubic(NR::Point const &start,
 		       path_descr_cubicto &res,
 		       double *Xk, double *Yk, double *Qk, double *tk, int nbPt);
@@ -478,7 +478,7 @@ private:
     double   totLen;
   };
   bool   AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cubicto & res,int &worstP);
-  bool   ExtendFit(fitting_tables &data,double treshhold, path_descr_cubicto & res,int &worstP);
+  bool   ExtendFit(int off, int N, fitting_tables &data,double treshhold, path_descr_cubicto & res,int &worstP);
   double RaffineTk (NR::Point pt, NR::Point p0, NR::Point p1, NR::Point p2, NR::Point p3, double it);
   void   FlushPendingAddition(Path* dest,path_descr *lastAddition,path_descr_cubicto &lastCubic,int lastAD);
 };
