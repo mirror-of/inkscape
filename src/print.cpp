@@ -178,15 +178,16 @@ sp_print_document_to_file (SPDocument *doc, const gchar *filename)
 {
 	Inkscape::Extension::Print *mod;
 	SPPrintContext context;
+	const gchar * oldconst;
 	gchar * oldoutput;
 	unsigned int ret;
 
 	sp_document_ensure_up_to_date (doc);
 
 	mod = Inkscape::Extension::get_print(SP_MODULE_KEY_PRINT_PS);
-	mod->get_param("destination", (gchar **)&oldoutput);
-	oldoutput = g_strdup(oldoutput);
-	mod->set_param("destination", (gchar *)filename);
+	oldconst = mod->get_param_string("destination");
+	oldoutput = g_strdup(oldconst);
+	mod->set_param_string("destination", (gchar *)filename);
 
 /* Start */
 	context.module = mod;
@@ -209,7 +210,7 @@ sp_print_document_to_file (SPDocument *doc, const gchar *filename)
 	mod->arena = NULL;
 /* end */
 
-	mod->set_param("destination", (gchar *)oldoutput);
+	mod->set_param_string("destination", oldoutput);
 	g_free(oldoutput);
 
 	return;

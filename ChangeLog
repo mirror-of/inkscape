@@ -1,3 +1,12 @@
+2004-07-31  Ted Gould  <ted@gould.cx>
+
+	* src/print.cpp, src/extension/extension.cpp, src/extension/extension.h,
+      src/extension/internal/eps-out.cpp, src/extension/internal/ps.cpp:
+
+	  Changed the get and set param prototypes so that they aren't overloaded
+	  anymore - this was flaky.  Also added a document to the prototype so
+	  that document specific parameters can be supported in the future.
+
 2004-07-28  David Turner
 
 	* sp-gradient.cpp, widgets/gradient-vector.cpp: fixed gradient handling to

@@ -16,6 +16,7 @@
 
 #include "widgets/menu.h"
 #include "xml/repr.h"
+#include "xml/repr-private.h"
 #include "forward.h"
 #include <libnr/nr-path.h>
 #include <display/nr-arena-forward.h>
@@ -143,21 +144,24 @@ public:
                                     want to overwrite it */
 private:
     void             make_param       (SPRepr * paramrepr);
-    inline param_t * param_shared     (gchar * name,
+    inline param_t * param_shared     (const gchar * name,
                                        GSList * list);
 public:
-    void             get_param        (gchar * name,
-                                       bool * value);
-    void             get_param        (gchar * name,
-                                       int * value);
-    void             get_param        (gchar * name,
-                                       gchar ** value);
-    bool             set_param        (gchar * name,
-                                       bool value);
-    int              set_param        (gchar * name,
-                                       int value);
-    gchar *          set_param        (gchar * name,
-                                       gchar * value);
+    bool             get_param_bool   (const gchar * name,
+                                       const SPReprDoc *   doc = NULL);
+    int              get_param_int    (const gchar * name,
+                                       const SPReprDoc *   doc = NULL);
+    const gchar *    get_param_string (const gchar * name,
+                                       const SPReprDoc *   doc = NULL);
+    bool             set_param_bool   (const gchar * name,
+                                       bool          value,
+                                       SPReprDoc *   doc = NULL);
+    int              set_param_int    (const gchar * name,
+                                       int           value,
+                                       SPReprDoc *   doc = NULL);
+    const gchar *    set_param_string (const gchar * name,
+                                       const gchar * value,
+                                       SPReprDoc *   doc = NULL);
 };
 
 class Input : public Extension {

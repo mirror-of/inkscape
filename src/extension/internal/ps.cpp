@@ -127,8 +127,7 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 	gtk_container_add (GTK_CONTAINER (f), vb);
 	gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
 	/* Print type */
-	p2bm = FALSE;
-	mod->get_param("bitmap", &p2bm);
+	p2bm = mod->get_param_bool("bitmap");
 	rb = gtk_radio_button_new_with_label (NULL, _("Print using PostScript operators"));
 	gtk_tooltips_set_tip ((GtkTooltips *) tt, rb,
 						  _("Use PostScript vector operators. The resulting image is usually smaller "
@@ -162,8 +161,8 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 	gtk_combo_set_popdown_strings (GTK_COMBO (combo), sl);
 	g_list_free (sl);
 	if (1) {
-		gchar * val = NULL;
-		mod->get_param("resolution", &val);
+		const gchar * val = NULL;
+		val = mod->get_param_string("resolution");
 		gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo)->entry), val);
 	}
 	gtk_box_pack_end (GTK_BOX (hb), combo, FALSE, FALSE, 0);
@@ -183,8 +182,8 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 
 	e = gtk_entry_new ();
 	if (1) {
-		gchar *val;
-		mod->get_param("destination", &val);
+		const gchar *val;
+		val = mod->get_param_string("destination");
 		gtk_entry_set_text (GTK_ENTRY (e), val);
 	}
 	gtk_box_pack_start (GTK_BOX (vb), e, FALSE, FALSE, 0);
@@ -209,9 +208,9 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 		fn = gtk_entry_get_text (GTK_ENTRY (e));
 		/* g_print ("Printing to %s\n", fn); */
 
-		mod->set_param("bitmap", _bitmap);
-		mod->set_param("resolution", (gchar *)sstr);
-		mod->set_param("destination", (gchar *)fn);
+		mod->set_param_bool("bitmap", _bitmap);
+		mod->set_param_string("resolution", (gchar *)sstr);
+		mod->set_param_string("destination", (gchar *)fn);
 		ret = TRUE;
 	}
 
@@ -226,9 +225,9 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 	Inkscape::SVGOStringStream os;
 	int res;
 	FILE *osf, *osp;
-	gchar * fn;
+	const gchar * fn;
 
-	mod->get_param("destination", (gchar **)&fn);
+	fn = mod->get_param_string("destination");
 
 	osf = NULL;
 	osp = NULL;
@@ -321,7 +320,7 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 
 	NRRect d;
 	bool   pageBoundingBox;
-	mod->get_param("pageBoundingBox", &pageBoundingBox);
+	pageBoundingBox = mod->get_param_bool("pageBoundingBox");
 	// printf("Page Bounding Box: %s\n", pageBoundingBox ? "TRUE" : "FALSE");
 	if (pageBoundingBox)
 	{
@@ -926,9 +925,7 @@ PrintPS::print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int he
 bool
 PrintPS::textToPath (Inkscape::Extension::Print * ext)
 {
-	bool param;
-	ext->get_param("textToPath", &param);
-	return param;
+	return ext->get_param_bool("textToPath");
 }
 
 void

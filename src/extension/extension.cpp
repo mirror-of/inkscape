@@ -364,7 +364,7 @@ Extension::make_param (SPRepr * paramrepr)
     called again with g_slist_next as a parameter.
 */
 inline Extension::param_t *
-Extension::param_shared (gchar * name, GSList * list)
+Extension::param_shared (const gchar * name, GSList * list)
 {
     Extension::param_t * output;
     
@@ -384,17 +384,11 @@ Extension::param_shared (gchar * name, GSList * list)
 }
 
 /**
-    \return   None
+    \return   A constant pointer to the string held by the parameters.
     \brief    Gets a parameter identified by name with the string placed
               in value.  It isn't duplicated into the value string.
     \param    name    The name of the parameter to get
-    \param    value   Place to put a pointer to the string
-
-    This function first checks to make sure that the value parameter
-    is not passed in as NULL.  If so, the function returns.  This
-    doesn't emit a warning - this will probably cause some sort of
-    error in the calling function (as it wouldn't be calling this function
-    if it didn't want the value) so it can be debugged there.
+	\param    doc    The document to look in for document specific parameters
 
     To get the parameter to be used the function param_shared is called.
     This function is inline so it shouldn't cause the stack to build
@@ -409,39 +403,26 @@ Extension::param_shared (gchar * name, GSList * list)
     Finally, if everything is okay, the string value that is stored in
     the parameter is placed in value.
 */
-void
-Extension::get_param (gchar * name, gchar ** value)
+const gchar *
+Extension::get_param_string (const gchar * name, const SPReprDoc * doc)
 {
     Extension::param_t * param;
     
-    if (value == NULL) {
-        /* This probably isn't a good error, but the calling function
-           will find out soon enough it doesn't have data there ;) */
-        return;
-    }
-
     param = Extension::param_shared(name, parameters);
 
     if (param->type != Extension::PARAM_STRING) {
         throw Extension::param_wrong_type();
     }
 
-    *value = param->val.t_string;
-    return;
+    return param->val.t_string;
 }
 
 /**
-    \return   None
+    \return   The value of the parameter identified by the name
     \brief    Gets a parameter identified by name with the bool placed
               in value.
     \param    name    The name of the parameter to get
-    \param    value   Place to put the bool value
-
-    This function first checks to make sure that the value parameter
-    is not passed in as NULL.  If so, the function returns.  This
-    doesn't emit a warning - this will probably cause some sort of
-    error in the calling function (as it wouldn't be calling this function
-    if it didn't want the value) so it can be debugged there.
+	\param    doc    The document to look in for document specific parameters
 
     To get the parameter to be used the function param_shared is called.
     This function is inline so it shouldn't cause the stack to build
@@ -456,39 +437,26 @@ Extension::get_param (gchar * name, gchar ** value)
     Finally, if everything is okay, the boolean value that is stored in
     the parameter is placed in value.
 */
-void
-Extension::get_param (gchar * name, bool * value)
+bool
+Extension::get_param_bool (const gchar * name, const SPReprDoc * doc)
 {
     Extension::param_t * param;
     
-    if (value == NULL) {
-        /* This probably isn't a good error, but the calling function
-           will find out soon enough it doesn't have data there ;) */
-        return;
-    }
-
     param = Extension::param_shared(name, parameters);
 
     if (param->type != Extension::PARAM_BOOL) {
         throw Extension::param_wrong_type();
     }
 
-    *value = param->val.t_bool;
-    return;
+    return param->val.t_bool;
 }
 
 /**
-    \return   None
+    \return   The integer value for the parameter specified
     \brief    Gets a parameter identified by name with the integer placed
               in value.
     \param    name    The name of the parameter to get
-    \param    value   Place to put the integer value
-
-    This function first checks to make sure that the value parameter
-    is not passed in as NULL.  If so, the function returns.  This
-    doesn't emit a warning - this will probably cause some sort of
-    error in the calling function (as it wouldn't be calling this function
-    if it didn't want the value) so it can be debugged there.
+	\param    doc    The document to look in for document specific parameters
 
     To get the parameter to be used the function param_shared is called.
     This function is inline so it shouldn't cause the stack to build
@@ -503,25 +471,18 @@ Extension::get_param (gchar * name, bool * value)
     Finally, if everything is okay, the integer value that is stored in
     the parameter is placed in value.
 */
-void
-Extension::get_param (gchar * name, int * value)
+int
+Extension::get_param_int (const gchar * name, const SPReprDoc * doc)
 {
     Extension::param_t * param;
     
-    if (value == NULL) {
-        /* This probably isn't a good error, but the calling function
-           will find out soon enough it doesn't have data there ;) */
-        return;
-    }
-
     param = Extension::param_shared(name, parameters);
 
     if (param->type != Extension::PARAM_INT) {
         throw Extension::param_wrong_type();
     }
 
-    *value = param->val.t_int;
-    return;
+    return param->val.t_int;
 }
 
 /**
@@ -530,6 +491,7 @@ Extension::get_param (gchar * name, int * value)
               in the parameter value.
     \param    name    The name of the parameter to set
     \param    value   The value to set the parameter to
+	\param    doc    The document to look in for document specific parameters
 
     To get the parameter to be used the function param_shared is called.
     This function is inline so it shouldn't cause the stack to build
@@ -545,7 +507,7 @@ Extension::get_param (gchar * name, int * value)
 	in is placed in the param.
 */
 bool
-Extension::set_param (gchar * name, bool value)
+Extension::set_param_bool (const gchar * name, bool value, SPReprDoc * doc)
 {
     Extension::param_t * param;
 	gchar * param_name;
@@ -571,6 +533,7 @@ Extension::set_param (gchar * name, bool value)
               in the parameter value.
     \param    name    The name of the parameter to set
     \param    value   The value to set the parameter to
+	\param    doc    The document to look in for document specific parameters
 
     To get the parameter to be used the function param_shared is called.
     This function is inline so it shouldn't cause the stack to build
@@ -586,7 +549,7 @@ Extension::set_param (gchar * name, bool value)
 	in is placed in the param.
 */
 int
-Extension::set_param (gchar * name, int value)
+Extension::set_param_int (const gchar * name, int value, SPReprDoc * doc)
 {
     Extension::param_t * param;
 	gchar * param_name;
@@ -612,6 +575,7 @@ Extension::set_param (gchar * name, int value)
               in the parameter value.
     \param    name    The name of the parameter to set
     \param    value   The value to set the parameter to
+	\param    doc    The document to look in for document specific parameters
 
 	First this function makes sure that the incoming string is not
 	NULL.  The value can't be set to NULL.
@@ -629,8 +593,8 @@ Extension::set_param (gchar * name, int value)
     Finally, if everything is okay, the previous value is free'd and
 	the incoming value is duplicated and placed in the parameter.
 */
-gchar *
-Extension::set_param (gchar * name, gchar * value)
+const gchar *
+Extension::set_param_string (const gchar * name, const gchar * value, SPReprDoc * doc)
 {
     Extension::param_t * param;
 	gchar * param_name;
