@@ -1,6 +1,13 @@
+2004-07-10  Kees Cook  <kees@outflux.net>
+
+	* src/knot.cpp: solved bug #988513: knot could stay grabbed in
+	  situations where the tool went away but never got "button_release"
+	  event.  This patch uses the "enter" and "leave" notifiers to disable
+	  the grab before a "motion" can come and snag the knot.
+
 2004-07-09  Kees Cook  <kees@outflux.net>
 
-	* src/widgets/paint-selector.cpp: solves bug #984902: the pattern
+	* src/widgets/paint-selector.cpp: solved bug #984902: the pattern
 	  menu was being destroyed since it was remaining part of the frame
 	  that was being destroyed whenever the selector changed.  It gets
 	  ref-counted, disconnected, and destroyed correctly now.

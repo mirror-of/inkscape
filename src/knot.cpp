@@ -543,10 +543,20 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 		break;
 	case GDK_ENTER_NOTIFY:
 		sp_knot_set_flag (knot, SP_KNOT_MOUSEOVER, TRUE);
+
+		sp_knot_set_flag (knot, SP_KNOT_GRABBED, FALSE);
+		grabbed = FALSE;
+		moved = FALSE;
+
 		consumed = TRUE;
 		break;
 	case GDK_LEAVE_NOTIFY:
 		sp_knot_set_flag (knot, SP_KNOT_MOUSEOVER, FALSE);
+
+		sp_knot_set_flag (knot, SP_KNOT_GRABBED, FALSE);
+		grabbed = FALSE;
+		moved = FALSE;
+
 		consumed = TRUE;
 		break;
 	case GDK_KEY_PRESS: // keybindings for knot
