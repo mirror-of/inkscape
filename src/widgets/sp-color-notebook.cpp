@@ -29,6 +29,7 @@
 #include <gtk/gtkcheckmenuitem.h>
 #include <gtk/gtkoptionmenu.h>
 #include <gtk/gtkalignment.h>
+#include "gtk/gtkarrow.h"
 #include "../color.h"
 #include "../helper/sp-intl.h"
 #include "../dialogs/dialog-events.h"
@@ -37,7 +38,6 @@
 
 #include "sp-color-scales.h"
 #include "sp-color-gtkselector.h"
-#include "gtk/gtkarrow.h"
 
 struct _SPColorNotebookTracker {
 	const gchar* name;
@@ -259,7 +259,10 @@ void ColorNotebook::init()
 	gtk_box_pack_start (GTK_BOX (_csel), table, TRUE, TRUE, 0);
 
 
-	gtk_table_attach (GTK_TABLE (table), _book, 0, 2, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
+	gtk_table_attach (GTK_TABLE (table), _book, 0, 2, row, row + 1,
+                      static_cast<GtkAttachOptions>(GTK_EXPAND|GTK_FILL),
+                      static_cast<GtkAttachOptions>(GTK_EXPAND|GTK_FILL),
+                      XPAD, YPAD);
 	{
 		gboolean found = FALSE;
 		GtkWidget* arrow;

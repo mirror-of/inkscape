@@ -1,5 +1,10 @@
 2003-12-17  Jon A. Cruz <jon@joncruz.org>
 
+	* src/widgets/sp-color-notebook.cpp: fix for 859128; changed selectors to grow when
+	given more space.
+
+2003-12-17  Jon A. Cruz <jon@joncruz.org>
+
 	* Converted color selectors to C++ classes.
 
 2003-12-18  Nathan Hurst <njh@csse.monash.edu.au>
