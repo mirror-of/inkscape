@@ -147,7 +147,13 @@ sp_count_chars (SPObject *o, SPObject *target)
 }
 
 
-
+// TODO: FIXME: it's even more cumbersome than that. According to the spec, we must
+// combine the lists of an object with those of its ancestors if the object's list is
+// shorter than the string. So I'll be able to return the object's ly.dx/ly.dy only when
+// its length is the same or longer, otherwise a new list will have to be constructed
+// and the ancestors traversed upwards, picking list bits from each one with
+// corresponding shifts, until the list has sufficient length (or until there are no
+// more ancestors).
 
 /**
 \brief   Returns the dx list that is effective for the object o, or NULL if
