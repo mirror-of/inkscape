@@ -25,6 +25,7 @@
 #include "extension/db.h"
 #include "widgets/icon.h"
 #include "prefs-utils.h"
+#include "path-prefix.h"
 
 #include "verbs.h"
 #include "shortcuts.h"
@@ -470,6 +471,17 @@ sp_ui_menu_append (GtkMenu *menu, const sp_verb_t *verbs, SPView *view)
     }
 }
 
+static void
+sp_ui_menu_append_submenu (GtkMenu *fm, SPView *view, void (*fill_function)(GtkWidget*, SPView *), const gchar *label, const gchar *tip, const gchar *icon)
+{
+    GtkWidget *item = sp_ui_menu_append_item (fm, NULL, label, tip, view, NULL, NULL);
+    if (icon) sp_ui_menuitem_add_icon (item, (gchar *) icon);
+
+    GtkWidget *menu = gtk_menu_new ();
+    fill_function (GTK_WIDGET (menu), view);
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), menu);
+}
+
  static void 
 checkitem_toggled(GtkCheckMenuItem *menuitem, gpointer user_data) 	 
  { 	 
@@ -570,19 +582,100 @@ sp_ui_menu_append_check_item_from_verb (GtkMenu *menu, SPView *view, const gchar
     g_signal_connect ( G_OBJECT (item), "deselect", G_CALLBACK (sp_ui_menu_deselect), NULL); 	 
 }
 
+static void
+sp_recent_open (GtkWidget *widget, const gchar *uri)
+{
+	sp_file_open (uri, NULL);
+}
 
+static void
+sp_file_new_from_template (GtkWidget *widget, const gchar *uri)
+{
+	sp_file_new (uri);
+}
+
+void
+sp_menu_append_new_templates (GtkWidget *menu, SPView *view)
+{
+    // the Default must be there even if the templates dir is unreadable or empty
+    sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_FILE_NEW, view);
+
+    GDir *dir = g_dir_open (INKSCAPE_TEMPLATESDIR, 0, NULL);
+    if (!dir)
+        return;
+    for (const gchar *file = g_dir_read_name (dir); file != NULL; file = g_dir_read_name (dir)) {
+        if (!g_str_has_suffix (file, ".svg"))
+            continue; // skip non-svg files
+        if (g_str_has_suffix (file, "default.svg"))
+            continue; // skip default.svg - it's in the menu already
+
+        const gchar *filepath = g_build_filename(INKSCAPE_TEMPLATESDIR, file, NULL);
+        const gchar *filename =  g_filename_to_utf8(g_strndup (file, strlen(file) - 4),  -1, NULL, NULL, NULL);
+
+        GtkWidget *item = gtk_menu_item_new_with_label (filename);
+        gtk_widget_show(item);
+        g_signal_connect(G_OBJECT(item),
+                         "activate",
+                         G_CALLBACK(sp_file_new_from_template),
+                         (gpointer) filepath);
+
+        if (view) {
+            // set null tip for now; later use a description from the template file
+            g_object_set_data (G_OBJECT (item), "view", (gpointer) view);
+            g_signal_connect ( G_OBJECT (item), "select", G_CALLBACK (sp_ui_menu_select), (gpointer) NULL );
+            g_signal_connect ( G_OBJECT (item), "deselect", G_CALLBACK (sp_ui_menu_deselect), NULL);
+        }
+
+        gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+    }
+    g_dir_close (dir);
+}
+
+
+void
+sp_menu_append_recent_documents (GtkWidget *menu, SPView* /* view */)
+{
+	const gchar ** recent;
+
+	recent = prefs_get_recent_files();
+	if (recent) {
+            int i;
+
+            for (i = 0; recent[i] != NULL; i += 2) {
+                const gchar *uri = recent[i];
+                const gchar *name = recent[i + 1];
+
+                GtkWidget *item = gtk_menu_item_new_with_label (name);
+                gtk_widget_show(item);
+                g_signal_connect(G_OBJECT(item),
+                                "activate",
+                                G_CALLBACK(sp_recent_open),
+                                (gpointer)uri);
+                gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+            }
+
+            g_free(recent);
+	} else {
+		GtkWidget *item = gtk_menu_item_new_with_label(_("None"));
+		gtk_widget_show(item);
+		gtk_widget_set_sensitive(item, FALSE);
+		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
+	}
+}
 
 static void
 sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
 {
-
-    GtkWidget *item_recent, *menu_recent;
+    sp_ui_menu_append_submenu (fm, view, sp_menu_append_new_templates, _("_New"), _("Create new document"), NULL);
 
     static const sp_verb_t file_verbs_one[] = {
-        SP_VERB_FILE_NEW,
 	SP_VERB_FILE_OPEN,
 	SP_VERB_LAST
     };
+
+    sp_ui_menu_append (fm, file_verbs_one, view);
+
+    sp_ui_menu_append_submenu (fm, view, sp_menu_append_recent_documents, _("Open _Recent"), _("Open one of the recently visited documents"), "file_open_recent");
 
     static const sp_verb_t file_verbs_two[] = {
 	SP_VERB_FILE_REVERT,
@@ -614,16 +707,8 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
         SP_VERB_LAST
     };
 
-    sp_ui_menu_append (fm, file_verbs_one, view);
-
-    item_recent = sp_ui_menu_append_item (fm, NULL, _("Open _Recent"), _("Open one of the recently visited documents"), view, NULL, NULL);
-    sp_ui_menuitem_add_icon (item_recent, "file_open_recent");
-    menu_recent = gtk_menu_new ();
-    sp_menu_append_recent_documents (GTK_WIDGET (menu_recent));
-    gtk_menu_item_set_submenu (GTK_MENU_ITEM (item_recent), menu_recent);
-
     sp_ui_menu_append (fm, file_verbs_two, view);
-} // end of sp_ui_file_menu()
+}
 
 
 
@@ -988,45 +1073,6 @@ sp_ui_context_menu (SPView *view, SPItem *item)
         }
 
 	return m;
-}
-
-static void
-sp_recent_open (GtkWidget *widget, const gchar *uri)
-{
-	sp_file_open (uri, NULL);
-}
-
-void
-sp_menu_append_recent_documents (GtkWidget *menu)
-{
-	const gchar ** recent;
-
-	recent = prefs_get_recent_files();
-	if (recent) {
-            int i;
-
-            for (i = 0; recent[i] != NULL; i += 2) {
-                GtkWidget *item;
-                const gchar *uri, *name;
-                uri = recent[i];
-                name = recent[i + 1];
-
-                item = gtk_menu_item_new_with_label (name);
-                gtk_widget_show(item);
-                g_signal_connect(G_OBJECT(item),
-                                "activate",
-                                G_CALLBACK(sp_recent_open),
-                                (gpointer)uri);
-                gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-            }
-
-            g_free(recent);
-	} else {
-		GtkWidget *item = gtk_menu_item_new_with_label(_("None"));
-		gtk_widget_show(item);
-		gtk_widget_set_sensitive(item, FALSE);
-		gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
-	}
 }
 
 /* Drag and Drop */

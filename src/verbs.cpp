@@ -809,7 +809,7 @@ static const SPVerbActionDef props[] = {
     {SP_VERB_NONE, "None", N_("None"), N_("Does nothing"), NULL},
 
     /* File */
-    {SP_VERB_FILE_NEW, "FileNew", N_("_New"), N_("Create new document"),
+    {SP_VERB_FILE_NEW, "FileNew", N_("Default"), N_("Create new document from default template"),
         GTK_STOCK_NEW },
     {SP_VERB_FILE_OPEN, "FileOpen", N_("_Open..."),
 	N_("Open existing document"), GTK_STOCK_OPEN },

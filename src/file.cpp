@@ -80,7 +80,7 @@ static gchar *import_path = NULL;
 void
 sp_file_new(const gchar *templ)
 {
-    SPDocument *doc = sp_document_new(templ, TRUE, TRUE);
+    SPDocument *doc = sp_document_new(templ, TRUE, TRUE, true);
     g_return_if_fail(doc != NULL);
 
     SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL));

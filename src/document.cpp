@@ -394,7 +394,7 @@ sp_document_create (SPReprDoc *rdoc,
 }
 
 SPDocument *
-sp_document_new (const gchar *uri, unsigned int advertize, unsigned int keepalive)
+sp_document_new (const gchar *uri, unsigned int advertize, unsigned int keepalive, bool make_new)
 {
 	SPDocument *doc;
 	SPReprDoc *rdoc;
@@ -424,6 +424,9 @@ sp_document_new (const gchar *uri, unsigned int advertize, unsigned int keepaliv
 		g_free (s);
 	} else {
 		rdoc = sp_repr_document_new ("svg");
+	}
+
+	if (make_new) {
 		base = NULL;
 		name = g_strdup_printf (_("New document %d"), ++doc_count);
 	}
