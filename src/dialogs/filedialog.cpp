@@ -46,7 +46,7 @@ static void
 checkbox_toggle (GtkWidget * widget, bool * append_extension)
 {
 	*append_extension = !*append_extension;
-	printf("Toggled Checkbox\n");
+	//printf("Toggled Checkbox\n");
 	return;
 }
 
