@@ -62,7 +62,7 @@ static void sp_item_widget_change_selection (SPWidget *spw, SPSelection *selecti
 static void sp_item_widget_setup (SPWidget *spw, SPSelection *selection);
 static void sp_item_widget_sensitivity_toggled (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_printability_toggled (GtkWidget *widget, SPWidget *spw);
-static void sp_item_widget_visibility_toggled (GtkWidget *widget, SPWidget *spw);
+static void sp_item_widget_hidden_toggled (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_label_changed (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_transform_value_changed (GtkWidget *widget, SPWidget *spw);
 
@@ -209,13 +209,14 @@ sp_item_widget_new (void)
                          spw );
     gtk_object_set_data (GTK_OBJECT (spw), "sensitive", cb);
 
-    cb = gtk_check_button_new_with_label (_("Visible"));
+    /* Whether to explicitly mark this object with visibility:hidden. */
+    cb = gtk_check_button_new_with_label(_("Hide"));
     gtk_widget_show (cb);
     gtk_table_attach ( GTK_TABLE (t), cb, 1, 2, 0, 1, 
                        (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
                        (GtkAttachOptions)0, 0, 0 );
-    g_signal_connect (G_OBJECT(cb), "toggled", G_CALLBACK(sp_item_widget_visibility_toggled), spw);
-    gtk_object_set_data (GTK_OBJECT (spw), "visible", cb);
+    g_signal_connect (G_OBJECT(cb), "toggled", G_CALLBACK(sp_item_widget_hidden_toggled), spw);
+    gtk_object_set_data(GTK_OBJECT(spw), "hidden", cb);
 
     cb = gtk_check_button_new_with_label (_("Active"));
     gtk_widget_set_sensitive (GTK_WIDGET (cb), FALSE);
@@ -379,10 +380,9 @@ sp_item_widget_setup ( SPWidget *spw, SPSelection *selection )
     GtkWidget *w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "sensitive"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), item->sensitive);
 
-    /* Visible */
-    w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "visible"));
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), 
-                                  ((SPObject*)item)->visible());
+    /* Hidden */
+    w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "hidden"));
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(w), item->isExplicitlyHidden());
 
     /* Printable */
     w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "printable"));
@@ -464,7 +464,7 @@ sp_item_widget_sensitivity_toggled (GtkWidget *widget, SPWidget *spw)
 }
 
 void
-sp_item_widget_visibility_toggled (GtkWidget *widget, SPWidget *spw)
+sp_item_widget_hidden_toggled(GtkWidget *widget, SPWidget *spw)
 {
     if (gtk_object_get_data (GTK_OBJECT (spw), "blocked"))
         return;
@@ -474,8 +474,7 @@ sp_item_widget_visibility_toggled (GtkWidget *widget, SPWidget *spw)
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
-    SPObject* obj = SP_OBJECT(item);
-    obj->setVisible(gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)));
+    item->setExplicitlyHidden(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget)));
 
     sp_document_maybe_done ( SP_WIDGET_DOCUMENT (spw), 
                              "ItemDialog:visiblity" );
