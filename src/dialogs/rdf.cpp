@@ -546,6 +546,8 @@ rdf_get_work_repr( SPDocument * doc, gchar const * name, bool build )
         work = sp_repr_new( XML_TAG_NAME_WORK );
         g_return_val_if_fail (work != NULL, NULL);
 
+        sp_repr_set_attr ( work, "rdf:about", "" );
+
         sp_repr_append_child(rdf, work);
         sp_repr_unref(work);
     }
