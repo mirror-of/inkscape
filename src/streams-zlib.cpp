@@ -19,7 +19,7 @@ namespace Inkscape {
  */
 
 ZlibBuffer::ZlibBuffer(URIHandle& urih) 
-    : _putsize(BUFSIZE_STREAM), _getsize(BUFSIZE_STREAM), _urihandle(&urih)
+  : _urihandle(&urih), _putsize(BUFSIZE_STREAM), _getsize(BUFSIZE_STREAM)
 { 
     init_inflation();
 }
