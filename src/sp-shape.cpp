@@ -477,36 +477,39 @@ sp_shape_modified (SPObject *object, unsigned int flags)
 
 static void sp_shape_bbox(SPItem *item, NRRect *bbox, NRMatrix const *transform, unsigned flags)
 {
-	SPShape *shape;
+    SPShape *shape = SP_SHAPE (item);
 
-	shape = SP_SHAPE (item);
+    if (shape->curve) {
 
-	if (shape->curve) {
-    NRRect  cbbox;
-		NRBPath bp;
-		bp.path = SP_CURVE_BPATH (shape->curve);
-    cbbox.x0 = cbbox.y0 = NR_HUGE;
-    cbbox.x1 = cbbox.y1 = -NR_HUGE;
-		nr_path_matrix_bbox_union(&bp, transform, &cbbox, 0.25);
-    SPStyle* style=SP_OBJECT_STYLE (item);
-    if (style->stroke.type != SP_PAINT_TYPE_NONE) {
-      float width, scale;
-      scale = NR_MATRIX_DF_EXPANSION (transform);
-      if ( fabsf(style->stroke_width.computed * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
-        width = MAX (0.125, style->stroke_width.computed * scale);
-        if ( fabs(cbbox.x1-cbbox.x0) > -0.00001 && fabs(cbbox.y1-cbbox.y0) > -0.00001 ) {
-          cbbox.x0-=0.5*width;
-          cbbox.x1+=0.5*width;
-          cbbox.y0-=0.5*width;
-          cbbox.y1+=0.5*width;
+        NRRect  cbbox;
+        NRBPath bp;
+
+        bp.path = SP_CURVE_BPATH (shape->curve);
+
+        cbbox.x0 = cbbox.y0 = NR_HUGE;
+        cbbox.x1 = cbbox.y1 = -NR_HUGE;
+
+        nr_path_matrix_bbox_union(&bp, transform, &cbbox, 0.25);
+
+        SPStyle* style=SP_OBJECT_STYLE (item);
+        if (style->stroke.type != SP_PAINT_TYPE_NONE) {
+            float width, scale;
+            scale = NR_MATRIX_DF_EXPANSION (transform);
+            if ( fabsf(style->stroke_width.computed * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
+                width = MAX (0.125, style->stroke_width.computed * scale);
+                if ( fabs(cbbox.x1-cbbox.x0) > -0.00001 && fabs(cbbox.y1-cbbox.y0) > -0.00001 ) {
+                    cbbox.x0-=0.5*width;
+                    cbbox.x1+=0.5*width;
+                    cbbox.y0-=0.5*width;
+                    cbbox.y1+=0.5*width;
+                }
+            }
         }
-      }
+        if ( fabs(cbbox.x1-cbbox.x0) > -0.00001 && fabs(cbbox.y1-cbbox.y0) > -0.00001 ) {
+            NRRect tbbox=*bbox;
+            nr_rect_d_union (bbox, &cbbox, &tbbox);
+        }
     }
-    if ( fabs(cbbox.x1-cbbox.x0) > -0.00001 && fabs(cbbox.y1-cbbox.y0) > -0.00001 ) {
-      NRRect tbbox=*bbox;
-      nr_rect_d_union (bbox, &cbbox, &tbbox);
-    }
-	}
 }
 
 void
