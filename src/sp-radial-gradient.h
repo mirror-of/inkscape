@@ -7,13 +7,6 @@
 #include "svg/svg-types.h"
 #include "sp-radial-gradient-fns.h"
 
-enum {
-    POINT_RG_CENTER,
-    POINT_RG_R1,
-    POINT_RG_R2,
-    POINT_RG_FOCUS
-};
-
 /** Radial gradient. */
 struct SPRadialGradient : public SPGradient {
     SPSVGLength cx;

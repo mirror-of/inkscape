@@ -42,6 +42,15 @@ typedef enum {
 	SP_GRADIENT_STATE_PRIVATE
 } SPGradientState;
 
+typedef enum {
+    POINT_LG_P1,
+    POINT_LG_P2,
+    POINT_RG_CENTER,
+    POINT_RG_R1,
+    POINT_RG_R2,
+    POINT_RG_FOCUS
+} GrPoint;
+
 struct SPGradient : public SPPaintServer {
 	/* Reference (href) */
 	SPGradientReference *ref;

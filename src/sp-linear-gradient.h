@@ -6,11 +6,6 @@
 #include "svg/svg-types.h"
 #include "sp-linear-gradient-fns.h"
 
-enum {
-    POINT_LG_P1,
-    POINT_LG_P2
-};
-
 /** Linear gradient. */
 struct SPLinearGradient : public SPGradient {
     SPSVGLength x1;

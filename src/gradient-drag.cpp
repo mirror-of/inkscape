@@ -228,7 +228,7 @@ GrDragger::addDraggable (GrDraggable *draggable)
 }
 
 
-GrDragger::GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable) 
+GrDragger::GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable, SPKnotShapeType shape) 
 {
     this->draggables = NULL;
 
@@ -237,7 +237,7 @@ GrDragger::GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable)
     this->point = p;
 
     this->knot = sp_knot_new (parent->desktop, NULL);
-    g_object_set (G_OBJECT (this->knot->item), "shape", SP_KNOT_SHAPE_SQUARE, NULL);
+    g_object_set (G_OBJECT (this->knot->item), "shape", shape, NULL);
     g_object_set (G_OBJECT (this->knot->item), "mode", SP_KNOT_MODE_XOR, NULL);
     this->knot->fill [SP_KNOT_STATE_NORMAL] = GR_KNOT_COLOR_NORMAL;
 
@@ -291,7 +291,7 @@ GrDrag::addLine (NR::Point p1, NR::Point p2)
 }
 
 void 
-GrDrag::addDragger (NR::Point p, GrDraggable *draggable)
+GrDrag::addDragger (NR::Point p, GrDraggable *draggable, SPKnotShapeType shape)
 {
     for (GSList *i = this->draggers; i != NULL; i = i->next) {
         GrDragger *dragger = (GrDragger *) i->data;
@@ -302,7 +302,22 @@ GrDrag::addDragger (NR::Point p, GrDraggable *draggable)
         }
     }
 
-    this->draggers = g_slist_prepend (this->draggers, new GrDragger(this, p, draggable));
+    this->draggers = g_slist_prepend (this->draggers, new GrDragger(this, p, draggable, shape));
+}
+
+void 
+GrDrag::addDraggersRadial (SPRadialGradient *rg, SPItem *item, bool fill_or_stroke)
+{
+    addDragger (sp_rg_get_center (item, rg), new GrDraggable (item, POINT_RG_CENTER, fill_or_stroke), SP_KNOT_SHAPE_CROSS);
+    addDragger (sp_rg_get_r1(item, rg), new GrDraggable (item, POINT_RG_R1, fill_or_stroke), SP_KNOT_SHAPE_CIRCLE);
+    addDragger (sp_rg_get_r2(item, rg), new GrDraggable (item, POINT_RG_R2, fill_or_stroke), SP_KNOT_SHAPE_CIRCLE);
+}
+
+void 
+GrDrag::addDraggersLinear (SPLinearGradient *lg, SPItem *item, bool fill_or_stroke)
+{
+    addDragger (sp_lg_get_p1 (item, lg), new GrDraggable (item, POINT_LG_P1, fill_or_stroke), SP_KNOT_SHAPE_SQUARE);
+    addDragger (sp_lg_get_p2 (item, lg), new GrDraggable (item, POINT_LG_P2, fill_or_stroke), SP_KNOT_SHAPE_SQUARE);
 }
 
 void
@@ -327,25 +342,18 @@ GrDrag::updateDraggers ()
         if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
             SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (item);
             if (SP_IS_LINEARGRADIENT (server)) {
-                SPLinearGradient *lg = SP_LINEARGRADIENT (server);
-
-                addDragger (sp_lg_get_p1 (item, lg), new GrDraggable (item, POINT_LG_P1, true));
-                addDragger (sp_lg_get_p2 (item, lg), new GrDraggable (item, POINT_LG_P2, true));
+                addDraggersLinear(SP_LINEARGRADIENT (server), item, true);
             } else if (SP_IS_RADIALGRADIENT (server)) {
-                SPRadialGradient *rg = SP_RADIALGRADIENT (server);
-                addDragger (sp_rg_get_center (item, rg), new GrDraggable (item, POINT_RG_CENTER, true));
-                addDragger (sp_rg_get_r1(item, rg), new GrDraggable (item, POINT_RG_R1, true));
-                addDragger (sp_rg_get_r2(item, rg), new GrDraggable (item, POINT_RG_R2, true));
+                addDraggersRadial (SP_RADIALGRADIENT (server), item, true);
             }
         }
 
         if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) { 
             SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER (item);
             if (SP_IS_LINEARGRADIENT (server)) {
-                SPLinearGradient *lg = SP_LINEARGRADIENT (server);
-
-                addDragger (sp_lg_get_p1 (item, lg), new GrDraggable (item, POINT_LG_P1, false));
-                addDragger (sp_lg_get_p2 (item, lg), new GrDraggable (item, POINT_LG_P2, false));
+                addDraggersLinear(SP_LINEARGRADIENT (server), item, false);
+            } else if (SP_IS_RADIALGRADIENT (server)) {
+                addDraggersRadial (SP_RADIALGRADIENT (server), item, false);
             }
         }
 

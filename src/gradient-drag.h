@@ -16,6 +16,7 @@
 #include <sigc++/sigc++.h>
 
 #include <forward.h>
+#include <knot-enums.h>
 
 struct SPItem;
 struct SPKnot;
@@ -35,7 +36,7 @@ struct GrDraggable {
 struct GrDrag;
 
 struct GrDragger {
-	GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable);
+	GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable, SPKnotShapeType shape);
 	~GrDragger();
 
     SPKnot *knot;
@@ -79,7 +80,10 @@ struct GrDrag {
 	void updateDraggers ();
 	void updateLines ();
 
-	void addDragger (NR::Point p, GrDraggable *draggable);
+	void addDragger (NR::Point p, GrDraggable *draggable, SPKnotShapeType shape);
+
+	void GrDrag::addDraggersRadial (SPRadialGradient *rg, SPItem *item, bool fill_or_stroke);
+	void GrDrag::addDraggersLinear (SPLinearGradient *lg, SPItem *item, bool fill_or_stroke);
 
 	GrDragger *selected;
 	void setSelected (GrDragger *dragger);
