@@ -50,6 +50,7 @@
 #include "selection.h"
 #include "selection-chemistry.h"
 #include "path-chemistry.h"
+#include "text-chemistry.h"
 #include "shortcuts.h"
 #include "toolbox.h"
 #include "view.h"
@@ -348,6 +349,10 @@ sp_verb_action_selection_perform (SPAction *action, void * data, void * pdata)
             break;
         case SP_VERB_SELECTION_UNGROUP:
             sp_selection_ungroup();
+            break;
+
+        case SP_VERB_SELECTION_TEXTTOPATH:
+            text_put_on_path ();
             break;
 
         case SP_VERB_SELECTION_UNION:
@@ -894,6 +899,9 @@ static const SPVerbActionDef props[] = {
         N_("Group selected objects"), "selection_group"},
     {SP_VERB_SELECTION_UNGROUP, "SelectionUnGroup", N_("_Ungroup"),
         N_("Ungroup selected group(s)"), "selection_ungroup"},
+
+    {SP_VERB_SELECTION_TEXTTOPATH, "SelectionTextToPath", N_("_Put text on path"),
+        N_("Put text on path"), NULL},
 
     {SP_VERB_SELECTION_UNION, "SelectionUnion", N_("_Union"),
         N_("Union of selected objects"), "union"},

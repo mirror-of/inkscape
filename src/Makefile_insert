@@ -167,6 +167,7 @@ libinkpre_a_SOURCES =	\
 	streams-jar.h streams-jar.cpp	\
 	style.cpp style.h	\
 	svg-view.cpp svg-view.h	\
+	text-chemistry.cpp text-chemistry.h	\	
 	text-context.cpp text-context.h	\
 	toolbox.cpp toolbox.h	\
 	tools-switch.cpp tools-switch.h\

@@ -761,7 +761,6 @@ sp_ui_object_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
     static const sp_verb_t selection[] = {
         SP_VERB_DIALOG_FILL_STROKE,
         SP_VERB_DIALOG_ITEM,
-        SP_VERB_DIALOG_TEXT,
         SP_VERB_NONE,
 
         SP_VERB_SELECTION_GROUP,
@@ -895,8 +894,20 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
     sp_ui_menu_append (menu, view_verbs2, view);
 }
 
+static void
+sp_ui_text_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
+{
+    static const sp_verb_t text_verbs[] = {
+        SP_VERB_DIALOG_TEXT,
 
-/* Menus */
+        SP_VERB_NONE,
+        SP_VERB_SELECTION_TEXTTOPATH,
+
+        SP_VERB_LAST
+    };
+
+    sp_ui_menu_append (menu, text_verbs, view);
+}
 
 static void
 sp_ui_help_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
@@ -979,6 +990,12 @@ sp_ui_main_menubar (SPView *view)
 	mitem = gtk_menu_item_new_with_mnemonic (_("_Path"));
 	menu = gtk_menu_new ();
 	sp_ui_path_menu (GTK_MENU (menu), NULL, view);
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
+	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
+
+	mitem = gtk_menu_item_new_with_mnemonic (_("_Text"));
+	menu = gtk_menu_new ();
+	sp_ui_text_menu (GTK_MENU (menu), NULL, view);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
 
