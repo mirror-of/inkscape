@@ -194,7 +194,7 @@ sp_group_cleanup (SPGroup *group)
 	}
 }
 
-void sp_edit_cleanup(gpointer, gpointer)
+void sp_selection_cleanup()
 {
 	SPDocument *doc = SP_ACTIVE_DOCUMENT;
 	if (!doc) return;

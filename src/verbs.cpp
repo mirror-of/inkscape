@@ -61,6 +61,7 @@
 #include "shortcuts.h"
 #include "toolbox.h"
 #include "view.h"
+#include "interface.h"
 #include "prefs-utils.h"
 #include "splivarot.h"
 #include "sp-namedview.h"
@@ -212,6 +213,9 @@ sp_verb_action_file_perform (SPAction *action, void * data, void *pdata)
             break;
         case SP_VERB_FILE_PREV_DESKTOP:
             inkscape_switch_desktops_prev();
+            break;
+        case SP_VERB_FILE_CLOSE_VIEW:
+            sp_ui_close_view (NULL);
             break;
         case SP_VERB_FILE_QUIT:
             sp_file_exit ();
@@ -369,6 +373,9 @@ sp_verb_action_selection_perform (SPAction *action, void * data, void * pdata)
             break;
         case SP_VERB_SELECTION_SIMPLIFY:
             sp_selected_path_simplify ();
+            break;
+        case SP_VERB_SELECTION_CLEANUP:
+            sp_selection_cleanup ();
             break;
 
         case SP_VERB_SELECTION_COMBINE:
@@ -580,6 +587,12 @@ sp_verb_action_zoom_perform (SPAction *action, void * data, void * pdata)
             fullscreen (dt);
             break;
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
+        case SP_VERB_VIEW_NEW:
+            sp_ui_new_view ();
+            break;
+        case SP_VERB_VIEW_NEW_PREVIEW:
+            sp_ui_new_view_preview ();
+            break;
         default:
             break;
     }
@@ -737,11 +750,7 @@ static SPActionEventVector action_tutorial_vector =
 #define SP_VERB_IS_SELECTION(v) ((v >= SP_VERB_SELECTION_TO_FRONT) && (v <= SP_VERB_SELECTION_BREAK_APART))
 #define SP_VERB_IS_OBJECT(v) ((v >= SP_VERB_OBJECT_ROTATE_90_CW) && (v <= SP_VERB_OBJECT_FLIP_VERTICAL))
 #define SP_VERB_IS_CONTEXT(v) ((v >= SP_VERB_CONTEXT_SELECT) && (v <= SP_VERB_CONTEXT_DROPPER))
-#if HAVE_GTK_WINDOW_FULLSCREEN
-#define SP_VERB_IS_ZOOM(v) ((v >= SP_VERB_ZOOM_IN) && (v <= SP_VERB_FULLSCREEN))
-#else
 #define SP_VERB_IS_ZOOM(v) ((v >= SP_VERB_ZOOM_IN) && (v <= SP_VERB_ZOOM_SELECTION))
-#endif /* HAVE_GTK_FULLSCREEN */
 
 #define SP_VERB_IS_DIALOG(v) ((v >= SP_VERB_DIALOG_DISPLAY) && (v <= SP_VERB_DIALOG_ITEM))
 #define SP_VERB_IS_HELP(v) ((v >= SP_VERB_HELP_KEYS) && (v <= SP_VERB_HELP_ABOUT))
@@ -760,6 +769,7 @@ typedef struct {
 } SPVerbActionDef;
 
 
+/* these must be in the same order as the SP_VERB_* enum in "verbs.h" */
 static const SPVerbActionDef props[] = {
     /* Header */
     {SP_VERB_INVALID, NULL, NULL, NULL, NULL},
@@ -788,6 +798,8 @@ static const SPVerbActionDef props[] = {
         N_("Switch to the next document window"), "window_next"},
     {SP_VERB_FILE_PREV_DESKTOP, "FilePrevDesktop", N_("P_rev window"),
         N_("Switch to the previous document window"), "window_previous"},
+    {SP_VERB_FILE_CLOSE_VIEW, "FileCloseView", N_("_Close"),
+	N_("Close View"), GTK_STOCK_CLOSE},
     {SP_VERB_FILE_QUIT, "FileQuit", N_("_Quit"), N_("Quit"), GTK_STOCK_QUIT},
 
     /* Edit */
@@ -812,9 +824,9 @@ static const SPVerbActionDef props[] = {
     {SP_VERB_EDIT_CLEAR_ALL, "EditClearAll", N_("Clea_r All"),
         N_("Delete all objects from document"), NULL},
     {SP_VERB_EDIT_SELECT_ALL, "EditSelectAll", N_("Select _All"),
-        N_("Select all objects or all nodes"), NULL},
+        N_("Select all objects or all nodes"), "selection_select_all"},
     {SP_VERB_EDIT_DESELECT, "EditDeselect", N_("D_eselect"),
-        N_("Deselect any selected objects or nodes"), NULL},
+        N_("Deselect any selected objects or nodes"), "selection_deselect"},
 
     /* Selection */
     {SP_VERB_SELECTION_TO_FRONT, "SelectionToFront", N_("Raise to _Top"),
@@ -868,9 +880,8 @@ static const SPVerbActionDef props[] = {
         N_("Convert selected stroke to path"), "stroke_tocurve"},
     {SP_VERB_SELECTION_SIMPLIFY, "SelectionSimplify", N_("Si_mplify"),
         N_("Simplify selected path"), "simplify"},
-    /* REJON: was adding, but had problems and instead went back to old
     {SP_VERB_SELECTION_CLEANUP, "SelectionCleanup", N_("Cl_eanup"),
-        N_("Cleanup selected path"), "cleanup"}, */
+        N_("Cleanup selected path"), "selection_cleanup"},
     {SP_VERB_SELECTION_COMBINE, "SelectionCombine", N_("_Combine"),
         N_("Combine multiple paths"), "selection_combine"},
     {SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break _Apart"),
@@ -939,6 +950,14 @@ static const SPVerbActionDef props[] = {
         "zoom_1_to_2"},
     {SP_VERB_ZOOM_2_1, "Zoom2:1", N_("_Zoom 2:1"), N_("Zoom to 2:1"),
         "zoom_2_to_1"},
+#ifdef HAVE_GTK_WINDOW_FULLSCREEN
+    {SP_VERB_FULLSCREEN, "FullScreen", N_("_Fullscreen"), N_("Fullscreen"),
+        "fullscreen"},
+#endif /* HAVE_GTK_WINDOW_FULLSCREEN */
+    {SP_VERB_VIEW_NEW, "ViewNew", N_("_New View"), N_("New View"),
+        "view_new"},
+    {SP_VERB_VIEW_NEW_PREVIEW, "ViewNewPreview", N_("_New View Preview"),
+	N_("New View Preview"), NULL/*"view_new_preview"*/},
     {SP_VERB_ZOOM_PAGE, "ZoomPage", N_("_Page"), N_("Fit page in window"),
         "zoom_page"},
     {SP_VERB_ZOOM_PAGE_WIDTH, "ZoomPageWidth", N_("Page _Width"),
@@ -947,10 +966,6 @@ static const SPVerbActionDef props[] = {
         N_("Fit drawing in window"), "zoom_draw"},
     {SP_VERB_ZOOM_SELECTION, "ZoomSelection", N_("_Selection"),
         N_("Fit selection in window"), "zoom_select"},
-#ifdef HAVE_GTK_WINDOW_FULLSCREEN
-    {SP_VERB_FULLSCREEN, "FullScreen", N_("_Fullscreen"), N_("Fullscreen"),
-        "fullscreen"},
-#endif /* HAVE_GTK_WINDOW_FULLSCREEN */
     /* Dialogs */
     {SP_VERB_DIALOG_DISPLAY, "DialogDisplay", N_("Inkscape _Options"),
         N_("Global Inkscape options"), "inkscape_options"},

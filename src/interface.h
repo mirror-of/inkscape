@@ -31,6 +31,12 @@ void sp_ui_close_view (GtkWidget *widget);
 /**
  *
  */
+void sp_ui_new_view (void);
+void sp_ui_new_view_preview (void);
+
+/**
+ *
+ */
 unsigned int sp_ui_close_all (void);
 
 /**

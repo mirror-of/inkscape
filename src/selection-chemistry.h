@@ -17,7 +17,7 @@
 #include "forward.h"
 #include "libnr/nr-forward.h"
 
-void sp_edit_cleanup (gpointer object, gpointer data);
+void sp_selection_cleanup();
 
 void sp_selection_delete();
 void sp_selection_duplicate();

@@ -1,3 +1,12 @@
+2004-04-11  Kees Cook <kees@outflux.net>
+
+	* src/verbs.h, src/verbs.cpp, src/interface.cpp, src/interface.h: replaced
+	  the rest of the missing menu verbs: "View New", "Cleanup".
+	* share/icons/icons.svg: added "selection_cleanup", "selection_deselect",
+	  "selection_select_all".  Corrected "view_new" and "selection_smooth".
+	* src/selection-chemistry.cpp, src/selection-chemistry.h: renamed
+	  "selection_cleanup" function.
+
 2004-04-11  Jon Phillip <jon@rejon.org>
 
 	* Makefile.mingw share/Makefile.am src/Makefile.am 
