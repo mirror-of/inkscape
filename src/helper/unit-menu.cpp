@@ -343,7 +343,7 @@ sp_unit_selector_update_test(SPUnitSelector const *selector)
     return selector->update;
 }
 
-float
+double
 sp_unit_selector_get_value_in_pixels(SPUnitSelector *selector, GtkAdjustment *adj)
 {
     g_return_val_if_fail(selector != NULL, adj->value);
@@ -353,7 +353,7 @@ sp_unit_selector_get_value_in_pixels(SPUnitSelector *selector, GtkAdjustment *ad
 }
 
 void
-sp_unit_selector_set_value_in_pixels(SPUnitSelector *selector, GtkAdjustment *adj, float value)
+sp_unit_selector_set_value_in_pixels(SPUnitSelector *selector, GtkAdjustment *adj, double value)
 {
     g_return_if_fail(selector != NULL);
     g_return_if_fail(SP_IS_UNIT_SELECTOR(selector));
