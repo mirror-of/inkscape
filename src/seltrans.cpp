@@ -998,9 +998,8 @@ sp_sel_trans_rotate_request (SPSelTrans * seltrans, SPSelTransHandle * handle, N
 	double h1, h2;
 	NRMatrixD r1, r2, n2p, p2n;
 	NRMatrixF rotate;
-	double dx1, dx2, dy1, dy2, sg, angle;
+	double dx1, dx2, dy1, dy2, angle;
 	SPDesktop * desktop;
-	gchar status[80];
 
 	desktop = seltrans->desktop;
 
@@ -1012,6 +1011,7 @@ sp_sel_trans_rotate_request (SPSelTrans * seltrans, SPSelTransHandle * handle, N
 	dy1 = point.y - norm.y;
 	dx2 = p->x    - norm.x;
 	dy2 = p->y    - norm.y;
+
 	h1 = hypot (dx1, dy1);
 	if (fabs (h1) < 1e-15) return FALSE;
 	q1.x = (dx1) / h1;
@@ -1020,6 +1020,22 @@ sp_sel_trans_rotate_request (SPSelTrans * seltrans, SPSelTransHandle * handle, N
 	if (fabs (h2) < 1e-15) return FALSE;
 	q2.x = (dx2) / h2;
 	q2.y = (dy2) / h2;
+
+	if (state & GDK_CONTROL_MASK) {                                         
+		double cost, sint, theta;                                       
+		/* Have to restrict movement */                                 
+		cost = q1.x * q2.x + q1.y * q2.y;                               
+		sint = q1.x * q2.y - q1.y * q2.x;                               
+		cost = CLAMP (cost, -1.0, 1.0);                                 
+		theta = acos (cost);                                            
+		theta = (M_PI / 12.0) * floor (12.0 * theta / M_PI + M_PI / 24.0);
+		if (sint < 0.0) theta = -theta;                                 
+		q1.x = 1.0;                                                     
+		q1.y = 0.0;                                                     
+		q2.x = cos (theta);                                             
+		q2.y = sin (theta);                                             
+	}                                                                       
+
 	r1.c[0] = q1.x;  r1.c[1] = -q1.y;  r1.c[2] =  q1.y;  r1.c[3] = q1.x;  r1.c[4] = 0;  r1.c[5] = 0;
 	r2.c[0] = q2.x;  r2.c[1] =  q2.y;  r2.c[2] = -q2.y;  r2.c[3] = q2.x;  r2.c[4] = 0;  r2.c[5] = 0;
 	nr_matrix_d_set_translate (&n2p, norm.x, norm.y);
@@ -1038,14 +1054,13 @@ sp_sel_trans_rotate_request (SPSelTrans * seltrans, SPSelTransHandle * handle, N
 	/* status text */
 	dx2 = p->x    - norm.x;
 	dy2 = p->y    - norm.y;
-	h2 = hypot (dx2, dy2);
-	if (fabs (h2) < 1e-15) return FALSE;
-	angle = 180 / M_PI * acos ((dx1*dx2 + dy1*dy2) / (h1 * h2));
-	sg = (dx1 * dy2 + dy1 * dx2) / (dx1*dx1 + dy1*dy1);
-	if (fabs (sg) > 1e-15) angle *= sg / fabs (sg);
-	
-	sprintf (status, "Rotate by %0.2f deg", angle);
-	sp_view_set_status (SP_VIEW (seltrans->desktop), status, FALSE);
+
+	angle = 180 / M_PI * atan2 (dy2*dx1-dy1*dx2, dx2*dx1+dy2*dy1);
+
+	if (angle > 180) angle -= 360;
+	if (angle < -180) angle += 360;
+
+	sp_view_set_statusf (SP_VIEW (seltrans->desktop), "Rotate by %0.2f deg", angle);
 
 	return TRUE;
 }
