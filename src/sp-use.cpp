@@ -306,7 +306,7 @@ sp_use_description(SPItem *item)
     SPUse *use = SP_USE(item);
 
     if (use->child) {
-        return g_strdup_printf(_("<b>Clone</b> of: %s. Use <b>Shift+D</b> to look up original"),
+        return g_strdup_printf(_("<b>Clone</b> of: %s"),
                                sp_item_description(SP_ITEM(use->child)));
     } else {
         return g_strdup(_("<b>Orphaned clone</b>"));

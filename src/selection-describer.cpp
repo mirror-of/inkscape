@@ -14,6 +14,10 @@
 #include "selection.h"
 #include "message-stack.h"
 #include "selection-describer.h"
+#include "desktop.h"
+#include "sp-tspan.h"
+#include "sp-offset.h"
+#include "sp-use.h"
 
 namespace Inkscape {
 
@@ -31,9 +35,25 @@ void SelectionDescriber::_updateMessageFromSelection(SPSelection *selection) {
     if (!items) { // no items
         _context.set(Inkscape::NORMAL_MESSAGE, _("No objects selected. Click, Shift+click, or drag around objects to select."));
     } else if (!items->next) { // one item
-        _context.setF(Inkscape::NORMAL_MESSAGE, "%s. %s.", sp_item_description(SP_ITEM(items->data)), when_selected);
+        SPItem *item = SP_ITEM(items->data);
+        SPObject *layer = selection->desktop()->layerForObject (SP_OBJECT (item));
+        if (SP_IS_USE(item) || (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref) || SP_IS_TEXT_TEXTPATH(item)) {
+            _context.setF(Inkscape::NORMAL_MESSAGE, "%s in layer <b>%s</b>. %s. %s.", 
+                          sp_item_description(item), layer->label(), _("Use <b>Shift+D</b> to look up original"), when_selected);
+        } else {
+            _context.setF(Inkscape::NORMAL_MESSAGE, "%s in layer <b>%s</b>. %s.", 
+                          sp_item_description(item), layer->label(), when_selected);
+        }
     } else { // multiple items
-        _context.setF(Inkscape::NORMAL_MESSAGE, _("<b>%i</b> objects selected. %s."), g_slist_length((GSList *)items), when_selected);
+        if (selection->numberOfLayers() == 1) {
+            SPItem *item = SP_ITEM(items->data);
+            SPObject *layer = selection->desktop()->layerForObject (SP_OBJECT (item));
+            _context.setF(Inkscape::NORMAL_MESSAGE, _("<b>%i</b> objects selected in layer <b>%s</b>. %s."), 
+                          g_slist_length((GSList *)items), layer->label(), when_selected);
+        } else {
+            _context.setF(Inkscape::NORMAL_MESSAGE, _("<b>%i</b> objects selected in <b>%i</b> layers. %s."), 
+                          g_slist_length((GSList *)items), selection->numberOfLayers(), when_selected);
+        }
     }
 }
 

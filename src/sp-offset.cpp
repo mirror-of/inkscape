@@ -393,7 +393,7 @@ sp_offset_description(SPItem *item)
 
     if ( offset->sourceHref ) {
         // TRANSLATORS COMMENT: %s is either "outset" or "inset" depending on sign
-        return g_strdup_printf(_("<b>Linked offset</b>, %s by %f pt. Use <b>Shift+D</b> to look up original"),
+        return g_strdup_printf(_("<b>Linked offset</b>, %s by %f pt"),
                                (offset->rad >= 0)? _("outset") : _("inset"), fabs (offset->rad));
     } else {
         // TRANSLATORS COMMENT: %s is either "outset" or "inset" depending on sign
