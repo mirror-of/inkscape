@@ -587,7 +587,15 @@ sp_repr_remove_child (SPRepr *repr, SPRepr *child)
 	allowed = TRUE;
 	for (rl = repr->listeners; rl != NULL; rl = rl->next) {
 		if (rl->vector->remove_child) {
-		  allowed = (* rl->vector->remove_child) (repr, child, ref, rl->data);
+		  /* TODO:  This is a quick & nasty hack to prevent 
+		     a crash in the XML editor when deleting the 
+		     'namedview' node.  There is a better solution but
+		     it's much more involved.  See Inkscape Bug #850971 */
+ 		  if (!strcmp(sp_repr_name(child), "sodipodi:namedview")) {
+		    allowed = FALSE;
+		  } else {
+		    allowed = (* rl->vector->remove_child) (repr, child, ref, rl->data);
+		  }
 		}
 	}
 

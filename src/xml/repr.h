@@ -36,92 +36,88 @@ typedef struct _SPXMLNs SPXMLNs;
 /**
 
 Though SPRepr provides "signals" for notification when individual nodes
-change, there is no mechanism to recieve notification for overall
+change, there is no mechanism to receive notification for overall
 document changes.
-                                                                                                 
+
 However, with the addition of the transactions code, it would not be
 very hard to implement if you wanted it.
-                                                                                                 
+
 SPRepr itself doesn't use GObject signals at present -- SPReprs maintain
 lists of SPReprEventVectors (added via sp_repr_add_listener), which are
 used to specify callbacks when something changes.
-                                                                                                 
+
 Here are the current callbacks in an event vector (they may be NULL):
-                                                                                                 
+
         void (* destroy) (SPRepr *repr, void * data);
-                                                                                                 
+
 Called when the repr is destroyed.
-                                                                                                 
+
         unsigned int (* add_child) (SPRepr *repr, SPRepr *child, SPRepr
 	*ref, void * data);
-                                                                                                 
+
 Called before a child is added; the handler can return FALSE to veto the
 addition.  ref is the child after which the new child is to be added.
-                                                                                                 
+
         void (* child_added) (SPRepr *repr, SPRepr *child, SPRepr *ref,
 void * data);
-                                                                                                 
+
 Called once a child has been added.
-                                                                                                 
+
         unsigned int (* remove_child) (SPRepr *repr, SPRepr *child,
 SPRepr *ref, void * data);
-                                                                                                 
+
 Called before a child is to be removed; it may veto the removal by
 returning FALSE.  ref is the child before the child to be removed.
-                                                                                                 
+
         void (* child_removed) (SPRepr *repr, SPRepr *child, SPRepr
 	*ref, void * data);
-                                                                                                 
+
 Called after a child is removed; ref is the child that used to precede
 the removed child.
-                                                                                                 
+
         unsigned int (* change_attr) (SPRepr *repr, const gchar *key,
 const gchar *oldval, const gchar *newval, void * data);
-                                                                                                 
+
 For Element nodes.  Called before an attribute is changed; can veto by
 returning FALSE.
-                                                                                                 
+
         void (* attr_changed) (SPRepr *repr, const gchar *key, const
 gchar *oldval, const gchar *newval, void * data);
-                                                                                                 
+
 Called after an attribute has been changed.
-                                                                                                 
+
         unsigned int (* change_content) (SPRepr *repr, const gchar
 	*oldcontent, const gchar *newcontent, void * data);
-                                                                                                 
+
 For Text nodes.  Called before an element's content is changed; can veto
 by returning FALSE.
-                                                                                                 
+
         void (* content_changed) (SPRepr *repr, const gchar *oldcontent,
 const gchar *newcontent, void * data);
-                                                                                                 
+
 Called after an element's content has been changed.
-                                                                                                 
+
         unsigned int (* change_order) (SPRepr *repr, SPRepr *child,
 SPRepr *oldref, SPRepr *newref, void * data);
-                                                                                                 
+
 Called before a child of repr is rearranged in its list of children.
 oldref is the child currently preceding the child; the child will be
 moved to the position after newref.  Can veto by returning FALSE.
-                                                                                                 
+
         void (* order_changed) (SPRepr *repr, SPRepr *child, SPRepr
 	*oldref, SPRepr *newref, void * data);
-                                                                                                 
+
 Called once the child has been moved to its new position in the child
 order.
-                                                                                                 
+
 NOTE!!!!! the veto callbacks are currently not useful because some
 functions SPObjects register for callbacks have side-effects -- by the
 time the veto was made, other callbacks might already have modified
 things...
 
 -- MenTaLguY, Dec 5, 2003
-                                                                                                 
+
  */
-
-
-
-
 
 /* SPXMLNs */
 
