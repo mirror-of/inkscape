@@ -183,7 +183,9 @@ struct SPObject : public GObject {
 	SPObject *appendChildRepr(SPRepr *repr);
 
 	/** @brief Gets the author-visible label for this object. */ 
-	gchar const *label() const { return _label; }
+        gchar const *label() const;
+	/** @brief Returns a default label for this object. */ 
+        gchar const *defaultLabel() const;
 	/** @brief Sets the author-visible label for this object.
 	 *
 	 * Sets the author-visible label for the object.

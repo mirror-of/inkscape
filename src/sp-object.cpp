@@ -288,15 +288,31 @@ SPObject *SPObject::appendChildRepr(SPRepr *repr) {
 	}
 }
 
-void SPObject::setLabel(gchar const *label) {
-	sp_repr_set_attr(SP_OBJECT_REPR(this), label, false);
+/** Gets the label property for the object or NULL if no label is defined */
+gchar const *
+SPObject::label() const {
+    return sp_repr_attr(SP_OBJECT_REPR(this), "label");
 }
 
+/** Returns a default label property for the object */
+gchar const *
+SPObject::defaultLabel() const {
+    g_assert(SP_OBJECT_ID(this));
+    return SP_OBJECT_ID(this);
+}
+
+/** Sets the label property for the object */
+void SPObject::setLabel(gchar const *label) {
+    sp_repr_set_attr(SP_OBJECT_REPR(this), "label", label, false);
+}
+
+/** Queues the object for orphan collection */
 void SPObject::requestOrphanCollection() {
 	g_return_if_fail(document != NULL);
 	document->queueForOrphanCollection(this);
 }
 
+/** Sends the delete signal to all children of this object recursively */
 void SPObject::_sendDeleteSignalRecursive() {
 	for (SPObject *child = sp_object_first_child(this); child; child = SP_OBJECT_NEXT (child)) {
 		child->_delete_signal.emit(child);
@@ -304,6 +320,11 @@ void SPObject::_sendDeleteSignalRecursive() {
 	}
 }
 
+/* Deletes the object reference, unparenting it from its parent.
+   If the \a propagate parameter is set to true, it emits a delete
+   signal.  If the \a propagate_descendants parameter is true, it
+   recursively sends the delete signal to children.
+*/
 void SPObject::deleteObject(bool propagate, bool propagate_descendants)
 {
 	sp_object_ref(this, NULL);

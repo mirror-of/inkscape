@@ -104,7 +104,7 @@ sp_item_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
 	item = (SPItem *) object;
 
 	/* Item dialog */
-	w = gtk_menu_item_new_with_mnemonic (_("Item _Properties"));
+	w = gtk_menu_item_new_with_mnemonic (_("Object _Properties"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_item_properties), item);
 	gtk_widget_show (w);

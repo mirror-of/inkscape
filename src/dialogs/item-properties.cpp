@@ -1,7 +1,7 @@
 #define __SP_ITEM_PROPERTIES_C__
 
 /*
- * Item configuration dialog
+ * Object properties dialog
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -61,7 +61,7 @@ static void sp_item_widget_setup (SPWidget *spw, SPSelection *selection);
 static void sp_item_widget_sensitivity_toggled (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_printability_toggled (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_visibility_toggled (GtkWidget *widget, SPWidget *spw);
-static void sp_item_widget_id_changed (GtkWidget *widget, SPWidget *spw);
+static void sp_item_widget_label_changed (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_transform_value_changed (GtkWidget *widget, SPWidget *spw);
 
 static void
@@ -113,29 +113,30 @@ sp_item_widget_new (void)
     gtk_widget_show (vb);
     gtk_container_add (GTK_CONTAINER (spw), vb);
 
-    /* Item name */
+    /* Create the label for the object label */
     hb = gtk_hbox_new (FALSE, 0);
     gtk_widget_show (hb);
     gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
-    l = gtk_label_new (_("ID"));
+    l = gtk_label_new (_("Label"));
     gtk_widget_show (l);
     gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
     gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
-    gtk_object_set_data (GTK_OBJECT (spw), "id_label", l);
+    gtk_object_set_data (GTK_OBJECT (spw), "label_label", l);
 
 
+    /* Create the entry box for the object label */
     tf = gtk_entry_new ();
     gtk_entry_set_max_length (GTK_ENTRY (tf), 64);
     gtk_widget_show (tf);
     gtk_box_pack_start (GTK_BOX (hb), tf, TRUE, TRUE, 0);
-    gtk_object_set_data (GTK_OBJECT (spw), "id", tf);
+    gtk_object_set_data (GTK_OBJECT (spw), "label", tf);
 
-
-    pb = gtk_button_new_with_label (_("Set ID"));
+    /* Create the button for setting the object label */
+    pb = gtk_button_new_with_label (_("Set Label"));
     gtk_box_pack_start (GTK_BOX (hb), pb, TRUE, TRUE, 0);
     
     gtk_signal_connect ( GTK_OBJECT (pb), "clicked", 
-                         GTK_SIGNAL_FUNC (sp_item_widget_id_changed), 
+                         GTK_SIGNAL_FUNC (sp_item_widget_label_changed), 
                          spw );
     gtk_widget_show (pb);
 
@@ -340,22 +341,27 @@ sp_item_widget_setup ( SPWidget *spw, SPSelection *selection )
         }
     }
 
-    /* Id */
+    /* Label */
     if (SP_OBJECT_IS_CLONED (item)) {
     
-        w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id"));
+        w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label"));
         gtk_entry_set_text (GTK_ENTRY (w), "");
         gtk_widget_set_sensitive (w, FALSE);
-        w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id_label"));
+        w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label_label"));
         gtk_label_set_text (GTK_LABEL (w), _("Ref"));
     
     } else {
         
-        w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id"));
-        gtk_entry_set_text (GTK_ENTRY (w), SP_OBJECT_ID(item));
+        w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label"));
+        SPObject *obj = (SPObject*)item;
+        if (obj->label() != NULL) {
+            gtk_entry_set_text (GTK_ENTRY (w), obj->label());
+        } else {
+            gtk_entry_set_text (GTK_ENTRY (w), SP_OBJECT_ID(item));
+        }
         gtk_widget_set_sensitive (w, TRUE);
-        w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id_label"));
-        gtk_label_set_text (GTK_LABEL (w), _("ID"));
+        w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label_label"));
+        gtk_label_set_text (GTK_LABEL (w), _("Label"));
     }
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (FALSE));
@@ -477,7 +483,7 @@ sp_item_widget_printability_toggled (GtkWidget *widget, SPWidget *spw)
 
 
 static void
-sp_item_widget_id_changed (GtkWidget *widget, SPWidget *spw)
+sp_item_widget_label_changed (GtkWidget *widget, SPWidget *spw)
 {
     if (gtk_object_get_data (GTK_OBJECT (spw), "blocked")) 
         return;
@@ -487,27 +493,29 @@ sp_item_widget_id_changed (GtkWidget *widget, SPWidget *spw)
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
-    GtkWidget *w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id"));
-    gchar *id = (gchar *)gtk_entry_get_text (GTK_ENTRY (w));
-    w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id_label"));
+    /* Retrieve the label widget for the object's label */
+    GtkWidget *w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label"));
+    gchar *label = (gchar *)gtk_entry_get_text (GTK_ENTRY (w));
+    w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label_label"));
     
-    if (!strcmp (id, ((SPObject *) item)->id)) {
-        gtk_label_set_text (GTK_LABEL (w), _("ID"));
-    } else if (!*id || !isalnum (*id)) {
-        gtk_label_set_text (GTK_LABEL (w), _("ID invalid"));
-    } else if (SP_WIDGET_DOCUMENT (spw)->getObjectById(id)) {
-        gtk_label_set_text (GTK_LABEL (w), _("ID exists"));
+    g_assert(label != NULL);
+    /* Give feedback on success of setting the drawing object's label
+     * using the widget's label text 
+     */
+    SPObject *obj = (SPObject*)item;
+    if (obj->label() && !strcmp (label, obj->label())) {
+        gtk_label_set_text (GTK_LABEL (w), _("Label"));
+    } else if (!*label || !isalnum (*label)) {
+        gtk_label_set_text (GTK_LABEL (w), _("Label invalid"));
     } else {
-        gtk_label_set_text (GTK_LABEL (w), _("ID"));
-        SPException ex;
-        SP_EXCEPTION_INIT (&ex);
-        sp_object_setAttribute (SP_OBJECT (item), "id", id, &ex);
-        sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "ItemDialog:id");
+        gtk_label_set_text (GTK_LABEL (w), _("Label"));
+        obj->setLabel(label);
+        sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "inkscape:label");
     }
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (FALSE));
 
-} // end of sp_item_widget_id_changed()
+} // end of sp_item_widget_label_changed()
 
 
 static void
