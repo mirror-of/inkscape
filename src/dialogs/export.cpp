@@ -50,6 +50,8 @@
 #include "extension/output.h"
 #include "extension/db.h"
 
+#include "io/sys.h"
+
 #include "export.h"
 
 #define SP_EXPORT_MIN_SIZE 1.0
@@ -967,7 +969,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
     }
 
     gchar * dirname = g_dirname(filename);
-    if (dirname == NULL || !g_file_test(dirname, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
+    if (dirname == NULL || !Inkscape::IO::file_test(dirname, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
         gchar * error;
         error = g_strdup_printf(_("Directory %s does not exist or is not a directory.\n"), dirname);
         sp_ui_error_dialog(error);

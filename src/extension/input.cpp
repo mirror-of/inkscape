@@ -10,6 +10,7 @@
 #include "implementation/implementation.h"
 #include "timer.h"
 #include "input.h"
+#include "io/sys.h"
 
 /* Inkscape::Extension::Input */
 
@@ -151,8 +152,8 @@ Input::open (const gchar *uri)
 	gchar* local_uri = g_filename_from_utf8 ( uri,
                                  -1,  &bytesRead,  &bytesWritten, &error);
 
-        // TODO fix this to work on WindowsXP
-	if (!g_file_test(local_uri, G_FILE_TEST_EXISTS)) {
+        // TODO fix this to work on WindowsXP (is this fixed now? -Kees)
+	if (!Inkscape::IO::file_test(local_uri, G_FILE_TEST_EXISTS)) {
 		g_free(local_uri);
 		return NULL;
 	}

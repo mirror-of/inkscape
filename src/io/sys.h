@@ -13,6 +13,7 @@
  */
 
 #include <stdio.h>
+#include <glib.h>
 
 /*#####################
 ## U T I L I T Y
@@ -26,6 +27,8 @@ void dump_fopen_call( char const *utf8name, char const *id );
 FILE *fopen_utf8name( char const *utf8name, char const *mode );
 
 int mkdir_utf8name( char const *utf8name );
+
+bool file_test( char const *utf8name, GFileTest test );
 
 }
 }

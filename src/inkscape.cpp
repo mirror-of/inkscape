@@ -606,14 +606,14 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
 		      const gchar *e_notsp, const gchar *warn)
 {
     gchar *fn = profile_path(filename);
-    if (!g_file_test(fn, G_FILE_TEST_EXISTS)) {
+    if (!Inkscape::IO::file_test(fn, G_FILE_TEST_EXISTS)) {
         /* No such file */
         inkscape_init_preferences (INKSCAPE);
         g_free (fn);
         return FALSE;
     }
 
-    if (!g_file_test(fn, G_FILE_TEST_IS_REGULAR)) {
+    if (!Inkscape::IO::file_test(fn, G_FILE_TEST_IS_REGULAR)) {
         /* Not a regular file */
         GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notreg, fn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
@@ -1103,11 +1103,11 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 		      const gchar *warn)
 {
     gchar *dn = profile_path(NULL);
-    if (!g_file_test(dn, G_FILE_TEST_EXISTS)) {
+    if (!Inkscape::IO::file_test(dn, G_FILE_TEST_EXISTS)) {
         if (Inkscape::IO::mkdir_utf8name(dn))
         {
             if (inkscape->use_gui) {
-                /* Cannot create directory */
+                // Cannot create directory
                 GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_mkdir, dn, warn);
                 gtk_dialog_run (GTK_DIALOG (w));
                 gtk_widget_destroy (w);
@@ -1119,9 +1119,9 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
                 return;
             }
         }
-    } else if (!g_file_test(dn, G_FILE_TEST_IS_DIR)) {
+    } else if (!Inkscape::IO::file_test(dn, G_FILE_TEST_IS_DIR)) {
         if (inkscape->use_gui) {
-            /* Not a directory */
+            // Not a directory
             GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notdir, dn, warn);
             gtk_dialog_run (GTK_DIALOG (w));
             gtk_widget_destroy (w);
@@ -1235,17 +1235,14 @@ profile_path(const char *filename)
         // c:\Documents and Settings\userName\; this
         // closes bug #933461
         if (!homedir) {
+            gchar * utf8Path = NULL;
             if ( PrintWin32::is_os_wide() )
             {
                 wchar_t pathBuf[MAX_PATH+1];
                 g_assert(sizeof(wchar_t) == sizeof(gunichar2));
                 if (SHGetSpecialFolderPathW(NULL, pathBuf, CSIDL_APPDATA, 1))
                 {
-                    gchar* utf8Path = g_utf16_to_utf8( (gunichar2*)(&pathBuf[0]), -1, NULL, NULL, NULL );
-                    if ( utf8Path )
-                    {
-                        homedir = utf8Path;
-                    }
+                    utf8Path = g_utf16_to_utf8( (gunichar2*)(&pathBuf[0]), -1, NULL, NULL, NULL );
                 }
             }
             else
@@ -1253,12 +1250,12 @@ profile_path(const char *filename)
                 char pathBuf[MAX_PATH+1];
                 if (SHGetSpecialFolderPathA(NULL, pathBuf, CSIDL_APPDATA, 1))
                 {
-                    gchar* utf8Path = g_filename_to_utf8( pathBuf, -1, NULL, NULL, NULL );
-                    if ( utf8Path )
-                    {
-                        homedir = utf8Path;
-                    }
+                    utf8Path = g_filename_to_utf8( pathBuf, -1, NULL, NULL, NULL );
                 }
+            }
+            if ( utf8Path )
+            {
+                homedir = utf8Path;
             }
         }
 #endif

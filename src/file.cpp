@@ -63,6 +63,8 @@
 /* #include "extension/menu.h"  */
 #include "extension/system.h"
 
+#include "io/sys.h"
+
 #include "uri.h"
 
 
@@ -109,7 +111,7 @@ void
 sp_file_new_default()
 {
     char *default_template = g_build_filename(INKSCAPE_TEMPLATESDIR, "/default.svg", NULL);
-    if (g_file_test(default_template, G_FILE_TEST_IS_REGULAR)) {
+    if (Inkscape::IO::file_test(default_template, G_FILE_TEST_IS_REGULAR)) {
         sp_file_new(default_template);
     } else {
         sp_file_new(NULL);
@@ -337,7 +339,7 @@ sp_file_open_dialog(gpointer object, gpointer data)
         g_free(open_path);
         open_path = NULL;
     }
-    if (open_path && !g_file_test(open_path, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
+    if (open_path && !Inkscape::IO::file_test(open_path, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
         g_free(open_path);
         open_path = NULL;
     }
@@ -527,7 +529,7 @@ sp_file_save_dialog(SPDocument *doc)
             g_free(save_path);
             save_path = NULL;
         }
-        if (save_path && !g_file_test(save_path, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
+        if (save_path && !Inkscape::IO::file_test(save_path, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
             g_free(save_path);
             save_path = NULL;
         }
@@ -537,7 +539,7 @@ sp_file_save_dialog(SPDocument *doc)
         save_loc = g_build_filename(save_path, temp_filename, NULL);
         g_free(temp_filename);
 
-        while (g_file_test(save_loc, G_FILE_TEST_EXISTS)) {
+        while (Inkscape::IO::file_test(save_loc, G_FILE_TEST_EXISTS)) {
             g_free(save_loc);
             temp_filename = g_strdup_printf(_("drawing-%d%s"), i++, filename_extension);
             save_loc = g_build_filename(save_path, temp_filename, NULL);
@@ -547,7 +549,9 @@ sp_file_save_dialog(SPDocument *doc)
         save_loc = g_strdup(doc->uri); /* \todo should use a getter */
     }
 
-    { // convert save_lock from utf-8 to locale
+    { // convert save_loc from utf-8 to locale
+      // is this needed any more, now that everything is handled in
+      // Inkscape::IO?
         gsize bytesRead = 0;
         gsize bytesWritten = 0;
         GError* error = NULL;
@@ -563,7 +567,7 @@ sp_file_save_dialog(SPDocument *doc)
             dump_str( save_loc, "B file post is " );
 #endif
         } else {
-            g_warning( "Error converting save filename stored in the file to locale encoding.");
+            //g_warning( "Error converting save filename stored in the file to locale encoding.");
         }
     }
 
@@ -1142,7 +1146,7 @@ sp_file_print_preview(gpointer object, gpointer data)
 
 void Inkscape::IO::fixupHrefs( SPDocument *doc, const gchar *base, gboolean spns )
 {
-    g_message("Inkscape::IO::fixupHrefs( , [%s], )", base );
+    //g_message("Inkscape::IO::fixupHrefs( , [%s], )", base );
 
     if ( 0 ) {
         gchar const* things[] = {
@@ -1211,23 +1215,23 @@ void Inkscape::IO::fixupHrefs( SPDocument *doc, const gchar *base, gboolean spns
         const gchar *href = sp_repr_attr(ir, "xlink:href");
 
         // First try to figure out an absolute path to the asset
-        g_message("image href [%s]", href );
+        //g_message("image href [%s]", href );
         if (spns && !g_path_is_absolute(href)) {
             const gchar *absref = sp_repr_attr(ir, "sodipodi:absref");
-            g_message("      absr [%s]", absref );
+            //g_message("      absr [%s]", absref );
 
-            if ( absref && g_file_test(absref, G_FILE_TEST_EXISTS) )
+            if ( absref && Inkscape::IO::file_test(absref, G_FILE_TEST_EXISTS) )
             {
                 // only switch over if the absref is still valid
                 href = absref;
-                g_message("     copied absref to href");
+                //g_message("     copied absref to href");
             }
         }
 
         // Once we have an absolute path, convert it relative to the new location
         if (href && g_path_is_absolute(href)) {
             const gchar *relname = sp_relative_path_from_path(href, base);
-            g_message("     setting to [%s]", relname );
+            //g_message("     setting to [%s]", relname );
             sp_repr_set_attr(ir, "xlink:href", relname);
         }
 // TODO next refinement is to make the first choice keeping the relative path as-is if

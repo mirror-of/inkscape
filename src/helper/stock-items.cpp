@@ -35,6 +35,8 @@
 #include "desktop-handles.h"
 #include "inkscape.h"
 
+#include "io/sys.h"
+
 #include <gtk/gtk.h>
 
 
@@ -55,10 +57,10 @@ static SPObject * sp_marker_load_from_svg(gchar const *name, SPDocument *current
     /* Try to load from document */
     if (!edoc && !doc) {
         char *markers = g_build_filename(INKSCAPE_MARKERSDIR, "/markers.svg", NULL);
-        if (g_file_test(markers, G_FILE_TEST_IS_REGULAR)) {
+        if (Inkscape::IO::file_test(markers, G_FILE_TEST_IS_REGULAR)) {
             doc = sp_document_new(markers, FALSE, FALSE);
         }
-        if ( !doc && g_file_test( markers,
+        if ( !doc && Inkscape::IO::file_test( markers,
                                   G_FILE_TEST_IS_REGULAR) )
         {
             doc = sp_document_new( markers,
@@ -98,10 +100,10 @@ sp_pattern_load_from_svg(gchar const *name, SPDocument *current_doc)
     /* Try to load from document */
     if (!edoc && !doc) {
         char *patterns = g_build_filename(INKSCAPE_PATTERNSDIR, "/patterns.svg", NULL);
-        if (g_file_test(patterns, G_FILE_TEST_IS_REGULAR)) {
+        if (Inkscape::IO::file_test(patterns, G_FILE_TEST_IS_REGULAR)) {
             doc = sp_document_new(patterns, FALSE, FALSE);
         }
-        if ( !doc && g_file_test( patterns,
+        if ( !doc && Inkscape::IO::file_test( patterns,
                                   G_FILE_TEST_IS_REGULAR) )
         {
             doc = sp_document_new( patterns,
@@ -140,10 +142,10 @@ sp_gradient_load_from_svg(gchar const *name, SPDocument *current_doc)
     /* Try to load from document */
     if (!edoc && !doc) {
         char *gradients = g_build_filename(INKSCAPE_GRADIENTSDIR, "/gradients.svg", NULL);
-        if (g_file_test(gradients, G_FILE_TEST_IS_REGULAR)) {
+        if (Inkscape::IO::file_test(gradients, G_FILE_TEST_IS_REGULAR)) {
             doc = sp_document_new(gradients, FALSE, FALSE);
         }
-        if ( !doc && g_file_test( gradients,
+        if ( !doc && Inkscape::IO::file_test( gradients,
                                   G_FILE_TEST_IS_REGULAR) )
         {
             doc = sp_document_new( gradients,

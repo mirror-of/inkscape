@@ -69,6 +69,7 @@
 #include "path-prefix.h"
 #include "widgets/icon.h"
 #include "helper/stock-items.h"
+#include "io/sys.h"
 #include <file.h>
 
 #include "dialogs/stroke-style.h"
@@ -1082,7 +1083,7 @@ ink_marker_menu( GtkWidget *tbl, gchar *menu_id, SPDocument *sandbox)
         // find and load  markers.svg
         static SPDocument *markers_doc = NULL;
         char *markers_source = g_build_filename(INKSCAPE_MARKERSDIR, "/markers.svg", NULL);
-        if (g_file_test (markers_source, G_FILE_TEST_IS_REGULAR)) {
+        if (Inkscape::IO::file_test (markers_source, G_FILE_TEST_IS_REGULAR)) {
             markers_doc = sp_document_new(markers_source, FALSE, FALSE);
         }
         g_free(markers_source);

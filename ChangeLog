@@ -4,6 +4,13 @@
 	  src/io/uristream.cpp, src/io/sys.cpp: additional win32 changes
 	  using Jon Cruz's new mkdir function.  Getting Win32 to compile the
 	  "io" directory.
+	* src/file.cpp, src/inkscape-stock.cpp, src/inkscape.cpp,
+	  src/interface.cpp, src/main.cpp, src/dialogs/export.cpp,
+	  src/dialogs/stroke-style.cpp, src/extension/input.cpp,
+	  src/extension/implementation/script.cpp, src/helper/stock-items.cpp,
+	  src/io/sys.cpp, src/io/sys.h, src/widgets/icon.cpp: wrapped
+	  g_file_test with new Inkscape::IO::file_test since g_file_test isn't 
+	  utf8-safe.
 
 2004-01-28  MenTaLguY  <mental@rydia.net>
 

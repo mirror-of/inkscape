@@ -72,6 +72,8 @@
 #include "sp-object-repr.h"
 #include "xml/repr.h"
 
+#include "io/sys.h"
+
 #include <extension/extension.h>
 #include <extension/system.h>
 #include <extension/db.h>
@@ -340,7 +342,7 @@ sp_main_gui(int argc, char const **argv)
 
     /* Set default icon */
     gchar *filename = (gchar *) g_build_filename (INKSCAPE_APPICONDIR, "inkscape.png", NULL);
-    if (g_file_test(filename, (GFileTest)(G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))) {
+    if (Inkscape::IO::file_test(filename, (GFileTest)(G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))) {
         gtk_window_set_default_icon_from_file(filename, NULL);
     }
     g_free (filename);

@@ -236,6 +236,21 @@ int Inkscape::IO::mkdir_utf8name( char const *utf8name )
     return retval;
 }
 
+bool Inkscape::IO::file_test( char const *utf8name, GFileTest test )
+{
+    bool exists;
+    gchar *filename;
+
+    if (!g_utf8_validate(utf8name, -1, NULL)) {
+        filename = g_strdup(utf8name);
+    }
+    else {
+        filename = g_filename_from_utf8 ( utf8name, -1, NULL, NULL, NULL );
+    }
+    exists = g_file_test (filename, test);
+    g_free(filename);
+    return exists;
+}
 
 /*
   Local Variables:

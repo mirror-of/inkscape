@@ -132,7 +132,7 @@ Script::check_existance (const gchar * command)
 
     if (g_utf8_strchr (command, -1, G_DIR_SEPARATOR) != NULL) {
         /* Don't search when it contains a slash.  */
-        if (g_file_test(command, G_FILE_TEST_EXISTS))
+        if (Inkscape::IO::file_test(command, G_FILE_TEST_EXISTS))
             return TRUE;
         else
             return FALSE;
@@ -173,7 +173,7 @@ Script::check_existance (const gchar * command)
             final_name = g_build_filename(local_path, command, NULL);
         }
 
-        if (g_file_test(final_name, G_FILE_TEST_EXISTS)) {
+        if (Inkscape::IO::file_test(final_name, G_FILE_TEST_EXISTS)) {
             g_free(final_name);
             g_free(orig_path);
             return TRUE;

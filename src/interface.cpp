@@ -55,6 +55,8 @@
 #include <glibmm/i18n.h>
 #include "helper/window.h"
 
+#include "io/sys.h"
+
 #include "dialogs/dialog-events.h"
 
 #include "message-context.h"
@@ -1335,7 +1337,7 @@ sp_ui_overwrite_file (const gchar * filename)
 	gchar * title;
 	gchar * text;
 
-	if (g_file_test(filename, G_FILE_TEST_EXISTS)) {
+	if (Inkscape::IO::file_test(filename, G_FILE_TEST_EXISTS)) {
 
 		title = g_strdup_printf(_("Overwrite %s"), filename);
 		dialog = gtk_dialog_new_with_buttons (title,

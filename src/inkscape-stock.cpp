@@ -28,6 +28,8 @@
 
 #include "gtk/gtkiconfactory.h"
 
+#include "io/sys.h"
+
 #include "inkscape-stock.h"
 
 static struct StockIcon
@@ -163,7 +165,7 @@ inkscape_gtk_stock_init (void) {
                                                       &bytesWritten,
                                                       &error);
 
-        if (!g_file_test (localFilename, G_FILE_TEST_EXISTS)) {
+        if (!Inkscape::IO::file_test (localFilename, G_FILE_TEST_EXISTS)) {
             // testing
             g_critical ("Unable to load stock pixmap RELOC %s\n", filename);
             // g_critical ("Unable to load stock pixmap %s\n", 

@@ -37,6 +37,7 @@
 #include "sp-item.h"
 #include "display/nr-arena.h"
 #include "display/nr-arena-item.h"
+#include "io/sys.h"
 
 #include "icon.h"
 
@@ -479,7 +480,7 @@ sp_icon_image_load_svg ( const gchar *name,
 
         /* Try to load from document */
         if (!info && 
-            g_file_test( doc_filename, G_FILE_TEST_IS_REGULAR ) &&
+            Inkscape::IO::file_test( doc_filename, G_FILE_TEST_IS_REGULAR ) &&
             (doc = sp_document_new ( doc_filename, FALSE, FALSE )) ) {
 
             // prep the document
