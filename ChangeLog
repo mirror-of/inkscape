@@ -4,6 +4,7 @@
 	Use NR::Rect and .midpoint.
 
 	* src/dropper-context.cpp (sp_dropper_context_root_handler):
+	* src/sp-text.cpp (sp_string_set_shape):
 	Cleanup: use translate rather than setting individual matrix elements.
 
 	* src/libnr/nr-matrix-ops.h (operator*: Matrix*rotate, translate*scale,

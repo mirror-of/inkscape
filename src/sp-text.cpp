@@ -28,6 +28,7 @@
 
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
 #include <libnrtype/nr-type-directory.h>
 #include <libnrtype/nr-font.h>
 #include <libnrtype/font-style-to-pos.h>
@@ -47,7 +48,6 @@
 #include "version.h"
 #include "inkscape.h"
 #include "view.h"
-#include "libnr/nr-matrix.h"
 
 #include "sp-text.h"
 
@@ -821,7 +821,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 	NR::Point pt = cp;
 
 	/* fixme: SPChars should do this upright instead */
-	NR::Matrix a = NR::scale (NR::Point(1.0, -1.0));
+	NR::scale const flip_y(1.0, -1.0);
 
 	gboolean intext = FALSE;
 	gboolean preserve = (((SPObject*)string)->xml_space.value == SP_XML_SPACE_PRESERVE);
@@ -848,13 +848,11 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 			if (!preserve && inspace && intext) {
 				pt = pt + NR::Point(spadv[NR::X], -spadv[NR::Y]);
 			}
-			
-			// NR::translate?
-			a[4] = pt[NR::X] + sp_char_dx (dx, dx_offset + pos);
-			a[5] = pt[NR::Y];
 
-			a[5] += sp_char_dy (dy, dy_offset + pos);
-
+			NR::Matrix const a( NR::Matrix(flip_y)
+					    * NR::translate(pt)
+					    * NR::translate(sp_char_dx(dx, dx_offset + pos),
+							    sp_char_dy(dy, dy_offset + pos)) );
 			sp_chars_add_element (chars, glyph, font, a);
 			NR::Point adv = nr_font_glyph_advance_get (font, glyph) + letterspacing_adv;
 
