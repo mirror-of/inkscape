@@ -956,23 +956,17 @@ sp_item_distance_to_svg_viewport(SPItem *item, gdouble distance, SPUnit const *u
 
     NRMatrix i2doc;
     sp_item_i2doc_affine(item, &i2doc);
-    double dx = i2doc.c[0] + i2doc.c[2];
-    double dy = i2doc.c[1] + i2doc.c[3];
-    double const u2a = sqrt(dx * dx + dy * dy) * M_SQRT1_2;
-    /* todo: It's probably safe to use of hypot(X,Y) for these
-       sqrt(X*X + Y*Y) calculations.  hypot has less numerical
-       error; don't know about speed difference.  njh thinks hypot
-       is typically slower. */
-
+    double const u2a = M_SQRT1_2 * hypot(i2doc.c[0] + i2doc.c[2],    // dx
+                                         i2doc.c[1] + i2doc.c[3]);   // dy
     if (unit->base == SP_UNIT_DIMENSIONLESS) {
         /* Check for percentage */
         if (!percent) percent = sp_unit_get_by_abbreviation("%");
         if (unit == percent) {
             /* Percentage of viewport */
             /* fixme: full viewport support (Lauris) */
-            dx = sp_document_width(SP_OBJECT_DOCUMENT(item));
-            dy = sp_document_height(SP_OBJECT_DOCUMENT(item));
-            return 0.01 * distance * sqrt(dx * dx + dy * dy) * M_SQRT1_2;
+            return ( 0.01 * distance
+                     * M_SQRT1_2 * hypot(sp_document_width(SP_OBJECT_DOCUMENT(item)),
+                                         sp_document_height(SP_OBJECT_DOCUMENT(item))) );
         } else {
             /* Treat as userspace */
             return distance * unit->unittobase * u2a;
@@ -1008,10 +1002,8 @@ sp_item_distance_to_svg_bbox(SPItem *item, gdouble distance, SPUnit const *unit)
 
     NRMatrix i2doc;
     sp_item_i2doc_affine(item, &i2doc);
-    double dx = i2doc.c[0] + i2doc.c[2];
-    double dy = i2doc.c[1] + i2doc.c[3];
-    double const u2a = sqrt(dx * dx + dy * dy) * M_SQRT1_2;
-
+    double const u2a = M_SQRT1_2 * hypot(i2doc.c[0] + i2doc.c[2],    // dx
+                                         i2doc.c[1] + i2doc.c[3]);   // dy
     if (unit->base == SP_UNIT_DIMENSIONLESS) {
         /* Check for percentage */
         if (!percent) percent = sp_unit_get_by_abbreviation("%");
@@ -1019,9 +1011,9 @@ sp_item_distance_to_svg_bbox(SPItem *item, gdouble distance, SPUnit const *unit)
             /* Percentage of viewport */
             /* fixme: full viewport support (Lauris) */
             g_warning("file %s: line %d: Implement real item bbox percentage etc.", __FILE__, __LINE__);
-            dx = sp_document_width(SP_OBJECT_DOCUMENT(item));
-            dy = sp_document_height(SP_OBJECT_DOCUMENT(item));
-            return 0.01 * distance * sqrt(dx * dx + dy * dy) * M_SQRT1_2;
+            return ( 0.01 * distance
+                     * M_SQRT1_2 * hypot(sp_document_width(SP_OBJECT_DOCUMENT(item)),
+                                         sp_document_height(SP_OBJECT_DOCUMENT(item))) );
         } else {
             /* Treat as userspace */
             return distance * unit->unittobase * u2a;
