@@ -385,3 +385,42 @@ sp_path_cleanup (SPPath *path)
 	sp_curve_unref (curve);
 }
 
+void
+sp_selected_path_reverse ()
+{
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+	if (!SP_IS_DESKTOP(desktop))
+	  return;
+	
+	SPSelection *selection = SP_DT_SELECTION (desktop);
+	GSList *items = (GSList *) selection->itemList();
+
+	if (g_slist_length (items) == 0) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select one or more paths to reverse."));
+		return;
+	}
+
+
+	bool did = false;
+	for (GSList *i = items; i != NULL; i = i->next) {
+
+		if (!SP_IS_SHAPE (items->data))
+			continue;
+
+		did = true;
+		SPShape *shape = SP_SHAPE (items->data);
+
+		SPCurve *rcurve = sp_curve_reverse (shape->curve);
+
+		char *str = sp_svg_write_path (rcurve->bpath);
+		sp_repr_set_attr (SP_OBJECT_REPR (shape), "d", str);
+
+		sp_curve_unref (rcurve);
+	}
+
+ 	if (did) {
+		sp_document_done (SP_DT_DOCUMENT (desktop));
+	} else {
+		sp_view_set_statusf_flash (SP_VIEW(desktop), _("No paths to reverse in the selection."));
+	} 
+}

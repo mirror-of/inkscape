@@ -715,6 +715,7 @@ sp_ui_path_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 
         SP_VERB_NONE,
         SP_VERB_SELECTION_SIMPLIFY,
+        SP_VERB_SELECTION_REVERSE,
         SP_VERB_SELECTION_CLEANUP,
         SP_VERB_LAST
     };

@@ -19,6 +19,7 @@
 #include "display/sp-canvas-util.h"
 #include "object-edit.h"
 #include "sp-path.h"
+#include "path-chemistry.h"
 #include "rubberband.h"
 #include "desktop.h"
 #include "desktop-affine.h"
@@ -518,6 +519,12 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 				sp_node_selected_set_line_type (NR_CURVETO);
 				ret = TRUE;
 			}
+			break;
+		case GDK_R:
+		case GDK_r:
+			// FIXME: add top panel button
+			sp_selected_path_reverse ();
+			ret = TRUE;
 			break;
 
 		case GDK_Left: // move selection left

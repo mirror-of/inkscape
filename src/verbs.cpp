@@ -395,6 +395,9 @@ sp_verb_action_selection_perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_SELECTION_CLEANUP:
             sp_selection_cleanup ();
             break;
+        case SP_VERB_SELECTION_REVERSE:
+            sp_selected_path_reverse ();
+            break;
 
         case SP_VERB_SELECTION_COMBINE:
             sp_selected_path_combine ();
@@ -918,6 +921,8 @@ static const SPVerbActionDef props[] = {
         N_("Simplify selected path(s) by removing extra nodes"), "simplify"},
     {SP_VERB_SELECTION_CLEANUP, "SelectionCleanup", N_("Cl_eanup"),
         N_("Clean up selected path(s)"), "selection_cleanup"},
+    {SP_VERB_SELECTION_REVERSE, "SelectionReverse", N_("_Reverse"),
+        N_("Reverse direction of selected path(s)"), NULL},
     {SP_VERB_SELECTION_COMBINE, "SelectionCombine", N_("_Combine"),
         N_("Combine several paths into one"), "selection_combine"},
     {SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break _Apart"),
