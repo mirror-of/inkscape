@@ -18,7 +18,7 @@
 #include <glib/gmessages.h>
 #include <glib/gslist.h>
 #include <glib/gtypes.h>
-
+#include "sp-metric.h"
 
 
 /*
@@ -86,7 +86,7 @@ struct SPUnit {
 	SPUnitId unit_id; /* used as sanity check */
 	SPUnitBase base;
 	gdouble unittobase; /* how many base units in this unit */
-	guint metric; // the corresponding SPMetric from sp-metrics.h
+	SPMetric metric; // the corresponding SPMetric from sp-metrics.h
 
 	/* I am not absolutely sure, but seems that gettext can do the magic */
 	gchar const *name;
@@ -105,7 +105,7 @@ struct SPUnit {
 const SPUnit *sp_unit_get_identity (guint base);
 const SPUnit *sp_unit_get_by_abbreviation (const gchar *abbreviation);
 const gchar *sp_unit_get_abbreviation (const SPUnit *unit);
-guint sp_unit_get_metric (const SPUnit *unit);
+SPMetric sp_unit_get_metric(SPUnit const *unit);
 
 extern SPUnit const sp_units[];
 

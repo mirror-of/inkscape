@@ -32,20 +32,20 @@
  * calls sp_unit_table_sane) to ensure that the two are in sync.
  */
 SPUnit const sp_units[] = {
-    {SP_UNIT_SCALE, SP_UNIT_DIMENSIONLESS, 1.0, 0, N_("Unit"), "", N_("Units"), ""},
+    {SP_UNIT_SCALE, SP_UNIT_DIMENSIONLESS, 1.0, NONE, N_("Unit"), "", N_("Units"), ""},
     {SP_UNIT_PT, SP_UNIT_ABSOLUTE, 1.0, SP_PT, N_("Point"), N_("pt"), N_("Points"), N_("Pt")},
     {SP_UNIT_PX, SP_UNIT_DEVICE, 0.8, SP_PX, N_("Pixel"), N_("px"), N_("Pixels"), N_("Px")}, // yet another place where the 90dpi is hard-coded
     /* Volatiles do not have default, so there are none here */
     /* You can add new elements from this point forward */
-    {SP_UNIT_PERCENT, SP_UNIT_DIMENSIONLESS, 0.01, 0, N_("Percent"), N_("%"), N_("Percents"), N_("%")},
+    {SP_UNIT_PERCENT, SP_UNIT_DIMENSIONLESS, 0.01, NONE, N_("Percent"), N_("%"), N_("Percents"), N_("%")},
     {SP_UNIT_MM, SP_UNIT_ABSOLUTE, (720. / 254.), SP_MM, N_("Millimeter"), N_("mm"), N_("Millimeters"), N_("mm")},
     {SP_UNIT_CM, SP_UNIT_ABSOLUTE, (7200. / 254.), SP_CM, N_("Centimeter"), N_("cm"), N_("Centimeters"), N_("cm")},
     {SP_UNIT_M, SP_UNIT_ABSOLUTE, (720000. / 254.), SP_M, N_("Meter"), N_("m"), N_("Meters"), N_("m")},
     {SP_UNIT_IN, SP_UNIT_ABSOLUTE, (72.0), SP_IN, N_("Inch"), N_("in"), N_("Inches"), N_("in")},
     // TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
-    {SP_UNIT_EM, SP_UNIT_VOLATILE, 1.0, 0, N_("Em square"), N_("em"), N_("Em squares"), N_("em")},
+    {SP_UNIT_EM, SP_UNIT_VOLATILE, 1.0, NONE, N_("Em square"), N_("em"), N_("Em squares"), N_("em")},
     // TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
-    {SP_UNIT_EX, SP_UNIT_VOLATILE, 1.0, 0, N_("Ex square"), N_("ex"), N_("Ex squares"), N_("ex")},
+    {SP_UNIT_EX, SP_UNIT_VOLATILE, 1.0, NONE, N_("Ex square"), N_("ex"), N_("Ex squares"), N_("ex")},
 };
 
 #define sp_num_units G_N_ELEMENTS(sp_units)
@@ -100,10 +100,10 @@ sp_unit_get_abbreviation(SPUnit const *unit)
     return unit->abbr;
 }
 
-guint
+SPMetric
 sp_unit_get_metric(SPUnit const *unit)
 {
-    g_return_val_if_fail(unit != NULL, 0);
+    g_return_val_if_fail(unit != NULL, NONE);
 
     return unit->metric;
 }
