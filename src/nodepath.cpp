@@ -2700,6 +2700,7 @@ gchar const *sp_node_type_description(Path::Node *n)
 {
 	switch (n->type) {
 	case Path::NODE_CUSP:
+		// TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
 		return _("cusp");
 	case Path::NODE_SMOOTH:
 		return _("smooth");
