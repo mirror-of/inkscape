@@ -2,6 +2,9 @@
 
 	* src/Makefile.am: Make non-recursive.  Now sources */Makefile_insert.
 	See HACKING or discussion on mailing list.
+	* autogen.sh: Bump requirement from automake-1.6 to automake-1.7.
+	* configure.in: Don't generate src/blah/Makefile, but do generate
+	src/blah/makefile stubs.
 
 2004-04-21  MenTaLguY <mental@rydia.net>
 
