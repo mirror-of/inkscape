@@ -375,7 +375,6 @@ sp_text_edit_dialog_update_object (SPText *text, SPRepr *repr)
 
 	if (text) {
 		sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
-		sp_document_ensure_up_to_date (SP_OBJECT_DOCUMENT (text));
 	}
 
 	g_object_set_data (G_OBJECT (dlg), "blocked", NULL);
@@ -422,13 +421,13 @@ sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg)
 		++items;
 	}
 	
-	if (items == 1) {
-		sp_text_edit_dialog_update_object (text, NULL);
-	} else if (items == 0) {
+	if (items == 0) {
 		repr = inkscape_get_repr (INKSCAPE, "tools.text");
 		sp_text_edit_dialog_update_object (NULL, repr);
 		gtk_widget_set_sensitive (def, FALSE);
-	}
+	} else {
+		sp_text_edit_dialog_update_object (text, NULL);
+	} 
 
 	gtk_widget_set_sensitive (apply, FALSE);
 
