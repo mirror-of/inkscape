@@ -120,6 +120,8 @@ sp_item_init (SPItem *item)
 	item->mask_ref->changedSignal().connect(SigC::bind(SigC::slot(mask_ref_changed), item));
 
 	if (!object->style) object->style = sp_style_new_from_object (SP_OBJECT (item));
+
+	new (&item->_transformed_signal) SigC::Signal2<void, NR::Matrix const *, SPItem *>();
 }
 
 static void
@@ -161,6 +163,7 @@ sp_item_release (SPObject * object)
 		item->display = sp_item_view_list_remove (item->display, item->display);
 	}
 
+	item->_transformed_signal.~Signal2();
 }
 
 static void
@@ -605,12 +608,38 @@ sp_item_invoke_hide (SPItem *item, unsigned int key)
 	}
 }
 
+/**
+Finds out the difference between the previous transform of an item (from its repr) and the new transform
+*/
+NR::Matrix
+sp_item_transform_delta (SPItem *item, NRMatrix *transform)
+{
+
+	NR::Matrix t_old (NR::identity());
+	const gchar *t_attr = sp_repr_attr(SP_OBJECT_REPR(item), "transform");
+	if (t_attr) {
+		NRMatrix t;
+		if (sp_svg_transform_read (t_attr, &t))
+			t_old = t;
+	}
+	return t_old.inverse() * NR::Matrix(transform);
+}
+
 void
-sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform)
+sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Matrix *adv)
 {
 	g_return_if_fail (item != NULL);
 	g_return_if_fail (SP_IS_ITEM (item));
 	g_return_if_fail (repr != NULL);
+
+	// calculate the relative transform, if not given by the adv attribute, and send it as a _transformed_signal
+	NR::Matrix advertized_move;
+	if (adv != NULL) {
+		advertized_move = *adv;
+	} else {
+		advertized_move = sp_item_transform_delta (item, transform);
+	}
+	item->_transformed_signal.emit (&advertized_move, item);
 
 	NR::Matrix xform(transform);
 
@@ -749,9 +778,6 @@ sp_item_i2vp_affine (SPItem const *item, NRMatrix *affine)
 	nr_matrix_set_identity(affine);
 
 	while (SP_OBJECT_PARENT (item)) {
-		if (!SP_IS_ITEM (item)) {
-			g_print ("Lala\n");
-		}
 		nr_matrix_multiply(affine, affine, &item->transform);
 		item = (SPItem *) SP_OBJECT_PARENT (item);
 	}

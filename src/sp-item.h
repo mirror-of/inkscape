@@ -99,6 +99,12 @@ struct SPItem {
 	SPItemView *display;
 
 	std::vector<SPGuideConstraint> constraints;
+
+	SigC::Signal2<void, NR::Matrix const *, SPItem *> _transformed_signal;
+
+       SigC::Connection connectTransformed(SigC::Slot2<void, NR::Matrix const *, SPItem *> slot) {
+                return _transformed_signal.connect(slot);
+        }
 };
 
 struct SPItemClass {
@@ -148,7 +154,7 @@ void sp_item_invoke_hide (SPItem *item, unsigned int key);
 
 int sp_item_snappoints(SPItem *item, NR::Point points[], int size);
 
-void sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
+void sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Matrix *adv = NULL);
 
 gint sp_item_event (SPItem *item, SPEvent *event);
 
