@@ -39,6 +39,8 @@
 #include "ui/icons.h"
 #include "ui/widget/toolbox.h"
 
+#include "display/sp-canvas.h"
+
 using namespace Inkscape::UI;
 using namespace Inkscape::UI::Widget;
 
@@ -103,6 +105,7 @@ Editor::EditorImpl::initLayout()
     initMenuBar();
     initCommandsBar();
     initToolControlsBar();
+    initUriBar();
     initToolsBar();
 
     // Canvas Viewport
@@ -948,6 +951,17 @@ Editor::EditorImpl::initToolControlsBar()
 }
 
 void
+Editor::EditorImpl::initUriBar()
+{
+/*
+    _uri_ctrl = static_cast<Gtk::Toolbar*>(_ui_mgr->get_widget("/UriBar"));
+    if (_uri_ctrl != NULL) {
+        _toolbars_vbox.pack_start(*Gtk::manage(_uri_ctrl), Gtk::PACK_SHRINK);
+    }
+*/
+}
+
+void
 Editor::EditorImpl::initToolsBar()
 {
     Toolbox *bar = new Toolbox(static_cast<Gtk::Toolbar*>(_ui_mgr->get_widget("/ToolsBar")),
@@ -988,7 +1002,17 @@ Editor::EditorImpl::initRightScrollbar()
 void
 Editor::EditorImpl::initSvgCanvas()
 {
-    _viewport_table.attach(_svg_canvas, 1, 2, 1, 2, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND);
+    GtkWidget* canvas = (GtkWidget*)gtk_type_new (sp_canvas_get_type ());
+    _svg_canvas = Glib::wrap(canvas);
+    _svg_canvas->set_flags(Gtk::CAN_FOCUS);
+
+    // Set background to white
+    Glib::RefPtr<Gtk::Style> style = _svg_canvas->get_style();
+    style->set_bg(Gtk::STATE_NORMAL, style->get_white());
+    _svg_canvas->set_style(style);
+
+    _viewport_table.attach(*_svg_canvas, 1, 2, 1, 2, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND);
+
 }
 
 void

@@ -1,24 +1,33 @@
-/**
- * \brief Messages dialog
+/*
+ * \brief Messages Dialog
+ *
+ * A very simple dialog for displaying Inkscape messages. Messages
+ * sent to g_log(), g_warning(), g_message(), ets, are routed here,
+ * in order to avoid messing with the startup console.
  *
  * Authors:
- *   Bryce W. Harrington <bryce@bryceharrington.org>
+ *   Bob Jamison
+ *   Other dudes from The Inkscape Organization
  *
- * Copyright (C) 2004 Authors
+ * Copyright (C) 2004, 2005 Authors
  *
- * Released under GNU GPL.  Read the file 'COPYING' for more information.
+ * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
 #ifndef INKSCAPE_UI_DIALOG_MESSAGES_H
 #define INKSCAPE_UI_DIALOG_MESSAGES_H
 
-#include <gtkmm/notebook.h>
+#include <gtkmm/box.h>
+#include <gtkmm/dialog.h>
+#include <gtkmm/textview.h>
+#include <gtkmm/button.h>
+#include <gtkmm/menubar.h>
+#include <gtkmm/menu.h>
+#include <gtkmm/scrolledwindow.h>
+
 #include <glibmm/i18n.h>
 
 #include "dialog.h"
-#include "ui/widget/notebook-page.h"
-
-using namespace Inkscape::UI::Widget;
 
 namespace Inkscape {
 namespace UI {
@@ -29,22 +38,52 @@ public:
     Messages();
     virtual ~Messages();
 
-    Glib::ustring getName() const { return _("Messages"); }
-    Glib::ustring getDesc() const { return _("Messages Dialog"); }
+    /**
+     * Clear all information from the dialog
+     */
+    void clear();
+
+    /**
+     * Display a message
+     */
+    void message(char *msg);
+
+    /**
+     * Redirect g_log() messages to this widget
+     */
+    void captureLogMessages();
+
+    /**
+     * Return g_log() messages to normal handling
+     */
+    void releaseLogMessages();
+
+    Glib::ustring  getName() const { return "Messages"; }
+    Glib::ustring  getDesc() const { return ""; }
 
 protected:
-    Gtk::Notebook  _notebook;
+    Gtk::MenuBar        menuBar;
+    Gtk::Menu           fileMenu;
+    Gtk::ScrolledWindow textScroll;
+    Gtk::TextView       messageText;
 
-    NotebookPage   _page_messages;
+    //Handler ID's
+    guint handlerDefault;
+    guint handlerGlibmm;
+    guint handlerAtkmm;
+    guint handlerPangomm;
+    guint handlerGdkmm;
+    guint handlerGtkmm;
 
 private:
     Messages(Messages const &d);
-    Messages& operator=(Messages const &d);
+    Messages operator=(Messages const &d);
 };
 
-} // namespace Dialog
-} // namespace UI
-} // namespace Inkscape
+
+} //namespace Dialog
+} //namespace UI
+} //namespace Inkscape
 
 #endif // INKSCAPE_UI_DIALOG_MESSAGES_H
 

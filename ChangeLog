@@ -1,3 +1,14 @@
+2005-03-26  Bryce <bryce@bryceharrington.com>
+
+	* share/ui/keybindings.rc, share/ui/menus-bars.xml
+	  src/application/editor-impl.cpp, src/application/editor-impl.h,
+	  src/extension/internal/svg.cpp, src/ui/dialog/Makefile_insert,
+	  src/ui/dialog/dialog-manager.cpp,
+	  src/ui/dialog/dialog-manager.h, src/ui/dialog/messages.cpp,
+	  src/ui/dialog/messages.h: Initial implementation of canvas in
+	  gtkmm.  Incorporating Messages dialog.
+
+
 2005-03-24  MenTaLguY  <mental@rydia.net>
 
     * src/sp-item.cpp: fix relative transforms to accomodate viewbox

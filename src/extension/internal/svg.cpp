@@ -92,6 +92,36 @@ Svg::init(void)
 	return;
 }
 
+
+#ifdef USE_GNOME_VFS
+gchar *
+_load_uri (const gchar *uri)
+{
+    GnomeVFSHandle   *handle;
+    GnomeVFSFileSize  bytes_read;
+    gchar             buffer[BUF_SIZE];
+    gchar            *doc;
+    gchar            *new_doc;
+
+    GnomeVFSResult result = gnome_vfs_open (&handle, uri, GNOME_VFS_OPEN_READ);
+    while (result == GNOME_VFS_OK) {
+        result = gnome_vfs_read (handle, buffer, BUF_SIZE, &bytes_read);
+
+        if (doc == NULL) {
+            doc = g_strndup(buffer, bytes_read);
+        } else {
+            buffer[bytes_read] = '\0';
+            new_doc = g_strconcat(doc, buffer, NULL);
+            g_free(doc);
+            doc = new_doc;
+        }
+    }
+
+    return doc;
+}
+#endif
+
+
 /**
 	\return    A new document just for you!
 	\brief     This function takes in a filename of a SVG document and
@@ -99,12 +129,17 @@ Svg::init(void)
 	\param     mod   Module to use
 	\param     uri   The path to the file
 
-	This function is really simple, it just calles sp_document_new...
+	This function is really simple, it just calls sp_document_new...
 */
 SPDocument *
 Svg::open (Inkscape::Extension::Input *mod, const gchar *uri)
 {
+#ifdef USE_GNOME_VFS
+	gchar * buffer = _load_uri(uri);
+	return sp_document_new_from_mem(buffer, strlen(buffer), 1);
+#else
 	return sp_document_new (uri, TRUE);
+#endif
 }
 
 /**

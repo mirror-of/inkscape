@@ -44,6 +44,7 @@ public:
     Dialog* getAlignAndDistributeDialog();
     Dialog* getInkscapePreferencesDialog();
     Dialog* getDocumentPreferencesDialog();
+    Dialog* getDebugDialog();
     Dialog* getExportDialog();
     Dialog* getExtensionEditorDialog();
     Dialog* getFillAndStrokeDialog();
@@ -66,6 +67,7 @@ protected:
     Dialog            *_about_dialog;
     Dialog            *_align_and_distribute_dialog;
     Dialog            *_inkscape_preferences_dialog;
+    Dialog            *_debug_dialog;
     Dialog            *_document_preferences_dialog;
     Dialog            *_export_dialog;
     Dialog            *_extension_editor_dialog;

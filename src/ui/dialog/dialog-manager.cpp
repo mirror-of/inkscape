@@ -70,6 +70,7 @@ DialogManager::DialogManager()
     : _about_dialog(NULL),
       _align_and_distribute_dialog(NULL),
       _inkscape_preferences_dialog(NULL),
+      _debug_dialog(NULL),
       _document_preferences_dialog(NULL),
       _export_dialog(NULL),
       _extension_editor_dialog(NULL),

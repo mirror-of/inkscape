@@ -29,6 +29,8 @@
 #include "ui/dialog/dialog-manager.h"
 #include "ui/widget/toolbox.h"
 
+struct SPCanvas;
+
 namespace Inkscape {
 namespace NSApplication {
 
@@ -59,6 +61,7 @@ public:
     void onDialogAbout();
     void onDialogAlignAndDistribute();
     void onDialogInkscapePreferences();
+    void onDialogDialog();
     void onDialogDocumentProperties();
     void onDialogExport();
     void onDialogExtensionEditor();
@@ -82,13 +85,14 @@ protected:
 
     UI::Widget::Toolbox  *_tool_ctrl;
     Gtk::Toolbar         *_select_ctrl;
+    Gtk::Toolbar         *_uri_ctrl;
     Gtk::Toolbar         *_node_ctrl;
 
     Gtk::HRuler          _top_ruler;
     Gtk::VRuler          _left_ruler;
     Gtk::HScrollbar      _bottom_scrollbar;
     Gtk::VScrollbar      _right_scrollbar;
-    Gtk::DrawingArea     _svg_canvas;
+    Gtk::Widget*         _svg_canvas;
     Gtk::Statusbar       _statusbar;
 
     Glib::RefPtr<Gtk::ActionGroup>  _act_grp;
@@ -101,6 +105,7 @@ protected:
     void initMenuBar();
     void initCommandsBar();
     void initToolControlsBar();
+    void initUriBar();
     void initToolsBar();
     void initBottomScrollbar();
     void initRightScrollbar();

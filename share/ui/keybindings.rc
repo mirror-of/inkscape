@@ -52,6 +52,7 @@
 (gtk_accel_path "<Actions>//ZoomPrevious" "grave")
 (gtk_accel_path "<Actions>//ZoomNext" "<Shift>grave")
 (gtk_accel_path "<Actions>//ShowHideDialogs" "F12")
+(gtk_accel_path "<Actions>//Messages" "")
 (gtk_accel_path "<Actions>//Grid" "numbersign")
 (gtk_accel_path "<Actions>//Guides" "bar")
 (gtk_accel_path "<Actions>//Fullscreen" "F11")
