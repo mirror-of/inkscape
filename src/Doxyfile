@@ -14,7 +14,12 @@ INPUT = \
 	extension/extension.h	\
 	geom.cpp	\
 	helper/action.h	\
+	libnr/nr-matrix.h	\
+	libnr/nr-matrix.cpp	\
 	libnr/nr-point.h	\
+	libnr/nr-rotate.h	\
+	libnr/nr-rotate-fns.cpp	\
+	libnr/nr-rotate-fns.h	\
 	libnr/nr-types.cpp	\
 	message-context.h	\
 	message-stack.h	\
