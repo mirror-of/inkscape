@@ -15,7 +15,7 @@
 
 #include "color.h"
 #include "forward.h"
-#include "sp-marker.h"
+#include "sp-marker-loc.h"
 #include "xml/xml-forward.h"
 
 namespace Inkscape {
