@@ -527,7 +527,7 @@ sp_xml_tree_dialog (void)
         gtk_tooltips_set_tip ( tooltips, GTK_WIDGET (set_attr),
                                // TRANSLATORS: "Set" is a verb here
                                _("Set attribute"), NULL );
-        GtkWidget *set_label = gtk_label_new ("Set");
+        GtkWidget *set_label = gtk_label_new (_("Set"));
         gtk_container_add (GTK_CONTAINER (set_attr), set_label);
 
         gtk_signal_connect ( GTK_OBJECT (set_attr), "clicked",
