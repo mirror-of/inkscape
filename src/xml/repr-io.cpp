@@ -30,17 +30,21 @@
 
 #include "file.h"
 
+#include <map>
+#include <glibmm/ustring.h>
+#include <glibmm/quark.h>
+#include "util/shared-c-string.h"
+
 static const gchar *sp_svg_doctype_str =
 "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\"\n"
 "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n";
 
 static SPReprDoc *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns);
 static SPRepr *sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *prefix_map);
-static void sp_repr_set_xmlns_attr (const gchar *prefix, const gchar *uri, SPRepr *repr);
 static gint sp_repr_qualified_name (gchar *p, gint len, xmlNsPtr ns, const xmlChar *name, const gchar *default_ns, GHashTable *prefix_map);
-static void sp_repr_write_root_stream (SPRepr *repr, FILE *file, gboolean add_whitespace, gchar const *default_ns);
-static void sp_repr_write_stream (SPRepr *repr, FILE *file, gint indent_level, gboolean add_whitespace, gchar const *elide_prefix);
-static void sp_repr_write_stream_element (SPRepr *repr, FILE *file, gint indent_level, gboolean add_whitespace, gchar const *elide_prefix);
+static void sp_repr_write_stream_root_element (SPRepr *repr, FILE *file, gboolean add_whitespace, gchar const *default_ns);
+static void sp_repr_write_stream (SPRepr *repr, FILE *file, gint indent_level, gboolean add_whitespace, Glib::QueryQuark elide_prefix);
+static void sp_repr_write_stream_element (SPRepr *repr, FILE *file, gint indent_level, gboolean add_whitespace, Glib::QueryQuark elide_prefix, SPReprAttr *attributes);
 
 #ifdef HAVE_LIBWMF
 static xmlDocPtr sp_wmf_convert (const char * file_name);
@@ -151,13 +155,6 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
     SPReprDoc *rdoc=NULL;
 
     if (root != NULL) {
-        g_hash_table_foreach (prefix_map, (GHFunc)sp_repr_set_xmlns_attr, root);
-
-        /* always include SVG, Sodipodi and Inkscape namespaces */
-        sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_SVG_NS_URI, "svg"), SP_SVG_NS_URI, root);
-        sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_SODIPODI_NS_URI, "sodipodi"), SP_SODIPODI_NS_URI, root);
-        sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_INKSCAPE_NS_URI, "inkscape"), SP_INKSCAPE_NS_URI, root);
-
         rdoc = sp_repr_document_new_list(reprs);
 
         /* TODO: if the root is just "svg", go through and "promote" all the
@@ -165,8 +162,6 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
 
         if (!strcmp (sp_repr_name (root), "svg:svg") && default_ns && !strcmp (default_ns, SP_SVG_NS_URI)) {
             sp_repr_set_attr ((SPRepr *) rdoc, "doctype", sp_svg_doctype_str);
-            /* always include XLink namespace */
-            sp_repr_set_xmlns_attr (sp_xml_ns_uri_prefix (SP_XLINK_NS_URI, "xlink"), SP_XLINK_NS_URI, root);
         }
     }
 
@@ -179,15 +174,6 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
     g_hash_table_destroy (prefix_map);
 
     return rdoc;
-}
-
-void
-sp_repr_set_xmlns_attr (const gchar *prefix, const gchar *uri, SPRepr *repr)
-{
-    gchar *name;
-    name = g_strconcat ("xmlns:", prefix, NULL);
-    sp_repr_set_attr (repr, name, uri);
-    g_free (name);
 }
 
 gint
@@ -288,12 +274,12 @@ sp_repr_save_stream (SPReprDoc *doc, FILE *fp, gchar const *default_ns)
           repr ; repr = sp_repr_next(repr) )
     {
         if ( repr->type() == SP_XML_ELEMENT_NODE ) {
-            sp_repr_write_root_stream(repr, fp, TRUE, default_ns);
+            sp_repr_write_stream_root_element(repr, fp, TRUE, default_ns);
         } else if ( repr->type() == SP_XML_COMMENT_NODE ) {
-            sp_repr_write_stream(repr, fp, 0, TRUE, NULL);
+            sp_repr_write_stream(repr, fp, 0, TRUE, GQuark(0));
             fputc('\n', fp);
         } else {
-            sp_repr_write_stream(repr, fp, 0, TRUE, NULL);
+            sp_repr_write_stream(repr, fp, 0, TRUE, GQuark(0));
         }
     }
 }
@@ -313,7 +299,7 @@ sp_repr_save_file (SPReprDoc *doc, const gchar *filename,
         return FALSE;
     }
 
-    sp_repr_save_stream (doc, file);
+    sp_repr_save_stream (doc, file, default_ns);
 
     if (fclose (file) != 0) {
         return FALSE;
@@ -325,7 +311,7 @@ sp_repr_save_file (SPReprDoc *doc, const gchar *filename,
 void
 sp_repr_print (SPRepr * repr)
 {
-    sp_repr_write_stream (repr, stdout, 0, TRUE, NULL);
+    sp_repr_write_stream (repr, stdout, 0, TRUE, GQuark(0));
 
     return;
 }
@@ -347,22 +333,143 @@ repr_quote_write (FILE * file, const gchar * val)
     }
 }
 
+namespace Inkscape {
+
+struct compare_quark_ids {
+    bool operator()(Glib::QueryQuark const &a, Glib::QueryQuark const &b) {
+        return a.id() < b.id();
+    }
+};
+
+}
+
+namespace {
+
+typedef std::map<Glib::QueryQuark, Inkscape::Util::SharedCString, Inkscape::compare_quark_ids> NSMap;
+typedef std::map<Glib::QueryQuark, Glib::QueryQuark, Inkscape::compare_quark_ids> PrefixMap;
+typedef std::map<Glib::QueryQuark, gchar const *, Inkscape::compare_quark_ids> LocalNameMap;
+
+Glib::QueryQuark qname_prefix(Glib::QueryQuark qname) {
+    static PrefixMap prefix_map;
+    PrefixMap::iterator iter = prefix_map.find(qname);
+    if ( iter != prefix_map.end() ) {
+        return (*iter).second;
+    } else {
+        gchar const *name_string=g_quark_to_string(qname);
+        gchar const *prefix_end=strchr(name_string, ':');
+        if (prefix_end) {
+            Glib::Quark prefix=Glib::ustring(name_string, prefix_end);
+            prefix_map.insert(PrefixMap::value_type(qname, prefix));
+            return prefix;
+        } else {
+            return GQuark(0);
+        }
+    }
+}
+
+gchar const *qname_local_name(Glib::QueryQuark qname) {
+    static LocalNameMap local_name_map;
+    LocalNameMap::iterator iter = local_name_map.find(qname);
+    if ( iter != local_name_map.end() ) {
+        return (*iter).second;
+    } else {
+        gchar const *name_string=g_quark_to_string(qname);
+        gchar const *prefix_end=strchr(name_string, ':');
+        if (prefix_end) {
+            return prefix_end + 1;
+        } else {
+            return name_string;
+        }
+    }
+}
+
+void add_ns_map_entry(NSMap &ns_map, Glib::QueryQuark prefix) {
+    using Inkscape::Util::SharedCString;
+    NSMap::iterator iter=ns_map.find(prefix);
+    if ( iter == ns_map.end() ) {
+        if (prefix.id()) {
+            gchar const *uri=sp_xml_ns_prefix_uri(g_quark_to_string(prefix));
+            if (uri) {
+                ns_map.insert(NSMap::value_type(prefix, SharedCString::coerce(uri)));
+            } else {
+                g_warning("No namespace known for normalized prefix %s", g_quark_to_string(prefix));
+            }
+        } else {
+            ns_map.insert(NSMap::value_type(prefix, SharedCString()));
+        }
+    }
+}
+
+void populate_ns_map(NSMap &ns_map, SPRepr &repr) {
+    if ( repr.type() == SP_XML_ELEMENT_NODE ) {
+        add_ns_map_entry(ns_map, qname_prefix(repr.name));
+        for ( SPReprAttr *attr=repr.attributes ;
+              attr ; attr = attr->next )
+        {
+            Glib::QueryQuark prefix=qname_prefix(attr->key);
+            if (prefix.id()) {
+                add_ns_map_entry(ns_map, prefix);
+            }
+        }
+        for ( SPRepr *child=sp_repr_children(&repr) ;
+              child ; child = sp_repr_next(child) )
+        {
+            populate_ns_map(ns_map, *child);
+        }
+    }
+}
+
+}
+
 void
-sp_repr_write_root_stream (SPRepr *repr, FILE *file, gboolean add_whitespace, gchar const *default_ns)
+sp_repr_write_stream_root_element (SPRepr *repr, FILE *file, gboolean add_whitespace, gchar const *default_ns)
 {
-    return sp_repr_write_stream(repr, file, 0, add_whitespace, NULL);
+    using Inkscape::Util::SharedCString;
+    g_assert(repr != NULL);
+
+    NSMap ns_map;
+    populate_ns_map(ns_map, *repr);
+
+    Glib::QueryQuark elide_prefix=GQuark(0);
+    if ( default_ns && ns_map.find(GQuark(0)) == ns_map.end() ) {
+        elide_prefix = g_quark_from_string(sp_xml_ns_uri_prefix(default_ns, NULL));
+    }
+
+    SPReprAttr *attributes=repr->attributes;
+    for ( NSMap::iterator iter=ns_map.begin() ; iter != ns_map.end() ; ++iter ) 
+    {
+        Glib::QueryQuark prefix=(*iter).first;
+        SharedCString ns_uri=(*iter).second;
+
+        if (prefix.id()) {
+            if ( elide_prefix == prefix ) {
+                attributes = new SPReprAttr(g_quark_from_static_string("xmlns"), ns_uri, attributes);
+            }
+
+            Glib::ustring attr_name="xmlns:";
+            attr_name.append(g_quark_to_string(prefix));
+            GQuark key = g_quark_from_string(attr_name.c_str());
+            attributes = new SPReprAttr(key, ns_uri, attributes); 
+        } else {
+            // if there are non-namespaced elements, we can't globally
+            // use a default namespace
+            elide_prefix = GQuark(0);
+        }
+    }
+
+    return sp_repr_write_stream_element(repr, file, 0, add_whitespace, elide_prefix, attributes);
 }
 
 void
 sp_repr_write_stream (SPRepr *repr, FILE *file, gint indent_level,
-                      gboolean add_whitespace, gchar const *elide_prefix)
+                      gboolean add_whitespace, Glib::QueryQuark elide_prefix)
 {
     if (repr->type() == SP_XML_TEXT_NODE) {
         repr_quote_write (file, sp_repr_content (repr));
     } else if (repr->type() == SP_XML_COMMENT_NODE) {
         fprintf (file, "<!--%s-->", sp_repr_content (repr));
     } else if (repr->type() == SP_XML_ELEMENT_NODE) {
-        sp_repr_write_stream_element(repr, file, indent_level, add_whitespace, elide_prefix);
+        sp_repr_write_stream_element(repr, file, indent_level, add_whitespace, elide_prefix, repr->attributes);
     } else {
         g_assert_not_reached();
     }
@@ -371,9 +478,9 @@ sp_repr_write_stream (SPRepr *repr, FILE *file, gint indent_level,
 void
 sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
                               gboolean add_whitespace,
-                              gchar const *elide_prefix)
+                              Glib::QueryQuark elide_prefix,
+                              SPReprAttr *attributes)
 {
-    SPReprAttr *attr;
     SPRepr *child;
     gboolean loose;
     gint i;
@@ -390,7 +497,15 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
         }
     }
 
-    fprintf (file, "<%s", sp_repr_name (repr));
+    gchar const *element_name;
+    if ( elide_prefix == qname_prefix(repr->name) ) {
+        element_name = qname_local_name(repr->name);
+    } else {
+        element_name = g_quark_to_string(repr->name);
+    }
+    fprintf (file, "<%s", element_name);
+
+    // TODO: this should depend on xml:space, not the element name
 
     // if this is a <text> element, suppress formatting whitespace
     // for its content and children:
@@ -399,7 +514,7 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
         add_whitespace = FALSE;
     }
 
-    for ( attr = repr->attributes ; attr != NULL ; attr = attr->next ) {
+    for ( SPReprAttr *attr = attributes ; attr != NULL ; attr = attr->next ) {
         gchar const * const key = SP_REPR_ATTRIBUTE_KEY(attr);
         gchar const * const val = SP_REPR_ATTRIBUTE_VALUE(attr);
         fputs ("\n", file);

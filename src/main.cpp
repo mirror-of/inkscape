@@ -465,7 +465,7 @@ sp_main_console(int argc, char const **argv)
                 rdoc = sp_repr_document_new("svg:svg");
                 repr = sp_repr_document_root(rdoc);
                 repr = sp_document_root(doc)->updateRepr(repr, SP_OBJECT_WRITE_BUILD);
-                sp_repr_save_file(sp_repr_document(repr), sp_export_svg);
+                sp_repr_save_file(sp_repr_document(repr), sp_export_svg, SP_SVG_NS_URI);
             }
         }
         fl = g_slist_remove(fl, fl->data);

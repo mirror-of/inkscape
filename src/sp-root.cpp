@@ -597,14 +597,8 @@ sp_root_write (SPObject *object, SPRepr *repr, guint flags)
 		repr = sp_repr_new ("svg:svg");
 	}
 
-	sp_repr_set_attr (repr, "xmlns:svg", "http://www.w3.org/2000/svg");
-	sp_repr_set_attr (repr, "xmlns:xlink", "http://www.w3.org/1999/xlink");
-
 	if (flags & SP_OBJECT_WRITE_EXT) {
 		gchar *version;
-
-		sp_repr_set_attr (repr, "xmlns:sodipodi", SP_SODIPODI_NS_URI);
-		sp_repr_set_attr (repr, "xmlns:inkscape", SP_INKSCAPE_NS_URI);
 
 		sp_repr_set_attr (repr, "sodipodi:version", SODIPODI_VERSION);
 

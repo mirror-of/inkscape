@@ -454,7 +454,7 @@ inkscape_segv_handler (int signum)
                 file = Inkscape::IO::fopen_utf8name(c, "w");
             }
             if (file) {
-                sp_repr_save_stream (sp_repr_document (repr), file);
+                sp_repr_save_stream (sp_repr_document (repr), file, SP_SVG_NS_URI);
                 savednames = g_slist_prepend (savednames, g_strdup (c));
                 fclose (file);
             } else {

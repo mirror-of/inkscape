@@ -1,3 +1,13 @@
+2004-01-03  MenTaLguY  <mental@rydia.net>
+
+	* src/document.cpp, src/main.cpp, src/sp-root.cpp:
+	  get rid of ugly xmlns hacks
+
+	* src/inkscape.cpp, src/extension/internal/svg.cpp, src/xml/repr-io.cpp:
+	  automatically include xmlns declarations for the required namespaces,
+	  and make a best effort at using a default namespace when requested
+	  and possible
+
 2004-01-02  Kees Cook  <kees@outflux.net>
 
     * share/icons/icons.svg: updated view and location

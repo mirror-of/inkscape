@@ -296,16 +296,6 @@ sp_document_create (SPReprDoc *rdoc,
 	sp_repr_set_attr (rroot, "inkscape:version", INKSCAPE_VERSION);
 	/* fixme: Again, I moved these here to allow version determining in ::build (Lauris) */
 
-	/* A quick hack to get namespaces into doc */
-	sp_repr_set_attr (rroot, "xmlns:svg", SP_SVG_NS_URI);
-	sp_repr_set_attr (rroot, "xmlns:sodipodi", SP_SODIPODI_NS_URI);
-	sp_repr_set_attr (rroot, "xmlns:inkscape", SP_INKSCAPE_NS_URI);
-	sp_repr_set_attr (rroot, "xmlns:xlink", SP_XLINK_NS_URI);
-	sp_repr_set_attr (rroot, "xmlns:rdf", SP_RDF_NS_URI);
-	sp_repr_set_attr (rroot, "xmlns:cc", SP_CC_NS_URI);
-	sp_repr_set_attr (rroot, "xmlns:dc", SP_DC_NS_URI);
-	/* End of quick hack */
-
 	/* Quick hack 2 - get default image size into document */
 	if (!sp_repr_attr (rroot, "width")) sp_repr_set_attr (rroot, "width", A4_WIDTH_STR);
 	if (!sp_repr_attr (rroot, "height")) sp_repr_set_attr (rroot, "height", A4_HEIGHT_STR);
