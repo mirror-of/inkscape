@@ -51,6 +51,10 @@
 #include "inkjar/jar.h"
 #endif
 
+#include "inkscape-private.h"
+
+Inkscape::Application *inkscape;
+
 #include <iostream>
 
 #ifndef HAVE_BIND_TEXTDOMAIN_CODESET
@@ -171,6 +175,8 @@ main (int argc, const char **argv)
     ss.doc = NULL;
     ss.view = NULL;
     ss.fullscreen = false;
+
+    inkscape = (Inkscape::Application *)g_object_new (SP_TYPE_INKSCAPE, NULL);
 
     for (i = 1; i < argc; i++) {
 	struct stat st;
@@ -438,8 +444,6 @@ static void usage()
 	    "\n");
     exit(1);
 }
-
-Inkscape::Application *inkscape;
 
 #ifdef XXX
 /* TODO !!! make this temporary stub unnecessary */
