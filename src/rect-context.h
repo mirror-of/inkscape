@@ -16,7 +16,8 @@
 
 #include <sigc++/sigc++.h>
 #include "event-context.h"
-#include "knotholder.h"
+#include "libnr/nr-point.h"
+struct SPKnotHolder;
 
 #define SP_TYPE_RECT_CONTEXT            (sp_rect_context_get_type ())
 #define SP_RECT_CONTEXT(obj)            (GTK_CHECK_CAST ((obj), SP_TYPE_RECT_CONTEXT, SPRectContext))
