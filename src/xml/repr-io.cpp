@@ -731,12 +731,10 @@ sp_repr_write_stream_element (Node * repr, Writer & out, gint indent_level,
     }
     out.printf( "<%s", element_name );
 
-    // TODO: this should depend on xml:space, not the element name
-
     // if this is a <text> element, suppress formatting whitespace
     // for its content and children:
-
-    if (!strcmp(repr->name(), "svg:text")) {
+    gchar const *xml_space_attr = repr->attribute("xml:space");
+    if (xml_space_attr != NULL && !strcmp(xml_space_attr, "preserve")) {
         add_whitespace = FALSE;
     }
 
