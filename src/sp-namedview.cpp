@@ -139,9 +139,7 @@ sp_namedview_build (SPObject * object, SPDocument * document, SPRepr * repr)
 
 	sp_object_read_attr (object, "viewonly");
 	sp_object_read_attr (object, "showgrid");
-	sp_object_read_attr (object, "snaptogrid");
 	sp_object_read_attr (object, "showguides");
-	sp_object_read_attr (object, "snaptoguides");
 	sp_object_read_attr (object, "gridtolerance");
 	sp_object_read_attr (object, "guidetolerance");
 	sp_object_read_attr (object, "gridoriginx");
@@ -228,10 +226,6 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		sp_namedview_setup_grid (nv);
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_SNAPTOGRID:
-		nv->grid_snapper.setEnabled(sp_str_to_bool(value));
-		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-		break;
 	case SP_ATTR_SHOWGUIDES:
 		if (!value) { // show guides if not specified, for backwards compatibility
 			nv->showguides = TRUE;
@@ -239,10 +233,6 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 			nv->showguides = sp_str_to_bool (value);
 		}
 		sp_namedview_setup_guides (nv);
-		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
-		break;
-	case SP_ATTR_SNAPTOGUIDES:
-		nv->guide_snapper.setEnabled(sp_str_to_bool(value));
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_GRIDTOLERANCE:
@@ -686,13 +676,9 @@ sp_namedview_toggle_guides (SPRepr *repr)
 	} else {
 		v = !v;
 	}
-	sp_repr_set_boolean (repr, "showguides", v);
 
-	if (v) {
-		sp_repr_set_boolean (repr, "snaptoguides", TRUE);
-	} else {
-		sp_repr_set_boolean (repr, "snaptoguides", FALSE);
-	}
+	sp_repr_set_boolean (repr, "showguides", v);
+	sp_repr_set_boolean (repr, "inkscape:guide-bbox", v);
 }
 
 void
@@ -701,13 +687,9 @@ sp_namedview_toggle_grid (SPRepr *repr)
 	unsigned int v;
 	sp_repr_get_boolean (repr, "showgrid", &v);
 	v = !v;
-	sp_repr_set_boolean (repr, "showgrid", v);
 
-	if (v) {
-		sp_repr_set_boolean (repr, "snaptogrid", TRUE);
-	} else {
-		sp_repr_set_boolean (repr, "snaptogrid", FALSE);
-	}
+	sp_repr_set_boolean (repr, "showgrid", v);
+	sp_repr_set_boolean (repr, "inkscape:grid-bbox", v);
 }
 
 static void
