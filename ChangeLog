@@ -1,3 +1,7 @@
+2003-11-23 Bryce Harrington <bryce@osdl.org>
+	* Added include for document.h to knot.c for declaring
+  	  sp_document_undo, as g++ didn't like not having it declared. 
+
 2003-11-22 bulia byak <bulia@dr.com>
 	
 	* unified handling of arrow keys in selector and node editor
