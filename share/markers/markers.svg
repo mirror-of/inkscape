@@ -7,12 +7,12 @@
    width="210mm"
    height="297mm"
    sodipodi:docname="markers.svg"
-   inkscape:version="0.38cvs-20040210"
+   inkscape:version="0.39cvs"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   sodipodi:docbase="C:\tmp\svg\src_inkscape\0.39\Current\inkscape\share\markers">
+   sodipodi:docbase="/home/d/ink/inkscape/share/markers">
   <defs
      id="defs3">
     <marker
@@ -371,78 +371,64 @@
   </defs>
   <sodipodi:namedview
      id="base"
-     inkscape:zoom="0.89797979"
-     inkscape:cx="127.23938"
-     inkscape:cy="431.38342"
+     inkscape:zoom="14.367677"
+     inkscape:cx="36.649643"
+     inkscape:cy="710.52414"
      inkscape:window-width="799"
      inkscape:window-height="633"
-     inkscape:window-x="175"
-     inkscape:window-y="1" />
+     inkscape:window-x="31"
+     inkscape:window-y="344" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mClub);"
-     d="M 199.84936,641.11178 L 155.55576,641.11178"
+     d="M 199.84936,691.11178 L 155.55576,691.11178"
      id="INK_mClub_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mCurveIn);"
-     d="M 78.744175,568.72708 L 34.450577,568.72708"
+     d="M 78.744175,618.72708 L 34.450577,618.72708"
      id="INK_mCurveIn_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#mArrow);"
-     d="M 78.744175,465.71808 L 34.450577,465.71808"
+     d="M 78.744175,515.71808 L 34.450577,515.71808"
      id="mArrow_prev" />
-  <g
-     id="INK_mArrow1_prev">
-    <path
-       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mArrowTail3);"
-       d="M 78.744175,532.53473 L 34.450577,532.53473"
-       id="INK_mArrowTail3_prev" />
-    <path
-       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mArrow1);marker-mid:none;marker-end:none;"
-       d="M 28.486812,158.67256 L 79.991310,158.67256"
-       id="asda" />
-    <rect
-       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.88930397pt;marker-start:none;"
-       id="rect892"
-       width="62.149406"
-       height="62.149406"
-       x="18.632557"
-       y="128.03323" />
-  </g>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mArrowTail3);"
+     d="M 86.190775,588.10278 L 41.897180,588.10278"
+     id="INK_mArrowTail3_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mArrow2);"
      d="M 33.408323,263.99290 L 84.912821,263.99290"
      id="INK_mArrow2_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mArrow3);"
-     d="M 33.408323,310.25510 L 84.912821,310.25510"
+     d="M 33.408323,360.25510 L 84.912821,360.25510"
      id="INK_mArrow3_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mArrow4);"
-     d="M 32.424021,349.62719 L 83.928519,349.62719"
+     d="M 32.424021,399.62719 L 83.928519,399.62719"
      id="INK_mArrow4_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mArrow5);"
-     d="M 35.376927,393.92079 L 86.881425,393.92079"
+     d="M 35.376927,443.92079 L 86.881425,443.92079"
      id="INK_mArrow5_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mArrow6);"
-     d="M 77.352161,685.65622 L 33.058563,685.65622"
+     d="M 77.352161,735.65622 L 33.058563,735.65622"
      id="INK_mArrow6_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mArrow7);"
-     d="M 199.84936,685.65621 L 155.55576,685.65621"
+     d="M 199.84936,735.65621 L 155.55576,735.65621"
      id="INK_mArrow7_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#mTriangle);marker-end:none;"
-     d="M 82.681384,433.23610 L 38.387785,433.23610"
+     d="M 82.681384,483.23610 L 38.387785,483.23610"
      id="mTriangle_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mCurveOut);"
-     d="M 78.744175,603.52742 L 34.450577,603.52742"
+     d="M 78.744175,653.52742 L 34.450577,653.52742"
      id="INK_mCurveOut_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mCurvyCross);"
-     d="M 78.744175,643.89581 L 34.450577,643.89581"
+     d="M 78.744175,693.89581 L 34.450577,693.89581"
      id="INK_mCurvyCross_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mDiamond);"
@@ -450,46 +436,61 @@
      id="INK_mDiamond_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mDot);"
-     d="M 198.45734,311.20458 L 154.16374,311.20458"
+     d="M 198.45734,361.20458 L 154.16374,361.20458"
      id="INK_mDot_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mSquare);"
-     d="M 198.45734,354.35700 L 154.16374,354.35700"
+     d="M 198.45734,404.35700 L 154.16374,404.35700"
      id="INK_mSquare_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mStop);"
-     d="M 198.45734,398.90143 L 154.16374,398.90143"
+     d="M 198.45734,448.90143 L 154.16374,448.90143"
      id="INK_mStop_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mSemiCircle2);"
-     d="M 197.06533,437.87781 L 152.77173,437.87781"
+     d="M 197.06533,487.87781 L 152.77173,487.87781"
      id="INK_mSemiCircle2_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mSemiCircle1);"
-     d="M 195.67332,472.67815 L 151.37972,472.67815"
+     d="M 195.67332,522.67815 L 151.37972,522.67815"
      id="INK_mSemiCircle1_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mTria);"
-     d="M 197.06533,501.91043 L 152.77173,501.91043"
+     d="M 197.06533,551.91043 L 152.77173,551.91043"
      id="INK_mTria_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mDistance1a);"
-     d="M 197.06533,538.10278 L 152.77173,538.10278"
+     d="M 197.06533,588.10278 L 152.77173,588.10278"
      id="INK_mDistance1a_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mDistance1b);"
-     d="M 197.06533,603.52742 L 152.77173,603.52742"
+     d="M 197.06533,653.52742 L 152.77173,653.52742"
      id="INK_mDistance1b_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#Template);"
-     d="M 77.352171,497.73439 L 33.058571,497.73439"
+     d="M 77.352171,547.73439 L 33.058571,547.73439"
      id="Template_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mTorso);marker-end:none;"
-     d="M 74.568134,730.20065 L 30.274536,730.20065"
+     d="M 74.568134,780.20065 L 30.274536,780.20065"
      id="INK_mTorso_prev" />
   <path
      style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:url(#INK_mLegs);"
-     d="M 198.45735,730.20064 L 154.16375,730.20064"
+     d="M 198.45735,780.20064 L 154.16375,780.20064"
      id="INK_mLegs_prev" />
+  <g
+     id="INK_mArrow1_prev">
+    <path
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0391427pt;marker-start:url(#INK_mArrow1);marker-mid:none;marker-end:none;"
+       d="M 34.793212,164.31109 L 50.376814,164.31109"
+       id="asda"
+       sodipodi:nodetypes="cc" />
+    <rect
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke-width:0.0000000;"
+       id="rect1120"
+       width="24.341282"
+       height="25.000000"
+       x="26.017609"
+       y="151.69437" />
+  </g>
 </svg>
