@@ -36,7 +36,7 @@
 // "private" is a gradient that has no stops but has position coords (e.g. center, radius etc for a radial). It references a vector for the actual colors. Each private is only used by one object. It is either linear or radial.
 
 static void sp_gradient_repr_set_link (SPRepr *repr, SPGradient *gr);
-static void sp_item_repr_set_style_gradient (SPRepr *repr, const gchar *property, SPGradient *gr);
+static void sp_item_repr_set_style_gradient (SPRepr *repr, const gchar *property, SPGradient *gr, bool recursive);
 
 /* fixme: One more step is needed - normalization vector to 0-1 (not sure 100% still) */
 
@@ -335,8 +335,8 @@ sp_gradient_convert_to_userspace (SPGradient *gr, SPItem *item, const gchar *pro
 		sp_repr_set_attr (repr, "gradientUnits", "userSpaceOnUse");
 	}
 
-	// apply the gradient to the item (may be necessary if we cloned it)
-	sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), property, gr);
+	// apply the gradient to the item (may be necessary if we cloned it); not recursive
+	sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), property, gr, false);
 
 	return gr;
 }
@@ -446,8 +446,8 @@ sp_item_set_gradient (SPItem *item, SPGradient *gr, SPGradientType type, bool is
 			g_return_val_if_fail (normalized != NULL, NULL);
 
 			if (normalized != current) {
-				/* We have to change object style here */
-				sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), is_fill? "fill" : "stroke", normalized);
+				/* We have to change object style here; recursive because this is used from fill&stroke and must work for groups etc. */
+				sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), is_fill? "fill" : "stroke", normalized, true);
 			}
 			SP_OBJECT (item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 			return normalized;
@@ -456,7 +456,7 @@ sp_item_set_gradient (SPItem *item, SPGradient *gr, SPGradientType type, bool is
 	} else {
 		/* Current fill style is not a gradient or wrong type, so construct everything */
 		SPGradient *constructed = sp_gradient_get_private_normalized (SP_OBJECT_DOCUMENT (item), gr, type);
-		sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), is_fill? "fill" : "stroke", constructed);
+		sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), is_fill? "fill" : "stroke", constructed, true);
 		SP_OBJECT (item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 		return constructed;
 	}
@@ -487,7 +487,7 @@ sp_gradient_repr_set_link (SPRepr *repr, SPGradient *link)
 }
 
 static void
-sp_item_repr_set_style_gradient (SPRepr *repr, const gchar *property, SPGradient *gr)
+sp_item_repr_set_style_gradient (SPRepr *repr, const gchar *property, SPGradient *gr, bool recursive)
 {
 	SPCSSAttr *css;
 	gchar *val;
@@ -500,7 +500,11 @@ sp_item_repr_set_style_gradient (SPRepr *repr, const gchar *property, SPGradient
 	css = sp_repr_css_attr_new ();
 	sp_repr_css_set_property (css, property, val);
 	g_free (val);
-	sp_repr_css_change_recursive (repr, css, "style");
+	if (recursive) {
+		sp_repr_css_change_recursive (repr, css, "style");
+	} else {
+		sp_repr_css_change (repr, css, "style");
+	}
 	sp_repr_css_attr_unref (css);
 }
 

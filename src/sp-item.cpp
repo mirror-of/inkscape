@@ -800,9 +800,6 @@ sp_item_write_transform(SPItem *item, SPRepr *repr, NR::Matrix const &transform,
     g_return_if_fail(SP_IS_ITEM(item));
     g_return_if_fail(repr != NULL);
 
-    // this converts the gradient fill, if any, to userspace; we need to do it here for compensations before the new transform is set
-    sp_shape_adjust_gradient (item, NR::identity(), false);
-
     // calculate the relative transform, if not given by the adv attribute
     NR::Matrix advertized_transform;
     if (adv != NULL) {
@@ -830,6 +827,9 @@ sp_item_write_transform(SPItem *item, SPRepr *repr, NR::Matrix const &transform,
     // recursively compensate gradient fill if it's not to be transformed
     if (prefs_get_int_attribute("options.transform", "gradient", 1) == 0) {
         sp_item_adjust_paint_recursive (item, advertized_transform.inverse(), NR::identity(), false);
+    } else {
+        // this converts the gradient fill, if any, to userspace; we need to do it here _before_ the new transform is set, so as to use the pre-transform bbox
+        sp_item_adjust_paint_recursive (item, NR::identity(), NR::identity(), false);
     }
 
     // run the object's set_transform if transforms are stored optimized
