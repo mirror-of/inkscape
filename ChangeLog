@@ -1,3 +1,9 @@
+2004-08-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/dialogs/xml-tree.cpp (set_dt_select):
+	  Address warning introduced in r1.21.
+	  Minor other cleanups.
+
 2004-08-12  MenTaLguY  <mental@rydia.net>
 
 	* src/xml/repr-css.cpp, src/xml/repr-private.h,
