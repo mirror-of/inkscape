@@ -10,19 +10,23 @@ using Inkscape::Util::ListContainer;
 #define ARRAY_RANGE(array) (array), (array)+sizeof((array))/sizeof((array)[0])
 
 static bool check_values(ListContainer<int> const &c, unsigned n_values, ...) {
+	bool ret = true;
 	va_list args;
 	va_start(args, n_values);
-	ListContainer<int>::const_iterator iter=c.begin();
+	ListContainer<int>::const_iterator iter(c.begin());
 	while ( n_values && iter != c.end() ) {
-		int value=va_arg(args, int);
+		int const value = va_arg(args, int);
 		if ( value != *iter ) {
-			break;
+			ret = false;
+		}
+		if ( n_values == 1 && &c.back() != &*iter ) {
+			ret = false;
 		}
 		n_values--;
 		++iter;
 	}
 	va_end(args);
-	return n_values == 0 && iter == c.end();
+	return ret && n_values == 0 && iter == c.end();
 }
 
 int main(int argc, char *argv[]) {
