@@ -1,3 +1,18 @@
+2004-07-06  Ted Gould  <ted@gould.cx>
+
+	* src/libnr/nr-point.h, src/libnr/nr-rect.h:
+
+	Adding in a function to round the points and rectangles.  Using this
+	for less precise comparisons.  Also, added in a function to print
+	each of these.
+
+	* src/dialogs/export.cpp:
+
+	Major revisions to do all kinds of fun stuff.  The major one being
+	that filenames and and dpi's can now be stored on selections.  This
+	makes it so that people working on a section of a document can export
+	it consistently.
+
 2004-07-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-typeset-utils.h: Greatly reduce #includes.

@@ -3,6 +3,8 @@
 
 #include <math.h>
 #include <stdexcept>
+#include <iostream>
+#include <iomanip>
 
 #include <libnr/nr-coord.h>
 #include <libnr/nr-dim2.h>
@@ -76,6 +78,22 @@ public:
         return Point(-_pt[Y], _pt[X]);
     }
 
+    /**
+        \brief A function to lower the precision of the point
+        \param  places  The number of decimal places that should be in
+                        the final number.
+
+        This function accomplishes its goal by doing a 10^places and
+        multipling the X and Y coordinates by that.  It then casts that
+        to an integer (to get rid of all decimal points) and then divides
+        by 10^places back again.
+    */
+    inline void round (int places = 0) {
+        _pt[X] = (Coord)(::round((double)_pt[X] * pow(10, places)) / pow(10, places));
+        _pt[Y] = (Coord)(::round((double)_pt[Y] * pow(10, places)) / pow(10, places));
+        return;
+    }
+
     void normalize();
 
     __attribute__((__deprecated__)) operator NRPoint() const {
@@ -123,13 +141,24 @@ public:
 
     Point &operator*=(Matrix const &m);
 
+    inline int operator == (const Point &in_pnt) {
+        return ((_pt[0] == in_pnt[0]) && (_pt[1] == in_pnt[1]));
+    }
+
+    friend inline std::ostream &operator<< (std::ostream &out_file, const NR::Point &in_pnt);
+
 private:
     Coord _pt[2];
 };
 
+/** A function to print out the Point.  It just prints out the coords
+    on the given output stream */
+inline std::ostream &operator<< (std::ostream &out_file, const NR::Point &in_pnt) {
+    out_file << "X: " << in_pnt[0] << "  Y: " << in_pnt[1];
+    return out_file;
+}
 
 } /* namespace NR */
-
 
 #endif /* !SEEN_NR_POINT_H */
 

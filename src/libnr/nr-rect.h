@@ -15,6 +15,7 @@
  */
 
 #include <stdexcept>
+#include <iostream>
 #include <libnr/nr-coord.h>
 #include <libnr/nr-i-coord.h>
 #include <libnr/nr-dim2.h>
@@ -133,6 +134,18 @@ public:
         };
     }
 
+    /**
+        \brief  Remove some precision from the Rect
+        \param  places  The number of decimal places left in the end
+
+        This function just calls round on the \c _min and \c _max points.
+    */
+    inline void round (int places = 0) {
+        _min.round(places);
+        _max.round(places);
+        return;
+    }
+
 	/** Translates the rectangle by p. */
 	void offset(Point p);
 
@@ -151,6 +164,12 @@ public:
 	inline Rect operator*(double s) const {
 		return Rect (s * min(), s * max());
 	}
+
+    inline int operator == (const Rect &in_rect) {
+        return ((this->min() == in_rect.min()) && (this->max() == in_rect.max()));
+    }
+
+    friend inline std::ostream &operator<< (std::ostream &out_file, const NR::Rect &in_rect);
 
 private:
 	Rect() {}
@@ -185,6 +204,18 @@ private:
     /* evil, but temporary */
     friend class Maybe<Rect>;
 };
+
+/** A function to print out the rectange if sent to an output
+    stream. */
+inline std::ostream
+&operator<< (std::ostream &out_file, const NR::Rect &in_rect)
+{
+	out_file << "Rectangle:\n";
+	out_file << "\tMin Point -> " << in_rect.min() << "\n";
+	out_file << "\tMax Point -> " << in_rect.max() << "\n";
+
+	return out_file;
+}
 
 } /* namespace NR */
 
