@@ -17,15 +17,17 @@
 #include "version.h"
 
 gboolean
-sp_version_from_string(const char *string, SPVersion *version)
+sp_version_from_string(const gchar *string, SPVersion *version)
 {
+	int result;
+	if (!string) return FALSE;
+
 	version->major = 0;
 	version->minor = 0;
 
-	if (!string) return FALSE;
-
-	return sscanf("%u.%u", string, &version->major, &version->minor) ||
-	       sscanf("%u", string, &version->major);
+	return sscanf((const char *)string, "%u.%u",
+	              &version->major, &version->minor) ||
+	       sscanf((const char *)string, "%u", &version->major);
 }
 
 gchar *
