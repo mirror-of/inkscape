@@ -59,6 +59,7 @@
 #include "star-context.h"
 #include "spiral-context.h"
 #include "gradient-context.h"
+#include "gradient-drag.h"
 #include "sp-desktop-widget.h"
 #include "sp-rect.h"
 #include "sp-star.h"
@@ -104,10 +105,46 @@ static void gr_toggle_fillstroke (GtkWidget *button, gpointer data) {
 }
 
 void
-gr_apply_gradient (SPSelection *selection, SPGradient *gr)
+gr_apply_gradient (SPSelection *selection, GrDrag *drag, SPGradient *gr)
 {
     SPGradientType new_type = (SPGradientType) prefs_get_int_attribute ("tools.gradient", "newgradient", SP_GRADIENT_TYPE_LINEAR);
     guint new_fill = prefs_get_int_attribute ("tools.gradient", "newfillorstroke", 1);
+
+    if (drag && drag->selected) {
+        GrDragger *dragger = drag->selected;
+        for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
+            GrDraggable *draggable = (GrDraggable *) i->data;
+            SPItem *item = draggable->item;
+            SPStyle *style = SP_OBJECT_STYLE (item);
+
+            if (draggable->fill_or_stroke) {
+                if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER) && 
+                    SP_IS_GRADIENT (SP_OBJECT_STYLE_FILL_SERVER (item))) {
+                    SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (item);
+                    if (SP_IS_LINEARGRADIENT (server)) {
+                        sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_LINEAR, true);
+                    } else if (SP_IS_RADIALGRADIENT (server)) {
+                        sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_RADIAL, true);
+                    } 
+                } else if (new_fill) {
+                    sp_item_set_gradient(item, gr, new_type, true);
+                }
+            } else {
+                if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER) && 
+                    SP_IS_GRADIENT (SP_OBJECT_STYLE_STROKE_SERVER (item))) {
+                    SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER (item);
+                    if (SP_IS_LINEARGRADIENT (server)) {
+                        sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_LINEAR, false);
+                    } else if (SP_IS_RADIALGRADIENT (server)) {
+                        sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_RADIAL, false);
+                    } 
+                } else if (!new_fill) {
+                    sp_item_set_gradient(item, gr, new_type, false);
+                }
+            }
+        }
+        return;
+    }
 
    for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
         SPItem *item = SP_ITEM(i->data);
@@ -147,8 +184,9 @@ gr_item_activate (GtkMenuItem *menuitem, gpointer data)
 
     SPDesktop *desktop = (SPDesktop *) data;
     SPSelection *selection = SP_DT_SELECTION (desktop);
+    SPEventContext *ev = SP_DT_EVENTCONTEXT (desktop);
 
-    gr_apply_gradient (selection, gr);
+    gr_apply_gradient (selection, ev? ev->get_drag() : NULL, gr);
 
     sp_document_done (SP_DT_DOCUMENT (desktop));
 }
@@ -267,8 +305,34 @@ gr_vector_list (SPDesktop *desktop, bool selection_empty, SPGradient *gr_selecte
 
 
 void
-gr_read_selection (SPSelection *selection, SPGradient **gr_selected, bool *gr_multi, SPGradientSpread *spr_selected, bool *spr_multi) 
+gr_read_selection (SPSelection *selection, GrDrag *drag, SPGradient **gr_selected, bool *gr_multi, SPGradientSpread *spr_selected, bool *spr_multi) 
 {
+    if (drag && drag->selected) {
+        GrDragger *dragger = drag->selected;
+        for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
+            GrDraggable *draggable = (GrDraggable *) i->data;
+            SPGradient *gradient = sp_item_gradient_get_vector (draggable->item, draggable->fill_or_stroke);
+            SPGradientSpread spread = sp_item_gradient_get_spread (draggable->item, draggable->fill_or_stroke);
+
+            if (gradient != *gr_selected) {
+                if (*gr_selected != NULL) {
+                    *gr_multi = true;
+                } else {
+                    *gr_selected = gradient;
+                }
+            }
+            if (spread != *spr_selected) {
+                if (*spr_selected != INT_MAX) {
+                    *spr_multi = true;
+                } else {
+                    *spr_selected = spread;
+                }
+            }
+         }
+        return;
+    } 
+
+   // If no selected dragger, read desktop selection
    for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
         SPItem *item = SP_ITEM(i->data);
         SPStyle *style = SP_OBJECT_STYLE (item);
@@ -319,12 +383,16 @@ gr_read_selection (SPSelection *selection, SPGradient **gr_selected, bool *gr_mu
  }
 
 static void 
-gr_tb_selection_changed (SPSelection *sel_sender, gpointer data)
+gr_tb_selection_changed (SPSelection *, gpointer data)
 {
     GtkWidget *widget = (GtkWidget *) data;
 
     SPDesktop *desktop = (SPDesktop *) g_object_get_data (G_OBJECT(widget), "desktop");
+    if (!desktop || !SP_IS_DESKTOP(desktop))
+        return;
+
     SPSelection *selection = SP_DT_SELECTION (desktop); // take from desktop, not from args
+    SPEventContext *ev = SP_DT_EVENTCONTEXT (desktop);
 
     GtkWidget *om = (GtkWidget *) g_object_get_data (G_OBJECT (widget), "menu");
     if (om) gtk_widget_destroy (om);
@@ -335,7 +403,7 @@ gr_tb_selection_changed (SPSelection *sel_sender, gpointer data)
     SPGradientSpread spr_selected = (SPGradientSpread) INT_MAX; // meaning undefined
     bool spr_multi = false;
 
-    gr_read_selection (selection, &gr_selected, &gr_multi, &spr_selected, &spr_multi);
+    gr_read_selection (selection, ev? ev->get_drag() : NULL, &gr_selected, &gr_multi, &spr_selected, &spr_multi);
 
     om = gr_vector_list (desktop, selection->isEmpty(), gr_selected, gr_multi);
     g_object_set_data (G_OBJECT (widget), "menu", om);
@@ -352,6 +420,12 @@ static void
 gr_tb_selection_modified (SPSelection *selection, guint flags, gpointer data)
 {
     gr_tb_selection_changed (selection, data);
+}
+
+static void
+gr_drag_selection_changed (gpointer dragger, gpointer data)
+{
+    gr_tb_selection_changed (NULL, data);
 }
 
 static void
@@ -372,6 +446,7 @@ gr_fork (GtkWidget *button, GtkWidget *widget)
     SPDesktop *desktop = (SPDesktop *) g_object_get_data (G_OBJECT(widget), "desktop");
     SPDocument *document = SP_DT_DOCUMENT (desktop);
     SPSelection *selection = SP_DT_SELECTION (desktop);
+    SPEventContext *ev = SP_DT_EVENTCONTEXT (desktop);
     GtkWidget *om = (GtkWidget *) g_object_get_data (G_OBJECT(widget), "menu");
 
     if (om && document) {
@@ -384,7 +459,7 @@ gr_fork (GtkWidget *button, GtkWidget *widget)
             SPGradient *gr_new = (SPGradient *) document->getObjectByRepr(repr);
             gr_new = sp_gradient_ensure_vector_normalized (gr_new);
             sp_repr_unref (repr);
-            gr_apply_gradient (selection, gr_new);
+            gr_apply_gradient (selection, ev? ev->get_drag() : NULL, gr_new);
             sp_document_done (document);
         }
     }
@@ -421,6 +496,7 @@ gr_change_widget (SPDesktop *desktop)
 {
     SPSelection *selection = SP_DT_SELECTION (desktop);
     SPDocument *document = SP_DT_DOCUMENT (desktop);
+    SPEventContext *ev = SP_DT_EVENTCONTEXT (desktop);
 
     SPGradient *gr_selected = NULL;
     bool gr_multi = false;
@@ -430,7 +506,7 @@ gr_change_widget (SPDesktop *desktop)
 
     GtkTooltips *tt = gtk_tooltips_new();
 
-    gr_read_selection (selection, &gr_selected, &gr_multi, &spr_selected, &spr_multi);
+    gr_read_selection (selection, ev? ev->get_drag() : NULL, &gr_selected, &gr_multi, &spr_selected, &spr_multi);
  
     GtkWidget *widget = gtk_hbox_new(FALSE, FALSE);
     g_object_set_data (G_OBJECT (widget), "desktop", desktop);
@@ -482,9 +558,16 @@ gr_change_widget (SPDesktop *desktop)
             (gpointer)widget )
     ));
 
+    sigc::connection *conn3 = new sigc::connection (desktop->connectToolSubselectionChanged(
+        sigc::bind (
+            sigc::ptr_fun(&gr_drag_selection_changed),
+            (gpointer)widget )
+    ));
+
     // when widget is destroyed, disconnect
     g_signal_connect(G_OBJECT(widget), "destroy", G_CALLBACK(gr_disconnect_sigc), conn1);
     g_signal_connect(G_OBJECT(widget), "destroy", G_CALLBACK(gr_disconnect_sigc), conn2);
+    g_signal_connect(G_OBJECT(widget), "destroy", G_CALLBACK(gr_disconnect_sigc), conn3);
 
     // connect to release and modified signals of the defs (i.e. when someone changes gradient)
     g_signal_connect (G_OBJECT (SP_DOCUMENT_DEFS (document)), "release", G_CALLBACK (gr_defs_release), widget);
