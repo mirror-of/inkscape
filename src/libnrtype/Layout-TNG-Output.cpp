@@ -159,17 +159,26 @@ void Layout::print(SPPrintContext *ctx, NRRect const *pbox, NRRect const *dbox, 
                 char_index--;
                 span_iter++;
             }
-            char text[7] = {0};
-            Glib::ustring::const_iterator next_char_iter = span_iter;
-            next_char_iter++;
-            memcpy(text, &*span_iter.base(), next_char_iter.base() - span_iter.base());
-			sp_print_bind(ctx, glyph_matrix, 1.0);
-			sp_print_text (ctx, text, g_pos, text_source->style);
-			sp_print_release(ctx);
 
-            unsigned same_character = _glyphs[glyph_index].in_character;
-            while (_glyphs[glyph_index].in_character == same_character)
-                glyph_index++;
+            // try to output as many characters as possible in one go by detecting kerning and stopping when we encounter it
+            Glib::ustring span_string;
+            double char_x = _characters[_glyphs[glyph_index].in_character].x;
+            unsigned this_span_index = _characters[_glyphs[glyph_index].in_character].in_span;
+            do {
+                span_string += *span_iter;
+                span_iter++;
+
+                unsigned same_character = _glyphs[glyph_index].in_character;
+                while (glyph_index < _glyphs.size() && _glyphs[glyph_index].in_character == same_character) {
+                    char_x += _glyphs[glyph_index].width;
+                    glyph_index++;
+                }
+            } while (glyph_index < _glyphs.size()
+                     && _characters[_glyphs[glyph_index].in_character].in_span == this_span_index
+                     && fabs(char_x - _characters[_glyphs[glyph_index].in_character].x) < FLT_EPSILON);
+			sp_print_bind(ctx, glyph_matrix, 1.0);
+			sp_print_text (ctx, span_string.c_str(), g_pos, text_source->style);
+			sp_print_release(ctx);
         }
     }
 }
