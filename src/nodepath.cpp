@@ -1907,23 +1907,126 @@ node_ungrabbed (SPKnot * knot, guint state, gpointer data)
 	update_repr (n->subpath->nodepath);
 }
 
+/**
+\brief The point on a line, given by its angle, closest to the given point
+\param p   point
+\param a   angle of the line; it is assumed to go through coordinate origin
+\param closest   pointer to the point struct where the result is stored
+*/
+void
+point_line_closest (NRPoint *p, double a, NRPoint *closest)
+{
+	if (a == HUGE_VAL) { // vertical
+		closest->x = 0; 
+		closest->y = p->y; 
+	} else {
+		closest->x = (a*p->y + p->x)/(a*a + 1);
+		closest->y = a*closest->x;
+	}
+}
+
+/**
+\brief Distance from the point to a line given by its angle
+\param p   point
+\param a   angle of the line; it is assumed to go through coordinate origin
+*/
+double
+point_line_distance (NRPoint *p, double a)
+{
+	NRPoint c;
+	point_line_closest (p, a, &c);
+	return sqrt ((p->x - c.x)*(p->x - c.x) + (p->y - c.y)*(p->y - c.y));
+}
+
+
+/* fixme: This goes to "moved" event? */
 static gboolean
 node_request (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 {
 	SPPathNode * n;
+	double yn, xn, yp, xp;
+	double an, ap, na, pa;
+	double d_an, d_ap, d_na, d_pa;
+	gboolean collinear = FALSE;
+	NRPoint c;
+	NRPoint pr; 
 
 	n = (SPPathNode *) data;
 
-	/* fixme: This goes to "moved" event? */
+	if (state & GDK_CONTROL_MASK) { // constrained motion 
 
-	if (state & GDK_CONTROL_MASK) {                                         
-		if (fabs(p->x - n->origin.x) > fabs(p->y - n->origin.y)) {
-			sp_nodepath_selected_nodes_move (n->subpath->nodepath, p->x - knot->x, n->origin.y - n->pos.y);
-		} else {
-			sp_nodepath_selected_nodes_move (n->subpath->nodepath, n->origin.x - n->pos.x, p->y - knot->y);
+		if (state & GDK_MOD1_MASK && !(xn == 0 && xp == 0)) { 
+			// sliding on handles, only if at least one of the handles is non-vertical
+
+			// calculate relative distances of control points
+			yn = n->n.pos.y - n->pos.y; 
+			xn = n->n.pos.x - n->pos.x;
+			if (xn < 0) { xn = -xn; yn = -yn; } // limit the handle angle to between 0 and pi
+			if (yn < 0) { xn = -xn; yn = -yn; } 
+
+			yp = n->p.pos.y - n->pos.y;
+			xp = n->p.pos.x - n->pos.x;
+			if (xp < 0) { xp = -xp; yp = -yp; } // limit the handle angle to between 0 and pi
+			if (yp < 0) { xp = -xp; yp = -yp; } 
+
+			// calculate angles of the control handles
+			if (xn == 0) {
+				if (yn == 0) { // no handle, consider it the continuation of the other one
+					an = 0; 
+					collinear = TRUE;
+				} 
+				else an = 0; // vertical; set the angle to horizontal
+			} else an = yn/xn;
+
+			if (xp == 0) {
+				if (yp == 0) { // no handle, consider it the continuation of the other one
+					ap = an; 
+				}
+				else ap = 0; // vertical; set the angle to horizontal
+			} else  ap = yp/xp; 
+
+			if (collinear) an = ap;
+
+			// angles of the perpendiculars; HUGE_VAL means vertical
+			if (an == 0) na = HUGE_VAL; else na = -1/an;
+			if (ap == 0) pa = HUGE_VAL; else pa = -1/ap;
+
+			//	g_print("an %g    ap %g\n", an, ap);
+
+			// mouse point relative to the node's original pos
+			pr.x = p->x - n->origin.x;
+			pr.y = p->y - n->origin.y;
+
+			// distances to the four lines (two handles and to perpendiculars)
+			d_an = point_line_distance(&pr, an);
+			d_na = point_line_distance(&pr, na);
+			d_ap = point_line_distance(&pr, ap);
+			d_pa = point_line_distance(&pr, pa);
+
+			// find out which line is the closest, save its closest point in c
+			if (d_an <= d_na && d_an <= d_ap && d_an <= d_pa) {
+				point_line_closest(&pr, an, &c);
+			} else if (d_ap <= d_an && d_ap <= d_na && d_ap <= d_pa) {
+				point_line_closest(&pr, ap, &c);
+			} else if (d_na <= d_an && d_na <= d_ap && d_na <= d_pa) {
+				point_line_closest(&pr, na, &c);
+			} else if (d_pa <= d_an && d_pa <= d_ap && d_pa <= d_na) {
+				point_line_closest(&pr, pa, &c);
+			}
+
+			// move the node to the closest point
+			sp_nodepath_selected_nodes_move (n->subpath->nodepath, n->origin.x + c.x - n->pos.x, n->origin.y + c.y - n->pos.y);
+
+		} else {  // constraining to hor/vert
+
+			if (fabs(p->x - n->origin.x) > fabs(p->y - n->origin.y)) { // snap to hor
+				sp_nodepath_selected_nodes_move (n->subpath->nodepath, p->x - n->pos.x, n->origin.y - n->pos.y);
+			} else { // snap to vert
+				sp_nodepath_selected_nodes_move (n->subpath->nodepath, n->origin.x - n->pos.x, p->y - n->pos.y);
+			}
 		}
-	} else {
-		sp_nodepath_selected_nodes_move (n->subpath->nodepath, p->x - knot->x, p->y - knot->y);
+	} else { // move freely
+		sp_nodepath_selected_nodes_move (n->subpath->nodepath, p->x - n->pos.x, p->y - n->pos.y);
 	}
 
 	return TRUE;
