@@ -209,7 +209,7 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 		fn = gtk_entry_get_text (GTK_ENTRY (e));
 		/* g_print ("Printing to %s\n", fn); */
 
-		mod->set_param("bitmap", (_bitmap) ? (bool)TRUE : (bool)FALSE);
+		mod->set_param("bitmap", _bitmap);
 		mod->set_param("resolution", (gchar *)sstr);
 		mod->set_param("destination", (gchar *)fn);
 		ret = TRUE;
@@ -240,6 +240,11 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
                                  -1,  &bytesRead,  &bytesWritten, &error);
 	fn = local_fn;
 
+	/* TODO: Replace the below fprintf's with something that does the right thing whether in
+	 * gui or batch mode (e.g. --print=blah).  Consider throwing an exception: currently one of
+	 * the callers (sp_print_document_to_file, "ret = mod->begin(doc)") wrongly ignores the
+	 * return code.
+	 */
 	if (fn != NULL) {
 		if (*fn == '|') {
 			fn += 1;
@@ -249,21 +254,37 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 #else
 			osp = _popen (fn, "w");
 #endif
+			if (!osp) {
+				fprintf(stderr, "inkscape: popen(%s): %s\n",
+					fn, strerror(errno));
+				return 0;
+			}
 			_stream = osp;
 		} else if (*fn == '>') {
 			fn += 1;
 			while (isspace (*fn)) fn += 1;
 			osf = fopen (fn, "w+");
+			if (!osf) {
+				fprintf(stderr, "inkscape: fopen(%s): %s\n",
+					fn, strerror(errno));
+				return 0;
+			}
 			_stream = osf;
 		} else {
 			gchar *qn;
 			/* put cwd stuff in here */
+			/* FIXME: quote fn */
 			qn = g_strdup_printf ("lpr -P %s", fn);
 #ifndef WIN32
 			osp = popen (qn, "w");
 #else
 			osp = _popen (qn, "w");
 #endif
+			if (!osp) {
+				fprintf(stderr, "inkscape: popen(%s): %s\n",
+					qn, strerror(errno));
+				return 0;
+			}
 			g_free (qn);
 			_stream = osp;
 		}
@@ -276,7 +297,7 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 #if !defined(_WIN32) && !defined(__WIN32__)
 		(void) signal(SIGPIPE, SIG_IGN);
 #endif
-	}
+	}	
 
 	res = fprintf (_stream, "%%!PS-Adobe-2.0\n");
 	/* flush this to test output stream as early as possible */
