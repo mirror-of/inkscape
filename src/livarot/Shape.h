@@ -458,7 +458,7 @@ private:
     // edge sorting function    
     void SortEdgesList(edge_list *edges, int s, int e);
   
-    void TesteIntersection(SweepTree *t, bool onLeft, bool onlyDiff);	// test if there is an intersection
+    void TesteIntersection(SweepTree *t, Side s, bool onlyDiff);	// test if there is an intersection
     bool TesteIntersection(SweepTree *iL, SweepTree *iR, NR::Point &atx, double &atL, double &atR, bool onlyDiff);
     bool TesteIntersection(Shape *iL, Shape *iR, int ilb, int irb,
 			   NR::Point &atx, double &atL, double &atR,
