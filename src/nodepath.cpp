@@ -17,6 +17,7 @@
 #include "svg/svg.h"
 #include "helper/sp-canvas-util.h"
 #include "helper/sp-ctrlline.h"
+#include "helper/sodipodi-ctrl.h"
 #include "knot.h"
 #include "inkscape.h"
 #include "document.h"
@@ -27,6 +28,7 @@
 #include "node-context.h"
 #include "nodepath.h"
 #include "selection-chemistry.h"
+#include "selection.h"
 #include "selection.h"
 
 #define hypot(a,b) sqrt ((a) * (a) + (b) * (b))
@@ -1907,6 +1909,64 @@ node_ungrabbed (SPKnot * knot, guint state, gpointer data)
 	update_repr (n->subpath->nodepath);
 }
 
+void
+xy_to_radial (double x, double y, radial *r)
+{
+	r->r = sqrt(x*x + y*y);
+	if (r->r > 0) r->a = atan2 (y, x);
+	else r->a = HUGE_VAL; //undefined
+}
+
+void
+radial_to_xy (radial *r, NRPoint *origin, NRPoint *p)
+{
+	if (r->a == HUGE_VAL) {
+		p->x = origin->x;
+		p->y = origin->y;
+	} else {
+		p->x = origin->x + cos(r->a)*(r->r);
+		p->y = origin->y + sin(r->a)*(r->r);
+	}
+}
+
+double
+closest_of_three (double x, double a, double b, double c)
+{
+	if (fabs(x-a) <= fabs(x-b) && fabs(x-a) <= fabs(x-c))
+		return a; 
+	if (fabs(x-b) <= fabs(x-a) && fabs(x-b) <= fabs(x-c))
+		return b; 
+	if (fabs(x-c) <= fabs(x-a) && fabs(x-c) <= fabs(x-b))
+		return c; 
+	g_assert_not_reached ();
+}
+
+double
+closest_of_six (double x, double a, double b, double c, double d, double e, double f)
+{
+	if (fabs(x-a) <= fabs(x-b) && fabs(x-a) <= fabs(x-c) && fabs(x-a) <= fabs(x-d) && fabs(x-a) <= fabs(x-e) && fabs(x-a) <= fabs(x-f))
+		return a; 
+	if (fabs(x-b) <= fabs(x-a) && fabs(x-b) <= fabs(x-c) && fabs(x-b) <= fabs(x-d) && fabs(x-b) <= fabs(x-e) && fabs(x-b) <= fabs(x-f))
+		return b; 
+	if (fabs(x-c) <= fabs(x-a) && fabs(x-c) <= fabs(x-b) && fabs(x-c) <= fabs(x-d) && fabs(x-c) <= fabs(x-e) && fabs(x-c) <= fabs(x-f))
+		return c; 
+	if (fabs(x-d) <= fabs(x-a) && fabs(x-d) <= fabs(x-b) && fabs(x-d) <= fabs(x-c) && fabs(x-d) <= fabs(x-e) && fabs(x-d) <= fabs(x-f))
+		return d; 
+	if (fabs(x-e) <= fabs(x-a) && fabs(x-e) <= fabs(x-b) && fabs(x-e) <= fabs(x-c) && fabs(x-e) <= fabs(x-d) && fabs(x-e) <= fabs(x-f))
+		return e; 
+	if (fabs(x-f) <= fabs(x-a) && fabs(x-f) <= fabs(x-b) && fabs(x-f) <= fabs(x-c) && fabs(x-f) <= fabs(x-d) && fabs(x-f) <= fabs(x-e))
+		return f; 
+	g_assert_not_reached ();
+}
+
+double
+angle_normalize (double a)
+{
+	if (a > M_PI) return a - 2*M_PI;
+	if (a < -M_PI) return a + 2*M_PI;
+	return a;
+}
+
 /**
 \brief The point on a line, given by its angle, closest to the given point
 \param p   point
@@ -2052,6 +2112,16 @@ node_ctrl_grabbed (SPKnot * knot, guint state, gpointer data)
 	if (!n->selected) {
 		sp_nodepath_node_select (n, (state & GDK_SHIFT_MASK), FALSE);
 	}
+
+	// remember the origin of the control
+	if (n->p.knot == knot) {
+		xy_to_radial (n->p.pos.x - n->pos.x, n->p.pos.y - n->pos.y, &(n->p.origin));
+	} else if (n->n.knot == knot) {
+		xy_to_radial (n->n.pos.x - n->pos.x, n->n.pos.y - n->pos.y, &(n->n.origin));
+	} else {
+		g_assert_not_reached ();
+	}
+
 }
 
 static void
@@ -2060,6 +2130,17 @@ node_ctrl_ungrabbed (SPKnot * knot, guint state, gpointer data)
 	SPPathNode * n;
 
 	n = (SPPathNode *) data;
+
+	// forget origin and set knot position once more (because it can be wrong now due to restrictions)
+	if (n->p.knot == knot) {
+		n->p.origin.a = 0;
+		sp_knot_set_position (knot, &(n->p.pos), state);
+	} else if (n->n.knot == knot) {
+		n->n.origin.a = 0;
+		sp_knot_set_position (knot, &(n->n.pos), state);
+	} else {
+		g_assert_not_reached ();
+	}
 
 	update_repr (n->subpath->nodepath);
 }
@@ -2120,27 +2201,73 @@ static void
 node_ctrl_moved (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 {
 	SPPathNode * n;
-	SPPathNodeSide * me;
+	SPPathNodeSide *me, *other;
+	double r_down, r_up;
+	radial rme, rother, rnew; 
+	NRPoint o;
 
 	n = (SPPathNode *) data;
 
 	if (n->p.knot == knot) {
 		me = &n->p;
+		other = &n->n;
 	} else if (n->n.knot == knot) {
 		me = &n->n;
+		other = &n->p;
 	} else {
 		me = NULL;
 		g_assert_not_reached ();
 	}
 
-	me->pos.x = p->x;
-	me->pos.y = p->y;
+	// calculate radial coordinates of the grabbed control, other control, and the mouse point
+	xy_to_radial (me->pos.x - n->pos.x, me->pos.y - n->pos.y, &rme);
+	xy_to_radial (other->pos.x - n->pos.x, other->pos.y - n->pos.y, &rother);
+	xy_to_radial (p->x - n->pos.x, p->y - n->pos.y, &rnew);
 
+	if (state & GDK_CONTROL_MASK && rnew.a != HUGE_VAL) { 
+		// restrict to 15 degree steps
+		double opposite, plus90, minus90;
+
+		// the two closest 15 degree steps
+		r_down = floor(rnew.a/(M_PI/12))*M_PI/12;
+		r_up = r_down + M_PI/12;
+
+		// the 90 degree steps starting from origin angle
+		opposite = angle_normalize (me->origin.a + M_PI); 
+		plus90 = angle_normalize (me->origin.a + M_PI/2); 
+		minus90 = angle_normalize (me->origin.a - M_PI/2); 
+
+		// snap to closest
+		rnew.a = closest_of_six (rnew.a, me->origin.a, opposite, plus90, minus90, r_down, r_up); 
+	} 
+
+	if (state & GDK_MOD1_MASK) { 
+		// lock handle length
+		rnew.r = me->origin.r;
+	} 
+
+	if ((state & GDK_SHIFT_MASK) && rme.a != HUGE_VAL && rnew.a != HUGE_VAL) { 
+		// rotate the other handle correspondingly, if both old and new angles exist
+		rother.a += rnew.a - rme.a;
+		radial_to_xy (&rother, &(n->pos), &o);
+		other->pos.x = o.x;
+		other->pos.y = o.y;
+		sp_ctrlline_set_coords (SP_CTRLLINE (other->line), n->pos.x, n->pos.y, other->pos.x, other->pos.y);
+		sp_knot_set_position (other->knot, &(other->pos), 0);
+	} 
+
+	radial_to_xy (&rnew, &(n->pos), &o);
+	me->pos.x = o.x;
+	me->pos.y = o.y;
 	sp_ctrlline_set_coords (SP_CTRLLINE (me->line), n->pos.x, n->pos.y, me->pos.x, me->pos.y);
 
-	update_object (n->subpath->nodepath);
+	// this is what sp_knot_set_position does, but without emitting the signal:
+	// we cannot emit a "moved" signal because we're now processing it
+	if (me->knot->item) sp_ctrl_moveto (SP_CTRL (me->knot->item), me->pos.x, me->pos.y);
 
-	sp_desktop_set_coordinate_status (knot->desktop, p->x, p->y, 0);
+	sp_desktop_set_coordinate_status (knot->desktop, me->pos.x, me->pos.y, 0);
+
+	update_object (n->subpath->nodepath);
 }
 
 static gboolean

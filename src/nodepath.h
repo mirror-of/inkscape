@@ -19,6 +19,11 @@ typedef struct _SPNodePath SPNodePath;
 typedef struct _SPNodeSubPath SPNodeSubPath;
 typedef struct _SPPathNode SPPathNode;
 
+typedef struct {
+	double r;
+	double a;
+} radial;
+
 typedef enum {
 	SP_PATHNODE_NONE,
 	SP_PATHNODE_CUSP,
@@ -47,6 +52,7 @@ typedef struct {
 	NRPoint pos;
 	SPKnot * knot;
 	SPCanvasItem * line;
+	radial origin;
 } SPPathNodeSide;
 
 struct _SPPathNode {
