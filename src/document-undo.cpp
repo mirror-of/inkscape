@@ -147,6 +147,8 @@ sp_document_undo (SPDocument *doc)
 	g_assert (doc->priv != NULL);
 	g_assert (doc->priv->sensitive);
 
+	doc->priv->sensitive = FALSE;
+
 	doc->actionkey = NULL;
 	log = sp_repr_commit_undoable (doc->rdoc);
 
@@ -169,6 +171,8 @@ sp_document_undo (SPDocument *doc)
 
 	sp_repr_begin_transaction (doc->rdoc);
 
+	doc->priv->sensitive = TRUE;
+
 	return ret;
 }
 
@@ -182,6 +186,8 @@ sp_document_redo (SPDocument *doc)
 	g_assert (SP_IS_DOCUMENT (doc));
 	g_assert (doc->priv != NULL);
 	g_assert (doc->priv->sensitive);
+
+	doc->priv->sensitive = FALSE;
 
 	doc->actionkey = NULL;
 	log = sp_repr_commit_undoable (doc->rdoc);
@@ -204,6 +210,8 @@ sp_document_redo (SPDocument *doc)
 	}
 
 	sp_repr_begin_transaction (doc->rdoc);
+
+	doc->priv->sensitive = TRUE;
 
 	return ret;
 }
