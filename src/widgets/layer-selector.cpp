@@ -217,7 +217,8 @@ public:
                           SPObject &object)
     : _column(column), _object(object) {}
     bool operator()(Gtk::TreeModel::const_iterator const &iter) const {
-        return (*iter)[_column] == &_object;
+        SPObject *current=(*iter)[_column];
+        return current == &_object;
     }
 private:
     Gtk::TreeModelColumn<SPObject *> const &_column;
@@ -387,7 +388,7 @@ void node_reordered(SPRepr *parent, SPRepr *child,
     }
 }
 
-void update_row_for_object(SPObject &object,
+void update_row_for_object(SPObject *object,
                            Gtk::TreeModelColumn<SPObject *> const &column,
                            Glib::RefPtr<Gtk::ListStore> const &model)
 {
@@ -395,7 +396,7 @@ void update_row_for_object(SPObject &object,
         std::find_if(
             model->children().begin(),
             model->children().end(),
-            column_matches_object(column, object)
+            column_matches_object(column, *object)
         )
     );
     if ( row != model->children().end() ) {
@@ -419,7 +420,7 @@ void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
 
     callbacks->update_row = sigc::bind(
         sigc::ptr_fun(&update_row_for_object),
-        object, _model_columns.object, _layer_model
+        &object, _model_columns.object, _layer_model
     );
 
     SPObject *layer=_desktop->currentLayer();

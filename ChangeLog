@@ -1,5 +1,10 @@
 2004-11-25  MenTaLguY  <mental@rydia.net>
 
+	* src/widgets/layer-selector.cpp: fixing the layer selector update bug;
+	  sigc++ apparently doesn't deal with reference arguments very well
+
+2004-11-25  MenTaLguY  <mental@rydia.net>
+
 	* src/layer-fns.cpp: fix layer creation within sublayers
 
 	* src/dialogs/layer-properties.cpp: fix dialog leak
