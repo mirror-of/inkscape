@@ -204,6 +204,10 @@ static PaperSize const inkscape_papers[] = {
 static void
 docoptions_event_attr_changed(SPRepr *, gchar const *, gchar const *, gchar const *, bool, gpointer)
 {
+    if (g_object_get_data(G_OBJECT(dlg), "update")) {
+        return;
+    }
+
     if (dlg) {
         sp_dtw_update(dlg, SP_ACTIVE_DESKTOP);
     }
@@ -1668,6 +1672,12 @@ sp_color_picker_color_mod(SPColorSelector *csel, GObject *cp)
         return;
     }
 
+    if (!SP_ACTIVE_DESKTOP) {
+        return;
+    }
+
+    gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(TRUE));
+
     SPColor color;
     float alpha;
     csel->base->getColorAlpha(color, &alpha);
@@ -1680,10 +1690,6 @@ sp_color_picker_color_mod(SPColorSelector *csel, GObject *cp)
     gchar *alphakey = (gchar *)g_object_get_data(G_OBJECT(cp), "alphakey");
     sp_color_preview_set_rgba32(cpv, rgba);
 
-    if (!SP_ACTIVE_DESKTOP) {
-        return;
-    }
-
     SPRepr *repr = SP_OBJECT_REPR(SP_ACTIVE_DESKTOP->namedview);
 
     gchar c[32];
@@ -1694,9 +1700,7 @@ sp_color_picker_color_mod(SPColorSelector *csel, GObject *cp)
         sp_repr_set_double(repr, alphakey, (rgba & 0xff) / 255.0);
     }
 
-    if (!SP_ACTIVE_DESKTOP) {
-        return;
-    }
+    gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(FALSE));
 
     sp_document_done(SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP));
 
