@@ -16,6 +16,7 @@
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-compose-transform.h>
+#include "../prefs-utils.h"
 #include "nr-arena-image.h"
 
 int nr_arena_image_x_sample = 1;
@@ -149,8 +150,6 @@ nr_arena_image_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int 
 }
 
 #define FBITS 12
-#define XSAMPLE nr_arena_image_x_sample
-#define YSAMPLE nr_arena_image_y_sample
 #define b2i (image->grid2px)
 
 static unsigned int
@@ -161,6 +160,9 @@ nr_arena_image_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
 	unsigned char *spx, *dpx;
 	int dw, dh, drs, sw, sh, srs;
 	NRMatrix d2s;
+
+	nr_arena_image_x_sample = prefs_get_int_attribute ("options.bitmapoversample", "value", 1);
+	nr_arena_image_y_sample = nr_arena_image_x_sample;
 
 	image = NR_ARENA_IMAGE (item);
 
@@ -188,17 +190,17 @@ nr_arena_image_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
 
 	if (pb->mode == NR_PIXBLOCK_MODE_R8G8B8) {
 		/* fixme: This is not implemented yet (Lauris) */
-		/* nr_R8G8B8_R8G8B8_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, &d2s, Falpha, XSAMPLE, YSAMPLE); */
+		/* nr_R8G8B8_R8G8B8_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, &d2s, Falpha, nr_arena_image_x_sample, nr_arena_image_y_sample); */
 	} else if (pb->mode == NR_PIXBLOCK_MODE_R8G8B8A8P) {
-		nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, &d2s, Falpha, XSAMPLE, YSAMPLE);
+		nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, &d2s, Falpha, nr_arena_image_x_sample, nr_arena_image_y_sample);
 	} else if (pb->mode == NR_PIXBLOCK_MODE_R8G8B8A8N) {
 
 		//FIXME: The _N_N_N_ version gives a gray border around images, see bug 906376
 		// This mode is only used when exporting, screen rendering always has _P_P_P_, so I decided to simply replace it for now
 		// Feel free to propose a better fix
 
-		//nr_R8G8B8A8_N_R8G8B8A8_N_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, &d2s, Falpha, XSAMPLE, YSAMPLE);
-		nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, &d2s, Falpha, XSAMPLE, YSAMPLE);
+		//nr_R8G8B8A8_N_R8G8B8A8_N_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, &d2s, Falpha, nr_arena_image_x_sample, nr_arena_image_y_sample);
+		nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, &d2s, Falpha, nr_arena_image_x_sample, nr_arena_image_y_sample);
 	}
 
 	pb->empty = FALSE;

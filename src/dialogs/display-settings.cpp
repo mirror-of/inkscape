@@ -239,6 +239,8 @@ sp_display_dialog_set_oversample (GtkMenuItem *item, gpointer data)
     nr_arena_image_y_sample = os;
 
     inkscape_refresh_display (INKSCAPE);
+
+    prefs_set_int_attribute ( "options.bitmapoversample", "value", os );
     
 } // end of sp_display_dialog_set_oversample()
 
