@@ -66,7 +66,6 @@ LayerPropertiesDialog::LayerPropertiesDialog()
     add_action_widget(_close_button, Gtk::RESPONSE_CLOSE);
     add_action_widget(_apply_button, Gtk::RESPONSE_APPLY);
 
-    sp_transientize(dlg);
     show_all_children();
 }
 
@@ -85,6 +84,8 @@ void LayerPropertiesDialog::_showDialog(LayerPropertiesDialog::Strategy &strateg
     dialog->_setLayer(layer);
 
     dialog->_strategy->setup(*dialog);
+
+    dialog->set_modal(true);
 
     dialog->show();
     dialog->present();
