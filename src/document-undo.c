@@ -33,7 +33,7 @@
 
 /* fixme: Implement in preferences */
 
-#define MAX_UNDO 128
+#define MAX_UNDO 512
 
 /*
  * Undo & redo
