@@ -1,4 +1,5 @@
 #include "../utest/utest.h"
+#include <glib.h>
 
 /* mental disclaims all responsibility for this evil idea for testing
    static functions.  The main disadvantages are that we retain the
@@ -8,8 +9,6 @@
 using NR::Point;
 
 static bool range_approx_equal(double const a[], double const b[], unsigned len);
-
-#define N_ELEMS(_ary) (sizeof(_ary) / sizeof((_ary)[0]))
 
 /* (Returns false if NaN encountered.) */
 template<class T>
@@ -136,24 +135,24 @@ int main(int argc, char *argv[]) {
 		{c[3], 1.0, 0.0},
 	};
 	UTEST_TEST("compute_error") {
-		for(unsigned i = 0; i < N_ELEMS(err_tst); ++i) {
+		for(unsigned i = 0; i < G_N_ELEMENTS(err_tst); ++i) {
 			Err_tst const &t = err_tst[i];
 			UTEST_ASSERT( compute_error(t.pt, t.u, c) == t.err );
 		}
 	}
 
 	UTEST_TEST("compute_max_error") {
-		Point d[N_ELEMS(err_tst)];
-		double u[N_ELEMS(err_tst)];
-		for(unsigned i = 0; i < N_ELEMS(err_tst); ++i) {
+		Point d[G_N_ELEMENTS(err_tst)];
+		double u[G_N_ELEMENTS(err_tst)];
+		for(unsigned i = 0; i < G_N_ELEMENTS(err_tst); ++i) {
 			Err_tst const &t = err_tst[i];
 			d[i] = t.pt;
 			u[i] = t.u;
 		}
-		g_assert( N_ELEMS(u) == N_ELEMS(d) );
+		g_assert( G_N_ELEMENTS(u) == G_N_ELEMENTS(d) );
 		unsigned max_ix = ~0u;
 
-		UTEST_ASSERT( err_tst[4].err == compute_max_error(d, u, N_ELEMS(d), c, &max_ix) );
+		UTEST_ASSERT( err_tst[4].err == compute_max_error(d, u, G_N_ELEMENTS(d), c, &max_ix) );
 		UTEST_ASSERT( max_ix == 4 );
 	}
 
@@ -162,17 +161,17 @@ int main(int argc, char *argv[]) {
 		{
 			Point const d[] = {Point(2.9415, -5.8149),
 					   Point(23.021, 4.9814)};
-			double u[N_ELEMS(d)];
+			double u[G_N_ELEMENTS(d)];
 			double const exp_u[] = {0.0, 1.0};
-			g_assert( N_ELEMS(u) == N_ELEMS(exp_u) );
-			chord_length_parameterize(d, u, N_ELEMS(d));
-			UTEST_ASSERT(range_equal(u, exp_u, N_ELEMS(exp_u)));
+			g_assert( G_N_ELEMENTS(u) == G_N_ELEMENTS(exp_u) );
+			chord_length_parameterize(d, u, G_N_ELEMENTS(d));
+			UTEST_ASSERT(range_equal(u, exp_u, G_N_ELEMENTS(exp_u)));
 		}
 
 		/* Straight line. */
 		{
 			double const exp_u[] = {0.0, 0.1829, 0.2105, 0.2105, 0.619, 0.815, 0.999, 1.0};
-			unsigned const n = N_ELEMS(exp_u);
+			unsigned const n = G_N_ELEMENTS(exp_u);
 			Point d[n];
 			double u[n];
 			Point const a(-23.985, 4.915), b(4.9127, 5.203);
@@ -195,7 +194,7 @@ int main(int argc, char *argv[]) {
 					Point(3., -2.)};
 		double const t[] = {0.0, .01, .02, .03, .05, .09, .18, .25, .37, .44,
 				    .51, .69, .81, .91, .93, .97, .98, .99, 1.0};
-		unsigned const n = N_ELEMS(t);
+		unsigned const n = G_N_ELEMENTS(t);
 		Point d[n];
 		NRPoint cd[n];
 		for(unsigned i = 0; i < n; ++i) {
