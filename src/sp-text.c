@@ -1562,6 +1562,7 @@ sp_text_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *t)
 	NRMatrixF i2p, p2i;
 	gdouble px, py, x, y;
 	SPObject *child;
+	gchar c[120];
 
 	text = SP_TEXT (item);
 
@@ -1594,12 +1595,11 @@ sp_text_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *t)
 		}
 	}
 
-	/*	if (sp_svg_transform_write (c, 80, &i2p)) {
+	if (sp_svg_transform_write (c, 80, &i2p)) {
 		sp_repr_set_attr (repr, "transform", c);
 	} else {
 		sp_repr_set_attr (repr, "transform", NULL);
-		}*/
-	*t = i2p;
+	}
 }
 
 static void
