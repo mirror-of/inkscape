@@ -16,6 +16,7 @@
 #include <string.h>
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-pixblock.h>
 #include <libnr/nr-matrix-ops.h>
 #include <gtk/gtksignal.h>
 #include "macros.h"
@@ -49,6 +50,11 @@ struct SPPatPainter {
 	NRArena *arena;
 	unsigned int dkey;
 	NRArenaItem *root;
+	
+	NRMatrix     ca2pa;
+	NRMatrix     pa2ca;
+	NRRectL      cached_bbox;
+	NRPixBlock   cached_tile;
 };
 
 static void sp_pattern_class_init (SPPatternClass *klass);
@@ -704,10 +710,42 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 		}
 	}
 
+	{
+		NRRect    one_tile,tr_tile;
+		one_tile.x0=pattern_x(pp->pat);
+		one_tile.y0=pattern_y(pp->pat);
+		one_tile.x1=one_tile.x0+pattern_width (pp->pat);
+		one_tile.y1=one_tile.y0+pattern_height (pp->pat);
+		nr_rect_d_matrix_transform (&tr_tile, &one_tile, &pp->ps2px);
+		int       tr_width=(int)ceil(1.3*(tr_tile.x1-tr_tile.x0));
+		int       tr_height=(int)ceil(1.3*(tr_tile.y1-tr_tile.y0));
+		if ( tr_width > 1000 ) tr_width=1000;
+		if ( tr_height > 1000 ) tr_height=1000;
+		pp->cached_bbox.x0=0;
+		pp->cached_bbox.y0=0;
+		pp->cached_bbox.x1=tr_width;
+		pp->cached_bbox.y1=tr_height;
+		nr_pixblock_setup (&pp->cached_tile,NR_PIXBLOCK_MODE_R8G8B8A8N, pp->cached_bbox.x0, pp->cached_bbox.y0, pp->cached_bbox.x1, pp->cached_bbox.y1,TRUE);		
+		pp->pa2ca.c[0]=((double)tr_width)/(one_tile.x1-one_tile.x0);
+		pp->pa2ca.c[1]=0;
+		pp->pa2ca.c[2]=0;
+		pp->pa2ca.c[3]=((double)tr_height)/(one_tile.y1-one_tile.y0);
+		pp->pa2ca.c[4]=-one_tile.x0*pp->pa2ca.c[0];
+		pp->pa2ca.c[5]=-one_tile.y0*pp->pa2ca.c[1];
+		pp->ca2pa.c[0]=(one_tile.x1-one_tile.x0)/((double)tr_width);
+		pp->ca2pa.c[1]=0;
+		pp->ca2pa.c[2]=0;
+		pp->ca2pa.c[3]=(one_tile.y1-one_tile.y0)/((double)tr_height);
+		pp->ca2pa.c[4]=one_tile.x0;
+		pp->ca2pa.c[5]=one_tile.y0;
+	}
+	
 	NRGC gc(NULL);
-	gc.transform = pp->pcs2px;
+//	gc.transform = pp->pcs2px;
+	gc.transform=pp->pa2ca;
 	nr_arena_item_invoke_update (pp->root, NULL, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_ALL);
-
+	nr_arena_item_invoke_render (pp->root, &pp->cached_bbox, &pp->cached_tile, 0);
+	
 	return (SPPainter *) pp;
 }
 
@@ -732,7 +770,55 @@ sp_pattern_painter_free (SPPaintServer *ps, SPPainter *painter)
 		}
 	}
 
+	nr_pixblock_release(&pp->cached_tile);
 	g_free (pp);
+}
+
+void
+get_cached_tile_pixel(SPPatPainter* pp,double x,double y,unsigned char &r,unsigned char &g,unsigned char &b,unsigned char &a)
+{
+	int    ca_h=(int)floor(x);
+	int    ca_v=(int)floor(y);
+	int    r_x=(int)floor(16*(x-floor(x)));
+	int    r_y=(int)floor(16*(y-floor(y)));
+	unsigned int    tl_m=(16-r_x)*(16-r_y);
+	unsigned int    bl_m=(16-r_x)*r_y;
+	unsigned int    tr_m=r_x*(16-r_y);
+	unsigned int    br_m=r_x*r_y;
+	int    cb_h=ca_h+1;
+	int    cb_v=ca_v+1;
+	if ( cb_h >= pp->cached_bbox.x1 ) cb_h=0;
+	if ( cb_v >= pp->cached_bbox.y1 ) cb_v=0;
+	
+	unsigned char* tlx=NR_PIXBLOCK_PX(&pp->cached_tile)+(ca_v*pp->cached_tile.rs)+4*ca_h;
+	unsigned char* trx=NR_PIXBLOCK_PX(&pp->cached_tile)+(ca_v*pp->cached_tile.rs)+4*cb_h;
+	unsigned char* blx=NR_PIXBLOCK_PX(&pp->cached_tile)+(cb_v*pp->cached_tile.rs)+4*ca_h;
+	unsigned char* brx=NR_PIXBLOCK_PX(&pp->cached_tile)+(cb_v*pp->cached_tile.rs)+4*cb_h;
+	
+	unsigned int tl_c=tlx[0];
+	unsigned int tr_c=trx[0];
+	unsigned int bl_c=blx[0];
+	unsigned int br_c=brx[0];
+	unsigned int f_c=(tl_m*tl_c+tr_m*tr_c+bl_m*bl_c+br_m*br_c)>>8;
+	r=f_c;
+	tl_c=tlx[1];
+	tr_c=trx[1];
+	bl_c=blx[1];
+	br_c=brx[1];
+	f_c=(tl_m*tl_c+tr_m*tr_c+bl_m*bl_c+br_m*br_c)>>8;
+	g=f_c;
+	tl_c=tlx[2];
+	tr_c=trx[2];
+	bl_c=blx[2];
+	br_c=brx[2];
+	f_c=(tl_m*tl_c+tr_m*tr_c+bl_m*bl_c+br_m*br_c)>>8;
+	b=f_c;
+	tl_c=tlx[3];
+	tr_c=trx[3];
+	bl_c=blx[3];
+	br_c=brx[3];
+	f_c=(tl_m*tl_c+tr_m*tr_c+bl_m*bl_c+br_m*br_c)>>8;
+	a=f_c;
 }
 
 static void
@@ -751,7 +837,7 @@ sp_pat_fill (SPPainter *painter, NRPixBlock *pb)
 	/* Find buffer area in gradient space */
 	/* fixme: This is suboptimal (Lauris) */
 
-	ba.x0 = pb->area.x0;
+/*	ba.x0 = pb->area.x0;
 	ba.y0 = pb->area.y0;
 	ba.x1 = pb->area.x1;
 	ba.y1 = pb->area.y1;
@@ -775,15 +861,80 @@ sp_pat_fill (SPPainter *painter, NRPixBlock *pb)
 			area.x1 = area.x0 + pb->area.x1 - pb->area.x0;
 			area.y1 = area.y0 + pb->area.y1 - pb->area.y0;
 
-			/* We do not update here anymore */
+			// We do not update here anymore 
 
-			/* Set up buffer */
-			/* fixme: (Lauris) */
+			// Set up buffer 
+			// fixme: (Lauris) 
 			nr_pixblock_setup_extern (&ppb, pb->mode, area.x0, area.y0, area.x1, area.y1, NR_PIXBLOCK_PX (pb), pb->rs, FALSE, FALSE);
 
 			nr_arena_item_invoke_render (pp->root, &area, &ppb, 0);
 
 			nr_pixblock_release (&ppb);
+		}
+	}*/
+	
+	double   pat_w=pattern_width (pp->pat);
+	double   pat_h=pattern_height (pp->pat);
+	if ( pb->mode == NR_PIXBLOCK_MODE_R8G8B8A8N || pb->mode == NR_PIXBLOCK_MODE_R8G8B8A8P ) { // same thing because it's filling an empty pixblock
+		unsigned char*  lpx=NR_PIXBLOCK_PX(pb);
+		double          px_y=pb->area.y0;
+		for (int j=pb->area.y0;j<pb->area.y1;j++) {
+			unsigned char* cpx=lpx;
+			double         px_x=px_x=pb->area.x0;
+
+			double ps_x=pp->px2ps.c[0]*px_x+pp->px2ps.c[2]*px_y+pp->px2ps.c[4];
+			double ps_y=pp->px2ps.c[1]*px_x+pp->px2ps.c[3]*px_y+pp->px2ps.c[5];
+			for (int i=pb->area.x0;i<pb->area.x1;i++) {
+				while ( ps_x > pat_w ) ps_x-=pat_w;
+				while ( ps_x < 0 ) ps_x+=pat_w;
+				while ( ps_y > pat_h ) ps_y-=pat_h;
+				while ( ps_y < 0 ) ps_y+=pat_h;
+				double ca_x=pp->pa2ca.c[0]*ps_x+pp->pa2ca.c[2]*ps_y+pp->pa2ca.c[4];
+				double ca_y=pp->pa2ca.c[1]*ps_x+pp->pa2ca.c[3]*ps_y+pp->pa2ca.c[5];
+				unsigned char n_a,n_r,n_g,n_b;
+				get_cached_tile_pixel(pp,ca_x,ca_y,n_r,n_g,n_b,n_a);
+				cpx[0]=n_r;
+				cpx[1]=n_g;
+				cpx[2]=n_b;
+				cpx[3]=n_a;
+				
+				px_x+=1.0;
+				ps_x+=pp->px2ps.c[0];
+				ps_y+=pp->px2ps.c[1];
+				cpx+=4;
+			}
+			px_y+=1.0;
+			lpx+=pb->rs;
+		}
+	} else if ( pb->mode == NR_PIXBLOCK_MODE_R8G8B8 ) {
+		unsigned char*  lpx=NR_PIXBLOCK_PX(pb);
+		double          px_y=pb->area.y0;
+		for (int j=pb->area.y0;j<pb->area.y1;j++) {
+			unsigned char* cpx=lpx;
+			double         px_x=px_x=pb->area.x0;
+			
+			double ps_x=pp->px2ps.c[0]*px_x+pp->px2ps.c[2]*px_y+pp->px2ps.c[4];
+			double ps_y=pp->px2ps.c[1]*px_x+pp->px2ps.c[3]*px_y+pp->px2ps.c[5];
+			for (int i=pb->area.x0;i<pb->area.x1;i++) {
+				while ( ps_x > pat_w ) ps_x-=pat_w;
+				while ( ps_x < 0 ) ps_x+=pat_w;
+				while ( ps_y > pat_h ) ps_y-=pat_h;
+				while ( ps_y < 0 ) ps_y+=pat_h;
+				double ca_x=pp->pa2ca.c[0]*ps_x+pp->pa2ca.c[2]*ps_y+pp->pa2ca.c[4];
+				double ca_y=pp->pa2ca.c[1]*ps_x+pp->pa2ca.c[3]*ps_y+pp->pa2ca.c[5];
+				unsigned char n_a,n_r,n_g,n_b;
+				get_cached_tile_pixel(pp,ca_x,ca_y,n_r,n_g,n_b,n_a);
+				cpx[0]=n_r;
+				cpx[1]=n_g;
+				cpx[2]=n_b;
+				
+				px_x+=1.0;
+				ps_x+=pp->px2ps.c[0];
+				ps_y+=pp->px2ps.c[1];
+				cpx+=4;
+			}
+			px_y+=1.0;
+			lpx+=pb->rs;
 		}
 	}
 }
