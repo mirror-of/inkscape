@@ -27,6 +27,8 @@
 
 class SPCSSAttr;
 
+struct SPItem;
+
 namespace Inkscape { class ObjectHierarchy; }
 
 enum ColorComponent {
@@ -110,8 +112,13 @@ struct SPDesktop : public SPView {
 
 	gboolean is_fullscreen;
 
-	// current values
+	// current style
 	SPCSSAttr *current;
+
+	// storage for selected dragger used by GrDrag as it's created and deleted by tools
+	SPItem *gr_item;
+	guint gr_point_num;
+	bool gr_fill_or_stroke;
 
 	SPObject *currentRoot();
 	SPObject *currentLayer();

@@ -211,10 +211,13 @@ sp_desktop_init (SPDesktop *desktop)
 
     desktop->is_fullscreen = FALSE;
 
+    desktop->gr_item = NULL;
+    desktop->gr_point_num = 0;
+    desktop->gr_fill_or_stroke = true;
+
     new (&desktop->sel_modified_connection) sigc::connection();
 
     new (&desktop->sel_changed_connection) sigc::connection();
-
 
 
     new (&desktop->_set_colorcomponent_signal) sigc::signal<bool, ColorComponent, float, bool, bool>();
@@ -222,8 +225,6 @@ sp_desktop_init (SPDesktop *desktop)
     new (&desktop->_set_style_signal) sigc::signal<bool, const SPCSSAttr *, StopOnTrue>();
 
     new (&desktop->_layer_changed_signal) sigc::signal<void, SPObject *>();
-
-
 
 
     desktop->_guides_message_context = new Inkscape::MessageContext(desktop->messageStack());

@@ -189,27 +189,41 @@ GrDrag::GrDrag(SPDesktop *desktop) {
     this->updateDraggers ();
     this->updateLines ();
     this->updateLevels ();
+
+    if (desktop->gr_item) {
+        this->setSelected (getDraggerFor (desktop->gr_item, desktop->gr_point_num, desktop->gr_fill_or_stroke));
+    }
 }
 
 GrDrag::~GrDrag() 
 {
-	this->sel_changed_connection.disconnect();
-	this->sel_modified_connection.disconnect();
-	this->style_set_connection.disconnect();
+    this->sel_changed_connection.disconnect();
+    this->sel_modified_connection.disconnect();
+    this->style_set_connection.disconnect();
 
-	for (GList *l = this->draggers; l != NULL; l = l->next) {
-          delete ((GrDragger *) l->data);
-	}
-	g_list_free (this->draggers);
-	this->draggers = NULL;
-	this->selected = NULL;
+    if (this->selected) {
+        GrDraggable *draggable = (GrDraggable *) this->selected->draggables->data;
+        desktop->gr_item = draggable->item;
+        desktop->gr_point_num = draggable->point_num;
+        desktop->gr_fill_or_stroke = draggable->fill_or_stroke;
+    } else {
+        desktop->gr_item = NULL;
+        desktop->gr_point_num = 0;
+        desktop->gr_fill_or_stroke = true;
+    }
 
-	for (GSList *l = this->lines; l != NULL; l = l->next) {
-         gtk_object_destroy( GTK_OBJECT (l->data));
-	}
-	g_slist_free (this->lines);
-	this->lines = NULL;
+    for (GList *l = this->draggers; l != NULL; l = l->next) {
+        delete ((GrDragger *) l->data);
+    }
+    g_list_free (this->draggers);
+    this->draggers = NULL;
+    this->selected = NULL;
 
+    for (GSList *l = this->lines; l != NULL; l = l->next) {
+        gtk_object_destroy( GTK_OBJECT (l->data));
+    }
+    g_slist_free (this->lines);
+    this->lines = NULL;
 }
 
 GrDraggable::GrDraggable (SPItem *item, guint point_num, bool fill_or_stroke)
