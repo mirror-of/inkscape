@@ -27,17 +27,18 @@ class Finalized {
 public:
     Finalized() {
 #ifndef SUPPRESS_LIBGC
-        void *mem=GC_base(this);
-        if (mem) { // only if we were allocated via the GC
+        void *base=GC_base(this);
+        if (base) { // only if we are managed by the collector
             CleanupFunc old_cleanup;
             void *old_data;
 
-            GC_register_finalizer_ignore_self(mem, _invoke_dtor, this,
-                                                   &old_cleanup, &old_data);
+            GC_register_finalizer_ignore_self(base, _invoke_dtor,
+                                                    _offset(base, this),
+                                                    &old_cleanup, &old_data);
 
             if (old_cleanup) { // Whoops, already one registered?  Put it back.
-                GC_register_finalizer_ignore_self(mem, old_cleanup, old_data,
-                                                       NULL, NULL);
+                GC_register_finalizer_ignore_self(base, old_cleanup, old_data,
+                                                        NULL, NULL);
             }
         }
 #endif
@@ -51,8 +52,19 @@ public:
     }
 
 private:
-    static void _invoke_dtor(void *mem, void *data) {
-        reinterpret_cast<Finalized *>(data)->~Finalized();
+    static void _invoke_dtor(void *base, void *offset) {
+        _unoffset(base, offset)->~Finalized();
+    }
+
+    static void *_offset(void *base, Finalized *self) {
+        return reinterpret_cast<void *>(
+            reinterpret_cast<char *>(self) - reinterpret_cast<char *>(base)
+        );
+    }
+    static Finalized *_unoffset(void *base, void *offset) {
+        return reinterpret_cast<Finalized *>(
+            reinterpret_cast<char *>(base) + reinterpret_cast<int>(offset)
+        );
     }
 };
 
