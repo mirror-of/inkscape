@@ -360,6 +360,11 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 
   	bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
     nr_arena_shape_add_bboxes(shape,bbox);
+    
+    shape->approx_bbox.x0 = (gint32)(bbox.x0 - 1.0F);
+    shape->approx_bbox.y0 = (gint32)(bbox.y0 - 1.0F);
+    shape->approx_bbox.x1 = (gint32)(bbox.x1 + 1.9999F);
+    shape->approx_bbox.y1 = (gint32)(bbox.y1 + 1.9999F);
   } 
 #else 
 	bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
@@ -671,6 +676,7 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
 void
 nr_arena_shape_add_bboxes(NRArenaShape* shape,NRRect &bbox)
 {
+#ifdef test_liv
   if ( shape->stroke_shp ) {
     shape->stroke_shp->CalcBBox();
     shape->stroke_shp->leftX=floorf(shape->stroke_shp->leftX);
@@ -721,6 +727,8 @@ nr_arena_shape_add_bboxes(NRArenaShape* shape,NRRect &bbox)
       if ( shape->fill_shp->bottomY > bbox.y1 ) bbox.y1=shape->fill_shp->bottomY;
     }
   }
+#else
+#endif
 }
 static unsigned int
 nr_arena_shape_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigned int flags)
@@ -742,13 +750,14 @@ nr_arena_shape_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
       tempGC.transform=shape->ctm;
       nr_arena_shape_update_stroke(shape,&tempGC);
       nr_arena_shape_update_fill(shape,&tempGC);
-      NRRect bbox;
+/*      NRRect bbox;
       bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
       nr_arena_shape_add_bboxes(shape,bbox);
       item->bbox.x0 = (gint32)(bbox.x0 - 1.0F);
       item->bbox.y0 = (gint32)(bbox.y0 - 1.0F);
       item->bbox.x1 = (gint32)(bbox.x1 + 1.0F);
       item->bbox.y1 = (gint32)(bbox.y1 + 1.0F);
+      shape->approx_bbox=item->bbox;*/
     }
   }
 #endif
@@ -876,13 +885,14 @@ nr_arena_shape_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb)
       tempGC.transform=shape->ctm;
       nr_arena_shape_update_stroke(shape,&tempGC);
       nr_arena_shape_update_fill(shape,&tempGC);
-      NRRect bbox;
+      /*      NRRect bbox;
       bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
       nr_arena_shape_add_bboxes(shape,bbox);
       item->bbox.x0 = (gint32)(bbox.x0 - 1.0F);
       item->bbox.y0 = (gint32)(bbox.y0 - 1.0F);
       item->bbox.x1 = (gint32)(bbox.x1 + 1.0F);
       item->bbox.y1 = (gint32)(bbox.y1 + 1.0F);
+      shape->approx_bbox=item->bbox;*/
     }
   }
 #endif
@@ -955,13 +965,14 @@ nr_arena_shape_pick (NRArenaItem *item, double x, double y, double delta, unsign
       tempGC.transform=shape->ctm;
       nr_arena_shape_update_stroke(shape,&tempGC);
       nr_arena_shape_update_fill(shape,&tempGC);
-      NRRect bbox;
+      /*      NRRect bbox;
       bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
       nr_arena_shape_add_bboxes(shape,bbox);
       item->bbox.x0 = (gint32)(bbox.x0 - 1.0F);
       item->bbox.y0 = (gint32)(bbox.y0 - 1.0F);
       item->bbox.x1 = (gint32)(bbox.x1 + 1.0F);
       item->bbox.y1 = (gint32)(bbox.y1 + 1.0F);
+      shape->approx_bbox=item->bbox;*/
     }
   }
 #endif
