@@ -6,6 +6,8 @@
       all files converted from tabs to 4 spaces and cleaned up the 
       coding style, tested, they build, and have committed.
       
+    * extension/*: I converted all files to coding style.
+
 
 2004-02-04  bulia byak <bulia@users.sourceforge.net>
 
