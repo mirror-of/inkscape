@@ -2424,6 +2424,9 @@ sp_style_paint_clear (SPStyle *style, SPIPaint *paint,
     }
 }
 
+/**
+ * \pre object != NULL
+ */
 SPCSSAttr *
 sp_css_attr_from_style (SPObject *object, guint flags)
 {
