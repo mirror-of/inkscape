@@ -45,8 +45,10 @@ sp_rubberband_move (double x, double y)
 		return;
 	}
 #else
+	// no need to loudly compain if !sp_rb_dragging, because it could have been nullified by escape without mouse release; just return
+	//	g_return_if_fail (sp_rb_dragging);
+	if (!sp_rb_dragging) return;
 	g_return_if_fail (sp_rb_desktop != NULL);
-	g_return_if_fail (sp_rb_dragging);
 #endif
 	if (sp_rb == NULL) {
 		sp_rb = (SPCtrlRect *) sp_canvas_item_new (SP_DT_CONTROLS (sp_rb_desktop), SP_TYPE_CTRLRECT, NULL);
