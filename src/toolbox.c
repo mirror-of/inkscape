@@ -165,8 +165,8 @@ aux_toolbox_size_request (GtkWidget *widget,
                           GtkRequisition *requisition,
                           gpointer user_data)
 {
-	if ( requisition->height < AUX_BUTTON_SIZE + 4 + 2 * AUX_BETWEEN_BUTTON_GROUPS) {
-		requisition->height = AUX_BUTTON_SIZE + 4 + 2 * AUX_BETWEEN_BUTTON_GROUPS;
+	if ( requisition->height < AUX_BUTTON_SIZE + 6 + 2 * AUX_BETWEEN_BUTTON_GROUPS) {
+		requisition->height = AUX_BUTTON_SIZE + 6 + 2 * AUX_BETWEEN_BUTTON_GROUPS;
 	}
 }
 
