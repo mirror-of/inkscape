@@ -1,3 +1,71 @@
+inkscape (0.38) unstable; urgency=high
+
+  *  Text and fonts: full kerning and spacing support, better installed font detection, better alternate font matching, better usability
+  * Path operations: new commands to cut paths, less distortions, better usability
+  * Gradients: full support for multi-stop gradients, bugfixes
+  * Shape tools: polygons, dramatically better usability with the top panel, bugfixes
+  * Libinkjar: a library for compound document support of packaged SVG and PNG files
+  * Pure usability: canvas autoscrolling, accelerated scrolling, inversion for visibility, more intuitive cut-and-paste, per-object selection indication, save dialog, new icons
+  * Paraphernalia: new and expanded tutorials, clipart, translation updates 
+
+  * * New functionality
+
+  * There's a complete support for horizontal and vertical kerning in text objects (the dx and dy attributes in SVG). Text objects with kerns remain fully editable.
+  * New boolean operations: Division (Ctrl+/), when applied to two objects, cuts the bottom object into pieces along the edges of the top object; Cut Path (Ctrl+Alt+/) is similar, but only cuts the stroke of the bottom object (convenient for cutting paths without fill).
+  * Multi-stop gradients are now fully supported: the redesigned gradient editor can add, delete, move, and set color/alpha for an arbitrary number of stops in a gradient.
+  * The star tool now has a polygon mode which generates true polygons instead of stars with flat points, so that you don't get extra points when you convert to path.
+  * There is a new library, libinkjar, which can read [OpenOffice] .sxw (and some .jar) files. This allows you to bundle a bunch of SVGs and embedded files like .png for viewing in inkscape or inkview. This is work in progress. 
+
+  * * Important bugfixes
+
+  * Inkscape's font support is cleaned up and improved. More installed fonts than before are now seen, displayed, and correctly applied. Font matcher is more intelligent yet faster and supports generic families and multiple family specifications, so bad font substitutions are now rare. Besides, Inkscape will warn you whenever it cannot find the exact match for the family or style requested by the document.
+  * The new polygon intersector code fixed a number of ugly rendering screw-ups and lock-ups.
+  * Previously, Inkscape canvas tended to "stick" after mouse release when you were panning a complex document by middle mouse button. This is now fixed.
+  * Non-ASCII filenames (e.g. Cyrillic) are fully supported for all file operations (opening, saving, importing, exporting).
+  * Problems on localized Windows systems caused by the wrong numeric format (comma as decimal separator in SVG) are resolved.
+  * The show/hide guidelines toggle (the | key) is restored and fully functional.
+  * The Inset and Outset commands create paths with much smaller distortions than before.
+  * A newly created group, or a combined path, now remains at the level of its topmost member, instead of jumping to the top as before. Several other commands are also fixed to preserve the z-order and the parent of the object(s) they work on.
+  * Copy/paste of objects with gradients now works between documents.
+  * The bounding box of an object now includes stroke width (this fixes the truncated bitmap export and some other problems).
+  * Several bugfixes were ported from Sodipodi; notably, the font size mismatch between Windows and Unix is now gone. 
+
+  * * Interface and usability
+
+  * Complete spacing/kerning control via keyboard in the text tool: when editing, Alt+< and Alt+> adjust letter spacing in the current line, Ctrl+Alt+< and Ctrl+Alt+> adjust spacing between lines, and Alt+arrows shift any character horizontally or vertically.
+  * In text tool, clicking on a text object positions the cursor closest to the click, instead of at the end of the text object as before.
+  * Node tool, text tool, and all shape tools now select objects regardless of grouping. This means you don't need to switch to selector for a Ctrl+click if you want to edit a grouped text object, path, or shape.
+  * The shape tools (Rectangle, Ellipse, Star, and Spiral) are vastly more convenient to use:
+  *       o All controls, such as the number of sides of a polygon, are moved from the "Tool Options" dialog to the editing window's top panel and are immediately accessible.
+  *       o The top panel controls affect (any number of) the selected object(s) of the relevant type, not only the next created object as was the case with "Tool Options".
+  *       o When you have any of the shape tools activated, the selected object now displays editing handles on the canvas, just like it did in the node tool before. This means you can draw a shape and edit it immediately, without switching to node tool.
+  *       o You can now select objects by clicking (regardless of grouping), or deselect by Esc, while in a shape tool.
+  *       o There's a two-way connection between the selected object and the top panel: dragging handles updates the relevant top panel controls, and editing the controls moves the handles. 
+  * The Paste command (Ctrl+V) now places the pasted objects(s) right under the mouse cursor. The old behavior - pasting to the original location - is available as the Paste In Place command (Crtl+Alt+V).
+  * The Raise and Lower commands reorder the selected objects only relative to those objects that overlap them, instead of all objects in the document.
+  * Autoscrolling: The canvas now scrolls automatically when you drag an object or node, or do a rubberband selection, and go near or beyond the edge of the canvas. Similarly, autoscrolling keeps the text cursor always visible.
+  * Accelerated scrolling: if you press and hold Ctrl+arrow to scroll canvas, Inkscape will gradually speed up scrolling. This makes navigating in complex documents much faster, without losing precision.
+  * Accelerated Simplify: similar to scrolling, a single Simplify (Ctrl+L) does a slight simplification, but invoking it several times in quick succession makes it act more and more aggressively on the selected objects. It is thus easy to apply the exact amount of simplification you need for each case.
+  * Scale/selection handles and the rubberband selection rectangle now use inversion and are therefore visible on any background. (Even 50% gray... our inversion is smart :-) Path nodes and node/shape controls also use inverted elements for better visibility. Text editing cursor is also inverse.
+  * In multi-object selections, every selected object now displays a small inverse diamond mark in the top left corner of its bounding box. This lets you see at once what objects are selected and what are not.
+  * In the linear and radial gradient panes of the Fill and Stroke dialog:
+  *       o You can press Ctrl while dragging handles to snap the linear gradient angle to 15 degrees increments (makes it easy to create strictly horizontal/vertical gradients).
+  *       o The handles, bounding box, and gradient axes use inversion for better visibility.
+  *       o The default linear gradient goes through the center of the object.
+  *       o The radial gradient displays a radius handle for adjusting the gradient radius. 
+  * The save dialog now remembers output format, can append file extension automatically, and warns when overwriting files. You can now save a file in Postscript format.
+  * Many new icons are added, and many old icons are redrawn to be crisper, more informative, and more laconic. 
+
+  * * Clipart, documentation, translations
+
+  * Inkscape now ships with a small collection of clipart (when it grows big enough we may separate it into a package of its own).
+  * The Inkscape tutorial is split into two parts, Basic and Advanced, and significantly expanded (new sections on offsets, simplification, compound paths, text tool, and more).
+  * Two new tutorials,"Elements of design" and "Tips and Tricks," are added.
+  * The Basic tutorial is available in Russian translation.
+  * French, Hungarian, Japanese, Russian, and Spanish interface translations are updated. 
+
+ -- Nathan Hurst <njh@mail.csse.monash.edu.au>  Fri, 9 Apr 2004 19:17:00 +1100
+
 inkscape (0.37) unstable; urgency=high
 
   * Boolean operations on shapes are now implemented: union, difference, intersection, and exclusive OR (XOR).
