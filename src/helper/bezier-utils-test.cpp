@@ -29,14 +29,14 @@ int main(int argc, char *argv[]) {
 	utest_start("bezier-utils.cpp");
 
 	UTEST_TEST("copy_without_nans_or_adjacent_duplicates") {
-		NRPoint const src[] = {
-			NRPoint(Point(2., 3.)),
-			NRPoint(Point(2., 3.)),
-			NRPoint(Point(0., 0.)),
-			NRPoint(Point(2., 3.)),
-			NRPoint(Point(2., 3.)),
-			NRPoint(Point(1., 9.)),
-			NRPoint(Point(1., 9.))
+		NR::Point const src[] = {
+			Point(2., 3.),
+			Point(2., 3.),
+			Point(0., 0.),
+			Point(2., 3.),
+			Point(2., 3.),
+			Point(1., 9.),
+			Point(1., 9.)
 		};
 		Point const exp_dest[] = {
 			Point(2., 3.),
@@ -196,13 +196,13 @@ int main(int argc, char *argv[]) {
 				    .51, .69, .81, .91, .93, .97, .98, .99, 1.0};
 		unsigned const n = G_N_ELEMENTS(t);
 		Point d[n];
-		NRPoint cd[n];
+		NR::Point cd[n];
 		for(unsigned i = 0; i < n; ++i) {
 			d[i] = bezier_pt(3, src_b, t[i]);
-			cd[i] = NRPoint(d[i]);
+			cd[i] = d[i];
 		}
 
-		NRPoint cest_b[4];
+		NR::Point cest_b[4];
 		gint const succ = sp_bezier_fit_cubic(cest_b, cd, n, square(1.2));
 		UTEST_ASSERT(succ >= 0);
 		printf("succ=%d:", succ);
