@@ -496,6 +496,17 @@ pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix t
 	return rect;
 }
 
+SPPattern *
+pattern_getroot (SPPattern *pat) 
+{
+	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
+		if (sp_object_first_child(SP_OBJECT(pat_i))) { // find the first one with children
+			return pat_i;
+		}
+	}
+	return NULL;
+}
+
 
 
 // Access functions that look up fields up the chain of referenced patterns and return the first one which is set

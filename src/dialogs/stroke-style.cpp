@@ -367,7 +367,7 @@ sp_stroke_style_paint_update(SPWidget *spw, SPSelection *sel)
         case SP_PAINT_SELECTOR_MODE_PATTERN:
         {
             sp_paint_selector_set_mode ( psel, SP_PAINT_SELECTOR_MODE_PATTERN);
-            SPPattern *pat = SP_PATTERN (SP_OBJECT_STYLE_STROKE_SERVER (object));
+            SPPattern *pat = pattern_getroot (SP_PATTERN (SP_OBJECT_STYLE_STROKE_SERVER (object)));
             sp_update_pattern_list ( psel, pat );
             break;
         }
@@ -695,22 +695,32 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                     /* No Pattern in paint selector should mean that we just
                      * changed mode - dont do jack.
                      */
-                    pattern = NULL;
-
 
                 } else {
                     SPRepr *patrepr = SP_OBJECT_REPR(pattern);
                     SPCSSAttr *css = sp_repr_css_attr_new ();
-                    sp_repr_css_set_property (css, "stroke", g_strdup_printf("url(#%s)", sp_repr_attr(patrepr,"id")));
+                    gchar *urltext = g_strdup_printf ("url(#%s)", sp_repr_attr (patrepr, "id"));
+                    sp_repr_css_set_property (css, "stroke", urltext);
 
-                    for (GSList const *i = items; i != NULL; i = i->next) {
-                         SPRepr *selrepr = SP_OBJECT_REPR((SPItem *) items->data);
-                         if (selrepr) {
-                               sp_repr_css_change_recursive (selrepr, css, "style");
-                           }
+                    for (const GSList *i = items; i != NULL; i = i->next) {
+                         SPRepr *selrepr = SP_OBJECT_REPR (items->data);
+                         SPObject *selobj = SP_OBJECT (items->data);
+                         if (!selrepr)
+                             continue;
+
+                         SPStyle *style = SP_OBJECT_STYLE (selobj);
+                         if (style && style->stroke.type == SP_PAINT_TYPE_PAINTSERVER) {
+                             SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER (selobj);
+                             if (SP_IS_PATTERN (server) && pattern_getroot (SP_PATTERN(server)) == pattern) 
+                                 // only if this object's pattern is not rooted in our selected pattern, apply
+                                 continue;
+                         }
+
+                         sp_repr_css_change_recursive (selrepr, css, "style");
                      }
-                      sp_repr_css_attr_unref (css);
 
+                    sp_repr_css_attr_unref (css);
+                    g_free (urltext);
 
                 } // end if
 
@@ -930,49 +940,6 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
                               NULL));
 
     return pb;
-}
-
-
-static bool
-sp_marker_load_from_svg(gchar const *name, SPDocument *current_doc)
-{
-    static SPDocument *doc = NULL;
-    static unsigned int edoc = FALSE;
-    if (!current_doc) {
-        return false;
-    }
-    /* Try to load from document */
-    if (!edoc && !doc) {
-        char *markers = g_build_filename(INKSCAPE_MARKERSDIR, "/markers.svg", NULL);
-        if (g_file_test(markers, G_FILE_TEST_IS_REGULAR)) {
-            doc = sp_document_new(markers, FALSE, FALSE);
-        }
-        if ( !doc && g_file_test( markers,
-                                  G_FILE_TEST_IS_REGULAR) )
-        {
-            doc = sp_document_new( markers,
-                                   FALSE, FALSE );
-        }
-        g_free(markers);
-        if (doc) {
-            sp_document_ensure_up_to_date(doc);
-        } else {
-            edoc = TRUE;
-        }
-    }
-    if (!edoc && doc) {
-        /* Get the marker we want */
-        SPObject *object = sp_document_lookup_id(doc, name);
-        if (object && SP_IS_MARKER(object)) {
-            SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(current_doc);
-            SPRepr *mark_repr = sp_repr_duplicate(SP_OBJECT_REPR(object));
-            sp_repr_set_attr(mark_repr, "inkscape:collect", "always");
-            sp_repr_add_child (SP_OBJECT_REPR(defs), mark_repr, NULL);
-            sp_repr_unref(mark_repr);
-            return true;
-        }
-    }
-    return false;
 }
 
 #define MARKER_ITEM_MARGIN 0

@@ -487,17 +487,16 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
         {
             SPObject *object = SP_OBJECT (objects->data);
 
-            sp_paint_selector_set_mode ( psel,
-                                         SP_PAINT_SELECTOR_MODE_PATTERN);
+            sp_paint_selector_set_mode ( psel, SP_PAINT_SELECTOR_MODE_PATTERN );
 
-            sp_update_pattern_list ( psel,SP_PATTERN(SP_OBJECT_STYLE_FILL_SERVER(object)));
+            SPPattern *pat = pattern_getroot (SP_PATTERN (SP_OBJECT_STYLE_FILL_SERVER (object)));
+            sp_update_pattern_list ( psel, pat);
 
             break;
         }
 
         default:
-            sp_paint_selector_set_mode ( psel,
-                                         SP_PAINT_SELECTOR_MODE_MULTIPLE );
+            sp_paint_selector_set_mode ( psel, SP_PAINT_SELECTOR_MODE_MULTIPLE );
             break;
 
     } // end of switch
@@ -574,7 +573,8 @@ sp_fill_style_widget_update_repr (SPWidget *spw, SPRepr *repr)
             {
             sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_PATTERN);
             SPObject *object = (SPObject *) sp_document_lookup_id (SP_ACTIVE_DOCUMENT, sp_repr_attr (repr, "id"));
-            SPPattern *pat = SP_PATTERN (SP_OBJECT_STYLE_FILL_SERVER (object));
+
+            SPPattern *pat = pattern_getroot (SP_PATTERN (SP_OBJECT_STYLE_FILL_SERVER (object)));
             sp_update_pattern_list ( psel, pat);
             }
             break;
@@ -893,27 +893,37 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                     /* No Pattern in paint selector should mean that we just
                      * changed mode - dont do jack.
                      */
-                    pattern = NULL;
-
 
                 } else {
                     SPRepr *patrepr = SP_OBJECT_REPR(pattern);
                     SPCSSAttr *css = sp_repr_css_attr_new ();
-                    gchar *urltext = g_strconcat ("url(#", sp_repr_attr(patrepr,"id"), ")",NULL);
+                    gchar *urltext = g_strdup_printf ("url(#%s)", sp_repr_attr (patrepr, "id"));
                     sp_repr_css_set_property (css, "fill", urltext);
 
                     for (const GSList *i = items; i != NULL; i = i->next) {
-                         SPRepr *selrepr = SP_OBJECT_REPR((SPItem *) items->data);
-                         if (selrepr) {
-                               sp_repr_css_change_recursive (selrepr, css, "style");
-                           }
+                         SPRepr *selrepr = SP_OBJECT_REPR (items->data);
+                         SPObject *selobj = SP_OBJECT (items->data);
+                         if (!selrepr)
+                             continue;
+
+                         SPStyle *style = SP_OBJECT_STYLE (selobj);
+                         if (style && style->fill.type == SP_PAINT_TYPE_PAINTSERVER) {
+                             SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (selobj);
+                             if (SP_IS_PATTERN (server) && pattern_getroot (SP_PATTERN(server)) == pattern) 
+                                 // only if this object's pattern is not rooted in our selected pattern, apply
+                                 continue;
+                         }
+
+                         sp_repr_css_change_recursive (selrepr, css, "style");
                      }
-                      sp_repr_css_attr_unref (css);
+
+                    sp_repr_css_attr_unref (css);
                     g_free (urltext);
 
                 } // end if
 
                 sp_document_done (SP_WIDGET_DOCUMENT (spw));
+
             } // end if
 
             break;

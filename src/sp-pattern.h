@@ -80,6 +80,8 @@ guint pattern_users (SPPattern *pattern);
 SPPattern *pattern_chain (SPPattern *pattern);
 SPRepr *pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix transformation);
 
+SPPattern *pattern_getroot (SPPattern *pat);
+
 guint pattern_patternUnits (SPPattern *pat);
 guint pattern_patternContentUnits (SPPattern *pat);
 NRMatrix *pattern_patternTransform (SPPattern *pat);
