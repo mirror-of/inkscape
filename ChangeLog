@@ -1,5 +1,8 @@
 2005-03-05  Bryce Harrington <bryce@bryceharrington.org>
 
+	* share/icons/*.svg, share/icons/Makefile.am:  Adding icons for
+	  new gui interface
+	
 	* src/ui/icons.cpp:  Fixing some paths
 	
 	* src/main.cpp src/application/Makefile_insert,
