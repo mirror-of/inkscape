@@ -1,6 +1,6 @@
 #define __SP_MODULE_C__
 /**
-	\file module.c
+	\file module.cpp
  
 	Frontend to certain, possibly pluggable, actions
 */
