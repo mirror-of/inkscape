@@ -154,20 +154,23 @@ typedef struct _SPTextStyle SPTextStyle;
 
 struct _SPStyle {
 	int refcount;
-	/* Object we are attached to */
-	/* fixme: I am not sure, whether style should be SPObject itself */
-	/* fixme: Or alternatively, whole style to be moved inside SPObject[Styled] */
+	/** Object we are attached to */
 	SPObject *object;
-	/* Our text style component */
+	/** Our text style component */
 	SPTextStyle *text;
 	unsigned int text_private : 1;
 
 	/* CSS2 */
 	/* Font */
+    /** Size of the font */
 	SPIFontSize font_size;
+    /** Style of the font */
 	SPIEnum font_style;
+    /** Which substyle of the font */
 	SPIEnum font_variant;
+    /** Weight of the font */
 	SPIEnum font_weight;
+    /** Stretch of the font */
 	SPIEnum font_stretch;
 
 	/* Misc attributes */
@@ -181,73 +184,113 @@ struct _SPStyle {
 	unsigned int clip_rule_set : 1;
 	unsigned int mask_set : 1;
 
-	/* opacity */
+	/** opacity */
 	SPIScale24 opacity;
 
-	/* display */
+	/** display */
 	unsigned int display : 1;
-	/* visibility */
+	/** visibility */
 	unsigned int visibility : 1;
 
-	/* color */
+	/** color */
 	SPIPaint color;
 
-	/* fill */
+	/** fill */
 	SPIPaint fill;
-	/* fill-opacity */
+	/** fill-opacity */
 	SPIScale24 fill_opacity;
-	/* fill-rule: 0 nonzero, 1 evenodd */
+	/** fill-rule: 0 nonzero, 1 evenodd */
 	SPIEnum fill_rule;
 
-	/* stroke */
+	/** stroke */
 	SPIPaint stroke;
-	/* stroke-width */
+	/** stroke-width */
 	SPILength stroke_width;
-	/* stroke-linecap */
+	/** stroke-linecap */
 	SPIEnum stroke_linecap;
-	/* stroke-linejoin */
+	/** stroke-linejoin */
 	SPIEnum stroke_linejoin;
-	/* stroke-miterlimit */
+	/** stroke-miterlimit */
 	SPIFloat stroke_miterlimit;
-	/* stroke-dash* */
+	/** stroke-dash* */
 	ArtVpathDash stroke_dash;
 	unsigned int stroke_dasharray_set : 1;
 	unsigned int stroke_dashoffset_set : 1;
-	/* stroke-opacity */
+	/** stroke-opacity */
 	SPIScale24 stroke_opacity;
-	/* fixme: remove this */
 
 	/* SVG */
+	/** Anchor of the text */
 	SPIEnum text_anchor;
+	/** Writing mode */
 	SPIEnum writing_mode;
 
-        /* markers */
-  /*        GQuark marker[SP_MARKER_LOC_QTY]; */
+    /* markers */
+    // GQuark marker[SP_MARKER_LOC_QTY];
+	/** Marker list */
 	SPIString marker[SP_MARKER_LOC_QTY];
 };
 
+/**
+ *
+ */
 SPStyle *sp_style_new (void);
+
+/**
+ *
+ */
 SPStyle *sp_style_new_from_object (SPObject *object);
 
+/**
+ *
+ */
 SPStyle *sp_style_ref (SPStyle *style);
+
+/**
+ *
+ */
 SPStyle *sp_style_unref (SPStyle *style);
 
-/*
+/**
  * 1. Reset existing object style
  * 2. Load current effective object style
  * 3. Load i attributes from immediate parent (which has to be up-to-date)
  */
-
 void sp_style_read_from_object (SPStyle *style, SPObject *object);
+
+/**
+ *
+ */
 void sp_style_read_from_repr (SPStyle *style, SPRepr *repr);
+
+/**
+ *
+ */
 void sp_style_merge_from_parent (SPStyle *style, SPStyle *parent);
 
+/**
+ *
+ */
 gchar *sp_style_write_string (SPStyle *style);
+
+/**
+ *
+ */
 gchar *sp_style_write_difference (SPStyle *from, SPStyle *to);
 
+/**
+ *
+ */
 void sp_style_set_fill_color_alpha (SPStyle *style, const SPColor* color, float a, unsigned int fill_set, unsigned int opacity_set);
+
+/**
+ *
+ */
 void sp_style_set_stroke_color_alpha (SPStyle *style, const SPColor* color, float a, unsigned int fill_set, unsigned int opacity_set);
 
+/**
+ *
+ */
 void sp_style_set_opacity (SPStyle *style, float opacity, unsigned int opacity_set);
 
 /* SPTextStyle */
