@@ -370,7 +370,6 @@ sp_verb_action_selection_perform (SPAction *action, void * data, void * pdata)
             sp_selected_path_simplify ();
             break;
 
-
         case SP_VERB_SELECTION_COMBINE:
             sp_selected_path_combine ();
             break;
@@ -778,39 +777,48 @@ static const SPVerbActionDef props[] = {
         N_("Group selected objects"), "selection_group"},
     {SP_VERB_SELECTION_UNGROUP, "SelectionUnGroup", N_("_Ungroup"),
         N_("Ungroup selected group(s)"), "selection_ungroup"},
+
     {SP_VERB_SELECTION_UNION, "SelectionUnion", N_("_Union"),
-        N_("Union of selected objects"), NULL},
+        N_("Union of selected objects"), "union"},
     {SP_VERB_SELECTION_INTERSECT, "SelectionIntersect", N_("_Intersection"),
-        N_("Intersection of selected objects"), NULL},
+        N_("Intersection of selected objects"), "intersection"},
     {SP_VERB_SELECTION_DIFF, "SelectionDiff", N_("_Difference"),
-        N_("Difference of selected objects"), NULL},
+        N_("Difference of selected objects"), "difference"},
     {SP_VERB_SELECTION_SYMDIFF, "SelectionSymDiff", N_("E_xclusion"),
-        N_("Exclusive OR of selected objects"), NULL},
+        N_("Exclusive OR of selected objects"), "exclusion"},
     {SP_VERB_SELECTION_CUT, "SelectionDivide", N_("Di_vision"),
-        N_("Cut the bottom object into pieces"), NULL},
+        N_("Cut the bottom object into pieces"), "division"},
     {SP_VERB_SELECTION_SLICE, "SelectionCutPath", N_("Cut _Path"),
-        N_("Cut the bottom path into pieces"), NULL},
+        N_("Cut the bottom path into pieces"), "cut_path"},
     {SP_VERB_SELECTION_OFFSET, "SelectionOffset", N_("Ou_tset"),
-        N_("Outset selected paths"), NULL},
-    {SP_VERB_SELECTION_OFFSET_SCREEN, "SelectionOffsetScreen", N_("O_utset Path by 1px"),
+        N_("Outset selected paths"), "outset_path"},
+    {SP_VERB_SELECTION_OFFSET_SCREEN, "SelectionOffsetScreen", 
+        N_("O_utset Path by 1px"),
         N_("Outset selected paths by 1px"), NULL},
-    {SP_VERB_SELECTION_OFFSET_SCREEN_10, "SelectionOffsetScreen10", N_("O_utset Path by 10px"),
+    {SP_VERB_SELECTION_OFFSET_SCREEN_10, "SelectionOffsetScreen10", 
+        N_("O_utset Path by 10px"),
         N_("Outset selected paths by 10px"), NULL},
     {SP_VERB_SELECTION_INSET, "SelectionInset", N_("I_nset"),
-        N_("Inset selected paths"), NULL},
-    {SP_VERB_SELECTION_INSET_SCREEN, "SelectionInsetScreen", N_("I_nset Path by 1px"),
+        N_("Inset selected paths"), "inset_path"},
+    {SP_VERB_SELECTION_INSET_SCREEN, "SelectionInsetScreen", 
+        N_("I_nset Path by 1px"),
         N_("Inset selected paths by 1px"), NULL},
-    {SP_VERB_SELECTION_INSET_SCREEN_10, "SelectionInsetScreen", N_("I_nset Path by 10px"),
+    {SP_VERB_SELECTION_INSET_SCREEN_10, "SelectionInsetScreen", 
+        N_("I_nset Path by 10px"),
         N_("Inset selected paths by 10px"), NULL},
     {SP_VERB_SELECTION_DYNAMIC_OFFSET, "SelectionDynOffset",
-        N_("D_ynamic Offset"), N_("Create a dynamic offset object"), NULL},
+        N_("D_ynamic Offset"), N_("Create a dynamic offset object"), "dynamic_offset"},
     {SP_VERB_SELECTION_LINKED_OFFSET, "SelectionLinkedOffset",
         N_("_Linked Offset"),
-        N_("Create a dynamic offset object linked to the original path"), NULL},
+        N_("Create a dynamic offset object linked to the original path"),
+        "linked_offset"},
     {SP_VERB_SELECTION_OUTLINE, "SelectionOutline", N_("_Stroke to Path"),
         N_("Convert selected stroke to path"), "stroke_tocurve"},
     {SP_VERB_SELECTION_SIMPLIFY, "SelectionSimplify", N_("Si_mplify"),
-        N_("Simplify selected path"), NULL},
+        N_("Simplify selected path"), "simplify"},
+    /* REJON: was adding, but had problems and instead went back to old
+    {SP_VERB_SELECTION_CLEANUP, "SelectionCleanup", N_("Cl_eanup"),
+        N_("Cleanup selected path"), "cleanup"}, */
     {SP_VERB_SELECTION_COMBINE, "SelectionCombine", N_("_Combine"),
         N_("Combine multiple paths"), "selection_combine"},
     {SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break _Apart"),
@@ -912,7 +920,7 @@ static const SPVerbActionDef props[] = {
     {SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("_Hide/View dialogs"),
         N_("Toggle visibility of all active dialogs"), NULL},
     {SP_VERB_DIALOG_ITEM, "DialogItem", N_("Item _Properties"),
-        N_("Item properties"), NULL},
+        N_("Item properties"), "item_properties"},
 
     /* Footer */
     {SP_VERB_LAST, NULL, NULL, NULL, NULL}

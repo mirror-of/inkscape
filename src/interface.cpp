@@ -160,19 +160,22 @@ static void sp_ui_new_view_preview(GtkWidget *widget)
 void
 sp_ui_close_view (GtkWidget * widget)
 {
-	GtkWidget *w;
+    GtkWidget *w;
 
-	if (SP_ACTIVE_DESKTOP == NULL) {
-	    return;
-	}
-	w = (GtkWidget*)g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window");
-	if (sp_view_shutdown (SP_VIEW (SP_ACTIVE_DESKTOP))) {
-	    return;
-	}
-	gtk_widget_destroy (w);
+    if (SP_ACTIVE_DESKTOP == NULL) {
+        return;
+    }
+    w = (GtkWidget*)g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window");
+    if (sp_view_shutdown (SP_VIEW (SP_ACTIVE_DESKTOP))) {
+        return;
+    }
+    gtk_widget_destroy (w);
 }
 
+
 /**
+ *  sp_ui_close_all
+ *
  *  This function is called to exit the program, and iterates through all
  *  open document view windows, attempting to close each in turn.  If the
  *  view has unsaved information, the user will be prompted to save,
@@ -187,17 +190,18 @@ sp_ui_close_all (void)
     /* Iterate through all the windows, destroying each in the order they
        become active */
     while (SP_ACTIVE_DESKTOP) {
-	GtkWidget *w;
-	w = (GtkWidget*)g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window");
-	if (sp_view_shutdown (SP_VIEW (SP_ACTIVE_DESKTOP))) {
-	    /* The user cancelled the operation, so end doing the close */
-	    return FALSE;
-	}
-	gtk_widget_destroy (w);
+    GtkWidget *w;
+    w = (GtkWidget*)g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window");
+    if (sp_view_shutdown (SP_VIEW (SP_ACTIVE_DESKTOP))) {
+        /* The user cancelled the operation, so end doing the close */
+        return FALSE;
+    }
+    gtk_widget_destroy (w);
     }
 
     return TRUE;
 }
+
 
 static gint
 sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view)
@@ -205,46 +209,66 @@ sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view)
 	return sp_view_shutdown (view);
 }
 
+
+
+/**
+ * sp_ui_menu_append_item
+ * 
+ * Appends a UI item with specific info for Inkscape/Sodipodi.
+ *
+ */
+
 static GtkWidget *
-sp_ui_menu_append_item (GtkMenu *menu, const gchar *stock, const gchar *label, GCallback callback, gpointer data, gboolean with_mnemonic = TRUE)
+sp_ui_menu_append_item ( GtkMenu *menu, const gchar *stock, 
+                         const gchar *label, GCallback callback, 
+                         gpointer data, gboolean with_mnemonic = TRUE )
 {
-	GtkWidget *item;
+    GtkWidget *item;
 
-	if (stock) {
-		item = gtk_image_menu_item_new_from_stock (stock, NULL);
-	} else if (label) {
-		item = (with_mnemonic) ? gtk_image_menu_item_new_with_mnemonic (label) : gtk_image_menu_item_new_with_label (label);
-	} else {
-		item = gtk_separator_menu_item_new ();
-	}
-	gtk_widget_show (item);
-	if (callback) {
-		g_signal_connect (G_OBJECT (item), "activate", callback, data);
-	}
-	gtk_menu_append (GTK_MENU (menu), item);
+    if (stock) {
+        item = gtk_image_menu_item_new_from_stock (stock, NULL);
+    } else if (label) {
+        item = (with_mnemonic) 
+            ? gtk_image_menu_item_new_with_mnemonic (label) :      
+            gtk_image_menu_item_new_with_label (label);
+    } else {
+        item = gtk_separator_menu_item_new ();
+    }
 
-	return item;
-}
+    gtk_widget_show (item);
+
+    if (callback) {
+        g_signal_connect (G_OBJECT (item), "activate", callback, data);
+    }
+    gtk_menu_append (GTK_MENU (menu), item);
+
+    return item;
+
+} // end of sp_ui_menu_append_item()
+
+
 
 static void
 sp_ui_menu_activate (void *object, SPAction *action)
 {
-	sp_action_perform (action, NULL);
+    sp_action_perform (action, NULL);
 }
+
 
 static void
 sp_ui_menu_key_press (GtkMenuItem *item, GdkEventKey *event, void *data)
 {
-	if (event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)) {
-		unsigned int shortcut;
+    if (event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK | GDK_MOD1_MASK)) {
+        unsigned int shortcut;
 
-		shortcut = event->keyval;
-		if (event->state & GDK_SHIFT_MASK) shortcut |= SP_SHORTCUT_SHIFT_MASK;
-		if (event->state & GDK_CONTROL_MASK) shortcut |= SP_SHORTCUT_CONTROL_MASK;
-		if (event->state & GDK_MOD1_MASK) shortcut |= SP_SHORTCUT_ALT_MASK;
-		sp_shortcut_set (shortcut, (sp_verb_t)((int)data), true);
-	}
+        shortcut = event->keyval;
+        if (event->state & GDK_SHIFT_MASK) shortcut |= SP_SHORTCUT_SHIFT_MASK;
+        if (event->state & GDK_CONTROL_MASK) shortcut |= SP_SHORTCUT_CONTROL_MASK;
+        if (event->state & GDK_MOD1_MASK) shortcut |= SP_SHORTCUT_ALT_MASK;
+        sp_shortcut_set (shortcut, (sp_verb_t)((int)data), true);
+    }
 }
+
 
 /**
 \brief  a wrapper around gdk_keyval_name producing (when possible) characters, not names
@@ -252,112 +276,129 @@ sp_ui_menu_key_press (GtkMenuItem *item, GdkEventKey *event, void *data)
 static gchar const *
 sp_key_name (guint keyval)
 {
-	gchar const *n = gdk_keyval_name (gdk_keyval_to_upper (keyval));
-	
-	if      (!strcmp (n, "asciicircum"))  return "^";
-	else if (!strcmp (n, "parenleft"  ))  return "(";
-	else if (!strcmp (n, "parenright" ))  return ")";
-	else if (!strcmp (n, "plus"       ))  return "+";
-	else if (!strcmp (n, "minus"      ))  return "-";
-	else if (!strcmp (n, "asterisk"   ))  return "*";
-	else if (!strcmp (n, "KP_Multiply"))  return "*";
-	else if (!strcmp (n, "Delete"     ))  return "Del";
-	else if (!strcmp (n, "Page_Up"    ))  return "PgUp";
-	else if (!strcmp (n, "Page_Down"  ))  return "PgDn";
-	else if (!strcmp (n, "grave"      ))  return "`";
-	else if (!strcmp (n, "numbersign" ))  return "#";
-	else if (!strcmp (n, "bar" ))  return "|";
-	else if (!strcmp (n, "slash" ))  return "/";
-	else return n;
+    gchar const *n = gdk_keyval_name (gdk_keyval_to_upper (keyval));
+
+    if      (!strcmp (n, "asciicircum"))  return "^";
+    else if (!strcmp (n, "parenleft"  ))  return "(";
+    else if (!strcmp (n, "parenright" ))  return ")";
+    else if (!strcmp (n, "plus"       ))  return "+";
+    else if (!strcmp (n, "minus"      ))  return "-";
+    else if (!strcmp (n, "asterisk"   ))  return "*";
+    else if (!strcmp (n, "KP_Multiply"))  return "*";
+    else if (!strcmp (n, "Delete"     ))  return "Del";
+    else if (!strcmp (n, "Page_Up"    ))  return "PgUp";
+    else if (!strcmp (n, "Page_Down"  ))  return "PgDn";
+    else if (!strcmp (n, "grave"      ))  return "`";
+    else if (!strcmp (n, "numbersign" ))  return "#";
+    else if (!strcmp (n, "bar" ))  return "|";
+    else if (!strcmp (n, "slash" ))  return "/";
+    else return n;
 }
+
 
 void
 sp_ui_shortcut_string (unsigned int shortcut, gchar* c)
 {
-	const gchar *altStr, *ctrlStr, *shiftStr;
+    const gchar *altStr, *ctrlStr, *shiftStr;
 
-	altStr   = (shortcut & SP_SHORTCUT_ALT_MASK    ) ? "Alt+"   : "";
-	ctrlStr  = (shortcut & SP_SHORTCUT_CONTROL_MASK) ? "Ctrl+"  : "";
-	shiftStr = (shortcut & SP_SHORTCUT_SHIFT_MASK  ) ? "Shift+" : "";
+    altStr   = (shortcut & SP_SHORTCUT_ALT_MASK    ) ? "Alt+"   : "";
+    ctrlStr  = (shortcut & SP_SHORTCUT_CONTROL_MASK) ? "Ctrl+"  : "";
+    shiftStr = (shortcut & SP_SHORTCUT_SHIFT_MASK  ) ? "Shift+" : "";
 
-	g_snprintf (c, 256, "%s%s%s%s", shiftStr, ctrlStr, altStr,
+    g_snprintf (c, 256, "%s%s%s%s", shiftStr, ctrlStr, altStr,
          sp_key_name (shortcut & 0xffffff));
 }
 
 void
 sp_ui_dialog_title_string (sp_verb_t verb, gchar* c)
 {
-	SPAction     *action;
-	unsigned int shortcut;
-	gchar        *s; 
-	gchar        key[256];
-	gchar        *atitle;
+    SPAction     *action;
+    unsigned int shortcut;
+    gchar        *s; 
+    gchar        key[256];
+    gchar        *atitle;
 
-	action = sp_verb_get_action (verb, NULL);
-	if (!action)
+    action = sp_verb_get_action (verb, NULL);
+    if (!action)
         return; 
-	
-	atitle = sp_action_get_title (action);
-	
-	s = g_stpcpy (c, atitle);
-	
-	g_free (atitle);
 
-	shortcut = sp_shortcut_get_primary (verb);
-	if (shortcut) {
-		s = g_stpcpy (s, " (");
-		sp_ui_shortcut_string (shortcut, key);
-		s = g_stpcpy (s, key);
-		s = g_stpcpy (s, ")");
-	}
+    atitle = sp_action_get_title (action);
+
+    s = g_stpcpy (c, atitle);
+
+    g_free (atitle);
+
+    shortcut = sp_shortcut_get_primary (verb);
+    if (shortcut) {
+        s = g_stpcpy (s, " (");
+        sp_ui_shortcut_string (shortcut, key);
+        s = g_stpcpy (s, key);
+        s = g_stpcpy (s, ")");
+    }
 }
+
+
+/**
+ * sp_ui_menu_append_item_from_verb
+ * 
+ * Appends a custom menu UI from a verb.
+ *
+ */
 
 static GtkWidget *
 sp_ui_menu_append_item_from_verb (GtkMenu *menu, sp_verb_t verb, SPView *view)
 {
-	SPAction *action;
-	GtkWidget *item, *icon;
+    SPAction *action;
+    GtkWidget *item, *icon;
 
-	if (verb == SP_VERB_NONE) {
-		item = gtk_separator_menu_item_new ();
-	} else {
-		unsigned int shortcut;
+    if (verb == SP_VERB_NONE) {
 
-		action = sp_verb_get_action (verb, view);
-		if (!action) return NULL;
+        item = gtk_separator_menu_item_new ();
 
-		shortcut = sp_shortcut_get_primary (verb);
-		if (shortcut) {
-			gchar c[256];
-			GtkWidget *hb, *l;
-			sp_ui_shortcut_string (shortcut, c);
-			hb = gtk_hbox_new (FALSE, 16);
-			l = gtk_label_new_with_mnemonic (action->name);
-			gtk_misc_set_alignment ((GtkMisc *) l, 0.0, 0.5);
-			gtk_box_pack_start ((GtkBox *) hb, l, TRUE, TRUE, 0);
-			l = gtk_label_new (c);
-			gtk_misc_set_alignment ((GtkMisc *) l, 1.0, 0.5);
-			gtk_box_pack_end ((GtkBox *) hb, l, FALSE, FALSE, 0);
-			gtk_widget_show_all (hb);
-			item = gtk_image_menu_item_new ();
-			gtk_container_add ((GtkContainer *) item, hb);
-		} else {
-			item = gtk_image_menu_item_new_with_mnemonic (action->name);
-		}
-		if (action->image) {
-			icon = sp_icon_new_scaled (16, action->image);
-			gtk_widget_show (icon);
-			gtk_image_menu_item_set_image ((GtkImageMenuItem *) item, icon);
-		}
-		gtk_widget_set_events (item, GDK_KEY_PRESS_MASK);
-		g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_ui_menu_activate), action);
-		g_signal_connect (G_OBJECT (item), "key_press_event", G_CALLBACK (sp_ui_menu_key_press), (void *) verb);
-	}
-	gtk_widget_show (item);
-	gtk_menu_append (GTK_MENU (menu), item);
+    } else {
+        unsigned int shortcut;
 
-	return item;
-}
+        action = sp_verb_get_action (verb, view);
+
+        if (!action) return NULL;
+
+        shortcut = sp_shortcut_get_primary (verb);
+        if (shortcut) {
+            gchar c[256];
+            GtkWidget *hb, *l;
+            sp_ui_shortcut_string (shortcut, c);
+            hb = gtk_hbox_new (FALSE, 16);
+            l = gtk_label_new_with_mnemonic (action->name);
+            gtk_misc_set_alignment ((GtkMisc *) l, 0.0, 0.5);
+            gtk_box_pack_start ((GtkBox *) hb, l, TRUE, TRUE, 0);
+            l = gtk_label_new (c);
+            gtk_misc_set_alignment ((GtkMisc *) l, 1.0, 0.5);
+            gtk_box_pack_end ((GtkBox *) hb, l, FALSE, FALSE, 0);
+            gtk_widget_show_all (hb);
+            item = gtk_image_menu_item_new ();
+            gtk_container_add ((GtkContainer *) item, hb);
+        } else {
+            item = gtk_image_menu_item_new_with_mnemonic (action->name);
+        }
+        if (action->image) {
+            icon = sp_icon_new_scaled (16, action->image);
+            gtk_widget_show (icon);
+            gtk_image_menu_item_set_image ((GtkImageMenuItem *) item, icon);
+        }
+        gtk_widget_set_events (item, GDK_KEY_PRESS_MASK);
+        g_signal_connect ( G_OBJECT (item), "activate", 
+                           G_CALLBACK (sp_ui_menu_activate), action );
+        g_signal_connect ( G_OBJECT (item), "key_press_event", 
+                           G_CALLBACK (sp_ui_menu_key_press), (void *) verb);
+    }
+
+    gtk_widget_show (item);
+    gtk_menu_append (GTK_MENU (menu), item);
+
+    return item;
+
+} // end of sp_ui_menu_append_item_from_verb
+
 
 
 static void
@@ -502,7 +543,9 @@ sp_ui_path_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
         SP_VERB_LAST
     };
     sp_ui_menu_append (menu, selection, view);
-    sp_ui_menu_append_item (menu, NULL, _("Cl_eanup"), G_CALLBACK (sp_edit_cleanup), NULL);
+    sp_ui_menu_append_item ( menu, NULL, _("Cl_eanup"), 
+                             G_CALLBACK (sp_edit_cleanup), NULL );
+
 }
 
 
