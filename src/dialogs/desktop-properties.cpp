@@ -11,30 +11,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <locale>
-#include <sstream>
-
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
+#include <locale>
+#include <sstream>
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-/*
-#include <gtk/gtknotebook.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtkcheckbutton.h>
-#include <gtk/gtkspinbutton.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkhseparator.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkframe.h>
-*/
 
 #include "macros.h"
 #include <glibmm/i18n.h>
