@@ -15,10 +15,26 @@ approx_equal(double const x, double const y)
     return fabs(x / y - 1) < 1e-15;
 }
 
+static double
+sp_units_get_points(double const x, SPUnit const &unit)
+{
+    SPUnit const &pt_unit = sp_unit_get_by_id(SP_UNIT_PT);
+    double const px = sp_units_get_pixels(x, unit);
+    return sp_pixels_get_units(px, pt_unit);
+}
+
+static double
+sp_points_get_units(double const pts, SPUnit const &unit)
+{
+    SPUnit const &pt_unit = sp_unit_get_by_id(SP_UNIT_PT);
+    double const px = sp_units_get_pixels(pts, pt_unit);
+    return sp_pixels_get_units(px, unit);
+}
+
 static bool
 test_conversions()
 {
-    utest_start("sp_units_get_points, sp_points_get_units");
+    utest_start("sp_units_get_pixels, sp_pixels_get_units");
 
     struct Case { double x; char const *abbr; double pts; } const tests[] = {
         { 1.0, "pt", 1.0 },
@@ -35,13 +51,13 @@ test_conversions()
         Case const &c = tests[i];
         SPUnit const &unit = *sp_unit_get_by_abbreviation(N_(c.abbr));
 
-        double const calc_pts = sp_units_get_points(c.x, &unit);
+        double const calc_pts = sp_units_get_points(c.x, unit);
         snprintf(name, sizeof(name), "%.1f %s -> %.1f pt", c.x, c.abbr, c.pts);
         UTEST_TEST(name) {
             UTEST_ASSERT(approx_equal(calc_pts, c.pts));
         }
 
-        double const calc_x = sp_points_get_units(c.pts, &unit);
+        double const calc_x = sp_points_get_units(c.pts, unit);
         snprintf(name, sizeof(name), "%.1f pt -> %.1f %s", c.pts, c.x, c.abbr);
         UTEST_TEST(name) {
             UTEST_ASSERT(approx_equal(calc_x, c.x));
