@@ -72,6 +72,14 @@ sp_unit_get_abbreviation(SPUnit const *unit)
     return unit->abbr;
 }
 
+gchar const *
+sp_unit_get_plural (SPUnit const *unit)
+{
+    g_return_val_if_fail(unit != NULL, NULL);
+
+    return unit->plural;
+}
+
 SPMetric
 sp_unit_get_metric(SPUnit const *unit)
 {
