@@ -789,15 +789,18 @@ sp_marker_preview_from_svg(gchar const *name,
     static unsigned int edoc = FALSE;
     /* Try to load from document */
     if (!edoc && !doc) {
-        if (g_file_test(INKSCAPE_MARKERSDIR "/markers.svg", G_FILE_TEST_IS_REGULAR)) {
-            doc = sp_document_new(INKSCAPE_MARKERSDIR "/markers.svg", FALSE, FALSE);
+        char *markers_file = g_build_filename(INKSCAPE_MARKERSDIR, "/markers.svg", NULL);
+        if (g_file_test(markers_file, G_FILE_TEST_IS_REGULAR)) {
+            doc = sp_document_new(markers_file, FALSE, FALSE);
         }
-        if ( !doc && g_file_test( INKSCAPE_MARKERSDIR "/markers.svg",
+        if ( !doc && g_file_test( markers_file,
                                   G_FILE_TEST_IS_REGULAR) )
         {
-            doc = sp_document_new( INKSCAPE_MARKERSDIR "/markers.svg",
+            doc = sp_document_new( markers_file,
                                    FALSE, FALSE );
         }
+        g_free(markers_file);
+        
         if (doc) {
             unsigned int visionkey;
             sp_document_ensure_up_to_date(doc);
@@ -910,15 +913,17 @@ sp_marker_load_from_svg(gchar const *name, SPDocument *current_doc)
     }
     /* Try to load from document */
     if (!edoc && !doc) {
-        if (g_file_test(INKSCAPE_MARKERSDIR "/markers.svg", G_FILE_TEST_IS_REGULAR)) {
-            doc = sp_document_new(INKSCAPE_MARKERSDIR "/markers.svg", FALSE, FALSE);
+        char *markers = g_build_filename(INKSCAPE_MARKERSDIR, "/markers.svg", NULL);
+        if (g_file_test(markers, G_FILE_TEST_IS_REGULAR)) {
+            doc = sp_document_new(markers, FALSE, FALSE);
         }
-        if ( !doc && g_file_test( INKSCAPE_MARKERSDIR "/markers.svg",
+        if ( !doc && g_file_test( markers,
                                   G_FILE_TEST_IS_REGULAR) )
         {
-            doc = sp_document_new( INKSCAPE_MARKERSDIR "/markers.svg",
+            doc = sp_document_new( markers,
                                    FALSE, FALSE );
         }
+        g_free(markers);
         if (doc) {
             sp_document_ensure_up_to_date(doc);
         } else {
@@ -952,15 +957,18 @@ sp_marker_defaultlist_from_svg(GtkWidget *m, SPDocument *current_doc)
 
     /* Try to load from document */
     if (!edoc && !doc) {
-        if (g_file_test(INKSCAPE_MARKERSDIR "/markers.svg", G_FILE_TEST_IS_REGULAR)) {
-            doc = sp_document_new(INKSCAPE_MARKERSDIR "/markers.svg", FALSE, FALSE);
+        char *marker = g_build_filename(INKSCAPE_MARKERSDIR, "/markers.svg", NULL);
+        if (g_file_test(marker, G_FILE_TEST_IS_REGULAR)) {
+            doc = sp_document_new(marker, FALSE, FALSE);
         }
-        if ( !doc && g_file_test( INKSCAPE_MARKERSDIR "/markers.svg",
+        if ( !doc && g_file_test( marker,
                                   G_FILE_TEST_IS_REGULAR) )
         {
-            doc = sp_document_new( INKSCAPE_MARKERSDIR "/markers.svg",
+            doc = sp_document_new( marker,
                                    FALSE, FALSE );
         }
+        g_free(marker);
+        
         if (doc) {
             sp_document_ensure_up_to_date(doc);
         } else {
@@ -1219,25 +1227,31 @@ sp_stroke_style_line_widget_new(void)
 
     tb = NULL;
 
+    char *path = g_build_filename(INKSCAPE_PIXMAPDIR, "/join_miter.xpm", NULL);
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_MITER,
-                                INKSCAPE_PIXMAPDIR "/join_miter.xpm",
-                                hb, spw, "join", "miter");
+                                path, hb, spw, "join", "miter");
+    g_free(path);
+
     // TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
     //  For an example, draw a triangle with a large stroke width and modify the
     //  "Join" option (in the Fill and Stroke dialog).
     gtk_tooltips_set_tip(tt, tb, _("Miter join"), NULL);
 
+    path = g_build_filename(INKSCAPE_PIXMAPDIR, "/join_round.xpm", NULL);
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_ROUND,
-                                INKSCAPE_PIXMAPDIR "/join_round.xpm",
-                                hb, spw, "join", "round");
+                                path, hb, spw, "join", "round");
+    g_free(path);
+
     // TRANSLATORS: Round join: joining lines with a rounded corner.
     //  For an example, draw a triangle with a large stroke width and modify the
     //  "Join" option (in the Fill and Stroke dialog).
     gtk_tooltips_set_tip(tt, tb, _("Round join"), NULL);
 
+    path = g_build_filename(INKSCAPE_PIXMAPDIR, "/join_bevel.xpm", NULL);
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_BEVEL,
-                                INKSCAPE_PIXMAPDIR "/join_bevel.xpm",
-                                hb, spw, "join", "bevel");
+                                path, hb, spw, "join", "bevel");
+    g_free(path);
+
     // TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
     //  For an example, draw a triangle with a large stroke width and modify the
     //  "Join" option (in the Fill and Stroke dialog).
@@ -1278,23 +1292,30 @@ sp_stroke_style_line_widget_new(void)
     hb = spw_hbox(t, 3, 1, i);
 
     tb = NULL;
+
+    path = g_build_filename(INKSCAPE_PIXMAPDIR, "/cap_butt.xpm", NULL);
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_BUTT,
-                                INKSCAPE_PIXMAPDIR "/cap_butt.xpm",
-                                hb, spw, "cap", "butt");
+                                path, hb, spw, "cap", "butt");
+    g_free(path);
+
     // TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
     //  of the line; the ends of the line are square
     gtk_tooltips_set_tip(tt, tb, _("Butt cap"), NULL);
 
+    path = g_build_filename(INKSCAPE_PIXMAPDIR, "/cap_round.xpm", NULL);
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_ROUND,
-                                INKSCAPE_PIXMAPDIR "/cap_round.xpm",
-                                hb, spw, "cap", "round");
+                                path, hb, spw, "cap", "round");
+    g_free(path);
+
     // TRANSLATORS: Round cap: the line shape extends beyond the end point of the
     //  line; the ends of the line are rounded
     gtk_tooltips_set_tip(tt, tb, _("Round cap"), NULL);
 
+    path = g_build_filename(INKSCAPE_PIXMAPDIR, "/cap_square.xpm", NULL);
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_SQUARE,
-                                INKSCAPE_PIXMAPDIR "/cap_square.xpm",
-                                hb, spw, "cap", "square");
+                                path, hb, spw, "cap", "square");
+    g_free(path);
+
     // TRANSLATORS: Square cap: the line shape extends beyond the end point of the
     //  line; the ends of the line are square
     gtk_tooltips_set_tip(tt, tb, _("Square cap"), NULL);
