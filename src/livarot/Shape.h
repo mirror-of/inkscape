@@ -344,7 +344,7 @@ public:
   bool Eulerian (bool directed);	// is the graph eulerian, considered directed if directed=true and
   // undirected if not?
   // nota: a polygon is always eulerian
-  void CalcBBox (void);		// calc bounding box and sets leftX,rightX,topY and bottomY to their values
+  void CalcBBox (bool strict_degree=false);		// calc bounding box and sets leftX,rightX,topY and bottomY to their values
 
   // debug function: plots the graph (mac only)
   void Plot (double ix, double iy, double ir, double mx, double my, bool doPoint,

@@ -2,6 +2,9 @@
 
 /*
  * layout routines for the typeset element
+ *
+ * public domain
+ *
  */
 
 #include <config.h>
@@ -44,25 +47,40 @@
 
 void   sp_typeset_rekplayout(SPTypeset *typeset);
 
+
+// breakpoints for the algo
 typedef struct one_break {
+  // this breakpoints comes after [start_ind .. end_ind] in the source text
   int          start_ind,end_ind;
+  // the box this breakpoint ends
   box_solution pos;
+  // whether the text in [start_ind .. end_ind] needs to be justified
   bool         no_justification;
 
+  // previous breakpoint
   int          prev;
+  // delta of score to the previous breakpoint
   double       score_to_prev;
 
+  // next breakpoint for index end_ind (linked list)
   int          next_for_ind;
 } one_break;
 
+
+// class to hold the breakpoints during the algorithm
+// breakpoints are not freed until the end of the algo
+// thus the linked lists of breakpoints for a given index don't need maintainance
 class break_holder {
 public:
+  // array of breakpoints
   int              nb_brk,max_brk;
   one_break*       brks;
 
+  // pot_first[i] is the first breakpoint for index i
   int              nb_pot;
   int*             pot_first;
 
+  // nb_potential is the max index (+1)
   break_holder(int nb_potential) {
     nb_brk=max_brk=0;
     brks=NULL;
@@ -75,10 +93,15 @@ public:
     if ( pot_first ) free(pot_first);
   };
 
+  // score of breakpoint of
   double           Score(int of);
+  // brekpoint ending the line before of
   int              PrevLine(int of);
+  // adds a breakpoint
   int              AddBrk(int st,int en,const box_solution &pos,int after,double delta,bool noJust);
 };
+
+
 double           break_holder::Score(int of)
 {
   double res=0;
@@ -150,6 +173,8 @@ int              break_holder::AddBrk(int st,int en,const box_solution &pos,int 
   }
 }
 
+
+// utility class to hold the breakpoints in need of consideration
 class pending_holder {
 public:
   typedef struct pooled {
@@ -226,7 +251,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
     typeset->theDst=nd;
     while ( l && l->data ) {
       shape_dest* theData=(shape_dest*)l->data;
-      if ( theData->theShape ) nd->AppendShape(theData->theShape);
+      if ( theData->theShape ) nd->AppendShape(theData->theShape,typeset->excluded);
       l=l->next;
     }
   } else if ( typeset->dstType == has_path_dest ) {
@@ -451,16 +476,19 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
                 if ( n_brk >= 0 ) {
                   double    a,d;
                   typeset->theSrc->InitialMetricsAt(brk_list->brks[cur_brk].end_ind+1,a,d);
-                  pen_list->AddPending(n_brk,a,d,true);
+                  pen_list->AddPending(n_brk,a,d,false);
                 }
               } else {
                 double   delta=0;
-                if ( sol[i].endOfParagraph == false ) {
+                if ( sol[i].endOfParagraph == false || sol[i].length > nLen) {
                   if ( sol[i].length > nLen ) {
                     delta=(sol[i].length/nLen)-1;
                   } else {
                     delta=(nLen/sol[i].length)-1;
                   }
+//                  printf("%i %i -> delta=%f\n",sol[i].start_ind,sol[i].end_ind,delta);
+                } else {
+//                  printf("%i %i  eo\n",sol[i].start_ind,sol[i].end_ind);
                 }
                 int n_brk=brk_list->AddBrk(sol[i].start_ind,sol[i].end_ind,cur_box,cur_brk,delta,false);
                 if ( n_brk >= 0 ) {
@@ -487,6 +515,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
             steps[0].start_ind=brk_list->brks[cur_brk].start_ind;
             steps[0].end_ind=brk_list->brks[cur_brk].end_ind;
             steps[0].no_justification=brk_list->brks[cur_brk].no_justification;
+            if ( steps[0].end_ind >= maxIndex-1 ) steps[0].no_justification=true;
             nb_step++;
           }
         }
@@ -528,16 +557,26 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
           spacing=0;
         }
         
+        if ( typeset->justify == false ) spacing=0;
+        double   delta_start=0;
+        if ( steps[i].no_justification || typeset->justify == false ) {
+          if ( typeset->centering == 1 ) {
+            delta_start=0.5*(steps[i].box.x_end-steps[i].box.x_start-used);
+          } else if ( typeset->centering == 2 ) {
+            delta_start=steps[i].box.x_end-steps[i].box.x_start-used;
+          }
+        }
+        
         if ( typeset->dstType == has_path_dest ) {
           dest_path_chunker* dpc=(dest_path_chunker*)typeset->theDst;
           if ( steps[i].box.frame_no >= 0 && steps[i].box.frame_no < dpc->nbPath ) {
-            path_to_SVG_context*  nCtx=new path_to_SVG_context(text_repr,dpc->paths[steps[i].box.frame_no].theP,dpc->paths[steps[i].box.frame_no].length);
+            path_to_SVG_context*  nCtx=new path_to_SVG_context(text_repr,dpc->paths[steps[i].box.frame_no].theP,dpc->paths[steps[i].box.frame_no].length,delta_start);
             nCtx->SetLetterSpacing(spacing);
             typeset->theSrc->GlyphsAndPositions(steps[i].start_ind,steps[i].end_ind,nCtx);
             delete nCtx;
           }
         } else {
-          box_to_SVG_context*  nCtx=new box_to_SVG_context(text_repr,steps[i].box.y,steps[i].box.x_start,steps[i].box.x_end);
+          box_to_SVG_context*  nCtx=new box_to_SVG_context(text_repr,steps[i].box.y,steps[i].box.x_start+delta_start,steps[i].box.x_end-delta_start);
           nCtx->SetLetterSpacing(spacing);
           typeset->theSrc->GlyphsAndPositions(steps[i].start_ind,steps[i].end_ind,nCtx);
           delete nCtx;

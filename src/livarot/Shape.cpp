@@ -2175,22 +2175,31 @@ Shape::Inverse (int b)
     }
 }
 void
-Shape::CalcBBox (void)
+Shape::CalcBBox (bool strict_degree)
 {
   if (nbPt <= 0)
-    {
-      leftX = rightX = topY = bottomY = 0;
-      return;
-    }
+  {
+    leftX = rightX = topY = bottomY = 0;
+    return;
+  }
   leftX = rightX = pts[0].x[0];
   topY = bottomY = pts[0].x[1];
-  for (int i = 1; i < nbPt; i++)
-    {
-      if (pts[i].x[0] < leftX) leftX = pts[i].x[0];
-      if (pts[i].x[0] > rightX) rightX = pts[i].x[0];
-      if (pts[i].x[1] < topY) topY = pts[i].x[1];
-      if (pts[i].x[1] > bottomY) bottomY = pts[i].x[1];
+  bool not_set=true;
+  for (int i = 0; i < nbPt; i++)
+  {
+    if ( strict_degree == false || pts[i].dI > 0 || pts[i].dO > 0 ) {
+      if ( not_set ) {
+        leftX = rightX = pts[i].x[0];
+        topY = bottomY = pts[i].x[1];
+        not_set=false;
+      } else {
+        if (  pts[i].x[0] < leftX) leftX = pts[i].x[0];
+        if (  pts[i].x[0] > rightX) rightX = pts[i].x[0];
+        if (  pts[i].x[1] < topY) topY = pts[i].x[1];
+        if (  pts[i].x[1] > bottomY) bottomY = pts[i].x[1];
+      }
     }
+  }
 }
 
 bool

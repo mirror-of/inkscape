@@ -1,7 +1,7 @@
 #define __sp_typeset_C__
 
 /*
- * SVG <g> implementation
+ * based on SVG <g> implementation
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -62,8 +62,10 @@ void   sp_typeset_relayout(SPTypeset *typeset);
 void   sp_typeset_rekplayout(SPTypeset *typeset);
 
 void   sp_typeset_ditch_dest(SPTypeset *typeset);
+void   sp_typeset_ditch_excl(SPTypeset *typeset);
 void   refresh_typeset_source(SPTypeset *typeset,shape_dest *nDst);
 void   refresh_typeset_source(SPTypeset *typeset,path_dest *nDst);
+
 
 static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
                                            const gchar * oldval,
@@ -156,12 +158,19 @@ sp_typeset_init (SPTypeset *object)
   typeset->dstType=has_no_dest;
   typeset->dstElems=NULL;
   
+  typeset->excluded=NULL;
+  typeset->exclElems=NULL;
+  
   typeset->layoutDirty=false;
   typeset->destDirty=false;
+  typeset->exclDirty=false;
   typeset->stdLayoutAlgo=false;
   
   typeset->theSrc=NULL;
   typeset->theDst=NULL;
+  
+  typeset->justify=true;
+  typeset->centering=0;
 }
 static void
 sp_typeset_release (SPObject *object)
@@ -173,6 +182,8 @@ sp_typeset_release (SPObject *object)
   typeset->srcType=has_no_src;
   if (typeset->srcText) free(typeset->srcText);
   sp_typeset_ditch_dest(typeset);
+  sp_typeset_ditch_excl(typeset);
+  if ( typeset->excluded ) delete typeset->excluded;
   if ( typeset->theSrc ) delete typeset->theSrc;
   if ( typeset->theDst ) delete typeset->theDst;
   
@@ -190,9 +201,11 @@ static void sp_typeset_build (SPObject *object, SPDocument * document, SPRepr * 
 	sp_object_read_attr (object, "inkscape:srcNoMarkup");
 	sp_object_read_attr (object, "inkscape:srcPango");
 	sp_object_read_attr (object, "inkscape:dstShape");
+	sp_object_read_attr (object, "inkscape:excludeShape");
 	sp_object_read_attr (object, "inkscape:dstPath");
 	sp_object_read_attr (object, "inkscape:dstBox");
 	sp_object_read_attr (object, "inkscape:dstColumn");
+	sp_object_read_attr (object, "inkscape:layoutOption");
 
 	if (((SPObjectClass *) (parent_class))->build)
 		(* ((SPObjectClass *) (parent_class))->build) (object, document, repr);
@@ -228,6 +241,45 @@ sp_typeset_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 
 	typeset = SP_TYPESET (object);
 
+  // refresh excluded
+  {
+    GSList* l=typeset->exclElems;
+    while ( l ) {
+      shape_dest* theData=(shape_dest*)l->data;
+      if ( theData->originalObj == NULL || typeset->exclDirty ) {
+        // need to resolve it
+        bool add_listener=(theData->originalObj == NULL);
+        refresh_typeset_source(typeset,theData);
+        if ( add_listener && theData->originalObj ) {
+          sp_repr_add_listener (theData->originalObj, &typeset_source_event_vector, typeset);
+        }
+      }
+      l=l->next;
+    }
+    typeset->exclDirty=false;
+    if ( typeset->exclElems == NULL ) {
+      if ( typeset->excluded ) delete typeset->excluded;
+      typeset->excluded=NULL;
+    } else {
+      if ( typeset->excluded == NULL ) typeset->excluded=new Shape;
+      typeset->excluded->Reset();
+      l=typeset->exclElems;
+      Shape* temp=new Shape;
+      while ( l ) {
+        shape_dest* theData=(shape_dest*)l->data;
+        if ( theData->theShape ) {
+          if ( typeset->excluded->nbPt <= 1 || typeset->excluded->nbAr <= 1 ) {
+            typeset->excluded->Copy(theData->theShape);
+          } else {
+            temp->Booleen(typeset->excluded,theData->theShape,bool_op_union);
+            Shape *swap=temp;temp=typeset->excluded;typeset->excluded=swap;
+          }
+        }
+        l=l->next;
+      }
+      delete temp;
+    }
+  }
   {
     if ( typeset->dstType == has_shape_dest ) {
       GSList* l=typeset->dstElems;
@@ -530,8 +582,95 @@ sp_typeset_set (SPObject *object, unsigned int key, const gchar *value)
         }
       }
       break;
+    case SP_ATTR_TEXT_EXCLUDE:
+      if ( value ) {
+        sp_typeset_ditch_excl(typeset);
+        printf("typeset %x: n excl dst= %s\n",(int)object,value);
+        char*  dup_value=strdup(value);
+        int pos=0,max=strlen(dup_value);
+        while ( pos < max ) {
+          while ( pos < max && dup_value[pos] != '#' ) {
+            pos++;
+          }
+          int spos=pos+1,epos=pos+1;
+          while ( epos < max ) {
+            char nc=dup_value[epos];
+            if ( ( nc >= '0' && nc <= '9' ) || ( nc >= 'a' && nc <= 'z' ) || ( nc >= 'A' && nc <= 'Z' ) || nc == '_' ) {
+            } else {
+              break;
+            }
+            epos++;
+          }
+          if ( epos <= max ) {
+            char savC=dup_value[epos];
+            dup_value[epos]=0;
+            shape_dest  *nSrc=(shape_dest*)malloc(sizeof(shape_dest));
+            nSrc->originalObj = NULL;
+            nSrc->originalID = strdup(dup_value+spos);
+            nSrc->windingRule=fill_nonZero;
+            nSrc->theShape=NULL;
+            nSrc->bbox=NR::Rect(NR::Point(0,0),NR::Point(0,0));
+            typeset->exclElems=g_slist_append(typeset->exclElems,nSrc);
+            typeset->layoutDirty=true;
+            typeset->exclDirty=true;
+            dup_value[epos]=savC;
+          }
+          pos=epos;
+        }
+        free(dup_value);
+      } else {
+        sp_typeset_ditch_excl(typeset);
+        if ( typeset->excluded ) delete typeset->excluded;
+        typeset->excluded=false;
+      }
+      break;
     case SP_ATTR_STYLE:
       typeset->layoutDirty=true;
+      break;
+    case SP_ATTR_LAYOUT_OPTIONS:
+    {
+      SPCSSAttr * opts=sp_repr_css_attr ((SP_OBJECT(typeset))->repr, "inkscape:layoutOptions");
+      {
+        const gchar * val=sp_repr_css_property (opts,"justification", NULL);
+        if ( val == NULL ) {
+          typeset->justify=true;
+        } else {
+          if ( strcmp(val,"0") == 0 || strcmp(val,"false") == 0 ) {
+            typeset->justify=false;
+          } else {
+            typeset->justify=true;
+          }
+        }
+      }
+      {
+        const gchar * val=sp_repr_css_property (opts,"alignment", NULL);
+        if ( val == NULL ) {
+          typeset->centering=0;
+        } else {
+          if ( strcmp(val,"left") == 0 ) {
+            typeset->centering=0;
+          } else if ( strcmp(val,"center") == 0 ) {
+            typeset->centering=1;
+          } else if ( strcmp(val,"right") == 0 ) {
+            typeset->centering=2;
+          }
+        }
+      }
+      {
+        const gchar * val=sp_repr_css_property (opts,"layoutAlgo", NULL);
+        if ( val == NULL ) {
+          typeset->stdLayoutAlgo=false;
+        } else {
+          if ( strcmp(val,"better") == 0 ) {
+            typeset->stdLayoutAlgo=false;
+          } else if ( strcmp(val,"simple") == 0 ) {
+            typeset->stdLayoutAlgo=true;
+          }
+        }
+      }
+      typeset->layoutDirty=true;
+      sp_repr_css_attr_unref (opts);
+    }
       break;
     default:
       if (((SPObjectClass *) parent_class)->set) {
@@ -542,6 +681,23 @@ sp_typeset_set (SPObject *object, unsigned int key, const gchar *value)
   if ( typeset->layoutDirty ) {
     sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
   }
+}
+void sp_typeset_ditch_excl(SPTypeset *typeset)
+{
+  GSList* l=typeset->exclElems;
+  while ( l ) {
+    shape_dest* cur=(shape_dest*)l->data;
+    if ( cur->theShape ) delete cur->theShape;
+    if ( cur->originalID ) free(cur->originalID);
+    if ( cur->originalObj ) sp_repr_remove_listener_by_data (cur->originalObj, typeset);
+    l=l->next;
+  }
+  while ( typeset->exclElems ) {
+    void* cur=(void*)typeset->exclElems->data;
+    typeset->exclElems=g_slist_remove(typeset->exclElems,cur);
+    free(cur);
+  }
+  typeset->layoutDirty=true;
 }
 void sp_typeset_ditch_dest(SPTypeset *typeset)
 {
@@ -594,6 +750,23 @@ static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
   if ( typeset == NULL || repr == NULL ) return;
   
   if ( strcmp(key,"point") != 0 && strcmp(key,"d") != 0 && strcmp(key,"transform") != 0 ) return;
+  
+  {
+    GSList *l=typeset->exclElems;
+    while ( l ) {
+      shape_dest *cur=(shape_dest*)(l->data);
+      if ( cur->originalObj == repr ) break;
+      l=l->next;
+    }
+    if ( l ) {
+      //      shape_dest *cur=(shape_dest*)(l->data);
+      typeset->exclDirty=true;
+      sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
+    } else {
+      // repr not used in this typeset
+      //      printf("not fount\n");
+    }
+  }
   
   if ( typeset->dstType == has_shape_dest ) {
     GSList *l=typeset->dstElems;
@@ -798,3 +971,4 @@ void   refresh_typeset_source(SPTypeset *typeset,path_dest *nDst)
 
   sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
 }
+

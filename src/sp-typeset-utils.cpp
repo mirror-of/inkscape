@@ -2,6 +2,9 @@
 
 /*
  * layout routines for the typeset element
+ *
+ * public domain
+ *
  */
 
 #include <config.h>
@@ -322,10 +325,23 @@ double         dest_shape_chunker::RemainingOnLine(box_solution& after)
   return left;
 }
 
-void                  dest_shape_chunker::AppendShape(Shape* iShape) {
-  iShape->CalcBBox();  // compute the bounding box
-  if ( iShape->rightX-iShape->leftX < 0.001 || iShape->bottomY-iShape->topY < 0.001 ) {
-    return;
+void                  dest_shape_chunker::AppendShape(Shape* iShape,Shape* iExcl) {
+  Shape* mCopy=NULL;
+  if ( iExcl && iExcl->nbAr > 1 ) {
+    mCopy=new Shape;
+    mCopy->Booleen(iShape,iExcl,bool_op_diff);
+    mCopy->CalcBBox(true);  // compute the bounding box
+    if ( mCopy->rightX-mCopy->leftX < 0.001 || mCopy->bottomY-mCopy->topY < 0.001 ) {
+      delete mCopy;
+      return;
+    }
+  } else {
+    iShape->CalcBBox(true);  // compute the bounding box
+    if ( iShape->rightX-iShape->leftX < 0.001 || iShape->bottomY-iShape->topY < 0.001 ) {
+      return;
+    }
+    mCopy=new Shape;
+    mCopy->Copy(iShape);
   }
   
   if ( nbShape >= maxShape ) {
@@ -333,10 +349,9 @@ void                  dest_shape_chunker::AppendShape(Shape* iShape) {
     shapes=(one_shape_elem*)realloc(shapes,maxShape*sizeof(one_shape_elem));
   }
   int nShape=nbShape++;
-  shapes[nShape].theS=new Shape();
-  shapes[nShape].theS->Copy(iShape);
+  shapes[nShape].theS=mCopy;
   shapes[nShape].theS->BeginRaster(shapes[nShape].curY,shapes[nShape].curPt,1.0);  // a bit of preparation
-  shapes[nShape].theS->CalcBBox();
+  shapes[nShape].theS->CalcBBox(true);
   shapes[nShape].l=shapes[nShape].theS->leftX;
   shapes[nShape].t=shapes[nShape].theS->topY;
   shapes[nShape].r=shapes[nShape].theS->rightX;
@@ -1329,11 +1344,12 @@ void            box_to_SVG_context::AddGlyph(int f_c,int l_c,const NR::Point &oa
 }
 
   
-path_to_SVG_context::path_to_SVG_context(SPRepr* in_repr,Path *iPath,double iLength):to_SVG_context(in_repr)
+path_to_SVG_context::path_to_SVG_context(SPRepr* in_repr,Path *iPath,double iLength,double iDelta):to_SVG_context(in_repr)
 {
   thePath=iPath;
   if ( thePath ) thePath->ConvertWithBackData(1.0);
   path_length=iLength;
+  path_delta=iDelta;
   
   cur_x=0;
   
@@ -1453,6 +1469,7 @@ void            path_to_SVG_context::AddGlyph(int f_c,int l_c,const NR::Point &o
   if ( st >= 0 ) at[0]+=((double)(f_c-st))*letter_spacing;
   int              nbp=0;
   double           mid_glyph=at[0]+0.5*advance;
+  mid_glyph+=path_delta;
   Path::cut_position*    cup=thePath->CurvilignToPosition(1,&mid_glyph,nbp);
   
   if ( cup ) {

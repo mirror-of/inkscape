@@ -2,6 +2,9 @@
 
 /*
  * layout routines for the typeset element
+ *
+ * public domain
+ *
  */
 
 #include <config.h>
@@ -69,7 +72,10 @@ void   sp_typeset_relayout(SPTypeset *typeset)
     typeset->theDst=nd;
     while ( l && l->data ) {
       shape_dest* theData=(shape_dest*)l->data;
-      if ( theData->theShape ) nd->AppendShape(theData->theShape);
+      if ( theData->theShape ) {
+        void   exclude_shape_from_dest(SPTypeset *typeset,Shape *canditate);
+        nd->AppendShape(theData->theShape,typeset->excluded);
+      }
       l=l->next;
     }
   } else if ( typeset->dstType == has_path_dest ) {
@@ -373,16 +379,26 @@ void   sp_typeset_relayout(SPTypeset *typeset)
           spacing=0;
         }
         
+        if ( typeset->justify == false ) spacing=0;
+        double   delta_start=0;
+        if ( steps[i].no_justification || typeset->justify == false ) {
+         if ( typeset->centering == 1 ) {
+            delta_start=0.5*(steps[i].box.x_end-steps[i].box.x_start-used);
+          } else if ( typeset->centering == 2 ) {
+            delta_start=steps[i].box.x_end-steps[i].box.x_start-used;
+          }
+        }
+        
         if ( typeset->dstType == has_path_dest ) {
           dest_path_chunker* dpc=(dest_path_chunker*)typeset->theDst;
           if ( steps[i].box.frame_no >= 0 && steps[i].box.frame_no < dpc->nbPath ) {
-            path_to_SVG_context*  nCtx=new path_to_SVG_context(text_repr,dpc->paths[steps[i].box.frame_no].theP,dpc->paths[steps[i].box.frame_no].length);
+            path_to_SVG_context*  nCtx=new path_to_SVG_context(text_repr,dpc->paths[steps[i].box.frame_no].theP,dpc->paths[steps[i].box.frame_no].length,delta_start);
             nCtx->SetLetterSpacing(spacing);
             typeset->theSrc->GlyphsAndPositions(steps[i].start_ind,steps[i].end_ind,nCtx);
             delete nCtx;
           }
         } else {
-          box_to_SVG_context*  nCtx=new box_to_SVG_context(text_repr,steps[i].box.y,steps[i].box.x_start,steps[i].box.x_end);
+          box_to_SVG_context*  nCtx=new box_to_SVG_context(text_repr,steps[i].box.y,steps[i].box.x_start+delta_start,steps[i].box.x_end-delta_start);
           nCtx->SetLetterSpacing(spacing);
           typeset->theSrc->GlyphsAndPositions(steps[i].start_ind,steps[i].end_ind,nCtx);
           delete nCtx;

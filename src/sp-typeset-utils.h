@@ -81,7 +81,7 @@ public:
   dest_shape_chunker(void);
   virtual ~dest_shape_chunker(void);
   
-	void                  AppendShape(Shape* iShape);
+	void                  AppendShape(Shape* iShape,Shape* iExcl=NULL);
 	void                  ComputeLine(float y,float a,float d,int shNo);
   
   virtual box_solution   VeryFirst(void);
@@ -218,6 +218,7 @@ class path_to_SVG_context : public to_SVG_context{
 public:
   Path*            thePath;
   double           path_length;
+  double           path_delta;
   
   double           cur_x;
   
@@ -230,7 +231,7 @@ public:
   SPCSSAttr        *style_repr;
   SPRepr           *span_repr;
   
-  path_to_SVG_context(SPRepr* in_repr,Path *iPath,double iLength);
+  path_to_SVG_context(SPRepr* in_repr,Path *iPath,double iLength,double iDelta);
   virtual ~path_to_SVG_context(void);
   
   virtual void            Finalize(void);
