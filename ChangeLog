@@ -14,6 +14,14 @@
 
 	* src/file.cpp src/main.cpp src/dialogs/export.cpp src/interface.cpp: use it
 
+2003-12-27  bulia byak <bulia@dr.com>
+
+	* src/draw-context.cpp: Added drag_tolerance to bezier tool, messages to statusbar 
+
+	* src/knot.cpp: Do not consume Esc when not escaping knot dragging 
+
+	* src/select-context.cpp: Enable dragging objects selected within group
+
 2003-12-27  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/helper/bezier-utils.cpp: Simplifications & documentation.
