@@ -38,11 +38,21 @@ Effect::check (void)
     return Extension::check();
 }
 
-GtkDialog *
-Effect::prefs (void)
+bool
+Effect::prefs (SPDocument * doc)
 {
-    _last_effect = this;
-    return imp->prefs_effect(this);
+    GtkDialog * dialog;
+
+    dialog = imp->prefs_effect(this);
+    if (dialog == NULL)
+        /* If there is no dialog, just say everything is okay */
+        return true;
+
+    gint response = gtk_dialog_run(dialog);
+    gtk_widget_destroy(GTK_WIDGET(dialog));
+    if (response == GTK_RESPONSE_OK)
+        return true;
+    return false;
 }
 
 void
@@ -77,6 +87,8 @@ Effect::EffectVerb::perform (SPAction *action, void * data, void *pdata)
     if (current_document == NULL) return;
 
     std::cout << "Executing: " << effect->get_name() << std::endl;
+    if (effect->prefs(current_document))
+        effect->effect(current_document);
 
     return;
 }

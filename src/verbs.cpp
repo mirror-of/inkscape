@@ -47,6 +47,8 @@
 #include "dialogs/layer-properties.h"
 #include "dialogs/clonetiler.h"
 
+#include "extension/effect.h"
+
 #include "tools-switch.h"
 #include "inkscape-private.h"
 #include "file.h"
@@ -1487,13 +1489,22 @@ EffectLastVerb::make_action (SPView * view)
 void
 EffectLastVerb::perform (SPAction *action, void * data, void *pdata)
 {
-#if 0
     /* These aren't used, but are here to remind people not to use
        the CURRENT_DOCUMENT macros unless they really have to. */
     SPView * current_view = sp_action_get_view(action);
     SPDocument * current_document = SP_VIEW_DOCUMENT(current_view);
-#endif
+    Inkscape::Extension::Effect * effect = Inkscape::Extension::Effect::get_last_effect();
+
+    if (effect == NULL) return;
+    if (current_document == NULL) return;
+
     switch ((long) data) {
+        case SP_VERB_EFFECT_LAST_PREF:
+            if (!effect->prefs(current_document))
+                return;
+        case SP_VERB_EFFECT_LAST:
+            effect->effect(current_document);
+            break;
         default:
             return;
     }

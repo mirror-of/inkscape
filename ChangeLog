@@ -1,5 +1,12 @@
 2004-12-24  Ted Gould  <ted@gould.cx>
 
+	* src/verbs.cpp, src/extension/effect.cpp, src/extension/effect.h:
+
+	Okay, now the effects menu really works!  Well, the implementation seems
+	to be broken, but the wrapper seems to be all working.
+
+2004-12-24  Ted Gould  <ted@gould.cx>
+
 	* src/interface.cpp, src/verbs.cpp, src/verbs.h, src/extension/effect.cpp,
 	src/extension/effect.h:
 
