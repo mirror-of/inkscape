@@ -72,7 +72,7 @@ struct _SPIString {
 	unsigned int set : 1;
 	unsigned int inherit : 1;
 	unsigned int data : 30;
-	unsigned char *value;
+	gchar *value;
 };
 
 enum {
@@ -221,8 +221,8 @@ void sp_style_read_from_object (SPStyle *style, SPObject *object);
 void sp_style_read_from_repr (SPStyle *style, SPRepr *repr);
 void sp_style_merge_from_parent (SPStyle *style, SPStyle *parent);
 
-unsigned char *sp_style_write_string (SPStyle *style);
-unsigned char *sp_style_write_difference (SPStyle *from, SPStyle *to);
+gchar *sp_style_write_string (SPStyle *style);
+gchar *sp_style_write_difference (SPStyle *from, SPStyle *to);
 
 void sp_style_set_fill_color_rgba (SPStyle *style, float r, float g, float b, float a, unsigned int fill_set, unsigned int opacity_set);
 void sp_style_set_fill_color_cmyka (SPStyle *style, float c, float m, float y, float k, float a, unsigned int fill_set, unsigned int opacity_set);

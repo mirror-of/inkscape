@@ -19,11 +19,11 @@
 #include "uri-references.h"
 
 SPObject *
-sp_uri_reference_resolve (SPDocument *document, const guchar *uri)
+sp_uri_reference_resolve (SPDocument *document, const gchar *uri)
 {
 	SPObject *ref;
-	const guchar *e;
-	guchar *id;
+	const gchar *e;
+	gchar *id;
 	gint len;
 
 	g_return_val_if_fail (document != NULL, NULL);
@@ -45,7 +45,7 @@ sp_uri_reference_resolve (SPDocument *document, const guchar *uri)
 	len = e - uri - 5;
 	if (len < 1) return NULL;
 
-	id = alloca (len + 1);
+	id = (gchar*)alloca (len + 1);
 	memcpy (id, uri + 5, len);
 	id[len] = '\0';
 

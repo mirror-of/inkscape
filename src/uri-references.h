@@ -16,6 +16,6 @@
 #include <glib.h>
 #include "forward.h"
 
-SPObject *sp_uri_reference_resolve (SPDocument *document, const guchar *uri);
+SPObject *sp_uri_reference_resolve (SPDocument *document, const gchar *uri);
 
 #endif

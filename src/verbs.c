@@ -415,10 +415,10 @@ static SPActionEventVector action_dialog_vector = {{NULL}, sp_verb_action_dialog
 
 typedef struct {
 	unsigned int code;
-	const unsigned char *id;
-	const unsigned char *name;
-	const unsigned char *tip;
-	const unsigned char *image;
+	const gchar *id;
+	const gchar *name;
+	const gchar *tip;
+	const gchar *image;
 } SPVerbActionDef;
 
 static const SPVerbActionDef props[] = {

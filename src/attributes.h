@@ -11,6 +11,7 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+#include <glib.h>
 
 unsigned int sp_attribute_lookup (const gchar *key);
 const unsigned char *sp_attribute_name (unsigned char id);

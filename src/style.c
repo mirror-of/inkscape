@@ -35,43 +35,43 @@ typedef struct _SPStyleEnum SPStyleEnum;
 
 static void sp_style_clear (SPStyle *style);
 
-static void sp_style_merge_from_style_string (SPStyle *style, const guchar *p);
-static void sp_style_merge_property (SPStyle *style, gint id, const guchar *val);
+static void sp_style_merge_from_style_string (SPStyle *style, const gchar *p);
+static void sp_style_merge_property (SPStyle *style, gint id, const gchar *val);
 
 static void sp_style_merge_ipaint (SPStyle *style, SPIPaint *paint, SPIPaint *parent);
-static void sp_style_read_dash (ArtVpathDash *dash, const guchar *str);
+static void sp_style_read_dash (ArtVpathDash *dash, const gchar *str);
 
 static SPTextStyle *sp_text_style_new (void);
 static void sp_text_style_clear (SPTextStyle *ts);
 static SPTextStyle *sp_text_style_unref (SPTextStyle *st);
 static SPTextStyle *sp_text_style_duplicate_unset (SPTextStyle *st);
-static guint sp_text_style_write (guchar *p, guint len, SPTextStyle *st);
+static guint sp_text_style_write (gchar *p, guint len, SPTextStyle *st);
 static void sp_style_privatize_text (SPStyle *style);
 
-static void sp_style_read_ifloat (SPIFloat *val, const guchar *str);
-static void sp_style_read_iscale24 (SPIScale24 *val, const guchar *str);
-static void sp_style_read_ienum (SPIEnum *val, const guchar *str, const SPStyleEnum *dict, unsigned int inherit);
-static void sp_style_read_istring (SPIString *val, const guchar *str);
-static void sp_style_read_ilength (SPILength *val, const guchar *str);
-static void sp_style_read_ipaint (SPIPaint *paint, const guchar *str, SPStyle *style, SPDocument *document);
-static void sp_style_read_ifontsize (SPIFontSize *val, const guchar *str);
+static void sp_style_read_ifloat (SPIFloat *val, const gchar *str);
+static void sp_style_read_iscale24 (SPIScale24 *val, const gchar *str);
+static void sp_style_read_ienum (SPIEnum *val, const gchar *str, const SPStyleEnum *dict, unsigned int inherit);
+static void sp_style_read_istring (SPIString *val, const gchar *str);
+static void sp_style_read_ilength (SPILength *val, const gchar *str);
+static void sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocument *document);
+static void sp_style_read_ifontsize (SPIFontSize *val, const gchar *str);
 
 #if 0
-static void sp_style_read_pfloat (SPIFloat *val, SPRepr *repr, const guchar *key);
+static void sp_style_read_pfloat (SPIFloat *val, SPRepr *repr, const gchar *key);
 #endif
-static void sp_style_read_penum (SPIEnum *val, SPRepr *repr, const guchar *key, const SPStyleEnum *dict, unsigned int inherit);
-static void sp_style_read_plength (SPILength *val, SPRepr *repr, const guchar *key);
-static void sp_style_read_pfontsize (SPIFontSize *val, SPRepr *repr, const guchar *key);
+static void sp_style_read_penum (SPIEnum *val, SPRepr *repr, const gchar *key, const SPStyleEnum *dict, unsigned int inherit);
+static void sp_style_read_plength (SPILength *val, SPRepr *repr, const gchar *key);
+static void sp_style_read_pfontsize (SPIFontSize *val, SPRepr *repr, const gchar *key);
 
-static gint sp_style_write_ifloat (guchar *p, gint len, const guchar *key, SPIFloat *val, SPIFloat *base, guint flags);
-static gint sp_style_write_iscale24 (guchar *p, gint len, const guchar *key, SPIScale24 *val, SPIScale24 *base, guint flags);
-static gint sp_style_write_ienum (guchar *p, gint len, const guchar *key, const SPStyleEnum *dict, SPIEnum *val, SPIEnum *base, guint flags);
-static gint sp_style_write_istring (guchar *p, gint len, const guchar *key, SPIString *val, SPIString *base, guint flags);
-static gint sp_style_write_ilength (guchar *p, gint len, const guchar *key, SPILength *val, SPILength *base, guint flags);
-static gint sp_style_write_ipaint (guchar *b, gint len, const guchar *key, SPIPaint *paint, SPIPaint *base, guint flags);
-static gint sp_style_write_ifontsize (guchar *p, gint len, const guchar *key, SPIFontSize *val, SPIFontSize *base, guint flags);
+static gint sp_style_write_ifloat (gchar *p, gint len, const gchar *key, SPIFloat *val, SPIFloat *base, guint flags);
+static gint sp_style_write_iscale24 (gchar *p, gint len, const gchar *key, SPIScale24 *val, SPIScale24 *base, guint flags);
+static gint sp_style_write_ienum (gchar *p, gint len, const gchar *key, const SPStyleEnum *dict, SPIEnum *val, SPIEnum *base, guint flags);
+static gint sp_style_write_istring (gchar *p, gint len, const gchar *key, SPIString *val, SPIString *base, guint flags);
+static gint sp_style_write_ilength (gchar *p, gint len, const gchar *key, SPILength *val, SPILength *base, guint flags);
+static gint sp_style_write_ipaint (gchar *b, gint len, const gchar *key, SPIPaint *paint, SPIPaint *base, guint flags);
+static gint sp_style_write_ifontsize (gchar *p, gint len, const gchar *key, SPIFontSize *val, SPIFontSize *base, guint flags);
 
-static SPColor *sp_style_read_color_cmyk (SPColor *color, const guchar *str);
+static SPColor *sp_style_read_color_cmyk (SPColor *color, const gchar *str);
 
 static void sp_style_paint_clear (SPStyle *style, SPIPaint *paint, unsigned int hunref, unsigned int unset);
 
@@ -88,7 +88,7 @@ static void sp_style_paint_clear (SPStyle *style, SPIPaint *paint, unsigned int 
 #define SPS_READ_PFONTSIZE_IF_UNSET(v,r,k) if (!(v)->set) {sp_style_read_pfontsize ((v), (r), (k));}
 
 struct _SPStyleEnum {
-	const guchar *key;
+	const gchar *key;
 	gint value;
 };
 
@@ -263,7 +263,7 @@ sp_style_unref (SPStyle *style)
 static void
 sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
 {
-	const guchar *val;
+	const gchar *val;
 
 	g_assert (style != NULL);
 	g_assert (repr != NULL);
@@ -432,7 +432,7 @@ sp_style_privatize_text (SPStyle *style)
 }
 
 static void
-sp_style_merge_property (SPStyle *style, gint id, const guchar *val)
+sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
 {
 	switch (id) {
 	/* CSS2 */
@@ -623,12 +623,12 @@ sp_style_merge_property (SPStyle *style, gint id, const guchar *val)
  */
 
 static void
-sp_style_merge_from_style_string (SPStyle *style, const guchar *p)
+sp_style_merge_from_style_string (SPStyle *style, const gchar *p)
 {
-	guchar c[BMAX];
+	gchar c[BMAX];
 
 	while (*p) {
-		const guchar *s, *e;
+		const gchar *s, *e;
 		gint len, idx;
 		while (!isalpha (*p)) {
 			if (!*p) return;
@@ -870,10 +870,10 @@ sp_style_merge_ipaint (SPStyle *style, SPIPaint *paint, SPIPaint *parent)
 
 /* fixme: Write real thing */
 
-guchar *
+gchar *
 sp_style_write_string (SPStyle *style)
 {
-	guchar c[BMAX], *p;
+	gchar c[BMAX], *p;
 
 	g_return_val_if_fail (style != NULL, NULL);
 
@@ -926,10 +926,10 @@ sp_style_write_string (SPStyle *style)
 
 #define STYLE_BUF_MAX
 
-guchar *
+gchar *
 sp_style_write_difference (SPStyle *from, SPStyle *to)
 {
-	guchar c[BMAX], *p;
+	gchar c[BMAX], *p;
 
 	g_return_val_if_fail (from != NULL, NULL);
 	g_return_val_if_fail (to != NULL, NULL);
@@ -1058,11 +1058,11 @@ sp_style_clear (SPStyle *style)
 }
 
 static void
-sp_style_read_dash (ArtVpathDash *dash, const guchar *str)
+sp_style_read_dash (ArtVpathDash *dash, const gchar *str)
 {
 	gint n_dash;
 	gdouble d[64];
-	guchar *e;
+	gchar *e;
 
 	n_dash = 0;
 	e = NULL;
@@ -1238,7 +1238,7 @@ sp_text_style_duplicate_unset (SPTextStyle *st)
 }
 
 static guint
-sp_text_style_write (guchar *p, guint len, SPTextStyle *st)
+sp_text_style_write (gchar *p, guint len, SPTextStyle *st)
 {
 	gint d;
 
@@ -1252,7 +1252,7 @@ sp_text_style_write (guchar *p, guint len, SPTextStyle *st)
 }
 
 static void
-sp_style_read_ifloat (SPIFloat *val, const guchar *str)
+sp_style_read_ifloat (SPIFloat *val, const gchar *str)
 {
 	if (!strcmp (str, "inherit")) {
 		val->set = TRUE;
@@ -1268,7 +1268,7 @@ sp_style_read_ifloat (SPIFloat *val, const guchar *str)
 }
 
 static void
-sp_style_read_iscale24 (SPIScale24 *val, const guchar *str)
+sp_style_read_iscale24 (SPIScale24 *val, const gchar *str)
 {
 	if (!strcmp (str, "inherit")) {
 		val->set = TRUE;
@@ -1285,7 +1285,7 @@ sp_style_read_iscale24 (SPIScale24 *val, const guchar *str)
 }
 
 static void
-sp_style_read_ienum (SPIEnum *val, const guchar *str, const SPStyleEnum *dict, unsigned int inherit)
+sp_style_read_ienum (SPIEnum *val, const gchar *str, const SPStyleEnum *dict, unsigned int inherit)
 {
 	if (inherit && !strcmp (str, "inherit")) {
 		val->set = TRUE;
@@ -1306,7 +1306,7 @@ sp_style_read_ienum (SPIEnum *val, const guchar *str, const SPStyleEnum *dict, u
 }
 
 static void
-sp_style_read_istring (SPIString *val, const guchar *str)
+sp_style_read_istring (SPIString *val, const gchar *str)
 {
 	if (val->value) g_free (val->value);
 
@@ -1322,7 +1322,7 @@ sp_style_read_istring (SPIString *val, const guchar *str)
 }
 
 static void
-sp_style_read_ilength (SPILength *val, const guchar *str)
+sp_style_read_ilength (SPILength *val, const gchar *str)
 {
 	if (!strcmp (str, "inherit")) {
 		val->set = TRUE;
@@ -1332,7 +1332,7 @@ sp_style_read_ilength (SPILength *val, const guchar *str)
 		gchar *e;
 		/* fixme: Move this to standard place (Lauris) */
 		value = strtod (str, &e);
-		if ((const guchar *) e != str) {
+		if ((const gchar *) e != str) {
 			if (!*e) {
 				/* Userspace */
 				val->unit = SP_CSS_UNIT_NONE;
@@ -1385,7 +1385,7 @@ sp_style_read_ilength (SPILength *val, const guchar *str)
 }
 
 static void
-sp_style_read_ipaint (SPIPaint *paint, const guchar *str, SPStyle *style, SPDocument *document)
+sp_style_read_ipaint (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocument *document)
 {
 	if (!strcmp (str, "inherit")) {
 		paint->set = TRUE;
@@ -1431,7 +1431,7 @@ sp_style_read_ipaint (SPIPaint *paint, const guchar *str, SPStyle *style, SPDocu
 }
 
 static void
-sp_style_read_ifontsize (SPIFontSize *val, const guchar *str)
+sp_style_read_ifontsize (SPIFontSize *val, const gchar *str)
 {
 	if (!strcmp (str, "inherit")) {
 		val->set = TRUE;
@@ -1454,7 +1454,7 @@ sp_style_read_ifontsize (SPIFontSize *val, const guchar *str)
 		gchar *e;
 		/* fixme: Move this to standard place (Lauris) */
 		value = strtod (str, &e);
-		if ((const guchar *) e != str) {
+		if ((const gchar *) e != str) {
 			if (!*e) {
 				/* Userspace */
 			} else if (!strcmp (e, "px")) {
@@ -1497,9 +1497,9 @@ sp_style_read_ifontsize (SPIFontSize *val, const guchar *str)
 
 #if 0
 static void
-sp_style_read_pfloat (SPIFloat *val, SPRepr *repr, const guchar *key)
+sp_style_read_pfloat (SPIFloat *val, SPRepr *repr, const gchar *key)
 {
-	const guchar *str;
+	const gchar *str;
 	str = sp_repr_attr (repr, key);
 	if (str) {
 		sp_style_read_ifloat (val, str);
@@ -1508,9 +1508,9 @@ sp_style_read_pfloat (SPIFloat *val, SPRepr *repr, const guchar *key)
 #endif
 
 static void
-sp_style_read_penum (SPIEnum *val, SPRepr *repr, const guchar *key, const SPStyleEnum *dict, unsigned int inherit)
+sp_style_read_penum (SPIEnum *val, SPRepr *repr, const gchar *key, const SPStyleEnum *dict, unsigned int inherit)
 {
-	const guchar *str;
+	const gchar *str;
 	str = sp_repr_attr (repr, key);
 	if (str) {
 		sp_style_read_ienum (val, str, dict, inherit);
@@ -1518,9 +1518,9 @@ sp_style_read_penum (SPIEnum *val, SPRepr *repr, const guchar *key, const SPStyl
 }
 
 static void
-sp_style_read_plength (SPILength *val, SPRepr *repr, const guchar *key)
+sp_style_read_plength (SPILength *val, SPRepr *repr, const gchar *key)
 {
-	const guchar *str;
+	const gchar *str;
 	str = sp_repr_attr (repr, key);
 	if (str) {
 		sp_style_read_ilength (val, str);
@@ -1528,9 +1528,9 @@ sp_style_read_plength (SPILength *val, SPRepr *repr, const guchar *key)
 }
 
 static void
-sp_style_read_pfontsize (SPIFontSize *val, SPRepr *repr, const guchar *key)
+sp_style_read_pfontsize (SPIFontSize *val, SPRepr *repr, const gchar *key)
 {
-	const guchar *str;
+	const gchar *str;
 	str = sp_repr_attr (repr, key);
 	if (str) {
 		sp_style_read_ifontsize (val, str);
@@ -1538,7 +1538,7 @@ sp_style_read_pfontsize (SPIFontSize *val, SPRepr *repr, const guchar *key)
 }
 
 static gint
-sp_style_write_ifloat (guchar *p, gint len, const guchar *key, SPIFloat *val, SPIFloat *base, guint flags)
+sp_style_write_ifloat (gchar *p, gint len, const gchar *key, SPIFloat *val, SPIFloat *base, guint flags)
 {
 	if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
 	    ((flags & SP_STYLE_FLAG_IFDIFF) && (val->value != base->value))) {
@@ -1552,7 +1552,7 @@ sp_style_write_ifloat (guchar *p, gint len, const guchar *key, SPIFloat *val, SP
 }
 
 static gint
-sp_style_write_iscale24 (guchar *p, gint len, const guchar *key, SPIScale24 *val, SPIScale24 *base, guint flags)
+sp_style_write_iscale24 (gchar *p, gint len, const gchar *key, SPIScale24 *val, SPIScale24 *base, guint flags)
 {
 	if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
 	    ((flags & SP_STYLE_FLAG_IFDIFF) && (val->value != base->value))) {
@@ -1566,7 +1566,7 @@ sp_style_write_iscale24 (guchar *p, gint len, const guchar *key, SPIScale24 *val
 }
 
 static gint
-sp_style_write_ienum (guchar *p, gint len, const guchar *key, const SPStyleEnum *dict, SPIEnum *val, SPIEnum *base, guint flags)
+sp_style_write_ienum (gchar *p, gint len, const gchar *key, const SPStyleEnum *dict, SPIEnum *val, SPIEnum *base, guint flags)
 {
 	if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
 	    ((flags & SP_STYLE_FLAG_IFDIFF) && (val->computed != base->computed))) {
@@ -1581,7 +1581,7 @@ sp_style_write_ienum (guchar *p, gint len, const guchar *key, const SPStyleEnum 
 }
 
 static gint
-sp_style_write_istring (guchar *p, gint len, const guchar *key, SPIString *val, SPIString *base, guint flags)
+sp_style_write_istring (gchar *p, gint len, const gchar *key, SPIString *val, SPIString *base, guint flags)
 {
 	if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
 	    ((flags & SP_STYLE_FLAG_IFDIFF) && strcmp (val->value, base->value))) {
@@ -1610,7 +1610,7 @@ sp_length_differ (SPILength *a, SPILength *b)
 }
 
 static gint
-sp_style_write_ilength (guchar *p, gint len, const guchar *key, SPILength *val, SPILength *base, guint flags)
+sp_style_write_ilength (gchar *p, gint len, const gchar *key, SPILength *val, SPILength *base, guint flags)
 {
 	if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
 	    ((flags & SP_STYLE_FLAG_IFDIFF) && sp_length_differ (val, base))) {
@@ -1667,7 +1667,7 @@ sp_paint_differ (SPIPaint *a, SPIPaint *b)
 }
 
 static gint
-sp_style_write_ipaint (guchar *b, gint len, const guchar *key, SPIPaint *paint, SPIPaint *base, guint flags)
+sp_style_write_ipaint (gchar *b, gint len, const gchar *key, SPIPaint *paint, SPIPaint *base, guint flags)
 {
 	unsigned int set;
 
@@ -1708,7 +1708,7 @@ sp_fontsize_differ (SPIFontSize *a, SPIFontSize *b)
 }
 
 static gint
-sp_style_write_ifontsize (guchar *p, gint len, const guchar *key, SPIFontSize *val, SPIFontSize *base, guint flags)
+sp_style_write_ifontsize (gchar *p, gint len, const gchar *key, SPIFontSize *val, SPIFontSize *base, guint flags)
 {
 	if (((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
 	    ((flags & SP_STYLE_FLAG_IFDIFF) && sp_fontsize_differ (val, base))) {
@@ -1735,7 +1735,7 @@ sp_style_write_ifontsize (guchar *p, gint len, const guchar *key, SPIFontSize *v
  */
 
 static SPColor *
-sp_style_read_color_cmyk (SPColor *color, const guchar *str)
+sp_style_read_color_cmyk (SPColor *color, const gchar *str)
 {
 	gdouble c, m, y, k;
 	gchar *cptr, *eptr;
