@@ -103,7 +103,7 @@ void          flow_eater::StartLetter(text_style* g_style,double k_x,double k_y,
 	}
 	letter_length=k_x;
 	if ( the_flow ) {
-		the_flow->StartLetter(g_style,word_rtl,k_x,k_y,px+letter_length,line_st_y+k_y,0,n_letter,utf8_offset);
+		the_flow->StartLetter(g_style, word_rtl, k_x, k_y, px+letter_length, line_st_y+k_y, 0, n_letter, utf8_offset);
 	}
 }
 void          flow_eater::Eat(int g_id,double g_x,double g_y,double g_w,char* iText,int iLen)
@@ -196,11 +196,6 @@ flow_res*          flow_maker::TextWork(void)
 		st_req.min_elem_no=st_req.min_elem_pos=-1;
 		st_req.ascent=st_req.descent=st_req.leading=0;
 		f_src->MetricsAt(0,0,st_req.ascent,st_req.descent,st_req.leading,st_req.rtl);
-		if ( fabs(st_req.ascent+st_req.descent) < 0.01 ) {
-			delete sols;
-			delete f_res;
-			return NULL;
-		}
 		int   st_brk=AddBrk(st_box,0,0);
 		brks[st_brk].rtl=st_req.rtl;
 		brks[st_brk].para_end=true;
@@ -385,7 +380,7 @@ flow_res*          flow_maker::TextWork(void)
 			if ( baby->the_flow ) baby->the_flow->SetSourcePos(line_mommy->utf8_length);
 			baby->StartLetter(NULL,0.0,0.0,0);
 			//baby->the_flow->AddText("\n",1);
-		}
+		} 
 	}
 	
 	delete baby;
