@@ -525,10 +525,9 @@ sp_document_default_gradient_vector (SPDocument *document, guint32 color)
 
 	SPRepr *repr = sp_repr_new ("linearGradient");
 
-	//sp_repr_set_attr(repr, "inkscape:collect", "always"); 
-      // perhaps we should set it here but remove when it's edited in the gradient editor
-	// however this breaks the list of dialogs in fill&stroke which crashes when a gradient vector is deleted from under it
-	// alternatively, to reduce clutter, we could 
+	sp_repr_set_attr(repr, "inkscape:collect", "always"); 
+      // set here, but removed when it's edited in the gradient editor
+	// to further reduce clutter, we could 
 	// (1) here, search gradients by color and return what is found without duplication
 	// (2) in fill & stroke, show only one copy of each gradient in list
 
