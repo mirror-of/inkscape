@@ -76,7 +76,7 @@ public:
     typedef enum {
         STATE_LOADED,      /**< The extension has been loaded successfully */
         STATE_UNLOADED,    /**< The extension has not been loaded */
-        STATE_DEACTIVATED, /**< The extension is missing something which makes it unusable */
+        STATE_DEACTIVATED  /**< The extension is missing something which makes it unusable */
     } state_t;
 
 private:
@@ -109,42 +109,11 @@ public:
 
 
 /* Parameter Stuff */
-    /* This is what allows modules to save values that are persistent
-       through a reset and while running.  These values should be created
-       when the extension is initialized, but will pull from previously
-       set values if they are available.
-     */
 private:
     GSList * parameters; /**< A table to store the parameters for this extension.
                               This only gets created if there are parameters in this
                               extension */
-    /** This is an enum to define the parameter type */
-    enum param_type_t {
-        PARAM_BOOL,   /**< Boolean parameter */
-        PARAM_INT,    /**< Integer parameter */
-        PARAM_FLOAT,  /**< Float parameter */
-        PARAM_STRING, /**< String parameter */
-        PARAM_CNT     /**< How many types are there? */
-    };
-    /** A union to select between the types of parameters.  They will
-        probbably all fit within a pointer of various systems, but making
-        them a union ensures this */
-    union param_switch_t {
-        bool t_bool;      /**< To get a boolean use this */
-        int  t_int;       /**< If you want an integer this is your variable */
-        float t_float;    /**< This guy stores the floating point numbers */
-        gchar * t_string; /**< Strings are here */
-    };
-    /** The class that actually stores the value and type of the
-        variable.  It should really take up a very small space.  It's
-        important to note that the name is stored as the key to the
-        hash table. */
-    class param_t {
-    public:
-        gchar * name;        /**< The name of this parameter */
-        param_type_t type;   /**< What type of variable */
-        param_switch_t val;  /**< Here is the actual value */
-    };
+
 public:
     class param_wrong_type {}; /**< An error class for when a parameter is
                                     called on a type it is not */
@@ -155,8 +124,10 @@ public:
                                     want to overwrite it */
 private:
     void             make_param       (Inkscape::XML::Node * paramrepr);
+#if 0
     inline param_t * param_shared     (const gchar * name,
                                        GSList * list);
+#endif
 public:
     bool             get_param_bool   (const gchar * name,
                                        const Inkscape::XML::Document *   doc = NULL);

@@ -17,6 +17,8 @@ extension_libextension_a_SOURCES =	\
 	extension/error-file.h \
 	extension/init.cpp	\
 	extension/init.h	\
+	extension/parameter.h \
+	extension/parameter.cpp \
 	extension/prefdialog.cpp \
 	extension/prefdialog.h \
 	extension/system.cpp	\
