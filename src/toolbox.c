@@ -104,27 +104,36 @@ static guint ntoolbox_drop_target_entries = ENTRIES_SIZE(toolbox_drop_target_ent
 static void sp_maintoolbox_open_files(gchar * buffer);
 static void sp_maintoolbox_open_one_file_with_check(gpointer filename, gpointer unused);
 
+static GtkWidget *window = NULL;
+
 static void
 sp_maintoolbox_destroy (GtkObject *object, gpointer data)
 {
-	sp_signal_disconnect_by_data (inkscape, object);
-	inkscape_unref ();
+	sp_signal_disconnect_by_data (INKSCAPE, window);
+	window = NULL;
 }
 
 void
 sp_maintoolbox_create_toplevel (void)
 {
-	GtkWidget *window, *toolbox;
+	GtkWidget *toolbox;
 
-	/* Create window */
-	window = sp_window_new (_("Inkscape"), FALSE);
-	g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), window);
+	if (!window) {
+		/* Create window */
+		window = sp_window_new (_("Inkscape"), FALSE);
+		sp_transientize (window);
+		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), window);
+		gtk_signal_connect (GTK_OBJECT (window), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), window);
+		gtk_signal_connect (GTK_OBJECT (window), "destroy", GTK_SIGNAL_FUNC (sp_maintoolbox_destroy), window);
 
-	toolbox = sp_maintoolbox_new ();
-	gtk_widget_show (toolbox);
-	gtk_container_add (GTK_CONTAINER (window), toolbox);
+		toolbox = sp_maintoolbox_new ();
+		gtk_widget_show (toolbox);
+		gtk_container_add (GTK_CONTAINER (window), toolbox);
 
-	gtk_widget_show (window);
+		gtk_widget_show (window);
+	} else {
+		gtk_window_present (GTK_WINDOW (window));
+	}
 };
 
 GtkWidget *
