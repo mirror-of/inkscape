@@ -10,6 +10,8 @@
  * This code is in public domain
  */
 
+#include <libnr/nr-forward.h>
+
 typedef struct _NRVPath NRVPath;
 typedef struct _NRBPath NRBPath;
 
@@ -22,8 +24,6 @@ enum {
 	NR_WIND_RULE_NONZERO,
 	NR_WIND_RULE_EVENODD
 };
-
-#include <libnr/nr-types.h>
 
 #include <libart_lgpl/art_vpath.h>
 #include <libart_lgpl/art_bpath.h>

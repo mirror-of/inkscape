@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include <glib.h>
-#include <libnr/nr-types.h>
+#include <libnr/nr-forward.h>
 #include <svg/svg-types.h>
 
 

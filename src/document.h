@@ -13,13 +13,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <libnr/nr-types.h>
 #include <glib-object.h>
 #include <glib.h>
 #include <gtk/gtksignal.h>
 #include <sigc++/sigc++.h>
 #include "xml/repr.h"
 #include "forward.h"
+#include "libnr/nr-forward.h"
 
 typedef struct _SPDocumentPrivate SPDocumentPrivate;
 

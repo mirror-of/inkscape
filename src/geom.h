@@ -10,7 +10,7 @@
  *
  */
 
-#include "libnr/nr-types.h"
+#include "libnr/nr-forward.h"
 
 typedef enum sp_intersector_kind{
 	intersects = 0,

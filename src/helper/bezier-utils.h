@@ -16,7 +16,7 @@
  * Released under GNU GPL
  */
 
-#include <libnr/nr-types.h>
+#include <libnr/nr-forward.h>
 #include <glib.h>
 
 /* Bezier approximation utils */

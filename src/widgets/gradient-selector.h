@@ -26,7 +26,7 @@ typedef struct _SPGradientSelectorClass SPGradientSelectorClass;
 #define SP_IS_GRADIENT_SELECTOR(o) (GTK_CHECK_TYPE ((o), SP_TYPE_GRADIENT_SELECTOR))
 #define SP_IS_GRADIENT_SELECTOR_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_GRADIENT_SELECTOR))
 
-#include <libnr/nr-types.h>
+#include <libnr/nr-forward.h>
 #include <gtk/gtkvbox.h>
 #include "../forward.h"
 
