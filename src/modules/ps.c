@@ -64,11 +64,11 @@ static unsigned int sp_module_print_plain_fill (SPModulePrint *mod, const NRBPat
 						const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox);
 static unsigned int sp_module_print_plain_stroke (SPModulePrint *mod, const NRBPath *bpath, const NRMatrixF *ctm, const SPStyle *style,
 						  const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox);
-static unsigned int sp_module_print_plain_image (SPModulePrint *mod, gchar *px, unsigned int w, unsigned int h, unsigned int rs,
+static unsigned int sp_module_print_plain_image (SPModulePrint *mod, guchar *px, unsigned int w, unsigned int h, unsigned int rs,
 						 const NRMatrixF *transform, const SPStyle *style);
 
 static void sp_print_bpath (FILE *stream, const ArtBpath *bp);
-static unsigned int sp_ps_print_image (FILE *ofp, gchar *px, unsigned int width, unsigned int height, unsigned int rs,
+static unsigned int sp_ps_print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
 				       const NRMatrixF *transform);
 
 static SPModulePrintClass *print_plain_parent_class;
@@ -330,7 +330,7 @@ sp_module_print_plain_finish (SPModulePrint *mod)
 		int width, height;
 		float scale;
 		NRMatrixF affine;
-		gchar *px;
+		guchar *px;
 		int y;
 
 		scale = pmod->dpi / 72.0;
@@ -352,7 +352,7 @@ sp_module_print_plain_finish (SPModulePrint *mod)
 
 		nr_arena_item_set_transform (mod->root, &affine);
 
-		px = nr_new (gchar, 4 * width * 64);
+		px = nr_new (guchar, 4 * width * 64);
 
 		for (y = 0; y < height; y += 64) {
 			NRRectL bbox;
@@ -368,10 +368,10 @@ sp_module_print_plain_finish (SPModulePrint *mod)
 			nr_matrix_d_set_identity (&gc.transform);
 			nr_arena_item_invoke_update (mod->root, &bbox, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
 			/* Render */
-			/* This should take gchar* instead of unsigned char*) */
+			/* This should take guchar* instead of unsigned char*) */
 			nr_pixblock_setup_extern (&pb, NR_PIXBLOCK_MODE_R8G8B8A8N,
 						  bbox.x0, bbox.y0, bbox.x1, bbox.y1,
-						  (unsigned char*)px, 4 * width, FALSE, FALSE);
+						  (guchar*)px, 4 * width, FALSE, FALSE);
 			memset (px, 0xff, 4 * width * 64);
 			nr_arena_item_invoke_render (mod->root, &bbox, &pb, 0);
 			/* Blitter goes here */
@@ -494,7 +494,7 @@ sp_module_print_plain_stroke (SPModulePrint *mod, const NRBPath *bpath, const NR
 }
 
 static unsigned int
-sp_module_print_plain_image (SPModulePrint *mod, gchar *px, unsigned int w, unsigned int h, unsigned int rs,
+sp_module_print_plain_image (SPModulePrint *mod, guchar *px, unsigned int w, unsigned int h, unsigned int rs,
 			     const NRMatrixF *transform, const SPStyle *style)
 {
 	SPModulePrintPlain *pmod;
@@ -520,7 +520,7 @@ sp_module_print_plain_image (SPModulePrint *mod, gchar *px, unsigned int w, unsi
 	fprintf (pmod->stream, "false 3 colorimage\n");
 
 	for (r = 0; r < h; r++) {
-		gchar *s;
+		guchar *s;
 		int c0, c1, c;
 		s = px + r * rs;
 		for (c0 = 0; c0 < w; c0 += 24) {
@@ -590,15 +590,15 @@ sp_print_bpath (FILE *stream, const ArtBpath *bp)
 
 static void
 compress_packbits (int nin,
-                   gchar *src,
+                   guchar *src,
                    int *nout,
-                   gchar *dst)
+                   guchar *dst)
 
 {register gchar c;
  int nrepeat, nliteral;
- gchar *run_start;
- gchar *start_dst = dst;
- gchar *last_literal = NULL;
+ guchar *run_start;
+ guchar *start_dst = dst;
+ guchar *last_literal = NULL;
 
  for (;;)
  {
@@ -632,7 +632,7 @@ compress_packbits (int nin,
      }
 
      /* Add repeat run */
-     *(dst++) = (gchar)((-nrepeat) & 0xff);
+     *(dst++) = (guchar)((-nrepeat) & 0xff);
      *(dst++) = c;
      last_literal = NULL;
      continue;
@@ -663,7 +663,7 @@ compress_packbits (int nin,
    else
    {
      last_literal = dst;
-     *(dst++) = (gchar)(nliteral-1);
+     *(dst++) = (guchar)(nliteral-1);
    }
    while (nliteral-- > 0) *(dst++) = *(run_start++);
  }
@@ -761,12 +761,12 @@ ascii85_done (FILE *ofp)
 }
 
 static unsigned int
-sp_ps_print_image (FILE *ofp, gchar *px, unsigned int width, unsigned int height, unsigned int rs,
+sp_ps_print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
 		   const NRMatrixF *transform)
 {
 	int i, j;
 	/* gchar *data, *src; */
-	gchar *packb = NULL, *plane = NULL;
+	guchar *packb = NULL, *plane = NULL;
 
 	fprintf (ofp, "gsave\n");
 	fprintf (ofp, "[%g %g %g %g %g %g] concat\n",
@@ -789,8 +789,8 @@ sp_ps_print_image (FILE *ofp, gchar *px, unsigned int width, unsigned int height
 	fprintf (ofp, "true 3\n");
 
 	/* Allocate buffer for packbits data. Worst case: Less than 1% increase */
-	packb = (gchar *)g_malloc ((width * 105)/100+2);
-	plane = (gchar *)g_malloc (width);
+	packb = (guchar *)g_malloc ((width * 105)/100+2);
+	plane = (guchar *)g_malloc (width);
 
 	/* ps_begin_data (ofp); */
 	fprintf (ofp, "colorimage\n");
@@ -803,9 +803,9 @@ sp_ps_print_image (FILE *ofp, gchar *px, unsigned int width, unsigned int height
 
 	for (i = 0; i < height; i++) {
 		/* if ((i % tile_height) == 0) GET_RGB_TILE (data); */ /* Get more data */
-		gchar *plane_ptr, *src_ptr;
+		guchar *plane_ptr, *src_ptr;
 		int rgb, nout;
-		gchar *src;
+		guchar *src;
 
 		src = px + i * rs;
 
@@ -819,7 +819,7 @@ sp_ps_print_image (FILE *ofp, gchar *px, unsigned int width, unsigned int height
 			}
 			compress_packbits (width, plane, &nout, packb);
 			ascii85_init ();
-			ascii85_nout (nout, packb, ofp);
+			ascii85_nout (nout, (gchar*)packb, ofp);
 			ascii85_out (128, ofp); /* Write EOD of RunLengthDecode filter */
 			ascii85_done (ofp);
 		}
