@@ -143,20 +143,10 @@ svg_save (SPModule *mod, SPDocument *doc, const gchar *uri)
 	g_return_if_fail(doc != NULL);
 	g_return_if_fail(uri != NULL);
 
-	save_path = g_dirname (uri);
-
+	// are we saving with extension namespaces?
 	spns = (!SP_MODULE_ID (mod) || !strcmp (SP_MODULE_ID (mod), SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
-	if (spns) {
-		rdoc = NULL;
-		repr = sp_document_repr_root (doc);
-		sp_repr_set_attr (repr, "sodipodi:docbase", save_path);
-		sp_repr_set_attr (repr, "sodipodi:docname", uri);
-	} else {
-		rdoc = sp_repr_document_new ("svg");
-		repr = sp_repr_document_root (rdoc);
-		repr = sp_object_invoke_write (sp_document_root (doc), repr, SP_OBJECT_WRITE_BUILD);
-	}
 
+	// first take care of the images
 	images = sp_document_get_resource_list (doc, "image");
 	for (l = images; l != NULL; l = l->next) {
 		SPRepr *ir;
@@ -167,15 +157,30 @@ svg_save (SPModule *mod, SPDocument *doc, const gchar *uri)
 			href = sp_repr_attr (ir, "sodipodi:absref");
 		}
 		if (href && g_path_is_absolute (href)) {
+			// TODO: this returns . for filename-only, so instead we want to use g_path_get_dirname() from an absolutized (and normalized) path
+			save_path = g_dirname (uri);
+			// TODO: can we use inkscape_abs2rel()?
 			relname = sp_relative_path_from_path (href, save_path);
 			sp_repr_set_attr (ir, "xlink:href", relname);
 		}
 	}
 
-	/* TODO: */
-	sp_repr_save_file (sp_repr_document (repr), uri);
-	sp_document_set_uri (doc, uri);
-
-	if (!spns) sp_repr_document_unref (rdoc);
+	if (spns) {
+		// first set the sodipodi:docbase and sodipodi:docname attributes
+		sp_document_set_uri (doc, uri);
+		// for saving with extensions, simply write the document's repr
+		repr = sp_document_repr_root (doc);
+		sp_repr_save_file (sp_repr_document (repr), uri);
+	} else {
+		// create a new empty repr
+		rdoc = sp_repr_document_new ("svg");
+		repr = sp_repr_document_root (rdoc);
+		// write a copy of the document repr without extensions
+		repr = sp_object_invoke_write (sp_document_root (doc), repr, SP_OBJECT_WRITE_BUILD);
+		// save that copy
+		sp_repr_save_file (sp_repr_document (repr), uri);
+		// clean up
+		sp_repr_document_unref (rdoc);
+	}
 }
 
