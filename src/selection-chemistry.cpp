@@ -1529,13 +1529,16 @@ sp_selection_tile()
     if (sort)
         reprs = g_slist_sort(reprs, (GCompareFunc) sp_repr_compare_position);
 
+    // remember the position of the first item
+    gint pos = sp_repr_position ((SPRepr *) reprs->data);
+
     // create a list of duplicates
     GSList *repr_copies = NULL;
     for (GSList *i = reprs; i != NULL; i = i->next) {
         SPRepr *dup = sp_repr_duplicate (((SPRepr *) i->data));
         repr_copies = g_slist_prepend (repr_copies, dup);
     }
-
+    
     // delete objects so that their clones don't get alerted; this object will be restored shortly 
     for (GSList *i = reprs; i != NULL; i = i->next) {
         SPObject *item = document->getObjectByRepr(((SPRepr *) i->data));
@@ -1546,11 +1549,18 @@ sp_selection_tile()
                                  NR::Rect (sp_desktop_d2doc_xy_point(desktop, r.min()), sp_desktop_d2doc_xy_point(desktop, r.max())),
                                  document, NR::Matrix(NR::translate(sp_desktop_d2doc_xy_point (desktop, NR::Point(r.min()[NR::X], r.max()[NR::Y])))));
 
-    SPItem *rectangle = SP_ITEM(desktop->currentLayer()->appendChildRepr(rect));
+    SPItem *rectangle = NULL;    
+    if (sort) { // restore parent and position
+        sp_repr_append_child (parent, rect);
+        sp_repr_set_position_absolute (rect, pos > 0 ? pos : 0);
+        rectangle = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(rect);
+    } else { // just add to the current layer
+        rectangle = SP_ITEM(desktop->currentLayer()->appendChildRepr(rect));
+    } 
+
     sp_repr_unref (rect);
 
     selection->clear();
-
     selection->setItem (rectangle);
 
     sp_document_done (document);
