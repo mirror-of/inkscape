@@ -664,6 +664,21 @@ sp_nodepath_node_duplicate (SPPathNode * node)
 }
 
 static void
+sp_node_control_mirror_n_to_p (SPPathNode * node)
+{
+	node->p.pos.x = (node->pos.x + (node->pos.x - node->n.pos.x));
+	node->p.pos.y = (node->pos.y + (node->pos.y - node->n.pos.y));
+}
+
+static void
+sp_node_control_mirror_p_to_n (SPPathNode * node)
+{
+	node->n.pos.x = (node->pos.x + (node->pos.x - node->p.pos.x));
+	node->n.pos.y = (node->pos.y + (node->pos.y - node->p.pos.y));
+}
+
+
+static void
 sp_nodepath_set_line_type (SPPathNode * end, ArtPathcode code)
 {
 	SPPathNode * start;
@@ -1160,7 +1175,9 @@ sp_node_selected_join_segment (void)
 
 		sp->first->p.other = sp->last;
 		sp->last->n.other = sp->first;
-		sp->last->n.pos = sp->first->p.pos;
+		
+		sp_node_control_mirror_p_to_n (sp->last);
+		sp_node_control_mirror_n_to_p (sp->first);
 
 		sp->first->code = sp->last->code;
 		sp->first = sp->last;
@@ -1178,7 +1195,6 @@ sp_node_selected_join_segment (void)
 
 	if (a == sa->first) {
 		SPNodeSubPath *t;
-		p = sa->first->pos;
 		code = (ArtPathcode) sa->first->n.other->code;
 		t = sp_nodepath_subpath_new (sa->nodepath);
 		n = sa->last;
@@ -1189,7 +1205,6 @@ sp_node_selected_join_segment (void)
 		sp_nodepath_subpath_destroy (sa);
 		sa = t;
 	} else if (a == sa->last) {
-		p = sa->last->pos;
 		code = (ArtPathcode)sa->last->code;
 	} else {
 		code = ART_END;
@@ -1198,13 +1213,17 @@ sp_node_selected_join_segment (void)
 
 	if (b == sb->first) {
 		n = sb->first;
-		sp_nodepath_node_new (sa, NULL, SP_PATHNODE_CUSP, code, &p, &n->pos, &n->n.pos);
+		sp_node_control_mirror_p_to_n (sa->last);
+		sp_nodepath_node_new (sa, NULL, SP_PATHNODE_CUSP, code, &n->p.pos, &n->pos, &n->n.pos);
+		sp_node_control_mirror_n_to_p (sa->last);
 		for (n = n->n.other; n != NULL; n = n->n.other) {
 			sp_nodepath_node_new (sa, NULL, (SPPathNodeType)n->type, (ArtPathcode)n->code, &n->p.pos, &n->pos, &n->n.pos);
 		}
 	} else if (b == sb->last) {
 		n = sb->last;
+		sp_node_control_mirror_p_to_n (sa->last);
 		sp_nodepath_node_new (sa, NULL, SP_PATHNODE_CUSP, code, &p, &n->pos, &n->p.pos);
+		sp_node_control_mirror_n_to_p (sa->last);
 		for (n = n->p.other; n != NULL; n = n->p.other) {
  			sp_nodepath_node_new (sa, NULL, (SPPathNodeType)n->type, (ArtPathcode)n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
 		}
