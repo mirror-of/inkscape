@@ -749,7 +749,6 @@ static void sp_stroke_style_line_dash_changed ( SPDashSelector *dsel,
 
 static void sp_stroke_style_update_marker_menus( SPWidget *spw, const GSList *objects);
 
-static void sp_stroke_style_ensure_marker (const gchar* n);
 static gchar* ink_extract_marker_name(const gchar *n);
 
                                                    
