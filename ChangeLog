@@ -1,5 +1,8 @@
 2004-09-05  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-matrix-fns.h, src/libnr/nr-matrix-fns.cpp
+	  (get_translation): New function.
+
 	* src/sp-polygon.cpp (polygon_get_value): Use static linkage.
 	  (sp_polygon_set): Remove debugging output.  Add `todo' comment.
 

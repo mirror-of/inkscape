@@ -30,6 +30,7 @@ bool translate_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilo
 bool matrix_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilon);
 
 Matrix transform(Matrix const &m);
+translate get_translation(Matrix const &m);
 
 };
 

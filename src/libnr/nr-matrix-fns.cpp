@@ -31,6 +31,10 @@ Matrix transform(Matrix const &m) {
     return ret;
 }
 
+translate get_translation(Matrix const &m) {
+    return translate(m[4], m[5]);
+}
+
 };
 
 
