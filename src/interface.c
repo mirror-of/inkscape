@@ -41,6 +41,7 @@
 #include "zoom-context.h"
 #include "event-broker.h"
 #include "svg-view.h"
+#include "sp-namedview.h"
 
 #include "dir-util.h"
 #include "xml/repr-private.h"

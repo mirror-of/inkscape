@@ -471,40 +471,6 @@ sp_document_set_size_px (SPDocument *doc, gdouble width, gdouble height)
 	g_signal_emit (G_OBJECT (doc), signals [RESIZED], 0, width / 1.25, height / 1.25);
 }
 
-#if 0
-/* named views */
-
-const GSList *
-sp_document_namedview_list (SPDocument * document)
-{
-	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
-
-	return SP_ROOT (document->root)->namedviews;
-}
-
-SPNamedView *
-sp_document_namedview (SPDocument * document, const gchar * id)
-{
-	const GSList * nvl, * l;
-
-	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
-
-	nvl = SP_ROOT (document->root)->namedviews;
-	g_assert (nvl != NULL);
-
-	if (id == NULL) return SP_NAMEDVIEW (nvl->data);
-
-	for (l = nvl; l != NULL; l = l->next) {
-		if (strcmp (id, SP_OBJECT (l->data)->id) == 0)
-			return SP_NAMEDVIEW (l->data);
-	}
-
-	return NULL;
-}
-#endif
-
 void
 sp_document_def_id (SPDocument * document, const gchar * id, SPObject * object)
 {

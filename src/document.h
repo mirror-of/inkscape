@@ -77,11 +77,6 @@ gdouble sp_document_height (SPDocument * document);
 #define SP_DOCUMENT_NAME(d) (SP_DOCUMENT (d)->name)
 #define SP_DOCUMENT_BASE(d) (SP_DOCUMENT (d)->base)
 
-#if 0
-const GSList * sp_document_namedview_list (SPDocument * document);
-SPNamedView *sp_document_namedview (SPDocument * document, const gchar * name);
-#endif
-
 /*
  * Dictionary
  */
