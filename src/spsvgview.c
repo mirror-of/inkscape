@@ -147,8 +147,8 @@ main (int argc, const char **argv)
 	w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title (GTK_WINDOW (w), SP_DOCUMENT_NAME (ss.doc));
 	gtk_window_set_default_size (GTK_WINDOW (w),
-				     MIN (sp_document_width (ss.doc), gdk_screen_width () - 64),
-				     MIN (sp_document_height (ss.doc), gdk_screen_height () - 64));
+				     MIN ((int)sp_document_width (ss.doc), (int)gdk_screen_width () - 64),
+				     MIN ((int)sp_document_height (ss.doc), (int)gdk_screen_height () - 64));
 	gtk_window_set_policy (GTK_WINDOW (w), TRUE, TRUE, FALSE);
 
 	g_signal_connect (G_OBJECT (w), "delete_event", (GCallback) sp_svgview_main_delete, &ss);
@@ -187,14 +187,26 @@ sp_svgview_control_show (struct _SPSlideShow *ss)
 		t = gtk_table_new (1, 4, TRUE);
 		gtk_container_add ((GtkContainer *) ctrlwin, t);
 		b = gtk_button_new_from_stock (GTK_STOCK_GOTO_FIRST);
-		gtk_table_attach ((GtkTable *) t, b, 0, 1, 0, 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+		gtk_table_attach ((GtkTable *) t, b, 0, 1, 0, 1, 
+				  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
+				  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
+				  0, 0);
 		/* g_signal_connect ((GObject *) b, "clicked", (GCallback) sp_svgview_goto_first, ss); */
 		b = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);
-		gtk_table_attach ((GtkTable *) t, b, 1, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+		gtk_table_attach ((GtkTable *) t, b, 1, 2, 0, 1,
+				  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
+				  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
+				  0, 0);
 		b = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);
-		gtk_table_attach ((GtkTable *) t, b, 2, 3, 0, 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+		gtk_table_attach ((GtkTable *) t, b, 2, 3, 0, 1,
+				  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
+				  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
+				  0, 0);
 		b = gtk_button_new_from_stock (GTK_STOCK_GOTO_LAST);
-		gtk_table_attach ((GtkTable *) t, b, 3, 4, 0, 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+		gtk_table_attach ((GtkTable *) t, b, 3, 4, 0, 1,
+				  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
+				  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
+				  0, 0);
 		gtk_widget_show_all (ctrlwin);
 	} else {
 		gtk_window_present ((GtkWindow *) ctrlwin);
