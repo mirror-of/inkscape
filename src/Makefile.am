@@ -75,11 +75,11 @@ inkscape_SOURCES = \
 	\
 	inkscape-stock.cpp inkscape-stock.h\
 	\
-	sp-namedview.cpppp sp-namedview.h \
+	sp-namedview.cpp sp-namedview.h \
 	sp-guide.cpp sp-guide.h \
 	\
 	view.cpp view.h \
-	svg-view.cpppp svg-view.h \
+	svg-view.cpp svg-view.h \
 	selection.cpp selection.h \
 	desktop.cpp desktop.h \
 	desktop-units.h \
@@ -105,7 +105,7 @@ inkscape_SOURCES = \
 	star-context.cpp star-context.h \
 	spiral-context.cpp spiral-context.h \
 	draw-context.cpp draw-context.h \
-	dyna-draw-context.cpppp dyna-draw-context.h \
+	dyna-draw-context.cpp dyna-draw-context.h \
 	text-context.cpp text-context.h \
 	zoom-context.cpp zoom-context.h \
 	dropper-context.cpp dropper-context.h \
@@ -163,9 +163,9 @@ inkscape_LDFLAGS = --export-dynamic $(kdeldflags)
 EXTRA_PROGRAMS = spsvgview
 
 spsvgview_SOURCES = \
-	spsvgview.cpppp \
+	spsvgview.cpp \
 	view.cpp view.h \
-	svg-view.cpppp svg-view.h \
+	svg-view.cpp svg-view.h \
 	dir-util.cpp dir-util.h \
 	modules/ps.c modules/ps.h \
 	module.cpp module.h \
