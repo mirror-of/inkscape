@@ -1,8 +1,7 @@
 
 #include <stdio.h>
 
-#include "InkscapePerl.h"
-#include "InkscapePython.h"
+#include "InkscapeScript.h"
 
 #ifndef TRUE
 #define TRUE  1
@@ -21,11 +20,12 @@ static char *pythonCodeStr =
 
 int testPython()
 {
-    InkscapePython python;
+    Inkscape::Extension::Script::InkscapeScript scriptEngine;
     printf("#####Executing Code#####\n");
     printf("%s\n", pythonCodeStr);
     printf("#####End#####\n");
-    python.interpretString(pythonCodeStr);
+    scriptEngine.interpretScript(pythonCodeStr, 
+          Inkscape::Extension::Script::InkscapeScript::PYTHON);
     return TRUE;
 }
 
@@ -41,11 +41,12 @@ static char *perlCodeStr =
 
 int testPerl()
 {
-    InkscapePerl perl;
+    Inkscape::Extension::Script::InkscapeScript scriptEngine;
     printf("#####Executing Code#####\n");
     printf("%s\n", perlCodeStr);
     printf("#####End#####\n");
-    perl.interpretString(perlCodeStr);
+    scriptEngine.interpretScript(perlCodeStr,
+         Inkscape::Extension::Script::InkscapeScript::PERL);
     return TRUE;
 }
 

@@ -1,8 +1,8 @@
-#ifndef __INKSCAPE_PYTHON_H__
-#define __INKSCAPE_PYTHON_H__
+#ifndef __INKSCAPE_SCRIPT_H__
+#define __INKSCAPE_SCRIPT_H__
 
 /**
- * Python Interpreter wrapper for Inkscape
+ * Inkscape Scripting container
  *
  * Authors:
  *   Bob Jamison <rjamison@titan.com>
@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "InkscapeInterpreter.h"
+
 
 namespace Inkscape
 {
@@ -22,40 +22,44 @@ namespace Script
 {
 
 
-
-class InkscapePython : public InkscapeInterpreter
+class InkscapeScript
 {
 public:
 
-    /*
+    /**
+     * Which type of language?
+     */
+    typedef enum
+        {
+        PYTHON,
+        PERL
+        } ScriptLanguage;
+
+    /**
      *
      */
-    InkscapePython();
-    
+    InkscapeScript();
 
-    /*
+    /**
      *
      */
-    virtual ~InkscapePython();
-    
-    
+    ~InkscapeScript();
 
-    /*
+    /**
      *
      */
-    virtual bool interpretScript(char *str);
-    
-    
+    bool interpretScript(char *script, ScriptLanguage language);
 
-    /*
+    /**
      *
      */
-    virtual bool interpretFile(char *fileName);
-    
-private:
+    bool interpretUri(char *uri, ScriptLanguage language);
 
 
-};
+
+}; //class InkscapeScript
+
+
 
 
 }  // namespace Script
@@ -64,10 +68,9 @@ private:
 
 
 
-#endif /*__INKSCAPE_PYTHON_H__ */
+#endif  /* __INKSCAPE_SCRIPT_H__ */
 //#########################################################################
 //# E N D    O F    F I L E
 //#########################################################################
-
 
 

@@ -1,8 +1,8 @@
-#ifndef __INKSCAPE_PYTHON_H__
-#define __INKSCAPE_PYTHON_H__
+#ifndef __INKSCAPE_INTERPRETER_H__
+#define __INKSCAPE_INTERPRETER_H__
 
 /**
- * Python Interpreter wrapper for Inkscape
+ * Base class for interpreter implementations, (InkscapePython, etc)
  *
  * Authors:
  *   Bob Jamison <rjamison@titan.com>
@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "InkscapeInterpreter.h"
+
 
 namespace Inkscape
 {
@@ -22,40 +22,35 @@ namespace Script
 {
 
 
-
-class InkscapePython : public InkscapeInterpreter
+class InkscapeInterpreter
 {
 public:
 
-    /*
+    /**
      *
      */
-    InkscapePython();
-    
+    InkscapeInterpreter();
 
-    /*
+    /**
      *
      */
-    virtual ~InkscapePython();
-    
-    
+    virtual ~InkscapeInterpreter();
 
-    /*
+    /**
      *
      */
-    virtual bool interpretScript(char *str);
-    
-    
+    virtual bool interpretScript(char *script);
 
-    /*
+    /**
      *
      */
-    virtual bool interpretFile(char *fileName);
-    
-private:
+    virtual bool interpretUri(char *uri);
 
 
-};
+
+}; //class InkscapeScript
+
+
 
 
 }  // namespace Script
@@ -64,10 +59,9 @@ private:
 
 
 
-#endif /*__INKSCAPE_PYTHON_H__ */
+#endif  /* __INKSCAPE_INTERPRETER_H__ */
 //#########################################################################
 //# E N D    O F    F I L E
 //#########################################################################
-
 
 

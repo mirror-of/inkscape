@@ -12,7 +12,10 @@
 CXX = g++
 
 
-OBJ = InkscapeBinding.o \
+OBJ = \
+InkscapeScript.o \
+InkscapeInterpreter.o \
+InkscapeBinding.o \
 InkscapePython.o inkscape_py_wrap.o \
 InkscapePerl.o inkscape_perl_wrap.o
 
@@ -31,11 +34,15 @@ PYTHON_LIB    := $(shell python -c "import distutils.sysconfig ; print distutils
 PYTHON_LDFLAGS = $(PYTHON_LDPATH)/$(PYTHON_LIB)
 #PYTHON_LDFLAGS = $(PYTHON_LDPATH)
 
+GLIB_INC := $(shell pkg-config --cflags glib-2.0)
+GLIB_LIB := $(shell pkg-config --libs glib-2.0)
+
+INC = -I. -I../.. $(GLIB_INC)
 
 CFLAGS = -g $(PYTHON_CFLAGS) $(PERL_CFLAGS)
 CXXFLAGS = $(CFLAGS)
 
-LIBS = $(PYTHON_LDFLAGS) $(PERL_LDFLAGS)
+LIBS = $(PYTHON_LDFLAGS) $(PERL_LDFLAGS) $(GLIB_LIB)
 
 all: bindtest cpptest _inkscape_py.so
 
@@ -54,14 +61,14 @@ inkscape_py_wrap.cpp: InkscapeBinding.h inkscape_py.i
 	sh wrap_swig_module.sh inkscape_py.py inkscape_py.py.h
 	
 InkscapePython.o: InkscapePython.cpp InkscapePython.h inkscape_py_wrap.o
-	$(CXX) $(CXXFLAGS) $(PYINC) -o $@ -c InkscapePython.cpp
+	$(CXX) $(CXXFLAGS) $(INC) $(PYINC) -o $@ -c InkscapePython.cpp
 
 inkscape_perl_wrap.cpp: InkscapeBinding.h inkscape_perl.i
 	swig -c++ -perl5 -static -o inkscape_perl_wrap.cpp inkscape_perl.i 
 	sh wrap_swig_module.sh inkscape_perl.pm inkscape_perl.pm.h
 	
 InkscapePerl.o: InkscapePerl.cpp InkscapePerl.h inkscape_perl_wrap.o
-	$(CXX) $(CXXFLAGS) $(PERLINC) -o $@ -c InkscapePerl.cpp
+	$(CXX) $(CXXFLAGS) $(INC) $(PERLINC) -o $@ -c InkscapePerl.cpp
 
 .cpp.o:
 	$(CXX) $(CXXFLAGS) $(INC) -o $@ -c $<

@@ -13,7 +13,7 @@ int perl_eval(char *string) {
   return perl_call_argv("eval",0,argv);
 }
 
-int
+extern "C" int
 InkscapePerlParseBuf(char *startupCodeBuf, char *codeBuf)
 {
     STRLEN n_a;
@@ -49,7 +49,7 @@ InkscapePerlParseBuf(char *startupCodeBuf, char *codeBuf)
     perl_destruct( my_perl );
     perl_free( my_perl );
 
-    return 0;
+    return 1;
 }
 
 /* Register any extra external extensions */
