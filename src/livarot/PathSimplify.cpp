@@ -60,48 +60,19 @@ Path::Simplify (double treshhold)
   while (lastM < savNbPt)
   {
     int lastP = lastM + 1;
-    if (back)
-    {
-    {
-      path_lineto_b *tp = (path_lineto_b *) savPts;
-      while (lastP < savNbPt
-             && ((tp + lastP)->isMoveTo == polyline_lineto
-                 || (tp + lastP)->isMoveTo == polyline_forced))
-        lastP++;
-      pts = (char *) (tp + lastM);
-      nbPt = lastP - lastM;
-    }
-    }
-    else
-    {
-    {
-      path_lineto *tp = (path_lineto *) savPts;
-      while (lastP < savNbPt
-             && ((tp + lastP)->isMoveTo == polyline_lineto
-                 || (tp + lastP)->isMoveTo == polyline_forced))
-        lastP++;
-      pts = (char *) (tp + lastM);
-      nbPt = lastP - lastM;
-    }
-    }
+    path_lineto *tp = (path_lineto *) savPts;
+    while (lastP < savNbPt
+	   && ((tp + lastP)->isMoveTo == polyline_lineto
+	       || (tp + lastP)->isMoveTo == polyline_forced))
+      lastP++;
+    pts = (char *) (tp + lastM);
+    nbPt = lastP - lastM;
     
 #ifdef pseudo_douglas_pecker
     {
-      NR::Point moveToPt,endToPt;
-      if (back) {
-        path_lineto_b *tp = (path_lineto_b *) pts;
-        moveToPt = tp[0].p;
-      } else {
-        path_lineto *tp = (path_lineto *) pts;
-        moveToPt = tp[0].p;
-      }
-      if (back) {
-        path_lineto_b *tp = (path_lineto_b *) pts;
-        endToPt = tp[nbPt-1].p;
-      } else {
-        path_lineto *tp = (path_lineto *) pts;
-        endToPt = tp[nbPt-1].p;
-      }
+      path_lineto *tp = (path_lineto *) pts;
+      NR::Point const moveToPt = tp[0].p;
+      NR::Point const endToPt = tp[nbPt-1].p;
       MoveTo (moveToPt);
       
       if ( nbPt <= 1 ) {
@@ -188,25 +159,14 @@ Path::DoSimplify (double treshhold,int /*recLevel*/)
 {
 #ifdef pseudo_douglas_pecker
   if ( nbPt <= 2 ) {
-    if (back) {
-      path_lineto_b *tp = (path_lineto_b *) pts;
-      LineTo(tp[nbPt-1].p);
-    } else {
-      path_lineto *tp = (path_lineto *) pts;
-      LineTo(tp[nbPt-1].p);
-    }
+    path_lineto *tp = (path_lineto *) pts;
+    LineTo(tp[nbPt-1].p);
     return;
   }
   // dichotomic method: split at worse approximation point, and more precisely, at the closest forced point, if one exists
   path_descr_cubicto  res;
-  NR::Point moveToPt;
-  if (back) {
-	  path_lineto_b *tp = (path_lineto_b *) pts;
-	  moveToPt = tp[0].p;
-	} else {
-	  path_lineto *tp = (path_lineto *) pts;
-	  moveToPt = tp[0].p;
-  }
+  path_lineto *tp = (path_lineto *) pts;
+  NR::Point moveToPt = tp[0].p;
 
   int    worstP=-1;
   if ( AttemptSimplify (treshhold,res,worstP) ) {
@@ -223,13 +183,8 @@ Path::DoSimplify (double treshhold,int /*recLevel*/)
       nbPt=worstP;
       DoSimplify (treshhold,recLevel-1);      
       
-      if (back) {
-        path_lineto_b *tp = (path_lineto_b *) savPts;
-        pts = (char *) (tp + worstP);
-      } else {
-        path_lineto *tp = (path_lineto *) savPts;
-        pts = (char *) (tp + worstP);
-      }
+      path_lineto *tp = (path_lineto *) savPts;
+      pts = (char *) (tp + worstP);
       nbPt=savNbPt-worstP;
       DoSimplify (treshhold,recLevel-1);      
       
@@ -257,13 +212,8 @@ Path::DoSimplify (double treshhold,int /*recLevel*/)
   data.nbPt=data.maxPt=data.inPt=0;
   
   NR::Point moveToPt, endToPt;
-  if (back) {
-	  path_lineto_b *tp = (path_lineto_b *) savPts;
-	  moveToPt = tp[0].p;
-  } else {
-	  path_lineto *tp = (path_lineto *) savPts;
-	  moveToPt = tp[0].p;
-  }
+  path_lineto *tp = (path_lineto *) savPts;
+  moveToPt = tp[0].p;
   MoveTo (moveToPt);
   endToPt = moveToPt;
   
@@ -271,13 +221,8 @@ Path::DoSimplify (double treshhold,int /*recLevel*/)
   {
     int lastP = curP + 1;
     nbPt = 2;
-    if (back) {
-      path_lineto_b *tp = (path_lineto_b *) savPts;
-      pts = (char *) (tp + curP);
-    } else {
-      path_lineto *tp = (path_lineto *) savPts;
-      pts = (char *) (tp + curP);
-    }
+    path_lineto *tp = (path_lineto *) savPts;
+    pts = (char *) (tp + curP);
     
     // remettre a zero
     data.inPt=data.nbPt=0;
@@ -289,15 +234,9 @@ Path::DoSimplify (double treshhold,int /*recLevel*/)
       int  forced_pt=-1;
       int  worstP=-1;
       do {
-        if (back) {
-          path_lineto_b *tp = (path_lineto_b *) savPts;
-          if ((tp + lastP)->isMoveTo == polyline_forced) contains_forced = true;
-          forced_pt=lastP;
-        } else {
-          path_lineto *tp = (path_lineto *) savPts;
-          if ((tp + lastP)->isMoveTo == polyline_forced) contains_forced = true;
-          forced_pt=lastP;
-        }
+        path_lineto *tp = (path_lineto *) savPts;
+        if ((tp + lastP)->isMoveTo == polyline_forced) contains_forced = true;
+        forced_pt=lastP;
         lastP+=step;
         nbPt+=step;
         //        if (kissGoodbye)
@@ -325,13 +264,8 @@ Path::DoSimplify (double treshhold,int /*recLevel*/)
       step/=2;
     }
     
-    if (back) {
-      path_lineto_b *tp = (path_lineto_b *) savPts;
-      endToPt = tp[lastP].p;
-    } else {
-      path_lineto *tp = (path_lineto *) savPts;
-      endToPt = tp[lastP].p;
-    }
+    tp = (path_lineto *) savPts;
+    endToPt = tp[lastP].p;
     if (nbPt <= 2) {
       LineTo (endToPt);
     } else {
@@ -452,20 +386,11 @@ bool   Path::ExtendFit(fitting_tables &data,double treshhold, path_descr_cubicto
     data.fk=(char*)g_realloc(data.fk,data.maxPt*sizeof(char));
   }
   if ( nbPt > data.inPt ) {
-    if ( back ) {
-      path_lineto_b*  tp=(path_lineto_b*)pts;
-      for (int i=data.inPt;i<nbPt;i++) {
-        data.Xk[i] = tp[i].p[0];
-        data.Yk[i] = tp[i].p[1];
-        data.fk[i]=( tp[i].isMoveTo == polyline_forced )? 0x01:0x00;        
-      }
-    } else {
-      path_lineto*  tp=(path_lineto*)pts;
-      for (int i=data.inPt;i<nbPt;i++) {
-        data.Xk[i] = tp[i].p[0];
-        data.Yk[i] = tp[i].p[1];
-        data.fk[i]=( tp[i].isMoveTo == polyline_forced )? 0x01:0x00;        
-      }
+    path_lineto*  tp=(path_lineto*)pts;
+    for (int i=data.inPt;i<nbPt;i++) {
+      data.Xk[i] = tp[i].p[0];
+      data.Yk[i] = tp[i].p[1];
+      data.fk[i]=( tp[i].isMoveTo == polyline_forced )? 0x01:0x00;        
     }
     data.lk[0]=0;
     data.tk[0]=0;
@@ -831,28 +756,10 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
     return true;
   }
   
-  if (back)
-  {
- 	{
-	  path_lineto_b *
-    tp = (path_lineto_b *)
-    pts;
-	  start = tp[0].p;
-	  cp1 = tp[1].p;
-	  end = tp[nbPt - 1].p;
-	}
-  }
-  else
-  {
-	{
-	  path_lineto *
-    tp = (path_lineto *)
-    pts;
-	  start = tp[0].p;
-	  cp1 = tp[1].p;
-	  end = tp[nbPt - 1].p;
-	}
-  }
+  path_lineto * tp = (path_lineto *) pts;
+  start = tp[0].p;
+  cp1 = tp[1].p;
+  end = tp[nbPt - 1].p;
   
   res.p = end;
   res.stD[0]=res.stD[1]=0;
@@ -881,28 +788,10 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
     NR::Point prevP =start;
     for (int i = 1; i < nbPt; i++)
     {
-      if (back)
-      {
-      {
-        path_lineto_b *
-        tp = (path_lineto_b *)
-        pts;
-        Xk[i] = tp[i].p[0];
-        Yk[i] = tp[i].p[1];
-        if ( tp[i].isMoveTo == polyline_forced ) fk[i]=0x01; else fk[i]=0;
-      }
-      }
-      else
-      {
-      {
-        path_lineto *
-        tp = (path_lineto *)
-        pts;
-        Xk[i] = tp[i].p[0];
-        Yk[i] = tp[i].p[1];
-        if ( tp[i].isMoveTo == polyline_forced ) fk[i]=0x01; else fk[i]=0;
-      }
-      }
+      path_lineto * tp = (path_lineto *) pts;
+      Xk[i] = tp[i].p[0];
+      Yk[i] = tp[i].p[1];
+      if ( tp[i].isMoveTo == polyline_forced ) fk[i]=0x01; else fk[i]=0;
       NR::Point diff;
       diff[0] = Xk[i] - prevP[0];
       diff[1] = Yk[i] - prevP[1];

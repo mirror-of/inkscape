@@ -69,12 +69,7 @@ void  Path::DashPolyline(float head,float tail,float body,int nbD,float *dashs,b
   char*     lastMP=NULL;
   
   for (int i=0;i<origNb;i++) {
-    int   typ;
-    if ( back ) {
-      typ=((path_lineto_b*)curP)->isMoveTo;
-    } else {
-      typ=((path_lineto*)curP)->isMoveTo;
-    }
+    int const typ = ((path_lineto*)curP)->isMoveTo;
     if ( typ == polyline_moveto ) {
       if ( lastMI >= 0 && lastMI < i-1 ) { // au moins 2 points
         DashSubPath(i-lastMI,lastMP,head,tail,body,nbD,dashs,stPlain,stOffset);
@@ -84,21 +79,13 @@ void  Path::DashPolyline(float head,float tail,float body,int nbD,float *dashs,b
     } else if ( typ == polyline_forced ) {
     } else {
     }
-    if ( back ) {
-      curP+=sizeof(path_lineto_b);
-    } else {
-      curP+=sizeof(path_lineto);
-    }
+    curP+=sizeof(path_lineto);
   }
   if ( lastMI >= 0 && lastMI < origNb-1 ) {
     DashSubPath(origNb-lastMI,lastMP,head,tail,body,nbD,dashs,stPlain,stOffset);
   }
   
-  if ( back ) {
-    curP+=sizeof(path_lineto_b);
-  } else {
-    curP+=sizeof(path_lineto);
-  }
+  curP+=sizeof(path_lineto);
   g_free(origPts);
   
 /*  for (int i=0;i<nbPt;i++) {
@@ -131,18 +118,9 @@ void Path::DashSubPath(int spL,char* spP,float head,float tail,float body,int nb
   
   double      totLength=0;
   NR::Point   lastP;
-  if ( back ) {
-    lastP=((path_lineto_b*)spP)[0].p;
-  } else {
-    lastP=((path_lineto*)spP)[0].p;
-  }
+  lastP=((path_lineto*)spP)[0].p;
   for (int i=1;i<spL;i++) {
-    NR::Point   n;
-    if ( back ) {
-      n=((path_lineto_b*)spP)[i].p;
-    } else {
-      n=((path_lineto*)spP)[i].p;
-    }
+    NR::Point const n = ((path_lineto*)spP)[i].p;
     NR::Point d=n-lastP;
     double    nl=NR::L2(d);
     if ( nl > 0.0001 ) {
@@ -159,19 +137,15 @@ void Path::DashSubPath(int spL,char* spP,float head,float tail,float body,int nb
   bool      dashPlain=false;
   double    lastT=0;
   int       lastPiece=-1;
-  if ( back ) {
-    lastP=((path_lineto_b*)spP)[0].p;
-  } else {
-    lastP=((path_lineto*)spP)[0].p;
-  }
+  lastP=((path_lineto*)spP)[0].p;
   for (int i=1;i<spL;i++) {
     NR::Point   n;
     int         nPiece=-1;
     double      nT=0;
     if ( back ) {
-      n=((path_lineto_b*)spP)[i].p;
-      nPiece=((path_lineto_b*)spP)[i].piece;
-      nT=((path_lineto_b*)spP)[i].t;
+      n=((path_lineto*)spP)[i].p;
+      nPiece=((path_lineto*)spP)[i].piece;
+      nT=((path_lineto*)spP)[i].t;
     } else {
       n=((path_lineto*)spP)[i].p;
     }
@@ -536,21 +510,12 @@ double      Path::Length(void)
   if ( nbPt <= 0 ) return 0;
   NR::Point  lastM;
   NR::Point  lastP;
-  if ( back ) {
-    lastM=((path_lineto_b *) pts)[0].p;
-  } else {
-    lastM=((path_lineto *) pts)[0].p;
-  }
+  lastM=((path_lineto *) pts)[0].p;
   lastP=lastM;
   for (int i=0;i<nbPt;i++) {
     path_lineto  cur;
-    if ( back ) {
-      cur.p=((path_lineto_b *) pts)[i].p;
-      cur.isMoveTo=((path_lineto_b *) pts)[i].isMoveTo;
-    } else {
-      cur.p=((path_lineto *) pts)[i].p;
-      cur.isMoveTo=((path_lineto *) pts)[i].isMoveTo;
-    }
+    cur.p=((path_lineto *) pts)[i].p;
+    cur.isMoveTo=((path_lineto *) pts)[i].isMoveTo;
     if ( cur.isMoveTo == polyline_moveto ) {
       lastP=lastM=cur.p;
     } else {
@@ -566,21 +531,12 @@ double      Path::Surface(void)
   if ( nbPt <= 0 ) return 0;
   NR::Point  lastM;
   NR::Point  lastP;
-  if ( back ) {
-    lastM=((path_lineto_b *) pts)[0].p;
-  } else {
-    lastM=((path_lineto *) pts)[0].p;
-  }
+  lastM=((path_lineto *) pts)[0].p;
   lastP=lastM;
   for (int i=0;i<nbPt;i++) {
     path_lineto  cur;
-    if ( back ) {
-      cur.p=((path_lineto_b *) pts)[i].p;
-      cur.isMoveTo=((path_lineto_b *) pts)[i].isMoveTo;
-    } else {
-      cur.p=((path_lineto *) pts)[i].p;
-      cur.isMoveTo=((path_lineto *) pts)[i].isMoveTo;
-    }
+    cur.p=((path_lineto *) pts)[i].p;
+    cur.isMoveTo=((path_lineto *) pts)[i].isMoveTo;
     if ( cur.isMoveTo == polyline_moveto ) {
       surf+=NR::cross(lastM-lastP,lastM);
       lastP=lastM=cur.p;
@@ -941,12 +897,12 @@ Path::cut_position*  Path::CurvilignToPosition(int nbCv,double* cvAbs,int &nbCut
   NR::Point  lastP;
   double     lastT=0;
   int        lastPiece=-1;
-  lastM=((path_lineto_b *) pts)[0].p;
+  lastM=((path_lineto *) pts)[0].p;
   
   lastP=lastM;
   for (int i=0;i<nbPt;i++) {
-    path_lineto_b  cur;
-    cur=((path_lineto_b *) pts)[i];
+    path_lineto  cur;
+    cur=((path_lineto *) pts)[i];
     if ( cur.isMoveTo == polyline_moveto ) {
       lastP=lastM=cur.p;
       lastT=cur.t;

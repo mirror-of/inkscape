@@ -62,7 +62,7 @@ void            Path::ConvertWithBackData(double treshhold)
 			// et on avance
 			curP++;
 		} else if ( nType == descr_close ) {
-      nextX=((path_lineto_b*)pts)[lastMoveTo].p;
+      nextX=((path_lineto*)pts)[lastMoveTo].p;
       AddPoint(nextX,curP,1.0,false);
 			curP++;
 		} else if ( nType == descr_lineto ) {
@@ -204,7 +204,7 @@ void            Path::ConvertForOffset(double treshhold,Path* orig,double off_de
 			// et on avance
 			curP++;
 		} else if ( nType == descr_close ) {
-			nextX=((path_lineto_b*)pts)[lastMoveTo].p;
+			nextX=((path_lineto*)pts)[lastMoveTo].p;
 			AddPoint(nextX,curP,1.0,false);
 			curP++;
 		} else if ( nType == descr_lineto ) {
@@ -1253,16 +1253,16 @@ void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool inve
 		if ( back ) {
     {
       // invert && back && !weighted
-      for (int i=0;i<nbPt;i++) dest->AddPoint(((path_lineto_b*)pts)[i].p);
+      for (int i=0;i<nbPt;i++) dest->AddPoint(((path_lineto*)pts)[i].p);
       int               lastM=0;
       int								curP=1;
       int               pathEnd=0;
       bool              closed=false;
       int               lEdge=-1;
       while ( curP < nbPt ) {
-        path_lineto_b*    sbp=((path_lineto_b*)pts)+curP;
-        path_lineto_b*    lm=((path_lineto_b*)pts)+lastM;
-        path_lineto_b*    prp=((path_lineto_b*)pts)+pathEnd;
+        path_lineto*    sbp=((path_lineto*)pts)+curP;
+        path_lineto*    lm=((path_lineto*)pts)+lastM;
+        path_lineto*    prp=((path_lineto*)pts)+pathEnd;
         if ( sbp->isMoveTo == polyline_moveto ) {
           if ( closeIfNeeded ) {
             if ( closed && lEdge >= 0 ) {
@@ -1312,7 +1312,7 @@ void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool inve
           dest->DisconnectStart(lEdge);
           dest->ConnectStart(first+lastM,lEdge);
         } else {
-          path_lineto_b*    lm=((path_lineto_b*)pts)+lastM;
+          path_lineto*    lm=((path_lineto*)pts)+lastM;
           lEdge=dest->AddEdge(first+lastM,first+pathEnd);
           if ( lEdge >= 0 ) {
             dest->ebData[lEdge].pathID=pathID;
@@ -1379,16 +1379,16 @@ void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool inve
 		if ( back ) {
     {
       // !invert && back && !weighted
-      for (int i=0;i<nbPt;i++) dest->AddPoint(((path_lineto_b*)pts)[i].p);
+      for (int i=0;i<nbPt;i++) dest->AddPoint(((path_lineto*)pts)[i].p);
       int               lastM=0;
       int								curP=1;
       int               pathEnd=0;
       bool              closed=false;
       int               lEdge=-1;
       while ( curP < nbPt ) {
-        path_lineto_b*    sbp=((path_lineto_b*)pts)+curP;
-        path_lineto_b*    lm=((path_lineto_b*)pts)+lastM;
-        path_lineto_b*    prp=((path_lineto_b*)pts)+pathEnd;
+        path_lineto*    sbp=((path_lineto*)pts)+curP;
+        path_lineto*    lm=((path_lineto*)pts)+lastM;
+        path_lineto*    prp=((path_lineto*)pts)+pathEnd;
         if ( sbp->isMoveTo == polyline_moveto ) {
           if ( closeIfNeeded ) {
             if ( closed && lEdge >= 0 ) {
@@ -1436,7 +1436,7 @@ void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool inve
           dest->DisconnectEnd(lEdge);
           dest->ConnectEnd(first+lastM,lEdge);
         } else {
-          path_lineto_b*    lm=((path_lineto_b*)pts)+lastM;
+          path_lineto*    lm=((path_lineto*)pts)+lastM;
           lEdge=dest->AddEdge(first+pathEnd,first+lastM);
           if ( lEdge >= 0 ) {
             dest->ebData[lEdge].pathID=pathID;
