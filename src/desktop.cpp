@@ -186,7 +186,7 @@ sp_desktop_init (SPDesktop *desktop)
 
     desktop->d2w.set_identity();
     desktop->w2d.set_identity();
-    desktop->doc2dt = NR::scale(NR::Point(0.8, -0.8));
+    desktop->doc2dt = NR::Matrix(NR::scale(0.8, -0.8));
 
     desktop->guides_active = FALSE;
 
@@ -1309,8 +1309,8 @@ sp_desktop_set_display_area (SPDesktop *dt, double x0, double y0, double x1, dou
     if (!NR_DF_TEST_CLOSE (newscale, scale, 1e-4 * scale)) {
         NR::Coord xform[6];
         /* Set zoom factors */
-        dt->d2w = NR::scale(newscale, -newscale);
-        dt->w2d = NR::scale(1/newscale, 1/-newscale);
+        dt->d2w = NR::Matrix(NR::scale(newscale, -newscale));
+        dt->w2d = NR::Matrix(NR::scale(1/newscale, 1/-newscale));
         dt->d2w.copyto(xform);
         sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (dt->main), xform);
         clear = TRUE;

@@ -144,7 +144,7 @@ nr_typeface_lookup_default (NRTypeFace *tf, unsigned int unival)
 NRFont *
 nr_font_new_default (NRTypeFace *tf, unsigned int metrics, float size)
 {
-	NR::Matrix scale = NR::scale (NR::Point(size, size));
+	NR::Matrix const scale(NR::scale(size, size));
 
 	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->font_new (tf, metrics, scale);
 }

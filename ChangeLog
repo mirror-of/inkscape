@@ -1,5 +1,10 @@
 2004-02-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/desktop.cpp (sp_desktop_init, sp_desktop_set_display_area):
+	* src/libnrtype/nr-font.cpp (nr_font_generic_glyph_outline_get):
+	* src/libnrtype/nr-typeface.cpp (nr_font_new_default):
+	Don't use implicit NR::Matrix conversions.
+
 	* src/libnr/nr-translate-ops.h (operator!=): new.
 
 	* src/sp-item.h, src/sp-item.cpp (sp_item_bbox_desktop):
