@@ -177,13 +177,13 @@ all_libs =	\
 	$(kdeldadd)	\
 	$(win32ldflags)
 
-libinkpre_a-desktop.$(OBJEXT): helper/sp-marshal.h
-libinkpre_a-document.$(OBJEXT): helper/sp-marshal.h
-libinkpre_a-inkscape.$(OBJEXT): helper/sp-marshal.h
-libinkpre_a-knot.$(OBJEXT): helper/sp-marshal.h
-libinkpre_a-selection.$(OBJEXT): helper/sp-marshal.h
-libinkpre_a-sp-object.$(OBJEXT): helper/sp-marshal.h
-libinkpre_a-view.$(OBJEXT): helper/sp-marshal.h
+desktop.$(OBJEXT): helper/sp-marshal.h
+document.$(OBJEXT): helper/sp-marshal.h
+inkscape.$(OBJEXT): helper/sp-marshal.h
+knot.$(OBJEXT): helper/sp-marshal.h
+selection.$(OBJEXT): helper/sp-marshal.h
+sp-object.$(OBJEXT): helper/sp-marshal.h
+view.$(OBJEXT): helper/sp-marshal.h
 help.$(OBJEXT): inkscape_version.h
 
 
