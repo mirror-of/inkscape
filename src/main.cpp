@@ -175,9 +175,15 @@ main (int argc, const char **argv)
 	fpsetmask (fpgetmask() & ~(FP_X_DZ|FP_X_INV));
 #endif
 
+#ifdef HAVE_NLS	
 	bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+#endif	
+
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+
+#ifdef HAVE_NLS	
 	textdomain (GETTEXT_PACKAGE);
+#endif	
 
 	LIBXML_TEST_VERSION
 
