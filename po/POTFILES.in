@@ -1,6 +1,7 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
 inkscape.desktop.in
+src/application/editor.cpp
 src/arc-context.cpp
 src/attributes.cpp
 src/color.cpp
@@ -29,6 +30,7 @@ src/dialogs/scriptdialog.cpp
 src/dialogs/sp-attribute-widget.cpp
 src/dialogs/stroke-style.cpp
 src/dialogs/text-edit.cpp
+src/dialogs/tiledialog.cpp
 src/dialogs/tracedialog.cpp
 src/dialogs/transformation.cpp
 src/dialogs/xml-tree.cpp
@@ -90,6 +92,7 @@ src/file.cpp
 src/fixes.cpp
 src/geom.cpp
 src/gradient-chemistry.cpp
+src/gradient-drag.cpp
 src/help.cpp
 src/helper/action.cpp
 src/helper/gnome-utils.cpp
@@ -247,6 +250,25 @@ src/text-context.cpp
 src/toolbox.cpp
 src/tools-switch.cpp
 src/trace/trace.cpp
+src/ui/dialog/align-and-distribute.cpp
+src/ui/dialog/align-and-distribute.h
+src/ui/dialog/document-preferences.cpp
+src/ui/dialog/export.h
+src/ui/dialog/extension-editor.h
+src/ui/dialog/fill-and-stroke.cpp
+src/ui/dialog/fill-and-stroke.h
+src/ui/dialog/find.cpp
+src/ui/dialog/find.h
+src/ui/dialog/inkscape-preferences.cpp
+src/ui/dialog/inkscape-preferences.h
+src/ui/dialog/layer-editor.h
+src/ui/dialog/messages.cpp
+src/ui/dialog/messages.h
+src/ui/dialog/text-properties.cpp
+src/ui/dialog/text-properties.h
+src/ui/dialog/tree-editor.h
+src/ui/dialog/xml-editor.h
+src/ui/stock-items.cpp
 src/uri-references.cpp
 src/uri.cpp
 src/verbs.cpp
@@ -282,7 +304,6 @@ src/widgets/test-widgets.cpp
 src/winmain.cpp
 src/xml/repr-action-test.cpp
 src/xml/repr-css.cpp
-src/xml/repr-get-children.cpp
 src/xml/repr-io.cpp
 src/xml/repr-util.cpp
 src/xml/repr.cpp
