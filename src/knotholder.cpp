@@ -20,12 +20,14 @@
 #include "desktop.h"
 #include "sp-item.h"
 #include "sp-shape.h"
+#include "knot.h"
 #include "knotholder.h"
+#include "knot-holder-entity.h"
 #include <libnr/nr-matrix-div.h>
 #include <libnr/nr-matrix-ops.h>
 
 static void knot_clicked_handler (SPKnot *knot, guint state, gpointer data);
-static void knot_moved_handler (SPKnot *knot, NR::Point *p, guint state, gpointer data);
+static void knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer data);
 static void knot_ungrabbed_handler (SPKnot *knot, unsigned int state, SPKnotHolder *kh);
 
 #ifdef KNOT_HOLDER_DEBUG
@@ -135,8 +137,11 @@ sp_knot_holder_add_full	(SPKnotHolder       *knot_holder,
 	sp_knot_show (e->knot);
 }
 
+/**
+ * \param p In desktop coordinates.
+ */
 static void
-knot_clicked_handler (SPKnot *knot, guint state, gpointer data)
+knot_clicked_handler(SPKnot *knot, guint state, gpointer data)
 {
 	SPKnotHolder *knot_holder = (SPKnotHolder *) data;
 	SPItem *item  = SP_ITEM (knot_holder->item);
@@ -154,7 +159,7 @@ knot_clicked_handler (SPKnot *knot, guint state, gpointer data)
 }
 
 static void
-knot_moved_handler (SPKnot *knot, NR::Point *p, guint state, gpointer data)
+knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer data)
 {
 	SPKnotHolder *knot_holder = (SPKnotHolder *) data;
 	SPItem *item  = SP_ITEM (knot_holder->item);
@@ -169,7 +174,7 @@ knot_moved_handler (SPKnot *knot, NR::Point *p, guint state, gpointer data)
 			break;
 		}
 	}
-	
+
 	sp_shape_set_shape (SP_SHAPE (item));
 
 	NR::Matrix const i2d(sp_item_i2d_affine(item));
