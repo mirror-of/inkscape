@@ -93,6 +93,10 @@ sp_shortcut_init ()
 	sp_shortcut_set (GDK_s, Inkscape::Verb::get(SP_VERB_CONTEXT_SELECT), false);
 	sp_shortcut_set (GDK_S, Inkscape::Verb::get(SP_VERB_CONTEXT_SELECT), false);
 
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_F1, Inkscape::Verb::get(SP_VERB_CONTEXT_GRADIENT), true);
+	sp_shortcut_set (GDK_g, Inkscape::Verb::get(SP_VERB_CONTEXT_GRADIENT), false);
+	sp_shortcut_set (GDK_G, Inkscape::Verb::get(SP_VERB_CONTEXT_GRADIENT), false);
+
 	sp_shortcut_set (GDK_F2, Inkscape::Verb::get(SP_VERB_CONTEXT_NODE), true);
 	sp_shortcut_set (GDK_n, Inkscape::Verb::get(SP_VERB_CONTEXT_NODE), false);
 	sp_shortcut_set (GDK_N, Inkscape::Verb::get(SP_VERB_CONTEXT_NODE), false);
