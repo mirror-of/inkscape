@@ -1,5 +1,8 @@
 2004-02-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/node-context.cpp (sp_node_context_root_handler):
+	NR::Point'ification and var cleanup.
+
 	* src/event-context.cpp (sp_event_context_private_root_handler,
 	set_event_location): NR::Point'ification.
 

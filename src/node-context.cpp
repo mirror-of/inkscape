@@ -372,38 +372,28 @@ sp_node_context_item_handler (SPEventContext * event_context, SPItem * item, Gdk
 static gint
 sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 {
-	SPDesktop * desktop;
-	SPNodeContext * nc;
-	NRPoint p;
-	NRRect b;
-	gint ret;
-	double nudge;
-
-	ret = FALSE;
-
-	desktop = event_context->desktop;
-	nc = SP_NODE_CONTEXT (event_context);
-	nudge = prefs_get_double_attribute_limited ("options.nudgedistance", "value", 2.8346457, 0, 1000); // default is 1 mm
+	SPDesktop *desktop = event_context->desktop;
+	SPNodeContext *nc = SP_NODE_CONTEXT(event_context);
+	double const nudge = prefs_get_double_attribute_limited("options.nudgedistance", "value", 2.8346457, 0, 1000); // default is 1 mm
 	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
-	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
-	gdouble offset = prefs_get_double_attribute_limited ("options.defaultoffsetwidth", "value", 2, 0, 1000); 
+	int const snaps = prefs_get_int_attribute("options.rotationsnapsperpi", "value", 12);
+	double const offset = prefs_get_double_attribute_limited("options.defaultoffsetwidth", "value", 2, 0, 1000);
+
+	gint ret = FALSE;
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
-		switch (event->button.button) {
-		case 1:
-
+		if (event->button.button == 1) {
 			// save drag origin
 			xp = (gint) event->button.x; 
 			yp = (gint) event->button.y;
 			within_tolerance = true;
 
-			sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
-			sp_rubberband_start (desktop, p.x, p.y);
+			NR::Point const button_w(event->button.x,
+						 event->button.y);
+			NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
+			sp_rubberband_start(desktop, button_dt);
 			ret = TRUE;
-			break;
-		default:
-			break;
 		}
 		break;
 	case GDK_MOTION_NOTIFY:
@@ -419,8 +409,10 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			// motion notify coordinates as given (no snapping back to origin)
 			within_tolerance = false; 
 
-			sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
-			sp_rubberband_move (p.x, p.y);
+			NR::Point const motion_w(event->motion.x,
+						 event->motion.y);
+			NR::Point const motion_dt(sp_desktop_w2d_xy_point(desktop, motion_w));
+			sp_rubberband_move(motion_dt);
 			nc->drag = TRUE;
 			ret = TRUE;
 		}
@@ -428,6 +420,7 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 	case GDK_BUTTON_RELEASE:
 		xp = yp = 0; 
 		if (event->button.button == 1) {
+			NRRect b;
 			if (sp_rubberband_rect (&b) && !within_tolerance) { // drag
 				if (nc->nodepath) {
 					sp_nodepath_select_rect (nc->nodepath, &b, event->button.state & GDK_SHIFT_MASK);
@@ -599,6 +592,8 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			}
 			break;
 		case GDK_Escape:
+		{
+			NRRect b;
 			if (sp_rubberband_rect (&b)) { // cancel rubberband
 				sp_rubberband_stop ();
 				nodeedit_rb_escaped = 1;
@@ -607,6 +602,7 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			}
 			ret = TRUE;
 			break;
+		}
 
  		case GDK_bracketleft:
 			if ( MOD__CTRL && !MOD__ALT && ( snaps != 0 ) ) {
