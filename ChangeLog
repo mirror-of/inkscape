@@ -1,3 +1,7 @@
+2004-06-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/uri-references.h (getOwner): Fix copy&paste bug.
+
 2004-06-11  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-object.h, src/sp-object.cpp:
@@ -10,7 +14,7 @@
 	  sp_object_request_modified -> SPObject::requestModified
 	  sp_object_invoke_modified -> SPObject::emitModified
 
-      (leaving deprecated wrappers in place for now)
+	  (leaving deprecated wrappers in place for now)
 
 	* src/document.cpp, src/object-edit.cpp, src/sp-clippath.cpp,
 	  src/sp-defs.cpp, src/sp-ellipse.cpp, src/sp-image.cpp,
@@ -24,7 +28,7 @@
 	  transitioned to SPObject::requestDisplayUpdate and
 	  SPObject::updateDisplay
 
-    * src/arc-context.cpp, src/document.cpp, src/gradient-chemistry.cpp,
+	* src/arc-context.cpp, src/document.cpp, src/gradient-chemistry.cpp,
 	  src/knotholder.cpp, src/main.cpp, src/rect-context.cpp,
 	  src/sp-anchor.cpp, src/sp-clippath.cpp, src/sp-defs.cpp,
 	  src/sp-gradient.cpp, src/sp-item-group.cpp, src/sp-item.cpp,
@@ -40,7 +44,7 @@
 	  and SPObject::updateRepr; also reworked "minimal" version of
 	  updateRepr.
 
-    * src/sp-object.h: added a little documentation
+	* src/sp-object.h: added a little documentation
 
 	* src/document.cpp, src/document.h, src/file.cpp,
 	  src/gradient-chemistry.cpp, src/help.cpp, src/object-ui.cpp,
@@ -87,14 +91,14 @@
 
 	* src/desktop-snap.cpp, src/desktop-snap.h: Coding style fixes.
 	Use NR::Coord rather than double where appropriate.  Added some
-	comments.  Use NR::Dim2	where appropriate.  Use NR_HUGE rather
+	comments.  Use NR::Dim2 where appropriate.  Use NR_HUGE rather
 	than hardcoded 1e18s.
 
 	* src/rect-context.cpp, src/nodepath.cpp, src/arc-context.cpp:
 	Adapt for changes to sp_desktop_dim_snap prototype.
 
 	* src/select-context.cpp:
-	Adapt for changes to sp_desktop_dim_snap_list prototype.	
+	Adapt for changes to sp_desktop_dim_snap_list prototype.
 
 2004-06-08  MenTaLguY  <mental@rydia.net>
 
@@ -164,7 +168,7 @@
 2004-06-06  Bryce Harrington <bryce@bryceharrington.com>
 
 	* libnrtype/nr-type-xft.cpp, libnrtype/nr-font.cpp,
-  	  libnrtype/nr-rasterfont.cpp, libnrtype/nr-type-directory.cpp,
+	  libnrtype/nr-rasterfont.cpp, libnrtype/nr-type-directory.cpp,
 	  libnrtype/nr-typeface.cpp, libnrtype/nr-type-w32.cpp, 
 	  libnrtype/nr-type-ft2.cpp, libnrtype/nr-type-pos-def.cpp,
 	  libnrtype/nr-type-primitives.cpp:
@@ -296,7 +300,7 @@
 	* src/selection.h, src/selection.cpp:
 	  rework SPSelection to be SPObject- rather than SPItem- oriented;
 	  this will be needed later for the layers/document tree dialog
-      (and could prove useful for the XML editor later too)
+	  (and could prove useful for the XML editor later too)
 
 	* src/sp-item.h: make SPItem a proper C++ subclass of SPObject
 
@@ -736,10 +740,10 @@
 	cleanups.
 
 2004-05-05 Spundun Bhatt <spundun@isi.edu>
- 
+
 	* configure.in: Stole Nathan's configure hack and used it to 
 	support gtkmm-2.4
- 
+
 2004-05-06  Ted Gould  <ted@gould.cx>
 
 	* src/file.cpp, src/extension/extension.cpp, src/extension/init.cpp,
@@ -893,13 +897,13 @@
 
 	* dialogs/dialog-events.cpp: Only set the UTILITY hint for non-modal windows,
 	fixes "disappearing save as"
- 
+
 	* toolbox.cpp widgets/widget-sizes.h widgets/button.cpp: Got rid of button
 	relief, top panel made less tall
 
 	* desktop.cpp preferences-skeleton.h dialogs/display-settings.cpp: Done away
 	with the sticky zoom button, now in prefs
- 
+
 	* path-chemistry.cpp: Preserve id= in combine/break, convert to paths; preserve
 	z-order in combine/break; cleanups
 
@@ -1286,13 +1290,13 @@
 	interface.cpp: Clone command (Edit menu, Shift+Ctrl+N)
 
 	* sp-use.cpp: Update propagated to parent class (SPItem), misc fixes
- 
+
 	* sp-polygon.cpp: Fix for points= updating by adding set_shape call into _write
 	(bug 910142)
 
 	* text-context.cpp: Do not create text object unless a printable key was
 	pressed; fixes 934280
- 
+
 	* widgets/dash-selector.cpp dialogs/stroke-style.cpp: Removed marker buttons,
 	fixed g_free crash in marker menus, added tooltips, added stroke-miterlimit
 	spinbutton
@@ -1303,7 +1307,7 @@
 	* splivarot.cpp sp-offset.cpp: Fix for 932642 
 
 	* helper/sodipodi-ctrlrect.cpp: Simplify and fix dashes and offsets
- 
+
 	* widgets/gradient-selector.cpp: Tooltip edits 
 
 	* verbs.cpp verbs.cpp verbs.h interface.cpp...: Remove tool options
@@ -1311,19 +1315,19 @@
 	* seltrans.cpp: Pivot marker made inverse
 
 	* toolbox.cpp: More defocusing
- 
+
 	* *-context.cpp: Eliminated config widgets from all tools 
 
 	* toolbox.cpp sp-ellipse.cpp: Ellipse fixes, tooltips
- 
+
 	* verbs.cpp: Options -> Preferences
- 
+
 	* dialogs/display-settings.cpp: An options dialog, completely new; selector
 	widget grafted here
 
 	* preferences-skeleton.h node-context.cpp select-context.cpp: scaling uses
 	defaultscale
- 
+
 	* dialogs/display-settings.cpp display/nr-arena-image.cpp: Make oversample
 	saveable
 
@@ -1336,7 +1340,7 @@
 
 	* main.cpp: Removed C-locale setting, not needed anymore; temporary switch of
 	gettext encoding for console output
- 
+
 	* inkscape.cpp: Memory fix from sodi
 
 	* right-click finishes pen (patch by Carl)  draw-context.cpp
@@ -1695,7 +1699,7 @@
 	* many files: _() fixes, edits in labels, messages, tooltips, mnemonics
 
 	* src/inkscape.cpp: remove redundancy in error messages for failing to load prefs
- 
+
 	* share/extensions src/extension/internal: Renaming file formats to include (*.ext)
 
 	* src/interface.cpp src/dialogs/filedialog.cpp: Transientize, make modal
@@ -1705,7 +1709,7 @@
 	thing is highlighted in xml editor
 
 	* src/sp-guide.cpp: Guide position updated after undo
- 
+
 	* src/widgets/sp-xmlview-attr-list.cpp: Max length of viewable attributes
 	increased
 
@@ -1715,9 +1719,9 @@
 	has none (e.g. group)
 
 	* src/knot.cpp: Knot dragging autoscrolls
- 
+
 	* src/sp-text.cpp src/text-context.cpp: Cursor movements autoscroll
- 
+
 	* src/desktop.h src/desktop.cpp: autoscrollspeed can be overridden in call to
 	sp_desktop_scroll_to_point
 
@@ -1725,7 +1729,7 @@
 	after click is no longer horizontal.
 
 	* src/helper/sp-ctrlline.cpp: Always-visible inversion for ctrlline
- 
+
 	* src/libnrtype/nr-type-w32.cpp: Fix stretch and variant on win32 
 
 	* src/widgets/gradient-vector.cpp: Undo fix; new stop takes average of its

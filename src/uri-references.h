@@ -78,7 +78,7 @@ public:
 	 *
 	 * @return a pointer to the URIReference's owner
 	 */
-	SPObject *getOwner() const { return _obj; }
+	SPObject *getOwner() const { return _owner; }
 
 	/**
 	 * Accessor for the referrent change notification signal;
