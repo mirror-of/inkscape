@@ -1,5 +1,8 @@
 2003-12-20  MenTaLguY <mental@rydia.net>
 
+	* src/help.cpp, glade/about_svg.tmpl, glade/about.svg:
+	  fixed version display in about box
+
 	* src/desktop.cpp, src/desktop.h, src/document.cpp, src/document.h:
 	  added sp_desktop_item_at_point()
 
