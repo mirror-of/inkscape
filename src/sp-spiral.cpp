@@ -125,10 +125,7 @@ sp_spiral_build (SPObject * object, SPDocument * document, SPRepr * repr)
 static SPRepr *
 sp_spiral_write (SPObject *object, SPRepr *repr, guint flags)
 {
-	SPSpiral *spiral;
-	char *d;
-
-	spiral = SP_SPIRAL (object);
+	SPSpiral *spiral = SP_SPIRAL (object);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 		repr = sp_repr_new ("path");
@@ -148,7 +145,19 @@ sp_spiral_write (SPObject *object, SPRepr *repr, guint flags)
 		sp_repr_set_double (repr, "sodipodi:t0", spiral->t0);
 	}
 
-	d = sp_svg_write_path (((SPShape *) spiral)->curve->bpath);
+        //Duplicate the path
+        SPCurve *curve = ((SPShape *) spiral)->curve;
+        //Nulls might be possible if this called iteratively
+        if ( !curve ) {
+                //g_warning("sp_spiral_write(): No path to copy\n");
+                return NULL;
+        }
+        NArtBpath *bpath = curve->bpath;
+        if ( !bpath ) {
+                //g_warning("sp_spiral_write(): No path to copy\n");
+                return NULL;
+        }
+	char *d = sp_svg_write_path ( bpath );
 	sp_repr_set_attr (repr, "d", d);
 	g_free (d);
 
