@@ -972,12 +972,11 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 			GtkWidget *close_box;
 			GtkWidget *close_align;
 			GtkWidget *hbox1;
-			char markup[256];
+			gchar *markup;
 			gint b;
 			
 			// The dialog label
-			g_snprintf(markup,
-				256,
+			markup = g_strdup_printf(
 			        "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before closing?</span>\n\n" \
 			        "If you close without saving, your changes will be discarded.",
 				SP_DOCUMENT_NAME(doc));
@@ -988,6 +987,7 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 			gtk_label_set_line_wrap (GTK_LABEL (lbl), TRUE);
 			gtk_misc_set_alignment (GTK_MISC (lbl), 0.5, 0);
 			
+			g_free (markup);
 			
 			// The dialog icon
 			warn_icon = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_DIALOG);
