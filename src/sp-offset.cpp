@@ -1115,7 +1115,7 @@ sp_offset_move_compensate(NR::Matrix const *mp, SPItem *original, SPOffset *self
 	
 	// commit the compensation
 	SPItem *item = SP_ITEM(self);
-	NRMatrix clone_move_nr = clone_move;
+	NRMatrix clone_move_nr = clone_move.operator const NRMatrix&();
 	nr_matrix_multiply(&item->transform, &item->transform, &clone_move_nr);
 	sp_item_write_transform(item, SP_OBJECT_REPR(item), &item->transform, &advertized_move);
 	SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
