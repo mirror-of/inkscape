@@ -1,8 +1,10 @@
 #define __NR_MATRIX_C__
 
+/** \file
+ * Various matrix routines.  Currently includes some NR::rotate etc. routines too.
+ */
+
 /*
- * Pixel buffer rendering library
- *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
@@ -192,6 +194,16 @@ Matrix from_basis(const Point x_basis, const Point y_basis, const Point offset) 
 	return ret;
 }
 
+/**
+ * Returns a rotation matrix corresponding by the specified angle (in radians) about the origin.
+ *
+ * \see NR::rotate_degrees
+ *
+ * Angle direction in Inkscape code: If you use the traditional mathematics convention that y
+ * increases upwards, then positive angles are anticlockwise as per the mathematics convention.  If
+ * you take the common non-mathematical convention that y increases downwards, then positive angles
+ * are clockwise, as is common outside of mathematics.
+ */
 rotate::rotate(NR::Coord const theta)
 	: vec(cos(theta), sin(theta))
 {

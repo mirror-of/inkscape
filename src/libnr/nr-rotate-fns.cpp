@@ -1,9 +1,20 @@
+/** \file
+ * Functions to/from NR::rotate.
+ */
 #include <glib.h>
 #include <cmath>
 #include <libnr/nr-rotate.h>
 #include <libnr/nr-rotate-fns.h>
 #include <libnr/nr-rotate-ops.h>
 
+/**
+ * Returns a rotation matrix corresponding by the specified angle about the origin.
+ *
+ * Angle direction in Inkscape code: If you use the traditional mathematics convention that y
+ * increases upwards, then positive angles are anticlockwise as per the mathematics convention.  If
+ * you take the common non-mathematical convention that y increases downwards, then positive angles
+ * are clockwise, as is common outside of mathematics.
+ */
 NR::rotate
 rotate_degrees(double degrees)
 {

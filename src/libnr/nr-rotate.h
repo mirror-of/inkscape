@@ -7,6 +7,9 @@
 
 namespace NR {
 
+/** Notionally an NR::Matrix corresponding to rotation about the origin.
+    Behaves like NR::Matrix for multiplication.
+**/
 class rotate {
 public:
     Point vec;
