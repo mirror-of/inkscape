@@ -2,6 +2,9 @@
 
 	* src/libnrtype/nr-type-xft.cpp: added patch 898200, hopefully this
 	  won't break anyone.
+	* src/dialogs/desktop-properties.cpp: added patch 947127, along with
+	  some orientation bugfixes, list cleanup, and logic to select the
+	  correct menu items based on document settings.
 
 2004-05-08  Kees Cook <kees@outflux.net>
 

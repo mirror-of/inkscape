@@ -86,6 +86,46 @@ static win_data wd;
 static gint x = -1000, y = -1000, w = 0, h = 0; 
 static gchar *prefs_path = "dialogs.documentoptions";
 
+struct inkscape_papers_t {
+	gchar *name;
+	gdouble height;
+	gdouble width;
+};
+
+static inkscape_papers_t inkscape_papers [] = {
+	{ "A4", 842, 595 },
+	{ "US Letter", 792, 612 },
+	{ "US Legal", 1008, 612 },
+	{ "US Executive", 720, 542 },
+	{ "A0", 3368, 2380 },
+	{ "A1", 2380, 1684 },
+	{ "A2", 1684, 1190 },
+	{ "A3", 1190, 842 },
+	{ "A5", 595, 421 },
+	{ "A6", 421, 297 },
+	{ "A7", 297, 210 },
+	{ "A8", 210, 148 },
+	{ "A9", 148, 105 },
+	{ "B0", 4008, 2836 },
+	{ "B1", 2836, 2004 },
+	{ "B2", 2004, 1418 },
+	{ "B3", 1418, 1002 },
+	{ "B4", 1002, 709 },
+	{ "B5", 709, 501 },
+	{ "B6", 501, 355 },
+	{ "B7", 355, 250 },
+	{ "B8", 250, 178 },
+	{ "B9", 178, 125 },
+	{ "B10", 125, 89 },
+	{ "CSE", 649, 462 },
+	{ "Comm10E", 683, 298 },
+	{ "DLE", 624, 312 },
+	{ "Folio", 935, 595 },
+	{ "Ledger", 792, 1224 },
+	{ "Tabloid", 1225, 792 },
+	{ NULL, 0, 0 },
+};
+
 static void 
 docoptions_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
 {
@@ -328,15 +368,53 @@ sp_dtw_guides_snap_distance_changed ( GtkAdjustment *adjustment,
 static void
 sp_doc_dialog_paper_selected ( GtkWidget *widget, gpointer data )
 {
+    GtkWidget *ww, *hw, *om;
+    struct inkscape_papers_t * paper;
+    gint landscape;
+    double h, w;
+    GtkAdjustment *aw, *ah;
+    SPUnitSelector *us;
+    const SPUnit *unit;
+    static const SPUnit *pt;
+
     if (gtk_object_get_data (GTK_OBJECT (dlg), "update")) {
         return;
     }
-    
-    GtkWidget *ww = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "widthsb");
-    GtkWidget *hw = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "heightsb");
 
-    gtk_widget_set_sensitive (ww, TRUE);
-    gtk_widget_set_sensitive (hw, TRUE);
+    paper = (struct inkscape_papers_t*) data;
+    
+    ww = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "widthsb");
+    gtk_widget_set_sensitive (ww, FALSE);
+    hw = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "heightsb");
+    gtk_widget_set_sensitive (hw, FALSE);
+
+    om = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "orientation");
+    landscape = gtk_option_menu_get_history(GTK_OPTION_MENU(om));
+
+    if (!pt) pt = sp_unit_get_by_abbreviation ("pt");
+    us = (SPUnitSelector *)gtk_object_get_data (GTK_OBJECT (dlg), "units");
+    unit = sp_unit_selector_get_unit (us);
+    aw = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (dlg), "width");
+    ah = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (dlg), "height");
+
+    if (paper) { 
+        if(!landscape) {
+          w = paper->width;
+          h = paper->height;
+	}
+	else {
+          w = paper->height;
+          h = paper->width;
+        }
+        sp_convert_distance (&w, pt, unit);
+        gtk_adjustment_set_value (aw, w);
+        sp_convert_distance (&h, pt, unit);
+        gtk_adjustment_set_value (ah, h);
+    }
+    else {
+        gtk_widget_set_sensitive (ww, TRUE);
+        gtk_widget_set_sensitive (hw, TRUE);
+    }
 
     if (!SP_ACTIVE_DESKTOP)
       return;
@@ -344,7 +422,36 @@ sp_doc_dialog_paper_selected ( GtkWidget *widget, gpointer data )
     sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
 }
 
+static void
+sp_doc_dialog_paper_orientation_selected ( GtkWidget *widget, gpointer data )
+{
+    gdouble w, h, t;
+    GtkAdjustment *aw, *ah;
 
+    if (gtk_object_get_data (GTK_OBJECT (dlg), "update")) {
+         return;
+    }
+
+    aw = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (dlg), "width");
+    ah = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (dlg), "height");
+
+    w = gtk_adjustment_get_value (aw);
+    h = gtk_adjustment_get_value (ah);
+
+    /* only toggle when we actually swap */
+    GtkWidget * om = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "orientation");
+    gint landscape = gtk_option_menu_get_history(GTK_OPTION_MENU(om));
+
+    if ((w > h && !landscape) ||
+        (w < h &&  landscape)) {
+        t = w; w = h; h = t;
+    }
+
+    gtk_adjustment_set_value (aw, w);
+    gtk_adjustment_set_value (ah, h);
+
+    gtk_object_set_data (GTK_OBJECT (dlg), "update", GINT_TO_POINTER (FALSE) );
+}
 
 void
 sp_desktop_dialog (void)
@@ -545,7 +652,6 @@ sp_desktop_dialog (void)
         gtk_widget_show (hb);
         gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
 
-        
         l = gtk_label_new (_("Paper size:"));
         gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
         gtk_widget_show (l);
@@ -558,13 +664,54 @@ sp_desktop_dialog (void)
         GtkWidget *m = gtk_menu_new ();
         gtk_widget_show (m);
 
-        GtkWidget *i = gtk_menu_item_new_with_label (_("Custom"));
+	GtkWidget *i;
+        for (struct inkscape_papers_t * paper = inkscape_papers;
+	     paper && paper->name;
+	     paper++) {
+            i = gtk_menu_item_new_with_label (paper->name);
+	    gtk_widget_show (i);
+	    g_signal_connect ( G_OBJECT (i), "activate",
+			    G_CALLBACK (sp_doc_dialog_paper_selected),
+			    (gpointer)(paper));
+	    gtk_menu_append (GTK_MENU (m), i);
+	}
+
+        i = gtk_menu_item_new_with_label (_("Custom"));
         gtk_widget_show (i);
         g_signal_connect ( G_OBJECT (i), "activate", 
                            G_CALLBACK (sp_doc_dialog_paper_selected), NULL);
         gtk_menu_prepend (GTK_MENU (m), i);
         gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
        
+        hb = gtk_hbox_new (FALSE, 4);
+        gtk_widget_show (hb);
+        gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
+
+        l = gtk_label_new (_("Paper orientation:"));
+        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+        gtk_widget_show (l);
+        gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
+        om = gtk_option_menu_new ();
+        gtk_widget_show (om);
+        gtk_box_pack_start (GTK_BOX (hb), om, TRUE, TRUE, 0);
+        gtk_object_set_data (GTK_OBJECT (dlg), "orientation", om);
+
+        m = gtk_menu_new ();
+        gtk_widget_show (m);
+
+        i = gtk_menu_item_new_with_label (_("Landscape"));
+        gtk_widget_show (i);
+        g_signal_connect ( G_OBJECT (i), "activate", 
+                           G_CALLBACK (sp_doc_dialog_paper_orientation_selected), NULL);
+        gtk_menu_prepend (GTK_MENU (m), i);
+
+        i = gtk_menu_item_new_with_label (_("Portrait"));
+        gtk_widget_show (i);
+        g_signal_connect ( G_OBJECT (i), "activate", 
+                           G_CALLBACK (sp_doc_dialog_paper_orientation_selected), NULL);
+        gtk_menu_prepend (GTK_MENU (m), i);
+
+        gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
         
         /* Custom paper frame */
         GtkWidget *f = gtk_frame_new (_("Custom paper"));
@@ -806,19 +953,49 @@ sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop)
         gdouble docw = sp_document_width (SP_DT_DOCUMENT (desktop));
         gdouble doch = sp_document_height (SP_DT_DOCUMENT (desktop));
 
-        gint pos = 1;
-        GSList *l = NULL;
 
         GtkWidget* ww = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dialog), "widthsb");
         GtkWidget* hw = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dialog), "heightsb");
-        GtkWidget* om = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dialog), "papers");
+        GtkWidget* pm = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dialog), "papers");
+        GtkWidget* om = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dialog), "orientation");
 
-        if (l != NULL) {
-            gtk_option_menu_set_history (GTK_OPTION_MENU (om), pos);
+	/* select paper orientation */
+	gdouble ph, pw;
+        if (docw > doch) {
+	    /* wider than tall: landscape */
+            gtk_option_menu_set_history (GTK_OPTION_MENU (om), 1);
+	    ph = docw;
+	    pw = doch;
+        }
+	else {
+	    /* taller than wide: portrait */
+            gtk_option_menu_set_history (GTK_OPTION_MENU (om), 0);
+	    ph = doch;
+	    pw = docw;
+	}
+	//printf("have ph: %f pw: %f\n",ph,pw);
+
+	/* find matching paper size */
+        gint pos;
+	struct inkscape_papers_t * paper;
+        for (paper = inkscape_papers, pos=1;
+	     paper && paper->name;
+	     paper++, pos++) {
+	    //printf("checking %s (%fx%f)\n",paper->name,paper->height,paper->width);
+            if (paper->width == pw &&
+	        paper->height == ph) {
+		//printf("matched\n");
+		break;
+            }
+        }
+        if (paper && paper->name) {
+	    //printf("using pos %d (%s)\n",pos,paper->name);
+            gtk_option_menu_set_history (GTK_OPTION_MENU (pm), pos);
             gtk_widget_set_sensitive (ww, FALSE);
             gtk_widget_set_sensitive (hw, FALSE);
         } else {
-            gtk_option_menu_set_history (GTK_OPTION_MENU (om), 0);
+	    //printf("using custom\n");
+            gtk_option_menu_set_history (GTK_OPTION_MENU (pm), 0);
             gtk_widget_set_sensitive (ww, TRUE);
             gtk_widget_set_sensitive (hw, TRUE);
         }
