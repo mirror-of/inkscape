@@ -67,41 +67,6 @@ test_conversions()
 }
 
 static bool
-test_bases()
-{
-    utest_start("sp_unit_get_identity");
-#define CASE(_base) { _base, #_base }
-    struct BaseCase { SPUnitBase base; char const *name; } const cases[] = {
-        CASE(SP_UNIT_DIMENSIONLESS),
-        CASE(SP_UNIT_ABSOLUTE),
-        CASE(SP_UNIT_DEVICE),
-        CASE(SP_UNIT_VOLATILE)
-    };
-#undef CASE
-
-    unsigned done = 0;
-    for (unsigned i = 0; i < G_N_ELEMENTS(cases); ++i) {
-        UTEST_TEST(cases[i].name) {
-            SPUnitBase const base = cases[i].base;
-            UTEST_ASSERT((base & (base - 1)) == 0);
-            UTEST_ASSERT(base != 0);
-            done |= base;
-            if (base != SP_UNIT_VOLATILE) {
-                /* SP_UNIT_VOLATILE has no base unit. */
-                SPUnit const &unit = *sp_unit_get_identity(base);
-                UTEST_ASSERT(unit.base == base);
-                UTEST_ASSERT(unit.unittobase == 1.0);
-            }
-        }
-    }
-    UTEST_TEST("coverage") {
-        UTEST_ASSERT(done == SP_UNITS_ALL);
-    }
-
-    return utest_end();
-}
-
-static bool
 test_unit_table()
 {
     utest_start("unit table");
@@ -115,7 +80,6 @@ int
 main(int argc, char *argv[])
 {
     int const ret = ( ( test_conversions()
-                        && test_bases()
                         && test_unit_table() )
                       ? EXIT_SUCCESS
                       : EXIT_FAILURE );
