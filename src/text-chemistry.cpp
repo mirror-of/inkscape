@@ -152,29 +152,11 @@ text_remove_from_path (void)
             continue;
         }
 
-        SPObject *text = SP_OBJECT (items->data);
         SPObject *tp = sp_object_first_child(SP_OBJECT (items->data));
 
         did = true;
 
-        // make a list of textpath children
-        GSList *tp_reprs = NULL;
-        for (SPObject *o = SP_OBJECT(tp)->children; o != NULL; o = o->next) {
-            tp_reprs = g_slist_prepend (tp_reprs, SP_OBJECT_REPR (o));
-        }
-
-        for ( GSList *i = tp_reprs ; i ; i = i->next ) {
-            // make a copy of each textpath child
-            SPRepr *copy = sp_repr_duplicate((SPRepr *) i->data);
-            // remove the old repr from under textpath
-            sp_repr_remove_child(SP_OBJECT_REPR(tp), (SPRepr *) i->data); 
-            // put its copy into under textPath
-            sp_repr_add_child (SP_OBJECT_REPR(text), copy, NULL); // fixme: copy id
-        }
-
-        //remove textpath
-        tp->deleteObject();
-        g_slist_free(tp_reprs);
+        sp_textpath_to_text (tp);
     }
 
     if (!did) {

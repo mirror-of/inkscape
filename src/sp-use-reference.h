@@ -53,6 +53,8 @@ public:
 	void            start_listening(SPObject* to);
 	void            quit_listening(void);
 	void            refresh_source(void);
+
+    void (*user_unlink) (SPObject *user);
 };
 
 #endif /* !SEEN_SP_USE_REFERENCE_H */

@@ -477,6 +477,7 @@ sp_textpath_init (SPTextPath *textpath)
 	textpath->isUpdating=false;
 		// set up the uri reference
 	textpath->sourcePath = new SPUsePath(SP_OBJECT(textpath));
+	textpath->sourcePath->user_unlink = sp_textpath_to_text;
 }
 static void
 sp_textpath_finalize(GObject *obj)
@@ -721,4 +722,29 @@ sp_textpath_get_path_item (SPTextPath *tp)
 			return (SPItem *) refobj;
 	}
 	return NULL;
+}
+
+void
+sp_textpath_to_text (SPObject *tp)
+{
+	SPObject *text = SP_OBJECT_PARENT (tp);
+
+        // make a list of textpath children
+        GSList *tp_reprs = NULL;
+        for (SPObject *o = SP_OBJECT(tp)->children; o != NULL; o = o->next) {
+            tp_reprs = g_slist_prepend (tp_reprs, SP_OBJECT_REPR (o));
+        }
+
+        for ( GSList *i = tp_reprs ; i ; i = i->next ) {
+            // make a copy of each textpath child
+            SPRepr *copy = sp_repr_duplicate((SPRepr *) i->data);
+            // remove the old repr from under textpath
+            sp_repr_remove_child(SP_OBJECT_REPR(tp), (SPRepr *) i->data); 
+            // put its copy into under textPath
+            sp_repr_add_child (SP_OBJECT_REPR(text), copy, NULL); // fixme: copy id
+        }
+
+        //remove textpath
+        tp->deleteObject();
+        g_slist_free(tp_reprs);
 }

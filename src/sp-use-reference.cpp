@@ -61,6 +61,8 @@ SPUsePath::SPUsePath(SPObject* i_owner):SPUseReference(i_owner)
     new (&_changed_connection) sigc::connection();
     new (&_transformed_connection) sigc::connection();
     _changed_connection = changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_usepath_href_changed), this)); // listening to myself, this should be virtual instead
+
+    user_unlink = NULL;
 }
 
 SPUsePath::~SPUsePath(void)
@@ -194,6 +196,8 @@ sp_usepath_delete_self(SPObject */*deleted*/, SPUsePath *offset)
         // leave it be. just forget about the source
         offset->quit_listening();
         offset->unlink();
+        if (offset->user_unlink)
+            offset->user_unlink(offset->owner);
     } else if (mode == SP_CLONE_ORPHANS_DELETE) {
         offset->owner->deleteObject();
     }
