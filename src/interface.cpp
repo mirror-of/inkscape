@@ -631,9 +631,9 @@ sp_ui_help_menu (GtkWidget *m)
 
     GtkWidget *item_t = sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_Tutorials"), NULL, NULL);
     GtkWidget *menu_t = gtk_menu_new ();
-    sp_ui_menu_append_item (GTK_MENU (menu_t), NULL, _("Inkscape: _Basic"), G_CALLBACK(sp_help_open_tutorial), _("tutorial-basic.svg"));
-    sp_ui_menu_append_item (GTK_MENU (menu_t), NULL, _("Inkscape: _Advanced"), G_CALLBACK(sp_help_open_tutorial), _("tutorial-advanced.svg"));
-    sp_ui_menu_append_item (GTK_MENU (menu_t), NULL, _("_Elements of Design"), G_CALLBACK(sp_help_open_tutorial), _("elementsofdesign.svg"));
+    sp_ui_menu_append_item (GTK_MENU (menu_t), NULL, _("Inkscape: _Basic"),    G_CALLBACK(sp_help_open_tutorial), (void *)_("tutorial-basic.svg"));
+    sp_ui_menu_append_item (GTK_MENU (menu_t), NULL, _("Inkscape: _Advanced"), G_CALLBACK(sp_help_open_tutorial), (void *)_("tutorial-advanced.svg"));
+    sp_ui_menu_append_item (GTK_MENU (menu_t), NULL, _("_Elements of Design"), G_CALLBACK(sp_help_open_tutorial), (void *)_("elementsofdesign.svg"));
     gtk_menu_item_set_submenu (GTK_MENU_ITEM (item_t), menu_t);
 
     sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_About Inkscape"), G_CALLBACK(sp_help_about), NULL);
