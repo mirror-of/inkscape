@@ -3016,30 +3016,6 @@ libnr/nr-svp-render.o: \
 	libnr/nr-translate.h \
 	libnr/nr-values.h
 
-libnr/nr-svp-uncross.o: \
-	libnr/nr-svp-uncross.cpp \
-	libnr/nr-coord.h \
-	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
-	libnr/nr-macros.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
-	libnr/nr-path.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-ops.h \
-	libnr/nr-point.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-svp-private.h \
-	libnr/nr-svp-uncross.h \
-	libnr/nr-svp.h \
-	libnr/nr-translate.h \
-	libnr/nr-values.h \
-	libnr/nr-values.h
-
 libnr/nr-svp.o: \
 	libnr/nr-svp.cpp \
 	libnr/nr-coord.h \
@@ -3060,7 +3036,6 @@ libnr/nr-svp.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-svp-private.h \
-	libnr/nr-svp-uncross.h \
 	libnr/nr-svp.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \

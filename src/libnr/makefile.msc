@@ -23,7 +23,6 @@ OBJECTS = \
 	nr-gradient.obj \
 	nr-path.obj \
 	nr-svp.obj \
-	nr-svp-uncross.obj \
 	nr-svp-render.obj \
 	nr-object.obj \
 
