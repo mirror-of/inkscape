@@ -1,3 +1,9 @@
+2004-03-15  Ted Gould <ted@gould.cx>
+
+	* src/extension/extension.cpp:  Adding in some comments for my
+	  previous checkin and also adding in the integer functions that
+	  I forgot (but aren't used yet).
+
 2004-03-14  Jon Phillips <jon@jonphillips.info>
 
     * src/toolbox.cpp src/verbs.cpp src/interface.cpp share/icons/icons.svg: 

@@ -196,6 +196,26 @@ Extension::get_name (void)
             have to use the system) :)
     \param  paramrepr  The XML describing the parameter
 
+    This function first grabs all of the data out of the Repr and puts
+    it into local variables.  Actually these are just pointers, and the
+    data is not duplicated so we need to be careful with it.  If there
+    isn't a name or a type in the XML, then no parameter is created as
+    the function just returns.
+
+    From this point on, we're pretty committed as we've allocated an
+    object and we're starting to fill it.  The name is set first, and
+    is created with a strdup to actually allocate memory for it.  Then
+    there is a case statement (roughly because strcmp requires 'ifs')
+    based on what type of parameter this is.  Depending which type it
+    is, the value is interpreted differently, but they are relatively
+    straight forward.  In all cases the value is set to the default
+    value from the XML and the type is set to the interpreted type.
+
+    Finally the allocated parameter is put into the GSList that is called
+    parameteres.
+
+    TODO: This function should pull up parameters that are stored
+    in the preferences somewhere.  This needs to be figured out.
 */
 void
 Extension::make_param (SPRepr * paramrepr)
@@ -208,7 +228,7 @@ Extension::make_param (SPRepr * paramrepr)
     name = sp_repr_attr(paramrepr, "name");
     type = sp_repr_attr(paramrepr, "type");
     // defaultval = sp_repr_content(paramrepr);
-	defaultval = sp_repr_content(sp_repr_children(paramrepr));
+    defaultval = sp_repr_content(sp_repr_children(paramrepr));
 
     /* In this case we just don't have enough information */
     if (name == NULL || type == NULL) {
@@ -235,13 +255,39 @@ Extension::make_param (SPRepr * paramrepr)
         param->type = Extension::PARAM_STRING;
         param->val.t_string = g_strdup(defaultval);
     } else {
-		return;
+        return;
     }
 
     parameters = g_slist_append(parameters, param);
     return;
 }
 
+/**
+    \return    Parameter structure with a name of 'name'
+    \brief     This function looks through the linked list for a parameter
+               structure with the name of the passed in name
+    \param     name   The name to search for
+    \param     list   The list to look for
+
+    This is an inline function that is used by all the get_param and
+    set_param functions to find a param_t in the linked list with
+    the passed in name.  It is done as an inline so that it will be
+    optimized into a 'jump' by the compiler.
+
+    This function can throw a 'param_not_exist' exception if the
+    name is not found.
+
+    The first thing that this function checks is if the list is NULL.
+    It could be NULL because there are no parameters for this extension
+    or because all of them have been checked (I'll spoil the ending and
+    tell you that this function is called recursively).  If the list
+    is NULL then the 'param_not_exist' exception is thrown.
+
+    Otherwise, the function looks at the current param_t that the element
+    list points to.  If the name of that param_t matches the passed in
+    name then that param_t is returned.  Otherwise, this function is
+    called again with g_slist_next as a parameter.
+*/
 inline Extension::param_t *
 Extension::param_shared (gchar * name, GSList * list)
 {
@@ -262,6 +308,32 @@ Extension::param_shared (gchar * name, GSList * list)
     return Extension::param_shared(name, g_slist_next(list));
 }
 
+/**
+    \return   None
+    \brief    Gets a parameter identified by name with the string placed
+              in value.  It isn't duplicated into the value string.
+    \param    name    The name of the parameter to get
+    \param    value   Place to put a pointer to the string
+
+    This function first checks to make sure that the value parameter
+    is not passed in as NULL.  If so, the function returns.  This
+    doesn't emit a warning - this will probably cause some sort of
+    error in the calling function (as it wouldn't be calling this function
+    if it didn't want the value) so it can be debugged there.
+
+    To get the parameter to be used the function param_shared is called.
+    This function is inline so it shouldn't cause the stack to build
+    or anything like that.  If it can't find the parameter, it will
+    throw and exception - we aren't catching that because we want
+    the calling function to catch it.
+
+    Next up, the parameter that we got, we're making sure that it is
+    a string parameter.  If it isn't, then we throw a param_wrong_type
+    exception.
+    
+    Finally, if everything is okay, the string value that is stored in
+    the parameter is placed in value.
+*/
 void
 Extension::get_param (gchar * name, gchar ** value)
 {
@@ -283,6 +355,32 @@ Extension::get_param (gchar * name, gchar ** value)
     return;
 }
 
+/**
+    \return   None
+    \brief    Gets a parameter identified by name with the bool placed
+              in value.
+    \param    name    The name of the parameter to get
+    \param    value   Place to put the bool value
+
+    This function first checks to make sure that the value parameter
+    is not passed in as NULL.  If so, the function returns.  This
+    doesn't emit a warning - this will probably cause some sort of
+    error in the calling function (as it wouldn't be calling this function
+    if it didn't want the value) so it can be debugged there.
+
+    To get the parameter to be used the function param_shared is called.
+    This function is inline so it shouldn't cause the stack to build
+    or anything like that.  If it can't find the parameter, it will
+    throw and exception - we aren't catching that because we want
+    the calling function to catch it.
+
+    Next up, the parameter that we got, we're making sure that it is
+    a bool parameter.  If it isn't, then we throw a param_wrong_type
+    exception.
+    
+    Finally, if everything is okay, the boolean value that is stored in
+    the parameter is placed in value.
+*/
 void
 Extension::get_param (gchar * name, bool * value)
 {
@@ -304,6 +402,73 @@ Extension::get_param (gchar * name, bool * value)
     return;
 }
 
+/**
+    \return   None
+    \brief    Gets a parameter identified by name with the integer placed
+              in value.
+    \param    name    The name of the parameter to get
+    \param    value   Place to put the integer value
+
+    This function first checks to make sure that the value parameter
+    is not passed in as NULL.  If so, the function returns.  This
+    doesn't emit a warning - this will probably cause some sort of
+    error in the calling function (as it wouldn't be calling this function
+    if it didn't want the value) so it can be debugged there.
+
+    To get the parameter to be used the function param_shared is called.
+    This function is inline so it shouldn't cause the stack to build
+    or anything like that.  If it can't find the parameter, it will
+    throw and exception - we aren't catching that because we want
+    the calling function to catch it.
+
+    Next up, the parameter that we got, we're making sure that it is
+    a integer parameter.  If it isn't, then we throw a param_wrong_type
+    exception.
+    
+    Finally, if everything is okay, the integer value that is stored in
+    the parameter is placed in value.
+*/
+void
+Extension::get_param (gchar * name, int * value)
+{
+    Extension::param_t * param;
+    
+    if (value == NULL) {
+        /* This probably isn't a good error, but the calling function
+           will find out soon enough it doesn't have data there ;) */
+        return;
+    }
+
+    param = Extension::param_shared(name, parameters);
+
+    if (param->type != Extension::PARAM_INT) {
+        throw Extension::param_wrong_type();
+    }
+
+    *value = param->val.t_int;
+    return;
+}
+
+/**
+    \return   The passed in value
+    \brief    Sets a parameter identified by name with the boolean
+              in the parameter value.
+    \param    name    The name of the parameter to set
+    \param    value   The value to set the parameter to
+
+    To get the parameter to be used the function param_shared is called.
+    This function is inline so it shouldn't cause the stack to build
+    or anything like that.  If it can't find the parameter, it will
+    throw and exception - we aren't catching that because we want
+    the calling function to catch it.
+
+    Next up, the parameter that we got, we're making sure that it is
+    a boolean parameter.  If it isn't, then we throw a param_wrong_type
+    exception.
+    
+    Finally, if everything is okay, the boolean value that was passed
+	in is placed in the param.
+*/
 bool
 Extension::set_param (gchar * name, bool value)
 {
@@ -319,6 +484,64 @@ Extension::set_param (gchar * name, bool value)
     return value;
 }
 
+/**
+    \return   The passed in value
+    \brief    Sets a parameter identified by name with the integer
+              in the parameter value.
+    \param    name    The name of the parameter to set
+    \param    value   The value to set the parameter to
+
+    To get the parameter to be used the function param_shared is called.
+    This function is inline so it shouldn't cause the stack to build
+    or anything like that.  If it can't find the parameter, it will
+    throw and exception - we aren't catching that because we want
+    the calling function to catch it.
+
+    Next up, the parameter that we got, we're making sure that it is
+    a integer parameter.  If it isn't, then we throw a param_wrong_type
+    exception.
+    
+    Finally, if everything is okay, the integer value that was passed
+	in is placed in the param.
+*/
+int
+Extension::set_param (gchar * name, int value)
+{
+    Extension::param_t * param;
+    
+    param = Extension::param_shared(name, parameters);
+
+    if (param->type != Extension::PARAM_INT) {
+        throw Extension::param_wrong_type();
+    }
+
+    param->val.t_int = value;
+    return value;
+}
+
+/**
+    \return   The passed in value
+    \brief    Sets a parameter identified by name with the string
+              in the parameter value.
+    \param    name    The name of the parameter to set
+    \param    value   The value to set the parameter to
+
+	First this function makes sure that the incoming string is not
+	NULL.  The value can't be set to NULL.
+
+    To get the parameter to be used the function param_shared is called.
+    This function is inline so it shouldn't cause the stack to build
+    or anything like that.  If it can't find the parameter, it will
+    throw and exception - we aren't catching that because we want
+    the calling function to catch it.
+
+    Next up, the parameter that we got, we're making sure that it is
+    a string parameter.  If it isn't, then we throw a param_wrong_type
+    exception.
+    
+    Finally, if everything is okay, the previous value is free'd and
+	the incoming value is duplicated and placed in the parameter.
+*/
 gchar *
 Extension::set_param (gchar * name, gchar * value)
 {
@@ -340,8 +563,6 @@ Extension::set_param (gchar * name, gchar * value)
     param->val.t_string = g_strdup(value);
     return value;
 }
-
-
 
 /* Inkscape::Extension::Input */
 
