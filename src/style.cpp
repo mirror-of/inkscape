@@ -425,7 +425,7 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
     /* 4. Presentation attributes */
     /* CSS2 */
     SPS_READ_PENUM_IF_UNSET (&style->visibility, repr, "visibility", enum_visibility, TRUE);
-    SPS_READ_PENUM_IF_UNSET (&style->visibility, repr, "display", enum_display, FALSE);
+    SPS_READ_PENUM_IF_UNSET (&style->display, repr, "display", enum_display, TRUE);
     /* Font */
     SPS_READ_PFONTSIZE_IF_UNSET (&style->font_size, repr, "font-size");
     SPS_READ_PENUM_IF_UNSET (&style->font_style, repr, "font-style", enum_font_style, TRUE);
@@ -682,7 +682,7 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         g_warning ("Unimplemented style property SP_PROP_CURSOR: value: %s", val);
         break;
     case SP_PROP_DISPLAY:
-        SPS_READ_IENUM_IF_UNSET(&style->display, val, enum_display, FALSE);
+        SPS_READ_IENUM_IF_UNSET(&style->display, val, enum_display, TRUE);
         break;
     case SP_PROP_OVERFLOW:
         // FIXME: temporaily disabled, for our markers.svg uses overflow: visible to show properly in batik.
