@@ -36,7 +36,7 @@
 #include "tools-switch.h"
 
 static char *tool_names[] = {
-	NULL,
+  NULL,
   "tools.select",
   "tools.nodes",
   "tools.shapes.rect",
@@ -49,11 +49,11 @@ static char *tool_names[] = {
   "tools.text",
   "tools.zoom",
   "tools.dropper",
-NULL
+  NULL
 };
 
 static char *tool_ids[] = {
-	NULL,
+  NULL,
   "select",
   "nodes",
   "rect",
@@ -66,18 +66,19 @@ static char *tool_ids[] = {
   "text",
   "zoom",
   "dropper",
-NULL
+  NULL
 };
 
 int 
 tools_id2num (const char *id) 
 {
   int i = 1;
-  while (tool_ids[i])
+  while (tool_ids[i]) {
     if (strcmp (tool_ids[i], id) == 0)
       return i; 
     else i++;
-  return 0; /* FIXME !!! what should we return here on failure? */
+  }
+  return 0; //nothing found
 }
 
 char* 
@@ -171,5 +172,5 @@ tools_switch_current (int num)
 {
 	SPDesktop *dt;
 	dt = SP_ACTIVE_DESKTOP;
-	tools_switch (dt, num);
+	if (dt) tools_switch (dt, num);
 }
