@@ -20,8 +20,6 @@
 #include "sp-gradient-spread.h"
 #include "sp-gradient-units.h"
 #include "sp-paint-server.h"
-#include "sp-stop.h"             /* TODO: Remove this #include. */
-#include "sp-gradient-vector.h"	 /* TODO: Remove this #include. */
 class SPGradientStop;
 class SPGradientVector;
 
@@ -75,10 +73,6 @@ struct SPGradientClass {
 
 
 #include "sp-gradient-fns.h"
-
-#include "sp-gradient-reference.h"  /* TODO: Get rid of this #include. */
-#include "sp-linear-gradient.h"  /* TODO: Get rid of this #include. */
-#include "sp-radial-gradient.h"  /* TODO: Get rid of this #include. */
 
 #endif /* !__SP_GRADIENT_H__ */
 
