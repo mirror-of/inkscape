@@ -1,0 +1,91 @@
+
+=== 1.0.0  Introduction ===
+
+The extensions system in Inkscape is a way for adding functionality to
+Inkscape, without affecting the core of the program itself.  We want
+Inkscape to follow a core-plus-modules approach similar to that adopted
+by many successful open source projects such as the Linux kernel, Perl,
+Apache, Gimp, and so on.  There are many different types of extension
+mechanisms, including file format conversion tools, filter scripts that
+process SVG, user interface elements that can be added at runtime, and
+so forth.
+
+This proposal defines a design for handling this wide variety of
+extensions in a flexible manner.
+
+
+=== 2.0.0  Terminology ===
+
+Extension - An extension is something that extends the functionality
+of Inkscape without being directly part of the core.   This implies
+that it should be easy to remove or add, and nothing in the core
+should depend on it directly.
+
+Extension Type - Establishes the functional interface that the
+Extension provides, including the types of messages it handles and
+what is contained in its data structures.
+
+Extension Implementation - Defines how the extension is accessed;
+i.e. through message passing, pipe/exec calls with commandline
+arguments, direct function calls, etc.
+
+Plug-in - An extension that is implemented through a loadable
+library.  This is a .o file on Unix-like systems or a .dll on Win32.
+The libraries should not be loaded until they are used.
+
+Script - A script is a type of extension that is implemented through
+an external program that recieves and sets SVG data through files and
+pipes.  This allows Inkscape to use programs that handle SVG but are
+targeted differently, seemlessly inside of Inkscape.
+
+Language Binding - A special type of plug-in that wrappers a script
+language interpreter such as Perl, Python, Lisp, etc.  A user
+interested in programmatic access to Inkscape's internals via one of
+these languages can install (or create) the relevant Language Binding
+Plug-in to achieve this.
+
+INX - 'INkscape eXtension' - The filename extension used for XML
+metadata files that describe each Inkscape Extension.
+
+=== 3.0.0  Requirements ===
+
+* Uses a general language binding system so it's easy to add new language
+  binding support
+* Allows direct interaction with the document object model including changing
+  styles, adding/removing defs and elements, etc.
+* Allows some limited interaction with the Inkscape UI such as manipulating
+  grids, overlays, etc.
+* Allows direct interaction with file load/save/export/print subsystem
+* Guaranteed to work properly with the undo system, even if the extension is
+  not written carefully
+* Well documented so is easy for people to learn how to make new extensions
+* Each extension can be implemented, distributed, and managed independently of
+  the core project
+* Icons, buttons, and other UI elements for extensions fit seamlessly into
+  main application GUI
+* User can easily select which extensions to automatically load into
+  application at startup
+* Loading of extensions shall not seriously slow startup time or make a major
+  impact on memory footprint
+* Failure of a extension shall not leave the drawing in an inconsistent state
+* Main application must gracefully recover from extension crashes or other
+  serious problems with extension execution
+* Dependencies for particular extensions must be clearly identified for user
+  if missing
+
+=== 4.0.0  Overview ===
+
+Different kinds of extensions can be categorized in two ways.  First,
+but what the extension does: File format converters, printing, SVG
+manipulation, symbol libraries, etc.  Second, by how the extension is
+implemented: command-line scripts, dynamically loaded libraries,
+internal compiled-in code, etc.
+
+The first kind of categorization is called the Extension Type.  This
+essentially establishes a calling interface and the set of messages the
+extension must be able to receive and handle.  For example, extensions
+of type Print must have a way to handle 'print' message.
+
+The second is the Extension Implementation.  This defines the mechanism
+Inkscape must use for passing messages to the extension.PI's of ofect
+(SPDocument * doc);
