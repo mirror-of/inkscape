@@ -44,10 +44,9 @@
 #include "inkscape-stock.h"
 
 static GtkWidget *dlg = NULL;
-
 static win_data wd;
-
-static gint x = 0, y = 0, w = 0, h = 0;
+static gint x = -1000, y = -1000, w = 0, h = 0; // impossible original values to make sure they are read from prefs
+static gchar *prefs_path = "dialogs.fillstroke";
 
 static void
 sp_object_properties_dialog_destroy (GtkObject *object, gpointer data)
@@ -62,6 +61,12 @@ sp_object_properties_dialog_delete (GtkObject *object, GdkEvent *event, gpointer
 {
 	gtk_window_get_position ((GtkWindow *) dlg, &x, &y);
 	gtk_window_get_size ((GtkWindow *) dlg, &w, &h);
+
+	prefs_set_int_attribute (prefs_path, "x", x);
+	prefs_set_int_attribute (prefs_path, "y", y);
+	prefs_set_int_attribute (prefs_path, "w", w);
+	prefs_set_int_attribute (prefs_path, "h", h);
+
 	return FALSE; // which means, go ahead and destroy it
 }
 
@@ -130,6 +135,14 @@ sp_object_properties_dialog (void)
 		sp_ui_dialog_title_string (SP_VERB_DIALOG_FILL_STROKE, c);
 
 		dlg = sp_window_new (c, TRUE);
+		if (x == -1000 || y == -1000) {
+			x = prefs_get_int_attribute (prefs_path, "x", 0);
+			y = prefs_get_int_attribute (prefs_path, "y", 0);
+		}
+		if (w ==0 || h == 0) {
+			w = prefs_get_int_attribute (prefs_path, "w", 0);
+			h = prefs_get_int_attribute (prefs_path, "h", 0);
+		}
 		gtk_window_move ((GtkWindow *) dlg, x, y);
 		if (w && h) gtk_window_resize ((GtkWindow *) dlg, w, h);
 		sp_transientize (dlg);
@@ -140,6 +153,7 @@ sp_object_properties_dialog (void)
 
 		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_object_properties_dialog_destroy), dlg);
 		gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_object_properties_dialog_delete), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_object_properties_dialog_delete), dlg);
 
 		vb = gtk_vbox_new (FALSE, 0);
 		gtk_widget_show (vb);
