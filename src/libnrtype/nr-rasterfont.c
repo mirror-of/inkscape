@@ -228,8 +228,8 @@ nr_rasterfont_generic_glyph_mask_render (NRRasterFont *rf, unsigned int glyph, N
 	NRRFGlyphSlot *slot;
 	NRRectS area;
 	int sx, sy;
-	unsigned char *spx;
-	int srs;
+	unsigned char *spx = NULL;
+	int srs = 0;
 	NRPixBlock spb;
 
 	glyph = CLAMP (glyph, 0, rf->nglyphs);
