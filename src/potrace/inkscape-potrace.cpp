@@ -39,9 +39,12 @@ PotraceTracingEngine::PotraceTracingEngine()
 {
 
     //##### Our defaults
-    useCanny            = false;
     useBrightness       = true;
     brightnessThreshold = 0.5;
+
+    useCanny            = false;
+    cannyHighThreshold  = 0.65;
+    cannyLowThreshold   = 0.1;
 
 
     //##### Potrace's defaults
@@ -154,7 +157,7 @@ PotraceTracingEngine::filter(GdkPixbuf * pixbuf)
         }
     else if (useCanny)
         {
-        newGm = grayMapCanny(gm);
+        newGm = grayMapCanny(gm, cannyLowThreshold, cannyHighThreshold);
         //newGm->writePPM(newGm, "canny.ppm");
         }
 

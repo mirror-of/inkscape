@@ -96,6 +96,11 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
     Gtk::Frame       potraceCannyFrame;
     Gtk::HBox        potraceCannyBox;
     Gtk::RadioButton potraceCannyRadioButton;
+    Gtk::HSeparator  potraceCannySeparator;
+    Gtk::Label       potraceCannyLoSpinnerLabel;
+    Gtk::SpinButton  potraceCannyLoSpinner;
+    Gtk::Label       potraceCannyHiSpinnerLabel;
+    Gtk::SpinButton  potraceCannyHiSpinner;
 
     //preview
     Gtk::Frame       potracePreviewFrame;
@@ -143,8 +148,12 @@ void TraceDialogImpl::responseCallback(int response_id)
         //##### Get the settings
         pte.setUseBrightness(potraceBrightnessRadioButton.get_active());
         pte.setUseCanny(potraceCannyRadioButton.get_active());
-        double threshold = potraceBrightnessSpinner.get_value();
-        pte.setBrightnessThreshold(threshold);
+        double brightnessThreshold = potraceBrightnessSpinner.get_value();
+        pte.setBrightnessThreshold(brightnessThreshold);
+        double cannyLowThreshold = potraceCannyLoSpinner.get_value();
+        pte.setCannyLowThreshold(cannyLowThreshold);
+        double cannyHighThreshold = potraceCannyHiSpinner.get_value();
+        pte.setCannyHighThreshold(cannyHighThreshold);
 
         //##### Get intermediate bitmap image
         GdkPixbuf *pixbuf = tracer.getSelectedImage();
@@ -185,7 +194,7 @@ TraceDialogImpl::TraceDialogImpl()
 {
 
     set_title(_("Bitmap Tracing"));
-    set_size_request(350, 350);
+    set_size_request(380, 360);
 
     Gtk::VBox *mainVBox = get_vbox();
 
@@ -209,6 +218,21 @@ TraceDialogImpl::TraceDialogImpl()
     potraceCannyRadioButton.set_label(_("Canny Edge Detection"));
     potraceCannyRadioButton.set_group(potraceGroup);
     potraceCannyBox.pack_start(potraceCannyRadioButton);
+    potraceCannyBox.pack_start(potraceCannySeparator);
+    potraceCannyLoSpinnerLabel.set_label(_("Low"));
+    potraceCannyBox.pack_start(potraceCannyLoSpinnerLabel);
+    potraceCannyLoSpinner.set_digits(5);
+    potraceCannyLoSpinner.set_increments(0.01, 0.1);
+    potraceCannyLoSpinner.set_range(0.0, 1.0);
+    potraceCannyLoSpinner.set_value(0.1);
+    potraceCannyBox.pack_start(potraceCannyLoSpinner);
+    potraceCannyHiSpinnerLabel.set_label(_("High"));
+    potraceCannyBox.pack_start(potraceCannyHiSpinnerLabel);
+    potraceCannyHiSpinner.set_digits(5);
+    potraceCannyHiSpinner.set_increments(0.01, 0.1);
+    potraceCannyHiSpinner.set_range(0.0, 1.0);
+    potraceCannyHiSpinner.set_value(0.65);
+    potraceCannyBox.pack_start(potraceCannyHiSpinner);
     potraceCannyFrame.set_label(_("Edge Detection"));
     potraceCannyFrame.add(potraceCannyBox);
     potraceBox.pack_start(potraceCannyFrame);

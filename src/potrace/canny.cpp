@@ -81,7 +81,7 @@ static int sobelY[] =
 };
 
 
-static GrayMap *canny(GrayMap *gm)
+static GrayMap *canny(GrayMap *gm, double dLowThreshold, double dHighThreshold)
 {
     int width  = gm->width;
     int height = gm->height;
@@ -198,8 +198,10 @@ static GrayMap *canny(GrayMap *gm)
                     sum = 0;
                 else
                     {
-                    unsigned long highThreshold = 400;
-                    unsigned long lowThreshold  = 60;
+                    unsigned long highThreshold = 
+                          (unsigned long)(dHighThreshold * 765.0);
+                    unsigned long lowThreshold = 
+                          (unsigned long)(dLowThreshold * 765.0);
                     if (sum >= highThreshold)
                         sum = 765; /* EDGE.  3*255 this needs to be settable */
                     else if (sum < lowThreshold)
@@ -237,7 +239,7 @@ static GrayMap *canny(GrayMap *gm)
 
 
 GrayMap *
-grayMapCanny(GrayMap *gm)
+grayMapCanny(GrayMap *gm, double lowThreshold, double highThreshold)
 {
     if (!gm)
         return NULL;
@@ -246,7 +248,7 @@ grayMapCanny(GrayMap *gm)
         return NULL;
     /*gaussGm->writePPM(gaussGm, "gauss.ppm");*/
 
-    GrayMap *cannyGm = canny(gaussGm);
+    GrayMap *cannyGm = canny(gaussGm, lowThreshold, highThreshold);
     if (!cannyGm)
         return NULL;
     /*cannyGm->writePPM(cannyGm, "canny.ppm");*/
@@ -257,7 +259,7 @@ grayMapCanny(GrayMap *gm)
 }
 
 
-GdkPixbuf *gdkCanny(GdkPixbuf *img)
+GdkPixbuf *gdkCanny(GdkPixbuf *img, double lowThreshold, double highThreshold)
 {
     if (!img)
         return NULL;
@@ -268,7 +270,7 @@ GdkPixbuf *gdkCanny(GdkPixbuf *img)
 
     /*grayMap->writePPM(grayMap, "gbefore.ppm");*/
 
-    GrayMap *cannyGm = grayMapCanny(grayMap);
+    GrayMap *cannyGm = grayMapCanny(grayMap,lowThreshold, highThreshold);
 
     grayMap->destroy(grayMap);
 

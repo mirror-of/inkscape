@@ -40,12 +40,22 @@ class PotraceTracingEngine : public TracingEngine
         {}
 
     /**
+     * Do I use the brightness threshold to make line art?
+     */
+    void setUseBrightness(bool val)
+        {
+        useBrightness = val;
+        }
+
+    /**
      * Sets the halfway point for black/white
      */
     void setBrightnessThreshold(double val)
         {
         brightnessThreshold = val;
         }
+
+
 
     /**
      * Do I use Canny filtering
@@ -55,12 +65,21 @@ class PotraceTracingEngine : public TracingEngine
         useCanny = val;
         }
 
+
     /**
-     * Do I use the brightness threshold to make line art?
+     * Sets lower cutoff for canny non-maximalizing
      */
-    void setUseBrightness(bool val)
+    void setCannyLowThreshold(double val)
         {
-        useBrightness = val;
+        cannyLowThreshold = val;
+        }
+
+    /**
+     * Sets upper cutoff for canny non-maximalizing
+     */
+    void setCannyHighThreshold(double val)
+        {
+        cannyHighThreshold = val;
         }
 
     /**
@@ -82,11 +101,15 @@ class PotraceTracingEngine : public TracingEngine
 
     private:
 
+    //## brightness items
+    bool useBrightness;
     double brightnessThreshold;
 
+    //## canny items
     bool useCanny;
+    double cannyLowThreshold;
+    double cannyHighThreshold;
 
-    bool useBrightness;
 
 };//class PotraceTracingEngine
 

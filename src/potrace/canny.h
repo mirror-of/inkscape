@@ -22,9 +22,12 @@
 extern "C" {
 #endif
 
-GrayMap *grayMapCanny(GrayMap *gm);
+GrayMap *grayMapCanny(GrayMap *gm, 
+             double lowThreshold, double highThreshold);
 
-GdkPixbuf *gdkCanny(GdkPixbuf *img);
+GdkPixbuf *gdkCanny(GdkPixbuf *img,
+            double lowThreshold, double highThreshold);
+
 
 
 #ifdef __cplusplus
