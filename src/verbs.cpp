@@ -815,9 +815,9 @@ static const SPVerbActionDef props[] = {
     {SP_VERB_EDIT_PASTE, "EditPaste", N_("_Paste"),
         N_("Paste objects from clipboard"), GTK_STOCK_PASTE},
     {SP_VERB_EDIT_PASTE_STYLE, "EditPasteStyle", N_("Paste _Style"),
-        N_("Apply style of copied object to selection"), NULL},
+        N_("Apply style of copied object to selection"), "selection_paste_style"},
     {SP_VERB_EDIT_PASTE_IN_PLACE, "EditPasteInPlace", N_("Paste _In Place"),
-        N_("Paste objects to the original location"), NULL},
+        N_("Paste objects to the original location"), "selection_paste_in_place"},
     {SP_VERB_EDIT_DELETE, "EditDelete", N_("_Delete"),
         N_("Delete selected objects"), GTK_STOCK_DELETE},
     {SP_VERB_EDIT_DUPLICATE, "EditDuplicate", N_("D_uplicate"),
@@ -986,7 +986,7 @@ static const SPVerbActionDef props[] = {
     {SP_VERB_DIALOG_TOGGLE, "DialogsToggle", N_("_Hide/View dialogs"),
         N_("Toggle visibility of all active dialogs"), "dialog_toggle"},
     {SP_VERB_DIALOG_ITEM, "DialogItem", N_("_Item Properties"),
-        N_("Item properties"), NULL},
+        N_("Item properties"), "dialog_item_properties"},
 
     /* Help */
     {SP_VERB_HELP_KEYS, "HelpKeys", N_("_Keys and Mouse"),
