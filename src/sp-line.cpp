@@ -18,6 +18,9 @@
 #include "style.h"
 #include "sp-line.h"
 #include "helper/sp-intl.h"
+#include <libnr/nr-point.h>
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
 
 static void sp_line_class_init (SPLineClass *klass);
 static void sp_line_init (SPLine *line);
@@ -27,7 +30,7 @@ static void sp_line_set (SPObject *object, unsigned int key, const gchar *value)
 static SPRepr *sp_line_write (SPObject *object, SPRepr *repr, guint flags);
 
 static gchar *sp_line_description (SPItem * item);
-static void sp_line_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t);
+static NR::Matrix sp_line_set_transform(SPItem *item, NR::Matrix const &xform);
 
 static void sp_line_set_shape (SPLine * line);
 
@@ -74,7 +77,7 @@ sp_line_class_init (SPLineClass *klass)
 	sp_object_class->write = sp_line_write;
 
 	item_class->description = sp_line_description;
-	item_class->write_transform = sp_line_write_transform;
+	item_class->set_transform = sp_line_set_transform;
 }
 
 static void
@@ -168,35 +171,42 @@ sp_line_description (SPItem * item)
 	return g_strdup ("Line");
 }
 
-static void
-sp_line_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
+static NR::Matrix
+sp_line_set_transform (SPItem *item, NR::Matrix const &xform)
 {
 	double sw, sh;
 	SPLine *line;
 
 	line = SP_LINE (item);
 
-	/* fixme: Would be nice to preserve units here */
-	sp_repr_set_double (repr, "x1", t->c[0] * line->x1.computed + t->c[2] * line->y1.computed + t->c[4]);
-	sp_repr_set_double (repr, "y1", t->c[1] * line->x1.computed + t->c[3] * line->y1.computed + t->c[5]);
-	sp_repr_set_double (repr, "x2", t->c[0] * line->x2.computed + t->c[2] * line->y2.computed + t->c[4]);
-	sp_repr_set_double (repr, "y2", t->c[1] * line->x2.computed + t->c[3] * line->y2.computed + t->c[5]);
+	NR::Point points[2];
+
+	points[0] = NR::Point(line->x1.computed, line->y1.computed);
+	points[1] = NR::Point(line->x2.computed, line->y2.computed);
+
+	points[0] = points[0] * xform;
+	points[1] = points[1] * xform;
+
+	line->x1 = points[0][NR::X];
+	line->y1 = points[0][NR::Y];
+	line->x2 = points[1][NR::X];
+	line->y2 = points[1][NR::Y];
+
+	sp_line_set_shape(line);
 
 	/* Scalers */
-	sw = sqrt (t->c[0] * t->c[0] + t->c[1] * t->c[1]);
-	sh = sqrt (t->c[2] * t->c[2] + t->c[3] * t->c[3]);
+	sw = sqrt (xform[0] * xform[0] + xform[1] * xform[1]);
+	sh = sqrt (xform[2] * xform[2] + xform[3] * xform[3]);
 
-	/* And last but not least */
+	/* Scale changed, so we have to adjust stroke width */
 	if ((fabs (sw - 1.0) > 1e-9) || (fabs (sh - 1.0) > 1e-9)) {
-		SPStyle *style;
-		gchar *str;
-		/* Scale changed, so we have to adjust stroke width */
-		style = SP_OBJECT_STYLE (item);
+		SPStyle *style=SP_OBJECT_STYLE (item);
 		style->stroke_width.computed *= sqrt (fabs (sw * sh));
-		str = sp_style_write_difference (style, SP_OBJECT_STYLE (SP_OBJECT_PARENT (item)));
-		sp_repr_set_attr (SP_OBJECT_REPR (item), "style", str);
-		g_free (str);
 	}
+
+	sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+
+	return NR::identity();
 }
 
 static void

@@ -149,7 +149,7 @@ sp_star_write (SPObject *object, SPRepr *repr, guint flags)
 static void
 sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	gulong unit;
+	SPSVGLengthUnit unit;
 
 	SPStar *star = SP_STAR (object);
 

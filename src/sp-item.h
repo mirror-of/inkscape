@@ -120,8 +120,8 @@ struct SPItemClass {
 	/* Returns the number of points used. */
 	int (* snappoints) (SPItem *item, NR::Point points[], int size);
 
-	/* Write item transform to repr optimally */
-	void (* write_transform) (SPItem *item, SPRepr *repr, NRMatrix *transform);
+	/* Apply the transform optimally, and return any residual transformation */
+	NR::Matrix (* set_transform)(SPItem *item, NR::Matrix const &transform);
 
 	/* Emit event, if applicable */
 	gint (* event) (SPItem *item, SPEvent *event);

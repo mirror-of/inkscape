@@ -1,3 +1,21 @@
+2004-04-29  MenTaLguY <mental@rydia.net>
+
+	* src/sp-image.cpp, src/sp-item.cpp, src/sp-item.h, src/sp-line.cpp,
+	  src/sp-path.cpp, src/sp-rect.cpp, src/sp-text.cpp:
+
+	  write_transform becomes set_transform, which applies the given
+	  transform to the object without (!) invoking a repr write
+
+	* src/sp-star.cpp, src/svg/svg-length.h, src/svg/svg-length.cpp,
+	  src/svg-types.h, src/svg/svg.h:
+
+	  replaced raw integers with real units enum
+
+	* src/libnr/nr-matrix.h:
+
+	  removed dead assertion (it's always valid to retrieve the
+	  translation component of a matrix)
+
 2004-04-29  Carl Hetherington <inkscape@carlh.net>
 
 	* src/extension/internal/win32.cpp: add textToPath parameter to

@@ -160,7 +160,7 @@ sp_svg_number_write_de (gchar *buf, double val, unsigned int tprec, unsigned int
 unsigned int
 sp_svg_length_read (const gchar *str, SPSVGLength *length)
 {
-	unsigned long unit;
+	SPSVGLengthUnit unit;
 	float value, computed;
 
 	if (!str) return 0;
@@ -179,7 +179,7 @@ sp_svg_length_read (const gchar *str, SPSVGLength *length)
 unsigned int
 sp_svg_length_read_absolute (const gchar *str, SPSVGLength *length)
 {
-	unsigned long unit;
+	SPSVGLengthUnit unit;
 	float value, computed;
 
 	if (!str) return 0;
@@ -203,7 +203,7 @@ sp_svg_length_read_absolute (const gchar *str, SPSVGLength *length)
 unsigned int
 sp_svg_length_read_computed_absolute (const gchar *str, float *length)
 {
-	unsigned long unit;
+	SPSVGLengthUnit unit;
 	float computed;
 
 	if (!str) return 0;
@@ -224,7 +224,7 @@ sp_svg_length_read_computed_absolute (const gchar *str, float *length)
 GList *
 sp_svg_length_list_read (const gchar *str)
 {
-	unsigned long unit;
+	SPSVGLengthUnit unit;
 	float value, computed;
 	char *next = (char *) str;
 	GList *list = NULL;
@@ -255,7 +255,7 @@ sp_svg_length_list_read (const gchar *str)
 #define UVAL(a,b) (((unsigned int) (a) << 8) | (unsigned int) (b))
 
 unsigned int
-sp_svg_length_read_lff (const gchar *str, unsigned long *unit, float *val, float *computed, char **next)
+sp_svg_length_read_lff (const gchar *str, SPSVGLengthUnit *unit, float *val, float *computed, char **next)
 {
 	const gchar *e;
 	float v;
@@ -338,7 +338,7 @@ sp_svg_length_read_lff (const gchar *str, unsigned long *unit, float *val, float
 	return 0;
 }
 
-unsigned int sp_svg_length_read_ldd (const gchar *str, unsigned long *unit, double *value, double *computed) {
+unsigned int sp_svg_length_read_ldd (const gchar *str, SPSVGLengthUnit *unit, double *value, double *computed) {
 	float a, b;
 	unsigned int r = sp_svg_length_read_lff (str, unit, &a, &b, NULL);
 	if(value) *value = a;
@@ -347,7 +347,7 @@ unsigned int sp_svg_length_read_ldd (const gchar *str, unsigned long *unit, doub
 }
 
 void
-sp_svg_length_set (SPSVGLength *length, unsigned long unit, float value, float computed)
+sp_svg_length_set (SPSVGLength *length, SPSVGLengthUnit unit, float value, float computed)
 {
 	length->set = 1;
 	length->unit = unit;
@@ -356,7 +356,7 @@ sp_svg_length_set (SPSVGLength *length, unsigned long unit, float value, float c
 }
 
 void
-sp_svg_length_unset (SPSVGLength *length, unsigned long unit, float value, float computed)
+sp_svg_length_unset (SPSVGLength *length, SPSVGLengthUnit unit, float value, float computed)
 {
 	length->set = 0;
 	length->unit = unit;

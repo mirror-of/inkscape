@@ -240,7 +240,6 @@ bool Matrix::is_translation(const Coord eps) const {
 }
 
 Matrix::operator NR::translate() const {
-	//g_assert(is_translation()); // assume they know what they're doing.
 	return NR::translate(_c[4], _c[5]);
 }
 

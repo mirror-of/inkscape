@@ -29,6 +29,7 @@
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-matrix-fns.h>
 #include <libnrtype/nr-type-directory.h>
 #include <libnrtype/nr-font.h>
 #include <libnrtype/font-style-to-pos.h>
@@ -1491,7 +1492,7 @@ static NRArenaItem *sp_text_show (SPItem *item, NRArena *arena, unsigned int key
 static void sp_text_hide (SPItem *item, unsigned int key);
 static char * sp_text_description (SPItem *item);
 static int sp_text_snappoints(SPItem *item, NR::Point p[], int size);
-static void sp_text_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
+static NR::Matrix sp_text_set_transform (SPItem *item, NR::Matrix const &xform);
 static void sp_text_print (SPItem *item, SPPrintContext *gpc);
 
 static void sp_text_request_relayout (SPText *text, guint flags);
@@ -1553,7 +1554,7 @@ sp_text_class_init (SPTextClass *classname)
     item_class->hide = sp_text_hide;
     item_class->description = sp_text_description;
     item_class->snappoints = sp_text_snappoints;
-    item_class->write_transform = sp_text_write_transform;
+    item_class->set_transform = sp_text_set_transform;
     item_class->print = sp_text_print;
 }
 
@@ -2150,48 +2151,41 @@ sp_text_snappoints(SPItem *item, NR::Point p[], int size)
  * Initially we'll do:
  * Transform x, y, set x, y, clear translation
  */
-static void
-sp_text_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
+static NR::Matrix
+sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
 {
     SPText *text = SP_TEXT (item);
 
-    NRMatrix i2p = *t;
+    NR::Matrix i2p(xform);
     // translate?
     i2p[4] = 0.0;
     i2p[5] = 0.0;
-    NRMatrix  p2i;
-    nr_matrix_invert (&p2i, &i2p);
+    NR::Matrix p2i=i2p.inverse();
 
-    gdouble px = NR_MATRIX_DF_TRANSFORM_X (t, text->ly.x.computed, text->ly.y.computed);
-    gdouble py = NR_MATRIX_DF_TRANSFORM_Y (t, text->ly.x.computed, text->ly.y.computed);
-    gdouble x = NR_MATRIX_DF_TRANSFORM_X (&p2i, px, py);
-    gdouble y = NR_MATRIX_DF_TRANSFORM_Y (&p2i, px, py);
-    sp_repr_set_double (repr, "x", x);
-    sp_repr_set_double (repr, "y", y);
+    NR::Point pos=NR::Point(text->ly.x.computed, text->ly.y.computed) * xform * p2i;
+    text->ly.x = pos[NR::X];
+    text->ly.y = pos[NR::Y];
+
     for (SPObject *child = sp_object_first_child(SP_OBJECT(text)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) { 
         if (SP_IS_TSPAN (child)) {
             SPTSpan *tspan;
             tspan = SP_TSPAN (child);
             if (tspan->ly.x.set || tspan->ly.y.set) {
+		double x, y;
                 x = (tspan->ly.x.set) ? tspan->ly.x.computed : text->ly.x.computed;
                 y = (tspan->ly.y.set) ? tspan->ly.y.computed : text->ly.y.computed;
-                px = NR_MATRIX_DF_TRANSFORM_X (t, x, y);
-                py = NR_MATRIX_DF_TRANSFORM_Y (t, x, y);
-                x = NR_MATRIX_DF_TRANSFORM_X (&p2i, px, py);
-                y = NR_MATRIX_DF_TRANSFORM_Y (&p2i, px, py);
-                /* fixme: This is wrong - what if repr != SP_OBJECT_REPR (text) */
-                sp_repr_set_double (SP_OBJECT_REPR (tspan), "x", x);
-                sp_repr_set_double (SP_OBJECT_REPR (tspan), "y", y);
+		pos = NR::Point(x, y) * xform * p2i;
+		tspan->ly.x = pos[NR::X];
+		tspan->ly.y = pos[NR::Y];
+
+		sp_object_request_update(SP_OBJECT(tspan), SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
             }
         }
     }
 
-    gchar c[120];
-    if (sp_svg_transform_write (c, 80, &i2p)) {
-        sp_repr_set_attr (repr, "transform", c);
-    } else {
-        sp_repr_set_attr (repr, "transform", NULL);
-    }
+    sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+
+    return i2p;
 }
 
 

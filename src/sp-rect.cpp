@@ -41,7 +41,7 @@ static SPRepr *sp_rect_write (SPObject *object, SPRepr *repr, guint flags);
 
 static gchar * sp_rect_description (SPItem * item);
 static int sp_rect_snappoints(SPItem *item, NR::Point p[], int size);
-static void sp_rect_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
+static NR::Matrix sp_rect_set_transform (SPItem *item, NR::Matrix const &xform);
 
 static void sp_rect_set_shape (SPShape *shape);
 
@@ -92,7 +92,7 @@ sp_rect_class_init (SPRectClass *klass)
 
 	item_class->description = sp_rect_description;
 	item_class->snappoints = sp_rect_snappoints;
-	item_class->write_transform = sp_rect_write_transform;
+	item_class->set_transform = sp_rect_set_transform;
 
 	shape_class->set_shape = sp_rect_set_shape;
 }
@@ -396,66 +396,61 @@ static int sp_rect_snappoints(SPItem *item, NR::Point p[], int size)
 /* fixme: Use preferred units somehow (Lauris) */
 /* fixme: Alternately preserve whatever units there are (lauris) */
 
-static void
-sp_rect_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
+static NR::Matrix
+sp_rect_set_transform (SPItem *item, NR::Matrix const &xform)
 {
 	SPRect *rect;
-	NRMatrix rev;
-	gdouble px, py, sw, sh;
-	gchar c[80];
+
+	gdouble sw, sh;
 	SPStyle *style;
 
 	rect = SP_RECT (item);
 
 	/* Calculate rect start in parent coords */
-	px = t->c[0] * rect->x.computed + t->c[2] * rect->y.computed + t->c[4];
-	py = t->c[1] * rect->x.computed + t->c[3] * rect->y.computed + t->c[5];
+	NR::Point pos=NR::Point(rect->x.computed, rect->y.computed) * xform;
 
 	/* Clear translation */
-	t->c[4] = 0.0;
-	t->c[5] = 0.0;
+	NR::Matrix remaining(xform);
+	remaining[4] = remaining[5] = 0.0;
 
 	/* Scalers */
-	sw = sqrt (t->c[0] * t->c[0] + t->c[1] * t->c[1]);
-	sh = sqrt (t->c[2] * t->c[2] + t->c[3] * t->c[3]);
+	sw = sqrt (remaining[0] * remaining[0] + remaining[1] * remaining[1]);
+	sh = sqrt (remaining[2] * remaining[2] + remaining[3] * remaining[3]);
 	if (sw > 1e-9) {
-		t->c[0] = t->c[0] / sw;
-		t->c[1] = t->c[1] / sw;
+		remaining[0] = remaining[0] / sw;
+		remaining[1] = remaining[1] / sw;
 	} else {
-		t->c[0] = 1.0;
-		t->c[1] = 0.0;
+		remaining[0] = 1.0;
+		remaining[1] = 0.0;
 	}
 	if (sh > 1e-9) {
-		t->c[2] = t->c[2] / sh;
-		t->c[3] = t->c[3] / sh;
+		remaining[2] = remaining[2] / sh;
+		remaining[3] = remaining[3] / sh;
 	} else {
-		t->c[2] = 0.0;
-		t->c[3] = 1.0;
-	}
-
-	if (sp_svg_transform_write (c, 80, t)) {
-		sp_repr_set_attr (SP_OBJECT_REPR (item), "transform", c);
-	} else {
-		sp_repr_set_attr (SP_OBJECT_REPR (item), "transform", NULL);
+		remaining[2] = 0.0;
+		remaining[3] = 1.0;
 	}
 
 	/* fixme: Would be nice to preserve units here */
-	sp_repr_set_double (repr, "width", rect->width.computed * sw);
-	sp_repr_set_double (repr, "height", rect->height.computed * sh);
-	if (rect->rx.set) sp_repr_set_double (repr, "rx", rect->rx.computed * sw);
-	if (rect->ry.set) sp_repr_set_double (repr, "ry", rect->ry.computed * sh);
+	rect->width = rect->width.computed * sw;
+	rect->height = rect->height.computed * sh;
+	if (rect->rx.set) {
+		rect->rx = rect->rx.computed * sw;
+	}
+	if (rect->ry.set) {
+		rect->ry = rect->ry.computed * sh;
+	}
 
 	/* Find start in item coords */
-	nr_matrix_invert (&rev, t);
-	sp_repr_set_double (repr, "x", px * rev.c[0] + py * rev.c[2]);
-	sp_repr_set_double (repr, "y", px * rev.c[1] + py * rev.c[3]);
+	pos = pos * remaining.inverse();
+	rect->x = pos[NR::X];
+	rect->y = pos[NR::Y];
 
 	/* And last but not least */
 	style = SP_OBJECT_STYLE (item);
 	if (style->stroke.type != SP_PAINT_TYPE_NONE) {
 		if (!NR_DF_TEST_CLOSE (sw, 1.0, NR_EPSILON) || !NR_DF_TEST_CLOSE (sh, 1.0, NR_EPSILON)) {
 			double scale;
-			gchar *str;
 			/* Scale changed, so we have to adjust stroke width */
 			scale = sqrt (fabs (sw * sh));
 			style->stroke_width.computed *= scale;
@@ -464,11 +459,12 @@ sp_rect_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
 				for (i = 0; i < style->stroke_dash.n_dash; i++) style->stroke_dash.dash[i] *= scale;
 				style->stroke_dash.offset *= scale;
 			}
-			str = sp_style_write_difference (style, SP_OBJECT_STYLE (SP_OBJECT_PARENT (item)));
-			sp_repr_set_attr (SP_OBJECT_REPR (item), "style", str);
-			g_free (str);
 		}
 	}
+
+	sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+
+	return remaining;
 }
 
 

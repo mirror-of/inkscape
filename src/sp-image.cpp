@@ -17,6 +17,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include "display/nr-arena-image.h"
@@ -50,7 +51,7 @@ static void sp_image_print (SPItem * item, SPPrintContext *ctx);
 static gchar * sp_image_description (SPItem * item);
 static int sp_image_snappoints(SPItem *item, NR::Point p[], int size);
 static NRArenaItem *sp_image_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
-static void sp_image_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
+static NR::Matrix sp_image_set_transform (SPItem *item, NR::Matrix const &xform);
 
 #ifdef ENABLE_AUTOTRACE
 static void sp_image_autotrace (GtkMenuItem *menuitem, SPAnchor *anchor);
@@ -111,7 +112,7 @@ sp_image_class_init (SPImageClass * klass)
 	item_class->description = sp_image_description;
 	item_class->show = sp_image_show;
 	item_class->snappoints = sp_image_snappoints;
-	item_class->write_transform = sp_image_write_transform;
+	item_class->set_transform = sp_image_set_transform;
 }
 
 static void
@@ -553,54 +554,47 @@ static int sp_image_snappoints (SPItem *item, NR::Point p[], int size)
  * Transform x, y, set x, y, clear translation
  */
 
-static void
-sp_image_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
+static NR::Matrix
+sp_image_set_transform (SPItem *item, NR::Matrix const &xform)
 {
-	SPImage *image;
-	NRMatrix rev;
-	gdouble px, py, sw, sh;
-	gchar c[80];
+	SPImage *image=SP_IMAGE (item);
 
-	image = SP_IMAGE (item);
+	/* Calculate position in parent coords */
+	NR::Point pos = NR::Point(image->x.computed, image->y.computed) * xform;
 
-	/* Calculate text start in parent coords */
-	px = NR_MATRIX_DF_TRANSFORM_X (t, image->x.computed, image->y.computed);
-	py = NR_MATRIX_DF_TRANSFORM_Y (t, image->x.computed, image->y.computed);
+	NR::Matrix remaining=xform;
+	remaining[4] = remaining[5] = 0.0;
 
-	/* Clear translation */
-	t->c[4] = 0.0;
-	t->c[5] = 0.0;
+	/* Remove scaling factor */
+	NR::Point scale(sqrt(xform[0]*xform[0]+xform[1]*xform[1]),
+			sqrt(xform[2]*xform[2]+xform[3]*xform[3]));
 
-	/* Scalers */
-	sw = sqrt (t->c[0] * t->c[0] + t->c[1] * t->c[1]);
-	sh = sqrt (t->c[2] * t->c[2] + t->c[3] * t->c[3]);
-	if (sw > 1e-9) {
-		t->c[0] = t->c[0] / sw;
-		t->c[1] = t->c[1] / sw;
+	if ( scale[NR::X] > 1e-9 ) {
+		remaining[0] /= scale[NR::X];
+		remaining[1] /= scale[NR::X];
 	} else {
-		t->c[0] = 1.0;
-		t->c[1] = 0.0;
+		remaining[0] = 1.0;
+		remaining[1] = 0.0;
 	}
-	if (sh > 1e-9) {
-		t->c[2] = t->c[2] / sh;
-		t->c[3] = t->c[3] / sh;
+	if ( scale[NR::Y] > 1e-9 ) {
+		remaining[2] /= scale[NR::Y];
+		remaining[3] /= scale[NR::Y];
 	} else {
-		t->c[2] = 0.0;
-		t->c[3] = 1.0;
+		remaining[2] = 0.0;
+		remaining[3] = 1.0;
 	}
-	sp_repr_set_double (repr, "width", image->width.computed * sw);
-	sp_repr_set_double (repr, "height", image->height.computed * sh);
 
-	/* Find start in item coords */
-	nr_matrix_invert (&rev, t);
-	sp_repr_set_double (repr, "x", px * rev.c[0] + py * rev.c[2]);
-	sp_repr_set_double (repr, "y", px * rev.c[1] + py * rev.c[3]);
+	image->width = image->width.computed * scale[NR::X];
+	image->height = image->height.computed * scale[NR::Y];
 
-	if (sp_svg_transform_write (c, 80, t)) {
-		sp_repr_set_attr (SP_OBJECT_REPR (item), "transform", c);
-	} else {
-		sp_repr_set_attr (SP_OBJECT_REPR (item), "transform", NULL);
-	}
+	/* Find position in item coords */
+	pos = pos * remaining.inverse();
+	image->x = pos[NR::X];
+	image->y = pos[NR::Y];
+
+	sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG);
+
+	return remaining;
 }
 
 #ifdef ENABLE_AUTOTRACE

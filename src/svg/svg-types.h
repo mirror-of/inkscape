@@ -13,7 +13,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-enum {
+enum SPSVGLengthUnit {
 	SP_SVG_UNIT_NONE,
 	SP_SVG_UNIT_PX,
 	SP_SVG_UNIT_PT,
@@ -27,10 +27,17 @@ enum {
 };
 
 struct SPSVGLength {
-	unsigned int set : 1;
-	unsigned int unit : 4;
+	bool set;
+	SPSVGLengthUnit unit;
 	float value;
 	float computed;
+
+	float operator=(float v) {
+		set = true;
+		unit = SP_SVG_UNIT_NONE;
+		value = computed = v;
+		return v;
+	}
 };
 
 #endif

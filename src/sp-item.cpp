@@ -176,8 +176,6 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			sp_item_set_item_transform(item, NR::identity());
 		}
-		sp_item_rm_unsatisfied_cns(*item);
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	}
 	case SP_PROP_CLIP_PATH: {
@@ -614,27 +612,20 @@ sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform)
 	g_return_if_fail (SP_IS_ITEM (item));
 	g_return_if_fail (repr != NULL);
 
+	NR::Matrix xform(transform);
+
 	gint preserve = prefs_get_int_attribute ("options.preservetransform", "value", 0);
 
 	if (!transform) {
-		sp_repr_set_attr (SP_OBJECT_REPR (item), "transform", NULL);
+		sp_item_set_item_transform(item, NR::identity());
 	} else {
-		if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->write_transform && !preserve) {
-			NRMatrix lt;
-			lt = *transform;
-			((SPItemClass *) G_OBJECT_GET_CLASS(item))->write_transform (item, repr, &lt);
-		} else {
-			gchar t[80];
-			if (sp_svg_transform_write (t, 79, transform)) {
-				sp_repr_set_attr (SP_OBJECT_REPR (item), "transform", t);
-			} else {
-				sp_repr_set_attr (SP_OBJECT_REPR (item), "transform", NULL);
-			}
+		if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->set_transform && !preserve) {
+			xform = ((SPItemClass *) G_OBJECT_GET_CLASS(item))->set_transform(item, xform);
 		}
+		sp_item_set_item_transform(item, xform);
 	}
 
-      /* Due to direct manipulation transforms may be out of sync */
-      sp_object_read_attr (SP_OBJECT (item), "transform");
+	sp_object_invoke_write(SP_OBJECT(item), SP_OBJECT_REPR(item), SP_OBJECT_WRITE_EXT);
 }
 
 gint
@@ -662,6 +653,7 @@ static void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform
     // the SP_OBJECT_USER_MODIFIED_FLAG_B is used to mark the fact that it's only a transformation
     // it's apparently not used anywhere else
 		sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG|SP_OBJECT_USER_MODIFIED_FLAG_B); 
+		sp_item_rm_unsatisfied_cns(*item);
 	}
 }
 

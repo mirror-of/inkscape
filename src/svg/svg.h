@@ -54,11 +54,11 @@ unsigned int sp_svg_length_read (const gchar *str, SPSVGLength *length);
 unsigned int sp_svg_length_read_absolute (const gchar *str, SPSVGLength *length);
 unsigned int sp_svg_length_read_computed_absolute (const gchar *str, float *length);
 GList *sp_svg_length_list_read (const gchar *str);
-unsigned int sp_svg_length_read_lff (const gchar *str, unsigned long *unit, float *value, float *computed, char **next);
-unsigned int sp_svg_length_read_ldd (const gchar *str, unsigned long *unit, double *value, double *computed);
+unsigned int sp_svg_length_read_lff (const gchar *str, SPSVGLengthUnit *unit, float *value, float *computed, char **next);
+unsigned int sp_svg_length_read_ldd (const gchar *str, SPSVGLengthUnit *unit, double *value, double *computed);
 
-void sp_svg_length_set (SPSVGLength *length, unsigned long unit, float value, float computed);
-void sp_svg_length_unset (SPSVGLength *length, unsigned long unit, float value, float computed);
+void sp_svg_length_set (SPSVGLength *length, SPSVGLengthUnit unit, float value, float computed);
+void sp_svg_length_unset (SPSVGLength *length, SPSVGLengthUnit unit, float value, float computed);
 void sp_svg_length_update (SPSVGLength *length, double em, double ex, double scale);
 
 unsigned int sp_svg_transform_read (const gchar *str, NRMatrix *transform);

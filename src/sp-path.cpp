@@ -18,6 +18,8 @@
 #include <libnr/nr-values.h>
 #include <libnr/nr-macros.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
+#include <libnr/nr-matrix-ops.h>
 
 #include "helper/sp-intl.h"
 #include "svg/svg.h"
@@ -36,7 +38,7 @@ static void sp_path_build (SPObject * object, SPDocument * document, SPRepr * re
 static void sp_path_set (SPObject *object, unsigned int key, const gchar *value);
 
 static SPRepr *sp_path_write (SPObject *object, SPRepr *repr, guint flags);
-static void sp_path_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
+static NR::Matrix sp_path_set_transform (SPItem *item, NR::Matrix const &xform);
 static gchar * sp_path_description (SPItem * item);
 
 static void sp_path_update (SPObject *object, SPCtx *ctx, guint flags);
@@ -70,7 +72,7 @@ sp_path_get_type (void)
 /** 
  *  Does the object-oriented work of initializing the class structure
  *  including parent class, and registers function pointers for
- *  the functions build, set, write, and write_transform.
+ *  the functions build, set, write, and set_transform.
  */
 static void
 sp_path_class_init (SPPathClass * klass)
@@ -89,7 +91,7 @@ sp_path_class_init (SPPathClass * klass)
 	sp_object_class->update = sp_path_update;
 
 	item_class->description = sp_path_description;
-	item_class->write_transform = sp_path_write_transform;
+	item_class->set_transform = sp_path_set_transform;
 }
 
 
@@ -283,40 +285,34 @@ sp_path_update (SPObject *object, SPCtx *ctx, guint flags)
 /**
  * Writes the given transform into the repr for the given item.
  */
-static void
-sp_path_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform)
+static NR::Matrix
+sp_path_set_transform (SPItem *item, NR::Matrix const &xform)
 {
 	SPPath *path;
 	SPShape *shape;
+	SPCurve *curve;
 	NRBPath dpath, spath;
 	double ex;
-	gchar *svgpath;
 	SPStyle *style;
 
 	path = (SPPath *) item;
 	shape = (SPShape *) item;
 
-	// since we're optimizing the given transform completely into d=,
-	// the item's transform must be reset
-	nr_matrix_set_identity (&item->transform);
-	sp_repr_set_attr (repr, "transform", NULL);
+	ex = NR::expansion(xform);
 
-	/* Calculate the DF */
-	ex = NR_MATRIX_DF_EXPANSION (transform);
-
-	/* Take the path for the shape, write it as an svgpath, and add it to the repr */
+	/* Transform the path */
 	spath.path = shape->curve->bpath;
-	nr_path_duplicate_transform (&dpath, &spath, transform);
-	svgpath = sp_svg_write_path (dpath.path);
-	sp_repr_set_attr (repr, "d", svgpath);
-	g_free (svgpath);
-	nr_free (dpath.path);
+	nr_path_duplicate_transform (&dpath, &spath, xform);
+	curve = sp_curve_new_from_bpath (dpath.path);
+	if (curve) {
+		sp_shape_set_curve (shape, curve, TRUE);
+		sp_curve_unref (curve);
+	}
 
-	/* Wrte the style info into the repr */
+	/* Transform the stroke style -- this should really be factored into a separate method of SPShape, IMO, for optional use of child classes -- we have several different copy-and-paste versions of this code... */
 	style = SP_OBJECT_STYLE (item);
 	if (style->stroke.type != SP_PAINT_TYPE_NONE) {
 		if (!NR_DF_TEST_CLOSE (ex, 1.0, NR_EPSILON)) {
-			gchar *str;
 			/* Scale changed, so we have to adjust stroke width */
 			style->stroke_width.computed *= ex;
 			if (style->stroke_dash.n_dash != 0) {
@@ -324,10 +320,11 @@ sp_path_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform)
 				for (i = 0; i < style->stroke_dash.n_dash; i++) style->stroke_dash.dash[i] *= ex;
 				style->stroke_dash.offset *= ex;
 			}
-			str = sp_style_write_difference (style, SP_OBJECT_STYLE (SP_OBJECT_PARENT (item)));
-			sp_repr_set_attr (repr, "style", str);
-			g_free (str);
 		}
 	}
+
+	sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+
+	return NR::identity();
 }
 
