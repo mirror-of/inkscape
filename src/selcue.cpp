@@ -117,8 +117,9 @@ sp_sel_cue_update_item_bboxes (SPSelCue * selcue)
 					     "stroke_color", 0x000000ff,
 					     NULL);
                      sp_canvas_item_show (box);
-
                      SP_CTRL(box)->moveto (NR::Point(b.x0, b.y1));
+
+                     sp_canvas_item_lower (box, 1000); // just low enough to not get in the way of other draggable knots
 		 }
 		 else if (mode == SP_SELCUE_BBOX)
 		 {
@@ -132,9 +133,22 @@ sp_sel_cue_update_item_bboxes (SPSelCue * selcue)
                      sp_ctrlrect_set_area (SP_CTRLRECT (box), b.x0, b.y0, b.x1, b.y1);
                      sp_ctrlrect_set_color (SP_CTRLRECT (box), 0x000000a0, 0, 0);
                      sp_ctrlrect_set_dashed (SP_CTRLRECT (box), 1);
+
+                     sp_canvas_item_lower (box, 1000);
 		 }
                  
 		 if (box)
 			 selcue->item_bboxes = g_slist_append (selcue->item_bboxes, box);
        }
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
