@@ -35,8 +35,10 @@
 #include <string.h>
 #include "prefix.h"
 
+/*
 #undef NULL
 #define NULL ((void *) 0)
+*/
 
 extern "C" {
 

@@ -26,6 +26,7 @@ class EpsOutput : Inkscape::Extension::Implementation::Implementation {
 public:
 	EpsOutput();
 	virtual ~EpsOutput();
+	bool check (Inkscape::Extension::Extension * module);
     GtkDialog *   prefs (Inkscape::Extension::Output * module);
 	void          save  (Inkscape::Extension::Output *mod,
 	                     SPDocument *doc,
@@ -47,5 +48,5 @@ public:
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=c++;expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
 

@@ -76,7 +76,6 @@ Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
         while (child_repr != NULL) {
             if (!strcmp(sp_repr_name(child_repr), "id")) {
                 val = sp_repr_content (sp_repr_children(child_repr));
-                val = db.get_unique_id (c, 256, val);
                 id = g_strdup (val);
             } /* id */
             if (!strcmp(sp_repr_name(child_repr), "name")) {
@@ -663,6 +662,17 @@ Input::~Input (void)
     return;
 }
 
+bool
+Input::check (void)
+{
+	if (extension == NULL)
+		return FALSE;
+	if (mimetype == NULL)
+		return FALSE;
+
+	return Extension::check();
+}
+
 SPDocument *
 Input::open (const gchar *uri)
 {
@@ -796,6 +806,17 @@ Output::~Output (void)
     return;
 }
 
+bool
+Output::check (void)
+{
+	if (extension == NULL)
+		return FALSE;
+	if (mimetype == NULL)
+		return FALSE;
+
+	return Extension::check();
+}
+
 gchar *
 Output::get_extension(void)
 {
@@ -857,6 +878,12 @@ Effect::~Effect (void)
     return;
 }
 
+bool
+Effect::check (void)
+{
+	return Extension::check();
+}
+
 GtkDialog *
 Effect::prefs (void)
 {
@@ -884,6 +911,12 @@ Print::Print (SPRepr * in_repr, Implementation::Implementation * in_imp) : Exten
 Print::~Print (void)
 {
     return;
+}
+
+bool
+Print::check (void)
+{
+	return Extension::check();
 }
 
 unsigned int

@@ -7,7 +7,7 @@
  *   Ted Gould <ted@gould.cx>
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
- * Copyright (C) 2002-2003 Authors
+ * Copyright (C) 2002-2004 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -36,7 +36,7 @@ struct ModuleDBForeachClosure {
 };
 
 DB::DB (void) {
-	moduledict = g_hash_table_new (g_str_hash, g_str_equal);
+	return;
 }
 
 /**
@@ -48,8 +48,10 @@ DB::register_ext (Extension *module)
 {
 	g_return_if_fail(module->get_id() != NULL);
 
-	/* printf("Registering: %s\n", module->get_name()); */
-	g_hash_table_insert (moduledict, module->get_id(), module);
+	// printf("Registering: %s\n", module->get_id());
+	moduledict[module->get_id()] = module;
+
+	return;
 }
 
 /**
@@ -61,7 +63,8 @@ DB::unregister_ext (Extension * module)
 {
 	g_return_if_fail(module->get_id() != NULL);
 
-	g_hash_table_remove (moduledict, module->get_id());
+	// printf("Extension DB: removing %s\n", module->get_id());
+	moduledict.erase(moduledict.find(module->get_id()));
 }
 
 /**
@@ -81,21 +84,9 @@ DB::get (const gchar *key)
 
 	if (key == NULL) return NULL;
 
-	mod = (Inkscape::Extension::Extension *)g_hash_table_lookup (moduledict, key);
+	mod = (*moduledict.find(key)).second;
 
 	return mod;
-}
-
-const gchar *
-DB::get_unique_id (gchar *c, int len, const gchar *val)
-{
-	static int mnumber = 0;
-
-	while (!val || g_hash_table_lookup (moduledict, val)) {
-		g_snprintf (c, len, "Module_%d", ++mnumber);
-		val = c;
-	}
-	return val;
 }
 
 /**
@@ -111,11 +102,12 @@ DB::get_unique_id (gchar *c, int len, const gchar *val)
 void
 DB::foreach (void (*in_func)(Extension * in_plug, gpointer in_data), gpointer in_data)
 {
-	g_return_if_fail(moduledict != NULL);
+	std::map <const char *, Extension *>::iterator cur;
 
-	ModuleDBForeachClosure closure = { in_func, in_data };
+	for (cur = moduledict.begin(); cur != moduledict.end(); cur++) {
+		in_func((*cur).second, in_data);
+	}
 
-	g_hash_table_foreach(moduledict, (GHFunc)DB::foreach_internal, &closure);
 	return;
 }
 

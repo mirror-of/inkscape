@@ -179,6 +179,7 @@ public:
                   Input                (SPRepr * in_repr,
                                         Implementation::Implementation * in_imp);
     virtual      ~Input                (void);
+	virtual bool  check                (void);
     SPDocument *  open                 (const gchar *uri);
     gchar *       get_extension        (void);
     gchar *       get_filetypename     (void);
@@ -200,7 +201,7 @@ public:
                  Output (SPRepr * in_repr,
                          Implementation::Implementation * in_imp);
     virtual     ~Output (void);
-
+	virtual bool check                (void);
     void         save (SPDocument *doc,
                        const gchar *uri);
     GtkDialog *  prefs (void);
@@ -215,7 +216,7 @@ public:
                  Effect  (SPRepr * in_repr,
                           Implementation::Implementation * in_imp);
     virtual     ~Effect  (void);
-
+	virtual bool check                (void);
     GtkDialog *  prefs   (void);
     void         effect  (SPDocument * doc);
 };
@@ -232,6 +233,7 @@ public:
                   Print       (SPRepr * in_repr,
                                Implementation::Implementation * in_imp);
                  ~Print       (void);
+	virtual bool  check       (void);
 
     /* FALSE means user hit cancel */
     unsigned int  setup       (void);

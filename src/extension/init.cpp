@@ -138,9 +138,11 @@ check_extensions_internal (Extension * in_plug, gpointer in_data)
 static void
 check_extensions (void)
 {
+	int pass = 0;
 	int count = 1;
 
 	while (count != 0) {
+		// printf("Check extensions pass %d\n", pass++);
 		count = 0;
 		db.foreach(check_extensions_internal, (gpointer)&count);
 	}

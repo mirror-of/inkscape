@@ -7,7 +7,7 @@
  *   Ted Gould <ted@gould.cx>
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
- * Copyright (C) 2002-2003 Authors
+ * Copyright (C) 2002-2004 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -15,6 +15,7 @@
 #ifndef __MODULES_DB_H__
 #define __MODULES_DB_H__
 
+#include <map>
 #include <glib.h>
 #include <extension/extension.h>
 
@@ -23,9 +24,16 @@ namespace Extension {
 
 class DB {
 private:
+	/** A string comparison function to be used in the moduledict
+	    to find the different extensions in the hash map. */
+	struct ltstr {
+		bool operator()(const char* s1, const char* s2) const {
+			return strcmp(s1, s2) < 0;
+		}
+	};
     /** This is the actual database.  It has all of the modules in it,
         indexed by their ids.  It's a hash table for faster lookups */
-    GHashTable *moduledict;
+	std::map <const char *, Extension *, ltstr> moduledict;
 
     static void foreach_internal (gpointer in_key, gpointer in_value, gpointer in_data);
 
@@ -34,7 +42,6 @@ public:
     Extension * get (const gchar *key);
     void register_ext (Extension *module);
     void unregister_ext (Extension *module);
-    const gchar * get_unique_id (gchar *c, int len, const gchar *val);
     void foreach (void (*in_func)(Extension * in_plug, gpointer in_data), gpointer in_data);
 
     /* Lists for UI stuff */

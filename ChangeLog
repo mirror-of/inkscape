@@ -1,3 +1,22 @@
+2004-04-24  Ted Gould  <ted@gould.cx>
+
+	* src/Makefile_include, src/prefix.cpp:
+
+	Removing the redefition of NULL and adding to the make system.
+
+2004-04-24  Ted Gould  <ted@gould.cx>
+
+	* src/extension/db.cpp, src/extension/db.h, src/extension/extension.cpp,
+	src/extension/extension.h, src/extension/init.cpp,
+	src/extension/internal/eps-out.cpp, src/extension/internal/eps-out.h,
+	src/extension/internal/ps-out.cpp, src/extension/internal/ps-out.h:
+
+	Adding in more checks for individual extensions.  All of them
+	should still pass though.  Also, moved the extension database from
+	glib to STL.  This allows extensions to be deleted while using the
+	foreach functions (which causes instability with the glib hash
+	table).
+
 2004-04-24  Peter  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/dialogs/Makefile_insert:

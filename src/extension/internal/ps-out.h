@@ -22,6 +22,7 @@ namespace Internal {
 class PsOutput : Inkscape::Extension::Implementation::Implementation {
 
 public:
+	bool check (Inkscape::Extension::Extension * module);
 	void          save  (Inkscape::Extension::Output *mod,
 	                     SPDocument *doc,
 	                     const gchar *uri);

@@ -73,7 +73,8 @@ libinkpre_a_SOURCES =	\
 	object-ui.cpp object-ui.h	\
 	path-chemistry.cpp path-chemistry.h	\
 	preferences-skeleton.h	\
-	prefs-utils.cpp prefs-utils.h\
+	prefs-utils.cpp prefs-utils.h \
+	prefix.cpp prefix.h \
 	print.cpp print.h	\
 	rect-context.cpp rect-context.h	\
 	rubberband.cpp rubberband.h	\

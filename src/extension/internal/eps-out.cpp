@@ -32,6 +32,15 @@ EpsOutput::~EpsOutput (void)
 	return;
 }
 
+bool
+EpsOutput::check (Inkscape::Extension::Extension * module)
+{
+	if (NULL == Inkscape::Extension::db.get(SP_MODULE_KEY_PRINT_PS))
+		return FALSE;
+
+	return TRUE;
+}
+
 void
 EpsOutput::pageBoxToggle (GtkWidget * widget, Inkscape::Extension::Output * omod)
 {
