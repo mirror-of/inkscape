@@ -232,6 +232,14 @@ can leave your ideas and requests there.</p>
 </group>
 
 <group>
+<title>Bitmaps</title>
+<keys><key><alt/>B</key> <action>create a bitmap copy</action></keys>
+<note>This exports the selected object(s) (all other objects hidden) as PNG in the document's directory and imports it back.</note>
+<keys><key><shift/><alt/>B</key> <action>trace bitmap</action></keys>
+<note>This opens the Trace Bitmap dialog allowing you to convert a bitmap object to path(s).</note> 
+</group>
+
+<group>
 <title>Tile</title>
 <keys><key><alt/>I</key>	 <action>tile selection</action></keys> 
 <note>This converts the selection to a rectangle with tiled pattern fill.</note>

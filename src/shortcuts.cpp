@@ -338,6 +338,9 @@ sp_shortcut_init ()
 	sp_shortcut_set (SP_SHORTCUT_ALT_MASK | GDK_b, Inkscape::Verb::get(SP_VERB_SELECTION_CREATE_BITMAP), true);
 	sp_shortcut_set (SP_SHORTCUT_ALT_MASK | GDK_B, Inkscape::Verb::get(SP_VERB_SELECTION_CREATE_BITMAP), false);
 
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_ALT_MASK | GDK_b, Inkscape::Verb::get(SP_VERB_SELECTION_POTRACE), true);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_ALT_MASK | GDK_B, Inkscape::Verb::get(SP_VERB_SELECTION_POTRACE), false);
+
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_k, Inkscape::Verb::get(SP_VERB_SELECTION_COMBINE), true);
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_K, Inkscape::Verb::get(SP_VERB_SELECTION_COMBINE), false);
 
