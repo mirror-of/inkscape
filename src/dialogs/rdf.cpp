@@ -75,76 +75,76 @@ struct rdf_double_t rdf_license_empty [] = {
 };
 
 struct rdf_double_t rdf_license_cc_a [] = {
-    { "permits", "http://web.resource.org/cc/Reproduction", },
-    { "permits", "http://web.resource.org/cc/Distribution", },
-    { "requires", "http://web.resource.org/cc/Notice", },
-    { "requires", "http://web.resource.org/cc/Attribution", },
-    { "permits", "http://web.resource.org/cc/DerivativeWorks", },
+    { "cc:permits", "http://web.resource.org/cc/Reproduction", },
+    { "cc:permits", "http://web.resource.org/cc/Distribution", },
+    { "cc:requires", "http://web.resource.org/cc/Notice", },
+    { "cc:requires", "http://web.resource.org/cc/Attribution", },
+    { "cc:permits", "http://web.resource.org/cc/DerivativeWorks", },
     { NULL, NULL }
 };
 
 struct rdf_double_t rdf_license_cc_a_sa [] = {
-    { "permits", "http://web.resource.org/cc/Reproduction", },
-    { "permits", "http://web.resource.org/cc/Distribution", },
-    { "requires", "http://web.resource.org/cc/Notice", },
-    { "requires", "http://web.resource.org/cc/Attribution", },
-    { "permits", "http://web.resource.org/cc/DerivativeWorks", },
-    { "requires", "http://web.resource.org/cc/ShareAlike", },
+    { "cc:permits", "http://web.resource.org/cc/Reproduction", },
+    { "cc:permits", "http://web.resource.org/cc/Distribution", },
+    { "cc:requires", "http://web.resource.org/cc/Notice", },
+    { "cc:requires", "http://web.resource.org/cc/Attribution", },
+    { "cc:permits", "http://web.resource.org/cc/DerivativeWorks", },
+    { "cc:requires", "http://web.resource.org/cc/ShareAlike", },
     { NULL, NULL }
 };
 
 struct rdf_double_t rdf_license_cc_a_nd [] = {
-    { "permits", "http://web.resource.org/cc/Reproduction", },
-    { "permits", "http://web.resource.org/cc/Distribution", },
-    { "requires", "http://web.resource.org/cc/Notice", },
-    { "requires", "http://web.resource.org/cc/Attribution", },
+    { "cc:permits", "http://web.resource.org/cc/Reproduction", },
+    { "cc:permits", "http://web.resource.org/cc/Distribution", },
+    { "cc:requires", "http://web.resource.org/cc/Notice", },
+    { "cc:requires", "http://web.resource.org/cc/Attribution", },
     { NULL, NULL }
 };
 
 struct rdf_double_t rdf_license_cc_a_nc [] = {
-    { "permits", "http://web.resource.org/cc/Reproduction", },
-    { "permits", "http://web.resource.org/cc/Distribution", },
-    { "requires", "http://web.resource.org/cc/Notice", },
-    { "requires", "http://web.resource.org/cc/Attribution", },
-    { "prohibits", "http://web.resource.org/cc/CommercialUse", },
-    { "permits", "http://web.resource.org/cc/DerivativeWorks", },
+    { "cc:permits", "http://web.resource.org/cc/Reproduction", },
+    { "cc:permits", "http://web.resource.org/cc/Distribution", },
+    { "cc:requires", "http://web.resource.org/cc/Notice", },
+    { "cc:requires", "http://web.resource.org/cc/Attribution", },
+    { "cc:prohibits", "http://web.resource.org/cc/CommercialUse", },
+    { "cc:permits", "http://web.resource.org/cc/DerivativeWorks", },
     { NULL, NULL }
 };
 
 struct rdf_double_t rdf_license_cc_a_nc_sa [] = {
-    { "permits", "http://web.resource.org/cc/Reproduction", },
-    { "permits", "http://web.resource.org/cc/Distribution", },
-    { "requires", "http://web.resource.org/cc/Notice", },
-    { "requires", "http://web.resource.org/cc/Attribution", },
-    { "prohibits", "http://web.resource.org/cc/CommercialUse", },
-    { "permits", "http://web.resource.org/cc/DerivativeWorks", },
-    { "requires", "http://web.resource.org/cc/ShareAlike", },
+    { "cc:permits", "http://web.resource.org/cc/Reproduction", },
+    { "cc:permits", "http://web.resource.org/cc/Distribution", },
+    { "cc:requires", "http://web.resource.org/cc/Notice", },
+    { "cc:requires", "http://web.resource.org/cc/Attribution", },
+    { "cc:prohibits", "http://web.resource.org/cc/CommercialUse", },
+    { "cc:permits", "http://web.resource.org/cc/DerivativeWorks", },
+    { "cc:requires", "http://web.resource.org/cc/ShareAlike", },
     { NULL, NULL }
 };
 
 struct rdf_double_t rdf_license_cc_a_nc_nd [] = {
-    { "permits", "http://web.resource.org/cc/Reproduction", },
-    { "permits", "http://web.resource.org/cc/Distribution", },
-    { "requires", "http://web.resource.org/cc/Notice", },
-    { "requires", "http://web.resource.org/cc/Attribution", },
-    { "prohibits", "http://web.resource.org/cc/CommercialUse", },
+    { "cc:permits", "http://web.resource.org/cc/Reproduction", },
+    { "cc:permits", "http://web.resource.org/cc/Distribution", },
+    { "cc:requires", "http://web.resource.org/cc/Notice", },
+    { "cc:requires", "http://web.resource.org/cc/Attribution", },
+    { "cc:prohibits", "http://web.resource.org/cc/CommercialUse", },
     { NULL, NULL }
 };
 
 struct rdf_double_t rdf_license_gpl [] = {
-    { "permits", "http://web.resource.org/cc/Reproduction", },
-    { "permits", "http://web.resource.org/cc/Distribution", },
-    { "requires", "http://web.resource.org/cc/Notice", },
-    { "permits", "http://web.resource.org/cc/DerivativeWorks", },
-    { "requires", "http://web.resource.org/cc/ShareAlike", },
-    { "requires", "http://web.resource.org/cc/SourceCode", },
+    { "cc:permits", "http://web.resource.org/cc/Reproduction", },
+    { "cc:permits", "http://web.resource.org/cc/Distribution", },
+    { "cc:requires", "http://web.resource.org/cc/Notice", },
+    { "cc:permits", "http://web.resource.org/cc/DerivativeWorks", },
+    { "cc:requires", "http://web.resource.org/cc/ShareAlike", },
+    { "cc:requires", "http://web.resource.org/cc/SourceCode", },
     { NULL, NULL }
 };
 
 struct rdf_double_t rdf_license_pd [] = {
-    { "permits", "http://web.resource.org/cc/Reproduction", },
-    { "permits", "http://web.resource.org/cc/Distribution", },
-    { "permits", "http://web.resource.org/cc/DerivativeWorks", },
+    { "cc:permits", "http://web.resource.org/cc/Reproduction", },
+    { "cc:permits", "http://web.resource.org/cc/Distribution", },
+    { "cc:permits", "http://web.resource.org/cc/DerivativeWorks", },
     { NULL, NULL }
 };
 
@@ -200,7 +200,7 @@ struct rdf_license_t rdf_licenses [] = {
 #define XML_TAG_NAME_METADATA "metadata"
 #define XML_TAG_NAME_RDF      "rdf:RDF"
 #define XML_TAG_NAME_WORK     "cc:Work"
-#define XML_TAG_NAME_LICENSE  "License"
+#define XML_TAG_NAME_LICENSE  "cc:License"
 
 struct rdf_work_entity_t rdf_work_entities [] = {
     { "title", N_("Title"), "dc:title", RDF_CONTENT,
@@ -532,6 +532,7 @@ rdf_get_rdf_root_repr ( SPDocument * doc, bool build )
     SPRepr * rdf = sp_repr_lookup_name ( doc->rroot, XML_TAG_NAME_RDF );
 
     if (rdf == NULL) {
+        //printf("missing XML '%s'\n",XML_TAG_NAME_RDF);
         if (!build) return NULL;
 
         SPRepr * svg = sp_repr_lookup_name ( doc->rroot, "svg" );
@@ -568,8 +569,10 @@ rdf_get_rdf_root_repr ( SPDocument * doc, bool build )
             sp_repr_unref ( metadata );
 
             /* move the RDF into it */
+            sp_repr_ref ( rdf );
             sp_repr_unparent ( rdf );
             sp_repr_append_child ( metadata, rdf );
+            sp_repr_unref ( rdf );
     }
     
     return rdf;
@@ -587,6 +590,7 @@ rdf_get_xml_repr( SPDocument * doc, gchar const * name, bool build )
 
     SPRepr * xml = sp_repr_lookup_name ( rdf, name );
     if (xml == NULL) {
+        //printf("missing XML '%s'\n",name);
         if (!build) return NULL;
 
         xml = sp_repr_new( name );
@@ -613,6 +617,7 @@ rdf_get_work_repr( SPDocument * doc, gchar const * name, bool build )
 
     SPRepr * item = sp_repr_lookup_name ( work, name );
     if (item == NULL) {
+        //printf("missing XML '%s'\n",name);
         if (!build) return NULL;
 
         item = sp_repr_new( name );
@@ -683,6 +688,8 @@ rdf_set_work_entity(SPDocument * doc, struct rdf_work_entity_t * entity,
     return rdf_set_repr_text ( item, entity, text );
 }
 
+#undef DEBUG_MATCH
+
 bool
 rdf_match_license ( SPRepr * repr, struct rdf_license_t * license )
 {
@@ -690,7 +697,9 @@ rdf_match_license ( SPRepr * repr, struct rdf_license_t * license )
     g_assert ( license != NULL );
 
     bool result=TRUE;
-    //printf("checking against '%s'\n",license->name);
+#ifdef DEBUG_MATCH
+    printf("checking against '%s'\n",license->name);
+#endif
 
     int count = 0;
     for (struct rdf_double_t * details = license->details;
@@ -706,15 +715,19 @@ rdf_match_license ( SPRepr * repr, struct rdf_license_t * license )
         gchar const * attr = sp_repr_attr ( current, "rdf:resource" );
         if ( attr == NULL ) continue;
 
-        //printf("\texamining '%s' => '%s'\n", sp_repr_name ( current ), attr);
+#ifdef DEBUG_MATCH
+        printf("\texamining '%s' => '%s'\n", sp_repr_name ( current ), attr);
+#endif
 
         bool found_match=FALSE;
         for (int i=0; i<count; i++) {
             // skip already matched items
             if (matched[i]) continue;
 
-            //printf("\t\t'%s' vs '%s'\n", sp_repr_name ( current ), license->details[i].name);
-            //printf("\t\t'%s' vs '%s'\n", attr, license->details[i].resource);
+#ifdef DEBUG_MATCH
+            printf("\t\t'%s' vs '%s'\n", sp_repr_name ( current ), license->details[i].name);
+            printf("\t\t'%s' vs '%s'\n", attr, license->details[i].resource);
+#endif
 
             if (!strcmp( sp_repr_name ( current ),
                          license->details[i].name ) &&
@@ -722,7 +735,9 @@ rdf_match_license ( SPRepr * repr, struct rdf_license_t * license )
                          license->details[i].resource )) {
                 matched[i]=TRUE;
                 found_match=TRUE;
-                //printf("\t\tgood!\n");
+#ifdef DEBUG_MATCH
+                printf("\t\tgood!\n");
+#endif
                 break;
             }
         }
@@ -730,24 +745,34 @@ rdf_match_license ( SPRepr * repr, struct rdf_license_t * license )
             // if we checked each known item of the license
             // and didn't find it, we must abort
             result=FALSE;
-            //printf("\t\tno '%s' element matched XML (bong)!\n",license->name);
+#ifdef DEBUG_MATCH
+            printf("\t\tno '%s' element matched XML (bong)!\n",license->name);
+#endif
             break;
         }
     }
-    //if (result) printf("\t\tall XML found matching elements!\n");
+#ifdef DEBUG_MATCH
+    if (result) printf("\t\tall XML found matching elements!\n");
+#endif
     for (int i=0; result && i<count; i++) {
         // scan looking for an unmatched item
         if (matched[i]==0) {
             result=FALSE;
-            //printf("\t\tnot all '%s' elements used to match (bong)!\n", license->name);
+#ifdef DEBUG_MATCH
+            printf("\t\tnot all '%s' elements used to match (bong)!\n", license->name);
+#endif
         }
     }
 
-    //printf("\t\tall '%s' elements used to match!\n",license->name);
+#ifdef DEBUG_MATCH
+    printf("\t\tall '%s' elements used to match!\n",license->name);
+#endif
 
     free(matched);
 
-    //if (result) printf("matched '%s'\n",license->name);
+#ifdef DEBUG_MATCH
+    if (result) printf("matched '%s'\n",license->name);
+#endif
     return result;
 }
 
@@ -766,6 +791,11 @@ rdf_get_license(SPDocument * document)
             if ( rdf_match_license ( repr, license ) ) return license;
         }
     }
+#ifdef DEBUG_MATCH
+    else {
+        printf("no license XML\n");
+    }
+#endif
     return NULL;
 }
 
