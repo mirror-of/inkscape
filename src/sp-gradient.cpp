@@ -588,7 +588,7 @@ sp_gradient_set_spread (SPGradient *gr, SPGradientSpread spread)
  * stops), optionally normalizing it
  */
 SPGradient *
-sp_gradient_get_vector (SPGradient *gradient, gboolean force_private)
+sp_gradient_get_vector (SPGradient *gradient, gboolean force_vector)
 {
     g_return_val_if_fail(gradient != NULL, NULL);
     g_return_val_if_fail(SP_IS_GRADIENT(gradient), NULL);
@@ -601,7 +601,7 @@ sp_gradient_get_vector (SPGradient *gradient, gboolean force_private)
         ref = gradient->ref->getObject();
     }
 
-    return (force_private) ? sp_gradient_ensure_vector_normalized(gradient) : gradient;
+    return (force_vector) ? sp_gradient_ensure_vector_normalized(gradient) : gradient;
 }
 
 /**
