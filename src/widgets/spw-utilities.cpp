@@ -181,7 +181,7 @@ spw_unit_selector(GtkWidget * dialog, GtkWidget * table,
   gtk_object_set_data (GTK_OBJECT (a), "unit_selector", us);
   gtk_object_set_data (GTK_OBJECT (dialog), key, a);
   sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (a));
-  sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 2);
+  sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 4);
   g_assert(sb != NULL);
   gtk_widget_show (sb);
   gtk_table_attach (GTK_TABLE (table), sb, 1, 2, row, row+1, 
