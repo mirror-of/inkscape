@@ -394,40 +394,60 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					case GDK_Left:
 					case GDK_KP_Left:
 					case GDK_KP_4:
-						if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-							tc->ipos = sp_text_down (SP_TEXT (tc->text), tc->ipos);
+						if (MOD__ALT) { 
+							sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(-1, 0));
+							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						} else {
-							tc->ipos = MAX (tc->ipos - 1, 0);
+							if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+								tc->ipos = sp_text_down (SP_TEXT (tc->text), tc->ipos);
+							} else {
+								tc->ipos = MAX (tc->ipos - 1, 0);
+							}
 						}
 						sp_text_context_update_cursor (tc);
 						return TRUE;
 					case GDK_Right:
 					case GDK_KP_Right:
 					case GDK_KP_6:
-						if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-							tc->ipos = sp_text_up (SP_TEXT (tc->text), tc->ipos);
+						if (MOD__ALT) { 
+							sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(1, 0));
+							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						} else {
-							tc->ipos = MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text)));
+							if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+								tc->ipos = sp_text_up (SP_TEXT (tc->text), tc->ipos);
+							} else {
+								tc->ipos = MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text)));
+							}
 						}
 						sp_text_context_update_cursor (tc);
 						return TRUE;
 					case GDK_Up:
 					case GDK_KP_Up:
 					case GDK_KP_8:
-						if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-							tc->ipos = MAX (tc->ipos - 1, 0);
+						if (MOD__ALT) { 
+							sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, -1));
+							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						} else {
-							tc->ipos = sp_text_up (SP_TEXT (tc->text), tc->ipos);
+							if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+								tc->ipos = MAX (tc->ipos - 1, 0);
+							} else {
+								tc->ipos = sp_text_up (SP_TEXT (tc->text), tc->ipos);
+							}
 						}
 						sp_text_context_update_cursor (tc);
 						return TRUE;
 					case GDK_Down:
 					case GDK_KP_Down:
 					case GDK_KP_2:
-						if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-							tc->ipos = MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text)));
+						if (MOD__ALT) { 
+							sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, 1));
+							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						} else {
-							tc->ipos = sp_text_down (SP_TEXT (tc->text), tc->ipos);
+							if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+								tc->ipos = MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text)));
+							} else {
+								tc->ipos = sp_text_down (SP_TEXT (tc->text), tc->ipos);
+							}
 						}
 						sp_text_context_update_cursor (tc);
 						return TRUE;

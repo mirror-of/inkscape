@@ -47,6 +47,7 @@
 #include "version.h"
 #include "inkscape.h"
 #include "view.h"
+#include "libnr/nr-matrix.h"
 
 #include "sp-text.h"
 
@@ -254,6 +255,8 @@ sp_set_dxdy (SPObject *o, GList *dx, GList *dy)
 
 	sp_repr_set_length_list (SP_OBJECT_REPR(o), "dx", dx);
 	sp_repr_set_length_list (SP_OBJECT_REPR(o), "dy", dy);
+
+	sp_object_request_update (o, SP_OBJECT_MODIFIED_FLAG);
 }
 
 /**
@@ -307,7 +310,7 @@ sp_fill_dxdy (SPObject *child, guint end)
 }
 
 /**
-\brief   Concatenates dx and dy lists of the two objects, assigns the reulting lists to
+\brief   Concatenates dx and dy lists of the two objects, assigns the resulting lists to
 the first object
 */
 void
@@ -365,7 +368,7 @@ sp_delete_dxdy (SPObject *child, gint start, gint end)
 }
 
 void
-sp_insert_dxdy (SPObject *child, guint pos, float dx_computed, float dy_computed)
+sp_insert_dxdy (SPObject *child, guint pos, float dx_computed, float dy_computed, bool ins = true)
 {
 	guint dx_offset, dy_offset;
 	GList *dxnew, *dx = sp_effective_dx (child, &dx_offset);
@@ -375,11 +378,11 @@ sp_insert_dxdy (SPObject *child, guint pos, float dx_computed, float dy_computed
 	dynew = g_list_copy (g_list_nth (dy, dy_offset));
 
 	if (g_list_length (dxnew) < pos) {
-		if (dx != 0) {
-			for (guint i = g_list_length(dxnew); i < pos; i++) {
+		if (dx_computed != 0) {
+			for (guint i = g_list_length(dxnew); i <= pos; i++) {
 				SPSVGLength *length = g_new (SPSVGLength, 1);
 				length->value = 0;
-				if (i == pos - 1)	
+				if (i == pos)	
 					length->computed = dx_computed;
 				else 
 					length->computed = 0;
@@ -390,15 +393,18 @@ sp_insert_dxdy (SPObject *child, guint pos, float dx_computed, float dy_computed
 		SPSVGLength *length = g_new (SPSVGLength, 1);
 		length->value = 0;
 		length->computed = dx_computed;
+		if (!ins) {
+			g_list_remove (dxnew, g_list_nth_data (dxnew, pos));
+		}
 		dxnew = g_list_insert (dxnew, (gpointer) length, pos);
 	}
 
 	if (g_list_length (dynew) < pos) {
-		if (dy != 0) {
-			for (guint i = g_list_length(dynew); i < pos; i++) {
+		if (dy_computed != 0) {
+			for (guint i = g_list_length(dynew); i <= pos; i++) {
 				SPSVGLength *length = g_new (SPSVGLength, 1);
 				length->value = 0;
-				if (i == pos - 1)	
+				if (i == pos)	
 					length->computed = dy_computed;
 				else 
 					length->computed = 0;
@@ -409,6 +415,9 @@ sp_insert_dxdy (SPObject *child, guint pos, float dx_computed, float dy_computed
 		SPSVGLength *length = g_new (SPSVGLength, 1);
 		length->value = 0;
 		length->computed = dy_computed;
+		if (!ins) {
+			g_list_remove (dynew, g_list_nth_data (dynew, pos));
+		}
 		dynew = g_list_insert (dynew, (gpointer) length, pos);
 	}
 
@@ -2500,9 +2509,41 @@ sp_text_get_child_by_position (SPText *text, gint pos)
 	return child;
 }
 
+/**
+\brief   Adjusts kerning of the pos'th character of text by by visible pixels at the current zoom
+*/
+void
+sp_adjust_kerning_screen (SPText *text, gint pos, SPDesktop *desktop, NR::Point by)
+{
+	SPObject *child = sp_text_get_child_by_position (text, pos);
+	if (!child) return; //FIXME: we should be able to set kerning on non-Inkscape text that has no tspans, too
+
+	SPString *string = SP_TEXT_CHILD_STRING (child);
+
+	guint dx_offset, dy_offset;
+	GList *dx = sp_effective_dx (SP_OBJECT(string), &dx_offset);
+	GList *dy = sp_effective_dy (SP_OBJECT(string), &dy_offset);
+
+	// obtain value
+	gdouble dx_a = sp_char_dx (dx, dx_offset + (pos - string->start));
+	gdouble dy_a = sp_char_dy (dy, dy_offset + (pos - string->start));
+
+	// divide increment by zoom 
+	// divide increment by matrix expansion 
+	gdouble factor = 1 / SP_DESKTOP_ZOOM (desktop);
+	NR::Matrix t = sp_item_i2doc_affine (SP_ITEM(child));
+	factor = factor / NR::expansion(t);
+	by = factor * by;
+
+	dx_a += by[NR::X];
+	dy_a += by[NR::Y];
+
+	// set back value
+	sp_insert_dxdy (child, pos - string->start, dx_a, dy_a, false);
+}
 
 /**
-\brief   Adjusts letterspacing in pos'th line of text so that the length of the line is changed by by visible pixels at the current zoom
+\brief   Adjusts letterspacing in the line of text containing pos so that the length of the line is changed by by visible pixels at the current zoom
 */
 void
 sp_adjust_tspan_letterspacing_screen (SPText *text, gint pos, SPDesktop *desktop, gdouble by)
@@ -2514,8 +2555,6 @@ sp_adjust_tspan_letterspacing_screen (SPText *text, gint pos, SPDesktop *desktop
 
 	SPStyle *style = SP_OBJECT_STYLE (child);
 	SPString *string = SP_TEXT_CHILD_STRING (child);
-
-	//FIXME: take transform expansion into account
 
 	// calculate real value
 	if (style->text->letterspacing.value != 0 && style->text->letterspacing.computed == 0) { // set in em or ex
@@ -2534,6 +2573,10 @@ sp_adjust_tspan_letterspacing_screen (SPText *text, gint pos, SPDesktop *desktop
 	// so that the entire line is expanded by by pixels, no matter what its length
 	gdouble zoom = SP_DESKTOP_ZOOM (desktop);
 	gdouble zby = by / (zoom * (string->length > 1 ? string->length - 1 : 1));
+
+	// divide increment by matrix expansion 
+	NR::Matrix t = sp_item_i2doc_affine (SP_ITEM(child));
+	zby = zby / NR::expansion(t);
 
 	val += zby;
 
