@@ -420,27 +420,47 @@ public:
     // many functions acting on iterators, most of which are obvious
     // also most of them don't check that \a it != end(). Be careful.
 
-    inline int glyphAt(iterator const &it) const;   /// the actual glyph, not its index
-
+    /** Returns the bounding box of the given glyph, and its rotation.
+    The centre of rotation is the horizontal centre of the box at the
+    text baseline. */
     NR::Rect glyphBoundingBox(iterator const &it, double *rotation) const;
 
+    /** Returns the zero-based line number of the character pointed to by
+    \a it. */
     inline unsigned lineIndex(iterator const &it) const;
 
+    /** Returns the zero-based number of the shape which contains the
+    character pointed to by \a it. */
     inline unsigned shapeIndex(iterator const &it) const;
 
+    /** Returns true if the character at \a it is a whitespace, as defined
+    by Pango. This is not meant to be used for picking out words from the
+    output, use iterator::nextStartOfWord() and friends instead. */
     inline bool isWhitespace(iterator const &it) const;
 
-    inline int characterAt(iterator const &it) const;   /// the unicode character code
+    /** Returns the unicode character code of the character pointed to by
+    \a it. If \a it == end() the result is undefined. */
+    inline int characterAt(iterator const &it) const;
 
+    /** Discovers where the character pointed to by \a it came from, by
+    retrieving the cookie that was passed to the call to appendText() or
+    appendControlCode() which generated that output. If \a it == end()
+    then NULL is returned as the cookie. If the character was generated
+    from a call to appendText() then the optional \a text_iterator
+    parameter is set to point to the actual character, otherwise
+    \a text_iterator is unaltered. */
     void getSourceOfCharacter(iterator const &it, void **source_cookie, Glib::ustring::iterator *text_iterator = NULL) const;
 
-    /** for latin text, the left side of the character, on the baseline */
+    /** For latin text, the left side of the character, on the baseline */
     NR::Point characterAnchorPoint(iterator const &it) const;
 
-    /** this is that value to apply to the x,y attributes of tspan role=line
-    elements, so it takes alignment into account. */
+    /** This is that value to apply to the x,y attributes of tspan role=line
+    elements, and hence it takes alignment into account. */
     NR::Point chunkAnchorPoint(iterator const &it) const;
 
+    /** Returns the box extents (not ink extents) of the given character.
+    The centre of rotation is at the horizontal centre of the box on the
+    text baseline. */
     NR::Rect characterBoundingBox(iterator const &it, double *rotation = NULL) const;
 
     /** Basically uses characterBoundingBox() on all the characters from
@@ -449,6 +469,8 @@ public:
     points for each, thus size() is always a multiple of four. */
     std::vector<NR::Point> createSelectionShape(iterator const &it_start, iterator const &it_end, NR::Matrix const &transform) const;
 
+    /** Returns true if \a it points to a character which is a valid cursor
+    position, as defined by Pango. */
     inline bool isCursorPosition(iterator const &it) const;
 
     /** Gets the ideal cursor shape for a given iterator. The result is
@@ -462,16 +484,31 @@ public:
     */
     void queryCursorShape(iterator const &it, NR::Point *position, double *height, double *rotation) const;
 
+    /** Returns true if \a it points to a character which is a the start of
+    a word, as defined by Pango. */
     inline bool isStartOfWord(iterator const &it) const;
 
+    /** Returns true if \a it points to a character which is a the end of
+    a word, as defined by Pango. */
     inline bool isEndOfWord(iterator const &it) const;
 
+    /** Returns true if \a it points to a character which is a the start of
+    a sentence, as defined by Pango. */
     inline bool isStartOfSentence(iterator const &it) const;
 
+    /** Returns true if \a it points to a character which is a the end of
+    a sentence, as defined by Pango. */
     inline bool isEndOfSentence(iterator const &it) const;
 
+    /** Returns the zero-based number of the paragraph containing the
+    character pointed to by \a it. */
     inline unsigned paragraphIndex(iterator const &it) const;
 
+    /** Returns the actual alignment used for the paragraph containing
+    the character pointed to by \a it. This means that the CSS 'start'
+    and 'end' are correctly translated into LEFT or RIGHT according to
+    the paragraph's directionality. For vertical text, LEFT is top
+    alignment and RIGHT is bottom. */
     inline Alignment paragraphAlignment(iterator const &it) const;
 
     //@}
@@ -869,9 +906,6 @@ inline Layout::iterator Layout::getNearestCursorPositionTo(NR::Point &point) con
 
 inline Layout::iterator Layout::getLetterAt(NR::Point &point) const
     {return getLetterAt(point[0], point[1]);}
-
-inline int Layout::glyphAt(iterator const &it) const   /// the actual glyph, not its index
-    {return _glyphs[it._glyph_index].glyph;}
 
 inline unsigned Layout::lineIndex(iterator const &it) const
     {return it._char_index == _characters.size() ? _lines.size() - 1 : _characters[it._char_index].chunk(this).in_line;}
