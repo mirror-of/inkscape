@@ -579,13 +579,6 @@ sp_ui_main_menubar (SPView *view)
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
 
-#ifdef WITH_MODULES
-	mitem = gtk_menu_item_new_with_mnemonic (_("Fil_ters"));
-	menu = gtk_menu_new ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM(mitem), GTK_WIDGET(sp_module_menu_filter()));
-	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
-#endif
-
 	mitem = gtk_menu_item_new_with_mnemonic (_("_Help"));
 	menu = gtk_menu_new ();
 	sp_ui_help_menu (menu);

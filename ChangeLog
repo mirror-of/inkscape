@@ -9,6 +9,8 @@
 
 	  NRCoord -> NR::Coord
 
+	* src/interface.cpp: removed Filters menu
+
 2004-01-28  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/seltrans.cpp: Various cleanups, including addressing some
