@@ -20,24 +20,30 @@ my $com = qr/(?:\#[^\n]*\n)/;
 my $str = qr/(?:"(?:[^"\\]|\\.)*"\n)/;
 
 my $rc = 0;
+
+sub po_error ($) {
+    my ($msg) = @_;
+    my $name = $ARGV;
+    $name =~ s,.*/,,;
+    print "$name: $msg:\n$_";
+    $rc = 1;
+}
+
 $/ = '';
 while(<>) {
 	if (m{\A${com}*\Z}) {
-		next;
+	    next;
 	}
 
 	s/"\n"//g;
 	if (!m{\A${com}*msgid[^\n]*\n${com}*msgstr[^\n]*\n${com}*\Z}) {
-		print "$ARGV: Not in msg format:\n$_";
-		$rc = 1;
+	    po_error('Not in msg format');
 	}
 	elsif (!m{\A${com}*msgid ${str}${com}*msgstr ${str}${com}*\Z}) {
-		print "$ARGV: Mismatched quotes:\n$_";
-		$rc = 1;
+	    po_error('Mismatched quotes');
 	}
 	elsif (m{<b>(?![^<>]*</b>)}) {
-		print "$ARGV: unclosed <b>:\n$_";
-		$rc = 1;
+	    po_error('unclosed <b>');
 	}
 
 	# Should also check that we don't have a </b> without a corresponding <b>.
