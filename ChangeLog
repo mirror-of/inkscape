@@ -1,3 +1,9 @@
+2004-07-04  MenTaLguY  <mental@rydia.net>
+
+	* src/sp-object.cpp: fixed bug #979281 -- I had accidentally
+	  reversed the sense of a test in SPObject::requestModified(),
+	  such that CHILD_MODIFIED notifications were never being sent
+
 2004-07-03  Kees Cook  <kees@outflux.net>
 
 	* src/document.cpp, src/dialogs/desktop-properties.cpp, 

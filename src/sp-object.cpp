@@ -976,7 +976,7 @@ SPObject::requestModified(unsigned int flags)
 	 * have already queued CHILD_MODIFIED with our ancestors and
 	 * need not disturb them again.
 	 */
-	if ( old_mflags & ( SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG ) ) {
+	if (!( old_mflags & ( SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG ) )) {
 		SPObject *parent=SP_OBJECT_PARENT(this);
 		if (parent) {
 			parent->requestModified(SP_OBJECT_CHILD_MODIFIED_FLAG);
