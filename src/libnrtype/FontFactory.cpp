@@ -11,8 +11,10 @@
 #include <pango/pango.h>
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+# include "config.h"
 #endif
+
+#include <glibmm/i18n.h> // _()
 
 /* Freetype2 */
 # include <pango/pangoft2.h>
@@ -325,7 +327,34 @@ font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
 	
 	if ( loadedFaces.find(descr) == loadedFaces.end() ) {
 		// not yet loaded
-		PangoFont* nFace=pango_font_map_load_font(fontServer,fontContext,descr);
+		PangoFont* nFace=NULL;
+
+                // numeric fonts blow up Pango.  The "1979" font reports
+                // "Normal 512" here, and many other do not.  I'm going to
+                // not allow that name as a work-around for this crash.
+                // See bug #1025565.
+                gchar * workaround = pango_font_description_to_string(descr);
+                /*
+                 * I was checking for all-numeric names, but that doesn't work
+                g_print("font: '%s'\n",workaround);
+                gchar * ptr=workaround;
+                for (glong i=0;
+                     ptr && *ptr;
+                     ptr=g_utf8_offset_to_pointer(workaround,i)) {
+                    if (!g_ascii_isdigit(*ptr)) break;
+                }
+
+                if (ptr && *ptr) {
+                */
+
+                if (strcmp(workaround,"Normal 512")) {
+		    nFace=pango_font_map_load_font(fontServer,fontContext,descr);
+                }
+                else {
+                    g_warning(_("Ignoring font that may crash Pango"));
+                }
+                g_free(workaround);
+
 		if ( nFace ) {
 			// duplicate FcPattern, the hard way
 			res=new font_instance();
@@ -444,7 +473,7 @@ void font_factory::UnrefFace(font_instance* who)
 	if ( loadedFaces.find(who->descr) == loadedFaces.end() ) {
 		// not found
 		char* tc=pango_font_description_to_string(who->descr);
-		printf("unrefFace %x=%s: failed\n",(unsigned int)who,tc);
+		g_warning("unrefFace %x=%s: failed\n",(unsigned int)who,tc);
 		free(tc);
 	} else {
 		loadedFaces.erase(loadedFaces.find(who->descr));
@@ -600,4 +629,4 @@ void                  font_factory::AddInCache(font_instance* who)
  fill-column:99
  End:
  */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
