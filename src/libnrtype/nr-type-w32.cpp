@@ -155,8 +155,8 @@ nr_type_read_w32_list (void)
 		family = NULL;
 		for (j = wfamilies.length - 1; j >= 0; j--) {
 			int len;
-			len = strlen (wfamilies.names[j]);
-			if (!strncmp (wfamilies.names[j], wnames.names[i], len)) {
+			len = strlen ((gchar *)wfamilies.names[j]);
+			if (!strncmp ((gchar *)wfamilies.names[j], (gchar *)wnames.names[i], len)) {
 				family = (const unsigned char *)wfamilies.names[j];
 				break;
 			}
@@ -709,17 +709,17 @@ nr_type_w32_init (void)
 
     /* Fill in lists */
     NRW32Families.length = g_slist_length (familylist);
-    NRW32Families.names = g_new (gchar *, NRW32Families.length);
+    NRW32Families.names = g_new (guchar *, NRW32Families.length);
     pos = 0;
     for (l = familylist; l != NULL; l = l->next) {
-        NRW32Families.names[pos] = (gchar *) l->data;
+        NRW32Families.names[pos] = (guchar *) l->data;
         pos += 1;
     }
     NRW32Typefaces.length = g_slist_length (namelist);
-    NRW32Typefaces.names = g_new (gchar *, NRW32Typefaces.length);
+    NRW32Typefaces.names = g_new (guchar *, NRW32Typefaces.length);
     pos = 0;
     for (l = namelist; l != NULL; l = l->next) {
-        NRW32Typefaces.names[pos] = (gchar *) l->data;
+        NRW32Typefaces.names[pos] = (guchar *) l->data;
         pos += 1;
     }
 
