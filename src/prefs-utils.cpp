@@ -72,8 +72,9 @@ prefs_get_double_attribute(gchar const *path, gchar const *attr, double def)
     SPRepr *repr = inkscape_get_repr(INKSCAPE, path);
     if (repr) {
         return sp_repr_get_double_attribute(repr, attr, def);
-    } else 
+    } else {
         return def;
+    }
 }
 
 /**
@@ -117,23 +118,25 @@ prefs_set_string_attribute(gchar const *path, gchar const *attr, gchar const *va
 void
 prefs_set_recent_file(gchar const *uri, gchar const *name)
 {
-    int const max_documents = prefs_get_int_attribute("options.maxrecentdocuments", "value", 20);
+    unsigned const max_documents = prefs_get_int_attribute("options.maxrecentdocuments", "value", 20);
 
     if (uri != NULL) {
-        SPRepr *recent;
-        recent = inkscape_get_repr(INKSCAPE, "documents.recent");
+        SPRepr *recent = inkscape_get_repr(INKSCAPE, "documents.recent");
         if (recent) {
-            SPRepr *child;
-            child = sp_repr_lookup_child(recent, "uri", uri);
+            SPRepr *child = sp_repr_lookup_child(recent, "uri", uri);
             if (child) {
                 sp_repr_change_order(recent, child, NULL);
             } else {
                 if (recent->childCount() >= max_documents) {
                     child = recent->firstChild();
                     // count to the last
-                    for (int i = 0; i < max_documents - 2; i ++) child = child->next();
+                    for (unsigned i = 0; i + 2 < max_documents; ++i) {
+                        child = child->next();
+                    }
                     // remove all after the last
-                    while (child->next()) sp_repr_unparent(child->next());
+                    while (child->next()) {
+                        sp_repr_unparent(child->next());
+                    }
                 }
                 child = sp_repr_new("document");
                 sp_repr_set_attr(child, "uri", uri);
