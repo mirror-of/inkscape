@@ -195,6 +195,9 @@ sp_shortcut_init ()
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_v, SP_VERB_EDIT_PASTE_STYLE, true);
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_V, SP_VERB_EDIT_PASTE_STYLE, false);
 
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | SP_SHORTCUT_ALT_MASK | GDK_v, SP_VERB_EDIT_PASTE_IN_PLACE, true);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | SP_SHORTCUT_ALT_MASK | GDK_V, SP_VERB_EDIT_PASTE_IN_PLACE, false);
+
 	sp_shortcut_set (GDK_Delete, SP_VERB_EDIT_DELETE, true);
 	sp_shortcut_set (GDK_KP_Delete, SP_VERB_EDIT_DELETE, false);
 
