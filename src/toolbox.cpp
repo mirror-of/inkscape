@@ -1885,9 +1885,6 @@ sp_calligraphy_toolbox_new (SPDesktop *desktop)
         gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
 
-    //  interval
-    gtk_box_pack_start (GTK_BOX (tbl), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
-
     /* Drag */
     {
         // TRANSLATORS: "drag" means "resistance" here

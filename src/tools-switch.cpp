@@ -168,7 +168,7 @@ tools_switch (SPDesktop *dt, int num)
 		sp_desktop_set_event_context (dt, SP_TYPE_DYNA_DRAW_CONTEXT, tool_names[num]);
 		sp_desktop_activate_guides (dt, FALSE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to paint a calligraphic stroke."));
+		SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to paint a calligraphic stroke. <b>Left</b>/<b>right</b> arrow keys adjust width, <b>up</b>/<b>down</b> adjust angle."));
 		break;
 	case TOOLS_TEXT:
 		sp_desktop_set_event_context (dt, SP_TYPE_TEXT_CONTEXT, tool_names[num]);
