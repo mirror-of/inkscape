@@ -590,7 +590,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	}
     }
   {
-    unsigned lastI = AssemblePoints (lastChgtPt, pts.size());
+    int lastI = AssemblePoints (lastChgtPt, pts.size());
 
 
     Shape *curSh = shapeHead;
@@ -1492,7 +1492,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	}
     }
   {
-    unsigned lastI = AssemblePoints (lastChgtPt, pts.size());
+    int lastI = AssemblePoints (lastChgtPt, pts.size());
 
 
     Shape *curSh = shapeHead;
@@ -1583,7 +1583,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   if ( mod == bool_op_cut ) {
     AssembleAretes (fill_justDont);
     // dupliquer les aretes de la coupure
-    unsigned i=aretes.size()-1;
+    int i=aretes.size()-1;
     for (;i>=0;i--) {
       if ( ebData[i].pathID == cutPathID ) {
         // on duplique
@@ -1697,7 +1697,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
       if ( aretes[i].st < 0 || aretes[i].en < 0 ) {
         if ( i < aretes.size()-1 ) {
           // decaler les askForWinding
-          unsigned cp = swsData[aretes.size()-1].firstLinkedPoint;
+          int cp = swsData[aretes.size()-1].firstLinkedPoint;
           while (cp >= 0) {
             pData[cp].askForWindingB = i;
             cp = pData[cp].nextLinkedPoint;
@@ -2368,7 +2368,7 @@ Shape::AssembleAretes (FillRule directed)
 	      DisconnectStart (cc);
 	      DisconnectEnd (cc);
 	      if (aretes.size() > 1) {
-          unsigned cp = swsData[aretes.size() - 1].firstLinkedPoint;
+          int cp = swsData[aretes.size() - 1].firstLinkedPoint;
           while (cp >= 0) {
             pData[cp].askForWindingB = cc;
             cp = pData[cp].nextLinkedPoint;
@@ -2439,7 +2439,7 @@ Shape::AssembleAretes (FillRule directed)
             DisconnectStart (cc);
             DisconnectEnd (cc);
             if (aretes.size() > 1) {
-              unsigned cp = swsData[aretes.size() - 1].firstLinkedPoint;
+              int cp = swsData[aretes.size() - 1].firstLinkedPoint;
               while (cp >= 0) {
                 pData[cp].askForWindingB = cc;
                 cp = pData[cp].nextLinkedPoint;
