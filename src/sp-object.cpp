@@ -55,6 +55,8 @@ static void sp_object_repr_order_changed (SPRepr *repr, SPRepr *child, SPRepr *o
 
 static gchar * sp_object_get_unique_id (SPObject * object, const gchar * defid);
 
+guint update_in_progress = 0; // guard against update-during-update
+
 enum {RELEASE, MODIFIED, LAST_SIGNAL};
 
 SPReprEventVector object_event_vector = {
@@ -854,6 +856,10 @@ SPRepr *SPObject::updateRepr(SPRepr *repr, unsigned int flags) {
 void
 SPObject::requestDisplayUpdate(unsigned int flags)
 {
+	if (update_in_progress) {
+		g_print ("WARNING: Requested update while update in progress, counter = %d\n", update_in_progress);
+	}
+
 	g_return_if_fail (!(flags & SP_OBJECT_PARENT_MODIFIED_FLAG));
 	g_return_if_fail ((flags & SP_OBJECT_MODIFIED_FLAG) || (flags & SP_OBJECT_CHILD_MODIFIED_FLAG));
 	g_return_if_fail (!((flags & SP_OBJECT_MODIFIED_FLAG) && (flags & SP_OBJECT_CHILD_MODIFIED_FLAG)));
@@ -879,6 +885,8 @@ SPObject::updateDisplay(SPCtx *ctx, unsigned int flags)
 {
 	g_return_if_fail (!(flags & ~SP_OBJECT_MODIFIED_CASCADE));
 
+	update_in_progress ++;
+
 #ifdef SP_OBJECT_DEBUG_CASCADE
 	g_print("Update %s:%s %x %x %x\n", g_type_name_from_instance ((GTypeInstance *) this), SP_OBJECT_ID (this), flags, this->uflags, this->mflags);
 #endif
@@ -898,13 +906,12 @@ SPObject::updateDisplay(SPCtx *ctx, unsigned int flags)
 		if (this->style && this->parent) {
 			sp_style_merge_from_parent (this->style, this->parent->style);
 		}
-		/* attribute */
-		/* TODO: this should be handled elsewhere */
-		sp_object_read_attr (this, "xml:space");
 	}
 
 	if (((SPObjectClass *) G_OBJECT_GET_CLASS (this))->update)
 		((SPObjectClass *) G_OBJECT_GET_CLASS (this))->update (this, ctx, flags);
+
+	update_in_progress --;
 }
 
 void
