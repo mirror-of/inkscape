@@ -1,9 +1,28 @@
+2004-09-15  Carl Hetherington <inkscape@carlh.net>
+
+	* src/display/canvas-bpath.cpp, src/display/nr-arena-shape.cpp
+	src/display/sp-ctrlline.cpp, src/libnrtype/FlowDest.cpp,
+	src/libnrtype/RasterFont.cpp, src/livarot/Shape.h,
+	src/livarot/ShapeRaster.cpp Remove unused parameters in
+	Shape::{Begin,End}{,Quick}Raster
+
+	* src/livarot/ShapeRaster.cpp: coding style cleanups.
+
+	* src/livarot/Shape.cpp, src/livarot/Shape.h,
+	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp: Factor
+	out initialisePointData() and initialiseEdgeData()
+
 2004-09-14  Carl Hetherington <inkscape@carlh.net>
 
 	* src/display/canvas-bpath.cpp, src/display/nr-arena-shape.cpp,
 	src/livarot/Shape.cpp, src/livarot/Shape.h,
 	src/livarot/ShapeMisc.cpp, src/livarot/ShapeSweep.cpp: move some
 	functions out of Shape that don't need to be members.
+
+	* src/livarot/Shape.h: reduce public: and private: sections to
+	just one of each.  Coding style cleanups.  No code changes.
+
+	* src/livarot/Shape.h: remove some unused code; const fixes.
 
 2004-09-10  Carl Hetherington <inkscape@carlh.net>
 
