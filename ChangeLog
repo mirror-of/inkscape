@@ -1,3 +1,28 @@
+2003-12-12  bulia byak <bulia@dr.com>
+
+	* src/svg/svg-path.c src/desktop.h src/libnr/gen_nr_config.c src/libnr/nr-object.c
+	src/libnr/nr-types.h: made all floats doubles and all shorts ints in libnr; maximum
+	zoom is increased to 256; SVG paths are stored with 8 digits precision (was 6)
+
+2003-12-11  bulia byak <bulia@dr.com>
+
+	* src/node-context.c adding node edit statusbar updates
+
+	* src/selection.c: update statusbar only if selector is active
+
+	* src/tools-switch.c: update statusbar when selector is activated
+
+	* src/nodepath.c src/nodepath.h: function for node edit statusbar display; fixes for
+	several tab-cycling and node-deleting bugs
+
+	* src/sp-path.c: added description for SPPath (used in statusbar display)
+
+	* src/draw-context.c: moved some messages from console to statusbar
+
+	* src/view.c src/view.h: utility functions for statusbar display
+
+	* src/text-context.c: statusbar display for unimode
+
 2003-12-10  Ted Gould <ted@gould.cx>
 
 	* configure.in: Changing to 0.37cvs
