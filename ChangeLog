@@ -2,6 +2,11 @@
 
 	* src/desktop.c: permit the canvas widget to take keyboard focus
 
+	* src/widgets/button.c, src/widgets/button.h: reworked perform
+	  callback as separate callback, so we can use
+	  g_signal_handlers_{un,}block...() on it rather than the stupid
+	  semaphore counter thing I had originally.
+
 2003-12-05 MenTaLguY <mental@rydia.net>
 
 	* src/widgets/icon.c, src/widgets/button.c, src/widgets/button.h, src/toolbox.c:

@@ -44,6 +44,7 @@ static void sp_button_destroy (GtkObject *object);
 
 static void sp_button_size_request (GtkWidget *widget, GtkRequisition *requisition);
 static void sp_button_clicked (GtkButton *button);
+static void sp_button_perform_action (SPButton *button, gpointer data);
 
 static void sp_button_set_action (SPButton *button, SPAction *action);
 static void sp_button_action_set_active (SPAction *action, unsigned int active, void *data);
@@ -97,12 +98,13 @@ sp_button_init (SPButton *button)
 {
 	button->action = NULL;
 	button->tooltips = NULL;
-	button->toggling = 0;
 
 	gtk_container_set_border_width (GTK_CONTAINER (button), 0);
 
 	GTK_WIDGET_UNSET_FLAGS (GTK_WIDGET (button), GTK_CAN_FOCUS);
 	GTK_WIDGET_UNSET_FLAGS (GTK_WIDGET (button), GTK_CAN_DEFAULT);
+
+	g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (sp_button_perform_action), NULL);
 }
 
 static void
@@ -149,8 +151,13 @@ sp_button_clicked (GtkButton *button)
 	if (sp_button->type == SP_BUTTON_TYPE_TOGGLE) {
 		((GtkButtonClass *) (parent_class))->clicked (button);
 	}
-	if (!sp_button->toggling) {
-		sp_action_perform (sp_button->action);
+}
+
+static void
+sp_button_perform_action (SPButton *button, gpointer data)
+{
+	if (button->action) {
+		sp_action_perform (button->action);
 	}
 }
 
@@ -179,9 +186,9 @@ void
 sp_button_toggle_set_down (SPButton *button, gboolean down)
 {
 	g_return_if_fail (button->type == SP_BUTTON_TYPE_TOGGLE);
-	button->toggling++;
+	g_signal_handlers_block_by_func (G_OBJECT (button), G_CALLBACK (sp_button_perform_action), NULL);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), down);
-	button->toggling--;
+	g_signal_handlers_unblock_by_func (G_OBJECT (button), G_CALLBACK (sp_button_perform_action), NULL);
 }
 
 static void

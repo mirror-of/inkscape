@@ -40,7 +40,6 @@ struct _SPBChoiceData {
 
 struct _SPButton {
 	GtkToggleButton widget;
-	unsigned toggling;
 	SPButtonType type;
 	unsigned int size;
 	SPAction *action;
