@@ -42,7 +42,12 @@ extern gint nr_arena_image_x_sample;
 extern gint nr_arena_image_y_sample;
 extern gdouble nr_arena_global_delta;
 
-
+#define SB_WIDTH 50
+#define SB_MARGIN 1
+#define SUFFIX_WIDTH 50
+#define HB_MARGIN 4
+#define VB_MARGIN 4
+#define VB_SKIP 1
 
 static void
 sp_display_dialog_destroy (GtkObject *object, gpointer data)
@@ -264,40 +269,77 @@ options_changed_double (GtkAdjustment *adj, gpointer data)
     prefs_set_double_attribute (prefs_path, "value",  adj->value);
 }
 
+static void
+options_changed_int (GtkAdjustment *adj, gpointer data)
+{
+    const gchar *prefs_path = (const gchar *) data;
+    prefs_set_int_attribute (prefs_path, "value",  (int) adj->value);
+}
+
 void 
-options_sb_double (
+options_sb (
     gchar const *label, 
     gchar const *tooltip, GtkTooltips *tt,
+    gchar const *suffix,
     GtkWidget *box,
     gdouble lower, gdouble upper, gdouble step_increment, gdouble page_increment, gdouble page_size,
     gchar const *prefs_path, gchar const *attr, gdouble def,
+    bool isint,
     void (*changed)(GtkAdjustment *, gpointer)
 )
 {
+    GtkWidget *hb = gtk_hbox_new (FALSE, HB_MARGIN);
+    gtk_widget_show (hb);
+    gtk_box_pack_start (GTK_BOX (box), hb, FALSE, FALSE, VB_SKIP);
+
+    {
+        GtkWidget *l = gtk_label_new (suffix);
+        gtk_misc_set_alignment (GTK_MISC (l), 0.0, 0.5);
+        gtk_widget_set_usize (l, SUFFIX_WIDTH, -1);
+        gtk_widget_show (l);
+        gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
+    }
+
+    {
+        GtkObject *a = gtk_adjustment_new (0.0, lower, upper, step_increment, page_increment, page_size);
+
+        gdouble value; 
+        if (isint)
+            value = (gdouble) prefs_get_int_attribute_limited (prefs_path, attr, (int) def, (int) lower, (int) upper);
+        else 
+            value = prefs_get_double_attribute_limited (prefs_path, attr, def, lower, upper);
+
+        gtk_adjustment_set_value (GTK_ADJUSTMENT (a), value);
+
+        GtkWidget *sb;
+        if (isint)
+            sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 0);
+        else 
+            sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
+
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, tooltip, NULL);
+        gtk_entry_set_width_chars (GTK_ENTRY (sb), 6);
+        gtk_widget_set_usize (sb, SB_WIDTH, -1);
+        gtk_widget_show (sb);
+        gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
+
+        gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (changed), (gpointer) prefs_path);
+    }
+
+    {
         GtkWidget *l = gtk_label_new (label);
         gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
         gtk_widget_show (l);
-        gtk_box_pack_start (GTK_BOX (box), l, TRUE, TRUE, 0);
+        gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+    }
 
-        GtkObject *a = gtk_adjustment_new (0.0, lower, upper, step_increment, page_increment, page_size);
-        gdouble value = prefs_get_double_attribute_limited (prefs_path, attr, def, lower, upper);
-        gtk_adjustment_set_value (GTK_ADJUSTMENT (a), value);
-
-        GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 1);
-        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, tooltip, NULL);
-        gtk_entry_set_width_chars (GTK_ENTRY (sb), 6);
-        gtk_widget_set_usize (sb, 100, -1);
-        gtk_widget_show (sb);
-        gtk_box_pack_end (GTK_BOX (box), sb, FALSE, FALSE, 0);
-
-        gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (changed), (gpointer) prefs_path);
 }
 
 void
 sp_display_dialog (void)
 {
 
-    GtkWidget *nb, *l, *vb, *hb, *om, *m, *i;
+    GtkWidget *nb, *l, *vb, *vbvb, *hb, *om, *m, *i, *frame;
 
     if (!dlg)
     {
@@ -359,6 +401,141 @@ sp_display_dialog (void)
         gtk_widget_show (nb);
         gtk_container_add (GTK_CONTAINER (dlg), nb);
 
+
+// Mouse                                      
+        l = gtk_label_new (_("Mouse"));
+        gtk_widget_show (l);
+        vb = gtk_vbox_new (FALSE, 4);
+        gtk_widget_show (vb);
+        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
+        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+
+options_sb (
+    _("Grab sensitivity:"), 
+    _("How close you need to be to an object to be able to grab it with mouse (in pixels)"), tt,
+    _("px"),
+    vb,
+    0.0, 30.0, 1.0, 1.0, 1.0,
+    "options.cursortolerance", "value", 8.0,
+    true,
+    sp_display_dialog_cursor_tolerance_changed
+    );
+
+options_sb (
+    _("Click/drag threshold:"), 
+    _("Maximum mouse drag (in pixels) which is considered a click, not a drag"), tt,
+    _("px"),
+    vb,
+    0.0, 20.0, 1.0, 1.0, 1.0,
+    "options.dragtolerance", "value", 4.0,
+    true,
+    options_changed_int
+    );
+
+
+// Scrolling
+        l = gtk_label_new (_("Scrolling"));
+        gtk_widget_show (l);
+        vb = gtk_vbox_new (FALSE, 4);
+        gtk_widget_show (vb);
+        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
+        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+
+options_sb (
+    _("Mouse wheel scrolls by:"), 
+    _("One mouse wheel notch scrolls by this distance in pixels (horizontally with Shift)"), tt,
+    _("px"),
+    vb,
+    0.0, 1000.0, 1.0, 1.0, 1.0,
+    "options.wheelscroll", "value", 40.0,
+    true,
+    options_changed_int
+    );
+
+        frame = gtk_frame_new (_("Ctrl+arrows"));
+        gtk_widget_show (frame);
+        gtk_box_pack_start (GTK_BOX (vb), frame, FALSE, FALSE, 0);
+        vbvb = gtk_vbox_new (FALSE, VB_MARGIN);
+        gtk_widget_show (vbvb);
+        gtk_container_add (GTK_CONTAINER (frame), vbvb);
+
+options_sb (
+    _("Scroll by:"), 
+    _("Pressing Ctrl+arrow key scrolls by this distance (in pixels)"), tt,
+    _("px"),
+    vbvb,
+    0.0, 1000.0, 1.0, 1.0, 1.0,
+    "options.keyscroll", "value", 10.0,
+    true,
+    options_changed_int
+    );
+
+options_sb (
+    _("Acceleration:"), 
+    _("Pressing and holding Ctrl+arrow will gradually speed up scrolling (0 for no acceleration)"), tt,
+    "",
+    vbvb,
+    0.0, 5.0, 0.01, 1.0, 1.0,
+    "options.scrollingacceleration", "value", 0.35,
+    false,
+    options_changed_double
+    );
+
+        frame = gtk_frame_new (_("Autoscrolling"));
+        gtk_widget_show (frame);
+        gtk_box_pack_start (GTK_BOX (vb), frame, FALSE, FALSE, 0);
+        vbvb = gtk_vbox_new (FALSE, VB_MARGIN);
+        gtk_widget_show (vbvb);
+        gtk_container_add (GTK_CONTAINER (frame), vbvb);
+
+options_sb (
+    _("Speed:"), 
+    _("How fast the canvas autoscrolls when you drag beyond canvas edge (0 to turn autoscroll off)"), tt,
+    "",
+    vbvb,
+    0.0, 5.0, 0.01, 1.0, 1.0,
+    "options.autoscrollspeed", "value", 0.7,
+    false,
+    options_changed_double
+    );
+
+options_sb (
+    _("Threshold:"), 
+    _("How far (in pixels) you need to be from the edge to trigger autoscroll; positive is outside the canvas, negative is within the canvas"), tt,
+    _("px"),
+    vbvb,
+    -600.0, 600.0, 1.0, 1.0, 1.0,
+    "options.autoscrolldistance", "value", -10.0,
+    true,
+    options_changed_int
+    );
+
+
+
+// Tools
+        l = gtk_label_new (_("Tools"));
+        gtk_widget_show (l);
+        vb = gtk_vbox_new (FALSE, 4);
+        gtk_widget_show (vb);
+        gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
+        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+
+        GtkWidget *nb_tools = gtk_notebook_new ();
+        gtk_widget_show (nb_tools);
+        gtk_container_add (GTK_CONTAINER (vb), nb_tools);
+
+        // Selector        
+        l = gtk_label_new (_("Selector"));
+        gtk_widget_show (l);
+        GtkWidget *vb_sel = gtk_vbox_new (FALSE, 4);
+        gtk_widget_show (vb_sel);
+        gtk_container_set_border_width (GTK_CONTAINER (vb_sel), 4);
+        gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_sel, l);
+
+        GtkWidget *selector_page = options_selector ();
+        gtk_widget_show (selector_page);
+        gtk_container_add (GTK_CONTAINER (vb_sel), selector_page);
+
 // Display        
         l = gtk_label_new (_("Display"));
         gtk_widget_show (l);
@@ -418,88 +595,6 @@ sp_display_dialog (void)
 
         gtk_option_menu_set_history ( GTK_OPTION_MENU (om), 
                                       nr_arena_image_x_sample);
-
-
-// Mouse                                      
-        l = gtk_label_new (_("Mouse"));
-        gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, 4);
-        gtk_widget_show (vb);
-        gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
-
-        hb = gtk_hbox_new (FALSE, 4);
-        gtk_widget_show (hb);
-        gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
-
-options_sb_double (
-    _("Grab sensitivity:"), 
-    _("How close you need to be to an object to be able to grab it with mouse (in pixels)"), tt,
-    hb,
-    0.0, 30.0, 0.1, 1.0, 1.0,
-    "options.cursortolerance", "value", 8.0,
-    sp_display_dialog_cursor_tolerance_changed
-    );
-
-        hb = gtk_hbox_new (FALSE, 4);
-        gtk_widget_show (hb);
-        gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
-
-options_sb_double (
-    _("Click/drag threshold:"), 
-    _("Maximum mouse drag (in pixels) which is considered a click, not a drag"), tt,
-    hb,
-    0.0, 20.0, 0.1, 1.0, 1.0,
-    "options.dragtolerance", "value", 4.0,
-    options_changed_double
-    );
-
-
-// Scrolling
-        l = gtk_label_new (_("Scrolling"));
-        gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, 4);
-        gtk_widget_show (vb);
-        gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
-
-        hb = gtk_hbox_new (FALSE, 4);
-        gtk_widget_show (hb);
-        gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
-
-options_sb_double (
-    _("Mouse wheel scrolls by:"), 
-    _("One mouse wheel notch scrolls by this distance in pixels (horizontally with Shift)"), tt,
-    hb,
-    0.0, 1000.0, 0.1, 1.0, 1.0,
-    "options.wheelscroll", "value", 40.0,
-    options_changed_double
-    );
-
-
-// Tools
-        l = gtk_label_new (_("Tools"));
-        gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, 4);
-        gtk_widget_show (vb);
-        gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
-
-        GtkWidget *nb_tools = gtk_notebook_new ();
-        gtk_widget_show (nb_tools);
-        gtk_container_add (GTK_CONTAINER (vb), nb_tools);
-
-        // Selector        
-        l = gtk_label_new (_("Selector"));
-        gtk_widget_show (l);
-        GtkWidget *vb_sel = gtk_vbox_new (FALSE, 4);
-        gtk_widget_show (vb_sel);
-        gtk_container_set_border_width (GTK_CONTAINER (vb_sel), 4);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_sel, l);
-
-        GtkWidget *selector_page = options_selector ();
-        gtk_widget_show (selector_page);
-        gtk_container_add (GTK_CONTAINER (vb_sel), selector_page);
                              
     } // end of if (!dlg)
     
