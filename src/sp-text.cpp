@@ -213,26 +213,86 @@ sp_letterspacing_advance (const SPStyle *style)
 }
 
 /**
-\brief   Returns the dx list that is effective for the object o, or NULL if
-none. According to the spec, the closest ancestor's value has precedence.
+\brief  Recursively counts chars in the object o, stops when runs into target
 */
-GList *
-sp_effective_dx (SPObject *o)
+guint 
+sp_count_chars_recursive (SPObject *o, SPObject *target)
 {
-	GList *l = NULL;
+	guint n = 0;
+	guint i;
 
-	while (SP_IS_STRING(o) || SP_IS_TSPAN(o) || SP_IS_TEXT(o)) {
-		if (SP_IS_TSPAN(o) && SP_TSPAN (o)->ly.dx) {
-			l = SP_TSPAN (o)->ly.dx;
+	if (o == target) {
+		return INT_MAX; // INT_MAX is a signal to stop searching the tree
+	}
+
+	if (SP_IS_STRING(o)) {
+		return (SP_STRING(o)->length);
+	}
+
+	// FIXME!!! tspans may recurse, too! To support this, we need to move parent/children tree to SPObject, as is done in SP
+	if (SP_IS_TSPAN(o)) {
+		if (SP_TSPAN(o)->string == target) {
+			return  INT_MAX; // INT_MAX is a signal to stop searching the tree
+		}
+		else {
+			return (SP_STRING(SP_TSPAN(o)->string)->length);
+		}
+	}
+
+	if (!SP_IS_TEXT(o)) {
+		return 0;
+	}
+
+	SPObject *child;
+	for (child = SP_TEXT(o)->children; child != NULL; child = child->next) {
+		if (child == target) {
 			break;
 		}
-		if (SP_IS_TEXT(o) && SP_TEXT (o)->ly.dx) {
+		i = sp_count_chars_recursive (child, target);
+		if (i == INT_MAX) { // somewhere under us, target was hit
+			break;
+		}
+		n += i;
+	}
+
+	return n;
+}
+
+guint 
+sp_count_chars (SPObject *o, SPObject *target)
+{
+	guint n = sp_count_chars_recursive (o, target);
+	if (n == INT_MAX)
+		return 0;
+	return n;
+}
+
+/**
+\brief   Returns the dx list that is effective for the object o, or NULL if
+none. According to the spec, the closest ancestor's value has precedence. 
+Writes the offset of o relative to its parent that holds the effective dx into
+offset. 
+*/
+GList *
+sp_effective_dx (SPObject *o, guint *offset)
+{
+	GList *l = NULL;
+	SPObject *orig = o;
+	*offset = 0;
+
+	while (SP_IS_STRING(o) || SP_IS_TSPAN(o) || SP_IS_TEXT(o)) {
+		if (SP_IS_TSPAN(o) && SP_TSPAN (o)->ly.dx != NULL) {
+			l = SP_TSPAN (o)->ly.dx;
+			*offset = sp_count_chars (o, orig);
+			break;
+		}
+		if (SP_IS_TEXT(o) && SP_TEXT (o)->ly.dx != NULL) {
 			l = SP_TEXT (o)->ly.dx;
+			*offset = sp_count_chars (o, orig);
 			break;
 		}
 		o = SP_OBJECT_PARENT(o);
 	}
-
 	return l;
 }
 
@@ -246,6 +306,45 @@ sp_char_dx (GList *dx, guint pos)
 	return ((SPSVGLength *) g_list_nth(dx, pos)->data)->computed;
 }
 
+/**
+\brief   Returns the dy list that is effective for the object o, or NULL if
+none. According to the spec, the closest ancestor's value has precedence. 
+Writes the offset of o relative to its parent that holds the effective dx into
+offset. 
+*/
+GList *
+sp_effective_dy (SPObject *o, guint *offset)
+{
+	GList *l = NULL;
+	SPObject *orig = o;
+	*offset = 0;
+
+	while (SP_IS_STRING(o) || SP_IS_TSPAN(o) || SP_IS_TEXT(o)) {
+		if (SP_IS_TSPAN(o) && SP_TSPAN (o)->ly.dy != NULL) {
+			l = SP_TSPAN (o)->ly.dy;
+			*offset = sp_count_chars (o, orig);
+			break;
+		}
+		if (SP_IS_TEXT(o) && SP_TEXT (o)->ly.dy != NULL) {
+			l = SP_TEXT (o)->ly.dy;
+			*offset = sp_count_chars (o, orig);
+			break;
+		}
+		o = SP_OBJECT_PARENT(o);
+	}
+	return l;
+}
+
+float
+sp_char_dy (GList *dy, guint pos)
+{
+	if (!dy)
+		return 0;
+	if (g_list_length(dy) < pos + 1) // pos starts from 0
+		return 0;
+	return -((SPSVGLength *) g_list_nth(dy, pos)->data)->computed; // negative to accommodate our flipped (relative to svg) coordinate system
+}
+
 static void
 sp_string_calculate_dimensions (SPString *string)
 {
@@ -255,7 +354,9 @@ sp_string_calculate_dimensions (SPString *string)
 
 	const SPStyle *style = SP_OBJECT_STYLE (SP_OBJECT_PARENT (string));
 
-	GList *dx = sp_effective_dx (SP_OBJECT(string));
+	guint dx_offset, dy_offset;
+	GList *dx = sp_effective_dx (SP_OBJECT(string), &dx_offset);
+	GList *dy = sp_effective_dy (SP_OBJECT(string), &dy_offset);
 
 	/* fixme: Adjusted value (Lauris) */
 	const gdouble size = style->font_size.computed;
@@ -299,7 +400,7 @@ sp_string_calculate_dimensions (SPString *string)
 
 			if (g_unichar_isspace (unival) && (unival != g_utf8_get_char ("\302\240"))) { // space but not non-break space
 				if (preserve) {
-					string->advance += spadv + NR::Point(sp_char_dx (dx, pos), 0);
+					string->advance += spadv + NR::Point(sp_char_dx (dx, dx_offset + pos), sp_char_dy (dy, dy_offset + pos));
 				}
 				if (unival != '\n' && unival != '\r') inspace = TRUE;
 			} else {
@@ -321,7 +422,7 @@ sp_string_calculate_dimensions (SPString *string)
 				}
 				adv = nr_font_glyph_advance_get (font, glyph ) + letterspacing_adv;
 
-				adv += NR::Point(sp_char_dx (dx, pos), 0);
+				adv += NR::Point(sp_char_dx (dx, dx_offset + pos), sp_char_dy (dy, dy_offset + pos));
 
 				string->advance += adv;
 				
@@ -350,7 +451,9 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 	SPChars *chars = SP_CHARS (string);
 	const SPStyle *style = SP_OBJECT_STYLE (SP_OBJECT_PARENT (string));
 
-	GList *dx = sp_effective_dx (SP_OBJECT(string));
+	guint dx_offset, dy_offset;
+	GList *dx = sp_effective_dx (SP_OBJECT(string), &dx_offset);
+	GList *dy = sp_effective_dy (SP_OBJECT(string), &dy_offset);
 
 	sp_chars_clear (chars);
 
@@ -399,14 +502,14 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 		gunichar unival;
              if (!preserve && inspace && intext) {
                        /* SP_XML_SPACE_DEFAULT */
-			string->p[pos] = pt + NR::Point(spadv[NR::X] + sp_char_dx (dx, pos), -spadv[NR::Y]);
+			string->p[pos] = pt + NR::Point(spadv[NR::X] + sp_char_dx (dx, dx_offset + pos), -spadv[NR::Y] + sp_char_dy (dy, dy_offset + pos));
 		} else {
-			string->p[pos] = pt + NR::Point(sp_char_dx (dx, pos), 0);
+			string->p[pos] = pt + NR::Point(sp_char_dx (dx, dx_offset + pos), sp_char_dy (dy, dy_offset + pos));
 		}
 		unival = g_utf8_get_char (cur_char);
              if (g_unichar_isspace(unival) && (unival != g_utf8_get_char ("\302\240"))) { // space but not non-break space
                        if (preserve) {
-                               pt += NR::Point(spadv[NR::X] + sp_char_dx (dx, pos), -spadv[NR::Y]);
+                               pt += NR::Point(spadv[NR::X] + sp_char_dx (dx, dx_offset + pos), -spadv[NR::Y] + sp_char_dy (dy, dy_offset + pos));
                        }
                        if (unival != '\n' && unival != '\r') inspace = TRUE;
 		} else {
@@ -417,15 +520,13 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 			}
 			
 			// NR::translate?
-			a[4] = pt[NR::X];
-			if (dx) 
-				a[4] += sp_char_dx (dx, pos);
-			a[5] = pt[NR::Y];
+			a[4] = pt[NR::X] + sp_char_dx (dx, dx_offset + pos);
+			a[5] = pt[NR::Y] + sp_char_dy (dy, dy_offset + pos);
 
 			sp_chars_add_element (chars, glyph, font, a);
 			NR::Point adv = nr_font_glyph_advance_get (font, glyph) + letterspacing_adv;
 
-			adv += NR::Point(sp_char_dx (dx, pos), 0);
+			adv += NR::Point(sp_char_dx (dx, dx_offset + pos), -sp_char_dy (dy, dy_offset + pos));
 
 			pt = pt + NR::Point(adv[NR::X], -adv[NR::Y]);
 			
@@ -596,14 +697,12 @@ sp_tspan_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	case SP_ATTR_DX:
 		if (!(tspan->ly.dx = sp_svg_length_list_read (value))) {
-			//			sp_svg_length_unset (&tspan->ly.dx, SP_SVG_UNIT_NONE, 0.0, 0.0);
 			tspan->ly.dx = NULL;
 		}
 		/* fixme: Re-layout it */
 		break;
 	case SP_ATTR_DY:
 		if (!(tspan->ly.dy = sp_svg_length_list_read (value))) {
-			//			sp_svg_length_unset (&tspan->ly.dy, SP_SVG_UNIT_NONE, 0.0, 0.0);
 			tspan->ly.dy = NULL;
 		}
 		/* fixme: Re-layout it */
