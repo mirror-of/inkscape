@@ -726,7 +726,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	dtw->hruler = sp_hruler_new ();
 	sp_ruler_set_metric (GTK_RULER (dtw->hruler), SP_PT);
 	gtk_container_add (GTK_CONTAINER (eventbox), dtw->hruler);
-	gtk_table_attach (GTK_TABLE (tbl), eventbox, 1, 3, 0, 1, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), widget->style->xthickness, 0);
+	gtk_table_attach (GTK_TABLE (tbl), eventbox, 1, 2, 0, 1, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), widget->style->xthickness, 0);
 	g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_hruler_event), dtw);
 	g_signal_connect (G_OBJECT (eventbox), "button_release_event", G_CALLBACK (sp_dt_hruler_event), dtw);
 	g_signal_connect (G_OBJECT (eventbox), "motion_notify_event", G_CALLBACK (sp_dt_hruler_event), dtw);
@@ -735,7 +735,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	dtw->vruler = sp_vruler_new ();
 	sp_ruler_set_metric (GTK_RULER (dtw->vruler), SP_PT);
 	gtk_container_add (GTK_CONTAINER (eventbox), GTK_WIDGET (dtw->vruler));
-	gtk_table_attach (GTK_TABLE (tbl), eventbox, 0, 1, 1, 3, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, widget->style->ythickness);
+	gtk_table_attach (GTK_TABLE (tbl), eventbox, 0, 1, 1, 2, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, widget->style->ythickness);
 	g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_vruler_event), dtw);
 	g_signal_connect (G_OBJECT (eventbox), "button_release_event", G_CALLBACK (sp_dt_vruler_event), dtw);
 	g_signal_connect (G_OBJECT (eventbox), "motion_notify_event", G_CALLBACK (sp_dt_vruler_event), dtw);

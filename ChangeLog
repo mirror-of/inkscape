@@ -1,3 +1,7 @@
+2003-12-23  MenTaLguY <mental@rydia.net>
+
+	* src/desktop.cpp: shortened rulers to canvas dimensions for now
+
 2003-12-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/desktop-snap.h, src/desktop-snap.cpp (all functions):
