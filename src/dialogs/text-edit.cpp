@@ -47,6 +47,7 @@ extern "C" {
 #include "../forward.h"
 #include "../inkscape.h"
 #include "../document.h"
+#include "../desktop.h"
 #include "../desktop-handles.h"
 #include "../selection.h"
 #include "../style.h"
@@ -417,21 +418,16 @@ sp_text_edit_dialog_change_selection ( Inkscape::Application *inkscape,
 }
 
 
-
 static void
-sp_text_edit_dialog_update_object ( SPText *text, SPRepr *repr )
+sp_text_edit_dialog_update_object_text ( SPText *text )
 {
-    g_object_set_data (G_OBJECT (dlg), "blocked", GINT_TO_POINTER (TRUE));
-
-    if (text)
-    {
         GtkTextBuffer *tb;
         GtkTextIter start, end;
         gchar *str;
 
         tb = (GtkTextBuffer*)g_object_get_data (G_OBJECT (dlg), "text");
 
-        /* Content */
+        /* write text */
         if (gtk_text_buffer_get_modified (tb)) {
             gtk_text_buffer_get_bounds (tb, &start, &end);
             str = gtk_text_buffer_get_text (tb, &start, &end, TRUE);
@@ -439,13 +435,15 @@ sp_text_edit_dialog_update_object ( SPText *text, SPRepr *repr )
             g_free (str);    
             gtk_text_buffer_set_modified (tb, FALSE);
         }
-    } // end of if (text)
+}
 
-    
-    if (repr)
-    {
+/**
+If text is non-null, modify it; otherwise assign style to the repr (used for prefs changing)
+*/
+static void
+sp_text_edit_dialog_update_object_style ( SPText *text, SPRepr *repr )
+{
         GtkWidget *fontsel = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "fontsel");
-        GtkWidget *preview = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "preview");
 
         SPCSSAttr *css = sp_repr_css_attr_new ();
 
@@ -499,24 +497,30 @@ sp_text_edit_dialog_update_object ( SPText *text, SPRepr *repr )
         } else {
             sp_repr_css_set_property (css, "writing-mode", "tb");
         }
+
         GtkWidget *combo = (GtkWidget*)g_object_get_data ((GObject *) dlg, "line_spacing");
         const char *sstr = gtk_entry_get_text ((GtkEntry *) ((GtkCombo *) (combo))->entry);
-        sp_repr_set_attr (repr, "sodipodi:linespacing", sstr);
 
-        sp_repr_css_change (repr, css, "style");
+        // now do the changing
+        SPRepr *text_repr;
+        if (text)
+            text_repr = SP_OBJECT_REPR (text);
+        else // assume repr is not NULL
+            text_repr = repr;
+
+        // note that linespacing is not recursed - it makes sense only for texts, not tspans
+        sp_repr_set_attr (text_repr, "sodipodi:linespacing", sstr);
+
+        if (text) {
+            // for object, do recursive style change
+            sp_desktop_apply_css_recursive (SP_OBJECT(text), css, true);
+        } else {
+            // for repr, do simple style change (prefs repr won't have children anyway)
+            sp_repr_css_change (text_repr, css, "style");
+        }
+
         sp_repr_css_attr_unref (css);
-    
-    } // end of if (repr)
-
-    
-    if (text) {
-        sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
-    }
-
-    g_object_set_data (G_OBJECT (dlg), "blocked", NULL);
-    
-} // end of sp_text_edit_dialog_update_object()
-
+}
 
 
 static void
@@ -529,7 +533,9 @@ sp_text_edit_dialog_set_default (GtkButton *button, GtkWidget *dlg)
 
     repr = inkscape_get_repr (INKSCAPE, "tools.text");
 
-    sp_text_edit_dialog_update_object (NULL, repr);
+    g_object_set_data (G_OBJECT (dlg), "blocked", GINT_TO_POINTER (TRUE));
+    sp_text_edit_dialog_update_object_style (NULL, repr);
+    g_object_set_data (G_OBJECT (dlg), "blocked", GINT_TO_POINTER (FALSE));
 
     gtk_widget_set_sensitive (def, FALSE);
 }
@@ -539,49 +545,47 @@ sp_text_edit_dialog_set_default (GtkButton *button, GtkWidget *dlg)
 static void
 sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg)
 {
-    GtkWidget *apply, *def;
-    SPText *text;
-    SPRepr *repr;
-    const GSList *item;
-    unsigned items;
-
     g_object_set_data (G_OBJECT (dlg), "blocked", GINT_TO_POINTER (TRUE));
 
-    apply = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "apply");
-    def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
+    GtkWidget *apply = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "apply");
+    GtkWidget *def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
 
-    text = NULL;
-    items = 0;
-    item = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->itemList();
+    unsigned items = 0;
+    const GSList *item_list = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->itemList();
+    bool text_changed = false, style_changed = false;
 
-    for (; item != NULL; item = item->next) { 
+    for (; item_list != NULL; item_list = item_list->next) { 
         // apply style to the reprs of all text objects in the selection
-        if (!SP_IS_TEXT (item->data)) continue;
-        text = SP_TEXT(item->data);
-        repr = SP_OBJECT_REPR (text);
-        sp_text_edit_dialog_update_object (NULL, repr);
-        ++items;
+        if (SP_IS_TEXT (item_list->data)) {
+            SPText *text = SP_TEXT(item_list->data);
+            sp_text_edit_dialog_update_object_style (text, NULL);
+            ++items;
+            style_changed = true;
+        }
     }
     
     if (items == 0) { 
-        // no text objects; apply style to new objects
-        repr = inkscape_get_repr (INKSCAPE, "tools.text");
-        sp_text_edit_dialog_update_object (NULL, repr);
+        // no text objects; apply style to prefs for new objects
+        SPRepr *repr = inkscape_get_repr (INKSCAPE, "tools.text");
+        sp_text_edit_dialog_update_object_style (NULL, repr);
         gtk_widget_set_sensitive (def, FALSE);
     } else if (items == 1) {
-        /* exactly one text object; now set its text, too (this will also 
-         *complete the transaction)
-         */
-        sp_text_edit_dialog_update_object (text, NULL);
-    } else {
-        // many text objects; do not change text, simply complete the 
-        // transaction
+        /* exactly one text object; now set its text, too */
+        SPItem *item = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->singleItem();
+        if (SP_IS_TEXT (item)) {
+            sp_text_edit_dialog_update_object_text (SP_TEXT(item));
+            text_changed = true;
+        }
+    } 
+
+    // complete the transaction
+    if (style_changed || text_changed) {
         sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
     }
 
     gtk_widget_set_sensitive (apply, FALSE);
 
-    g_object_set_data (G_OBJECT (dlg), "blocked", NULL);
+    g_object_set_data (G_OBJECT (dlg), "blocked", GINT_TO_POINTER (FALSE));
 }
 
 
