@@ -626,11 +626,12 @@ sp_ruler_set_metric (GtkRuler *ruler,
 {
   g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_RULER (ruler));
+  g_return_if_fail((unsigned) metric < G_N_ELEMENTS(sp_ruler_metrics));
 
   if (metric == 0) 
 	return;
 
-  ruler->metric = (GtkRulerMetric *) &sp_ruler_metrics[metric];
+  ruler->metric = const_cast<GtkRulerMetric *>(&sp_ruler_metrics[metric]);
 
   if (GTK_WIDGET_DRAWABLE (ruler))
     gtk_widget_queue_draw (GTK_WIDGET (ruler));
