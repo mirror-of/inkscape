@@ -20,6 +20,7 @@ typedef struct _SPViewClass SPViewClass;
 #define SP_VIEW(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_VIEW, SPView))
 #define SP_IS_VIEW(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_VIEW))
 
+#include <stdarg.h>
 #include <gtk/gtkeventbox.h>
 #include "forward.h"
 
@@ -60,8 +61,11 @@ void sp_view_set_document (SPView *view, SPDocument *doc);
 void sp_view_emit_resized (SPView *view, gdouble width, gdouble height);
 void sp_view_set_position (SPView *view, gdouble x, gdouble y);
 void sp_view_set_status (SPView *view, const gchar *status, gboolean isdefault);
+void sp_view_set_statusf (SPView *view, const gchar *format, ...);
+void sp_view_set_statusf_va (SPView *view, const gchar *format, va_list args);
+void sp_view_clear_status (SPView *view);
 void sp_status_display (gchar *message);
-void sp_status_clear (void);
+void sp_status_clear ();
 
 gboolean sp_view_shutdown (SPView *view);
 void sp_view_request_redraw (SPView *view);

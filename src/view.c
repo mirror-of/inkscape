@@ -206,6 +206,40 @@ sp_view_set_status (SPView *view, const gchar *status, gboolean isdefault)
 }
 
 void
+sp_view_set_statusf (SPView *view, const gchar *format, ...)
+{
+	va_list args;
+	va_start (args, format);
+	sp_view_set_statusf_va (view, format, args);
+	va_end (args);
+}
+
+void
+sp_view_set_statusf_va (SPView *view, const gchar *format, va_list args)
+{
+	gchar *status;
+
+	g_return_if_fail (view != NULL);
+	g_return_if_fail (SP_IS_VIEW (view));
+
+	status = g_strdup_vprintf (format, args);
+
+	g_return_if_fail (status != NULL);
+
+	g_signal_emit (G_OBJECT (view), signals[STATUS_SET], 0, status, TRUE);
+	g_free (status);
+}
+
+void
+sp_view_clear_status (SPView *view)
+{
+	g_return_if_fail (view != NULL);
+	g_return_if_fail (SP_IS_VIEW (view));
+
+	g_signal_emit (G_OBJECT (view), signals[STATUS_SET], 0, NULL, TRUE);
+}
+
+void
 sp_status_display (gchar *message)
 {
 	sp_view_set_status (SP_VIEW (SP_ACTIVE_DESKTOP), message, TRUE);

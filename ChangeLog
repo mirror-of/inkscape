@@ -1,3 +1,7 @@
+2003-12-14  MenTaLguY <mental@rydia.net>
+
+	* src/view.h, src/view.c: added new utility things for setting status
+
 2003-12-14  bulia byak <bulia@dr.com>
 
 	* src/verbs.h src/verbs.c: changed 'offset' to 'outset' (more logical), added simplify

@@ -212,7 +212,7 @@ sp_selection_update_statusbar (SPSelection * selection)
 		message = g_strdup_printf ("%i objects", len);
 	}
 
-	sp_view_set_status (SP_VIEW (SP_ACTIVE_DESKTOP), message, TRUE);
+	sp_view_set_status (SP_VIEW (selection->desktop), message, TRUE);
 	
 	g_free (message);
 }
@@ -220,15 +220,13 @@ sp_selection_update_statusbar (SPSelection * selection)
 void
 sp_selection_changed (SPSelection * selection)
 {
-	SPDesktop *dt;
-	dt = SP_ACTIVE_DESKTOP;
-
 	g_return_if_fail (selection != NULL);
 	g_return_if_fail (SP_IS_SELECTION (selection));
 
 	g_signal_emit (G_OBJECT (selection), selection_signals [CHANGED], 0);
 
-	if (dt && tools_isactive (dt, TOOLS_SELECT)) { // this function gets called not only when selector is active!
+	if (selection->desktop && tools_isactive (selection->desktop, TOOLS_SELECT)) {
+		// this function gets called not only when selector is active!
 		sp_selection_update_statusbar (selection);
 	}
 }
