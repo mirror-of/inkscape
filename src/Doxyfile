@@ -1,0 +1,70 @@
+# Doxyfile: default configuration for `doxygen'.
+
+# We'll explicitly list inputs (for faster doxygen runs), but will probably
+# switch to recursive scan once we have a large number of inputs.
+#FILE_PATTERNS = *.cpp *.h
+#RECURSIVE = yes
+# find -name '*.cpp' -o -name '*.h'|xargs grep -l '\\file'|sort|sed 's,^./,    ,;s,$,    \\,'
+INPUT = \
+	dialogs/export.cpp	\
+	display/bezier-utils.cpp	\
+	display/curve.cpp	\
+	display/curve.h	\
+	extension/extension.cpp	\
+	extension/extension.h	\
+	geom.cpp	\
+	helper/action.h	\
+	libnr/nr-point.h	\
+	libnr/nr-types.cpp	\
+	message-context.h	\
+	message-stack.h	\
+	nodepath.h	\
+	snap.cpp	\
+	snap.h	\
+	sp-item-notify-moveto.cpp	\
+	sp-item.cpp	\
+	sp-item.h	\
+	sp-spiral.cpp	\
+	verbs.cpp	\
+	widgets/paint-selector.cpp	\
+	xml/repr-private.h	\
+	xml/repr-util.cpp	\
+	xml/repr.cpp
+
+# Uncomment this to treat undocumented things as if they had an empty
+# documentation string; comment it out to suppress all undocumented things from
+# the output.
+# Leaving it uncommented allows using doxygen output as the primary information
+# source about a class (without needing to look at the source code to look for
+# undocumented things).
+# OTOH, you may find it annoying to have reems of relatively unhelpful
+# information: commenting it out gives more compact display of the helpful
+# bits.
+# I'm commenting it out for now to facilitate checking existing doc comments
+# for doxygen correctness.
+#EXTRACT_ALL = yes
+
+# I'll disable this for the moment, to reduce the number of files in the output.
+SOURCE_BROWSER = no
+
+# Keep the output out of the src directory so that it doesn't get in the way of
+# `rgrep'.
+OUTPUT_DIRECTORY = ../doxygen
+
+# In absence of explicit `\brief', treat the first "sentence" as the brief part
+# and the rest as detail.  (With explicit `\brief', the first _paragraph_ is
+# considered the brief part.)
+#
+# It's unclear whether programmers should deliberately use this facility.
+# Advantage: Less clutter.
+# Disadvantage: Absence of `\brief' may indicate that the comment was written
+# by someone unfamiliar with doxygen and not giving thought to what the brief
+# description should be.  Using explicit `\brief' may facilitate checking
+# non-\briefed comments for doxygen correctness.
+# OTOH, using `\brief' may be parrot-like: it doesn't necessarily indicate
+# doxygen familiarity.
+JAVADOC_AUTOBRIEF = yes
+
+WARN_IF_UNDOCUMENTED = no
+
+WARN_LOGFILE = doxygen-log
