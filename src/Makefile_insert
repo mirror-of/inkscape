@@ -127,6 +127,7 @@ libinkpre_a_SOURCES =	\
 	sp-line.cpp sp-line.h	\
 	splivarot.cpp splivarot.h	\
 	sp-marker.cpp sp-marker.h	\
+	sp-marker-loc.h	\
 	sp-mask.cpp sp-mask.h	\
 	sp-metrics.cpp sp-metrics.h	\
 	sp-namedview.cpp sp-namedview.h	\
