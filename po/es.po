@@ -1,15 +1,16 @@
 # 
+
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-10-27 21:39+0200\n"
-"PO-Revision-Date: 2004-10-25 20:13+0200\n"
+"PO-Revision-Date: 2004-10-28 09:39+0200\n"
 "Last-Translator: Lucas Vieites <lucas@asixinformatica.com>\n"
 "Language-Team: Spanish/Spain <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: inkscape.desktop.in.h:1
 msgid "Inkscape SVG Vector Illustrator"
@@ -55,7 +56,7 @@ msgstr "%s en %s"
 #. This is the distance by which the guide is to be moved.
 #: src/desktop-events.cpp:288
 msgid " relative by "
-msgstr " relatuvo"
+msgstr " relativo "
 
 #  TRANSLATORS: This string appears when double-clicking on a guide.
 #  This is the target location where the guide is to be moved.
@@ -63,7 +64,7 @@ msgstr " relatuvo"
 #. This is the target location where the guide is to be moved.
 #: src/desktop-events.cpp:293 src/desktop-events.cpp:418
 msgid " absolute to "
-msgstr " absoluto a"
+msgstr " absoluto a "
 
 #  create dialog
 #. create dialog
@@ -78,12 +79,12 @@ msgstr "Mover %s"
 
 #: src/desktop.cpp:907
 msgid "Zoom drawing if window size changes"
-msgstr "Ajustar el dibujo a la ventana si cambia el tamaño de esta"
+msgstr "Ajustar el dibujo a la ventana si cambia el tamaño de ésta"
 
 #: src/desktop.cpp:929 src/dialogs/display-settings.cpp:1081
 #: src/verbs.cpp:1597
 msgid "Zoom"
-msgstr "Aumentar"
+msgstr "Zoom"
 
 #. FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
 #. that's because labels are "lightweight" widgets that don't have
@@ -128,7 +129,7 @@ msgid ""
 "If you close without saving, your changes will be discarded."
 msgstr ""
 "<span weight=\"bold\" size=\"larger\">¿Desea guardar los cambios en el "
-"documento \"%s\" antes de cerrar?</span>\n"
+"documento «%s» antes de cerrar?</span>\n"
 "\n"
 "Si cierra sin guardar se perderán los cambios realizados."
 
@@ -189,7 +190,7 @@ msgstr "Alinear nodos"
 
 #: src/dialogs/align.cpp:464
 msgid "Relative to: "
-msgstr "Relativo a:"
+msgstr "Relativo a: "
 
 #: src/dialogs/align.cpp:468 src/dialogs/align.cpp:938
 msgid "Right side of aligned objects to left side of anchor"
@@ -1242,7 +1243,7 @@ msgstr "Exportando [%d x %d] %s"
 #: src/dialogs/export.cpp:1016
 #, c-format
 msgid "Could not export to filename %s.\n"
-msgstr ""
+msgstr "No se pudo exportar al archivo %s.\n"
 
 #: src/dialogs/export.cpp:1119
 msgid "Select a filename for exporting"
@@ -3017,26 +3018,20 @@ msgstr ""
 "con el radio horizontal"
 
 #: src/object-edit.cpp:435 src/object-edit.cpp:437
-#, fuzzy
 msgid ""
 "Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to "
 "lock ratio or stretch in one dimension only"
 msgstr ""
 "Ajustar el <b>alto y el ancho</b> del rectángulo; con <b>Ctrl</b> para "
-"bloquear la proporción"
+"bloquear la proporción o estirar en una sola dirección"
 
 #: src/object-edit.cpp:606
-#, fuzzy
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
-msgstr ""
-"Ajustar el <b>alto y el ancho</b> del rectángulo; con <b>Ctrl</b> para "
-"bloquear la proporción"
+msgstr "Ajustar el <b>ancho</b> de la elipse; con <b>Ctrl</b> para hacer un círculo"
 
 #: src/object-edit.cpp:608
-#, fuzzy
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
-msgstr ""
-"Ajustar el <b>alto y el ancho</b> del rectángulo; con <b>Ctrl</b> para "
+msgstr "Ajustar el <b>alto y el ancho</b> del rectángulo; con <b>Ctrl</b> para "
 "bloquear la proporción"
 
 #: src/object-edit.cpp:610
@@ -3638,14 +3633,14 @@ msgid "<b>Spiral</b> with %3f turns"
 msgstr "<b>Espiral</b> con %3f vueltas"
 
 #: src/sp-star.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Star</b> with %d vertices"
-msgstr "<b>Estrella</b> de %d lados"
+msgstr "<b>Estrella</b> de %d vértices"
 
 #: src/sp-star.cpp:287
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Polygon</b> with %d vertices"
-msgstr "<b>Polígono</b> de %d lados"
+msgstr "<b>Polígono</b> de %d vértices"
 
 #: src/sp-text.cpp:472
 msgid "<no name found>"
@@ -3777,15 +3772,12 @@ msgstr ""
 "trayecto.Utilice <b>Mayús+D</b> para buscar su trayecto."
 
 #: src/text-chemistry.cpp:141
-#, fuzzy
 msgid "Select <b>a text on path</b> to remove it from path."
-msgstr ""
-"Debe seleccionar <b>un texto y un trazo</b> para poner un texto en trayecto."
+msgstr "Seleccione <b>un texto en trayecto</b> para quitarlo del trayecto."
 
 #: src/text-chemistry.cpp:181
-#, fuzzy
 msgid "<b>No texts-on-paths</b> in the selection."
-msgstr "<b>No hay trazos</b> reversibles en la selección."
+msgstr "<b>No hay trazos en trayecto</b> en la selección."
 
 #: src/text-context.cpp:393
 msgid "No-break space"
@@ -4121,9 +4113,8 @@ msgstr ""
 "portapapeles."
 
 #: src/trace/trace.cpp:69 src/trace/trace.cpp:78 src/trace/trace.cpp:86
-#, fuzzy
 msgid "Select an <b>image</b> to trace"
-msgstr "Seleccione el <b>objeto</b> que desea clonar"
+msgstr "Seleccione una <b>imagen</b> para trazar"
 
 #: src/trace/trace.cpp:140
 msgid "Trace: No active document"
@@ -4174,9 +4165,8 @@ msgid "tutorial-basic.svg"
 msgstr "tutorial-basic.svg"
 
 #: src/verbs.cpp:1306
-#, fuzzy
 msgid "tutorial-shapes.svg"
-msgstr "tutorial-basic.svg"
+msgstr "tutorial-shapes.svg"
 
 #: src/verbs.cpp:1309
 msgid "tutorial-advanced.svg"
@@ -4502,7 +4492,6 @@ msgid "Ungroup selected group(s)"
 msgstr "Desagrupar grupo(s) seleccionado(s)"
 
 #: src/verbs.cpp:1479
-#, fuzzy
 msgid "_Put on path"
 msgstr "_Poner texto en trayecto"
 
@@ -4511,14 +4500,12 @@ msgid "Put text on path"
 msgstr "Poner texto en trayecto"
 
 #: src/verbs.cpp:1481
-#, fuzzy
 msgid "_Remove from path"
-msgstr "Deshacer _transformaciones"
+msgstr "_Retirar del trayecto"
 
 #: src/verbs.cpp:1482
-#, fuzzy
 msgid "Remove text from path"
-msgstr "Convierte el texto en trazo"
+msgstr "Retirar texto de trayecto"
 
 #: src/verbs.cpp:1483
 msgid "_Union"
@@ -5239,26 +5226,24 @@ msgstr "Inkscape: _Básico"
 
 #: src/verbs.cpp:1694
 msgid "Getting started with Inkscape"
-msgstr ""
+msgstr "Introducción a Inkscape"
 
 #. "tutorial_basic"
 #: src/verbs.cpp:1695
-#, fuzzy
 msgid "Inkscape: _Shapes"
-msgstr "Inkscape: _Básico"
+msgstr "Inkscape: _Formas"
 
 #: src/verbs.cpp:1696
 msgid "Using shape tools to create and edit shapes"
-msgstr ""
+msgstr "Cómo usar las herramientas de forma para crear y editar formas"
 
 #: src/verbs.cpp:1697
 msgid "Inkscape: _Advanced"
 msgstr "Inkscape: _Avanzado"
 
 #: src/verbs.cpp:1698
-#, fuzzy
 msgid "Advanced Inkscape topics"
-msgstr "Tutorial avanzado de Inkscape"
+msgstr "Temas avanzados de Inkscape"
 
 #. "tutorial_advanced"
 #: src/verbs.cpp:1699
