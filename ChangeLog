@@ -1,4 +1,9 @@
-2005-03-01  MenTaLguY  <mental@rydia.net<
+2005-03-01  MenTaLguY  <mental@rydia.net>
+
+	* src/extensions/internal/ps.cpp: apply patch from Michael Forbes
+	  (miforbes@mbhs.edu) to support gradient fills in Postscript
+
+2005-03-01  MenTaLguY  <mental@rydia.net>
 
 	* src/xml/node.h, src/xml/simple-node.cpp, src/xml/simple-node.h:
 

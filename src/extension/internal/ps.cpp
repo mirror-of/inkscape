@@ -55,6 +55,11 @@
 #include "sp-item.h"
 #include "style.h"
 #include "inkscape_version.h"
+#include <sp-gradient.h>
+#include <sp-gradient-vector.h>
+#include <sp-linear-gradient.h>
+#include <sp-pattern.h>
+#include <sp-radial-gradient.h>
 
 #include <libnrtype/FontFactory.h>
 #include <libnrtype/font-instance.h>
@@ -550,12 +555,73 @@ PrintPS::comment(Inkscape::Extension::Print *mod, const char * comment)
 void
 PrintPS::print_fill_style(SVGOStringStream &os, const SPStyle *style)
 {
-    g_return_if_fail(style->fill.type == SP_PAINT_TYPE_COLOR);
+    g_return_if_fail(style->fill.type == SP_PAINT_TYPE_COLOR || SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style)));
+    
+    if (style->fill.type == SP_PAINT_TYPE_COLOR)
+    {
+        float rgb[3];
+        sp_color_get_rgb_floatv(&style->fill.value.color, rgb);
 
-    float rgb[3];
-    sp_color_get_rgb_floatv(&style->fill.value.color, rgb);
-
-    os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
+        os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
+    } else if (SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style))) {
+        if (SP_IS_LINEARGRADIENT (SP_STYLE_FILL_SERVER (style))) {
+            SPLinearGradient *lg=SP_LINEARGRADIENT(SP_STYLE_FILL_SERVER (style));
+            os << "<<\n/ShadingType 2\n/ColorSpace /DeviceRGB\n";
+            os << "/Coords [" << lg->x1.computed << " " << lg->y1.computed << " " << lg->x2.computed << " " << lg->y2.computed <<"]\n";
+            os << "/Extend [true true]\n";
+            os << "/Domain [0 1]\n";
+            os << "/Function <<\n/FunctionType 3\n/Functions\n[\n";
+            for (gint i=0;unsigned(i)<lg->vector.stops.size()-1;i++) {
+                float rgb[3];
+                sp_color_get_rgb_floatv(&lg->vector.stops[i].color, rgb);
+                os << "<<\n/FunctionType 2\n/Domain [0 1]\n";
+                os << "/C0 [" << rgb[0] << " " << rgb[1] << " " << rgb[2] << "]\n";
+                sp_color_get_rgb_floatv(&lg->vector.stops[i+1].color, rgb);
+                os << "/C1 [" << rgb[0] << " " << rgb[1] << " " << rgb[2] << "]\n";
+                os << "/N 1\n>>\n";
+            }
+            os << "]\n/Domain [0 1]\n";
+            os << "/Bounds [ ";
+            for (gint i=0;unsigned(i)<lg->vector.stops.size()-2;i++) {
+                os << lg->vector.stops[i+1].offset <<" ";
+            }
+            os << "]\n";
+            os << "/Encode [ ";
+            for (gint i=0;unsigned(i)<lg->vector.stops.size()-1;i++) {
+                os << "0 1 ";
+            }
+            os << "]\n";
+            os << ">>\n>>\n";
+        } else if (SP_IS_RADIALGRADIENT (SP_STYLE_FILL_SERVER (style))) {
+            SPRadialGradient *rg=SP_RADIALGRADIENT(SP_STYLE_FILL_SERVER (style));
+            os << "<<\n/ShadingType 3\n/ColorSpace /DeviceRGB\n";
+            os << "/Coords ["<<rg->fx.computed<<" "<<rg->fy.computed<<" 0 "<<rg->cx.computed<<" "<<rg->cy.computed<<" "<<rg->r.computed<<"]\n";
+            os << "/Extend [true true]\n";
+            os << "/Domain [0 1]\n";
+            os << "/Function <<\n/FunctionType 3\n/Functions\n[\n";
+            for (gint i=0;unsigned(i)<rg->vector.stops.size()-1;i++) {
+                float rgb[3];
+                sp_color_get_rgb_floatv(&rg->vector.stops[i].color, rgb);
+                os << "<<\n/FunctionType 2\n/Domain [0 1]\n";
+                os << "/C0 [" << rgb[0] << " " << rgb[1] << " " << rgb[2] << "]\n";
+                sp_color_get_rgb_floatv(&rg->vector.stops[i+1].color, rgb);
+                os << "/C1 [" << rgb[0] << " " << rgb[1] << " " << rgb[2] << "]\n";
+                os << "/N 1\n>>\n";
+            }
+            os << "]\n/Domain [0 1]\n";
+            os << "/Bounds [ ";
+            for (gint i=0;unsigned(i)<rg->vector.stops.size()-2;i++) {
+                os << rg->vector.stops[i+1].offset <<" ";
+            }
+            os << "]\n";
+            os << "/Encode [ ";
+            for (gint i=0;unsigned(i)<rg->vector.stops.size()-1;i++) {
+                os << "0 1 ";
+            }
+            os << "]\n";
+            os << ">>\n>>\n";
+        }
+    }
 }
 
 void
@@ -595,7 +661,7 @@ PrintPS::fill(Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMat
     if (!_stream) return 0; // XXX: fixme, returning -1 as unsigned.
     if (_bitmap) return 0;
 
-    if (style->fill.type == SP_PAINT_TYPE_COLOR) {
+    if (style->fill.type == SP_PAINT_TYPE_COLOR || SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style))) {
         Inkscape::SVGOStringStream os;
 
         print_fill_style(os, style);
@@ -603,12 +669,40 @@ PrintPS::fill(Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMat
         print_bpath(os, bpath->path);
 
         if (style->fill_rule.value == SP_WIND_RULE_EVENODD) {
-            os << "eofill\n";
+            if (style->fill.type == SP_PAINT_TYPE_COLOR) {
+                os << "eofill\n";
+            } else if (SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style))) {
+                SPGradient *g=SP_GRADIENT(SP_STYLE_FILL_SERVER (style));
+                os << "eoclip\n";
+                if (g->gradientTransform_set) {
+                    os << "gsave [" << g->gradientTransform[0] << " " << g->gradientTransform[1] 
+                        << " " << g->gradientTransform[2] << " " << g->gradientTransform[3] 
+                        << " " << g->gradientTransform[4] << " " << g->gradientTransform[5] << "] concat\n"; 
+                }
+                os << "shfill\n";
+                if (g->gradientTransform_set) {
+                    os << "grestore\n";
+                }
+            }
         } else {
-            os << "fill\n";
+            if (style->fill.type == SP_PAINT_TYPE_COLOR) {
+                os << "fill\n";
+            } else if (SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style))) {
+                SPGradient *g=SP_GRADIENT(SP_STYLE_FILL_SERVER (style));
+                os << "clip\n";
+                if (g->gradientTransform_set) {
+                    os << "gsave [" << g->gradientTransform[0] << " " << g->gradientTransform[1] 
+                        << " " << g->gradientTransform[2] << " " << g->gradientTransform[3] 
+                        << " " << g->gradientTransform[4] << " " << g->gradientTransform[5] << "] concat\n"; 
+                }
+                os << "shfill\n";
+                if (g->gradientTransform_set) {
+                    os << "grestore\n";
+                }
+            }
         }
         fprintf(_stream, "%s", os.str().c_str());
-    }
+    }        
 
     return 0;
 }
