@@ -138,6 +138,12 @@ struct SPDesktop : public SPView {
 
 	sigc::signal<void, sp_verb_t> _tool_changed;
 
+	// subselection is some sort of selection which is specific to the tool, such as a handle in gradient tool, or a text selection
+	sigc::signal<void, gpointer> _tool_subselection_changed;
+	sigc::connection connectToolSubselectionChanged(const sigc::slot<void, gpointer> & slot) {
+		return _tool_subselection_changed.connect(slot);
+	}
+	void emitToolSubselectionChanged(gpointer data) {_tool_subselection_changed.emit(data);}
 
 	Inkscape::MessageContext *_guides_message_context;
 
