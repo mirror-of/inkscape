@@ -49,10 +49,6 @@ used to specify callbacks when something changes.
 
 Here are the current callbacks in an event vector (they may be NULL):
 
-        void (* destroy) (SPRepr *repr, void *data);
-
-Called when the repr is destroyed.
-
         void (* child_added) (SPRepr *repr, SPRepr *child, SPRepr *ref,
 void *data);
 
@@ -92,7 +88,12 @@ into with my best-guess answers so others can follow along too.
 
 Q: How do I find the root SPRepr?
 A: If you have an SPDocument, use doc->rroot.  For example:
+
      SP_ACTIVE_DOCUMENT->rroot
+
+     (but it's better to arrange for your caller to pass in the relevent
+      document rather than assuming it's necessarily the active one and
+      using SP_ACTIVE_DOCUMENT)
 
 Q: How do I find an SPRepr by unique key/value?
 A: Use sp_repr_lookup_child
@@ -109,7 +110,8 @@ A: Add the XML namespace URL as a #define to repr.h at the top with the
 
 Q: How do I create a new SPRepr?
 A: Use "sp_repr_new*".  Then attach it to a parent somewhere with
-   "sp_repr_append_child" and finally called "sp_repr_unref".
+   parent->appendChild(child), and then use Inkscape::GC::release(child) to
+   let go of it (the parent will hold it in memory).
 
 Q: How do I destroy an SPRepr?
 A: Just call "sp_repr_unparent" on it and release any references
@@ -123,6 +125,7 @@ Q: How do I add a namespace to a newly created document?
 A: The current hack is in document.cpp:sp_document_create
 
  Kees Cook  2004-07-01
+ updated MenTaLguY 2005-01-25
 
  */
 
@@ -131,62 +134,95 @@ A: The current hack is in document.cpp:sp_document_create
 const  char *sp_xml_ns_uri_prefix(gchar const *uri, gchar const *suggested);
 const  char *sp_xml_ns_prefix_uri(gchar const *prefix);
 
-/* SPXMLNode */
-
-/* SPXMLElement */
-
-/*
- * SPRepr is opaque
- */
-
-struct SPRepr;
-
-/* Create new repr & similar */
-
 SPRepr *sp_repr_new(gchar const *name);
 SPRepr *sp_repr_new_text(gchar const *content);
 SPRepr *sp_repr_new_comment(gchar const *comment);
-SPRepr *sp_repr_ref(SPRepr *repr);
-SPRepr *sp_repr_unref(SPRepr *repr);
-SPRepr *sp_repr_duplicate(SPRepr const *repr);
 
-/* Documents - 1st step in migrating to real XML */
+inline SPRepr *sp_repr_ref(SPRepr *repr) {
+	return Inkscape::GC::anchor(repr);
+}
+inline SPRepr *sp_repr_unref(SPRepr *repr) {
+	Inkscape::GC::release(repr);
+	return NULL;
+}
+inline SPRepr *sp_repr_duplicate(SPRepr const *repr) {
+	return repr->duplicate();
+}
 
 SPReprDoc *sp_repr_document_new(gchar const *rootname);
-void sp_repr_document_ref(SPReprDoc *doc);
-void sp_repr_document_unref(SPReprDoc *doc);
+inline void sp_repr_document_ref(SPReprDoc *doc) {
+	Inkscape::GC::anchor(doc);
+}
+inline void sp_repr_document_unref(SPReprDoc *doc) {
+	Inkscape::GC::release(doc);
+}
 
-SPRepr *sp_repr_document_root(SPReprDoc const *doc);
-SPReprDoc *sp_repr_document(SPRepr const *repr);
+inline SPRepr *sp_repr_document_root(SPReprDoc const *doc) {
+	return const_cast<SPRepr *>(doc->root());
+}
+inline SPReprDoc *sp_repr_document(SPRepr const *repr) {
+	return const_cast<SPReprDoc *>(repr->document());
+}
 
 
-/* Documents Utility */
-unsigned int sp_repr_document_merge(SPReprDoc *doc, SPReprDoc const *src, char const *key);
-unsigned int sp_repr_merge(SPRepr *repr, SPRepr const *src, gchar const *key);
+inline unsigned int sp_repr_document_merge(SPReprDoc *doc,
+		                           SPReprDoc const *src,
+					   char const *key)
+{
+	doc->root()->mergeFrom(src->root(), key);
+	return true;
+}
+
+inline unsigned int sp_repr_merge(SPRepr *repr, SPRepr const *src, gchar const *key) {
+	repr->mergeFrom(src, key);
+	return true;
+}
 
 /* Contents */
 
-const  char *sp_repr_name(SPRepr const *repr);
-const  char *sp_repr_content(SPRepr const *repr);
-const  char *sp_repr_attr(SPRepr const *repr, gchar const *key);
-bool sp_repr_has_attr(SPRepr const *repr, gchar const *partial_name);
+inline const char *sp_repr_name(SPRepr const *repr) {
+	return repr->name();
+}
+inline const char *sp_repr_content(SPRepr const *repr) {
+	return repr->content();
+}
+inline const char *sp_repr_attr(SPRepr const *repr, gchar const *key) {
+	return repr->attribute(key);
+}
+inline bool sp_repr_has_attr(SPRepr const *repr, gchar const *partial_name) {
+	return repr->matchAttributeName(partial_name);
+}
 
-/*
- * NB! signal handler may decide, that change is not allowed
- *
- * TRUE, if successful
- */
+inline unsigned int sp_repr_set_content(SPRepr *repr, gchar const *content) {
+	repr->setContent(content);
+	return true;
+}
 
-unsigned int sp_repr_set_content(SPRepr *repr, gchar const *content);
-unsigned int sp_repr_set_attr(SPRepr *repr, gchar const *key, gchar const *value, bool is_interactive=false);
+inline unsigned int sp_repr_set_attr(SPRepr *repr, gchar const *key, gchar const *value, bool is_interactive=false) {
+	repr->setAttribute(key, value, is_interactive);
+	return true;
+}
 
 /* Tree */
-SPRepr *sp_repr_parent(SPRepr const *repr);
-SPRepr *sp_repr_children(SPRepr *repr);
-SPRepr *sp_repr_next(SPRepr *repr);
+inline SPRepr *sp_repr_parent(SPRepr const *repr) {
+	return const_cast<SPRepr *>(repr->parent());
+}
+inline SPRepr *sp_repr_children(SPRepr *repr) {
+	return ( repr ? repr->firstChild() : NULL );
+}
+inline SPRepr *sp_repr_next(SPRepr *repr) {
+	return ( repr ? repr->next() : NULL );
+}
 
-unsigned int sp_repr_add_child(SPRepr *repr, SPRepr *child, SPRepr *ref);
-unsigned int sp_repr_remove_child(SPRepr *repr, SPRepr *child);
+inline unsigned int sp_repr_add_child(SPRepr *repr, SPRepr *child, SPRepr *ref)
+{
+	repr->addChild(child, ref);
+	return true;
+}
+inline unsigned int sp_repr_remove_child(SPRepr *repr, SPRepr *child) {
+	repr->removeChild(child);
+	return true;
+}
 
 /* IO */
 
@@ -218,9 +254,16 @@ void sp_repr_css_print (SPCSSAttr * css);
 
 /* Utility finctions */
 
-void sp_repr_unparent(SPRepr *repr);
+inline void sp_repr_unparent(SPRepr *repr) {
+	SPRepr *parent=repr->parent();
+	if (parent) {
+		parent->removeChild(repr);
+	}
+}
 
-int sp_repr_attr_is_set(SPRepr *repr, gchar const *key);
+inline bool sp_repr_attr_is_set(SPRepr *repr, gchar const *key) {
+	return repr->attribute(key);
+}
 
 /* Convenience */
 unsigned int sp_repr_get_boolean(SPRepr *repr, gchar const *key, unsigned int *val);
@@ -239,11 +282,21 @@ int sp_repr_get_int_attribute(SPRepr *repr, gchar const *key, int def);
 
 int sp_repr_compare_position(SPRepr *first, SPRepr *second);
 
-int sp_repr_position(SPRepr const *repr);
-void sp_repr_set_position_absolute(SPRepr *repr, int pos);
-int sp_repr_n_children(SPRepr *repr);
-SPRepr *sp_repr_nth_child(SPRepr *repr, int n);
-void sp_repr_append_child(SPRepr *repr, SPRepr *child);
+inline int sp_repr_position(SPRepr const *repr) {
+	return repr->position();
+}
+inline void sp_repr_set_position_absolute(SPRepr *repr, int pos) {
+	repr->setPosition(pos);
+}
+inline int sp_repr_n_children(SPRepr *repr) {
+	return repr->childCount();
+}
+inline SPRepr *sp_repr_nth_child(SPRepr *repr, int n) {
+	return repr->nthChild(n);
+}
+inline void sp_repr_append_child(SPRepr *repr, SPRepr *child) {
+	repr->appendChild(child);
+}
 
 /* Searching */
 SPRepr       *sp_repr_lookup_name   (SPRepr             *repr,
@@ -253,9 +306,14 @@ SPRepr       *sp_repr_lookup_child  (SPRepr    	        *repr,
 				     gchar const        *key,
 				     gchar const        *value);
 
-unsigned int sp_repr_change_order (SPRepr *repr, SPRepr *child, SPRepr *ref);
+inline unsigned int sp_repr_change_order (SPRepr *repr, SPRepr *child, SPRepr *ref) {
+	repr->changeOrder(child, ref);
+	return true;
+}
                                                                                 
 SPReprDoc *sp_repr_document_new_list (GSList *reprs);
-SPRepr *sp_repr_document_first_child(SPReprDoc const *doc);
+inline SPRepr *sp_repr_document_first_child(SPReprDoc const *doc) {
+	return const_cast<SPRepr *>(doc->firstChild());
+}
 
 #endif

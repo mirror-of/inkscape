@@ -16,7 +16,7 @@
 
 #include <glib/gtypes.h>
 
-struct SPRepr;
+#include "xml/sp-repr.h"
 
 struct SPReprEventVector {
 	/* Immediate signals */
@@ -27,10 +27,15 @@ struct SPReprEventVector {
 	void (* order_changed) (SPRepr *repr, SPRepr *child, SPRepr *oldref, SPRepr *newref, void * data);
 };
 
-void sp_repr_synthesize_events (SPRepr *repr, const SPReprEventVector *vector, void * data);
+inline void sp_repr_synthesize_events (SPRepr *repr, const SPReprEventVector *vector, void * data) {
+	repr->synthesizeEvents(vector, data);
+}
                                                                                 
-void sp_repr_add_listener (SPRepr *repr, const SPReprEventVector *vector, void * data);
-void sp_repr_remove_listener_by_data (SPRepr *repr, void * data);
-
+inline void sp_repr_add_listener (SPRepr *repr, const SPReprEventVector *vector, void * data) {
+	repr->addListener(vector, data);
+}
+inline void sp_repr_remove_listener_by_data (SPRepr *repr, void * data) {
+	repr->removeListenerByData(data);
+}
 
 #endif

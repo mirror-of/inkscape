@@ -1,3 +1,10 @@
+2004-01-26  MenTaLguY  <mental@rydia.net>
+
+	* src/xml/repr-util.cpp, src/xml/repr.cpp, src/xml/repr.h,
+	  src/xml/sp-repr-action.h, src/xml/sp-repr-event-vector.h:
+
+	  inlined legacy wrappers
+
 2005-01-25  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/interface.cpp: Passed file import call to shared code.

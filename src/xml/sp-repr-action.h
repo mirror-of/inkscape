@@ -9,6 +9,7 @@
 #include "util/shared-c-string-ptr.h"
 #include "util/forward-pointer-iterator.h"
 #include "gc-managed.h"
+#include "xml/sp-repr.h"
 
 class SPReprAction
 : public Inkscape::GC::Managed<Inkscape::GC::SCANNED, Inkscape::GC::MANUAL>

@@ -281,51 +281,6 @@ sp_xml_ns_prefix_uri (const gchar *prefix)
     return uri;
 }
 
-/** Returns the first child of \a repr, or NULL if \a repr has no children (or if repr is itself
- *  NULL).
- *
- * \see sp_repr_next
- */
-SPRepr *
-sp_repr_children (SPRepr *repr)
-{
-    //This is not worth a warning
-    // child of null is null
-    //g_return_val_if_fail (repr != NULL, NULL);
-
-    if (!repr)
-        return NULL;
-    return repr->firstChild();
-}
-
-/** Returns the next sibling of \a repr, or NULL if \a repr is the last sibling (or if repr is
- *  NULL).
- *
- *  \see sp_repr_prev
- *  \see sp_repr_parent
- *  \see sp_repr_children
- */
-SPRepr *
-sp_repr_next (SPRepr *repr)
-{
-    //This is not worth a warning
-    // next of null is null
-    //g_return_val_if_fail (repr != NULL, NULL);
-
-    if (!repr)
-        return NULL;
-    return repr->next();
-}
-
-int sp_repr_attr_is_set (SPRepr * repr, const char * key)
-{
-    char * result;
-
-    result = (char *) sp_repr_attr (repr, key);
-
-    return (result != NULL);
-}
-
 double sp_repr_get_double_attribute (SPRepr * repr, const char * key, double def)
 {
     char * result;
@@ -409,54 +364,6 @@ sp_repr_compare_position(SPRepr *first, SPRepr *second)
        beginning of the yet-unencountered elements of the vector.
        Continue until no more than one remains unencountered.  --
        pjrm */
-}
-
-/** Returns the position of \a repr among its parent's children (starting with 0 for the first
- *  child).
- *
- *  \pre repr != NULL.
- *  \pre sp_repr_parent(repr) != NULL.
- *  \pre sp_repr_parent(repr)'s list of children includes \a repr.
- */
-int
-sp_repr_position(SPRepr const *repr)
-{
-    g_assert(repr != NULL);
-    return repr->position();
-}
-
-int
-sp_repr_n_children(SPRepr *repr)
-{
-    g_assert(repr != NULL);
-    return (int)repr->childCount();
-}
-
-SPRepr *sp_repr_nth_child(SPRepr *repr, int n) {
-    g_assert(repr != NULL);
-    g_return_val_if_fail(n < 0, NULL);
-    return repr->nthChild((unsigned)n);
-}
-
-void
-sp_repr_append_child (SPRepr * repr, SPRepr * child)
-{
-    g_assert (repr != NULL);
-    g_assert (child != NULL);
-
-    return repr->appendChild(child);
-}
-
-void sp_repr_unparent (SPRepr * repr)
-{
-    SPRepr * parent;
-
-    g_assert (repr != NULL);
-
-    parent = sp_repr_parent (repr);
-    g_assert (parent != NULL);
-
-    sp_repr_remove_child (parent, repr);
 }
 
 /**
