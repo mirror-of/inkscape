@@ -820,6 +820,15 @@ sp_selection_scale_absolute (SPSelection *selection, double x0, double x1, doubl
 
 void sp_selection_scale_relative(SPSelection *selection, NR::Point const &align, NR::scale const &scale)
 {
+	// don't try to scale above 1 Mpt, it won't display properly and will crash sooner or later anyway
+	NR::Rect const bbox(sp_selection_bbox(selection));
+	if (
+		bbox.extent(NR::X) * scale[NR::X] > 1e6 ||
+		bbox.extent(NR::Y) * scale[NR::Y] > 1e6
+	) return;
+
+	double const max_len = bbox.maxExtent();
+
 	NR::translate const n2d(-align);
 	NR::translate const d2n(align);
 	NR::Matrix const final( n2d * scale * d2n );
@@ -933,12 +942,13 @@ sp_selection_scale (SPSelection *selection, gdouble grow)
 	NR::Point const center(bbox.midpoint());
 	double const max_len = bbox.maxExtent();
 
+	// you can't scale "do nizhe pola" (below zero)
 	if ( max_len + 2 * grow <= 0 ) {
 		return;
 	}
 
 	double const times = 1.0 + grow / max_len;
-	sp_selection_scale_relative(selection, center, NR::scale(times, times));
+	sp_selection_scale_relative (selection, center, NR::scale(times, times));
 
 	sp_document_maybe_done(SP_DT_DOCUMENT(selection->desktop),
 			       ( (grow > 0)
