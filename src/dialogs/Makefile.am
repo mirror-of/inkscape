@@ -12,6 +12,7 @@ iconsdir = $(datadir)/inkscape
 INCLUDES = \
 	-I.. \
 	-I$(top_srcdir)/src \
+	-I$(top_srcdir)/src/dialogs \
 	-DINKSCAPE_ICONS_DIR=\""$(iconsdir)"\" \
 	-DINKSCAPE_PIXMAPDIR=\""$(iconsdir)"\" \
 	$(INKSCAPE_CFLAGS)

@@ -18,4 +18,3 @@ libspbonobo_a_SOURCES = \
     embeddable-drawing.cpp embeddable-drawing.h \
     canvas-translator.cpp canvas-translator.h
 
-

@@ -24,17 +24,17 @@
 #include "sp-item.h"
 #include "style.h"
 #include "sp-paint-server.h"
-#include "module.h"
+#include "extension/extension.h"
 #include "print.h"
 
-#include <modules/ps.h>
+#include <extension/internal/ps.h>
 
 #ifdef WIN32
-#include <modules/win32.h>
+#include <extension/internal/win32.h>
 #endif
 
 #ifdef WITH_GNOME_PRINT
-#include <modules/gnome.h>
+#include <extension/internal/gnome.h>
 #endif
 
 /* Identity typedef */

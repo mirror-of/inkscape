@@ -18,9 +18,9 @@
 #include <sp-object.h>
 #include <document.h>
 #include <dir-util.h>
-#include <module.h>
+#include <extension.h>
 #include "svg.h"
-#include "system.h"
+#include "../system.h"
 
 /* Prototypes */
 static void svg_save (SPModule *mod, SPDocument *doc, const gchar *uri);

@@ -76,11 +76,11 @@ testnr_LDADD =	\
 	libnr.a	\
 	-lglib-2.0
 
-nr_types_test_SOURCES = nr-types-test.cpp nr-types.cpp nr-point-fns.cpp
-nr_types_test_LDADD = -lglib-2.0
+nr_types_test_SOURCES = nr-types-test.cpp
+nr_types_test_LDADD = -lglib-2.0 libnr.a
 
-nr_point_fns_test_SOURCES = nr-point-fns-test.cpp nr-types.cpp nr-point-fns.cpp
-nr_point_fns_test_LDADD = -lglib-2.0
+nr_point_fns_test_SOURCES = nr-point-fns-test.cpp
+nr_point_fns_test_LDADD = -lglib-2.0 libnr.a
 
-nr_matrix_test_SOURCES = nr-matrix-test.cpp nr-matrix.cpp nr-types.cpp nr-values.cpp
-nr_matrix_test_LDADD = -lglib-2.0
+nr_matrix_test_SOURCES = nr-matrix-test.cpp
+nr_matrix_test_LDADD = -lglib-2.0 libnr.a

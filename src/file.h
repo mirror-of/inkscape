@@ -15,7 +15,7 @@
  */
 
 #include "forward.h"
-#include "module.h"
+#include <extension/extension.h>
 
 /*######################
 ## N E W

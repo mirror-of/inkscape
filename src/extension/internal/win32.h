@@ -21,7 +21,7 @@
 #endif
 #include <windows.h>
 
-#include <module.h>
+#include <extension.h>
 
 /* Initialization */
 

@@ -10,10 +10,7 @@ inkjar_dir = inkjar
 inkjar_libs = inkjar/libinkjar.a
 endif
 
-module_libs = modules/libspmodules.a
-module_src = module.cpp module.h
-
-SUBDIRS = libarikkei libnr livarot libnrtype xml svg helper widgets dialogs display modules utest $(inkjar_dir)
+SUBDIRS = libarikkei libnr livarot libnrtype xml svg helper widgets dialogs display extension utest $(inkjar_dir)
 
 AM_CPPFLAGS = \
 	-DINKSCAPE_VERSION=\""$(VERSION)"\"
@@ -161,7 +158,6 @@ inkscape_SOURCES = \
 	interface.cpp interface.h \
 	object-ui.cpp object-ui.h \
 	slideshow.cpp slideshow.h \
-	$(module_src) \
 	\
 	preferences-skeleton.h
 
@@ -177,7 +173,9 @@ inkscape_private_libs = \
 	libnr/libnr.a \
 	libarikkei/libarikkei.a \
 	livarot/libvarot.a \
-	$(module_libs) \
+	extension/libextension.a \
+	extension/implementation/libimplementation.a \
+	extension/internal/libinternal.a \
 	$(inkjar_libs)
 
 
@@ -199,14 +197,14 @@ inkview_SOURCES = \
 	view.cpp view.h \
 	svg-view.cpp svg-view.h \
 	dir-util.cpp dir-util.h \
-	modules/ps.cpp modules/ps.h \
-	module.cpp module.h \
 	print.cpp print.h \
 	prefs-utils.cpp prefs-utils.h
 
 inkview_LDADD = \
 	$(spproglibs) \
-	$(module_libs) \
+	extension/libextension.a \
+	extension/implementation/libimplementation.a \
+	extension/internal/libinternal.a \
 	xml/libspxml.a \
 	svg/libspsvg.a \
 	display/libspdisplay.a \

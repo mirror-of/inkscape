@@ -65,9 +65,9 @@
 #include "sp-object-repr.h"
 
 #ifdef WIN32
-#include "modules/win32.h"
+#include "extension/internal/win32.h"
 #endif
-#include "modules/init.h"
+#include "extension/init.h"
 
 #include "helper/sp-intl.h"
 

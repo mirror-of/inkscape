@@ -17,7 +17,7 @@
 
 #include <gtk/gtk.h>
 #include <document.h>
-#include <module.h>
+#include <extension/extension.h>
 
 
 SPDocument * sp_module_system_open                (const gchar * key,

@@ -19,10 +19,10 @@
 #include <xml/repr.h>
 #include <helper/sp-intl.h>
 
-#include <module.h>
+#include <extension.h>
 #include "system.h"
-#include "extension.h"
-#include "svg.h"
+#include "implementation/script.h"
+#include "internal/svg.h"
 
 /** This is the extention that all files are that are pulled from
     the extension directory and parsed */

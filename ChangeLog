@@ -1,3 +1,9 @@
+2004-02-22  Ted Gould <ted@gould.cx>
+
+	* src/modules -> src/extensions:
+	Changing the directory name so that it fits the new naming
+	conventions that we're working with.
+
 2004-02-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/desktop.cpp (sp_desktop_init, sp_desktop_set_display_area):

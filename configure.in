@@ -388,7 +388,9 @@ src/widgets/Makefile
 src/helper/Makefile
 src/dialogs/Makefile
 src/display/Makefile
-src/modules/Makefile
+src/extension/Makefile
+src/extension/internal/Makefile
+src/extension/implementation/Makefile
 src/inkjar/Makefile
 extensions/Makefile
 doc/Makefile

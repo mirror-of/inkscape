@@ -19,7 +19,7 @@
 typedef struct _SPModulePrintPlain SPModulePrintPlain;
 typedef struct _SPModulePrintPlainClass SPModulePrintPlainClass;
 
-#include <module.h>
+#include <extension/extension.h>
 
 struct _SPModulePrintPlain {
 	SPModulePrint module;

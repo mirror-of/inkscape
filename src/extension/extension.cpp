@@ -1,6 +1,6 @@
 #define __SP_MODULE_C__
 /**
-	\file module.cpp
+	\file extension.cpp
  
 	Frontend to certain, possibly pluggable, actions
 */
@@ -25,9 +25,9 @@
 #include "inkscape.h"
 #include "sp-object.h"
 #include "document.h"
-#include "module.h"
+#include "extension.h"
 
-#include "modules/db.h"
+#include "db.h"
 
 /* SPModule */
 

@@ -26,6 +26,6 @@ libspxml_a_SOURCES = \
 	repr-css.cpp \
 	repr-action.cpp repr-action.h
 
-repr_action_test_SOURCES = repr-action-test.cpp repr-action.cpp repr.cpp repr-util.cpp
+repr_action_test_SOURCES = repr-action-test.cpp
 
-repr_action_test_LDADD = $(INKSCAPE_LIBS)
+repr_action_test_LDADD = $(INKSCAPE_LIBS) libspxml.a

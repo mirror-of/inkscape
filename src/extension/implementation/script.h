@@ -13,7 +13,7 @@
 #ifndef __MODULES_EXTENSION_H__
 #define __MODULES_EXTENSION_H__
 
-#include "module.h"
+#include "../extension.h"
 
 
 

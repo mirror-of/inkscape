@@ -15,7 +15,7 @@
 #ifndef __MODULES_DB_H__
 #define __MODULES_DB_H__
 
-#include <module.h>
+#include <extension/extension.h>
 
 SPModule * sp_module_db_get (const gchar *key);
 void sp_module_db_register (SPModule *module);

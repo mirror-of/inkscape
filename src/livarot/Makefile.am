@@ -29,5 +29,5 @@ libvarot_a_SOURCES = \
 	ShapeSweepUtils.cpp Shape.h \
 	MySeg.cpp MySeg.h
 
-Path_test_SOURCES = Path-test.cpp AVL.cpp DblLinked.cpp PathConversion.cpp PathOutline.cpp Shape.cpp ShapeSweepUtils.cpp
-Path_test_LDADD = ../libnr/libnr.a -lglib-2.0
+Path_test_SOURCES = Path-test.cpp
+Path_test_LDADD = ../libnr/libnr.a -lglib-2.0 libvarot.a

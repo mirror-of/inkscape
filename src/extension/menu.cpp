@@ -16,7 +16,7 @@
 #include <gtk/gtk.h>
 #include <helper/sp-intl.h>
 
-#include <module.h>
+#include <extension.h>
 
 #include "menu.h"
 #include "system.h"

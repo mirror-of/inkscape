@@ -29,9 +29,9 @@
 #include <sp-object.h>
 #include <sp-namedview.h>
 
-#include "system.h"
+#include "../system.h"
 
-#include "extension.h"
+#include "script.h"
 
 /** This is the command buffer that gets allocated from the stack */
 #define BUFSIZE (255)

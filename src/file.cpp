@@ -48,8 +48,9 @@
 
 #include "sp-namedview.h"
 
-#include "module.h"
-#include "modules/system.h"
+#include "extension/extension.h"
+#include "extension/menu.h"
+#include "extension/system.h"
 
 
 /**

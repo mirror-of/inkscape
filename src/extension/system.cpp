@@ -19,11 +19,11 @@
 #include <inkscape.h>
 #include <desktop-handles.h>
 
-#include <module.h>
+#include <extension.h>
 
 #include "system.h"
 #include "db.h"
-#include "extension.h"
+#include "implementation/script.h"
 
 static void open_internal (SPModule * in_plug, gpointer in_data);
 static void save_internal (SPModule * in_plug, gpointer in_data);

@@ -21,7 +21,7 @@ typedef struct _SPModulePrintGnomeClass SPModulePrintGnomeClass;
 
 #include <libgnomeprint/gnome-print.h>
 
-#include <module.h>
+#include <extension.h>
 
 struct _SPModulePrintGnome {
 	SPModulePrint module;
