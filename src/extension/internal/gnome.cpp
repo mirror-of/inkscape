@@ -17,6 +17,7 @@
 
 #include <string.h>
 
+#include <libnr/n-art-bpath.h>
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
@@ -44,7 +45,7 @@
 #include <extension/extension.h>
 #include <extension/system.h>
 
-ArtBpath* nr_artpath_to_art_bpath(NArtBpath *s);
+static ArtBpath *nr_artpath_to_art_bpath(NArtBpath const *s);
 
 namespace Inkscape {
 namespace Extension {
@@ -393,7 +394,11 @@ PrintGNOME::init (void)
 }; /* namespace Extension */
 }; /* namespace Inkscape */
 
-ArtBpath* nr_artpath_to_art_bpath(NArtBpath *s) { // remember to free the result!
+
+// Remember to free the result!
+static ArtBpath *
+nr_artpath_to_art_bpath(NArtBpath const *s)
+{
 	int i;
 	if (!s) {
 		return NULL;
