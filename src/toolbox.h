@@ -27,3 +27,14 @@ GtkWidget *sp_toolbox_button_normal_new_from_verb (GtkWidget *t, unsigned int si
 void aux_toolbox_space (GtkWidget *tb, gint space);
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+*/

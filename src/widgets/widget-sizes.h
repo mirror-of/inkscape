@@ -30,3 +30,14 @@
 #define RULER_HEIGHT          12
 #define RULER_FONT_SIZE 7000
 #define RULER_FONT_VERTICAL_SPACING 1.2
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+*/

@@ -1054,3 +1054,14 @@ sp_fill_style_determine_paint_selector_mode (SPStyle *style)
 } // end of sp_fill_style_determine_paint_selector_mode()
 
 
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+*/

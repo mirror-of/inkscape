@@ -1,8 +1,6 @@
 #ifndef __NR_MAYBE_H__
 #define __NR_MAYBE_H__
 
-/* ex:set et ts=4 sw=4: */
-
 /*
  * Functionalesque "Maybe" class
  *
@@ -106,3 +104,14 @@ private:
 } /* namespace NR */
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+*/

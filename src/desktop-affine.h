@@ -50,3 +50,14 @@ NR::Point sp_desktop_root2dt_xy_point (SPDesktop const *dt, const NR::Point p);
 NR::Point sp_desktop_dt2root_xy_point (SPDesktop const *dt, const NR::Point p);
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+*/

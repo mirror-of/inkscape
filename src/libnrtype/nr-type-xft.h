@@ -23,3 +23,14 @@ void nr_type_xft_build_def (NRTypeFaceDefFT2 *dft2, const gchar *name, const gch
 void nr_type_read_xft_list (void);
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+*/

@@ -1,7 +1,5 @@
 #define __SP_FILE_C__
 
-/* ex:set et sw=4 ts=4: */
-
 /*
  * File/Print operations
  *
@@ -86,7 +84,6 @@ sp_file_new (void)
 
     sp_create_window (dtw, TRUE);
     sp_namedview_window_from_document (SP_DESKTOP(dtw->view));
-
 }
 
 
@@ -226,7 +223,7 @@ sp_file_save_document (SPDocument *doc)
 
     SPRepr *repr = sp_document_repr_root (doc);
 
-    const gchar *fn = sp_repr_attr (repr, "sodipodi:modified");
+    gchar const *fn = sp_repr_attr(repr, "sodipodi:modified");
     if (fn != NULL) {
         if (doc->uri == NULL) {
             success = sp_file_save_dialog (doc);
@@ -323,14 +320,13 @@ file_import (SPDocument *doc, const gchar *filename)
     if ((e == NULL) || (strcmp (e, "svg") == 0) || (strcmp (e, "xml") == 0)) {
 
         SPReprDoc *rnewdoc = sp_repr_read_file (filename, SP_SVG_NS_URI);
-        if (rnewdoc == NULL)
-            {
+        if (rnewdoc == NULL) {
             /*
               We might need an error dialog here
               for failing to load an SVG document
             */
             return;
-            }
+	}
         SPRepr *repr = sp_repr_document_root (rnewdoc);
         const gchar *style = sp_repr_attr (repr, "style");
 
@@ -629,3 +625,14 @@ sp_file_print_preview (gpointer object, gpointer data)
 
 }
 
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+*/

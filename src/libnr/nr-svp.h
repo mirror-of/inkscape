@@ -90,3 +90,14 @@ NRSVP *nr_svp_from_svl (NRSVL *svl, NRFlat *flat);
 int nr_svl_point_wind (NRSVL *svl, float x, float y);
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+*/

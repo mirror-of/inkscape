@@ -29,3 +29,14 @@ SPSelTransHandle const handles_rotate[] = {
 SPSelTransHandle const handle_center =
   {GTK_ANCHOR_CENTER, GDK_CROSSHAIR,      12,      sp_sel_trans_center,  sp_sel_trans_center_request,  0.5, 0.5};
 
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+*/

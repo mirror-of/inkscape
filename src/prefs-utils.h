@@ -19,3 +19,14 @@ double prefs_get_double_attribute_limited (gchar const *path, gchar const *attr,
 
 gchar const *prefs_get_string_attribute (gchar const *path, gchar const *attr);
 void prefs_set_string_attribute (gchar const *path, gchar const *attr, gchar const *value);
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+*/

@@ -39,3 +39,14 @@
 #define MOD__SHIFT_ONLY ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK))
 #define MOD__CTRL_ONLY (!(event->key.state & GDK_SHIFT_MASK) && (event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK))
 #define MOD__ALT_ONLY (!(event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && (event->key.state & GDK_MOD1_MASK))
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+*/

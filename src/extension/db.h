@@ -24,3 +24,14 @@ const gchar *sp_module_db_get_unique_id (gchar *c, int len, const gchar *val);
 void sp_module_db_foreach (void (*in_func)(SPModule * in_plug, gpointer in_data), gpointer in_data);
 
 #endif /* __MODULES_DB_H__ */
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+  vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+*/
