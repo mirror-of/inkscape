@@ -194,6 +194,17 @@ struct SPObject : public GObject {
 	 */
 	void setLabel(gchar const *label);
 
+    /** Retrieves the title of this object */
+    gchar const *title() const { return "unimplemented"; /* TODO */ }
+    /** Sets the title of this object */
+    void setTitle(gchar const *title) { /* TODO */ }
+
+    /** Retrieves the description of this object */
+    gchar const *desc() const { return "unimplemented"; /* TODO */ }
+    /** Sets the description of this object */
+    void setDesc(gchar const *desc) { /* TODO */ }
+
+    /** Retrieves the visibility state of this object */
         bool visible() const;
         /** @brief Sets the visibility of this object
 	 * 

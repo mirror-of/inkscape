@@ -140,7 +140,7 @@ sp_item_widget_new (void)
     gtk_object_set_data (GTK_OBJECT (spw), "label", tf);
 
     /* Create the button for setting the object label */
-    pb = gtk_button_new_with_label (_("Set Label"));
+    pb = gtk_button_new_with_label (_("Update Properties"));
     gtk_table_attach ( GTK_TABLE (t), pb, 2, 3, 0, 1, 
                        (GtkAttachOptions)( GTK_SHRINK | GTK_FILL ), 
                        (GtkAttachOptions)0, 0, 0 );
@@ -161,6 +161,7 @@ sp_item_widget_new (void)
 
     /* Create the entry box for the object title */
     tf = gtk_entry_new ();
+    gtk_widget_set_sensitive (GTK_WIDGET (tf), FALSE);
     gtk_entry_set_max_length (GTK_ENTRY (tf), 256);
     gtk_widget_show (tf);
     gtk_table_attach ( GTK_TABLE (t), tf, 1, 3, 1, 2, 
@@ -177,15 +178,16 @@ sp_item_widget_new (void)
                        (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 0, 0 );
     gtk_object_set_data (GTK_OBJECT (spw), "desc_frame", l);
 
-    /* Create the entry box for the object description */
+    /* Create the text view box for the object description */
     GtkWidget *textframe = gtk_frame_new(NULL);
     gtk_container_set_border_width(GTK_CONTAINER(textframe), 3);
+    gtk_widget_set_sensitive (GTK_WIDGET (textframe), FALSE);
     gtk_widget_show (textframe);
     gtk_container_add (GTK_CONTAINER (f), textframe);
     gtk_frame_set_shadow_type (GTK_FRAME (textframe), GTK_SHADOW_IN);
     tf = gtk_text_view_new();
     desc_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tf));
-    gtk_text_buffer_set_text(desc_buffer, "Default description", -1);
+    gtk_text_buffer_set_text(desc_buffer, "", -1);
     gtk_widget_show (tf); 
     gtk_container_add (GTK_CONTAINER (textframe), tf);
     gtk_object_set_data (GTK_OBJECT (spw), "desc", tf);
@@ -533,8 +535,8 @@ sp_item_widget_label_changed (GtkWidget *widget, SPWidget *spw)
     GtkWidget *w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label"));
     gchar *label = (gchar *)gtk_entry_get_text (GTK_ENTRY (w));
     w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "label_label"));
-    
     g_assert(label != NULL);
+
     /* Give feedback on success of setting the drawing object's label
      * using the widget's label text 
      */
@@ -547,6 +549,22 @@ sp_item_widget_label_changed (GtkWidget *widget, SPWidget *spw)
         gtk_label_set_text (GTK_LABEL (w), _("Label"));
         obj->setLabel(label);
         sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "inkscape:label");
+    }
+
+    /* Retrieve the title */
+    w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "title"));
+    gchar *title = (gchar *)gtk_entry_get_text (GTK_ENTRY (w));
+    if (!obj->title() || strcmp(title, obj->title())!=0) {
+        obj->setTitle(title);
+        sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "title");
+    }
+
+    /* Retrieve the description */
+    w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "desc"));
+    gchar *desc = (gchar *)gtk_entry_get_text (GTK_ENTRY (w));
+    if (!obj->desc() || strcmp(desc, obj->desc())!=0) {
+        obj->setDesc(desc);
+        sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "desc");
     }
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (FALSE));

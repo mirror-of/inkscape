@@ -18,7 +18,8 @@
 	  visible()/setVisible() functions and activating checkbox.
 	* dialogs/item-properties.cpp:  Adding title and desc boxes.
 	  Adjusting layout of dialog a bit.  Changing to use of tables
-	  instead of horiz/vert boxes for layout.
+	  instead of horiz/vert boxes for layout.  Setting to inactive
+	  until some underlying bits get finished.
 	
 2004-10-29  Kees Cook  <kees@outflux.net>
 
