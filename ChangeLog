@@ -5,12 +5,14 @@
 	  Use black, dashed bounding boxes for indicating itemselection,
 	  rather than red, solid boxes (as suggested by Bulia).
 
-2004-04-15  Carl Hetherington <inkscape@carlh.net>
-
 	* src/desktop.cpp
 	Small fix for the problem whereby the first file loaded in an
 	Inkscape session will not have its grid set up properly.  This was
 	my patch #935013.
+
+	* src/dialogs/filedialog-win32.cpp
+	Use the extension system to build the list of allowable file types
+	for save.  This means that save as PS and EPS work properly.
 
 2004-04-14  Ted Gould <ted@gould.cx>
 
