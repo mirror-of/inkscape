@@ -1316,7 +1316,7 @@ sp_text_font_style_to_lookup (SPStyle const *style)
 		break;
 	case SP_CSS_FONT_WEIGHT_400:
 	case SP_CSS_FONT_WEIGHT_NORMAL:
-		wstr = NULL;
+		wstr = "";
 		break;
 	case SP_CSS_FONT_WEIGHT_500:
 		wstr = "medium";

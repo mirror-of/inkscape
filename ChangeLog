@@ -1,3 +1,8 @@
+2004-01-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/sp-text.cpp (sp_text_font_style_to_lookup): Fix segfault I
+	introduced, reported by ishmal.
+
 2004-01-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-gradient.cpp (sp_gradient_repr_set_vector): "Fix" a memory
