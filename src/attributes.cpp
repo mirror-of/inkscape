@@ -40,6 +40,7 @@ static const SPStyleProp props[] = {
 	{SP_ATTR_XLINK_SHOW, "xlink:show"},
 	{SP_ATTR_XLINK_ACTUATE, "xlink:actuate"},
 	{SP_ATTR_TARGET, "target"},
+	{SP_ATTR_INKSCAPE_GROUPMODE, "inkscape:groupmode"},
 	/* SPRoot */
 	{SP_ATTR_VERSION, "version"},
 	{SP_ATTR_WIDTH, "width"},

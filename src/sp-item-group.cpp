@@ -24,6 +24,7 @@
 #include "svg/svg.h"
 #include "document.h"
 #include "style.h"
+#include "attributes.h"
 
 #include "sp-root.h"
 #include "sp-use.h"
@@ -32,6 +33,8 @@
 
 static void sp_group_class_init (SPGroupClass *klass);
 static void sp_group_init (SPGroup *group);
+static void sp_group_build(SPObject *object, SPDocument *document, SPRepr *repr);
+static void sp_group_release(SPObject *object);
 static void sp_group_dispose (GObject *object);
 
 static void sp_group_child_added (SPObject * object, SPRepr * child, SPRepr * ref);
@@ -40,6 +43,7 @@ static void sp_group_order_changed (SPObject * object, SPRepr * child, SPRepr * 
 static void sp_group_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_group_modified (SPObject *object, guint flags);
 static SPRepr *sp_group_write (SPObject *object, SPRepr *repr, guint flags);
+static void sp_group_set(SPObject *object, unsigned key, char const *value);
 
 static void sp_group_bbox(SPItem const *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static void sp_group_print (SPItem * item, SPPrintContext *ctx);
@@ -92,7 +96,10 @@ sp_group_class_init (SPGroupClass *klass)
 	sp_object_class->order_changed = sp_group_order_changed;
 	sp_object_class->update = sp_group_update;
 	sp_object_class->modified = sp_group_modified;
+	sp_object_class->set = sp_group_set;
 	sp_object_class->write = sp_group_write;
+	sp_object_class->release = sp_group_release;
+	sp_object_class->build = sp_group_build;
 
 	item_class->bbox = sp_group_bbox;
 	item_class->print = sp_group_print;
@@ -109,11 +116,28 @@ sp_group_init (SPGroup *group)
 	new (&group->_display_modes) std::map<unsigned int, SPGroup::LayerMode>();
 }
 
+static void sp_group_build(SPObject *object, SPDocument *document, SPRepr *repr)
+{
+	sp_object_read_attr(object, "inkscape:groupmode");
+
+	if (((SPObjectClass *)parent_class)->build) {
+		((SPObjectClass *)parent_class)->build(object, document, repr);
+	}
+}
+
+static void sp_group_release(SPObject *object) {
+	if ( SP_GROUP(object)->_layer_mode == SPGroup::LAYER ) {
+		sp_document_remove_resource(SP_OBJECT_DOCUMENT(object), "layer", object);
+	}
+	if (((SPObjectClass *)parent_class)->release) {
+		((SPObjectClass *)parent_class)->release(object);
+	}
+}
+
 static void
 sp_group_dispose(GObject *object)
 {
-	SPGroup *group=(SPGroup *)object;
-	group->_display_modes.~map();
+	SP_GROUP(object)->_display_modes.~map();
 }
 
 static void
@@ -275,6 +299,18 @@ sp_group_write (SPObject *object, SPRepr *repr, guint flags)
 		}
 	}
 
+	if ( flags & SP_OBJECT_WRITE_EXT ) {
+		const char *value;
+		if ( group->_layer_mode == SPGroup::LAYER ) {
+			value = "layer";
+		} else if ( flags & SP_OBJECT_WRITE_ALL ) {
+			value = "group";
+		} else {
+			value = NULL;
+		}
+		sp_repr_set_attr(repr, "inkscape:groupmode", NULL);
+	}
+
 	if (((SPObjectClass *) (parent_class))->write)
 		((SPObjectClass *) (parent_class))->write (object, repr, flags);
 
@@ -326,6 +362,25 @@ static gchar * sp_group_description (SPItem * item)
 	}
 
 	return g_strdup_printf(_("Group of %d objects"), len);
+}
+
+static void sp_group_set(SPObject *object, unsigned key, char const *value) {
+	SPGroup *group=SP_GROUP(object);
+
+	switch (key) {
+		case SP_ATTR_INKSCAPE_GROUPMODE: {
+			if (!strcmp(value, "layer")) {
+				group->setLayerMode(SPGroup::LAYER);
+			} else {
+				group->setLayerMode(SPGroup::GROUP);
+			}
+		} break;
+		default: {
+			if (((SPObjectClass *) (parent_class))->set) {
+				(* ((SPObjectClass *) (parent_class))->set)(object, key, value);
+			}
+		}
+	}
 }
 
 static NRArenaItem *
@@ -526,6 +581,11 @@ sp_item_group_get_child_by_name (SPGroup *group, SPObject *ref, const gchar *nam
 
 void SPGroup::setLayerMode(LayerMode mode) {
 	if ( _layer_mode != mode ) {
+		if ( mode == LAYER ) {
+			sp_document_add_resource(SP_OBJECT_DOCUMENT(this), "layer", this);
+		} else {
+			sp_document_remove_resource(SP_OBJECT_DOCUMENT(this), "layer", this);
+		}
 		_layer_mode = mode;
 		_updateLayerMode();
 	}

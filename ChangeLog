@@ -1,5 +1,9 @@
 2004-09-02  MenTaLguY <mental@rydia.net>
 
+	* src/attributes.cpp, src/attributes.h, src/sp-item-group.cpp:
+
+	  reintroduced the inkscape:groupmode attribute
+
 	* src/gc-core.h, src/gc-finalized.h, src/gc-anchored.h,
 	  src/libnr/nr-object.cpp:
 	  
