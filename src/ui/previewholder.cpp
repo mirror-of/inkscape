@@ -46,20 +46,34 @@ PreviewHolder::~PreviewHolder()
 void PreviewHolder::clear()
 {
     items.clear();
+    rebuildUI();
 }
 
 void PreviewHolder::addPreview( Previewable* preview )
 {
     items.push_back(preview);
 
-
-    Gtk::Widget* label = manage(preview->getPreview(PREVIEW_STYLE_BLURB, _baseSize));
-    Gtk::Widget* thing = manage(preview->getPreview(PREVIEW_STYLE_PREVIEW, _baseSize));
-
-
     int i = items.size() - 1;
-    _insides->attach( *thing, 0, 1, i, i+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
-    _insides->attach( *label, 1, 2, i, i+1, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK );
+    if ( _view == VIEW_TYPE_LIST ) {
+        Gtk::Widget* label = manage(preview->getPreview(PREVIEW_STYLE_BLURB, _baseSize));
+        Gtk::Widget* thing = manage(preview->getPreview(PREVIEW_STYLE_PREVIEW, _baseSize));
+
+        _insides->attach( *thing, 0, 1, i, i+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
+        _insides->attach( *label, 1, 2, i, i+1, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK );
+    } else {
+        Gtk::Widget* thing = manage(items[i]->getPreview(PREVIEW_STYLE_PREVIEW, _baseSize));
+        int width = _baseSize == Gtk::ICON_SIZE_MENU ? 16 : 8;
+        int col = i % width;
+        int row = i / width;
+        if ( col == 0 ) {
+            // we just started a new row
+            _insides->resize( row + 1, width );
+        }
+        _insides->attach( *thing, col, col+1, row, row+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
+    }
+
+    _scroller->show_all_children();
+    _scroller->queue_draw();
 }
 
 void PreviewHolder::setStyle(Gtk::BuiltinIconSize size, ViewType view)
@@ -78,6 +92,7 @@ void PreviewHolder::rebuildUI()
 
     if ( _view == VIEW_TYPE_LIST ) {
         Gtk::Table* stuff = manage(new Gtk::Table( 1, 2 ));
+        _insides = stuff;
         stuff->set_col_spacings( 8 );
 
         for ( unsigned int i = 0; i < items.size(); i++ ) {
@@ -93,8 +108,12 @@ void PreviewHolder::rebuildUI()
     } else {
         int width = _baseSize == Gtk::ICON_SIZE_MENU ? 16 : 8;
         int height = (items.size() + (width - 1)) / width;
+        if ( height < 1 ) {
+            height = 1;
+        }
 
-        Gtk::Table* stuff = manage(new Gtk::Table( width, height ));
+        Gtk::Table* stuff = manage(new Gtk::Table( height, width ));
+        _insides = stuff;
         int col = 0;
         int row = 0;
 
