@@ -1066,7 +1066,8 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
 
                 if (sp_repr_attr(repr, "id") == NULL ||
                         !(g_strrstr(filename, sp_repr_attr(repr,"id")) != NULL &&
-                          strcmp(g_dirname(filename), g_dirname(SP_DOCUMENT_URI(SP_ACTIVE_DOCUMENT))) == 0)) {
+                          (!SP_DOCUMENT_URI(SP_ACTIVE_DOCUMENT) || 
+                            strcmp(g_dirname(filename), g_dirname(SP_DOCUMENT_URI(SP_ACTIVE_DOCUMENT))) == 0))) {
                     temp_string = sp_repr_attr(repr, "inkscape:export-filename");
                     if (temp_string == NULL || strcmp(temp_string, filename)) {
                         sp_repr_set_attr(repr, "inkscape:export-filename", filename);
