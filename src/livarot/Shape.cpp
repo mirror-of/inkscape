@@ -8,9 +8,9 @@
 
 #include <glib/gmem.h>
 #include "Shape.h"
-//#include "MyMath.h"
 #include <libnr/nr-point.h>
 #include <libnr/nr-point-fns.h>
+#include "livarot/sweep-event-queue.h"
 
 /*
  * Shape instances handling.
