@@ -289,7 +289,8 @@ sp_toolbox_new (GtkWidget * contents, const gchar * name, const gchar * internal
 	gtk_box_pack_start (GTK_BOX (hbb), w, FALSE, FALSE, 2);
 	gtk_widget_show (w);
 	t->arrow = w;
-	w = gtk_image_new_from_stock (pixmapname, GTK_ICON_SIZE_MENU);
+//	w = gtk_image_new_from_stock (pixmapname, GTK_ICON_SIZE_MENU);
+	w = sp_icon_new (SP_ICON_SIZE_TITLEBAR, pixmapname);
 	gtk_box_pack_start (GTK_BOX (hbb), w, FALSE, FALSE, 0);
 	gtk_widget_show (w);
 	w = gtk_label_new (t->name);
