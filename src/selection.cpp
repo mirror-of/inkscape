@@ -518,11 +518,11 @@ sp_selection_repr (SPSelection * selection)
 	return SP_OBJECT (selection->items->data)->repr;
 }
 
-NRRectF *
-sp_selection_bbox (SPSelection *selection, NRRectF *bbox)
+NRRect *
+sp_selection_bbox (SPSelection *selection, NRRect *bbox)
 {
 	SPItem *item;
-	NRRectF b;
+	NRRect b;
 	GSList *l;
 
 	g_return_val_if_fail (selection != NULL, NULL);
@@ -549,8 +549,8 @@ sp_selection_bbox (SPSelection *selection, NRRectF *bbox)
 	return bbox;
 }
 
-NRRectF *
-sp_selection_bbox_document (SPSelection *selection, NRRectF *bbox)
+NRRect *
+sp_selection_bbox_document (SPSelection *selection, NRRect *bbox)
 {
 	GSList *l;
 
@@ -567,8 +567,8 @@ sp_selection_bbox_document (SPSelection *selection, NRRectF *bbox)
 	bbox->x1 = bbox->y1 = -1e18;
 
 	for (l = selection->items; l != NULL; l = l-> next) {
-		NRMatrixF i2docf;
-		NRMatrixD i2docd;
+		NRMatrix i2docf;
+		NRMatrix i2docd;
 
 		sp_item_i2doc_affine (SP_ITEM (l->data), &i2docf);
 		nr_matrix_d_from_f (&i2docd, &i2docf);
@@ -579,12 +579,12 @@ sp_selection_bbox_document (SPSelection *selection, NRRectF *bbox)
 }
 
 int
-sp_selection_snappoints (SPSelection *selection, NRPointF *points, int size)
+sp_selection_snappoints (SPSelection *selection, NRPoint *points, int size)
 /* compute the list of points in the selection 
  * which are to be considered for snapping */
 {
         GSList *l;
-	NRRectF bbox;
+	NRRect bbox;
 
 	g_return_val_if_fail (selection != NULL, 0);
 	g_return_val_if_fail (SP_IS_SELECTION (selection), 0);

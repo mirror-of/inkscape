@@ -106,7 +106,7 @@ void sp_desktop_pop_event_context (SPDesktop *desktop, unsigned int key);
 
 void sp_desktop_set_coordinate_status (SPDesktop *desktop, gdouble x, gdouble y, guint underline);
 
-NRRectF *sp_desktop_get_display_area (SPDesktop *dt, NRRectF *area);
+NRRect *sp_desktop_get_display_area (SPDesktop *dt, NRRect *area);
 
 void sp_desktop_set_display_area (SPDesktop *dt, float x0, float y0, float x1, float y1, float border);
 void sp_desktop_zoom_absolute (SPDesktop *dt, float cx, float cy, float zoom);

@@ -2134,8 +2134,8 @@ sp_canvas_world_to_window (SPCanvas *canvas, double worldx, double worldy, doubl
 	if (winy) *winy = worldy - canvas->y0;
 }
 
-NRRectF *
-sp_canvas_get_viewbox (SPCanvas *canvas, NRRectF *viewbox)
+NRRect *
+sp_canvas_get_viewbox (SPCanvas *canvas, NRRect *viewbox)
 {
 	g_return_val_if_fail (canvas != NULL, NULL);
 	g_return_val_if_fail (SP_IS_CANVAS (canvas), NULL);

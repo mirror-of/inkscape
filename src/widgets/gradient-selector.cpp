@@ -296,13 +296,13 @@ sp_gradient_selector_set_bbox (SPGradientSelector *sel, gdouble x0, gdouble y0, 
 }
 
 void
-sp_gradient_selector_set_gs2d_matrix_f (SPGradientSelector *gsel, NRMatrixF *gs2d)
+sp_gradient_selector_set_gs2d_matrix_f (SPGradientSelector *gsel, NRMatrix *gs2d)
 {
 	sp_gradient_position_set_gs2d_matrix_f (SP_GRADIENT_POSITION (gsel->position), gs2d);
 }
 
 void
-sp_gradient_selector_get_gs2d_matrix_f (SPGradientSelector *gsel, NRMatrixF *gs2d)
+sp_gradient_selector_get_gs2d_matrix_f (SPGradientSelector *gsel, NRMatrix *gs2d)
 {
 	sp_gradient_position_get_gs2d_matrix_f (SP_GRADIENT_POSITION (gsel->position), gs2d);
 }

@@ -39,7 +39,7 @@ struct _SPRoot {
 
 	/* viewBox; */
 	unsigned int viewBox_set : 1;
-	NRRectD viewBox;
+	NRRect viewBox;
 
 	/* preserveAspectRatio */
 	unsigned int aspect_set : 1;
@@ -47,7 +47,7 @@ struct _SPRoot {
 	unsigned int aspect_clip : 1;
 
 	/* Child to parent additional transform */
-	NRMatrixD c2p;
+	NRMatrix c2p;
 
 	/* List of namedviews */
 	/* fixme: use single container instead */

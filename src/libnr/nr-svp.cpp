@@ -75,7 +75,7 @@ nr_svp_from_svl (NRSVL *svl, NRFlat *flat)
 	svp->length = nsegs;
 	if (nsegs > 0) {
 		unsigned int sidx, pidx;
-		svp->points = nr_new (NRPointF, npoints);
+		svp->points = nr_new (NRPoint, npoints);
 		sidx = 0;
 		pidx = 0;
 		si = svl;
@@ -161,7 +161,7 @@ nr_svp_point_wind (NRSVP *svp, float x, float y)
 				last = seg->start + seg->length - 1;
 				for (pidx = seg->start; (pidx < last) && (svp->points[pidx].y <= y); pidx++) {
 					if (svp->points[pidx + 1].y > y) {
-						NRPointF *pt;
+						NRPoint *pt;
 						/* Segment crosses with our Y */
 						pt = svp->points + pidx;
 						if ((pt[0].x <= x) && (pt[1].x <= x)) {
@@ -230,7 +230,7 @@ nr_svp_point_distance (NRSVP *svp, float x, float y)
 			} else {
 				unsigned int pidx;
 				for (pidx = 0; pidx < (unsigned int) seg->length - 1; pidx++) {
-					NRPointF *pt;
+					NRPoint *pt;
 					double dist2;
 					pt = svp->points + seg->start + pidx;
 					dist2 = nr_line_point_distance2 (pt[0].x, pt[0].y, pt[1].x, pt[1].y, x, y);
@@ -246,7 +246,7 @@ nr_svp_point_distance (NRSVP *svp, float x, float y)
 }
 
 void
-nr_svp_bbox (NRSVP *svp, NRRectF *bbox, unsigned int clear)
+nr_svp_bbox (NRSVP *svp, NRRect *bbox, unsigned int clear)
 {
 	unsigned int sidx;
 	float x0, y0, x1, y1;
@@ -452,7 +452,7 @@ nr_svl_from_art_vpath (ArtVpath *vpath, unsigned int windrule)
 }
 
 NRSVL *
-nr_svl_from_art_bpath (ArtBpath *bpath, NRMatrixF *transform, unsigned int windrule, unsigned int close, float flatness)
+nr_svl_from_art_bpath (ArtBpath *bpath, NRMatrix *transform, unsigned int windrule, unsigned int close, float flatness)
 {
 	NRSVLBuild svlb;
 	ArtBpath *bp;
@@ -781,7 +781,7 @@ nr_svl_new (void)
 }
 
 NRSVL *
-nr_svl_new_full (NRVertex *vertex, NRRectF *bbox, int dir)
+nr_svl_new_full (NRVertex *vertex, NRRect *bbox, int dir)
 {
 	NRSVL *svl;
 

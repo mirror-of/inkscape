@@ -52,20 +52,20 @@ nr_font_glyph_outline_unref (NRFont *font, unsigned int glyph)
 	((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->font_glyph_outline_unref (font, glyph);
 }
 
-NRPointF *
-nr_font_glyph_advance_get (NRFont *font, unsigned int glyph, NRPointF *adv)
+NRPoint *
+nr_font_glyph_advance_get (NRFont *font, unsigned int glyph, NRPoint *adv)
 {
 	return ((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->font_glyph_advance_get (font, glyph, adv);
 }
 
-NRRectF *
-nr_font_glyph_area_get (NRFont *font, unsigned int glyph, NRRectF *area)
+NRRect *
+nr_font_glyph_area_get (NRFont *font, unsigned int glyph, NRRect *area)
 {
 	return ((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->font_glyph_area_get (font, glyph, area);
 }
 
 NRRasterFont *
-nr_rasterfont_new (NRFont *font, NRMatrixF *transform)
+nr_rasterfont_new (NRFont *font, NRMatrix *transform)
 {
 	return ((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->rasterfont_new (font, transform);
 }
@@ -83,7 +83,7 @@ struct _NRFontGeneric {
 };
 
 NRFont *
-nr_font_generic_new (NRTypeFace *tf, unsigned int metrics, NRMatrixF *transform)
+nr_font_generic_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform)
 {
 	NRFontGeneric *fg;
 
@@ -135,7 +135,7 @@ nr_font_generic_glyph_outline_get (NRFont *font, unsigned int glyph, NRBPath *d,
 	if (!fg->outlines[glyph].path) {
 		NRBPath tfgol;
 		if (nr_typeface_glyph_outline_get (font->face, glyph, font->metrics, &tfgol, 0)) {
-			NRMatrixF scale;
+			NRMatrix scale;
 			nr_matrix_f_set_scale (&scale, font->size / 1000.0, font->size / 1000.0);
 			nr_path_duplicate_transform (&fg->outlines[glyph], &tfgol, &scale);
 		}
@@ -152,8 +152,8 @@ nr_font_generic_glyph_outline_unref (NRFont *font, unsigned int glyph)
 	/* NOP by now */
 }
 
-NRPointF *
-nr_font_generic_glyph_advance_get (NRFont *font, unsigned int glyph, NRPointF *adv)
+NRPoint *
+nr_font_generic_glyph_advance_get (NRFont *font, unsigned int glyph, NRPoint *adv)
 {
 	((NRTypeFaceClass *) ((NRObject *) font->face)->klass)->glyph_advance_get (font->face, glyph, font->metrics, adv);
 
@@ -163,8 +163,8 @@ nr_font_generic_glyph_advance_get (NRFont *font, unsigned int glyph, NRPointF *a
 	return adv;
 }
 
-NRRectF *
-nr_font_generic_glyph_area_get (NRFont *font, unsigned int glyph, NRRectF *area)
+NRRect *
+nr_font_generic_glyph_area_get (NRFont *font, unsigned int glyph, NRRect *area)
 {
 	NRBPath bpath;
 
@@ -177,7 +177,7 @@ nr_font_generic_glyph_area_get (NRFont *font, unsigned int glyph, NRRectF *area)
 }
 
 NRRasterFont *
-nr_font_generic_rasterfont_new (NRFont *font, NRMatrixF *transform)
+nr_font_generic_rasterfont_new (NRFont *font, NRMatrix *transform)
 {
 	NRFontGeneric *fg;
 	NRRasterFont *rf;

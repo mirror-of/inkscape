@@ -11,8 +11,8 @@
 
 #include "nr-matrix.h"
 
-NRMatrixD *
-nr_matrix_d_from_f (NRMatrixD *d, const NRMatrixF *s)
+NRMatrix *
+nr_matrix_d_from_f (NRMatrix *d, const NRMatrix *s)
 {
 	if (s) {
 		d->c[0] = s->c[0];
@@ -28,8 +28,8 @@ nr_matrix_d_from_f (NRMatrixD *d, const NRMatrixF *s)
 	return d;
 }
 
-NRMatrixF *
-nr_matrix_f_from_d (NRMatrixF *d, const NRMatrixD *s)
+NRMatrix *
+nr_matrix_f_from_d (NRMatrix *d, const NRMatrix *s)
 {
 	if (s) {
 		d->c[0] = (float) s->c[0];
@@ -45,8 +45,8 @@ nr_matrix_f_from_d (NRMatrixF *d, const NRMatrixD *s)
 	return d;
 }
 
-NRMatrixD *
-nr_matrix_multiply_ddd (NRMatrixD *d, const NRMatrixD *m0, const NRMatrixD *m1)
+NRMatrix *
+nr_matrix_multiply_ddd (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1)
 {
 	if (m0) {
 		if (m1) {
@@ -78,8 +78,8 @@ nr_matrix_multiply_ddd (NRMatrixD *d, const NRMatrixD *m0, const NRMatrixD *m1)
 	return d;
 }
 
-NRMatrixF *
-nr_matrix_multiply_fff (NRMatrixF *d, const NRMatrixF *m0, const NRMatrixF *m1)
+NRMatrix *
+nr_matrix_multiply_fff (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1)
 {
 	if (m0) {
 		if (m1) {
@@ -111,8 +111,8 @@ nr_matrix_multiply_fff (NRMatrixF *d, const NRMatrixF *m0, const NRMatrixF *m1)
 	return d;
 }
 
-NRMatrixF *
-nr_matrix_multiply_fdd (NRMatrixF *d, const NRMatrixD *m0, const NRMatrixD *m1)
+NRMatrix *
+nr_matrix_multiply_fdd (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1)
 {
 	if (m0) {
 		if (m1) {
@@ -146,8 +146,8 @@ nr_matrix_multiply_fdd (NRMatrixF *d, const NRMatrixD *m0, const NRMatrixD *m1)
 	return d;
 }
 
-NRMatrixF *
-nr_matrix_multiply_fdf (NRMatrixF *d, const NRMatrixD *m0, const NRMatrixF *m1)
+NRMatrix *
+nr_matrix_multiply_fdf (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1)
 {
 	if (m0) {
 		if (m1) {
@@ -184,8 +184,8 @@ nr_matrix_multiply_fdf (NRMatrixF *d, const NRMatrixD *m0, const NRMatrixF *m1)
 	return d;
 }
 
-NRMatrixF *
-nr_matrix_multiply_ffd (NRMatrixF *d, const NRMatrixF *m0, const NRMatrixD *m1)
+NRMatrix *
+nr_matrix_multiply_ffd (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1)
 {
 	if (m0) {
 		if (m1) {
@@ -222,8 +222,8 @@ nr_matrix_multiply_ffd (NRMatrixF *d, const NRMatrixF *m0, const NRMatrixD *m1)
 	return d;
 }
 
-NRMatrixD *
-nr_matrix_multiply_ddf (NRMatrixD *d, const NRMatrixD *m0, const NRMatrixF *m1)
+NRMatrix *
+nr_matrix_multiply_ddf (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1)
 {
 	if (m0) {
 		if (m1) {
@@ -260,8 +260,8 @@ nr_matrix_multiply_ddf (NRMatrixD *d, const NRMatrixD *m0, const NRMatrixF *m1)
 	return d;
 }
 
-NRMatrixD *
-nr_matrix_multiply_dfd (NRMatrixD *d, const NRMatrixF *m0, const NRMatrixD *m1)
+NRMatrix *
+nr_matrix_multiply_dfd (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1)
 {
 	if (m0) {
 		if (m1) {
@@ -298,8 +298,8 @@ nr_matrix_multiply_dfd (NRMatrixD *d, const NRMatrixF *m0, const NRMatrixD *m1)
 	return d;
 }
 
-NRMatrixD *
-nr_matrix_d_invert (NRMatrixD *d, const NRMatrixD *m)
+NRMatrix *
+nr_matrix_d_invert (NRMatrix *d, const NRMatrix *m)
 {
 	if (m) {
 		double det;
@@ -325,8 +325,8 @@ nr_matrix_d_invert (NRMatrixD *d, const NRMatrixD *m)
 	return d;
 }
 
-NRMatrixF *
-nr_matrix_f_invert (NRMatrixF *d, const NRMatrixF *m)
+NRMatrix *
+nr_matrix_f_invert (NRMatrix *d, const NRMatrix *m)
 {
 	if (m) {
 		float det;
@@ -352,8 +352,8 @@ nr_matrix_f_invert (NRMatrixF *d, const NRMatrixF *m)
 	return d;
 }
 
-NRMatrixD *
-nr_matrix_d_set_translate (NRMatrixD *m, double x, double y)
+NRMatrix *
+nr_matrix_d_set_translate (NRMatrix *m, double x, double y)
 {
 	m->c[0] = 1.0;
 	m->c[1] = 0.0;
@@ -365,8 +365,8 @@ nr_matrix_d_set_translate (NRMatrixD *m, double x, double y)
 	return m;
 }
 
-NRMatrixF *
-nr_matrix_f_set_translate (NRMatrixF *m, float x, float y)
+NRMatrix *
+nr_matrix_f_set_translate (NRMatrix *m, float x, float y)
 {
 	m->c[0] = 1.0;
 	m->c[1] = 0.0;
@@ -378,8 +378,8 @@ nr_matrix_f_set_translate (NRMatrixF *m, float x, float y)
 	return m;
 }
 
-NRMatrixD *
-nr_matrix_d_set_scale (NRMatrixD *m, double sx, double sy)
+NRMatrix *
+nr_matrix_d_set_scale (NRMatrix *m, double sx, double sy)
 {
 	m->c[0] = sx;
 	m->c[1] = 0.0;
@@ -391,8 +391,8 @@ nr_matrix_d_set_scale (NRMatrixD *m, double sx, double sy)
 	return m;
 }
 
-NRMatrixF *
-nr_matrix_f_set_scale (NRMatrixF *m, float sx, float sy)
+NRMatrix *
+nr_matrix_f_set_scale (NRMatrix *m, float sx, float sy)
 {
 	m->c[0] = sx;
 	m->c[1] = 0.0;
@@ -404,8 +404,8 @@ nr_matrix_f_set_scale (NRMatrixF *m, float sx, float sy)
 	return m;
 }
 
-NRMatrixD *
-nr_matrix_d_set_rotate (NRMatrixD *m, double theta)
+NRMatrix *
+nr_matrix_d_set_rotate (NRMatrix *m, double theta)
 {
 	double s, c;
 	s = sin (theta);
@@ -419,8 +419,8 @@ nr_matrix_d_set_rotate (NRMatrixD *m, double theta)
 	return m;
 }
 
-NRMatrixF *
-nr_matrix_f_set_rotate (NRMatrixF *m, float theta)
+NRMatrix *
+nr_matrix_f_set_rotate (NRMatrix *m, float theta)
 {
 	float s, c;
 	s = (float) sin (theta);

@@ -25,12 +25,12 @@ enum {
 	NR_STROKE_JOIN_BEVEL
 };
 
-NRSVL *nr_bpath_stroke (const NRBPath *path, NRMatrixF *transform,
+NRSVL *nr_bpath_stroke (const NRBPath *path, NRMatrix *transform,
 			float width,
 			unsigned int cap, unsigned int join, float miterlimit,
 			float flatness);
 
-NRSVL *nr_vpath_stroke (const ArtVpath *path, NRMatrixF *transform,
+NRSVL *nr_vpath_stroke (const ArtVpath *path, NRMatrix *transform,
 			float width,
 			unsigned int cap, unsigned int join, float miterlimit,
 			float flatness);

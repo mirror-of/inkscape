@@ -86,7 +86,7 @@ sp_paint_server_release (SPObject *object)
 }
 
 SPPainter *
-sp_paint_server_painter_new (SPPaintServer *ps, const gdouble *affine, const NRRectF *bbox)
+sp_paint_server_painter_new (SPPaintServer *ps, const gdouble *affine, const NRRect *bbox)
 {
 	SPPainter *painter;
 	SPPaintServerClass *psc;

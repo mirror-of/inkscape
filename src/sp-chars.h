@@ -29,7 +29,7 @@ struct _SPCharElement {
 	SPCharElement *next;
 	guint glyph;
 	NRFont *font;
-	NRMatrixF transform;
+	NRMatrix transform;
 };
 
 struct _SPChars {
@@ -49,14 +49,14 @@ GType sp_chars_get_type (void);
 
 void sp_chars_clear (SPChars *chars);
 
-void sp_chars_add_element (SPChars *chars, guint glyph, NRFont *font, const NRMatrixF *transform);
+void sp_chars_add_element (SPChars *chars, guint glyph, NRFont *font, const NRMatrix *transform);
 
 SPCurve *sp_chars_normalized_bpath (SPChars *chars);
 
 /* This is completely unrelated to SPItem::print */
-void sp_chars_do_print (SPChars *chars, SPPrintContext *ctx, const NRMatrixF *ctm,
-			const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox);
-void sp_chars_set_paintbox (SPChars *chars, NRRectF *paintbox);
+void sp_chars_do_print (SPChars *chars, SPPrintContext *ctx, const NRMatrix *ctm,
+			const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
+void sp_chars_set_paintbox (SPChars *chars, NRRect *paintbox);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -419,9 +419,9 @@ sp_icon_image_load_svg (const gchar *name, unsigned int size, unsigned int scale
 		SPObject *object;
 		object = sp_document_lookup_id (doc, name);
 		if (object && SP_IS_ITEM (object)) {
-			NRMatrixD i2docD;
-			NRMatrixF i2docF;
-			NRRectF dbox;
+			NRMatrix i2docD;
+			NRMatrix i2docF;
+			NRRect dbox;
 			/* Find bbox in document */
 			sp_item_i2doc_affine (SP_ITEM (object), &i2docF);
 			nr_matrix_d_from_f (&i2docD, &i2docF);
@@ -429,7 +429,7 @@ sp_icon_image_load_svg (const gchar *name, unsigned int size, unsigned int scale
 			/* This is in document coordinates, i.e. pixels */
 			if (!nr_rect_f_test_empty (&dbox)) {
 				NRRectL ibox, area, ua;
-				NRMatrixF t;
+				NRMatrix t;
 				NRPixBlock B;
 				NRGC gc;
 				float sf;

@@ -44,14 +44,14 @@ nr_rasterfont_unref (NRRasterFont *rf)
 	return NULL;
 }
 
-NRPointF *
-nr_rasterfont_glyph_advance_get (NRRasterFont *rf, int glyph, NRPointF *adv)
+NRPoint *
+nr_rasterfont_glyph_advance_get (NRRasterFont *rf, int glyph, NRPoint *adv)
 {
 	return ((NRTypeFaceClass *) ((NRObject *) rf->font->face)->klass)->rasterfont_glyph_advance_get (rf, glyph, adv);
 }
 
-NRRectF *
-nr_rasterfont_glyph_area_get (NRRasterFont *rf, int glyph, NRRectF *area)
+NRRect *
+nr_rasterfont_glyph_area_get (NRRasterFont *rf, int glyph, NRRect *area)
 {
 	return ((NRTypeFaceClass *) ((NRObject *) rf->font->face)->klass)->rasterfont_glyph_area_get (rf, glyph, area);
 }
@@ -135,7 +135,7 @@ struct _NRRFGlyphSlot {
 static NRRFGlyphSlot *nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned int flags);
 
 NRRasterFont *
-nr_rasterfont_generic_new (NRFont *font, NRMatrixF *transform)
+nr_rasterfont_generic_new (NRFont *font, NRMatrix *transform)
 {
 	NRRasterFont *rf;
 
@@ -181,10 +181,10 @@ nr_rasterfont_generic_free (NRRasterFont *rf)
 	nr_free (rf);
 }
 
-NRPointF *
-nr_rasterfont_generic_glyph_advance_get (NRRasterFont *rf, unsigned int glyph, NRPointF *adv)
+NRPoint *
+nr_rasterfont_generic_glyph_advance_get (NRRasterFont *rf, unsigned int glyph, NRPoint *adv)
 {
-	NRPointF a;
+	NRPoint a;
 
 	if (nr_font_glyph_advance_get (rf->font, glyph, &a)) {
 		adv->x = NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y);
@@ -195,8 +195,8 @@ nr_rasterfont_generic_glyph_advance_get (NRRasterFont *rf, unsigned int glyph, N
 	return NULL;
 }
 
-NRRectF *
-nr_rasterfont_generic_glyph_area_get (NRRasterFont *rf, unsigned int glyph, NRRectF *area)
+NRRect *
+nr_rasterfont_generic_glyph_area_get (NRRasterFont *rf, unsigned int glyph, NRRect *area)
 {
 	NRRFGlyphSlot *slot;
 
@@ -311,7 +311,7 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 	slot = rf->pages[page] + code;
 
 	if ((flags & NR_RASTERFONT_ADVANCE_FLAG) && !slot->has_advance) {
-		NRPointF a;
+		NRPoint a;
 		if (nr_font_glyph_advance_get (rf->font, glyph, &a)) {
 			switch (slot->type) {
 			case NRRF_TYPE_TINY:
@@ -345,8 +345,8 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 		if (nr_font_glyph_outline_get (rf->font, glyph, &gbp, 0) && (gbp.path && (gbp.path->code == ART_MOVETO))) {
 			NRSVL *svl;
 			NRSVP *svp;
-			NRMatrixF a;
-			NRRectF bbox;
+			NRMatrix a;
+			NRRect bbox;
 			int x0, y0, x1, y1, w, h;
 
 			a = rf->transform;

@@ -33,7 +33,7 @@
 /* fixme: find a better place */
 GSList *clipboard = NULL;
 
-static void sp_matrix_d_set_rotate (NRMatrixD *m, double theta);
+static void sp_matrix_d_set_rotate (NRMatrix *m, double theta);
 
 void
 sp_selection_delete (gpointer object, gpointer data)
@@ -628,7 +628,7 @@ sp_selection_apply_affine (SPSelection * selection, double affine[6]) {
 
     
 	for (l = selection->items; l != NULL; l = l-> next) {
-		NRMatrixD curaff, newaff;
+		NRMatrix curaff, newaff;
 
 		item = SP_ITEM (l->data);
 
@@ -671,8 +671,8 @@ sp_selection_remove_transform (void)
 void
 sp_selection_scale_absolute (SPSelection *selection, double x0, double x1, double y0, double y1)
 {
-	NRRectF bbox;
-	NRMatrixD p2o, o2n, scale, final, s;
+	NRRect bbox;
+	NRMatrix p2o, o2n, scale, final, s;
 	double dx, dy, nx, ny;
   
 	g_assert (SP_IS_SELECTION (selection));
@@ -697,9 +697,9 @@ sp_selection_scale_absolute (SPSelection *selection, double x0, double x1, doubl
 
 
 void
-sp_selection_scale_relative (SPSelection *selection, NRPointF *align, double dx, double dy)
+sp_selection_scale_relative (SPSelection *selection, NRPoint *align, double dx, double dy)
 {
-	NRMatrixD scale, n2d, d2n, final, s;
+	NRMatrix scale, n2d, d2n, final, s;
 
 	nr_matrix_d_set_translate (&n2d, -align->x, -align->y);
 	nr_matrix_d_set_translate (&d2n, align->x, align->y);
@@ -713,9 +713,9 @@ sp_selection_scale_relative (SPSelection *selection, NRPointF *align, double dx,
 
 
 void
-sp_selection_rotate_relative (SPSelection *selection, NRPointF *center, gdouble angle)
+sp_selection_rotate_relative (SPSelection *selection, NRPoint *center, gdouble angle)
 {
-	NRMatrixD rotate, n2d, d2n, final, s;
+	NRMatrix rotate, n2d, d2n, final, s;
   
 	nr_matrix_d_set_translate (&n2d, -center->x, -center->y);
 	nr_matrix_d_invert (&d2n, &n2d);
@@ -729,9 +729,9 @@ sp_selection_rotate_relative (SPSelection *selection, NRPointF *center, gdouble 
 
 
 void
-sp_selection_skew_relative (SPSelection *selection, NRPointF *align, double dx, double dy)
+sp_selection_skew_relative (SPSelection *selection, NRPoint *align, double dx, double dy)
 {
-	NRMatrixD skew, n2d, d2n, final, s;
+	NRMatrix skew, n2d, d2n, final, s;
   
 	nr_matrix_d_set_translate (&n2d, -align->x, -align->y);
 	nr_matrix_d_invert (&d2n, &n2d);
@@ -753,7 +753,7 @@ sp_selection_skew_relative (SPSelection *selection, NRPointF *align, double dx, 
 void
 sp_selection_move_relative (SPSelection * selection, double dx, double dy)
 {
-	NRMatrixD move;
+	NRMatrix move;
   
 	nr_matrix_d_set_translate (&move, dx, dy);
 
@@ -843,8 +843,8 @@ sp_selection_item_next (void)
 	SPSelection *selection;
 	SPItem *item = NULL;
 	GSList *children = NULL, *l = NULL;
-	NRRectF dbox;
-	NRRectF sbox;
+	NRRect dbox;
+	NRRect sbox;
 	ArtPoint s,d;
 	gint dx=0, dy=0;
 
@@ -858,7 +858,7 @@ sp_selection_item_next (void)
   
 	// get item list
 	if (SP_CYCLING == SP_CYCLE_VISIBLE) {
-		NRRectD d;
+		NRRect d;
 		sp_desktop_get_display_area (desktop, &dbox);
 		d.x0 = dbox.x0;
 		d.y0 = dbox.y0;
@@ -920,8 +920,8 @@ sp_selection_item_prev (void)
   SPSelection * selection;
   SPItem * item = NULL;
   GSList * children = NULL, * l = NULL;
-  NRRectF dbox;
-  NRRectF sbox;
+  NRRect dbox;
+  NRRect sbox;
   ArtPoint s,d;
   gint dx=0, dy=0;
 
@@ -935,7 +935,7 @@ sp_selection_item_prev (void)
   
   // get item list
   if (SP_CYCLING == SP_CYCLE_VISIBLE) {
-	  NRRectD d;
+	  NRRect d;
 	  sp_desktop_get_display_area (desktop, &dbox);
 	  d.x0 = dbox.x0;
 	  d.y0 = dbox.y0;
@@ -987,7 +987,7 @@ sp_selection_item_prev (void)
 }
 
 static void
-sp_matrix_d_set_rotate (NRMatrixD *m, double theta)
+sp_matrix_d_set_rotate (NRMatrix *m, double theta)
 {
 	double s, c;
 	s = sin (theta * M_PI / 180.0);

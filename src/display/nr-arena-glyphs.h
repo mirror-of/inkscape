@@ -32,7 +32,7 @@ struct _NRArenaGlyphs {
 	/* Glyphs data */
 	SPCurve *curve;
 	SPStyle *style;
-	NRMatrixF transform;
+	NRMatrix transform;
 	NRFont *font;
 	gint glyph;
 
@@ -51,7 +51,7 @@ NRType nr_arena_glyphs_get_type (void);
 void nr_arena_glyphs_set_path (NRArenaGlyphs *glyphs,
 			       SPCurve *curve, unsigned int lieutenant,
 			       NRFont *font, int glyph,
-			       const NRMatrixF *transform);
+			       const NRMatrix *transform);
 void nr_arena_glyphs_set_style (NRArenaGlyphs *glyphs, SPStyle *style);
 
 /* Integrated group of component glyphss */
@@ -68,7 +68,7 @@ typedef struct _NRArenaGlyphsGroupClass NRArenaGlyphsGroupClass;
 struct _NRArenaGlyphsGroup {
 	NRArenaGroup group;
 	SPStyle *style;
-	NRRectF paintbox;
+	NRRect paintbox;
 	/* State data */
 	SPPainter *fill_painter;
 	SPPainter *stroke_painter;
@@ -84,7 +84,7 @@ NRType nr_arena_glyphs_group_get_type (void);
 
 void nr_arena_glyphs_group_clear (NRArenaGlyphsGroup *group);
 
-void nr_arena_glyphs_group_add_component (NRArenaGlyphsGroup *group, NRFont *font, int glyph, const NRMatrixF *transform);
+void nr_arena_glyphs_group_add_component (NRArenaGlyphsGroup *group, NRFont *font, int glyph, const NRMatrix *transform);
 
 void nr_arena_glyphs_group_set_style (NRArenaGlyphsGroup *group, SPStyle *style);
 

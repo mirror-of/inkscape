@@ -273,7 +273,7 @@ sp_module_print_win32_finish (SPModulePrint *mod)
 	float scalex, scaley;
 	int x0, y0, x1, y1;
 	int width, height;
-	NRMatrixF affine;
+	NRMatrix affine;
 	unsigned char *px;
 	int sheight, row;
 	BITMAPINFO bmInfo = {

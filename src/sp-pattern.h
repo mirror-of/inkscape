@@ -45,7 +45,7 @@ struct _SPPattern {
 	guint patternContentUnits : 1;
 	guint patternContentUnits_set : 1;
 	/* patternTransform attribute */
-	NRMatrixD patternTransform;
+	NRMatrix patternTransform;
 	guint patternTransform_set : 1;
 	/* Tile rectangle */
 	SPSVGLength x;
@@ -53,7 +53,7 @@ struct _SPPattern {
 	SPSVGLength width;
 	SPSVGLength height;
 	/* VieBox */
-	NRRectD viewBox;
+	NRRect viewBox;
 	guint viewBox_set : 1;
 };
 

@@ -60,18 +60,18 @@ static void sp_module_print_plain_finalize (GObject *object);
 static unsigned int sp_module_print_plain_setup (SPModulePrint *mod);
 static unsigned int sp_module_print_plain_begin (SPModulePrint *mod, SPDocument *doc);
 static unsigned int sp_module_print_plain_finish (SPModulePrint *mod);
-static unsigned int sp_module_print_plain_bind (SPModulePrint *mod, const NRMatrixF *transform, float opacity);
+static unsigned int sp_module_print_plain_bind (SPModulePrint *mod, const NRMatrix *transform, float opacity);
 static unsigned int sp_module_print_plain_release (SPModulePrint *mod);
-static unsigned int sp_module_print_plain_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMatrixF *ctm, const SPStyle *style,
-						const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox);
-static unsigned int sp_module_print_plain_stroke (SPModulePrint *mod, const NRBPath *bpath, const NRMatrixF *ctm, const SPStyle *style,
-						  const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox);
+static unsigned int sp_module_print_plain_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+						const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
+static unsigned int sp_module_print_plain_stroke (SPModulePrint *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+						  const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
 static unsigned int sp_module_print_plain_image (SPModulePrint *mod, guchar *px, unsigned int w, unsigned int h, unsigned int rs,
-						 const NRMatrixF *transform, const SPStyle *style);
+						 const NRMatrix *transform, const SPStyle *style);
 
 static void sp_print_bpath (FILE *stream, const ArtBpath *bp);
 static unsigned int sp_ps_print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
-				       const NRMatrixF *transform);
+				       const NRMatrix *transform);
 
 static SPModulePrintClass *print_plain_parent_class;
 
@@ -354,7 +354,7 @@ sp_module_print_plain_finish (SPModulePrint *mod)
 		double x0, y0, x1, y1;
 		int width, height;
 		float scale;
-		NRMatrixF affine;
+		NRMatrix affine;
 		guchar *px;
 		int y;
 
@@ -382,7 +382,7 @@ sp_module_print_plain_finish (SPModulePrint *mod)
 		for (y = 0; y < height; y += 64) {
 			NRRectL bbox;
 			NRGC gc;
-			NRMatrixF imgt;
+			NRMatrix imgt;
 			NRPixBlock pb;
 			/* Set area of interest */
 			bbox.x0 = 0;
@@ -419,7 +419,7 @@ sp_module_print_plain_finish (SPModulePrint *mod)
 }
 
 static unsigned int
-sp_module_print_plain_bind (SPModulePrint *mod, const NRMatrixF *transform, float opacity)
+sp_module_print_plain_bind (SPModulePrint *mod, const NRMatrix *transform, float opacity)
 {
 	SPModulePrintPlain *pmod;
 
@@ -448,8 +448,8 @@ sp_module_print_plain_release (SPModulePrint *mod)
 }
 
 static unsigned int
-sp_module_print_plain_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMatrixF *ctm, const SPStyle *style,
-			    const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox)
+sp_module_print_plain_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+			    const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {
 	SPModulePrintPlain *pmod;
 
@@ -478,8 +478,8 @@ sp_module_print_plain_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMa
 }
 
 static unsigned int
-sp_module_print_plain_stroke (SPModulePrint *mod, const NRBPath *bpath, const NRMatrixF *ctm, const SPStyle *style,
-			      const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox)
+sp_module_print_plain_stroke (SPModulePrint *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+			      const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {
 	SPModulePrintPlain *pmod;
 
@@ -520,7 +520,7 @@ sp_module_print_plain_stroke (SPModulePrint *mod, const NRBPath *bpath, const NR
 
 static unsigned int
 sp_module_print_plain_image (SPModulePrint *mod, guchar *px, unsigned int w, unsigned int h, unsigned int rs,
-			     const NRMatrixF *transform, const SPStyle *style)
+			     const NRMatrix *transform, const SPStyle *style)
 {
 	SPModulePrintPlain *pmod;
 
@@ -787,7 +787,7 @@ ascii85_done (FILE *ofp)
 
 static unsigned int
 sp_ps_print_image (FILE *ofp, guchar *px, unsigned int width, unsigned int height, unsigned int rs,
-		   const NRMatrixF *transform)
+		   const NRMatrix *transform)
 {
 	unsigned int i, j;
 	/* gchar *data, *src; */

@@ -37,9 +37,9 @@
 #endif
 
 unsigned int
-sp_svg_transform_read (const gchar *str, NRMatrixF *transform)
+sp_svg_transform_read (const gchar *str, NRMatrix *transform)
 {
-	NRMatrixD m, a;
+	NRMatrix m, a;
 	int idx;
 	char keyword[32];
 	double args[6];
@@ -167,7 +167,7 @@ sp_svg_transform_read (const gchar *str, NRMatrixF *transform)
 #define EQ(a,b) (fabs ((a) - (b)) < 1e-9)
 
 unsigned int
-sp_svg_transform_write (gchar *str, unsigned int size, NRMatrixF *transform)
+sp_svg_transform_write (gchar *str, unsigned int size, NRMatrix *transform)
 {
 	gchar c[256];
 	int p;

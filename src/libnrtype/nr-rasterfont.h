@@ -20,7 +20,7 @@ struct _NRRasterFont {
 	unsigned int refcount;
 	NRRasterFont *next;
 	NRFont *font;
-	NRMatrixF transform;
+	NRMatrix transform;
 	unsigned int nglyphs;
 	NRRFGlyphSlot **pages;
 };
@@ -31,17 +31,17 @@ struct _NRRasterFont {
 NRRasterFont *nr_rasterfont_ref (NRRasterFont *rf);
 NRRasterFont *nr_rasterfont_unref (NRRasterFont *rf);
 
-NRPointF *nr_rasterfont_glyph_advance_get (NRRasterFont *rf, int glyph, NRPointF *adv);
-NRRectF *nr_rasterfont_glyph_area_get (NRRasterFont *rf, int glyph, NRRectF *area);
+NRPoint *nr_rasterfont_glyph_advance_get (NRRasterFont *rf, int glyph, NRPoint *adv);
+NRRect *nr_rasterfont_glyph_area_get (NRRasterFont *rf, int glyph, NRRect *area);
 
 void nr_rasterfont_glyph_mask_render (NRRasterFont *rf, int glyph, NRPixBlock *mask, float x, float y);
 
 /* Generic implementation */
 
-NRRasterFont *nr_rasterfont_generic_new (NRFont *font, NRMatrixF *transform);
+NRRasterFont *nr_rasterfont_generic_new (NRFont *font, NRMatrix *transform);
 void nr_rasterfont_generic_free (NRRasterFont *rf);
-NRPointF *nr_rasterfont_generic_glyph_advance_get (NRRasterFont *rf, unsigned int glyph, NRPointF *adv);
-NRRectF *nr_rasterfont_generic_glyph_area_get (NRRasterFont *rf, unsigned int glyph, NRRectF *area);
+NRPoint *nr_rasterfont_generic_glyph_advance_get (NRRasterFont *rf, unsigned int glyph, NRPoint *adv);
+NRRect *nr_rasterfont_generic_glyph_area_get (NRRasterFont *rf, unsigned int glyph, NRRect *area);
 void nr_rasterfont_generic_glyph_mask_render (NRRasterFont *rf, unsigned int glyph, NRPixBlock *m, float x, float y);
 
 #endif

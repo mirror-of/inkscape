@@ -195,7 +195,7 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 	SPSelTrans *seltrans;
 	SPSelection *selection;
 	GdkCursor *cursor;
-	NRPointF p;
+	NRPoint p;
 	gint ret = FALSE;
 
 	desktop = event_context->desktop;
@@ -338,8 +338,8 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 	SPSelection *selection;
 	SPItem *item;
 	gint ret = FALSE;
-	NRPointF p;
-	NRRectD b;
+	NRPoint p;
+	NRRect b;
 	GSList *l;
 	double nudge;
 
@@ -590,8 +590,8 @@ static void
 sp_selection_moveto (SPSelTrans * seltrans, double x, double y, guint state)
 {
 	double dx, dy;
-	NRMatrixD move;
-	NRPointF p, norm = {0,0};
+	NRMatrix move;
+	NRPoint p, norm = {0,0};
 	GString * xs, * ys;
 	gchar status[80];
 	SPDesktop * desktop;

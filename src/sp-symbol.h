@@ -34,7 +34,7 @@ struct _SPSymbol {
 
 	/* viewBox; */
 	unsigned int viewBox_set : 1;
-	NRRectD viewBox;
+	NRRect viewBox;
 
 	/* preserveAspectRatio */
 	unsigned int aspect_set : 1;
@@ -42,7 +42,7 @@ struct _SPSymbol {
 	unsigned int aspect_clip : 1;
 
 	/* Child to parent additional transform */
-	NRMatrixD c2p;
+	NRMatrix c2p;
 };
 
 struct _SPSymbolClass {

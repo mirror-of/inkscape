@@ -46,7 +46,7 @@ static void sp_shape_release (SPObject *object);
 static void sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags);
 static void sp_shape_modified (SPObject *object, unsigned int flags);
 
-static void sp_shape_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags);
+static void sp_shape_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
 void sp_shape_print (SPItem * item, SPPrintContext * ctx);
 static NRArenaItem *sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_shape_hide (SPItem *item, unsigned int key);
@@ -232,7 +232,7 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 
 	if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG)) {
 		SPItemView *v;
-		NRRectF paintbox;
+		NRRect paintbox;
 		/* This is suboptimal, because changing parent style schedules recalculation */
 		/* But on the other hand - how can we know that parent does not tie style and transform */
 		sp_item_invoke_bbox (SP_ITEM (object), &paintbox, NULL, TRUE);
@@ -306,7 +306,7 @@ sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai)
 	nmid = 0;
 	nend = 0;
 	for (bp = shape->curve->bpath; bp->code != ART_END; bp++) {
-		NRMatrixF m;
+		NRMatrix m;
 		if (shape->marker[SP_MARKER_LOC_START] && ((bp->code == ART_MOVETO) || (bp->code == ART_MOVETO_OPEN))) {
 			float dx, dy, h;
 			if (bp[1].code == ART_LINETO) {
@@ -394,14 +394,14 @@ sp_shape_modified (SPObject *object, unsigned int flags)
 }
 
 static void
-sp_shape_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags)
+sp_shape_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
 {
 	SPShape *shape;
 
 	shape = SP_SHAPE (item);
 
 	if (shape->curve) {
-		NRMatrixF a;
+		NRMatrix a;
 		NRBPath bp;
 		nr_matrix_f_from_d (&a, transform);
 		bp.path = SP_CURVE_BPATH (shape->curve);
@@ -413,8 +413,8 @@ void
 sp_shape_print (SPItem *item, SPPrintContext *ctx)
 {
 	SPShape *shape;
-	NRRectF pbox, dbox, bbox;
-	NRMatrixF i2d;
+	NRRect pbox, dbox, bbox;
+	NRMatrix i2d;
 
 	shape = SP_SHAPE (item);
 
@@ -447,7 +447,7 @@ sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 {
 	SPObject *object;
 	SPShape *shape;
-	NRRectF paintbox;
+	NRRect paintbox;
 	NRArenaItem *arenaitem;
 
 	object = SP_OBJECT (item);

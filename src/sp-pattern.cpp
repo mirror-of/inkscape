@@ -36,9 +36,9 @@ struct _SPPatPainter {
 	SPPainter painter;
 	SPPattern *pat;
 
-	NRMatrixF ps2px;
-	NRMatrixF px2ps;
-	NRMatrixF pcs2px;
+	NRMatrix ps2px;
+	NRMatrix px2ps;
+	NRMatrix pcs2px;
 
 	NRArena *arena;
 	unsigned int dkey;
@@ -59,7 +59,7 @@ static void sp_pattern_modified (SPObject *object, unsigned int flags);
 static void sp_pattern_href_destroy (SPObject *href, SPPattern *pattern);
 static void sp_pattern_href_modified (SPObject *href, guint flags, SPPattern *pattern);
 
-static SPPainter *sp_pattern_painter_new (SPPaintServer *ps, const gdouble *affine, const NRRectF *bbox);
+static SPPainter *sp_pattern_painter_new (SPPaintServer *ps, const gdouble *affine, const NRRect *bbox);
 static void sp_pattern_painter_free (SPPaintServer *ps, SPPainter *painter);
 
 static SPPaintServerClass * pattern_parent_class;
@@ -220,7 +220,7 @@ sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_PATTERNTRANSFORM: {
-		NRMatrixF t;
+		NRMatrix t;
 		if (value && sp_svg_transform_read (value, &t)) {
 			int i;
 			for (i = 0; i < 6; i++) pat->patternTransform.c[i] = t.c[i];
@@ -466,7 +466,7 @@ sp_pattern_href_modified (SPObject *href, guint flags, SPPattern *pattern)
 static void sp_pat_fill (SPPainter *painter, NRPixBlock *pb);
 
 static SPPainter *
-sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRectF *bbox)
+sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRect *bbox)
 {
 	SPPattern *pat;
 	SPPatPainter *pp;
@@ -488,8 +488,8 @@ sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRectF *bb
 	 */
 
 	if (pat->patternUnits == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
-		NRMatrixF bbox2user;
-		NRMatrixF ps2user;
+		NRMatrix bbox2user;
+		NRMatrix ps2user;
 
 		/* patternTransform goes here (Lauris) */
 
@@ -503,7 +503,7 @@ sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRectF *bb
 
 		/* fixme: (Lauris) */
 		nr_matrix_multiply_fdf (&ps2user, &pat->patternTransform, &bbox2user);
-		nr_matrix_multiply_ffd (&pp->ps2px, &ps2user, (NRMatrixD *) ctm);
+		nr_matrix_multiply_ffd (&pp->ps2px, &ps2user, (NRMatrix *) ctm);
 	} else {
 		/* Problem: What to do, if we have mixed lengths and percentages? */
 		/* Currently we do ignore percentages at all, but that is not good (lauris) */
@@ -511,7 +511,7 @@ sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRectF *bb
 		/* fixme: We may try to normalize here too, look at linearGradient (Lauris) */
 
 		/* fixme: (Lauris) */
-		nr_matrix_multiply_fdd (&pp->ps2px, &pat->patternTransform, (NRMatrixD *) ctm);
+		nr_matrix_multiply_fdd (&pp->ps2px, &pat->patternTransform, (NRMatrix *) ctm);
 	}
 
 	nr_matrix_f_invert (&pp->px2ps, &pp->ps2px);
@@ -522,7 +522,7 @@ sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRectF *bb
 	 */
 
 	if (pat->viewBox_set) {
-		NRMatrixF vb2ps, vb2us;
+		NRMatrix vb2ps, vb2us;
 		/* Forget content units at all */
 		vb2ps.c[0] = pat->width.computed / (pat->viewBox.x1 - pat->viewBox.x0);
 		vb2ps.c[1] = 0.0;
@@ -534,14 +534,14 @@ sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRectF *bb
 		/* Currently we do ignore percentages at all, but that is not good (Lauris) */
 		/* fixme: (Lauris) */
 		nr_matrix_multiply_ffd (&vb2us, &vb2ps, &pat->patternTransform);
-		nr_matrix_multiply_ffd (&pp->pcs2px, &vb2us, (NRMatrixD *) ctm);
+		nr_matrix_multiply_ffd (&pp->pcs2px, &vb2us, (NRMatrix *) ctm);
 	} else {
-		NRMatrixF t;
+		NRMatrix t;
 
 		/* No viewbox, have to parse units */
 		if (pat->patternContentUnits == SP_PATTERN_UNITS_OBJECTBOUNDINGBOX) {
-			NRMatrixF bbox2user;
-			NRMatrixF pcs2user;
+			NRMatrix bbox2user;
+			NRMatrix pcs2user;
 
 			/* patternTransform goes here (Lauris) */
 
@@ -555,12 +555,12 @@ sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRectF *bb
 
 			/* fixme: (Lauris) */
 			nr_matrix_multiply_fdf (&pcs2user, &pat->patternTransform, &bbox2user);
-			nr_matrix_multiply_ffd (&pp->pcs2px, &pcs2user, (NRMatrixD *) ctm);
+			nr_matrix_multiply_ffd (&pp->pcs2px, &pcs2user, (NRMatrix *) ctm);
 		} else {
 			/* Problem: What to do, if we have mixed lengths and percentages? */
 			/* Currently we do ignore percentages at all, but that is not good (lauris) */
 			/* fixme: (Lauris) */
-			nr_matrix_multiply_fdd (&pp->pcs2px, &pat->patternTransform, (NRMatrixD *) ctm);
+			nr_matrix_multiply_fdd (&pp->pcs2px, &pat->patternTransform, (NRMatrix *) ctm);
 		}
 
 		nr_matrix_f_set_translate (&t, pat->x.computed, pat->y.computed);
@@ -628,7 +628,7 @@ static void
 sp_pat_fill (SPPainter *painter, NRPixBlock *pb)
 {
 	SPPatPainter *pp;
-	NRRectF ba, psa;
+	NRRect ba, psa;
 	NRRectL area;
 	float x, y;
 

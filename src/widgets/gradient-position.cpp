@@ -401,7 +401,7 @@ sp_gradient_position_motion_notify (GtkWidget *widget, GdkEventMotion *event)
 		if (pos->dragging) {
 			if (event->state & GDK_CONTROL_MASK) {
 #if 0
-				NRMatrixF n2gs, gs2n, n2w, w2n, s2n;
+				NRMatrix n2gs, gs2n, n2w, w2n, s2n;
 				float x1, y1, x2, y2;
 				float cx, cy, ncx, ncy, nx, ny;
 				x1 = pos->gdata.linear.x1;
@@ -601,7 +601,7 @@ sp_gradient_position_set_bbox (SPGradientPosition *pos, gdouble x0, gdouble y0, 
 }
 
 void
-sp_gradient_position_set_gs2d_matrix_f (SPGradientPosition *pos, NRMatrixF *gs2d)
+sp_gradient_position_set_gs2d_matrix_f (SPGradientPosition *pos, NRMatrix *gs2d)
 {
 	pos->gs2d = *gs2d;
 
@@ -610,7 +610,7 @@ sp_gradient_position_set_gs2d_matrix_f (SPGradientPosition *pos, NRMatrixF *gs2d
 }
 
 void
-sp_gradient_position_get_gs2d_matrix_f (SPGradientPosition *pos, NRMatrixF *gs2d)
+sp_gradient_position_get_gs2d_matrix_f (SPGradientPosition *pos, NRMatrix *gs2d)
 {
 	*gs2d = pos->gs2d;
 }

@@ -165,7 +165,7 @@ sp_toggle_selector (SPDesktop *dt)
 static gint
 sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *event)
 {
-	static NRPointF s;
+	static NRPoint s;
 	static unsigned int panning = 0;
 	gint ret;
 	SPDesktop * desktop;
@@ -317,7 +317,7 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 			}
 			/* shift + wheel, zoom in--out */
 		} else if (event->scroll.state & GDK_SHIFT_MASK) {
-			NRRectF d;
+			NRRect d;
 			switch (event->scroll.direction) {
 			case GDK_SCROLL_UP:
 				sp_desktop_get_display_area (desktop, &d);
@@ -538,7 +538,7 @@ sp_event_context_config_widget (SPEventContext *ec)
 static void
 set_event_location (SPDesktop * desktop, GdkEvent * event)
 {
-	NRPointF p;
+	NRPoint p;
 
 	if (event->type != GDK_MOTION_NOTIFY)
 		return;

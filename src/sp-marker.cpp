@@ -44,7 +44,7 @@ static SPRepr *sp_marker_write (SPObject *object, SPRepr *repr, guint flags);
 
 static NRArenaItem *sp_marker_private_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_marker_private_hide (SPItem *item, unsigned int key);
-static void sp_marker_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags);
+static void sp_marker_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
 static void sp_marker_print (SPItem *item, SPPrintContext *ctx);
 
 static void sp_marker_view_remove (SPMarker *marker, SPMarkerView *view, unsigned int destroyitems);
@@ -309,9 +309,9 @@ sp_marker_update (SPObject *object, SPCtx *ctx, guint flags)
 	SPItem *item;
 	SPMarker *marker;
 	SPItemCtx rctx;
-	NRRectD *vb;
+	NRRect *vb;
 	double x, y, width, height;
-	NRMatrixD q;
+	NRMatrix q;
 	SPMarkerView *v;
 
 	item = SP_ITEM (object);
@@ -433,7 +433,7 @@ sp_marker_update (SPObject *object, SPCtx *ctx, guint flags)
 
 	/* As last step set additional transform of arena group */
 	for (v = marker->views; v != NULL; v = v->next) {
-		NRMatrixF vbf;
+		NRMatrix vbf;
 		unsigned int i;
 		nr_matrix_f_from_d (&vbf, &marker->c2p);
 		for (i = 0; i < v->size; i++) {
@@ -515,7 +515,7 @@ sp_marker_private_hide (SPItem *item, unsigned int key)
 }
 
 static void
-sp_marker_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags)
+sp_marker_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
 {
 	/* Break propagation */
 }
@@ -557,7 +557,7 @@ sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size)
 NRArenaItem *
 sp_marker_show_instance (SPMarker *marker, NRArenaItem *parent,
 			 unsigned int key, unsigned int pos,
-			 NRMatrixF *base, float linewidth)
+			 NRMatrix *base, float linewidth)
 {
 	SPMarkerView *v;
 
@@ -572,7 +572,7 @@ sp_marker_show_instance (SPMarker *marker, NRArenaItem *parent,
 										      parent->arena, key,
 										      SP_ITEM_REFERENCE_FLAGS);
 				if (v->items[pos]) {
-					NRMatrixF vbf;
+					NRMatrix vbf;
 					/* fixme: Position (Lauris) */
 					nr_arena_item_add_child (parent, v->items[pos], NULL);
 					/* nr_arena_item_unref (v->items[pos]); */
@@ -581,7 +581,7 @@ sp_marker_show_instance (SPMarker *marker, NRArenaItem *parent,
 				}
 			}
 			if (v->items[pos]) {
-				NRMatrixF m;
+				NRMatrix m;
 				if (marker->orient_auto) {
 					m = *base;
 				} else {

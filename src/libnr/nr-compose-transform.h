@@ -16,28 +16,28 @@
 
 void nr_R8G8B8A8_N_EMPTY_R8G8B8A8_N_TRANSFORM (unsigned char *px, int w, int h, int rs,
 					       const unsigned char *spx, int sw, int sh, int srs,
-					       const NRMatrixF *d2s, unsigned int alpha, int xd, int yd);
+					       const NRMatrix *d2s, unsigned int alpha, int xd, int yd);
 void nr_R8G8B8A8_N_EMPTY_R8G8B8A8_P_TRANSFORM (unsigned char *px, int w, int h, int rs,
 					       const unsigned char *spx, int sw, int sh, int srs,
-					       const NRMatrixF *d2s, unsigned int alpha, int xd, int yd);
+					       const NRMatrix *d2s, unsigned int alpha, int xd, int yd);
 void nr_R8G8B8A8_P_EMPTY_R8G8B8A8_N_TRANSFORM (unsigned char *px, int w, int h, int rs,
 					       const unsigned char *spx, int sw, int sh, int srs,
-					       const NRMatrixF *d2s, unsigned int alpha, int xd, int yd);
+					       const NRMatrix *d2s, unsigned int alpha, int xd, int yd);
 void nr_R8G8B8A8_P_EMPTY_R8G8B8A8_P_TRANSFORM (unsigned char *px, int w, int h, int rs,
 					       const unsigned char *spx, int sw, int sh, int srs,
-					       const NRMatrixF *d2s, unsigned int alpha, int xd, int yd);
+					       const NRMatrix *d2s, unsigned int alpha, int xd, int yd);
 
 void nr_R8G8B8A8_N_R8G8B8A8_N_R8G8B8A8_N_TRANSFORM (unsigned char *px, int w, int h, int rs,
 						    const unsigned char *spx, int sw, int sh, int srs,
-						    const NRMatrixF *d2s, unsigned int alpha, int xd, int yd);
+						    const NRMatrix *d2s, unsigned int alpha, int xd, int yd);
 void nr_R8G8B8A8_N_R8G8B8A8_N_R8G8B8A8_P_TRANSFORM (unsigned char *px, int w, int h, int rs,
 						    const unsigned char *spx, int sw, int sh, int srs,
-						    const NRMatrixF *d2s, unsigned int alpha, int xd, int yd);
+						    const NRMatrix *d2s, unsigned int alpha, int xd, int yd);
 void nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM (unsigned char *px, int w, int h, int rs,
 						    const unsigned char *spx, int sw, int sh, int srs,
-						    const NRMatrixF *d2s, unsigned int alpha, int xd, int yd);
+						    const NRMatrix *d2s, unsigned int alpha, int xd, int yd);
 void nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_P_TRANSFORM (unsigned char *px, int w, int h, int rs,
 						    const unsigned char *spx, int sw, int sh, int srs,
-						    const NRMatrixF *d2s, unsigned int alpha, int xd, int yd);
+						    const NRMatrix *d2s, unsigned int alpha, int xd, int yd);
 
 #endif

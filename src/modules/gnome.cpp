@@ -48,14 +48,14 @@ static unsigned int sp_module_print_gnome_set_preview (SPModulePrint *mod);
 static unsigned int sp_module_print_gnome_begin (SPModulePrint *mod, SPDocument *doc);
 static unsigned int sp_module_print_gnome_finish (SPModulePrint *mod);
 
-static unsigned int sp_module_print_gnome_bind (SPModulePrint *mod, const NRMatrixF *transform, float opacity);
+static unsigned int sp_module_print_gnome_bind (SPModulePrint *mod, const NRMatrix *transform, float opacity);
 static unsigned int sp_module_print_gnome_release (SPModulePrint *mod);
-static unsigned int sp_module_print_gnome_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMatrixF *ctm, const SPStyle *style,
-						const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox);
-static unsigned int sp_module_print_gnome_stroke (SPModulePrint *mod, const NRBPath *bpath, const NRMatrixF *ctm, const SPStyle *style,
-						  const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox);
+static unsigned int sp_module_print_gnome_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+						const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
+static unsigned int sp_module_print_gnome_stroke (SPModulePrint *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+						  const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
 static unsigned int sp_module_print_gnome_image (SPModulePrint *mod, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
-						 const NRMatrixF *transform, const SPStyle *style);
+						 const NRMatrix *transform, const SPStyle *style);
 
 static SPModulePrintClass *print_gnome_parent_class;
 
@@ -225,7 +225,7 @@ sp_module_print_gnome_finish (SPModulePrint *mod)
 }
 
 static unsigned int
-sp_module_print_gnome_bind (SPModulePrint *mod, const NRMatrixF *transform, float opacity)
+sp_module_print_gnome_bind (SPModulePrint *mod, const NRMatrix *transform, float opacity)
 {
 	SPModulePrintGnome *gpmod;
 	gdouble t[6];
@@ -261,8 +261,8 @@ sp_module_print_gnome_release (SPModulePrint *mod)
 }
 
 static unsigned int
-sp_module_print_gnome_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMatrixF *ctm, const SPStyle *style,
-			    const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox)
+sp_module_print_gnome_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+			    const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {
 	SPModulePrintGnome *gpmod;
 	gdouble t[6];
@@ -297,8 +297,8 @@ sp_module_print_gnome_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMa
 		}
 	} else if (style->fill.type == SP_PAINT_TYPE_PAINTSERVER) {
 		SPPainter *painter;
-		NRMatrixD dctm;
-		NRRectD dpbox;
+		NRMatrix dctm;
+		NRRect dpbox;
 
 		/* fixme: */
 		nr_matrix_d_from_f (&dctm, ctm);
@@ -308,9 +308,9 @@ sp_module_print_gnome_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMa
 		dpbox.y1 = pbox->y1;
 		painter = sp_paint_server_painter_new (SP_STYLE_FILL_SERVER (style), NR_MATRIX_D_TO_DOUBLE (&dctm), &dpbox);
 		if (painter) {
-			NRRectF cbox;
+			NRRect cbox;
 			NRRectL ibox;
-			NRMatrixF d2i;
+			NRMatrix d2i;
 			double dd2i[6];
 			int x, y;
 
@@ -361,8 +361,8 @@ sp_module_print_gnome_fill (SPModulePrint *mod, const NRBPath *bpath, const NRMa
 }
 
 static unsigned int
-sp_module_print_gnome_stroke (SPModulePrint *mod, const NRBPath *bpath, const NRMatrixF *ctm, const SPStyle *style,
-			      const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox)
+sp_module_print_gnome_stroke (SPModulePrint *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+			      const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {
 	SPModulePrintGnome *gpmod;
 	gdouble t[6];
@@ -408,7 +408,7 @@ sp_module_print_gnome_stroke (SPModulePrint *mod, const NRBPath *bpath, const NR
 
 static unsigned int
 sp_module_print_gnome_image (SPModulePrint *mod, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
-			     const NRMatrixF *transform, const SPStyle *style)
+			     const NRMatrix *transform, const SPStyle *style)
 {
 	SPModulePrintGnome *gpmod;
 	gdouble t[6];

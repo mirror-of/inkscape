@@ -841,14 +841,14 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 	}
 
 	if (GTK_WIDGET_REALIZED (widget)) {
-		NRRectF area;
+		NRRect area;
 		double zoom;
 		sp_desktop_get_display_area (dtw->desktop, &area);
 		zoom = SP_DESKTOP_ZOOM (dtw->desktop);
 		if (GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate)
 			GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate (widget, allocation);
 		if (SP_BUTTON_IS_DOWN (dtw->sticky_zoom)) {
-			NRRectF newarea;
+			NRRect newarea;
 			double zpsp;
 			/* Calculate zoom per pixel */
 			zpsp = zoom / hypot (area.x1 - area.x0, area.y1 - area.y0);
@@ -1180,7 +1180,7 @@ void
 sp_desktop_set_display_area (SPDesktop *dt, float x0, float y0, float x1, float y1, float border)
 {
 	SPDesktopWidget *dtw;
-	NRRectF viewbox;
+	NRRect viewbox;
 	float cx, cy;
 	double scale, newscale;
 	int clear;
@@ -1230,11 +1230,11 @@ sp_desktop_set_display_area (SPDesktop *dt, float x0, float y0, float x1, float 
 	sp_desktop_widget_update_zoom (dtw);
 }
 
-NRRectF *
-sp_desktop_get_display_area (SPDesktop *dt, NRRectF *area)
+NRRect *
+sp_desktop_get_display_area (SPDesktop *dt, NRRect *area)
 {
 	SPDesktopWidget *dtw;
-	NRRectF viewbox;
+	NRRect viewbox;
 	float scale;
 
 	dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
@@ -1256,7 +1256,7 @@ void
 sp_desktop_zoom_absolute (SPDesktop *dt, float cx, float cy, float zoom)
 {
 	SPDesktopWidget *dtw;
-	NRRectF viewbox;
+	NRRect viewbox;
 	float width2, height2;
 
 	dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
@@ -1285,7 +1285,7 @@ sp_desktop_zoom_relative (SPDesktop *dt, float cx, float cy, float zoom)
 void
 sp_desktop_zoom_page (SPDesktop *dt)
 {
-	NRRectF d;
+	NRRect d;
 
 	d.x0 = d.y0 = 0.0;
 	d.x1 = sp_document_width (SP_DT_DOCUMENT (dt));
@@ -1299,7 +1299,7 @@ sp_desktop_zoom_page (SPDesktop *dt)
 void
 sp_desktop_zoom_page_width (SPDesktop *dt)
 {
-	NRRectF d;
+	NRRect d;
 
 	sp_desktop_get_display_area (dt, &d);
 
@@ -1317,7 +1317,7 @@ void
 sp_desktop_zoom_selection (SPDesktop *dt)
 {
 	SPSelection * selection;
-	NRRectF d;
+	NRRect d;
 
 	selection = SP_DT_SELECTION (dt);
 	g_return_if_fail (selection != NULL);
@@ -1332,7 +1332,7 @@ sp_desktop_zoom_drawing (SPDesktop *dt)
 {
 	SPDocument * doc;
 	SPItem * docitem;
-	NRRectF d;
+	NRRect d;
 
 	doc = SP_VIEW_DOCUMENT (SP_VIEW (dt));
 	g_return_if_fail (doc != NULL);
@@ -1348,7 +1348,7 @@ void
 sp_desktop_scroll_world (SPDesktop *dt, float dx, float dy)
 {
 	SPDesktopWidget *dtw;
-	NRRectF viewbox;
+	NRRect viewbox;
 
 	dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
 	if (!dtw) return;
@@ -1364,7 +1364,7 @@ sp_desktop_scroll_world (SPDesktop *dt, float dx, float dy)
 static void
 sp_desktop_widget_update_rulers (SPDesktopWidget *dtw)
 {
-	NRRectF viewbox;
+	NRRect viewbox;
 	double scale, s, e;
 	sp_canvas_get_viewbox (dtw->canvas, &viewbox);
 	scale = SP_DESKTOP_ZOOM (dtw->desktop);
@@ -1398,7 +1398,7 @@ sp_desktop_update_scrollbars (SPDesktop *dt)
 {
 	SPDesktopWidget *dtw;
 	SPDocument *doc;
-	NRRectF darea, carea, viewbox;
+	NRRect darea, carea, viewbox;
 	double scale;
 
 	dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
@@ -1468,7 +1468,7 @@ sp_dtw_zoom_output (GtkSpinButton *spin, gpointer data)
 void
 sp_dtw_zoom_value_changed (GtkSpinButton *spin, gpointer data)
 {
-	NRRectF d;
+	NRRect d;
 	float zoom_factor;
 	SPDesktop *desktop;
 	SPDesktopWidget *dtw;
@@ -1533,7 +1533,7 @@ sp_dtw_zoom_populate_popup (GtkEntry *entry, GtkMenu *menu, gpointer data)
 void
 sp_dtw_zoom_menu_handler (SPDesktop *dt, gdouble factor)
 {
-	NRRectF d;
+	NRRect d;
 
 	sp_desktop_get_display_area (dt, &d);
 	sp_desktop_zoom_absolute (dt, ( d.x0 + d.x1 ) / 2, ( d.y0 + d.y1 ) / 2, factor);

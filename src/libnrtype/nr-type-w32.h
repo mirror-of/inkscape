@@ -44,8 +44,8 @@ enum {
 };
 
 struct _NRTypeFaceGlyphW32 {
-	NRRectF area;
-	NRPointF advance;
+	NRRect area;
+	NRPoint advance;
 	int olref;
 	NRBPath outline;
 };

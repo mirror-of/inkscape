@@ -45,23 +45,23 @@
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
-NRRectD *nr_rect_d_intersect (NRRectD *d, const NRRectD *r0, const NRRectD *r1);
-NRRectF *nr_rect_f_intersect (NRRectF *d, const NRRectF *r0, const NRRectF *r1);
+NRRect *nr_rect_d_intersect (NRRect *d, const NRRect *r0, const NRRect *r1);
+NRRect *nr_rect_f_intersect (NRRect *d, const NRRect *r0, const NRRect *r1);
 NRRectL *nr_rect_l_intersect (NRRectL *d, const NRRectL *r0, const NRRectL *r1);
 NRRectS *nr_rect_s_intersect (NRRectS *d, const NRRectS *r0, const NRRectS *r1);
 
-NRRectD *nr_rect_d_union (NRRectD *d, const NRRectD *r0, const NRRectD *r1);
-NRRectF *nr_rect_f_union (NRRectF *d, const NRRectF *r0, const NRRectF *r1);
+NRRect *nr_rect_d_union (NRRect *d, const NRRect *r0, const NRRect *r1);
+NRRect *nr_rect_f_union (NRRect *d, const NRRect *r0, const NRRect *r1);
 NRRectL *nr_rect_l_union (NRRectL *d, const NRRectL *r0, const NRRectL *r1);
 NRRectS *nr_rect_s_union (NRRectS *d, const NRRectS *r0, const NRRectS *r1);
 
-NRRectD *nr_rect_d_union_xy (NRRectD *d, double x, double y);
-NRRectF *nr_rect_f_union_xy (NRRectF *d, float x, float y);
+NRRect *nr_rect_d_union_xy (NRRect *d, double x, double y);
+NRRect *nr_rect_f_union_xy (NRRect *d, float x, float y);
 NRRectL *nr_rect_l_union_xy (NRRectL *d, NRLong x, NRLong y);
 NRRectS *nr_rect_s_union_xy (NRRectS *d, NRShort x, NRShort y);
 
-NRRectD *nr_rect_d_matrix_d_transform (NRRectD *d, NRRectD *s, NRMatrixD *m);
-NRRectF *nr_rect_f_matrix_f_transform (NRRectF *d, NRRectF *s, NRMatrixF *m);
+NRRect *nr_rect_d_matrix_d_transform (NRRect *d, NRRect *s, NRMatrix *m);
+NRRect *nr_rect_f_matrix_f_transform (NRRect *d, NRRect *s, NRMatrix *m);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -11,8 +11,8 @@
 
 #include "nr-rect.h"
 
-NRRectD *
-nr_rect_d_intersect (NRRectD *d, const NRRectD *r0, const NRRectD *r1)
+NRRect *
+nr_rect_d_intersect (NRRect *d, const NRRect *r0, const NRRect *r1)
 {
 	if (!r0) {
 		if (!r1) {
@@ -39,8 +39,8 @@ nr_rect_d_intersect (NRRectD *d, const NRRectD *r0, const NRRectD *r1)
 	return d;
 }
 
-NRRectF *
-nr_rect_f_intersect (NRRectF *d, const NRRectF *r0, const NRRectF *r1)
+NRRect *
+nr_rect_f_intersect (NRRect *d, const NRRect *r0, const NRRect *r1)
 {
 	if (!r0) {
 		if (!r1) {
@@ -123,8 +123,8 @@ nr_rect_s_intersect (NRRectS *d, const NRRectS *r0, const NRRectS *r1)
 	return d;
 }
 
-NRRectD *
-nr_rect_d_union (NRRectD *d, const NRRectD *r0, const NRRectD *r1)
+NRRect *
+nr_rect_d_union (NRRect *d, const NRRect *r0, const NRRect *r1)
 {
 	if (!r0 || !r1) {
 		d->x0 = -NR_HUGE_D;
@@ -153,8 +153,8 @@ nr_rect_d_union (NRRectD *d, const NRRectD *r0, const NRRectD *r1)
 	return d;
 }
 
-NRRectF *
-nr_rect_f_union (NRRectF *d, const NRRectF *r0, const NRRectF *r1)
+NRRect *
+nr_rect_f_union (NRRect *d, const NRRect *r0, const NRRect *r1)
 {
 	if (!r0 || !r1) {
 		d->x0 = -NR_HUGE_F;
@@ -243,8 +243,8 @@ nr_rect_s_union (NRRectS *d, const NRRectS *r0, const NRRectS *r1)
 	return d;
 }
 
-NRRectD *
-nr_rect_d_union_xy (NRRectD *d, double x, double y)
+NRRect *
+nr_rect_d_union_xy (NRRect *d, double x, double y)
 {
 	if (d) {
 		if ((d->x0 <= d->x1) && (d->y0 <= d->y1)) {
@@ -260,8 +260,8 @@ nr_rect_d_union_xy (NRRectD *d, double x, double y)
 	return d;
 }
 
-NRRectF *
-nr_rect_f_union_xy (NRRectF *d, float x, float y)
+NRRect *
+nr_rect_f_union_xy (NRRect *d, float x, float y)
 {
 	if (d) {
 		if ((d->x0 <= d->x1) && (d->y0 <= d->y1)) {
@@ -311,8 +311,8 @@ nr_rect_s_union_xy (NRRectS *d, NRShort x, NRShort y)
 	return d;
 }
 
-NRRectD *
-nr_rect_d_matrix_d_transform (NRRectD *d, NRRectD *s, NRMatrixD *m)
+NRRect *
+nr_rect_d_matrix_d_transform (NRRect *d, NRRect *s, NRMatrix *m)
 {
 	if (nr_rect_d_test_empty (s)) {
 		nr_rect_d_set_empty (d);
@@ -342,8 +342,8 @@ nr_rect_d_matrix_d_transform (NRRectD *d, NRRectD *s, NRMatrixD *m)
 	return d;
 }
 
-NRRectF *
-nr_rect_f_matrix_f_transform (NRRectF *d, NRRectF *s, NRMatrixF *m)
+NRRect *
+nr_rect_f_matrix_f_transform (NRRect *d, NRRect *s, NRMatrix *m)
 {
 	if (nr_rect_f_test_empty (s)) {
 		nr_rect_f_set_empty (d);

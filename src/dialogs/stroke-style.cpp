@@ -166,10 +166,10 @@ sp_stroke_style_paint_update (SPWidget *spw, SPSelection *sel)
 	SPLinearGradient *lg;
 	SPRadialGradient *rg;
 #if 0
-	NRPointF p0, p1;
+	NRPoint p0, p1;
 #endif
-	NRMatrixF fctm, gs2d;
-	NRRectF fbb;
+	NRMatrix fctm, gs2d;
+	NRRect fbb;
 
 	if (gtk_object_get_data (GTK_OBJECT (spw), "update")) return;
 
@@ -792,7 +792,7 @@ sp_stroke_style_line_update (SPWidget *spw, SPSelection *sel)
 	avgwidth = 0.0;
 	stroked = TRUE;
 	for (l = objects; l != NULL; l = l->next) {
-		NRMatrixF i2d;
+		NRMatrix i2d;
 		gdouble dist;
 		sp_item_i2d_affine (SP_ITEM (l->data), &i2d);
 		object = SP_OBJECT (l->data);
@@ -1071,7 +1071,7 @@ sp_stroke_style_scale_line (SPWidget *spw)
 
 	if (items) {
 		for (i = items; i != NULL; i = i->next) {
-			NRMatrixF i2d, d2i;
+			NRMatrix i2d, d2i;
 			double length, dist;
 			double *dash, offset;
 			int ndash;

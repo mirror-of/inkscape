@@ -56,9 +56,9 @@ void sp_svg_length_set (SPSVGLength *length, unsigned long unit, float value, fl
 void sp_svg_length_unset (SPSVGLength *length, unsigned long unit, float value, float computed);
 void sp_svg_length_update (SPSVGLength *length, double em, double ex, double scale);
 
-unsigned int sp_svg_transform_read (const gchar *str, NRMatrixF *transform);
+unsigned int sp_svg_transform_read (const gchar *str, NRMatrix *transform);
 
-unsigned int sp_svg_transform_write (gchar *str, unsigned int size, NRMatrixF *transform);
+unsigned int sp_svg_transform_write (gchar *str, unsigned int size, NRMatrix *transform);
 
 #if 0
 gint sp_svg_write_length (gchar *buf, gint buflen, gdouble val, const SPUnit *unit);

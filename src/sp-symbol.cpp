@@ -36,7 +36,7 @@ static SPRepr *sp_symbol_write (SPObject *object, SPRepr *repr, guint flags);
 
 static NRArenaItem *sp_symbol_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_symbol_hide (SPItem *item, unsigned int key);
-static void sp_symbol_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags);
+static void sp_symbol_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
 static void sp_symbol_print (SPItem *item, SPPrintContext *ctx);
 
 static SPGroupClass *parent_class;
@@ -280,7 +280,7 @@ sp_symbol_update (SPObject *object, SPCtx *ctx, guint flags)
 
 		if (symbol->viewBox_set) {
 			double x, y, width, height;
-			NRMatrixD q;
+			NRMatrix q;
 			/* Determine actual viewbox in viewport coordinates */
 			if (symbol->aspect_align == SP_ASPECT_NONE) {
 				x = 0.0;
@@ -368,7 +368,7 @@ sp_symbol_update (SPObject *object, SPCtx *ctx, guint flags)
 
 		/* As last step set additional transform of arena group */
 		for (v = item->display; v != NULL; v = v->next) {
-			NRMatrixF vbf;
+			NRMatrix vbf;
 			nr_matrix_f_from_d (&vbf, &symbol->c2p);
 			nr_arena_group_set_child_transform (NR_ARENA_GROUP (v->arenaitem), &vbf);
 		}
@@ -423,7 +423,7 @@ sp_symbol_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int fla
 		if (((SPItemClass *) (parent_class))->show) {
 			ai = ((SPItemClass *) (parent_class))->show (item, arena, key, flags);
 			if (ai) {
-				NRMatrixF vbf;
+				NRMatrix vbf;
 				nr_matrix_f_from_d (&vbf, &symbol->c2p);
 				nr_arena_group_set_child_transform (NR_ARENA_GROUP (ai), &vbf);
 			}
@@ -452,10 +452,10 @@ sp_symbol_hide (SPItem *item, unsigned int key)
 }
 
 static void
-sp_symbol_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags)
+sp_symbol_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
 {
 	SPSymbol *symbol;
-	NRMatrixD a[6];
+	NRMatrix a[6];
 
 	symbol = SP_SYMBOL (item);
 
@@ -474,7 +474,7 @@ static void
 sp_symbol_print (SPItem *item, SPPrintContext *ctx)
 {
 	SPSymbol *symbol;
-	NRMatrixF t;
+	NRMatrix t;
 
 	symbol = SP_SYMBOL (item);
 

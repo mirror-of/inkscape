@@ -168,7 +168,7 @@ sp_spiral_context_root_handler (SPEventContext * event_context, GdkEvent * event
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
-			NRPointF fp;
+			NRPoint fp;
 			dragging = TRUE;
 			/* Position center */
 			sp_desktop_w2d_xy_point (event_context->desktop, &fp, event->button.x, event->button.y);
@@ -184,7 +184,7 @@ sp_spiral_context_root_handler (SPEventContext * event_context, GdkEvent * event
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (dragging && event->motion.state && GDK_BUTTON1_MASK) {
-			NRPointF p;
+			NRPoint p;
 			sp_desktop_w2d_xy_point (event_context->desktop, &p, event->motion.x, event->motion.y);
 			sp_spiral_drag (sc, p.x, p.y, event->motion.state);
 			ret = TRUE;
@@ -215,11 +215,11 @@ sp_spiral_drag (SPSpiralContext * sc, double x, double y, guint state)
 {
 	SPSpiral *spiral;
 	SPDesktop *desktop;
-	NRPointF p0, p1;
+	NRPoint p0, p1;
 	gdouble dx, dy, rad, arg;
 	GString *xs, *ys;
 	gchar status[80];
-	NRPointF fp;
+	NRPoint fp;
 
 	desktop = SP_EVENT_CONTEXT (sc)->desktop;
 

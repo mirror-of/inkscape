@@ -190,7 +190,7 @@ sp_string_calculate_dimensions (SPString *string)
 	gdouble size;
 	gint spglyph;
 	unsigned int metrics;
-	NRPointF spadv;
+	NRPoint spadv;
 
 	string->bbox.x0 = string->bbox.y0 = 1e18;
 	string->bbox.x1 = string->bbox.y1 = -1e18;
@@ -238,8 +238,8 @@ sp_string_calculate_dimensions (SPString *string)
 				}
 				if (unival != '\n' && unival != '\r') inspace = TRUE;
 			} else {
-				NRRectF bbox;
-				NRPointF adv;
+				NRRect bbox;
+				NRPoint adv;
 				gint glyph;
 
 				glyph = nr_typeface_lookup_default (face, unival);
@@ -287,14 +287,14 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean 
 	gdouble size;
 	gint spglyph;
 	gdouble x, y;
-	NRMatrixF a;
+	NRMatrix a;
 	const gchar *p;
 	gboolean preserve;
 	gboolean inspace;
 	gboolean intext;
 	gint len, pos;
 	unsigned int metrics;
-	NRPointF spadv;
+	NRPoint spadv;
 
 	chars = SP_CHARS (string);
 	style = SP_OBJECT_STYLE (SP_OBJECT_PARENT (string));
@@ -305,7 +305,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean 
 	len = g_utf8_strlen (string->text, -1);
 	if (!len) return;
 	g_free (string->p);
-	string->p = g_new (NRPointF, len + 1);
+	string->p = g_new (NRPoint, len + 1);
 
 	/* fixme: Adjusted value (Lauris) */
 	size = style->font_size.computed;
@@ -356,7 +356,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean 
                        }
                        if (unival != '\n' && unival != '\r') inspace = TRUE;
 		} else {
-			NRPointF adv;
+			NRPoint adv;
 			gint glyph;
 
 			glyph = nr_typeface_lookup_default (face, unival);
@@ -406,7 +406,7 @@ static void sp_tspan_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_tspan_modified (SPObject *object, unsigned int flags);
 static SPRepr *sp_tspan_write (SPObject *object, SPRepr *repr, guint flags);
 
-static void sp_tspan_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags);
+static void sp_tspan_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
 static NRArenaItem *sp_tspan_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_tspan_hide (SPItem *item, unsigned int key);
 
@@ -707,7 +707,7 @@ sp_tspan_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_tspan_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags)
+sp_tspan_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
 {
 	SPTSpan *tspan;
 
@@ -778,12 +778,12 @@ static void sp_text_modified (SPObject *object, guint flags);
 static unsigned int sp_text_sequence (SPObject *object, SPObject *target, unsigned int *seq);
 static SPRepr *sp_text_write (SPObject *object, SPRepr *repr, guint flags);
 
-static void sp_text_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags);
+static void sp_text_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
 static NRArenaItem *sp_text_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_text_hide (SPItem *item, unsigned int key);
 static char * sp_text_description (SPItem *item);
-static int sp_text_snappoints (SPItem *item, NRPointF *p, int size);
-static void sp_text_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *transform);
+static int sp_text_snappoints (SPItem *item, NRPoint *p, int size);
+static void sp_text_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
 static void sp_text_print (SPItem *item, SPPrintContext *gpc);
 
 static void sp_text_request_relayout (SPText *text, guint flags);
@@ -1219,7 +1219,7 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_text_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags)
+sp_text_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
 {
 	SPText *text;
 	SPItem *child;
@@ -1228,7 +1228,7 @@ sp_text_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned 
 	text = SP_TEXT (item);
 
 	for (o = text->children; o != NULL; o = o->next) {
-		NRMatrixD a;
+		NRMatrix a;
 		child = SP_ITEM (o);
 		nr_matrix_multiply_dfd (&a, &child->transform, transform);
 		sp_item_invoke_bbox_full (child, bbox, &a, flags, FALSE);
@@ -1379,7 +1379,7 @@ sp_text_set_shape (SPText *text)
 	ArtPoint cp;
 	SPObject *child;
 	gboolean isfirstline, inspace;
-	NRRectF paintbox;
+	NRRect paintbox;
 
 	/* The logic should be: */
 	/* 1. Calculate attributes */
@@ -1529,10 +1529,10 @@ sp_text_set_shape (SPText *text)
 }
 
 static int
-sp_text_snappoints (SPItem *item, NRPointF *p, int size)
+sp_text_snappoints (SPItem *item, NRPoint *p, int size)
 {
 	SPLayoutData *ly;
-	NRMatrixF i2d;
+	NRMatrix i2d;
 	int pos;
 
 	/* we use corners of item and x,y coordinates of ellipse */
@@ -1557,10 +1557,10 @@ sp_text_snappoints (SPItem *item, NRPointF *p, int size)
  */
 
 static void
-sp_text_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *t)
+sp_text_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
 {
 	SPText *text;
-	NRMatrixF i2p, p2i;
+	NRMatrix i2p, p2i;
 	gdouble px, py, x, y;
 	SPObject *child;
 	gchar c[120];
@@ -1608,8 +1608,8 @@ sp_text_print (SPItem *item, SPPrintContext *ctx)
 {
 	SPText *text;
 	SPObject *ch;
-	NRMatrixF ctm;
-	NRRectF pbox, dbox, bbox;
+	NRMatrix ctm;
+	NRRect pbox, dbox, bbox;
 
 	text = SP_TEXT (item);
 

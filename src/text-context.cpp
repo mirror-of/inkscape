@@ -245,7 +245,7 @@ sp_text_context_item_handler (SPEventContext *ec, SPItem *item, GdkEvent *event)
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (SP_IS_TEXT (item)) {
-			NRRectF bbox;
+			NRRect bbox;
 			sp_item_bbox_desktop(item, &bbox);
 			sp_canvas_item_show (tc->indicator);
 			sp_ctrlrect_set_area (SP_CTRLRECT (tc->indicator), 
@@ -315,7 +315,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
-			NRPointF dtp;
+			NRPoint dtp;
 			/* Button 1, set X & Y & new item */
 			sp_selection_empty (SP_DT_SELECTION (ec->desktop));
 			sp_desktop_w2d_xy_point (ec->desktop, &dtp, (float) event->button.x, (float) event->button.y);
@@ -525,7 +525,7 @@ sp_text_context_update_cursor (SPTextContext *tc)
 
 	if (tc->text) {
 		ArtPoint p0, p1, d0, d1;
-		NRMatrixF i2d;
+		NRMatrix i2d;
 		sp_text_get_cursor_coords (SP_TEXT (tc->text), tc->ipos, &p0, &p1);
 		sp_item_i2d_affine (SP_ITEM (tc->text), &i2d);
 		d0.x = NR_MATRIX_DF_TRANSFORM_X (&i2d, p0.x, p0.y);

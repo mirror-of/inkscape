@@ -26,38 +26,38 @@
 #define nr_matrix_d_test_translate_equal(m0,m1,e) ((!(m0) && !(m1)) || ((m0) && (m1) && NR_MATRIX_DF_TEST_TRANSLATE_CLOSE (m0, m1, e)))
 #define nr_matrix_f_test_translate_equal(m0,m1,e) ((!(m0) && !(m1)) || ((m0) && (m1) && NR_MATRIX_DF_TEST_TRANSLATE_CLOSE (m0, m1, e)))
 
-NRMatrixD *nr_matrix_d_from_f (NRMatrixD *d, const NRMatrixF *s);
-NRMatrixF *nr_matrix_f_from_d (NRMatrixF *d, const NRMatrixD *s);
+NRMatrix *nr_matrix_d_from_f (NRMatrix *d, const NRMatrix *s);
+NRMatrix *nr_matrix_f_from_d (NRMatrix *d, const NRMatrix *s);
 
-NRMatrixD *nr_matrix_d_invert (NRMatrixD *d, const NRMatrixD *m);
+NRMatrix *nr_matrix_d_invert (NRMatrix *d, const NRMatrix *m);
 
 /* Currently uses single-precision calculation. */
-NRMatrixF *nr_matrix_f_invert (NRMatrixF *d, const NRMatrixF *m);
+NRMatrix *nr_matrix_f_invert (NRMatrix *d, const NRMatrix *m);
 
 /* d,m0,m1 needn't be distinct in any of these multiply routines. */
 
-NRMatrixD *nr_matrix_multiply_ddd (NRMatrixD *d, const NRMatrixD *m0, const NRMatrixD *m1);
+NRMatrix *nr_matrix_multiply_ddd (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1);
 
 /* Currently uses single-precision intermediate results (depending on compiler,
    optimization settings etc.). */
-NRMatrixF *nr_matrix_multiply_fff (NRMatrixF *d, const NRMatrixF *m0, const NRMatrixF *m1);
+NRMatrix *nr_matrix_multiply_fff (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1);
 
 /* (_fdd and _fdf use double-precision calculations.) */
-NRMatrixF *nr_matrix_multiply_fdd (NRMatrixF *d, const NRMatrixD *m0, const NRMatrixD *m1);
-NRMatrixF *nr_matrix_multiply_fdf (NRMatrixF *d, const NRMatrixD *m0, const NRMatrixF *m1);
-NRMatrixF *nr_matrix_multiply_ffd (NRMatrixF *d, const NRMatrixF *m0, const NRMatrixD *m1);
+NRMatrix *nr_matrix_multiply_fdd (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1);
+NRMatrix *nr_matrix_multiply_fdf (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1);
+NRMatrix *nr_matrix_multiply_ffd (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1);
 
-NRMatrixD *nr_matrix_multiply_ddf (NRMatrixD *d, const NRMatrixD *m0, const NRMatrixF *m1);
-NRMatrixD *nr_matrix_multiply_dfd (NRMatrixD *d, const NRMatrixF *m0, const NRMatrixD *m1);
+NRMatrix *nr_matrix_multiply_ddf (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1);
+NRMatrix *nr_matrix_multiply_dfd (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1);
 
-NRMatrixD *nr_matrix_d_set_translate (NRMatrixD *m, double x, double y);
-NRMatrixF *nr_matrix_f_set_translate (NRMatrixF *m, float x, float y);
+NRMatrix *nr_matrix_d_set_translate (NRMatrix *m, double x, double y);
+NRMatrix *nr_matrix_f_set_translate (NRMatrix *m, float x, float y);
 
-NRMatrixD *nr_matrix_d_set_scale (NRMatrixD *m, double sx, double sy);
-NRMatrixF *nr_matrix_f_set_scale (NRMatrixF *m, float sx, float sy);
+NRMatrix *nr_matrix_d_set_scale (NRMatrix *m, double sx, double sy);
+NRMatrix *nr_matrix_f_set_scale (NRMatrix *m, float sx, float sy);
 
-NRMatrixD *nr_matrix_d_set_rotate (NRMatrixD *m, double theta);
-NRMatrixF *nr_matrix_f_set_rotate (NRMatrixF *m, float theta);
+NRMatrix *nr_matrix_d_set_rotate (NRMatrix *m, double theta);
+NRMatrix *nr_matrix_f_set_rotate (NRMatrix *m, float theta);
 
 #define NR_MATRIX_DF_TRANSFORM_X(m,x,y) ((m)->c[0] * (x) + (m)->c[2] * (y) + (m)->c[4])
 #define NR_MATRIX_DF_TRANSFORM_Y(m,x,y) ((m)->c[1] * (x) + (m)->c[3] * (y) + (m)->c[5])

@@ -225,10 +225,10 @@ sp_fill_style_widget_update (SPWidget *spw, SPSelection *sel)
 	SPLinearGradient *lg;
 	SPRadialGradient *rg;
 #if 0
-	NRPointF p0, p1, p2;
+	NRPoint p0, p1, p2;
 #endif
-	NRMatrixF fctm, gs2d;
-	NRRectF fbb;
+	NRMatrix fctm, gs2d;
+	NRRect fbb;
 
 	if (g_object_get_data (G_OBJECT (spw), "update")) return;
 

@@ -94,14 +94,14 @@ struct _SPKnotClass {
 	void (* clicked) (SPKnot *knot, guint state);
 	void (* grabbed) (SPKnot *knot, guint state);
 	void (* ungrabbed) (SPKnot *knot, guint state);
-	void (* moved) (SPKnot *knot, NRPointF *position, guint state);
+	void (* moved) (SPKnot *knot, NRPoint *position, guint state);
 	void (* stamped)  (SPKnot *know, guint state);
 	
 	/* Request knot to move to absolute position */
-	gboolean (* request) (SPKnot *knot, NRPointF *pos, guint state);
+	gboolean (* request) (SPKnot *knot, NRPoint *pos, guint state);
 
 	/* Find complex distance from knot to point */
-	gdouble (* distance) (SPKnot *knot, NRPointF *pos, guint state);
+	gdouble (* distance) (SPKnot *knot, NRPoint *pos, guint state);
 };
 
 GType sp_knot_get_type (void);
@@ -116,13 +116,13 @@ SPKnot * sp_knot_new (SPDesktop * desktop);
 void sp_knot_show (SPKnot *knot);
 void sp_knot_hide (SPKnot *knot);
 
-void sp_knot_request_position (SPKnot * knot, NRPointF *pos, guint state);
-gdouble sp_knot_distance (SPKnot * knot, NRPointF *p, guint state);
+void sp_knot_request_position (SPKnot * knot, NRPoint *pos, guint state);
+gdouble sp_knot_distance (SPKnot * knot, NRPoint *p, guint state);
 
 /* Unconditional */
 
-void sp_knot_set_position (SPKnot *knot, NRPointF *p, guint state);
+void sp_knot_set_position (SPKnot *knot, NRPoint *p, guint state);
 
-NRPointF *sp_knot_position (SPKnot *knot, NRPointF *p);
+NRPoint *sp_knot_position (SPKnot *knot, NRPoint *p);
 
 #endif

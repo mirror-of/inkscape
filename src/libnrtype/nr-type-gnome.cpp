@@ -26,10 +26,10 @@ static void nr_typeface_gnome_setup (NRTypeFace *tface, NRTypeFaceDef *def);
 static unsigned int nr_typeface_gnome_attribute_get (NRTypeFace *tf, const unsigned char *key, unsigned char *str, unsigned int size);
 static NRBPath *nr_typeface_gnome_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref);
 static void nr_typeface_gnome_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
-static NRPointF *nr_typeface_gnome_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPointF *adv);
+static NRPoint *nr_typeface_gnome_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPoint *adv);
 static unsigned int nr_typeface_gnome_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival);
 
-static NRFont *nr_typeface_gnome_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrixF *transform);
+static NRFont *nr_typeface_gnome_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform);
 static void nr_typeface_gnome_font_free (NRFont *font);
 
 static NRTypeFaceClass *parent_class;
@@ -288,7 +288,7 @@ nr_typeface_gnome_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigne
 		}
 		if (!tfg->voutlines[glyph].path) {
 			NRBPath bpath;
-			NRRectF bbox;
+			NRRect bbox;
 			double t[6];
 			bpath.path = (ArtBpath *) gnome_font_face_get_glyph_stdoutline (tfg->face, glyph);
 			bbox.x0 = bbox.y0 = 1e18;
@@ -323,8 +323,8 @@ nr_typeface_gnome_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsig
 	tfg = (NRTypeFaceGnome *) tf;
 }
 
-static NRPointF *
-nr_typeface_gnome_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPointF *adv)
+static NRPoint *
+nr_typeface_gnome_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPoint *adv)
 {
 	NRTypeFaceGnome *tfg;
 
@@ -364,7 +364,7 @@ nr_typeface_gnome_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival
 }
 
 static NRFont *
-nr_typeface_gnome_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrixF *transform)
+nr_typeface_gnome_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform)
 {
 	NRTypeFaceGnome *tfg;
 	NRFont *font;

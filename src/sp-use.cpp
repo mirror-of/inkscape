@@ -35,7 +35,7 @@ static SPRepr *sp_use_write (SPObject *object, SPRepr *repr, guint flags);
 static void sp_use_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_use_modified (SPObject *object, guint flags);
 
-static void sp_use_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags);
+static void sp_use_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
 static void sp_use_print (SPItem *item, SPPrintContext *ctx);
 static gchar * sp_use_description (SPItem * item);
 static NRArenaItem *sp_use_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
@@ -234,7 +234,7 @@ sp_use_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_use_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags)
+sp_use_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
 {
 	SPUse * use;
 
@@ -242,7 +242,7 @@ sp_use_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned i
 
 	if (use->child && SP_IS_ITEM (use->child)) {
 		SPItem *child;
-		NRMatrixD ct, t;
+		NRMatrix ct, t;
 		child = SP_ITEM (use->child);
 		nr_matrix_d_set_translate (&t, use->x.computed, use->y.computed);
 		nr_matrix_multiply_ddd (&ct, &t, transform);
@@ -284,7 +284,7 @@ sp_use_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags)
 
 	if (use->child) {
 		NRArenaItem *ai, *ac;
-		NRMatrixF t;
+		NRMatrix t;
 		ai = nr_arena_item_new (arena, NR_TYPE_ARENA_GROUP);
 		nr_arena_group_set_transparent (NR_ARENA_GROUP (ai), FALSE);
 		ac = sp_item_invoke_show (SP_ITEM (use->child), arena, key, flags);
@@ -404,7 +404,7 @@ sp_use_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 
 	/* As last step set additional transform of arena group */
 	for (v = item->display; v != NULL; v = v->next) {
-		NRMatrixF t;
+		NRMatrix t;
 		nr_matrix_f_set_translate (&t, use->x.computed, use->y.computed);
 		nr_arena_group_set_child_transform (NR_ARENA_GROUP (v->arenaitem), &t);
 	}

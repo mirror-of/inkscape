@@ -49,18 +49,18 @@ struct _SPSelTrans {
 	unsigned int changed : 1;
 
 	SPItem **items;
-	NRMatrixF *transforms;
+	NRMatrix *transforms;
 	int nitems;
 
-	NRPointF *spp;
+	NRPoint *spp;
 	int spp_length;
 
-	NRRectD box;
-        NRMatrixD current;
-        NRPointD opposit;
-        NRPointD origin;
-	NRPointD point;
-	NRPointD center;
+	NRRect box;
+        NRMatrix current;
+        NRPoint opposit;
+        NRPoint origin;
+	NRPoint point;
+	NRPoint center;
 	SPKnot *shandle[8];
 	SPKnot *rhandle[8];
 	SPKnot *chandle;
@@ -89,13 +89,13 @@ void sp_sel_trans_reset_state (SPSelTrans * seltrans);
 void sp_sel_trans_increase_state (SPSelTrans * seltrans);
 void sp_sel_trans_set_center (SPSelTrans * seltrans, gdouble x, gdouble y);
 
-void sp_sel_trans_grab (SPSelTrans * seltrans, NRPointF *p, gdouble x, gdouble y, gboolean show_handles);
-void sp_sel_trans_transform (SPSelTrans * seltrans, NRMatrixD *affine, NRPointF *norm);
+void sp_sel_trans_grab (SPSelTrans * seltrans, NRPoint *p, gdouble x, gdouble y, gboolean show_handles);
+void sp_sel_trans_transform (SPSelTrans * seltrans, NRMatrix *affine, NRPoint *norm);
 void sp_sel_trans_ungrab (SPSelTrans * seltrans);
 void sp_sel_trans_stamp (SPSelTrans * seltrans);
 
-NRPointF *sp_sel_trans_point_desktop (SPSelTrans *seltrans, NRPointF *p);
-NRPointF *sp_sel_trans_origin_desktop (SPSelTrans * seltrans, NRPointF *p);
+NRPoint *sp_sel_trans_point_desktop (SPSelTrans *seltrans, NRPoint *p);
+NRPoint *sp_sel_trans_origin_desktop (SPSelTrans * seltrans, NRPoint *p);
 
 
 #endif

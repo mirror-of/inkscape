@@ -559,7 +559,7 @@ sp_export_png_file (SPDocument *doc, const gchar *filename,
 		    unsigned int width, unsigned int height,
 		    unsigned long bgcolor)
 {
-	NRMatrixF affine;
+	NRMatrix affine;
 	gdouble t;
 	NRArena *arena;
 	struct SPEBP ebp;

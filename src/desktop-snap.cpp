@@ -25,10 +25,10 @@
 /* Snap a point in horizontal and vertical direction */
 
 double
-sp_desktop_free_snap (SPDesktop *desktop, NRPointF *req)
+sp_desktop_free_snap (SPDesktop *desktop, NRPoint *req)
 {
 	double dh, dv;
-	NRPointF result = *req;
+	NRPoint result = *req;
 
 	/* fixme: If allowing arbitrary snap targtes, free snap is not the sum of h and v */
 	dh = sp_desktop_vector_snap (desktop, &result, 1.0, 0.0);
@@ -52,7 +52,7 @@ typedef enum sp_intersector_kind{
 } sp_intersector_kind;
 
 sp_intersector_kind
-sp_intersector_line_intersection(NRPointF *n0, double d0, NRPointF *n1, double d1, NRPointF* result)
+sp_intersector_line_intersection(NRPoint *n0, double d0, NRPoint *n1, double d1, NRPoint* result)
 /* This function finds the intersection of the two lines (infinite)
  * defined by n0.X = d0 and x1.X = d1.  The algorithm is as follows:
  * To compute the intersection point use kramer's rule:
@@ -112,7 +112,7 @@ sp_intersector_line_intersection(NRPointF *n0, double d0, NRPointF *n1, double d
 
 /* ccw exists as a building block */
 static int
-sp_intersector_ccw(NRPointF p0, NRPointF p1, NRPointF p2)
+sp_intersector_ccw(NRPoint p0, NRPoint p1, NRPoint p2)
 /* Determine which way a set of three points winds. */
 {
 	float dx1 = (p1.x - p0.x);
@@ -133,7 +133,7 @@ sp_intersector_ccw(NRPointF p0, NRPointF p1, NRPointF p2)
 
 
 int
-sp_intersector_segment_intersectp(NRPointF p00, NRPointF p01, NRPointF p10, NRPointF p11)
+sp_intersector_segment_intersectp(NRPoint p00, NRPoint p01, NRPoint p10, NRPoint p11)
 /* Determine whether two line segments intersect.  This doesn't find
    the intersection, use the line_intersect funcction above */
 {
@@ -145,14 +145,14 @@ sp_intersector_segment_intersectp(NRPointF p00, NRPointF p01, NRPointF p10, NRPo
 }
 
 sp_intersector_kind
-sp_intersector_segment_intersect(NRPointF p00, NRPointF p01, NRPointF p10, NRPointF p11, NRPointF* result)
+sp_intersector_segment_intersect(NRPoint p00, NRPoint p01, NRPoint p10, NRPoint p11, NRPoint* result)
 /* Determine whether two line segments intersect.  This doesn't find
    the intersection, use the line_intersect funcction above */
 {
 	if(sp_intersector_segment_intersectp(p00, p01, p10, p11)) {
 		double d0, d1;
 
-		NRPointF n0, n1;
+		NRPoint n0, n1;
 		n0.x = p00.y - p01.y;
 		n0.y = -(p00.x - p01.x);
 		d0 = n0.x*p00.x + n0.y*p00.y;
@@ -168,13 +168,13 @@ sp_intersector_segment_intersect(NRPointF p00, NRPointF p01, NRPointF p10, NRPoi
 
 /* Snap a point along a line to another line. */
 double
-sp_intersector_a_vector_snap (NRPointF * req, NRPointF * v, 
-			NRPointF * n, double d)
+sp_intersector_a_vector_snap (NRPoint * req, NRPoint * v, 
+			NRPoint * n, double d)
 /* This function returns the snap position and the distance from the
    starting point for doing a snap to arbitrary line. */
 {
-	NRPointF starting;
-	NRPointF vperp; /* Perpendicular vector to v */
+	NRPoint starting;
+	NRPoint vperp; /* Perpendicular vector to v */
 	double d0;
 
 	vperp.x = v->y;
@@ -190,15 +190,15 @@ sp_intersector_a_vector_snap (NRPointF * req, NRPointF * v,
 /* Look for snappoint along a line given by req and the vector (dx,dy) */
 
 double
-sp_desktop_vector_snap (SPDesktop * desktop, NRPointF *req, double dx, double dy)
+sp_desktop_vector_snap (SPDesktop * desktop, NRPoint *req, double dx, double dy)
 {
 	SPNamedView * nv;
-	NRPointF actual;
+	NRPoint actual;
 	double len, best = 1e18, upper = 1e18;
 	GSList * l;
-	NRPointF v;
-	NRPointF horizontal;
-	NRPointF vertical;
+	NRPoint v;
+	NRPoint horizontal;
+	NRPoint vertical;
 
 	horizontal.x = 1; horizontal.y = 0;
 	vertical.x = 0; vertical.y = 1;
@@ -217,7 +217,7 @@ sp_desktop_vector_snap (SPDesktop * desktop, NRPointF *req, double dx, double dy
 	if (nv->snaptoguides) {
 		upper = desktop->guidesnap;
 		for (l = nv->vguides; l != NULL; l = l->next) {
-			NRPointF trial = *req;
+			NRPoint trial = *req;
 			gdouble dist = sp_intersector_a_vector_snap (&trial, 
 								 &v, 
 								 &horizontal,
@@ -229,7 +229,7 @@ sp_desktop_vector_snap (SPDesktop * desktop, NRPointF *req, double dx, double dy
 			}
 		}
 		for (l = nv->hguides; l != NULL; l = l->next) {
-			NRPointF trial = *req;
+			NRPoint trial = *req;
 			gdouble dist = sp_intersector_a_vector_snap (&trial, 
 								 &v, 
 								 &vertical,
@@ -244,7 +244,7 @@ sp_desktop_vector_snap (SPDesktop * desktop, NRPointF *req, double dx, double dy
 
 	if (nv->snaptogrid) {
 		double iv, ih, dist, upper;
-		NRPointF trial = *req;
+		NRPoint trial = *req;
 /*  find nearest grid line (either H or V whatever is closer) along
  *  the vector to the requested point.  If the distance along the
  *  vector is less than the snap distance then snap. */
@@ -279,10 +279,10 @@ sp_desktop_vector_snap (SPDesktop * desktop, NRPointF *req, double dx, double dy
 // fixme: replace with line+circle intersector.
 
 double
-sp_desktop_circular_snap (SPDesktop * desktop, NRPointF * req, double cx, double cy)
+sp_desktop_circular_snap (SPDesktop * desktop, NRPoint * req, double cx, double cy)
 {
 	SPNamedView * nv;
-	NRPointF actual;
+	NRPoint actual;
 	gdouble best = 1e18, dist, h, dx, dy;
 	gboolean snapped;
 	GSList * l;
@@ -471,14 +471,14 @@ sp_desktop_circular_snap (SPDesktop * desktop, NRPointF * req, double cx, double
 /* 
  * functions for lists of points
  *
- * All functions take a list of NRPointF and parameter indicating the proposed transformation.
+ * All functions take a list of NRPoint and parameter indicating the proposed transformation.
  * They return the updated transformation parameter. 
  */
 
 double
-sp_desktop_horizontal_snap_list (SPDesktop *desktop, NRPointF *p, int length, double dx)
+sp_desktop_horizontal_snap_list (SPDesktop *desktop, NRPoint *p, int length, double dx)
 {
-	NRPointF q;
+	NRPoint q;
 	double xdist, xpre, dist, d;
 	int i;
 
@@ -501,9 +501,9 @@ sp_desktop_horizontal_snap_list (SPDesktop *desktop, NRPointF *p, int length, do
 }
 
 double
-sp_desktop_vertical_snap_list (SPDesktop *desktop, NRPointF *p, int length, double dy)
+sp_desktop_vertical_snap_list (SPDesktop *desktop, NRPoint *p, int length, double dy)
 {
-	NRPointF q;
+	NRPoint q;
 	double ydist, ypre, dist, d;
 	int i;
 
@@ -525,9 +525,9 @@ sp_desktop_vertical_snap_list (SPDesktop *desktop, NRPointF *p, int length, doub
 }
 
 double
-sp_desktop_horizontal_snap_list_scale (SPDesktop *desktop, NRPointF *p, int length, NRPointF *norm, double sx)
+sp_desktop_horizontal_snap_list_scale (SPDesktop *desktop, NRPoint *p, int length, NRPoint *norm, double sx)
 {
-	NRPointF q, check;
+	NRPoint q, check;
 	double xscale, xdist, d;
 	int i;
 
@@ -553,9 +553,9 @@ sp_desktop_horizontal_snap_list_scale (SPDesktop *desktop, NRPointF *p, int leng
 }
 
 double
-sp_desktop_vertical_snap_list_scale (SPDesktop *desktop, NRPointF *p, int length, NRPointF *norm, double sy)
+sp_desktop_vertical_snap_list_scale (SPDesktop *desktop, NRPoint *p, int length, NRPoint *norm, double sy)
 {
-	NRPointF q, check;
+	NRPoint q, check;
 	double yscale, ydist, d;
 	int i;
 
@@ -580,9 +580,9 @@ sp_desktop_vertical_snap_list_scale (SPDesktop *desktop, NRPointF *p, int length
 }
 
 double
-sp_desktop_vector_snap_list (SPDesktop *desktop, NRPointF *p, int length, NRPointF *norm, double sx, double sy)
+sp_desktop_vector_snap_list (SPDesktop *desktop, NRPoint *p, int length, NRPoint *norm, double sx, double sy)
 {
-	NRPointF q, check;
+	NRPoint q, check;
 	double dist, d, ratio;
 	int i;
 
@@ -610,9 +610,9 @@ sp_desktop_vector_snap_list (SPDesktop *desktop, NRPointF *p, int length, NRPoin
 }
 
 double
-sp_desktop_horizontal_snap_list_skew (SPDesktop *desktop, NRPointF *p, int length, NRPointF *norm, double sx)
+sp_desktop_horizontal_snap_list_skew (SPDesktop *desktop, NRPoint *p, int length, NRPoint *norm, double sx)
 {
-	NRPointF q, check;
+	NRPoint q, check;
 	double xskew, xdist, d;
 	int i;
 
@@ -637,9 +637,9 @@ sp_desktop_horizontal_snap_list_skew (SPDesktop *desktop, NRPointF *p, int lengt
 }
 
 double
-sp_desktop_vertical_snap_list_skew (SPDesktop *desktop, NRPointF *p, int length, NRPointF *norm, double sy)
+sp_desktop_vertical_snap_list_skew (SPDesktop *desktop, NRPoint *p, int length, NRPoint *norm, double sy)
 {
-	NRPointF q, check;
+	NRPoint q, check;
 	gdouble yskew, ydist, d;
 	int i;
 
@@ -667,10 +667,10 @@ sp_desktop_vertical_snap_list_skew (SPDesktop *desktop, NRPointF *p, int length,
    this function takes the whole transformation matrix as parameter
    working with angles would be too complex
 */
-NRMatrixF *
-sp_desktop_circular_snap_list (SPDesktop *desktop, NRPointF *p, int length, NRPointF *norm, NRMatrixF *rotate)
+NRMatrix *
+sp_desktop_circular_snap_list (SPDesktop *desktop, NRPoint *p, int length, NRPoint *norm, NRMatrix *rotate)
 {
-	NRPointF q1, q2, q, check;
+	NRPoint q1, q2, q, check;
 	gdouble d, best, h1, h2;
 	int i;
 
@@ -692,7 +692,7 @@ sp_desktop_circular_snap_list (SPDesktop *desktop, NRPointF *p, int length, NRPo
 
 	// compute the new transformation (rotation) from the snapped point
 	if (best < 1e18) {
-		NRMatrixF r1, r2, p2n, n2p;
+		NRMatrix r1, r2, p2n, n2p;
 
 		h1 = hypot (q1.x - norm->x, q1.y - norm->y);
 		q1.x = (q1.x - norm->x) / h1;

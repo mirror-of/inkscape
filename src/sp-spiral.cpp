@@ -47,7 +47,7 @@ static void sp_spiral_set (SPObject *object, unsigned int key, const gchar *valu
 static void sp_spiral_update (SPObject *object, SPCtx *ctx, guint flags);
 
 static gchar * sp_spiral_description (SPItem * item);
-static int sp_spiral_snappoints (SPItem *item, NRPointF *p, int size);
+static int sp_spiral_snappoints (SPItem *item, NRPoint *p, int size);
 static void sp_spiral_set_shape (SPShape *shape);
 
 static SPShapeClass *parent_class;
@@ -265,16 +265,16 @@ static void
 sp_spiral_fit_and_draw (SPSpiral *spiral,
 			SPCurve	 *c,
 			double dstep,
-			NRPointF *darray,
-			NRPointF *hat1,
-			NRPointF *hat2,
+			NRPoint *darray,
+			NRPoint *hat1,
+			NRPoint *hat2,
 			double    t)
 {
 #define BEZIER_SIZE   4
 #define FITTING_DEPTH 3
 #define BEZIER_LENGTH (BEZIER_SIZE * (2 << (FITTING_DEPTH - 1)))
 
-	NRPointF bezier[BEZIER_LENGTH];
+	NRPoint bezier[BEZIER_LENGTH];
 	double d;
 	int depth, i;
 	
@@ -319,8 +319,8 @@ static void
 sp_spiral_set_shape (SPShape *shape)
 {
 	SPSpiral *spiral;
-	NRPointF darray[SAMPLE_SIZE + 1];
-	NRPointF hat1, hat2;
+	NRPoint darray[SAMPLE_SIZE + 1];
+	NRPoint hat1, hat2;
 	int i;
 	double tstep, t;
 	double dstep, d;
@@ -406,7 +406,7 @@ sp_spiral_position_set       (SPSpiral          *spiral,
 }
 
 static int
-sp_spiral_snappoints (SPItem *item, NRPointF *p, int size)
+sp_spiral_snappoints (SPItem *item, NRPoint *p, int size)
 {
 #if 0
 	/* fixme: (Lauris) */
@@ -442,7 +442,7 @@ sp_spiral_snappoints (SPItem *item, NRPointF *p, int size)
 }
 
 void
-sp_spiral_get_xy (SPSpiral *spiral, gdouble t, NRPointF *p)
+sp_spiral_get_xy (SPSpiral *spiral, gdouble t, NRPoint *p)
 {
 	gdouble rad, arg;
 

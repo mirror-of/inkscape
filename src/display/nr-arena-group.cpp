@@ -268,7 +268,7 @@ nr_arena_group_set_transparent (NRArenaGroup *group, unsigned int transparent)
 }
 
 void
-nr_arena_group_set_child_transform (NRArenaGroup *group, NRMatrixF *t)
+nr_arena_group_set_child_transform (NRArenaGroup *group, NRMatrix *t)
 {
 	if (!t) t = &NR_MATRIX_F_IDENTITY;
 

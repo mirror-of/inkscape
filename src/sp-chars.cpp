@@ -31,7 +31,7 @@ static void sp_chars_init (SPChars *chars);
 static void sp_chars_release (SPObject *object);
 static void sp_chars_modified (SPObject *object, guint flags);
 
-static void sp_chars_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags);
+static void sp_chars_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
 static NRArenaItem *sp_chars_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 
 static SPItemClass *parent_class;
@@ -124,7 +124,7 @@ sp_chars_modified (SPObject *object, unsigned int flags)
 }
 
 static void
-sp_chars_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags)
+sp_chars_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
 {
 	SPChars *chars;
 	SPCharElement *el;
@@ -134,7 +134,7 @@ sp_chars_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned
 	for (el = chars->elements; el != NULL; el = el->next) {
 		NRBPath bpath;
 		if (nr_font_glyph_outline_get (el->font, el->glyph, &bpath, FALSE)) {
-			NRMatrixF a;
+			NRMatrix a;
 			nr_matrix_multiply_ffd (&a, &el->transform, transform);
 			nr_path_matrix_f_bbox_f_union (&bpath, &a, bbox, 0.25);
 		}
@@ -185,7 +185,7 @@ sp_chars_clear (SPChars *chars)
 }
 
 void
-sp_chars_add_element (SPChars *chars, guint glyph, NRFont *font, const NRMatrixF *transform)
+sp_chars_add_element (SPChars *chars, guint glyph, NRFont *font, const NRMatrix *transform)
 {
 	SPItem *item;
 	SPItemView *v;
@@ -247,8 +247,8 @@ sp_chars_normalized_bpath (SPChars *chars)
 /* This is completely unrelated to SPItem::print */
 
 static void
-sp_chars_print_bpath (SPPrintContext *ctx, const NRBPath *bpath, const SPStyle *style, const NRMatrixF *ctm,
-		      const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox)
+sp_chars_print_bpath (SPPrintContext *ctx, const NRBPath *bpath, const SPStyle *style, const NRMatrix *ctm,
+		      const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {
 	if (style->fill.type != SP_PAINT_TYPE_NONE) {
 		sp_print_fill (ctx, bpath, ctm, style, pbox, dbox, bbox);
@@ -266,7 +266,7 @@ sp_chars_print_bpath (SPPrintContext *ctx, const NRBPath *bpath, const SPStyle *
  */
 
 void
-sp_chars_do_print (SPChars *chars, SPPrintContext *ctx, const NRMatrixF *ctm, const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox)
+sp_chars_do_print (SPChars *chars, SPPrintContext *ctx, const NRMatrix *ctm, const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
 {
 	SPCharElement *el;
 
@@ -286,7 +286,7 @@ sp_chars_do_print (SPChars *chars, SPPrintContext *ctx, const NRMatrixF *ctm, co
 }
 
 void
-sp_chars_set_paintbox (SPChars *chars, NRRectF *paintbox)
+sp_chars_set_paintbox (SPChars *chars, NRRect *paintbox)
 {
 	SPItemView *v;
 

@@ -141,8 +141,8 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (dc->dragging) {
-			NRMatrixD w2dt, sm;
-			NRPointF cd;
+			NRMatrix w2dt, sm;
+			NRPoint cd;
 			float rw, scale;
 			int x0, y0, x1, y1;
 			rw = hypot (event->button.x - dc->centre.x, event->button.y - dc->centre.y);

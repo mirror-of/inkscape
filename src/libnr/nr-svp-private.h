@@ -27,7 +27,7 @@ struct _NRSVLBuild {
 	int dir;
 	int reverse;
 	NRCoord sx, sy;
-	NRRectF bbox;
+	NRRect bbox;
 };
 
 void nr_svl_build_finish_segment (NRSVLBuild *svlb);
@@ -41,7 +41,7 @@ void nr_svl_build_curveto (NRSVLBuild *svlb,
 #include <libart_lgpl/art_svp.h>
 
 NRSVL *nr_svl_from_art_vpath (ArtVpath *vpath, unsigned int windrule);
-NRSVL *nr_svl_from_art_bpath (ArtBpath *bpath, NRMatrixF *transform, unsigned int windrule, unsigned int close, float flatness);
+NRSVL *nr_svl_from_art_bpath (ArtBpath *bpath, NRMatrix *transform, unsigned int windrule, unsigned int close, float flatness);
 NRSVL *nr_svl_from_art_svp (ArtSVP *asvp);
 ArtSVP *nr_art_svp_from_svl (NRSVL *svl);
 
@@ -57,7 +57,7 @@ NRVertex *nr_vertex_reverse_list (NRVertex *v);
 /* NRSVL */
 
 NRSVL *nr_svl_new (void);
-NRSVL *nr_svl_new_full (NRVertex *vertex, NRRectF *bbox, int wind);
+NRSVL *nr_svl_new_full (NRVertex *vertex, NRRect *bbox, int wind);
 NRSVL *nr_svl_new_vertex_wind (NRVertex *vertex, int wind);
 void nr_svl_free_one (NRSVL *svl);
 void nr_svl_free_list (NRSVL *svl);

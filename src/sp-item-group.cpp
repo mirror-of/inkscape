@@ -41,7 +41,7 @@ static void sp_group_modified (SPObject *object, guint flags);
 static gint sp_group_sequence (SPObject *object, gint seq);
 static SPRepr *sp_group_write (SPObject *object, SPRepr *repr, guint flags);
 
-static void sp_group_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags);
+static void sp_group_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
 static void sp_group_print (SPItem * item, SPPrintContext *ctx);
 static gchar * sp_group_description (SPItem * item);
 static NRArenaItem *sp_group_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
@@ -427,7 +427,7 @@ sp_group_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_group_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags)
+sp_group_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
 {
 	SPGroup * group;
 	SPItem * child;
@@ -437,7 +437,7 @@ sp_group_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned
 
 	for (o = group->children; o != NULL; o = o->next) {
 		if (SP_IS_ITEM (o)) {
-			NRMatrixD ct;
+			NRMatrix ct;
 			child = SP_ITEM (o);
 			nr_matrix_multiply_dfd (&ct, &child->transform, transform);
 			sp_item_invoke_bbox_full (child, bbox, &ct, flags, FALSE);
@@ -560,7 +560,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children)
 		nrepr = sp_repr_duplicate (SP_OBJECT_REPR (child));
 		if (SP_IS_ITEM (child)) {
 			SPItem *citem;
-			NRMatrixF ctrans;
+			NRMatrix ctrans;
 			gchar affinestr[80];
 			gchar *ss;
 

@@ -33,7 +33,7 @@ struct _NRRGradientRenderer {
 	NRRenderer renderer;
 	const unsigned char *vector;
 	unsigned int spread;
-	NRMatrixF px2gs;
+	NRMatrix px2gs;
 	float cx, cy;
 	float fx, fy;
 	float r;
@@ -43,7 +43,7 @@ struct _NRRGradientRenderer {
 NRRenderer *nr_rgradient_renderer_setup (NRRGradientRenderer *rgr,
 					 const unsigned char *cv,
 					 unsigned int spread,
-					 const NRMatrixF *gs2px,
+					 const NRMatrix *gs2px,
 					 float cx, float cy,
 					 float fx, float fy,
 					 float r);

@@ -392,7 +392,7 @@ sp_item_widget_transform_value_changed (GtkWidget *widget, SPWidget *spw)
 {
 	SPException ex;
 	SPItem *item;
-	NRMatrixF t;
+	NRMatrix t;
 	gchar c[64];
 	int i;
 

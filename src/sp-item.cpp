@@ -47,7 +47,7 @@ static void sp_item_update (SPObject *object, SPCtx *ctx, guint flags);
 static SPRepr *sp_item_write (SPObject *object, SPRepr *repr, guint flags);
 
 static gchar * sp_item_private_description (SPItem * item);
-static int sp_item_private_snappoints (SPItem *item, NRPointF *p, int size);
+static int sp_item_private_snappoints (SPItem *item, NRPoint *p, int size);
 
 static SPItemView *sp_item_view_new_prepend (SPItemView *list, SPItem *item, unsigned int flags, unsigned int key, NRArenaItem *arenaitem);
 static SPItemView *sp_item_view_list_remove (SPItemView *list, SPItemView *view);
@@ -218,7 +218,7 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 
 	switch (key) {
 	case SP_ATTR_TRANSFORM: {
-		NRMatrixF t;
+		NRMatrix t;
 		if (value && sp_svg_transform_read (value, &t)) {
 			sp_item_set_item_transform (item, &t);
 		} else {
@@ -243,7 +243,7 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 				item->clip = sp_object_hunref (item->clip, object);
 			}
 			if (SP_IS_CLIPPATH (cp)) {
-				NRRectF bbox;
+				NRRect bbox;
 				SPItemView *v;
 				item->clip = sp_object_href (cp, object);
 				g_signal_connect (G_OBJECT (item->clip), "release", G_CALLBACK (sp_item_clip_release), item);
@@ -279,7 +279,7 @@ sp_item_set (SPObject *object, unsigned int key, const gchar *value)
 				item->mask = sp_object_hunref (item->mask, object);
 			}
 			if (SP_IS_MASK (m)) {
-				NRRectF bbox;
+				NRRect bbox;
 				SPItemView *v;
 				item->mask = sp_object_href (m, object);
 				g_signal_connect (G_OBJECT (item->mask), "release", G_CALLBACK (sp_item_mask_release), item);
@@ -348,7 +348,7 @@ sp_item_update (SPObject *object, SPCtx *ctx, guint flags)
 			}
 		}
 		if ((item->clip) || (item->mask)) {
-			NRRectF bbox;
+			NRRect bbox;
 			sp_item_invoke_bbox (item, &bbox, NULL, TRUE);
 			if (item->clip) {
 				for (v = item->display; v != NULL; v = v->next) {
@@ -403,13 +403,13 @@ sp_item_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 void
-sp_item_invoke_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int clear)
+sp_item_invoke_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int clear)
 {
 	sp_item_invoke_bbox_full (item, bbox, transform, 0, clear);
 }
 
 void
-sp_item_invoke_bbox_full (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags, unsigned int clear)
+sp_item_invoke_bbox_full (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags, unsigned int clear)
 {
 	g_assert (item != NULL);
 	g_assert (SP_IS_ITEM (item));
@@ -427,10 +427,10 @@ sp_item_invoke_bbox_full (SPItem *item, NRRectF *bbox, const NRMatrixD *transfor
 }
 
 void
-sp_item_bbox_desktop (SPItem *item, NRRectF *bbox)
+sp_item_bbox_desktop (SPItem *item, NRRect *bbox)
 {
-	NRMatrixF i2d;
-	NRMatrixD i2dd;
+	NRMatrix i2d;
+	NRMatrix i2dd;
 
 	g_assert (item != NULL);
 	g_assert (SP_IS_ITEM (item));
@@ -443,11 +443,11 @@ sp_item_bbox_desktop (SPItem *item, NRRectF *bbox)
 }
 
 static int
-sp_item_private_snappoints (SPItem *item, NRPointF *p, int size)
+sp_item_private_snappoints (SPItem *item, NRPoint *p, int size)
 {
-        NRRectF bbox;
-	NRMatrixF i2d;
-	NRMatrixD i2dd;
+        NRRect bbox;
+	NRMatrix i2d;
+	NRMatrix i2dd;
 	if (size < 4) return 0;
 	sp_item_i2d_affine (item, &i2d);
 	nr_matrix_d_from_f (&i2dd, &i2d);
@@ -464,7 +464,7 @@ sp_item_private_snappoints (SPItem *item, NRPointF *p, int size)
 }
 
 int
-sp_item_snappoints (SPItem *item, NRPointF *p, int size)
+sp_item_snappoints (SPItem *item, NRPoint *p, int size)
 {
 	g_return_val_if_fail (item != NULL, 0);
 	g_return_val_if_fail (SP_IS_ITEM (item), 0);
@@ -603,7 +603,7 @@ sp_item_invoke_hide (SPItem *item, unsigned int key)
 }
 
 void
-sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *transform)
+sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform)
 {
 	g_return_if_fail (item != NULL);
 	g_return_if_fail (SP_IS_ITEM (item));
@@ -613,7 +613,7 @@ sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *transform)
 		sp_repr_set_attr (SP_OBJECT_REPR (item), "transform", NULL);
 	} else {
 		if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->write_transform) {
-			NRMatrixF lt;
+			NRMatrix lt;
 			lt = *transform;
 			((SPItemClass *) G_OBJECT_GET_CLASS(item))->write_transform (item, repr, &lt);
 		} else {
@@ -643,7 +643,7 @@ sp_item_event (SPItem *item, SPEvent *event)
 /* Sets item private transform (not propagated to repr) */
 
 void
-sp_item_set_item_transform (SPItem *item, const NRMatrixF *transform)
+sp_item_set_item_transform (SPItem *item, const NRMatrix *transform)
 {
 	g_return_if_fail (item != NULL);
 	g_return_if_fail (SP_IS_ITEM (item));
@@ -656,8 +656,8 @@ sp_item_set_item_transform (SPItem *item, const NRMatrixF *transform)
 	}
 }
 
-NRMatrixD *
-sp_item_i2doc_affine_d (SPItem const *item, NRMatrixD *affine_d)
+NRMatrix *
+sp_item_i2doc_affine_d (SPItem const *item, NRMatrix *affine_d)
 {
 	SPRoot const *root;
 
@@ -683,19 +683,19 @@ sp_item_i2doc_affine_d (SPItem const *item, NRMatrixD *affine_d)
 	return affine_d;
 }
 
-NRMatrixF *
-sp_item_i2doc_affine (SPItem const *item, NRMatrixF *affine_f)
+NRMatrix *
+sp_item_i2doc_affine (SPItem const *item, NRMatrix *affine_f)
 {
-	NRMatrixD affine_d;
+	NRMatrix affine_d;
 	sp_item_i2doc_affine_d (item, &affine_d);
 	nr_matrix_f_from_d (affine_f, &affine_d);
 	return affine_f;
 }
 
-NRMatrixF *
-sp_item_i2root_affine (SPItem const *item, NRMatrixF *affine)
+NRMatrix *
+sp_item_i2root_affine (SPItem const *item, NRMatrix *affine)
 {
-	NRMatrixD td;
+	NRMatrix td;
 	SPRoot *root;
 
 	g_return_val_if_fail (item != NULL, NULL);
@@ -727,10 +727,10 @@ sp_item_i2root_affine (SPItem const *item, NRMatrixF *affine)
 
 /* Transformation to normalized (0,0-1,1) viewport */
 
-NRMatrixF *
-sp_item_i2vp_affine (SPItem const *item, NRMatrixF *affine)
+NRMatrix *
+sp_item_i2vp_affine (SPItem const *item, NRMatrix *affine)
 {
-	NRMatrixD td;
+	NRMatrix td;
 	SPRoot *root;
 
 	g_return_val_if_fail (item != NULL, NULL);
@@ -766,10 +766,10 @@ sp_item_i2vp_affine (SPItem const *item, NRMatrixF *affine)
 
 /* fixme: This is EVIL!!! */
 
-NRMatrixD *
-sp_item_i2d_affine_d (SPItem const *item, NRMatrixD *affine_d)
+NRMatrix *
+sp_item_i2d_affine_d (SPItem const *item, NRMatrix *affine_d)
 {
-	NRMatrixD doc2dt;
+	NRMatrix doc2dt;
 
 	g_return_val_if_fail (item != NULL, NULL);
 	g_return_val_if_fail (SP_IS_ITEM (item), NULL);
@@ -783,21 +783,21 @@ sp_item_i2d_affine_d (SPItem const *item, NRMatrixD *affine_d)
 	return affine_d;
 }
 
-NRMatrixF *
-sp_item_i2d_affine (SPItem const *item, NRMatrixF *affine_f)
+NRMatrix *
+sp_item_i2d_affine (SPItem const *item, NRMatrix *affine_f)
 {
-	NRMatrixD affine_d;
+	NRMatrix affine_d;
 	sp_item_i2d_affine_d (item, &affine_d);
 	nr_matrix_f_from_d (affine_f, &affine_d);
 	return affine_f;
 }
 
 void
-sp_item_set_i2d_affine_d (SPItem *item, NRMatrixD const *affine_d)
+sp_item_set_i2d_affine_d (SPItem *item, NRMatrix const *affine_d)
 {
-	NRMatrixD p2dt; /* item parent to desktop transform */
-	NRMatrixD dt2p; /* desktop to item parent transform */
-	NRMatrixF i2p; /* item to parent transform */
+	NRMatrix p2dt; /* item parent to desktop transform */
+	NRMatrix dt2p; /* desktop to item parent transform */
+	NRMatrix i2p; /* item to parent transform */
 
 	g_return_if_fail (item != NULL);
 	g_return_if_fail (SP_IS_ITEM (item));
@@ -818,19 +818,19 @@ sp_item_set_i2d_affine_d (SPItem *item, NRMatrixD const *affine_d)
 }
 
 void
-sp_item_set_i2d_affine (SPItem *item, NRMatrixF const *affine_f)
+sp_item_set_i2d_affine (SPItem *item, NRMatrix const *affine_f)
 {
-	NRMatrixD affine_d;
+	NRMatrix affine_d;
 
 	nr_matrix_d_from_f (&affine_d, affine_f);
 	sp_item_set_i2d_affine_d (item, &affine_d);
 }
 
 
-NRMatrixD *
-sp_item_dt2i_affine_d (SPItem const *item, SPDesktop *dt, NRMatrixD *affine_d)
+NRMatrix *
+sp_item_dt2i_affine_d (SPItem const *item, SPDesktop *dt, NRMatrix *affine_d)
 {
-	NRMatrixD i2dt;
+	NRMatrix i2dt;
 
 	/* fixme: Implement the right way (Lauris) */
 	sp_item_i2d_affine_d (item, &i2dt);
@@ -888,7 +888,7 @@ static const SPUnit *ex = NULL;
 gdouble
 sp_item_distance_to_svg_viewport (SPItem *item, gdouble distance, const SPUnit *unit)
 {
-	NRMatrixF i2doc;
+	NRMatrix i2doc;
 	double dx, dy;
 	double a2u, u2a;
 
@@ -941,7 +941,7 @@ sp_item_distance_to_svg_viewport (SPItem *item, gdouble distance, const SPUnit *
 gdouble
 sp_item_distance_to_svg_bbox (SPItem *item, gdouble distance, const SPUnit *unit)
 {
-	NRMatrixF i2doc;
+	NRMatrix i2doc;
 	double dx, dy;
 	double a2u, u2a;
 

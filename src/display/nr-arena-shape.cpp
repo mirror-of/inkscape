@@ -205,7 +205,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 	NRArenaShape *shape;
 	NRArenaItem *child;
 	SPStyle *style;
-	NRRectF bbox;
+	NRRect bbox;
 	unsigned int newstate, beststate;
 
 	shape = NR_ARENA_SHAPE (item);
@@ -223,7 +223,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 		shape->ctm = gc->transform;
 		if (state & NR_ARENA_ITEM_STATE_BBOX) {
 			if (shape->curve) {
-				NRMatrixF ctm;
+				NRMatrix ctm;
 				NRBPath bp;
 				/* fixme: */
 				bbox.x0 = bbox.y0 = NR_HUGE_F;
@@ -282,7 +282,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 	if (shape->style->fill.type != SP_PAINT_TYPE_NONE) {
 		if ((shape->curve->end > 2) || (shape->curve->bpath[1].code == ART_CURVETO)) {
 			if (TRUE || !shape->fill_svp) {
-				NRMatrixF ctmf;
+				NRMatrix ctmf;
 				NRSVL *svl;
 				unsigned int windrule;
 				nr_matrix_f_from_d (&ctmf, &gc->transform);
@@ -547,8 +547,8 @@ nr_arena_shape_pick (NRArenaItem *item, double x, double y, double delta, unsign
 			}
 		}
 	} else {
-		NRMatrixF t;
-		NRPointF pt;
+		NRMatrix t;
+		NRPoint pt;
 		NRBPath bp;
 		float dist;
 		int wind;
@@ -629,7 +629,7 @@ nr_arena_shape_set_style (NRArenaShape *shape, SPStyle *style)
 }
 
 void
-nr_arena_shape_set_paintbox (NRArenaShape *shape, const NRRectF *pbox)
+nr_arena_shape_set_paintbox (NRArenaShape *shape, const NRRect *pbox)
 {
 	g_return_if_fail (shape != NULL);
 	g_return_if_fail (NR_IS_ARENA_SHAPE (shape));

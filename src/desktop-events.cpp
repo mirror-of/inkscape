@@ -81,7 +81,7 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 	static gboolean dragging = FALSE;
 	static SPCanvasItem * guide = NULL;
 	SPDesktop *desktop;
-	NRPointF p;
+	NRPoint p;
 	double px, py;
 	int wx, wy;
 
@@ -118,7 +118,7 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 		break;
 	case GDK_BUTTON_RELEASE:
 		if (dragging && event->button.button == 1) {
-			NRPointF p;
+			NRPoint p;
 		        gdk_pointer_ungrab (event->button.time);
 			sp_canvas_window_to_world (dtw->canvas, wx, wy, &px, &py);
 			sp_desktop_w2d_xy_point (desktop, &p, px, py);
@@ -188,7 +188,7 @@ sp_dt_guide_event (SPCanvasItem * item, GdkEvent * event, gpointer data)
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (dragging) {
-			NRPointF p;
+			NRPoint p;
 			sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
 			sp_guide_moveto (guide, p.x, p.y);
 			moved = TRUE;
@@ -209,7 +209,7 @@ sp_dt_guide_event (SPCanvasItem * item, GdkEvent * event, gpointer data)
 			if (moved) {
 				GtkWidget *w;
 				double winx, winy;
-				NRPointF p;
+				NRPoint p;
 				w = GTK_WIDGET (item->canvas);
 				sp_canvas_world_to_window (item->canvas, event->button.x, event->button.y, &winx, &winy);
 				sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);

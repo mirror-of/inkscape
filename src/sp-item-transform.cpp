@@ -23,8 +23,8 @@ void art_affine_skew (double dst[6], double dx, double dy);
 void
 sp_item_rotate_rel (SPItem * item, double angle)
 {
-	NRRectF b;
-	NRMatrixF curaff, f;
+	NRRect b;
+	NRMatrix curaff, f;
   double rotate[6], s[6], t[6], u[6], v[6], newaff[6];
   double x,y;
   char tstr[80];
@@ -60,11 +60,11 @@ sp_item_rotate_rel (SPItem * item, double angle)
 void
 sp_item_scale_rel (SPItem *item, double dx, double dy)
 {
-	NRMatrixF curaff, new_transform;
-	NRMatrixD scale, s, t, u, v;
+	NRMatrix curaff, new_transform;
+	NRMatrix scale, s, t, u, v;
 	char tstr[80];
 	double x, y;
-	NRRectF b;
+	NRRect b;
 
 	sp_item_bbox_desktop (item, &b);
 
@@ -108,11 +108,11 @@ art_affine_skew (double dst[6], double dx, double dy)
 void
 sp_item_skew_rel (SPItem *item, double dx, double dy)
 {
-	NRMatrixF cur, new_transform;
+	NRMatrix cur, new_transform;
 	double skew[6], s[6], t[6] ,u[6] ,v[6] ,newaff[6];
 	char tstr[80];
 	double x,y;
-	NRRectF b;
+	NRRect b;
 
 	sp_item_bbox_desktop (item, &b);
 	x = b.x0 + (b.x1 - b.x0) / 2;
@@ -142,7 +142,7 @@ sp_item_skew_rel (SPItem *item, double dx, double dy)
 void
 sp_item_move_rel (SPItem * item, double dx, double dy)
 {
-	NRMatrixF cur, new_transform;
+	NRMatrix cur, new_transform;
 	double move[6];
 	char tstr[80];
 

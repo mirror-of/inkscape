@@ -30,9 +30,9 @@ struct _NRArenaShape {
 	/* Shape data */
 	SPCurve *curve;
 	SPStyle *style;
-	NRRectF paintbox;
+	NRRect paintbox;
 	/* State data */
-	NRMatrixD ctm;
+	NRMatrix ctm;
 	SPPainter *fill_painter;
 	SPPainter *stroke_painter;
 	NRSVP *fill_svp;
@@ -49,6 +49,6 @@ NRType nr_arena_shape_get_type (void);
 
 void nr_arena_shape_set_path (NRArenaShape *shape, SPCurve *curve, unsigned int lieutenant, const double *affine);
 void nr_arena_shape_set_style (NRArenaShape *shape, SPStyle *style);
-void nr_arena_shape_set_paintbox (NRArenaShape *shape, const NRRectF *pbox);
+void nr_arena_shape_set_paintbox (NRArenaShape *shape, const NRRect *pbox);
 
 #endif

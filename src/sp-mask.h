@@ -46,6 +46,6 @@ GType sp_mask_get_type (void);
 NRArenaItem *sp_mask_show (SPMask *mask, NRArena *arena, unsigned int key);
 void sp_mask_hide (SPMask *mask, unsigned int key);
 
-void sp_mask_set_bbox (SPMask *mask, unsigned int key, NRRectF *bbox);
+void sp_mask_set_bbox (SPMask *mask, unsigned int key, NRRect *bbox);
 
 #endif

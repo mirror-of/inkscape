@@ -31,7 +31,7 @@ struct _SPNodePath {
 	SPPath * path;
 	GList * subpaths;
 	GList * selected;
-	NRMatrixD i2d, d2i;
+	NRMatrix i2d, d2i;
 };
 
 struct _SPNodeSubPath {
@@ -44,7 +44,7 @@ struct _SPNodeSubPath {
 
 typedef struct {
 	SPPathNode * other;
-	NRPointF pos;
+	NRPoint pos;
 	SPKnot * knot;
 	SPCanvasItem * line;
 } SPPathNodeSide;
@@ -54,8 +54,8 @@ struct _SPPathNode {
 	guint type : 4;
 	guint code : 4;
 	guint selected : 1;
-	NRPointF pos;
-	NRPointF origin;
+	NRPoint pos;
+	NRPoint origin;
 	SPKnot * knot;
 	SPPathNodeSide n;
 	SPPathNodeSide p;
@@ -70,7 +70,7 @@ void sp_nodepath_deselect (SPNodePath *nodepath);
 void sp_nodepath_select_all (SPNodePath *nodepath);
 void sp_nodepath_select_next (SPNodePath *nodepath);
 void sp_nodepath_select_prev (SPNodePath *nodepath);
-void sp_nodepath_select_rect (SPNodePath * nodepath, NRRectD * b, gboolean incremental);
+void sp_nodepath_select_rect (SPNodePath * nodepath, NRRect * b, gboolean incremental);
 GList *save_nodepath_selection (SPNodePath *nodepath);
 void restore_nodepath_selection (SPNodePath *nodepath, GList *r);
 gboolean nodepath_repr_changed (SPNodePath * np);

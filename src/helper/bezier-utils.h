@@ -21,18 +21,18 @@
 
 /* Bezier approximation utils */
 
-gint sp_bezier_fit_cubic (NRPointF *bezier, const NRPointF *data, gint len, gdouble error);
+gint sp_bezier_fit_cubic (NRPoint *bezier, const NRPoint *data, gint len, gdouble error);
 
-gint sp_bezier_fit_cubic_r (NRPointF *bezier, const NRPointF *data, gint len, gdouble error, gint max_depth);
+gint sp_bezier_fit_cubic_r (NRPoint *bezier, const NRPoint *data, gint len, gdouble error, gint max_depth);
 
-gint sp_bezier_fit_cubic_full (NRPointF *bezier, const NRPointF *data, gint len,
-			       NRPointF *tHat1, NRPointF *tHat2, gdouble error, gint max_depth);
+gint sp_bezier_fit_cubic_full (NRPoint *bezier, const NRPoint *data, gint len,
+			       NRPoint *tHat1, NRPoint *tHat2, gdouble error, gint max_depth);
 
 
 /* Data array */
 
-void sp_darray_left_tangent (const NRPointF *d, int first, int length, NRPointF *tHat1);
-void sp_darray_right_tangent (const NRPointF *d, int last, int length, NRPointF *tHat2);
-void sp_darray_center_tangent (const NRPointF *d, gint center, NRPointF *tHatCenter);
+void sp_darray_left_tangent (const NRPoint *d, int first, int length, NRPoint *tHat1);
+void sp_darray_right_tangent (const NRPoint *d, int last, int length, NRPoint *tHat2);
+void sp_darray_center_tangent (const NRPoint *d, gint center, NRPoint *tHatCenter);
 
 #endif /* __SP_BEZIER_UTILS_H__ */

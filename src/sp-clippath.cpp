@@ -30,7 +30,7 @@ struct _SPClipPathView {
 	SPClipPathView *next;
 	unsigned int key;
 	NRArenaItem *arenaitem;
-	NRRectF bbox;
+	NRRect bbox;
 };
 
 static void sp_clippath_class_init (SPClipPathClass *klass);
@@ -233,7 +233,7 @@ sp_clippath_update (SPObject *object, SPCtx *ctx, guint flags)
 
 	for (v = cp->display; v != NULL; v = v->next) {
 		if (cp->clipPathUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX) {
-			NRMatrixF t;
+			NRMatrix t;
 			nr_matrix_f_set_scale (&t, v->bbox.x1 - v->bbox.x0, v->bbox.y1 - v->bbox.y0);
 			t.c[4] = v->bbox.x0;
 			t.c[5] = v->bbox.y0;
@@ -317,7 +317,7 @@ sp_clippath_show (SPClipPath *cp, NRArena *arena, unsigned int key)
 	}
 
 	if (cp->clipPathUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX) {
-		NRMatrixF t;
+		NRMatrix t;
 		nr_matrix_f_set_scale (&t, cp->display->bbox.x1 - cp->display->bbox.x0, cp->display->bbox.y1 - cp->display->bbox.y0);
 		t.c[4] = cp->display->bbox.x0;
 		t.c[5] = cp->display->bbox.y0;
@@ -354,7 +354,7 @@ sp_clippath_hide (SPClipPath *cp, unsigned int key)
 }
 
 void
-sp_clippath_set_bbox (SPClipPath *cp, unsigned int key, NRRectF *bbox)
+sp_clippath_set_bbox (SPClipPath *cp, unsigned int key, NRRect *bbox)
 {
 	SPClipPathView *v;
 

@@ -35,7 +35,7 @@ static void sp_path_build (SPObject * object, SPDocument * document, SPRepr * re
 static void sp_path_set (SPObject *object, unsigned int key, const gchar *value);
 
 static SPRepr *sp_path_write (SPObject *object, SPRepr *repr, guint flags);
-static void sp_path_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *transform);
+static void sp_path_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
 static gchar * sp_path_description (SPItem * item);
 
 static SPShapeClass *parent_class;
@@ -267,7 +267,7 @@ sp_path_write (SPObject *object, SPRepr *repr, guint flags)
  * Writes the given transform into the repr for the given item.
  */
 static void
-sp_path_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *transform)
+sp_path_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform)
 {
 	SPPath *path;
 	SPShape *shape;

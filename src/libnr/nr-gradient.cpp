@@ -37,7 +37,7 @@ NRRenderer *
 nr_rgradient_renderer_setup (NRRGradientRenderer *rgr,
 			     const unsigned char *cv,
 			     unsigned int spread,
-			     const NRMatrixF *gs2px,
+			     const NRMatrix *gs2px,
 			     float cx, float cy,
 			     float fx, float fy,
 			     float r)
@@ -67,7 +67,7 @@ nr_rgradient_renderer_setup (NRRGradientRenderer *rgr,
 		rgr->fy = rgr->cy;
 		rgr->r = 1.0;
 	} else {
-		NRMatrixF n2gs, n2px;
+		NRMatrix n2gs, n2px;
 		double df;
 
 		rgr->renderer.render = nr_rgradient_render_block_optimized;

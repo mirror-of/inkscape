@@ -314,8 +314,8 @@ sp_verb_action_object_perform (SPAction *action, void * data, void * pdata)
 {
 	SPDesktop *dt;
 	SPSelection *sel;
-	NRRectF bbox;
-	NRPointF center;
+	NRRect bbox;
+	NRPoint center;
 
 	dt = SP_ACTIVE_DESKTOP;
 	if (!dt) return;
@@ -411,7 +411,7 @@ static void
 sp_verb_action_zoom_perform (SPAction *action, void * data, void * pdata)
 {
 	SPDesktop *dt;
-	NRRectF d;
+	NRRect d;
 	SPRepr *repr;
 	unsigned int v = 0;
 

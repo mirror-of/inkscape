@@ -35,7 +35,7 @@ struct _NRSVPFlat {
 
 struct _NRSVP {
 	unsigned int length;
-	NRPointF *points;
+	NRPoint *points;
 	NRSVPSegment segments[1];
 };
 
@@ -55,7 +55,7 @@ void nr_svp_free (NRSVP *svp);
 
 int nr_svp_point_wind (NRSVP *svp, float x, float y);
 double nr_svp_point_distance (NRSVP *svp, float x, float y);
-void nr_svp_bbox (NRSVP *svp, NRRectF *bbox, unsigned int clear);
+void nr_svp_bbox (NRSVP *svp, NRRect *bbox, unsigned int clear);
 
 /* Sorted vertex lists */
 
@@ -74,7 +74,7 @@ struct _NRVertex {
 struct _NRSVL {
 	NRSVL *next;
 	NRVertex *vertex;
-	NRRectF bbox;
+	NRRect bbox;
 	NRShort dir;
 	NRShort wind;
 };

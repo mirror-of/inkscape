@@ -60,7 +60,7 @@ typedef struct _NRGC NRGC;
 #include "nr-arena-forward.h"
 
 struct _NRGC {
-	NRMatrixD transform;
+	NRMatrix transform;
 };
 
 struct _NRArenaItem {
@@ -86,7 +86,7 @@ struct _NRArenaItem {
 	/* BBox in grid coordinates */
 	NRRectL bbox;
 	/* Our affine */
-	NRMatrixF *transform;
+	NRMatrix *transform;
 	/* Clip item */
 	NRArenaItem *clip;
 	/* Mask item */
@@ -157,7 +157,7 @@ NRArenaItem *nr_arena_item_unparent (NRArenaItem *item);
 
 void nr_arena_item_append_child (NRArenaItem *parent, NRArenaItem *child);
 
-void nr_arena_item_set_transform (NRArenaItem *item, const NRMatrixF *transform);
+void nr_arena_item_set_transform (NRArenaItem *item, const NRMatrix *transform);
 void nr_arena_item_set_opacity (NRArenaItem *item, double opacity);
 void nr_arena_item_set_sensitive (NRArenaItem *item, unsigned int sensitive);
 void nr_arena_item_set_visible (NRArenaItem *item, unsigned int visible);

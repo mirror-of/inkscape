@@ -192,8 +192,8 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 {
 	SPDesktop * desktop;
 	SPNodeContext * nc;
-	NRPointF p;
-	NRRectD b;
+	NRPoint p;
+	NRRect b;
 	gint ret;
 	double nudge;
 

@@ -95,7 +95,7 @@ nr_arena_image_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int 
 {
 	NRArenaImage *image;
 	double hscale, vscale;
-	NRMatrixD grid2px;
+	NRMatrix grid2px;
 
 	image = NR_ARENA_IMAGE (item);
 
@@ -124,7 +124,7 @@ nr_arena_image_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int 
 
 	/* Calculate bbox */
 	if (image->px) {
-		NRRectD bbox;
+		NRRect bbox;
 
 		bbox.x0 = image->x;
 		bbox.y0 = image->y;
@@ -160,7 +160,7 @@ nr_arena_image_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
 	NRULong Falpha;
 	unsigned char *spx, *dpx;
 	int dw, dh, drs, sw, sh, srs;
-	NRMatrixF d2s;
+	NRMatrix d2s;
 
 	image = NR_ARENA_IMAGE (item);
 

@@ -575,9 +575,9 @@ nr_arena_item_append_child (NRArenaItem *parent, NRArenaItem *child)
 }
 
 void
-nr_arena_item_set_transform (NRArenaItem *item, const NRMatrixF *transform)
+nr_arena_item_set_transform (NRArenaItem *item, const NRMatrix *transform)
 {
-	const NRMatrixF *ms, *md;
+	const NRMatrix *ms, *md;
 
 	nr_return_if_fail (item != NULL);
 	nr_return_if_fail (NR_IS_ARENA_ITEM (item));
@@ -594,7 +594,7 @@ nr_arena_item_set_transform (NRArenaItem *item, const NRMatrixF *transform)
 			if (item->transform) nr_free (item->transform);
 			item->transform = NULL;
 		} else {
-			if (!item->transform) item->transform = nr_new (NRMatrixF, 1);
+			if (!item->transform) item->transform = nr_new (NRMatrix, 1);
 			*item->transform = *transform;
 		}
 		nr_arena_item_request_update (item, NR_ARENA_ITEM_STATE_ALL, TRUE);

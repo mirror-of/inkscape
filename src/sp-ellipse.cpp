@@ -64,7 +64,7 @@ static void sp_genericellipse_init (SPGenericEllipse *ellipse);
 
 static void sp_genericellipse_update (SPObject *object, SPCtx *ctx, guint flags);
 
-static int sp_genericellipse_snappoints (SPItem *item, NRPointF *p, int size);
+static int sp_genericellipse_snappoints (SPItem *item, NRPoint *p, int size);
 
 static void sp_genericellipse_set_shape (SPShape *shape);
 
@@ -252,10 +252,10 @@ g_print ("step %d s %f e %f coords %f %f %f %f %f %f\n",
 }
 
 static int
-sp_genericellipse_snappoints (SPItem *item, NRPointF *p, int size)
+sp_genericellipse_snappoints (SPItem *item, NRPoint *p, int size)
 {
 	SPGenericEllipse *ge;
-	NRMatrixF i2d;
+	NRMatrix i2d;
 	int pos;
 
 	ge = SP_GENERICELLIPSE (item);
@@ -693,7 +693,7 @@ sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr)
 {
 #define ARC_BUFSIZE 256
 	SPGenericEllipse *ge;
-	NRPointF p1, p2;
+	NRPoint p1, p2;
 	gint fa, fs;
 	gdouble  dt;
 	gchar c[ARC_BUFSIZE];
@@ -705,7 +705,7 @@ sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr)
 
 	dt = fmod (ge->end - ge->start, SP_2PI);
 	if (fabs (dt) < 1e-6) {
-		NRPointF ph;
+		NRPoint ph;
 		sp_arc_get_xy (arc, (ge->start + ge->end) / 2.0, &ph);
 		g_snprintf (c, ARC_BUFSIZE, "M %f %f A %f %f 0 %d %d %f,%f A %g %g 0 %d %d %g %g L %f %f z",
 			    p1.x, p1.y,
@@ -896,7 +896,7 @@ sp_arc_position_set (SPArc *arc, gdouble x, gdouble y, gdouble rx, gdouble ry)
 }
 
 void
-sp_arc_get_xy (SPArc *arc, gdouble arg, NRPointF *p)
+sp_arc_get_xy (SPArc *arc, gdouble arg, NRPoint *p)
 {
 	SPGenericEllipse *ge;
 

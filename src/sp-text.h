@@ -71,13 +71,13 @@ struct _SPString {
 	SPLayoutData *ly;
 	/* Content */
 	gchar *text;
-	NRPointF *p;
+	NRPoint *p;
 	/* Bookkeeping */
 	guint start;
 	guint length;
 	/* Using current direction and style */
-	NRRectF bbox;
-	NRPointF advance;
+	NRRect bbox;
+	NRPoint advance;
 };
 
 struct _SPStringClass {

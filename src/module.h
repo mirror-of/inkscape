@@ -226,14 +226,14 @@ struct _SPModulePrintClass {
 	unsigned int (* finish) (SPModulePrint *modp);
 
 	/* Rendering methods */
-	unsigned int (* bind) (SPModulePrint *modp, const NRMatrixF *transform, float opacity);
+	unsigned int (* bind) (SPModulePrint *modp, const NRMatrix *transform, float opacity);
 	unsigned int (* release) (SPModulePrint *modp);
-	unsigned int (* fill) (SPModulePrint *modp, const NRBPath *bpath, const NRMatrixF *ctm, const SPStyle *style,
-			       const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox);
-	unsigned int (* stroke) (SPModulePrint *modp, const NRBPath *bpath, const NRMatrixF *transform, const SPStyle *style,
-				 const NRRectF *pbox, const NRRectF *dbox, const NRRectF *bbox);
+	unsigned int (* fill) (SPModulePrint *modp, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
+			       const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
+	unsigned int (* stroke) (SPModulePrint *modp, const NRBPath *bpath, const NRMatrix *transform, const SPStyle *style,
+				 const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
 	unsigned int (* image) (SPModulePrint *modp, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
-				const NRMatrixF *transform, const SPStyle *style);
+				const NRMatrix *transform, const SPStyle *style);
 };
 
 SPModulePrint * sp_module_print_new (SPRepr * in_repr);

@@ -48,7 +48,7 @@ sp_item_knot_holder (SPItem *item, SPDesktop *desktop)
 /* SPRect */
 
 static void
-sp_rect_rx_get (SPItem *item, NRPointF *p)
+sp_rect_rx_get (SPItem *item, NRPoint *p)
 {
 	SPRect *rect;
 
@@ -59,7 +59,7 @@ sp_rect_rx_get (SPItem *item, NRPointF *p)
 }
 
 static void
-sp_rect_rx_set (SPItem *item, const NRPointF *p, guint state)
+sp_rect_rx_set (SPItem *item, const NRPoint *p, guint state)
 {
 	SPRect *rect;
 
@@ -78,7 +78,7 @@ sp_rect_rx_set (SPItem *item, const NRPointF *p, guint state)
 
 
 static void
-sp_rect_ry_get (SPItem *item, NRPointF *p)
+sp_rect_ry_get (SPItem *item, NRPoint *p)
 {
 	SPRect *rect;
 
@@ -89,7 +89,7 @@ sp_rect_ry_get (SPItem *item, NRPointF *p)
 }
 
 static void
-sp_rect_ry_set (SPItem *item, const NRPointF *p, guint state)
+sp_rect_ry_set (SPItem *item, const NRPoint *p, guint state)
 {
 	SPRect *rect;
 
@@ -130,7 +130,7 @@ sp_rect_knot_holder (SPItem *item, SPDesktop *desktop)
  *   -1 : outside
  */
 static gint
-sp_genericellipse_side (SPGenericEllipse *ellipse, const NRPointF *p)
+sp_genericellipse_side (SPGenericEllipse *ellipse, const NRPoint *p)
 {
 	gdouble dx, dy;
 	gdouble s;
@@ -145,7 +145,7 @@ sp_genericellipse_side (SPGenericEllipse *ellipse, const NRPointF *p)
 }
 
 static void
-sp_arc_start_set (SPItem *item, const NRPointF *p, guint state)
+sp_arc_start_set (SPItem *item, const NRPoint *p, guint state)
 {
 	SPGenericEllipse *ge;
 	SPArc *arc;
@@ -168,7 +168,7 @@ sp_arc_start_set (SPItem *item, const NRPointF *p, guint state)
 }
 
 static void
-sp_arc_start_get (SPItem *item, NRPointF *p)
+sp_arc_start_get (SPItem *item, NRPoint *p)
 {
 	SPGenericEllipse *ge;
 	SPArc *arc;
@@ -180,7 +180,7 @@ sp_arc_start_get (SPItem *item, NRPointF *p)
 }
 
 static void
-sp_arc_end_set (SPItem *item, const NRPointF *p, guint state)
+sp_arc_end_set (SPItem *item, const NRPoint *p, guint state)
 {
 	SPGenericEllipse *ge;
 	SPArc *arc;
@@ -202,7 +202,7 @@ sp_arc_end_set (SPItem *item, const NRPointF *p, guint state)
 }
 
 static void
-sp_arc_end_get (SPItem *item, NRPointF *p)
+sp_arc_end_get (SPItem *item, NRPoint *p)
 {
 	SPGenericEllipse *ge;
 	SPArc *arc;
@@ -235,7 +235,7 @@ sp_arc_knot_holder (SPItem *item, SPDesktop *desktop)
 /* SPStar */
 
 static void
-sp_star_knot1_set (SPItem *item, const NRPointF *p, guint state)
+sp_star_knot1_set (SPItem *item, const NRPoint *p, guint state)
 {
 	SPStar *star;
 	gdouble dx, dy, arg1, darg1;
@@ -259,7 +259,7 @@ sp_star_knot1_set (SPItem *item, const NRPointF *p, guint state)
 }
 
 static void
-sp_star_knot2_set (SPItem *item, const NRPointF *p, guint state)
+sp_star_knot2_set (SPItem *item, const NRPoint *p, guint state)
 {
 	SPStar *star;
 	gdouble dx, dy;
@@ -280,7 +280,7 @@ sp_star_knot2_set (SPItem *item, const NRPointF *p, guint state)
 }
 
 static void
-sp_star_knot1_get (SPItem *item, NRPointF *p)
+sp_star_knot1_get (SPItem *item, NRPoint *p)
 {
 	SPStar *star;
 
@@ -293,7 +293,7 @@ sp_star_knot1_get (SPItem *item, NRPointF *p)
 }
 
 static void
-sp_star_knot2_get (SPItem *item, NRPointF *p)
+sp_star_knot2_get (SPItem *item, NRPoint *p)
 {
 	SPStar *star;
 
@@ -341,7 +341,7 @@ sp_star_knot_holder (SPItem *item, SPDesktop *desktop)
  *   [control] constrain inner arg to round per PI/4
  */
 static void
-sp_spiral_inner_set (SPItem *item, const NRPointF *p, guint state)
+sp_spiral_inner_set (SPItem *item, const NRPoint *p, guint state)
 {
 	SPSpiral *spiral;
 	gdouble   dx, dy;
@@ -385,7 +385,7 @@ sp_spiral_inner_set (SPItem *item, const NRPointF *p, guint state)
  *   [control] constrain inner arg to round per PI/4
  */
 static void
-sp_spiral_outer_set (SPItem *item, const NRPointF *p, guint state)
+sp_spiral_outer_set (SPItem *item, const NRPoint *p, guint state)
 {
 	SPSpiral *spiral;
 	gdouble   dx, dy;
@@ -411,7 +411,7 @@ sp_spiral_outer_set (SPItem *item, const NRPointF *p, guint state)
 }
 
 static void
-sp_spiral_inner_get (SPItem *item, NRPointF *p)
+sp_spiral_inner_get (SPItem *item, NRPoint *p)
 {
 	SPSpiral *spiral;
 
@@ -421,7 +421,7 @@ sp_spiral_inner_get (SPItem *item, NRPointF *p)
 }
 
 static void
-sp_spiral_outer_get (SPItem *item, NRPointF *p)
+sp_spiral_outer_get (SPItem *item, NRPoint *p)
 {
 	SPSpiral *spiral;
 

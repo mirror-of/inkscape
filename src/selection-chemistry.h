@@ -40,9 +40,9 @@ void sp_selection_paste_style (GtkWidget * widget);
 void sp_selection_apply_affine (SPSelection *selection, double affine[6]);
 void sp_selection_remove_transform (void);
 void sp_selection_scale_absolute (SPSelection *selection, double x0, double x1, double y0, double y1);
-void sp_selection_scale_relative (SPSelection *selection, NRPointF *align, double dx, double dy);
-void sp_selection_rotate_relative (SPSelection *selection, NRPointF *center, gdouble angle);
-void sp_selection_skew_relative (SPSelection *selection, NRPointF *align, double dx, double dy);
+void sp_selection_scale_relative (SPSelection *selection, NRPoint *align, double dx, double dy);
+void sp_selection_rotate_relative (SPSelection *selection, NRPoint *center, gdouble angle);
+void sp_selection_skew_relative (SPSelection *selection, NRPoint *align, double dx, double dy);
 void sp_selection_move_relative (SPSelection *selection, double dx, double dy);
 
 void sp_selection_rotate_90 (void);

@@ -32,7 +32,7 @@ struct _NRArenaImage {
 	double width, height;
 
 	/* From GRID to PIXELS */
-	NRMatrixF grid2px;
+	NRMatrix grid2px;
 };
 
 struct _NRArenaImageClass {

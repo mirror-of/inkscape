@@ -66,7 +66,7 @@ struct _SPMarker {
 
 	/* viewBox; */
 	unsigned int viewBox_set : 1;
-	NRRectD viewBox;
+	NRRect viewBox;
 
 	/* preserveAspectRatio */
 	unsigned int aspect_set : 1;
@@ -74,7 +74,7 @@ struct _SPMarker {
 	unsigned int aspect_clip : 1;
 
 	/* Child to parent additional transform */
-	NRMatrixD c2p;
+	NRMatrix c2p;
 
 	/* Private views */
 	SPMarkerView *views;
@@ -89,7 +89,7 @@ GType sp_marker_get_type (void);
 void sp_marker_show_dimension (SPMarker *marker, unsigned int key, unsigned int size);
 NRArenaItem *sp_marker_show_instance (SPMarker *marker, NRArenaItem *parent,
 				      unsigned int key, unsigned int pos,
-				      NRMatrixF *base, float linewidth);
+				      NRMatrix *base, float linewidth);
 void sp_marker_hide (SPMarker *marker, unsigned int key);
 
 #endif

@@ -28,13 +28,9 @@ typedef struct _NRPointS {
 	NRShort x, y;
 } NRPointS;
 
-typedef struct _NRRectD {
+typedef struct _NRRect {
 	double x0, y0, x1, y1;
-} NRRectD;
-
-typedef struct _NRRectF {
-	double x0, y0, x1, y1;
-} NRRectF;
+} NRRect;
 
 typedef struct _NRRectL {
 	NRLong x0, y0, x1, y1;

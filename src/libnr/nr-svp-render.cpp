@@ -310,7 +310,7 @@ typedef struct _NRSlice NRSlice;
 struct _NRSlice {
 	NRSlice *next;
 	int wind;
-	NRPointF *points;
+	NRPoint *points;
 	unsigned int current;
 	unsigned int last;
 	double x;
@@ -318,7 +318,7 @@ struct _NRSlice {
 	double stepx;
 };
 
-static NRSlice *nr_slice_new (int wind, NRPointF *points, unsigned int length, NRCoord y);
+static NRSlice *nr_slice_new (int wind, NRPoint *points, unsigned int length, NRCoord y);
 static NRSlice *nr_slice_free_one (NRSlice *s);
 static void nr_slice_free_list (NRSlice *s);
 static NRSlice *nr_slice_insert_sorted (NRSlice *start, NRSlice *slice);
@@ -590,10 +590,10 @@ nr_svp_render (NRSVP *svp, unsigned char *px, unsigned int bpp, unsigned int rs,
 static NRSlice *ffslice = NULL;
 
 static NRSlice *
-nr_slice_new (int wind, NRPointF *points, unsigned int length, NRCoord y)
+nr_slice_new (int wind, NRPoint *points, unsigned int length, NRCoord y)
 {
 	NRSlice *s;
-	NRPointF *p;
+	NRPoint *p;
 
 	/* g_assert (svl); */
 	/* g_assert (svl->vertex); */
@@ -697,7 +697,7 @@ nr_slice_compare (NRSlice *l, NRSlice *r)
 		if (l->stepx > r->stepx) return 1;
 	} else if (l->y > r->y) {
 		unsigned int pidx;
-		NRPointF *p;
+		NRPoint *p;
 		double x, ldx, rdx;
 		/* This is bitch - we have to determine r values at l->y */
 		pidx = 0;
@@ -718,7 +718,7 @@ nr_slice_compare (NRSlice *l, NRSlice *r)
 		if (ldx > rdx) return 1;
 	} else {
 		unsigned int pidx;
-		NRPointF *p;
+		NRPoint *p;
 		double x, ldx, rdx;
 		/* This is bitch - we have to determine l value at r->y */
 		pidx = 0;

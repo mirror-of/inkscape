@@ -72,8 +72,8 @@ sp_selected_path_combine (void)
 	style = g_strdup (sp_repr_attr ((SP_OBJECT (il->data))->repr, "style"));
 
 	for (l = il; l != NULL; l = l->next) {
-		NRMatrixF i2root;
-		NRMatrixD i2rootd;
+		NRMatrix i2root;
+		NRMatrix i2rootd;
 		path = (SPPath *) l->data;
 		c = sp_shape_get_curve (SP_SHAPE (path));
 		sp_item_i2root_affine (SP_ITEM (path), &i2root);
@@ -110,8 +110,8 @@ sp_selected_path_break_apart (void)
 	SPPath * path;
 	SPCurve * curve;
 	ArtBpath * abp;
-	NRMatrixF i2root;
-	NRMatrixD d;
+	NRMatrix i2root;
+	NRMatrix d;
 	gchar * style, * str;
 	GSList * list, * l;
 	SPDesktop * desktop;

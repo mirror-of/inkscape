@@ -29,7 +29,7 @@ static void sp_line_set (SPObject *object, unsigned int key, const gchar *value)
 static SPRepr *sp_line_write (SPObject *object, SPRepr *repr, guint flags);
 
 static gchar *sp_line_description (SPItem * item);
-static void sp_line_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *t);
+static void sp_line_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t);
 
 static void sp_line_set_shape (SPLine * line);
 
@@ -170,7 +170,7 @@ sp_line_description (SPItem * item)
 }
 
 static void
-sp_line_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *t)
+sp_line_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
 {
 	double sw, sh;
 	SPLine *line;

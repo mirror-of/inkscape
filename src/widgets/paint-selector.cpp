@@ -372,7 +372,7 @@ sp_paint_selector_set_gradient_bbox (SPPaintSelector *psel, gdouble x0, gdouble 
 }
 
 void
-sp_paint_selector_set_gradient_gs2d_matrix_f (SPPaintSelector *psel, NRMatrixF *gs2d)
+sp_paint_selector_set_gradient_gs2d_matrix_f (SPPaintSelector *psel, NRMatrix *gs2d)
 {
 	SPGradientSelector *gsel;
 
@@ -387,7 +387,7 @@ sp_paint_selector_set_gradient_gs2d_matrix_f (SPPaintSelector *psel, NRMatrixF *
 }
 
 void
-sp_paint_selector_get_gradient_gs2d_matrix_f (SPPaintSelector *psel, NRMatrixF *gs2d)
+sp_paint_selector_get_gradient_gs2d_matrix_f (SPPaintSelector *psel, NRMatrix *gs2d)
 {
 	SPGradientSelector *gsel;
 
@@ -469,8 +469,8 @@ void
 sp_paint_selector_write_lineargradient (SPPaintSelector *psel, SPLinearGradient *lg, SPItem *item)
 {
 	gfloat p[4], gp[4];
-	NRMatrixF fctm, gs2d, g2d, d2g, gs2g, g2gs;
-	NRRectF fbb;
+	NRMatrix fctm, gs2d, g2d, d2g, gs2g, g2gs;
+	NRRect fbb;
 	double e;
 	SPGradientUnits units;
 	SPGradientSpread spread;
@@ -517,8 +517,8 @@ void
 sp_paint_selector_write_radialgradient (SPPaintSelector *psel, SPRadialGradient *rg, SPItem *item)
 {
 	gfloat p[5], gp[4];
-	NRMatrixF fctm, gs2d, g2d, d2g, gs2g, g2gs;
-	NRRectF fbb;
+	NRMatrix fctm, gs2d, g2d, d2g, gs2g, g2gs;
+	NRRect fbb;
 	double e;
 	SPGradientUnits units;
 	SPGradientSpread spread;

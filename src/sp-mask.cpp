@@ -29,7 +29,7 @@ struct _SPMaskView {
 	SPMaskView *next;
 	unsigned int key;
 	NRArenaItem *arenaitem;
-	NRRectF bbox;
+	NRRect bbox;
 };
 
 static void sp_mask_class_init (SPMaskClass *klass);
@@ -249,7 +249,7 @@ sp_mask_update (SPObject *object, SPCtx *ctx, guint flags)
 
 	for (v = mask->display; v != NULL; v = v->next) {
 		if (mask->maskContentUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX) {
-			NRMatrixF t;
+			NRMatrix t;
 			nr_matrix_f_set_scale (&t, v->bbox.x1 - v->bbox.x0, v->bbox.y1 - v->bbox.y0);
 			t.c[4] = v->bbox.x0;
 			t.c[5] = v->bbox.y0;
@@ -333,7 +333,7 @@ sp_mask_show (SPMask *mask, NRArena *arena, unsigned int key)
 	}
 
 	if (mask->maskContentUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX) {
-		NRMatrixF t;
+		NRMatrix t;
 		nr_matrix_f_set_scale (&t, mask->display->bbox.x1 - mask->display->bbox.x0, mask->display->bbox.y1 - mask->display->bbox.y0);
 		t.c[4] = mask->display->bbox.x0;
 		t.c[5] = mask->display->bbox.y0;
@@ -370,7 +370,7 @@ sp_mask_hide (SPMask *cp, unsigned int key)
 }
 
 void
-sp_mask_set_bbox (SPMask *mask, unsigned int key, NRRectF *bbox)
+sp_mask_set_bbox (SPMask *mask, unsigned int key, NRRect *bbox)
 {
 	SPMaskView *v;
 

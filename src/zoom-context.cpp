@@ -111,8 +111,8 @@ static gint
 sp_zoom_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 {
 	SPDesktop * desktop;
-	NRPointF p;
-	NRRectD b;
+	NRPoint p;
+	NRRect b;
 	gint ret;
 
 	ret = FALSE;
@@ -181,7 +181,7 @@ void
 sp_zoom_string (const gchar * zoom_str) {
 	SPDesktop * desktop;
 	gchar * zoom_str2;
-	NRRectF d;
+	NRRect d;
 	gdouble any;
 	
 	desktop = SP_ACTIVE_DESKTOP;

@@ -39,11 +39,11 @@ NRRenderer *
 nr_lgradient_renderer_setup (NRLGradientRenderer *lgr,
 			     const unsigned char *cv, 
 			     unsigned int spread, 
-			     const NRMatrixF *gs2px,
+			     const NRMatrix *gs2px,
 			     float x0, float y0,
 			     float x1, float y1)
 {
-	NRMatrixF n2gs, n2px, px2n;
+	NRMatrix n2gs, n2px, px2n;
 
 	lgr->renderer.render = nr_lgradient_render_block;
 

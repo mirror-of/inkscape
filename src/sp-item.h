@@ -73,11 +73,11 @@ typedef struct _SPItemCtx SPItemCtx;
 struct _SPItemCtx {
 	SPCtx ctx;
 	/* Item to document transformation */
-	NRMatrixD i2doc;
+	NRMatrix i2doc;
 	/* Viewport size */
-	NRRectD vp;
+	NRRect vp;
 	/* Item to viewport transformation */
-	NRMatrixD i2vp;
+	NRMatrix i2vp;
 };
 
 struct _SPItem {
@@ -87,7 +87,7 @@ struct _SPItem {
 	unsigned int printable : 1;
 	unsigned int stop_paint: 1;
 
-	NRMatrixF transform;
+	NRMatrix transform;
 
 	SPObject *clip;
 	SPObject *mask;
@@ -99,7 +99,7 @@ struct _SPItemClass {
 	SPObjectClass parent_class;
 
 	/* BBox union in given coordinate system */
-	void (* bbox) (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags);
+	void (* bbox) (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
 
 	/* Printing method. Assumes ctm is set to item affine matrix */
 	/* fixme: Think about it, and maybe implement generic export method instead (Lauris) */
@@ -112,10 +112,10 @@ struct _SPItemClass {
 	void (* hide) (SPItem *item, unsigned int key);
 
 	/* Returns a number of points used */ 
-	int (* snappoints) (SPItem *item, NRPointF *points, int size);
+	int (* snappoints) (SPItem *item, NRPoint *points, int size);
 
 	/* Write item transform to repr optimally */
-	void (* write_transform) (SPItem *item, SPRepr *repr, NRMatrixF *transform);
+	void (* write_transform) (SPItem *item, SPRepr *repr, NRMatrix *transform);
 
 	/* Emit event, if applicable */
 	gint (* event) (SPItem *item, SPEvent *event);
@@ -131,8 +131,8 @@ struct _SPItemClass {
 extern "C" {
 #endif /* __cplusplus */
 
-void sp_item_invoke_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int clear);
-void sp_item_invoke_bbox_full (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags, unsigned int clear);
+void sp_item_invoke_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int clear);
+void sp_item_invoke_bbox_full (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags, unsigned int clear);
 
 gchar * sp_item_description (SPItem * item);
 void sp_item_invoke_print (SPItem *item, SPPrintContext *ctx);
@@ -142,22 +142,22 @@ unsigned int sp_item_display_key_new (unsigned int numkeys);
 NRArenaItem *sp_item_invoke_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 void sp_item_invoke_hide (SPItem *item, unsigned int key);
 
-int sp_item_snappoints (SPItem *item, NRPointF *points, int size);
+int sp_item_snappoints (SPItem *item, NRPoint *points, int size);
 
-void sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *transform);
+void sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
 
 gint sp_item_event (SPItem *item, SPEvent *event);
 
-void sp_item_set_item_transform (SPItem *item, const NRMatrixF *transform);
+void sp_item_set_item_transform (SPItem *item, const NRMatrix *transform);
 
 /* Utility */
 
-void sp_item_bbox_desktop (SPItem *item, NRRectF *bbox);
+void sp_item_bbox_desktop (SPItem *item, NRRect *bbox);
 
-NRMatrixF *sp_item_i2doc_affine (SPItem const *item, NRMatrixF *transform);
-NRMatrixF *sp_item_i2root_affine (SPItem const *item, NRMatrixF *transform);
+NRMatrix *sp_item_i2doc_affine (SPItem const *item, NRMatrix *transform);
+NRMatrix *sp_item_i2root_affine (SPItem const *item, NRMatrix *transform);
 /* Transformation to normalized (0,0-1,1) viewport */
-NRMatrixF *sp_item_i2vp_affine (SPItem const *item, NRMatrixF *transform);
+NRMatrix *sp_item_i2vp_affine (SPItem const *item, NRMatrix *transform);
 
 /* fixme: - these are evil, but OK */
 
@@ -167,13 +167,13 @@ NRMatrixF *sp_item_i2vp_affine (SPItem const *item, NRMatrixF *transform);
  *
  * Returns TRANSFORM.
  */
-NRMatrixD *sp_item_i2d_affine_d (SPItem const *item, NRMatrixD *transform);
-NRMatrixF *sp_item_i2d_affine (SPItem const *item, NRMatrixF *transform);
+NRMatrix *sp_item_i2d_affine_d (SPItem const *item, NRMatrix *transform);
+NRMatrix *sp_item_i2d_affine (SPItem const *item, NRMatrix *transform);
 
-void sp_item_set_i2d_affine_d (SPItem *item, NRMatrixD const *transform);
-void sp_item_set_i2d_affine (SPItem *item, NRMatrixF const *transform);
+void sp_item_set_i2d_affine_d (SPItem *item, NRMatrix const *transform);
+void sp_item_set_i2d_affine (SPItem *item, NRMatrix const *transform);
 
-NRMatrixD *sp_item_dt2i_affine_d (SPItem const *item, SPDesktop *dt, NRMatrixD *transform);
+NRMatrix *sp_item_dt2i_affine_d (SPItem const *item, SPDesktop *dt, NRMatrix *transform);
 
 /* Convert distances into SVG units */
 

@@ -36,7 +36,7 @@ static void sp_root_modified (SPObject *object, guint flags);
 static SPRepr *sp_root_write (SPObject *object, SPRepr *repr, guint flags);
 
 static NRArenaItem *sp_root_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
-static void sp_root_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags);
+static void sp_root_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
 static void sp_root_print (SPItem *item, SPPrintContext *ctx);
 
 static SPGroupClass *parent_class;
@@ -473,7 +473,7 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 
 	if (root->viewBox_set) {
 		double x, y, width, height;
-		NRMatrixD q;
+		NRMatrix q;
 		/* Determine actual viewbox in viewport coordinates */
 		if (root->aspect_align == SP_ASPECT_NONE) {
 			x = 0.0;
@@ -572,7 +572,7 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 
 	/* As last step set additional transform of arena group */
 	for (v = item->display; v != NULL; v = v->next) {
-		NRMatrixF vbf;
+		NRMatrix vbf;
 		nr_matrix_f_from_d (&vbf, &root->c2p);
 		nr_arena_group_set_child_transform (NR_ARENA_GROUP (v->arenaitem), &vbf);
 	}
@@ -646,7 +646,7 @@ sp_root_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags
 	if (((SPItemClass *) (parent_class))->show) {
 		ai = ((SPItemClass *) (parent_class))->show (item, arena, key, flags);
 		if (ai) {
-			NRMatrixF vbf;
+			NRMatrix vbf;
 			nr_matrix_f_from_d (&vbf, &root->c2p);
 			nr_arena_group_set_child_transform (NR_ARENA_GROUP (ai), &vbf);
 		}
@@ -658,10 +658,10 @@ sp_root_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags
 }
 
 static void
-sp_root_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags)
+sp_root_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
 {
 	SPRoot *root;
-	NRMatrixD a[6];
+	NRMatrix a[6];
 
 	root = SP_ROOT (item);
 
@@ -676,7 +676,7 @@ static void
 sp_root_print (SPItem *item, SPPrintContext *ctx)
 {
 	SPRoot *root;
-	NRMatrixF t;
+	NRMatrix t;
 
 	root = SP_ROOT (item);
 

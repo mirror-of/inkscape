@@ -64,12 +64,12 @@ struct _NRBPath {
 	ArtBpath *path;
 };
 
-NRBPath *nr_path_duplicate_transform (NRBPath *d, NRBPath *s, NRMatrixF *transform);
+NRBPath *nr_path_duplicate_transform (NRBPath *d, NRBPath *s, NRMatrix *transform);
 
-void nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrixF *m, NRPointF *pt,
-						  NRRectF *bbox, int *wind, float *dist,
+void nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrix *m, NRPoint *pt,
+						  NRRect *bbox, int *wind, float *dist,
 						  float tolerance);
 
-void nr_path_matrix_f_bbox_f_union (NRBPath *bpath, NRMatrixF *m, NRRectF *bbox, float tolerance);
+void nr_path_matrix_f_bbox_f_union (NRBPath *bpath, NRMatrix *m, NRRect *bbox, float tolerance);
 
 #endif

@@ -459,7 +459,7 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
-			NRPointF p;
+			NRPoint p;
 			sp_desktop_w2d_xy_point (knot->desktop,
 				&p,
 				event->button.x,
@@ -507,8 +507,8 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (grabbed) {
-			NRPointF p;
-			NRPointF fp;
+			NRPoint p;
+			NRPoint fp;
 			if (!moved) {
 				g_signal_emit (G_OBJECT (knot),
 					       knot_signals[GRABBED], 0,
@@ -614,7 +614,7 @@ sp_knot_hide (SPKnot * knot)
 }
 
 void
-sp_knot_request_position (SPKnot * knot, NRPointF * p, guint state)
+sp_knot_request_position (SPKnot * knot, NRPoint * p, guint state)
 {
 	gboolean done;
 
@@ -638,7 +638,7 @@ sp_knot_request_position (SPKnot * knot, NRPointF * p, guint state)
 }
 
 gdouble
-sp_knot_distance (SPKnot * knot, NRPointF * p, guint state)
+sp_knot_distance (SPKnot * knot, NRPoint * p, guint state)
 {
 	gdouble distance;
 
@@ -658,7 +658,7 @@ sp_knot_distance (SPKnot * knot, NRPointF * p, guint state)
 }
 
 void
-sp_knot_set_position (SPKnot * knot, NRPointF * p, guint state)
+sp_knot_set_position (SPKnot * knot, NRPoint * p, guint state)
 {
 	g_return_if_fail (knot != NULL);
 	g_return_if_fail (SP_IS_KNOT (knot));
@@ -675,8 +675,8 @@ sp_knot_set_position (SPKnot * knot, NRPointF * p, guint state)
 		       state);
 }
 
-NRPointF *
-sp_knot_position (SPKnot * knot, NRPointF * p)
+NRPoint *
+sp_knot_position (SPKnot * knot, NRPoint * p)
 {
 	g_return_val_if_fail (knot != NULL, NULL);
 	g_return_val_if_fail (SP_IS_KNOT (knot), NULL);

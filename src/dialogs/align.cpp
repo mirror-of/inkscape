@@ -357,8 +357,8 @@ sp_align_arrange_clicked (GtkWidget *widget, const gchar *aligns)
 	SPSelection * selection;
 	GSList * slist;
 	SPItem * master, * item;
-	NRRectF b;
-	NRPointF mp, sp;
+	NRRect b;
+	NRPoint mp, sp;
 	GSList * l;
 	gboolean changed;
 
@@ -438,7 +438,7 @@ sp_align_arrange_clicked (GtkWidget *widget, const gchar *aligns)
 static SPItem *
 sp_quick_align_find_master (const GSList *slist, gboolean horizontal)
 {
-	NRRectF b;
+	NRRect b;
 	const GSList * l;
 	SPItem * master, * item;
 	gdouble dim, max;
@@ -496,7 +496,7 @@ sp_quick_align_find_master (const GSList *slist, gboolean horizontal)
 
 struct _SPBBoxSort {
 	SPItem *item;
-	NRRectF bbox;
+	NRRect bbox;
 	float anchor;
 };
 

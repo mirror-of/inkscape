@@ -22,6 +22,6 @@ void sp_rubberband_start (SPDesktop *desktop, double x, double y);
 void sp_rubberband_move (double x, double y);
 void sp_rubberband_stop (void);
 
-gboolean sp_rubberband_rect (NRRectD *rect);
+gboolean sp_rubberband_rect (NRRect *rect);
 
 #endif

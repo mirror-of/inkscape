@@ -129,8 +129,8 @@ nr_typeface_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned in
 	((NRTypeFaceClass *) ((NRObject *) tf)->klass)->glyph_outline_unref (tf, glyph, metrics);
 }
 
-NRPointF *
-nr_typeface_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPointF *adv)
+NRPoint *
+nr_typeface_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPoint *adv)
 {
 	return ((NRTypeFaceClass *) ((NRObject *) tf)->klass)->glyph_advance_get (tf, glyph, metrics, adv);
 }
@@ -144,7 +144,7 @@ nr_typeface_lookup_default (NRTypeFace *tf, unsigned int unival)
 NRFont *
 nr_font_new_default (NRTypeFace *tf, unsigned int metrics, float size)
 {
-	NRMatrixF scale;
+	NRMatrix scale;
 
 	nr_matrix_f_set_scale (&scale, size, size);
 
@@ -175,10 +175,10 @@ static void nr_typeface_empty_finalize (NRObject *object);
 static unsigned int nr_typeface_empty_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size);
 static NRBPath *nr_typeface_empty_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref);
 static void nr_typeface_empty_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsigned int metrics);
-static NRPointF *nr_typeface_empty_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPointF *adv);
+static NRPoint *nr_typeface_empty_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPoint *adv);
 static unsigned int nr_typeface_empty_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival);
 
-static NRFont *nr_typeface_empty_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrixF *transform);
+static NRFont *nr_typeface_empty_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform);
 static void nr_typeface_empty_font_free (NRFont *font);
 
 static NRTypeFaceClass *empty_parent_class;
@@ -299,8 +299,8 @@ nr_typeface_empty_glyph_outline_unref (NRTypeFace *tf, unsigned int glyph, unsig
 {
 }
 
-static NRPointF *
-nr_typeface_empty_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPointF *adv)
+static NRPoint *
+nr_typeface_empty_glyph_advance_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRPoint *adv)
 {
 	if (metrics == NR_TYPEFACE_METRICS_VERTICAL) {
 		adv->x = 0.0;
@@ -320,7 +320,7 @@ nr_typeface_empty_lookup (NRTypeFace *tf, unsigned int rule, unsigned int unival
 }
 
 static NRFont *
-nr_typeface_empty_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrixF *transform)
+nr_typeface_empty_font_new (NRTypeFace *tf, unsigned int metrics, NRMatrix *transform)
 {
 	NRFont *font;
 	float size;

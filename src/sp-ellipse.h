@@ -104,6 +104,6 @@ struct _SPArcClass {
 
 GType sp_arc_get_type (void);
 void sp_arc_position_set (SPArc * arc, gdouble x, gdouble y, gdouble rx, gdouble ry);
-void sp_arc_get_xy (SPArc *ge, gdouble arg, NRPointF *p);
+void sp_arc_get_xy (SPArc *ge, gdouble arg, NRPoint *p);
 
 #endif

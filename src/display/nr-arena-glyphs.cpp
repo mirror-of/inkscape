@@ -123,7 +123,7 @@ nr_arena_glyphs_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state,
 {
 	NRArenaGlyphs *glyphs;
 	NRRasterFont *rfont;
-	NRMatrixF t;
+	NRMatrix t;
 	ArtBpath *abp;
 	ArtVpath *vp, *pvp;
 	ArtDRect bbox;
@@ -149,7 +149,7 @@ nr_arena_glyphs_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state,
 	bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
 
 	if (glyphs->style->fill.type != SP_PAINT_TYPE_NONE) {
-		NRRectF area;
+		NRRect area;
 		nr_matrix_multiply_ffd (&t, &glyphs->transform, &gc->transform);
 		rfont = nr_rasterfont_new (glyphs->font, &t);
 		if (glyphs->rfont) glyphs->rfont = nr_rasterfont_unref (glyphs->rfont);
@@ -243,7 +243,7 @@ nr_arena_glyphs_pick (NRArenaItem *item, gdouble x, gdouble y, gdouble delta, un
 }
 
 void
-nr_arena_glyphs_set_path (NRArenaGlyphs *glyphs, SPCurve *curve, unsigned int lieutenant, NRFont *font, gint glyph, const NRMatrixF *transform)
+nr_arena_glyphs_set_path (NRArenaGlyphs *glyphs, SPCurve *curve, unsigned int lieutenant, NRFont *font, gint glyph, const NRMatrix *transform)
 {
 	nr_return_if_fail (glyphs != NULL);
 	nr_return_if_fail (NR_IS_ARENA_GLYPHS (glyphs));
@@ -615,7 +615,7 @@ nr_arena_glyphs_group_clear (NRArenaGlyphsGroup *sg)
 }
 
 void
-nr_arena_glyphs_group_add_component (NRArenaGlyphsGroup *sg, NRFont *font, int glyph, const NRMatrixF *transform)
+nr_arena_glyphs_group_add_component (NRArenaGlyphsGroup *sg, NRFont *font, int glyph, const NRMatrix *transform)
 {
 	NRArenaGroup *group;
 	NRBPath bpath;

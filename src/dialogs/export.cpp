@@ -318,7 +318,7 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
 		gtk_object_set_data (base, "area", (gpointer) key);
 		if (SP_ACTIVE_DESKTOP) {
 			SPDocument *doc;
-			NRRectF bbox;
+			NRRect bbox;
 			doc = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
 			if (!strcmp (key, "page")) {
 				bbox.x0 = 0.0;

@@ -74,8 +74,8 @@ void sp_gradient_selector_set_spread (SPGradientSelector *sel, guint spread);
 void sp_gradient_selector_set_vector (SPGradientSelector *sel, SPDocument *doc, SPGradient *vector);
 void sp_gradient_selector_set_bbox (SPGradientSelector *sel, gdouble x0, gdouble y0, gdouble x1, gdouble y1);
 
-void sp_gradient_selector_set_gs2d_matrix_f (SPGradientSelector *gsel, NRMatrixF *gs2d);
-void sp_gradient_selector_get_gs2d_matrix_f (SPGradientSelector *gsel, NRMatrixF *gs2d);
+void sp_gradient_selector_set_gs2d_matrix_f (SPGradientSelector *gsel, NRMatrix *gs2d);
+void sp_gradient_selector_get_gs2d_matrix_f (SPGradientSelector *gsel, NRMatrix *gs2d);
 
 void sp_gradient_selector_set_lgradient_position (SPGradientSelector *sel, gdouble x0, gdouble y0, gdouble x1, gdouble y1);
 void sp_gradient_selector_set_rgradient_position (SPGradientSelector *sel, gdouble cx, gdouble cy, gdouble fx, gdouble fy, gdouble r);

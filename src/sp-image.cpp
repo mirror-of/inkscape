@@ -44,12 +44,12 @@ static void sp_image_set (SPObject *object, unsigned int key, const gchar *value
 static void sp_image_update (SPObject *object, SPCtx *ctx, unsigned int flags);
 static SPRepr *sp_image_write (SPObject *object, SPRepr *repr, guint flags);
 
-static void sp_image_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags);
+static void sp_image_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
 static void sp_image_print (SPItem * item, SPPrintContext *ctx);
 static gchar * sp_image_description (SPItem * item);
-static int sp_image_snappoints (SPItem *item, NRPointF *p, int size);
+static int sp_image_snappoints (SPItem *item, NRPoint *p, int size);
 static NRArenaItem *sp_image_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
-static void sp_image_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *transform);
+static void sp_image_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
 
 #ifdef ENABLE_AUTOTRACE
 static void sp_image_autotrace (GtkMenuItem *menuitem, SPAnchor *anchor);
@@ -289,7 +289,7 @@ sp_image_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_image_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags)
+sp_image_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
 {
 	SPImage *image;
 
@@ -335,7 +335,7 @@ static void
 sp_image_print (SPItem *item, SPPrintContext *ctx)
 {
 	SPImage *image;
-	NRMatrixF tp, ti, s, t;
+	NRMatrix tp, ti, s, t;
 	guchar *px;
 	int w, h, rs;
 
@@ -507,10 +507,10 @@ sp_image_update_canvas_image (SPImage *image)
 }
 
 static int
-sp_image_snappoints (SPItem *item, NRPointF *p, int size)
+sp_image_snappoints (SPItem *item, NRPoint *p, int size)
 {
 	SPImage *image;
-	NRMatrixF i2d;
+	NRMatrix i2d;
 	float x0, y0, x1, y1;
 	int i;
 
@@ -555,10 +555,10 @@ sp_image_snappoints (SPItem *item, NRPointF *p, int size)
  */
 
 static void
-sp_image_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *t)
+sp_image_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
 {
 	SPImage *image;
-	NRMatrixF rev;
+	NRMatrix rev;
 	gdouble px, py, sw, sh;
 	gchar c[80];
 

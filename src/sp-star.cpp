@@ -41,7 +41,7 @@ static void sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 static void sp_star_update (SPObject *object, SPCtx *ctx, guint flags);
 
 static gchar * sp_star_description (SPItem * item);
-static int sp_star_snappoints (SPItem *item, NRPointF *p, int size);
+static int sp_star_snappoints (SPItem *item, NRPoint *p, int size);
 
 static void sp_star_set_shape (SPShape *shape);
 
@@ -263,7 +263,7 @@ sp_star_set_shape (SPShape *shape)
 	gint i;
 	gint sides;
 	SPCurve *c;
-	NRPointF p;
+	NRPoint p;
 	
 	star = SP_STAR (shape);
 
@@ -314,7 +314,7 @@ sp_star_position_set (SPStar *star, gint sides, gdouble cx, gdouble cy, gdouble 
 /* fixme: We should use all corners of star (Lauris) */
 
 static int
-sp_star_snappoints (SPItem *item, NRPointF *p, int size)
+sp_star_snappoints (SPItem *item, NRPoint *p, int size)
 {
 #if 0
 	SPStar *star;
@@ -356,7 +356,7 @@ sp_star_snappoints (SPItem *item, NRPointF *p, int size)
  */
 
 void
-sp_star_get_xy (SPStar *star, SPStarPoint point, gint index, NRPointF *p)
+sp_star_get_xy (SPStar *star, SPStarPoint point, gint index, NRPoint *p)
 {
 	gdouble arg, darg;
 

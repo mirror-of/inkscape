@@ -21,7 +21,7 @@
 #include "sp-shape.h"
 #include "knotholder.h"
 
-static void knot_moved_handler (SPKnot *knot, NRPointF *p, guint state, gpointer data);
+static void knot_moved_handler (SPKnot *knot, NRPoint *p, guint state, gpointer data);
 static void knot_ungrabbed_handler (SPKnot *knot, unsigned int state, SPKnotHolder *kh);
 
 #ifdef KNOT_HOLDER_DEBUG
@@ -92,8 +92,8 @@ sp_knot_holder_add_full	(SPKnotHolder       *knot_holder,
 {
 	SPKnotHolderEntity *e;
 	SPItem        *item;
-	NRPointF sp, dp;
-	NRMatrixF i2d;
+	NRPoint sp, dp;
+	NRMatrix i2d;
 
 	g_return_if_fail (knot_holder != NULL);
 	g_return_if_fail (knot_set != NULL);
@@ -104,7 +104,7 @@ sp_knot_holder_add_full	(SPKnotHolder       *knot_holder,
 #define KH_EPSILON 1e-6
 	/* Precondition for knot_set and knot_get */
 	{
-		NRPointF p1, p2;
+		NRPoint p1, p2;
 		knot_get (item, &p1);
 		knot_set (item, &p1, 0);
 		knot_get (item, &p2);
@@ -140,12 +140,12 @@ sp_knot_holder_add_full	(SPKnotHolder       *knot_holder,
 }
 
 static void
-knot_moved_handler (SPKnot *knot, NRPointF *p, guint state, gpointer data)
+knot_moved_handler (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 {
 	SPKnotHolder *knot_holder;
 	SPItem *item;
 	SPObject *object;
-	NRMatrixF i2d;
+	NRMatrix i2d;
 	GSList *el;
 
 	knot_holder = (SPKnotHolder *) data;
@@ -155,8 +155,8 @@ knot_moved_handler (SPKnot *knot, NRPointF *p, guint state, gpointer data)
 	for (el = knot_holder->entity; el; el = el->next) {
 		SPKnotHolderEntity *e = (SPKnotHolderEntity *)el->data;
 		if (e->knot == knot) {
-			NRMatrixF d2i;
-			NRPointF q;
+			NRMatrix d2i;
+			NRPoint q;
 
 			sp_item_i2d_affine(item, &i2d);
 			nr_matrix_f_invert (&d2i, &i2d);
@@ -175,7 +175,7 @@ knot_moved_handler (SPKnot *knot, NRPointF *p, guint state, gpointer data)
 
 	for (el = knot_holder->entity; el; el = el->next) {
 		SPKnotHolderEntity *e = (SPKnotHolderEntity *)el->data;
-		NRPointF sp, dp;
+		NRPoint sp, dp;
 		GObject *kob;
 		
 		kob = G_OBJECT (e->knot);

@@ -24,7 +24,7 @@ struct _NRArenaGroup {
 	unsigned int transparent : 1;
 	NRArenaItem *children;
 	NRArenaItem *last;
-	NRMatrixF child_transform;
+	NRMatrix child_transform;
 };
 
 struct _NRArenaGroupClass {
@@ -35,6 +35,6 @@ NRType nr_arena_group_get_type (void);
 
 void nr_arena_group_set_transparent (NRArenaGroup *group, unsigned int transparent);
 
-void nr_arena_group_set_child_transform (NRArenaGroup *group, NRMatrixF *t);
+void nr_arena_group_set_child_transform (NRArenaGroup *group, NRMatrix *t);
 
 #endif

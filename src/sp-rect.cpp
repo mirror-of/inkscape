@@ -39,8 +39,8 @@ static void sp_rect_update (SPObject *object, SPCtx *ctx, guint flags);
 static SPRepr *sp_rect_write (SPObject *object, SPRepr *repr, guint flags);
 
 static gchar * sp_rect_description (SPItem * item);
-static int sp_rect_snappoints (SPItem *item, NRPointF *p, int size);
-static void sp_rect_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *transform);
+static int sp_rect_snappoints (SPItem *item, NRPoint *p, int size);
+static void sp_rect_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
 
 static void sp_rect_set_shape (SPShape *shape);
 
@@ -355,11 +355,11 @@ sp_rect_set_ry (SPRect * rect, gboolean set, gdouble value)
 }
 
 static int
-sp_rect_snappoints (SPItem *item, NRPointF *p, int size)
+sp_rect_snappoints (SPItem *item, NRPoint *p, int size)
 {
 	SPRect *rect;
 	float x0, y0, x1, y1;
-	NRMatrixF i2d;
+	NRMatrix i2d;
 	int i;
 
 	rect = SP_RECT (item);
@@ -406,10 +406,10 @@ sp_rect_snappoints (SPItem *item, NRPointF *p, int size)
 /* fixme: Alternately preserve whatever units there are (lauris) */
 
 static void
-sp_rect_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *t)
+sp_rect_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
 {
 	SPRect *rect;
-	NRMatrixF rev;
+	NRMatrix rev;
 	gdouble px, py, sw, sh;
 	gchar c[80];
 	SPStyle *style;

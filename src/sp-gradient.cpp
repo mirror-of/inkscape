@@ -357,7 +357,7 @@ sp_gradient_set (SPObject *object, unsigned int key, const gchar *value)
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_GRADIENTTRANSFORM: {
-		NRMatrixF t;
+		NRMatrix t;
 		if (value && sp_svg_transform_read (value, &t)) {
 			int i;
 			for (i = 0; i < 6; i++) gr->transform[i] = t.c[i];
@@ -568,7 +568,7 @@ sp_gradient_write (SPObject *object, SPRepr *repr, guint flags)
 
 	if ((flags & SP_OBJECT_WRITE_ALL) || gr->transform_set) {
 		gchar c[256];
-		NRMatrixF t;
+		NRMatrix t;
 		int i;
 		for (i = 0; i < 6; i++) t.c[i] = gr->transform[i];
 		if (sp_svg_transform_write (c, 256, &t)) {
@@ -1054,11 +1054,11 @@ sp_gradient_render_vector_block_rgb (SPGradient *gradient, guchar *buf, gint wid
 	}
 }
 
-NRMatrixF *
-sp_gradient_get_g2d_matrix_f (SPGradient *gr, NRMatrixF *ctm, NRRectF *bbox, NRMatrixF *g2d)
+NRMatrix *
+sp_gradient_get_g2d_matrix_f (SPGradient *gr, NRMatrix *ctm, NRRect *bbox, NRMatrix *g2d)
 {
 	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-		NRMatrixF bb2u;
+		NRMatrix bb2u;
 
 		bb2u.c[0] = bbox->x1 - bbox->x0;
 		bb2u.c[1] = 0.0;
@@ -1075,11 +1075,11 @@ sp_gradient_get_g2d_matrix_f (SPGradient *gr, NRMatrixF *ctm, NRRectF *bbox, NRM
 	return g2d;
 }
 
-NRMatrixF *
-sp_gradient_get_gs2d_matrix_f (SPGradient *gr, NRMatrixF *ctm, NRRectF *bbox, NRMatrixF *gs2d)
+NRMatrix *
+sp_gradient_get_gs2d_matrix_f (SPGradient *gr, NRMatrix *ctm, NRRect *bbox, NRMatrix *gs2d)
 {
 	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-		NRMatrixF bb2u, gs2u;
+		NRMatrix bb2u, gs2u;
 
 		bb2u.c[0] = bbox->x1 - bbox->x0;
 		bb2u.c[1] = 0.0;
@@ -1088,24 +1088,24 @@ sp_gradient_get_gs2d_matrix_f (SPGradient *gr, NRMatrixF *ctm, NRRectF *bbox, NR
 		bb2u.c[4] = bbox->x0;
 		bb2u.c[5] = bbox->y0;
 
-		nr_matrix_multiply_fdf (&gs2u, (NRMatrixD *) gr->transform, &bb2u);
+		nr_matrix_multiply_fdf (&gs2u, (NRMatrix *) gr->transform, &bb2u);
 		nr_matrix_multiply_fff (gs2d, &gs2u, ctm);
 	} else {
-		nr_matrix_multiply_fdf (gs2d, (NRMatrixD *) gr->transform, ctm);
+		nr_matrix_multiply_fdf (gs2d, (NRMatrix *) gr->transform, ctm);
 	}
 
 	return gs2d;
 }
 
 void
-sp_gradient_set_gs2d_matrix_f (SPGradient *gr, NRMatrixF *ctm, NRRectF *bbox, NRMatrixF *gs2d)
+sp_gradient_set_gs2d_matrix_f (SPGradient *gr, NRMatrix *ctm, NRRect *bbox, NRMatrix *gs2d)
 {
-	NRMatrixF g2d, d2g, gs2g;
+	NRMatrix g2d, d2g, gs2g;
 
 	SP_PRINT_MATRIX ("* GS2D:", gs2d);
 
 	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-		NRMatrixF bb2u;
+		NRMatrix bb2u;
 
 		bb2u.c[0] = bbox->x1 - bbox->x0;
 		bb2u.c[1] = 0.0;
@@ -1147,16 +1147,16 @@ sp_gradient_set_gs2d_matrix_f (SPGradient *gr, NRMatrixF *ctm, NRRectF *bbox, NR
 }
 
 void
-sp_gradient_from_position_xy (SPGradient *gr, gdouble *ctm, NRRectD *bbox, NRPointF *p, float x, float y)
+sp_gradient_from_position_xy (SPGradient *gr, gdouble *ctm, NRRect *bbox, NRPoint *p, float x, float y)
 {
-	NRMatrixF gs2d;
+	NRMatrix gs2d;
 
 	g_return_if_fail (gr != NULL);
 	g_return_if_fail (SP_IS_GRADIENT (gr));
 	g_return_if_fail (p != NULL);
 
 	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-		NRMatrixF bb2u, gs2u;
+		NRMatrix bb2u, gs2u;
 
 		bb2u.c[0] = bbox->x1 - bbox->x0;
 		bb2u.c[1] = 0.0;
@@ -1165,10 +1165,10 @@ sp_gradient_from_position_xy (SPGradient *gr, gdouble *ctm, NRRectD *bbox, NRPoi
 		bb2u.c[4] = bbox->x0;
 		bb2u.c[5] = bbox->y0;
 
-		nr_matrix_multiply_fdf (&gs2u, (NRMatrixD *) gr->transform, &bb2u);
-		nr_matrix_multiply_ffd (&gs2d, &gs2u, (NRMatrixD *) ctm);
+		nr_matrix_multiply_fdf (&gs2u, (NRMatrix *) gr->transform, &bb2u);
+		nr_matrix_multiply_ffd (&gs2d, &gs2u, (NRMatrix *) ctm);
 	} else {
-		nr_matrix_multiply_fdd (&gs2d, (NRMatrixD *) gr->transform, (NRMatrixD *) ctm);
+		nr_matrix_multiply_fdd (&gs2d, (NRMatrix *) gr->transform, (NRMatrix *) ctm);
 	}
 
 	p->x = gs2d.c[0] * x + gs2d.c[2] * y + gs2d.c[4];
@@ -1176,16 +1176,16 @@ sp_gradient_from_position_xy (SPGradient *gr, gdouble *ctm, NRRectD *bbox, NRPoi
 }
 
 void
-sp_gradient_to_position_xy (SPGradient *gr, gdouble *ctm, NRRectD *bbox, NRPointF *p, float x, float y)
+sp_gradient_to_position_xy (SPGradient *gr, gdouble *ctm, NRRect *bbox, NRPoint *p, float x, float y)
 {
-	NRMatrixF gs2d, d2gs;
+	NRMatrix gs2d, d2gs;
 
 	g_return_if_fail (gr != NULL);
 	g_return_if_fail (SP_IS_GRADIENT (gr));
 	g_return_if_fail (p != NULL);
 
 	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-		NRMatrixF bb2u, gs2u;
+		NRMatrix bb2u, gs2u;
 
 		bb2u.c[0] = bbox->x1 - bbox->x0;
 		bb2u.c[1] = 0.0;
@@ -1194,10 +1194,10 @@ sp_gradient_to_position_xy (SPGradient *gr, gdouble *ctm, NRRectD *bbox, NRPoint
 		bb2u.c[4] = bbox->x0;
 		bb2u.c[5] = bbox->y0;
 
-		nr_matrix_multiply_fdf (&gs2u, (NRMatrixD *) gr->transform, &bb2u);
-		nr_matrix_multiply_ffd (&gs2d, &gs2u, (NRMatrixD *) ctm);
+		nr_matrix_multiply_fdf (&gs2u, (NRMatrix *) gr->transform, &bb2u);
+		nr_matrix_multiply_ffd (&gs2d, &gs2u, (NRMatrix *) ctm);
 	} else {
-		nr_matrix_multiply_fdd (&gs2d, (NRMatrixD *) gr->transform, (NRMatrixD *) ctm);
+		nr_matrix_multiply_fdd (&gs2d, (NRMatrix *) gr->transform, (NRMatrix *) ctm);
 	}
 
 	nr_matrix_f_invert (&d2gs, &gs2d);
@@ -1226,7 +1226,7 @@ static void sp_lineargradient_build (SPObject *object, SPDocument * document, SP
 static void sp_lineargradient_set (SPObject *object, unsigned int key, const gchar *value);
 static SPRepr *sp_lineargradient_write (SPObject *object, SPRepr *repr, guint flags);
 
-static SPPainter *sp_lineargradient_painter_new (SPPaintServer *ps, const double *affine, const NRRectF *bbox);
+static SPPainter *sp_lineargradient_painter_new (SPPaintServer *ps, const double *affine, const NRRect *bbox);
 static void sp_lineargradient_painter_free (SPPaintServer *ps, SPPainter *painter);
 
 static void sp_lg_fill (SPPainter *painter, NRPixBlock *pb);
@@ -1373,13 +1373,13 @@ sp_lineargradient_write (SPObject *object, SPRepr *repr, guint flags)
  */
 
 static SPPainter *
-sp_lineargradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRectF *bbox)
+sp_lineargradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRect *bbox)
 {
 	SPLinearGradient *lg;
 	SPGradient *gr;
 	SPLGPainter *lgp;
 	gdouble color2norm[6], color2px[6];
-	NRMatrixF v2px;
+	NRMatrix v2px;
 
 	lg = SP_LINEARGRADIENT (ps);
 	gr = SP_GRADIENT (ps);
@@ -1568,7 +1568,7 @@ static void sp_radialgradient_build (SPObject *object, SPDocument *document, SPR
 static void sp_radialgradient_set (SPObject *object, unsigned int key, const gchar *value);
 static SPRepr *sp_radialgradient_write (SPObject *object, SPRepr *repr, guint flags);
 
-static SPPainter *sp_radialgradient_painter_new (SPPaintServer *ps, const gdouble *affine, const NRRectF *bbox);
+static SPPainter *sp_radialgradient_painter_new (SPPaintServer *ps, const gdouble *affine, const NRRect *bbox);
 static void sp_radialgradient_painter_free (SPPaintServer *ps, SPPainter *painter);
 
 static void sp_rg_fill (SPPainter *painter, NRPixBlock *pb);
@@ -1721,12 +1721,12 @@ sp_radialgradient_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static SPPainter *
-sp_radialgradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRectF *bbox)
+sp_radialgradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRect *bbox)
 {
 	SPRadialGradient *rg;
 	SPGradient *gr;
 	SPRGPainter *rgp;
-	NRMatrixF gs2px;
+	NRMatrix gs2px;
 
 	rg = SP_RADIALGRADIENT (ps);
 	gr = SP_GRADIENT (ps);
@@ -1743,8 +1743,8 @@ sp_radialgradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRe
 	/* fixme: We may try to normalize here too, look at linearGradient (Lauris) */
 
 	if (gr->units == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX) {
-		NRMatrixF bbox2user;
-		NRMatrixF gs2user;
+		NRMatrix bbox2user;
+		NRMatrix gs2user;
 
 		/* fixme: We may try to normalize here too, look at linearGradient (Lauris) */
 
@@ -1759,8 +1759,8 @@ sp_radialgradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRe
 		bbox2user.c[5] = bbox->y0;
 
 		/* fixme: (Lauris) */
-		nr_matrix_multiply_fdf (&gs2user, (NRMatrixD *) gr->transform, &bbox2user);
-		nr_matrix_multiply_ffd (&gs2px, &gs2user, (NRMatrixD *) ctm);
+		nr_matrix_multiply_fdf (&gs2user, (NRMatrix *) gr->transform, &bbox2user);
+		nr_matrix_multiply_ffd (&gs2px, &gs2user, (NRMatrix *) ctm);
 	} else {
 		/* Problem: What to do, if we have mixed lengths and percentages? */
 		/* Currently we do ignore percentages at all, but that is not good (lauris) */
@@ -1768,7 +1768,7 @@ sp_radialgradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRe
 		/* fixme: We may try to normalize here too, look at linearGradient (Lauris) */
 
 		/* fixme: (Lauris) */
-		nr_matrix_multiply_fdd (&gs2px, (NRMatrixD *) gr->transform, (NRMatrixD *) ctm);
+		nr_matrix_multiply_fdd (&gs2px, (NRMatrix *) gr->transform, (NRMatrix *) ctm);
 	}
 
 	nr_rgradient_renderer_setup (&rgp->rgr, gr->color, gr->spread,

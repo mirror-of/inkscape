@@ -78,10 +78,10 @@ nr_vpath_release (NRVPath *vpath)
 	nr_free (vpath->elements);
 }
 
-static void nr_curve_bbox (double x000, double y000, double x001, double y001, double x011, double y011, double x111, double y111, NRRectF *bbox);
+static void nr_curve_bbox (double x000, double y000, double x001, double y001, double x011, double y011, double x111, double y111, NRRect *bbox);
 
 NRBPath *
-nr_path_duplicate_transform (NRBPath *d, NRBPath *s, NRMatrixF *transform)
+nr_path_duplicate_transform (NRBPath *d, NRBPath *s, NRMatrix *transform)
 {
 	int i;
 
@@ -114,7 +114,7 @@ nr_path_duplicate_transform (NRBPath *d, NRBPath *s, NRMatrixF *transform)
 }
 
 static void
-nr_line_wind_distance (double x0, double y0, double x1, double y1, NRPointF *pt, int *wind, float *best)
+nr_line_wind_distance (double x0, double y0, double x1, double y1, NRPoint *pt, int *wind, float *best)
 {
 	double Ax, Ay, Bx, By, Dx, Dy, Px, Py, s;
 	double dist2;
@@ -174,8 +174,8 @@ nr_curve_bbox_wind_distance (double x000, double y000,
 			     double x001, double y001,
 			     double x011, double y011,
 			     double x111, double y111,
-			     NRPointF *pt,
-			     NRRectF *bbox, int *wind, float *best,
+			     NRPoint *pt,
+			     NRRect *bbox, int *wind, float *best,
 			     float tolerance)
 {
 	double x0, y0, x1, y1, len2;
@@ -265,8 +265,8 @@ nr_curve_bbox_wind_distance (double x000, double y000,
 }
 
 void
-nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrixF *m, NRPointF *pt,
-					     NRRectF *bbox, int *wind, float *dist,
+nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrix *m, NRPoint *pt,
+					     NRRect *bbox, int *wind, float *dist,
 					     float tolerance)
 {
 	double x0, y0, x3, y3;
@@ -335,7 +335,7 @@ nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrixF *m, NRPoi
 /* Thanks to Nathan Hurst for suggesting it */
 
 static void
-nr_curve_bbox (double x000, double y000, double x001, double y001, double x011, double y011, double x111, double y111, NRRectF *bbox)
+nr_curve_bbox (double x000, double y000, double x001, double y001, double x011, double y011, double x111, double y111, NRRect *bbox)
 {
 	double a, b, c, D;
 
@@ -419,8 +419,8 @@ nr_curve_bbox (double x000, double y000, double x001, double y001, double x011, 
 }
 
 void
-nr_path_matrix_f_bbox_f_union (NRBPath *bpath, NRMatrixF *m,
-			       NRRectF *bbox,
+nr_path_matrix_f_bbox_f_union (NRBPath *bpath, NRMatrix *m,
+			       NRRect *bbox,
 			       float tolerance)
 {
 	double x0, y0, x3, y3;

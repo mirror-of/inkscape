@@ -29,7 +29,7 @@ typedef struct _NRSVLStrokeBuild NRSVLStrokeBuild;
 struct _NRSVLStrokeBuild {
 	NRSVL *svl;
 	NRFlat *flats;
-	NRMatrixF transform;
+	NRMatrix transform;
 	unsigned int closed : 1;
 	unsigned int cap : 2;
 	unsigned int join : 2;
@@ -37,7 +37,7 @@ struct _NRSVLStrokeBuild {
 	float width_2;
 	double cosml;
 	int npoints;
-	NRRectF bbox;
+	NRRect bbox;
 	NRCoord x[4];
 	NRCoord y[4];
 	NRSVLBuild left, right;
@@ -222,7 +222,7 @@ nr_svl_stroke_build_curveto (NRSVLStrokeBuild *svlb,
 }
 
 NRSVL *
-nr_bpath_stroke (const NRBPath *path, NRMatrixF *transform,
+nr_bpath_stroke (const NRBPath *path, NRMatrix *transform,
 		 float width,
 		 unsigned int cap, unsigned int join, float miterlimit,
 		 float flatness)
@@ -315,7 +315,7 @@ nr_bpath_stroke (const NRBPath *path, NRMatrixF *transform,
 }
 
 NRSVL *
-nr_vpath_stroke (const ArtVpath *path, NRMatrixF *transform,
+nr_vpath_stroke (const ArtVpath *path, NRMatrix *transform,
 		 float width,
 		 unsigned int cap, unsigned int join, float miterlimit,
 		 float flatness)

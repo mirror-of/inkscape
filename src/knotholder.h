@@ -19,8 +19,8 @@
 #include "knot.h"
 #include "forward.h"
 
-typedef void (* SPKnotHolderSetFunc) (SPItem *item, const NRPointF *p, guint state);
-typedef void (* SPKnotHolderGetFunc) (SPItem *item, NRPointF *p);
+typedef void (* SPKnotHolderSetFunc) (SPItem *item, const NRPoint *p, guint state);
+typedef void (* SPKnotHolderGetFunc) (SPItem *item, NRPoint *p);
 /* fixme: Think how to make callbacks most sensitive (Lauris) */
 typedef void (* SPKnotHolderReleasedFunc) (SPItem *item);
 
@@ -31,8 +31,8 @@ typedef struct _SPKnotHolder       SPKnotHolder;
 struct _SPKnotHolderEntity {
 	SPKnot *knot;
 	guint   handler_id;
-	void (* knot_set) (SPItem *item, const NRPointF *p, guint state);
-	void (* knot_get) (SPItem *item, NRPointF *p);
+	void (* knot_set) (SPItem *item, const NRPoint *p, guint state);
+	void (* knot_get) (SPItem *item, NRPoint *p);
 };
 
 struct _SPKnotHolder {

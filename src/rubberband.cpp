@@ -70,7 +70,7 @@ sp_rubberband_stop (void)
 }
 
 gboolean
-sp_rubberband_rect (NRRectD *rect)
+sp_rubberband_rect (NRRect *rect)
 {
 	if (sp_rb == NULL) return FALSE;
 	rect->x0 = MIN (sp_rb_rect.x0, sp_rb_rect.x1);

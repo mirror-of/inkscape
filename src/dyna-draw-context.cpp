@@ -299,7 +299,7 @@ sp_dyna_draw_get_npoint (const SPDynaDrawContext *dc,
                          gdouble           *ny)
 {
 #ifdef NORMALIZED_COORDINATE
-	NRRectF drect;
+	NRRect drect;
 
 	sp_desktop_get_display_area (SP_EVENT_CONTEXT(dc)->desktop, &drect);
 	*nx = (vx - drect.x0)/(drect.x1 - drect.x0);
@@ -322,7 +322,7 @@ sp_dyna_draw_get_vpoint (const SPDynaDrawContext *dc,
                          gdouble           *vy)
 {
 #ifdef NORMALIZED_COORDINATE
-	NRRectF drect;
+	NRRect drect;
 
 	sp_desktop_get_display_area (SP_EVENT_CONTEXT(dc)->desktop, &drect);
 	*vx = nx * (drect.x1 - drect.x0) + drect.x0;
@@ -342,7 +342,7 @@ sp_dyna_draw_get_curr_vpoint (const SPDynaDrawContext * dc,
                               gdouble *vy)
 {
 #ifdef NORMALIZED_COORDINATE
-	NRRectF drect;
+	NRRect drect;
 
 	sp_desktop_get_display_area (SP_EVENT_CONTEXT(dc)->desktop, &drect);
 	*vx = dc->curx * (drect.x1 - drect.x0) + drect.x0;
@@ -438,7 +438,7 @@ sp_dyna_draw_brush (SPDynaDrawContext *dc)
 		/* calligraphics */
 		double width;
 		double delx, dely;
-		NRPointF *vp;
+		NRPoint *vp;
 		double xd, yd;
 
 		/* fixme: */
@@ -486,7 +486,7 @@ sp_dyna_draw_timeout_handler (gpointer data)
 	SPCanvas *canvas;
 	double xd, yd;
 	int x, y;
-	NRPointF p;
+	NRPoint p;
 
 	dc = SP_DYNA_DRAW_CONTEXT (data);
 	desktop = SP_EVENT_CONTEXT(dc)->desktop;
@@ -525,7 +525,7 @@ sp_dyna_draw_context_root_handler (SPEventContext * event_context,
 {
 	SPDynaDrawContext *dc;
 	SPDesktop *desktop;
-	NRPointF p;
+	NRPoint p;
 	gint ret;
 
 	dc = SP_DYNA_DRAW_CONTEXT (event_context);
@@ -709,7 +709,7 @@ set_to_accumulated (SPDynaDrawContext * dc)
 	  sp_repr_unref (dc->repr);
 	  sp_selection_set_repr (SP_DT_SELECTION (desktop), dc->repr);
 	}
-      sp_desktop_dt2root_affine (desktop, (NRMatrixD *) d2doc);
+      sp_desktop_dt2root_affine (desktop, (NRMatrix *) d2doc);
       abp = art_bpath_affine_transform (sp_curve_first_bpath (dc->accumulated), d2doc);
       str = sp_svg_write_path (abp);
       g_assert (str != NULL);
@@ -794,7 +794,7 @@ static void
 fit_and_split_line (SPDynaDrawContext *dc,
                     gboolean           release)
 {
-	NRPointF b[4];
+	NRPoint b[4];
 	gdouble tolerance;
 
 	tolerance = SP_EVENT_CONTEXT (dc)->desktop->w2d[0] * TOLERANCE_LINE;
@@ -866,7 +866,7 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 #define BEZIER_MAX_DEPTH  4
 #define BEZIER_MAX_LENGTH (BEZIER_SIZE * (2 << (BEZIER_MAX_DEPTH-1)))
 		SPCurve *curve;
-		NRPointF b1[BEZIER_MAX_LENGTH], b2[BEZIER_MAX_LENGTH];
+		NRPoint b1[BEZIER_MAX_LENGTH], b2[BEZIER_MAX_LENGTH];
 		gint nb1, nb2;            /* number of blocks */
 
 #ifdef DYNA_DRAW_VERBOSE
@@ -890,7 +890,7 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 		nb2 = sp_bezier_fit_cubic_r (b2, dc->point2, dc->npoints,
 					     tolerance, BEZIER_MAX_DEPTH);
 		if (nb1 != -1 && nb2 != -1) {
-			NRPointF *bp1, *bp2;
+			NRPoint *bp1, *bp2;
 			/* Fit and draw and reset state */
 #ifdef DYNA_DRAW_VERBOSE
 			g_print ("nb1:%d nb2:%d\n", nb1, nb2);

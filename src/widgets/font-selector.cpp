@@ -513,7 +513,7 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 			int hpos[SPFP_MAX_LEN];
 			float px, py;
 			int len;
-			NRRectF bbox;
+			NRRect bbox;
 			float startx, starty;
 			int x, y;
 			tface = NR_RASTERFONT_TYPEFACE (fprev->rfont);
@@ -528,8 +528,8 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 			bbox.x0 = bbox.y0 = bbox.x1 = bbox.y1 = 0.0;
 			while (p && *p && (len < SPFP_MAX_LEN)) {
 				unsigned int unival;
-				NRPointF adv;
-				NRRectF gbox;
+				NRPoint adv;
+				NRRect gbox;
 				unival = g_utf8_get_char (p);
 				glyphs[len] = nr_typeface_lookup_default (tface, unival);
 				hpos[len] = (int)px;
@@ -602,7 +602,7 @@ sp_font_preview_set_font (SPFontPreview *fprev, NRFont *font)
 		fprev->rfont = nr_rasterfont_unref (fprev->rfont);
 	}
 	if (fprev->font) {
-		NRMatrixF flip;
+		NRMatrix flip;
 		nr_matrix_f_set_scale (&flip, 1.0, -1.0);
 		fprev->rfont = nr_rasterfont_new (fprev->font, &flip);
 	}

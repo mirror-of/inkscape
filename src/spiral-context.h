@@ -29,7 +29,7 @@ typedef struct _SPSpiralContextClass SPSpiralContextClass;
 struct _SPSpiralContext {
 	SPEventContext event_context;
 	SPItem * item;
-	NRPointF center;
+	NRPoint center;
 	gdouble revo;
 	gdouble exp;
 	gdouble t0;

@@ -50,7 +50,7 @@ GType sp_star_get_type (void);
 
 void sp_star_position_set (SPStar *star, gint sides, gdouble cx, gdouble cy, gdouble r1, gdouble r2, gdouble arg1, gdouble arg2);
 
-void sp_star_get_xy (SPStar *star, SPStarPoint point, gint index, NRPointF *p);
+void sp_star_get_xy (SPStar *star, SPStarPoint point, gint index, NRPoint *p);
 
 G_END_DECLS
 

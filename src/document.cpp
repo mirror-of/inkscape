@@ -612,14 +612,14 @@ sp_document_add_repr (SPDocument *document, SPRepr *repr)
 }
 
 static int
-is_within (const NRRectD *what, const NRRectF *box)
+is_within (const NRRect *what, const NRRect *box)
 {
 	return (box->x0 > what->x0) && (box->x1 < what->x1)
 	    && (box->y0 > what->y0) && (box->y1 < what->y1);
 }
 
 static int
-overlaps (const NRRectD *what, const NRRectF *box)
+overlaps (const NRRect *what, const NRRect *box)
 {
 	return (((box->x0 > what->x0) && (box->x0 < what->x1)) ||
 	        ((box->x1 > what->x0) && (box->x1 < what->x1))) &&
@@ -628,8 +628,8 @@ overlaps (const NRRectD *what, const NRRectF *box)
 }
 
 static GSList *
-find_items_in_area (GSList *s, SPGroup *group, NRRectD *area,
-                    int (*test)(const NRRectD *, const NRRectF *))
+find_items_in_area (GSList *s, SPGroup *group, NRRect *area,
+                    int (*test)(const NRRect *, const NRRect *))
 {
 	SPObject * o;
 
@@ -642,7 +642,7 @@ find_items_in_area (GSList *s, SPGroup *group, NRRectD *area,
 		{
 			s = find_items_in_area (s, SP_GROUP (o), area, test);
 		} else {
-			NRRectF box;
+			NRRect box;
 			SPItem * child = SP_ITEM (o);
 
 			sp_item_bbox_desktop (child, &box);
@@ -663,7 +663,7 @@ find_items_in_area (GSList *s, SPGroup *group, NRRectD *area,
  */
 
 GSList *
-sp_document_items_in_box (SPDocument *document, NRRectD *box)
+sp_document_items_in_box (SPDocument *document, NRRect *box)
 {
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
@@ -682,7 +682,7 @@ sp_document_items_in_box (SPDocument *document, NRRectD *box)
  */
 
 GSList *
-sp_document_partial_items_in_box (SPDocument *document, NRRectD *box)
+sp_document_partial_items_in_box (SPDocument *document, NRRect *box)
 {
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);

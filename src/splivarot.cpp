@@ -159,7 +159,7 @@ sp_selected_path_boolop (bool_op bop)
 
 		originaux[0]->Fill(theShape,0);
 		{
-			NRMatrixF i2root;
+			NRMatrix i2root;
 			sp_item_i2root_affine (SP_ITEM (il->data), &i2root);
 			for (int i=0;i<theShape->nbPt;i++) {
 				float x=i2root.c[0]*theShape->pts[i].x+i2root.c[2]*theShape->pts[i].y+i2root.c[4];
@@ -189,7 +189,7 @@ sp_selected_path_boolop (bool_op bop)
 		originaux[curOrig]->Fill(theShape,curOrig);
 		
 		{
-			NRMatrixF i2root;
+			NRMatrix i2root;
 			sp_item_i2root_affine (SP_ITEM (l->data), &i2root);
 			for (int i=0;i<theShape->nbPt;i++) {
 				float x=i2root.c[0]*theShape->pts[i].x+i2root.c[2]*theShape->pts[i].y+i2root.c[4];
@@ -377,7 +377,7 @@ void sp_selected_path_outline(void)
 	float        o_width,o_miter;
 	JoinType		 o_join;
 	ButtType     o_butt;
-	NRMatrixF    i2root;
+	NRMatrix    i2root;
 	
 	desktop = SP_ACTIVE_DESKTOP;
 	if (!SP_IS_DESKTOP(desktop)) return;
@@ -598,7 +598,7 @@ void        sp_selected_path_do_offset(bool expand)
 	float        o_width,o_miter;
 	JoinType		 o_join;
 	ButtType     o_butt;
-	NRMatrixF    i2root;
+	NRMatrix    i2root;
 	
 	desktop = SP_ACTIVE_DESKTOP;
 	if (!SP_IS_DESKTOP(desktop)) return;
@@ -821,7 +821,7 @@ void sp_selected_path_simplify(void)
 	SPCurve * curve;
 	gchar * style, * str;
 	SPDesktop    *desktop;
-	NRMatrixF    i2root;
+	NRMatrix    i2root;
 	
 	desktop = SP_ACTIVE_DESKTOP;
 	if (!SP_IS_DESKTOP(desktop)) return;

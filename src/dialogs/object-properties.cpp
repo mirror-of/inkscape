@@ -461,7 +461,7 @@ sp_selection_layout_widget_update (SPWidget *spw, SPSelection *sel)
 	f = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (spw), "frame");
 
 	if (sel && !sp_selection_is_empty (sel)) {
-		NRRectF bbox;
+		NRRect bbox;
 
 		sp_selection_bbox (sel, &bbox);
 
@@ -499,7 +499,7 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 	GtkWidget *us;
 	GtkAdjustment *a;
 	const SPUnit *unit;
-	NRRectF bbox;
+	NRRect bbox;
 	gdouble x0, y0, x1, y1;
 	SPSelection *sel;
 

@@ -184,7 +184,7 @@ sp_guideline_new (SPCanvasGroup *parent, double position, unsigned int vertical)
 void
 sp_guideline_set_position (SPGuideLine *gl, double position)
 {
-	NRMatrixD i2b;
+	NRMatrix i2b;
 
 	nr_matrix_d_set_translate (&i2b, position, position);
 
