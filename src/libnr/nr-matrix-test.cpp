@@ -98,6 +98,33 @@ int main(int argc, char *argv[])
 		UTEST_ASSERT( Matrix(s2).inverse() == Matrix(sp5) );
 	}
 
+	UTEST_TEST("nr_matrix_invert") {
+		NRMatrix const nr_m_id(m_id);
+		Matrix const m_s2(NR::scale(-4.0, 2.0));
+		NRMatrix const nr_s2(m_s2);
+		Matrix const m_sp5(NR::scale(-.25, .5));
+		NRMatrix const nr_sp5(m_sp5);
+		Matrix const m_t23(t23);
+		NRMatrix const nr_t23(m_t23);
+		NRMatrix inv;
+		nr_matrix_invert(&inv, &nr_m_id);
+		UTEST_ASSERT( Matrix(inv) == m_id );
+		nr_matrix_invert(&inv, &nr_t23);
+		UTEST_ASSERT( Matrix(inv) == Matrix(NR::translate(-2.0, -3.0)) );
+		nr_matrix_invert(&inv, &nr_s2);
+		UTEST_ASSERT( Matrix(inv) == Matrix(nr_sp5) );
+		nr_matrix_invert(&inv, &nr_sp5);
+		UTEST_ASSERT( Matrix(inv) == Matrix(nr_s2) );
+
+		/* Test that nr_matrix_invert handles src == dest. */
+		inv = nr_s2;
+		nr_matrix_invert(&inv, &inv);
+		UTEST_ASSERT( Matrix(inv) == Matrix(nr_sp5) );
+		inv = nr_t23;
+		nr_matrix_invert(&inv, &inv);
+		UTEST_ASSERT( Matrix(inv) == Matrix(NR::translate(-2.0, -3.0)) );
+	}
+
 	UTEST_TEST("elliptic quadratic form") {
 		NR::Matrix const aff(1.0, 1.0,
 							 0.0, 1.0,
