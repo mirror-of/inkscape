@@ -1230,14 +1230,19 @@ profile_path(const char *filename)
 {
     static const gchar *homedir = NULL;
     if (!homedir) {
-        homedir = g_get_home_dir();
 #ifdef HAS_SHGetSpecialFolderPath
-        if (!homedir) { //only try this is previous attempt fails
+        // prefer c:\Documents and Settings\UserName\Application Data\
+        // to c:\Documents and Settings\userName\
+        // Closes bug #933461
+        if (!homedir) {
             char pathBuf[MAX_PATH+1];
             if (SHGetSpecialFolderPath(NULL, pathBuf, CSIDL_APPDATA, 1))
                 homedir = g_strdup(pathBuf);
         }
 #endif
+        if (!homedir) {
+            homedir = g_get_home_dir();
+        }
         if (!homedir) {
             homedir = g_path_get_dirname(INKSCAPE->argv0);
         }

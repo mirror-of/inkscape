@@ -1,3 +1,8 @@
+2004-01-15  Kees Cook  <kees@outflux.net>
+
+	* src/inkscape.cpp: correcting windows path for preferences.  Closes
+	bug #933461.
+
 2004-01-14  MenTaLguY  <mental@rydia.net>
 
 	* src/gc.cpp: leave the free space multiplier at the default, which
