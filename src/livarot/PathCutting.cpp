@@ -7,6 +7,7 @@
  *
  */
 
+#include "evil-malloc.h"
 #include "Path.h"
 #include "libnr/n-art-bpath.h"
 #include "libnr/nr-point-fns.h"
@@ -317,7 +318,7 @@ void Path::DashSubPath(int spL,char* spP,float head,float tail,float body,int nb
 void* Path::MakeArtBPath(void)
 {
 	int				 nb_cmd=0,max_cmd=0;
-	NArtBpath* bpath=(NArtBpath*)malloc((max_cmd+1)*sizeof(NArtBpath));
+	NArtBpath* bpath=(NArtBpath*)evil_malloc((max_cmd+1)*sizeof(NArtBpath));
 	
 	NR::Point   lastP,bezSt,bezEn,lastMP;
 	int         lastM=-1,bezNb=0;

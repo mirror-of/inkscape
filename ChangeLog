@@ -3,6 +3,12 @@
 	* src/traits/function.h: add typedefs for all argument positions,
 	  specifying 'void' for all arguments after the last
 
+	* src/livarot/evil-malloc.h, src/livarot/BitLigne.cpp,
+	  src/livarot/PathCutting.cpp, src/livarot/PathSimplify.cpp,
+	  src/livarot/Shape.cpp, src/livarot/ShapeSweepUtils.cpp:
+
+	  work around livarot bugs so I can use ElectricFence
+
 2004-08-26  MenTaLguY <mental@rydia.net>
 
 	* src/document-private.h, src/document.h, src/document.cpp:

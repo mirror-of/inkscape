@@ -6,6 +6,7 @@
  *
  */
 
+#include "evil-malloc.h"
 #include "Shape.h"
 //#include "MyMath.h"
 #include <libnr/nr-point.h>
@@ -90,7 +91,7 @@ Shape::MakePointData (bool nVal)
 	  flags |= has_points_data;
 	  if (pData)
 	    free (pData);
-	  pData = (point_data *) malloc (maxPt * sizeof (point_data));
+	  pData = (point_data *) evil_malloc (maxPt * sizeof (point_data));
 	}
     }
   else
@@ -122,7 +123,7 @@ Shape::MakeEdgeData (bool nVal)
 	  flags |= has_edges_data;
 	  if (eData)
 	    free (eData);
-	  eData = (edge_data *) malloc (maxAr * sizeof (edge_data));
+	  eData = (edge_data *) evil_malloc (maxAr * sizeof (edge_data));
 	}
     }
   else
@@ -154,7 +155,7 @@ Shape::MakeRasterData (bool nVal)
 	  flags |= has_raster_data;
 	  if (swrData)
 	    free (swrData);
-	  swrData = (raster_data *) malloc (maxAr * sizeof (raster_data));
+	  swrData = (raster_data *) evil_malloc (maxAr * sizeof (raster_data));
 	}
     }
   else
@@ -187,7 +188,7 @@ Shape::MakeQuickRasterData (bool nVal)
 	  if (qrsData)
 	    free (qrsData);
 	  qrsData =
-	    (quick_raster_data *) malloc (maxAr * sizeof (quick_raster_data));
+	    (quick_raster_data *) evil_malloc (maxAr * sizeof (quick_raster_data));
 	}
     }
   else
@@ -220,7 +221,7 @@ Shape::MakeSweepSrcData (bool nVal)
 	  if (swsData)
 	    free (swsData);
 	  swsData =
-	    (sweep_src_data *) malloc (maxAr * sizeof (sweep_src_data));
+	    (sweep_src_data *) evil_malloc (maxAr * sizeof (sweep_src_data));
 	}
     }
   else
@@ -253,7 +254,7 @@ Shape::MakeSweepDestData (bool nVal)
 	  if (swdData)
 	    free (swdData);
 	  swdData =
-	    (sweep_dest_data *) malloc (maxAr * sizeof (sweep_dest_data));
+	    (sweep_dest_data *) evil_malloc (maxAr * sizeof (sweep_dest_data));
 	}
     }
   else
@@ -285,7 +286,7 @@ Shape::MakeBackData (bool nVal)
 	  flags |= has_back_data;
 	  if (ebData)
 	    free (ebData);
-	  ebData = (back_data *) malloc (maxAr * sizeof (back_data));
+	  ebData = (back_data *) evil_malloc (maxAr * sizeof (back_data));
 	}
     }
   else
@@ -320,8 +321,8 @@ Shape::MakeVoronoiData (bool nVal)
 	  if (voreData)
 	    free (voreData);
 	  vorpData =
-	    (voronoi_point *) malloc (maxPt * sizeof (voronoi_point));
-	  voreData = (voronoi_edge *) malloc (maxAr * sizeof (voronoi_edge));
+	    (voronoi_point *) evil_malloc (maxPt * sizeof (voronoi_point));
+	  voreData = (voronoi_edge *) evil_malloc (maxAr * sizeof (voronoi_edge));
 	}
     }
   else
@@ -1608,7 +1609,7 @@ Shape::SortEdges (void)
     }
   SetFlag (need_edges_sorting, false);
 
-  edge_list *list = (edge_list *) malloc (nbAr * sizeof (edge_list));
+  edge_list *list = (edge_list *) evil_malloc (nbAr * sizeof (edge_list));
   for (int p = 0; p < nbPt; p++)
     {
       int d = pts[p].dI + pts[p].dO;

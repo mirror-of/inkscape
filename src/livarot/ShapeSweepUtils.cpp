@@ -6,6 +6,7 @@
  *
  */
 
+#include "evil-malloc.h"
 #include "Shape.h"
 #include "LivarotDefs.h"
 #include <libnr/nr-point.h>
@@ -82,8 +83,8 @@ SweepEvent::CreateQueue (SweepEventQueue & queue, int size)
 {
   queue.nbEvt = 0;
   queue.maxEvt = size;
-  queue.events = (SweepEvent *) malloc (queue.maxEvt * sizeof (SweepEvent));
-  queue.inds = (int *) malloc (queue.maxEvt * sizeof (int));
+  queue.events = (SweepEvent *) evil_malloc (queue.maxEvt * sizeof (SweepEvent));
+  queue.inds = (int *) evil_malloc (queue.maxEvt * sizeof (int));
 }
 
 void
@@ -380,7 +381,7 @@ SweepTree::CreateList (SweepTreeList & list, int size)
 {
   list.nbTree = 0;
   list.maxTree = size;
-  list.trees = (SweepTree *) malloc (list.maxTree * sizeof (SweepTree));
+  list.trees = (SweepTree *) evil_malloc (list.maxTree * sizeof (SweepTree));
   list.racine = NULL;
 }
 

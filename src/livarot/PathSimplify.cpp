@@ -6,6 +6,7 @@
  *
  */
 
+#include "evil-malloc.h"
 #include "Path.h"
 //#include "MyMath.h"
 #include <math.h>
@@ -866,12 +867,12 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
   }
   
   // Totally inefficient, allocates & deallocates all the time.
-  tk = (double *) malloc (nbPt * sizeof (double));
-  Qk = (double *) malloc (nbPt * sizeof (double));
-  Xk = (double *) malloc (nbPt * sizeof (double));
-  Yk = (double *) malloc (nbPt * sizeof (double));
-  lk = (double *) malloc (nbPt * sizeof (double));
-  fk = (char *) malloc (nbPt * sizeof (char));
+  tk = (double *) evil_malloc (nbPt * sizeof (double));
+  Qk = (double *) evil_malloc (nbPt * sizeof (double));
+  Xk = (double *) evil_malloc (nbPt * sizeof (double));
+  Yk = (double *) evil_malloc (nbPt * sizeof (double));
+  lk = (double *) evil_malloc (nbPt * sizeof (double));
+  fk = (char *) evil_malloc (nbPt * sizeof (char));
   
   // chord length method
   tk[0] = 0.0;

@@ -8,6 +8,7 @@
  */
 
 #include "BitLigne.h"
+#include "evil-malloc.h"
 
 #include <math.h>
 
@@ -27,8 +28,8 @@ BitLigne::BitLigne(int ist,int ien,float iScale)
 		nbInt=nbBit/32;
 	}
   nbInt+=1;
-	fullB=(uint32_t*)malloc(nbInt*sizeof(uint32_t));
-	partB=(uint32_t*)malloc(nbInt*sizeof(uint32_t));
+	fullB=(uint32_t*)evil_malloc(nbInt*sizeof(uint32_t));
+	partB=(uint32_t*)evil_malloc(nbInt*sizeof(uint32_t));
 
 	curMin=en;
 	curMax=st;
