@@ -354,8 +354,7 @@ update_tool_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget
 		SPButton *button=SP_BUTTON (g_object_get_data (G_OBJECT (toolbox),
 		                                               tools[i].data_name));
 		sp_button_toggle_set_down (button,
-		                           tname && !strcmp(tname, tools[i].type_name),
-		                           FALSE);
+		                           tname && !strcmp(tname, tools[i].type_name));
 	}
 }
 

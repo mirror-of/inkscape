@@ -1,5 +1,8 @@
 2003-12-05 MenTaLguY <mental@rydia.net>
 
+	* src/widgets/icon.c, src/widgets/button.c, src/widgets/button.h, src/toolbox.c:
+	  Reworked SPButton to derive from GtkToggleButton.
+
 	* src/svg/svg-length.c, src/helper/units.c: removed #ifdef WIN32 insanity
 
 	* src/Makefile.am, src/extension.c,

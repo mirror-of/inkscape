@@ -134,7 +134,13 @@ sp_icon_size_request (GtkWidget *widget, GtkRequisition *requisition)
 static void
 sp_icon_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 {
+	SPIcon *icon=SP_ICON (widget);
+
 	widget->allocation = *allocation;
+
+	if ( allocation->width < icon->size || allocation->height < icon->size ) {
+		g_warning ("SPIcon: icon allocated less than requested size");
+	}
 
 	if (GTK_WIDGET_DRAWABLE (widget)) {
 		gtk_widget_queue_draw (widget);
@@ -261,8 +267,16 @@ sp_icon_paint (SPIcon *icon, GdkRectangle *area)
 
 	widget = GTK_WIDGET (icon);
 
-	padx = (widget->allocation.width - icon->size) / 2;
-	pady = (widget->allocation.height - icon->size) / 2;
+	if ( widget->allocation.width > icon->size ) {
+		padx = (widget->allocation.width - icon->size) / 2;
+	} else {
+		padx = 0;
+	}
+	if ( widget->allocation.height > icon->size ) {
+		pady = (widget->allocation.height - icon->size) / 2;
+	} else {
+		pady = 0;
+	}
 
 	x0 = MAX (area->x, widget->allocation.x + padx);
 	y0 = MAX (area->y, widget->allocation.y + pady);
@@ -302,8 +316,6 @@ sp_icon_paint (SPIcon *icon, GdkRectangle *area)
 						d += 3;
 					}
 				}
-			} else {
-				nr_pixblock_render_gray_noise (&bpb, NULL);
 			}
 
 			gdk_draw_rgb_image (widget->window, widget->style->black_gc,
