@@ -495,6 +495,7 @@ hasSuffix(Glib::ustring &str, Glib::ustring &ext)
 static bool
 isValidImageFile(Glib::ustring &fileName)
 {
+    Glib::ustring lowName = fileName.lowercase();
     std::vector<Gdk::PixbufFormat>formats = Gdk::Pixbuf::get_formats();
     for (unsigned int i=0; i<formats.size(); i++)
         {
@@ -503,7 +504,7 @@ isValidImageFile(Glib::ustring &fileName)
         for (unsigned int j=0; j<extensions.size(); j++)
             {
             Glib::ustring ext = extensions[j];
-            if (hasSuffix(fileName, ext))
+            if (hasSuffix(lowName, ext))
                 {
                 return true;
                 }
