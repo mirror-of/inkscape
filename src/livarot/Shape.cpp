@@ -2086,6 +2086,50 @@ Shape::PtWinding (const NR::Point px) const
 }
 
 
+void Shape::initialisePointData()
+{
+    int const N = numberOfPoints();
+  
+    for (int i = 0; i < N; i++) {
+	pData[i].pending = 0;
+	pData[i].edgeOnLeft = -1;
+	pData[i].nextLinkedPoint = -1;
+	pData[i].rx[0] = Round(getPoint(i).x[0]);
+	pData[i].rx[1] = Round(getPoint(i).x[1]);
+    }
+}
+
+void Shape::initialiseEdgeData()
+{
+    int const N = numberOfEdges();
+
+    for (int i = 0; i < N; i++) {
+	eData[i].rdx = pData[getEdge(i).en].rx - pData[getEdge(i).st].rx;
+	eData[i].length = dot(eData[i].rdx, eData[i].rdx);
+	eData[i].ilength = 1 / eData[i].length;
+	eData[i].sqlength = sqrt(eData[i].length);
+	eData[i].isqlength = 1 / eData[i].sqlength;
+	eData[i].siEd = eData[i].rdx[1] * eData[i].isqlength;
+	eData[i].coEd = eData[i].rdx[0] * eData[i].isqlength;
+	
+	if (eData[i].siEd < 0) {
+	    eData[i].siEd = -eData[i].siEd;
+	    eData[i].coEd = -eData[i].coEd;
+	}
+
+	swsData[i].misc = NULL;
+	swsData[i].firstLinkedPoint = -1;
+	swsData[i].stPt = swsData[i].enPt = -1;
+	swsData[i].leftRnd = swsData[i].rightRnd = -1;
+	swsData[i].nextSh = NULL;
+	swsData[i].nextBo = -1;
+	swsData[i].curPoint = -1;
+	swsData[i].doneTo = -1;
+  }
+}
+
+
+
 
 /**
  *    A directed graph is Eulerian iff every vertex has equal indegree and outdegree.

@@ -96,19 +96,13 @@ Shape::Reoriente (Shape * a)
   MakeEdgeData (true);
   MakeSweepDestData (true);
 
-  for (int i = 0; i < numberOfPoints(); i++)
-    {
-      pData[i].pending = 0;
-      pData[i].edgeOnLeft = -1;
-      pData[i].nextLinkedPoint = -1;
-      pData[i].rx[0] = Round (getPoint(i).x[0]);
-      pData[i].rx[1] = Round (getPoint(i).x[1]);
+  initialisePointData();
+
+  for (int i = 0; i < numberOfPoints(); i++) {
       _pts[i].x = pData[i].rx;
-    }
-  for (int i = 0; i < numberOfPoints(); i++)
-    {
       _pts[i].oldDegree = getPoint(i).totalDegree();
-    }
+  }
+  
   for (int i = 0; i < a->numberOfEdges(); i++)
     {
       eData[i].rdx = pData[getEdge(i).en].rx - pData[getEdge(i).st].rx;
@@ -189,39 +183,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   MakeSweepDestData (true);
   MakeBackData(a->_has_back_data);
 
-  for (int i = 0; i < a->numberOfPoints(); i++)
-    {
-      a->pData[i].pending = 0;
-      a->pData[i].edgeOnLeft = -1;
-      a->pData[i].nextLinkedPoint = -1;
-      a->pData[i].rx[0] = Round (a->getPoint(i).x[0]);
-      a->pData[i].rx[1] = Round (a->getPoint(i).x[1]);
-    }
-  for (int i = 0; i < a->numberOfEdges(); i++)
-    {
-      a->eData[i].rdx =
-	a->pData[a->getEdge(i).en].rx - a->pData[a->getEdge(i).st].rx;
-    a->eData[i].length = dot(a->eData[i].rdx,a->eData[i].rdx);
-      a->eData[i].ilength = 1 / a->eData[i].length;
-      a->eData[i].sqlength = sqrt (a->eData[i].length);
-      a->eData[i].isqlength = 1 / a->eData[i].sqlength;
-      a->eData[i].siEd = a->eData[i].rdx[1] * a->eData[i].isqlength;
-      a->eData[i].coEd = a->eData[i].rdx[0] * a->eData[i].isqlength;
-      if (a->eData[i].siEd < 0)
-	{
-	  a->eData[i].siEd = -a->eData[i].siEd;
-	  a->eData[i].coEd = -a->eData[i].coEd;
-	}
-
-      a->swsData[i].misc = NULL;
-      a->swsData[i].firstLinkedPoint = -1;
-      a->swsData[i].stPt = a->swsData[i].enPt = -1;
-      a->swsData[i].leftRnd = a->swsData[i].rightRnd = -1;
-      a->swsData[i].nextSh = NULL;
-      a->swsData[i].nextBo = -1;
-      a->swsData[i].curPoint = -1;
-      a->swsData[i].doneTo = -1;
-    }
+  a->initialisePointData();
+  a->initialiseEdgeData();
 
   a->SortPointsRounded ();
 
@@ -951,72 +914,11 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
       MakeBackData (false);
     }
 
-  for (int i = 0; i < a->numberOfPoints(); i++)
-    {
-      a->pData[i].pending = 0;
-      a->pData[i].edgeOnLeft = -1;
-      a->pData[i].nextLinkedPoint = -1;
-      a->pData[i].rx[0] = Round (a->getPoint(i).x[0]);
-      a->pData[i].rx[1] = Round (a->getPoint(i).x[1]);
-    }
-  for (int i = 0; i < b->numberOfPoints(); i++)
-    {
-      b->pData[i].pending = 0;
-      b->pData[i].edgeOnLeft = -1;
-      b->pData[i].nextLinkedPoint = -1;
-      b->pData[i].rx[0] = Round (b->getPoint(i).x[0]);
-      b->pData[i].rx[1] = Round (b->getPoint(i).x[1]);
-    }
-  for (int i = 0; i < a->numberOfEdges(); i++)
-    {
-      a->eData[i].rdx =
-	a->pData[a->getEdge(i).en].rx - a->pData[a->getEdge(i).st].rx;
-      a->eData[i].length = 	dot(a->eData[i].rdx,a->eData[i].rdx);
-      a->eData[i].ilength = 1 / a->eData[i].length;
-      a->eData[i].sqlength = sqrt (a->eData[i].length);
-      a->eData[i].isqlength = 1 / a->eData[i].sqlength;
-      a->eData[i].siEd = a->eData[i].rdx[1] * a->eData[i].isqlength;
-      a->eData[i].coEd = a->eData[i].rdx[0] * a->eData[i].isqlength;
-      if (a->eData[i].siEd < 0)
-	{
-	  a->eData[i].siEd = -a->eData[i].siEd;
-	  a->eData[i].coEd = -a->eData[i].coEd;
-	}
+  a->initialisePointData();
+  b->initialisePointData();
 
-      a->swsData[i].misc = NULL;
-      a->swsData[i].firstLinkedPoint = -1;
-      a->swsData[i].stPt = a->swsData[i].enPt = -1;
-      a->swsData[i].leftRnd = a->swsData[i].rightRnd = -1;
-      a->swsData[i].nextSh = NULL;
-      a->swsData[i].nextBo = -1;
-      a->swsData[i].curPoint = -1;
-      a->swsData[i].doneTo = -1;
-    }
-  for (int i = 0; i < b->numberOfEdges(); i++)
-    {
-      b->eData[i].rdx =
-	b->pData[b->getEdge(i).en].rx - b->pData[b->getEdge(i).st].rx;
-      b->eData[i].length = dot(b->eData[i].rdx , b->eData[i].rdx );
-      b->eData[i].ilength = 1 / b->eData[i].length;
-      b->eData[i].sqlength = sqrt (b->eData[i].length);
-      b->eData[i].isqlength = 1 / b->eData[i].sqlength;
-
-      b->eData[i].siEd = b->eData[i].rdx[1] * b->eData[i].isqlength;
-      b->eData[i].coEd = b->eData[i].rdx[0] * b->eData[i].isqlength;
-      if (b->eData[i].siEd < 0)
-      {
-        b->eData[i].siEd = -b->eData[i].siEd;
-        b->eData[i].coEd = -b->eData[i].coEd;
-      }
-      b->swsData[i].misc = NULL;
-      b->swsData[i].firstLinkedPoint = -1;
-      b->swsData[i].stPt = b->swsData[i].enPt = -1;
-      b->swsData[i].leftRnd = b->swsData[i].rightRnd = -1;
-      b->swsData[i].nextSh = NULL;
-      b->swsData[i].nextBo = -1;
-      b->swsData[i].curPoint = -1;
-      b->swsData[i].doneTo = -1;
-    }
+  a->initialiseEdgeData();
+  b->initialiseEdgeData();
 
   a->SortPointsRounded ();
   b->SortPointsRounded ();

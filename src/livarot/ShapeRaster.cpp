@@ -92,13 +92,7 @@ void Shape::BeginQuickRaster(float &pos, int &curPt)
     curPt = 0;
     pos = getPoint(0).x[1] - 1.0;
 
-    for (int i=0;i < numberOfPoints(); i++) {
-        pData[i].pending = 0;
-        pData[i].edgeOnLeft = -1;
-        pData[i].nextLinkedPoint = -1;
-        pData[i].rx[0] = Round(getPoint(i).x[0]);
-        pData[i].rx[1] = Round(getPoint(i).x[1]);
-    }
+    initialisePointData();
     
     for (int i=0;i<numberOfEdges();i++) {
         swrData[i].misc = NULL;

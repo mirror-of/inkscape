@@ -358,8 +358,8 @@ public:
     
     bool hasBackData() const { return _has_back_data; }
     
-    dg_point const &getPoint(int n) const { return _pts[n]; }
-    dg_arete const &getEdge(int n) const { return _aretes[n]; }
+    inline dg_point const &getPoint(int n) const { return _pts[n]; }
+    inline dg_arete const &getEdge(int n) const { return _aretes[n]; }
 
 private:
 
@@ -431,6 +431,9 @@ private:
 	bool starting;
 	NR::Point x;
     };
+
+    void initialisePointData();
+    void initialiseEdgeData();
 
     // activation/deactivation of the temporary data arrays
     void MakePointData(bool nVal);
