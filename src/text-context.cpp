@@ -35,6 +35,7 @@
 #include "pixmaps/cursor-text.xpm"
 #include "text-context.h"
 #include "view.h"
+#include "helper/sp-intl.h"
 
 static void sp_text_context_class_init (SPTextContextClass * klass);
 static void sp_text_context_init (SPTextContext * text_context);
@@ -279,9 +280,9 @@ sp_text_context_setup_text (SPTextContext *tc)
 	SPRepr *rstring = sp_xml_document_createTextNode (sp_repr_document (rtext), "");
 	sp_repr_add_child (rtspan, rstring, NULL);
 	sp_repr_unref (rstring);
-	sp_document_add_repr (SP_DT_DOCUMENT (ec->desktop), rtext);
+	SPItem *text_item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (ec->desktop), rtext);
 	/* fixme: Is selection::changed really immediate? */
-	sp_selection_set_repr (SP_DT_SELECTION (ec->desktop), rtext);
+	sp_selection_set_item (SP_DT_SELECTION (ec->desktop), text_item);
 	sp_repr_unref (rtext);
 	sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 }
@@ -322,25 +323,25 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		if (event->key.keyval == GDK_KP_Add || event->key.keyval == GDK_KP_Subtract)
 			break; // pass on keypad +/- so they can zoom
 
-		if (!sp_selection_is_empty (SP_DT_SELECTION (ec->desktop)) || (tc->nascent_object)) {
-			// there is a selection, or a new object was just created
-
-			tc->nascent_object = 0; // we don't need it anymore, because now sp_selection_is_empty != NULL
+		if ((tc->text) || (tc->nascent_object)) {
+			// there is an active text object in this context, or a new object was just created
 
 			if (tc->unimode || !tc->imc || !gtk_im_context_filter_keypress (tc->imc, (GdkEventKey*) event)) {
-				//IM did not consumed the key, or we're in unimode
+				//IM did not consume the key, or we're in unimode
 
-				if (!tc->text) sp_text_context_setup_text (tc);
-				else sp_text_context_preedit_reset (tc);
-				g_assert (tc->text != NULL);
-				SPStyle *style = SP_OBJECT_STYLE (tc->text);
+				if (tc->text) 
+					sp_text_context_preedit_reset (tc);
 
 				if (MOD__CTRL_ONLY) {
 					switch (event->key.keyval) {
 					case GDK_space:
 						/* No-break space */
+						if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
+							sp_text_context_setup_text (tc);
+							tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
+						}
 						tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, "\302\240");
-						sp_view_set_statusf_flash (SP_VIEW(ec->desktop), "No-break space");
+						sp_view_set_statusf_flash (SP_VIEW(ec->desktop), _("No-break space"));
 						sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						return TRUE;
 					case GDK_U:
@@ -351,7 +352,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						} else {
 							tc->unimode = TRUE;
 							tc->unipos = 0;
-							sp_view_set_statusf (SP_VIEW(ec->desktop), "Unicode: ");
+							sp_view_set_statusf (SP_VIEW(ec->desktop), _("Unicode: "));
 						}
 						if (tc->imc) {
 							gtk_im_context_reset (tc->imc);
@@ -365,7 +366,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						if (isxdigit ((guchar) event->key.keyval)) {
 							tc->uni[tc->unipos] = event->key.keyval;
 							sp_view_set_statusf (SP_VIEW(ec->desktop), 
-                                                        "Unicode: %c%c%c%c", 
+                                                        _("Unicode: %c%c%c%c"), 
                                                         tc->uni[0], 
                                                         tc->unipos > 0 ? tc->uni[1] : ' ', 
                                                         tc->unipos > 1 ? tc->uni[2] : ' ', 
@@ -378,8 +379,12 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 								u[len] = '\0';
 								tc->unipos = 0;
 								if (!g_unichar_isprint ((gunichar) uv)) {
-									sp_view_set_statusf_error (SP_VIEW(ec->desktop), "Non-printable character"); // this may be due to bad input, so it goes to statusbar
+									sp_view_set_statusf_error (SP_VIEW(ec->desktop), _("Non-printable character")); // this may be due to bad input, so it goes to statusbar
 								} else {
+									if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
+										sp_text_context_setup_text (tc);                                                 
+										tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
+									}
 									tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, u);
 									sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 								}
@@ -400,140 +405,168 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					switch (event->key.keyval) {
 					case GDK_Return:
 					case GDK_KP_Enter:
+						if (!tc->text) { // printable key; create text if none (i.e. if nascent_object)
+							sp_text_context_setup_text (tc);                                                 
+							tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
+						}
 						sp_text_insert_line (SP_TEXT (tc->text), tc->ipos);
 						tc->ipos += 1;
 						sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						return TRUE;
 					case GDK_BackSpace:
-						tc->ipos = sp_text_delete (SP_TEXT (tc->text), MAX (tc->ipos - 1, 0), tc->ipos);
-						sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+						if (tc->text) { // if nascent_object, do nothing, but return TRUE; same for all other delete and move keys
+							tc->ipos = sp_text_delete (SP_TEXT (tc->text), MAX (tc->ipos - 1, 0), tc->ipos);
+							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+						}
 						return TRUE;
 					case GDK_Delete:
 					case GDK_KP_Delete:
-						tc->ipos = sp_text_delete (SP_TEXT (tc->text), tc->ipos, MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text))));
-						sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+						if (tc->text) {
+							tc->ipos = sp_text_delete (SP_TEXT (tc->text), tc->ipos, MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text))));
+							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+						}
 						return TRUE;
 					case GDK_Left:
 					case GDK_KP_Left:
 					case GDK_KP_4:
-						if (MOD__ALT) { 
-							if (MOD__SHIFT)
-								sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(-10, 0));
-							else
-								sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(-1, 0));
-							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
-						} else {
-							if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-								tc->ipos = sp_text_down (SP_TEXT (tc->text), tc->ipos);
+						if (tc->text) {
+							if (MOD__ALT) { 
+								if (MOD__SHIFT)
+									sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(-10, 0));
+								else
+									sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(-1, 0));
+								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 							} else {
-								tc->ipos = MAX (tc->ipos - 1, 0);
+								SPStyle *style = SP_OBJECT_STYLE (tc->text);
+								if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+									tc->ipos = sp_text_down (SP_TEXT (tc->text), tc->ipos);
+								} else {
+									tc->ipos = MAX (tc->ipos - 1, 0);
+								}
 							}
+							sp_text_context_update_cursor (tc);
 						}
-						sp_text_context_update_cursor (tc);
 						return TRUE;
 					case GDK_Right:
 					case GDK_KP_Right:
 					case GDK_KP_6:
-						if (MOD__ALT) { 
-							if (MOD__SHIFT)
-								sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(10, 0));
-							else
-								sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(1, 0));
-							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
-						} else {
-							if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-								tc->ipos = sp_text_up (SP_TEXT (tc->text), tc->ipos);
+						if (tc->text) {
+							if (MOD__ALT) { 
+								if (MOD__SHIFT)
+									sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(10, 0));
+								else
+									sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(1, 0));
+								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 							} else {
-								tc->ipos = MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text)));
+								SPStyle *style = SP_OBJECT_STYLE (tc->text);
+								if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+									tc->ipos = sp_text_up (SP_TEXT (tc->text), tc->ipos);
+								} else {
+									tc->ipos = MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text)));
+								}
 							}
+							sp_text_context_update_cursor (tc);
 						}
-						sp_text_context_update_cursor (tc);
 						return TRUE;
 					case GDK_Up:
 					case GDK_KP_Up:
 					case GDK_KP_8:
-						if (MOD__ALT) { 
-							if (MOD__SHIFT)
-								sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, -10));
-							else 
-								sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, -1));
-							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
-						} else {
-							if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-								tc->ipos = MAX (tc->ipos - 1, 0);
+						if (tc->text) {
+							if (MOD__ALT) { 
+								if (MOD__SHIFT)
+									sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, -10));
+								else 
+									sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, -1));
+								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 							} else {
-								tc->ipos = sp_text_up (SP_TEXT (tc->text), tc->ipos);
+								SPStyle *style = SP_OBJECT_STYLE (tc->text);
+								if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+									tc->ipos = MAX (tc->ipos - 1, 0);
+								} else {
+									tc->ipos = sp_text_up (SP_TEXT (tc->text), tc->ipos);
+								}
 							}
+							sp_text_context_update_cursor (tc);
 						}
-						sp_text_context_update_cursor (tc);
 						return TRUE;
 					case GDK_Down:
 					case GDK_KP_Down:
 					case GDK_KP_2:
-						if (MOD__ALT) { 
-							if (MOD__SHIFT)
-								sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, 10));
-							else 
-								sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, 1));
-							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
-						} else {
-							if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-								tc->ipos = MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text)));
+						if (tc->text) {
+							if (MOD__ALT) { 
+								if (MOD__SHIFT)
+									sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, 10));
+								else 
+									sp_adjust_kerning_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, NR::Point(0, 1));
+								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 							} else {
-								tc->ipos = sp_text_down (SP_TEXT (tc->text), tc->ipos);
+								SPStyle *style = SP_OBJECT_STYLE (tc->text);
+								if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+									tc->ipos = MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text)));
+								} else {
+									tc->ipos = sp_text_down (SP_TEXT (tc->text), tc->ipos);
+								}
 							}
+							sp_text_context_update_cursor (tc);
 						}
-						sp_text_context_update_cursor (tc);
 						return TRUE;
 					case GDK_Home:
 					case GDK_KP_Home:
-						tc->ipos = sp_text_start_of_line (SP_TEXT (tc->text), tc->ipos);
-						sp_text_context_update_cursor (tc);
+						if (tc->text) {
+							tc->ipos = sp_text_start_of_line (SP_TEXT (tc->text), tc->ipos);
+							sp_text_context_update_cursor (tc);
+						}
 						return TRUE;
 					case GDK_End:
 					case GDK_KP_End:
-						tc->ipos = sp_text_end_of_line (SP_TEXT (tc->text), tc->ipos);
-						sp_text_context_update_cursor (tc);
+						if (tc->text) {
+							tc->ipos = sp_text_end_of_line (SP_TEXT (tc->text), tc->ipos);
+							sp_text_context_update_cursor (tc);
+						}
 						return TRUE;
 					case GDK_Escape:
 						sp_selection_empty (SP_DT_SELECTION (ec->desktop));
 						return TRUE;
 					case GDK_less:
 					case GDK_comma:
-						if (MOD__ALT) { 
-							if (MOD__CTRL) {
-								if (MOD__SHIFT)
-									sp_adjust_linespacing_screen (SP_TEXT (tc->text), ec->desktop, -10);
-								else 
-									sp_adjust_linespacing_screen (SP_TEXT (tc->text), ec->desktop, -1);
-							} else {
-								if (MOD__SHIFT)
-									sp_adjust_tspan_letterspacing_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, -10);
-								else 
-									sp_adjust_tspan_letterspacing_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, -1);
+						if (tc->text) {
+							if (MOD__ALT) { 
+								if (MOD__CTRL) {
+									if (MOD__SHIFT)
+										sp_adjust_linespacing_screen (SP_TEXT (tc->text), ec->desktop, -10);
+									else 
+										sp_adjust_linespacing_screen (SP_TEXT (tc->text), ec->desktop, -1);
+								} else {
+									if (MOD__SHIFT)
+										sp_adjust_tspan_letterspacing_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, -10);
+									else 
+										sp_adjust_tspan_letterspacing_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, -1);
+								}
+								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+								sp_text_context_update_cursor (tc);
+								return TRUE;
 							}
-							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
-							sp_text_context_update_cursor (tc);
-							return TRUE;
 						}
 						break;
 					case GDK_greater:
 					case GDK_period:
-						if (MOD__ALT) { 
-							if (MOD__CTRL) {
-								if (MOD__SHIFT)
-									sp_adjust_linespacing_screen (SP_TEXT (tc->text), ec->desktop, 10);
-								else 
-									sp_adjust_linespacing_screen (SP_TEXT (tc->text), ec->desktop, 1);
-							} else {
-								if (MOD__SHIFT)
-									sp_adjust_tspan_letterspacing_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, 10);
-								else 
-									sp_adjust_tspan_letterspacing_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, 1);
+						if (tc->text) {
+							if (MOD__ALT) { 
+								if (MOD__CTRL) {
+									if (MOD__SHIFT)
+										sp_adjust_linespacing_screen (SP_TEXT (tc->text), ec->desktop, 10);
+									else 
+										sp_adjust_linespacing_screen (SP_TEXT (tc->text), ec->desktop, 1);
+								} else {
+									if (MOD__SHIFT)
+										sp_adjust_tspan_letterspacing_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, 10);
+									else 
+										sp_adjust_tspan_letterspacing_screen (SP_TEXT (tc->text), tc->ipos, ec->desktop, 1);
+								}
+								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+								sp_text_context_update_cursor (tc);
+								return TRUE;
 							}
-							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
-							sp_text_context_update_cursor (tc);
-							return TRUE;
 						}
 						break;
 					default:
@@ -543,8 +576,10 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			} else return TRUE; // return the "I took care of it" value if it was consumed by the IM
 		} else { // do nothing if there's no object to type in - the key will be sent to parent context, 
 			    // except up/down that are swallowed to prevent the zoom field from activation
-			if ((event->key.keyval == GDK_Up || event->key.keyval == GDK_Down || 
-					 event->key.keyval == GDK_KP_Up || event->key.keyval == GDK_KP_Down) && !MOD__CTRL_ONLY) 
+			if ((event->key.keyval == GDK_Up || 
+				 event->key.keyval == GDK_Down ||
+				 event->key.keyval == GDK_KP_Up || 
+				 event->key.keyval == GDK_KP_Down) && !MOD__CTRL_ONLY) 
 				return TRUE;
 		}
 		break;
@@ -658,7 +693,7 @@ sp_text_context_forget_text (SPTextContext *tc)
 	/* We have to set it to zero,
 	 * or selection changed signal messes everything up */
 	tc->text = NULL;
-	if (sp_text_is_empty(SP_TEXT (ti))) {
+	if (SP_IS_TEXT(ti) && sp_text_is_empty(SP_TEXT (ti))) {
 		SPRepr *text_repr=SP_OBJECT_REPR(ti);
 		// the repr may already have been unparented
 		// if we were called e.g. as the result of
@@ -687,7 +722,10 @@ sptc_focus_out (GtkWidget *widget, GdkEventFocus *event, SPTextContext *tc)
 void
 sptc_commit (GtkIMContext *imc, gchar *string, SPTextContext *tc)
 {
-	if (!tc->text) sp_text_context_setup_text (tc);
+	if (!tc->text) {
+		sp_text_context_setup_text (tc);                                                 
+		tc->nascent_object = 0; // we don't need it anymore, having created a real <text>
+	}
 
 	if (!tc->preedit_string ) sp_text_context_preedit_reset (tc);
 
