@@ -1,5 +1,5 @@
-#ifndef __SP_FIND_H__
-#define __SP_FIND_H__
+#ifndef SEEN_FIND_H
+#define SEEN_FIND_H
 
 /**
  * \brief  Find dialog
@@ -12,17 +12,20 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-GtkWidget *sp_find_dialog (void);
+#include <gtk/gtkstyle.h>
 
-#endif
+GtkWidget *sp_find_dialog();
+
+
+#endif /* !SEEN_FIND_H */
 
 /*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
