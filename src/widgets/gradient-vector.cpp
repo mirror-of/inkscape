@@ -330,11 +330,11 @@ sp_gvs_gradient_activate (GtkMenuItem *mi, SPGradientVectorSelector *gvs)
 	/* Namely - menuitems etc. will be fucked up */
 	/* Hmmm - probably we can just re-set it as menuitem data (Lauris) */
 
-	g_print ("SPGradientVectorSelector: gradient %s activated\n", SP_OBJECT_ID (gr));
+	//g_print ("SPGradientVectorSelector: gradient %s activated\n", SP_OBJECT_ID (gr));
 
 	norm = sp_gradient_ensure_vector_normalized (gr);
 	if (norm != gr) {
-		g_print ("SPGradientVectorSelector: become %s after normalization\n", SP_OBJECT_ID (norm));
+		//g_print ("SPGradientVectorSelector: become %s after normalization\n", SP_OBJECT_ID (norm));
 		/* But be careful that we do not have gradient saved anywhere else */
 		g_object_set_data (G_OBJECT (mi), "gradient", norm);
 	}
