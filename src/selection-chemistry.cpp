@@ -133,7 +133,7 @@ void sp_edit_clear_all()
 	SPDesktop *dt = SP_ACTIVE_DESKTOP;
 	if (!dt) return;
 	SPDocument *doc = SP_DT_DOCUMENT (dt);
-	sp_selection_set_empty (SP_DT_SELECTION (dt));
+	sp_selection_empty (SP_DT_SELECTION (dt));
 
 	GSList *items = sp_item_group_item_list (SP_GROUP (sp_document_root (doc)));
 
@@ -766,7 +766,7 @@ void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine)
 {
 	g_assert (SP_IS_SELECTION (selection));
 
-	for (GSList *l = selection->items; l != NULL; l = l-> next) {
+	for (GSList const *l = selection->itemList(); l != NULL; l = l-> next) {
 		SPItem *item = SP_ITEM(l->data);
 		sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
 		/* update repr -  needed for undo */
@@ -889,10 +889,10 @@ void sp_selection_rotate_90_cw ()
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (!SP_IS_DESKTOP(desktop)) return;
     SPSelection *selection = SP_DT_SELECTION(desktop);
-    if sp_selection_is_empty(selection) return;
-    GSList *l = selection->items;
+    if (selection->isEmpty()) return;
+    GSList const *l = selection->itemList();
     NR::rotate const rot_neg_90(NR::Point(0, -1));
-    for (GSList *l2 = l ; l2 != NULL ; l2 = l2->next) {
+    for (GSList const *l2 = l ; l2 != NULL ; l2 = l2->next) {
         SPItem *item = SP_ITEM(l2->data);
         sp_item_rotate_rel(item, rot_neg_90);
     }
@@ -913,10 +913,10 @@ void sp_selection_rotate_90_ccw ()
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (!SP_IS_DESKTOP(desktop)) return;
     SPSelection *selection = SP_DT_SELECTION(desktop);
-    if sp_selection_is_empty(selection) return;
-    GSList *l = selection->items;
+    if (selection->isEmpty()) return;
+    GSList const *l = selection->itemList();
     NR::rotate const rot_neg_90(NR::Point(0, 1));
-    for (GSList *l2 = l ; l2 != NULL ; l2 = l2->next) {
+    for (GSList const *l2 = l ; l2 != NULL ; l2 = l2->next) {
         SPItem *item = SP_ITEM(l2->data);
         sp_item_rotate_rel(item, rot_neg_90);
     }
@@ -1092,7 +1092,7 @@ sp_selection_item_next (void)
 	if (sp_selection_is_empty(selection)) {
 		item = SP_ITEM(children->data);
 	} else {
-		GSList *l = g_slist_find(children, selection->items->data);
+		GSList *l = g_slist_find(children, selection->itemList()->data);
 		if ( ( l == NULL ) || ( l->next == NULL ) ) {
 			item = SP_ITEM(children->data);
 		} else {
@@ -1148,7 +1148,7 @@ sp_selection_item_prev (void)
 		item = SP_ITEM(g_slist_last(children)->data);
 	} else {
 		GSList *l = children;
-		while ((l->next != NULL) && (l->next->data != selection->items->data)) {
+		while ((l->next != NULL) && (l->next->data != selection->itemList()->data)) {
 			l = l->next;
 		}
 		item = SP_ITEM (l->data);

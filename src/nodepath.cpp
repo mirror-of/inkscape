@@ -2719,7 +2719,7 @@ sp_nodepath_update_statusbar (Path::Path *nodepath)
 
 	if (selected == 0) {
 		SPSelection *sel = nodepath->desktop->selection;
-		if (!sel || !sel->items)
+		if (!sel || sel->isEmpty())
 			sp_view_set_statusf (SP_VIEW(nodepath->desktop), _("Select one path object with selector first, then switch back to node tool."));
 		else 
 			sp_view_set_statusf (SP_VIEW(nodepath->desktop), _("0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."), total);

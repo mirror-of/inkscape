@@ -1081,7 +1081,7 @@ sp_sel_trans_update_item_bboxes (SPSelTrans * seltrans)
 {
        g_return_if_fail (seltrans != NULL);
 
-       GSList* l;
+       GSList const* l;
        for (l = seltrans->item_bboxes; l != NULL; l = l->next) {
                gtk_object_destroy( GTK_OBJECT (l->data));
        }
@@ -1095,7 +1095,7 @@ sp_sel_trans_update_item_bboxes (SPSelTrans * seltrans)
 
        NRRect b;
        SPCanvasItem* box = NULL;
-       for (l = seltrans->selection->items; l != NULL; l = l->next) {
+       for (l = seltrans->selection->itemList(); l != NULL; l = l->next) {
 
 		 sp_item_bbox_desktop ((SPItem *) l->data, &b);
 
