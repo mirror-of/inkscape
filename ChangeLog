@@ -1,5 +1,8 @@
 2004-02-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/display/nr-arena-group.h, src/display/nr-arena-group.cpp
+	(nr_arena_group_set_child_transform): Add NR::Matrix version.
+
 	* src/verbs.cpp: Add g++-2.95 portability for hash_map.
 	(Still using hash_map, though, not yet GHashTable.)
 

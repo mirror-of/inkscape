@@ -35,6 +35,7 @@ NRType nr_arena_group_get_type (void);
 
 void nr_arena_group_set_transparent (NRArenaGroup *group, unsigned int transparent);
 
-void nr_arena_group_set_child_transform (NRArenaGroup *group, NRMatrix const *t);
+void nr_arena_group_set_child_transform(NRArenaGroup *group, NR::Matrix const &t);
+void nr_arena_group_set_child_transform(NRArenaGroup *group, NRMatrix const *t);
 
 #endif
