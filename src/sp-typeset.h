@@ -87,8 +87,8 @@ public:
   text_chunker(char* /*inText*/) {};
   virtual ~text_chunker(void) {};
 
-  virtual void                 SetText(char* /*inText*/) {};
-  virtual void                 ChangeText(int /*startPos*/,int /*endPos*/,char* /*inText*/) {};
+  virtual void                 SetText(char* /*inText*/,int /*flags*/) {};
+  virtual void                 ChangeText(int /*startPos*/,int /*endPos*/,char* /*inText*/,int /*flags*/) {};
   virtual int                  MaxIndex(void) {return 0;}; // index in visual text != char index in source text
   
   virtual void                 InitialMetricsAt(int /*startPos*/,double &/*ascent*/,double &/*descent*/) {};

@@ -594,7 +594,7 @@ static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * /*key*/
       l=l->next;
     }
     if ( l ) {
-      shape_dest *cur=(shape_dest*)(l->data);
+//      shape_dest *cur=(shape_dest*)(l->data);
       typeset->destDirty=true;
       sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
     } else {
@@ -609,7 +609,7 @@ static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * /*key*/
       l=l->next;
     }
     if ( l ) {
-      path_dest *cur=(path_dest*)l->data;
+ //     path_dest *cur=(path_dest*)l->data;
       typeset->destDirty=true;
       sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
     } else {
@@ -684,7 +684,7 @@ static void sp_typeset_source_child_removed (SPRepr *repr, SPRepr *child, SPRepr
   if ( child == NULL ) return;
   if ( repr == NULL ) return; // juste le premier niveau.
 }
-static void sp_typeset_source_content_changed (SPRepr *repr, const gchar */*oldcontent*/, const gchar */*newcontent*/, void * data)
+static void sp_typeset_source_content_changed (SPRepr */*repr*/, const gchar */*oldcontent*/, const gchar */*newcontent*/, void * data)
 {
 //  printf("chgcont %x tps=%x\n",(int)repr,data);
   SPTypeset *typeset = (SPTypeset *) data;
