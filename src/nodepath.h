@@ -75,6 +75,7 @@ void restore_nodepath_selection (SPNodePath *nodepath, GList *r);
 gboolean nodepath_repr_changed (SPNodePath * np);
 void update_repr (SPNodePath * np);
 gboolean node_key (GdkEvent * event);
+void sp_nodepath_update_statusbar (SPNodePath *nodepath);
 
 /* possibly private functions */
 

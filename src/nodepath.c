@@ -26,6 +26,7 @@
 #include "desktop-snap.h"
 #include "node-context.h"
 #include "nodepath.h"
+#include "selection-chemistry.h"
 
 #define hypot(a,b) sqrt ((a) * (a) + (b) * (b))
 
@@ -742,6 +743,8 @@ sp_nodepath_set_node_type (SPPathNode * node, SPPathNodeType type)
 
 	sp_node_adjust_knots (node);
 
+	sp_nodepath_update_statusbar (node->subpath->nodepath);
+
 	return node;
 }
 
@@ -988,6 +991,8 @@ sp_node_selected_add_node (void)
 	sp_nodepath_ensure_ctrls (nodepath);
 
 	update_repr (nodepath);
+
+	sp_nodepath_update_statusbar (nodepath);
 }
 
 void
@@ -1138,6 +1143,8 @@ sp_node_selected_join (void)
 	sp_nodepath_ensure_ctrls (sa->nodepath);
 
 	update_repr (nodepath);
+
+	sp_nodepath_update_statusbar (nodepath);
 }
 
 void
@@ -1258,6 +1265,13 @@ sp_node_selected_delete (void)
 	sp_nodepath_ensure_ctrls (nodepath);
 
 	update_repr (nodepath);
+
+	if (g_list_length (nodepath->subpaths) == 0) { // if the entire nodepath is removed, delete the selected object
+		sp_nodepath_destroy (nodepath);
+		sp_selection_delete (NULL, NULL);
+	}
+
+	sp_nodepath_update_statusbar (nodepath);
 }
 
 void
@@ -1358,6 +1372,8 @@ sp_nodepath_node_select (SPPathNode * node, gboolean incremental, gboolean overr
 		nodepath->selected = g_list_append (nodepath->selected, node);
 		sp_node_set_selected (node, TRUE);
 	}
+
+	sp_nodepath_update_statusbar (nodepath);
 }
 
 /**
@@ -1375,6 +1391,8 @@ sp_nodepath_node_deselect (SPPathNode * node)
 		sp_node_set_selected (node, FALSE);
 		nodepath->selected = g_list_remove (nodepath->selected, node);
 	}
+
+	sp_nodepath_update_statusbar (nodepath);
 }
 
 
@@ -1388,6 +1406,7 @@ sp_nodepath_deselect (SPNodePath *nodepath)
 		sp_node_set_selected ((SPPathNode *) nodepath->selected->data, FALSE);
 		nodepath->selected = g_list_remove (nodepath->selected, nodepath->selected->data);
 	}
+	sp_nodepath_update_statusbar (nodepath);
 }
 
 /**
@@ -1427,11 +1446,32 @@ sp_nodepath_select_next (SPNodePath *nodepath)
 			for (nl = subpath->nodes; nl != NULL; nl = nl->next) {
 				node = (SPPathNode *) nl->data;
 				if (node->selected) {
-					if (node->n.other) // there's a next node on this subpath
-						last = node->n.other;
-					else if (spl->next) { // there's a next subpath
-						subpath_next = (SPNodeSubPath *) spl->next->data;
-						last = subpath_next->first;
+					if (node->n.other == (SPPathNode *) subpath->last) {
+						if (node->n.other == (SPPathNode *) subpath->first) { // closed subpath 
+							if (spl->next) { // there's a next subpath
+								subpath_next = (SPNodeSubPath *) spl->next->data;
+								last = subpath_next->first;
+							} else if (spl->prev) { // there's a previous subpath
+								last = NULL; // to be set later to the first node of first subpath
+							} else {
+								last = node->n.other;
+							}
+						} else {
+							last = node->n.other;
+						}
+					} else {
+						if (node->n.other) {
+							last = node->n.other;
+						} else {
+							if (spl->next) { // there's a next subpath
+								subpath_next = (SPNodeSubPath *) spl->next->data;
+								last = subpath_next->first;
+							} else if (spl->prev) { // there's a previous subpath
+								last = NULL; // to be set later to the first node of first subpath
+							} else {
+								last = (SPPathNode *) subpath->first;
+							}
+						}
 					}
 				}
 			}
@@ -1463,11 +1503,32 @@ sp_nodepath_select_prev (SPNodePath *nodepath)
 			for (nl = g_list_last (subpath->nodes); nl != NULL; nl = nl->prev) {
 				node = (SPPathNode *) nl->data;
 				if (node->selected) {
-					if (node->p.other) // there's a prev node on this subpath
-						last = node->p.other;
-					else if (spl->prev) { // there's a prev subpath
-						subpath_prev = (SPNodeSubPath *) spl->prev->data;
-						last = subpath_prev->last;
+					if (node->p.other == (SPPathNode *) subpath->first) {
+						if (node->p.other == (SPPathNode *) subpath->last) { // closed subpath 
+							if (spl->prev) { // there's a prev subpath
+								subpath_prev = (SPNodeSubPath *) spl->prev->data;
+								last = subpath_prev->last;
+							} else if (spl->next) { // there's a next subpath
+								last = NULL; // to be set later to the last node of last subpath
+							} else {
+								last = node->p.other;
+							}
+						} else {
+							last = node->p.other;
+						}
+					} else {
+						if (node->p.other) {
+							last = node->p.other;
+						} else {
+							if (spl->prev) { // there's a prev subpath
+								subpath_prev = (SPNodeSubPath *) spl->prev->data;
+								last = subpath_prev->last;
+							} else if (spl->next) { // there's a next subpath
+								last = NULL; // to be set later to the last node of last subpath
+							} else {
+								last = (SPPathNode *) subpath->last;
+							}
+						}
 					}
 				}
 			}
@@ -2210,17 +2271,18 @@ sp_nodepath_node_destroy (SPPathNode * node)
 
 	sp = node->subpath;
 
-	if (node->selected) {
+	if (node->selected) { // first, deselect
 		g_assert (g_list_find (node->subpath->nodepath->selected, node));
 		node->subpath->nodepath->selected = g_list_remove (node->subpath->nodepath->selected, node);
 	}
 
-	node->subpath->nodes = g_list_remove (node->subpath->nodes, node);
 	/*
 	sp_knot_hide (node->knot);
 	sp_knot_hide (node->p.knot);
 	sp_knot_hide (node->n.knot);
 	*/
+	node->subpath->nodes = g_list_remove (node->subpath->nodes, node);
+
 	g_object_unref (G_OBJECT (node->knot));
 	g_object_unref (G_OBJECT (node->p.knot));
 	g_object_unref (G_OBJECT (node->n.knot));
@@ -2228,7 +2290,7 @@ sp_nodepath_node_destroy (SPPathNode * node)
 	gtk_object_destroy (GTK_OBJECT (node->p.line));
 	gtk_object_destroy (GTK_OBJECT (node->n.line));
 	
-	if (sp->nodes) {
+	if (sp->nodes) { // there are others nodes on the subpath
 		if (sp->closed) {
 			if (sp->first == node) {
 				g_assert (sp->last == node);
@@ -2246,6 +2308,8 @@ sp_nodepath_node_destroy (SPPathNode * node)
 			if (node->p.other) node->p.other->n.other = node->n.other;
 			if (node->n.other) node->n.other->p.other = node->p.other;
 		}
+	} else { // this was the last node on subpath
+		sp->nodepath->subpaths = g_list_remove (sp->nodepath->subpaths, sp);
 	}
 
 	g_mem_chunk_free (nodechunk, node);
@@ -2307,5 +2371,47 @@ sp_node_path_code_from_side (SPPathNode * node, SPPathNodeSide * me)
 	return ART_END;
 }
 
+const gchar* 
+sp_node_type_description (SPPathNode *n)
+{
+	switch (n->type) {
+	case SP_PATHNODE_CUSP:
+		return ("cusp");
+	case SP_PATHNODE_SMOOTH:
+		return ("smooth");
+	case SP_PATHNODE_SYMM:
+		return ("symmetric");
+	}
+	return NULL;
+}
 
+void
+sp_nodepath_update_statusbar (SPNodePath *nodepath)
+{
+	gchar * message;
+	gint total, selected;
+	SPNodeSubPath * subpath;
+	SPPathNode * node;
+	GList * spl, * nl;
 
+	if (!nodepath) return;
+
+	total = selected = 0;
+
+	for (spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
+		subpath = (SPNodeSubPath *) spl->data;
+		total += g_list_length (subpath->nodes);
+	}
+
+	selected = g_list_length (nodepath->selected);
+
+	if (selected == 1) {
+		message = g_strdup_printf ("%i of %i nodes selected; %s", selected, total, sp_node_type_description ((SPPathNode *) nodepath->selected->data));
+	} else {
+		message = g_strdup_printf ("%i of %i nodes selected ", selected, total);
+	}
+
+	sp_view_set_status (SP_VIEW (SP_ACTIVE_DESKTOP), message, TRUE);
+	
+	g_free (message);
+}
