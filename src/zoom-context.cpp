@@ -17,6 +17,7 @@
 
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkeditable.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "rubberband.h"
 #include "inkscape.h"
@@ -187,6 +188,16 @@ sp_zoom_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 		sp_rubberband_stop ();
 		xp = yp = 0; 
 		break;
+	case GDK_KEY_PRESS:
+		switch (event->key.keyval) {
+		case GDK_Up: 
+		case GDK_Down: 
+			// prevent the zoom field from activation
+			ret = TRUE;
+			break;
+		default:
+			break;
+		}
 	default:
 		break;
 	}

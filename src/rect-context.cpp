@@ -18,6 +18,8 @@
 #include <string.h>
 #include <glib.h>
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
+
 #include "helper/sp-canvas.h"
 #include "sp-rect.h"
 #include "inkscape.h"
@@ -208,6 +210,16 @@ sp_rect_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			sp_canvas_item_ungrab (SP_CANVAS_ITEM (desktop->acetate), event->button.time);
 		}
 		break;
+	case GDK_KEY_PRESS:
+		switch (event->key.keyval) {
+		case GDK_Up: 
+		case GDK_Down: 
+			// prevent the zoom field from activation
+			ret = TRUE;
+			break;
+		default:
+			break;
+		}
 	default:
 		break;
 	}

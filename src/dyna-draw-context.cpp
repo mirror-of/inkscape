@@ -55,6 +55,8 @@
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtklabel.h>
+#include <gdk/gdkkeysyms.h>
+
 #include "svg/svg.h"
 #include "helper/sp-intl.h"
 #include "helper/curve.h"
@@ -642,6 +644,16 @@ sp_dyna_draw_context_root_handler (SPEventContext * event_context,
 			ret = TRUE;
 		}
 		break;
+	case GDK_KEY_PRESS:
+		switch (event->key.keyval) {
+		case GDK_Up: 
+		case GDK_Down: 
+			// prevent the zoom field from activation
+			ret = TRUE;
+			break;
+		default:
+			break;
+		}
 	default:
 		break;
 	}

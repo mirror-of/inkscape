@@ -453,7 +453,11 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					}
 				}
 			} else return TRUE; // return the "I took care of it" value if it was consumed by the IM
-		} // do nothing if there's no object to type in - the key will be sent to parent context
+		} else { // do nothing if there's no object to type in - the key will be sent to parent context, 
+			    // except up/down that are swallowed to prevent the zoom field from activation
+			if (event->key.keyval == GDK_Up || event->key.keyval == GDK_Down) 
+				return TRUE;
+		}
 		break;
 	case GDK_KEY_RELEASE:
 		if (!tc->unimode && tc->imc && gtk_im_context_filter_keypress (tc->imc, (GdkEventKey*) event)) {

@@ -11,6 +11,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gdk/gdkkeysyms.h>
+
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-pixblock.h>
 
@@ -207,6 +209,16 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			ret = TRUE;
 		}
 		break;
+	case GDK_KEY_PRESS:
+		switch (event->key.keyval) {
+		case GDK_Up: 
+		case GDK_Down: 
+			// prevent the zoom field from activation
+			ret = TRUE;
+			break;
+		default:
+			break;
+		}
 	default:
 		break;
 	}
