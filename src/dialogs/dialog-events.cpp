@@ -251,7 +251,7 @@ sp_dialog_hide (GtkObject *object, gpointer data)
     GtkWidget *dlg = (GtkWidget *) data;
     
     if (dlg)
-        gtk_widget_hide_all (dlg);
+        gtk_widget_hide (dlg);
     
     return TRUE;
 }
@@ -264,7 +264,7 @@ sp_dialog_unhide (GtkObject *object, gpointer data)
     GtkWidget *dlg = (GtkWidget *) data;
     
     if (dlg)
-        gtk_widget_show_all (dlg);
+        gtk_widget_show (dlg);
     
     return TRUE;
 }
