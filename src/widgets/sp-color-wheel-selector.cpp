@@ -48,6 +48,7 @@ sp_color_wheel_selector_get_type (void)
             sizeof (SPColorWheelSelector),
             0,    /* n_preallocs */
             (GInstanceInitFunc) sp_color_wheel_selector_init,
+            0,    /* value_table */
         };
 
         type = g_type_register_static (SP_TYPE_COLOR_SELECTOR,

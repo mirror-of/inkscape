@@ -1,3 +1,5 @@
+2004-02-10  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
 2004-02-09  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/widgets/sp-color-wheel.h, src/widgets/sp-color-wheel.cpp,
@@ -8,6 +10,10 @@
 	Added new, smaller color wheel selector.
 
 2004-02-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/widgets/sp-color-wheel-selector.cpp
+	(sp_color_wheel_selector_get_type):
+	Address harmless warning: add value_table initializer.
 
 	* src/display/nr-arena-group.h, src/display/nr-arena-group.cpp
 	(nr_arena_group_set_child_transform): Add NR::Matrix version.
