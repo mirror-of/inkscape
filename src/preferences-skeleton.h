@@ -66,6 +66,7 @@ static const char preferences_skeleton[] =
 "    <group id=\"documentoptions\"/>"
 "    <group id=\"preferences\"/>"
 "    <group id=\"gradienteditor\"/>"
+"    <group id=\"export\"/>"
 "  </group>"
 "  <group id=\"printing\">"
 "    <settings id=\"ps\"/>"
