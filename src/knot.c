@@ -100,7 +100,7 @@ static void
 sp_knot_class_init (SPKnotClass * klass)
 {
 	GObjectClass * object_class;
-	const char *nograbenv;
+	const gchar *nograbenv;
 
 	object_class = (GObjectClass *) klass;
 
