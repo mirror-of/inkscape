@@ -361,7 +361,8 @@ sp_font_selector_set_font (SPFontSelector *fsel, NRFont *font)
 		}
 		if (i >= fsel->families.length) return;
 		fsel->block_emit = TRUE;
-		gtk_clist_select_row (GTK_CLIST (fsel->family), i, 0);
+		gtk_clist_select_row (fcl, i, 0);
+		gtk_clist_moveto (fcl, i, 0, 0.66, 0.0);
 		fsel->block_emit = FALSE;
 
 		nr_typeface_name_get (NR_FONT_TYPEFACE (font), n, 256);
@@ -370,6 +371,7 @@ sp_font_selector_set_font (SPFontSelector *fsel, NRFont *font)
 		}
 		if (i >= fsel->styles.length) return;
 		gtk_clist_select_row (scl, i, 0);
+		gtk_clist_moveto (scl, i, 0, 0.66, 0.0);
 
 		g_snprintf (s, 8, "%.5g", NR_FONT_SIZE (font));
 		gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (fsel->size)->entry), s);
