@@ -46,6 +46,8 @@ sp-marshal.c: sp-marshal.h sp-marshal.list
 	echo '#include "helper/sp-marshal.h"' > $@
 	glib-genmarshal --prefix=sp_marshal --body sp-marshal.list >> $@
 
+sp-marshal.c sp-marshal.h: Makefile
+
 EXTRA_DIST = sp-marshal.list
 
 DISTCLEANFILES = sp-marshal.c sp-marshal.h
