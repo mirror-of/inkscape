@@ -13,7 +13,6 @@ src/color.cpp
 src/desktop-affine.cpp
 src/desktop-events.cpp
 src/desktop-handles.cpp
-src/desktop-snap.cpp
 src/desktop.cpp
 src/dialogs/align.cpp
 src/dialogs/desktop-properties.cpp
