@@ -810,6 +810,7 @@ on_destroy (GtkObject * object, gpointer data)
 {
     set_tree_desktop (NULL);
     gtk_object_destroy (GTK_OBJECT (tooltips));
+    tooltips = NULL;
     sp_signal_disconnect_by_data (INKSCAPE, dlg);
     wd.win = dlg = NULL;
     wd.stop = 0;

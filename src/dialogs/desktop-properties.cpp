@@ -88,6 +88,7 @@ static void sp_color_picker_button(GtkWidget *dialog, GtkWidget *t,
                                    gchar *opacity_key, int row);
 
 static GtkWidget *dlg = NULL;
+static GtkTooltips *tooltips = NULL;
 static win_data wd;
 
 /* impossible original values to make sure they are read from prefs */
@@ -160,6 +161,8 @@ static void
 sp_dtw_dialog_destroy(GtkObject *object, gpointer data)
 {
     sp_signal_disconnect_by_data(INKSCAPE, dlg);
+    gtk_object_destroy ( GTK_OBJECT (tooltips) );
+    tooltips = NULL;
     sp_repr_remove_listener_by_data(SP_OBJECT_REPR(SP_ACTIVE_DESKTOP->namedview), dlg);
     wd.win = dlg = NULL;
     wd.stop = 0;
@@ -748,6 +751,8 @@ sp_desktop_dialog(void)
         sp_transientize(dlg);
         wd.win = dlg;
         wd.stop = 0;
+        tooltips = gtk_tooltips_new ();
+        gtk_tooltips_enable (tooltips);
 
         g_signal_connect(G_OBJECT(INKSCAPE), "activate_desktop", G_CALLBACK(sp_transientize_callback), &wd);
 
@@ -1042,11 +1047,10 @@ sp_desktop_dialog(void)
 
         row=0;
         /* add generic metadata entry areas */
-        GtkTooltips * tip = gtk_tooltips_new ();
         struct rdf_work_entity_t * entity;
         for (entity = rdf_work_entities; entity && entity->name; entity++) {
             if ( entity->editable == RDF_EDIT_GENERIC ) {
-                sp_doc_dialog_add_work_entity ( entity, t, tip, row++ );
+                sp_doc_dialog_add_work_entity ( entity, t, tooltips, row++ );
             }
         }
 
@@ -1099,11 +1103,11 @@ sp_desktop_dialog(void)
         row = 0;
         /* add license-specific metadata entry areas */
         entity = rdf_find_entity ( "license_uri" );
-        GtkWidget * w = sp_doc_dialog_add_work_entity ( entity, t, tip, row++ );
+        GtkWidget * w = sp_doc_dialog_add_work_entity ( entity, t, tooltips, row++ );
         gtk_widget_set_sensitive ( w, FALSE );
         /*
         entity = rdf_find_entity ( "license_fragment" );
-        w = sp_doc_dialog_add_work_entity ( entity, t, tip, row++ );
+        w = sp_doc_dialog_add_work_entity ( entity, t, tooltips, row++ );
         gtk_widget_set_sensitive ( w, FALSE );
         */
 

@@ -16,6 +16,8 @@
 	  from the desktop, the selection context may need to be cleared since
 	  it may have pointers to the deleted items.  To do this, I just
 	  reselect the current tool (fixes bug #983243).
+	* src/dialogs/xml-tree.cpp, src/dialogs/desktop-properties.cpp:
+	  corrected tooltips memory handling.
 
 2004-07-06  MenTaLguY  <mental@rydia.net>
 
