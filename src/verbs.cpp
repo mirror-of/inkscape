@@ -1567,6 +1567,7 @@ Verb * Verb::_base_verbs[] = {
         N_("Clean up selected path(s)"), "selection_cleanup"),
     new SelectionVerb(SP_VERB_SELECTION_REVERSE, "SelectionReverse", N_("_Reverse"),
         N_("Reverses the direction of selected path(s); useful for flipping markers"), "selection_reverse"),
+    // TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
     new SelectionVerb(SP_VERB_SELECTION_POTRACE, "SelectionPotrace", N_("_Trace Bitmap"),
         N_("Convert bitmap object to paths"), "selection_trace"),
     new SelectionVerb(SP_VERB_SELECTION_CREATE_BITMAP, "SelectionCreateBitmap", N_("_Make a Bitmap Copy"),
@@ -1739,6 +1740,7 @@ Verb * Verb::_base_verbs[] = {
         N_("Using shape tools to create and edit shapes"), NULL),
     new TutorialVerb(SP_VERB_TUTORIAL_ADVANCED, "TutorialsAdvanced", N_("Inkscape: _Advanced"),
         N_("Advanced Inkscape topics"), NULL/*"tutorial_advanced"*/),
+    // TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
     new TutorialVerb(SP_VERB_TUTORIAL_TRACING, "TutorialsTracing", N_("Inkscape: T_racing"),
         N_("Using the Inkscape tracing tool"), NULL/*"tutorial_tracing"*/),
     new TutorialVerb(SP_VERB_TUTORIAL_DESIGN, "TutorialsDesign", N_("_Elements of Design"),
