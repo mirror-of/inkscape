@@ -22,19 +22,24 @@
 #include "units.h"
 #include "sp-intl.h"
 
-/* fixme: use some fancy unit program */
+/* todo: use some fancy unit program */
 
+/* The order determines the order of the list returned by sp_unit_get_list.
+ * (It can also affect string lookups if there are any duplicates in the
+ * current locale... hopefully none.)  If you re-order this list, then you must
+ * also re-order the SPUnitId enum values accordingly.  Run `make check' (which
+ * calls sp_unit_table_sane) to ensure that the two are in sync.
+ */
 static const SPUnit sp_units[] = {
-	/* Do not insert any elements before/between first 3 */
 	{SP_UNIT_SCALE, SP_UNIT_DIMENSIONLESS, 1.0, N_("Unit"), "", N_("Units"), ""},
 	{SP_UNIT_PT, SP_UNIT_ABSOLUTE, 1.0, N_("Point"), N_("pt"), N_("Points"), N_("Pt")},
 	{SP_UNIT_PX, SP_UNIT_DEVICE, 1.0, N_("Pixel"), N_("px"), N_("Pixels"), N_("Px")},
 	/* Volatiles do not have default, so there are none here */
 	/* You can add new elements from this point forward */
 	{SP_UNIT_PERCENT, SP_UNIT_DIMENSIONLESS, 0.01, N_("Percent"), N_("%"), N_("Percents"), N_("%")},
-	{SP_UNIT_MM, SP_UNIT_ABSOLUTE, (72.0 / 25.4), N_("Millimeter"), N_("mm"), N_("Millimeters"), N_("mm")},
-	{SP_UNIT_CM, SP_UNIT_ABSOLUTE, (72.0 / 2.54), N_("Centimeter"), N_("cm"), N_("Centimeters"), N_("cm")},
-	{SP_UNIT_M, SP_UNIT_ABSOLUTE, (72.0 / 0.0254), N_("Meter"), N_("m"), N_("meters"), N_("m")},
+	{SP_UNIT_MM, SP_UNIT_ABSOLUTE, (720. / 254.), N_("Millimeter"), N_("mm"), N_("Millimeters"), N_("mm")},
+	{SP_UNIT_CM, SP_UNIT_ABSOLUTE, (7200. / 254.), N_("Centimeter"), N_("cm"), N_("Centimeters"), N_("cm")},
+	{SP_UNIT_M, SP_UNIT_ABSOLUTE, (720000. / 254.), N_("Meter"), N_("m"), N_("meters"), N_("m")},
 	{SP_UNIT_IN, SP_UNIT_ABSOLUTE, (72.0), N_("Inch"), N_("in"), N_("Inches"), N_("in")},
 	// TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
 	{SP_UNIT_EM, SP_UNIT_VOLATILE, 1.0, N_("Em square"), N_("em"), N_("Em squares"), N_("em")},
@@ -79,13 +84,6 @@ sp_unit_get_identity (guint base)
 	g_assert(guint(ret.base) == base);
 	g_assert(ret.unittobase == 1.0);
 	return &ret;
-}
-
-/* fixme: */
-const SPUnit *
-sp_unit_get_default (void)
-{
-	return &sp_units[0];
 }
 
 const SPUnit *

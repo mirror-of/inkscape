@@ -68,8 +68,8 @@ enum SPUnitId {
 	SP_UNIT_CM,	// centimetres
 	SP_UNIT_M,	// metres
 	SP_UNIT_IN,	// inches
-	SP_UNIT_EM,	// em of current font
-	SP_UNIT_EX	// x-height of current font
+	SP_UNIT_EM,	// font-size of relevant font
+	SP_UNIT_EX	// x-height of relevant font
 };
 
 /*
@@ -101,7 +101,6 @@ struct SPDistance {
 #define SP_PS_UNIT (sp_unit_get_identity (SP_UNIT_ABSOLUTE))
 
 const SPUnit *sp_unit_get_identity (guint base);
-const SPUnit *sp_unit_get_default (void);
 const SPUnit *sp_unit_get_by_name (const gchar *name);
 const SPUnit *sp_unit_get_by_abbreviation (const gchar *abbreviation);
 SPUnit const &sp_unit_get_by_id(SPUnitId const id);

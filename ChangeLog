@@ -16,6 +16,8 @@
 	  (sp_convert_distance_full): Change arguments & return value.
 	  Call g_log if no conversion possible.
 	  Callers updated.
+	  (sp_unit_get_default): Remove unused function.
+	  sp_units: Less rounding error in unittobase.
 
 2004-06-16  Carl Hetherington  <inkscape@carlh.net>
 
@@ -24,7 +26,7 @@
 2004-06-15  Ted Gould  <ted@gould.cx>
 
 	* share/extensions/ai_input.inkmod:
-	Removing the command line arguement to specify line endings.
+	Removing the command-line argument to specify line endings.
 
 	* src/print.cpp, src/print.h, src/sp-text.cpp,
 	src/extension/extension.cpp, src/extension/extension.h,
@@ -32,7 +34,7 @@
 	src/extension/implementation/implementation.h,
 	src/extension/internal/ps.cpp, src/extension/internal/ps.h:
 
-	Changing it so that the text to vector is it's own function.  This way it
+	Changing it so that the text to vector is its own function.  This way it
 	can be used as a parameter in Postscript, but then can be easily used for
 	drivers which only support vector drawing.
 
