@@ -523,18 +523,6 @@ private:
     std::vector<raster_data> swrData;
     std::vector<point_data> pData;
     
-    /* FIXME: don't use void * here */
-    static int CmpQuickRaster(const void *i1, const void *i2)
-    {
-	quick_raster_data *d1 = (quick_raster_data *) i1;
-	quick_raster_data *d2 = (quick_raster_data *) i2;
-	if (d1->x < d2->x)
-	    return -1;
-	if (d1->x > d2->x)
-	    return 1;
-	return 0;
-    };
-
     static int CmpQRs(const quick_raster_data &p1, const quick_raster_data &p2) {
 	if ( fabs(p1.x - p2.x) < 0.00001 ) {
 	    return 0;
@@ -543,18 +531,8 @@ private:
 	return ( ( p1.x < p2.x ) ? -1 : 1 );
     };
 
-    /* FIXME: don't use void * here */
-    static int CmpIncidence(const void *p1, const void *p2)
-    {
-	incidenceData *d1 = (incidenceData *) p1;
-	incidenceData *d2 = (incidenceData *) p2;
-	if (d1->theta == d2->theta)
-	    return 0;
-	return ((d1->theta < d2->theta) ? -1 : 1);
-    };
-
     // edge direction comparison function    
-    static int CmpToVert(const NR::Point ax, const NR::Point bx,bool as,bool bs);
+    static int CmpToVert(const NR::Point ax, const NR::Point bx, bool as, bool bs);
 };
 
 bool directedEulerian(Shape const *s);
