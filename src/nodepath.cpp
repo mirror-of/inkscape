@@ -634,8 +634,7 @@ sp_nodepath_line_midpoint (SPPathNode * new_path, SPPathNode * end, gdouble t)
 	if (end->code == ART_LINETO) {
 		new_path->type = SP_PATHNODE_CUSP;
 		new_path->code = ART_LINETO;
-		new_path->pos[NR::X] = (t * start->pos[NR::X] + (1 - t) * end->pos[NR::X]);
-		new_path->pos[NR::Y] = (t * start->pos[NR::Y] + (1 - t) * end->pos[NR::Y]);
+		new_path->pos = (t * start->pos + (1 - t) * end->pos);
 	} else {
 		new_path->type = SP_PATHNODE_SMOOTH;
 		new_path->code = ART_CURVETO;
@@ -1184,8 +1183,7 @@ sp_node_selected_join (void)
 
 	/* a and b are endpoints */
 
-	c[NR::X] = (a->pos[NR::X] + b->pos[NR::X]) / 2;
-	c[NR::Y] = (a->pos[NR::Y] + b->pos[NR::Y]) / 2;
+	c = (a->pos + b->pos) / 2;
 
 	if (a->subpath == b->subpath) {
 		SPNodeSubPath * sp;
