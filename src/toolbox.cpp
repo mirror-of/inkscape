@@ -580,7 +580,15 @@ sp_stb_proportion_value_changed (GtkAdjustment *adj, SPWidget *tbl)
 	for (; items != NULL; items = items->next) {
 		if (SP_IS_STAR ((SPItem *) items->data)) {
 				SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
-				sp_repr_set_double(repr,"sodipodi:r2" ,sp_repr_get_double_attribute (repr, "sodipodi:r1", 0.5)*adj->value);
+
+				gdouble r1 = sp_repr_get_double_attribute (repr, "sodipodi:r1", 1.0);
+				gdouble r2 = sp_repr_get_double_attribute (repr, "sodipodi:r2", 1.0);
+				if (r2 < r1) {
+					sp_repr_set_double(repr, "sodipodi:r2", r1*adj->value);
+				} else {
+					sp_repr_set_double(repr, "sodipodi:r1", r2*adj->value);
+				}
+
 				sp_object_invoke_write (SP_OBJECT ((SPItem *) items->data), repr, SP_OBJECT_WRITE_EXT);
 				modmade = true;
 		}
@@ -591,30 +599,36 @@ sp_stb_proportion_value_changed (GtkAdjustment *adj, SPWidget *tbl)
 }
 
 static void star_tb_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive,  gpointer data) {
-    GtkWidget *tbl = GTK_WIDGET(data);
-    GtkAdjustment *adj;
+	GtkWidget *tbl = GTK_WIDGET(data);
+	GtkAdjustment *adj;
 
-    g_object_set_data (G_OBJECT (tbl), "freeze", GINT_TO_POINTER (TRUE));
+	g_object_set_data (G_OBJECT (tbl), "freeze", GINT_TO_POINTER (TRUE));
 
-    adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "magnitude");
-    gtk_adjustment_set_value (adj, sp_repr_get_int_attribute (repr, "sodipodi:sides", 0));
-    adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "proportion");
-    gtk_adjustment_set_value (adj, sp_repr_get_double_attribute (repr, "sodipodi:r2", 1.0)/sp_repr_get_double_attribute (repr, "sodipodi:r1", 1.0));
+	adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "magnitude");
+	gtk_adjustment_set_value (adj, sp_repr_get_int_attribute (repr, "sodipodi:sides", 0));
 
-    GtkWidget *fscb = (GtkWidget*) g_object_get_data (G_OBJECT (tbl), "flat_checkbox");
-    GtkWidget *prop_widget = (GtkWidget*) g_object_get_data (G_OBJECT (tbl), "prop_widget");
-    const char *flatsides = sp_repr_attr(repr,"inkscape:flatsided");
+	adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "proportion");
+	gdouble r1 = sp_repr_get_double_attribute (repr, "sodipodi:r1", 1.0);
+	gdouble r2 = sp_repr_get_double_attribute (repr, "sodipodi:r2", 1.0);
+	if (r2 < r1) {
+		gtk_adjustment_set_value (adj, r2/r1);
+	} else {
+		gtk_adjustment_set_value (adj, r1/r2);
+	}
 
-    if (flatsides && !strcmp (flatsides,"false" )) {
-            gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  FALSE);
-            gtk_widget_set_sensitive (GTK_WIDGET (prop_widget), TRUE);
-    } else {  
-            gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  TRUE);
-            gtk_widget_set_sensitive (GTK_WIDGET (prop_widget), FALSE);
-    }
+	GtkWidget *fscb = (GtkWidget*) g_object_get_data (G_OBJECT (tbl), "flat_checkbox");
+	GtkWidget *prop_widget = (GtkWidget*) g_object_get_data (G_OBJECT (tbl), "prop_widget");
+	const char *flatsides = sp_repr_attr(repr,"inkscape:flatsided");
 
-    g_object_set_data (G_OBJECT (tbl), "freeze", GINT_TO_POINTER (FALSE));
+	if (flatsides && !strcmp (flatsides,"false" )) {
+		gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  FALSE);
+		gtk_widget_set_sensitive (GTK_WIDGET (prop_widget), TRUE);
+	} else {  
+		gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  TRUE);
+		gtk_widget_set_sensitive (GTK_WIDGET (prop_widget), FALSE);
+	}
 
+	g_object_set_data (G_OBJECT (tbl), "freeze", GINT_TO_POINTER (FALSE));
 }
 
 
