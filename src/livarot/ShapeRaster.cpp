@@ -22,89 +22,101 @@
  * the *Quick*() functions are not useful. forget about them
  */
 
-void              Shape::BeginRaster(float &pos,int &curPt,float /*step*/)
+void Shape::BeginRaster(float &pos, int &curPt)
 {
-	if ( numberOfPoints() <= 1 || numberOfEdges() <= 1 ) {
-		curPt=0;
-		pos=0;
-		return;
-	}
-	MakeRasterData(true);
-	MakePointData(true);
-	MakeEdgeData(true);
-	if ( _has_sweep_data ) {
-	} else {
-SweepTree::CreateList(sTree,numberOfEdges());
-SweepEvent::CreateQueue(sEvts,numberOfEdges());
-_has_sweep_data = true;
-	}
+    if ( numberOfPoints() <= 1 || numberOfEdges() <= 1 ) {
+        curPt = 0;
+        pos = 0;
+        return;
+    }
+    
+    MakeRasterData(true);
+    MakePointData(true);
+    MakeEdgeData(true);
 
-	SortPoints();
+    if ( _has_sweep_data == false) {
+        SweepTree::CreateList(sTree,numberOfEdges());
+        SweepEvent::CreateQueue(sEvts,numberOfEdges());
+        _has_sweep_data = true;
+    }
 
-	curPt=0;
-	pos = getPoint(0).x[1]-1.0;
+    SortPoints();
 
-	for (int i=0;i<numberOfPoints();i++) {
-		pData[i].pending=0;
-		pData[i].edgeOnLeft=-1;
-		pData[i].nextLinkedPoint=-1;
-		pData[i].rx[0]=/*Round(*/getPoint(i).x[0]/*)*/;
-		pData[i].rx[1]=/*Round(*/getPoint(i).x[1]/*)*/;
-	}
-	for (int i=0;i<numberOfEdges();i++) {
-    swrData[i].misc=NULL;
-		eData[i].rdx=pData[getEdge(i).en].rx-pData[getEdge(i).st].rx;
-	}
+    curPt = 0;
+    pos = getPoint(0).x[1] - 1.0;
+
+    for (int i = 0; i < numberOfPoints(); i++) {
+        pData[i].pending = 0;
+        pData[i].edgeOnLeft = -1;
+        pData[i].nextLinkedPoint = -1;
+        pData[i].rx[0] = /*Round(*/getPoint(i).x[0]/*)*/;
+        pData[i].rx[1] = /*Round(*/getPoint(i).x[1]/*)*/;
+    }
+
+    for (int i = 0;i < numberOfEdges(); i++) {
+        swrData[i].misc = NULL;
+        eData[i].rdx=pData[getEdge(i).en].rx - pData[getEdge(i).st].rx;
+    }
 }
-void              Shape::EndRaster(void)
+
+
+void Shape::EndRaster()
 {
-	if ( _has_sweep_data ) {
-	  SweepTree::DestroyList(sTree);
-	  SweepEvent::DestroyQueue(sEvts);
-	  _has_sweep_data = false;
-	}
-	MakePointData(false);
-	MakeEdgeData(false);
-	MakeRasterData(false);
+    if ( _has_sweep_data ) {
+        SweepTree::DestroyList(sTree);
+        SweepEvent::DestroyQueue(sEvts);
+        _has_sweep_data = false;
+    }
+    
+    MakePointData(false);
+    MakeEdgeData(false);
+    MakeRasterData(false);
 }
-void              Shape::BeginQuickRaster(float &pos,int &curPt,float /*step*/)
+
+
+void Shape::BeginQuickRaster(float &pos, int &curPt)
 {
-	if ( numberOfPoints() <= 1 || numberOfEdges() <= 1 ) {
-		curPt=0;
-		pos=0;
-		return;
-	}
-	MakeRasterData(true);
-	MakeQuickRasterData(true);
-	nbQRas=0;
-  firstQRas=lastQRas=-1;
-	MakePointData(true);
-	MakeEdgeData(true);
+    if ( numberOfPoints() <= 1 || numberOfEdges() <= 1 ) {
+        curPt = 0;
+        pos = 0;
+        return;
+    }
+    
+    MakeRasterData(true);
+    MakeQuickRasterData(true);
+    nbQRas = 0;
+    firstQRas = lastQRas = -1;
+    MakePointData(true);
+    MakeEdgeData(true);
 
-	curPt=0;
-	pos=getPoint(0).x[1]-1.0;
+    curPt = 0;
+    pos = getPoint(0).x[1] - 1.0;
 
-	for (int i=0;i<numberOfPoints();i++) {
-		pData[i].pending=0;
-		pData[i].edgeOnLeft=-1;
-		pData[i].nextLinkedPoint=-1;
-		pData[i].rx[0]=Round(getPoint(i).x[0]);
-		pData[i].rx[1]=Round(getPoint(i).x[1]);
-	}
-	for (int i=0;i<numberOfEdges();i++) {
-	  swrData[i].misc = NULL;
-    qrsData[i].ind=-1;
-		eData[i].rdx=pData[getEdge(i).en].rx-pData[getEdge(i).st].rx;
-	}
-	SortPoints();
+    for (int i=0;i < numberOfPoints(); i++) {
+        pData[i].pending = 0;
+        pData[i].edgeOnLeft = -1;
+        pData[i].nextLinkedPoint = -1;
+        pData[i].rx[0] = Round(getPoint(i).x[0]);
+        pData[i].rx[1] = Round(getPoint(i).x[1]);
+    }
+    
+    for (int i=0;i<numberOfEdges();i++) {
+        swrData[i].misc = NULL;
+        qrsData[i].ind = -1;
+        eData[i].rdx = pData[getEdge(i).en].rx - pData[getEdge(i).st].rx;
+    }
+    
+    SortPoints();
 //	SortPointsRounded();
 }
-void              Shape::EndQuickRaster(void)
+
+
+void Shape::EndQuickRaster()
 {
-	MakePointData(false);
-	MakeEdgeData(false);
-	MakeRasterData(false);
-	MakeQuickRasterData(false);
+    MakePointData(false);
+    MakeEdgeData(false);
+    MakeRasterData(false);
+    MakeQuickRasterData(false);
 }
 
 // 2 versions of the Scan() series to move the scanline to a given position withou actually computing coverages
@@ -1901,3 +1913,13 @@ void              Shape::AvanceEdge(int no,float to,AlphaLigne* line,bool exact,
 }
 
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
