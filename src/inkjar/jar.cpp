@@ -290,7 +290,6 @@ guint8 *JarFile::get_uncompressed_file(guint32 compressed_size, guint32 crc,
 	
 	crc2 = crc32(crc2, (Bytef*)bytes, nbytes);
 	    
-	//::write(1, bytes, nbytes);
 	g_byte_array_append (gba, bytes, nbytes);
 	out_a += nbytes;
 	in_a -= nbytes;
@@ -353,6 +352,7 @@ guint8 *JarFile::get_compressed_file(guint32 compressed_size,
     guint8 in_buffer[RDSZ];
     guint8 out_buffer[RDSZ];
     int nbytes;
+    GByteArray *gba = g_byte_array_new();
     
     _zs.avail_in = 0;
     crc = crc32(crc, Z_NULL, 0);
@@ -372,7 +372,11 @@ guint8 *JarFile::get_compressed_file(guint32 compressed_size,
 	
 	int ret = inflate(&_zs, Z_NO_FLUSH);
 	if (RDSZ != _zs.avail_out) {
-	    ::write(1, out_buffer, (RDSZ - _zs.avail_out));
+	    guint8 *tmp_bytes = (guint8 *)g_malloc(sizeof(guint8) 
+						   * _zs.avail_out);
+	    memcpy(tmp_bytes, _zs.next_out, _zs.avail_out);
+	    
+	    g_byte_array_append(gba, tmp_bytes, _zs.avail_out);
 	}
 	if (ret == Z_STREAM_END) {
 	    break;
@@ -386,14 +390,14 @@ guint8 *JarFile::get_compressed_file(guint32 compressed_size,
     std::printf("%d bytes left over\n", _zs.avail_in);
     std::printf("CRC is %x\n", crc);
 #endif
-    //ze->crc = crc;
-    //ze->usize = zs.total_out;
-    /*    if (::read(fd, _zs.next_in, _zs.avail_in) != _zs.avail_in) {
-	  printer.err("jarfile read error");
-	  }
-    */
+    
+    //fixme check crc
+
+    guint8 *ret_bytes = gba->data;
+    g_byte_array_free(gba, FALSE);
+
     inflateReset(&_zs);
-    return 0;
+    return ret_bytes;
 }
 
 JarFile::JarFile(JarFile const& rhs)
@@ -406,7 +410,7 @@ JarFile& JarFile::operator=(JarFile const& rhs)
     if (this == &rhs)
 	return *this;
 
-    _zs = rhs._zs;
+    _zs = rhs._zs;//fixme
     if (_filename == NULL)
 	_filename = NULL;
     else
