@@ -42,15 +42,15 @@ class DOMImplementationImpl : public DOMImplementation
     virtual ~DOMImplementationImpl()
         {}
 
-    bool hasFeature(DOMString& feature, DOMString& version);
+    bool hasFeature(const DOMString& feature, const DOMString& version);
 
-    DocumentType *createDocumentType( DOMString& qualifiedName, 
-                                     DOMString& publicId, 
-                                     DOMString& systemId)
+    DocumentType *createDocumentType(const DOMString& qualifiedName, 
+                                     const DOMString& publicId, 
+                                     const DOMString& systemId)
                                      throw(DOMException);
 
-    Document *createDocument(DOMString& namespaceURI, 
-                             DOMString& qualifiedName, 
+    Document *createDocument(const DOMString& namespaceURI, 
+                             const DOMString& qualifiedName, 
                              DocumentType *doctype)
                              throw(DOMException);
 
@@ -69,7 +69,7 @@ class NodeImpl : virtual public Node
 
     DOMString getNodeValue() throw (DOMException);
 
-    void setNodeValue(DOMString& val) throw (DOMException);
+    void setNodeValue(const DOMString& val) throw (DOMException);
 
 
     unsigned short getNodeType();
@@ -120,21 +120,21 @@ class NodeImpl : virtual public Node
 
     void normalize();
 
-    bool isSupported(DOMString& feature, 
-                     DOMString& version);
+    bool isSupported(const DOMString& feature, 
+                     const DOMString& version);
 
     DOMString getNamespaceURI();
 
     DOMString getPrefix();
 
-    void setPrefix(DOMString& val) throw(DOMException);
+    void setPrefix(const DOMString& val) throw(DOMException);
 
     DOMString getLocalName();
 
     bool hasAttributes();
 
     /* not in api */
-    void setNodeName(DOMString& val);
+    void setNodeName(const DOMString& val);
 
 
     protected:
@@ -208,30 +208,30 @@ class NamedNodeMapImpl : public NamedNodeMap
     virtual ~NamedNodeMapImpl()
         {}
 
-    Node *getNamedItem(DOMString& name);
+    Node *getNamedItem(const DOMString& name);
 
     Node *setNamedItem(Node *arg) throw(DOMException);
 
-    Node *removeNamedItem(DOMString& name) throw(DOMException);
+    Node *removeNamedItem(const DOMString& name) throw(DOMException);
 
     Node *item(unsigned long index);
 
     unsigned long getLength();
 
-    Node *getNamedItemNS(DOMString& namespaceURI, 
-                         DOMString& localName);
+    Node *getNamedItemNS(const DOMString& namespaceURI, 
+                         const DOMString& localName);
 
     Node *setNamedItemNS(Node *arg) throw(DOMException);
 
-    Node *removeNamedItemNS(DOMString& namespaceURI, 
-                            DOMString& localName)
+    Node *removeNamedItemNS(const DOMString& namespaceURI, 
+                            const DOMString& localName)
                             throw(DOMException);
 
     private:
 
     struct MapComparator
         {
-        bool operator()(DOMString& a, DOMString& b) const
+        bool operator()(const DOMString& a, const DOMString& b) const
             { return a < b ; }
         };
 
@@ -252,7 +252,7 @@ class CharacterDataImpl : public CharacterData , public NodeImpl
 
     DOMString getData() throw(DOMException);
 
-    void setData(DOMString& val) throw(DOMException);
+    void setData(const DOMString& val) throw(DOMException);
 
     unsigned long getLength();
 
@@ -260,10 +260,10 @@ class CharacterDataImpl : public CharacterData , public NodeImpl
                             unsigned long count)
                             throw(DOMException);
 
-    void appendData(DOMString& arg) throw(DOMException);
+    void appendData(const DOMString& arg) throw(DOMException);
 
     void insertData(unsigned long offset, 
-                    DOMString& arg)
+                    const DOMString& arg)
                     throw(DOMException);
 
     void deleteData(unsigned long offset, 
@@ -272,7 +272,7 @@ class CharacterDataImpl : public CharacterData , public NodeImpl
 
     void  replaceData(unsigned long offset, 
                       unsigned long count, 
-                      DOMString& arg)
+                      const DOMString& arg)
                       throw(DOMException);
 
 };
@@ -295,7 +295,7 @@ class AttrImpl : public Attr, public NodeImpl
 
     DOMString getValue();
 
-    void setValue(DOMString& val) throw(DOMException);
+    void setValue(const DOMString& val) throw(DOMException);
 
     Element *getOwnerElement();
 
@@ -321,16 +321,16 @@ class ElementImpl : public Element, public NodeImpl
 
     DOMString getTagName();
 
-    DOMString getAttribute(DOMString& name);
+    DOMString getAttribute(const DOMString& name);
 
-    void setAttribute(DOMString& name, 
-                      DOMString& value)
+    void setAttribute(const DOMString& name, 
+                      const DOMString& value)
                       throw(DOMException);
 
-    void removeAttribute(DOMString& name)
+    void removeAttribute(const DOMString& name)
                          throw(DOMException);
 
-    Attr *getAttributeNode(DOMString& name);
+    Attr *getAttributeNode(const DOMString& name);
 
     Attr *setAttributeNode(Attr *newAttr)
                           throw(DOMException);
@@ -338,37 +338,37 @@ class ElementImpl : public Element, public NodeImpl
     Attr *removeAttributeNode(Attr *oldAttr)
                              throw(DOMException);
 
-    NodeList *getElementsByTagName(DOMString& name);
+    NodeList *getElementsByTagName(const DOMString& name);
 
 
-    DOMString getAttributeNS(DOMString& namespaceURI, 
-                             DOMString& localName);
+    DOMString getAttributeNS(const DOMString& namespaceURI, 
+                             const DOMString& localName);
 
-    void setAttributeNS(DOMString& namespaceURI, 
-                        DOMString& qualifiedName, 
-                        DOMString& value)
+    void setAttributeNS(const DOMString& namespaceURI, 
+                        const DOMString& qualifiedName, 
+                        const DOMString& value)
                         throw(DOMException);
 
 
-    void removeAttributeNS(DOMString& namespaceURI, 
-                           DOMString& localName)
+    void removeAttributeNS(const DOMString& namespaceURI, 
+                           const DOMString& localName)
                            throw(DOMException);
  
 
-    Attr *getAttributeNodeNS(DOMString& namespaceURI, 
-                            DOMString& localName);
+    Attr *getAttributeNodeNS(const DOMString& namespaceURI, 
+                            const DOMString& localName);
 
     Attr *setAttributeNodeNS(Attr *newAttr)
                             throw(DOMException);
 
-    NodeList *getElementsByTagNameNS(DOMString& namespaceURI, 
-                                    DOMString& localName);
+    NodeList *getElementsByTagNameNS(const DOMString& namespaceURI, 
+                                    const DOMString& localName);
 
 
-    bool hasAttribute(DOMString& name);
+    bool hasAttribute(const DOMString& name);
 
-    bool hasAttributeNS(DOMString& namespaceURI, 
-                        DOMString& localName);
+    bool hasAttributeNS(const DOMString& namespaceURI, 
+                        const DOMString& localName);
 };
 
 
@@ -422,8 +422,8 @@ class DocumentTypeImpl : public NodeImpl, public DocumentType
     virtual ~DocumentTypeImpl()
         {}
 
-    DocumentTypeImpl(DOMString& qualifiedName, 
-                     DOMString& publicId, DOMString& systemId);
+    DocumentTypeImpl(const DOMString& qualifiedName, 
+                     const DOMString& publicId, const DOMString& systemId);
 
     DOMString getName();
 
@@ -506,7 +506,7 @@ class ProcessingInstructionImpl : public ProcessingInstruction, public NodeImpl
 
     DOMString getData();
 
-    void setData(DOMString& val) throw(DOMException);
+    void setData(const DOMString& val) throw(DOMException);
 
     private:
 
@@ -538,7 +538,7 @@ class DocumentImpl : public Document, public NodeImpl
     DocumentImpl()
         {}
 
-    DocumentImpl(DOMString &namespaceURI,DOMString &qualifiedName,
+    DocumentImpl(const DOMString& namespaceURI, const DOMString& qualifiedName,
                    DocumentType *doctype);
 
     virtual ~DocumentImpl()
@@ -550,47 +550,47 @@ class DocumentImpl : public Document, public NodeImpl
 
     Element *DocumentImpl::getDocumentElement();
 
-    Element *DocumentImpl::createElement(DOMString& tagName) throw(DOMException);
+    Element *DocumentImpl::createElement(const DOMString& tagName) throw(DOMException);
 
     DocumentFragment *DocumentImpl::createDocumentFragment();
 
-    Text *DocumentImpl::createTextNode(DOMString& data);
+    Text *DocumentImpl::createTextNode(const DOMString& data);
 
-    Comment  *DocumentImpl::createComment(DOMString& data);
+    Comment  *DocumentImpl::createComment(const DOMString& data);
 
-    CDATASection *DocumentImpl::createCDATASection(DOMString& data)
+    CDATASection *DocumentImpl::createCDATASection(const DOMString& data)
                                      throw(DOMException);
 
-    ProcessingInstruction *DocumentImpl::createProcessingInstruction(DOMString& target, 
-                                                       DOMString& data)
+    ProcessingInstruction *DocumentImpl::createProcessingInstruction(const DOMString& target, 
+                                                       const DOMString& data)
                                                        throw(DOMException);
 
 
-    Attr *DocumentImpl::createAttribute(DOMString& name)
+    Attr *DocumentImpl::createAttribute(const DOMString& name)
                           throw(DOMException);
 
 
-    EntityReference *DocumentImpl::createEntityReference(DOMString& name)
+    EntityReference *DocumentImpl::createEntityReference(const DOMString& name)
                                            throw(DOMException);
 
 
-    NodeList *DocumentImpl::getElementsByTagName(DOMString& tagname);
+    NodeList *DocumentImpl::getElementsByTagName(const DOMString& tagname);
 
     Node *DocumentImpl::importNode(Node *importedNode, bool deep)
                                  throw(DOMException);
 
-    Element *DocumentImpl::createElementNS(DOMString& namespaceURI, 
-                             DOMString& qualifiedName)
+    Element *DocumentImpl::createElementNS(const DOMString& namespaceURI, 
+                             const DOMString& qualifiedName)
                              throw(DOMException);
 
-    Attr *DocumentImpl::createAttributeNS(DOMString& namespaceURI, 
-                            DOMString& qualifiedName)
+    Attr *DocumentImpl::createAttributeNS(const DOMString& namespaceURI, 
+                            const DOMString& qualifiedName)
                             throw(DOMException);
 
-    NodeList *DocumentImpl::getElementsByTagNameNS(DOMString& namespaceURI, 
-                                     DOMString& localName);
+    NodeList *DocumentImpl::getElementsByTagNameNS(const DOMString& namespaceURI, 
+                                     const DOMString& localName);
 
-    Element *DocumentImpl::getElementById(DOMString& elementId);
+    Element *DocumentImpl::getElementById(const DOMString& elementId);
 
 };
 

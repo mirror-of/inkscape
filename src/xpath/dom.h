@@ -125,22 +125,22 @@ class DOMImplementation
     /**
      *
      */
-    virtual bool hasFeature(DOMString& feature, DOMString& version) = 0;
+    virtual bool hasFeature(const DOMString& feature, const DOMString& version) = 0;
 
 
     /**
      * L2
      */
-    virtual DocumentType *createDocumentType(DOMString& qualifiedName, 
-                                     DOMString& publicId, 
-                                     DOMString& systemId)
+    virtual DocumentType *createDocumentType(const DOMString& qualifiedName, 
+                                     const DOMString& publicId, 
+                                     const DOMString& systemId)
                                      throw(DOMException) = 0;
 
     /**
      * L2
      */
-    virtual Document *createDocument(DOMString& namespaceURI, 
-                             DOMString& qualifiedName, 
+    virtual Document *createDocument(const DOMString& namespaceURI, 
+                             const DOMString& qualifiedName, 
                              DocumentType *doctype)
                              throw(DOMException) = 0;
 
@@ -192,7 +192,7 @@ class Node
     /**
      *
      */
-    virtual void setNodeValue(DOMString& val) throw (DOMException) = 0;
+    virtual void setNodeValue(const DOMString& val) throw (DOMException) = 0;
 
     /**
      *
@@ -284,8 +284,8 @@ class Node
     /**
      * L2
      */
-    virtual bool isSupported(DOMString& feature, 
-                     DOMString& version) = 0;
+    virtual bool isSupported(const DOMString& feature, 
+                     const DOMString& version) = 0;
 
     /**
      * L2
@@ -300,7 +300,7 @@ class Node
     /**
      *
      */
-    virtual void setPrefix(DOMString& val) throw(DOMException) = 0;
+    virtual void setPrefix(const DOMString& val) throw(DOMException) = 0;
 
     /**
      * L2
@@ -355,7 +355,7 @@ class NamedNodeMap
     /**
      *
      */
-    virtual Node *getNamedItem(DOMString& name) = 0;
+    virtual Node *getNamedItem(const DOMString& name) = 0;
 
     /**
      *
@@ -366,7 +366,7 @@ class NamedNodeMap
     /**
      *
      */
-    virtual Node *removeNamedItem(DOMString& name) throw(DOMException) = 0;
+    virtual Node *removeNamedItem(const DOMString& name) throw(DOMException) = 0;
 
     /**
      *
@@ -381,8 +381,8 @@ class NamedNodeMap
     /**
      * L2
      */
-    virtual Node *getNamedItemNS(DOMString& namespaceURI, 
-                         DOMString& localName) = 0;
+    virtual Node *getNamedItemNS(const DOMString& namespaceURI, 
+                         const DOMString& localName) = 0;
 
     /**
      * L2
@@ -392,8 +392,8 @@ class NamedNodeMap
     /**
      * L2
      */
-    virtual Node *removeNamedItemNS(DOMString& namespaceURI, 
-                            DOMString& localName)
+    virtual Node *removeNamedItemNS(const DOMString& namespaceURI, 
+                            const DOMString& localName)
                             throw(DOMException) = 0;
 };//class NamedNodeMap
 
@@ -419,7 +419,7 @@ class CharacterData : virtual public Node
     /**
      *
      */
-    virtual void setData(DOMString& val) throw(DOMException) = 0;
+    virtual void setData(const DOMString& val) throw(DOMException) = 0;
 
     /**
      *
@@ -436,13 +436,13 @@ class CharacterData : virtual public Node
     /**
      *
      */
-    virtual void appendData(DOMString& arg) throw(DOMException) = 0;
+    virtual void appendData(const DOMString& arg) throw(DOMException) = 0;
 
     /**
      *
      */
     virtual void insertData(unsigned long offset, 
-                    DOMString& arg)
+                    const DOMString& arg)
                     throw(DOMException) = 0;
 
     /**
@@ -457,7 +457,7 @@ class CharacterData : virtual public Node
      */
     virtual void  replaceData(unsigned long offset, 
                       unsigned long count, 
-                      DOMString& arg)
+                      const DOMString& arg)
                       throw(DOMException) = 0;
 
 
@@ -496,7 +496,7 @@ class Attr : virtual public Node
     /**
      *
      */
-    virtual void setValue(DOMString& val) throw(DOMException) = 0;
+    virtual void setValue(const DOMString& val) throw(DOMException) = 0;
                                         
 
 
@@ -530,25 +530,25 @@ class Element : virtual public Node
     /**
      *
      */
-    virtual DOMString getAttribute(DOMString& name) = 0;
+    virtual DOMString getAttribute(const DOMString& name) = 0;
 
     /**
      *
      */
-    virtual void setAttribute(DOMString& name, 
-                      DOMString& value)
+    virtual void setAttribute(const DOMString& name, 
+                      const DOMString& value)
                       throw(DOMException) = 0;
 
     /**
      *
      */
-    virtual void removeAttribute(DOMString& name)
+    virtual void removeAttribute(const DOMString& name)
                          throw(DOMException) = 0;
 
     /**
      *
      */
-    virtual Attr *getAttributeNode(DOMString& name) = 0;
+    virtual Attr *getAttributeNode(const DOMString& name) = 0;
 
     /**
      *
@@ -565,34 +565,34 @@ class Element : virtual public Node
     /**
      *
      */
-    virtual NodeList *getElementsByTagName(DOMString& name) = 0;
+    virtual NodeList *getElementsByTagName(const DOMString& name) = 0;
 
     /**
      * L2
      */
-    virtual DOMString getAttributeNS(DOMString& namespaceURI, 
-                             DOMString& localName) = 0;
+    virtual DOMString getAttributeNS(const DOMString& namespaceURI, 
+                             const DOMString& localName) = 0;
 
     /**
      * L2
      */
-    virtual void setAttributeNS(DOMString& namespaceURI, 
-                        DOMString& qualifiedName, 
-                        DOMString& value)
+    virtual void setAttributeNS(const DOMString& namespaceURI, 
+                        const DOMString& qualifiedName, 
+                        const DOMString& value)
                         throw(DOMException) = 0;
 
     /**
      * L2
      */
-    virtual void removeAttributeNS(DOMString& namespaceURI, 
-                           DOMString& localName)
+    virtual void removeAttributeNS(const DOMString& namespaceURI, 
+                           const DOMString& localName)
                            throw(DOMException) = 0;
  
     /**
      * L2
      */
-    virtual Attr *getAttributeNodeNS(DOMString& namespaceURI, 
-                            DOMString& localName) = 0;
+    virtual Attr *getAttributeNodeNS(const DOMString& namespaceURI, 
+                            const DOMString& localName) = 0;
 
     /**
      * L2
@@ -603,19 +603,19 @@ class Element : virtual public Node
     /**
      * L2
      */
-    virtual NodeList *getElementsByTagNameNS(DOMString& namespaceURI, 
-                                    DOMString& localName) = 0;
+    virtual NodeList *getElementsByTagNameNS(const DOMString& namespaceURI, 
+                                    const DOMString& localName) = 0;
 
     /**
      * L2
      */
-    virtual bool hasAttribute(DOMString& name) = 0;
+    virtual bool hasAttribute(const DOMString& name) = 0;
 
     /**
      * L2
      */
-    virtual bool hasAttributeNS(DOMString& namespaceURI, 
-                        DOMString& localName) = 0;
+    virtual bool hasAttributeNS(const DOMString& namespaceURI, 
+                        const DOMString& localName) = 0;
 };//class Element
 
 
@@ -816,7 +816,7 @@ class ProcessingInstruction : virtual public Node
     /**
      *
      */
-   virtual  void setData(DOMString& val) throw(DOMException) = 0;
+   virtual  void setData(const DOMString& val) throw(DOMException) = 0;
 
 };//class ProcessingInstruction
 
@@ -868,7 +868,7 @@ class Document : virtual public Node
     /**
      *
      */
-    virtual Element *createElement(DOMString& tagName)
+    virtual Element *createElement(const DOMString& tagName)
                            throw(DOMException) = 0;
 
     /**
@@ -879,42 +879,42 @@ class Document : virtual public Node
     /**
      *
      */
-    virtual Text *createTextNode(DOMString& data) = 0;
+    virtual Text *createTextNode(const DOMString& data) = 0;
 
     /**
      *
      */
-    virtual Comment  *createComment(DOMString& data) = 0;
+    virtual Comment  *createComment(const DOMString& data) = 0;
 
     /**
      *
      */
-    virtual CDATASection *createCDATASection(DOMString& data)
+    virtual CDATASection *createCDATASection(const DOMString& data)
                                      throw(DOMException) = 0;
 
     /**
      *
      */
-    virtual ProcessingInstruction *createProcessingInstruction(DOMString& target, 
-                                                       DOMString& data)
+    virtual ProcessingInstruction *createProcessingInstruction(const DOMString& target, 
+                                                       const DOMString& data)
                                                        throw(DOMException) = 0;
 
     /**
      *
      */
-    virtual Attr *createAttribute(DOMString& name)
+    virtual Attr *createAttribute(const DOMString& name)
                           throw(DOMException) = 0;
 
     /**
      *
      */
-    virtual EntityReference *createEntityReference(DOMString& name)
+    virtual EntityReference *createEntityReference(const DOMString& name)
                                            throw(DOMException) = 0;
 
     /**
      *
      */
-    virtual NodeList *getElementsByTagName(DOMString& tagname) = 0;
+    virtual NodeList *getElementsByTagName(const DOMString& tagname) = 0;
 
 
     /**
@@ -927,27 +927,27 @@ class Document : virtual public Node
     /**
      * L2
      */
-    virtual Element *createElementNS(DOMString& namespaceURI, 
-                             DOMString& qualifiedName)
+    virtual Element *createElementNS(const DOMString& namespaceURI, 
+                             const DOMString& qualifiedName)
                              throw(DOMException) = 0;
 
     /**
      * L2
      */
-    virtual Attr *createAttributeNS(DOMString& namespaceURI, 
-                            DOMString& qualifiedName)
+    virtual Attr *createAttributeNS(const DOMString& namespaceURI, 
+                            const DOMString& qualifiedName)
                             throw(DOMException) = 0;
 
     /**
      * L2
      */
-    virtual NodeList *getElementsByTagNameNS(DOMString& namespaceURI, 
-                                     DOMString& localName) = 0;
+    virtual NodeList *getElementsByTagNameNS(const DOMString& namespaceURI, 
+                                     const DOMString& localName) = 0;
 
     /**
      * L2
      */
-    virtual Element *getElementById(DOMString& elementId) = 0;
+    virtual Element *getElementById(const DOMString& elementId) = 0;
 
 
 };//class Document

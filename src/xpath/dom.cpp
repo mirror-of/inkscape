@@ -81,8 +81,8 @@ const char *DOMException::what() const throw()
 /**
  *
  */
-bool DOMImplementationImpl::hasFeature(DOMString& feature, 
-                                       DOMString& version)
+bool DOMImplementationImpl::hasFeature(const DOMString& feature, 
+                                       const DOMString& version)
 {
 
 
@@ -97,9 +97,9 @@ bool DOMImplementationImpl::hasFeature(DOMString& feature,
  * L2
  */
 DocumentType *DOMImplementationImpl::createDocumentType(
-                                     DOMString& qualifiedName, 
-                                     DOMString& publicId, 
-                                     DOMString& systemId)
+                                     const DOMString& qualifiedName, 
+                                     const DOMString& publicId, 
+                                     const DOMString& systemId)
                                      throw(DOMException)
 {
    DocumentType *type = new DocumentTypeImpl(qualifiedName, 
@@ -112,8 +112,8 @@ DocumentType *DOMImplementationImpl::createDocumentType(
 /**
  * L2
  */
-Document *DOMImplementationImpl::createDocument(DOMString& namespaceURI, 
-                             DOMString& qualifiedName, 
+Document *DOMImplementationImpl::createDocument(const DOMString& namespaceURI, 
+                             const DOMString& qualifiedName, 
                              DocumentType *doctype)
                              throw(DOMException)
 {
@@ -188,7 +188,7 @@ DOMString NodeImpl::getNodeValue() throw (DOMException)
 /**
  *
  */
-void NodeImpl::setNodeValue(DOMString& val) throw (DOMException)
+void NodeImpl::setNodeValue(const DOMString& val) throw (DOMException)
 {
     nodeValue = val;
 }
@@ -383,8 +383,8 @@ void NodeImpl::normalize()
 /**
  * L2
  */
-bool NodeImpl::isSupported(DOMString& feature, 
-                       DOMString& version)
+bool NodeImpl::isSupported(const DOMString& feature, 
+                       const DOMString& version)
 {
     return false;
 }
@@ -411,7 +411,7 @@ DOMString NodeImpl::getPrefix()
 /**
  *
  */
-void NodeImpl::setPrefix(DOMString& val) throw(DOMException)
+void NodeImpl::setPrefix(const DOMString& val) throw(DOMException)
 {
     prefix = val;
 }
@@ -436,7 +436,7 @@ bool NodeImpl::hasAttributes()
 }
 
 /*not in api*/
-void NodeImpl::setNodeName(DOMString& val)
+void NodeImpl::setNodeName(const DOMString& val)
 {
     nodeName = val;
 }
@@ -539,7 +539,7 @@ void NodeListImpl::append(Node *newNode)
 /**
  *
  */
-Node *NamedNodeMapImpl::getNamedItem(DOMString& name)
+Node *NamedNodeMapImpl::getNamedItem(const DOMString& name)
 {
     Node *item = table[name];
     return item;
@@ -560,7 +560,7 @@ Node *NamedNodeMapImpl::setNamedItem(Node *node) throw(DOMException)
 /**
  *
  */
-Node *NamedNodeMapImpl::removeNamedItem(DOMString& name) throw(DOMException)
+Node *NamedNodeMapImpl::removeNamedItem(const DOMString& name) throw(DOMException)
 {
     Node *node = table[name];
     table.erase(name);
@@ -594,8 +594,8 @@ unsigned long NamedNodeMapImpl::getLength()
 /**
  * L2
  */
-Node *NamedNodeMapImpl::getNamedItemNS(DOMString& namespaceURI, 
-                                   DOMString& localName)
+Node *NamedNodeMapImpl::getNamedItemNS(const DOMString& namespaceURI, 
+                                   const DOMString& localName)
 {
     return table[localName];
 }
@@ -615,8 +615,8 @@ Node *NamedNodeMapImpl::setNamedItemNS(Node *node) throw(DOMException)
 /**
  * L2
  */
-Node *NamedNodeMapImpl::removeNamedItemNS(DOMString& namespaceURI, 
-                                      DOMString& localName)
+Node *NamedNodeMapImpl::removeNamedItemNS(const DOMString& namespaceURI, 
+                                      const DOMString& localName)
                                       throw(DOMException)
 {
     Node *node = table[localName];
@@ -645,7 +645,7 @@ DOMString CharacterDataImpl::getData() throw(DOMException)
 /**
  *
  */
-void CharacterDataImpl::setData(DOMString& val) throw(DOMException)
+void CharacterDataImpl::setData(const DOMString& val) throw(DOMException)
 {
     nodeValue = val;
 }
@@ -674,7 +674,7 @@ DOMString CharacterDataImpl::substringData(unsigned long offset,
 /**
  *
  */
-void CharacterDataImpl::appendData(DOMString& arg) throw(DOMException)
+void CharacterDataImpl::appendData(const DOMString& arg) throw(DOMException)
 {
     nodeValue += arg;
 }
@@ -684,7 +684,7 @@ void CharacterDataImpl::appendData(DOMString& arg) throw(DOMException)
  *
  */
 void CharacterDataImpl::insertData(unsigned long offset, 
-                               DOMString& arg)
+                               const DOMString& arg)
                                throw(DOMException)
 {
     nodeValue.insert(offset, arg);
@@ -707,7 +707,7 @@ void CharacterDataImpl::deleteData(unsigned long offset,
  */
 void  CharacterDataImpl::replaceData(unsigned long offset, 
                                  unsigned long count, 
-                                 DOMString& arg)
+                                 const DOMString& arg)
                                  throw(DOMException)
 {
     nodeValue.replace(offset, count, arg);
@@ -754,7 +754,7 @@ DOMString AttrImpl::getValue()
 /**
  *
  */
-void AttrImpl::setValue(DOMString& val) throw(DOMException)
+void AttrImpl::setValue(const DOMString& val) throw(DOMException)
 {
     nodeValue = val;
 }
@@ -791,7 +791,7 @@ DOMString ElementImpl::getTagName()
 /**
  *
  */
-DOMString ElementImpl::getAttribute(DOMString& name)
+DOMString ElementImpl::getAttribute(const DOMString& name)
 {
     Node *node = attributes->getNamedItem(name);
     if (!node)
@@ -803,8 +803,8 @@ DOMString ElementImpl::getAttribute(DOMString& name)
 /**
  *
  */
-void ElementImpl::setAttribute(DOMString& name, 
-                      DOMString& value)
+void ElementImpl::setAttribute(const DOMString& name, 
+                      const DOMString& value)
                       throw(DOMException)
 {
     AttrImpl *attr = reinterpret_cast<AttrImpl *>(attributes->getNamedItem(name));
@@ -824,7 +824,7 @@ void ElementImpl::setAttribute(DOMString& name,
 /**
  *
  */
-void ElementImpl::removeAttribute(DOMString& name)
+void ElementImpl::removeAttribute(const DOMString& name)
                          throw(DOMException)
 {
     attributes->removeNamedItem(name);
@@ -834,7 +834,7 @@ void ElementImpl::removeAttribute(DOMString& name)
 /**
  *
  */
-Attr *ElementImpl::getAttributeNode(DOMString& name)
+Attr *ElementImpl::getAttributeNode(const DOMString& name)
 {
     AttrImpl *attr = reinterpret_cast<AttrImpl *>(attributes->getNamedItem(name));
     return attr;
@@ -859,37 +859,39 @@ Attr *ElementImpl::setAttributeNode(Attr *newAttr)
 Attr *ElementImpl::removeAttributeNode(Attr *oldAttr)
                              throw(DOMException)
 {
-    attributes->removeNamedItem(oldAttr);
-    delete oldAttr;
+    attributes->removeNamedItem(oldAttr->getName());
+    return oldAttr;
 }
 
 
 /**
  *
  */
-NodeList *ElementImpl::getElementsByTagName(DOMString& name)
+NodeList *ElementImpl::getElementsByTagName(const DOMString& name)
 {
-    NodeList *list = new NodeList();
+    NodeList *list = new NodeListImpl();
     /***START HERE***/
+    return list;
 }
 
 
 /**
  * L2
  */
-DOMString ElementImpl::getAttributeNS(DOMString& namespaceURI, 
-                             DOMString& localName)
+DOMString ElementImpl::getAttributeNS(const DOMString& namespaceURI, 
+                             const DOMString& localName)
 {
-
+    DOMString val;
+    return val;
 }
 
 
 /**
  * L2
  */
-void ElementImpl::setAttributeNS(DOMString& namespaceURI, 
-                        DOMString& qualifiedName, 
-                        DOMString& value)
+void ElementImpl::setAttributeNS(const DOMString& namespaceURI, 
+                        const DOMString& qualifiedName, 
+                        const DOMString& value)
                         throw(DOMException)
 {
 
@@ -899,8 +901,8 @@ void ElementImpl::setAttributeNS(DOMString& namespaceURI,
 /**
  * L2
  */
-void ElementImpl::removeAttributeNS(DOMString& namespaceURI, 
-                           DOMString& localName)
+void ElementImpl::removeAttributeNS(const DOMString& namespaceURI, 
+                           const DOMString& localName)
                            throw(DOMException)
 {
 
@@ -910,10 +912,11 @@ void ElementImpl::removeAttributeNS(DOMString& namespaceURI,
 /**
  * L2
  */
-Attr *ElementImpl::getAttributeNodeNS(DOMString& namespaceURI, 
-                            DOMString& localName)
+Attr *ElementImpl::getAttributeNodeNS(const DOMString& namespaceURI, 
+                            const DOMString& localName)
 {
-
+    Attr *attr;
+    return attr;
 }
 
 
@@ -923,6 +926,8 @@ Attr *ElementImpl::getAttributeNodeNS(DOMString& namespaceURI,
 Attr *ElementImpl::setAttributeNodeNS(Attr *newAttr)
                             throw(DOMException)
 {
+    Attr *attr;
+    return attr;
 
 }
 
@@ -930,8 +935,18 @@ Attr *ElementImpl::setAttributeNodeNS(Attr *newAttr)
 /**
  * L2
  */
-NodeList *ElementImpl::getElementsByTagNameNS(DOMString& namespaceURI, 
-                                    DOMString& localName)
+NodeList *ElementImpl::getElementsByTagNameNS(const DOMString& namespaceURI, 
+                                    const DOMString& localName)
+{
+    NodeList *list = new NodeListImpl();
+    return list;
+}
+
+
+/**
+ * L2
+ */
+bool ElementImpl::hasAttribute(const DOMString& name)
 {
 
 }
@@ -940,17 +955,8 @@ NodeList *ElementImpl::getElementsByTagNameNS(DOMString& namespaceURI,
 /**
  * L2
  */
-bool ElementImpl::hasAttribute(DOMString& name)
-{
-
-}
-
-
-/**
- * L2
- */
-bool ElementImpl::hasAttributeNS(DOMString& namespaceURI, 
-                        DOMString& localName)
+bool ElementImpl::hasAttributeNS(const DOMString& namespaceURI, 
+                        const DOMString& localName)
 {
 
 }
@@ -1150,7 +1156,7 @@ DOMString ProcessingInstructionImpl::getData()
 /**
  *
  */
-void ProcessingInstructionImpl::setData(DOMString& val) throw(DOMException)
+void ProcessingInstructionImpl::setData(const DOMString& val) throw(DOMException)
 {
     piData = val;
 }
@@ -1218,7 +1224,7 @@ Element *DocumentImpl::getDocumentElement()
 /**
  *
  */
-Element *DocumentImpl::createElement(DOMString& tagName)
+Element *DocumentImpl::createElement(const DOMString& tagName)
                            throw(DOMException)
 {
     Element *elem = new ElementImpl(tagName);
@@ -1239,7 +1245,7 @@ DocumentFragment *DocumentImpl::createDocumentFragment()
 /**
  *
  */
-Text *DocumentImpl::createTextNode(DOMString& data)
+Text *DocumentImpl::createTextNode(const DOMString& data)
 {
     Text *text = new TextImpl(data);
     return text;
@@ -1249,7 +1255,7 @@ Text *DocumentImpl::createTextNode(DOMString& data)
 /**
  *
  */
-Comment  *DocumentImpl::createComment(DOMString& data)
+Comment  *DocumentImpl::createComment(const DOMString& data)
 {
     Comment *comment = new CommentImpl(data);
     return comment;
@@ -1259,7 +1265,7 @@ Comment  *DocumentImpl::createComment(DOMString& data)
 /**
  *
  */
-CDATASection *DocumentImpl::createCDATASection(DOMString& data)
+CDATASection *DocumentImpl::createCDATASection(const DOMString& data)
                                      throw(DOMException)
 {
     CDATASection *cds = new CDATASectionImpl(data);
@@ -1270,8 +1276,8 @@ CDATASection *DocumentImpl::createCDATASection(DOMString& data)
 /**
  *
  */
-ProcessingInstruction *DocumentImpl::createProcessingInstruction(DOMString& target, 
-                                                       DOMString& data)
+ProcessingInstruction *DocumentImpl::createProcessingInstruction(const DOMString& target, 
+                                                       const DOMString& data)
                                                        throw(DOMException)
 {
     ProcessingInstruction *pi = new ProcessingInstructionImpl();
@@ -1282,7 +1288,7 @@ ProcessingInstruction *DocumentImpl::createProcessingInstruction(DOMString& targ
 /**
  *
  */
-Attr *DocumentImpl::createAttribute(DOMString& name)
+Attr *DocumentImpl::createAttribute(const DOMString& name)
                           throw(DOMException)
 {
     Attr attr = new AttrImpl(name);
@@ -1293,7 +1299,7 @@ Attr *DocumentImpl::createAttribute(DOMString& name)
 /**
  *
  */
-EntityReference *DocumentImpl::createEntityReference(DOMString& name)
+EntityReference *DocumentImpl::createEntityReference(const DOMString& name)
                                            throw(DOMException)
 {
     EntityReference *er = new EntityReferenceImpl(name);
@@ -1304,9 +1310,10 @@ EntityReference *DocumentImpl::createEntityReference(DOMString& name)
 /**
  *
  */
-NodeList *DocumentImpl::getElementsByTagName(DOMString& tagname)
+NodeList *DocumentImpl::getElementsByTagName(const DOMString& tagname)
 {
-
+    NodeList *list = new NodeListImpl();
+    return list;
 }
 
 
@@ -1315,20 +1322,23 @@ NodeList *DocumentImpl::getElementsByTagName(DOMString& tagname)
  * L2
  */
 Node *DocumentImpl::importNode(Node *importedNode, 
-                 bool deep)
-                 throw(DOMException)
+                               bool deep)
+                               throw(DOMException)
 {
-
+    Node *node = new NodeImpl();
+    return node;
 }
 
 
 /**
  * L2
  */
-Element *DocumentImpl::createElementNS(DOMString& namespaceURI, 
-                             DOMString& qualifiedName)
+Element *DocumentImpl::createElementNS(const DOMString& namespaceURI, 
+                             const DOMString& qualifiedName)
                              throw(DOMException)
 {
+    Element *elem;
+    return elem;
 
 }
 
@@ -1336,30 +1346,33 @@ Element *DocumentImpl::createElementNS(DOMString& namespaceURI,
 /**
  * L2
  */
-Attr *DocumentImpl::createAttributeNS(DOMString& namespaceURI, 
-                            DOMString& qualifiedName)
+Attr *DocumentImpl::createAttributeNS(const DOMString& namespaceURI, 
+                            const DOMString& qualifiedName)
                             throw(DOMException)
 {
-
+    Attr *attr;
+    return attr;
 }
 
 
 /**
  * L2
  */
-NodeList *DocumentImpl::getElementsByTagNameNS(DOMString& namespaceURI, 
-                                     DOMString& localName)
+NodeList *DocumentImpl::getElementsByTagNameNS(const DOMString& namespaceURI, 
+                                     const DOMString& localName)
 {
-
+    NodeList *list = new NodeListImpl();
+    return list;
 }
 
 
 /**
  * L2
  */
-Element *DocumentImpl::getElementById(DOMString& elementId)
+Element *DocumentImpl::getElementById(const DOMString& elementId)
 {
-
+    Element *elem;
+    return elem;
 }
 
 
