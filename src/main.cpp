@@ -232,7 +232,10 @@ main(int argc, char const **argv)
     gint result, i;
 
 #ifdef HAVE_FPSETMASK
-    fpsetmask(fpgetmask() & ~(FP_X_DZ|FP_X_INV));
+    /* This is inherited from Sodipodi code, where it was in #ifdef __FreeBSD__.  It's probably
+       safe to remove: the default mask is already 0 in C99, and in current FreeBSD according to
+       the fenv man page on www.freebsd.org, and in glibc according to (libc)FP Exceptions. */
+    fpsetmask(fpgetmask() & ~(FP_X_DZ | FP_X_INV));
 #endif
 
 #ifdef ENABLE_NLS
@@ -301,10 +304,6 @@ main(int argc, char const **argv)
         result = sp_main_console(argc, argv);
     }
 
-#ifdef HAVE_FPSETMASK
-    fpsetsticky(FP_X_DZ|FP_X_INV);
-    fpsetmask(FP_X_DZ|FP_X_INV);
-#endif
     return result;
 }
 
