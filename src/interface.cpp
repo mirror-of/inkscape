@@ -508,8 +508,12 @@ sp_ui_menu_append_check_item_from_verb (GtkMenu *menu, SPView *view, const gchar
     GtkWidget *item;
 
     unsigned int shortcut = 0;
-    if (verb)
+    SPAction *action = NULL;
+
+    if (verb) {
         shortcut = sp_shortcut_get_primary (verb);
+        action = sp_verb_get_action (verb, view);
+    }
 
     if (verb && shortcut) {
         gchar c[256];
@@ -518,7 +522,7 @@ sp_ui_menu_append_check_item_from_verb (GtkMenu *menu, SPView *view, const gchar
         GtkWidget *hb = gtk_hbox_new (FALSE, 16);
 
         {
-            GtkWidget *l = gtk_label_new_with_mnemonic (label);
+            GtkWidget *l = gtk_label_new_with_mnemonic (action ? action->name : label);
             gtk_misc_set_alignment ((GtkMisc *) l, 0.0, 0.5);
             gtk_box_pack_start ((GtkBox *) hb, l, TRUE, TRUE, 0);
         }
@@ -534,7 +538,7 @@ sp_ui_menu_append_check_item_from_verb (GtkMenu *menu, SPView *view, const gchar
         item = gtk_check_menu_item_new ();
         gtk_container_add ((GtkContainer *) item, hb);
     } else {
-        GtkWidget *l = gtk_label_new_with_mnemonic (label);
+        GtkWidget *l = gtk_label_new_with_mnemonic (action ? action->name : label);
         gtk_misc_set_alignment ((GtkMisc *) l, 0.0, 0.5);
         item = gtk_check_menu_item_new ();
         gtk_container_add ((GtkContainer *) item, l);
@@ -549,7 +553,7 @@ sp_ui_menu_append_check_item_from_verb (GtkMenu *menu, SPView *view, const gchar
     g_signal_connect( G_OBJECT(item), "toggled", (GCallback) callback_toggle, (void *) pref); 	 
     g_signal_connect( G_OBJECT(item), "expose_event", (GCallback) callback_update, (void *) pref);
 	 
-    g_signal_connect ( G_OBJECT (item), "select", G_CALLBACK (sp_ui_menu_select), (gpointer) tip ); 	 
+    g_signal_connect ( G_OBJECT (item), "select", G_CALLBACK (sp_ui_menu_select), (gpointer) (action ? action->tip : tip)); 	 
     g_signal_connect ( G_OBJECT (item), "deselect", G_CALLBACK (sp_ui_menu_deselect), NULL); 	 
 }
 
@@ -768,9 +772,9 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
                                   checkitem_toggled, checkitem_update, 0);
     sp_ui_menu_append_check_item_from_verb (m, view, _("_Toolbox"), _("Show or hide the main toolbox (on the left)"), "toolbox",
                                   checkitem_toggled, checkitem_update, 0);
-    sp_ui_menu_append_check_item_from_verb (m, view, _("_Rulers"), _("Show or hide the canvas rulers"), "rulers",
+    sp_ui_menu_append_check_item_from_verb (m, view, NULL, NULL, "rulers",
                                   checkitem_toggled, checkitem_update, SP_VERB_TOGGLE_RULERS);
-    sp_ui_menu_append_check_item_from_verb (m, view, _("Scroll_bars"), _("Show or hide the canvas scrollbars"), "scrollbars",
+    sp_ui_menu_append_check_item_from_verb (m, view, NULL, NULL, "scrollbars",
                                   checkitem_toggled, checkitem_update, SP_VERB_TOGGLE_SCROLLBARS);
     sp_ui_menu_append_check_item_from_verb (m, view, _("_Statusbar"), _("Show or hide the statusbar (at the bottom of the window)"), "statusbar",
                                   checkitem_toggled, checkitem_update, 0);

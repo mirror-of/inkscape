@@ -959,8 +959,8 @@ static const SPVerbActionDef props[] = {
     /* Zooming */
     {SP_VERB_ZOOM_IN, "ZoomIn", N_("Zoom In"), N_("Zoom in"), "zoom_in"},
     {SP_VERB_ZOOM_OUT, "ZoomOut", N_("Zoom Out"), N_("Zoom out"), "zoom_out"},
-    {SP_VERB_TOGGLE_RULERS, "ToggleRulers", N_("Ru_lers"), N_("Show or hide rulers"), "rulers"},
-    {SP_VERB_TOGGLE_SCROLLBARS, "ToggleScrollbars", N_("Scroll_bars"), N_("Show or hide scrollbars"), "scrollbars"},
+    {SP_VERB_TOGGLE_RULERS, "ToggleRulers", N_("_Rulers"), N_("Show or hide the canvas rulers"), "rulers"},
+    {SP_VERB_TOGGLE_SCROLLBARS, "ToggleScrollbars", N_("Scroll_bars"), N_("Show or hide the canvas scrollbars"), "scrollbars"},
     {SP_VERB_TOGGLE_GRID, "ToggleGrid", N_("_Grid"), N_("Show or hide grid"), "grid"},
     {SP_VERB_TOGGLE_GUIDES, "ToggleGuides", N_("G_uides"), N_("Show or hide guides"), "guides"},
     {SP_VERB_ZOOM_NEXT, "ZoomNext", N_("Nex_t zoom"), N_("Next zoom (from the history of zooms)"),
