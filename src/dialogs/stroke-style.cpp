@@ -1237,7 +1237,7 @@ sp_stroke_style_line_widget_new(void)
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_BEVEL,
                                 INKSCAPE_PIXMAPDIR "/join_bevel.xpm",
                                 hb, spw, "join", "bevel");
-    // TRANSLATORS: Bevel join: joining lines with a blunted (flatten) corner.
+    // TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
     //  For an example, draw a triangle with a large stroke width and modify the
     //  "Join" option (in the Fill and Stroke dialog).
     gtk_tooltips_set_tip(tt, tb, _("Bevel join"), NULL);
@@ -1271,6 +1271,7 @@ sp_stroke_style_line_widget_new(void)
     i++;
 
     /* Cap type */
+    // TRANSLATORS: cap type specifies the shape for the ends of lines
     spw_label(t, _("Cap:"), 0, i);
 
     hb = spw_hbox(t, 3, 1, i);
@@ -1279,16 +1280,22 @@ sp_stroke_style_line_widget_new(void)
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_BUTT,
                                 INKSCAPE_PIXMAPDIR "/cap_butt.xpm",
                                 hb, spw, "cap", "butt");
+    // TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
+    //  of the line; the ends of the line are square
     gtk_tooltips_set_tip(tt, tb, _("Butt cap"), NULL);
 
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_ROUND,
                                 INKSCAPE_PIXMAPDIR "/cap_round.xpm",
                                 hb, spw, "cap", "round");
+    // TRANSLATORS: Round cap: the line shape extends beyond the end point of the
+    //  line; the ends of the line are rounded
     gtk_tooltips_set_tip(tt, tb, _("Round cap"), NULL);
 
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_SQUARE,
                                 INKSCAPE_PIXMAPDIR "/cap_square.xpm",
                                 hb, spw, "cap", "square");
+    // TRANSLATORS: Square cap: the line shape extends beyond the end point of the
+    //  line; the ends of the line are square
     gtk_tooltips_set_tip(tt, tb, _("Square cap"), NULL);
 
     i++;
