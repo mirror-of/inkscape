@@ -66,9 +66,8 @@ sp_desktop_dialog (void)
 {
 	if (!dlg) {
 		dlg = sp_desktop_dialog_new ();
-		// if there's an active canvas, attach dialog to it as a transient:
-		if (SP_ACTIVE_DESKTOP && g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window")) 
-			gtk_window_set_transient_for ((GtkWindow *) dlg, (GtkWindow *) g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window"));
+
+		sp_transientize (dlg);
 		//now all uncatched keypresses from the window will be handled:
 		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
 

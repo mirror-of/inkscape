@@ -18,9 +18,17 @@
 #include <math.h>
 #include <string.h>
 #include <glib.h>
+#include <gtk/gtksignal.h>
+#include <gtk/gtknotebook.h>
+#include <gtk/gtkvbox.h>
+#include <gtk/gtkhbox.h>
+#include <gtk/gtklabel.h>
+#include <gtk/gtkoptionmenu.h>
+#include <gtk/gtkmenu.h>
+#include <gtk/gtkmenuitem.h>
+#include <gtk/gtkspinbutton.h>
 
 #include "macros.h"
-
 #include "helper/sp-intl.h"
 #include "helper/window.h"
 #include "helper/unit-menu.h"
@@ -30,6 +38,7 @@
 #include "../desktop.h"
 #include "../desktop-handles.h"
 #include "../sp-namedview.h"
+#include "dialog-events.h"
 
 #include "document-properties.h"
 
@@ -61,6 +70,11 @@ sp_document_dialog (void)
 {
 	if (!dialog) {
 		dialog = sp_doc_dialog_new ();
+
+		sp_transientize (dialog);
+		//now all uncatched keypresses from the window will be handled:
+		gtk_signal_connect (GTK_OBJECT (dialog), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dialog);
+
 		g_signal_connect (G_OBJECT (dialog), "destroy", G_CALLBACK (sp_doc_dialog_destroy), NULL);
 	}
 

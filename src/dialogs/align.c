@@ -38,7 +38,6 @@
 #include "dialog-events.h"
 #include "macros.h"
 
-
 #include "align.h"
 
 /*
@@ -131,7 +130,6 @@ static unsigned int base = SP_ALIGN_LAST;
 static void
 sp_quick_align_dialog_destroy (void)
 {
-	//	if (GTK_WIDGET_VISIBLE (dlg)) gtk_widget_hide (dlg);
 	sp_signal_disconnect_by_data (INKSCAPE, dlg);
 	dlg = NULL;
 }
@@ -157,12 +155,11 @@ sp_quick_align_dialog (void)
 
 		dlg = sp_window_new (_("Align objects"), FALSE);
 
-		// if there's an active canvas, attach dialog to it as a transient:
-		if (SP_ACTIVE_DESKTOP && g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window")) 
-			gtk_window_set_transient_for ((GtkWindow *) dlg, (GtkWindow *) g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window"));
-		g_signal_connect (G_OBJECT (dlg), "destroy", G_CALLBACK (sp_quick_align_dialog_destroy), NULL);
+		sp_transientize (dlg);
 		//now all uncatched keypresses from the window will be handled:
 		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
+
+		g_signal_connect (G_OBJECT (dlg), "destroy", G_CALLBACK (sp_quick_align_dialog_destroy), NULL);
 
 		nb = gtk_notebook_new ();
 		gtk_container_add (GTK_CONTAINER (dlg), nb);
