@@ -37,7 +37,10 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 	case GDK_KEY_PRESS:
 		switch (event->key.keyval) {
 		case GDK_Escape: 
-			gtk_widget_destroy ((GtkWidget *) win);
+			//gtk_widget_destroy ((GtkWidget *) win);
+			if (w = gtk_window_get_transient_for ((GtkWindow *) win)) {
+				gtk_window_present (w);
+			}
 			ret = TRUE; 
 			break;
 		default: 
