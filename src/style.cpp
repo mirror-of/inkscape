@@ -570,7 +570,7 @@ sp_style_read(SPStyle *style, SPObject *object, Inkscape::XML::Node *repr)
     SPS_READ_PENUM_IF_UNSET(&style->stroke_linecap, repr, "stroke-linecap", enum_stroke_linecap, true);
     SPS_READ_PENUM_IF_UNSET(&style->stroke_linejoin, repr, "stroke-linejoin", enum_stroke_linejoin, true);
     SPS_READ_PFLOAT_IF_UNSET(&style->stroke_miterlimit, repr, "stroke-miterlimit");
- 
+
     /* markers */
     if (!style->marker[SP_MARKER_LOC].set) {
         val = repr->attribute("marker");
@@ -999,7 +999,7 @@ sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
                 sp_style_read_iscale24(&style->stroke_opacity, val);
             }
             break;
-               
+
         default:
             g_warning("Invalid style property id: %d value: %s", id, val);
             break;
@@ -1356,13 +1356,13 @@ sp_style_paint_server_release(SPPaintServer *server, SPStyle *style)
         && (server == style->fill.value.paint.server))
     {
         sp_style_paint_clear(style, &style->fill, TRUE, FALSE);
-    } 
+    }
 
     if ((style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)
         && (server == style->stroke.value.paint.server))
     {
         sp_style_paint_clear(style, &style->stroke, TRUE, FALSE);
-    } 
+    }
 }
 
 
@@ -1422,7 +1422,7 @@ sp_style_merge_ipaint(SPStyle *style, SPIPaint *paint, SPIPaint *parent)
             if (paint->value.paint.server) {
                 if (!style->cloned) {
                     sp_object_href(SP_OBJECT(paint->value.paint.server), style);
-                } 
+                }
                 g_signal_connect(G_OBJECT(paint->value.paint.server), "release",
                                  G_CALLBACK(sp_style_paint_server_release), style);
                 g_signal_connect(G_OBJECT(paint->value.paint.server), "modified",
@@ -1444,7 +1444,9 @@ flags. Used with Always for copying an object's complete cascaded style to style
 you need a CSS string for an object in the document tree, you normally call
 sp_style_write_difference instead to take into account the object's parent.
 
+\pre style != NULL.
 \pre flags in {IFSET, ALWAYS}.
+\post ret != NULL.
 */
 gchar *
 sp_style_write_string(SPStyle const *const style, guint const flags)
@@ -1570,7 +1572,9 @@ sp_style_write_string(SPStyle const *const style, guint const flags)
 
 
 /**
- *
+ * \pre from != NULL.
+ * \pre to != NULL.
+ * \post ret != NULL.
  */
 gchar *
 sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
@@ -2260,7 +2264,7 @@ sp_style_read_ipaint(SPIPaint *paint, gchar const *str, SPStyle *style, SPDocume
     while (isspace(*str)) {
         ++str;
     }
- 
+
     if (streq(str, "inherit")) {
         paint->set = TRUE;
         paint->inherit = TRUE;
@@ -2292,7 +2296,7 @@ sp_style_read_ipaint(SPIPaint *paint, gchar const *str, SPStyle *style, SPDocume
                 paint->value.paint.server = SP_PAINT_SERVER(ps);
                 if (!style->cloned) {
                     sp_object_href(SP_OBJECT(paint->value.paint.server), style);
-                } 
+                }
                 g_signal_connect(G_OBJECT(paint->value.paint.server), "release",
                                  G_CALLBACK(sp_style_paint_server_release), style);
                 g_signal_connect(G_OBJECT(paint->value.paint.server), "modified",
@@ -2834,7 +2838,7 @@ sp_style_paint_clear(SPStyle *style, SPIPaint *paint,
     if (hunref && (paint->type == SP_PAINT_TYPE_PAINTSERVER) && paint->value.paint.server) {
         if (!style->cloned) {
             sp_object_hunref(SP_OBJECT(paint->value.paint.server), style);
-        } 
+        }
         // gtk_signal_disconnect_by_data(GTK_OBJECT(paint->value.server),
         //        style);
         g_signal_handlers_disconnect_matched(G_OBJECT(paint->value.paint.server),
@@ -2930,9 +2934,10 @@ sp_css_attr_from_style(SPObject *object, guint flags)
     g_return_val_if_fail(((flags == SP_STYLE_FLAG_IFSET) ||
                           (flags == SP_STYLE_FLAG_ALWAYS)  ),
                          NULL);
-    if (SP_OBJECT_STYLE(object) == NULL)
+    SPStyle const *const style = SP_OBJECT_STYLE(object);
+    if (style == NULL)
         return NULL;
-    gchar *style_str = sp_style_write_string(SP_OBJECT_STYLE(object), flags);
+    gchar *style_str = sp_style_write_string(style, flags);
     SPCSSAttr *css = sp_repr_css_attr_new();
     sp_repr_css_attr_add_from_string(css, style_str);
     g_free(style_str);
@@ -2975,7 +2980,7 @@ sp_css_attr_unset_text(SPCSSAttr *css)
 bool
 is_url(char const *p)
 {
-    if (p == NULL) 
+    if (p == NULL)
         return false;
 // FIXME: I'm not sure if this applies to SVG as well, but CSS2 says any URIs in property values must start with 'url('
     return (g_ascii_strncasecmp(p, "url(", 4) == 0);
