@@ -1,5 +1,10 @@
 2004-01-26 MenTaLguY <mental@rydia.net>
 
+	* src/sp-marker.h: added a URIReference subclass for markers
+
+	* src/sp-path.cpp: fixed backwards-compatiblilty thing with
+	  (ancient) Sodipodi
+
 	* src/xml/repr-action.c, src/xml/repr-action.h,
 	  src/xml/repr-private.h, src/xml/repr.cpp:
 
