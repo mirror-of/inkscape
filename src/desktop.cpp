@@ -972,12 +972,12 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 			GtkWidget *close_box;
 			GtkWidget *close_align;
 			GtkWidget *hbox1;
-			char markup[255];
+			char markup[256];
 			gint b;
 			
 			// The dialog label
 			g_snprintf(markup,
-				255,
+				256,
 			        "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before closing?</span>\n\n" \
 			        "If you close without saving, your changes will be discarded.",
 				SP_DOCUMENT_NAME(doc));
