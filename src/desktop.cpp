@@ -386,6 +386,10 @@ static void sp_desktop_set_namedview (SPDesktop *desktop, SPNamedView* namedview
 
 /* Constructor */
 
+/**
+ * \pre namedview != NULL.
+ * \pre canvas != NULL.
+ */
 static SPView *
 sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 {
@@ -736,7 +740,7 @@ sp_desktop_get_default_metric (SPDesktop *dt)
     if (sp_desktop_get_default_unit (dt))
         return sp_unit_get_metric (sp_desktop_get_default_unit (dt));
     else
-        return SP_DEFAULT_METRIC;
+        return SP_PT;
 }
 
 SPItem *
