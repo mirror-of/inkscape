@@ -53,12 +53,12 @@ static void compare_ctlpts(Point const est_b[], Point const exp_est_b[])
                diff_mask);
         printf(" Previous:");
         for (unsigned i = 0; i < 4; ++i) {
-            printf(" (%g, %g)", exp_est_b[i][0], exp_est_b[i][1]);
+            printf(" (%g, %g)", exp_est_b[i][0], exp_est_b[i][1]); // localizing ok
         }
         putchar('\n');
         printf(" Found:   ");
         for (unsigned i = 0; i < 4; ++i) {
-            printf(" (%g, %g)", est_b[i][0], est_b[i][1]);
+            printf(" (%g, %g)", est_b[i][0], est_b[i][1]); // localizing ok
         }
         putchar('\n');
     }
@@ -78,8 +78,7 @@ static void compare_rms(Point const est_b[], double const t[], Point const d[], 
     if ( rms_error < exp_rms_error - 1.1e-6 ) {
         /* The fitter code appears to have improved [or the floating point calculations differ
            on this machine from the machine where exp_rms_error was calculated]. */
-        printf("N.B. rms_error regression requirement can be decreased: have rms_error=%g.\n",
-               rms_error);
+        printf("N.B. rms_error regression requirement can be decreased: have rms_error=%g.\n", rms_error); // localizing ok
     }
 }
 

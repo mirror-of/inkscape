@@ -104,7 +104,7 @@ void  Path::DashPolyline(float head,float tail,float body,int nbD,float *dashs,b
     int        nm;
     if ( back ) np=((path_lineto_b*)pts)[i].p; else np=((path_lineto*)pts)[i].p;
     if ( back ) nm=((path_lineto_b*)pts)[i].isMoveTo; else nm=((path_lineto*)pts)[i].isMoveTo;
-    printf("(%f %f  %i) ",np[0],np[1],nm);
+    printf("(%f %f  %i) ",np[0],np[1],nm); // localizing ok
   }
   printf("\n");*/
 }
@@ -113,15 +113,15 @@ void  Path::DashPolyline(float head,float tail,float body,int nbD,float *dashs,b
 
 void Path::DashSubPath(int spL,char* spP,float head,float tail,float body,int nbD,float *dashs,bool stPlain,float stOffset)
 {
-/*  printf("%f [%f : %i ",head,body,nbD);
-  for (int i=0;i<nbD;i++) printf("%f ",dashs[i]);
-  printf("]* %f\n",tail);
+/*  printf("%f [%f : %i ",head,body,nbD); // localizing ok
+  for (int i=0;i<nbD;i++) printf("%f ",dashs[i]); // localizing ok
+  printf("]* %f\n",tail); // localizing ok
   for (int i=0;i<spL;i++) {
     NR::Point  np;
     int        nm;
     if ( back ) np=((path_lineto_b*)spP)[i].p; else np=((path_lineto*)spP)[i].p;
     if ( back ) nm=((path_lineto_b*)spP)[i].isMoveTo; else nm=((path_lineto*)spP)[i].isMoveTo;
-    printf("(%f %f  %i) ",np[0],np[1],nm);
+    printf("(%f %f  %i) ",np[0],np[1],nm); // localizing ok
   }
   printf("\n");*/
 

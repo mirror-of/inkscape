@@ -320,7 +320,7 @@ nr_svp_render (NRSVP *svp, unsigned char *px, unsigned int bpp, unsigned int rs,
             }
 #ifdef NR_VERBOSE
             if ((localval < -0.01) || (localval > 1.01)) {
-                printf ("Weird localval %g : gv %g\n", localval, globalval);
+                printf ("Weird localval %g : gv %g\n", localval, globalval); // localizing ok
             }
 #endif
             localval = CLAMP (localval, 0.0F, 1.0F);

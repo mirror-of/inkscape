@@ -91,9 +91,9 @@ main (int argc, const char **argv)
 		}
 		end = get_time ();
 	}
-	printf ("Did %d [64x64] random buffers in %f sec\n", count, end - start);
-	printf ("%f buffers per second\n", count / (end - start));
-	printf ("%f pixels per second\n", count * (64 * 64) / (end - start));
+	printf ("Did %d [64x64] random buffers in %f sec\n", count, end - start); // localizing ok
+	printf ("%f buffers per second\n", count / (end - start)); // localizing ok
+	printf ("%f pixels per second\n", count * (64 * 64) / (end - start)); // localizing ok
 
 	return 0;
 }

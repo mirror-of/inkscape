@@ -86,12 +86,11 @@ sp_svg_transform_read (const gchar *str, NRMatrix *transform)
 			if (g_ascii_isdigit (c) || c == '+' || c == '-' || c == '.') {
 				if (n_args == sizeof (args) / sizeof (args[0])) return 0; /* Too many args */
 				args[n_args] = g_ascii_strtod (str + idx, &end_ptr);
-				/*
-				printf("took %d chars from '%s' to make %f\n",
-						end_ptr-(str+idx),
-						str+idx,
-						args[n_args]);
-				*/
+				
+				//printf("took %d chars from '%s' to make %f\n",
+				//		end_ptr-(str+idx),
+				//		str+idx,
+				//		args[n_args]);
 
 				idx = end_ptr - (char *) str;
 

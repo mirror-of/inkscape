@@ -1081,7 +1081,7 @@ bool  insert_cache(NRArenaItem* owner,int th,int tv,NRPixBlock *ipb,NRPixBlock *
   hitMissCount++;
   if ( hitMissCount > 100 ) {
     hitMissCount=0;
-    printf("hit/miss = %f  used/total=%i/%i\n",(misses>0.001)?hits/misses:100000.0,nbEnt,hash_max);
+    printf("hit/miss = %f  used/total=%i/%i\n",(misses>0.001)?hits/misses:100000.0,nbEnt,hash_max); // localizing ok
   }
 #endif
   int    key=hash_that(owner,th,tv);

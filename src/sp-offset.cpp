@@ -447,12 +447,12 @@ sp_offset_description (SPItem * item)
   char tempSt[256];
   if (offset->rad > 0)
   {
-    sprintf (tempSt, "Path outset by %f pt", offset->rad);
+    sprintf (tempSt, "Path outset by %f pt", offset->rad); // localizing ok
     return g_strdup (tempSt);
   }
   if (offset->rad < 0)
   {
-    sprintf (tempSt, "Path inset by %f pt", -offset->rad);
+    sprintf (tempSt, "Path inset by %f pt", -offset->rad); // localizing ok
     return g_strdup (tempSt);
   }
   return g_strdup ("Offset by 0pt = original path");

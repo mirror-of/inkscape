@@ -586,10 +586,10 @@ void             FloatLigne::Flatten(void)
 void             FloatLigne::Affiche(void)
 {
 	printf("%i : \n",nbBord);
-	for (int i=0;i<nbBord;i++) printf("(%f %f %f %i) ",bords[i].pos,bords[i].val,bords[i].pente,(bords[i].start?1:0));
+	for (int i=0;i<nbBord;i++) printf("(%f %f %f %i) ",bords[i].pos,bords[i].val,bords[i].pente,(bords[i].start?1:0)); // localization ok
 	printf("\n");
 	printf("%i : \n",nbRun);
-	for (int i=0;i<nbRun;i++) printf("(%f %f -> %f %f / %f) ",runs[i].st,runs[i].vst,runs[i].en,runs[i].ven,runs[i].pente);
+	for (int i=0;i<nbRun;i++) printf("(%f %f -> %f %f / %f) ",runs[i].st,runs[i].vst,runs[i].en,runs[i].ven,runs[i].pente); // localization ok
 	printf("\n");
 }
 
@@ -1223,7 +1223,7 @@ void             IntLigne::Affiche(void)
 {
 	printf("%i : \n",nbRun);
 	for (int i=0;i<nbRun;i++)
-		printf("(%i %f -> %i %f) ",runs[i].st,runs[i].vst,runs[i].en,runs[i].ven);
+		printf("(%i %f -> %i %f) ",runs[i].st,runs[i].vst,runs[i].en,runs[i].ven); // localization ok
 	printf("\n");
 }
 

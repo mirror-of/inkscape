@@ -64,37 +64,37 @@ Path::Affiche(void)
       case descr_lineto:
       {
         path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + descr_cmd[i].dStart );
-        printf("  l %f %f",nData->p[0],nData->p[1]);
+        printf("  l %f %f",nData->p[0],nData->p[1]); // localizing ok
       }
         break;
       case descr_moveto:
       {
         path_descr_moveto *nData = reinterpret_cast<path_descr_moveto *>( descr_data + descr_cmd[i].dStart );
-        printf("  m %f %f",nData->p[0],nData->p[1]);
+        printf("  m %f %f",nData->p[0],nData->p[1]); // localizing ok
       }
         break;
       case descr_arcto:
       {
         path_descr_arcto *nData = reinterpret_cast<path_descr_arcto *>( descr_data + descr_cmd[i].dStart );
-        printf("  a %f %f %f %f %f %i %i",nData->p[0],nData->p[1],nData->rx,nData->ry,nData->angle,((nData->clockwise)?1:0),((nData->large)?1:0));
+        printf("  a %f %f %f %f %f %i %i",nData->p[0],nData->p[1],nData->rx,nData->ry,nData->angle,((nData->clockwise)?1:0),((nData->large)?1:0)); // localizing ok
       }
         break;
       case descr_cubicto:
       {
         path_descr_cubicto *nData = reinterpret_cast<path_descr_cubicto *>( descr_data + descr_cmd[i].dStart );
-        printf("  c %f %f %f %f %f %f",nData->p[0],nData->p[1],nData->stD[0],nData->stD[1],nData->enD[0],nData->enD[1]);
+        printf("  c %f %f %f %f %f %f",nData->p[0],nData->p[1],nData->stD[0],nData->stD[1],nData->enD[0],nData->enD[1]); // localizing ok
       }
         break;
       case descr_bezierto:
       {
         path_descr_bezierto *nData = reinterpret_cast<path_descr_bezierto *>( descr_data + descr_cmd[i].dStart );
-        printf("  b %f %f %i",nData->p[0],nData->p[1],nData->nb);
+        printf("  b %f %f %i",nData->p[0],nData->p[1],nData->nb); // localizing ok
       }
         break;
       case descr_interm_bezier:
       {
         path_descr_intermbezierto *nData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + descr_cmd[i].dStart );
-        printf("  i %f %f",nData->p[0],nData->p[1]);
+        printf("  i %f %f",nData->p[0],nData->p[1]); // localizing ok
       }
         break;
     }

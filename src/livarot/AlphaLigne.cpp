@@ -34,7 +34,7 @@ void						 AlphaLigne::Affiche(void)
 {
 	printf("%i steps\n",nbStep);
 	for (int i=0;i<nbStep;i++) {
-		printf("(%i %f) ",steps[i].x,steps[i].delta);
+		printf("(%i %f) ",steps[i].x,steps[i].delta); // localization ok
 	}
 	printf("\n");
 }

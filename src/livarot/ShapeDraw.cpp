@@ -52,14 +52,14 @@ Shape::Plot (double ix, double iy, double ir, double mx, double my, bool doPoint
 		for (int i=0;i<nbPt;i++) {
 			double   ph=(pts[i].x[0]-ix)*ir+mx;
 			double   pv=(pts[i].x[1]-iy)*ir+my;
-      fprintf(outFile,"     <circle cx=\"%f\" cy=\"%f\" r=\"5\" fill=\"none\" stroke=\"red\" stroke-width=\"0.25\" />\n",ph,pv);
+      fprintf(outFile,"     <circle cx=\"%f\" cy=\"%f\" r=\"5\" fill=\"none\" stroke=\"red\" stroke-width=\"0.25\" />\n",ph,pv); // localizing ok
     }
 	}
   if ( pointsNo ) {
 		for (int i=0;i<nbPt;i++) {
 			double   ph=(pts[i].x[0]-ix)*ir+mx;
 			double   pv=(pts[i].x[1]-iy)*ir+my;
-      fprintf(outFile,"     <text x=\"%f\" y=\"%f\" font-family=\"Monaco\" font-size=\"5\" fill=\"blue\" >\n",ph-2,pv+1);
+      fprintf(outFile,"     <text x=\"%f\" y=\"%f\" font-family=\"Monaco\" font-size=\"5\" fill=\"blue\" >\n",ph-2,pv+1); // localizing ok
       fprintf(outFile,"%i\n",i);
       fprintf(outFile,"     </text>\n");
     }
@@ -76,9 +76,9 @@ Shape::Plot (double ix, double iy, double ir, double mx, double my, bool doPoint
 			if ( doDir ) {
 				double   endh=(9*eh+1*sh)/10;
 				double   endv=(9*ev+1*sv)/10;
-        fprintf(outFile,"     <line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" stroke=\"black\" stroke-width=\"0.5\" />\n",sh,sv,endh,endv);
+        fprintf(outFile,"     <line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" stroke=\"black\" stroke-width=\"0.5\" />\n",sh,sv,endh,endv); // localizing ok
 			} else {
-        fprintf(outFile,"     <line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" stroke=\"black\" stroke-width=\"0.5\" />\n",sh,sv,eh,ev);
+        fprintf(outFile,"     <line x1=\"%f\" y1=\"%f\" x2=\"%f\" y2=\"%f\" stroke=\"black\" stroke-width=\"0.5\" />\n",sh,sv,eh,ev); // localizing ok
 			}
 		}
 	}
@@ -91,7 +91,7 @@ Shape::Plot (double ix, double iy, double ir, double mx, double my, bool doPoint
 			double   sv=(pts[stP].x[1]-iy)*ir+my;
 			double   eh=(pts[enP].x[0]-ix)*ir+mx;
 			double   ev=(pts[enP].x[1]-iy)*ir+my;
-      fprintf(outFile,"     <text x=\"%f\" y=\"%f\" font-family=\"Monaco\" font-size=\"5\" fill=\"blue\" >\n",(sh+eh)/2+2,(sv+ev)/2);
+      fprintf(outFile,"     <text x=\"%f\" y=\"%f\" font-family=\"Monaco\" font-size=\"5\" fill=\"blue\" >\n",(sh+eh)/2+2,(sv+ev)/2); // localizing ok
       fprintf(outFile,"%i\n",i);
       fprintf(outFile,"     </text>\n");
 		}

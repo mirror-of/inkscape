@@ -2,6 +2,15 @@
 
 	* src/extension/internal/ps.h, src/extension/internal/ps.cpp:
 	  Hopefully fixed the locale problems in the PS output generator.
+	* src/sp-offset.cpp, src/display/bezier-utils-test.cpp,
+	  src/display/nr-arena-item.cpp, src/libnr/nr-svp-render.cpp,
+	  src/libnr/testnr.cpp, src/livarot/AlphaLigne.cpp,
+	  src/livarot/Ligne.cpp, src/livarot/Path.cpp,
+	  src/livarot/PathCutting.cpp, src/livarot/Shape.cpp,
+	  src/livarot/ShapeDraw.cpp, src/livarot/ShapeSweep.cpp,
+	  src/svg/svg-affine.cpp: added comments and notes to all remaining
+	  "printf"ish calls that have %g or %f in them.  Most are just debug
+	  output, etc.  Hopefully we are actually free of locale bugs!  :)
 
 2004-05-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 

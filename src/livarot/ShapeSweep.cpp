@@ -261,7 +261,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     {
 /*		if ( nbPt > 0 && pts[nbPt-1].y >= 250.4 && pts[nbPt-1].y <= 250.6 ) {
 			for (int i=0;i<sEvts.nbEvt;i++) {
-				printf("%f %f %i %i\n",sEvts.events[i].posx,sEvts.events[i].posy,sEvts.events[i].leftSweep->bord,sEvts.events[i].rightSweep->bord);
+				printf("%f %f %i %i\n",sEvts.events[i].posx,sEvts.events[i].posy,sEvts.events[i].leftSweep->bord,sEvts.events[i].rightSweep->bord); // localizing ok
 			}
 			//		cout << endl;
 			if ( sTree.racine ) {
@@ -1061,7 +1061,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   while (curAPt < a->nbPt || curBPt < b->nbPt || sEvts.nbEvt > 0)
     {
 /*		for (int i=0;i<sEvts.nbEvt;i++) {
-			printf("%f %f %i %i\n",sEvts.events[i].posx,sEvts.events[i].posy,sEvts.events[i].leftSweep->bord,sEvts.events[i].rightSweep->bord);
+			printf("%f %f %i %i\n",sEvts.events[i].posx,sEvts.events[i].posy,sEvts.events[i].leftSweep->bord,sEvts.events[i].rightSweep->bord); // localizing ok
 		}
 		//		cout << endl;
 		if ( sTree.racine ) {
@@ -3215,6 +3215,8 @@ Shape::AddChgt (int lastPointNo, int lastChgtPt, Shape * &shapeHead,
 	}
     }
 }
+
+// is this a debug function?  It's calling localized "printf" ...
 void
 Shape::Validate (void)
 {
