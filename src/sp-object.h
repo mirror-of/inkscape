@@ -167,7 +167,13 @@ void sp_object_invoke_release (SPObject *object);
 
 void sp_object_set (SPObject *object, unsigned int key, const gchar *value);
 
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
 void sp_object_read_attr (SPObject *object, const gchar *key);
+#ifdef __cplusplus
+};
+#endif // __cplusplus
 
 /* Styling */
 

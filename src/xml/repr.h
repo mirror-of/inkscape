@@ -38,12 +38,15 @@ const  char *sp_xml_ns_prefix_uri (const gchar *prefix);
 
 /* SPXMLDocument */
 
+#ifdef __cplusplus
 extern "C" {
+#endif // __cplusplus
 SPXMLText *sp_xml_document_createTextNode (SPXMLDocument *doc, const gchar *content);
 SPXMLElement *sp_xml_document_createElement (SPXMLDocument *doc, const gchar *name);
 SPXMLElement *sp_xml_document_createElementNS (SPXMLDocument *doc, const gchar *ns, const  char *qname);
+#ifdef __cplusplus
 };
-
+#endif // __cplusplus
 /* SPXMLNode */
 
 SPXMLDocument *sp_xml_node_get_Document (SPXMLNode *node);
@@ -60,13 +63,17 @@ typedef struct _SPRepr SPRepr;
 
 /* Create new repr & similar */
 
+#ifdef __cplusplus
 extern "C" {
+#endif // __cplusplus
 SPRepr *sp_repr_new (const gchar *name);
 SPRepr *sp_repr_new_text (const gchar *content);
 SPRepr *sp_repr_ref (SPRepr *repr);
 SPRepr *sp_repr_unref (SPRepr *repr);
 SPRepr *sp_repr_duplicate (const SPRepr *repr);
+#ifdef __cplusplus
 };
+#endif // __cplusplus
 
 /* Documents - 1st step in migrating to real XML */
 
@@ -116,14 +123,17 @@ SPRepr *sp_repr_parent (SPRepr *repr);
 SPRepr *sp_repr_children (SPRepr *repr);
 SPRepr *sp_repr_next (SPRepr *repr);
 
+#ifdef __cplusplus
 extern "C" {
+#endif // __cplusplus
 unsigned int sp_repr_add_child (SPRepr * repr, SPRepr * child, SPRepr * ref);
 unsigned int sp_repr_remove_child (SPRepr * repr, SPRepr * child);
 void sp_repr_write_stream (SPRepr * repr, FILE * file, int level);
 
-#if 0
-const GList *sp_repr_get_children_list (SPRepr * repr);
-#endif
+//#if 0
+//const GList *sp_repr_get_children_list (SPRepr * repr);
+//#endif
+
 int sp_repr_n_children (SPRepr * repr);
 
 /* IO */
@@ -174,7 +184,9 @@ int sp_repr_get_int_attribute (SPRepr * repr, const gchar * key, int def);
 unsigned int sp_repr_set_double_attribute (SPRepr * repr, const gchar * key, double value);
 unsigned int sp_repr_set_int_attribute (SPRepr * repr, const gchar * key, int value);
 
+#ifdef __cplusplus
 };
+#endif // __cplusplus
 
 int sp_repr_compare_position (SPRepr * first, SPRepr * second);
 

@@ -18,7 +18,7 @@
 #ifdef WITH_MMX
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // __cplusplus
 /* fixme: */
 int nr_have_mmx (void);
 void nr_mmx_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM_0 (unsigned char *px, int w, int h, int rs,
@@ -30,7 +30,7 @@ void nr_mmx_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM_n (unsigned char *px, int
 #define NR_PIXOPS_MMX (1 && nr_have_mmx ())
 #ifdef __cplusplus
 };
-#endif
+#endif __cplusplus
 #endif
 
 /* fixme: Implement missing (Lauris) */
