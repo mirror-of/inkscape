@@ -249,6 +249,9 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				}
 			}
 
+			if (fabs (A) < 1e-4)
+				A = 0; // suppress exponentials, CSS does not allow that
+
 			// remember color
 			dc->R = R;
 			dc->G = G;
