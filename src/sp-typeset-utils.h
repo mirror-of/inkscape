@@ -5,21 +5,11 @@
  * layout utilities for the typeset element
  */
 
-#include <config.h>
+#include <pango/pango-attributes.h>
 
-#include "style.h"
-#include "attributes.h"
-
+#include <libnr/nr-forward.h>
+#include <livarot/livarot-forward.h>
 #include "sp-typeset.h"
-
-#include "display/curve.h"
-#include "livarot/Path.h"
-#include "livarot/Ligne.h"
-#include "livarot/Shape.h"
-#include "livarot/LivarotDefs.h"
-
-#include <pango/pango.h>
-#include <glib.h>
 
 class text_wrapper;
 
@@ -239,3 +229,11 @@ public:
 
 #endif
 
+/*
+  Local Variables:
+  mode:c++
+  tab-width:2
+  fill-column:99
+  End:
+*/
+//vim: filetype=cpp:shiftwidth=2:tabstop=2 :
