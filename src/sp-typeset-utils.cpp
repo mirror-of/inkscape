@@ -33,9 +33,9 @@
 #include <pango/pango-engine.h>
 #include <pango/pango-context.h>
 //#include <pango/pangoxft.h>
-#ifdef WITH_XFT
-#include <pango/pangoft2.h>
-#endif
+//#ifdef WITH_XFT
+//#include <pango/pangoft2.h>
+//#endif
 #include <gdk/gdk.h>
 
 #define pango_to_ink  0.0009765625
@@ -846,17 +846,17 @@ box_solution   dest_shape_chunker::NextLine(box_solution& after,double asc,doubl
  *
  */
 
-#ifdef WITH_XFT
-PangoFontMap  *theFontMap=NULL;
-#endif
+//#ifdef WITH_XFT
+//PangoFontMap  *theFontMap=NULL;
+//#endif
 
 pango_text_chunker::pango_text_chunker(text_with_info* inText,char* font_family,double font_size,int flags):text_chunker(inText->UTF8Text())
 {
-#ifdef WITH_XFT
-  if ( theFontMap == NULL ) {
-    theFontMap=pango_ft2_font_map_new();
-  }
-#endif
+//#ifdef WITH_XFT
+//  if ( theFontMap == NULL ) {
+//    theFontMap=pango_ft2_font_map_new();
+//  }
+//#endif
   
   theText=inText;
   own_text=false;
@@ -1161,10 +1161,25 @@ void                         pango_text_chunker::AddBox(int st,int en,bool whit,
       charas[j].y_pos=cumul[1];
       if ( cumul[1] < min_y ) min_y=cumul[1];
       if ( cumul[1] > max_y ) max_y=cumul[1];
-      charas[j].x_dpos=pango_to_ink*((double)(from->glyphs[cur_g].geometry.x_offset));
-      charas[j].y_dpos=pango_to_ink*((double)(from->glyphs[cur_g].geometry.y_offset));
+      if ( cur_g < from->num_glyphs ) {
+        charas[j].x_dpos=pango_to_ink*((double)(from->glyphs[cur_g].geometry.x_offset));
+        charas[j].y_dpos=pango_to_ink*((double)(from->glyphs[cur_g].geometry.y_offset));
+      } else {
+        charas[j].x_dpos=0;
+        charas[j].y_dpos=0;
+     }
     }
-    NR::Point t_adv=nr_font_glyph_advance_get (inkFont, from->glyphs[cur_g].glyph);
+    NR::Point t_adv;
+    if ( cur_g < from->num_glyphs ) {
+      if ( from->glyphs[cur_g].glyph > 10000 ) {
+        // probably a return; i need a way to track these before they're "converted" to glyphs
+        t_adv=NR::Point(0,0);
+      } else {
+        t_adv=nr_font_glyph_advance_get (inkFont, from->glyphs[cur_g].glyph);
+      }
+    } else {
+      t_adv=NR::Point(0,0);
+    }
     charas[i].x_adv=t_adv[0];
 //    charas[i].x_adv=pango_to_ink*((double)(from->glyphs[cur_g].geometry.width));
     cur_pos+=charas[i].x_adv;
@@ -1195,15 +1210,15 @@ void                         pango_text_chunker::SetTextWithAttrs(text_with_info
   PangoFontDescription* pfd;
   PangoLogAttr*         pAttrs;
   
-#ifdef WITH_XFT
-  if ( theFontMap ) {
-    pContext=pango_ft2_font_map_create_context((PangoFT2FontMap*)theFontMap);
-  } else {
-    pContext=gdk_pango_context_get();
-  }
-#else
+//#ifdef WITH_XFT
+//  if ( theFontMap ) {
+//    pContext=pango_ft2_font_map_create_context((PangoFT2FontMap*)theFontMap);
+//  } else {
+//    pContext=gdk_pango_context_get();
+//  }
+//#else
   pContext=gdk_pango_context_get();
-#endif
+//#endif
   pfd = pango_font_description_from_string (theFace);
   pango_font_description_set_size (pfd,(int)(ink_to_pango*theSize));
   pango_context_set_font_description(pContext,pfd);
