@@ -32,6 +32,7 @@
 #define SP_MODULE_KEY_OUTPUT_SVG "org.inkscape.output.svg.plain"
 /** This is an output file that has SVG data with the Sodipodi namespace extensions */
 #define SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "org.inkscape.output.svg.inkscape"
+#define SP_MODULE_KEY_OUTPUT_SVGZ_INKSCAPE "org.inkscape.output.svgz.inkscape"
 /** Which output module should be used? */
 #define SP_MODULE_KEY_OUTPUT_DEFAULT SP_MODULE_KEY_AUTODETECT
 

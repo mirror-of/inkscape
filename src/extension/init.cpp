@@ -31,6 +31,7 @@
 #include "db.h"
 #include "implementation/script.h"
 #include "internal/svg.h"
+#include "internal/svgz.h"
 #include "internal/ps.h"
 #ifdef WITH_GNOME_PRINT
 #include "internal/gnome.h"
@@ -103,6 +104,7 @@ init (void)
 {
 	/* TODO: Change to Internal */
 	Internal::Svg::init();
+	Internal::Svgz::init();
 	Internal::PsOutput::init();
 	Internal::EpsOutput::init();
 	Internal::PrintPS::init();
