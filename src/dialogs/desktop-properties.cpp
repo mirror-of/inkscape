@@ -17,6 +17,7 @@
 #include <locale>
 #include <sstream>
 #include <utility>  // pair
+#include <algorithm>  // swap
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
@@ -525,27 +526,25 @@ sp_doc_dialog_paper_selected(GtkWidget *widget, gpointer data)
 static void
 sp_doc_dialog_paper_orientation_selected(GtkWidget *widget, gpointer data)
 {
-    gdouble w, h, t;
-    GtkAdjustment *aw, *ah;
-
     if (gtk_object_get_data(GTK_OBJECT(dlg), "update")) {
         return;
     }
 
-    aw = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "width");
-    ah = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "height");
+    GtkAdjustment *aw = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "width");
+    GtkAdjustment *ah = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dlg), "height");
 
-    w = gtk_adjustment_get_value(aw);
-    h = gtk_adjustment_get_value(ah);
+    gdouble w = gtk_adjustment_get_value(aw);
+    gdouble h = gtk_adjustment_get_value(ah);
 
     /* only toggle when we actually swap */
     GtkWidget *om = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(dlg), "orientation");
-    gint landscape = gtk_option_menu_get_history(GTK_OPTION_MENU(om));
+    gint const landscape = gtk_option_menu_get_history(GTK_OPTION_MENU(om));
 
-    if ((w > h && !landscape) ||
-        (w < h &&  landscape)   )
+    if ( landscape
+         ? (w < h)
+         : (w > h) )
     {
-        t = w; w = h; h = t;
+        std::swap(w, h);
     }
 
     gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(TRUE));
@@ -1711,4 +1710,4 @@ sp_color_picker_clicked(GObject *cp, void *data)
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
