@@ -38,7 +38,7 @@ void            Path::ConvertWithBackData(double treshhold)
 	
 	// le moveto
   {
-    int firstTyp=descr_cmd[0].getType();
+    int firstTyp=descr_cmd[0]->getType();
     if ( firstTyp == descr_moveto ) {
       curX=((path_descr_moveto*)(descr_data))->p;
     } else {
@@ -49,7 +49,7 @@ void            Path::ConvertWithBackData(double treshhold)
   }
 	// et le reste, 1 par 1
 	while ( curP < int(descr_cmd.size()) ) {
-            path_descr*  curD=&descr_cmd[curP];
+            path_descr*  curD=descr_cmd[curP];
 		int          nType=curD->getType();
 		NR::Point    nextX;
 		if ( nType == descr_forced ) {
@@ -90,7 +90,7 @@ void            Path::ConvertWithBackData(double treshhold)
 			int   nbInterm=nBData->nb;
 			nextX=nBData->p;
 			
-			curD=&descr_cmd[curP+1];
+			curD=descr_cmd[curP+1];
 			path_descr* intermPoints=curD;
       path_descr_intermbezierto*  nData=(path_descr_intermbezierto*)(descr_data+intermPoints->dStart);
 			
@@ -175,7 +175,7 @@ void            Path::ConvertForOffset(double treshhold,Path* orig,double off_de
 	
 	// le moveto
   {
-    int firstTyp=descr_cmd[0].getType();
+    int firstTyp=descr_cmd[0]->getType();
     if ( firstTyp == descr_moveto ) {
       curX=((path_descr_moveto*)(descr_data))->p;
     } else {
@@ -191,7 +191,7 @@ void            Path::ConvertForOffset(double treshhold,Path* orig,double off_de
 	
 	// et le reste, 1 par 1
 	while ( curP < int(descr_cmd.size()) ) {
-            path_descr*  curD=&descr_cmd[curP];
+            path_descr*  curD=descr_cmd[curP];
 		int          nType=curD->getType();
 		NR::Point    nextX;
 		if ( nType == descr_forced ) {
@@ -248,7 +248,7 @@ void            Path::ConvertForOffset(double treshhold,Path* orig,double off_de
 			int   nbInterm=nBData->nb;
 			nextX=nBData->p;
 			
-			curD=&descr_cmd[curP+1];
+			curD=descr_cmd[curP+1];
 			path_descr* intermPoints=curD;
       path_descr_intermbezierto*  nData=(path_descr_intermbezierto*)(descr_data+intermPoints->dStart);
 			
@@ -349,7 +349,7 @@ void            Path::Convert(double treshhold)
 	
 	// le moveto
   {
-    int firstTyp=descr_cmd[0].getType();
+    int firstTyp=descr_cmd[0]->getType();
     if ( firstTyp == descr_moveto ) {
       curX=((path_descr_moveto*)(descr_data))->p;
     } else {
@@ -358,11 +358,11 @@ void            Path::Convert(double treshhold)
     }
     lastMoveTo=AddPoint(curX,true);
   }
-	descr_cmd[0].associated=lastMoveTo;
+	descr_cmd[0]->associated=lastMoveTo;
 	
 	// et le reste, 1 par 1
 	while ( curP < int(descr_cmd.size()) ) {
-            path_descr*  curD=&descr_cmd[curP];
+            path_descr*  curD=descr_cmd[curP];
 		int          nType=curD->getType();
 		NR::Point    nextX;
 		if ( nType == descr_forced ) {
@@ -435,7 +435,7 @@ void            Path::Convert(double treshhold)
 			path_descr* curBD=curD;
 			
 			curP++;
-			curD=&descr_cmd[curP];
+			curD=descr_cmd[curP];
 			path_descr* intermPoints=curD;
       path_descr_intermbezierto*  nData=(path_descr_intermbezierto*)(descr_data+intermPoints->dStart);
 			
@@ -540,7 +540,7 @@ void            Path::ConvertEvenLines(double treshhold)
 	
 	// le moveto
   {
-    int firstTyp=descr_cmd[0].getType();
+    int firstTyp=descr_cmd[0]->getType();
     if ( firstTyp == descr_moveto ) {
       curX=((path_descr_moveto*)(descr_data))->p;
     } else {
@@ -549,11 +549,11 @@ void            Path::ConvertEvenLines(double treshhold)
     }
     lastMoveTo=AddPoint(curX,true);
   }
-	descr_cmd[0].associated=lastMoveTo;
+	descr_cmd[0]->associated=lastMoveTo;
 	
 	// et le reste, 1 par 1
 	while ( curP < int(descr_cmd.size()) ) {
-            path_descr*  curD=&descr_cmd[curP];
+            path_descr*  curD=descr_cmd[curP];
 		int          nType=curD->getType();
 		NR::Point    nextX;
 		if ( nType == descr_forced ) {
@@ -646,7 +646,7 @@ void            Path::ConvertEvenLines(double treshhold)
 			path_descr*  curBD=curD;
 			
 			curP++;
-			curD=&descr_cmd[curP];
+			curD=descr_cmd[curP];
 			path_descr* intermPoints=curD;
       path_descr_intermbezierto*  nData=(path_descr_intermbezierto*)(descr_data+intermPoints->dStart);
 			
@@ -735,25 +735,25 @@ const NR::Point Path::PrevPoint(int i) const
 	/* TODO: I suspect this should assert `(unsigned) i < descr_nb'.  We can probably change
 	   the argument to unsigned.  descr_nb should probably be changed to unsigned too. */
 	g_assert( i >= 0 );
-	switch ( descr_cmd[i].getType() ) {
+	switch ( descr_cmd[i]->getType() ) {
 		case descr_moveto: {
-			path_descr_moveto *nData=(path_descr_moveto*)(descr_data+descr_cmd[i].dStart);
+			path_descr_moveto *nData=(path_descr_moveto*)(descr_data+descr_cmd[i]->dStart);
 			return nData->p;
 		}
 		case descr_lineto: {
-			path_descr_lineto *nData=(path_descr_lineto*)(descr_data+descr_cmd[i].dStart);
+			path_descr_lineto *nData=(path_descr_lineto*)(descr_data+descr_cmd[i]->dStart);
 			return nData->p;
 		}
 		case descr_arcto: {
-			path_descr_arcto *nData=(path_descr_arcto*)(descr_data+descr_cmd[i].dStart);
+			path_descr_arcto *nData=(path_descr_arcto*)(descr_data+descr_cmd[i]->dStart);
 			return nData->p;
 		}
 		case descr_cubicto: {
-			path_descr_cubicto *nData=(path_descr_cubicto*)(descr_data+descr_cmd[i].dStart);
+			path_descr_cubicto *nData=(path_descr_cubicto*)(descr_data+descr_cmd[i]->dStart);
 			return nData->p;
 		}
 		case descr_bezierto: {
-			path_descr_bezierto *nData=(path_descr_bezierto*)(descr_data+descr_cmd[i].dStart);
+			path_descr_bezierto *nData=(path_descr_bezierto*)(descr_data+descr_cmd[i]->dStart);
 			return nData->p;
 		}
 		case descr_interm_bezier:
@@ -762,7 +762,7 @@ const NR::Point Path::PrevPoint(int i) const
 			return PrevPoint(i-1);
 		default:
 			g_assert_not_reached();
-			return descr_data[descr_cmd[i].dStart];
+			return descr_data[descr_cmd[i]->dStart];
 	}
 }
 

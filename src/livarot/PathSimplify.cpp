@@ -1281,7 +1281,7 @@ Path::Coalesce (double tresh)
   // As the elements are stored in a separate tableau, it's no longer worth optimizing the rewriting in the same tableau.
   // [[comme les elements sont stockes dans un tableau a part, plus la peine d'optimiser la rŽŽcriture dans la meme tableau]]
 //  int writeP = 0; 
-  int lastA = descr_cmd[0].associated;
+  int lastA = descr_cmd[0]->associated;
   int prevA = lastA;
   NR::Point           firstP;
   path_descr          lastAddition;
@@ -1290,28 +1290,28 @@ Path::Coalesce (double tresh)
   
   lastAddition.flags = descr_moveto;
   for (int curP = 0; curP < int(descr_cmd.size()); curP++) {
-    int typ = descr_cmd[curP].getType();
+    int typ = descr_cmd[curP]->getType();
     int nextA = lastA;
     if (typ == descr_moveto) {
       if (lastAddition.flags != descr_moveto) {
  //       descr_cmd[writeP++] = lastAddition;
-        FlushPendingAddition(tempDest,lastAddition,pending_cubic,lastAP);
+        FlushPendingAddition(tempDest,&lastAddition,pending_cubic,lastAP);
       }
-      lastAddition = descr_cmd[curP];
+      lastAddition = *descr_cmd[curP];
       lastAP=curP;
 //      descr_cmd[writeP++] = lastAddition;
-      FlushPendingAddition(tempDest,lastAddition,pending_cubic,lastAP);
+      FlushPendingAddition(tempDest,&lastAddition,pending_cubic,lastAP);
       // Added automatically (too bad about multiple moveto's).
       // [fr: (tant pis pour les moveto multiples)]
       containsForced=false;
       
-      path_descr_moveto *nData=(path_descr_moveto*)(descr_data+descr_cmd[curP].dStart);
+      path_descr_moveto *nData=(path_descr_moveto*)(descr_data+descr_cmd[curP]->dStart);
       firstP = nData->p;
-      lastA = descr_cmd[curP].associated;
+      lastA = descr_cmd[curP]->associated;
       prevA = lastA;
       lastP = curP;
     } else if (typ == descr_close) {
-      nextA = descr_cmd[curP].associated;
+      nextA = descr_cmd[curP]->associated;
       if (lastAddition.flags != descr_moveto)
 	    {
 	      path_lineto *sav_pts = (path_lineto *) pts;
@@ -1331,7 +1331,7 @@ Path::Coalesce (double tresh)
         }
         
 //	      descr_cmd[writeP++] = lastAddition;
-        FlushPendingAddition(tempDest,lastAddition,pending_cubic,lastAP);
+        FlushPendingAddition(tempDest,&lastAddition,pending_cubic,lastAP);
 //	      descr_cmd[writeP++] = descr_cmd[curP];
         FlushPendingAddition(tempDest,descr_cmd[curP],pending_cubic,curP);
         
@@ -1347,7 +1347,7 @@ Path::Coalesce (double tresh)
       lastP = curP;
       lastAP=curP;
     } else if (typ == descr_forced) {
-      nextA = descr_cmd[curP].associated;
+      nextA = descr_cmd[curP]->associated;
       if (lastAddition.flags != descr_moveto)
 	    {
 	      path_lineto *sav_pts = (path_lineto *) pts;
@@ -1365,7 +1365,7 @@ Path::Coalesce (double tresh)
         } else  {
           // on force l'addition
 //          descr_cmd[writeP++] = lastAddition;
-          FlushPendingAddition(tempDest,lastAddition,pending_cubic,lastAP);
+          FlushPendingAddition(tempDest,&lastAddition,pending_cubic,lastAP);
           lastAddition.flags = descr_moveto;
           prevA = lastA = nextA;
           lastP = curP;
@@ -1380,7 +1380,7 @@ Path::Coalesce (double tresh)
 	    }
     } else if (typ == descr_lineto || typ == descr_cubicto
              || typ == descr_arcto) {
-      nextA = descr_cmd[curP].associated;
+      nextA = descr_cmd[curP]->associated;
       if (lastAddition.flags != descr_moveto) {
 	      path_lineto *sav_pts = (path_lineto *) pts;
 	      int sav_nbPt = nbPt;
@@ -1398,12 +1398,12 @@ Path::Coalesce (double tresh)
           lastP = curP;
           lastAP=-1;
         }  else {
-          lastA = descr_cmd[lastP].associated;	// pourrait etre surecrit par la ligne suivante
+          lastA = descr_cmd[lastP]->associated;	// pourrait etre surecrit par la ligne suivante
 //          descr_cmd[writeP++] = lastAddition;
-          FlushPendingAddition(tempDest,lastAddition,pending_cubic,lastAP);
-          lastAddition = descr_cmd[curP];
+          FlushPendingAddition(tempDest,&lastAddition,pending_cubic,lastAP);
+          lastAddition = *descr_cmd[curP];
           if ( typ == descr_cubicto ) {
-            pending_cubic=*((path_descr_cubicto*)(descr_data+descr_cmd[curP].dStart));
+            pending_cubic=*((path_descr_cubicto*)(descr_data+descr_cmd[curP]->dStart));
           }
           lastAP=curP;
           containsForced=false;
@@ -1412,10 +1412,10 @@ Path::Coalesce (double tresh)
 	      pts = (char *) sav_pts;
 	      nbPt = sav_nbPt;
 	    } else {
-	      lastA = prevA /*descr_cmd[curP-1].associated */ ;
-	      lastAddition = descr_cmd[curP];
+	      lastA = prevA /*descr_cmd[curP-1]->associated */ ;
+	      lastAddition = *descr_cmd[curP];
         if ( typ == descr_cubicto ) {
-          pending_cubic=*((path_descr_cubicto*)(descr_data+descr_cmd[curP].dStart));
+          pending_cubic=*((path_descr_cubicto*)(descr_data+descr_cmd[curP]->dStart));
         }
         lastAP=curP;
         containsForced=false;
@@ -1424,14 +1424,13 @@ Path::Coalesce (double tresh)
     } else if (typ == descr_bezierto) {
       if (lastAddition.flags != descr_moveto) {
 //	      descr_cmd[writeP++] = lastAddition;
-        FlushPendingAddition(tempDest,lastAddition,pending_cubic,lastAP);
+        FlushPendingAddition(tempDest,&lastAddition,pending_cubic,lastAP);
 	      lastAddition.flags = descr_moveto;
-	    } else {
 	    }
       lastAP=-1;
-      lastA = descr_cmd[curP].associated;
+      lastA = descr_cmd[curP]->associated;
       lastP = curP;
-      path_descr_bezierto *nBData=(path_descr_bezierto*)(descr_data+descr_cmd[curP].dStart);
+      path_descr_bezierto *nBData=(path_descr_bezierto*)(descr_data+descr_cmd[curP]->dStart);
       for (int i = 1; i <= nBData->nb; i++) {
 //        descr_cmd[writeP++] = descr_cmd[curP + i];
         FlushPendingAddition(tempDest,descr_cmd[curP + i],pending_cubic,curP+i);
@@ -1448,7 +1447,7 @@ Path::Coalesce (double tresh)
   }
   if (lastAddition.flags != descr_moveto) {
 //    descr_cmd[writeP++] = lastAddition;
-    FlushPendingAddition(tempDest,lastAddition,pending_cubic,lastAP);
+    FlushPendingAddition(tempDest,&lastAddition,pending_cubic,lastAP);
   }
 //  descr_nb = writeP;
   
@@ -1462,12 +1461,12 @@ Path::DoCoalesce (Path * /*dest*/, double /*tresh*/)
   
   
 }
-void   Path::FlushPendingAddition(Path* dest,path_descr &lastAddition,path_descr_cubicto &lastCubic,int lastAP)
+void   Path::FlushPendingAddition(Path* dest,path_descr *lastAddition,path_descr_cubicto &lastCubic,int lastAP)
 {
-  int const typ = lastAddition.getType();
+  int const typ = lastAddition->getType();
   if ( typ == descr_moveto ) {
     if ( lastAP >= 0 ) {
-      path_descr_moveto* nData=(path_descr_moveto*)(descr_data+descr_cmd[lastAP].dStart);
+      path_descr_moveto* nData=(path_descr_moveto*)(descr_data+descr_cmd[lastAP]->dStart);
       dest->MoveTo(nData->p);
     }
   } else if ( typ == descr_close ) {
@@ -1477,22 +1476,22 @@ void   Path::FlushPendingAddition(Path* dest,path_descr &lastAddition,path_descr
     dest->CubicTo(lastCubic.p,lastCubic.stD,lastCubic.enD);
   } else if ( typ == descr_lineto ) {
     if ( lastAP >= 0 ) {
-      path_descr_lineto* nData=(path_descr_lineto*)(descr_data+descr_cmd[lastAP].dStart);
+      path_descr_lineto* nData=(path_descr_lineto*)(descr_data+descr_cmd[lastAP]->dStart);
       dest->LineTo(nData->p);
     }
   } else if ( typ == descr_arcto ) {
     if ( lastAP >= 0 ) {
-      path_descr_arcto* nData=(path_descr_arcto*)(descr_data+descr_cmd[lastAP].dStart);
+      path_descr_arcto* nData=(path_descr_arcto*)(descr_data+descr_cmd[lastAP]->dStart);
       dest->ArcTo(nData->p,nData->rx,nData->ry,nData->angle,nData->large,nData->clockwise);
     }
   } else if ( typ == descr_bezierto ) {
     if ( lastAP >= 0 ) {
-      path_descr_bezierto* nData=(path_descr_bezierto*)(descr_data+descr_cmd[lastAP].dStart);
+      path_descr_bezierto* nData=(path_descr_bezierto*)(descr_data+descr_cmd[lastAP]->dStart);
       dest->BezierTo(nData->p);
     }
   } else if ( typ == descr_interm_bezier ) {
     if ( lastAP >= 0 ) {
-      path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(descr_data+descr_cmd[lastAP].dStart);
+      path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(descr_data+descr_cmd[lastAP]->dStart);
       dest->IntermBezierTo(nData->p);
     }
   }

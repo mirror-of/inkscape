@@ -155,7 +155,7 @@ public:
   int         pending_moveto_data;
   // the path description:
   // first the commands: an array of size descr_max containing descr_nb commands
-  std::vector<path_descr> descr_cmd;
+  std::vector<path_descr*> descr_cmd;
   // and an array of NR::Points, of size ddata_max, of which ddata_nb are used
   // the choice of NR::Point is arbitrary, it could be anything, in fact
   int         ddata_max,ddata_nb;
@@ -483,6 +483,6 @@ private:
   bool   AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cubicto & res,int &worstP);
   bool   ExtendFit(fitting_tables &data,double treshhold, path_descr_cubicto & res,int &worstP);
   double RaffineTk (NR::Point pt, NR::Point p0, NR::Point p1, NR::Point p2, NR::Point p3, double it);
-  void   FlushPendingAddition(Path* dest,path_descr &lastAddition,path_descr_cubicto &lastCubic,int lastAD);
+  void   FlushPendingAddition(Path* dest,path_descr *lastAddition,path_descr_cubicto &lastCubic,int lastAD);
 };
 #endif
