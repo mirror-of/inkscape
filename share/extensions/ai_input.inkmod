@@ -6,6 +6,7 @@
         <mimetype>image/x-adobe-illustrator</mimetype>
         <filetypename>Adobe Illustrator</filetypename>
         <filetypetooltip>Open files saved with Adobe Illustrator</filetypetooltip>
+		<output_extension>modules.output.ai</output_extension>
     </input>
     <extension>
         <command reldir="extensions">ill2svg.pl -l &quot;mac&quot;</command>

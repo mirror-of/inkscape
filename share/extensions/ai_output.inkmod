@@ -1,0 +1,14 @@
+<spmodule>
+    <name>AI Output</name>
+    <id>modules.output.ai</id>
+    <output>
+        <extension>.ai</extension>
+        <mimetype>image/x-adobe-illustrator</mimetype>
+        <filetypename>Adobe Illustrator (*.ai)</filetypename>
+        <filetypetooltip>Write Adobe Illustrator</filetypetooltip>
+    </output>
+    <extension>
+        <command reldir="path">pstoedit -f ps2ai</command>
+		<helper_extension>module.output.ps</helper_extension>
+    </extension>
+</spmodule>

@@ -21,6 +21,7 @@ modules = \
 	svgz_input.inkmod \
 	svgz_output.inkmod \
 	ai_input.inkmod \
+	ai_output.inkmod \
 	roundhole.inkmod \
 	dropshadow.inkmod \
 	dia.inkmod \
