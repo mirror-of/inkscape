@@ -12,7 +12,6 @@
 
 #include "xsltstream.h"
 #include "stringstream.h"
-#include <libxml/xmlerror.h>
 #include <libxslt/xslt.h>
 #include <libxslt/xsltInternals.h>
 #include <libxslt/transform.h>
@@ -180,7 +179,7 @@ void XsltOutputStream::flush() throw (StreamException)
     xmlDocPtr srcDoc = xmlParseMemory(outbuf.raw().c_str(), outbuf.size());
     xmlDocPtr resDoc = xsltApplyStylesheet(stylesheet.stylesheet, srcDoc, params);
     xmlDocDumpFormatMemory(resDoc, &resbuf, &resSize, 1);
-    xmlErrorPtr err = xmlGetLastError();
+    xmlError *err = xmlGetLastError();
     if (err)
         {
         throw StreamException(err->message);
