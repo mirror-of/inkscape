@@ -44,7 +44,7 @@ class Anchored {
 public:
     void anchor() const {
         if (!_anchor) {
-            _anchor = new Anchor(this);
+            _anchor = new Anchor(GC_base(this));
         }
         _anchor->refcount++;
     }
@@ -61,9 +61,9 @@ protected:
 
 private:
     struct Anchor : public Managed<SCANNED, MANUAL> {
-        Anchor(Anchored const *obj) : refcount(0), object(obj) {}
+        Anchor(void const *obj) : refcount(0), object(obj) {}
         int refcount;
-        Anchored const *object;
+        void const *object;
     };
 
     Anchored(Anchored const &); // no copy

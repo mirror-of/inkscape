@@ -1,3 +1,9 @@
+2004-08-24  MenTaLguY <mental@rydia.net>
+
+	* src/gc-anchor.h: fix to always use the GC base address, since
+	  that will not always be the same as 'this', when I::GC::Anchored
+	  is used via multiple inheritance.
+
 2004-08-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/libnrtype/TextWrapper.h, src/libnrtype/TextWrapper.cpp (AppendUTF8):
