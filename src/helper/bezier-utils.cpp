@@ -34,7 +34,7 @@ typedef NR::Point BezierCurve[];
 
 /* Forward declarations */
 static void generate_bezier (NR::Point b[], NR::Point const d[], gdouble const uPrime[], unsigned len, NR::Point const &tHat1, NR::Point const &tHat2);
-static gdouble * reparameterize(NR::Point const d[], unsigned len, gdouble const u[], BezierCurve bezCurve);
+static void reparameterize(NR::Point const d[], unsigned len, double u[], BezierCurve bezCurve);
 static gdouble NewtonRaphsonRootFind(BezierCurve Q, NR::Point const &P, gdouble u);
 static NR::Point bezier_pt (unsigned degree, NR::Point const V[], gdouble t);
 static NR::Point sp_darray_left_tangent (NR::Point const d[], unsigned length);
@@ -190,47 +190,47 @@ sp_bezier_fit_cubic_full (NR::Point *bezier, NR::Point const data[], gint len,
 		BEZIER_ASSERT (bezier);
 		return 1;
 	}
-	
+
 	/*  Parameterize points, and attempt to fit curve */
-	double *u = (double *) alloca( len * sizeof(gdouble) );
+	unsigned splitPoint;		/* Point to split point set at */
+	{
+	double *u = g_new(double, len);
 	chord_length_parameterize (data, u, len);
 	if (u[len - 1] == 0.0) {
 		/* Zero-length path: every point in data[] is the same. */
+		g_free(u);
 		return 0;
 	}
 
 	generate_bezier (bezier, data, u, len, tHat1, tHat2);
-	
+	reparameterize(data, len, u, bezier);
+
 	/*  Find max deviation of points to fitted curve */
-	unsigned splitPoint;		/* Point to split point set at */
 	double maxError = compute_max_error(data, u, len, bezier, &splitPoint);
 	
 	if (maxError <= error) {
 		BEZIER_ASSERT (bezier);
+		g_free(u);
 		return 1;
 	}
 
 	/*  If error not too large, try some reparameterization  */
 	/*  and iteration */
-	double *u_alloca = u;
 	if (maxError <= error * 9.0) {
 		for (int i = 0; i < maxIterations; i++) {
-			double *uPrime = reparameterize(data, len, u, bezier);
-			generate_bezier (bezier, data, uPrime, len, tHat1, tHat2);
-			maxError = compute_max_error(data, uPrime, len, bezier, &splitPoint);
-			if (u != u_alloca)
-				g_free(u);
+			generate_bezier(bezier, data, u, len, tHat1, tHat2);
+			reparameterize(data, len, u, bezier);
+			maxError = compute_max_error(data, u, len, bezier, &splitPoint);
 			if (maxError <= error) {
 				BEZIER_ASSERT (bezier);
-				g_free (uPrime);
+				g_free(u);
 				return 1;
 			}
-			u = uPrime;
 		}
 	}
-	if (u != u_alloca)
-		g_free(u);
-	
+	g_free(u);
+	}
+
 	if (max_depth > 1)
 	{
 		/*
@@ -365,16 +365,13 @@ generate_bezier (NR::Point bezier[],
  *  \param len  Number of values in both d and u arrays.
  *              Also the size of the array that is allocated for return.
  */
-static gdouble *
+static void
 reparameterize(NR::Point const d[],
 	       unsigned        len,
-	       gdouble const  *u,
+	       double u[],
 	       BezierCurve     bezCurve)
 {
 	g_assert(2 <= len);
-
-	/*  New parameter values. */
-	gdouble	*uPrime = g_new (gdouble, len);
 
 	unsigned const last = len - 1;
 	g_assert(bezCurve[0] == d[0]);
@@ -383,13 +380,9 @@ reparameterize(NR::Point const d[],
 	g_assert(u[last] == 1.0);
 	/* Otherwise, consider including 0 and last in the below loop. */
 
-	uPrime[0] = 0.0;
-	uPrime[last] = 1.0;
-
 	for (unsigned i = 1; i < last; i++) {
-		uPrime[i] = NewtonRaphsonRootFind(bezCurve, d[i], u[i]);
+		u[i] = NewtonRaphsonRootFind(bezCurve, d[i], u[i]);
 	}
-	return (uPrime);
 }
 
 /*

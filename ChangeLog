@@ -1,7 +1,13 @@
 2004-04-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
-	* src/helper/bezier-utils-test.cpp: Add tests for generate_bezier,
-	sp_bezier_fit_cubic_full.
+	* src/helper/bezier-utils.cpp (sp_bezier_fit_cubic_full):
+	Always reparameterize between generate_bezier and calc_max_error.
+	Switch from discouraged alloca (see man page) to g_new, at cost of
+	some extra g_free calls in the code.
+	(reparameterize): Do in-place modification.
+
+	* src/helper/bezier-utils-test.cpp:
+	Add tests for generate_bezier, sp_bezier_fit_cubic_full.
 	Change to a simpler test bezier.
 
 	* src/helper/bezier-utils.cpp (sp_darray_left_tangent,
