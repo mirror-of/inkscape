@@ -296,11 +296,16 @@ sp_document_create (SPReprDoc *rdoc,
 
 	/* Namedviews */
 	if (!sp_item_group_get_child_by_name ((SPGroup *) document->root, NULL, "sodipodi:namedview")) {
-		SPRepr *r;
+		SPRepr *r, *rnew;
 		r = inkscape_get_repr (INKSCAPE, "template.sodipodi:namedview");
-		if (!r) r = sp_repr_new ("sodipodi:namedview");
-		sp_repr_set_attr (r, "id", "base");
-		sp_repr_add_child (rroot, r, NULL);
+		if (!r) {
+			rnew = sp_repr_new ("sodipodi:namedview");
+		} else {
+			rnew = sp_repr_duplicate (r);
+		}
+		sp_repr_set_attr (rnew, "id", "base");
+ 		sp_repr_add_child (rroot, rnew, NULL);
+		sp_repr_unref (rnew);
 		sp_repr_unref (r);
 	}
 
