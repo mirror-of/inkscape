@@ -368,17 +368,6 @@ sp_te_insert(SPItem *item, gint i_ucs4_pos, gchar const *utf8)
     return i_ucs4_pos+ucs4_len;
 }
 
-SPObject *
-object_prev_sibling(SPObject *child)      // TEMPORARY, until spobject provides this
-{
-    SPObject *parent = SP_OBJECT_PARENT(child);
-    for ( SPObject *i = sp_object_first_child(parent) ; i; i = SP_OBJECT_NEXT(i) ) {
-        if (i->next == child)
-            return i;
-    }
-    return NULL;
-}
-
 /* Returns start position */
 gint
 sp_te_delete (SPItem *item, gint i_start, gint i_end)
@@ -430,7 +419,7 @@ sp_te_delete (SPItem *item, gint i_start, gint i_end)
     SP_OBJECT(item)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(item)),SP_OBJECT_WRITE_EXT);
 
     for (GSList *i = lines_to_merge; i; i = i->next) {
-        SPObject *prev = object_prev_sibling (SP_OBJECT (i->data));
+        SPObject *prev = SP_OBJECT_PREV (i->data);
         if (prev && SP_IS_TSPAN(prev) && SP_TSPAN(prev)->role != SP_TSPAN_ROLE_UNSPECIFIED) {
             // If the line to be merged has a prev sibling and it's also a line,
             for (SPObject *child = sp_object_first_child(SP_OBJECT(i->data)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
