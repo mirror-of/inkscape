@@ -1228,11 +1228,6 @@ void Path::Coalesce(double tresh)
         } else if (typ == descr_close) {
             nextA = descr_cmd[curP]->associated;
             if (lastAddition.flags != descr_moveto) {
-                path_lineto *sav_pts = (path_lineto *) pts;
-                int sav_nbPt = nbPt;
-        
-                pts = (char *) (sav_pts + lastA);
-                nbPt = nextA - lastA + 1;
         
                 path_descr_cubicto res;
                 int worstP = -1;
@@ -1245,8 +1240,6 @@ void Path::Coalesce(double tresh)
                 FlushPendingAddition(tempDest, &lastAddition, pending_cubic, lastAP);
                 FlushPendingAddition(tempDest, descr_cmd[curP], pending_cubic, curP);
         
-                pts = (char *) sav_pts;
-                nbPt = sav_nbPt;
 	    } else {
                 FlushPendingAddition(tempDest,descr_cmd[curP],pending_cubic,curP);
 	    }
@@ -1261,11 +1254,6 @@ void Path::Coalesce(double tresh)
             
             nextA = descr_cmd[curP]->associated;
             if (lastAddition.flags != descr_moveto) {
-                path_lineto *sav_pts = (path_lineto *) pts;
-                int sav_nbPt = nbPt;
-                
-                pts = (char *) (sav_pts + lastA);
-                nbPt = nextA - lastA + 1;
                 
                 path_descr_cubicto res;
                 int worstP = -1;
@@ -1282,20 +1270,12 @@ void Path::Coalesce(double tresh)
                     lastAP = curP;
                     containsForced = false;
                 }
-        
-                pts = (char *) sav_pts;
-                nbPt = sav_nbPt;
 	    }
             
         } else if (typ == descr_lineto || typ == descr_cubicto || typ == descr_arcto) {
             
             nextA = descr_cmd[curP]->associated;
             if (lastAddition.flags != descr_moveto) {
-                path_lineto *sav_pts = (path_lineto *) pts;
-                int sav_nbPt = nbPt;
-        
-                pts = (char *) (sav_pts + lastA);
-                nbPt = nextA - lastA + 1;
                 
                 path_descr_cubicto res;
                 int worstP = -1;
@@ -1316,8 +1296,6 @@ void Path::Coalesce(double tresh)
                     containsForced = false;
                 }
         
-                pts = (char *) sav_pts;
-                nbPt = sav_nbPt;
 	    } else {
                 lastA = prevA /*descr_cmd[curP-1]->associated */ ;
                 lastAddition = *descr_cmd[curP];

@@ -56,46 +56,36 @@ void Path::Stroke(Shape *dest, bool doClose, double width, JoinType join,
     
     dest->MakeBackData(false);
 
-    /* FIXME */
-    char *savPts = pts;
-    int savNbPt = nbPt;
-  
     int lastM = 0;
-    while (lastM < savNbPt) {
+    while (lastM < nbPt) {
 
         int lastP = lastM + 1;
-        path_lineto *tp = (path_lineto *) savPts;
-        while (lastP < savNbPt
+        path_lineto *tp = (path_lineto *) pts;
+        while (lastP < nbPt
                && ((tp + lastP)->isMoveTo == polyline_lineto
                    || (tp + lastP)->isMoveTo == polyline_forced))
         {
 	    lastP++;
         }
 
-        /* FIXME */
-        pts = (char *) (tp + lastM);
-        nbPt = lastP - lastM;
         if ( lastP > lastM+1 ) {
-            NR::Point sbStart = ((path_lineto *) savPts)[lastM].p;
-            NR::Point sbEnd = ((path_lineto *) savPts)[lastP-1].p;
+            NR::Point sbStart = ((path_lineto *) pts)[lastM].p;
+            NR::Point sbEnd = ((path_lineto *) pts)[lastP - 1].p;
             if ( NR::LInfty(sbEnd-sbStart) < 0.00001 ) {
                 // debut==fin => ferme (on devrait garder un element pour les close(), mais tant pis)
-                DoStroke(dest, true, width, join, butt, miter, true);
+                DoStroke(lastM, lastP - lastM, dest, true, width, join, butt, miter, true);
             } else {
-                DoStroke(dest, doClose, width, join, butt, miter, true);
+                DoStroke(lastM, lastP - lastM, dest, doClose, width, join, butt, miter, true);
             }
         }
         lastM = lastP;
     }
-  
-    pts = savPts;
-    nbPt = savNbPt;
 }
 
-void Path::DoStroke(Shape *dest, bool doClose, double width, JoinType join,
+void Path::DoStroke(int off, int N, Shape *dest, bool doClose, double width, JoinType join,
                     ButtType butt, double miter, bool justAdd)
 {
-    if (nbPt <= 1) {
+    if (N <= 1) {
         return;
     }
   
@@ -104,12 +94,12 @@ void Path::DoStroke(Shape *dest, bool doClose, double width, JoinType join,
     int upTo;
   
     int curI = 0;
-    NR::Point curP = ((path_lineto *) pts)[0].p;
+    NR::Point curP = ((path_lineto *) pts)[off].p;
   
     if (doClose) {
 
-        path_lineto *curPt = (path_lineto *) pts;
-        prevI = nbPt - 1;
+        path_lineto *curPt = ((path_lineto *) pts) + off;
+        prevI = N - 1;
         curPt = (path_lineto *) (((char *) curPt) + prevI * sizeof (path_lineto));
         while (prevI > 0) {
             prevP = curPt->p;
@@ -130,11 +120,11 @@ void Path::DoStroke(Shape *dest, bool doClose, double width, JoinType join,
         
         prevP = curP;
         prevI = curI;
-        upTo = nbPt - 1;
+        upTo = N - 1;
     }
     
     {
-        path_lineto *curPt = (path_lineto *) pts;
+        path_lineto *curPt = ((path_lineto *) pts) + off;
         nextI = 1;
         curPt = (path_lineto *) (((char *) curPt) + nextI * sizeof (path_lineto));
         while (nextI <= upTo) {
@@ -178,7 +168,7 @@ void Path::DoStroke(Shape *dest, bool doClose, double width, JoinType join,
         prevD = nextD;
         prevLe = nextLe;
         nextI++;
-        path_lineto *curPt = (path_lineto *) pts;
+        path_lineto *curPt = ((path_lineto *) pts) + off;
         curPt = (path_lineto *) (((char *) curPt) + nextI * sizeof (path_lineto));
         while (nextI <= upTo) {
             nextP = curPt->p;
@@ -212,7 +202,7 @@ void Path::DoStroke(Shape *dest, bool doClose, double width, JoinType join,
 				curP=nextP;
 				curI=nextI;
 				prevD=nextD;*/
-        path_lineto *curPt = (path_lineto *) pts;
+        path_lineto *curPt = ((path_lineto *) pts) + off;
         nextP = curPt->p;
 
         nextD = nextP - curP;
@@ -924,34 +914,23 @@ void Path::Stroke(Shape *dest, bool doClose, double width, JoinType join,
     
     dest->MakeBackData(false);
 
-    /* FIXME */
-    char *savPts = pts;
-    int savNbPt = nbPt;
-  
     int lastM = 0;
-    while (lastM < savNbPt) {
+    while (lastM < nbPt) {
         int lastP = lastM + 1;
-        path_lineto *tp = (path_lineto *) savPts;
-        while (lastP < savNbPt
+        path_lineto *tp = (path_lineto *) pts;
+        while (lastP < nbPt
                && ((tp + lastP)->isMoveTo == polyline_lineto
                    || (tp + lastP)->isMoveTo == polyline_forced))
         {
             lastP++;
         }
 
-        /* FIXME */
-        pts = (char *) (tp + lastM);
-        nbPt = lastP - lastM;
-        DoStroke(dest, doClose, width, join, butt, miter, nbDash, dashs, true);
+        DoStroke(lastM, lastP - lastM, dest, doClose, width, join, butt, miter, nbDash, dashs, true);
         lastM = lastP;
     }
-
-    /* FIXME */
-    pts = savPts;
-    nbPt = savNbPt;
 }
 
-void Path::DoStroke(Shape *dest, bool doClose, double width, JoinType join,
+void Path::DoStroke(int off, int N, Shape *dest, bool doClose, double width, JoinType join,
                     ButtType butt, double miter, int nbDash, one_dash *dashs,
                     bool justAdd)
 {
@@ -959,7 +938,7 @@ void Path::DoStroke(Shape *dest, bool doClose, double width, JoinType join,
         return;
     }
     
-    if (nbPt <= 1) {
+    if (N <= 1) {
         return;
     }
   
@@ -976,12 +955,12 @@ void Path::DoStroke(Shape *dest, bool doClose, double width, JoinType join,
     int dashNo = 0;
     
     int curI = 0;
-    NR::Point curP = ((path_lineto *) pts)[0].p;
+    NR::Point curP = ((path_lineto *) pts)[off].p;
   
     if (doClose) {
 
-        path_lineto *curPt = (path_lineto *) pts;
-        prevI = nbPt - 1;
+        path_lineto *curPt = ((path_lineto *) pts) + off;
+        prevI = N - 1;
         curPt = (path_lineto *) (((char *) curPt) + prevI * sizeof (path_lineto));
         while (prevI > 0) {
             prevP = curPt->p;
@@ -1001,11 +980,11 @@ void Path::DoStroke(Shape *dest, bool doClose, double width, JoinType join,
     } else {
         prevP = curP;
         prevI = curI;
-        upTo = nbPt - 1;
+        upTo = N - 1;
     }
     
     {
-        path_lineto *curPt = (path_lineto *) pts;
+        path_lineto *curPt = ((path_lineto *) pts) + off;
         nextI = 1;
         curPt = (path_lineto *) (((char *) curPt) + nextI * sizeof (path_lineto));
         while (nextI <= upTo) {
@@ -1096,7 +1075,7 @@ void Path::DoStroke(Shape *dest, bool doClose, double width, JoinType join,
         prevLe = nextLe;
         prevD = nextD;
         nextI++;
-        path_lineto *curPt = (path_lineto *) pts;
+        path_lineto *curPt = ((path_lineto *) pts) + off;
         curPt = (path_lineto *) (((char *) curPt) + nextI * sizeof (path_lineto));
         while (nextI <= upTo) {
             nextP = curPt->p;
@@ -1150,7 +1129,7 @@ void Path::DoStroke(Shape *dest, bool doClose, double width, JoinType join,
                         curA=nextA;
                         prevD=nextD;*/
         
-        path_lineto *curPt = (path_lineto *) pts;
+        path_lineto *curPt = ((path_lineto *) pts) + off;
         nextP = curPt->p;
     
         nextD = nextP - curP;

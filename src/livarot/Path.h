@@ -405,11 +405,11 @@ private:
 			 ButtType butt, double miter, int &stNo, int &enNo);
   void DoInsideOutline (Path * dest, double width, JoinType join,
 			ButtType butt, double miter, int &stNo, int &enNo);
-  void DoStroke (Shape * dest, bool doClose, double width, JoinType join,
-		 ButtType butt, double miter, bool justAdd = false);
-  void DoStroke (Shape * dest, bool doClose, double width, JoinType join,
-		 ButtType butt, double miter, int nbDash, one_dash * dashs,
-		 bool justAdd = false);
+  void DoStroke(int off, int N, Shape *dest, bool doClose, double width, JoinType join,
+		ButtType butt, double miter, bool justAdd = false);
+  void DoStroke(int off, int N, Shape *dest, bool doClose, double width, JoinType join,
+		ButtType butt, double miter, int nbDash, one_dash *dashs,
+		bool justAdd = false);
 
   static void TangentOnSegAt (double at, NR::Point const &iS,
 			      path_descr_lineto & fin, NR::Point & pos, NR::Point & tgt,
