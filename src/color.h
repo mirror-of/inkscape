@@ -80,6 +80,10 @@ void sp_color_get_cmyk_floatv (const SPColor *color, float *cmyk);
 
 void sp_color_rgb_to_hsv_floatv (float *hsv, float r, float g, float b);
 void sp_color_hsv_to_rgb_floatv (float *rgb, float h, float s, float v);
+
+void sp_color_rgb_to_hsl_floatv (float *hsl, float r, float g, float b);
+void sp_color_hsl_to_rgb_floatv (float *rgb, float h, float s, float l);
+
 void sp_color_rgb_to_cmyk_floatv (float *cmyk, float r, float g, float b);
 void sp_color_cmyk_to_rgb_floatv (float *rgb, float c, float m, float y, float k);
 

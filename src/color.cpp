@@ -280,6 +280,73 @@ sp_color_hsv_to_rgb_floatv (float *rgb, float h, float s, float v)
 }
 
 void
+sp_color_rgb_to_hsl_floatv (float *hsl, float r, float g, float b)
+{
+    float max = MAX (MAX (r, g), b);
+    float min = MIN (MIN (r, g), b);
+    float delta = max - min;
+
+    hsl[2] = (max + min)/2.0;
+
+    if (delta == 0) {
+        hsl[0] = 0;
+        hsl[1] = 0;
+    } else {
+        if (hsl[2] <= 0.5) 
+            hsl[1] = delta / (max + min);
+        else 
+            hsl[1] = delta / (2 - max - min);
+
+        float d_r = (((max - r ) / 6 ) + (delta / 2 ) ) / delta;
+        float d_g = (((max - g) / 6 ) + (delta / 2 ) ) / delta;
+        float d_b = (((max - b) / 6 ) + (delta / 2 ) ) / delta;
+
+        if (r == max) hsl[0] = (g - b) / delta;
+        else if (g == max) hsl[0] = 2.0 + (b - r) / delta;
+        else if (b == max) hsl[0] = 4.0 + (r - g) / delta;
+
+        hsl[0] = hsl[0] / 6.0;
+
+        if (hsl[0] < 0) hsl[0] += 1;
+        if (hsl[0] > 1) hsl[0] -= 1;
+    }
+}
+
+float
+hue_2_rgb (float v1, float v2, float h)
+{
+    if (h < 0) h += 6.0;
+    if (h > 6) h -= 6.0;
+
+    if (h < 1) return v1 + (v2 - v1) * h;
+    if (h < 3) return v2;
+    if (h < 4) return v1 + (v2 - v1) * (4 - h);
+    return v1;
+}
+
+void
+sp_color_hsl_to_rgb_floatv (float *rgb, float h, float s, float l)
+{
+    if (s == 0) {
+        rgb[0] = l;
+        rgb[1] = l;
+        rgb[2] = l;
+    } else {
+        float v2;
+        if (l < 0.5) {
+            v2 = l * (1 + s);
+        } else {
+            v2 = l + s - l*s;
+        }
+        float v1 = 2*l - v2;
+
+        rgb[0] = hue_2_rgb (v1, v2, h*6 + 2.0);
+        rgb[1] = hue_2_rgb (v1, v2, h*6);
+        rgb[2] = hue_2_rgb (v1, v2, h*6 - 2.0);
+    }
+}
+
+void
 sp_color_rgb_to_cmyk_floatv (float *cmyk, float r, float g, float b)
 {
     float c, m, y, k, kd;
