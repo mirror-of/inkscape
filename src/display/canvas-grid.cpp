@@ -9,6 +9,7 @@
 
 #include <math.h>
 
+#include "round.h"
 #include "sp-canvas.h"
 #include "sp-canvas-util.h"
 #include "canvas-grid.h"
@@ -20,7 +21,9 @@ enum {
 	ARG_ORIGINY,
 	ARG_SPACINGX,
 	ARG_SPACINGY,
-	ARG_COLOR
+	ARG_COLOR,
+	ARG_EMPCOLOR,
+	ARG_EMPSPACING
 };
 
 
@@ -70,6 +73,8 @@ sp_cgrid_class_init (SPCGridClass *klass)
 	gtk_object_add_arg_type ("SPCGrid::spacingx", GTK_TYPE_DOUBLE, GTK_ARG_WRITABLE, ARG_SPACINGX);
 	gtk_object_add_arg_type ("SPCGrid::spacingy", GTK_TYPE_DOUBLE, GTK_ARG_WRITABLE, ARG_SPACINGY);
 	gtk_object_add_arg_type ("SPCGrid::color", GTK_TYPE_INT, GTK_ARG_WRITABLE, ARG_COLOR);
+	gtk_object_add_arg_type ("SPCGrid::empcolor", GTK_TYPE_INT, GTK_ARG_WRITABLE, ARG_EMPCOLOR);
+	gtk_object_add_arg_type ("SPCGrid::empspacing", GTK_TYPE_INT, GTK_ARG_WRITABLE, ARG_EMPSPACING);
 
 	object_class->destroy = sp_cgrid_destroy;
 	object_class->set_arg = sp_cgrid_set_arg;
@@ -84,6 +89,8 @@ sp_cgrid_init (SPCGrid *grid)
 	grid->origin[NR::X] = grid->origin[NR::Y] = 0.0;
 	grid->spacing[NR::X] = grid->spacing[NR::Y] = 8.0;
 	grid->color = 0x0000ff7f;
+	grid->empcolor = 0x3F3FFF40;
+	grid->empspacing = 5;
 }
 
 static void
@@ -123,6 +130,15 @@ sp_cgrid_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 		break;
 	case ARG_COLOR:
 		grid->color = GTK_VALUE_INT (* arg);
+		sp_canvas_item_request_update (item);
+		break;
+	case ARG_EMPCOLOR:
+		grid->empcolor = GTK_VALUE_INT (* arg);
+		sp_canvas_item_request_update (item);
+		break;
+	case ARG_EMPSPACING:
+		grid->empspacing = GTK_VALUE_INT (* arg);
+		// std::cout << "Emphasis Spacing: " << grid->empspacing << std::endl;
 		sp_canvas_item_request_update (item);
 		break;
 	default:
@@ -194,13 +210,24 @@ sp_cgrid_render (SPCanvasItem * item, SPCanvasBuf * buf)
 	const gdouble syg = floor ((buf->rect.y0 - grid->ow[NR::Y]) / grid->sw[NR::Y]) * grid->sw[NR::Y] + grid->ow[NR::Y];
 
 	for (gdouble y = syg; y < buf->rect.y1; y += grid->sw[NR::Y]) {
-		const gint y0 = (gint) floor (y + 0.5);
-		const gint y1 = (gint) floor (y + grid->sw[NR::Y] + 0.5);
-		sp_grid_hline (buf, y0, buf->rect.x0, buf->rect.x1 - 1, grid->color);
+		const gint y0 = (gint) Inkscape::round(y);
+		const gint y1 = (gint) Inkscape::round(y + grid->sw[NR::Y]);
+
+		if (!grid->scaled[NR::Y] &&
+				(((int)Inkscape::round(y / grid->sw[NR::Y])) % grid->empspacing) == 0) {
+			sp_grid_hline (buf, y0, buf->rect.x0, buf->rect.x1 - 1, grid->empcolor);
+		} else {
+			sp_grid_hline (buf, y0, buf->rect.x0, buf->rect.x1 - 1, grid->color);
+		}
 
 		for (gdouble x = sxg; x < buf->rect.x1; x += grid->sw[NR::X]) {
-			const gint ix = (gint) floor (x + 0.5);
-			sp_grid_vline (buf, ix, y0 + 1, y1 - 1, grid->color);
+			const gint ix = (gint) Inkscape::round(x);
+			if (!grid->scaled[NR::X] &&
+					(((int)Inkscape::round(x / grid->sw[NR::X])) % grid->empspacing) == 0) {
+				sp_grid_vline (buf, ix, y0 + 1, y1 - 1, grid->empcolor);
+			} else {
+				sp_grid_vline (buf, ix, y0 + 1, y1 - 1, grid->color);
+			}
 		}
 	}
 }
@@ -216,14 +243,23 @@ sp_cgrid_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int flag
 	grid->ow = grid->origin * affine;
 	grid->sw = grid->spacing * affine;
 	grid->sw -= NR::Point(affine[4], affine[5]);
+
 	for(int dim = 0; dim < 2; dim++) {
+		grid->scaled[dim] = FALSE;
 		grid->sw[dim] = fabs (grid->sw[dim]);
 		while (grid->sw[dim] < 8.0) {
+			grid->scaled[dim] = TRUE;
 			grid->sw[dim] *= 5.0;
 			if (grid->sw[dim] < 8.0)
 				grid->sw[dim] *= 2.0;
 		}
 	}
+
+	if (grid->empspacing == 0) {
+		grid->scaled[NR::Y] = TRUE;
+		grid->scaled[NR::X] = TRUE;
+	}
+
 	sp_canvas_request_redraw (item->canvas,
 				     -1000000, -1000000,
 				     1000000, 1000000);

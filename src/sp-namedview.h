@@ -53,6 +53,7 @@ struct SPNamedView {
 	/* Grid data is in points regardless of unit */
 	NR::Point gridorigin;
 	gdouble gridspacing[2];
+	gint gridempspacing;
 
 	const SPUnit *gridtoleranceunit;
 	gdouble gridtolerance;
@@ -61,6 +62,7 @@ struct SPNamedView {
 	gdouble guidetolerance;
 
 	guint32 gridcolor;
+	guint32 gridempcolor;
 	guint32 guidecolor;
 	guint32 guidehicolor;
 	guint32 bordercolor;

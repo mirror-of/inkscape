@@ -25,6 +25,9 @@ struct SPCGrid : public SPCanvasItem{
 	NR::Point origin;
 	NR::Point spacing;
 	guint32 color;
+	guint32 empcolor;
+	gint empspacing;
+	bool scaled[2];
 
 	NR::Point ow, sw;
 };

@@ -42,6 +42,8 @@
 
 #define DEFAULTTOLERANCE 5.0
 #define DEFAULTGRIDCOLOR 0x3f3fff2f
+#define DEFAULTGRIDEMPCOLOR 0x3f3fff40
+#define DEFAULTGRIDEMPSPACING 5
 #define DEFAULTGUIDECOLOR 0x0000ff7f
 #define DEFAULTGUIDEHICOLOR 0xff00007f
 #define DEFAULTBORDERCOLOR 0x000000ff
@@ -146,8 +148,11 @@ sp_namedview_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	sp_object_read_attr (object, "gridoriginy");
 	sp_object_read_attr (object, "gridspacingx");
 	sp_object_read_attr (object, "gridspacingy");
+	sp_object_read_attr (object, "gridempspacing");
 	sp_object_read_attr (object, "gridcolor");
+	sp_object_read_attr (object, "gridempcolor");
 	sp_object_read_attr (object, "gridopacity");
+	sp_object_read_attr (object, "gridempopacity");
 	sp_object_read_attr (object, "guidecolor");
 	sp_object_read_attr (object, "guideopacity");
 	sp_object_read_attr (object, "guidehicolor");
@@ -287,9 +292,30 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		sp_namedview_setup_grid (nv);
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
+	case SP_ATTR_GRIDEMPCOLOR:
+		nv->gridempcolor = (nv->gridempcolor & 0xff) | (DEFAULTGRIDEMPCOLOR & 0xffffff00);
+		if (value) {
+			nv->gridempcolor = (nv->gridempcolor & 0xff) | sp_svg_read_color (value, nv->gridempcolor);
+		}
+		sp_namedview_setup_grid (nv);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+		break;
 	case SP_ATTR_GRIDOPACITY:
 		nv->gridcolor = (nv->gridcolor & 0xffffff00) | (DEFAULTGRIDCOLOR & 0xff);
 		sp_nv_read_opacity (value, &nv->gridcolor);
+		sp_namedview_setup_grid (nv);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+		break;
+	case SP_ATTR_GRIDEMPOPACITY:
+		nv->gridempcolor = (nv->gridempcolor & 0xffffff00) | (DEFAULTGRIDEMPCOLOR & 0xff);
+		sp_nv_read_opacity (value, &nv->gridempcolor);
+		sp_namedview_setup_grid (nv);
+		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+		break;
+	case SP_ATTR_GRIDEMPSPACING:
+		nv->gridempspacing = DEFAULTGRIDEMPSPACING;
+		if (value != NULL)
+			nv->gridempspacing = atoi(value);
 		sp_namedview_setup_grid (nv);
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
@@ -717,6 +743,8 @@ sp_namedview_setup_grid_item (SPNamedView * nv, SPCanvasItem * item)
 			       "originy", nv->gridorigin[NR::Y],
 			       "spacingx", nv->gridspacing[NR::X],
 			       "spacingy", nv->gridspacing[NR::Y],
+				   "empcolor", nv->gridempcolor,
+				   "empspacing", nv->gridempspacing,
 			       NULL);
 }
 

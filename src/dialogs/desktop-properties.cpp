@@ -256,7 +256,9 @@ sp_dtw_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
                                                                 "unit_selector");
 
     Inkscape::SVGOStringStream os;
-    os << adjustment->value << sp_unit_selector_get_unit(us)->abbr;
+    os << adjustment->value;
+    if (us != NULL)
+        os << sp_unit_selector_get_unit(us)->abbr;
 
     sp_document_set_undo_sensitive(doc, FALSE);
     sp_repr_set_attr(repr, key, os.str().c_str());
@@ -412,6 +414,29 @@ sp_dtw_grid_snap_distance_changed(GtkAdjustment *adjustment,
     os << adjustment->value << sp_unit_selector_get_unit(us)->abbr;
 
     sp_repr_set_attr(repr, "gridtolerance", os.str().c_str());
+    sp_document_done(SP_DT_DOCUMENT(dt));
+}
+
+static void
+sp_dtw_grid_emp_spacing_changed (GtkAdjustment *adjustment,
+                                 GtkWidget *dialog)
+{
+    if (gtk_object_get_data(GTK_OBJECT(dialog), "update")) {
+        return;
+    }
+
+    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+    if (!dt) {
+        return;
+    }
+
+    SPRepr *repr = SP_OBJECT_REPR(dt->namedview);
+
+    Inkscape::SVGOStringStream os;
+    int value = adjustment->value;
+    os << value;
+
+    sp_repr_set_attr(repr, "gridempspacing", os.str().c_str());
     sp_document_done(SP_DT_DOCUMENT(dt));
 }
 
@@ -825,7 +850,22 @@ sp_desktop_dialog(void)
                           G_CALLBACK(sp_dtw_grid_snap_distance_changed));
 
         sp_color_picker_button(dlg, t, _("Grid color:"), "gridcolor",
-                               _("Grid color"), "gridhicolor", row++);
+                               _("Grid color"), "gridopacity", row++);
+
+        sp_color_picker_button(dlg, t, _("Grid emphasis color:"), "gridempcolor",
+                               _("Grid emphasis color"), "gridempopacity", row++);
+
+        if (1) {
+            spw_label(t, _("Grid emphasis spacing:"), 0, row);
+            GtkObject * a = gtk_adjustment_new (0.0, 0.0, 25.0, 1.0, 1.0, 1.0);
+            gtk_object_set_data(GTK_OBJECT(a), (const gchar *)"key", (gpointer)"gridempspacing");
+            gtk_object_set_data(GTK_OBJECT(dlg), "gridempspacing", a);
+            GtkWidget * sb = gtk_spin_button_new (GTK_ADJUSTMENT(a), 1.0, 0);
+            gtk_widget_show(sb);
+            gtk_table_attach(GTK_TABLE(t), sb, 1, 2, row, row+1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+            g_signal_connect(G_OBJECT(a), "value_changed", G_CALLBACK(sp_dtw_grid_emp_spacing_changed), dlg);
+            row++;
+        }
 
         /* Guidelines page */
 
@@ -1164,12 +1204,17 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         if (w) {
             gtk_widget_set_sensitive(GTK_WIDGET(w), FALSE);
         }
-        cp = (GObject *)g_object_get_data(G_OBJECT(dialog), "guidecolor");
+        cp = (GObject *)g_object_get_data(G_OBJECT(dialog), "gridempcolor");
         w = (GObject *)g_object_get_data(cp, "window");
         if (w) {
             gtk_widget_set_sensitive(GTK_WIDGET(w), FALSE);
         }
         cp = (GObject *)g_object_get_data(G_OBJECT(dialog), "guidecolor");
+        w = (GObject *)g_object_get_data(cp, "window");
+        if (w) {
+            gtk_widget_set_sensitive(GTK_WIDGET(w), FALSE);
+        }
+        cp = (GObject *)g_object_get_data(G_OBJECT(dialog), "guidehicolor");
         w = (GObject *)g_object_get_data(cp, "window");
         if (w) {
             gtk_widget_set_sensitive(GTK_WIDGET(w), FALSE);
@@ -1215,9 +1260,19 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         o = (GtkObject *)gtk_object_get_data(GTK_OBJECT(dialog), "gridtolerance");
         gtk_adjustment_set_value(GTK_ADJUSTMENT(o), nv->gridtolerance);
 
+        o = (GtkObject *)gtk_object_get_data(GTK_OBJECT(dialog), "gridempspacing");
+        gtk_adjustment_set_value(GTK_ADJUSTMENT(o), nv->gridempspacing);
+
         GtkWidget *cp = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dialog), "gridcolor");
         sp_color_picker_set_rgba32(cp, nv->gridcolor);
         GtkWidget *w = (GtkWidget *)g_object_get_data(G_OBJECT(cp), "window");
+        if (w) {
+            gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
+        }
+
+        cp = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dialog), "gridempcolor");
+        sp_color_picker_set_rgba32(cp, nv->gridempcolor);
+        w = (GtkWidget *)g_object_get_data(G_OBJECT(cp), "window");
         if (w) {
             gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
         }

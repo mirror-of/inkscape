@@ -1,3 +1,15 @@
+2004-07-23  Ted Gould  <ted@gould.cx>
+
+	* src/attributes.cpp, src/attributes.h, src/sp-namedview.cpp,
+	src/sp-namedview.h, src/dialogs/desktop-properties.cpp,
+	src/display/canvas-grid.cpp, src/display/canvas-grid.h:
+
+	Adding in the ability to have 'emphasis grid lines' where some lines are a
+	different color than others.  In the default case every fifth grid line
+	gets to be 0x11 darker alpha.  Nothing that will get in your way, but
+	enough that you can find the spacing.  All parameters are changeable in
+	document preferences.
+
 2004-07-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* autogen.sh: Move unversioned automake to last resort.
