@@ -279,7 +279,7 @@ sp_font_selector_family_select_row (GtkCList *clist, gint row, gint column, GdkE
 			gtk_clist_freeze (GTK_CLIST (fsel->style));
 			for (i = 0; i < fsel->styles.length; i++) {
 
-				const gchar *p = (const gchar *)fsel->styles.names[i];
+				const gchar *p = (const gchar *) ((fsel->styles.records)[i].name);
 
 				gtk_clist_append (GTK_CLIST (fsel->style), (gchar **) &p);
 				gtk_clist_set_row_data (GTK_CLIST (fsel->style), static_cast< gint > (i), GUINT_TO_POINTER (i));
@@ -320,7 +320,7 @@ sp_font_selector_emit_set (SPFontSelector *fsel)
 	font_instance *font;
 
 	if (static_cast< unsigned int > (fsel->styleidx) < fsel->styles.length) {
-		tf = (font_factory::Default())->FaceFromDescr ((gchar *)fsel->styles.pango_descrs[fsel->styleidx]);
+		tf = (font_factory::Default())->FaceFromDescr ((gchar *) ((fsel->styles.records)[fsel->styleidx].descr));
 		font = tf;
 		font->Ref();
 		tf->Unref ();
@@ -351,7 +351,7 @@ sp_font_selector_new (void)
 }
 
 void
-sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font)
+sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font, double size)
 {
 	GtkCList *fcl, *scl;
 
@@ -359,27 +359,48 @@ sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font)
 	scl = GTK_CLIST (fsel->style);
 
 	if (font) {
-		gchar n[256], s[8];
-		unsigned int i;
-		font->Name(n,256);
-		for (i = 0; i < fsel->families.length; i++) {
-			if (!strcmp (n, (gchar *)fsel->families.names[i])) break;
-		}
-		if (i >= fsel->families.length) return;
-		fsel->block_emit = TRUE;
-		gtk_clist_select_row (fcl, i, 0);
-		gtk_clist_moveto (fcl, i, 0, 0.66, 0.0);
-		fsel->block_emit = FALSE;
+		{
+			gchar family[256];
+			font->Family (family, 256);
 
-		font->Name(n,256);
-		for (i = 0; i < fsel->styles.length; i++) {
-			if (!strcmp (n, (gchar *)fsel->styles.names[i])) break;
-		}
-		if (i >= fsel->styles.length) return;
-		gtk_clist_select_row (scl, i, 0);
-		gtk_clist_moveto (scl, i, 0, 0.66, 0.0);
+			unsigned int i;
+			for (i = 0; i < fsel->families.length; i++) {
+				if (!strcmp (family, (gchar *)fsel->families.names[i])) {
+					break;
+				}
+			}
 
-		g_snprintf (s, 8, "%.5g", fsel->fontsize);
+			if (i >= fsel->families.length) 
+				return;
+
+			fsel->block_emit = TRUE;
+			gtk_clist_select_row (fcl, i, 0);
+			gtk_clist_moveto (fcl, i, 0, 0.66, 0.0);
+			fsel->block_emit = FALSE;
+		}
+
+		{
+			gchar descr[256];
+			font->Name (descr, 256);
+
+			unsigned int i;
+			for (i = 0; i < fsel->styles.length; i++) {
+				//			g_print ("style length %d   descr %s    record descr %s\n", fsel->styles.length, descr, (gchar *) (fsel->styles.records)[i].descr);
+				if (!strcmp(descr, (gchar *) (fsel->styles.records)[i].descr)) {
+					//					g_print ("style match at %d\n", i);
+					break;
+				}
+			}
+
+			if (i >= fsel->styles.length) 
+				return;
+
+			gtk_clist_select_row (scl, i, 0);
+			gtk_clist_moveto (scl, i, 0, 0.66, 0.0);
+		}
+
+		gchar s[8];
+		g_snprintf (s, 8, "%.5g", size); // UI, so printf is ok
 		gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (fsel->size)->entry), s);
 	}
 }
@@ -646,7 +667,7 @@ sp_font_preview_set_font (SPFontPreview *fprev, font_instance *font, SPFontSelec
 	if (fprev->font) {
 		NRMatrix flip;
 		nr_matrix_set_scale (&flip, fsel->fontsize, -fsel->fontsize);
-		fprev->rfont = fprev->font->RasterFont(flip,0);
+		fprev->rfont = fprev->font->RasterFont(flip, 0);
 	}
 	if (GTK_WIDGET_DRAWABLE (fprev)) gtk_widget_queue_draw (GTK_WIDGET (fprev));
 }

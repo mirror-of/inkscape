@@ -36,7 +36,7 @@ GtkType sp_font_selector_get_type (void);
 
 GtkWidget *sp_font_selector_new (void);
 
-void sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font);
+void sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font, double size);
 
 font_instance *sp_font_selector_get_font (SPFontSelector *fsel);
 double  sp_font_selector_get_size (SPFontSelector *fsel);

@@ -168,16 +168,17 @@ font_instance::font_instance(void)
 	wFont=NULL;
 #endif
 }
+
 font_instance::~font_instance(void)
 {
   if ( daddy ) daddy->UnrefFace(this);
-//  printf("font instance death\n");
+	//  printf("font instance death\n");
   if ( pFont ) g_object_unref(pFont);
   pFont=NULL;
   if ( descr ) pango_font_description_free(descr);
   descr=NULL;
 #ifdef WITH_XFT
-//	if ( theFace ) FT_Done_Face(theFace); // owned by pFont. don't touch
+	//	if ( theFace ) FT_Done_Face(theFace); // owned by pFont. don't touch
 	theFace=NULL;
 #endif
 #ifdef WIN32
@@ -196,12 +197,13 @@ font_instance::~font_instance(void)
   glyphs=NULL;
 }
 
-void								 font_instance::Ref(void)
+void font_instance::Ref(void)
 {
 	refCount++;
 //  printf("font %x ref'd %i\n",this,refCount);
 }
-void								 font_instance::Unref(void)
+
+void font_instance::Unref(void)
 {
 	refCount--;
 //  printf("font %x unref'd %i\n",this,refCount);
@@ -211,15 +213,18 @@ void								 font_instance::Unref(void)
 		delete this;
 	}
 }
-unsigned int         font_instance::Name(gchar *str, unsigned int size)
+
+unsigned int font_instance::Name(gchar *str, unsigned int size)
 {
-	return Attribute("name",str,size);
+	return Attribute("name", str, size);
 }
-unsigned int         font_instance::Family(gchar *str, unsigned int size)
+
+unsigned int font_instance::Family(gchar *str, unsigned int size)
 {
-	return Attribute("family",str,size);
+	return Attribute("family", str, size);
 }
-unsigned int         font_instance::Attribute(const gchar *key, gchar *str, unsigned int size)
+
+unsigned int font_instance::Attribute(const gchar *key, gchar *str, unsigned int size)
 {
   if ( descr == NULL ) {
     if ( size > 0 ) str[0]=0;
@@ -229,9 +234,8 @@ unsigned int         font_instance::Attribute(const gchar *key, gchar *str, unsi
 	bool    free_res=false;
 
 	if ( strcmp(key,"name") == 0 ) {
-		pango_font_description_unset_fields(descr,PANGO_FONT_MASK_SIZE);
-		res=pango_font_description_to_string(descr);
-		pango_font_description_set_size(descr,512*PANGO_SCALE);
+		pango_font_description_unset_fields (descr, PANGO_FONT_MASK_SIZE);
+		res=pango_font_description_to_string (descr);
 		free_res=true;
 	} else if ( strcmp(key,"family") == 0 ) {
 		res=(char*)pango_font_description_get_family(descr);
@@ -239,11 +243,11 @@ unsigned int         font_instance::Attribute(const gchar *key, gchar *str, unsi
 	} else if ( strcmp(key,"style") == 0 ) {
 		PangoStyle v=pango_font_description_get_style(descr);
 		if ( v == PANGO_STYLE_ITALIC ) {
-			res="Italic";
+			res="italic";
 		} else if ( v == PANGO_STYLE_OBLIQUE ) {
-			res="Oblique";
+			res="oblique";
 		} else {
-			res="Regular";
+			res="normal";
 		}
 		free_res=false;
 	} else if ( strcmp(key,"weight") == 0 ) {
@@ -255,7 +259,7 @@ unsigned int         font_instance::Attribute(const gchar *key, gchar *str, unsi
 		} else if ( v <= PANGO_WEIGHT_NORMAL ) {
 			res="normal";
 		} else if ( v <= PANGO_WEIGHT_BOLD ) {
-			res="Bold";
+			res="bold";
 		} else {
 			res="800";
 		}
@@ -294,17 +298,21 @@ unsigned int         font_instance::Attribute(const gchar *key, gchar *str, unsi
 		if ( size > 0 ) str[0]=0;
 		return 0;
 	}
-	unsigned int len=strlen(res);
-	unsigned int rlen=(size-1<len)?size-1:len;
-  if ( str ) {
-	  if ( rlen > 0 ) memcpy(str,res,rlen);
-	  if ( size > 0 ) str[rlen]=0;
-  }
-	if ( free_res && res ) free(res);
-	return len;
+
+	if (res) {
+		unsigned int len=strlen(res);
+		unsigned int rlen=(size-1<len)?size-1:len;
+		if ( str ) {
+			if ( rlen > 0 ) memcpy(str,res,rlen);
+			if ( size > 0 ) str[rlen]=0;
+		}
+		if (free_res) free(res);
+		return len;
+	}
+	return 0;
 }
 
-void                 font_instance::InstallFace(PangoFont* iFace)
+void font_instance::InstallFace(PangoFont* iFace)
 {
 	pFont=iFace;
 #ifdef WITH_XFT
@@ -353,7 +361,8 @@ void                 font_instance::InstallFace(PangoFont* iFace)
 		pFont=NULL;
 	}
 }
-bool								 font_instance::IsOutlineFont(void)
+
+bool	font_instance::IsOutlineFont(void)
 {
 	if ( pFont == NULL ) return false;
 #ifdef WITH_XFT
@@ -379,7 +388,8 @@ bool								 font_instance::IsOutlineFont(void)
 #endif
 	return false;
 }
-int                  font_instance::MapUnicodeChar(gunichar c)
+
+int font_instance::MapUnicodeChar(gunichar c)
 {
 	if ( pFont == NULL ) return 0;
 	int res=0;
@@ -405,7 +415,7 @@ int                  font_instance::MapUnicodeChar(gunichar c)
 #define FIXED_TO_FLOAT(p) ((p)->value + (double) (p)->fract / 65536.0)
 #endif
 
-void                 font_instance::LoadGlyph(int glyph_id)
+void font_instance::LoadGlyph(int glyph_id)
 {
 	if ( pFont == NULL ) return;
 #ifdef WITH_XFT
@@ -545,7 +555,8 @@ void                 font_instance::LoadGlyph(int glyph_id)
   } else {
   }
 }
-NR::Rect             font_instance::BBox(int glyph_id)
+
+NR::Rect font_instance::BBox(int glyph_id)
 {
   int no=-1;
   if ( id_to_no.find(glyph_id) == id_to_no.end() ) {
@@ -564,7 +575,8 @@ NR::Rect             font_instance::BBox(int glyph_id)
 	NR::Rect  res(rmin,rmax);
   return res;
 }
-Path*                font_instance::Outline(int glyph_id,Path* copyInto)
+
+Path* font_instance::Outline(int glyph_id,Path* copyInto)
 {
   int no=-1;
   if ( id_to_no.find(glyph_id) == id_to_no.end() ) {
@@ -586,7 +598,8 @@ Path*                font_instance::Outline(int glyph_id,Path* copyInto)
 	}
   return src_o;
 }
-void*                font_instance::ArtBPath(int glyph_id)
+
+void* font_instance::ArtBPath(int glyph_id)
 {
   int no=-1;
   if ( id_to_no.find(glyph_id) == id_to_no.end() ) {
@@ -603,7 +616,7 @@ void*                font_instance::ArtBPath(int glyph_id)
 	return glyphs[no].artbpath;
 }
 
-double               font_instance::Advance(int glyph_id,bool vertical)
+double font_instance::Advance(int glyph_id,bool vertical)
 {
   int no=-1;
   if ( id_to_no.find(glyph_id) == id_to_no.end() ) {
@@ -627,7 +640,7 @@ double               font_instance::Advance(int glyph_id,bool vertical)
 }	
 
 
-raster_font*         font_instance::RasterFont(const NR::Matrix &trs,double stroke_width,bool vertical,JoinType stroke_join,ButtType stroke_cap)
+raster_font* font_instance::RasterFont(const NR::Matrix &trs,double stroke_width,bool vertical,JoinType stroke_join,ButtType stroke_cap)
 {
 	font_style  nStyle;
 	nStyle.transform=trs;
@@ -640,7 +653,8 @@ raster_font*         font_instance::RasterFont(const NR::Matrix &trs,double stro
 	nStyle.dashes=NULL;
 	return RasterFont(nStyle);
 }
-raster_font*         font_instance::RasterFont(const font_style &nStyle)
+
+raster_font* font_instance::RasterFont(const font_style &nStyle)
 {
 	raster_font  *res=NULL;
 	if ( loadedStyles.find(nStyle) == loadedStyles.end() ) {
@@ -661,7 +675,8 @@ raster_font*         font_instance::RasterFont(const font_style &nStyle)
   if ( res ) Ref();
 	return res;
 }
-void                 font_instance::RemoveRasterFont(raster_font* who)
+
+void font_instance::RemoveRasterFont(raster_font* who)
 {
   if ( who == NULL ) return;
   if ( loadedStyles.find(who->style) == loadedStyles.end() ) {

@@ -21,16 +21,20 @@ typedef void (* NRNameListDestructor) (NRNameList *list);
 typedef void (* NRStyleListDestructor) (NRStyleList *list);
 
 struct NRNameList {
-	unsigned long length;
+	guint length;
       guchar **names;
       guchar **families;
 	NRNameListDestructor destructor;
 };
 
+struct NRStyleRecord {
+	guchar *name;
+      guchar *descr;
+};
+
 struct NRStyleList {
-	unsigned long length;
-      guchar **names;
-      guchar **pango_descrs;
+	guint length;
+      NRStyleRecord *records;
 	NRStyleListDestructor destructor;
 };
 

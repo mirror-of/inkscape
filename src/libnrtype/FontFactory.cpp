@@ -17,9 +17,216 @@
 #include <pango/pangowin32.h>
 #endif
 
+/////////////////// helper functions
+
+/**
+ * A wrapper for strcasestr that also provides an implementation for Win32.
+ */
+bool
+ink_strstr (const char *haystack, const char *pneedle)
+{
+#ifndef WIN32
+	return (strcasestr(haystack, pneedle) != NULL);
+#else
+	// windows has no strcasestr implementation, so here is ours...
+	// stolen from nmap
+	char buf[512];
+	register const char *p;
+	char *needle, *q, *foundto;
+	if (!*pneedle) return true;
+	if (!haystack) return false;
+
+	needle = buf;
+	p = pneedle; q = needle;
+	while((*q++ = tolower(*p++)))
+		;
+	p = haystack - 1; foundto = needle;
+	while(*++p) {
+		if(tolower(*p) == *foundto) {
+			if(!*++foundto) {
+				/* Yeah, we found it */
+				return true;
+			}
+		} else foundto = needle;
+	}
+	return false;
+#endif
+}
+
+/**
+ * Regular fonts are 'Regular', 'Roman', 'Normal', or 'Plain'
+ */
+// FIXME: make this UTF8, add non-English style names
+bool
+is_regular (const char *s)
+{
+	if (ink_strstr(s, "Regular")) return true;
+	if (ink_strstr(s, "Roman")) return true;
+	if (ink_strstr(s, "Normal")) return true;
+	if (ink_strstr(s, "Plain")) return true;
+	return false;
+}
+
+/**
+ * Non-bold fonts are 'Medium' or 'Book'
+ */
+bool
+is_nonbold (const char *s)
+{
+	if (ink_strstr(s, "Medium")) return true;
+	if (ink_strstr(s, "Book")) return true;
+	return false;
+}
+
+/**
+ * Italic fonts are 'Italic', 'Oblique', or 'Slanted'
+ */
+bool
+is_italic (const char *s)
+{
+	if (ink_strstr(s, "Italic")) return true;
+	if (ink_strstr(s, "Oblique")) return true;
+	if (ink_strstr(s, "Slanted")) return true;
+	return false;
+}
+
+/**
+ * Bold fonts are 'Bold'
+ */
+bool
+is_bold (const char *s)
+{
+	if (ink_strstr(s, "Bold")) return true;
+	return false;
+}
+
+/**
+ * Caps fonts are 'Caps'
+ */
+bool
+is_caps (const char *s)
+{
+	if (ink_strstr(s, "Caps")) return true;
+	return false;
+}
+
+/**
+ * Monospaced fonts are 'Mono'
+ */
+bool
+is_mono (const char *s)
+{
+	if (ink_strstr(s, "Mono")) return true;
+	return false;
+}
+
+/**
+ * Rounded fonts are 'Round'
+ */
+bool
+is_round (const char *s)
+{
+	if (ink_strstr(s, "Round")) return true;
+	return false;
+}
+
+/**
+ * Outline fonts are 'Outline'
+ */
+bool
+is_outline (const char *s)
+{
+	if (ink_strstr(s, "Outline")) return true;
+	return false;
+}
+
+/**
+ * Swash fonts are 'Swash'
+ */
+bool
+is_swash (const char *s)
+{
+	if (ink_strstr(s, "Swash")) return true;
+	return false;
+}
+
+/**
+ * Determines if two style names match.  This allows us to match
+ * based on the type of style rather than simply doing string matching,
+ * because for instance 'Plain' and 'Normal' mean the same thing.
+ * 
+ * Q:  Shouldn't this include the other tests such as is_outline, etc.?
+ * Q:  Is there a problem with strcasecmp on Win32?  Should it use stricmp?
+ */
+static int
+style_name_compare (const void *aa, const void *bb)
+{
+	const char *a = (char *) aa;
+	const char *b = (char *) bb;
+
+ if (is_regular(a) && !is_regular(b)) return -1;
+ if (is_regular(b) && !is_regular(a)) return 1;
+
+ if (is_bold(a) && !is_bold(b)) return 1;
+ if (is_bold(b) && !is_bold(a)) return -1;
+
+ if (is_italic(a) && !is_italic(b)) return 1;
+ if (is_italic(b) && !is_italic(a)) return -1;
+
+ if (is_nonbold(a) && !is_nonbold(b)) return 1;
+ if (is_nonbold(b) && !is_nonbold(a)) return -1;
+
+ if (is_caps(a) && !is_caps(b)) return 1;
+ if (is_caps(b) && !is_caps(a)) return -1;
+
+ return strcasecmp (a, b);
+}
+
+static int
+style_record_compare (const void *aa, const void *bb)
+{
+	NRStyleRecord *a = (NRStyleRecord *) aa;
+	NRStyleRecord *b = (NRStyleRecord *) bb;
+
+	return (style_name_compare (a->name, b->name));
+}
+
+static void font_factory_name_list_destructor (NRNameList *list) 
+{
+       for (unsigned int i=0; i<list->length; i++) 
+		 free(list->names[i]);
+       if ( list->names ) nr_free (list->names);
+}
+
+static void font_factory_style_list_destructor (NRStyleList *list) 
+{
+       for (unsigned int i=0; i<list->length; i++) {
+           free((list->records)[i].name);
+           free((list->records)[i].descr);
+       }
+       if ( list->records ) nr_free (list->records);
+}
+
+/**
+ * On Win32 performs a stricmp(a,b), otherwise does a strcasecmp(a,b)
+ */
+static int
+family_name_compare (const void *a, const void *b)
+{
+#ifndef WIN32
+        return strcasecmp ((*((const char **) a)), (*((const char **) b)));
+#else
+        return stricmp ((*((const char **) a)), (*((const char **) b)));
+#endif
+}
+
 void noop (...) {}
 //#define PANGO_DEBUG g_print
 #define PANGO_DEBUG noop
+
+
+
+///////////////////// FontFactory
 
 font_factory*  font_factory::lUsine=NULL;
 
@@ -57,7 +264,7 @@ font_factory::~font_factory(void)
 //	g_object_unref(fontContext);
 }
 
-font_instance*        font_factory::FaceFromDescr(const char* descr)
+font_instance* font_factory::FaceFromDescr(const char* descr)
 {
 	PangoFontDescription* temp_descr=pango_font_description_from_string(descr);
 	font_instance *res=Face(temp_descr);
@@ -65,7 +272,7 @@ font_instance*        font_factory::FaceFromDescr(const char* descr)
 	return res;
 }
 
-font_instance*        font_factory::Face(PangoFontDescription* descr, bool canFail)
+font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
 {
 #ifdef WITH_XFT
 	pango_font_description_set_size (descr, 512*PANGO_SCALE); // mandatory huge size (hinting workaround)
@@ -123,7 +330,7 @@ font_instance*        font_factory::Face(PangoFontDescription* descr, bool canFa
   return res;
 }
 
-font_instance*        font_factory::Face(const char* family, int variant, int style, int weight, int stretch, int /*size*/, int /*spacing*/)
+font_instance* font_factory::Face(const char* family, int variant, int style, int weight, int stretch, int /*size*/, int /*spacing*/)
 {
 	PangoFontDescription*  temp_descr=pango_font_description_new();
 	pango_font_description_set_family(temp_descr,family);
@@ -136,90 +343,72 @@ font_instance*        font_factory::Face(const char* family, int variant, int st
 	return res;
 }
 
-font_instance*        font_factory::Face(const char* family, NRTypePosDef apos)
+font_instance* font_factory::Face(const char* family, NRTypePosDef apos)
 {
 	PangoFontDescription*  temp_descr=pango_font_description_new();
-	pango_font_description_set_family(temp_descr,family);
+
+	pango_font_description_set_family (temp_descr, family);
+
 	if ( apos.variant == NR_POS_VARIANT_SMALLCAPS ) {
-		pango_font_description_set_variant(temp_descr,PANGO_VARIANT_SMALL_CAPS);
+		pango_font_description_set_variant (temp_descr, PANGO_VARIANT_SMALL_CAPS);
 	} else {
-		pango_font_description_set_variant(temp_descr,PANGO_VARIANT_NORMAL);
+		pango_font_description_set_variant (temp_descr, PANGO_VARIANT_NORMAL);
 	}
+
 	if ( apos.italic ) {
-		pango_font_description_set_style(temp_descr,PANGO_STYLE_ITALIC);
+		pango_font_description_set_style (temp_descr, PANGO_STYLE_ITALIC);
 	} else if ( apos.oblique ) {
-		pango_font_description_set_style(temp_descr,PANGO_STYLE_OBLIQUE);
+		pango_font_description_set_style (temp_descr, PANGO_STYLE_OBLIQUE);
 	} else {
-		pango_font_description_set_style(temp_descr,PANGO_STYLE_NORMAL);
+		pango_font_description_set_style (temp_descr, PANGO_STYLE_NORMAL);
 	}
+
 	if ( apos.weight <= NR_POS_WEIGHT_ULTRA_LIGHT ) {
-		pango_font_description_set_weight(temp_descr,PANGO_WEIGHT_ULTRALIGHT);
+		pango_font_description_set_weight (temp_descr, PANGO_WEIGHT_ULTRALIGHT);
 	} else if ( apos.weight <= NR_POS_WEIGHT_LIGHT ) {
-		pango_font_description_set_weight(temp_descr,PANGO_WEIGHT_LIGHT);
+		pango_font_description_set_weight (temp_descr, PANGO_WEIGHT_LIGHT);
 	} else if ( apos.weight <= NR_POS_WEIGHT_NORMAL ) {
-		pango_font_description_set_weight(temp_descr,PANGO_WEIGHT_NORMAL);
+		pango_font_description_set_weight (temp_descr, PANGO_WEIGHT_NORMAL);
 	} else if ( apos.weight <= NR_POS_WEIGHT_SEMIBOLD ) {
-		pango_font_description_set_weight(temp_descr,PANGO_WEIGHT_BOLD);
+		pango_font_description_set_weight (temp_descr, PANGO_WEIGHT_BOLD);
 	} else if ( apos.weight <= NR_POS_WEIGHT_BOLD ) {
-		pango_font_description_set_weight(temp_descr,PANGO_WEIGHT_ULTRABOLD);
+		pango_font_description_set_weight (temp_descr, PANGO_WEIGHT_ULTRABOLD);
 	} else {
-		pango_font_description_set_weight(temp_descr,PANGO_WEIGHT_HEAVY);
+		pango_font_description_set_weight (temp_descr, PANGO_WEIGHT_HEAVY);
 	}
+
 	if ( apos.stretch <= NR_POS_STRETCH_ULTRA_CONDENSED ) {
-		pango_font_description_set_stretch(temp_descr,PANGO_STRETCH_EXTRA_CONDENSED);
+		pango_font_description_set_stretch (temp_descr, PANGO_STRETCH_EXTRA_CONDENSED);
 	} else if ( apos.stretch <= NR_POS_STRETCH_CONDENSED ) {
-		pango_font_description_set_stretch(temp_descr,PANGO_STRETCH_CONDENSED);
+		pango_font_description_set_stretch (temp_descr, PANGO_STRETCH_CONDENSED);
 	} else if ( apos.stretch <= NR_POS_STRETCH_SEMI_CONDENSED ) {
-		pango_font_description_set_stretch(temp_descr,PANGO_STRETCH_SEMI_CONDENSED);
+		pango_font_description_set_stretch (temp_descr, PANGO_STRETCH_SEMI_CONDENSED);
 	} else if ( apos.stretch <= NR_POS_WEIGHT_NORMAL ) {
-		pango_font_description_set_stretch(temp_descr,PANGO_STRETCH_NORMAL);
+		pango_font_description_set_stretch (temp_descr, PANGO_STRETCH_NORMAL);
 	} else if ( apos.stretch <= NR_POS_STRETCH_SEMI_EXPANDED ) {
-		pango_font_description_set_stretch(temp_descr,PANGO_STRETCH_SEMI_EXPANDED);
+		pango_font_description_set_stretch (temp_descr, PANGO_STRETCH_SEMI_EXPANDED);
 	} else if ( apos.stretch <= NR_POS_STRETCH_EXPANDED ) {
-		pango_font_description_set_stretch(temp_descr,PANGO_STRETCH_EXPANDED);
+		pango_font_description_set_stretch (temp_descr, PANGO_STRETCH_EXPANDED);
 	} else {
-		pango_font_description_set_stretch(temp_descr,PANGO_STRETCH_EXTRA_EXPANDED);
+		pango_font_description_set_stretch (temp_descr, PANGO_STRETCH_EXTRA_EXPANDED);
 	}
-	font_instance *res=Face(temp_descr);
-	pango_font_description_free(temp_descr);
+
+	font_instance *res = Face (temp_descr);
+	pango_font_description_free (temp_descr);
 	return res;
 }
 
-void                  font_factory::UnrefFace(font_instance* who)
+void font_factory::UnrefFace(font_instance* who)
 {
-  if ( who == NULL ) return;
-  if ( loadedFaces.find(who->descr) == loadedFaces.end() ) {
-    // not found
-  } else {
-    loadedFaces.erase(loadedFaces.find(who->descr));
-  }
+    if ( who == NULL ) return;
+    if ( loadedFaces.find(who->descr) == loadedFaces.end() ) {
+        // not found
+    } else {
+        loadedFaces.erase(loadedFaces.find(who->descr));
+    }
 }
 
-static void font_factory_name_list_destructor (NRNameList *list) {
-       for (unsigned int i=0;i<list->length;i++) free(list->names[i]);
-       if ( list->names ) nr_free(list->names);
-}
-
-static void font_factory_style_list_destructor (NRStyleList *list) {
-       for (unsigned int i=0;i<list->length;i++) free(list->names[i]);
-       if ( list->names ) nr_free(list->names);
-       if ( list->pango_descrs ) g_free(list->pango_descrs);
-}
-
-/**
- * On Win32 performs a stricmp(a,b), otherwise does a strcasecmp(a,b)
- */
-static int
-family_name_compare (const void *a, const void *b)
-{
-#ifndef WIN32
-        return strcasecmp ((*((const char **) a)), (*((const char **) b)));
-#else
-        return stricmp ((*((const char **) a)), (*((const char **) b)));
-#endif
-}
-
-NRNameList*           font_factory::Families(NRNameList *flist)
+NRNameList* font_factory::Families(NRNameList *flist)
 {
 	PangoFontFamily**  fams=NULL;
 	int                nbFam=0;
@@ -253,7 +442,8 @@ NRNameList*           font_factory::Families(NRNameList *flist)
 	
 	return flist;
 }
-NRStyleList*           font_factory::Styles(const gchar *family, NRStyleList *slist)
+
+NRStyleList* font_factory::Styles(const gchar *family, NRStyleList *slist)
 {
 	PangoFontFamily* theFam=NULL;
 
@@ -267,7 +457,6 @@ NRStyleList*           font_factory::Styles(const gchar *family, NRStyleList *sl
 			const char* fname=pango_font_family_get_name(fams[i]);
 			if ( fname && strcmp(family,fname) == 0 ) {
 				theFam=fams[i];
-				fams[i]=NULL;
 				break;
 			}
 		}
@@ -278,45 +467,61 @@ NRStyleList*           font_factory::Styles(const gchar *family, NRStyleList *sl
 	// nothing found
 	if ( theFam == NULL ) {
 		slist->length = 0;
-		slist->names = NULL;
-		slist->pango_descrs = NULL;
+		slist->records = NULL;
 		slist->destructor = NULL;
 		return slist;
 	}
 
 	// search faces in the found family
-	PangoFontFace**  facs=NULL;
-	int							 nbFac=0;
-	pango_font_family_list_faces(theFam, &facs, &nbFac);
+	PangoFontFace**  faces=NULL;
+	int nFaces=0;
+	pango_font_family_list_faces (theFam, &faces, &nFaces);
 
-	slist->length = nbFac;
-	slist->names = (guchar **)malloc(nbFac*sizeof(guchar*));
-	slist->pango_descrs = (guchar **)malloc(nbFac*sizeof(guchar*));
+	slist->records = (NRStyleRecord *) malloc (nFaces * sizeof (NRStyleRecord));
 	slist->destructor = font_factory_style_list_destructor;
 
-	for (int i=0;i<nbFac;i++) {
+	int nr = 0;
+	for (int i=0; i<nFaces; i++) {
 
-               // no unnamed faces
-               if (pango_font_face_get_face_name (facs[i]) == NULL)
-                       continue;
-               if (pango_font_description_to_string (pango_font_face_describe(facs[i])) == NULL)
-                       continue;
+                // no unnamed faces
+                if (pango_font_face_get_face_name (faces[i]) == NULL)
+                    continue;
+                if (pango_font_face_describe(faces[i]) == NULL)
+                    continue;
+                if (pango_font_description_to_string (pango_font_face_describe(faces[i])) == NULL)
+                    continue;
 
-               guchar *name = (guchar *) g_strdup (pango_font_face_get_face_name (facs[i]));
-               guchar *descr = (guchar *) g_strdup (pango_font_description_to_string (pango_font_face_describe(facs[i])));
+                guchar *name = (guchar *) g_strdup (pango_font_face_get_face_name (faces[i]));
+                guchar *descr = (guchar *) g_strdup (pango_font_description_to_string (pango_font_face_describe(faces[i])));
 
-               // no duplicates
-               for (int j = 0; j < i; j ++) {
-                       if (!strcmp ((const char *) slist->names[j], (const char *) name))
-                               continue;
-               }
+                // no duplicates
+                for (int j = 0; j < nr; j ++) {
+ 			 if (!strcmp ((const char *) ((slist->records)[j].name), (const char *) name)) {
+                                continue;
+ 			 }
+                }
 
-               slist->names[i] = name;
-               slist->pango_descrs[i] = descr;
+                slist->records[nr].name = name;
+                slist->records[nr].descr = descr;
+                nr ++;
 	}
+
+	slist->length = nr;
+
+	qsort (slist->records, slist->length, sizeof (NRStyleRecord), style_record_compare);
 	
-	g_free(facs);
+	g_free(faces);
 	
 	return slist;
 }
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

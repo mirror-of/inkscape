@@ -182,20 +182,12 @@ sp_text_edit_dialog (void)
                            
         gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
                              
-        gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", 
-                             G_CALLBACK (sp_text_edit_dialog_destroy), dlg );
-                             
-        gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", 
-                             G_CALLBACK (sp_text_edit_dialog_delete), dlg );
-                             
-        g_signal_connect ( G_OBJECT (INKSCAPE), "shut_down", 
-                           G_CALLBACK (sp_text_edit_dialog_delete), dlg );
+        gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_text_edit_dialog_destroy), dlg );
+        gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_text_edit_dialog_delete), dlg );
+        g_signal_connect ( G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_text_edit_dialog_delete), dlg );
                            
-        g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", 
-                           G_CALLBACK (sp_dialog_hide), dlg );
-                           
-        g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", 
-                           G_CALLBACK (sp_dialog_unhide), dlg );
+        g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg );
+        g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg );
 
         gtk_window_set_policy (GTK_WINDOW (dlg), TRUE, TRUE, FALSE);
 
@@ -451,48 +443,39 @@ sp_text_edit_dialog_update_object ( SPText *text, SPRepr *repr )
     
     if (repr)
     {
-        GtkWidget *fontsel, *preview, *b, *combo;
-        SPCSSAttr *css;
-        font_instance *font;
-        gchar c[256];
-	 Inkscape::SVGOStringStream os;	
-        const char *sstr;
+        GtkWidget *fontsel = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "fontsel");
+        GtkWidget *preview = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "preview");
 
-        fontsel = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "fontsel");
-        preview = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "preview");
-
-        css = sp_repr_css_attr_new ();
+        SPCSSAttr *css = sp_repr_css_attr_new ();
 
         /* font */
-        font = sp_font_selector_get_font (SP_FONT_SELECTOR (fontsel));
+        font_instance *font = sp_font_selector_get_font (SP_FONT_SELECTOR (fontsel));
 
-        font->Family( c, 256);
+        gchar c[256];
+        font->Family(c, 256);
         sp_repr_css_set_property (css, "font-family", c);
 
         font->Attribute( "weight", c, 256);
-        g_strdown (c);
         sp_repr_css_set_property (css, "font-weight", c);
 
         font->Attribute("style", c, 256);
-        g_strdown (c);
         sp_repr_css_set_property (css, "font-style", c);
 
         font->Attribute("stretch", c, 256);
-        g_strdown (c);
         sp_repr_css_set_property (css, "font-stretch", c);
 
         font->Attribute("variant", c, 256);
-        g_strdown (c);
         sp_repr_css_set_property (css, "font-variant", c);
 
+        Inkscape::SVGOStringStream os;
         os << sp_font_selector_get_size (SP_FONT_SELECTOR (fontsel));
         sp_repr_css_set_property (css, "font-size", os.str().c_str());
 
-				font->Unref();
+        font->Unref();
         font=NULL;
 				
         /* Layout */
-        b = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "text_anchor_start");
+        GtkWidget *b = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "text_anchor_start");
         
         if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (b))) {
             sp_repr_css_set_property (css, "text-anchor", "start");
@@ -513,8 +496,8 @@ sp_text_edit_dialog_update_object ( SPText *text, SPRepr *repr )
         } else {
             sp_repr_css_set_property (css, "writing-mode", "tb");
         }
-        combo = (GtkWidget*)g_object_get_data ((GObject *) dlg, "line_spacing");
-        sstr = gtk_entry_get_text ((GtkEntry *) ((GtkCombo *) (combo))->entry);
+        GtkWidget *combo = (GtkWidget*)g_object_get_data ((GObject *) dlg, "line_spacing");
+        const char *sstr = gtk_entry_get_text ((GtkEntry *) ((GtkCombo *) (combo))->entry);
         sp_repr_set_attr (repr, "sodipodi:linespacing", sstr);
 
         sp_repr_css_change (repr, css, "style");
@@ -613,31 +596,27 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
                                      gboolean dostyle, 
                                      gboolean docontent )
 {
-    GtkWidget *notebook, *textw, *fontsel, *preview, *apply, *def;
-    GtkTextBuffer *tb;
-    SPText *text;
-    SPRepr *repr;
-    SPStyle *style;
-    unsigned items;
-
     if (g_object_get_data (G_OBJECT (dlg), "blocked")) 
         return;
     
     g_object_set_data (G_OBJECT (dlg), "blocked", GINT_TO_POINTER (TRUE));
 
-    notebook = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "notebook");
-    textw = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "textw");
-    tb = (GtkTextBuffer*)g_object_get_data (G_OBJECT (dlg), "text");
-    fontsel = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "fontsel");
-    preview = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "preview");
-    apply = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "apply");
-    def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
+    GtkWidget *notebook = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "notebook");
+    GtkWidget *textw = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "textw");
+    GtkWidget *fontsel = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "fontsel");
+    GtkWidget *preview = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "preview");
+    GtkWidget *apply = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "apply");
+    GtkWidget *def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
 
-    text = sp_ted_get_selected_text_item ();
+    GtkTextBuffer *tb = (GtkTextBuffer*)g_object_get_data (G_OBJECT (dlg), "text");
 
+    SPText *text = sp_ted_get_selected_text_item ();
+
+    SPRepr *repr;
+    SPStyle *style;
     if (text)
     {
-        items = sp_ted_get_selected_text_count ();
+        guint items = sp_ted_get_selected_text_count ();
         if (items == 1) {
             gtk_widget_set_sensitive (textw, TRUE);
         } else {
@@ -685,23 +664,18 @@ sp_text_edit_dialog_read_selection ( GtkWidget *dlg,
     }
 
     if (dostyle) {
-        font_instance *tf;
-        font_instance *font=NULL;
         GtkWidget *b, *combo;
         const gchar *sstr;
 
-        tf = (font_factory::Default())->Face ( style->text->font_family.value, font_style_to_pos(*style) );
-        if ( tf ) {
-					font = tf;
-					font->Ref();
-					tf->Unref();
-					tf=NULL;
-				}
+        font_instance *font = (font_factory::Default())->Face ( style->text->font_family.value, font_style_to_pos(*style) );
+
         if (font) {
-            sp_font_selector_set_font (SP_FONT_SELECTOR (fontsel), font);
+            // the font is oversized, so we need to pass the true size separately
+            sp_font_selector_set_font (SP_FONT_SELECTOR (fontsel), font, style->font_size.computed);
             sp_font_preview_set_font (SP_FONT_PREVIEW (preview), font, SP_FONT_SELECTOR(fontsel));
-						font->Unref();
-						font=NULL;
+// crashed preview!
+//						font->Unref();
+//						font=NULL;
         }
 
         if (style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_START) {
