@@ -1,3 +1,9 @@
+2004-03-14  MenTaLguY <mental@rydia.net>
+
+	* src/xml/repr.cpp: existing listeners were getting dropped when new
+	  listeners were added; this fix makes the behavior documented in
+	  bug #896706 a little worse, but fixes bug #915913
+
 2004-03-14  rejon <jon@protofunk.org>
 
     * src/toolbox.cpp share/icons/icons.svg: Cleaned the file up to coding 
