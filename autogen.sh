@@ -29,10 +29,10 @@ ${srcdir}/tools-version.sh
 check_version ()
 {
     if expr $1 \>= $2 > /dev/null; then
-    echo "yes (version $1)"
+        echo "yes (version $1)"
     else
-    echo "Too old (found version $1)!"
-    DIE=1
+        echo "Too old (found version $1)!"
+        DIE=1
     fi
 }
 
@@ -59,7 +59,10 @@ fi
 
 echo -n "checking for automake >= $AUTOMAKE_REQUIRED_VERSION ... "
 # Prefer earlier versions just so that the earliest supported version gets test coverage by developers.
-if (automake-1.7 --version) < /dev/null > /dev/null 2>&1; then
+if (automake --version) < /dev/null > /dev/null 2>&1; then
+   AUTOMAKE=automake
+   ACLOCAL=aclocal
+elif (automake-1.7 --version) < /dev/null > /dev/null 2>&1; then
    AUTOMAKE=automake-1.7
    ACLOCAL=aclocal-1.7
 elif (automake-1.8 --version) < /dev/null > /dev/null 2>&1; then
@@ -72,7 +75,6 @@ else
     echo "  (or a newer version if it is available)"
     DIE=1
 fi
-
 if test x$AUTOMAKE != x; then
     VER=`$AUTOMAKE --version \
          | grep automake | sed "s/.* \([0-9.]*\)[-a-z0-9]*$/\1/"`

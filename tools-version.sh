@@ -5,7 +5,7 @@
 # distro web page: http://distro.pipfield.ca/ 
 
 # Please add a tool you want to check
-TOOLS="m4 autoconf autoheader automake automake-1.7 aclocal aclocal-1.7 intltoolize gettextize libtoolize "
+TOOLS="m4 autoconf autoheader automake automake-1.7 automake-1.8 aclocal aclocal-1.7 aclocal-1.8 intltoolize gettextize libtoolize "
 ENVPATTERN='PATH\|FLAGS\|LANG'
 
 srcdir=`dirname $0`
@@ -21,9 +21,14 @@ echo )
 
 (echo '--2. tools-------------------------------------------------------------------'
 for x in $TOOLS; do 
-    echo "which $x: `which $x`"
-    y=`echo $x | cut -f1 -d-`
-    $x --version </dev/null | grep $y
+    loc=`which $x 2>/dev/null`
+    if [ -z "$loc" ]; then
+        echo "$x: not found"
+    else 
+        echo -n "$loc: "
+        y=`echo $x | cut -f1 -d-`
+        $x --version </dev/null | grep $y
+    fi
 done 
 echo )
 

@@ -17,11 +17,11 @@ AM_PROG_CC_STDC
 AM_PROG_AS
 AC_HEADER_STDC
 
-# Honor aclocal flags
+dnl Honor aclocal flags
 ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 
-AC_PROG_RANLIB
-
+dnl RANLIB is outdated now
+dnl AC_PROG_RANLIB
 AM_PROG_LIBTOOL
 
 dnl Verify our GCC version
@@ -469,7 +469,6 @@ dnl Have to add module makefiles (lauris)
 
 AC_CONFIG_FILES([
 Makefile
-m4/Makefile
 src/Makefile
 src/check-header-compile
 src/dialogs/makefile
