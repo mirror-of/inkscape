@@ -1,3 +1,9 @@
+2004-01-15  MenTaLguY <mental@rydia.net>
+
+	* glade/about.svg, glade/about_svg.tmpl, samples/inkscape.logo.svg:
+	  updated to match the current standard logos from
+	  inskcape_project/artwork
+
 2004-01-15  Nathan Hurst <njh@mail.csse.monash.edu.au>
 
 	* src/livarot/* an ungodly number of changes for improved use of
