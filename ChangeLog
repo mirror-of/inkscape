@@ -5,6 +5,8 @@
 
 	* src/sp-item.cpp, src/sp-item.h: implement lock/hide related methods
 
+	* src/verbs.cpp: "Remove All Kerns" -> "Remove Manual Kerning"
+
 2004-11-04  Kees Cook  <kees@outflux.net>
 
 	* src/dialogs/rdf.h, src/dialogs/rdf.cpp: added rdf:Bag for the
