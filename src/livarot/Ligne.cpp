@@ -641,7 +641,7 @@ void             FloatLigne::Copy(IntLigne* a)
 	nbBord=0;
 	nbRun=a->nbRun;
 	if ( nbRun > maxRun ) {
-		maxRun=nbRun;
+		maxRun=nbRun*2;
 		runs=(float_ligne_run*)realloc(runs,maxRun*sizeof(float_ligne_run));
 	}
 	for (int i=0;i<nbRun;i++) {
