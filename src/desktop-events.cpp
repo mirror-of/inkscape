@@ -247,7 +247,7 @@ sp_dt_guide_event (SPCanvasItem * item, GdkEvent * event, gpointer data)
 		
 		sp_guideline_set_color (SP_GUIDELINE (item), guide->hicolor);
 
-		GString *position_string = SP_PT_TO_METRIC_STRING (guide->position, SP_DEFAULT_METRIC);
+		GString *position_string = SP_PT_TO_METRIC_STRING (guide->position, (SPMetric) sp_desktop_get_default_metric(desktop));
 		char *guide_description = sp_guide_description(guide);
 
 		desktop->guidesMessageContext()->setF(Inkscape::NORMAL_MESSAGE, _("%s at %s"), guide_description, position_string->str);

@@ -507,8 +507,8 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
 
     sp_arc_position_set(SP_ARC(ac->item), (x0 + x1) / 2, (y0 + y1) / 2, (x1 - x0) / 2, (y1 - y0) / 2);
 
-    GString *xs = SP_PT_TO_METRIC_STRING(fabs(x1-x0), SP_DEFAULT_METRIC);
-    GString *ys = SP_PT_TO_METRIC_STRING(fabs(y1-y0), SP_DEFAULT_METRIC);
+    GString *xs = SP_PX_TO_METRIC_STRING(fabs(x1-x0), (SPMetric) sp_desktop_get_default_metric(desktop));
+    GString *ys = SP_PX_TO_METRIC_STRING(fabs(y1-y0), (SPMetric) sp_desktop_get_default_metric(desktop));
     ac->_message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Ellipse</b>: %s x %s; with <b>Ctrl</b> to make circle or integer-ratio ellipse; with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
     g_string_free(xs, FALSE);
     g_string_free(ys, FALSE);

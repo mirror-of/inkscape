@@ -558,8 +558,8 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
     }
 
     // status text
-    GString *xs = SP_PT_TO_METRIC_STRING(fabs( x1 - x0 ), SP_DEFAULT_METRIC);
-    GString *ys = SP_PT_TO_METRIC_STRING(fabs( y1 - y0 ), SP_DEFAULT_METRIC);
+    GString *xs = SP_PX_TO_METRIC_STRING(fabs( x1 - x0 ), (SPMetric) sp_desktop_get_default_metric(desktop));
+    GString *ys = SP_PX_TO_METRIC_STRING(fabs( y1 - y0 ), (SPMetric) sp_desktop_get_default_metric(desktop));
     rc._message_context->setF(Inkscape::NORMAL_MESSAGE, _("<b>Rectangle</b>: %s x %s; with <b>Ctrl</b> to make square or integer-ratio rectangle; with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
     g_string_free(xs, FALSE);
     g_string_free(ys, FALSE);
