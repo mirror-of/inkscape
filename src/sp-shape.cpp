@@ -51,6 +51,7 @@
 #include "sp-gradient.h"
 #include "gradient-chemistry.h"
 #include "sp-defs.h"
+#include "prefs-utils.h"
 
 #define noSHAPE_VERBOSE
 
@@ -625,7 +626,13 @@ sp_shape_print (SPItem *item, SPPrintContext *ctx)
 
 	if (!shape->curve) return;
 
-        //sp_print_comment(ctx, "Start");
+        gint add_comments = prefs_get_int_attribute_limited ("printing.debug", "add-label-comments", 0, 0, 1);
+        if (add_comments) {
+            gchar * comment = g_strdup_printf("begin '%s'",
+                                              SP_OBJECT(item)->defaultLabel());
+            sp_print_comment(ctx, comment);
+            g_free(comment);
+        }
 
 	/* fixme: Think (Lauris) */
 	sp_item_invoke_bbox(item, &pbox, NR::identity(), TRUE);
@@ -673,7 +680,12 @@ sp_shape_print (SPItem *item, SPPrintContext *ctx)
             }
         }
 
-        //sp_print_comment(ctx,"End");
+        if (add_comments) {
+            gchar * comment = g_strdup_printf("end '%s'",
+                                              SP_OBJECT(item)->defaultLabel());
+            sp_print_comment(ctx, comment);
+            g_free(comment);
+        }
 }
 
 static NRArenaItem *

@@ -1402,13 +1402,24 @@ options_checkbox (
             options_changed_int
             );
 
-options_checkbox (
+        options_checkbox (
     /* TRANSLATORS: When on, an imported bitmap creates an <image> element; otherwise it is a
      * rectangle with bitmap fill. */
     _("Import bitmap as <image>"), 
     _("When on, an imported bitmap creates an <image> element; otherwise it is a rectangle with bitmap fill"), tt,
     vb,
     "options.importbitmapsasimages", "value", 1,
+    options_changed_boolean
+    );
+
+        options_checkbox (
+    /* TRANSLATORS: When on, the print out (currently Postscript) will have
+     * a comment with the each object's label visible, marking the section
+     * of the printing commands that represent the given object. */
+    _("Add label comments to printing output"), 
+    _("When on, a comment will be added to the raw print output, marking the rendered output for an object with its label"), tt,
+    vb,
+    "printing.debug", "show-label-comments", 0,
     options_changed_boolean
     );
 

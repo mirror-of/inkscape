@@ -131,6 +131,7 @@ static char const preferences_skeleton[] =
 "  </group>\n"
 "  <group id=\"printing\">\n"
 "    <settings id=\"ps\"/>\n"
+"    <group id=\"debug\" add-label-comments=\"0\"/>\n"
 "  </group>\n"
 "\n"
 "  <group id=\"options\">\n"

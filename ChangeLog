@@ -4,14 +4,18 @@
 	  routine to work around a Pango crash bug.  This can be removed once
 	  Pango is fixed.  See bug #1025565.  Actually, I figured out a fix.
 	* print.cpp, print.h, sp-shape.cpp, extension/print.cpp,
-	extension/print.h, extension/implementation/implementation.cpp,
-	extension/implementation/implementation.h,
-	extension/implementation/plugin.cpp, extension/implementation/plugin.h,
-	extension/internal/gnome.h, extension/internal/ps.cpp,
-	extension/internal/ps.h, extension/internal/win32.h:
-	In an attempt to start debugging print rendering, I've added the
-	Print::comment function so that SPItem boundries can be easily
-	seen in rendered output.
+      extension/print.h, extension/implementation/implementation.cpp,
+      extension/implementation/implementation.h,
+      extension/implementation/plugin.cpp, extension/implementation/plugin.h,
+      extension/internal/gnome.h, extension/internal/ps.cpp,
+      extension/internal/ps.h, extension/internal/win32.h:
+      In an attempt to start debugging print rendering, I've added the
+      Print::comment function so that SPItem boundries can be easily
+      seen in rendered output.
+	* src/preferences-skeleton.h, src/sp-shape.cpp,
+      src/dialogs/display-settings.cpp, src/extension/internal/ps.cpp:
+      Added printout comments for print debugging.  Fixed dash output
+	  bug #1104050.
 
 2005-01-30  Jon A. Cruz  <jon@joncruz.org>
 	* src/io/sys.h, src/io/sys.cpp: added utility routine to cleanup

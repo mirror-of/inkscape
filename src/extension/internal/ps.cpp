@@ -566,18 +566,18 @@ PrintPS::print_stroke_style(SVGOStringStream &os, const SPStyle *style)
 
     os << rgb[0] << " " << rgb[1] << " " << rgb[2] << " setrgbcolor\n";
 
-    if (style->stroke_dasharray_set) {
-        if (style->stroke_dash.n_dash && style->stroke_dash.dash) {
-            int i;
-            os << "[";
-            for (i = 0; i < style->stroke_dash.n_dash; i++) {
-                if ((i)) {
-                    os << " ";
-                }
-                os << style->stroke_dash.dash[i];
+    if (style->stroke_dasharray_set &&
+        style->stroke_dash.n_dash &&
+        style->stroke_dash.dash) {
+        int i;
+        os << "[";
+        for (i = 0; i < style->stroke_dash.n_dash; i++) {
+            if ((i)) {
+                os << " ";
             }
-            os << "] " << style->stroke_dash.offset << " setdash\n";
+            os << style->stroke_dash.dash[i];
         }
+        os << "] " << style->stroke_dash.offset << " setdash\n";
     } else {
         os << "[] 0 setdash\n";
     }
