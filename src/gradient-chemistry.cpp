@@ -166,8 +166,6 @@ sp_gradient_get_private_normalized(SPDocument *document, SPGradient *vector, SPG
     SPGradient *gr = (SPGradient *) document->getObjectByRepr(repr);
     g_assert(gr != NULL);
     g_assert(SP_IS_GRADIENT(gr));
-    // set state
-    gr->state = SP_GRADIENT_STATE_PRIVATE;
 
     return gr;
 }
@@ -235,7 +233,7 @@ sp_gradient_fork_private_if_necessary(SPGradient *gr, SPGradient *vector,
 
     // Check the number of uses of the gradient within this object;
     // if we are private and there are no other users,
-    if ((gr->state == SP_GRADIENT_STATE_PRIVATE) && (SP_OBJECT_HREFCOUNT(gr) <= count_gradient_hrefs(user, gr))) {
+    if (SP_OBJECT_HREFCOUNT(gr) <= count_gradient_hrefs(user, gr)) {
         // check vector
         if ( gr->ref->getObject() != vector) {
             /* our href is not the vector; relink */
@@ -277,8 +275,6 @@ sp_gradient_fork_private_if_necessary(SPGradient *gr, SPGradient *vector,
 
         return gr_new;
     } else {
-        /* Set state */
-        gr->state = SP_GRADIENT_STATE_PRIVATE;
         return gr;
     }
 }
@@ -690,14 +686,13 @@ sp_item_set_gradient(SPItem *item, SPGradient *gr, SPGradientType type, bool is_
 
         //g_print("hrefcount %d   count %d\n", SP_OBJECT_HREFCOUNT(ig), count_gradient_hrefs(SP_OBJECT(item), ig));
 
-        if (current->state == SP_GRADIENT_STATE_PRIVATE &&
-            (SP_OBJECT_HREFCOUNT(current) == 1 || SP_OBJECT_HREFCOUNT(current) == count_gradient_hrefs(SP_OBJECT(item), current))) {
+        if (SP_OBJECT_HREFCOUNT(current) == 1 || 
+            SP_OBJECT_HREFCOUNT(current) == count_gradient_hrefs(SP_OBJECT(item), current)) {
+
             // current is private and it's either used once, or all its uses are by children of item;
             // so just change its href to vector
 
-            g_assert(current->state == SP_GRADIENT_STATE_PRIVATE);
-
-            if ( current->ref->getObject() != gr ) {
+            if ( sp_gradient_get_vector(current, false) != gr ) {
                 /* href is not the vector */
                 sp_gradient_repr_set_link(SP_OBJECT_REPR(current), gr);
             }
@@ -705,6 +700,7 @@ sp_item_set_gradient(SPItem *item, SPGradient *gr, SPGradientType type, bool is_
             return current;
 
         } else {
+
             // the gradient is not private, or it is shared with someone else;
             // normalize it (this includes creating new private if necessary)
             SPGradient *normalized = sp_gradient_fork_private_if_necessary(current, gr, type, item);
@@ -712,6 +708,7 @@ sp_item_set_gradient(SPItem *item, SPGradient *gr, SPGradientType type, bool is_
             g_return_val_if_fail(normalized != NULL, NULL);
 
             if (normalized != current) {
+
                 /* We have to change object style here; recursive because this is used from
                  * fill&stroke and must work for groups etc. */
                 sp_item_repr_set_style_gradient(SP_OBJECT_REPR(item), is_fill? "fill" : "stroke", normalized, true);
