@@ -671,6 +671,18 @@ options_dropper ()
     return vb;
 }
 
+GtkWidget *
+new_tab (GtkWidget *nb, const gchar *label)
+{
+     GtkWidget *l = gtk_label_new (label);
+     gtk_widget_show (l);
+     GtkWidget *vb = gtk_vbox_new (FALSE, VB_MARGIN);
+     gtk_widget_show (vb);
+     gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
+     gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+     return vb;
+}
+
 void
 sp_display_dialog (void)
 {
@@ -739,12 +751,7 @@ sp_display_dialog (void)
 
 
 // Mouse                                      
-        l = gtk_label_new (_("Mouse"));
-        gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, VB_MARGIN);
-        gtk_widget_show (vb);
-        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+        vb = new_tab (nb, _("Mouse"));
 
         options_sb (
             _("Grab sensitivity:"), 
@@ -770,12 +777,7 @@ sp_display_dialog (void)
 
 
 // Scrolling
-        l = gtk_label_new (_("Scrolling"));
-        gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, VB_MARGIN);
-        gtk_widget_show (vb);
-        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+        vb = new_tab (nb, _("Scrolling"));
 
         options_sb (
             _("Mouse wheel scrolls by:"), 
@@ -847,12 +849,7 @@ sp_display_dialog (void)
             );
 
 // Steps
-        l = gtk_label_new (_("Steps"));
-        gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, VB_MARGIN);
-        gtk_widget_show (vb);
-        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+        vb = new_tab (nb, _("Steps"));
 
         options_sb (
             _("Arrow keys move by:"), 
@@ -901,12 +898,7 @@ sp_display_dialog (void)
             );
 
 // Tools
-        l = gtk_label_new (_("Tools"));
-        gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, VB_MARGIN);
-        gtk_widget_show (vb);
-        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+        vb = new_tab (nb, _("Tools"));
 
         GtkWidget *nb_tools = gtk_notebook_new ();
         gtk_widget_show (nb_tools);
@@ -914,12 +906,7 @@ sp_display_dialog (void)
 
         // Selector        
         {
-            l = gtk_label_new (_("Selector"));
-            gtk_widget_show (l);
-            GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
-            gtk_widget_show (vb_tool);
-            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
-            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
+            GtkWidget *vb_tool = new_tab (nb_tools, _("Selector"));
 
             GtkWidget *selector_page = options_selector ();
             gtk_widget_show (selector_page);
@@ -928,36 +915,20 @@ sp_display_dialog (void)
 
         // Node
         {
-            l = gtk_label_new (_("Node"));
-            gtk_widget_show (l);
-            GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
-            gtk_widget_show (vb_tool);
-            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
-            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
+            GtkWidget *vb_tool = new_tab (nb_tools, _("Node"));
 
             selcue_checkbox (vb_tool, tt, "tools.nodes");
-
         }
 
         // Zoom
         {
-            l = gtk_label_new (_("Zoom"));
-            gtk_widget_show (l);
-            GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
-            gtk_widget_show (vb_tool);
-            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
-            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
+            GtkWidget *vb_tool = new_tab (nb_tools, _("Zoom"));
 
             selcue_checkbox (vb_tool, tt, "tools.zoom");
         }
 
         { // The 4 shape tools
-            l = gtk_label_new (_("Shapes"));
-            gtk_widget_show (l);
-            GtkWidget *vb_shapes = gtk_vbox_new (FALSE, VB_MARGIN);
-            gtk_widget_show (vb_shapes);
-            gtk_container_set_border_width (GTK_CONTAINER (vb_shapes), VB_MARGIN);
-            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_shapes, l);
+            GtkWidget *vb_shapes = new_tab (nb_tools, _("Shapes"));
 
             GtkWidget *nb_shapes = gtk_notebook_new ();
             gtk_widget_show (nb_shapes);
@@ -965,42 +936,22 @@ sp_display_dialog (void)
 
             // Rect
             {
-                l = gtk_label_new (_("Rect"));
-                gtk_widget_show (l);
-                GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
-                gtk_widget_show (vb_tool);
-                gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
-                gtk_notebook_append_page (GTK_NOTEBOOK (nb_shapes), vb_tool, l);
+                GtkWidget *vb_tool = new_tab (nb_shapes, _("Rect"));
             }
 
             // Ellipse
             {
-                l = gtk_label_new (_("Ellipse"));
-                gtk_widget_show (l);
-                GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
-                gtk_widget_show (vb_tool);
-                gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
-                gtk_notebook_append_page (GTK_NOTEBOOK (nb_shapes), vb_tool, l);
+                GtkWidget *vb_tool = new_tab (nb_shapes, _("Ellipse"));
             }
 
             // Star
             {
-                l = gtk_label_new (_("Star"));
-                gtk_widget_show (l);
-                GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
-                gtk_widget_show (vb_tool);
-                gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
-                gtk_notebook_append_page (GTK_NOTEBOOK (nb_shapes), vb_tool, l);
+                GtkWidget *vb_tool = new_tab (nb_shapes, _("Star"));
             }
 
             // Spiral
             {
-                l = gtk_label_new (_("Spiral"));
-                gtk_widget_show (l);
-                GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
-                gtk_widget_show (vb_tool);
-                gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
-                gtk_notebook_append_page (GTK_NOTEBOOK (nb_shapes), vb_tool, l);
+                GtkWidget *vb_tool = new_tab (nb_shapes, _("Spiral"));
             }
 
             // common for all shapes
@@ -1009,12 +960,7 @@ sp_display_dialog (void)
 
         // Freehand
         {
-            l = gtk_label_new (_("Pencil"));
-            gtk_widget_show (l);
-            GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
-            gtk_widget_show (vb_tool);
-            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
-            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
+            GtkWidget *vb_tool = new_tab (nb_tools, _("Pencil"));
 
             options_sb (
                 _("Tolerance:"), 
@@ -1032,36 +978,21 @@ sp_display_dialog (void)
 
         // Pen
         {
-            l = gtk_label_new (_("Pen"));
-            gtk_widget_show (l);
-            GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
-            gtk_widget_show (vb_tool);
-            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
-            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
+            GtkWidget *vb_tool = new_tab (nb_tools, _("Pen"));
 
             selcue_checkbox (vb_tool, tt, "tools.freehand.pen");
         }
 
         // Text
         {
-            l = gtk_label_new (_("Text"));
-            gtk_widget_show (l);
-            GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
-            gtk_widget_show (vb_tool);
-            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
-            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
+            GtkWidget *vb_tool = new_tab (nb_tools, _("Text"));
 
             selcue_checkbox (vb_tool, tt, "tools.text");
         }
 
         // Dropper
         {
-            l = gtk_label_new (_("Dropper"));
-            gtk_widget_show (l);
-            GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
-            gtk_widget_show (vb_tool);
-            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
-            gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
+            GtkWidget *vb_tool = new_tab (nb_tools, _("Dropper"));
 
             GtkWidget *dropper_page = options_dropper ();
             gtk_widget_show (dropper_page);
@@ -1070,12 +1001,7 @@ sp_display_dialog (void)
 
 
 // Windows
-        l = gtk_label_new (_("Windows"));
-        gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, VB_MARGIN);
-        gtk_widget_show (vb);
-        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+        vb = new_tab (nb, _("Windows"));
 
         options_dialogs_ontop (vb, tt);
 
@@ -1105,12 +1031,7 @@ options_checkbox (
 
 
 // Clones
-        l = gtk_label_new (_("Clones"));
-        gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, VB_MARGIN);
-        gtk_widget_show (vb);
-        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+        vb = new_tab (nb, _("Clones"));
 
         // Clone compensation
         {
@@ -1179,12 +1100,7 @@ options_checkbox (
         }
 
 // Transforms
-        l = gtk_label_new (_("Transforms"));
-        gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, VB_MARGIN);
-        gtk_widget_show (vb);
-        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+        vb = new_tab (nb, _("Transforms"));
 
 options_checkbox (
     _("Scale stroke width"), 
@@ -1221,12 +1137,7 @@ options_checkbox (
 
 
 // To be broken into: Display, Save, Export, SVG, Commands
-        l = gtk_label_new (_("Misc"));
-        gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, VB_MARGIN);
-        gtk_widget_show (vb);
-        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+        vb = new_tab (nb, _("Misc"));
 
         options_sb (
             _("Default export resolution:"), 
