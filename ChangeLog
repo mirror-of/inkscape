@@ -1,6 +1,9 @@
 2004-02-11  Kees Cook  <kees@outflux.net>
 
     * src/Makefile.mingw, src/make.*: win32 compile updates.
+	* src/extensions/internal/gnome.cpp: added my missing "comment" code.
+	* src/shortcuts.cpp, doc/keys.xml, doc/keys.html, share/screens/keys.svg:
+	  added explicit ctrl-w. since gtk already binds it, we may as well show it.
 
 2004-02-10  Jon A. Cruz  <jon@joncruz.org>
 

@@ -183,7 +183,8 @@ PrintGNOME::release (Inkscape::Extension::Print *mod)
     return 0;
 }
 
-unsigned int comment (Inkscape::Extension::Print * module, const char * comment)
+unsigned int PrintGNOME::comment (Inkscape::Extension::Print * module,
+		                  const char * comment)
 {
 	// ignore comment
 	return 0;

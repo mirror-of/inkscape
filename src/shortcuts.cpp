@@ -82,6 +82,9 @@ sp_shortcut_init ()
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_ISO_Left_Tab, Inkscape::Verb::get(SP_VERB_FILE_PREV_DESKTOP), false);
 	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_ISO_Left_Tab, Inkscape::Verb::get(SP_VERB_FILE_PREV_DESKTOP), false);
 
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_w, Inkscape::Verb::get(SP_VERB_FILE_CLOSE_VIEW), true);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_W, Inkscape::Verb::get(SP_VERB_FILE_CLOSE_VIEW), true);
+
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_q, Inkscape::Verb::get(SP_VERB_FILE_QUIT), true);
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_Q, Inkscape::Verb::get(SP_VERB_FILE_QUIT), true);
 

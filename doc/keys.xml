@@ -38,6 +38,7 @@ can leave your ideas and requests there.</p>
 <keys><key><ctrl/>P</key>	 <action>print document</action></keys>
 <keys><key><ctrl/>S</key>	 <action>save document</action></keys>
 <keys><key><shift/><ctrl/>S</key>	 <action>save under a new name</action></keys>
+<keys><key><ctrl/>W</key>	 <action>close window</action></keys>
 <keys><key><ctrl/>Q</key>	 <action>exit Inkscape</action></keys>
 </group>
 
