@@ -130,8 +130,8 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
 
         PovShapeInfo shapeInfo;
 
-        shapeInfo.id    = id;
-        shapeInfo.color = "";
+        shapeInfo.id           = id;
+        shapeInfo.color        = "";
 
         //Try to get the fill color of the shape
         SPStyle *style = SP_OBJECT_STYLE(shape);
@@ -146,7 +146,10 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
             double dr = ((double)r) / 256.0;
             double dg = ((double)g) / 256.0;
             double db = ((double)b) / 256.0;
-            gchar *str = g_strdup_printf("rgb < %1.3f, %1.3f, %1.3f >", dr, dg, db);
+            double dopacity = SP_SCALE24_TO_FLOAT(style->opacity.value) *
+                              SP_SCALE24_TO_FLOAT(style->fill_opacity.value);
+            gchar *str = g_strdup_printf("rgbf < %1.3f, %1.3f, %1.3f %1.3f>",
+                     dr, dg, db, 1.0-dopacity);
             shapeInfo.color += str;
             g_free(str);
 
@@ -315,14 +318,22 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
             fprintf(f, "            } \n");
             fprintf(f, "        } \n");
             }
-        fprintf(f, "}\n\n\n");
+        fprintf(f, "}\n\n\n\n");
 
 
-        fprintf(f, "/* Same union, but with Z-diffs (actually Y in pov)*/\n");
-        fprintf(f, "#declare %sZ = union {\n", id);
         double zinc   = 0.2 / (double)povShapes.size();
-        double zscale = 1.0;
-        double ztrans = 0.0;
+        fprintf(f, "/*#### Same union, but with Z-diffs (actually Y in pov) ####*/\n");
+        fprintf(f, "\n\n");
+        fprintf(f, "/**\n");
+        fprintf(f, " * Allow the user to redefine the Z-Increment\n");
+        fprintf(f, " */\n");
+        fprintf(f, "#ifndef (AllShapes_Z_Increment)\n");
+        fprintf(f, "#declare AllShapes_Z_Increment = %f;\n", zinc);
+        fprintf(f, "#end\n");
+        fprintf(f, "\n");
+        fprintf(f, "#declare AllShapes_Z_Scale = 1.0;\n");
+        fprintf(f, "\n\n");
+        fprintf(f, "#declare %s_Z = union {\n", id);
         for (unsigned int i=0 ; i<povShapes.size() ; i++)
             {
             fprintf(f, "    object { %s\n", povShapes[i].id.c_str());
@@ -333,11 +344,10 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
                 fprintf(f, "            pigment { rgb <0,0,0> }\n");
             fprintf(f, "            finish { %s_Finish }\n", id);
             fprintf(f, "            } \n");
-            fprintf(f, "        scale <1, %2.5f, 1>  translate <1, %2.5f, 1>\n", 
-                                     zscale, ztrans);
+            fprintf(f, "        scale <1, %s_Z_Scale, 1>\n", id);
             fprintf(f, "        } \n");
-            zscale += zinc;
-            ztrans -= zinc/2.0;
+            fprintf(f, "#declare %s_Z_Scale = %s_Z_Scale + %s_Z_Increment;\n\n",
+                                  id, id, id);
             }
 
         fprintf(f, "}\n");

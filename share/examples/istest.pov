@@ -46,7 +46,18 @@
 #include "skies.inc"
 
 /*#########################################################################
-# Our Inkscape-exported shapes file
+# Note the Z-order differentation of the prisms in the object is
+# normally just sufficient to display all of the objects, and
+# avoid 'black spots' where surfaces are coincident.  This can
+# be adjusted by changing the value below.
+#########################################################################*/
+
+/*
+#declare AllShapes_Z_Increment = 0.008;
+*/
+
+
+/*#########################################################################
 # Note that the finish of the "all shapes" object exported
 # at the end of the shapes file can be modified, by defining
 # if before the #include.  Uncomment the following declaration
@@ -60,6 +71,10 @@
            specular 0.8
        }
 */
+
+/*#########################################################################
+# Our Inkscape-exported shapes file
+#########################################################################*/
 
 #include "isshapes.pov"
 
@@ -123,7 +138,7 @@ object {
     */
 
     //## As a group
-    object { AllShapesZ }
+    object { AllShapes_Z }
 
 
     translate<-AllShapes_CENTER_X, 0, -AllShapes_CENTER_Y>
