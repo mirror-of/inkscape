@@ -5,13 +5,10 @@
 # To avoid stripping the binaries, you can also:
 #  "--define '__spec_install_post /usr/lib/rpm/brp-compress'"
 
-# If you want to stop the auto require building, use
-#  AUTOREQ=no rpmbuild ....
-
 Name:		inkscape
 Summary:	A Vector Drawing Application
 Version:	@VERSION@
-Release:	CVS
+Release:	1
 Copyright:	GPL
 Group:		Applications/Graphics
 Source:		%{name}-%{version}.tar.gz
@@ -26,7 +23,6 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 # package names given in debian/control to rpm equivalent packages.
 Requires: gtk2 >= 2.4.0
 BuildRequires: gtk2-devel >= 2.4.0
-AutoReqProv: ${AUTOREQ:-yes}
 
 %description
 Inkscape is an SVG-based generic vector-drawing program for Linux/Unix/Windows/Mac.
@@ -80,7 +76,6 @@ rm -rf %{buildroot}
 * Wed Nov 24 2004 Kees Cook <kees@outflux.net>
 - Added SMP flags so I can build faster
 - Added static build capability
-- Added autoreq detection disabling for static builds
 
 * Sat Jul 17 2004 Bryce W. Harrington <bryce@bryceharrington.com>
 - Removing _libdir and TODO, updating description
