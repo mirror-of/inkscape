@@ -197,7 +197,7 @@ sp_node_context_selection_changed (SPSelection * selection, gpointer data)
 	SPEventContext * ec;
 	SPDesktop *desktop;
 	SPItem * item;
-	SPRepr *old_repr, *repr;
+	SPRepr *old_repr = NULL, *repr;
 
 	nc = SP_NODE_CONTEXT (data);
 	ec = SP_EVENT_CONTEXT (nc);
@@ -211,9 +211,10 @@ sp_node_context_selection_changed (SPSelection * selection, gpointer data)
 		sp_knot_holder_destroy (nc->knot_holder);
 	}
 
-	// remove old listener
-	sp_repr_remove_listener_by_data (old_repr, ec);
-	sp_repr_unref (old_repr);
+	if (old_repr) { // remove old listener
+		sp_repr_remove_listener_by_data (old_repr, ec);
+		sp_repr_unref (old_repr);
+	}
 
 	item = sp_selection_item (selection);
 	
@@ -312,13 +313,11 @@ nodepath_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * ol
 		sp_nodepath_update_from_item (nc, item);
  		if (nc->nodepath && saved) restore_nodepath_selection (nc->nodepath, saved);
 
-		sp_nodepath_update_statusbar (nc->nodepath);
-
 	} else if (kh && changed) {
 		sp_nodepath_update_from_item (nc, item);
-
-		sp_nodepath_update_statusbar (nc->nodepath);
 	}
+
+	sp_nodepath_update_statusbar (nc->nodepath);
 }
 
 static gint
