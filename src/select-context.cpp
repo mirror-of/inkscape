@@ -185,12 +185,6 @@ sp_select_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
 		} else {
 			sc->seltrans.show = SP_SELTRANS_SHOW_CONTENT;
 		}
-	} else if (!strcmp (key, "transform")) {
-		if (val && !strcmp (val, "keep")) {
-			sc->seltrans.transform = SP_SELTRANS_TRANSFORM_KEEP;
-		} else {
-			sc->seltrans.transform = SP_SELTRANS_TRANSFORM_OPTIMIZE;
-		}
 	} else if (!strcmp (key, "cue")) {
                if (val) {
                    if (!strcmp (val, "none")) {

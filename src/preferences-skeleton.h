@@ -110,6 +110,7 @@ static const char preferences_skeleton[] =
 "    <group id=\"simplifythreshold\" value=\"0.003\"/>\n"
 "    <group id=\"dialogsskiptaskbar\" value=\"1\"/>\n"
 "    <group id=\"arenatilescachesize\" value=\"8192\"/>\n"
+"    <group id=\"preservetransform\" value=\"0\"/>\n"
 "  </group>\n"
 "\n"
 "</inkscape>\n";

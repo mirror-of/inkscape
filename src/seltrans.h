@@ -30,11 +30,6 @@ enum {
 };
 
 enum {
-	SP_SELTRANS_TRANSFORM_OPTIMIZE,
-	SP_SELTRANS_TRANSFORM_KEEP
-};
-
-enum {
         SP_SELTRANS_CUE_NONE,
         SP_SELTRANS_CUE_MARK,
         SP_SELTRANS_CUE_BBOX
@@ -56,8 +51,7 @@ struct SPSelTrans {
 
 	guint state : 1;
 	guint show : 1;
-	guint transform : 1;
-        guint cue : 2;
+	guint cue : 2;
 
 	unsigned int grabbed : 1;
 	unsigned int show_handles : 1;

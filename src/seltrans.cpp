@@ -95,7 +95,6 @@ void sp_sel_trans_init(SPSelTrans *seltrans, SPDesktop *desktop)
 
 	seltrans->state = SP_SELTRANS_STATE_SCALE;
 	seltrans->show = SP_SELTRANS_SHOW_CONTENT;
-	seltrans->transform = SP_SELTRANS_TRANSFORM_OPTIMIZE;
 	seltrans->cue = SP_SELTRANS_CUE_MARK;
 
 	seltrans->spp = nr_new(NR::Point, SP_SELTRANS_SPP_SIZE);
@@ -359,18 +358,7 @@ void sp_sel_trans_ungrab(SPSelTrans *seltrans)
 					sp_item_set_i2d_affine(item, i2dnew);
 				}
 
-				// FIXME: make preserve/optimize switch global and leave only _write_transform call here
-				if (seltrans->transform == SP_SELTRANS_TRANSFORM_OPTIMIZE) {
-					sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
-				} else {
-					gchar tstr[80];
-					tstr[79] = '\0';
-					if (sp_svg_transform_write (tstr, 79, &item->transform)) {
-						sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", tstr);
-					} else {
-						sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", NULL);
-					}
-				}
+				sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
 			} 
 		}
 		seltrans->center *= seltrans->current;

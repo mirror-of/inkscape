@@ -35,6 +35,7 @@
 #include "sp-mask.h"
 #include "sp-item.h"
 #include "sp-item-rm-unsatisfied-cns.h"
+#include "prefs-utils.h"
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-fns.h"
 #include "libnr/nr-matrix-ops.h"
@@ -613,10 +614,12 @@ sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform)
 	g_return_if_fail (SP_IS_ITEM (item));
 	g_return_if_fail (repr != NULL);
 
+	gint preserve = prefs_get_int_attribute ("options.preservetransform", "value", 0);
+
 	if (!transform) {
 		sp_repr_set_attr (SP_OBJECT_REPR (item), "transform", NULL);
 	} else {
-		if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->write_transform) {
+		if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->write_transform && !preserve) {
 			NRMatrix lt;
 			lt = *transform;
 			((SPItemClass *) G_OBJECT_GET_CLASS(item))->write_transform (item, repr, &lt);

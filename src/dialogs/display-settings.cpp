@@ -92,12 +92,11 @@ options_selector_show_toggled (GtkToggleButton *button)
 }
 
 static void
-options_selector_transform_toggled (GtkToggleButton *button)
+options_store_transform_toggled (GtkToggleButton *button)
 {
 	if (gtk_toggle_button_get_active (button)) {
-		const gchar *val;
-		val = (const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value");
-		prefs_set_string_attribute ("tools.select", "transform", val);
+		const guint val = GPOINTER_TO_INT((const gchar*)gtk_object_get_data (GTK_OBJECT (button), "value"));
+		prefs_set_int_attribute ("options.preservetransform", "value", val);
 	}
 }
 
@@ -193,28 +192,6 @@ options_selector ()
         options_selector_show_toggled
         );
 
-    f = gtk_frame_new (_("Store transformation:"));
-    gtk_widget_show (f);
-    gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
-
-    fb = gtk_vbox_new (FALSE, 0);
-    gtk_widget_show (fb);
-    gtk_container_add (GTK_CONTAINER (f), fb);
-
-    gchar const *transform = prefs_get_string_attribute ("tools.select", "transform");
-
-    b = sp_select_context_add_radio (
-        NULL, fb, tt, _("Optimized"), _("If possible, apply transformation to objects without adding a transform= attribute"), "optimize",  0, false,
-        (transform == NULL) || !strcmp (transform, "optimize"),
-        options_selector_transform_toggled
-        );
-
-    sp_select_context_add_radio (
-        b, fb, tt, _("Preserved"), _("Always store transformation as a transform= attribute on objects"), "keep",  0, false,
-        transform && !strcmp (transform, "keep"),
-        options_selector_transform_toggled
-        );
-        
     f = gtk_frame_new (_("Per-object selection cue:"));
     gtk_widget_show (f);
     gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
@@ -697,7 +674,7 @@ sp_display_dialog (void)
 // Mouse                                      
         l = gtk_label_new (_("Mouse"));
         gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, 4);
+        vb = gtk_vbox_new (FALSE, VB_MARGIN);
         gtk_widget_show (vb);
         gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
@@ -728,7 +705,7 @@ sp_display_dialog (void)
 // Scrolling
         l = gtk_label_new (_("Scrolling"));
         gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, 4);
+        vb = gtk_vbox_new (FALSE, VB_MARGIN);
         gtk_widget_show (vb);
         gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
@@ -805,7 +782,7 @@ sp_display_dialog (void)
 // Steps
         l = gtk_label_new (_("Steps"));
         gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, 4);
+        vb = gtk_vbox_new (FALSE, VB_MARGIN);
         gtk_widget_show (vb);
         gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
@@ -856,50 +833,12 @@ sp_display_dialog (void)
             options_changed_percent
             );
 
-// Save
-        l = gtk_label_new (_("Save"));
-        gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, 4);
-        gtk_widget_show (vb);
-        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
-
-        options_sb (
-            _("Max recent documents:"), 
-            _("The maximum length of the Open Recent list in the File menu"), tt,
-            "",
-            vb,
-            0.0, 1000.0, 1.0, 1.0, 1.0,
-            "options.maxrecentdocuments", "value", 20.0,
-            true, false,
-            options_changed_int
-            );
-
-// Export
-        l = gtk_label_new (_("Export"));
-        gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, 4);
-        gtk_widget_show (vb);
-        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
-
-        options_sb (
-            _("Default resolution:"), 
-            _("Default bitmap resolution (in dots per inch) in the Export dialog"), tt, // FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
-            _("dpi"),
-            vb,
-            0.0, 6000.0, 1.0, 1.0, 1.0,
-            "dialogs.export.defaultxdpi", "value", 72.0,
-            true, false,
-            options_changed_int
-            );
-
 // Tools
         l = gtk_label_new (_("Tools"));
         gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, 4);
+        vb = gtk_vbox_new (FALSE, VB_MARGIN);
         gtk_widget_show (vb);
-        gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
+        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
 
         GtkWidget *nb_tools = gtk_notebook_new ();
@@ -910,9 +849,9 @@ sp_display_dialog (void)
         {
             l = gtk_label_new (_("Selector"));
             gtk_widget_show (l);
-            GtkWidget *vb_tool = gtk_vbox_new (FALSE, 4);
+            GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
             gtk_widget_show (vb_tool);
-            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), 4);
+            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
             gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
 
             GtkWidget *selector_page = options_selector ();
@@ -924,9 +863,9 @@ sp_display_dialog (void)
         {
             l = gtk_label_new (_("Pencil"));
             gtk_widget_show (l);
-            GtkWidget *vb_tool = gtk_vbox_new (FALSE, 4);
+            GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
             gtk_widget_show (vb_tool);
-            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), 4);
+            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
             gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
 
             options_sb (
@@ -945,9 +884,9 @@ sp_display_dialog (void)
         {
             l = gtk_label_new (_("Dropper"));
             gtk_widget_show (l);
-            GtkWidget *vb_tool = gtk_vbox_new (FALSE, 4);
+            GtkWidget *vb_tool = gtk_vbox_new (FALSE, VB_MARGIN);
             gtk_widget_show (vb_tool);
-            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), 4);
+            gtk_container_set_border_width (GTK_CONTAINER (vb_tool), VB_MARGIN);
             gtk_notebook_append_page (GTK_NOTEBOOK (nb_tools), vb_tool, l);
 
             GtkWidget *dropper_page = options_dropper ();
@@ -959,7 +898,7 @@ sp_display_dialog (void)
 // Windows
         l = gtk_label_new (_("Windows"));
         gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, 4);
+        vb = gtk_vbox_new (FALSE, VB_MARGIN);
         gtk_widget_show (vb);
         gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
@@ -982,13 +921,60 @@ options_checkbox (
     options_changed_boolean
     );
 
-// Display        
-        l = gtk_label_new (_("Display"));
+// To be broken into: Display, Save, Export, SVG, Commands
+        l = gtk_label_new (_("Misc"));
         gtk_widget_show (l);
-        vb = gtk_vbox_new (FALSE, 4);
+        vb = gtk_vbox_new (FALSE, VB_MARGIN);
         gtk_widget_show (vb);
-        gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
+        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+
+        options_sb (
+            _("Default export resolution:"), 
+            _("Default bitmap resolution (in dots per inch) in the Export dialog"), tt, // FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
+            _("dpi"),
+            vb,
+            0.0, 6000.0, 1.0, 1.0, 1.0,
+            "dialogs.export.defaultxdpi", "value", 72.0,
+            true, false,
+            options_changed_int
+            );
+
+        options_sb (
+            _("Max recent documents:"), 
+            _("The maximum length of the Open Recent list in the File menu"), tt,
+            "",
+            vb,
+            0.0, 1000.0, 1.0, 1.0, 1.0,
+            "options.maxrecentdocuments", "value", 20.0,
+            true, false,
+            options_changed_int
+            );
+
+        // Store transformation (global)
+        {
+            GtkWidget *f = gtk_frame_new (_("Store transformation:"));
+            gtk_widget_show (f);
+            gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
+
+            GtkWidget *fb = gtk_vbox_new (FALSE, 0);
+            gtk_widget_show (fb);
+            gtk_container_add (GTK_CONTAINER (f), fb);
+
+            gint preserve = prefs_get_int_attribute ("options.preservetransform", "value", 0);
+
+            GtkWidget *b = sp_select_context_add_radio (
+                NULL, fb, tt, _("Optimized"), _("If possible, apply transformation to objects without adding a transform= attribute"), NULL, 0, true,
+                preserve == 0,
+                options_store_transform_toggled
+                );
+
+            sp_select_context_add_radio (
+                b, fb, tt, _("Preserved"), _("Always store transformation as a transform= attribute on objects"), NULL, 1, true,
+                preserve != 0,
+                options_store_transform_toggled
+                );
+        }
      
         /* Oversample */
         hb = gtk_hbox_new (FALSE, 4);
@@ -1001,7 +987,7 @@ options_checkbox (
         gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
         om = gtk_option_menu_new ();
         gtk_widget_show (om);
-        gtk_box_pack_start (GTK_BOX (hb), om, TRUE, TRUE, 0);
+        gtk_box_pack_start (GTK_BOX (hb), om, FALSE, FALSE, 0);
 
         m = gtk_menu_new ();
         gtk_widget_show (m);
