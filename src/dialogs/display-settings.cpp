@@ -1188,6 +1188,13 @@ sp_display_dialog (void)
             gradientdrag_checkbox (vb_tool, tt, "tools.text");
         }
 
+        // Gradient
+        {
+            GtkWidget *vb_tool = new_tab (nb_tools, _("Gradient"));
+
+            selcue_checkbox (vb_tool, tt, "tools.gradient");
+        }
+
         // Dropper
         {
             GtkWidget *vb_tool = new_tab (nb_tools, _("Dropper"));

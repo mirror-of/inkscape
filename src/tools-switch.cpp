@@ -37,6 +37,7 @@
 #include "pen-context.h"
 #include "pencil-context.h"
 #include "text-context.h"
+#include "gradient-context.h"
 #include "zoom-context.h"
 #include "dropper-context.h"
 
@@ -54,6 +55,7 @@ static char const *tool_names[] = {
   "tools.freehand.pen",
   "tools.calligraphic",
   "tools.text",
+  "tools.gradient",
   "tools.zoom",
   "tools.dropper",
   NULL
@@ -71,6 +73,7 @@ static char const *tool_ids[] = {
   "pen",
   "calligraphic",
   "text",
+  "gradient",
   "zoom",
   "dropper",
   NULL
@@ -175,6 +178,12 @@ tools_switch (SPDesktop *dt, int num)
 		sp_desktop_activate_guides (dt, FALSE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
 		SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Click</b> to select or create text object, then type."));
+		break;
+	case TOOLS_GRADIENT:
+		sp_desktop_set_event_context (dt, SP_TYPE_GRADIENT_CONTEXT, tool_names[num]);
+		sp_desktop_activate_guides (dt, FALSE);
+		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
+		SP_VIEW(dt)->tipsMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Drag</b> to create a gradient on selected objects, <b>drag handles</b> to adjust gradients."));
 		break;
 	case TOOLS_ZOOM:
 		sp_desktop_set_event_context (dt, SP_TYPE_ZOOM_CONTEXT, tool_names[num]);

@@ -6,7 +6,7 @@
  * Authors:
  *   bulia byak <bulia@users.sf.net>
  *
- * Copyright (C) 2004 Authors
+ * Copyright (C) 2005 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */

@@ -1129,6 +1129,9 @@ ContextVerb::perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_CONTEXT_TEXT:
             tools_switch_current (TOOLS_TEXT);
             break;
+        case SP_VERB_CONTEXT_GRADIENT:
+            tools_switch_current (TOOLS_GRADIENT);
+            break;
         case SP_VERB_CONTEXT_ZOOM:
             tools_switch_current (TOOLS_ZOOM);
             break;
@@ -1188,6 +1191,11 @@ ContextVerb::perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_CONTEXT_TEXT_PREFS:
             prefs_set_int_attribute ("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
             prefs_set_int_attribute ("dialogs.preferences", "page_tools", PREFS_PAGE_TOOLS_TEXT);
+            sp_display_dialog ();
+            break;
+        case SP_VERB_CONTEXT_GRADIENT_PREFS:
+            prefs_set_int_attribute ("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
+            prefs_set_int_attribute ("dialogs.preferences", "page_tools", PREFS_PAGE_TOOLS_GRADIENT);
             sp_display_dialog ();
             break;
         case SP_VERB_CONTEXT_ZOOM_PREFS:
@@ -1765,6 +1773,8 @@ Verb * Verb::_base_verbs[] = {
         N_("Draw calligraphic lines"), "draw_calligraphic"),
     new ContextVerb(SP_VERB_CONTEXT_TEXT, "DrawText", N_("Text"),
         N_("Create and edit text objects"), "draw_text"),
+    new ContextVerb(SP_VERB_CONTEXT_GRADIENT, "DrawGradient", N_("Gradient"),
+        N_("Create and edit gradients"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_ZOOM, "DrawZoom", N_("Zoom"),
         N_("Zoom in or out"), "draw_zoom"),
     new ContextVerb(SP_VERB_CONTEXT_DROPPER, "DrawDropper", N_("Dropper"),
@@ -1791,6 +1801,8 @@ Verb * Verb::_base_verbs[] = {
         N_("Open Inkscape Preferences for the Calligraphy tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_TEXT_PREFS, "TextPrefs", N_("Text Preferences"),
         N_("Open Inkscape Preferences for the Text tool"), NULL),
+    new ContextVerb(SP_VERB_CONTEXT_GRADIENT_PREFS, "GradientPrefs", N_("Gradient Preferences"),
+        N_("Open Inkscape Preferences for the Gradient tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_ZOOM_PREFS, "ZoomPrefs", N_("Zoom Preferences"),
         N_("Open Inkscape Preferences for the Zoom tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_DROPPER_PREFS, "DropperPrefs", N_("Dropper Preferences"),
