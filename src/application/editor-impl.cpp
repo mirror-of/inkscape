@@ -78,11 +78,12 @@ Editor::EditorImpl::initUIManager()
     _ui_mgr->insert_action_group(_act_grp);
     add_accel_group(_ui_mgr->get_accel_group());
 
-    gchar *filename = g_build_filename(INKSCAPE_UIDIR, "menus-bars.xml", NULL);
-    if (_ui_mgr->add_ui_from_file(filename) == 0) {
-        g_warning("Error merging ui from file '%s'", filename);
+    gchar *filename_utf8 = g_build_filename(INKSCAPE_UIDIR, "menus-bars.xml", NULL);
+    if (_ui_mgr->add_ui_from_file(filename_utf8) == 0) {
+        g_warning("Error merging ui from file '%s'", filename_utf8);
+        // fixme-charset: What charset should we pass to g_warning?
     }
-    g_free(filename);
+    g_free(filename_utf8);
 }
 
 void
