@@ -74,8 +74,10 @@ CP = copy
 #are we on WinNt and beyond?
 ifeq ($(DOSSHELL),CMD_EXE)
 RMDIR = rmdir /s /q
+RM    = rm
 else
 RMDIR = deltree /y
+RM    = del
 endif
 MKDIR = mkdir
 CPDIR = xcopy /e /i
