@@ -494,7 +494,7 @@ sp_item_invoke_print (SPItem *item, SPPrintContext *ctx)
 static gchar *
 sp_item_private_description (SPItem * item)
 {
-	return g_strdup (_("Unknown item :-("));
+	return g_strdup (_("Object"));
 }
 
 gchar *
