@@ -24,7 +24,9 @@
 #include "../helper/nr-plain-stuff.h"
 #include "../helper/nr-plain-stuff-gdk.h"
 #include "../macros.h"
+#include "../prefs-utils.h"
 #include "gradient-position.h"
+#include "../nodepath.h" // fixme! this is only included for the Radial class, if it's moved elsewhere, update this 
 
 #include <libnr/nr-point-fns.h>
 
@@ -351,16 +353,55 @@ static gint
 sp_gradient_position_motion_notify (GtkWidget *widget, GdkEventMotion *event)
 {
     SPGradientPosition *pos = SP_GRADIENT_POSITION (widget);
+    int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
     NR::Point const mouse_gs = NR::Point(event->x, event->y) * NR::Matrix(pos->w2gs);
     
     if (pos->mode == SP_GRADIENT_POSITION_MODE_LINEAR) {
 	switch(pos->dragging) {
 	case 1:
-	    pos->linear.start = mouse_gs;
+		if (event->state & GDK_CONTROL_MASK) {
+			Radial mouse (mouse_gs - pos->linear.end);
+			Radial old (pos->linear.start - pos->linear.end);
+
+			double a_snapped, a_ortho;
+			// the closest PI/snaps angle, starting from zero
+			a_snapped = floor (mouse.a/(M_PI/snaps) + 0.5) * (M_PI/snaps);
+			// the closest PI/2 angle, starting from original angle (i.e. snapping to original, its opposite and perpendiculars)
+			a_ortho = old.a + floor ((mouse.a - old.a)/(M_PI/2) + 0.5) * (M_PI/2);
+
+			// snap to the closest
+			if (fabs (a_snapped - mouse.a) < fabs (a_ortho - mouse.a))
+				mouse.a = a_snapped;
+			else 
+				mouse.a = a_ortho;
+
+			pos->linear.start = pos->linear.end + NR::Point (mouse);
+		} else {
+			pos->linear.start = mouse_gs;
+		}
 	    break;
 	case 2:
-	    pos->linear.end = mouse_gs;
+		if (event->state & GDK_CONTROL_MASK) {
+			Radial mouse (mouse_gs - pos->linear.start);
+			Radial old (pos->linear.end - pos->linear.start);
+
+			double a_snapped, a_ortho;
+			// the closest PI/snaps angle, starting from zero
+			a_snapped = floor (mouse.a/(M_PI/snaps) + 0.5) * (M_PI/snaps);
+			// the closest PI/2 angle, starting from original angle (i.e. snapping to original, its opposite and perpendiculars)
+			a_ortho = old.a + floor ((mouse.a - old.a)/(M_PI/2) + 0.5) * (M_PI/2);
+
+			// snap to the closest
+			if (fabs (a_snapped - mouse.a) < fabs (a_ortho - mouse.a))
+				mouse.a = a_snapped;
+			else 
+				mouse.a = a_ortho;
+
+			pos->linear.end = pos->linear.start + NR::Point (mouse);
+		} else {
+			pos->linear.end = mouse_gs;
+		}
 	    break;
 	default:
 	    break;
@@ -442,8 +483,8 @@ sp_gradient_position_set_mode (SPGradientPosition *pos, guint mode)
     if (pos->mode != mode) {
 	pos->mode = mode;
 	if (pos->mode == SP_GRADIENT_POSITION_MODE_LINEAR) {
-	    pos->linear.start = NR::Point(0, 0);
-	    pos->linear.end = NR::Point(1, 0);
+	    pos->linear.start = NR::Point(0, 0.5);
+	    pos->linear.end = NR::Point(1, 0.5);
 	} else {
 	    pos->radial.center = NR::Point(0.5, 0.5);
 	    pos->radial.f = NR::Point(0.5, 0.5);
@@ -457,8 +498,8 @@ sp_gradient_position_set_mode (SPGradientPosition *pos, guint mode)
 void
 sp_gradient_position_set_bbox (SPGradientPosition *pos, gdouble x0, gdouble y0, gdouble x1, gdouble y1)
 {
-    g_return_if_fail (x1 > x0);
-    g_return_if_fail (y1 > y0);
+    g_return_if_fail (x1 >= x0);
+    g_return_if_fail (y1 >= y0);
 
     pos->bbox.x0 = x0;
     pos->bbox.y0 = y0;
@@ -552,8 +593,14 @@ sp_gradient_position_update (SPGradientPosition *pos)
     if (!pos->gc) pos->gc = gdk_gc_new (widget->window);
 
     /* Calculate bbox */
-    xs = width / (pos->bbox.x1 - pos->bbox.x0);
-    ys = height / (pos->bbox.y1 - pos->bbox.y0);
+		if (pos->bbox.x1 > pos->bbox.x0)
+			xs = width / (pos->bbox.x1 - pos->bbox.x0);
+		else 
+			xs = 1e18;
+		if (pos->bbox.y1 > pos->bbox.y0)
+			ys = height / (pos->bbox.y1 - pos->bbox.y0);
+		else 
+			ys = 1e18;
 
     if (xs > ys) {
 	pos->vbox.x0 = (short) floor (width * (1 - ys / xs) / 2.0);
@@ -569,10 +616,16 @@ sp_gradient_position_update (SPGradientPosition *pos)
     pos->vbox.y1 = widget->allocation.height - pos->vbox.y0;
 
     /* Calculate w2d */
-    pos->w2d.c[0] = (pos->bbox.x1 - pos->bbox.x0) / (pos->vbox.x1 - pos->vbox.x0);
+ 		if (pos->bbox.x1 > pos->bbox.x0)
+			pos->w2d.c[0] = (pos->bbox.x1 - pos->bbox.x0) / (pos->vbox.x1 - pos->vbox.x0);
+		else 
+			pos->w2d.c[0] = 1e18;
     pos->w2d.c[1] = 0.0;
     pos->w2d.c[2] = 0.0;
-    pos->w2d.c[3] = (pos->bbox.y1 - pos->bbox.y0) / (pos->vbox.y1 - pos->vbox.y0);
+		if (pos->bbox.y1 > pos->bbox.y0)
+			pos->w2d.c[3] = (pos->bbox.y1 - pos->bbox.y0) / (pos->vbox.y1 - pos->vbox.y0);
+		else 
+			pos->w2d.c[3] = 1e18;
     pos->w2d.c[4] = pos->bbox.x0 - (pos->vbox.x0 * pos->w2d.c[0]);
     pos->w2d.c[5] = pos->bbox.y0 - (pos->vbox.y0 * pos->w2d.c[3]);
     /* Calculate d2w */
@@ -627,8 +680,8 @@ sp_gradient_position_paint (GtkWidget *widget, GdkRectangle *area)
     gp = SP_GRADIENT_POSITION (widget);
 
     if (!gp->gradient ||
-	(gp->bbox.x0 >= gp->bbox.x1) ||
-	(gp->bbox.y0 >= gp->bbox.y1) ||
+	(gp->bbox.x0 > gp->bbox.x1) ||
+	(gp->bbox.y0 > gp->bbox.y1) ||
 	(widget->allocation.width < 1) ||
 	(widget->allocation.height < 1)) {
 	/* Draw empty thing */
@@ -685,26 +738,30 @@ sp_gradient_position_paint (GtkWidget *widget, GdkRectangle *area)
 
 		/* Draw controls */
 		spgp_draw_line (NR_PIXBLOCK_PX (&pb), w, h, pb.rs, wx1 - x, wy1 - y, wx2 - x, wy2 - y,
-				0xfff7f77f, 0x7f7f7f7f);
+										//				0xfff7f77f, 0x7f7f7f7f);
+														0x000000ff, 0x000000ff);
 		spgp_draw_line (NR_PIXBLOCK_PX (&pb), w, h, pb.rs,
 				c[0] - x, c[1] - y,
 				c[2] - x, c[3] - y,
-				0x7f7fffff, 0x7f7f7fff);
+										//0x7f7fffff, 0x7f7f7fff);
+				0xff0000ff, 0xff0000ff);
 
 		spgp_draw_rect (NR_PIXBLOCK_PX (&pb), w, h, pb.rs,
 				wx1 - RADIUS - x, wy1 - RADIUS - y,
 				wx1 + RADIUS - x, wy1 + RADIUS - y,
-				0xff7f7f7f, 0x7f7f7f7f);
+										//				0xff7f7f7f, 0x7f7f7f7f);
+				0x0000007f, 0x000000ff);
 		spgp_draw_rect (NR_PIXBLOCK_PX (&pb), w, h, pb.rs,
 				wx2 - RADIUS - x, wy2 - RADIUS - y,
 				wx2 + RADIUS - x, wy2 + RADIUS - y,
-				0xff7f7f7f, 0x7f7f7f7f);
+				0x0000007f, 0x000000ff);
 
 		/* Draw pixmap */
 		gdk_gc_set_function (gp->gc, GDK_COPY);
 		gdk_draw_rgb_image (gp->px, gp->gc, 0, 0, w, h, GDK_RGB_DITHER_MAX, NR_PIXBLOCK_PX (&pb), pb.rs);
 
 		/* Draw bbox */
+		gdk_gc_set_function (gp->gc, GDK_INVERT);
 		gdk_draw_rectangle (gp->px, gp->gc, FALSE,
 				    gp->vbox.x0 - x, gp->vbox.y0 - y,
 				    gp->vbox.x1 - gp->vbox.x0 - 1, gp->vbox.y1 - gp->vbox.y0 - 1);
@@ -759,27 +816,34 @@ sp_gradient_position_paint (GtkWidget *widget, GdkRectangle *area)
 
 		/* Draw controls */
 		spgp_draw_line (NR_PIXBLOCK_PX (&pb), w, h, pb.rs, wcx - x, wcy - y, wdx - x, wdy - y,
-				0xfff7f77f, 0x7f7f7f7f);
+				0x000000ff, 0x000000ff);
 		spgp_draw_line (NR_PIXBLOCK_PX (&pb), w, h, pb.rs,
 				c[0] - x, c[1] - y,
 				c[2] - x, c[3] - y,
-				0x7f7fffff, 0x7f7f7fff);
+				0x000000ff, 0x000000ff);
 
+		// center
 		spgp_draw_rect (NR_PIXBLOCK_PX (&pb), w, h, pb.rs,
 				wcx - RADIUS - x, wcy - RADIUS - y,
 				wcx + RADIUS - x, wcy + RADIUS - y,
-				0xff7f7f7f, 0x7f7f7f7f);
+				0x0000007f, 0x000000ff);
+		// radius 
+		spgp_draw_rect (NR_PIXBLOCK_PX (&pb), w, h, pb.rs,
+				wdx - RADIUS - x, wcy - RADIUS - y,
+				wdx + RADIUS - x, wcy + RADIUS - y,
+				0x0000007f, 0x000000ff);
+		// focus
 		spgp_draw_rect (NR_PIXBLOCK_PX (&pb), w, h, pb.rs,
 				wfx - RADIUS - x, wfy - RADIUS - y,
 				wfx + RADIUS - x, wfy + RADIUS - y,
-				0xff7f7f7f, 0x7f7f7f7f);
-
+				0x0000007f, 0x000000ff);
 
 		/* Draw pixmap */
 		gdk_gc_set_function (gp->gc, GDK_COPY);
 		gdk_draw_rgb_image (gp->px, gp->gc, 0, 0, w, h, GDK_RGB_DITHER_MAX, NR_PIXBLOCK_PX (&pb), pb.rs);
 
 		/* Draw bbox */
+		gdk_gc_set_function (gp->gc, GDK_INVERT);
 		gdk_draw_rectangle (gp->px, gp->gc, FALSE,
 				    gp->vbox.x0 - x, gp->vbox.y0 - y,
 				    gp->vbox.x1 - gp->vbox.x0 - 1, gp->vbox.y1 - gp->vbox.y0 - 1);
@@ -895,9 +959,9 @@ spgp_draw_line (guchar *px, int w, int h, int rs, int x0, int y0, int x1, int y1
 	    guchar *d, *s;
 	    d = px + y * rs + 3 * x;
 	    s = &c[4 * (curpixel & 0x1)];
-	    d[0] = NR_COMPOSEN11 (s[0], s[3], d[0]);
-	    d[1] = NR_COMPOSEN11 (s[1], s[3], d[1]);
-	    d[2] = NR_COMPOSEN11 (s[2], s[3], d[2]);
+	    d[0] = INK_COMPOSE (s[0], s[3], d[0]);
+	    d[1] = INK_COMPOSE (s[1], s[3], d[1]);
+	    d[2] = INK_COMPOSE (s[2], s[3], d[2]);
 	}
 	num += numadd;
 	if (num >= den) {
@@ -941,22 +1005,22 @@ spgp_draw_rect (guchar *px, int w, int h, int rs, int x0, int y0, int x1, int y1
 	p = px + y * rs + sx * 3;
 	if ((y == y0) || (y == y1)) {
 	    for (x = sx; x <= ex; x++) {
-		p[0] = NR_COMPOSEN11 (s[0], s[3], p[0]);
-		p[1] = NR_COMPOSEN11 (s[0], s[3], p[0]);
-		p[2] = NR_COMPOSEN11 (s[0], s[3], p[0]);
+		p[0] = INK_COMPOSE (s[0], s[3], p[0]);
+		p[1] = INK_COMPOSE (s[0], s[3], p[0]);
+		p[2] = INK_COMPOSE (s[0], s[3], p[0]);
 		p += 3;
 	    }
 	} else {
 	    for (x = sx; x <= ex; x++) {
 		if ((x == x0) || (x == x1)) {
-		    p[0] = NR_COMPOSEN11 (s[0], s[3], p[0]);
-		    p[1] = NR_COMPOSEN11 (s[0], s[3], p[0]);
-		    p[2] = NR_COMPOSEN11 (s[0], s[3], p[0]);
+		    p[0] = INK_COMPOSE (s[0], s[3], p[0]);
+		    p[1] = INK_COMPOSE (s[0], s[3], p[0]);
+		    p[2] = INK_COMPOSE (s[0], s[3], p[0]);
 		    p += 3;
 		} else {
-		    p[0] = NR_COMPOSEN11 (f[0], f[3], p[0]);
-		    p[1] = NR_COMPOSEN11 (f[0], f[3], p[0]);
-		    p[2] = NR_COMPOSEN11 (f[0], f[3], p[0]);
+		    p[0] = INK_COMPOSE (f[0], f[3], p[0]);
+		    p[1] = INK_COMPOSE (f[0], f[3], p[0]);
+		    p[2] = INK_COMPOSE (f[0], f[3], p[0]);
 		    p += 3;
 		}
 	    }
