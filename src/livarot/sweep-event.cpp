@@ -28,16 +28,12 @@ SweepEvent *SweepEventQueue::add(SweepTree *iLeft, SweepTree *iRight, NR::Point 
     int const n = nbEvt++;
     events[n].MakeNew (iLeft, iRight, px, itl, itr);
 
-    if (iLeft->src->getEdge(iLeft->bord).st < iLeft->src->getEdge(iLeft->bord).en) {
-	iLeft->src->pData[iLeft->src->getEdge(iLeft->bord).en].pending++;
-    } else {
-	iLeft->src->pData[iLeft->src->getEdge(iLeft->bord).st].pending++;
-    }
-    
-    if (iRight->src->getEdge(iRight->bord).st < iRight->src->getEdge(iRight->bord).en) {
-	iRight->src->pData[iRight->src->getEdge(iRight->bord).en].pending++;
-    } else {
-	iRight->src->pData[iRight->src->getEdge(iRight->bord).st].pending++;
+    SweepTree *t[2] = { iLeft, iRight };
+    for (int i = 0; i < 2; i++) {
+        Shape *s = t[i]->src;
+	Shape::dg_arete const &e = s->getEdge(t[i]->bord);
+	int const n = std::max(e.st, e.en);
+	s->pData[n].pending++;;
     }
 
     events[n].ind = n;
@@ -229,61 +225,51 @@ void SweepEventQueue::relocate(SweepEvent *e, int to)
  * are already sorted. and the binary heap is much faster with only intersections...
  * the code sample on which this code is based comes from purists.org
  */
-SweepEvent::SweepEvent ()
+SweepEvent::SweepEvent()
 {
-  NR::Point dummy(0,0);
-  MakeNew (NULL, NULL,dummy, 0, 0);
-}
-SweepEvent::~SweepEvent (void)
-{
-  MakeDelete ();
+    MakeNew (NULL, NULL, NR::Point(0, 0), 0, 0);
 }
 
-void
-SweepEvent::MakeNew (SweepTree * iLeft, SweepTree * iRight, NR::Point &px, double itl, double itr)
+SweepEvent::~SweepEvent()
 {
-  ind = -1;
-  posx = px;
-  tl = itl;
-  tr = itr;
-  sweep[LEFT] = iLeft;
-  sweep[RIGHT] = iRight;
-  sweep[LEFT]->evt[RIGHT] = this;
-  sweep[RIGHT]->evt[LEFT] = this;
+    MakeDelete();
 }
 
-void
-SweepEvent::MakeDelete (void)
+void SweepEvent::MakeNew(SweepTree *iLeft, SweepTree *iRight, NR::Point const &px, double itl, double itr)
 {
-  if (sweep[LEFT])
-    {
-      if (sweep[LEFT]->src->getEdge(sweep[LEFT]->bord).st <
-	  sweep[LEFT]->src->getEdge(sweep[LEFT]->bord).en)
-	{
-	  sweep[LEFT]->src->pData[sweep[LEFT]->src->getEdge(sweep[LEFT]->bord).en].
-	    pending--;
-	}
-      else
-	{
-	  sweep[LEFT]->src->pData[sweep[LEFT]->src->getEdge(sweep[LEFT]->bord).st].
-	    pending--;
-	}
-      sweep[LEFT]->evt[RIGHT] = NULL;
-    }
-  if (sweep[RIGHT])
-    {
-      if (sweep[RIGHT]->src->getEdge(sweep[RIGHT]->bord).st <
-	  sweep[RIGHT]->src->getEdge(sweep[RIGHT]->bord).en)
-	{
-	  sweep[RIGHT]->src->pData[sweep[RIGHT]->src->getEdge(sweep[RIGHT]->bord).
-				 en].pending--;
-	}
-      else
-	{
-	  sweep[RIGHT]->src->pData[sweep[RIGHT]->src->getEdge(sweep[RIGHT]->bord).
-				 st].pending--;
-	}
-      sweep[RIGHT]->evt[LEFT] = NULL;
-    }
-  sweep[LEFT] = sweep[RIGHT] = NULL;
+    ind = -1;
+    posx = px;
+    tl = itl;
+    tr = itr;
+    sweep[LEFT] = iLeft;
+    sweep[RIGHT] = iRight;
+    sweep[LEFT]->evt[RIGHT] = this;
+    sweep[RIGHT]->evt[LEFT] = this;
 }
+
+void SweepEvent::MakeDelete()
+{
+    for (int i = 0; i < 2; i++) {
+	if (sweep[i]) {
+	    Shape *s = sweep[i]->src;
+	    Shape::dg_arete const &e = s->getEdge(sweep[i]->bord);
+	    int const n = std::max(e.st, e.en);
+	    s->pData[n].pending--;
+	}
+
+	sweep[i]->evt[1 - i] = NULL;
+	sweep[i] = NULL;
+    }
+}
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
