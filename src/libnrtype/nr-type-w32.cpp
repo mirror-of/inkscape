@@ -285,14 +285,19 @@ nr_typeface_w32_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, uns
 
     } else if (!strcmp ((const char *)key, "style")) {
         if (tfw32->logfont->lfItalic) {
-                val = (const unsigned char *)"italic";
+				val = (const unsigned char *)"italic";
         } else {
-        /* fixme: */
-        val = (const unsigned char *)"normal";
+        /* fixme: no slanted ever! add name parsing for it? */
+				val = (const unsigned char *)"normal";
         }
-
+    } else if (!strcmp (key, "stretch")) {
+			gint w = parse_name_for_stretch (tf->def->name);
+			val = (const unsigned char *) stretch_to_css (w);
+    } else if (!strcmp (key, "variant")) {
+			gint w = parse_name_for_variant (tf->def->name);
+			val = (const unsigned char *) variant_to_css (w);
     } else {
-        val = (const unsigned char *)"";
+			val = (const unsigned char *)"";
     }
 
     len = MIN (size - 1, strlen ((const char *)val));
