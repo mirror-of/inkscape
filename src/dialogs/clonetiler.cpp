@@ -977,23 +977,23 @@ clonetiler_dialog (void)
                 int group;
                 gchar const *label;
             } const sym_groups[] = {
-                {TILE_P1, _("P1: simple translate")},
-                {TILE_P2, _("P2: 180&#176; rotation")},
-                {TILE_PM, _("PM: reflection")},
-                {TILE_PG, _("PG: glide reflection")},
-                {TILE_CM, _("CM: reflection + glide reflection")},
-                {TILE_PMM, _("PMM: reflection + reflection")},
-                {TILE_PMG, _("PMG: reflection + 180&#176; rotation")},
-                {TILE_PGG, _("PGG: glide reflection + 180&#176; rotation")},
-                {TILE_CMM, _("CMM: reflection + reflection + 180&#176; rotation")},
-                {TILE_P4, _("P4: 90&#176; rotation")},
-                {TILE_P4M, _("P4M: 90&#176; rotation + 45&#176; reflection")},
-                {TILE_P4G, _("P4G: 90&#176; rotation + 90&#176; reflection")},
-                {TILE_P3, _("P3: 120&#176; rotation")},
-                {TILE_P31M, _("P31M: reflection + 120&#176; rotation, dense")},
-                {TILE_P3M1, _("P3M1: reflection + 120&#176; rotation, sparse")},
-                {TILE_P6, _("P6: 60&#176; rotation")},
-                {TILE_P6M, _("P6M: reflection + 60&#176; rotation")},
+                {TILE_P1, _("<b>P1</b>: simple translation")},
+                {TILE_P2, _("<b>P2</b>: 180&#176; rotation")},
+                {TILE_PM, _("<b>PM</b>: reflection")},
+                {TILE_PG, _("<b>PG</b>: glide reflection")},
+                {TILE_CM, _("<b>CM</b>: reflection + glide reflection")},
+                {TILE_PMM, _("<b>PMM</b>: reflection + reflection")},
+                {TILE_PMG, _("<b>PMG</b>: reflection + 180&#176; rotation")},
+                {TILE_PGG, _("<b>PGG</b>: glide reflection + 180&#176; rotation")},
+                {TILE_CMM, _("<b>CMM</b>: reflection + reflection + 180&#176; rotation")},
+                {TILE_P4, _("<b>P4</b>: 90&#176; rotation")},
+                {TILE_P4M, _("<b>P4M</b>: 90&#176; rotation + 45&#176; reflection")},
+                {TILE_P4G, _("<b>P4G</b>: 90&#176; rotation + 90&#176; reflection")},
+                {TILE_P3, _("<b>P3</b>: 120&#176; rotation")},
+                {TILE_P31M, _("<b>P31M</b>: reflection + 120&#176; rotation, dense")},
+                {TILE_P3M1, _("<b>P3M1</b>: reflection + 120&#176; rotation, sparse")},
+                {TILE_P6, _("<b>P6</b>: 60&#176; rotation")},
+                {TILE_P6M, _("<b>P6M</b>: reflection + 60&#176; rotation")},
             };
 
             for (unsigned j = 0; j < G_N_ELEMENTS(sym_groups); ++j) {
@@ -1033,12 +1033,12 @@ clonetiler_dialog (void)
                 gtk_container_add(GTK_CONTAINER(f), fvbox);
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal shift per each row"), "d_x_per_y");
+                    GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal shift per each row (in % of tile width)"), "d_x_per_y");
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical shift per each row"), "d_y_per_y");
+                    GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical shift per each row (in % of tile height)"), "d_y_per_y");
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
             }
@@ -1053,13 +1053,13 @@ clonetiler_dialog (void)
                 gtk_container_add(GTK_CONTAINER(f), fvbox);
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal shift per each column"), "d_x_per_x");
+                    GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal shift per each column (in % of tile width)"), "d_x_per_x");
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
 
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical shift per each column"), "d_y_per_x");
+                    GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical shift per each column (in % of tile height)"), "d_y_per_x");
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
             }
@@ -1129,7 +1129,7 @@ clonetiler_dialog (void)
 
 
             {
-                GtkWidget *l = clonetiler_checkbox (_("Alternate sign"), tt, _("Alternate the sign of the scale for each row or column"), "alternate_scale");
+                GtkWidget *l = clonetiler_checkbox (_("Alternate sign"), tt, _("Alternate the sign of the scale increment for each row or column"), "alternate_scale");
                 gtk_container_set_border_width (GTK_CONTAINER (l), 4);
                 gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
             }
@@ -1143,7 +1143,7 @@ clonetiler_dialog (void)
 
 
         {
-            GtkWidget *vb = clonetiler_new_tab (nb, _("Rotate"));
+            GtkWidget *vb = clonetiler_new_tab (nb, _("Rotation"));
 
             GtkWidget *table = gtk_hbox_new (TRUE, 4);
             gtk_container_set_border_width (GTK_CONTAINER (table), 4);
@@ -1158,7 +1158,7 @@ clonetiler_dialog (void)
                 gtk_container_add(GTK_CONTAINER(f), fvbox);
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("Angle:"), tt, _("Rotate tile per each row"), "d_rot_per_y", false, true);
+                    GtkWidget *l = clonetiler_percent_spinbox (_("Angle:"), tt, _("Rotate tiles by this angle for each row"), "d_rot_per_y", false, true);
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
             }
@@ -1173,7 +1173,7 @@ clonetiler_dialog (void)
                 gtk_container_add(GTK_CONTAINER(f), fvbox);
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("Angle:"), tt, _("Rotate tile per each column"), "d_rot_per_x", false, true);
+                    GtkWidget *l = clonetiler_percent_spinbox (_("Angle:"), tt, _("Rotate tiles by this angle for each column"), "d_rot_per_x", false, true);
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
             }
@@ -1209,7 +1209,7 @@ clonetiler_dialog (void)
                 gtk_container_add(GTK_CONTAINER(f), fvbox);
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("Dissolve:"), tt, _("Decrease opacity by this percentage for each row"), "d_opacity_per_y", true);
+                    GtkWidget *l = clonetiler_percent_spinbox (_("Dissolve:"), tt, _("Decrease tile opacity by this percentage for each row"), "d_opacity_per_y", true);
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
             }
@@ -1224,7 +1224,7 @@ clonetiler_dialog (void)
                 gtk_container_add(GTK_CONTAINER(f), fvbox);
 
                 {
-                    GtkWidget *l = clonetiler_percent_spinbox (_("Dissolve:"), tt, _("Decrease opacity by this percentage for each column"), "d_opacity_per_x", true);
+                    GtkWidget *l = clonetiler_percent_spinbox (_("Dissolve:"), tt, _("Decrease tile opacity by this percentage for each column"), "d_opacity_per_x", true);
                     gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
                 }
             }
@@ -1306,21 +1306,14 @@ clonetiler_dialog (void)
             GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
             gtk_box_pack_start (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
 
-            GtkWidget *b  = gtk_check_button_new ();
+            GtkWidget *b  = gtk_check_button_new_with_label (_("Use saved size and position of the tile"));
             gint keepbbox = prefs_get_int_attribute ("dialogs.clonetiler", "keepbbox", 1);
             gtk_toggle_button_set_active ((GtkToggleButton *) b, keepbbox != 0);
-            gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, _("Use the tile bounding box of the previous tiling (if any), instead of the actual bounding box of selection"), NULL);
-            gtk_box_pack_end (GTK_BOX (hb), b, FALSE, FALSE, 0);
+            gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, _("Pretend that the size and position of the tile are the same as the last time you tiled it (if any), instead of using the current size"), NULL);
+            gtk_box_pack_start (GTK_BOX (hb), b, FALSE, FALSE, 0);
 
             gtk_signal_connect(GTK_OBJECT(b), "toggled",
                                GTK_SIGNAL_FUNC(clonetiler_keep_bbox_toggled), NULL);
-
-            {
-                GtkWidget *l = gtk_label_new (_("Use saved tile bbox"));
-                gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-                gtk_widget_show (l);
-                gtk_box_pack_end (GTK_BOX (hb), l, TRUE, TRUE, VB_MARGIN);
-            }
 
         }
 
