@@ -42,7 +42,7 @@ static void sp_ctrl_set_arg (GtkObject *object, GtkArg *arg, guint arg_id);
 static void sp_ctrl_update (SPCanvasItem *item, double *affine, unsigned int flags);
 static void sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf);
 
-static double sp_ctrl_point (SPCanvasItem *item, double x, double y, SPCanvasItem **actual_item);
+static double sp_ctrl_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item);
 
 
 static SPCanvasItemClass *parent_class;
@@ -265,14 +265,15 @@ sp_ctrl_update (SPCanvasItem *item, double *affine, unsigned int flags)
 }
 
 static double
-sp_ctrl_point (SPCanvasItem *item, double x, double y, SPCanvasItem **actual_item)
+sp_ctrl_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item)
 {
-	SPCtrl *ctrl;
-
-	ctrl = SP_CTRL (item);
+	SPCtrl *ctrl = SP_CTRL (item);
 
 	*actual_item = item;
-
+	
+	const double x = p[NR::X];
+	const double y = p[NR::Y];
+	
 	if ((x >= ctrl->box.x0) && (x <= ctrl->box.x1) && (y >= ctrl->box.y0) && (y <= ctrl->box.y1)) return 0.0;
 
 	return 1e18;
@@ -446,11 +447,10 @@ sp_ctrl_build_cache (SPCtrl *ctrl)
 static void
 sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
 {
-	SPCtrl *ctrl;
 	gint y0, y1, y, x0,x1,x;
 	guchar * p, * q, a;
 	
-	ctrl = SP_CTRL (item);
+	SPCtrl *ctrl = SP_CTRL (item);
 	
 	if (!ctrl->defined) return;
 	if ((!ctrl->filled) && (!ctrl->stroked)) return;
@@ -496,16 +496,6 @@ sp_ctrl_render (SPCanvasItem *item, SPCanvasBuf *buf)
 		}
 	}
 	ctrl->shown = TRUE;
-}
-
-void
-sp_ctrl_moveto (SPCtrl * ctrl, double x, double y)
-{
-	double affine[6];
-
-	art_affine_translate (affine, x, y);
-
-	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (ctrl), affine);
 }
 
 void

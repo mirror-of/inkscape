@@ -30,7 +30,7 @@ struct _SPCanvasArena {
 
 	guint cursor : 1;
 	guint sticky : 1;
-	gdouble cx, cy;
+	NR::Point c; // what is this?
 
 	NRArena *arena;
 	NRArenaItem *root;

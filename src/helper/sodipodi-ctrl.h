@@ -66,7 +66,6 @@ struct _SPCtrlClass {
 /* Standard Gtk function */
 GtkType sp_ctrl_get_type (void);
 
-void sp_ctrl_moveto (SPCtrl * ctrl, double x, double y);
 void sp_ctrl_moveto (SPCtrl * ctrl, NR::Point const p);
 
 

@@ -1113,7 +1113,7 @@ sp_sel_trans_update_item_bboxes (SPSelTrans * seltrans)
 					     NULL);
                      sp_canvas_item_show (box);
 
-                     sp_ctrl_moveto (SP_CTRL(box), b.x0, b.y1);
+                     sp_ctrl_moveto (SP_CTRL(box), NR::Point(b.x0, b.y1));
 		 }
 		 else if (seltrans->cue == SP_SELTRANS_CUE_BBOX)
 		 {

@@ -772,7 +772,7 @@ find_item_at_point (gint dkey, SPGroup *group, NR::Point const p, gboolean into_
 			NRArenaItem *arenaitem = sp_item_get_arenaitem(child, dkey);
 
 			// seen remembers the last (topmost) of items pickable at this point
-			if (nr_arena_item_invoke_pick (arenaitem, p[NR::X], p[NR::Y], nr_arena_global_delta, 1) != NULL 
+			if (nr_arena_item_invoke_pick (arenaitem, p, nr_arena_global_delta, 1) != NULL 
                            && (take_insensitive || child->sensitive)) {
 				seen = child;
 			}
@@ -793,7 +793,7 @@ find_group_at_point (gint dkey, SPGroup *group, NR::Point const p)
 			NRArenaItem *arenaitem = sp_item_get_arenaitem(child, dkey);
 
 			// seen remembers the last (topmost) of groups pickable at this point
-			if (nr_arena_item_invoke_pick (arenaitem, p[NR::X], p[NR::Y], nr_arena_global_delta, 1) != NULL) {
+			if (nr_arena_item_invoke_pick (arenaitem, p, nr_arena_global_delta, 1) != NULL) {
 				seen = child;
 			}
 		}

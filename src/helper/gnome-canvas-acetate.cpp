@@ -21,7 +21,7 @@ static void sp_canvas_acetate_init (SPCanvasAcetate *acetate);
 static void sp_canvas_acetate_destroy (GtkObject *object);
 
 static void sp_canvas_acetate_update (SPCanvasItem *item, double *affine, unsigned int flags);
-static double sp_canvas_acetate_point (SPCanvasItem *item, double x, double y, SPCanvasItem **actual_item);
+static double sp_canvas_acetate_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item);
 
 static SPCanvasItemClass *parent_class;
 
@@ -90,7 +90,7 @@ sp_canvas_acetate_update (SPCanvasItem *item, double *affine, unsigned int flags
 }
 
 static double
-sp_canvas_acetate_point (SPCanvasItem *item, double x, double y, SPCanvasItem **actual_item)
+sp_canvas_acetate_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item)
 {
 	*actual_item = item;
 

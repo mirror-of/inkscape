@@ -259,10 +259,10 @@ sp_canvas_item_invoke_update (SPCanvasItem *item, double *affine, unsigned int f
  * inverse of the item's transform, maintaining the affine invariant.
  */
 static double
-sp_canvas_item_invoke_point (SPCanvasItem *item, double x, double y, SPCanvasItem **actual_item)
+sp_canvas_item_invoke_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item)
 {
 	if (SP_CANVAS_ITEM_GET_CLASS (item)->point)
-		return SP_CANVAS_ITEM_GET_CLASS (item)->point (item, x, y, actual_item);
+		return SP_CANVAS_ITEM_GET_CLASS (item)->point (item, p, actual_item);
 
 	return NR_HUGE;
 }
@@ -637,7 +637,7 @@ static void sp_canvas_group_init (SPCanvasGroup *group);
 static void sp_canvas_group_destroy (GtkObject *object);
 
 static void sp_canvas_group_update (SPCanvasItem *item, double *affine, unsigned int flags);
-static double sp_canvas_group_point (SPCanvasItem *item, double x, double y, SPCanvasItem **actual_item);
+static double sp_canvas_group_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item);
 static void sp_canvas_group_render (SPCanvasItem *item, SPCanvasBuf *buf);
 
 static SPCanvasItemClass *group_parent_class;
@@ -737,10 +737,11 @@ sp_canvas_group_update (SPCanvasItem *item, double *affine, unsigned int flags)
 
 /* Point handler for canvas groups */
 static double
-sp_canvas_group_point (SPCanvasItem *item, double x, double y, SPCanvasItem **actual_item)
+sp_canvas_group_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item)
 {
 	const SPCanvasGroup *group = SP_CANVAS_GROUP (item);
-	
+	const double x = p[NR::X];
+	const double y = p[NR::Y];
 	int x1 = (int)(x - item->canvas->close_enough);
 	int y1 = (int)(y - item->canvas->close_enough);
 	int x2 = (int)(x + item->canvas->close_enough);
@@ -759,7 +760,7 @@ sp_canvas_group_point (SPCanvasItem *item, double x, double y, SPCanvasItem **ac
 
 			int has_point;
 			if ((child->object.flags & SP_CANVAS_ITEM_VISIBLE) && SP_CANVAS_ITEM_GET_CLASS (child)->point) {
-				dist = sp_canvas_item_invoke_point (child, x, y, &point_item);
+				dist = sp_canvas_item_invoke_point (child, p, &point_item);
 				has_point = TRUE;
 			} else
 				has_point = FALSE;
@@ -1325,7 +1326,7 @@ pick_current_item (SPCanvas *canvas, GdkEvent *event)
 
 		/* find the closest item */
 		if (canvas->root->object.flags & SP_CANVAS_ITEM_VISIBLE) {
-			sp_canvas_item_invoke_point (canvas->root, x, y, &canvas->new_current_item);
+			sp_canvas_item_invoke_point (canvas->root, NR::Point(x, y), &canvas->new_current_item);
 		} else {
 			canvas->new_current_item = NULL;
 		}

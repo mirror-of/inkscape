@@ -15,6 +15,7 @@
 #include <math.h>
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-compose-transform.h>
 #include "../prefs-utils.h"
 #include "nr-arena-image.h"
@@ -33,7 +34,7 @@ static void nr_arena_image_finalize (NRObject *object);
 
 static unsigned int nr_arena_image_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int state, unsigned int reset);
 static unsigned int nr_arena_image_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigned int flags);
-static NRArenaItem *nr_arena_image_pick (NRArenaItem *item, double x, double y, double delta, unsigned int sticky);
+static NRArenaItem *nr_arena_image_pick (NRArenaItem *item, NR::Point p, double delta, unsigned int sticky);
 
 static NRArenaItemClass *parent_class;
 
@@ -82,9 +83,7 @@ nr_arena_image_init (NRArenaImage *image)
 static void
 nr_arena_image_finalize (NRObject *object)
 {
-	NRArenaImage *image;
-
-	image = NR_ARENA_IMAGE (object);
+	NRArenaImage *image = NR_ARENA_IMAGE (object);
 
 	image->px = NULL;
 
@@ -94,17 +93,16 @@ nr_arena_image_finalize (NRObject *object)
 static unsigned int
 nr_arena_image_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int state, unsigned int reset)
 {
-	NRArenaImage *image;
-	double hscale, vscale;
 	NRMatrix grid2px;
 
-	image = NR_ARENA_IMAGE (item);
+	NRArenaImage *image = NR_ARENA_IMAGE (item);
 
 	/* Request render old */
 	nr_arena_item_request_render (item);
 
 	/* Copy affine */
 	nr_matrix_invert (&grid2px, &gc->transform);
+	double hscale, vscale; // todo: replace with NR::scale
 	if (image->px) {
 		hscale = image->pxw / image->width;
 		vscale = image->pxh / image->height;
@@ -113,15 +111,15 @@ nr_arena_image_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int 
 		vscale = 1.0;
 	}
 
-	image->grid2px.c[0] = grid2px.c[0] * hscale;
-	image->grid2px.c[2] = grid2px.c[2] * hscale;
-	image->grid2px.c[4] = grid2px.c[4] * hscale;
-	image->grid2px.c[1] = grid2px.c[1] * vscale;
-	image->grid2px.c[3] = grid2px.c[3] * vscale;
-	image->grid2px.c[5] = grid2px.c[5] * vscale;
+	image->grid2px[0] = grid2px.c[0] * hscale;
+	image->grid2px[2] = grid2px.c[2] * hscale;
+	image->grid2px[4] = grid2px.c[4] * hscale;
+	image->grid2px[1] = grid2px.c[1] * vscale;
+	image->grid2px[3] = grid2px.c[3] * vscale;
+	image->grid2px[5] = grid2px.c[5] * vscale;
 
-	image->grid2px.c[4] -= image->x * hscale;
-	image->grid2px.c[5] -= image->y * vscale;
+	image->grid2px[4] -= image->x * hscale;
+	image->grid2px[5] -= image->y * vscale;
 
 	/* Calculate bbox */
 	if (image->px) {
@@ -138,8 +136,8 @@ nr_arena_image_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int 
 		item->bbox.x1 = (int) ceil (bbox.x1);
 		item->bbox.y1 = (int) ceil (bbox.y1);
 	} else {
-		item->bbox.x0 = (int) gc->transform.c[4];
-		item->bbox.y0 = (int) gc->transform.c[5];
+		item->bbox.x0 = (int) gc->transform[4];
+		item->bbox.y0 = (int) gc->transform[5];
 		item->bbox.x1 = item->bbox.x0 - 1;
 		item->bbox.y1 = item->bbox.y0 - 1;
 	}
@@ -155,52 +153,48 @@ nr_arena_image_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int 
 static unsigned int
 nr_arena_image_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigned int flags)
 {
-	NRArenaImage *image;
-	guint32 Falpha;
-	unsigned char *spx, *dpx;
-	int dw, dh, drs, sw, sh, srs;
-	NRMatrix d2s;
-
 	nr_arena_image_x_sample = prefs_get_int_attribute ("options.bitmapoversample", "value", 1);
 	nr_arena_image_y_sample = nr_arena_image_x_sample;
 
-	image = NR_ARENA_IMAGE (item);
+	NRArenaImage *image = NR_ARENA_IMAGE (item);
 
 	if (!image->px) return item->state;
 
-	Falpha = item->opacity;
+	guint32 Falpha = item->opacity;
 	if (Falpha < 1) return item->state;
 
-	dpx = NR_PIXBLOCK_PX (pb);
-	drs = pb->rs;
-	dw = pb->area.x1 - pb->area.x0;
-	dh = pb->area.y1 - pb->area.y0;
+	unsigned char * dpx = NR_PIXBLOCK_PX (pb);
+	const int drs = pb->rs;
+	const int dw = pb->area.x1 - pb->area.x0;
+	const int dh = pb->area.y1 - pb->area.y0;
 
-	spx = image->px;
-	srs = image->pxrs;
-	sw = image->pxw;
-	sh = image->pxh;
+	unsigned char * spx = image->px;
+	const int srs = image->pxrs;
+	const int sw = image->pxw;
+	const int sh = image->pxh;
 
-	d2s.c[0] = b2i.c[0];
-	d2s.c[1] = b2i.c[1];
-	d2s.c[2] = b2i.c[2];
-	d2s.c[3] = b2i.c[3];
-	d2s.c[4] = b2i.c[0] * pb->area.x0 + b2i.c[2] * pb->area.y0 + b2i.c[4];
-	d2s.c[5] = b2i.c[1] * pb->area.x0 + b2i.c[3] * pb->area.y0 + b2i.c[5];
+	NR::Matrix d2s;
+
+	d2s[0] = b2i[0];
+	d2s[1] = b2i[1];
+	d2s[2] = b2i[2];
+	d2s[3] = b2i[3];
+	d2s[4] = b2i[0] * pb->area.x0 + b2i[2] * pb->area.y0 + b2i[4];
+	d2s[5] = b2i[1] * pb->area.x0 + b2i[3] * pb->area.y0 + b2i[5];
 
 	if (pb->mode == NR_PIXBLOCK_MODE_R8G8B8) {
 		/* fixme: This is not implemented yet (Lauris) */
-		/* nr_R8G8B8_R8G8B8_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, &d2s, Falpha, nr_arena_image_x_sample, nr_arena_image_y_sample); */
+		/* nr_R8G8B8_R8G8B8_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, d2s, Falpha, nr_arena_image_x_sample, nr_arena_image_y_sample); */
 	} else if (pb->mode == NR_PIXBLOCK_MODE_R8G8B8A8P) {
-		nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, &d2s, Falpha, nr_arena_image_x_sample, nr_arena_image_y_sample);
+		nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, d2s, Falpha, nr_arena_image_x_sample, nr_arena_image_y_sample);
 	} else if (pb->mode == NR_PIXBLOCK_MODE_R8G8B8A8N) {
 
 		//FIXME: The _N_N_N_ version gives a gray border around images, see bug 906376
 		// This mode is only used when exporting, screen rendering always has _P_P_P_, so I decided to simply replace it for now
 		// Feel free to propose a better fix
 
-		//nr_R8G8B8A8_N_R8G8B8A8_N_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, &d2s, Falpha, nr_arena_image_x_sample, nr_arena_image_y_sample);
-		nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, &d2s, Falpha, nr_arena_image_x_sample, nr_arena_image_y_sample);
+		//nr_R8G8B8A8_N_R8G8B8A8_N_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, d2s, Falpha, nr_arena_image_x_sample, nr_arena_image_y_sample);
+		nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM (dpx, dw, dh, drs, spx, sw, sh, srs, d2s, Falpha, nr_arena_image_x_sample, nr_arena_image_y_sample);
 	}
 
 	pb->empty = FALSE;
@@ -209,30 +203,26 @@ nr_arena_image_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
 }
 
 static NRArenaItem *
-nr_arena_image_pick (NRArenaItem *item, double x, double y, double delta, unsigned int sticky)
+nr_arena_image_pick (NRArenaItem *item, NR::Point p, double delta, unsigned int sticky)
 {
-	NRArenaImage *image;
-	unsigned char *p;
-	int ix, iy;
-	unsigned char *pixels;
-	int width, height, rowstride;
-
-	image = NR_ARENA_IMAGE (item);
+	NRArenaImage *image = NR_ARENA_IMAGE (item);
 
 	if (!image->px) return NULL;
 
-	pixels = image->px;
-	width = image->pxw;
-	height = image->pxh;
-	rowstride = image->pxrs;
-	ix = (int)(x * image->grid2px.c[0] + y * image->grid2px.c[2] + image->grid2px.c[4]);
-	iy = (int)(x * image->grid2px.c[1] + y * image->grid2px.c[3] + image->grid2px.c[5]);
+	unsigned char * const pixels = image->px;
+	const int width = image->pxw;
+	const int height = image->pxh;
+	const int rowstride = image->pxrs;
+	NR::Point tp = p * image->grid2px;
+	const int ix = (int)(tp[NR::X]);
+	const int iy = (int)(tp[NR::Y]);
 
-	if ((ix < 0) || (iy < 0) || (ix >= width) || (iy >= height)) return NULL;
+	if ((ix < 0) || (iy < 0) || (ix >= width) || (iy >= height))
+		return NULL;
 
-	p = pixels + iy * rowstride + ix * 4;
-
-	return (p[3] > 0) ? item : NULL;
+	unsigned char *pix_ptr = pixels + iy * rowstride + ix * 4;
+	// is the alpha not transparent?
+	return (pix_ptr[3] > 0) ? item : NULL;
 }
 
 /* Utility */

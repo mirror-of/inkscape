@@ -674,26 +674,25 @@ nr_arena_item_invoke_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb)
 }
 
 NRArenaItem *
-nr_arena_item_invoke_pick (NRArenaItem *item, double x, double y, double delta, unsigned int sticky)
+nr_arena_item_invoke_pick (NRArenaItem *item, NR::Point p, double delta, unsigned int sticky)
 {
-	int ix, iy;
-
 	nr_return_val_if_fail (item != NULL, NULL);
 	nr_return_val_if_fail (NR_IS_ARENA_ITEM (item), NULL);
 	nr_return_val_if_fail (item->state & NR_ARENA_ITEM_STATE_BBOX, NULL);
 	nr_return_val_if_fail (item->state & NR_ARENA_ITEM_STATE_PICK, NULL);
 
 	if (!sticky && !item->sensitive) return NULL;
-
-	ix = (int) x;
-	iy = (int) y;
-
+	
+	// TODO: rewrite using NR::Rect
+	const double x = p[NR::X];
+	const double y = p[NR::Y];
+	
 	if (((x + delta) >= item->bbox.x0) &&
 	    ((x - delta) <  item->bbox.x1) &&
 	    ((y + delta) >= item->bbox.y0) &&
 	    ((y - delta) <  item->bbox.y1)) {
 		if (((NRArenaItemClass *) NR_OBJECT_GET_CLASS (item))->pick)
-			return ((NRArenaItemClass *) NR_OBJECT_GET_CLASS (item))->pick (item, x, y, delta, sticky);
+			return ((NRArenaItemClass *) NR_OBJECT_GET_CLASS (item))->pick (item, p, delta, sticky);
 	}
 
 	return NULL;

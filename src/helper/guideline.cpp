@@ -26,7 +26,7 @@ static void sp_guideline_destroy (GtkObject *object);
 static void sp_guideline_update (SPCanvasItem *item, double *affine, unsigned int flags);
 static void sp_guideline_render (SPCanvasItem *item, SPCanvasBuf *buf);
 
-static double sp_guideline_point (SPCanvasItem *item, double x, double y, SPCanvasItem ** actual_item);
+static double sp_guideline_point (SPCanvasItem *item, NR::Point p, SPCanvasItem ** actual_item);
 
 static SPCanvasItemClass *parent_class;
 
@@ -149,7 +149,7 @@ sp_guideline_update (SPCanvasItem *item, double *affine, unsigned int flags)
 }
 
 static double
-sp_guideline_point (SPCanvasItem *item, double x, double y, SPCanvasItem **actual_item)
+sp_guideline_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item)
 {
 	SPGuideLine *gl;
 
@@ -160,9 +160,9 @@ sp_guideline_point (SPCanvasItem *item, double x, double y, SPCanvasItem **actua
 	*actual_item = item;
 
 	if (gl->vertical) {
-		return fabs (gl->position - x);
+		return fabs (gl->position - p[NR::X]);
 	} else {
-		return fabs (gl->position - y);
+		return fabs (gl->position - p[NR::Y]);
 	}
 }
 

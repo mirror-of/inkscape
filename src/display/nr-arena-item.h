@@ -117,7 +117,7 @@ struct _NRArenaItemClass {
 	unsigned int (* update) (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int state, unsigned int reset);
 	unsigned int (* render) (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigned int flags);
 	unsigned int (* clip) (NRArenaItem *item, NRRectL *area, NRPixBlock *pb);
-	NRArenaItem * (* pick) (NRArenaItem *item, double x, double y, double delta, unsigned int sticky);
+	NRArenaItem * (* pick) (NRArenaItem *item, NR::Point p, double delta, unsigned int sticky);
 };
 
 #define NR_ARENA_ITEM_ARENA(ai) (((NRArenaItem *) (ai))->arena)
@@ -152,7 +152,7 @@ unsigned int nr_arena_item_invoke_update (NRArenaItem *item, NRRectL *area, NRGC
 unsigned int nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigned int flags);
 
 unsigned int nr_arena_item_invoke_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb);
-NRArenaItem *nr_arena_item_invoke_pick (NRArenaItem *item, double x, double y, double delta, unsigned int sticky);
+NRArenaItem *nr_arena_item_invoke_pick (NRArenaItem *item, NR::Point p, double delta, unsigned int sticky);
 
 void nr_arena_item_request_update (NRArenaItem *item, unsigned int reset, unsigned int propagate);
 void nr_arena_item_request_render (NRArenaItem *item);

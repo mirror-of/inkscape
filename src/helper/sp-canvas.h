@@ -68,7 +68,7 @@ struct _SPCanvasItemClass {
 	void (* update) (SPCanvasItem *item, double *affine, unsigned int flags);
 
 	void (* render) (SPCanvasItem *item, SPCanvasBuf *buf);
-	double (* point) (SPCanvasItem *item, double x, double y, SPCanvasItem **actual_item);
+	double (* point) (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item);
 
 	int (* event) (SPCanvasItem *item, GdkEvent *event);
 };

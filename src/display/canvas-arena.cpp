@@ -36,7 +36,7 @@ static void sp_canvas_arena_destroy(GtkObject *object);
 
 static void sp_canvas_arena_update (SPCanvasItem *item, double *affine, unsigned int flags);
 static void sp_canvas_arena_render (SPCanvasItem *item, SPCanvasBuf *buf);
-static double sp_canvas_arena_point (SPCanvasItem *item, double x, double y, SPCanvasItem **actual_item);
+static double sp_canvas_arena_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item);
 static gint sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event);
 
 static gint sp_canvas_arena_send_event (SPCanvasArena *arena, GdkEvent *event);
@@ -120,9 +120,7 @@ sp_canvas_arena_init (SPCanvasArena *arena)
 static void
 sp_canvas_arena_destroy (GtkObject *object)
 {
-	SPCanvasArena *arena;
-
-	arena = SP_CANVAS_ARENA (object);
+	SPCanvasArena *arena = SP_CANVAS_ARENA (object);
 
 	if (arena->active) {
 		nr_object_unref ((NRObject *) arena->active);
@@ -148,10 +146,9 @@ sp_canvas_arena_destroy (GtkObject *object)
 static void
 sp_canvas_arena_update (SPCanvasItem *item, double *affine, unsigned int flags)
 {
-	SPCanvasArena *arena;
 	guint reset;
 
-	arena = SP_CANVAS_ARENA (item);
+	SPCanvasArena *arena = SP_CANVAS_ARENA (item);
 
 	if (((SPCanvasItemClass *) parent_class)->update)
 		(* ((SPCanvasItemClass *) parent_class)->update) (item, affine, flags);
@@ -174,15 +171,15 @@ sp_canvas_arena_update (SPCanvasItem *item, double *affine, unsigned int flags)
 	if (arena->cursor) {
 		NRArenaItem *new_arena;
 		/* Mess with enter/leave notifiers */
-		new_arena = nr_arena_item_invoke_pick (arena->root, arena->cx, arena->cy, nr_arena_global_delta, arena->sticky);
+		new_arena = nr_arena_item_invoke_pick (arena->root, arena->c, nr_arena_global_delta, arena->sticky);
 		if (new_arena != arena->active) {
 			GdkEventCrossing ec;
 			ec.window = GTK_WIDGET (item->canvas)->window;
 			ec.send_event = TRUE;
 			ec.subwindow = ec.window;
 			ec.time = GDK_CURRENT_TIME;
-			ec.x = arena->cx;
-			ec.y = arena->cy;
+			ec.x = arena->c[NR::X];
+			ec.y = arena->c[NR::Y];
 			/* fixme: */
 			if (arena->active) {
 				ec.type = GDK_LEAVE_NOTIFY;
@@ -207,11 +204,10 @@ extern void age_cache(void);
 static void
 sp_canvas_arena_render (SPCanvasItem *item, SPCanvasBuf *buf)
 {
-	SPCanvasArena *arena;
 	gint bw, bh, sw, sh;
 	gint x, y;
 
-	arena = SP_CANVAS_ARENA (item);
+	SPCanvasArena *arena = SP_CANVAS_ARENA (item);
 
 	nr_arena_item_invoke_update (arena->root, NULL, &arena->gc,
 				     NR_ARENA_ITEM_STATE_BBOX | NR_ARENA_ITEM_STATE_RENDER,
@@ -290,18 +286,15 @@ sp_canvas_arena_render (SPCanvasItem *item, SPCanvasBuf *buf)
 }
 
 static double
-sp_canvas_arena_point (SPCanvasItem *item, double x, double y, SPCanvasItem **actual_item)
+sp_canvas_arena_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item)
 {
-	SPCanvasArena *arena;
-	NRArenaItem *picked;
-
-	arena = SP_CANVAS_ARENA (item);
+	SPCanvasArena *arena = SP_CANVAS_ARENA (item);
 
 	nr_arena_item_invoke_update (arena->root, NULL, &arena->gc,
 				     NR_ARENA_ITEM_STATE_BBOX | NR_ARENA_ITEM_STATE_PICK,
 				     NR_ARENA_ITEM_STATE_NONE);
 
-	picked = nr_arena_item_invoke_pick (arena->root, x, y, nr_arena_global_delta, arena->sticky);
+	NRArenaItem *picked = nr_arena_item_invoke_pick (arena->root, p, nr_arena_global_delta, arena->sticky);
 
 	arena->picked = picked;
 
@@ -316,14 +309,12 @@ sp_canvas_arena_point (SPCanvasItem *item, double x, double y, SPCanvasItem **ac
 static gint
 sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event)
 {
-	SPCanvasArena *arena;
 	NRArenaItem *new_arena;
-	gint ret;
 	/* fixme: This sucks, we have to handle enter/leave notifiers */
 
-	arena = SP_CANVAS_ARENA (item);
+	SPCanvasArena *arena = SP_CANVAS_ARENA (item);
 
-	ret = FALSE;
+	gint ret = FALSE;
 
 	switch (event->type) {
 	case GDK_ENTER_NOTIFY:
@@ -335,12 +326,11 @@ sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event)
 			arena->cursor = TRUE;
 
 			/* TODO ... event -> arena transform? */
-			arena->cx = event->crossing.x;
-			arena->cy = event->crossing.y;
+			arena->c = NR::Point(event->crossing.x, event->crossing.y);
 
 			/* fixme: Not sure abut this, but seems the right thing (Lauris) */
 			nr_arena_item_invoke_update (arena->root, NULL, &arena->gc, NR_ARENA_ITEM_STATE_PICK, NR_ARENA_ITEM_STATE_NONE);
-			arena->active = nr_arena_item_invoke_pick (arena->root, arena->cx, arena->cy, nr_arena_global_delta, arena->sticky);
+			arena->active = nr_arena_item_invoke_pick (arena->root, arena->c, nr_arena_global_delta, arena->sticky);
 			if (arena->active) nr_object_ref ((NRObject *) arena->active);
 			ret = sp_canvas_arena_send_event (arena, event);
 		}
@@ -355,12 +345,11 @@ sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event)
 		break;
 	case GDK_MOTION_NOTIFY:
 		/* TODO ... event -> arena transform? */
-		arena->cx = event->motion.x;
-		arena->cy = event->motion.y;
+		arena->c = NR::Point(event->motion.x, event->motion.y);
 
 		/* fixme: Not sure abut this, but seems the right thing (Lauris) */
 		nr_arena_item_invoke_update (arena->root, NULL, &arena->gc, NR_ARENA_ITEM_STATE_PICK, NR_ARENA_ITEM_STATE_NONE);
-		new_arena = nr_arena_item_invoke_pick (arena->root, arena->cx, arena->cy, nr_arena_global_delta, arena->sticky);
+		new_arena = nr_arena_item_invoke_pick (arena->root, arena->c, nr_arena_global_delta, arena->sticky);
 		if (new_arena != arena->active) {
 			GdkEventCrossing ec;
 			ec.window = event->motion.window;
@@ -396,9 +385,7 @@ sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event)
 static gint
 sp_canvas_arena_send_event (SPCanvasArena *arena, GdkEvent *event)
 {
-	gint ret;
-
-	ret = FALSE;
+	gint ret = FALSE;
 
 	/* Send event to arena */
 	gtk_signal_emit (GTK_OBJECT (arena), signals[ARENA_EVENT], arena->active, event, &ret);

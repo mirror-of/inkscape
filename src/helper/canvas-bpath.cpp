@@ -49,7 +49,7 @@ static void sp_canvas_bpath_destroy (GtkObject *object);
 
 static void sp_canvas_bpath_update (SPCanvasItem *item, double *affine, unsigned int flags);
 static void sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf);
-static double sp_canvas_bpath_point (SPCanvasItem *item, double x, double y, SPCanvasItem **actual_item);
+static double sp_canvas_bpath_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item);
  
 static SPCanvasItemClass *parent_class;
 
@@ -333,7 +333,7 @@ sp_canvas_bpath_render (SPCanvasItem *item, SPCanvasBuf *buf)
 #define BIGVAL 1e18
 
 static double
-sp_canvas_bpath_point (SPCanvasItem *item, double x, double y, SPCanvasItem **actual_item)
+sp_canvas_bpath_point (SPCanvasItem *item, NR::Point p, SPCanvasItem **actual_item)
 {
 	SPCanvasBPath *cbp;
 	gdouble dist;
@@ -342,7 +342,7 @@ sp_canvas_bpath_point (SPCanvasItem *item, double x, double y, SPCanvasItem **ac
 
 #ifdef bpath_liv
   {
-    NR::Point const thePt(x, y);
+    NR::Point const thePt = p;
 		if (cbp->fill_shp ) {
 			if (cbp->fill_shp->PtWinding(thePt) > 0 ) {
         *actual_item = item;

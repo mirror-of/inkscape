@@ -52,7 +52,7 @@ static void nr_arena_glyphs_finalize (NRObject *object);
 
 static guint nr_arena_glyphs_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, guint reset);
 static guint nr_arena_glyphs_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb);
-static NRArenaItem *nr_arena_glyphs_pick (NRArenaItem *item, double x, double y, double delta, unsigned int sticky);
+static NRArenaItem *nr_arena_glyphs_pick (NRArenaItem *item, NR::Point p, double delta, unsigned int sticky);
 
 static NRArenaItemClass *glyphs_parent_class;
 
@@ -361,7 +361,7 @@ nr_arena_glyphs_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb)
 }
 
 static NRArenaItem *
-nr_arena_glyphs_pick (NRArenaItem *item, gdouble x, gdouble y, gdouble delta, unsigned int sticky)
+nr_arena_glyphs_pick (NRArenaItem *item, NR::Point p, gdouble delta, unsigned int sticky)
 {
 	NRArenaGlyphs *glyphs;
 
@@ -369,12 +369,14 @@ nr_arena_glyphs_pick (NRArenaItem *item, gdouble x, gdouble y, gdouble delta, un
 
 	if (!glyphs->font || !glyphs->curve) return NULL;
 	if (!glyphs->style) return NULL;
-
-	/* fixme: */
+	
+	const double x = p[NR::X];
+	const double y = p[NR::Y];
+	/* fixme: pt in rect*/
 	if ((x >= item->bbox.x0) && (y >= item->bbox.y0) && (x < item->bbox.x1) && (y < item->bbox.y1)) return item;
 
 #ifdef test_glyph_liv
-  NR::Point const thePt(x, y);
+	NR::Point const thePt = p;
 		if (glyphs->stroke_shp && (glyphs->style->stroke.type != SP_PAINT_TYPE_NONE)) {
 			if (glyphs->stroke_shp->PtWinding(thePt) > 0 ) return item;
 		}
@@ -520,7 +522,7 @@ static void nr_arena_glyphs_group_finalize (NRObject *object);
 static guint nr_arena_glyphs_group_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, guint reset);
 static unsigned int nr_arena_glyphs_group_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigned int flags);
 static unsigned int nr_arena_glyphs_group_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb);
-static NRArenaItem *nr_arena_glyphs_group_pick (NRArenaItem *item, gdouble x, gdouble y, gdouble delta, unsigned int sticky);
+static NRArenaItem *nr_arena_glyphs_group_pick (NRArenaItem *item, NR::Point p, gdouble delta, unsigned int sticky);
 
 static NRArenaGroupClass *group_parent_class;
 
@@ -748,18 +750,13 @@ nr_arena_glyphs_group_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, 
 static unsigned int
 nr_arena_glyphs_group_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb)
 {
-	NRArenaGroup *group;
-	NRArenaGlyphsGroup *ggroup;
-	NRArenaItem *child;
-	guint ret;
+	NRArenaGroup *group = NR_ARENA_GROUP (item);
+	NRArenaGlyphsGroup *ggroup = NR_ARENA_GLYPHS_GROUP (item);
 
-	group = NR_ARENA_GROUP (item);
-	ggroup = NR_ARENA_GLYPHS_GROUP (item);
-
-	ret = item->state;
+	guint ret = item->state;
 
 	/* Render children fill mask */
-	for (child = group->children; child != NULL; child = child->next) {
+	for (NRArenaItem *child = group->children; child != NULL; child = child->next) {
 		ret = nr_arena_glyphs_fill_mask (NR_ARENA_GLYPHS (child), area, pb);
 		if (!(ret & NR_ARENA_ITEM_STATE_RENDER)) return ret;
 	}
@@ -768,17 +765,14 @@ nr_arena_glyphs_group_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb)
 }
 
 static NRArenaItem *
-nr_arena_glyphs_group_pick (NRArenaItem *item, gdouble x, gdouble y, gdouble delta, unsigned int sticky)
+nr_arena_glyphs_group_pick (NRArenaItem *item, NR::Point p, gdouble delta, unsigned int sticky)
 {
-	NRArenaGroup *group;
-	NRArenaItem *picked;
+	NRArenaGroup *group = NR_ARENA_GROUP (item);
 
-	group = NR_ARENA_GROUP (item);
-
-	picked = NULL;
+	NRArenaItem *picked = NULL;
 
 	if (((NRArenaItemClass *) group_parent_class)->pick)
-		picked = ((NRArenaItemClass *) group_parent_class)->pick (item, x, y, delta, sticky);
+		picked = ((NRArenaItemClass *) group_parent_class)->pick (item, p, delta, sticky);
 
 	if (picked) picked = item;
 
@@ -788,9 +782,7 @@ nr_arena_glyphs_group_pick (NRArenaItem *item, gdouble x, gdouble y, gdouble del
 void
 nr_arena_glyphs_group_clear (NRArenaGlyphsGroup *sg)
 {
-	NRArenaGroup *group;
-
-	group = NR_ARENA_GROUP (sg);
+	NRArenaGroup *group = NR_ARENA_GROUP (sg);
 
 	nr_arena_item_request_render (NR_ARENA_ITEM (group));
 

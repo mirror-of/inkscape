@@ -43,21 +43,21 @@ void nr_mmx_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM_n (unsigned char *px, int
 
 void nr_R8G8B8A8_N_EMPTY_R8G8B8A8_N_TRANSFORM (unsigned char *px, int w, int h, int rs,
 					       const unsigned char *spx, int sw, int sh, int srs,
-					       const NRMatrix *d2s, unsigned int alpha, int xd, int yd);
+					       const NR::Matrix &d2s, unsigned int alpha, int xd, int yd);
 void nr_R8G8B8A8_N_EMPTY_R8G8B8A8_P_TRANSFORM (unsigned char *px, int w, int h, int rs,
 					       const unsigned char *spx, int sw, int sh, int srs,
-					       const NRMatrix *d2s, unsigned int alpha, int xd, int yd);
+					       const NR::Matrix &d2s, unsigned int alpha, int xd, int yd);
 void nr_R8G8B8A8_P_EMPTY_R8G8B8A8_N_TRANSFORM (unsigned char *px, int w, int h, int rs,
 					       const unsigned char *spx, int sw, int sh, int srs,
-					       const NRMatrix *d2s, unsigned int alpha, int xd, int yd);
+					       const NR::Matrix &d2s, unsigned int alpha, int xd, int yd);
 void nr_R8G8B8A8_P_EMPTY_R8G8B8A8_P_TRANSFORM (unsigned char *px, int w, int h, int rs,
 					       const unsigned char *spx, int sw, int sh, int srs,
-					       const NRMatrix *d2s, unsigned int alpha, int xd, int yd);
+					       const NR::Matrix &d2s, unsigned int alpha, int xd, int yd);
 
 void
 nr_R8G8B8A8_N_R8G8B8A8_N_R8G8B8A8_N_TRANSFORM (unsigned char *px, int w, int h, int rs,
 					       const unsigned char *spx, int sw, int sh, int srs,
-					       const NRMatrix *d2s, unsigned int alpha, int xd, int yd)
+					       const NR::Matrix &d2s, unsigned int alpha, int xd, int yd)
 {
 	int xsize, ysize, size, dbits;
 	long FFs_x_x, FFs_x_y, FFs_y_x, FFs_y_y, FFs__x, FFs__y;
@@ -77,12 +77,12 @@ nr_R8G8B8A8_N_R8G8B8A8_N_R8G8B8A8_N_TRANSFORM (unsigned char *px, int w, int h, 
 	dbits = xd + yd;
 
 	/* Set up fixed point matrix */
-	FFs_x_x = (long) (d2s->c[0] * (1 << FBITS) + 0.5);
-	FFs_x_y = (long) (d2s->c[1] * (1 << FBITS) + 0.5);
-	FFs_y_x = (long) (d2s->c[2] * (1 << FBITS) + 0.5);
-	FFs_y_y = (long) (d2s->c[3] * (1 << FBITS) + 0.5);
-	FFs__x = (long) (d2s->c[4] * (1 << FBITS) + 0.5);
-	FFs__y = (long) (d2s->c[5] * (1 << FBITS) + 0.5);
+	FFs_x_x = (long) (d2s[0] * (1 << FBITS) + 0.5);
+	FFs_x_y = (long) (d2s[1] * (1 << FBITS) + 0.5);
+	FFs_y_x = (long) (d2s[2] * (1 << FBITS) + 0.5);
+	FFs_y_y = (long) (d2s[3] * (1 << FBITS) + 0.5);
+	FFs__x = (long) (d2s[4] * (1 << FBITS) + 0.5);
+	FFs__y = (long) (d2s[5] * (1 << FBITS) + 0.5);
 
 	FFs_x_x_S = FFs_x_x >> xd;
 	FFs_x_y_S = FFs_x_y >> xd;
@@ -163,7 +163,7 @@ nr_R8G8B8A8_N_R8G8B8A8_N_R8G8B8A8_N_TRANSFORM (unsigned char *px, int w, int h, 
 
 void nr_R8G8B8A8_N_R8G8B8A8_N_R8G8B8A8_P_TRANSFORM (unsigned char *px, int w, int h, int rs,
 						    const unsigned char *spx, int sw, int sh, int srs,
-						    const NRMatrix *d2s, unsigned int alpha, int xd, int yd);
+						    const NR::Matrix &d2s, unsigned int alpha, int xd, int yd);
 
 static void
 nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM_0 (unsigned char *px, int w, int h, int rs,
@@ -295,7 +295,7 @@ nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM_n (unsigned char *px, int w, int h
 
 void nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM (unsigned char *px, int w, int h, int rs,
 						    const unsigned char *spx, int sw, int sh, int srs,
-						    const NRMatrix *d2s, unsigned int alpha, int xd, int yd)
+						    const NR::Matrix &d2s, unsigned int alpha, int xd, int yd)
 {
 	int dbits;
 	long FFd2s[6];
@@ -306,7 +306,7 @@ void nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM (unsigned char *px, int w, in
 	dbits = xd + yd;
 
 	for (i = 0; i < 6; i++) {
-		FFd2s[i] = (long) (d2s->c[i] * (1 << FBITS) + 0.5);
+		FFd2s[i] = (long) (d2s[i] * (1 << FBITS) + 0.5);
 	}
 
 	if (dbits == 0) {
@@ -354,4 +354,4 @@ void nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_N_TRANSFORM (unsigned char *px, int w, in
 
 void nr_R8G8B8A8_P_R8G8B8A8_P_R8G8B8A8_P_TRANSFORM (unsigned char *px, int w, int h, int rs,
 						    const unsigned char *spx, int sw, int sh, int srs,
-						    const NRMatrix *d2s, unsigned int alpha, int xd, int yd);
+						    const NR::Matrix &d2s, unsigned int alpha, int xd, int yd);

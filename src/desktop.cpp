@@ -616,11 +616,11 @@ sp_desktop_pop_event_context (SPDesktop *dt, unsigned int key)
  * Thus we may just get rid of it.
  */
 void
-sp_desktop_set_coordinate_status (SPDesktop *desktop, gdouble x, gdouble y, guint underline)
+sp_desktop_set_coordinate_status (SPDesktop *desktop, NR::Point p, guint underline)
 {
     gchar cstr[64];
-
-    g_snprintf (cstr, 64, "%6.1f, %6.1f", x, y);
+    
+    g_snprintf (cstr, 64, "%6.1f, %6.1f", p[0], p[1]);
 
     gtk_label_set_text (GTK_LABEL (desktop->owner->coord_status), cstr);
 }
@@ -1217,7 +1217,7 @@ sp_desktop_widget_view_position_set (SPView *view, double x, double y, SPDesktop
     GTK_RULER(dtw->vruler)->position = origin[Y];
     gtk_ruler_draw_pos (GTK_RULER (dtw->vruler));
 
-    sp_desktop_set_coordinate_status(SP_DESKTOP(view), origin[X], origin[Y], 0);
+    sp_desktop_set_coordinate_status(SP_DESKTOP(view), origin, 0);
 }
 
 /*
