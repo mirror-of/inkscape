@@ -129,10 +129,6 @@ sp_icon_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 
 	widget->allocation = *allocation;
 
-	if ( allocation->width < icon->size || allocation->height < icon->size ) {
-		g_warning ("SPIcon: icon allocated less than requested size");
-	}
-
 	if (GTK_WIDGET_DRAWABLE (widget)) {
 		gtk_widget_queue_draw (widget);
 	}
