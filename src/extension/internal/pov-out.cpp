@@ -140,10 +140,13 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
             // see color.h for how to parse SPColor 
             SPColor spColor = style->fill.value.color;
             guint32 color = sp_color_get_rgba32_ualpha(&spColor, 0);
-            int r = SP_RGBA32_R_U(color);
-            int g = SP_RGBA32_G_U(color);
-            int b = SP_RGBA32_B_U(color);
-            gchar *str = g_strdup_printf("rgb < %d, %d, %d >", r, g, b);
+            int r     = SP_RGBA32_R_U(color);
+            int g     = SP_RGBA32_G_U(color);
+            int b     = SP_RGBA32_B_U(color);
+            double dr = ((double)r) / 256.0;
+            double dg = ((double)g) / 256.0;
+            double db = ((double)b) / 256.0;
+            gchar *str = g_strdup_printf("rgb < %1.3f, %1.3f, %1.3f >", dr, dg, db);
             shapeInfo.color += str;
             g_free(str);
 
@@ -190,12 +193,12 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
             double y3 = bp->y3;
             */
             /**/
-            double x1 = NR_MATRIX_DF_TRANSFORM_X(tf,bp->x1, bp->y1);
-            double y1 = NR_MATRIX_DF_TRANSFORM_Y(tf,bp->x1, bp->y1);
-            double x2 = NR_MATRIX_DF_TRANSFORM_X(tf,bp->x2, bp->y2);
-            double y2 = NR_MATRIX_DF_TRANSFORM_Y(tf,bp->x2, bp->y2);
-            double x3 = NR_MATRIX_DF_TRANSFORM_X(tf,bp->x3, bp->y3);
-            double y3 = NR_MATRIX_DF_TRANSFORM_Y(tf,bp->x3, bp->y3);
+            double x1 = NR_MATRIX_DF_TRANSFORM_X(tf, bp->x1, bp->y1);
+            double y1 = NR_MATRIX_DF_TRANSFORM_Y(tf, bp->x1, bp->y1);
+            double x2 = NR_MATRIX_DF_TRANSFORM_X(tf, bp->x2, bp->y2);
+            double y2 = NR_MATRIX_DF_TRANSFORM_Y(tf, bp->x2, bp->y2);
+            double x3 = NR_MATRIX_DF_TRANSFORM_X(tf, bp->x3, bp->y3);
+            double y3 = NR_MATRIX_DF_TRANSFORM_Y(tf, bp->x3, bp->y3);
             /**/
 
             switch (bp->code)
