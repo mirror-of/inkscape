@@ -76,6 +76,7 @@ inkscapelib_src = \
 	\
 	color.cpp color.h \
 	marker-status.cpp marker-status.h	\
+	extract-uri.cpp extract-uri.h \
 	style.cpp style.h \
 	\
 	document.cpp document.h document-private.h \
@@ -227,3 +228,12 @@ inkview_LDADD = \
 dist-hook:
 	mkdir $(distdir)/pixmaps
 	cp $(srcdir)/pixmaps/*xpm $(distdir)/pixmaps
+
+TESTS = extract-uri-test$(EXEEXT)
+# automake adds $(EXEEXT) to check_PROGRAMS items but not to TESTS items:
+# TESTS items can be scripts etc.
+
+check_PROGRAMS = extract-uri-test
+
+extract_uri_test_SOURCES = extract-uri-test.cpp
+extract_uri_test_LDADD = libinkscape.la -lglib-2.0

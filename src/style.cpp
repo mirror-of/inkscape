@@ -32,6 +32,7 @@
 #include "helper/canvas-bpath.h"
 #include "attributes.h"
 #include "document.h"
+#include "extract-uri.h"
 #include "marker-status.h"
 #include "uri-references.h"
 #include "sp-paint-server.h"
@@ -1858,24 +1859,6 @@ sp_style_read_icolor (SPIPaint *paint, const gchar *str, SPStyle *style, SPDocum
        }
 }
 
-// FIXME: kill this ugliness when we have a proper CSS parser
-gchar *
-extract_uri (const gchar *s)
-{
-	const gchar *sb, *se;
-
-	sb = s;
-	if (!strncmp (sb, "url", 3)) sb += 3;
-	while (*sb && (*sb == ' ' || *sb == '(')) sb ++;
-
-	se = s + strlen (s) - 1;
-	while (*se && (*se == ' ' || *se == '(')) se --;
-
-	if (se >= sb)
-		return g_strndup (sb, se - sb);
-	else 
-		return NULL;
-}
 
 
 /**
