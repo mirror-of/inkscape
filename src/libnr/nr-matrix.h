@@ -129,7 +129,6 @@ public:
 
 	bool test_identity() const;
 	bool is_translation(const Coord eps=0.01) const;
-	operator NR::translate() const;
 
 	Matrix inverse() const;
 

@@ -1,5 +1,10 @@
 2004-09-26  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-matrix.h, src/libnr/nr-matrix.cpp:
+	  Get rid of operator NR::translate(), which was allowing
+	  *implicit* (and typically lossy) conversion to NR::translate,
+	  and which made a bug hard to find.
+
 	* src/sp-gradient-test.cpp: New unit test file.  I believe this is the
 	  first test that tests an SPObject.
 	* src/Makefile_insert, src/Makefile.am: Invoke the new test.
