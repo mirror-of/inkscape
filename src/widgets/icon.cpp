@@ -4,6 +4,7 @@
  *
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Jon A. Cruz <jon@joncruz.org>
  *
  * Copyright (C) 2002 Lauris Kaplinski
  *
@@ -30,6 +31,7 @@
 #include <gtk/gtkstock.h>
 #include <gtk/gtkimage.h>
 
+#include <gtkmm/image.h>
 
 #include "forward.h"
 #include "prefs-utils.h"
@@ -304,13 +306,24 @@ sp_icon_new_full( GtkIconSize lsize, const gchar *name )
 GtkWidget *
 sp_icon_new( GtkIconSize lsize, const gchar *name )
 {
-        return sp_icon_new_full( lsize, name );
+    return sp_icon_new_full( lsize, name );
 }
 
-GtkWidget *
-sp_icon_new_scaled( GtkIconSize lsize, const gchar *name )
+Gtk::Widget *sp_icon_get_icon( const Glib::ustring &oid, GtkIconSize size )
 {
-	return sp_icon_new_full( lsize, name );
+    Gtk::Widget *result = 0;
+    GtkWidget * widget = sp_icon_new_full( size, oid.c_str() );
+
+    if ( widget ) {
+        if ( GTK_IS_IMAGE(widget) ) {
+            GtkImage* img = GTK_IMAGE(widget);
+            result = Glib::wrap( img );
+        } else {
+            result = Glib::wrap( widget );
+        }
+    }
+
+    return result;
 }
 
 // Try to load the named svg, falling back to pixmaps
@@ -767,62 +780,6 @@ sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psiz
 
     return px;
 } // end of sp_icon_image_load_svg()
-
-
-PixBufFactory::ID::ID(Glib::ustring id, GtkIconSize size , unsigned int psize ):
-    _id(id),
-    _size(size),
-    _psize( sp_icon_get_phys_size(psize) )
-{
-}
-
-
-PixBufFactory::PixBufFactory()
-{}
-
-PixBufFactory & PixBufFactory::get()
-{
-  static PixBufFactory pbf;
-  return pbf;
-}
-
-const Glib::RefPtr<Gdk::Pixbuf> PixBufFactory::getIcon(const Glib::ustring &oid)
-{
-    ID id (oid, GTK_ICON_SIZE_SMALL_TOOLBAR, sp_icon_get_phys_size( GTK_ICON_SIZE_SMALL_TOOLBAR ) );
-
-    return getIcon(id);
-}
-
-const Glib::RefPtr<Gdk::Pixbuf> PixBufFactory::getIcon(const Glib::ustring &oid, GtkIconSize size) {
-    ID id (oid, size, sp_icon_get_phys_size(size) );
-
-    return getIcon(id);
-}
-
-
-const Glib::RefPtr<Gdk::Pixbuf> PixBufFactory::getIcon(const ID &id)
-{
-    Glib::RefPtr<Gdk::Pixbuf> inMap = _map[id];
-    //cached, return
-    if (inMap) return inMap;
-
-    //not cached, loading
-    int size(id.size());
-    int psize = sp_icon_get_phys_size(size);
-    gint dump = prefs_get_int_attribute_limited( "debug.icons", "dumpCache", 0, 0, 1 );
-    if ( dump ) {
-        g_message( "not cached, loading  '%s':%d:%d", id.id().c_str(), size, psize );
-    }
-    guchar *data = sp_icon_image_load_svg(id.id().c_str(), size, psize);
-    Glib::RefPtr<Gdk::Pixbuf> pixbuf =
-        Gdk::Pixbuf::create_from_data (
-            data,
-            Gdk::COLORSPACE_RGB,
-            true,
-            8, psize, psize, psize * 4);
-    _map[id]=pixbuf;
-    return pixbuf;
-}
 
 void sp_icon_overlay_pixels( guchar *px, int width, int height, int stride, unsigned int r, unsigned int g, unsigned int b )
 {

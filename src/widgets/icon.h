@@ -40,50 +40,12 @@ struct SPIconClass {
 GType sp_icon_get_type (void);
 
 GtkWidget *sp_icon_new( GtkIconSize size, const gchar *name );
-GtkWidget *sp_icon_new_scaled( GtkIconSize size, const gchar *name );
-
 
 #include <glibmm/ustring.h>
-#include <gdkmm/pixbuf.h>
-#include <map>
+#include <gtkmm/widget.h>
 
-class PixBufFactory {
-  //Singleton class handling pixbufs from icons.svg
-public :
-  static PixBufFactory &get();
-  class ID {
-  public :
-    ID(Glib::ustring id, GtkIconSize size , unsigned int psize );
-    Glib::ustring id() const {return _id;}
-    int size() const {return _size;}
-    int psize() const {return _psize;}
-  private :
-    Glib::ustring _id;
-    GtkIconSize _size;
-    unsigned int _psize;
-  };
+// Might return a wrapped SPIcon, or Gtk::Image
+Gtk::Widget *sp_icon_get_icon( const Glib::ustring &oid, GtkIconSize size = GTK_ICON_SIZE_BUTTON );
 
-
-  const Glib::RefPtr<Gdk::Pixbuf> getIcon(const Glib::ustring &oid);
-  const Glib::RefPtr<Gdk::Pixbuf> getIcon(const Glib::ustring &oid, GtkIconSize size);
-  const Glib::RefPtr<Gdk::Pixbuf> getIcon(const ID &id);
-
-private :
-  PixBufFactory ();
-  struct cmpID
-  {
-    bool operator()(const ID &i1, const ID &i2) const
-    {
-      int cmp = i1.id().compare(i2.id());
-      if (cmp == 0)
-      {
-          if (i1.size() == i2.size()) return i1.psize() < i2.psize() ;
-          return i1.size() < i2.size();
-      }
-      return cmp < 0;
-    }
-  };
-  std::map<ID, Glib::RefPtr<Gdk::Pixbuf>, cmpID> _map;
-};
 
 #endif // SEEN_SP_ICON_H
