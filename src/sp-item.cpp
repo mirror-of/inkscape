@@ -1065,7 +1065,7 @@ NR::Matrix sp_item_i2d_affine(SPItem const *item)
     g_assert(SP_IS_ITEM(item));
 
     NR::Matrix const ret( sp_item_i2doc_affine(item)
-                          * NR::scale(0.8, -0.8)
+                          * NR::scale(1, -1)
                           * NR::translate(0, sp_document_height(SP_OBJECT_DOCUMENT(item))) );
 #ifdef NDEBUG
     NRMatrix tst;
@@ -1082,7 +1082,7 @@ NR::Matrix sp_item_i2r_affine(SPItem const *item)
     g_assert(SP_IS_ITEM(item));
 
     NR::Matrix const ret( sp_item_i2root_affine(item)
-                          * NR::scale(0.8, -0.8)
+                          * NR::scale(1, -1)
                           * NR::translate(0, sp_document_height(SP_OBJECT_DOCUMENT(item))) );
     return ret;
 }
@@ -1096,7 +1096,7 @@ NRMatrix *sp_item_i2d_affine(SPItem const *item, NRMatrix *affine)
     sp_item_i2doc_affine(item, affine);
 
     NRMatrix doc2dt;
-    nr_matrix_set_scale(&doc2dt, 0.8, -0.8);
+    nr_matrix_set_scale(&doc2dt, 1, -1);
     doc2dt.c[5] = sp_document_height(SP_OBJECT_DOCUMENT(item));
 
     nr_matrix_multiply(affine, affine, &doc2dt);
@@ -1114,7 +1114,7 @@ void sp_item_set_i2d_affine(SPItem *item, NR::Matrix const &i2dt)
         dt2p = sp_item_i2d_affine((SPItem *) SP_OBJECT_PARENT(item)).inverse();
     } else {
         dt2p = ( NR::translate(0, -sp_document_height(SP_OBJECT_DOCUMENT(item)))
-                 * NR::scale(1.25, -1.25) );
+                 * NR::scale(1, -1) );
     }
 
     NR::Matrix const i2p( i2dt * dt2p );

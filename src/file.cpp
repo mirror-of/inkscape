@@ -1066,12 +1066,12 @@ sp_export_png_file(SPDocument *doc, gchar const *filename,
      */
 
     NRMatrix affine;
-    affine.c[0] = width / ((x1 - x0) * 1.25);
+    affine.c[0] = width / (x1 - x0);
     affine.c[1] = 0.0;
     affine.c[2] = 0.0;
-    affine.c[3] = height / ((y1 - y0) * 1.25);
-    affine.c[4] = -affine.c[0] * x0 * 1.25;
-    affine.c[5] = -affine.c[3] * y0 * 1.25;
+    affine.c[3] = height / (y1 - y0);
+    affine.c[4] = -affine.c[0] * x0;
+    affine.c[5] = -affine.c[3] * y0;
 
     //SP_PRINT_MATRIX("SVG2PNG", &affine);
 

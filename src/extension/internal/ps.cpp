@@ -413,7 +413,7 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
         }
 
         if (!_bitmap) {
-            os << "0.8 -0.8 scale\n";
+            os << "1 -1 scale\n";
         }
     }
 
@@ -445,12 +445,12 @@ PrintPS::finish(Inkscape::Extension::Print *mod)
         width = (int) (_width * scale + 0.5);
         height = (int) (_height * scale + 0.5);
 
-        affine.c[0] = width / ((x1 - x0) * 1.25);
+        affine.c[0] = width / (x1 - x0);
         affine.c[1] = 0.0;
         affine.c[2] = 0.0;
-        affine.c[3] = height / ((y1 - y0) * 1.25);
-        affine.c[4] = -affine.c[0] * x0 * 1.25;
-        affine.c[5] = -affine.c[3] * y0 * 1.25;
+        affine.c[3] = height / (y1 - y0);
+        affine.c[4] = -affine.c[0] * x0;
+        affine.c[5] = -affine.c[3] * y0;
 
         nr_arena_item_set_transform(mod->root, &affine);
 

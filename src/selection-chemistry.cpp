@@ -1749,7 +1749,6 @@ sp_selection_tile(bool apply)
     NR::Rect r = selection->bounds();
     NR::Point move_p = NR::Point(0, sp_document_height(document)) - (r.min() + NR::Point (0, r.extent(NR::Y)));
     move_p[NR::Y] = -move_p[NR::Y];
-    move_p *= 1.25;
     NR::Matrix move = NR::Matrix (NR::translate (move_p));
 
     GSList *items = g_slist_copy((GSList *) selection->itemList());
@@ -1960,7 +1959,7 @@ sp_selection_create_bitmap_copy ()
 
 
     // Calculate the matrix that will be applied to the image so that it exactly overlaps the source objects
-    NR::Matrix eek = NR::scale(0.8, -0.8) * NR::translate(0, sp_document_height(document));
+    NR::Matrix eek = NR::scale(1, -1) * NR::translate(0, sp_document_height(document));
     NR::Matrix t = NR::scale (1/res, -1/res) * NR::translate (bbox.x0, bbox.y1) * eek.inverse(); 
 
     // Do the export

@@ -374,7 +374,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			sp_canvas_item_show (tc->cursor);
 			// Cursor height is defined by the new text object's font size; it needs to be set
 			// articifically here, for the text object does not exist yet:
-			double cursor_height = 0.8 * sp_desktop_get_font_size_tool (ec->desktop);
+			double cursor_height = sp_desktop_get_font_size_tool (ec->desktop);
 			sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), dtp, dtp + NR::Point(0, cursor_height)); 
 
 			/* Processed */

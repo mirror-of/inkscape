@@ -54,10 +54,6 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
             }
         }
 
-        // we calculated w/h in pt, but we set them in anon svg pixels
-        width *= 1.25;
-        height *= 1.25;
-
         if (prefs_get_int_attribute("options.importbitmapsasimages", "value", 1) == 1) {
             // import as <image>
             repr = sp_repr_new ("svg:image");

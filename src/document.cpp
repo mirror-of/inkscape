@@ -493,7 +493,7 @@ gdouble sp_document_width(SPDocument *document)
 	g_return_val_if_fail (document->priv != NULL, 0.0);
 	g_return_val_if_fail (document->root != NULL, 0.0);
 
-	return SP_ROOT (document->root)->width.computed / 1.25;
+	return SP_ROOT (document->root)->width.computed;
 }
 
 gdouble sp_document_height(SPDocument *document)
@@ -503,7 +503,7 @@ gdouble sp_document_height(SPDocument *document)
 	g_return_val_if_fail (document->priv != NULL, 0.0);
 	g_return_val_if_fail (document->root != NULL, 0.0);
 
-	return SP_ROOT (document->root)->height.computed / 1.25;
+	return SP_ROOT (document->root)->height.computed;
 }
 
 void sp_document_set_uri(SPDocument *document, gchar const *uri)
@@ -562,10 +562,8 @@ sp_document_set_size_px (SPDocument *doc, gdouble width, gdouble height)
 {
 	g_return_if_fail (doc != NULL);
 	g_return_if_fail (SP_IS_DOCUMENT (doc));
-	g_return_if_fail (width > 0.001);
-	g_return_if_fail (height > 0.001);
 
-	g_signal_emit (G_OBJECT (doc), signals [RESIZED], 0, width / 1.25, height / 1.25);
+	g_signal_emit (G_OBJECT (doc), signals [RESIZED], 0, width, height);
 }
 
 void sp_document_def_id(SPDocument *document, gchar const *id, SPObject *object)

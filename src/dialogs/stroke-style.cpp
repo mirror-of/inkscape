@@ -1298,7 +1298,7 @@ static gboolean stroke_width_set_unit(SPUnitSelector *,
         g_object_set_data (dlg, "update", GUINT_TO_POINTER (TRUE));
 
         GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data (dlg, "width"));
-        float w = sp_units_get_points (a->value, old);
+        float w = sp_units_get_pixels (a->value, *old);
 
         gdouble average = stroke_average_width (objects);
 
@@ -1320,7 +1320,7 @@ static gboolean stroke_width_set_unit(SPUnitSelector *,
 
         gdouble average = stroke_average_width (objects);
 
-        gtk_adjustment_set_value (a, sp_points_get_units (0.01 * a->value * average, new_units));
+        gtk_adjustment_set_value (a, sp_pixels_get_units (0.01 * a->value * average, *new_units));
 
         g_object_set_data (dlg, "update", GUINT_TO_POINTER (FALSE));
         return TRUE;
@@ -1739,7 +1739,7 @@ sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel)
     unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
 
     if (unit->base == SP_UNIT_ABSOLUTE || unit->base == SP_UNIT_DEVICE) {
-        sp_convert_distance(&avgwidth, SP_PS_UNIT, sp_unit_selector_get_unit(SP_UNIT_SELECTOR(us)));
+        avgwidth = sp_pixels_get_units (avgwidth, *unit);
         gtk_adjustment_set_value(GTK_ADJUSTMENT(width), avgwidth);
     } else {
         gtk_adjustment_set_value(GTK_ADJUSTMENT(width), 100);
@@ -1821,10 +1821,8 @@ sp_stroke_style_line_update_repr(SPWidget *spw, SPRepr *repr)
         return;
     }
 
-    /* We need points */
-    gdouble swidth = style->stroke_width.computed / 1.25;
     SPUnit const *unit = sp_unit_selector_get_unit(SP_UNIT_SELECTOR(units));
-    sp_convert_distance(&swidth, SP_PS_UNIT, unit);
+    gdouble swidth = sp_pixels_get_units (style->stroke_width.computed, *unit);
     gtk_adjustment_set_value(GTK_ADJUSTMENT(width), swidth);
 
     /* Join */
@@ -1923,7 +1921,7 @@ sp_stroke_style_scale_line(SPWidget *spw)
             /* Set stroke width */
             double width;
             if (unit->base == SP_UNIT_ABSOLUTE || unit->base == SP_UNIT_DEVICE) {
-                sp_convert_distance( &width_typed, sp_unit_selector_get_unit(us), SP_PS_UNIT );
+                width_typed = sp_units_get_pixels (width_typed, *sp_unit_selector_get_unit(us));
                 NR::Matrix i2d = sp_item_i2d_affine (SP_ITEM(i->data));
                 width = width_typed / expansion(i2d);
             } else { // percentage

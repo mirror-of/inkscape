@@ -438,8 +438,8 @@ sp_transformation_move_relative_toggled (GtkToggleButton *tb, GObject *dlg)
     SPUnitSelector *us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "move_units"));
     GtkAdjustment *ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_x"));
     GtkAdjustment *ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_y"));
-    float x = sp_unit_selector_get_value_in_points (us, ax);
-    float y = sp_unit_selector_get_value_in_points (us, ay);
+    float x = sp_unit_selector_get_value_in_pixels (us, ax);
+    float y = sp_unit_selector_get_value_in_pixels (us, ay);
 
     NR::Rect bbox = selection->bounds();
 
@@ -447,12 +447,12 @@ sp_transformation_move_relative_toggled (GtkToggleButton *tb, GObject *dlg)
 
     if (gtk_toggle_button_get_active (tb)) {
         /* From absolute to relative */
-        sp_unit_selector_set_value_in_points (us, ax, x - bbox.min()[NR::X]);
-        sp_unit_selector_set_value_in_points (us, ay, y - bbox.min()[NR::Y]);
+        sp_unit_selector_set_value_in_pixels (us, ax, x - bbox.min()[NR::X]);
+        sp_unit_selector_set_value_in_pixels (us, ay, y - bbox.min()[NR::Y]);
     } else {
         /* From relative to absolute */
-        sp_unit_selector_set_value_in_points (us, ax, bbox.min()[NR::X] + x);
-        sp_unit_selector_set_value_in_points (us, ay, bbox.min()[NR::Y] + y);
+        sp_unit_selector_set_value_in_pixels (us, ax, bbox.min()[NR::X] + x);
+        sp_unit_selector_set_value_in_pixels (us, ay, bbox.min()[NR::Y] + y);
     }
 
     g_object_set_data (dlg, "update", GUINT_TO_POINTER (FALSE));
@@ -553,8 +553,8 @@ sp_transformation_move_update (GObject *dlg, SPSelection *selection)
             GtkAdjustment *ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_y"));
             SPUnitSelector *us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "move_units"));
             NR::Rect bbox = selection->bounds();
-            sp_unit_selector_set_value_in_points (us, ax, bbox.min()[NR::X]);
-            sp_unit_selector_set_value_in_points (us, ay, bbox.min()[NR::Y]);
+            sp_unit_selector_set_value_in_pixels (us, ax, bbox.min()[NR::X]);
+            sp_unit_selector_set_value_in_pixels (us, ay, bbox.min()[NR::Y]);
         }
         gtk_widget_set_sensitive (page, TRUE);
     
@@ -570,8 +570,8 @@ static void sp_transformation_move_apply(GObject *dlg, SPSelection *selection)
     SPUnitSelector *us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "move_units"));
     GtkAdjustment *ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_x"));
     GtkAdjustment *ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_y"));
-    NR::Point const move(sp_unit_selector_get_value_in_points(us, ax),
-                         sp_unit_selector_get_value_in_points(us, ay));
+    NR::Point const move(sp_unit_selector_get_value_in_pixels(us, ax),
+                         sp_unit_selector_get_value_in_pixels(us, ay));
 
     GtkToggleButton *cb = GTK_TOGGLE_BUTTON(g_object_get_data (dlg, "move_relative"));
 
@@ -615,8 +615,8 @@ static gboolean sp_transformation_scale_set_unit(SPUnitSelector *,
         g_object_set_data (dlg, "update", GUINT_TO_POINTER (TRUE));
         GtkAdjustment *ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_x"));
         GtkAdjustment *ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_y"));
-        float x = sp_units_get_points (ax->value, old);
-        float y = sp_units_get_points (ay->value, old);
+        float x = sp_units_get_pixels (ax->value, *old);
+        float y = sp_units_get_pixels (ay->value, *old);
         NR::Rect bbox = selection->bounds();
         gtk_adjustment_set_value (ax, 100.0 * x / bbox.extent(NR::X));
         gtk_adjustment_set_value (ay, 100.0 * y / bbox.extent(NR::Y));
@@ -632,11 +632,11 @@ static gboolean sp_transformation_scale_set_unit(SPUnitSelector *,
         GtkAdjustment *ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_y"));
         NR::Rect bbox = selection->bounds();
         gtk_adjustment_set_value (ax, 
-            sp_points_get_units (0.01 * ax->value * bbox.extent(NR::X),
-                                 new_units));
+            sp_pixels_get_units (0.01 * ax->value * bbox.extent(NR::X),
+                                 *new_units));
         gtk_adjustment_set_value (ay, 
-            sp_points_get_units (0.01 * ay->value * bbox.extent(NR::Y), 
-                                 new_units));
+            sp_pixels_get_units (0.01 * ay->value * bbox.extent(NR::Y), 
+                                 *new_units));
         g_object_set_data (dlg, "update", GUINT_TO_POINTER (FALSE));
         return TRUE;
     }
@@ -740,8 +740,8 @@ sp_transformation_scale_update (GObject *dlg, SPSelection *selection)
         const SPUnit *unit = sp_unit_selector_get_unit (us);
         
         if (unit->base == SP_UNIT_ABSOLUTE || unit->base == SP_UNIT_DEVICE) {
-            sp_unit_selector_set_value_in_points (us, ax, bbox.extent(NR::X));
-            sp_unit_selector_set_value_in_points (us, ay, bbox.extent(NR::Y));
+            sp_unit_selector_set_value_in_pixels (us, ax, bbox.extent(NR::X));
+            sp_unit_selector_set_value_in_pixels (us, ay, bbox.extent(NR::Y));
         } else {
             gtk_adjustment_set_value (ax, 100.0);
             gtk_adjustment_set_value (ay, 100.0);
@@ -765,8 +765,8 @@ static void sp_transformation_scale_apply(GObject *dlg, SPSelection *selection)
     SPUnit const *unit = sp_unit_selector_get_unit(us);
 
     if (unit->base == SP_UNIT_ABSOLUTE || unit->base == SP_UNIT_DEVICE) {
-        NR::scale const numerator(sp_unit_selector_get_value_in_points(us, ax),
-                                  sp_unit_selector_get_value_in_points(us, ay));
+        NR::scale const numerator(sp_unit_selector_get_value_in_pixels (us, ax),
+                                  sp_unit_selector_get_value_in_pixels (us, ay));
         NR::scale const denominator(bbox.dimensions());
         sp_selection_scale_relative(selection, center,
                                     numerator / denominator);

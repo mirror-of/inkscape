@@ -270,7 +270,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		if (value) {
 			sp_nv_read_length (value, SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE, &nv->gridorigin[d], &nv->gridunit);
 		}
-		sp_convert_distance (&nv->gridorigin[d], nv->gridunit, pt);
+		nv->gridorigin[d] = sp_units_get_pixels (nv->gridorigin[d], *(nv->gridunit));
 		sp_namedview_setup_grid (nv);
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
@@ -284,7 +284,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		if (value) {
 			sp_nv_read_length (value, SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE, &nv->gridspacing[d], &nv->gridunit);
 		}
-		sp_convert_distance (&nv->gridspacing[d], nv->gridunit, pt);
+		nv->gridspacing[d] = sp_units_get_pixels (nv->gridspacing[d], *(nv->gridunit));
 		sp_namedview_setup_grid (nv);
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;

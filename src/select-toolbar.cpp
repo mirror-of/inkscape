@@ -106,7 +106,7 @@ sp_selection_layout_widget_update(SPWidget *spw, SPSelection *sel)
                 };
                 for (unsigned i = 0; i < G_N_ELEMENTS(keyval); ++i) {
                     GtkAdjustment *a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), keyval[i].key);
-                    gtk_adjustment_set_value(a, sp_points_get_units(keyval[i].val, &unit));
+                    gtk_adjustment_set_value(a, sp_pixels_get_units(keyval[i].val, unit));
                 }
             }
 
@@ -173,15 +173,15 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, SPWidget *spw)
     if (unit.base == SP_UNIT_ABSOLUTE || unit.base == SP_UNIT_DEVICE) {
         GtkAdjustment *a;
         a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "X");
-        x0 = sp_units_get_points(a->value, unit);
+        x0 = sp_units_get_pixels (a->value, unit);
         a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "Y");
-        y0 = sp_units_get_points(a->value, unit);
+        y0 = sp_units_get_pixels (a->value, unit);
         a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "width");
-        x1 = x0 + sp_units_get_points(a->value, unit);
-        xrel = sp_units_get_points(a->value, unit) / bbox.extent(NR::X);
+        x1 = x0 + sp_units_get_pixels (a->value, unit);
+        xrel = sp_units_get_pixels (a->value, unit) / bbox.extent(NR::X);
         a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "height");
-        y1 = y0 + sp_units_get_points(a->value, unit);
-        yrel = sp_units_get_points(a->value, unit) / bbox.extent(NR::Y);
+        y1 = y0 + sp_units_get_pixels (a->value, unit);
+        yrel = sp_units_get_pixels (a->value, unit) / bbox.extent(NR::Y);
     } else {
         GtkAdjustment *a;
         a = (GtkAdjustment *) gtk_object_get_data(GTK_OBJECT(spw), "X");
@@ -299,10 +299,10 @@ static gboolean aux_set_unit(SPUnitSelector *,
         GtkAdjustment *aw = GTK_ADJUSTMENT(g_object_get_data(dlg, "width"));
         GtkAdjustment *ah = GTK_ADJUSTMENT(g_object_get_data(dlg, "height"));
 
-        double const x = sp_units_get_points(ax->value, old);
-        double const y = sp_units_get_points(ay->value, old);
-        double const w = sp_units_get_points(aw->value, old);
-        double const h = sp_units_get_points(ah->value, old);
+        double const x = sp_units_get_pixels (ax->value, *old);
+        double const y = sp_units_get_pixels (ay->value, *old);
+        double const w = sp_units_get_pixels (aw->value, *old);
+        double const h = sp_units_get_pixels (ah->value, *old);
 
         NR::Rect bbox = selection->bounds();
 
@@ -326,10 +326,10 @@ static gboolean aux_set_unit(SPUnitSelector *,
 
         NR::Rect bbox = selection->bounds();
 
-        gtk_adjustment_set_value(ax, sp_points_get_units(0.01 * ax->value * bbox.min()[NR::X], new_units));
-        gtk_adjustment_set_value(ay, sp_points_get_units(0.01 * ay->value * bbox.min()[NR::Y], new_units));
-        gtk_adjustment_set_value(aw, sp_points_get_units(0.01 * aw->value * bbox.extent(NR::X), new_units));
-        gtk_adjustment_set_value(ah, sp_points_get_units(0.01 * ah->value * bbox.extent(NR::Y), new_units));
+        gtk_adjustment_set_value(ax, sp_pixels_get_units(0.01 * ax->value * bbox.min()[NR::X], *new_units));
+        gtk_adjustment_set_value(ay, sp_pixels_get_units(0.01 * ay->value * bbox.min()[NR::Y], *new_units));
+        gtk_adjustment_set_value(aw, sp_pixels_get_units(0.01 * aw->value * bbox.extent(NR::X), *new_units));
+        gtk_adjustment_set_value(ah, sp_pixels_get_units(0.01 * ah->value * bbox.extent(NR::Y), *new_units));
 
         g_object_set_data(dlg, "update", GUINT_TO_POINTER(FALSE));
         return TRUE;

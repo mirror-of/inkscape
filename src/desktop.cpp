@@ -203,7 +203,7 @@ sp_desktop_init (SPDesktop *desktop)
 
     desktop->d2w.set_identity();
     desktop->w2d.set_identity();
-    desktop->doc2dt = NR::Matrix(NR::scale(0.8, -0.8));
+    desktop->doc2dt = NR::Matrix(NR::scale(1, -1));
 
     desktop->guides_active = FALSE;
 

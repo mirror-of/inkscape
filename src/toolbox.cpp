@@ -1268,7 +1268,7 @@ sp_rtb_rxry_value_changed (GtkAdjustment *adj, SPWidget *tbl, const gchar* value
     const SPUnit *unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
 
     if (sp_document_get_undo_sensitive (SP_DT_DOCUMENT(desktop))) {
-        prefs_set_double_attribute ("tools.shapes.rect", value_name, sp_units_get_points (adj->value, unit));
+        prefs_set_double_attribute ("tools.shapes.rect", value_name, sp_units_get_pixels (adj->value, *unit));
     }
 
     // quit if run by the attr_changed listener
@@ -1284,7 +1284,7 @@ sp_rtb_rxry_value_changed (GtkAdjustment *adj, SPWidget *tbl, const gchar* value
         for (const GSList *items = selection->itemList(); items != NULL; items = items->next) {
         if (SP_IS_RECT (items->data)) {
             if (adj->value != 0) {
-                setter (SP_RECT (items->data), sp_units_get_points (adj->value, unit));
+                setter (SP_RECT (items->data), sp_units_get_pixels (adj->value, *unit));
             } else {
                 sp_repr_set_attr (SP_OBJECT_REPR (items->data), value_name, NULL);
             }
@@ -1353,13 +1353,13 @@ static void rect_tb_event_attr_changed (SPRepr * repr, const gchar * name, const
         {
             GtkAdjustment *adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "rx");
             gdouble rx = sp_rect_get_visible_rx (SP_RECT (item));
-            gtk_adjustment_set_value(adj, sp_points_get_units(rx, unit));
+            gtk_adjustment_set_value(adj, sp_pixels_get_units (rx, *unit));
         }
 
         {
             GtkAdjustment *adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "ry");
             gdouble ry = sp_rect_get_visible_ry (SP_RECT (item));
-            gtk_adjustment_set_value(adj, sp_points_get_units(ry, unit));
+            gtk_adjustment_set_value(adj, sp_pixels_get_units (ry, *unit));
         }
     }
 
