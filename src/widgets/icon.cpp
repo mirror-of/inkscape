@@ -237,10 +237,10 @@ sp_icon_get_gtk_size (int size)
 	return map[size];
 }
 
-int sp_icon_get_phys_size( int size )
+static int sp_icon_get_phys_size(int size)
 {
     static bool init = false;
-    static int vals[GTK_ICON_SIZE_DIALOG];
+    static int vals[GTK_ICON_SIZE_DIALOG + 1];
 
     size = CLAMP( size, GTK_ICON_SIZE_MENU, GTK_ICON_SIZE_DIALOG );
 
@@ -250,7 +250,7 @@ int sp_icon_get_phys_size( int size )
             g_message( "Default icon sizes:" );
         }
         memset( vals, 0, sizeof(vals) );
-        GtkIconSize gtkSizes[] = {
+        GtkIconSize const gtkSizes[] = {
             GTK_ICON_SIZE_MENU,
             GTK_ICON_SIZE_SMALL_TOOLBAR,
             GTK_ICON_SIZE_LARGE_TOOLBAR,
@@ -258,7 +258,7 @@ int sp_icon_get_phys_size( int size )
             GTK_ICON_SIZE_DND,
             GTK_ICON_SIZE_DIALOG
         };
-        const gchar* names[] = {
+        gchar const *const names[] = {
             "GTK_ICON_SIZE_MENU",
             "GTK_ICON_SIZE_SMALL_TOOLBAR",
             "GTK_ICON_SIZE_LARGE_TOOLBAR",
@@ -269,32 +269,37 @@ int sp_icon_get_phys_size( int size )
 
         GtkWidget *icon = (GtkWidget *)g_object_new (SP_TYPE_ICON, NULL);
 
-        for ( int i = 0; i < (int)(sizeof(gtkSizes)/sizeof(gtkSizes[0])); i++ ) {
+        for (unsigned i = 0; i < G_N_ELEMENTS(gtkSizes); ++i) {
+            unsigned const val_ix(gtkSizes[i]);
+            g_assert( val_ix < G_N_ELEMENTS(vals) );
+
             gint width = 0;
             gint height = 0;
             bool used = false;
             if ( gtk_icon_size_lookup(gtkSizes[i], &width, &height ) ) {
-                vals[(int)gtkSizes[i]] = std::max( width, height );
+                vals[val_ix] = std::max(width, height);
                 used = true;
             }
-            if ( dump ) {
-                g_message( " =--  %d  size:%d  %c(%d, %d)   '%s'", i, gtkSizes[i], (used?' ':'X'), width, height, names[i] );
+            if (dump) {
+                g_message(" =--  %u  size:%d  %c(%d, %d)   '%s'",
+                          i, gtkSizes[i],
+                          ( used ? ' ' : 'X' ), width, height, names[i]);
             }
-            gchar const * id = GTK_STOCK_OPEN;
-            GdkPixbuf* pb = gtk_widget_render_icon( icon, id, gtkSizes[i], NULL);
-            if ( pb ) {
+            gchar const *id = GTK_STOCK_OPEN;
+            GdkPixbuf *pb = gtk_widget_render_icon( icon, id, gtkSizes[i], NULL);
+            if (pb) {
                 width = gdk_pixbuf_get_width(pb);
                 height = gdk_pixbuf_get_height(pb);
                 int newSize = std::max( width, height );
-                if ( newSize > 0 && newSize != vals[(int)gtkSizes[i]] ) {
-                    // TODO perhaps check a few more stock icons to get a range on sizes
-                    vals[(int)gtkSizes[i]] = newSize;
+                // TODO perhaps check a few more stock icons to get a range on sizes.
+                if ( newSize > 0 ) {
+                    vals[val_ix] = newSize;
                 }
-                if ( dump ) {
-                    g_message( "      %d  size:%d   (%d, %d)", i, gtkSizes[i], width, height );
+                if (dump) {
+                    g_message("      %u  size:%d   (%d, %d)", i, gtkSizes[i], width, height);
                 }
 
-                g_object_unref (G_OBJECT (pb));
+                g_object_unref(G_OBJECT(pb));
             }
         }
         //g_object_unref(icon);
@@ -581,9 +586,9 @@ struct svg_doc_cache_t
 static guchar *
 sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psize )
 {
-    gint dump = prefs_get_int_attribute_limited( "debug.icons", "dumpSvg", 0, 0, 1 );
+    gint const dump = prefs_get_int_attribute_limited("debug.icons", "dumpSvg", 0, 0, 1);
 
-    // it would be nice to figure out how to attach "desctructors" to
+    // It would be nice to figure out how to attach "desctructors" to
     // these maps to keep mem-watching tools like valgrind happy.
     static std::map<Glib::ustring, svg_doc_cache_t *> doc_cache;
     static std::map<Glib::ustring, guchar *> px_cache;
@@ -612,7 +617,7 @@ sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psiz
         return px;
     }
 
-    // fall back from user prefs dir into system locations
+    // Fall back from user prefs dir into system locations.
     Glib::ustring iconsvg = name;
     iconsvg += ".svg";
     std::list<gchar *> sources;
@@ -621,21 +626,21 @@ sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psiz
     sources.push_back(g_build_filename(INKSCAPE_PIXMAPDIR, iconsvg.c_str(), NULL));
     sources.push_back(g_build_filename(INKSCAPE_PIXMAPDIR, "icons.svg", NULL));
 
+    // Use this loop to iterate through a list of possible document locations.
     while (!sources.empty()) {
         gchar *doc_filename = sources.front();
 
-        //g_warning("trying to load '%s' from '%s'", name, doc_filename);
-
-        // did we already load this doc?
+        // Did we already load this doc?
+        Glib::ustring key(doc_filename);
         info = 0;
         {
-            std::map<Glib::ustring, svg_doc_cache_t *>::iterator i = doc_cache.find(Glib::ustring(doc_filename));
+            std::map<Glib::ustring, svg_doc_cache_t *>::iterator i = doc_cache.find(key);
             if ( i != doc_cache.end() ) {
                 info = i->second;
             }
         }
 
-        /* Try to load from document */
+        /* Try to load from document. */
         if (!info &&
             Inkscape::IO::file_test( doc_filename, G_FILE_TEST_IS_REGULAR ) &&
             (doc = sp_document_new ( doc_filename, FALSE )) ) {
@@ -656,7 +661,7 @@ sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psiz
 
             info->doc=doc;
             info->root=root;
-            doc_cache[Glib::ustring(doc_filename)]=info;
+            doc_cache[key]=info;
         }
         if (info) {
             doc=info->doc;
