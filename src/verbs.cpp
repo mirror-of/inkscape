@@ -47,6 +47,7 @@
 #include "dialogs/tiledialog.h"
 #include "dialogs/layer-properties.h"
 #include "dialogs/clonetiler.h"
+#include "dialogs/iconpreview.h"
 
 #include "extension/effect.h"
 
@@ -1300,6 +1301,9 @@ ZoomVerb::perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_VIEW_NEW_PREVIEW:
             sp_ui_new_view_preview ();
             break;
+        case SP_VERB_VIEW_ICON_PREVIEW:
+            Inkscape::UI::Dialogs::IconPreview::showInstance();
+            break;
         default:
             break;
     }
@@ -1833,6 +1837,8 @@ Verb * Verb::_base_verbs[] = {
         "view_new"),
     new ZoomVerb(SP_VERB_VIEW_NEW_PREVIEW, "ViewNewPreview", N_("_New View Preview"),
          N_("New View Preview"), NULL/*"view_new_preview"*/),
+    new ZoomVerb(SP_VERB_VIEW_ICON_PREVIEW, "ViewIconPreview", N_("_Icon Preview"),
+         N_("Icon Preview"), NULL/*"view_icon_preview"*/),
     new ZoomVerb(SP_VERB_ZOOM_PAGE, "ZoomPage", N_("_Page"),
        N_("Zoom to fit page in window"), "zoom_page"),
     new ZoomVerb(SP_VERB_ZOOM_PAGE_WIDTH, "ZoomPageWidth", N_("Page _Width"),

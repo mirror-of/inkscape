@@ -1,3 +1,9 @@
+2005-03-07  Jon A. Cruz  <jon@joncruz.org>
+	* src/interface.cpp, src/verbs.h, src.verbs.cpp, src/widgets/icon.cpp,
+	  src/dialogs/iconpreview.h, src/dialogs/iconpreview.cpp,
+	  src/dialogs/Makefile_insert:
+	  Initial cut of icon preview.
+
 2005-03-05  Bryce Harrington <bryce@bryceharrington.org>
 
 	* share/icons/*.svg, share/icons/Makefile.am:  Adding icons for

@@ -1,5 +1,5 @@
-#ifndef __SP_VERBS_H__
-#define __SP_VERBS_H__
+#ifndef SEEN_SP_VERBS_H
+#define SEEN_SP_VERBS_H
 
 /**
  * \brief Frontend to actions
@@ -158,6 +158,7 @@ enum {
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
     SP_VERB_VIEW_NEW,
     SP_VERB_VIEW_NEW_PREVIEW,
+    SP_VERB_VIEW_ICON_PREVIEW,
     SP_VERB_ZOOM_PAGE,
     SP_VERB_ZOOM_PAGE_WIDTH,
     SP_VERB_ZOOM_DRAWING,
@@ -328,7 +329,7 @@ public:
 
 }  /* Inkscape namespace */
 
-#endif
+#endif // SEEN_SP_VERBS_H
 
 /*
   Local Variables:

@@ -945,6 +945,7 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
         Inkscape::Verb::get(SP_VERB_NONE),
 	Inkscape::Verb::get(SP_VERB_VIEW_NEW),
 	// Inkscape::Verb::get(SP_VERB_VIEW_NEW_PREVIEW),
+        Inkscape::Verb::get(SP_VERB_VIEW_ICON_PREVIEW),
         Inkscape::Verb::get(SP_VERB_LAST)
     };
 

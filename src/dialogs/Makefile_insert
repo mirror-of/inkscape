@@ -65,7 +65,10 @@ dialogs_libspdialogs_a_SOURCES = \
 	dialogs/find.cpp        \
 	dialogs/find.h \
 	dialogs/clonetiler.cpp        \
-	dialogs/clonetiler.h
+	dialogs/clonetiler.h        \
+	dialogs/iconpreview.cpp     \
+	dialogs/iconpreview.h
+
 
 #	dialogs/sp-widget.c	\
 #	dialogs/sp-widget.h	\

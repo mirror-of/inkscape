@@ -542,9 +542,9 @@ sp_icon_image_load_pixmap (const gchar *name, unsigned int lsize, unsigned int p
 }
 
 // takes doc, root, icon, and icon name to produce pixels
-static guchar *
+extern "C" guchar *
 sp_icon_doc_icon( SPDocument *doc, NRArenaItem *root,
-                  const gchar *name, unsigned int lsize, unsigned int psize )
+                  const gchar *name, unsigned int psize )
 {
     gint dump = prefs_get_int_attribute_limited( "debug.icons", "dumpSvg", 0, 0, 1 );
     guchar *px = NULL;
@@ -773,7 +773,7 @@ sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psiz
         if ( dump ) {
             g_message( "loading svg '%s' (%d:%d)", name, lsize, psize );
         }
-        px = sp_icon_doc_icon( doc, root, name, lsize, psize );
+        px = sp_icon_doc_icon( doc, root, name, psize );
         if (px) {
             px_cache[icon_index] = px;
             break;
