@@ -96,25 +96,24 @@ sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point &req, NR::Point cons
 	double len = L2(d);
 	if (len < 1e-18)
 		return sp_desktop_free_snap (desktop, req);
-	NR::Point v = d;
-	v.normalize();
+	NR::Point const v = NR::unit_vector(d);
 
-	SPNamedView *nv = desktop->namedview;
-	NR::Point actual = req;
+	SPNamedView const *nv = desktop->namedview;
+	NR::Point snapped = req;
 	
 	if (nv->snaptoguides) {
 		upper = desktop->guidesnap;
-		for (GSList *l = nv->guides; l != NULL; l = l->next) {
+		for (GSList const *l = nv->guides; l != NULL; l = l->next) {
 			NR::Point trial(req);
-			SPGuide const *g = SP_GUIDE (l->data);
-			gdouble dist = sp_intersector_a_vector_snap (trial, 
-								 v, 
-								 g->normal,
-								 g->position);
+			SPGuide const &g = *SP_GUIDE(l->data);
+			double const dist = sp_intersector_a_vector_snap(trial,
+									 v,
+									 g.normal,
+									 g.position);
 			
 			if (dist < upper) {
 				upper = best = dist;
-				actual = trial;
+				snapped = trial;
 			}
 		}
 	}
@@ -138,11 +137,11 @@ sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point &req, NR::Point cons
 
 			if (dist < upper) {
 				upper = best = dist;
-				actual = trial;
+				snapped = trial;
 			}
 		}
 	}
-	req = actual;
+	req = snapped;
 	return best;
 }
 

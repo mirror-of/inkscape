@@ -1,5 +1,7 @@
 2004-02-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/desktop-snap.cpp (sp_desktop_vector_snap): Minor cleanups.
+
 	* src/libnr/Makefile.am, src/libnr/nr-point-fns-test.cpp:
 	New unit test file nr-point-fns-test.cpp.
 
