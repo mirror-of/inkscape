@@ -34,6 +34,7 @@
 #include "../selection.h"
 #include "../selection-chemistry.h"
 #include "../style.h"
+#include "../desktop.h"
 #include "xml/repr-private.h"
 
 #include "display-settings.h"
@@ -694,6 +695,11 @@ style_from_selection_to_tool (GtkWidget *widget,  const gchar* prefs_path)
         return;
 
     SPSelection *selection = SP_DT_SELECTION(desktop);
+
+    if (selection->isEmpty()) {
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No objects selected</b> to take the style from."));
+        return;
+    }
 
     SPItem *item = selection->singleItem();
 
