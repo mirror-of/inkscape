@@ -50,9 +50,14 @@ private:
 
     bool closed;
     
-    FILE *inf;
-    
+    FILE *inf;           //for file: uris
+    unsigned char *data; //for data: uris
+    int dataPos;         //  current read position in data field
+    int dataLen;         //  length of data buffer
+
     Inkscape::URI &uri;
+
+    int scheme;
 
 }; // class UriInputStream
 
@@ -114,10 +119,12 @@ private:
 
     bool closed;
     
-    FILE *outf;
+    FILE *outf;         //for file: uris
+    Glib::ustring data; //for data: uris
     
     Inkscape::URI &uri;
 
+    int scheme;
 
 }; // class UriOutputStream
 

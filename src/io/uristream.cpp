@@ -22,8 +22,15 @@ namespace IO
 {
 
 /*
-A temporary modification of Jon Cruz's portable fopen().
-Simplified a bit, since we will always use binary
+ * URI scheme types
+ */
+#define SCHEME_NONE 0
+#define SCHEME_FILE 1
+#define SCHEME_DATA 2
+
+/*
+ * A temporary modification of Jon Cruz's portable fopen().
+ * Simplified a bit, since we will always use binary
 */
 
 #define FILE_READ  1
@@ -64,11 +71,13 @@ static FILE *fopen_utf8name( char const *utf8name, int mode )
         }
     } else {
         gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
-        if (mode == FILE_READ)
-            fp = std::fopen(filename, "rb");
-        else
-            fp = std::fopen(filename, "wb");
-        g_free(filename);
+        if ( filename ) {
+            if (mode == FILE_READ)
+                fp = std::fopen(filename, "rb");
+            else
+                fp = std::fopen(filename, "wb");
+            g_free(filename);
+        }
     }
 #endif
 
@@ -88,16 +97,39 @@ static FILE *fopen_utf8name( char const *utf8name, int mode )
 UriInputStream::UriInputStream(Inkscape::URI &source)
                     throw (StreamException): uri(source) 
 {
-    char *cpath = (char *)uri.toNativeFilename();
-    //printf("path:'%s'\n", cpath);
-    inf = fopen_utf8name(cpath, FILE_READ);
-    //inf = fopen(cpath, "rb");
-    if (!inf)
-       {
-       Glib::ustring err = "UriInputStream cannot open file ";
-       err += cpath;
-       throw StreamException(err);
-       }
+    //get information from uri
+    char *schemestr = (char *) uri.getScheme();
+    scheme = SCHEME_FILE;
+    if (!schemestr || strncmp("file", schemestr, 4)==0)
+        scheme = SCHEME_FILE;
+    else if (strncmp("data", schemestr, 4)==0)
+        scheme = SCHEME_DATA;
+    //printf("in schemestr:'%s' scheme:'%d'\n", schemestr, scheme);
+    char *cpath = NULL;
+
+    switch (scheme) {
+
+        case SCHEME_FILE:
+            cpath     = (char *) uri.toNativeFilename();
+            //printf("in cpath:'%s'\n", cpath);
+            inf = fopen_utf8name(cpath, FILE_READ);
+            //inf = fopen(cpath, "rb");
+            g_free(cpath);
+            if (!inf) {
+                Glib::ustring err = "UriInputStream cannot open file ";
+                err += cpath;
+                throw StreamException(err);
+            }
+        break;
+
+        case SCHEME_DATA:
+            data        = (unsigned char *) uri.getPath();
+            //printf("in data:'%s'\n", data);
+            dataPos     = 0;
+            dataLen     = strlen((const char *)data);
+        break;
+
+    }
     closed = false;
 }
 
@@ -127,11 +159,26 @@ int UriInputStream::available() throw(StreamException)
  */ 
 void UriInputStream::close() throw(StreamException)
 {
-    closed = true;
-    if (closed || !inf)
+    if (closed)
         return;
-    fclose(inf);
-    inf = NULL;
+
+    switch (scheme) {
+
+        case SCHEME_FILE:
+            if (!inf)
+                return;
+            fflush(inf);
+            fclose(inf);
+            inf=NULL;
+        break;
+
+        case SCHEME_DATA:
+            //do nothing
+        break;
+
+    }//switch
+
+    closed = true;
 }
     
 /**
@@ -139,13 +186,27 @@ void UriInputStream::close() throw(StreamException)
  */ 
 int UriInputStream::get() throw(StreamException)
 {
-    if (closed || !inf)
+    if (closed)
         return -1;
+
+    switch (scheme) {
+
+        case SCHEME_FILE:
+            if (!inf || feof(inf))
+                return -1;
+            return fgetc(inf);
+        break;
+
+        case SCHEME_DATA:
+            if (dataPos >= dataLen)
+                return -1;
+            return data[dataPos++];
+        break;
+
+
+    }//switch
+
         
-    if (feof(inf))
-        return -1;
-        
-    return fgetc(inf);
 }
    
 
@@ -206,15 +267,37 @@ gunichar UriReader::get() throw(StreamException)
 UriOutputStream::UriOutputStream(Inkscape::URI &destination)
                     throw (StreamException): uri(destination) 
 {
-    char *cpath = (char *)uri.getPath();
-    outf = fopen_utf8name(cpath, FILE_WRITE);
-    //outf = fopen(cpath, "wb");
-    if (!outf)
-       {
-       Glib::ustring err = "UriOutputStream cannot open file ";
-       err += cpath;
-       throw StreamException(err);
-       }
+    //get information from uri
+    char *schemestr = (char *) uri.getScheme();
+    scheme = SCHEME_FILE;
+    if (!schemestr || strncmp("file", schemestr, 4)==0)
+        scheme = SCHEME_FILE;
+    else if (strncmp("data", schemestr, 4)==0)
+        scheme = SCHEME_DATA;
+    //printf("out schemestr:'%s' scheme:'%d'\n", schemestr, scheme);
+    char *cpath = NULL;
+
+    switch (scheme) {
+
+        case SCHEME_FILE:
+            cpath     = (char *) uri.toNativeFilename();
+            //printf("out path:'%s'\n", cpath);
+            outf = fopen_utf8name(cpath, FILE_WRITE);
+            //outf = fopen(cpath, "wb");
+            g_free(cpath);
+            if (!outf) {
+                Glib::ustring err = "UriOutputStream cannot open file ";
+                err += cpath;
+                throw StreamException(err);
+            }
+        break;
+
+        case SCHEME_DATA:
+            data        = "data:";
+        break;
+
+    }//switch
+
     closed = false;
 }
 
@@ -233,11 +316,25 @@ UriOutputStream::~UriOutputStream() throw(StreamException)
  */ 
 void UriOutputStream::close() throw(StreamException)
 {
-    if (closed || !outf)
+    if (closed)
         return;
-    fflush(outf);
-    fclose(outf);
-    outf=NULL;
+
+    switch (scheme) {
+
+        case SCHEME_FILE:
+            if (!outf)
+                return;
+            fflush(outf);
+            fclose(outf);
+            outf=NULL;
+        break;
+
+        case SCHEME_DATA:
+            uri = URI(data.raw().c_str());
+        break;
+
+    }//switch
+
     closed = true;
 }
     
@@ -247,9 +344,23 @@ void UriOutputStream::close() throw(StreamException)
  */ 
 void UriOutputStream::flush() throw(StreamException)
 {
-    if (closed || !outf)
+    if (closed)
         return;
-    fflush(outf);
+
+    switch (scheme) {
+
+        case SCHEME_FILE:
+            if (!outf)
+                return;
+            fflush(outf);
+        break;
+
+        case SCHEME_DATA:
+            //nothing
+        break;
+
+    }//switch
+
 }
     
 /**
@@ -257,11 +368,29 @@ void UriOutputStream::flush() throw(StreamException)
  */ 
 void UriOutputStream::put(int ch) throw(StreamException)
 {
-    if (closed || !outf)
+    if (closed)
         return;
-    unsigned char uch = (unsigned char)(ch & 0xff);
-    fputc(uch, outf);
-    //fwrite(uch, 1, 1, outf);
+
+    unsigned char uch;
+    gunichar gch;
+
+    switch (scheme) {
+
+        case SCHEME_FILE:
+            if (!outf)
+                return;
+            uch = (unsigned char)(ch & 0xff);
+            fputc(uch, outf);
+            //fwrite(uch, 1, 1, outf);
+        break;
+
+        case SCHEME_DATA:
+            gch = (gunichar) ch;
+            data.push_back(gch);
+        break;
+
+    }//switch
+
 }
 
 
