@@ -134,12 +134,9 @@ static void
 sp_genericellipse_update (SPObject *object, SPCtx *ctx, guint flags)
 {
 	if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
-		SPGenericEllipse *ellipse;
-		SPStyle *style;
-		double d;
-		ellipse = (SPGenericEllipse *) object;
-		style = object->style;
-		d = 1.0 / NR_MATRIX_DF_EXPANSION (&((SPItemCtx *) ctx)->i2vp);
+		SPGenericEllipse *ellipse = (SPGenericEllipse *) object;
+		SPStyle *style = object->style;
+		double const d = 1.0 / NR_MATRIX_DF_EXPANSION (&((SPItemCtx *) ctx)->i2vp);
 		sp_svg_length_update (&ellipse->cx, style->font_size.computed, style->font_size.computed * 0.5, d);
 		sp_svg_length_update (&ellipse->cy, style->font_size.computed, style->font_size.computed * 0.5, d);
 		sp_svg_length_update (&ellipse->rx, style->font_size.computed, style->font_size.computed * 0.5, d);
@@ -387,7 +384,7 @@ sp_ellipse_write (SPObject *object, SPRepr *repr, guint flags)
 	sp_repr_set_double (repr, "rx", ellipse->rx.computed);
 	sp_repr_set_double (repr, "ry", ellipse->ry.computed);
 
-	sp_arc_set_elliptical_path_attribute (SP_ARC (object), repr);
+	sp_arc_set_elliptical_path_attribute(SP_ARC(object), repr);
 
 	if (((SPObjectClass *) ellipse_parent_class)->write)
 		(* ((SPObjectClass *) ellipse_parent_class)->write) (object, repr, flags);
