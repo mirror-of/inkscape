@@ -417,7 +417,7 @@ spdc_endpoint_snap_internal(SPDrawContext *dc, NR::Point &p, NR::Point const o, 
             /* Snap it along best vector */
             namedview_vector_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(dc)->namedview, p, best);
         }
-    } else {
+    } else if ((state & GDK_SHIFT_MASK) == 0) {
         /* Free */
         namedview_free_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(dc)->namedview, p);
     }
@@ -1122,7 +1122,9 @@ spdc_set_startpoint(SPPencilContext *pc, NR::Point p, guint state)
 {
     SPDrawContext *dc = SP_DRAW_CONTEXT(pc);
 
-    namedview_free_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(dc)->namedview, p);
+    if ((state & GDK_SHIFT_MASK) == 0) {
+        namedview_free_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(dc)->namedview, p);
+    }
 
     dc->npoints = 0;
     dc->p[dc->npoints++] = p;
