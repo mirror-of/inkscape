@@ -154,6 +154,7 @@ sp_group_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XM
 
     SPObject *last_child = object->lastChild();
     if (last_child && SP_OBJECT_REPR(last_child) == child) {
+        // optimization for the common special case where the child is being added at the end
 	    SPObject *ochild = last_child;
 	    if ( SP_IS_ITEM(ochild) ) {
 		    /* TODO: this should be moved into SPItem somehow */
@@ -169,7 +170,7 @@ sp_group_child_added (SPObject *object, Inkscape::XML::Node *child, Inkscape::XM
 			    }
 		    }
 	    }
-    } else {
+    } else {    // general case
 	    SPObject *ochild = sp_object_get_child_by_repr(object, child);
 	    if ( ochild && SP_IS_ITEM(ochild) ) {
 		    /* TODO: this should be moved into SPItem somehow */
