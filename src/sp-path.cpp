@@ -39,6 +39,8 @@
 
 static void sp_path_class_init (SPPathClass *klass);
 static void sp_path_init (SPPath *path);
+static void sp_path_finalize(GObject *obj);
+static void sp_path_release(SPObject *object);
 
 static void sp_path_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static void sp_path_set (SPObject *object, unsigned int key, const gchar *value);
@@ -75,7 +77,7 @@ sp_path_get_type (void)
 	return type;
 }
 
-/** 
+/**
  *  Does the object-oriented work of initializing the class structure
  *  including parent class, and registers function pointers for
  *  the functions build, set, write, and set_transform.
@@ -83,12 +85,16 @@ sp_path_get_type (void)
 static void
 sp_path_class_init (SPPathClass * klass)
 {
+	GObjectClass *gobject_class = (GObjectClass *) klass;
 	SPObjectClass *sp_object_class = (SPObjectClass *) klass;
 	SPItemClass *item_class = (SPItemClass *) klass;
 
 	parent_class = (SPShapeClass *)g_type_class_peek_parent (klass);
 
+	gobject_class->finalize = sp_path_finalize;
+
 	sp_object_class->build = sp_path_build;
+	sp_object_class->release = sp_path_release;
 	sp_object_class->set = sp_path_set;
 	sp_object_class->write = sp_path_write;
 	sp_object_class->update = sp_path_update;
@@ -105,7 +111,7 @@ sp_nodes_in_path (SPPath *path)
 	gint r = curve->end;
 	gint i = curve->length - 1;
 	if (i > r) i = r; // sometimes after switching from node editor length is wrong, e.g. f6 - draw - f2 - tab - f1, this fixes it
-	for (; i >= 0; i --) 
+	for (; i >= 0; i --)
 		if ((curve->bpath + i) -> code == NR_MOVETO)
 			r --;
 	return r;
@@ -123,7 +129,15 @@ sp_path_description (SPItem * item)
 static void
 sp_path_init (SPPath *path)
 {
-	/* Nothing here */
+	new (&path->connEndPair) SPConnEndPair(path);
+}
+
+static void
+sp_path_finalize(GObject *obj)
+{
+	SPPath *path = (SPPath *) obj;
+
+	path->connEndPair.~SPConnEndPair();
 }
 
 /**
@@ -157,6 +171,8 @@ sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 	sp_object_read_attr (object, "marker-start");
 	sp_object_read_attr (object, "marker-mid");
 	sp_object_read_attr (object, "marker-end");
+
+	sp_conn_end_pair_build(object);
 
 	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
 		SPShape *shape;
@@ -204,6 +220,18 @@ sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 	}
 }
 
+static void
+sp_path_release(SPObject *object)
+{
+	SPPath *path = SP_PATH(object);
+
+	path->connEndPair.release();
+
+	if (((SPObjectClass *) parent_class)->release) {
+		((SPObjectClass *) parent_class)->release(object);
+	}
+}
+
 /**
  *  Sets a value in the path object given by 'key', to 'value'.  This is used
  *  for setting attributes and markers on a path object.
@@ -233,6 +261,10 @@ sp_path_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_PROP_MARKER_END:
 		sp_shape_set_marker(object, key, value);
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+		break;
+	case SP_ATTR_CONNECTION_START:
+	case SP_ATTR_CONNECTION_END:
+		path->connEndPair.setAttr(key, value);
 		break;
  	default:
 		if (((SPObjectClass *) parent_class)->set) {
@@ -267,6 +299,8 @@ sp_path_write (SPObject *object, SPRepr *repr, guint flags)
 	} else {
 		sp_repr_set_attr(repr, "d", NULL);
 	}
+
+	SP_PATH(shape)->connEndPair.writeRepr(repr);
 
 	if (((SPObjectClass *) (parent_class))->write) {
 		((SPObjectClass *) (parent_class))->write (object, repr, flags);
@@ -316,4 +350,3 @@ sp_path_set_transform (SPItem *item, NR::Matrix const &xform)
 	// nothing remains - we've written all of the transform, so return identity
 	return NR::identity();
 }
-

@@ -14,7 +14,7 @@
  */
 
 #include "sp-shape.h"
-
+#include "sp-conn-end-pair.h"
 
 
 #define SP_TYPE_PATH (sp_path_get_type ())
@@ -22,15 +22,26 @@
 #define SP_IS_PATH(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_PATH))
 
 struct SPPath {
-	SPShape shape;
+    SPShape shape;
+    SPConnEndPair connEndPair;
 };
 
 struct SPPathClass {
-	SPShapeClass shape_class;
+    SPShapeClass shape_class;
 };
 
 GType sp_path_get_type (void);
 
 
-
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

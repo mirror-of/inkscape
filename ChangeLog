@@ -7,6 +7,8 @@
 	  New files.
 	* src/Makefile_insert (libinkpre_a_SOURCES): Add the new files.
 
+	* src/sp-path.cpp, src/sp-path.h: Call the new connector stuff.
+
 2004-08-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/display/curve.h, src/display/curve.cpp
