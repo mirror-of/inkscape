@@ -43,6 +43,7 @@
 #include "sp-item.h"
 #include "snap.h"
 #include "prefs-utils.h"
+#include "tools-switch.h"
 #include "message-context.h"
 #include "message-stack.h"
 
@@ -269,6 +270,9 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
     switch (event->type) {
         case GDK_2BUTTON_PRESS:
             if (event->button.button == 1) {
+                if (!selection->isEmpty()) {
+                    tools_switch_by_item (desktop, (SPItem *) selection->itemList()->data);
+                }
                 ret = TRUE;
             }
             break;
@@ -294,13 +298,14 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                     sc->moved = FALSE;
 
                     // remember the clicked item in sc->item:
-                    sc->item = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, FALSE);
+                    sc->item = sp_event_context_find_item (desktop, 
+                                              NR::Point(event->button.x, event->button.y), event->button.state, FALSE);
                     sp_object_ref(sc->item, NULL);
 
                     rb_escaped = drag_escaped = 0;
 
                     sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->drawing),
-                                        GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+                                        GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK |
                                         GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
                                         NULL, event->button.time);
                     sc->grabbed = SP_CANVAS_ITEM(desktop->drawing);
@@ -308,93 +313,6 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                     ret = TRUE;
                 }
             }
-            break;
-        case GDK_MOTION_NOTIFY:
-            if (event->motion.state & GDK_BUTTON1_MASK) {
-                /* Left mousebutton */
-                if (sc->dragging) {
-                    ret = TRUE;
-
-                    if ( within_tolerance
-                         && ( abs( (gint) event->motion.x - xp ) < tolerance )
-                         && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
-                        break; // do not drag if we're within tolerance from origin
-                    }
-                    // Once the user has moved farther than tolerance from the original location
-                    // (indicating they intend to move the object, not click), then always process the
-                    // motion notify coordinates as given (no snapping back to origin)
-                    within_tolerance = false;
-
-                    NR::Point const motion_pt(event->motion.x, event->motion.y);
-                    NR::Point const p(sp_desktop_w2d_xy_point(desktop, motion_pt));
-                    if (!sc->moved) {
-                        NR::Point const button_pt(event->button.x, event->button.y);
-                        SPItem *item_at_point = sp_desktop_item_at_point(desktop, button_pt, TRUE);
-                        SPItem *group_at_point = sp_desktop_group_at_point(desktop, button_pt);
-                        // if neither a group nor an item (possibly in a group) at point are selected, set selection to the item passed with the event
-                        if ( ( !item_at_point || !selection->includesItem(item_at_point) )
-                             && ( !group_at_point || !selection->includesItem(group_at_point) ) 
-                             && !sc->button_press_alt) {
-                            // select what is under cursor
-                            if (!seltrans->empty)
-                                sp_sel_trans_reset_state(seltrans);
-                            if (!selection->includesItem(sc->item)) {
-                                selection->setItem(sc->item);
-                            }
-                        } // otherwise, do not change selection so that dragging selected-within-group items, as well as alt-dragging, is possible
-                        sp_sel_trans_grab(seltrans, p, -1, -1, FALSE);
-                        sc->moved = TRUE;
-                    }
-                    if (!seltrans->empty)
-                        sp_selection_moveto(seltrans, p, event->button.state);
-                    if (sp_desktop_scroll_to_point(desktop, &p)) {
-                        // unfortunately in complex drawings, gobbling results in losing grab of the object, for some mysterious reason
-                        ; //gobble_motion_events (GDK_BUTTON1_MASK);
-                    }
-                }
-            }
-            break;
-        case GDK_BUTTON_RELEASE:
-            xp = yp = 0;
-            if (event->button.button == 1) {
-                seltrans->messageContext().clear();
-                if (sc->moved) {
-                    // item has been moved
-                    sp_sel_trans_ungrab(seltrans);
-                    sc->moved = FALSE;
-                } else if (sc->item && !drag_escaped) {
-                    // item has not been moved -> do selecting
-                    if (!selection->isEmpty()) {
-                        if (event->button.state & GDK_SHIFT_MASK) { // shift-click, with previous selection
-                            sp_sel_trans_reset_state(seltrans);
-                            selection->toggleItem(sc->item);
-                        } else { // simple click, with previous selection
-                            if (selection->includesItem(sc->item)) {
-                                sp_sel_trans_increase_state(seltrans);
-                            } else {
-                                sp_sel_trans_reset_state(seltrans);
-                                selection->setItem(sc->item);
-                            }
-                        }
-                    } else { // simple or shift click, no previous selection
-                        sp_sel_trans_reset_state(seltrans);
-                        selection->setItem(sc->item);
-                    }
-                }
-                sc->dragging = FALSE;
-                if (sc->item) {
-                    sp_object_unref( SP_OBJECT(sc->item), NULL);
-                }
-                sc->item = NULL;
-                if (sc->grabbed) {
-                    sp_canvas_item_ungrab(sc->grabbed, event->button.time);
-                    sc->grabbed = NULL;
-                }
-                ret = TRUE;
-            }
-            sc->button_press_shift = false;
-            sc->button_press_ctrl = false;
-            sc->button_press_alt = false;
             break;
 
         case GDK_ENTER_NOTIFY:
@@ -454,6 +372,14 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
     }
 
     switch (event->type) {
+        case GDK_2BUTTON_PRESS:
+            if (event->button.button == 1) {
+                if (!selection->isEmpty()) {
+                    tools_switch_by_item (desktop, (SPItem *) selection->itemList()->data);
+                }
+                ret = TRUE;
+            }
+            break;
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1) {
 
@@ -543,7 +469,6 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                 }
             }
             break;
-
         case GDK_BUTTON_RELEASE:
             xp = yp = 0;
             if ((event->button.button == 1) && (sc->grabbed)) {
@@ -552,7 +477,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                         // item has been moved
                         sp_sel_trans_ungrab(seltrans);
                         sc->moved = FALSE;
-                    } else if (!drag_escaped) {
+                    } else if (sc->item && !drag_escaped) {
                         // item has not been moved -> simply a click, do selecting
                         if (!selection->isEmpty()) {
                             if (event->button.state & GDK_SHIFT_MASK) {
@@ -601,12 +526,14 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                             sc->button_press_shift = false;
 
                             if (sc->button_press_ctrl) {
-                                // go into groups
-                                item = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
+                                // go into groups, honoring Alt
+                                item = sp_event_context_find_item (desktop, 
+                                                   NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
                                 sc->button_press_ctrl = FALSE;
                             } else {
-                                // don't go into groups
-                                item = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, FALSE);
+                                // don't go into groups, honoring Alt
+                                item = sp_event_context_find_item (desktop, 
+                                                   NR::Point(event->button.x, event->button.y), event->button.state, FALSE);
                             }
 
                             if (item) {
@@ -618,7 +545,8 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 
                             sc->button_press_ctrl = FALSE;
 
-                            item = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
+                            item = sp_event_context_find_item (desktop, 
+                                         NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
 
                             if (item) {
                                 if (selection->includesItem(item)) {
@@ -630,9 +558,9 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                                 item = NULL;
                             }
 
-                        } else { // click without shift, simply deselect
+                        } else { // click without shift, simply deselect, unless with Alt or something was cancelled
                             if (!selection->isEmpty()) {
-                                if (!(rb_escaped) && !(drag_escaped)) // unless something was cancelled
+                                if (!(rb_escaped) && !(drag_escaped) && !(event->button.state & GDK_MOD1_MASK))
                                     selection->clear();
                                 rb_escaped = 0;
                                 ret = TRUE;
