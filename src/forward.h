@@ -101,6 +101,10 @@ class SPGuideClass;
 class SPObjectGroup;
 class SPObjectGroupClass;
 
+struct SPMarker;
+struct SPMarkerClass;
+class SPMarkerReference;
+
 class SPPath;
 class SPPathClass;
 
@@ -172,6 +176,12 @@ class SPStyle;
 class SPEvent;
 
 class SPPrintContext;
+
+class SPView;
+class SPViewClass;
+
+class SPViewWidget;
+class SPViewWidgetClass;
 
 class StopOnTrue;
 
