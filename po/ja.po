@@ -3900,9 +3900,8 @@ msgstr ""
 "色をクリップボードへコピー"
 
 #: src/trace/trace.cpp:69 src/trace/trace.cpp:78 src/trace/trace.cpp:86
-#, fuzzy
 msgid "Select an <b>image</b> to trace"
-msgstr "クローンするオブジェクトを選択してください。"
+msgstr "トレースするイメージを選択してください。"
 
 #: src/trace/trace.cpp:140
 msgid "Trace: No active document"
