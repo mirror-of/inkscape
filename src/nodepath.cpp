@@ -2304,8 +2304,8 @@ static void node_ctrl_moved(SPKnot *knot, NR::Point *p, guint state, gpointer da
         // the closest PI/2 angle, starting from original angle (i.e. snapping to original, its opposite and perpendiculars)
         a_ortho = me->origin.a + floor((rnew.a - me->origin.a)/(M_PI/2) + 0.5) * (M_PI/2);
 
-        // snap to the closest
-        if (fabs(a_snapped - rnew.a) < fabs(a_ortho - rnew.a))
+        // snap to the closest, or to snapped if ortho does not exist because original control was zero length
+        if (me->origin.a == HUGE_VAL || fabs(a_snapped - rnew.a) < fabs(a_ortho - rnew.a))
             rnew.a = a_snapped;
         else
             rnew.a = a_ortho;
