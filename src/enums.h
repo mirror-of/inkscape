@@ -48,29 +48,9 @@ enum {
 };
 
 /* stroke-linejoin */
-
-enum {
-	SP_STROKE_LINEJOIN_MITER,
-	SP_STROKE_LINEJOIN_ROUND,
-	SP_STROKE_LINEJOIN_BEVEL
-};
-
 /* stroke-linecap */
-
-enum {
-	SP_STROKE_LINECAP_BUTT,
-	SP_STROKE_LINECAP_ROUND,
-	SP_STROKE_LINECAP_SQUARE
-};
-
 /* fill-rule */
 /* clip-rule */
-
-enum {
-	SP_WIND_RULE_NONZERO,
-	SP_WIND_RULE_INVALID_1,
-	SP_WIND_RULE_EVENODD
-};
 
 #endif
 
