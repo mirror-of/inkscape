@@ -244,7 +244,7 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	}
 
         if (sp_shape_has_markers (shape)) {
-            
+
             /* Dimension marker views */
             for (SPItemView *v = item->display; v != NULL; v = v->next) {
 
@@ -266,7 +266,7 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
                     }
 		}
             }
-                
+
             /* Update marker views */
             for (SPItemView *v = item->display; v != NULL; v = v->next) {
                 sp_shape_update_marker_view (shape, v->arenaitem);
@@ -454,7 +454,7 @@ sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai)
         for (int i = SP_MARKER_LOC_START; i < SP_MARKER_LOC_QTY; i++) {
 
             int n = 0;
-            
+
             for (NArtBpath *bp = shape->curve->bpath; bp->code != NR_END; bp++) {
                 if (sp_shape_marker_required (shape, i, bp)) {
                     NRMatrix m = sp_shape_marker_get_transform (shape, i, bp);
@@ -609,8 +609,8 @@ sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
                                               sp_shape_number_of_markers (shape, i));
 		}
             }
-                   
-                    
+
+
             /* Update marker views */
             sp_shape_update_marker_view (shape, arenaitem);
 	}
@@ -655,7 +655,7 @@ sp_shape_has_markers (SPShape* shape)
     /* Note, we're ignoring 'marker' settings, which technically should apply for
        all three settings.  This should be fixed later such that if 'marker' is
        specified, then all three should appear. */
-    
+
     return (
         shape->curve &&
         (shape->marker[SP_MARKER_LOC_START] ||
@@ -682,7 +682,7 @@ sp_shape_number_of_markers (SPShape *shape, int type)
 
     return n;
 }
-    
+
 static void
 sp_shape_marker_release (SPObject *marker, SPShape *shape)
 {
@@ -819,7 +819,7 @@ sp_shape_adjust_pattern (SPItem *item, NR::Matrix const &premul, NR::Matrix cons
 {
     SPStyle *style = SP_OBJECT_STYLE (item);
 
-    if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
+    if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) {
         SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
         if (SP_IS_PATTERN (server)) {
 
@@ -851,7 +851,47 @@ sp_shape_adjust_pattern (SPItem *item, NR::Matrix const &premul, NR::Matrix cons
                 sp_repr_set_attr(SP_OBJECT_REPR(pattern), "patternTransform", NULL);
             }
         }
-    } 
+    }
+}
+
+void
+sp_shape_set_pattern (SPItem *item, NR::Matrix const &premul, NR::Matrix const &postmul)
+{
+    SPStyle *style = SP_OBJECT_STYLE (item);
+
+    if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) {
+        SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
+        if (SP_IS_PATTERN (server)) {
+
+            SPPattern *pattern;
+
+            if (pattern_users(SP_PATTERN (server)) > 1) {
+                pattern = pattern_chain (SP_PATTERN (server));
+                gchar *href = g_strconcat ("url(#", sp_repr_attr (SP_OBJECT_REPR (pattern), "id"), ")", NULL);
+
+                SPCSSAttr *css = sp_repr_css_attr_new ();
+                sp_repr_css_set_property (css, "fill", href);
+                sp_repr_css_change_recursive (SP_OBJECT_REPR (item), css, "style");
+            } else {
+                pattern = SP_PATTERN (server);
+            }
+
+            // this formula is for a different interpretation of pattern transforms as described in (*) in sp-pattern.cpp
+            // for it to work, we also need    sp_object_read_attr (SP_OBJECT (item), "transform");
+            //pattern->patternTransform = premul * NR::Matrix(item->transform) * NR::Matrix(pattern->patternTransform) * NR::Matrix(item->transform).inverse() * postmul;
+
+            // otherwise the formula is much simpler
+            pattern->patternTransform =  postmul;
+            pattern->patternTransform_set = TRUE;
+
+            gchar c[256];
+            if (sp_svg_transform_write(c, 256, &(pattern->patternTransform))) {
+                sp_repr_set_attr(SP_OBJECT_REPR(pattern), "patternTransform", c);
+            } else {
+                sp_repr_set_attr(SP_OBJECT_REPR(pattern), "patternTransform", NULL);
+            }
+        }
+    }
 }
 
 void
