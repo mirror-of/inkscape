@@ -224,10 +224,6 @@ sp_select_context_abort(SPEventContext *event_context)
             sc->dragging = FALSE;
             drag_escaped = 1;
 
-            if (sc->button_press_ctrl && sc->item == NULL) {
-                g_warning("BUG:  ctrl-move cannot be canceled properly because sc->item is not defined\n");
-            }
-
             if (sc->item) {
                 // only undo if the item is still valid
                 if (SP_OBJECT_DOCUMENT( SP_OBJECT(sc->item))) {
@@ -235,6 +231,11 @@ sp_select_context_abort(SPEventContext *event_context)
                 }
 
                 sp_object_unref( SP_OBJECT(sc->item), NULL);
+            } else if (sc->button_press_ctrl) {
+                // NOTE:  This is a workaround to a bug.
+                // When the ctrl key is held, sc->item is not defined
+                // so in this case (only), we skip the object doc check
+                sp_document_undo(SP_DT_DOCUMENT(desktop));
             }
             sc->item = NULL;
 
