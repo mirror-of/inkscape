@@ -69,10 +69,10 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 		/* NOTICE */
 		/* We are in some lonely place in tree, so clone EVERYTHING */
 		/* And do not forget to flatten original */
-		g_print ("GVECTORNORM: Gradient %s IS NOT in <defs>\n", SP_OBJECT_ID (gr));
+
 		/* Step 1 - flatten original EXCEPT vector */
 		SP_OBJECT(gr)->updateRepr(((SPObject *) gr)->repr, SP_OBJECT_WRITE_EXT | SP_OBJECT_WRITE_ALL);
-		g_print ("GVECTORNORM: Gradient %s attributes flattened\n", SP_OBJECT_ID (gr));
+
 		/* Step 2 - create new empty gradient and prepend it to <defs> */
 		repr = sp_repr_new ("linearGradient");
 		//sp_repr_set_attr(repr, "inkscape:collect", "always");
@@ -80,19 +80,19 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 		spnew = (SPGradient *) doc->getObjectByRepr(repr);
 		g_assert (gr != NULL);
 		g_assert (SP_IS_GRADIENT (gr));
-		g_print ("GVECTORNORM: Created new vector gradient %s\n", SP_OBJECT_ID (spnew));
+
 		/* Step 3 - set vector of new gradient */
 		sp_gradient_repr_set_vector (spnew, SP_OBJECT_REPR (spnew), gr->vector);
-		g_print ("GVECTORNORM: Added stops to %s\n", SP_OBJECT_ID (spnew));
+
 		/* Step 4 - set state flag */
 		spnew->state = SP_GRADIENT_STATE_VECTOR;
-		g_print ("GVECTORNORM: Set of %s to vector normalized\n", SP_OBJECT_ID (spnew));
+
 		/* Step 5 - set href of old vector */
 		sp_gradient_repr_set_link (SP_OBJECT_REPR (gr), spnew);
-		g_print ("GVECTORNORM: Set href of %s to %s\n", SP_OBJECT_ID (gr), SP_OBJECT_ID (spnew));
+
 		/* Step 6 - clear stops of old gradient */
 		sp_gradient_repr_set_vector (gr, SP_OBJECT_REPR (gr), NULL);
-		g_print ("GVECTORNORM: Cleared all stops of %s\n", SP_OBJECT_ID (gr));
+
 		/* Now we have successfully created new normalized vector, and cleared old stops */
 		return spnew;
 	} else {
