@@ -690,7 +690,12 @@ sp_text_context_update_cursor (SPTextContext *tc,  bool scroll_to_see)
 
 	if (tc->text) {
 		NR::Point p0, p1;
-		sp_text_get_cursor_coords (SP_TEXT (tc->text), tc->ipos, p0, p1);
+
+		// text length may have changed elsewhere without updating ipos, e.g. by undo;
+		// in that case we position at the end
+		guint pos = (tc->ipos >= sp_text_get_length (SP_TEXT(tc->text)))? sp_text_get_length (SP_TEXT(tc->text)) : tc->ipos;
+
+		sp_text_get_cursor_coords (SP_TEXT (tc->text), pos, p0, p1);
 		NR::Point const d0 = p0 * sp_item_i2d_affine(SP_ITEM(tc->text));
 		NR::Point const d1 = p1 * sp_item_i2d_affine(SP_ITEM(tc->text));
 

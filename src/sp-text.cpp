@@ -958,13 +958,10 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
     /* fixme: SPChars should do this upright instead */
     NR::scale const flip_y(size, -size);
 
-    gboolean intext = FALSE;
     gboolean preserve = (((SPObject*)string)->xml_space.value == SP_XML_SPACE_PRESERVE);
     gboolean inspace = pinspace ? *pinspace : FALSE;
-//		guint pos = 0;
 		{
 			text_wrapper*   str_text=new text_wrapper();
-			int             space_offset=0;
 			str_text->SetDefaultFont(face);
 			str_text->AppendUTF8(string->text,-1);
 			if ( dx ) str_text->KernXForLastAddition(g_list_nth(dx,dx_offset),1.0/size);
@@ -2673,6 +2670,10 @@ sp_text_insert (SPText *text, gint pos, const gchar *utf8)
     }
 
     sp_distribute_dxdy (text);
+
+    // text length may have changed elsewhere without updating ipos, e.g. by undo;
+    // in that case we position at the end
+    pos = (pos >= sp_text_get_length (text))? sp_text_get_length (text) : pos;
 
     SPObject *child = sp_text_get_child_by_position (text, pos);
     if (!child) return sp_text_append (text, utf8);
