@@ -115,39 +115,24 @@ nr_matrix_set_rotate (NRMatrix *m, const NR::Coord theta)
 
 namespace NR {
 
-Matrix::Matrix(const NRMatrix* nr) {
-	if(nr) {
-		for(int i = 0; i < 6; i++)
-			c[i] = nr->c[i];
+Matrix::Matrix(const NRMatrix *nr) {
+	if (nr) {
+		assign(nr->c);
 	} else {
 		set_identity();
 	}
 }
-	
-Matrix::operator NRMatrix*() const {
-	NRMatrix* d = new NRMatrix;
-	for(int i = 0; i < 6; i++)
-		d->c[i] = c[i];
-	return d;
-}
 
-Matrix::operator NRMatrix() const {
-	NRMatrix d;
-	for(int i = 0; i < 6; i++)
-		d.c[i] = c[i];
-	return d;
-}
-
-Matrix operator*(const Matrix m0, const Matrix m1)
+Matrix operator*(const Matrix &m0, const Matrix &m1)
 {
 	Matrix d;
 	
-	d.c[0] = m0.c[0] * m1.c[0] + m0.c[1] * m1.c[2];
-	d.c[1] = m0.c[0] * m1.c[1] + m0.c[1] * m1.c[3];
-	d.c[2] = m0.c[2] * m1.c[0] + m0.c[3] * m1.c[2];
-	d.c[3] = m0.c[2] * m1.c[1] + m0.c[3] * m1.c[3];
-	d.c[4] = m0.c[4] * m1.c[0] + m0.c[5] * m1.c[2] + m1.c[4];
-	d.c[5] = m0.c[4] * m1.c[1] + m0.c[5] * m1.c[3] + m1.c[5];
+	d[0] = m0[0] * m1[0] + m0[1] * m1[2];
+	d[1] = m0[0] * m1[1] + m0[1] * m1[3];
+	d[2] = m0[2] * m1[0] + m0[3] * m1[2];
+	d[3] = m0[2] * m1[1] + m0[3] * m1[3];
+	d[4] = m0[4] * m1[0] + m0[5] * m1[2] + m1[4];
+	d[5] = m0[4] * m1[1] + m0[5] * m1[3] + m1[5];
 	
 	return d;
 }
@@ -156,16 +141,16 @@ Matrix Matrix::inverse() const
 {
 	Matrix d;
 	
-	NR::Coord det = c[0] * c[3] - c[1] * c[2];
+	NR::Coord det = _c[0] * _c[3] - _c[1] * _c[2];
 	if (!NR_DF_TEST_CLOSE (det, 0.0, NR_EPSILON)) {
-		Coord t = c[3] / det;
-		d.c[3] = c[0] / det;
-		d.c[0] = t;
-		t = -c[1] / det;
-		d.c[1] = -c[1] / det;
-		d.c[2] = -c[2] / det;
-		d.c[4] = -c[4] * d.c[0] - c[5] * d.c[2];
-		d.c[5] = -c[4] * d.c[1] - c[5] * d.c[3];
+		Coord t = _c[3] / det;
+		d._c[3] = _c[0] / det;
+		d._c[0] = t;
+		t = -_c[1] / det;
+		d._c[1] = -_c[1] / det;
+		d._c[2] = -_c[2] / det;
+		d._c[4] = -_c[4] * d._c[0] - _c[5] * d._c[2];
+		d._c[5] = -_c[4] * d._c[1] - _c[5] * d._c[3];
 	} else {
 		d.set_identity ();
 	}
@@ -176,21 +161,21 @@ Matrix Matrix::inverse() const
 /*Matrix translate (const Point p)
 {
 	Matrix m;
-	m.c[0] = 1.0; m.c[2] = 0.0;
-	m.c[1] = 0.0; m.c[3] = 1.0;
+	m._c[0] = 1.0; m._c[2] = 0.0;
+	m._c[1] = 0.0; m._c[3] = 1.0;
 	// translation
 	for ( int i = 0 ; i < 2 ; i++ ) {
-		m.c[4+i] = p[i];
+		m._c[4+i] = p[i];
 	}
 	return m;
 }*/
 
 void Matrix::set_identity ()
 {
-	c[0] = 1.0; c[2] = 0.0;
-	c[1] = 0.0; c[3] = 1.0;
+	_c[0] = 1.0; _c[2] = 0.0;
+	_c[1] = 0.0; _c[3] = 1.0;
 	// translation
-	c[4] = 0; c[5] = 0;
+	_c[4] = 0; _c[5] = 0;
 }
 
 Matrix identity ()
@@ -203,9 +188,9 @@ Matrix identity ()
 Matrix from_basis(const Point x_basis, const Point y_basis, const Point offset) {
 	Matrix m;
 	for (int i = 0; i < 2; i++) {
-		m.c[2*i + NR::X] = x_basis[i];
-		m.c[2*i + NR::Y] = y_basis[i];
-		m.c[4+i] = offset[i];
+		m[2*i + NR::X] = x_basis[i];
+		m[2*i + NR::Y] = y_basis[i];
+		m[4+i] = offset[i];
 	}
 	return m;
 }
@@ -213,11 +198,11 @@ Matrix from_basis(const Point x_basis, const Point y_basis, const Point offset) 
 /*Matrix scale (const Point scale)
 {
 	Matrix m;
-	m.c[0] = scale[NR::X];  m.c[2] = 0.0;
-	m.c[1] = 0.0;              m.c[3] = scale[NR::Y];
+	m._c[0] = scale[NR::X];  m._c[2] = 0.0;
+	m._c[1] = 0.0;              m._c[3] = scale[NR::Y];
 	// translation
-	m.c[4] = 0.0;
-	m.c[5] = 0.0;
+	m._c[4] = 0.0;
+	m._c[5] = 0.0;
 	return m;
 }
 
@@ -226,11 +211,11 @@ Matrix rotate(const NR::Coord theta)
 	Matrix m;
 	NR::Coord sn = sin (theta);
 	NR::Coord cs = cos (theta);
-	m.c[0] = cs; m.c[2] = -sn;
-	m.c[1] = sn; m.c[3] = cs;
+	m._c[0] = cs; m._c[2] = -sn;
+	m._c[1] = sn; m._c[3] = cs;
 	// translation
-	m.c[4] = 0.0;
-	m.c[5] = 0.0;
+	m._c[4] = 0.0;
+	m._c[5] = 0.0;
 	return m;
 }*/
 
@@ -241,7 +226,7 @@ rotate::rotate(const NR::Coord theta)
 }
 
 NR::Coord Matrix::det() const {
-	return c[0] * c[3] - c[1] * c[2];
+	return _c[0] * _c[3] - _c[1] * _c[2];
 }
 
 NR::Coord Matrix::descrim2() const {
@@ -252,11 +237,34 @@ NR::Coord Matrix::descrim() const{
 	return sqrt (descrim2());
 }
 
-void Matrix::copyto(NRMatrix* nrm) {
-	assert(nrm);
+Matrix &Matrix::assign(const Coord *array) {
+	assert(array != NULL);
+
+	for ( int i = 0 ; i < 6 ; i++ ) {
+		_c[i] = array[i];
+	}
+
+	return *this;
+}
+
+NRMatrix *Matrix::copyto(NRMatrix *nrm) const {
+	assert(nrm != NULL);
 	
-	for(int i = 0; i < 6; i++)
-		nrm->c[i] = c[i];
+	for ( int i = 0 ; i < 6 ; i++ ) {
+		nrm->c[i] = _c[i];
+	}
+
+	return nrm;
+}
+
+NR::Coord *Matrix::copyto(NR::Coord *array) const {
+	assert(array != NULL);
+
+	for ( int i = 0 ; i < 6 ; i++ ) {
+		array[i] = _c[i];
+	}
+
+	return array;
 }
 
 double expansion(Matrix const & m) {
@@ -267,11 +275,11 @@ bool Matrix::test_identity() const {
         return NR_MATRIX_DF_TEST_CLOSE (this, &NR_MATRIX_IDENTITY, NR_EPSILON);
 }
 
-bool transform_equalp(const Matrix m0, const Matrix m1, const NR::Coord epsilon) {
+bool transform_equalp(const Matrix &m0, const Matrix &m1, const NR::Coord epsilon) {
         return NR_MATRIX_DF_TEST_TRANSFORM_CLOSE (&m0, &m1, epsilon);
                                                                                 
 }
-bool translate_equalp(const Matrix m0, const Matrix m1, const NR::Coord epsilon) {
+bool translate_equalp(const Matrix &m0, const Matrix &m1, const NR::Coord epsilon) {
         return NR_MATRIX_DF_TEST_TRANSLATE_CLOSE (&m0, &m1, epsilon);
 }
 };

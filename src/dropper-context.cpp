@@ -135,9 +135,9 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			NR::Matrix w2dt = sp_desktop_w2dt_affine (ec->desktop);
 			const double scale = rw * NR_MATRIX_DF_EXPANSION (&w2dt);
 			NR::Matrix sm = NR::scale(NR::Point(scale, scale));
-			sm.c[4] = cd[0];
-			sm.c[5] = cd[1];
-			sp_canvas_item_affine_absolute (dc->area, NR_MATRIX_D_TO_DOUBLE (&sm));
+			sm[4] = cd[0];
+			sm[5] = cd[1];
+			sp_canvas_item_affine_absolute (dc->area, NR_MATRIX_D_TO_DOUBLE ((const NRMatrix *)sm));
 			sp_canvas_item_show (dc->area);
 			/* Get buffer */
 			const int x0 = (int) floor (dc->centre[NR::X] - rw);

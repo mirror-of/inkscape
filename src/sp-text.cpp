@@ -368,8 +368,8 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 			}
 			
 			// NR::translate?
-			a.c[4] = pt[NR::X];
-			a.c[5] = pt[NR::Y];
+			a[4] = pt[NR::X];
+			a[5] = pt[NR::Y];
 
 			sp_chars_add_element (chars, glyph, font, a);
 			NR::Point adv = nr_font_glyph_advance_get (font, glyph) + letterspacing_adv;
@@ -1424,8 +1424,8 @@ sp_text_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
 
 	NRMatrix i2p = *t;
 	// translate?
-	i2p.c[4] = 0.0;
-	i2p.c[5] = 0.0;
+	i2p[4] = 0.0;
+	i2p[5] = 0.0;
 	NRMatrix  p2i;
 	nr_matrix_invert (&p2i, &i2p);
 

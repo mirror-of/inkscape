@@ -34,6 +34,9 @@ class Matrix;
 
 struct NRMatrix {
 	NR::Coord c[6];
+
+	NR::Coord &operator[](int i) { return c[i]; }
+	NR::Coord operator[](int i) const { return c[i]; }
 };
 
 struct NRPoint {

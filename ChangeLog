@@ -1,5 +1,19 @@
 2004-02-07  MenTaLguY <mental@rydia.net>
 
+    * src/desktop-affine.cpp, src/desktop.cpp, src/draw-context.cpp,
+      src/dropper-context.cpp, src/dyna-draw-context.cpp,
+      src/seltrans.cpp, src/sp-root.cpp, src/sp-text.cpp,
+      src/libnr/nr-macros.h, src/libnr/nr-types.h, src/libnr/nr-matrix.h,
+      src/libnr/nr-matrix.cpp, src/libnrtype/nr-font.cpp,
+      src/libnrtype/nr-rasterfont.cpp, src/livarot/PathSimplify.cpp,
+      src/livarot/ShapeSweep.cpp:
+
+      The array data member of NR::Matrix is now private; use the
+      [] operator to access elements individually.  More matrix routines
+      now pass by reference, and the casting operators to cast to NRMatrix
+      no longer leak memory (by allocating temporary objects that were
+      never freed).
+
     * src/modules/db.cpp: cleaned up some very grotty code that gcc 3.4
       (rightly) refused to compile
 

@@ -308,13 +308,13 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
     tk[i] /= tk[nbPt - 1];
   
   // la matrice tNN
-  M.c[0] = M.c[2] = M.c[1] = M.c[3] = M.c[4] = M.c[5] = 0;
+  M[0] = M[2] = M[1] = M[3] = M[4] = M[5] = 0;
   for (int i = 1; i < nbPt - 1; i++)
   {
-    M.c[0] += N13 (tk[i]) * N13 (tk[i]);
-    M.c[1] += N23 (tk[i]) * N13 (tk[i]);
-    M.c[2] += N13 (tk[i]) * N23 (tk[i]);
-    M.c[3] += N23 (tk[i]) * N23 (tk[i]);
+    M[0] += N13 (tk[i]) * N13 (tk[i]);
+    M[1] += N23 (tk[i]) * N13 (tk[i]);
+    M[2] += N13 (tk[i]) * N23 (tk[i]);
+    M[3] += N23 (tk[i]) * N23 (tk[i]);
   }
   
   double
@@ -411,13 +411,13 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
     }
     
     // la matrice tNN
-    M.c[0] = M.c[2] = M.c[1] = M.c[3] = M.c[4] = M.c[5] = 0;
+    M[0] = M[2] = M[1] = M[3] = M[4] = M[5] = 0;
     for (int i = 1; i < nbPt - 1; i++)
     {
-      M.c[0] += N13 (tk[i]) * N13 (tk[i]);
-      M.c[1] += N23 (tk[i]) * N13 (tk[i]);
-      M.c[2] += N13 (tk[i]) * N23 (tk[i]);
-      M.c[3] += N23 (tk[i]) * N23 (tk[i]);
+      M[0] += N13 (tk[i]) * N13 (tk[i]);
+      M[1] += N23 (tk[i]) * N13 (tk[i]);
+      M[2] += N13 (tk[i]) * N23 (tk[i]);
+      M[3] += N23 (tk[i]) * N23 (tk[i]);
     }
     
     det=M.det();

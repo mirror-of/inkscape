@@ -250,10 +250,12 @@ static void
 sp_desktop_document_resized (SPView *view, SPDocument *doc, gdouble width, gdouble height)
 {
 	SPDesktop *desktop = SP_DESKTOP (view);
+	NR::Coord xform[6];
 
-	desktop->doc2dt.c[5] = height;
+	desktop->doc2dt[5] = height;
 
-	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), desktop->doc2dt.c);
+	desktop->doc2dt.copyto(xform);
+	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), xform);
 
 	sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page), 0.0, 0.0, width, height);
 }
@@ -292,6 +294,7 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 {
 	SPCanvasGroup *root;
 	/* *page; */
+	NR::Coord xform[6];
 	NRArenaItem *ai;
 
 	SPDocument *document = SP_OBJECT_DOCUMENT (namedview);
@@ -351,8 +354,9 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
 	}
 
 	/* Connect event for page resize */
-	desktop->doc2dt.c[5] = sp_document_height (document);
-	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), desktop->doc2dt.c);
+	desktop->doc2dt[5] = sp_document_height (document);
+	desktop->doc2dt.copyto(xform);
+	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), xform);
 
 	g_signal_connect (G_OBJECT (desktop->selection), "modified", G_CALLBACK (sp_desktop_selection_modified), desktop);
 
@@ -458,7 +462,7 @@ sp_dt_update_snap_distances (SPDesktop *desktop)
 
 	if (!px) px = sp_unit_get_by_abbreviation ("px");
 
-	px2doc = sqrt (fabs (desktop->w2d.c[0] * desktop->w2d.c[3]));
+	px2doc = sqrt (fabs (desktop->w2d[0] * desktop->w2d[3]));
 	desktop->gridsnap = (desktop->namedview->snaptogrid) ? desktop->namedview->gridtolerance : 0.0;
 	sp_convert_distance_full (&desktop->gridsnap, desktop->namedview->gridtoleranceunit, px, 1.0, px2doc);
 	desktop->guidesnap = (desktop->namedview->snaptoguides) ? desktop->namedview->guidetolerance : 0.0;
@@ -1311,10 +1315,12 @@ sp_desktop_set_display_area (SPDesktop *dt, float x0, float y0, float x1, float 
 	newscale = CLAMP (newscale, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
 
 	if (!NR_DF_TEST_CLOSE (newscale, scale, 1e-4 * scale)) {
+		NR::Coord xform[6];
 		/* Set zoom factors */
 		dt->d2w = NR::scale(NR::Point(newscale, -newscale));
 		dt->w2d = dt->d2w.inverse();
-		sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (dt->main), dt->d2w.c);
+		dt->d2w.copyto(xform);
+		sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (dt->main), xform);
 		clear = TRUE;
 	} else {
 		clear = FALSE;
@@ -1396,7 +1402,7 @@ sp_desktop_get_display_area (SPDesktop *dt, NRRect *area)
 
 	sp_canvas_get_viewbox (dtw->canvas, &viewbox);
 
-	scale = dt->d2w.c[0];
+	scale = dt->d2w[0];
 
 	area->x0 = viewbox.x0 / scale;
 	area->y0 = viewbox.y1 / -scale;

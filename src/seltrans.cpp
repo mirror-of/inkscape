@@ -296,10 +296,10 @@ sp_sel_trans_transform (SPSelTrans * seltrans, NRMatrix* affine, NRPoint* norm) 
 	NR::Point n = *norm;
 	NR::Matrix a;
 	for(int i = 0; i < 6; i++)
-		a.c[i] = affine->c[i];
+		a[i] = affine->c[i];
 	sp_sel_trans_transform (seltrans, a, n);
 	for(int i = 0; i < 6; i++)
-		affine->c[i] = a.c[i];
+		affine->c[i] = a[i];
 	*norm = n;
 }
 
@@ -1096,14 +1096,16 @@ void sp_sel_trans_skew(SPSelTrans *seltrans, SPSelTransHandle *handle, NR::Point
 	if (fabs (offset[dim]) < 1e-15)
 		return;
         NR::Matrix skew = NR::identity();
-	skew.c[2*dim + dim] = (pt[dim] - norm[dim]) / offset[dim];
-	skew.c[2*dim + (1-dim)] = (pt[1-dim] - point[1-dim]) / offset[dim];
-	skew.c[2*(1-dim) + (dim)] = 0;
-	skew.c[2*(1-dim) + (1-dim)] = 1;
+	skew[2*dim + dim] = (pt[dim] - norm[dim]) / offset[dim];
+	skew[2*dim + (1-dim)] = (pt[1-dim] - point[1-dim]) / offset[dim];
+	skew[2*(1-dim) + (dim)] = 0;
+	skew[2*(1-dim) + (1-dim)] = 1;
 	
-	for(int i = 0; i < 2; i++)
-		if (fabs (skew.c[3*i]) < 1e-15)
-			skew.c[3*i] = 1e-15;
+	for(int i = 0; i < 2; i++) {
+		if (fabs (skew[3*i]) < 1e-15) {
+			skew[3*i] = 1e-15;
+		}
+	}
 	sp_sel_trans_transform (seltrans, skew, norm);
 }
 

@@ -2655,10 +2655,10 @@ Shape::TesteIntersection (Shape * ils, Shape * irs, int ilb, int irb,
 
   NR::Matrix m;
   // pas sur de l'ordre des coefs de m
-  m.c[0] = ldir[0];
-  m.c[1] = ldir[1];
-  m.c[2] = rdir[0];
-  m.c[3] = rdir[1];
+  m[0] = ldir[0];
+  m[1] = ldir[1];
+  m[2] = rdir[0];
+  m[3] = rdir[1];
 
   double det = m.det();
 
@@ -2689,16 +2689,16 @@ Shape::TesteIntersection (Shape * ils, Shape * irs, int ilb, int irb,
     }
 
   // plus de colinearite ni d'extremites en commun
-  m.c[1] = -m.c[1];
-  m.c[2] = -m.c[2];
+  m[1] = -m[1];
+  m[2] = -m[2];
   {
-    double swap = m.c[0];
-    m.c[0] = m.c[3];
-    m.c[3] = swap;
+    double swap = m[0];
+    m[0] = m[3];
+    m[3] = swap;
   }
 
-  atL = (m.c[0]* usvs[0] + m.c[1] * usvs[1]) / det;
-  atR = -(m.c[2] * usvs[0] + m.c[3] * usvs[1]) / det;
+  atL = (m[0]* usvs[0] + m[1] * usvs[1]) / det;
+  atR = -(m[2] * usvs[0] + m[3] * usvs[1]) / det;
   atx = ils->pData[lSt].rx + atL * ldir;
 
 

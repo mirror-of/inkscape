@@ -566,12 +566,12 @@ sp_root_update (SPObject *object, SPCtx *ctx, guint flags)
 		}
 		/* Compose additional transformation from scale and position */
 		NR::Matrix q;
-		q.c[0] = width / (root->viewBox.x1 - root->viewBox.x0);
-		q.c[1] = 0.0;
-		q.c[2] = 0.0;
-		q.c[3] = height / (root->viewBox.y1 - root->viewBox.y0);
-		q.c[4] = -root->viewBox.x0 * q.c[0] + x;
-		q.c[5] = -root->viewBox.y0 * q.c[3] + y;
+		q[0] = width / (root->viewBox.x1 - root->viewBox.x0);
+		q[1] = 0.0;
+		q[2] = 0.0;
+		q[3] = height / (root->viewBox.y1 - root->viewBox.y0);
+		q[4] = -root->viewBox.x0 * q[0] + x;
+		q[5] = -root->viewBox.y0 * q[3] + y;
 		/* Append viewbox transformation */
 		root->c2p = q * root->c2p;
 	}

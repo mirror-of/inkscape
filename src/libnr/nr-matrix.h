@@ -33,10 +33,10 @@ NRMatrix *nr_matrix_set_scale (NRMatrix *m, const NR::Coord sx, const NR::Coord 
 
 NRMatrix *nr_matrix_set_rotate (NRMatrix *m, const NR::Coord theta);
 
-#define NR_MATRIX_DF_TRANSFORM_X(m,x,y) ((m)->c[0] * (x) + (m)->c[2] * (y) + (m)->c[4])
-#define NR_MATRIX_DF_TRANSFORM_Y(m,x,y) ((m)->c[1] * (x) + (m)->c[3] * (y) + (m)->c[5])
+#define NR_MATRIX_DF_TRANSFORM_X(m,x,y) ((*(m))[0] * (x) + (*(m))[2] * (y) + (*(m))[4])
+#define NR_MATRIX_DF_TRANSFORM_Y(m,x,y) ((*(m))[1] * (x) + (*(m))[3] * (y) + (*(m))[5])
 
-#define NR_MATRIX_DF_EXPANSION2(m) (fabs ((m)->c[0] * (m)->c[3] - (m)->c[1] * (m)->c[2]))
+#define NR_MATRIX_DF_EXPANSION2(m) (fabs ((*(m))[0] * (*(m))[3] - (*(m))[1] * (*(m))[2]))
 #define NR_MATRIX_DF_EXPANSION(m) (sqrt (NR_MATRIX_DF_EXPANSION2 (m)))
 
 namespace NR {
@@ -79,53 +79,73 @@ inline Point operator *(const translate t, const Point v) {
 */
 class Matrix {
 public:
-	NR::Coord c[6];
-
 	Matrix() {
 	}
 
 	Matrix(const Matrix &m) {
 		for ( int i = 0 ; i < 6 ; i++ ) {
-			c[i] = m.c[i];
+			_c[i] = m._c[i];
 		}
 	}
 
 	Matrix(const scale &sm) {
-		c[0] = sm[X]; c[2] = 0;      c[4] = 0;
-		c[1] = 0;     c[3] =  sm[Y]; c[5] = 0;
+		_c[0] = sm[X]; _c[2] = 0;      _c[4] = 0;
+		_c[1] = 0;     _c[3] =  sm[Y]; _c[5] = 0;
 	}
 
 	Matrix(const rotate &rm) {
-		c[0] = rm[X]; c[2] = -rm[Y]; c[4] = 0;
-		c[1] = rm[Y]; c[3] =  rm[X]; c[5] = 0;
+		_c[0] = rm[X]; _c[2] = -rm[Y]; _c[4] = 0;
+		_c[1] = rm[Y]; _c[3] =  rm[X]; _c[5] = 0;
 	}
 	Matrix(const translate &tm) {
-		c[0] = 1; c[2] = 0; c[4] = tm[X];
-		c[1] = 0; c[3] = 1; c[5] = tm[Y];
+		_c[0] = 1; _c[2] = 0; _c[4] = tm[X];
+		_c[1] = 0; _c[3] = 1; _c[5] = tm[Y];
 	}
 	Matrix(NRMatrix const *nr);
 	
 	bool test_identity() const;
 	Matrix inverse() const;
+
+	Coord &operator[](int i) { return _c[i]; }
+	Coord operator[](int i) const { return _c[i]; }
 	
 	Point operator*(const Point v) const {
 		// perhaps this should be done with a loop?  It's more
 		// readable this way though.
-		return Point(c[0]*v[X] + c[2]*v[Y] + c[4],
-			     c[1]*v[X] + c[3]*v[Y] + c[5]);
+		return Point(_c[0]*v[X] + _c[2]*v[Y] + _c[4],
+			     _c[1]*v[X] + _c[3]*v[Y] + _c[5]);
 	}
 
 	void set_identity();
 	
 	// What do these do?  some kind of norm?
-	NR::Coord det() const;
-	NR::Coord descrim2() const;
-	NR::Coord descrim() const;
+	Coord det() const;
+	Coord descrim2() const;
+	Coord descrim() const;
 	
 	// legacy
-	void copyto(NRMatrix* nrm);
-	operator NRMatrix*() const;
-	operator NRMatrix() const;
+	Matrix &assign(const Coord *array);
+	NRMatrix *copyto(NRMatrix* nrm) const;
+	Coord *copyto(Coord *array) const;
+
+	operator NRMatrix&() {
+		g_assert(sizeof(_c) == sizeof(NRMatrix));
+		return *reinterpret_cast<NRMatrix *>(_c);
+	}
+	operator const NRMatrix&() const {
+		g_assert(sizeof(_c) == sizeof(NRMatrix));
+		return *reinterpret_cast<const NRMatrix *>(_c);
+	}
+	operator NRMatrix*() {
+		g_assert(sizeof(_c) == sizeof(NRMatrix));
+		return reinterpret_cast<NRMatrix *>(_c);
+	}
+	operator const NRMatrix*() const {
+		g_assert(sizeof(_c) == sizeof(NRMatrix));
+		return reinterpret_cast<const NRMatrix *>(_c);
+	}
+private:
+	NR::Coord _c[6];
 };
 
 // Matrix factories
@@ -138,12 +158,12 @@ Matrix identity();
 
 double expansion(Matrix const & m);
 
-Matrix operator*(const Matrix a, const Matrix b);
+Matrix operator *(const Matrix &a, const Matrix &b);
 
-bool transform_equalp(const Matrix m0, const Matrix m1, const NR::Coord epsilon);
-bool translate_equalp(const Matrix m0, const Matrix m1, const NR::Coord epsilon);
+bool transform_equalp(const Matrix &m0, const Matrix &m1, const NR::Coord epsilon);
+bool translate_equalp(const Matrix &m0, const Matrix &m1, const NR::Coord epsilon);
 
-inline Point operator*(const NRMatrix& nrm, const Point &p) {
+inline Point operator*(const NRMatrix &nrm, const Point &p) {
 	 return Point(NR_MATRIX_DF_TRANSFORM_X(&nrm, p[X], p[Y]),
 		      NR_MATRIX_DF_TRANSFORM_Y(&nrm, p[X], p[Y]));
 }

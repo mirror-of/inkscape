@@ -55,12 +55,12 @@
 #define NR_DF_TEST_CLOSE(a,b,e) (fabs ((a) - (b)) <= (e))
 
 // Todo: move these into nr-matrix.h
-#define NR_MATRIX_DF_TEST_TRANSFORM_CLOSE(a,b,e) (NR_DF_TEST_CLOSE ((a)->c[0], (b)->c[0], e) && \
-				        NR_DF_TEST_CLOSE ((a)->c[1], (b)->c[1], e) && \
-					NR_DF_TEST_CLOSE ((a)->c[2], (b)->c[2], e) && \
-					NR_DF_TEST_CLOSE ((a)->c[3], (b)->c[3], e))
-#define NR_MATRIX_DF_TEST_TRANSLATE_CLOSE(a,b,e) (NR_DF_TEST_CLOSE ((a)->c[4], (b)->c[4], e) && \
-					NR_DF_TEST_CLOSE ((a)->c[5], (b)->c[5], e))
+#define NR_MATRIX_DF_TEST_TRANSFORM_CLOSE(a,b,e) (NR_DF_TEST_CLOSE ((*(a))[0], (*(b))[0], e) && \
+				        NR_DF_TEST_CLOSE ((*(a))[1], (*(b))[1], e) && \
+					NR_DF_TEST_CLOSE ((*(a))[2], (*(b))[2], e) && \
+					NR_DF_TEST_CLOSE ((*(a))[3], (*(b))[3], e))
+#define NR_MATRIX_DF_TEST_TRANSLATE_CLOSE(a,b,e) (NR_DF_TEST_CLOSE ((*(a))[4], (*(b))[4], e) && \
+					NR_DF_TEST_CLOSE ((*(a))[5], (*(b))[5], e))
 #define NR_MATRIX_DF_TEST_CLOSE(a,b,e) (NR_MATRIX_DF_TEST_TRANSLATE_CLOSE (a, b, e) && \
 					NR_MATRIX_DF_TEST_TRANSFORM_CLOSE (a, b, e))
 

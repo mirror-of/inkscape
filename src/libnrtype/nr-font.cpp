@@ -174,10 +174,10 @@ nr_font_generic_rasterfont_new (NRFont *font, NR::Matrix const transform)
 			if (NR_DF_TEST_CLOSE (mexp, 0.0, 0.0001))
 				return nr_rasterfont_ref (rf);
 			double rmexp = mexp * 0.001;
-			if (NR_DF_TEST_CLOSE (transform.c[0], rf->transform.c[0], rmexp) &&
-			    NR_DF_TEST_CLOSE (transform.c[1], rf->transform.c[1], rmexp) &&
-			    NR_DF_TEST_CLOSE (transform.c[2], rf->transform.c[2], rmexp) &&
-			    NR_DF_TEST_CLOSE (transform.c[3], rf->transform.c[3], rmexp)) {
+			if (NR_DF_TEST_CLOSE (transform[0], rf->transform[0], rmexp) &&
+			    NR_DF_TEST_CLOSE (transform[1], rf->transform[1], rmexp) &&
+			    NR_DF_TEST_CLOSE (transform[2], rf->transform[2], rmexp) &&
+			    NR_DF_TEST_CLOSE (transform[3], rf->transform[3], rmexp)) {
 				return nr_rasterfont_ref (rf);
 			}
 		}

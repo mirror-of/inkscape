@@ -673,7 +673,7 @@ fit_and_split (SPDrawContext * dc)
 
 	g_assert (dc->npoints > 1);
 
-	tolerance = SP_EVENT_CONTEXT (dc)->desktop->w2d.c[0] * prefs_get_double_attribute_limited ("tools.freehand.pencil", "tolerance", 10.0, 1.0, 100.0);
+	tolerance = SP_EVENT_CONTEXT (dc)->desktop->w2d[0] * prefs_get_double_attribute_limited ("tools.freehand.pencil", "tolerance", 10.0, 1.0, 100.0);
 	tolerance = tolerance * tolerance;
 
 	if (sp_bezier_fit_cubic (b, dc->p, dc->npoints, tolerance) > 0 && dc->npoints < SP_DRAW_POINTS_MAX) {

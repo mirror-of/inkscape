@@ -145,8 +145,8 @@ nr_rasterfont_generic_new (NRFont *font, NR::Matrix transform)
 	rf->font = nr_font_ref (font);
 	rf->transform = transform;
 	/* fixme: How about subpixel positioning */
-	rf->transform.c[4] = 0.0;
-	rf->transform.c[5] = 0.0;
+	rf->transform[4] = 0.0;
+	rf->transform[5] = 0.0;
 	rf->nglyphs = NR_FONT_NUM_GLYPHS (font);
 	rf->pages = NULL;
 
@@ -342,8 +342,8 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 			int x0, y0, x1, y1, w, h;
 
 			a = rf->transform;
-			a.c[4] = 0.0;
-			a.c[5] = 0.0;
+			a[4] = 0.0;
+			a[5] = 0.0;
 
 			svl = nr_svl_from_art_bpath (gbp.path, &a, NR_WIND_RULE_NONZERO, TRUE, 0.25);
 			svp = nr_svp_from_svl (svl, NULL);
