@@ -136,7 +136,10 @@ sp_verb_action_edit_perform (SPAction *action, void *data)
 		sp_selection_copy (NULL);
 		break;
 	case SP_VERB_EDIT_PASTE:
-		sp_selection_paste (NULL);
+		sp_selection_paste (NULL); 
+		break;
+	case SP_VERB_EDIT_PASTE_STYLE:
+		sp_selection_paste_style (NULL); 
 		break;
 	case SP_VERB_EDIT_DELETE:
 		sp_selection_delete (NULL, NULL);
@@ -437,6 +440,7 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_EDIT_CUT, "EditCut", N_("Cut"), N_("Cut selected objects to clipboard"), GTK_STOCK_CUT},
 	{SP_VERB_EDIT_COPY, "EditCopy", N_("Copy"), N_("Copy selected objects to clipboard"), GTK_STOCK_COPY},
 	{SP_VERB_EDIT_PASTE, "EditPaste", N_("Paste"), N_("Paste objects from clipboard"), GTK_STOCK_PASTE},
+	{SP_VERB_EDIT_PASTE_STYLE, "EditPasteStyle", N_("Paste style"), N_("Apply style of copied object to selection"), NULL},
 	{SP_VERB_EDIT_DELETE, "EditDelete", N_("Delete"), N_("Delete selected objects"), GTK_STOCK_DELETE},
 	{SP_VERB_EDIT_DUPLICATE, "EditDuplicate", N_("Duplicate"), N_("Duplicate selected objects"), "edit_duplicate"},
 	{SP_VERB_EDIT_CLEAR_ALL, "EditClearAll", N_("Clear All"), N_("Delete all objects from document"), NULL},

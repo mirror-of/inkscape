@@ -35,6 +35,7 @@ void sp_selection_lower_to_bottom (GtkWidget * widget);
 void sp_selection_cut (GtkWidget * widget);
 void sp_selection_copy (GtkWidget * widget);
 void sp_selection_paste (GtkWidget * widget);
+void sp_selection_paste_style (GtkWidget * widget);
 
 void sp_selection_apply_affine (SPSelection *selection, double affine[6]);
 void sp_selection_remove_transform (void);

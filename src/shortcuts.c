@@ -126,6 +126,8 @@ sp_shortcut_table_load (const unsigned char *name)
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_C, SP_VERB_EDIT_COPY, FALSE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_v, SP_VERB_EDIT_PASTE, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_V, SP_VERB_EDIT_PASTE, FALSE);
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_v, SP_VERB_EDIT_PASTE_STYLE, TRUE);
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_V, SP_VERB_EDIT_PASTE_STYLE, FALSE);
 	sp_shortcut_set_verb (GDK_Delete, SP_VERB_EDIT_DELETE, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_d, SP_VERB_EDIT_DUPLICATE, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_D, SP_VERB_EDIT_DUPLICATE, FALSE);

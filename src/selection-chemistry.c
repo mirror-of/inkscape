@@ -590,6 +590,35 @@ sp_selection_paste (GtkWidget * widget)
 }
 
 void
+sp_selection_paste_style (GtkWidget * widget)
+{
+	SPDesktop * desktop;
+	SPSelection * selection;
+	GSList *l, *selected;
+	SPRepr *repr, *copy;
+	SPCSSAttr *css;
+
+	desktop = SP_ACTIVE_DESKTOP;
+	if (desktop == NULL) return;
+	g_assert (SP_IS_DESKTOP (desktop));
+
+	selection = SP_DT_SELECTION (desktop);
+	g_assert (selection != NULL);
+	g_assert (SP_IS_SELECTION (selection));
+
+	if (sp_selection_is_empty (selection)) return;
+
+	selected = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
+
+	for (l = selected; l != NULL; l = l->next) {
+		css = sp_repr_css_attr_inherited ((SPRepr *) clipboard->data, "style"); // take the css from first object on clipboard
+		sp_repr_css_set ((SPRepr *) l->data, css, "style");
+	}
+
+	sp_document_done (SP_DT_DOCUMENT (desktop));
+}
+
+void
 sp_selection_apply_affine (SPSelection * selection, double affine[6]) {
 	SPItem * item;
 	GSList * l;

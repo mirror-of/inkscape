@@ -1,3 +1,11 @@
+2003-11-29  bulia byak <bulia@dr.com>
+
+	* src/selection-ch emistry.c src/selection-chemistry.h src/verbs.c src/verbs.h
+	  src/shortcuts.c src/interface.c: new function, verb, shortcut (shift-ctrl-v), menu
+	  command: paste style (apply the style of copied object to selection). If more than
+	  one object is copied, the first one in the clipboard list is taken as the source of
+	  the style.
+
 2003-11-30  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/style.c (sp_style_merge_from_parent): Fix some
