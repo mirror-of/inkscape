@@ -386,7 +386,7 @@ nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
 {
     shape->delayed_shp = false;
     if (shape->style->fill.type != SP_PAINT_TYPE_NONE) {
-	if ((shape->curve->end > 2) || (shape->curve->bpath[1].code == ART_CURVETO)) {
+	if ((shape->curve->end > 2) || (shape->curve->bpath[1].code == NR_CURVETO)) {
 	    if (TRUE || !shape->fill_shp) {
 		//unsigned int windrule = (shape->style->fill_rule.value == SP_WIND_RULE_EVENODD) ? NR_WIND_RULE_EVENODD : NR_WIND_RULE_NONZERO;
 		NR::Matrix  cached_to_new;

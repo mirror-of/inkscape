@@ -102,15 +102,15 @@ sp_svg_write_polygon (const NArtBpath * bpath)
 	
 	g_return_val_if_fail (bpath != NULL, NULL);
 
-	for (i = 0; bpath[i].code != ART_END; i++){
+	for (i = 0; bpath[i].code != NR_END; i++){
 		switch (bpath [i].code){
-		case ART_LINETO:
-		case ART_MOVETO:
-		case ART_MOVETO_OPEN:
+		case NR_LINETO:
+		case NR_MOVETO:
+		case NR_MOVETO_OPEN:
 			os << bpath [i].x3 << "," << bpath [i].y3 << " ";
 			break;
 
-		case ART_CURVETO:
+		case NR_CURVETO:
 		default:
 			g_assert_not_reached ();
 		}

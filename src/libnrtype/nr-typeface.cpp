@@ -271,17 +271,17 @@ static NRBPath *
 nr_typeface_empty_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigned int metrics, NRBPath *d, unsigned int ref)
 {
 	static const NArtBpath gol[] = {
-		{ART_MOVETO, 0, 0, 0, 0, 100.0, 100.0},
-		{ART_LINETO, 0, 0, 0, 0, 100.0, 900.0},
-		{ART_LINETO, 0, 0, 0, 0, 900.0, 900.0},
-		{ART_LINETO, 0, 0, 0, 0, 900.0, 100.0},
-		{ART_LINETO, 0, 0, 0, 0, 100.0, 100.0},
-		{ART_MOVETO, 0, 0, 0, 0, 150.0, 150.0},
-		{ART_LINETO, 0, 0, 0, 0, 850.0, 150.0},
-		{ART_LINETO, 0, 0, 0, 0, 850.0, 850.0},
-		{ART_LINETO, 0, 0, 0, 0, 150.0, 850.0},
-		{ART_LINETO, 0, 0, 0, 0, 150.0, 150.0},
-		{ART_END, 0, 0, 0, 0, 0, 0}
+		{NR_MOVETO, 0, 0, 0, 0, 100.0, 100.0},
+		{NR_LINETO, 0, 0, 0, 0, 100.0, 900.0},
+		{NR_LINETO, 0, 0, 0, 0, 900.0, 900.0},
+		{NR_LINETO, 0, 0, 0, 0, 900.0, 100.0},
+		{NR_LINETO, 0, 0, 0, 0, 100.0, 100.0},
+		{NR_MOVETO, 0, 0, 0, 0, 150.0, 150.0},
+		{NR_LINETO, 0, 0, 0, 0, 850.0, 150.0},
+		{NR_LINETO, 0, 0, 0, 0, 850.0, 850.0},
+		{NR_LINETO, 0, 0, 0, 0, 150.0, 850.0},
+		{NR_LINETO, 0, 0, 0, 0, 150.0, 150.0},
+		{NR_END, 0, 0, 0, 0, 0, 0}
 	};
 
 	d->path = (NArtBpath *) gol;

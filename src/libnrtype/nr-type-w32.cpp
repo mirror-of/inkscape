@@ -861,7 +861,7 @@ nr_typeface_w32_ensure_outline (NRTypeFaceW32 *tfw32, NRTypeFaceGlyphW32 *slot, 
 
         /* Always starts with moveto */
 
-        bp->code  =  ART_MOVETO;
+        bp->code  =  NR_MOVETO;
         bp->x3    =  Ax;
         bp->y3    =  Ay;
         bp        += 1;
@@ -878,7 +878,7 @@ nr_typeface_w32_ensure_outline (NRTypeFaceW32 *tfw32, NRTypeFaceGlyphW32 *slot, 
                 for (int i = 0; i < pc->cpfx; i++) {
                     Cx       =  FIXED_TO_FLOAT (&pc->apfx[i].x);
                     Cy       =  FIXED_TO_FLOAT (&pc->apfx[i].y);
-                    bp->code =  ART_LINETO;
+                    bp->code =  NR_LINETO;
                     bp->x3   =  Cx;
                     bp->y3   =  Cy;
                     bp       += 1;
@@ -899,7 +899,7 @@ nr_typeface_w32_ensure_outline (NRTypeFaceW32 *tfw32, NRTypeFaceGlyphW32 *slot, 
                         Cy = FIXED_TO_FLOAT (&pc->apfx[i + 1].y);
                     }
 
-                    bp->code =  ART_CURVETO;
+                    bp->code =  NR_CURVETO;
                     bp->x1   =  Bx - (Bx - Ax) / 3;
                     bp->y1   =  By - (By - Ay) / 3;
                     bp->x2   =  Bx + (Cx - Bx) / 3;
@@ -915,7 +915,7 @@ nr_typeface_w32_ensure_outline (NRTypeFaceW32 *tfw32, NRTypeFaceGlyphW32 *slot, 
         }
 
         if ((Cx != Sx) || (Cy != Sy)) {
-            bp->code =  ART_LINETO;
+            bp->code =  NR_LINETO;
             bp->x3   =  Sx;
             bp->y3   =  Sy;
             bp       += 1;
@@ -923,7 +923,7 @@ nr_typeface_w32_ensure_outline (NRTypeFaceW32 *tfw32, NRTypeFaceGlyphW32 *slot, 
 
     }
 
-    bp->code = ART_END;
+    bp->code = NR_END;
 
     if (metrics == NR_TYPEFACE_METRICS_VERTICAL) {
         static MAT2 mat = {{0, 1}, {0, 0}, {0, 0}, {0, 1}};

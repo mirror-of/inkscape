@@ -499,14 +499,14 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 		case GDK_L:
 		case GDK_l:
 			if (MOD__SHIFT_ONLY) {
-				sp_node_selected_set_line_type (ART_LINETO);
+				sp_node_selected_set_line_type (NR_LINETO);
 				ret = TRUE;
 			}
 			break;
 		case GDK_K:
 		case GDK_k:
 			if (MOD__SHIFT_ONLY) {
-				sp_node_selected_set_line_type (ART_CURVETO);
+				sp_node_selected_set_line_type (NR_CURVETO);
 				ret = TRUE;
 			}
 			break;

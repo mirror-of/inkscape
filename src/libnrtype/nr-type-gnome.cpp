@@ -95,7 +95,7 @@ nr_typeface_gnome_finalize (NRObject *object)
     tfg = (NRTypeFaceGnome *) object;
 
     if (tfg->voutlines) {
-	int i;
+	unsigned int i;
 	for (i = 0; i < tf->nglyphs; i++) {
 	    if (tfg->voutlines[i].path) art_free (tfg->voutlines[i].path);
 	}
@@ -285,7 +285,7 @@ nr_typeface_gnome_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigne
 
     if (metrics == NR_TYPEFACE_METRICS_VERTICAL) {
 	if (!tfg->voutlines) {
-	    int i;
+	    unsigned int i;
 	    tfg->voutlines = nr_new (NRBPath, tf->nglyphs);
 	    for (i = 0; i < tf->nglyphs; i++) {
 		tfg->voutlines[i].path = NULL;
@@ -294,19 +294,18 @@ nr_typeface_gnome_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigne
 	if (!tfg->voutlines[glyph].path) {
 	    NRBPath bpath;
 	    NRRect bbox;
-	    double t[6];
 	    bpath.path = (NArtBpath *) gnome_font_face_get_glyph_stdoutline (tfg->face, glyph);
 	    bbox.x0 = bbox.y0 = 1e18;
 	    bbox.x1 = bbox.y1 = -1e18;
 	    nr_path_matrix_bbox_union (&bpath, NULL, &bbox, 0.25);
 	    if (!nr_rect_d_test_empty (&bbox)) {
-		t[0] = 1.0;
-		t[1] = 0.0;
-		t[2] = 0.0;
-		t[3] = 1.0;
-		t[4] = 0.0 - (bbox.x1 - bbox.x0) / 2;
-		t[5] = -1000.0;
-		tfg->voutlines[glyph].path = art_bpath_affine_transform (bpath.path, t);
+		NR::Matrix t(1.0,
+					 0.0,
+					 0.0,
+					 1.0,
+					 0.0 - (bbox.x1 - bbox.x0) / 2,
+					 -1000.0);
+		tfg->voutlines[glyph].path = nr_artpath_affine (bpath.path, t);
 	    }
 	}
 	*d = tfg->voutlines[glyph];

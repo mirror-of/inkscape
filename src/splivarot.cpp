@@ -1442,11 +1442,11 @@ Path_for_item (SPItem * item,bool doTransformation)
         float lastX  = 0.0;
         float lastY  = 0.0;
     
-        for (i = 0; bpath[i].code != ART_END; i++)
+        for (i = 0; bpath[i].code != NR_END; i++)
         {
             switch (bpath[i].code)
             {
-            case ART_LINETO:
+            case NR_LINETO:
                 lastX = bpath[i].x3;
                 lastY = bpath[i].y3;
                 {
@@ -1455,7 +1455,7 @@ Path_for_item (SPItem * item,bool doTransformation)
                 }
                 break;
           
-            case ART_CURVETO:
+            case NR_CURVETO:
             {
                 NR::Point  tmp,tms,tme;
                 tmp[0]=bpath[i].x3;
@@ -1470,11 +1470,11 @@ Path_for_item (SPItem * item,bool doTransformation)
             lastY = bpath[i].y3;
             break;
           
-            case ART_MOVETO_OPEN:
-            case ART_MOVETO:
+            case NR_MOVETO_OPEN:
+            case NR_MOVETO:
                 if (closed)
                     dest->Close ();
-                closed = (bpath[i].code == ART_MOVETO);
+                closed = (bpath[i].code == NR_MOVETO);
                 lastX = bpath[i].x3;
                 lastY = bpath[i].y3;
                 {

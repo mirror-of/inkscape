@@ -106,11 +106,12 @@ Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
 */
 Extension::~Extension (void)
 {
+	set_state(STATE_UNLOADED);
 	db.unregister_ext(this);
     sp_repr_unref(repr);
     g_free(id);
     g_free(name);
-    /* TODO: Need to do parameters here */
+    /** \todo Need to do parameters here */
     return;
 }
 
@@ -164,7 +165,15 @@ Extension::loaded (void)
 bool
 Extension::check (void)
 {
-	/* Need to check the local settings here */
+	if (id == NULL)
+		return FALSE;
+	if (name == NULL)
+		return FALSE;
+	if (repr == NULL)
+		return FALSE;
+	if (imp == NULL)
+		return FALSE;
+
 	return imp->check(this);
 }
 

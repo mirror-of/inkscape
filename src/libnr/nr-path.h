@@ -14,11 +14,11 @@
 #include <libnr/nr-coord.h>
 
 typedef enum {
-  ART_MOVETO,
-  ART_MOVETO_OPEN,
-  ART_CURVETO,
-  ART_LINETO,
-  ART_END
+  NR_MOVETO,
+  NR_MOVETO_OPEN,
+  NR_CURVETO,
+  NR_LINETO,
+  NR_END
 } NRPathcode;
 
 class NArtBpath {

@@ -621,7 +621,7 @@ NArtBpath *sp_svg_read_path(gchar const *str)
 
     bpath = g_new (NArtBpath, ctx.bpath->n_bpath);
     memcpy (bpath, ctx.bpath->bpath, ctx.bpath->n_bpath * sizeof (NArtBpath));
-    g_assert ((bpath + ctx.bpath->n_bpath - 1)->code == ART_END);
+    g_assert ((bpath + ctx.bpath->n_bpath - 1)->code == NR_END);
     gnome_canvas_bpath_def_unref (ctx.bpath);
 
     return bpath;
@@ -634,27 +634,27 @@ gchar *sp_svg_write_path(NArtBpath const *bpath)
     
     g_return_val_if_fail (bpath != NULL, NULL);
 
-    for (int i = 0; bpath[i].code != ART_END; i++){
+    for (int i = 0; bpath[i].code != NR_END; i++){
         if (i) {
             os << " ";
         }
         switch (bpath [i].code){
-        case ART_LINETO:
+        case NR_LINETO:
             os << "L " << bpath[i].x3 << "," << bpath[i].y3;
             break;
 
-        case ART_CURVETO:
+        case NR_CURVETO:
             os << "C " << bpath[i].x1 << "," << bpath[i].y1
                << " "  << bpath[i].x2 << "," << bpath[i].y2
                << " "  << bpath[i].x3 << "," << bpath[i].y3;
             break;
 
-        case ART_MOVETO_OPEN:
-        case ART_MOVETO:
+        case NR_MOVETO_OPEN:
+        case NR_MOVETO:
             if (closed) {
                 os << "z ";
             }
-            closed = ( bpath[i].code == ART_MOVETO );
+            closed = ( bpath[i].code == NR_MOVETO );
             os << "M " << bpath[i].x3 << "," << bpath[i].y3;
             break;
         default:

@@ -566,7 +566,7 @@ static int tfft2_move_to (FT_Vector * to, void * user)
 	if (od->end == 0 ||
 	    p.x != od->bp[od->end - 1].x3 ||
 	    p.y != od->bp[od->end - 1].y3) {
-		od->bp[od->end].code = ART_MOVETO;
+		od->bp[od->end].code = NR_MOVETO;
 		od->bp[od->end].x3 = to->x * od->t[0] + to->y * od->t[2] + od->t[4];
 		od->bp[od->end].y3 = to->x * od->t[1] + to->y * od->t[3] + od->t[5];
 		od->end++;
@@ -587,7 +587,7 @@ static int tfft2_line_to (FT_Vector * to, void * user)
 	p.y = to->x * od->t[1] + to->y * od->t[3] + od->t[5];
 
 	if ((p.x != s->x3) || (p.y != s->y3)) {
-		od->bp[od->end].code = ART_LINETO;
+		od->bp[od->end].code = NR_LINETO;
 		od->bp[od->end].x3 = to->x * od->t[0] + to->y * od->t[2] + od->t[4];
 		od->bp[od->end].y3 = to->x * od->t[1] + to->y * od->t[3] + od->t[5];
 		od->end++;
@@ -607,7 +607,7 @@ static int tfft2_conic_to (FT_Vector * control, FT_Vector * to, void * user)
 	s = &od->bp[od->end - 1];
 	e = &od->bp[od->end];
 
-	e->code = ART_CURVETO;
+	e->code = NR_CURVETO;
 
 	c.x = control->x * od->t[0] + control->y * od->t[2] + od->t[4];
 	c.y = control->x * od->t[1] + control->y * od->t[3] + od->t[5];
@@ -629,7 +629,7 @@ static int tfft2_cubic_to (FT_Vector * control1, FT_Vector * control2, FT_Vector
 
 	od = (TFFT2OutlineData *) user;
 
-	od->bp[od->end].code = ART_CURVETO;
+	od->bp[od->end].code = NR_CURVETO;
 	od->bp[od->end].x1 = control1->x * od->t[0] + control1->y * od->t[2] + od->t[4];
 	od->bp[od->end].y1 = control1->x * od->t[1] + control1->y * od->t[3] + od->t[5];
 	od->bp[od->end].x2 = control2->x * od->t[0] + control2->y * od->t[2] + od->t[4];
@@ -664,7 +664,7 @@ tff_ol2bp (FT_Outline * ol, float transform[])
 
 	FT_Outline_Decompose (ol, &tfft2_outline_funcs, &od);
 
-	od.bp[od.end].code = ART_END;
+	od.bp[od.end].code = NR_END;
 
 	od.bp = nr_renew (od.bp, NArtBpath, od.end + 1);
 

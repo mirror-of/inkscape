@@ -294,13 +294,13 @@ sp_node_path_edit_join_segment (void)
 void
 sp_node_path_edit_toline (void)
 {
-    sp_node_selected_set_line_type (ART_LINETO);
+    sp_node_selected_set_line_type (NR_LINETO);
 }
 
 void
 sp_node_path_edit_tocurve (void)
 {
-    sp_node_selected_set_line_type (ART_CURVETO);
+    sp_node_selected_set_line_type (NR_CURVETO);
 }
 
 void

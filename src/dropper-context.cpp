@@ -38,12 +38,12 @@
 
 #define C1 0.552
 static const NArtBpath spdc_circle[] = {
-	{ART_MOVETO, 0, 0, 0, 0, -1, 0},
-	{ART_CURVETO, -1, C1, -C1, 1, 0, 1},
-	{ART_CURVETO, C1, 1, 1, C1, 1, 0},
-	{ART_CURVETO, 1, -C1, C1, -1, 0, -1},
-	{ART_CURVETO, -C1, -1, -1, -C1, -1, 0},
-	{ART_END, 0, 0, 0, 0, 0, 0}
+	{NR_MOVETO, 0, 0, 0, 0, -1, 0},
+	{NR_CURVETO, -1, C1, -C1, 1, 0, 1},
+	{NR_CURVETO, C1, 1, 1, C1, 1, 0},
+	{NR_CURVETO, 1, -C1, C1, -1, 0, -1},
+	{NR_CURVETO, -C1, -1, -1, -C1, -1, 0},
+	{NR_END, 0, 0, 0, 0, 0, 0}
 };
 #undef C1
 

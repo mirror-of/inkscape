@@ -325,11 +325,11 @@ void  Path::LoadArtBPath(void *iV,NR::Matrix const &trans,bool doTransformation)
     bool  closed = false;
     NR::Point lastX(0,0);
     
-    for (i = 0; bpath[i].code != ART_END; i++)
+    for (i = 0; bpath[i].code != NR_END; i++)
     {
       switch (bpath[i].code)
       {
-        case ART_LINETO:
+        case NR_LINETO:
           lastX[0] = bpath[i].x3;
           lastX[1] = bpath[i].y3;
           if ( doTransformation ) {
@@ -338,7 +338,7 @@ void  Path::LoadArtBPath(void *iV,NR::Matrix const &trans,bool doTransformation)
             LineTo (lastX);
             break;
           
-        case ART_CURVETO:
+        case NR_CURVETO:
         {
           NR::Point  tmp,tms(0,0),tme(0,0),tm1,tm2;
           tmp[0]=bpath[i].x3;
@@ -363,10 +363,10 @@ void  Path::LoadArtBPath(void *iV,NR::Matrix const &trans,bool doTransformation)
           }
           break;
           
-        case ART_MOVETO_OPEN:
-        case ART_MOVETO:
+        case NR_MOVETO_OPEN:
+        case NR_MOVETO:
           if (closed) Close ();
-          closed = (bpath[i].code == ART_MOVETO);
+          closed = (bpath[i].code == NR_MOVETO);
           lastX[0] = bpath[i].x3;
           lastX[1] = bpath[i].y3;
           if ( doTransformation ) {

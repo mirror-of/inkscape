@@ -191,9 +191,9 @@ static void sp_genericellipse_set_shape(SPShape *shape)
 	NArtBpath bpath[16];
 	i = 0;
 	if (ellipse->closed) {
-		bpath[i].code = ART_MOVETO;
+		bpath[i].code = NR_MOVETO;
 	} else {
-		bpath[i].code = ART_MOVETO_OPEN;
+		bpath[i].code = NR_MOVETO_OPEN;
 	}
 	bpath[i].x3 = cos (ellipse->start);
 	bpath[i].y3 = sin (ellipse->start);
@@ -216,7 +216,7 @@ static void sp_genericellipse_set_shape(SPShape *shape)
 g_print ("step %d s %f e %f coords %f %f %f %f %f %f\n",
 	i, s, e, x1, y1, x2, y2, x3, y3);
 #endif
-		bpath[i].code = ART_CURVETO;
+		bpath[i].code = NR_CURVETO;
 		bpath[i].x1 = x1;
 		bpath[i].y1 = y1;
 		bpath[i].x2 = x2;
@@ -227,11 +227,11 @@ g_print ("step %d s %f e %f coords %f %f %f %f %f %f\n",
 	}
 
 	if (slice && ellipse->closed) {
-		bpath[i].code = ART_LINETO;
+		bpath[i].code = NR_LINETO;
 		bpath[i].x3 = 0.0;
 		bpath[i].y3 = 0.0;
 		i++;
-		bpath[i].code = ART_LINETO;
+		bpath[i].code = NR_LINETO;
 		bpath[i].x3 = bpath[0].x3;
 		bpath[i].y3 = bpath[0].y3;
 		i++;
@@ -240,7 +240,7 @@ g_print ("step %d s %f e %f coords %f %f %f %f %f %f\n",
 		bpath[i-1].y3 = bpath[0].y3;
 	}
 
-	bpath[i].code = ART_END;
+	bpath[i].code = NR_END;
 	SPCurve *c = sp_curve_new_from_bpath(nr_artpath_affine(bpath, aff));
 	sp_shape_set_curve_insync ((SPShape *) ellipse, c, TRUE);
 	sp_curve_unref (c);

@@ -594,16 +594,16 @@ concat_current_line(SPDynaDrawContext *dc)
         NArtBpath *bpath;
         if (sp_curve_empty(dc->accumulated)) {
             bpath = sp_curve_first_bpath(dc->currentcurve);
-            g_assert( bpath->code == ART_MOVETO_OPEN );
+            g_assert( bpath->code == NR_MOVETO_OPEN );
             sp_curve_moveto(dc->accumulated, bpath->x3, bpath->y3);
         }
         bpath = sp_curve_last_bpath(dc->currentcurve);
-        if ( bpath->code == ART_CURVETO ) {
+        if ( bpath->code == NR_CURVETO ) {
             sp_curve_curveto(dc->accumulated,
                              bpath->x1, bpath->y1,
                              bpath->x2, bpath->y2,
                              bpath->x3, bpath->y3);
-        } else if ( bpath->code == ART_LINETO ) {
+        } else if ( bpath->code == NR_LINETO ) {
             sp_curve_lineto(dc->accumulated, bpath->x3, bpath->y3);
         } else {
             g_assert_not_reached();

@@ -397,7 +397,7 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
         slot->glyph.tg.bbox.y1 = 0;
         slot->glyph.tg.px[0] = 0;
         slot->type = NRRF_TYPE_TINY;
-        if (nr_font_glyph_outline_get (rf->font, glyph, &gbp, 0) && (gbp.path && (gbp.path->code == ART_MOVETO))) {
+        if (nr_font_glyph_outline_get (rf->font, glyph, &gbp, 0) && (gbp.path && (gbp.path->code == NR_MOVETO))) {
             NRRect bbox;
             int x0, y0, x1, y1, w, h;
 

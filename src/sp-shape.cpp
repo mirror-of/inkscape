@@ -237,7 +237,6 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		}
 	}
 
-
         if (sp_shape_has_markers (shape)) {
             
             /* Dimension marker views */
@@ -285,14 +284,14 @@ sp_shape_marker_required (SPShape* shape, int m, NArtBpath* bp)
     if (shape->marker[m] == NULL)
         return 0;
 
-    if (m == SP_MARKER_LOC_START && (bp->code == ART_MOVETO || bp->code == ART_MOVETO_OPEN))
+    if (m == SP_MARKER_LOC_START && (bp->code == NR_MOVETO || bp->code == NR_MOVETO_OPEN))
         return 1;
 
-    if (m == SP_MARKER_LOC_END && (bp[1].code != ART_LINETO) && (bp[1].code != ART_CURVETO))
+    if (m == SP_MARKER_LOC_END && (bp[1].code != NR_LINETO) && (bp[1].code != NR_CURVETO))
         return 1;
 
-    if (m == SP_MARKER_LOC_MID && ((bp->code != ART_MOVETO && bp->code != ART_MOVETO_OPEN)
-                && (((bp + 1)->code == ART_LINETO) || ((bp + 1)->code == ART_CURVETO))))
+    if (m == SP_MARKER_LOC_MID && ((bp->code != NR_MOVETO && bp->code != NR_MOVETO_OPEN)
+                && (((bp + 1)->code == NR_LINETO) || ((bp + 1)->code == NR_CURVETO))))
         return 1;
 
     return 0;
@@ -322,10 +321,10 @@ sp_shape_marker_get_transform (SPShape* shape, int m, NArtBpath* bp)
         case SP_MARKER_LOC_START:
         {
 			float dx, dy, h;
-			if (bp[1].code == ART_LINETO) {
+			if (bp[1].code == NR_LINETO) {
 				dx = bp[1].x3 - bp[0].x3;
 				dy = bp[1].y3 - bp[0].y3;
-			} else if (bp[1].code == ART_CURVETO) {
+			} else if (bp[1].code == NR_CURVETO) {
 				dx = bp[1].x1 - bp[0].x3;
 				dy = bp[1].y1 - bp[0].y3;
 			} else {
@@ -349,10 +348,10 @@ sp_shape_marker_get_transform (SPShape* shape, int m, NArtBpath* bp)
         case SP_MARKER_LOC_END:
         {
 			float dx, dy, h;
-			if ((bp->code == ART_LINETO) && (bp > shape->curve->bpath)) {
+			if ((bp->code == NR_LINETO) && (bp > shape->curve->bpath)) {
                 dx = (bp - 1)->x3 - bp->x3;
                 dy = (bp - 1)->y3 - bp->y3 ;
-            } else if (bp->code == ART_CURVETO) {
+            } else if (bp->code == NR_CURVETO) {
                 dx = bp->x2 - bp->x3;
                 dy = bp->y2 - bp->y3 ;
 
@@ -391,10 +390,10 @@ sp_shape_marker_get_transform (SPShape* shape, int m, NArtBpath* bp)
         case SP_MARKER_LOC_MID:
         {
             float dx, dy, h;
-            if ((bp->code == ART_LINETO) && (bp > shape->curve->bpath)) {
+            if ((bp->code == NR_LINETO) && (bp > shape->curve->bpath)) {
                 dx = ((bp->x3 - (bp - 1)->x3)+(bp[1].x3 - bp[0].x3))/2;
                 dy = ((bp->y3 - (bp - 1)->y3)+(bp[1].y3 - bp[0].y3))/2;
-            } else if (bp->code == ART_CURVETO) {
+            } else if (bp->code == NR_CURVETO) {
                 dx = ((bp->x3 - bp->x2) + (bp[1].x1 - bp[0].x3))/2;
                 dy = ((bp->y3 - bp->y2) + (bp[1].y1 - bp[0].y3))/2;
 
@@ -448,7 +447,7 @@ sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai)
 
             int n = 0;
             
-            for (NArtBpath *bp = shape->curve->bpath; bp->code != ART_END; bp++) {
+            for (NArtBpath *bp = shape->curve->bpath; bp->code != NR_END; bp++) {
                 if (sp_shape_marker_required (shape, i, bp)) {
                     NRMatrix m = sp_shape_marker_get_transform (shape, i, bp);
                     sp_marker_show_instance ((SPMarker* ) shape->marker[i], ai,
@@ -544,7 +543,7 @@ sp_shape_print (SPItem *item, SPPrintContext *ctx)
 		sp_print_stroke (ctx, &bp, &i2d, style, &pbox, &dbox, &bbox);
 	}
 
-        for (NArtBpath* bp = shape->curve->bpath; bp->code != ART_END; bp++) {
+        for (NArtBpath* bp = shape->curve->bpath; bp->code != NR_END; bp++) {
             for (int m = SP_MARKER_LOC_START; m < SP_MARKER_LOC_QTY; m++) {
                 if (sp_shape_marker_required (shape, m, bp)) {
 
@@ -666,7 +665,7 @@ static int
 sp_shape_number_of_markers (SPShape *shape, int type)
 {
     int n = 0;
-    for (NArtBpath* bp = shape->curve->bpath; bp->code != ART_END; bp++) {
+    for (NArtBpath* bp = shape->curve->bpath; bp->code != NR_END; bp++) {
         if (sp_shape_marker_required (shape, type, bp)) {
             n++;
         }

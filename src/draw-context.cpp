@@ -348,7 +348,7 @@ spdc_attach_selection(SPDrawContext *dc, SPSelection *sel)
             SPCurve *c;
             c = (SPCurve*)l->data;
             g_return_if_fail( c->end > 1 );
-            if ( c->bpath->code == ART_MOVETO_OPEN ) {
+            if ( c->bpath->code == NR_MOVETO_OPEN ) {
                 NArtBpath *s, *e;
                 SPDrawAnchor *a;
                 s = sp_curve_first_bpath(c);

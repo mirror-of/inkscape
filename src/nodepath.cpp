@@ -155,7 +155,7 @@ Path::Path *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
 
 	NArtBpath *b = bpath;
 
-	while (b->code != ART_END) {
+	while (b->code != NR_END) {
 		b = subpath_from_bpath (np, b, typestr + (b - bpath));
 	}
 
@@ -288,32 +288,32 @@ static NArtBpath *subpath_from_bpath(Path::Path *np, NArtBpath *b, gchar const *
 {
 	NR::Point ppos, pos, npos;
 
-	g_assert ((b->code == ART_MOVETO) || (b->code == ART_MOVETO_OPEN));
+	g_assert ((b->code == NR_MOVETO) || (b->code == NR_MOVETO_OPEN));
 
 	Path::SubPath *sp = sp_nodepath_subpath_new (np);
-	bool const closed = (b->code == ART_MOVETO);
+	bool const closed = (b->code == NR_MOVETO);
 
 	pos = NR::Point(b->x3, b->y3) * np->i2d;
-	if (b[1].code == ART_CURVETO) {
+	if (b[1].code == NR_CURVETO) {
 		npos = NR::Point(b[1].x1, b[1].y1) * np->i2d;
 	} else {
 		npos = pos;
 	}
 	Path::Node *n;
-	n = sp_nodepath_node_new(sp, NULL, (Path::NodeType) *t, ART_MOVETO, &pos, &pos, &npos);
+	n = sp_nodepath_node_new(sp, NULL, (Path::NodeType) *t, NR_MOVETO, &pos, &pos, &npos);
 	g_assert (sp->first == n);
 	g_assert (sp->last  == n);
 
 	b++;
 	t++;
-	while ((b->code == ART_CURVETO) || (b->code == ART_LINETO)) {
+	while ((b->code == NR_CURVETO) || (b->code == NR_LINETO)) {
 		pos = NR::Point(b->x3, b->y3) * np->i2d;
-		if (b->code == ART_CURVETO) {
+		if (b->code == NR_CURVETO) {
 			ppos = NR::Point(b->x2, b->y2) * np->i2d;
 		} else {
 			ppos = pos;
 		}
-		if (b[1].code == ART_CURVETO) {
+		if (b[1].code == NR_CURVETO) {
 			npos = NR::Point(b[1].x1, b[1].y1) * np->i2d;
 		} else {
 			npos = pos;
@@ -440,10 +440,10 @@ static SPCurve *create_curve(Path::Path *np)
 		while (n) {
 			NR::Point const end_pt = n->pos * np->d2i;
 			switch (n->code) {
-			case ART_LINETO:
+			case NR_LINETO:
 				sp_curve_lineto(curve, end_pt);
 				break;
-			case ART_CURVETO:
+			case NR_CURVETO:
 				sp_curve_curveto(curve,
 						 n->p.other->n.pos * np->d2i,
 						 n->p.pos * np->d2i,
@@ -553,13 +553,13 @@ static void sp_nodepath_line_midpoint(Path::Node *new_path, Path::Node *end, gdo
 	Path::Node *start = new_path->p.other;
 	g_assert (start);
 
-	if (end->code == ART_LINETO) {
+	if (end->code == NR_LINETO) {
 		new_path->type = Path::NODE_CUSP;
-		new_path->code = ART_LINETO;
+		new_path->code = NR_LINETO;
 		new_path->pos  = (t * start->pos + (1 - t) * end->pos);
 	} else {
 		new_path->type = Path::NODE_SMOOTH;
-		new_path->code = ART_CURVETO;
+		new_path->code = NR_CURVETO;
 		gdouble s      = 1 - t;
 		for(int dim = 0; dim < 2; dim++) {
 			const NR::Coord f000 = start->pos[dim];
@@ -627,7 +627,7 @@ static Path::Node *sp_nodepath_node_break(Path::Node *node)
 		Path::SubPath *newsubpath = sp_nodepath_subpath_new(np);
 
 		// duplicate the break node as start of the new subpath
-		Path::Node *newnode = sp_nodepath_node_new (newsubpath, NULL, (Path::NodeType)node->type, ART_MOVETO, &node->pos, &node->pos, &node->n.pos);
+		Path::Node *newnode = sp_nodepath_node_new (newsubpath, NULL, (Path::NodeType)node->type, NR_MOVETO, &node->pos, &node->pos, &node->n.pos);
 
 		while (node->n.other) { // copy the remaining nodes into the new subpath
 			Path::Node *n  = node->n.other;
@@ -651,8 +651,8 @@ static Path::Node *sp_nodepath_node_duplicate(Path::Node *node)
 	Path::SubPath *sp = node->subpath;
 
 	NRPathcode code = (NRPathcode) node->code;
-	if (code == ART_MOVETO) { // if node is the endnode,
-		node->code = ART_LINETO; // new one is inserted before it, so change that to line
+	if (code == NR_MOVETO) { // if node is the endnode,
+		node->code = NR_LINETO; // new one is inserted before it, so change that to line
 	}
 
 	Path::Node *newnode = sp_nodepath_node_new(sp, node, (Path::NodeType)node->type, code,
@@ -685,10 +685,10 @@ static void sp_nodepath_set_line_type(Path::Node *end, NRPathcode code)
 
 	end->code = code;
 
-	if (code == ART_LINETO) {
-		if (start->code == ART_LINETO) start->type = Path::NODE_CUSP;
+	if (code == NR_LINETO) {
+		if (start->code == NR_LINETO) start->type = Path::NODE_CUSP;
 		if (end->n.other) {
-			if (end->n.other->code == ART_LINETO) end->type = Path::NODE_CUSP;
+			if (end->n.other->code == NR_LINETO) end->type = Path::NODE_CUSP;
 		}
 		sp_node_adjust_knot (start, -1);
 		sp_node_adjust_knot (end, 1);
@@ -713,7 +713,7 @@ static Path::Node *sp_nodepath_set_node_type(Path::Node *node, Path::NodeType ty
 		return node;
 
 	if ((node->p.other != NULL) && (node->n.other != NULL)) {
-		if ((node->code == ART_LINETO) && (node->n.other->code == ART_LINETO)) {
+		if ((node->code == NR_LINETO) && (node->n.other->code == NR_LINETO)) {
 			type = Path::NODE_CUSP;
 		}
 	}
@@ -742,13 +742,13 @@ static void sp_node_moveto(Path::Node *node, NR::Point p)
 	node->n.pos += delta;
 
 	if (node->p.other) {
-		if (node->code == ART_LINETO) {
+		if (node->code == NR_LINETO) {
 			sp_node_adjust_knot (node, 1);
 			sp_node_adjust_knot (node->p.other, -1);
 		}
 	}
 	if (node->n.other) {
-		if (node->n.other->code == ART_LINETO) {
+		if (node->n.other->code == NR_LINETO) {
 			sp_node_adjust_knot (node, -1);
 			sp_node_adjust_knot (node->n.other, 1);
 		}
@@ -834,7 +834,7 @@ static void sp_node_ensure_knot(Path::Node *node, gint which, gboolean show_knot
 	Path::NodeSide *side = sp_node_get_side (node, which);
 	NRPathcode code = sp_node_path_code_from_side (node, side);
 
-	show_knot = show_knot && (code == ART_CURVETO);
+	show_knot = show_knot && (code == NR_CURVETO);
 
 	if (show_knot) {
 		if (!SP_KNOT_IS_VISIBLE (side->knot)) {
@@ -1025,7 +1025,7 @@ void sp_node_selected_join()
 		code = (NRPathcode)sa->first->n.other->code;
 		Path::SubPath *t = sp_nodepath_subpath_new (sa->nodepath);
 		n = sa->last;
-		sp_nodepath_node_new (t, NULL, Path::NODE_CUSP, ART_MOVETO, &n->n.pos, &n->pos, &n->p.pos);
+		sp_nodepath_node_new (t, NULL, Path::NODE_CUSP, NR_MOVETO, &n->n.pos, &n->pos, &n->p.pos);
 		n = n->p.other;
 		while (n) {
 			sp_nodepath_node_new (t, NULL, (Path::NodeType)n->type, (NRPathcode)n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
@@ -1039,7 +1039,7 @@ void sp_node_selected_join()
 		code = (NRPathcode)sa->last->code;
 		sp_nodepath_node_destroy (sa->last);
 	} else {
-		code = ART_END;
+		code = NR_END;
 		g_assert_not_reached ();
 	}
 
@@ -1124,7 +1124,7 @@ void sp_node_selected_join_segment()
 		code = (NRPathcode) sa->first->n.other->code;
 		Path::SubPath *t = sp_nodepath_subpath_new (sa->nodepath);
 		n = sa->last;
-		sp_nodepath_node_new (t, NULL, Path::NODE_CUSP, ART_MOVETO, &n->n.pos, &n->pos, &n->p.pos);
+		sp_nodepath_node_new (t, NULL, Path::NODE_CUSP, NR_MOVETO, &n->n.pos, &n->pos, &n->p.pos);
 		for (n = n->p.other; n != NULL; n = n->p.other) {
 			sp_nodepath_node_new (t, NULL, (Path::NodeType)n->type, (NRPathcode)n->n.other->code, &n->n.pos, &n->pos, &n->p.pos);
 		}
@@ -1133,7 +1133,7 @@ void sp_node_selected_join_segment()
 	} else if (a == sa->last) {
 		code = (NRPathcode)sa->last->code;
 	} else {
-		code = ART_END;
+		code = NR_END;
 		g_assert_not_reached ();
 	}
 
@@ -1280,7 +1280,7 @@ sp_node_selected_delete_segment (void)
 		for (curr=end ; curr ; curr=curr->n.other) {
             NRPathcode code = (NRPathcode) curr->code;
             if (curr == end)
-                code = ART_MOVETO;
+                code = NR_MOVETO;
 			sp_nodepath_node_new (t, NULL, 
                 (Path::NodeType)curr->type, code,
 			    &curr->p.pos, &curr->pos, &curr->n.pos);
@@ -1697,7 +1697,7 @@ static void sp_node_adjust_knot(Path::Node *node, gint which_adjust)
 		ocode = (NRPathcode)other->other->code;
 	}
 
-	if (mecode == ART_LINETO) return;
+	if (mecode == NR_LINETO) return;
 
 	/* I am curve */
 
@@ -1708,7 +1708,7 @@ static void sp_node_adjust_knot(Path::Node *node, gint which_adjust)
 	if (node->type == Path::NODE_CUSP) return;
 	
 	NR::Point delta;
-	if (ocode == ART_LINETO) {
+	if (ocode == NR_LINETO) {
 		/* other is lineto, we are either smooth or symm */
 		Path::Node *othernode = other->other;
 		len = NR::L2(me->pos - node->pos);
@@ -1760,15 +1760,15 @@ static void sp_node_adjust_knots(Path::Node *node)
 
 	if (node->n.other == NULL) return;
 
-	if (node->code == ART_LINETO) {
-		if (node->n.other->code == ART_LINETO) return;
+	if (node->code == NR_LINETO) {
+		if (node->n.other->code == NR_LINETO) return;
 		sp_node_adjust_knot (node, 1);
 		sp_node_ensure_ctrls (node);
 		return;
 	}
 
-	if (node->n.other->code == ART_LINETO) {
-		if (node->code == ART_LINETO) return;
+	if (node->n.other->code == NR_LINETO) {
+		if (node->code == NR_LINETO) return;
 		sp_node_adjust_knot (node, -1);
 		sp_node_ensure_ctrls (node);
 		return;
@@ -2107,7 +2107,7 @@ static gboolean node_ctrl_request(SPKnot *knot, NR::Point *p, guint state, gpoin
 
 	NRPathcode othercode = sp_node_path_code_from_side (n, opposite);
 
-	if (opposite->other && (n->type != Path::NODE_CUSP) && (othercode == ART_LINETO)) {
+	if (opposite->other && (n->type != Path::NODE_CUSP) && (othercode == NR_LINETO)) {
 		gdouble len, linelen, scal;
 		/* We are smooth node adjacent with line */
 		NR::Point delta = *p - n->pos;
@@ -2336,14 +2336,14 @@ void node_scale(Path::Node *n, gdouble grow, int which)
 	if (rme.r < 0) rme.r = 1e-6; // not 0, so that direction is not lost
 	if (rme.a == HUGE_VAL) {
 		rme.a = 0; // if direction is unknown, initialize to 0
-		sp_node_selected_set_line_type (ART_CURVETO);
+		sp_node_selected_set_line_type (NR_CURVETO);
 	}
 	if (both || n->type == Path::NODE_SYMM) {
 		rother.r += grow;
 		if (rother.r < 0) rother.r = 1e-6;
 		if (rother.r == HUGE_VAL) {
 			rother.a = 0;
-			sp_node_selected_set_line_type (ART_CURVETO);
+			sp_node_selected_set_line_type (NR_CURVETO);
 		}
 	}
 
@@ -2437,7 +2437,7 @@ static void sp_nodepath_subpath_close(Path::SubPath *sp)
 {
 	g_assert (!sp->closed);
 	g_assert (sp->last != sp->first);
-	g_assert (sp->first->code == ART_MOVETO);
+	g_assert (sp->first->code == NR_MOVETO);
 
 	sp->closed = TRUE;
 
@@ -2459,7 +2459,7 @@ static void sp_nodepath_subpath_open(Path::SubPath *sp, Path::Node *n)
 
 	/* We create new startpoint, current node will become last one */
 
-	Path::Node *new_path = sp_nodepath_node_new(sp, n->n.other, Path::NODE_CUSP, ART_MOVETO,
+	Path::Node *new_path = sp_nodepath_node_new(sp, n->n.other, Path::NODE_CUSP, NR_MOVETO,
 						    &n->pos, &n->pos, &n->n.pos);
 
 
@@ -2622,7 +2622,7 @@ static void sp_nodepath_node_destroy (Path::Node *node)
 		} else {
 			if (sp->first == node) {
 				sp->first = node->n.other;
-				sp->first->code = ART_MOVETO;
+				sp->first->code = NR_MOVETO;
 			}
 			if (sp->last == node) sp->last = node->p.other;
 			if (node->p.other) node->p.other->n.other = node->n.other;
@@ -2675,17 +2675,17 @@ static NRPathcode sp_node_path_code_from_side(Path::Node *node, Path::NodeSide *
 
 	if (me == &node->p) {
 		if (node->p.other) return (NRPathcode)node->code;
-		return ART_MOVETO;
+		return NR_MOVETO;
 	}
 
 	if (me == &node->n) {
 		if (node->n.other) return (NRPathcode)node->n.other->code;
-		return ART_MOVETO;
+		return NR_MOVETO;
 	}
 
 	g_assert_not_reached ();
 
-	return ART_END;
+	return NR_END;
 }
 
 gchar const *sp_node_type_description(Path::Node *n)

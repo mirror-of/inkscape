@@ -43,6 +43,8 @@
 #include <extension/extension.h>
 #include <extension/system.h>
 
+ArtBpath* nr_artpath_to_art_bpath(NArtBpath *s);
+
 namespace Inkscape {
 namespace Extension {
 namespace Internal {
@@ -64,7 +66,6 @@ PrintGNOME::setup (Inkscape::Extension::Print *mod)
 #if OLDGnome
     GtkWidget *dlg, *vbox, *sel;
 #endif
-    int btn;
 
     config = gnome_print_config_default ();
 #if OLDGnome
@@ -204,7 +205,9 @@ PrintGNOME::fill (Inkscape::Extension::Print *mod, const NRBPath *bpath, const N
 	opacity = SP_SCALE24_TO_FLOAT (style->fill_opacity.value) * SP_SCALE24_TO_FLOAT (style->opacity.value);
 	gnome_print_setopacity (_gpc, opacity);
 
-	gnome_print_bpath (_gpc, bpath->path, FALSE);
+	ArtBpath * apath = nr_artpath_to_art_bpath(bpath->path);
+	gnome_print_bpath (_gpc, apath, FALSE);
+	g_free(apath);
 
 	if (style->fill_rule.value == SP_WIND_RULE_EVENODD) {
 	    gnome_print_eofill (_gpc);
@@ -240,7 +243,9 @@ PrintGNOME::fill (Inkscape::Extension::Print *mod, const NRBPath *bpath, const N
 
 	    gnome_print_gsave (_gpc);
 
-	    gnome_print_bpath (_gpc, bpath->path, FALSE);
+		ArtBpath * apath = nr_artpath_to_art_bpath(bpath->path);
+		gnome_print_bpath (_gpc, apath, FALSE);
+		g_free(apath);
 
 	    if (style->fill_rule.value == SP_WIND_RULE_EVENODD) {
 		gnome_print_eoclip (_gpc);
@@ -311,7 +316,9 @@ PrintGNOME::stroke (Inkscape::Extension::Print *mod, const NRBPath *bpath, const
 	gnome_print_setlinejoin (_gpc, style->stroke_linejoin.computed);
 	gnome_print_setlinecap (_gpc, style->stroke_linecap.computed);
 
-	gnome_print_bpath (_gpc, bpath->path, FALSE);
+	ArtBpath * apath = nr_artpath_to_art_bpath(bpath->path);
+	gnome_print_bpath (_gpc, apath, FALSE);
+	g_free(apath);
 
 	gnome_print_stroke (_gpc);
     }
@@ -338,7 +345,7 @@ PrintGNOME::image (Inkscape::Extension::Print *mod, unsigned char *px, unsigned 
 
     if (style->opacity.value != SP_SCALE24_MAX) {
 	guchar *dpx, *d, *s;
-	gint x, y;
+	guint x, y;
 	guint32 alpha;
 	alpha = (guint32) floor (SP_SCALE24_TO_FLOAT (style->opacity.value) * 255.9999);
 	dpx = g_new (guchar, w * h * 4);
@@ -390,14 +397,14 @@ ArtBpath* nr_artpath_to_art_bpath(NArtBpath *s) { // remember to free the result
 	}
 
 	i = 0;
-	while (s[i].code != ART_END) i += 1;
+	while (s[i].code != NR_END) i += 1;
 
 	ArtBpath* d = nr_new (ArtBpath, i + 1);
 
 	i = 0;
-	while (s[i].code != ART_END) {
-		d[i].code = s[i].code;
-		if (s[i].code == ART_CURVETO) {
+	while (s[i].code != NR_END) {
+		d[i].code = (ArtPathcode)s[i].code;
+		if (s[i].code == NR_CURVETO) {
 			d[i].x1 = s[i].x1;
 			d[i].y1 = s[i].y1;
 			d[i].x2 = s[i].x2;

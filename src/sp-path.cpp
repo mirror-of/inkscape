@@ -103,7 +103,7 @@ sp_nodes_in_path (SPPath *path)
 	i = curve->length - 1;
 	if (i > r) i = r; // sometimes after switching from node editor length is wrong, e.g. f6 - draw - f2 - tab - f1, this fixes it
 	for (; i >= 0; i --) 
-		if ((curve->bpath + i) -> code == ART_MOVETO)
+		if ((curve->bpath + i) -> code == NR_MOVETO)
 			r --;
 	return r;
 }
@@ -167,8 +167,8 @@ sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 		open = FALSE;
 		if (shape->curve && shape->curve->bpath) {
 			NArtBpath *bp;
-			for (bp = shape->curve->bpath; bp->code != ART_END; bp++) {
-				if (bp->code == ART_MOVETO_OPEN) {
+			for (bp = shape->curve->bpath; bp->code != NR_END; bp++) {
+				if (bp->code == NR_MOVETO_OPEN) {
 					open = TRUE;
 					break;
 				}

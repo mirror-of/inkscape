@@ -1,3 +1,29 @@
+2004-04-22  Ted Gould  <ted@gould.cx>
+
+	* src/draw-context.cpp, src/dropper-context.cpp,
+	src/dyna-draw-context.cpp, src/node-context.cpp, src/nodepath.cpp,
+	src/sp-ellipse.cpp, src/sp-offset.cpp, src/sp-path.cpp,
+	src/sp-polygon.cpp, src/sp-shape.cpp, src/splivarot.cpp, src/toolbox.cpp,
+	src/display/curve.cpp, src/display/nr-arena-shape.cpp,
+	src/extension/internal/gnome.cpp, src/extension/internal/ps.cpp,
+	src/libnr/nr-path.cpp, src/libnr/nr-path.h,
+	src/libnrtype/nr-rasterfont.cpp, src/libnrtype/nr-type-ft2.cpp,
+	src/libnrtype/nr-type-gnome.cpp, src/libnrtype/nr-type-w32.cpp,
+	src/libnrtype/nr-typeface.cpp, src/livarot/PathCutting.cpp,
+	src/svg/gnome-canvas-bpath-util.cpp, src/svg/svg-path.cpp:
+
+	Changing the ART_ enums to NR_ so that if libart is include (like if
+	you are building gnome-print) it doesn't conflict with the internal
+	definitions.
+
+	* share/extensions/svgz_output.inkmod, src/extension/extension.cpp,
+	src/extension/init.cpp, src/extension/implementation/script.cpp:
+
+	Adding in a little more checking code.  Now extensions can start
+	deleting themseleves if they fail certain tests.  More tests are
+	needed, along with more testing of this feature.  Consider this
+	an 'early release' of the feature. ;)
+
 2004-04-22  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/Makefile.am: Make non-recursive.  Now sources */Makefile_insert.

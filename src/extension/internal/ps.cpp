@@ -573,26 +573,26 @@ PrintPS::print_bpath (FILE *stream, const NArtBpath *bp)
 
 	fprintf (stream, "newpath\n");
 	closed = FALSE;
-	while (bp->code != ART_END) {
+	while (bp->code != NR_END) {
 		switch (bp->code) {
-		case ART_MOVETO:
+		case NR_MOVETO:
 			if (closed) {
 				fprintf (stream, "closepath\n");
 			}
 			closed = TRUE;
 			fprintf (stream, "%g %g moveto\n", bp->x3, bp->y3);
 			break;
-		case ART_MOVETO_OPEN:
+		case NR_MOVETO_OPEN:
 			if (closed) {
 				fprintf (stream, "closepath\n");
 			}
 			closed = FALSE;
 			fprintf (stream, "%g %g moveto\n", bp->x3, bp->y3);
 			break;
-		case ART_LINETO:
+		case NR_LINETO:
 			fprintf (stream, "%g %g lineto\n", bp->x3, bp->y3);
 			break;
-		case ART_CURVETO:
+		case NR_CURVETO:
 			fprintf (stream, "%g %g %g %g %g %g curveto\n", bp->x1, bp->y1, bp->x2, bp->y2, bp->x3, bp->y3);
 			break;
 		default:

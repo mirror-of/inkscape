@@ -21,6 +21,7 @@
 
 #include <extension.h>
 #include "system.h"
+#include "db.h"
 #include "implementation/script.h"
 #include "internal/svg.h"
 #include "internal/ps.h"
@@ -121,10 +122,30 @@ build_module_from_dir (const gchar * dirname)
 }
 
 static void
+check_extensions_internal (Extension * in_plug, gpointer in_data)
+{
+	int * count = (int *)in_data;
+
+	if (!in_plug->check()) {
+		printf("Deleting Extension: %s\n", in_plug->get_name());
+		delete in_plug;
+		(*count)++;
+	}
+
+	return;
+}
+
+static void
 check_extensions (void)
 {
+	int count = 1;
 
+	while (count != 0) {
+		count = 0;
+		db.foreach(check_extensions_internal, (gpointer)&count);
+	}
 
+	return;
 }
 
 }; }; /* namespace Inkscape::Extension */
