@@ -1,0 +1,36 @@
+This file contains some loose proofs of a few properties.  It's somewhat
+ad-hoc.  At least it gives an indication of what assert/g_assert calls have
+been checked by a developer.  If an assertion does trigger, then this file may
+help in debugging that assertion failure.
+
+
+
+sp-spiral.cpp:sp_spiral_fit_and_draw
+
+Proof of postcondition is_unit_vector(*hat2):
+
+hat2 is set by sp_spiral_get_tangent unconditionally, which Ensures is_unit_vector(*hat2).
+We then negate *hat2, which doesn't affect its length.
+We pass it only to sp_bezier_fit_cubic_full, which claims constness of *hat2.
+
+Proof of unconditionalness: Not inside if/for/while.  No previous `return'.
+
+
+sp-spiral.cpp:sp_spiral_set_shape
+
+Loose proof of requirements for sp_spiral_fit_and_draw:
+
+ Proof of dstep > 0:
+ 
+  SAMPLE_STEP equals .25.  spiral->revo is bounded to [0.05, 20.0] by various CLAMP calls.
+  (todo: Get CLAMP to ensure it never returns NaN.)  SAMPLE_SIZE equals 8.
+  dstep is const and equals SAMPLE_STEP / spiral->revo / (SAMPLE_SIZE - 1),
+  == 1 / (4 * [.05, 20.0] * 7)
+  == 1 / [1.4, 560]
+  dstep in [.0018, .714].
+
+ Proof of is_unit_vector(hat1):
+
+  Initially guaranteed by sp_spiral_get_tangent Ensures.
+  For subsequent calls, hat1 is set from negated hat2 as set by sp_spiral_fit_and_draw,
+  which Ensures is_unit_vector(hat2).
