@@ -564,7 +564,7 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 					       knot_signals[UNGRABBED], 0,
 					       event->button.state);
 				sp_document_undo (SP_DT_DOCUMENT (knot->desktop));
-				knot->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Node or handle drag cancelled."));
+				knot->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Node or handle drag canceled."));
 				transform_escaped = true;
 				consumed = TRUE;
 			} 

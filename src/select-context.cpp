@@ -643,13 +643,13 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                             sc->item = NULL;
                             sp_document_undo(SP_DT_DOCUMENT(desktop));
                             drag_escaped = 1;
-                            SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Move cancelled."));
+                            SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Move canceled."));
                         }
                     } else {
                         if (sp_rubberband_rect(&b)) { // cancel rubberband
                             sp_rubberband_stop();
                             rb_escaped = 1;
-                            SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Selection cancelled."));
+                            SP_EVENT_CONTEXT(sc)->desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Selection canceled."));
                         } else {
                             selection->clear();
                         }
