@@ -18,8 +18,8 @@ INCLUDES = \
 	-DINKSCAPE_PIXMAPDIR=\""$(datadir)/inkscape"\" \
 	-DDATADIR=\""$(datadir)"\" \
 	-I$(srcdir) \
-	-I$(srcdir/xml) \
-	-I$(srcdir/svg) \
+	-I$(srcdir)/xml \
+	-I$(srcdir)/svg \
 	$(INKSCAPE_CFLAGS) \
 	$(GNOME_PRINT_CFLAGS)
 
@@ -42,6 +42,7 @@ inkscapelib_src = \
 	sp-anchor.c sp-anchor.h \
 	sp-root.c sp-root.h \
 	sp-image.c sp-image.h \
+	brokenimage.xpm \
 	sp-path.c sp-path.h \
 	sp-shape.c sp-shape.h \
 	sp-rect.c sp-rect.h \
