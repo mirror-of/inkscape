@@ -28,6 +28,11 @@
 namespace Inkscape {
 namespace Widgets {
 
+/** LayerSelector constructor.  Creates lock and hide buttons, 
+ *  initalizes the layer dropdown selector with a label renderer,
+ *  and hooks up signal for setting the desktop layer when the
+ *  selector is changed.
+ */ 
 LayerSelector::LayerSelector(SPDesktop *desktop)
 : _desktop(NULL)
 {
@@ -49,6 +54,8 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
     setDesktop(desktop);
 }
 
+/**  Destructor - disconnects signal handler 
+ */
 LayerSelector::~LayerSelector() {
     setDesktop(NULL);
     _selection_changed_connection.disconnect();
@@ -56,6 +63,8 @@ LayerSelector::~LayerSelector() {
 
 namespace {
 
+/** Helper function - detaches desktop from selector 
+ */
 gboolean detach(SPView *view, LayerSelector *selector) {
     selector->setDesktop(NULL);
     return FALSE;
@@ -63,6 +72,11 @@ gboolean detach(SPView *view, LayerSelector *selector) {
 
 }
 
+/** Sets the desktop for the widget.  First disconnects signals
+ *  for the current desktop, then stores the pointer to the
+ *  given \a desktop, and attaches its signals to this one.
+ *  Then it selects the current layer for the desktop.
+ */
 void LayerSelector::setDesktop(SPDesktop *desktop) {
     if ( desktop == _desktop ) {
         return;
@@ -111,6 +125,8 @@ private:
 
 }
 
+/** Selects the given layer in the dropdown selector.  
+ */
 void LayerSelector::_selectLayer(SPObject *layer) {
     using Inkscape::Util::cons;
     using Inkscape::Util::reverse_list;
@@ -143,6 +159,8 @@ void LayerSelector::_selectLayer(SPObject *layer) {
     _selection_changed_connection.unblock();
 }
 
+/** Sets the current desktop layer to the actively selected layer.
+ */
 void LayerSelector::_setDesktopLayer() {
     Gtk::ListStore::iterator selected(_selector.get_active());
     SPObject *layer=_selector.get_active()->get_value(_model_columns.object);
@@ -155,6 +173,9 @@ void LayerSelector::_setDesktopLayer() {
     }
 }
 
+/** Creates rows in the _layer_model data structure for each item
+ *  in \a hierarchy, to a given \a depth.
+ */
 void LayerSelector::_buildEntries(unsigned depth,
                                   Inkscape::Util::List<SPObject &> hierarchy)
 {
@@ -171,6 +192,9 @@ void LayerSelector::_buildEntries(unsigned depth,
     }
 }
 
+/** Creates entries in the _layer_model data structure for
+ *  all siblings of the first child in \a parent.
+ */
 void LayerSelector::_buildSiblingEntries(
     unsigned depth, SPObject &parent,
     Inkscape::Util::List<SPObject &> hierarchy
@@ -226,6 +250,8 @@ void update_row_for_object(SPObject &object,
 
 }
 
+/** Builds and appends a row in the layer model object.
+ */
 void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
     static const SPReprEventVector events = {
         NULL, NULL,
@@ -254,6 +280,9 @@ void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
     sp_repr_add_listener(repr, &events, reinterpret_cast<void *>(update_slot));
 }
 
+/** Removes a row from the _model_columns object, disconnecting listeners
+ *  on the slot.
+ */
 void LayerSelector::_destroyEntry(Gtk::ListStore::iterator const &row) {
     SPRepr *repr=row->get_value(_model_columns.repr);
     sigc::slot<void> *update_slot=row->get_value(_model_columns.update_slot);
@@ -263,6 +292,8 @@ void LayerSelector::_destroyEntry(Gtk::ListStore::iterator const &row) {
     }
 }
 
+/** Formats the label for a given layer row 
+ */
 void LayerSelector::_prepareLabelRenderer(
     Gtk::TreeModel::const_iterator const &row
 ) {
@@ -281,9 +312,9 @@ void LayerSelector::_prepareLabelRenderer(
         if ( layer && SP_OBJECT_PARENT(object) == SP_OBJECT_PARENT(layer) ||
              layer == root && SP_OBJECT_PARENT(object) == root
         ) {
-            format="%*s<small>%s%s%s</small>";
+            format="<small>%*s%s%s%s</small>";
         } else {
-            format="%*s<small><small>%s%s%s</small></small>";
+            format="<small>%*s<small>%s%s%s</small></small>";
         }
 
         gchar const *prefix="";
