@@ -408,7 +408,7 @@ sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 		SP_VERB_EDIT_DELETE,
 		SP_VERB_NONE,
 		SP_VERB_EDIT_SELECT_ALL,
-		SP_VERB_EDIT_CLEAR_ALL,
+		SP_VERB_EDIT_DESELECT,
 		SP_VERB_LAST
 	};
 	sp_ui_menu_append (menu, edit_verbs, view);
