@@ -2,6 +2,7 @@
 #include <libnr/nr-dim2.h>
 #include <cmath>
 #include <algorithm>
+#include <isnan.h>
 
 using NR::Point;
 
@@ -9,7 +10,7 @@ using NR::Point;
 NR::Coord NR::LInfty(Point const &p) {
 	NR::Coord const a(fabs(p[NR::X]));
 	NR::Coord const b(fabs(p[NR::Y]));
-	return ( a < b || isnan(b)
+    return ( a < b || isNaN(b)
 		 ? b
 		 : a );
 }
