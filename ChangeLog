@@ -1,3 +1,12 @@
+2004-05-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/extension/system.h, src/extension/system.cpp (build_from_file):
+	  Remove unused second argument.  Callers updated.
+	* src/extension/system.cpp (build_from_reprdoc):
+	  Just one call to sp_repr_name per child.
+	* src/extension/system.h, src/extension/system.cpp:
+	  Cleanup: greater conformance to CodingStyle.
+
 2004-05-23  MenTaLguY  <mental@rydia.net>
 
 	* src/libnrtype/Makefile_insert, src/libnrtype/nr-type-gnome.cpp,
