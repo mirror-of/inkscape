@@ -27,6 +27,7 @@
 #include "node-context.h"
 #include "nodepath.h"
 #include "selection-chemistry.h"
+#include "selection.h"
 
 #define hypot(a,b) sqrt ((a) * (a) + (b) * (b))
 
@@ -1064,19 +1065,23 @@ sp_node_selected_join (void)
 	ArtPathcode code;
 
 	nodepath = sp_nodepath_current ();
-	if (!nodepath) return;
-	if (g_list_length (nodepath->selected) != 2) return;
+	if (!nodepath || g_list_length (nodepath->selected) != 2) {
+		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), "To join, you must have two endnodes selected.");
+		return;
+	}
 
 	a = (SPPathNode *) nodepath->selected->data;
 	b = (SPPathNode *) nodepath->selected->next->data;
 
 	g_assert (a != b);
-
-	if ((a->subpath->closed) || (b->subpath->closed)) return;
-	if (a->p.other && a->n.other) return;
 	g_assert (a->p.other || a->n.other);
-	if (b->p.other && b->n.other) return;
 	g_assert (b->p.other || b->n.other);
+
+	if (((a->subpath->closed) || (b->subpath->closed)) || (a->p.other && a->n.other) || (b->p.other && b->n.other)) {
+		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), "To join, you must have two endnodes selected.");
+		return;
+	}
+
 	/* a and b are endpoints */
 
 	c.x = (a->pos.x + b->pos.x) / 2;
@@ -1157,20 +1162,22 @@ sp_node_selected_join_segment (void)
 	ArtPathcode code;
 
 	nodepath = sp_nodepath_current ();
-	if (!nodepath) return;
-	if (g_list_length (nodepath->selected) != 2) return;
+	if (!nodepath || g_list_length (nodepath->selected) != 2) {
+		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), "To join, you must have two endnodes selected.");
+		return;
+	}
 
 	a = (SPPathNode *) nodepath->selected->data;
 	b = (SPPathNode *) nodepath->selected->next->data;
 
 	g_assert (a != b);
-
-	if ((a->subpath->closed) || (b->subpath->closed)) return;
-	if (a->p.other && a->n.other) return;
 	g_assert (a->p.other || a->n.other);
-	if (b->p.other && b->n.other) return;
 	g_assert (b->p.other || b->n.other);
-	/* a and b are endpoints */
+
+	if (((a->subpath->closed) || (b->subpath->closed)) || (a->p.other && a->n.other) || (b->p.other && b->n.other)) {
+		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop), "To join, you must have two endnodes selected.");
+		return;
+	}
 
 	if (a->subpath == b->subpath) {
 		SPNodeSubPath * sp;
@@ -2388,13 +2395,15 @@ sp_node_type_description (SPPathNode *n)
 void
 sp_nodepath_update_statusbar (SPNodePath *nodepath)
 {
-	gchar * message;
 	gint total, selected;
 	SPNodeSubPath * subpath;
 	SPPathNode * node;
 	GList * spl, * nl;
+	SPSelection *sel;
 
 	if (!nodepath) return;
+
+	const gchar* when_selected = "Drag nodes or control points to edit the path";
 
 	total = selected = 0;
 
@@ -2405,13 +2414,16 @@ sp_nodepath_update_statusbar (SPNodePath *nodepath)
 
 	selected = g_list_length (nodepath->selected);
 
-	if (selected == 1) {
-		message = g_strdup_printf ("%i of %i nodes selected; %s", selected, total, sp_node_type_description ((SPPathNode *) nodepath->selected->data));
+	if (selected == 0) {
+		sel = nodepath->desktop->selection;
+		GSList *i = sel->items;
+		if (g_slist_length (sel->items) == 0)
+		sp_view_set_statusf (SP_VIEW(nodepath->desktop), "Select one path object with selector first, then switch back to node editor.");
+		else 
+		sp_view_set_statusf (SP_VIEW(nodepath->desktop), "No nodes selected. Click, Shift+click, drag around nodes to select.");
+	} else if (selected == 1) {
+		sp_view_set_statusf (SP_VIEW(nodepath->desktop), "%i of %i nodes selected; %s. %s.", selected, total, sp_node_type_description ((SPPathNode *) nodepath->selected->data), when_selected);
 	} else {
-		message = g_strdup_printf ("%i of %i nodes selected ", selected, total);
+		sp_view_set_statusf (SP_VIEW(nodepath->desktop), "%i of %i nodes selected. %s.", selected, total, when_selected);
 	}
-
-	sp_view_set_status (SP_VIEW (SP_ACTIVE_DESKTOP), message, TRUE);
-	
-	g_free (message);
 }
