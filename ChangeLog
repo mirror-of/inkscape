@@ -1,3 +1,10 @@
+2005-02-22  Jon A. Cruz  <jon@joncruz.org>
+	* src/inkscape.cpp, src/main.cpp, src/extension/input.cpp, src/io/sys.cpp,
+	  src/xml/repr-io.cpp:
+	  Better catching of problematic filenames.
+	  Made segv handler only use dialog box when app is using a gui.
+	  Fixes bug #1145847.
+
 2005-02-22  Ted Gould  <ted@gould.cx>
 
 	* src/extension/effect.cpp, src/extension/prefdialog.cpp,
