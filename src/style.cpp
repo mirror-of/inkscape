@@ -632,7 +632,6 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         sp_style_read_ilength (&style->text->letterspacing, val);
         style->text->letterspacing.set = TRUE;
         break;
-        break;
     case SP_PROP_TEXT_DECORATION:
         g_warning ("Unimplemented style property SP_PROP_TEXT_DECORATION: value: %s", val);
         break;
@@ -1234,6 +1233,7 @@ sp_style_merge_ipaint (SPStyle *style, SPIPaint *paint, SPIPaint *parent)
 /**
  * fixme: Write real thing
  */
+// FIXME: this function is not used anywhere and seems to be severely broken. Perhaps we should kill it.
 gchar *
 sp_style_write_string (SPStyle *style)
 {
