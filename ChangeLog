@@ -1,7 +1,18 @@
+2004-12-23  Kees Cook  <kees@outflux.net>
+
+	* configure.ac, src/Makefile_insert, src/extension/script/Makefile_insert:
+	  adding Perl and Python compile tests.  Corrected library locations.
+	* src/extension/script/InkscapeScript.h,
+	  src/extension/script/InkscapePython.cpp,
+	  src/extension/script/InkscapeScript.cpp: white space fix, and
+	  added config.h, and some small debugging for myself.  Hope Bob doesn't
+	  mind!  :)
+
 2004-12-22  Kees Cook  <kees@outflux.net>
 
 	* configure.ac, src/extension/script/Makefile_insert: automake cleanups
 	  to deal with perl/python detection.
+
 
 2004-12-20  David Turner <novalis@gnu.org>
 	* src/widgets/gradient-vector.cpp:
