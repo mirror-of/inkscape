@@ -34,6 +34,8 @@
 #include <libnr/nr-rotate-fns.h>
 #include <libnr/nr-rotate-ops.h>
 #include <libnr/nr-rotate-matrix-ops.h>
+#include <libnr/nr-scale-matrix-ops.h>
+#include <libnr/nr-translate-matrix-ops.h>
 #include <libnr/nr-translate-rotate-ops.h>
 #include <libnr/nr-translate-ops.h>
 #include <libnr/nr-values.h>
