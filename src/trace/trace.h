@@ -13,6 +13,8 @@
 #define __TRACE_H__
 
 
+#include <string.h>
+
 #include <glib.h>
 #include <sp-image.h>
 #include <sp-path.h>
@@ -24,6 +26,67 @@
 namespace Inkscape {
 
 namespace Trace {
+
+
+
+/**
+ *
+ */
+class TracingEngineResult
+{
+
+public:
+
+    /**
+     *
+     */
+    TracingEngineResult(char *theStyle, char *thePathData)
+        {
+        next     = NULL;
+        style    = strdup(theStyle);
+        pathData = strdup(thePathData);
+        }
+
+    /**
+     *
+     */
+    virtual ~TracingEngineResult()
+        {
+        if (next)
+            delete next;
+        if (style)
+            free(style);
+        if (pathData)
+            free(pathData);
+        }
+
+
+    /**
+     *
+     */
+    char *getStyle()
+        { return style; }
+
+    /**
+     *
+     */
+    char *getPathData()
+        { return pathData; }
+
+    /**
+     *
+     */
+    TracingEngineResult *next;
+
+private:
+
+    char *style;
+
+    char *pathData;
+
+};
+
+
 
 /**
  *
@@ -48,11 +111,13 @@ class TracingEngine
     /**
      *  This is the working method of this interface, and all
      *  implementing classes.  Take a GdkPixbuf, trace it, and
-     *  return the path data that is compatible with the d="" attribute
+     *  return a style attribute and the path data that is
+     *  compatible with the d="" attribute
      *  of an SVG <path> element.
      */
-    virtual char *getPathDataFromPixbuf(GdkPixbuf *pixbuf)
+    virtual  TracingEngineResult *trace(GdkPixbuf *pixbuf, int *nrPaths)
         { return NULL; }
+
 
     /**
      *  Abort the thread that is executing getPathDataFromPixbuf()
@@ -80,7 +145,8 @@ class TracingEngine
  */
 class Tracer
 {
-    public:
+
+public:
 
 
     /**
@@ -106,7 +172,7 @@ class Tracer
      * any, and create a <path> element from it, inserting it into
      * the current document.
      */
-    void convertImageToPath(TracingEngine *engine);
+    void trace(TracingEngine *engine);
 
 
     /**
@@ -114,23 +180,13 @@ class Tracer
      */
     void abort();
 
-    /**
-     *  Get a singleton instance of this class and execute
-     *  convertImageToPath()
-     */
-    static gboolean staticConvertImageToPath();
 
-
-
-
-
-
-    private:
+private:
 
     /**
-     * This is the thread code that is called by its counterpart above.
+     * This is the single path code that is called by its counterpart above.
      */
-    void convertImageToPathThread();
+    void traceThread();
 
     /**
      * This is true during execution. Setting it to false (like abort()

@@ -148,7 +148,7 @@ class PotraceTracingEngine : public TracingEngine
      *  return the path data that is compatible with the d="" attribute
      *  of an SVG <path> element.
      */
-    virtual char *getPathDataFromPixbuf(GdkPixbuf *pixbuf);
+    virtual TracingEngineResult *trace(GdkPixbuf *pixbuf, int *nrPaths);
 
     /**
      *  Abort the thread that is executing getPathDataFromPixbuf()

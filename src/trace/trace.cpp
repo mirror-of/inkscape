@@ -54,6 +54,10 @@ Tracer::~Tracer()
 }
 
 
+
+/**
+ *
+ */
 SPImage *
 Tracer::getSelectedSPImage()
 {
@@ -99,6 +103,10 @@ Tracer::getSelectedSPImage()
 }
 
 
+
+/**
+ *
+ */
 GdkPixbuf *
 Tracer::getSelectedImage()
 {
@@ -115,10 +123,15 @@ Tracer::getSelectedImage()
 
 
 
+//#########################################################################
+//#  T R A C E
+//#########################################################################
+
+
 /**
- *  Threaded method that actually does the conversion
+ *  Threaded method that does single bitmap--->path conversion
  */
-void Tracer::convertImageToPathThread()
+void Tracer::traceThread()
 {
     //## Remember. NEVER leave this method without setting
     //## engine back to NULL
@@ -166,7 +179,9 @@ void Tracer::convertImageToPathThread()
         return;
         }
 
-    char *d = engine->getPathDataFromPixbuf(pixbuf);
+    int nrPaths;
+    TracingEngineResult *result = engine->trace(pixbuf, &nrPaths);
+    char *d = result->getPathData();
 
     //## EXAMPLE:  Check if we should stop
     if (!keepGoing)
@@ -218,7 +233,7 @@ void Tracer::convertImageToPathThread()
     SPRepr *par = sp_repr_parent(imgRepr);
     sp_repr_add_child(par, pathRepr, imgRepr);
 
-    free(d);
+    delete result;
 
     //### Apply the transform from the image to the new shape
     SPObject *reprobj = doc->getObjectByRepr(pathRepr);
@@ -243,9 +258,9 @@ void Tracer::convertImageToPathThread()
 }
 
 /**
- *  Static no-knowledge version
+ *  Main tracing method
  */
-void Tracer::convertImageToPath(TracingEngine *theEngine)
+void Tracer::trace(TracingEngine *theEngine)
 {
     //Check if we are already running
     if (engine)
@@ -260,17 +275,19 @@ void Tracer::convertImageToPath(TracingEngine *theEngine)
 
     //Create our thread and run it
     Glib::Thread::create(
-        sigc::mem_fun(*this, &Tracer::convertImageToPathThread), false);
+        sigc::mem_fun(*this, &Tracer::traceThread), false);
 #else
-    convertImageToPathThread();
+    traceThread();
 #endif
 
 }
 
 
 
+
+
 /**
- *  Abort the thread that is executing convertImageToPath()
+ *  Abort the thread that is executing trace()
  */
 void Tracer::abort()
 {
@@ -284,27 +301,6 @@ void Tracer::abort()
         }
 
 }
-
-
-
-
-
-
-/**
- *  Static no-knowledge version
- */
-gboolean Tracer::staticConvertImageToPath()
-{
-    Tracer tracer;
-    Inkscape::Trace::Potrace::PotraceTracingEngine engine;
-    tracer.convertImageToPath(&engine);
-    return true;
-}
-
-
-
-
-
 
 
 

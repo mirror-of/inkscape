@@ -337,8 +337,8 @@ PotraceTracingEngine::preview(GdkPixbuf * pixbuf)
  *  return the path data that is compatible with the d="" attribute
  *  of an SVG <path> element.
  */
-char *
-PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * thePixbuf)
+TracingEngineResult *
+PotraceTracingEngine::trace(GdkPixbuf * thePixbuf, int *nrPaths)
 {
 
     if (!thePixbuf)
@@ -422,11 +422,19 @@ PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * thePixbuf)
         return NULL;
 
     //# get the svg <path> 'd' attribute
-    char *d = strdup(data.str().c_str());
+    char *style = (char *)"";
+    char *d     = (char *)data.str().c_str();
     //g_message("### GOT '%s' \n", d);
+    TracingEngineResult *result = new TracingEngineResult(style, d);
+    *nrPaths = 1;
 
-    return d;
+    return result;
 }
+
+
+
+
+
 
 /**
  *  Abort the thread that is executing getPathDataFromPixbuf()
