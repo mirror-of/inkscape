@@ -1,5 +1,9 @@
 2004-01-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* configure.in: Fix sigc++ checking code: add it to the existing
+	  PKG_CHECK_MODULES(INKSCAPE, ...)  list instead of modifying
+	  $CXXFLAGS,$LIBS.
+
 	* distro: Remove some bashisms: change `function f {...}' to
 	  `f () {...}', and invoke self with `sh' rather than `bash'.
 
