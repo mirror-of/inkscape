@@ -65,8 +65,12 @@ S = $(BSLASH)
 
 # file manipulation programs
 CP = copy
-#RMDIR = deltree /y
+#are we on WinNt and beyond?
+ifeq ($(notdir $(ComSpec)),cmd.exe)
 RMDIR = rmdir /s /q
+else
+RMDIR = deltree /y
+endif
 MKDIR = mkdir
 CPDIR = xcopy /e /i
 
