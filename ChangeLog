@@ -1,3 +1,7 @@
+2004-04-26  MenTaLguY  <mental@rydia.net>
+
+	* src/selection.cpp: migrate to new glib idle API
+
 2004-04-26  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* configure.in: Replace use of old AM_PROG_LIBTOOL macro with

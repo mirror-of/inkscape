@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtk/gtkmain.h>
+#include <glib/gmain.h>
 #include "macros.h"
 #include "helper/sp-marshal.h"
 #include "helper/sp-intl.h"
@@ -37,7 +37,7 @@ SPSelection::~SPSelection() {
 	_clear();
 	_desktop = NULL;
 	if (_idle) {
-		gtk_idle_remove(_idle);
+		g_source_remove(_idle);
 		_idle = 0;
 	}
 }
@@ -55,7 +55,7 @@ SPSelection::_schedule_modified(SPItem *item, guint flags, SPSelection *selectio
 {
 	if (!selection->_idle) {
 		/* Request handling to be run in _idle loop */
-		selection->_idle = gtk_idle_add_priority (SP_SELECTION_UPDATE_PRIORITY, (GtkFunction)&SPSelection::_emit_modified, selection);
+		selection->_idle = g_idle_add_full(SP_SELECTION_UPDATE_PRIORITY, GSourceFunc(&SPSelection::_emit_modified), selection, NULL);
 	}
 
 	/* Collect all flags */
