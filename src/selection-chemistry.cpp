@@ -49,7 +49,7 @@ sp_selection_delete (gpointer object, gpointer data)
 
 	// check if something is selected
 	if (sp_selection_is_empty (selection)) {
-		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Nothing was cut."));
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Nothing was deleted."));
 		return;
 	}
 
