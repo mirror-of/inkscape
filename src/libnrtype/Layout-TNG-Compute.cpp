@@ -1071,7 +1071,18 @@ class Layout::Calculator
                         } else */
 
                         new_glyph.width = unbroken_span.glyph_string->glyphs[glyph_index].geometry.width * font_size_multiplier;
-                        if (new_span.direction == RIGHT_TO_LEFT) new_glyph.x -= new_glyph.width;
+                        if (new_span.direction == RIGHT_TO_LEFT) {
+                            // pango wanted to give us glyphs in visual order but we refused, so we need to work
+                            // out where the cluster start is ourselves
+                            double cluster_width = unbroken_span.glyph_string->glyphs[glyph_index].geometry.width;
+                            for (unsigned rtl_index = glyph_index + 1; rtl_index < it_span->end_glyph_index ; rtl_index++) {
+                                if (unbroken_span.glyph_string->glyphs[rtl_index].attr.is_cluster_start)
+                                    break;
+                                cluster_width += unbroken_span.glyph_string->glyphs[rtl_index].geometry.width;
+                            }
+                            new_glyph.x -= cluster_width * font_size_multiplier;
+                        }
+                        //if (new_span.direction == RIGHT_TO_LEFT) new_glyph.x -= new_glyph.width;
                         _flow._glyphs.push_back(new_glyph);
 
                         // create the Layout::Character(s)
