@@ -59,6 +59,7 @@
 #include "slideshow.h"
 #include "color.h"
 #include "sp-item.h"
+#include "unit-constants.h"
 
 #include "svg/svg.h"
 
@@ -167,7 +168,7 @@ struct poptOption options[] = {
 
     {"export-dpi", 'd', 
      POPT_ARG_STRING, &sp_export_dpi, SP_ARG_EXPORT_DPI,
-     N_("The resolution used for exporting SVG into bitmap (default 72)"),
+     N_("The resolution used for exporting SVG into bitmap (default 90)"),
      N_("DPI")},
 
     {"export-area", 'a', 
@@ -583,7 +584,7 @@ sp_do_export_png(SPDocument *doc)
 
     // default dpi
     if (dpi == 0.0)
-        dpi = 72.0;
+        dpi = PX_PER_IN;
 
     gint width = 0;
     gint height = 0;
@@ -594,7 +595,7 @@ sp_do_export_png(SPDocument *doc)
             g_warning("Export width %d out of range (1 - 65536). Nothing exported.", width);
             return;
         }
-        dpi = (gdouble) width * 72.0 / (area.x1 - area.x0);
+        dpi = (gdouble) width * PX_PER_IN / (area.x1 - area.x0);
     }
 
     if (sp_export_height) {
@@ -603,15 +604,15 @@ sp_do_export_png(SPDocument *doc)
             g_warning("Export height %d out of range (1 - 65536). Nothing exported.", width);
             return;
         }
-        dpi = (gdouble) height * 72.0 / (area.y1 - area.y0);
+        dpi = (gdouble) height * PX_PER_IN / (area.y1 - area.y0);
     }
 
     if (!sp_export_width) {
-        width = (gint) ((area.x1 - area.x0) * dpi / 72.0 + 0.5);
+        width = (gint) ((area.x1 - area.x0) * dpi / PX_PER_IN + 0.5);
     }
 
     if (!sp_export_height) {
-        height = (gint) ((area.y1 - area.y0) * dpi / 72.0 + 0.5);
+        height = (gint) ((area.y1 - area.y0) * dpi / PX_PER_IN + 0.5);
     }
 
     guint32 bgcolor = 0x00000000;

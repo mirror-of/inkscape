@@ -41,9 +41,9 @@ options:
 B<Inkscape> is a GUI editor for B<Scalable Vector Graphics (SVG)> format
 drawing files, with capabilities similar to B<Adobe Illustrator>,
 B<CorelDraw>, B<Visio>, etc. Inkscape features include versatile
-shapes, bezier paths, freehand drawing, multi-line text, 
-alpha blending, transforms, gradients, node
-editing, SVG-to-PNG export, grouping, patterns, and more.  The interface is
+shapes, bezier paths, freehand drawing, multi-line text, text on path,
+alpha blending, arbitrary affine transforms, gradient and pattern fills, node
+editing, SVG-to-PNG export, grouping, layers, live clones, and more.  The interface is
 designed to be comfortable and efficient for skilled users, while
 remaining conformant to B<GNOME> standards so that users familiar with
 other GNOME applications can learn its interface rapidly.
@@ -89,7 +89,8 @@ then the page color set in Inkscape in the Document Options dialog will be used 
 =item B<-d> I<DPI>, B<--export-dpi>=I<DPI>
 
 The resolution used for bitmap export.
-The default is 72, which corresponds to 1 SVG point (pt) exporting to 1 bitmap pixel.
+The default is 90, which corresponds to 1 SVG pixel 
+(px, also called "user unit") exporting to 1 bitmap pixel.
 This value overrides the DPI hint if used with --export-use-hints.
 
 =item B<-e> I<FILENAME>, B<--export-png>=I<FILENAME>
