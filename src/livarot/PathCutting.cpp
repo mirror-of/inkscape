@@ -212,32 +212,10 @@ void Path::DashSubPath(int spL,char* spP,float head,float tail,float body,int nb
         }
         dashPlain=nPlain;
       }
-      if ( curLength <= totLength-tail && curLength+nl > totLength-tail ) {
-        nl=totLength-tail-curLength;
-        dashInd=0;
-        dashPos=0;
-        bool nPlain=false;
-        if ( nPlain == true && dashPlain == false ) {
-        } else if ( nPlain == false && dashPlain == true ) {
-          NR::Point  p=(enLength-curLength)*lastP+(curLength-stLength)*n;
-          p/=(enLength-stLength);
-          if ( back ) {
-            double pT=0;
-            if ( nPiece == lastPiece ) {
-              pT=(lastT*(enLength-curLength)+nT*(curLength-stLength))/(enLength-stLength);
-            } else {
-              pT=(nPiece*(curLength-stLength))/(enLength-stLength);
-            }
-            AddPoint(p,nPiece,pT,false);
-          } else {
-            AddPoint(p,false);
-          }
-        }
-        dashPlain=nPlain;
-      }
       // faire les tirets
-      if ( curLength >= head && curLength+nl <= totLength-tail ) {
-        while ( nl > 0 ) {
+      if ( curLength >= head /*&& curLength+nl <= totLength-tail*/ ) {
+        while ( curLength <= totLength-tail && nl > 0 ) {
+          if ( enLength <= totLength-tail ) nl=enLength-curLength; else nl=totLength-tail-curLength;
           double  leftInDash=body-dashPos;
           if ( dashInd < nbD ) {
             leftInDash=dashs[dashInd]-dashPos;
@@ -300,6 +278,30 @@ void Path::DashSubPath(int spL,char* spP,float head,float tail,float body,int nb
             AddPoint(n,false);
           }
         }
+        nl=enLength-curLength;
+      }
+      if ( curLength <= totLength-tail && curLength+nl > totLength-tail ) {
+        nl=totLength-tail-curLength;
+        dashInd=0;
+        dashPos=0;
+        bool nPlain=false;
+        if ( nPlain == true && dashPlain == false ) {
+        } else if ( nPlain == false && dashPlain == true ) {
+          NR::Point  p=(enLength-curLength)*lastP+(curLength-stLength)*n;
+          p/=(enLength-stLength);
+          if ( back ) {
+            double pT=0;
+            if ( nPiece == lastPiece ) {
+              pT=(lastT*(enLength-curLength)+nT*(curLength-stLength))/(enLength-stLength);
+            } else {
+              pT=(nPiece*(curLength-stLength))/(enLength-stLength);
+            }
+            AddPoint(p,nPiece,pT,false);
+          } else {
+            AddPoint(p,false);
+          }
+        }
+        dashPlain=nPlain;
       }
       // continuer
       curLength=enLength;
