@@ -28,6 +28,8 @@
 #include "sp-object.h"
 #include "sp-item.h"
 #include "document-private.h"
+#include "document.h"
+#include "selection.h"
 
 /* fixme: Implement in preferences */
 
@@ -161,6 +163,12 @@ sp_document_undo (SPDocument *doc)
 	}
 
 	sp_repr_begin_transaction (doc->rdoc);
+
+	// the selection_changed signal is emitted to let node editor update node display.
+	// this is only a temporary solution; a better one would require using the selection_modified signal.
+	// now selection_modified is issued constantly in an idle loop in selection.c; probably this needs to be fixed.
+	// as a side effect of using selection_changed, selected nodes are deselected :(
+	sp_current_selection_changed ();
 }
 
 void
