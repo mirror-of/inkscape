@@ -270,9 +270,9 @@ nr_arena_group_set_transparent (NRArenaGroup *group, unsigned int transparent)
 void
 nr_arena_group_set_child_transform (NRArenaGroup *group, NRMatrix *t)
 {
-	if (!t) t = &NR_MATRIX_F_IDENTITY;
+	if (!t) t = &NR_MATRIX_IDENTITY;
 
-	if (!NR_MATRIX_DF_TEST_CLOSE (t, &group->child_transform, NR_EPSILON_F)) {
+	if (!NR_MATRIX_DF_TEST_CLOSE (t, &group->child_transform, NR_EPSILON)) {
 		nr_arena_item_request_render (NR_ARENA_ITEM (group));
 		group->child_transform = *t;
 		nr_arena_item_request_update (NR_ARENA_ITEM (group), NR_ARENA_ITEM_STATE_ALL, TRUE);

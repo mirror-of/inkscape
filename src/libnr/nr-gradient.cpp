@@ -45,10 +45,10 @@ nr_rgradient_renderer_setup (NRRGradientRenderer *rgr,
 	rgr->vector = cv;
 	rgr->spread = spread;
 
-	if (r < NR_EPSILON_F) {
+	if (r < NR_EPSILON) {
 		rgr->renderer.render = nr_rgradient_render_block_end;
-	} else if (NR_DF_TEST_CLOSE (cx, fx, NR_EPSILON_F) &&
-		   NR_DF_TEST_CLOSE (cy, fy, NR_EPSILON_F)) {
+	} else if (NR_DF_TEST_CLOSE (cx, fx, NR_EPSILON) &&
+		   NR_DF_TEST_CLOSE (cy, fy, NR_EPSILON)) {
 		rgr->renderer.render = nr_rgradient_render_block_symmetric;
 
 		nr_matrix_invert (&rgr->px2gs, gs2px);
@@ -95,7 +95,7 @@ nr_rgradient_renderer_setup (NRRGradientRenderer *rgr,
 		rgr->r = r / (float) hypot (fx - cx, fy - cy);
 		rgr->C = 1.0F - rgr->r * rgr->r;
 		/* INVARIANT: C < 0 */
-		rgr->C = MIN (rgr->C, -NR_EPSILON_F);
+		rgr->C = MIN (rgr->C, -NR_EPSILON);
 	}
 
 	return (NRRenderer *) rgr;

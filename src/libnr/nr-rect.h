@@ -15,8 +15,8 @@
 
 /* NULL rect is infinite */
 
-#define nr_rect_d_set_empty(r) (*(r) = NR_RECT_D_EMPTY)
-#define nr_rect_f_set_empty(r) (*(r) = NR_RECT_F_EMPTY)
+#define nr_rect_d_set_empty(r) (*(r) = NR_RECT_EMPTY)
+#define nr_rect_f_set_empty(r) (*(r) = NR_RECT_EMPTY)
 #define nr_rect_l_set_empty(r) (*(r) = NR_RECT_L_EMPTY)
 #define nr_rect_s_set_empty(r) (*(r) = NR_RECT_S_EMPTY)
 

@@ -634,8 +634,8 @@ sp_pat_fill (SPPainter *painter, NRPixBlock *pb)
 
 	pp = (SPPatPainter *) painter;
 
-	if (pp->pat->width.computed < NR_EPSILON_F) return;
-	if (pp->pat->height.computed < NR_EPSILON_F) return;
+	if (pp->pat->width.computed < NR_EPSILON) return;
+	if (pp->pat->height.computed < NR_EPSILON) return;
 
 	/* Find buffer area in gradient space */
 	/* fixme: This is suboptimal (Lauris) */

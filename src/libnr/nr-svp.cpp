@@ -209,7 +209,7 @@ nr_svp_point_distance (NRSVP *svp, float x, float y)
 	unsigned int sidx;
 	double best, best2;
 
-	best = NR_HUGE_F;
+	best = NR_HUGE;
 	best2 = best * best;
 	for (sidx = 0; sidx < svp->length; sidx++) {
 		NRSVPSegment *seg;
@@ -251,8 +251,8 @@ nr_svp_bbox (NRSVP *svp, NRRect *bbox, unsigned int clear)
 	unsigned int sidx;
 	float x0, y0, x1, y1;
 
-	x0 = y0 = NR_HUGE_F;
-	x1 = y1 = -NR_HUGE_F;
+	x0 = y0 = NR_HUGE;
+	x1 = y1 = -NR_HUGE;
 
 	for (sidx = 0; sidx < svp->length; sidx++) {
 		NRSVPSegment *seg;
@@ -418,8 +418,8 @@ nr_svl_from_art_vpath (ArtVpath *vpath, unsigned int windrule)
 	svlb.svl = NULL;
 	svlb.flats = NULL;
 	svlb.refvx = NULL;
-	svlb.bbox.x0 = svlb.bbox.y0 = NR_HUGE_F;
-	svlb.bbox.x1 = svlb.bbox.y1 = -NR_HUGE_F;
+	svlb.bbox.x0 = svlb.bbox.y0 = NR_HUGE;
+	svlb.bbox.x1 = svlb.bbox.y1 = -NR_HUGE;
 	svlb.dir = 0;
 	svlb.sx = svlb.sy = 0.0;
 
@@ -466,8 +466,8 @@ nr_svl_from_art_bpath (ArtBpath *bpath, NRMatrix *transform, unsigned int windru
 	svlb.svl = &svl;
 	svlb.flats = &flats;
 	svlb.refvx = NULL;
-	svlb.bbox.x0 = svlb.bbox.y0 = NR_HUGE_F;
-	svlb.bbox.x1 = svlb.bbox.y1 = -NR_HUGE_F;
+	svlb.bbox.x0 = svlb.bbox.y0 = NR_HUGE;
+	svlb.bbox.x1 = svlb.bbox.y1 = -NR_HUGE;
 	svlb.dir = 0;
 	svlb.reverse = FALSE;
 	svlb.sx = svlb.sy = 0.0;

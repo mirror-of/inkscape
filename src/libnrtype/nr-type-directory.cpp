@@ -107,7 +107,7 @@ nr_type_directory_lookup_fuzzy (const gchar *family, const gchar *description)
 
 	if (!typedict) nr_type_directory_build ();
 
-	best = NR_HUGE_F;
+	best = NR_HUGE;
 	bestfdef = NULL;
 
 	for (fdef = families; fdef; fdef = fdef->next) {
@@ -121,7 +121,7 @@ nr_type_directory_lookup_fuzzy (const gchar *family, const gchar *description)
 
 	if (!bestfdef) return NULL;
 
-	best = NR_HUGE_F;
+	best = NR_HUGE;
 	besttdef = NULL;
 
 	/* fixme: In reality the latter method reqires full qualified name */

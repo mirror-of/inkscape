@@ -584,12 +584,12 @@ nr_arena_item_set_transform (NRArenaItem *item, const NRMatrix *transform)
 
 	if (!transform && !item->transform) return;
 
-	md = (item->transform) ? item->transform : &NR_MATRIX_F_IDENTITY;
-	ms = (transform) ? transform : &NR_MATRIX_F_IDENTITY;
+	md = (item->transform) ? item->transform : &NR_MATRIX_IDENTITY;
+	ms = (transform) ? transform : &NR_MATRIX_IDENTITY;
 
-	if (!NR_MATRIX_DF_TEST_CLOSE (md, ms, NR_EPSILON_F)) {
+	if (!NR_MATRIX_DF_TEST_CLOSE (md, ms, NR_EPSILON)) {
 		nr_arena_item_request_render (item);
-		if (!transform || nr_matrix_test_identity (transform, NR_EPSILON_F)) {
+		if (!transform || nr_matrix_test_identity (transform, NR_EPSILON)) {
 			/* Set to identity affine */
 			if (item->transform) nr_free (item->transform);
 			item->transform = NULL;

@@ -461,7 +461,7 @@ sp_rect_write_transform (SPItem *item, SPRepr *repr, NRMatrix *t)
 	/* And last but not least */
 	style = SP_OBJECT_STYLE (item);
 	if (style->stroke.type != SP_PAINT_TYPE_NONE) {
-		if (!NR_DF_TEST_CLOSE (sw, 1.0, NR_EPSILON_D) || !NR_DF_TEST_CLOSE (sh, 1.0, NR_EPSILON_D)) {
+		if (!NR_DF_TEST_CLOSE (sw, 1.0, NR_EPSILON) || !NR_DF_TEST_CLOSE (sh, 1.0, NR_EPSILON)) {
 			double scale;
 			gchar *str;
 			/* Scale changed, so we have to adjust stroke width */

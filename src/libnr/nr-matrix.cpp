@@ -15,12 +15,8 @@ NRMatrix *
 nr_matrix_d_from_f (NRMatrix *d, const NRMatrix *s)
 {
 	if (s) {
-		d->c[0] = s->c[0];
-		d->c[1] = s->c[1];
-		d->c[2] = s->c[2];
-		d->c[3] = s->c[3];
-		d->c[4] = s->c[4];
-		d->c[5] = s->c[5];
+		for(int i = 0; i < 6; i++)
+			d->c[i] = s->c[i];
 	} else {
 		nr_matrix_set_identity (d);
 	}
@@ -31,18 +27,7 @@ nr_matrix_d_from_f (NRMatrix *d, const NRMatrix *s)
 NRMatrix *
 nr_matrix_f_from_d (NRMatrix *d, const NRMatrix *s)
 {
-	if (s) {
-		d->c[0] = (float) s->c[0];
-		d->c[1] = (float) s->c[1];
-		d->c[2] = (float) s->c[2];
-		d->c[3] = (float) s->c[3];
-		d->c[4] = (float) s->c[4];
-		d->c[5] = (float) s->c[5];
-	} else {
-		nr_matrix_set_identity (d);
-	}
-
-	return d;
+	return nr_matrix_d_from_f(d, s);
 }
 
 NRMatrix *
@@ -84,7 +69,7 @@ nr_matrix_invert (NRMatrix *d, const NRMatrix *m)
 	if (m) {
 		double det;
 		det = m->c[0] * m->c[3] - m->c[1] * m->c[2];
-		if (!NR_DF_TEST_CLOSE (det, 0.0, NR_EPSILON_D)) {
+		if (!NR_DF_TEST_CLOSE (det, 0.0, NR_EPSILON)) {
 			double rdet, t;
 			rdet = 1.0 / det;
 			t = m->c[3] * rdet;

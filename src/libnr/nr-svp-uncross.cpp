@@ -96,7 +96,7 @@ nr_svl_test_slices (NRSVLSlice *slices, double yslice, const unsigned char *pref
 			} else if (d > 0.0) {
 				if (test) printf ("%s: Slice x %g > TEST %g\n", prefix, cx, nx);
 			}
-		} else if (cx > (nx - NR_EPSILON_F)) {
+		} else if (cx > (nx - NR_EPSILON)) {
 			if (close) printf ("%s: Slice x %g < EPSILON %g\n", prefix, cx, nx);
 		}
 		wind += s->svl->wind;
@@ -368,7 +368,7 @@ nr_svl_uncross_full (NRSVL *svl, NRFlat *flats, unsigned int windrule)
 				ydc = ns->vertex->next->y - ns->y;
 				d = xba * ydc - yba * xdc;
 
-				if (fabs (d) > NR_EPSILON_F) {
+				if (fabs (d) > NR_EPSILON) {
 					double xac, yac, numr, nums;
 					double r, s, x, y, dr, ds, dr2, ds2;
 
@@ -990,7 +990,7 @@ nr_segment_intersection (NRVertex *s0, NRVertex *s1, double *x, double *y)
 	d = xba * ydc - yba * xdc;
  
 	/* Check for parallel */
-	if (fabs (d) < NR_EPSILON_F) return -NR_HUGE_F;
+	if (fabs (d) < NR_EPSILON) return -NR_HUGE;
 
 	xac = s0->x - s1->x;
 	yac = s0->y - s1->y;

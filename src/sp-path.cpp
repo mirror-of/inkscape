@@ -293,7 +293,7 @@ sp_path_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform)
 	/* Wrte the style info into the repr */
 	style = SP_OBJECT_STYLE (item);
 	if (style->stroke.type != SP_PAINT_TYPE_NONE) {
-		if (!NR_DF_TEST_CLOSE (ex, 1.0, NR_EPSILON_D)) {
+		if (!NR_DF_TEST_CLOSE (ex, 1.0, NR_EPSILON)) {
 			gchar *str;
 			/* Scale changed, so we have to adjust stroke width */
 			style->stroke_width.computed *= ex;

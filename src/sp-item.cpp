@@ -420,7 +420,7 @@ sp_item_invoke_bbox_full (SPItem *item, NRRect *bbox, const NRMatrix *transform,
 		bbox->x1 = bbox->y1 = -1e18;
 	}
 
-	if (!transform) transform = &NR_MATRIX_D_IDENTITY;
+	if (!transform) transform = &NR_MATRIX_IDENTITY;
 
 	if (((SPItemClass *) G_OBJECT_GET_CLASS (item))->bbox)
 		((SPItemClass *) G_OBJECT_GET_CLASS (item))->bbox (item, bbox, transform, flags);
@@ -480,7 +480,7 @@ sp_item_invoke_print (SPItem *item, SPPrintContext *ctx)
 {
 	if (item->printable) {
 		if (((SPItemClass *) G_OBJECT_GET_CLASS (item))->print) {
-			if (!nr_matrix_test_identity (&item->transform, NR_EPSILON_F) ||
+			if (!nr_matrix_test_identity (&item->transform, NR_EPSILON) ||
 			    SP_OBJECT_STYLE (item)->opacity.value != SP_SCALE24_MAX) {
 				sp_print_bind (ctx, &item->transform, SP_SCALE24_TO_FLOAT (SP_OBJECT_STYLE (item)->opacity.value));
 				((SPItemClass *) G_OBJECT_GET_CLASS (item))->print (item, ctx);
@@ -648,9 +648,9 @@ sp_item_set_item_transform (SPItem *item, const NRMatrix *transform)
 	g_return_if_fail (item != NULL);
 	g_return_if_fail (SP_IS_ITEM (item));
 
-	if (!transform) transform = &NR_MATRIX_F_IDENTITY;
+	if (!transform) transform = &NR_MATRIX_IDENTITY;
 
-	if (!NR_MATRIX_DF_TEST_CLOSE (transform, &item->transform, NR_EPSILON_F)) {
+	if (!NR_MATRIX_DF_TEST_CLOSE (transform, &item->transform, NR_EPSILON)) {
 		item->transform = *transform;
 		sp_object_request_update (SP_OBJECT (item), SP_OBJECT_MODIFIED_FLAG);
 	}

@@ -274,7 +274,7 @@ sp_canvas_item_invoke_point (SPCanvasItem *item, double x, double y, SPCanvasIte
 	if (SP_CANVAS_ITEM_GET_CLASS (item)->point)
 		return SP_CANVAS_ITEM_GET_CLASS (item)->point (item, x, y, actual_item);
 
-	return NR_HUGE_D;
+	return NR_HUGE;
 }
 
 /**

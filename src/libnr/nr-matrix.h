@@ -13,9 +13,9 @@
 #include <libnr/nr-macros.h>
 #include <libnr/nr-values.h>
 
-#define nr_matrix_set_identity(m) (*(m) = NR_MATRIX_D_IDENTITY)
+#define nr_matrix_set_identity(m) (*(m) = NR_MATRIX_IDENTITY)
 
-#define nr_matrix_test_identity(m,e) (!(m) || NR_MATRIX_DF_TEST_CLOSE (m, &NR_MATRIX_D_IDENTITY, e))
+#define nr_matrix_test_identity(m,e) (!(m) || NR_MATRIX_DF_TEST_CLOSE (m, &NR_MATRIX_IDENTITY, e))
 
 #define nr_matrix_test_equal(m0,m1,e) ((!(m0) && !(m1)) || ((m0) && (m1) && NR_MATRIX_DF_TEST_CLOSE (m0, m1, e)))
 #define nr_matrix_test_transform_equal(m0,m1,e) ((!(m0) && !(m1)) || ((m0) && (m1) && NR_MATRIX_DF_TEST_TRANSFORM_CLOSE (m0, m1, e)))

@@ -300,8 +300,8 @@ sp_gradient_position_button_press (GtkWidget *widget, GdkEventButton *event)
 				g_signal_emit (G_OBJECT (pos), position_signals[GRABBED], 0);
 				x1 = NR_MATRIX_DF_TRANSFORM_X (&pos->w2gs, event->x, event->y);
 				y1 = NR_MATRIX_DF_TRANSFORM_Y (&pos->w2gs, event->x, event->y);
-				if (!NR_DF_TEST_CLOSE (x1, pos->gdata.linear.x1, NR_EPSILON_F) ||
-				    !NR_DF_TEST_CLOSE (y1, pos->gdata.linear.y1, NR_EPSILON_F)) {
+				if (!NR_DF_TEST_CLOSE (x1, pos->gdata.linear.x1, NR_EPSILON) ||
+				    !NR_DF_TEST_CLOSE (y1, pos->gdata.linear.y1, NR_EPSILON)) {
 					pos->gdata.linear.x1 = x1;
 					pos->gdata.linear.y1 = y1;
 					g_signal_emit (G_OBJECT (pos), position_signals[DRAGGED], 0);
@@ -330,8 +330,8 @@ sp_gradient_position_button_press (GtkWidget *widget, GdkEventButton *event)
 				g_signal_emit (G_OBJECT (pos), position_signals[GRABBED], 0);
 				fx = NR_MATRIX_DF_TRANSFORM_X (&pos->w2gs, event->x, event->y);
 				fy = NR_MATRIX_DF_TRANSFORM_Y (&pos->w2gs, event->x, event->y);
-				if (!NR_DF_TEST_CLOSE (fx, pos->gdata.radial.fx, NR_EPSILON_F) ||
-				    !NR_DF_TEST_CLOSE (fy, pos->gdata.radial.fy, NR_EPSILON_F)) {
+				if (!NR_DF_TEST_CLOSE (fx, pos->gdata.radial.fx, NR_EPSILON) ||
+				    !NR_DF_TEST_CLOSE (fy, pos->gdata.radial.fy, NR_EPSILON)) {
 					pos->gdata.radial.fx = fx;
 					pos->gdata.radial.fy = fy;
 					g_signal_emit (G_OBJECT (pos), position_signals[DRAGGED], 0);
@@ -349,8 +349,8 @@ sp_gradient_position_button_press (GtkWidget *widget, GdkEventButton *event)
 				g_signal_emit (G_OBJECT (pos), position_signals[GRABBED], 0);
 				cx = NR_MATRIX_DF_TRANSFORM_X (&pos->w2gs, event->x, event->y);
 				cy = NR_MATRIX_DF_TRANSFORM_Y (&pos->w2gs, event->x, event->y);
-				if (!NR_DF_TEST_CLOSE (cx, pos->gdata.radial.cx, NR_EPSILON_F) ||
-				    !NR_DF_TEST_CLOSE (cy, pos->gdata.radial.cy, NR_EPSILON_F)) {
+				if (!NR_DF_TEST_CLOSE (cx, pos->gdata.radial.cx, NR_EPSILON) ||
+				    !NR_DF_TEST_CLOSE (cy, pos->gdata.radial.cy, NR_EPSILON)) {
 					pos->gdata.radial.cx = cx;
 					pos->gdata.radial.cy = cy;
 					pos->gdata.radial.fx = cx;
@@ -429,7 +429,7 @@ sp_gradient_position_motion_notify (GtkWidget *widget, GdkEventMotion *event)
 
 				s2n.c[0] = 1.0;
 				s2n.c[1] = 0.0;
-				s2n.c[2] = !NR_DF_TEST_CLOSE (ncy, ny, NR_EPSILON_F) ? (nx - ncx) / (ny - ncy) : 0.0;
+				s2n.c[2] = !NR_DF_TEST_CLOSE (ncy, ny, NR_EPSILON) ? (nx - ncx) / (ny - ncy) : 0.0;
 				s2n.c[3] = 1.0;
 				s2n.c[4] = 0.0;
 				s2n.c[5] = 0.0;
@@ -467,9 +467,9 @@ sp_gradient_position_motion_notify (GtkWidget *widget, GdkEventMotion *event)
 			} else {
 				float x, y;
 #if 0
-				if (1 || !NR_DF_TEST_CLOSE (pos->w2gs.c[0], pos->w2gs.c[3], NR_EPSILON_F) ||
-				    !NR_DF_TEST_CLOSE (pos->w2gs.c[1], 0.0, NR_EPSILON_F) ||
-				    !NR_DF_TEST_CLOSE (pos->w2gs.c[2], 0.0, NR_EPSILON_F)) {
+				if (1 || !NR_DF_TEST_CLOSE (pos->w2gs.c[0], pos->w2gs.c[3], NR_EPSILON) ||
+				    !NR_DF_TEST_CLOSE (pos->w2gs.c[1], 0.0, NR_EPSILON) ||
+				    !NR_DF_TEST_CLOSE (pos->w2gs.c[2], 0.0, NR_EPSILON)) {
 					double ex, cxw, cyw, fxw, fyw, dxw, dyw, s;
 					ex = NR_MATRIX_DF_EXPANSION (&pos->gs2w);
 					cxw = NR_MATRIX_DF_TRANSFORM_X (&pos->gs2w, cx, cy);
@@ -942,16 +942,16 @@ spgp_clip_line (long *c, long x0, long y0, long x1, long y1)
 	vx = c[2] - c[0];
 	vy = c[3] - c[1];
 
-	s = -NR_HUGE_F;
-	e = NR_HUGE_F;
+	s = -NR_HUGE;
+	e = NR_HUGE;
 
-	if (!NR_DF_TEST_CLOSE (vx, 0.0, NR_EPSILON_F)) {
+	if (!NR_DF_TEST_CLOSE (vx, 0.0, NR_EPSILON)) {
 		t0 = (x0 - px) / vx;
 		t1 = (x1 - px) / vx;
 		s = MAX (s, MIN (t0, t1));
 		e = MIN (e, MAX (t0, t1));
 	}
-	if (!NR_DF_TEST_CLOSE (vy, 0.0, NR_EPSILON_F)) {
+	if (!NR_DF_TEST_CLOSE (vy, 0.0, NR_EPSILON)) {
 		t0 = (y0 - py) / vy;
 		t1 = (y1 - py) / vy;
 		s = MAX (s, MIN (t0, t1));

@@ -274,11 +274,11 @@ nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrix *m, NRPoin
 
 	if (!bpath->path) {
 		if (wind) *wind = 0;
-		if (dist) *dist = NR_HUGE_F;
+		if (dist) *dist = NR_HUGE;
 		return;
 	}
 
-	if (!m) m = &NR_MATRIX_F_IDENTITY;
+	if (!m) m = &NR_MATRIX_IDENTITY;
 
 	x0 = y0 = 0.0;
 	x3 = y3 = 0.0;
@@ -428,7 +428,7 @@ nr_path_matrix_f_bbox_f_union (NRBPath *bpath, NRMatrix *m,
 
 	if (!bpath->path) return;
 
-	if (!m) m = &NR_MATRIX_F_IDENTITY;
+	if (!m) m = &NR_MATRIX_IDENTITY;
 
 	x0 = y0 = 0.0;
 	x3 = y3 = 0.0;

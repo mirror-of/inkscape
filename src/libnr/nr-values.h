@@ -12,11 +12,9 @@
 
 #include <libnr/nr-types.h>
 
-#define NR_EPSILON_D 1e-18
-#define NR_EPSILON_F 1e-18F
+#define NR_EPSILON 1e-18
 
-#define NR_HUGE_D 1e18L
-#define NR_HUGE_F 1e18F
+#define NR_HUGE 1e18
 #define NR_HUGE_L (0x7fffffff)
 #define NR_HUGE_S (0x7fff)
 
@@ -27,17 +25,14 @@
 #endif
 
 #if defined (__NR_VALUES_C__) || defined (_WIN32)
-NR_EXPORT NRMatrix NR_MATRIX_D_IDENTITY = {{1.0, 0.0, 0.0, 1.0, 0.0, 0.0}};
-NR_EXPORT NRMatrix NR_MATRIX_F_IDENTITY = {{1.0, 0.0, 0.0, 1.0, 0.0, 0.0}};
-NR_EXPORT NRRect NR_RECT_D_EMPTY = {NR_HUGE_D, NR_HUGE_D, -NR_HUGE_D, -NR_HUGE_D};
-NR_EXPORT NRRect NR_RECT_F_EMPTY = {NR_HUGE_F, NR_HUGE_F, -NR_HUGE_F, -NR_HUGE_F};
+NR_EXPORT NRMatrix NR_MATRIX_IDENTITY = {{1.0, 0.0, 0.0, 1.0, 0.0, 0.0}};
+NR_EXPORT NRRect NR_RECT_EMPTY = {NR_HUGE, NR_HUGE, -NR_HUGE, -NR_HUGE};
 NR_EXPORT NRRectL NR_RECT_L_EMPTY = {NR_HUGE_L, NR_HUGE_L, -NR_HUGE_L, -NR_HUGE_L};
 NR_EXPORT NRRectS NR_RECT_S_EMPTY = {NR_HUGE_S, NR_HUGE_S, -NR_HUGE_S, -NR_HUGE_S};
 #else
-extern NRMatrix NR_MATRIX_D_IDENTITY;
-extern NRMatrix NR_MATRIX_F_IDENTITY;
-extern NRRect NR_RECT_D_EMPTY;
-extern NRRect NR_RECT_F_EMPTY;
+extern NRMatrix NR_MATRIX_IDENTITY;
+extern NRMatrix NR_MATRIX_IDENTITY;
+extern NRRect NR_RECT_EMPTY;
 extern NRRectL NR_RECT_L_EMPTY;
 extern NRRectS NR_RECT_S_EMPTY;
 #endif

@@ -482,7 +482,7 @@ sp_desktop_horizontal_snap_list (SPDesktop *desktop, NRPoint *p, int length, dou
 	double xdist, xpre, dist, d;
 	int i;
 
-	dist = NR_HUGE_F;
+	dist = NR_HUGE;
 	xdist = dx;
 
 	if (SNAP_ON (desktop))
@@ -507,7 +507,7 @@ sp_desktop_vertical_snap_list (SPDesktop *desktop, NRPoint *p, int length, doubl
 	double ydist, ypre, dist, d;
 	int i;
 
-	dist = NR_HUGE_F;
+	dist = NR_HUGE;
 	ydist = dy;
 	if(SNAP_ON (desktop))
 		for (i = 0; i < length; i++) {
@@ -533,7 +533,7 @@ sp_desktop_horizontal_snap_list_scale (SPDesktop *desktop, NRPoint *p, int lengt
 
 	if (!SNAP_ON (desktop)) return sx;
 
-	xdist = NR_HUGE_F;
+	xdist = NR_HUGE;
 	xscale = sx;
 
 	for (i = 0; i < length; i++) {
@@ -561,7 +561,7 @@ sp_desktop_vertical_snap_list_scale (SPDesktop *desktop, NRPoint *p, int length,
 
 	if (!SNAP_ON (desktop)) return sy;
 
-	ydist = NR_HUGE_F;
+	ydist = NR_HUGE;
 	yscale = sy;
 
 	for (i = 0; i < length; i++) {
@@ -588,7 +588,7 @@ sp_desktop_vector_snap_list (SPDesktop *desktop, NRPoint *p, int length, NRPoint
 
 	if (!SNAP_ON (desktop)) return sx;
 
-	dist = NR_HUGE_F;
+	dist = NR_HUGE;
 	ratio = fabs (sx);
 
 	for (i = 0; i < length; i++) {
@@ -618,7 +618,7 @@ sp_desktop_horizontal_snap_list_skew (SPDesktop *desktop, NRPoint *p, int length
 
 	if (!SNAP_ON (desktop)) return sx;
 
-	xdist = NR_HUGE_F;
+	xdist = NR_HUGE;
 	xskew = sx;
 
 	for (i = 0; i < length; i++) {
@@ -645,7 +645,7 @@ sp_desktop_vertical_snap_list_skew (SPDesktop *desktop, NRPoint *p, int length, 
 
 	if (!SNAP_ON (desktop)) return sy;
 
-	ydist = NR_HUGE_F;
+	ydist = NR_HUGE;
 	yskew = sy;
 
 	for (i = 0; i < length; i++) {
@@ -676,7 +676,7 @@ sp_desktop_circular_snap_list (SPDesktop *desktop, NRPoint *p, int length, NRPoi
 
 	if (!SNAP_ON (desktop)) return rotate;
 
-	best = NR_HUGE_F;
+	best = NR_HUGE;
 
 	for (i = 0; i < length; i++) {
 		q = p[i];

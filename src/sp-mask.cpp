@@ -376,10 +376,10 @@ sp_mask_set_bbox (SPMask *mask, unsigned int key, NRRect *bbox)
 
 	for (v = mask->display; v != NULL; v = v->next) {
 		if (v->key == key) {
-			if (!NR_DF_TEST_CLOSE (v->bbox.x0, bbox->x0, NR_EPSILON_F) ||
-			    !NR_DF_TEST_CLOSE (v->bbox.y0, bbox->y0, NR_EPSILON_F) ||
-			    !NR_DF_TEST_CLOSE (v->bbox.x1, bbox->x1, NR_EPSILON_F) ||
-			    !NR_DF_TEST_CLOSE (v->bbox.y1, bbox->y1, NR_EPSILON_F)) {
+			if (!NR_DF_TEST_CLOSE (v->bbox.x0, bbox->x0, NR_EPSILON) ||
+			    !NR_DF_TEST_CLOSE (v->bbox.y0, bbox->y0, NR_EPSILON) ||
+			    !NR_DF_TEST_CLOSE (v->bbox.x1, bbox->x1, NR_EPSILON) ||
+			    !NR_DF_TEST_CLOSE (v->bbox.y1, bbox->y1, NR_EPSILON)) {
 				v->bbox = *bbox;
 				sp_object_request_update (SP_OBJECT (mask), SP_OBJECT_MODIFIED_FLAG);
 			}

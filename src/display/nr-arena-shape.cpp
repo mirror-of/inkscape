@@ -226,8 +226,8 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 				NRMatrix ctm;
 				NRBPath bp;
 				/* fixme: */
-				bbox.x0 = bbox.y0 = NR_HUGE_F;
-				bbox.x1 = bbox.y1 = -NR_HUGE_F;
+				bbox.x0 = bbox.y0 = NR_HUGE;
+				bbox.x1 = bbox.y1 = -NR_HUGE;
 				nr_matrix_f_from_d (&ctm, &gc->transform);
 				bp.path = shape->curve->bpath;
 				nr_path_matrix_f_bbox_f_union (&bp, &ctm, &bbox, 1.0);
@@ -254,7 +254,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 	}
 
 	/* Release state data */
-	if (TRUE || !nr_matrix_test_transform_equal (&gc->transform, &shape->ctm, NR_EPSILON_D)) {
+	if (TRUE || !nr_matrix_test_transform_equal (&gc->transform, &shape->ctm, NR_EPSILON)) {
 		/* Concept test */
 		if (shape->fill_svp) {
 			nr_svp_free (shape->fill_svp);
@@ -290,7 +290,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 				svl = nr_svl_from_art_bpath (shape->curve->bpath, &ctmf, windrule, TRUE, 0.25);
 				shape->fill_svp = nr_svp_from_svl (svl, NULL);
 				nr_svl_free_list (svl);
-			} else if (!NR_MATRIX_DF_TEST_TRANSLATE_CLOSE (&gc->transform, &NR_MATRIX_D_IDENTITY, NR_EPSILON_D)) {
+			} else if (!NR_MATRIX_DF_TEST_TRANSLATE_CLOSE (&gc->transform, &NR_MATRIX_IDENTITY, NR_EPSILON)) {
 #if 0
 				ArtSVP *svpa;
 				/* Concept test */
@@ -556,9 +556,9 @@ nr_arena_shape_pick (NRArenaItem *item, double x, double y, double delta, unsign
 		pt.y = (float) y;
 		nr_matrix_f_from_d (&t, &shape->ctm);
 		bp.path = shape->curve->bpath;
-		dist = NR_HUGE_F;
+		dist = NR_HUGE;
 		wind = 0;
-		nr_path_matrix_f_point_f_bbox_wind_distance (&bp, &t, &pt, NULL, &wind, &dist, NR_EPSILON_F);
+		nr_path_matrix_f_point_f_bbox_wind_distance (&bp, &t, &pt, NULL, &wind, &dist, NR_EPSILON);
 		if (shape->style->fill.type != SP_PAINT_TYPE_NONE) {
 			if (!shape->style->fill_rule.value) {
 				if (wind != 0) return item;
