@@ -1,7 +1,6 @@
 // nr-types-test.h
 #include <cxxtest/TestSuite.h>
 
-#include "../utest/utest.h"
 #include "libnr/nr-types.h"
 #include "libnr/nr-point-fns.h"
 #include <cmath>

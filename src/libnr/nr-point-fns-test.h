@@ -1,10 +1,11 @@
 // nr-point-fns-test.h
+#include <cxxtest/TestSuite.h>
+
 #include <cassert>
 #include <cmath>
 #include <glib/gmacros.h>
 #include <stdlib.h>
 
-#include "utest/utest.h"
 #include "libnr/nr-point-fns.h"
 #include "isnan.h"
 
