@@ -848,13 +848,7 @@ fit_and_split_line (SPDynaDrawContext *dc,
 		g_signal_connect (G_OBJECT (cbp), "event", G_CALLBACK (sp_desktop_root_handler), SP_EVENT_CONTEXT (dc)->desktop);
 
 		dc->segments = g_slist_prepend (dc->segments, cbp);
-
-#if 0
 		dc->point1[0] = dc->point1[dc->npoints - 2];
-		dc->point1[1] = dc->point1[dc->npoints - 1];
-#else
-		dc->point1[0] = dc->point1[dc->npoints - 2];
-#endif
 		dc->npoints = 1;
 	}
 }
