@@ -13,13 +13,15 @@
 // algo d'origine: http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/INT-APP/CURVE-APP-global.html
 
 // need the b-spline basis for cubic splines
+// Don't forget that this is a clamped b-spline
+// and that it corresponds to a normal bezier curve.
 // pas oublier que c'est une b-spline clampee
 // et que ca correspond a une courbe de bezier normale
 #define N03(t) ((1.0-t)*(1.0-t)*(1.0-t))
 #define N13(t) (3*t*(1.0-t)*(1.0-t))
 #define N23(t) (3*t*t*(1.0-t))
 #define N33(t) (t*t*t)
-// quadratic b-splines (jsut in case)
+// quadratic b-splines (just in case)
 #define N02(t) ((1.0-t)*(1.0-t))
 #define N12(t) (2*t*(1.0-t))
 #define N22(t) (t*t)
@@ -494,6 +496,7 @@ bool                   Path::AttemptSimplify(float treshhold,path_descr_cubicto 
 float                  Path::RaffineTk(vec2 pt,vec2 p0,vec2 p1,vec2 p2,vec2 p3,float it)
 {
 	// raffinement des tk
+	// A single iteration of Newton-Raphson,
 	// une seule iteration de newtow rhapston, vu que de toute facon la courbe est approchée
 	double   Ax,Bx,Cx;
 	double   Ay,By,Cy;
