@@ -294,19 +294,25 @@ sp_document_create (SPReprDoc *rdoc,
 		sp_repr_set_attr (rroot, "docbase", NULL);
 	}
 
-	/* Namedviews */
+	// creating namedview
 	if (!sp_item_group_get_child_by_name ((SPGroup *) document->root, NULL, "sodipodi:namedview")) {
-		SPRepr *r, *rnew;
-		r = inkscape_get_repr (INKSCAPE, "template.sodipodi:namedview");
+		// if there's none in the document already,
+		SPRepr *r = NULL;
+		SPRepr *rnew = NULL;
+		r = inkscape_get_repr (INKSCAPE, "template.base");
+		// see if there's a template with id="base" in the preferences 
 		if (!r) {
+			// if there's none, create an empty element
 			rnew = sp_repr_new ("sodipodi:namedview");
+			sp_repr_set_attr (rnew, "id", "base");
 		} else {
+			// otherwise, take from preferences
 			rnew = sp_repr_duplicate (r);
 		}
-		sp_repr_set_attr (rnew, "id", "base");
- 		sp_repr_add_child (rroot, rnew, NULL);
+		// insert into the document
+		sp_repr_add_child (rroot, rnew, NULL);
+		// clean up
 		sp_repr_unref (rnew);
-		sp_repr_unref (r);
 	}
 
 	/* Defs */
