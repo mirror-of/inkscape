@@ -725,7 +725,7 @@ static const SPVerbActionDef props[] = {
     {SP_VERB_FILE_PRINT, "FilePrint", N_("_Print..."), N_("Print document"),
         GTK_STOCK_PRINT },
     {SP_VERB_FILE_PRINT_DIRECT, "FilePrintDirect", N_("Print _Direct"),
-        N_("Print directly to file or pipe"), "file_print_direct" },
+        N_("Print directly to file or pipe"), NULL },
     {SP_VERB_FILE_PRINT_PREVIEW, "FilePrintPreview", N_("Print Previe_w"),
         N_("Preview document printout"), GTK_STOCK_PRINT_PREVIEW },
     {SP_VERB_FILE_IMPORT, "FileImport", N_("_Import..."),
