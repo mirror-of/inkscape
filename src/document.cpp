@@ -287,7 +287,8 @@ sp_document_create (SPReprDoc *rdoc,
 	if (!sp_repr_attr (rroot, "width")) sp_repr_set_attr (rroot, "width", A4_WIDTH_STR);
 	if (!sp_repr_attr (rroot, "height")) sp_repr_set_attr (rroot, "height", A4_HEIGHT_STR);
         /*Now add viewBox */
-	if (!sp_repr_attr (rroot, "viewBox")) {
+	/* Do this later
+        if (!sp_repr_attr (rroot, "viewBox")) {
             //A short-term hack to set the viewBox to be 1.25 x the size
             // of the page.
             gdouble vbWidth  = (gdouble)atof(sp_repr_attr (rroot, "width"))  * 1.25;
@@ -300,8 +301,8 @@ sp_document_create (SPReprDoc *rdoc,
             gchar const *strVal = (gchar const *)os.str().c_str();
             sp_repr_set_attr (rroot, "viewBox", g_strdup(strVal));
         }
-
-	/* End of quick hack 2 */
+        */
+        /* End of quick hack 2 */
 
 	/* Quick hack 3 - Set uri attributes */
 	if (uri) {

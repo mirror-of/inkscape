@@ -272,6 +272,7 @@ sp_doc_dialog_whatever_changed ( GtkAdjustment *adjustment, GtkWidget *dialog )
         os << "0 0 " << vbWidth << " " << vbHeight;
         gchar const *strVal = (gchar const *)os.str().c_str();
         sp_repr_set_attr (repr, "viewBox", g_strdup(strVal));
+
     }
     sp_document_done (doc);
 }
