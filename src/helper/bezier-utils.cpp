@@ -162,11 +162,7 @@ sp_bezier_fit_cubic_full (NR::Point *bezier, NR::Point const data[], gint len,
 			  NR::Point const &tHat1, NR::Point const &tHat2,
 			  double const error, gint max_depth)
 {
-	double *u;		/* Parameter values for point */
-	double *u_alloca;	/* Just for memory management */
-	double *uPrime;		/* Improved parameter values */
-	double maxError;	/* Maximum fitting error */
-	int maxIterations = 4;	/* Max times to try iterating */
+	int const maxIterations = 4;	/* Max times to try iterating */
 	
 	g_return_val_if_fail (bezier != NULL, -1);
 	g_return_val_if_fail (data != NULL, -1);
@@ -196,7 +192,7 @@ sp_bezier_fit_cubic_full (NR::Point *bezier, NR::Point const data[], gint len,
 	}
 	
 	/*  Parameterize points, and attempt to fit curve */
-	u = (double*)alloca (len * sizeof (gdouble));
+	double *u = (double *) alloca( len * sizeof(gdouble) );
 	chord_length_parameterize (data, u, len);
 	if (u[len - 1] == 0.0) {
 		/* Zero-length path: every point in data[] is the same. */
@@ -207,7 +203,7 @@ sp_bezier_fit_cubic_full (NR::Point *bezier, NR::Point const data[], gint len,
 	
 	/*  Find max deviation of points to fitted curve */
 	unsigned splitPoint;		/* Point to split point set at */
-	maxError = compute_max_error (data, u, len, bezier, &splitPoint);
+	double maxError = compute_max_error(data, u, len, bezier, &splitPoint);
 	
 	if (maxError <= error) {
 		BEZIER_ASSERT (bezier);
@@ -216,10 +212,10 @@ sp_bezier_fit_cubic_full (NR::Point *bezier, NR::Point const data[], gint len,
 
 	/*  If error not too large, try some reparameterization  */
 	/*  and iteration */
-	u_alloca = u;
+	double *u_alloca = u;
 	if (maxError <= error * 9.0) {
 		for (int i = 0; i < maxIterations; i++) {
-			uPrime = reparameterize(data, len, u, bezier);
+			double *uPrime = reparameterize(data, len, u, bezier);
 			generate_bezier (bezier, data, uPrime, len, tHat1, tHat2);
 			maxError = compute_max_error(data, uPrime, len, bezier, &splitPoint);
 			if (u != u_alloca)
@@ -407,7 +403,7 @@ reparameterize(NR::Point const d[],
  *      Improved u
  */
 static gdouble
-NewtonRaphsonRootFind(BezierCurve Q, NR::Point const &P, gdouble u)
+NewtonRaphsonRootFind(BezierCurve Q, NR::Point const &P, gdouble const u)
 {
 	g_assert(0.0 <= u);
 	g_assert(u <= 1.0);
