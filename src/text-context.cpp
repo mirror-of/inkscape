@@ -371,6 +371,11 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		if (event->key.keyval == GDK_KP_Add || event->key.keyval == GDK_KP_Subtract)
 			break; // pass on keypad +/- so they can zoom
 
+		if (MOD__CTRL && MOD__SHIFT) {
+			// some input methods (recently started to) gobble ctrl+shift keystrokes, but we need them for dialogs!
+			break;
+		}
+
 		if ((tc->text) || (tc->nascent_object)) {
 			// there is an active text object in this context, or a new object was just created
 
