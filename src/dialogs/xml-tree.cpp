@@ -79,6 +79,8 @@ static SPDocument * current_document = NULL;
 static gint selected_attr = 0;
 static SPRepr * selected_repr = NULL;
 
+static void sp_xmltree_desktop_change ( Inkscape::Application *inkscape,  SPDesktop *desktop, GtkWidget *dialog );
+
 static void set_tree_desktop (SPDesktop * desktop);
 static void set_tree_document (SPDocument * document);
 static void set_tree_repr (SPRepr * repr);
@@ -538,6 +540,13 @@ sp_xml_tree_dialog (void)
                         text_container, GTK_OBJECT (text_container));
                         
         gtk_widget_hide (text_container);
+
+        g_signal_connect ( G_OBJECT (INKSCAPE), "activate_desktop", 
+                           G_CALLBACK (sp_xmltree_desktop_change), dlg);
+                           
+        g_signal_connect ( G_OBJECT (INKSCAPE), "deactivate_desktop", 
+                           G_CALLBACK (sp_xmltree_desktop_change), dlg);
+
     } // end of if (dlg == NULL)
     
     gtk_window_present ((GtkWindow *) dlg);
@@ -547,6 +556,14 @@ sp_xml_tree_dialog (void)
 
 } // end of sp_xml_tree_dialog()
 
+static void
+sp_xmltree_desktop_change ( Inkscape::Application *inkscape, 
+                          SPDesktop *desktop, 
+                          GtkWidget *dialog )
+{
+    if (!desktop) return;
+    set_tree_desktop (desktop);
+}
 
 
 void
