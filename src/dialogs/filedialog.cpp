@@ -254,7 +254,7 @@ bool SVGPreview::set(const char *fName, int dialogType)
           "xmlns=\"http://www.w3.org/2000/svg\"\n"
           "xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n"
           "width=\"%d\" height=\"%d\">\n"
-          "<g transform=\"translate(-170,24.27184)\">\n"
+          "<g transform=\"translate(-170,24.27184)\" style=\"opacity:0.12;\">\n"
           "<path\n"
           "style=\"font-size:12;fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.936193pt;\"\n"
           "d=\"M 397.64309 320.25301 L 280.39197 282.517 L 250.74227 124.83447 L 345.08225 "
@@ -312,8 +312,8 @@ bool SVGPreview::set(const char *fName, int dialogType)
           "id=\"mountainDroplet\" />\n"
           "</g>\n"
           "<text xml:space=\"preserve\"\n"
-          "style=\"font-size:28.000000;font-style:normal;font-variant:normal;font-weight:bold;"
-          "font-stretch:normal;fill:#fff900;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;"
+          "style=\"font-size:32.000000;font-style:normal;font-variant:normal;font-weight:bold;"
+          "font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;"
           "stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;"
           "font-family:Bitstream Vera Sans;text-anchor:middle;writing-mode:lr;\"\n"
           "x=\"190\" y=\"240\">%s</text>\n"
@@ -321,7 +321,7 @@ bool SVGPreview::set(const char *fName, int dialogType)
 
         //Fill in the template
         gchar *xmlBuffer = g_strdup_printf(xformat, 
-               previewWidth, previewHeight, _("Preview Not Available"));
+               previewWidth, previewHeight, _("No preview"));
 
         //g_message("%s\n", xmlBuffer);
 
