@@ -55,7 +55,7 @@ enum {
 enum {
   SP_MARKER_NONE,
   SP_MARKER_TRIANGLE,
-  SP_MARKER_ARROW,
+  SP_MARKER_ARROW
 };
 
 /* fill-rule */
