@@ -263,7 +263,7 @@ PrintWin32::finish (Inkscape::Extension::Print *mod)
 			0,       // biClrUsed
 			0        // biClrImportant
 		},
-		{0, 0, 0, 0} // bmiColors
+		{ { 0, 0, 0, 0 } } // bmiColors
 	};
 	//RECT wrect;
 	int res;
