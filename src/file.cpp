@@ -362,14 +362,15 @@ sp_file_save_document (SPDocument *doc)
 
 	fn = sp_repr_attr (repr, "sodipodi:modified");
 	if (fn != NULL) {
-		fn = sp_repr_attr (repr, "sodipodi:docname");
-		if (fn == NULL) {
+		if (doc->uri == NULL) {
 			success = sp_file_save_dialog (doc);
 		} else {
 			/* TODO: This currently requires a recognizable extension to
 				 be on the file name - odd stuff won't work */
+			fn = g_strdup (doc->uri);
 			file_save(doc, fn, SP_MODULE_KEY_AUTODETECT);
 			success = TRUE;
+			g_free ((void *) fn);
 		}
 
 		if (success) {
