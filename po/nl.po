@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Inkscape cvs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-23 00:20+0100\n"
-"PO-Revision-Date: 2005-03-16 22:21+0100\n"
+"PO-Revision-Date: 2005-03-27 15:51+0200\n"
 "Last-Translator: Jeroen van der Vegt <ajvdvegt (at) 123mail.org>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -380,25 +380,27 @@ msgid "Make selected segments curves"
 msgstr "Gekromde lijnen maken van de geselecteerde segmenten."
 
 #: src/arc-context.cpp:365
+#, fuzzy
 msgid ""
 "<b>Ctrl</b>: make circle or integer-ratio ellipse, snap arc/segment angle"
 msgstr ""
+"<b>Ctrl</b>: maak een circel of een 'gehele ratio'-ellips, "
 
 #: src/arc-context.cpp:366 src/rect-context.cpp:400
 msgid "<b>Shift</b>: draw around the starting point"
-msgstr ""
+msgstr "<b>Shift</b>: teken om het begin punt heen"
 
 #: src/arc-context.cpp:430 src/dyna-draw-context.cpp:457
 #: src/pen-context.cpp:272 src/pencil-context.cpp:178 src/rect-context.cpp:467
 #: src/spiral-context.cpp:433 src/star-context.cpp:437
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to draw on it."
-msgstr ""
+msgstr "<b>De huidige laag is verborgen</b>. Toon hem om er op te kunnen tekenen."
 
 #: src/arc-context.cpp:434 src/dyna-draw-context.cpp:461
 #: src/pen-context.cpp:276 src/pencil-context.cpp:182 src/rect-context.cpp:471
 #: src/spiral-context.cpp:438 src/star-context.cpp:441
 msgid "<b>Current layer is locked</b>. Unlock it to be able to draw on it."
-msgstr ""
+msgstr "<b>De huidige laag is vergrendeld</b>. Ontgrendel hem om er op te kunnen tekenen."
 
 #: src/arc-context.cpp:513
 #, c-format
@@ -410,7 +412,7 @@ msgstr ""
 #: src/desktop-events.cpp:253
 #, c-format
 msgid "%s at %s"
-msgstr ""
+msgstr "%s op %s"
 
 #. TRANSLATORS: This string appears when double-clicking on a guide.
 #. This is the distance by which the guide is to be moved.
@@ -454,6 +456,7 @@ msgid ""
 "<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; "
 "use selector (arrow) to move or transform them."
 msgstr ""
+"<b>Welkom bij Inkscape!</b> Gebruik vorm- of losse-pols gereedschappen om objecten te maken, gebruik de muiscursor om ze te verplaatsen of transformeren."
 
 #: src/desktop.cpp:1038
 #, c-format
@@ -481,7 +484,7 @@ msgstr ""
 
 #: src/desktop.cpp:1200 src/desktop.cpp:1258
 msgid "Close _without saving"
-msgstr "Sluiten zonder opslaan"
+msgstr "Sluiten _zonder opslaan"
 
 #: src/desktop.cpp:1244
 #, c-format
@@ -491,6 +494,10 @@ msgid ""
 "\n"
 "Do you want to save this file in another format?"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">Het bestand \"%s\" was opgeslagen "
+"in een formaat (%s), wat data verlies tot gevolg kan hebben!</span>\n"
+"\n"
+"Wilt u dit bestand opslaan in een ander formaat?"
 
 #: src/desktop.cpp:1645
 msgid "No previous zoom."
@@ -1889,7 +1896,7 @@ msgstr "Document afdrukken"
 
 #: src/dialogs/display-settings.cpp:1451
 msgid "The maximum length of the Open Recent list in the File menu"
-msgstr ""
+msgstr "Het maximum aantal bestandsnamen in 'Recente bestanden' in het 'Bestand'-menu"
 
 #: src/dialogs/display-settings.cpp:1461
 msgid "Simplification threshold:"
@@ -2494,9 +2501,8 @@ msgstr "Hoek:"
 
 #. TRANSLATORS: "Open" is an adjective here (is the ellipse open or not)
 #: src/dialogs/object-attributes.cpp:68
-#, fuzzy
 msgid "Open:"
-msgstr "Openen"
+msgstr "Open:"
 
 #: src/dialogs/object-attributes.cpp:75
 msgid "Expansion:"
@@ -3129,7 +3135,7 @@ msgstr "Nieuwe tekst node"
 
 #: src/dialogs/xml-tree.cpp:345
 msgid "Duplicate node"
-msgstr "Item dupliceren"
+msgstr "Knooppunt dupliceren"
 
 #: src/dialogs/xml-tree.cpp:366
 msgid "Delete node"
@@ -3481,32 +3487,29 @@ msgstr "Ontbrekende gereedschap eigenschappen"
 #. sp_ui_error_dialog(_("Format autodetect failed. The file is being opened as SVG."));
 #: src/extension/system.cpp:108
 msgid "Format autodetect failed. The file is being opened as SVG."
-msgstr ""
+msgstr "Het automatisch detecteren van de bestandsindeling is mislukt. Het bestand wordt geopend als SVG."
 
 #: src/file.cpp:184 src/file.cpp:822
 #, c-format
 msgid "Failed to load the requested file %s"
-msgstr ""
+msgstr "Het lukte niet om het bestand %s te laden"
 
 #: src/file.cpp:209
-#, fuzzy
 msgid "Document not saved yet.  Cannot revert."
-msgstr "Document naam:"
+msgstr "Het bestand is nog niet opgeslagen, kan niet terugdraaien."
 
 #: src/file.cpp:215
 #, c-format
 msgid "Changes will be lost!  Are you sure you want to reload document %s?"
-msgstr ""
+msgstr "Wijzigingen zullen verloren gaan! Weet u zeker dat u het bestand %s opnieuw wilt laden?"
 
 #: src/file.cpp:242
-#, fuzzy
 msgid "Document reverted."
-msgstr "Document boom"
+msgstr "Het bestand is teruggezet."
 
 #: src/file.cpp:244
-#, fuzzy
 msgid "Document not reverted."
-msgstr "Document boom"
+msgstr "Het bestand is niet teruggezet."
 
 #: src/file.cpp:356
 msgid "Select file to open"
@@ -3527,70 +3530,63 @@ msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
 msgstr ""
+"Er werden geen Inkscape extenties aangetroffen om het bestand (%s) op te slaan. Dit kan komen door een onbekende bestands-extentie."
 
 #: src/file.cpp:479 src/file.cpp:487
-#, fuzzy
 msgid "Document not saved."
-msgstr "Document naam:"
+msgstr "Document niet opgeslagen"
 
 #: src/file.cpp:486
 #, c-format
 msgid "File %s could not be saved."
-msgstr ""
+msgstr "Bestand %s kon niet worden opgeslagen."
 
 #: src/file.cpp:496
-#, fuzzy
 msgid "Document saved."
-msgstr "Document naam:"
+msgstr "Document opgeslagen."
 
 #: src/file.cpp:544
-#, fuzzy, c-format
+#, c-format
 msgid "drawing%s"
-msgstr "Tekening"
+msgstr "Tekening%s"
 
 #: src/file.cpp:550
-#, fuzzy, c-format
+#, c-format
 msgid "drawing-%d%s"
-msgstr "Tekening"
+msgstr "Tekening-%d%s"
 
 #: src/file.cpp:585
-#, fuzzy
 msgid "Select file to save to"
-msgstr "Selecteer een bestand om te openen"
+msgstr "Opslaan als..."
 
 #: src/file.cpp:669
 msgid "No changes need to be saved."
-msgstr ""
+msgstr "Er zijn geen wijzigingen die opgeslagen moeten worden."
 
 #: src/file.cpp:848
 msgid "Select file to import"
 msgstr "Selecteer een bestand om te importeren"
 
 #: src/gradient-drag.cpp:58
-#, fuzzy
 msgid "Linear gradient <b>start</b>"
-msgstr "Lineaire overgang"
+msgstr "<b>Begin</b> van lineaire overgang"
 
 #. POINT_LG_P1
 #: src/gradient-drag.cpp:59
-#, fuzzy
 msgid "Linear gradient <b>end</b>"
-msgstr "Lineaire overgang"
+msgstr "<b>Einde</b> van lineaire overgang"
 
 #: src/gradient-drag.cpp:60
-#, fuzzy
 msgid "Radial gradient <b>center</b>"
-msgstr "Circelvormige overgang"
+msgstr "<b>Midden</b> van circelvormige overgang"
 
 #: src/gradient-drag.cpp:61 src/gradient-drag.cpp:62
-#, fuzzy
 msgid "Radial gradient <b>radius</b>"
-msgstr "Circelvormige overgang"
+msgstr "<b>Straal</b> van circelvormige overgang"
 
 #: src/gradient-drag.cpp:63
-#, fuzzy
 msgid "Radial gradient <b>focus</b>"
-msgstr "Circelvormige overgang"
+msgstr "<b>Brandpunt</b> van circelvormige overgang"
 
 #: src/gradient-drag.cpp:423
 #, c-format
@@ -3626,11 +3622,11 @@ msgstr ""
 #. string here should be changed.)
 #: src/help.cpp:65
 msgid "about.svg"
-msgstr ""
+msgstr "about.svg"
 
 #: src/help.cpp:81 src/verbs.cpp:1866
 msgid "About Inkscape"
-msgstr ""
+msgstr "Over Inkscape"
 
 #: src/helper/units.cpp:36
 msgid "Unit"
@@ -3761,13 +3757,11 @@ msgstr "Naamloos document"
 
 #. Show nice dialog box
 #: src/inkscape.cpp:462
-#, fuzzy
 msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr ""
-"Er is een fout op getreden in Sodipodi, en het zal nu worden afgesloten.\n"
+"Er is een fout op getreden in Inkscape, en het zal nu worden afgesloten.\n"
 
 #: src/inkscape.cpp:463
-#, fuzzy
 msgid ""
 "Automatic backups of unsaved documents were done to the following "
 "locations:\n"
@@ -3776,7 +3770,6 @@ msgstr ""
 "de volgende lokaties:\n"
 
 #: src/inkscape.cpp:464
-#, fuzzy
 msgid "Automatic backup of the following documents failed:\n"
 msgstr ""
 "Het automatisch maken van een reservekopie is mislukt voor de volgende "
@@ -3788,6 +3781,8 @@ msgid ""
 "%s is not a regular file.\n"
 "%s"
 msgstr ""
+"%s is geen normaal bestand.\n"
+"%s"
 
 #: src/inkscape.cpp:655
 #, c-format
@@ -3796,6 +3791,9 @@ msgid ""
 "you don't have read permissions on it.\n"
 "%s"
 msgstr ""
+"%s is geen geldig XML bestand,of\n"
+"u heeft niet het recht om het te lezen.\n"
+"%s"
 
 #: src/inkscape.cpp:657
 #, c-format
@@ -3803,12 +3801,16 @@ msgid ""
 "%s is not a valid preferences file.\n"
 "%s"
 msgstr ""
+"%s is geen geldig vorokeuren bestand.\n"
+"%s"
 
 #: src/inkscape.cpp:658
 msgid ""
 "Inkscape will run with default settings.\n"
 "New settings will not be saved."
 msgstr ""
+"Inkscape zal starten met de standaard instellingen.\n"
+"Nieuwe instellingen worden niet opgeslagen."
 
 #: src/inkscape.cpp:1186
 #, c-format
@@ -3816,6 +3818,8 @@ msgid ""
 "Cannot create directory %s.\n"
 "%s"
 msgstr ""
+"De map %s kon niet worden aangemaakt.\n"
+"%s"
 
 #: src/inkscape.cpp:1187
 #, c-format
@@ -3823,6 +3827,8 @@ msgid ""
 "%s is not a valid directory.\n"
 "%s"
 msgstr ""
+"%s is geen een geldige map.\n"
+"%s"
 
 #: src/inkscape.cpp:1188
 #, c-format
@@ -3830,6 +3836,8 @@ msgid ""
 "Cannot create file %s.\n"
 "%s"
 msgstr ""
+"Het bestand %s kon niet worden aangemaakt.\n"
+"%s"
 
 #: src/inkscape.cpp:1189
 #, c-format
@@ -3837,79 +3845,77 @@ msgid ""
 "Cannot write file %s.\n"
 "%s"
 msgstr ""
+"Kan niet schrijven naar bestand %s.\n"
+"%s"
 
 #: src/inkscape.cpp:1190
 msgid ""
 "Although Inkscape will run, it will use default settings,\n"
 "and any changes made in preferences will not be saved."
 msgstr ""
+"Inkscape zal nu welliswaar starten met de standaard instellingen,\n"
+"maar wijzigingen in de voorkeuren zullen niet worden opgeslagen."
 
 #: src/interface.cpp:712
-#, fuzzy
 msgid "_New"
-msgstr "Nieuw"
+msgstr "_Nieuw"
 
 #: src/interface.cpp:712
-#, fuzzy
 msgid "Create new document"
-msgstr "Maak een nieuw SVG document"
+msgstr "Maak een nieuw document"
 
 #: src/interface.cpp:721 src/ui/stock-items.cpp:32
-#, fuzzy
 msgid "Open _Recent"
 msgstr "Recen_te bestanden"
 
 #: src/interface.cpp:721
 msgid "Open one of the recently visited documents"
-msgstr ""
+msgstr "Open een recentelijk geopend bestand"
 
 #: src/interface.cpp:956 src/ui/stock-items.cpp:71
-#, fuzzy
 msgid "_Show/Hide"
-msgstr "Hulplijnen weergeven"
+msgstr "_Weergeven/verbergen"
 
 #: src/interface.cpp:956
 msgid ""
 "Show or hide parts of the document window (differently for normal and "
 "fullscreen modes)"
 msgstr ""
+"Delen van het document venster weergeven of verbergen (dit verschilt voor normale en volledig-scherm weergave)"
 
 #. sp_ui_menu_append_check_item_from_verb (m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
 #. checkitem_toggled, checkitem_update, 0);
 #: src/interface.cpp:961
 msgid "Commands Bar"
-msgstr ""
+msgstr "Opdrachtenbalk"
 
 #: src/interface.cpp:961
-#, fuzzy
 msgid "Show or hide the Commands bar (under the menu)"
-msgstr "Hulplijnen weergeven"
+msgstr "Opdrachtenbalk weergeven of verbergen (onder de menubalk)"
 
 #: src/interface.cpp:963
-#, fuzzy
 msgid "Tool Controls"
 msgstr "Gereedschap eigenschappen"
 
 #: src/interface.cpp:963
-#, fuzzy
 msgid "Show or hide the Tool Controls panel"
-msgstr "Hulplijnen weergeven"
+msgstr "'Gereedschap eigenschappen'-balk weergeven of verbergen"
 
 #: src/interface.cpp:965
 msgid "_Toolbox"
-msgstr ""
+msgstr "_Gereedschappen"
 
 #: src/interface.cpp:965
 msgid "Show or hide the main toolbox (on the left)"
-msgstr ""
+msgstr "Gereedschappen weergeven of verbergen (aan de linker kant)"
 
 #: src/interface.cpp:971 src/ui/stock-items.cpp:77
 msgid "_Statusbar"
-msgstr ""
+msgstr "_Statusbalk"
 
 #: src/interface.cpp:971
 msgid "Show or hide the statusbar (at the bottom of the window)"
-msgstr ""
+msgstr "Statusbalk weergeven of verbergen (onderaan het scherm)"
 
 #. There isn't a way to handle "sub menus" (which could really be seen as a
 #. * list of verb arguments) in the verb system right now, so we have to build
@@ -3917,41 +3923,38 @@ msgstr ""
 #.
 #: src/interface.cpp:1069 src/ui/stock-items.cpp:154
 msgid "_Tutorials"
-msgstr ""
+msgstr "_Handleidingen"
 
 #: src/interface.cpp:1069
 msgid "Interactive Inkscape tutorials"
-msgstr ""
+msgstr "Interactieve Inkscape handleidingen"
 
 #: src/interface.cpp:1138
-#, fuzzy
 msgid "Effects"
-msgstr "Object"
+msgstr "Effecten"
 
 #. TRANSLATORS: #%s is the id of the group e.g. <g id="#g7">, not a number.
 #: src/interface.cpp:1217
-#, fuzzy, c-format
+#, c-format
 msgid "Enter group #%s"
-msgstr "Bewerken"
+msgstr "Groep #%s binnengaan"
 
 #: src/interface.cpp:1228
-#, fuzzy
 msgid "Go to parent"
-msgstr "Effen opvulling"
+msgstr "Ga naar de ouder"
 
 #: src/interface.cpp:1234
-#, fuzzy
 msgid "Go to root"
-msgstr "Bewerken"
+msgstr "Ga naar het begin"
 
 #: src/interface.cpp:1264
 msgid "Could not parse SVG data"
-msgstr ""
+msgstr "De SVG gegevens konden niet worden verwerkt."
 
 #: src/interface.cpp:1357
 #, c-format
 msgid "Overwrite %s"
-msgstr ""
+msgstr "%s overschrijven"
 
 #: src/interface.cpp:1375
 #, c-format
@@ -3959,27 +3962,28 @@ msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "
 "current document?"
 msgstr ""
+"Het bestand %s bestaat al. Wilt u dat bestand overschrijven met het "
+"huidige bestand?"
 
 #: src/knot.cpp:601
 msgid "Node or handle drag canceled."
-msgstr ""
+msgstr "Het slepen van het knooppunt of handvat is afgebroken."
 
 #: src/libnrtype/FontFactory.cpp:343
 msgid "Ignoring font without family that will crash Pango"
-msgstr ""
+msgstr "Lettertype zonder familie (welke Pango doet crashen) wordt genegeerd"
 
 #: src/main.cpp:144
 msgid "Print the Inkscape version number"
-msgstr ""
+msgstr "Het Inkscape versienummer tonen."
 
 #: src/main.cpp:149
 msgid "Do not use X server (only process files from console)"
 msgstr "X-server niet gebruiken (verwerk alleen bestanden van de terminal)"
 
 #: src/main.cpp:154
-#, fuzzy
 msgid "Try to use X server (even if $DISPLAY is not set)"
-msgstr "Probeer X-server te gebruiken zelfs als $DISPLAY geen waarde heeft"
+msgstr "Probeer X-server te gebruiken (zelfs als $DISPLAY geen waarde heeft)"
 
 #: src/main.cpp:159
 msgid "Open specified document(s) (option string may be excluded)"
@@ -3998,27 +4002,23 @@ msgstr ""
 "een pipe)"
 
 #: src/main.cpp:169
-#, fuzzy
 msgid "Export document to a PNG file"
-msgstr "Document exporteren naar .png bestand."
+msgstr "Document exporteren naar .png bestand"
 
 #: src/main.cpp:174
-#, fuzzy
 msgid "The resolution used for exporting SVG into bitmap (default 90)"
-msgstr ""
-"De resolutie die gebruikt is om SVG naar bitmap om te zeten (standaard 72.0)"
+msgstr "De resolutie die gebruikt wordt om SVG naar bitmap te exporteren (standaard 90)"
 
 #: src/main.cpp:175
 msgid "DPI"
 msgstr "DPI"
 
 #: src/main.cpp:179
-#, fuzzy
 msgid ""
 "Exported area in SVG pixels (default is full document; 0,0 is lower-left "
 "corner)"
 msgstr ""
-"Oppervlakte van het geëxporteerde  ebied (standaard het hele documenten; 0,0 "
+"Te exporteren oppervlakte in SVG pixels (standaard het hele document; 0,0 "
 "is de hoek linksonder)"
 
 #: src/main.cpp:180
@@ -4026,30 +4026,24 @@ msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
 #: src/main.cpp:184
-#, fuzzy
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
-msgstr ""
-"De breedte van de gegenereerde bitmap in pixels (dit overschijft de DPI)"
+msgstr "De breedte van de gegenereerde bitmap in pixels (dit overschijft de DPI)"
 
 #: src/main.cpp:185
 msgid "WIDTH"
 msgstr "BREEDTE"
 
 #: src/main.cpp:189
-#, fuzzy
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
-msgstr ""
-"De hoogte van de gegenereerde bitmap in pixels (dit overschijft de DPI)"
+msgstr "De hoogte van de gegenereerde bitmap in pixels (dit overschijft de DPI)"
 
 #: src/main.cpp:190
 msgid "HEIGHT"
 msgstr "HOOGTE"
 
 #: src/main.cpp:194
-#, fuzzy
 msgid "The ID of the object to export (overrides export-area)"
-msgstr ""
-"De breedte van de gegenereerde bitmap in pixels (dit overschijft de DPI)"
+msgstr "Het ID van het te exporteren object (dit overschijft het te exporteren gebied)"
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
@@ -4057,13 +4051,15 @@ msgstr ""
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
+"Exporteer alleen het object met het opgegeven object-id, verberg alle andere objecten"
 
 #: src/main.cpp:206
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
+"Gebruik de opgeslagen bestandsnaam en DPI instellingen bij het exporteren"
+"(alleen met export-id)"
 
 #: src/main.cpp:211
-#, fuzzy
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Achtergrondkleur van de geëxporteerde bitmap (kan iedere door SVG "
@@ -4074,21 +4070,19 @@ msgid "COLOR"
 msgstr "KLEUR"
 
 #: src/main.cpp:216
-#, fuzzy
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr ""
-"Achtergrondkleur van de geëxporteerde bitmap (kan iedere door SVG "
-"ondersteunde kleur zijn)"
+"Achtergrond ondoorzichtigheid van de geëxporteerde bitmap (ofwel "
+"tussen 0.0 en 1.0, of tussen 1 en 255)"
 
 #: src/main.cpp:217
 msgid "VALUE"
-msgstr ""
+msgstr "WAARDE"
 
 #: src/main.cpp:221
-#, fuzzy
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
-"Document exporteren naar gewoon SVG bestand (geen \"xmlns:sodipodi\" "
+"Document exporteren naar gewoon SVG bestand (geen sodipodi of inkscape"
 "naamruimte)"
 
 #: src/main.cpp:226
@@ -4103,6 +4097,9 @@ msgid ""
 "\n"
 "Available options:"
 msgstr ""
+"[OPTIES...] [BESTAND]\n"
+"\n"
+"Beschikbare opties:"
 
 #: src/node-context.cpp:369
 msgid ""
@@ -4181,32 +4178,38 @@ msgid ""
 msgstr ""
 
 #: src/nodepath.cpp:2922
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
-msgstr "Lijnen op de geselecteerde knooppunten samenvoegen"
+msgstr "<b>%i</b> van <b>%i</b> knooppunten geselecteerd: %s. %s."
 
 #: src/nodepath.cpp:2928
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
-msgstr "Lijnen op de geselecteerde knooppunten samenvoegen"
+msgstr "<b>%i</b> van <b>%i</b> knooppunten geselecteerd. %s."
 
 #: src/object-edit.cpp:433
 msgid ""
 "Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> to make the "
 "vertical radius the same"
 msgstr ""
+"De straal van de <b>horizontale afronding</b> van hoeken instellen; gebruik "
+"<b>Ctrl</b> om de vertikale straal gelijk te maken"
 
 #: src/object-edit.cpp:435
 msgid ""
 "Adjust the <b>vertical rounding</b> radius; with <b>Ctrl</b> to make the "
 "horizontal radius the same"
 msgstr ""
+"De straal van de <b>vertikale afronding</b> van hoeken instellen; gebruik "
+"<b>Ctrl</b> om de horizontale straal gelijk te maken"
 
 #: src/object-edit.cpp:437 src/object-edit.cpp:439
 msgid ""
 "Adjust the <b>width and height</b> of the rectangle; with <b>Ctrl</b> to "
 "lock ratio or stretch in one dimension only"
 msgstr ""
+"De <b>hoogte en breedte</b> van de rechthoek aanpassen; gebruik <b>Ctrl</b>"
+"om de verhouding te vergrendelen of om in een dimensie te schalen"
 
 #: src/object-edit.cpp:608
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
@@ -4484,74 +4487,66 @@ msgstr ""
 
 #: src/selection-chemistry.cpp:105
 msgid "<b>Nothing</b> was deleted."
-msgstr ""
+msgstr "Er is <b>niets</b> verwijderd."
 
 #: src/selection-chemistry.cpp:136
-#, fuzzy
 msgid "Select <b>object(s)</b> to duplicate."
-msgstr "Geselecteerde objecten knippen naar het klembord"
+msgstr "Selecteer (een) <b>object(en)</b> om te dupliceren."
 
 #: src/selection-chemistry.cpp:355
-#, fuzzy
 msgid "Select <b>two or more objects</b> to group."
-msgstr "De geselecteerde objecten naar voren brengen"
+msgstr "Selecteer <b>twee objecten of meer</b> om te groeperen."
 
 #: src/selection-chemistry.cpp:363
-#, fuzzy
 msgid "Select <b>at least two objects</b> to group."
-msgstr "Alle objecten in het document selecteren"
+msgstr "Selecteer <b>tenminste  twee objecten</b> om te groeperen."
 
 #: src/selection-chemistry.cpp:372
 msgid "You cannot group objects from <b>different groups</b> or <b>layers</b>."
 msgstr ""
 
 #: src/selection-chemistry.cpp:420
-#, fuzzy
 msgid "Select a <b>group</b> to ungroup."
-msgstr "De geselecteerde objecten naar voren brengen"
+msgstr "Selecteer een <b>groep</b> om te degroeperen"
 
 #: src/selection-chemistry.cpp:454
 msgid "<b>No groups</b> to ungroup in the selection."
-msgstr ""
+msgstr "Er zijn <b>geen groepen</b> in de selectie om te degroeperen."
 
 #: src/selection-chemistry.cpp:521
-#, fuzzy
 msgid "Select <b>objects</b> to raise."
-msgstr "Geselecteerde objecten knippen naar het klembord"
+msgstr "Selecteer <b>objecten</b> om naar voren te brengen."
 
 #: src/selection-chemistry.cpp:527 src/selection-chemistry.cpp:579
 #: src/selection-chemistry.cpp:613 src/selection-chemistry.cpp:671
 msgid ""
 "You cannot raise/lower objects from <b>different groups</b> or <b>layers</b>."
 msgstr ""
+"U kunt geen object uit <b>verschillende groepen</b> of <b>lagen</b> naar voren brengen of naar achteren sturen."
 
 #: src/selection-chemistry.cpp:571
-#, fuzzy
 msgid "Select <b>object(s)</b> to raise to top."
-msgstr "Het geselecteerde object omzetten naar pad"
+msgstr "Selecteer <b>objecten</b> die u naar voren wilt brengen."
 
 #: src/selection-chemistry.cpp:607
-#, fuzzy
 msgid "Select <b>object(s)</b> to lower."
-msgstr "De geselecteerde objecten knippen en op het klembord plaatsen"
+msgstr "Selecteer <b>objecten</b> die u naar achteren wilt sturen."
 
 #: src/selection-chemistry.cpp:663
-#, fuzzy
 msgid "Select <b>object(s)</b> to lower to bottom."
-msgstr "De geselecteerde objecten naar de achtergrond sturen"
+msgstr "Selecteer <b>objecten</b> die u naar achteren wilt sturen."
 
 #: src/selection-chemistry.cpp:705
 msgid "Nothing to undo."
-msgstr ""
+msgstr "Er is niets om ongedaan te maken."
 
 #: src/selection-chemistry.cpp:714
-#, fuzzy
 msgid "Nothing to redo."
-msgstr "Naar voren brengen"
+msgstr "Er is niets om opnieuw te doen."
 
 #: src/selection-chemistry.cpp:924
 msgid "Nothing was copied."
-msgstr ""
+msgstr "Er is niets gekopieërd."
 
 #: src/selection-chemistry.cpp:1035
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to paste to it."
@@ -4562,43 +4557,36 @@ msgid "<b>Current layer is locked</b>. Unlock it to be able to paste to it."
 msgstr ""
 
 #: src/selection-chemistry.cpp:1052 src/selection-chemistry.cpp:1088
-#, fuzzy
 msgid "Nothing on the clipboard."
-msgstr "Geselecteerde objecten naar het klembord kopieëren"
+msgstr "Er staat niets op het klembord."
 
 #: src/selection-chemistry.cpp:1094
-#, fuzzy
 msgid "Select <b>object(s)</b> to paste style to."
-msgstr "Het geselecteerde object omzetten naar pad"
+msgstr "Selecteer <b>objecten</b> om de stijl op toe te passen."
 
 #: src/selection-chemistry.cpp:1113
-#, fuzzy
 msgid "Select <b>object(s)</b> to move to the layer above."
-msgstr "Geselecteerde objecten knippen naar het klembord"
+msgstr "Selecteer <b>objecten</b> om naar de bovenliggende laag te verplaatsen."
 
 #: src/selection-chemistry.cpp:1130
-#, fuzzy
 msgid "No more layers above."
-msgstr "Document naam:"
+msgstr "Er zijn geen bovenliggende lagen."
 
 #: src/selection-chemistry.cpp:1144
-#, fuzzy
 msgid "Select <b>object(s)</b> to move to the layer below."
-msgstr "Geselecteerde objecten knippen naar het klembord"
+msgstr "Selecteer <b>objecten</b> om naar de onderliggende laag te verplaatsen."
 
 #: src/selection-chemistry.cpp:1161
-#, fuzzy
 msgid "No more layers below."
-msgstr "Document naam:"
+msgstr "Er zijn geen onderliggende lagen."
 
 #: src/selection-chemistry.cpp:1767
-#, fuzzy
 msgid "Select a <b>clone</b> to unlink."
-msgstr "Selecteer een bestand om te openen"
+msgstr "Selecteer een <b>kloon</b> om los te koppelen."
 
 #: src/selection-chemistry.cpp:1798
 msgid "<b>No clones to unlink</b> in the selection."
-msgstr ""
+msgstr "Er zijn <b>geen klonen om te ontkoppelen</b> geselecteerd."
 
 #: src/selection-chemistry.cpp:1815
 msgid ""
@@ -4619,69 +4607,68 @@ msgid ""
 msgstr ""
 
 #: src/selection-chemistry.cpp:1869
-#, fuzzy
 msgid "Select <b>object(s)</b> to convert to pattern."
-msgstr "Geselecteerde objecten knippen naar het klembord"
+msgstr "Selecteer <b>objecten</b> om te gebruiken als patroon."
 
 #: src/selection-chemistry.cpp:1945
-#, fuzzy
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
-msgstr "Geselecteerde objecten knippen naar het klembord"
+msgstr "Selecteer <b>objecten met patroonvulling</b> om objecten uit te halen."
 
 #: src/selection-chemistry.cpp:1998
-#, fuzzy
 msgid "<b>No pattern fills</b> in the selection."
-msgstr "Geselecteerde objecten knippen naar het klembord"
+msgstr "Er zijn geen <b>objecten met patroonvulling</b> geselecteerd."
 
 #: src/selection-chemistry.cpp:2018
-#, fuzzy
 msgid "Select <b>object(s)</b> to make a bitmap copy."
-msgstr "Het geselecteerde object omzetten naar pad"
+msgstr "Selecteer <b>objecten</b> om een bitmap kopie van te maken."
 
 #: src/selection-describer.cpp:34
 msgid "Click selection to toggle scale/rotation handles"
-msgstr ""
+msgstr "Klik op de selectie om te wisselen tussen draaien en vergroten/verkleinen"
 
 #. no items
 #: src/selection-describer.cpp:36
 msgid ""
 "No objects selected. Click, Shift+click, or drag around objects to select."
 msgstr ""
+"Er zijn geen objecten geselecteerd. Klik, shift-klik of sleep om objecten te selecteren."
 
 #: src/selection-describer.cpp:44
-#, fuzzy, c-format
+#, c-format
 msgid " in layer <b>%s</b>"
-msgstr "Node naar voren brengen"
+msgstr " in laag <b>%s</b>"
 
 #: src/selection-describer.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid " in layer <b><i>%s</i></b>"
-msgstr "Node naar voren brengen"
+msgstr " in laag <b><i>%s</i></b>"
 
 #: src/selection-describer.cpp:53
 msgid "Use <b>Shift+D</b> to look up original"
-msgstr ""
+msgstr "Gebruik <b>Shift+D</b> om het origineel te vinden"
 
 #: src/selection-describer.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%i</b> object selected"
-msgstr "Lijnen op de geselecteerde knooppunten samenvoegen"
+msgstr "<b>%i</b> object geselecteerd"
 
 #: src/selection-describer.cpp:68
 #, c-format
 msgid "%s%s. %s."
-msgstr ""
+msgstr "%s%s. %s."
 
 #: src/selection-describer.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "%s in <b>%i</b> layer. %s."
-msgstr "Lijnen op de geselecteerde knooppunten samenvoegen"
+msgstr "%s in <b>%i</b> laag. %s."
 
 #: src/seltrans.cpp:456
 msgid ""
 "<b>Center</b> of rotation and skewing: drag to reposition; scaling with "
 "Shift also uses this center"
 msgstr ""
+"Het <b>midden</b> van draaiing and skewing: sleep om te verplaatsen; "
+"vergroten/verkleinen met Shift gebruikt ook dit midden."
 
 #: src/seltrans.cpp:472
 msgid ""
@@ -5361,26 +5348,24 @@ msgid "Scroll by"
 msgstr ""
 
 #: src/ui/dialog/inkscape-preferences.cpp:107
-#, fuzzy
 msgid "Acceleration"
-msgstr "Selectie"
+msgstr "Versnelling"
 
 #: src/ui/dialog/inkscape-preferences.cpp:116
-#, fuzzy
 msgid "Speed"
-msgstr "Vorm"
+msgstr "Snelheid"
 
 #: src/ui/dialog/inkscape-preferences.cpp:119
 msgid "Threshold"
-msgstr ""
+msgstr "Drempelwaarde"
 
 #: src/ui/dialog/inkscape-preferences.cpp:127
 msgid "Arrow keys move by"
-msgstr ""
+msgstr "Cursor-toetsen verplaatsen met"
 
 #: src/ui/dialog/inkscape-preferences.cpp:132
 msgid "> and < scale by"
-msgstr ""
+msgstr "> en < schalen met"
 
 #: src/ui/dialog/inkscape-preferences.cpp:137
 msgid "Inset/Outset by"
@@ -5391,183 +5376,151 @@ msgid "Rotation snaps every"
 msgstr ""
 
 #: src/ui/dialog/inkscape-preferences.cpp:160
-#, fuzzy
 msgid "Zoom in/out by"
-msgstr "Afbeeldingen uitzoomen"
+msgstr "In- of uitzoomen met"
 
 #: src/ui/dialog/inkscape-preferences.h:33
-#, fuzzy
 msgid "Inkscape Preferences"
-msgstr "Sodipodi diavoorstelling"
+msgstr "Inkscape voorkeuren"
 
 #: src/ui/dialog/inkscape-preferences.h:34
-#, fuzzy
 msgid "Inkscape Preferences Dialog"
-msgstr "Sodipodi diavoorstelling"
+msgstr "Inkscape voorkeuren dialoog"
 
 #: src/ui/dialog/layer-editor.h:28
-#, fuzzy
 msgid "Layer Editor"
-msgstr "XML weergave"
+msgstr "Lagen aanpassen"
 
 #: src/ui/dialog/layer-editor.h:29
-#, fuzzy
 msgid "Layer Editor Dialog"
-msgstr "De geselecteerde objecten naar voren brengen"
+msgstr "Lagen aanpassen dialoog"
 
 #: src/ui/dialog/messages.h:33
 msgid "Messages Dialog"
-msgstr ""
+msgstr "Berichten dialoog"
 
 #: src/ui/dialog/text-properties.h:32
-#, fuzzy
 msgid "Text Properties"
 msgstr "Tekst eigenschappen"
 
 #: src/ui/dialog/text-properties.h:33
-#, fuzzy
 msgid "Text Properties Dialog"
-msgstr "Tekst eigenschappen"
+msgstr "Tekst eigenschappen dialoog"
 
 #: src/ui/dialog/tree-editor.h:32 src/ui/dialog/tree-editor.h:33
-#, fuzzy
 msgid "Tree Editor"
-msgstr "XML weergave"
+msgstr "Boom-editor"
 
 #: src/ui/dialog/xml-editor.h:28 src/verbs.cpp:1847
 msgid "XML Editor"
 msgstr "XML weergave"
 
 #: src/ui/dialog/xml-editor.h:29
-#, fuzzy
 msgid "XML Editor Dialog"
-msgstr "XML weergave"
+msgstr "XML weergave dialoog"
 
 #: src/ui/stock-items.cpp:33 src/verbs.cpp:1554
-#, fuzzy
 msgid "Save _As..."
-msgstr "Opslaan als..."
+msgstr "Opslaan _als..."
 
 #: src/ui/stock-items.cpp:34 src/verbs.cpp:1565
-#, fuzzy
 msgid "_Import..."
-msgstr "Importeren"
+msgstr "_Importeren..."
 
 #: src/ui/stock-items.cpp:35
-#, fuzzy
 msgid "_Export..."
-msgstr "Exporteren"
+msgstr "_Exporteren..."
 
 #: src/ui/stock-items.cpp:36 src/verbs.cpp:1556
-#, fuzzy
 msgid "_Print..."
-msgstr "Afdrukken..."
+msgstr "_Afdrukken..."
 
 #: src/ui/stock-items.cpp:37 src/verbs.cpp:1563
-#, fuzzy
 msgid "Print Previe_w"
-msgstr "Afdrukvoorbeeld"
+msgstr "Afdruk_voorbeeld"
 
 #. TRANSLATORS: "Vacuum Defs" means "Clean up defs" (so as to remove unused definitions)
 #: src/ui/stock-items.cpp:38 src/verbs.cpp:1559
 msgid "Vac_uum Defs"
-msgstr ""
+msgstr "_Definities opruimen"
 
 #: src/ui/stock-items.cpp:39
-#, fuzzy
 msgid "_Document Properties"
-msgstr "Rechthoek eigenschappen"
+msgstr "_Document voorkeuren"
 
 #: src/ui/stock-items.cpp:40
-#, fuzzy
 msgid "In_kscape Preferences"
-msgstr "Sodipodi diavoorstelling"
+msgstr "In_kscape voorkeuren"
 
 #. Edit menu
 #: src/ui/stock-items.cpp:43 src/verbs.cpp:1590
-#, fuzzy
 msgid "Paste _In Place"
-msgstr "Veegstijl"
+msgstr "Plak _op positie"
 
 #: src/ui/stock-items.cpp:44 src/verbs.cpp:1588
-#, fuzzy
 msgid "Paste _Style"
-msgstr "Veegstijl"
+msgstr "Plak _stijl"
 
 #: src/ui/stock-items.cpp:45 src/verbs.cpp:1594
-#, fuzzy
 msgid "Duplic_ate"
-msgstr "Dupliceren"
+msgstr "_Dupliceren"
 
 #: src/ui/stock-items.cpp:46 src/verbs.cpp:1596
-#, fuzzy
 msgid "Clo_ne"
-msgstr "Sluiten"
+msgstr "_Klonen"
 
 #: src/ui/stock-items.cpp:47 src/verbs.cpp:1598
 msgid "Unlin_k Clone"
-msgstr ""
+msgstr "Kloo_n ontkoppelen"
 
 #: src/ui/stock-items.cpp:48
-#, fuzzy
 msgid "Select _Original Clone"
-msgstr "Printer selecteren"
+msgstr "Selecteer kloon-origineel"
 
 #: src/ui/stock-items.cpp:49 src/verbs.cpp:1695
-#, fuzzy
 msgid "_Make a Bitmap Copy"
-msgstr "Afdrukken als bitmap"
+msgstr "Kopieer als bitmap"
 
 #: src/ui/stock-items.cpp:50
-#, fuzzy
 msgid "Tile"
-msgstr "Titel:"
+msgstr "Tegelen"
 
 #: src/ui/stock-items.cpp:51
-#, fuzzy
 msgid "Untile"
-msgstr "Naamloos"
+msgstr ""
 
 #: src/ui/stock-items.cpp:52
-#, fuzzy
 msgid "Select A_ll"
-msgstr "Alles selecteren"
+msgstr "A_lles selecteren"
 
 #: src/ui/stock-items.cpp:53
-#, fuzzy
 msgid "Select All in All La_yers"
-msgstr "Selecteren"
+msgstr "Alles selecteren in alle lagen"
 
 #: src/ui/stock-items.cpp:54
-#, fuzzy
 msgid "In_vert Selection"
-msgstr "Selectie"
+msgstr "Selectie inverteren"
 
 #: src/ui/stock-items.cpp:55
-#, fuzzy
 msgid "Select Non_e"
-msgstr "Selectie"
+msgstr "Ni_ets selectie"
 
 #: src/ui/stock-items.cpp:56 src/verbs.cpp:1846
-#, fuzzy
 msgid "_XML Editor..."
-msgstr "XML weergave"
+msgstr "_XML weergave..."
 
 #. View menu
 #: src/ui/stock-items.cpp:59
-#, fuzzy
 msgid "_Zoom"
-msgstr "Zoomen"
+msgstr "_Zoomen"
 
 #: src/ui/stock-items.cpp:60
-#, fuzzy
 msgid "Zoom _In"
-msgstr "Zoomen"
+msgstr "_Inzoomen"
 
 #: src/ui/stock-items.cpp:61
-#, fuzzy
 msgid "Zoom _Out"
-msgstr "Zoomen"
+msgstr "_Uit zoomen"
 
 #: src/ui/stock-items.cpp:62
 msgid "1:_1 (100%)"
@@ -6133,9 +6086,8 @@ msgid "Create new document from default template"
 msgstr "Maak een nieuw SVG document"
 
 #: src/verbs.cpp:1548
-#, fuzzy
 msgid "_Open..."
-msgstr "Openen..."
+msgstr "_Openen..."
 
 #: src/verbs.cpp:1549
 #, fuzzy
@@ -6143,18 +6095,16 @@ msgid "Open existing document"
 msgstr "Open een bestaand SVG document"
 
 #: src/verbs.cpp:1550
-#, fuzzy
 msgid "Re_vert"
-msgstr "Omdraaien"
+msgstr "_Terugdraaien"
 
 #: src/verbs.cpp:1551
 msgid "Revert to the last saved version of document (changes will be lost)"
 msgstr ""
 
 #: src/verbs.cpp:1552
-#, fuzzy
 msgid "_Save"
-msgstr "Opslaan"
+msgstr "Op_slaan"
 
 #: src/verbs.cpp:1552
 msgid "Save document"
@@ -6190,9 +6140,8 @@ msgid "Import bitmap or SVG image into document"
 msgstr "Bitmap of SVG-bestand in het document importeren"
 
 #: src/verbs.cpp:1567
-#, fuzzy
 msgid "_Export Bitmap..."
-msgstr "Bitmap exporteren"
+msgstr "Bitmap _exporteren..."
 
 #: src/verbs.cpp:1568
 #, fuzzy
@@ -6208,18 +6157,16 @@ msgid "Switch to the previous document window"
 msgstr ""
 
 #: src/verbs.cpp:1573
-#, fuzzy
 msgid "_Close"
-msgstr "Sluiten"
+msgstr "Sl_uiten"
 
 #: src/verbs.cpp:1574
-#, fuzzy
 msgid "Close window"
-msgstr "Weergave sluiten"
+msgstr "Venster sluiten"
 
 #: src/verbs.cpp:1575
 msgid "_Quit"
-msgstr ""
+msgstr "A_fsluiten"
 
 #: src/verbs.cpp:1575
 #, fuzzy
@@ -6771,9 +6718,8 @@ msgid "Create and edit text objects"
 msgstr "Tekstobjecten maken en aanpassen"
 
 #: src/verbs.cpp:1769
-#, fuzzy
 msgid "Zoom in or out"
-msgstr "Afbeelding inzoomen"
+msgstr "In- of uit zoomen"
 
 #: src/verbs.cpp:1771
 msgid "Pick averaged colors from image"
@@ -6871,107 +6817,91 @@ msgid "Open Inkscape Preferences for the Text tool"
 msgstr ""
 
 #: src/verbs.cpp:1794
-#, fuzzy
 msgid "Zoom Preferences"
-msgstr "Ontbrekende gereedschap eigenschappen"
+msgstr "Zoom voorkeuren"
 
 #: src/verbs.cpp:1795
 msgid "Open Inkscape Preferences for the Zoom tool"
 msgstr ""
 
 #: src/verbs.cpp:1796
-#, fuzzy
 msgid "Dropper Preferences"
-msgstr "Sodipodi diavoorstelling"
+msgstr "Pipet voorkeuren"
 
 #: src/verbs.cpp:1797
 msgid "Open Inkscape Preferences for the Dropper tool"
-msgstr ""
+msgstr "Inkscape voorkeuren voor het pipetgereedschap openen"
 
 #. Zooming
 #: src/verbs.cpp:1800
-#, fuzzy
 msgid "Zoom In"
-msgstr "Zoomen"
+msgstr "Inzoomen"
 
 #: src/verbs.cpp:1800
-#, fuzzy
 msgid "Zoom in"
-msgstr "Zoomen"
+msgstr "Inzoomen"
 
 #: src/verbs.cpp:1801
-#, fuzzy
 msgid "Zoom Out"
-msgstr "Zoomen"
+msgstr "Uitzoomen"
 
 #: src/verbs.cpp:1801
-#, fuzzy
 msgid "Zoom out"
-msgstr "Afbeeldingen uitzoomen"
+msgstr "Uitzoomen"
 
 #: src/verbs.cpp:1802
-#, fuzzy
 msgid "Show or hide the canvas rulers"
-msgstr "Hulplijnen weergeven"
+msgstr "Linealen weergeven of verbergen"
 
 #: src/verbs.cpp:1803
-#, fuzzy
 msgid "Show or hide the canvas scrollbars"
-msgstr "Hulplijnen weergeven"
+msgstr "Scrollbars weergeven of verbergen"
 
 #: src/verbs.cpp:1804
-#, fuzzy
 msgid "Show or hide grid"
-msgstr "Rand weergeven"
+msgstr "Raster weergeven of verbergen"
 
 #: src/verbs.cpp:1805
-#, fuzzy
 msgid "Show or hide guides"
-msgstr "Hulplijnen weergeven"
+msgstr "Hulplijnen weergeven of verbergen"
 
 #: src/verbs.cpp:1806
 msgid "Nex_t Zoom"
-msgstr ""
+msgstr "V_olgende zoom niveau"
 
 #: src/verbs.cpp:1806
 msgid "Next zoom (from the history of zooms)"
-msgstr ""
+msgstr "Volgende zoom niveau (uit de zoom-geschiedenis)"
 
 #: src/verbs.cpp:1808
 msgid "Pre_vious Zoom"
-msgstr ""
+msgstr "Vo_rige zoom niveau"
 
 #: src/verbs.cpp:1808
 msgid "Previous zoom (from the history of zooms)"
-msgstr ""
+msgstr "Vorige zoom niveau (uit de zoom-geschiedenis)"
 
 #: src/verbs.cpp:1810
-#, fuzzy
 msgid "Zoom 1:_1"
-msgstr "Zoomen"
+msgstr "Zoom 1:_1"
 
 #: src/verbs.cpp:1810
-#, fuzzy
 msgid "Zoom to 1:1"
 msgstr "Zoomfactor instellen op 1:1"
 
 #: src/verbs.cpp:1812
-#, fuzzy
 msgid "Zoom 1:_2"
-msgstr "Zoomen"
+msgstr "Zoom 1:_2"
 
 #: src/verbs.cpp:1812
-#, fuzzy
 msgid "Zoom to 1:2"
 msgstr "Zoomfactor instellen op 1:2"
 
 #: src/verbs.cpp:1814
-#, fuzzy
 msgid "_Zoom 2:1"
-msgstr "Zoomen"
+msgstr "_Zoom 2:1"
 
 #: src/verbs.cpp:1814
-#, fuzzy
 msgid "Zoom to 2:1"
 msgstr "Zoomfactor instellen op 2:1"
 
@@ -6980,9 +6910,8 @@ msgid "Stretch this document window to full screen"
 msgstr ""
 
 #: src/verbs.cpp:1820
-#, fuzzy
 msgid "Open a new window with the same document"
-msgstr "Open een bestaand SVG document"
+msgstr "Open een nieuwe venster met hetzelfde document"
 
 #: src/verbs.cpp:1822
 #, fuzzy
@@ -7021,24 +6950,20 @@ msgstr "De hele selectie in het scherm passen"
 
 #. Dialogs
 #: src/verbs.cpp:1834
-#, fuzzy
 msgid "In_kscape Preferences..."
-msgstr "Sodipodi diavoorstelling"
+msgstr "In_kscape voorkeuren..."
 
 #: src/verbs.cpp:1835
-#, fuzzy
 msgid "Global Inkscape preferences"
-msgstr "Algemene weergave voorkeuren"
+msgstr "Algemene Inkscape voorkeuren"
 
 #: src/verbs.cpp:1836
-#, fuzzy
 msgid "_Document Preferences..."
-msgstr "Document boom"
+msgstr "_Document voorkeuren..."
 
 #: src/verbs.cpp:1837
-#, fuzzy
 msgid "Preferences saved with the document"
-msgstr "Voorkeursbreedte voor het dock-item"
+msgstr "Voorkeuren opgeslagen in dit document"
 
 #: src/verbs.cpp:1839
 #, fuzzy
