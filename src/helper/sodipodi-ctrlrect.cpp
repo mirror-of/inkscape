@@ -259,7 +259,7 @@ sp_ctrlrect_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int f
 
 	NRRect bbox;
 
-	nr_rect_d_matrix_d_transform (&bbox, &cr->rect, affine);
+	nr_rect_d_matrix_transform (&bbox, &cr->rect, affine);
 
 	cr->area.x0 = (int) (bbox.x0 + 0.5);
 	cr->area.y0 = (int) (bbox.y0 + 0.5);

@@ -897,7 +897,7 @@ sp_string_calculate_dimensions (SPString *string)
     //nr_font_unref (font);
     //nr_typeface_unref (face);
 
-    if (nr_rect_f_test_empty (&string->bbox)) {
+    if (nr_rect_d_test_empty (&string->bbox)) {
         string->bbox.x0 = string->bbox.y0 = 0.0;
         string->bbox.x1 = string->bbox.y1 = 0.0;
     }

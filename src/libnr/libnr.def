@@ -39,21 +39,11 @@ EXPORTS
 	nr_flat_insert_sorted
 	nr_flat_new_full
 	nr_lgradient_renderer_setup
-	nr_matrix_d_invert
-	nr_matrix_d_set_rotate
-	nr_matrix_d_set_scale
-	nr_matrix_d_set_translate
-	nr_matrix_f_invert
-	nr_matrix_f_set_rotate
-	nr_matrix_f_set_scale
-	nr_matrix_f_set_translate
-	nr_matrix_multiply_ddd
-	nr_matrix_multiply_ddf
-	nr_matrix_multiply_dfd
-	nr_matrix_multiply_fdd
-	nr_matrix_multiply_fdf
-	nr_matrix_multiply_ffd
-	nr_matrix_multiply_fff
+	nr_matrix_invert
+	nr_matrix_set_rotate
+	nr_matrix_set_scale
+	nr_matrix_set_translate
+	nr_matrix_multiply
 	nr_object_check_instance_cast
 	nr_object_check_instance_type
 	nr_object_delete
@@ -85,15 +75,10 @@ EXPORTS
 	nr_pixelstore_64K_free
 	nr_pixelstore_64K_new
 	nr_rect_d_intersect
-	nr_rect_d_matrix_d_transform
+	nr_rect_d_matrix_transform
 	nr_rect_d_union
-	nr_rect_f_intersect
-	nr_rect_f_matrix_f_transform
-	nr_rect_f_union
 	nr_rect_l_intersect
 	nr_rect_l_union
-	nr_rect_s_intersect
-	nr_rect_s_union
 	nr_rgradient_renderer_setup
 	nr_svl_calculate_bbox
 	nr_svl_compare
@@ -109,12 +94,6 @@ EXPORTS
 	nr_svl_new_vertex_wind
 	nr_svl_point_wind
 	nr_svl_remove
-;	nr_svl_slice_free_list
-;	nr_svl_slice_free_one
-;	nr_svl_slice_insert_sorted
-;	nr_svl_slice_new
-;	nr_svl_slice_stretch_list
-	nr_svl_uncross_full
 	nr_svp_bbox
 	nr_svp_free
 	nr_svp_from_svl
@@ -126,5 +105,3 @@ EXPORTS
 	nr_vertex_new
 	nr_vertex_new_xy
 	nr_vertex_reverse_list
-	nr_vpath_release
-	nr_vpath_setup_from_art_vpath

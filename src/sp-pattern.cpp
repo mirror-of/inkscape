@@ -575,7 +575,7 @@ sp_pat_fill (SPPainter *painter, NRPixBlock *pb)
 	ba.y0 = pb->area.y0;
 	ba.x1 = pb->area.x1;
 	ba.y1 = pb->area.y1;
-	nr_rect_f_matrix_f_transform (&psa, &ba, &pp->px2ps);
+	nr_rect_d_matrix_transform (&psa, &ba, &pp->px2ps);
 
 	psa.x0 = floor ((psa.x0 - pp->pat->x.computed) / pp->pat->width.computed);
 	psa.y0 = floor ((psa.y0 - pp->pat->y.computed) / pp->pat->height.computed);

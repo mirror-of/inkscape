@@ -380,7 +380,7 @@ sp_icon_image_load_svg ( const gchar *name,
             NRRect dbox;
             sp_item_invoke_bbox(SP_ITEM(object), &dbox, &i2doc, TRUE);
             /* This is in document coordinates, i.e. pixels */
-            if (!nr_rect_f_test_empty (&dbox))
+            if (!nr_rect_d_test_empty (&dbox))
             {
                 NRRectL ibox, area, ua;
                 NRMatrix t;

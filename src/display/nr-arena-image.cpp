@@ -129,7 +129,7 @@ nr_arena_image_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int 
 		bbox.y0 = image->y;
 		bbox.x1 = image->x + image->width;
 		bbox.y1 = image->y + image->height;
-		nr_rect_d_matrix_d_transform (&bbox, &bbox, &gc->transform);
+		nr_rect_d_matrix_transform (&bbox, &bbox, &gc->transform);
 
 		item->bbox.x0 = (int) floor (bbox.x0);
 		item->bbox.y0 = (int) floor (bbox.y0);

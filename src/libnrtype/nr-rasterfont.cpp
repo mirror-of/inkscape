@@ -430,7 +430,7 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 			nr_svp_bbox (svp, &bbox, TRUE);
 #endif
       
-			if (!nr_rect_f_test_empty (&bbox)) {
+			if (!nr_rect_d_test_empty (&bbox)) {
 				x0 = NRRF_COORD_FROM_FLOAT_LOWER (bbox.x0);
 				y0 = NRRF_COORD_FROM_FLOAT_LOWER (bbox.y0);
 				x1 = NRRF_COORD_FROM_FLOAT_UPPER (bbox.x1);

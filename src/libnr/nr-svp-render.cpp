@@ -9,6 +9,9 @@
  * This code is in public domain
  */
 
+#define NR_SVPSEG_Y0(s,i) ((s)->points[(s)->segments[i].start].y)
+#define NR_SVPSEG_Y1(s,i) ((s)->points[(s)->segments[i].start + (s)->segments[i].length - 1].y)
+
 #define noNR_VERBOSE
 
 #include "nr-macros.h"
@@ -45,45 +48,6 @@ nr_pixblock_render_svl_mask_or (NRPixBlock *d, NRSVL *svl)
     nr_svl_render (svl, NR_PIXBLOCK_PX (d), 1, d->rs,
                    d->area.x0, d->area.y0, d->area.x1, d->area.y1,
                    nr_svp_run_A8_OR, NULL);
-}
-
-/* Renders colored SVL into buffer (has to be RGB/RGBA) */
-
-void
-nr_pixblock_render_svl_rgba (NRPixBlock *dpb, NRSVL *svl, guint32 rgba)
-{
-    unsigned char c[4];
-
-    c[0] = NR_RGBA32_R (rgba);
-    c[1] = NR_RGBA32_G (rgba);
-    c[2] = NR_RGBA32_B (rgba);
-    c[3] = NR_RGBA32_A (rgba);
-
-    switch (dpb->mode) {
-    case NR_PIXBLOCK_MODE_R8G8B8:
-        nr_svl_render (svl, NR_PIXBLOCK_PX (dpb), 3, dpb->rs,
-                       dpb->area.x0, dpb->area.y0, dpb->area.x1, dpb->area.y1,
-                       nr_svp_run_R8G8B8, c);
-        break;
-    case NR_PIXBLOCK_MODE_R8G8B8A8P:
-        if (dpb->empty) {
-            nr_svl_render (svl, NR_PIXBLOCK_PX (dpb), 4, dpb->rs,
-                           dpb->area.x0, dpb->area.y0, dpb->area.x1, dpb->area.y1,
-                           nr_svp_run_R8G8B8A8P_EMPTY, c);
-        } else {
-            nr_svl_render (svl, NR_PIXBLOCK_PX (dpb), 4, dpb->rs,
-                           dpb->area.x0, dpb->area.y0, dpb->area.x1, dpb->area.y1,
-                           nr_svp_run_R8G8B8A8P_R8G8B8A8P, c);
-        }
-        break;
-    case NR_PIXBLOCK_MODE_R8G8B8A8N:
-        nr_svl_render (svl, NR_PIXBLOCK_PX (dpb), 4, dpb->rs,
-                       dpb->area.x0, dpb->area.y0, dpb->area.x1, dpb->area.y1,
-                       nr_svp_run_R8G8B8A8N_R8G8B8A8N, c);
-        break;
-    default:
-        break;
-    }
 }
 
 static void

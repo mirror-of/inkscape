@@ -43,22 +43,10 @@ struct _NRSVP {
     NRSVPSegment segments[1];
 };
 
-#define NR_SVPSEG_LENGTH(s,i) ((s)->segments[i].length)
 #define NR_SVPSEG_IS_FLAT(s,i) (!(s)->segments[i].length)
-
-#define NR_SVPSEG_X0(s,i) ((s)->segments[i].x0)
-#define NR_SVPSEG_Y0(s,i) ((s)->points[(s)->segments[i].start].y)
-#define NR_SVPSEG_X1(s,i) ((s)->segments[i].x1)
-#define NR_SVPSEG_Y1(s,i) ((s)->points[(s)->segments[i].start + (s)->segments[i].length - 1].y)
-
-#define NR_SVPFLAT_X0(s,i) (((NRSVPFlat *) (s)->segments + i)->x0)
-#define NR_SVPFLAT_X1(s,i) (((NRSVPFlat *) (s)->segments + i)->x1)
-#define NR_SVPFLAT_Y(s,i) (((NRSVPFlat *) (s)->segments + i)->y)
 
 void nr_svp_free (NRSVP *svp);
 
-int nr_svp_point_wind (NRSVP *svp, float x, float y);
-NR::Coord nr_svp_point_distance (NRSVP *svp, float x, float y);
 void nr_svp_bbox (NRSVP *svp, NRRect *bbox, unsigned int clear);
 
 /* Sorted vertex lists */
@@ -86,8 +74,6 @@ struct _NRFlat {
 };
 
 NRSVP *nr_svp_from_svl (NRSVL *svl, NRFlat *flat);
-
-int nr_svl_point_wind (NRSVL *svl, float x, float y);
 
 #endif
 

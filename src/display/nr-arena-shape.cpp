@@ -21,7 +21,6 @@
 #include <libnr/nr-path.h>
 #include <libnr/nr-pixops.h>
 #include <libnr/nr-blit.h>
-#include <libnr/nr-stroke.h>
 
 #include <libart_lgpl/art_misc.h>
 #include <libart_lgpl/art_bpath.h>
@@ -330,7 +329,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 	shape->approx_bbox.y1 = (gint32)(bbox.y1 + 1.9999F);
     } 
 	
-    if (nr_rect_f_test_empty (&bbox)) return NR_ARENA_ITEM_STATE_ALL;
+    if (nr_rect_d_test_empty (&bbox)) return NR_ARENA_ITEM_STATE_ALL;
 
     item->bbox.x0 = (gint32)(bbox.x0 - 1.0F);
     item->bbox.y0 = (gint32)(bbox.y0 - 1.0F);
@@ -803,14 +802,12 @@ nr_arena_shape_pick (NRArenaItem *item, NR::Point p, double delta, unsigned int 
 	area.x1=(int)ceil(p[NR::X]);
 	area.y0=(int)floor(p[NR::Y]);
 	area.y1=(int)ceil(p[NR::Y]);
-	area.x0-=(int)ceil(delta);
-	area.x1+=(int)ceil(delta);
-	area.y0-=(int)ceil(delta);
-	area.y1+=(int)ceil(delta);
-	area.x0-=1;
-	area.x1+=1;
-	area.y0-=1;
-	area.y1+=1;
+	int idelta = (int)ceil(delta) + 1;
+	// njh: inset rect
+	area.x0-=idelta;
+	area.x1+=idelta;
+	area.y0-=idelta;
+	area.y1+=idelta;
 	if ( nr_rect_l_test_intersect (&area, &item->bbox) ) {
 	    NRGC   tempGC;
 	    tempGC.transform=shape->ctm;

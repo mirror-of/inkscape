@@ -1715,7 +1715,7 @@ sp_desktop_update_scrollbars (SPDesktop *dt)
     sp_canvas_get_viewbox (dtw->canvas, &viewbox);
 
     /* Viewbox is always included into scrollable region */
-    nr_rect_f_union (&carea, &carea, &viewbox);
+    nr_rect_d_union (&carea, &carea, &viewbox);
 
     set_adjustment (dtw->hadj, carea.x0, carea.x1,
                     (viewbox.x1 - viewbox.x0),

@@ -299,7 +299,7 @@ nr_typeface_gnome_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigne
 	    bbox.x0 = bbox.y0 = 1e18;
 	    bbox.x1 = bbox.y1 = -1e18;
 	    nr_path_matrix_bbox_union (&bpath, NULL, &bbox, 0.25);
-	    if (!nr_rect_f_test_empty (&bbox)) {
+	    if (!nr_rect_d_test_empty (&bbox)) {
 		t[0] = 1.0;
 		t[1] = 0.0;
 		t[2] = 0.0;

@@ -230,7 +230,7 @@ PrintGNOME::fill (Inkscape::Extension::Print *mod, const NRBPath *bpath, const N
 	    double dd2i[6];
 	    int x, y;
 
-	    nr_rect_f_intersect (&cbox, dbox, bbox);
+	    nr_rect_d_intersect (&cbox, dbox, bbox);
 	    ibox.x0 = (long) cbox.x0;
 	    ibox.y0 = (long) cbox.y0;
 	    ibox.x1 = (long) (cbox.x1 + 0.9999);

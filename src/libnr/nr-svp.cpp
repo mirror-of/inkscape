@@ -142,109 +142,6 @@ nr_svp_free (NRSVP *svp)
     free (svp);
 }
 
-int
-nr_svp_point_wind (NRSVP *svp, float x, float y)
-{
-    unsigned int sidx;
-    int wind;
-
-    wind = 0;
-    for (sidx = 0; sidx < svp->length; sidx++) {
-        NRSVPSegment *seg;
-        seg = svp->segments + sidx;
-        if (seg->wind && (seg->x0 < x) && (svp->points[seg->start].y <= y) && (svp->points[seg->start + seg->length - 1].y > y)) {
-            if (seg->x1 <= x) {
-                /* Segment entirely to the left */
-                wind += seg->wind;
-            } else {
-                unsigned int pidx, last;
-                last = seg->start + seg->length - 1;
-                for (pidx = seg->start; (pidx < last) && (svp->points[pidx].y <= y); pidx++) {
-                    if (svp->points[pidx + 1].y > y) {
-                        NRPoint *pt;
-                        /* Segment crosses with our Y */
-                        pt = svp->points + pidx;
-                        if ((pt[0].x <= x) && (pt[1].x <= x)) {
-                            /* Both endpoints to the left */
-                            wind += seg->wind;
-                        } else {
-                            float cxy;
-                            /* Have to calculate X at Y */
-                            cxy = pt[0].x + (pt[1].x - pt[0].x) * (y - pt[0].y) / (pt[1].y - pt[0].y);
-                            if (cxy < x) wind += seg->wind;
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-    }
-    return wind;
-}
-
-static NR::Coord
-nr_line_point_distance2 (float Ax, float Ay, float Bx, float By, float Px, float Py)
-{
-    NR::Coord Dx, Dy, s;
-    NR::Coord dist2;
-    Dx = Bx - Ax;
-    Dy = By - Ay;
-    s = ((Px - Ax) * Dx + (Py - Ay) * Dy) / (Dx * Dx + Dy * Dy);
-    if (s <= 0.0) {
-        dist2 = (Px - Ax) * (Px - Ax) + (Py - Ay) * (Py - Ay);
-    } else if (s >= 1.0) {
-        dist2 = (Px - Bx) * (Px - Bx) + (Py - By) * (Py - By);
-    } else {
-        NR::Coord Qx, Qy;
-        Qx = Ax + s * Dx;
-        Qy = Ay + s * Dy;
-        dist2 = (Px - Qx) * (Px - Qx) + (Py - Qy) * (Py - Qy);
-    }
-    return dist2;
-}
-
-NR::Coord
-nr_svp_point_distance (NRSVP *svp, float x, float y)
-{
-    unsigned int sidx;
-    NR::Coord best, best2;
-
-    best = NR_HUGE;
-    best2 = best * best;
-    for (sidx = 0; sidx < svp->length; sidx++) {
-        NRSVPSegment *seg;
-        seg = svp->segments + sidx;
-        if (((seg->x0 - x) < best) &&
-            ((NR_SVPSEG_Y0 (svp, sidx) - y) < best) &&
-            ((x - seg->x1) < best) &&
-            ((y - NR_SVPSEG_Y1 (svp, sidx)) < best)) {
-            if (seg->length < 2) {
-                NRSVPFlat *flat;
-                NR::Coord dist2;
-                flat = (NRSVPFlat *) seg;
-                dist2 = nr_line_point_distance2 (flat->x0, flat->y, flat->x1, flat->y, x, y);
-                if (dist2 < best2) {
-                    best2 = dist2;
-                    best = sqrt (best2);
-                }
-            } else {
-                unsigned int pidx;
-                for (pidx = 0; pidx < (unsigned int) seg->length - 1; pidx++) {
-                    NRPoint *pt;
-                    NR::Coord dist2;
-                    pt = svp->points + seg->start + pidx;
-                    dist2 = nr_line_point_distance2 (pt[0].x, pt[0].y, pt[1].x, pt[1].y, x, y);
-                    if (dist2 < best2) {
-                        best2 = dist2;
-                        best = sqrt (best2);
-                    }
-                }
-            }
-        }
-    }
-    return best;
-}
-
 void
 nr_svp_bbox (NRSVP *svp, NRRect *bbox, unsigned int clear)
 {
@@ -332,7 +229,7 @@ nr_svl_build_lineto (NRSVLBuild *svlb, float x, float y)
         vertex->next = svlb->refvx;
         svlb->refvx = vertex;
         /* Stretch bbox */
-        nr_rect_f_union_xy (&svlb->bbox, x, y);
+        nr_rect_d_union_xy (&svlb->bbox, x, y);
         svlb->sx = x;
         svlb->sy = y;
     } else if (x != svlb->sx) {

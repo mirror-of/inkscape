@@ -36,41 +36,31 @@ inline bool empty(NRRect const &r)
 }
 
 #define nr_rect_d_set_empty(r) (*(r) = NR_RECT_EMPTY)
-#define nr_rect_f_set_empty(r) (*(r) = NR_RECT_EMPTY)
 #define nr_rect_l_set_empty(r) (*(r) = NR_RECT_L_EMPTY)
 
 #define nr_rect_d_test_empty(r) ((r) && NR_RECT_DFLS_TEST_EMPTY (r))
-#define nr_rect_f_test_empty(r) ((r) && NR_RECT_DFLS_TEST_EMPTY (r))
 #define nr_rect_l_test_empty(r) ((r) && NR_RECT_DFLS_TEST_EMPTY (r))
 
 #define nr_rect_d_test_intersect(r0,r1) \
 	(!nr_rect_d_test_empty (r0) && !nr_rect_d_test_empty (r1) && \
-	 !((r0) && (r1) && !NR_RECT_DFLS_TEST_INTERSECT (r0, r1)))
-#define nr_rect_f_test_intersect(r0,r1) \
-	(!nr_rect_f_test_empty (r0) && !nr_rect_f_test_empty (r1) && \
 	 !((r0) && (r1) && !NR_RECT_DFLS_TEST_INTERSECT (r0, r1)))
 #define nr_rect_l_test_intersect(r0,r1) \
 	(!nr_rect_l_test_empty (r0) && !nr_rect_l_test_empty (r1) && \
 	 !((r0) && (r1) && !NR_RECT_DFLS_TEST_INTERSECT (r0, r1)))
 
 #define nr_rect_d_point_d_test_inside(r,p) ((p) && (!(r) || (!NR_RECT_DF_TEST_EMPTY (r) && NR_RECT_DF_POINT_DF_TEST_INSIDE (r,p))))
-#define nr_rect_f_point_f_test_inside(r,p) ((p) && (!(r) || (!NR_RECT_DF_TEST_EMPTY (r) && NR_RECT_DF_POINT_DF_TEST_INSIDE (r,p))))
 
 /* NULL values are OK for r0 and r1, but not for d */
 NRRect *nr_rect_d_intersect (NRRect *d, const NRRect *r0, const NRRect *r1);
-NRRect *nr_rect_f_intersect (NRRect *d, const NRRect *r0, const NRRect *r1);
 NRRectL *nr_rect_l_intersect (NRRectL *d, const NRRectL *r0, const NRRectL *r1);
 
 NRRect *nr_rect_d_union (NRRect *d, const NRRect *r0, const NRRect *r1);
-NRRect *nr_rect_f_union (NRRect *d, const NRRect *r0, const NRRect *r1);
 NRRectL *nr_rect_l_union (NRRectL *d, const NRRectL *r0, const NRRectL *r1);
 
 NRRect *nr_rect_d_union_xy (NRRect *d, NR::Coord x, NR::Coord y);
-NRRect *nr_rect_f_union_xy (NRRect *d, float x, float y);
 NRRectL *nr_rect_l_union_xy (NRRectL *d, NR::ICoord x, NR::ICoord y);
 
-NRRect *nr_rect_d_matrix_d_transform (NRRect *d, NRRect *s, NRMatrix const *m);
-NRRect *nr_rect_f_matrix_f_transform (NRRect *d, NRRect *s, NRMatrix const *m);
+NRRect *nr_rect_d_matrix_transform (NRRect *d, NRRect *s, NRMatrix const *m);
 
 #include <stdexcept>
 #include <typeinfo>
