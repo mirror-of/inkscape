@@ -94,13 +94,6 @@ public:
 
     void normalize();
 
-    __attribute__((__deprecated__)) operator NRPoint() const {
-        NRPoint nrp;
-        nrp.x = _pt[X];
-        nrp.y = _pt[Y];
-        return nrp;
-    }
-
     inline Point &operator+=(Point const &o) {
         for ( unsigned i = 0 ; i < 2 ; ++i ) {
             _pt[i] += o._pt[i];
@@ -125,14 +118,6 @@ public:
     inline Point &operator*=(double const s) {
         for ( unsigned i = 0 ; i < 2 ; ++i ) {
             _pt[i] *= s;
-        }
-        return *this;
-    }
-  
-    __attribute__((__deprecated__))
-    Point &operator*=(Point const &s) {
-        for ( unsigned i = 0 ; i < 2 ; ++i ) {
-            _pt[i] *= s[i];
         }
         return *this;
     }
