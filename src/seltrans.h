@@ -52,6 +52,7 @@ struct SPSelTrans {
 	std::vector<std::pair<SPItem *,NR::Matrix> > items;
 	
 	std::vector<NR::Point> snap_points;
+	std::vector<NR::Point> bbox_points;
 
 	NR::Rect box;
 	NR::Matrix current;
