@@ -861,7 +861,7 @@ sp_star_toolbox_new (SPDesktop *desktop)
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  FALSE);
     else
         gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON (fscb),  TRUE);
-    gtk_tooltips_set_tip (tt, fscb, _("Create polygons instead of stars"), NULL);
+    gtk_tooltips_set_tip (tt, fscb, _("Regular polygon (with one handle) instead of a star"), NULL);
     gtk_widget_show (fscb);
     gtk_object_set_data (GTK_OBJECT (tbl), "flat_checkbox", fscb);
     gtk_container_add (GTK_CONTAINER (hb), fscb);
@@ -898,7 +898,7 @@ sp_star_toolbox_new (SPDesktop *desktop)
     b = gtk_button_new_with_label (_("Defaults"));
     gtk_widget_show (b);
     gtk_container_add (GTK_CONTAINER (hb), b);
-    gtk_tooltips_set_tip (tt, b, _("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults"), NULL);
+    gtk_tooltips_set_tip (tt, b, _("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults)"), NULL);
     gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_stb_defaults), tbl);
     gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
@@ -1414,7 +1414,7 @@ sp_spiral_toolbox_new (SPDesktop *desktop)
     /* Reset */
     hb = gtk_hbox_new (FALSE, 1);
     b = gtk_button_new_with_label (_("Defaults"));
-    gtk_tooltips_set_tip (tt, b, _("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults"), NULL);
+    gtk_tooltips_set_tip (tt, b, _("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults)"), NULL);
     gtk_widget_show (b);
     gtk_container_add (GTK_CONTAINER (hb), b);
     gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_spl_tb_defaults), tbl);
@@ -1595,7 +1595,7 @@ sp_calligraphy_toolbox_new (SPDesktop *desktop)
     {
 	GtkWidget *hb = gtk_hbox_new (FALSE, 1);
         GtkWidget *b = gtk_button_new_with_label(_("Defaults"));
-        gtk_tooltips_set_tip (tt, b, _("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults"), NULL);
+        gtk_tooltips_set_tip (tt, b, _("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults)"), NULL);
         gtk_widget_show(b);
     gtk_container_add (GTK_CONTAINER (hb), b);
         gtk_signal_connect(GTK_OBJECT(b), "clicked", GTK_SIGNAL_FUNC(sp_ddc_defaults), tbl);
