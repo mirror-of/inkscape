@@ -44,8 +44,9 @@ SPGradient *sp_gradient_vector_for_object (SPDocument *doc, SPDesktop *desktop, 
 /*
  * Get vector gradient of given gradient
  */
-
 SPGradient *sp_gradient_get_vector (SPGradient *gradient, gboolean force_private);
+
+SPGradientSpread sp_gradient_get_spread(SPGradient *gradient);
 
 void sp_object_ensure_fill_gradient_normalized (SPObject *object);
 void sp_object_ensure_stroke_gradient_normalized (SPObject *object);
