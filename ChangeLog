@@ -1,3 +1,21 @@
+2004-01-18  bulia byak <bulia@users.sourceforge.net>
+
+	* src/sp-spiral.cpp,h: Moved defines to .h
+
+	* src/object-edit.cpp: Reenabled restricted ctrl-rotation of spiral and arc. Added
+	alt-drag in spiral to lock radius. Used PI/options.rotationsnapsperpi everywhere
+	instead of PI/4.
+ 
+	* src/selection-chemistry.cpp,h src/select-context.cpp: Enable [ ] keys to rotate
+	selected objects by rotationsnapsperpi. Alt [ ] rotate by angular pixels.
+ 
+	* src/event-context.cpp src/preferences-skeleton.h src/desktop.h src/zoom-context.cpp
+	src/select-context.cpp: Behavior fixes, simplifications, & unifications in handling
+	dragtolerance, rubberband, and shift/ctrl+selection
+
+	* src/event-context.cpp src/preferences-skeleton.h src/desktop.h: Define & use new
+	options for scrolling distances: keyscroll, wheelscroll
+
 2004-01-18 MenTaLguY <mental@rydia.net>
 
 	* src/uri.h, src/uri.cpp, src/uri-reference.h, src/uri-reference.cpp,
