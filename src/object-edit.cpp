@@ -44,6 +44,7 @@ static SPKnotHolder *sp_arc_knot_holder (SPItem *item, SPDesktop *desktop);
 static SPKnotHolder *sp_star_knot_holder (SPItem *item, SPDesktop *desktop);
 static SPKnotHolder *sp_spiral_knot_holder (SPItem * item, SPDesktop *desktop);
 static SPKnotHolder *sp_offset_knot_holder (SPItem * item, SPDesktop *desktop);
+static SPKnotHolder *sp_path_knot_holder (SPItem * item, SPDesktop *desktop);
 static SPKnotHolder *sp_pat_knot_holder (SPItem * item, SPKnotHolder *knot_holder);
 
 SPKnotHolder *
@@ -61,6 +62,8 @@ sp_item_knot_holder (SPItem *item, SPDesktop *desktop)
 		return sp_spiral_knot_holder (item, desktop);
 	} else if (SP_IS_OFFSET (item)) {
 		return sp_offset_knot_holder (item, desktop);
+    } else if (SP_IS_PATH (item)) {
+        return sp_path_knot_holder (item, desktop);
     }
 	return NULL;
 }
@@ -118,8 +121,6 @@ static NR::Point sp_pattern_xy_get (SPItem *item)
 
 static NR::Point sp_pattern_angle_get (SPItem *item)
 {
-    // Both the techniques below work, didnt know which was a more correct approach...
-
     SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
 
     gdouble x = (pattern_width(pat)*0.25);
@@ -606,6 +607,21 @@ sp_offset_knot_holder (SPItem * item, SPDesktop *desktop)
     sp_pat_knot_holder (item, knot_holder);
 
 	return knot_holder;
+}
+
+static SPKnotHolder *
+sp_path_knot_holder (SPItem * item, SPDesktop *desktop)
+{
+    if ((SP_OBJECT(item)->style->fill.type == SP_PAINT_TYPE_PAINTSERVER)
+        && SP_IS_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style)))
+        {
+            SPKnotHolder *knot_holder = sp_knot_holder_new (desktop, item, NULL);
+
+            sp_pat_knot_holder (item, knot_holder);
+
+            return knot_holder;
+        }
+   return NULL;
 }
 
 static SPKnotHolder *
