@@ -29,7 +29,6 @@
 
 #include <libnr/nr-forward.h>
 #include <libnr/nr-coord.h>
-#include <libnr/n-art-bpath.h>
 
 NArtBpath* nr_artpath_affine(NArtBpath *s, NR::Matrix const &transform);
 
