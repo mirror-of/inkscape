@@ -1,8 +1,8 @@
 #ifndef __SP_MAINTOOLBOX_H__
 #define __SP_MAINTOOLBOX_H__
 
-/*
- * Main toolbox
+/**
+ * \brief Main toolbox
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -22,7 +22,11 @@ void sp_tool_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop);
 GtkWidget *sp_aux_toolbox_new (void);
 void sp_aux_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop);
 
-GtkWidget *sp_toolbox_button_normal_new_from_verb (GtkWidget *t, unsigned int size, sp_verb_t verb, SPView *view, GtkTooltips *tt);
+GtkWidget *sp_toolbox_button_normal_new_from_verb ( GtkWidget *t,
+                                                    unsigned int size,
+                                                    sp_verb_t verb,
+                                                    SPView *view,
+                                                    GtkTooltips *tt );
 
 void aux_toolbox_space (GtkWidget *tb, gint space);
 

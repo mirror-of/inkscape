@@ -1,3 +1,8 @@
+2004-03-14  rejon <jon@protofunk.org>
+
+    * src/toolbox.cpp share/icons/icons.svg: Cleaned the file up to coding 
+      standards. I also have begun to add new icons to our program.
+
 2004-03-13  MenTaLguY <mental@rydia.net>
 
     * src/document.cpp: bumped the update limit on documents a bit
