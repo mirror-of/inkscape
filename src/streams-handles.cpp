@@ -35,7 +35,7 @@ FILE *FileHandle::sys_open(URI const& uri, char const* mode)
     if ((fp = std::fopen(filename, mode)) == 0) {
 	error("fopen");
     }
-#ifdef DEBUG
+#ifdef DEBUG_STREAMS
     std::cout<<"file opened fp="<<fp<<std::endl;
 #endif
     return fp;

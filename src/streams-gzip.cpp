@@ -30,21 +30,21 @@ static unsigned int const GZIP_HEADER_FLAGS = (GZIP_IS_ASCII
  * GZipBuffer
  */
 
-int GZipBuffer::consume_header() throw(GZipHeaderException)
+void GZipBuffer::consume_header() throw(GZipHeaderException)
 {
     unsigned int flags;
     guint8 data[4];
     
     try {
-	get_urihandle()->read(data, 4);
+	_urihandle->read(data, 4);
 	check_signature(data);
 	check_flags(data);
 	flags = data[3];
-	get_urihandle()->read(data, 4);
+	_urihandle->read(data, 4);
 	//get_modification_time()
-	get_urihandle()->read(data, 1);
+	_urihandle->read(data, 1);
 	//check_extra_flags();
-	get_urihandle()->read(data, 1);
+	_urihandle->read(data, 1);
 	//check_OS();
 	
 	if (flags & GZIP_EXTRA_FIELD) {
@@ -63,8 +63,6 @@ int GZipBuffer::consume_header() throw(GZipHeaderException)
     catch(std::exception& e) {
 	throw GZipHeaderException();
     }
-
-    return 1;
 }
 
 void GZipBuffer::check_signature(guint8 *data) throw(GZipHeaderException)
@@ -83,7 +81,7 @@ void GZipBuffer::check_flags(guint8 *data) throw(GZipHeaderException)
 
 gchar *GZipBuffer::get_filename()
 {
-#ifdef DEBUG
+#ifdef DEBUG_STREAMS
     std::cout<<"Filename is ";
 #endif
     return read_string();
@@ -91,7 +89,7 @@ gchar *GZipBuffer::get_filename()
 
 gchar *GZipBuffer::get_comment()
 {
-#ifdef DEBUG
+#ifdef DEBUG_STREAMS
     std::cout<<"Comment is "<<std::endl;
 #endif
     return read_string();
@@ -100,17 +98,17 @@ gchar *GZipBuffer::get_comment()
 guint16 GZipBuffer::get_crc()
 {
     guint16 buf;
-    get_urihandle()->read(&buf, 2);
+    _urihandle->read(&buf, 2);
     return buf;
 }
 
 void GZipBuffer::get_extrafield()
 {
     guint8 length_data[2];
-    get_urihandle()->read(length_data, 2);
+    _urihandle->read(length_data, 2);
     unsigned int const length = length_data[0] | (length_data[1] << 8);
     guint8 *data = new guint8[length];
-    get_urihandle()->read(data, length);
+    _urihandle->read(data, length);
 }
 
 gchar *GZipBuffer::read_string() throw(GZipHeaderException)
@@ -119,9 +117,9 @@ gchar *GZipBuffer::read_string() throw(GZipHeaderException)
     try {
 	guint8 byte[1];
 	do {
-	    get_urihandle()->read(byte, 1);
+	    _urihandle->read(byte, 1);
 	    g_byte_array_append(gba, byte, sizeof(byte));
-#ifdef DEBUG
+#ifdef DEBUG_STREAMS
 	    std::cout <<(char)*byte;
 #endif
 	} while (*byte != 0);
@@ -129,7 +127,7 @@ gchar *GZipBuffer::read_string() throw(GZipHeaderException)
 	g_byte_array_free(gba, TRUE);
 	throw GZipHeaderException();
     }
-#ifdef DEBUG
+#ifdef DEBUG_STREAMS
     std::cout<<std::endl;
 #endif
     gchar *ret = (gchar *)gba->data;
@@ -138,44 +136,3 @@ gchar *GZipBuffer::read_string() throw(GZipHeaderException)
 }
 
 } // namespace Inkscape
-#if 0 // testing code 
-int main(int argc, char *argv[])
-{
-    try {
-	Inkscape::FileHandle *fh = new Inkscape::FileHandle;
-	Inkscape::URI uri("file:///cvs/inkscape/src/inkjar/changelog-2.gz");
-	if (!fh->open(uri, "r"))
-	    return 1;
-	Inkscape::GZipBuffer gzb(*fh);
-	Inkscape::igzipstream izs(gzb);
-	
-	
-	char buf;
-	while (izs.get(buf)) {
-	    std::cout <<buf;
-	}
-	
-
-	/*
-	  char buf[40960];
-	  while(!izs.eof())
-	  {
-	  izs >> buf;
-	  fprintf(stdout, "%s ", buf);
-	  }
-	*/
-	if (!izs.eof())
-	    std::cerr<<"something strange happened."<<std::endl;
-	fh->close();
-    }
-    catch (Inkscape::BadURIException& e) {
-	std::cerr<<e.what()<<std::endl;
-    }
-    catch (Inkscape::GZipHeaderException& e) {
-	std::cerr<<e.what()<<std::endl;
-    }
-    catch (std::exception& e) {
-	std::cerr<<e.what()<<std::endl;
-    }
-}
-#endif // testing code
