@@ -57,6 +57,7 @@ NRRectL *nr_rect_l_intersect (NRRectL *d, const NRRectL *r0, const NRRectL *r1);
 NRRect *nr_rect_d_union (NRRect *d, const NRRect *r0, const NRRect *r1);
 NRRectL *nr_rect_l_union (NRRectL *d, const NRRectL *r0, const NRRectL *r1);
 
+NRRect *nr_rect_union_pt(NRRect *dst, NR::Point const &p);
 NRRect *nr_rect_d_union_xy (NRRect *d, NR::Coord x, NR::Coord y);
 NRRectL *nr_rect_l_union_xy (NRRectL *d, NR::ICoord x, NR::ICoord y);
 
@@ -115,10 +116,11 @@ public:
         return MAX(extent<X>(), extent<Y>());
     }
 
-    double extent(Dim2 axis) const {
+    double extent(Dim2 const axis) const {
         switch (axis) {
         case X: return extent<X>();
         case Y: return extent<Y>();
+	default: g_error("invalid axis value %d", (int) axis); return 0;
         };
     }
 

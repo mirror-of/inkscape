@@ -92,6 +92,15 @@ nr_rect_l_union (NRRectL *d, const NRRectL *r0, const NRRectL *r1)
 }
 
 NRRect *
+nr_rect_union_pt(NRRect *dst, NR::Point const &p)
+{
+	using NR::X;
+	using NR::Y;
+
+	return nr_rect_d_union_xy(dst, p[X], p[Y]);
+}
+
+NRRect *
 nr_rect_d_union_xy (NRRect *d, NR::Coord x, NR::Coord y)
 {
 	if ((d->x0 <= d->x1) && (d->y0 <= d->y1)) {
