@@ -724,6 +724,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	gtk_container_add (GTK_CONTAINER (dtw), vbox);
 
        sbar = gtk_hbox_new (FALSE, 0);
+	gtk_widget_set_usize (sbar, -1, BOTTOM_BAR_HEIGHT);
 	gtk_box_pack_end (GTK_BOX (vbox), sbar, FALSE, TRUE, 0);
 
 	hbox = gtk_hbox_new (FALSE, 0);
@@ -781,7 +782,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
       	gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (dtw->canvas));
 
 	// sticky zoom buton (FIXME: to be removed when we have this setting in preferences)
-	dtw->sticky_zoom = sp_button_new_from_data (SP_ICON_SIZE_BUTTON,
+	dtw->sticky_zoom = sp_button_new_from_data (BOTTOM_BUTTON_SIZE,
 						    SP_BUTTON_TYPE_TOGGLE,
 	                                            NULL,
 						    "sticky_zoom",
@@ -817,7 +818,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	gtk_tooltips_set_tip (tt, dtw->coord_status, _("Cursor coordinates"), NULL);
 	gtk_widget_set_usize (dtw->coord_status, STATUS_COORD_WIDTH, SP_ICON_SIZE_BUTTON);
 	sp_set_font_size (dtw->coord_status, STATUS_COORD_FONT_SIZE);
-	gtk_box_pack_start (GTK_BOX (coord_box), dtw->coord_status, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (coord_box), dtw->coord_status, FALSE, FALSE, 1);
 	gtk_box_pack_start (GTK_BOX (sbar), coord_box, FALSE, FALSE, 1);
 
 	// statusbar
