@@ -13,6 +13,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <libnr/nr-types.h>
+
 typedef struct _SPView SPView;
 typedef struct _SPViewClass SPViewClass;
 
@@ -60,6 +62,11 @@ void sp_view_set_document (SPView *view, SPDocument *doc);
 
 void sp_view_emit_resized (SPView *view, gdouble width, gdouble height);
 void sp_view_set_position (SPView *view, gdouble x, gdouble y);
+
+inline void sp_view_set_position(SPView *view, NR::Point const &p)
+{
+	sp_view_set_position(view, p[NR::X], p[NR::Y]);
+}
 
 //new
 void sp_view_set_statusf (SPView *view, const gchar *format, ...);

@@ -1,5 +1,7 @@
 2004-02-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/view.h (sp_view_set_position): Add NR::Point version.
+
 	* src/desktop.h (sp_desktop_set_coordinate_status):
 	Add NR::Point version.
 
