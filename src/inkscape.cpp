@@ -85,15 +85,19 @@ static void inkscape_init_config (SPReprDoc *doc, const gchar *config_name, cons
 				  const gchar *e_notdir,
 				  const gchar *e_ccf,
 				  const gchar *e_cwf);
+
 static void inkscape_init_preferences (Inkscape::Application *inkscape);
 
 static void inkscape_init_preferences (Inkscape::Application * inkscape);
+
+static gchar *profile_path(const char *filename);
 
 struct Inkscape::Application {
 	GObject object;
 	SPReprDoc *preferences;
 	GSList *documents;
 	GSList *desktops;
+	gchar *argv0;
 };
 
 struct Inkscape::ApplicationClass {
@@ -490,7 +494,7 @@ inkscape_segv_handler (int signum)
 }
 
 Inkscape::Application *
-inkscape_application_new (void)
+inkscape_application_new (const gchar *argv0)
 {
 	Inkscape::Application *sp;
 
@@ -502,6 +506,8 @@ inkscape_application_new (void)
 	signal (SIGFPE, inkscape_segv_handler);
 	signal (SIGILL, inkscape_segv_handler);
 #endif
+
+	sp->argv0 = g_strdup(argv0);
 
 	return sp;
 }
@@ -518,15 +524,15 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
 	SPReprDoc * doc;
 	SPRepr * root;
 
-	fn = g_build_filename (g_get_home_dir (), INKSCAPE_PROFILE_DIR, filename, NULL);
-	if (g_file_test(fn, G_FILE_TEST_EXISTS)) {
+	fn = profile_path(filename);
+	if (!g_file_test(fn, G_FILE_TEST_EXISTS)) {
 		/* No such file */
 		inkscape_init_preferences (INKSCAPE);
 		g_free (fn);
 		return;
 	}
 
-	if (g_file_test(fn, G_FILE_TEST_IS_REGULAR)) {
+	if (!g_file_test(fn, G_FILE_TEST_IS_REGULAR)) {
 		/* Not a regular file */
 		w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notreg, fn);
 		gtk_dialog_run (GTK_DIALOG (w));
@@ -585,7 +591,7 @@ inkscape_save_preferences (Inkscape::Application * inkscape)
 {
 	gchar * fn;
 
-	fn = g_build_filename (g_get_home_dir (), INKSCAPE_PROFILE_DIR, PREFERENCES_FILE, NULL);
+	fn = profile_path(PREFERENCES_FILE);
 	sp_repr_save_file (inkscape->preferences, fn);
 
 	g_free (fn);
@@ -969,7 +975,7 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 	FILE *fh;
 	GtkWidget * w;
 
-	dn = g_build_filename (g_get_home_dir (), INKSCAPE_PROFILE_DIR, NULL);
+	dn = profile_path(NULL);
 	if (!g_file_test(dn, G_FILE_TEST_EXISTS)) {
 		if (mkdir (dn, S_IRWXU | S_IRGRP | S_IXGRP))
 		{
@@ -990,9 +996,9 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 	}
 	g_free (dn);
 
-	fn = g_build_filename (g_get_home_dir (), INKSCAPE_PROFILE_DIR, config_name, NULL);
+	fn = profile_path(config_name);
 
-	fh = fopen(fn, "r+");
+	fh = fopen(fn, "w");
 	if (!fh) {
 		/* Cannot create file */
 		w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_ccf, fn);
@@ -1059,5 +1065,18 @@ inkscape_exit (Inkscape::Application *inkscape)
 		inkscape_save_preferences (INKSCAPE);
 	}
 	gtk_main_quit ();
+}
+
+gchar *
+profile_path(const char *filename)
+{
+	static const gchar *homedir=NULL;
+	if (!homedir) {
+		homedir = g_get_home_dir();
+		if (!homedir) {
+			homedir = g_path_get_dirname(INKSCAPE->argv0);
+		}
+	}
+	return g_build_filename(homedir, INKSCAPE_PROFILE_DIR, filename, NULL);
 }
 

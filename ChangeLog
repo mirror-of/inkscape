@@ -1,3 +1,8 @@
+2004-01-03  MenTaLguY <mental@rydia.net>
+
+	* src/inkscape.cpp, src/inkscape.h, src/main.cpp:
+	  fixes to preference loading
+
 2004-01-02  MenTaLguY <mental@rydia.net>
 
 	* src/shortcuts.cpp: zoom in shortcut fix for german and other

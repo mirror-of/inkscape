@@ -40,7 +40,7 @@
 	extern Inkscape::Application * inkscape;
 #endif
 
-Inkscape::Application * inkscape_application_new (void);
+Inkscape::Application * inkscape_application_new (const gchar *argv0);
 
 /* Preference management */
 void inkscape_load_preferences (Inkscape::Application * inkscape);

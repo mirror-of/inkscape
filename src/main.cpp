@@ -251,7 +251,7 @@ sp_main_gui (int argc, const char **argv)
 	if (!sp_global_slideshow) {
 		gboolean create_new = TRUE; 
 		
-		inkscape = inkscape_application_new ();
+		inkscape = inkscape_application_new (argv[0]);
 		inkscape_load_preferences (inkscape);
 
 		if (fl) { // no documents on command line
@@ -285,7 +285,7 @@ sp_main_gui (int argc, const char **argv)
 	} else {
 		if (fl) {
 			GtkWidget *ss;
-			inkscape = inkscape_application_new ();
+			inkscape = inkscape_application_new (argv[0]);
 			inkscape_load_preferences (inkscape);
 			ss = sp_slideshow_new (fl);
 			if (ss) gtk_widget_show (ss);
@@ -358,7 +358,7 @@ sp_main_console (int argc, const char **argv)
 
 	/* Start up g type system, without requiring X */
 	g_type_init();
-	inkscape = inkscape_application_new ();
+	inkscape = inkscape_application_new (argv[0]);
 	inkscape_load_preferences (inkscape);
 
 	while (fl) {
