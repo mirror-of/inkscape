@@ -944,7 +944,11 @@ void Path::Path::selection(std::list<Node *> &l)
 
 void sp_nodepath_selected_align(Path::Path *nodepath, NR::Dim2 axis)
 {
-    if ( ! nodepath->selected->next ) {
+    if ( !nodepath || !nodepath->selected ) { // no nodepath, or no nodes selected
+        return;
+    }
+
+    if ( !nodepath->selected->next ) { // only one node selected
         return;
     }
     Path::Node *pNode = reinterpret_cast<Path::Node *>(nodepath->selected->data);
@@ -981,9 +985,14 @@ static bool operator<(NodeSort const &a, NodeSort const &b)
 
 void sp_nodepath_selected_distribute(Path::Path *nodepath, NR::Dim2 axis)
 {
-    if ( ! (nodepath->selected->next && nodepath->selected->next->next) ) {
+    if ( !nodepath || !nodepath->selected ) { // no nodepath, or no nodes selected
         return;
     }
+
+    if ( ! (nodepath->selected->next && nodepath->selected->next->next) ) { // less than 3 nodes selected
+        return;
+    }
+
     Path::Node *pNode = reinterpret_cast<Path::Node *>(nodepath->selected->data);
     std::vector<NodeSort> sorted;
     for (GList *l = nodepath->selected; l != NULL; l = l->next) {
