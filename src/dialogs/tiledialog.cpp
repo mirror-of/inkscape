@@ -10,6 +10,8 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+#define DEBUG_GRID_ARRANGE 0
+
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
@@ -186,7 +188,7 @@ void TileDialogImpl::Grid_Arrange ()
 {
 
     int cnt;
-    double grid_left,grid_top,col_width,row_height,paddingx,paddingy,width, height, new_x, new_y;
+    double grid_left,grid_top,col_width,row_height,paddingx,paddingy,width, height, new_x, new_y,cx,cy;
     col_width = 0;
     row_height = 0;
     paddingx = XPadSpinner.get_value();
@@ -204,16 +206,24 @@ void TileDialogImpl::Grid_Arrange ()
         sp_item_invoke_bbox(item, &b, sp_item_i2doc_affine(item), TRUE);
         width = fabs (b.x1 - b.x0);
         height = fabs (b.y1 - b.y0);
+        cx = (b.x1 + b.x0)/2;
+        cy = (b.y1 + b.y0)/2;
 
         #ifdef DEBUG_GRID_ARRANGE
-        g_print("\n x0 = %f x1= %f",b.x0,b.x1);
+        g_print("\n cx = %f cy= %f gridleft=%f",cx,cy,grid_left);
         #endif
 
-        if (b.x0 < grid_left) grid_left = b.x0;
-        if (b.y0 < grid_top) grid_top = b.y0;
+        if (cx < grid_left) grid_left = cx;
+        if (cy < grid_top) grid_top = cy;
         if (width > col_width) col_width = width;
         if (height > row_height) row_height = height;
     }
+    grid_top = grid_top - (row_height / 2);
+    grid_left = grid_left - (col_width/2);
+
+       #ifdef DEBUG_GRID_ARRANGE
+            g_print("\n gridleft=%f",grid_left);
+        #endif
     // if auto set, update the spinners to reflect the value
     if (ColumnWidthButton.get_active()) ColumnWidthSpinner.set_value(col_width);
     if (RowHeightButton.get_active()) RowHeightSpinner.set_value(row_height);
@@ -514,7 +524,7 @@ TileDialogImpl::TileDialogImpl()
         //g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg );
 
      //  Dont have a clue why the below crashes IS every time you change the selection
-     //   g_signal_connect ( G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (updateSelectionCallback), dlg);
+      //  g_signal_connect ( G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (updateSelectionCallback), (void *)this);
         g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (hideCallback), (void *)this );
         g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (unhideCallback), (void *)this );
     }
