@@ -30,13 +30,11 @@
 #include <libnr/nr-scale-ops.h>
 #include <libnr/nr-values.h>
 
-static std::list<const Snapper*> sp_desktop_get_snappers(SPDesktop const *dt);
-
+static std::list<const Snapper*> desktop_get_snappers(SPDesktop const *dt);
+static bool desktop_will_snap_something(SPDesktop const *dt);
 
 /* Minimal distance to norm before point is considered for snap. */
-#define MIN_DIST_NORM 1.0
-
-#define SNAP_ON(d) (((d)->namedview->grid_snapper.getDistance() > 0.0) || ((d)->namedview->guide_snapper.getDistance() > 0.0))
+static const double MIN_DIST_NORM = 1.0;
 
 /**
  *    Try to snap `req' in one dimension.
@@ -103,7 +101,7 @@ NR::Coord sp_desktop_vector_snap (SPDesktop const *dt, Snapper::PointType t, NR:
     g_assert(dt != NULL);
     g_assert(SP_IS_DESKTOP(dt));
 
-    std::list<const Snapper*> snappers = sp_desktop_get_snappers(dt);
+    std::list<const Snapper*> snappers = desktop_get_snappers(dt);
 
     NR::Coord best = NR_HUGE;
     for (std::list<const Snapper*>::const_iterator i = snappers.begin(); i != snappers.end(); i++) {
@@ -146,7 +144,7 @@ double sp_desktop_dim_snap_list(SPDesktop const *dt, Snapper::PointType t, const
     gdouble dist = NR_HUGE;
     gdouble xdist = dx;
     
-    if (SNAP_ON (dt)) {
+    if (desktop_will_snap_something(dt)) {
         for (std::vector<NR::Point>::const_iterator i = p.begin(); i != p.end(); i++) {
             NR::Point q = *i;
             NR::Coord const pre = q[dim];
@@ -168,7 +166,7 @@ double sp_desktop_vector_snap_list(SPDesktop const *dt, Snapper::PointType t, co
     using NR::X;
     using NR::Y;
 
-    if (!SNAP_ON(dt)) {
+    if (desktop_will_snap_something(dt) == false) {
         return s[X];
     }
     
@@ -197,10 +195,11 @@ double sp_desktop_vector_snap_list(SPDesktop const *dt, Snapper::PointType t, co
 double sp_desktop_dim_snap_list_scale(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
 				      NR::Point const &norm, double const sx, NR::Dim2 dim)
 {
-    g_assert( dim < 2 );
-    if (!SNAP_ON (dt)) {
+    if (desktop_will_snap_something(dt) == false) {
         return sx;
     }
+
+    g_assert(dim < 2);
 
     NR::Coord dist = NR_HUGE;
     double scale = sx;
@@ -224,10 +223,11 @@ double sp_desktop_dim_snap_list_scale(SPDesktop const *dt, Snapper::PointType t,
 double sp_desktop_dim_snap_list_skew(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
 				     NR::Point const &norm, double const sx, NR::Dim2 const dim)
 {
-    g_assert( dim < 2 );
-    if (!SNAP_ON (dt)) {
+    if (desktop_will_snap_something(dt) == false) {
         return sx;
     }
+
+    g_assert(dim < 2);
 
     gdouble dist = NR_HUGE;
     gdouble skew = sx;
@@ -251,7 +251,7 @@ double sp_desktop_dim_snap_list_skew(SPDesktop const *dt, Snapper::PointType t, 
 
 
 /* FIXME: this should probably be in SPNamedView */
-static std::list<const Snapper*> sp_desktop_get_snappers(SPDesktop const *dt)
+static std::list<const Snapper*> desktop_get_snappers(SPDesktop const *dt)
 {
     std::list<const Snapper*> s;
     SPNamedView const &nv = *dt->namedview;
@@ -259,6 +259,18 @@ static std::list<const Snapper*> sp_desktop_get_snappers(SPDesktop const *dt)
     s.push_back(&nv.guide_snapper);
     return s;
 }
+
+bool desktop_will_snap_something(SPDesktop const *dt)
+{
+    std::list<const Snapper*> s = desktop_get_snappers(dt);
+    std::list<const Snapper*>::iterator i = s.begin();
+    while (i != s.end() && (*i)->will_snap_something() == false) {
+        i++;
+    }
+
+    return (i != s.end());
+}
+            
 
 
 Snapper::Snapper(NR::Coord const d) : _distance(d), _enabled(false)
@@ -325,6 +337,25 @@ NR::Coord Snapper::intersector_a_vector_snap(NR::Point &req, NR::Point const &mv
     } else {
         return NR_HUGE;
     }
+}
+
+
+/**
+ *  \return true if this Snapper will snap at least one kind of point.
+ */
+
+bool Snapper::will_snap_something() const
+{
+    if (_enabled == false) {
+        return false;
+    }
+
+    std::map<PointType, bool>::const_iterator i = _snap_to.begin();
+    while (i != _snap_to.end() && i->second == false) {
+        i++;
+    }
+
+    return (i != _snap_to.end());
 }
 
 

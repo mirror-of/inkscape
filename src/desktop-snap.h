@@ -51,6 +51,8 @@ public:
     bool getEnabled() const;
     NR::Coord getDistance() const;
 
+    bool will_snap_something() const;
+
     virtual NR::Coord vector_snap(SPDesktop const *dt,
                                   PointType t,
                                   NR::Point &req,
