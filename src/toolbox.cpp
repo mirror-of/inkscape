@@ -325,7 +325,7 @@ sp_node_toolbox_new (SPDesktop *desktop)
 	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_smooth",
 		GTK_SIGNAL_FUNC (sp_node_path_edit_smooth), tt, _("Make selected nodes smooth"));
 	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_symetric",
-		GTK_SIGNAL_FUNC (sp_node_path_edit_symmetrical), tt, _("Make selected nodes symmetrical"));
+		GTK_SIGNAL_FUNC (sp_node_path_edit_symmetrical), tt, _("Make selected nodes symmetric"));
 
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
