@@ -211,7 +211,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
                 delete dragger;
 
                 // update the new merged dragger
-                d_new->fireDraggables(true);
+                d_new->fireDraggables(true, true);
                 d_new->parent->updateLines();
                 d_new->parent->setSelected (d_new);
                 d_new->updateKnotShape ();
@@ -352,7 +352,7 @@ gr_knot_clicked_handler(SPKnot *knot, guint state, gpointer data)
 Act upon all draggables of the dragger, setting them to the dragger's point
 */
 void
-GrDragger::fireDraggables (bool write_repr)
+GrDragger::fireDraggables (bool write_repr, bool merging_focus)
 {
     for (GSList const* i = this->draggables; i != NULL; i = i->next) {
         GrDraggable *draggable = (GrDraggable *) i->data;
@@ -360,8 +360,10 @@ GrDragger::fireDraggables (bool write_repr)
         // set local_change flag so that selection_changed callback does not regenerate draggers
         this->parent->local_change = true;
 
-        // change gradient, optionally writing to repr; prevent focus from moving if it's snapped to the center
-        if (!(draggable->point_num == POINT_RG_FOCUS && this->isA(draggable->item, POINT_RG_CENTER, draggable->fill_or_stroke)))
+        // change gradient, optionally writing to repr; prevent focus from moving if it's snapped
+        // to the center, unless it's the first update upon merge when we must snap it to the point
+        if (merging_focus || 
+            !(draggable->point_num == POINT_RG_FOCUS && this->isA(draggable->item, POINT_RG_CENTER, draggable->fill_or_stroke)))
             sp_item_gradient_set_coords (draggable->item, draggable->point_num, this->point, draggable->fill_or_stroke, write_repr);
     }
 }
