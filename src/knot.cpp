@@ -33,6 +33,7 @@
 #include "prefs-utils.h"
 #include <libnr/nr-point-fns.h>
 #include "message-stack.h"
+#include "event-context.h"
 
 #include "sp-guide.h"
 
@@ -60,6 +61,7 @@ enum {
 	PROP_IMAGE, PROP_IMAGE_MOUSEOVER, PROP_IMAGE_DRAGGING,
 	PROP_CURSOR, PROP_CURSOR_MOUSEOVER, PROP_CURSOR_DRAGGING,
 	PROP_PIXBUF,
+	PROP_TIP,
 
 	PROP_LAST
 };
@@ -226,6 +228,10 @@ sp_knot_class_init (SPKnotClass * klass)
 					 PROP_PIXBUF,
 					 g_param_spec_pointer ("pixbuf", "Pixbuf", "",
 							       (GParamFlags)G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_TIP,
+					 g_param_spec_pointer ("tip", "Tip", "",
+							       (GParamFlags)G_PARAM_READWRITE));
 
 	knot_signals[EVENT] = g_signal_new ("event",
 					    G_TYPE_FROM_CLASS(klass),
@@ -301,6 +307,7 @@ sp_knot_init (SPKnot * knot)
 	knot->anchor = GTK_ANCHOR_CENTER;
 	knot->shape = SP_KNOT_SHAPE_SQUARE;
 	knot->mode = SP_KNOT_MODE_XOR;
+	knot->tip = NULL;
 
 	knot->fill [SP_KNOT_STATE_NORMAL] = 0xffffff00;
 	knot->fill [SP_KNOT_STATE_MOUSEOVER] = 0xff0000ff;
@@ -340,6 +347,11 @@ sp_knot_dispose (GObject * object)
 			gdk_cursor_unref (knot->cursor[i]);
 			knot->cursor[i] = NULL;
 		}
+	}
+
+	if (knot->tip) {
+		g_free (knot->tip);
+		knot->tip = NULL;
 	}
 
 	if (((GObjectClass *) (parent_class))->dispose)
@@ -427,6 +439,9 @@ sp_knot_set_property (GObject * object, guint prop_id, const GValue *value, GPar
 		break;
 	case PROP_PIXBUF:
 	        knot->pixbuf = g_value_get_pointer (value);
+	        break;
+	case PROP_TIP:
+	        knot->tip = g_strdup ((const gchar *) g_value_get_pointer (value));
 	        break;
 	default:
 		g_assert_not_reached ();
@@ -545,6 +560,10 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 		sp_knot_set_flag (knot, SP_KNOT_MOUSEOVER, TRUE);
 
 		sp_knot_set_flag (knot, SP_KNOT_GRABBED, FALSE);
+
+		if (knot->tip)
+			knot->desktop->event_context->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, knot->tip);
+
 		grabbed = FALSE;
 		moved = FALSE;
 
@@ -554,6 +573,10 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 		sp_knot_set_flag (knot, SP_KNOT_MOUSEOVER, FALSE);
 
 		sp_knot_set_flag (knot, SP_KNOT_GRABBED, FALSE);
+
+		if (knot->tip)
+			knot->desktop->event_context->defaultMessageContext()->clear();
+
 		grabbed = FALSE;
 		moved = FALSE;
 

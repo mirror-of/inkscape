@@ -80,6 +80,8 @@ struct SPKnot {
 
 	GdkCursor *saved_cursor;
         gpointer pixbuf;
+
+	gchar *tip;
 };
 
 struct SPKnotClass {

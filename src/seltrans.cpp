@@ -58,7 +58,7 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans);
 static void sp_sel_trans_update_volatile_state(SPSelTrans &seltrans);
 
 static void sp_remove_handles(SPKnot *knot[], gint num);
-static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHandle const handle[], gint num);
+static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHandle const handle[], gint num, const gchar* even_tip, const gchar* odd_tip);
 
 static void sp_sel_trans_handle_grab(SPKnot *knot, guint state, gpointer data);
 static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint state, gpointer data);
@@ -484,6 +484,7 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
                          "stroke", 0x000000ff,
                          "stroke_mouseover", 0xff0000b0,
                          "pixbuf", handles[handle_center.control],
+                         "tip", _("Drag to position the center of rotation and skewing; scaling with Shift also uses this center"),
                          NULL);
             g_signal_connect(G_OBJECT(seltrans.chandle), "request",
                              G_CALLBACK (sp_sel_trans_handle_request), (gpointer) &handle_center);
@@ -498,10 +499,14 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
         sp_remove_handles(&seltrans.chandle, 1);
 	if ( seltrans.state == SP_SELTRANS_STATE_SCALE ) {
 		sp_remove_handles(seltrans.rhandle, 8);
-		sp_show_handles(seltrans, seltrans.shandle, handles_scale, 8);
+		sp_show_handles(seltrans, seltrans.shandle, handles_scale, 8,
+                    _("Squeeze or stretch selection; with Ctrl to scale uniformly, with Shift to scale around rotation center"), 
+                    _("Scale selection; with Ctrl to scale uniformly, with Shift to scale around rotation center"));
 	} else {
 		sp_remove_handles(seltrans.shandle, 8);
-		sp_show_handles(seltrans, seltrans.rhandle, handles_rotate, 8);
+		sp_show_handles(seltrans, seltrans.rhandle, handles_rotate, 8,
+                    _("Skew selection; with Shift to skew around the opposite side"), // fixme: CTRL SNAP!!! remove "skew and scale"
+                    _("Rotate selection; with Ctrl to snap, with Shift to rotate around the opposite corner"));
 	}
         if ( seltrans.state == SP_SELTRANS_STATE_SCALE ) {
 		sp_knot_hide(seltrans.chandle);
@@ -540,7 +545,7 @@ static void sp_remove_handles(SPKnot *knot[], gint num)
 	}
 }
 
-static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHandle const handle[], gint num)
+static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHandle const handle[], gint num, const gchar* even_tip, const gchar* odd_tip)
 {
 	g_return_if_fail( !seltrans.empty );
 
@@ -557,6 +562,7 @@ static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHand
 					"stroke", 0x000000ff, // inversion
 					"stroke_mouseover", 0x000000ff, // inversion
 					"pixbuf", handles[handle[i].control],
+                                "tip", i % 2 ? even_tip : odd_tip,
 					NULL);
 
 			g_signal_connect (G_OBJECT (knot[i]), "request",
