@@ -95,7 +95,7 @@ sp_selected_path_combine (void)
 		SPPath *path = (SPPath *) i->data;
 		SPCurve *c = sp_shape_get_curve (SP_SHAPE (path));
 		
-		NArtBpath *abp = nr_artpath_affine (c->bpath, sp_item_i2root_affine (SP_ITEM (path)));
+		NArtBpath *abp = nr_artpath_affine (c->bpath, NR::Matrix (SP_ITEM (path)->transform));
 		sp_curve_unref (c);
 		gchar *str = sp_svg_write_path (abp);
 		nr_free (abp);
