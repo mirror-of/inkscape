@@ -694,20 +694,20 @@ sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr)
 
 	SPGenericEllipse *ge = SP_GENERICELLIPSE (arc);
 
-	NRPoint p1 = sp_arc_get_xy (arc, ge->start);
-	NRPoint p2 = sp_arc_get_xy (arc, ge->end);
+	NR::Point p1 = sp_arc_get_xy (arc, ge->start);
+	NR::Point p2 = sp_arc_get_xy (arc, ge->end);
 
 	dt = fmod (ge->end - ge->start, SP_2PI);
 	if (fabs (dt) < 1e-6) {
-		NRPoint ph = sp_arc_get_xy (arc, (ge->start + ge->end) / 2.0);
+		NR::Point ph = sp_arc_get_xy (arc, (ge->start + ge->end) / 2.0);
 		g_snprintf (c, ARC_BUFSIZE, "M %f %f A %f %f 0 %d %d %f,%f A %g %g 0 %d %d %g %g L %f %f z",
-			    p1.x, p1.y,
+			    p1[NR::X], p1[NR::Y],
 			    ge->rx.computed, ge->ry.computed,
 			    1, (dt > 0),
-			    ph.x, ph.y,
+			    ph[NR::X], ph[NR::Y],
 			    ge->rx.computed, ge->ry.computed,
 			    1, (dt > 0),
-			    p2.x, p2.y,
+			    p2[NR::X], p2[NR::Y],
 			    ge->cx.computed, ge->cy.computed);
 	} else {
 		fa = (fabs (dt) > M_PI) ? 1 : 0;
@@ -717,16 +717,16 @@ sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr)
 #endif
 		if (ge->closed) {
 			g_snprintf (c, ARC_BUFSIZE, "M %f,%f A %f,%f 0 %d %d %f,%f L %f,%f z",
-				    p1.x, p1.y,
+				    p1[NR::X], p1[NR::Y],
 				    ge->rx.computed, ge->ry.computed,
 				    fa, fs,
-				    p2.x, p2.y,
+				    p2[NR::X], p2[NR::Y],
 				    ge->cx.computed, ge->cy.computed);
 		} else {
 			g_snprintf (c, ARC_BUFSIZE, "M %f,%f A %f,%f 0 %d %d %f,%f",
-				    p1.x, p1.y,
+				    p1[NR::X], p1[NR::Y],
 				    ge->rx.computed, ge->ry.computed,
-				    fa, fs, p2.x, p2.y);
+				    fa, fs, p2[NR::X], p2[NR::Y]);
 		}
 	}
 	return sp_repr_set_attr (repr, "d", c);
@@ -735,8 +735,6 @@ sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr)
 static SPRepr *
 sp_arc_write (SPObject *object, SPRepr *repr, guint flags)
 {
-	gdouble len;
-
 	SPGenericEllipse *ge = SP_GENERICELLIPSE (object);
 	SPArc *arc = SP_ARC (object);
 
@@ -751,7 +749,7 @@ sp_arc_write (SPObject *object, SPRepr *repr, guint flags)
 		sp_repr_set_double (repr, "sodipodi:ry", ge->ry.computed);
 
 		// write start and end only if they are non-trivial; otherwise remove
-		len = fmod (ge->end - ge->start, SP_2PI);
+		gdouble len = fmod (ge->end - ge->start, SP_2PI);
 		if (len < 0.0) len += SP_2PI;
 		if (!(fabs (len) < 1e-8 || fabs (len - SP_2PI) < 1e-8)) {
 			sp_repr_set_double (repr, "sodipodi:start", ge->start);
