@@ -11,5 +11,6 @@
     <extension>
         <command reldir="path">gzip -c</command>
 		<helper_extension>modules.output.SVG.sodipodi</helper_extension>
+		<check reldir="path">gzip</check>
     </extension>
 </spmodule>

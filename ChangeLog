@@ -1,3 +1,17 @@
+2004-04-25  Ted Gould  <ted@gould.cx>
+
+	* share/extensions/ai_output.inkmod, share/extensions/dia.inkmod,
+	share/extensions/dropshadow.inkmod, share/extensions/epsi_output.inkmod,
+	share/extensions/roundhole.inkmod, share/extensions/svgz_input.inkmod,
+	share/extensions/svgz_output.inkmod, share/extensions/txt2svg.inkmod,
+	src/extension/implementation/script.cpp,
+	src/extension/implementation/script.h:
+
+	Adding in support for superior checking of dependencies.  Now scripts
+	can include a line, which will look for a binary in the path.  So
+	something like dia input will no be loaded if there isn't dia available in
+	the path.
+
 2004-04-25  Carl Hetherington <inkscape@carlh.net>
 
 	* src/verbs.cpp, src/rect-context.cpp, src/spiral-context.cpp,

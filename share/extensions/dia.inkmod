@@ -9,5 +9,7 @@
     </input>
     <extension>
         <command reldir="extensions">dia2svg.sh</command>
+        <check reldir="extensions">dia2svg.sh</check>
+		<check reldir="path">dia</check>
     </extension>
 </spmodule>

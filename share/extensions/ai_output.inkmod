@@ -10,5 +10,6 @@
     <extension>
         <command reldir="path">pstoedit -f ps2ai</command>
 		<helper_extension>module.output.ps</helper_extension>
+		<check reldir="path">pstoedit</check>
     </extension>
 </spmodule>

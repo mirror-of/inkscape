@@ -5,5 +5,6 @@
     </filter>
     <extension>
         <command reldir="extensions">roundhole</command>
+        <check reldir="extensions">roundhole</check>
     </extension>
 </spmodule>

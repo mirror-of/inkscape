@@ -36,6 +36,7 @@ private:
     /** Just a quick function to find and resolve relative paths for
         the incoming scripts */
     gchar *       solve_reldir (SPRepr * reprin);
+	bool          check_existance (const gchar * command);
 
 public:
                           Script       (void);

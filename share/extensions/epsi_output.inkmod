@@ -10,5 +10,6 @@
     <extension>
         <command reldir="extensions">ps2epsi.sh</command>
 		<helper_extension>module.output.ps</helper_extension>
+        <check reldir="extensions">ps2epsi.sh</check>
     </extension>
 </spmodule>

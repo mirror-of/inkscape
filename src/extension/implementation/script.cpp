@@ -96,6 +96,88 @@ Script::solve_reldir (SPRepr * reprin) {
 }
 
 /**
+	\return   Whether the command given exists, including in the path
+	\brief    This function is used to find out if something exists for
+	          the check command.  It can look in the path if required.
+	\param    command   The command or file that should be looked for
+
+	The first thing that this function does is check to see if the
+	incoming file name has a directory delimiter in it.  This would
+	mean that it wants to control the directories, and should be
+	used directly.
+
+	If not, the path is used.  Each entry in the path is stepped through,
+	attached to the string, and then tested.  If the file is found
+	then a TRUE is returned.  If we get all the way through the path
+	then a FALSE is returned, the command could not be found.
+*/
+bool
+Script::check_existance (const gchar * command)
+{
+	gchar * path;
+	gchar * orig_path;
+
+	if (*command == '\0') {
+		/* We check the simple case first. */
+		return FALSE;
+	}
+
+	if (g_utf8_strchr (command, -1, G_DIR_SEPARATOR) != NULL) {
+		/* Don't search when it contains a slash.  */
+		if (g_file_test(command, G_FILE_TEST_EXISTS))
+			return TRUE;
+		else
+			return FALSE;
+    }
+
+
+	path = g_strdup(g_getenv("PATH"));
+
+	if (path == NULL) {
+		/* There is no `PATH' in the environment.
+		   The default search path is the current directory */
+		path = g_strdup(G_SEARCHPATH_SEPARATOR_S);
+	}
+	orig_path = path;
+
+	for (; path != NULL;) {
+		gchar * local_path;
+		gchar * final_name;
+
+		local_path = path;
+		path = g_utf8_strchr(path, -1, G_SEARCHPATH_SEPARATOR);
+		if (path == NULL) {
+			break;
+		}
+		/* Not sure whether this is UTF8 happy, but it would seem
+		   like it considering that I'm searching (and finding)
+		   the ':' character */
+		if (path != local_path && path != NULL) {
+			path[0] = '\0';
+			path++;
+		} else {
+			path = NULL;
+		}
+
+		if (local_path == '\0') {
+			final_name = g_strdup(command);
+		} else {
+			final_name = g_build_filename(local_path, command, NULL);
+		}
+
+		if (g_file_test(final_name, G_FILE_TEST_EXISTS)) {
+			g_free(final_name);
+			g_free(orig_path);
+			return TRUE;
+		}
+
+		g_free(final_name);
+	}
+
+	return FALSE;
+}
+
+/**
 	\return   none
 	\brief    This function 'loads' an extention, basically it determines
 	          the full command for the extention and stores that.
@@ -189,10 +271,15 @@ Script::check (Inkscape::Extension::Extension * module)
 				if (!strcmp(sp_repr_name(child_repr), "check")) {
 					command_text = solve_reldir(child_repr);
 					
+					if (command_text != NULL) {
 					/* I've got the command */
+						bool existance;
 
-
-
+						existance = check_existance(command_text);
+						g_free(command_text);
+						if (!existance)
+							return FALSE;
+					}
 				}
 
 				if (!strcmp(sp_repr_name(child_repr), "helper_extension")) {

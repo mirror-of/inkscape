@@ -10,5 +10,6 @@
     </input>
     <extension>
         <command reldir="path">gzip -cd</command>
+        <check reldir="path">gzip</check>
     </extension>
 </spmodule>
