@@ -108,11 +108,20 @@ static GtkWidget *window = NULL;
 
 static win_data wd;
 
+static gint x = 0, y = 0;
+
 static void
 sp_maintoolbox_destroy (GtkObject *object, gpointer data)
 {
 	sp_signal_disconnect_by_data (INKSCAPE, window);
 	window = NULL;
+}
+
+static void
+sp_maintoolbox_delete (GtkObject *object, gpointer data)
+{
+	gtk_window_get_position ((GtkWindow *) window, &x, &y);
+	gtk_widget_destroy (window);
 }
 
 void
@@ -123,6 +132,7 @@ sp_maintoolbox_create_toplevel (void)
 	if (!window) {
 		/* Create window */
 		window = sp_window_new (_("Inkscape"), FALSE);
+		gtk_window_move ((GtkWindow *) window, x, y);
 		sp_transientize (window);
 		wd.win = window;
 		wd.stop = 0;
@@ -130,6 +140,7 @@ sp_maintoolbox_create_toplevel (void)
 		gtk_signal_connect (GTK_OBJECT (window), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), window);
 
 		gtk_signal_connect (GTK_OBJECT (window), "destroy", GTK_SIGNAL_FUNC (sp_maintoolbox_destroy), window);
+		gtk_signal_connect (GTK_OBJECT (window), "delete_event", GTK_SIGNAL_FUNC (sp_maintoolbox_delete), window);
 
 		toolbox = sp_maintoolbox_new ();
 		gtk_widget_show (toolbox);
