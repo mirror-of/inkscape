@@ -1,3 +1,13 @@
+2003-12-24  bulia byak <bulia@dr.com>
+
+	* src/select-context.cpp: Added statusbar update in a few places
+ 
+	* src/interface.cpp: Changed order of keyboard modifiers. Split view and object menus.
+
+	* src/verbs.cpp: A couple fixes in mnemonics to better match shortcuts
+
+	* samples/tux.svg: Added missing sodipodi namespace, added namedview
+
 2003-12-24  Alexander Clausen <alex@skip86.com>
 
 	* src/file.cpp src/modules/system.cpp: Fix for 860199; returning NULL in
