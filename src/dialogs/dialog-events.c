@@ -57,7 +57,17 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 		case GDK_W:
 			// close dialog
 			if (MOD__CTRL_ONLY) {
-				gtk_widget_destroy ((GtkWidget *) win);
+				// this code sends a delete_event to the dialog, instead of just destroying it,
+				// so that the dialog can do some housekeeping, such as remember its position
+				GdkEventAny event;
+				GtkWidget *widget = (GtkWidget *) win;
+				event.type = GDK_DELETE;
+				event.window = widget->window;
+				event.send_event = TRUE;
+				g_object_ref (G_OBJECT (event.window));
+				gtk_main_do_event ((GdkEvent*)&event);
+				g_object_unref (G_OBJECT (event.window));
+
 				ret = TRUE; 
 			}
 			break;
