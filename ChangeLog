@@ -2,6 +2,9 @@
 
 	* doc/architecture.svg: reworked architecture diagram a bit
 
+	* doc/class-hierarchy.dia: added first shot at documenting the
+	  class hierarchy in Dia
+
 2003-11-27 MenTaLguY <mental@rydia.net>
 
 	* src/desktop.c: the coord status bar area should not have a
