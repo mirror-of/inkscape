@@ -16,11 +16,11 @@ class SPObject;
 
 namespace Inkscape {
 
-SPObject *create_layer(SPObject *parent);
+SPObject *create_layer(SPObject *root, SPObject *layer);
 
-SPObject *next_layer(SPObject *root, SPObject *current);
+SPObject *next_layer(SPObject *root, SPObject *layer);
 
-SPObject *previous_layer(SPObject *root, SPObject *current);
+SPObject *previous_layer(SPObject *root, SPObject *layer);
 
 }
 

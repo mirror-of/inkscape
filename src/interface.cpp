@@ -756,6 +756,33 @@ sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 
 
 static void
+sp_ui_layer_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
+{
+    static const sp_verb_t layer_verbs[] = {
+        SP_VERB_LAYER_NEW,
+
+        SP_VERB_NONE,
+
+        SP_VERB_LAYER_NEXT,
+        SP_VERB_LAYER_PREV,
+
+        SP_VERB_NONE,
+        
+        SP_VERB_LAYER_RAISE,
+        SP_VERB_LAYER_LOWER,
+        SP_VERB_LAYER_TO_TOP,
+        SP_VERB_LAYER_TO_BOTTOM,
+
+        SP_VERB_NONE,
+
+        SP_VERB_LAYER_DELETE,
+
+        SP_VERB_LAST
+    };
+    sp_ui_menu_append (menu, layer_verbs, view);
+}
+
+static void
 sp_ui_object_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
     static const sp_verb_t selection[] = {
@@ -978,6 +1005,12 @@ sp_ui_main_menubar (SPView *view)
 	mitem = gtk_menu_item_new_with_mnemonic (_("_View"));
 	menu = gtk_menu_new ();
 	sp_ui_view_menu (GTK_MENU (menu), NULL, view);
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
+	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
+
+	mitem = gtk_menu_item_new_with_mnemonic (_("_Layer"));
+	menu = gtk_menu_new ();
+	sp_ui_layer_menu (GTK_MENU (menu), NULL, view);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
 	

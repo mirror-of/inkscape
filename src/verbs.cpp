@@ -442,13 +442,7 @@ static void sp_verb_action_layer_perform (SPAction *action, void *data,
 
     switch (verb) {
         case SP_VERB_LAYER_NEW: {
-            SPObject *parent;
-            if ( dt->currentLayer() == dt->currentRoot() ) {
-                parent = dt->currentRoot();
-            } else {
-                parent = SP_OBJECT_PARENT(dt->currentLayer());
-            }
-            SPObject *layer=Inkscape::create_layer(parent);
+            SPObject *layer=Inkscape::create_layer(dt->currentRoot(), dt->currentLayer());
             dt->setCurrentLayer(layer);
             dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("New layer created."));
             break;
