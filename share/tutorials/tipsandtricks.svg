@@ -4,11 +4,11 @@
 <svg
    id="svg1"
    sodipodi:version="0.32"
-   inkscape:version="0.39cvs"
+   inkscape:version="0.40cvs"
    width="256pt"
    height="1720.4000pt"
    sodipodi:docname="tipsandtricks.svg"
-   sodipodi:docbase="C:\inkdocs\!backup"
+   sodipodi:docbase="/scratch/src/inkscape/inkscape/share/tutorials"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:cc="http://web.resource.org/cc/"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -734,9 +734,9 @@
   </defs>
   <sodipodi:namedview
      id="base"
-     inkscape:zoom="2.2500000"
-     inkscape:cx="128.50148"
-     inkscape:cy="1548.1089"
+     inkscape:zoom="2.5845713"
+     inkscape:cx="129.24242"
+     inkscape:cy="1639.7035"
      inkscape:window-width="780"
      inkscape:window-height="580"
      inkscape:window-x="0"
@@ -1202,7 +1202,7 @@
        sodipodi:linespacing="100%"
        transform="translate(0.000000,-78.93704)"><tspan
          x="5.5156250"
-         y="981.45313"
+         y="981.45312"
          sodipodi:role="line"
          id="tspan1841">Changing the rulers' unit of measure</tspan></text>
     <text

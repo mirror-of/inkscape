@@ -4,11 +4,11 @@
 <svg
    id="svg1"
    sodipodi:version="0.32"
-   inkscape:version="0.39cvs"
+   inkscape:version="0.40cvs"
    width="256pt"
    height="3669.2000pt"
    sodipodi:docname="tutorial-advanced.svg"
-   sodipodi:docbase="C:\inkdocs\!backup"
+   sodipodi:docbase="/scratch/src/inkscape/inkscape/share/tutorials"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:cc="http://web.resource.org/cc/"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -471,9 +471,9 @@
   </defs>
   <sodipodi:namedview
      id="base"
-     inkscape:zoom="2.1511687"
-     inkscape:cx="136.22547"
-     inkscape:cy="3489.5603"
+     inkscape:zoom="2.5845713"
+     inkscape:cx="129.24272"
+     inkscape:cy="3592.6042"
      inkscape:window-width="780"
      inkscape:window-height="580"
      inkscape:window-x="0"
@@ -1134,7 +1134,7 @@ http://www.inkscape.org/</dc:description>
        id="text2240"
        sodipodi:linespacing="100%"
        transform="translate(0.000000,-995.0560)"><tspan
-         x="6.0976563"
+         x="6.0976562"
          y="5337.4287"
          sodipodi:role="line"
          id="tspan1454">XML editor</tspan></text>
