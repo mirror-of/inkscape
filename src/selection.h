@@ -230,6 +230,12 @@ public:
 	 */
 	std::vector<NR::Point> getSnapPoints() const;
 
+  /**
+   * @return A vector containing the top-left and bottom-right
+   * corners of each selected object's bounding box.
+   */
+  std::vector<NR::Point> getBBoxPoints() const;
+
 	/**
 	 * @brief Connects a slot to be notified of selection changes
 	 *
