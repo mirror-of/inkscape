@@ -126,7 +126,7 @@ SVGPreview::SVGPreview()
         inkscape_application_init("");
     document = NULL;
     viewerGtk = NULL;
-    set_size_request(180,180);
+    set_size_request(150,150);
 }
 
 SVGPreview::~SVGPreview()
@@ -307,6 +307,10 @@ FileOpenDialogImpl::FileOpenDialogImpl(const char *dir,
         Gtk::FileFilter filter;
         Glib::ustring uname(_(ioext->name));
         filter.set_name(uname);
+        Glib::ustring upattern("*");
+        upattern += ioext->file_extension;
+        //g_message("ext for %s: '%s'\n", ioext->name,upattern.c_str());
+        filter.add_pattern(upattern);
         add_filter(filter);
         extensionMap[uname]=ioext->extension;
 
@@ -519,7 +523,10 @@ FileSaveDialogImpl::FileSaveDialogImpl(const char *dir,
         Gtk::FileFilter filter;
         Glib::ustring uname(_(ioext->name));
         filter.set_name(uname);
-        //g_message("extension %s\n", ioext->file_extension);
+        Glib::ustring upattern("*");
+        upattern += ioext->file_extension;
+        //g_message("ext for %s: '%s'\n", ioext->name,upattern.c_str());
+        filter.add_pattern(upattern);
         add_filter(filter);
         extensionMap[uname]=ioext->extension;
 
