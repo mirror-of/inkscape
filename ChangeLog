@@ -1,3 +1,7 @@
+2004-06-16  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/sp-item.h: added a comment.
+
 2004-06-15  Ted Gould  <ted@gould.cx>
 
 	* share/extensions/ai_input.inkmod:
