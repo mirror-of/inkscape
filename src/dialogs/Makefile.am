@@ -26,12 +26,10 @@ libspdialogs_a_SOURCES = \
 	align.cpp align.h	\
 	display-settings.cpp display-settings.h \
 	desktop-properties.cpp desktop-properties.h \
-	document-properties.cpp document-properties.h \
 	object-properties.cpp object-properties.h \
 	item-properties.cpp item-properties.h \
 	object-attributes.cpp object-attributes.h \
 	tool-options.cpp tool-options.h \
-	tool-attributes.cpp tool-attributes.h \
 	fill-style.cpp fill-style.h \
 	stroke-style.cpp stroke-style.h \
 	transformation.cpp transformation.h \

@@ -32,10 +32,8 @@
 #include "dialogs/transformation.h"
 #include "dialogs/object-properties.h"
 #include "dialogs/desktop-properties.h"
-#include "dialogs/document-properties.h"
 #include "dialogs/display-settings.h"
 #include "dialogs/tool-options.h"
-#include "dialogs/tool-attributes.h"
 #include "dialogs/item-properties.h"
 
 #include "select-context.h"
@@ -518,14 +516,8 @@ sp_verb_action_dialog_perform (SPAction *action, void * data, void * pdata)
 	case SP_VERB_DIALOG_TOOL_OPTIONS:
 		sp_tool_options_dialog ();
 		break;
-	case SP_VERB_DIALOG_TOOL_ATTRIBUTES:
-		sp_tool_attributes_dialog ();
-		break;
 	case SP_VERB_DIALOG_FILL_STROKE:
 		sp_object_properties_dialog ();
-		break;
-	case SP_VERB_DIALOG_SIZE_POSITION:
-		sp_object_properties_layout ();
 		break;
 	case SP_VERB_DIALOG_TRANSFORM:
 		sp_transformation_dialog_move ();
@@ -671,9 +663,7 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_DIALOG_DISPLAY, "DialogDisplay", N_("Inkscape _Options"), N_("Global Inkscape options"), NULL},
 	{SP_VERB_DIALOG_NAMEDVIEW, "DialogNamedview", N_("_Document Options"), N_("Options saved with the document"), NULL},
 	{SP_VERB_DIALOG_TOOL_OPTIONS, "DialogToolOptions", N_("Tool Optio_ns"), N_("Tool options"), NULL},
-	{SP_VERB_DIALOG_TOOL_ATTRIBUTES, "DialogToolAttributes", N_("Tool Attributes"), N_("Tool attributes"), NULL},
 	{SP_VERB_DIALOG_FILL_STROKE, "DialogFillStroke", N_("_Fill and Stroke"), N_("Fill and stroke settings"), NULL},
-	{SP_VERB_DIALOG_SIZE_POSITION, "DialogSizePosition", N_("_Size and Position"), N_("Object size and position"), "object_layout"},
 	{SP_VERB_DIALOG_TRANSFORM, "DialogTransform", N_("Transfor_m"), N_("Object transformations"), "object_trans"},
 	{SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "DialogAlignDistribute", N_("_Align and Distribute"), N_("Align and distribute objects"), "object_align"},
 	{SP_VERB_DIALOG_TEXT, "Dialogtext", N_("_Text and Font"), N_("Text editing and font settings"), "object_font"},
