@@ -1,3 +1,17 @@
+2003-12-30  bulia byak <bulia@dr.com>
+
+	* src/selection-chemistry.cpp: Grouping: Statusbar messages for nothing to group or
+	only one object, prevent crash when trying to group objects with different parents,
+	add new group to the members' common parent rather than to the document
+	root. Ungrouping: ungroup all groups in selection, statusbar messages for nothing to
+	ungroup.
+
+	* src/node-context.cpp src/node-context.h src/knotholder.h src/knotholder.cpp
+	src/nodepath.h src/nodepath.cpp src/document-undo.cpp: Add repr listener in node
+	context recreating nodepath or knotholder when the repr was changed outside of the
+	node editor, remove the change selection signal hack in document_undo, fixes many
+	bugs.
+
 2003-12-28  Daniel Borgmann  <spark@mayl.de>
 
 	* src/main.cpp: Include gtkmm/main.h and gtkmmify the main loop
