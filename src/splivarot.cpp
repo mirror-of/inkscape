@@ -600,8 +600,7 @@ sp_selected_path_outline ()
             }
         }
 
-        NRMatrix i2root;
-        sp_item_i2root_affine (item, &i2root);
+        NR::Matrix const transform = NR::Matrix (item->transform);
         gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR (item), "style"));
 
         float o_width, o_miter;
@@ -718,7 +717,7 @@ sp_selected_path_outline ()
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
 
             SPItem *newitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
-            sp_item_write_transform (newitem, repr, &i2root);
+            sp_item_write_transform (newitem, repr, transform);
 
             selection->addRepr (repr);
 
@@ -809,7 +808,6 @@ sp_selected_path_create_offset_object (int expand,bool updating)
     float o_width, o_miter;
     JoinType o_join;
     ButtType o_butt;
-    NRMatrix i2root;
   
     curve = NULL;
   
@@ -838,7 +836,6 @@ sp_selected_path_create_offset_object (int expand,bool updating)
             return;
     }
   
-    sp_item_i2root_affine (item, &i2root);
     style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
   
     {
@@ -1048,8 +1045,6 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
                 continue;
         }
 
-        NRMatrix i2root;
-        sp_item_i2root_affine (item, &i2root);
         gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR (item), "style"));
 
         float o_width, o_miter;
@@ -1302,8 +1297,7 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
                 continue;
         }
 
-        NRMatrix i2root;
-        sp_item_i2root_affine (item, &i2root);
+        NR::Matrix const transform = NR::Matrix (item->transform);
         gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR (item), "style"));
 
         Path *orig = Path_for_item (item, false);
@@ -1353,7 +1347,7 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
 
             SPItem *newitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
-            sp_item_write_transform (newitem, repr, &i2root);
+            sp_item_write_transform (newitem, repr, transform);
 
             selection->addRepr (repr);
 
