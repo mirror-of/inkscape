@@ -9,6 +9,7 @@
 
 #include "display/nr-arena-group.h"
 #include "xml/repr-private.h"
+#include "xml/repr.h"
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
 #include "sp-object-repr.h"
@@ -71,7 +72,7 @@ public:
     stillSameLine=false;
     return NextLine(after,asc,desc,lead);
   };
-  virtual double         RemainingOnLine(box_solution& after) {return 0;};
+  virtual double         RemainingOnLine(box_solution& /*after*/) {return 0;};
 };
 
 class dest_box_chunker : public dest_chunker  {
@@ -156,7 +157,7 @@ public:
     stillSameLine=false;
     return NextLine(after,asc,desc,lead);
   };
-  virtual double         RemainingOnLine(box_solution& after) {return 0;};
+  virtual double         RemainingOnLine(box_solution& /*after*/) {return 0;};
 };
 
 
@@ -484,7 +485,7 @@ public:
       pango_layout_set_text(pLayout, theText, -1);
       pango_layout_get_log_attrs(pLayout,&pAttrs,&pNAttr);
 //      textLength=strlen(theText);
-      textLength=pNAttr-1; // is it correct?
+      textLength=pNAttr; // is it correct?
       
       PangoLayoutIter* pIter=pango_layout_get_iter(pLayout);
       baselineY=pango_layout_iter_get_baseline(pIter);
@@ -505,12 +506,12 @@ public:
     pAttrs=NULL;
     textLength=0;
     if ( theText ) {       
-      textLength=pNAttr-1; // is it correct?
+      textLength=pNAttr; // is it correct?
       pango_layout_set_text(pLayout, theText, -1);
       pango_layout_get_log_attrs(pLayout,&pAttrs,&pNAttr);
     }
   };
-  virtual void                 ChangeText(int startPos,int endPos,char* inText) {
+  virtual void                 ChangeText(int /*startPos*/,int /*endPos*/,char* inText) {
     SetText(inText);
   };
   virtual int                  MaxIndex(void) {return textLength;};
@@ -527,7 +528,7 @@ public:
     ascent=0.001*((double)(baselineY-meas.y));
     descent=0.001*((double)(meas.y+meas.height-baselineY));
   };
-  virtual text_chunk_solution* StuffThatBox(int start_ind,double minLength,double nominalLength,double maxLength,bool strict) {
+  virtual text_chunk_solution* StuffThatBox(int start_ind,double minLength,double /*nominalLength*/,double maxLength,bool strict) {
     if ( theText == NULL || pLayout == NULL || pAttrs == NULL ) return NULL;
     if ( start_ind < 0 ) start_ind=0;
     if ( start_ind >= textLength ) return NULL;
@@ -545,7 +546,8 @@ public:
     text_chunk_solution curSol;
     curSol.end_of_array=false;
     curSol.start_ind=start_ind;
-    curSol.end_ind=start_ind-1;
+    curSol.end_ind=-1;
+    curSol.start_ind=0;
     curSol.length=0;
     curSol.ascent=0;
     curSol.descent=0;
@@ -590,8 +592,10 @@ public:
       }
       if ( curSol.length < minLength ) {
         if ( breaksAfter ) {
-          lastBefore=lastWord;
-          lastWord.end_ind=lastWord.start_ind-1;
+          if ( lastWord.end_ind >= lastWord.start_ind ) {
+            lastBefore=lastWord;
+            lastWord.end_ind=lastWord.start_ind-1;
+          }
         }
       } else if ( curSol.length > maxLength ) {
         if ( breaksAfter ) {
@@ -606,7 +610,6 @@ public:
             if ( lastWord.end_ind >= lastWord.start_ind ) {
               sol=(text_chunk_solution*)realloc(sol,(solSize+1)*sizeof(text_chunk_solution));
               sol[solSize]=sol[solSize-1];
-              sol[solSize-1].end_of_array=false;
               sol[solSize-1]=lastWord;
               lastWord.end_ind=lastWord.start_ind-1;
               solSize++;
@@ -616,8 +619,7 @@ public:
         }
       } else {
         if ( breaksAfter ) {
-          if ( strict ) {
-          } else {
+          if ( strict == false ) {
             if ( lastBefore.end_ind >= lastBefore.start_ind ) {
               sol=(text_chunk_solution*)realloc(sol,(solSize+1)*sizeof(text_chunk_solution));
               sol[solSize]=sol[solSize-1];
@@ -903,39 +905,13 @@ void   sp_typeset_relayout(SPTypeset *typeset)
             sp_repr_set_double (span_repr, "x", textPos[0]);
             sp_repr_set_double (span_repr, "y", textPos[1]);
             
-            gchar c[32];
-            gchar *s = NULL;
-            
-            for (int j = 0; j < span_info[k].nbG ; j ++) {
-              if ( j == 0 ) {
-                s = g_strdup ("0");
-              } else {
-                g_ascii_formatd (c, sizeof (c), "%.8g", spacing);
-                s = g_strjoin (" ", s, c, NULL);
-              }
-              for (int l=span_info[k].g_start[j]+1;l<=span_info[k].g_end[j];l++) {
-                s = g_strjoin (" 0", s, c, NULL);
-              }
+            {
+              SPCSSAttr *ocss;
+              ocss = sp_repr_css_attr (span_repr, "style");              
+              sp_repr_set_double ((SPRepr*)ocss, "letter-spacing", spacing);
+              sp_repr_css_change (span_repr, ocss, "style");
+              sp_repr_css_attr_unref (ocss);
             }
-            sp_repr_set_attr (span_repr, "dx", s);
-            g_free(s);
-            
-            double prevVal=0;
-            s=NULL;
-            for (int j = 0; j < span_info[k].nbG ; j ++) {
-              g_ascii_formatd (c, sizeof (c), "%.8g", span_info[k].g_pos[j][1]-prevVal);
-              prevVal=span_info[k].g_pos[j][1];
-              if ( j == 0 ) {
-                s = g_strdup (c);
-              } else {
-                s = g_strjoin (" ", s, c, NULL);
-              }
-              for (int l=span_info[k].g_start[j]+1;l<=span_info[k].g_end[j];l++) {
-                s = g_strjoin (" 0", s, c, NULL);
-              }
-            }
-            sp_repr_set_attr (span_repr, "dy", s);
-            g_free(s);
           } else {
             sp_repr_set_double (span_repr, "x", steps[i].box.x_start);
             sp_repr_set_double (span_repr, "y", steps[i].box.y);

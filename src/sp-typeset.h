@@ -84,16 +84,16 @@ typedef struct glyphs_for_span {
 class text_chunker {
 public:
   
-  text_chunker(char* inText) {};
+  text_chunker(char* /*inText*/) {};
   virtual ~text_chunker(void) {};
 
-  virtual void                 SetText(char* inText) {};
-  virtual void                 ChangeText(int startPos,int endPos,char* inText) {};
+  virtual void                 SetText(char* /*inText*/) {};
+  virtual void                 ChangeText(int /*startPos*/,int /*endPos*/,char* /*inText*/) {};
   virtual int                  MaxIndex(void) {return 0;}; // index in visual text != char index in source text
   
-  virtual void                 InitialMetricsAt(int startPos,double &ascent,double &descent) {};
-  virtual text_chunk_solution* StuffThatBox(int start_ind,double minLength,double nominalLength,double maxLength,bool strict) {return NULL;};
-  virtual void                 GlyphsAndPositions(int start_ind,int end_ind,int &nbS,glyphs_for_span* &spans) {nbS=0;spans=NULL;};
+  virtual void                 InitialMetricsAt(int /*startPos*/,double &/*ascent*/,double &/*descent*/) {};
+  virtual text_chunk_solution* StuffThatBox(int /*start_ind*/,double /*minLength*/,double /*nominalLength*/,double /*maxLength*/,bool /*strict*/) {return NULL;};
+  virtual void                 GlyphsAndPositions(int /*start_ind*/,int /*end_ind*/,int &nbS,glyphs_for_span* &spans) {nbS=0;spans=NULL;};
 };
 
 class dest_chunker {
@@ -103,10 +103,10 @@ public:
   virtual ~dest_chunker(void) {};
   
   virtual box_solution   VeryFirst(void) {box_solution res;res.finished=true;res.y=res.ascent=res.descent=res.x_start=res.x_end=0;res.frame_no=0;return res;};
-  virtual box_solution   NextLine(box_solution& after,double asc,double desc,double lead) {box_solution res;
+  virtual box_solution   NextLine(box_solution& /*after*/,double /*asc*/,double /*desc*/,double /*lead*/) {box_solution res;
     res.finished=true;res.y=res.ascent=res.descent=res.x_start=res.x_end=0;res.frame_no=0;return res;};
   virtual box_solution   NextBox(box_solution& after,double asc,double desc,double lead,bool &stillSameLine) {stillSameLine=false;return NextLine(after,asc,desc,lead);};
-  virtual double         RemainingOnLine(box_solution& after) {return 0;};
+  virtual double         RemainingOnLine(box_solution& /*after*/) {return 0;};
 };
 
 
@@ -114,6 +114,7 @@ struct SPTypeset {
 	SPGroup     group;
   
   bool        layoutDirty;
+  bool        destDirty;
   
   int         srcType;
   char*       srcText;
