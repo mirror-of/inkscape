@@ -34,115 +34,117 @@
 
 
 SPItem *
-text_in_selection (SPSelection *selection)
+text_in_selection(SPSelection *selection)
 {
-	for (GSList *items = (GSList *) selection->itemList();
+    for (GSList *items = (GSList *) selection->itemList();
          items != NULL;
          items = items->next) {
-		if (SP_IS_TEXT (items->data))
-			return ((SPItem *) items->data);
-	}
-	return NULL;
+        if (SP_IS_TEXT(items->data))
+            return ((SPItem *) items->data);
+    }
+    return NULL;
 }
 
 SPItem *
-shape_in_selection (SPSelection *selection)
+shape_in_selection(SPSelection *selection)
 {
-	for (GSList *items = (GSList *) selection->itemList();
+    for (GSList *items = (GSList *) selection->itemList();
          items != NULL;
          items = items->next) {
-		if (SP_IS_SHAPE (items->data))
-			return ((SPItem *) items->data);
-	}
-	return NULL;
+        if (SP_IS_SHAPE(items->data))
+            return ((SPItem *) items->data);
+    }
+    return NULL;
 }
 
 void
-scale_text_recursive (SPItem *item, gdouble scale)
+scale_text_recursive(SPItem *item, gdouble scale)
 {
-    SPStyle *style = SP_OBJECT_STYLE (item);
+    SPStyle *style = SP_OBJECT_STYLE(item);
     if (style) {
         style->font_size.computed *= scale;
     }
     SP_OBJECT(item)->updateRepr();
 
-    for (SPObject *child = sp_object_first_child(SP_OBJECT(item)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+    for (SPObject *child = sp_object_first_child(SP_OBJECT(item));
+         child != NULL; child = SP_OBJECT_NEXT(child))
+    {
         if (SP_IS_ITEM(child))
-            scale_text_recursive ((SPItem *) child, scale);
+            scale_text_recursive((SPItem *) child, scale);
     }
 }
 
 
-void 
-text_put_on_path (void)
+void
+text_put_on_path()
 {
-	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-	if (!desktop)
-		return;
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (!desktop)
+        return;
 
-	SPSelection *selection = SP_DT_SELECTION(desktop);
+    SPSelection *selection = SP_DT_SELECTION(desktop);
 
-	SPItem *text = text_in_selection (selection);
-	SPItem *shape = shape_in_selection (selection);
+    SPItem *text = text_in_selection(selection);
+    SPItem *shape = shape_in_selection(selection);
 
-	if (!text || !shape || g_slist_length ((GSList *) selection->itemList()) != 2) {
-		desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a text and a path</b> to put text on path."));
-		return;
-	}
+    if (!text || !shape || g_slist_length((GSList *) selection->itemList()) != 2) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a text and a path</b> to put text on path."));
+        return;
+    }
 
-	if (SP_IS_TEXT_TEXTPATH(text)) {
-		desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("This text object is <b>already put to a path</b>. Remove it from the path first. Use <b>Shift+D</b> to look up its path."));
-		return;
-	}
+    if (SP_IS_TEXT_TEXTPATH(text)) {
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("This text object is <b>already put to a path</b>. Remove it from the path first. Use <b>Shift+D</b> to look up its path."));
+        return;
+    }
 
-      if (SP_IS_RECT (shape)) {
-            // rect is the only SPShape which is not <path> yet, and thus SVG forbids us from putting text on it
-		desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot put text on a rectangle in this version. Convert rectangle to path first."));
-		return;
-	}
+    if (SP_IS_RECT(shape)) {
+        // rect is the only SPShape which is not <path> yet, and thus SVG forbids us from putting text on it
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot put text on a rectangle in this version. Convert rectangle to path first."));
+        return;
+    }
 
-	// remove transform from text, but recursively scale text's fontsize by the expansion
-      scale_text_recursive (text, NR::expansion(SP_ITEM(text)->transform));
-      sp_repr_set_attr (SP_OBJECT_REPR (text), "transform", NULL);
+    // remove transform from text, but recursively scale text's fontsize by the expansion
+    scale_text_recursive(text, NR::expansion(SP_ITEM(text)->transform));
+    sp_repr_set_attr(SP_OBJECT_REPR(text), "transform", NULL);
 
-	// make a list of text children
-	GSList *text_reprs = NULL;
-	for (SPObject *o = SP_OBJECT(text)->children; o != NULL; o = o->next) {
-		text_reprs = g_slist_prepend (text_reprs, SP_OBJECT_REPR (o));
-	}
+    // make a list of text children
+    GSList *text_reprs = NULL;
+    for (SPObject *o = SP_OBJECT(text)->children; o != NULL; o = o->next) {
+        text_reprs = g_slist_prepend(text_reprs, SP_OBJECT_REPR(o));
+    }
 
-	// create textPath and put it into the text
-	SPRepr *textpath = sp_repr_new ("svg:textPath");
-	// reference the shape
-	sp_repr_set_attr (textpath, "xlink:href", g_strdup_printf ("#%s", sp_repr_attr (SP_OBJECT_REPR(shape), "id")));
-	sp_repr_add_child (SP_OBJECT_REPR(text), textpath, NULL);
+    // create textPath and put it into the text
+    SPRepr *textpath = sp_repr_new("svg:textPath");
+    // reference the shape
+    sp_repr_set_attr(textpath, "xlink:href", g_strdup_printf("#%s", sp_repr_attr(SP_OBJECT_REPR(shape), "id")));
+    sp_repr_add_child(SP_OBJECT_REPR(text), textpath, NULL);
 
-	for ( GSList *i = text_reprs ; i ; i = i->next ) {
-		// make a copy of each text child
-		SPRepr *copy = sp_repr_duplicate((SPRepr *) i->data);
-		// We cannot have multiline in textpath, so remove line attrs from tspans
-		if (!strcmp (copy->name(), "svg:tspan")) {
-			sp_repr_set_attr (copy, "sodipodi:role", NULL);
-			sp_repr_set_attr (copy, "x", NULL);
-			sp_repr_set_attr (copy, "y", NULL);
-		}
-		// remove the old repr from under text
-		sp_repr_remove_child(SP_OBJECT_REPR(text), (SPRepr *) i->data); 
-		// put its copy into under textPath
-		sp_repr_add_child (textpath, copy, NULL); // fixme: copy id
-	}
+    for ( GSList *i = text_reprs ; i ; i = i->next ) {
+        // make a copy of each text child
+        SPRepr *copy = sp_repr_duplicate((SPRepr *) i->data);
+        // We cannot have multiline in textpath, so remove line attrs from tspans
+        if (!strcmp(copy->name(), "svg:tspan")) {
+            sp_repr_set_attr(copy, "sodipodi:role", NULL);
+            sp_repr_set_attr(copy, "x", NULL);
+            sp_repr_set_attr(copy, "y", NULL);
+        }
+        // remove the old repr from under text
+        sp_repr_remove_child(SP_OBJECT_REPR(text), (SPRepr *) i->data);
+        // put its copy into under textPath
+        sp_repr_add_child(textpath, copy, NULL); // fixme: copy id
+    }
 
-      // x/y are useless with textpath, and confuse Batik 1.5
-      SP_TEXT(text)->x.set = FALSE;
-      SP_TEXT(text)->y.set = FALSE;
-      SP_OBJECT (text)->updateRepr();
+    // x/y are useless with textpath, and confuse Batik 1.5
+    SP_TEXT(text)->x.set = FALSE;
+    SP_TEXT(text)->y.set = FALSE;
+    SP_OBJECT(text)->updateRepr();
 
-	sp_document_done(SP_DT_DOCUMENT(desktop));
-	g_slist_free(text_reprs);
+    sp_document_done(SP_DT_DOCUMENT(desktop));
+    g_slist_free(text_reprs);
 }
 
-void 
-text_remove_from_path (void)
+void
+text_remove_from_path()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
@@ -159,40 +161,40 @@ text_remove_from_path (void)
          items != NULL;
          items = items->next) {
 
-        if (!SP_IS_TEXT_TEXTPATH (SP_OBJECT (items->data))) {
+        if (!SP_IS_TEXT_TEXTPATH(SP_OBJECT(items->data))) {
             continue;
         }
 
-        SPObject *tp = sp_object_first_child(SP_OBJECT (items->data));
+        SPObject *tp = sp_object_first_child(SP_OBJECT(items->data));
 
         did = true;
 
-        sp_textpath_to_text (tp);
+        sp_textpath_to_text(tp);
     }
 
     if (!did) {
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No texts-on-paths</b> in the selection."));
     } else {
-        selection->setItemList (g_slist_copy((GSList *) selection->itemList())); // reselect to update statusbar description
+        selection->setItemList(g_slist_copy((GSList *) selection->itemList())); // reselect to update statusbar description
         sp_document_done(SP_DT_DOCUMENT(desktop));
     }
 }
 
-void 
-text_remove_all_kerns_recursively (SPObject *o)
+void
+text_remove_all_kerns_recursively(SPObject *o)
 {
-    sp_repr_set_attr (SP_OBJECT_REPR(o), "dx", NULL);
-    sp_repr_set_attr (SP_OBJECT_REPR(o), "dy", NULL);
-    sp_repr_set_attr (SP_OBJECT_REPR(o), "rotate", NULL); 
+    sp_repr_set_attr(SP_OBJECT_REPR(o), "dx", NULL);
+    sp_repr_set_attr(SP_OBJECT_REPR(o), "dy", NULL);
+    sp_repr_set_attr(SP_OBJECT_REPR(o), "rotate", NULL);
 
-    for (SPObject *i = sp_object_first_child (o); i != NULL; i = SP_OBJECT_NEXT(i)) {
-        text_remove_all_kerns_recursively (i);
+    for (SPObject *i = sp_object_first_child(o); i != NULL; i = SP_OBJECT_NEXT(i)) {
+        text_remove_all_kerns_recursively(i);
     }
 }
 
 //FIXME: must work with text selection
-void 
-text_remove_all_kerns (void)
+void
+text_remove_all_kerns()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
@@ -209,11 +211,11 @@ text_remove_all_kerns (void)
          items != NULL;
          items = items->next) {
 
-        if (!SP_IS_TEXT (SP_OBJECT (items->data))) {
+        if (!SP_IS_TEXT(SP_OBJECT(items->data))) {
             continue;
         }
 
-        text_remove_all_kerns_recursively (SP_OBJECT (items->data));
+        text_remove_all_kerns_recursively(SP_OBJECT(items->data));
         did = true;
     }
 
@@ -229,9 +231,9 @@ text_remove_all_kerns (void)
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
