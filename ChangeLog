@@ -1,5 +1,12 @@
 2004-08-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-object.cpp, src/sp-object.h, src/sp-object-tree-iterator.h:
+	  Move TreeIterator<SPObject *> specialization to snew file
+	  sp-object-tree-iterator.h.
+	  Mark several pointers as not being written through.
+	  Correspondingly change TreeIterator specialization to
+	  <SPObject const *> instead of <SPObject *>.
+
 	* display/nr-arena-item.cpp, display/nr-arena-item.h:
 	  Add NR::Matrix version of nr_arena_item_set_transform.
 

@@ -145,14 +145,19 @@ struct SPObject : public GObject {
 	gchar *id; /* Our very own unique id */
 	SPStyle *style;
 
-	bool isSiblingOf(SPObject *object) {
+	bool isSiblingOf(SPObject const *object) const {
 		g_return_val_if_fail(object != NULL, false);
 		return this->parent && this->parent == object->parent;
 	}
-	bool isAncestorOf(SPObject *object);
-	SPObject *nearestCommonAncestor(SPObject *object);
+	bool isAncestorOf(SPObject const *object) const;
+
+	SPObject const *nearestCommonAncestor(SPObject const *object) const;
+	/* A non-const version can be similarly constructed if you want one.
+	 * (Don't just cast away the constness, which would be ill-formed.) */
 
 	bool hasChildren() const { return ( children != NULL ); }
+
+	SPObject const *firstChild() const { return children; }
 	SPObject *firstChild() { return children; }
 
 	SPObject *appendChildRepr(SPRepr *repr);
@@ -321,33 +326,6 @@ struct SPObjectClass {
 	SPRepr * (* write) (SPObject *object, SPRepr *repr, unsigned int flags);
 };
 
-namespace Inkscape {
-namespace Traits {
-
-template <typename T> struct TreeIterator;
-
-template <>
-struct TreeIterator<SPObject *> {
-	typedef SPObject *Node;
-
-	static bool is_null(SPObject *o) { return o == NULL; }
-	static SPObject *null() { return NULL; }
-
-	static Node node(SPObject *o) { return o; }
-
-	static SPObject *first_child(SPObject *o) {
-		return o->firstChild();
-	}
-	static SPObject *parent(SPObject *o) {
-		return SP_OBJECT_PARENT(o);
-	}
-	static SPObject *next(SPObject *o) {
-		return SP_OBJECT_NEXT(o);
-	}
-};
-
-}
-}
 
 /*
  * Attaching/detaching
