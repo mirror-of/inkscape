@@ -354,11 +354,16 @@ SPCurve*              flow_res::NormalizedBPath(void)
 	
 }
 
+// for each letter, the text it comes from starts at letters[].utf8_offset in the text. its length is unknown, but should be
+// the length of the utf8 text sufficient to describe it, that is letters[].t_en-letters[].t_st
+// note that the text in the 'chars' array may be reorganized wrt the source text in case of bidirectionality, and that some 
+// chars of the source may be missing from the text_holder, hence from chars, like soft hyphen.
 void               flow_res::OffsetToLetter(int offset,int &c,int &s,int &l,bool &l_start,bool &l_end)
 {
 	c=s=l=-1;
 	l_start=l_end=false;
 	for (int i=0;i<nbLetter;i++) {
+		// check for each letter if the requested offset if inside the letter
 		int   l_st=letters[i].utf8_offset;
 		int   l_en=l_st+letters[i].t_en-letters[i].t_st;
 		if ( offset >= l_st && offset < l_en ) {
@@ -367,12 +372,15 @@ void               flow_res::OffsetToLetter(int offset,int &c,int &s,int &l,bool
 			l_start=( offset == letters[i].utf8_offset );
 			break;
 		}
+		// test if the position is at end of the letter
+		// fo not return, because starting a letter is more important than ending one.
 		if ( offset == l_en ) {
 			l_end=true;
 			l_start=false;
 			l=i;
 		}
 	}
+	// once we have the letter no, fill the rest of the parameters
 	if ( l >= 0 ) {
 		for (int i=0;i<nbChunk;i++) {
 			if ( l >= chunks[i].l_st && l < chunks[i].l_en ) {

@@ -302,7 +302,9 @@ void							 flow_res::ComputeDY(int no)
 
 void               flow_res::ApplyLetterSpacing(void)
 {
+	// for each line:
 	for (int i=0;i<nbChunk;i++) {
+		// first collect all letterspacing
 		int max=0;
 		for (int j=chunks[i].l_st;j<chunks[i].l_en;j++) {
 			if ( letters[j].no > max ) max=letters[j].no;
@@ -319,13 +321,14 @@ void               flow_res::ApplyLetterSpacing(void)
 				}
 				//			}
 		}
+		// do a running sum to get the actual displacements
 		double cumul=0;
 		for (int j=0;j<=max;j++) {
 			double nspc=lspc[j];
 			lspc[j]=cumul;
 			cumul+=nspc;
 		}
-		
+		// displace each letter
 		for (int j=chunks[i].s_st;j<chunks[i].s_en;j++) {
 			for (int k=spans[j].l_st;k<spans[j].l_en;k++) {
 				if ( letters[k].no >= 0 ) {

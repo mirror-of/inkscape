@@ -28,6 +28,19 @@ class flow_src;
 
 class SPObject;
 
+/*
+ * classes to collect the text from the SPObject tree
+ * 2 steps:
+ *	- one_flow_src variants are included in each element that can contribute text, that is in SPText, SPTspan, SPTextpath, SPString,
+ * SPFlowdiv, SPFlowpara, SPFlowspan, SPFlowLine SPFlowRegionBreak. before the flow is collected, this one_flow_src instances are
+ * linked in a doubly-linked list by sp-text and sp-flowtext.
+ *  - this linked list is then converted in a 'flat' flow_src, which is basically an array of text control elements and text paragraphs.
+ * paragraphs are stored in text_holder instances.
+ *
+ * additionnally, one_flow_src instances contain utf8_st and utf8_en fields representing the interval they take in the text
+ * element. these values are computed before the flow, and used when the text is modified.
+ */
+
 
 class div_flow_src;
 // lightweight class to be included in those filling the flow source
@@ -37,9 +50,9 @@ public:
 	// the text interval held by this object
 	int              ucs4_st,ucs4_en;
 	int              utf8_st,utf8_en;
-	// linking in the flow; prev=NULL means it's a flow start, a paragraph or a sodipodi:role=line tspan
+	// linking in the flow; 
 	one_flow_src     *next,*prev;
-	one_flow_src		 *dad,*chunk;
+	one_flow_src		 *dad,*chunk; // chunk=NULL means it's a flow start, a paragraph or a sodipodi:role=line tspan
 	
 	one_flow_src(SPObject* i_me);
 	virtual ~one_flow_src(void);
@@ -49,14 +62,23 @@ public:
 	void              DoFill(flow_src* what);
 	one_flow_src*     Locate(int utf8_pos,int &ucs4_pos,bool src_start,bool src_end,bool must_be_text);
 	
+	// introspection
 	virtual int       Type(void) {return flw_none;};
+	// asks for kerning info to be pushed in the text_holder. st/ en /offset are ucs4 positions
 	virtual void      PushInfo(int st,int en,int offset,text_holder* into);
+	// tells the element to remove the info such as x/y/dx/dy/rotate stuff it might hold for the specified portion
 	virtual void      DeleteInfo(int i_utf8_st,int i_utf8_en,int i_ucs4_st,int i_ucs4_en);
+	// returns a text_style for this element. the caller should take care of deallocating it
 	virtual text_style*  GetStyle(void);
+	// function called after SetPosition to fill the flow_src instance
 	virtual void      Fill(flow_src* what);
-	virtual void      SetPositions(bool for_text,int &last_utf8,int &last_ucs4,bool &in_white); // computes the ucs4_st and ucs4_en vals, and does the linking of chunk
+	// function used to prepare the element, most notably to computed the interval in the text it represents
+	virtual void      SetPositions(bool for_text,int &last_utf8,int &last_ucs4,bool &in_white);
+	// insert some text 'n_text' at positoin utf8_pos in the text. 'done' is set if this call actually inserted all the text
 	virtual void      Insert(int utf8_pos,int ucs4_pos,const char* n_text,int n_utf8_len,int n_ucs4_len,bool &done); 
+	// delete a portion of the text
 	virtual void      Delete(int i_utf8_st,int i_utf8_en);
+	// set/ add some value at the given position. v_type=0 -> set the 'x' value; 1->'y'; 2->'dx'; 3->'dy'; 4->'rotate'
 	virtual void      AddValue(int utf8_pos,SPSVGLength &val,int v_type,bool increment);
 };
 // text variant
@@ -89,7 +111,7 @@ public:
 	virtual void      Fill(flow_src* what);
 	virtual void      SetPositions(bool for_text,int &last_utf8,int &last_ucs4,bool &in_white);
 };
-// object variant, to hold placement info
+// object variant, to hold placement info. it's a text/ tspan/ textpath/ flowdiv/ flowspan/ flowpara
 class div_flow_src : public one_flow_src {
 public:
 	int 							type;
@@ -105,14 +127,18 @@ public:
 	div_flow_src(SPObject* i_me,int i_type);
 	virtual ~div_flow_src(void);
 	
+	// general purpose functions for manipulating the various attributes
 	static void       ReadArray(int &nb,SPSVGLength* &array,const char* from);
 	static char*      WriteArray(int nb,SPSVGLength* array);
 	static void       InsertArray(int l,int at,int &nb,SPSVGLength* &array,bool is_delta);
 	static void       SuppressArray(int l,int at,int &nb,SPSVGLength* &array);
 	static void       ForceVal(int at,SPSVGLength &val,int &nb,SPSVGLength* &array,bool increment);
 	static void       UpdateArray(double size,double scale,int &nb,SPSVGLength* &array);
+	// sets the SPSVGLength 'computed' field of the attributes it holds
 	void              UpdateLength(double size,double scale);
+	// returns the style for this element
 	void              SetStyle(SPStyle* i_style);
+	// wrappers
 	void							SetX(const char* val);
 	void							SetY(const char* val);
 	void							SetDX(const char* val);
@@ -123,6 +149,7 @@ public:
 	char*							GetDX(int st=-1,int en=-1);
 	char*							GetDY(int st=-1,int en=-1);
 	char*							GetRot(int st=-1,int en=-1);
+	// called by text_flow_src->AddValue(), because only the text element can do the utf8->ucs4 conversion
 	void              DoAddValue(int utf8_pos,int ucs4_pos,SPSVGLength &val,int v_type,bool increment);
 	
 	int               UCS4Pos(int i_utf8_pos);
@@ -137,6 +164,10 @@ public:
 	virtual void      Delete(int i_utf8_st,int i_utf8_en);
 };
 
+/*
+ * source of the flow
+ * it derives from flow_styles and thus holds an array of all the text_styles used in the source text
+ */
 class flow_src : public flow_styles {
 public:
 	typedef struct one_elem {
@@ -162,9 +193,11 @@ public:
 	
 	void                Prepare(void);
 	
+	// wrapper for their text_holder counterparts, mainly.
 	void                MetricsAt(int from_no,int from_pos,double &ascent,double &descent,double &leading,bool &flow_rtl);
 	void                ComputeSol(int from_no,int from_pos,line_solutions *sols,bool &flow_rtl);
 	void                Feed(int st_no,int st_pos,int en_no,int en_pos,bool flow_rtl,flow_eater* baby);
+	// finds the text_holder in the specified input span in the one_elem array
 	text_holder*        ParagraphBetween(int st_no,int st_pos,int en_no,int en_pos);
 
 	void                Affiche(void);

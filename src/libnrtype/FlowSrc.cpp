@@ -471,7 +471,7 @@ void              text_flow_src::Fill(flow_src* what)
 	}
 	one_flow_src*  cur_dad=dad;
 	while ( cur_dad ) {
-		cur_dad->PushInfo(added_utf8_st,added_utf8_en,ucs4_st,th);
+		cur_dad->PushInfo(added_ucs4_st,added_ucs4_en,ucs4_st,th);
 		cur_dad=cur_dad->dad;
 	}
 }
