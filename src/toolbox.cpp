@@ -1538,6 +1538,7 @@ sp_calligraphy_toolbox_new (SPDesktop *desktop)
     /* Drag */
     {
 			GtkWidget *hb = gtk_hbox_new (FALSE, 1);
+			// TRANSLATORS: "drag" means "resistance" here
 			GtkWidget *l = gtk_label_new(_("Drag:"));
 			gtk_widget_show(l);
 			gtk_misc_set_alignment(GTK_MISC(l), 1.0, 0.5);
