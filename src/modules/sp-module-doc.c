@@ -24,7 +24,7 @@ sp_module_doc_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_module_doc_init,
 		};
-		type = g_type_register_static (G_TYPE_OBJECT, "SPModuleDoc", &info, 0);
+		type = g_type_register_static (G_TYPE_OBJECT, "SPModuleDoc", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -34,7 +34,7 @@ static void sp_module_doc_class_init (SPModuleDocClass * klass) {
 
 	g_object_class = (GObjectClass *)klass;
 
-	base_parent_class = g_type_class_peek_parent (klass);
+	base_parent_class = (GObjectClass *)g_type_class_peek_parent (klass);
 
 	g_object_class->finalize = sp_module_doc_finalize;
 }

@@ -44,10 +44,10 @@ static void sp_dtw_activate_desktop (Inkscape *inkscape, SPDesktop *desktop, Gtk
 static void sp_dtw_desactivate_desktop (Inkscape *inkscape, SPDesktop *desktop, GtkWidget *dialog);
 static void sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop);
 
-static GtkWidget *sp_color_picker_new (unsigned char *colorkey, unsigned char *alphakey, unsigned char *title, guint32 rgba);
+static GtkWidget *sp_color_picker_new (gchar *colorkey, gchar *alphakey, gchar *title, guint32 rgba);
 static void sp_color_picker_set_rgba32 (GtkWidget *cp, guint32 rgba);
 static void sp_color_picker_clicked (GObject *cp, void *data);
-void sp_color_picker_button(GtkWidget * dialog, GtkWidget * t, const guchar * label, guchar * key, guchar * color_dialog_label, guchar * opacity_key, int row);
+void sp_color_picker_button(GtkWidget * dialog, GtkWidget * t, const gchar * label, gchar * key, gchar * color_dialog_label, gchar * opacity_key, int row);
 
 static GtkWidget *dlg = NULL;
 
@@ -77,7 +77,7 @@ sp_dtw_whatever_toggled (GtkToggleButton *tb, GtkWidget *dialog)
 	SPDesktop *dt;
 	SPDocument *doc;
 	SPRepr *repr;
-	const guchar *key;
+	const gchar *key;
 
 	if (gtk_object_get_data (GTK_OBJECT (dialog), "update")) return;
 
@@ -86,7 +86,7 @@ sp_dtw_whatever_toggled (GtkToggleButton *tb, GtkWidget *dialog)
 	doc = SP_DT_DOCUMENT (dt);
 
 	repr = SP_OBJECT_REPR (dt->namedview);
-	key = gtk_object_get_data (GTK_OBJECT (tb), "key");
+	key = (const gchar *)gtk_object_get_data (GTK_OBJECT (tb), "key");
 
 	sp_document_set_undo_sensitive (doc, FALSE);
 	sp_repr_set_boolean (repr, key, gtk_toggle_button_get_active (tb));
@@ -120,8 +120,8 @@ sp_dtw_whatever_changed (GtkAdjustment *adjustment, GtkWidget *dialog)
 	SPDocument *doc;
 	SPRepr *repr;
 	SPUnitSelector *us;
-	const guchar *key;
-	guchar c[32];
+	const gchar *key;
+	gchar c[32];
 
 	if (gtk_object_get_data (GTK_OBJECT (dialog), "update")) return;
 
@@ -130,8 +130,8 @@ sp_dtw_whatever_changed (GtkAdjustment *adjustment, GtkWidget *dialog)
 	doc = SP_DT_DOCUMENT (dt);
 
 	repr = SP_OBJECT_REPR (dt->namedview);
-	key = gtk_object_get_data (GTK_OBJECT (adjustment), "key");
-	us = gtk_object_get_data (GTK_OBJECT (adjustment), "unit_selector");
+	key = (const gchar *)gtk_object_get_data (GTK_OBJECT (adjustment), "key");
+	us = (SPUnitSelector *)gtk_object_get_data (GTK_OBJECT (adjustment), "unit_selector");
 
 	g_snprintf (c, 32, "%g%s", adjustment->value, sp_unit_selector_get_unit (us)->abbr);
 
@@ -145,7 +145,7 @@ sp_dtw_grid_snap_distance_changed (GtkAdjustment *adjustment, GtkWidget *dialog)
 {
 	SPRepr *repr;
 	SPUnitSelector *us;
-	guchar c[32];
+	gchar c[32];
 
 	if (gtk_object_get_data (GTK_OBJECT (dialog), "update")) return;
 
@@ -153,7 +153,7 @@ sp_dtw_grid_snap_distance_changed (GtkAdjustment *adjustment, GtkWidget *dialog)
 
 	repr = SP_OBJECT_REPR (SP_ACTIVE_DESKTOP->namedview);
 
-	us = gtk_object_get_data (GTK_OBJECT (dialog), "grid_snap_units");
+	us = (SPUnitSelector *)gtk_object_get_data (GTK_OBJECT (dialog), "grid_snap_units");
 
 	g_snprintf (c, 32, "%g%s", adjustment->value, sp_unit_selector_get_unit (us)->abbr);
 	sp_repr_set_attr (repr, "gridtolerance", c);
@@ -164,7 +164,7 @@ sp_dtw_guides_snap_distance_changed (GtkAdjustment *adjustment, GtkWidget *dialo
 {
 	SPRepr *repr;
 	SPUnitSelector *us;
-	guchar c[32];
+	gchar c[32];
 
 	if (gtk_object_get_data (GTK_OBJECT (dialog), "update")) return;
 
@@ -172,7 +172,7 @@ sp_dtw_guides_snap_distance_changed (GtkAdjustment *adjustment, GtkWidget *dialo
 
 	repr = SP_OBJECT_REPR (SP_ACTIVE_DESKTOP->namedview);
 
-	us = gtk_object_get_data (GTK_OBJECT (dialog), "guide_snap_units");
+	us = (SPUnitSelector *)gtk_object_get_data (GTK_OBJECT (dialog), "guide_snap_units");
 
 	g_snprintf (c, 32, "%g%s", adjustment->value, sp_unit_selector_get_unit (us)->abbr);
 	sp_repr_set_attr (repr, "guidetolerance", c);
@@ -279,7 +279,7 @@ sp_desktop_dialog_new (void)
 
 	b = gtk_check_button_new_with_label (_("Border on top of drawing"));
 	gtk_widget_show (b);
-	gtk_table_attach (GTK_TABLE (t), b, 0, 1, 1, 2, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), b, 0, 1, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_object_set_data (GTK_OBJECT (dialog), "borderlayer", b);
 	g_signal_connect (G_OBJECT (b), "toggled", G_CALLBACK (sp_dtw_border_layer_toggled), dialog);
 
@@ -309,14 +309,14 @@ sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop)
 	if (!desktop) {
 		GObject *cp, *w;
 		gtk_widget_set_sensitive (dialog, FALSE);
-		cp = g_object_get_data (G_OBJECT (dialog), "gridcolor");
-		w = g_object_get_data (cp, "window");
+		cp = (GObject *)g_object_get_data (G_OBJECT (dialog), "gridcolor");
+		w = (GObject *)g_object_get_data (cp, "window");
 		if (w) gtk_widget_set_sensitive (GTK_WIDGET (w), FALSE);
-		cp = g_object_get_data (G_OBJECT (dialog), "guidecolor");
-		w = g_object_get_data (cp, "window");
+		cp = (GObject *)g_object_get_data (G_OBJECT (dialog), "guidecolor");
+		w = (GObject *)g_object_get_data (cp, "window");
 		if (w) gtk_widget_set_sensitive (GTK_WIDGET (w), FALSE);
-		cp = g_object_get_data (G_OBJECT (dialog), "guidecolor");
-		w = g_object_get_data (cp, "window");
+		cp = (GObject *)g_object_get_data (G_OBJECT (dialog), "guidecolor");
+		w = (GObject *)g_object_get_data (cp, "window");
 		if (w) gtk_widget_set_sensitive (GTK_WIDGET (w), FALSE);
 	} else {
 		static const SPUnit *pt;
@@ -332,69 +332,69 @@ sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop)
 		gtk_object_set_data (GTK_OBJECT (dialog), "update", GINT_TO_POINTER (TRUE));
 		gtk_widget_set_sensitive (dialog, TRUE);
 
-		o = gtk_object_get_data (GTK_OBJECT (dialog), "showgrid");
+		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "showgrid");
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->showgrid);
 
-		o = gtk_object_get_data (GTK_OBJECT (dialog), "snaptogrid");
+		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "snaptogrid");
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->snaptogrid);
 
-		o = gtk_object_get_data (GTK_OBJECT (dialog), "grid_units");
+		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "grid_units");
 		sp_unit_selector_set_unit (SP_UNIT_SELECTOR (o), nv->gridunit);
 
 		val = nv->gridoriginx;
 		sp_convert_distance (&val, pt, nv->gridunit);
-		o = gtk_object_get_data (GTK_OBJECT (dialog), "gridoriginx");
+		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "gridoriginx");
 		gtk_adjustment_set_value (GTK_ADJUSTMENT (o), val);
 		val = nv->gridoriginy;
 		sp_convert_distance (&val, pt, nv->gridunit);
-		o = gtk_object_get_data (GTK_OBJECT (dialog), "gridoriginy");
+		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "gridoriginy");
 		gtk_adjustment_set_value (GTK_ADJUSTMENT (o), val);
 		val = nv->gridspacingx;
 		sp_convert_distance (&val, pt, nv->gridunit);
-		o = gtk_object_get_data (GTK_OBJECT (dialog), "gridspacingx");
+		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "gridspacingx");
 		gtk_adjustment_set_value (GTK_ADJUSTMENT (o), val);
 		val = nv->gridspacingy;
 		sp_convert_distance (&val, pt, nv->gridunit);
-		o = gtk_object_get_data (GTK_OBJECT (dialog), "gridspacingy");
+		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "gridspacingy");
 		gtk_adjustment_set_value (GTK_ADJUSTMENT (o), val);
 
-		o = gtk_object_get_data (GTK_OBJECT (dialog), "grid_snap_units");
+		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "grid_snap_units");
 		sp_unit_selector_set_unit (SP_UNIT_SELECTOR (o), nv->gridtoleranceunit);
 
-		o = gtk_object_get_data (GTK_OBJECT (dialog), "gridtolerance");
+		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "gridtolerance");
 		gtk_adjustment_set_value (GTK_ADJUSTMENT (o), nv->gridtolerance);
 
-		cp = gtk_object_get_data (GTK_OBJECT (dialog), "gridcolor");
+		cp = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dialog), "gridcolor");
 		sp_color_picker_set_rgba32 (cp, nv->gridcolor);
-		w = g_object_get_data (G_OBJECT (cp), "window");
+		w = (GtkWidget *)g_object_get_data (G_OBJECT (cp), "window");
 		if (w) gtk_widget_set_sensitive (GTK_WIDGET (w), TRUE);
 
-		o = gtk_object_get_data (GTK_OBJECT (dialog), "showguides");
+		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "showguides");
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->showgrid);
 
-		o = gtk_object_get_data (GTK_OBJECT (dialog), "snaptoguides");
+		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "snaptoguides");
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->snaptogrid);
 
-		o = gtk_object_get_data (GTK_OBJECT (dialog), "guide_snap_units");
+		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "guide_snap_units");
 		sp_unit_selector_set_unit (SP_UNIT_SELECTOR (o), nv->guidetoleranceunit);
 
-		o = gtk_object_get_data (GTK_OBJECT (dialog), "guidetolerance");
+		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "guidetolerance");
 		gtk_adjustment_set_value (GTK_ADJUSTMENT (o), nv->guidetolerance);
 
-		cp = g_object_get_data (G_OBJECT (dialog), "guidecolor");
+		cp = (GtkWidget *)g_object_get_data (G_OBJECT (dialog), "guidecolor");
 		sp_color_picker_set_rgba32 (cp, nv->guidecolor);
-		w = g_object_get_data (G_OBJECT (cp), "window");
+		w = (GtkWidget *)g_object_get_data (G_OBJECT (cp), "window");
 		if (w) gtk_widget_set_sensitive (GTK_WIDGET (w), TRUE);
 
-		cp = g_object_get_data (G_OBJECT (dialog), "guidehicolor");
+		cp = (GtkWidget *)g_object_get_data (G_OBJECT (dialog), "guidehicolor");
 		sp_color_picker_set_rgba32 (cp, nv->guidehicolor);
-		w = g_object_get_data (G_OBJECT (cp), "window");
+		w = (GtkWidget *)g_object_get_data (G_OBJECT (cp), "window");
 		if (w) gtk_widget_set_sensitive (GTK_WIDGET (w), TRUE);
 
-		o = gtk_object_get_data (GTK_OBJECT (dialog), "showborder");
+		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "showborder");
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->showborder);
 
-		o = gtk_object_get_data (GTK_OBJECT (dialog), "borderlayer");
+		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "borderlayer");
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), (nv->borderlayer == SP_BORDER_LAYER_TOP));
 
 		gtk_object_set_data (GTK_OBJECT (dialog), "update", GINT_TO_POINTER (FALSE));
@@ -403,18 +403,18 @@ sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop)
 
 void
 sp_color_picker_button(GtkWidget * dialog, GtkWidget * t,
-		       const guchar * label, guchar * key,
-		       guchar * color_dialog_label, guchar * opacity_key,
+		       const gchar * label, gchar * key,
+		       gchar * color_dialog_label, gchar * opacity_key,
 		       int row)
 {
   GtkWidget *l, *cp;
   l = gtk_label_new (label);
   gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
   gtk_widget_show (l);
-  gtk_table_attach (GTK_TABLE (t), l, 0, 1, row, row+1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+  gtk_table_attach (GTK_TABLE (t), l, 0, 1, row, row+1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
   cp = sp_color_picker_new (key, opacity_key, color_dialog_label, 0);
   gtk_widget_show (cp);
-  gtk_table_attach (GTK_TABLE (t), cp, 1, 2, row, row+1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+  gtk_table_attach (GTK_TABLE (t), cp, 1, 2, row, row+1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
   g_object_set_data (G_OBJECT (dialog), key, cp);
 }
                                                                                                 
@@ -423,13 +423,13 @@ sp_color_picker_destroy (GtkObject *cp, gpointer data)
 {
 	GtkObject *w;
 
-	w = g_object_get_data (G_OBJECT (cp), "window");
+	w = (GtkObject *)g_object_get_data (G_OBJECT (cp), "window");
 
 	if (w) gtk_object_destroy (w);
 }
 
 static GtkWidget *
-sp_color_picker_new (unsigned char *colorkey, unsigned char *alphakey, unsigned char *title, guint32 rgba)
+sp_color_picker_new (gchar *colorkey, gchar *alphakey, gchar *title, guint32 rgba)
 {
 	GtkWidget *b, *cpv;
 
@@ -460,10 +460,10 @@ sp_color_picker_set_rgba32 (GtkWidget *cp, guint32 rgba)
 	SPColorPreview *cpv;
 	SPColorSelector *csel;
 
-	cpv = g_object_get_data (G_OBJECT (cp), "preview");
+	cpv = (SPColorPreview *)g_object_get_data (G_OBJECT (cp), "preview");
 	sp_color_preview_set_rgba32 (cpv, rgba);
 
-	csel = g_object_get_data (G_OBJECT (cp), "selector");
+	csel = (SPColorSelector *)g_object_get_data (G_OBJECT (cp), "selector");
 	if (csel) sp_color_selector_set_rgba32 (csel, rgba);
 
 	g_object_set_data (G_OBJECT (cp), "color", GUINT_TO_POINTER (rgba));
@@ -482,16 +482,16 @@ sp_color_picker_color_mod (SPColorSelector *csel, GObject *cp)
 	guint32 rgba;
 	SPColorPreview *cpv;
 	SPRepr *repr;
-	guchar c[32];
-	unsigned char *colorkey, *alphakey;
+	gchar c[32];
+	gchar *colorkey, *alphakey;
 
 	if (g_object_get_data (G_OBJECT (cp), "update")) return;
 
 	rgba = sp_color_selector_get_rgba32 (csel);
 
-	cpv = g_object_get_data (G_OBJECT (cp), "preview");
-	colorkey = g_object_get_data (G_OBJECT (cp), "colorkey");
-	alphakey = g_object_get_data (G_OBJECT (cp), "alphakey");
+	cpv = (SPColorPreview *)g_object_get_data (G_OBJECT (cp), "preview");
+	colorkey = (gchar *)g_object_get_data (G_OBJECT (cp), "colorkey");
+	alphakey = (gchar *)g_object_get_data (G_OBJECT (cp), "alphakey");
 	sp_color_preview_set_rgba32 (cpv, rgba);
 
 	if (!SP_ACTIVE_DESKTOP) return;
@@ -515,11 +515,11 @@ sp_color_picker_clicked (GObject *cp, void *data)
 {
 	GtkWidget *w;
 
-	w = g_object_get_data (cp, "window");
+	w = (GtkWidget *)g_object_get_data (cp, "window");
 	if (!w) {
 		GtkWidget *vb, *csel, *hs, *hb, *b;
 		w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-		gtk_window_set_title (GTK_WINDOW (w), g_object_get_data (cp, "title"));
+		gtk_window_set_title (GTK_WINDOW (w), (gchar *)g_object_get_data (cp, "title"));
 		gtk_container_set_border_width (GTK_CONTAINER (w), 4);
 		g_object_set_data (cp, "window", w);
 		g_signal_connect (G_OBJECT (w), "destroy", G_CALLBACK (sp_color_picker_window_destroy), cp);

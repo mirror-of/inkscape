@@ -17,11 +17,17 @@
 
 #ifdef WITH_MMX
 /* fixme: */
+#ifdef __cplusplus
+extern "C" {
+#endif
 int nr_have_mmx (void);
 void nr_mmx_R8G8B8A8_P_EMPTY_A8_RGBAP (unsigned char *px, int w, int h, int rs, const unsigned char *spx, int srs, unsigned char *c);
 void nr_mmx_R8G8B8A8_P_R8G8B8A8_P_A8_RGBAP (unsigned char *px, int w, int h, int rs, const unsigned char *spx, int srs, unsigned char *c);
 void nr_mmx_R8G8B8_R8G8B8_R8G8B8A8_P (unsigned char *px, int w, int h, int rs, const unsigned char *spx, int srs, unsigned int alpha);
 #define NR_PIXOPS_MMX nr_have_mmx ()
+#ifdef __cplusplus
+};
+#endif
 #endif
 
 void

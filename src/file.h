@@ -41,7 +41,7 @@ void sp_do_file_print_to_file (SPDocument * doc, gchar *filename);
 void sp_file_exit (void);
 
 void sp_file_export_dialog (void *widget);
-void sp_export_png_file (SPDocument *doc, const unsigned char *filename,
+void sp_export_png_file (SPDocument *doc, const gchar *filename,
 			 double x0, double y0, double x1, double y1,
 			 unsigned int width, unsigned int height,
 			 unsigned long bgcolor);

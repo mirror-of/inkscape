@@ -23,8 +23,8 @@
 #include "object-attributes.h"
 
 typedef struct {
-	guchar *label;
-	guchar *attribute;
+	gchar *label;
+	gchar *attribute;
 } SPAttrDesc;
 
 static const SPAttrDesc anchor_desc[] = {
@@ -93,9 +93,9 @@ window_destroyed (GtkObject *window, GtkObject *object)
 }
 
 static void
-sp_object_attr_show_dialog (SPObject *object, const SPAttrDesc *desc, const guchar *tag)
+sp_object_attr_show_dialog (SPObject *object, const SPAttrDesc *desc, const gchar *tag)
 {
-	const guchar **labels, **attrs;
+	const gchar **labels, **attrs;
 	gint len, i;
 	gchar *title;
 	GtkWidget *w, *t;
@@ -103,8 +103,8 @@ sp_object_attr_show_dialog (SPObject *object, const SPAttrDesc *desc, const guch
 	len = 0;
 	while (desc[len].label) len += 1;
 
-	labels = alloca (len * sizeof (char *));
-	attrs = alloca (len * sizeof (char *));
+	labels = (const gchar **)alloca (len * sizeof (char *));
+	attrs = (const gchar **)alloca (len * sizeof (char *));
 
 	for (i = 0; i < len; i++) {
 		labels[i] = desc[i].label;
@@ -126,7 +126,7 @@ sp_object_attr_show_dialog (SPObject *object, const SPAttrDesc *desc, const guch
 }
 
 void
-sp_object_attributes_dialog (SPObject *object, const guchar *tag)
+sp_object_attributes_dialog (SPObject *object, const gchar *tag)
 {
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (SP_IS_OBJECT (object));

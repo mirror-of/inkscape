@@ -39,7 +39,7 @@ sp_module_handler_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_module_exec_init,
 		};
-		type = g_type_register_static (G_TYPE_OBJECT, "SPModuleHandler", &info, 0);
+		type = g_type_register_static (G_TYPE_OBJECT, "SPModuleHandler", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -49,7 +49,7 @@ static void sp_module_exec_class_init (SPModuleExecClass * klass) {
 
     g_object_class = (GObjectClass *)klass;
 
-    base_parent_class = g_type_class_peek_parent (klass);
+    base_parent_class = (GObjectClass *)g_type_class_peek_parent (klass);
 
     g_object_class->finalize = sp_module_exec_finalize;
 
@@ -129,7 +129,7 @@ sp_module_exec_builtin_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_module_exec_builtin_init,
 		};
-		type = g_type_register_static (SP_TYPE_MODULE_EXEC, "SPModuleExecBuiltin", &info, 0);
+		type = g_type_register_static (SP_TYPE_MODULE_EXEC, "SPModuleExecBuiltin", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -141,7 +141,7 @@ static void sp_module_exec_builtin_class_init (SPModuleExecBuiltinClass * klass)
     g_object_class = (GObjectClass *)klass;
     module = (SPModuleExecClass *)klass;
 
-    builtin_parent_class = g_type_class_peek_parent (klass);
+    builtin_parent_class = (SPModuleExecClass *)g_type_class_peek_parent (klass);
 
     g_object_class->finalize = sp_module_exec_builtin_finalize;
 

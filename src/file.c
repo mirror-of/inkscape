@@ -603,7 +603,7 @@ sp_export_get_rows (const unsigned char **rows, int row, int num_rows, void *dat
 
 
 void
-sp_export_png_file (SPDocument *doc, const unsigned char *filename,
+sp_export_png_file (SPDocument *doc, const gchar *filename,
 		    double x0, double y0, double x1, double y1,
 		    unsigned int width, unsigned int height,
 		    unsigned long bgcolor)

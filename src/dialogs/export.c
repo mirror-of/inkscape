@@ -51,10 +51,10 @@ static void sp_export_bitmap_width_value_changed (GtkAdjustment *adj, GtkObject 
 static void sp_export_xdpi_value_changed (GtkAdjustment *adj, GtkObject *base);
 
 static void sp_export_set_area (GtkObject *base, float x0, float y0, float x1, float y1);
-static void sp_export_value_set (GtkObject *base, const unsigned char *key, float val);
-static void sp_export_value_set_pt (GtkObject *base, const unsigned char *key, float val);
-static float sp_export_value_get (GtkObject *base, const unsigned char *key);
-static float sp_export_value_get_pt (GtkObject *base, const unsigned char *key);
+static void sp_export_value_set (GtkObject *base, const gchar *key, float val);
+static void sp_export_value_set_pt (GtkObject *base, const gchar *key, float val);
+static float sp_export_value_get (GtkObject *base, const gchar *key);
+static float sp_export_value_get_pt (GtkObject *base, const gchar *key);
 
 static GtkWidget *dlg = NULL;
 
@@ -65,8 +65,8 @@ sp_export_dialog_destroy (GtkObject *object, gpointer data)
 }
 
 static void
-sp_export_spinbutton_new (unsigned char *key, float val, float min, float max, float step, float page, GtkWidget *us,
-			  GtkWidget *t, int x, int y, const unsigned char *ll, const unsigned char *lr,
+sp_export_spinbutton_new (gchar *key, float val, float min, float max, float step, float page, GtkWidget *us,
+			  GtkWidget *t, int x, int y, const gchar *ll, const gchar *lr,
 			  int digits, unsigned int sensitive,
 			  GCallback cb, GtkWidget *dlg)
 {
@@ -76,29 +76,29 @@ sp_export_spinbutton_new (unsigned char *key, float val, float min, float max, f
 
 	a = gtk_adjustment_new (val, min, max, step, page, page);
 	gtk_object_set_data (a, "key", key);
-	gtk_object_set_data (GTK_OBJECT (dlg), key, a);
+	gtk_object_set_data (GTK_OBJECT (dlg), (const gchar *)key, a);
 	if (us) sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (a));
 
 	pos = 0;
 
 	if (ll) {
-		l = gtk_label_new (ll);
+		l = gtk_label_new ((const gchar *)ll);
 		gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-		gtk_table_attach (GTK_TABLE (t), l, x + pos, x + pos + 1, y, y + 1, 0, 0, 0, 0);
+		gtk_table_attach (GTK_TABLE (t), l, x + pos, x + pos + 1, y, y + 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 		gtk_widget_set_sensitive (l, sensitive);
 		pos += 1;
 	}
 
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, digits);
-	gtk_table_attach (GTK_TABLE (t), sb, x + pos, x + pos + 1, y, y + 1, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), sb, x + pos, x + pos + 1, y, y + 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	gtk_widget_set_usize (sb, 64, -1);
 	gtk_widget_set_sensitive (sb, sensitive);
 	pos += 1;
 
 	if (lr) {
-		l = gtk_label_new (lr);
+		l = gtk_label_new ((const gchar *)lr);
 		gtk_misc_set_alignment (GTK_MISC (l), 0.0, 0.5);
-		gtk_table_attach (GTK_TABLE (t), l, x + pos, x + pos + 1, y, y + 1, 0, 0, 0, 0);
+		gtk_table_attach (GTK_TABLE (t), l, x + pos, x + pos + 1, y, y + 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 		gtk_widget_set_sensitive (l, sensitive);
 		pos += 1;
 	}
@@ -130,20 +130,20 @@ sp_export_dialog (void)
 		gtk_container_add (GTK_CONTAINER (f), t);
 
 		hb = gtk_hbox_new (FALSE, 0);
-		gtk_table_attach (GTK_TABLE (t), hb, 0, 6, 0, 1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+		gtk_table_attach (GTK_TABLE (t), hb, 0, 6, 0, 1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 
 		b = gtk_toggle_button_new_with_label (_("Page"));
-		gtk_object_set_data (GTK_OBJECT (b), "key", "page");
+		gtk_object_set_data (GTK_OBJECT (b), "key", (void *)"page");
 		gtk_object_set_data (GTK_OBJECT (dlg), "page", b);
 		gtk_box_pack_start (GTK_BOX (hb), b, FALSE, FALSE, 0);
 		gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_export_area_toggled), dlg);
 		b = gtk_toggle_button_new_with_label (_("Drawing"));
-		gtk_object_set_data (GTK_OBJECT (b), "key", "drawing");
+		gtk_object_set_data (GTK_OBJECT (b), "key", (void *)"drawing");
 		gtk_object_set_data (GTK_OBJECT (dlg), "drawing", b);
 		gtk_box_pack_start (GTK_BOX (hb), b, FALSE, FALSE, 0);
 		gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_export_area_toggled), dlg);
 		b = gtk_toggle_button_new_with_label (_("Selection"));
-		gtk_object_set_data (GTK_OBJECT (b), "key", "selection");
+		gtk_object_set_data (GTK_OBJECT (b), "key", (void *)"selection");
 		gtk_object_set_data (GTK_OBJECT (dlg), "selection", b);
 		gtk_box_pack_start (GTK_BOX (hb), b, FALSE, FALSE, 0);
 		gtk_signal_connect (GTK_OBJECT (b), "clicked", GTK_SIGNAL_FUNC (sp_export_area_toggled), dlg);
@@ -208,8 +208,8 @@ sp_export_dialog (void)
 		/* fixme: */
 		fe = gtk_entry_new ();
 		if (SP_ACTIVE_DOCUMENT && SP_DOCUMENT_URI (SP_ACTIVE_DOCUMENT)) {
-			const unsigned char *name, *dot;
-			unsigned char c[1024];
+			const gchar *name, *dot;
+			gchar c[1024];
 			int len;
 			name = SP_DOCUMENT_NAME (SP_ACTIVE_DOCUMENT);
 			len = strlen (name);
@@ -249,8 +249,8 @@ static void
 sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
 {
 	if (gtk_toggle_button_get_active (tb)) {
-		const unsigned char *key;
-		key = gtk_object_get_data (GTK_OBJECT (tb), "key");
+		const gchar *key;
+		key = (const gchar *)gtk_object_get_data (GTK_OBJECT (tb), "key");
 		if (strcmp (key, "page")) {
 			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (base, "page")), FALSE);
 		}
@@ -284,13 +284,13 @@ static void
 sp_export_export_clicked (GtkButton *button, GtkObject *base)
 {
 	GtkWidget *fe;
-	const unsigned char *filename;
+	const gchar *filename;
 	float x0, y0, x1, y1;
 	int width, height;
 
 	if (!SP_ACTIVE_DESKTOP) return;
 
-	fe = gtk_object_get_data (base, "filename");
+	fe = (GtkWidget *)gtk_object_get_data (base, "filename");
 #if 0
 	filename = gnome_file_entry_get_full_path (GNOME_FILE_ENTRY (fe), FALSE);
 #else
@@ -315,7 +315,7 @@ sp_export_area_x_value_changed (GtkAdjustment *adj, GtkObject *base)
 	float x0, x1, xdpi, width;
 
 	if (gtk_object_get_data (base, "update")) return;
-	if (sp_unit_selector_update_test (gtk_object_get_data (base, "units"))) return;
+	if (sp_unit_selector_update_test ((SPUnitSelector *)gtk_object_get_data (base, "units"))) return;
 	gtk_object_set_data (base, "update", GUINT_TO_POINTER (TRUE));
 
 	x0 = sp_export_value_get_pt (base, "x0");
@@ -325,9 +325,9 @@ sp_export_area_x_value_changed (GtkAdjustment *adj, GtkObject *base)
 	width = floor ((x1 - x0) * xdpi / 72.0 + 0.5);
 
 	if (width < SP_EXPORT_MIN_SIZE) {
-		const unsigned char *key;
+		const gchar *key;
 		width = SP_EXPORT_MIN_SIZE;
-		key = gtk_object_get_data (GTK_OBJECT (adj), "key");
+		key = (const gchar *)gtk_object_get_data (GTK_OBJECT (adj), "key");
 		if (!strcmp (key, "x0")) {
 			x1 = x0 + width * 72.0 / xdpi;
 			sp_export_value_set_pt (base, "x1", x1);
@@ -349,7 +349,7 @@ sp_export_area_y_value_changed (GtkAdjustment *adj, GtkObject *base)
 	float y0, y1, ydpi, height;
 
 	if (gtk_object_get_data (base, "update")) return;
-	if (sp_unit_selector_update_test (gtk_object_get_data (base, "units"))) return;
+	if (sp_unit_selector_update_test ((SPUnitSelector *)gtk_object_get_data (base, "units"))) return;
 	gtk_object_set_data (base, "update", GUINT_TO_POINTER (TRUE));
 
 	y0 = sp_export_value_get_pt (base, "y0");
@@ -359,9 +359,9 @@ sp_export_area_y_value_changed (GtkAdjustment *adj, GtkObject *base)
 	height = floor ((y1 - y0) * ydpi / 72.0 + 0.5);
 
 	if (height < SP_EXPORT_MIN_SIZE) {
-		const unsigned char *key;
+		const gchar *key;
 		height = SP_EXPORT_MIN_SIZE;
-		key = gtk_object_get_data (GTK_OBJECT (adj), "key");
+		key = (const gchar *)gtk_object_get_data (GTK_OBJECT (adj), "key");
 		if (!strcmp (key, "y0")) {
 			y1 = y0 + height * 72.0 / ydpi;
 			sp_export_value_set_pt (base, "y1", y1);
@@ -383,7 +383,7 @@ sp_export_area_width_value_changed (GtkAdjustment *adj, GtkObject *base)
 	float x0, x1, xdpi, width, bmwidth;
 
 	if (gtk_object_get_data (base, "update")) return;
-	if (sp_unit_selector_update_test (gtk_object_get_data (base, "units"))) return;
+	if (sp_unit_selector_update_test ((SPUnitSelector *)gtk_object_get_data (base, "units"))) return;
 	gtk_object_set_data (base, "update", GUINT_TO_POINTER (TRUE));
 
 	x0 = sp_export_value_get_pt (base, "x0");
@@ -410,7 +410,7 @@ sp_export_area_height_value_changed (GtkAdjustment *adj, GtkObject *base)
 	float y0, y1, ydpi, height, bmheight;
 
 	if (gtk_object_get_data (base, "update")) return;
-	if (sp_unit_selector_update_test (gtk_object_get_data (base, "units"))) return;
+	if (sp_unit_selector_update_test ((SPUnitSelector *)gtk_object_get_data (base, "units"))) return;
 	gtk_object_set_data (base, "update", GUINT_TO_POINTER (TRUE));
 
 	y0 = sp_export_value_get_pt (base, "y0");
@@ -450,7 +450,7 @@ sp_export_bitmap_width_value_changed (GtkAdjustment *adj, GtkObject *base)
 	float x0, x1, bmwidth, xdpi;
 
 	if (gtk_object_get_data (base, "update")) return;
-	if (sp_unit_selector_update_test (gtk_object_get_data (base, "units"))) return;
+	if (sp_unit_selector_update_test ((SPUnitSelector *)gtk_object_get_data (base, "units"))) return;
 	gtk_object_set_data (base, "update", GUINT_TO_POINTER (TRUE));
 
 	x0 = sp_export_value_get_pt (base, "x0");
@@ -476,7 +476,7 @@ sp_export_xdpi_value_changed (GtkAdjustment *adj, GtkObject *base)
 	float x0, x1, xdpi, bmwidth;
 
 	if (gtk_object_get_data (base, "update")) return;
-	if (sp_unit_selector_update_test (gtk_object_get_data (base, "units"))) return;
+	if (sp_unit_selector_update_test ((SPUnitSelector *)gtk_object_get_data (base, "units"))) return;
 	gtk_object_set_data (base, "update", GUINT_TO_POINTER (TRUE));
 
 	x0 = sp_export_value_get_pt (base, "x0");
@@ -508,47 +508,47 @@ sp_export_set_area (GtkObject *base, float x0, float y0, float x1, float y1)
 }
 
 static void
-sp_export_value_set (GtkObject *base, const unsigned char *key, float val)
+sp_export_value_set (GtkObject *base, const gchar *key, float val)
 {
 	GtkAdjustment *adj;
 
-	adj = gtk_object_get_data (base, key);
+	adj = (GtkAdjustment *)gtk_object_get_data (base, key);
 
 	gtk_adjustment_set_value (adj, val);
 }
 
 static void
-sp_export_value_set_pt (GtkObject *base, const unsigned char *key, float val)
+sp_export_value_set_pt (GtkObject *base, const gchar *key, float val)
 {
 	GtkAdjustment *adj;
 	const SPUnit *unit;
 
-	adj = gtk_object_get_data (base, key);
+	adj = (GtkAdjustment *)gtk_object_get_data (base, key);
 
-	unit = sp_unit_selector_get_unit (gtk_object_get_data (base, "units"));
+	unit = sp_unit_selector_get_unit ((SPUnitSelector *)gtk_object_get_data (base, "units"));
 
 	gtk_adjustment_set_value (adj, sp_points_get_units (val, unit));
 }
 
 static float
-sp_export_value_get (GtkObject *base, const unsigned char *key)
+sp_export_value_get (GtkObject *base, const gchar *key)
 {
 	GtkAdjustment *adj;
 
-	adj = gtk_object_get_data (base, key);
+	adj = (GtkAdjustment *)gtk_object_get_data (base, key);
 
 	return adj->value;
 }
 
 static float
-sp_export_value_get_pt (GtkObject *base, const unsigned char *key)
+sp_export_value_get_pt (GtkObject *base, const gchar *key)
 {
 	GtkAdjustment *adj;
 	const SPUnit *unit;
 
-	adj = gtk_object_get_data (base, key);
+	adj = (GtkAdjustment *)gtk_object_get_data (base, key);
 
-	unit = sp_unit_selector_get_unit (gtk_object_get_data (base, "units"));
+	unit = sp_unit_selector_get_unit ((SPUnitSelector *)gtk_object_get_data (base, "units"));
 
 	return sp_units_get_points (adj->value, unit);
 }

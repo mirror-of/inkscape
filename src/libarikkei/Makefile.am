@@ -2,8 +2,8 @@ noinst_LIBRARIES = libarikkei.a
 
 INCLUDES = \
 	-I.. \
-	$(INKSCAPE_CFLAGS) \
-	$(cflags)
+	$(cflags) \
+	$(INKSCAPE_CFLAGS)
 
 libarikkei_a_SOURCES = \
 	arikkei-dict.c arikkei-dict.h \

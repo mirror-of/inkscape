@@ -106,7 +106,7 @@ static void on_editable_changed_enable_if_valid_xml_name (GtkEditable * editable
 
 static void on_desktop_selection_changed (SPSelection * selection);
 static gboolean on_desktop_shutdown (SPDesktop * desktop, gpointer data);
-static void on_document_uri_set (SPDocument * document, const guchar * uri, gpointer data);
+static void on_document_uri_set (SPDocument * document, const gchar * uri, gpointer data);
 
 static void on_clicked_get_editable_text (GtkWidget * widget, gpointer data);
 
@@ -683,7 +683,7 @@ void
 on_attr_select_row_set_name_content (GtkCList *list, gint row, gint column, GdkEventButton *event, gpointer data)
 {
 	GtkEditable * editable;
-	const guchar * name;
+	const gchar * name;
 	gint pos;
 	editable = GTK_EDITABLE (data);
 	name = g_quark_to_string (sp_xmlview_attr_list_get_row_key (list, row));
@@ -697,7 +697,7 @@ void
 on_attr_select_row_set_value_content (GtkCList *list, gint row, gint column, GdkEventButton *event, gpointer data)
 {
 	GtkTextBuffer *tb;
-	const guchar *name, *value;
+	const gchar *name, *value;
 	tb = gtk_text_view_get_buffer (GTK_TEXT_VIEW (data));
 	name = g_quark_to_string (sp_xmlview_attr_list_get_row_key (list, row));
 	value = sp_repr_attr (selected_repr, name);
@@ -820,9 +820,9 @@ on_desktop_shutdown (SPDesktop * desktop, gpointer data)
 }
 
 void
-on_document_uri_set (SPDocument * document, const guchar * uri, gpointer data)
+on_document_uri_set (SPDocument * document, const gchar * uri, gpointer data)
 {
-	guchar * title;
+	gchar * title;
 	title = g_strdup_printf (_("Inkscape: %s : XML View"), SP_DOCUMENT_NAME (document));
 	gtk_window_set_title (GTK_WINDOW (dialog), title);
 	g_free (title);

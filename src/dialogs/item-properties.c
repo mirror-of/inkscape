@@ -101,22 +101,22 @@ sp_item_widget_new (void)
 
 	cb = gtk_check_button_new_with_label (_("Sensitive"));
 	gtk_widget_show (cb);
-	gtk_table_attach (GTK_TABLE (t), cb, 0, 1, 0, 1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), cb, 0, 1, 0, 1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_signal_connect (GTK_OBJECT (cb), "toggled", GTK_SIGNAL_FUNC (sp_item_widget_sensitivity_toggled), spw);
 	gtk_object_set_data (GTK_OBJECT (spw), "sensitive", cb);
 	cb = gtk_check_button_new_with_label (_("Visible"));
 	gtk_widget_set_sensitive (GTK_WIDGET (cb), FALSE);
 	gtk_widget_show (cb);
-	gtk_table_attach (GTK_TABLE (t), cb, 1, 2, 0, 1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), cb, 1, 2, 0, 1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_object_set_data (GTK_OBJECT (spw), "visible", cb);
 	cb = gtk_check_button_new_with_label (_("Active"));
 	gtk_widget_set_sensitive (GTK_WIDGET (cb), FALSE);
 	gtk_widget_show (cb);
-	gtk_table_attach (GTK_TABLE (t), cb, 0, 1, 1, 2, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), cb, 0, 1, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_object_set_data (GTK_OBJECT (spw), "active", cb);
 	cb = gtk_check_button_new_with_label (_("Printable"));
 	gtk_widget_show (cb);
-	gtk_table_attach (GTK_TABLE (t), cb, 1, 2, 1, 2, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), cb, 1, 2, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_signal_connect (GTK_OBJECT (cb), "toggled", GTK_SIGNAL_FUNC (sp_item_widget_printability_toggled), spw);
 	gtk_object_set_data (GTK_OBJECT (spw), "printable", cb);
 
@@ -156,42 +156,42 @@ sp_item_widget_new (void)
 	gtk_object_set_data (GTK_OBJECT (spw), "t0", a);
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
 	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (t), sb, 0, 1, 0, 1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), sb, 0, 1, 0, 1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_signal_connect (a, "value_changed", GTK_SIGNAL_FUNC (sp_item_widget_transform_value_changed), spw);
 
 	a = gtk_adjustment_new (0.0, -NR_HUGE_F, NR_HUGE_F, 0.01, 0.1, 0.1);
 	gtk_object_set_data (GTK_OBJECT (spw), "t1", a);
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
 	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (t), sb, 0, 1, 1, 2, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), sb, 0, 1, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_signal_connect (a, "value_changed", GTK_SIGNAL_FUNC (sp_item_widget_transform_value_changed), spw);
 
 	a = gtk_adjustment_new (0.0, -NR_HUGE_F, NR_HUGE_F, 0.01, 0.1, 0.1);
 	gtk_object_set_data (GTK_OBJECT (spw), "t2", a);
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
 	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (t), sb, 1, 2, 0, 1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), sb, 1, 2, 0, 1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_signal_connect (a, "value_changed", GTK_SIGNAL_FUNC (sp_item_widget_transform_value_changed), spw);
 
 	a = gtk_adjustment_new (1.0, -NR_HUGE_F, NR_HUGE_F, 0.01, 0.1, 0.1);
 	gtk_object_set_data (GTK_OBJECT (spw), "t3", a);
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
 	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (t), sb, 1, 2, 1, 2, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), sb, 1, 2, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_signal_connect (a, "value_changed", GTK_SIGNAL_FUNC (sp_item_widget_transform_value_changed), spw);
 
 	a = gtk_adjustment_new (0.0, -NR_HUGE_F, NR_HUGE_F, 0.01, 0.1, 0.1);
 	gtk_object_set_data (GTK_OBJECT (spw), "t4", a);
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
 	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 0, 1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 0, 1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_signal_connect (a, "value_changed", GTK_SIGNAL_FUNC (sp_item_widget_transform_value_changed), spw);
 
 	a = gtk_adjustment_new (0.0, -NR_HUGE_F, NR_HUGE_F, 0.01, 0.1, 0.1);
 	gtk_object_set_data (GTK_OBJECT (spw), "t5", a);
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
 	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 1, 2, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_signal_connect (a, "value_changed", GTK_SIGNAL_FUNC (sp_item_widget_transform_value_changed), spw);
 
 	sp_item_widget_setup (SP_WIDGET (spw), SP_DT_SELECTION (SP_ACTIVE_DESKTOP));
@@ -234,43 +234,43 @@ sp_item_widget_setup (SPWidget *spw, SPSelection *selection)
 	style = SP_OBJECT_STYLE (item);
 
 	/* Sensitive */
-	w = gtk_object_get_data (GTK_OBJECT (spw), "sensitive");
+	w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "sensitive"));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), item->sensitive);
 	
 	/* Printable */
-	w = gtk_object_get_data (GTK_OBJECT (spw), "printable");
+	w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "printable"));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), item->printable);
 	
 	/* Opacity */
-	a = gtk_object_get_data (GTK_OBJECT (spw), "opacity");
+	a = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "opacity"));
 	gtk_adjustment_set_value (a, SP_SCALE24_TO_FLOAT (style->opacity.value));
 
 	/* Transform */
-	a = gtk_object_get_data (GTK_OBJECT (spw), "t0");
+	a = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "t0"));
 	gtk_adjustment_set_value (a, item->transform.c[0]);
-	a = gtk_object_get_data (GTK_OBJECT (spw), "t1");
+	a = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "t1"));
 	gtk_adjustment_set_value (a, item->transform.c[1]);
-	a = gtk_object_get_data (GTK_OBJECT (spw), "t2");
+	a = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "t2"));
 	gtk_adjustment_set_value (a, item->transform.c[2]);
-	a = gtk_object_get_data (GTK_OBJECT (spw), "t3");
+	a = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "t3"));
 	gtk_adjustment_set_value (a, item->transform.c[3]);
-	a = gtk_object_get_data (GTK_OBJECT (spw), "t4");
+	a = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "t4"));
 	gtk_adjustment_set_value (a, item->transform.c[4]);
-	a = gtk_object_get_data (GTK_OBJECT (spw), "t5");
+	a = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "t5"));
 	gtk_adjustment_set_value (a, item->transform.c[5]);
 
 	/* Id */
 	if (SP_OBJECT_IS_CLONED (item)) {
-		w = gtk_object_get_data (GTK_OBJECT (spw), "id");
+		w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id"));
 		gtk_entry_set_text (GTK_ENTRY (w), "");
 		gtk_widget_set_sensitive (w, FALSE);
-		w = gtk_object_get_data (GTK_OBJECT (spw), "id_label");
+		w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id_label"));
 		gtk_label_set_text (GTK_LABEL (w), _("Ref"));
 	} else {
-		w = gtk_object_get_data (GTK_OBJECT (spw), "id");
+		w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id"));
 		gtk_entry_set_text (GTK_ENTRY (w), item->object.id);
 		gtk_widget_set_sensitive (w, TRUE);
-		w = gtk_object_get_data (GTK_OBJECT (spw), "id_label");
+		w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id_label"));
 		gtk_label_set_text (GTK_LABEL (w), _("ID"));
 	}
 
@@ -341,9 +341,9 @@ sp_item_widget_id_changed (GtkWidget *widget, SPWidget *spw)
 
 	gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
-	w = gtk_object_get_data (GTK_OBJECT (spw), "id");
+	w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id"));
 	id = (gchar *)gtk_entry_get_text (GTK_ENTRY (w));
-	w = gtk_object_get_data (GTK_OBJECT (spw), "id_label");
+	w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "id_label"));
 	if (!strcmp (id, ((SPObject *) item)->id)) {
 		gtk_label_set_text (GTK_LABEL (w), _("ID"));
 	} else if (!*id || !isalnum (*id)) {
@@ -367,7 +367,7 @@ sp_item_widget_opacity_value_changed (GtkAdjustment *a, SPWidget *spw)
 {
 	SPItem *item;
 	SPCSSAttr *css;
-	unsigned char c[32];
+	gchar c[32];
 
 	if (gtk_object_get_data (GTK_OBJECT (spw), "blocked")) return;
 
@@ -393,7 +393,7 @@ sp_item_widget_transform_value_changed (GtkWidget *widget, SPWidget *spw)
 	SPException ex;
 	SPItem *item;
 	NRMatrixF t;
-	unsigned char c[64];
+	gchar c[64];
 	int i;
 
 	if (gtk_object_get_data (GTK_OBJECT (spw), "blocked")) return;
@@ -404,7 +404,7 @@ sp_item_widget_transform_value_changed (GtkWidget *widget, SPWidget *spw)
 	gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
 	for (i = 0; i < 6; i++) {
-		unsigned char c[8];
+		gchar c[8];
 		g_snprintf (c, 8, "t%d", i);
 		t.c[i] = GTK_ADJUSTMENT (gtk_object_get_data (GTK_OBJECT (spw), c))->value;
 	}

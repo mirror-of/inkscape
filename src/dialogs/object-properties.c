@@ -47,13 +47,13 @@ sp_object_properties_dialog_destroy (GtkObject *object, gpointer data)
 }
 
 static void
-sp_object_properties_style_activate (GtkMenuItem *menuitem, const guchar *key)
+sp_object_properties_style_activate (GtkMenuItem *menuitem, const gchar *key)
 {
 	GtkWidget *fs, *sp, *sl;
 
-	fs = gtk_object_get_data (GTK_OBJECT (dlg), "fill");
-	sp = gtk_object_get_data (GTK_OBJECT (dlg), "stroke-paint");
-	sl = gtk_object_get_data (GTK_OBJECT (dlg), "stroke-line");
+	fs = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "fill");
+	sp = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "stroke-paint");
+	sl = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "stroke-line");
 
 	if (key) {
 		SPRepr *repr;
@@ -87,16 +87,16 @@ sp_object_properties_color_set (Inkscape *inkscape, SPColor *color, double opaci
 	GtkNotebook *nb;
 	int pnum;
 
-	nb = g_object_get_data (dlg, "notebook");
+	nb = (GtkNotebook *)g_object_get_data (dlg, "notebook");
 	pnum = gtk_notebook_get_current_page (nb);
 
 	if (pnum == 0) {
 		GtkWidget *fs;
-		fs = g_object_get_data (dlg, "fill");
+		fs = (GtkWidget *)g_object_get_data (dlg, "fill");
 		sp_fill_style_widget_system_color_set (fs, color, opacity);
 	} else if (pnum == 1) {
 		GtkWidget *ss;
-		ss = g_object_get_data (dlg, "stroke-paint");
+		ss = (GtkWidget *)g_object_get_data (dlg, "stroke-paint");
 		sp_stroke_style_paint_system_color_set (ss, color, opacity);
 	}
 }
@@ -185,28 +185,28 @@ sp_object_properties_dialog (void)
 		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), NULL);
 		mi = gtk_menu_item_new_with_label (_("All shape tools"));
 		gtk_menu_append (GTK_MENU (m), mi);
-		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), "tools.shapes");
+		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), (void *)"tools.shapes");
 		mi = gtk_menu_item_new_with_label (_("Rectangle tool"));
 		gtk_menu_append (GTK_MENU (m), mi);
-		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), "tools.shapes.rect");
+		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), (void *)"tools.shapes.rect");
 		mi = gtk_menu_item_new_with_label (_("Arc tool"));
 		gtk_menu_append (GTK_MENU (m), mi);
-		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), "tools.shapes.arc");
+		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), (void *)"tools.shapes.arc");
 		mi = gtk_menu_item_new_with_label (_("Star tool"));
 		gtk_menu_append (GTK_MENU (m), mi);
-		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), "tools.shapes.star");
+		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), (void *)"tools.shapes.star");
 		mi = gtk_menu_item_new_with_label (_("Spiral tool"));
 		gtk_menu_append (GTK_MENU (m), mi);
-		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), "tools.shapes.spiral");
+		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), (void *)"tools.shapes.spiral");
 		mi = gtk_menu_item_new_with_label (_("Freehand and pen"));
 		gtk_menu_append (GTK_MENU (m), mi);
-		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), "tools.freehand");
+		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), (void *)"tools.freehand");
 		mi = gtk_menu_item_new_with_label (_("Calligraphic line"));
 		gtk_menu_append (GTK_MENU (m), mi);
-		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), "tools.calligraphic");
+		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), (void *)"tools.calligraphic");
 		mi = gtk_menu_item_new_with_label (_("Text"));
 		gtk_menu_append (GTK_MENU (m), mi);
-		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), "tools.text");
+		gtk_signal_connect (GTK_OBJECT (mi), "activate", GTK_SIGNAL_FUNC (sp_object_properties_style_activate), (void *)"tools.text");
 
 		gtk_widget_show_all (m);
 
@@ -226,7 +226,7 @@ void sp_object_properties_stroke (void)
 
 	sp_object_properties_dialog ();
 
-	nb = gtk_object_get_data (GTK_OBJECT (dlg), "notebook");
+	nb = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "notebook");
 
 	gtk_notebook_set_page (GTK_NOTEBOOK (nb), 1);
 }
@@ -237,7 +237,7 @@ void sp_object_properties_fill (void)
 
 	sp_object_properties_dialog ();
 
-	nb = gtk_object_get_data (GTK_OBJECT (dlg), "notebook");
+	nb = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "notebook");
 
 	gtk_notebook_set_page (GTK_NOTEBOOK (nb), 0);
 }
@@ -318,70 +318,70 @@ sp_selection_layout_widget_new (void)
 	l = gtk_label_new (_("Units:"));
 	gtk_widget_show (l);
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 2, 0, 1, GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), l, 0, 2, 0, 1, GTK_FILL, (GtkAttachOptions)0, 0, 0);
 	us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
 	gtk_widget_show (us);
-	gtk_table_attach (GTK_TABLE (t), us, 2, 3, 0, 1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), us, 2, 3, 0, 1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_object_set_data (GTK_OBJECT (spw), "units", us);
 
 	px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/arrows_hor.xpm");
 	gtk_widget_show (px);
-	gtk_table_attach (GTK_TABLE (t), px, 0, 1, 1, 2, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), px, 0, 1, 1, 2, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	l = gtk_label_new (_("X:"));
 	gtk_widget_show (l);
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 1, 2, 1, 2, GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), l, 1, 2, 1, 2, GTK_FILL, (GtkAttachOptions)0, 0, 0);
 	a = gtk_adjustment_new (0.0, -1e6, 1e6, 0.1, 10.0, 10.0);
 	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (a));
 	gtk_object_set_data (GTK_OBJECT (spw), "X", a);
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
 	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 1, 2, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_object_layout_any_value_changed), spw);
 
 	px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/arrows_ver.xpm");
 	gtk_widget_show (px);
-	gtk_table_attach (GTK_TABLE (t), px, 0, 1, 2, 3, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), px, 0, 1, 2, 3, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	l = gtk_label_new (_("Y:"));
 	gtk_widget_show (l);
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 1, 2, 2, 3, GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), l, 1, 2, 2, 3, GTK_FILL, (GtkAttachOptions)0, 0, 0);
 	a = gtk_adjustment_new (0.0, -1e6, 1e6, 0.1, 10.0, 10.0);
 	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (a));
 	gtk_object_set_data (GTK_OBJECT (spw), "Y", a);
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
 	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 2, 3, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 2, 3, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_object_layout_any_value_changed), spw);
 
 	px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/dimension_hor.xpm");
 	gtk_widget_show (px);
-	gtk_table_attach (GTK_TABLE (t), px, 0, 1, 3, 4, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), px, 0, 1, 3, 4, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	l = gtk_label_new (_("Width:"));
 	gtk_widget_show (l);
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 1, 2, 3, 4, GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), l, 1, 2, 3, 4, GTK_FILL, (GtkAttachOptions)0, 0, 0);
 	a = gtk_adjustment_new (0.0, -1e6, 1e6, 0.1, 10.0, 10.0);
 	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (a));
 	gtk_object_set_data (GTK_OBJECT (spw), "width", a);
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
 	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 3, 4, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 3, 4, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_object_layout_any_value_changed), spw);
 
 	px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/dimension_ver.xpm");
 	gtk_widget_show (px);
-	gtk_table_attach (GTK_TABLE (t), px, 0, 1, 4, 5, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), px, 0, 1, 4, 5, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	l = gtk_label_new (_("Height:"));
 	gtk_widget_show (l);
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 1, 2, 4, 5, GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), l, 1, 2, 4, 5, GTK_FILL, (GtkAttachOptions)0, 0, 0);
 	a = gtk_adjustment_new (0.0, -1e6, 1e6, 0.1, 10.0, 10.0);
 	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (a));
 	gtk_object_set_data (GTK_OBJECT (spw), "height", a);
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
 	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 4, 5, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), sb, 2, 3, 4, 5, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_object_layout_any_value_changed), spw);
 
 	gtk_signal_connect (GTK_OBJECT (spw), "modify_selection", GTK_SIGNAL_FUNC (sp_selection_layout_widget_modify_selection), NULL);
@@ -415,7 +415,7 @@ sp_selection_layout_widget_update (SPWidget *spw, SPSelection *sel)
 
 	gtk_object_set_data (GTK_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
-	f = gtk_object_get_data (GTK_OBJECT (spw), "frame");
+	f = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (spw), "frame");
 
 	if (sel && !sp_selection_is_empty (sel)) {
 		NRRectF bbox;
@@ -427,16 +427,16 @@ sp_selection_layout_widget_update (SPWidget *spw, SPSelection *sel)
 			GtkAdjustment *a;
 			const SPUnit *unit;
 
-			us = gtk_object_get_data (GTK_OBJECT (spw), "units");
+			us = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (spw), "units");
 			unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
 
-			a = gtk_object_get_data (GTK_OBJECT (spw), "X");
+			a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "X");
 			gtk_adjustment_set_value (a, sp_points_get_units (bbox.x0, unit));
-			a = gtk_object_get_data (GTK_OBJECT (spw), "Y");
+			a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "Y");
 			gtk_adjustment_set_value (a, sp_points_get_units (bbox.y0, unit));
-			a = gtk_object_get_data (GTK_OBJECT (spw), "width");
+			a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "width");
 			gtk_adjustment_set_value (a, sp_points_get_units (bbox.x1 - bbox.x0, unit));
-			a = gtk_object_get_data (GTK_OBJECT (spw), "height");
+			a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "height");
 			gtk_adjustment_set_value (a, sp_points_get_units (bbox.y1 - bbox.y0, unit));
 
 			gtk_widget_set_sensitive (f, TRUE);
@@ -463,9 +463,9 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 	if (gtk_object_get_data (GTK_OBJECT (spw), "update")) return;
 
 	sel = SP_WIDGET_SELECTION (spw);
-	us = gtk_object_get_data (GTK_OBJECT (spw), "units");
+	us = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (spw), "units");
 	unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
-	if (sp_unit_selector_update_test (us)) {
+	if (sp_unit_selector_update_test (SP_UNIT_SELECTOR (us))) {
 		/*
 		 * When only units are being changed, don't treat changes
 		 * to adjuster values as object changes.
@@ -478,13 +478,13 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 	g_return_if_fail (bbox.x1 - bbox.x0 > 1e-9);
 	g_return_if_fail (bbox.y1 - bbox.y0 > 1e-9);
 
-	a = gtk_object_get_data (GTK_OBJECT (spw), "X");
+	a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "X");
 	x0 = sp_units_get_points (a->value, unit);
-	a = gtk_object_get_data (GTK_OBJECT (spw), "Y");
+	a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "Y");
 	y0 = sp_units_get_points (a->value, unit);
-	a = gtk_object_get_data (GTK_OBJECT (spw), "width");
+	a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "width");
 	x1 = x0 + sp_units_get_points (a->value, unit);
-	a = gtk_object_get_data (GTK_OBJECT (spw), "height");
+	a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (spw), "height");
 	y1 = y0 + sp_units_get_points (a->value, unit);
 
 	if ((fabs (x0 - bbox.x0) > 1e-6) || (fabs (y0 - bbox.y0) > 1e-6) || (fabs (x1 - bbox.x1) > 1e-6) || (fabs (y1 - bbox.y1) > 1e-6)) {

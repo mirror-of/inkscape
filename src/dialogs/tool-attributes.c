@@ -13,6 +13,7 @@
 
 #include <config.h>
 #include <string.h>
+#include <glib/gtypes.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtklabel.h>
 #include "macros.h"
@@ -81,45 +82,45 @@ sp_tool_attributes_dialog_setup (SPEventContext *ec)
 	}
 
 	if (ec) {
-		const gchar *typename;
-		typename = gtk_type_name (GTK_OBJECT_TYPE (ec));
-		if (!strcmp (typename, "SPSpiralContext")) {
+		const gchar *type_name;
+		type_name = gtk_type_name (GTK_OBJECT_TYPE (ec));
+		if (!strcmp (type_name, "SPSpiralContext")) {
 			SPRepr *repr;
 			repr = inkscape_get_repr (INKSCAPE, "tools.shapes.spiral");
 			if (repr) {
-				guchar *labels[] = {N_("Revolution:"), N_("Expansion"), N_("Inner radius")};
-				guchar *attrs[] = {"revolution", "expansion", "t0"};
-				tbl = sp_attribute_table_new_repr (repr, 3, (const guchar **) labels, (const guchar **) attrs);
+				gchar *labels[] = {N_("Revolution:"), N_("Expansion"), N_("Inner radius")};
+				gchar *attrs[] = {"revolution", "expansion", "t0"};
+				tbl = sp_attribute_table_new_repr (repr, 3, (const gchar **) labels, (const gchar **) attrs);
 			} else {
 				tbl = gtk_label_new (_("Missing tool preferences"));
 			}
-		} else if (!strcmp (typename, "SPStarContext")) {
+		} else if (!strcmp (type_name, "SPStarContext")) {
 			SPRepr *repr;
 			repr = inkscape_get_repr (INKSCAPE, "tools.shapes.star");
 			if (repr) {
-				guchar *labels[] = {N_("Corners:"), N_("Proportion")};
-				guchar *attrs[] = {"magnitude", "proportion"};
-				tbl = sp_attribute_table_new_repr (repr, 2, (const guchar **) labels, (const guchar **) attrs);
+				gchar *labels[] = {N_("Corners:"), N_("Proportion")};
+				gchar *attrs[] = {"magnitude", "proportion"};
+				tbl = sp_attribute_table_new_repr (repr, 2, (const gchar **) labels, (const gchar **) attrs);
 			} else {
 				tbl = gtk_label_new (_("Missing tool preferences"));
 			}
-		} else if (!strcmp (typename, "SPSelectContext")) {
+		} else if (!strcmp (type_name, "SPSelectContext")) {
 			SPRepr *repr;
 			repr = inkscape_get_repr (INKSCAPE, "tools.select");
 			if (repr) {
-				guchar *labels[] = {N_("Show:"), N_("Transform:")};
-				guchar *attrs[] = {"show", "transform"};
-				tbl = sp_attribute_table_new_repr (repr, 2, (const guchar **) labels, (const guchar **) attrs);
+				gchar *labels[] = {N_("Show:"), N_("Transform:")};
+				gchar *attrs[] = {"show", "transform"};
+				tbl = sp_attribute_table_new_repr (repr, 2, (const gchar **) labels, (const gchar **) attrs);
 			} else {
 				tbl = gtk_label_new (_("Missing tool preferences"));
 			}
-		} else if (!strcmp (typename, "SPDynaDrawContext")) {
+		} else if (!strcmp (type_name, "SPDynaDrawContext")) {
 			SPRepr *repr;
 			repr = inkscape_get_repr (INKSCAPE, "tools.calligraphic");
 			if (repr) {
-				guchar *labels[] = {N_("Mass:"), N_("Drag:"), N_("Angle"), N_("Width:")};
-				guchar *attrs[] = {"mass", "drag", "angle", "width"};
-				tbl = sp_attribute_table_new_repr (repr, 4, (const guchar **) labels, (const guchar **) attrs);
+				gchar *labels[] = {N_("Mass:"), N_("Drag:"), N_("Angle"), N_("Width:")};
+				gchar *attrs[] = {"mass", "drag", "angle", "width"};
+				tbl = sp_attribute_table_new_repr (repr, 4, (const gchar **) labels, (const gchar **) attrs);
 			} else {
 				tbl = gtk_label_new (_("Missing tool preferences"));
 			}

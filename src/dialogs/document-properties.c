@@ -75,8 +75,8 @@ sp_doc_dialog_paper_selected (GtkWidget *widget, const GnomePrintPaper *paper)
 
 	if (gtk_object_get_data (GTK_OBJECT (dialog), "update")) return;
 
-	ww = gtk_object_get_data (GTK_OBJECT (dialog), "widthsb");
-	hw = gtk_object_get_data (GTK_OBJECT (dialog), "heightsb");
+	ww = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dialog), "widthsb");
+	hw = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dialog), "heightsb");
 
 	if (paper) {
 		SPUnitSelector *us;
@@ -87,14 +87,14 @@ sp_doc_dialog_paper_selected (GtkWidget *widget, const GnomePrintPaper *paper)
 		gtk_widget_set_sensitive (ww, FALSE);
 		gtk_widget_set_sensitive (hw, FALSE);
 		if (!pt) pt = sp_unit_get_by_abbreviation ("pt");
-		us = gtk_object_get_data (GTK_OBJECT (dialog), "units");
+		us = (SPUnitSelector *)gtk_object_get_data (GTK_OBJECT (dialog), "units");
 		unit = sp_unit_selector_get_unit (us);
 		w = paper->width;
-		a = gtk_object_get_data (GTK_OBJECT (dialog), "width");
+		a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (dialog), "width");
 		sp_convert_distance (&w, pt, unit);
 		gtk_adjustment_set_value (a, w);
 		h = paper->height;
-		a = gtk_object_get_data (GTK_OBJECT (dialog), "height");
+		a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (dialog), "height");
 		sp_convert_distance (&h, pt, unit);
 		gtk_adjustment_set_value (a, h);
 	} else {
@@ -110,8 +110,8 @@ sp_doc_dialog_paper_selected (GtkWidget *widget, gpointer data)
 
 	if (gtk_object_get_data (GTK_OBJECT (dialog), "update")) return;
 
-	ww = gtk_object_get_data (GTK_OBJECT (dialog), "widthsb");
-	hw = gtk_object_get_data (GTK_OBJECT (dialog), "heightsb");
+	ww = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dialog), "widthsb");
+	hw = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dialog), "heightsb");
 
 	gtk_widget_set_sensitive (ww, TRUE);
 	gtk_widget_set_sensitive (hw, TRUE);
@@ -125,8 +125,8 @@ sp_doc_dialog_whatever_changed (GtkAdjustment *adjustment, GtkWidget *dialog)
 	SPDocument *doc;
 	SPRepr *repr;
 	SPUnitSelector *us;
-	const guchar *key;
-	guchar c[32];
+	const gchar *key;
+	gchar c[32];
 
 	if (gtk_object_get_data (GTK_OBJECT (dialog), "update")) return;
 
@@ -135,8 +135,8 @@ sp_doc_dialog_whatever_changed (GtkAdjustment *adjustment, GtkWidget *dialog)
 	doc = SP_DT_DOCUMENT (dt);
 
 	repr = sp_document_repr_root (doc);
-	key = gtk_object_get_data (GTK_OBJECT (adjustment), "key");
-	us = gtk_object_get_data (GTK_OBJECT (adjustment), "unit_selector");
+	key = (const gchar *)gtk_object_get_data (GTK_OBJECT (adjustment), "key");
+	us = (SPUnitSelector *)gtk_object_get_data (GTK_OBJECT (adjustment), "unit_selector");
 
 	g_snprintf (c, 32, "%g%s", adjustment->value, sp_unit_selector_get_unit (us)->abbr);
 
@@ -214,39 +214,39 @@ sp_doc_dialog_new (void)
 	l = gtk_label_new (_("Units:"));
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
 	gtk_widget_show (l);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 0, 1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 0, 1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
 	gtk_widget_show (us);
-	gtk_table_attach (GTK_TABLE (t), us, 1, 2, 0, 1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), us, 1, 2, 0, 1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_object_set_data (GTK_OBJECT (dialog), "units", us);
 
 	l = gtk_label_new (_("Width:"));
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
 	gtk_widget_show (l);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 1, 2, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	a = gtk_adjustment_new (0.0, 1e-6, 1e6, 1.0, 10.0, 10.0);
-	gtk_object_set_data (GTK_OBJECT (a), "key", "width");
+	gtk_object_set_data (GTK_OBJECT (a), "key", (void *)"width");
 	gtk_object_set_data (GTK_OBJECT (a), "unit_selector", us);
 	gtk_object_set_data (GTK_OBJECT (dialog), "width", a);
 	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (a));
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 2);
 	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (t), sb, 1, 2, 1, 2, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), sb, 1, 2, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_object_set_data (GTK_OBJECT (dialog), "widthsb", sb);
 	g_signal_connect (G_OBJECT (a), "value_changed", G_CALLBACK (sp_doc_dialog_whatever_changed), dialog);
 
 	l = gtk_label_new (_("Height:"));
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
 	gtk_widget_show (l);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 2, 3, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 2, 3, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	a = gtk_adjustment_new (0.0, 1e-6, 1e6, 1.0, 10.0, 10.0);
-	gtk_object_set_data (GTK_OBJECT (a), "key", "height");
+	gtk_object_set_data (GTK_OBJECT (a), "key", (void *)"height");
 	gtk_object_set_data (GTK_OBJECT (a), "unit_selector", us);
 	gtk_object_set_data (GTK_OBJECT (dialog), "height", a);
 	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (a));
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 2);
 	gtk_widget_show (sb);
-	gtk_table_attach (GTK_TABLE (t), sb, 1, 2, 2, 3, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), sb, 1, 2, 2, 3, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_object_set_data (GTK_OBJECT (dialog), "heightsb", sb);
 	g_signal_connect (G_OBJECT (a), "value_changed", G_CALLBACK (sp_doc_dialog_whatever_changed), dialog);
 
@@ -306,9 +306,9 @@ sp_doc_dialog_update (GtkWidget *dialog, SPDocument *doc)
 		l = NULL;
 #endif
 
-		ww = gtk_object_get_data (GTK_OBJECT (dialog), "widthsb");
-		hw = gtk_object_get_data (GTK_OBJECT (dialog), "heightsb");
-		om = gtk_object_get_data (GTK_OBJECT (dialog), "papers");
+		ww = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dialog), "widthsb");
+		hw = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dialog), "heightsb");
+		om = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dialog), "papers");
 
 		if (l != NULL) {
 			gtk_option_menu_set_history (GTK_OPTION_MENU (om), pos);
@@ -321,12 +321,12 @@ sp_doc_dialog_update (GtkWidget *dialog, SPDocument *doc)
 		}
 
 		if (!pt) pt = sp_unit_get_by_abbreviation ("pt");
-		us = gtk_object_get_data (GTK_OBJECT (dialog), "units");
+		us = (SPUnitSelector *)gtk_object_get_data (GTK_OBJECT (dialog), "units");
 		unit = sp_unit_selector_get_unit (us);
-		a = gtk_object_get_data (GTK_OBJECT (dialog), "width");
+		a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (dialog), "width");
 		sp_convert_distance (&docw, pt, unit);
 		gtk_adjustment_set_value (a, docw);
-		a = gtk_object_get_data (GTK_OBJECT (dialog), "height");
+		a = (GtkAdjustment *)gtk_object_get_data (GTK_OBJECT (dialog), "height");
 		sp_convert_distance (&doch, pt, unit);
 		gtk_adjustment_set_value (a, doch);
 

@@ -57,7 +57,7 @@ sp_module_exec_ext_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_module_exec_ext_init,
 		};
-		type = g_type_register_static (SP_TYPE_MODULE_EXEC, "SPModuleExecExt", &info, 0);
+		type = g_type_register_static (SP_TYPE_MODULE_EXEC, "SPModuleExecExt", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -70,7 +70,7 @@ static void sp_module_exec_ext_class_init (SPModuleExecExtClass * klass)
 	g_object_class = (GObjectClass *)klass;
 	module = (SPModuleExecClass *)klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (SPModuleExecClass *)g_type_class_peek_parent (klass);
 
 	g_object_class->finalize = sp_module_exec_ext_finalize;
 

@@ -82,7 +82,7 @@ enum {
 	SP_DISTRIBUTE_VDIST
 };
 
-static const unsigned char aligns[10][8] = {
+static const gchar aligns[10][8] = {
 	{0, 0, 0, 2, 0, 0, 0, 2},
 	{0, 0, 0, 2, 0, 0, 2, 0},
 	{0, 2, 0, 0, 0, 2, 0, 0},
@@ -95,23 +95,23 @@ static const unsigned char aligns[10][8] = {
 	{0, 0, 1, 1, 0, 0, 1, 1}
 };
 
-static const unsigned char hdist[4][3] = {
+static const gchar hdist[4][3] = {
 	{2, 0, 0},
 	{1, 1, 0},
 	{0, 2, 0},
 	{1, 1, 1}
 };
 
-static const unsigned char vdist[4][3] = {
+static const gchar vdist[4][3] = {
 	{0, 2, 0},
 	{1, 1, 0},
 	{2, 0, 0},
 	{1, 1, 1}
 };
 
-void sp_align_arrange_clicked (GtkWidget *widget, const unsigned char *aligns);
-void sp_align_distribute_h_clicked (GtkWidget *widget, const unsigned char *layout);
-void sp_align_distribute_v_clicked (GtkWidget *widget, const unsigned char *layout);
+void sp_align_arrange_clicked (GtkWidget *widget, const gchar *aligns);
+void sp_align_distribute_h_clicked (GtkWidget *widget, const gchar *layout);
+void sp_align_distribute_v_clicked (GtkWidget *widget, const gchar *layout);
 
 void sp_quick_align_dialog_close (void);
 
@@ -133,14 +133,14 @@ sp_quick_align_dialog_delete (void)
 
 static void
 sp_align_add_button (GtkWidget *t, int col, int row, GCallback handler, gconstpointer data, 
-		     const unsigned char *px, const unsigned char *tip,
+		     const gchar *px, const gchar *tip,
 		     GtkTooltips * tt)
 {
 	GtkWidget *b;
 	b = sp_button_new_from_data (24, SP_BUTTON_TYPE_NORMAL, px, tip, tt);
 	gtk_widget_show (b);
 	if (handler) g_signal_connect (G_OBJECT (b), "clicked", handler, (gpointer) data);
-	gtk_table_attach (GTK_TABLE (t), b, col, col + 1, row, row + 1, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), b, col, col + 1, row, row + 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 }
 
 void
@@ -262,7 +262,7 @@ sp_quick_align_dialog_close (void)
 }
 
 static void
-sp_align_add_menuitem (GtkWidget *menu, const unsigned char *label, GCallback handler, int value)
+sp_align_add_menuitem (GtkWidget *menu, const gchar *label, GCallback handler, int value)
 {
 	GtkWidget *menuitem;
 
@@ -300,7 +300,7 @@ set_base (GtkMenuItem *menuitem, gpointer data)
 
 
 void
-sp_align_arrange_clicked (GtkWidget *widget, const unsigned char *aligns)
+sp_align_arrange_clicked (GtkWidget *widget, const gchar *aligns)
 {
 	float mx0, mx1, my0, my1;
 	float sx0, sx1, sy0, sy1;
@@ -463,7 +463,7 @@ sp_align_bbox_sort (const void *a, const void *b)
 }
 
 void
-sp_align_distribute_h_clicked (GtkWidget *widget, const unsigned char *layout)
+sp_align_distribute_h_clicked (GtkWidget *widget, const gchar *layout)
 {
 	SPDesktop *desktop;
 	SPSelection *selection;
@@ -535,7 +535,7 @@ sp_align_distribute_h_clicked (GtkWidget *widget, const unsigned char *layout)
 }
 
 void
-sp_align_distribute_v_clicked (GtkWidget *widget, const unsigned char *layout)
+sp_align_distribute_v_clicked (GtkWidget *widget, const gchar *layout)
 {
 	SPDesktop *desktop;
 	SPSelection *selection;

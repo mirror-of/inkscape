@@ -110,7 +110,7 @@ sp_transformation_dialog_present (unsigned int page)
 		dlg = sp_transformation_dialog_new ();
 	}
 
-	nbook = g_object_get_data (G_OBJECT (dlg), "notebook");
+	nbook = GTK_WIDGET(g_object_get_data (G_OBJECT (dlg), "notebook"));
 	gtk_notebook_set_page (GTK_NOTEBOOK (nbook), page);
 
 #if 0
@@ -141,7 +141,7 @@ sp_transformation_dialog_update_selection (GObject *dlg, unsigned int page, SPSe
 		break;
 	}
 
-	apply = g_object_get_data (dlg, "apply");
+	apply = GTK_WIDGET(g_object_get_data (dlg, "apply"));
 	if (selection && !sp_selection_is_empty (selection)) {
 		gtk_widget_set_sensitive (apply, TRUE);
 	} else {
@@ -155,7 +155,7 @@ sp_transformation_dialog_selection_changed (Inkscape *inkscape, SPSelection *sel
 	GObject *notebook;
 	int page;
 
-	notebook = g_object_get_data (obj, "notebook");
+	notebook = G_OBJECT(g_object_get_data (obj, "notebook"));
 	page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
 
 	sp_transformation_dialog_update_selection (obj, page, selection);
@@ -167,7 +167,7 @@ sp_transformation_dialog_selection_modified (Inkscape *inkscape, SPSelection *se
 	GObject *notebook;
 	int page;
 
-	notebook = g_object_get_data (obj, "notebook");
+	notebook = G_OBJECT(g_object_get_data (obj, "notebook"));
 	page = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
 
 	sp_transformation_dialog_update_selection (obj, page, selection);
@@ -274,7 +274,7 @@ sp_transformation_dialog_apply (GObject *object, GObject *dlg)
 	selection = SP_DT_SELECTION (desktop);
 	g_return_if_fail (!sp_selection_is_empty (selection));
 
-	nbookw = g_object_get_data (dlg, "notebook");
+	nbookw = GTK_WIDGET(g_object_get_data (dlg, "notebook"));
 	page = gtk_notebook_get_current_page (GTK_NOTEBOOK (nbookw));
 
 	switch (page) {
@@ -292,7 +292,7 @@ sp_transformation_dialog_apply (GObject *object, GObject *dlg)
 		break;
 	}
 
-	apply = g_object_get_data (dlg, "apply");
+	apply = GTK_WIDGET(g_object_get_data (dlg, "apply"));
 	gtk_widget_set_sensitive (apply, TRUE);
 }
 
@@ -313,7 +313,7 @@ sp_transformation_move_value_changed (GtkAdjustment *adj, GObject *dlg)
 
 	if (g_object_get_data (dlg, "update")) return;
 
-	apply = g_object_get_data (dlg, "apply");
+	apply = GTK_WIDGET(g_object_get_data (dlg, "apply"));
 	gtk_widget_set_sensitive (apply, TRUE);
 }
 
@@ -333,9 +333,9 @@ sp_transformation_move_relative_toggled (GtkToggleButton *tb, GObject *dlg)
 	if (sp_selection_is_empty (selection)) return;
 
 	/* Read values from widget */
-	us = g_object_get_data (dlg, "move_units");
-	ax = g_object_get_data (dlg, "move_position_x");
-	ay = g_object_get_data (dlg, "move_position_y");
+	us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "move_units"));
+	ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_x"));
+	ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_y"));
 	x = sp_unit_selector_get_value_in_points (us, ax);
 	y = sp_unit_selector_get_value_in_points (us, ay);
 
@@ -381,32 +381,32 @@ sp_transformation_page_move_new (GObject *obj)
 	}
 	/* Horizontal */
 	img = sp_icon_new (SP_ICON_SIZE_BUTTON, "arrows_hor");
-	gtk_table_attach (GTK_TABLE (tbl), img, 0, 1, 0, 1, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), img, 0, 1, 0, 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -1e6, 1e6, 0.01, 0.1, 0.1);
 	g_object_set_data (obj, "move_position_x", adj);
 	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), adj);
 	g_signal_connect (G_OBJECT (adj), "value_changed", G_CALLBACK (sp_transformation_move_value_changed), obj);
 	sb = gtk_spin_button_new (adj, 0.1, 2);
-	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 0, 1, (GtkAttachOptions)( (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ) ), (GtkAttachOptions)( (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ) ), 0, 0);
 	/* Vertical */
 	img = sp_icon_new (SP_ICON_SIZE_BUTTON, "arrows_ver");
-	gtk_table_attach (GTK_TABLE (tbl), img, 0, 1, 1, 2, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), img, 0, 1, 1, 2, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -1e6, 1e6, 0.01, 0.1, 0.1);
 	g_object_set_data (obj, "move_position_y", adj);
 	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), adj);
 	g_signal_connect (G_OBJECT (adj), "value_changed", G_CALLBACK (sp_transformation_move_value_changed), obj);
 	sb = gtk_spin_button_new (adj, 0.1, 2);
-	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 1, 2, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 0, 0);
 	/* Unit selector */
 	lbl = gtk_label_new (_("Units:"));
 	gtk_misc_set_alignment (GTK_MISC (lbl), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (tbl), lbl, 0, 1, 2, 3, 0, 0, 0, 0);
-	gtk_table_attach (GTK_TABLE (tbl), us, 1, 2, 2, 3, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), lbl, 0, 1, 2, 3, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), us, 1, 2, 2, 3, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 0, 0);
 
 	/* Relative moves */
 	cb = gtk_check_button_new_with_label (_("Relative move"));
 	g_object_set_data (obj, "move_relative", cb);
-	gtk_table_attach (GTK_TABLE (tbl), cb, 1, 2, 3, 4, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), cb, 1, 2, 3, 4, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (cb), TRUE);
 	g_signal_connect (G_OBJECT (cb), "toggled", G_CALLBACK (sp_transformation_move_relative_toggled), obj);
 
@@ -420,18 +420,18 @@ sp_transformation_move_update (GObject *dlg, SPSelection *selection)
 {
 	GtkWidget *page;
 
-	page = g_object_get_data (dlg, "move");
+	page = GTK_WIDGET(g_object_get_data (dlg, "move"));
 
 	if (selection && !sp_selection_is_empty (selection)) {
 		GtkToggleButton *cb;
-		cb = g_object_get_data (dlg, "move_relative");
+		cb = GTK_TOGGLE_BUTTON(g_object_get_data (dlg, "move_relative"));
 		if (!gtk_toggle_button_get_active (cb)) {
 			GtkAdjustment *ax, *ay;
 			SPUnitSelector *us;
 			NRRectF bbox;
-			ax = g_object_get_data (dlg, "move_position_x");
-			ay = g_object_get_data (dlg, "move_position_y");
-			us = g_object_get_data (dlg, "move_units");
+			ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_x"));
+			ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_y"));
+			us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "move_units"));
 			sp_selection_bbox (selection, &bbox);
 			sp_unit_selector_set_value_in_points (us, ax, bbox.x0);
 			sp_unit_selector_set_value_in_points (us, ay, bbox.y0);
@@ -450,13 +450,13 @@ sp_transformation_move_apply (GObject *dlg, SPSelection *selection, unsigned int
 	GtkToggleButton *cb;
 	float x, y;
 
-	us = g_object_get_data (dlg, "move_units");
-	ax = g_object_get_data (dlg, "move_position_x");
-	ay = g_object_get_data (dlg, "move_position_y");
+	us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "move_units"));
+	ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_x"));
+	ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "move_position_y"));
 	x = sp_unit_selector_get_value_in_points (us, ax);
 	y = sp_unit_selector_get_value_in_points (us, ay);
 
-	cb = g_object_get_data (dlg, "move_relative");
+	cb = GTK_TOGGLE_BUTTON(g_object_get_data (dlg, "move_relative"));
 	if (gtk_toggle_button_get_active (cb)) {
 		sp_selection_move_relative (selection, x, y);
 	} else {
@@ -473,7 +473,7 @@ sp_transformation_move_apply (GObject *dlg, SPSelection *selection, unsigned int
  */
 
 static gboolean
-sp_transformation_scale_set_unit (SPUnitSelector *us, const SPUnit *old, const SPUnit *new, GObject *dlg)
+sp_transformation_scale_set_unit (SPUnitSelector *us, const SPUnit *old, const SPUnit *new_units, GObject *dlg)
 {
 	SPDesktop *desktop;
 	SPSelection *selection;
@@ -483,16 +483,16 @@ sp_transformation_scale_set_unit (SPUnitSelector *us, const SPUnit *old, const S
 	selection = SP_DT_SELECTION (desktop);
 	if (sp_selection_is_empty (selection)) return FALSE;
 
-	if ((old->base == SP_UNIT_ABSOLUTE) && (new->base == SP_UNIT_DIMENSIONLESS)) {
+	if ((old->base == SP_UNIT_ABSOLUTE) && (new_units->base == SP_UNIT_DIMENSIONLESS)) {
 		SPUnitSelector *us;
 		GtkAdjustment *ax, *ay;
 		NRRectF bbox;
 		float x, y;
 		/* Absolute to percentage */
 		g_object_set_data (dlg, "update", GUINT_TO_POINTER (TRUE));
-		us = g_object_get_data (dlg, "scale_units");
-		ax = g_object_get_data (dlg, "scale_dimension_x");
-		ay = g_object_get_data (dlg, "scale_dimension_y");
+		us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "scale_units"));
+		ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_x"));
+		ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_y"));
 		x = sp_units_get_points (ax->value, old);
 		y = sp_units_get_points (ay->value, old);
 		sp_selection_bbox (selection, &bbox);
@@ -500,18 +500,18 @@ sp_transformation_scale_set_unit (SPUnitSelector *us, const SPUnit *old, const S
 		gtk_adjustment_set_value (ay, 100.0 * y / (bbox.y1 - bbox.y0));
 		g_object_set_data (dlg, "update", GUINT_TO_POINTER (FALSE));
 		return TRUE;
-	} else if ((old->base == SP_UNIT_DIMENSIONLESS) && (new->base == SP_UNIT_ABSOLUTE)) {
+	} else if ((old->base == SP_UNIT_DIMENSIONLESS) && (new_units->base == SP_UNIT_ABSOLUTE)) {
 		SPUnitSelector *us;
 		GtkAdjustment *ax, *ay;
 		NRRectF bbox;
 		/* Percentage to absolute */
 		g_object_set_data (dlg, "update", GUINT_TO_POINTER (TRUE));
-		us = g_object_get_data (dlg, "scale_units");
-		ax = g_object_get_data (dlg, "scale_dimension_x");
-		ay = g_object_get_data (dlg, "scale_dimension_y");
+		us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "scale_units"));
+		ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_x"));
+		ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_y"));
 		sp_selection_bbox (selection, &bbox);
-		gtk_adjustment_set_value (ax, sp_points_get_units (0.01 * ax->value * (bbox.x1 - bbox.x0), new));
-		gtk_adjustment_set_value (ay, sp_points_get_units (0.01 * ay->value * (bbox.y1 - bbox.y0), new));
+		gtk_adjustment_set_value (ax, sp_points_get_units (0.01 * ax->value * (bbox.x1 - bbox.x0), new_units));
+		gtk_adjustment_set_value (ay, sp_points_get_units (0.01 * ay->value * (bbox.y1 - bbox.y0), new_units));
 		g_object_set_data (dlg, "update", GUINT_TO_POINTER (FALSE));
 		return TRUE;
 	}
@@ -526,7 +526,7 @@ sp_transformation_scale_value_changed (GtkAdjustment *adj, GObject *dlg)
 
 	if (g_object_get_data (dlg, "update")) return;
 
-	apply = g_object_get_data (dlg, "apply");
+	apply = GTK_WIDGET(g_object_get_data (dlg, "apply"));
 	gtk_widget_set_sensitive (apply, TRUE);
 }
 
@@ -556,27 +556,27 @@ sp_transformation_page_scale_new (GObject *obj)
 	g_signal_connect (G_OBJECT (us), "set_unit", G_CALLBACK (sp_transformation_scale_set_unit), obj);
 	/* Horizontal */
 	img = sp_icon_new (SP_ICON_SIZE_BUTTON, "scale_hor");
-	gtk_table_attach (GTK_TABLE (tbl), img, 0, 1, 0, 1, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), img, 0, 1, 0, 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -1e6, 1e6, 0.01, 0.1, 0.1);
 	g_object_set_data (obj, "scale_dimension_x", adj);
 	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), adj);
 	g_signal_connect (G_OBJECT (adj), "value_changed", G_CALLBACK (sp_transformation_scale_value_changed), obj);
 	sb = gtk_spin_button_new (adj, 0.1, 2);
-	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 0, 1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 0, 0);
 	/* Vertical */
 	img = sp_icon_new (SP_ICON_SIZE_BUTTON, "scale_ver");
-	gtk_table_attach (GTK_TABLE (tbl), img, 0, 1, 1, 2, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), img, 0, 1, 1, 2, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -1e6, 1e6, 0.01, 0.1, 0.1);
 	g_object_set_data (obj, "scale_dimension_y", adj);
 	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), adj);
 	g_signal_connect (G_OBJECT (adj), "value_changed", G_CALLBACK (sp_transformation_scale_value_changed), obj);
 	sb = gtk_spin_button_new (adj, 0.1, 2);
-	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 1, 2, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 0, 0);
 	/* Unit selector */
 	lbl = gtk_label_new (_("Units:"));
 	gtk_misc_set_alignment (GTK_MISC (lbl), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (tbl), lbl, 0, 1, 2, 3, 0, 0, 0, 0);
-	gtk_table_attach (GTK_TABLE (tbl), us, 1, 2, 2, 3, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), lbl, 0, 1, 2, 3, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), us, 1, 2, 2, 3, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 0, 0);
 
 	gtk_widget_show_all (vb);
 
@@ -588,16 +588,16 @@ sp_transformation_scale_update (GObject *dlg, SPSelection *selection)
 {
 	GtkWidget *page;
 
-	page = g_object_get_data (dlg, "scale");
+	page = GTK_WIDGET(g_object_get_data (dlg, "scale"));
 
 	if (selection && !sp_selection_is_empty (selection)) {
 		GtkAdjustment *ax, *ay;
 		SPUnitSelector *us;
 		const SPUnit *unit;
 		NRRectF bbox;
-		ax = g_object_get_data (dlg, "scale_dimension_x");
-		ay = g_object_get_data (dlg, "scale_dimension_y");
-		us = g_object_get_data (dlg, "scale_units");
+		ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_x"));
+		ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_y"));
+		us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "scale_units"));
 		sp_selection_bbox (selection, &bbox);
 		unit = sp_unit_selector_get_unit (us);
 		if (unit->base == SP_UNIT_ABSOLUTE) {
@@ -623,9 +623,9 @@ sp_transformation_scale_apply (GObject *dlg, SPSelection *selection, unsigned in
 	NRPointF c;
 	float x, y;
 
-	us = g_object_get_data (dlg, "scale_units");
-	ax = g_object_get_data (dlg, "scale_dimension_x");
-	ay = g_object_get_data (dlg, "scale_dimension_y");
+	us = SP_UNIT_SELECTOR(g_object_get_data (dlg, "scale_units"));
+	ax = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_x"));
+	ay = GTK_ADJUSTMENT(g_object_get_data (dlg, "scale_dimension_y"));
 
 	sp_selection_bbox (selection, &bbox);
 	c.x = 0.5 * (bbox.x0 + bbox.x1);
@@ -653,7 +653,7 @@ sp_transformation_rotate_value_changed (GtkAdjustment *adj, GObject *dlg)
 
 	if (g_object_get_data (dlg, "update")) return;
 
-	apply = g_object_get_data (dlg, "apply");
+	apply = GTK_WIDGET(g_object_get_data (dlg, "apply"));
 	gtk_widget_set_sensitive (apply, TRUE);
 }
 
@@ -675,14 +675,14 @@ sp_transformation_page_rotate_new (GObject *obj)
 	gtk_box_pack_start (GTK_BOX (vb), tbl, FALSE, FALSE, 0);
 
 	img = sp_icon_new (SP_ICON_SIZE_BUTTON, "rotate_left");
-	gtk_table_attach (GTK_TABLE (tbl), img, 0, 1, 0, 1, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), img, 0, 1, 0, 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 	adj = (GtkAdjustment *) gtk_adjustment_new (0.0, -1e6, 1e6, 0.01, 0.1, 0.1);
 	g_object_set_data (obj, "rotate_angle", adj);
 	g_signal_connect (G_OBJECT (adj), "value_changed", G_CALLBACK (sp_transformation_rotate_value_changed), obj);
 	sb = gtk_spin_button_new (adj, 0.1, 2);
-	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), sb, 1, 2, 0, 1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 0, 0);
 	lbl = gtk_label_new (_("deg"));
-	gtk_table_attach (GTK_TABLE (tbl), lbl, 2, 3, 0, 1, 0, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (tbl), lbl, 2, 3, 0, 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 
 	gtk_widget_show_all (vb);
 
@@ -694,7 +694,7 @@ sp_transformation_rotate_update (GObject *dlg, SPSelection *selection)
 {
 	GtkWidget *page;
 
-	page = g_object_get_data (dlg, "rotate");
+	page = GTK_WIDGET(g_object_get_data (dlg, "rotate"));
 
 	if (selection && !sp_selection_is_empty (selection)) {
 		gtk_widget_set_sensitive (page, TRUE);
@@ -710,7 +710,7 @@ sp_transformation_rotate_apply (GObject *dlg, SPSelection *selection, unsigned i
 	NRRectF bbox;
 	NRPointF c;
 
-	a = g_object_get_data (dlg, "rotate_angle");
+	a = GTK_ADJUSTMENT(g_object_get_data (dlg, "rotate_angle"));
 
 	sp_selection_bbox (selection, &bbox);
 	c.x = 0.5 * (bbox.x0 + bbox.x1);

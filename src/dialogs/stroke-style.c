@@ -59,7 +59,7 @@
 static void sp_stroke_style_paint_construct (SPWidget *spw, SPPaintSelector *psel);
 static void sp_stroke_style_paint_modify_selection (SPWidget *spw, SPSelection *selection, guint flags, SPPaintSelector *psel);
 static void sp_stroke_style_paint_change_selection (SPWidget *spw, SPSelection *selection, SPPaintSelector *psel);
-static void sp_stroke_style_paint_attr_changed (SPWidget *spw, const guchar *key, const guchar *oldval, const guchar *newval);
+static void sp_stroke_style_paint_attr_changed (SPWidget *spw, const gchar *key, const gchar *oldval, const gchar *newval);
 static void sp_stroke_style_paint_update (SPWidget *spw, SPSelection *sel);
 static void sp_stroke_style_paint_update_repr (SPWidget *spw, SPRepr *repr);
 
@@ -103,7 +103,7 @@ sp_stroke_style_paint_system_color_set (GtkWidget *widget, SPColor *color, float
 {
 	SPPaintSelector *psel;
 
-	psel = g_object_get_data (G_OBJECT (widget), "paint-selector");
+	psel = SP_PAINT_SELECTOR(g_object_get_data (G_OBJECT (widget), "paint-selector"));
 
 	switch (psel->mode) {
 	case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
@@ -143,7 +143,7 @@ sp_stroke_style_paint_change_selection (SPWidget *spw, SPSelection *selection, S
 }
 
 static void
-sp_stroke_style_paint_attr_changed (SPWidget *spw, const guchar *key, const guchar *oldval, const guchar *newval)
+sp_stroke_style_paint_attr_changed (SPWidget *spw, const gchar *key, const gchar *oldval, const gchar *newval)
 {
 	if (!strcmp (key, "style")) {
 		/* This sounds interesting */
@@ -172,7 +172,7 @@ sp_stroke_style_paint_update (SPWidget *spw, SPSelection *sel)
 
 	gtk_object_set_data (GTK_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
-	psel = gtk_object_get_data (GTK_OBJECT (spw), "paint-selector");
+	psel = SP_PAINT_SELECTOR(gtk_object_get_data (GTK_OBJECT (spw), "paint-selector"));
 
 	if (!sel || sp_selection_is_empty (sel)) {
 		/* No objects, set empty */
@@ -288,7 +288,7 @@ sp_stroke_style_paint_update_repr (SPWidget *spw, SPRepr *repr)
 
 	gtk_object_set_data (GTK_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
-	psel = gtk_object_get_data (GTK_OBJECT (spw), "paint-selector");
+	psel = SP_PAINT_SELECTOR(gtk_object_get_data (GTK_OBJECT (spw), "paint-selector"));
 
 	style = sp_style_new ();
 	sp_style_read_from_repr (style, repr);
@@ -402,7 +402,7 @@ sp_stroke_style_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 	SPCSSAttr *css;
 	gfloat rgba[4], cmyka[5];
 	SPGradient *vector;
-	guchar b[64];
+	gchar b[64];
 
 	if (gtk_object_get_data (GTK_OBJECT (spw), "update")) return;
 #ifdef SP_SS_VERBOSE
@@ -521,7 +521,7 @@ sp_stroke_style_paint_changed (SPPaintSelector *psel, SPWidget *spw)
 static void sp_stroke_style_line_construct (SPWidget *spw, gpointer data);
 static void sp_stroke_style_line_modify_selection (SPWidget *spw, SPSelection *selection, guint flags, gpointer data);
 static void sp_stroke_style_line_change_selection (SPWidget *spw, SPSelection *selection, gpointer data);
-static void sp_stroke_style_line_attr_changed (SPWidget *spw, const guchar *key, const guchar *oldval, const guchar *newval);
+static void sp_stroke_style_line_attr_changed (SPWidget *spw, const gchar *key, const gchar *oldval, const gchar *newval);
 
 static void sp_stroke_style_line_update (SPWidget *spw, SPSelection *sel);
 static void sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr);
@@ -556,11 +556,11 @@ sp_stroke_style_line_widget_new (void)
 	l = gtk_label_new (_("Width:"));
 	gtk_widget_show (l);
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 0, 1, GTK_FILL, 0, 4, 0);
+	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 0, 1, GTK_FILL, (GtkAttachOptions)0, 4, 0);
 
 	hb = gtk_hbox_new (FALSE, 4);
 	gtk_widget_show (hb);
-	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, 0, 1, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, 0, 1, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 
 	a = gtk_adjustment_new (1.0, 0.0, 100.0, 0.1, 10.0, 10.0);
 	gtk_object_set_data (GTK_OBJECT (spw), "width", a);
@@ -579,18 +579,18 @@ sp_stroke_style_line_widget_new (void)
 	l = gtk_label_new (_("Join:"));
 	gtk_widget_show (l);
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 1, 2, GTK_FILL, 0, 4, 0);
+	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 1, 2, GTK_FILL, (GtkAttachOptions)0, 4, 0);
 
 	hb = gtk_hbox_new (FALSE, 4);
 	gtk_widget_show (hb);
-	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, 1, 2, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 
 	tb = gtk_radio_button_new (NULL);
 	gtk_widget_show (tb);
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
 	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
 	gtk_object_set_data (GTK_OBJECT (spw), "join-miter", tb);
-	gtk_object_set_data (GTK_OBJECT (tb), "join", "miter");
+	gtk_object_set_data (GTK_OBJECT (tb), "join", (void *)"miter");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
         px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/join_miter.xpm");
 	gtk_widget_show (px);
@@ -601,7 +601,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
 	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
 	gtk_object_set_data (GTK_OBJECT (spw), "join-round", tb);
-	gtk_object_set_data (GTK_OBJECT (tb), "join", "round");
+	gtk_object_set_data (GTK_OBJECT (tb), "join", (void *)"round");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
         px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/join_round.xpm");
 	gtk_widget_show (px);
@@ -612,7 +612,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
 	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
 	gtk_object_set_data (GTK_OBJECT (spw), "join-bevel", tb);
-	gtk_object_set_data (GTK_OBJECT (tb), "join", "bevel");
+	gtk_object_set_data (GTK_OBJECT (tb), "join", (void *)"bevel");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
         px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/join_bevel.xpm");
 	gtk_widget_show (px);
@@ -622,18 +622,18 @@ sp_stroke_style_line_widget_new (void)
 	l = gtk_label_new (_("Cap:"));
 	gtk_widget_show (l);
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 2, 3, GTK_FILL, 0, 4, 0);
+	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 2, 3, GTK_FILL, (GtkAttachOptions)0, 4, 0);
 
 	hb = gtk_hbox_new (FALSE, 4);
 	gtk_widget_show (hb);
-	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, 2, 3, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, 2, 3, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 
 	tb = gtk_radio_button_new (NULL);
 	gtk_widget_show (tb);
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
 	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
 	gtk_object_set_data (GTK_OBJECT (spw), "cap-butt", tb);
-	gtk_object_set_data (GTK_OBJECT (tb), "cap", "butt");
+	gtk_object_set_data (GTK_OBJECT (tb), "cap", (void *)"butt");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
         px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/cap_butt.xpm");
 	gtk_widget_show (px);
@@ -644,7 +644,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
 	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
 	gtk_object_set_data (GTK_OBJECT (spw), "cap-round", tb);
-	gtk_object_set_data (GTK_OBJECT (tb), "cap", "round");
+	gtk_object_set_data (GTK_OBJECT (tb), "cap", (void *)"round");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
         px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/cap_round.xpm");
 	gtk_widget_show (px);
@@ -655,7 +655,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (tb), FALSE);
 	gtk_box_pack_start (GTK_BOX (hb), tb, FALSE, FALSE, 0);
 	gtk_object_set_data (GTK_OBJECT (spw), "cap-square", tb);
-	gtk_object_set_data (GTK_OBJECT (tb), "cap", "square");
+	gtk_object_set_data (GTK_OBJECT (tb), "cap", (void *)"square");
 	gtk_signal_connect (GTK_OBJECT (tb), "toggled", GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled), spw);
         px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/cap_square.xpm");
 	gtk_widget_show (px);
@@ -665,11 +665,11 @@ sp_stroke_style_line_widget_new (void)
 	l = gtk_label_new (_("Pattern:"));
 	gtk_widget_show (l);
 	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 3, 4, GTK_FILL, 0, 4, 0);
+	gtk_table_attach (GTK_TABLE (t), l, 0, 1, 3, 4, GTK_FILL, (GtkAttachOptions)0, 4, 0);
 
 	ds = sp_dash_selector_new (inkscape_get_repr (INKSCAPE, "palette.dashes"));
 	gtk_widget_show (ds);
-	gtk_table_attach (GTK_TABLE (t), ds, 1, 4, 3, 4, GTK_EXPAND | GTK_FILL, 0, 0, 0);
+	gtk_table_attach (GTK_TABLE (t), ds, 1, 4, 3, 4, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 	gtk_object_set_data (GTK_OBJECT (spw), "dash", ds);
 	gtk_signal_connect (GTK_OBJECT (ds), "changed", GTK_SIGNAL_FUNC (sp_stroke_style_line_dash_changed), spw);
 
@@ -711,7 +711,7 @@ sp_stroke_style_line_change_selection (SPWidget *spw, SPSelection *selection, gp
 }
 
 static void
-sp_stroke_style_line_attr_changed (SPWidget *spw, const guchar *key, const guchar *oldval, const guchar *newval)
+sp_stroke_style_line_attr_changed (SPWidget *spw, const gchar *key, const gchar *oldval, const gchar *newval)
 {
 	if (!strcmp (key, "style")) {
 		/* This sounds interesting */
@@ -737,10 +737,10 @@ sp_stroke_style_line_update (SPWidget *spw, SPSelection *sel)
 
 	gtk_object_set_data (GTK_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
-	sset = gtk_object_get_data (GTK_OBJECT (spw), "stroke");
-	width = gtk_object_get_data (GTK_OBJECT (spw), "width");
-	units = gtk_object_get_data (GTK_OBJECT (spw), "units");
-	dsel = gtk_object_get_data (GTK_OBJECT (spw), "dash");
+	sset = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "stroke"));
+	width = GTK_OBJECT(gtk_object_get_data (GTK_OBJECT (spw), "width"));
+	units = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "units"));
+	dsel = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "dash"));
 
 	if (!sel || sp_selection_is_empty (sel)) {
 		/* No objects, set empty */
@@ -794,13 +794,13 @@ sp_stroke_style_line_update (SPWidget *spw, SPSelection *sel)
 
 	switch (jointype) {
 	case SP_STROKE_LINEJOIN_MITER:
-		tb = gtk_object_get_data (GTK_OBJECT (spw), "join-miter");
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-miter"));
 		break;
 	case SP_STROKE_LINEJOIN_ROUND:
-		tb = gtk_object_get_data (GTK_OBJECT (spw), "join-round");
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-round"));
 		break;
 	case SP_STROKE_LINEJOIN_BEVEL:
-		tb = gtk_object_get_data (GTK_OBJECT (spw), "join-bevel");
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-bevel"));
 		break;
 	default:
 		tb = NULL;
@@ -810,13 +810,13 @@ sp_stroke_style_line_update (SPWidget *spw, SPSelection *sel)
 
 	switch (captype) {
 	case SP_STROKE_LINECAP_BUTT:
-		tb = gtk_object_get_data (GTK_OBJECT (spw), "cap-butt");
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-butt"));
 		break;
 	case SP_STROKE_LINECAP_ROUND:
-		tb = gtk_object_get_data (GTK_OBJECT (spw), "cap-round");
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-round"));
 		break;
 	case SP_STROKE_LINECAP_SQUARE:
-		tb = gtk_object_get_data (GTK_OBJECT (spw), "cap-square");
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-square"));
 		break;
 	default:
 		tb = NULL;
@@ -856,10 +856,10 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
 
 	gtk_object_set_data (GTK_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
-	sset = gtk_object_get_data (GTK_OBJECT (spw), "stroke");
-	width = gtk_object_get_data (GTK_OBJECT (spw), "width");
-	units = gtk_object_get_data (GTK_OBJECT (spw), "units");
-	dsel = gtk_object_get_data (GTK_OBJECT (spw), "dash");
+	sset = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "stroke"));
+	width = GTK_OBJECT(gtk_object_get_data (GTK_OBJECT (spw), "width"));
+	units = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "units"));
+	dsel = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "dash"));
 
 	style = sp_style_new ();
 	sp_style_read_from_repr (style, repr);
@@ -879,13 +879,13 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
 	/* Join & Cap */
 	switch (style->stroke_linejoin.value) {
 	case SP_STROKE_LINEJOIN_MITER:
-		tb = gtk_object_get_data (GTK_OBJECT (spw), "join-miter");
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-miter"));
 		break;
 	case SP_STROKE_LINEJOIN_ROUND:
-		tb = gtk_object_get_data (GTK_OBJECT (spw), "join-round");
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-round"));
 		break;
 	case SP_STROKE_LINEJOIN_BEVEL:
-		tb = gtk_object_get_data (GTK_OBJECT (spw), "join-bevel");
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-bevel"));
 		break;
 	default:
 		tb = NULL;
@@ -895,13 +895,13 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
 
 	switch (style->stroke_linecap.value) {
 	case SP_STROKE_LINECAP_BUTT:
-		tb = gtk_object_get_data (GTK_OBJECT (spw), "cap-butt");
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-butt"));
 		break;
 	case SP_STROKE_LINECAP_ROUND:
-		tb = gtk_object_get_data (GTK_OBJECT (spw), "cap-round");
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-round"));
 		break;
 	case SP_STROKE_LINECAP_SQUARE:
-		tb = gtk_object_get_data (GTK_OBJECT (spw), "cap-square");
+		tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-square"));
 		break;
 	default:
 		tb = NULL;
@@ -933,7 +933,7 @@ static void
 sp_stroke_style_set_scaled_dash (SPCSSAttr *css, int ndash, double *dash, double offset, double scale)
 {
 	if (ndash > 0) {
-		unsigned char c[1024];
+		gchar c[1024];
 		int i, pos;
 		pos = 0;
 		for (i = 0; i < ndash; i++) {
@@ -962,11 +962,11 @@ sp_stroke_style_scale_line (SPWidget *spw)
 	const GSList *items, *i, *r;
 	GSList *reprs;
 	SPCSSAttr *css;
-	guchar c[32];
+	gchar c[32];
 
-	wadj = gtk_object_get_data (GTK_OBJECT (spw), "width");
-	us = gtk_object_get_data (GTK_OBJECT (spw), "units");
-	dsel = gtk_object_get_data (GTK_OBJECT (spw), "dash");
+	wadj = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "width"));
+	us = SP_UNIT_SELECTOR(gtk_object_get_data (GTK_OBJECT (spw), "units"));
+	dsel = SP_DASH_SELECTOR(gtk_object_get_data (GTK_OBJECT (spw), "dash"));
 
 	if (spw->inkscape) {
 		/* fixme: */
@@ -1050,12 +1050,12 @@ sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw)
 	if (gtk_toggle_button_get_active (tb)) {
 		const GSList *items, *i, *r;
 		GSList *reprs;
-		const guchar *join, *cap;
+		const gchar *join, *cap;
 		SPCSSAttr *css;
 
 		items = sp_widget_get_item_list (spw);
-		join = gtk_object_get_data (GTK_OBJECT (tb), "join");
-		cap = gtk_object_get_data (GTK_OBJECT (tb), "cap");
+		join = (const gchar *)gtk_object_get_data (GTK_OBJECT (tb), "join");
+		cap = (const gchar *)gtk_object_get_data (GTK_OBJECT (tb), "cap");
 
 		if (spw->inkscape) {
 			reprs = NULL;
@@ -1200,11 +1200,11 @@ sp_stroke_style_set_join_buttons (SPWidget *spw, GtkWidget *active)
 {
 	GtkWidget *tb;
 
-	tb = gtk_object_get_data (GTK_OBJECT (spw), "join-miter");
+	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-miter"));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
-	tb = gtk_object_get_data (GTK_OBJECT (spw), "join-round");
+	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-round"));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
-	tb = gtk_object_get_data (GTK_OBJECT (spw), "join-bevel");
+	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "join-bevel"));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
 }
 
@@ -1213,11 +1213,11 @@ sp_stroke_style_set_cap_buttons (SPWidget *spw, GtkWidget *active)
 {
 	GtkWidget *tb;
 
-	tb = gtk_object_get_data (GTK_OBJECT (spw), "cap-butt");
+	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-butt"));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
-	tb = gtk_object_get_data (GTK_OBJECT (spw), "cap-round");
+	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-round"));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
-	tb = gtk_object_get_data (GTK_OBJECT (spw), "cap-square");
+	tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "cap-square"));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
 }
 

@@ -325,7 +325,7 @@ SPDocument * sp_modulesys_do_open (SPModule * object, SPModuleDoc * doc) {
 		GtkWidget * warning;
 		/* basically means that we coudln't autodetect */
 		warning = gtk_message_dialog_new(NULL,
-				                         GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+				                         (GtkDialogFlags)(GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT),
 										 GTK_MESSAGE_ERROR,
 										 GTK_BUTTONS_CLOSE,
 										 "Unable to find a way to open %s, with the extention of %s.  Perhaps you should specify the file type.",
@@ -455,7 +455,7 @@ static void module_autodetect (gpointer in_module, gpointer in_struct) {
 		}
 
 		if (!strcmp(plug_extention, localstruct->extention)) {
-			localstruct->module = in_module;
+			localstruct->module = (SPModule *)in_module;
 #if 0
 			printf("Autodetect: Found module %8.8X\n", in_module);
 #endif
@@ -583,7 +583,7 @@ svg_out_exec (SPModule * in_module, SPModuleDoc * in_doc,  gpointer in_data) {
 	images = sp_document_get_resource_list (doc, "image");
 	for (l = images; l != NULL; l = l->next) {
 		SPRepr *ir;
-		const guchar *href, *relname;
+		const gchar *href, *relname;
 		ir = SP_OBJECT_REPR (l->data);
 		href = sp_repr_attr (ir, "xlink:href");
 		if (spns && !g_path_is_absolute (href)) {
@@ -655,7 +655,7 @@ svg_nons_out_exec (SPModule * in_module, SPModuleDoc * in_doc,  gpointer in_data
 	images = sp_document_get_resource_list (doc, "image");
 	for (l = images; l != NULL; l = l->next) {
 		SPRepr *ir;
-		const guchar *href, *relname;
+		const gchar *href, *relname;
 		ir = SP_OBJECT_REPR (l->data);
 		href = sp_repr_attr (ir, "xlink:href");
 		if (spns && !g_path_is_absolute (href)) {
