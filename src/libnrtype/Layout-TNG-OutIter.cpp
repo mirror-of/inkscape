@@ -701,5 +701,63 @@ bool Layout::iterator::nextEndOfSentence()
 bool Layout::iterator::prevEndOfSentence()
     PREV_WITH_ATTRIBUTE_SET(is_sentence_end);
 
+bool Layout::iterator::_cursorLeftOrRightLocalX(Direction direction)
+{
+    if (_parent_layout->_characters.empty()) return false;
+    Direction para_direction;
+    if (_char_index == _parent_layout->_characters.size())
+        para_direction = _parent_layout->_paragraphs.back().base_direction;
+    else
+        para_direction = _parent_layout->_characters[_char_index].paragraph(_parent_layout).base_direction;
+    if (direction == para_direction)
+        return nextCursorPosition();
+    else
+        return prevCursorPosition();
+}
+
+bool Layout::iterator::cursorUp()
+{
+    Direction block_progression = _parent_layout->_blockProgression();
+    if(block_progression == TOP_TO_BOTTOM)
+        return prevLineCursor();
+    else if(block_progression == BOTTOM_TO_TOP)
+        return nextLineCursor();
+    else
+        return _cursorLeftOrRightLocalX(RIGHT_TO_LEFT);
+}
+
+bool Layout::iterator::cursorDown()
+{
+    Direction block_progression = _parent_layout->_blockProgression();
+    if(block_progression == TOP_TO_BOTTOM)
+        return nextLineCursor();
+    else if(block_progression == BOTTOM_TO_TOP)
+        return prevLineCursor();
+    else
+        return _cursorLeftOrRightLocalX(LEFT_TO_RIGHT);
+}
+
+bool Layout::iterator::cursorLeft()
+{
+    Direction block_progression = _parent_layout->_blockProgression();
+    if(block_progression == LEFT_TO_RIGHT)
+        return prevLineCursor();
+    else if(block_progression == RIGHT_TO_LEFT)
+        return nextLineCursor();
+    else
+        return _cursorLeftOrRightLocalX(RIGHT_TO_LEFT);
+}
+
+bool Layout::iterator::cursorRight()
+{
+    Direction block_progression = _parent_layout->_blockProgression();
+    if(block_progression == LEFT_TO_RIGHT)
+        return nextLineCursor();
+    else if(block_progression == RIGHT_TO_LEFT)
+        return prevLineCursor();
+    else
+        return _cursorLeftOrRightLocalX(LEFT_TO_RIGHT);
+}
+
 }//namespace Text
 }//namespace Inkscape

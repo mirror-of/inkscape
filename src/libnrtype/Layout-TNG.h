@@ -705,6 +705,11 @@ move around in it. See Layout for a glossary of the names of functions.
 I'm not going to document all the methods because most of their names make
 their function self-evident.
 
+A lot of the functions would do the same thing in a naive implementation
+for latin-only text, for example nextCharacter(), nextCursorPosition() and
+cursorRight(). Generally it's fairly obvious which one you should use in a
+given situation, but sometimes you might need to put some thought in to it.
+
 All the methods return false if the requested action would have caused the
 current position to move out of bounds. In this case the position is moved
 to either begin() or end(), depending on which direction you were going.
@@ -792,15 +797,11 @@ public:
     bool thisStartOfSource();
     bool nextStartOfSource();
 
-    //logical cursor movement. TODO: these need fixing for vertical and rtl text
-    bool cursorUp()
-        {return prevLineCursor();}
-    bool cursorDown()
-        {return nextLineCursor();}
-    bool cursorLeft()
-        {return prevCursorPosition();}
-    bool cursorRight()
-        {return nextCursorPosition();}
+    //logical cursor movement
+    bool cursorUp();
+    bool cursorDown();
+    bool cursorLeft();
+    bool cursorRight();
 
 private:
     Layout const *_parent_layout;
@@ -818,6 +819,11 @@ private:
         : _parent_layout(p), _glyph_index(p->_characters[c].in_glyph), _char_index(c), _cursor_moving_vertically(false), _x_coordinate(0.0) {}
     // no dtor required
     void beginCursorUpDown();  /// stores the current x coordinate so that the cursor won't drift. See #_x_coordinate
+
+    /** moves forward or backwards one cursor position according to the
+    directionality of the current paragraph, but ignoring block progression.
+    Helper for the cursor*() functions. */
+    bool _cursorLeftOrRightLocalX(Direction direction);
 };
 
 // ************************** inline methods
