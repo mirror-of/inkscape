@@ -1,5 +1,8 @@
 2004-02-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/Makefile.am, src/libnr/nr-point-fns-test.cpp:
+	New unit test file nr-point-fns-test.cpp.
+
 	* src/libnr/nr-point-fns.h, src/libnr/nr-point-fns.cpp (unit_vector):
 	New function.
 

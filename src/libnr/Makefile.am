@@ -9,11 +9,13 @@ INCLUDES = \
 	$(INKSCAPE_CFLAGS)
 
 TESTS = nr-types-test$(EXEEXT)	\
+	nr-point-fns-test$(EXEEXT)	\
 	nr-matrix-test$(EXEEXT)
 # automake adds $(EXEEXT) to check_PROGRAMS items but not to TESTS items:
 # TESTS items can be scripts etc.
 
 check_PROGRAMS = nr-types-test	\
+	nr-point-fns-test	\
 	nr-matrix-test
 
 if USE_MMX
@@ -63,8 +65,11 @@ testnr_LDADD =	\
 	libnr.a	\
 	-lglib-2.0
 
-nr_matrix_test_SOURCES = nr-matrix-test.cpp nr-matrix.cpp nr-types.cpp nr-values.cpp
-nr_matrix_test_LDADD = -lglib-2.0
-
 nr_types_test_SOURCES = nr-types-test.cpp nr-types.cpp nr-point-fns.cpp
 nr_types_test_LDADD = -lglib-2.0
+
+nr_point_fns_test_SOURCES = nr-point-fns-test.cpp nr-types.cpp nr-point-fns.cpp
+nr_point_fns_test_LDADD = -lglib-2.0
+
+nr_matrix_test_SOURCES = nr-matrix-test.cpp nr-matrix.cpp nr-types.cpp nr-values.cpp
+nr_matrix_test_LDADD = -lglib-2.0
