@@ -14,11 +14,25 @@
  * This code is in public domain
  */
 
+#include <libnr/nr-coord.h>
+#include <libnr/nr-i-coord.h>
+#include <libnr/nr-dim2.h>
 #include <libnr/nr-macros.h>
+#include <libnr/nr-point.h>
 #include <libnr/nr-values.h>
 #include <libnr/nr-maybe.h>
 
 /* NULL rect is infinite */
+
+struct NRRect {
+	NR::Coord x0, y0, x1, y1;
+};
+
+inline bool empty(NRRect const &r)
+{
+	return ( ( r.x0 > r.x1 ) ||
+		 ( r.y0 > r.y1 ) );
+}
 
 #define nr_rect_d_set_empty(r) (*(r) = NR_RECT_EMPTY)
 #define nr_rect_f_set_empty(r) (*(r) = NR_RECT_EMPTY)
