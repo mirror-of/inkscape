@@ -1721,7 +1721,7 @@ Verb * Verb::_base_verbs[] = {
     new ObjectVerb(SP_VERB_OBJECT_TO_CURVE, "ObjectToCurve", N_("_Object to Path"),
         N_("Convert selected object(s) to path(s)"), "object_tocurve"),
     new ObjectVerb(SP_VERB_OBJECT_FLOWTEXT_TO_TEXT, "ObjectFlowtextToText", N_("_Unflow Text"),
-        N_("Convert selected flowtext to text"), NULL),
+        N_("Convert selected flowed text(s) to regular text objects"), NULL),
     new ObjectVerb(SP_VERB_OBJECT_FLIP_HORIZONTAL, "ObjectFlipHorizontally",
         N_("Flip _Horizontally"), N_("Flip selection horizontally"),
         "object_flip_hor"),
