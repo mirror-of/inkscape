@@ -1,3 +1,14 @@
+2003-12-02  bulia byak <bulia@dr.com>
+
+	* src/interface.c: removed tool attributes command
+	* src/preferences-skeleton.h: added branch for export dialog
+	* src/file.c: made import dialog transient
+	* src/verbs.c: changed some dialog names and tooltips
+	* src/shortcuts.c: changed shortcuts for transform and text dialogs
+	* src/dialogs/display-settings.c: fixed dialog title
+	* src/dialogs/export.c: made unsinkable, remembering size and position, added label
+	for filename
+
 2003-11-30 MenTaLguY <mental@rydia.net>
 
 	* src/xml/repr-io.c, src/attributes.c, src/attributes.h,
