@@ -28,9 +28,7 @@
 
 class Shape;
 
-struct NRArenaGlyphs {
-	NRArenaItem item;
-
+struct NRArenaGlyphs : public NRArenaItem{
 	/* Glyphs data */
 	SPCurve *curve;
 	SPStyle *style;
@@ -72,8 +70,7 @@ typedef struct NRArenaGlyphsGroupClass NRArenaGlyphsGroupClass;
 #define NR_ARENA_GLYPHS_GROUP(obj) (NR_CHECK_INSTANCE_CAST ((obj), NR_TYPE_ARENA_GLYPHS_GROUP, NRArenaGlyphsGroup))
 #define NR_IS_ARENA_GLYPHS_GROUP(obj) (NR_CHECK_INSTANCE_TYPE ((obj), NR_TYPE_ARENA_GLYPHS_GROUP))
 
-struct NRArenaGlyphsGroup {
-	NRArenaGroup group;
+struct NRArenaGlyphsGroup : public NRArenaGroup{
 	SPStyle *style;
 	NRRect paintbox;
 	/* State data */

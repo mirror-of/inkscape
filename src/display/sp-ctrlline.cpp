@@ -38,9 +38,7 @@
 
 void nr_pixblock_render_ctrl_rgba (Shape* theS,uint32_t color,NRRectL &area,char* destBuf,int stride);
 
-struct SPCtrlLine {
-    SPCanvasItem item;
-
+struct SPCtrlLine :public SPCanvasItem{
     guint32 rgba;
     NRPoint s, e;
     Shape* shp;

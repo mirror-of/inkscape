@@ -25,9 +25,7 @@
 #define SP_IS_CTRLRECT(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_CTRLRECT))
 #define SP_IS_CTRLRECT_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_CTRLRECT))
 
-struct SPCtrlRect {
-    SPCanvasItem item;
-
+struct SPCtrlRect : public SPCanvasItem {
     guint has_fill : 1;
     guint dashed : 1;
     

@@ -64,8 +64,7 @@ struct NRGC {
 	NRMatrix transform;
 };
 
-struct NRArenaItem {
-	NRObject object;
+struct NRArenaItem : public NRObject{
 	NRArena *arena;
 	NRArenaItem *parent;
 	NRArenaItem *next;

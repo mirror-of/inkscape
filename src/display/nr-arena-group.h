@@ -19,8 +19,7 @@
 
 #include "nr-arena-item.h"
 
-struct NRArenaGroup {
-	NRArenaItem item;
+struct NRArenaGroup : public NRArenaItem{
 	unsigned int transparent : 1;
 	NRArenaItem *children;
 	NRArenaItem *last;

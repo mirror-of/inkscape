@@ -21,9 +21,7 @@
 #define SP_IS_CGRID_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_CGRID))
 
 
-struct SPCGrid {
-	SPCanvasItem item;
-
+struct SPCGrid : public SPCanvasItem{
 	NR::Point origin;
 	NR::Point spacing;
 	guint32 color;

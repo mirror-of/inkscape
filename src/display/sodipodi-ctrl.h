@@ -35,9 +35,7 @@ typedef enum {
 	SP_CTRL_MODE_XOR
 } SPCtrlModeType;
 
-struct SPCtrl {
-	SPCanvasItem item;
-
+struct SPCtrl : public SPCanvasItem{
 	SPCtrlShapeType shape;
 	SPCtrlModeType mode;
 	GtkAnchorType anchor;

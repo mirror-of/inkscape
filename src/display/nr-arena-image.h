@@ -20,9 +20,7 @@
 #include <libnr/nr-matrix.h>
 #include "nr-arena-item.h"
 
-struct NRArenaImage {
-	NRArenaItem item;
-
+struct NRArenaImage : public NRArenaItem{
 	unsigned char *px;
 	unsigned int pxw;
 	unsigned int pxh;

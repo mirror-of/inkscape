@@ -27,8 +27,7 @@
 
 #include "../livarot/Shape.h"
 
-struct NRArenaShape {
-	NRArenaItem item;
+struct NRArenaShape : public NRArenaItem{
 	/* Shape data */
 	SPCurve *curve;
 	SPStyle *style;

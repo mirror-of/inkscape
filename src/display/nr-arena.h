@@ -27,8 +27,7 @@ struct NRArenaEventVector {
 	void (* request_render) (NRArena *arena, NRRectL *area, void *data);
 };
 
-struct NRArena {
-	NRActiveObject object;
+struct NRArena : public NRActiveObject{
 };
 
 struct NRArenaClass {
