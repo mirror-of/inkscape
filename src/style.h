@@ -287,12 +287,12 @@ void sp_style_merge_from_parent (SPStyle *style, SPStyle *parent);
 /**
  *
  */
-gchar *sp_style_write_string (SPStyle *style, guint flags = SP_STYLE_FLAG_IFSET);
+gchar *sp_style_write_string(SPStyle const *style, guint flags = SP_STYLE_FLAG_IFSET);
 
 /**
  *
  */
-gchar *sp_style_write_difference (SPStyle *from, SPStyle *to);
+gchar *sp_style_write_difference(SPStyle const *from, SPStyle const *to);
 
 /**
  *

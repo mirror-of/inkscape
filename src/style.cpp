@@ -121,7 +121,7 @@ static SPTextStyle *sp_text_style_new (void);
 static void sp_text_style_clear (SPTextStyle *ts);
 static SPTextStyle *sp_text_style_unref (SPTextStyle *st);
 static SPTextStyle *sp_text_style_duplicate_unset (SPTextStyle *st);
-static guint sp_text_style_write (gchar *p, guint len, SPTextStyle *st, guint flags = SP_STYLE_FLAG_IFSET);
+static guint sp_text_style_write(gchar *p, guint len, SPTextStyle const *st, guint flags = SP_STYLE_FLAG_IFSET);
 static void sp_style_privatize_text (SPStyle *style);
 
 static void sp_style_read_ifloat (SPIFloat *val, const gchar *str);
@@ -137,13 +137,13 @@ static void sp_style_read_penum (SPIEnum *val, SPRepr *repr, const gchar *key, c
 static void sp_style_read_plength (SPILength *val, SPRepr *repr, const gchar *key);
 static void sp_style_read_pfontsize (SPIFontSize *val, SPRepr *repr, const gchar *key);
 
-static gint sp_style_write_ifloat (gchar *p, gint len, const gchar *key, SPIFloat *val, SPIFloat *base, guint flags);
-static gint sp_style_write_iscale24 (gchar *p, gint len, const gchar *key, SPIScale24 *val, SPIScale24 *base, guint flags);
-static gint sp_style_write_ienum (gchar *p, gint len, const gchar *key, const SPStyleEnum *dict, SPIEnum *val, SPIEnum *base, guint flags);
-static gint sp_style_write_istring (gchar *p, gint len, const gchar *key, SPIString *val, SPIString *base, guint flags);
-static gint sp_style_write_ilength (gchar *p, gint len, const gchar *key, SPILength *val, SPILength *base, guint flags);
-static gint sp_style_write_ipaint (gchar *b, gint len, const gchar *key, SPIPaint *paint, SPIPaint *base, guint flags);
-static gint sp_style_write_ifontsize (gchar *p, gint len, const gchar *key, SPIFontSize *val, SPIFontSize *base, guint flags);
+static gint sp_style_write_ifloat(gchar *p, gint len, gchar const *key, SPIFloat const *val, SPIFloat const *base, guint flags);
+static gint sp_style_write_iscale24(gchar *p, gint len, gchar const *key, SPIScale24 const *val, SPIScale24 const *base, guint flags);
+static gint sp_style_write_ienum(gchar *p, gint len, gchar const *key, SPStyleEnum const *dict, SPIEnum const *val, SPIEnum const *base, guint flags);
+static gint sp_style_write_istring(gchar *p, gint len, gchar const *key, SPIString const *val, SPIString const *base, guint flags);
+static gint sp_style_write_ilength(gchar *p, gint len, gchar const *key, SPILength const *val, SPILength const *base, guint flags);
+static gint sp_style_write_ipaint(gchar *b, gint len, gchar const *key, SPIPaint const *paint, SPIPaint const *base, guint flags);
+static gint sp_style_write_ifontsize(gchar *p, gint len, gchar const *key, SPIFontSize const *val, SPIFontSize const *base, guint flags);
 
 static void sp_style_paint_clear (SPStyle *style, SPIPaint *paint, unsigned int hunref, unsigned int unset);
 
@@ -1233,7 +1233,7 @@ sp_style_write_difference instead to take into account the object's parent.
 FIXME: merge with write_difference, much duplicate code!
 */
 gchar *
-sp_style_write_string (SPStyle *style, guint flags)
+sp_style_write_string(SPStyle const *const style, guint const flags)
 {
     gchar c[BMAX], *p;
 
@@ -1338,7 +1338,7 @@ sp_style_write_string (SPStyle *style, guint flags)
  *
  */
 gchar *
-sp_style_write_difference (SPStyle *from, SPStyle *to)
+sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
 {
     gchar c[BMAX], *p;
 
@@ -1718,7 +1718,7 @@ sp_text_style_duplicate_unset (SPTextStyle *st)
  *
  */
 static guint
-sp_text_style_write (gchar *p, guint len, SPTextStyle *st, guint flags)
+sp_text_style_write(gchar *p, guint const len, SPTextStyle const *const st, guint flags)
 {
     gint d = 0;
 
@@ -2100,7 +2100,8 @@ sp_style_read_pfontsize (SPIFontSize *val, SPRepr *repr, const gchar *key)
  *
  */
 static gint
-sp_style_write_ifloat (gchar *p, gint len, const gchar *key, SPIFloat *val, SPIFloat *base, guint flags)
+sp_style_write_ifloat(gchar *p, gint const len, gchar const *const key,
+                      SPIFloat const *const val, SPIFloat const *const base, guint const flags)
 {
 	Inkscape::SVGOStringStream os;
 
@@ -2122,7 +2123,9 @@ sp_style_write_ifloat (gchar *p, gint len, const gchar *key, SPIFloat *val, SPIF
  *
  */
 static gint
-sp_style_write_iscale24 (gchar *p, gint len, const gchar *key, SPIScale24 *val, SPIScale24 *base, guint flags)
+sp_style_write_iscale24(gchar *p, gint const len, gchar const *const key,
+                        SPIScale24 const *const val, SPIScale24 const *const base,
+                        guint const flags)
 {
 	Inkscape::SVGOStringStream os;
 
@@ -2144,7 +2147,9 @@ sp_style_write_iscale24 (gchar *p, gint len, const gchar *key, SPIScale24 *val, 
  *
  */
 static gint
-sp_style_write_ienum (gchar *p, gint len, const gchar *key, const SPStyleEnum *dict, SPIEnum *val, SPIEnum *base, guint flags)
+sp_style_write_ienum(gchar *p, gint const len, gchar const *const key,
+                     SPStyleEnum const *const dict,
+                     SPIEnum const *const val, SPIEnum const *const base, guint const flags)
 {
     if ((flags & SP_STYLE_FLAG_ALWAYS) ||
         ((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
@@ -2165,7 +2170,8 @@ sp_style_write_ienum (gchar *p, gint len, const gchar *key, const SPStyleEnum *d
  *
  */
 static gint
-sp_style_write_istring (gchar *p, gint len, const gchar *key, SPIString *val, SPIString *base, guint flags)
+sp_style_write_istring(gchar *p, gint const len, gchar const *const key,
+                       SPIString const *const val, SPIString const *const base, guint const flags)
 {
     if ((flags & SP_STYLE_FLAG_ALWAYS) ||
         ((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
@@ -2183,16 +2189,16 @@ sp_style_write_istring (gchar *p, gint len, const gchar *key, SPIString *val, SP
 /**
  *
  */
-static unsigned int
-sp_length_differ (SPILength *a, SPILength *b)
+static bool
+sp_length_differ(SPILength const *const a, SPILength const *const b)
 {
     if (a->unit != b->unit) {
-        if (a->unit == SP_CSS_UNIT_EM) return TRUE;
-        if (a->unit == SP_CSS_UNIT_EX) return TRUE;
-        if (a->unit == SP_CSS_UNIT_PERCENT) return TRUE;
-        if (b->unit == SP_CSS_UNIT_EM) return TRUE;
-        if (b->unit == SP_CSS_UNIT_EX) return TRUE;
-        if (b->unit == SP_CSS_UNIT_PERCENT) return TRUE;
+        if (a->unit == SP_CSS_UNIT_EM) return true;
+        if (a->unit == SP_CSS_UNIT_EX) return true;
+        if (a->unit == SP_CSS_UNIT_PERCENT) return true;
+        if (b->unit == SP_CSS_UNIT_EM) return true;
+        if (b->unit == SP_CSS_UNIT_EX) return true;
+        if (b->unit == SP_CSS_UNIT_PERCENT) return true;
     }
 
     return (a->computed != b->computed);
@@ -2204,7 +2210,8 @@ sp_length_differ (SPILength *a, SPILength *b)
  *
  */
 static gint
-sp_style_write_ilength (gchar *p, gint len, const gchar *key, SPILength *val, SPILength *base, guint flags)
+sp_style_write_ilength(gchar *p, gint const len, gchar const *const key,
+                       SPILength const *const val, SPILength const *const base, guint const flags)
 {
 	Inkscape::SVGOStringStream os;
 
@@ -2269,16 +2276,16 @@ sp_style_write_ilength (gchar *p, gint len, const gchar *key, SPILength *val, SP
 /**
  *
  */
-static unsigned int
-sp_paint_differ (SPIPaint *a, SPIPaint *b)
+static bool
+sp_paint_differ(SPIPaint const *const a, SPIPaint const *const b)
 {
     if (a->type != b->type)
-        return TRUE;
+        return true;
     if (a->type == SP_PAINT_TYPE_COLOR)
         return !sp_color_is_equal (&a->value.color, &b->value.color);
     if (a->type == SP_PAINT_TYPE_PAINTSERVER)
         return (a->value.paint.server != b->value.paint.server);
-    return FALSE;
+    return false;
 }
 
 
@@ -2287,7 +2294,8 @@ sp_paint_differ (SPIPaint *a, SPIPaint *b)
  *
  */
 static gint
-sp_style_write_ipaint (gchar *b, gint len, const gchar *key, SPIPaint *paint, SPIPaint *base, guint flags)
+sp_style_write_ipaint(gchar *b, gint const len, gchar const *const key,
+                      SPIPaint const *const paint, SPIPaint const *const base, guint const flags)
 {
     if ((flags & SP_STYLE_FLAG_ALWAYS) ||
         ((flags & SP_STYLE_FLAG_IFSET) && paint->set) ||
@@ -2317,19 +2325,19 @@ sp_style_write_ipaint (gchar *b, gint len, const gchar *key, SPIPaint *paint, SP
 /**
  *
  */
-static unsigned int
-sp_fontsize_differ (SPIFontSize *a, SPIFontSize *b)
+static bool
+sp_fontsize_differ(SPIFontSize const *const a, SPIFontSize const *const b)
 {
     if (a->type != b->type)
-        return TRUE;
+        return true;
     if (a->type == SP_FONT_SIZE_LENGTH) {
         if (a->computed != b->computed)
-            return TRUE;
+            return true;
     } else {
         if (a->value != b->value)
-            return TRUE;
+            return true;
     }
-    return FALSE;
+    return false;
 }
 
 
@@ -2337,7 +2345,9 @@ sp_fontsize_differ (SPIFontSize *a, SPIFontSize *b)
  *
  */
 static gint
-sp_style_write_ifontsize (gchar *p, gint len, const gchar *key, SPIFontSize *val, SPIFontSize *base, guint flags)
+sp_style_write_ifontsize(gchar *p, gint const len, gchar const *key,
+                         SPIFontSize const *const val, SPIFontSize const *const base,
+                         guint const flags)
 {
     if ((flags & SP_STYLE_FLAG_ALWAYS) ||
         ((flags & SP_STYLE_FLAG_IFSET) && val->set) ||
