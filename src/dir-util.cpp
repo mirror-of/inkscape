@@ -13,7 +13,7 @@
 
     N.B. The return value is a pointer into the \a path string.
 
-    \a base is expected to be the absolute path of a directory.
+    \a base is expected to be either NULL or the absolute path of a directory.
 
     \a path is expected to be an absolute path.
 
@@ -23,9 +23,9 @@
 char const *
 sp_relative_path_from_path(char const *const path, char const *const base)
 {
-	/* TODO: Make sure that we're doing the right thing if base ends in G_DIR_SEPARATOR.  As a
-	   special case, make sure that it does the right thing if base is "/" (and G_DIR_SEPARATOR
-	   is '/'). */
+	if (base == NULL || path == NULL) {
+		return path;
+	}
 
 	size_t base_len = strlen(base);
 	while (base_len != 0

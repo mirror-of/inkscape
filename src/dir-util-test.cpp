@@ -19,7 +19,8 @@ test_sp_relative_path_from_path()
         {"/foo/barney", "/foo/bar", "/foo/barney"},
         {"/foo/bar/baz", "/foo/", "bar/baz"},
         {"/foo/bar/baz", "/", "foo/bar/baz"},
-        {"/foo/bar/baz", "/foo/qux", "/foo/bar/baz"}
+        {"/foo/bar/baz", "/foo/qux", "/foo/bar/baz"},
+        {"/foo", NULL, "/foo"}
     };
     test_2ary_cases<char const *, char const *, char const *, char const *, streq_functor>
         ("sp_relative_path_from_path",
