@@ -185,6 +185,7 @@ sp_rect_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			/* Position center */
 			sp_desktop_w2d_xy_point (event_context->desktop, &fp, event->button.x, event->button.y);
 			/* Snap center to nearest magnetic point */
+			rc->center = fp;
 			sp_desktop_free_snap (event_context->desktop, rc->center);
 			sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
 					     GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | 

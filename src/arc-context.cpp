@@ -140,6 +140,7 @@ sp_arc_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			/* Position center */
 			sp_desktop_w2d_xy_point (event_context->desktop, &fp,
 									 (float) event->button.x, (float) event->button.y);
+			ac->center = fp;
 			/* Snap center to nearest magnetic point */
 			sp_desktop_free_snap (event_context->desktop, ac->center);
 			sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
