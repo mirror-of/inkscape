@@ -76,7 +76,7 @@ DialogFind::DialogFind():
     Gtk::Image*  pImage = 
         Gtk::manage( new Gtk::Image(
                          PixBufFactory::get().
-                         getFromSVG(id)));
+                         getIcon(id)));
     _widget.pack_start(*pImage);
     _widget.pack_start(_fieldsTable);
     addSearchField("_Text", _("Find objects by their text content (exact or partial match)"), 0);

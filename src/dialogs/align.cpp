@@ -72,7 +72,7 @@ public :
         _id(id),         
         _parent(parent)
     {
-        Gtk::Image*  pImage = Gtk::manage( new Gtk::Image(PixBufFactory::get().getFromSVG(_id)));
+        Gtk::Image*  pImage = Gtk::manage( new Gtk::Image(PixBufFactory::get().getIcon(_id)));
 	Gtk::Button * pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
 	pImage->show();

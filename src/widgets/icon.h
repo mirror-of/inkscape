@@ -75,11 +75,11 @@ public :
   };
 
 
-  const Glib::RefPtr<Gdk::Pixbuf> getFromSVG(const Glib::ustring &oid) {
+  const Glib::RefPtr<Gdk::Pixbuf> getIcon(const Glib::ustring &oid) {
     ID id (oid, 20, 20);
-    return getFromSVG(id);
+    return getIcon(id);
   }
-  const Glib::RefPtr<Gdk::Pixbuf> getFromSVG(const ID &id);
+  const Glib::RefPtr<Gdk::Pixbuf> getIcon(const ID &id);
 
 private :
   PixBufFactory ();

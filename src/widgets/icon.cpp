@@ -146,7 +146,7 @@ static int sp_icon_expose(GtkWidget *widget, GdkEventExpose *event)
 static GtkWidget *
 sp_icon_new_full (unsigned int size, unsigned int scale, const gchar *name)
 {
-	char c[256];
+	//char c[256];
 	SPIcon *icon;
 	guchar *pixels;
 
@@ -154,7 +154,7 @@ sp_icon_new_full (unsigned int size, unsigned int scale, const gchar *name)
 	icon = (SPIcon *)g_object_new (SP_TYPE_ICON, NULL);
 
 	icon->size = CLAMP (size, 1, 128);
-	g_snprintf (c, 256, "%d:%d:%s", icon->size, scale, name);
+	//g_snprintf (c, 256, "%d:%d:%s", icon->size, scale, name);
 	pixels = sp_icon_image_load_gtk ((GtkWidget *) icon, name, icon->size, scale);
 
 	if (pixels) {
@@ -206,6 +206,7 @@ sp_icon_new_from_data (unsigned int size, const guchar *px)
 	return (GtkWidget *) icon;
 }
 
+// Try to load the named svg, falling back to pixmaps
 guchar *
 sp_icon_image_load (const gchar *name, unsigned int size, unsigned int scale)
 {
@@ -465,7 +466,7 @@ PixBufFactory & PixBufFactory::get()
   return pbf;
 }
 
-const Glib::RefPtr<Gdk::Pixbuf> PixBufFactory::getFromSVG(const ID &id)
+const Glib::RefPtr<Gdk::Pixbuf> PixBufFactory::getIcon(const ID &id)
 {
   Glib::RefPtr<Gdk::Pixbuf> inMap = _map[id];
   //cached, return
