@@ -362,7 +362,10 @@ static gchar * sp_group_description (SPItem * item)
 		}
 	}
 
-	return g_strdup_printf(_("<b>Group</b> of <b>%d</b> objects"), len);
+	return g_strdup_printf(
+			ngettext("<b>Group</b> of <b>%d</b> object",
+				 "<b>Group</b> of <b>%d</b> objects",
+				 len), len);
 }
 
 static void sp_group_set(SPObject *object, unsigned key, char const *value) {

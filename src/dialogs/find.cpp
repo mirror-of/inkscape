@@ -425,10 +425,13 @@ void sp_find_dialog_find(GObject *, GObject *dlg)
     }
 
     if (n != NULL) {
+        int count = g_slist_length (n);
         desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,
                                         // TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-                                        _("<b>%d</b> object(s) found (out of <b>%d</b>), %s match."),
-                                        g_slist_length (n), all, exact? _("exact") : _("partial"));
+                                        ngettext("<b>%d</b> object found (out of <b>%d</b>), %s match.",
+                                                 "<b>%d</b> objects found (out of <b>%d</b>), %s match.",
+                                                 count),
+                                        count, all, exact? _("exact") : _("partial"));
 
         SPSelection *selection = SP_DT_SELECTION (desktop);
         selection->clear();

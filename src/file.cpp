@@ -475,7 +475,13 @@ sp_file_vacuum()
 
     SPDesktop *dt = SP_ACTIVE_DESKTOP;
     if (before - after > 0) {
-        dt->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,  _("Removed <b>%i</b> unused item(s) in &lt;defs&gt;."), before - after);
+        int diff = before - after;
+
+        dt->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,
+                ngettext("Removed <b>%i</b> unused item in &lt;defs&gt;.",
+                         "Removed <b>%i</b> unused items in &lt;defs&gt;.",
+                         diff),
+                diff);
     } else {
         dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE,  _("No unused items in &lt;defs&gt;."));
     }

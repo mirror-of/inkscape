@@ -973,8 +973,8 @@ gboolean sp_sel_trans_rotate_request(SPSelTrans *seltrans, SPSelTransHandle cons
 	if (angle > 180) angle -= 360;
 	if (angle < -180) angle += 360;
 
-       seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE, 
-            _("<b>Rotate</b>: %0.2f degrees; with <b>Ctrl</b> to snap angle"), angle);
+        seltrans->_message_context.setF(Inkscape::NORMAL_MESSAGE, 
+            _("<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"), angle);
 
 	return TRUE;
 }

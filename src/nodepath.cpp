@@ -2899,17 +2899,26 @@ sp_nodepath_update_statusbar(Path::Path *nodepath)
         SPSelection *sel = nodepath->desktop->selection;
         if (!sel || sel->isEmpty()) {
             mc->setF(Inkscape::NORMAL_MESSAGE,
-                                                     _("Select one path object with selector first, then switch back to node tool."));
+                     _("Select one path object with selector first, then switch back to node tool."));
         } else {
             mc->setF(Inkscape::NORMAL_MESSAGE,
-                                                      _("<b>0</b> out of <b>%i</b> nodes selected. Click, Shift+click, or drag around nodes to select."), total);
+                     ngettext("<b>0</b> out of <b>%i</b> node selected. Click, Shift+click, or drag around nodes to select.",
+                              "<b>0</b> out of <b>%i</b> nodes selected. Click, Shift+click, or drag around nodes to select.",
+                              total),
+                     total);
         }
     } else if (selected == 1) {
         mc->setF(Inkscape::NORMAL_MESSAGE,
-                                                  _("<b>%i</b> of <b>%i</b> nodes selected; %s. %s."), selected, total, sp_node_type_description((Path::Node *) nodepath->selected->data), when_selected);
+                 ngettext("<b>%i</b> of <b>%i</b> node selected; %s. %s.",
+                          "<b>%i</b> of <b>%i</b> nodes selected; %s. %s.",
+                          total),
+                 selected, total, sp_node_type_description((Path::Node *) nodepath->selected->data), when_selected);
     } else {
         mc->setF(Inkscape::NORMAL_MESSAGE,
-                                                  _("<b>%i</b> of <b>%i</b> nodes selected. %s."), selected, total, when_selected);
+                 ngettext("<b>%i</b> of <b>%i</b> node selected. %s.",
+                          "<b>%i</b> of <b>%i</b> nodes selected. %s.",
+                          total),
+                 selected, total, when_selected);
     }
 }
 

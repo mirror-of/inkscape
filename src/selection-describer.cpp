@@ -56,13 +56,27 @@ void SelectionDescriber::_updateMessageFromSelection(SPSelection *selection) {
                               sp_item_description(item), layer_name? layer_name : "", when_selected);
             }
         } else { // multiple items
+            int object_count = g_slist_length((GSList *)items);
+            const gchar *object_count_str = NULL;
+            object_count_str = g_strdup_printf (
+                                ngettext("<b>%i</b> object selected",
+                                         "<b>%i</b> objects selected",
+                                         object_count),
+                                object_count);
+
             if (selection->numberOfLayers() == 1) {
-                _context.setF(Inkscape::NORMAL_MESSAGE, _("<b>%i</b> objects selected%s. %s."), 
-                              g_slist_length((GSList *)items), layer_name? layer_name : "", when_selected);
+                _context.setF(Inkscape::NORMAL_MESSAGE, _("%s%s. %s."), 
+                              object_count_str, layer_name? layer_name : "", when_selected);
             } else {
-                _context.setF(Inkscape::NORMAL_MESSAGE, _("<b>%i</b> objects selected in <b>%i</b> layers. %s."), 
-                              g_slist_length((GSList *)items), selection->numberOfLayers(), when_selected);
+                _context.setF(Inkscape::NORMAL_MESSAGE, 
+                              ngettext("%s in <b>%i</b> layer. %s.",
+                                       "%s in <b>%i</b> layers. %s.", 
+                                       selection->numberOfLayers()),
+                              object_count_str, selection->numberOfLayers(), when_selected);
             }
+
+            if (object_count_str)
+                g_free ((gchar *) object_count_str);
         }
 
         if (layer_name) 

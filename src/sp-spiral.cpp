@@ -267,6 +267,8 @@ sp_spiral_update (SPObject *object, SPCtx *ctx, guint flags)
 static gchar *
 sp_spiral_description (SPItem * item)
 {
+	// TRANSLATORS: since turn count isn't an integer, please adjust the
+	// string as needed to deal with an localized plural forms.
 	return g_strdup_printf (_("<b>Spiral</b> with %3f turns"), SP_SPIRAL(item)->revo);
 }
 
