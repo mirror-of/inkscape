@@ -1,5 +1,7 @@
 2004-08-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-scale.h (NR::scale(double)): new constructor.
+
 	* src/svg/svg-affine.cpp (sp_svg_transform_write), src/svg/svg.h:
 	  Add NR::Matrix version.
 
