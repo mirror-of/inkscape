@@ -35,6 +35,7 @@
 #include "../inkscape.h"
 #include "../document.h"
 #include "../desktop-handles.h"
+#include "../desktop-style.h"
 #include "../selection.h"
 #include "../sp-item.h"
 #include "../style.h"
@@ -551,9 +552,6 @@ sp_item_widget_opacity_value_changed (GtkAdjustment *a, SPWidget *spw)
     if (gtk_object_get_data (GTK_OBJECT (spw), "blocked"))
         return;
 
-    SPItem *item = SP_WIDGET_SELECTION(spw)->singleItem();
-    g_return_if_fail (item != NULL);
-
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
     SPCSSAttr *css = sp_repr_css_attr_new ();
@@ -561,14 +559,15 @@ sp_item_widget_opacity_value_changed (GtkAdjustment *a, SPWidget *spw)
     Inkscape::SVGOStringStream os;	
     os << CLAMP (a->value, 0.0, 1.0);
     sp_repr_css_set_property (css, "opacity", os.str().c_str());
-    sp_repr_css_change (SP_OBJECT_REPR (item), css, "style");
+
+    sp_desktop_set_style (SP_ACTIVE_DESKTOP, css);
+
     sp_repr_css_attr_unref (css);
 
     sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "ItemDialog:style");
 
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (FALSE));
-
-} // end of sp_item_widget_opacity_value_changed()
+} 
 
 
 
