@@ -1,9 +1,12 @@
 #include "dialogs/docker.h"
 #include  "dialogs/dockable.h"
 #include "dialogs/align.h"
+#include "dialogs/dialog-events.h"
 #include "inkscape.h"
 #include "desktop.h"
 #include "display/sp-canvas.h"
+
+#include <gtk/gtk.h> // temporary
 
 #include <iostream> // TODO : delete
 //Docker class
@@ -58,13 +61,23 @@ void Docker::init()
   _window.set_type_hint(Gdk::WINDOW_TYPE_HINT_UTILITY);	
   _window.set_skip_taskbar_hint(true);
   _window.set_skip_pager_hint(true);
-//  SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-  //Looks like this does not work.
-//   if (desktop)
-//     {
-//       Gtk::Window * w = Glib::wrap((GtkWindow *) &(desktop->owner->canvas->widget));
-//       _window.set_transient_for(*w);
-//     }
+
+    { 
+    // This block is a much simplified version of the code used in all other dialogs for
+    // saving/restoring geometry, transientising, passing events to the aplication, and
+    // hiding/unhiding on F12. This code fits badly into gtkmm so it had to be abridged and
+    // mutilated somewhat. This block should be removed when the same functionality is made
+    // available to all gtkmm dialogs via a base class.
+        GtkWidget *dlg = GTK_WIDGET(_window.gobj());
+
+        gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
+
+        sp_transientize (dlg);
+                           
+        gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
+    }
+
+
   _window.add(_notebook);
   _notebook.show();
   _notebook.signal_button_press_event().connect(sigc::mem_fun(*this, &Docker::on_click));        
