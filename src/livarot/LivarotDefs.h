@@ -8,6 +8,7 @@
 
 #ifndef my_defs
 #define my_defs
+#include <stdint.h>
 
 // error codes
 enum

@@ -1,5 +1,7 @@
 2004-02-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/livarot/LivarotDefs.h: #include <stdint.h> (moved from Path.h).
+
 	* src/livarot/PathOutline.cpp, src/livarot/PathSimplify.cpp,
 	src/livarot/PathStroke.cpp, src/sp-offset.cpp:
 	#include libnr/nr-point-fns.h.
