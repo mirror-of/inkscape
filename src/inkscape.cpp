@@ -510,7 +510,8 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
 	SPRepr * root;
 
 #ifdef WIN32
-	fn = g_strdup_printf ("inkscape/%s", filename);
+	//	fn = g_strdup_printf ("inkscape/%s", filename);
+	fn = g_build_filename (g_get_home_dir (), ".inkscape", filename, NULL);
 #else
 	fn = g_build_filename (g_get_home_dir (), ".inkscape", filename, NULL);
 #endif
@@ -584,9 +585,10 @@ inkscape_save_preferences (Inkscape::Application * inkscape)
 	//TODO:WIN32: find out if this works on windows:
 	//fn = g_build_filename (g_get_home_dir (), ".inkscape/", preferences_file, NULL);
 	//this is the old code that stores prefs in current dir:
-	fn = g_strdup ("inkscape/preferences.xml");
+	//	fn = g_strdup ("inkscape/preferences.xml");
+	fn = g_build_filename (g_get_home_dir (), ".inkscape", preferences_file, NULL);
 #else
-	fn = g_build_filename (g_get_home_dir (), ".inkscape/", preferences_file, NULL);
+	fn = g_build_filename (g_get_home_dir (), ".inkscape", preferences_file, NULL);
 #endif
 
 	sp_repr_save_file (inkscape->preferences, fn);
@@ -999,7 +1001,8 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 	g_free (dn);
 
 #ifdef WIN32
-	fn = g_strdup_printf ("inkscape/%s", config_name);
+	//	fn = g_strdup_printf ("inkscape/%s", config_name);
+	fn = g_build_filename (g_get_home_dir (), ".inkscape", config_name, NULL);
 	fh = creat (fn, S_IREAD | S_IWRITE);
 #else
 	fn = g_build_filename (g_get_home_dir (), ".inkscape", config_name, NULL);
