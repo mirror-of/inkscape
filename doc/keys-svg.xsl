@@ -1085,7 +1085,7 @@ It is generated automatically from doc/keys.xml by doc/keys-svg.xsl.
 </xsl:if>
 </xsl:template>
 
-<xsl:template match="k:shift | k:ctrl | k:alt | k:left | k:right">
+<xsl:template match="k:left-click | k:shift | k:ctrl | k:alt | k:left | k:right">
 <xsl:param name="x"/>
 <xsl:param name="y"/>
 <xsl:variable name="xx" select="
@@ -1101,7 +1101,7 @@ It is generated automatically from doc/keys.xml by doc/keys-svg.xsl.
  count(following-sibling::k:misc-wide)*$w-misc-wide -
  count(following-sibling::k:misc)*$w-misc -
  count(following-sibling::k:arrows)*$w-arrows -
- count(following-sibling::k:wheel | following-sibling::k:left-click | following-sibling::k:left-drag | following-sibling::k:mid-click | following-sibling::k:mid-drag | following-sibling::k:right-click | following-sibling::k:right-drag)*$w-mouse
+ count(following-sibling::k:wheel | following-sibling::k:left-click | following-sibling::k:left-drag | following-sibling::k:mid-click | following-sibling::k:mid-drag | following-sibling::k:right-click | following-sibling::k:right-drag | self::k:left-click)*$w-mouse
 "/>
 <use xlink:href="#{name()}"
 transform="translate({$xx},{$y})"/>
@@ -1213,7 +1213,7 @@ transform="translate({$xx},{$y})"/>
 transform="translate({$xx},{$y})"/>
 </xsl:template>
 
-<xsl:template match="k:wheel | k:left-click | k:left-drag | k:mid-click | k:mid-drag | k:right-click | k:right-drag">
+<xsl:template match="k:wheel | k:left-drag | k:mid-click | k:mid-drag | k:right-click | k:right-drag">
 <xsl:param name="x"/>
 <xsl:param name="y"/>
 <xsl:variable name="xx" select="

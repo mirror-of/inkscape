@@ -435,12 +435,19 @@ can leave your ideas and requests there.</p>
 </group>
 
 <group>
-<title>Keyboard</title>
-<keys><key>a</key>    <action>toggle new/append</action></keys>
-<note>This switches between creating a new line or appending to the selected line (anchors are displayed for appending).</note>
+<title>Finish</title>
 <keys><key><misc-wide f="Enter"/></key>  <action>finish current line</action></keys>
+<mouse><key><right-click/></key> <action>finish current line</action></mouse>
+<mouse><key><left-click/><left-click/></key> <action>finish current line</action></mouse>
+<note>Enter, right click, or double left click finish the current line, discarding the last unfinished (red) segment.</note>
+</group>
+
+<group>
+<title>Keyboard</title>
 <keys><key><misc f="Esc"/></key>  <action>cancel current line</action></keys>
 <keys><key><misc-wide f="Backspace"/></key> <action>erase last segment of current line</action></keys>
+<keys><key>a</key>    <action>toggle new/append</action></keys>
+<note>This switches between creating a new line or appending to the selected line (anchors are displayed for appending).</note>
 </group>
 </section>
 
