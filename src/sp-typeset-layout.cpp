@@ -724,17 +724,20 @@ void   sp_typeset_relayout(SPTypeset *typeset)
   typeset->theSrc=NULL;
   if ( typeset->srcType == has_std_txt ) {
     SPCSSAttr *css;
-    gchar *val=NULL;
     css = sp_repr_css_attr (SP_OBJECT_REPR (SP_OBJECT(typeset)), "style");
-    val = sp_repr_css_property (css, "font-size", NULL);
+
+    const gchar *val_size = sp_repr_css_property (css, "font-size", NULL);
     double  fsize=12.0;
-    if ( val ) fsize=sp_repr_css_double_property (css, "font-size", NULL);
-    val = sp_repr_css_property (css, "font-family", NULL);
-    if ( val ) {
-      typeset->theSrc=new pango_text_chunker(typeset->srcText,val,fsize);
+    if ( val_size ) 
+        fsize = sp_repr_css_double_property (css, "font-size", 12.0);
+
+    const gchar *val_family = sp_repr_css_property (css, "font-family", NULL);
+    if ( val_family ) {
+      typeset->theSrc = new pango_text_chunker(typeset->srcText, (gchar *) val_family, fsize);
     } else {
-      typeset->theSrc=new pango_text_chunker(typeset->srcText,"Luxi Sans",fsize);
+      typeset->theSrc = new pango_text_chunker(typeset->srcText, "Luxi Sans", fsize);
     }
+
   } else if ( typeset->srcType == has_pango_txt ) {
   }
   
