@@ -717,7 +717,9 @@ options_changed_radio (GtkToggleButton *tb, gpointer data)
     const gchar *prefs_attr = (const gchar *) g_object_get_data (G_OBJECT(tb), "attr");
     const guint val = GPOINTER_TO_INT((const gchar*)gtk_object_get_data (GTK_OBJECT (tb), "value"));
 
-    prefs_set_int_attribute (prefs_path, prefs_attr, val);
+    if (prefs_path && prefs_attr && gtk_toggle_button_get_active (tb)) {
+        prefs_set_int_attribute (prefs_path, prefs_attr, val);
+    }
 
     GtkWidget *button = (GtkWidget *) g_object_get_data (G_OBJECT(tb), "button_to_activate");
     if (button)
