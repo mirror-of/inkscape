@@ -52,7 +52,6 @@
 #include "dropper-context.h"
 
 #include "tools-switch.h"
-
 #include "inkscape-private.h"
 #include "file.h"
 #include "document.h"
@@ -63,7 +62,7 @@
 #include "shortcuts.h"
 #include "toolbox.h"
 #include "view.h"
-
+#include "prefs-utils.h"
 #include "splivarot.h"
 
 #include "verbs.h"
@@ -442,14 +441,16 @@ sp_verb_action_zoom_perform (SPAction *action, void * data, void * pdata)
 	if (!dt) return;
 	repr = SP_OBJECT_REPR (dt->namedview);
 
+	gdouble zoom_inc = prefs_get_double_attribute_limited ("options.zoomincrement", "value", 1.414213562, 1.01, 10);
+
 	switch ((int) data) {
 	case SP_VERB_ZOOM_IN:
 		sp_desktop_get_display_area (dt, &d);
-		sp_desktop_zoom_relative (dt, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, SP_DESKTOP_ZOOM_INC);
+		sp_desktop_zoom_relative (dt, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, zoom_inc);
 		break;
 	case SP_VERB_ZOOM_OUT:
 		sp_desktop_get_display_area (dt, &d);
-		sp_desktop_zoom_relative (dt, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, 1 / SP_DESKTOP_ZOOM_INC);
+		sp_desktop_zoom_relative (dt, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, 1 / zoom_inc);
 		break;
 	case SP_VERB_ZOOM_1_1:
 		sp_desktop_get_display_area (dt, &d);
