@@ -5,12 +5,12 @@
  *   Bryce Harrington <bryce@osdl.org>
  *   Ted Gould <ted@gould.cx>
  *
- * Copyright (C) 2002-2003 Authors
+ * Copyright (C) 2002-2004 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#define __SP_EXTENSION_C__
+#define __INKSCAPE_EXTENSION_IMPLEMENTATION_SCRIPT_C__
 
 #include <string.h>
 #include <stdlib.h>
@@ -44,10 +44,21 @@ namespace Extension {
 namespace Implementation {
 
 /* Real functions */
-Script::Script (void) {
+/**
+	\return    A script object
+	\breif     This function creates a script object and sets up the
+	           variables.
+
+   This function just sets the command to NULL.  It should get built
+   officially in the load function.  This allows for less allocation
+   of memory in the unloaded state.
+*/
+Script::Script (void) : Implementation::Implementation()
+{
 	command = NULL;
 	return;
 }
+
 /**
 	\return    A string with the complete string with the relative directory expanded
 	\brief     This function takes in a Repr that contains a reldir entry
@@ -98,17 +109,6 @@ Script::solve_reldir (SPRepr * reprin) {
 	if statement to make sure they didn't exit because of not finding
 	the command.  If that's the case, the extention doesn't get loaded
 	and should error out at a higher level.
-
-	The command is saved as an attribute to the highest level
-	Repr.  The string is free'd because it is copied by the attribute
-	add function.
-
-	Now, depending on the type of module, the functions are set to
-	use the extension functions in this file.  Basically there are
-	seperate functions for each type of module - and their pointers
-	are all configured.
-	
-	Finally, the module is set to loaded!
 */
 
 bool
@@ -152,18 +152,13 @@ Script::load (Inkscape::Extension::Extension * module)
 	\brief    Unload this puppy!
 	\param    module  Extension to be unloaded.
 
-	This function just sets the module to unloaded.  There doesn't
-	seem to be a Repr attribute delete command, and it isn't that
-	much memory to leave around anyway.
+	This function just sets the module to unloaded.  It free's the
+	command if it has been allocated.
 */
 void
 Script::unload (Inkscape::Extension::Extension * module)
 {
-	if (module->loaded()) {
-		g_free(command);
-		module->set_state(Inkscape::Extension::Extension::STATE_UNLOADED);
-		return;
-	}
+	g_free(command);
 	return;
 }
 
@@ -220,7 +215,7 @@ Script::prefs (Inkscape::Extension::Filter * module)
 
 	First things first, this function needs a temporary file name.  To
 	create on of those the function g_mkstemp is used, with a filename with
-	the header of sp_ext_.
+	the header of ink_ext_.
 
 	The extension is then executed using the 'execute' function
 	with the filname coming in, and the temporary filename.  After
@@ -234,7 +229,7 @@ Script::prefs (Inkscape::Extension::Filter * module)
 SPDocument *
 Script::open (Inkscape::Extension::Input * module, const gchar * filename)
 {
-	char tempfilename_out_x[] = "/tmp/sp_ext_XXXXXX";
+	char tempfilename_out_x[] = "/tmp/ink_ext_XXXXXX";
 	gchar * tempfilename_out;
 	SPDocument * mydoc;
 
@@ -244,14 +239,14 @@ Script::open (Inkscape::Extension::Input * module, const gchar * filename)
 		/* Error, couldn't create temporary filename */
 		if (errno == EINVAL) {
 			/* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
-			perror("extension.c:  template for filenames is misconfigured.\n");
+			perror("Extension::Script:  template for filenames is misconfigured.\n");
 			exit(-1);	    
 		} else if (errno == EEXIST) {
 			/* Now the  contents of template are undefined. */
-			perror("extension.c:  Could not create a unique temporary filename\n");
+			perror("Extension::Script:  Could not create a unique temporary filename\n");
 			return NULL;
 		} else {
-			perror("extension.c:  Unknown error creating temporary filename\n");
+			perror("Extension::Script:  Unknown error creating temporary filename\n");
 			exit(-1);
 		}
 	}
@@ -293,7 +288,7 @@ Script::open (Inkscape::Extension::Input * module, const gchar * filename)
 void
 Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gchar * filename)
 {
-	gchar tempfilename_in_x[] = "/tmp/sp_ext_XXXXXX";
+	gchar tempfilename_in_x[] = "/tmp/ink_ext_XXXXXX";
 	gchar * tempfilename_in;
 
 	tempfilename_in = tempfilename_in_x;
@@ -302,14 +297,14 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
 		/* Error, couldn't create temporary filename */
 		if (errno == EINVAL) {
 			/* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
-			perror("extension.c:  template for filenames is misconfigured.\n");
+			perror("Extension::Script:  template for filenames is misconfigured.\n");
 			exit(-1);	    
 		} else if (errno == EEXIST) {
 			/* Now the  contents of template are undefined. */
-			perror("extension.c:  Could not create a unique temporary filename\n");
+			perror("Extension::Script:  Could not create a unique temporary filename\n");
 			return;
 		} else {
-			perror("extension.c:  Unknown error creating temporary filename\n");
+			perror("Extension::Script:  Unknown error creating temporary filename\n");
 			exit(-1);
 		}
 	}
@@ -359,9 +354,9 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
 void
 Script::filter (Inkscape::Extension::Filter * module, SPDocument * doc)
 {
-	char tempfilename_in_x[] = "/tmp/sp_ext_XXXXXX";
+	char tempfilename_in_x[] = "/tmp/ink_ext_XXXXXX";
 	gchar * tempfilename_in;
-	char tempfilename_out_x[] = "/tmp/sp_ext_XXXXXX";
+	char tempfilename_out_x[] = "/tmp/ink_ext_XXXXXX";
 	gchar * tempfilename_out;
 	char * command = NULL;
 	SPItem * selected;
@@ -373,14 +368,14 @@ Script::filter (Inkscape::Extension::Filter * module, SPDocument * doc)
 		/* Error, couldn't create temporary filename */
 		if (errno == EINVAL) {
 			/* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
-			perror("extension.c:  template for filenames is misconfigured.\n");
+			perror("Extension::Script:  template for filenames is misconfigured.\n");
 			exit(-1);	    
 		} else if (errno == EEXIST) {
 			/* Now the  contents of template are undefined. */
-			perror("extension.c:  Could not create a unique temporary filename\n");
+			perror("Extension::Script:  Could not create a unique temporary filename\n");
 			return;
 		} else {
-			perror("extension.c:  Unknown error creating temporary filename\n");
+			perror("Extension::Script:  Unknown error creating temporary filename\n");
 			exit(-1);
 		}
 	}
@@ -391,14 +386,14 @@ Script::filter (Inkscape::Extension::Filter * module, SPDocument * doc)
 		/* Error, couldn't create temporary filename */
 		if (errno == EINVAL) {
 			/* The  last  six characters of template were not XXXXXX.  Now template is unchanged. */
-			perror("extension.c:  template for filenames is misconfigured.\n");
+			perror("Extension::Script:  template for filenames is misconfigured.\n");
 			exit(-1);	    
 		} else if (errno == EEXIST) {
 			/* Now the  contents of template are undefined. */
-			perror("extension.c:  Could not create a unique temporary filename\n");
+			perror("Extension::Script:  Could not create a unique temporary filename\n");
 			return;
 		} else {
-			perror("extension.c:  Unknown error creating temporary filename\n");
+			perror("Extension::Script:  Unknown error creating temporary filename\n");
 			exit(-1);
 		}
 	}
@@ -495,9 +490,9 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
 	if (ppipe == NULL) {
 	  /* Error - could not open pipe - check errno */
 	  if (errno == EINVAL) {
-	    perror("extension.c:  Invalid mode argument in popen\n");
+	    perror("Extension::Script:  Invalid mode argument in popen\n");
 	  } else if (errno == ECHILD) {
-	    perror("extension.c:  Cannot obtain child extension status in popen\n");
+	    perror("Extension::Script:  Cannot obtain child extension status in popen\n");
 	  }
 	  return;
 	}
@@ -507,9 +502,9 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
 	if (pfile == NULL) {
 	  /* Error - could not open file */
 	  if (errno == EINVAL) {
-	    perror("extension.c:  The mode provided to fopen was invalid\n");
+	    perror("Extension::Script:  The mode provided to fopen was invalid\n");
 	  } else {
-	    perror("extension.c:  Unknown error attempting to open temporary file\n");
+	    perror("Extension::Script:  Unknown error attempting to open temporary file\n");
 	  }
 	  return;
 	}
@@ -522,21 +517,21 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
 	/* Close file */
 	if (fclose(pfile) == EOF) {
 	  if (errno == EBADF) {
-	    perror("extension.c:  The filedescriptor for the temporary file is invalid\n");
+	    perror("Extension::Script:  The filedescriptor for the temporary file is invalid\n");
 	    return;
 	  } else {
-	    perror("extension.c:  Unknown error closing temporary file\n");
+	    perror("Extension::Script:  Unknown error closing temporary file\n");
 	  }
 	}
 
 	/* Close pipe */
 	if (pclose(ppipe) == -1) {
 	  if (errno == EINVAL) {
-	    perror("extension.c:  Invalid mode set for pclose\n");
+	    perror("Extension::Script:  Invalid mode set for pclose\n");
 	  } else if (errno == ECHILD) {
-	    perror("extension.c:  Could not obtain child status for pclose\n");
+	    perror("Extension::Script:  Could not obtain child status for pclose\n");
 	  } else {
-	    perror("extension.c:  Unknown error for pclose\n");
+	    perror("Extension::Script:  Unknown error for pclose\n");
 	  }
 	}
 
@@ -546,3 +541,14 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
 }; /* Inkscape  */
 }; /* module  */
 }; /* Implementation  */
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

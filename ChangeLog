@@ -1,4 +1,12 @@
 2004-03-05  Ted Gould  <ted@gould.cx>
+	* src/extension/impelementation/implementation.cpp,
+	  src/extension/impelementation/implementation.h,
+	  src/extension/impelementation/script.h,
+	  src/extension/impelementation/script.cpp:
+    Adding in some more comments and doing some general cleanup
+	of the code.  It is getting better everyday.
+
+2004-03-05  Ted Gould  <ted@gould.cx>
 
 	* src/Makefile.am: Adding back in inkview.  This was fixed by
 	Bob, but he didn't add it back in.  It's back in the build now.

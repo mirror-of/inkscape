@@ -1,3 +1,14 @@
+/*
+    Author:  Ted Gould <ted@gould.cx>
+    Copyright (c) 2003-2004
+
+    This code is licensed under the GNU GPL.  See COPYING for details.
+ 
+    This file is the backend to the extensions system.  These are
+    the parts of the system that most users will never see, but are
+    important for implementing the extensions themselves.  This file
+    contains the base class for all of that.
+*/
 
 #include "../extension.h"
 #include "implementation.h"
@@ -6,6 +17,11 @@ namespace Inkscape {
 namespace Extension {
 namespace Implementation {
 
+/**
+	\return   Was the load sucessful?
+	\breif    This function is the stub load.  It just returns sucess.
+	\param    module   The Extension that should be loaded.
+*/
 bool 
 Implementation::load (Inkscape::Extension::Extension * module) {
 	return TRUE;
@@ -116,3 +132,14 @@ Implementation::image (Inkscape::Extension::Print * module, unsigned char *px, u
 }; /* namespace Implementation */
 }; /* namespace Extension */
 }; /* namespace Inkscape */
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
