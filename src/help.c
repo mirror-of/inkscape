@@ -22,9 +22,12 @@
 #include "helper/sp-intl.h"
 #include "libnr/nr-macros.h"
 
+static GtkWidget *w = NULL;
+
 static gint
 sp_help_about_delete (GtkWidget *widget, GdkEvent *event, gpointer data)
 {
+	w = NULL;
 	return FALSE;
 }
 
@@ -44,8 +47,10 @@ sp_help_about (void)
 {
 	SPDocument *doc;
 	SPObject *title;
-	GtkWidget *w, *v;
+	GtkWidget *v;
 	gint width, height;
+
+	if (!w) {
 
 	doc = sp_document_new (INKSCAPE_PIXMAPDIR "/about.svg", FALSE, TRUE);
 	g_return_if_fail (doc != NULL);
@@ -59,11 +64,12 @@ sp_help_about (void)
 	sp_document_ensure_up_to_date (doc);
 
 	w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title (GTK_WINDOW (w), _("About inkscape"));
+	gtk_window_set_title (GTK_WINDOW (w), _("About Inkscape"));
 
         width = INK_STATIC_CAST( gint, CLAMP( sp_document_width(doc), WINDOW_MIN, WINDOW_MAX ) );
         height = INK_STATIC_CAST( gint, CLAMP( sp_document_height(doc), WINDOW_MIN, WINDOW_MAX ) );
         gtk_window_set_default_size (GTK_WINDOW (w), width, height );
+				gtk_window_set_position(GTK_WINDOW(w), GTK_WIN_POS_CENTER);
 
 #if 1
 	gtk_window_set_policy (GTK_WINDOW (w), TRUE, TRUE, FALSE);
@@ -76,5 +82,7 @@ sp_help_about (void)
 	gtk_widget_show (v);
 	gtk_container_add (GTK_CONTAINER (w), v);
 
-	gtk_widget_show (w);
+	}
+
+	gtk_window_present ((GtkWindow *) w);
 }
