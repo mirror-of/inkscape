@@ -100,8 +100,6 @@ struct SPDistance {
 
 /* Base units are the ones used by gnome-print and paper descriptions */
 
-#define SP_PS_UNIT (sp_unit_get_identity (SP_UNIT_ABSOLUTE))
-
 const SPUnit *sp_unit_get_identity (guint base);
 const SPUnit *sp_unit_get_by_abbreviation (const gchar *abbreviation);
 
@@ -117,6 +115,8 @@ sp_unit_get_by_id(SPUnitId const id)
 	g_return_val_if_fail(ix <= sp_max_unit_id, sp_units[SP_UNIT_PX]);
 	return sp_units[ix];
 }
+
+#define SP_PS_UNIT (&sp_unit_get_by_id(SP_UNIT_PT))
 
 
 /** Used solely by units-test.cpp. */
