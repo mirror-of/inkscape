@@ -18,7 +18,7 @@
 #include "LivarotDefs.h"
 #include "AVL.h"
 
-#include "../libnr/nr-types.h"
+#include <libnr/nr-point.h>
 
 
 class SweepTree;

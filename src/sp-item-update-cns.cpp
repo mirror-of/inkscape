@@ -2,7 +2,7 @@
 #include <vector>
 
 #include <approx-equal.h>
-#include <libnr/nr-types.h>
+#include <libnr/nr-point.h>
 #include <remove-last.h>
 #include "satisfied-guide-cns.h"
 #include "sp-guide-attachment.h"

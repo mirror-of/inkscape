@@ -41,7 +41,7 @@
 
 #define SP_TSPAN_STRING(t) ((SPString *) SP_TSPAN (t)->string)
 
-#include <libnr/nr-types.h>
+#include <libnr/nr-point.h>
 #include "svg/svg-types.h"
 #include "sp-chars.h"
 

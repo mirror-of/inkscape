@@ -12,7 +12,7 @@
 
 #include "helper/helper-forward.h"
 #include "sp-object.h"
-#include "libnr/nr-types.h"
+#include "libnr/nr-point.h"
 #include <vector>
 class SPGuideAttachment;
 

@@ -11,7 +11,7 @@
 
 #include "LivarotDefs.h"
 
-#include "libnr/nr-types.h"
+#include "libnr/nr-point.h"
 
 enum
 {

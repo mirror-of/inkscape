@@ -13,11 +13,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <libnr/nr-types.h>
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
 #include "helper/helper-forward.h"
 #include "forward.h"
+#include <libnr/nr-point.h>
 
 typedef enum {
 	SP_KNOT_SHAPE_SQUARE,

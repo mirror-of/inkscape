@@ -20,7 +20,7 @@
 
 #include "helper/units.h"
 #include "sp-object-group.h"
-#include "libnr/nr-types.h"
+#include "libnr/nr-point.h"
 
 
 

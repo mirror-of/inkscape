@@ -17,7 +17,7 @@
 #include <string.h>
 #include <libart_lgpl/art_misc.h>
 #include "curve.h"
-#include <libnr/nr-types.h>
+#include <libnr/nr-point.h>
 
 #define SP_CURVE_LENSTEP 32
 

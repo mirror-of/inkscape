@@ -17,7 +17,7 @@
 //#include <iostream.h>
 
 #include "ShapeUtils.h"
-#include "../libnr/nr-types.h"
+#include "libnr/nr-point.h"
 
 // possible values for the "type" field in the Shape class:
 enum

@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <libnr/nr-types.h>
+#include <libnr/nr-point.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-rect.h>
 #include "knot.h"
