@@ -71,6 +71,10 @@ static void sp_fill_style_widget_modify_selection   ( SPWidget *spw,
                                                       Inkscape::Selection *selection,
                                                       guint flags,
                                                       SPPaintSelector *psel );
+static void
+sp_fill_style_widget_change_subselection ( Inkscape::Application *inkscape, 
+                                        SPDesktop *desktop,
+                                           SPWidget *spw );
 
 static void sp_fill_style_widget_change_selection   ( SPWidget *spw,
                                                       Inkscape::Selection *selection,
@@ -88,7 +92,6 @@ static void sp_fill_style_widget_fillrule_changed ( SPPaintSelector *psel,
 
 static void sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw );
 static void sp_fill_style_widget_paint_changed (SPPaintSelector *psel, SPWidget *spw );
-static void sp_fill_style_widget_fill_rule_activate (GtkWidget *w, SPWidget *spw);
 static void sp_fill_style_get_average_color_rgba (GSList const *objects, gfloat *c);
 static void sp_fill_style_get_average_color_cmyka (GSList const *objects, gfloat *c);
 static SPPaintSelectorMode sp_fill_style_determine_paint_selector_mode ( SPStyle *style );
@@ -128,11 +131,15 @@ sp_fill_style_widget_new (void)
     g_signal_connect ( G_OBJECT (spw), "construct",
                        G_CALLBACK (sp_fill_style_widget_construct), psel);
 
+//FIXME: switch these from spw signals to global inkscape object signals; spw just retranslates
+//those anyway; then eliminate spw
     g_signal_connect ( G_OBJECT (spw), "modify_selection",
                        G_CALLBACK (sp_fill_style_widget_modify_selection), psel);
 
     g_signal_connect ( G_OBJECT (spw), "change_selection",
                        G_CALLBACK (sp_fill_style_widget_change_selection), psel);
+
+    g_signal_connect (INKSCAPE, "change_subselection", G_CALLBACK (sp_fill_style_widget_change_subselection), spw);
 
     sp_fill_style_widget_update (SP_WIDGET (spw),
         SP_ACTIVE_DESKTOP ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL);
@@ -175,6 +182,14 @@ sp_fill_style_widget_modify_selection ( SPWidget *spw,
 }
 
 static void
+sp_fill_style_widget_change_subselection ( Inkscape::Application *inkscape, 
+                                        SPDesktop *desktop,
+                                        SPWidget *spw )
+{
+    sp_fill_style_widget_update (spw, SP_DT_SELECTION(desktop));
+}
+
+static void
 sp_fill_style_widget_change_selection ( SPWidget *spw,
                                         Inkscape::Selection *selection,
                                         SPPaintSelector *psel )
@@ -193,8 +208,31 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
 
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
-    SPPaintSelector *psel = SP_PAINT_SELECTOR (g_object_get_data ( G_OBJECT (spw),
-                                                                   "paint-selector"));
+    SPPaintSelector *psel = SP_PAINT_SELECTOR (g_object_get_data (G_OBJECT (spw), "paint-selector"));
+
+    // create temporary style
+    SPStyle *query = sp_style_new ();
+    // query into it
+    int result = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_FILLSTROKE); 
+
+    if (result) { 
+// for now this is mostly a duplication of the else branch; eventually the else will be eliminated,
+// after sp_desktop_query_style can query selection (for now it only works for subselections which implement it)
+        SPPaintSelectorMode pselmode = sp_fill_style_determine_paint_selector_mode (query);
+        sp_paint_selector_set_mode (psel, pselmode);
+
+        sp_paint_selector_set_fillrule (psel, query->fill_rule.computed == ART_WIND_RULE_NONZERO? 
+                                        SP_PAINT_SELECTOR_FILLRULE_NONZERO : SP_PAINT_SELECTOR_FILLRULE_EVENODD);
+
+        if (query->fill.type == SP_PAINT_TYPE_COLOR) {
+            gfloat d[3];
+            sp_color_get_rgb_floatv (&query->fill.value.color, d);
+            SPColor color;
+            sp_color_set_rgb_float (&color, d[0], d[1], d[2]);
+            sp_paint_selector_set_color_alpha (psel, &color, SP_SCALE24_TO_FLOAT (query->fill_opacity.value));
+        }
+
+    } else { 
 
     if ( !sel || sel->isEmpty() ) {
         /* No objects, set empty */
@@ -299,8 +337,6 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
 
         case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
         {
-            SPObject *object = SP_OBJECT (objects->data);
-
             /* We know that all objects have radialgradient fill style */
             SPGradient *vector =
                 sp_gradient_get_vector ( SP_GRADIENT
@@ -337,8 +373,6 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
 
         case SP_PAINT_SELECTOR_MODE_PATTERN:
         {
-            SPObject *object = SP_OBJECT (objects->data);
-
             sp_paint_selector_set_mode ( psel, SP_PAINT_SELECTOR_MODE_PATTERN );
 
             SPPattern *pat = pattern_getroot (SP_PATTERN (SP_OBJECT_STYLE_FILL_SERVER (object)));
@@ -361,6 +395,8 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
 
     sp_paint_selector_set_fillrule (psel, SP_OBJECT_STYLE(object)->fill_rule.computed == ART_WIND_RULE_NONZERO? 
         SP_PAINT_SELECTOR_FILLRULE_NONZERO : SP_PAINT_SELECTOR_FILLRULE_EVENODD);
+
+    }
 
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
 
@@ -403,9 +439,40 @@ sp_fill_style_widget_fillrule_changed ( SPPaintSelector *psel,
     }
 }
 
+static gchar *undo_label_1 = "fillstroke:flatcolor:1";
+static gchar *undo_label_2 = "fillstroke:flatcolor:2";
+static gchar *undo_label = undo_label_1;
+
+static void
+sp_fill_style_set_flat_color (SPPaintSelector *psel, SPDesktop *desktop)
+{
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+
+    SPColor color;
+    gfloat alpha;
+    sp_paint_selector_get_color_alpha (psel, &color, &alpha);
+    guint32 rgba = sp_color_get_rgba32_falpha (&color, alpha);
+
+    gchar b[64];
+    sp_svg_write_color (b, 64, rgba);
+
+    sp_repr_css_set_property (css, "fill", b);
+    Inkscape::SVGOStringStream osalpha;
+    osalpha << alpha;
+    sp_repr_css_set_property (css, "fill-opacity", osalpha.str().c_str());
+
+    sp_desktop_set_style (desktop, css);
+
+    sp_repr_css_attr_unref (css);
+
+    sp_document_maybe_done (SP_DT_DOCUMENT(desktop), undo_label);
+}
+
 /**
-This is called repeatedly while you are dragging a color slider or a gradient node. Therefore it
-must not update repr (for efficiency).
+This is called repeatedly while you are dragging a color slider, only for flat color
+modes. Previously it set the color in style but did not update the repr for efficiency, however
+this was flakey and didn't buy us almost anything. So now it does the same as _changed, except
+lumps all its changes for undo.
  */
 static void
 sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
@@ -417,56 +484,25 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
     if (g_object_get_data (G_OBJECT (spw), "update")) {
         return;
     }
-
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
-#ifdef SP_FS_VERBOSE
-    g_print ("FillStyleWidget: paint dragged\n");
-#endif
+
     switch (psel->mode) {
-        case SP_PAINT_SELECTOR_MODE_EMPTY:
-        case SP_PAINT_SELECTOR_MODE_MULTIPLE:
-        case SP_PAINT_SELECTOR_MODE_NONE:
-            g_warning ( "file %s: line %d: Paint %d should not emit 'dragged'",
-                        __FILE__, __LINE__, psel->mode );
-            break;
 
         case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
         case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
         {
-            SPColor color;
-            gfloat alpha;
-            sp_paint_selector_get_color_alpha (psel, &color, &alpha);
-            GSList const *items = sp_widget_get_item_list(spw);
-            for (GSList const *i = items; i != NULL; i = i->next) {
-                sp_style_set_fill_color_alpha ( SP_OBJECT_STYLE (i->data),
-                                                &color, alpha, TRUE, TRUE);
-            }
-            break;
-        }
-
-        case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
-        {
-            // gradient in fill&stroke does not drag anymore...
-            break;
-        }
-
-        case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
-        {
-            // gradient in fill&stroke does not drag anymore...
+            sp_fill_style_set_flat_color (psel, SP_ACTIVE_DESKTOP);
             break;
         }
 
         default:
-            g_warning ( "file %s: line %d: Paint selector should not be in "
-                        "mode %d",
-                        __FILE__, __LINE__, psel->mode);
+            g_warning ( "file %s: line %d: Paint %d should not emit 'dragged'",
+                        __FILE__, __LINE__, psel->mode );
             break;
 
-    } // end of switch
-
+    }
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
-
-} // end of sp_fill_style_widget_paint_dragged()
+}
 
 
 /**
@@ -485,10 +521,6 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
     }
 
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
-
-#ifdef SP_FS_VERBOSE
-    g_print ("FillStyleWidget: paint changed\n");
-#endif
 
     GSList *reprs = NULL;
     GSList const *items = NULL;
@@ -534,51 +566,16 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
         }
 
         case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
-        {
-            SPCSSAttr *css = sp_repr_css_attr_new ();
-
-            SPColor color;
-            gfloat alpha;
-            sp_paint_selector_get_color_alpha (psel, &color, &alpha);
-            guint32 rgba = sp_color_get_rgba32_falpha (&color, alpha);
-
-            gchar b[64];
-            sp_svg_write_color (b, 64, rgba);
-
-            sp_repr_css_set_property (css, "fill", b);
-            Inkscape::SVGOStringStream osalpha;
-            osalpha << alpha;
-            sp_repr_css_set_property (css, "fill-opacity", osalpha.str().c_str());
-
-            sp_desktop_set_style (desktop, css);
-
-            sp_repr_css_attr_unref (css);
-            if (spw->inkscape) {
-                sp_document_done (SP_WIDGET_DOCUMENT (spw));
-            }
-            break;
-        }
-
         case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
         {
-            SPCSSAttr *css = sp_repr_css_attr_new ();
-            SPColor color;
-            gfloat alpha;
-            sp_paint_selector_get_color_alpha (psel, &color, &alpha);
-            guint32 rgba = sp_color_get_rgba32_falpha (&color, alpha);
-            gchar b[64];
-            sp_svg_write_color (b, 64, rgba);
-            sp_repr_css_set_property (css, "fill", b);
-            Inkscape::SVGOStringStream osalpha;
-            osalpha << alpha;
-            sp_repr_css_set_property (css, "fill-opacity", osalpha.str().c_str());
+            sp_fill_style_set_flat_color (psel, SP_ACTIVE_DESKTOP);
 
-            sp_desktop_set_style (desktop, css);
+            // on release, toggle undo_label so that the next drag will not be lumped with this one
+            if (undo_label == undo_label_1)
+                undo_label = undo_label_2;
+            else 
+                undo_label = undo_label_1;
 
-            sp_repr_css_attr_unref (css);
-            if (spw->inkscape) {
-                sp_document_done (SP_WIDGET_DOCUMENT (spw));
-            }
             break;
         }
 
