@@ -106,12 +106,14 @@ char *br_prepend_prefix	(void *symbol, char *path);
 #ifdef ENABLE_BINRELOC
 #  undef INKSCAPE_DATADIR
 #  undef INKSCAPE_PIXMAPDIR
+#  undef INKSCAPE_MODULESDIR
 #  define INKSCAPE_DATADIR DATADIR
 #  define INKSCAPE_PIXMAPDIR BR_DATADIR( "/inkscape/icons" )
 #  define INKSCAPE_SCREENSDIR BR_DATADIR( "/inkscape/screens" )
 #  define INKSCAPE_TUTORIALSDIR BR_DATADIR( "/inkscape/tutorials" )
 #  define INKSCAPE_PATTERNSDIR BR_DATADIR("/inkscape/patterns")
 #  define INKSCAPE_MARKERSDIR BR_DATADIR("/inkscape/markers")
+#  define INKSCAPE_MODULESDIR BR_DATADIR("/inkscape/extensions")
 #  define INKSCAPE_GRADIENTSDIR BR_DATADIR("/inkscape/gradients")
 #else
 #  ifdef WIN32

@@ -22,7 +22,7 @@
 
 #ifndef BR_PTHREADS
 	/* Change 1 to 0 if you don't want thread support */
-	#define BR_PTHREADS 1
+	#define BR_PTHREADS 0
 #endif /* BR_PTHREADS */
 
 #ifndef _PREFIX_C_

@@ -38,6 +38,7 @@
 #include "internal/ps-out.h"
 #include "internal/eps-out.h"
 #include "internal/gdkpixbuf-input.h"
+#include "prefix.h"
 
 namespace Inkscape {
 namespace Extension {
