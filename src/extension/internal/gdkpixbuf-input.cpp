@@ -19,7 +19,7 @@ SPDocument *
 GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
 {
     /* Try pixbuf */
-    SPDocument * doc = sp_document_new(NULL, TRUE, TRUE);
+    SPDocument * doc = sp_document_new(NULL, TRUE, TRUE, TRUE);
     gsize bytesRead = 0;
     gsize bytesWritten = 0;
     GError* error = NULL;
