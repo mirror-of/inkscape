@@ -5,7 +5,7 @@
 #define WIN32
 #endif
  
-#define VERSION "0.37cvs20031230"
+#define VERSION "0.37cvs20031231"
 
 #define INKSCAPE_VERSION      VERSION
 #define PACKAGE_LOCALE_DIR    "locale"
