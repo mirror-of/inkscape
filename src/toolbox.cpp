@@ -2399,7 +2399,7 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
  * color representation. This is useful for passing values between various 
  * input boxes, or directly to xml.
  */
-static void
+void
 sp_dropper_copy( GtkWidget *widget, GtkObject *obj)
 {
     GtkWidget *tbl = GTK_WIDGET(obj);
@@ -2423,7 +2423,7 @@ sp_dropper_copy( GtkWidget *widget, GtkObject *obj)
  *       for the hex value ppl. want for web pages, etc.
  */
 
-static void
+void
 sp_dropper_copy_as_hex ( GtkWidget *widget, GtkObject *obj)
 {
     GtkWidget *tbl = GTK_WIDGET(obj);

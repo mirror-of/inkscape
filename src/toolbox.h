@@ -42,7 +42,7 @@ void aux_toolbox_space(GtkWidget *tb, gint space);
 void sp_toolbox_add_label(GtkWidget *tbl, gchar const *title, bool wide = true);
 
 
-static void sp_dropper_copy( GtkWidget *widget, GtkObject *obj);
+void sp_dropper_copy( GtkWidget *widget, GtkObject *obj);
 
 static void sp_dropper_copy_as_hex ( GtkWidget *widget, GtkObject *obj);
 
