@@ -39,6 +39,7 @@ class Previewable
 {
 public:
 // TODO need to add some nice parameters
+    virtual ~Previewable() {}
     virtual Gtk::Widget* getPreview( PreviewStyle style, Gtk::BuiltinIconSize size ) = 0;
 };
 

@@ -22,6 +22,7 @@ namespace UI {
 class PreviewFillable
 {
 public:
+    virtual ~PreviewFillable() {}
     virtual void clear() = 0;
     virtual void addPreview( Previewable* preview ) = 0;
     virtual void setStyle(Gtk::BuiltinIconSize size, ViewType type) = 0;

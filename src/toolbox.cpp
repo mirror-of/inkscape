@@ -105,6 +105,9 @@ static GtkWidget *sp_calligraphy_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_dropper_toolbox_new(SPDesktop *desktop);
 static GtkWidget *sp_empty_toolbox_new(SPDesktop *desktop);
 
+static void sp_dropper_copy_as_hex ( GtkWidget *widget, GtkObject *obj);
+
+
 static struct {
     gchar const *type_name;
     gchar const *data_name;

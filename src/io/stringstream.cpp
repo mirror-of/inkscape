@@ -65,8 +65,8 @@ void StringInputStream::close()
  */ 
 int StringInputStream::get()
 {
-    if (position>=buffer.size())
-      return -1;
+    if (position >= (int)buffer.size())
+        return -1;
     int ch = (int) buffer[position++];
     return ch;
 }
