@@ -686,7 +686,7 @@ sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Mat
     if (!transform) {
         sp_item_set_item_transform(item, NR::identity());
     } else {
-        NR::Matrix transform_attr (NR::identity());
+        NR::Matrix transform_attr (xform);
         if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->set_transform && !preserve) {
             transform_attr = ((SPItemClass *) G_OBJECT_GET_CLASS(item))->set_transform(item, xform);
         }
