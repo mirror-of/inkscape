@@ -3,6 +3,7 @@
 	* SF Patch #841940: autoconf update from joncruz
 	* SF Patch #842949: lpr fixes from Lynn Kerby
 	* SF Patch #842951: variable declaration fixes in interface.c
+	* SF Patch #842953: small color picker update from John Bintz
 
 2003-11-16  MenTaLguY <mental@rydia.net>
 

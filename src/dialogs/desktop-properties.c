@@ -480,6 +480,12 @@ sp_color_picker_set_rgba32 (GtkWidget *cp, guint32 rgba)
 static void
 sp_color_picker_window_destroy (GtkObject *object, GObject *cp)
 {
+	GtkWidget *w;
+
+	/* remove window object */
+	w = g_object_get_data (G_OBJECT (cp), "window");
+	if (w) gtk_widget_destroy(GTK_WIDGET (w));
+
 	g_object_set_data (G_OBJECT (cp), "window", NULL);
 	g_object_set_data (G_OBJECT (cp), "selector", NULL);
 }
@@ -496,6 +502,7 @@ sp_color_picker_color_mod (SPColorSelector *csel, GObject *cp)
 	if (g_object_get_data (G_OBJECT (cp), "update")) return;
 
 	rgba = sp_color_selector_get_rgba32 (csel);
+	g_object_set_data (G_OBJECT (cp), "color", GUINT_TO_POINTER (rgba));
 
 	cpv = (SPColorPreview *)g_object_get_data (G_OBJECT (cp), "preview");
 	colorkey = (gchar *)g_object_get_data (G_OBJECT (cp), "colorkey");
