@@ -164,13 +164,14 @@ sp_module_print_plain_setup (SPModulePrint *mod)
 	tt = gtk_tooltips_new ();
 	g_object_ref ((GObject *) tt);
 	gtk_object_sink ((GtkObject *) tt);
-	dlg = gtk_dialog_new_with_buttons (_("Print destination"), NULL,
-					   GTK_DIALOG_MODAL,
-					   GTK_STOCK_PRINT,
-					   GTK_RESPONSE_OK,
-					   GTK_STOCK_CANCEL,
-					   GTK_RESPONSE_CANCEL,
-					   NULL);
+       dlg = gtk_dialog_new_with_buttons (_("Print Destination"), NULL,
+                                          (GtkDialogFlags) (GTK_DIALOG_MODAL |
+                                          GTK_DIALOG_NO_SEPARATOR),
+                                          GTK_STOCK_CANCEL,
+                                          GTK_RESPONSE_CANCEL,
+                                          GTK_STOCK_PRINT,
+                                          GTK_RESPONSE_OK,
+                                          NULL);
 
 	vbox = GTK_DIALOG (dlg)->vbox;
 	gtk_container_set_border_width (GTK_CONTAINER (vbox), 4);

@@ -1,3 +1,8 @@
+2004-01-11  Iain <iain@prettypeople.org>
+
+	* src/modules/ps.cpp: Swap the Print and Cancel buttons around, and
+	remove the separator.
+
 2004-01-11  bulia byak <bulia@users.sourceforge.net>
 
 	* src/desktop.cpp,h: New functions and SPDesktop members for maintaining lists of past
