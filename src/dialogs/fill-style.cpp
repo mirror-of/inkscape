@@ -651,11 +651,11 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                     gchar *urltext = g_strdup_printf ("url(#%s)", patrepr->attribute("id"));
                     sp_repr_css_set_property (css, "fill", urltext);
 
+                    // cannot just call sp_desktop_set_style, because we don't want to touch those
+                    // objects who already have the same root pattern but through a different href
+                    // chain. FIXME: move this to a sp_item_set_pattern
                     for (GSList const *i = items; i != NULL; i = i->next) {
-                         Inkscape::XML::Node *selrepr = SP_OBJECT_REPR (i->data);
                          SPObject *selobj = SP_OBJECT (i->data);
-                         if (!selrepr)
-                             continue;
 
                          SPStyle *style = SP_OBJECT_STYLE (selobj);
                          if (style && style->fill.type == SP_PAINT_TYPE_PAINTSERVER) {
@@ -665,7 +665,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                                  continue;
                          }
 
-                         sp_repr_css_change_recursive (selrepr, css, "style");
+                         sp_desktop_apply_css_recursive (selobj, css, true);
                      }
 
                     sp_repr_css_attr_unref (css);
