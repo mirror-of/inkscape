@@ -134,7 +134,7 @@ nr_type_xft_init (void)
 	NRXftPatterns = XftListFonts (GDK_DISPLAY (), 0,
 				      XFT_SCALABLE, XftTypeBool, 1, XFT_OUTLINE, XftTypeBool, 1, 0,
 				      XFT_FAMILY, XFT_STYLE, XFT_WEIGHT, XFT_SLANT, XFT_FILE, XFT_INDEX, 0);
-	NRXftTypefaces.length = NRXftPatterns->nfont * 2;
+	NRXftTypefaces.length = NRXftPatterns->nfont;
 	NRXftTypefaces.names = nr_new (guchar *, NRXftPatterns->nfont);
 	NRXftTypefaces.families = nr_new (guchar *, NRXftPatterns->nfont);
 	NRXftTypefaces.destructor = NULL;
