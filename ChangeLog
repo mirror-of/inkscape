@@ -1,5 +1,8 @@
 2004-01-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/svg/svg-affine.cpp (sp_svg_transform_write): Add assertions
+	that buffer overflow hasn't occurred.
+
 	* src/sp-text.cpp (sp_text_font_style_to_lookup),
 	src/dialogs/text-edit.cpp (sp_text_edit_dialog_font_style_to_lookup):
 	Slight restructuring using g_snprintf instead of less readable (&
