@@ -29,6 +29,9 @@ extern "C" {
 #include "desktop.h"
 #include "splivarot.h"
 #include "helper/canvas-bpath.h"
+	
+#include "xml/repr.h"
+#include "xml/repr-private.h"
 }
 
 #include "livarot/Path.h"
@@ -39,6 +42,9 @@ Path*				Path_for_item(SPItem* item);
 gchar*      liv_svg_dump_path (Path* path);
 void        sp_selected_path_boolop (bool_op bop);
 void        sp_selected_path_do_offset(bool expand);
+SPRepr*     LCA(SPRepr* a,SPRepr* b);
+bool        Ancetre(SPRepr* a,SPRepr* who);
+SPRepr*     AncetreFils(SPRepr* a,SPRepr* d);
 
 void sp_selected_path_union(void)
 {
@@ -83,12 +89,47 @@ sp_selected_path_boolop (bool_op bop)
 		}
 	}
 	
+
+	bool  reverseOrderForOp=false;
+	// mettre les elements de la liste dans l'ordre pour ces operations
+	if ( bop == bool_op_diff || bop == bool_op_symdiff ) {
+		SPRepr* a=SP_OBJECT_REPR(il->data);
+		SPRepr* b=SP_OBJECT_REPR(il->next->data);
+		if ( a == NULL || b == NULL ) {
+			printf("a ou b ==NULL\n");
+			fflush(stdout);
+			return;
+		}
+		if ( Ancetre(a,b) ) {
+		} else if ( Ancetre(b,a) ) {
+			// mauvais sens
+			reverseOrderForOp=true;
+		} else {
+			SPRepr* dad=LCA(a,b);
+			if ( dad == NULL ) {
+				printf("dad==NULL\n");
+				fflush(stdout);
+				return;
+			}
+			SPRepr* as=AncetreFils(a,dad);
+			SPRepr* bs=AncetreFils(b,dad);
+			for (SPRepr* child=dad->children;child;child=child->next) {
+				if ( child == a ) {
+					// a en premier->mauvais sens
+					reverseOrderForOp=true;
+					break;
+				}
+				if ( child == b ) break;
+			}
+		}
+	}	
+
+	il = g_slist_copy (il);
+
 	for (l = il; l != NULL; l = l->next) {
 		item = (SPItem *) l->data;
 		if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item)) return;
 	}
-
-	il = g_slist_copy (il);
 
 	// choper les originaux pour faire l'operation demandée
 	int     nbOriginaux=g_slist_length (il);
@@ -172,7 +213,11 @@ sp_selected_path_boolop (bool_op bop)
 		}
 		
 		// les elements arrivent en ordre inverse dans la liste
-		theShape->Booleen(theShapeB,theShapeA,bop);
+		if ( reverseOrderForOp ) {
+			theShape->Booleen(theShapeA,theShapeB,bop);
+		} else {
+			theShape->Booleen(theShapeB,theShapeA,bop);
+		}
 		
 		{Shape* swap=theShape;theShape=theShapeA;theShapeA=swap;}
 		curOrig++;
@@ -190,8 +235,12 @@ sp_selected_path_boolop (bool_op bop)
 	d = liv_svg_dump_path(res);
 	delete res;
 	
-	style = g_strdup (sp_repr_attr ((SP_OBJECT (il->data))->repr, "style"));
-
+	if ( reverseOrderForOp ) {
+		style = g_strdup (sp_repr_attr ((SP_OBJECT (il->data))->repr, "style"));
+	} else {
+		style = g_strdup (sp_repr_attr ((SP_OBJECT (il->next->data))->repr, "style"));
+	}
+	
 	for (l = il; l != NULL; l = l->next) {
 		sp_repr_unparent (SP_OBJECT_REPR (l->data));
 	}
@@ -313,7 +362,6 @@ void sp_selected_path_outline(void)
 	SPSelection * selection;
 	SPRepr * repr;
 	SPItem * item;
-	SPPath * path;
 	SPCurve * curve;
 	gchar * style, * str;
 	SPDesktop    *desktop;
@@ -330,10 +378,9 @@ void sp_selected_path_outline(void)
 	item = sp_selection_item (selection);
 	
 	if (item == NULL) return;
-	if ( !SP_IS_PATH (item) && !SP_IS_TEXT (item) ) return;
-	if ( SP_IS_PATH(item) ) {
-		path = SP_PATH (item);
-		curve = sp_shape_get_curve (SP_SHAPE (path));
+	if ( !SP_IS_SHAPE (item) && !SP_IS_TEXT (item) ) return;
+	if ( SP_IS_SHAPE(item) ) {
+		curve = sp_shape_get_curve (SP_SHAPE (item));
 		if (curve == NULL) return;
 	}
 	if ( SP_IS_TEXT(item) ) {
@@ -494,7 +541,6 @@ void        sp_selected_path_do_offset(bool expand)
 	SPSelection * selection;
 	SPRepr * repr;
 	SPItem * item;
-	SPPath * path;
 	SPCurve * curve;
 	gchar * style, * str;
 	SPDesktop    *desktop;
@@ -511,10 +557,9 @@ void        sp_selected_path_do_offset(bool expand)
 	item = sp_selection_item (selection);
 	
 	if (item == NULL) return;
-	if ( !SP_IS_PATH (item) && !SP_IS_TEXT (item) ) return;
-	if ( SP_IS_PATH(item) ) {
-		path = SP_PATH (item);
-		curve = sp_shape_get_curve (SP_SHAPE (path));
+	if ( !SP_IS_SHAPE (item) && !SP_IS_TEXT (item) ) return;
+	if ( SP_IS_SHAPE(item) ) {
+		curve = sp_shape_get_curve (SP_SHAPE (item));
 		if (curve == NULL) return;
 	}
 	if ( SP_IS_TEXT(item) ) {
@@ -649,7 +694,8 @@ void        sp_selected_path_do_offset(bool expand)
 		sp_repr_unref (repr);
 		sp_selection_add_item (selection, item);
 
-		{
+		// on laisse le style en place (peut-etre fill=none serait plus approprié? ou changer l'epaisseur du trait?)
+/*		{
 			SPCSSAttr *ocss;
 			SPCSSAttr *css;
 			const gchar *val;
@@ -664,7 +710,7 @@ void        sp_selected_path_do_offset(bool expand)
 			sp_repr_css_change (SP_OBJECT_REPR (item), css, "style");
 			
 			sp_repr_css_attr_unref (css);
-		}
+		}*/
 	}
 	
 	sp_document_done (SP_DT_DOCUMENT (desktop));
@@ -680,7 +726,6 @@ void sp_selected_path_simplify(void)
 		SPSelection * selection;
 	SPRepr * repr;
 	SPItem * item;
-	SPPath * path;
 	SPCurve * curve;
 	gchar * style, * str;
 	SPDesktop    *desktop;
@@ -694,10 +739,9 @@ void sp_selected_path_simplify(void)
 	item = sp_selection_item (selection);
 	
 	if (item == NULL) return;
-	if ( !SP_IS_PATH (item) && !SP_IS_TEXT (item) ) return;
-	if ( SP_IS_PATH(item) ) {
-		path = SP_PATH (item);
-		curve = sp_shape_get_curve (SP_SHAPE (path));
+	if ( !SP_IS_SHAPE (item) && !SP_IS_TEXT (item) ) return;
+	if ( SP_IS_SHAPE(item) ) {
+		curve = sp_shape_get_curve (SP_SHAPE (item));
 		if (curve == NULL) return;
 	}
 	if ( SP_IS_TEXT(item) ) {
@@ -753,4 +797,28 @@ void sp_selected_path_simplify(void)
 	g_free (style);
 	
 }
+
+SPRepr*     AncetreFils(SPRepr* a,SPRepr* d)
+{
+	if ( a == NULL || d == NULL ) return NULL;
+	if ( sp_repr_parent(a) == d ) return a;
+	return AncetreFils(sp_repr_parent(a),d);
+}
+
+bool        Ancetre(SPRepr* a,SPRepr* who)
+{
+	if ( who == NULL || a == NULL ) return false;
+	if ( who == a ) return true;
+	return Ancetre(sp_repr_parent(a),who);
+}
+SPRepr*     LCA(SPRepr* a,SPRepr* b)
+{
+	if ( a == NULL || b == NULL ) return NULL;
+	if ( Ancetre(a,b) ) return b;
+	if ( Ancetre(b,a) ) return a;
+	SPRepr* t=sp_repr_parent(a);
+	while ( t && !Ancetre(b,t) ) t=sp_repr_parent(t);
+	return t;
+}
+
 
