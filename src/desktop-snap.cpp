@@ -476,7 +476,7 @@ sp_desktop_circular_snap (SPDesktop * desktop, NRPoint * req, double cx, double 
  */
 
 double
-sp_desktop_horizontal_snap_list (SPDesktop *desktop, NRPoint *p, int length, double dx)
+sp_desktop_horizontal_snap_list (SPDesktop *desktop, NRPoint const *p, int length, double dx)
 {
 	NRPoint q;
 	double xdist, xpre, dist, d;
@@ -501,7 +501,7 @@ sp_desktop_horizontal_snap_list (SPDesktop *desktop, NRPoint *p, int length, dou
 }
 
 double
-sp_desktop_vertical_snap_list (SPDesktop *desktop, NRPoint *p, int length, double dy)
+sp_desktop_vertical_snap_list (SPDesktop *desktop, NRPoint const *p, int length, double dy)
 {
 	NRPoint q;
 	double ydist, ypre, dist, d;
@@ -525,7 +525,7 @@ sp_desktop_vertical_snap_list (SPDesktop *desktop, NRPoint *p, int length, doubl
 }
 
 double
-sp_desktop_horizontal_snap_list_scale (SPDesktop *desktop, NRPoint *p, int length, NRPoint *norm, double sx)
+sp_desktop_horizontal_snap_list_scale (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, double sx)
 {
 	NRPoint q, check;
 	double xscale, xdist, d;
@@ -553,7 +553,7 @@ sp_desktop_horizontal_snap_list_scale (SPDesktop *desktop, NRPoint *p, int lengt
 }
 
 double
-sp_desktop_vertical_snap_list_scale (SPDesktop *desktop, NRPoint *p, int length, NRPoint *norm, double sy)
+sp_desktop_vertical_snap_list_scale (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, double sy)
 {
 	NRPoint q, check;
 	double yscale, ydist, d;
@@ -580,7 +580,7 @@ sp_desktop_vertical_snap_list_scale (SPDesktop *desktop, NRPoint *p, int length,
 }
 
 double
-sp_desktop_vector_snap_list (SPDesktop *desktop, NRPoint *p, int length, NRPoint *norm, double sx, double sy)
+sp_desktop_vector_snap_list (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, double sx, double sy)
 {
 	NRPoint q, check;
 	double dist, d, ratio;
@@ -610,7 +610,7 @@ sp_desktop_vector_snap_list (SPDesktop *desktop, NRPoint *p, int length, NRPoint
 }
 
 double
-sp_desktop_horizontal_snap_list_skew (SPDesktop *desktop, NRPoint *p, int length, NRPoint *norm, double sx)
+sp_desktop_horizontal_snap_list_skew (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, double sx)
 {
 	NRPoint q, check;
 	double xskew, xdist, d;
@@ -637,7 +637,7 @@ sp_desktop_horizontal_snap_list_skew (SPDesktop *desktop, NRPoint *p, int length
 }
 
 double
-sp_desktop_vertical_snap_list_skew (SPDesktop *desktop, NRPoint *p, int length, NRPoint *norm, double sy)
+sp_desktop_vertical_snap_list_skew (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, double sy)
 {
 	NRPoint q, check;
 	gdouble yskew, ydist, d;
@@ -668,7 +668,7 @@ sp_desktop_vertical_snap_list_skew (SPDesktop *desktop, NRPoint *p, int length, 
    working with angles would be too complex
 */
 NRMatrix *
-sp_desktop_circular_snap_list (SPDesktop *desktop, NRPoint *p, int length, NRPoint *norm, NRMatrix *rotate)
+sp_desktop_circular_snap_list (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, NRMatrix *rotate)
 {
 	NRPoint q1, q2, q, check;
 	gdouble d, best, h1, h2;

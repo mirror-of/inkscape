@@ -1,3 +1,8 @@
+2003-12-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/desktop-snap.h, src/desktop-snap.cpp (all functions):
+	Indicate that the given point(s) aren't modified by these functions.
+
 2003-12-22  bulia byak <bulia@dr.com>
 
 	* src/nodepath.cpp src/nodepath.h>: restrict control handle movement with ctrl, alt,
