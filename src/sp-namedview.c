@@ -38,7 +38,7 @@ static void sp_namedview_init (SPNamedView * namedview);
 
 static void sp_namedview_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static void sp_namedview_release (SPObject *object);
-static void sp_namedview_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_namedview_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_namedview_child_added (SPObject * object, SPRepr * child, SPRepr * ref);
 static void sp_namedview_remove_child (SPObject *object, SPRepr *child);
 static SPRepr *sp_namedview_write (SPObject *object, SPRepr *repr, guint flags);
@@ -46,9 +46,9 @@ static SPRepr *sp_namedview_write (SPObject *object, SPRepr *repr, guint flags);
 static void sp_namedview_setup_grid (SPNamedView * nv);
 static void sp_namedview_setup_grid_item (SPNamedView * nv, SPCanvasItem * item);
 
-static gboolean sp_str_to_bool (const guchar *str);
-static gboolean sp_nv_read_length (const guchar *str, guint base, gdouble *val, const SPUnit **unit);
-static gboolean sp_nv_read_opacity (const guchar *str, guint32 *color);
+static gboolean sp_str_to_bool (const gchar *str);
+static gboolean sp_nv_read_length (const gchar *str, guint base, gdouble *val, const SPUnit **unit);
+static gboolean sp_nv_read_opacity (const gchar *str, guint32 *color);
 
 static SPObjectGroupClass * parent_class;
 
@@ -68,7 +68,7 @@ sp_namedview_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_namedview_init,
 		};
-		namedview_type = g_type_register_static (SP_TYPE_OBJECTGROUP, "SPNamedView", &namedview_info, 0);
+		namedview_type = g_type_register_static (SP_TYPE_OBJECTGROUP, "SPNamedView", &namedview_info, (GTypeFlags)0);
 	}
 	return namedview_type;
 }
@@ -82,7 +82,7 @@ sp_namedview_class_init (SPNamedViewClass * klass)
 	gobject_class = (GObjectClass *) klass;
 	sp_object_class = (SPObjectClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_OBJECTGROUP);
+	parent_class = (SPObjectGroupClass*)g_type_class_ref (SP_TYPE_OBJECTGROUP);
 
 	sp_object_class->build = sp_namedview_build;
 	sp_object_class->release = sp_namedview_release;
@@ -185,7 +185,7 @@ sp_namedview_release (SPObject * object)
 }
 
 static void
-sp_namedview_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPNamedView *nv;
 	const SPUnit *pt = NULL;
@@ -582,7 +582,7 @@ sp_namedview_view_list (SPNamedView * nv)
 /* This should be moved somewhere */
 
 static gboolean
-sp_str_to_bool (const guchar *str)
+sp_str_to_bool (const gchar *str)
 {
 	if (str) {
 		if (!g_strcasecmp (str, "true") ||
@@ -597,7 +597,7 @@ sp_str_to_bool (const guchar *str)
 /* fixme: Collect all these length parsing methods and think common sane API */
 
 static gboolean
-sp_nv_read_length (const guchar *str, guint base, gdouble *val, const SPUnit **unit)
+sp_nv_read_length (const gchar *str, guint base, gdouble *val, const SPUnit **unit)
 {
 	gdouble v;
 	gchar *u;
@@ -658,7 +658,7 @@ sp_nv_read_length (const guchar *str, guint base, gdouble *val, const SPUnit **u
 }
 
 static gboolean
-sp_nv_read_opacity (const guchar *str, guint32 *color)
+sp_nv_read_opacity (const gchar *str, guint32 *color)
 {
 	gdouble v;
 	gchar *u;
