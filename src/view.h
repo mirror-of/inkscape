@@ -137,60 +137,6 @@ void sp_view_widget_set_view (SPViewWidget *vw, SPView *view);
 /* Allows presenting 'save changes' dialog, FALSE - continue, TRUE - cancel */
 gboolean sp_view_widget_shutdown (SPViewWidget *vw);
 
-inline __attribute__((deprecated)) void sp_view_set_statusf(SPView *view, gchar const *format, ...) {
-	va_list args;
-	va_start(args, format);
-	view->legacyMessageContext()->setVF(Inkscape::NORMAL_MESSAGE, format, args);
-	va_end(args);
-}
-
-inline __attribute__((deprecated)) void sp_view_pop_statusf(SPView *view) {
-	view->legacyMessageContext()->clear();
-}
-
-inline __attribute__((deprecated)) void sp_view_set_statusf_timeout(SPView *view, guint msec, gchar const *format, ...)
-{
-	va_list args;
-	va_start(args, format);
-	if (msec) {
-		view->messageStack()->flashVF(Inkscape::NORMAL_MESSAGE, format, args);
-	} else {
-		view->legacyMessageContext()->setVF(Inkscape::NORMAL_MESSAGE, format, args);
-	}
-	va_end(args);
-}
-
-inline __attribute__((deprecated)) void sp_view_set_statusf_flash(SPView *view, gchar const *format, ...)
-{
-	va_list args;
-	va_start(args, format);
-	view->messageStack()->flashVF(Inkscape::NORMAL_MESSAGE, format, args);
-	va_end(args);
-}
-
-inline __attribute__((deprecated)) void sp_view_set_statusf_error(SPView *view, gchar const *format, ...)
-{
-	va_list args;
-	va_start(args, format);
-	view->messageStack()->flashVF(Inkscape::ERROR_MESSAGE, format, args);
-	va_end(args);
-}
-
-inline __attribute__((deprecated)) void sp_view_set_statusf_va(SPView *view, gchar const *format, va_list args)
-{
-	view->legacyMessageContext()->setVF(Inkscape::NORMAL_MESSAGE, format, args);
-}
-
-inline __attribute__((deprecated)) void sp_view_clear_status(SPView *view) {
-	view->legacyMessageContext()->clear();
-}
-
-inline __attribute__((deprecated)) void sp_view_set_status(SPView *view, gchar const *status, gboolean)
-{
-	view->legacyMessageContext()->set(Inkscape::NORMAL_MESSAGE, status);
-}
-
-
 /* Create a new SPViewWidget (which happens to be a SPDesktopWidget). */
 SPViewWidget *sp_desktop_widget_new (SPNamedView *namedview);
 

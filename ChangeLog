@@ -1,5 +1,7 @@
 2004-10-15  MenTaLguY  <mental@rydia.net>
 
+	* src/view.h: removed obsolete status message functions
+
 	* src/attributes.h: remove unused #define
 
 	* src/sp-object.cpp: fix for bug #1048268 (inkscape:collect being written
