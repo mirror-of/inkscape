@@ -85,10 +85,6 @@ public:
     // debug dump of the instance
     void Affiche();
 
-    // operations on FloatLigne instances:
-    // computes a mod b and stores the result in the present FloatLigne
-    void Booleen(FloatLigne *a, FloatLigne *b, BooleanOp mod);
-    
     // clips the coverage runs to tresh
     // if addIt == false, it only leaves the parts that are not entirely under tresh
     // if addIt == true, it's the coverage clamped to tresh
