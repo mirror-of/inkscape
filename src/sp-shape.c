@@ -37,7 +37,7 @@
 
 #define noSHAPE_VERBOSE
 
-static void sp_shape_class_init (SPShapeClass *class);
+static void sp_shape_class_init (SPShapeClass *klass);
 static void sp_shape_init (SPShape *shape);
 
 static void sp_shape_build (SPObject * object, SPDocument * document, SPRepr * repr);
@@ -69,7 +69,7 @@ sp_shape_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_shape_init,
 		};
-		type = g_type_register_static (SP_TYPE_ITEM, "SPShape", &info, 0);
+		type = g_type_register_static (SP_TYPE_ITEM, "SPShape", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -85,7 +85,7 @@ sp_shape_class_init (SPShapeClass *klass)
 	item_class = (SPItemClass *) klass;
 	path_class = (SPPathClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (SPItemClass *)g_type_class_peek_parent (klass);
 
 	sp_object_class->build = sp_shape_build;
 	sp_object_class->release = sp_shape_release;
@@ -129,7 +129,7 @@ sp_shape_build (SPObject *object, SPDocument *document, SPRepr *repr)
 
 	if ((version > 0) && (version < 25)) {
 		SPCSSAttr *css;
-		const guchar *val;
+		const gchar *val;
 		gdouble dval;
 		gchar c[32];
 		gboolean changed;
@@ -568,7 +568,7 @@ sp_shape_marker_modified (SPObject *marker, guint flags, SPItem *item)
 }
 
 void
-sp_shape_set_marker (SPObject *object, unsigned int key, const unsigned char *value)
+sp_shape_set_marker (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPItem *item;
 	SPShape *shape;

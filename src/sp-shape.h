@@ -55,6 +55,6 @@ void sp_shape_set_curve (SPShape *shape, SPCurve *curve, unsigned int owner);
 void sp_shape_set_curve_insync (SPShape *shape, SPCurve *curve, unsigned int owner);
 
 /* PROTECTED */
-void sp_shape_set_marker (SPObject *object, unsigned int key, const unsigned char *value);
+void sp_shape_set_marker (SPObject *object, unsigned int key, const gchar *value);
 
 #endif
