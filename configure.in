@@ -329,11 +329,13 @@ inkscape.1
 
 AH_BOTTOM([
 #ifdef __cplusplus
-#define INK_STATIC_CAST( type, ptr ) static_cast< type >(ptr)
-#define INK_CONST_CAST( type, ptr ) const_cast< type >(ptr)
+#define INK_STATIC_CAST( type, ptr ) static_cast< type >((ptr))
+#define INK_CONST_CAST( type, ptr ) const_cast< type >((ptr))
+#define INK_REINTERPRET_CAST( type, ptr ) reinterpret_cast< type >((ptr))
 #else
 #define INK_STATIC_CAST( type, ptr ) ((type)(ptr))
 #define INK_CONST_CAST( type, ptr ) ((type)(ptr))
+#define INK_REINTERPRET_CAST( type, ptr ) ((type)(ptr))
 #endif
 ])
 
