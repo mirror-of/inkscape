@@ -45,7 +45,9 @@ dialogs_libspdialogs_a_SOURCES = \
 	dialogs/transformation.cpp	\
 	dialogs/transformation.h	\
 	dialogs/xml-tree.cpp	\
-	dialogs/xml-tree.h
+	dialogs/xml-tree.h      \
+	dialogs/find.cpp        \
+	dialogs/find.h
 
 #	dialogs/sp-widget.c	\
 #	dialogs/sp-widget.h	\
