@@ -440,19 +440,14 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
                           ButtType butt, double miter, bool closeIfNeeded,
                           bool skipMoveto, NR::Point & lastP, NR::Point & lastT)
 {
-  NR::Point curX;
-  double curW;
-  int curP = 1;
-  NR::Point curT;
-  NR::Point firstP, firstT;
-  bool doFirst;
   outline_callback_data callsData;
   
   callsData.orig = this;
   callsData.dest = dest;
   
   // le moveto
-  curX = (descr_data)->d.m.p;
+  NR::Point curX = (descr_data)->d.m.p;
+  double curW;
   if ((descr_data)->flags & descr_weighted)
   {
     curW = (descr_data)->d.m.w;
@@ -461,13 +456,14 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
   {
     curW = 1;
   }
-  curT.pt[0] = curT.pt[1] = 0;
+  NR::Point curT(0, 0);
   
-  doFirst = true;
-  firstP.pt[0] = firstP.pt[1] = 0;
-  firstT.pt[0] = firstT.pt[1] = 0;
+  bool doFirst = true;
+  NR::Point firstP(0, 0);
+  NR::Point firstT(0, 0);
   
   // et le reste, 1 par 1
+  int curP = 1;
   while (curP < descr_nb)
   {
     path_descr *curD = descr_data + curP;
@@ -1044,102 +1040,65 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
  */
 
 bool
-Path::IsNulCurve (path_descr * curD, NR::Point &curX)
+Path::IsNulCurve (path_descr const * curD, NR::Point const &curX)
 {
-  int typ = curD->flags & descr_type_mask;
-  if (typ == descr_lineto)
-  {
-    if (fabsf (curD->d.l.p.pt[0] - curX.pt[0]) < 0.00001
-        && fabsf (curD->d.l.p.pt[1] - curX.pt[1]) < 0.00001)
-    {
-      return true;
-    }
-    return false;
-  }
-  else if (typ == descr_cubicto)
-  {
-    double ax, bx, cx, dx;
-    double ay, by, cy, dy;
-    ax = curD->d.c.stD.pt[0] + curD->d.c.enD.pt[0] + 2 * curX.pt[0] - 2 * curD->d.c.p.pt[0];
-    bx = 3 * curD->d.c.p.pt[0] - 3 * curX.pt[0] - 2 * curD->d.c.stD.pt[0] - curD->d.c.enD.pt[0];
-    cx = curD->d.c.stD.pt[0];
-    dx = curX.pt[0];
-    ay = curD->d.c.stD.pt[1] + curD->d.c.enD.pt[1] + 2 * curX.pt[1] - 2 * curD->d.c.p.pt[1];
-    by = 3 * curD->d.c.p.pt[1] - 3 * curX.pt[1] - 2 * curD->d.c.stD.pt[1] - curD->d.c.enD.pt[1];
-    cy = curD->d.c.stD.pt[1];
-    dy = curX.pt[1];
-    if (fabsf (ax) < 0.0001 && fabsf (bx) < 0.0001 && fabsf (cx) < 0.0001 &&
-        fabsf (ay) < 0.0001 && fabsf (by) < 0.0001 && fabsf (cy) < 0.0001)
-    {
-      return true;
-    }
-    return false;
-  }
-  else if (typ == descr_arcto)
-  {
-    if (fabsf (curD->d.a.p.pt[0] - curX.pt[0]) < 0.00001
-        && fabsf (curD->d.a.p.pt[1] - curX.pt[1]) < 0.00001)
-    {
-      if (curD->d.a.large == false)
-	    {
-	      return true;
-	    }
-      if (fabsf (curD->d.a.rx) < 0.00001
-          || fabsf (curD->d.a.ry) < 0.00001)
-	    {
-	      return true;
-	    }
-    }
-    return false;
-  }
-  else if (typ == descr_bezierto)
-  {
-    if (curD->d.b.nb <= 0)
-    {
-      if (fabsf (curD->d.b.p.pt[0] - curX.pt[0]) < 0.00001
-          && fabsf (curD->d.b.p.pt[1] - curX.pt[1]) < 0.00001)
-	    {
-	      return true;
-	    }
-      return false;
-    }
-    else if (curD->d.b.nb == 1)
-    {
-      if (fabsf (curD->d.b.p.pt[0] - curX.pt[0]) < 0.00001
-          && fabsf (curD->d.b.p.pt[1] - curX.pt[1]) < 0.00001)
-	    {
-	      path_descr *interm = curD + 1;
-	      if (fabsf (interm->d.i.p.pt[0] - curX.pt[0]) < 0.00001
-            && fabsf (interm->d.i.p.pt[1] - curX.pt[1]) < 0.00001)
-        {
-          return true;
-        }
-	    }
-      return false;
-    }
-    else
-    {
-      if (fabsf (curD->d.b.p.pt[0] - curX.pt[0]) < 0.00001
-          && fabsf (curD->d.b.p.pt[1] - curX.pt[1]) < 0.00001)
-	    {
-	      bool diff = false;
-	      for (int i = 1; i <= curD->d.b.nb; i++)
-        {
-          path_descr *interm = curD + i;
-          if (fabsf (interm->d.i.p.pt[0] - curX.pt[0]) > 0.00001
-              || fabsf (interm->d.i.p.pt[1] - curX.pt[1]) > 0.00001)
-          {
-            diff = true;
-            break;
-          }
-        }
-	      if (diff == false)
-          return true;
-	    }
-      return false;
-    }
-  }
-  return true;
+	switch(curD->flags & descr_type_mask) {
+	case descr_lineto:
+		if (NR::LInfty(curD->d.l.p - curX) < 0.00001) {
+			return true;
+		}
+		return false;
+	case descr_cubicto:
+	{
+		NR::Point A = curD->d.c.stD + curD->d.c.enD + 2*(curX - curD->d.c.p);
+		NR::Point B = 3*(curD->d.c.p - curX) - 2*curD->d.c.stD 
+			- curD->d.c.enD;
+		NR::Point C = curD->d.c.stD;
+		if (NR::LInfty(A) < 0.0001 
+		    && NR::LInfty(B) < 0.0001 
+		    && NR::LInfty (C) < 0.0001) {
+			return true;
+		}
+		return false;
+	}
+	case descr_arcto:
+		if ( NR::LInfty(curD->d.a.p - curX) < 0.00001) {
+			if ((curD->d.a.large == false) 
+			    || (fabsf (curD->d.a.rx) < 0.00001
+				|| fabsf (curD->d.a.ry) < 0.00001)) {
+				return true;
+			}
+		}
+		return false;
+	case descr_bezierto:
+		if (curD->d.b.nb <= 0)
+		{
+			if (NR::LInfty(curD->d.b.p - curX) < 0.00001) {
+				return true;
+			}
+			return false;
+		}
+		else if (curD->d.b.nb == 1)
+		{
+			if (NR::LInfty(curD->d.b.p - curX) < 0.00001) {
+				path_descr const *interm = curD + 1;
+				if (NR::LInfty(interm->d.i.p - curX) < 0.00001) {
+					return true;
+				}
+			}
+			return false;
+		} else if (NR::LInfty(curD->d.b.p - curX) < 0.00001) {
+			for (int i = 1; i <= curD->d.b.nb; i++) {
+				path_descr const *interm = curD + i;
+				if (NR::LInfty(interm->d.i.p - curX) > 0.00001) {
+					return false;
+				}
+			}
+			return true;
+		}
+	default:
+		return true;
+	}
 }
 
 void

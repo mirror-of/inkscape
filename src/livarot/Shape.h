@@ -235,7 +235,7 @@ public:
   // -reset the graph, and ensure there's room for n points and m edges
   void Reset (int n = 0, int m = 0);
   //  -points:
-  int AddPoint (NR::Point x);	// as the function name says
+  int AddPoint (const NR::Point x);	// as the function name says
   // returns the index at which the point has been added in the array
   void SubPoint (int p);	// removes the point at index p
   // nota: this function relocates the last point to the index p
@@ -446,14 +446,14 @@ private:
   }
   edge_list;
   void SortEdgesList (edge_list * edges, int s, int e);	// edge sorting function
-  static int CmpToVert (NR::Point ax, NR::Point bx);	// edge direction comparison function
+  static int CmpToVert (const NR::Point ax, const NR::Point bx);	// edge direction comparison function
 
   void TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff);	// test if there is an intersection
   bool TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, double &atL, double &atR, bool onlyDiff);
   bool TesteIntersection (Shape * iL, Shape * iR, int ilb, int irb,
 			  NR::Point &atx, double &atL, double &atR,
 			  bool onlyDiff);
-  bool TesteAdjacency (Shape * iL, int ilb, NR::Point atx, int nPt,
+  bool TesteAdjacency (Shape * iL, int ilb, const NR::Point atx, int nPt,
 		       bool push);
   int PushIncidence (Shape * a, int cb, int pt, double theta);
   int CreateIncidence (Shape * a, int cb, int pt);
@@ -473,8 +473,8 @@ private:
   void GetWindings (Shape * a, Shape * b = NULL, BooleanOp mod =
 		    bool_op_union, bool brutal = false);
   void Validate (void);
-  int Winding (NR::Point px);
-  int Winding (int nPt);
+  int Winding (const NR::Point px) const ;
+  int Winding (int nPt) const ;
   void SortPointsRounded (void);
   void SortPointsRounded (int s, int e);
   static int CmpIncidence (const void *p1, const void *p2)
@@ -502,7 +502,7 @@ private:
   int ReFormeArcTo (int bord, int curBord, Path * dest, Path * orig);
   int ReFormeCubicTo (int bord, int curBord, Path * dest, Path * orig);
   int ReFormeBezierTo (int bord, int curBord, Path * dest, Path * orig);
-  void ReFormeBezierChunk (NR::Point px, NR::Point nx,
+  void ReFormeBezierChunk (const NR::Point px, const NR::Point nx,
 			   Path * dest, int inBezier, int nbInterm,
 			   Path * from, int p, double ts, double te);
 

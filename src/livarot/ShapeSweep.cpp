@@ -2066,7 +2066,7 @@ Shape::CreateIncidence (Shape * a, int no, int nPt)
 }
 
 int
-Shape::Winding (int nPt)
+Shape::Winding (int nPt) const 
 {
   int askTo = pData[nPt].askForWindingB;
   if (askTo < 0)
@@ -2083,7 +2083,7 @@ Shape::Winding (int nPt)
 }
 
 int
-Shape::Winding (NR::Point px)
+Shape::Winding (const NR::Point px) const 
 {
   int lr = 0, ll = 0, rr = 0;
 
@@ -2706,7 +2706,7 @@ Shape::TesteIntersection (Shape * ils, Shape * irs, int ilb, int irb,
 }
 
 bool
-Shape::TesteAdjacency (Shape * a, int no, NR::Point atx, int nPt,
+Shape::TesteAdjacency (Shape * a, int no, const NR::Point atx, int nPt,
 		       bool push)
 {
   if (nPt == a->swsData[no].stPt || nPt == a->swsData[no].enPt)

@@ -410,7 +410,7 @@ Shape::Reset (int n, int m)
 }
 
 int
-Shape::AddPoint (NR::Point x)
+Shape::AddPoint (const NR::Point x)
 {
   if (nbPt >= maxPt)
     {
