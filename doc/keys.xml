@@ -72,9 +72,10 @@ can leave your ideas and requests there.</p>
 <keys><key><shift/><ctrl/>T</key> <action>Text and Font</action></keys>
 <keys><key><shift/><ctrl/>M</key> <action>Transform</action></keys>
 <keys><key><shift/><ctrl/>A</key> <action>Align and Distribute</action></keys>
+<keys><key><shift/><ctrl/>O</key> <action>Object Properties</action></keys>
 <keys><key><shift/><ctrl/>X</key> <action>XML Editor</action></keys>
-<keys><key><shift/><ctrl/>D</key> <action>Document Options</action></keys>
-<keys><key><shift/><ctrl/>O</key> <action>Inkscape Options</action></keys>
+<keys><key><shift/><ctrl/>D</key> <action>Document Preferences</action></keys>
+<keys><key><shift/><ctrl/>P</key> <action>Inkscape Preferences</action></keys>
 <keys><key><shift/><ctrl/>E</key>	 <action>Export to PNG</action></keys>
 <note>These open a new dialog window if it wasn't open yet, otherwise the corresponding dialog gets focus.</note>
 </group>
@@ -263,7 +264,8 @@ can leave your ideas and requests there.</p>
 <note>Division cuts the bottom object into pieces by the top object, preserving the fill and stroke of the bottom.</note>
 <keys><key><ctrl/><alt/>/</key>  <action>cut path</action></keys>
 <note>Cut Path cuts the bottom object's stroke only where it is intersected by the top path, removing any fill from the result.</note>
-<note>The result of any boolean operation inherits the id= attribute and therefore the clones of the bottom object.</note>
+<note>The result of Union, Difference, Intersection, and XOR inherits the id= attribute and therefore the clones of the bottom object.</note>
+<note>Division and Cut path normally produce several objects; of them, a random one inherits the id= of the bottom source object.</note>
 </group>
 
 <group>

@@ -88,9 +88,10 @@ Ctrl+W</span></td><td><span class="action">close document window</span></td></tr
 <tr bgcolor="f0eae7"><td align="right"><span class="key">Shift+Ctrl+T</span></td><td><span class="action">Text and Font</span></td></tr>
 <tr bgcolor="f0eae7"><td align="right"><span class="key">Shift+Ctrl+M</span></td><td><span class="action">Transform</span></td></tr>
 <tr bgcolor="f0eae7"><td align="right"><span class="key">Shift+Ctrl+A</span></td><td><span class="action">Align and Distribute</span></td></tr>
+<tr bgcolor="f0eae7"><td align="right"><span class="key">Shift+Ctrl+O</span></td><td><span class="action">Object Properties</span></td></tr>
 <tr bgcolor="f0eae7"><td align="right"><span class="key">Shift+Ctrl+X</span></td><td><span class="action">XML Editor</span></td></tr>
-<tr bgcolor="f0eae7"><td align="right"><span class="key">Shift+Ctrl+D</span></td><td><span class="action">Document Options</span></td></tr>
-<tr bgcolor="f0eae7"><td align="right"><span class="key">Shift+Ctrl+O</span></td><td><span class="action">Inkscape Options</span></td></tr>
+<tr bgcolor="f0eae7"><td align="right"><span class="key">Shift+Ctrl+D</span></td><td><span class="action">Document Preferences</span></td></tr>
+<tr bgcolor="f0eae7"><td align="right"><span class="key">Shift+Ctrl+P</span></td><td><span class="action">Inkscape Preferences</span></td></tr>
 <tr bgcolor="f0eae7"><td align="right"><span class="key">Shift+Ctrl+E</span></td><td><span class="action">Export to PNG</span></td></tr>
 <tr bgcolor="f0eae7"><td colspan="3"><span class="note">These open a new dialog window if it wasn't open yet, otherwise the corresponding dialog gets focus.</span></td></tr>
 
@@ -278,7 +279,8 @@ Ctrl+U</span></td><td><span class="action">ungroup selected group(s)</span></td>
 <tr bgcolor="f9f1d9"><td colspan="3"><span class="note">Division cuts the bottom object into pieces by the top object, preserving the fill and stroke of the bottom.</span></td></tr>
 <tr bgcolor="f9f1d9"><td align="right"><span class="key">Ctrl+Alt+/</span></td><td><span class="action">cut path</span></td></tr>
 <tr bgcolor="f9f1d9"><td colspan="3"><span class="note">Cut Path cuts the bottom object's stroke only where it is intersected by the top path, removing any fill from the result.</span></td></tr>
-<tr bgcolor="f9f1d9"><td colspan="3"><span class="note">The result of any boolean operation inherits the id= attribute and therefore the clones of the bottom object.</span></td></tr>
+<tr bgcolor="f9f1d9"><td colspan="3"><span class="note">The result of Union, Difference, Intersection, and XOR inherits the id= attribute and therefore the clones of the bottom object.</span></td></tr>
+<tr bgcolor="f9f1d9"><td colspan="3"><span class="note">Division and Cut path normally produce several objects; of them, a random one inherits the id= of the bottom source object.</span></td></tr>
 
 
 
