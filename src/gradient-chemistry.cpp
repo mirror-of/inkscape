@@ -280,6 +280,61 @@ sp_gradient_fork_private_if_necessary(SPGradient *gr, SPGradient *vector,
 }
 
 /**
+ * Convert an item's gradient to userspace _without_ preserving coords, setting them to defaults
+ * instead. No forking or reapplying is done because this is only called for newly created privates.  
+ * @return The new gradient.
+ */
+SPGradient *
+sp_gradient_reset_to_userspace (SPGradient *gr, SPItem *item)
+{
+    Inkscape::XML::Node *repr = SP_OBJECT_REPR(gr);
+
+    // calculate the bbox of the item
+    NRRect bbox;
+    sp_document_ensure_up_to_date(SP_OBJECT_DOCUMENT(item));
+    sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE); // we need "true" bbox without item_i2d_affine
+
+    double width = bbox.x1 - bbox.x0;
+    double height = bbox.y1 - bbox.y0;
+    g_assert (height > 0 && width > 0);
+
+    NR::Point center = NR::Point (0.5 * (bbox.x1 + bbox.x0), 0.5 * (bbox.y1 + bbox.y0));
+
+    if (SP_IS_RADIALGRADIENT(gr)) {
+        sp_repr_set_double(repr, "cx", center[NR::X]);
+        sp_repr_set_double(repr, "cy", center[NR::Y]);
+        sp_repr_set_double(repr, "fx", center[NR::X]);
+        sp_repr_set_double(repr, "fy", center[NR::Y]);
+        sp_repr_set_double(repr, "r", width/2);
+
+        // we want it to be elliptic, not circular
+        NR::Matrix squeeze = NR::Matrix (NR::translate (-center)) * 
+            NR::Matrix (NR::scale(1, height/width)) * 
+            NR::Matrix (NR::translate (center));
+
+        gr->gradientTransform = squeeze;
+        {
+            gchar c[256];
+            if (sp_svg_transform_write(c, 256, gr->gradientTransform)) {
+                sp_repr_set_attr(SP_OBJECT_REPR(gr), "gradientTransform", c);
+            } else {
+                sp_repr_set_attr(SP_OBJECT_REPR(gr), "gradientTransform", NULL);
+            }
+        }
+    } else {
+        sp_repr_set_double(repr, "x1", (center - NR::Point(width/2, 0))[NR::X]);
+        sp_repr_set_double(repr, "y1", (center - NR::Point(width/2, 0))[NR::Y]);
+        sp_repr_set_double(repr, "x2", (center + NR::Point(width/2, 0))[NR::X]);
+        sp_repr_set_double(repr, "y2", (center + NR::Point(width/2, 0))[NR::Y]);
+    }
+
+    // set the gradientUnits
+    sp_repr_set_attr(repr, "gradientUnits", "userSpaceOnUse");
+
+    return gr;
+}
+
+/**
  * Convert an item's gradient to userspace if necessary, also fork it if necessary.
  * @return The new gradient.
  */
@@ -664,10 +719,10 @@ sp_item_gradient_get_coords (SPItem *item, guint point_num, bool fill_or_stroke)
 }
 
 
-/*
+/**
  * Sets item fill or stroke to the gradient of the specified type with given vector, creating
  * new private gradient, if needed.
- * gr has to be normalized vector
+ * gr has to be a normalized vector.
  */
 
 SPGradient *
@@ -731,8 +786,7 @@ sp_item_set_gradient(SPItem *item, SPGradient *gr, SPGradientType type, bool is_
     } else {
         /* Current fill style is not a gradient or wrong type, so construct everything */
         SPGradient *constructed = sp_gradient_get_private_normalized(SP_OBJECT_DOCUMENT(item), gr, type);
-        constructed = sp_gradient_convert_to_userspace(constructed, item,
-                                                       ( is_fill ? "fill" : "stroke" ));
+        constructed = sp_gradient_reset_to_userspace(constructed, item);
         sp_item_repr_set_style_gradient(SP_OBJECT_REPR(item),
                                         ( is_fill ? "fill" : "stroke" ),
                                         constructed, true);
