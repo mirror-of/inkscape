@@ -54,10 +54,15 @@ static gint sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view);
 
 /* Drag and Drop */
 typedef enum {
-  URI_LIST
+  URI_LIST,
+  SVG_XML_DATA,
+  SVG_DATA,
 } ui_drop_target_info;
+
 static GtkTargetEntry ui_drop_target_entries [] = {
   {"text/uri-list", 0, URI_LIST},
+  {"image/svg+xml", 0, SVG_XML_DATA},
+  {"image/svg",     0, SVG_DATA},
 };
 
 #define ENTRIES_SIZE(n) sizeof(n)/sizeof(n[0]) 
@@ -107,7 +112,7 @@ sp_create_window (SPViewWidget *vw, gboolean editable)
 			  GTK_DEST_DEFAULT_ALL,
 			  ui_drop_target_entries,
 			  nui_drop_target_entries,
-			  GDK_ACTION_COPY);
+			  GdkDragAction (GDK_ACTION_COPY | GDK_ACTION_MOVE));
 	g_signal_connect (G_OBJECT(w),
 			   "drag_data_received",
 			   G_CALLBACK (sp_ui_drag_data_received),
@@ -614,9 +619,53 @@ sp_ui_drag_data_received (GtkWidget * widget,
 			  guint event_time,
 			  gpointer user_data)
 {
-	gchar * uri;
+	gchar * uri, * svgdata;
+	SPRepr * rdoc, * repr, * newgroup, * child;
+	SPReprDoc * rnewdoc;
+	SPDocument * doc;
+	const gchar *style;
 	
 	switch(info) {
+	case SVG_DATA:
+	case SVG_XML_DATA: 
+		svgdata = (gchar *)data->data;
+
+		doc = SP_ACTIVE_DOCUMENT;
+
+		/* fixme: put into a function (sp_mem_import?) */
+		rdoc = sp_document_repr_root (doc);
+		
+		rnewdoc = sp_repr_read_mem (svgdata, data->length, SP_SVG_NS_URI);
+
+		if (rnewdoc == NULL) {
+			GtkWidget *msg;
+			msg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
+					GTK_BUTTONS_CLOSE,
+					_("Could not parse SVG data"));
+			gtk_dialog_run (GTK_DIALOG (msg));
+			gtk_widget_destroy (msg);
+			return;
+		}
+	
+		repr = sp_repr_document_root (rnewdoc);
+		style = sp_repr_attr (repr, "style");
+
+		newgroup = sp_repr_new ("g");
+		sp_repr_set_attr (newgroup, "style", style);
+
+		for (child = repr->children; child != NULL; child = child->next) {
+			SPRepr * newchild;
+			newchild = sp_repr_duplicate (child);
+			sp_repr_append_child (newgroup, newchild);
+		}
+
+		sp_repr_document_unref (rnewdoc);
+
+		sp_document_add_repr (doc, newgroup);
+		sp_repr_unref (newgroup);
+		sp_document_done (doc);
+		
+		break;
 	case URI_LIST:
 		uri = (gchar *)data->data;
 		sp_ui_import_files(uri);
