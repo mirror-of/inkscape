@@ -1,3 +1,11 @@
+2005-03-01  MenTaLguY  <mental@rydia.net>
+
+	* src/Makefile.am, src/libnr/Makefile_insert, src/xml/Makefile_insert:
+	  use in-tree copy of cxxtest
+
+	* src/util/Makefile_insert, src/util/list-container.h:
+	  add Util::List-based STL container
+
 2005-02-28 SwinginCelt  <swinginceltgmail.com>
 
 	* Fixed an improper conversion of sp_repr_document_merge that was causing

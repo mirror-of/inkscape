@@ -49,10 +49,10 @@ xml_libspxml_a_SOURCES =	\
 	xml/invalid-operation-exception.h
 
 xml/test-xml-main.cpp: xml/test-xml.cpp $(xml_test_xml_includes)
-	cxxtestgen.pl --error-printer -root -o xml/test-xml-main.cpp $(xml_test_xml_includes)
+	$(top_srcdir)/cxxtest/cxxtestgen.pl --error-printer -root -o xml/test-xml-main.cpp $(xml_test_xml_includes)
 
 xml/test-xml.cpp: $(xml_test_xml_includes)
-	cxxtestgen.pl -part -o xml/test-xml.cpp $(xml_test_xml_includes)
+	$(top_srcdir)/cxxtest/cxxtestgen.pl -part -o xml/test-xml.cpp $(xml_test_xml_includes)
 
 xml_test_xml_includes = \
 	$(srcdir)/xml/repr-action-test.h	\

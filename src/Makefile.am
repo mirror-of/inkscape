@@ -18,7 +18,8 @@ INCLUDES =	\
 	$(GNOME_PRINT_CFLAGS)	\
 	$(XFT_CFLAGS)	\
 	-DPOTRACE=\"potrace\"	\
-	$(INKSCAPE_CFLAGS)
+	$(INKSCAPE_CFLAGS) \
+	-I$(top_srcdir)/cxxtest
 
 include Makefile_insert
 include application/Makefile_insert
@@ -193,7 +194,7 @@ check_PROGRAMS =	\
 
 
 test-all.cpp: $(libnr_test_nr_a_SOURCES) $(xml_test_xml_a_SOURCES) $(libnr_test_nr_includes)  $(xml_test_xml_includes)
-	cxxtestgen.pl --error-printer -root -o test-all.cpp $(libnr_test_nr_includes)  $(xml_test_xml_includes)
+	$(top_srcdir)/cxxtest/cxxtestgen.pl --error-printer -root -o test-all.cpp $(libnr_test_nr_includes)  $(xml_test_xml_includes)
 
 test_all_SOURCES = \
 	test-all.cpp

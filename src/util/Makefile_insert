@@ -9,6 +9,7 @@ util_libinkutil_a_SOURCES = \
 	util/forward-pointer-iterator.h \
 	util/glib-list.h \
 	util/list.h \
+	util/list-container.h \
 	util/map-list.h \
 	util/reverse-list.h \
 	util/shared-c-string-ptr.h \
