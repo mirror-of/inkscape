@@ -1,3 +1,8 @@
+2004-08-18  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/widgets/font-selector.cpp: uint -> guint to fix
+	compile errors.
+
 2004-08-17  Bryce Harrington  <bryce@bryceharrington.com>
 
 	*  nodepath.cpp path-chemistry.cpp selection-chemistry.cpp,
