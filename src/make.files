@@ -46,8 +46,6 @@ dialogs/stroke-style.cpp
 dialogs/stroke-style.h
 dialogs/text-edit.cpp
 dialogs/text-edit.h
-dialogs/tool-options.cpp
-dialogs/tool-options.h
 dialogs/transformation.cpp
 dialogs/transformation.h
 dialogs/xml-tree.cpp
@@ -175,8 +173,6 @@ knot.cpp
 knot.h
 knotholder.cpp
 knotholder.h
-libarikkei/arikkei-dict.cpp
-libarikkei/arikkei-dict.h
 libarikkei/arikkei-token.cpp
 libarikkei/arikkei-token.h
 libnr/have_mmx.S

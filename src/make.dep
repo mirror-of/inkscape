@@ -963,19 +963,6 @@ dialogs/text-edit.o: \
 	widgets/font-selector.h \
 	xml/repr.h
 
-dialogs/tool-options.o: \
-	dialogs/tool-options.cpp \
-	desktop-handles.h \
-	dialogs/tool-options.h \
-	event-context.h \
-	forward.h \
-	helper/helper-forward.h \
-	helper/sp-intl.h \
-	helper/window.h \
-	inkscape.h \
-	macros.h \
-	xml/repr.h
-
 dialogs/transformation.o: \
 	dialogs/transformation.cpp \
 	desktop-handles.h \
@@ -1241,7 +1228,8 @@ display/nr-arena-image.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	prefs-utils.h
 
 display/nr-arena-item.o: \
 	display/nr-arena-item.cpp \
@@ -1985,6 +1973,7 @@ extract-uri.o: \
 
 file.o: \
 	file.cpp \
+	desktop-handles.h \
 	desktop.h \
 	dialogs/dialog-events.h \
 	dialogs/export.h \
@@ -2033,6 +2022,7 @@ file.o: \
 	macros.h \
 	prefs-utils.h \
 	print.h \
+	selection.h \
 	sp-image.h \
 	sp-item.h \
 	sp-namedview.h \
@@ -2713,10 +2703,6 @@ knotholder.o: \
 	version.h \
 	view.h \
 	xml/repr.h
-
-libarikkei/arikkei-dict.o: \
-	libarikkei/arikkei-dict.cpp \
-	libarikkei/arikkei-dict.h
 
 libarikkei/arikkei-token.o: \
 	libarikkei/arikkei-token.cpp \
@@ -4925,6 +4911,7 @@ sp-ellipse.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	prefs-utils.h \
 	sp-ellipse.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -6929,6 +6916,7 @@ toolbox.o: \
 	selection-chemistry.h \
 	selection.h \
 	sp-defs.h \
+	sp-ellipse.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -7069,7 +7057,6 @@ verbs.o: \
 	dialogs/item-properties.h \
 	dialogs/object-properties.h \
 	dialogs/text-edit.h \
-	dialogs/tool-options.h \
 	dialogs/transformation.h \
 	dialogs/xml-tree.h \
 	display/nr-arena-forward.h \

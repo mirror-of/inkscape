@@ -24,7 +24,6 @@ OBJECTS = \
 	dialogs/sp-attribute-widget.o \
 	dialogs/stroke-style.o \
 	dialogs/text-edit.o \
-	dialogs/tool-options.o \
 	dialogs/transformation.o \
 	dialogs/xml-tree.o \
 	dir-util.o \
@@ -85,7 +84,6 @@ OBJECTS = \
 	interface.o \
 	knot.o \
 	knotholder.o \
-	libarikkei/arikkei-dict.o \
 	libarikkei/arikkei-token.o \
 	libnr/have_mmx.o \
 	libnr/nr-blit.o \
@@ -300,7 +298,6 @@ LINTS = \
 	dialogs/sp-attribute-widget.lint \
 	dialogs/stroke-style.lint \
 	dialogs/text-edit.lint \
-	dialogs/tool-options.lint \
 	dialogs/transformation.lint \
 	dialogs/xml-tree.lint \
 	dir-util.lint \
@@ -361,7 +358,6 @@ LINTS = \
 	interface.lint \
 	knot.lint \
 	knotholder.lint \
-	libarikkei/arikkei-dict.lint \
 	libarikkei/arikkei-token.lint \
 	libnr/have_mmx.lint \
 	libnr/nr-blit.lint \
