@@ -338,6 +338,8 @@ sp_repr_print (SPRepr * repr)
 static void
 repr_quote_write (FILE * file, const gchar * val)
 {
+    if (!val) return;
+
     for (; *val != '\0'; val++) {
         switch (*val) {
         case '"': fputs ("&quot;", file); break;
