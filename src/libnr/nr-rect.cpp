@@ -216,3 +216,65 @@ nr_rect_f_matrix_f_transform (NRRect *d, NRRect *s, NRMatrix *m)
 	return nr_rect_d_matrix_d_transform(d, s, m);
 }
 
+
+namespace NR{
+
+/** returns the four corners of the rectangle in sequence for
+ * the correct winding order. */
+const Point Rect::corner(const int i) {
+	switch(i % 4) {
+	case 0:
+		return topleft();
+	case 1:
+		return topright();
+	case 2:
+		return bottomright();
+	case 3:
+		return bottomleft();
+	}
+}
+	
+/** returns a vector from topleft to bottom right. */
+	const Point Rect::dimensions() {
+		return max - min;
+	}
+
+/** returns the midpoint of this rect. */
+	const Point Rect::centre() {
+		return (min + max)/2;
+	}
+
+/** Translates the rectangle by p. */
+	void Rect::offset(Point p) {
+		min += p;
+		max += p;
+	}
+
+/** Makes this rectangle large enough to include the point p. */
+	void Rect::least_bound(Point p) {
+		for(int i=0; i < 2; i++) {
+			min[i] = MIN(min[i], p[i]);
+			max[i] = MAX(max[i], p[i]);
+		}
+	}
+
+/** Returns the set of points shared by both rectangles. */
+	Rect Rect::intersect(const Rect a, const Rect b) {
+		Rect r;
+		for(int i=0; i < 2; i++) {
+			r.min[i] = MAX(a.min[i], b.min[i]);
+			r.max[i] = MIN(a.max[i], b.max[i]);
+		}
+		return r;
+	}
+/** Returns the smallest rectangle that encloses both rectangles. */
+	Rect Rect::least_bound(const Rect a, const Rect b) {
+		Rect r;
+		for(int i=0; i < 2; i++) {
+			r.min[i] = MIN(a.min[i], b.min[i]);
+			r.max[i] = MAX(a.max[i], b.max[i]);
+		}
+		return r;
+	}
+
+};

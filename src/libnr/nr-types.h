@@ -176,6 +176,46 @@ operator!=(Point const &a, Point const &b) {
 
 Point abs(Point const &b);
 
+class Rect{
+/** A rectangle is always aligned to the X and Y axis.  This means it
+ * can be defined using only 4 coordinates, and determining
+ * intersection is very efficient.  The points inside a rectangle are
+ * min[dim] <= pt[dim] < max[dim].  This means that any rectangle
+ * whose max is less than _or_ equal to its min is empty (contains no
+ * points).  Infinities are allowed.*/
+ private:
+	Point min, max;
+ public:
+	Point topleft() {return min;}
+	const Point topright() {return Point(max[X], min[Y]);}
+	const Point bottomleft() {return Point(min[X], max[Y]);}
+	Point bottomright() {return max;}
+/** returns the four corners of the rectangle in sequence for the
+ * correct winding order. */
+	const Point corner(const int i);
+	
+/** returns a vector from topleft to bottom right. */
+	const Point dimensions();
+/** returns the midpoint of this rect. */
+	const Point centre();
+	
+/** Does this rectangle surround any points? */
+	inline bool empty() const {
+		return (min[0] > max[0]) || (min[1] > max[0]);
+	}
+/** Translates the rectangle by p. */
+	void offset(Point p);
+	
+/** Makes this rectangle large enough to include the point p. */
+	void least_bound(Point p);
+	
+/** Returns the set of points shared by both rectangles. */
+	static Rect intersect(const Rect a, const Rect b);
+/** Returns the smallest rectangle that encloses both rectangles. */
+	static Rect least_bound(const Rect a, const Rect b);
+
+};
+
 } /* namespace NR */
 
 struct NRRect {
