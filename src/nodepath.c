@@ -1400,6 +1400,8 @@ sp_nodepath_select_all (SPNodePath *nodepath)
 	SPPathNode * node;
 	GList * spl, * nl;
 
+	if (!nodepath) return;
+
 	for (spl = nodepath->subpaths; spl != NULL; spl = spl->next) {
 		subpath = (SPNodeSubPath *) spl->data;
 		for (nl = subpath->nodes; nl != NULL; nl = nl->next) {
