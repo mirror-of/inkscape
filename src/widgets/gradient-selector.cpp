@@ -20,6 +20,7 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtkoptionmenu.h>
 #include <gtk/gtkmenuitem.h>
+#include <gtk/gtktooltips.h>
 
 #include "../document.h"
 #include "../document-private.h"
@@ -131,6 +132,7 @@ sp_gradient_selector_init (SPGradientSelector *sel)
 	/* Create box for buttons */
 	hb = gtk_hbox_new (FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (sel), hb, FALSE, FALSE, 0);
+	GtkTooltips *ttips = gtk_tooltips_new ();
 
 	sel->edit = gtk_button_new_with_label (_("Edit"));
 	gtk_box_pack_start (GTK_BOX (hb), sel->edit, TRUE, TRUE, 0);
@@ -159,13 +161,17 @@ sp_gradient_selector_init (SPGradientSelector *sel)
 	sel->units = gtk_option_menu_new ();
 	gtk_widget_show (sel->units);
 	gtk_box_pack_end (GTK_BOX (hb), sel->units, FALSE, FALSE, 0);
+	gtk_tooltips_set_tip (ttips, sel->units,
+					_("Whether the gradient vector is defined in the coordinates of the user space "
+					"(gradientUnits=\"userSpaceOnUse\") or relative to the object's bounding box "
+					"(gradientUnits=\"objectBoundingBox\")"), NULL);
 
 	m = gtk_menu_new ();
-	mi = gtk_menu_item_new_with_label ("objectBoundingBox");
+	mi = gtk_menu_item_new_with_label (_("object"));
 	gtk_menu_append (GTK_MENU (m), mi);
 	g_object_set_data (G_OBJECT (mi), "gradientUnits", GUINT_TO_POINTER (SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX));
 	g_signal_connect (G_OBJECT (mi), "activate", G_CALLBACK (sp_gradient_selector_units_activate), sel);
-	mi = gtk_menu_item_new_with_label ("userSpaceOnUse");
+	mi = gtk_menu_item_new_with_label (_("user space"));
 	gtk_menu_append (GTK_MENU (m), mi);
 	g_object_set_data (G_OBJECT (mi), "gradientUnits", GUINT_TO_POINTER (SP_GRADIENT_UNITS_USERSPACEONUSE));
 	g_signal_connect (G_OBJECT (mi), "activate", G_CALLBACK (sp_gradient_selector_units_activate), sel);
@@ -173,7 +179,7 @@ sp_gradient_selector_init (SPGradientSelector *sel)
 
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (sel->units), m);
 
-	l = gtk_label_new (_("gradientUnits"));
+	l = gtk_label_new (_("Coordinates:"));
 	gtk_widget_show (l);
 	gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 4);
 
@@ -184,17 +190,22 @@ sp_gradient_selector_init (SPGradientSelector *sel)
 	sel->spread = gtk_option_menu_new ();
 	gtk_widget_show (sel->spread);
 	gtk_box_pack_end (GTK_BOX (hb), sel->spread, FALSE, FALSE, 0);
+	gtk_tooltips_set_tip (ttips, sel->spread,
+					_("Whether to fill with flat color beyond the ends of the gradient vector "
+					"(spreadMethod=\"pad\"), or repeat the gradient in the same direction "
+					"(spreadMethod=\"repeat\"), or repeat the gradient in alternating "
+					"directions (spreadMethod=\"reflect\")"), NULL);
 
 	m = gtk_menu_new ();
-	mi = gtk_menu_item_new_with_label ("pad");
+	mi = gtk_menu_item_new_with_label (_("none"));
 	gtk_menu_append (GTK_MENU (m), mi);
 	g_object_set_data (G_OBJECT (mi), "gradientSpread", GUINT_TO_POINTER (SP_GRADIENT_SPREAD_PAD));
 	g_signal_connect (G_OBJECT (mi), "activate", G_CALLBACK (sp_gradient_selector_spread_activate), sel);
-	mi = gtk_menu_item_new_with_label ("reflect");
+	mi = gtk_menu_item_new_with_label (_("reflected"));
 	g_object_set_data (G_OBJECT (mi), "gradientSpread", GUINT_TO_POINTER (SP_GRADIENT_SPREAD_REFLECT));
 	g_signal_connect (G_OBJECT (mi), "activate", G_CALLBACK (sp_gradient_selector_spread_activate), sel);
 	gtk_menu_append (GTK_MENU (m), mi);
-	mi = gtk_menu_item_new_with_label ("repeat");
+	mi = gtk_menu_item_new_with_label (_("direct"));
 	g_object_set_data (G_OBJECT (mi), "gradientSpread", GUINT_TO_POINTER (SP_GRADIENT_SPREAD_REPEAT));
 	g_signal_connect (G_OBJECT (mi), "activate", G_CALLBACK (sp_gradient_selector_spread_activate), sel);
 	gtk_menu_append (GTK_MENU (m), mi);
@@ -202,7 +213,7 @@ sp_gradient_selector_init (SPGradientSelector *sel)
 
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (sel->spread), m);
 
-	l = gtk_label_new (_("gradientSpread"));
+	l = gtk_label_new (_("Repeat:"));
 	gtk_widget_show (l);
 	gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 4);
 }
