@@ -10,9 +10,6 @@ widgets/all: widgets/libspwidgets.a
 widgets/clean:
 	rm -f widgets/libspwidgets.a $(widgets_libspwidgets_a_OBJECTS)
 
-widgets_libspwidgets_a_CPPFLAGS =	\
-	$(INKSCAPE_CFLAGS)
-
 widgets_libspwidgets_a_SOURCES =	\
 	widgets/button.cpp	\
 	widgets/button.h	\
@@ -70,6 +67,9 @@ widgets_libspwidgets_a_SOURCES =	\
 #	widgets/sp-value-winder.h
 #	widgets/sp-spin-button.cpp	\
 #	widgets/sp-spin-button.h
+
+widgets/button.$(OBJEXT): helper/sp-marshal.h
+widgets/menu.$(OBJEXT): helper/sp-marshal.h
 
 
 #noinst_PROGRAMS = test-widgets test-wrapbox
