@@ -46,6 +46,7 @@ static SPEventContextClass *parent_class;
 static gint xp = 0, yp = 0; // where drag started
 static gint tolerance = 0;
 static bool within_tolerance = false;
+static bool escaped;
 
 GType sp_zoom_context_get_type(void)
 {
@@ -131,6 +132,8 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
                 NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
                 sp_rubberband_start(desktop, button_dt);
 
+                escaped = false;
+
                 ret = TRUE;
             }
             break;
@@ -160,7 +163,7 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
                 NRRect b;
                 if (sp_rubberband_rect (&b) && !within_tolerance) {
                     sp_desktop_set_display_area(desktop, b.x0, b.y0, b.x1, b.y1, 10);
-                } else {
+                } else if (!escaped) {
                     NR::Point const button_w(event->button.x, event->button.y);
                     NR::Point const button_dt(sp_desktop_w2d_xy_point(desktop, button_w));
                     double const zoom_rel( (event->button.state & GDK_SHIFT_MASK)
@@ -172,24 +175,31 @@ static gint sp_zoom_context_root_handler(SPEventContext *event_context, GdkEvent
             }
             sp_rubberband_stop();
             xp = yp = 0; 
+            escaped = false;
             break;
             
-	case GDK_KEY_PRESS:
+        case GDK_KEY_PRESS:
             switch (event->key.keyval) {
-		case GDK_Up: 
-		case GDK_Down: 
-		case GDK_KP_Up: 
-		case GDK_KP_Down: 
+                case GDK_Escape: 
+                    sp_rubberband_stop();
+                    xp = yp = 0; 
+                    escaped = true;
+                    ret = TRUE;
+                    break;
+                case GDK_Up: 
+                case GDK_Down: 
+                case GDK_KP_Up: 
+                case GDK_KP_Down: 
                     // prevent the zoom field from activation
                     if (!MOD__CTRL_ONLY)
                         ret = TRUE;
                     break;
-		case GDK_Shift_L:
-		case GDK_Shift_R:
+                case GDK_Shift_L:
+                case GDK_Shift_R:
                     event_context->cursor_shape = cursor_zoom_out_xpm;
-			sp_event_context_update_cursor(event_context);
-			break;
-		default:
+                    sp_event_context_update_cursor(event_context);
+                    break;
+                default:
 			break;
 		}
 		break;
