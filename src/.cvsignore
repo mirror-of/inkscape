@@ -1,9 +1,10 @@
-*.lo
 *.la
-.libs
+*.lo
 .deps
+.libs
 Makefile
 Makefile.in
 inkscape
+inkscape_version.h
 inkview
 spsvgview
