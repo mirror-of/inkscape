@@ -41,9 +41,9 @@ public:
 	SPObject			 *sourceObject;
 	
 	gulong           _modified_connection;
-	SigC::Connection _delete_connection;
-	SigC::Connection _changed_connection;
-	SigC::Connection _transformed_connection;
+	sigc::connection _delete_connection;
+	sigc::connection _changed_connection;
+	sigc::connection _transformed_connection;
 
 	SPUsePath(SPObject* i_owner);
 	~SPUsePath(void);

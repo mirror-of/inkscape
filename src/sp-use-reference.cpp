@@ -70,9 +70,9 @@ SPUsePath::~SPUsePath(void)
 	quit_listening();
 	unlink();
 
-	_delete_connection.~Connection();
-	_changed_connection.~Connection();
-	_transformed_connection.~Connection();
+	_delete_connection.~connection();
+	_changed_connection.~connection();
+	_transformed_connection.~connection();
 }
 
 void            
