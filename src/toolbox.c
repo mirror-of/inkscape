@@ -24,6 +24,7 @@
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtktooltips.h>
 #include <gtk/gtkdnd.h>
+#include <gtk/gtklabel.h>
 
 #include "macros.h"
 #include "helper/window.h"
@@ -31,15 +32,7 @@
 #include "widgets/button.h"
 #include "widgets/sp-toolbox.h"
 
-#include "dialogs/object-properties.h"
-#include "dialogs/transformation.h"
-#include "dialogs/text-edit.h"
-#include "dialogs/align.h"
-#include "dialogs/export.h"
-#include "dialogs/node-edit.h"
-
 #include "verbs.h"
-
 #include "file.h"
 #include "selection-chemistry.h"
 #include "path-chemistry.h"
@@ -58,6 +51,14 @@
 #include "xml/repr-private.h"
 #include "helper/gnome-utils.h"
 #include "helper/sp-intl.h"
+
+#include "dialogs/object-properties.h"
+#include "dialogs/transformation.h"
+#include "dialogs/text-edit.h"
+#include "dialogs/align.h"
+#include "dialogs/export.h"
+#include "dialogs/node-edit.h"
+#include "dialogs/dialog-events.h"
 
 static GtkWidget *sp_toolbox_file_create (void);
 static GtkWidget *sp_toolbox_edit_create (void);
@@ -117,6 +118,7 @@ sp_maintoolbox_create_toplevel (void)
 
 	/* Create window */
 	window = sp_window_new (_("Inkscape"), FALSE);
+	g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), window);
 
 	toolbox = sp_maintoolbox_new ();
 	gtk_widget_show (toolbox);
