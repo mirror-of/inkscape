@@ -104,16 +104,16 @@ sp_help_about (void)
 void
 sp_help_open_tutorial (GtkMenuItem *menuitem, gpointer data)
 {
-    gchar *name = (gchar *) data;
-    gchar *c = g_build_filename (INKSCAPE_TUTORIALSDIR, "/", name, NULL);
-    sp_file_open (c, NULL);
-    g_free (c);
+    gchar const *name = static_cast<gchar const *>(data);
+    gchar *c = g_build_filename(INKSCAPE_TUTORIALSDIR, "/", name, NULL);
+    sp_file_open(c, NULL);
+    g_free(c);
 }
 
 void
-sp_help_open_screen (const gchar * name)
+sp_help_open_screen(gchar const *name)
 {
-    gchar *c = g_build_filename (INKSCAPE_SCREENSDIR, "/", name, NULL);
-    sp_file_open (c, NULL);
-    g_free (c);
+    gchar *c = g_build_filename(INKSCAPE_SCREENSDIR, "/", name, NULL);
+    sp_file_open(c, NULL);
+    g_free(c);
 }
