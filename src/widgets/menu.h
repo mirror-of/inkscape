@@ -14,7 +14,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 typedef struct _SPMenu SPMenu;
 typedef struct _SPMenuClass SPMenuClass;
@@ -45,6 +45,6 @@ GType sp_menu_get_type (void);
 GtkWidget *sp_menu_new (void);
 void sp_menu_append (SPMenu *menu, const gchar *name, const gchar *tip, const void *data);
 
-G_END_DECLS
+
 
 #endif

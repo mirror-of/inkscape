@@ -13,7 +13,7 @@
 #include <libart_lgpl/art_point.h>
 #include "sp-canvas.h"
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_CGRID            (sp_cgrid_get_type ())
 #define SP_CGRID(obj)            (GTK_CHECK_CAST ((obj), SP_TYPE_CGRID, SPCGrid))
@@ -43,6 +43,6 @@ struct _SPCGridClass {
 /* Standard Gtk function */
 GtkType sp_cgrid_get_type (void);
 
-G_END_DECLS
+
 
 #endif

@@ -38,9 +38,6 @@ struct _SPCurve {
 #define SP_CURVE_SEGMENT(c,i) (((SPCurve *)(c))->bpath + (i))
 /* Constructors */
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
 SPCurve * sp_curve_new (void);
 SPCurve * sp_curve_new_sized (gint length);
 SPCurve * sp_curve_new_from_bpath (ArtBpath * bpath);
@@ -78,9 +75,5 @@ ArtBpath *sp_curve_first_bpath (SPCurve *curve);
 void sp_curve_append (SPCurve *curve, SPCurve *curve2, gboolean use_lineto);
 SPCurve *sp_curve_reverse (SPCurve *curve);
 void sp_curve_backspace (SPCurve *curve);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
 
 #endif

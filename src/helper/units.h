@@ -17,7 +17,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 /*
  * Units and conversion methods used by libgnomeprint.
@@ -108,6 +108,6 @@ gdouble sp_distance_get_points (SPDistance *distance);
 gdouble sp_points_get_units (gdouble points, const SPUnit *unit);
 gdouble sp_units_get_points (gdouble units, const SPUnit *unit);
 
-G_END_DECLS
+
 
 #endif 

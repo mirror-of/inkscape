@@ -11,7 +11,7 @@
 #include "sp-canvas.h"
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_CTRL            (sp_ctrl_get_type ())
 #define SP_CTRL(obj)            (GTK_CHECK_CAST ((obj), SP_TYPE_CTRL, SPCtrl))
@@ -68,6 +68,6 @@ GtkType sp_ctrl_get_type (void);
 
 void sp_ctrl_moveto (SPCtrl * ctrl, double x, double y);
 
-G_END_DECLS
+
 
 #endif

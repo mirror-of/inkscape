@@ -12,7 +12,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 typedef struct _NRRGradientRenderer NRRGradientRenderer;
 
@@ -48,6 +48,6 @@ NRRenderer *nr_rgradient_renderer_setup (NRRGradientRenderer *rgr,
 					 float fx, float fy,
 					 float r);
 
-G_END_DECLS
+
 
 #endif

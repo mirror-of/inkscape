@@ -15,7 +15,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_STOP (sp_stop_get_type ())
 #define SP_STOP(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_STOP, SPStop))
@@ -231,6 +231,6 @@ void sp_radialgradient_set_position (SPRadialGradient *rg, gdouble cx, gdouble c
 
 SPRepr *sp_radialgradient_build_repr (SPRadialGradient *lg, gboolean vector);
 
-G_END_DECLS
+
 
 #endif

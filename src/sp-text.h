@@ -15,7 +15,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_TEXT (sp_text_get_type ())
 #define SP_TEXT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_TEXT, SPText))
@@ -86,7 +86,7 @@ struct _SPStringClass {
 
 #define SP_STRING_TEXT(s) (SP_STRING (s)->text)
 
-GType sp_string_get_type (void);
+GType sp_string_get_type ();
 
 /* SPTSpan */
 
@@ -110,7 +110,7 @@ struct _SPTSpanClass {
 	SPItemClass parent_class;
 };
 
-GType sp_tspan_get_type (void);
+GType sp_tspan_get_type ();
 
 /* SPText */
 
@@ -130,7 +130,7 @@ struct _SPTextClass {
 
 #define SP_TEXT_CHILD_STRING(c) (SP_IS_TSPAN (c) ? SP_TSPAN_STRING (c) : SP_STRING (c))
 
-GType sp_text_get_type (void);
+GType sp_text_get_type ();
 
 int sp_text_is_empty (SPText *text);
 gchar *sp_text_get_string_multiline (SPText *text);
@@ -158,6 +158,6 @@ gint sp_text_end_of_line (SPText *text, gint pos);
 
 void sp_text_get_cursor_coords (SPText *text, gint position, ArtPoint *p0, ArtPoint *p1);
 
-G_END_DECLS
+
 
 #endif

@@ -42,9 +42,6 @@
 #define nr_rect_f_point_f_test_inside(r,p) ((p) && (!(r) || (!NR_RECT_DF_TEST_EMPTY (r) && NR_RECT_DF_POINT_DF_TEST_INSIDE (r,p))))
 
 /* NULL values are OK for r0 and r1, but not for d */
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
 NRRect *nr_rect_d_intersect (NRRect *d, const NRRect *r0, const NRRect *r1);
 NRRect *nr_rect_f_intersect (NRRect *d, const NRRect *r0, const NRRect *r1);
 NRRectL *nr_rect_l_intersect (NRRectL *d, const NRRectL *r0, const NRRectL *r1);
@@ -62,8 +59,5 @@ NRRectS *nr_rect_s_union_xy (NRRectS *d, NRShort x, NRShort y);
 
 NRRect *nr_rect_d_matrix_d_transform (NRRect *d, NRRect *s, NRMatrix *m);
 NRRect *nr_rect_f_matrix_f_transform (NRRect *d, NRRect *s, NRMatrix *m);
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
 
 #endif

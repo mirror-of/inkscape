@@ -16,7 +16,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 typedef struct _SPColorSlider SPColorSlider;
 typedef struct _SPColorSliderClass SPColorSliderClass;
@@ -62,6 +62,6 @@ void sp_color_slider_set_colors (SPColorSlider *slider, guint32 start, guint32 e
 void sp_color_slider_set_map (SPColorSlider *slider, const guchar *map);
 void sp_color_slider_set_background (SPColorSlider *slider, guint dark, guint light, guint size);
 
-G_END_DECLS
+
 
 #endif

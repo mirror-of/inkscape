@@ -18,7 +18,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 void sp_ruler_set_metric (GtkRuler * ruler, SPMetric  metric);
 
@@ -74,6 +74,6 @@ GtkType    sp_vruler_get_type (void);
 GtkWidget* sp_vruler_new      (void);
 
 
-G_END_DECLS
+
 
 #endif /* __SP_RULER_H__ */

@@ -15,7 +15,7 @@
 #include "svg/svg-types.h"
 #include "sp-shape.h"
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_LINE            (sp_line_get_type ())
 #define SP_LINE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_LINE, SPLine))
@@ -41,6 +41,6 @@ struct _SPLineClass {
 
 GType sp_line_get_type (void);
 
-G_END_DECLS
+
 
 #endif

@@ -15,7 +15,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_GRADIENT_POSITION (sp_gradient_position_get_type ())
 #define SP_GRADIENT_POSITION(o) (GTK_CHECK_CAST ((o), SP_TYPE_GRADIENT_POSITION, SPGradientPosition))
@@ -114,6 +114,6 @@ void sp_gradient_position_get_linear_position_floatv (SPGradientPosition *gp, fl
 void sp_gradient_position_get_radial_position_floatv (SPGradientPosition *gp, float *pos);
 
 
-G_END_DECLS
+
 
 #endif

@@ -4,7 +4,7 @@
 #include <glib.h>
 #include "sp-shape.h"
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_POLYLINE            (sp_polyline_get_type ())
 #define SP_POLYLINE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_POLYLINE, SPPolyLine))
@@ -25,6 +25,6 @@ struct _SPPolyLineClass {
 
 GType sp_polyline_get_type (void);
 
-G_END_DECLS
+
 
 #endif

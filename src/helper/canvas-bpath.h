@@ -15,7 +15,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_CANVAS_BPATH (sp_canvas_bpath_get_type ())
 #define SP_CANVAS_BPATH(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_CANVAS_BPATH, SPCanvasBPath))
@@ -97,7 +97,7 @@ void sp_canvas_bpath_set_bpath (SPCanvasBPath *cbp, SPCurve *curve);
 void sp_canvas_bpath_set_fill (SPCanvasBPath *cbp, guint32 rgba, SPWindRule rule);
 void sp_canvas_bpath_set_stroke (SPCanvasBPath *cbp, guint32 rgba, gdouble width, SPStrokeJoinType join, SPStrokeCapType cap);
 
-G_END_DECLS
+
 
 #endif
 

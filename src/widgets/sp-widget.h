@@ -15,7 +15,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_WIDGET (sp_widget_get_type ())
 #define SP_WIDGET(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_WIDGET, SPWidget))
@@ -77,6 +77,6 @@ const GSList *sp_widget_get_item_list (SPWidget *spw);
 #define SP_WIDGET_DESKTOP(spw) SP_ACTIVE_DESKTOP
 #define SP_WIDGET_SELECTION(spw) SP_DT_SELECTION (SP_ACTIVE_DESKTOP)
 
-G_END_DECLS
+
 
 #endif

@@ -16,7 +16,7 @@
 
 #include "sp-shape.h"
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_SPIRAL            (sp_spiral_get_type ())
 #define SP_SPIRAL(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_SPIRAL, SPSpiral))
@@ -80,6 +80,6 @@ void    sp_spiral_get_polar	(SPSpiral const *spiral,
 gboolean sp_spiral_is_invalid   (SPSpiral const *spiral);
 
 
-G_END_DECLS
+
 
 #endif

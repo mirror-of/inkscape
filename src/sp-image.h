@@ -26,7 +26,7 @@ typedef struct _SPImageClass SPImageClass;
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include "svg/svg-types.h"
@@ -53,6 +53,6 @@ struct _SPImageClass {
 
 GType sp_image_get_type (void);
 
-G_END_DECLS
+
 
 #endif

@@ -13,7 +13,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #include <gtk/gtkwidget.h>
 
@@ -21,6 +21,6 @@ void sp_display_dialog (void);
 void sp_display_dialog_apply (GtkWidget * widget);
 void sp_display_dialog_close (GtkWidget * widget);
 
-G_END_DECLS
+
 
 #endif

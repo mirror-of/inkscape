@@ -18,7 +18,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 typedef struct _SPGradientImage SPGradientImage;
 typedef struct _SPGradientImageClass SPGradientImageClass;
@@ -44,6 +44,6 @@ GtkType sp_gradient_image_get_type (void);
 GtkWidget *sp_gradient_image_new (SPGradient *gradient);
 void sp_gradient_image_set_gradient (SPGradientImage *gi, SPGradient *gr);
 
-G_END_DECLS
+
 
 #endif

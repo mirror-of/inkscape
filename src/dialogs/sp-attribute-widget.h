@@ -17,7 +17,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_ATTRIBUTE_WIDGET (sp_attribute_widget_get_type ())
 #define SP_ATTRIBUTE_WIDGET(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_ATTRIBUTE_WIDGET, SPAttributeWidget))
@@ -90,6 +90,6 @@ GtkWidget *sp_attribute_table_new_repr (SPRepr *repr, gint num_attr, const gchar
 void sp_attribute_table_set_object (SPAttributeTable *spw, SPObject *object, gint num_attr, const gchar **labels, const gchar **attrs);
 void sp_attribute_table_set_repr (SPAttributeTable *spw, SPRepr *repr, gint num_attr, const gchar **labels, const gchar **attrs);
 
-G_END_DECLS
+
 
 #endif

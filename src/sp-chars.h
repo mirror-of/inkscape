@@ -42,10 +42,7 @@ struct _SPCharsClass {
 	SPItemClass parent_class;
 };
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-GType sp_chars_get_type (void);
+GType sp_chars_get_type ();
 
 void sp_chars_clear (SPChars *chars);
 
@@ -57,9 +54,6 @@ SPCurve *sp_chars_normalized_bpath (SPChars *chars);
 void sp_chars_do_print (SPChars *chars, SPPrintContext *ctx, const NRMatrix *ctm,
 			const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
 void sp_chars_set_paintbox (SPChars *chars, NRRect *paintbox);
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
 
 #endif
 

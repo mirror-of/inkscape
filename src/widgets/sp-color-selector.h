@@ -7,12 +7,12 @@
 #include <glib.h>
 
 
-G_BEGIN_DECLS
+
 
 typedef struct _SPColorSelector SPColorSelector;
 typedef struct _SPColorSelectorClass SPColorSelectorClass;
 
-G_END_DECLS
+
 
 class ColorSelector
 {
@@ -59,7 +59,7 @@ private:
     gboolean _held;
 };
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_COLOR_SELECTOR (sp_color_selector_get_type ())
 #define SP_COLOR_SELECTOR(o) (GTK_CHECK_CAST ((o), SP_TYPE_COLOR_SELECTOR, SPColorSelector))
@@ -91,6 +91,6 @@ GType sp_color_selector_get_type (void);
 
 GtkWidget *sp_color_selector_new (GType selector_type, SPColorSpaceType colorspace);
 
-G_END_DECLS
+
 
 #endif

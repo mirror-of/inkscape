@@ -19,7 +19,7 @@ typedef struct _SPDashSelector SPDashSelector;
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_DASH_SELECTOR (sp_dash_selector_get_type ())
 #define SP_DASH_SELECTOR(o) (GTK_CHECK_CAST ((o), SP_TYPE_DASH_SELECTOR, SPDashSelector))
@@ -32,6 +32,6 @@ GtkWidget *sp_dash_selector_new (SPRepr *repr);
 void sp_dash_selector_set_dash (SPDashSelector *dsel, int ndash, double *dash, double offset);
 void sp_dash_selector_get_dash (SPDashSelector *dsel, int *ndash, double **dash, double *offset);
 
-G_END_DECLS
+
 
 #endif

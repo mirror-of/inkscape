@@ -15,10 +15,10 @@
 #ifndef __SVG_H__
 #define __SVG_H__
 
-G_BEGIN_DECLS
+
 
 void svg_init(void);
 
-G_END_DECLS
+
 
 #endif /* __SVG_H__ */

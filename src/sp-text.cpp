@@ -68,7 +68,7 @@ static void sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *c
 static SPCharsClass *string_parent_class;
 
 GType
-sp_string_get_type (void)
+sp_string_get_type ()
 {
 	static GType type = 0;
 	if (!type) {
@@ -415,7 +415,7 @@ static void sp_tspan_set_shape (SPTSpan *tspan, SPLayoutData *ly, ArtPoint *cp, 
 static SPItemClass *tspan_parent_class;
 
 GType
-sp_tspan_get_type (void)
+sp_tspan_get_type ()
 {
 	static GType type = 0;
 	if (!type) {
@@ -795,7 +795,7 @@ static SPObject *sp_text_get_child_by_position (SPText *text, gint pos);
 static SPItemClass *text_parent_class;
 
 GType
-sp_text_get_type (void)
+sp_text_get_type ()
 {
 	static GType type = 0;
 	if (!type) {

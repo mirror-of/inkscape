@@ -20,7 +20,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 GtkWidget *
 spw_label(GtkWidget * table, const gchar *label_text, int col, int row);
@@ -44,6 +44,6 @@ spw_unit_selector(GtkWidget * dialog, GtkWidget * table,
 		  const gchar * label, gchar * key, int row,
 		  GtkWidget * us, GCallback cb);
 
-G_END_DECLS
+
 
 #endif

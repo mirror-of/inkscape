@@ -17,7 +17,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_XMLVIEW_TREE (sp_xmlview_tree_get_type ())
 #define SP_XMLVIEW_TREE(o) (GTK_CHECK_CAST ((o), SP_TYPE_XMLVIEW_TREE, SPXMLViewTree))
@@ -50,6 +50,6 @@ void sp_xmlview_tree_set_repr (SPXMLViewTree * tree, SPRepr * repr);
 SPRepr * sp_xmlview_tree_node_get_repr (SPXMLViewTree * tree, GtkCTreeNode * node);
 GtkCTreeNode * sp_xmlview_tree_get_repr_node (SPXMLViewTree * tree, SPRepr * repr);
 
-G_END_DECLS
+
 
 #endif

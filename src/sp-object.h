@@ -60,10 +60,6 @@
 #include "forward.h"
 #include "version.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 typedef void (* SPObjectMethod) (SPObject *object, gpointer data);
 
 typedef enum {
@@ -224,9 +220,5 @@ void sp_object_removeAttribute (SPObject *object, const gchar *key, SPException 
 const gchar *sp_object_get_style_property (SPObject *object, const gchar *key, const gchar *def);
 
 SPVersion sp_object_get_sodipodi_version (SPObject *object);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
 
 #endif

@@ -13,7 +13,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #include <gtk/gtkwidget.h>
 #include "../forward.h"
@@ -22,6 +22,6 @@ GtkWidget *sp_item_widget_new (void);
 
 void sp_item_dialog (void);
 
-G_END_DECLS
+
 
 #endif

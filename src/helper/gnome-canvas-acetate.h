@@ -17,7 +17,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #define GNOME_TYPE_CANVAS_ACETATE (sp_canvas_acetate_get_type ())
 #define SP_CANVAS_ACETATE(obj) (GTK_CHECK_CAST ((obj), GNOME_TYPE_CANVAS_ACETATE, SPCanvasAcetate))
@@ -40,6 +40,6 @@ struct _SPCanvasAcetateClass {
 
 GtkType sp_canvas_acetate_get_type (void);
 
-G_END_DECLS
+
 
 #endif

@@ -17,7 +17,7 @@
 
 #include <libart_lgpl/art_bpath.h>
 
-G_BEGIN_DECLS
+
 
 typedef struct _GnomeCanvasBpathDef GnomeCanvasBpathDef;
 
@@ -49,6 +49,6 @@ void gnome_canvas_bpath_def_closepath  (GnomeCanvasBpathDef *bpd);
 
 void gnome_canvas_bpath_def_art_finish (GnomeCanvasBpathDef *bpd);
 
-G_END_DECLS
+
 
 #endif

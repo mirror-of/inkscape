@@ -20,7 +20,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 typedef struct _SPPainter SPPainter;
 
@@ -66,6 +66,6 @@ SPPainter *sp_paint_server_painter_new (SPPaintServer *ps, const gdouble *affine
 
 SPPainter *sp_painter_free (SPPainter *painter);
 
-G_END_DECLS
+
 
 #endif

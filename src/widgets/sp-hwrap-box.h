@@ -26,7 +26,7 @@
 
 #include "sp-wrap-box.h"
 
-G_BEGIN_DECLS
+
 
 
 /* --- type macros --- */
@@ -65,6 +65,6 @@ GtkType	    sp_hwrap_box_get_type  (void) G_GNUC_CONST;
 GtkWidget * sp_hwrap_box_new       (gboolean homogeneous);
 
 
-G_END_DECLS
+
 
 #endif /* __SP_HWRAP_BOX_H__ */

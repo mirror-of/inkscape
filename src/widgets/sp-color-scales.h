@@ -8,7 +8,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 typedef struct _SPColorScales SPColorScales;
 typedef struct _SPColorScalesClass SPColorScalesClass;
@@ -20,7 +20,7 @@ typedef enum {
 	SP_COLOR_SCALES_MODE_CMYK = 3
 } SPColorScalesMode;
 
-G_END_DECLS
+
 
 class ColorScales: public ColorSelector
 {
@@ -66,7 +66,7 @@ private:
     ColorScales& operator=( const ColorScales& obj );
 };
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_COLOR_SCALES (sp_color_scales_get_type ())
 #define SP_COLOR_SCALES(o) (GTK_CHECK_CAST ((o), SP_TYPE_COLOR_SCALES, SPColorScales))
@@ -86,6 +86,6 @@ GType sp_color_scales_get_type (void);
 
 GtkWidget *sp_color_scales_new (void);
 
-G_END_DECLS
+
 
 #endif

@@ -16,7 +16,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 typedef struct _SPFontSelector SPFontSelector;
 typedef struct _SPFontSelectorClass SPFontSelectorClass;
@@ -56,7 +56,7 @@ void sp_font_preview_set_font (SPFontPreview *fprev, NRFont *font);
 void sp_font_preview_set_rgba32 (SPFontPreview *fprev, guint32 rgba);
 void sp_font_preview_set_phrase (SPFontPreview *fprev, const gchar *phrase);
 
-G_END_DECLS
+
 
 #endif
 

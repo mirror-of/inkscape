@@ -31,8 +31,6 @@ void sp_sel_trans_skew (SPSelTrans * seltrans, SPSelTransHandle * handle, NRPoin
 void sp_sel_trans_rotate (SPSelTrans * seltrans, SPSelTransHandle * handle, NRPoint *p, guint state);
 void sp_sel_trans_center (SPSelTrans * seltrans, SPSelTransHandle * handle, NRPoint *p, guint state);
 
-
-
 struct _SPSelTransHandle {
 	GtkAnchorType anchor;
 	GdkCursorType cursor;

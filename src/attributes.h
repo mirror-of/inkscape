@@ -13,7 +13,7 @@
  */
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 unsigned int sp_attribute_lookup (const gchar *key);
 const unsigned char *sp_attribute_name (unsigned char id);
@@ -243,6 +243,6 @@ enum {
 	SP_PROP_WRITING_MODE
 };
 
-G_END_DECLS
+
 
 #endif

@@ -9,28 +9,24 @@
 
 #include "forward.h"
 
-G_BEGIN_DECLS
-
 // boolean operations
 // work on the current selection
 // selection has 2 contain exactly 2 items
-void sp_selected_path_union (void);
-void sp_selected_path_intersect (void);
-void sp_selected_path_diff (void);
-void sp_selected_path_symdiff (void);
+void sp_selected_path_union ();
+void sp_selected_path_intersect ();
+void sp_selected_path_diff ();
+void sp_selected_path_symdiff ();
 
 // offset/inset of a curve
 // takes the fill-rule in consideration
 // offset amount is the stroke-width of the curve
-void sp_selected_path_offset (void);
-void sp_selected_path_inset (void);
+void sp_selected_path_offset ();
+void sp_selected_path_inset ();
 // outline of a curve
 // uses the stroke-width
-void sp_selected_path_outline (void);
+void sp_selected_path_outline ();
 
 // simplifies a path (removes small segments and the like)
-void sp_selected_path_simplify(void);
-
-G_END_DECLS
+void sp_selected_path_simplify();
 
 #endif

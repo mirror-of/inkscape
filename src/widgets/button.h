@@ -27,7 +27,7 @@ typedef struct _SPButtonClass SPButtonClass;
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 typedef enum {
 	SP_BUTTON_TYPE_NORMAL,
@@ -64,6 +64,6 @@ GtkWidget *sp_button_new_from_data (unsigned int size, SPButtonType type,
 				    const gchar *tip,
 				    GtkTooltips *tooltips);
 
-G_END_DECLS
+
 
 #endif

@@ -20,13 +20,13 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 typedef struct _SPColorNotebook SPColorNotebook;
 typedef struct _SPColorNotebookClass SPColorNotebookClass;
 typedef struct _SPColorNotebookTracker SPColorNotebookTracker;
 
-G_END_DECLS
+
 
 class ColorNotebook: public ColorSelector
 {
@@ -76,7 +76,7 @@ private:
     ColorNotebook& operator=( const ColorNotebook& obj );
 };
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_COLOR_NOTEBOOK (sp_color_notebook_get_type ())
 #define SP_COLOR_NOTEBOOK(o) (GTK_CHECK_CAST ((o), SP_TYPE_COLOR_NOTEBOOK, SPColorNotebook))
@@ -104,6 +104,6 @@ GtkWidget *sp_color_notebook_new (void);
 /* void sp_color_notebook_set_mode (SPColorNotebook *csel, SPColorNotebookMode mode); */
 /* SPColorNotebookMode sp_color_notebook_get_mode (SPColorNotebook *csel); */
 
-G_END_DECLS
+
 
 #endif

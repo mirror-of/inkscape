@@ -30,9 +30,6 @@
 #define SP_DT_SKETCH(d) sp_desktop_sketch (d)
 #define SP_DT_CONTROLS(d) sp_desktop_controls (d)
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
 SPEventContext * sp_desktop_event_context (SPDesktop * desktop);
 SPSelection * sp_desktop_selection (SPDesktop * desktop);
 SPDocument * sp_desktop_document (SPDesktop * desktop);
@@ -44,8 +41,5 @@ SPCanvasGroup * sp_desktop_guides (SPDesktop * desktop);
 SPCanvasItem *sp_desktop_drawing (SPDesktop *desktop);
 SPCanvasGroup * sp_desktop_sketch (SPDesktop * desktop);
 SPCanvasGroup * sp_desktop_controls (SPDesktop * desktop);
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
 
 #endif

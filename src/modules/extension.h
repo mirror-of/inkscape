@@ -15,7 +15,7 @@
 
 #include "module.h"
 
-G_BEGIN_DECLS
+
 
 void          extension_load         (SPModule *module);
 void          extension_unload       (SPModule *module);
@@ -31,6 +31,6 @@ GtkDialog *   extension_filter_prefs (SPModule * module);
 void          extension_filter       (SPModule * module,
                                       SPDocument * document);
 
-G_END_DECLS
+
 
 #endif /* __MODULES_EXTENSION_H__ */

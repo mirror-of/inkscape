@@ -55,10 +55,6 @@ struct _SPReprAction {
 	} act;
 };
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 void sp_repr_begin_transaction (SPReprDoc *doc);
 void sp_repr_rollback (SPReprDoc *doc);
 void sp_repr_commit (SPReprDoc *doc);
@@ -85,9 +81,5 @@ SPReprAction *sp_repr_log_chgcontent (SPReprAction *log, SPRepr *repr,
 SPReprAction *sp_repr_log_chgorder (SPReprAction *log, SPRepr *repr,
                                     SPRepr *child,
                                     SPRepr *oldref, SPRepr *newref);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

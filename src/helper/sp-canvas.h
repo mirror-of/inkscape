@@ -17,7 +17,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #include <libnr/nr-rect.h>
 #include <libart_lgpl/art_misc.h>
@@ -159,6 +159,6 @@ void sp_canvas_world_to_window (SPCanvas *canvas, double worldx, double worldy, 
 
 NRRect *sp_canvas_get_viewbox (SPCanvas *canvas, NRRect *viewbox);
 
-G_END_DECLS
+
 
 #endif

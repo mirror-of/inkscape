@@ -21,7 +21,7 @@
 #include "helper/units.h"
 #include "sp-object-group.h"
 
-G_BEGIN_DECLS
+
 
 enum {
 	SP_BORDER_LAYER_BOTTOM,
@@ -77,7 +77,7 @@ const GSList * sp_namedview_view_list (SPNamedView * nv);
 
 SPNamedView *sp_document_namedview (SPDocument * document, const gchar * name);
 
-G_END_DECLS
+
 
 #endif
 

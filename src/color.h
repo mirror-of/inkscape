@@ -18,7 +18,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 /* Useful composition macros */
 
@@ -84,7 +84,7 @@ void sp_color_hsv_to_rgb_floatv (float *rgb, float h, float s, float v);
 void sp_color_rgb_to_cmyk_floatv (float *cmyk, float r, float g, float b);
 void sp_color_cmyk_to_rgb_floatv (float *rgb, float c, float m, float y, float k);
 
-G_END_DECLS
+
 
 #endif
 

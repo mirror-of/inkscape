@@ -14,7 +14,7 @@
 
 #include "sp-canvas.h"
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_CTRLLINE (sp_ctrlline_get_type ())
 #define SP_CTRLLINE(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_CTRLLINE, SPCtrlLine))
@@ -28,6 +28,6 @@ GtkType sp_ctrlline_get_type (void);
 void sp_ctrlline_set_rgba32 (SPCtrlLine *cl, guint32 rgba);
 void sp_ctrlline_set_coords (SPCtrlLine *cl, gdouble x0, gdouble y0, gdouble x1, gdouble y1);
 
-G_END_DECLS
+
 
 #endif

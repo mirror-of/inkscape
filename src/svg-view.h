@@ -25,7 +25,7 @@ typedef struct _SPSVGViewClass SPSVGViewClass;
 #include "helper/helper-forward.h"
 #include "view.h"
 
-G_BEGIN_DECLS
+
 
 struct _SPSVGView {
 	SPView view;
@@ -85,6 +85,6 @@ GtkWidget *sp_svg_view_widget_new (SPDocument *doc);
 
 void sp_svg_view_widget_set_resize (SPSVGViewWidget *vw, gboolean resize, gdouble width, gdouble height);
 
-G_END_DECLS
+
 
 #endif

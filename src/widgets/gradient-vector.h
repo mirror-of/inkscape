@@ -15,7 +15,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #include <gtk/gtkvbox.h>
 #include "../forward.h"
@@ -59,6 +59,6 @@ SPGradient *sp_gradient_vector_selector_get_gradient (SPGradientVectorSelector *
 /* fixme: rethink this (Lauris) */
 GtkWidget *sp_gradient_vector_editor_new (SPGradient *gradient);
 
-G_END_DECLS
+
 
 #endif

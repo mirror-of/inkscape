@@ -14,7 +14,7 @@
 
 #include "sp-canvas.h"
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_GUIDELINE (sp_guideline_get_type ())
 #define SP_GUIDELINE(o) (GTK_CHECK_CAST ((o), SP_TYPE_GUIDELINE, SPGuideLine))
@@ -46,6 +46,6 @@ void sp_guideline_set_position (SPGuideLine *gl, double position);
 void sp_guideline_set_color (SPGuideLine *gl, unsigned int rgba);
 void sp_guideline_set_sensitive (SPGuideLine *gl, int sensitive);
 
-G_END_DECLS
+
 
 #endif

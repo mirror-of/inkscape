@@ -18,7 +18,7 @@
 #include "xml/repr.h"
 #include "forward.h"
 
-G_BEGIN_DECLS
+
 
 typedef struct _SPDocumentPrivate SPDocumentPrivate;
 
@@ -159,6 +159,6 @@ SPItem * sp_document_item_at_point (SPDocument *document, unsigned int key, doub
 void sp_document_set_uri (SPDocument *document, const gchar *uri);
 void sp_document_set_size_px (SPDocument *doc, gdouble width, gdouble height);
 
-G_END_DECLS
+
 
 #endif

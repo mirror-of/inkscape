@@ -17,7 +17,7 @@
 #include "forward.h"
 #include "xml/repr.h"
 
-G_BEGIN_DECLS
+
 
 struct _SPSelection {
 	GObject object;
@@ -72,6 +72,6 @@ NRRect *sp_selection_bbox_document (SPSelection *selection, NRRect *bbox);
 /* Returns number of points used */
 int sp_selection_snappoints (SPSelection *selection, NRPoint *points, int size);
 
-G_END_DECLS
+
 
 #endif

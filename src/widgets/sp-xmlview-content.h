@@ -21,7 +21,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_XMLVIEW_CONTENT (sp_xmlview_content_get_type ())
 #define SP_XMLVIEW_CONTENT(o) (GTK_CHECK_CAST ((o), SP_TYPE_XMLVIEW_CONTENT, SPXMLViewContent))
@@ -51,6 +51,6 @@ GtkWidget * sp_xmlview_content_new (SPRepr * repr);
 
 void sp_xmlview_content_set_repr (SPXMLViewContent * text, SPRepr * repr);
 
-G_END_DECLS
+
 
 #endif

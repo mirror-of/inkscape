@@ -127,10 +127,6 @@ struct _SPItemClass {
 
 /* Methods */
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 void sp_item_invoke_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int clear);
 void sp_item_invoke_bbox_full (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags, unsigned int clear);
 
@@ -181,9 +177,5 @@ NRMatrix *sp_item_dt2i_affine_d (SPItem const *item, SPDesktop *dt, NRMatrix *tr
 
 gdouble sp_item_distance_to_svg_viewport (SPItem *item, gdouble distance, const SPUnit *unit);
 gdouble sp_item_distance_to_svg_bbox (SPItem *item, gdouble distance, const SPUnit *unit);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
 
 #endif

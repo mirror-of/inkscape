@@ -40,10 +40,6 @@
 	extern Inkscape::Application * inkscape;
 #endif
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 Inkscape::Application * inkscape_application_new (void);
 
 /* Preference management */
@@ -59,10 +55,6 @@ SPDocument * inkscape_active_document (void);
 
 #define SP_ACTIVE_DESKTOP inkscape_active_desktop ()
 SPDesktop * inkscape_active_desktop (void);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
 
 /*
  * fixme: This has to be rethought

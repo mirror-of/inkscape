@@ -12,8 +12,6 @@
  * contains lots of stitched pieces of path-chemistry.c
  */
 
-// comment out the extern "C" if compiling with g++
-extern "C" {
 #include <string.h>
 #include <libart_lgpl/art_misc.h>
 #include "xml/repr.h"
@@ -33,7 +31,6 @@ extern "C" {
 #include "xml/repr.h"
 #include "xml/repr-private.h"
 #include "libnr/nr-types.h"
-}
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
@@ -47,19 +44,19 @@ SPRepr*     LCA(SPRepr* a,SPRepr* b);
 bool        Ancetre(SPRepr* a,SPRepr* who);
 SPRepr*     AncetreFils(SPRepr* a,SPRepr* d);
 
-void sp_selected_path_union(void)
+void sp_selected_path_union()
 {
 	sp_selected_path_boolop(bool_op_union);
 }
-void sp_selected_path_intersect(void)
+void sp_selected_path_intersect()
 {
 	sp_selected_path_boolop(bool_op_inters);
 }
-void sp_selected_path_diff(void)
+void sp_selected_path_diff()
 {
 	sp_selected_path_boolop(bool_op_diff);
 }
-void sp_selected_path_symdiff(void)
+void sp_selected_path_symdiff()
 {
 	sp_selected_path_boolop(bool_op_symdiff);
 }
@@ -372,7 +369,7 @@ Path::path_descr  theD=path->descr_data[i];
 	return res;
 }
 
-void sp_selected_path_outline(void)
+void sp_selected_path_outline()
 {
 	SPSelection * selection;
 	SPRepr * repr;
@@ -587,11 +584,11 @@ void sp_selected_path_outline(void)
 	
 	g_free (style);
 }
-void sp_selected_path_offset(void)
+void sp_selected_path_offset()
 {
 	sp_selected_path_do_offset(true);
 }
-void sp_selected_path_inset(void)
+void sp_selected_path_inset()
 {
 	sp_selected_path_do_offset(false);
 }
@@ -792,9 +789,9 @@ void        sp_selected_path_do_offset(bool expand)
 	g_free (style);
 }
 
-void sp_selected_path_simplify(void)
+void sp_selected_path_simplify()
 {
-		SPSelection * selection;
+	SPSelection * selection;
 	SPRepr * repr;
 	SPItem * item;
 	SPCurve * curve;

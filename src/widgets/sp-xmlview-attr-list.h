@@ -18,7 +18,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_XMLVIEW_ATTR_LIST (sp_xmlview_attr_list_get_type ())
 #define SP_XMLVIEW_ATTR_LIST(o) (GTK_CHECK_CAST ((o), SP_TYPE_XMLVIEW_ATTR_LIST, SPXMLViewAttrList))
@@ -50,6 +50,6 @@ GtkWidget * sp_xmlview_attr_list_new (SPRepr * repr);
 
 void sp_xmlview_attr_list_set_repr (SPXMLViewAttrList * list, SPRepr * repr);
 
-G_END_DECLS
+
 
 #endif

@@ -16,7 +16,7 @@
 #include "svg/svg-types.h"
 #include "sp-item.h"
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_USE            (sp_use_get_type ())
 #define SP_USE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_USE, SPUse))
@@ -43,6 +43,6 @@ struct _SPUseClass {
 
 GType sp_use_get_type (void);
 
-G_END_DECLS
+
 
 #endif

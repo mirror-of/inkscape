@@ -1,3 +1,7 @@
+2003-12-21  MenTaLguY <mental@rydia.net>
+
+	* Finally cleaned up the linker issues
+
 2003-12-21  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/Makefile.am (inkscapelib_src):

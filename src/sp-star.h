@@ -16,7 +16,7 @@
 
 #include "sp-polygon.h"
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_STAR            (sp_star_get_type ())
 #define SP_STAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_STAR, SPStar))
@@ -52,6 +52,6 @@ void sp_star_position_set (SPStar *star, gint sides, gdouble cx, gdouble cy, gdo
 
 void sp_star_get_xy (SPStar *star, SPStarPoint point, gint index, NRPoint *p);
 
-G_END_DECLS
+
 
 #endif

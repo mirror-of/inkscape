@@ -14,13 +14,13 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #include <gtk/gtkwidget.h>
 #include "../forward.h"
 
 void sp_object_attributes_dialog (SPObject *object, const gchar *tag);
 
-G_END_DECLS
+
 
 #endif

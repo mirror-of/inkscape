@@ -26,7 +26,7 @@
 
 #include <gtk/gtkcontainer.h>
 
-G_BEGIN_DECLS
+
 
 
 /* --- type macros --- */
@@ -134,6 +134,6 @@ guint*	   sp_wrap_box_query_line_lengths  (SPWrapBox	     *wbox,
 					     guint           *n_lines);
 
 
-G_END_DECLS
+
 
 #endif /* __SP_WRAP_BOX_H__ */

@@ -12,7 +12,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_PAINT_SELECTOR (sp_paint_selector_get_type ())
 #define SP_PAINT_SELECTOR(o) (GTK_CHECK_CAST ((o), SP_TYPE_PAINT_SELECTOR, SPPaintSelector))
@@ -98,6 +98,6 @@ void sp_paint_selector_write_radialgradient (SPPaintSelector *psel, SPRadialGrad
 
 void sp_paint_selector_system_color_set (SPPaintSelector *psel, const SPColor *color, float opacity);
 
-G_END_DECLS
+
 
 #endif

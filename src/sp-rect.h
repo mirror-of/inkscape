@@ -17,7 +17,7 @@
 #include "svg/svg-types.h"
 #include "sp-shape.h"
 
-G_BEGIN_DECLS
+
 
 #define SP_TYPE_RECT            (sp_rect_get_type ())
 #define SP_RECT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_RECT, SPRect))
@@ -53,6 +53,6 @@ void sp_rect_position_set (SPRect * rect, gdouble x, gdouble y, gdouble width, g
 void sp_rect_set_rx(SPRect * rect, gboolean set, gdouble value);
 void sp_rect_set_ry(SPRect * rect, gboolean set, gdouble value);
 
-G_END_DECLS
+
 
 #endif

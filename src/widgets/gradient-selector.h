@@ -15,7 +15,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 typedef struct _SPGradientSelector SPGradientSelector;
 typedef struct _SPGradientSelectorClass SPGradientSelectorClass;
@@ -88,6 +88,6 @@ void sp_gradient_selector_get_rgradient_position_floatv (SPGradientSelector *gse
 void sp_gradient_selector_get_lgradient_position_floatv (SPGradientSelector *gsel, gfloat *pos);
 void sp_gradient_selector_get_rgradient_position_floatv (SPGradientSelector *gsel, gfloat *pos);
 
-G_END_DECLS
+
 
 #endif

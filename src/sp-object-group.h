@@ -31,15 +31,6 @@ struct _SPObjectGroupClass {
 	SPObjectClass parent_class;
 };
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 GType sp_objectgroup_get_type (void);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
 
 #endif

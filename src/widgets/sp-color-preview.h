@@ -17,7 +17,7 @@
 
 #include <glib.h>
 
-G_BEGIN_DECLS
+
 
 typedef struct _SPColorPreview SPColorPreview;
 typedef struct _SPColorPreviewClass SPColorPreviewClass;
@@ -45,6 +45,6 @@ GtkWidget *sp_color_preview_new (guint32 rgba);
 void sp_color_preview_set_rgba32 (SPColorPreview *cp, guint32 color);
 
 
-G_END_DECLS
+
 
 #endif
