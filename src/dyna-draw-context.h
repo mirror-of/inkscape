@@ -69,7 +69,6 @@ struct SPDynaDrawContext
     guint dynahand : 1;           /* mouse state: mouse is in draw */
     guint use_timeout : 1;
     guint use_calligraphic : 1;
-    guint fixed_angle : 1;
     double mass, drag;
     double angle;
     double width;

@@ -33,12 +33,7 @@
 #include <math.h>
 #include <string.h>
 #include <glib.h>
-#include <gtk/gtkmain.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtkbutton.h>
-#include <gtk/gtkspinbutton.h>
-#include <gtk/gtklabel.h>
+#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "svg/svg.h"
@@ -161,7 +156,6 @@ sp_dyna_draw_context_init(SPDynaDrawContext *ddc)
     ddc->del = NR::Point(0,0);
 
     /* attributes */
-    ddc->fixed_angle = TRUE;   
     ddc->use_timeout = FALSE;
     ddc->use_calligraphic = TRUE;
     ddc->timer_id = 0;
@@ -244,10 +238,8 @@ sp_dyna_draw_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
         double const dval = ( val ? g_ascii_strtod (val, NULL) : DRAG_DEFAULT );
         ddc->drag = CLAMP(dval, DRAG_MIN, DRAG_MAX);
     } else if (!strcmp(key, "angle")) {
-        double const dval = ( val
-                              ? mod360( g_ascii_strtod (val, NULL))
-                              : 0.0 );
-        ddc->angle = dval;
+        double const dval = ( val ? g_ascii_strtod (val, NULL) : 0.0);
+        ddc->angle = CLAMP (dval, -90, 90);
     } else if (!strcmp(key, "width")) {
         double const dval = ( val ? g_ascii_strtod (val, NULL) : 0.1 );
         ddc->width = CLAMP(dval, -1000.0, 1000.0);
@@ -428,6 +420,16 @@ sp_dyna_draw_timeout_handler(gpointer data)
     return TRUE;
 }
 
+void
+sp_ddc_update_toolbox (SPDesktop *desktop, const gchar *id, double value)
+{
+    gpointer hb = sp_search_by_data_recursive (desktop->owner->aux_toolbox, (gpointer) id);
+    if (hb && GTK_IS_WIDGET(hb) && GTK_IS_SPIN_BUTTON(hb)) {
+        GtkAdjustment *a = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(hb));
+        gtk_adjustment_set_value (a, value);
+    }
+ }
+
 gint
 sp_dyna_draw_context_root_handler(SPEventContext *event_context,
                                   GdkEvent *event)
@@ -459,9 +461,11 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
 
             sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                                 ( dc->use_timeout
-                                  ? ( GDK_BUTTON_RELEASE_MASK |
+                                  ? ( GDK_KEY_PRESS_MASK |
+                                      GDK_BUTTON_RELEASE_MASK |
                                       GDK_BUTTON_PRESS_MASK    )
-                                  : ( GDK_BUTTON_RELEASE_MASK |
+                                  : ( GDK_KEY_PRESS_MASK | 
+                                      GDK_BUTTON_RELEASE_MASK |
                                       GDK_POINTER_MOTION_MASK |
                                       GDK_BUTTON_PRESS_MASK    ) ),
                                 NULL,
@@ -543,11 +547,43 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
     case GDK_KEY_PRESS:
         switch (event->key.keyval) {
         case GDK_Up:
-        case GDK_Down:
         case GDK_KP_Up:
-        case GDK_KP_Down:
-            // prevent the zoom field from activation
             if (!MOD__CTRL_ONLY) {
+                dc->angle += 5.0;
+                if (dc->angle > 90.0) 
+                    dc->angle = 90.0;
+                sp_ddc_update_toolbox (desktop, "calligraphy-angle", dc->angle);
+                ret = TRUE;
+            }
+            break;
+        case GDK_Down:
+        case GDK_KP_Down:
+            if (!MOD__CTRL_ONLY) {
+                dc->angle -= 5.0;
+                if (dc->angle < -90.0) 
+                    dc->angle = -90.0;
+                g_print ("%g\n", dc->angle);
+                sp_ddc_update_toolbox (desktop, "calligraphy-angle", dc->angle);
+                ret = TRUE;
+            }
+            break;
+        case GDK_Right:
+        case GDK_KP_Right:
+            if (!MOD__CTRL_ONLY) {
+                dc->width += 0.01;
+                if (dc->width > 1.0) 
+                    dc->width = 1.0;
+                sp_ddc_update_toolbox (desktop, "altx-calligraphy", dc->width); // the same spinbutton is for alt+x
+                ret = TRUE;
+            }
+            break;
+        case GDK_Left:
+        case GDK_KP_Left:
+            if (!MOD__CTRL_ONLY) {
+                dc->width -= 0.01;
+                if (dc->width < 0.0) 
+                    dc->width = 0.0;
+                sp_ddc_update_toolbox (desktop, "altx-calligraphy", dc->width); 
                 ret = TRUE;
             }
             break;
@@ -577,6 +613,7 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
 
     return ret;
 }
+
 
 static void
 clear_current(SPDynaDrawContext *dc)
