@@ -15,6 +15,7 @@
 
 #include <math.h>
 #include <string.h>
+#include <glib.h>
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-path.h>

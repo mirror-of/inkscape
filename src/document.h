@@ -30,15 +30,15 @@ struct _SPDocument {
 	SPRepr *rroot; /* Root element of SPReprDoc */
 	SPObject *root; /* Our SPRoot */
 
-	guchar *uri; /* URI string or NULL */
-	guchar *base;
-	guchar *name;
+	gchar *uri; /* URI string or NULL */
+	gchar *base;
+	gchar *name;
 
 	/* fixme: remove this */
 	SPDocumentPrivate *priv;
 
 	/* Last action key */
-	const guchar *actionkey;
+	const gchar *actionkey;
 	/* Handler ID */
 	guint modified_id;
 };
@@ -47,7 +47,7 @@ struct _SPDocumentClass {
 	GObjectClass parent_class;
 
 	void (* modified) (SPDocument *document, guint flags);
-	void (* uri_set) (SPDocument *document, const guchar *uri);
+	void (* uri_set) (SPDocument *document, const gchar *uri);
 	void (* resized) (SPDocument *document, gdouble width, gdouble height);
 };
 
@@ -101,8 +101,8 @@ void sp_document_clear_redo (SPDocument * document);
 
 void sp_document_child_added (SPDocument *doc, SPObject *object, SPRepr *child, SPRepr *ref);
 void sp_document_child_removed (SPDocument *doc, SPObject *object, SPRepr *child, SPRepr *ref);
-void sp_document_attr_changed (SPDocument *doc, SPObject *object, const guchar *key, const guchar *oldval, const guchar *newval);
-void sp_document_content_changed (SPDocument *doc, SPObject *object, const guchar *oldcontent, const guchar *newcontent);
+void sp_document_attr_changed (SPDocument *doc, SPObject *object, const gchar *key, const gchar *oldval, const gchar *newval);
+void sp_document_content_changed (SPDocument *doc, SPObject *object, const gchar *oldcontent, const gchar *newcontent);
 void sp_document_order_changed (SPDocument *doc, SPObject *object, SPRepr *child, SPRepr *oldref, SPRepr *newref);
 
 /* Object modification root handler */
@@ -111,7 +111,7 @@ gint sp_document_ensure_up_to_date (SPDocument *doc);
 
 /* Save all previous actions to stack, as one undo step */
 void sp_document_done (SPDocument *document);
-void sp_document_maybe_done (SPDocument *document, const guchar *key);
+void sp_document_maybe_done (SPDocument *document, const gchar *key);
 
 /* Cancel (and revert) current unsaved actions */
 void sp_document_cancel (SPDocument *document);
@@ -133,9 +133,9 @@ void sp_document_del_repr (SPDocument *document, SPRepr *repr);
 #endif
 
 /* Resource management */
-gboolean sp_document_add_resource (SPDocument *document, const guchar *key, SPObject *object);
-gboolean sp_document_remove_resource (SPDocument *document, const guchar *key, SPObject *object);
-const GSList *sp_document_get_resource_list (SPDocument *document, const guchar *key);
+gboolean sp_document_add_resource (SPDocument *document, const gchar *key, SPObject *object);
+gboolean sp_document_remove_resource (SPDocument *document, const gchar *key, SPObject *object);
+const GSList *sp_document_get_resource_list (SPDocument *document, const gchar *key);
 
 /*
  * Ideas: How to overcome style invalidation nightmare
@@ -158,7 +158,7 @@ const GSList *sp_document_get_resource_list (SPDocument *document, const guchar 
 GSList * sp_document_items_in_box (SPDocument *document, NRRectD *box);
 GSList * sp_document_partial_items_in_box (SPDocument *document, NRRectD *box);
 
-void sp_document_set_uri (SPDocument *document, const guchar *uri);
+void sp_document_set_uri (SPDocument *document, const gchar *uri);
 void sp_document_set_size_px (SPDocument *doc, gdouble width, gdouble height);
 
 #endif

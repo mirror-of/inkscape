@@ -13,6 +13,7 @@
  */
 
 #include <math.h>
+#include <glib.h>
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-blit.h>

@@ -215,9 +215,9 @@ sp_document_dispose (GObject *object)
 
 static SPDocument *
 sp_document_create (SPReprDoc *rdoc,
-		    const unsigned char *uri,
-		    const unsigned char *base,
-		    const unsigned char *name,
+		    const gchar *uri,
+		    const gchar *base,
+		    const gchar *name,
 		    unsigned int advertize,
 		    unsigned int keepalive)
 {
@@ -310,11 +310,11 @@ sp_document_new (const gchar *uri, unsigned int advertize, unsigned int keepaliv
 {
 	SPDocument *doc;
 	SPReprDoc *rdoc;
-	unsigned char *base, *name;
+	gchar *base, *name;
 
 	if (uri) {
 		SPRepr *rroot;
-		unsigned char *s, *p;
+		gchar *s, *p;
 		/* Try to fetch repr from file */
 		rdoc = sp_repr_read_file (uri, SP_SVG_NS_URI);
 		/* If file cannot be loaded, return NULL without warning */
@@ -354,7 +354,7 @@ sp_document_new_from_mem (const gchar *buffer, gint length, unsigned int adverti
 	SPDocument *doc;
 	SPReprDoc *rdoc;
 	SPRepr *rroot;
-	unsigned char *name;
+	gchar *name;
 
 	rdoc = sp_repr_read_mem (buffer, length, SP_SVG_NS_URI);
 
@@ -418,7 +418,7 @@ sp_document_height (SPDocument * document)
 }
 
 void
-sp_document_set_uri (SPDocument *doc, const guchar *uri)
+sp_document_set_uri (SPDocument *doc, const gchar *uri)
 {
 	g_return_if_fail (doc != NULL);
 	g_return_if_fail (SP_IS_DOCUMENT (doc));
@@ -437,7 +437,7 @@ sp_document_set_uri (SPDocument *doc, const guchar *uri)
 	}
 
 	if (uri) {
-		guchar *s, *p;
+		gchar *s, *p;
 		doc->uri = g_strdup (uri);
 		/* fixme: Think, what this means for images (Lauris) */
 		s = g_strdup (uri);
@@ -735,7 +735,7 @@ sp_document_partial_items_in_box (SPDocument *document, NRRectD *box)
 /* Resource management */
 
 gboolean
-sp_document_add_resource (SPDocument *document, const guchar *key, SPObject *object)
+sp_document_add_resource (SPDocument *document, const gchar *key, SPObject *object)
 {
 	GSList *rlist;
 
@@ -755,7 +755,7 @@ sp_document_add_resource (SPDocument *document, const guchar *key, SPObject *obj
 }
 
 gboolean
-sp_document_remove_resource (SPDocument *document, const guchar *key, SPObject *object)
+sp_document_remove_resource (SPDocument *document, const gchar *key, SPObject *object)
 {
 	GSList *rlist;
 
@@ -776,7 +776,7 @@ sp_document_remove_resource (SPDocument *document, const guchar *key, SPObject *
 }
 
 const GSList *
-sp_document_get_resource_list (SPDocument *document, const guchar *key)
+sp_document_get_resource_list (SPDocument *document, const gchar *key)
 {
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);

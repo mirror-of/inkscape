@@ -11,6 +11,7 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+#include <glib.h>
 
 #include "../nodepath.h"
 #include "node-edit.h"

@@ -58,7 +58,7 @@ sp_document_done (SPDocument *doc)
 }
 
 void
-sp_document_maybe_done (SPDocument *doc, const guchar *key)
+sp_document_maybe_done (SPDocument *doc, const gchar *key)
 {
 	SPReprAction *log;
 

@@ -7,15 +7,16 @@
  *
  * Copyright (C) 1999-2003 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
+ * g++ port Copyright (C) 2003 Nathan Hurst
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glib.h>
+
 #include "repr.h"
 #include "repr-private.h"
 #include "repr-action.h"
-
-#include <glib.h>
 
 static SPReprAction *reverse_log (SPReprAction *log);
 static void coalesce_chgattr (SPReprAction *action);

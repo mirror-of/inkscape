@@ -9,6 +9,7 @@
  *
  * Copyright (C) 1999-2003 authors
  * Copyright (C) 2000-2002 Ximian, Inc.
+ * g++ port Copyright (C) 2003 Nathan Hurst
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -64,7 +65,7 @@ static void sp_repr_remove_attribute (SPRepr *repr, SPReprAttr *attr);
 static void sp_repr_remove_listener (SPRepr *repr, SPListener *listener);
 
 static SPReprAttr *sp_attribute_duplicate (const SPReprAttr *attr);
-static SPReprAttr *sp_attribute_new_from_code (int key, const unsigned char *value);
+static SPReprAttr *sp_attribute_new_from_code (int key, const gchar *value);
 
 static SPRepr * sp_repr_alloc (SPReprClass *type);
 static void sp_repr_free (SPRepr *repr);
@@ -86,7 +87,7 @@ sp_repr_new_from_code (SPReprClass *type, int code)
 }
 
 SPRepr *
-sp_repr_new (const unsigned char *name)
+sp_repr_new (const gchar *name)
 {
 	g_return_val_if_fail (name != NULL, NULL);
 	g_return_val_if_fail (*name != '\0', NULL);
@@ -95,7 +96,7 @@ sp_repr_new (const unsigned char *name)
 }
 
 SPRepr *
-sp_repr_new_text (const unsigned char *content)
+sp_repr_new_text (const gchar *content)
 {
 	SPRepr * repr;
 	g_return_val_if_fail (content != NULL, NULL);
@@ -247,7 +248,7 @@ repr_doc_copy (SPRepr *to, const SPRepr *from)
 	to_doc->is_logging = 0;
 }
 
-const unsigned char *
+const gchar *
 sp_repr_name (const SPRepr *repr)
 {
 	g_return_val_if_fail (repr != NULL, NULL);
@@ -255,7 +256,7 @@ sp_repr_name (const SPRepr *repr)
 	return SP_REPR_NAME (repr);
 }
 
-const unsigned char *
+const gchar *
 sp_repr_content (const SPRepr *repr)
 {
 	g_assert (repr != NULL);
@@ -263,8 +264,8 @@ sp_repr_content (const SPRepr *repr)
 	return SP_REPR_CONTENT (repr);
 }
 
-const unsigned char *
-sp_repr_attr (const SPRepr *repr, const unsigned char *key)
+const gchar *
+sp_repr_attr (const SPRepr *repr, const gchar *key)
 {
 	SPReprAttr *ra;
 	unsigned int q;
@@ -280,10 +281,10 @@ sp_repr_attr (const SPRepr *repr, const unsigned char *key)
 }
 
 unsigned int
-sp_repr_set_content (SPRepr *repr, const unsigned char *newcontent)
+sp_repr_set_content (SPRepr *repr, const gchar *newcontent)
 {
 	SPReprListener *rl;
-	unsigned char *oldcontent;
+	gchar *oldcontent;
 	unsigned int allowed;
 
 	g_return_val_if_fail (repr != NULL, FALSE);
@@ -316,7 +317,7 @@ sp_repr_set_content (SPRepr *repr, const unsigned char *newcontent)
 }
 
 static unsigned int
-sp_repr_del_attr (SPRepr *repr, const unsigned char *key)
+sp_repr_del_attr (SPRepr *repr, const gchar *key)
 {
 	SPReprAttr *prev, *attr;
 	SPReprListener *rl;
@@ -334,7 +335,7 @@ sp_repr_del_attr (SPRepr *repr, const unsigned char *key)
 	for (attr = repr->attributes; attr && (attr->key != q); attr = attr->next) prev = attr;
 
 	if (attr) {
-		unsigned char *oldval;
+		gchar *oldval;
 
 		oldval = attr->value;
 
@@ -367,7 +368,7 @@ sp_repr_del_attr (SPRepr *repr, const unsigned char *key)
 }
 
 static unsigned int
-sp_repr_chg_attr (SPRepr *repr, const unsigned char *key, const unsigned char *value)
+sp_repr_chg_attr (SPRepr *repr, const gchar *key, const gchar *value)
 {
 	SPReprAttr *prev, *attr;
 	SPReprListener *rl;
@@ -422,7 +423,7 @@ sp_repr_chg_attr (SPRepr *repr, const unsigned char *key, const unsigned char *v
 }
 
 unsigned int
-sp_repr_set_attr (SPRepr *repr, const unsigned char *key, const unsigned char *value)
+sp_repr_set_attr (SPRepr *repr, const gchar *key, const gchar *value)
 {
 	g_return_val_if_fail (repr != NULL, FALSE);
 	g_return_val_if_fail (key != NULL, FALSE);
@@ -813,7 +814,7 @@ sp_repr_document_root (const SPReprDoc *doc)
  */
 
 unsigned int
-sp_repr_document_merge (SPReprDoc *doc, const SPReprDoc *src, const unsigned char *key)
+sp_repr_document_merge (SPReprDoc *doc, const SPReprDoc *src, const gchar *key)
 {
 	SPRepr *rdoc;
 	const SPRepr *rsrc;
@@ -834,7 +835,7 @@ sp_repr_document_merge (SPReprDoc *doc, const SPReprDoc *src, const unsigned cha
  */
 
 unsigned int
-sp_repr_merge (SPRepr *repr, const SPRepr *src, const unsigned char *key)
+sp_repr_merge (SPRepr *repr, const SPRepr *src, const gchar *key)
 {
 	SPRepr *child;
 	SPReprAttr *attr;
@@ -853,7 +854,7 @@ sp_repr_merge (SPRepr *repr, const SPRepr *src, const unsigned char *key)
 	
 	for (child = src->children; child != NULL; child = child->next) {
 		SPRepr *rch;
-		const unsigned char *id;
+		const gchar *id;
 		id = sp_repr_attr (child, key);
 		if (id) {
 			rch = sp_repr_lookup_child (repr, key, id);
@@ -891,7 +892,7 @@ sp_attribute_duplicate (const SPReprAttr *attr)
 }
 
 static SPReprAttr *
-sp_attribute_new_from_code (int key, const unsigned char *value)
+sp_attribute_new_from_code (int key, const gchar *value)
 {
 	SPReprAttr *new;
 

@@ -45,7 +45,7 @@ Inkscape * inkscape_application_new (void);
 /* Preference management */
 void inkscape_load_preferences (Inkscape * inkscape);
 void inkscape_save_preferences (Inkscape * inkscape);
-SPRepr *inkscape_get_repr (Inkscape *inkscape, const unsigned char *key);
+SPRepr *inkscape_get_repr (Inkscape *inkscape, const gchar *key);
 
 /* Extension management */
 void inkscape_load_extensions (Inkscape *inkscape);

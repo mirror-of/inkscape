@@ -7,6 +7,7 @@
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
  * Copyright (C) 1999-2003 authors
+ * g++ port Copyright (C) 2003 Nathan Hurst
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -75,10 +76,10 @@ static void inkscape_activate_desktop_private (Inkscape *inkscape, SPDesktop *de
 static void inkscape_desactivate_desktop_private (Inkscape *inkscape, SPDesktop *desktop);
 
 static void inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, int skel_size,
-				  const unsigned char *e_mkdir,
-				  const unsigned char *e_notdir,
-				  const unsigned char *e_ccf,
-				  const unsigned char *e_cwf);
+				  const gchar *e_mkdir,
+				  const gchar *e_notdir,
+				  const gchar *e_ccf,
+				  const gchar *e_cwf);
 static void inkscape_init_preferences (Inkscape *inkscape);
 static void inkscape_init_extensions (Inkscape *inkscape);
 
@@ -131,7 +132,7 @@ inkscape_get_type (void)
 			4,
 			(GInstanceInitFunc) inkscape_init,
 		};
-		type = g_type_register_static (G_TYPE_OBJECT, "Inkscape", &info, 0);
+		type = g_type_register_static (G_TYPE_OBJECT, "Inkscape", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -143,7 +144,7 @@ inkscape_class_init (InkscapeClass * klass)
 
 	object_class = (GObjectClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (GObjectClass *)g_type_class_peek_parent (klass);
 
 	inkscape_signals[MODIFY_SELECTION] = g_signal_new ("modify_selection",
 							   G_TYPE_FROM_CLASS (klass),
@@ -328,7 +329,7 @@ inkscape_segv_handler (int signum)
 	gint count, nllen, len, pos;
 	time_t sptime;
 	struct tm *sptm;
-	char sptstr[256];
+	gchar sptstr[256];
 	GtkWidget *msgbox;
 
 	/* Kill loops */
@@ -351,7 +352,7 @@ inkscape_segv_handler (int signum)
 		doc = (SPDocument *) l->data;
 		repr = sp_document_repr_root (doc);
 		if (sp_repr_attr (repr, "sodipodi:modified")) {
-			const guchar *docname, *d0, *d;
+			const gchar *docname, *d0, *d;
 			gchar n[64], c[1024];
 			FILE *file;
 #if 0
@@ -363,9 +364,9 @@ inkscape_segv_handler (int signum)
 			docname = doc->name;
 			if (docname) {
 				/* fixme: Quick hack to remove emergency file suffix */
-				d0 = strrchr (docname, '.');
+				d0 = strrchr ((char*)docname, '.');
 				if (d0 && (d0 > docname)) {
-					d0 = strrchr (d0 - 1, '.');
+					d0 = strrchr ((char*)(d0 - 1), '.');
 					if (d0 && (d0 > docname)) {
 						d = d0;
 						while (isdigit (*d) || (*d == '.') || (*d == '_')) d += 1;
@@ -479,7 +480,7 @@ inkscape_application_new (void)
 {
 	Inkscape *sp;
 
-	sp = g_object_new (SP_TYPE_INKSCAPE, NULL);
+	sp = (Inkscape *)g_object_new (SP_TYPE_INKSCAPE, NULL);
 	/* fixme: load application defaults */
 
 #ifndef WIN32
@@ -495,8 +496,8 @@ inkscape_application_new (void)
 /* We use '.' as separator */
 
 static void
-inkscape_load_config (const unsigned char *filename, SPReprDoc *config, const unsigned char *skeleton, unsigned int skel_size,
-		      const unsigned char *e_notreg, const unsigned char *e_notxml, const unsigned char *e_notsp)
+inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *skeleton, unsigned int skel_size,
+		      const gchar *e_notreg, const gchar *e_notxml, const gchar *e_notsp)
 {
 	gchar *fn;
 	struct stat s;
@@ -512,7 +513,7 @@ inkscape_load_config (const unsigned char *filename, SPReprDoc *config, const un
 	if (stat (fn, &s)) {
 		/* No such file */
 		/* fixme: Think out something (Lauris) */
-		if (!strcmp (filename, "extensions")) {
+		if (!strcmp ((char*)filename, "extensions")) {
 			inkscape_init_extensions (INKSCAPE);
 		} else {
 			inkscape_init_preferences (INKSCAPE);
@@ -611,7 +612,7 @@ inkscape_save_preferences (Inkscape * inkscape)
 
 /* We use '.' as separator */
 SPRepr *
-inkscape_get_repr (Inkscape *inkscape, const unsigned char *key)
+inkscape_get_repr (Inkscape *inkscape, const gchar *key)
 {
 	SPRepr * repr;
 	const gchar * id, * s, * e;
@@ -729,14 +730,14 @@ inkscape_remove_desktop (SPDesktop * desktop)
 	if (DESKTOP_IS_ACTIVE (desktop)) {
 		g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DESACTIVATE_DESKTOP], 0, desktop);
 		if (inkscape->desktops->next != NULL) {
-			SPDesktop * new;
-			new = (SPDesktop *) inkscape->desktops->next->data;
-			inkscape->desktops = g_slist_remove (inkscape->desktops, new);
-			inkscape->desktops = g_slist_prepend (inkscape->desktops, new);
-			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, new);
-			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, SP_DT_EVENTCONTEXT (new));
-			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, SP_DT_SELECTION (new));
-			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, SP_DT_SELECTION (new));
+			SPDesktop * new_desktop;
+			new_desktop = (SPDesktop *) inkscape->desktops->next->data;
+			inkscape->desktops = g_slist_remove (inkscape->desktops, new_desktop);
+			inkscape->desktops = g_slist_prepend (inkscape->desktops, new_desktop);
+			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, new_desktop);
+			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, SP_DT_EVENTCONTEXT (new_desktop));
+			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, SP_DT_SELECTION (new_desktop));
+			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, SP_DT_SELECTION (new_desktop));
 		} else {
 			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, NULL);
 			g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, NULL);
@@ -860,7 +861,7 @@ inkscape_active_event_context (void)
 
 static void
 inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *skeleton, int skel_size,
-		      const unsigned char *e_mkdir, const unsigned char *e_notdir, const unsigned char *e_ccf, const unsigned char *e_cwf)
+		      const gchar *e_mkdir, const gchar *e_notdir, const gchar *e_ccf, const gchar *e_cwf)
 {
 	gchar * dn, *fn;
 	struct stat s;
