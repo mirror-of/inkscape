@@ -161,7 +161,6 @@ inkscape_private_libs =	\
 	helper/libspchelp.a	\
 	libnrtype/libnrtype.a	\
 	libnr/libnr.a	\
-	libarikkei/libarikkei.a	\
 	livarot/libvarot.a	\
 	extension/libextension.a	\
 	extension/implementation/libimplementation.a	\

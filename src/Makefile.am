@@ -22,7 +22,6 @@ include extension/implementation/Makefile_insert
 include extension/internal/Makefile_insert
 include helper/Makefile_insert
 include inkjar/Makefile_insert
-include libarikkei/Makefile_insert
 include libnr/Makefile_insert
 include libnrtype/Makefile_insert
 include livarot/Makefile_insert
@@ -42,7 +41,6 @@ noinst_LIBRARIES =	\
 	extension/libextension.a	\
 	helper/libspchelp.a	\
 	$(inkjar_libs)	\
-	libarikkei/libarikkei.a	\
 	libnr/libnr.a	\
 	libnrtype/libnrtype.a	\
 	livarot/libvarot.a	\
@@ -64,7 +62,6 @@ EXTRA_DIST =	\
 	extension/makefile.in	\
 	helper/makefile.in	\
 	inkjar/makefile.in	\
-	libarikkei/makefile.in	\
 	libnr/makefile.in	\
 	libnrtype/makefile.in	\
 	livarot/makefile.in	\

@@ -434,7 +434,6 @@ src/extension/implementation/makefile
 src/extension/internal/makefile
 src/helper/makefile
 src/inkjar/makefile
-src/libarikkei/makefile
 src/libnr/makefile
 src/libnrtype/makefile
 src/livarot/makefile
