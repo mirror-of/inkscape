@@ -542,9 +542,6 @@ bezier_pt(unsigned const degree, NR::Point const V[], gdouble const t)
 NR::Point
 sp_darray_left_tangent(NR::Point const d[], unsigned const len)
 {
-    /* Note: The reason we don't use the tolerance approach of right_tangent is that the current
-       implementation of fit_and_split in pencil-context.cpp uses the first two datapoints to
-       indicate the required tangent. */
     g_assert( len >= 2 );
     g_assert( d[0] != d[1] );
     return unit_vector( d[1] - d[0] );
@@ -567,6 +564,37 @@ sp_darray_right_tangent(NR::Point const d[], unsigned const len)
     unsigned const prev = last - 1;
     g_assert( d[last] != d[prev] );
     return unit_vector( d[prev] - d[last] );
+}
+
+/** Estimate the (forward) tangent at point d[0].
+
+    Unlike the center and right versions, this calculates the tangent in the way one might expect,
+    i.e. wrt increasing index into d.
+
+    \pre 2 \<= len.
+    \pre d[0] != d[1].
+    \pre all[p in d] in_svg_plane(p).
+    \post is_unit_vector(ret).
+**/
+NR::Point
+sp_darray_left_tangent(NR::Point const d[], unsigned const len, double const tolerance_sq)
+{
+    g_assert( 2 <= len );
+    g_assert( 0 <= tolerance_sq );
+    for (unsigned i = 1;;) {
+        NR::Point const pi(d[i]);
+        NR::Point const t(pi - d[0]);
+        double const distsq = dot(t, t);
+        if ( tolerance_sq < distsq ) {
+            return unit_vector(t);
+        }
+        ++i;
+        if (i == len) {
+            return ( distsq == 0
+                     ? sp_darray_left_tangent(d, len)
+                     : unit_vector(t) );
+        }
+    }
 }
 
 /** Estimates the (backward) tangent at d[last].

@@ -31,6 +31,7 @@ gint sp_bezier_fit_cubic_full(NR::Point bezier[], NR::Point const data[], gint l
                               gdouble error, gint lg_max_beziers);
 
 NR::Point sp_darray_left_tangent(NR::Point const d[], unsigned const len);
+NR::Point sp_darray_left_tangent(NR::Point const d[], unsigned const len, double const tolerance_sq);
 NR::Point sp_darray_right_tangent(NR::Point const d[], unsigned const length, double const tolerance_sq);
 
 
