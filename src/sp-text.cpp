@@ -247,7 +247,6 @@ sp_string_calculate_dimensions (SPString *string)
 				if (!preserve && inspace && intext) {
 					string->advance.x += spadv.x;
 					string->advance.y -= spadv.y;
-					inspace = FALSE;
 				}
 
 				if (nr_font_glyph_area_get (font, glyph, &bbox)) {
