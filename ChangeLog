@@ -1,5 +1,9 @@
 2004-01-26  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/livarot/Path-test.cpp: new file.
+	* src/livarot/Makefile.am: New test program Path-test.
+	  Remove $(cflags) from INCLUDES.
+
 	* configure.in: Adjust some things for our C to C++ transition.
 	  Add warning flags to CXXFLAGS if the compiler is g++.
 

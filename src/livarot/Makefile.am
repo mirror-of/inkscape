@@ -2,9 +2,14 @@ noinst_LIBRARIES = libvarot.a
 
 INCLUDES = \
 	-I.. \
-	$(cflags) \
 	-I$(top_srcdir)/src \
 	$(INKSCAPE_CFLAGS)
+
+TESTS = Path-test$(EXEEXT)
+# automake adds $(EXEEXT) to check_PROGRAMS items but not to TESTS items:
+# TESTS items can be scripts etc.
+
+check_PROGRAMS = Path-test
 
 libvarot_a_SOURCES = \
 	AVL.cpp AVL.h \
@@ -24,3 +29,5 @@ libvarot_a_SOURCES = \
 	ShapeSweepUtils.cpp Shape.h \
 	MySeg.cpp MySeg.h
 
+Path_test_SOURCES = Path-test.cpp AVL.cpp DblLinked.cpp PathConversion.cpp PathOutline.cpp Shape.cpp ShapeSweepUtils.cpp
+Path_test_LDADD = ../libnr/nr-point-fns.o ../libnr/nr-types.o -lglib-2.0
