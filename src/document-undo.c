@@ -91,7 +91,7 @@ sp_document_maybe_done (SPDocument *doc, const gchar *key)
 		doc->priv->history_size++;
 	}
 
-	doc->actionkey = NULL;
+	doc->actionkey = key;
 
 	if (!sp_repr_attr (doc->rroot, "sodipodi:modified")) {
 		sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
