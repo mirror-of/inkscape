@@ -77,6 +77,7 @@ can leave your ideas and requests there.</p>
 <keys><key><shift/><ctrl/>D</key> <action>Document Preferences</action></keys>
 <keys><key><shift/><ctrl/>P</key> <action>Inkscape Preferences</action></keys>
 <keys><key><shift/><ctrl/>E</key>	 <action>Export to PNG</action></keys>
+<keys><key><ctrl/>F</key>	 <action>Find</action></keys>
 <note>These open a new dialog window if it wasn't open yet, otherwise the corresponding dialog gets focus.</note>
 </group>
 
