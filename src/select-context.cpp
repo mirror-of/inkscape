@@ -770,6 +770,10 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
 		dxy[dim] = sp_desktop_dim_snap_list(desktop, seltrans->spp, seltrans->spp_length, dxy[dim], dim);
 	}
 
+	/* N.B. If we ever implement angled guides, then we'll want to make sure that the movement
+	   respects both the snapped-to guide and the h-or-v constraint implied by control mask.
+	   This should be a special case of snapping to h-or-v followed by snapping to whatever
+	   real guides there are. */
 	if (state & GDK_CONTROL_MASK) {
 		if( fabs(dxy[X]) > fabs(dxy[Y]) ) {
 			dxy[Y] = 0.0;
