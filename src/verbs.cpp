@@ -675,16 +675,16 @@ sp_verb_action_tutorial_perform (SPAction *action, void * data, void * pdata)
 {
     switch ((int) data) {
         case SP_VERB_TUTORIAL_BASIC:
-            sp_help_open_tutorial (NULL, (gpointer) "tutorial-basic.svg");
+            sp_help_open_tutorial (NULL, (gpointer)_("tutorial-basic.svg"));
             break;
         case SP_VERB_TUTORIAL_ADVANCED:
-            sp_help_open_tutorial (NULL, (gpointer) "tutorial-advanced.svg");
+            sp_help_open_tutorial (NULL, (gpointer)_("tutorial-advanced.svg"));
             break;
         case SP_VERB_TUTORIAL_DESIGN:
-            sp_help_open_tutorial (NULL, (gpointer) "elementsofdesign.svg");
+            sp_help_open_tutorial (NULL, (gpointer)_("elementsofdesign.svg"));
             break;
         case SP_VERB_TUTORIAL_TIPS:
-            sp_help_open_tutorial (NULL, (gpointer) "tipsandtricks.svg");
+            sp_help_open_tutorial (NULL, (gpointer)_("tipsandtricks.svg"));
             break;
 	default:
 	    break;

@@ -1,3 +1,7 @@
+2004-05-07  Kees Cook <kees@outflux.net>
+
+	* src/verbs.cpp: re-localizing tutorials.  My goof!
+
 2004-05-07  Carl Hetherington <inkscape@carlh.net>
 
 	* src/desktop.cpp: make sure that a SPNamedView's modified signal
