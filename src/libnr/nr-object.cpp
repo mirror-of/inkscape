@@ -71,8 +71,6 @@ NRType nr_object_register_type(NRType parent,
 			       void (* cinit) (NRObjectClass *),
 			       void (* iinit) (NRObject *))
 {
-    NRObjectClass *klass;
-
     if (classes_len >= classes_size) {
 	classes_size += 32;
 	classes = nr_renew (classes, NRObjectClass *, classes_size);
