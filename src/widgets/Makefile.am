@@ -24,7 +24,6 @@ libspwidgets_a_SOURCES = \
 	sp-color-notebook.cpp sp-color-notebook.h \
 	sp-color-scales.cpp sp-color-scales.h \
 	sp-color-gtkselector.cpp sp-color-gtkselector.h \
-	sp-crayon-selector.cpp sp-crayon-selector.h \
 	sp-color-wheel.cpp sp-color-wheel.h \
 	sp-color-wheel-selector.cpp sp-color-wheel-selector.h \
 	dash-selector.cpp dash-selector.h \
