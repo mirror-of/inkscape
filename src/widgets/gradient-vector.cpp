@@ -438,15 +438,11 @@ static void grad_edit_dia_stopremoved (SPRepr *repr, SPRepr *child, SPRepr *ref,
 
 static SPReprEventVector grad_edit_dia_repr_events =
 {
-    NULL, /* add_child */
     NULL, /* child_added */
-    NULL, /* remove_child */
     grad_edit_dia_stopremoved, /* child_removed */
     NULL, /* change_attr */
     NULL, /* attr_changed*/
-    NULL, /* change_list */
     NULL, /* content_changed */
-    NULL, /* change_order */
     NULL  /* order_changed */
 };
 

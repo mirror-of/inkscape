@@ -1038,15 +1038,11 @@ static void star_tb_event_attr_changed (SPRepr * repr, const gchar * name, const
 
 static SPReprEventVector star_tb_repr_events =
 {
-    NULL, /* add_child */
     NULL, /* child_added */
-    NULL, /* remove_child */
     NULL, /* child_removed */
     NULL, /* change_attr */
     star_tb_event_attr_changed,
-    NULL, /* change_list */
     NULL, /* content_changed */
-    NULL, /* change_order */
     NULL  /* order_changed */
 };
 
@@ -1368,15 +1364,11 @@ static void rect_tb_event_attr_changed (SPRepr * repr, const gchar * name, const
 
 
 static SPReprEventVector rect_tb_repr_events = {
-    NULL, /* add_child */
     NULL, /* child_added */
-    NULL, /* remove_child */
     NULL, /* child_removed */
     NULL, /* change_attr */
     rect_tb_event_attr_changed,
-    NULL, /* change_list */
     NULL, /* content_changed */
-    NULL, /* change_order */
     NULL  /* order_changed */
 };
 
@@ -1614,15 +1606,11 @@ static void spiral_tb_event_attr_changed (SPRepr * repr, const gchar * name, con
 
 
 static SPReprEventVector spiral_tb_repr_events = {
-    NULL, /* add_child */
     NULL, /* child_added */
-    NULL, /* remove_child */
     NULL, /* child_removed */
     NULL, /* change_attr */
     spiral_tb_event_attr_changed,
-    NULL, /* change_list */
     NULL, /* content_changed */
-    NULL, /* change_order */
     NULL  /* order_changed */
 };
 
@@ -2104,15 +2092,11 @@ static void arc_tb_event_attr_changed (SPRepr * repr, const gchar * name, const 
 }
 
 static SPReprEventVector arc_tb_repr_events = {
-    NULL, /* add_child */
     NULL, /* child_added */
-    NULL, /* remove_child */
     NULL, /* child_removed */
     NULL, /* change_attr */
     arc_tb_event_attr_changed,
-    NULL, /* change_list */
     NULL, /* content_changed */
-    NULL, /* change_order */
     NULL  /* order_changed */
 };
 

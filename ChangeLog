@@ -1,3 +1,16 @@
+2004-01-15  MenTaLguY  <mental@rydia.net>
+
+	* src/arc-context.cpp, src/event-context.cpp, src/node-context.cpp,
+	  src/rect-context.cpp, src/sp-object.cpp, src/spiral-context.cpp,
+	  src/star-context.cpp, src/toolbox.cpp,
+	  src/dialogs/desktop-properties.cpp, src/widgets/gradient-vector.cpp,
+	  src/widgets/layer-selector.cpp, src/widgets/sp-widget.cpp,
+	  src/widgets/sp-xmlview-attr-list.cpp, src/widgets/sp-xmlview-content.cpp,
+	  src/widgets/sp-xmlview-tree.cpp, src/xml/repr.cpp,
+	  src/xml/sp-repr-event-vector.h:
+
+	  remove all veto callbacks but setting attributes
+
 2004-01-15  Kees Cook  <kees@outflux.net>
 
 	* src/inkscape.cpp: correcting windows path for preferences.  Closes

@@ -37,15 +37,11 @@ static void event_content_changed (SPRepr * repr, const gchar * old_content, con
 static GtkTextViewClass * parent_class = NULL;
 
 static SPReprEventVector repr_events = {
-	NULL, /* add_child */
 	NULL, /* child_added */
-	NULL, /* remove_child */
 	NULL, /* child_removed */
 	NULL, /* change_attr */
 	NULL, /* attr_changed */
-	NULL, /* change_text */
 	event_content_changed,
-	NULL, /* change_order */
 	NULL  /* order_changed */
 };
 

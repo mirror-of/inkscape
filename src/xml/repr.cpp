@@ -210,36 +210,27 @@ sp_repr_set_content(SPRepr *repr, gchar const *newcontent)
 {
     g_return_val_if_fail(repr != NULL, FALSE);
 
-    unsigned allowed = TRUE;
-    for (SPReprListener *rl = repr->listeners; rl && allowed; rl = rl->next) {
-        if (rl->vector->change_content) {
-            allowed = (* rl->vector->change_content)(repr, repr->content, newcontent, rl->data);
+    SharedCString oldcontent = repr->content;
+
+    if (newcontent) {
+        repr->content = SharedCString::copy(newcontent);
+    } else {
+        repr->content = SharedCString();
+    }
+    if (repr->doc) {
+        if (repr->doc->is_logging) {
+            repr->doc->log = (new SPReprActionChgContent(repr, oldcontent, repr->content, repr->doc->log))->optimizeOne();
+        }
+        repr->doc->_emitContentChanged(repr, oldcontent, repr->content);
+    }
+
+    for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
+        if (rl->vector->content_changed) {
+            (* rl->vector->content_changed)(repr, oldcontent, repr->content, rl->data);
         }
     }
 
-    if (allowed) {
-        SharedCString oldcontent = repr->content;
-
-        if (newcontent) {
-            repr->content = SharedCString::copy(newcontent);
-        } else {
-            repr->content = SharedCString();
-        }
-        if (repr->doc) {
-            if (repr->doc->is_logging) {
-                repr->doc->log = (new SPReprActionChgContent(repr, oldcontent, repr->content, repr->doc->log))->optimizeOne();
-            }
-            repr->doc->_emitContentChanged(repr, oldcontent, repr->content);
-        }
-
-        for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
-            if (rl->vector->content_changed) {
-                (* rl->vector->content_changed)(repr, oldcontent, repr->content, rl->data);
-            }
-        }
-    }
-
-    return allowed;
+    return true;
 }
 
 static unsigned
@@ -259,7 +250,8 @@ sp_repr_del_attr(SPRepr *repr, gchar const *key, bool is_interactive)
     unsigned allowed = TRUE;
 
     if (attr) {
-        for (SPReprListener *rl = repr->listeners; rl && allowed; rl = rl->next) {
+        for (SPReprListener *rl = repr->listeners; rl && allowed; rl = rl->next)
+        {
             if (rl->vector->change_attr) {
                 allowed = (* rl->vector->change_attr)(repr, key, attr->value, NULL, rl->data);
             }
@@ -382,63 +374,49 @@ sp_repr_add_child(SPRepr *repr, SPRepr *child, SPRepr *ref)
     g_assert(child->parent == NULL);
     g_assert(child->doc == NULL || child->doc == repr->doc);
 
-    unsigned allowed = TRUE;
-    for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
-        if (rl->vector->add_child) {
-            allowed = (* rl->vector->add_child)(repr, child, ref, rl->data);
-            /* FIXME: I'd guess that `&& allowed' should be added to the loop condition, like the
-               other `allowed' loops, so that we don't overwrite false.  Alternatively, given that
-               this probable-bug has occurred, perhaps use explicit `break' statement when false is
-               encountered, so that no easy-to-miss `&& allowed' test is needed in the `for'
-               condition.  Similarly elsewhere in repr.cpp.  -- pjrm */
-        }
-    }
-
-    if (allowed) {
-        if (ref) {
-            child->next = ref->next;
-            ref->next = child;
-            repr->children->_n_siblings++;
-            repr->_child_counts_complete = false;
+    if (ref) {
+        child->next = ref->next;
+        ref->next = child;
+        repr->children->_n_siblings++;
+        repr->_child_counts_complete = false;
+    } else {
+        child->next = repr->children;
+        repr->children = child;
+        if (child->next) {
+            child->_n_siblings = child->next->_n_siblings + 1;
         } else {
-            child->next = repr->children;
-            repr->children = child;
-            if (child->next) {
-                child->_n_siblings = child->next->_n_siblings + 1;
-            } else {
-                child->_n_siblings = 1;
-            }
-        }
-
-        child->parent = repr;
-
-        if (child->doc == NULL) bind_document(repr->doc, child);
-
-        if (repr->doc) {
-            if (repr->doc->is_logging) {
-                repr->doc->log = (new SPReprActionAdd(repr, child, ref, repr->doc->log))->optimizeOne();
-            }
-            repr->doc->_emitNodeMoved(child, NULL, NULL, repr, ref);
-        }
-
-        for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
-            if (rl->vector->child_added) {
-                (* rl->vector->child_added)(repr, child, ref, rl->data);
-            }
+            child->_n_siblings = 1;
         }
     }
 
-    return allowed;
+    child->parent = repr;
+
+    if (child->doc == NULL) bind_document(repr->doc, child);
+
+    if (repr->doc) {
+        if (repr->doc->is_logging) {
+            repr->doc->log = (new SPReprActionAdd(repr, child, ref, repr->doc->log))->optimizeOne();
+        }
+        repr->doc->_emitNodeMoved(child, NULL, NULL, repr, ref);
+    }
+
+    for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
+        if (rl->vector->child_added) {
+            (* rl->vector->child_added)(repr, child, ref, rl->data);
+        }
+    }
+
+    return true;
 }
 
 static void
-bind_document(SPReprDoc *doc, SPRepr *repr)
-{
+bind_document(SPReprDoc *doc, SPRepr *repr) {
     g_assert(repr->doc == NULL);
 
     repr->doc = doc;
 
-    for ( SPRepr *child = repr->children ; child != NULL ; child = child->next ) {
+    for ( SPRepr *child = repr->children ; child != NULL ; child = child->next )
+    {
         bind_document(doc, child);
     }
 }
@@ -458,60 +436,34 @@ sp_repr_remove_child(SPRepr *repr, SPRepr *child)
         }
     }
 
-    unsigned allowed = TRUE;
+    if (ref) {
+        ref->next = child->next;
+        repr->children->_n_siblings--;
+        repr->_child_counts_complete = false;
+    } else {
+        repr->children = child->next;
+        if (repr->children) {
+            repr->children->_n_siblings = child->_n_siblings - 1;
+        }
+    }
+
+    child->parent = NULL;
+    child->next = NULL;
+
+    if (repr->doc) {
+        if (repr->doc->is_logging) {
+            repr->doc->log = (new SPReprActionDel(repr, child, ref, repr->doc->log))->optimizeOne();
+        }
+        repr->doc->_emitNodeMoved(child, repr, ref, NULL, NULL);
+    }
+
     for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
-        if (rl->vector->remove_child) {
-            /* TODO:  This is a quick & nasty hack to prevent
-               a crash in the XML editor when deleting the
-               'namedview' node.  There is a better solution but
-               it's much more involved.  See Inkscape Bug #850971 */
-            // added a check that the namedview is top-level (child of svg),
-            // otherwise this freezes when trying to ungroup imported group   --bb
-            if ( !strcmp(sp_repr_name(child), "sodipodi:namedview")  &&
-                 !strcmp(sp_repr_name(sp_repr_parent(child)), "svg:svg") )
-            {
-                allowed = FALSE;
-            } else {
-                allowed = (* rl->vector->remove_child)(repr, child, ref, rl->data);
-            }
-            /* FIXME: I'd guess that `&& allowed' should be added to the loop condition, like the
-               other `allowed' loops, so that we don't overwrite false.  Alternatively, given that
-               this probable-bug has occurred, perhaps use explicit `break' statement when false is
-               encountered, so that no easy-to-miss `&& allowed' test is needed in the `for'
-               condition.  Similarly elsewhere in repr.cpp.  -- pjrm */
+        if (rl->vector->child_removed) {
+            (* rl->vector->child_removed)(repr, child, ref, rl->data);
         }
     }
 
-    if (allowed) {
-        if (ref) {
-            ref->next = child->next;
-            repr->children->_n_siblings--;
-            repr->_child_counts_complete = false;
-        } else {
-            repr->children = child->next;
-            if (repr->children) {
-                repr->children->_n_siblings = child->_n_siblings - 1;
-            }
-        }
-
-        child->parent = NULL;
-        child->next = NULL;
-
-        if (repr->doc) {
-            if (repr->doc->is_logging) {
-                repr->doc->log = (new SPReprActionDel(repr, child, ref, repr->doc->log))->optimizeOne();
-            }
-            repr->doc->_emitNodeMoved(child, repr, ref, NULL, NULL);
-        }
-
-        for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
-            if (rl->vector->child_removed) {
-                (* rl->vector->child_removed)(repr, child, ref, rl->data);
-            }
-        }
-    }
-
-    return allowed;
+    return true;
 }
 
 unsigned
@@ -530,49 +482,40 @@ sp_repr_change_order(SPRepr *const repr, SPRepr *const child, SPRepr *const ref)
         return TRUE;
     }
 
-    unsigned allowed = TRUE;
-    for (SPReprListener *rl = repr->listeners; rl && allowed; rl = rl->next) {
-        if (rl->vector->change_order) {
-            allowed = (* rl->vector->change_order)(repr, child, prev, ref, rl->data);
+    int n_children=repr->children->_n_siblings;
+
+    /* Remove from old position. */
+    if (prev) {
+        prev->next = child->next;
+    } else {
+        repr->children = child->next;
+    }
+    /* Insert at new position. */
+    if (ref) {
+        child->next = ref->next;
+        ref->next = child;
+    } else {
+        child->next = repr->children;
+        repr->children = child;
+    }
+
+    repr->children->_n_siblings = n_children;
+    repr->_child_counts_complete = false;
+
+    if (repr->doc) {
+        if (repr->doc->is_logging) {
+            repr->doc->log = (new SPReprActionChgOrder(repr, child, prev, ref, repr->doc->log))->optimizeOne();
+        }
+        repr->doc->_emitNodeMoved(child, repr, prev, repr, ref);
+    }
+
+    for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
+        if (rl->vector->order_changed) {
+            (* rl->vector->order_changed)(repr, child, prev, ref, rl->data);
         }
     }
 
-    if (allowed) {
-        int n_children=repr->children->_n_siblings;
-
-        /* Remove from old position. */
-        if (prev) {
-            prev->next = child->next;
-        } else {
-            repr->children = child->next;
-        }
-        /* Insert at new position. */
-        if (ref) {
-            child->next = ref->next;
-            ref->next = child;
-        } else {
-            child->next = repr->children;
-            repr->children = child;
-        }
-
-        repr->children->_n_siblings = n_children;
-        repr->_child_counts_complete = false;
-
-        if (repr->doc) {
-            if (repr->doc->is_logging) {
-                repr->doc->log = (new SPReprActionChgOrder(repr, child, prev, ref, repr->doc->log))->optimizeOne();
-            }
-            repr->doc->_emitNodeMoved(child, repr, prev, repr, ref);
-        }
-
-        for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
-            if (rl->vector->order_changed) {
-                (* rl->vector->order_changed)(repr, child, prev, ref, rl->data);
-            }
-        }
-    }
-
-    return allowed;
+    return true;
 }
 
 /** Note: Many if not all existing callers would be better off calling sp_repr_prev in

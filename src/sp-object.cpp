@@ -78,15 +78,11 @@ guint update_in_progress = 0; // guard against update-during-update
 enum {RELEASE, MODIFIED, LAST_SIGNAL};
 
 SPReprEventVector object_event_vector = {
-	NULL, /* Add child */
 	sp_object_repr_child_added,
-	NULL, /* Remove child */
 	sp_object_repr_child_removed,
 	sp_object_repr_change_attr,
 	sp_object_repr_attr_changed,
-	NULL, /* Change content */
 	sp_object_repr_content_changed,
-	NULL, /* change_order */
 	sp_object_repr_order_changed
 };
 

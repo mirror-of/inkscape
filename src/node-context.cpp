@@ -48,15 +48,11 @@ static gint sp_node_context_item_handler (SPEventContext * event_context, SPItem
 
 static void nodepath_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data);
 static SPReprEventVector nodepath_repr_events = {
-	NULL, /* add_child */
 	NULL, /* child_added */
-	NULL, /* remove_child */
 	NULL, /* child_removed */
 	NULL, /* change_attr */
 	nodepath_event_attr_changed,
-	NULL, /* change_list */
 	NULL, /* content_changed */
-	NULL, /* change_order */
 	NULL  /* order_changed */
 };
 

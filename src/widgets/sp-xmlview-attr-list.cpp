@@ -36,15 +36,11 @@ static void event_attr_changed (SPRepr * repr, const gchar * name, const gchar *
 static GtkCListClass * parent_class = NULL;
 
 static SPReprEventVector repr_events = {
-	NULL, /* add_child */
 	NULL, /* child_added */
-	NULL, /* remove_child */
 	NULL, /* child_removed */
 	NULL, /* change_attr */
 	event_attr_changed,
-	NULL, /* change_list */
 	NULL, /* content_changed */
-	NULL, /* change_order */
 	NULL  /* order_changed */
 };
 

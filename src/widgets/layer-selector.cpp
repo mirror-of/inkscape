@@ -432,21 +432,21 @@ void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
         );
 
         SPReprEventVector events = {
-            NULL, &node_added,
-            NULL, &node_removed,
+            &node_added,
+            &node_removed,
             NULL, &attribute_changed,
-            NULL, NULL,
-            NULL, &node_reordered
+            NULL,
+            &node_reordered
         };
 
         vector = new SPReprEventVector(events);
     } else {
         SPReprEventVector events = {
-            NULL, NULL,
-            NULL, NULL,
+            NULL,
+            NULL,
             NULL, &attribute_changed,
-            NULL, NULL,
-            NULL, NULL
+            NULL,
+            NULL
         };
 
         vector = new SPReprEventVector(events);

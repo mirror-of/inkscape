@@ -61,41 +61,29 @@ static SPRepr * sibling_to_ref (GtkCTreeNode * parent, GtkCTreeNode * sibling);
 static gint match_node_data_by_repr(gconstpointer data_p, gconstpointer repr);
 
 static const SPReprEventVector element_repr_events = {
-        NULL, /* add_child */
         element_child_added,
-        NULL, /* remove_child */
         element_child_removed,
         NULL, /* change_attr */
         element_attr_changed,
-        NULL, /* change_content */
         NULL, /* content_changed */
-        NULL, /* change_order */
         element_order_changed
 };
 
 static const SPReprEventVector text_repr_events = {
-        NULL, /* add_child */
         NULL, /* child_added */
-        NULL, /* remove_child */
         NULL, /* child_removed */
         NULL, /* change_attr */
         NULL, /* attr_changed */
-        NULL, /* change_content */
         text_content_changed,
-        NULL, /* change_order */
         NULL  /* order_changed */
 };
 
 static const SPReprEventVector comment_repr_events = {
-        NULL, /* add_child */
         NULL, /* child_added */
-        NULL, /* remove_child */
         NULL, /* child_removed */
         NULL, /* change_attr */
         NULL, /* attr_changed */
-        NULL, /* change_content */
         comment_content_changed,
-        NULL, /* change_order */
         NULL  /* order_changed */
 };
 

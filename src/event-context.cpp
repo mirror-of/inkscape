@@ -582,15 +582,11 @@ sp_ec_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, co
 }
 
 SPReprEventVector sp_ec_event_vector = {
-	NULL, /* Add child */
 	NULL, /* Child added */
-	NULL, /* Remove child */
 	NULL, /* Child removed */
 	NULL, /* Change attr */
 	sp_ec_repr_attr_changed,
-	NULL, /* Change content */
 	NULL, /* Content changed */
-	NULL, /* Change_order */
 	NULL /* Order changed */
 };
 

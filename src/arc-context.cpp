@@ -164,15 +164,11 @@ static void shape_event_attr_changed(SPRepr * repr, const gchar * name, const gc
 }
 
 static SPReprEventVector shape_repr_events = {
-    NULL, /* add_child */
     NULL, /* child_added */
-    NULL, /* remove_child */
     NULL, /* child_removed */
     NULL, /* change_attr */
     shape_event_attr_changed,
-    NULL, /* change_list */
     NULL, /* content_changed */
-    NULL, /* change_order */
     NULL  /* order_changed */
 };
 

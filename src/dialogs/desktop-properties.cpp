@@ -147,15 +147,11 @@ docoptions_event_attr_changed(SPRepr *, gchar const *, gchar const *, gchar cons
 }
 
 static SPReprEventVector docoptions_repr_events = {
-    NULL, /* add_child */
     NULL, /* child_added */
-    NULL, /* remove_child */
     NULL, /* child_removed */
     NULL, /* change_attr */
     docoptions_event_attr_changed,
-    NULL, /* change_list */
     NULL, /* content_changed */
-    NULL, /* change_order */
     NULL  /* order_changed */
 };
 
