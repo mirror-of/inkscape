@@ -1349,7 +1349,8 @@ sp_desktop_zoom_absolute (SPDesktop *dt, float cx, float cy, float zoom)
 	zoom = CLAMP (zoom, SP_DESKTOP_ZOOM_MIN, SP_DESKTOP_ZOOM_MAX);
 	
 	// maximum or minimum zoom reached, but there's no exact equality because of rounding errors:
-	if (fabs(SP_DESKTOP_ZOOM (dt) - zoom) < 0.01) return; 
+	if (fabs(SP_DESKTOP_ZOOM (dt) - zoom) < 0.01 && (fabs(SP_DESKTOP_ZOOM_MAX - zoom) < 0.01 || fabs(SP_DESKTOP_ZOOM_MIN - zoom) < 0.01)) 
+		return;
 
 	sp_canvas_get_viewbox (dtw->canvas, &viewbox);
 
