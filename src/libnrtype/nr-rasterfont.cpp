@@ -415,7 +415,7 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
         bbox.x0 = bbox.y0 = NR_HUGE;
         bbox.x1 = bbox.y1 = -NR_HUGE;
         bp.path = gbp.path;
-        nr_path_matrix_f_bbox_f_union(&bp, &a, &bbox, 1.0);
+        nr_path_matrix_bbox_union(&bp, &a, &bbox, 1.0);
       }
 #else
 			NRSVL *svl = nr_svl_from_art_bpath(gbp.path, &a, NR_WIND_RULE_NONZERO, TRUE, 0.25);

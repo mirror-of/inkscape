@@ -31,14 +31,11 @@ nr_gdk_draw_rgba32_solid (GdkDrawable *drawable, GdkGC *gc, gint x, gint y, gint
 void
 nr_gdk_draw_gray_garbage (GdkDrawable *drawable, GdkGC *gc, gint x, gint y, gint w, gint h)
 {
-	gint xx, yy;
-
-	for (yy = y; yy < y + h; yy += 64) {
-		for (xx = x; xx < x + w; xx += 64) {
+	for (gint yy = y; yy < y + h; yy += 64) {
+		for (gint xx = x; xx < x + w; xx += 64) {
 			NRPixBlock pb;
-			gint ex, ey;
-			ex = MIN (xx + 64, x + w);
-			ey = MIN (yy + 64, y + h);
+			gint ex = MIN (xx + 64, x + w);
+			gint ey = MIN (yy + 64, y + h);
 			nr_pixblock_setup_fast (&pb, NR_PIXBLOCK_MODE_R8G8B8, xx, yy, ex, ey, FALSE);
 			nr_pixblock_render_gray_noise (&pb, NULL);
 			gdk_draw_rgb_image (drawable, gc, xx, yy, ex - xx, ey - yy, GDK_RGB_DITHER_NONE, NR_PIXBLOCK_PX (&pb), pb.rs);

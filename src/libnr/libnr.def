@@ -65,8 +65,8 @@ EXPORTS
 	nr_object_setup
 	nr_object_unref
 	nr_path_duplicate_transform
-	nr_path_matrix_f_bbox_f_union
-	nr_path_matrix_f_point_f_bbox_wind_distance
+	nr_path_matrix_bbox_nion
+	nr_path_matrix_point_bbox_wind_distance
 	nr_pixblock_draw_line_rgba32
 	nr_pixblock_free
 	nr_pixblock_new

@@ -298,7 +298,7 @@ nr_typeface_gnome_glyph_outline_get (NRTypeFace *tf, unsigned int glyph, unsigne
 	    bpath.path = (ArtBpath *) gnome_font_face_get_glyph_stdoutline (tfg->face, glyph);
 	    bbox.x0 = bbox.y0 = 1e18;
 	    bbox.x1 = bbox.y1 = -1e18;
-	    nr_path_matrix_f_bbox_f_union (&bpath, NULL, &bbox, 0.25);
+	    nr_path_matrix_bbox_union (&bpath, NULL, &bbox, 0.25);
 	    if (!nr_rect_f_test_empty (&bbox)) {
 		t[0] = 1.0;
 		t[1] = 0.0;

@@ -528,7 +528,7 @@ static void sp_shape_bbox(SPItem *item, NRRect *bbox, NRMatrix const *transform,
 		bp.path = SP_CURVE_BPATH (shape->curve);
     cbbox.x0 = cbbox.y0 = NR_HUGE;
     cbbox.x1 = cbbox.y1 = -NR_HUGE;
-		nr_path_matrix_f_bbox_f_union(&bp, transform, &cbbox, 0.25);
+		nr_path_matrix_bbox_union(&bp, transform, &cbbox, 0.25);
     SPStyle* style=SP_OBJECT_STYLE (item);
     if (style->stroke.type != SP_PAINT_TYPE_NONE) {
       float width, scale;

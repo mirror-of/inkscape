@@ -243,7 +243,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 				bbox.x0 = bbox.y0 = NR_HUGE;
 				bbox.x1 = bbox.y1 = -NR_HUGE;
 				bp.path = shape->curve->bpath;
-				nr_path_matrix_f_bbox_f_union(&bp, &gc->transform, &bbox, 1.0);
+				nr_path_matrix_bbox_union(&bp, &gc->transform, &bbox, 1.0);
 				item->bbox.x0 = (gint32)(bbox.x0 - 1.0F);
 				item->bbox.y0 = (gint32)(bbox.y0 - 1.0F);
 				item->bbox.x1 = (gint32)(bbox.x1 + 1.9999F);
@@ -278,7 +278,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
     bbox.x0 = bbox.y0 = NR_HUGE;
     bbox.x1 = bbox.y1 = -NR_HUGE;
     bp.path = shape->curve->bpath;
-    nr_path_matrix_f_bbox_f_union(&bp, &gc->transform, &bbox, 1.0);
+    nr_path_matrix_bbox_union(&bp, &gc->transform, &bbox, 1.0);
     if (style->stroke.type != SP_PAINT_TYPE_NONE) {
       float width, scale;
       scale = NR_MATRIX_DF_EXPANSION (&gc->transform);
@@ -428,7 +428,7 @@ nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
           shape->fill_svp = nr_svp_from_svl (svl, NULL);
           nr_svl_free_list (svl);
 #else
-          NRMatrix  cached_to_new;
+          NR::Matrix  cached_to_new;
           int       isometry=0;
           if ( shape->cached_fill ) {
             NR::Matrix   oMat(shape->cached_fctm);
@@ -574,7 +574,7 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
       nr_svl_free_list (svl);
       art_free (bp.path);
 #else
-      NRMatrix  cached_to_new;
+      NR::Matrix  cached_to_new;
       int       isometry=0;
       if ( shape->cached_stroke ) {
         NR::Matrix   oMat(shape->cached_sctm);
@@ -1019,14 +1019,11 @@ nr_arena_shape_pick (NRArenaItem *item, NR::Point p, double delta, unsigned int 
 		/* todo: These float casts may be left over from when pt was a NRPointF (with float
 		   coords). They can probably be removed.  Similarly, dist can probably be changed
 		   to double and change ...wind_distance accordingly. */
-		NRPoint pt;
-		pt.x = (float) x;
-		pt.y = (float) y;
 		NRBPath bp;
 		bp.path = shape->curve->bpath;
 		float dist = NR_HUGE;
 		int wind = 0;
-		nr_path_matrix_f_point_f_bbox_wind_distance(&bp, &shape->ctm, &pt, NULL, &wind, &dist, NR_EPSILON);
+		nr_path_matrix_point_bbox_wind_distance(&bp, shape->ctm, p, NULL, &wind, &dist, NR_EPSILON);
 		if (shape->style->fill.type != SP_PAINT_TYPE_NONE) {
 			if (!shape->style->fill_rule.value) {
 				if (wind != 0) return item;

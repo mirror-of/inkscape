@@ -68,10 +68,10 @@ NRBPath *nr_path_duplicate_transform(NRBPath *d, NRBPath *s, NRMatrix const *tra
 
 NRBPath *nr_path_duplicate_transform(NRBPath *d, NRBPath *s, NR::Matrix const transform);
 
-void nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrix const *m, NRPoint *pt,
-						  NRRect *bbox, int *wind, float *dist,
-						  float tolerance);
+void nr_path_matrix_point_bbox_wind_distance (NRBPath *bpath, NR::Matrix const &m, NR::Point &pt,
+					      NRRect *bbox, int *wind, float *dist,
+					      float tolerance);
 
-void nr_path_matrix_f_bbox_f_union (NRBPath *bpath, NRMatrix const *m, NRRect *bbox, float tolerance);
+void nr_path_matrix_bbox_union (NRBPath *bpath, NRMatrix const *m, NRRect *bbox, float tolerance);
 
 #endif

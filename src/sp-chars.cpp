@@ -137,7 +137,7 @@ sp_chars_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned i
 		if (nr_font_glyph_outline_get (el->font, el->glyph, &bpath, FALSE)) {
 			NRMatrix a;
 			nr_matrix_multiply (&a, &el->transform, transform);
-			nr_path_matrix_f_bbox_f_union (&bpath, &a, bbox, 0.25);
+			nr_path_matrix_bbox_union (&bpath, &a, bbox, 0.25);
 		}
 	}
 }

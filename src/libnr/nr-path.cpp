@@ -119,9 +119,9 @@ NRBPath *nr_path_duplicate_transform(NRBPath *d, NRBPath *s, NR::Matrix const tr
 }
 
 static void
-nr_line_wind_distance (NR::Coord x0, NR::Coord y0, NR::Coord x1, NR::Coord y1, NRPoint *pt, int *wind, float *best)
+nr_line_wind_distance (NR::Coord x0, NR::Coord y0, NR::Coord x1, NR::Coord y1, NR::Point &pt, int *wind, float *best)
 {
-	NR::Coord Ax, Ay, Bx, By, Dx, Dy, Px, Py, s;
+	NR::Coord Ax, Ay, Bx, By, Dx, Dy, s;
 	NR::Coord dist2;
 
 	/* Find distance */
@@ -131,8 +131,8 @@ nr_line_wind_distance (NR::Coord x0, NR::Coord y0, NR::Coord x1, NR::Coord y1, N
 	By = y1;
 	Dx = x1 - x0;
 	Dy = y1 - y0;
-	Px = pt->x;
-	Py = pt->y;
+	const NR::Coord Px = pt[NR::X];
+	const NR::Coord Py = pt[NR::Y];
 
 	if (best) {
 		s = ((Px - Ax) * Dx + (Py - Ay) * Dy) / (Dx * Dx + Dy * Dy);
@@ -179,16 +179,15 @@ nr_curve_bbox_wind_distance (NR::Coord x000, NR::Coord y000,
 			     NR::Coord x001, NR::Coord y001,
 			     NR::Coord x011, NR::Coord y011,
 			     NR::Coord x111, NR::Coord y111,
-			     NRPoint *pt,
+			     NR::Point &pt,
 			     NRRect *bbox, int *wind, float *best,
 			     float tolerance)
 {
 	NR::Coord x0, y0, x1, y1, len2;
-	NR::Coord Px, Py;
 	int needdist, needwind, needline;
 
-	Px = pt->x;
-	Py = pt->y;
+	const NR::Coord Px = pt[NR::X];
+	const NR::Coord Py = pt[NR::Y];
 
 	needdist = 0;
 	needwind = 0;
@@ -270,7 +269,7 @@ nr_curve_bbox_wind_distance (NR::Coord x000, NR::Coord y000,
 }
 
 void
-nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrix const *m, NRPoint *pt,
+nr_path_matrix_point_bbox_wind_distance (NRBPath *bpath, NR::Matrix const &m, NR::Point &pt,
 					     NRRect *bbox, int *wind, float *dist,
 					     float tolerance)
 {
@@ -283,8 +282,6 @@ nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrix const *m, 
 		return;
 	}
 
-	if (!m) m = &NR_MATRIX_IDENTITY;
-
 	x0 = y0 = 0.0;
 	x3 = y3 = 0.0;
 
@@ -292,8 +289,8 @@ nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrix const *m, 
 		switch (p->code) {
 		case ART_MOVETO_OPEN:
 		case ART_MOVETO:
-			x0 = m->c[0] * p->x3 + m->c[2] * p->y3 + m->c[4];
-			y0 = m->c[1] * p->x3 + m->c[3] * p->y3 + m->c[5];
+			x0 = m[0] * p->x3 + m[2] * p->y3 + m[4];
+			y0 = m[1] * p->x3 + m[3] * p->y3 + m[5];
 			if (bbox) {
 				bbox->x0 = (float) MIN (bbox->x0, x0);
 				bbox->y0 = (float) MIN (bbox->y0, y0);
@@ -302,8 +299,8 @@ nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrix const *m, 
 			}
 			break;
 		case ART_LINETO:
-			x3 = m->c[0] * p->x3 + m->c[2] * p->y3 + m->c[4];
-			y3 = m->c[1] * p->x3 + m->c[3] * p->y3 + m->c[5];
+			x3 = m[0] * p->x3 + m[2] * p->y3 + m[4];
+			y3 = m[1] * p->x3 + m[3] * p->y3 + m[5];
 			if (bbox) {
 				bbox->x0 = (float) MIN (bbox->x0, x3);
 				bbox->y0 = (float) MIN (bbox->y0, y3);
@@ -317,13 +314,13 @@ nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrix const *m, 
 			y0 = y3;
 			break;
 		case ART_CURVETO:
-			x3 = m->c[0] * p->x3 + m->c[2] * p->y3 + m->c[4];
-			y3 = m->c[1] * p->x3 + m->c[3] * p->y3 + m->c[5];
+			x3 = m[0] * p->x3 + m[2] * p->y3 + m[4];
+			y3 = m[1] * p->x3 + m[3] * p->y3 + m[5];
 			nr_curve_bbox_wind_distance (x0, y0,
-						     m->c[0] * p->x1 + m->c[2] * p->y1 + m->c[4],
-						     m->c[1] * p->x1 + m->c[3] * p->y1 + m->c[5],
-						     m->c[0] * p->x2 + m->c[2] * p->y2 + m->c[4],
-						     m->c[1] * p->x2 + m->c[3] * p->y2 + m->c[5],
+						     m[0] * p->x1 + m[2] * p->y1 + m[4],
+						     m[1] * p->x1 + m[3] * p->y1 + m[5],
+						     m[0] * p->x2 + m[2] * p->y2 + m[4],
+						     m[1] * p->x2 + m[3] * p->y2 + m[5],
 						     x3, y3,
 						     pt,
 						     bbox, wind, dist, tolerance);
@@ -424,7 +421,7 @@ nr_curve_bbox (NR::Coord x000, NR::Coord y000, NR::Coord x001, NR::Coord y001, N
 }
 
 void
-nr_path_matrix_f_bbox_f_union (NRBPath *bpath, NRMatrix const *m,
+nr_path_matrix_bbox_union (NRBPath *bpath, NRMatrix const *m,
 			       NRRect *bbox,
 			       float tolerance)
 {
