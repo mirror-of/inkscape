@@ -1,3 +1,7 @@
+2003-12-17  Jon A. Cruz <jon@joncruz.org>
+
+	* Converted color selectors to C++ classes.
+
 2003-12-18  Nathan Hurst <njh@csse.monash.edu.au>
 
 	* Merged NRPointF and D, similarly Matrix and Rect.
