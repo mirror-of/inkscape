@@ -1,3 +1,7 @@
+2004-06-22  Kees Cook  <kees@outflux.net>
+
+	* src/inkscape.cpp: added SIGBUS and SIGABRT handling.
+
 2004-06-22  John Cliff <simarilius@yahoo.com>
 
 	* src/object-edit.cpp: 	Added knots for manipulation of pattern fills.

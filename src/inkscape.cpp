@@ -400,6 +400,9 @@ inkscape_segv_handler (int signum)
     gchar sptstr[256];
     GtkWidget *msgbox;
 
+    /* let any SIGABRTs seen from within this handler dump core */
+    signal(SIGABRT, SIG_DFL);
+
     /* Kill loops */
     if (recursion) abort ();
     recursion = TRUE;
@@ -555,9 +558,10 @@ inkscape_application_init (const gchar *argv0)
     /* fixme: load application defaults */
   
     segv_handler = signal (SIGSEGV, inkscape_segv_handler);
-    signal (SIGFPE, inkscape_segv_handler);
-    signal (SIGILL, inkscape_segv_handler);
-
+    signal (SIGFPE,  inkscape_segv_handler);
+    signal (SIGILL,  inkscape_segv_handler);
+    signal (SIGBUS,  inkscape_segv_handler);
+    signal (SIGABRT, inkscape_segv_handler);
 
     inkscape->argv0 = g_strdup(argv0);
 
