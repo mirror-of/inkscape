@@ -48,7 +48,7 @@ libnr_a_SOURCES = \
 	nr-point-l.h	\
 	nr-point.h nr-point-ops.h	\
 	nr-point-fns.cpp nr-point-fns.h	\
-	nr-rect-l.h	\
+	nr-rect-l.h nr-rect-l.cpp	\
 	nr-rotate.h nr-rotate-ops.h	\
 	nr-scale.h nr-scale-ops.h	\
 	nr-translate-ops.h nr-translate.h	\

@@ -127,6 +127,7 @@ private:
     Coord _pt[2];
 };
 
+
 } /* namespace NR */
 
 

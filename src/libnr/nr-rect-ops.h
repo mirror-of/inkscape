@@ -17,6 +17,14 @@
 
 namespace NR {
 
+	Rect expand(Rect const &r, double by) {
+		const NR::Point p(by, by);
+		return Rect(r.min()+p, r.max()-p);
+	}
+	Rect expand(Rect const &r, NR::Point by) {
+		return Rect(r.min()+by, r.max()-by);
+	}
+
 ConvexHull operator*(Rect const &r, Matrix const &m) {
     ConvexHull points(r.corner(0));
     for ( unsigned i = 1 ; i < 4 ; i++ ) {
