@@ -38,6 +38,8 @@ static SPRepr *sp_path_write (SPObject *object, SPRepr *repr, guint flags);
 static void sp_path_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform);
 static gchar * sp_path_description (SPItem * item);
 
+static void sp_path_update (SPObject *object, SPCtx *ctx, guint flags);
+
 static SPShapeClass *parent_class;
 
 /**
@@ -83,6 +85,7 @@ sp_path_class_init (SPPathClass * klass)
 	sp_object_class->build = sp_path_build;
 	sp_object_class->set = sp_path_set;
 	sp_object_class->write = sp_path_write;
+	sp_object_class->update = sp_path_update;
 
 	item_class->description = sp_path_description;
 	item_class->write_transform = sp_path_write_transform;
@@ -261,6 +264,18 @@ sp_path_write (SPObject *object, SPRepr *repr, guint flags)
 
 	return repr;
 }
+
+static void
+sp_path_update (SPObject *object, SPCtx *ctx, guint flags)
+{
+	if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
+		flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
+	}
+
+	if (((SPObjectClass *) parent_class)->update)
+		((SPObjectClass *) parent_class)->update (object, ctx, flags);
+}
+
 
 /**
  * Writes the given transform into the repr for the given item.

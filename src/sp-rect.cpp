@@ -217,7 +217,7 @@ sp_rect_update (SPObject *object, SPCtx *ctx, guint flags)
 		sp_svg_length_update (&rect->rx, style->font_size.computed, style->font_size.computed * 0.5, w);
 		sp_svg_length_update (&rect->ry, style->font_size.computed, style->font_size.computed * 0.5, h);
 		sp_shape_set_shape ((SPShape *) object);
-    flags&=~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
+		flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
 	}
 
 	if (((SPObjectClass *) parent_class)->update)
