@@ -31,7 +31,7 @@ libraries. Helix Gnome + gnome-print 0.21 (or higher) + bonobo 0.17
 (or higher) should do it.  You can also add --without-bonobo to
 configure command line to disable HIGHLY EXPERIMENTAL bonobo support
 
-If you modify Inkscape in any usable way, please let me know also.
+If you modify Inkscape in any usable way, please let us know also.
 
 Some demo pictures could have absolute paths for imported images. So if they
 do not display correctly, tune them with a good text editor.
