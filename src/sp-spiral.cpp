@@ -50,6 +50,8 @@ static gchar * sp_spiral_description (SPItem * item);
 static int sp_spiral_snappoints (SPItem *item, NRPoint *p, int size);
 static void sp_spiral_set_shape (SPShape *shape);
 
+static void sp_spiral_get_tangent (SPSpiral const *spiral, gdouble t, NRPoint *p);
+
 static SPShapeClass *parent_class;
 
 GType
@@ -547,7 +549,7 @@ sp_spiral_get_xy (SPSpiral const *spiral, gdouble t, NRPoint *p)
  *	p != NULL.
  *  Ensures: is_unit_vector(*p).
  */
-void
+static void
 sp_spiral_get_tangent (SPSpiral const *spiral, gdouble t, NRPoint *p)
 {
 	g_return_if_fail (spiral != NULL);

@@ -33,6 +33,9 @@ static void GenerateBezier (NRPoint *b, NRPoint const *d, gdouble const *uPrime,
 static gdouble * Reparameterize(NRPoint const *d, unsigned len, gdouble const *u, BezierCurve bezCurve);
 static gdouble NewtonRaphsonRootFind(BezierCurve Q, NRPoint const &P, gdouble u);
 static void BezierII (gint degree, NRPoint * V, gdouble t, NRPoint *result);
+static void sp_darray_left_tangent (const NRPoint *d, int first, int length, NRPoint *tHat1);
+static void sp_darray_right_tangent (const NRPoint *d, int last, int length, NRPoint *tHat2);
+static void sp_darray_center_tangent (const NRPoint *d, gint center, NRPoint *tHatCenter);
 
 /*
  *  B0, B1, B2, B3 : Bezier multipliers
@@ -450,7 +453,7 @@ BezierII (gint degree, NRPoint * V, gdouble t, NRPoint *Q)
     Unlike the center and right versions, this calculates the tangent in the way one might expect,
     i.e. wrt increasing index into d.
 **/
-void
+static void
 sp_darray_left_tangent (const NRPoint *d, int first, int len, NRPoint *tHat)
 {
 	int second, l2, i;
@@ -473,7 +476,7 @@ sp_darray_left_tangent (const NRPoint *d, int first, int len, NRPoint *tHat)
     Requires: point_ne (d[last],
 			d[last - 1]).
 */
-void
+static void
 sp_darray_right_tangent (const NRPoint *d, int last, int len, NRPoint *tHat)
 {
 	int prev, l2, i;
@@ -498,7 +501,7 @@ sp_darray_right_tangent (const NRPoint *d, int last, int len, NRPoint *tHat)
     Requires: point_ne (d[center - 1],
 			d[center + 1]).
 */
-void
+static void
 sp_darray_center_tangent (const NRPoint *d,
 			  gint            center,
 			  NRPoint       *tHatCenter)

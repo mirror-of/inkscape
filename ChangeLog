@@ -1,5 +1,11 @@
 2003-12-22  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/helper/bezier-utils.cpp (sp_darray_center_tangent,
+	sp_darray_left_tangent, sp_darray_right_tangent),
+	src/helper/bezier-utils.h, src/sp-spiral.h, src/sp-spiral.cpp
+	(sp_spiral_get_tangent):
+	Make these functions static.
+
 	* src/helper/bezier-utils.cpp (GenerateBezier): Back out accidental
 	commit of inserted g_assert(!isnan(bezier coordinate)).  (Having a NaN
 	bezier coordinate is usually a problem, perhaps worth warning about,

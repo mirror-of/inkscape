@@ -68,10 +68,6 @@ void    sp_spiral_get_xy	(SPSpiral const *spiral,
 				 gdouble	t,
 				 NRPoint	*p);
 
-void	sp_spiral_get_tangent	(SPSpiral const *spiral,
-				 gdouble	t,
-				 NRPoint	*p);
-
 void    sp_spiral_get_polar	(SPSpiral const *spiral,
 				 gdouble	t,
 				 gdouble       *rad,
