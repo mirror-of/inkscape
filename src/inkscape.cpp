@@ -1138,27 +1138,4 @@ profile_path(const char *filename)
 	return g_build_filename(homedir, INKSCAPE_PROFILE_DIR, filename, NULL);
 }
 
-gchar *
-executable_path(void)
-{
-  gchar *path  = "";
-  int   strLen = 0;
-#ifdef HAS_PROC_SELF_EXE
-  char  pathBuf[PATH_MAX+1];
-  strLen = readlink("/proc/self/exe", pathBuf, PATH_MAX);
-#else
-#ifdef HAS_GetModuleFileName
-  char  pathBuf[MAX_PATH+1];
-  strLen = (int)GetModuleFileName(NULL, pathBuf, MAX_PATH);
-#endif
-#endif
-  if (strLen <= 0)
-    {
-    g_print("Unable to retrieve the path of the executable.\n");
-    return NULL;
-    }
-  path = g_strdup(pathBuf);
-  return path;
-}
-
 
