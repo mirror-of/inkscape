@@ -33,6 +33,8 @@
 	* src/sp-item.cpp, src/uri-references.h, src/uri-references.cpp:
 	reworked Inkscape::URIReference a little
 
+	* src/sp-item.cpp: masks now use Inkscape::URIReference as well
+
 2004-01-02  MenTaLguY <mental@rydia.net>
 
 	* src/shortcuts.cpp: zoom in shortcut fix for german and other
