@@ -1,4 +1,14 @@
 
+## IF automated
+DTG = `date +%y%m%d.%H%M`
+# else hardcoded
+#DTG = 20040108
+
+VERSION = \"0.37cvs${DTG}\"
+
+
+
+
 #CC = gcc
 #CXX = g++
 #WINDRES = windres
@@ -76,7 +86,7 @@ GTKSLIB = \
 #-DINKSCAPE_MODULESDIR=\""modules"\" \
 #-DINKSCAPE_GLADEDIR=\""pixmaps"\"
 
-CFLAGS = -O3  -Wall -mms-bitfields
+CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION)
 
 BSLASH := \\#
 FSLASH := /

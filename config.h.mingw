@@ -4,8 +4,11 @@
 #ifndef WIN32
 #define WIN32
 #endif
- 
-#define VERSION "0.37cvs20040106"
+
+/*  A default Version number if one is not supplied by Make */
+#ifndef VERSION 
+#define VERSION "0.37cvs"
+#endif
 
 #define INKSCAPE_VERSION      VERSION
 #define PACKAGE_LOCALE_DIR    "locale"
