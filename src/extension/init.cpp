@@ -141,45 +141,22 @@ init (void)
 static void
 build_module_from_dir (const gchar * dirname)
 {
-#if 0
-	DIR * directory;
-	struct dirent * dentry;
+        if (!dirname) {
+            g_warning(_("Null external module directory name.  Modules will not be loaded."));
+            return;
+        }
 
-	directory = opendir(dirname);
-	if (directory == NULL) {
-		g_warning(_("Modules directory (%s) is unavailable.  External modules in that directory will not be loaded."), dirname);
-		return;
-	}
-
-	while ((dentry = readdir(directory)) != NULL) {
-		gchar * filename;
-
-		if (strlen(dentry->d_name) < strlen(SP_MODULE_EXTENSION)) {
-			continue;
-		}
-
-		if (strcmp(SP_MODULE_EXTENSION, dentry->d_name + (strlen(dentry->d_name) - strlen(SP_MODULE_EXTENSION)))) {
-			continue;
-		}
-
-		filename = g_strdup_printf("%s/%s", INKSCAPE_EXTENSIONDIR, dentry->d_name);
-		build_from_file(filename);
-		g_free(filename);
-	}
-
-	closedir(directory);
-#else
         //# Hopefully doing this the Glib way is portable
         
         GError *err;
 	GDir *directory = g_dir_open(dirname, 0, &err);
-	if (directory == NULL) {
+	if (!directory) {
 		g_warning(_("Modules directory (%s) is unavailable.  External modules in that directory will not be loaded."), dirname);
 		return;
 	}
 
         gchar *filename;
-	while ((filename = (char *)g_dir_read_name(directory)) != NULL) {
+	while ((filename = (gchar *)g_dir_read_name(directory)) != NULL) {
 
 		if (strlen(filename) < strlen(SP_MODULE_EXTENSION)) {
 			continue;
@@ -196,9 +173,9 @@ build_module_from_dir (const gchar * dirname)
 
 	g_dir_close(directory);
 
-#endif
 	return;
 }
+
 
 static void
 check_extensions_internal (Extension * in_plug, gpointer in_data)
