@@ -147,7 +147,10 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer da
             for (GSList const* l = dragger->draggables; l != NULL; l = l->next) { // for all draggables of dragger
                 GrDraggable *draggable = (GrDraggable *) l->data;
                 // copy draggable to d_new:
-                d_new->addDraggable (new GrDraggable (draggable->item, draggable->point_num, draggable->fill_or_stroke)); 
+                GrDraggable *da_new = new GrDraggable (draggable->item, draggable->point_num, draggable->fill_or_stroke);
+                d_new->addDraggable (da_new); 
+                // move to the exact position of d_new, writing to repr:
+                sp_item_gradient_set_coords (da_new->item, da_new->point_num, d_new->point, da_new->fill_or_stroke, true);
             }
             dragger->parent->draggers = g_slist_remove (dragger->parent->draggers, dragger);
             delete dragger;
