@@ -115,6 +115,7 @@ enum {
     SP_ARG_SLIDESHOW,
     SP_ARG_BITMAP_ICONS,
     SP_ARG_VERSION,
+    SP_ARG_NEW_GUI,
     SP_ARG_LAST
 };
 
@@ -136,6 +137,7 @@ static gchar *sp_export_background_opacity = NULL;
 static gboolean sp_export_use_hints = FALSE;
 static gboolean sp_export_id_only = FALSE;
 static gchar *sp_export_svg = NULL;
+static int sp_new_gui = FALSE;
 
 static GSList *sp_process_args(poptContext ctx);
 struct poptOption options[] = {
@@ -226,6 +228,11 @@ struct poptOption options[] = {
      N_("Show given files one-by-one, switch to next on any key/mouse event"), 
      NULL},
 
+    {"new-gui", 'G', 
+     POPT_ARG_NONE, &sp_new_gui, SP_ARG_NEW_GUI,
+     N_("Use the new Gtkmm GUI interface"),
+     NULL},
+
     POPT_AUTOHELP POPT_TABLEEND
 };
 
@@ -297,13 +304,14 @@ main(int argc, char **argv)
         } else if (!strcmp(argv[i], "-g") || !strcmp(argv[i], "--with-gui")) {
             use_gui = TRUE;
             break;
+        } else if (!strcmp(argv[i], "-G") || !strcmp(argv[i], "--new-gui")) {
+            sp_new_gui = TRUE;
+            break;
         }
     }
 
-    gboolean new_gui = false;
-
     // TODO:  Should this be a static object (see inkscape.cpp)?
-    Inkscape::NSApplication::Application app(argc, argv, use_gui, new_gui);
+    Inkscape::NSApplication::Application app(argc, argv, use_gui, sp_new_gui);
 
     return app.run();
 }

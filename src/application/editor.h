@@ -15,19 +15,16 @@
 
 #include <gtkmm/window.h>
 
-namespace Inkscape {
-namespace NSApplication {
-
 class SPDesktop;
 class SPDocument;
 class SPEventContext;
+
 namespace Inkscape {
 namespace XML {
 class Document;
 }
-}
 
-class GSList;
+namespace NSApplication {
 
 class Editor
 {
@@ -53,7 +50,15 @@ public:
 
     void            refreshDisplay();
     void            exit();
+
+    gboolean        lastViewOfDocument(SPDocument* doc, SPDesktop* view) const;
     
+    gboolean        addDocument(SPDocument* doc);
+    gboolean        deleteDocument(SPDocument* doc);
+
+    gboolean        addView(SPDesktop* view);
+    gboolean        deleteView(SPDesktop* view);
+
 protected:
     class EditorImpl;
     EditorImpl *rep;
