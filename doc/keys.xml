@@ -263,8 +263,8 @@ can leave your ideas and requests there.</p>
 
 <group>
 <title>Keyboard select</title>
-<keys><key><misc f="Tab"/></key>  <action>select  next  object </action></keys>
-<keys><key><shift/><misc f="Tab"/></key> <action>select  previous object </action></keys>
+<keys><key><misc f="Tab"/></key>  <action>select next object </action></keys>
+<keys><key><shift/><misc f="Tab"/></key> <action>select previous object </action></keys>
 <note>These keys pick objects in their z-order (Tab cycles from bottom to top, Shift+Tab cycles from top to bottom).</note> 
 <note>Unless you did manual rearrangements, the last object you created is always on top.</note> 
 <note>As a result, if nothing is selected, pressing Shift+Tab once conveniently selects the object you created last.</note>
@@ -572,7 +572,7 @@ can leave your ideas and requests there.</p>
 <group>
 <mouse><key><left-drag/></key> <action>draw a rectangle</action></mouse>
 <mouse><key><ctrl/><left-drag/></key>	<action>make square or integer-ratio rectangle</action></mouse>
-<note>This restricts rectangle so its height/width ratio  is  a  whole  number.</note>
+<note>This restricts rectangle so its height/width ratio is a whole number.</note>
 <mouse><key><shift/><left-drag/></key> <action>draw around the starting point</action></mouse>
 <note>This creates a rectangle symmetric around the starting point of the mouse drag.</note>
 </group>
@@ -582,7 +582,7 @@ can leave your ideas and requests there.</p>
 <group>
 <mouse><key><left-drag/></key> <action>draw an ellipse</action></mouse>
 <mouse><key><ctrl/><left-drag/></key>	<action>make circle or integer-ratio ellipse</action></mouse>
-<note>This restricts ellipse so its height/width ratio  is  a  whole  number.</note>
+<note>This restricts ellipse so its height/width ratio is a whole number.</note>
 <mouse><key><shift/><left-drag/></key> <action>draw around the starting point</action></mouse>
 <note>This creates an ellipse symmetric around the starting point of the mouse drag.</note>
 </group>

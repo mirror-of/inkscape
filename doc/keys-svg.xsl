@@ -895,7 +895,7 @@ It is generated automatically from doc/keys.xml by doc/keys-svg.xsl.
 </svg>
 </xsl:template>
 
-<xsl:template match="k:root/text() | k:column/text() | root/p"/>
+<xsl:template match="k:root/text() | k:column/text() | k:root/k:p"/>
 
 <xsl:template match="k:column">
 <xsl:variable name="y" select="
