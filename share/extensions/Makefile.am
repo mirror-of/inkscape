@@ -12,7 +12,10 @@ extensions = \
 	dia2svg.sh \
 	sk2svg.sh \
 	ps2epsi.sh \
-	txt2svg.pl
+	txt2svg.pl \
+	inkscape-shadow.sh \
+	inkscape-shadow-white.sh \
+	embed_raster_in_svg.pl
 
 otherstuff =
 
