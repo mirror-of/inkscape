@@ -153,7 +153,7 @@ INC = -I. -I.. -I../.. $(GTKINC) -I$(GTK)/include \
 
 LIBS = $(GTKLIB) -lxml2 \
 $(GTK)/lib/iconv.lib	\
--lfreetype -lfontconfig -lpng -lpopt $(GTK)/lib/zdll.lib \
+-lfreetype6.dll -lfontconfig-1.dll -lpng -lpopt $(GTK)/lib/zdll.lib \
 -lgc -lgccpp -mwindows -lws2_32 -lintl
 
 
