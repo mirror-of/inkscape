@@ -233,7 +233,7 @@ void SPUsePath::refresh_source()
             return;
     }
     if (SP_IS_TEXT(item)) {
-        curve = sp_text_normalized_bpath(SP_TEXT(item));
+        curve = SP_TEXT(item)->getNormalizedBpath();
         if (curve == NULL) {
             return;
         }

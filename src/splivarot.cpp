@@ -573,7 +573,7 @@ sp_selected_path_outline ()
                 continue;
         }
         if (SP_IS_TEXT (item)) {
-            curve = sp_text_normalized_bpath (SP_TEXT (item));
+            curve = SP_TEXT (item)->getNormalizedBpath ();
             if (curve == NULL)
                 continue;
         }
@@ -849,7 +849,7 @@ sp_selected_path_create_offset_object (int expand, bool updating)
     }
     if (SP_IS_TEXT (item))
     {
-        curve = sp_text_normalized_bpath (SP_TEXT (item));
+        curve = SP_TEXT (item)->getNormalizedBpath ();
         if (curve == NULL)
             return;
     }
@@ -1082,7 +1082,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
                 continue;
         }
         if (SP_IS_TEXT (item)) {
-            curve = sp_text_normalized_bpath (SP_TEXT (item));
+            curve = SP_TEXT (item)->getNormalizedBpath ();
             if (curve == NULL)
                 continue;
         }
@@ -1320,7 +1320,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop, SPSelection *selection, SPIte
     }
 
     if (SP_IS_TEXT (item)) {
-        curve = sp_text_normalized_bpath (SP_TEXT (item));
+        curve = SP_TEXT (item)->getNormalizedBpath ();
         if (!curve)
             return false;
     }
@@ -1512,7 +1512,7 @@ Path_for_item (SPItem * item, bool doTransformation, bool transformFull)
     }
     else if (SP_IS_TEXT (item))
     {
-        curve = sp_text_normalized_bpath (SP_TEXT (item));
+        curve = SP_TEXT (item)->getNormalizedBpath ();
     }
     else
     {

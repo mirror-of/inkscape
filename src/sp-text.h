@@ -128,23 +128,40 @@ private:
 /* SPText */
 
 struct SPText : public SPItem {
+    /** Converts the text object to its component curves */
+    SPCurve *getNormalizedBpath() const
+        {return layout.convertToCurves();}
+
+    /** Completely recalculates the layout. */
+    void rebuildLayout();
+
+//semiprivate:  (need to be accessed by the C-style functions still)
     TextTagAttributes attributes;
     Inkscape::Text::Layout layout;
 	
-    guint relayout : 1;
+    /** when the object is transformed it's nicer to change the font size
+    and coordinates when we can, rather than just applying a matrix
+    transform. */
+    static void _adjustCoordsRecursive(SPItem *item, NR::Matrix const &m, double ex);
+    static void _adjustFontsizeRecursive(SPItem *item, double ex);
 	
-    void ClearFlow(NRArenaGroup *in_arena);
+    /** discards the NRArena objects representing this text. */
+    void _clearFlow(NRArenaGroup *in_arena);
+
+private:
+    /** Recursively walks the xml tree adding tags and their contents. The
+    non-trivial code does two things: firstly, it manages the positioning
+    attributes and their inheritance rules, and secondly it keeps track of line
+    breaks and makes sure both that they are assigned the correct SPObject and
+    that we don't get a spurious extra one at the end of the flow. */
+    unsigned _buildLayoutInput(SPObject *root, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset, SPObject **pending_line_break_object);
 };
 
 struct SPTextClass {
     SPItemClass parent_class;
 };
 
-#define SP_TEXT_CHILD_STRING(c) ( SP_IS_TSPAN(c) ? SP_TSPAN_STRING(c) : SP_STRING(c) )
-
 GType sp_text_get_type();
-
-SPCurve *sp_text_normalized_bpath(SPText *text);
 
 #endif
 

@@ -1114,7 +1114,7 @@ void   refresh_offset_source(SPOffset* offset)
             return;
     }
     if (SP_IS_TEXT (item)) {
-        curve = sp_text_normalized_bpath (SP_TEXT (item));
+        curve = SP_TEXT (item)->getNormalizedBpath ();
         if (curve == NULL)
 	    return;
     }

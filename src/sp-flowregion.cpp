@@ -495,7 +495,7 @@ static void         GetDest(SPObject* child,flow_dest* computed,NR::Matrix itr_m
 	if ( SP_IS_SHAPE (u_child) ) {
 		curve = sp_shape_get_curve (SP_SHAPE (u_child));
 	} else if ( SP_IS_TEXT (u_child) ) {
-	curve = sp_text_normalized_bpath (SP_TEXT (u_child));
+	curve = SP_TEXT (u_child)->getNormalizedBpath ();
 	}
 	
 	if ( curve ) {

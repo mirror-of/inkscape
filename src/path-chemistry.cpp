@@ -313,7 +313,7 @@ sp_selected_item_to_curved_repr(SPItem * item, guint32 text_grouping_policy)
 	if (SP_IS_SHAPE (item)) {
 		curve = sp_shape_get_curve (SP_SHAPE (item));
 	} else if (SP_IS_TEXT (item)) {
-		curve = sp_text_normalized_bpath (SP_TEXT (item));
+		curve = SP_TEXT(item)->getNormalizedBpath ();
 	}
 	
 	if (!curve)
