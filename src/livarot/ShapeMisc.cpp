@@ -34,7 +34,7 @@
 void
 Shape::ConvertToForme (Path * dest)
 {
-  if (numberOfPoints() <= 1 || nbAr <= 1)
+  if (numberOfPoints() <= 1 || numberOfEdges() <= 1)
     return;
   if (Eulerian (true) == false)
     return;
@@ -51,9 +51,9 @@ Shape::ConvertToForme (Path * dest)
     pData[i].rx[0] = Round (getPoint(i).x[0]);
     pData[i].rx[1] = Round (getPoint(i).x[1]);
   }
-  for (int i = 0; i < nbAr; i++)
+  for (int i = 0; i < numberOfEdges(); i++)
   {
-    eData[i].rdx = pData[aretes[i].en].rx - pData[aretes[i].st].rx;
+    eData[i].rdx = pData[getEdge(i).en].rx - pData[getEdge(i).st].rx;
   }
   
   // sort edge clockwise, with the closest after midnight being first in the doubly-linked list
@@ -63,7 +63,7 @@ Shape::ConvertToForme (Path * dest)
   // depth-first search implies: we make a stack of edges traversed.
   // precParc: previous in the stack
   // suivParc: next in the stack
-  for (int i = 0; i < nbAr; i++)
+  for (int i = 0; i < numberOfEdges(); i++)
   {
     swdData[i].misc = 0;
     swdData[i].precParc = swdData[i].suivParc = -1;
@@ -89,12 +89,12 @@ Shape::ConvertToForme (Path * dest)
       if (fi < numberOfPoints())
       {
         int bestB = getPoint(fi).firstA;
-        while (bestB >= 0 && aretes[bestB].st != fi)
+        while (bestB >= 0 && getEdge(bestB).st != fi)
           bestB = NextAt (fi, bestB);
         if (bestB >= 0)
 	      {
           startBord = bestB;
-          dest->MoveTo (getPoint(aretes[startBord].en).x);
+          dest->MoveTo (getPoint(getEdge(startBord).en).x);
 	      }
       }
     }
@@ -110,7 +110,7 @@ Shape::ConvertToForme (Path * dest)
       swdData[curBord].suivParc = -1;
       do
 	    {
-	      int cPt = aretes[curBord].en;
+	      int cPt = getEdge(curBord).en;
 	      int nb = curBord;
         //                              printf("de curBord= %d au point %i  -> ",curBord,cPt);
         // get next edge
@@ -127,7 +127,7 @@ Shape::ConvertToForme (Path * dest)
           if (nb < 0 || nb == curBord)
             break;
         }
-	      while (swdData[nb].misc != 0 || aretes[nb].st != cPt);
+	      while (swdData[nb].misc != 0 || getEdge(nb).st != cPt);
         
 	      if (nb < 0 || nb == curBord)
         {
@@ -158,7 +158,7 @@ Shape::ConvertToForme (Path * dest)
           //                                      printf("suite %d\n",curBord);
           {
             // add that edge
-            dest->LineTo (getPoint(aretes[nb].en).x);
+            dest->LineTo (getPoint(getEdge(nb).en).x);
           }
         }
 	    }
@@ -179,7 +179,7 @@ Shape::ConvertToForme (Path * dest)
 void
 Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
 {
-  if (numberOfPoints() <= 1 || nbAr <= 1)
+  if (numberOfPoints() <= 1 || numberOfEdges() <= 1)
     return;
 //  if (Eulerian (true) == false)
 //    return;
@@ -201,14 +201,14 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
     pData[i].rx[0] = Round (getPoint(i).x[0]);
     pData[i].rx[1] = Round (getPoint(i).x[1]);
   }
-  for (int i = 0; i < nbAr; i++)
+  for (int i = 0; i < numberOfEdges(); i++)
   {
-    eData[i].rdx = pData[aretes[i].en].rx - pData[aretes[i].st].rx;
+    eData[i].rdx = pData[getEdge(i).en].rx - pData[getEdge(i).st].rx;
   }
   
   SortEdges ();
   
-  for (int i = 0; i < nbAr; i++)
+  for (int i = 0; i < numberOfEdges(); i++)
   {
     swdData[i].misc = 0;
     swdData[i].precParc = swdData[i].suivParc = -1;
@@ -231,7 +231,7 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
       if (fi < numberOfPoints())
       {
         int bestB = getPoint(fi).firstA;
-        while (bestB >= 0 && aretes[bestB].st != fi)
+        while (bestB >= 0 && getEdge(bestB).st != fi)
           bestB = NextAt (fi, bestB);
         if (bestB >= 0)
 	      {
@@ -248,10 +248,10 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
       bool back = false;
       swdData[curBord].precParc = -1;
       swdData[curBord].suivParc = -1;
-      int curStartPt=aretes[curBord].st;
+      int curStartPt=getEdge(curBord).st;
       do
 	    {
-	      int cPt = aretes[curBord].en;
+	      int cPt = getEdge(curBord).en;
 	      int nb = curBord;
         //printf("de curBord= %d au point %i  -> ",curBord,cPt);
 	      do
@@ -267,7 +267,7 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
           if (nb < 0 || nb == curBord)
             break;
         }
-	      while (swdData[nb].misc != 0 || aretes[nb].st != cPt);
+	      while (swdData[nb].misc != 0 || getEdge(nb).st != cPt);
         
 	      if (nb < 0 || nb == curBord)
         {
@@ -298,9 +298,9 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
           {
             back = false;
             startBord = nb;
-            curStartPt=aretes[nb].st;
+            curStartPt=getEdge(nb).st;
           } else {
-            if ( aretes[curBord].en == curStartPt ) {
+            if ( getEdge(curBord).en == curStartPt ) {
               //printf("contour %i ",curStartPt);
               swdData[curBord].suivParc = -1;
               AddContour (dest, nbP, orig, startBord, curBord,splitWhenForced);
@@ -332,7 +332,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
   contStart=NULL;
   nbNest=0;
 
-  if (numberOfPoints() <= 1 || nbAr <= 1)
+  if (numberOfPoints() <= 1 || numberOfEdges() <= 1)
     return;
   //  if (Eulerian (true) == false)
   //    return;
@@ -354,14 +354,14 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
     pData[i].rx[0] = Round (getPoint(i).x[0]);
     pData[i].rx[1] = Round (getPoint(i).x[1]);
   }
-  for (int i = 0; i < nbAr; i++)
+  for (int i = 0; i < numberOfEdges(); i++)
   {
-    eData[i].rdx = pData[aretes[i].en].rx - pData[aretes[i].st].rx;
+    eData[i].rdx = pData[getEdge(i).en].rx - pData[getEdge(i).st].rx;
   }
   
   SortEdges ();
   
-  for (int i = 0; i < nbAr; i++)
+  for (int i = 0; i < numberOfEdges(); i++)
   {
     swdData[i].misc = 0;
     swdData[i].precParc = swdData[i].suivParc = -1;
@@ -383,7 +383,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
       }
       {
         int askTo = pData[fi].askForWindingB;
-        if (askTo < 0 || askTo >= nbAr ) {
+        if (askTo < 0 || askTo >= numberOfEdges() ) {
           dadContour=-1;
         } else {
           dadContour = (int) swdData[askTo].misc;
@@ -394,7 +394,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
       if (fi < numberOfPoints())
       {
         int bestB = getPoint(fi).firstA;
-        while (bestB >= 0 && aretes[bestB].st != fi)
+        while (bestB >= 0 && getEdge(bestB).st != fi)
           bestB = NextAt (fi, bestB);
         if (bestB >= 0)
 	      {
@@ -411,10 +411,10 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
       bool back = false;
       swdData[curBord].precParc = -1;
       swdData[curBord].suivParc = -1;
-      int curStartPt=aretes[curBord].st;
+      int curStartPt=getEdge(curBord).st;
       do
 	    {
-	      int cPt = aretes[curBord].en;
+	      int cPt = getEdge(curBord).en;
 	      int nb = curBord;
         //printf("de curBord= %d au point %i  -> ",curBord,cPt);
 	      do
@@ -430,7 +430,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
           if (nb < 0 || nb == curBord)
             break;
         }
-	      while (swdData[nb].misc != 0 || aretes[nb].st != cPt);
+	      while (swdData[nb].misc != 0 || getEdge(nb).st != cPt);
         
 	      if (nb < 0 || nb == curBord)
         {
@@ -445,7 +445,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
             {
               bool escapePath=false;
               int tb=curBord;
-              while ( tb >= 0 && tb < nbAr ) {
+              while ( tb >= 0 && tb < numberOfEdges() ) {
                 if ( ebData[tb].pathID == wildPath ) {
                   escapePath=true;
                   break;
@@ -478,14 +478,14 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
           {
             back = false;
             startBord = nb;
-            curStartPt=aretes[nb].st;
+            curStartPt=getEdge(nb).st;
           } else {
-            if ( aretes[curBord].en == curStartPt ) {
+            if ( getEdge(curBord).en == curStartPt ) {
               //printf("contour %i ",curStartPt);
               
               bool escapePath=false;
               int tb=curBord;
-              while ( tb >= 0 && tb < nbAr ) {
+              while ( tb >= 0 && tb < numberOfEdges() ) {
                 if ( ebData[tb].pathID == wildPath ) {
                   escapePath=true;
                   break;
@@ -547,11 +547,10 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
           (point_data *) g_realloc(pData, maxPt * sizeof (point_data));
     }
     
-    nbAr = a->nbAr;
-    if (nbAr > maxAr)
+    _aretes = a->_aretes;
+    if (numberOfEdges() > maxAr)
     {
-      maxAr = nbAr;
-      aretes.reserve(maxAr);
+      maxAr = numberOfEdges();
       if (_has_edges_data)
         eData = (edge_data *) g_realloc(eData, maxAr * sizeof (edge_data));
       if (_has_sweep_src_data)
@@ -569,10 +568,9 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
         ebData =
           (back_data *) g_realloc(ebData, maxAr * sizeof (back_data));
     }
-    aretes = a->aretes;
     return 0;
   }
-  if (a->numberOfPoints() <= 1 || a->nbAr <= 1 || a->type != shape_polygon)
+  if (a->numberOfPoints() <= 1 || a->numberOfEdges() <= 1 || a->type != shape_polygon)
     return shape_input_err;
   
   a->SortEdges ();
@@ -580,26 +578,26 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
   a->MakeSweepDestData (true);
   a->MakeSweepSrcData (true);
   
-  for (int i = 0; i < a->nbAr; i++)
+  for (int i = 0; i < a->numberOfEdges(); i++)
   {
     //              int    stP=a->swsData[i].stPt/*,enP=a->swsData[i].enPt*/;
     int stB = -1, enB = -1;
     if (dec > 0)
     {
-      stB = a->CycleNextAt (a->aretes[i].st, i);
-      enB = a->CyclePrevAt (a->aretes[i].en, i);
+      stB = a->CycleNextAt (a->getEdge(i).st, i);
+      enB = a->CyclePrevAt (a->getEdge(i).en, i);
     }
     else
     {
-      stB = a->CyclePrevAt (a->aretes[i].st, i);
-      enB = a->CycleNextAt (a->aretes[i].en, i);
+      stB = a->CyclePrevAt (a->getEdge(i).st, i);
+      enB = a->CycleNextAt (a->getEdge(i).en, i);
     }
     
     NR::Point stD, seD, enD;
     double stL, seL, enL;
-    stD = a->aretes[stB].dx;
-    seD = a->aretes[i].dx;
-    enD = a->aretes[enB].dx;
+    stD = a->getEdge(stB).dx;
+    seD = a->getEdge(i).dx;
+    enD = a->getEdge(enB).dx;
     
     stL = sqrt (dot(stD,stD));
     seL = sqrt (dot(seD,seD));
@@ -610,7 +608,7 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
     
     NR::Point ptP;
     int stNo, enNo;
-    ptP = a->getPoint(a->aretes[i].st).x;
+    ptP = a->getPoint(a->getEdge(i).st).x;
     int   usePathID=-1;
     int   usePieceID=0;
     double useT=0.0;
@@ -643,17 +641,17 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
   }
   if (dec < 0)
   {
-    for (int i = 0; i < nbAr; i++)
+    for (int i = 0; i < numberOfEdges(); i++)
       Inverse (i);
   }
   if ( _has_back_data ) {
-    for (int i = 0; i < a->nbAr; i++)
+    for (int i = 0; i < a->numberOfEdges(); i++)
     {
       int nEd=AddEdge (a->swsData[i].stPt, a->swsData[i].enPt);
       ebData[nEd]=a->ebData[i];
     }
   } else {
-    for (int i = 0; i < a->nbAr; i++)
+    for (int i = 0; i < a->numberOfEdges(); i++)
     {
       AddEdge (a->swsData[i].stPt, a->swsData[i].enPt);
     }
@@ -673,7 +671,7 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord, int curBor
   int bord = startBord;
   
   {
-    dest->MoveTo (getPoint(aretes[bord].st).x);
+    dest->MoveTo (getPoint(getEdge(bord).st).x);
   }
   
   while (bord >= 0)
@@ -684,7 +682,7 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord, int curBor
     if (nPath < 0 || nPath >= nbP || orig[nPath] == NULL)
     {
       // segment batard
-      dest->LineTo (getPoint(aretes[bord].en).x);
+      dest->LineTo (getPoint(getEdge(bord).en).x);
       bord = swdData[bord].suivParc;
     }
     else
@@ -693,7 +691,7 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord, int curBor
       if (nPiece < 0 || nPiece >= from->descr_nb)
 	    {
 	      // segment batard
-	      dest->LineTo (getPoint(aretes[bord].en).x);
+	      dest->LineTo (getPoint(getEdge(bord).en).x);
 	      bord = swdData[bord].suivParc;
 	    }
       else
@@ -703,7 +701,7 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord, int curBor
             || nType == descr_forced)
         {
           // devrait pas arriver
-          dest->LineTo (getPoint(aretes[bord].en).x);
+          dest->LineTo (getPoint(getEdge(bord).en).x);
           bord = swdData[bord].suivParc;
         }
 	      else if (nType == descr_lineto)
@@ -737,20 +735,20 @@ Shape::AddContour (Path * dest, int nbP, Path * *orig, int startBord, int curBor
 	      else
         {
           // devrait pas arriver non plus
-          dest->LineTo (getPoint(aretes[bord].en).x);
+          dest->LineTo (getPoint(getEdge(bord).en).x);
           bord = swdData[bord].suivParc;
         }
-	      if (bord >= 0 && getPoint(aretes[bord].st).totalDegree() > 2 ) {
+	      if (bord >= 0 && getPoint(getEdge(bord).st).totalDegree() > 2 ) {
           dest->ForcePoint ();
-        } else if ( bord >= 0 && getPoint(aretes[bord].st).oldDegree > 2 && getPoint(aretes[bord].st).totalDegree() == 2)  {
+        } else if ( bord >= 0 && getPoint(getEdge(bord).st).oldDegree > 2 && getPoint(getEdge(bord).st).totalDegree() == 2)  {
           if ( splitWhenForced ) {
             // pour les coupures
             dest->ForcePoint ();
          } else {
             if ( _has_back_data ) {
-              int   prevEdge=getPoint(aretes[bord].st).firstA;
-              int   nextEdge=getPoint(aretes[bord].st).lastA;
-              if ( aretes[prevEdge].en != aretes[bord].st ) {
+              int   prevEdge=getPoint(getEdge(bord).st).firstA;
+              int   nextEdge=getPoint(getEdge(bord).st).lastA;
+              if ( getEdge(prevEdge).en != getEdge(bord).st ) {
                 int  swai=prevEdge;prevEdge=nextEdge;nextEdge=swai;
               }
               if ( ebData[prevEdge].pieceID == ebData[nextEdge].pieceID  && ebData[prevEdge].pathID == ebData[nextEdge].pathID ) {
@@ -778,12 +776,12 @@ Shape::ReFormeLineTo (int bord, int curBord, Path * dest, Path * orig)
   int nPiece = ebData[bord].pieceID;
   int nPath = ebData[bord].pathID;
   double /*ts=ebData[bord].tSt, */ te = ebData[bord].tEn;
-  NR::Point nx = getPoint(aretes[bord].en).x;
+  NR::Point nx = getPoint(getEdge(bord).en).x;
   bord = swdData[bord].suivParc;
   while (bord >= 0)
   {
-    if (getPoint(aretes[bord].st).dI + getPoint(aretes[bord].st).dO > 2
-        || getPoint(aretes[bord].st).oldDegree > 2)
+    if (getPoint(getEdge(bord).st).totalDegree() > 2
+        || getPoint(getEdge(bord).st).oldDegree > 2)
     {
       break;
     }
@@ -791,7 +789,7 @@ Shape::ReFormeLineTo (int bord, int curBord, Path * dest, Path * orig)
     {
       if (fabs (te - ebData[bord].tSt) > 0.0001)
         break;
-      nx = getPoint(aretes[bord].en).x;
+      nx = getPoint(getEdge(bord).en).x;
       te = ebData[bord].tEn;
     }
     else
@@ -812,13 +810,13 @@ Shape::ReFormeArcTo (int bord, int curBord, Path * dest, Path * from)
   int nPiece = ebData[bord].pieceID;
   int nPath = ebData[bord].pathID;
   double ts = ebData[bord].tSt, te = ebData[bord].tEn;
-  //      double  px=pts[aretes[bord].st].x,py=pts[aretes[bord].st].y;
-  NR::Point nx = getPoint(aretes[bord].en).x;
+  //      double  px=pts[getEdge(bord).st].x,py=pts[getEdge(bord).st].y;
+  NR::Point nx = getPoint(getEdge(bord).en).x;
   bord = swdData[bord].suivParc;
   while (bord >= 0)
   {
-    if (getPoint(aretes[bord].st).dI + getPoint(aretes[bord].st).dO > 2
-        || getPoint(aretes[bord].st).oldDegree > 2)
+    if (getPoint(getEdge(bord).st).totalDegree() > 2
+        || getPoint(getEdge(bord).st).oldDegree > 2)
     {
       break;
     }
@@ -828,7 +826,7 @@ Shape::ReFormeArcTo (int bord, int curBord, Path * dest, Path * from)
 	    {
 	      break;
 	    }
-      nx = getPoint(aretes[bord].en).x;
+      nx = getPoint(getEdge(bord).en).x;
       te = ebData[bord].tEn;
     }
     else
@@ -890,12 +888,12 @@ Shape::ReFormeCubicTo (int bord, int curBord, Path * dest, Path * from)
   int nPiece = ebData[bord].pieceID;
   int nPath = ebData[bord].pathID;
   double ts = ebData[bord].tSt, te = ebData[bord].tEn;
-  NR::Point nx = getPoint(aretes[bord].en).x;
+  NR::Point nx = getPoint(getEdge(bord).en).x;
   bord = swdData[bord].suivParc;
   while (bord >= 0)
   {
-    if (getPoint(aretes[bord].st).dI + getPoint(aretes[bord].st).dO > 2
-        || getPoint(aretes[bord].st).oldDegree > 2)
+    if (getPoint(getEdge(bord).st).totalDegree() > 2
+        || getPoint(getEdge(bord).st).oldDegree > 2)
     {
       break;
     }
@@ -905,7 +903,7 @@ Shape::ReFormeCubicTo (int bord, int curBord, Path * dest, Path * from)
 	    {
 	      break;
 	    }
-      nx = getPoint(aretes[bord].en).x;
+      nx = getPoint(getEdge(bord).en).x;
       te = ebData[bord].tEn;
     }
     else
@@ -937,8 +935,8 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
   int nPath = ebData[bord].pathID;
   double ts = ebData[bord].tSt, te = ebData[bord].tEn;
   int ps = nPiece, pe = nPiece;
-  NR::Point px = getPoint(aretes[bord].st).x;
-  NR::Point nx = getPoint(aretes[bord].en).x;
+  NR::Point px = getPoint(getEdge(bord).st).x;
+  NR::Point nx = getPoint(getEdge(bord).en).x;
   int inBezier = -1, nbInterm = -1;
   int typ;
   typ = from->descr_cmd[nPiece].flags & descr_type_mask;
@@ -974,8 +972,8 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
   bord = swdData[bord].suivParc;
   while (bord >= 0)
   {
-    if (getPoint(aretes[bord].st).dI + getPoint(aretes[bord].st).dO > 2
-        || getPoint(aretes[bord].st).oldDegree > 2)
+    if (getPoint(getEdge(bord).st).totalDegree() > 2
+        || getPoint(getEdge(bord).st).oldDegree > 2)
     {
       break;
     }
@@ -992,7 +990,7 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
         break;
       if (ebData[bord].pieceID != pe && (te > 0.0001 && te < 0.9999))
         break;
-      nx = getPoint(aretes[bord].en).x;
+      nx = getPoint(getEdge(bord).en).x;
       te = ebData[bord].tEn;
       pe = ebData[bord].pieceID;
     }

@@ -65,9 +65,9 @@ Shape::Plot (double ix, double iy, double ir, double mx, double my, bool doPoint
     }
   }
 	{
-		for (int i=0;i<nbAr;i++) {
-			int     stP=aretes[i].st;
-			int     enP=aretes[i].en;
+		for (int i=0;i<numberOfEdges();i++) {
+			int     stP=getEdge(i).st;
+			int     enP=getEdge(i).en;
 			if ( stP < 0 || enP < 0 ) continue;
 			double   sh=(getPoint(stP).x[0]-ix)*ir+mx;
 			double   sv=(getPoint(stP).x[1]-iy)*ir+my;
@@ -83,9 +83,9 @@ Shape::Plot (double ix, double iy, double ir, double mx, double my, bool doPoint
 		}
 	}
   if ( edgesNo ) {
-		for (int i=0;i<nbAr;i++) {
-			int     stP=aretes[i].st;
-			int     enP=aretes[i].en;
+		for (int i=0;i<numberOfEdges();i++) {
+			int     stP=getEdge(i).st;
+			int     enP=getEdge(i).en;
 			if ( stP < 0 || enP < 0 ) continue;
 			double   sh=(getPoint(stP).x[0]-ix)*ir+mx;
 			double   sv=(getPoint(stP).x[1]-iy)*ir+my;

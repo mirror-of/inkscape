@@ -33,7 +33,7 @@ Shape::Shape (void)
 {
   leftX = topY = rightX = bottomY = 0;
   maxPt = 0;
-  nbAr = maxAr = 0;
+  maxAr = 0;
 
   type = shape_polygon;
 
@@ -50,7 +50,7 @@ Shape::Shape (void)
 Shape::~Shape (void)
 {
   maxPt = 0;
-  nbAr = maxAr = 0;
+  maxAr = 0;
   g_free(eData);
   g_free(ebData);
   g_free(swsData);
@@ -287,8 +287,7 @@ Shape::Copy (Shape * who)
       _has_sweep_data = false;
     }
 
-  Reset (who->numberOfPoints(), who->nbAr);
-  nbAr = who->nbAr;
+  Reset (who->numberOfPoints(), who->numberOfEdges());
   type = who->type;
   _need_points_sorting = who->_need_points_sorting;
   _need_edges_sorting = who->_need_edges_sorting;
@@ -303,15 +302,15 @@ Shape::Copy (Shape * who)
   _has_voronoi_data = false;
 
   _pts = who->_pts;
-  aretes = who->aretes;
+  _aretes = who->_aretes;
 }
 
 void
 Shape::Reset (int n, int m)
 {
   _pts.clear();
+  _aretes.clear();
   
-  nbAr = 0;
   type = shape_polygon;
   if (n > maxPt)
     {
@@ -326,7 +325,6 @@ Shape::Reset (int n, int m)
   if (m > maxAr)
     {
       maxAr = m;
-      aretes.reserve(maxAr);
       if (_has_edges_data)
 	eData = (edge_data *) g_realloc(eData, maxAr * sizeof (edge_data));
       if (_has_sweep_dest_data)
@@ -343,7 +341,6 @@ Shape::Reset (int n, int m)
 	voreData =
 	  (voronoi_edge *) g_realloc(voreData, maxAr * sizeof (voronoi_edge));
     }
-  aretes.resize(m);
   _need_points_sorting = false;
   _need_edges_sorting = false;
 }
@@ -396,20 +393,20 @@ Shape::SubPoint (int p)
   _need_points_sorting = true;
   int cb;
   cb = getPoint(p).firstA;
-  while (cb >= 0 && cb < nbAr)
+  while (cb >= 0 && cb < numberOfEdges())
     {
-      if (aretes[cb].st == p)
+      if (getEdge(cb).st == p)
 	{
-	  int ncb = aretes[cb].nextS;
-	  aretes[cb].nextS = aretes[cb].prevS = -1;
-	  aretes[cb].st = -1;
+	  int ncb = getEdge(cb).nextS;
+	  _aretes[cb].nextS = _aretes[cb].prevS = -1;
+	  _aretes[cb].st = -1;
 	  cb = ncb;
 	}
-      else if (aretes[cb].en == p)
+      else if (getEdge(cb).en == p)
 	{
-	  int ncb = aretes[cb].nextE;
-	  aretes[cb].nextE = aretes[cb].prevE = -1;
-	  aretes[cb].en = -1;
+	  int ncb = getEdge(cb).nextE;
+	  _aretes[cb].nextE = _aretes[cb].prevE = -1;
+	  _aretes[cb].en = -1;
 	  cb = ncb;
 	}
       else
@@ -431,60 +428,60 @@ Shape::SwapPoints (int a, int b)
   if (getPoint(a).totalDegree() == 2 && getPoint(b).totalDegree() == 2)
     {
       int cb = getPoint(a).firstA;
-      if (aretes[cb].st == a)
+      if (getEdge(cb).st == a)
 	{
-	  aretes[cb].st = numberOfPoints();
+	  _aretes[cb].st = numberOfPoints();
 	}
-      else if (aretes[cb].en == a)
+      else if (getEdge(cb).en == a)
 	{
-	  aretes[cb].en = numberOfPoints();
+	  _aretes[cb].en = numberOfPoints();
 	}
       cb = getPoint(a).lastA;
-      if (aretes[cb].st == a)
+      if (getEdge(cb).st == a)
 	{
-	  aretes[cb].st = numberOfPoints();
+	  _aretes[cb].st = numberOfPoints();
 	}
-      else if (aretes[cb].en == a)
+      else if (getEdge(cb).en == a)
 	{
-	  aretes[cb].en = numberOfPoints();
+	  _aretes[cb].en = numberOfPoints();
 	}
 
       cb = getPoint(b).firstA;
-      if (aretes[cb].st == b)
+      if (getEdge(cb).st == b)
 	{
-	  aretes[cb].st = a;
+	  _aretes[cb].st = a;
 	}
-      else if (aretes[cb].en == b)
+      else if (getEdge(cb).en == b)
 	{
-	  aretes[cb].en = a;
+	  _aretes[cb].en = a;
 	}
       cb = getPoint(b).lastA;
-      if (aretes[cb].st == b)
+      if (getEdge(cb).st == b)
 	{
-	  aretes[cb].st = a;
+	  _aretes[cb].st = a;
 	}
-      else if (aretes[cb].en == b)
+      else if (getEdge(cb).en == b)
 	{
-	  aretes[cb].en = a;
+	  _aretes[cb].en = a;
 	}
 
       cb = getPoint(a).firstA;
-      if (aretes[cb].st == numberOfPoints())
+      if (getEdge(cb).st == numberOfPoints())
 	{
-	  aretes[cb].st = b;
+	  _aretes[cb].st = b;
 	}
-      else if (aretes[cb].en == numberOfPoints())
+      else if (getEdge(cb).en == numberOfPoints())
 	{
-	  aretes[cb].en = b;
+	  _aretes[cb].en = b;
 	}
       cb = getPoint(a).lastA;
-      if (aretes[cb].st == numberOfPoints())
+      if (getEdge(cb).st == numberOfPoints())
 	{
-	  aretes[cb].st = b;
+	  _aretes[cb].st = b;
 	}
-      else if (aretes[cb].en == numberOfPoints())
+      else if (getEdge(cb).en == numberOfPoints())
 	{
-	  aretes[cb].en = b;
+	  _aretes[cb].en = b;
 	}
 
     }
@@ -495,13 +492,13 @@ Shape::SwapPoints (int a, int b)
       while (cb >= 0)
 	{
 	  int ncb = NextAt (a, cb);
-	  if (aretes[cb].st == a)
+	  if (getEdge(cb).st == a)
 	    {
-	      aretes[cb].st = numberOfPoints();
+	      _aretes[cb].st = numberOfPoints();
 	    }
-	  else if (aretes[cb].en == a)
+	  else if (getEdge(cb).en == a)
 	    {
-	      aretes[cb].en = numberOfPoints();
+	      _aretes[cb].en = numberOfPoints();
 	    }
 	  cb = ncb;
 	}
@@ -509,13 +506,13 @@ Shape::SwapPoints (int a, int b)
       while (cb >= 0)
 	{
 	  int ncb = NextAt (b, cb);
-	  if (aretes[cb].st == b)
+	  if (getEdge(cb).st == b)
 	    {
-	      aretes[cb].st = a;
+	      _aretes[cb].st = a;
 	    }
-	  else if (aretes[cb].en == b)
+	  else if (getEdge(cb).en == b)
 	    {
-	      aretes[cb].en = a;
+	      _aretes[cb].en = a;
 	    }
 	  cb = ncb;
 	}
@@ -523,13 +520,13 @@ Shape::SwapPoints (int a, int b)
       while (cb >= 0)
 	{
 	  int ncb = NextAt (numberOfPoints(), cb);
-	  if (aretes[cb].st == numberOfPoints())
+	  if (getEdge(cb).st == numberOfPoints())
 	    {
-	      aretes[cb].st = b;
+	      _aretes[cb].st = b;
 	    }
-	  else if (aretes[cb].en == numberOfPoints())
+	  else if (getEdge(cb).en == numberOfPoints())
 	    {
-	      aretes[cb].en = b;
+	      _aretes[cb].en = b;
 	    }
 	  cb = ncb;
 	}
@@ -1156,10 +1153,9 @@ Shape::AddEdge (int st, int en)
   if (st < 0 || en < 0)
     return -1;
   type = shape_graph;
-  if (nbAr >= maxAr)
+  if (numberOfEdges() >= maxAr)
     {
-      maxAr = 2 * nbAr + 1;
-      aretes.reserve(maxAr);
+      maxAr = 2 * numberOfEdges() + 1;
       if (_has_edges_data)
 	eData = (edge_data *) g_realloc(eData, maxAr * sizeof (edge_data));
       if (_has_sweep_src_data)
@@ -1179,25 +1175,25 @@ Shape::AddEdge (int st, int en)
 	voreData =
 	  (voronoi_edge *) g_realloc(voreData, maxAr * sizeof (voronoi_edge));
     }
-  int n = nbAr++;
-  aretes.resize(nbAr);
-  aretes[n].st = aretes[n].en = -1;
-  aretes[n].prevS = aretes[n].nextS = -1;
-  aretes[n].prevE = aretes[n].nextE = -1;
-  if (st >= 0 && en >= 0)
-    {
-      aretes[n].dx = getPoint(en).x - getPoint(st).x;
-    }
-  else
-    {
-      aretes[n].dx[0] = aretes[n].dx[1] = 0;
-    }
+
+  dg_arete a;
+  a.dx = NR::Point(0, 0);
+  a.st = a.en = -1;
+  a.prevS = a.nextS = -1;
+  a.prevE = a.nextE = -1;
+  if (st >= 0 && en >= 0) {
+    a.dx = getPoint(en).x - getPoint(st).x;
+  }
+
+  _aretes.push_back(a);
+  int const n = numberOfEdges() - 1;
+  
   ConnectStart (st, n);
   ConnectEnd (en, n);
   if (_has_edges_data)
     {
       eData[n].weight = 1;
-      eData[n].rdx = aretes[n].dx;
+      eData[n].rdx = getEdge(n).dx;
     }
   if (_has_sweep_src_data)
     {
@@ -1230,18 +1226,17 @@ Shape::AddEdge (int st, int en, int leF, int riF)
     int cb = getPoint(st).firstA;
     while (cb >= 0)
       {
-	if (aretes[cb].st == st && aretes[cb].en == en)
+	if (getEdge(cb).st == st && getEdge(cb).en == en)
 	  return -1;		// doublon
-	if (aretes[cb].st == en && aretes[cb].en == st)
+	if (getEdge(cb).st == en && getEdge(cb).en == st)
 	  return -1;		// doublon
 	cb = NextAt (st, cb);
       }
   }
   type = shape_graph;
-  if (nbAr >= maxAr)
+  if (numberOfEdges() >= maxAr)
     {
-      maxAr = 2 * nbAr + 1;
-      aretes.reserve(maxAr);
+      maxAr = 2 * numberOfEdges() + 1;
       if (_has_edges_data)
 	eData = (edge_data *) g_realloc(eData, maxAr * sizeof (edge_data));
       if (_has_sweep_src_data)
@@ -1261,25 +1256,25 @@ Shape::AddEdge (int st, int en, int leF, int riF)
 	voreData =
 	  (voronoi_edge *) g_realloc(voreData, maxAr * sizeof (voronoi_edge));
     }
-  int n = nbAr++;
-  aretes.resize(nbAr);
-  aretes[n].st = aretes[n].en = -1;
-  aretes[n].prevS = aretes[n].nextS = -1;
-  aretes[n].prevE = aretes[n].nextE = -1;
-  if (st >= 0 && en >= 0)
-    {
-      aretes[n].dx = getPoint(en).x - getPoint(st).x;
-    }
-  else
-    {
-      aretes[n].dx[0] = aretes[n].dx[1] = 0;
-    }
+
+  dg_arete a;
+  a.dx = NR::Point(0, 0);
+  a.st = a.en = -1;
+  a.prevS = a.nextS = -1;
+  a.prevE = a.nextE = -1;
+  if (st >= 0 && en >= 0) {
+    a.dx = getPoint(en).x - getPoint(st).x;
+  }
+  
+  _aretes.push_back(a);
+  int const n = numberOfEdges() - 1;
+
   ConnectStart (st, n);
   ConnectEnd (en, n);
   if (_has_edges_data)
     {
       eData[n].weight = 1;
-      eData[n].rdx = aretes[n].dx;
+      eData[n].rdx = getEdge(n).dx;
     }
   if (_has_sweep_src_data)
     {
@@ -1304,14 +1299,14 @@ Shape::AddEdge (int st, int en, int leF, int riF)
 void
 Shape::SubEdge (int e)
 {
-  if (e < 0 || e >= nbAr)
+  if (e < 0 || e >= numberOfEdges())
     return;
   type = shape_graph;
   DisconnectStart (e);
   DisconnectEnd (e);
-  if (e < nbAr - 1)
-    SwapEdges (e, nbAr - 1);
-  nbAr--;
+  if (e < numberOfEdges() - 1)
+    SwapEdges (e, numberOfEdges() - 1);
+  _aretes.pop_back();
   _need_edges_sorting = true;
 }
 
@@ -1320,160 +1315,160 @@ Shape::SwapEdges (int a, int b)
 {
   if (a == b)
     return;
-  if (aretes[a].prevS >= 0 && aretes[a].prevS != b)
+  if (getEdge(a).prevS >= 0 && getEdge(a).prevS != b)
     {
-      if (aretes[aretes[a].prevS].st == aretes[a].st)
+      if (getEdge(getEdge(a).prevS).st == getEdge(a).st)
 	{
-	  aretes[aretes[a].prevS].nextS = b;
+	  _aretes[getEdge(a).prevS].nextS = b;
 	}
-      else if (aretes[aretes[a].prevS].en == aretes[a].st)
+      else if (getEdge(getEdge(a).prevS).en == getEdge(a).st)
 	{
-	  aretes[aretes[a].prevS].nextE = b;
+	  _aretes[getEdge(a).prevS].nextE = b;
 	}
     }
-  if (aretes[a].nextS >= 0 && aretes[a].nextS != b)
+  if (getEdge(a).nextS >= 0 && getEdge(a).nextS != b)
     {
-      if (aretes[aretes[a].nextS].st == aretes[a].st)
+      if (getEdge(getEdge(a).nextS).st == getEdge(a).st)
 	{
-	  aretes[aretes[a].nextS].prevS = b;
+	  _aretes[getEdge(a).nextS].prevS = b;
 	}
-      else if (aretes[aretes[a].nextS].en == aretes[a].st)
+      else if (getEdge(getEdge(a).nextS).en == getEdge(a).st)
 	{
-	  aretes[aretes[a].nextS].prevE = b;
+	  _aretes[getEdge(a).nextS].prevE = b;
 	}
     }
-  if (aretes[a].prevE >= 0 && aretes[a].prevE != b)
+  if (getEdge(a).prevE >= 0 && getEdge(a).prevE != b)
     {
-      if (aretes[aretes[a].prevE].st == aretes[a].en)
+      if (getEdge(getEdge(a).prevE).st == getEdge(a).en)
 	{
-	  aretes[aretes[a].prevE].nextS = b;
+	  _aretes[getEdge(a).prevE].nextS = b;
 	}
-      else if (aretes[aretes[a].prevE].en == aretes[a].en)
+      else if (getEdge(getEdge(a).prevE).en == getEdge(a).en)
 	{
-	  aretes[aretes[a].prevE].nextE = b;
+	  _aretes[getEdge(a).prevE].nextE = b;
 	}
     }
-  if (aretes[a].nextE >= 0 && aretes[a].nextE != b)
+  if (getEdge(a).nextE >= 0 && getEdge(a).nextE != b)
     {
-      if (aretes[aretes[a].nextE].st == aretes[a].en)
+      if (getEdge(getEdge(a).nextE).st == getEdge(a).en)
 	{
-	  aretes[aretes[a].nextE].prevS = b;
+	  _aretes[getEdge(a).nextE].prevS = b;
 	}
-      else if (aretes[aretes[a].nextE].en == aretes[a].en)
+      else if (getEdge(getEdge(a).nextE).en == getEdge(a).en)
 	{
-	  aretes[aretes[a].nextE].prevE = b;
+	  _aretes[getEdge(a).nextE].prevE = b;
 	}
     }
-  if (aretes[a].st >= 0)
+  if (getEdge(a).st >= 0)
     {
-      if (getPoint(aretes[a].st).firstA == a)
-	_pts[aretes[a].st].firstA = nbAr;
-      if (getPoint(aretes[a].st).lastA == a)
-	_pts[aretes[a].st].lastA = nbAr;
+      if (getPoint(getEdge(a).st).firstA == a)
+	_pts[getEdge(a).st].firstA = numberOfEdges();
+      if (getPoint(getEdge(a).st).lastA == a)
+	_pts[getEdge(a).st].lastA = numberOfEdges();
     }
-  if (aretes[a].en >= 0)
+  if (getEdge(a).en >= 0)
     {
-      if (getPoint(aretes[a].en).firstA == a)
-	_pts[aretes[a].en].firstA = nbAr;
-      if (getPoint(aretes[a].en).lastA == a)
-	_pts[aretes[a].en].lastA = nbAr;
-    }
-
-
-  if (aretes[b].prevS >= 0 && aretes[b].prevS != a)
-    {
-      if (aretes[aretes[b].prevS].st == aretes[b].st)
-	{
-	  aretes[aretes[b].prevS].nextS = a;
-	}
-      else if (aretes[aretes[b].prevS].en == aretes[b].st)
-	{
-	  aretes[aretes[b].prevS].nextE = a;
-	}
-    }
-  if (aretes[b].nextS >= 0 && aretes[b].nextS != a)
-    {
-      if (aretes[aretes[b].nextS].st == aretes[b].st)
-	{
-	  aretes[aretes[b].nextS].prevS = a;
-	}
-      else if (aretes[aretes[b].nextS].en == aretes[b].st)
-	{
-	  aretes[aretes[b].nextS].prevE = a;
-	}
-    }
-  if (aretes[b].prevE >= 0 && aretes[b].prevE != a)
-    {
-      if (aretes[aretes[b].prevE].st == aretes[b].en)
-	{
-	  aretes[aretes[b].prevE].nextS = a;
-	}
-      else if (aretes[aretes[b].prevE].en == aretes[b].en)
-	{
-	  aretes[aretes[b].prevE].nextE = a;
-	}
-    }
-  if (aretes[b].nextE >= 0 && aretes[b].nextE != a)
-    {
-      if (aretes[aretes[b].nextE].st == aretes[b].en)
-	{
-	  aretes[aretes[b].nextE].prevS = a;
-	}
-      else if (aretes[aretes[b].nextE].en == aretes[b].en)
-	{
-	  aretes[aretes[b].nextE].prevE = a;
-	}
-    }
-  if (aretes[b].st >= 0)
-    {
-      if (getPoint(aretes[b].st).firstA == b)
-	_pts[aretes[b].st].firstA = a;
-      if (getPoint(aretes[b].st).lastA == b)
-	_pts[aretes[b].st].lastA = a;
-    }
-  if (aretes[b].en >= 0)
-    {
-      if (getPoint(aretes[b].en).firstA == b)
-	_pts[aretes[b].en].firstA = a;
-      if (getPoint(aretes[b].en).lastA == b)
-	_pts[aretes[b].en].lastA = a;
+      if (getPoint(getEdge(a).en).firstA == a)
+	_pts[getEdge(a).en].firstA = numberOfEdges();
+      if (getPoint(getEdge(a).en).lastA == a)
+	_pts[getEdge(a).en].lastA = numberOfEdges();
     }
 
-  if (aretes[a].st >= 0)
+
+  if (getEdge(b).prevS >= 0 && getEdge(b).prevS != a)
     {
-      if (getPoint(aretes[a].st).firstA == nbAr)
-	_pts[aretes[a].st].firstA = b;
-      if (getPoint(aretes[a].st).lastA == nbAr)
-	_pts[aretes[a].st].lastA = b;
+      if (getEdge(getEdge(b).prevS).st == getEdge(b).st)
+	{
+	  _aretes[getEdge(b).prevS].nextS = a;
+	}
+      else if (getEdge(getEdge(b).prevS).en == getEdge(b).st)
+	{
+	  _aretes[getEdge(b).prevS].nextE = a;
+	}
     }
-  if (aretes[a].en >= 0)
+  if (getEdge(b).nextS >= 0 && getEdge(b).nextS != a)
     {
-      if (getPoint(aretes[a].en).firstA == nbAr)
-	_pts[aretes[a].en].firstA = b;
-      if (getPoint(aretes[a].en).lastA == nbAr)
-	_pts[aretes[a].en].lastA = b;
+      if (getEdge(getEdge(b).nextS).st == getEdge(b).st)
+	{
+	  _aretes[getEdge(b).nextS].prevS = a;
+	}
+      else if (getEdge(getEdge(b).nextS).en == getEdge(b).st)
+	{
+	  _aretes[getEdge(b).nextS].prevE = a;
+	}
+    }
+  if (getEdge(b).prevE >= 0 && getEdge(b).prevE != a)
+    {
+      if (getEdge(getEdge(b).prevE).st == getEdge(b).en)
+	{
+	  _aretes[getEdge(b).prevE].nextS = a;
+	}
+      else if (getEdge(getEdge(b).prevE).en == getEdge(b).en)
+	{
+	  _aretes[getEdge(b).prevE].nextE = a;
+	}
+    }
+  if (getEdge(b).nextE >= 0 && getEdge(b).nextE != a)
+    {
+      if (getEdge(getEdge(b).nextE).st == getEdge(b).en)
+	{
+	  _aretes[getEdge(b).nextE].prevS = a;
+	}
+      else if (getEdge(getEdge(b).nextE).en == getEdge(b).en)
+	{
+	  _aretes[getEdge(b).nextE].prevE = a;
+	}
+    }
+  if (getEdge(b).st >= 0)
+    {
+      if (getPoint(getEdge(b).st).firstA == b)
+	_pts[getEdge(b).st].firstA = a;
+      if (getPoint(getEdge(b).st).lastA == b)
+	_pts[getEdge(b).st].lastA = a;
+    }
+  if (getEdge(b).en >= 0)
+    {
+      if (getPoint(getEdge(b).en).firstA == b)
+	_pts[getEdge(b).en].firstA = a;
+      if (getPoint(getEdge(b).en).lastA == b)
+	_pts[getEdge(b).en].lastA = a;
     }
 
-  if (aretes[a].prevS == b)
-    aretes[a].prevS = a;
-  if (aretes[a].prevE == b)
-    aretes[a].prevE = a;
-  if (aretes[a].nextS == b)
-    aretes[a].nextS = a;
-  if (aretes[a].nextE == b)
-    aretes[a].nextE = a;
-  if (aretes[b].prevS == a)
-    aretes[a].prevS = b;
-  if (aretes[b].prevE == a)
-    aretes[a].prevE = b;
-  if (aretes[b].nextS == a)
-    aretes[a].nextS = b;
-  if (aretes[b].nextE == a)
-    aretes[a].nextE = b;
+  if (getEdge(a).st >= 0)
+    {
+      if (getPoint(getEdge(a).st).firstA == numberOfEdges())
+	_pts[getEdge(a).st].firstA = b;
+      if (getPoint(getEdge(a).st).lastA == numberOfEdges())
+	_pts[getEdge(a).st].lastA = b;
+    }
+  if (getEdge(a).en >= 0)
+    {
+      if (getPoint(getEdge(a).en).firstA == numberOfEdges())
+	_pts[getEdge(a).en].firstA = b;
+      if (getPoint(getEdge(a).en).lastA == numberOfEdges())
+	_pts[getEdge(a).en].lastA = b;
+    }
 
-  dg_arete swap = aretes[a];
-  aretes[a] = aretes[b];
-  aretes[b] = swap;
+  if (getEdge(a).prevS == b)
+    _aretes[a].prevS = a;
+  if (getEdge(a).prevE == b)
+    _aretes[a].prevE = a;
+  if (getEdge(a).nextS == b)
+    _aretes[a].nextS = a;
+  if (getEdge(a).nextE == b)
+    _aretes[a].nextE = a;
+  if (getEdge(b).prevS == a)
+    _aretes[a].prevS = b;
+  if (getEdge(b).prevE == a)
+    _aretes[a].prevE = b;
+  if (getEdge(b).nextS == a)
+    _aretes[a].nextS = b;
+  if (getEdge(b).nextE == a)
+    _aretes[a].nextE = b;
+
+  dg_arete swap = getEdge(a);
+  _aretes[a] = getEdge(b);
+  _aretes[b] = swap;
   if (_has_edges_data)
     {
       edge_data swae = eData[a];
@@ -1528,7 +1523,7 @@ Shape::SortEdges (void)
   }
   _need_edges_sorting = false;
 
-  edge_list *list = (edge_list *) g_malloc(nbAr * sizeof (edge_list));
+  edge_list *list = (edge_list *) g_malloc(numberOfEdges() * sizeof (edge_list));
   for (int p = 0; p < numberOfPoints(); p++)
     {
       int const d = getPoint(p).totalDegree();
@@ -1541,14 +1536,14 @@ Shape::SortEdges (void)
 	    {
 	      int n = nb++;
 	      list[n].no = cb;
-	      if (aretes[cb].st == p)
+	      if (getEdge(cb).st == p)
 		{
-		  list[n].x = aretes[cb].dx;
+		  list[n].x = getEdge(cb).dx;
 		  list[n].starting = true;
 		}
 	      else
 		{
-		  list[n].x = -aretes[cb].dx;
+		  list[n].x = -getEdge(cb).dx;
 		  list[n].starting = false;
 		}
 	      cb = NextAt (p, cb);
@@ -1562,38 +1557,38 @@ Shape::SortEdges (void)
 		{
 		  if (i > 0)
 		    {
-		      aretes[list[i].no].prevS = list[i - 1].no;
+		      _aretes[list[i].no].prevS = list[i - 1].no;
 		    }
 		  else
 		    {
-		      aretes[list[i].no].prevS = -1;
+		      _aretes[list[i].no].prevS = -1;
 		    }
 		  if (i < nb - 1)
 		    {
-		      aretes[list[i].no].nextS = list[i + 1].no;
+		      _aretes[list[i].no].nextS = list[i + 1].no;
 		    }
 		  else
 		    {
-		      aretes[list[i].no].nextS = -1;
+		      _aretes[list[i].no].nextS = -1;
 		    }
 		}
 	      else
 		{
 		  if (i > 0)
 		    {
-		      aretes[list[i].no].prevE = list[i - 1].no;
+		      _aretes[list[i].no].prevE = list[i - 1].no;
 		    }
 		  else
 		    {
-		      aretes[list[i].no].prevE = -1;
+		      _aretes[list[i].no].prevE = -1;
 		    }
 		  if (i < nb - 1)
 		    {
-		      aretes[list[i].no].nextE = list[i + 1].no;
+		      _aretes[list[i].no].nextE = list[i + 1].no;
 		    }
 		  else
 		    {
-		      aretes[list[i].no].nextE = -1;
+		      _aretes[list[i].no].nextE = -1;
 		    }
 		}
 	    }
@@ -1902,21 +1897,22 @@ Shape::SortEdgesList (edge_list * list, int s, int e)
 void
 Shape::ConnectStart (int p, int b)
 {
-  if (aretes[b].st >= 0)
+  if (getEdge(b).st >= 0)
     DisconnectStart (b);
-  aretes[b].st = p;
+  
+  _aretes[b].st = p;
   _pts[p].dO++;
-  aretes[b].nextS = -1;
-  aretes[b].prevS = getPoint(p).lastA;
+  _aretes[b].nextS = -1;
+  _aretes[b].prevS = getPoint(p).lastA;
   if (getPoint(p).lastA >= 0)
     {
-      if (aretes[getPoint(p).lastA].st == p)
+      if (getEdge(getPoint(p).lastA).st == p)
 	{
-	  aretes[getPoint(p).lastA].nextS = b;
+	  _aretes[getPoint(p).lastA].nextS = b;
 	}
-      else if (aretes[getPoint(p).lastA].en == p)
+      else if (getEdge(getPoint(p).lastA).en == p)
 	{
-	  aretes[getPoint(p).lastA].nextE = b;
+	  _aretes[getPoint(p).lastA].nextE = b;
 	}
     }
   _pts[p].lastA = b;
@@ -1927,21 +1923,21 @@ Shape::ConnectStart (int p, int b)
 void
 Shape::ConnectEnd (int p, int b)
 {
-  if (aretes[b].en >= 0)
+  if (getEdge(b).en >= 0)
     DisconnectEnd (b);
-  aretes[b].en = p;
+  _aretes[b].en = p;
   _pts[p].dI++;
-  aretes[b].nextE = -1;
-  aretes[b].prevE = getPoint(p).lastA;
+  _aretes[b].nextE = -1;
+  _aretes[b].prevE = getPoint(p).lastA;
   if (getPoint(p).lastA >= 0)
     {
-      if (aretes[getPoint(p).lastA].st == p)
+      if (getEdge(getPoint(p).lastA).st == p)
 	{
-	  aretes[getPoint(p).lastA].nextS = b;
+	  _aretes[getPoint(p).lastA].nextS = b;
 	}
-      else if (aretes[getPoint(p).lastA].en == p)
+      else if (getEdge(getPoint(p).lastA).en == p)
 	{
-	  aretes[getPoint(p).lastA].nextE = b;
+	  _aretes[getPoint(p).lastA].nextE = b;
 	}
     }
   _pts[p].lastA = b;
@@ -1952,71 +1948,71 @@ Shape::ConnectEnd (int p, int b)
 void
 Shape::DisconnectStart (int b)
 {
-  if (aretes[b].st < 0)
+  if (getEdge(b).st < 0)
     return;
-  _pts[aretes[b].st].dO--;
-  if (aretes[b].prevS >= 0)
+  _pts[getEdge(b).st].dO--;
+  if (getEdge(b).prevS >= 0)
     {
-      if (aretes[aretes[b].prevS].st == aretes[b].st)
+      if (getEdge(getEdge(b).prevS).st == getEdge(b).st)
 	{
-	  aretes[aretes[b].prevS].nextS = aretes[b].nextS;
+	  _aretes[getEdge(b).prevS].nextS = getEdge(b).nextS;
 	}
-      else if (aretes[aretes[b].prevS].en == aretes[b].st)
+      else if (getEdge(getEdge(b).prevS).en == getEdge(b).st)
 	{
-	  aretes[aretes[b].prevS].nextE = aretes[b].nextS;
+	  _aretes[getEdge(b).prevS].nextE = getEdge(b).nextS;
 	}
     }
-  if (aretes[b].nextS >= 0)
+  if (getEdge(b).nextS >= 0)
     {
-      if (aretes[aretes[b].nextS].st == aretes[b].st)
+      if (getEdge(getEdge(b).nextS).st == getEdge(b).st)
 	{
-	  aretes[aretes[b].nextS].prevS = aretes[b].prevS;
+	  _aretes[getEdge(b).nextS].prevS = getEdge(b).prevS;
 	}
-      else if (aretes[aretes[b].nextS].en == aretes[b].st)
+      else if (getEdge(getEdge(b).nextS).en == getEdge(b).st)
 	{
-	  aretes[aretes[b].nextS].prevE = aretes[b].prevS;
+	  _aretes[getEdge(b).nextS].prevE = getEdge(b).prevS;
 	}
     }
-  if (getPoint(aretes[b].st).firstA == b)
-    _pts[aretes[b].st].firstA = aretes[b].nextS;
-  if (getPoint(aretes[b].st).lastA == b)
-    _pts[aretes[b].st].lastA = aretes[b].prevS;
-  aretes[b].st = -1;
+  if (getPoint(getEdge(b).st).firstA == b)
+    _pts[getEdge(b).st].firstA = getEdge(b).nextS;
+  if (getPoint(getEdge(b).st).lastA == b)
+    _pts[getEdge(b).st].lastA = getEdge(b).prevS;
+  _aretes[b].st = -1;
 }
 
 void
 Shape::DisconnectEnd (int b)
 {
-  if (aretes[b].en < 0)
+  if (getEdge(b).en < 0)
     return;
-  _pts[aretes[b].en].dI--;
-  if (aretes[b].prevE >= 0)
+  _pts[getEdge(b).en].dI--;
+  if (getEdge(b).prevE >= 0)
     {
-      if (aretes[aretes[b].prevE].st == aretes[b].en)
+      if (getEdge(getEdge(b).prevE).st == getEdge(b).en)
 	{
-	  aretes[aretes[b].prevE].nextS = aretes[b].nextE;
+	  _aretes[getEdge(b).prevE].nextS = getEdge(b).nextE;
 	}
-      else if (aretes[aretes[b].prevE].en == aretes[b].en)
+      else if (getEdge(getEdge(b).prevE).en == getEdge(b).en)
 	{
-	  aretes[aretes[b].prevE].nextE = aretes[b].nextE;
+	  _aretes[getEdge(b).prevE].nextE = getEdge(b).nextE;
 	}
     }
-  if (aretes[b].nextE >= 0)
+  if (getEdge(b).nextE >= 0)
     {
-      if (aretes[aretes[b].nextE].st == aretes[b].en)
+      if (getEdge(getEdge(b).nextE).st == getEdge(b).en)
 	{
-	  aretes[aretes[b].nextE].prevS = aretes[b].prevE;
+	  _aretes[getEdge(b).nextE].prevS = getEdge(b).prevE;
 	}
-      else if (aretes[aretes[b].nextE].en == aretes[b].en)
+      else if (getEdge(getEdge(b).nextE).en == getEdge(b).en)
 	{
-	  aretes[aretes[b].nextE].prevE = aretes[b].prevE;
+	  _aretes[getEdge(b).nextE].prevE = getEdge(b).prevE;
 	}
     }
-  if (getPoint(aretes[b].en).firstA == b)
-    _pts[aretes[b].en].firstA = aretes[b].nextE;
-  if (getPoint(aretes[b].en).lastA == b)
-    _pts[aretes[b].en].lastA = aretes[b].prevE;
-  aretes[b].en = -1;
+  if (getPoint(getEdge(b).en).firstA == b)
+    _pts[getEdge(b).en].firstA = getEdge(b).nextE;
+  if (getPoint(getEdge(b).en).lastA == b)
+    _pts[getEdge(b).en].lastA = getEdge(b).prevE;
+  _aretes[b].en = -1;
 }
 
 bool
@@ -2049,25 +2045,25 @@ void
 Shape::Inverse (int b)
 {
   int swap;
-  swap = aretes[b].st;
-  aretes[b].st = aretes[b].en;
-  aretes[b].en = swap;
-  swap = aretes[b].prevE;
-  aretes[b].prevE = aretes[b].prevS;
-  aretes[b].prevS = swap;
-  swap = aretes[b].nextE;
-  aretes[b].nextE = aretes[b].nextS;
-  aretes[b].nextS = swap;
-  aretes[b].dx = -aretes[b].dx;
-  if (aretes[b].st >= 0)
+  swap = getEdge(b).st;
+  _aretes[b].st = getEdge(b).en;
+  _aretes[b].en = swap;
+  swap = getEdge(b).prevE;
+  _aretes[b].prevE = getEdge(b).prevS;
+  _aretes[b].prevS = swap;
+  swap = getEdge(b).nextE;
+  _aretes[b].nextE = getEdge(b).nextS;
+  _aretes[b].nextS = swap;
+  _aretes[b].dx = -getEdge(b).dx;
+  if (getEdge(b).st >= 0)
     {
-      _pts[aretes[b].st].dO++;
-      _pts[aretes[b].st].dI--;
+      _pts[getEdge(b).st].dO++;
+      _pts[getEdge(b).st].dI--;
     }
-  if (aretes[b].en >= 0)
+  if (getEdge(b).en >= 0)
     {
-      _pts[aretes[b].en].dO--;
-      _pts[aretes[b].en].dI++;
+      _pts[getEdge(b).en].dO--;
+      _pts[getEdge(b).en].dI++;
     }
   if (_has_edges_data)
     eData[b].weight = -eData[b].weight;
@@ -2152,11 +2148,11 @@ bool Shape::DistanceLE(NR::Point const thePt, double const max_l2)
     }
   }
   
-  for (int i = 0; i < nbAr; i++) {
-    if ( aretes[i].st >= 0 &&
-         aretes[i].en >= 0 ) {
-      NR::Point const st(getPoint(aretes[i].st).x);
-      NR::Point const en(getPoint(aretes[i].en).x);
+  for (int i = 0; i < numberOfEdges(); i++) {
+    if ( getEdge(i).st >= 0 &&
+         getEdge(i).en >= 0 ) {
+      NR::Point const st(getPoint(getEdge(i).st).x);
+      NR::Point const en(getPoint(getEdge(i).en).x);
       NR::Point const d( thePt - st );
       NR::Point const e( en - st );
       double const el = NR::L2(e);
@@ -2195,11 +2191,11 @@ double Shape::Distance(NR::Point const thePt)
     }
   }
   
-  for (int i = 0; i < nbAr; i++) {
-    if ( aretes[i].st >= 0 &&
-         aretes[i].en >= 0 ) {
-      NR::Point const st(getPoint(aretes[i].st).x);
-      NR::Point const en(getPoint(aretes[i].en).x);
+  for (int i = 0; i < numberOfEdges(); i++) {
+    if ( getEdge(i).st >= 0 &&
+         getEdge(i).en >= 0 ) {
+      NR::Point const st(getPoint(getEdge(i).st).x);
+      NR::Point const en(getPoint(getEdge(i).en).x);
       NR::Point const d( thePt - st );
       NR::Point const e( en - st );
       double const el = NR::dot(e,e);
@@ -2228,12 +2224,12 @@ Shape::PtWinding (const NR::Point px) const
 {
   int lr = 0, ll = 0, rr = 0;
   
-  for (int i = 0; i < nbAr; i++)
+  for (int i = 0; i < numberOfEdges(); i++)
   {
-    NR::Point const adir = aretes[i].dx;
+    NR::Point const adir = getEdge(i).dx;
 
-    NR::Point const ast = getPoint(aretes[i].st).x;
-    NR::Point const aen = getPoint(aretes[i].en).x;
+    NR::Point const ast = getPoint(getEdge(i).st).x;
+    NR::Point const aen = getPoint(getEdge(i).en).x;
     
     //int const nWeight = eData[i].weight;
     int const nWeight = 1;

@@ -47,30 +47,30 @@ SweepEvent::MakeDelete (void)
 {
   if (leftSweep)
     {
-      if (leftSweep->src->aretes[leftSweep->bord].st <
-	  leftSweep->src->aretes[leftSweep->bord].en)
+      if (leftSweep->src->getEdge(leftSweep->bord).st <
+	  leftSweep->src->getEdge(leftSweep->bord).en)
 	{
-	  leftSweep->src->pData[leftSweep->src->aretes[leftSweep->bord].en].
+	  leftSweep->src->pData[leftSweep->src->getEdge(leftSweep->bord).en].
 	    pending--;
 	}
       else
 	{
-	  leftSweep->src->pData[leftSweep->src->aretes[leftSweep->bord].st].
+	  leftSweep->src->pData[leftSweep->src->getEdge(leftSweep->bord).st].
 	    pending--;
 	}
       leftSweep->rightEvt = NULL;
     }
   if (rightSweep)
     {
-      if (rightSweep->src->aretes[rightSweep->bord].st <
-	  rightSweep->src->aretes[rightSweep->bord].en)
+      if (rightSweep->src->getEdge(rightSweep->bord).st <
+	  rightSweep->src->getEdge(rightSweep->bord).en)
 	{
-	  rightSweep->src->pData[rightSweep->src->aretes[rightSweep->bord].
+	  rightSweep->src->pData[rightSweep->src->getEdge(rightSweep->bord).
 				 en].pending--;
 	}
       else
 	{
-	  rightSweep->src->pData[rightSweep->src->aretes[rightSweep->bord].
+	  rightSweep->src->pData[rightSweep->src->getEdge(rightSweep->bord).
 				 st].pending--;
 	}
       rightSweep->leftEvt = NULL;
@@ -106,22 +106,22 @@ SweepEvent::AddInQueue (SweepTree * iLeft, SweepTree * iRight, NR::Point &px, do
   int n = queue.nbEvt++;
   queue.events[n].MakeNew (iLeft, iRight, px, itl, itr);
 
-  if (iLeft->src->aretes[iLeft->bord].st < iLeft->src->aretes[iLeft->bord].en)
+  if (iLeft->src->getEdge(iLeft->bord).st < iLeft->src->getEdge(iLeft->bord).en)
     {
-      iLeft->src->pData[iLeft->src->aretes[iLeft->bord].en].pending++;
+      iLeft->src->pData[iLeft->src->getEdge(iLeft->bord).en].pending++;
     }
   else
     {
-      iLeft->src->pData[iLeft->src->aretes[iLeft->bord].st].pending++;
+      iLeft->src->pData[iLeft->src->getEdge(iLeft->bord).st].pending++;
     }
-  if (iRight->src->aretes[iRight->bord].st <
-      iRight->src->aretes[iRight->bord].en)
+  if (iRight->src->getEdge(iRight->bord).st <
+      iRight->src->getEdge(iRight->bord).en)
     {
-      iRight->src->pData[iRight->src->aretes[iRight->bord].en].pending++;
+      iRight->src->pData[iRight->src->getEdge(iRight->bord).en].pending++;
     }
   else
     {
-      iRight->src->pData[iRight->src->aretes[iRight->bord].st].pending++;
+      iRight->src->pData[iRight->src->getEdge(iRight->bord).st].pending++;
     }
 
   queue.events[n].ind = n;
@@ -342,7 +342,7 @@ SweepTree::ConvertTo (Shape * iSrc, int iBord, int iWeight, int iStartPoint)
   bord = iBord;
   leftEvt = rightEvt = NULL;
   startPoint = iStartPoint;
-  if (src->aretes[bord].st < src->aretes[bord].en)
+  if (src->getEdge(bord).st < src->getEdge(bord).en)
     {
       if (iWeight >= 0)
 	sens = true;
@@ -357,7 +357,7 @@ SweepTree::ConvertTo (Shape * iSrc, int iBord, int iWeight, int iStartPoint)
 	sens = true;
     }
 //      invDirLength=src->eData[bord].isqlength;
-//      invDirLength=1/sqrt(src->aretes[bord].dx*src->aretes[bord].dx+src->aretes[bord].dy*src->aretes[bord].dy);
+//      invDirLength=1/sqrt(src->getEdge(bord).dx*src->getEdge(bord).dx+src->getEdge(bord).dy*src->getEdge(bord).dy);
 }
 void
 SweepTree::MakeDelete (void)
@@ -415,9 +415,9 @@ SweepTree::Find (NR::Point const &px, SweepTree * newOne, SweepTree * &insertL,
   // get the edge associated with this node: one point+one direction
   // since we're dealing with line, the direction (bNorm) is taken downwards
   NR::Point bOrig, bNorm;
-  bOrig = src->pData[src->aretes[bord].st].rx;
+  bOrig = src->pData[src->getEdge(bord).st].rx;
   bNorm = src->eData[bord].rdx;
-  if (src->aretes[bord].st > src->aretes[bord].en)
+  if (src->getEdge(bord).st > src->getEdge(bord).en)
     {
       bNorm = -bNorm;
     }
@@ -444,8 +444,8 @@ SweepTree::Find (NR::Point const &px, SweepTree * newOne, SweepTree * &insertL,
       // prendre en compte les directions
       NR::Point nNorm;
       nNorm = newOne->src->eData[newOne->bord].rdx;
-      if (newOne->src->aretes[newOne->bord].st >
-	  newOne->src->aretes[newOne->bord].en)
+      if (newOne->src->getEdge(newOne->bord).st >
+	  newOne->src->getEdge(newOne->bord).en)
 	{
 	  nNorm = -nNorm;
 	}
@@ -523,9 +523,9 @@ SweepTree::Find (NR::Point const &px, SweepTree * &insertL,
 		 SweepTree * &insertR)
 {
   NR::Point bOrig, bNorm;
-  bOrig = src->pData[src->aretes[bord].st].rx;
+  bOrig = src->pData[src->getEdge(bord).st].rx;
   bNorm = src->eData[bord].rdx;
-  if (src->aretes[bord].st > src->aretes[bord].en)
+  if (src->getEdge(bord).st > src->getEdge(bord).en)
     {
       bNorm = -bNorm;
     }
@@ -706,8 +706,8 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
   NR::Point fromP;
   fromP = src->pData[fromPt].rx;
   NR::Point nNorm;
-  nNorm = src->aretes[bord].dx;
-  if (src->aretes[bord].st > src->aretes[bord].en)
+  nNorm = src->getEdge(bord).dx;
+  if (src->getEdge(bord).st > src->getEdge(bord).en)
     {
       nNorm = -nNorm;
     }
@@ -717,9 +717,9 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
     }
 
   NR::Point bNorm;
-  bNorm = insNode->src->aretes[insNode->bord].dx;
-  if (insNode->src->aretes[insNode->bord].st >
-      insNode->src->aretes[insNode->bord].en)
+  bNorm = insNode->src->getEdge(insNode->bord).dx;
+  if (insNode->src->getEdge(insNode->bord).st >
+      insNode->src->getEdge(insNode->bord).en)
     {
       bNorm = -bNorm;
     }
@@ -741,16 +741,16 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
 	{
 	  if (insertL->src == src)
 	    {
-	      if (insertL->src->aretes[insertL->bord].st != fromPt
-		  && insertL->src->aretes[insertL->bord].en != fromPt)
+	      if (insertL->src->getEdge(insertL->bord).st != fromPt
+		  && insertL->src->getEdge(insertL->bord).en != fromPt)
 		{
 		  break;
 		}
 	    }
 	  else
 	    {
-	      int ils = insertL->src->aretes[insertL->bord].st;
-	      int ile = insertL->src->aretes[insertL->bord].en;
+	      int ils = insertL->src->getEdge(insertL->bord).st;
+	      int ile = insertL->src->getEdge(insertL->bord).en;
 	      if ((insertL->src->pData[ils].rx[0] != fromP[0]
 		   || insertL->src->pData[ils].rx[1] != fromP[1])
 		  && (insertL->src->pData[ile].rx[0] != fromP[0]
@@ -759,9 +759,9 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
 		  break;
 		}
 	    }
-	  bNorm = insertL->src->aretes[insertL->bord].dx;
-	  if (insertL->src->aretes[insertL->bord].st >
-	      insertL->src->aretes[insertL->bord].en)
+	  bNorm = insertL->src->getEdge(insertL->bord).dx;
+	  if (insertL->src->getEdge(insertL->bord).st >
+	      insertL->src->getEdge(insertL->bord).en)
 	    {
 	      bNorm = -bNorm;
 	    }
@@ -783,16 +783,16 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
 	{
 	  if (insertR->src == src)
 	    {
-	      if (insertR->src->aretes[insertR->bord].st != fromPt
-		  && insertR->src->aretes[insertR->bord].en != fromPt)
+	      if (insertR->src->getEdge(insertR->bord).st != fromPt
+		  && insertR->src->getEdge(insertR->bord).en != fromPt)
 		{
 		  break;
 		}
 	    }
 	  else
 	    {
-	      int ils = insertR->src->aretes[insertR->bord].st;
-	      int ile = insertR->src->aretes[insertR->bord].en;
+	      int ils = insertR->src->getEdge(insertR->bord).st;
+	      int ile = insertR->src->getEdge(insertR->bord).en;
 	      if ((insertR->src->pData[ils].rx[0] != fromP[0]
 		   || insertR->src->pData[ils].rx[1] != fromP[1])
 		  && (insertR->src->pData[ile].rx[0] != fromP[0]
@@ -801,9 +801,9 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
 		  break;
 		}
 	    }
-	  bNorm = insertR->src->aretes[insertR->bord].dx;
-	  if (insertR->src->aretes[insertR->bord].st >
-	      insertR->src->aretes[insertR->bord].en)
+	  bNorm = insertR->src->getEdge(insertR->bord).dx;
+	  if (insertR->src->getEdge(insertR->bord).st >
+	      insertR->src->getEdge(insertR->bord).en)
 	    {
 	      bNorm = -bNorm;
 	    }

@@ -76,8 +76,8 @@ public:
 
   int numberOfPoints() const { return _pts.size(); }
   bool hasPoints() const { return (_pts.empty() == false); }
-  int numberOfEdges() const { return nbAr; }
-  bool hasEdges() const { return (nbAr != 0); }
+  int numberOfEdges() const { return _aretes.size(); }
+  bool hasEdges() const { return (_aretes.empty() == false); }
 
   void needPointsSorting() { _need_points_sorting = true; }
   void needEdgesSorting()  { _need_edges_sorting = true; }
@@ -85,15 +85,13 @@ public:
   bool hasBackData() const { return _has_back_data; }
 
   dg_point const &getPoint(int n) const { return _pts[n]; }
-  dg_arete const &getEdge(int n) const { return aretes[n]; }
+  dg_arete const &getEdge(int n) const { return _aretes[n]; }
 
 private:
 
   std::vector<dg_point> _pts;
-  std::vector<dg_arete> aretes; /* FIXME: rename to _aretes, or maybe _edges */
+  std::vector<dg_arete> _aretes;
   
-  int nbAr; ///< number of edges (aretes) [FIXME: remove this in favour of aretes.size()]
-
   bool _need_points_sorting;  ///< points have been added or removed: we need to sort the points again
   bool _need_edges_sorting;   ///< edges have been added: maybe they are not ordered clockwise
                               ///< nota: if you remove an edge, the clockwise order still holds
@@ -273,63 +271,63 @@ public:
   // primitives for topological manipulations
   inline int Other (int p, int b)	// endpoint of edge at index b that is different from the point p
   {
-    if (aretes[b].st == p)
-      return aretes[b].en;
-    return aretes[b].st;
+    if (getEdge(b).st == p)
+      return getEdge(b).en;
+    return getEdge(b).st;
   };
   inline int NextAt (int p, int b)	// next edge (after edge b) in the double-linked list at point p
   {
-    if (p == aretes[b].st)
+    if (p == getEdge(b).st)
       {
-	return aretes[b].nextS;
+	return getEdge(b).nextS;
       }
-    else if (p == aretes[b].en)
+    else if (p == getEdge(b).en)
       {
-	return aretes[b].nextE;
+	return getEdge(b).nextE;
       }
     return -1;
   };
   inline int PrevAt (int p, int b)	// previous edge
   {
-    if (p == aretes[b].st)
+    if (p == getEdge(b).st)
       {
-	return aretes[b].prevS;
+	return getEdge(b).prevS;
       }
-    else if (p == aretes[b].en)
+    else if (p == getEdge(b).en)
       {
-	return aretes[b].prevE;
+	return getEdge(b).prevE;
       }
     return -1;
   };
   inline int CycleNextAt (int p, int b)	// same as NextAt, but the list is considered circular
   {
-    if (p == aretes[b].st)
+    if (p == getEdge(b).st)
       {
-	if (aretes[b].nextS < 0)
+	if (getEdge(b).nextS < 0)
 	  return getPoint(p).firstA;
-	return aretes[b].nextS;
+	return getEdge(b).nextS;
       }
-    else if (p == aretes[b].en)
+    else if (p == getEdge(b).en)
       {
-	if (aretes[b].nextE < 0)
+	if (getEdge(b).nextE < 0)
 	  return getPoint(p).firstA;
-	return aretes[b].nextE;
+	return getEdge(b).nextE;
       }
     return -1;
   };
   inline int CyclePrevAt (int p, int b)	// same as PrevAt, but the list is considered circular
   {
-    if (p == aretes[b].st)
+    if (p == getEdge(b).st)
       {
-	if (aretes[b].prevS < 0)
+	if (getEdge(b).prevS < 0)
 	  return getPoint(p).lastA;
-	return aretes[b].prevS;
+	return getEdge(b).prevS;
       }
-    else if (p == aretes[b].en)
+    else if (p == getEdge(b).en)
       {
-	if (aretes[b].prevE < 0)
+	if (getEdge(b).prevE < 0)
 	  return getPoint(p).lastA;
-	return aretes[b].prevE;
+	return getEdge(b).prevE;
       }
     return -1;
   };

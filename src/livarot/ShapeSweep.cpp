@@ -65,7 +65,7 @@ int
 Shape::Reoriente (Shape * a)
 {
   Reset (0, 0);
-  if (a->numberOfPoints() <= 1 || a->nbAr <= 1)
+  if (a->numberOfPoints() <= 1 || a->numberOfEdges() <= 1)
     return 0;
   if (a->Eulerian (true) == false)
     return shape_input_err;
@@ -78,11 +78,10 @@ Shape::Reoriente (Shape * a)
 	pData = (point_data *) g_realloc(pData, maxPt * sizeof (point_data));
     }
 
-  nbAr = a->nbAr;
-  if (nbAr > maxAr)
+  _aretes = a->_aretes;
+  if (numberOfEdges() > maxAr)
     {
-      maxAr = nbAr;
-      aretes.reserve(maxAr);
+      maxAr = numberOfEdges();
       if (_has_edges_data)
 	eData = (edge_data *) g_realloc(eData, maxAr * sizeof (edge_data));
       if (_has_sweep_src_data)
@@ -97,7 +96,6 @@ Shape::Reoriente (Shape * a)
 	swrData =
 	  (raster_data *) g_realloc(swrData, maxAr * sizeof (raster_data));
     }
-  aretes = a->aretes;
 
   MakePointData (true);
   MakeEdgeData (true);
@@ -116,11 +114,11 @@ Shape::Reoriente (Shape * a)
     {
       _pts[i].oldDegree = getPoint(i).totalDegree();
     }
-  for (int i = 0; i < a->nbAr; i++)
+  for (int i = 0; i < a->numberOfEdges(); i++)
     {
-      eData[i].rdx = pData[aretes[i].en].rx - pData[aretes[i].st].rx;
+      eData[i].rdx = pData[getEdge(i).en].rx - pData[getEdge(i).st].rx;
       eData[i].weight = 1;
-      aretes[i].dx = eData[i].rdx;
+      _aretes[i].dx = eData[i].rdx;
     }
 
   SortPointsRounded ();
@@ -129,7 +127,7 @@ Shape::Reoriente (Shape * a)
   GetWindings (this, NULL, bool_op_union, true);
 
 //      Plot(341,56,8,400,400,true,true,false,true);
-  for (int i = 0; i < nbAr; i++)
+  for (int i = 0; i < numberOfEdges(); i++)
     {
       swdData[i].leW %= 2;
       swdData[i].riW %= 2;
@@ -161,8 +159,8 @@ Shape::Reoriente (Shape * a)
   if (Eulerian (true) == false)
     {
 //              printf( "pas euclidian2");
-      nbAr = 0;
       _pts.clear();
+      _aretes.clear();
       return shape_euler_err;
     }
 
@@ -174,7 +172,7 @@ int
 Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 {
   Reset (0, 0);
-  if (a->numberOfPoints() <= 1 || a->nbAr <= 1)
+  if (a->numberOfPoints() <= 1 || a->numberOfEdges() <= 1)
     return 0;
   if ( directed == fill_justDont ) {
   } else {
@@ -186,8 +184,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
   if (_has_sweep_data == false)
     {
-      SweepTree::CreateList (sTree, a->nbAr);
-      SweepEvent::CreateQueue (sEvts, a->nbAr);
+      SweepTree::CreateList (sTree, a->numberOfEdges());
+      SweepEvent::CreateQueue (sEvts, a->numberOfEdges());
       _has_sweep_data = true;
     }
   MakePointData (true);
@@ -204,10 +202,10 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       a->pData[i].rx[0] = Round (a->getPoint(i).x[0]);
       a->pData[i].rx[1] = Round (a->getPoint(i).x[1]);
     }
-  for (int i = 0; i < a->nbAr; i++)
+  for (int i = 0; i < a->numberOfEdges(); i++)
     {
       a->eData[i].rdx =
-	a->pData[a->aretes[i].en].rx - a->pData[a->aretes[i].st].rx;
+	a->pData[a->getEdge(i).en].rx - a->pData[a->getEdge(i).st].rx;
     a->eData[i].length = dot(a->eData[i].rdx,a->eData[i].rdx);
       a->eData[i].ilength = 1 / a->eData[i].length;
       a->eData[i].sqlength = sqrt (a->eData[i].length);
@@ -335,8 +333,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	      chgts[i].ptNo = pData[chgts[i].ptNo].newInd;
 	      if (chgts[i].type == 0)
 		{
-		  if (chgts[i].src->aretes[chgts[i].bord].st <
-		      chgts[i].src->aretes[chgts[i].bord].en)
+		  if (chgts[i].src->getEdge(chgts[i].bord).st <
+		      chgts[i].src->getEdge(chgts[i].bord).en)
 		    {
 		      chgts[i].src->swsData[chgts[i].bord].stPt =
 			chgts[i].ptNo;
@@ -349,8 +347,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 		}
 	      else if (chgts[i].type == 1)
 		{
-		  if (chgts[i].src->aretes[chgts[i].bord].st >
-		      chgts[i].src->aretes[chgts[i].bord].en)
+		  if (chgts[i].src->getEdge(chgts[i].bord).st >
+		      chgts[i].src->getEdge(chgts[i].bord).en)
 		    {
 		      chgts[i].src->swsData[chgts[i].bord].stPt =
 			chgts[i].ptNo;
@@ -412,20 +410,20 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	  int nbUp = 0, nbDn = 0;
 	  int upNo = -1, dnNo = -1;
 	  cb = ptSh->getPoint(nPt).firstA;
-	  while (cb >= 0 && cb < ptSh->nbAr)
+	  while (cb >= 0 && cb < ptSh->numberOfEdges())
 	    {
-	      if ((ptSh->aretes[cb].st < ptSh->aretes[cb].en
-		   && nPt == ptSh->aretes[cb].en)
-		  || (ptSh->aretes[cb].st > ptSh->aretes[cb].en
-		      && nPt == ptSh->aretes[cb].st))
+	      if ((ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
+		   && nPt == ptSh->getEdge(cb).en)
+		  || (ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
+		      && nPt == ptSh->getEdge(cb).st))
 		{
 		  upNo = cb;
 		  nbUp++;
 		}
-	      if ((ptSh->aretes[cb].st > ptSh->aretes[cb].en
-		   && nPt == ptSh->aretes[cb].en)
-		  || (ptSh->aretes[cb].st < ptSh->aretes[cb].en
-		      && nPt == ptSh->aretes[cb].st))
+	      if ((ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
+		   && nPt == ptSh->getEdge(cb).en)
+		  || (ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
+		      && nPt == ptSh->getEdge(cb).st))
 		{
 		  dnNo = cb;
 		  nbDn++;
@@ -447,12 +445,12 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	  if (nbUp > 0)
 	    {
 	      cb = ptSh->getPoint(nPt).firstA;
-	      while (cb >= 0 && cb < ptSh->nbAr)
+	      while (cb >= 0 && cb < ptSh->numberOfEdges())
 		{
-		  if ((ptSh->aretes[cb].st < ptSh->aretes[cb].en
-		       && nPt == ptSh->aretes[cb].en)
-		      || (ptSh->aretes[cb].st > ptSh->aretes[cb].en
-			  && nPt == ptSh->aretes[cb].st))
+		  if ((ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
+		       && nPt == ptSh->getEdge(cb).en)
+		      || (ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
+			  && nPt == ptSh->getEdge(cb).st))
 		    {
 		      if (cb != upNo)
 			{
@@ -497,17 +495,17 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 				    (SweepTree *) onLeftS->swsData[onLeftB].
 				    misc;
 				  if (onLeftS == ptSh
-				      && (onLeftS->aretes[onLeftB].en == nPt
-					  || onLeftS->aretes[onLeftB].st ==
+				      && (onLeftS->getEdge(onLeftB).en == nPt
+					  || onLeftS->getEdge(onLeftB).st ==
 					  nPt))
 				    {
 				    }
 				  else
 				    {
 				      if (onRightS == ptSh
-					  && (onRightS->aretes[onRightB].en ==
+					  && (onRightS->getEdge(onRightB).en ==
 					      nPt
-					      || onRightS->aretes[onRightB].
+					      || onRightS->getEdge(onRightB).
 					      st == nPt))
 					{
 					}
@@ -584,12 +582,12 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	  if (nbDn > 1)
 	    {			// si nbDn == 1 , alors dnNo a deja ete traite
 	      cb = ptSh->getPoint(nPt).firstA;
-	      while (cb >= 0 && cb < ptSh->nbAr)
+	      while (cb >= 0 && cb < ptSh->numberOfEdges())
 		{
-		  if ((ptSh->aretes[cb].st > ptSh->aretes[cb].en
-		       && nPt == ptSh->aretes[cb].en)
-		      || (ptSh->aretes[cb].st < ptSh->aretes[cb].en
-			  && nPt == ptSh->aretes[cb].st))
+		  if ((ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
+		       && nPt == ptSh->getEdge(cb).en)
+		      || (ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
+			  && nPt == ptSh->getEdge(cb).st))
 		    {
 		      if (cb != dnNo)
 			{
@@ -653,8 +651,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	chgts[i].ptNo = pData[chgts[i].ptNo].newInd;
 	if (chgts[i].type == 0)
 	  {
-	    if (chgts[i].src->aretes[chgts[i].bord].st <
-		chgts[i].src->aretes[chgts[i].bord].en)
+	    if (chgts[i].src->getEdge(chgts[i].bord).st <
+		chgts[i].src->getEdge(chgts[i].bord).en)
 	      {
 		chgts[i].src->swsData[chgts[i].bord].stPt = chgts[i].ptNo;
 	      }
@@ -665,8 +663,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	  }
 	else if (chgts[i].type == 1)
 	  {
-	    if (chgts[i].src->aretes[chgts[i].bord].st >
-		chgts[i].src->aretes[chgts[i].bord].en)
+	    if (chgts[i].src->getEdge(chgts[i].bord).st >
+		chgts[i].src->getEdge(chgts[i].bord).en)
 	      {
 		chgts[i].src->swsData[chgts[i].bord].stPt = chgts[i].ptNo;
 	      }
@@ -740,7 +738,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   {
     if (invert)
     {
-      for (int i = 0; i < nbAr; i++)
+      for (int i = 0; i < numberOfEdges(); i++)
 	    {
 	      if (swdData[i].leW < 0 && swdData[i].riW >= 0)
         {
@@ -761,7 +759,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     }
     else
     {
-      for (int i = 0; i < nbAr; i++)
+      for (int i = 0; i < numberOfEdges(); i++)
 	    {
 	      if (swdData[i].leW > 0 && swdData[i].riW <= 0)
         {
@@ -785,7 +783,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   {
     if (invert)
     {
-      for (int i = 0; i < nbAr; i++)
+      for (int i = 0; i < numberOfEdges(); i++)
 	    {
 	      if (swdData[i].leW < 0 && swdData[i].riW == 0)
         {
@@ -815,7 +813,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     }
     else
     {
-      for (int i = 0; i < nbAr; i++)
+      for (int i = 0; i < numberOfEdges(); i++)
 	    {
 	      if (swdData[i].leW > 0 && swdData[i].riW == 0)
         {
@@ -846,7 +844,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   }
   else if (directed == fill_oddEven)
   {
-    for (int i = 0; i < nbAr; i++)
+    for (int i = 0; i < numberOfEdges(); i++)
     {
       swdData[i].leW %= 2;
       swdData[i].riW %= 2;
@@ -871,8 +869,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	    }
     }
   } else if ( directed == fill_justDont ) {
-    for (int i=0;i<nbAr;i++) {
-      if ( aretes[i].st < 0 || aretes[i].en < 0 ) {
+    for (int i=0;i<numberOfEdges();i++) {
+      if ( getEdge(i).st < 0 || getEdge(i).en < 0 ) {
         SubEdge(i);
         i--;
       } else {
@@ -900,8 +898,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       MakeSweepSrcData (false);
       MakeSweepDestData (false);
       a->CleanupSweep ();
-      nbAr = 0;
       _pts.clear();
+      _aretes.clear();
       return shape_euler_err;
     }
   }
@@ -923,9 +921,9 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   if (a == b || a == NULL || b == NULL)
     return shape_input_err;
   Reset (0, 0);
-  if (a->numberOfPoints() <= 1 || a->nbAr <= 1)
+  if (a->numberOfPoints() <= 1 || a->numberOfEdges() <= 1)
     return 0;
-  if (b->numberOfPoints() <= 1 || b->nbAr <= 1)
+  if (b->numberOfPoints() <= 1 || b->numberOfEdges() <= 1)
     return 0;
   if ( mod == bool_op_cut ) {
   } else if ( mod == bool_op_slice ) {
@@ -941,8 +939,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 
   if (_has_sweep_data == false)
     {
-      SweepTree::CreateList (sTree, a->nbAr + b->nbAr);
-      SweepEvent::CreateQueue (sEvts, a->nbAr + b->nbAr);
+      SweepTree::CreateList (sTree, a->numberOfEdges() + b->numberOfEdges());
+      SweepEvent::CreateQueue (sEvts, a->numberOfEdges() + b->numberOfEdges());
       _has_sweep_data = true;
     }
   MakePointData (true);
@@ -974,10 +972,10 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
       b->pData[i].rx[0] = Round (b->getPoint(i).x[0]);
       b->pData[i].rx[1] = Round (b->getPoint(i).x[1]);
     }
-  for (int i = 0; i < a->nbAr; i++)
+  for (int i = 0; i < a->numberOfEdges(); i++)
     {
       a->eData[i].rdx =
-	a->pData[a->aretes[i].en].rx - a->pData[a->aretes[i].st].rx;
+	a->pData[a->getEdge(i).en].rx - a->pData[a->getEdge(i).st].rx;
       a->eData[i].length = 	dot(a->eData[i].rdx,a->eData[i].rdx);
       a->eData[i].ilength = 1 / a->eData[i].length;
       a->eData[i].sqlength = sqrt (a->eData[i].length);
@@ -999,10 +997,10 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
       a->swsData[i].curPoint = -1;
       a->swsData[i].doneTo = -1;
     }
-  for (int i = 0; i < b->nbAr; i++)
+  for (int i = 0; i < b->numberOfEdges(); i++)
     {
       b->eData[i].rdx =
-	b->pData[b->aretes[i].en].rx - b->pData[b->aretes[i].st].rx;
+	b->pData[b->getEdge(i).en].rx - b->pData[b->getEdge(i).st].rx;
       b->eData[i].length = dot(b->eData[i].rdx , b->eData[i].rdx );
       b->eData[i].ilength = 1 / b->eData[i].length;
       b->eData[i].sqlength = sqrt (b->eData[i].length);
@@ -1222,8 +1220,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	      chgts[i].ptNo = pData[chgts[i].ptNo].newInd;
 	      if (chgts[i].type == 0)
 		{
-		  if (chgts[i].src->aretes[chgts[i].bord].st <
-		      chgts[i].src->aretes[chgts[i].bord].en)
+		  if (chgts[i].src->getEdge(chgts[i].bord).st <
+		      chgts[i].src->getEdge(chgts[i].bord).en)
 		    {
 		      chgts[i].src->swsData[chgts[i].bord].stPt =
 			chgts[i].ptNo;
@@ -1236,8 +1234,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 		}
 	      else if (chgts[i].type == 1)
 		{
-		  if (chgts[i].src->aretes[chgts[i].bord].st >
-		      chgts[i].src->aretes[chgts[i].bord].en)
+		  if (chgts[i].src->getEdge(chgts[i].bord).st >
+		      chgts[i].src->getEdge(chgts[i].bord).en)
 		    {
 		      chgts[i].src->swsData[chgts[i].bord].stPt =
 			chgts[i].ptNo;
@@ -1304,20 +1302,20 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	  int nbUp = 0, nbDn = 0;
 	  int upNo = -1, dnNo = -1;
 	  cb = ptSh->getPoint(nPt).firstA;
-	  while (cb >= 0 && cb < ptSh->nbAr)
+	  while (cb >= 0 && cb < ptSh->numberOfEdges())
 	    {
-	      if ((ptSh->aretes[cb].st < ptSh->aretes[cb].en
-		   && nPt == ptSh->aretes[cb].en)
-		  || (ptSh->aretes[cb].st > ptSh->aretes[cb].en
-		      && nPt == ptSh->aretes[cb].st))
+	      if ((ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
+		   && nPt == ptSh->getEdge(cb).en)
+		  || (ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
+		      && nPt == ptSh->getEdge(cb).st))
 		{
 		  upNo = cb;
 		  nbUp++;
 		}
-	      if ((ptSh->aretes[cb].st > ptSh->aretes[cb].en
-		   && nPt == ptSh->aretes[cb].en)
-		  || (ptSh->aretes[cb].st < ptSh->aretes[cb].en
-		      && nPt == ptSh->aretes[cb].st))
+	      if ((ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
+		   && nPt == ptSh->getEdge(cb).en)
+		  || (ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
+		      && nPt == ptSh->getEdge(cb).st))
 		{
 		  dnNo = cb;
 		  nbDn++;
@@ -1341,12 +1339,12 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	  if (nbUp > 0)
 	    {
 	      cb = ptSh->getPoint(nPt).firstA;
-	      while (cb >= 0 && cb < ptSh->nbAr)
+	      while (cb >= 0 && cb < ptSh->numberOfEdges())
 		{
-		  if ((ptSh->aretes[cb].st < ptSh->aretes[cb].en
-		       && nPt == ptSh->aretes[cb].en)
-		      || (ptSh->aretes[cb].st > ptSh->aretes[cb].en
-			  && nPt == ptSh->aretes[cb].st))
+		  if ((ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
+		       && nPt == ptSh->getEdge(cb).en)
+		      || (ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
+			  && nPt == ptSh->getEdge(cb).st))
 		    {
 		      if (cb != upNo)
 			{
@@ -1392,17 +1390,17 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 				    misc;
 //                                                                      SweepTree* onRight=(SweepTree*)onRightS->swsData[onRightB].misc;
 				  if (onLeftS == ptSh
-				      && (onLeftS->aretes[onLeftB].en == nPt
-					  || onLeftS->aretes[onLeftB].st ==
+				      && (onLeftS->getEdge(onLeftB).en == nPt
+					  || onLeftS->getEdge(onLeftB).st ==
 					  nPt))
 				    {
 				    }
 				  else
 				    {
 				      if (onRightS == ptSh
-					  && (onRightS->aretes[onRightB].en ==
+					  && (onRightS->getEdge(onRightB).en ==
 					      nPt
-					      || onRightS->aretes[onRightB].
+					      || onRightS->getEdge(onRightB).
 					      st == nPt))
 					{
 					}
@@ -1483,12 +1481,12 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	  if (nbDn > 1)
 	    {			// si nbDn == 1 , alors dnNo a deja ete traite
 	      cb = ptSh->getPoint(nPt).firstA;
-	      while (cb >= 0 && cb < ptSh->nbAr)
+	      while (cb >= 0 && cb < ptSh->numberOfEdges())
 		{
-		  if ((ptSh->aretes[cb].st > ptSh->aretes[cb].en
-		       && nPt == ptSh->aretes[cb].en)
-		      || (ptSh->aretes[cb].st < ptSh->aretes[cb].en
-			  && nPt == ptSh->aretes[cb].st))
+		  if ((ptSh->getEdge(cb).st > ptSh->getEdge(cb).en
+		       && nPt == ptSh->getEdge(cb).en)
+		      || (ptSh->getEdge(cb).st < ptSh->getEdge(cb).en
+			  && nPt == ptSh->getEdge(cb).st))
 		    {
 		      if (cb != dnNo)
 			{
@@ -1556,8 +1554,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	chgts[i].ptNo = pData[chgts[i].ptNo].newInd;
 	if (chgts[i].type == 0)
 	  {
-	    if (chgts[i].src->aretes[chgts[i].bord].st <
-		chgts[i].src->aretes[chgts[i].bord].en)
+	    if (chgts[i].src->getEdge(chgts[i].bord).st <
+		chgts[i].src->getEdge(chgts[i].bord).en)
 	      {
 		chgts[i].src->swsData[chgts[i].bord].stPt = chgts[i].ptNo;
 	      }
@@ -1568,8 +1566,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	  }
 	else if (chgts[i].type == 1)
 	  {
-	    if (chgts[i].src->aretes[chgts[i].bord].st >
-		chgts[i].src->aretes[chgts[i].bord].en)
+	    if (chgts[i].src->getEdge(chgts[i].bord).st >
+		chgts[i].src->getEdge(chgts[i].bord).en)
 	      {
 		chgts[i].src->swsData[chgts[i].bord].stPt = chgts[i].ptNo;
 	      }
@@ -1622,18 +1620,18 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   if ( mod == bool_op_cut ) {
     AssembleAretes (fill_justDont);
     // dupliquer les aretes de la coupure
-    int i=nbAr-1;
+    int i=numberOfEdges()-1;
     for (;i>=0;i--) {
       if ( ebData[i].pathID == cutPathID ) {
         // on duplique
-        int nEd=AddEdge(aretes[i].en,aretes[i].st);
+        int nEd=AddEdge(getEdge(i).en,getEdge(i).st);
         ebData[nEd].pathID=cutPathID;
         ebData[nEd].pieceID=ebData[i].pieceID;
         ebData[nEd].tSt=ebData[i].tEn;
         ebData[nEd].tEn=ebData[i].tSt;
         eData[nEd].weight=eData[i].weight;
         // lui donner les firstlinkedpoitn si besoin
-        if ( aretes[i].en >= aretes[i].st ) {
+        if ( getEdge(i).en >= getEdge(i).st ) {
           int cp = swsData[i].firstLinkedPoint;
           while (cp >= 0) {
             pData[cp].askForWindingB = nEd;
@@ -1663,7 +1661,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 
   if (mod == bool_op_symdiff)
   {
-    for (int i = 0; i < nbAr; i++)
+    for (int i = 0; i < numberOfEdges(); i++)
     {
       swdData[i].leW = swdData[i].leW % 2;
       if (swdData[i].leW < 0)
@@ -1691,7 +1689,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   }
   else if (mod == bool_op_union || mod == bool_op_diff)
   {
-    for (int i = 0; i < nbAr; i++)
+    for (int i = 0; i < numberOfEdges(); i++)
     {
       if (swdData[i].leW > 0 && swdData[i].riW <= 0)
 	    {
@@ -1712,7 +1710,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   }
   else if (mod == bool_op_inters)
   {
-    for (int i = 0; i < nbAr; i++)
+    for (int i = 0; i < numberOfEdges(); i++)
     {
       if (swdData[i].leW > 1 && swdData[i].riW <= 1)
 	    {
@@ -1732,18 +1730,18 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
     }
   } else if ( mod == bool_op_cut ) {
     // inverser les aretes de la coupe au besoin
-    for (int i=0;i<nbAr;i++) {
-      if ( aretes[i].st < 0 || aretes[i].en < 0 ) {
-        if ( i < nbAr-1 ) {
+    for (int i=0;i<numberOfEdges();i++) {
+      if ( getEdge(i).st < 0 || getEdge(i).en < 0 ) {
+        if ( i < numberOfEdges()-1 ) {
           // decaler les askForWinding
-          int cp = swsData[nbAr-1].firstLinkedPoint;
+          int cp = swsData[numberOfEdges()-1].firstLinkedPoint;
           while (cp >= 0) {
             pData[cp].askForWindingB = i;
             cp = pData[cp].nextLinkedPoint;
           }
         }
-        SwapEdges(i,nbAr-1);
-        SubEdge(nbAr-1);
+        SwapEdges(i,numberOfEdges()-1);
+        SubEdge(numberOfEdges()-1);
 //        SubEdge(i);
         i--;
       } else if ( ebData[i].pathID == cutPathID ) {
@@ -1756,16 +1754,16 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
     }
   } else if ( mod == bool_op_slice ) {
     // supprimer les aretes de la coupe
-    int i=nbAr-1;
+    int i=numberOfEdges()-1;
     for (;i>=0;i--) {
-      if ( ebData[i].pathID == cutPathID || aretes[i].st < 0 || aretes[i].en < 0 ) {
+      if ( ebData[i].pathID == cutPathID || getEdge(i).st < 0 || getEdge(i).en < 0 ) {
         SubEdge(i);
       }
     }
   }
   else
   {
-    for (int i = 0; i < nbAr; i++)
+    for (int i = 0; i < numberOfEdges(); i++)
     {
       if (swdData[i].leW > 0 && swdData[i].riW <= 0)
 	    {
@@ -1805,8 +1803,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   if (Eulerian (true) == false)
     {
 //              printf( "pas euclidian2");
-      nbAr = 0;
       _pts.clear();
+      _aretes.clear();
       return shape_euler_err;
     }
   type = shape_polygon;
@@ -1848,8 +1846,8 @@ Shape::TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff)
 bool
 Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, double &atL, double &atR, bool onlyDiff)
 {
-  int lSt = iL->src->aretes[iL->bord].st, lEn = iL->src->aretes[iL->bord].en;
-  int rSt = iR->src->aretes[iR->bord].st, rEn = iR->src->aretes[iR->bord].en;
+  int lSt = iL->src->getEdge(iL->bord).st, lEn = iL->src->getEdge(iL->bord).en;
+  int rSt = iR->src->getEdge(iR->bord).st, rEn = iR->src->getEdge(iR->bord).en;
   NR::Point ldir, rdir;
   ldir = iL->src->eData[iL->bord].rdx;
   rdir = iR->src->eData[iR->bord].rdx;
@@ -1935,10 +1933,10 @@ Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, double
     return false;
 
   // on reprend les vrais points
-  lSt = iL->src->aretes[iL->bord].st;
-  lEn = iL->src->aretes[iL->bord].en;
-  rSt = iR->src->aretes[iR->bord].st;
-  rEn = iR->src->aretes[iR->bord].en;
+  lSt = iL->src->getEdge(iL->bord).st;
+  lEn = iL->src->getEdge(iL->bord).en;
+  rSt = iR->src->getEdge(iR->bord).st;
+  rEn = iR->src->getEdge(iR->bord).en;
 
   // compute intersection (if there is one)
   // Boissonat anr Preparata said in one paper that double precision floats were sufficient for get single precision
@@ -2173,7 +2171,7 @@ Shape::CreateIncidence (Shape * a, int no, int nPt)
 {
   NR::Point adir, diff;
   adir = a->eData[no].rdx;
-  diff = getPoint(nPt).x - a->pData[a->aretes[no].st].rx;
+  diff = getPoint(nPt).x - a->pData[a->getEdge(no).st].rx;
   double t = dot (diff, adir);
   t *= a->eData[no].ilength;
   return PushIncidence (a, no, nPt, t);
@@ -2185,7 +2183,7 @@ Shape::Winding (int nPt) const
   int askTo = pData[nPt].askForWindingB;
   if (askTo < 0)
     return 0;
-  if (aretes[askTo].st < aretes[askTo].en)
+  if (getEdge(askTo).st < getEdge(askTo).en)
     {
       return swdData[askTo].leW;
     }
@@ -2201,13 +2199,13 @@ Shape::Winding (const NR::Point px) const
 {
   int lr = 0, ll = 0, rr = 0;
 
-  for (int i = 0; i < nbAr; i++)
+  for (int i = 0; i < numberOfEdges(); i++)
     {
       NR::Point adir, diff, ast, aen;
       adir = eData[i].rdx;
 
-      ast = pData[aretes[i].st].rx;
-      aen = pData[aretes[i].en].rx;
+      ast = pData[getEdge(i).st].rx;
+      aen = pData[getEdge(i).en].rx;
 
       int nWeight = eData[i].weight;
 
@@ -2335,7 +2333,7 @@ Shape::AssemblePoints (Shape * a)
     {
       int lastI = AssemblePoints (0, numberOfPoints());
 
-      for (int i = 0; i < a->nbAr; i++)
+      for (int i = 0; i < a->numberOfEdges(); i++)
 	{
 	  a->swsData[i].stPt = pData[a->swsData[i].stPt].newInd;
 	  a->swsData[i].enPt = pData[a->swsData[i].enPt].newInd;
@@ -2359,8 +2357,8 @@ Shape::AssembleAretes (FillRule directed)
       cb = getPoint(i).firstA;
       cc = getPoint(i).lastA;
       bool  doublon=false;
-      if ((aretes[cb].st == aretes[cc].st && aretes[cb].en == aretes[cc].en)
-          || (aretes[cb].st == aretes[cc].en && aretes[cb].en == aretes[cc].en)) doublon=true;
+      if ((getEdge(cb).st == getEdge(cc).st && getEdge(cb).en == getEdge(cc).en)
+          || (getEdge(cb).st == getEdge(cc).en && getEdge(cb).en == getEdge(cc).en)) doublon=true;
       if ( directed == fill_justDont ) {
         if ( doublon ) {
           if ( ebData[cb].pathID > ebData[cc].pathID ) {
@@ -2382,7 +2380,7 @@ Shape::AssembleAretes (FillRule directed)
       } else {
       }
       if ( doublon ) {
-        if (aretes[cb].st == aretes[cc].st) {
+        if (getEdge(cb).st == getEdge(cc).st) {
           eData[cb].weight += eData[cc].weight;
         } else {
           eData[cb].weight -= eData[cc].weight;
@@ -2408,27 +2406,27 @@ Shape::AssembleAretes (FillRule directed)
         
 	      DisconnectStart (cc);
 	      DisconnectEnd (cc);
-	      if (nbAr > 1) {
-          int cp = swsData[nbAr - 1].firstLinkedPoint;
+	      if (numberOfEdges() > 1) {
+          int cp = swsData[numberOfEdges() - 1].firstLinkedPoint;
           while (cp >= 0) {
             pData[cp].askForWindingB = cc;
             cp = pData[cp].nextLinkedPoint;
           }
         }
-	      SwapEdges (cc, nbAr - 1);
-	      if (cb == nbAr - 1) {
+	      SwapEdges (cc, numberOfEdges() - 1);
+	      if (cb == numberOfEdges() - 1) {
           cb = cc;
         }
-	      nbAr--;
+	      _aretes.pop_back();
 	    }
     } else {
       int cb;
       cb = getPoint(i).firstA;
-      while (cb >= 0 && cb < nbAr) {
+      while (cb >= 0 && cb < numberOfEdges()) {
 	      int other = Other (i, cb);
 	      int cc;
 	      cc = getPoint(i).firstA;
-	      while (cc >= 0 && cc < nbAr) {
+	      while (cc >= 0 && cc < numberOfEdges()) {
           int ncc = NextAt (i, cc);
           bool  doublon=false;
           if (cc != cb && Other (i, cc) == other ) doublon=true;
@@ -2452,7 +2450,7 @@ Shape::AssembleAretes (FillRule directed)
           if ( doublon ) {
 //            if (cc != cb && Other (i, cc) == other) {
             // doublon
-            if (aretes[cb].st == aretes[cc].st) {
+            if (getEdge(cb).st == getEdge(cc).st) {
               eData[cb].weight += eData[cc].weight;
             } else {
               eData[cb].weight -= eData[cc].weight;
@@ -2478,21 +2476,21 @@ Shape::AssembleAretes (FillRule directed)
             
             DisconnectStart (cc);
             DisconnectEnd (cc);
-            if (nbAr > 1) {
-              int cp = swsData[nbAr - 1].firstLinkedPoint;
+            if (numberOfEdges() > 1) {
+              int cp = swsData[numberOfEdges() - 1].firstLinkedPoint;
               while (cp >= 0) {
                 pData[cp].askForWindingB = cc;
                 cp = pData[cp].nextLinkedPoint;
               }
             }
-            SwapEdges (cc, nbAr - 1);
-            if (cb == nbAr - 1) {
+            SwapEdges (cc, numberOfEdges() - 1);
+            if (cb == numberOfEdges() - 1) {
               cb = cc;
             }
-            if (ncc == nbAr - 1) {
+            if (ncc == numberOfEdges() - 1) {
               ncc = cc;
             }
-            nbAr--;
+	    _aretes.pop_back();
           }
           cc = ncc;
         }
@@ -2502,7 +2500,7 @@ Shape::AssembleAretes (FillRule directed)
   }
   
   if ( directed == fill_justDont ) {
-    for (int i = 0; i < nbAr; i++)  {
+    for (int i = 0; i < numberOfEdges(); i++)  {
       if (eData[i].weight == 0) {
 //        SubEdge(i);
  //       i--;
@@ -2511,7 +2509,7 @@ Shape::AssembleAretes (FillRule directed)
       }
     }
   } else {
-    for (int i = 0; i < nbAr; i++)  {
+    for (int i = 0; i < numberOfEdges(); i++)  {
       if (eData[i].weight == 0) {
         //                      SubEdge(i);
         //                      i--;
@@ -2525,7 +2523,7 @@ void
 Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 {
   // preparation du parcours
-  for (int i = 0; i < nbAr; i++)
+  for (int i = 0; i < numberOfEdges(); i++)
     {
       swdData[i].misc = 0;
       swdData[i].precParc = swdData[i].suivParc = -1;
@@ -2571,17 +2569,17 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 		      }
 		  }
     if ( getPoint(fi).totalDegree() == 1 ) {
-      if ( fi == aretes[startBord].en ) {
+      if ( fi == getEdge(startBord).en ) {
         if ( eData[startBord].weight == 0 ) {
           // on se contente d'inverser
           Inverse(startBord);
         } else {
           // on passe le askForWinding (sinon ca va rester startBord)
-          pData[aretes[startBord].st].askForWindingB=pData[aretes[startBord].en].askForWindingB;
+          pData[getEdge(startBord).st].askForWindingB=pData[getEdge(startBord).en].askForWindingB;
         }
       }
     }
-		if (aretes[startBord].en == fi)
+		if (getEdge(startBord).en == fi)
 		  outsideW += eData[startBord].weight;
 	      }
 	  }
@@ -2601,15 +2599,15 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 	    {
 	      int cPt;
 	      if (curDir)
-		cPt = aretes[curBord].en;
+		cPt = getEdge(curBord).en;
 	      else
-		cPt = aretes[curBord].st;
+		cPt = getEdge(curBord).st;
 	      int nb = curBord;
 //        if ( doDebug ) printf("de curBord= %d avec leF= %d et riF= %d  -> ",curBord,swdData[curBord].leW,swdData[curBord].riW);
 	      do
 		{
 		  int nnb = -1;
-		  if (aretes[nb].en == cPt)
+		  if (getEdge(nb).en == cPt)
 		    {
 		      outsideW = swdData[nb].riW;
 		      nnb = CyclePrevAt (cPt, nb);
@@ -2633,14 +2631,14 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 		  // retour en arriere
 		  int oPt;
 		  if (curDir)
-		    oPt = aretes[curBord].st;
+		    oPt = getEdge(curBord).st;
 		  else
-		    oPt = aretes[curBord].en;
+		    oPt = getEdge(curBord).en;
 		  curBord = swdData[curBord].precParc;
 //    if ( doDebug ) printf("retour vers %d\n",curBord);
 		  if (curBord < 0)
 		    break;
-		  if (oPt == aretes[curBord].en)
+		  if (oPt == getEdge(curBord).en)
 		    curDir = true;
 		  else
 		    curDir = false;
@@ -2649,7 +2647,7 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 		{
 		  swdData[nb].misc = (void *) 1;
 		  swdData[nb].ind = searchInd++;
-		  if (cPt == aretes[nb].st)
+		  if (cPt == getEdge(nb).st)
 		    {
 		      swdData[nb].riW = outsideW;
 		      swdData[nb].leW = outsideW + eData[nb].weight;
@@ -2663,7 +2661,7 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 		  swdData[curBord].suivParc = nb;
 		  curBord = nb;
 //		  if ( doDebug ) printf("suite %d\n",curBord);
-		  if (cPt == aretes[nb].en)
+		  if (cPt == getEdge(nb).en)
 		    curDir = false;
 		  else
 		    curDir = true;
@@ -2682,8 +2680,8 @@ Shape::TesteIntersection (Shape * ils, Shape * irs, int ilb, int irb,
                           NR::Point &atx, double &atL, double &atR,
 			  bool onlyDiff)
 {
-  int lSt = ils->aretes[ilb].st, lEn = ils->aretes[ilb].en;
-  int rSt = irs->aretes[irb].st, rEn = irs->aretes[irb].en;
+  int lSt = ils->getEdge(ilb).st, lEn = ils->getEdge(ilb).en;
+  int rSt = irs->getEdge(irb).st, rEn = irs->getEdge(irb).en;
   if (lSt == rSt || lSt == rEn)
     {
       return false;
@@ -2832,8 +2830,8 @@ Shape::TesteAdjacency (Shape * a, int no, const NR::Point atx, int nPt,
 
   NR::Point adir, diff, ast, aen, diff1, diff2, diff3, diff4;
 
-  ast = a->pData[a->aretes[no].st].rx;
-  aen = a->pData[a->aretes[no].en].rx;
+  ast = a->pData[a->getEdge(no).st].rx;
+  aen = a->pData[a->getEdge(no).en].rx;
 
   adir = a->eData[no].rdx;
 
@@ -3211,19 +3209,19 @@ Shape::Validate (void)
     {
       pData[i].rx = getPoint(i).x;
     }
-  for (int i = 0; i < nbAr; i++)
+  for (int i = 0; i < numberOfEdges(); i++)
     {
-      eData[i].rdx = aretes[i].dx;
+      eData[i].rdx = getEdge(i).dx;
     }
-  for (int i = 0; i < nbAr; i++)
+  for (int i = 0; i < numberOfEdges(); i++)
     {
-      for (int j = i + 1; j < nbAr; j++)
+      for (int j = i + 1; j < numberOfEdges(); j++)
 	{
         NR::Point atx;
         double   atL, atR;
 	  if (TesteIntersection (this, this, i, j, atx, atL, atR, false))
 	    {
-	      printf ("%i %i  %f %f di=%f %f  dj=%f %f\n", i, j, atx[0],atx[1],aretes[i].dx[0],aretes[i].dx[1],aretes[j].dx[0],aretes[j].dx[1]);
+	      printf ("%i %i  %f %f di=%f %f  dj=%f %f\n", i, j, atx[0],atx[1],getEdge(i).dx[0],getEdge(i).dx[1],getEdge(j).dx[0],getEdge(j).dx[1]);
 	    }
 	}
     }
@@ -3482,10 +3480,10 @@ Shape::DoEdgeTo (Shape * iS, int iB, int iTo, bool direct, bool sens)
       else
 	{
 	  double bdl = iS->eData[iB].ilength;
-    NR::Point bpx = iS->pData[iS->aretes[iB].st].rx;
+    NR::Point bpx = iS->pData[iS->getEdge(iB).st].rx;
 	  NR::Point bdx = iS->eData[iB].rdx;
-	  NR::Point psx = getPoint(aretes[ne].st).x;
-	  NR::Point pex = getPoint(aretes[ne].en).x;
+	  NR::Point psx = getPoint(getEdge(ne).st).x;
+	  NR::Point pex = getPoint(getEdge(ne).en).x;
         NR::Point psbx=psx-bpx;
         NR::Point pebx=pex-bpx;
 	  double pst = dot(psbx,bdx) * bdl;
