@@ -1,0 +1,25 @@
+###########################################################################
+#  $Id$
+###########################################################################
+# Makefile for building with MinGW
+###########################################################################
+
+include ../../Makefile.mingw.common
+
+
+
+OBJ = \
+repr-action.o repr-css.o repr-io.o repr.o repr-util.o
+
+all: $(OBJ)
+
+.cpp.o:
+	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
+
+.c.o:
+	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
+
+
+clean:
+	$(RM) *.o
+	$(RM) *.a

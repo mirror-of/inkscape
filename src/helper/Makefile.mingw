@@ -1,0 +1,29 @@
+###########################################################################
+#  $Id$
+###########################################################################
+# Makefile for building with MinGW
+###########################################################################
+
+include ../../Makefile.mingw.common
+
+
+
+OBJ = \
+action.o bezier-utils.o canvas-bpath.o canvas-grid.o curve.o \
+gnome-canvas-acetate.o gnome-utils.o guideline.o nr-gradient-gpl.o \
+nr-plain-stuff-gdk.o nr-plain-stuff.o png-write.o sodipodi-ctrl.o \
+sodipodi-ctrlrect.o sp-canvas.o sp-canvas-util.o sp-ctrlline.o \
+sp-marshal.o unit-menu.o units.o window.o
+
+all: $(OBJ)
+
+.cpp.o:
+	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
+
+.c.o:
+	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
+
+
+clean:
+	$(RM) *.o
+	$(RM) *.a

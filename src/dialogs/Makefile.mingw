@@ -1,0 +1,29 @@
+###########################################################################
+#  $Id$
+###########################################################################
+# Makefile for building with MinGW
+###########################################################################
+
+include ../../Makefile.mingw.common
+
+
+
+OBJ = \
+align.o desktop-properties.o dialog-events.o display-settings.o \
+document-properties.o export.o fill-style.o item-properties.o node-edit.o \
+object-attributes.o object-properties.o sp-attribute-widget.o \
+stroke-style.o text-edit.o tool-attributes.o tool-options.o \
+transformation.o xml-tree.o
+
+all: $(OBJ)
+
+.cpp.o:
+	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
+
+.c.o:
+	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
+
+
+clean:
+	$(RM) *.o
+	$(RM) *.a

@@ -1,0 +1,27 @@
+###########################################################################
+#  $Id$
+###########################################################################
+# Makefile for building with MinGW
+###########################################################################
+
+include ../../Makefile.mingw.common
+
+
+
+OBJ = \
+AVL.o DblLinked.o MySeg.o PathConversion.o Path.o PathOutline.o \
+PathSimplify.o PathStroke.o ShapeDraw.o ShapeMisc.o Shape.o \
+ShapeSweep.o ShapeSweepUtils.o
+
+all: $(OBJ)
+
+.cpp.o:
+	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
+
+.c.o:
+	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
+
+
+clean:
+	$(RM) *.o
+	$(RM) *.a

@@ -1,0 +1,27 @@
+###########################################################################
+#  $Id$
+###########################################################################
+# Makefile for building with MinGW
+###########################################################################
+
+include ../../Makefile.mingw.common
+
+
+
+
+OBJ = \
+canvas-arena.o nr-arena-glyphs.o nr-arena-group.o nr-arena-image.o \
+nr-arena-item.o nr-arena.o nr-arena-shape.o
+
+all: $(OBJ)
+
+.cpp.o:
+	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
+
+.c.o:
+	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
+
+
+clean:
+	$(RM) *.o
+	$(RM) *.a
