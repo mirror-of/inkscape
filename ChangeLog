@@ -1,6 +1,8 @@
 2004-04-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
-	* src/extension/extension.cpp (Extension): Address warning.
+	* src/extension/extension.cpp (Extension):
+	* src/extension/init.cpp (check_extensions): 
+	Address warning.
 
 	* src/dialogs/stroke-style.cpp: #include prefix.h.
 
