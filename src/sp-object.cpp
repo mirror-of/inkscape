@@ -554,7 +554,10 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 			object->id = g_strdup ((const char*)value);
 			sp_document_def_id (object->document, object->id, object);
 		} else {
-			g_warning ("ID of cloned object changed, so document is out of sync");
+			// This warning fires when the id is changed on the original of an SPUse, because the SPUse is updated from the same repr.
+			// The child of an SPUse has a cloned flag set - I have little idea of what it is used for.
+			// Anyway, the warning is useless, because the child has no repr of its own, and therefore no id conflict may ensue in XML.
+			//g_warning ("ID of cloned object changed, so document is out of sync");
 		}
 		break;
 	case SP_ATTR_XML_SPACE:
