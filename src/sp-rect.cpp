@@ -281,20 +281,20 @@ sp_rect_set_shape(SPShape *shape)
      * arc fairly well.
      */
     if ((rx > 1e-18) && (ry > 1e-18)) {
-        sp_curve_moveto(c, x + rx, y + 0.0);
-        sp_curve_curveto(c, x + rx * (1 - C1), y + 0.0, x + 0.0, y + ry * (1 - C1), x + 0.0, y + ry);
-        if (ry < h2) sp_curve_lineto(c, x + 0.0, y + h - ry);
-        sp_curve_curveto(c, x + 0.0, y + h - ry * (1 - C1), x + rx * (1 - C1), y + h, x + rx, y + h);
-        if (rx < w2) sp_curve_lineto(c, x + w - rx, y + h);
-        sp_curve_curveto(c, x + w - rx * (1 - C1), y + h, x + w, y + h - ry * (1 - C1), x + w, y + h - ry);
-        if (ry < h2) sp_curve_lineto(c, x + w, y + ry);
-        sp_curve_curveto(c, x + w, y + ry * (1 - C1), x + w - rx * (1 - C1), y + 0.0, x + w - rx, y + 0.0);
-        if (rx < w2) sp_curve_lineto(c, x + rx, y + 0.0);
+        sp_curve_moveto(c, x + rx, y);
+        if (rx < w2) sp_curve_lineto(c, x + w - rx, y);
+        sp_curve_curveto(c, x + w - rx * (1 - C1), y,     x + w, y + ry * (1 - C1),       x + w, y + ry);
+        if (ry < h2) sp_curve_lineto(c, x + w, y + h - ry);
+        sp_curve_curveto(c, x + w, y + h - ry * (1 - C1),     x + w - rx * (1 - C1), y + h,       x + w - rx, y + h);
+        if (rx < w2) sp_curve_lineto(c, x + rx, y + h);
+        sp_curve_curveto(c, x + rx * (1 - C1), y + h,     x, y + h - ry * (1 - C1),       x, y + h - ry);
+        if (ry < h2) sp_curve_lineto(c, x, y + ry);
+        sp_curve_curveto(c, x, y + ry * (1 - C1),     x + rx * (1 - C1), y,       x + rx, y);
     } else {
         sp_curve_moveto(c, x + 0.0, y + 0.0);
-        sp_curve_lineto(c, x + 0.0, y + h);
-        sp_curve_lineto(c, x + w, y + h);
         sp_curve_lineto(c, x + w, y + 0.0);
+        sp_curve_lineto(c, x + w, y + h);
+        sp_curve_lineto(c, x + 0.0, y + h);
         sp_curve_lineto(c, x + 0.0, y + 0.0);
     }
 
