@@ -12,11 +12,11 @@ may be specified on the command-line and the slideshow will consist of the
 files supplied on the command line in the given order.
 
 .SH KEYBINDINGS
- Left: show previous slide
- Right: show next slide
+ Left or Page Up: show previous slide
+ Right, Page Down, or space bar: show next slide
  Up: go to first slide
  Down: go to last slide
- Escape: quit
+ Escape, q or Q: quit
  F11: go to fullscreen mode/revert back to window mode
  Return: pop up window with slide buttons (first, prev, next, last)
 

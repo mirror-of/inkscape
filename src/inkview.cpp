@@ -123,13 +123,20 @@ sp_svgview_main_key_press (GtkWidget *widget, GdkEventKey *event, struct SPSlide
     case GDK_Return:
 	sp_svgview_control_show (ss);
 	break;
+    case GDK_KP_Page_Down:
+    case GDK_Page_Down:
     case GDK_Right:
+    case GDK_space:
 	sp_svgview_show_next (ss);
 	break;
+    case GDK_KP_Page_Up:
+    case GDK_Page_Up:
     case GDK_Left:
 	sp_svgview_show_prev (ss);
 	break;
     case GDK_Escape:
+    case GDK_q:
+    case GDK_Q:
 	gtk_main_quit();
 	break;
     default:
