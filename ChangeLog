@@ -1,4 +1,10 @@
 2004-03-31  Ted Gould <ted@gould.cx>
+
+	* src/interface.cpp:  Changing the default size so that it matches
+	  the default template size.  This way, for blank documents, the
+	  window doesn't open and then resize.
+
+2004-03-31  Ted Gould <ted@gould.cx>
 	* src/file.cpp, src/dialogs/filedialog.cpp, src/extension/db.cpp,
       src/extension/db.h, src/extension/system.cpp:
 	  A bunch of changes for Bulia's bug 925875.  Basically now the

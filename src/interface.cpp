@@ -97,7 +97,7 @@ sp_create_window (SPViewWidget *vw, gboolean editable)
 
 	/* fixme: */
 	if (editable) {
-		gtk_window_set_default_size ((GtkWindow *) w, 400, 400);
+		gtk_window_set_default_size ((GtkWindow *) w, 640, 480);
 		g_object_set_data (G_OBJECT (w), "desktop", SP_DESKTOP_WIDGET (vw)->desktop);
 		g_object_set_data (G_OBJECT (w), "desktopwidget", vw);
 		g_signal_connect (G_OBJECT (w), "delete_event", G_CALLBACK (sp_ui_delete), vw->view);
