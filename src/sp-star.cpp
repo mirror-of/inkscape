@@ -274,6 +274,9 @@ sp_star_description (SPItem *item)
 	else return g_strdup_printf (_("Polygon of %d sides"), star->sides);
 }
 
+/**
+Returns a unit-length vector at 90 degrees to the direction from o to n
+ */
 NR::Point
 rot90_rel (NR::Point o, NR::Point n)
 {
@@ -283,32 +286,43 @@ rot90_rel (NR::Point o, NR::Point n)
 NR::Point
 sp_star_get_curvepoint (SPStar *star, SPStarPoint point, gint index, bool previ)
 {
+	// the point whose neighboring curve handle we're calculating
 	NR::Point o = sp_star_get_xy (star, point, index);
 
+	// indices of previous and next points
 	gint pi = (index > 0)? (index - 1) : (star->sides - 1);
 	gint ni = (index < star->sides - 1)? (index + 1) : 0;
 
+	// the other point type
 	SPStarPoint other = (point == SP_STAR_POINT_KNOT2? SP_STAR_POINT_KNOT1 : SP_STAR_POINT_KNOT2);
 
+	// the neighbors of o; depending on flatsided, they're either the same type (polygon) or the other type (star)
 	NR::Point prev = (star->flatsided? sp_star_get_xy (star, point, pi) : sp_star_get_xy (star, other, point == SP_STAR_POINT_KNOT2? index : pi));
 	NR::Point next = (star->flatsided? sp_star_get_xy (star, point, ni) : sp_star_get_xy (star, other, point == SP_STAR_POINT_KNOT1? index : ni));
 
+	// prev-next midpoint
 	NR::Point mid =  0.5 * (prev + next);
-	NR::Point biss =  mid + 1000 * rot90_rel (mid, next); // just a far enough point on the midline
 
+	// point to which we direct the bissector of the curve handles;
+	// it's far enough outside the star on the perpendicular to prev-next through mid
+	NR::Point biss =  mid + 100000 * rot90_rel (mid, next); 
+
+	// lengths of vectors to prev and next
 	gdouble prev_len = NR::L2 (prev - o);
 	gdouble next_len = NR::L2 (next - o);
 
+	// unit-length vector perpendicular to o-biss
 	NR::Point rot = rot90_rel (o, biss);
 
+	// multiply rot by star->rounded coefficient and the distance to the star point; flip for next
 	NR::Point ret;
-
 	if (previ) {
 		ret = (star->rounded * prev_len) * rot;
 	} else {
 		ret = (star->rounded * next_len * -1) * rot;
 	}
 
+	// add the vector to o to get the final curvepoint
 	return o + ret;
 }
 
