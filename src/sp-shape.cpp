@@ -345,8 +345,8 @@ angle_for_seg (SPShape const * shape, NArtBpath const * bp, int which)
             dy = bp->y1 - bp[-1].y3;
         }
 
-        /*Chris Lilley at W3C said this procedure made sense */
         /*The control point is the same as the end point, fall back to the previous control point */
+        /*Chris Lilley at W3C said this procedure made sense */
         if (dx == 0 && dy == 0) {
             if (which == 0) {
                 dx = bp->x3 - bp->x1;
@@ -375,7 +375,8 @@ angle_for_seg (SPShape const * shape, NArtBpath const * bp, int which)
     case NR_MOVETO_OPEN:
     case NR_END:
         /*Open and end segments have no directionality*/
-        g_assert_not_reached();
+        g_warning ("Open and end segments have no directionality\n");
+        dx = 1;
         break;
     }
 
@@ -411,7 +412,7 @@ sp_shape_marker_get_transform (SPShape const * shape, int m, NArtBpath const * b
         if (closed) {
             /*find last segment*/
             NArtBpath const *lastseg;
-            for (lastseg = bp; lastseg->code != NR_END; lastseg++) {
+            for (lastseg = bp + 1; lastseg->code != NR_END; lastseg++) {
                 if (lastseg->code == NR_MOVETO) {
                     break;
                 }
@@ -430,6 +431,7 @@ sp_shape_marker_get_transform (SPShape const * shape, int m, NArtBpath const * b
             for (firstseg = bp; firstseg != shape->curve->bpath; firstseg--) {
                 if (firstseg->code == NR_MOVETO || firstseg->code == NR_MOVETO_OPEN) break;
             }
+            firstseg ++;
             angle2 = angle_for_seg (shape, firstseg, 1);
         }
     } else {
