@@ -61,6 +61,8 @@ public:
 	void              DoPositions(bool for_text);
 	void              DoFill(flow_src* what);
 	one_flow_src*     Locate(int utf8_pos,int &ucs4_pos,bool src_start,bool src_end,bool must_be_text);
+	int               Do_UCS4_2_UTF8(int ucs4_pos);
+	int               Do_UTF8_2_UCS4(int ucs4_pos);
 	
 	// introspection
 	virtual int       Type(void) {return flw_none;};
@@ -80,6 +82,8 @@ public:
 	virtual void      Delete(int i_utf8_st,int i_utf8_en);
 	// set/ add some value at the given position. v_type=0 -> set the 'x' value; 1->'y'; 2->'dx'; 3->'dy'; 4->'rotate'
 	virtual void      AddValue(int utf8_pos,SPSVGLength &val,int v_type,bool increment);
+	virtual int       UCS4_2_UTF8(int ucs4_pos);
+	virtual int       UTF8_2_UCS4(int ucs4_pos);
 };
 // text variant
 class text_flow_src : public one_flow_src {
@@ -98,6 +102,8 @@ public:
 	virtual void      Insert(int utf8_pos,int ucs4_pos,const char* n_text,int n_utf8_len,int n_ucs4_len,bool &done); 
 	virtual void      Delete(int i_utf8_st,int i_utf8_en);
 	virtual void      AddValue(int utf8_pos,SPSVGLength &val,int v_type,bool increment);
+	virtual int       UCS4_2_UTF8(int ucs4_pos);
+	virtual int       UTF8_2_UCS4(int ucs4_pos);
 };
 // control stuff in the flow, like line and region breaks
 class control_flow_src : public one_flow_src {
@@ -110,6 +116,8 @@ public:
 	virtual int       Type(void) {return type;};
 	virtual void      Fill(flow_src* what);
 	virtual void      SetPositions(bool for_text,int &last_utf8,int &last_ucs4,bool &in_white);
+	virtual int       UCS4_2_UTF8(int ucs4_pos);
+	virtual int       UTF8_2_UCS4(int ucs4_pos);
 };
 // object variant, to hold placement info. it's a text/ tspan/ textpath/ flowdiv/ flowspan/ flowpara
 class div_flow_src : public one_flow_src {
@@ -162,6 +170,8 @@ public:
 	virtual void      SetPositions(bool for_text,int &last_utf8,int &last_ucs4,bool &in_white);
 	virtual void      Insert(int utf8_pos,int ucs4_pos,const char* n_text,int n_utf8_len,int n_ucs4_len,bool &done); 
 	virtual void      Delete(int i_utf8_st,int i_utf8_en);
+	virtual int       UCS4_2_UTF8(int ucs4_pos);
+	virtual int       UTF8_2_UCS4(int ucs4_pos);
 };
 
 /*

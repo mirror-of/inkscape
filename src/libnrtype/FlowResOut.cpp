@@ -284,23 +284,36 @@ void flow_res::Print(SPPrintContext *ctx,
 			curS->with_style->text->font_family.value=savFam;
 		}
 	} else {
-		/*			for (int i=0;i<nbGroup;i++) {
-				text_style*     curS=groups[i].style;
+		for (int no=0;no<nbChunk;no++) {
+			for (int i=chunks[no].s_st;i<chunks[no].s_en;i++) {
+				text_style*     curS=spans[i].c_style;
 				font_instance*  curF=curS->theFont;
 				const char*     curFam=pango_font_description_get_family(curF->descr);
 				char*           savFam=curS->with_style->text->font_family.value;
 				curS->with_style->text->font_family.value=(gchar*)curFam;
-				for (int j=groups[i].st;j<groups[i].en;j++) {
-					NR::Point   g_pos(glyphs[j].g_x,glyphs[j].g_y);
-					char*       g_txt=chars+glyphs[j].g_st;
-					int         g_len=glyphs[j].g_en-glyphs[j].g_st;
+				for (int j=spans[i].l_st;j<spans[i].l_en;j++) {
+					NR::Point   g_pos(0,0);
+					double  px=letters[j].x_st,py=letters[j].y;
+					double  ang=letters[j].rotate;
+					NR::Matrix  g_tr;
+					g_tr[0]=cos(ang);
+					g_tr[1]=sin(ang);
+					g_tr[2]=sin(ang);
+					g_tr[3]=-cos(ang);
+					g_tr[4]=px;
+					g_tr[5]=py;
+					char*       g_txt=chars+letters[j].t_st;
+					int         g_len=letters[j].t_en-letters[j].t_st;
 					char savC=g_txt[g_len];
 					g_txt[g_len]=0;
+					sp_print_bind(ctx, g_tr,1.0);
 					sp_print_text (ctx, g_txt, g_pos, curS->with_style);
+					sp_print_release(ctx);
 					g_txt[g_len]=savC;
 				}
 				curS->with_style->text->font_family.value=savFam;
-				}*/
+			}
+		}
 	}
 }
 SPCurve*              flow_res::NormalizedBPath(void)

@@ -802,8 +802,8 @@ sp_text_get_length (SPText *text)
     one_flow_src *cur = &text->contents;
     gint length = 0;
     while (cur) {
-        length += cur->utf8_en-cur->utf8_st;
-        cur = cur->next;
+			length += cur->ucs4_en-cur->ucs4_st;
+			cur = cur->next;
     }
     return length;
 }
@@ -855,11 +855,12 @@ sp_text_append_line(SPText *text)
 
 
 SPTSpan *
-sp_text_insert_line (SPText *text, gint utf8_pos)
+sp_text_insert_line (SPText *text, gint i_ucs4_pos)
 {
-    // no updateRepr in thios function because SPRepr are handled directly
-    if ( text->f_src == NULL ) return NULL;
-
+	int utf8_pos=text->contents.Do_UCS4_2_UTF8(i_ucs4_pos);
+	// no updateRepr in thios function because SPRepr are handled directly
+	if ( text->f_src == NULL ) return NULL;
+	
     int  ucs4_pos=0;
     one_flow_src* into=text->contents.Locate(utf8_pos,ucs4_pos,true,false,false);
     //printf("pos=%i -> %i in %x\n",utf8_pos,ucs4_pos,into);
@@ -884,7 +885,7 @@ sp_text_insert_line (SPText *text, gint utf8_pos)
                 SPRepr*       into_repr=SP_OBJECT_REPR(into_dad->me);
                 if ( into->dad->dad ) {
                     // just in case
-                    sp_repr_set_attr (into_repr, "sodipodi:role", "line");
+                    //sp_repr_set_attr (into_repr, "sodipodi:role", "line");
                     // create the new tspan
                     SPRepr*   rtspan = sp_repr_new ("tspan");
                     sp_repr_set_attr (rtspan, "sodipodi:role", "line");
@@ -1040,20 +1041,21 @@ sp_text_append (SPText */*text*/, gchar const */*utf8*/)
  * \pre \a utf8[] is valid UTF-8 text.
  */
 gint
-sp_text_insert(SPText *text, gint utf8_pos, gchar const *utf8)
+sp_text_insert(SPText *text, gint i_ucs4_pos, gchar const *utf8)
 {
     if ( g_utf8_validate(utf8,-1,NULL) != TRUE ) {
         g_warning("Trying to insert invalid utf8");
-        return utf8_pos;
+        return i_ucs4_pos;
     }
-    //printf("insert %s at %i\n",utf8,pos);
+ 	int utf8_pos=text->contents.Do_UCS4_2_UTF8(i_ucs4_pos);
+   //printf("insert %s at %i\n",utf8,pos);
     int  utf8_len=strlen(utf8);
     int  ucs4_len=0;
     for (gchar const *p = utf8; *p; p = g_utf8_next_char(p)) {
         ucs4_len++;
     }
     if ( text->f_src == NULL ) { // no source text?
-        return utf8_pos;
+        return i_ucs4_pos;
     }
     if ( text->f_res == NULL ) {
         // no output but some input means: totally empty text
@@ -1065,16 +1067,16 @@ sp_text_insert(SPText *text, gint utf8_pos, gchar const *utf8)
             into->Insert(0,ucs4_pos,utf8,utf8_len,ucs4_len,done);
             SP_OBJECT(text)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(text)),SP_OBJECT_WRITE_EXT);
             SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            return utf8_len;
+            return ucs4_len;
         }
-        return utf8_pos;
+        return i_ucs4_pos;
     }
 
     // round to the letter granularity
     int    c_st=-1,s_st=-1,l_st=-1;
     bool   l_start_st=false,l_end_st=false;
     text->f_res->OffsetToLetter(utf8_pos,c_st,s_st,l_st,l_start_st,l_end_st);
-    if ( l_st < 0 ) return utf8_pos;
+    if ( l_st < 0 ) return i_ucs4_pos;
     text->f_res->LetterToOffset(c_st,s_st,l_st,l_start_st,l_end_st,utf8_pos);
     //utf8_pos=text->f_res->letters[l_st].utf8_offset;
     int  ucs4_pos=text->f_res->letters[l_st].ucs4_offset;
@@ -1087,14 +1089,16 @@ sp_text_insert(SPText *text, gint utf8_pos, gchar const *utf8)
     }
     SP_OBJECT(text)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(text)),SP_OBJECT_WRITE_EXT);
     SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    return utf8_pos+utf8_len;
+    return i_ucs4_pos+ucs4_len;
 }
 
 gint
-sp_text_delete (SPText *text, gint start, gint end)
+sp_text_delete (SPText *text, gint i_start, gint i_end)
 {
-    //printf("delete %i -> %i\n",start,end);
-    if ( text->f_src == NULL || text->f_res == NULL ) return start;
+ 	int start=text->contents.Do_UCS4_2_UTF8(i_start);
+	int end=text->contents.Do_UCS4_2_UTF8(i_end);
+ 	//printf("delete %i -> %i\n",start,end);
+    if ( text->f_src == NULL || text->f_res == NULL ) return i_start;
     // round to the letter granularity
     int    c_st=-1,s_st=-1,l_st=-1;
     int    c_en=-1,s_en=-1,l_en=-1;
@@ -1104,8 +1108,8 @@ sp_text_delete (SPText *text, gint start, gint end)
     text->f_res->OffsetToLetter(end,c_en,s_en,l_en,l_start_en,l_end_en);
     if ( l_start_st == false && l_end_st == false ) l_start_st=true;
     if ( l_start_en == false && l_end_en == false ) l_end_en=true;
-    if ( l_st < 0 || l_en < 0 || l_st > l_en ) return start;
-    if ( l_st == l_en && ( l_start_st == l_start_en || l_end_st == l_end_en ) ) return start;
+    if ( l_st < 0 || l_en < 0 || l_st > l_en ) return i_start;
+    if ( l_st == l_en && ( l_start_st == l_start_en || l_end_st == l_end_en ) ) return i_start;
     text->f_res->LetterToOffset(c_st,s_st,l_st,l_start_st,l_end_st,start);
     text->f_res->LetterToOffset(c_en,s_en,l_en,l_start_en,l_end_en,end);
     one_flow_src* last=NULL;
@@ -1115,13 +1119,14 @@ sp_text_delete (SPText *text, gint start, gint end)
     }
     SP_OBJECT(text)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(text)),SP_OBJECT_WRITE_EXT);
     SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    return start;
+    return i_start;
 }
 
 gint
-sp_text_up (SPText *text, gint position)
+sp_text_up (SPText *text, gint i_position)
 {
-    if ( text->f_res == NULL ) return position;
+	int position=text->contents.Do_UCS4_2_UTF8(i_position);
+   if ( text->f_res == NULL ) return i_position;
     int    c_p=-1,s_p=-1,l_p=-1;
     bool   l_start=false,l_end=false;
     text->f_res->OffsetToLetter(position,c_p,s_p,l_p,l_start,l_end);
@@ -1140,15 +1145,17 @@ sp_text_up (SPText *text, gint position)
         }
         int   res=position;
         text->f_res->LetterToOffset(c_p,s_p,l_p,l_start,l_end,res);
-        return res;
+//				int  ucs4_pos=text->f_res->letters[l_p].ucs4_offset;
+        return text->contents.Do_UTF8_2_UCS4(res);
     }
-    return position;
+    return i_position;
 }
 
 gint
-sp_text_down (SPText *text, gint position)
+sp_text_down (SPText *text, gint i_position)
 {
-    if ( text->f_res == NULL ) return position;
+	int position=text->contents.Do_UCS4_2_UTF8(i_position);
+    if ( text->f_res == NULL ) return i_position;
     int    c_p=-1,s_p=-1,l_p=-1;
     bool   l_start=false,l_end=false;
     text->f_res->OffsetToLetter(position,c_p,s_p,l_p,l_start,l_end);
@@ -1167,15 +1174,16 @@ sp_text_down (SPText *text, gint position)
         }
         int   res=position;
         text->f_res->LetterToOffset(c_p,s_p,l_p,l_start,l_end,res);
-        return res;
+        return text->contents.Do_UTF8_2_UCS4(res);
     }
-    return position;
+    return i_position;
 }
 
 gint
-sp_text_start_of_line (SPText *text, gint position)
+sp_text_start_of_line (SPText *text, gint i_position)
 {
-    if ( text->f_res == NULL ) return position;
+ 	int position=text->contents.Do_UCS4_2_UTF8(i_position);
+   if ( text->f_res == NULL ) return i_position;
     int    c_p=-1,s_p=-1,l_p=-1;
     bool   l_start=false,l_end=false;
     text->f_res->OffsetToLetter(position,c_p,s_p,l_p,l_start,l_end);
@@ -1187,15 +1195,16 @@ sp_text_start_of_line (SPText *text, gint position)
         l_end=false;
         int   res=position;
         text->f_res->LetterToOffset(c_p,s_p,l_p,l_start,l_end,res);
-        return res;
+        return text->contents.Do_UTF8_2_UCS4(res);
     }
-    return position;
+    return i_position;
 }
 
 gint
-sp_text_end_of_line (SPText *text, gint position)
+sp_text_end_of_line (SPText *text, gint i_position)
 {
-    if ( text->f_res == NULL ) return position;
+ 	int position=text->contents.Do_UCS4_2_UTF8(i_position);
+   if ( text->f_res == NULL ) return i_position;
     int    c_p=-1,s_p=-1,l_p=-1;
     bool   l_start=false,l_end=false;
     text->f_res->OffsetToLetter(position,c_p,s_p,l_p,l_start,l_end);
@@ -1205,15 +1214,17 @@ sp_text_end_of_line (SPText *text, gint position)
         }
         l_start=true; // otherwise ends up at beginning of next line
         l_end=false;
+				if ( c_p >= text->f_res->nbChunk-1 ) {l_start=false;l_end=true;}
         int   res=position;
         text->f_res->LetterToOffset(c_p,s_p,l_p,l_start,l_end,res);
-        return res;
+        return text->contents.Do_UTF8_2_UCS4(res);
     }
-    return position;
+    return i_position;
 }
 void
-sp_text_get_cursor_coords (SPText *text, gint position, NR::Point &p0, NR::Point &p1)
+sp_text_get_cursor_coords (SPText *text, gint i_position, NR::Point &p0, NR::Point &p1)
 {
+	int position=text->contents.Do_UCS4_2_UTF8(i_position);
     p0=p1=NR::Point(text->x.computed,text->y.computed);
     if ( text->f_res == NULL ) return;
     int c_p = -1, s_p = -1, l_p = -1;
@@ -1234,9 +1245,10 @@ sp_text_get_cursor_coords (SPText *text, gint position, NR::Point &p0, NR::Point
 }
 
 static SPObject *
-sp_text_get_child_by_position (SPText *text, gint utf8_pos)
+sp_text_get_child_by_position (SPText *text, gint i_ucs4_pos)
 {
-    if ( text->f_res == NULL ) return NULL;
+ 	int utf8_pos=text->contents.Do_UCS4_2_UTF8(i_ucs4_pos);
+   if ( text->f_res == NULL ) return NULL;
     int   ucs4_pos=0;
     one_flow_src *into = text->contents.Locate(utf8_pos,ucs4_pos,true,false,true);
     //printf("ucs4 at offset %i = %i -> txt=%x",utf8_pos,ucs4_pos,into);
@@ -1262,7 +1274,7 @@ sp_text_get_position_by_coords (SPText *text, NR::Point &i_p)
         int position=0;
         text->f_res->LetterToOffset(c_p,s_p,l_p,l_start,l_end,position);
         //printf(" -> offset %i \n",position);
-        return position;
+        return text->contents.Do_UTF8_2_UCS4(position);
     } else {
         //printf("none\n");
     }
@@ -1270,8 +1282,9 @@ sp_text_get_position_by_coords (SPText *text, NR::Point &i_p)
 }
 
 void
-sp_adjust_kerning_screen (SPText *text, gint position, SPDesktop *desktop, NR::Point by)
+sp_adjust_kerning_screen (SPText *text, gint i_position, SPDesktop *desktop, NR::Point by)
 {
+	int position=text->contents.Do_UCS4_2_UTF8(i_position);
     if ( text->f_src == NULL ) return;
     one_flow_src* cur=&text->contents;
 
@@ -1296,8 +1309,9 @@ sp_adjust_kerning_screen (SPText *text, gint position, SPDesktop *desktop, NR::P
 }
 
 void
-sp_adjust_tspan_letterspacing_screen(SPText *text, gint pos, SPDesktop *desktop, gdouble by)
+sp_adjust_tspan_letterspacing_screen(SPText *text, gint i_position, SPDesktop *desktop, gdouble by)
 {
+	int pos=text->contents.Do_UCS4_2_UTF8(i_position);
     gdouble val;
     int     nb_let=0;
     SPObject *child = sp_text_get_child_by_position (text, pos);
@@ -1314,6 +1328,7 @@ sp_adjust_tspan_letterspacing_screen(SPText *text, gint pos, SPDesktop *desktop,
         } else {
             //printf("none\n");
         }
+				return;
     }
     SPStyle *style = SP_OBJECT_STYLE (child);
 

@@ -344,6 +344,36 @@ void              one_flow_src::PushInfo(int /*st*/,int /*en*/,int /*offset*/,te
 void              one_flow_src::Fill(flow_src* /*what*/)
 {
 }
+int               one_flow_src::Do_UCS4_2_UTF8(int ucs4_pos)
+{
+	int res=0;
+	one_flow_src* cur=this;
+	while ( cur ) {
+		if ( ucs4_pos >= cur->ucs4_st && ucs4_pos < cur->ucs4_en ) return cur->UCS4_2_UTF8(ucs4_pos);
+		res=cur->utf8_en;
+		cur=cur->next;
+	}
+	return res;
+}
+int               one_flow_src::Do_UTF8_2_UCS4(int utf8_pos)
+{
+	int res=0;
+	one_flow_src* cur=this;
+	while ( cur ) {
+		if ( utf8_pos >= cur->utf8_st && utf8_pos < cur->utf8_en ) return cur->UTF8_2_UCS4(utf8_pos);
+		res=cur->ucs4_en;
+		cur=cur->next;
+	}
+	return res;
+}
+int               one_flow_src::UCS4_2_UTF8(int /*ucs4_pos*/)
+{
+	return utf8_st;
+}
+int               one_flow_src::UTF8_2_UCS4(int /*ucs4_pos*/)
+{
+	return ucs4_st;
+}
 one_flow_src*     one_flow_src::Locate(int utf8_pos,int &ucs4_pos,bool src_start,bool src_end,bool must_be_text)
 {
 	one_flow_src* res=NULL;
@@ -531,6 +561,15 @@ void              text_flow_src::AddValue(int utf8_pos,SPSVGLength &val,int v_ty
 		if ( dad ) (dynamic_cast<div_flow_src*>(dad))->DoAddValue(utf8_pos,ucs4_pos,val,v_type,increment);
 	}
 }
+int               text_flow_src::UCS4_2_UTF8(int ucs4_pos)
+{
+	return utf8_st+cleaned_up.UCS4_2_UTF8(ucs4_pos-ucs4_st);
+}
+int               text_flow_src::UTF8_2_UCS4(int utf8_pos)
+{
+	return ucs4_st+cleaned_up.UTF8_2_UCS4(utf8_pos-utf8_st);
+}
+
 // control stuff in the flow, like line and region breaks
 control_flow_src::control_flow_src(SPObject* i_me,int i_type):one_flow_src(i_me)
 {
@@ -556,6 +595,14 @@ void              control_flow_src::Fill(flow_src* what)
 		what->cur_holder=NULL;
 	}
 	what->AddElement(type,NULL,this);
+}
+int               control_flow_src::UCS4_2_UTF8(int /*ucs4_pos*/)
+{
+	return utf8_st;
+}
+int               control_flow_src::UTF8_2_UCS4(int /*ucs4_pos*/)
+{
+	return ucs4_st;
 }
 
 // object variant, to hold placement info
@@ -796,6 +843,14 @@ void              div_flow_src::PushInfo(int st,int en,int offset,text_holder* i
 			}
 		}
 	}
+}
+int               div_flow_src::UCS4_2_UTF8(int /*ucs4_pos*/)
+{
+	return utf8_st;
+}
+int               div_flow_src::UTF8_2_UCS4(int /*ucs4_pos*/)
+{
+	return ucs4_st;
 }
 void              div_flow_src::SetPositions(bool /*for_text*/,int &last_utf8,int &last_ucs4,bool &in_white)
 {

@@ -36,6 +36,7 @@ public:
 	void             Insert(int at,char* iText,int iLen);
 	
 	int              UTF8_2_UCS4(int utf8_pos);
+	int              UCS4_2_UTF8(int ucs4_pos);
 };
 
 class correspondance {

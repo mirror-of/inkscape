@@ -73,6 +73,18 @@ int              partial_text::UTF8_2_UCS4(int utf8_pos)
 	}
 	return ucs4_length;
 }
+int              partial_text::UCS4_2_UTF8(int ucs4_pos)
+{
+	int cur_pos=0;
+	for (char* p=utf8_text;p&&*p;p=g_utf8_next_char(p)) {
+		int d=((int)p)-((int)utf8_text);
+		if ( cur_pos >= ucs4_pos ) {
+			return d;
+		}
+		cur_pos++;
+	}
+	return utf8_length;
+}
 void             partial_text::Delete(int st,int en)
 {
 	if ( st < 0 ) st=0;
