@@ -77,11 +77,8 @@ sp_path_get_type (void)
 static void
 sp_path_class_init (SPPathClass * klass)
 {
-	SPObjectClass *sp_object_class;
-	SPItemClass *item_class;
-
-	sp_object_class = (SPObjectClass *) klass;
-	item_class = (SPItemClass *) klass;
+	SPObjectClass *sp_object_class = (SPObjectClass *) klass;
+	SPItemClass *item_class = (SPItemClass *) klass;
 
 	parent_class = (SPShapeClass *)g_type_class_peek_parent (klass);
 
@@ -95,14 +92,12 @@ sp_path_class_init (SPPathClass * klass)
 }
 
 
-gint 
+gint
 sp_nodes_in_path (SPPath *path)
 {
-	SPCurve * curve;
-	gint r, i; 
-	curve = SP_SHAPE (path) -> curve;
-	r = curve->end; 
-	i = curve->length - 1;
+	SPCurve *curve = SP_SHAPE(path)->curve;
+	gint r = curve->end;
+	gint i = curve->length - 1;
 	if (i > r) i = r; // sometimes after switching from node editor length is wrong, e.g. f6 - draw - f2 - tab - f1, this fixes it
 	for (; i >= 0; i --) 
 		if ((curve->bpath + i) -> code == NR_MOVETO)
@@ -240,18 +235,14 @@ sp_path_set (SPObject *object, unsigned int key, const gchar *value)
 static SPRepr *
 sp_path_write (SPObject *object, SPRepr *repr, guint flags)
 {
-	SPShape *shape;
-	NArtBpath *abp;
-	gchar *str;
-
-	shape = (SPShape *) object;
+	SPShape *shape = (SPShape *) object;
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 		repr = sp_repr_new ("path");
 	}
 
-	abp = sp_curve_first_bpath (shape->curve);
-	str = sp_svg_write_path (abp);
+	NArtBpath *abp = sp_curve_first_bpath(shape->curve);
+	gchar *str = sp_svg_write_path(abp);
 	sp_repr_set_attr (repr, "d", str);
 	g_free (str);
 
@@ -280,18 +271,13 @@ sp_path_update (SPObject *object, SPCtx *ctx, guint flags)
 static NR::Matrix
 sp_path_set_transform (SPItem *item, NR::Matrix const &xform)
 {
-	SPPath *path;
-	SPShape *shape;
-	SPCurve *curve;
-	NRBPath dpath, spath;
-
-	path = (SPPath *) item;
-	shape = (SPShape *) item;
+	SPShape *shape = (SPShape *) item;
 
 	/* Transform the path */
+	NRBPath dpath, spath;
 	spath.path = shape->curve->bpath;
 	nr_path_duplicate_transform (&dpath, &spath, xform);
-	curve = sp_curve_new_from_bpath (dpath.path);
+	SPCurve *curve = sp_curve_new_from_bpath(dpath.path);
 	if (curve) {
 		sp_shape_set_curve (shape, curve, TRUE);
 		sp_curve_unref (curve);
