@@ -1125,6 +1125,8 @@ sp_adjust_tspan_letterspacing_screen(SPText *text, gint i_position, SPDesktop *d
     SPStyle *style = SP_OBJECT_STYLE (child);
 
     // calculate real value
+    /* TODO: Consider calculating val unconditionally, i.e. drop the first `if' line, and
+       get rid of the `else val = 0.0'.  Similarly below and in sp-string.cpp. */
     if (style->text->letterspacing.value != 0 && style->text->letterspacing.computed == 0) { // set in em or ex
         if (style->text->letterspacing.unit == SP_CSS_UNIT_EM) {
             val = style->font_size.computed * style->text->letterspacing.value;
@@ -1139,16 +1141,14 @@ sp_adjust_tspan_letterspacing_screen(SPText *text, gint i_position, SPDesktop *d
 
     // divide increment by zoom and by the number of characters in the line,
     // so that the entire line is expanded by by pixels, no matter what its length
-    gdouble zoom = SP_DESKTOP_ZOOM (desktop);
-    gdouble zby = by / (zoom * (nb_let > 1 ? nb_let - 1 : 1));
-
-    // divide increment by matrix expansion
-    NR::Matrix t = sp_item_i2doc_affine (SP_ITEM(child));
-    zby = zby / NR::expansion(t);
-
+    gdouble const zoom = SP_DESKTOP_ZOOM(desktop);
+    gdouble const zby = (by
+                         / (zoom * (nb_let > 1 ? nb_let - 1 : 1))
+                         / NR::expansion(sp_item_i2doc_affine(SP_ITEM(child))));
     val += zby;
 
     // set back value
+    style->text->letterspacing_normal = FALSE;
     if (style->text->letterspacing.value != 0 && style->text->letterspacing.computed == 0) { // set in em or ex
         if (style->text->letterspacing.unit == SP_CSS_UNIT_EM) {
             style->text->letterspacing.value = val / style->font_size.computed;

@@ -656,6 +656,11 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         break;
     case SP_PROP_LETTER_SPACING:
         if (!style->text_private) sp_style_privatize_text (style);
+        style->text->letterspacing_normal = FALSE;
+        if (strcmp(val, "normal") == 0) {
+            style->text->letterspacing_normal = TRUE;
+            val = "0";
+        }
         sp_style_read_ilength (&style->text->letterspacing, val);
         style->text->letterspacing.set = TRUE;
         break;
@@ -1155,6 +1160,7 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
             style->text->font_family.value = g_strdup (parent->text->font_family.value);
         }
         if (!style->text->letterspacing.set || style->text->letterspacing.inherit) {
+            style->text->letterspacing_normal = parent->text->letterspacing_normal;
             style->text->letterspacing.value = parent->text->letterspacing.value;
             style->text->letterspacing.computed = parent->text->letterspacing.computed;
             style->text->letterspacing.unit = parent->text->letterspacing.unit;
@@ -1508,6 +1514,7 @@ sp_style_clear (SPStyle *style)
     style->text->font.set = FALSE;
     style->text->font_family.set = FALSE;
 
+    style->text->letterspacing_normal = TRUE;
     style->text->letterspacing.value = 0.0;
     style->text->letterspacing.computed = 0.0;
     style->text->letterspacing.set = FALSE;
@@ -1786,7 +1793,15 @@ sp_text_style_write(gchar *p, guint const len, SPTextStyle const *const st, guin
         flags = SP_STYLE_FLAG_IFSET;
 
     d += sp_style_write_istring (p + d, len - d, "font-family", &st->font_family, NULL, flags);
-    d += sp_style_write_ilength (p + d, len - d, "letter-spacing", &st->letterspacing, NULL, flags);
+    if ((flags == SP_STYLE_FLAG_ALWAYS) || st->letterspacing.set) {
+        if (st->letterspacing.inherit) {
+            d += g_snprintf(p + d, len - d, "letter-spacing:inherit;");
+        } else if (st->letterspacing_normal) {
+            d += g_snprintf(p + d, len - d, "letter-spacing:normal;");
+        } else {
+            d += sp_style_write_ilength(p + d, len - d, "letter-spacing", &st->letterspacing, NULL, flags);
+        }
+    }
 
     return d;
 }

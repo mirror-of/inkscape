@@ -427,6 +427,7 @@ struct SPTextStyle {
 	unsigned int text_decoration : 3;
 	unsigned int unicode_bidi : 2;
 
+	unsigned int letterspacing_normal : 1;
 	SPILength letterspacing;
 };
 
