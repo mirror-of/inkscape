@@ -44,7 +44,7 @@ class Anchored {
 public:
     void anchor() const {
         if (!_anchor) {
-            _anchor = new Anchor(GC_base(const_cast<Anchored *>(this)));
+            _anchor = new Anchor(this);
         }
         _anchor->refcount++;
     }
@@ -61,9 +61,13 @@ protected:
 
 private:
     struct Anchor : public Managed<SCANNED, MANUAL> {
-        Anchor(void const *obj) : refcount(0), object(obj) {}
+        Anchor(Anchored const *obj) : refcount(0) {
+#ifndef SUPPRESS_LIBGC
+            base = GC_base(const_cast<Anchored *>(obj));
+#endif
+        }
         int refcount;
-        void const *object;
+        void const *base;
     };
 
     Anchored(Anchored const &); // no copy

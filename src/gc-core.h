@@ -17,16 +17,20 @@
 #include <gc/gc.h>
 #include <glib/gmain.h>
 
+//#define SUPPRESS_LIBGC
+
 namespace Inkscape {
 
 namespace GC {
 
 inline void init() {
+#ifndef SUPPRESS_LIBGC
     GC_finalize_on_demand = 1;
     GC_no_dls = 1;
     GC_INIT();
     // ensure that finalizers are called at sane times
     g_idle_add(GSourceFunc(GC_invoke_finalizers), NULL);
+#endif
 }
 
 enum ScanPolicy {
@@ -56,6 +60,7 @@ inline void *operator new(size_t size,
                           void *data=NULL)
 throw(std::bad_alloc)
 {
+#ifndef SUPPRESS_LIBGC
     void *mem;
     if ( collect == Inkscape::GC::AUTO ) {
         if ( scan == Inkscape::GC::SCANNED ) {
@@ -77,6 +82,9 @@ throw(std::bad_alloc)
         GC_REGISTER_FINALIZER_IGNORE_SELF(mem, cleanup, data, NULL, NULL);
     }
     return mem;
+#else
+    return ::operator new(size);
+#endif
 }
 
 inline void *operator new(size_t size,
@@ -108,7 +116,11 @@ throw(std::bad_alloc)
 }
 
 inline void operator delete(void *mem, Inkscape::GC::Delete) {
+#ifndef SUPPRESS_LIBGC
     GC_FREE(mem);
+#else
+    ::operator delete(mem);
+#endif
 }
 
 inline void operator delete[](void *mem, Inkscape::GC::Delete) {
