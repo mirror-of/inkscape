@@ -11,7 +11,7 @@
 
 // debug routine for vizualizing the polygons
 void
-Shape::Plot (float ix, float iy, float ir, float mx, float my, bool doPoint,
+Shape::Plot (double ix, double iy, double ir, double mx, double my, bool doPoint,
 	     bool edgesNo, bool pointsNo, bool doDir)
 {
 /*	Rect   r;
@@ -26,8 +26,8 @@ Shape::Plot (float ix, float iy, float ir, float mx, float my, bool doPoint,
 		color.blue=0;
 		::RGBForeColor(&color);
 		for (i=0;i<nbPt;i++) {
-			float   ph=(pts[i].x-ix)*ir+mx;
-			float   pv=(pts[i].y-iy)*ir+my;
+			double   ph=(pts[i].x-ix)*ir+mx;
+			double   pv=(pts[i].y-iy)*ir+my;
 			int      iph=(int)ph,ipv=(int)pv;
 			Rect r;
 			::SetRect(&r,iph-1,ipv-1,iph+1,ipv+1);
@@ -43,15 +43,15 @@ Shape::Plot (float ix, float iy, float ir, float mx, float my, bool doPoint,
 			int     stP=aretes[i].st;
 			int     enP=aretes[i].en;
 			if ( stP < 0 || enP < 0 ) continue;
-			float   sh=(pts[stP].x-ix)*ir+mx;
-			float   sv=(pts[stP].y-iy)*ir+my;
-			float   eh=(pts[enP].x-ix)*ir+mx;
-			float   ev=(pts[enP].y-iy)*ir+my;
+			double   sh=(pts[stP].x-ix)*ir+mx;
+			double   sv=(pts[stP].y-iy)*ir+my;
+			double   eh=(pts[enP].x-ix)*ir+mx;
+			double   ev=(pts[enP].y-iy)*ir+my;
 			int      ish=(int)sh,isv=(int)sv,ieh=(int)eh,iev=(int)ev;
 			::MoveTo(ish,isv);
 			if ( doDir ) {
-				float   endh=(9*eh+1*sh)/10;
-				float   endv=(9*ev+1*sv)/10;
+				double   endh=(9*eh+1*sh)/10;
+				double   endv=(9*ev+1*sv)/10;
 				int     iendh=(int)endh,iendv=(int)endv;
 				::LineTo(iendh,iendv);
 			} else {
@@ -72,8 +72,8 @@ Shape::Plot (float ix, float iy, float ir, float mx, float my, bool doPoint,
 	}
 	if ( pointsNo ) {
 		for (i=0;i<nbPt;i++) {
-			float   ph=(pts[i].x-ix)*ir+mx;
-			float   pv=(pts[i].y-iy)*ir+my;
+			double   ph=(pts[i].x-ix)*ir+mx;
+			double   pv=(pts[i].y-iy)*ir+my;
 			int      iph=(int)ph,ipv=(int)pv;
 			::MoveTo(iph+2,ipv);
 			 char  tempSt[256];

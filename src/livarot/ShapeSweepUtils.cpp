@@ -21,7 +21,7 @@ SweepEvent::~SweepEvent (void)
 }
 
 void
-SweepEvent::MakeNew (SweepTree * iLeft, SweepTree * iRight, NR::Point &px, float itl, float itr)
+SweepEvent::MakeNew (SweepTree * iLeft, SweepTree * iRight, NR::Point &px, double itl, double itr)
 {
   ind = -1;
   posx = px;
@@ -91,7 +91,7 @@ SweepEvent::DestroyQueue (SweepEventQueue & queue)
 }
 
 SweepEvent *
-SweepEvent::AddInQueue (SweepTree * iLeft, SweepTree * iRight, NR::Point &px, float itl, float itr,
+SweepEvent::AddInQueue (SweepTree * iLeft, SweepTree * iRight, NR::Point &px, double itl, double itr,
 			SweepEventQueue & queue)
 {
   if (queue.nbEvt >= queue.maxEvt)
@@ -253,7 +253,7 @@ SweepEvent::SupprFromQueue (SweepEventQueue & queue)
     }
 }
 bool
-SweepEvent::PeekInQueue (SweepTree * &iLeft, SweepTree * &iRight, NR::Point &px, float &itl, float &itr,
+SweepEvent::PeekInQueue (SweepTree * &iLeft, SweepTree * &iRight, NR::Point &px, double &itl, double &itr,
 			 SweepEventQueue & queue)
 {
   if (queue.nbEvt <= 0)
@@ -268,7 +268,7 @@ SweepEvent::PeekInQueue (SweepTree * &iLeft, SweepTree * &iRight, NR::Point &px,
 
 bool
 SweepEvent::ExtractFromQueue (SweepTree * &iLeft, SweepTree * &iRight,
-                              NR::Point &px, float &itl, float &itr,
+                              NR::Point &px, double &itl, double &itr,
 			      SweepEventQueue & queue)
 {
   if (queue.nbEvt <= 0)
@@ -875,7 +875,7 @@ SweepTree::SwapWithRight (SweepTreeList & list, SweepEventQueue & queue)
     tL->startPoint = tR->startPoint;
     tR->startPoint = swap;
   }
-//      {float swap=tL->invDirLength;tL->invDirLength=tR->invDirLength;tR->invDirLength=swap;}
+//      {double swap=tL->invDirLength;tL->invDirLength=tR->invDirLength;tR->invDirLength=swap;}
   {
     bool swap = tL->sens;
     tL->sens = tR->sens;

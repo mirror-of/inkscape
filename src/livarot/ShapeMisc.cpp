@@ -296,7 +296,7 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig)
 
 // offsets
 int
-Shape::MakeOffset (Shape * a, float dec, JoinType join, float miter)
+Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
 {
   Reset (0, 0);
   if ( a->HasBackData() ) MakeBackData(true); else MakeBackData (false);
@@ -362,7 +362,7 @@ Shape::MakeOffset (Shape * a, float dec, JoinType join, float miter)
     }
     
     NR::Point stD, seD, enD;
-    float stL, seL, enL;
+    double stL, seL, enL;
     stD = a->aretes[stB].dx;
     seD = a->aretes[i].dx;
     enD = a->aretes[enB].dx;
@@ -379,7 +379,7 @@ Shape::MakeOffset (Shape * a, float dec, JoinType join, float miter)
     ptP = a->pts[a->aretes[i].st].x;
     int   usePathID=-1;
     int   usePieceID=0;
-    float useT=0.0;
+    double useT=0.0;
     if ( a->HasBackData() ) {
       if ( a->ebData[i].pathID >= 0 && a->ebData[stB].pathID == a->ebData[i].pathID && a->ebData[stB].pieceID == a->ebData[i].pieceID
            && a->ebData[stB].tEn == a->ebData[i].tSt ) {
@@ -532,7 +532,7 @@ Shape::ReFormeLineTo (int bord, int curBord, Path * dest, Path * orig)
 {
   int nPiece = ebData[bord].pieceID;
   int nPath = ebData[bord].pathID;
-  float /*ts=ebData[bord].tSt, */ te = ebData[bord].tEn;
+  double /*ts=ebData[bord].tSt, */ te = ebData[bord].tEn;
   NR::Point nx = pts[aretes[bord].en].x;
   bord = swdData[bord].suivParc;
   while (bord >= 0)
@@ -566,8 +566,8 @@ Shape::ReFormeArcTo (int bord, int curBord, Path * dest, Path * from)
 {
   int nPiece = ebData[bord].pieceID;
   int nPath = ebData[bord].pathID;
-  float ts = ebData[bord].tSt, te = ebData[bord].tEn;
-  //      float  px=pts[aretes[bord].st].x,py=pts[aretes[bord].st].y;
+  double ts = ebData[bord].tSt, te = ebData[bord].tEn;
+  //      double  px=pts[aretes[bord].st].x,py=pts[aretes[bord].st].y;
   NR::Point nx = pts[aretes[bord].en].x;
   bord = swdData[bord].suivParc;
   while (bord >= 0)
@@ -592,7 +592,7 @@ Shape::ReFormeArcTo (int bord, int curBord, Path * dest, Path * from)
     }
     bord = swdData[bord].suivParc;
   }
-  float sang, eang;
+  double sang, eang;
   bool nLarge = from->descr_data[nPiece].d.a.large;
   bool nClockwise = from->descr_data[nPiece].d.a.clockwise;
   NR::Point prevx;
@@ -612,8 +612,8 @@ Shape::ReFormeArcTo (int bord, int curBord, Path * dest, Path * from)
     if (sang > eang)
       sang -= 2 * M_PI;
   }
-  float delta = eang - sang;
-  float ndelta = delta * (te - ts);
+  double delta = eang - sang;
+  double ndelta = delta * (te - ts);
   if (ts > te)
     nClockwise = !nClockwise;
   if (ndelta < 0)
@@ -650,7 +650,7 @@ Shape::ReFormeCubicTo (int bord, int curBord, Path * dest, Path * from)
 {
   int nPiece = ebData[bord].pieceID;
   int nPath = ebData[bord].pathID;
-  float ts = ebData[bord].tSt, te = ebData[bord].tEn;
+  double ts = ebData[bord].tSt, te = ebData[bord].tEn;
   NR::Point nx = pts[aretes[bord].en].x;
   bord = swdData[bord].suivParc;
   while (bord >= 0)
@@ -700,7 +700,7 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
 {
   int nPiece = ebData[bord].pieceID;
   int nPath = ebData[bord].pathID;
-  float ts = ebData[bord].tSt, te = ebData[bord].tEn;
+  double ts = ebData[bord].tSt, te = ebData[bord].tEn;
   int ps = nPiece, pe = nPiece;
   NR::Point px = pts[aretes[bord].st].x;
   NR::Point nx = pts[aretes[bord].en].x;
@@ -917,7 +917,7 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
 void
 Shape::ReFormeBezierChunk (NR::Point px, NR::Point nx,
                            Path * dest, int inBezier, int nbInterm,
-                           Path * from, int p, float ts, float te)
+                           Path * from, int p, double ts, double te)
 {
   NR::Point bstx;
   NR::Point benx;

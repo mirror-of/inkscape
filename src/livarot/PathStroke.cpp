@@ -20,8 +20,8 @@
 }
 
 void
-Path::Stroke (Shape * dest, bool doClose, float width, JoinType join,
-              ButtType butt, float miter, bool justAdd)
+Path::Stroke (Shape * dest, bool doClose, double width, JoinType join,
+              ButtType butt, double miter, bool justAdd)
 {
   if (dest == NULL)
     return;
@@ -95,14 +95,14 @@ Path::Stroke (Shape * dest, bool doClose, float width, JoinType join,
 }
 
 void
-Path::DoStroke (Shape * dest, bool doClose, float width, JoinType join,
-                ButtType butt, float miter, bool justAdd)
+Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
+                ButtType butt, double miter, bool justAdd)
 {
   if (nbPt <= 1)
     return;
   
   NR::Point curP, prevP, nextP;
-  float curW, prevW, nextW;
+  double curW, prevW, nextW;
   int curI, prevI, nextI;
   int upTo;
   
@@ -147,7 +147,7 @@ Path::DoStroke (Shape * dest, bool doClose, float width, JoinType join,
       else
         prevW = 1;
       NR::Point diff=curP-prevP;
-      float dist =dot(diff,diff);
+      double dist =dot(diff,diff);
       if (dist > 0.001)
 	    {
 	      break;
@@ -216,7 +216,7 @@ Path::DoStroke (Shape * dest, bool doClose, float width, JoinType join,
       else
         nextW = 1;
       NR::Point diff=curP-nextP;
-      float dist =dot(diff,diff);
+      double dist =dot(diff,diff);
       if (dist > 0.001)
       {
         break;
@@ -248,7 +248,7 @@ Path::DoStroke (Shape * dest, bool doClose, float width, JoinType join,
   int startLeft = -1, startRight = -1;
   int lastLeft = -1, lastRight = -1;
   NR::Point prevD, nextD;
-  float prevLe, nextLe;
+  double prevLe, nextLe;
   prevD = curP - prevP;
   nextD = nextP - curP;
   prevLe = sqrt (dot(prevD,prevD));
@@ -308,7 +308,7 @@ Path::DoStroke (Shape * dest, bool doClose, float width, JoinType join,
       else
         nextW = 1;
       NR::Point diff=curP-nextP;
-      float dist =dot(diff,diff);
+      double dist =dot(diff,diff);
       if (dist > 0.001)
 	    {
 	      break;
@@ -388,7 +388,7 @@ Path::DoStroke (Shape * dest, bool doClose, float width, JoinType join,
   }
 }
 void
-Path::DoButt (Shape * dest, float width, ButtType butt, NR::Point pos, NR::Point dir,
+Path::DoButt (Shape * dest, double width, ButtType butt, NR::Point pos, NR::Point dir,
               int &leftNo, int &rightNo)
 {
   NR::Point nor;
@@ -448,8 +448,8 @@ Path::DoButt (Shape * dest, float width, ButtType butt, NR::Point pos, NR::Point
   }
 }
 void
-Path::DoJoin (Shape * dest, float width, JoinType join, NR::Point pos, NR::Point prev,
-              NR::Point next, float miter, float prevL, float nextL, int &leftStNo,
+Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Point prev,
+              NR::Point next, double miter, double prevL, double nextL, int &leftStNo,
               int &leftEnNo, int &rightStNo, int &rightEnNo)
 {
   //      DoLeftJoin(dest,width,join,pos,prev,next,miter,prevL,nextL,leftStNo,leftEnNo);
@@ -459,10 +459,10 @@ Path::DoJoin (Shape * dest, float width, JoinType join, NR::Point pos, NR::Point
   NR::Point pnor, nnor;
   pnor=prev.ccw();
   nnor=next.ccw();
-  float angSi = cross (next, prev);
+  double angSi = cross (next, prev);
   if (angSi > -0.0001 && angSi < 0.0001)
   {
-    float angCo = dot (prev, next);
+    double angCo = dot (prev, next);
     if (angCo > 0.9999)
     {
       // tout droit
@@ -491,10 +491,10 @@ Path::DoJoin (Shape * dest, float width, JoinType join, NR::Point pos, NR::Point
     {
       NR::Point biss;
       biss = next - prev;
-      float c2 = cross (biss, next);
-      float l = width / c2;
-      float projn = l * (dot (biss, next));
-      float projp = -l * (dot (biss, prev));
+      double c2 = cross (biss, next);
+      double l = width / c2;
+      double projn = l * (dot (biss, next));
+      double projp = -l * (dot (biss, prev));
       if (projp <= 0.5 * prevL && projn <= 0.5 * nextL)
       {
         x = pos + l * biss;
@@ -520,9 +520,9 @@ Path::DoJoin (Shape * dest, float width, JoinType join, NR::Point pos, NR::Point
       NR::Point biss;
       biss = pnor + nnor;
       StrokeNormalize (biss);
-      float c2 = dot (biss, nnor);
-      float l = width / c2;
-      float emiter = width * c2;
+      double c2 = dot (biss, nnor);
+      double l = width / c2;
+      double emiter = width * c2;
       if (emiter < miter)
         emiter = miter;
       int nrightStNo, nrightEnNo;
@@ -533,8 +533,8 @@ Path::DoJoin (Shape * dest, float width, JoinType join, NR::Point pos, NR::Point
 	    }
       else
 	    {
-	      float s2 = cross (biss, nnor);
-	      float dec = (l - emiter) * c2 / s2;
+	      double s2 = cross (biss, nnor);
+	      double dec = (l - emiter) * c2 / s2;
 	      NR::Point tbiss=biss.ccw();
         
 	      x = pos - emiter * biss - dec * tbiss;
@@ -556,9 +556,9 @@ Path::DoJoin (Shape * dest, float width, JoinType join, NR::Point pos, NR::Point
       NR::Point biss;
       biss = pnor + nnor;
       StrokeNormalize (biss);
-      float c2 = dot (biss, nnor);
-      float l = width / c2;
-      float typ = dot (pnor, nnor);
+      double c2 = dot (biss, nnor);
+      double l = width / c2;
+      double typ = dot (pnor, nnor);
       if (typ >= 0)
 	    {
 	      x = pos - l * biss;
@@ -567,8 +567,8 @@ Path::DoJoin (Shape * dest, float width, JoinType join, NR::Point pos, NR::Point
 	    }
       else
 	    {
-	      float s2 = cross (biss, nnor);
-	      float dec = (l - width) * c2 / s2;
+	      double s2 = cross (biss, nnor);
+	      double dec = (l - width) * c2 / s2;
 	      NR::Point tbiss=biss.ccw();
         
         NR::Point nsx = pos - width * biss - dec * tbiss;
@@ -596,10 +596,10 @@ Path::DoJoin (Shape * dest, float width, JoinType join, NR::Point pos, NR::Point
     {
       NR::Point biss;
       biss = next - prev;
-      float c2 = cross (next, biss);
-      float l = width / c2;
-      float projn = l * (dot (biss, next));
-      float projp = -l * (dot (biss, prev));
+      double c2 = cross (next, biss);
+      double l = width / c2;
+      double projn = l * (dot (biss, next));
+      double projp = -l * (dot (biss, prev));
       if (projp <= 0.5 * prevL && projn <= 0.5 * nextL)
       {
         x = pos + l * biss;
@@ -625,9 +625,9 @@ Path::DoJoin (Shape * dest, float width, JoinType join, NR::Point pos, NR::Point
       NR::Point biss;
       biss = pnor + nnor;
       StrokeNormalize (biss);
-      float c2 = dot (biss, nnor);
-      float l = width / c2;
-      float emiter = width * c2;
+      double c2 = dot (biss, nnor);
+      double l = width / c2;
+      double emiter = width * c2;
       if (emiter < miter)
         emiter = miter;
       int nleftStNo, nleftEnNo;
@@ -638,8 +638,8 @@ Path::DoJoin (Shape * dest, float width, JoinType join, NR::Point pos, NR::Point
 	    }
       else
 	    {
-	      float s2 = cross (biss, nnor);
-	      float dec = (l - emiter) * c2 / s2;
+	      double s2 = cross (biss, nnor);
+	      double dec = (l - emiter) * c2 / s2;
 	      NR::Point tbiss=biss.ccw();
         
 	      x = pos + emiter * biss + dec * tbiss;
@@ -661,9 +661,9 @@ Path::DoJoin (Shape * dest, float width, JoinType join, NR::Point pos, NR::Point
       NR::Point biss;
       biss = pnor + nnor;
       StrokeNormalize (biss);
-      float c2 = dot (biss, nnor);
-      float l = width / c2;
-      float typ = dot (pnor, nnor);
+      double c2 = dot (biss, nnor);
+      double l = width / c2;
+      double typ = dot (pnor, nnor);
       if (typ >= 0)
 	    {
 	      x = pos + l * biss;
@@ -672,8 +672,8 @@ Path::DoJoin (Shape * dest, float width, JoinType join, NR::Point pos, NR::Point
 	    }
       else
 	    {
-	      float s2 = cross (biss, nnor);
-	      float dec = (l - width) * c2 / s2;
+	      double s2 = cross (biss, nnor);
+	      double dec = (l - width) * c2 / s2;
 	      NR::Point tbiss=biss.ccw();
         
         NR::Point mx = pos + width * biss;
@@ -699,17 +699,17 @@ Path::DoJoin (Shape * dest, float width, JoinType join, NR::Point pos, NR::Point
 }
 
 void
-Path::DoLeftJoin (Shape * dest, float width, JoinType join, NR::Point pos,
-                  NR::Point prev, NR::Point next, float miter, float prevL, float nextL,
-                  int &leftStNo, int &leftEnNo,int pathID,int pieceID,float tID)
+Path::DoLeftJoin (Shape * dest, double width, JoinType join, NR::Point pos,
+                  NR::Point prev, NR::Point next, double miter, double prevL, double nextL,
+                  int &leftStNo, int &leftEnNo,int pathID,int pieceID,double tID)
 {
   NR::Point pnor, nnor;
   pnor=prev.ccw();
   nnor=next.ccw();
-  float angSi = cross (next, prev);
+  double angSi = cross (next, prev);
   if (angSi > -0.0001 && angSi < 0.0001)
   {
-    float angCo = dot (prev, next);
+    double angCo = dot (prev, next);
     if (angCo > 0.9999)
     {
       // tout droit
@@ -739,12 +739,12 @@ Path::DoLeftJoin (Shape * dest, float width, JoinType join, NR::Point pos,
     /*		NR::Point     biss;
 		biss.x=next.x-prev.x;
 		biss.y=next.y-prev.y;
-		float   c2=cross(biss,next);
-		float   l=width/c2;
-		float		projn=l*(dot(biss,next));
-		float		projp=-l*(dot(biss,prev));
+		double   c2=cross(biss,next);
+		double   l=width/c2;
+		double		projn=l*(dot(biss,next));
+		double		projp=-l*(dot(biss,prev));
 		if ( projp <= 0.5*prevL && projn <= 0.5*nextL ) {
-			float   x,y;
+			double   x,y;
 			x=pos.x+l*biss.x;
 			y=pos.y+l*biss.y;
 			leftEnNo=leftStNo=dest->AddPoint(x,y);
@@ -783,9 +783,9 @@ Path::DoLeftJoin (Shape * dest, float width, JoinType join, NR::Point pos,
       NR::Point biss;
       biss = pnor + nnor;
       StrokeNormalize (biss);
-      float c2 = dot (biss, nnor);
-      float l = width / c2;
-      float emiter = width * c2;
+      double c2 = dot (biss, nnor);
+      double l = width / c2;
+      double emiter = width * c2;
       if (emiter < miter)
         emiter = miter;
       if (l <= emiter)
@@ -807,8 +807,8 @@ Path::DoLeftJoin (Shape * dest, float width, JoinType join, NR::Point pos,
 	    }
       else
 	    {
-	      float s2 = cross (biss, nnor);
-	      float dec = (l - emiter) * c2 / s2;
+	      double s2 = cross (biss, nnor);
+	      double dec = (l - emiter) * c2 / s2;
 	      NR::Point tbiss=biss.ccw();
         
 	      x = pos + emiter * biss + dec * tbiss;
@@ -845,9 +845,9 @@ Path::DoLeftJoin (Shape * dest, float width, JoinType join, NR::Point pos,
       NR::Point biss;
       biss = pnor + nnor;
       StrokeNormalize (biss);
-      float c2 = dot (biss, nnor);
-      float l = width / c2;
-      float typ = dot (pnor, nnor);
+      double c2 = dot (biss, nnor);
+      double l = width / c2;
+      double typ = dot (pnor, nnor);
       if (typ >= 0)
 	    {
 	      x = pos + l * biss;
@@ -856,8 +856,8 @@ Path::DoLeftJoin (Shape * dest, float width, JoinType join, NR::Point pos,
 	    }
       else
 	    {
-	      float s2 = cross (biss, nnor);
-	      float dec = (l - width) * c2 / s2;
+	      double s2 = cross (biss, nnor);
+	      double dec = (l - width) * c2 / s2;
 	      NR::Point tbiss=biss.ccw();
         
         NR::Point mx = pos + width * biss;
@@ -887,17 +887,17 @@ Path::DoLeftJoin (Shape * dest, float width, JoinType join, NR::Point pos,
   }
 }
 void
-Path::DoRightJoin (Shape * dest, float width, JoinType join, NR::Point pos,
-                   NR::Point prev, NR::Point next, float miter, float prevL,
-                   float nextL, int &rightStNo, int &rightEnNo,int pathID,int pieceID,float tID)
+Path::DoRightJoin (Shape * dest, double width, JoinType join, NR::Point pos,
+                   NR::Point prev, NR::Point next, double miter, double prevL,
+                   double nextL, int &rightStNo, int &rightEnNo,int pathID,int pieceID,double tID)
 {
   NR::Point pnor, nnor;
   pnor=prev.ccw();
   nnor=next.ccw();
-  float angSi = cross (next,prev);
+  double angSi = cross (next,prev);
   if (angSi > -0.0001 && angSi < 0.0001)
   {
-    float angCo = dot (prev, next);
+    double angCo = dot (prev, next);
     if (angCo > 0.9999)
     {
       // tout droit
@@ -936,9 +936,9 @@ Path::DoRightJoin (Shape * dest, float width, JoinType join, NR::Point pos,
       NR::Point biss;
       biss = pnor + nnor;
       StrokeNormalize (biss);
-      float c2 = dot (biss, nnor);
-      float l = width / c2;
-      float emiter = width * c2;
+      double c2 = dot (biss, nnor);
+      double l = width / c2;
+      double emiter = width * c2;
       if (emiter < miter)
         emiter = miter;
       if (l <= emiter)
@@ -960,8 +960,8 @@ Path::DoRightJoin (Shape * dest, float width, JoinType join, NR::Point pos,
 	    }
       else
 	    {
-	      float s2 = cross (biss, nnor);
-	      float dec = (l - emiter) * c2 / s2;
+	      double s2 = cross (biss, nnor);
+	      double dec = (l - emiter) * c2 / s2;
 	      NR::Point tbiss=biss.ccw();
         
 	      x = pos - emiter * biss - dec * tbiss;
@@ -998,9 +998,9 @@ Path::DoRightJoin (Shape * dest, float width, JoinType join, NR::Point pos,
       NR::Point biss;
       biss = pnor + nnor;
       StrokeNormalize (biss);
-      float c2 = dot (biss, nnor);
-      float l = width / c2;
-      float typ = dot (pnor, nnor);
+      double c2 = dot (biss, nnor);
+      double l = width / c2;
+      double typ = dot (pnor, nnor);
       if (typ >= 0)
 	    {
 	      x = pos - l * biss;
@@ -1009,8 +1009,8 @@ Path::DoRightJoin (Shape * dest, float width, JoinType join, NR::Point pos,
 	    }
       else
 	    {
-	      float s2 = cross (biss, nnor);
-	      float dec = (l - width) * c2 / s2;
+	      double s2 = cross (biss, nnor);
+	      double dec = (l - width) * c2 / s2;
 	      NR::Point tbiss=biss.ccw();
         
         NR::Point nsx = pos - width * biss - dec * tbiss;
@@ -1042,12 +1042,12 @@ Path::DoRightJoin (Shape * dest, float width, JoinType join, NR::Point pos,
     /*		NR::Point     biss;
 		biss=next.x-prev.x;
 		biss.y=next.y-prev.y;
-		float   c2=cross(next,biss);
-		float   l=width/c2;
-		float		projn=l*(dot(biss,next));
-		float		projp=-l*(dot(biss,prev));
+		double   c2=cross(next,biss);
+		double   l=width/c2;
+		double		projn=l*(dot(biss,next));
+		double		projp=-l*(dot(biss,prev));
 		if ( projp <= 0.5*prevL && projn <= 0.5*nextL ) {
-			float   x,y;
+			double   x,y;
 			x=pos.x+l*biss.x;
 			y=pos.y+l*biss.y;
 			rightEnNo=rightStNo=dest->AddPoint(x,y);
@@ -1077,7 +1077,7 @@ Path::DoRightJoin (Shape * dest, float width, JoinType join, NR::Point pos,
 
 
 void
-Path::RecRound (Shape * dest, int sNo, int eNo, NR::Point &iP, NR::Point &iS,NR::Point &iE, float tresh, int lev)
+Path::RecRound (Shape * dest, int sNo, int eNo, NR::Point &iP, NR::Point &iS,NR::Point &iE, double tresh, int lev)
 {
   if (lev <= 0)
   {
@@ -1085,7 +1085,7 @@ Path::RecRound (Shape * dest, int sNo, int eNo, NR::Point &iP, NR::Point &iS,NR:
     return;
   }
   NR::Point ps=iS-iP,pe=iE-iP;
-  float s = cross(pe,ps);
+  double s = cross(pe,ps);
   if (s < 0)
     s = -s;
   if (s < tresh)
@@ -1111,8 +1111,8 @@ Path::RecRound (Shape * dest, int sNo, int eNo, NR::Point &iP, NR::Point &iS,NR:
  */
 
 void
-Path::Stroke (Shape * dest, bool doClose, float width, JoinType join,
-              ButtType butt, float miter, int nbDash, one_dash * dashs,
+Path::Stroke (Shape * dest, bool doClose, double width, JoinType join,
+              ButtType butt, double miter, int nbDash, one_dash * dashs,
               bool justAdd)
 {
   if (nbDash <= 0)
@@ -1193,8 +1193,8 @@ Path::Stroke (Shape * dest, bool doClose, float width, JoinType join,
 }
 
 void
-Path::DoStroke (Shape * dest, bool doClose, float width, JoinType join,
-                ButtType butt, float miter, int nbDash, one_dash * dashs,
+Path::DoStroke (Shape * dest, bool doClose, double width, JoinType join,
+                ButtType butt, double miter, int nbDash, one_dash * dashs,
                 bool justAdd)
 {
   
@@ -1204,11 +1204,11 @@ Path::DoStroke (Shape * dest, bool doClose, float width, JoinType join,
     return;
   
   NR::Point curP, prevP, nextP;
-  float curW, prevW, nextW;
+  double curW, prevW, nextW;
   int curI, prevI, nextI;
   int upTo;
-  float curA, prevA, nextA;
-  float dashPos = 0, dashAbs = 0;
+  double curA, prevA, nextA;
+  double dashPos = 0, dashAbs = 0;
   int dashNo = 0;
   
   curI = 0;
@@ -1252,7 +1252,7 @@ Path::DoStroke (Shape * dest, bool doClose, float width, JoinType join,
       else
         prevW = 1;
       NR::Point diff=curP-prevP;
-      float dist =dot(diff,diff);
+      double dist =dot(diff,diff);
       if (dist > 0.001)
 	    {
 	      break;
@@ -1321,7 +1321,7 @@ Path::DoStroke (Shape * dest, bool doClose, float width, JoinType join,
       else
         nextW = 1;
       NR::Point diff=curP-nextP;
-      float dist =dot(diff,diff);
+      double dist =dot(diff,diff);
       if (dist > 0.001)
       {
         break;
@@ -1354,7 +1354,7 @@ Path::DoStroke (Shape * dest, bool doClose, float width, JoinType join,
   int lastLeft = -1, lastRight = -1;
   bool noStartJoin = false, inGap = true;
   NR::Point prevD, nextD;
-  float prevLe, nextLe;
+  double prevLe, nextLe;
   prevD = curP - prevP;
   nextD = nextP - curP;
   curA = 0;
@@ -1368,7 +1368,7 @@ Path::DoStroke (Shape * dest, bool doClose, float width, JoinType join,
   
   {
     int cDashNo = dashNo;
-    float nDashAbs = 0;
+    double nDashAbs = 0;
     do
     {
       if (dashAbs + (dashs[dashNo].length - dashPos) <= nDashAbs)
@@ -1458,7 +1458,7 @@ Path::DoStroke (Shape * dest, bool doClose, float width, JoinType join,
       else
         nextW = 1;
       NR::Point   diff=curP-nextP;
-      float dist =dot(diff,diff);
+      double dist =dot(diff,diff);
       if (dist > 0.001)
 	    {
 	      break;
@@ -1609,20 +1609,20 @@ Path::DoStroke (Shape * dest, bool doClose, float width, JoinType join,
 }
 
 void
-Path::DashTo (Shape * dest, dashTo_info * dTo, float &dashAbs, int &dashNo,
-              float &dashPos, bool & inGap, int &lastLeft, int &lastRight,
+Path::DashTo (Shape * dest, dashTo_info * dTo, double &dashAbs, int &dashNo,
+              double &dashPos, bool & inGap, int &lastLeft, int &lastRight,
               int nbDash, one_dash * dashs)
 {
   //      printf("%f %i %f %i -> %f\n",dashAbs,dashNo,dashPos,(inGap)?1:0,dTo->nDashAbs);
   NR::Point pnor=dTo->prevD.ccw();
   
-  float oDashAbs = dashAbs;
+  double oDashAbs = dashAbs;
   while (dashAbs < dTo->nDashAbs)
   {
     int cDashNo = dashNo;
     do
     {
-      float delta = dashs[dashNo].length - dashPos;
+      double delta = dashs[dashNo].length - dashPos;
       if (delta <= dTo->nDashAbs - dashAbs)
 	    {
 	      dashNo++;
@@ -1639,7 +1639,7 @@ Path::DashTo (Shape * dest, dashTo_info * dTo, float &dashAbs, int &dashNo,
 	      if (dashs[dashNo].length > 0)
         {
           NR::Point pos;
-          float nw;
+          double nw;
           dashAbs += delta;
           pos =
             ((dTo->nDashAbs - dashAbs) * dTo->prevP+

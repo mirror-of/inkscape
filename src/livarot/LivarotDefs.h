@@ -18,7 +18,7 @@ enum
   avl_ins_err = 3,
   shape_euler_err = 4,		// computations result in a non-eulerian graph, thus the function cannot do a proper polygon
   // despite the rounding sheme, this still happen with uber-complex graphs
-  // note that coordinates are stored in float => double precision for the computation is not even
+  // note that coordinates are stored in double => double precision for the computation is not even
   // enough to get exact results (need quadruple precision, i think).
   shape_input_err = 5		// the function was given an incorrect input (not a polygon, or not eulerian)
 };
@@ -72,7 +72,7 @@ typedef enum fill_typ FillRule;
 typedef struct one_dash
 {
   bool gap;
-  float length;
+  double length;
 }
 one_dash;
 
@@ -81,16 +81,16 @@ typedef struct std_color
 {
   uint32_t uCol;
   uint16_t iColA, iColR, iColG, iColB;
-  float fColA, fColR, fColG, fColB;
+  double fColA, fColR, fColG, fColB;
   uint32_t iColATab[256];
 }
 std_color;
 
 typedef struct grad_stop
 {
-  float at;
-  float ca, cr, cg, cb;
-  float iSize;
+  double at;
+  double ca, cr, cg, cb;
+  double iSize;
 }
 grad_stop;
 
@@ -100,9 +100,9 @@ typedef struct lin_grad
   int type;			// 0= gradient appears once
   // 1= repeats itself start-end/start-end/start-end...
   // 2= repeats itself start-end/end-start/start-end...
-  float u, v, w;		// u*x+v*y+w = position in the gradient (clipped to [0;1])
-//      float       caa,car,cag,cab; // color at gradient position 0
-//      float       cba,cbr,cbg,cbb; // color at gradient position 1
+  double u, v, w;		// u*x+v*y+w = position in the gradient (clipped to [0;1])
+//      double       caa,car,cag,cab; // color at gradient position 0
+//      double       cba,cbr,cbg,cbb; // color at gradient position 1
   int nbStop;
   grad_stop stops[2];
 }
@@ -114,8 +114,8 @@ typedef struct rad_grad
   int type;			// 0= gradient appears once
   // 1= repeats itself start-end/start-end/start-end...
   // 2= repeats itself start-end/end-start/start-end...
-  float mh, mv;			// center
-  float rxx, rxy, ryx, ryy;	// 1/radius
+  double mh, mv;			// center
+  double rxx, rxy, ryx, ryy;	// 1/radius
   int nbStop;
   grad_stop stops[2];
 }
@@ -134,7 +134,7 @@ typedef void (*GotoLigneColorFunc) (int pv, void *);	// move to v-coordinate pv 
 // an arbitrary shader
 typedef struct gen_color
 {
-  float colA, colR, colG, colB;
+  double colA, colR, colG, colB;
   InitColorFunc iFunc;
   NextPixelColorFunc npFunc;
   NextLigneColorFunc nlFunc;

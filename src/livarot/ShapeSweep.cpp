@@ -246,7 +246,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 //              cout << endl << endl;
 
     NR::Point ptX;
-      float ptL, ptR;
+      double ptL, ptR;
       SweepTree *intersL = NULL;
       SweepTree *intersR = NULL;
       int nPt = -1;
@@ -1019,7 +1019,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
 		printf("\n");*/
 
     NR::Point ptX;
-      float ptL, ptR;
+      double ptL, ptR;
       SweepTree *intersL = NULL;
       SweepTree *intersR = NULL;
       int nPt = -1;
@@ -1714,7 +1714,7 @@ Shape::TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff)
       if (tL)
 	{
         NR::Point atx;
-        float     atl, atr;
+        double     atl, atr;
 	  if (TesteIntersection (tL, t, atx, atl, atr, onlyDiff))
 	    {
 	      SweepEvent::AddInQueue (tL, t, atx, atl, atr, sEvts);
@@ -1727,7 +1727,7 @@ Shape::TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff)
       if (tR)
 	{
         NR::Point  atx;
-	  float atl, atr;
+	  double atl, atr;
 	  if (TesteIntersection (t, tR, atx, atl, atr, onlyDiff))
 	    {
 	      SweepEvent::AddInQueue (t, tR, atx, atl, atr, sEvts);
@@ -1736,7 +1736,7 @@ Shape::TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff)
     }
 }
 bool
-Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, float &atL, float &atR, bool onlyDiff)
+Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, double &atL, double &atR, bool onlyDiff)
 {
   int lSt = iL->src->aretes[iL->bord].st, lEn = iL->src->aretes[iL->bord].en;
   int rSt = iR->src->aretes[iR->bord].st, rEn = iR->src->aretes[iR->bord].en;
@@ -2035,7 +2035,7 @@ Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, float 
 }
 
 int
-Shape::PushIncidence (Shape * a, int cb, int pt, float theta)
+Shape::PushIncidence (Shape * a, int cb, int pt, double theta)
 {
   if (theta < 0 || theta > 1)
     return -1;
@@ -2558,7 +2558,7 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 
 bool
 Shape::TesteIntersection (Shape * ils, Shape * irs, int ilb, int irb,
-                          NR::Point &atx, float &atL, float &atR,
+                          NR::Point &atx, double &atL, double &atR,
 			  bool onlyDiff)
 {
   int lSt = ils->aretes[ilb].st, lEn = ils->aretes[ilb].en;
@@ -3099,7 +3099,7 @@ Shape::Validate (void)
       for (int j = i + 1; j < nbAr; j++)
 	{
         NR::Point atx;
-        float   atL, atR;
+        double   atL, atR;
 	  if (TesteIntersection (this, this, i, j, atx, atL, atR, false))
 	    {
 	      printf ("%i %i  %f %f \n", i, j, atx.pt[0],atx.pt[1]);
@@ -3360,15 +3360,15 @@ Shape::DoEdgeTo (Shape * iS, int iB, int iTo, bool direct, bool sens)
 	}
       else
 	{
-	  float bdl = iS->eData[iB].ilength;
+	  double bdl = iS->eData[iB].ilength;
     NR::Point bpx = iS->pData[iS->aretes[iB].st].rx;
 	  NR::Point bdx = iS->eData[iB].rdx;
 	  NR::Point psx = pts[aretes[ne].st].x;
 	  NR::Point pex = pts[aretes[ne].en].x;
         NR::Point psbx=psx-bpx;
         NR::Point pebx=pex-bpx;
-	  float pst = dot(psbx,bdx) * bdl;
-	  float pet = dot(pebx,bdx) * bdl;
+	  double pst = dot(psbx,bdx) * bdl;
+	  double pet = dot(pebx,bdx) * bdl;
 	  pst = iS->ebData[iB].tSt * (1 - pst) + iS->ebData[iB].tEn * pst;
 	  pet = iS->ebData[iB].tSt * (1 - pet) + iS->ebData[iB].tEn * pet;
 	  ebData[ne].tEn = pet;

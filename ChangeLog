@@ -1,3 +1,8 @@
+2004-01-15  Nathan Hurst <njh@mail.csse.monash.edu.au>
+
+	* src/livarot/* an ungodly number of changes for improved use of
+	NR::Point.  Const propagation.  Minor bugfixes.
+
 2004-01-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/widgets/paint-selector.cpp (sp_paint_selector_set_color_alpha,

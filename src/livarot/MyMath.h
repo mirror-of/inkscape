@@ -17,13 +17,13 @@
 
 typedef struct vec2
 {
-  float x, y;
+  double x, y;
 }
 vec2;
 
 typedef struct mat2
 {
-  float xx, xy, yx, yy;
+  double xx, xy, yx, yy;
 }
 mat2;
 
@@ -40,7 +40,7 @@ typedef struct mat2d
 mat2d;
 
 #define RotCCW(a) {\
-	float _t=(a).x;\
+	double _t=(a).x;\
 	(a).x=(a).y;\
 	(a).y=-_t;\
 }
@@ -49,7 +49,7 @@ mat2d;
 	(d).y=-(a).x;\
 }
 #define RotCW(a) {\
-	float _t=(a).x;\
+	double _t=(a).x;\
 	(a).x=-(a).y;\
 	(a).y=_t;\
 }
@@ -61,7 +61,7 @@ mat2d;
 #define Cross(a,b) (a).x*(b).x+(a).y*(b).y
 
 #define Normalize(a) { \
-	float _le=(a).x*(a).x+(a).y*(a).y; \
+	double _le=(a).x*(a).x+(a).y*(a).y; \
 	if ( _le > 0.0001 ) { \
 		_le=sqrt(_le); \
 		(a).x/=_le; \

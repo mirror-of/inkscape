@@ -30,7 +30,7 @@
 
 
 void
-Path::Simplify (float treshhold)
+Path::Simplify (double treshhold)
 {
   if (nbPt <= 1)
     return;
@@ -100,7 +100,7 @@ Path::Simplify (float treshhold)
 }
 
 void
-Path::DoSimplify (float treshhold)
+Path::DoSimplify (double treshhold)
 {
   if (nbPt <= 1)
     return;
@@ -280,7 +280,7 @@ Path::DoSimplify (float treshhold)
   nbPt = savNbPt;
 }
 
-bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
+bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
 {
   NR::Point start,end;
   // pour une coordonnee
@@ -358,8 +358,7 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
   // chord length method
   tk[0] = 0.0;
   {
-    NR::Point
-      prevP =start;
+    NR::Point prevP =start;
     for (int i = 1; i < nbPt; i++)
       {
 	if (back)
@@ -405,7 +404,7 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
 	diff.pt[1] = Yk[i] - prevP.pt[1];
 	prevP.pt[0] = Xk[i];
 	prevP.pt[1] = Yk[i];
-	float l =sqrt (dot(diff,diff));
+	const double l = NR::L2(diff);
 	tk[i] = tk[i - 1] + l;
       }
   }
@@ -487,7 +486,7 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
   cp1.pt[1] = P.pt[0];
   cp2.pt[1] = P.pt[1];
 
-  float
+  double
     delta =
     0;
   for (int i = 1; i < nbPt - 1; i++)
@@ -591,7 +590,7 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
       cp1.pt[1] = P.pt[0];
       cp2.pt[1] = P.pt[1];
 
-      float
+      double
 	ndelta =
 	0;
       for (int i = 1; i < nbPt - 1; i++)
@@ -629,8 +628,8 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
   return false;
 }
 
-float
-Path::RaffineTk (NR::Point pt, NR::Point p0, NR::Point p1, NR::Point p2, NR::Point p3, float it)
+double
+Path::RaffineTk (NR::Point pt, NR::Point p0, NR::Point p1, NR::Point p2, NR::Point p3, double it)
 {
   // Refinement of the tk values. 
   // Just one iteration of Newtow Raphson, given that we're approaching the curve anyway.
@@ -664,7 +663,7 @@ Path::RaffineTk (NR::Point pt, NR::Point p0, NR::Point p1, NR::Point p2, NR::Poi
 }
 
 void
-Path::Coalesce (float tresh)
+Path::Coalesce (double tresh)
 {
   if (descr_flags & descr_adding_bezier)
     CancelBezier ();
@@ -849,7 +848,7 @@ Path::Coalesce (float tresh)
 }
 
 void
-Path::DoCoalesce (Path * dest, float tresh)
+Path::DoCoalesce (Path * dest, double tresh)
 {
 
 

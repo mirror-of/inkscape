@@ -1035,8 +1035,8 @@ Shape::SortPointsRounded (int s, int e)
 
   int ppos = (s + e) / 2;
   int plast = ppos;
-  float pvalx = pData[ppos].rx.pt[0];
-  float pvaly = pData[ppos].rx.pt[1];
+  double pvalx = pData[ppos].rx.pt[0];
+  double pvaly = pData[ppos].rx.pt[1];
 
   int le = s, ri = e;
   while (le < ppos || ri > plast)
@@ -2142,7 +2142,7 @@ Shape::Inverse (int b)
     }
   if (HasBackData ())
     {
-      float swat = ebData[b].tSt;
+      double swat = ebData[b].tSt;
       ebData[b].tSt = ebData[b].tEn;
       ebData[b].tEn = swat;
     }

@@ -46,7 +46,7 @@ public:
   SweepTree *rightSweep;	// sweep element associated with the right edge 
 
   NR::Point posx;		// coordinates of the intersection
-  float tl, tr;			// coordinates of the intersection on the left edge (tl) and on the right edge (tr)
+  double tl, tr;			// coordinates of the intersection on the left edge (tl) and on the right edge (tr)
 
   int ind;			// index in the binary heap
 
@@ -55,7 +55,7 @@ public:
 
   // inits a SweepEvent structure
    void MakeNew (SweepTree * iLeft, SweepTree * iRight, NR::Point &iPt,
-		float itl, float itr);
+		double itl, double itr);
   // voids a SweepEvent structure
   void MakeDelete (void);
 
@@ -65,16 +65,16 @@ public:
   static void DestroyQueue (SweepEventQueue & queue);
   // add one intersection in the binary heap
   static SweepEvent *AddInQueue (SweepTree * iLeft, SweepTree * iRight,
-				 NR::Point &iPt, float itl, float itr,
+				 NR::Point &iPt, double itl, double itr,
 				 SweepEventQueue & queue);
   // the calling SweepEvent removes itself from the binary heap
   void SupprFromQueue (SweepEventQueue & queue);
   // look for the topmost intersection in the heap
-  static bool PeekInQueue (SweepTree * &iLeft, SweepTree * &iRight, NR::Point &oPt, float &itl, float &itr,
+  static bool PeekInQueue (SweepTree * &iLeft, SweepTree * &iRight, NR::Point &oPt, double &itl, double &itr,
 			   SweepEventQueue & queue);
   // extract the topmost intersection from the heap
   static bool ExtractFromQueue (SweepTree * &iLeft, SweepTree * &iRight,
-				NR::Point &oPt, float &itl, float &itr,
+				NR::Point &oPt, double &itl, double &itr,
 				SweepEventQueue & queue);
 
   // misc: change a SweepEvent structure's postion in the heap

@@ -55,7 +55,7 @@ class Shape
   friend class SweepEvent;
 public:
   // bounding box stuff
-  float leftX, topY, rightX, bottomY;
+  double leftX, topY, rightX, bottomY;
 
   // topological information: who links who?
   typedef struct dg_point
@@ -109,7 +109,7 @@ private:
     int nextBo;			// they are used to maintain a linked list of edge that start/end or intersect at
     // the current sweep position
     int curPoint, doneTo;
-    float curT;
+    double curT;
   }
   sweep_src_data;
   typedef struct sweep_dest_data
@@ -123,18 +123,18 @@ private:
   typedef struct raster_data
   {
     SweepTree *misc;		// pointer to the associated SweepTree* in the sweepline
-    float lastX, lastY, curX, curY;	// curX;curY is the current intersection of the edge with the sweepline
+    double lastX, lastY, curX, curY;	// curX;curY is the current intersection of the edge with the sweepline
     // lastX;lastY is the intersection with the previous sweepline
     bool sens;			// true if the edge goes down, false otherwise
-    float calcX;		// horizontal position of the intersection of the edge with the
+    double calcX;		// horizontal position of the intersection of the edge with the
     // previous sweepline
-    float dxdy, dydx;		// horizontal change per unit vertical move of the intersection with the sweepline
+    double dxdy, dydx;		// horizontal change per unit vertical move of the intersection with the sweepline
     int guess;
   }
   raster_data;
   typedef struct quick_raster_data
   {
-    float x;			// x-position on the sweepline
+    double x;			// x-position on the sweepline
     int bord;			// index of the edge
     int ind;
     bool process;
@@ -156,7 +156,7 @@ private:
   {
     int nextInc;		// next incidence in the linked list
     int pt;			// point incident to the edge (there is one list per edge)
-    float theta;		// coordinate of the incidence on the edge
+    double theta;		// coordinate of the incidence on the edge
   }
   incidenceData;
   typedef struct sTreeChange
@@ -180,21 +180,21 @@ private:
   typedef struct back_data
   {
     int pathID, pieceID;
-    float tSt, tEn;
+    double tSt, tEn;
   }
   back_data;
   typedef struct voronoi_point
   {				// info for points treated as points of a voronoi diagram (obtained by MakeShape())
-    float value;		// distance to source
+    double value;		// distance to source
     int winding;		// winding relatively to source
   }
   voronoi_point;
   typedef struct voronoi_edge
   {				// info for edges, treated as approximation of edges of the voronoi diagram
     int leF, riF;		// left and right site
-    float leStX, leStY, riStX, riStY;	// on the left side: (leStX,leStY) is the smallest vector from the source to st
+    double leStX, leStY, riStX, riStY;	// on the left side: (leStX,leStY) is the smallest vector from the source to st
     // etc...
-    float leEnX, leEnY, riEnX, riEnY;
+    double leEnX, leEnY, riEnX, riEnY;
   }
   voronoi_edge;
 
@@ -331,7 +331,7 @@ public:
   void CalcBBox (void);		// calc bounding box and sets leftX,rightX,topY and bottomY to their values
 
   // debug function: plots the graph (mac only)
-  void Plot (float ix, float iy, float ir, float mx, float my, bool doPoint,
+  void Plot (double ix, double iy, double ir, double mx, double my, bool doPoint,
 	     bool edgesNo, bool pointNo, bool doDir);
 
   // transforms a polygon in a "forme" structure, ie a set of contours, which can be holes (see ShapeUtils.h)
@@ -380,7 +380,7 @@ public:
   // create a graph that is an offseted version of the graph "of"
   // the offset is dec, with joins between edges of type "join" (see LivarotDefs.h)
   // the result is NOT a polygon; you need a subsequent call to ConvertToShape to get a real polygon
-  int MakeOffset (Shape * of, float dec, JoinType join, float miter);
+  int MakeOffset (Shape * of, double dec, JoinType join, double miter);
 
 private:
   // coz' i'm lazy
@@ -449,13 +449,13 @@ private:
   static int CmpToVert (NR::Point ax, NR::Point bx);	// edge direction comparison function
 
   void TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff);	// test if there is an intersection
-  bool TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, float &atL, float &atR, bool onlyDiff);
+  bool TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, double &atL, double &atR, bool onlyDiff);
   bool TesteIntersection (Shape * iL, Shape * iR, int ilb, int irb,
-			  NR::Point &atx, float &atL, float &atR,
+			  NR::Point &atx, double &atL, double &atR,
 			  bool onlyDiff);
   bool TesteAdjacency (Shape * iL, int ilb, NR::Point atx, int nPt,
 		       bool push);
-  int PushIncidence (Shape * a, int cb, int pt, float theta);
+  int PushIncidence (Shape * a, int cb, int pt, double theta);
   int CreateIncidence (Shape * a, int cb, int pt);
   void AssemblePoints (Shape * a);
   int AssemblePoints (int st, int en);
@@ -504,7 +504,7 @@ private:
   int ReFormeBezierTo (int bord, int curBord, Path * dest, Path * orig);
   void ReFormeBezierChunk (NR::Point px, NR::Point nx,
 			   Path * dest, int inBezier, int nbInterm,
-			   Path * from, int p, float ts, float te);
+			   Path * from, int p, double ts, double te);
 
 };
 

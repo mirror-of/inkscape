@@ -12,7 +12,7 @@
 
 #include <libnr/nr-point-fns.h>
 
-void            Path::ConvertWithBackData(float treshhold)
+void            Path::ConvertWithBackData(double treshhold)
 {
 	if ( descr_flags&descr_adding_bezier ) CancelBezier();
 	if ( descr_flags&descr_doing_subpath ) CloseSubpath(0);
@@ -20,8 +20,8 @@ void            Path::ConvertWithBackData(float treshhold)
 	SetBackData(true);
 	ResetPoints(descr_nb);
 	if ( descr_nb <= 0 ) return;
-  NR::Point curX;
-	float     curW;
+	NR::Point curX;
+	double     curW;
 	int       curP=1;
 	int       lastMoveTo=0;
 	
@@ -34,13 +34,13 @@ void            Path::ConvertWithBackData(float treshhold)
 	}
 	if ( weighted ) lastMoveTo=AddPoint(curX,curW,0,0.0,true); else lastMoveTo=AddPoint(curX,0,0.0,true);
 	
-		// et le reste, 1 par 1
+	// et le reste, 1 par 1
 	while ( curP < descr_nb ) {
 		path_descr*  curD=descr_data+curP;
 		int          nType=curD->flags&descr_type_mask;
 		bool         nWeight=curD->flags&descr_weighted;
-    NR::Point    nextX;
-		float        nextW;
+		NR::Point    nextX;
+		double        nextW;
 		if ( nType == descr_forced ) {
 			if ( weighted ) AddForcedPoint(curX,curW,curP,1.0); else AddForcedPoint(curX,curP,1.0);
 			curP++;
@@ -99,12 +99,27 @@ void            Path::ConvertWithBackData(float treshhold)
 			path_descr* intermPoints=curD;
 			
 			if ( nbInterm <= 0 ) {
-      } else if ( nbInterm >= 1 ) {
-        NR::Point   bx=curX;
-        NR::Point cx=curX;
-        NR::Point dx=curX;
-        float       bw=curW,cw=curW,dw=curW;
+			} else if ( nbInterm >= 1 ) {
+				NR::Point   bx=curX;
+				NR::Point cx=curX;
+				NR::Point dx=curX;
+				double       bw=curW,cw=curW,dw=curW;
 					
+				dx=intermPoints->d.i.p;
+				if ( nWeight ) {
+					dw=intermPoints->d.i.w;
+				} else {
+					dw=1;
+				}
+				intermPoints++;
+					
+				cx=2*bx-dx;
+				cw=2*bw-dw;
+					
+				for (int k=0;k<nbInterm-1;k++) {
+					bx=cx;bw=cw;
+					cx=dx;cw=dw;
+						
 					dx=intermPoints->d.i.p;
 					if ( nWeight ) {
 						dw=intermPoints->d.i.w;
@@ -112,72 +127,57 @@ void            Path::ConvertWithBackData(float treshhold)
 						dw=1;
 					}
 					intermPoints++;
-					
-					cx=2*bx-dx;
-					cw=2*bw-dw;
-					
-					for (int k=0;k<nbInterm-1;k++) {
-						bx=cx;bw=cw;
-						cx=dx;cw=dw;
 						
-						dx=intermPoints->d.i.p;
-						if ( nWeight ) {
-							dw=intermPoints->d.i.w;
-						} else {
-							dw=1;
-						}
-						intermPoints++;
-						
-            NR::Point  stx;
-            stx=(bx+cx)/2;
-						float  stw=(bw+cw)/2;
-						if ( k > 0 ) {
-							if ( weighted ) AddPoint(stx,stw,curP-1+k,1.0,false); else AddPoint(stx,curP-1+k,1.0,false);
-						}
-						
-						if ( weighted ) {
-              NR::Point mx;
-              mx=(cx+dx)/2;
-							RecBezierTo(cx,cw,stx,stw,mx,(cw+dw)/2,treshhold,8,0.0,1.0,curP+k);
-						} else {
-              NR::Point mx;
-              mx=(cx+dx)/2;
-							RecBezierTo(cx,stx,mx,treshhold,8,0.0,1.0,curP+k);
-						}
+					NR::Point  stx;
+					stx=(bx+cx)/2;
+					double  stw=(bw+cw)/2;
+					if ( k > 0 ) {
+						if ( weighted ) AddPoint(stx,stw,curP-1+k,1.0,false); else AddPoint(stx,curP-1+k,1.0,false);
 					}
-					{
-						bx=cx;bw=cw;
-						cx=dx;cw=dw;
 						
-						dx=nextX;
-						if ( nWeight ) {
-							dw=nextW;
-						} else {
-							dw=1;
-						}
-						dx=2*dx-cx;
-						dw=2*dw-cw;
-						
-            NR::Point  stx;
-            stx=(bx+cx)/2;
-						float  stw=(bw+cw)/2;
-						
-						if ( nbInterm > 1 ) {
-							if ( weighted ) AddPoint(stx,stw,curP+nbInterm-2,1.0,false); else AddPoint(stx,curP+nbInterm-2,1.0,false);
-						}
-						
-						if ( weighted ) {
-              NR::Point mx;
-              mx=(cx+dx)/2;
-							RecBezierTo(cx,cw,stx,stw,mx,(cw+dw)/2,treshhold,8,0.0,1.0,curP+nbInterm-1);
-						} else {
-              NR::Point mx;
-              mx=(cx+dx)/2;
-							RecBezierTo(cx,stx,mx,treshhold,8,0.0,1.0,curP+nbInterm-1);
-						}
+					if ( weighted ) {
+						NR::Point mx;
+						mx=(cx+dx)/2;
+						RecBezierTo(cx,cw,stx,stw,mx,(cw+dw)/2,treshhold,8,0.0,1.0,curP+k);
+					} else {
+						NR::Point mx;
+						mx=(cx+dx)/2;
+						RecBezierTo(cx,stx,mx,treshhold,8,0.0,1.0,curP+k);
 					}
-					
 				}
+				{
+					bx=cx;bw=cw;
+					cx=dx;cw=dw;
+						
+					dx=nextX;
+					if ( nWeight ) {
+						dw=nextW;
+					} else {
+						dw=1;
+					}
+					dx=2*dx-cx;
+					dw=2*dw-cw;
+						
+					NR::Point  stx;
+					stx=(bx+cx)/2;
+					double  stw=(bw+cw)/2;
+						
+					if ( nbInterm > 1 ) {
+						if ( weighted ) AddPoint(stx,stw,curP+nbInterm-2,1.0,false); else AddPoint(stx,curP+nbInterm-2,1.0,false);
+					}
+						
+					if ( weighted ) {
+						NR::Point mx;
+						mx=(cx+dx)/2;
+						RecBezierTo(cx,cw,stx,stw,mx,(cw+dw)/2,treshhold,8,0.0,1.0,curP+nbInterm-1);
+					} else {
+						NR::Point mx;
+						mx=(cx+dx)/2;
+						RecBezierTo(cx,stx,mx,treshhold,8,0.0,1.0,curP+nbInterm-1);
+					}
+				}
+					
+			}
 			
 			
 			if ( weighted ) AddPoint(nextX,nextW,curP-1+nbInterm,1.0,false); else AddPoint(nextX,curP-1+nbInterm,1.0,false);
@@ -189,7 +189,7 @@ void            Path::ConvertWithBackData(float treshhold)
 		curW=nextW;
 	}
 }
-void            Path::ConvertForOffset(float treshhold,Path* orig,float off_dec)
+void            Path::ConvertForOffset(double treshhold,Path* orig,double off_dec)
 {
 	if ( descr_flags&descr_adding_bezier ) CancelBezier();
 	if ( descr_flags&descr_doing_subpath ) CloseSubpath(0);
@@ -197,8 +197,8 @@ void            Path::ConvertForOffset(float treshhold,Path* orig,float off_dec)
 	SetBackData(true);
 	ResetPoints(descr_nb);
 	if ( descr_nb <= 0 ) return;
-  NR::Point curX;
-	float     curW;
+	NR::Point curX;
+	double     curW;
 	int       curP=1;
 	int       lastMoveTo=0;
 	
@@ -215,13 +215,13 @@ void            Path::ConvertForOffset(float treshhold,Path* orig,float off_dec)
 	off_data.orig=orig;
 	off_data.off_dec=off_dec;
 	
-		// et le reste, 1 par 1
+	// et le reste, 1 par 1
 	while ( curP < descr_nb ) {
 		path_descr*  curD=descr_data+curP;
 		int          nType=curD->flags&descr_type_mask;
 		bool         nWeight=curD->flags&descr_weighted;
-    NR::Point    nextX;
-		float        nextW;
+		NR::Point    nextX;
+		double        nextW;
 		if ( nType == descr_forced ) {
 			AddForcedPoint(curX,curP,1.0);
 			curP++;
@@ -281,11 +281,26 @@ void            Path::ConvertForOffset(float treshhold,Path* orig,float off_dec)
 			
 			if ( nbInterm <= 0 ) {
 			} else if ( nbInterm >= 1 ) {
-        NR::Point   bx=curX;
-        NR::Point cx=curX;
-        NR::Point dx=curX;
-        float       bw=curW,cw=curW,dw=curW;
+				NR::Point   bx=curX;
+				NR::Point cx=curX;
+				NR::Point dx=curX;
+				double       bw=curW,cw=curW,dw=curW;
 					
+				dx=intermPoints->d.i.p;
+				if ( nWeight ) {
+					dw=intermPoints->d.i.w;
+				} else {
+					dw=1;
+				}
+				intermPoints++;
+					
+				cx=2*bx-dx;
+				cw=2*bw-dw;
+					
+				for (int k=0;k<nbInterm-1;k++) {
+					bx=cx;bw=cw;
+					cx=dx;cw=dw;
+						
 					dx=intermPoints->d.i.p;
 					if ( nWeight ) {
 						dw=intermPoints->d.i.w;
@@ -293,78 +308,63 @@ void            Path::ConvertForOffset(float treshhold,Path* orig,float off_dec)
 						dw=1;
 					}
 					intermPoints++;
-					
-					cx=2*bx-dx;
-					cw=2*bw-dw;
-					
-					for (int k=0;k<nbInterm-1;k++) {
-						bx=cx;bw=cw;
-						cx=dx;cw=dw;
 						
-						dx=intermPoints->d.i.p;
-						if ( nWeight ) {
-							dw=intermPoints->d.i.w;
-						} else {
-							dw=1;
-						}
-						intermPoints++;
-						
-            NR::Point  stx;
-            stx=(bx+cx)/2;
-//						float  stw=(bw+cw)/2;
-						if ( k > 0 ) {
-							AddPoint(stx,curP-1+k,1.0,false);
-						}
-						
-						off_data.piece=intermPoints->associated;
-						off_data.tSt=intermPoints->tSt;
-						off_data.tEn=intermPoints->tEn;
-						if ( intermPoints->associated >= 0 ) {
-              NR::Point mx;
-              mx=(cx+dx)/2;
-							RecBezierTo(cx,stx,mx,treshhold,8,0.0,1.0,curP+k,off_data);
-						} else {
-              NR::Point mx;
-              mx=(cx+dx)/2;
-							RecBezierTo(cx,stx,mx,treshhold,8,0.0,1.0,curP+k);
-						}
+					NR::Point  stx;
+					stx=(bx+cx)/2;
+//						double  stw=(bw+cw)/2;
+					if ( k > 0 ) {
+						AddPoint(stx,curP-1+k,1.0,false);
 					}
-					{
-						bx=cx;bw=cw;
-						cx=dx;cw=dw;
 						
-						dx=nextX;
-						if ( nWeight ) {
-							dw=nextW;
-						} else {
-							dw=1;
-						}
-						dx=2*dx-cx;
-						dw=2*dw-cw;
-						
-            NR::Point  stx;
-            stx=(bx+cx)/2;
-//						float  stw=(bw+cw)/2;
-						
-						if ( nbInterm > 1 ) {
-							AddPoint(stx,curP+nbInterm-2,1.0,false);
-						}
-						
-						off_data.piece=curD->associated;
-						off_data.tSt=curD->tSt;
-						off_data.tEn=curD->tEn;
-						if ( curD->associated >= 0 ) {
-              NR::Point mx;
-              mx=(cx+dx)/2;
-							RecBezierTo(cx,stx,mx,treshhold,8,0.0,1.0,curP+nbInterm-1,off_data);
-						} else {
-              NR::Point mx;
-              mx=(cx+dx)/2;
-							RecBezierTo(cx,stx,mx,treshhold,8,0.0,1.0,curP+nbInterm-1);
-						}
+					off_data.piece=intermPoints->associated;
+					off_data.tSt=intermPoints->tSt;
+					off_data.tEn=intermPoints->tEn;
+					if ( intermPoints->associated >= 0 ) {
+						NR::Point mx;
+						mx=(cx+dx)/2;
+						RecBezierTo(cx,stx,mx,treshhold,8,0.0,1.0,curP+k,off_data);
+					} else {
+						NR::Point mx;
+						mx=(cx+dx)/2;
+						RecBezierTo(cx,stx,mx,treshhold,8,0.0,1.0,curP+k);
 					}
-					
 				}
+				{
+					bx=cx;bw=cw;
+					cx=dx;cw=dw;
+						
+					dx=nextX;
+					if ( nWeight ) {
+						dw=nextW;
+					} else {
+						dw=1;
+					}
+					dx=2*dx-cx;
+					dw=2*dw-cw;
+						
+					NR::Point  stx;
+					stx=(bx+cx)/2;
+//						double  stw=(bw+cw)/2;
+						
+					if ( nbInterm > 1 ) {
+						AddPoint(stx,curP+nbInterm-2,1.0,false);
+					}
+						
+					off_data.piece=curD->associated;
+					off_data.tSt=curD->tSt;
+					off_data.tEn=curD->tEn;
+					if ( curD->associated >= 0 ) {
+						NR::Point mx;
+						mx=(cx+dx)/2;
+						RecBezierTo(cx,stx,mx,treshhold,8,0.0,1.0,curP+nbInterm-1,off_data);
+					} else {
+						NR::Point mx;
+						mx=(cx+dx)/2;
+						RecBezierTo(cx,stx,mx,treshhold,8,0.0,1.0,curP+nbInterm-1);
+					}
+				}
+					
+			}
 			
 			
 			AddPoint(nextX,curP-1+nbInterm,1.0,false);
@@ -376,7 +376,7 @@ void            Path::ConvertForOffset(float treshhold,Path* orig,float off_dec)
 		curW=nextW;
 	}
 }
-void            Path::Convert(float treshhold)
+void            Path::Convert(double treshhold)
 {
 	if ( descr_flags&descr_adding_bezier ) CancelBezier();
 	if ( descr_flags&descr_doing_subpath ) CloseSubpath(0);
@@ -384,8 +384,8 @@ void            Path::Convert(float treshhold)
 	SetBackData(false);
 	ResetPoints(descr_nb);
 	if ( descr_nb <= 0 ) return;
-  NR::Point curX;
-	float     curW;
+	NR::Point curX;
+	double     curW;
 	int       curP=1;
 	int       lastMoveTo=0;
 	
@@ -399,13 +399,13 @@ void            Path::Convert(float treshhold)
 	if ( weighted ) lastMoveTo=AddPoint(curX,curW,true); else lastMoveTo=AddPoint(curX,true);
 	(descr_data)->associated=lastMoveTo;
 	
-		// et le reste, 1 par 1
+	// et le reste, 1 par 1
 	while ( curP < descr_nb ) {
 		path_descr*  curD=descr_data+curP;
 		int          nType=curD->flags&descr_type_mask;
 		bool         nWeight=curD->flags&descr_weighted;
-    NR::Point    nextX;
-		float        nextW;
+		NR::Point    nextX;
+		double        nextW;
 		if ( nType == descr_forced ) {
 			if ( weighted ) (curD)->associated=AddForcedPoint(curX,curW); else (curD)->associated=AddForcedPoint(curX);
 			curP++;
@@ -518,8 +518,8 @@ void            Path::Convert(float treshhold)
 			
 			if ( nbInterm <= 0 ) {
 			} else if ( nbInterm == 1 ) {
-        NR::Point  midX;
-				float midW;
+				NR::Point  midX;
+				double midW;
 				midX=intermPoints->d.i.p;
 				if ( nWeight ) {
 					midW=intermPoints->d.i.w;
@@ -532,10 +532,10 @@ void            Path::Convert(float treshhold)
 					RecBezierTo(midX,curX,nextX,treshhold,8);
 				}
 			} else if ( nbInterm > 1 ) {
-        NR::Point   bx=curX;
-        NR::Point cx=curX;
-        NR::Point dx=curX;
-        float       bw=curW,cw=curW,dw=curW;
+				NR::Point   bx=curX;
+				NR::Point cx=curX;
+				NR::Point dx=curX;
+				double       bw=curW,cw=curW,dw=curW;
 								
 				dx=intermPoints->d.i.p;
 				if ( nWeight ) {
@@ -560,9 +560,9 @@ void            Path::Convert(float treshhold)
 					}
 					intermPoints++;
 					
-          NR::Point  stx;
-          stx=(bx+cx)/2;
-					float  stw=(bw+cw)/2;
+					NR::Point  stx;
+					stx=(bx+cx)/2;
+					double  stw=(bw+cw)/2;
 					if ( k > 0 ) {
 						if ( weighted ) (intermPoints-2)->associated=AddPoint(stx,stw,false); else (intermPoints-2)->associated=AddPoint(stx,false);
 						if ( (intermPoints-2)->associated < 0 ) {
@@ -575,12 +575,12 @@ void            Path::Convert(float treshhold)
 					}
 					
 					if ( weighted ) {
-            NR::Point mx;
-            mx=(cx+dx)/2;
+						NR::Point mx;
+						mx=(cx+dx)/2;
 						RecBezierTo(cx,cw,stx,stw,mx,(cw+dw)/2,treshhold,8);
 					} else {
-            NR::Point mx;
-            mx=(cx+dx)/2;
+						NR::Point mx;
+						mx=(cx+dx)/2;
 						RecBezierTo(cx,stx,mx,treshhold,8);
 					}
 				}
@@ -597,9 +597,9 @@ void            Path::Convert(float treshhold)
 					dx=2*dx-cx;
 					dw=2*dw-cw;
 					
-          NR::Point  stx;
-          stx=(bx+cx)/2;
-					float  stw=(bw+cw)/2;
+					NR::Point  stx;
+					stx=(bx+cx)/2;
+					double  stw=(bw+cw)/2;
 					
 					if ( weighted ) (intermPoints-1)->associated=AddPoint(stx,stw,false); else (intermPoints-1)->associated=AddPoint(stx,false);
 					if ( (intermPoints-1)->associated < 0 ) {
@@ -611,12 +611,12 @@ void            Path::Convert(float treshhold)
 					}
 					
 					if ( weighted ) {
-            NR::Point mx;
-            mx=(cx+dx)/2;
+						NR::Point mx;
+						mx=(cx+dx)/2;
 						RecBezierTo(cx,cw,stx,stw,mx,(cw+dw)/2,treshhold,8);
 					} else {
-            NR::Point mx;
-            mx=(cx+dx)/2;
+						NR::Point mx;
+						mx=(cx+dx)/2;
 						RecBezierTo(cx,stx,mx,treshhold,8);
 					}
 				}
@@ -637,7 +637,7 @@ void            Path::Convert(float treshhold)
 		curW=nextW;
 	}
 }
-void            Path::ConvertEvenLines(float treshhold)
+void            Path::ConvertEvenLines(double treshhold)
 {
 	if ( descr_flags&descr_adding_bezier ) CancelBezier();
 	if ( descr_flags&descr_doing_subpath ) CloseSubpath(0);
@@ -645,8 +645,8 @@ void            Path::ConvertEvenLines(float treshhold)
 	SetBackData(false);
 	ResetPoints(descr_nb);
 	if ( descr_nb <= 0 ) return;
-  NR::Point curX;
-	float    curW;
+	NR::Point curX;
+	double    curW;
 	int      curP=1;
 	int      lastMoveTo=0;
 	
@@ -660,13 +660,13 @@ void            Path::ConvertEvenLines(float treshhold)
 	if ( weighted ) lastMoveTo=AddPoint(curX,curW,true); else lastMoveTo=AddPoint(curX,true);
 	(descr_data)->associated=lastMoveTo;
 	
-		// et le reste, 1 par 1
+	// et le reste, 1 par 1
 	while ( curP < descr_nb ) {
 		path_descr*  curD=descr_data+curP;
 		int          nType=curD->flags&descr_type_mask;
 		bool         nWeight=curD->flags&descr_weighted;
-    NR::Point    nextX;
-		float        nextW;
+		NR::Point    nextX;
+		double        nextW;
 		if ( nType == descr_forced ) {
 			if ( weighted ) (curD)->associated=AddForcedPoint(curX,curW); else (curD)->associated=AddForcedPoint(curX);
 			curP++;
@@ -682,13 +682,11 @@ void            Path::ConvertEvenLines(float treshhold)
 				nextX=((path_lineto_w*)pts)[lastMoveTo].p;
 				nextW=((path_lineto_w*)pts)[lastMoveTo].w;
 				{
-          NR::Point nexcur=nextX-curX;
-					float segL=sqrt(dot(nexcur,nexcur));
+					NR::Point nexcur=nextX-curX;
+					const double segL=NR::L2(nexcur);
 					if ( segL > treshhold ) {
-						for (float i=treshhold;i<segL;i+=treshhold) {
-              NR::Point  nX;
-              nX=(segL-i)*curX+i*nextX;
-                  nX/=segL;
+						for (double i=treshhold;i<segL;i+=treshhold) {
+							NR::Point  nX=((segL-i)*curX+i*nextX)/segL;
 							AddPoint(nX,((segL-i)*curW+i*nextW)/segL);
 						}
 					}
@@ -704,14 +702,14 @@ void            Path::ConvertEvenLines(float treshhold)
 			} else {
 				nextX=((path_lineto*)pts)[lastMoveTo].p;
 				{
-          NR::Point nexcur;
-          nexcur=nextX-curX;
-					float segL=sqrt(dot(nexcur,nexcur));
+					NR::Point nexcur;
+					nexcur=nextX-curX;
+					const double segL=NR::L2(nexcur);
 					if ( segL > treshhold ) {
-						for (float i=treshhold;i<segL;i+=treshhold) {
-              NR::Point  nX;
-              nX=(segL-i)*curX+i*nextX;
-              nX/=segL;
+						for (double i=treshhold;i<segL;i+=treshhold) {
+							NR::Point  nX;
+							nX=(segL-i)*curX+i*nextX;
+							nX/=segL;
 							AddPoint(nX);
 						}
 					}
@@ -730,14 +728,11 @@ void            Path::ConvertEvenLines(float treshhold)
 			nextX=curD->d.l.p;
 			if ( nWeight ) nextW=curD->d.l.w; else nextW=1;
 			if ( weighted ) {
-        NR::Point nexcur;
-        nexcur=nextX-curX;
-        float segL=sqrt(dot(nexcur,nexcur));
+				NR::Point nexcur=nextX-curX;
+				const double segL=NR::L2(nexcur);
 				if ( segL > treshhold ) {
-					for (float i=treshhold;i<segL;i+=treshhold) {
-            NR::Point  nX;
-            nX=(segL-i)*curX+i*nextX;
-            nX/=segL;
+					for (double i=treshhold;i<segL;i+=treshhold) {
+						NR::Point  nX = ((segL-i)*curX+i*nextX)/segL;
 						AddPoint(nX,((segL-i)*curW+i*nextW)/segL);
 					}
 				}
@@ -750,15 +745,12 @@ void            Path::ConvertEvenLines(float treshhold)
 					}
 				}
 			} else {
-        NR::Point nexcur;
-        nexcur=nextX-curX;
-        float segL=sqrt(dot(nexcur,nexcur));
+				NR::Point nexcur = nextX-curX;
+				const double segL = L2(nexcur);
 				if ( segL > treshhold ) {
-					for (float i=treshhold;i<segL;i+=treshhold) {
-            NR::Point  nX;
-            nX=(segL-i)*curX+i*nextX;
-            nX/=segL;
-					AddPoint(nX);
+					for (double i=treshhold;i<segL;i+=treshhold) {
+						NR::Point  nX=((segL-i)*curX+i*nextX)/segL;
+						AddPoint(nX);
 					}
 				}
 				curD->associated=AddPoint(nextX,false);
@@ -836,9 +828,8 @@ void            Path::ConvertEvenLines(float treshhold)
 			
 			if ( nbInterm <= 0 ) {
 			} else if ( nbInterm == 1 ) {
-        NR::Point  midX;
-				float midW;
-				midX=intermPoints->d.i.p;
+				double midW;
+				NR::Point  midX=intermPoints->d.i.p;
 				if ( nWeight ) {
 					midW=intermPoints->d.i.w;
 				} else {
@@ -850,8 +841,8 @@ void            Path::ConvertEvenLines(float treshhold)
 					RecBezierTo(midX,curX,nextX,treshhold,8,4*treshhold);
 				}
 			} else if ( nbInterm > 1 ) {
-        NR::Point   bx=curX,cx=curX,dx=curX;
-        float       bw=curW,cw=curW,dw=curW;
+				NR::Point   bx=curX,cx=curX,dx=curX;
+				double       bw=curW,cw=curW,dw=curW;
 								
 				dx=intermPoints->d.i.p;
 				if ( nWeight ) {
@@ -876,9 +867,8 @@ void            Path::ConvertEvenLines(float treshhold)
 					}
 					intermPoints++;
 					
-          NR::Point  stx;
-          stx=(bx+cx)/2;
-					float  stw=(bw+cw)/2;
+					NR::Point  stx = (bx+cx)/2;
+					double  stw=(bw+cw)/2;
 					if ( k > 0 ) {
 						if ( weighted ) (intermPoints-2)->associated=AddPoint(stx,stw,false); else (intermPoints-2)->associated=AddPoint(stx,false);
 						if ( (intermPoints-2)->associated < 0 ) {
@@ -891,12 +881,10 @@ void            Path::ConvertEvenLines(float treshhold)
 					}
 					
 					if ( weighted ) {
-            NR::Point mx;
-            mx=(cx+dx)/2;
+						const NR::Point mx=(cx+dx)/2;
 						RecBezierTo(cx,cw,stx,stw,mx,(cw+dw)/2,treshhold,8,4*treshhold);
 					} else {
-            NR::Point mx;
-            mx=(cx+dx)/2;
+						const NR::Point mx=(cx+dx)/2;
 						RecBezierTo(cx,stx,mx,treshhold,8,4*treshhold);
 					}
 				}
@@ -913,9 +901,8 @@ void            Path::ConvertEvenLines(float treshhold)
 					dx=2*dx-cx;
 					dw=2*dw-cw;
 					
-          NR::Point  stx;
-          stx=(bx+cx)/2;
-					float  stw=(bw+cw)/2;
+					const NR::Point  stx = (bx+cx)/2;
+					double  stw=(bw+cw)/2;
 					
 					if ( weighted ) (intermPoints-1)->associated=AddPoint(stx,stw,false); else (intermPoints-1)->associated=AddPoint(stx,false);
 					if ( (intermPoints-1)->associated < 0 ) {
@@ -927,12 +914,10 @@ void            Path::ConvertEvenLines(float treshhold)
 					}
 					
 					if ( weighted ) {
-            NR::Point mx;
-            mx=(cx+dx)/2;
+						const NR::Point mx = (cx+dx)/2;
 						RecBezierTo(cx,cw,stx,stw,mx,(cw+dw)/2,treshhold,8,4*treshhold);
 					} else {
-            NR::Point mx;
-            mx=(cx+dx)/2;
+						const NR::Point mx = (cx+dx)/2;
 						RecBezierTo(cx,stx,mx,treshhold,8,4*treshhold);
 					}
 				}
@@ -977,49 +962,48 @@ void						Path::PrevPoint(int i,NR::Point &oPt)
 		PrevPoint(i-1,oPt);
 	}
 }
-void            Path::QuadraticPoint(float t,NR::Point &oPt,NR::Point &iS,NR::Point &iM,NR::Point &iE)
+void            Path::QuadraticPoint(double t, NR::Point &oPt, 
+				     const NR::Point &iS, const NR::Point &iM, const NR::Point &iE)
 {
-  NR::Point ax,bx,cx;
-	ax=iE-2*iM+iS;
-	bx=2*iM-2*iS;
-	cx=iS;
+	NR::Point ax = iE-2*iM+iS;
+	NR::Point bx = 2*iM-2*iS;
+	NR::Point cx = iS;
 	
-	oPt=t*t*ax+t*bx+cx;
+	oPt = t*t*ax+t*bx+cx;
 }
-void            Path::CubicTangent(float t,NR::Point &oPt,NR::Point &iS,NR::Point &isD,NR::Point &iE,NR::Point &ieD)
+void            Path::CubicTangent(double t, NR::Point &oPt, const NR::Point &iS, const NR::Point &isD, const NR::Point &iE, const NR::Point &ieD)
 {
-  NR::Point ax,bx,cx,dx;
-	ax=ieD-2*iE+2*iS+isD;
-	bx=3*iE-ieD-2*isD-3*iS;
-	cx=isD;
-	dx=iS;
+	NR::Point ax = ieD-2*iE+2*iS+isD;
+	NR::Point bx = 3*iE-ieD-2*isD-3*iS;
+	NR::Point cx = isD;
+	NR::Point dx = iS;
 	
-	oPt=3*t*t*ax+2*t*bx+cx;
+	oPt = 3*t*t*ax+2*t*bx+cx;
 }
-void            Path::ArcAngles(NR::Point &iS,NR::Point &iE,float rx,float ry,float angle,bool large,bool wise,float &sang,float &eang)
+void            Path::ArcAngles( const NR::Point &iS, const NR::Point &iE,double rx,double ry,double angle,bool large,bool wise,double &sang,double &eang)
 {
-  NR::Point  dr;
-  ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
+	NR::Point  dr;
+	ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
 }
-void            Path::ArcAnglesAndCenter(NR::Point &iS,NR::Point &iE,float rx,float ry,float angle,bool large,bool wise,float &sang,float &eang,NR::Point &dr)
+void Path::ArcAnglesAndCenter(const NR::Point &iS, const NR::Point &iE,
+			      double rx, double ry, double angle,
+			      bool large, bool wise,
+			      double &sang, double &eang, NR::Point &dr)
 {
-  NR::Point   se=iE-iS;
-  NR::Point   ca(cos(angle),sin(angle));
-  NR::Point   cse(dot(se,ca),cross(se,ca));
-	cse.pt[0]/=rx;
-  cse.pt[1]/=ry;
-	float   l=dot(cse,cse);
-	float   d=1-l/4;
-	if ( d < 0 ) d=0;
-	d=sqrt(d);
-  NR::Point   csd;
-  csd=cse.ccw();
+	NR::Point se = iE-iS;
+	NR::Point ca(cos(angle),sin(angle));
+	NR::Point cse(dot(se,ca),cross(se,ca));
+	cse.pt[0] /= rx;
+	cse.pt[1] /= ry;
+	double   l = dot(cse,cse);
+	const double d = sqrt(std::max(1-l/4, 0.0));
+	NR::Point   csd = cse.ccw();
 	l=sqrt(l);
 	csd/=l;
 	csd*=d;
-	
-  NR::Point  ra;
-  ra=-(csd+0.5*cse);
+  
+	NR::Point  ra;
+	ra=-(csd+0.5*cse);
 	if ( ra.pt[0] <= -1 ) {
 		sang=M_PI;
 	} else if ( ra.pt[0] >= 1 ) {
@@ -1028,7 +1012,7 @@ void            Path::ArcAnglesAndCenter(NR::Point &iS,NR::Point &iE,float rx,fl
 		sang=acos(ra.pt[0]);
 		if ( ra.pt[1] < 0 ) sang=2*M_PI-sang;
 	}
-  ra=-csd+0.5*cse;
+	ra=-csd+0.5*cse;
 	if ( ra.pt[0] <= -1 ) {
 		eang=M_PI;
 	} else if ( ra.pt[0] >= 1 ) {
@@ -1039,129 +1023,124 @@ void            Path::ArcAnglesAndCenter(NR::Point &iS,NR::Point &iE,float rx,fl
 	}
 	
 	csd.pt[0]*=rx;csd.pt[1]*=ry;
-  ca.pt[1]=-ca.pt[1]; // because it's the inverse rotation
+	ca.pt[1]=-ca.pt[1]; // because it's the inverse rotation
   
-  dr.pt[0]=dot(csd,ca);
-  dr.pt[1]=cross(csd,ca);
+	dr.pt[0]=dot(csd,ca);
+	dr.pt[1]=cross(csd,ca);
   
-  ca.pt[1]=-ca.pt[1];
+	ca.pt[1]=-ca.pt[1];
 	
 	if ( wise ) {
 		if ( large == true ) {
-      dr=-dr;
-			float  swap=eang;eang=sang;sang=swap;
+			dr=-dr;
+			double  swap=eang;eang=sang;sang=swap;
 			eang+=M_PI;sang+=M_PI;
 			if ( eang >= 2*M_PI ) eang-=2*M_PI;
 			if ( sang >= 2*M_PI ) sang-=2*M_PI;
 		}
 	} else {
 		if ( large == false ) {
-      dr=-dr;
-			float  swap=eang;eang=sang;sang=swap;
+			dr=-dr;
+			double  swap=eang;eang=sang;sang=swap;
 			eang+=M_PI;sang+=M_PI;
 			if ( eang >= 2*M_PI ) eang-=2*M_PI;
 			if ( sang >= 2*M_PI ) sang-=2*M_PI;
 		}
 	}
-  dr+=0.5*(iS+iE);
+	dr+=0.5*(iS+iE);
 }
-void            Path::DoArc(NR::Point &iS,NR::Point &iE,float rx,float ry,float angle,bool large,bool wise,float tresh)
+void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
+		 double rx, double ry, double angle,
+		 bool large, bool wise, double tresh)
 {
-	if ( rx <= 0.0001 || ry <= 0.0001 ) return; // on ajoute toujours un lineto apres, donc c bon
+	if ( rx <= 0.0001 || ry <= 0.0001 )
+		return; // on ajoute toujours un lineto apres, donc c bon
 	
-  float       sang,eang;
-  NR::Point   dr;
-  ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
+	double       sang,eang;
+	NR::Point   dr;
+	ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
   
-  NR::Point  ca(cos(angle),sin(angle));
+	NR::Point  ca(cos(angle),sin(angle));
 	if ( wise ) {
 		if ( sang < eang ) sang+=2*M_PI;
-		for (float b=sang-0.1;b>eang;b-=0.1) {
-      NR::Point  cb(cos(b),sin(b));
-      NR::Point  ar(rx,ry);
-      NR::Point  u;
-      u=ca^cb;
+		for (double b=sang-0.1;b>eang;b-=0.1) {
+			NR::Point  cb(cos(b),sin(b));
+			NR::Point  ar(rx,ry);
+			NR::Point  u=ca^cb;
 			u*=ar;
-      u+=dr;
-			AddPoint(u);
+			AddPoint(u+dr);
 		}
 	} else {
 		if ( sang > eang ) sang-=2*M_PI;
-		for (float b=sang+0.1;b<eang;b+=0.1) {
-      NR::Point  cb(cos(b),sin(b));
-      NR::Point  ar(rx,ry);
-      NR::Point  u;
-      u=ca^cb;
+		for (double b=sang+0.1;b<eang;b+=0.1) {
+			NR::Point  cb(cos(b),sin(b));
+			NR::Point  ar(rx,ry);
+			NR::Point  u=ca^cb;
 			u*=ar;
-      u+=dr;
-			AddPoint(u);
+			AddPoint(u + dr);
 		}
 	}
 }
-void            Path::DoArc(NR::Point &iS,float sw,NR::Point &iE,float ew,float rx,float ry,float angle,bool large,bool wise,float tresh)
+void Path::DoArc(NR::Point const &iS, double sw, 
+		 NR::Point const &iE, double ew,
+		 double rx, double ry, double angle,
+		 bool large, bool wise, double tresh)
 {
 	if ( rx <= 0.0001 || ry <= 0.0001 ) return; // on ajoute toujours un lineto apres, donc c bon
 
-  float       sang,eang;
-  NR::Point   dr;
-  ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
+	double       sang,eang;
+	NR::Point   dr;
+	ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
   
-  NR::Point  ca(cos(angle),sin(angle));
+	NR::Point  ca(cos(angle),sin(angle));
 	if ( wise ) {
 		if ( sang < eang ) sang+=2*M_PI;
-		for (float b=sang-0.1;b>eang;b-=0.1) {
-      NR::Point  cb(cos(b),sin(b));
-      NR::Point  ar(rx,ry);
-      NR::Point  u;
-      u=ca^cb;
+		for (double b=sang-0.1;b>eang;b-=0.1) {
+			NR::Point  cb(cos(b),sin(b));
+			NR::Point  ar(rx,ry);
+			NR::Point  u=ca^cb;
 			u*=ar;
-      u+=dr;
-			float  nw=(sw*(b-eang)+ew*(sang-b))/(sang-eang);
+			u+=dr;
+			double  nw=(sw*(b-eang)+ew*(sang-b))/(sang-eang);
 			AddPoint(u,nw);
 		}
 	} else {
 		if ( sang > eang ) sang-=2*M_PI;
-		for (float b=sang+0.1;b<eang;b+=0.1) {
-      NR::Point  cb(cos(b),sin(b));
-      NR::Point  ar(rx,ry);
-      NR::Point  u;
-      u=ca^cb;
+		for (double b=sang+0.1;b<eang;b+=0.1) {
+			NR::Point  cb(cos(b),sin(b));
+			NR::Point  ar(rx,ry);
+			NR::Point  u=ca^cb;
 			u*=ar;
-      u+=dr;
-			float  nw=(sw*(eang-b)+ew*(b-sang))/(eang-sang);
+			u+=dr;
+			double  nw=(sw*(eang-b)+ew*(b-sang))/(eang-sang);
 			AddPoint(u,nw);
 		}
 	}
 }
-void            Path::RecCubicTo(NR::Point &iS,NR::Point &isD,NR::Point &iE,NR::Point &ieD,float tresh,int lev,float maxL)
+void Path::RecCubicTo( NR::Point const &iS, NR::Point const &isD, 
+		       NR::Point const &iE, NR::Point const &ieD,
+		       double tresh,int lev,double maxL)
 {
-  NR::Point  se;
-  se=iE-iS;
-	float dC=sqrt(dot(se,se));
+	NR::Point  se;
+	se=iE-iS;
+	const double dC=NR::L2(se);
 	if ( dC < 0.01 ) {
-		float sC=dot(isD,isD);
-		float eC=dot(ieD,ieD);
+		const double sC = dot(isD,isD);
+		const double eC = dot(ieD,ieD);
 		if ( sC < tresh && eC < tresh ) return;
 	} else {
-		float sC=cross(se,isD);
-		float eC=cross(se,ieD);
-		if ( sC < 0 ) sC=-sC;
-		if ( eC < 0 ) eC=-eC;
-		sC/=dC;
-		eC/=dC;
+		const double sC = fabs(cross(se,isD)) / dC;
+		const double eC = fabs(cross(se,ieD)) / dC;
 		if ( sC < tresh && eC < tresh ) {
 			// presque tt droit -> attention si on nous demande de bien subdiviser les petits segments
 			if ( maxL > 0 && dC > maxL ) {
 				if ( lev <= 0 ) return;
-        NR::Point  m;
-        m=0.5*(iS+iE)+0.125*(isD-ieD);
-        NR::Point  md;
-        md=0.75*(iE-iS)-0.125*(isD+ieD);
+				NR::Point  m = 0.5*(iS+iE)+0.125*(isD-ieD);
+				NR::Point  md = 0.75*(iE-iS)-0.125*(isD+ieD);
 				
-        NR::Point  hisD,hieD;
-        hisD=0.5*isD;
-        hieD=0.5*ieD;
-
+				NR::Point  hisD=0.5*isD;
+				NR::Point  hieD=0.5*ieD;
+				
 				RecCubicTo(iS,hisD,m,md,tresh,lev-1,maxL);
 				AddPoint(m);
 				RecCubicTo(m,md,iE,hieD,tresh,lev-1,maxL);
@@ -1172,52 +1151,40 @@ void            Path::RecCubicTo(NR::Point &iS,NR::Point &isD,NR::Point &iE,NR::
 	
 	if ( lev <= 0 ) return;
 	{
-    NR::Point  m;
-    m=0.5*(iS+iE)+0.125*(isD-ieD);
-    NR::Point  md;
-    md=0.75*(iE-iS)-0.125*(isD+ieD);
+		NR::Point  m=0.5*(iS+iE)+0.125*(isD-ieD);
+		NR::Point  md=0.75*(iE-iS)-0.125*(isD+ieD);
 				
-    NR::Point  hisD,hieD;
-    hisD=0.5*isD;
-    hieD=0.5*ieD;
+		NR::Point  hisD=0.5*isD;
+		NR::Point  hieD=0.5*ieD;
  
-    RecCubicTo(iS,hisD,m,md,tresh,lev-1,maxL);
-    AddPoint(m);
-    RecCubicTo(m,md,iE,hieD,tresh,lev-1,maxL);
+		RecCubicTo(iS,hisD,m,md,tresh,lev-1,maxL);
+		AddPoint(m);
+		RecCubicTo(m,md,iE,hieD,tresh,lev-1,maxL);
 	}
 }
-void            Path::RecCubicTo(NR::Point &iS,float sw,NR::Point &isD,NR::Point &iE,float ew,NR::Point &ieD,float tresh,int lev,float maxL)
+void            Path::RecCubicTo( const NR::Point &iS,double sw, const NR::Point &isD, const NR::Point &iE,double ew, const NR::Point &ieD,double tresh,int lev,double maxL)
 {
-  NR::Point  se;
-  se=iE-iS;
-	float dC=sqrt(dot(se,se));
+	NR::Point  se=iE-iS;
+	double dC=NR::L2(se);
 	if ( dC < 0.01 ) {
-		float sC=dot(isD,isD);
-		float eC=dot(ieD,ieD);
+		double sC=dot(isD,isD);
+		double eC=dot(ieD,ieD);
 		if ( sC < tresh && eC < tresh ) return;
 	} else {
-		float sC=cross(se,isD);
-		float eC=cross(se,ieD);
-		if ( sC < 0 ) sC=-sC;
-		if ( eC < 0 ) eC=-eC;
-		sC/=dC;
-		eC/=dC;
+		const double sC = fabs(cross(se,isD)) / dC;
+		const double eC = fabs(cross(se,ieD)) / dC;
 		if ( sC < tresh && eC < tresh ) {
 			// presque tt droit -> attention si on nous demande de bien subdiviser les petits segments
 			if ( maxL > 0 && dC > maxL ) {
 				if ( lev <= 0 ) return;
-				float   mw;
-        NR::Point  m;
-        m=0.5*(iS+iE)+0.125*(isD-ieD);
-        NR::Point  md;
-        md=0.75*(iE-iS)-0.125*(isD+ieD);
-				mw=(sw+ew)/2;
+				NR::Point  m=0.5*(iS+iE)+0.125*(isD-ieD);
+				NR::Point  md=0.75*(iE-iS)-0.125*(isD+ieD);
+				double   mw=(sw+ew)/2;
 				
-        NR::Point  hisD,hieD;
-        hisD=0.5*isD;
-        hieD=0.5*ieD;
-
-        RecCubicTo(iS,sw,hisD,m,mw,md,tresh,lev-1,maxL);
+				NR::Point  hisD=0.5*isD;
+				NR::Point  hieD=0.5*ieD;
+				
+				RecCubicTo(iS,sw,hisD,m,mw,md,tresh,lev-1,maxL);
 				AddPoint(m,mw);
 				RecCubicTo(m,mw,md,iE,ew,hieD,tresh,lev-1,maxL);
 			}
@@ -1226,41 +1193,34 @@ void            Path::RecCubicTo(NR::Point &iS,float sw,NR::Point &isD,NR::Point
 	}
 		
 	if ( lev <= 0 ) return;
-  {
-    float   mw;
-    NR::Point  m;
-    m=0.5*(iS+iE)+0.125*(isD-ieD);
-    NR::Point  md;
-    md=0.75*(iE-iS)-0.125*(isD+ieD);
-    mw=(sw+ew)/2;
+	{
+		NR::Point  m=0.5*(iS+iE)+0.125*(isD-ieD);
+		NR::Point  md=0.75*(iE-iS)-0.125*(isD+ieD);
+		double   mw=(sw+ew)/2;
 				
-    NR::Point  hisD,hieD;
-    hisD=0.5*isD;
-    hieD=0.5*ieD;
+		NR::Point  hisD=0.5*isD;
+		NR::Point  hieD=0.5*ieD;
 
-    RecCubicTo(iS,sw,hisD,m,mw,md,tresh,lev-1,maxL);
-    AddPoint(m,mw);
-    RecCubicTo(m,mw,md,iE,ew,hieD,tresh,lev-1,maxL);
-  }
+		RecCubicTo(iS,sw,hisD,m,mw,md,tresh,lev-1,maxL);
+		AddPoint(m,mw);
+		RecCubicTo(m,mw,md,iE,ew,hieD,tresh,lev-1,maxL);
+	}
 }
-void            Path::RecBezierTo(NR::Point &iP,NR::Point &iS,NR::Point &iE,float tresh,int lev,float maxL)
+void Path::RecBezierTo(const NR::Point &iP,
+		       const NR::Point &iS,
+		       const NR::Point &iE,
+		       double tresh,int lev,double maxL)
 {
 	if ( lev <= 0 ) return;
-  NR::Point ps;
-  ps=iS-iP;
-  NR::Point pe;
-  pe=iE-iP;
-  NR::Point se;
-  se=iE-iS;
-	float s=cross(pe,ps);
-	if ( s < 0 ) s=-s;
+	NR::Point ps=iS-iP;
+	NR::Point pe=iE-iP;
+	NR::Point se=iE-iS;
+	double s = fabs(cross(pe,ps));
 	if ( s < tresh ) {
-		float l=sqrt(dot(se,se));
+		const double l=L2(se);
 		if ( maxL > 0 && l > maxL ) {
-      NR::Point  m;
-      m=0.25*(iS+iE+2*iP);
-      NR::Point  md;
-			md=0.5*(iS+iP);
+			const NR::Point  m=0.25*(iS+iE+2*iP);
+			NR::Point  md = 0.5*(iS+iP);
 			RecBezierTo(md,iS,m,tresh,lev-1,maxL);
 			AddPoint(m);
 			md=0.5*(iP+iE);
@@ -1269,310 +1229,275 @@ void            Path::RecBezierTo(NR::Point &iP,NR::Point &iS,NR::Point &iE,floa
 		return;
 	}
 	{
-    NR::Point  m;
-    m=0.25*(iS+iE+2*iP);
-    NR::Point  md;
-    md=0.5*(iS+iP);
-    RecBezierTo(md,iS,m,tresh,lev-1,maxL);
-    AddPoint(m);
-    md=0.5*(iP+iE);
-    RecBezierTo(md,m,iE,tresh,lev-1,maxL);	
+		const NR::Point  m=0.25*(iS+iE+2*iP);
+		NR::Point  md=0.5*(iS+iP);
+		RecBezierTo(md,iS,m,tresh,lev-1,maxL);
+		AddPoint(m);
+		md=0.5*(iP+iE);
+		RecBezierTo(md,m,iE,tresh,lev-1,maxL);	
 	}
 }
-void            Path::RecBezierTo(NR::Point &iP,float pw,NR::Point &iS,float sw,NR::Point &iE,float ew,float tresh,int lev,float maxL)
+
+void Path::RecBezierTo(const NR::Point &iP,
+		       double pw,
+		       const NR::Point &iS,
+		       double sw,
+		       const NR::Point &iE,
+		       double ew,double tresh,int lev,double maxL)
 {
 	if ( lev <= 0 ) return;
-  NR::Point ps;
-  ps=iS-iP;
-  NR::Point pe;
-  pe=iE-iP;
-  NR::Point se;
-  se=iE-iS;
-	float s=cross(pe,ps);
-	if ( s < 0 ) s=-s;
+	NR::Point ps=iS-iP;
+	NR::Point pe=iE-iP;
+	NR::Point se=iE-iS;
+	const double s = fabs(cross(pe,ps));
 	if ( s < tresh ) {
-		float l=sqrt(dot(se,se));
+		double l=NR::L2(se);
 		if ( maxL > 0 && l > maxL ) {
-      float      mw=0.25*(sw+ew+2*pw);
-      NR::Point  m;
-      m=0.25*(iS+iE+2*iP);
-      float      mdw;
-      NR::Point  md;
-			md=0.5*(iS+iP);
-      mdw=(sw+pw)/2;
+			double  mw=0.25*(sw+ew+2*pw);
+			NR::Point  m = 0.25*(iS+iE+2*iP);
+			NR::Point  md = 0.5*(iS+iP);
+			double  mdw=(sw+pw)/2;
 			RecBezierTo(md,mdw,iS,sw,m,mw,tresh,lev-1,maxL);
 			AddPoint(m,mw);
 			md=0.5*(iP+iE);
-      mdw=(pw+ew)/2;
+			mdw=(pw+ew)/2;
 			RecBezierTo(md,mdw,m,mw,iE,ew,tresh,lev-1,maxL);	
-    }
+		}
 		return;
 	}
 	
-  {
-    float      mw=0.25*(sw+ew+2*pw);
-    NR::Point  m;
-    m=0.25*(iS+iE+2*iP);
-    float      mdw;
-    NR::Point  md;
-    md=0.5*(iS+iP);
-    mdw=(sw+pw)/2;
-    RecBezierTo(md,mdw,iS,sw,m,mw,tresh,lev-1,maxL);
-    AddPoint(m,mw);
-    md=0.5*(iP+iE);
-    mdw=(pw+ew)/2;
-    RecBezierTo(md,mdw,m,mw,iE,ew,tresh,lev-1,maxL);	
-  }
+	{
+		double      mw=0.25*(sw+ew+2*pw);
+		NR::Point  m=0.25*(iS+iE+2*iP);
+		NR::Point  md=0.5*(iS+iP);
+		double      mdw=(sw+pw)/2;
+		RecBezierTo(md,mdw,iS,sw,m,mw,tresh,lev-1,maxL);
+		AddPoint(m,mw);
+		md=0.5*(iP+iE);
+		mdw=(pw+ew)/2;
+		RecBezierTo(md,mdw,m,mw,iE,ew,tresh,lev-1,maxL);	
+	}
 }
 
-void            Path::DoArc(NR::Point &iS,NR::Point &iE,float rx,float ry,float angle,bool large,bool wise,float tresh,int piece)
+void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
+		 double rx,double ry,double angle,
+		 bool large,bool wise,double tresh,int piece)
 {
 	if ( rx <= 0.0001 || ry <= 0.0001 ) return; // on ajoute toujours un lineto apres, donc c bon
 	
-  float       sang,eang;
-  NR::Point   dr;
-  ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
+	double       sang,eang;
+	NR::Point   dr;
+	ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
   
-  NR::Point  ca(cos(angle),sin(angle));
+	NR::Point  ca(cos(angle),sin(angle));
 	if ( wise ) {
 		if ( sang < eang ) sang+=2*M_PI;
-		for (float b=sang-0.1;b>eang;b-=0.1) {
-      NR::Point  cb(cos(b),sin(b));
-      NR::Point  ar(rx,ry);
-      NR::Point  u;
-      u=ca^cb;
+		for (double b=sang-0.1;b>eang;b-=0.1) {
+			NR::Point  cb(cos(b),sin(b));
+			NR::Point  ar(rx,ry);
+			NR::Point  u=ca^cb;
 			u*=ar;
-      u+=dr;
+			u+=dr;
 			AddPoint(u,piece,(sang-b)/(sang-eang));
 		}
 	} else {
 		if ( sang > eang ) sang-=2*M_PI;
-		for (float b=sang+0.1;b<eang;b+=0.1) {
-      NR::Point  cb(cos(b),sin(b));
-      NR::Point  ar(rx,ry);
-      NR::Point  u;
-      u=ca^cb;
+		for (double b=sang+0.1;b<eang;b+=0.1) {
+			NR::Point  cb(cos(b),sin(b));
+			NR::Point  ar(rx,ry);
+			NR::Point  u=ca^cb;
 			u*=ar;
-      u+=dr;
+			u+=dr;
 			AddPoint(u,piece,(b-sang)/(eang-sang));
 		}
 	}
 }
-void            Path::DoArc(NR::Point &iS,float sw,NR::Point &iE,float ew,float rx,float ry,float angle,bool large,bool wise,float tresh,int piece)
+void Path::DoArc(NR::Point const &iS,double sw, NR::Point const &iE,double ew,
+		 double rx,double ry,double angle,
+		 bool large,bool wise,double tresh,int piece)
 {
 	if ( rx <= 0.0001 || ry <= 0.0001 ) return; // on ajoute toujours un lineto apres, donc c bon
 
-  float       sang,eang;
-  NR::Point   dr;
-  ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
+	double       sang,eang;
+	NR::Point   dr;
+	ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
   
-  NR::Point  ca(cos(angle),sin(angle));
+	NR::Point  ca(cos(angle),sin(angle));
 	if ( wise ) {
 		if ( sang < eang ) sang+=2*M_PI;
-		for (float b=sang-0.1;b>eang;b-=0.1) {
-      NR::Point  cb(cos(b),sin(b));
-      NR::Point  ar(rx,ry);
-      NR::Point  u;
-      u=ca^cb;
+		for (double b=sang-0.1;b>eang;b-=0.1) {
+			NR::Point  cb(cos(b),sin(b));
+			NR::Point  ar(rx,ry);
+			NR::Point  u=ca^cb;
 			u*=ar;
-      u+=dr;
-			float  nw=(sw*(b-eang)+ew*(sang-b))/(sang-eang);
+			u+=dr;
+			double  nw=(sw*(b-eang)+ew*(sang-b))/(sang-eang);
 			AddPoint(u,nw,piece,(sang-b)/(sang-eang));
 		}
 	} else {
 		if ( sang > eang ) sang-=2*M_PI;
-		for (float b=sang+0.1;b<eang;b+=0.1) {
-      NR::Point  cb(cos(b),sin(b));
-      NR::Point  ar(rx,ry);
-      NR::Point  u;
-      u=ca^cb;
+		for (double b=sang+0.1;b<eang;b+=0.1) {
+			NR::Point  cb(cos(b),sin(b));
+			NR::Point  ar(rx,ry);
+			NR::Point  u=ca^cb;
 			u*=ar;
-      u+=dr;
-			float  nw=(sw*(eang-b)+ew*(b-sang))/(eang-sang);
+			u+=dr;
+			double  nw=(sw*(eang-b)+ew*(b-sang))/(eang-sang);
 			AddPoint(u,nw,piece,(b-sang)/(eang-sang));
 		}
 	}
 }
-void            Path::RecCubicTo(NR::Point &iS,NR::Point &isD,NR::Point &iE,NR::Point &ieD,float tresh,int lev,float st,float et,int piece)
+void Path::RecCubicTo(NR::Point const &iS, NR::Point const &isD, 
+		      NR::Point const &iE, NR::Point const &ieD,
+		      double tresh,int lev,double st,double et,int piece)
 {
-  NR::Point  se;
-  se=iE-iS;
-	float dC=sqrt(dot(se,se));
+	const NR::Point  se=iE-iS;
+	const double dC=NR::L2(se);
 	if ( dC < 0.01 ) {
-		float sC=dot(isD,isD);
-		float eC=dot(ieD,ieD);
+		const double sC=dot(isD,isD);
+		const double eC=dot(ieD,ieD);
 		if ( sC < tresh && eC < tresh ) return;
 	} else {
-		float sC=cross(se,isD);
-		float eC=cross(se,ieD);
-		if ( sC < 0 ) sC=-sC;
-		if ( eC < 0 ) eC=-eC;
-		sC/=dC;
-		eC/=dC;
+		const double sC = fabs(cross(se,isD)) / dC;
+		const double eC = fabs(cross(se,ieD)) / dC;
 		if ( sC < tresh && eC < tresh ) return;
 	}
 	
 	if ( lev <= 0 ) return;
 	
-  float   mt;
-  NR::Point  m;
-  m=0.5*(iS+iE);
-  m+=0.125*(isD-ieD);
-  NR::Point  md;
-  md=0.75*(iE-iS);
-  md-=0.125*(isD+ieD);
-  mt=(st+et)/2;
-  
-  NR::Point  hisD,hieD;
-  hisD=0.5*isD;
-  hieD=0.5*ieD;
-  
-  RecCubicTo(iS,hisD,m,md,tresh,lev-1,st,mt,piece);
-  AddPoint(m,piece,mt);
-  RecCubicTo(m,md,iE,hieD,tresh,lev-1,mt,et,piece);
-
+	NR::Point  m = 0.5*(iS+iE) + 0.125*(isD-ieD);
+	NR::Point  md = 0.75*(iE-iS) - 0.125*(isD+ieD);
+	double   mt=(st+et)/2;
+	
+	NR::Point  hisD=0.5*isD;
+	NR::Point  hieD=0.5*ieD;
+	
+	RecCubicTo(iS,hisD,m,md,tresh,lev-1,st,mt,piece);
+	AddPoint(m,piece,mt);
+	RecCubicTo(m,md,iE,hieD,tresh,lev-1,mt,et,piece);
+	
 }
-void            Path::RecCubicTo(NR::Point &iS,float sw,NR::Point &isD,NR::Point &iE,float ew,NR::Point &ieD,float tresh,int lev,float st,float et,int piece)
+void Path::RecCubicTo(NR::Point const &iS,double sw,
+		      NR::Point const &isD, NR::Point const &iE, double ew, 
+		      NR::Point const &ieD, double tresh,int lev,double st,double et,int piece)
 {
-  NR::Point  se;
-  se=iE-iS;
-	float dC=sqrt(dot(se,se));
+	const NR::Point se = iE - iS;
+	const double dC = NR::L2(se);
 	if ( dC < 0.01 ) {
-		float sC=dot(isD,isD);
-		float eC=dot(ieD,ieD);
+		const double sC = dot(isD,isD);
+		const double eC = dot(ieD,ieD);
 		if ( sC < tresh && eC < tresh ) return;
 	} else {
-		float sC=cross(se,isD);
-		float eC=cross(se,ieD);
-		if ( sC < 0 ) sC=-sC;
-		if ( eC < 0 ) eC=-eC;
-		sC/=dC;
-		eC/=dC;
+		const double sC = fabs(cross(se,isD)) / dC;
+		const double eC = fabs(cross(se,ieD)) / dC;
 		if ( sC < tresh && eC < tresh ) return;
 	}
 		
 	if ( lev <= 0 ) return;
-  float   mt,mw;
-  NR::Point  m;
-  m=0.5*(iS+iE)+0.125*(isD-ieD);
-  NR::Point  md;
-  md=0.75*(iE-iS)-0.125*(isD+ieD);
-  mt=(st+et)/2;
-  mw=(ew+sw)/2;
-  
-  NR::Point  hisD,hieD;
-  hisD=0.5*isD;
-  hieD=0.5*ieD;
-
-  RecCubicTo(iS,sw,hisD,m,mw,md,tresh,lev-1,st,mt,piece);
-  AddPoint(m,mw,piece,mt);
-  RecCubicTo(m,mw,md,iE,ew,hieD,tresh,lev-1,mt,et,piece);
+	const NR::Point m = 0.5*(iS+iE)+0.125*(isD-ieD);
+	const NR::Point md = 0.75*(iE-iS)-0.125*(isD+ieD);
+	const double mt = (st+et)/2;
+	const double mw = (ew+sw)/2;
+	
+	const NR::Point hisD=0.5*isD;
+	const NR::Point hieD=0.5*ieD;
+	
+	RecCubicTo(iS,sw,hisD,m,mw,md,tresh,lev-1,st,mt,piece);
+	AddPoint(m,mw,piece,mt);
+	RecCubicTo(m,mw,md,iE,ew,hieD,tresh,lev-1,mt,et,piece);
 }
-void            Path::RecBezierTo(NR::Point &iP,NR::Point &iS,NR::Point &iE,float tresh,int lev,float st,float et,int piece)
+void Path::RecBezierTo(NR::Point const &iP,
+		       NR::Point const &iS,
+		       NR::Point const &iE,
+		       double tresh,int lev,double st,double et,int piece)
 {
 	if ( lev <= 0 ) return;
-  NR::Point ps;
-  ps=iS-iP;
-  NR::Point pe;
-  pe=iE-iP;
-  NR::Point se;
-  se=iE-iS;
-	float s=cross(pe,ps);
-	if ( s < 0 ) s=-s;
+	NR::Point ps=iS-iP;
+	NR::Point pe=iE-iP;
+	NR::Point se=iE-iS;
+	const double s = fabs(cross(pe,ps));
 	if ( s < tresh ) return ;
 	
-  {
-    float      mt=(st+et)/2;
-    NR::Point  m;
-    m=0.25*(iS+iE+2*iP);
-    NR::Point  md;
-    md=0.5*(iS+iP);
-    RecBezierTo(md,iS,m,tresh,lev-1,st,mt,piece);
-    AddPoint(m,piece,mt);
-    md=0.5*(iP+iE);
-    RecBezierTo(md,m,iE,tresh,lev-1,mt,et,piece);	
-  }
+	{
+		const double mt=(st+et)/2;
+		const NR::Point  m=0.25*(iS+iE+2*iP);
+		RecBezierTo(0.5*(iS+iP),iS,m,tresh,lev-1,st,mt,piece);
+		AddPoint(m,piece,mt);
+		RecBezierTo(0.5*(iP+iE), 
+			    m,iE,tresh,lev-1,mt,et,piece);	
+	}
 }
-void            Path::RecBezierTo(NR::Point &iP,float pw,NR::Point &iS,float sw,NR::Point &iE,float ew,float tresh,int lev,float st,float et,int piece)
+void Path::RecBezierTo(NR::Point const &iP, double pw, 
+		       NR::Point const &iS, double sw,
+		       NR::Point const &iE, double ew,
+		       double tresh, int lev, double st, double et, int piece)
 {
 	if ( lev <= 0 ) return;
-  NR::Point ps;
-  ps=iS-iP;
-  NR::Point pe;
-  pe=iE-iP;
-  NR::Point se;
-  se=iE-iS;
-	float s=cross(pe,ps);
-	if ( s < 0 ) s=-s;
-	if ( s < tresh ) return ;
-  
-  {
-    float      mw=0.25*(sw+ew+2*pw),mt=(st+et)/2;
-    NR::Point  m;
-    m=0.25*(iS+iE+2*iP);
-    float      mdw;
-    NR::Point  md;
-    md=0.5*(iS+iP);
-    mdw=(sw+pw)/2;
-    RecBezierTo(md,mdw,iS,sw,m,mw,tresh,lev-1,st,mt,piece);
-    AddPoint(m,piece,mt);
-    md=0.5*(iP+iE);
-    mdw=(pw+ew)/2;
-    RecBezierTo(md,mdw,m,mw,iE,ew,tresh,lev-1,mt,et,piece);	
-  }
+	const NR::Point ps=iS-iP;
+	const NR::Point pe=iE-iP;
+	const NR::Point se=iE-iS;
+	const double s = fabs(cross(pe,ps));
+	if ( s < tresh ) return;
+	
+	{
+		const double mw = 0.25*(sw+ew+2*pw),mt=(st+et)/2;
+		const NR::Point m = 0.25*(iS+iE+2*iP);
+		RecBezierTo(0.5*(iS+iP), (sw+pw)/2,
+			    iS,sw,m,mw,tresh,lev-1,st,mt,piece);
+		AddPoint(m,piece,mt);
+		RecBezierTo(0.5*(iP+iE),(pw+ew)/2,
+			    m,mw,iE,ew,tresh,lev-1,mt,et,piece);	
+	}
 }
 
-void            Path::DoArc(NR::Point &iS,NR::Point &iE,float rx,float ry,float angle,bool large,bool wise,float tresh,int piece,offset_orig& orig)
+void Path::DoArc(NR::Point const &iS,NR::Point const &iE,
+		 double rx, double ry, double angle,
+		 bool large, bool wise, double tresh,
+		 int piece, offset_orig& orig)
 {
 	// on n'arrivera jamais ici, puisque les offsets sont fait de cubiques
 	if ( rx <= 0.0001 || ry <= 0.0001 ) return; // on ajoute toujours un lineto apres, donc c bon
 	
-  float       sang,eang;
-  NR::Point   dr;
-  ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
+	double       sang,eang;
+	NR::Point   dr;
+	ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
   
-  NR::Point  ca(cos(angle),sin(angle));
+	NR::Point  ca(cos(angle),sin(angle));
 	if ( wise ) {
 		if ( sang < eang ) sang+=2*M_PI;
-		for (float b=sang-0.1;b>eang;b-=0.1) {
-      NR::Point  cb(cos(b),sin(b));
-      NR::Point  ar(rx,ry);
-      NR::Point  u;
-      u=ca^cb;
+		for (double b=sang-0.1;b>eang;b-=0.1) {
+			NR::Point  cb(cos(b),sin(b));
+			NR::Point  ar(rx,ry);
+			NR::Point  u=ca^cb;
 			u*=ar;
-      u+=dr;
-			AddPoint(u,piece,(sang-b)/(sang-eang));
+			AddPoint(u + dr,piece,(sang-b)/(sang-eang));
 		}
 	} else {
 		if ( sang > eang ) sang-=2*M_PI;
-		for (float b=sang+0.1;b<eang;b+=0.1) {
-      NR::Point  cb(cos(b),sin(b));
-      NR::Point  ar(rx,ry);
-      NR::Point  u;
-      u=ca^cb;
+		for (double b=sang+0.1;b<eang;b+=0.1) {
+			NR::Point  cb(cos(b),sin(b));
+			NR::Point  ar(rx,ry);
+			NR::Point  u=ca^cb;
 			u*=ar;
-      u+=dr;
-			AddPoint(u,piece,(b-sang)/(eang-sang));
+			AddPoint(u + dr,piece,(b-sang)/(eang-sang));
 		}
 	}
 }
-void            Path::RecCubicTo(NR::Point &iS,NR::Point &isD,NR::Point &iE,NR::Point &ieD,float tresh,int lev,float st,float et,int piece,offset_orig& orig)
+void Path::RecCubicTo(NR::Point const &iS, NR::Point const &isD, 
+		      NR::Point const &iE, NR::Point const &ieD,
+		      double tresh, int lev, double st, double et,
+		      int piece, offset_orig& orig)
 {
-  NR::Point  se;
-  se=iE-iS;
-	float dC=sqrt(dot(se,se));
+	const NR::Point  se = iE-iS;
+	const double dC = NR::L2(se);
 	bool  doneSub=false;
 	if ( dC < 0.01 ) {
-		float sC=dot(isD,isD);
-		float eC=dot(ieD,ieD);
+		const double sC=dot(isD,isD);
+		const double eC=dot(ieD,ieD);
 		if ( sC < tresh && eC < tresh ) return;
 	} else {
-		float sC=cross(se,isD);
-		float eC=cross(se,ieD);
-		if ( sC < 0 ) sC=-sC;
-		if ( eC < 0 ) eC=-eC;
-		sC/=dC;
-		eC/=dC;
+		const double sC = fabs(cross(se,isD)) / dC;
+		const double eC = fabs(cross(se,ieD)) / dC;
 		if ( sC < tresh && eC < tresh ) doneSub=true;
 	}
 	
@@ -1586,9 +1511,8 @@ void            Path::RecCubicTo(NR::Point &iS,NR::Point &isD,NR::Point &iE,NR::
 		orig.orig->PointAndTangentAt(orig.piece,orig.tSt*(1-et)+orig.tEn*et,oe_pos,oe_tgt);
 		
 
-    NR::Point   n_tgt;
-		n_tgt=isD;
-		float si=dot(n_tgt,os_tgt);
+		NR::Point   n_tgt=isD;
+		double si=dot(n_tgt,os_tgt);
 		if ( si < 0 ) stInv=true;
 		n_tgt=ieD;
 		si=dot(n_tgt,oe_tgt);
@@ -1605,41 +1529,35 @@ void            Path::RecCubicTo(NR::Point &iS,NR::Point &isD,NR::Point &iE,NR::
 	}
 	if ( ( !stInv && !enInv && doneSub ) || lev <= 0 ) return;
 	
-  {
-    float   mt;
-    NR::Point  m;
-    m=0.5*(iS+iE)+0.125*(isD-ieD);
-    NR::Point  md;
-    md=0.75*(iE-iS)-0.125*(isD+ieD);
-    mt=(st+et)/2;
-    NR::Point  hisD,hieD;
-    hisD=0.5*isD;
-    hieD=0.5*ieD;
+	{
+		const NR::Point  m=0.5*(iS+iE)+0.125*(isD-ieD);
+		const NR::Point  md=0.75*(iE-iS)-0.125*(isD+ieD);
+		const double   mt=(st+et)/2;
+		const NR::Point  hisD=0.5*isD;
+		const NR::Point  hieD=0.5*ieD;
     
-    RecCubicTo(iS,hisD,m,md,tresh,lev-1,st,mt,piece,orig);
-    AddPoint(m,piece,mt);
-    RecCubicTo(m,md,iE,hieD,tresh,lev-1,mt,et,piece,orig);
-  }
+		RecCubicTo(iS,hisD,m,md,tresh,lev-1,st,mt,piece,orig);
+		AddPoint(m,piece,mt);
+		RecCubicTo(m,md,iE,hieD,tresh,lev-1,mt,et,piece,orig);
+	}
 }
-void            Path::RecBezierTo(NR::Point &iP,NR::Point &iS,NR::Point &iE,float tresh,int lev,float st,float et,int piece,offset_orig& orig)
+void Path::RecBezierTo(NR::Point const &iP, NR::Point const &iS,NR::Point const &iE,
+		       double tresh,int lev,double st,double et,
+		       int piece,offset_orig& orig)
 {
 	bool doneSub=false;
 	if ( lev <= 0 ) return;
-  NR::Point ps;
-  ps=iS-iP;
-  NR::Point pe;
-  pe=iE-iP;
-  NR::Point se;
-  se=iE-iS;
-	float s=cross(pe,ps);
-	if ( s < 0 ) s=-s;
+	const NR::Point ps=iS-iP;
+	const NR::Point pe=iE-iP;
+	const NR::Point se=iE-iS;
+	const double s = fabs(cross(pe,ps));
 	if ( s < tresh ) doneSub=true ;
   
 	// test des inversions
 	bool stInv=false,enInv=false;
 	{
 		NR::Point  os_pos,os_tgt,oe_pos,oe_tgt,n_tgt,n_pos;
-		float n_len,n_rad;
+		double n_len,n_rad;
 		path_descr_intermbezierto mid;
 		mid.p=iP;
 		path_descr_bezierto fin;
@@ -1648,7 +1566,7 @@ void            Path::RecBezierTo(NR::Point &iP,NR::Point &iS,NR::Point &iE,floa
 		
 		TangentOnBezAt(0.0,iS,mid,fin,false,n_pos,n_tgt,n_len,n_rad);
 		orig.orig->PointAndTangentAt(orig.piece,orig.tSt*(1-st)+orig.tEn*st,os_pos,os_tgt);
-		float si=dot(n_tgt,os_tgt);
+		double si=dot(n_tgt,os_tgt);
 		if ( si < 0 ) stInv=true;
 		
 		TangentOnBezAt(1.0,iS,mid,fin,false,n_pos,n_tgt,n_len,n_rad);
@@ -1664,21 +1582,19 @@ void            Path::RecBezierTo(NR::Point &iP,NR::Point &iS,NR::Point &iE,floa
 			return;
 			//		} else if ( ( stInv && !enInv ) || ( !stInv && enInv ) ) {
 			//			return;
-			}
+		}
 	}
 	if ( !stInv && !enInv && doneSub ) return;
 
-  {
-    float      mt=(st+et)/2;
-    NR::Point  m;
-    m=0.25*(iS+iE+2*iP);
-    NR::Point  md;
-    md=0.5*(iS+iP);
-    RecBezierTo(md,iS,m,tresh,lev-1,st,mt,piece,orig);
-    AddPoint(m,piece,mt);
-    md=0.5*(iP+iE);
-    RecBezierTo(md,m,iE,tresh,lev-1,mt,et,piece,orig);	
-  }
+	{
+		double      mt=(st+et)/2;
+		NR::Point  m=0.25*(iS+iE+2*iP);
+		NR::Point  md=0.5*(iS+iP);
+		RecBezierTo(md,iS,m,tresh,lev-1,st,mt,piece,orig);
+		AddPoint(m,piece,mt);
+		md=0.5*(iP+iE);
+		RecBezierTo(md,m,iE,tresh,lev-1,mt,et,piece,orig);	
+	}
 }
 
 
@@ -1686,7 +1602,7 @@ void            Path::RecBezierTo(NR::Point &iP,NR::Point &iS,NR::Point &iE,floa
  * conversions
  */
 
-void            Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool invert)
+void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool invert)
 {
 	if ( dest == NULL ) return;
 	if ( justAdd == false ) {

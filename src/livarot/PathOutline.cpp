@@ -11,8 +11,8 @@
 #include <math.h>
 
 void
-Path::Outline (Path * dest, float width, JoinType join, ButtType butt,
-               float miter)
+Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
+               double miter)
 {
   if (descr_flags & descr_adding_bezier)
     CancelBezier ();
@@ -249,8 +249,8 @@ Path::Outline (Path * dest, float width, JoinType join, ButtType butt,
 }
 
 void
-Path::OutsideOutline (Path * dest, float width, JoinType join, ButtType butt,
-                      float miter)
+Path::OutsideOutline (Path * dest, double width, JoinType join, ButtType butt,
+                      double miter)
 {
   if (descr_flags & descr_adding_bezier)
     CancelBezier ();
@@ -274,8 +274,8 @@ Path::OutsideOutline (Path * dest, float width, JoinType join, ButtType butt,
 }
 
 void
-Path::InsideOutline (Path * dest, float width, JoinType join, ButtType butt,
-                     float miter)
+Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
+                     double miter)
 {
   if (descr_flags & descr_adding_bezier)
     CancelBezier ();
@@ -425,23 +425,23 @@ Path::InsideOutline (Path * dest, float width, JoinType join, ButtType butt,
 }
 
 void
-Path::DoOutsideOutline (Path * dest, float width, JoinType join,
-                        ButtType butt, float miter, int &stNo, int &enNo)
+Path::DoOutsideOutline (Path * dest, double width, JoinType join,
+                        ButtType butt, double miter, int &stNo, int &enNo)
 {
 }
 void
-Path::DoInsideOutline (Path * dest, float width, JoinType join, ButtType butt,
-                       float miter, int &stNo, int &enNo)
+Path::DoInsideOutline (Path * dest, double width, JoinType join, ButtType butt,
+                       double miter, int &stNo, int &enNo)
 {
 }
 void
 Path::SubContractOutline (Path * dest, outline_callbacks & calls,
-                          float tolerance, float width, JoinType join,
-                          ButtType butt, float miter, bool closeIfNeeded,
+                          double tolerance, double width, JoinType join,
+                          ButtType butt, double miter, bool closeIfNeeded,
                           bool skipMoveto, NR::Point & lastP, NR::Point & lastT)
 {
   NR::Point curX;
-  float curW;
+  double curW;
   int curP = 1;
   NR::Point curT;
   NR::Point firstP, firstT;
@@ -474,9 +474,9 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
     int nType = curD->flags & descr_type_mask;
     bool nWeight = curD->flags & descr_weighted;
     NR::Point nextX;
-    float nextW;
+    double nextW;
     NR::Point stPos, enPos, stTgt, enTgt, stNor, enNor;
-    float stRad, enRad, stTle, enTle;
+    double stRad, enRad, stTle, enTle;
     if (nType == descr_forced)
     {
       curP++;
@@ -823,7 +823,7 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
       else if (nbInterm == 1)
 	    {
         NR::Point  midX;
-        float  midW;
+        double  midW;
 	      midX = intermPoints->d.i.p;
 	      if (nWeight)
         {
@@ -884,7 +884,7 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
         NR::Point  bx=curX;
         NR::Point cx=curX;
         NR::Point dx=curX;
-	      float bw = curW, cw = curW, dw = curW;
+	      double bw = curW, cw = curW, dw = curW;
         
 	      dx = intermPoints->d.i.p;
 	      if (nWeight)
@@ -950,7 +950,7 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
           intermPoints++;
           
           NR::Point stx = (bx + cx) / 2;
-          //                                      float  stw=(bw+cw)/2;
+          //                                      double  stw=(bw+cw)/2;
           
           path_descr_bezierto tempb;
           path_descr_intermbezierto tempi;
@@ -994,7 +994,7 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
           dw = 2 * dw - cw;
           
           NR::Point stx = (bx + cx) / 2;
-          //                                      float  stw=(bw+cw)/2;
+          //                                      double  stw=(bw+cw)/2;
           
           path_descr_bezierto tempb;
           path_descr_intermbezierto tempi;
@@ -1058,8 +1058,8 @@ Path::IsNulCurve (path_descr * curD, NR::Point &curX)
   }
   else if (typ == descr_cubicto)
   {
-    float ax, bx, cx, dx;
-    float ay, by, cy, dy;
+    double ax, bx, cx, dx;
+    double ay, by, cy, dy;
     ax = curD->d.c.stD.pt[0] + curD->d.c.enD.pt[0] + 2 * curX.pt[0] - 2 * curD->d.c.p.pt[0];
     bx = 3 * curD->d.c.p.pt[0] - 3 * curX.pt[0] - 2 * curD->d.c.stD.pt[0] - curD->d.c.enD.pt[0];
     cx = curD->d.c.stD.pt[0];
@@ -1143,14 +1143,14 @@ Path::IsNulCurve (path_descr * curD, NR::Point &curX)
 }
 
 void
-Path::TangentOnSegAt (float at, NR::Point &iS, path_descr_lineto & fin,
-                      NR::Point & pos, NR::Point & tgt, float &len)
+Path::TangentOnSegAt (double at, NR::Point const &iS, path_descr_lineto & fin,
+                      NR::Point & pos, NR::Point & tgt, double &len)
 {
   NR::Point iE;
   iE = fin.p;
   NR::Point seg;
   seg = iE-iS;
-  float l = sqrtf (dot(seg,seg));
+  double l = L2(seg);
   if (l <= 0.000001)
   {
     pos = iS;
@@ -1166,12 +1166,12 @@ Path::TangentOnSegAt (float at, NR::Point &iS, path_descr_lineto & fin,
   }
 }
 void
-Path::TangentOnArcAt (float at, NR::Point &iS, path_descr_arcto & fin,
-                      NR::Point & pos, NR::Point & tgt, float &len, float &rad)
+Path::TangentOnArcAt (double at, const NR::Point &iS, path_descr_arcto & fin,
+                      NR::Point & pos, NR::Point & tgt, double &len, double &rad)
 {
   NR::Point iE;
   iE = fin.p;
-  float rx, ry, angle;
+  double rx, ry, angle;
   rx = fin.rx;
   ry = fin.ry;
   angle = fin.angle;
@@ -1184,27 +1184,24 @@ Path::TangentOnArcAt (float at, NR::Point &iS, path_descr_arcto & fin,
   if (rx <= 0.0001 || ry <= 0.0001)
     return;
   
-  float sex = iE.pt[0] - iS.pt[0], sey = iE.pt[1] - iS.pt[1];
-  float ca = cos (angle), sa = sin (angle);
-  float csex = ca * sex + sa * sey, csey = -sa * sex + ca * sey;
+  double sex = iE.pt[0] - iS.pt[0], sey = iE.pt[1] - iS.pt[1];
+  double ca = cos (angle), sa = sin (angle);
+  double csex = ca * sex + sa * sey, csey = -sa * sex + ca * sey;
   csex /= rx;
   csey /= ry;
-  float l = csex * csex + csey * csey;
+  double l = csex * csex + csey * csey;
   if (l >= 4)
     return;
-  float d = 1 - l / 4;
-  if (d < 0)
-    d = 0;
-  d = sqrt (d);
-  float csdx = csey, csdy = -csex;
+  const double d = sqrt(std::max(1 - l / 4, 0.0));
+  double csdx = csey, csdy = -csex;
   l = sqrt (l);
   csdx /= l;
   csdy /= l;
   csdx *= d;
   csdy *= d;
   
-  float sang, eang;
-  float rax = -csdx - csex / 2, ray = -csdy - csey / 2;
+  double sang, eang;
+  double rax = -csdx - csex / 2, ray = -csdy - csey / 2;
   if (rax < -1)
   {
     sang = M_PI;
@@ -1238,7 +1235,7 @@ Path::TangentOnArcAt (float at, NR::Point &iS, path_descr_arcto & fin,
   
   csdx *= rx;
   csdy *= ry;
-  float drx = ca * csdx - sa * csdy, dry = sa * csdx + ca * csdy;
+  double drx = ca * csdx - sa * csdy, dry = sa * csdx + ca * csdy;
   
   if (wise)
   {
@@ -1246,7 +1243,7 @@ Path::TangentOnArcAt (float at, NR::Point &iS, path_descr_arcto & fin,
     {
       drx = -drx;
       dry = -dry;
-      float swap = eang;
+      double swap = eang;
       eang = sang;
       sang = swap;
       eang += M_PI;
@@ -1263,7 +1260,7 @@ Path::TangentOnArcAt (float at, NR::Point &iS, path_descr_arcto & fin,
     {
       drx = -drx;
       dry = -dry;
-      float swap = eang;
+      double swap = eang;
       eang = sang;
       sang = swap;
       eang += M_PI;
@@ -1281,8 +1278,8 @@ Path::TangentOnArcAt (float at, NR::Point &iS, path_descr_arcto & fin,
   {
     if (sang < eang)
       sang += 2 * M_PI;
-    float b = sang * (1 - at) + eang * at;
-    float cb = cos (b), sb = sin (b);
+    double b = sang * (1 - at) + eang * at;
+    double cb = cos (b), sb = sin (b);
     pos.pt[0] = drx + ca * rx * cb - sa * ry * sb;
     pos.pt[1] = dry + sa * rx * cb + ca * ry * sb;
     tgt.pt[0] = ca * rx * sb + sa * ry * cb;
@@ -1290,7 +1287,7 @@ Path::TangentOnArcAt (float at, NR::Point &iS, path_descr_arcto & fin,
     NR::Point dtgt;
     dtgt.pt[0] = -ca * rx * cb + sa * ry * sb;
     dtgt.pt[1] = -sa * rx * cb - ca * ry * sb;
-    len = sqrtf (tgt.pt[0] * tgt.pt[0] + tgt.pt[1] * tgt.pt[1]);
+    len = L2(tgt);
     rad =
       len * (tgt.pt[0] * tgt.pt[0] + tgt.pt[1] * tgt.pt[1]) / (tgt.pt[0] * dtgt.pt[1] -
                                                                tgt.pt[1] * dtgt.pt[0]);
@@ -1301,8 +1298,8 @@ Path::TangentOnArcAt (float at, NR::Point &iS, path_descr_arcto & fin,
   {
     if (sang > eang)
       sang -= 2 * M_PI;
-    float b = sang * (1 - at) + eang * at;
-    float cb = cos (b), sb = sin (b);
+    double b = sang * (1 - at) + eang * at;
+    double cb = cos (b), sb = sin (b);
     pos.pt[0] = drx + ca * rx * cb - sa * ry * sb;
     pos.pt[1] = dry + sa * rx * cb + ca * ry * sb;
     tgt.pt[0] = ca * rx * sb + sa * ry * cb;
@@ -1310,7 +1307,7 @@ Path::TangentOnArcAt (float at, NR::Point &iS, path_descr_arcto & fin,
     NR::Point dtgt;
     dtgt.pt[0] = -ca * rx * cb + sa * ry * sb;
     dtgt.pt[1] = -sa * rx * cb - ca * ry * sb;
-    len = sqrtf (tgt.pt[0] * tgt.pt[0] + tgt.pt[1] * tgt.pt[1]);
+    len = L2(tgt);
     rad =
       len * (tgt.pt[0] * tgt.pt[0] + tgt.pt[1] * tgt.pt[1]) / (tgt.pt[0] * dtgt.pt[1] -
                                                                tgt.pt[1] * dtgt.pt[0]);
@@ -1320,14 +1317,14 @@ Path::TangentOnArcAt (float at, NR::Point &iS, path_descr_arcto & fin,
   }
 }
 void
-Path::TangentOnCubAt (float at, NR::Point &iS, path_descr_cubicto & fin,
-                      bool before, NR::Point & pos, NR::Point & tgt, float &len,
-                      float &rad)
+Path::TangentOnCubAt (double at, NR::Point const &iS, path_descr_cubicto & fin,
+                      bool before, NR::Point & pos, NR::Point & tgt, double &len,
+                      double &rad)
 {
-  float ex, ey;
+  double ex, ey;
   ex = fin.p.pt[0];
   ey = fin.p.pt[1];
-  float sdx, sdy, edx, edy;
+  double sdx, sdy, edx, edy;
   edx = fin.enD.pt[0];
   edy = fin.enD.pt[1];
   sdx = fin.stD.pt[0];
@@ -1338,8 +1335,8 @@ Path::TangentOnCubAt (float at, NR::Point &iS, path_descr_cubicto & fin,
   tgt.pt[1] = 0;
   len = rad = 0;
   
-  float ax, bx, cx, dx;
-  float ay, by, cy, dy;
+  double ax, bx, cx, dx;
+  double ay, by, cy, dy;
   ax = sdx + edx - 2 * ex + 2 * iS.pt[0];
   bx = 0.5 * (edx - sdx);
   cx = 0.25 * (6 * ex - 6 * iS.pt[0] - sdx - edx);
@@ -1348,7 +1345,7 @@ Path::TangentOnCubAt (float at, NR::Point &iS, path_descr_cubicto & fin,
   by = 0.5 * (edy - sdy);
   cy = 0.25 * (6 * ey - 6 * iS.pt[1] - sdy - edy);
   dy = 0.125 * (4 * iS.pt[1] + 4 * ey - edy + sdy);
-  float atb = at - 0.5;
+  double atb = at - 0.5;
   pos.pt[0] = ax * atb * atb * atb + bx * atb * atb + cx * atb + dx;
   pos.pt[1] = ay * atb * atb * atb + by * atb * atb + cy * atb + dy;
   NR::Point der, dder, ddder;
@@ -1376,14 +1373,14 @@ Path::TangentOnCubAt (float at, NR::Point &iS, path_descr_cubicto & fin,
 	dder.y=6*ay*at+2*by;
 	ddder.x=6*ax;
 	ddder.y=6*ay;*/
-  float l = sqrtf (dot(der,der));
+  double l = NR::L2 (der);
   if (l <= 0.0001)
   {
     len = 0;
-    l = sqrtf (dot(dder,dder));
+    l = L2(dder);
     if (l <= 0.0001)
     {
-      l = sqrtf (dot(ddder,ddder));
+      l = L2(ddder);
       if (l <= 0.0001)
 	    {
 	      // pas de segment....
@@ -1415,23 +1412,23 @@ Path::TangentOnCubAt (float at, NR::Point &iS, path_descr_cubicto & fin,
 }
 
 void
-Path::TangentOnBezAt (float at, NR::Point &iS,
+Path::TangentOnBezAt (double at, NR::Point const &iS,
                       path_descr_intermbezierto & mid,
                       path_descr_bezierto & fin, bool before, NR::Point & pos,
-                      NR::Point & tgt, float &len, float &rad)
+                      NR::Point & tgt, double &len, double &rad)
 {
-  float ex, ey;
+  double ex, ey;
   ex = fin.p.pt[0];
   ey = fin.p.pt[1];
-  float mx, my;
+  double mx, my;
   mx = mid.p.pt[0];
   my = mid.p.pt[1];
   
   pos = iS;
   tgt.pt[0] = tgt.pt[1] = 0;
   len = rad = 0;
-  float ax, bx, cx;
-  float ay, by, cy;
+  double ax, bx, cx;
+  double ay, by, cy;
   ax = ex + iS.pt[0] - 2 * mx;
   bx = 2 * mx - 2 * iS.pt[0];
   cx = iS.pt[0];
@@ -1446,11 +1443,11 @@ Path::TangentOnBezAt (float at, NR::Point &iS,
   der.pt[1] = 2 * ay * at + by;
   dder.pt[0] = 2 * ax;
   dder.pt[1] = 2 * ay;
-  float l = sqrtf (dot(der,der));
+  double l = NR::L2(der);
   if (l <= 0.0001)
   {
     len = 0;
-    l = sqrtf (dot(dder,dder));
+    l = NR::L2(dder);
     if (l <= 0.0001)
     {
       // pas de segment....
@@ -1472,11 +1469,11 @@ Path::TangentOnBezAt (float at, NR::Point &iS,
 }
 
 void
-Path::OutlineJoin (Path * dest, NR::Point pos, NR::Point stNor, NR::Point enNor, float width,
-                   JoinType join, float miter)
+Path::OutlineJoin (Path * dest, NR::Point pos, NR::Point stNor, NR::Point enNor, double width,
+                   JoinType join, double miter)
 {
-  float angSi = cross (enNor,stNor);
-  float angCo = dot (stNor, enNor);
+  double angSi = cross (enNor,stNor);
+  double angCo = dot (stNor, enNor);
   // 1/1000 est tres grossier, mais sinon ca merde tout azimut
   if ((width >= 0 && angSi > -0.001) || (width < 0 && angSi < 0.001))
   {
@@ -1503,7 +1500,7 @@ Path::OutlineJoin (Path * dest, NR::Point pos, NR::Point stNor, NR::Point enNor,
     {
       // utiliser des bouts de cubique: approximation de l'arc (au point ou on en est...), et supporte mieux 
       // l'arrondi des coordonnees des extremites
-      /*			float   angle=acos(angCo);
+      /*			double   angle=acos(angCo);
 			if ( angCo >= 0 ) {
 				NR::Point   stTgt,enTgt;
 				RotCCWTo(stNor,stTgt);
@@ -1514,7 +1511,7 @@ Path::OutlineJoin (Path * dest, NR::Point pos, NR::Point stNor, NR::Point enNor,
 				NR::Point   stTgt,enTgt,biTgt;
 				biNor.x=stNor.x+enNor.x;
 				biNor.y=stNor.y+enNor.y;
-				float  biL=sqrt(biNor.x*biNor.x+biNor.y*biNor.y);
+				double  biL=sqrt(biNor.x*biNor.x+biNor.y*biNor.y);
 				biNor.x/=biL;
 				biNor.y/=biL;
 				RotCCWTo(stNor,stTgt);
@@ -1541,16 +1538,16 @@ Path::OutlineJoin (Path * dest, NR::Point pos, NR::Point stNor, NR::Point enNor,
     {
       NR::Point biss;
       biss = stNor + enNor;
-      float lb = sqrt (dot(biss,biss));
+      double lb = NR::L2(biss);
       biss /= lb;
-      float angCo = dot (biss, enNor);
-      float angSi = cross (biss, stNor);
-      float l = width / angCo;
+      double angCo = dot (biss, enNor);
+      double angSi = cross (biss, stNor);
+      double l = width / angCo;
       if (miter < 0.5 * lb)
         miter = 0.5 * lb;
       if (l > miter)
 	    {
-	      float r = (l - miter) * angCo / angSi;
+	      double r = (l - miter) * angCo / angSi;
         NR::Point tmp;
         tmp.pt[0]=miter*biss.pt[0]-r*biss.pt[1];
         tmp.pt[1]=miter*biss.pt[1]+r*biss.pt[0];
@@ -1582,13 +1579,13 @@ Path::OutlineJoin (Path * dest, NR::Point pos, NR::Point stNor, NR::Point enNor,
 // les callbacks
 
 void
-Path::RecStdCubicTo (outline_callback_data * data, float tol, float width,
+Path::RecStdCubicTo (outline_callback_data * data, double tol, double width,
                      int lev)
 {
   NR::Point stPos, miPos, enPos;
   NR::Point stTgt, enTgt, miTgt, stNor, enNor, miNor;
-  float stRad, miRad, enRad;
-  float stTle, miTle, enTle;
+  double stRad, miRad, enRad;
+  double stTle, miTle, enTle;
   // un cubic
   {
     path_descr_cubicto temp;
@@ -1612,7 +1609,7 @@ Path::RecStdCubicTo (outline_callback_data * data, float tol, float width,
     enNor=enTgt.cw();
   }
   
-  float stGue = 1, miGue = 1, enGue = 1;
+  double stGue = 1, miGue = 1, enGue = 1;
   if (fabsf (stRad) > 0.01)
     stGue += width / stRad;
   if (fabsf (miRad) > 0.01)
@@ -1644,7 +1641,7 @@ Path::RecStdCubicTo (outline_callback_data * data, float tol, float width,
   req = miPos + width * miNor;
   {
     path_descr_cubicto temp;
-    float chTle, chRad;
+    double chTle, chRad;
     NR::Point chTgt;
     temp.p = enPos + width * enNor;
     temp.stD = stGue * stTgt;
@@ -1655,7 +1652,7 @@ Path::RecStdCubicTo (outline_callback_data * data, float tol, float width,
   }
   NR::Point diff;
   diff = req - chk;
-  float err = (dot(diff,diff));
+  double err = (dot(diff,diff));
   if (err <= tol * tol)
   {
     NR::Point  tmp=enPos+width*enNor;
@@ -1701,14 +1698,14 @@ Path::RecStdCubicTo (outline_callback_data * data, float tol, float width,
 }
 
 void
-Path::StdCubicTo (Path::outline_callback_data * data, float tol, float width)
+Path::StdCubicTo (Path::outline_callback_data * data, double tol, double width)
 {
   fflush (stdout);
   RecStdCubicTo (data, tol, width, 8);
 }
 
 void
-Path::StdBezierTo (Path::outline_callback_data * data, float tol, float width)
+Path::StdBezierTo (Path::outline_callback_data * data, double tol, double width)
 {
   path_descr_bezierto tempb;
   path_descr_intermbezierto tempi;
@@ -1718,7 +1715,7 @@ Path::StdBezierTo (Path::outline_callback_data * data, float tol, float width)
   tempi.p.pt[0] = data->d.b.mx;
   tempi.p.pt[1] = data->d.b.my;
   NR::Point stPos, enPos, stTgt, enTgt;
-  float stRad, enRad, stTle, enTle;
+  double stRad, enRad, stTle, enTle;
   NR::Point  tmp(data->x1,data->y1);
   TangentOnBezAt (0.0, tmp, tempi, tempb, false, stPos, stTgt,
                   stTle, stRad);
@@ -1732,13 +1729,13 @@ Path::StdBezierTo (Path::outline_callback_data * data, float tol, float width)
 }
 
 void
-Path::RecStdArcTo (outline_callback_data * data, float tol, float width,
+Path::RecStdArcTo (outline_callback_data * data, double tol, double width,
                    int lev)
 {
   NR::Point stPos, miPos, enPos;
   NR::Point stTgt, enTgt, miTgt, stNor, enNor, miNor;
-  float stRad, miRad, enRad;
-  float stTle, miTle, enTle;
+  double stRad, miRad, enRad;
+  double stTle, miTle, enTle;
   // un cubic
   {
     path_descr_arcto temp;
@@ -1761,7 +1758,7 @@ Path::RecStdArcTo (outline_callback_data * data, float tol, float width,
     enNor=enTgt.cw();
   }
   
-  float stGue = 1, miGue = 1, enGue = 1;
+  double stGue = 1, miGue = 1, enGue = 1;
   if (fabsf (stRad) > 0.01)
     stGue += width / stRad;
   if (fabsf (miRad) > 0.01)
@@ -1771,14 +1768,14 @@ Path::RecStdArcTo (outline_callback_data * data, float tol, float width,
   stGue *= stTle;
   miGue *= miTle;
   enGue *= enTle;
-  float sang, eang;
+  double sang, eang;
   {
     NR::Point  tms(data->x1,data->y1),tme(data->x2,data->y2);
     ArcAngles (tms,tme, data->d.a.rx,
                data->d.a.ry, data->d.a.angle, data->d.a.large, !data->d.a.clock,
                sang, eang);
   }
-  float scal = eang - sang;
+  double scal = eang - sang;
   if (scal < 0)
     scal += 2 * M_PI;
   if (scal > 2 * M_PI)
@@ -1805,7 +1802,7 @@ Path::RecStdArcTo (outline_callback_data * data, float tol, float width,
   req = miPos + width * miNor;
   {
     path_descr_cubicto temp;
-    float chTle, chRad;
+    double chTle, chRad;
     NR::Point chTgt;
     temp.p = enPos + width * enNor;
     temp.stD = stGue * scal * stTgt;
@@ -1816,7 +1813,7 @@ Path::RecStdArcTo (outline_callback_data * data, float tol, float width,
   }
   NR::Point diff;
   diff = req - chk;
-  float err = (dot(diff,diff));
+  double err = (dot(diff,diff));
   if (err <= tol * tol)
   {
     NR::Point  tmp=enPos+width*enNor;
@@ -1845,7 +1842,7 @@ Path::RecStdArcTo (outline_callback_data * data, float tol, float width,
   }
 }
 void
-Path::StdArcTo (Path::outline_callback_data * data, float tol, float width)
+Path::StdArcTo (Path::outline_callback_data * data, double tol, double width)
 {
   data->d.a.stA = 0.0;
   data->d.a.enA = 1.0;
