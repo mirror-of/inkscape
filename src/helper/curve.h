@@ -16,6 +16,7 @@
 
 #include <glib.h>
 #include <libart_lgpl/art_bpath.h>
+namespace NR { class Point; }
 
 typedef struct _SPCurve SPCurve;
 
@@ -58,21 +59,24 @@ SPCurve *sp_curve_transform (SPCurve *curve, const gdouble transform[]);
 
 void sp_curve_reset (SPCurve * curve);
 
+void sp_curve_moveto (SPCurve * curve, NR::Point const &p);
 void sp_curve_moveto (SPCurve * curve, gdouble x, gdouble y);
+void sp_curve_lineto (SPCurve * curve, NR::Point const &p);
 void sp_curve_lineto (SPCurve * curve, gdouble x, gdouble y);
 void sp_curve_lineto_moving (SPCurve * curve, gdouble x, gdouble y);
+void sp_curve_curveto (SPCurve * curve, NR::Point const &p0, NR::Point const &p1, NR::Point const &p2);
 void sp_curve_curveto (SPCurve * curve, gdouble x0, gdouble y0, gdouble x1, gdouble y1, gdouble x2, gdouble y2);
 void sp_curve_closepath (SPCurve * curve);
 void sp_curve_closepath_current (SPCurve * curve);
 
-SPCurve *sp_curve_append_continuous (SPCurve *c0, SPCurve *c1, gdouble tolerance);
+SPCurve *sp_curve_append_continuous (SPCurve *c0, SPCurve const *c1, gdouble tolerance);
 
 #define sp_curve_is_empty sp_curve_empty
 gboolean sp_curve_empty (SPCurve * curve);
-ArtBpath *sp_curve_last_bpath (SPCurve *curve);
-ArtBpath *sp_curve_first_bpath (SPCurve *curve);
+ArtBpath *sp_curve_last_bpath (SPCurve const *curve);
+ArtBpath *sp_curve_first_bpath (SPCurve const *curve);
 
-void sp_curve_append (SPCurve *curve, SPCurve *curve2, gboolean use_lineto);
+void sp_curve_append (SPCurve *curve, SPCurve const *curve2, gboolean use_lineto);
 SPCurve *sp_curve_reverse (SPCurve *curve);
 void sp_curve_backspace (SPCurve *curve);
 

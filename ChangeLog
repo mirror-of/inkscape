@@ -1,5 +1,12 @@
 2004-01-04  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/helper/curve.h, src/helper/curve.cpp (sp_curve_moveto,
+	sp_curve_lineto, sp_curve_curveto): Add convenience wrappers that
+	take n NR::Point's instead of 2*n gdoubles.
+
+	* src/helper/curve.h, src/helper/curve.cpp: Indicate that certain
+	functions don't modify the curve passed to them.
+
 	* src/libnr/nr-types.h: operator[], operator+=, operator/=, unary operator-,
 	operator==, operator!=: new.  Remove methods L1,L2,Linfty, move them to
 	functions in nr-point-fns.{h,cpp}.  Rename Normalize to normalize with

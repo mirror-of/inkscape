@@ -17,6 +17,7 @@
 #include <string.h>
 #include <libart_lgpl/art_misc.h>
 #include "curve.h"
+#include <libnr/nr-types.h>
 
 #define SP_CURVE_LENSTEP 32
 
@@ -353,7 +354,13 @@ sp_curve_reset (SPCurve * curve)
 	curve->closed = FALSE;
 }
 
-/* Several conequtive movetos are ALLOWED */
+/* Several consecutive movetos are ALLOWED */
+
+void
+sp_curve_moveto (SPCurve * curve, NR::Point const &p)
+{
+  sp_curve_moveto(curve, p[NR::X], p[NR::Y]);
+}
 
 void
 sp_curve_moveto (SPCurve * curve, gdouble x, gdouble y)
@@ -367,6 +374,12 @@ sp_curve_moveto (SPCurve * curve, gdouble x, gdouble y)
 	curve->posset = TRUE;
 	curve->x = x;
 	curve->y = y;
+}
+
+void
+sp_curve_lineto (SPCurve * curve, NR::Point const &p)
+{
+  sp_curve_lineto(curve, p[NR::X], p[NR::Y]);
 }
 
 void
@@ -474,6 +487,17 @@ sp_curve_lineto_moving (SPCurve * curve, gdouble x, gdouble y)
 	bp->code = ART_END;
 	curve->end++;
 	curve->moving = TRUE;
+}
+
+void
+sp_curve_curveto (SPCurve * curve, NR::Point const &p0, NR::Point const &p1, NR::Point const &p2)
+{
+  using NR::X;
+  using NR::Y;
+  sp_curve_curveto(curve,
+		   p0[X], p0[Y],
+		   p1[X], p1[Y],
+		   p2[X], p2[Y]);
 }
 
 void
@@ -599,7 +623,7 @@ sp_curve_empty (SPCurve * curve)
 }
 
 ArtBpath *
-sp_curve_last_bpath (SPCurve * curve)
+sp_curve_last_bpath (SPCurve const *curve)
 {
 	g_return_val_if_fail (curve != NULL, NULL);
 
@@ -609,7 +633,7 @@ sp_curve_last_bpath (SPCurve * curve)
 }
 
 ArtBpath *
-sp_curve_first_bpath (SPCurve * curve)
+sp_curve_first_bpath (SPCurve const *curve)
 {
 	g_return_val_if_fail (curve != NULL, NULL);
 
@@ -671,10 +695,10 @@ sp_curve_reverse (SPCurve *curve)
 
 void
 sp_curve_append (SPCurve *curve,
-                 SPCurve *curve2,
+                 SPCurve const *curve2,
                  gboolean use_lineto)
 {
-	ArtBpath *bs, *bp;
+	ArtBpath const *bs, *bp;
 	gboolean closed;
 
 	g_return_if_fail (curve != NULL);
@@ -733,7 +757,7 @@ sp_curve_append (SPCurve *curve,
 }
 
 SPCurve *
-sp_curve_append_continuous (SPCurve *c0, SPCurve *c1, gdouble tolerance)
+sp_curve_append_continuous (SPCurve *c0, SPCurve const *c1, gdouble tolerance)
 {
 	ArtBpath *e;
 
@@ -746,7 +770,7 @@ sp_curve_append_continuous (SPCurve *c0, SPCurve *c1, gdouble tolerance)
 
 	e = sp_curve_last_bpath (c0);
 	if (e) {
-		ArtBpath *s;
+		ArtBpath const *s;
 		s = sp_curve_first_bpath (c1);
 		if (s && (fabs (s->x3 - e->x3) <= tolerance) && (fabs (s->y3 - e->y3) <= tolerance)) {
 			gboolean closed;
