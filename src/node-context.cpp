@@ -226,6 +226,10 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (event->motion.state & GDK_BUTTON1_MASK) {
+
+			if (abs((gint) event->motion.x - xp) < tolerance && abs((gint) event->motion.y - yp) < tolerance) 
+				break; // do not drag if we're within tolerance from origin
+
 			sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
 			sp_rubberband_move (p.x, p.y);
 			nc->drag = TRUE;
@@ -244,6 +248,9 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 					sp_nodepath_select_rect (nc->nodepath, &b, event->button.state & GDK_SHIFT_MASK);
 				}
 				ret = TRUE;
+			} else {
+				if (!(nodeedit_rb_escaped) && !(nodeedit_drag_escaped)) // unless something was cancelled
+					sp_nodepath_deselect (nc->nodepath); 
 			}
 			xp = yp = 0;
 			nodeedit_rb_escaped = 0;
