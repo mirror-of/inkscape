@@ -26,6 +26,12 @@
 #include "sp-paint-server.h"
 #include "nr-arena-item.h"
 
+//#define test_glyph_liv
+
+#ifdef test_glyph_liv
+class Shape;
+#endif
+
 struct _NRArenaGlyphs {
 	NRArenaItem item;
 
@@ -39,7 +45,11 @@ struct _NRArenaGlyphs {
 	NRRasterFont *rfont;
 	float x, y;
 
+#ifdef test_glyph_liv
+  Shape  *stroke_shp;
+#else
 	ArtSVP *stroke_svp;
+#endif
 };
 
 struct _NRArenaGlyphsClass {

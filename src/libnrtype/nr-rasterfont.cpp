@@ -23,6 +23,14 @@
 #include <libnr/nr-svp.h>
 #include <libnr/nr-svp-render.h>
 
+//#define test_rf_liv
+#include "../livarot/Shape.h"
+#include "../livarot/Path.h"
+#include "../livarot/Ligne.h"
+#include "../livarot/LivarotDefs.h"
+
+void nrrf_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS);
+
 #include <libnr/nr-svp-private.h>
 
 #include "nr-rasterfont.h"
@@ -91,7 +99,8 @@ enum {
 	NRRF_TYPE_NONE,
 	NRRF_TYPE_TINY,
 	NRRF_TYPE_IMAGE,
-	NRRF_TYPE_SVP
+	NRRF_TYPE_SVP,
+  NRRF_TYPE_LIV
 };
 
 struct _NRRFGlyphTiny {
@@ -121,8 +130,17 @@ struct _NRRFGlyphSVP {
 	NRSVP *svp;
 };
 
+struct _NRRFGlyphLIV {
+	/* 26.6 fixed point */
+	NRPointL advance;
+	/* 26.6 fixed point */
+	NRRectL bbox;
+	/* Image */
+	Shape *shp;
+};
+
 struct _NRRFGlyphSlot {
-	unsigned int type : 2;
+	unsigned int type : 3;
 	unsigned int has_advance : 1;
 	unsigned int has_bbox : 1;
 	unsigned int has_gmap : 1;
@@ -130,6 +148,7 @@ struct _NRRFGlyphSlot {
 		struct _NRRFGlyphTiny tg;
 		struct _NRRFGlyphImage ig;
 		struct _NRRFGlyphSVP sg;
+		struct _NRRFGlyphLIV lg;
 	} glyph;
 };
 
@@ -172,6 +191,8 @@ nr_rasterfont_generic_free (NRRasterFont *rf)
 						nr_free (slots[s].glyph.ig.px);
 					} else if (slots[s].type == NRRF_TYPE_SVP) {
 						nr_svp_free (slots[s].glyph.sg.svp);
+					} else if (slots[s].type == NRRF_TYPE_LIV) {
+						delete slots[s].glyph.lg.shp;
 					}
 				}
 				nr_free (rf->pages[p]);
@@ -208,6 +229,15 @@ nr_rasterfont_generic_glyph_area_get (NRRasterFont *rf, unsigned int glyph, NRRe
 	case NRRF_TYPE_SVP:
 		nr_svp_bbox (slot->glyph.sg.svp, area, TRUE);
 		break;
+  case NRRF_TYPE_LIV:
+  {
+    slot->glyph.lg.shp->CalcBBox();
+    area->x0=slot->glyph.lg.shp->leftX;
+    area->x1=slot->glyph.lg.shp->rightX;
+    area->y0=slot->glyph.lg.shp->topY;
+    area->y1=slot->glyph.lg.shp->bottomY;
+  }
+    break;
 	default:
 		break;
 	}
@@ -259,24 +289,39 @@ nr_rasterfont_generic_glyph_mask_render (NRRasterFont *rf, unsigned int glyph, N
 		nr_pixblock_render_svp_mask_or (&spb, slot->glyph.sg.svp);
 		nr_pixblock_release (&spb);
 		return;
+  case NRRF_TYPE_LIV:
+    // rasterization is position independent? wtf?
+    // maybe translating/transforming the shape prior rendering would be more clever
+    // or are each glyph given a slot? (very inefficient)
+		nr_pixblock_setup_extern (&spb, NR_PIXBLOCK_MODE_A8,
+                              m->area.x0 - sx, m->area.y0 - sy, m->area.x1 - sx, m->area.y1 - sy,
+                              NR_PIXBLOCK_PX (m), m->rs, FALSE, FALSE);
+		nrrf_pixblock_render_shape_mask_or (spb, slot->glyph.lg.shp);
+		nr_pixblock_release (&spb);
+    break;
 	default:
 		break;
 	}
 
 	if (nr_rect_l_test_intersect (&area, &m->area)) {
-		NRRectL clip;
-		int x, y;
-		nr_rect_l_intersect (&clip, &area, &m->area);
-		for (y = clip.y0; y < clip.y1; y++) {
-			unsigned char *d, *s;
-			s = spx + (y - area.y0) * srs + (clip.x0 - area.x0);
-			d = NR_PIXBLOCK_PX (m) + (y - m->area.y0) * m->rs + (clip.x0 - m->area.x0);
-			for (x = clip.x0; x < clip.x1; x++) {
-				*d = (NR_A7 (*s, *d) + 127) / 255;
-				s += 1;
-				d += 1;
-			}
-		}
+    // seems to be only for the case where the glyph is an image (otherwise spx=NULL)
+    // so we add that check
+    // the code was maybe relying on bounding boxes to handle this segregation
+    if ( slot->type == NRRF_TYPE_TINY || slot->type == NRRF_TYPE_IMAGE ) {
+      NRRectL clip;
+      int x, y;
+      nr_rect_l_intersect (&clip, &area, &m->area);
+      for (y = clip.y0; y < clip.y1; y++) {
+        unsigned char *d, *s;
+        s = spx + (y - area.y0) * srs + (clip.x0 - area.x0);
+        d = NR_PIXBLOCK_PX (m) + (y - m->area.y0) * m->rs + (clip.x0 - m->area.x0);
+        for (x = clip.x0; x < clip.x1; x++) {
+          *d = (NR_A7 (*s, *d) + 127) / 255;
+          s += 1;
+          d += 1;
+        }
+      }
+    }
 	}
 
 	if (!spb.empty) nr_pixblock_release (&spb);
@@ -318,6 +363,9 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 			break;
 		case NRRF_TYPE_SVP:
 			slot->glyph.sg.advance = ip;
+			break;
+		case NRRF_TYPE_LIV:
+			slot->glyph.lg.advance = ip;
 			break;
 		default:
 			break;
@@ -361,12 +409,38 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 				if ((w >= NRRF_MAX_GLYPH_DIMENSION) ||
 				    (h >= NRRF_MAX_GLYPH_DIMENSION) ||
 				    ((w * h) > NRRF_MAX_GLYPH_SIZE)) {
-					slot->glyph.sg.bbox.x0 = MAX (x0, -32768);
+          // we should not compute the svp, but use the ConvertToShape() instead
+          // using the svp ensures we keep the exact same behavior
+          // 
+#ifndef test_rf_liv
+          slot->glyph.sg.bbox.x0 = MAX (x0, -32768);
 					slot->glyph.sg.bbox.y0 = MAX (y0, -32768);
 					slot->glyph.sg.bbox.x1 = MIN (x1, 32767);
 					slot->glyph.sg.bbox.y1 = MIN (y1, 32767);
 					slot->type = NRRF_TYPE_SVP;
 					slot->glyph.sg.svp = svp;
+#else
+          slot->glyph.lg.bbox.x0 = MAX (x0, -32768);
+					slot->glyph.lg.bbox.y0 = MAX (y0, -32768);
+					slot->glyph.lg.bbox.x1 = MIN (x1, 32767);
+					slot->glyph.lg.bbox.y1 = MIN (y1, 32767);
+					slot->type = NRRF_TYPE_LIV;
+					slot->glyph.lg.shp = new Shape;
+          
+          Path*  thePath=new Path;
+          Shape* theShape=new Shape;
+          {
+            NR::Matrix   tempMat(&a);
+            thePath->LoadArtBPath(gbp.path,tempMat,true);
+          }
+          thePath->Convert(0.25);
+          thePath->Fill(theShape,0);
+          slot->glyph.lg.shp->ConvertToShape(theShape,fill_nonZero);
+          delete theShape;
+          delete thePath;
+          
+          nr_svp_free(svp);
+#endif
 				} else {
 					NRPixBlock spb;
 					slot->glyph.ig.bbox.x0 = MAX (x0, -32768);
@@ -393,5 +467,145 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 	}
 
 	return slot;
+}
+
+// duplicate of the one in nr-arena-shape.cpp
+
+static void
+shape_run_A8_OR (raster_info &dest,void *data,int st,float vst,int en,float ven)
+{
+  //	printf("%i %f -> %i %f\n",st,vst,en,ven);
+  if ( st >= en ) return;
+  if ( vst < 0 ) vst=0;
+  if ( vst > 1 ) vst=1;
+  if ( ven < 0 ) ven=0;
+  if ( ven > 1 ) ven=1;
+  float   sv=vst;
+  float   dv=ven-vst;
+  int     len=en-st;
+  unsigned char*   d=(unsigned char*)dest.buffer;
+  d+=(st-dest.startPix);
+  if ( fabsf(dv) < 0.001 ) {
+    if ( vst > 0.999 ) {
+      /* Simple copy */
+      while (len > 0) {
+        d[0] = 255;
+        d += 1;
+        len -= 1;
+      }
+    } else {
+      sv*=256;
+      unsigned int c0_24=(int)sv;
+      c0_24&=0xFF;
+      while (len > 0) {
+        unsigned int da;
+        /* Draw */
+        da = 65025 - (255 - c0_24) * (255 - d[0]);
+        d[0] = (da + 127) / 255;
+        d += 1;
+        len -= 1;
+      }
+    }
+  } else {
+    if ( en <= st+1 ) {
+      sv=0.5*(vst+ven);
+      sv*=256;
+      unsigned int c0_24=(int)sv;
+      c0_24&=0xFF;
+      unsigned int da;
+      /* Draw */
+      da = 65025 - (255 - c0_24) * (255 - d[0]);
+      d[0] = (da + 127) / 255;
+    } else {
+      dv/=len;
+      vst+=0.5*dv; // correction trapezoidale
+      sv*=16777216;
+      dv*=16777216;
+      int c0_24 = static_cast<int>(CLAMP(sv, 0, 16777216));
+      int s0_24 = static_cast<int>(dv);
+      while (len > 0) {
+        unsigned int ca, da;
+        /* Draw */
+        ca = c0_24 >> 16;
+        if ( ca > 255 ) ca=255;
+        da = 65025 - (255 - ca) * (255 - d[0]);
+        d[0] = (da + 127) / 255;
+        d += 1;
+        c0_24 += s0_24;
+        c0_24 = CLAMP (c0_24, 0, 16777216);
+        len -= 1;
+      }
+    }
+  }
+}
+
+void nrrf_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
+{
+  //  printf("bbox %i %i %i %i \n",m.area.x0,m.area.y0,m.area.x1,m.area.y1);
+  
+  theS->CalcBBox();
+  float  l=theS->leftX,r=theS->rightX,t=theS->topY,b=theS->bottomY;
+  int    il,ir,it,ib;
+  il=(int)floorf(l);
+  ir=(int)ceilf(r);
+  it=(int)floorf(t);
+  ib=(int)ceilf(b);
+  
+  if ( il >= m.area.x1 || ir <= m.area.x0 || it >= m.area.y1 || ib <= m.area.y0 ) return;
+  if ( il < m.area.x0 ) il=m.area.x0;
+  if ( it < m.area.y0 ) it=m.area.y0;
+  if ( ir > m.area.x1 ) ir=m.area.x1;
+  if ( ib > m.area.y1 ) ib=m.area.y1;
+  
+  int    curPt;
+  float  curY;
+  theS->BeginRaster(curY,curPt,1.0);
+  
+  FloatLigne* theI=new FloatLigne();
+  IntLigne*   theIL=new IntLigne();
+  //  AlphaLigne*   theI=new AlphaLigne(il,ir);
+  
+  theS->Scan(curY,curPt,(float)(it),1.0);
+  
+  char* mdata=(char*)m.data.px;
+  if ( m.size == NR_PIXBLOCK_SIZE_TINY ) mdata=(char*)m.data.p;
+  uint32_t* ligStart=((uint32_t*)(mdata+((il-m.area.x0)+m.rs*(it-m.area.y0))));
+  for (int y=it;y<ib;y++) {
+    theI->Reset();
+    //    theIL->Reset();
+    /*    if ( y == -1661 && il == 5424 ) {
+    printf("o");
+    }*/
+    if ( y&0x00000003 ) {
+      theS->Scan(curY,curPt,((float)(y+1)),theI,false,1.0);
+    } else {
+      theS->Scan(curY,curPt,((float)(y+1)),theI,true,1.0);
+    }
+    theI->Flatten();
+    theIL->Copy(theI);
+    /*    {
+      bool   bug=false;
+    for (int i=1;i<theI->nbRun;i++) {
+      if ( theI->runs[i].st < theI->runs[i-1].en-0.1 ) bug=true;
+    }
+    if ( bug ) {
+      //        theI->Affiche();
+    }
+    }
+    if ( showRuns ) theIL->Affiche();*/
+    
+    raster_info  dest;
+    dest.startPix=il;
+    dest.endPix=ir;
+    dest.sth=il;
+    dest.stv=y;
+    dest.buffer=ligStart;
+    //    theI->Raster(dest,NULL,shape_run_A8_OR);
+    theIL->Raster(dest,NULL,shape_run_A8_OR);
+    ligStart=((uint32_t*)(((char*)ligStart)+m.rs));
+  }
+  theS->EndRaster();
+  delete theI;
+  delete theIL;
 }
 

@@ -34,6 +34,17 @@
 #include "nr-arena.h"
 #include "nr-arena-glyphs.h"
 
+#ifdef test_glyph_liv
+#include "../helper/canvas-bpath.h"
+#include "../livarot/LivarotDefs.h"
+#include "../livarot/Path.h"
+#include "../livarot/Shape.h"
+#include "../livarot/Ligne.h"
+
+// defined in nr-arena-shape.cpp
+void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS);
+#endif
+
 static void nr_arena_glyphs_class_init (NRArenaGlyphsClass *klass);
 static void nr_arena_glyphs_init (NRArenaGlyphs *glyphs);
 static void nr_arena_glyphs_finalize (NRObject *object);
@@ -83,7 +94,11 @@ nr_arena_glyphs_init (NRArenaGlyphs *glyphs)
 	glyphs->curve = NULL;
 	glyphs->style = NULL;
 
+#ifdef test_glyph_liv
+  glyphs->stroke_shp=NULL;
+#else
 	glyphs->stroke_svp = NULL;
+#endif
 }
 
 static void
@@ -93,11 +108,18 @@ nr_arena_glyphs_finalize (NRObject *object)
 
 	glyphs = NR_ARENA_GLYPHS (object);
 
+#ifdef test_glyph_liv
+	if (glyphs->stroke_shp) {
+		delete glyphs->stroke_shp;
+		glyphs->stroke_shp = NULL;
+	}
+#else
 	if (glyphs->stroke_svp) {
 		art_svp_free (glyphs->stroke_svp);
 		glyphs->stroke_svp = NULL;
 	}
-
+#endif
+  
 	if (glyphs->rfont) {
 		glyphs->rfont = nr_rasterfont_unref (glyphs->rfont);
 	}
@@ -124,8 +146,10 @@ nr_arena_glyphs_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state,
 	NRArenaGlyphs *glyphs;
 	NRRasterFont *rfont;
 	NRMatrix t;
+#ifndef test_glyph_liv
 	ArtBpath *abp;
 	ArtVpath *vp, *pvp;
+#endif
 	ArtDRect bbox;
 
 	glyphs = NR_ARENA_GLYPHS (item);
@@ -138,10 +162,17 @@ nr_arena_glyphs_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state,
 	}
 
 	/* Release state data */
+#ifdef test_glyph_liv
+	if (glyphs->stroke_shp) {
+    delete glyphs->stroke_shp;
+		glyphs->stroke_shp = NULL;
+	}
+#else
 	if (glyphs->stroke_svp) {
 		art_svp_free (glyphs->stroke_svp);
 		glyphs->stroke_svp = NULL;
 	}
+#endif
 
 	if (!glyphs->font || !glyphs->curve || !glyphs->style) return NR_ARENA_ITEM_STATE_ALL;
 	if ((glyphs->style->fill.type == SP_PAINT_TYPE_NONE) && (glyphs->style->stroke.type == SP_PAINT_TYPE_NONE)) return NR_ARENA_ITEM_STATE_ALL;
@@ -165,6 +196,34 @@ nr_arena_glyphs_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state,
 
 	if (glyphs->style->stroke.type != SP_PAINT_TYPE_NONE) {
 		/* Build state data */
+#ifdef test_glyph_liv
+    Path*  thePath=new Path;
+    Shape* theShape=new Shape;    
+    if ( glyphs->stroke_shp == NULL ) glyphs->stroke_shp=new Shape;
+    {
+      NR::Matrix   tempMat(gc->transform);
+      thePath->LoadArtBPath(glyphs->curve->bpath,tempMat,true);
+    }
+    thePath->Convert(0.25);
+
+    gdouble width;
+    width = glyphs->style->stroke_width.computed * NR_MATRIX_DF_EXPANSION (&gc->transform);
+    width = MAX (0.125, width);
+
+    JoinType join=join_straight;
+    ButtType butt=butt_straight;
+    if ( glyphs->style->stroke_linecap.value == SP_STROKE_LINECAP_BUTT ) butt=butt_straight;
+    if ( glyphs->style->stroke_linecap.value == SP_STROKE_LINECAP_ROUND ) butt=butt_round;
+    if ( glyphs->style->stroke_linecap.value == SP_STROKE_LINECAP_SQUARE ) butt=butt_square;
+    if ( glyphs->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_MITER ) join=join_pointy;
+    if ( glyphs->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_ROUND ) join=join_round;
+    if ( glyphs->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_BEVEL ) join=join_straight;
+    thePath->Stroke(theShape,false,0.5*width, join,butt,width*glyphs->style->stroke_miterlimit.value);
+
+    glyphs->stroke_shp->ConvertToShape(theShape,fill_nonZero);
+    delete thePath;
+    delete theShape;
+#else
 		abp = art_bpath_affine_transform (glyphs->curve->bpath, NR_MATRIX_D_TO_DOUBLE (&gc->transform));
 		vp = art_bez_path_to_vec (abp, 0.25);
 		art_free (abp);
@@ -183,9 +242,27 @@ nr_arena_glyphs_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state,
 		}
 
 		art_free (pvp);
+#endif
 	}
 
+#ifdef test_glyph_liv
+  if ( glyphs->stroke_shp ) {
+    glyphs->stroke_shp->CalcBBox();
+    if ( bbox.x0 >= bbox.x1 || bbox.y0 >= bbox.y1 ) {
+      bbox.x0=glyphs->stroke_shp->leftX;
+      bbox.x1=glyphs->stroke_shp->rightX;
+      bbox.y0=glyphs->stroke_shp->topY;
+      bbox.y1=glyphs->stroke_shp->bottomY;
+    } else {
+      if ( glyphs->stroke_shp->leftX < bbox.x0 ) bbox.x0=glyphs->stroke_shp->leftX;
+      if ( glyphs->stroke_shp->rightX > bbox.x1 ) bbox.x1=glyphs->stroke_shp->rightX;
+      if ( glyphs->stroke_shp->topY < bbox.y0 ) bbox.y0=glyphs->stroke_shp->topY;
+      if ( glyphs->stroke_shp->bottomY > bbox.y1 ) bbox.y1=glyphs->stroke_shp->bottomY;
+    }
+  }
+#else 
 	if (glyphs->stroke_svp) art_drect_svp_union (&bbox, glyphs->stroke_svp);
+#endif
 	if (art_drect_empty (&bbox)) return NR_ARENA_ITEM_STATE_ALL;
 
 	item->bbox.x0 = (gint32)(bbox.x0 - 1.0);
@@ -224,6 +301,17 @@ nr_arena_glyphs_pick (NRArenaItem *item, gdouble x, gdouble y, gdouble delta, un
 	/* fixme: */
 	if ((x >= item->bbox.x0) && (y >= item->bbox.y0) && (x < item->bbox.x1) && (y < item->bbox.y1)) return item;
 
+#ifdef test_glyph_liv
+  NR::Point const thePt(x, y);
+		if (glyphs->stroke_shp && (glyphs->style->stroke.type != SP_PAINT_TYPE_NONE)) {
+			if (glyphs->stroke_shp->PtWinding(thePt) > 0 ) return item;
+		}
+		if (delta > 1e-3) {
+			if (glyphs->stroke_shp && (glyphs->style->stroke.type != SP_PAINT_TYPE_NONE)) {
+				if ( glyphs->stroke_shp->DistanceLE(thePt, delta)) return item;
+			}
+		}
+#else
 	if (glyphs->stroke_svp && (glyphs->style->stroke.type != SP_PAINT_TYPE_NONE)) {
 		if (art_svp_point_wind (glyphs->stroke_svp, x, y)) return item;
 	}
@@ -232,7 +320,8 @@ nr_arena_glyphs_pick (NRArenaItem *item, gdouble x, gdouble y, gdouble delta, un
 			if (art_svp_point_dist (glyphs->stroke_svp, x, y) <= delta) return item;
 		}
 	}
-
+#endif
+  
 	return NULL;
 }
 
@@ -312,12 +401,21 @@ nr_arena_glyphs_stroke_mask (NRArenaGlyphs *glyphs, NRRectL *area, NRPixBlock *m
 	NRArenaItem *item;
 
 	item = NR_ARENA_ITEM (glyphs);
-
+#ifdef test_glyph_liv
+	if (glyphs->stroke_shp && nr_rect_l_test_intersect (area, &item->bbox)) {
+#else
 	if (glyphs->stroke_svp && nr_rect_l_test_intersect (area, &item->bbox)) {
+#endif
 		NRPixBlock gb;
 		gint x, y;
 		nr_pixblock_setup_fast (&gb, NR_PIXBLOCK_MODE_A8, area->x0, area->y0, area->x1, area->y1, TRUE);
+#ifdef test_glyph_liv
+    // art_gray_svp_aa is just fillung apparently
+    // dunno why it's used here instead of its libnr counterpart
+    nr_pixblock_render_shape_mask_or (gb,glyphs->stroke_shp);    
+#else
 		art_gray_svp_aa (glyphs->stroke_svp, area->x0, area->y0, area->x1, area->y1, NR_PIXBLOCK_PX (&gb), gb.rs);
+#endif
 		for (y = area->y0; y < area->y1; y++) {
 			guchar *d, *s;
 			d = NR_PIXBLOCK_PX (m) + (y - area->y0) * m->rs;
@@ -330,8 +428,12 @@ nr_arena_glyphs_stroke_mask (NRArenaGlyphs *glyphs, NRRectL *area, NRPixBlock *m
 		}
 		nr_pixblock_release (&gb);
 		m->empty = FALSE;
+#ifdef test_glyph_liv
+  }
+#else
 	}
-
+#endif
+  
 	return item->state;
 }
 
