@@ -564,11 +564,14 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 					       event->button.state);
 				sp_document_undo (SP_DT_DOCUMENT (knot->desktop));
 				sp_view_set_statusf_flash (SP_VIEW(knot->desktop), "Knot drag cancelled.");
+				transform_escaped = 1;
+				consumed = TRUE;
 			} 
 			grabbed = FALSE;
 			moved = FALSE;
-			transform_escaped = 1;
-			consumed = TRUE;
+			break;
+		default:
+			consumed = FALSE;
 			break;
 		}
 		break;
