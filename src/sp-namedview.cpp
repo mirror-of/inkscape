@@ -39,7 +39,7 @@
 
 #include "isnan.h" //temp fox for isnan().  include last
 
-#define DEFAULTTOLERANCE 5.0
+#define DEFAULTTOLERANCE 0.4
 #define DEFAULTGRIDCOLOR 0x3f3fff2f
 #define DEFAULTGRIDEMPCOLOR 0x3f3fff52
 #define DEFAULTGRIDEMPSPACING 5
@@ -140,6 +140,7 @@ sp_namedview_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	if (((SPObjectClass *) (parent_class))->build)
 		(* ((SPObjectClass *) (parent_class))->build) (object, document, repr);
 
+	sp_object_read_attr (object, "inkscape:document-units");
 	sp_object_read_attr (object, "viewonly");
 	sp_object_read_attr (object, "showgrid");
 	sp_object_read_attr (object, "showguides");
@@ -177,7 +178,6 @@ sp_namedview_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	sp_object_read_attr (object, "inkscape:grid-points");
 	sp_object_read_attr (object, "inkscape:guide-points");
 	sp_object_read_attr (object, "inkscape:current-layer");
-	sp_object_read_attr (object, "inkscape:document-units");
 
 	/* Construct guideline list */
 
@@ -244,7 +244,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_GRIDTOLERANCE:
-		nv->gridtoleranceunit = px;
+		nv->gridtoleranceunit = nv->doc_units;
 		nv->gridtolerance = DEFAULTTOLERANCE;
 		if (value) {
 			sp_nv_read_length (value, SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE, &nv->gridtolerance, &nv->gridtoleranceunit);
@@ -252,7 +252,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_GUIDETOLERANCE:
-		nv->guidetoleranceunit = px;
+		nv->guidetoleranceunit = nv->doc_units;
 		nv->guidetolerance = DEFAULTTOLERANCE;
 		if (value) {
 			sp_nv_read_length (value, SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE, &nv->guidetolerance, &nv->guidetoleranceunit);
@@ -263,7 +263,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_ATTR_GRIDORIGINY:
 	{
 		unsigned const d = (key == SP_ATTR_GRIDORIGINY);
-		nv->gridunit = mm;
+		nv->gridunit = nv->doc_units;
 		nv->gridorigin[d] = 0.0;
 		if (value) {
 			sp_nv_read_length (value, SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE, &nv->gridorigin[d], &nv->gridunit);
@@ -277,8 +277,8 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_ATTR_GRIDSPACINGY:
 	{
 		unsigned const d = (key == SP_ATTR_GRIDSPACINGY);
-		nv->gridunit = mm;
-		nv->gridspacing[d] = 5.0;
+		nv->gridunit = nv->doc_units;
+		nv->gridspacing[d] = 1.0;
 		if (value) {
 			sp_nv_read_length (value, SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE, &nv->gridspacing[d], &nv->gridunit);
 		}
@@ -444,7 +444,7 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_DOCUMENT_UNITS: {
-		SPUnit const *new_unit = pt;
+		SPUnit const *new_unit = pt; // old documents were pretty much pt-based, so leave it as the default
 		if (value) {
 			SPUnit const *const req_unit = sp_unit_get_by_abbreviation(value);
 			if ( req_unit == NULL ) {
