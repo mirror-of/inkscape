@@ -33,6 +33,8 @@ livarot_libvarot_a_SOURCES =	\
 	livarot/ShapeMisc.cpp	\
 	livarot/ShapeRaster.cpp	\
 	livarot/ShapeSweep.cpp	\
+	livarot/sweep-tree-list.cpp	\
+	livarot/sweep-tree-list.h	\
 	livarot/sweep-tree.cpp \
 	livarot/sweep-tree.h \
 	livarot/sweep-event.cpp \

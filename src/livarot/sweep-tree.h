@@ -1,28 +1,15 @@
-#ifndef INKSCAPE_LIVAROT_SWEEP_TREE_LIST_H
-#define INKSCAPE_LIVAROT_SWEEP_TREE_LIST_H
+#ifndef INKSCAPE_LIVAROT_SWEEP_TREE_H
+#define INKSCAPE_LIVAROT_SWEEP_TREE_H
 
+#include "livarot/sweep-tree-list.h"   // FIXME: Remove this temporary #include.
 #include "libnr/nr-point.h"
 #include "livarot/AVL.h"
 
-class SweepTree;
 class Shape;
 class SweepEvent;
 class SweepEventQueue;
+class SweepTreeList;
 
-// the sweepline: a set of edges intersecting the current sweepline
-// stored as an AVL tree
-class SweepTreeList
-{
-public:
-  int nbTree, maxTree;		// number of nodes in the tree, max number of nodes
-  SweepTree *trees;		// the array of nodes
-  SweepTree *racine;		// root of the tree
-
-  SweepTreeList(int s);
-  ~SweepTreeList();
-  
-  SweepTree *add(Shape *iSrc, int iBord, int iWeight, int iStartPoint, Shape *iDst);
-};
 
 // one node in the AVL tree of edges
 // note that these nodes will be stored in a dynamically allocated array, hence the Relocate() function
@@ -77,4 +64,4 @@ public:
   void Relocate (SweepTree * to);
 };
 
-#endif
+#endif /* !INKSCAPE_LIVAROT_SWEEP_TREE_H */
