@@ -20,10 +20,12 @@ int main(int argc, char** argv)
    Inkscape::SVGViewer area;
    Inkscape::URI uri(argv[1]);
    area.setURI(uri);
+   win.set_title("SVGViewer test");
+   win.resize(500,500);
    win.add(area);
    area.show();
 
-   Gtk::Main::run(win);
+   kit.run(win);
 
    return 0;
 }
