@@ -26,6 +26,8 @@ class SPReprAction;
 
 struct SPDocumentPrivate {
 	typedef std::map<GQuark, SPDocument::IDChangedSignal> IDChangedSignalMap;
+	typedef std::map<GQuark, SPDocument::ResourcesChangedSignal> ResourcesChangedSignalMap;
+
 	GHashTable *iddef;	/**< Dictionary of id -> SPObject mappings */
 	/** Dictionary of signals for id changes */
 	IDChangedSignalMap id_changed_signals;
@@ -33,6 +35,7 @@ struct SPDocumentPrivate {
 	/* Resources */
 	/* It is GHashTable of GSLists */
 	GHashTable *resources;
+	ResourcesChangedSignalMap resources_changed_signals;
 
 	/* Undo/Redo state */
 	guint sensitive: 1; /* If we save actions to undo stack */

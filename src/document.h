@@ -27,6 +27,7 @@ class SPDocumentPrivate;
 
 struct SPDocument {
 	typedef sigc::signal<void, SPObject *> IDChangedSignal;
+	typedef sigc::signal<void> ResourcesChangedSignal;
 
 	GObject object;
 
@@ -42,7 +43,6 @@ struct SPDocument {
 	gchar *base;
 	gchar *name;
 
-	/* fixme: remove this */
 	SPDocumentPrivate *priv;
 
 	/* Last action key */
@@ -138,6 +138,8 @@ gboolean sp_document_redo (SPDocument * document);
 gboolean sp_document_add_resource (SPDocument *document, const gchar *key, SPObject *object);
 gboolean sp_document_remove_resource (SPDocument *document, const gchar *key, SPObject *object);
 const GSList *sp_document_get_resource_list (SPDocument *document, const gchar *key);
+sigc::connection sp_document_resources_changed_connect(SPDocument *document, const gchar *key, SPDocument::ResourcesChangedSignal::slot_type slot);
+
 
 /*
  * Ideas: How to overcome style invalidation nightmare

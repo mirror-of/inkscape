@@ -913,6 +913,7 @@ gboolean
 sp_document_add_resource (SPDocument *document, const gchar *key, SPObject *object)
 {
 	GSList *rlist;
+	GQuark q=g_quark_from_string(key);
 
 	g_return_val_if_fail (document != NULL, FALSE);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), FALSE);
@@ -926,6 +927,8 @@ sp_document_add_resource (SPDocument *document, const gchar *key, SPObject *obje
 	rlist = g_slist_prepend (rlist, object);
 	g_hash_table_insert (document->priv->resources, (gpointer) key, rlist);
 
+	document->priv->resources_changed_signals[q].emit();
+
 	return TRUE;
 }
 
@@ -933,6 +936,7 @@ gboolean
 sp_document_remove_resource (SPDocument *document, const gchar *key, SPObject *object)
 {
 	GSList *rlist;
+	GQuark q=g_quark_from_string(key);
 
 	g_return_val_if_fail (document != NULL, FALSE);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), FALSE);
@@ -947,6 +951,8 @@ sp_document_remove_resource (SPDocument *document, const gchar *key, SPObject *o
 	rlist = g_slist_remove (rlist, object);
 	g_hash_table_insert (document->priv->resources, (gpointer) key, rlist);
 
+	document->priv->resources_changed_signals[q].emit();
+
 	return TRUE;
 }
 
@@ -959,6 +965,15 @@ sp_document_get_resource_list (SPDocument *document, const gchar *key)
 	g_return_val_if_fail (*key != '\0', NULL);
 
 	return (GSList*)g_hash_table_lookup (document->priv->resources, key);
+}
+
+sigc::connection sp_document_resources_changed_connect(
+	SPDocument *document,
+	const gchar *key,
+	SPDocument::ResourcesChangedSignal::slot_type slot
+) {
+	GQuark q=g_quark_from_string(key);
+	return document->priv->resources_changed_signals[q].connect(slot);
 }
 
 /* Helpers */
