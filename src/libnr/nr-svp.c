@@ -15,6 +15,7 @@
 
 #include <assert.h>
 #include <stdio.h>
+#include <glib.h>
 
 #include "nr-values.h"
 #include "nr-macros.h"
@@ -689,7 +690,7 @@ nr_vertex_new_xy (NRCoord x, NRCoord y)
 	NRVertex * v;
 
 	if (!finite(x) || !finite(y)) {
-		g_critical("nr_vertex_new_xy: Coordinates are not finite");
+		g_critical("nr_vertex_new_xy: BUG: Coordinates are not finite");
 		x = y = 0;
 	} else if (!( fabs(x) < 1e17 && fabs(y) < 1e17 )) {
 		g_critical("nr_vertex_new_xy: Coordinates out of range");
