@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include <glib.h>
+#include <glibmm/i18n.h>
 
 #include <gtk/gtk.h>
 
@@ -31,13 +32,11 @@
 #include <gtk/gtkalignment.h>
 
 #include "macros.h"
-#include <glibmm/i18n.h>
 #include "helper/sp-marshal.h"
 #include "display/gnome-canvas-acetate.h"
 #include "display/sodipodi-ctrlrect.h"
 #include "display/sp-canvas-util.h"
 #include "helper/units.h"
-#include <glibmm/i18n.h>
 #include "libnr/nr-matrix-ops.h"
 #include "widgets/button.h"
 #include "widgets/ruler.h"
