@@ -35,7 +35,7 @@ nr_matrix_multiply (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1)
 {
 	if (m0) {
 		if (m1) {
-			double d0, d1, d2, d3, d4, d5;
+			NR::Coord d0, d1, d2, d3, d4, d5;
 
 			d0 = m0->c[0] * m1->c[0] + m0->c[1] * m1->c[2];
 			d1 = m0->c[0] * m1->c[1] + m0->c[1] * m1->c[3];
@@ -67,10 +67,10 @@ NRMatrix *
 nr_matrix_invert (NRMatrix *d, const NRMatrix *m)
 {
 	if (m) {
-		double det;
+		NR::Coord det;
 		det = m->c[0] * m->c[3] - m->c[1] * m->c[2];
 		if (!NR_DF_TEST_CLOSE (det, 0.0, NR_EPSILON)) {
-			double rdet, t;
+			NR::Coord rdet, t;
 			rdet = 1.0 / det;
 			t = m->c[3] * rdet;
 			d->c[3] = m->c[0] * rdet;
@@ -91,7 +91,7 @@ nr_matrix_invert (NRMatrix *d, const NRMatrix *m)
 }
 
 NRMatrix *
-nr_matrix_set_translate (NRMatrix *m, double x, double y)
+nr_matrix_set_translate (NRMatrix *m, NR::Coord x, NR::Coord y)
 {
 	m->c[0] = 1.0;
 	m->c[1] = 0.0;
@@ -104,7 +104,7 @@ nr_matrix_set_translate (NRMatrix *m, double x, double y)
 }
 
 NRMatrix *
-nr_matrix_set_scale (NRMatrix *m, double sx, double sy)
+nr_matrix_set_scale (NRMatrix *m, NR::Coord sx, NR::Coord sy)
 {
 	m->c[0] = sx;
 	m->c[1] = 0.0;
@@ -117,9 +117,9 @@ nr_matrix_set_scale (NRMatrix *m, double sx, double sy)
 }
 
 NRMatrix *
-nr_matrix_set_rotate (NRMatrix *m, double theta)
+nr_matrix_set_rotate (NRMatrix *m, NR::Coord theta)
 {
-	double s, c;
+	NR::Coord s, c;
 	s = sin (theta);
 	c = cos (theta);
 	m->c[0] = c;
@@ -152,7 +152,7 @@ Matrix::operator NRMatrix() const {
 Matrix Matrix::multiply (const Matrix m0, const Matrix m1)
 {
 	Matrix d;
-	double d0, d1, d2, d3, d4, d5;
+	NR::Coord d0, d1, d2, d3, d4, d5;
 	
 	for(int i = 0; i < 3; i++)
 		for(int j = 0; j < 2; j++)
@@ -171,10 +171,10 @@ Matrix Matrix::invert ()
 {
 	Matrix d;
 	if (m) {
-		double det;
+		NR::Coord det;
 		det = m.c[0] * m.c[3] - m.c[1] * m.c[2];
 		if (!NR_DF_TEST_CLOSE (det, 0.0, NR_EPSILON)) {
-			double rdet, t;
+			NR::Coord rdet, t;
 			rdet = 1.0 / det;
 			t = m.c[3] * rdet;
 			d.c[3] = m.c[0] * rdet;
@@ -216,10 +216,10 @@ void set_scale (Point scale)
 	return m;
 }
 
-void set_rotate (const double theta)
+void set_rotate (const NR::Coord theta)
 {
-	double s = sin (theta);
-	double c = cos (theta);
+	NR::Coord s = sin (theta);
+	NR::Coord c = cos (theta);
 	c[0] = c; c[2] = -s;
 	c[1] = s; c[3] = c;
 	// translation

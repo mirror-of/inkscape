@@ -34,7 +34,7 @@ struct _NRPixBlock {
 	unsigned int mode : 2;
 	unsigned int empty : 1;
 	unsigned int rs;
-	NRRectS area;
+	NRRectL area;
 	union {
 		unsigned char *px;
 		unsigned char p[sizeof (unsigned char *)];

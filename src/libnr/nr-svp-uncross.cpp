@@ -37,8 +37,8 @@ struct _NRSVLSlice {
 	NRCoord y;
 };
 
-static NRSVL *nr_svl_slice_break (NRSVLSlice *s, double x, double y, NRSVL *svl);
-static NRSVL *nr_svl_slice_break_y_and_continue_x (NRSVLSlice *s, double y, double x, NRSVL *svl, double ytest, NRFlat **flats);
+static NRSVL *nr_svl_slice_break (NRSVLSlice *s, NR::Coord x, NR::Coord y, NRSVL *svl);
+static NRSVL *nr_svl_slice_break_y_and_continue_x (NRSVLSlice *s, NR::Coord y, NR::Coord x, NRSVL *svl, NR::Coord ytest, NRFlat **flats);
 
 static NRSVLSlice *nr_svl_slice_new (NRSVL *svl, NRCoord y);
 static void nr_svl_slice_free_one (NRSVLSlice *slice);
@@ -47,20 +47,20 @@ static NRSVLSlice *nr_svl_slice_insert_sorted (NRSVLSlice *start, NRSVLSlice *sl
 
 static NRSVLSlice *nr_svl_slice_stretch_list (NRSVLSlice *slices, NRCoord y);
 
-static double nr_vertex_segment_distance2 (NRVertex *v, NRVertex *s);
-static double nr_segment_intersection (NRVertex *s0, NRVertex *s1, double *x, double *y);
+static NR::Coord nr_vertex_segment_distance2 (NRVertex *v, NRVertex *s);
+static NR::Coord nr_segment_intersection (NRVertex *s0, NRVertex *s1, NR::Coord *x, NR::Coord *y);
 
 #ifdef NR_EXTRA_CHECK
 static void
-nr_svl_test_slices (NRSVLSlice *slices, double yslice, const unsigned char *prefix, int colinear, int test, int close)
+nr_svl_test_slices (NRSVLSlice *slices, NR::Coord yslice, const unsigned char *prefix, int colinear, int test, int close)
 {
 	NRSVLSlice *s;
 	int wind;
 	wind = 0;
 	for (s = slices; s && s->next; s = s->next) {
 		NRSVLSlice *cs, *ns;
-		double cx0, cy0, cx1, cy1, cx;
-		double nx0, ny0, nx1, ny1, nx;
+		NR::Coord cx0, cy0, cx1, cy1, cx;
+		NR::Coord nx0, ny0, nx1, ny1, nx;
 		cs = s;
 		ns = s->next;
 		cx0 = cs->vertex->x;
@@ -84,8 +84,8 @@ nr_svl_test_slices (NRSVLSlice *slices, double yslice, const unsigned char *pref
 		if (cx > nx) {
 			printf ("%s: Slice x %g > %g\n", prefix, cx, nx);
 		} else if (cx == nx) {
-			double ldx, ldy, rdx, rdy;
-			double d;
+			NR::Coord ldx, ldy, rdx, rdy;
+			NR::Coord d;
 			ldx = cx1 - cx;
 			ldy = cy1 - yslice;
 			rdx = nx1 - nx;
@@ -188,7 +188,7 @@ nr_svl_uncross_full (NRSVL *svl, NRFlat *flats, unsigned int windrule)
 				ss = NULL;
 				cs = slices;
 			} else if (cs->x == ns->x) {
-				double order;
+				NR::Coord order;
 				/* Break if either one is new slice */
 				if ((cs->y == cs->vertex->y) || (ns->y == ns->vertex->y)) {
 					csvl = nr_svl_slice_break (cs, cs->x, yslice, csvl);
@@ -197,7 +197,7 @@ nr_svl_uncross_full (NRSVL *svl, NRFlat *flats, unsigned int windrule)
 				/* test continuation direction */
 				order = nr_svl_slice_compare (cs, ns);
 				if (fabs (order < 0.01)) {
-					double dist2;
+					NR::Coord dist2;
 					/* Potentially close, test endpoint */
 					/* Bitch'o'bitches (Lauris) */
 					if (cs->vertex->next->y < ns->vertex->next->y) {
@@ -294,7 +294,7 @@ nr_svl_uncross_full (NRSVL *svl, NRFlat *flats, unsigned int windrule)
 				cs = ns;
 			} else if ((cs->x > ns->vertex->next->x) || (ns->x < cs->vertex->next->x) ||
 				   (cs->vertex->next->x > ns->vertex->next->x)) {
-				double d, x, y;
+				NR::Coord d, x, y;
 				d = nr_segment_intersection (cs->vertex, ns->vertex, &x, &y);
 				if ((d >= 0.0) && (d < NR_COORD_TOLERANCE) && (y >= yslice)) {
 					y = NR_COORD_SNAP_DOWN (y);
@@ -309,14 +309,14 @@ nr_svl_uncross_full (NRSVL *svl, NRFlat *flats, unsigned int windrule)
 							x = cs->x;
 						}
 						if (cs->x != x) {
-							double x0, x1;
+							NR::Coord x0, x1;
 							x0 = MIN (x, cs->x);
 							x1 = MAX (x, cs->x);
 							f = nr_flat_new_full (yslice, x0, x1);
 							nflat = nr_flat_insert_sorted (nflat, f);
 						}
 						if (ns->x != cs->x) {
-							double x0, x1;
+							NR::Coord x0, x1;
 							x0 = MIN (x, ns->x);
 							x1 = MAX (x, ns->x);
 							f = nr_flat_new_full (yslice, x0, x1);
@@ -358,8 +358,8 @@ nr_svl_uncross_full (NRSVL *svl, NRFlat *flats, unsigned int windrule)
 #if 0
 				/* (MAX (cs->x, cs->vertex->next->x) > MIN (ns->x, ns->vertex->next->x)) */
 				/* Potential intersection */
-				double xba, yba, xdc, ydc;
-				double d;
+				NR::Coord xba, yba, xdc, ydc;
+				NR::Coord d;
 
 				/* Bitch 'o' bitches */
 				xba = cs->vertex->next->x - cs->x;
@@ -369,8 +369,8 @@ nr_svl_uncross_full (NRSVL *svl, NRFlat *flats, unsigned int windrule)
 				d = xba * ydc - yba * xdc;
 
 				if (fabs (d) > NR_EPSILON) {
-					double xac, yac, numr, nums;
-					double r, s, x, y, dr, ds, dr2, ds2;
+					NR::Coord xac, yac, numr, nums;
+					NR::Coord r, s, x, y, dr, ds, dr2, ds2;
 
 					/* Not parallel */
 					xac = cs->vertex->x - ns->vertex->x;
@@ -403,14 +403,14 @@ nr_svl_uncross_full (NRSVL *svl, NRFlat *flats, unsigned int windrule)
 								x = cs->x;
 							}
 							if (cs->x != x) {
-								double x0, x1;
+								NR::Coord x0, x1;
 								x0 = MIN (x, cs->x);
 								x1 = MAX (x, cs->x);
 								f = nr_flat_new_full (y, x0, x1);
 								nflat = nr_flat_insert_sorted (nflat, f);
 							}
 							if (ns->x != cs->x) {
-								double x0, x1;
+								NR::Coord x0, x1;
 								x0 = MIN (x, ns->x);
 								x1 = MAX (x, ns->x);
 								f = nr_flat_new_full (y, x0, x1);
@@ -465,7 +465,7 @@ nr_svl_uncross_full (NRSVL *svl, NRFlat *flats, unsigned int windrule)
 		fl = NULL;
 		for (f = nflat; f && (f->y == yslice); f = f->next) {
 			for (s = slices; s != NULL; s = s->next) {
-				double x0, x1;
+				NR::Coord x0, x1;
 				assert (s->vertex->y <= yslice);
 				assert (s->vertex->next->y > yslice);
 				/* fixme: We can safely use EPSILON here */
@@ -582,7 +582,7 @@ nr_svl_uncross_full (NRSVL *svl, NRFlat *flats, unsigned int windrule)
 }
 
 static NRSVL *
-nr_svl_slice_break (NRSVLSlice *s, double x, double y, NRSVL *svl)
+nr_svl_slice_break (NRSVLSlice *s, NR::Coord x, NR::Coord y, NRSVL *svl)
 {
 	NRVertex *newvx;
 	NRSVL *newsvl;
@@ -635,7 +635,7 @@ nr_svl_slice_break (NRSVLSlice *s, double x, double y, NRSVL *svl)
 }
 
 static NRSVL *
-nr_svl_slice_break_y_and_continue_x (NRSVLSlice *s, double y, double x, NRSVL *svl, double ytest, NRFlat **flats)
+nr_svl_slice_break_y_and_continue_x (NRSVLSlice *s, NR::Coord y, NR::Coord x, NRSVL *svl, NR::Coord ytest, NRFlat **flats)
 {
 	NRVertex *newvx;
 	NRSVL *newsvl;
@@ -645,7 +645,7 @@ nr_svl_slice_break_y_and_continue_x (NRSVLSlice *s, double y, double x, NRSVL *s
 	assert (y <= s->vertex->next->y);
 
 	if (y < s->vertex->next->y) {
-		double dx, dy;
+		NR::Coord dx, dy;
 		/* Mid-segment intersection */
 		/* Create continuation svl */
 		newvx = nr_vertex_new_xy (x, y);
@@ -662,7 +662,7 @@ nr_svl_slice_break_y_and_continue_x (NRSVLSlice *s, double y, double x, NRSVL *s
 		/* Set the new starting point */
 		if (newvx->x != x) {
 			NRFlat *f;
-			double x0, x1;
+			NR::Coord x0, x1;
 			x0 = MIN (x, newvx->x);
 			x1 = MAX (x, newvx->x);
 			f = nr_flat_new_full (y, x0, x1);
@@ -681,7 +681,7 @@ nr_svl_slice_break_y_and_continue_x (NRSVLSlice *s, double y, double x, NRSVL *s
 		/* Set the new starting point */
 		if (s->vertex->next->x != x) {
 			NRFlat *f;
-			double x0, x1;
+			NR::Coord x0, x1;
 			x0 = MIN (x, s->vertex->next->x);
 			x1 = MAX (x, s->vertex->next->x);
 			f = nr_flat_new_full (y, x0, x1);
@@ -707,7 +707,7 @@ nr_svl_slice_break_y_and_continue_x (NRSVLSlice *s, double y, double x, NRSVL *s
 		/* Still have to place flat */
 		if (s->vertex->next->x != x) {
 			NRFlat *f;
-			double x0, x1;
+			NR::Coord x0, x1;
 			x0 = MIN (x, s->vertex->next->x);
 			x1 = MAX (x, s->vertex->next->x);
 			f = nr_flat_new_full (y, x0, x1);
@@ -910,7 +910,7 @@ nr_svl_slice_stretch_list (NRSVLSlice * slices, NRCoord y)
 #if 0
 				s->x = NR_COORD_SNAP (v->x + (v->next->x - v->x) * (y - v->y) / (v->next->y - v->y));
 #else
-				s->x = v->x + (double) (v->next->x - v->x) * (y - v->y) / (v->next->y - v->y);
+				s->x = v->x + (NR::Coord) (v->next->x - v->x) * (y - v->y) / (v->next->y - v->y);
 #endif
 			}
 			s->y = y;
@@ -925,8 +925,8 @@ nr_svl_slice_stretch_list (NRSVLSlice * slices, NRCoord y)
 static int
 nr_svl_slice_compare (NRSVLSlice *l, NRSVLSlice *r)
 {
-	double ldx, ldy, rdx, rdy;
-	double d;
+	NR::Coord ldx, ldy, rdx, rdy;
+	NR::Coord d;
 
 	assert (l->y == r->y);
 	assert (l->vertex->next->y > l->y);
@@ -948,12 +948,12 @@ nr_svl_slice_compare (NRSVLSlice *l, NRSVLSlice *r)
 	return 0;
 }
 
-static double
+static NR::Coord
 nr_vertex_segment_distance2 (NRVertex *vx, NRVertex *seg)
 {
-	double Ax, Ay, Bx, By, Px, Py;
-	double Dx, Dy, s;
-	double dist2;
+	NR::Coord Ax, Ay, Bx, By, Px, Py;
+	NR::Coord Dx, Dy, s;
+	NR::Coord dist2;
 	Ax = seg->x;
 	Ay = seg->y;
 	Bx = seg->next->x;
@@ -968,7 +968,7 @@ nr_vertex_segment_distance2 (NRVertex *vx, NRVertex *seg)
 	} else if (s >= 1.0) {
 		dist2 = (Px - Bx) * (Px - Bx) + (Py - By) * (Py - By);
 	} else {
-		double Qx, Qy;
+		NR::Coord Qx, Qy;
 		Qx = Ax + s * Dx;
 		Qy = Ay + s * Dy;
 		dist2 = (Px - Qx) * (Px - Qx) + (Py - Qy) * (Py - Qy);
@@ -976,12 +976,12 @@ nr_vertex_segment_distance2 (NRVertex *vx, NRVertex *seg)
 	return dist2;
 }
 
-static double
-nr_segment_intersection (NRVertex *s0, NRVertex *s1, double *x, double *y)
+static NR::Coord
+nr_segment_intersection (NRVertex *s0, NRVertex *s1, NR::Coord *x, NR::Coord *y)
 {
-	double xba, yba, xdc, ydc, xac, yac;
-	double d, numr, nums, r, s;
-	double dr, ds, d0_2, d1_2, d_2;
+	NR::Coord xba, yba, xdc, ydc, xac, yac;
+	NR::Coord d, numr, nums, r, s;
+	NR::Coord dr, ds, d0_2, d1_2, d_2;
 
 	xba = s0->next->x - s0->x;
 	yba = s0->next->y - s0->y;

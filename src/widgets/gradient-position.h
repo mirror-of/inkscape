@@ -52,7 +52,7 @@ struct _SPGradientPosition {
 	guint mode : 1;
 	guint changed : 1;
 	SPGradient *gradient;
-	NRRectS vbox; /* BBox in widget coordinates */
+	NRRectL vbox; /* BBox in widget coordinates */
 	GdkGC *gc;
 	GdkPixmap *px;
 

@@ -56,13 +56,13 @@ struct _NRSVP {
 void nr_svp_free (NRSVP *svp);
 
 int nr_svp_point_wind (NRSVP *svp, float x, float y);
-double nr_svp_point_distance (NRSVP *svp, float x, float y);
+NR::Coord nr_svp_point_distance (NRSVP *svp, float x, float y);
 void nr_svp_bbox (NRSVP *svp, NRRect *bbox, unsigned int clear);
 
 /* Sorted vertex lists */
 
 /* fixme: Move/remove this (Lauris) */
-typedef double NRCoord;
+typedef NR::Coord NRCoord;
 
 typedef struct _NRVertex NRVertex;
 typedef struct _NRSVL NRSVL;

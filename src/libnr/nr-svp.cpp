@@ -182,11 +182,11 @@ nr_svp_point_wind (NRSVP *svp, float x, float y)
 	return wind;
 }
 
-static double
+static NR::Coord
 nr_line_point_distance2 (float Ax, float Ay, float Bx, float By, float Px, float Py)
 {
-	double Dx, Dy, s;
-	double dist2;
+	NR::Coord Dx, Dy, s;
+	NR::Coord dist2;
 	Dx = Bx - Ax;
 	Dy = By - Ay;
 	s = ((Px - Ax) * Dx + (Py - Ay) * Dy) / (Dx * Dx + Dy * Dy);
@@ -195,7 +195,7 @@ nr_line_point_distance2 (float Ax, float Ay, float Bx, float By, float Px, float
 	} else if (s >= 1.0) {
 		dist2 = (Px - Bx) * (Px - Bx) + (Py - By) * (Py - By);
 	} else {
-		double Qx, Qy;
+		NR::Coord Qx, Qy;
 		Qx = Ax + s * Dx;
 		Qy = Ay + s * Dy;
 		dist2 = (Px - Qx) * (Px - Qx) + (Py - Qy) * (Py - Qy);
@@ -203,11 +203,11 @@ nr_line_point_distance2 (float Ax, float Ay, float Bx, float By, float Px, float
 	return dist2;
 }
 
-double
+NR::Coord
 nr_svp_point_distance (NRSVP *svp, float x, float y)
 {
 	unsigned int sidx;
-	double best, best2;
+	NR::Coord best, best2;
 
 	best = NR_HUGE;
 	best2 = best * best;
@@ -220,7 +220,7 @@ nr_svp_point_distance (NRSVP *svp, float x, float y)
 		    ((y - NR_SVPSEG_Y1 (svp, sidx)) < best)) {
 			if (seg->length < 2) {
 				NRSVPFlat *flat;
-				double dist2;
+				NR::Coord dist2;
 				flat = (NRSVPFlat *) seg;
 				dist2 = nr_line_point_distance2 (flat->x0, flat->y, flat->x1, flat->y, x, y);
 				if (dist2 < best2) {
@@ -231,7 +231,7 @@ nr_svp_point_distance (NRSVP *svp, float x, float y)
 				unsigned int pidx;
 				for (pidx = 0; pidx < (unsigned int) seg->length - 1; pidx++) {
 					NRPoint *pt;
-					double dist2;
+					NR::Coord dist2;
 					pt = svp->points + seg->start + pidx;
 					dist2 = nr_line_point_distance2 (pt[0].x, pt[0].y, pt[1].x, pt[1].y, x, y);
 					if (dist2 < best2) {
@@ -349,12 +349,12 @@ nr_svl_build_lineto (NRSVLBuild *svlb, float x, float y)
 }
 
 void
-nr_svl_build_curveto (NRSVLBuild *svlb, double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3, float flatness)
+nr_svl_build_curveto (NRSVLBuild *svlb, NR::Coord x0, NR::Coord y0, NR::Coord x1, NR::Coord y1, NR::Coord x2, NR::Coord y2, NR::Coord x3, NR::Coord y3, float flatness)
 {
-	double dx1_0, dy1_0, dx2_0, dy2_0, dx3_0, dy3_0, dx2_3, dy2_3, d3_0_2;
-	double s1_q, t1_q, s2_q, t2_q, v2_q;
-	double f2, f2_q;
-	double x00t, y00t, x0tt, y0tt, xttt, yttt, x1tt, y1tt, x11t, y11t;
+	NR::Coord dx1_0, dy1_0, dx2_0, dy2_0, dx3_0, dy3_0, dx2_3, dy2_3, d3_0_2;
+	NR::Coord s1_q, t1_q, s2_q, t2_q, v2_q;
+	NR::Coord f2, f2_q;
+	NR::Coord x00t, y00t, x0tt, y0tt, xttt, yttt, x1tt, y1tt, x11t, y11t;
 
 	dx1_0 = x1 - x0;
 	dy1_0 = y1 - y0;
@@ -367,7 +367,7 @@ nr_svl_build_curveto (NRSVLBuild *svlb, double x0, double y0, double x1, double 
 	f2 = flatness * flatness;
 	d3_0_2 = dx3_0 * dx3_0 + dy3_0 * dy3_0;
 	if (d3_0_2 < f2) {
-		double d1_0_2, d2_0_2;
+		NR::Coord d1_0_2, d2_0_2;
 		d1_0_2 = dx1_0 * dx1_0 + dy1_0 * dy1_0;
 		d2_0_2 = dx2_0 * dx2_0 + dy2_0 * dy2_0;
 		if ((d1_0_2 < f2) && (d2_0_2 < f2)) {
@@ -456,7 +456,7 @@ nr_svl_from_art_bpath (ArtBpath *bpath, NRMatrix *transform, unsigned int windru
 {
 	NRSVLBuild svlb;
 	ArtBpath *bp;
-	double x, y, sx, sy;
+	NR::Coord x, y, sx, sy;
 	NRSVL *svl;
 	NRFlat *flats;
 

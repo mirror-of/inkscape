@@ -35,7 +35,7 @@ struct _NRSVLStrokeBuild {
 	unsigned int join : 2;
 	unsigned int curve : 1;
 	float width_2;
-	double cosml;
+	NR::Coord cosml;
 	int npoints;
 	NRRect bbox;
 	NRCoord x[4];
@@ -147,14 +147,14 @@ nr_svl_stroke_build_finish_segment (NRSVLStrokeBuild *svlb)
 
 static void
 nr_svl_stroke_build_curveto (NRSVLStrokeBuild *svlb,
-			     double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
+			     NR::Coord x0, NR::Coord y0, NR::Coord x1, NR::Coord y1, NR::Coord x2, NR::Coord y2, NR::Coord x3, NR::Coord y3,
 			     float flatness, int level)
 {
-	double t_x0, t_y0, t_x1, t_y1, t_x2, t_y2, t_x3, t_y3;
-	double dx1_0, dy1_0, dx2_0, dy2_0, dx3_0, dy3_0, dx2_3, dy2_3, d3_0_2;
-	double s1_q, t1_q, s2_q, t2_q, v2_q;
-	double f2, f2_q;
-	double x00t, y00t, x0tt, y0tt, xttt, yttt, x1tt, y1tt, x11t, y11t;
+	NR::Coord t_x0, t_y0, t_x1, t_y1, t_x2, t_y2, t_x3, t_y3;
+	NR::Coord dx1_0, dy1_0, dx2_0, dy2_0, dx3_0, dy3_0, dx2_3, dy2_3, d3_0_2;
+	NR::Coord s1_q, t1_q, s2_q, t2_q, v2_q;
+	NR::Coord f2, f2_q;
+	NR::Coord x00t, y00t, x0tt, y0tt, xttt, yttt, x1tt, y1tt, x11t, y11t;
 
 	if (level >= MAX_SUBDIVIDE_DEPTH) goto nosubdivide;
 
@@ -178,7 +178,7 @@ nr_svl_stroke_build_curveto (NRSVLStrokeBuild *svlb,
 	f2 = flatness * flatness;
 	d3_0_2 = dx3_0 * dx3_0 + dy3_0 * dy3_0;
 	if (d3_0_2 < f2) {
-		double d1_0_2, d2_0_2;
+		NR::Coord d1_0_2, d2_0_2;
 		d1_0_2 = dx1_0 * dx1_0 + dy1_0 * dy1_0;
 		d2_0_2 = dx2_0 * dx2_0 + dy2_0 * dy2_0;
 		if ((d1_0_2 < f2) && (d2_0_2 < f2)) {
@@ -229,7 +229,7 @@ nr_bpath_stroke (const NRBPath *path, NRMatrix *transform,
 {
 	NRSVLStrokeBuild svlb;
 	ArtBpath *bp;
-	double x, y, sx, sy;
+	NR::Coord x, y, sx, sy;
 
 	/* Initialize NRSVLBuilds */
 	svlb.svl = NULL;
@@ -322,7 +322,7 @@ nr_vpath_stroke (const ArtVpath *path, NRMatrix *transform,
 {
 	NRSVLStrokeBuild svlb;
 	const ArtVpath *p;
-	double x, y, sx, sy;
+	NR::Coord x, y, sx, sy;
 
 	/* Initialize NRSVLBuilds */
 	svlb.svl = NULL;
@@ -465,7 +465,7 @@ nr_svl_stroke_build_draw_join (NRSVLStrokeBuild *svlb, float x0, float y0, float
 {
 	float len0, dx0, dy0, px0, py0;
 	float len1, dx1, dy1, px1, py1;
-	double costheta;
+	NR::Coord costheta;
 	len0 = hypot (x1 - x0, y1 - y0);
 	dx0 = (x1 - x0) / len0;
 	dy0 = (y1 - y0) / len0;
@@ -479,8 +479,8 @@ nr_svl_stroke_build_draw_join (NRSVLStrokeBuild *svlb, float x0, float y0, float
 	costheta = -dx0 * dx1 + -dy0 * dy1;
 	if (costheta > NR_STRAIGHT_TRESHOLD) {
 		unsigned int join;
-		double dx, dy, d2, D_d;
-		double dir;
+		NR::Coord dx, dy, d2, D_d;
+		NR::Coord dir;
 		join = svlb->join;
 		if (svlb->curve) join = NR_STROKE_JOIN_ROUND;
 		if ((join == NR_STROKE_JOIN_MITER) && (costheta > svlb->cosml)) join = NR_STROKE_JOIN_BEVEL;
@@ -492,7 +492,7 @@ nr_svl_stroke_build_draw_join (NRSVLStrokeBuild *svlb, float x0, float y0, float
 		dy *= D_d;
 		dir = dx0 * dy1 - dx1 * dy0;
 		if (dir > 0.0) {
-			double cx, cy, lx0, ly0, lx1, ly1;
+			NR::Coord cx, cy, lx0, ly0, lx1, ly1;
 			/* Left is inner */
 			/* Draw left side */
 			/* Find inner intersection point */
@@ -516,13 +516,13 @@ nr_svl_stroke_build_draw_join (NRSVLStrokeBuild *svlb, float x0, float y0, float
 				/* Miter */
 				nr_svl_build_lineto (&svlb->right, x1 + dx, y1 + dy);
 			} else if (join == NR_STROKE_JOIN_ROUND) {
-				double px, py;
+				NR::Coord px, py;
 				/* Round */
 				nr_svl_build_lineto (&svlb->right, x1 + px0, y1 + py0);
 				px = COS_R * px0 + -SIN_R * py0;
 				py = SIN_R * px0 + COS_R * py0;
 				while ((px * py1 - py * px1) > 0.0) {
-					double sx, sy;
+					NR::Coord sx, sy;
 					nr_svl_build_lineto (&svlb->right, x1 + px, y1 + py);
 					sx = COS_R * px + -SIN_R * py;
 					sy = SIN_R * px + COS_R * py;
@@ -536,7 +536,7 @@ nr_svl_stroke_build_draw_join (NRSVLStrokeBuild *svlb, float x0, float y0, float
 				nr_svl_build_lineto (&svlb->right, x1 + px1, y1 + py1);
 			}
 		} else {
-			double cx, cy, lx0, ly0, lx1, ly1;
+			NR::Coord cx, cy, lx0, ly0, lx1, ly1;
 			/* Right is inner */
 			/* Draw right side */
 			/* Find inner intersection point */
@@ -560,13 +560,13 @@ nr_svl_stroke_build_draw_join (NRSVLStrokeBuild *svlb, float x0, float y0, float
 				/* Miter */
 				nr_svl_build_lineto (&svlb->left, x1 - dx, y1 - dy);
 			} else if (join == NR_STROKE_JOIN_ROUND) {
-				double px, py;
+				NR::Coord px, py;
 				/* Round */
 				nr_svl_build_lineto (&svlb->left, x1 - px0, y1 - py0);
 				px = COS_R * -px0 + SIN_R * -py0;
 				py = -SIN_R * -px0 + COS_R * -py0;
 				while ((px * -py1 - py * -px1) < 0.0) {
-					double sx, sy;
+					NR::Coord sx, sy;
 					nr_svl_build_lineto (&svlb->left, x1 + px, y1 + py);
 					sx = COS_R * px + SIN_R * py;
 					sy = -SIN_R * px + COS_R * py;

@@ -78,7 +78,7 @@ nr_vpath_release (NRVPath *vpath)
 	nr_free (vpath->elements);
 }
 
-static void nr_curve_bbox (double x000, double y000, double x001, double y001, double x011, double y011, double x111, double y111, NRRect *bbox);
+static void nr_curve_bbox (NR::Coord x000, NR::Coord y000, NR::Coord x001, NR::Coord y001, NR::Coord x011, NR::Coord y011, NR::Coord x111, NR::Coord y111, NRRect *bbox);
 
 NRBPath *
 nr_path_duplicate_transform (NRBPath *d, NRBPath *s, NRMatrix *transform)
@@ -114,10 +114,10 @@ nr_path_duplicate_transform (NRBPath *d, NRBPath *s, NRMatrix *transform)
 }
 
 static void
-nr_line_wind_distance (double x0, double y0, double x1, double y1, NRPoint *pt, int *wind, float *best)
+nr_line_wind_distance (NR::Coord x0, NR::Coord y0, NR::Coord x1, NR::Coord y1, NRPoint *pt, int *wind, float *best)
 {
-	double Ax, Ay, Bx, By, Dx, Dy, Px, Py, s;
-	double dist2;
+	NR::Coord Ax, Ay, Bx, By, Dx, Dy, Px, Py, s;
+	NR::Coord dist2;
 
 	/* Find distance */
 	Ax = x0;
@@ -136,7 +136,7 @@ nr_line_wind_distance (double x0, double y0, double x1, double y1, NRPoint *pt, 
 		} else if (s >= 1.0) {
 			dist2 = (Px - Bx) * (Px - Bx) + (Py - By) * (Py - By);
 		} else {
-			double Qx, Qy;
+			NR::Coord Qx, Qy;
 			Qx = Ax + s * Dx;
 			Qy = Ay + s * Dy;
 			dist2 = (Px - Qx) * (Px - Qx) + (Py - Qy) * (Py - Qy);
@@ -159,7 +159,7 @@ nr_line_wind_distance (double x0, double y0, double x1, double y1, NRPoint *pt, 
 			if (Bx < Px) *wind += 1;
 			return;
 		} else {
-			double Qx;
+			NR::Coord Qx;
 			/* Have to calculate intersection */
 			Qx = Ax + Dx * (Py - Ay) / Dy;
 			if (Qx < Px) {
@@ -170,16 +170,16 @@ nr_line_wind_distance (double x0, double y0, double x1, double y1, NRPoint *pt, 
 }
 
 static void
-nr_curve_bbox_wind_distance (double x000, double y000,
-			     double x001, double y001,
-			     double x011, double y011,
-			     double x111, double y111,
+nr_curve_bbox_wind_distance (NR::Coord x000, NR::Coord y000,
+			     NR::Coord x001, NR::Coord y001,
+			     NR::Coord x011, NR::Coord y011,
+			     NR::Coord x111, NR::Coord y111,
 			     NRPoint *pt,
 			     NRRect *bbox, int *wind, float *best,
 			     float tolerance)
 {
-	double x0, y0, x1, y1, len2;
-	double Px, Py;
+	NR::Coord x0, y0, x1, y1, len2;
+	NR::Coord Px, Py;
 	int needdist, needwind, needline;
 
 	Px = pt->x;
@@ -236,9 +236,9 @@ nr_curve_bbox_wind_distance (double x000, double y000,
 	}
 
 	if (needdist || needwind) {
-		double x00t, x0tt, xttt, x1tt, x11t, x01t;
-		double y00t, y0tt, yttt, y1tt, y11t, y01t;
-		double s, t;
+		NR::Coord x00t, x0tt, xttt, x1tt, x11t, x01t;
+		NR::Coord y00t, y0tt, yttt, y1tt, y11t, y01t;
+		NR::Coord s, t;
 
 		t = 0.5;
 		s = 1 - t;
@@ -269,7 +269,7 @@ nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrix *m, NRPoin
 					     NRRect *bbox, int *wind, float *dist,
 					     float tolerance)
 {
-	double x0, y0, x3, y3;
+	NR::Coord x0, y0, x3, y3;
 	const ArtBpath *p;
 
 	if (!bpath->path) {
@@ -335,9 +335,9 @@ nr_path_matrix_f_point_f_bbox_wind_distance (NRBPath *bpath, NRMatrix *m, NRPoin
 /* Thanks to Nathan Hurst for suggesting it */
 
 static void
-nr_curve_bbox (double x000, double y000, double x001, double y001, double x011, double y011, double x111, double y111, NRRect *bbox)
+nr_curve_bbox (NR::Coord x000, NR::Coord y000, NR::Coord x001, NR::Coord y001, NR::Coord x011, NR::Coord y011, NR::Coord x111, NR::Coord y111, NRRect *bbox)
 {
-	double a, b, c, D;
+	NR::Coord a, b, c, D;
 
 	bbox->x0 = (float) MIN (bbox->x0, x111);
 	bbox->y0 = (float) MIN (bbox->y0, y111);
@@ -372,7 +372,7 @@ nr_curve_bbox (double x000, double y000, double x001, double y001, double x011, 
 	D = b * b - 4 * a * c;
 
 	if (D >= 0.0) {
-		double d, s, t, xttt;
+		NR::Coord d, s, t, xttt;
 		/* Have solution */
 		d = sqrt (D);
 		s = (-b + d) / (2 * a);
@@ -398,7 +398,7 @@ nr_curve_bbox (double x000, double y000, double x001, double y001, double x011, 
 	D = b * b - 4 * a * c;
 
 	if (D >= 0.0) {
-		double d, s, t, yttt;
+		NR::Coord d, s, t, yttt;
 		/* Have solution */
 		d = sqrt (D);
 		s = (-b + d) / (2 * a);
@@ -423,7 +423,7 @@ nr_path_matrix_f_bbox_f_union (NRBPath *bpath, NRMatrix *m,
 			       NRRect *bbox,
 			       float tolerance)
 {
-	double x0, y0, x3, y3;
+	NR::Coord x0, y0, x3, y3;
 	const ArtBpath *p;
 
 	if (!bpath->path) return;

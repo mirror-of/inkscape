@@ -17,7 +17,7 @@
 void
 nr_blit_pixblock_pixblock_alpha (NRPixBlock *d, NRPixBlock *s, unsigned int alpha)
 {
-	NRRectS clip;
+	NRRectL clip;
 	unsigned char *dpx, *spx;
 	int dbpp, sbpp;
 	int w, h;
@@ -51,9 +51,9 @@ nr_blit_pixblock_pixblock_alpha (NRPixBlock *d, NRPixBlock *s, unsigned int alph
 	 *
 	 */
 
-	nr_rect_s_intersect (&clip, &d->area, &s->area);
+	nr_rect_l_intersect (&clip, &d->area, &s->area);
 
-	if (nr_rect_s_test_empty (&clip)) return;
+	if (nr_rect_l_test_empty (&clip)) return;
 
 	/* Pointers */
 	dbpp = NR_PIXBLOCK_BPP (d);
@@ -118,7 +118,7 @@ nr_blit_pixblock_pixblock_alpha (NRPixBlock *d, NRPixBlock *s, unsigned int alph
 void
 nr_blit_pixblock_pixblock_mask (NRPixBlock *d, NRPixBlock *s, NRPixBlock *m)
 {
-	NRRectS clip;
+	NRRectL clip;
 	unsigned char *dpx, *spx, *mpx;
 	int dbpp, sbpp;
 	int w, h;
@@ -151,10 +151,10 @@ nr_blit_pixblock_pixblock_mask (NRPixBlock *d, NRPixBlock *s, NRPixBlock *m)
 	 *
 	 */
 
-	nr_rect_s_intersect (&clip, &d->area, &s->area);
-	nr_rect_s_intersect (&clip, &clip, &m->area);
+	nr_rect_l_intersect (&clip, &d->area, &s->area);
+	nr_rect_l_intersect (&clip, &clip, &m->area);
 
-	if (nr_rect_s_test_empty (&clip)) return;
+	if (nr_rect_l_test_empty (&clip)) return;
 
 	/* Pointers */
 	dbpp = NR_PIXBLOCK_BPP (d);
@@ -223,15 +223,15 @@ nr_blit_pixblock_mask_rgba32 (NRPixBlock *d, NRPixBlock *m, unsigned long rgba)
 	if (!(rgba & 0xff)) return;
 
 	if (m) {
-		NRRectS clip;
+		NRRectL clip;
 		unsigned char *dpx, *mpx;
 		int w, h;
 
 		if (m->mode != NR_PIXBLOCK_MODE_A8) return;
 
-		if (!nr_rect_s_test_intersect (&d->area, &m->area)) return;
+		if (!nr_rect_l_test_intersect (&d->area, &m->area)) return;
 
-		nr_rect_s_intersect (&clip, &d->area, &m->area);
+		nr_rect_l_intersect (&clip, &d->area, &m->area);
 
 		/* Pointers */
 		dpx = NR_PIXBLOCK_PX (d) + (clip.y0 - d->area.y0) * d->rs + NR_PIXBLOCK_BPP (d) * (clip.x0 - d->area.x0);

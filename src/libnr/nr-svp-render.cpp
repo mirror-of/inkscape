@@ -293,11 +293,11 @@ typedef struct _NRRun NRRun;
 
 struct _NRRun {
 	NRRun *next;
-	double x0, y0, x1, y1;
+	NR::Coord x0, y0, x1, y1;
 	float step;
 	float final;
-	double x;
-	double value;
+	NR::Coord x;
+	NR::Coord value;
 };
 
 static NRRun *nr_run_new (NRCoord x0, NRCoord y0, NRCoord x1, NRCoord y1, int wind);
@@ -313,9 +313,9 @@ struct _NRSlice {
 	NRPoint *points;
 	unsigned int current;
 	unsigned int last;
-	double x;
-	double y;
-	double stepx;
+	NR::Coord x;
+	NR::Coord y;
+	NR::Coord stepx;
 };
 
 static NRSlice *nr_slice_new (int wind, NRPoint *points, unsigned int length, NRCoord y);
@@ -328,7 +328,7 @@ static void
 nr_svp_render (NRSVP *svp, unsigned char *px, unsigned int bpp, unsigned int rs, int iX0, int iY0, int iX1, int iY1,
 	       void (* run) (unsigned char *px, int len, int c0_24, int s0_24, void *data), void *data)
 {
-	double dX0, dY0, dX1, dY1;
+	NR::Coord dX0, dY0, dX1, dY1;
 	NRSlice *slices;
 	unsigned int sidx;
 	int ystart;
@@ -380,7 +380,7 @@ nr_svp_render (NRSVP *svp, unsigned char *px, unsigned int bpp, unsigned int rs,
 
 	/* Main iteration */
 	for (iy0 = iY0; iy0 < iY1; iy0 += 1) {
-		double dy0, dy1;
+		NR::Coord dy0, dy1;
 		NRSlice *ss, *cs;
 		NRRun *runs;
 		int xstart;
@@ -400,7 +400,7 @@ nr_svp_render (NRSVP *svp, unsigned char *px, unsigned int bpp, unsigned int rs,
 				if (NR_SVPSEG_Y0 (svp, sidx) > dy1) break;
 				seg = svp->segments + sidx;
 				if (seg->wind) {
-					double y;
+					NR::Coord y;
 					NRSlice *newslice;
 					/* We are renderable */
 					/* fixme: we should use safely nsvl->vertex->y here */
@@ -420,7 +420,7 @@ nr_svp_render (NRSVP *svp, unsigned char *px, unsigned int bpp, unsigned int rs,
 			/* g_assert (cs->y >= y0); */
 			/* g_assert (cs->y < (y + 1)); */
 			while ((cs->y < dy1) && (cs->current < cs->last)) {
-				double rx0, ry0, rx1, ry1;
+				NR::Coord rx0, ry0, rx1, ry1;
 				NRRun * newrun;
 				rx0 = cs->x;
 				ry0 = cs->y;
@@ -494,7 +494,7 @@ nr_svp_render (NRSVP *svp, unsigned char *px, unsigned int bpp, unsigned int rs,
 		d = rowbuffer + bpp * (xstart - iX0);
 
 		for (ix0 = xstart; (runs) && (ix0 < iX1); ix0++) {
-			double dx0, dx1;
+			NR::Coord dx0, dx1;
 			int ix1;
 			NRRun *sr, *cr;
 			float localval;
@@ -698,7 +698,7 @@ nr_slice_compare (NRSlice *l, NRSlice *r)
 	} else if (l->y > r->y) {
 		unsigned int pidx;
 		NRPoint *p;
-		double x, ldx, rdx;
+		NR::Coord x, ldx, rdx;
 		/* This is bitch - we have to determine r values at l->y */
 		pidx = 0;
 		while ((pidx < r->last) && (r->points[pidx + 1].y <= l->y)) pidx += 1;
@@ -719,7 +719,7 @@ nr_slice_compare (NRSlice *l, NRSlice *r)
 	} else {
 		unsigned int pidx;
 		NRPoint *p;
-		double x, ldx, rdx;
+		NR::Coord x, ldx, rdx;
 		/* This is bitch - we have to determine l value at r->y */
 		pidx = 0;
 		while ((pidx < l->last) && (l->points[pidx + 1].y <= r->y)) pidx += 1;
@@ -747,9 +747,9 @@ struct _NRSliceL {
 	NRSliceL *next;
 	NRSVL *svl;
 	NRVertex *vertex;
-	double x;
-	double y;
-	double stepx;
+	NR::Coord x;
+	NR::Coord y;
+	NR::Coord stepx;
 };
 
 static NRSliceL *nr_slice_new_l (NRSVL *svl, NRCoord y);
@@ -1088,7 +1088,7 @@ nr_slice_compare_l (NRSliceL *l, NRSliceL *r)
 		if (l->stepx > r->stepx) return 1;
 	} else if (l->y > r->y) {
 		NRVertex *v;
-		double x, ldx, rdx;
+		NR::Coord x, ldx, rdx;
 		/* This is bitch - we have to determine r values at l->y */
 		v = r->vertex;
 		while (v->next && (v->next->y <= l->y)) v = v->next;
@@ -1107,7 +1107,7 @@ nr_slice_compare_l (NRSliceL *l, NRSliceL *r)
 		if (ldx > rdx) return 1;
 	} else {
 		NRVertex * v;
-		double x, ldx, rdx;
+		NR::Coord x, ldx, rdx;
 		/* This is bitch - we have to determine l value at r->y */
 		v = l->vertex;
 		while (v->next && (v->next->y <= r->y)) v = v->next;

@@ -23,12 +23,12 @@ nr_pixblock_render_gray_noise (NRPixBlock *pb, NRPixBlock *mask)
 	static unsigned char *noise = NULL;
 	static unsigned int seed = 0;
 	unsigned int v;
-	NRRectS clip;
+	NRRectL clip;
 	int x, y, bpp;
 
 	if (mask) {
 		if (mask->empty) return;
-		nr_rect_s_intersect (&clip, &pb->area, &mask->area);
+		nr_rect_l_intersect (&clip, &pb->area, &mask->area);
 		if (nr_rect_l_test_empty (&clip)) return;
 	} else {
 		clip = pb->area;

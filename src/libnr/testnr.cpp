@@ -25,14 +25,14 @@
 
 NRPathElement toru[10];
 
-static double
+static NR::Coord
 get_time (void)
 {
 #if defined (_WIN32) || defined (__WIN32__)
 
     DWORD millis;
     millis = GetTickCount ();
-    return ((double)millis)/1000.0;
+    return ((NR::Coord)millis)/1000.0;
 
 #else
 
@@ -52,7 +52,7 @@ rand_byte (void)
 int
 main (int argc, const char **argv)
 {
-	double start, end;
+	NR::Coord start, end;
 	NRPixBlock d, m[16];
 	int count, i;
 

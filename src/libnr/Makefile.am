@@ -1,6 +1,6 @@
 noinst_LIBRARIES = libnr.a
 
-noinst_PROGRAMS = testnr
+EXTRA_PROGRAMS = testnr
 
 INCLUDES = \
 	-I.. \

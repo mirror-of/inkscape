@@ -34,7 +34,7 @@ void nr_svl_build_finish_segment (NRSVLBuild *svlb);
 void nr_svl_build_moveto (NRSVLBuild *svlb, float x, float y);
 void nr_svl_build_lineto (NRSVLBuild *svlb, float x, float y);
 void nr_svl_build_curveto (NRSVLBuild *svlb,
-			   double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
+			   NR::Coord x0, NR::Coord y0, NR::Coord x1, NR::Coord y1, NR::Coord x2, NR::Coord y2, NR::Coord x3, NR::Coord y3,
 			   float flatness);
 
 /* fixme: Remove these if ready (Lauris) */

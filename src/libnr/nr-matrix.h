@@ -32,11 +32,11 @@ NRMatrix *nr_matrix_multiply (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m
 
 /* Currently uses single-precision intermediate results (depending on compiler,
    optimization settings etc.). */
-NRMatrix *nr_matrix_set_translate (NRMatrix *m, double x, double y);
+NRMatrix *nr_matrix_set_translate (NRMatrix *m, NR::Coord x, NR::Coord y);
 
-NRMatrix *nr_matrix_set_scale (NRMatrix *m, double sx, double sy);
+NRMatrix *nr_matrix_set_scale (NRMatrix *m, NR::Coord sx, NR::Coord sy);
 
-NRMatrix *nr_matrix_set_rotate (NRMatrix *m, double theta);
+NRMatrix *nr_matrix_set_rotate (NRMatrix *m, NR::Coord theta);
 
 #define NR_MATRIX_DF_TRANSFORM_X(m,x,y) ((m)->c[0] * (x) + (m)->c[2] * (y) + (m)->c[4])
 #define NR_MATRIX_DF_TRANSFORM_Y(m,x,y) ((m)->c[1] * (x) + (m)->c[3] * (y) + (m)->c[5])
@@ -47,7 +47,7 @@ NRMatrix *nr_matrix_set_rotate (NRMatrix *m, double theta);
 namespace NR{
 class Matrix{
  public:
-	double c[6]; // should this be a pointer?
+	NR::Coord c[6]; // should this be a pointer?
 
 	Matrix() {
 	}
@@ -62,19 +62,19 @@ class Matrix{
 	void set_identity();
 	void set_translate(Point p);
 	void set_scale(Point s);
-	void set_rotate(const double angle);
+	void set_rotate(const NR::Coord angle);
 	
 	// What do these do?  some kind of norm?
-	double DF_EXPANSION2() const;
-	double DF_EXPANSION() const;
+	NR::Coord DF_EXPANSION2() const;
+	NR::Coord DF_EXPANSION() const;
 };
 
 bool operator==(const Matrix a, const Matrix b);
 Matrix operator*(const Matrix a, const Matrix b);
 Point operator*(const Matrix a, const Point v);
 
-bool transform_equalp(const Matrix m0, const Matrix m1, const double epsilon);
-bool translate_equalp(const Matrix m0, const Matrix m1, const double epsilon);
+bool transform_equalp(const Matrix m0, const Matrix m1, const NR::Coord epsilon);
+bool translate_equalp(const Matrix m0, const Matrix m1, const NR::Coord epsilon);
 
 inline Point operator*(const NRMatrix& nrm, const Point p) {
 	 return Point(NR_MATRIX_DF_TRANSFORM_X(&nrm, p.pt[0], p.pt[1]),

@@ -15,19 +15,19 @@
 #include <math.h>
 #include "nr-macros.h"
 
-double NR::Point::L1() const {
-	double d = 0;
+NR::Coord NR::Point::L1() const {
+	NR::Coord d = 0;
 	for(int i = 0; i < 2; i++)
 		d += fabs(pt[i]);
 	return d;
 }
 
-double NR::Point::L2() const {
+NR::Coord NR::Point::L2() const {
 	return hypot(pt[0], pt[1]);
 }
 
-double NR::Point::Linfty() const {
-	double d = 0;
+NR::Coord NR::Point::Linfty() const {
+	NR::Coord d = 0;
 	for(int i = 0; i < 2; i++)
 		d = MAX(d, fabs(pt[i]));
 	return d;

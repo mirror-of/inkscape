@@ -93,19 +93,19 @@ enum {
 };
 
 struct _NRRFGlyphTiny {
-	/* 10.6 fixed point */
-	NRPointS advance;
-	/* 10.6 fixed point */
-	NRRectS bbox;
+	/* 26.6 fixed point */
+	NRPointL advance;
+	/* 26.6 fixed point */
+	NRRectL bbox;
 	/* Image */
 	unsigned char px[16];
 };
 
 struct _NRRFGlyphImage {
-	/* 10.6 fixed point */
-	NRPointS advance;
-	/* 10.6 fixed point */
-	NRRectS bbox;
+	/* 26.6 fixed point */
+	NRPointL advance;
+	/* 26.6 fixed point */
+	NRRectL bbox;
 	/* Image */
 	unsigned char *px;
 };
@@ -226,7 +226,7 @@ void
 nr_rasterfont_generic_glyph_mask_render (NRRasterFont *rf, unsigned int glyph, NRPixBlock *m, float x, float y)
 {
 	NRRFGlyphSlot *slot;
-	NRRectS area;
+	NRRectL area;
 	int sx, sy;
 	unsigned char *spx = NULL;
 	int srs = 0;
@@ -243,7 +243,7 @@ nr_rasterfont_generic_glyph_mask_render (NRRasterFont *rf, unsigned int glyph, N
 
 	switch (slot->type) {
 	case NRRF_TYPE_TINY:
-		if (nr_rect_s_test_empty (&slot->glyph.tg.bbox)) return;
+		if (nr_rect_l_test_empty (&slot->glyph.tg.bbox)) return;
 		spx = slot->glyph.tg.px;
 		srs = NRRF_COORD_INT_SIZE (slot->glyph.tg.bbox.x0, slot->glyph.tg.bbox.x1);
 		area.x0 = NRRF_COORD_INT_LOWER (slot->glyph.tg.bbox.x0) + sx;
@@ -270,10 +270,10 @@ nr_rasterfont_generic_glyph_mask_render (NRRasterFont *rf, unsigned int glyph, N
 		break;
 	}
 
-	if (nr_rect_s_test_intersect (&area, &m->area)) {
-		NRRectS clip;
+	if (nr_rect_l_test_intersect (&area, &m->area)) {
+		NRRectL clip;
 		int x, y;
-		nr_rect_s_intersect (&clip, &area, &m->area);
+		nr_rect_l_intersect (&clip, &area, &m->area);
 		for (y = clip.y0; y < clip.y1; y++) {
 			unsigned char *d, *s;
 			s = spx + (y - area.y0) * srs + (clip.x0 - area.x0);
@@ -315,12 +315,12 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 		if (nr_font_glyph_advance_get (rf->font, glyph, &a)) {
 			switch (slot->type) {
 			case NRRF_TYPE_TINY:
-				slot->glyph.tg.advance.x = (gint16)NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y);
-				slot->glyph.tg.advance.y = (gint16)NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y);
+				slot->glyph.tg.advance.x = NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y);
+				slot->glyph.tg.advance.y = NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y);
 				break;
 			case NRRF_TYPE_IMAGE:
-				slot->glyph.ig.advance.x = (gint16)NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y);
-				slot->glyph.ig.advance.y = (gint16)NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y);
+				slot->glyph.ig.advance.x = NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y);
+				slot->glyph.ig.advance.y = NR_MATRIX_DF_TRANSFORM_Y (&rf->transform, a.x, a.y);
 				break;
 			case NRRF_TYPE_SVP:
 				slot->glyph.sg.advance.x = (gint32)NR_MATRIX_DF_TRANSFORM_X (&rf->transform, a.x, a.y);

@@ -17,13 +17,20 @@
 
 #include <glib.h>
 
-typedef struct _NRMatrix {
-	double c[6];
-} NRMatrix;
+namespace NR {
 
-typedef struct _NRPoint {
-	double x, y;
-} NRPoint;
+typedef double Coord;
+typedef gint32 ICoord;
+
+} /* namespace NR */
+
+struct NRMatrix {
+	NR::Coord c[6];
+};
+
+struct NRPoint {
+	NR::Coord x, y;
+};
 
 #define NR_POINT_DF_TEST_CLOSE(a,b,e) (NR_DF_TEST_CLOSE ((a)->x, (b)->x, e) && NR_DF_TEST_CLOSE ((a)->y, (b)->y, e))
 
@@ -33,17 +40,17 @@ enum dimT { X, Y };
 
 class Point{
  public:
-	double pt[2];
+	Coord pt[2];
 
 	Point() {
 	}
 
-	Point(double x, double y) {
+	Point(Coord x, Coord y) {
 		pt[X] = x;
 		pt[Y] = y;
 	}
 
-	Point(const NRPoint p) {
+	Point(const NRPoint &p) {
 		pt[X] = p.x;
 		pt[Y] = p.y;
 	}
@@ -64,11 +71,11 @@ class Point{
 		return Point(-pt[Y], pt[X]);
 	}
 
-	double L1() const ;
+	Coord L1() const ;
 /** Compute the L1 norm, or manhattan distance, of this vector */
-	double L2() const ;
+	Coord L2() const ;
 /** Compute the L2 or euclidean norm of this vector */
-	double Linfty() const ;
+	Coord Linfty() const ;
 /** Compute the L infinity or maximum norm of this vector */
 	void Normalize();
 	
@@ -107,7 +114,7 @@ operator*(Point const &a, Point const &b) {
 }
 
 inline Point
-operator*(const double s, Point const &b) {
+operator*(const Coord s, Point const &b) {
 	Point ret;
 	for(int i = 0; i < 2; i++) {
 		ret.pt[i] = s * b.pt[i];
@@ -116,7 +123,7 @@ operator*(const double s, Point const &b) {
 }
 
 inline Point
-operator/(Point const &b, const double d) {
+operator/(Point const &b, const Coord d) {
 	Point ret;
 	for(int i = 0; i < 2; i++) {
 		ret.pt[i] = b.pt[i] / d;
@@ -124,54 +131,43 @@ operator/(Point const &b, const double d) {
 	return ret;
 }
 
-inline double
+inline Coord
 dot(Point const &a, Point const &b) {
-	double ret = 0;
+	Coord ret = 0;
 	for(int i = 0; i < 2; i++) {
 		ret += a.pt[i] * b.pt[i];
 	}
 	return ret;
 }
 
-inline double
+inline Coord
 cross(Point const &a, Point const &b) {
-	double ret = 0;
+	Coord ret = 0;
 	for(int i = 0; i < 2; i++)
 		ret = a.pt[1-i] * b.pt[i] - ret;
 	return ret;
 }
 
 inline void Point::Normalize() {
-	double d = L2();
+	Coord d = L2();
 	if(d > 0.0001) // Why this number?
 		*this = (1/d)**this;
 }
 
 Point abs(Point const &b);
 
-}
+} /* namespace NR */
 
-typedef struct _NRRect {
-	double x0, y0, x1, y1;
-} NRRect;
+struct NRRect {
+	NR::Coord x0, y0, x1, y1;
+};
 
+struct NRPointL {
+	NR::ICoord x, y;
+};
 
-typedef struct _NRPointL {
-	gint32 x, y;
-} NRPointL;
-
-typedef struct _NRPointS {
-	gint16 x, y;
-} NRPointS;
-
-typedef struct _NRRectL {
-	gint32 x0, y0, x1, y1;
-} NRRectL;
-
-typedef struct _NRRectS {
-	gint16 x0, y0, x1, y1;
-} NRRectS;
-
-
+struct NRRectL {
+	NR::ICoord x0, y0, x1, y1;
+};
 
 #endif
