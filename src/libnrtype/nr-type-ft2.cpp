@@ -430,7 +430,7 @@ nr_typeface_ft2_ensure_slot_h (NRTypeFaceFT2 *tff, unsigned int glyph)
 		}
 		slot = tff->slots + tff->slots_length;
 
-		FT_Load_Glyph (tff->ft_face, glyph, FT_LOAD_NO_SCALE | FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP);
+		if (FT_Load_Glyph (tff->ft_face, glyph, FT_LOAD_NO_SCALE | FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP)) return NULL;
 
 		slot->area.x0 = tff->ft_face->glyph->metrics.horiBearingX * tff->ft2ps;
 		slot->area.y1 = tff->ft_face->glyph->metrics.horiBearingY * tff->ft2ps;
