@@ -677,23 +677,19 @@ sp_nodepath_node_break (SPPathNode * node)
 
 		return sp->first;
 	} else {
-		SPNodeSubPath * newsubpath;
-		SPPathNode * newnode;
-		SPPathNode * n, *nn;
-
 		// no break for end nodes
 		if (node == sp->first) return NULL;
 		if (node == sp->last) return NULL;
 
 		// create a new subpath
-		newsubpath = sp_nodepath_subpath_new (np);
+		SPNodeSubPath * newsubpath = sp_nodepath_subpath_new (np);
 
 		// duplicate the break node as start of the new subpath
-		newnode = sp_nodepath_node_new (newsubpath, NULL, (SPPathNodeType)node->type, ART_MOVETO, &node->pos, &node->pos, &node->n.pos);
+		SPPathNode *newnode = sp_nodepath_node_new (newsubpath, NULL, (SPPathNodeType)node->type, ART_MOVETO, &node->pos, &node->pos, &node->n.pos);
 
 		while (node->n.other) { // copy the remaining nodes into the new subpath
-			n = node->n.other;
-			nn = sp_nodepath_node_new (newsubpath, NULL, (SPPathNodeType)n->type, (ArtPathcode)n->code, &n->p.pos, &n->pos, &n->n.pos);
+			SPPathNode *n = node->n.other;
+			SPPathNode *nn = sp_nodepath_node_new (newsubpath, NULL, (SPPathNodeType)n->type, (ArtPathcode)n->code, &n->p.pos, &n->pos, &n->n.pos);
 			if (n->selected) {
 				sp_nodepath_node_select (nn, TRUE, TRUE); //preserve selection
 			}
