@@ -1,5 +1,8 @@
 2004-02-27  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/dialogs/stroke-style.cpp (sp_stroke_style_set_marker_buttons):
+	Cleanup: restructure.
+
 	* src/dialogs/Makefile.am: in-dt-coordsys.cpp, in-dt-coordsys.h:
 	New files.
 	* src/dialogs/xml-tree.cpp (set_dt_select): Fix bug when clicked on a

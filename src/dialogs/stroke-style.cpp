@@ -1763,22 +1763,20 @@ sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, const gcha
     /* Set up the various xpm's as an array so that new kinds of markers 
      * can be added without having to cut and paste the code itself.
      */
-    gchar *marker_xpm[INKSCAPE_STOCK_MARKER_QTY+1];
-    marker_xpm[0] = g_strconcat( marker_name, 
-                                 INKSCAPE_STOCK_MARKER_NONE, NULL );
-    marker_xpm[1] = g_strconcat( marker_name, 
-                                 INKSCAPE_STOCK_MARKER_FILLED_ARROW, NULL );
-    marker_xpm[2] = g_strconcat( marker_name, 
-                                 INKSCAPE_STOCK_MARKER_HOLLOW_ARROW, NULL );
-    marker_xpm[3] = NULL;
+    gchar const * const suffixes[] = {
+        INKSCAPE_STOCK_MARKER_NONE,
+        INKSCAPE_STOCK_MARKER_FILLED_ARROW,
+        INKSCAPE_STOCK_MARKER_HOLLOW_ARROW
+    };
 
-    for (int i=0; marker_xpm[i] ; i++) {
-        GtkWidget *tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), marker_xpm[i]));
-        g_assert(tb != NULL);
-        if (tb != NULL) {
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(tb), (active == tb));
+    for (unsigned i = 0; i < G_N_ELEMENTS(suffixes); ++i) {
+        gchar * const marker_xpm = g_strconcat(marker_name, suffixes[i], NULL);
+        GtkWidget *tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), marker_xpm));
+        g_assert( tb != NULL );
+        if ( tb != NULL ) {
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(tb), ( active == tb ));
         }
-        g_free(marker_xpm[i]);
+        g_free(marker_xpm);
     }
 }
 
