@@ -1,3 +1,33 @@
+2004-08-15  MenTaLguY  <mental@rydia.net>
+
+	* src/Makefile.am, src/Makefile_insert, src/util/Makefile_insert:
+
+	  added libinkutil for util/ directory
+
+	* src/arc-context.cpp, src/desktop.cpp, src/event-context.cpp,
+	  src/node-context.cpp, src/rect-context.cpp, src/sp-object.cpp,
+	  src/sp-text.cpp, src/spiral-context.cpp, src/star-context.cpp,
+	  src/toolbox.cpp, src/dialogs/desktop-properties.cpp,
+	  src/widgets/gradient-vector.cpp, src/widgets/sp-widget.cpp,
+	  src/widgets/sp-xmlview-attr-list.cpp,
+	  src/widgets/sp-xmlview-content.cpp, src/widgets/sp-xmlview-tree.cpp,
+	  src/xml/sp-repr-event-vector.h, src/xml/sp-repr-listener.h:
+
+	  moved SPReprListener and SPReprEventVector into their own header
+	  files, and remove "destroy" callback
+
+	* src/util/share-c-string.cpp, src/util/share-c-string.h:
+
+      add Inksape::Util::share_c_string, a function to make an
+	  immutable and garbage-collected copy of a string which can
+	  safely be shared
+	
+	* src/xml/Makefile_insert, src/xml/repr-action.cpp, src/xml/repr-css.cpp,
+	  src/xml/repr-private.h, src/xml/repr.cpp, src/xml/sp-repr-attr.h:
+
+	  start sharing rather than copying strings, and taking advantage
+	  of garbage collection
+
 2004-08-15  Peter Moulder  <pmoulder@river>
 
 	* src/sp-flowtext.cpp: CodingStyle changes.

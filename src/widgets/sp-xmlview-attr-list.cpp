@@ -23,7 +23,7 @@
 #include <gtk/gtkadjustment.h>
 #include "helper/sp-intl.h"
 #include "../xml/repr.h"
-#include "../xml/repr-private.h"
+#include "../xml/sp-repr-event-vector.h"
 #include "sp-xmlview-attr-list.h"
 
 static void sp_xmlview_attr_list_class_init (SPXMLViewAttrListClass * klass);
@@ -35,7 +35,6 @@ static void event_attr_changed (SPRepr * repr, const gchar * name, const gchar *
 static GtkCListClass * parent_class = NULL;
 
 static SPReprEventVector repr_events = {
-	NULL, /* destroy */
 	NULL, /* add_child */
 	NULL, /* child_added */
 	NULL, /* remove_child */

@@ -43,7 +43,7 @@
 #include "object-edit.h"
 #include "knotholder.h"
 #include "xml/repr.h"
-#include "xml/repr-private.h"
+#include "xml/sp-repr-event-vector.h"
 #include "prefs-utils.h"
 #include "widgets/spw-utilities.h"
 #include <libnr/nr-point-fns.h>
@@ -165,7 +165,6 @@ static void shape_event_attr_changed (SPRepr * repr, const gchar * name, const g
 }
 
 static SPReprEventVector shape_repr_events = {
-    NULL, /* destroy */
     NULL, /* add_child */
     NULL, /* child_added */
     NULL, /* remove_child */

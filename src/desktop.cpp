@@ -72,6 +72,7 @@
 #include "message-context.h"
 #include "object-hierarchy.h"
 #include "xml/repr-private.h"
+#include "xml/sp-repr-event-vector.h"
 
 #include "file.h"
 
@@ -2173,7 +2174,6 @@ void update_label_from_attr(SPRepr *repr, gchar const *name, gchar const *, gcha
 }
 
 SPReprEventVector label_events={
-    NULL,
     NULL,
     NULL,
     NULL,

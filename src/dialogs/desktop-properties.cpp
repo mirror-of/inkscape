@@ -59,7 +59,7 @@
 #include "../interface.h"
 
 #include "../xml/repr.h"
-#include "../xml/repr-private.h"
+#include "../xml/sp-repr-event-vector.h"
 
 #include "desktop-properties.h"
 #include "svg/stringstream.h"
@@ -144,7 +144,6 @@ docoptions_event_attr_changed(SPRepr *, gchar const *, gchar const *, gchar cons
 }
 
 static SPReprEventVector docoptions_repr_events = {
-    NULL, /* destroy */
     NULL, /* add_child */
     NULL, /* child_added */
     NULL, /* remove_child */

@@ -26,8 +26,6 @@ static SPReprAction *new_action (SPReprAction *log,
                                  SPReprActionType type,
                                  SPRepr *repr);
 
-static gchar const *shared_string(gchar const *string);
-
 static SPReprAction *coalesce_action(SPReprAction *action);
 static SPReprAction *coalesce_add(SPReprAction *action);
 static SPReprAction *coalesce_remove(SPReprAction *action);
@@ -269,8 +267,8 @@ sp_repr_log_chgattr (SPReprAction *log, SPRepr *repr, GQuark const key,
 
 	action = new_action (log, SP_REPR_ACTION_CHGATTR, repr);
 	action->chgattr.key = key;
-	action->chgattr.oldval = shared_string(oldval);
-	action->chgattr.newval = shared_string(newval);
+	action->chgattr.oldval = oldval;
+	action->chgattr.newval = newval;
 
 	return coalesce_action(action);
 }
@@ -284,8 +282,8 @@ sp_repr_log_chgcontent (SPReprAction *log, SPRepr *repr,
 	g_assert (repr != NULL);
 
 	action = new_action (log, SP_REPR_ACTION_CHGCONTENT, repr);
-	action->chgcontent.oldval = shared_string(oldval);
-	action->chgcontent.newval = shared_string(newval);
+	action->chgcontent.oldval = oldval;
+	action->chgcontent.newval = newval;
 
 	return coalesce_action(action);
 }
@@ -305,19 +303,6 @@ sp_repr_log_chgorder (SPReprAction *log, SPRepr *repr,
 	action->chgorder.newref = newref;
 
 	return coalesce_action(action);
-}
-
-gchar const *shared_string(gchar const *string) {
-	if (!string) {
-		return NULL;
-	}
-
-	size_t n_bytes=std::strlen(string);
-	gchar *copy=new (Inkscape::GC::ATOMIC) gchar[n_bytes+1];
-	std::memcpy(copy, string, n_bytes);
-	copy[n_bytes] = '\000';
-
-	return copy;
 }
 
 static SPReprAction *

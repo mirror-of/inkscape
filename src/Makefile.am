@@ -43,6 +43,7 @@ noinst_LIBRARIES =	\
 	extension/internal/libinternal.a	\
 	extension/libextension.a	\
 	helper/libspchelp.a	\
+	util/libinkutil.a \
 	$(inkjar_libs)	\
 	libnr/libnr.a	\
 	libnrtype/libnrtype.a	\

@@ -21,7 +21,7 @@
 #include <gtk/gtkmenuitem.h>
 
 #include "display/sp-canvas.h"
-#include "xml/repr-private.h"
+#include "xml/sp-repr-event-vector.h"
 #include "sp-cursor.h"
 #include "shortcuts.h"
 #include "desktop.h"
@@ -564,11 +564,6 @@ sp_event_context_private_item_handler (SPEventContext *ec, SPItem *item, GdkEven
 	return ret;
 }
 
-static void sp_ec_repr_destroy(SPRepr *, gpointer)
-{
-	g_warning ("Oops! Repr destroyed while event context still present");
-}
-
 static unsigned int
 sp_ec_repr_change_attr (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, gpointer data)
 {
@@ -593,7 +588,6 @@ sp_ec_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, co
 }
 
 SPReprEventVector sp_ec_event_vector = {
-	sp_ec_repr_destroy,
 	NULL, /* Add child */
 	NULL, /* Child added */
 	NULL, /* Remove child */

@@ -22,6 +22,7 @@
 #include <gtk/gtkcontainer.h>
 #include "../xml/repr.h"
 #include "../xml/repr-private.h"
+#include "../xml/sp-repr-event-vector.h"
 #include "sp-xmlview-tree.h"
 
 struct NodeData {
@@ -60,7 +61,6 @@ static SPRepr * sibling_to_ref (GtkCTreeNode * parent, GtkCTreeNode * sibling);
 static gint match_node_data_by_repr(gconstpointer data_p, gconstpointer repr);
 
 static const SPReprEventVector element_repr_events = {
-        NULL, /* destroy */
         NULL, /* add_child */
         element_child_added,
         NULL, /* remove_child */
@@ -74,7 +74,6 @@ static const SPReprEventVector element_repr_events = {
 };
 
 static const SPReprEventVector text_repr_events = {
-        NULL, /* destroy */
         NULL, /* add_child */
         NULL, /* child_added */
         NULL, /* remove_child */
@@ -88,7 +87,6 @@ static const SPReprEventVector text_repr_events = {
 };
 
 static const SPReprEventVector comment_repr_events = {
-        NULL, /* destroy */
         NULL, /* add_child */
         NULL, /* child_added */
         NULL, /* remove_child */

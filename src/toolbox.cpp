@@ -55,7 +55,7 @@
 #include "desktop-handles.h"
 #include "interface.h"
 #include "nodepath.h"
-#include "xml/repr-private.h"
+#include "xml/sp-repr-event-vector.h"
 #include "helper/gnome-utils.h"
 #include "helper/sp-intl.h"
 #include "helper/unit-menu.h"
@@ -1018,7 +1018,6 @@ static void star_tb_event_attr_changed (SPRepr * repr, const gchar * name, const
 
 static SPReprEventVector star_tb_repr_events =
 {
-    NULL, /* destroy */
     NULL, /* add_child */
     NULL, /* child_added */
     NULL, /* remove_child */
@@ -1391,7 +1390,6 @@ static void rect_tb_event_attr_changed (SPRepr * repr, const gchar * name, const
 
 
 static SPReprEventVector rect_tb_repr_events = {
-    NULL, /* destroy */
     NULL, /* add_child */
     NULL, /* child_added */
     NULL, /* remove_child */
@@ -1661,7 +1659,6 @@ static void spiral_tb_event_attr_changed (SPRepr * repr, const gchar * name, con
 
 
 static SPReprEventVector spiral_tb_repr_events = {
-    NULL, /* destroy */
     NULL, /* add_child */
     NULL, /* child_added */
     NULL, /* remove_child */
@@ -2139,7 +2136,6 @@ static void arc_tb_event_attr_changed (SPRepr * repr, const gchar * name, const 
 }
 
 static SPReprEventVector arc_tb_repr_events = {
-    NULL, /* destroy */
     NULL, /* add_child */
     NULL, /* child_added */
     NULL, /* remove_child */

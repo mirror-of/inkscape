@@ -17,6 +17,7 @@
 
 #include "helper/sp-marshal.h"
 #include "xml/repr-private.h"
+#include "xml/sp-repr-event-vector.h"
 #include "attributes.h"
 #include "document.h"
 #include "style.h"
@@ -64,7 +65,6 @@ guint update_in_progress = 0; // guard against update-during-update
 enum {RELEASE, MODIFIED, LAST_SIGNAL};
 
 SPReprEventVector object_event_vector = {
-	NULL, /* Destroy */
 	NULL, /* Add child */
 	sp_object_repr_child_added,
 	NULL, /* Remove child */

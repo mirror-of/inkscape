@@ -120,7 +120,7 @@ sp_repr_css_set (SPRepr * repr, SPCSSAttr * css, const gchar * attr)
 {
 	SPReprAttr * a;
 	const char *key;
-	char *val;
+	const char *val;
 	char c[4096], *p;
 
 	g_assert (repr != NULL);

@@ -26,24 +26,17 @@
 
 #include <glib.h>
 
-#include "repr-private.h"
-#include <xml/sp-repr-attr.h>
+#include "xml/repr-private.h"
+#include "xml/sp-repr-listener.h"
+#include "xml/sp-repr-event-vector.h"
+#include "xml/sp-repr-attr.h"
+#include "util/share-c-string.h"
 
-typedef struct SPReprListener SPListener;
+using Inkscape::Util::share_c_string;
 
 static void bind_document(SPReprDoc *doc, SPRepr *repr);
 
 static SPRepr *sp_repr_new_from_code(SPReprType type, int code);
-static void sp_repr_remove_attribute(SPRepr *repr, SPReprAttr *attr);
-static void sp_repr_remove_listener(SPRepr *repr, SPListener *listener);
-
-static SPReprAttr *sp_attribute_duplicate(SPReprAttr const *attr);
-static SPReprAttr *sp_attribute_new_from_code(GQuark key, gchar const *value);
-
-static SPReprAttr *sp_attribute_alloc(void);
-static void sp_attribute_free(SPReprAttr *attribute);
-static SPListener *sp_listener_alloc(void);
-static void sp_listener_free(SPListener *listener);
 
 static SPRepr *
 sp_repr_new_from_code(SPReprType type, int code)
@@ -77,7 +70,7 @@ sp_repr_new_text(gchar const *content)
 {
     g_return_val_if_fail(content != NULL, NULL);
     SPRepr *repr = sp_repr_new_from_code(SP_XML_TEXT_NODE, g_quark_from_static_string("text"));
-    repr->content = g_strdup(content);
+    repr->content = share_c_string(content);
     return repr;
 }
 
@@ -86,7 +79,7 @@ sp_repr_new_comment(gchar const *comment)
 {
     g_return_val_if_fail(comment != NULL, NULL);
     SPRepr *repr = sp_repr_new_from_code(SP_XML_COMMENT_NODE, g_quark_from_static_string("comment"));
-    repr->content = g_strdup(comment);
+    repr->content = share_c_string(comment);
     return repr;
 }
 
@@ -104,27 +97,8 @@ SPReprDoc::SPReprDoc(int code) : SPRepr(SP_XML_DOCUMENT_NODE, code) {
     this->is_logging = false;
 }
 
-SPRepr::~SPRepr() {
-    SPReprListener *rl;
-    /* Parents reference children */
-    g_assert(this->parent == NULL);
-    g_assert(this->next == NULL);
-    this->doc = NULL;
-
-    for (rl = this->listeners; rl; rl = rl->next) {
-        if (rl->vector->destroy) (* rl->vector->destroy)(this, rl->data);
-    }
-    while (this->children) sp_repr_remove_child(this, this->children);
-    while (this->attributes) sp_repr_remove_attribute(this, this->attributes);
-    g_free(this->content);
-    while (this->listeners) sp_repr_remove_listener(this, this->listeners);
-}
-
 SPReprDoc::~SPReprDoc() {
-    if (this->log) {
-        sp_repr_free_log(this->log);
-        this->log = NULL;
-    }
+    sp_repr_free_log(this->log);
 }
 
 SPRepr *sp_repr_ref(SPRepr *repr) {
@@ -157,12 +131,8 @@ sp_repr_duplicate(SPRepr const *repr)
 }
 
 SPRepr::SPRepr(SPRepr const &repr)
-: Refcounted(), type(repr.type), name(repr.name)
+: Refcounted(), type(repr.type), name(repr.name), content(repr.content)
 {
-    if (repr.content != NULL) {
-        this->content = g_strdup(repr.content);
-    }
-
     SPRepr *lastchild = NULL;
     for (SPRepr *child = repr.children; child != NULL; child = child->next) {
         if (lastchild) {
@@ -175,9 +145,9 @@ SPRepr::SPRepr(SPRepr const &repr)
     SPReprAttr *lastattr = NULL;
     for (SPReprAttr *attr = repr.attributes; attr != NULL; attr = attr->next) {
         if (lastattr) {
-            lastattr = lastattr->next = sp_attribute_duplicate(attr);
+            lastattr = lastattr->next = new SPReprAttr(*attr);
         } else {
-            lastattr = this->attributes = sp_attribute_duplicate(attr);
+            lastattr = this->attributes = new SPReprAttr(*attr);
         }
     }
 }
@@ -258,24 +228,22 @@ sp_repr_set_content(SPRepr *repr, gchar const *newcontent)
     }
 
     if (allowed) {
-        gchar *oldcontent = repr->content;
+        gchar const *oldcontent = repr->content;
 
         if (newcontent) {
-            repr->content = g_strdup(newcontent);
+            repr->content = share_c_string(newcontent);
         } else {
             repr->content = NULL;
         }
         if ( repr->doc && repr->doc->is_logging ) {
-            repr->doc->log = sp_repr_log_chgcontent(repr->doc->log, repr, oldcontent, newcontent);
+            repr->doc->log = sp_repr_log_chgcontent(repr->doc->log, repr, oldcontent, repr->content);
         }
 
         for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
             if (rl->vector->content_changed) {
-                (* rl->vector->content_changed)(repr, oldcontent, newcontent, rl->data);
+                (* rl->vector->content_changed)(repr, oldcontent, repr->content, rl->data);
             }
         }
-
-        g_free(oldcontent);
     }
 
     return allowed;
@@ -319,8 +287,6 @@ sp_repr_del_attr(SPRepr *repr, gchar const *key, bool is_interactive)
                     (* rl->vector->attr_changed)(repr, key, attr->value, NULL, is_interactive, rl->data);
                 }
             }
-
-            sp_attribute_free(attr);
         }
     }
 
@@ -353,12 +319,12 @@ sp_repr_chg_attr(SPRepr *repr, gchar const *key, gchar const *value, bool is_int
     }
 
     if (allowed) {
-        gchar *oldval = ( attr ? attr->value : NULL );
+        gchar const *oldval = ( attr ? attr->value : NULL );
 
         if (attr) {
-            attr->value = g_strdup(value);
+            attr->value = share_c_string(value);
         } else {
-            attr = sp_attribute_new_from_code(q, value);
+            attr = new SPReprAttr(q, share_c_string(value));
             if (prev) {
                 prev->next = attr;
             } else {
@@ -366,16 +332,14 @@ sp_repr_chg_attr(SPRepr *repr, gchar const *key, gchar const *value, bool is_int
             }
         }
         if ( repr->doc && repr->doc->is_logging ) {
-            repr->doc->log = sp_repr_log_chgattr(repr->doc->log, repr, q, oldval, value);
+            repr->doc->log = sp_repr_log_chgattr(repr->doc->log, repr, q, oldval, attr->value);
         }
 
         for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
             if (rl->vector->attr_changed) {
-                (* rl->vector->attr_changed)(repr, key, oldval, value, is_interactive, rl->data);
+                (* rl->vector->attr_changed)(repr, key, oldval, attr->value, is_interactive, rl->data);
             }
         }
-
-        g_free(oldval);
     }
 
     return allowed;
@@ -393,27 +357,6 @@ sp_repr_set_attr(SPRepr *repr, gchar const *key, gchar const *value, bool const 
     } else {
         return sp_repr_chg_attr(repr, key, value, is_interactive);
     }
-}
-
-
-static void
-sp_repr_remove_attribute(SPRepr *repr, SPReprAttr *attr)
-{
-    g_assert(repr != NULL);
-    g_assert(attr != NULL);
-
-    if (attr == repr->attributes) {
-        repr->attributes = attr->next;
-    } else {
-        SPReprAttr *prev = repr->attributes;
-        while (prev->next != attr) {
-            prev = prev->next;
-            g_assert(prev != NULL);
-        }
-        prev->next = attr->next;
-    }
-
-    sp_attribute_free(attr);
 }
 
 SPRepr *
@@ -462,7 +405,6 @@ sp_repr_add_child(SPRepr *repr, SPRepr *child, SPRepr *ref)
         }
 
         child->parent = repr;
-        sp_repr_ref(child);
 
         if (child->doc == NULL) bind_document(repr->doc, child);
 
@@ -549,13 +491,6 @@ sp_repr_remove_child(SPRepr *repr, SPRepr *child)
                 (* rl->vector->child_removed)(repr, child, ref, rl->data);
             }
         }
-
-#ifdef REPR_VERBOSE
-        if (child->refcount > 1) {
-            g_warning("Detaching repr with refcount > 1");
-        }
-#endif
-        sp_repr_unref(child);
     }
 
     return allowed;
@@ -681,10 +616,7 @@ sp_repr_add_listener(SPRepr *repr, SPReprEventVector const *vector, void *data)
     g_assert(repr != NULL);
     g_assert(vector != NULL);
 
-    SPReprListener *rl = sp_listener_alloc();
-    rl->next = NULL;
-    rl->vector = vector;
-    rl->data = data;
+    SPReprListener *rl = new SPReprListener(vector, data);
 
     if (repr->last_listener) {
         repr->last_listener->next = rl;
@@ -692,28 +624,6 @@ sp_repr_add_listener(SPRepr *repr, SPReprEventVector const *vector, void *data)
         repr->listeners = rl;
     }
     repr->last_listener = rl;
-}
-
-static void
-sp_repr_remove_listener(SPRepr *repr, SPListener *listener)
-{
-    SPReprListener *prev = NULL;
-    for ( SPReprListener *iter = repr->listeners ; iter ; iter = iter->next ) {
-        if ( iter == listener ) {
-            if (prev) {
-                prev->next = listener->next;
-            } else {
-                repr->listeners = listener->next;
-            }
-            if (!listener->next) {
-                repr->last_listener = prev;
-            }
-            break;
-        }
-        prev = iter;
-    }
-
-    sp_listener_free(listener);
 }
 
 void
@@ -732,7 +642,6 @@ sp_repr_remove_listener_by_data(SPRepr *repr, void *data)
             if (!rl->next) {
                 repr->last_listener = prev;
             }
-            sp_listener_free(rl);
             return;
         }
         prev = rl;
@@ -851,10 +760,7 @@ sp_repr_merge(SPRepr *repr, SPRepr const *src, gchar const *key)
     g_return_val_if_fail(src != NULL, FALSE);
     g_return_val_if_fail(key != NULL, FALSE);
 
-    g_free(repr->content);
-    repr->content = ( src->content
-                      ? g_strdup(src->content)
-                      : NULL );
+    repr->content = src->content;
 
     for (SPRepr *child = src->children; child != NULL; child = child->next) {
         gchar const *id = sp_repr_attr(child, key);
@@ -865,10 +771,12 @@ sp_repr_merge(SPRepr *repr, SPRepr const *src, gchar const *key)
             } else {
                 rch = sp_repr_duplicate(child);
                 sp_repr_append_child(repr, rch);
+                sp_repr_unref(rch);
             }
         } else {
             SPRepr *rch = sp_repr_duplicate(child);
             sp_repr_append_child(repr, rch);
+            sp_repr_unref(rch);
         }
     }
 
@@ -878,91 +786,6 @@ sp_repr_merge(SPRepr *repr, SPRepr const *src, gchar const *key)
 
     return TRUE;
 }
-
-static SPReprAttr *
-sp_attribute_duplicate(SPReprAttr const *attr)
-{
-    SPReprAttr *new_attr = sp_attribute_alloc();
-    new_attr->next = NULL;
-    new_attr->key = attr->key;
-    new_attr->value = g_strdup(attr->value);
-
-    return new_attr;
-}
-
-static SPReprAttr *
-sp_attribute_new_from_code(GQuark const key, gchar const *value)
-{
-    SPReprAttr *new_attr = sp_attribute_alloc();
-    new_attr->next = NULL;
-    new_attr->key = key;
-    new_attr->value = g_strdup(value);
-
-    return new_attr;
-}
-
-#define SP_ATTRIBUTE_ALLOC_SIZE 32
-static SPReprAttr *free_attribute = NULL;
-
-static SPReprAttr *
-sp_attribute_alloc(void)
-{
-    SPReprAttr *attribute;
-    if (free_attribute) {
-        attribute = free_attribute;
-        free_attribute = free_attribute->next;
-    } else {
-        attribute = g_new(SPReprAttr, SP_ATTRIBUTE_ALLOC_SIZE);
-        for (int i = 1; i < SP_ATTRIBUTE_ALLOC_SIZE - 1; i++) {
-            attribute[i].next = attribute + i + 1;
-        }
-        attribute[SP_ATTRIBUTE_ALLOC_SIZE - 1].next = NULL;
-        free_attribute = attribute + 1;
-    }
-
-    return attribute;
-}
-
-static void
-sp_attribute_free(SPReprAttr *attribute)
-{
-    if (attribute->value) {
-        g_free(attribute->value);
-        attribute->value = NULL;
-    }
-    attribute->next = free_attribute;
-    free_attribute = attribute;
-}
-
-#define SP_LISTENER_ALLOC_SIZE 32
-static SPListener *free_listener = NULL;
-
-static SPListener *
-sp_listener_alloc()
-{
-    SPListener *listener;
-    if (free_listener) {
-        listener = free_listener;
-        free_listener = free_listener->next;
-    } else {
-        listener = g_new(SPListener, SP_LISTENER_ALLOC_SIZE);
-        for (int i = 1; i < SP_LISTENER_ALLOC_SIZE - 1; i++) {
-            listener[i].next = listener + i + 1;
-        }
-        listener[SP_LISTENER_ALLOC_SIZE - 1].next = NULL;
-        free_listener = listener + 1;
-    }
-
-    return listener;
-}
-
-static void
-sp_listener_free(SPListener *listener)
-{
-    listener->next = free_listener;
-    free_listener = listener;
-}
-
 
 /*
   Local Variables:

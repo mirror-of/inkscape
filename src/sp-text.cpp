@@ -763,7 +763,9 @@ sp_text_set_repr_text_multiline (SPText *text, const gchar *str)
 		sp_repr_set_attr (rtspan, "sodipodi:role", "line");
 		rstr = sp_xml_document_createTextNode (sp_repr_document (repr), p);
 		sp_repr_add_child (rtspan, rstr, NULL);
+		sp_repr_unref(rstr);
 		sp_repr_append_child (repr, rtspan);
+		sp_repr_unref(rtspan);
 		p = (e) ? e + 1 : NULL;
 	}
 	

@@ -14,7 +14,7 @@
 
 #include <gtk/gtksignal.h>
 #include "macros.h"
-#include "../xml/repr-private.h"
+#include "../xml/sp-repr-event-vector.h"
 #include "../inkscape.h"
 #include "../desktop.h"
 #include "../desktop-handles.h"
@@ -51,12 +51,6 @@ static GtkBinClass *parent_class;
 static guint signals[LAST_SIGNAL] = {0};
 
 static void
-spw_repr_destroy (SPRepr *repr, gpointer data)
-{
-	g_warning ("Oops! Repr destroyed while SPWidget still present");
-}
-
-static void
 spw_repr_attr_changed (SPRepr *repr, const gchar *key, const gchar *oldval, const gchar *newval, bool is_interactive, gpointer data)
 {
 	g_signal_emit (G_OBJECT (data), signals[ATTR_CHANGED], 0, key, oldval, newval);
@@ -69,7 +63,6 @@ spw_repr_content_changed (SPRepr *repr, const gchar *oldval, const gchar *newval
 }
 
 SPReprEventVector spw_event_vector = {
-	spw_repr_destroy,
 	NULL, /* Add child */
 	NULL, /* Child added */
 	NULL, /* Remove child */

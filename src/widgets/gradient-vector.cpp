@@ -405,6 +405,7 @@ sp_gvs_defs_modified (SPObject *defs, guint flags, SPGradientVectorSelector *gvs
 #include "../desktop-handles.h"
 #include "../selection.h"
 #include "../xml/repr-private.h"
+#include "../xml/sp-repr-event-vector.h"
 #include "../svg/svg.h"
 
 
@@ -435,7 +436,6 @@ static void grad_edit_dia_stopremoved (SPRepr *repr, SPRepr *child, SPRepr *ref,
 
 static SPReprEventVector grad_edit_dia_repr_events =
 {
-    NULL, /* destroy */
     NULL, /* add_child */
     NULL, /* child_added */
     NULL, /* remove_child */

@@ -187,6 +187,7 @@ inkscape_private_libs =	\
 	libnrtype/libnrtype.a	\
 	libnr/libnr.a	\
 	livarot/libvarot.a	\
+	util/libinkutil.a \
 	extension/libextension.a	\
 	extension/implementation/libimplementation.a	\
 	extension/internal/libinternal.a	\
