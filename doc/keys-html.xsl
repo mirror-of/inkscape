@@ -3,14 +3,12 @@
 <xsl:stylesheet
    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
    xmlns:k="http://www.inkscape.org/namespaces/keys"
-   xmlns="http://www.w3.org/1999/xhtml"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   exclude-result-prefixes="k"
+   exclude-result-prefixes="k #default inkscape sodipodi xlink"
 >
-
-<xsl:output method="html" encoding="utf-8" indent="no"/>
+<xsl:output method="html" encoding="utf-8" indent="no" doctype-public="-//W3C//DTD HTML 4.0 Transitional//EN"/>
 
 <xsl:template match="k:root">
 <xsl:comment>
@@ -20,7 +18,7 @@ It is generated automatically from doc/keys.xml by doc/keys-html.xsl.
 <html>
 <head>
 <title>Inkscape keys and mouse reference</title>
-<style language="css">
+<style type="text/css">
 .key {font-weight: bold}
 .action {}
 .note {padding-left: 4em; font-size: 70%}
@@ -33,6 +31,13 @@ h4 {font-weight: bold; font-style: italic}
 <table border ="0" cellspacing="0" cellpadding="4">
 <xsl:apply-templates select="k:column"/>
 </table>
+
+    <p>
+      <a href="http://validator.w3.org/check/referer"><img border="0"
+          src="http://www.w3.org/Icons/valid-html40"
+          alt="Valid HTML 4.0!" height="31" width="88" /></a>
+    </p>
+
 </body>
 </html>
 </xsl:template>
