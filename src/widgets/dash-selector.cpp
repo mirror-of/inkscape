@@ -19,23 +19,9 @@
 #include <string.h>
 #include <libnr/nr-values.h>
 #include <libnr/nr-macros.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkpixmap.h>
-#include <gtk/gtkspinbutton.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkadjustment.h>
-#include <gtk/gtkmisc.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkframe.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtkradiobutton.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkiconfactory.h>
+#include <gtk/gtk.h>
 
+#include "helper/sp-intl.h"
 #include "../xml/repr-private.h"
 #include "../style.h"
 #include "../dialogs/dialog-events.h"
@@ -113,7 +99,10 @@ sp_dash_selector_class_init (SPDashSelectorClass *klass)
 static void
 sp_dash_selector_init (SPDashSelector *dsel)
 {
+	GtkTooltips *tt = gtk_tooltips_new();
+
 	dsel->dash = gtk_option_menu_new ();
+	gtk_tooltips_set_tip (tt, dsel->dash, _("Stroke pattern"), NULL);
 	gtk_widget_show (dsel->dash);
 	gtk_box_pack_start (GTK_BOX (dsel), dsel->dash, FALSE, FALSE, 0);
 
@@ -128,6 +117,8 @@ sp_dash_selector_init (SPDashSelector *dsel)
 
 	dsel->offset = gtk_adjustment_new (0.0, 0.0, 10.0, 0.1, 1.0, 1.0);
 	GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (dsel->offset), 0.1, 2);
+	gtk_tooltips_set_tip (tt, sb, _("Pattern offset"), NULL);
+
 	sp_dialog_defocus_on_enter (sb); 
 	gtk_widget_show (sb);
 	gtk_box_pack_start (GTK_BOX (dsel), sb, FALSE, FALSE, 0);

@@ -24,21 +24,7 @@
 #include <libnr/nr-values.h>
 #include <libnr/nr-matrix.h>
 
-
-#include <gtk/gtksignal.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkadjustment.h>
-#include <gtk/gtkmisc.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkframe.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkspinbutton.h>
-#include <gtk/gtkradiobutton.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkiconfactory.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmenuitem.h>
+#include <gtk/gtk.h>
 
 #include "helper/sp-intl.h"
 #include "helper/unit-menu.h"
@@ -759,6 +745,7 @@ static void sp_stroke_style_set_marker_buttons ( SPWidget *spw,
                                                  GtkWidget *active, 
                                                  const gchar *marker_name );
 static void sp_stroke_style_width_changed (GtkAdjustment *adj, SPWidget *spw);
+static void sp_stroke_style_miterlimit_changed (GtkAdjustment *adj, SPWidget *spw);
 static void sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw);
 static void sp_stroke_style_line_dash_changed ( SPDashSelector *dsel, 
                                                 SPWidget *spw );
@@ -1193,6 +1180,8 @@ sp_stroke_style_line_widget_new (void)
     GtkObject *a;
     gint i;
 
+    GtkTooltips *tt = gtk_tooltips_new();
+
     spw = sp_widget_new_global (INKSCAPE);
 
     f = gtk_frame_new (_("Stroke settings"));
@@ -1217,11 +1206,12 @@ sp_stroke_style_line_widget_new (void)
     a = gtk_adjustment_new (1.0, 0.0, 100.0, 0.1, 10.0, 10.0);
     gtk_object_set_data (GTK_OBJECT (spw), "width", a);
     sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
+    gtk_tooltips_set_tip (tt, sb, _("Stroke width"), NULL);
     gtk_widget_show (sb);
 
     sp_dialog_defocus_on_enter (sb); 
 
-    gtk_box_pack_start (GTK_BOX (hb), sb, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (hb), sb, FALSE, FALSE, 0);
     us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
     gtk_widget_show (us);
     sp_unit_selector_add_adjustment ( SP_UNIT_SELECTOR (us), 
@@ -1243,13 +1233,39 @@ sp_stroke_style_line_widget_new (void)
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_MITER,
                 INKSCAPE_PIXMAPDIR "/join_miter.xpm",
                 hb, spw, "join", "miter");
+    gtk_tooltips_set_tip (tt, tb, _("Miter join"), NULL);
+
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_ROUND,
                 INKSCAPE_PIXMAPDIR "/join_round.xpm",
                 hb, spw, "join", "round");
+    gtk_tooltips_set_tip (tt, tb, _("Round join"), NULL);
+
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_JOIN_BEVEL,
                 INKSCAPE_PIXMAPDIR "/join_bevel.xpm",
                 hb, spw, "join", "bevel");
+    gtk_tooltips_set_tip (tt, tb, _("Bevel join"), NULL);
+
     i++;  
+
+    /* Miterlimit  */
+    spw_label(t, _("Miter limit:"), 0, i);
+
+    hb = spw_hbox(t, 3, 1, i);
+
+    a = gtk_adjustment_new (4.0, 0.0, 100.0, 0.1, 10.0, 10.0);
+    gtk_object_set_data (GTK_OBJECT (spw), "miterlimit", a);
+
+    sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
+    gtk_tooltips_set_tip (tt, sb, _("Maximum length of the miter (in units of stroke width)"), NULL);
+    gtk_widget_show (sb);
+    gtk_object_set_data (GTK_OBJECT (spw), "miterlimit_sb", sb);
+    sp_dialog_defocus_on_enter (sb); 
+
+    gtk_box_pack_start (GTK_BOX (hb), sb, FALSE, FALSE, 0);
+
+    gtk_signal_connect ( GTK_OBJECT (a), "value_changed", 
+                         GTK_SIGNAL_FUNC (sp_stroke_style_miterlimit_changed), spw );
+    i++;
 
     /* Cap type */
     spw_label(t, _("Cap:"), 0, i);
@@ -1260,20 +1276,26 @@ sp_stroke_style_line_widget_new (void)
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_BUTT,
                 INKSCAPE_PIXMAPDIR "/cap_butt.xpm",
                 hb, spw, "cap", "butt");
+    gtk_tooltips_set_tip (tt, tb, _("Butt cap"), NULL);
+
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_ROUND,
                 INKSCAPE_PIXMAPDIR "/cap_round.xpm",
                 hb, spw, "cap", "round");
+    gtk_tooltips_set_tip (tt, tb, _("Round cap"), NULL);
+
     tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_CAP_SQUARE,
                 INKSCAPE_PIXMAPDIR "/cap_square.xpm",
                 hb, spw, "cap", "square");
+    gtk_tooltips_set_tip (tt, tb, _("Square cap"), NULL);
+
     i++;
 
 
     /* Dash */
     spw_label(t, _("Pattern:"), 0, i);
-
     ds = sp_dash_selector_new ( inkscape_get_repr ( INKSCAPE, 
                                                     "palette.dashes") );
+
     gtk_widget_show (ds);
     gtk_table_attach ( GTK_TABLE (t), ds, 1, 4, i, i+1, 
                        (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
@@ -1395,9 +1417,7 @@ sp_stroke_style_line_widget_new (void)
                          NULL );
 
     SPDesktop *desktop = inkscape_active_desktop();
-    sp_stroke_style_line_update ( SP_WIDGET (spw), 
-                                  desktop ? SP_DT_SELECTION (desktop) : NULL);
-    // sp_stroke_style_line_update (SP_WIDGET (spw), SP_ACTIVE_DESKTOP ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL);
+    sp_stroke_style_line_update ( SP_WIDGET (spw), desktop ? SP_DT_SELECTION (desktop) : NULL);
 
     return spw;
 
@@ -1465,13 +1485,10 @@ sp_stroke_style_line_attr_changed ( SPWidget *spw,
 static void
 sp_stroke_style_line_update ( SPWidget *spw, SPSelection *sel )
 {
-    GtkWidget *sset, *units, *dsel;
-    GtkObject *width;
     const SPUnit *unit;
     const GSList *objects, *l;
     SPObject *object;
     SPStyle *style;
-    gdouble avgwidth;
     gboolean stroked;
     gboolean joinValid = TRUE;
     unsigned int jointype;
@@ -1486,10 +1503,11 @@ sp_stroke_style_line_update ( SPWidget *spw, SPSelection *sel )
 
     gtk_object_set_data (GTK_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
-    sset = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "stroke"));
-    width = GTK_OBJECT(gtk_object_get_data (GTK_OBJECT (spw), "width"));
-    units = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "units"));
-    dsel = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "dash"));
+    GtkWidget *sset = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "stroke"));
+    GtkObject *width = GTK_OBJECT(gtk_object_get_data (GTK_OBJECT (spw), "width"));
+    GtkObject *ml = GTK_OBJECT(gtk_object_get_data (GTK_OBJECT (spw), "miterlimit"));
+    GtkWidget *units = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "units"));
+    GtkWidget *dsel = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "dash"));
 
     if (!sel || sp_selection_is_empty (sel)) {
         /* No objects, set empty */
@@ -1501,24 +1519,29 @@ sp_stroke_style_line_update ( SPWidget *spw, SPSelection *sel )
 
     objects = sp_selection_item_list (sel);
 
-    /* Determine average stroke width */
-    avgwidth = 0.0;
+    /* Determine average stroke width and miterlimit */
+    gdouble avgwidth = 0.0;
+    gdouble avgml = 0.0;
     stroked = TRUE;
     for (l = objects; l != NULL; l = l->next) {
+
         NRMatrix i2d;
-        gdouble dist;
         sp_item_i2d_affine (SP_ITEM (l->data), &i2d);
+
         object = SP_OBJECT (l->data);
-        dist = object->style->stroke_width.computed * 
-               NR_MATRIX_DF_EXPANSION (&i2d);
+
+        gdouble dist = object->style->stroke_width.computed * NR_MATRIX_DF_EXPANSION (&i2d);
+        gdouble ml = object->style->stroke_miterlimit.value;
                
 #ifdef SP_SS_VERBOSE
         g_print ( "%g in user is %g on desktop\n", 
                   object->style->stroke_width.computed, dist );
 #endif
         avgwidth += dist;
+        avgml += ml;
         if (object->style->stroke.type == SP_PAINT_TYPE_NONE) stroked = FALSE;
     }
+
     if (stroked) {
         gtk_widget_set_sensitive (sset, TRUE);
     } else {
@@ -1528,10 +1551,14 @@ sp_stroke_style_line_update ( SPWidget *spw, SPSelection *sel )
                               GINT_TO_POINTER (FALSE) );
         return;
     }
+
     avgwidth /= g_slist_length ((GSList *) objects);
     unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (units));
     sp_convert_distance (&avgwidth, SP_PS_UNIT, unit);
     gtk_adjustment_set_value (GTK_ADJUSTMENT (width), avgwidth);
+
+    avgml /= g_slist_length ((GSList *) objects);
+    gtk_adjustment_set_value (GTK_ADJUSTMENT (ml), avgml);
 
     /* Join & Cap */
     object = SP_OBJECT (objects->data);
@@ -1805,16 +1832,14 @@ sp_stroke_style_set_scaled_dash ( SPCSSAttr *css,
 static void
 sp_stroke_style_scale_line (SPWidget *spw)
 {
-    GtkAdjustment *wadj;
-    SPUnitSelector *us;
-    SPDashSelector *dsel;
     const GSList *items, *i, *r;
     GSList *reprs;
     SPCSSAttr *css;
 
-    wadj = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "width"));
-    us = SP_UNIT_SELECTOR(gtk_object_get_data (GTK_OBJECT (spw), "units"));
-    dsel = SP_DASH_SELECTOR(gtk_object_get_data (GTK_OBJECT (spw), "dash"));
+    GtkAdjustment *wadj = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "width"));
+    SPUnitSelector *us = SP_UNIT_SELECTOR(gtk_object_get_data (GTK_OBJECT (spw), "units"));
+    SPDashSelector *dsel = SP_DASH_SELECTOR(gtk_object_get_data (GTK_OBJECT (spw), "dash"));
+    GtkAdjustment *ml = GTK_ADJUSTMENT(gtk_object_get_data (GTK_OBJECT (spw), "miterlimit"));
 
     if (spw->inkscape) {
         /* TODO: */
@@ -1837,40 +1862,56 @@ sp_stroke_style_scale_line (SPWidget *spw)
     if (items) {
         for (i = items; i != NULL; i = i->next) {
             NRMatrix i2d, d2i;
-            double length, dist;
+            double length, dist, miterlimit;
             double *dash, offset;
             int ndash;
-	     Inkscape::SVGOStringStream os;
+	     Inkscape::SVGOStringStream os_width, os_ml;
 
             length = wadj->value;
+            miterlimit = ml->value;
             sp_dash_selector_get_dash (dsel, &ndash, &dash, &offset);
+
             /* Set stroke width */
             sp_convert_distance ( &length, sp_unit_selector_get_unit (us), 
                                   SP_PS_UNIT );
             sp_item_i2d_affine (SP_ITEM (i->data), &i2d);
             nr_matrix_invert (&d2i, &i2d);
             dist = length * NR_MATRIX_DF_EXPANSION (&d2i);
-            os << dist;
-            sp_repr_css_set_property (css, "stroke-width", os.str().c_str());
+
+            os_width << dist;
+            sp_repr_css_set_property (css, "stroke-width", os_width.str().c_str());
+
+            os_ml << miterlimit;
+            sp_repr_css_set_property (css, "stroke-miterlimit", os_ml.str().c_str());
+
             /* Set dash */
             sp_stroke_style_set_scaled_dash (css, ndash, dash, offset, dist);
+
             sp_repr_css_change_recursive ( SP_OBJECT_REPR (i->data), css, 
                                            "style" );
             g_free (dash);
         }
     } else {
         for (r = reprs; r != NULL; r = r->next) {
-            double length;
+            double length, miterlimit;
             double *dash, offset;
             int ndash;
-            Inkscape::SVGOStringStream os;
+	     Inkscape::SVGOStringStream os_width, os_ml;
+
             length = wadj->value;
+            miterlimit = ml->value;
             sp_dash_selector_get_dash (dsel, &ndash, &dash, &offset);
+
             sp_convert_distance ( &length, sp_unit_selector_get_unit (us), 
                                   SP_PS_UNIT );
-            os << length * 1.25;
-            sp_repr_css_set_property (css, "stroke-width", os.str().c_str());
+            os_width << length * 1.25;
+            sp_repr_css_set_property (css, "stroke-width", os_width.str().c_str());
+
+            os_ml << miterlimit;
+            sp_repr_css_set_property (css, "stroke-miterlimit", os_ml.str().c_str());
+
             sp_stroke_style_set_scaled_dash (css, ndash, dash, offset, length);
+
             sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
             g_free (dash);
         }
@@ -1896,7 +1937,14 @@ sp_stroke_style_width_changed (GtkAdjustment *adj, SPWidget *spw)
     sp_stroke_style_scale_line (spw);
 }
 
+static void
+sp_stroke_style_miterlimit_changed (GtkAdjustment *adj, SPWidget *spw)
+{
+    if (gtk_object_get_data (GTK_OBJECT (spw), "update")) 
+        return;
 
+    sp_stroke_style_scale_line (spw);
+}
 
 static void
 sp_stroke_style_line_dash_changed (SPDashSelector *dsel, SPWidget *spw)
@@ -1939,6 +1987,10 @@ sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw)
                                                          "mid_marker");
         end_marker = (const gchar*)gtk_object_get_data ( GTK_OBJECT (tb), 
                                                          "end_marker");
+        if (join) {
+            GtkWidget *ml = GTK_WIDGET (g_object_get_data (G_OBJECT (spw), "miterlimit_sb"));
+            gtk_widget_set_sensitive (ml, !strcmp(join, "miter"));
+        }
 
         if (spw->inkscape) {
             reprs = NULL;
@@ -2151,6 +2203,10 @@ sp_stroke_style_set_join_buttons (SPWidget *spw, GtkWidget *active)
     tb = GTK_WIDGET(gtk_object_get_data ( GTK_OBJECT (spw), 
                                           INKSCAPE_STOCK_JOIN_MITER) );
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
+
+    GtkWidget *ml = GTK_WIDGET (g_object_get_data (G_OBJECT (spw), "miterlimit_sb"));
+    gtk_widget_set_sensitive (ml, (active == tb));
+
     tb = GTK_WIDGET(gtk_object_get_data ( GTK_OBJECT (spw), 
                                           INKSCAPE_STOCK_JOIN_ROUND) );
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
