@@ -130,15 +130,6 @@ options_selcue_toggled (GtkToggleButton *button)
 }
 
 static void
-options_selector_move_with_grid_toggled (GtkToggleButton *button)
-{
-        if (gtk_toggle_button_get_active (button)) {
-                const gchar *val = (const gchar *) gtk_object_get_data (GTK_OBJECT (button), "value");
-                prefs_set_string_attribute ("tools.select", "move_with_grid", val);
-        }
-}
-
-static void
 options_dropper_pick_toggled (GtkToggleButton *button)
 {
 	if (gtk_toggle_button_get_active (button)) {
@@ -248,32 +239,6 @@ options_selector ()
         options_selcue_toggled
         );
 
-    f = gtk_frame_new (_("Default action when moving with grid enabled:"));
-    gtk_widget_show (f);
-    gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
-
-    fb = gtk_vbox_new (FALSE, 0);
-    gtk_widget_show (fb);
-    gtk_container_add (GTK_CONTAINER (f), fb);
-
-    gchar const* move_with_grid = prefs_get_string_attribute ("tools.select", "move_with_grid");
-
-    b = sp_select_context_add_radio (
-        NULL, fb, tt, _("Snap points to the grid"),
-        _("Default action is to snap the points of objects to the grid, even if the object was not "
-          "previously snapped.  Shift+drag selects the alternative behaviour."),
-        "snap", 0, false, move_with_grid == NULL || !strcmp(move_with_grid, "snap"),
-        options_selector_move_with_grid_toggled
-        );
-        
-    b = sp_select_context_add_radio (
-        b, fb, tt, _("Snap objects to their current grid offset"),
-        _("Default action is to snap objects to having the same offset from the grid as they did "
-          "before the move.  Shift+drag selects the alternative behaviour."),
-        "keep_offset", 0, false, move_with_grid && !strcmp(move_with_grid, "keep_offset"),
-        options_selector_move_with_grid_toggled
-        );
-    
     return vb;
 }
 
