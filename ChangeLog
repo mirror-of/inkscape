@@ -1,3 +1,7 @@
+2004-08-20  Carl Hetherington <inkscape@carlh.net>
+
+	* src/zoom-context.cpp: coding style cleanups.
+
 2004-08-18  Bryce Harrington <bryce@bryceharrington.com>
 
 	* autogen.sh:  Fixing the 'missing ltmain.sh' bug
