@@ -52,6 +52,9 @@ SPCurve *sp_shape_get_curve (SPShape *shape);
 
 void sp_shape_set_curve (SPShape *shape, SPCurve *curve, unsigned int owner);
 
+void sp_shape_adjust_pattern (SPItem *item, NR::Matrix const &xform);
+void sp_shape_adjust_stroke (SPItem *item, gdouble ex);
+
 /* NOT FOR GENERAL PUBLIC UNTIL SORTED OUT (Lauris) */
 void sp_shape_set_curve_insync (SPShape *shape, SPCurve *curve, unsigned int owner);
 

@@ -292,13 +292,9 @@ sp_path_set_transform (SPItem *item, NR::Matrix const &xform)
 	SPShape *shape;
 	SPCurve *curve;
 	NRBPath dpath, spath;
-	double ex;
-	SPStyle *style;
 
 	path = (SPPath *) item;
 	shape = (SPShape *) item;
-
-	ex = NR::expansion(xform);
 
 	/* Transform the path */
 	spath.path = shape->curve->bpath;
@@ -309,22 +305,15 @@ sp_path_set_transform (SPItem *item, NR::Matrix const &xform)
 		sp_curve_unref (curve);
 	}
 
-	/* Transform the stroke style -- this should really be factored into a separate method of SPShape, IMO, for optional use of child classes -- we have several different copy-and-paste versions of this code... */
-	style = SP_OBJECT_STYLE (item);
-	if (style->stroke.type != SP_PAINT_TYPE_NONE) {
-		if (!NR_DF_TEST_CLOSE (ex, 1.0, NR_EPSILON)) {
-			/* Scale changed, so we have to adjust stroke width */
-			style->stroke_width.computed *= ex;
-			if (style->stroke_dash.n_dash != 0) {
-				int i;
-				for (i = 0; i < style->stroke_dash.n_dash; i++) style->stroke_dash.dash[i] *= ex;
-				style->stroke_dash.offset *= ex;
-			}
-		}
-	}
+	// Adjust stroke
+	sp_shape_adjust_stroke (item, NR::expansion(xform));
+
+	// Adjust pattern fill
+	sp_shape_adjust_pattern (item, xform);
 
 	sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
+	// nothing remains - we've written all of the transform, so return identity
 	return NR::identity();
 }
 

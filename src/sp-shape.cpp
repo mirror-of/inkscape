@@ -18,6 +18,9 @@
 #include <string.h>
 
 #include <libnr/nr-pixblock.h>
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-point-fns.h>
 
 #include "macros.h"
 #include "helper/sp-intl.h"
@@ -38,6 +41,7 @@
 #include "sp-marker.h"
 #include "sp-shape.h"
 #include "sp-path.h"
+#include "sp-pattern.h"
 #include "sp-defs.h"
 
 #define noSHAPE_VERBOSE
@@ -802,6 +806,47 @@ sp_shape_set_curve_insync (SPShape *shape, SPCurve *curve, unsigned int owner)
 			shape->curve = sp_curve_copy (curve);
 		}
 	}
+}
+
+// Adjusters
+
+void
+sp_shape_adjust_pattern (SPItem *item, NR::Matrix const &xform)
+{
+    SPStyle *style = SP_OBJECT_STYLE (item);
+
+    if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
+        SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
+        if (SP_IS_PATTERN (server)) {
+            SP_PATTERN (server)->patternTransform = NR::Matrix(SP_PATTERN (server)->patternTransform) * xform;
+            gchar c[256];
+            if (sp_svg_transform_write(c, 256, &(SP_PATTERN (server)->patternTransform))) {
+                sp_repr_set_attr(SP_OBJECT_REPR(server), "patternTransform", c);
+            } else {
+                sp_repr_set_attr(SP_OBJECT_REPR(server), "patternTransform", NULL);
+            }
+        }
+    } 
+}
+
+void
+sp_shape_adjust_stroke (SPItem *item, gdouble ex)
+{
+    SPStyle *style = SP_OBJECT_STYLE (item);
+
+    if (style->stroke.type != SP_PAINT_TYPE_NONE) {
+        if (!NR_DF_TEST_CLOSE (ex, 1.0, NR_EPSILON)) {
+            /* Scale changed, so we have to adjust stroke width */
+            style->stroke_width.computed *= ex;
+            if (style->stroke_dash.n_dash != 0) {
+                int i;
+                for (i = 0; i < style->stroke_dash.n_dash; i++) {
+                    style->stroke_dash.dash[i] *= ex;
+                }
+                style->stroke_dash.offset *= ex;
+            }
+        }
+    }
 }
 
 

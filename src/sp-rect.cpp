@@ -27,6 +27,7 @@
 #include "document.h"
 #include "dialogs/object-attributes.h"
 #include "sp-root.h"
+#include "sp-shape.h"
 #include "sp-rect.h"
 #include "helper/sp-intl.h"
 
@@ -404,12 +405,7 @@ static int sp_rect_snappoints(SPItem *item, NR::Point p[], int size)
 static NR::Matrix
 sp_rect_set_transform (SPItem *item, NR::Matrix const &xform)
 {
-	SPRect *rect;
-
-	gdouble sw, sh;
-	SPStyle *style;
-
-	rect = SP_RECT (item);
+	SPRect *rect = SP_RECT (item);
 
 	/* Calculate rect start in parent coords */
 	NR::Point pos=NR::Point(rect->x.computed, rect->y.computed) * xform;
@@ -419,8 +415,8 @@ sp_rect_set_transform (SPItem *item, NR::Matrix const &xform)
 	remaining[4] = remaining[5] = 0.0;
 
 	/* Scalers */
-	sw = sqrt (remaining[0] * remaining[0] + remaining[1] * remaining[1]);
-	sh = sqrt (remaining[2] * remaining[2] + remaining[3] * remaining[3]);
+	gdouble sw = sqrt (remaining[0] * remaining[0] + remaining[1] * remaining[1]);
+	gdouble sh = sqrt (remaining[2] * remaining[2] + remaining[3] * remaining[3]);
 	if (sw > 1e-9) {
 		remaining[0] = remaining[0] / sw;
 		remaining[1] = remaining[1] / sw;
@@ -451,21 +447,11 @@ sp_rect_set_transform (SPItem *item, NR::Matrix const &xform)
 	rect->x = pos[NR::X];
 	rect->y = pos[NR::Y];
 
-	/* And last but not least */
-	style = SP_OBJECT_STYLE (item);
-	if (style->stroke.type != SP_PAINT_TYPE_NONE) {
-		if (!NR_DF_TEST_CLOSE (sw, 1.0, NR_EPSILON) || !NR_DF_TEST_CLOSE (sh, 1.0, NR_EPSILON)) {
-			double scale;
-			/* Scale changed, so we have to adjust stroke width */
-			scale = sqrt (fabs (sw * sh));
-			style->stroke_width.computed *= scale;
-			if (style->stroke_dash.n_dash != 0) {
-				int i;
-				for (i = 0; i < style->stroke_dash.n_dash; i++) style->stroke_dash.dash[i] *= scale;
-				style->stroke_dash.offset *= scale;
-			}
-		}
-	}
+	// Adjust stroke width 
+	sp_shape_adjust_stroke (item, sqrt (fabs (sw * sh)));
+
+	// Adjust pattern fill
+	sp_shape_adjust_pattern (item, xform * remaining.inverse());
 
 	sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
