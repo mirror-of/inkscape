@@ -600,9 +600,11 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
 #endif
 
         SP_VERB_NONE,
+        SP_VERB_FILE_VACUUM,
+
+        SP_VERB_NONE,
        SP_VERB_DIALOG_NAMEDVIEW,
        SP_VERB_DIALOG_DISPLAY,
-        SP_VERB_FILE_VACUUM,
 
         SP_VERB_NONE,
 	SP_VERB_FILE_CLOSE_VIEW,
