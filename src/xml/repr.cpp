@@ -742,13 +742,11 @@ sp_repr_add_listener (SPRepr *repr, const SPReprEventVector *vector, void * data
 	rl->data = data;
 
 	if (repr->last_listener) {
-		g_assert(repr->last_listener->next == NULL);
 		repr->last_listener->next = rl;
-		repr->last_listener = rl;
 	} else {
 		repr->listeners = rl;
-		repr->last_listener = rl;
 	}
+	repr->last_listener = rl;
 }
 
 static void
