@@ -30,6 +30,8 @@ dialogs_libspdialogs_a_SOURCES = \
 	dialogs/display-settings.h	\
 	dialogs/export.cpp	\
 	dialogs/export.h	\
+	dialogs/extensions.cpp	\
+	dialogs/extensions.h	\
 	dialogs/filedialog.cpp	\
 	dialogs/filedialog.h	\
 	dialogs/fill-style.cpp	\
