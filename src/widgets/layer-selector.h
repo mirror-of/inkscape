@@ -18,11 +18,13 @@
 #include <gtkmm/cellrenderertext.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/liststore.h>
+#include <sigc++/slot.h>
 #include "util/list.h"
 
 class SPDesktop;
 class SPDocument;
 class SPObject;
+class SPRepr;
 
 namespace Inkscape {
 namespace Widgets {
@@ -38,27 +40,33 @@ public:
     void setDesktop(SPDesktop *desktop);
 
 private:
-    Gtk::ComboBox _selector;
-    Gtk::ToggleButton _lock_button;
-    Gtk::ToggleButton _hide_button;
-
     class LayerModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         Gtk::TreeModelColumn<unsigned> depth;
         Gtk::TreeModelColumn<SPObject *> object;
+        Gtk::TreeModelColumn<SPRepr *> repr;
+        Gtk::TreeModelColumn<sigc::slot<void> *> update_slot;
 
-        LayerModelColumns() { add(depth); add(object); }
+        LayerModelColumns() {
+            add(depth); add(object); add(repr); add(update_slot);
+        }
     };
+
+    SPDesktop *_desktop;
+
+    Gtk::ComboBox _selector;
+    Gtk::ToggleButton _lock_button;
+    Gtk::ToggleButton _hide_button;
 
     LayerModelColumns _model_columns;
     Gtk::CellRendererText _label_renderer;
     Glib::RefPtr<Gtk::ListStore> _layer_model;
 
     sigc::connection _layer_changed_connection;
+    sigc::connection _selection_changed_connection;
 
-    SPDesktop *_desktop;
-
-    void _updateLayer(SPObject *layer);
+    void _selectLayer(SPObject *layer);
+    void _setDesktopLayer();
 
     void _buildEntry(unsigned depth, SPObject &object);
     void _buildEntries(unsigned depth,
@@ -66,6 +74,7 @@ private:
     void _buildSiblingEntries(unsigned depth,
                               SPObject &parent,
                               Inkscape::Util::List<SPObject &> hierarchy);
+    void _destroyEntry(Gtk::ListStore::iterator const &row);
 
     void _prepareLabelRenderer(Gtk::TreeModel::const_iterator const &row);
 };

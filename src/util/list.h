@@ -21,6 +21,22 @@ namespace Inkscape {
 
 namespace Util {
 
+template <typename T> class List;
+template <typename T> class MutableList;
+
+template <typename T>
+typename List<T>::reference first(List<T> const &list);
+
+template <typename T>
+List<T> const &rest(List<T> const &list);
+
+template <typename T>
+MutableList<T> &rest(MutableList<T> const &list);
+
+template <typename T>
+MutableList<T> const &set_rest(MutableList<T> const &list,
+                               MutableList<T> const &rest);
+
 template <typename T>
 class ListBase {
 public:
@@ -31,9 +47,6 @@ public:
     typedef typename Traits::Reference<value_type>::RValue const_reference;
     typedef typename Traits::Reference<value_type>::Pointer pointer;
 
-    reference operator*() const { return _cell->value; }
-    pointer operator->() const { return &_cell->value; }
-
     operator bool() const { return _cell != NULL; }
 
 protected:
@@ -41,15 +54,15 @@ protected:
     ListBase(const_reference value, ListBase const &next)
     : _cell(new Cell(value, next._cell)) {}
 
-    bool is_equal(ListBase const &other) const {
+    bool _is_equivalent(ListBase const &other) const {
         return _cell == other._cell;
     }
 
-    ListBase next() const { return ListBase(_cell->next); }
-    ListBase setNext(ListBase const &next) {
-        _cell->next = next._cell;
-        return next;
+    reference _first() const { return _cell->value; }
+    ListBase &_rest() const {
+        return reinterpret_cast<ListBase &>(_cell->next);
     }
+    void _advance() { _cell = _cell->next; }
 
 private:
     struct Cell : public GC::Managed<> {
@@ -68,38 +81,35 @@ private:
 template <typename T> class List;
 
 template <typename T>
-class List<T const> : public ListBase<T const> {
+class List<T const> : public ListBase<T> {
 public:
-
     typedef T const value_type;
     typedef typename Traits::Reference<value_type>::LValue reference;
     typedef typename Traits::Reference<value_type>::RValue const_reference;
     typedef typename Traits::Reference<value_type>::Pointer pointer;
 
-    List() : ListBase<T const>() {}
+    List() : ListBase<T>() {}
     explicit List(const_reference value, List const &next=List())
-    : ListBase<T const>(value, next) {}
+    : ListBase<T>(value, next) {}
 
-    bool operator==(List const &other) const {
-        return is_equal(other);
-    }
-    bool operator!=(List const &other) const {
-        return !is_equal(other);
-    }
+    reference operator*() const { return _first(); }
+    pointer operator->() const { return &_first(); }
 
-    List next() const { return List(ListBase<T const>::next()); }
+    bool operator==(List const &other) const { return _is_equivalent(other); }
+    bool operator!=(List const &other) const { return !_is_equivalent(other); }
 
     List &operator++() {
-        return *this = next();
+        _advance();
+        return *this;
     }
     List operator++(int) {
         List old(*this);
-        *this = next();
+        _advance();
         return old;
     }
 
-private:
-    explicit List(ListBase<T const> const &list) : ListBase<T const>(list) {}
+    friend reference first<>(List const &);
+    friend List const &rest<>(List const &);
 };
 
 template <typename T>
@@ -114,26 +124,21 @@ public:
     explicit List(const_reference value, List const &next=List())
     : List<T const>(value, next) {}
 
-    reference operator*() const {
-        return const_cast<reference>(List<T const>::operator*());
-    }
-    pointer operator->() const {
-        return const_cast<pointer>(List<T const>::operator->());
-    }
-
-    List next() const { return List(List<T const>::next()); }
+    reference operator*() const { return const_cast<reference>(_first()); }
+    pointer operator->() const { return const_cast<pointer>(&_first()); }
 
     List &operator++() {
-        return *this = next();
+        _advance();
+        return *this;
     }
     List operator++(int) {
         List old(*this);
-        *this = next();
+        _advance();
         return old;
     }
 
-private:
-    explicit List(List<T const> const &list) : List<T const>(list) {}
+    friend reference first<>(List const &);
+    friend List const &rest<>(List const &);
 };
 
 template <typename T>
@@ -148,26 +153,24 @@ public:
     List(const_reference value, List const &next=List())
     : ListBase<T &>(value, next) {}
 
-    bool operator==(List const &other) const {
-        return is_equal(other);
-    }
-    bool operator!=(List const &other) const {
-        return !is_equal(other);
-    }
+    reference operator*() const { return _first(); }
+    pointer operator->() const { return &_first(); }
 
-    List next() const { return List(ListBase<T &>::next()); }
+    bool operator==(List const &other) const { return _is_equivalent(other); }
+    bool operator!=(List const &other) const { return !_is_equivalent(other); }
 
     List &operator++() {
-        return *this = next();
+        _advance();
+        return *this;
     }
     List operator++(int) {
         List old(*this);
-        *this = next();
+        _advance();
         return old;
     }
 
-private:
-    explicit List(ListBase<T &> const &list) : ListBase<T &>(list) {}
+    friend reference first<>(List const &);
+    friend List const &rest<>(List const &);
 };
 
 template <typename T>
@@ -175,54 +178,58 @@ class MutableList : public List<T> {
 public:
     MutableList() {}
     explicit MutableList(typename List<T>::const_reference value,
-                         MutableList<T> const &next=MutableList<T>())
+                         MutableList const &next=MutableList())
     : List<T>(value, next) {}
 
-    MutableList<T> &operator++() {
-        List<T>::operator++();
+    MutableList &operator++() {
+        _advance();
         return *this;
     }
-    MutableList<T> operator++(int) {
-        MutableList<T> old(*this);
-        List<T>::operator++();
+    MutableList operator++(int) {
+        MutableList old(*this);
+        _advance();
         return old;
     }
 
-    MutableList<T> next() const {
-        return MutableList<T>(List<T>::next());
-    }
-    MutableList<T> setNext(MutableList<T> const &next) {
-        List<T>::setNext(next);
-        return next;
-    }
-
-private:
-    explicit MutableList(List<T> const &list) : List<T>(list) {}
+    friend MutableList &rest<>(MutableList const &);
+    friend MutableList const &set_rest<>(MutableList const &,
+                                         MutableList const &);
 };
 
 template <typename T>
-inline
-List<T> cons(typename Traits::Reference<T>::RValue value, List<T> const &next)
+inline List<T> cons(typename Traits::Reference<T>::RValue value,
+                    List<T> const &next)
 {
     return List<T>(value, next);
 }
 
 template <typename T>
-inline
-MutableList<T> cons(typename Traits::Reference<T>::RValue value,
-                    MutableList<T> const &next)
+inline MutableList<T> cons(typename Traits::Reference<T>::RValue first,
+                           MutableList<T> const &rest)
 {
-    return MutableList<T>(value, next);
+    return MutableList<T>(first, rest);
 }
 
 template <typename T>
-List<T> rest(List<T> const &list) {
-    return list.next();
+inline typename List<T>::reference first(List<T> const &list) {
+    return list._first();
 }
 
 template <typename T>
-MutableList<T> rest(MutableList<T> const &list) {
-    return list.next();
+inline List<T> const &rest(List<T> const &list) {
+    return static_cast<List<T> &>(list._rest());
+}
+
+template <typename T>
+inline MutableList<T> &rest(MutableList<T> const &list) {
+    return static_cast<MutableList<T> &>(list._rest());
+}
+
+template <typename T>
+inline MutableList<T> const &set_rest(MutableList<T> const &list,
+                                      MutableList<T> const &rest)
+{
+    return static_cast<MutableList<T> &>(list._rest()) = rest;
 }
 
 

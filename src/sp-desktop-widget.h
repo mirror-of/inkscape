@@ -47,22 +47,15 @@ struct SPDesktopWidget {
     GtkWidget *zoom_status;
     gulong zoom_update;
 
-    GtkWidget *layer_selector;
-
     gint coord_status_id, select_status_id;
 
     SPCanvas *canvas;
 
     GtkAdjustment *hadj, *vadj;
 
-    Inkscape::Widgets::LayerSelector *layer_selector_gtkmm;
+    Inkscape::Widgets::LayerSelector *layer_selector;
 
     void setMessage(Inkscape::MessageType type, gchar const *message);
-    static void _update_layer_display(SPObject *layer, SPDesktopWidget *widget);
-    static void _activate_layer_menu(GtkOptionMenu *selector, SPDesktopWidget *widget);
-    static void _deactivate_layer_menu(GtkOptionMenu *selector, SPDesktopWidget *widget);
-    unsigned _buildLayerMenuItems(GtkMenu *menu, SPObject *layer);
-    void _buildLayerStatusMenuItem(GtkMenu *menu, SPObject *layer);
 };
 
 struct SPDesktopWidgetClass {

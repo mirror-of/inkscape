@@ -1,3 +1,19 @@
+2004-10-18  MenTaLguY  <mental@rydia.net>
+
+	* src/util/list.h: cleanups of list class.  I think, aside from
+	  documentation and maybe fixes for g++ 3.4 (if required), this
+	  is the last set of changes I will need to make.
+
+	* src/sp-item.cpp, src/splivarot.cpp, src/util/reverse-list.h,
+	  src/util/filter-list.h, src/util/map-list.h:
+	  adjust for changes in the list class' interface
+
+	* src/desktop.cpp, src/sp-desktop-widget.h: removed old layer selector
+
+	* src/widgets/layer-selector.cpp, src/widgets/layer-selector.h:
+	  more work; it's now at least as functional as the old selector it
+	  replaces
+	  
 2004-10-27  Kees Cook  <kees@outflux.net>
 
 	* src/libnr/nr-point.h: use NR::X and NR::Y instead of "0" and "1".

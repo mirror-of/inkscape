@@ -28,7 +28,7 @@ map_list(UnaryFunction f, InputIterator start, InputIterator end)
         MutableList<T> tail(head);
         while ( ++start != end ) {
             MutableList<T> cell(f(*start));
-            tail.setNext(cell);
+            set_rest(tail, cell);
             tail = cell;
         }
         return head;

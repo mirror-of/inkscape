@@ -9,6 +9,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <cstring>
 #include <algorithm>
 #include <functional>
 #include <gtkmm/liststore.h>
@@ -20,6 +21,7 @@
 #include "sp-object.h"
 #include "desktop.h"
 #include "xml/repr.h"
+#include "xml/sp-repr-event-vector.h"
 
 namespace Inkscape {
 namespace Widgets {
@@ -39,11 +41,15 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
         sigc::mem_fun(*this, &LayerSelector::_prepareLabelRenderer)
     );
 
+    _selection_changed_connection = _selector.signal_changed().connect(
+        sigc::mem_fun(*this, &LayerSelector::_setDesktopLayer)
+    );
     setDesktop(desktop);
 }
 
 LayerSelector::~LayerSelector() {
     setDesktop(NULL);
+    _selection_changed_connection.disconnect();
 }
 
 namespace {
@@ -68,12 +74,13 @@ void LayerSelector::setDesktop(SPDesktop *desktop) {
     if (_desktop) {
         // TODO we need a different signal for this, really..
         g_signal_connect_after(_desktop, "shutdown", GCallback(detach), this);
-        _layer_changed_connection = _desktop->connectCurrentLayerChanged(sigc::mem_fun(*this, &LayerSelector::_updateLayer));
-        _updateLayer(_desktop->currentLayer());
+
+        _layer_changed_connection = _desktop->connectCurrentLayerChanged(
+            sigc::mem_fun(*this, &LayerSelector::_selectLayer)
+        );
+        _selectLayer(_desktop->currentLayer());
     }
 }
-
-using Inkscape::Util::List;
 
 namespace {
 
@@ -89,24 +96,30 @@ private:
 
 class column_matches_object {
 public:
-    column_matches_object(Gtk::TreeModelColumn<SPObject *> &column,
-                          SPObject *object)
+    column_matches_object(Gtk::TreeModelColumn<SPObject *> const &column,
+                          SPObject &object)
     : _column(column), _object(object) {}
     bool operator()(Gtk::TreeModel::const_iterator const &iter) const {
-        return (*iter)[_column] == _object;
+        return (*iter)[_column] == &_object;
     }
 private:
-    Gtk::TreeModelColumn<SPObject *> &_column;
-    SPObject *_object;
+    Gtk::TreeModelColumn<SPObject *> const &_column;
+    SPObject &_object;
 };
 
 }
 
-void LayerSelector::_updateLayer(SPObject *layer) {
+void LayerSelector::_selectLayer(SPObject *layer) {
     using Inkscape::Util::cons;
     using Inkscape::Util::reverse_list;
 
-    _layer_model->clear();
+    _selection_changed_connection.block();
+
+    while (!_layer_model->children().empty()) {
+        Gtk::ListStore::iterator first_row(_layer_model->children().begin());
+        _destroyEntry(first_row);
+        _layer_model->erase(first_row);
+    }
 
     if (layer) {
         SPObject *root(_desktop->currentRoot());
@@ -116,10 +129,26 @@ void LayerSelector::_updateLayer(SPObject *layer) {
         ));
 
         _selector.set_active(
-            std::find_if(_layer_model->children().begin(),
-                         _layer_model->children().end(),
-                         column_matches_object(_model_columns.object, layer))
+            std::find_if(
+                _layer_model->children().begin(),
+                _layer_model->children().end(),
+                column_matches_object(_model_columns.object, *layer)
+            )
         );
+            
+    }
+
+    _selection_changed_connection.unblock();
+}
+
+void LayerSelector::_setDesktopLayer() {
+    Gtk::ListStore::iterator selected(_selector.get_active());
+    SPObject *layer=_selector.get_active()->get_value(_model_columns.object);
+    if ( _desktop && layer ) {
+        _layer_changed_connection.block();
+        _desktop->setCurrentLayer(layer);
+        _layer_changed_connection.unblock();
+        _selectLayer(_desktop->currentLayer());
     }
 }
 
@@ -167,11 +196,68 @@ void LayerSelector::_buildSiblingEntries(
     }
 }
 
-void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
-    Gtk::ListStore::iterator entry(_layer_model->append());
+namespace {
 
-    entry->set_value(_model_columns.depth, depth);
-    entry->set_value(_model_columns.object, &object);
+void attribute_changed(SPRepr *repr, gchar const *name,
+                       gchar const *old_value, gchar const *new_value,
+                       bool is_interactive, void *data) 
+{
+    if ( !std::strcmp(name, "id") || !std::strcmp(name, "inkscape:label") ) {
+        (*reinterpret_cast<sigc::slot<void> *>(data))();
+    }
+}
+
+void update_row_for_object(SPObject &object,
+                           Gtk::TreeModelColumn<SPObject *> const &column,
+                           Glib::RefPtr<Gtk::ListStore> const &model)
+{
+    Gtk::TreeIter row(
+        std::find_if(
+            model->children().begin(),
+            model->children().end(),
+            column_matches_object(column, object)
+        )
+    );
+    model->row_changed(model->get_path(row), row);
+}
+
+}
+
+void LayerSelector::_buildEntry(unsigned depth, SPObject &object) {
+    static const SPReprEventVector events = {
+        NULL, NULL,
+        NULL, NULL,
+        NULL, &attribute_changed,
+        NULL, NULL,
+        NULL, NULL
+    };
+
+    Gtk::ListStore::iterator row(_layer_model->append());
+
+    SPRepr *repr=SP_OBJECT_REPR(&object);
+
+    sigc::slot<void> *update_slot = new sigc::slot<void>(
+        sigc::bind(
+            sigc::ptr_fun(&update_row_for_object),
+            object, _model_columns.object, _layer_model
+        )
+    );
+
+    row->set_value(_model_columns.depth, depth);
+    row->set_value(_model_columns.object, &object);
+    row->set_value(_model_columns.repr, repr);
+    row->set_value(_model_columns.update_slot, update_slot);
+
+    sp_repr_add_listener(repr, &events, reinterpret_cast<void *>(update_slot));
+}
+
+void LayerSelector::_destroyEntry(Gtk::ListStore::iterator const &row) {
+    SPRepr *repr=row->get_value(_model_columns.repr);
+    sigc::slot<void> *update_slot=row->get_value(_model_columns.update_slot);
+    if (repr) {
+        sp_repr_remove_listener_by_data(repr, reinterpret_cast<void *>(update_slot));
+        delete update_slot;
+    }
 }
 
 void LayerSelector::_prepareLabelRenderer(
@@ -186,9 +272,12 @@ void LayerSelector::_prepareLabelRenderer(
     //       where does it come from, and how can we avoid it?
     if (object) {
         SPObject *layer=( _desktop ? _desktop->currentLayer() : NULL );
+        SPObject *root=( _desktop ? _desktop->currentRoot() : NULL );
 
         gchar const *format;
-        if ( layer && SP_OBJECT_PARENT(object) == SP_OBJECT_PARENT(layer) ) {
+        if ( layer && SP_OBJECT_PARENT(object) == SP_OBJECT_PARENT(layer) ||
+             layer == root && SP_OBJECT_PARENT(object) == root
+        ) {
             format="%*s<small>%s%s%s</small>";
         } else {
             format="%*s<small><small>%s%s%s</small></small>";
@@ -207,9 +296,9 @@ void LayerSelector::_prepareLabelRenderer(
                 suffix = ")";
             }
         } else {
-            prefix = "(";
+            prefix = "<";
             label = "root";
-            suffix = ")";
+            suffix = ">";
         }
 
         gchar *text=g_markup_printf_escaped(format, depth*3, "",

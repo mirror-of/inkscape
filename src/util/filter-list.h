@@ -34,7 +34,7 @@ filter_list(UnaryPredicate p, InputIterator start, InputIterator end) {
     }
     while ( start != end ) {
         if (p(*start)) {
-            tail.setNext(ResultList(*start));
+            set_rest(tail, ResultList(*start));
             ++tail;
         }
         ++start;

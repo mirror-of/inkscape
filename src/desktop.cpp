@@ -957,15 +957,10 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     sp_set_font_size (dtw->coord_status, STATUS_COORD_FONT_SIZE);
     gtk_box_pack_start (GTK_BOX (dtw->statusbar), dtw->coord_status, FALSE, FALSE, 1);
 
-    dtw->layer_selector_gtkmm = new Inkscape::Widgets::LayerSelector(NULL);
-    dtw->layer_selector_gtkmm->reference();
-    dtw->layer_selector_gtkmm->set_size_request(-1, SP_ICON_SIZE_BUTTON);
-    gtk_box_pack_start(GTK_BOX(dtw->statusbar), GTK_WIDGET(dtw->layer_selector_gtkmm->gobj()), FALSE, FALSE, 1);
-
-    dtw->layer_selector = gtk_option_menu_new();
-    gtk_tooltips_set_tip(tt, dtw->layer_selector, _("Select layer"), NULL);
-    //gtk_widget_set_usize(dtw->layer_selector, -1, SP_ICON_SIZE_BUTTON);
-    gtk_box_pack_start(GTK_BOX(dtw->statusbar), dtw->layer_selector, FALSE, FALSE, 1);
+    dtw->layer_selector = new Inkscape::Widgets::LayerSelector(NULL);
+    dtw->layer_selector->reference();
+    //dtw->layer_selector->set_size_request(-1, SP_ICON_SIZE_BUTTON);
+    gtk_box_pack_start(GTK_BOX(dtw->statusbar), GTK_WIDGET(dtw->layer_selector->gobj()), FALSE, FALSE, 1);
 
     dtw->select_status = gtk_label_new (NULL);//gtk_statusbar_new ();
     gtk_misc_set_alignment (GTK_MISC (dtw->select_status), 0.0, 0.5);
@@ -985,7 +980,7 @@ sp_desktop_widget_destroy (GtkObject *object)
 {
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET (object);
 
-    dtw->layer_selector_gtkmm->unreference();
+    dtw->layer_selector->unreference();
 
     if (dtw->desktop) {
         g_object_unref (G_OBJECT (dtw->desktop));
@@ -1358,10 +1353,7 @@ sp_desktop_widget_new (SPNamedView *namedview)
     /* Listen on namedview modification */
     g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (sp_desktop_widget_namedview_modified), dtw);
 
-    dtw->layer_selector_gtkmm->setDesktop(dtw->desktop);
-
-    dtw->desktop->connectCurrentLayerChanged(sigc::bind(sigc::ptr_fun(&SPDesktopWidget::_update_layer_display), dtw));
-    SPDesktopWidget::_update_layer_display(dtw->desktop->currentLayer(), dtw);
+    dtw->layer_selector->setDesktop(dtw->desktop);
 
     dtw->menubar = sp_ui_main_menubar (SP_VIEW (dtw->desktop));
     gtk_widget_show_all (dtw->menubar);
@@ -2112,163 +2104,6 @@ fullscreen(SPDesktop *dt)
     }
 }
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
-
-namespace {
-
-void update_label(GtkLabel *label, gchar const *id) {
-    unsigned indent=GPOINTER_TO_INT(g_object_get_data(G_OBJECT(label), "indent"));
-    gchar *text=g_strdup_printf("%*s#%s", indent*2, "", id);
-    gtk_label_set_text(label, text);
-    g_free(text);    
-}
-
-void update_label_from_attr(SPRepr *repr, gchar const *name, gchar const *, gchar const *value, bool, void *data)
-{
-    update_label(GTK_LABEL(data), value);
-}
-
-SPReprEventVector label_events={
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    update_label_from_attr,
-    NULL,
-    NULL,
-    NULL,
-    NULL
-};
-
-void label_destroy(GtkLabel *label, SPRepr *repr) {
-    sp_repr_remove_listener_by_data(repr, label);
-}
-
-void select_layer(GtkMenuItem *item, SPObject *layer) {
-    if (gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(item))) {
-        SPDesktop *desktop=SP_DESKTOP(g_object_get_data(G_OBJECT(item), "desktop"));
-        desktop->setCurrentLayer(layer);
-    }
-}
-
-void build_item(SPDesktop *desktop, GSList *&items, SPObject *layer,
-                unsigned indent, bool selected)
-{
-    GtkWidget *item;
-    if (layer) {
-        item=gtk_radio_menu_item_new_with_label(items, "");
-        GtkLabel *label=GTK_LABEL(gtk_bin_get_child(GTK_BIN(item)));
-        g_object_set_data(G_OBJECT(label), "indent", GINT_TO_POINTER(indent));
-        update_label(label, SP_OBJECT_ID(layer));
-        sp_repr_add_listener(SP_OBJECT_REPR(layer), &label_events, label);
-        g_signal_connect(G_OBJECT(label), "destroy", GCallback(&label_destroy), SP_OBJECT_REPR(layer));
-    } else {
-        layer = desktop->currentRoot();
-        item=gtk_radio_menu_item_new_with_label(items, "        ");
-    }
-    items = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item));
-
-    if (selected) {
-        gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item), selected);
-    }
-
-    g_object_set_data(G_OBJECT(item), "desktop", desktop);
-    g_signal_connect(G_OBJECT(item), "activate", GCallback(select_layer), layer);
-
-    sp_set_font_size(item, STATUS_LAYER_FONT_SIZE);
-    gtk_widget_show(item);
-}
-
-unsigned build_ancestor_items(SPDesktop *desktop, GSList *&items,
-                              SPObject *layer, SPObject *root,
-                              unsigned indent)
-{
-    if ( layer && layer != root ) {
-        unsigned offset=build_ancestor_items(desktop, items, SP_OBJECT_PARENT(layer), root, indent);
-        build_item(desktop, items, layer, indent+offset, false);
-        return offset+1;
-    } else {
-        return 0;
-    }
-}
-
-unsigned build_sibling_items(SPDesktop *desktop, GSList *&items,
-                             SPObject *layer, SPObject *parent,
-                             unsigned indent)
-{
-    GSList *layers=NULL;
-
-    SPObject *object=sp_object_first_child(parent);
-    while (object) {
-        if (desktop->isLayer(object)) {
-            layers = g_slist_prepend(layers, object);
-        }
-        object = SP_OBJECT_NEXT(object);
-    }
-    
-    unsigned offset=0;
-
-    bool found=false;
-    for ( GSList *iter=layers ; iter ; iter = iter->next ) {
-        object=SP_OBJECT(iter->data);
-        if ( object == layer ) {
-            build_item(desktop, items, object, indent, true);
-            found = true;
-        } else {
-            build_item(desktop, items, object, indent, false);
-            if (!found) {
-                offset++;
-            }
-        }
-    }
-    g_slist_free(layers);
-
-    return offset;
-}
-
-unsigned build_layer_menu_items(SPDesktop *desktop, GtkMenu *menu, SPObject *layer)
-{
-    if (!layer) {
-        return 0;
-    }
-
-    SPObject *root=desktop->currentRoot();
-    SPObject *parent=SP_OBJECT_PARENT(layer);
-    GSList *items=NULL;
-    unsigned offset;
-
-    build_item(desktop, items, NULL, 0, true);
-    if ( parent && layer != root ) {
-        offset = build_ancestor_items(desktop, items, parent, root, 0) + 1;
-        offset += build_sibling_items(desktop, items, layer, parent, offset);
-    } else {
-        build_sibling_items(desktop, items, NULL, layer, 0);
-        offset = 0;
-    }
-
-    items = g_slist_reverse(g_slist_copy(items));
-    for ( GSList *iter=items ; iter ; iter = iter->next ) {
-        gtk_menu_append(menu, GTK_WIDGET(iter->data));
-    }
-    g_slist_free(items);
-
-    return offset;
-}
-
-void SPDesktopWidget::_update_layer_display(SPObject *layer,
-                                            SPDesktopWidget *widget)
-{
-    GtkOptionMenu *selector=GTK_OPTION_MENU(widget->layer_selector);
-    SPDesktop *desktop=widget->desktop;
-    GtkWidget *menu=gtk_menu_new();
-    unsigned offset=build_layer_menu_items(desktop, GTK_MENU(menu), layer);
-    gtk_option_menu_set_menu(selector, menu);
-    gtk_option_menu_set_history(selector, offset);
-    gtk_widget_set_sensitive(GTK_WIDGET(selector), offset != 0);
-}
-
-}
-
 
 /*
   Local Variables:
