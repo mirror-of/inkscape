@@ -21,8 +21,8 @@ namespace Internal {
 SPDocument *
 GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
 {
-    /* Try pixbuf */
     SPDocument * doc = sp_document_new(NULL, TRUE, TRUE, TRUE);
+    sp_document_set_undo_sensitive (doc, FALSE); // no need to undo in this temporary document
     GdkPixbuf* pb = Inkscape::IO::pixbuf_new_from_file( uri, NULL );
     SPRepr *rdoc = sp_document_repr_root (doc);
     const gchar *docbase = sp_repr_attr (rdoc, "sodipodi:docbase");
@@ -93,8 +93,9 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
 
         SP_DOCUMENT_ROOT(doc)->appendChildRepr(repr);
         sp_repr_unref (repr);
-        sp_document_done (doc);
         gdk_pixbuf_unref (pb);
+        // restore undo, as now this document may be shown to the user if a bitmap was opened
+        sp_document_set_undo_sensitive (doc, TRUE); 
     } else {
         printf("GdkPixbuf loader failed\n");
     }
