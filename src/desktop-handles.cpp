@@ -28,8 +28,8 @@ sp_desktop_event_context (SPDesktop * desktop)
 SPSelection *
 sp_desktop_selection (SPDesktop * desktop)
 {
-	g_return_val_if_fail (desktop != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DESKTOP (desktop), NULL);
+	g_assert(desktop != NULL);
+	g_assert(SP_IS_DESKTOP(desktop));
 
 	return desktop->selection;
 }
