@@ -147,10 +147,20 @@ GTKLIB = -L$(GTK)/lib \
 -lgdk_pixbuf-2.0 -lm -lpangoft2-1.0 -lpangowin32-1.0 -lpango-1.0 \
 -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0
 
+# For PERL
+# (note: perl's config.h has some nested comments)
+PERLINC = -Wno-comment -I$(GTK)/perl/lib/CORE
+PERLLIB = -L$(GTK)/perl/lib/CORE -lperl58
+
+#For Python
+PYTHONINC = -I$(GTK)/python/include
+PYTHONLIB = -L$(GTK)/python/libs -lpython24
+
 # remove -DLIBXML_STATIC 
 INC = -I. -I.. -I../.. $(GTKINC) -I$(GTK)/include \
--I$(GTK)/include/libxml2 \
--I$(GTK)/include/freetype2
+$(PERLINC) $(PYTHONINC) -I$(GTK)/include/libxml2 \
+-I$(GTK)/include/freetype2 \
+
 
 LIBS = $(GTKLIB) -lxml2 \
 $(GTK)/lib/iconv.lib	\
