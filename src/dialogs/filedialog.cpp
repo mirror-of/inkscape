@@ -1104,7 +1104,7 @@ void FileSaveDialogImpl::fileTypeChangedCallback()
     if (sel<0 || sel >= (int)fileTypes.size())
         return;
     FileType type = fileTypes[sel];
-    g_message("selected: %s\n", type.name.c_str());
+    //g_message("selected: %s\n", type.name.c_str());
     Gtk::FileFilter filter;
     filter.add_pattern(type.pattern);
     set_filter(filter);
