@@ -1,3 +1,7 @@
+2004-08-15  Peter Moulder  <pmoulder@river>
+
+	* src/sp-flowtext.cpp: CodingStyle changes.
+
 2004-08-14  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/sp-use-reference.cpp, src/sp-use-reference.h: use sigc 2.0
