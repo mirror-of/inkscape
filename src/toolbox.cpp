@@ -1826,6 +1826,9 @@ sp_calligraphy_toolbox_new (SPDesktop *desktop)
 
     GtkTooltips *tt = gtk_tooltips_new ();
 
+    //  interval
+    gtk_box_pack_start (GTK_BOX (tbl), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
     /* Width */
     {
         GtkWidget *hb = sp_tb_spinbutton (_("Width:"), _("The width of the calligraphic pen (relative to the visible canvas area)"), 
@@ -1833,7 +1836,7 @@ sp_calligraphy_toolbox_new (SPDesktop *desktop)
                                           NULL, (SPWidget *) tbl, TRUE, "altx-calligraphy",
                                           0.01, 1.0, 0.01, 0.1, 
                                           sp_ddc_width_value_changed);
-        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
 
     /* Thinning */
@@ -1843,28 +1846,34 @@ sp_calligraphy_toolbox_new (SPDesktop *desktop)
                                           NULL, (SPWidget *) tbl, FALSE, NULL,
                                           -1.0, 1.0, 0.01, 0.1, 
                                           sp_ddc_velthin_value_changed);
-        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
 
-    /* Flatness */
-    {
-        GtkWidget *hb = sp_tb_spinbutton (_("Flatness:"), _("How flat is the pen's nib (0 = round, 1 = flat)"), 
-                                          "tools.calligraphic", "flatness", 0.9,
-                                          NULL, (SPWidget *) tbl, FALSE, NULL,
-                                          0.0, 1.0, 0.01, 0.1, 
-                                          sp_ddc_flatness_value_changed);
-        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
-    }
+    //  interval
+    gtk_box_pack_start (GTK_BOX (tbl), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
     /* Angle */
     {
-        GtkWidget *hb = sp_tb_spinbutton (_("Angle:"), _("The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if flatness = 0)"), 
+        GtkWidget *hb = sp_tb_spinbutton (_("Angle:"), _("The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if fixation = 0)"), 
                                           "tools.calligraphic", "angle", 30,
                                           NULL, (SPWidget *) tbl, TRUE, "calligraphy-angle",
                                           -90.0, 90.0, 1.0, 10.0,
                                           sp_ddc_angle_value_changed, 1, 0);
-        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
+
+    /* Fixation */
+    {
+        GtkWidget *hb = sp_tb_spinbutton (_("Fixation:"), _("How fixed is the pen angle (0 = always perpendicular to stroke direction, 1 = fixed)"), 
+                                          "tools.calligraphic", "flatness", 0.9,
+                                          NULL, (SPWidget *) tbl, FALSE, NULL,
+                                          0.0, 1.0, 0.01, 0.1, 
+                                          sp_ddc_flatness_value_changed);
+        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_SPACING);
+    }
+
+    //  interval
+    gtk_box_pack_start (GTK_BOX (tbl), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
     /* Mass */
     {
@@ -1873,8 +1882,11 @@ sp_calligraphy_toolbox_new (SPDesktop *desktop)
                                           NULL, (SPWidget *) tbl, FALSE, NULL,
                                           0.0, 1.0, 0.01, 0.1,
                                           sp_ddc_mass_value_changed);
-        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
+
+    //  interval
+    gtk_box_pack_start (GTK_BOX (tbl), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
     /* Drag */
     {
@@ -1884,9 +1896,11 @@ sp_calligraphy_toolbox_new (SPDesktop *desktop)
                                           NULL, (SPWidget *) tbl, FALSE, NULL,
                                           0.0, 1.0, 0.01, 0.1,
                                           sp_ddc_drag_value_changed);
-        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+        gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_SPACING);
     }
 
+    //  interval
+    gtk_box_pack_start (GTK_BOX (tbl), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
     /* Reset */
     {

@@ -348,6 +348,7 @@ sp_dyna_draw_apply(SPDynaDrawContext *dc, NR::Point p)
     if (a2 < -M_PI)
         a2 += 2*M_PI;
     // find the flatness-weighted bisector angle, unflip if a2 was flipped
+    // FIXME: when dc->vel is oscillating around the fixed angle, the new_ang flips back and forth. How to avoid this?
     double new_ang = a1 + (1 - dc->flatness) * (a2 - a1) - (flipped? M_PI : 0);
     // convert to point
     dc->ang = NR::Point (cos (new_ang), sin (new_ang));
@@ -562,7 +563,6 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
                 dc->angle -= 5.0;
                 if (dc->angle < -90.0) 
                     dc->angle = -90.0;
-                g_print ("%g\n", dc->angle);
                 sp_ddc_update_toolbox (desktop, "calligraphy-angle", dc->angle);
                 ret = TRUE;
             }
