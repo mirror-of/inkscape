@@ -294,7 +294,7 @@ void SVGPreview::showNoPreview()
           "xmlns=\"http://www.w3.org/2000/svg\"\n"
           "xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n"
           "width=\"%d\" height=\"%d\">\n"
-          "<g transform=\"translate(-170,24.27184)\" style=\"opacity:0.12;\">\n"
+          "<g transform=\"translate(-190,24.27184)\" style=\"opacity:0.12;\">\n"
           "<path\n"
           "style=\"font-size:12;fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.936193pt;\"\n"
           "d=\"M 397.64309 320.25301 L 280.39197 282.517 L 250.74227 124.83447 L 345.08225 "
@@ -350,13 +350,13 @@ void SVGPreview::showNoPreview()
           "275.37038 359.88393 275.50997 L 360.76161 284.72563 C 343.2235 282.91785 306.11346 "
           "274.45012 297.36372 269.98057 L 290.92738 261.61333 z \"\n"
           "id=\"mountainDroplet\" />\n"
-          "</g>\n"
+          "</g> <g transform=\"translate(-20,0)\">\n"
           "<text xml:space=\"preserve\"\n"
           "style=\"font-size:32.000000;font-style:normal;font-variant:normal;font-weight:bold;"
           "font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;"
           "stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;"
           "font-family:Bitstream Vera Sans;text-anchor:middle;writing-mode:lr;\"\n"
-          "x=\"190\" y=\"240\">%s</text>\n"
+          "x=\"190\" y=\"240\">%s</text></g>\n"
           "</svg>\n\n";
 
     //Fill in the template
