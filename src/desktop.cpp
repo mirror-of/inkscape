@@ -1167,9 +1167,10 @@ sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw)
 static gboolean
 sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 {
-    SPDocument *doc = SP_VIEW_DOCUMENT (view);
-
-    if (doc && (((GObject *) doc)->ref_count == 1)) {
+    SPDesktop *desktop=SP_DESKTOP(view);
+    g_assert(desktop != NULL);
+    if (inkscape_is_sole_desktop_for_document(*desktop)) {
+        SPDocument *doc=SP_VIEW_DOCUMENT (view);
         if (sp_repr_attr (sp_document_repr_root (doc), "sodipodi:modified") != NULL) {
             GtkWidget *dialog;
 

@@ -333,9 +333,8 @@ inkscape_dispose (GObject *object)
     Inkscape::Application *inkscape = (Inkscape::Application *) object;
 
     while (inkscape->documents) {
-        // TODO this is wrong now, as SPDocument is not an SPObject
-        // also, we don't otherwise unref, so why here?
-        g_object_unref (G_OBJECT (inkscape->documents->data));
+        // we don't otherwise unref, so why here?
+        sp_document_unref((SPDocument *)inkscape->documents->data);
     }
 
     g_assert (!inkscape->desktops);
@@ -1091,7 +1090,20 @@ inkscape_active_document (void)
     return NULL;
 }
 
-
+bool inkscape_is_sole_desktop_for_document(SPDesktop const &desktop) {
+    SPDocument *document = SP_VIEW_DOCUMENT(&desktop);
+    if (!document) {
+        return false;
+    }
+    for ( GSList *iter = inkscape->desktops ; iter ; iter = iter->next ) {
+        SPDesktop *other_desktop=(SPDesktop *)iter->data;
+        SPDocument *other_document=SP_VIEW_DOCUMENT(other_desktop);
+        if ( other_document == document && other_desktop != &desktop ) {
+            return false;
+        }
+    }
+    return true;
+}
 
 SPEventContext *
 inkscape_active_event_context (void)
