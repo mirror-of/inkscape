@@ -423,9 +423,11 @@ sp_ui_help_menu(GtkWidget *m)
 {
 	sp_ui_menu_append_item (GTK_MENU (m), NULL, _("About Inkscape"), G_CALLBACK(sp_help_about), NULL);
 #ifdef WITH_MODULES
+#if 0
 	/* Modules need abouts too */
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM(sp_ui_menu_append_item (GTK_MENU (m), NULL, _("About Modules"), NULL, NULL)),
 			                   GTK_WIDGET(sp_module_menu_about()));
+#endif
 #endif /* WITH_MODULES */
 }
 
