@@ -28,15 +28,22 @@
 
 #include "select-context.h"
 #include "node-context.h"
+#include "sp-path.h"
 #include "rect-context.h"
+#include "sp-rect.h"
 #include "arc-context.h"
+#include "sp-ellipse.h"
 #include "star-context.h"
+#include "sp-star.h"
 #include "spiral-context.h"
+#include "sp-spiral.h"
 #include "draw-context.h"
 #include "dyna-draw-context.h"
 #include "pen-context.h"
 #include "pencil-context.h"
 #include "text-context.h"
+#include "sp-text.h"
+#include "sp-flowtext.h"
 #include "gradient-context.h"
 #include "zoom-context.h"
 #include "dropper-context.h"
@@ -206,4 +213,21 @@ tools_switch_current (int num)
 	SPDesktop *dt;
 	dt = SP_ACTIVE_DESKTOP;
 	if (dt) tools_switch (dt, num);
+}
+
+void tools_switch_by_item (SPDesktop *dt, SPItem *item)
+{
+	if (SP_IS_RECT(item)) {
+		tools_switch (dt, TOOLS_SHAPES_RECT);
+	} else if (SP_IS_GENERICELLIPSE(item)) {
+		tools_switch (dt, TOOLS_SHAPES_ARC);
+	} else if (SP_IS_STAR(item)) {
+		tools_switch (dt, TOOLS_SHAPES_STAR);
+	} else if (SP_IS_SPIRAL(item)) {
+		tools_switch (dt, TOOLS_SHAPES_SPIRAL);
+	} else if (SP_IS_PATH(item)) {
+		tools_switch (dt, TOOLS_NODES);
+	} else if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item))  {
+		tools_switch (dt, TOOLS_TEXT);
+	}
 }
