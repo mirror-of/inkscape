@@ -69,38 +69,13 @@ SPCSSAttr * sp_repr_css_attr_inherited (SPRepr * repr, const gchar * attr)
 static void
 sp_repr_css_add_components (SPCSSAttr * css, SPRepr * repr, const gchar * attr)
 {
-	const char * data;
-	char * new_str;
-	char * current;
-	char ** token, ** ctoken;
-	char * key, * val;
-
 	g_assert (css != NULL);
 	g_assert (repr != NULL);
 	g_assert (attr != NULL);
 
-	data = sp_repr_attr (repr, attr);
+	const char *data = sp_repr_attr (repr, attr);
 
-	if (data != NULL) {
-		new_str = g_strdup (data);
-		token = g_strsplit (new_str, ";", 32);
-		for (ctoken = token; *ctoken != NULL; ctoken++) {
-			current = g_strstrip (* ctoken);
-			key = current;
-			for (val = key; *val != '\0'; val++)
-				if (*val == ':') break;
-			if (*val == '\0') break;
-			*val++ = '\0';
-			key = g_strstrip (key);
-			val = g_strstrip (val);
-			if (*val == '\0') break;
-
-			if (!sp_repr_attr_is_set ((SPRepr *) css, key))
-				sp_repr_set_attr ((SPRepr *) css, key, val);
-		}
-		g_strfreev (token);
-		g_free (new_str);
-	}
+	sp_repr_css_attr_add_from_string (css, data);
 
 	return;
 }
@@ -162,7 +137,7 @@ sp_repr_css_set (SPRepr * repr, SPCSSAttr * css, const gchar * attr)
 	sp_repr_set_attr (repr, attr, (c[0]) ? c : NULL);
 }
 
-static void
+void
 sp_repr_css_merge (SPCSSAttr * dst, SPCSSAttr * src)
 {
 	SPReprAttr * attr;
@@ -176,7 +151,41 @@ sp_repr_css_merge (SPCSSAttr * dst, SPCSSAttr * src)
 		val = SP_REPR_ATTRIBUTE_VALUE (attr);
 		sp_repr_set_attr ((SPRepr *) dst, key, val);
 	}
+}
 
+void
+sp_repr_css_attr_add_from_string (SPCSSAttr *css, const gchar *data)
+{
+	if (data != NULL) {
+		char *new_str = g_strdup (data);
+		char **token = g_strsplit (new_str, ";", 32);
+		for (char **ctoken = token; *ctoken != NULL; ctoken++) {
+			char *current = g_strstrip (* ctoken);
+			char *key = current;
+			char *val;
+			for (val = key; *val != '\0'; val++)
+				if (*val == ':') break;
+			if (*val == '\0') break;
+			*val++ = '\0';
+			key = g_strstrip (key);
+			val = g_strstrip (val);
+			if (*val == '\0') break;
+
+			if (!sp_repr_attr_is_set ((SPRepr *) css, key))
+				sp_repr_set_attr ((SPRepr *) css, key, val);
+		}
+		g_strfreev (token);
+		g_free (new_str);
+	}
+}
+
+void
+sp_repr_css_print (SPCSSAttr * css)
+{
+	g_print ("== SPCSSAttr:\n");
+	for (SPReprAttr *attr = ((SPRepr *) css)->attributes; attr != NULL; attr = attr->next) {
+		g_print ("%s: %s\n", SP_REPR_ATTRIBUTE_KEY (attr), SP_REPR_ATTRIBUTE_VALUE (attr));
+	}
 }
 
 void

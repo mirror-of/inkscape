@@ -207,8 +207,12 @@ void sp_repr_css_set_property(SPCSSAttr *css, gchar const *name, gchar const *va
 double sp_repr_css_double_property(SPCSSAttr *css, gchar const *name, double defval);
 
 void sp_repr_css_set(SPRepr *repr, SPCSSAttr *css, gchar const *key);
+void sp_repr_css_merge (SPCSSAttr * dst, SPCSSAttr * src);
+void sp_repr_css_attr_add_from_string (SPCSSAttr *css, const gchar *data);
 void sp_repr_css_change(SPRepr *repr, SPCSSAttr *css, gchar const *key);
 void sp_repr_css_change_recursive(SPRepr *repr, SPCSSAttr *css, gchar const *key);
+
+void sp_repr_css_print (SPCSSAttr * css);
 
 /* Utility finctions */
 
