@@ -1,5 +1,8 @@
 2004-03-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/draw-context.cpp (fit_and_split): Fix to fix to edge case in
+	freehand tool.  (Hopefully to be replaced by different approach.)
+
 	* src/dialogs/transformation.cpp (sp_transformation_move_apply,
 	sp_transformation_scale_apply, sp_transformation_rotate_apply,
 	sp_transformation_skew_apply):

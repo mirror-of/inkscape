@@ -671,9 +671,9 @@ static void fit_and_split(SPDrawContext *dc)
 
 		dc->green_bpaths = g_slist_prepend (dc->green_bpaths, cshape);
 
-		const int continuity = std::min(2, dc->npoints);
+		int const continuity = std::min(2, dc->npoints);
 		for(int i = 0; i < continuity; i++)
-			dc->p[i] = dc->p[dc->npoints - continuity];
+			dc->p[i] = dc->p[dc->npoints - continuity + i];
 		dc->npoints = continuity;
 	}
 }
