@@ -48,3 +48,4 @@ sp-marshal.c: sp-marshal.h sp-marshal.list
 
 EXTRA_DIST = sp-marshal.list
 
+DISTCLEANFILES = sp-marshal.c sp-marshal.h
