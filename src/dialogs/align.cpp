@@ -662,8 +662,7 @@ sp_align_bbox_sort ( const void *a, const void *b )
 } // end of sp_align_bbox_sort()
 
 
-
-static void sp_align_distribute_h_clicked(GtkWidget *, gchar const *layout)
+static void sp_align_distribute_h_or_v_clicked(GtkWidget *, gchar const *layout, bool horiz)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     
@@ -676,20 +675,19 @@ static void sp_align_distribute_h_clicked(GtkWidget *, gchar const *layout)
     
     if (!slist->next)
         return;
-
+    
     int len = g_slist_length ((GSList *) slist);
     SPBBoxSort *bbs = g_new (SPBBoxSort, len);
     
-    
     {
-        unsigned pos = 0;
+        unsigned int pos = 0;
         
         for (const GSList *l = slist; l != NULL; l = l->next) {
             bbs[pos].item = SP_ITEM (l->data);
             sp_item_bbox_desktop (bbs[pos].item, &bbs[pos].bbox);
-            bbs[pos].anchor = 
-                0.5 * layout[0] * bbs[pos].bbox.x0 + 0.5 * 
-                layout[1] * bbs[pos].bbox.x1;
+            bbs[pos].anchor =
+                0.5 * layout[0] * (horiz ? bbs[pos].bbox.x0 : bbs[pos].bbox.y0) +
+                0.5 * layout[0] * (horiz ? bbs[pos].bbox.x1 : bbs[pos].bbox.y1);
             ++pos;
         }
     }
@@ -697,40 +695,41 @@ static void sp_align_distribute_h_clicked(GtkWidget *, gchar const *layout)
 
     qsort (bbs, len, sizeof (SPBBoxSort), sp_align_bbox_sort);
 
-    unsigned int changed = FALSE;
+    bool changed = false;
 
-    if (!layout[2])
-    {
-        
-        float dist, step;
-        int i;
-        dist = bbs[len - 1].anchor - bbs[0].anchor;
-        step = dist / (len - 1);
-        for (i = 0; i < len; i++) {
+    if (!layout[2]) {
+        float dist = bbs[len - 1].anchor - bbs[0].anchor;
+        float step = dist / (len - 1);
+        for (int i = 0; i < len; i++) {
             float pos;
             pos = bbs[0].anchor + i * step;
             if (!NR_DF_TEST_CLOSE (pos, bbs[i].anchor, 1e-6)) {
-                sp_item_move_rel(bbs[i].item, NR::translate(pos - bbs[i].anchor,
-                                                            0.0));
-                changed = TRUE;
+                float d = pos - bbs[i].anchor;
+                sp_item_move_rel(bbs[i].item, NR::translate(horiz ? d : 0.0, horiz ? 0.0 : d));
+                changed = true;
             }
         }
     } else {
         /* Damn I am not sure, how to order them initially (Lauris) */
-        float dist, span, step, pos;
-        int i;
-        dist = bbs[len - 1].bbox.x1 - bbs[0].bbox.x0;
-        span = 0;
-        for (i = 0; i < len; i++) span += (bbs[i].bbox.x1 - bbs[i].bbox.x0);
-        step = (dist - span) / (len - 1);
-        pos = bbs[0].bbox.x0;
-        for (i = 0; i < len; i++) {
+        float dist = horiz ? (bbs[len - 1].bbox.x1 - bbs[0].bbox.x0) : (bbs[len - 1].bbox.y1 - bbs[0].bbox.y0);
+        float span = 0;
+        for (int i = 0; i < len; i++) {
+            span += horiz ? (bbs[i].bbox.x1 - bbs[i].bbox.x0) : (bbs[i].bbox.y1 - bbs[i].bbox.y0);
+        }
+        
+        float step = (dist - span) / (len - 1);
+        float pos = horiz ? bbs[0].bbox.x0 : bbs[0].bbox.y0;
+        for (int i = 0; i < len; i++) {
             if (!NR_DF_TEST_CLOSE (pos, bbs[i].bbox.x0, 1e-6)) {
-                sp_item_move_rel(bbs[i].item, NR::translate(pos - bbs[i].bbox.x0,
-                                                            0.0));
-                changed = TRUE;
+                if (horiz) {
+                    sp_item_move_rel(bbs[i].item, NR::translate(pos - bbs[i].bbox.x0, 0.0));
+                } else {
+                    sp_item_move_rel(bbs[i].item, NR::translate(0.0, pos - bbs[i].bbox.y0));
+                }
+                    
+                changed = true;
             }
-            pos += (bbs[i].bbox.x1 - bbs[i].bbox.x0);
+            pos += horiz ? (bbs[i].bbox.x1 - bbs[i].bbox.x0) : (bbs[i].bbox.y1 - bbs[i].bbox.y0);
             pos += step;
         }
         
@@ -742,91 +741,18 @@ static void sp_align_distribute_h_clicked(GtkWidget *, gchar const *layout)
         sp_document_done ( SP_DT_DOCUMENT (desktop) );
     }
     
-} // end of sp_align_distribute_h_clicked() 
 
+}
 
-
-static void sp_align_distribute_v_clicked(GtkWidget *, gchar const *layout)
+static void sp_align_distribute_h_clicked(GtkWidget *w, gchar const *layout)
 {
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (!desktop)
-        return;
+    sp_align_distribute_h_or_v_clicked(w, layout, true);
+}
 
-    const GSList *slist = SP_DT_SELECTION(desktop)->itemList();
-    if (!slist)
-        return;
-    
-    if (!slist->next)
-        return;
-
-    int len = g_slist_length ((GSList *) slist);
-    SPBBoxSort *bbs = g_new (SPBBoxSort, len);
-    
-    
-    {
-        unsigned pos = 0;
-        for (const GSList *l = slist; l != NULL; l = l->next) {
-            bbs[pos].item = SP_ITEM (l->data);
-            sp_item_bbox_desktop (bbs[pos].item, &bbs[pos].bbox);
-            bbs[pos].anchor = 
-                0.5 * layout[0] * bbs[pos].bbox.y0 + 0.5 * 
-                layout[1] * bbs[pos].bbox.y1;
-            ++pos;
-        }
-    }
-
-    
-    qsort ( bbs, len, sizeof (SPBBoxSort), sp_align_bbox_sort );
-
-    unsigned int changed = FALSE;
-
-    
-    if (!layout[2]) 
-    {
-        
-        float dist, step;
-        int i;
-        dist = bbs[len - 1].anchor - bbs[0].anchor;
-        step = dist / (len - 1);
-        for (i = 0; i < len; i++) {
-            float pos;
-            pos = bbs[0].anchor + i * step;
-            if (!NR_DF_TEST_CLOSE (pos, bbs[i].anchor, 1e-6)) {
-                sp_item_move_rel(bbs[i].item, NR::translate(0.0,
-                                                            pos - bbs[i].anchor));
-                changed = TRUE;
-            }
-        }
-    } else {
-    
-        /* Damn I am not sure, how to order them initially (Lauris) */
-        float dist, span, step, pos;
-        int i;
-        dist = bbs[len - 1].bbox.y1 - bbs[0].bbox.y0;
-        span = 0;
-        for (i = 0; i < len; i++) span += (bbs[i].bbox.y1 - bbs[i].bbox.y0);
-        step = (dist - span) / (len - 1);
-        pos = bbs[0].bbox.y0;
-        
-        for (i = 0; i < len; i++) {
-            if (!NR_DF_TEST_CLOSE (pos, bbs[i].bbox.y0, 1e-6)) {
-                sp_item_move_rel(bbs[i].item, NR::translate(0.0,
-                                                            pos - bbs[i].bbox.y0));
-                changed = TRUE;
-            }
-            pos += (bbs[i].bbox.y1 - bbs[i].bbox.y0);
-            pos += step;
-        }
-        
-    } // end of if (!layout[2]) 
-
-    g_free (bbs);
-
-    if ( changed ) {
-        sp_document_done (SP_DT_DOCUMENT (desktop));
-    }
-    
-} // end of sp_align_distribute_v_clicked()
+static void sp_align_distribute_v_clicked(GtkWidget *w, gchar const *layout)
+{
+    sp_align_distribute_h_or_v_clicked(w, layout, false);
+}
 
 
 /*
