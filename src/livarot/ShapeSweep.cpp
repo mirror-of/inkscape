@@ -74,11 +74,10 @@ Shape::Reoriente (Shape * a)
   if (nbPt > maxPt)
     {
       maxPt = nbPt;
-      pts = (dg_point *) g_realloc(pts, maxPt * sizeof (dg_point));
       if (HasPointsData ())
 	pData = (point_data *) g_realloc(pData, maxPt * sizeof (point_data));
     }
-  memcpy (pts, a->pts, nbPt * sizeof (dg_point));
+  pts = a->pts;
 
   nbAr = a->nbAr;
   if (nbAr > maxAr)

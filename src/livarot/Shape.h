@@ -88,7 +88,7 @@ public:
 
   // lists of the nodes and edges
   int nbPt, maxPt;
-  dg_point *pts;
+  std::vector<dg_point> pts;
   int nbAr, maxAr;
   std::vector<dg_arete> aretes;
 

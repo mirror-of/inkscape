@@ -22,7 +22,6 @@ Shape::Shape (void)
 {
   leftX = topY = rightX = bottomY = 0;
   nbPt = maxPt = 0;
-  pts = NULL;
   nbAr = maxAr = 0;
 
   flags = 0;
@@ -40,12 +39,7 @@ Shape::Shape (void)
 }
 Shape::~Shape (void)
 {
-  if (maxPt > 0)
-    {
-      g_free(pts);
-    }
   nbPt = maxPt = 0;
-  pts = NULL;
   nbAr = maxAr = 0;
   if (eData)
     g_free(eData);
@@ -378,7 +372,7 @@ Shape::Copy (Shape * who)
   type = who->type;
   flags = who->flags & (need_points_sorting + need_edges_sorting);
 
-  memcpy (pts, who->pts, nbPt * sizeof (dg_point));
+  pts = who->pts;
   aretes = who->aretes;
 }
 
@@ -391,7 +385,6 @@ Shape::Reset (int n, int m)
   if (n > maxPt)
     {
       maxPt = n;
-      pts = (dg_point *) g_realloc(pts, maxPt * sizeof (dg_point));
       if (HasPointsData ())
 	pData = (point_data *) g_realloc(pData, maxPt * sizeof (point_data));
       if (HasVoronoiData ())
@@ -419,6 +412,7 @@ Shape::Reset (int n, int m)
 	voreData =
 	  (voronoi_edge *) g_realloc(voreData, maxAr * sizeof (voronoi_edge));
     }
+  pts.resize(n);
   aretes.resize(m);
   SetFlag (need_points_sorting, false);
   SetFlag (need_edges_sorting, false);
@@ -430,7 +424,6 @@ Shape::AddPoint (const NR::Point x)
   if (nbPt >= maxPt)
     {
       maxPt = 2 * nbPt + 1;
-      pts = (dg_point *) g_realloc(pts, maxPt * sizeof (dg_point));
       if (HasPointsData ())
 	pData = (point_data *) g_realloc(pData, maxPt * sizeof (point_data));
       if (HasVoronoiData ())
@@ -439,6 +432,7 @@ Shape::AddPoint (const NR::Point x)
 				     maxPt * sizeof (voronoi_point));
     }
   int n = nbPt++;
+  pts.resize(nbPt);
   pts[n].x = x;
   pts[n].dI = pts[n].dO = 0;
   pts[n].firstA = pts[n].lastA = -1;

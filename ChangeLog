@@ -1,5 +1,10 @@
 2004-09-07  MenTaLguY <mental@rydia.net>
 
+	* src/livarot/Shape.cpp, src/livarot/Shape.h, src/livarot/ShapeMisc.cpp,
+	  src/livarot/ShapeSweep.cpp:
+
+	  use std::vector for points array (seems to crash less?)
+
 	* src/livarot/AlphaLigne.cpp, src/livarot/BitLigne.cpp,
 	  src/livarot/Ligne.cpp, src/livarot/Path.cpp,
 	  src/livarot/PathCutting.cpp, src/livarot/PathSimplify.cpp,
