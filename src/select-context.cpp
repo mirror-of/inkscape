@@ -461,7 +461,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 					if (sc->button_press_shift) {
 						// this was a shift-click, select what was clicked upon
 
-						item = sp_document_item_at_point (desktop, SP_DT_DOCUMENT (desktop), event->button.x, event->button.y);
+						item = sp_desktop_item_at_point (desktop, event->button.x, event->button.y);
 						if (item) {
 							// toggle selected status
 							if (sp_selection_item_selected (selection, item)) {

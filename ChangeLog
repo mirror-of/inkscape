@@ -1,3 +1,8 @@
+2003-12-20  MenTaLguY <mental@rydia.net>
+
+	* src/desktop.cpp, src/desktop.h, src/document.cpp, src/document.h:
+	  added sp_desktop_item_at_point()
+
 2003-12-19  bulia byak <bulia@dr.com>
 
 	* src/sp-item.cpp src/sp-item.h: new sp_item_get_arenaitem (by mental)

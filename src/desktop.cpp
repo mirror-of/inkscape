@@ -589,6 +589,14 @@ sp_desktop_set_coordinate_status (SPDesktop *desktop, gdouble x, gdouble y, guin
 {
 }
 
+SPItem *
+sp_desktop_item_at_point (SPDesktop *desktop, gdouble x, gdouble y)
+{
+	SPDocument *document=SP_VIEW (desktop)->doc;
+	g_return_val_if_fail (document != NULL, NULL);
+	return sp_document_item_at_point (document, desktop->dkey, x, y);
+}
+
 const SPUnit *
 sp_desktop_get_default_unit (SPDesktop *dt)
 {

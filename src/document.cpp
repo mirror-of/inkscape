@@ -728,13 +728,13 @@ sp_document_partial_items_in_box (SPDocument *document, NRRect *box)
 }
 
 SPItem*
-sp_document_item_at_point (SPDesktop *desktop, SPDocument *document, double x, double y)
+sp_document_item_at_point (SPDocument *document, unsigned int key, double x, double y)
 {
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
 	g_return_val_if_fail (document->priv != NULL, NULL);
 
- 	return find_item_at_point (desktop->dkey, SP_GROUP (document->root), x, y);
+ 	return find_item_at_point (key, SP_GROUP (document->root), x, y);
 }
 
 
