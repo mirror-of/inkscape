@@ -1,5 +1,5 @@
 #include "sp-gradient-reference.h"
-#include "sp-gradient.h"
+#include "sp-gradient-fns.h"
 
 bool
 SPGradientReference::_acceptObject(SPObject *obj) const

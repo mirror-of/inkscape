@@ -43,7 +43,6 @@
 #include "../sp-text.h"
 #include "../sp-tspan.h"
 #include "../sp-root.h"
-#include "../sp-gradient.h"
 #include "../sp-defs.h"
 #include "in-dt-coordsys.h"
 

@@ -36,6 +36,12 @@
 #include "document-private.h"
 #include "sp-object-repr.h"
 #include "sp-gradient.h"
+#include "sp-gradient-fns.h"
+#include "sp-gradient-reference.h"
+#include "sp-gradient-vector.h"
+#include "sp-linear-gradient.h"
+#include "sp-radial-gradient.h"
+#include "sp-stop.h"
 #include "uri.h"
 #include "uri-references.h"
 

@@ -28,8 +28,8 @@
 #include <libnr/nr-matrix.h>
 #include <xml/repr.h>
 #include "sp-defs.h"
+#include "sp-gradient-fns.h"
 #include "document-private.h"
-#include "sp-gradient.h"
 #include "sp-pattern.h"
 #include "sp-marker.h"
 #include "desktop-handles.h"

@@ -37,6 +37,8 @@
 #include "widgets/sp-widget.h"
 #include "widgets/spw-utilities.h"
 #include "sp-gradient.h"
+#include "sp-linear-gradient.h"
+#include "sp-radial-gradient.h"
 #include <sp-use.h>
 #include "sp-marker.h"
 #include <sp-pattern.h>

@@ -40,7 +40,9 @@
 #include <svg/stringstream.h>
 #include <widgets/sp-widget.h>
 #include <sp-gradient.h>
+#include <sp-linear-gradient.h>
 #include <sp-pattern.h>
+#include <sp-radial-gradient.h>
 #include <sp-use.h>
 #include <widgets/paint-selector.h>
 #include <style.h>

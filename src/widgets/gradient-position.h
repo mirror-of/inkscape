@@ -14,8 +14,7 @@
  */
 
 #include <glib.h>
-
-
+class SPGradient;
 
 #define SP_TYPE_GRADIENT_POSITION (sp_gradient_position_get_type ())
 #define SP_GRADIENT_POSITION(o) (GTK_CHECK_CAST ((o), SP_TYPE_GRADIENT_POSITION, SPGradientPosition))
@@ -29,7 +28,6 @@ struct SPGradientPositionClass;
 #include <libnr/nr-gradient.h>
 #include <gtk/gtkwidget.h>
 #include "display/nr-gradient-gpl.h"
-#include "sp-gradient.h"
 
 enum {
 	SP_GRADIENT_POSITION_MODE_LINEAR,

@@ -14,8 +14,9 @@
  */
 
 #include <glib.h>
-
-
+#include "sp-gradient-spread.h"
+#include "sp-gradient-units.h"
+class SPGradient;
 
 #define SP_TYPE_GRADIENT_SELECTOR (sp_gradient_selector_get_type ())
 #define SP_GRADIENT_SELECTOR(o) (GTK_CHECK_CAST ((o), SP_TYPE_GRADIENT_SELECTOR, SPGradientSelector))

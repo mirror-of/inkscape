@@ -18,6 +18,7 @@
 #include "../display/nr-plain-stuff.h"
 #include "../display/nr-plain-stuff-gdk.h"
 #include "gradient-image.h"
+#include "sp-gradient-fns.h"
 
 #define VBLOCK 16
 

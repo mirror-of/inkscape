@@ -32,7 +32,6 @@
 #include <gtk/gtkimage.h>
 
 #include "../sp-item.h"
-#include "../sp-gradient.h"
 #include "../sp-pattern.h"
 #include "../helper/sp-intl.h"
 #include "../widgets/icon.h"
@@ -42,6 +41,8 @@
 
 #include "sp-color-selector.h"
 #include "sp-color-notebook.h"
+#include "sp-linear-gradient-fns.h"
+#include "sp-radial-gradient-fns.h"
 /* fixme: Move it from dialogs to here */
 #include "gradient-selector.h"
 #include <inkscape.h>

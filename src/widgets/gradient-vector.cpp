@@ -34,7 +34,6 @@
 #include "../widgets/gradient-image.h"
 #include "../inkscape.h"
 #include "../document-private.h"
-#include "../sp-gradient.h"
 #include "../gradient-chemistry.h"
 #include "gradient-vector.h"
 #include "../helper/window.h"
@@ -44,6 +43,8 @@
 #include "../verbs.h"
 #include "../interface.h"
 #include "../svg/stringstream.h"
+#include "sp-gradient-vector.h"
+#include "sp-stop.h"
 
 enum {
 	VECTOR_SET,

@@ -15,7 +15,7 @@
 
 #include <gtk/gtkwidget.h>
 #include "../libnr/nr-matrix.h"
-#include "../sp-gradient.h"
+class SPGradient;
 
 #include <glib.h>
 

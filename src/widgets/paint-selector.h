@@ -11,8 +11,9 @@
  */
 
 #include <glib.h>
-
-
+#include "sp-gradient-spread.h"
+#include "sp-gradient-units.h"
+class SPGradient;
 
 #define SP_TYPE_PAINT_SELECTOR (sp_paint_selector_get_type ())
 #define SP_PAINT_SELECTOR(o) (GTK_CHECK_CAST ((o), SP_TYPE_PAINT_SELECTOR, SPPaintSelector))
@@ -25,7 +26,6 @@
 #include "../forward.h"
 #include <color.h>
 #include <libnr/nr-forward.h>
-#include <sp-gradient.h>
 
 typedef enum {
 	SP_PAINT_SELECTOR_MODE_EMPTY,

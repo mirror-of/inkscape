@@ -28,6 +28,7 @@
 #include "../macros.h"
 #include "../prefs-utils.h"
 #include "gradient-position.h"
+#include "sp-gradient-fns.h"
 #include "../nodepath.h" // fixme! this is only included for the Radial class, if it's moved elsewhere, update this 
 
 #include <libnr/nr-point-fns.h>
