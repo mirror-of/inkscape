@@ -917,6 +917,10 @@ static unsigned sp_bpath_length(NArtBpath const bpath[])
     return ret;
 }
 
+/*fixme: this is bogus -- it doesn't check for nr_moveto, which will indicate a closing of the
+subpath it's nonsense to talk about a path as a whole being closed, although maybe someone would
+want that for some other reason?  Oh, also, if the bpath just ends, then it's *open*.  I hope
+nobody is using this code for anything. */
 static bool sp_bpath_closed(NArtBpath const bpath[])
 {
     g_return_val_if_fail(bpath != NULL, FALSE);

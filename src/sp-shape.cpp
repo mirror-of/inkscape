@@ -289,19 +289,98 @@ sp_shape_marker_required (SPShape* shape, int m, NArtBpath* bp)
     if (shape->marker[m] == NULL)
         return 0;
 
-    if (m == SP_MARKER_LOC_START && (bp->code == NR_MOVETO || bp->code == NR_MOVETO_OPEN))
-        return 1;
+    if (bp == shape->curve->bpath)
+        return m == SP_MARKER_LOC_START;
 
-    if (m == SP_MARKER_LOC_END && (bp[1].code != NR_LINETO) && (bp[1].code != NR_CURVETO))
-        return 1;
+    if (bp[1].code == NR_END)
+        return m == SP_MARKER_LOC_END;
 
-    if (m == SP_MARKER_LOC_MID && ((bp->code != NR_MOVETO && bp->code != NR_MOVETO_OPEN)
-                && (((bp + 1)->code == NR_LINETO) || ((bp + 1)->code == NR_CURVETO))))
-        return 1;
+    return m == SP_MARKER_LOC_MID;
 
     return 0;
 }
 
+static bool 
+sp_bpath_closed (NArtBpath const *bpath)
+{
+
+    for (const NArtBpath *bp = bpath; bp->code != NR_END; bp++) {
+        if (bp->code == NR_MOVETO) return true;
+        if (bp->code == NR_MOVETO_OPEN) return false;
+    }
+
+    return false;
+}
+
+static bool
+first_segment_in_subpath (SPShape const* shape, NArtBpath const* bp)
+{
+    return bp == shape->curve->bpath || bp->code == NR_MOVETO || bp->code == NR_MOVETO_OPEN;
+}
+
+static bool
+last_segment_in_path (SPShape const* shape, NArtBpath const* bp)
+{
+    return bp [1].code == NR_END || bp [1].code == NR_MOVETO || bp [1].code == NR_MOVETO_OPEN;
+}
+
+/*fixme: handle zero-length paths */
+static float 
+angle_for_seg (SPShape const * shape, NArtBpath const * bp, int which)
+{
+
+    float dx = 0, dy = 0;
+    switch (bp->code) {
+    case NR_LINETO:
+    case NR_MOVETO:
+        dx = bp[0].x3 - bp[-1].x3;
+        dy = bp[0].y3 - bp[-1].y3; 
+        break;
+    case NR_CURVETO:
+        if (which == 0) {
+            dx = bp->x3 - bp->x2;
+            dy = bp->y3 - bp->y2;
+        } else {
+            dx = bp->x1 - bp[-1].x3;
+            dy = bp->y1 - bp[-1].y3;
+        }
+
+        /*Chris Lilley at W3C said this procedure made sense */
+        /*The control point is the same as the end point, fall back to the previous control point */
+        if (dx == 0 && dy == 0) {
+            if (which == 0) {
+                dx = bp->x3 - bp->x1;
+                dy = bp->y3 - bp->y1;
+            } else {
+                dx = bp->x2 - bp[-1].x3;
+                dy = bp->y2 - bp[-1].y3;
+            }
+
+            /* The second control point is the same, fall back to end point */
+            if (dx == 0 && dy == 0) {
+                if (which == 0) {
+                    dx = bp->x3 - bp[1].x3;
+                    dy = bp->y3 - bp[1].y3;
+                } else {
+                    dx = bp->x3 - bp[-1].x3;
+                    dy = bp->y3 - bp[-1].y3;
+                }
+                if (dx == 0 && dy == 0) {
+                    /*Fixme: Implement zero-length path directionality rules (which make no sense)*/
+                    dx = 1;
+                }
+            }
+        }
+        break;
+    case NR_MOVETO_OPEN:
+    case NR_END:
+        /*Open and end segments have no directionality*/
+        g_assert_not_reached();
+        break;
+    }
+
+    return atan2 (dy, dx);
+}
 
 /**
 * Calculate the transform required to get a marker's path object in the
@@ -316,130 +395,69 @@ sp_shape_marker_required (SPShape* shape, int m, NArtBpath* bp)
 * \param bp Path segment which the arrow is for.
 * \return Transform matrix.
 */
+
 static NRMatrix
-sp_shape_marker_get_transform (SPShape* shape, int m, NArtBpath* bp)
+sp_shape_marker_get_transform (SPShape const * shape, int m, NArtBpath const * bp)
 {
+
     NRMatrix t;
 
-    switch (m)
-    {
-    case SP_MARKER_LOC_START:
-    {
-        float dx, dy, h;
-        if (bp[1].code == NR_LINETO) {
-            dx = bp[1].x3 - bp[0].x3;
-            dy = bp[1].y3 - bp[0].y3;
-        } else if (bp[1].code == NR_CURVETO) {
-            dx = bp[1].x1 - bp[0].x3;
-            dy = bp[1].y1 - bp[0].y3;
-        } else {
-            dx = 1.0;
-            dy = 0.0;
-        }
-        h = hypot (dx, dy);
-        if (h > 1e-9) {
-            t.c[0] = dx / h;
-            t.c[1] = dy / h;
-            t.c[2] = -dy / h;
-            t.c[3] = dx / h;
-            t.c[4] = bp->x3;
-            t.c[5] = bp->y3;
-        } else {
-            nr_matrix_set_translate (&t, bp->x3, bp->y3);
-        }
-        break;
-    }
+    float angle1 = 100.0, angle2 = 100.0;
+    
+    bool closed = sp_bpath_closed (bp);
 
-    case SP_MARKER_LOC_END:
-    {
-        float dx, dy, h;
-        if ((bp->code == NR_LINETO) && (bp > shape->curve->bpath)) {
-            dx = (bp - 1)->x3 - bp->x3;
-            dy = (bp - 1)->y3 - bp->y3 ;
-        } else if (bp->code == NR_CURVETO) {
-            dx = bp->x2 - bp->x3;
-            dy = bp->y2 - bp->y3 ;
-
-            /* If the second Bezier control point x2 and the end y3
-            ** are coincident, the arrow will not be rotated in a
-            ** sensible fashion.  In this case, this code tries to
-            ** use the second control point on a previous segment to decide
-            ** the arrow's direction.  FIXME: this may not actually
-            ** be in spec for SVG...
-            */
-            if (hypot (dx, dy) < 1e-9 && (bp > shape->curve->bpath)) {
-                dx = bp->x3 - (bp - 1)->x2;
-                dy = bp->y3 - (bp - 1)->y2;
+    if (first_segment_in_subpath (shape, bp)) {
+        /*this is first segment in subpath */
+        if (closed) {
+            /*find last segment*/
+            NArtBpath const *lastseg;
+            for (lastseg = bp; lastseg->code != NR_END; lastseg++) {
+                if (lastseg->code == NR_MOVETO) {
+                    break;
+                }
+                g_assert (lastseg->code != NR_MOVETO_OPEN);
             }
-        } else {
-            dx = 1.0;
-            dy = 0.0;
+            lastseg -= 1;
+            /* for closed paths, first angle is angle of last seg */
+            angle1 = angle_for_seg (shape, lastseg, 0);
         }
-        h = hypot (dx, dy);
-        if (h > 1e-9) {
-            // This orients an end marker in the same direction as a start marker, not in the opposite direction.
-            // Both Adobe SVG plugin and Batik behave this way.
-            t.c[0] = -dx / h;
-            t.c[1] = -dy / h;
-            t.c[2] = dy / h;
-            t.c[3] = -dx / h;
-            t.c[4] = bp->x3;
-            t.c[5] = bp->y3;
-        } else {
-            nr_matrix_set_translate (&t, bp->x3, bp->y3);
-        }
-        break;
-    }
-
-    /* the following works on the average of the incoming
-       and outgoing curve tangents.*/
-
-    case SP_MARKER_LOC_MID:
-    {
-        float dx, dy, h;
-        if ((bp->code == NR_LINETO) && (bp > shape->curve->bpath)) {
-            dx = ((bp->x3 - (bp - 1)->x3)+(bp[1].x3 - bp[0].x3))/2;
-            dy = ((bp->y3 - (bp - 1)->y3)+(bp[1].y3 - bp[0].y3))/2;
-        } else if (bp->code == NR_CURVETO) {
-            dx = ((bp->x3 - bp->x2) + (bp[1].x1 - bp[0].x3))/2;
-            dy = ((bp->y3 - bp->y2) + (bp[1].y1 - bp[0].y3))/2;
-
-            /* If the second Bezier control point x2 and the end y3
-            ** are coincident, the arrow will not be rotated in a
-            ** sensible fashion.  In this case, this code tries to
-            ** use the second control point on a previous segment to decide
-            ** the arrow's direction.  FIXME: this may not actually
-            ** be in spec for SVG...
-            */
-            if (hypot (dx, dy) < 1e-9 && (bp > shape->curve->bpath)) {
-                dx = (bp - 1)->x2 - bp->x3 ;
-                dy = (bp - 1)->y2 - bp->y3 ;
-
+        angle2 = angle_for_seg (shape, bp + 1, 1);
+    } else if (last_segment_in_path (shape, bp)) {
+        angle1 = angle_for_seg (shape, bp, 0);
+        if (closed) {
+            /* find first segment */
+            NArtBpath const *firstseg;
+            for (firstseg = bp; firstseg != shape->curve->bpath; firstseg--) {
+                if (firstseg->code == NR_MOVETO || firstseg->code == NR_MOVETO_OPEN) break;
             }
-        } else {
-            dx = 1.0;
-            dy = 0.0;
+            angle2 = angle_for_seg (shape, firstseg, 1);
         }
-        h = hypot (dx, dy);
-        if (h > 1e-9) {
-            t.c[0] = dx / h;
-            t.c[1] = dy / h;
-            t.c[2] = -dy / h;
-            t.c[3] = dx / h;
-            t.c[4] = bp->x3;
-            t.c[5] = bp->y3;
-        } else {
-            nr_matrix_set_translate (&t, bp->x3, bp->y3);
-        }
-        break;
+    } else {
+        /* midpoint */
+        angle1 = angle_for_seg (shape, bp, 0);
+        angle2 = angle_for_seg (shape, bp + 1, 1);
     }
 
+    if (angle1 > 10) {
+        nr_matrix_set_rotate (&t, angle2);
+    } else if (angle2 > 10) {
+        nr_matrix_set_rotate (&t, angle1);
+    } else {
+        /*
+          from a1 -- if i have to go less than 180 cw to hit a2, inner ab.  else, outer ab
+        */
+        if (angle1 > angle2) angle2 += M_PI * 2;
+        if (angle2 - angle1 > M_PI)
+            nr_matrix_set_rotate (&t, M_PI + (angle1 + angle2) / 2);
+        else
+            nr_matrix_set_rotate (&t, (angle1 + angle2) / 2);
     }
+
+    t.c[4] = bp->x3;
+    t.c[5] = bp->y3;
 
     return t;
 }
-
-
 
 /* Marker views have to be scaled already */
 
@@ -449,7 +467,7 @@ sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai)
 	SPStyle *style = ((SPObject *) shape)->style;
 
 	marker_status("sp_shape_update_marker_view:  Updating views of markers");
-
+        
         for (int i = SP_MARKER_LOC_START; i < SP_MARKER_LOC_QTY; i++) {
 
             int n = 0;

@@ -1,3 +1,7 @@
+2004-08-06  David Turner <novalis@gnu.org
+	* src/sp-shape.cpp (sp_shape_marker_get_transform): Make marker handling match
+	SVG spec better.
+
 2004-08-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/libnr/nr-matrix.h, src/libnr/nr-matrix.cpp:
