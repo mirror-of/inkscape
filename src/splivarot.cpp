@@ -1216,15 +1216,15 @@ sp_selected_path_simplify (void)
 
 	GTimeVal cu;
 	g_get_current_time (&cu);
-	double current = cu.tv_sec * 1000000 + cu.tv_usec;
+	double current = cu.tv_sec * 1000000 + cu.tv_usec; // current time
 
-	if (prev_time != 0 && current - prev_time < 500000) {
-		simplify_multiply += 0.5;
+	if (prev_time != 0 && current - prev_time < 500000) { // last call of the command was within 0.5 sec
+		simplify_multiply += 0.5; // add to the threshold 1/2 of its original value
 		simplify_threshold *= simplify_multiply;
 	} else {
-		simplify_multiply = 1;
+		simplify_multiply = 1; // reset to the default
 	}
-	prev_time = current;
+	prev_time = current; // remember time
 
 	//g_print ("%g\n", simplify_threshold);
 
