@@ -558,6 +558,18 @@ private:
     /** so that LEFT_TO_RIGHT == RIGHT_TO_LEFT but != TOP_TO_BOTTOM */
     static bool _directions_are_orthogonal(Direction d1, Direction d2);
 
+    /** If the output is empty callers still want to be able to call
+    queryCursorShape() and get a valid answer so, while #_input_wrap_shapes
+    can still be considered valid, we need to precompute the cursor shape
+    for this case. */
+    void _calculateCursorShapeForEmpty();
+
+    struct CursorShape {
+        NR::Point position;
+        double height;
+        double rotation;
+    } _empty_cursor_shape;
+
     // ******************* input shapes
 
     struct InputWrapShape {

@@ -594,17 +594,6 @@ void
 sp_te_get_cursor_coords (SPItem *item, gint i_position, NR::Point &p0, NR::Point &p1)
 {
     Inkscape::Text::Layout const *layout = te_get_layout(item);
-    if (!layout->outputExists()) {
-        if (SP_IS_TEXT(item)) {
-            p0 = SP_TEXT(item)->attributes.firstXY();
-        } else if (SP_IS_FLOWTEXT(item)) {
-            p0[NR::X] = 0.0;  // fixme
-            p0[NR::Y] = 0.0;
-        }
-        p1 = p0;
-        p1[NR::Y] -= item->style->font_size.computed;
-        return;
-    }
     double height, rotation;
     layout->queryCursorShape(layout->charIndexToIterator(i_position), &p0, &height, &rotation);
     p1 = NR::Point(p0[NR::X] + height * sin(rotation), p0[NR::Y] - height * cos(rotation));

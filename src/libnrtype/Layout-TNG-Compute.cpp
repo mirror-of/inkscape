@@ -1271,9 +1271,56 @@ public:
     }
 };
 
+void Layout::_calculateCursorShapeForEmpty()
+{
+    _empty_cursor_shape.position = NR::Point(0, 0);
+    _empty_cursor_shape.height = 0.0;
+    _empty_cursor_shape.rotation = 0.0;
+    if (_input_stream.empty() || _input_stream.front()->Type() != TEXT_SOURCE)
+        return;
+
+    InputStreamTextSource const *text_source = static_cast<InputStreamTextSource const *>(_input_stream.front());
+
+    font_instance *font = text_source->styleGetFontInstance();
+    double font_size = text_source->styleComputeFontSize();
+    double caret_slope_run = 0.0, caret_slope_rise = 1.0;
+    LineHeight line_height;
+    if (font) {
+        const_cast<font_instance*>(font)->FontSlope(caret_slope_run, caret_slope_rise);
+        font->FontMetrics(line_height.ascent, line_height.descent, line_height.leading);
+        line_height *= font_size;
+        font->Unref();
+    } else {
+        line_height.ascent = font_size * 0.85;      // random guesses
+        line_height.descent = font_size * 0.15;
+        line_height.leading = 0.0;
+    }
+    double caret_slope = atan2(caret_slope_run, caret_slope_rise);
+    _empty_cursor_shape.height = font_size / cos(caret_slope);
+    _empty_cursor_shape.rotation = caret_slope;
+
+    if (_input_wrap_shapes.empty()) {
+        _empty_cursor_shape.position = NR::Point(text_source->x.empty() || !text_source->x.front().set ? 0.0 : text_source->x.front().computed,
+                                                 text_source->y.empty() || !text_source->y.front().set ? 0.0 : text_source->y.front().computed);
+    } else {
+        Direction block_progression = text_source->styleGetBlockProgression();
+        ShapeScanlineMaker scanline_maker(_input_wrap_shapes.front().shape, block_progression);
+        std::vector<ScanlineMaker::ScanRun> scan_runs = scanline_maker.makeScanline(line_height);
+        if (!scan_runs.empty()) {
+            if (block_progression == LEFT_TO_RIGHT || block_progression == RIGHT_TO_LEFT)
+                _empty_cursor_shape.position = NR::Point(scan_runs.front().y + font_size, scan_runs.front().x_start);
+            else
+                _empty_cursor_shape.position = NR::Point(scan_runs.front().x_start, scan_runs.front().y + font_size);
+        }
+    }
+}
+
 bool Layout::calculateFlow()
 {
-    return Calculator(this).calculate();
+    bool result = Calculator(this).calculate();
+    if (_characters.empty())
+        _calculateCursorShapeForEmpty();
+    return result;
 }
 
 }//namespace Text

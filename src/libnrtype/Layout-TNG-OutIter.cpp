@@ -12,6 +12,8 @@
 #include "livarot/Path.h"
 #include "font-instance.h"
 #include "livarot/Shape.h"
+#include "Layout-TNG-Scanline-Maker.h"
+#include "svg/svg-types.h"
 
 namespace Inkscape {
 namespace Text {
@@ -353,9 +355,9 @@ Shape* Layout::createSelectionShape(iterator const &it_start, iterator const &it
 void Layout::queryCursorShape(iterator const &it, NR::Point *position, double *height, double *rotation) const
 {
     if (_characters.empty()) {
-        *position = NR::Point(0, 0);
-        *height = 0.0;
-        *rotation = 0.0;
+        *position = _empty_cursor_shape.position;
+        *height = _empty_cursor_shape.height;
+        *rotation = _empty_cursor_shape.rotation;
     } else {
         // we want to cursor to be positioned where the left edge of a character that is about to be typed will be.
         // this means x & rotation are the current values but y & height belong to the previous character.
