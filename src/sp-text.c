@@ -53,7 +53,7 @@ static void sp_text_update_length (SPSVGLength *length, gdouble em, gdouble ex, 
 
 /* SPString */
 
-static void sp_string_class_init (SPStringClass *class);
+static void sp_string_class_init (SPStringClass *classname);
 static void sp_string_init (SPString *string);
 
 static void sp_string_build (SPObject *object, SPDocument *document, SPRepr *repr);
@@ -82,21 +82,21 @@ sp_string_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_string_init,
 		};
-		type = g_type_register_static (SP_TYPE_CHARS, "SPString", &info, 0);
+		type = g_type_register_static (SP_TYPE_CHARS, "SPString", &info, (GTypeFlags)0);
 	}
 	return type;
 }
 
 static void
-sp_string_class_init (SPStringClass *class)
+sp_string_class_init (SPStringClass *classname)
 {
 	SPObjectClass *sp_object_class;
 	SPItemClass *item_class;
 
-	sp_object_class = (SPObjectClass *) class;
-	item_class = (SPItemClass *) class;
+	sp_object_class = (SPObjectClass *) classname;
+	item_class = (SPItemClass *) classname;
 
-	string_parent_class = g_type_class_ref (SP_TYPE_CHARS);
+	string_parent_class = (SPCharsClass*)g_type_class_ref (SP_TYPE_CHARS);
 
 	sp_object_class->build = sp_string_build;
 	sp_object_class->release = sp_string_release;
@@ -386,12 +386,12 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean 
 
 /* SPTSpan */
 
-static void sp_tspan_class_init (SPTSpanClass *class);
+static void sp_tspan_class_init (SPTSpanClass *classname);
 static void sp_tspan_init (SPTSpan *tspan);
 
 static void sp_tspan_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static void sp_tspan_release (SPObject *object);
-static void sp_tspan_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_tspan_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_tspan_child_added (SPObject *object, SPRepr *rch, SPRepr *ref);
 static void sp_tspan_remove_child (SPObject *object, SPRepr *rch);
 static void sp_tspan_update (SPObject *object, SPCtx *ctx, guint flags);
@@ -422,21 +422,21 @@ sp_tspan_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_tspan_init,
 		};
-		type = g_type_register_static (SP_TYPE_ITEM, "SPTSpan", &info, 0);
+		type = g_type_register_static (SP_TYPE_ITEM, "SPTSpan", &info, (GTypeFlags)0);
 	}
 	return type;
 }
 
 static void
-sp_tspan_class_init (SPTSpanClass *class)
+sp_tspan_class_init (SPTSpanClass *classname)
 {
 	SPObjectClass * sp_object_class;
 	SPItemClass * item_class;
 
-	sp_object_class = (SPObjectClass *) class;
-	item_class = (SPItemClass *) class;
+	sp_object_class = (SPObjectClass *) classname;
+	item_class = (SPItemClass *) classname;
 
-	tspan_parent_class = g_type_class_ref (SP_TYPE_ITEM);
+	tspan_parent_class = (SPItemClass*)g_type_class_ref (SP_TYPE_ITEM);
 
 	sp_object_class->build = sp_tspan_build;
 	sp_object_class->release = sp_tspan_release;
@@ -486,7 +486,7 @@ sp_tspan_build (SPObject *object, SPDocument *doc, SPRepr *repr)
 	}
 
 	/* fixme: We should really pick up first child always */
-	string = g_object_new (SP_TYPE_STRING, NULL);
+	string = (SPString*)g_object_new (SP_TYPE_STRING, NULL);
 	tspan->string = sp_object_attach_reref (object, SP_OBJECT (string), NULL);
 	string->ly = &tspan->ly;
 	sp_object_invoke_build (tspan->string, doc, rch, SP_OBJECT_IS_CLONED (object));
@@ -517,7 +517,7 @@ sp_tspan_release (SPObject *object)
 }
 
 static void
-sp_tspan_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_tspan_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPTSpan *tspan;
 
@@ -584,7 +584,7 @@ sp_tspan_child_added (SPObject *object, SPRepr *rch, SPRepr *ref)
 	if (!tspan->string && rch->type == SP_XML_TEXT_NODE) {
 		SPString *string;
 		/* fixme: We should really pick up first child always */
-		string = g_object_new (SP_TYPE_STRING, 0);
+		string = (SPString*)g_object_new (SP_TYPE_STRING, 0);
 		tspan->string = sp_object_attach_reref (object, SP_OBJECT (string), NULL);
 		string->ly = &tspan->ly;
 		sp_object_invoke_build (tspan->string, SP_OBJECT_DOCUMENT (object), rch, SP_OBJECT_IS_CLONED (object));
@@ -757,12 +757,12 @@ sp_tspan_set_shape (SPTSpan *tspan, SPLayoutData *ly, ArtPoint *cp, gboolean fir
 
 /* SPText */
 
-static void sp_text_class_init (SPTextClass *class);
+static void sp_text_class_init (SPTextClass *classname);
 static void sp_text_init (SPText *text);
 
 static void sp_text_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static void sp_text_release (SPObject *object);
-static void sp_text_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_text_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_text_child_added (SPObject *object, SPRepr *rch, SPRepr *ref);
 static void sp_text_remove_child (SPObject *object, SPRepr *rch);
 static void sp_text_update (SPObject *object, SPCtx *ctx, guint flags);
@@ -801,21 +801,21 @@ sp_text_get_type (void)
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_text_init,
 		};
-		type = g_type_register_static (SP_TYPE_ITEM, "SPText", &info, 0);
+		type = g_type_register_static (SP_TYPE_ITEM, "SPText", &info, (GTypeFlags)0);
 	}
 	return type;
 }
 
 static void
-sp_text_class_init (SPTextClass *class)
+sp_text_class_init (SPTextClass *classname)
 {
 	SPObjectClass * sp_object_class;
 	SPItemClass * item_class;
 
-	sp_object_class = (SPObjectClass *) class;
-	item_class = (SPItemClass *) class;
+	sp_object_class = (SPObjectClass *) classname;
+	item_class = (SPItemClass *) classname;
 
-	text_parent_class = g_type_class_ref (SP_TYPE_ITEM);
+	text_parent_class = (SPItemClass*)g_type_class_ref (SP_TYPE_ITEM);
 
 	sp_object_class->build = sp_text_build;
 	sp_object_class->release = sp_text_release;
@@ -894,7 +894,7 @@ sp_text_build (SPObject *object, SPDocument *doc, SPRepr *repr)
 	for (rch = repr->children; rch != NULL; rch = rch->next) {
 		if (rch->type == SP_XML_TEXT_NODE) {
 			SPString *string;
-			string = g_object_new (SP_TYPE_STRING, 0);
+			string = (SPString*)g_object_new (SP_TYPE_STRING, 0);
 			if (ref) {
 				ref->next = sp_object_attach_reref (object, SP_OBJECT (string), NULL);
 			} else {
@@ -905,7 +905,7 @@ sp_text_build (SPObject *object, SPDocument *doc, SPRepr *repr)
 			ref = SP_OBJECT (string);
 		} else if ((rch->type == SP_XML_ELEMENT_NODE) && !strcmp (sp_repr_name (rch), "tspan")) {
 			SPObject *child;
-			child = g_object_new (SP_TYPE_TSPAN, 0);
+			child = (SPObject*)g_object_new (SP_TYPE_TSPAN, 0);
 			if (ref) {
 				ref->next = sp_object_attach_reref (object, child, NULL);
 			} else {
@@ -945,7 +945,7 @@ sp_text_release (SPObject *object)
 }
 
 static void
-sp_text_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_text_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPText *text;
 
@@ -1021,7 +1021,7 @@ sp_text_child_added (SPObject *object, SPRepr *rch, SPRepr *ref)
 
 	if (rch->type == SP_XML_TEXT_NODE) {
 		SPString *string;
-		string = g_object_new (SP_TYPE_STRING, 0);
+		string = (SPString*)g_object_new (SP_TYPE_STRING, 0);
 		if (prev) {
 			prev->next = sp_object_attach_reref (object, SP_OBJECT (string), prev->next);
 		} else {
@@ -1032,7 +1032,7 @@ sp_text_child_added (SPObject *object, SPRepr *rch, SPRepr *ref)
 		och = SP_OBJECT (string);
 	} else if ((rch->type == SP_XML_ELEMENT_NODE) && !strcmp (sp_repr_name (rch), "tspan")) {
 		SPObject *child;
-		child = g_object_new (SP_TYPE_TSPAN, 0);
+		child = (SPObject*)g_object_new (SP_TYPE_TSPAN, 0);
 		if (prev) {
 			prev->next = sp_object_attach_reref (object, child, prev->next);
 		} else {
@@ -1403,7 +1403,7 @@ sp_text_set_shape (SPText *text)
 
 	child = text->children;
 	while (child != NULL) {
-		SPObject *next, *new;
+		SPObject *next, *spnew;
 		SPString *string;
 		ArtDRect bbox;
 		ArtPoint advance;
@@ -1485,7 +1485,7 @@ sp_text_set_shape (SPText *text)
 			advance.x += string->advance.x;
 			advance.y += string->advance.y;
 		}
-		new = next;
+		spnew = next;
 		/* Calculate starting position */
 		switch (child->style->text_anchor.computed) {
 		case SP_CSS_TEXT_ANCHOR_START:
@@ -1510,7 +1510,7 @@ sp_text_set_shape (SPText *text)
 			break;
 		}
 		/* Set child shapes */
-		for (next = child; (next != NULL) && (next != new); next = next->next) {
+		for (next = child; (next != NULL) && (next != spnew); next = next->next) {
 			if (SP_IS_STRING (next)) {
 				sp_string_set_shape (SP_STRING (next), &text->ly, &cp, haslast);
 				haslast = TRUE;
@@ -1652,7 +1652,7 @@ sp_text_is_empty (SPText *text)
 
 	for (ch = text->children; ch != NULL; ch = ch->next) {
 		SPString *str;
-		unsigned char *p;
+		gchar *p;
 		str = SP_TEXT_CHILD_STRING (ch);
 		for (p = str->text; p && *p; p = g_utf8_next_char (p)) {
 			gunichar unival;
@@ -1690,7 +1690,7 @@ sp_text_get_string_multiline (SPText *text)
 
 	len = 0;
 	for (l = strs; l != NULL; l = l->next) {
-		len += strlen (l->data);
+		len += strlen ((const gchar*)l->data);
 		len += strlen ("\n");
 	}
 
@@ -1701,8 +1701,8 @@ sp_text_get_string_multiline (SPText *text)
 	str = g_new (gchar, len);
 	p = str;
 	while (strs) {
-		memcpy (p, strs->data, strlen (strs->data));
-		p += strlen (strs->data);
+		memcpy (p, strs->data, strlen ((const gchar*)strs->data));
+		p += strlen ((const gchar*)strs->data);
 		strs = g_slist_remove (strs, strs->data);
 		if (strs) *p++ = '\n';
 	}
@@ -2013,7 +2013,7 @@ sp_text_insert (SPText *text, gint pos, const gchar *utf8, gboolean preservews)
 {
 	SPObject *child;
 	SPString *string;
-	gchar *new, *ip;
+	gchar *spnew, *ip;
 	int slen, ulen, i;
 
 	g_return_val_if_fail (text != NULL, -1);
@@ -2035,18 +2035,18 @@ sp_text_insert (SPText *text, gint pos, const gchar *utf8, gboolean preservews)
 
 	slen = ip - string->text;
 	ulen = strlen (utf8);
-	new = g_new (gchar, strlen (string->text) + ulen + 1);
+	spnew = g_new (gchar, strlen (string->text) + ulen + 1);
 	/* Copy start */
-	memcpy (new, string->text, slen);
+	memcpy (spnew, string->text, slen);
 	/* Copy string */
-	memcpy (new + slen, utf8, ulen);
+	memcpy (spnew + slen, utf8, ulen);
 	for (i = slen; i < slen + ulen; i++) {
-		if ((new[i] < 32) && ((new[i] != 9) && (new[i] != 10) && (new[i] != 13))) new[i] = 32;
+		if ((spnew[i] < 32) && ((spnew[i] != 9) && (spnew[i] != 10) && (spnew[i] != 13))) spnew[i] = 32;
 	}
 	/* Copy end */
-	strcpy (new + slen + ulen, ip);
-	sp_repr_set_content (SP_OBJECT_REPR (string), new);
-	g_free (new);
+	strcpy (spnew + slen + ulen, ip);
+	sp_repr_set_content (SP_OBJECT_REPR (string), spnew);
+	g_free (spnew);
 
 	return pos + g_utf8_strlen (utf8, -1);
 }
