@@ -5,6 +5,13 @@
 	* src/style.cpp:
 	Change include stringstream.h to include svg/stringstream.h.
 
+	* src/Makefile.am, src/Makefile_insert: Change libinkscape.a use
+	to eliminate triple compilation of these object files.
+
+	* src/Makefile.am: Use `subdir-objects' option.
+
+	* src/Makefile.am: Add global INCLUDES setting.
+
 2004-04-22  Ted Gould  <ted@gould.cx>
 
 	* src/draw-context.cpp, src/dropper-context.cpp,

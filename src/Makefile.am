@@ -8,8 +8,11 @@
 # ################################################
 
 # Should work in either automake1.7 or 1.8, but 1.6 doesn't
-# handle foo/libfoo_a_CPPFLAGS properly.
-AUTOMAKE_OPTIONS = 1.7
+# handle foo/libfoo_a_CPPFLAGS properly (if at all).
+AUTOMAKE_OPTIONS = 1.7 subdir-objects
+
+INCLUDES =	\
+	$(INKSCAPE_CFLAGS)
 
 include Makefile_insert
 include dialogs/Makefile_insert
@@ -28,7 +31,10 @@ include utest/Makefile_insert
 include widgets/Makefile_insert
 include xml/Makefile_insert
 
+bin_PROGRAMS = inkscape inkview
+
 noinst_LIBRARIES =	\
+	libinkpre.a	\
 	dialogs/libspdialogs.a	\
 	display/libspdisplay.a	\
 	extension/implementation/libimplementation.a	\
@@ -43,7 +49,7 @@ noinst_LIBRARIES =	\
 	svg/libspsvg.a	\
 	widgets/libspwidgets.a	\
 	xml/libspxml.a	\
-	libinkscape.a
+	libinkpost.a
 
 DISTCLEANFILES =	\
 	helper/sp-marshal.cpp helper/sp-marshal.h
