@@ -83,47 +83,74 @@ static win_data wd;
 static gint x = -1000, y = -1000, w = 0, h = 0;
 static gchar *prefs_path = "dialogs.documentoptions";
 
-struct inkscape_papers_t {
-    gchar const * const name;
-    gdouble const height;
-    gdouble const width;
+struct PaperSize {
+    char const * const name;
+    double const smaller;
+    double const larger;
+    SPUnitId const unit;
 };
 
-static inkscape_papers_t const inkscape_papers[] = {
-    { "A4", 842, 595 },
-    { "US Letter", 792, 612 },
-    { "US Legal", 1008, 612 },
-    { "US Executive", 720, 542 },
-    { "A0", 3368, 2380 },
-    { "A1", 2380, 1684 },
-    { "A2", 1684, 1190 },
-    { "A3", 1190, 842 },
-    { "A5", 595, 421 },
-    { "A6", 421, 297 },
-    { "A7", 297, 210 },
-    { "A8", 210, 148 },
-    { "A9", 148, 105 },
-    { "B0", 4008, 2836 },
-    { "B1", 2836, 2004 },
-    { "B2", 2004, 1418 },
-    { "B3", 1418, 1002 },
-    { "B4", 1002, 709 },
-    { "B5", 709, 501 },
-    { "B6", 501, 355 },
-    { "B7", 355, 250 },
-    { "B8", 250, 178 },
-    { "B9", 178, 125 },
-    { "B10", 125, 89 },
-    { "CSE", 649, 462 },
-    { "Comm10E", 683, 298 },
-    { "DLE", 624, 312 },
-    { "Folio", 935, 595 },
-    { "Ledger", 792, 1224 },
-    { "Tabloid", 1225, 792 },
-    { "Banner 468x60", 60, 468 },
-    { "Icon 16x16", 16, 16 },
-    { "Icon 32x32", 32, 32 },
-    { NULL, 0, 0 },
+static PaperSize const inkscape_papers[] = {
+    { "A4", 210, 297, SP_UNIT_MM },
+    { "US Letter", 8.5, 11, SP_UNIT_IN },
+    { "US Legal", 8.5, 14, SP_UNIT_IN },
+    { "US Executive", 7.25, 10.5, SP_UNIT_IN },
+    { "A0", 841, 1189, SP_UNIT_MM },
+    { "A1", 594, 841, SP_UNIT_MM },
+    { "A2", 420, 594, SP_UNIT_MM },
+    { "A3", 297, 420, SP_UNIT_MM },
+    { "A5", 148, 210, SP_UNIT_MM },
+    { "A6", 105, 148, SP_UNIT_MM },
+    { "A7", 74, 105, SP_UNIT_MM },
+    { "A8", 52, 74, SP_UNIT_MM },
+    { "A9", 37, 52, SP_UNIT_MM },
+    { "A10", 26, 37, SP_UNIT_MM },
+    { "B0", 1000, 1414, SP_UNIT_MM },
+    { "B1", 707, 1000, SP_UNIT_MM },
+    { "B2", 500, 707, SP_UNIT_MM },
+    { "B3", 353, 500, SP_UNIT_MM },
+    { "B4", 250, 353, SP_UNIT_MM },
+    { "B5", 176, 250, SP_UNIT_MM },
+    { "B6", 125, 176, SP_UNIT_MM },
+    { "B7", 88, 125, SP_UNIT_MM },
+    { "B8", 62, 88, SP_UNIT_MM },
+    { "B9", 44, 62, SP_UNIT_MM },
+    { "B10", 31, 44, SP_UNIT_MM },
+#if 0 /* Whether to include or exclude these depends on how big we mind our page size menu
+         becoming.  C series is used for envelopes; don't know what D and E series are used for. */
+    { "C0", 917, 1297, SP_UNIT_MM },
+    { "C1", 648, 917, SP_UNIT_MM },
+    { "C2", 458, 648, SP_UNIT_MM },
+    { "C3", 324, 458, SP_UNIT_MM },
+    { "C4", 229, 324, SP_UNIT_MM },
+    { "C5", 162, 229, SP_UNIT_MM },
+    { "C6", 114, 162, SP_UNIT_MM },
+    { "C7", 81, 114, SP_UNIT_MM },
+    { "C8", 57, 81, SP_UNIT_MM },
+    { "C9", 40, 57, SP_UNIT_MM },
+    { "C10", 28, 40, SP_UNIT_MM },
+    { "D1", 545, 771, SP_UNIT_MM },
+    { "D2", 385, 545, SP_UNIT_MM },
+    { "D3", 272, 385, SP_UNIT_MM },
+    { "D4", 192, 272, SP_UNIT_MM },
+    { "D5", 136, 192, SP_UNIT_MM },
+    { "D6", 96, 136, SP_UNIT_MM },
+    { "D7", 68, 96, SP_UNIT_MM },
+    { "E3", 400, 560, SP_UNIT_MM },
+    { "E4", 280, 400, SP_UNIT_MM },
+    { "E5", 200, 280, SP_UNIT_MM },
+    { "E6", 140, 200, SP_UNIT_MM },
+#endif
+    { "CSE", 462, 649, SP_UNIT_PT },
+    { "US #10 Commercial Envelope", 4.125, 9.5, SP_UNIT_IN },
+    /* See http://www.hbp.com/content/PCR_envelopes.cfm for a much larger list of US envelope
+       sizes. */
+    { "DLE", 312, 624, SP_UNIT_PT },
+    { "Ledger/Tabloid", 11, 17, SP_UNIT_IN },
+    { "Banner 468x60", 60, 468, SP_UNIT_PX },  // TODO: Select landscape by default.
+    { "Icon 16x16", 16, 16, SP_UNIT_PX },
+    { "Icon 32x32", 32, 32, SP_UNIT_PX },
+    { NULL, 0, 0, SP_UNIT_PX },
 };
 
 static void
@@ -467,19 +494,19 @@ sp_dtw_guides_snap_distance_changed(GtkAdjustment *adjustment,
 
 
 static pair<double, double>
-get_paper_size(inkscape_papers_t const &paper, bool const landscape, SPUnit const *const dest_unit)
+get_paper_size(PaperSize const &paper, bool const landscape, SPUnit const *const dest_unit)
 {
     double h, w;
     if (landscape) {
-        w = paper.height;
-        h = paper.width;
+        w = paper.larger;
+        h = paper.smaller;
     } else {
-        w = paper.width;
-        h = paper.height;
+        w = paper.smaller;
+        h = paper.larger;
     }
-    SPUnit const *const pt = &sp_unit_get_by_id(SP_UNIT_PT);
-    sp_convert_distance(&w, pt, dest_unit);
-    sp_convert_distance(&h, pt, dest_unit);
+    SPUnit const &src_unit = sp_unit_get_by_id(paper.unit);
+    sp_convert_distance(&w, &src_unit, dest_unit);
+    sp_convert_distance(&h, &src_unit, dest_unit);
     return pair<double, double>(w, h);
 }
 
@@ -490,7 +517,7 @@ sp_doc_dialog_paper_selected(GtkWidget *widget, gpointer data)
         return;
     }
 
-    struct inkscape_papers_t const *const paper = (struct inkscape_papers_t const *) data;
+    PaperSize const *const paper = (PaperSize const *) data;
 
     GtkWidget *const ww = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "widthsb");
     GtkWidget *const hw = (GtkWidget *)gtk_object_get_data(GTK_OBJECT(dlg), "heightsb");
@@ -1013,8 +1040,8 @@ sp_desktop_dialog(void)
         gtk_widget_show(m);
 
         GtkWidget *i;
-        for (struct inkscape_papers_t const *paper = inkscape_papers;
-             paper && paper->name;
+        for (PaperSize const *paper = inkscape_papers;
+             paper->name;
              paper++) {
             i = gtk_menu_item_new_with_label(paper->name);
             gtk_widget_show(i);
@@ -1244,6 +1271,33 @@ sp_dtw_deactivate_desktop(Inkscape::Application *inkscape,
     sp_dtw_update(dialog, NULL);
 }
 
+/** Returns an index into inkscape_papers of a paper of the specified size (specified in px),
+    or -1 if there's no such paper.
+**/
+static int
+find_paper_size(double const w_px, double const h_px)
+{
+    double given[2];
+    if ( w_px < h_px ) {
+        given[0] = w_px; given[1] = h_px;
+    } else {
+        given[0] = h_px; given[1] = w_px;
+    }
+    g_return_val_if_fail(given[0] <= given[1], -1);
+    for (unsigned i = 0; i < G_N_ELEMENTS(inkscape_papers) - 1; ++i) {
+        SPUnit const &i_unit = sp_unit_get_by_id(inkscape_papers[i].unit);
+        double const i_sizes[2] = { sp_units_get_pixels(inkscape_papers[i].smaller, i_unit),
+                                    sp_units_get_pixels(inkscape_papers[i].larger, i_unit) };
+        g_return_val_if_fail(i_sizes[0] <= i_sizes[1], -1);
+        if ((fabs(given[0] - i_sizes[0]) <= .1) &&
+            (fabs(given[1] - i_sizes[1]) <= .1)   )
+        {
+            return (int) i;
+        }
+    }
+    return -1;
+}
+
 static void
 sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
 {
@@ -1380,8 +1434,8 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
 
         // Start of former "document settings" stuff
 
-        gdouble docw = sp_document_width(SP_DT_DOCUMENT(desktop));
-        gdouble doch = sp_document_height(SP_DT_DOCUMENT(desktop));
+        gdouble const doc_w_px = sp_document_width(SP_DT_DOCUMENT(desktop));
+        gdouble const doc_h_px = sp_document_height(SP_DT_DOCUMENT(desktop));
 
         GtkWidget *ww = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(dialog), "widthsb");
         GtkWidget *hw = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(dialog), "heightsb");
@@ -1389,55 +1443,26 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         GtkWidget *om = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(dialog), "orientation");
 
         /* select paper orientation */
-        gdouble ph, pw;
-        if (docw > doch) {
-            /* wider than tall: landscape */
-            gtk_option_menu_set_history(GTK_OPTION_MENU(om), 1);
-            ph = docw;
-            pw = doch;
-        }
-        else {
-            /* taller than wide: portrait */
-            gtk_option_menu_set_history(GTK_OPTION_MENU(om), 0);
-            ph = doch;
-            pw = docw;
-        }
-        //printf("have ph: %f pw: %f\n",ph,pw);
+        gint const landscape = ( doc_w_px > doc_h_px );
+        gtk_option_menu_set_history(GTK_OPTION_MENU(om), landscape);
 
         /* find matching paper size */
-        gint pos;
-        struct inkscape_papers_t const *paper;
-        for (paper = inkscape_papers, pos=1;
-             paper && paper->name;
-             paper++, pos++) {
-            //printf("checking %s (%fx%f)\n",paper->name,paper->height,paper->width);
-            if (paper->width == pw
-                && paper->height == ph)
-            {
-                //printf("matched\n");
-                break;
-            }
-        }
-        if (paper && paper->name) {
-            //printf("using pos %d (%s)\n",pos,paper->name);
-            gtk_option_menu_set_history(GTK_OPTION_MENU(pm), pos);
-            gtk_widget_set_sensitive(ww, FALSE);
-            gtk_widget_set_sensitive(hw, FALSE);
-        } else {
-            //printf("using custom\n");
-            gtk_option_menu_set_history(GTK_OPTION_MENU(pm), 0);
-            gtk_widget_set_sensitive(ww, TRUE);
-            gtk_widget_set_sensitive(hw, TRUE);
-        }
+        gint const pos = 1 + find_paper_size(doc_w_px, doc_h_px);
+        gtk_option_menu_set_history(GTK_OPTION_MENU(pm), pos);
+        gtk_widget_set_sensitive(ww, !pos);
+        gtk_widget_set_sensitive(hw, !pos);
 
-        SPUnitSelector *us = (SPUnitSelector *)gtk_object_get_data(GTK_OBJECT(dialog), "units");
-        SPUnit const *unit = sp_unit_selector_get_unit(us);
-        GtkAdjustment *a = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dialog), "width");
-        docw = sp_pixels_get_units (docw, *unit);
-        gtk_adjustment_set_value(a, docw);
-        a = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dialog), "height");
-        doch = sp_pixels_get_units (doch, *unit);
-        gtk_adjustment_set_value(a, doch);
+        /* Show document width/height in the requested units. */
+        {
+            SPUnitSelector const *us = (SPUnitSelector *)gtk_object_get_data(GTK_OBJECT(dialog), "units");
+            SPUnit const *unit = sp_unit_selector_get_unit(us);
+            gdouble const doc_w_u = sp_pixels_get_units(doc_w_px, *unit);
+            gdouble const doc_h_u = sp_pixels_get_units(doc_h_px, *unit);
+            GtkAdjustment *w_adj = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dialog), "width");
+            GtkAdjustment *h_adj = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dialog), "height");
+            gtk_adjustment_set_value(w_adj, doc_w_u);
+            gtk_adjustment_set_value(h_adj, doc_h_u);
+        }
 
         // end of "document settings" stuff
 
