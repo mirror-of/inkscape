@@ -912,7 +912,7 @@ inline int Layout::iteratorToCharIndex(Layout::iterator const &it) const
 inline void Layout::validateIterator(Layout::iterator *it) const
 {
     it->_parent_layout = this;
-    if (it->_char_index > _characters.size()) {
+    if (it->_char_index >= _characters.size()) {
         it->_char_index = _characters.size();
         it->_glyph_index = _glyphs.size();
     } else
