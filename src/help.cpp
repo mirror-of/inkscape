@@ -13,8 +13,7 @@
  */
 
 #include <config.h>
-#include <gtk/gtkwindow.h>
-#include <gtk/gtksignal.h>
+#include <gtk/gtk.h>
 #include "inkscape.h"
 #include "document.h"
 #include "sp-text.h"
@@ -97,24 +96,13 @@ sp_help_about (void)
 
 } // close sp_help_about()
 
-
 void
-sp_help_tutorial (void)
+sp_help_open_tutorial (GtkMenuItem *menuitem, gpointer data)
 {
-	gchar *c = g_strconcat (INKSCAPE_TUTORIALSDIR, _("/tutorial.svg"), 
-                                NULL);
+	gchar *name = (gchar *) data;
+	gchar *c = g_strconcat (INKSCAPE_TUTORIALSDIR, "/", name, NULL);
 	sp_file_open (c, NULL);
 	g_free (c);
-}
-
-void
-sp_help_elementsofdesign (void)
-{
-        gchar *c = g_strconcat (INKSCAPE_TUTORIALSDIR, 
-				_("/elementsofdesign.svg"),
-                                NULL);
-        sp_file_open (c, NULL);
-        g_free (c);
 }
 
 void

@@ -628,16 +628,16 @@ sp_ui_dialogs_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 static void
 sp_ui_help_menu (GtkWidget *m)
 {
-    sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_Tutorial"), 
-                            G_CALLBACK(sp_help_tutorial), NULL);
+    sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_Keys and Mouse"), G_CALLBACK(sp_help_keys), NULL);
 
-    sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_Elements of Design"),                                   G_CALLBACK(sp_help_elementsofdesign), NULL);
+    GtkWidget *item_t = sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_Tutorials"), NULL, NULL);
+    GtkWidget *menu_t = gtk_menu_new ();
+    sp_ui_menu_append_item (GTK_MENU (menu_t), NULL, _("Inkscape: _Basic"), G_CALLBACK(sp_help_open_tutorial), _("tutorial-basic.svg"));
+    sp_ui_menu_append_item (GTK_MENU (menu_t), NULL, _("Inkscape: _Advanced"), G_CALLBACK(sp_help_open_tutorial), _("tutorial-advanced.svg"));
+    sp_ui_menu_append_item (GTK_MENU (menu_t), NULL, _("_Elements of Design"), G_CALLBACK(sp_help_open_tutorial), _("elementsofdesign.svg"));
+    gtk_menu_item_set_submenu (GTK_MENU_ITEM (item_t), menu_t);
 
-    sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_Keys and Mouse"), 
-                            G_CALLBACK(sp_help_keys), NULL);
-
-    sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_About Inkscape"), 
-                            G_CALLBACK(sp_help_about), NULL);
+    sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_About Inkscape"), G_CALLBACK(sp_help_about), NULL);
 
 #ifdef WITH_MODULES
 	/* TODO: Modules need abouts too
