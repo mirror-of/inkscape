@@ -1,3 +1,7 @@
+2005-03-24  MenTaLguY  <mental@rydia.net>
+
+    * src/sp-item.cpp: fix relative transforms to accomodate viewbox
+
 2005-03-24  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/ui/Makefile_insert, src/dialogs/swatches.cpp,

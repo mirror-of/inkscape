@@ -1025,25 +1025,19 @@ sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform)
 
 
 /**
- * \pre \a ancestor really is an ancestor (\>=) of \a object.
+ * \pre \a ancestor really is an ancestor (\>=) of \a object, or NULL.
  *   ("Ancestor (\>=)" here includes as far as \a object itself.)
- *
- * \pre in_same_coordsys_as_anc(object, ancestor).
  */
 NR::Matrix
 i2anc_affine(SPObject const *object, SPObject const *const ancestor) {
     NR::Matrix ret(NR::identity());
-    g_return_val_if_fail(object != NULL && ancestor != NULL, ret);
+    g_return_val_if_fail(object != NULL, ret);
 
-    while ( object != ancestor ) {
-        g_return_val_if_fail(SP_IS_ITEM(object), ret);
-        /* g_error is correct if object is <defs> or a non-SVG element type.
-         *
-         * I wonder if there are cases (perhaps involving a nested <svg> inside a foreignObject)
-         * where some different behaviour is appropriate.  We'll wait for a bug report and example
-         * document to decide what to do.
-         */
-
+    /* stop at first non-renderable ancestor */
+    while ( object != ancestor && SP_IS_ITEM(object) ) {
+        if (SP_IS_ROOT(object)) {
+            ret *= SP_ROOT(object)->c2p;
+        }
         ret *= SP_ITEM(object)->transform;
         object = SP_OBJECT_PARENT(object);
     }
@@ -1061,42 +1055,13 @@ NR::Matrix SPItem::getRelativeTransform(SPObject const *dest) const {
     return i2i_affine(this, dest);
 }
 
-
 /**
  * Returns the accumulated transformation of the item and all its ancestors, including root's viewport.
  * \pre (item != NULL) and SP_IS_ITEM(item).
  */
 NR::Matrix sp_item_i2doc_affine(SPItem const *item)
 {
-    g_assert(item != NULL);
-    g_assert(SP_IS_ITEM(item));
-
-    NR::Matrix ret(NR::identity());
-#ifdef NDEBUG
-    g_assert(ret.test_identity());
-#endif
-
-    /* Note that this routine may be called for items that are not members of
-    ** the root.  For example, markers are members of a <def> object.  Hence
-    ** we terminate either when reaching the top of the tree, or when a
-    ** non-item object is reached.
-    */
-    while ( NULL != SP_OBJECT_PARENT(item) && SP_IS_ITEM(SP_OBJECT_PARENT(item)) ) {
-        ret *= item->transform;
-        item = SP_ITEM(SP_OBJECT_PARENT(item));
-    }
-
-    /* Then we only do root-related stuff if we found a root item */
-    if (SP_IS_ROOT(item)) {
-        SPRoot const *root = SP_ROOT(item);
-
-        // Viewbox is relative to root's transform:
-        // http://www.w3.org/TR/SVG11/coords.html#ViewBoxAttributeEffectOnSiblingAttributes
-        ret *= root->c2p;
-        ret *= item->transform;
-    }
-
-    return ret;
+    return i2anc_affine(item, NULL);
 }
 
 /**
