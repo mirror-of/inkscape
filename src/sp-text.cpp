@@ -864,7 +864,7 @@ SPTSpan *
 sp_text_insert_line (SPText *text, gint i_ucs4_pos)
 {
 	int utf8_pos=text->contents.Do_UCS4_2_UTF8(i_ucs4_pos);
-	// no updateRepr in thios function because SPRepr are handled directly
+	// no updateRepr in this function because SPRepr are handled directly
 	if ( text->f_src == NULL ) return NULL;
 	
     int  ucs4_pos=0;
@@ -1098,32 +1098,79 @@ sp_text_insert(SPText *text, gint i_ucs4_pos, gchar const *utf8)
     return i_ucs4_pos+ucs4_len;
 }
 
+SPObject *
+object_prev_sibling(SPObject *child)      // TEMPORARY, until spobject provides this
+{
+    SPObject *parent = SP_OBJECT_PARENT(child);
+    for ( SPObject *i = sp_object_first_child(parent) ; i; i = SP_OBJECT_NEXT(i) ) {
+        if (i->next == child)
+            return i;
+    }
+    return NULL;
+}
+
+
 gint
 sp_text_delete (SPText *text, gint i_start, gint i_end)
 {
- 	int start=text->contents.Do_UCS4_2_UTF8(i_start);
-	int end=text->contents.Do_UCS4_2_UTF8(i_end);
+    int start = text->contents.Do_UCS4_2_UTF8(i_start);
+    int end = text->contents.Do_UCS4_2_UTF8(i_end);
  	//printf("delete %i -> %i\n",start,end);
-    if ( text->f_src == NULL || text->f_res == NULL ) return i_start;
+
+    if ( text->f_src == NULL || text->f_res == NULL ) 
+        return i_start;
+
     // round to the letter granularity
-    int    c_st=-1,s_st=-1,l_st=-1;
-    int    c_en=-1,s_en=-1,l_en=-1;
-    bool   l_start_st=false,l_end_st=false;
-    bool   l_start_en=false,l_end_en=false;
-    text->f_res->OffsetToLetter(start,c_st,s_st,l_st,l_start_st,l_end_st);
-    text->f_res->OffsetToLetter(end,c_en,s_en,l_en,l_start_en,l_end_en);
+    int    c_st=-1, s_st=-1, l_st=-1;
+    int    c_en=-1, s_en=-1, l_en=-1;
+    bool   l_start_st=false, l_end_st=false;
+    bool   l_start_en=false, l_end_en=false;
+    text->f_res->OffsetToLetter(start, c_st, s_st, l_st, l_start_st, l_end_st);
+    text->f_res->OffsetToLetter(end, c_en, s_en, l_en, l_start_en, l_end_en);
     if ( l_start_st == false && l_end_st == false ) l_start_st=true;
     if ( l_start_en == false && l_end_en == false ) l_end_en=true;
     if ( l_st < 0 || l_en < 0 || l_st > l_en ) return i_start;
     if ( l_st == l_en && ( l_start_st == l_start_en || l_end_st == l_end_en ) ) return i_start;
-    text->f_res->LetterToOffset(c_st,s_st,l_st,l_start_st,l_end_st,start);
-    text->f_res->LetterToOffset(c_en,s_en,l_en,l_start_en,l_end_en,end);
+    text->f_res->LetterToOffset(c_st, s_st, l_st, l_start_st, l_end_st, start);
+    text->f_res->LetterToOffset(c_en, s_en, l_en, l_start_en, l_end_en, end);
+
+    // Find the last ofc
     one_flow_src* last=NULL;
-    for (one_flow_src* cur=&text->contents;cur;cur=cur->next) last=cur;
-    for (one_flow_src* cur=last;cur;cur=cur->prev) {
-        cur->Delete(start,end);
+    for (one_flow_src* cur=&text->contents; cur; cur=cur->next) {
+        last=cur;
     }
+
+    // list of line tspans that are to be merged
+    GSList *lines_to_merge = NULL;
+
+    for (one_flow_src* cur=last; cur; cur=cur->prev) {
+        if (start <= cur->utf8_st && end >= cur->utf8_en && 
+            SP_IS_TSPAN(cur->me) && SP_TSPAN(cur->me)->role != SP_TSPAN_ROLE_UNSPECIFIED) {
+            // If the delete range fully covers this ofc and it comes from a line tspan, remember to merge it
+            lines_to_merge = g_slist_prepend (lines_to_merge, cur->me);
+        }
+        // only those ofc's that overlap the delete range will be affected:
+        cur->Delete(start, end);
+    }
+
     SP_OBJECT(text)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(text)),SP_OBJECT_WRITE_EXT);
+
+    for (GSList *i = lines_to_merge; i; i = i->next) {
+        SPObject *prev = object_prev_sibling (SP_OBJECT (i->data));
+        if (prev && SP_IS_TSPAN(prev) && SP_TSPAN(prev)->role != SP_TSPAN_ROLE_UNSPECIFIED) {
+            // If the line to be merged has a prev sibling and it's also a line,
+            for (SPObject *child = sp_object_first_child(SP_OBJECT(i->data)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+                // copy all children to it
+                SPRepr *copy = sp_repr_duplicate (SP_OBJECT_REPR (child));
+                sp_repr_append_child(SP_OBJECT_REPR(prev), copy);
+                sp_repr_unref (copy);
+            }
+            // delete line to be merged
+            SP_OBJECT(i->data)->deleteObject();
+        }
+    }
+    g_slist_free (lines_to_merge);
+
     SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     return i_start;
 }
