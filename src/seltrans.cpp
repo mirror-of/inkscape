@@ -113,8 +113,6 @@ void sp_sel_trans_init(SPSelTrans *seltrans, SPDesktop *desktop)
 
 	seltrans->selection = SP_DT_SELECTION(desktop);
 
-	g_assert(seltrans->selection != NULL);
-
 	seltrans->norm = sp_canvas_item_new (SP_DT_CONTROLS (desktop),
 		SP_TYPE_CTRL,
 		"anchor", GTK_ANCHOR_CENTER,
