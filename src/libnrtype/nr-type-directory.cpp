@@ -132,9 +132,9 @@ nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 	if (!bestfdef) return NULL;
 
 	// Fixme: modal box?
-	if (fbest != 0 && !g_slist_find (family_warnings, (gpointer) family)) {
+	if (fbest != 0 && !g_slist_find_custom (family_warnings, (gpointer) family, compare_warnings)) {
 		g_warning ("font-family: No exact match for '%s', using '%s'", family, bestfdef->name);
-		family_warnings = g_slist_append (family_warnings, (gpointer) family);
+		family_warnings = g_slist_append (family_warnings, (gpointer) g_strdup (family));
 	}
 
 	double best = NR_HUGE;
@@ -154,9 +154,9 @@ nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 	}
 
 	// Fixme: modal box?
-	if (best != 0 && !g_slist_find (style_warnings, (gpointer) besttdef->name)) {
+	if (best != 0 && !g_slist_find_custom (style_warnings, (gpointer) besttdef->name, compare_warnings)) {
 		g_warning ("In family '%s', required style not found, using '%s'", bestfdef->name, besttdef->name);
-		style_warnings = g_slist_append (style_warnings, (gpointer) besttdef->name);
+		style_warnings = g_slist_append (style_warnings, (gpointer) g_strdup (besttdef->name));
 	}
 
 	if (!besttdef->typeface) {
