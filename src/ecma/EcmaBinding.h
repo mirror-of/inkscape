@@ -23,6 +23,8 @@ namespace Inkscape {
 
 
 //Forward declarations
+class  EcmaObjectt;
+struct EcmaObjectPrivate;  //hide impl specifics
 class  EcmaScript;
 struct EcmaScriptPrivate;  //hide impl specifics
 class  EcmaBinding;
@@ -48,6 +50,81 @@ class EcmaException : public std::exception
 
 
 /**
+ * This is a one-for-one mapping of every node of the SVG tree
+ */
+class EcmaObject
+{
+
+
+
+public:
+    /**
+     * Constructor.
+     *
+     * @param owner.  The EcmaBinding container that owns this object
+     * @param parent  The node above this one in the tree
+     * chunk.
+     *
+     */
+    EcmaObject(EcmaBinding *owner, EcmaObject *parent) throw (EcmaException);
+
+    /**
+     * Destructor.  Should perform any cleanup, esp the JSContext
+     * library.
+     */
+    virtual ~EcmaObject();
+
+    /**
+     * Add a child object to this object
+     * @param newNode node to add to this object
+     */
+    void EcmaObject::addChild(EcmaObject *newNode);
+
+
+    /**
+     * Implementation-specific data
+     */
+    struct EcmaObjectPrivate *pdata;
+
+
+private:
+    /**
+     * My owner
+     */
+    EcmaBinding *owner;
+    
+    /**
+     * The node above me
+     */
+    EcmaObject  *parent;
+    
+    /**
+     * Any nodes that I own
+     */
+    EcmaObject  *children;
+    
+    /**
+     * My next sibling node under the same parent
+     */
+    EcmaObject  *next;
+
+
+
+
+};//class EcmaObject
+
+
+
+
+
+
+
+
+
+
+
+
+/**
  * This is one <script> node or onClick="script" chunk from the SVG tree
  */
 class EcmaScript
@@ -56,6 +133,8 @@ class EcmaScript
 
 
 public:
+
+
     /**
      * Constructor.
      *
@@ -78,13 +157,19 @@ public:
 
 
 private:
-    // My owner
+
+    /**
+     * The EcmaBinding engine that owns me
+     */
     EcmaBinding *parent;
 
 
 
 
 };//class EcmaScript
+
+
+
 
 
 
@@ -102,6 +187,7 @@ class EcmaBinding
 
 
 public:
+
     /**
      * Constructor.
      *
@@ -116,18 +202,44 @@ public:
      * library.
      */
     virtual ~EcmaBinding();
-
+    
+    /**
+     * Get ECMAScript nodes from document and compile scripts
+     * This is before running anything.
+     *
+     * @param document.  The SVG document to process.
+     *
+     */
+    bool processDocument(SPDocument *document) throw (EcmaException);
 
     /**
      * Implementation-specific data
      */
     struct EcmaBindingPrivate *pdata;
+    
+    /**
+     * Test binding from the application
+     *
+     */
+    static int testMe();
 
 
 private:
 
-    // My owner
+    /**
+     * The Inkscape application that owns this EcmaBinding engine
+     */
     Inkscape::Application *parent;
+
+    /**
+     * The document to which we will bind
+     */
+    SPDocument            *document;
+
+    /**
+     * The REPR tree root to which we will bind
+     */
+    SPRepr                *root;
 
 
 

@@ -10,9 +10,14 @@ CXX=g++
 
 CFLAGS = -O -g -Wall -DXP_UNIX 
 
-INC = -I. -I.. -I../extension/script/js `pkg-config --cflags gtk+-2.0`
+INC = -I. -I.. -I../extension/script/js \
+`pkg-config --cflags gtk+-2.0` \
+`pkg-config --cflags sigc++-1.2`
 
-LIBS = -L../extension/script/js -ljs `pkg-config --libs gtk+-2.0`
+LIBS = ../libinkpost.a ../libinkpre.a \
+-L../extension/script/js -ljs \
+`pkg-config --libs gtk+-2.0` \
+`pkg-config --libs sigc++-1.2`
 
 
 OBJ = EcmaBinding.o
