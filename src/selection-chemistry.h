@@ -47,6 +47,7 @@ void sp_selection_move_relative (SPSelection *selection, double dx, double dy);
 
 void sp_selection_rotate_90 (void);
 void sp_selection_rotate (SPSelection *selection, gdouble angle);
+void sp_selection_rotate_screen (SPSelection *selection, gdouble angle);
 void sp_selection_move (gdouble dx, gdouble dy);
 void sp_selection_move_screen (gdouble dx, gdouble dy);
 void sp_selection_item_next (void);

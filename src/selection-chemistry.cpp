@@ -879,6 +879,33 @@ sp_selection_rotate (SPSelection *selection, gdouble angle)
 	sp_document_done (SP_DT_DOCUMENT (selection->desktop));
 }
 
+/**
+\param  angle   the angle in "angular pixels", i.e. how many visible pixels must move the outermost point of the rotated object
+*/
+void
+sp_selection_rotate_screen (SPSelection *selection,  gdouble angle)
+{
+	gdouble zoom, zmove, zangle, r;
+	NRRect bbox;
+	NRPoint center;
+
+	sp_selection_bbox (selection, &bbox);
+
+	center.x = 0.5 * (bbox.x0 + bbox.x1);
+	center.y = 0.5 * (bbox.y0 + bbox.y1);
+
+	zoom = SP_DESKTOP_ZOOM (selection->desktop);
+	zmove = angle / zoom;
+	r = hypot(bbox.x1 - center.x, bbox.y1 - center.y);
+
+	zangle = 180 * atan2 (zmove, r) / M_PI;
+
+	sp_selection_rotate_relative (selection, &center, zangle);
+
+	sp_selection_changed (selection);
+	sp_document_done (SP_DT_DOCUMENT (selection->desktop));
+}
+
 void
 sp_selection_move (gdouble dx, gdouble dy)
 {
