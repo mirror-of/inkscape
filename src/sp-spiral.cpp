@@ -66,7 +66,7 @@ sp_spiral_get_type (void)
 			(GInstanceInitFunc) sp_spiral_init,
 			NULL,	/* value_table */
 		};
-		spiral_type = g_type_register_static (SP_TYPE_SHAPE, "SPSPiral", &spiral_info, (GTypeFlags)0);
+		spiral_type = g_type_register_static (SP_TYPE_SHAPE, "SPSpiral", &spiral_info, (GTypeFlags)0);
 	}
 	return spiral_type;
 }
