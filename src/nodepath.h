@@ -48,12 +48,17 @@ typedef struct _SPPathNode SPPathNode;
 /**
  *
  */
-typedef struct {
+class Radial{
+ public:
 /**  Radius */
 	double r;
 /**  Amplitude */
 	double a;
-} radial;
+	Radial() {}
+	Radial(NR::Point const &p); // Convert a point to radial coordinates
+	Radial(Radial &p) : r(p.r),a(p.a) {}
+	operator NR::Point() const;
+};
 
 
 /**
@@ -138,7 +143,7 @@ typedef struct {
 /**  What kind of rendering? */
 	SPCanvasItem * line;
 /**  */
-	radial origin;
+	Radial origin;
 } SPPathNodeSide;
 
 

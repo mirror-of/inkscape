@@ -1914,22 +1914,22 @@ static void node_ungrabbed(SPKnot *knot, guint state, gpointer data)
 	update_repr (n->subpath->nodepath);
 }
 
-static void xy_to_radial(NR::Point p, radial *r)
+Radial::Radial(NR::Point const &p)
 {
-	r->r = NR::L2(p);
-	if (r->r > 0) {
-		r->a = NR::atan2 (p);
+	r = NR::L2(p);
+	if (r > 0) {
+		a = NR::atan2 (p);
 	} else {
-		r->a = HUGE_VAL; //undefined
+		a = HUGE_VAL; //undefined
 	}
 }
 
-static NR::Point radial_to_xy (radial const *r, NR::Point const *origin)
+Radial::operator NR::Point() const
 {
-	if (r->a == HUGE_VAL) {
-		return *origin;
+	if (a == HUGE_VAL) {
+		return NR::Point(0,0);
 	} else {
-		return *origin + (r->r)*NR::Point(cos(r->a), sin(r->a));
+		return r*NR::Point(cos(a), sin(a));
 	}
 }
 
@@ -2077,9 +2077,9 @@ static void node_ctrl_grabbed(SPKnot *knot, guint state, gpointer data)
 
 	// remember the origin of the control
 	if (n->p.knot == knot) {
-		xy_to_radial (n->p.pos - n->pos, &(n->p.origin));
+		n->p.origin = Radial(n->p.pos - n->pos);
 	} else if (n->n.knot == knot) {
-		xy_to_radial (n->n.pos - n->pos, &(n->n.origin));
+		n->n.origin = Radial(n->n.pos - n->pos);
 	} else {
 		g_assert_not_reached ();
 	}
@@ -2127,27 +2127,20 @@ static gboolean node_ctrl_request(SPKnot *knot, NR::Point *p, guint state, gpoin
 	ArtPathcode othercode = sp_node_path_code_from_side (n, opposite);
 
 	if (opposite->other && (n->type != SP_PATHNODE_CUSP) && (othercode == ART_LINETO)) {
-		gdouble dx, dy, ndx, ndy, len, linelen, scal;
+		gdouble len, linelen, scal;
 		/* We are smooth node adjacent with line */
-		dx = (*p)[NR::X] - n->pos[NR::X];
-		dy = (*p)[NR::Y] - n->pos[NR::Y];
-		len = hypot (dx, dy);
+		NR::Point delta = *p - n->pos;
+		len = NR::L2(delta);
 		SPPathNode *othernode = opposite->other;
-		ndx = n->pos[NR::X] - othernode->pos[NR::X];
-		ndy = n->pos[NR::Y] - othernode->pos[NR::Y];
-		linelen = hypot (ndx, ndy);
+		NR::Point ndelta = n->pos - othernode->pos;
+		linelen = NR::L2(ndelta);
 		if ((len > 1e-18) && (linelen > 1e-18)) {
-			scal = (dx * ndx + dy * ndy) / linelen;
-			(*p)[NR::X] = n->pos[NR::X] + ndx / linelen * scal;
-			(*p)[NR::Y] = n->pos[NR::Y] + ndy / linelen * scal;
+			scal = dot(delta, ndelta) / linelen;
+			(*p) = n->pos + (scal / linelen) * ndelta;
 		}
-		NR::Point pp = *p;
-		sp_desktop_vector_snap (n->subpath->nodepath->desktop, pp, NR::Point(ndx, ndy));
-		*p = pp;
+		sp_desktop_vector_snap (n->subpath->nodepath->desktop, *p, ndelta);
 	} else {
-		NR::Point pp = *p;
-		sp_desktop_free_snap (n->subpath->nodepath->desktop, pp);
-		*p = pp;
+		sp_desktop_free_snap (n->subpath->nodepath->desktop, *p);
 	}
 
 	sp_node_adjust_knot (n, -which);
@@ -2174,10 +2167,9 @@ static void node_ctrl_moved (SPKnot *knot, NR::Point *p, guint state, gpointer d
 	}
 
 	// calculate radial coordinates of the grabbed control, other control, and the mouse point
-	radial rme, rother, rnew;
-	xy_to_radial (me->pos - n->pos, &rme);
-	xy_to_radial (other->pos - n->pos, &rother);
-	xy_to_radial (*p - n->pos, &rnew);
+	Radial rme(me->pos - n->pos);
+	Radial rother(other->pos - n->pos);
+	Radial rnew(*p - n->pos);
 
 	if (state & GDK_CONTROL_MASK && rnew.a != HUGE_VAL) { 
 		double a_snapped, a_ortho;
@@ -2205,12 +2197,12 @@ static void node_ctrl_moved (SPKnot *knot, NR::Point *p, guint state, gpointer d
 	if ((state & GDK_SHIFT_MASK) && rme.a != HUGE_VAL && rnew.a != HUGE_VAL) { 
 		// rotate the other handle correspondingly, if both old and new angles exist
 		rother.a += rnew.a - rme.a;
-		other->pos = radial_to_xy (&rother, &(n->pos));
+		other->pos = NR::Point(rother) + n->pos;
 		sp_ctrlline_set_coords (SP_CTRLLINE (other->line), n->pos, other->pos);
 		sp_knot_set_position (other->knot, &other->pos, 0);
 	} 
 
-	me->pos = radial_to_xy (&rnew, &(n->pos));
+	me->pos = NR::Point(rnew) + n->pos;
 	sp_ctrlline_set_coords (SP_CTRLLINE (me->line), n->pos, me->pos);
 
 	// this is what sp_knot_set_position does, but without emitting the signal:
@@ -2247,30 +2239,33 @@ static gboolean node_ctrl_event(SPKnot *knot, GdkEvent *event, SPPathNode *n)
 }
 
 void
-node_rotate_internal (SPPathNode *n, gdouble angle, radial *rme, radial *rother, gboolean both)
+node_rotate_internal (SPPathNode *n, gdouble angle, Radial &rme, Radial &rother, gboolean both)
 {
-	rme->a += angle; 
+	rme.a += angle; 
 	if (both || n->type == SP_PATHNODE_SMOOTH || n->type == SP_PATHNODE_SYMM) 
-		rother->a += angle;
+		rother.a += angle;
 }
 
 void
-node_rotate_internal_screen (SPPathNode *n, gdouble angle, radial *rme, radial *rother, gboolean both)
+node_rotate_internal_screen (SPPathNode *n, gdouble const ang, Radial &rme, Radial &rother, gboolean both)
 {
 	gdouble r;
 
-	angle = angle / SP_DESKTOP_ZOOM (n->subpath->nodepath->desktop);
+	gdouble const norm_angle = ang / SP_DESKTOP_ZOOM (n->subpath->nodepath->desktop);
 
 	if (both || n->type == SP_PATHNODE_SMOOTH || n->type == SP_PATHNODE_SYMM) 
-		r = MAX (rme->r, rother->r);
+		r = MAX (rme.r, rother.r);
 	else 
-		r = rme->r;
+		r = rme.r;
 
-	angle = atan2 (angle, r);
+	gdouble const weird_angle = atan2 (norm_angle, r);
+/* If anyone can explain this to me...  It seems to be assuming
+ * norm_angle is quite small and a reasonable approximation to the
+ * normal to r.  Or something.*/
 
-	rme->a += angle; 
+	rme.a += weird_angle; 
 	if (both || n->type == SP_PATHNODE_SMOOTH || n->type == SP_PATHNODE_SYMM)  
-		rother->a += angle;
+		rother.a += weird_angle;
 }
 
 void
@@ -2278,7 +2273,6 @@ node_rotate_common (SPPathNode *n, gdouble angle, int which, gboolean screen)
 {
 	SPPathNodeSide *me, *other;
 	gboolean both = FALSE;
-	radial rme, rother;
 
 	if (which > 0) {
 		me = &(n->n);
@@ -2292,19 +2286,19 @@ node_rotate_common (SPPathNode *n, gdouble angle, int which, gboolean screen)
 		both = TRUE;
 	}
 
-	xy_to_radial (me->pos - n->pos, &rme);
-	xy_to_radial (other->pos - n->pos, &rother);
+	Radial rme(me->pos - n->pos);
+	Radial rother(other->pos - n->pos);
 
 	if (screen) {
-		node_rotate_internal_screen (n, angle, &rme, &rother, both);
+		node_rotate_internal_screen (n, angle, rme, rother, both);
 	} else {
-		node_rotate_internal (n, angle, &rme, &rother, both);
+		node_rotate_internal (n, angle, rme, rother, both);
 	}
 
-	me->pos = radial_to_xy (&rme, &(n->pos));
+	me->pos += NR::Point(rme);
 
 	if (both || n->type == SP_PATHNODE_SMOOTH || n->type == SP_PATHNODE_SYMM) {
-		other->pos = radial_to_xy (&rother, &(n->pos));
+		other->pos = NR::Point(rother) + n->pos;
 	}
 
 	sp_node_ensure_ctrls (n);
@@ -2354,9 +2348,8 @@ void node_scale(SPPathNode *n, gdouble grow, int which)
 		both = true;
 	}
 
-	radial rme, rother;
-	xy_to_radial (me->pos - n->pos, &rme);
-	xy_to_radial (other->pos - n->pos, &rother);
+	Radial rme(me->pos - n->pos);
+	Radial rother(other->pos - n->pos);
 
 	rme.r += grow; 
 	if (rme.r < 0) rme.r = 1e-6; // not 0, so that direction is not lost
@@ -2373,10 +2366,10 @@ void node_scale(SPPathNode *n, gdouble grow, int which)
 		}
 	}
 
-	me->pos = radial_to_xy (&rme, &(n->pos));
+	me->pos = NR::Point(rme) + n->pos;
 
 	if (both || n->type == SP_PATHNODE_SYMM) {
-		other->pos = radial_to_xy (&rother, &(n->pos));
+		other->pos = NR::Point(rother) + n->pos;
 	}
 
 	sp_node_ensure_ctrls (n);
