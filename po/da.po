@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-26 15:27+0100\n"
+"POT-Creation-Date: 2005-01-29 17:30+0100\n"
 "PO-Revision-Date: 2002-01-15 13:30+0100\n"
 "Last-Translator: Keld Simonsen <keld@dkuug.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -147,7 +147,7 @@ msgstr ""
 
 #. Page page
 #: src/desktop.cpp:2064 src/dialogs/align.cpp:556 src/dialogs/align.cpp:1098
-#: src/dialogs/desktop-properties.cpp:1027 src/dialogs/export.cpp:130
+#: src/dialogs/desktop-properties.cpp:1025 src/dialogs/export.cpp:130
 msgid "Page"
 msgstr "Side"
 
@@ -325,279 +325,283 @@ msgstr "Symmetrisk"
 msgid "Select one of the 17 symmetry groups for the tiling"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:981
+#. TRANSLATORS: "translation" means "shift" here
+#: src/dialogs/clonetiler.cpp:982
 msgid "<b>P1</b>: simple translation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:982
+#: src/dialogs/clonetiler.cpp:983
 msgid "<b>P2</b>: 180&#176; rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:983
+#: src/dialogs/clonetiler.cpp:984
 msgid "<b>PM</b>: reflection"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:984
+#. TRANSLATORS: "glide reflection" is a reflection and a translation combined
+#. For more info, see http://mathforum.org/sum95/suzanne/symsusan.html
+#: src/dialogs/clonetiler.cpp:987
 msgid "<b>PG</b>: glide reflection"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:985
+#: src/dialogs/clonetiler.cpp:988
 msgid "<b>CM</b>: reflection + glide reflection"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:986
+#: src/dialogs/clonetiler.cpp:989
 msgid "<b>PMM</b>: reflection + reflection"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:987
+#: src/dialogs/clonetiler.cpp:990
 msgid "<b>PMG</b>: reflection + 180&#176; rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:988
+#: src/dialogs/clonetiler.cpp:991
 msgid "<b>PGG</b>: glide reflection + 180&#176; rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:989
+#: src/dialogs/clonetiler.cpp:992
 msgid "<b>CMM</b>: reflection + reflection + 180&#176; rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:990
+#: src/dialogs/clonetiler.cpp:993
 msgid "<b>P4</b>: 90&#176; rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:991
+#: src/dialogs/clonetiler.cpp:994
 msgid "<b>P4M</b>: 90&#176; rotation + 45&#176; reflection"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:992
+#: src/dialogs/clonetiler.cpp:995
 msgid "<b>P4G</b>: 90&#176; rotation + 90&#176; reflection"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:993
+#: src/dialogs/clonetiler.cpp:996
 msgid "<b>P3</b>: 120&#176; rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:994
+#: src/dialogs/clonetiler.cpp:997
 msgid "<b>P31M</b>: reflection + 120&#176; rotation, dense"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:995
+#: src/dialogs/clonetiler.cpp:998
 msgid "<b>P3M1</b>: reflection + 120&#176; rotation, sparse"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:996
+#: src/dialogs/clonetiler.cpp:999
 msgid "<b>P6</b>: 60&#176; rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:997
+#: src/dialogs/clonetiler.cpp:1000
 msgid "<b>P6M</b>: reflection + 60&#176; rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1022
+#: src/dialogs/clonetiler.cpp:1025
 msgid "S_hift"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1029 src/dialogs/clonetiler.cpp:1094
-#: src/dialogs/clonetiler.cpp:1156 src/dialogs/clonetiler.cpp:1207
+#: src/dialogs/clonetiler.cpp:1032 src/dialogs/clonetiler.cpp:1100
+#: src/dialogs/clonetiler.cpp:1163 src/dialogs/clonetiler.cpp:1215
 msgid "Per row:"
 msgstr ""
 
-#. TRANSLATORS: "shift" means: in each row of the pattern, the tiles will be shifted (offset) by this amount
-#: src/dialogs/clonetiler.cpp:1038 src/dialogs/clonetiler.cpp:1059
-#: src/dialogs/clonetiler.cpp:1102 src/dialogs/clonetiler.cpp:1122
+#: src/dialogs/clonetiler.cpp:1040 src/dialogs/clonetiler.cpp:1064
+#: src/dialogs/clonetiler.cpp:1108 src/dialogs/clonetiler.cpp:1128
 #: src/dialogs/object-attributes.cpp:86 src/dialogs/object-attributes.cpp:94
 msgid "X:"
 msgstr "X:"
 
-#: src/dialogs/clonetiler.cpp:1038
+#. TRANSLATORS: "shift" means: in each row of the pattern, the tiles will be shifted (offset) by this amount
+#: src/dialogs/clonetiler.cpp:1042
 #, c-format
 msgid "Horizontal shift per each row (in % of tile width)"
 msgstr ""
 
-#. TRANSLATORS: "shift" means: in each row of the pattern, the tiles will be shifted (offset) by this amount
-#: src/dialogs/clonetiler.cpp:1044 src/dialogs/clonetiler.cpp:1065
-#: src/dialogs/clonetiler.cpp:1107 src/dialogs/clonetiler.cpp:1128
+#: src/dialogs/clonetiler.cpp:1047 src/dialogs/clonetiler.cpp:1070
+#: src/dialogs/clonetiler.cpp:1113 src/dialogs/clonetiler.cpp:1134
 #: src/dialogs/object-attributes.cpp:87 src/dialogs/object-attributes.cpp:95
 msgid "Y:"
 msgstr "Y:"
 
-#: src/dialogs/clonetiler.cpp:1044
+#. TRANSLATORS: "shift" means: in each row of the pattern, the tiles will be shifted (offset) by this amount
+#: src/dialogs/clonetiler.cpp:1049
 #, c-format
 msgid "Vertical shift per each row (in % of tile height)"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1050 src/dialogs/clonetiler.cpp:1113
-#: src/dialogs/clonetiler.cpp:1170 src/dialogs/clonetiler.cpp:1221
+#: src/dialogs/clonetiler.cpp:1055 src/dialogs/clonetiler.cpp:1119
+#: src/dialogs/clonetiler.cpp:1177 src/dialogs/clonetiler.cpp:1229
 msgid "Per column:"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1059
+#: src/dialogs/clonetiler.cpp:1064
 #, c-format
 msgid "Horizontal shift per each column (in % of tile width)"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1065
+#: src/dialogs/clonetiler.cpp:1070
 #, c-format
 msgid "Vertical shift per each column (in % of tile height)"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1072 src/dialogs/clonetiler.cpp:1135
-#: src/dialogs/clonetiler.cpp:1186 src/dialogs/clonetiler.cpp:1237
+#. TRANSLATORS: "Alternate" is a verb here
+#: src/dialogs/clonetiler.cpp:1078 src/dialogs/clonetiler.cpp:1142
+#: src/dialogs/clonetiler.cpp:1194 src/dialogs/clonetiler.cpp:1246
 #, fuzzy
 msgid "Alternate sign"
 msgstr "Mætning:"
 
-#: src/dialogs/clonetiler.cpp:1072
+#: src/dialogs/clonetiler.cpp:1078
 msgid "Alternate the sign of the shifts for each row or column"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1078 src/dialogs/clonetiler.cpp:1141
-#: src/dialogs/clonetiler.cpp:1192 src/dialogs/clonetiler.cpp:1243
+#: src/dialogs/clonetiler.cpp:1084 src/dialogs/clonetiler.cpp:1148
+#: src/dialogs/clonetiler.cpp:1200 src/dialogs/clonetiler.cpp:1252
 msgid "Randomize:"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1078
+#: src/dialogs/clonetiler.cpp:1084
 msgid "How much to randomize tile positions"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1087
+#: src/dialogs/clonetiler.cpp:1093
 #, fuzzy
 msgid "Sc_ale"
 msgstr "Skalér"
 
-#: src/dialogs/clonetiler.cpp:1102
+#: src/dialogs/clonetiler.cpp:1108
 #, fuzzy
 msgid "Horizontal scale per each row"
 msgstr "vandret skalaværdi"
 
-#: src/dialogs/clonetiler.cpp:1107
+#: src/dialogs/clonetiler.cpp:1113
 #, fuzzy
 msgid "Vertical scale per each row"
 msgstr "lodret skalaværdi"
 
-#: src/dialogs/clonetiler.cpp:1122
+#: src/dialogs/clonetiler.cpp:1128
 #, fuzzy
 msgid "Horizontal scale per each column"
 msgstr "vandret skalaværdi"
 
-#: src/dialogs/clonetiler.cpp:1128
+#: src/dialogs/clonetiler.cpp:1134
 #, fuzzy
 msgid "Vertical scale per each column"
 msgstr "lodret skalaværdi"
 
-#: src/dialogs/clonetiler.cpp:1135
+#: src/dialogs/clonetiler.cpp:1142
 msgid "Alternate the sign of the scale increment for each row or column"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1141
+#: src/dialogs/clonetiler.cpp:1148
 msgid "How much to randomize tile sizes"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1149
+#: src/dialogs/clonetiler.cpp:1156
 #, fuzzy
 msgid "_Rotation"
 msgstr "Omdrejning:"
 
-#: src/dialogs/clonetiler.cpp:1164 src/dialogs/clonetiler.cpp:1179
+#: src/dialogs/clonetiler.cpp:1171 src/dialogs/clonetiler.cpp:1186
 #: src/toolbox.cpp:1833
 #, fuzzy
 msgid "Angle:"
 msgstr "vinkel"
 
-#: src/dialogs/clonetiler.cpp:1164
+#: src/dialogs/clonetiler.cpp:1171
 msgid "Rotate tiles by this angle for each row"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1179
+#: src/dialogs/clonetiler.cpp:1186
 msgid "Rotate tiles by this angle for each column"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1186
+#: src/dialogs/clonetiler.cpp:1194
 msgid "Alternate the rotation direction for each row or column"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1192
+#: src/dialogs/clonetiler.cpp:1200
 msgid "How much to randomize tile rotation"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1200
+#: src/dialogs/clonetiler.cpp:1208
 #, fuzzy
 msgid "_Opacity"
 msgstr "Uigennemskuelighed:"
 
-#: src/dialogs/clonetiler.cpp:1215 src/dialogs/clonetiler.cpp:1230
+#: src/dialogs/clonetiler.cpp:1223 src/dialogs/clonetiler.cpp:1238
 msgid "Dissolve:"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1215
+#: src/dialogs/clonetiler.cpp:1223
 msgid "Decrease tile opacity by this percentage for each row"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1230
+#: src/dialogs/clonetiler.cpp:1238
 msgid "Decrease tile opacity by this percentage for each column"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1237
+#: src/dialogs/clonetiler.cpp:1246
 msgid "Alternate the sign of opacity changes for each row or column"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1243
+#: src/dialogs/clonetiler.cpp:1252
 msgid "How much to randomize tile opacity"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1260
+#: src/dialogs/clonetiler.cpp:1269
 #, fuzzy
 msgid "<b>Rows</b>:"
 msgstr "Elipse"
 
-#: src/dialogs/clonetiler.cpp:1270
+#: src/dialogs/clonetiler.cpp:1279
 msgid "How many rows in the tiling"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1286
+#: src/dialogs/clonetiler.cpp:1295
 #, fuzzy
 msgid "<b>Columns</b>:"
 msgstr "Ændr"
 
-#: src/dialogs/clonetiler.cpp:1296
+#: src/dialogs/clonetiler.cpp:1305
 msgid "How many columns in the tiling"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1312
+#: src/dialogs/clonetiler.cpp:1321
 #, fuzzy
 msgid "Use saved size and position of the tile"
 msgstr "Position"
 
-#: src/dialogs/clonetiler.cpp:1315
+#: src/dialogs/clonetiler.cpp:1324
 msgid ""
 "Pretend that the size and position of the tile are the same as the last time "
 "you tiled it (if any), instead of using the current size"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1330
+#: src/dialogs/clonetiler.cpp:1339
 #, fuzzy
 msgid " <b>_Create</b> "
 msgstr "Ændr"
 
-#: src/dialogs/clonetiler.cpp:1332
+#: src/dialogs/clonetiler.cpp:1341
 msgid "Create and tile the clones of the selection"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1338
+#: src/dialogs/clonetiler.cpp:1347
 #, fuzzy
 msgid " Re_move "
 msgstr "Fjern lænke"
 
-#: src/dialogs/clonetiler.cpp:1339
+#: src/dialogs/clonetiler.cpp:1348
 msgid "Remove existing tiled clones of the selected object (siblings only)"
 msgstr ""
 
-#: src/dialogs/clonetiler.cpp:1345
+#: src/dialogs/clonetiler.cpp:1354
 #, fuzzy
 msgid " R_eset "
 msgstr "Fjern lænke"
 
-#: src/dialogs/clonetiler.cpp:1346
+#: src/dialogs/clonetiler.cpp:1355
 msgid "Reset all shifts, scales, rotates, and opacities to zero"
 msgstr ""
 
@@ -627,206 +631,207 @@ msgid "Release log messages"
 msgstr ""
 
 #. Notebook tab
-#: src/dialogs/desktop-properties.cpp:908
+#: src/dialogs/desktop-properties.cpp:904
 msgid "Grid"
 msgstr "Gitter"
 
 #. Checkbuttons
-#: src/dialogs/desktop-properties.cpp:916
+#. FIXME: gray out snapping when grid is off
+#: src/dialogs/desktop-properties.cpp:913
 msgid "Show grid"
 msgstr "Vis gitter"
 
-#: src/dialogs/desktop-properties.cpp:917
+#: src/dialogs/desktop-properties.cpp:914
 #, fuzzy
 msgid "Snap bounding boxes to grid"
 msgstr "Fastsæt til gitter"
 
-#: src/dialogs/desktop-properties.cpp:918
+#: src/dialogs/desktop-properties.cpp:915
 #, fuzzy
 msgid "Snap points to grid"
 msgstr "Fastsæt til gitter"
 
-#: src/dialogs/desktop-properties.cpp:936
+#: src/dialogs/desktop-properties.cpp:933
 msgid "Grid units:"
 msgstr "Enheder for gitter:"
 
-#: src/dialogs/desktop-properties.cpp:938
+#: src/dialogs/desktop-properties.cpp:935
 msgid "Origin X:"
 msgstr "Udgangspunkt X:"
 
-#: src/dialogs/desktop-properties.cpp:941
+#: src/dialogs/desktop-properties.cpp:938
 msgid "Origin Y:"
 msgstr "Udgangspunkt Y:"
 
-#: src/dialogs/desktop-properties.cpp:944
+#: src/dialogs/desktop-properties.cpp:941
 msgid "Spacing X:"
 msgstr "Afstand X:"
 
-#: src/dialogs/desktop-properties.cpp:947
+#: src/dialogs/desktop-properties.cpp:944
 msgid "Spacing Y:"
 msgstr "Afstand Y:"
 
-#: src/dialogs/desktop-properties.cpp:951
-#: src/dialogs/desktop-properties.cpp:1011
+#: src/dialogs/desktop-properties.cpp:948
+#: src/dialogs/desktop-properties.cpp:1009
 msgid "Snap units:"
 msgstr "Fastsætnings enheder:"
 
-#: src/dialogs/desktop-properties.cpp:954
-#: src/dialogs/desktop-properties.cpp:1014
+#: src/dialogs/desktop-properties.cpp:951
+#: src/dialogs/desktop-properties.cpp:1012
 msgid "Snap distance:"
 msgstr "Fastgørelsesafstand"
 
-#: src/dialogs/desktop-properties.cpp:957
+#: src/dialogs/desktop-properties.cpp:954
 #, fuzzy
 msgid "Minor grid line color:"
 msgstr "Farver for hjælpelinier"
 
-#: src/dialogs/desktop-properties.cpp:958
+#: src/dialogs/desktop-properties.cpp:955
 msgid "Grid color"
 msgstr "Hjælpelinjefarve"
 
-#: src/dialogs/desktop-properties.cpp:960
+#: src/dialogs/desktop-properties.cpp:957
 #, fuzzy
 msgid "Major grid line color:"
 msgstr "Farver for hjælpelinier"
 
-#: src/dialogs/desktop-properties.cpp:961
+#: src/dialogs/desktop-properties.cpp:958
 #, fuzzy
 msgid "Grid emphasis color"
 msgstr "Hjælpelinjefarve"
 
-#: src/dialogs/desktop-properties.cpp:964
+#: src/dialogs/desktop-properties.cpp:961
 #, fuzzy
 msgid "Major grid line spacing:"
 msgstr "Afstand X:"
 
 #. TRANSLATORS: This belongs to the "Major grid line spacing:" string,
 #. see grid settings in the "Document Preferences" dialog
-#: src/dialogs/desktop-properties.cpp:976
+#: src/dialogs/desktop-properties.cpp:973
 #, fuzzy
 msgid "lines"
 msgstr "Luk vindue"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:990
+#: src/dialogs/desktop-properties.cpp:987
 msgid "Guides"
 msgstr "Hjælpelinjer"
 
-#: src/dialogs/desktop-properties.cpp:998
+#: src/dialogs/desktop-properties.cpp:996
 msgid "Show guides"
 msgstr "Vis hjælpelinier"
 
-#: src/dialogs/desktop-properties.cpp:999
+#: src/dialogs/desktop-properties.cpp:997
 #, fuzzy
 msgid "Snap bounding boxes to guides"
 msgstr "Fastsæt til hjælpelinier"
 
-#: src/dialogs/desktop-properties.cpp:1000
+#: src/dialogs/desktop-properties.cpp:998
 #, fuzzy
 msgid "Snap points to guides"
 msgstr "Fastsæt til gitter"
 
-#: src/dialogs/desktop-properties.cpp:1018
+#: src/dialogs/desktop-properties.cpp:1016
 #, fuzzy
 msgid "Guide color:"
 msgstr "Farve for hjælpelinjer:"
 
-#: src/dialogs/desktop-properties.cpp:1019
+#: src/dialogs/desktop-properties.cpp:1017
 msgid "Guideline color"
 msgstr "Farver for hjælpelinier"
 
-#: src/dialogs/desktop-properties.cpp:1021
+#: src/dialogs/desktop-properties.cpp:1019
 msgid "Highlight color:"
 msgstr "Farve for fremhævning:"
 
-#: src/dialogs/desktop-properties.cpp:1022
+#: src/dialogs/desktop-properties.cpp:1020
 #, fuzzy
 msgid "Highlighted guideline color"
 msgstr "Farve for fremhævede hjælpelinjer"
 
-#: src/dialogs/desktop-properties.cpp:1037
+#: src/dialogs/desktop-properties.cpp:1035
 #, fuzzy
 msgid "Background (also for export):"
 msgstr "Slutfarve"
 
-#: src/dialogs/desktop-properties.cpp:1038
+#: src/dialogs/desktop-properties.cpp:1036
 #, fuzzy
 msgid "Background color"
 msgstr "Slutfarve"
 
-#: src/dialogs/desktop-properties.cpp:1042
+#: src/dialogs/desktop-properties.cpp:1040
 #, fuzzy
 msgid "Show canvas border"
 msgstr "Vis gitter"
 
-#: src/dialogs/desktop-properties.cpp:1046
+#: src/dialogs/desktop-properties.cpp:1044
 #, fuzzy
 msgid "Border on top of drawing"
 msgstr "Zoom til tegning"
 
-#: src/dialogs/desktop-properties.cpp:1049
+#: src/dialogs/desktop-properties.cpp:1047
 #, fuzzy
 msgid "Border color:"
 msgstr "Gitterfarve:"
 
-#: src/dialogs/desktop-properties.cpp:1050
+#: src/dialogs/desktop-properties.cpp:1048
 msgid "Canvas border color"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:1053
+#: src/dialogs/desktop-properties.cpp:1051
 #, fuzzy
 msgid "Default units:"
 msgstr "Slet"
 
-#: src/dialogs/desktop-properties.cpp:1059
+#: src/dialogs/desktop-properties.cpp:1057
 msgid "Units for the tool controls, ruler, and the statusbar"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:1078
+#: src/dialogs/desktop-properties.cpp:1076
 #, fuzzy
 msgid "Canvas size:"
 msgstr "Gem ikke"
 
-#: src/dialogs/desktop-properties.cpp:1102 src/dialogs/export.cpp:130
+#: src/dialogs/desktop-properties.cpp:1100 src/dialogs/export.cpp:130
 msgid "Custom"
 msgstr "Tilpas"
 
-#: src/dialogs/desktop-properties.cpp:1113
+#: src/dialogs/desktop-properties.cpp:1111
 #, fuzzy
 msgid "Canvas orientation:"
 msgstr "Mætning:"
 
-#: src/dialogs/desktop-properties.cpp:1125
+#: src/dialogs/desktop-properties.cpp:1123
 #, fuzzy
 msgid "Landscape"
 msgstr "Sodipodi: %s: %s: %d"
 
-#: src/dialogs/desktop-properties.cpp:1131
+#: src/dialogs/desktop-properties.cpp:1129
 #, fuzzy
 msgid "Portrait"
 msgstr "Punkt"
 
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:1140
+#: src/dialogs/desktop-properties.cpp:1138
 #, fuzzy
 msgid "Custom canvas"
 msgstr "Tilpasset papir"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:1152 src/dialogs/export.cpp:265
+#: src/dialogs/desktop-properties.cpp:1150 src/dialogs/export.cpp:265
 #: src/dialogs/transformation.cpp:515 src/dialogs/transformation.cpp:710
 msgid "Units:"
 msgstr "Enheder:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:1154 src/dialogs/export.cpp:305
+#: src/dialogs/desktop-properties.cpp:1152 src/dialogs/export.cpp:305
 #: src/dialogs/export.cpp:412 src/dialogs/object-attributes.cpp:88
 #: src/dialogs/object-attributes.cpp:96 src/dialogs/stroke-style.cpp:1360
 #: src/toolbox.cpp:1810
 msgid "Width:"
 msgstr "Bredde:"
 
-#: src/dialogs/desktop-properties.cpp:1176 src/dialogs/export.cpp:321
+#: src/dialogs/desktop-properties.cpp:1174 src/dialogs/export.cpp:321
 #: src/dialogs/export.cpp:427 src/dialogs/object-attributes.cpp:89
 #: src/dialogs/object-attributes.cpp:97
 msgid "Height:"
@@ -836,21 +841,21 @@ msgstr "Højde:"
 #.
 #. * Ownership metadata tab
 #.
-#: src/dialogs/desktop-properties.cpp:1202
+#: src/dialogs/desktop-properties.cpp:1200
 msgid "Metadata"
 msgstr ""
 
 #. add license selector pull-down
-#: src/dialogs/desktop-properties.cpp:1221
+#: src/dialogs/desktop-properties.cpp:1219
 #, fuzzy
 msgid "License"
 msgstr "tommer"
 
-#: src/dialogs/desktop-properties.cpp:1251
+#: src/dialogs/desktop-properties.cpp:1249
 msgid "Proprietary"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:1763
+#: src/dialogs/desktop-properties.cpp:1761
 #, fuzzy
 msgid "Close"
 msgstr "Luk vindue"
@@ -2599,54 +2604,56 @@ msgstr ""
 msgid "Same as Color, but convert result to grayscale"
 msgstr ""
 
-#: src/dialogs/tracedialog.cpp:510
+#. TRANSLATORS: "Stack" is a verb here
+#: src/dialogs/tracedialog.cpp:511
 #, fuzzy
 msgid "Stack"
 msgstr "Stjerne"
 
-#: src/dialogs/tracedialog.cpp:513
+#: src/dialogs/tracedialog.cpp:514
 msgid ""
 "Stack scans vertically (no gaps) or tile horizontally (usually with gaps)"
 msgstr ""
 
-#: src/dialogs/tracedialog.cpp:515
+#. TRANSLATORS: "Smooth" is a verb here
+#: src/dialogs/tracedialog.cpp:517
 msgid "Smooth"
 msgstr ""
 
-#: src/dialogs/tracedialog.cpp:518
+#: src/dialogs/tracedialog.cpp:520
 msgid "Apply Gaussian blur to the bitmap before tracing"
 msgstr ""
 
-#: src/dialogs/tracedialog.cpp:522
+#: src/dialogs/tracedialog.cpp:524
 msgid "Multiple Scanning"
 msgstr ""
 
 #. #### Preview ####
-#: src/dialogs/tracedialog.cpp:528 src/dialogs/tracedialog.cpp:538
+#: src/dialogs/tracedialog.cpp:530 src/dialogs/tracedialog.cpp:540
 #, fuzzy
 msgid "Preview"
 msgstr "Nyt smugkig"
 
 #. do not expand
-#: src/dialogs/tracedialog.cpp:532
+#: src/dialogs/tracedialog.cpp:534
 msgid "Preview the result without actual tracing"
 msgstr ""
 
 #. #### swap black and white ####
-#: src/dialogs/tracedialog.cpp:544
+#: src/dialogs/tracedialog.cpp:546
 #, fuzzy
 msgid "Invert"
 msgstr "Nulstil"
 
-#: src/dialogs/tracedialog.cpp:548
+#: src/dialogs/tracedialog.cpp:550
 msgid "Invert black and white regions for single traces"
 msgstr ""
 
-#: src/dialogs/tracedialog.cpp:552
+#: src/dialogs/tracedialog.cpp:554
 msgid "Thanks to Peter Selinger, http://potrace.sourceforge.net"
 msgstr ""
 
-#: src/dialogs/tracedialog.cpp:555
+#: src/dialogs/tracedialog.cpp:557
 #, fuzzy
 msgid "Credits"
 msgstr "Farve-bitmap"
@@ -2654,17 +2661,17 @@ msgstr "Farve-bitmap"
 #. done
 #. TRANSLATORS: Potrace is an application for transforming bitmaps into
 #. vector graphics (http://potrace.sourceforge.net/)
-#: src/dialogs/tracedialog.cpp:563
+#: src/dialogs/tracedialog.cpp:565
 #, fuzzy
 msgid "Potrace"
 msgstr "Punkt"
 
-#: src/dialogs/tracedialog.cpp:576
+#: src/dialogs/tracedialog.cpp:578
 #, fuzzy
 msgid "Abort a trace in progress"
 msgstr "Eksporteret som"
 
-#: src/dialogs/tracedialog.cpp:580
+#: src/dialogs/tracedialog.cpp:582
 msgid "Execute the trace"
 msgstr ""
 
@@ -2884,40 +2891,41 @@ msgstr "Ekspansion:"
 msgid "plugin"
 msgstr ""
 
-#: src/extension/dependency.cpp:36
+#. TRANSLATORS: "path" refers to "filesystem path" here
+#: src/extension/dependency.cpp:37
 #, fuzzy
 msgid "path"
 msgstr "pt"
 
-#: src/extension/dependency.cpp:37
+#: src/extension/dependency.cpp:38
 #, fuzzy
 msgid "extensions"
 msgstr "Ekspansion:"
 
-#: src/extension/dependency.cpp:38
+#: src/extension/dependency.cpp:39
 #, fuzzy
 msgid "absolute"
 msgstr "absolut"
 
-#: src/extension/dependency.cpp:237
+#: src/extension/dependency.cpp:238
 msgid "Dependency::"
 msgstr ""
 
-#: src/extension/dependency.cpp:238
+#: src/extension/dependency.cpp:239
 #, fuzzy
 msgid "  type: "
 msgstr "Stíl for fyld"
 
-#: src/extension/dependency.cpp:239
+#: src/extension/dependency.cpp:240
 #, fuzzy
 msgid "  location: "
 msgstr "Omdrejning:"
 
-#: src/extension/dependency.cpp:240
+#: src/extension/dependency.cpp:241
 msgid "  string: "
 msgstr ""
 
-#: src/extension/dependency.cpp:243
+#: src/extension/dependency.cpp:244
 #, fuzzy
 msgid "  description: "
 msgstr "Position"
@@ -3680,18 +3688,18 @@ msgid ""
 "Available options:"
 msgstr ""
 
-#: src/node-context.cpp:343
+#: src/node-context.cpp:348
 msgid ""
 "<b>Ctrl</b>: toggle node type, snap handle angle, move hor/vert; <b>Ctrl"
 "+Alt</b>: move along handles"
 msgstr ""
 
-#: src/node-context.cpp:344
+#: src/node-context.cpp:349
 msgid ""
 "<b>Shift</b>: toggle node selection, disable snapping, rotate both handles"
 msgstr ""
 
-#: src/node-context.cpp:345
+#: src/node-context.cpp:350
 msgid "<b>Alt</b>: lock handle length; <b>Ctrl+Alt</b>: move along handles"
 msgstr ""
 
@@ -3730,25 +3738,26 @@ msgstr ""
 msgid "cusp"
 msgstr "us"
 
-#: src/nodepath.cpp:2880
+#. TRANSLATORS: "smooth" is an adjective here
+#: src/nodepath.cpp:2881
 msgid "smooth"
 msgstr ""
 
-#: src/nodepath.cpp:2882
+#: src/nodepath.cpp:2883
 #, fuzzy
 msgid "symmetric"
 msgstr "Usymmetrisk"
 
-#: src/nodepath.cpp:2892
+#: src/nodepath.cpp:2893
 msgid "Drag nodes or node handles to edit the path"
 msgstr ""
 
-#: src/nodepath.cpp:2911
+#: src/nodepath.cpp:2912
 msgid ""
 "Select one path object with selector first, then switch back to node tool."
 msgstr ""
 
-#: src/nodepath.cpp:2914
+#: src/nodepath.cpp:2915
 #, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. Click, Shift+click, or drag around "
@@ -3759,14 +3768,14 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/nodepath.cpp:2921
+#: src/nodepath.cpp:2922
 #, fuzzy, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
 msgstr[0] "Udjævn linje ved valgte knuder"
 msgstr[1] "Udjævn linje ved valgte knuder"
 
-#: src/nodepath.cpp:2927
+#: src/nodepath.cpp:2928
 #, fuzzy, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
 msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
