@@ -29,8 +29,7 @@
 #include <libgnomeprint/gnome-print-master.h>
 #include <libgnomeprintui/gnome-print-master-preview.h>
 #endif
-#include <libgnomeprintui/gnome-print-dialog.h>
-//#include <libgnomeprintui/gnome-print-unit-selector.h>
+
 #include "helper/sp-intl.h"
 #include "enums.h"
 #include "document.h"
