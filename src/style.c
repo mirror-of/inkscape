@@ -1169,16 +1169,16 @@ sp_style_write_difference (SPStyle *from, SPStyle *to)
 	g_message("sp_style_write_difference:  Writing markers");
 #endif
 	if (from->marker[SP_MARKER_LOC].value != NULL) {
-	  p += g_snprintf (p, c + BMAX - p, "marker:%s",       from->marker[SP_MARKER_LOC]);
+	  p += g_snprintf (p, c + BMAX - p, "marker:%s",       from->marker[SP_MARKER_LOC].value);
 	}
 	if (from->marker[SP_MARKER_LOC_START].value != NULL) {
-	  p += g_snprintf (p, c + BMAX - p, "marker-start:%s", from->marker[SP_MARKER_LOC_START]);
+	  p += g_snprintf (p, c + BMAX - p, "marker-start:%s", from->marker[SP_MARKER_LOC_START].value);
 	}
 	if (from->marker[SP_MARKER_LOC_MID].value != NULL) {
-	  p += g_snprintf (p, c + BMAX - p, "marker-mid:%s",   from->marker[SP_MARKER_LOC_MID]);
+	  p += g_snprintf (p, c + BMAX - p, "marker-mid:%s",   from->marker[SP_MARKER_LOC_MID].value);
 	}
 	if (from->marker[SP_MARKER_LOC_END].value != NULL) {
-	  p += g_snprintf (p, c + BMAX - p, "marker-end:%s",   from->marker[SP_MARKER_LOC_END]);
+	  p += g_snprintf (p, c + BMAX - p, "marker-end:%s",   from->marker[SP_MARKER_LOC_END].value);
 	}
 
 	/* fixme: */
