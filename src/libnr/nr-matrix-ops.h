@@ -52,25 +52,6 @@ inline Point &Point::operator*=(Matrix const &m)
 
 Matrix operator*(Matrix const &a, Matrix const &b);
 
-inline Matrix operator*(Matrix const &m, rotate const &r)
-{
-    return m * Matrix(r);
-}
-
-inline Matrix operator*(translate const &t, scale const &s)
-{
-    Matrix ret(s);
-    ret[4] = t[X] * s[X];
-    ret[5] = t[Y] * s[Y];
-    assert_close( ret, Matrix(t) * Matrix(s) );
-    return ret;
-}
-
-inline Matrix operator*(scale const &s, translate const &t)
-{
-    return Matrix(s) * t;
-}
-
 inline Matrix operator*(Matrix const &a, NRMatrix const &b)
 {
     return a * NR::Matrix(b);
