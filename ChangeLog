@@ -1,3 +1,64 @@
+2004-04-19  bulia byak <bulia@users.sourceforge.net>
+
+        * shortcuts.cpp selection-chemistry.cpp selection-chemistry.h verbs.cpp verbs.h
+        interface.cpp: Clone command (Edit menu, Shift+Ctrl+N)
+
+        * sp-use.cpp: Update propagated to parent class (SPItem), misc fixes
+ 
+        * sp-polygon.cpp: Fix for points= updating by adding set_shape call into _write
+        (bug 910142)
+
+        * text-context.cpp: Do not create text object unless a printable key was
+        pressed; fixes 934280
+ 
+        * widgets/dash-selector.cpp dialogs/stroke-style.cpp: Removed marker buttons,
+        fixed g_free crash in marker menus, added tooltips, added stroke-miterlimit
+        spinbutton
+
+        * splivarot.cpp: Outline handles multiple objects; All commands use correct
+        stroke_miterlimit
+
+        * splivarot.cpp sp-offset.cpp: Fix for 932642 
+
+        * helper/sodipodi-ctrlrect.cpp: Simplify and fix dashes and offsets
+ 
+        * widgets/gradient-selector.cpp: Tooltip edits 
+
+        * verbs.cpp verbs.cpp verbs.h interface.cpp...: Remove tool options
+
+        * seltrans.cpp: Pivot marker made inverse
+
+        * toolbox.cpp: More defocusing
+ 
+        * *-context.cpp: Eliminated config widgets from all tools 
+
+        * toolbox.cpp sp-ellipse.cpp: Ellipse fixes, tooltips
+ 
+        * verbs.cpp: Options -> Preferences
+ 
+        * dialogs/display-settings.cpp: An options dialog, completely new; selector
+        widget grafted here
+
+        * preferences-skeleton.h node-context.cpp select-context.cpp: scaling uses
+        defaultscale
+ 
+        * dialogs/display-settings.cpp display/nr-arena-image.cpp: Make oversample
+        saveable
+
+        * toolbox.cpp: Aux toolbar for calligraphic
+
+        * preferences-skeleton.h: fill-opacity:1 for calligraphic 
+
+        * select-context.cpp seltrans.cpp seltrans.cpp: Patch to enable box and none
+        options for per-object selection cue
+
+        * main.cpp: Removed C-locale setting, not needed anymore; temporary switch of
+        gettext encoding for console output
+ 
+        * inkscape.cpp: Memory fix from sodi
+
+        * right-click finishes pen (patch by Carl)  draw-context.cpp
+
 2004-04-19  Carl Hetherington <inkscape@carlh.net>
 
 	* src/livarot/ShapeRaster.cpp
