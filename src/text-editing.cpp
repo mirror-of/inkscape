@@ -497,6 +497,7 @@ static SPObject* delete_line_break(SPObject *root, SPObject *item, bool *next_is
 gint
 sp_te_delete (SPItem *item, gint i_start, gint i_end)
 {
+    g_assert(i_start <= i_end);
     Inkscape::Text::Layout const *layout = te_get_layout(item);
     Inkscape::Text::Layout::iterator it_start = layout->charIndexToIterator(i_start);
     Inkscape::Text::Layout::iterator it_end = layout->charIndexToIterator(i_end);
@@ -504,6 +505,8 @@ sp_te_delete (SPItem *item, gint i_start, gint i_end)
     Glib::ustring::iterator start_text_iter, end_text_iter;
     layout->getSourceOfCharacter(it_start, (void**)&start_item, &start_text_iter);
     layout->getSourceOfCharacter(it_end, (void**)&end_item, &end_text_iter);
+    if (start_item == NULL)
+        return i_start;   // start is at end of text
     if (is_line_break_object(start_item))
         move_to_end_of_paragraph(&start_item, &start_text_iter);
     if (end_item == NULL) {
