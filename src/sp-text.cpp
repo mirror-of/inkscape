@@ -680,13 +680,9 @@ static void sp_text_snappoints(SPItem const *item, SnapPointsIter p)
 static NR::Matrix
 sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
 {
-//	SPText *text = SP_TEXT (item);
+	item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 
-	NR::Matrix i2p(xform);
- 
-	SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
-
-	return i2p;
+	return xform;
 }
 
 static void
