@@ -587,7 +587,7 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_SELECTION_UNION, "SelectionUnion", N_("U_nion"), N_("Union of selected objects"), NULL},
 	{SP_VERB_SELECTION_INTERSECT, "SelectionIntersect", N_("_Intersection"), N_("Intersection of selected objects"), NULL},
 	{SP_VERB_SELECTION_DIFF, "SelectionDiff", N_("_Difference"), N_("Difference of selected objects"), NULL},
-	{SP_VERB_SELECTION_SYMDIFF, "SelectionSymDiff", N_("_XOR"), N_("Exclusive OR of selected objects"), NULL},
+	{SP_VERB_SELECTION_SYMDIFF, "SelectionSymDiff", N_("E_xclude"), N_("Exclusive OR of selected objects"), NULL},
 	{SP_VERB_SELECTION_OFFSET, "SelectionOffset", N_("_Outset Path"), N_("Outset selected paths"), NULL},
 	{SP_VERB_SELECTION_INSET, "SelectionInset", N_("In_set Path"), N_("Inset selected paths"), NULL},
 	{SP_VERB_SELECTION_OUTLINE, "SelectionOutline", N_("_Stroke to Path"), N_("Convert selected stroke to path"), NULL},

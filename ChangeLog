@@ -1,5 +1,7 @@
 2003-12-24  MenTaLguY <mental@rydia.net>
 
+	* src/verbs.cpp: renamed 'XOR' to 'Exclude' on the menu
+
 	* src/object-ui.cpp: moved object-specific menuitems out onto the
 	  main context menu, instead of sequestered in their own submenus.
 
