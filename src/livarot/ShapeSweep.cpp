@@ -203,7 +203,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
   int curAPt = 0;
 
-  while (curAPt < a->numberOfPoints() || sEvts->nbEvt > 0)
+  while (curAPt < a->numberOfPoints() || sEvts->size() > 0)
     {
 /*		if ( nbPt > 0 && pts[nbPt-1].y >= 250.4 && pts[nbPt-1].y <= 250.6 ) {
 			for (int i=0;i<sEvts.nbEvt;i++) {
@@ -939,7 +939,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   int curAPt = 0;
   int curBPt = 0;
 
-  while (curAPt < a->numberOfPoints() || curBPt < b->numberOfPoints() || sEvts->nbEvt > 0)
+  while (curAPt < a->numberOfPoints() || curBPt < b->numberOfPoints() || sEvts->size() > 0)
     {
 /*		for (int i=0;i<sEvts.nbEvt;i++) {
 			printf("%f %f %i %i\n",sEvts.events[i].posx,sEvts.events[i].posy,sEvts.events[i].leftSweep->bord,sEvts.events[i].rightSweep->bord); // localizing ok

@@ -3,7 +3,7 @@
 #include "livarot/sweep-event.h"
 #include "livarot/Shape.h"
 
-SweepEventQueue::SweepEventQueue(int size) : nbEvt(0), maxEvt(size)
+SweepEventQueue::SweepEventQueue(int s) : nbEvt(0), maxEvt(s)
 {
     /* FIXME: use new[] for this, but this causes problems when delete[]
     ** calls the SweepEvent destructors.
@@ -95,11 +95,130 @@ bool SweepEventQueue::extract(SweepTree * &iLeft, SweepTree * &iRight, NR::Point
     px = e.posx;
     itl = e.tl;
     itr = e.tr;
-    e.SupprFromQueue (*this);
+    remove(&e);
     
     return true;
 }
 
+
+void SweepEventQueue::remove(SweepEvent *e)
+{
+    if (nbEvt <= 1) {
+	e->MakeDelete ();
+	nbEvt = 0;
+	return;
+    }
+    
+    int const n = e->ind;
+    int to = inds[n];
+    e->MakeDelete();
+    relocate(&events[--nbEvt], to);
+
+    int const moveInd = nbEvt;
+    if (moveInd == n) {
+	return;
+    }
+    
+    to = inds[moveInd];
+
+    events[to].ind = n;
+    inds[n] = to;
+
+    int curInd = n;
+    NR::Point const px = events[to].posx;
+    bool didClimb = false;
+    while (curInd > 0) {
+	int const half = (curInd - 1) / 2;
+	int const no = inds[half];
+	if (px[1] < events[no].posx[1]
+	    || (px[1] == events[no].posx[1] && px[0] < events[no].posx[0]))
+	{
+	  events[to].ind = half;
+	  events[no].ind = curInd;
+	  inds[half] = to;
+	  inds[curInd] = no;
+	  didClimb = true;
+	} else {
+	    break;
+	}
+	curInd = half;
+    }
+    
+    if (didClimb) {
+	return;
+    }
+    
+    while (2 * curInd + 1 < nbEvt) {
+	int const son1 = 2 * curInd + 1;
+	int const son2 = son1 + 1;
+	int const no1 = inds[son1];
+	int const no2 = inds[son2];
+	if (son2 < nbEvt) {
+	    if (px[1] > events[no1].posx[1]
+		|| (px[1] == events[no1].posx[1]
+		    && px[0] > events[no1].posx[0]))
+	    {
+		if (events[no2].posx[1] > events[no1].posx[1]
+		    || (events[no2].posx[1] == events[no1].posx[1]
+			&& events[no2].posx[0] > events[no1].posx[0]))
+		{
+		    events[to].ind = son1;
+		    events[no1].ind = curInd;
+		    inds[son1] = to;
+		    inds[curInd] = no1;
+		    curInd = son1;
+		} else {
+		    events[to].ind = son2;
+		    events[no2].ind = curInd;
+		    inds[son2] = to;
+		    inds[curInd] = no2;
+		    curInd = son2;
+		}
+	    } else {
+		if (px[1] > events[no2].posx[1]
+		    || (px[1] == events[no2].posx[1]
+			&& px[0] > events[no2].posx[0]))
+		{
+		    events[to].ind = son2;
+		    events[no2].ind = curInd;
+		    inds[son2] = to;
+		    inds[curInd] = no2;
+		    curInd = son2;
+		} else {
+		    break;
+		}
+	    }
+	} else {
+	    if (px[1] > events[no1].posx[1]
+		|| (px[1] == events[no1].posx[1]
+		    && px[0] > events[no1].posx[0]))
+	    {
+		events[to].ind = son1;
+		events[no1].ind = curInd;
+		inds[son1] = to;
+		inds[curInd] = no1;
+	    }
+	    
+	    break;
+	}
+    }
+}
+
+
+
+
+void SweepEventQueue::relocate(SweepEvent *e, int to)
+{
+    if (inds[e->ind] == to) {
+	return;			// j'y suis deja
+    }
+
+    events[to] = *e;
+
+    e->leftSweep->rightEvt = events + to;
+    e->rightSweep->leftEvt = events + to;
+    inds[e->ind] = to;
+}
 
 
 /*
@@ -166,134 +285,4 @@ SweepEvent::MakeDelete (void)
       rightSweep->leftEvt = NULL;
     }
   leftSweep = rightSweep = NULL;
-}
-
-
-void
-SweepEvent::SupprFromQueue (SweepEventQueue & queue)
-{
-  if (queue.nbEvt <= 1)
-    {
-      MakeDelete ();
-      queue.nbEvt = 0;
-      return;
-    }
-  int n = ind;
-  int to = queue.inds[n];
-  MakeDelete ();
-  queue.events[--queue.nbEvt].Relocate (queue, to);
-
-  int moveInd = queue.nbEvt;
-  if (moveInd == n)
-    return;
-  to = queue.inds[moveInd];
-
-  queue.events[to].ind = n;
-  queue.inds[n] = to;
-
-  int curInd = n;
-  NR::Point px = queue.events[to].posx;
-  bool didClimb = false;
-  while (curInd > 0)
-    {
-      int half = (curInd - 1) / 2;
-      int no = queue.inds[half];
-      if (px[1] < queue.events[no].posx[1]
-	  || (px[1] == queue.events[no].posx[1] && px[0] < queue.events[no].posx[0]))
-	{
-	  queue.events[to].ind = half;
-	  queue.events[no].ind = curInd;
-	  queue.inds[half] = to;
-	  queue.inds[curInd] = no;
-	  didClimb = true;
-	}
-      else
-	{
-	  break;
-	}
-      curInd = half;
-    }
-  if (didClimb)
-    return;
-  while (2 * curInd + 1 < queue.nbEvt)
-    {
-      int son1 = 2 * curInd + 1;
-      int son2 = son1 + 1;
-      int no1 = queue.inds[son1];
-      int no2 = queue.inds[son2];
-      if (son2 < queue.nbEvt)
-	{
-	  if (px[1] > queue.events[no1].posx[1]
-	      || (px[1] == queue.events[no1].posx[1]
-		  && px[0] > queue.events[no1].posx[0]))
-	    {
-	      if (queue.events[no2].posx[1] > queue.events[no1].posx[1]
-		  || (queue.events[no2].posx[1] == queue.events[no1].posx[1]
-		      && queue.events[no2].posx[0] > queue.events[no1].posx[0]))
-		{
-		  queue.events[to].ind = son1;
-		  queue.events[no1].ind = curInd;
-		  queue.inds[son1] = to;
-		  queue.inds[curInd] = no1;
-		  curInd = son1;
-		}
-	      else
-		{
-		  queue.events[to].ind = son2;
-		  queue.events[no2].ind = curInd;
-		  queue.inds[son2] = to;
-		  queue.inds[curInd] = no2;
-		  curInd = son2;
-		}
-	    }
-	  else
-	    {
-	      if (px[1] > queue.events[no2].posx[1]
-		  || (px[1] == queue.events[no2].posx[1]
-		      && px[0] > queue.events[no2].posx[0]))
-		{
-		  queue.events[to].ind = son2;
-		  queue.events[no2].ind = curInd;
-		  queue.inds[son2] = to;
-		  queue.inds[curInd] = no2;
-		  curInd = son2;
-		}
-	      else
-		{
-		  break;
-		}
-	    }
-	}
-      else
-	{
-	  if (px[1] > queue.events[no1].posx[1]
-	      || (px[1] == queue.events[no1].posx[1]
-		  && px[0] > queue.events[no1].posx[0]))
-	    {
-	      queue.events[to].ind = son1;
-	      queue.events[no1].ind = curInd;
-	      queue.inds[son1] = to;
-	      queue.inds[curInd] = no1;
-	    }
-	  break;
-	}
-    }
-}
-
-
-void
-SweepEvent::Relocate (SweepEventQueue & queue, int to)
-{
-  if (queue.inds[ind] == to)
-    return;			// j'y suis deja
-
-  queue.events[to].posx = posx;
-  queue.events[to].tl = tl;
-  queue.events[to].tr = tr;
-  queue.events[to].leftSweep = leftSweep;
-  queue.events[to].rightSweep = rightSweep;
-  leftSweep->rightEvt = queue.events + to;
-  rightSweep->leftEvt = queue.events + to;
-  queue.events[to].ind = ind;
-  queue.inds[ind] = to;
 }

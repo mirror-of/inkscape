@@ -299,7 +299,7 @@ SweepTree::RemoveEvent (SweepEventQueue & queue, bool onLeft)
     {
       if (leftEvt)
 	{
-	  leftEvt->SupprFromQueue (queue);
+	  queue.remove(leftEvt);
 //                      leftEvt->MakeDelete(); // fait dans SupprFromQueue
 	}
       leftEvt = NULL;
@@ -308,7 +308,7 @@ SweepTree::RemoveEvent (SweepEventQueue & queue, bool onLeft)
     {
       if (rightEvt)
 	{
-	  rightEvt->SupprFromQueue (queue);
+	  queue.remove(rightEvt);
 //                      rightEvt->MakeDelete(); // fait dans SupprFromQueue
 	}
       rightEvt = NULL;

@@ -12,13 +12,10 @@ class SweepTree;
 class SweepEventQueue
 {
 public:
-  
-  int nbEvt, maxEvt;		// number of events currently in the heap, allocated size of the heap
-  int *inds;			// indices
-  SweepEvent *events;		// events
-
-  SweepEventQueue(int size);
+  SweepEventQueue(int s);
   ~SweepEventQueue();
+
+  int size() const { return nbEvt; }
 
   // look for the topmost intersection in the heap
   bool peek(SweepTree * &iLeft, SweepTree * &iRight, NR::Point &oPt, double &itl, double &itr);
@@ -26,6 +23,15 @@ public:
   bool extract(SweepTree * &iLeft, SweepTree * &iRight, NR::Point &oPt, double &itl, double &itr);
   // add one intersection in the binary heap
   SweepEvent *add(SweepTree *iLeft, SweepTree *iRight, NR::Point &iPt, double itl, double itr);
+
+  void remove(SweepEvent *e);
+  void relocate(SweepEvent *e, int to);
+  
+private:
+  int nbEvt;            ///< number of events currently in the heap
+  int maxEvt;		///< allocated size of the heap
+  int *inds;		///< indices
+  SweepEvent *events;	///< events
 };
 
 // one intersection event
@@ -48,12 +54,6 @@ public:
 		double itl, double itr);
   // voids a SweepEvent structure
   void MakeDelete (void);
-
-  // the calling SweepEvent removes itself from the binary heap
-  void SupprFromQueue (SweepEventQueue & queue);
-
-  // misc: change a SweepEvent structure's postion in the heap
-  void Relocate (SweepEventQueue & queue, int to);
 };
 
 #endif
