@@ -352,6 +352,10 @@ generate_bezier(NR::Point bezier[],
     return;
 }
 
+static double lensq(NR::Point const p) {
+    return dot(p, p);
+}
+
 /**
  * Given set of points and their parameterization, try to find a better assignment of parameter
  * values for the points.
@@ -446,6 +450,20 @@ NewtonRaphsonRootFind(BezierCurve const Q, NR::Point const &P, gdouble const u)
         improved_u = 0.0;
     } else if ( improved_u > 1.0 ) {
         improved_u = 1.0;
+    }
+
+    /* Ensure that improved_u isn't actually worse. */
+    {
+        double const diff_lensq = lensq(diff);
+        for (double proportion = .125; ; proportion += .125) {
+            g_assert( proportion <= 1.0 );
+            if ( lensq( bezier_pt(3, Q, improved_u) - P ) > diff_lensq ) {
+                improved_u = ( ( 1 - proportion ) * improved_u  +
+                               proportion         * u            );
+            } else {
+                break;
+            }
+        }
     }
 
     DOUBLE_ASSERT(improved_u);
