@@ -33,6 +33,7 @@ inline ::GCPlacement to_placement(ScanPolicy scan, CollectionPolicy collect) {
             return ::PointerFreeGC;
         } else {
             g_assert_not_reached();
+            return ::NoGC;
         }
     }
 }
@@ -63,11 +64,13 @@ public:
 
 template <ScanPolicy default_scan=SCANNED,
           CollectionPolicy default_collect=AUTO>
-class Object : Base<::gc_object, default_scan, default_collect> {}
+class Object
+: public Base< ::gc, default_scan, default_collect> {};
 
 template <ScanPolicy default_scan=SCANNED,
           CollectionPolicy default_collect=AUTO>
-class FinalizedObject : Base<::gc_cleanup, default_scan, default_collect> {}
+class FinalizedObject
+: public Base< ::gc_cleanup, default_scan, default_collect> {};
 
 }
 

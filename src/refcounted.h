@@ -13,29 +13,27 @@
 #define SEEN_INKSCAPE_REFCOUNTED_H
 
 #include <glib/gmessages.h>
+#include "gc-object.h"
 
 namespace Inkscape {
 
 /**
- * A base class for refcounted objects.  The current collection
- * scheme is based on simple refcounting, but may include other
- * strategies (e.g. mark-and-sweep) in the future.
+ * A base class for refcounted objects.  Objects are managed
+ * by our mark-and-sweep collector, but are anchored as GC roots
+ * so long as their reference count is nonzero.
  *
  * New instances of refcounted objects should be created using the C++ new
  * operator.  Under normal circumstances they should not be created on
  * the stack.
  *
  * A newly created refcounted object begins with a refcount of one, and
- * may only be collected unless the refcount is zero.  Currently
- * collection takes place as soon as the refcount reaches zero, but
- * immediate collection is not guaranteed in the future.  Do not rely
- * on it.
+ * will not be collected unless the refcount is zero.
  *
  * @see Inkscape::Refcounted::claim
  * @see Inkscape::Refcounted::release
  */
 
-class Refcounted {
+class Refcounted : public GC::FinalizedObject<> {
 public:
     /**
      * @brief Increments the reference count of a refcounted object.
@@ -81,9 +79,10 @@ public:
      * that object's reference count, and return a reference to the
      * object of the same type as the function's parameter.
      *
-     * The object will likely have been destroyed by the time this
-     * function returns.  This function's return value is for future
-     * use only.
+     * The return value is safe to use since the object, even if
+     * its refcount has reached zero, will not actually be collected
+     * until there are no references to it in local variables or
+     * parameters.
      *
      * @param m a reference to a refcounted object
      *
@@ -103,9 +102,10 @@ public:
      * that object's reference count, and return a pointer to the
      * object of the same type as the function's parameter.
      *
-     * The object will likely have been destroyed by the time this
-     * function returns.  This function's return value is for future
-     * use only.
+     * The return value is safe to use since the object, even if
+     * its refcount has reached zero, will not actually be collected
+     * until there are no references to it in local variables or
+     * parameters.
      *
      * @param m a pointer to a refcounted object
      *
@@ -118,27 +118,32 @@ public:
     }
 
 protected:
-    Refcounted() : _refcount(1) {}
-    virtual ~Refcounted() {
-        if (_refcount) {
-            g_critical("Refcounted object destroyed with nonzero refcount");
-        }
-    }
+    Refcounted() : _anchor(NULL) { _claim(); }
 
 private:
+    struct Anchor : public GC::Object<GC::SCANNED, GC::MANUAL> {
+        Anchor(Refcounted const *obj) : refcount(0), object(obj) {}
+        int refcount;
+        Refcounted const *object;
+    };
+
     Refcounted(Refcounted const &); // no copy
     void operator=(Refcounted const &); // no assign
 
     void _claim() const {
-        _refcount++;
+        if (!_anchor) {
+            _anchor = new Anchor(this);
+        }
+        _anchor->refcount++;
     }
     void _release() const {
-        if (!--_refcount) {
-            delete const_cast<Refcounted *>(this);
+        if (!--_anchor->refcount) {
+            delete _anchor;
+            _anchor = NULL;
         }
     }
 
-    mutable int _refcount;
+    mutable Anchor *_anchor;
 };
 
 }

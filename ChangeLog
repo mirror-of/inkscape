@@ -1,3 +1,9 @@
+2004-08-04  MenTaLguY  <mental@rydia.net>
+
+	* configure.in, src/gc-object.h, src/refcounted.h:
+
+	  start using libgc in earnest; Inkscape::Refcounted is now GC-aware
+
 2004-08-04  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/nodepath.cpp: Cleanups: Mark some things as static.  Switch from
