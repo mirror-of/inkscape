@@ -20,6 +20,7 @@
 #include "svg-view.h"
 #include "help.h"
 #include "helper/sp-intl.h"
+#include "libnr/nr-macros.h"
 
 static gint
 sp_help_about_delete (GtkWidget *widget, GdkEvent *event, gpointer data)
@@ -27,12 +28,24 @@ sp_help_about_delete (GtkWidget *widget, GdkEvent *event, gpointer data)
 	return FALSE;
 }
 
+#ifndef INK_STATIC_CAST
+#ifdef __cplusplus
+#define INK_STATIC_CAST(t,v) static_cast<(t)>((v))
+#else
+#define INK_STATIC_CAST(t,v) ((t)(v))
+#endif
+#endif
+
+#define WINDOW_MIN 20
+#define WINDOW_MAX INT_MAX
+
 void
 sp_help_about (void)
 {
 	SPDocument *doc;
 	SPObject *title;
 	GtkWidget *w, *v;
+	gint width, height;
 
 	doc = sp_document_new (INKSCAPE_PIXMAPDIR "/about.svg", FALSE, TRUE);
 	g_return_if_fail (doc != NULL);
@@ -47,9 +60,11 @@ sp_help_about (void)
 
 	w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title (GTK_WINDOW (w), _("About inkscape"));
-	gtk_window_set_default_size (GTK_WINDOW (w), 
-				     (gint)sp_document_width (doc), 
-				     sp_document_height (doc));
+
+        width = INK_STATIC_CAST( gint, CLAMP( sp_document_width(doc), WINDOW_MIN, WINDOW_MAX ) );
+        height = INK_STATIC_CAST( gint, CLAMP( sp_document_height(doc), WINDOW_MIN, WINDOW_MAX ) );
+        gtk_window_set_default_size (GTK_WINDOW (w), width, height );
+
 #if 1
 	gtk_window_set_policy (GTK_WINDOW (w), TRUE, TRUE, FALSE);
 #endif
