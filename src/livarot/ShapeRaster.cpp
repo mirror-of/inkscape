@@ -34,10 +34,11 @@ void Shape::BeginRaster(float &pos, int &curPt)
     MakePointData(true);
     MakeEdgeData(true);
 
-    if ( _has_sweep_data == false) {
+    if (sTree == NULL) {
         sTree = new SweepTreeList(numberOfEdges());
+    }
+    if (sEvts == NULL) {
         sEvts = new SweepEventQueue(numberOfEdges());
-        _has_sweep_data = true;
     }
 
     SortPoints();
@@ -62,13 +63,10 @@ void Shape::BeginRaster(float &pos, int &curPt)
 
 void Shape::EndRaster()
 {
-    if ( _has_sweep_data ) {
-        delete sTree;
-        sTree = NULL;
-        delete sEvts;
-        sEvts = NULL;
-        _has_sweep_data = false;
-    }
+    delete sTree;
+    sTree = NULL;
+    delete sEvts;
+    sEvts = NULL;
     
     MakePointData(false);
     MakeEdgeData(false);

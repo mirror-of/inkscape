@@ -27,7 +27,6 @@ Shape::Shape (void)
     _has_edges_data(false),
     _has_sweep_src_data(false),
     _has_sweep_dest_data(false),
-    _has_sweep_data(false),
     _has_raster_data(false),
     _has_quick_raster_data(false),
     _has_back_data(false),
@@ -241,14 +240,11 @@ Shape::Copy (Shape * who)
   MakeRasterData (false);
   MakeQuickRasterData (false);
   MakeBackData (false);
-  if (_has_sweep_data)
-    {
-      delete sTree;
-      sTree = NULL;
-      delete sEvts;
-      sEvts = NULL;
-      _has_sweep_data = false;
-    }
+
+  delete sTree;
+  sTree = NULL;
+  delete sEvts;
+  sEvts = NULL;
 
   Reset (who->numberOfPoints(), who->numberOfEdges());
   type = who->type;
@@ -258,7 +254,6 @@ Shape::Copy (Shape * who)
   _has_edges_data = false;
   _has_sweep_src_data = false;
   _has_sweep_dest_data = false;
-  _has_sweep_data = false;
   _has_raster_data = false;
   _has_quick_raster_data = false;
   _has_back_data = false;

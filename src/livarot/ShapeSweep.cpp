@@ -171,12 +171,13 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   
   a->ResetSweep ();
 
-  if (_has_sweep_data == false)
-    {
+  if (sTree == NULL) {
       sTree = new SweepTreeList(a->numberOfEdges());
+  }
+  if (sEvts == NULL) {
       sEvts = new SweepEventQueue(a->numberOfEdges());
-      _has_sweep_data = true;
-    }
+  }
+  
   MakePointData (true);
   MakeEdgeData (true);
   MakeSweepSrcData (true);
@@ -834,14 +835,11 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   
 //      Plot(200.0,200.0,2.0,400.0,400.0,true,true,true,true);
 
-  if (_has_sweep_data)
-    {
-      delete sTree;
-      sTree = NULL;
-      delete sEvts;
-      sEvts = NULL;
-      _has_sweep_data = false;
-    }
+  delete sTree;
+  sTree = NULL;
+  delete sEvts;
+  sEvts = NULL;
+
   if ( directed == fill_justDont ) {
   } else {
     if (directedEulerian(this) == false)
@@ -892,12 +890,13 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   a->ResetSweep ();
   b->ResetSweep ();
 
-  if (_has_sweep_data == false)
-    {
+  if (sTree == NULL) {
       sTree = new SweepTreeList(a->numberOfEdges() + b->numberOfEdges());
+  }
+  if (sEvts == NULL) {
       sEvts = new SweepEventQueue(a->numberOfEdges() + b->numberOfEdges());
-      _has_sweep_data = true;
-    }
+  }
+  
   MakePointData (true);
   MakeEdgeData (true);
   MakeSweepSrcData (true);
@@ -1676,14 +1675,11 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
     }
   }
   
-  if (_has_sweep_data)
-    {
-      delete sTree;
-      sTree = NULL;
-      delete sEvts;
-      sEvts = NULL;
-      _has_sweep_data = false;
-    }
+  delete sTree;
+  sTree = NULL;
+  delete sEvts;
+  sEvts = NULL;
+  
   if ( mod == bool_op_cut ) {
     // on garde le askForWinding
   } else {

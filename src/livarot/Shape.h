@@ -516,9 +516,6 @@ private:
     bool _has_edges_data;       ///< the eData array is allocated
     bool _has_sweep_src_data;   ///< the swsData array is allocated
     bool _has_sweep_dest_data;  ///< the swdData array is allocated
-    bool _has_sweep_data;       ///< the sTree and sEvts structures are allocated
-    ///< nota: the size of these structures is determined when they are allocated, and don't
-    ///< change after that
     bool _has_raster_data;      ///< the swrData array is allocated
     bool _has_quick_raster_data;///< the swrData array is allocated
     bool _has_back_data;        //< the ebData array is allocated
