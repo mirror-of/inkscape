@@ -29,6 +29,7 @@
 #include "sp-item-group.h"
 #include "sp-path.h"
 #include "sp-use.h"
+#include "sp-text.h"
 #include "helper/sp-intl.h"
 #include "display/sp-canvas.h"
 #include "path-chemistry.h"
@@ -687,7 +688,15 @@ void sp_selection_copy()
     if (style_clipboard)
         sp_repr_css_attr_unref (style_clipboard);
     SPItem *item = SP_ITEM (items->data);
-    style_clipboard = sp_css_attr_from_style (SP_OBJECT(item));
+    // write the complete cascaded style, context-free
+    style_clipboard = sp_css_attr_from_style (SP_OBJECT(item), SP_STYLE_FLAG_ALWAYS);
+    if (SP_IS_GROUP(item) || (SP_IS_TEXT(item) && SP_OBJECT(item)->children && SP_OBJECT(item)->children->next == NULL)) {
+        // if this is a text with exactly one tspan child, merge the style of that tspan as well
+        // If this is a group, merge the style of its first child
+        SPCSSAttr *temp = sp_css_attr_from_style (sp_object_last_child (item), SP_STYLE_FLAG_ALWAYS);
+        sp_repr_css_merge (style_clipboard, temp);
+        sp_repr_css_attr_unref (temp);
+    }
     //sp_repr_css_print (style_clipboard);
 
     // 3.  Sort items:
