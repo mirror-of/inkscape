@@ -11,6 +11,9 @@
 	  src/svg/svg-affine.cpp: added comments and notes to all remaining
 	  "printf"ish calls that have %g or %f in them.  Most are just debug
 	  output, etc.  Hopefully we are actually free of locale bugs!  :)
+	* src/desktop.h, src/desktop.cpp: desktop's knowledge of
+	  fullscreen-ness doesn't depend on having the ability to DO it.  Other
+	  functions already test "is_fullscreen" to alter their behavior.
 
 2004-05-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 

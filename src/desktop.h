@@ -125,9 +125,7 @@ struct SPDesktop {
 	GList *zooms_future;
 	gboolean can_go_forward;
 
-#ifdef HAVE_GTK_WINDOW_FULLSCREEN
 	gboolean is_fullscreen;
-#endif /* HAVE_GTK_FULLSCREEN */
 
 	// current values
 	ColorRGBA fill_color;
