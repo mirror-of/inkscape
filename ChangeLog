@@ -1,3 +1,38 @@
+2004-02-14  bulia byak <bulia@users.sourceforge.net>
+
+  * src/dialogs/dialog-events.cpp: Added UTILITY hint to sp_transientize() 
+
+  * po/fr.po: Update from f.rodrigo@tuxfamily.org 
+
+  * src/interface.cpp: Fix for underscore in the recent files menu, by alxrem 
+
+  * src/event-context.cpp src/preferences-skeleton.h: Accelerated scrolling by Ctrl-arrows
+
+  * src/event-context.cpp: Ctrl-middle-click zooms in
+
+  * doc/keys.xml doc/keys-svg.xsl doc/keys-html.xsl doc/keys.html icons/keys.svg:
+  Updated middle and right buttons scroll/zoom, cosmetics
+ 
+  * src/shortcuts.cpp: Menu shortcut fix 
+
+  * src/verbs.cpp,h: New verb: deselect 
+
+  * src/selection.cpp,h: Removed unused function
+
+  * src/interface.cpp: Removed Edit/Clear All, added Edit/Deselect. Comment fix
+
+  * src/toolbox.cpp: Spelling fix: symmetric, not symmetrical
+
+  * src/desktop.cpp,h: sp_desktop_point(): returns mouse point in document coordinates
+
+  * src/selection-chemistry.cpp,h: sp_selection_paste obeys in_place parameter
+
+  * src/verbs.cpp src/verbs.h src/shortcuts.cpp: Paste in place verb, shortcut 
+
+  * src/interface.cpp: Paste In Place command in Edit
+
+  * src/selection-chemistry.cpp: Toolbar message fix 
+
 2004-02-14  MenTaLguY <mental@rydia.net>
 
 	* src/libnr/nr-types.h: added intersects() and contains() tests
