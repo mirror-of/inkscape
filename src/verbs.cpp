@@ -1774,7 +1774,7 @@ Verb * Verb::_base_verbs[] = {
     new ContextVerb(SP_VERB_CONTEXT_TEXT, "DrawText", N_("Text"),
         N_("Create and edit text objects"), "draw_text"),
     new ContextVerb(SP_VERB_CONTEXT_GRADIENT, "DrawGradient", N_("Gradient"),
-        N_("Create and edit gradients"), NULL),
+        N_("Create and edit gradients"), "draw_gradient"),
     new ContextVerb(SP_VERB_CONTEXT_ZOOM, "DrawZoom", N_("Zoom"),
         N_("Zoom in or out"), "draw_zoom"),
     new ContextVerb(SP_VERB_CONTEXT_DROPPER, "DrawDropper", N_("Dropper"),
