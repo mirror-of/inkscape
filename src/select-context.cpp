@@ -61,8 +61,8 @@ static GdkCursor *CursorSelectMouseover = NULL;
 static GdkCursor *CursorSelectDragging = NULL;
 GdkPixbuf * handles[13];
 
-gint rb_escaped = 0; // if non-zero, rubberband was canceled by esc, so the next button release should not deselect
-gint drag_escaped = 0; // if non-zero, drag was canceled by esc
+static gint rb_escaped = 0; // if non-zero, rubberband was canceled by esc, so the next button release should not deselect
+static gint drag_escaped = 0; // if non-zero, drag was canceled by esc
 
 static gint xp = 0, yp = 0; // where drag started
 static gint tolerance = 0;

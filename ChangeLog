@@ -1,5 +1,8 @@
 2004-01-29  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/node-context.cpp, src/select-context.cpp:
+	Make some globals static.
+
 	* src/style.cpp (sp_style_read_pfloat, SPS_READ_IFLOAT_IF_UNSET, 
 	SPS_READ_PFLOAT_IF_UNSET): Remove these unused functions/macros.
 

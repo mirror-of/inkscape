@@ -60,10 +60,10 @@ static SPReprEventVector nodepath_repr_events = {
 	NULL  /* order_changed */
 };
 
-static SPEventContextClass * parent_class;
-GdkCursor * CursorNodeMouseover = NULL, * CursorNodeDragging = NULL;
+static SPEventContextClass *parent_class;
+static GdkCursor *CursorNodeMouseover = NULL, *CursorNodeDragging = NULL;
 
-gint nodeedit_rb_escaped = 0; // if non-zero, rubberband was canceled by esc, so the next button release should not deselect
+static gint nodeedit_rb_escaped = 0; // if non-zero, rubberband was canceled by esc, so the next button release should not deselect
 
 static gint xp = 0, yp = 0; // where drag started
 static gint tolerance = 0;
