@@ -197,7 +197,6 @@ flow_res*          flow_maker::TextWork(void)
 		st_req.ascent=st_req.descent=st_req.leading=0;
 		f_src->MetricsAt(0,0,st_req.ascent,st_req.descent,st_req.leading,st_req.rtl);
 		if ( fabs(st_req.ascent+st_req.descent) < 0.01 ) {
-			printf("null height line\n");
 			delete sols;
 			delete f_res;
 			return NULL;
