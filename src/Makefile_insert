@@ -226,5 +226,8 @@ mod360_test_LDADD = libinkpre.a -lglib-2.0
 extract_uri_test_SOURCES = extract-uri-test.cpp
 extract_uri_test_LDADD = libinkpre.a -lglib-2.0
 
+round_test_SOURCES = round-test.cpp
+round_test_LDADD = libinkpost.a
+
 inkscape_version.h: ../configure.in
 	echo '#define INKSCAPE_VERSION "$(VERSION)"' > inkscape_version.h

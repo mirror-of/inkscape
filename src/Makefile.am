@@ -96,6 +96,7 @@ EXTRA_PROGRAMS =	\
 TESTS =	\
 	extract-uri-test$(EXEEXT)	\
 	mod360-test$(EXEEXT)	\
+	round-test$(EXEEXT)	\
 	display/bezier-utils-test$(EXEEXT)	\
 	helper/units-test$(EXEEXT)	\
 	libnr/nr-matrix-test$(EXEEXT)	\
@@ -114,6 +115,7 @@ TESTS =	\
 check_PROGRAMS =	\
 	extract-uri-test	\
 	mod360-test	\
+	round-test	\
 	display/bezier-utils-test	\
 	helper/units-test	\
 	libnr/nr-matrix-test	\
