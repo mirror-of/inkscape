@@ -116,6 +116,9 @@ std::vector<Layout::ScanlineMaker::ScanRun> Layout::ShapeScanlineMaker::makeScan
     if (_y < _bounding_box_top)
         _y = _bounding_box_top;
 
+    if (line_text_height == 0.0)
+        line_text_height = 0.001;     // Scan() doesn't work for zero height so this will have to do
+
     // I think what's going on here is that we're moving the top of the scanline to the given position...
     _rotated_shape->Scan(_rasterizer_y, _current_rasterization_point, _y, line_text_height);
     // ...then actually retreiving the scanline (which alters the first two parameters)

@@ -19,12 +19,6 @@
 struct SPFlowtext : public SPItem {
     Inkscape::Text::Layout layout;
 
-	// layout options  (RH: to be merged into css)
-	bool              justify;
-	double            par_indent;
-	int               algo;
-	double            min_scale,max_scale;
-
 	void              ClearFlow(NRArenaGroup* in_arena);
 	void              BuildFlow(NRArenaGroup* in_arena, 	NRRect *paintbox);
 };

@@ -111,10 +111,6 @@ sp_flowtext_class_init(SPFlowtextClass *klass)
 static void
 sp_flowtext_init(SPFlowtext *group)
 {
-    group->justify = false;
-    group->par_indent = 0;
-    group->algo = 0;
-
     new (&group->layout) Inkscape::Text::Layout();
 }
 
@@ -261,11 +257,11 @@ sp_flowtext_modified(SPObject */*object*/, guint /*flags*/)
 static void
 sp_flowtext_build(SPObject *object, SPDocument *document, Inkscape::XML::Node *repr)
 {
-    sp_object_read_attr(object, "inkscape:layoutOptions");
-
     if (((SPObjectClass *) (parent_class))->build) {
         (* ((SPObjectClass *) (parent_class))->build)(object, document, repr);
     }
+
+    sp_object_read_attr(object, "inkscape:layoutOptions");     // must happen after css has been read
 }
 
 static void
@@ -275,34 +271,37 @@ sp_flowtext_set(SPObject *object, unsigned key, gchar const *value)
 
     switch (key) {
         case SP_ATTR_LAYOUT_OPTIONS: {
+            // deprecated attribute, read for backward compatibility only
             SPCSSAttr *opts = sp_repr_css_attr((SP_OBJECT(group))->repr, "inkscape:layoutOptions");
             {
                 gchar const *val = sp_repr_css_property(opts, "justification", NULL);
-                if ( val == NULL ) {
-                    group->justify = false;
-                } else {
+                if (val != NULL && !object->style->text_align.set) {
                     if ( strcmp(val, "0") == 0 || strcmp(val, "false") == 0 ) {
-                        group->justify = false;
+                        object->style->text_align.value = SP_CSS_TEXT_ALIGN_LEFT;
                     } else {
-                        group->justify = true;
+                        object->style->text_align.value = SP_CSS_TEXT_ALIGN_JUSTIFY;
                     }
+                    object->style->text_align.set = TRUE;
+                    object->style->text_align.inherit = FALSE;
+                    object->style->text_align.computed = object->style->text_align.value;
                 }
             }
+            /* no equivalent css attribute for these two (yet)
             {
                 gchar const *val = sp_repr_css_property(opts, "layoutAlgo", NULL);
                 if ( val == NULL ) {
                     group->algo = 0;
                 } else {
-                    if ( strcmp(val, "better") == 0 ) {
+                    if ( strcmp(val, "better") == 0 ) {     // knuth-plass, never worked for general cases
                         group->algo = 2;
-                    } else if ( strcmp(val, "simple") == 0 ) {
+                    } else if ( strcmp(val, "simple") == 0 ) {   // greedy, but allowed lines to be compressed by up to 20% if it would make them fit
                         group->algo = 1;
-                    } else if ( strcmp(val, "default") == 0 ) {
+                    } else if ( strcmp(val, "default") == 0 ) {    // the same one we use, a standard greedy
                         group->algo = 0;
                     }
                 }
             }
-            {
+            {   // This would probably translate to padding-left, if SPStyle had it.
                 gchar const *val = sp_repr_css_property(opts, "par-indent", NULL);
                 if ( val == NULL ) {
                     group->par_indent = 0.0;
@@ -310,6 +309,7 @@ sp_flowtext_set(SPObject *object, unsigned key, gchar const *value)
                     sp_repr_get_double((Inkscape::XML::Node*)opts, "par-indent", &group->par_indent);
                 }
             }
+            */
             sp_repr_css_attr_unref(opts);
             object->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
