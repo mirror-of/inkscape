@@ -13,8 +13,8 @@
 #include "AlphaLigne.h"
 #include "BitLigne.h"
 
-#include "../libnr/nr-types.h"
-#include "../libnr/nr-point-fns.h"
+#include <libnr/nr-point.h>
+#include <libnr/nr-point-fns.h>
 
 /*
  * polygon rasterization: the sweepline algorithm in all its glory
