@@ -475,6 +475,11 @@ sp_namedview_window_from_document (SPDesktop *desktop)
 			gtk_window_move (win, nv->window_x, nv->window_y);
 		}
 	}
+	// cancel any history of zooms up to this point
+	if (desktop->zooms_past) {
+		g_list_free (desktop->zooms_past);
+		desktop->zooms_past = NULL;
+	}
 }
 
 void 
