@@ -15,6 +15,8 @@ OBJEXT="@OBJEXT@"
 config_h_dir=..
 
 for i in `find "$srcdir" -name bonobo -prune \
+	-o -name ecma -prune	\
+	-o -path '*/extension/script/js' -prune	\
 	-o -name '*.h' \
 	   \! -name gnome.h \! -name win32.h \! -name nr-type-gnome.h \! -name nr-type-w32.h \! -name Livarot.h \! -name radial.h \
 	   -printf '%P\n'`
