@@ -696,11 +696,7 @@ sp_string_build (SPObject *object, SPDocument *doc, SPRepr *repr)
 
     if (((SPObjectClass *) string_parent_class)->build)
         ((SPObjectClass *) string_parent_class)->build (object, doc, repr);
-
-    /* fixme: This can be waste here, but ensures loaded documents are up-to-date */
-    sp_string_calculate_dimensions (SP_STRING (object));
 }
-
 
 
 
@@ -757,7 +753,7 @@ sp_string_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 
     if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_MODIFIED_FLAG)) {
         /* Parent style or we ourselves changed, so recalculate */
-      flags&=~SP_OBJECT_USER_MODIFIED_FLAG_B; // won't be "just a transformation" anymore, we're going to recompute "x" and "y" attributes
+        flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // won't be "just a transformation" anymore, we're going to recompute "x" and "y" attributes
         sp_string_calculate_dimensions (SP_STRING (object));
     }
 }
@@ -1795,14 +1791,14 @@ sp_text_update (SPObject *object, SPCtx *ctx, guint flags)
         cflags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
 
     /* Update relative distances */
-    double d = 1.0 / NR_MATRIX_DF_EXPANSION (&ictx->i2vp);
-    sp_text_update_length (&text->ly.x, style->font_size.computed, style->font_size.computed * 0.5, d);
-    sp_text_update_length (&text->ly.y, style->font_size.computed, style->font_size.computed * 0.5, d);
+     double d = 1.0 / NR_MATRIX_DF_EXPANSION (&ictx->i2vp);
+     sp_text_update_length (&text->ly.x, style->font_size.computed, style->font_size.computed * 0.5, d);
+     sp_text_update_length (&text->ly.y, style->font_size.computed, style->font_size.computed * 0.5, d);
 
-    for (i = text->ly.dx; i != NULL; i = i->next)
-        sp_text_update_length ((SPSVGLength *) i->data, style->font_size.computed, style->font_size.computed * 0.5, d);
-    for (i = text->ly.dy; i != NULL; i = i->next)
-        sp_text_update_length ((SPSVGLength *) i->data, style->font_size.computed, style->font_size.computed * 0.5, d);
+     for (i = text->ly.dx; i != NULL; i = i->next)
+         sp_text_update_length ((SPSVGLength *) i->data, style->font_size.computed, style->font_size.computed * 0.5, d);
+     for (i = text->ly.dy; i != NULL; i = i->next)
+         sp_text_update_length ((SPSVGLength *) i->data, style->font_size.computed, style->font_size.computed * 0.5, d);
 
     /* Create temporary list of children */
     l = NULL;
@@ -1820,14 +1816,14 @@ sp_text_update (SPObject *object, SPCtx *ctx, guint flags)
         }
         sp_object_unref (SP_OBJECT (child), object);
     }
-    if (text->relayout || (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG))) {
-        /* fixme: It is not nice to have it here, but otherwise children content changes does not work */
-        /* fixme: Even now it may not work, as we are delayed */
-        /* fixme: So check modification flag everywhere immediate state is used */
-        sp_text_update_immediate_state (text);
-        sp_text_set_shape (text);
-        text->relayout = FALSE;
-    }
+     if (text->relayout || (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG))) {
+         /* fixme: It is not nice to have it here, but otherwise children content changes does not work */
+         /* fixme: Even now it may not work, as we are delayed */
+         /* fixme: So check modification flag everywhere immediate state is used */
+         sp_text_update_immediate_state (text);
+         sp_text_set_shape (text);
+         text->relayout = FALSE;
+     }
 }
 
 
