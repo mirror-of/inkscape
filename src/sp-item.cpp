@@ -45,6 +45,7 @@
 #include "libnr/nr-matrix-div.h"
 #include "libnr/nr-matrix-fns.h"
 #include "libnr/nr-matrix-ops.h"
+#include "libnr/nr-matrix-scale-ops.h"
 #include "libnr/nr-rect.h"
 #include "svg/stringstream.h"
 #include "algorithms/find-last-if.h"
