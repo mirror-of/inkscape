@@ -165,9 +165,6 @@ sp_stroke_style_paint_update (SPWidget *spw, SPSelection *sel)
 	gfloat c[5];
 	SPLinearGradient *lg;
 	SPRadialGradient *rg;
-#if 0
-	NRPoint p0, p1;
-#endif
 	NRMatrix fctm, gs2d;
 	NRRect fbb;
 
@@ -516,11 +513,13 @@ static void sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr);
 
 static void sp_stroke_style_set_join_buttons (SPWidget *spw, GtkWidget *active);
 static void sp_stroke_style_set_cap_buttons (SPWidget *spw, GtkWidget *active);
-static void sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, gchar *marker_type);
+static void sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, const gchar *marker_name);
 static void sp_stroke_style_width_changed (GtkAdjustment *adj, SPWidget *spw);
 static void sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw);
 static void sp_stroke_style_line_dash_changed (SPDashSelector *dsel, SPWidget *spw);
 
+static void sp_stroke_style_update_marker_buttons(SPWidget *spw, const GSList *objects, 
+						  unsigned int loc, const gchar *stock_type);
 
 /**
  * Helper function for creating radio buttons.  This should probably be re-thought out
@@ -770,7 +769,9 @@ sp_stroke_style_line_update (SPWidget *spw, SPSelection *sel)
 	unsigned int captype;
 	GtkWidget *tb;
 
-	if (gtk_object_get_data (GTK_OBJECT (spw), "update")) return;
+	if (gtk_object_get_data (GTK_OBJECT (spw), "update")) {
+	  return;
+	}
 
 	gtk_object_set_data (GTK_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
@@ -874,52 +875,9 @@ sp_stroke_style_line_update (SPWidget *spw, SPSelection *sel)
 	sp_stroke_style_set_cap_buttons (spw, tb);
 
 	/* Markers */
-	object = SP_OBJECT (objects->data);
-	style = SP_OBJECT_STYLE (object);
-
-	gchar* start_marker = object->style->marker[SP_MARKER_LOC_START].value;
-	g_message("Start marker is '%s'", start_marker);
-#if 0
-	/* TODO:  This code is adapted for how it's done for caps and joins but I'm not sure
-	          if this is the best way to handle it...  I think this routine updates the
-		  buttons based on what the document settings are, but doesn't actually perform
-		  the change to the drawing.
-	*/
-
-	gboolean startMarkerValid = TRUE;
-
-	/* Iterate through the objects and check the style */
-	for (l = objects->next; l != NULL; l = l->next) {
-		SPObject *o;
-		o = SP_OBJECT (l->data);
-		if (o->style->marker[SP_MARKER_LOC_START].value != startmarkertype)
-		{
-		  startMarkerValid = FALSE;
-		}
-	}
-
-	tb = NULL;
-	if ( startMarkerValid )
-	{
-		switch (startmarkertype) {
-		case SP_STROKE_MARKER_NONE:
-			tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), 
-							     INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_NONE));
-			break;
-		case SP_STROKE_MARKER_FILLED_ARROW:
-			tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), 
-							     INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_FILLED_ARROW));
-			break;
-		case SP_STROKE_MARKER_HOLLOW_ARROW:
-			tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), 
-							     INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_HOLLOW_ARROW));
-			break;
-		default:
-			break;
-		}
-	}
-	sp_stroke_style_set_start_marker_buttons (spw, tb);
-#endif
+	sp_stroke_style_update_marker_buttons(spw, objects, SP_MARKER_LOC_START, INKSCAPE_STOCK_START_MARKER);
+	sp_stroke_style_update_marker_buttons(spw, objects, SP_MARKER_LOC_MID, INKSCAPE_STOCK_MID_MARKER);
+	sp_stroke_style_update_marker_buttons(spw, objects, SP_MARKER_LOC_END, INKSCAPE_STOCK_END_MARKER);
 
 	/* Dash */
 	if (style->stroke_dash.n_dash > 0) {
@@ -1398,7 +1356,7 @@ sp_stroke_style_set_cap_buttons (SPWidget *spw, GtkWidget *active)
  * active - the currently selected button.
  */
 static void
-sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, gchar *marker_type)
+sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, const gchar *marker_name)
 {
   /* A toggle button */
   GtkWidget *tb;
@@ -1407,9 +1365,9 @@ sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, gchar *mar
    * without having to cut and paste the code itself.
    */
   gchar *marker_xpm[INKSCAPE_STOCK_MARKER_QTY+1];
-  marker_xpm[0] = g_strconcat(marker_type, INKSCAPE_STOCK_MARKER_NONE, NULL);
-  marker_xpm[1] = g_strconcat(marker_type, INKSCAPE_STOCK_MARKER_FILLED_ARROW, NULL);
-  marker_xpm[2] = g_strconcat(marker_type, INKSCAPE_STOCK_MARKER_HOLLOW_ARROW, NULL);
+  marker_xpm[0] = g_strconcat(marker_name, INKSCAPE_STOCK_MARKER_NONE, NULL);
+  marker_xpm[1] = g_strconcat(marker_name, INKSCAPE_STOCK_MARKER_FILLED_ARROW, NULL);
+  marker_xpm[2] = g_strconcat(marker_name, INKSCAPE_STOCK_MARKER_HOLLOW_ARROW, NULL);
   marker_xpm[3] = NULL;
 
   for (int i=0; i<INKSCAPE_STOCK_MARKER_QTY; i++) {
@@ -1421,4 +1379,38 @@ sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, gchar *mar
     
   }
   g_strfreev(marker_xpm);
+}
+
+/**
+ * Checks the marker style settings for the selected objects and updates the
+ * toggle buttons accordingly.
+ */
+static void
+sp_stroke_style_update_marker_buttons(SPWidget *spw, const GSList *objects,
+				      unsigned int loc, const gchar *stock_type) {
+  GtkWidget *tb         = NULL;
+  gboolean marker_valid = TRUE;
+  SPObject *object      = SP_OBJECT (objects->data);
+  gchar *marker_type    = object->style->marker[loc].value;
+
+  g_message("'%s' marker is '%s'", stock_type, marker_type);
+  
+  /* Iterate through the objects and check the styles */
+  for (GSList *l = objects->next; l != NULL; l = l->next) {
+    SPObject *o;
+    o = SP_OBJECT (l->data);
+    if (! g_ascii_strcasecmp(o->style->marker[loc].value, marker_type)) {
+	      marker_valid = FALSE;
+    }
+  }
+  
+  if ( marker_valid ) {
+    gchar *widget_name[2];
+    widget_name[0] = g_strconcat(stock_type, marker_type, NULL);
+    widget_name[1] = NULL;
+    g_message("Widget name is '%s'", widget_name[0]);
+    tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), widget_name[0]));
+    g_strfreev(widget_name);
+  } 
+  sp_stroke_style_set_marker_buttons (spw, GTK_WIDGET (tb), stock_type);
 }
