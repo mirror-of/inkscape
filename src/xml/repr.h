@@ -239,9 +239,8 @@ int sp_repr_get_int_attribute(SPRepr *repr, gchar const *key, int def);
 
 int sp_repr_compare_position(SPRepr *first, SPRepr *second);
 
-int sp_repr_position(SPRepr *repr);
+int sp_repr_position(SPRepr const *repr);
 void sp_repr_set_position_absolute(SPRepr *repr, int pos);
-void sp_repr_set_position_relative(SPRepr *repr, int pos);
 int sp_repr_n_children(SPRepr *repr);
 void sp_repr_append_child(SPRepr *repr, SPRepr *child);
 

@@ -365,57 +365,58 @@ sp_repr_doc_attr (SPRepr * repr, const char * key)
 }
 
 int
-sp_repr_compare_position (SPRepr * first, SPRepr * second)
+sp_repr_compare_position(SPRepr *first, SPRepr *second)
 {
-    SPRepr * parent;
-    int p1, p2;
+    g_assert( sp_repr_parent(first) == sp_repr_parent(second) );
 
-    parent = sp_repr_parent (first);
-    g_assert (parent == sp_repr_parent (second));
-
-    p1 = sp_repr_position (first);
-    p2 = sp_repr_position (second);
+    int const p1 = sp_repr_position(first);
+    int const p2 = sp_repr_position(second);
 
     if (p1 > p2) return 1;
     if (p1 < p2) return -1;
     return 0;
+
+    /* effic: Assuming that the parent--child relationship is consistent (i.e. that the parent
+       really does contain first and second among its list of children), it should be equivalent to
+       walk along the children and see which we encounter first (returning 0 iff first == second).
+
+       Given that this function is used solely for sorting, we can use a similar approach to do the
+       sort: gather the things to be sorted, into an STL vector (to allow random access and faster
+       traversals).  Do a single pass of the parent's children; for each child, do a pass on
+       whatever items in the vector we haven't yet encountered.  If the child is found, then swap
+       it to the beginning of the yet-unencountered elements of the vector.  Continue until no more
+       than one remains unencountered.  -- pjrm */
 }
 
+
+/** Returns the position of \a repr among its parent's children (starting with 0 for the first
+ *  child).
+ *
+ *  Requires: repr != NULL
+ *         && sp_repr_parent(repr) != NULL
+ *         && sp_repr_parent(repr)'s list of children includes \a repr.
+ */
 int
-sp_repr_position (SPRepr * repr)
+sp_repr_position(SPRepr const *repr)
 {
-    SPRepr * parent;
-    SPRepr * sibling;
-    int pos;
+    g_assert(repr != NULL);
+    SPRepr const *parent = sp_repr_parent(repr);
+    g_assert(parent != NULL);
 
-    g_assert (repr != NULL);
-    parent = sp_repr_parent (repr);
-    g_assert (parent != NULL);
-
-    pos = 0;
-    for (sibling = parent->children; sibling != NULL; sibling = sibling->next) {
-        if (repr == sibling) return pos;
-        pos += 1;
+    int pos = 0;
+    for (SPRepr *sibling = parent->children; sibling != NULL; sibling = sibling->next) {
+        if ( repr == sibling ) {
+            return pos;
+        }
+        ++pos;
     }
-    
-    g_assert_not_reached ();
 
+    g_assert_not_reached();
     return -1;
 }
 
-void
-sp_repr_set_position_relative (SPRepr * repr, int pos)
-{
-    int cpos;
-
-    g_assert (repr != NULL);
-
-    cpos = sp_repr_position (repr);
-    sp_repr_set_position_absolute (repr, cpos + pos);
-}
-
 int
-sp_repr_n_children (SPRepr * repr)
+sp_repr_n_children(SPRepr *repr)
 {
     SPRepr * child;
     int n;

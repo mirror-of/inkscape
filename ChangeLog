@@ -1,3 +1,11 @@
+2004-05-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/xml/repr.h, src/xml/repr-util.cpp:
+	  Remove unused function sp_repr_set_position_relative.
+
+	* src/xml/repr-util.cpp (sp_repr_compare_position, sp_repr_position):
+	  Minor cleanups.
+
 2004-05-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-use.cpp: Cleanup: greater conformance to CodingStyle.
