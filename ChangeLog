@@ -1,5 +1,7 @@
 2004-03-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/style.cpp (sp_style_read_from_object): Additional check.
+
 	* src/rect-context.cpp: Minor cleanups (mostly fixing mixed tab usage).
 
 	* src/sp-gradient.cpp (sp_gradient_rebuild_vector): Add assertion.

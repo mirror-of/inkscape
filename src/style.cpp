@@ -549,7 +549,10 @@ sp_style_read_from_object (SPStyle *style, SPObject *object)
     g_return_if_fail (object != NULL);
     g_return_if_fail (SP_IS_OBJECT (object));
 
-    sp_style_read (style, object, SP_OBJECT_REPR (object));
+    SPRepr *repr = SP_OBJECT_REPR(object);
+    g_return_if_fail(repr != NULL);
+
+    sp_style_read(style, object, repr);
 }
 
 
