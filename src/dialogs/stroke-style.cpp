@@ -1450,7 +1450,66 @@ sp_stroke_style_line_attr_changed(SPWidget *spw,
     }
 }
 
+static void
+sp_dash_selector_set_from_style (GtkWidget *dsel, SPStyle *style)
+{
+    if (style->stroke_dash.n_dash > 0) {
+        double d[64];
+        int len = MIN(style->stroke_dash.n_dash, 64);
+        for (int i = 0; i < len; i++) {
+            if (style->stroke_width.computed != 0)
+                d[i] = style->stroke_dash.dash[i] / style->stroke_width.computed;
+            else 
+                d[i] = style->stroke_dash.dash[i]; // is there a better thing to do for stroke_width==0?
+        }
+        sp_dash_selector_set_dash(SP_DASH_SELECTOR(dsel), len, d,
+               style->stroke_width.computed != 0? 
+                    style->stroke_dash.offset / style->stroke_width.computed  :
+                    style->stroke_dash.offset);
+    } else {
+        sp_dash_selector_set_dash(SP_DASH_SELECTOR(dsel), 0, NULL, 0.0);
+    }
+}
 
+static void
+sp_jointype_set (SPWidget *spw, unsigned const jointype)
+{
+    GtkWidget *tb = NULL;
+    switch (jointype) {
+        case SP_STROKE_LINEJOIN_MITER:
+            tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), INKSCAPE_STOCK_JOIN_MITER));
+            break;
+        case SP_STROKE_LINEJOIN_ROUND:
+            tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), INKSCAPE_STOCK_JOIN_ROUND));
+            break;
+        case SP_STROKE_LINEJOIN_BEVEL:
+            tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), INKSCAPE_STOCK_JOIN_BEVEL));
+            break;
+        default:
+            break;
+    }
+    sp_stroke_style_set_join_buttons (spw, tb);
+}
+
+static void
+sp_captype_set (SPWidget *spw, unsigned const captype)
+{
+    GtkWidget *tb = NULL;
+    switch (captype) {
+        case SP_STROKE_LINECAP_BUTT:
+            tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), INKSCAPE_STOCK_CAP_BUTT));
+            break;
+        case SP_STROKE_LINECAP_ROUND:
+            tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), INKSCAPE_STOCK_CAP_ROUND));
+            break;
+        case SP_STROKE_LINECAP_SQUARE:
+            tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), INKSCAPE_STOCK_CAP_SQUARE));
+            break;
+        default:
+            break;
+    }
+    sp_stroke_style_set_cap_buttons (spw, tb);
+}
 
 static void
 sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel)
@@ -1536,79 +1595,28 @@ sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel)
         }
     }
 
-    {
-        GtkWidget *tb = NULL;
-        if (joinValid) {
-            switch (jointype) {
-                case SP_STROKE_LINEJOIN_MITER:
-                    tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw),
-                                                        INKSCAPE_STOCK_JOIN_MITER));
-                    break;
-
-                case SP_STROKE_LINEJOIN_ROUND:
-                    tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw),
-                                                        INKSCAPE_STOCK_JOIN_ROUND));
-                    break;
-
-                case SP_STROKE_LINEJOIN_BEVEL:
-                    tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw),
-                                                        INKSCAPE_STOCK_JOIN_BEVEL));
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        sp_stroke_style_set_join_buttons(spw, tb);
+    if (joinValid) {
+        sp_jointype_set (spw, jointype);
+    } else {
+        sp_stroke_style_set_join_buttons(spw, NULL);
     }
 
-    {
-        GtkWidget *tb = NULL;
-        if (capValid) {
-            switch (captype) {
-                case SP_STROKE_LINECAP_BUTT:
-                    tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw),
-                                                        INKSCAPE_STOCK_CAP_BUTT));
-                    break;
-
-                case SP_STROKE_LINECAP_ROUND:
-                    tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw),
-                                                        INKSCAPE_STOCK_CAP_ROUND));
-                    break;
-
-                case SP_STROKE_LINECAP_SQUARE:
-                    tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw),
-                                                        INKSCAPE_STOCK_CAP_SQUARE));
-                    break;
-
-                default:
-                    break;
-            }
-        }
-        sp_stroke_style_set_cap_buttons(spw, tb);
+    if (capValid) {
+        sp_captype_set (spw, captype);
+    } else {
+        sp_stroke_style_set_cap_buttons(spw, NULL);
     }
 
     /* Markers */
     sp_stroke_style_update_marker_menus(spw, objects);
 
     /* Dash */
-    if (style->stroke_dash.n_dash > 0) {
-        double d[64];
-        int len = MIN(style->stroke_dash.n_dash, 64);
-        for (int i = 0; i < len; i++) {
-            d[i] = style->stroke_dash.dash[i] / style->stroke_width.computed;
-        }
-        sp_dash_selector_set_dash(SP_DASH_SELECTOR(dsel), len, d,
-                                  style->stroke_dash.offset / style->stroke_width.computed);
-    } else {
-        sp_dash_selector_set_dash(SP_DASH_SELECTOR(dsel), 0, NULL, 0.0);
-    }
+    sp_dash_selector_set_from_style (dsel, style);
 
     gtk_widget_set_sensitive(sset, TRUE);
 
     gtk_object_set_data(GTK_OBJECT(spw), "update",
                         GINT_TO_POINTER(FALSE));
-
 } 
 
 
@@ -1650,71 +1658,13 @@ sp_stroke_style_line_update_repr(SPWidget *spw, SPRepr *repr)
     gtk_adjustment_set_value(GTK_ADJUSTMENT(width), swidth);
 
     /* Join */
-    {
-        GtkWidget *tb;
-        switch (style->stroke_linejoin.value) {
-            case SP_STROKE_LINEJOIN_MITER:
-                tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw),
-                                                    INKSCAPE_STOCK_JOIN_MITER));
-                break;
-
-            case SP_STROKE_LINEJOIN_ROUND:
-                tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw),
-                                                    INKSCAPE_STOCK_JOIN_ROUND));
-                break;
-
-            case SP_STROKE_LINEJOIN_BEVEL:
-                tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw),
-                                                    INKSCAPE_STOCK_JOIN_BEVEL));
-                break;
-
-            default:
-                tb = NULL;
-                break;
-        }
-        sp_stroke_style_set_join_buttons(spw, tb);
-    }
+    sp_jointype_set (spw, style->stroke_linejoin.value);
 
     /* Cap */
-    {
-        GtkWidget *tb;
-        switch (style->stroke_linecap.value) {
-            case SP_STROKE_LINECAP_BUTT:
-                tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw),
-                                                    INKSCAPE_STOCK_CAP_BUTT));
-                break;
-
-            case SP_STROKE_LINECAP_ROUND:
-                tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw),
-                                                    INKSCAPE_STOCK_CAP_ROUND));
-                break;
-
-            case SP_STROKE_LINECAP_SQUARE:
-                tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw),
-                                                    INKSCAPE_STOCK_CAP_SQUARE));
-                break;
-
-            default:
-                tb = NULL;
-                break;
-
-        } // end of switch()
-
-        sp_stroke_style_set_cap_buttons(spw, tb);
-    }
+    sp_captype_set (spw, style->stroke_linecap.value);
 
     /* Dash */
-    if (style->stroke_dash.n_dash > 0) {
-        double d[64];
-        int len = MIN(style->stroke_dash.n_dash, 64);
-        for (int i = 0; i < len; i++) {
-            d[i] = style->stroke_dash.dash[i] / style->stroke_width.computed;
-        }
-        sp_dash_selector_set_dash(SP_DASH_SELECTOR(dsel), len, d,
-                                  style->stroke_dash.offset / style->stroke_width.computed);
-    } else {
-        sp_dash_selector_set_dash(SP_DASH_SELECTOR(dsel), 0, NULL, 0.0);
-    }
+    sp_dash_selector_set_from_style (dsel, style);
 
     gtk_widget_set_sensitive(sset, TRUE);
 
