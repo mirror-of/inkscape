@@ -279,7 +279,6 @@ static void
 sp_text_update (SPObject *object, SPCtx *ctx, guint flags)
 {
     SPText *text = SP_TEXT (object);
-    SPItemCtx *ictx = (SPItemCtx *) ctx;
 
     if (((SPObjectClass *) text_parent_class)->update)
         ((SPObjectClass *) text_parent_class)->update (object, ctx, flags);
@@ -451,8 +450,6 @@ sp_text_show(SPItem *item, NRArena *arena, unsigned /* key*/, unsigned /*flags*/
 static void
 sp_text_hide(SPItem *item, unsigned key)
 {
-    SPText *group = (SPText *) item;
-
     if (((SPItemClass *) text_parent_class)->hide)
         ((SPItemClass *) text_parent_class)->hide (item, key);
 }
@@ -465,11 +462,15 @@ sp_text_description(SPItem *item)
 
     font_instance *tf = (font_factory::Default())->Face(style->text->font_family.value,
                                                         font_style_to_pos(*style));
-    gchar n[256];
-    /* FIXME: Must always assign to n even if !tf. */
-    if ( tf ) tf->Name( n, 256);
-    //printf("sp_text_description  ");
-    if ( tf ) tf->Unref();
+    char name_buf[256];
+    char const *n;
+    if (tf) {
+        tf->Name(name_buf, sizeof(name_buf));
+        n = name_buf;
+        tf->Unref();
+    } else {
+        n = _("<no name found>");
+    }
 
     return g_strdup_printf (_("Text (%s, %.5gpt)"), n, style->font_size.computed );
 }

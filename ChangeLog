@@ -3,6 +3,9 @@
 	* src/xml/repr-css.cpp (sp_repr_css_print):
 	  Fix for shared string change.
 
+	* src/sp-text.cpp (sp_text_description):
+	  Fix for when font Name() call fails.
+
 	* src/sp-text.cpp: CodingStyle changes, including moving some
 	  declarations to first use.
 	  Remove unused __SP_TEXT_C__ define.
