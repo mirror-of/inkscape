@@ -4,12 +4,12 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-11-01 23:23+0100\n"
-"PO-Revision-Date: 2004-10-28 09:39+0200\n"
+"PO-Revision-Date: 2004-11-02 09:49+0100\n"
 "Last-Translator: Lucas Vieites <lucas@asixinformatica.com>\n"
 "Language-Team: Spanish/Spain <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: inkscape.desktop.in.h:1
 msgid "Inkscape SVG Vector Illustrator"
@@ -311,14 +311,12 @@ msgid "_Clear"
 msgstr "_Limpiar"
 
 #: src/dialogs/debugdialog.cpp:155
-#, fuzzy
 msgid "Capture log messages"
-msgstr "Ver los mensajes de depuración"
+msgstr "Capturar los mensajes de registro"
 
 #: src/dialogs/debugdialog.cpp:157
-#, fuzzy
 msgid "Release log messages"
-msgstr "Ver los mensajes de depuración"
+msgstr "Dejar de capturar los mensajes de registro"
 
 #. Notebook tab
 #: src/dialogs/desktop-properties.cpp:810
@@ -1059,7 +1057,7 @@ msgstr "Los clones huérfanos se borran junto con su original."
 #. TRANSLATORS: Noun, i.e. transformations.
 #: src/dialogs/display-settings.cpp:1282
 msgid "Transforms"
-msgstr "Se transforma"
+msgstr "Transformaciones"
 
 #: src/dialogs/display-settings.cpp:1285
 msgid "Scale stroke width"
@@ -1096,7 +1094,7 @@ msgstr "Transformar los patrones (en relleno o borde) junto con los objetos"
 #. TRANSLATORS: How to specify the affine transformation in the SVG file.
 #: src/dialogs/display-settings.cpp:1320
 msgid "Store transformation:"
-msgstr "Guardar transformación"
+msgstr "Guardar transformación:"
 
 #: src/dialogs/display-settings.cpp:1331
 msgid "Optimized"
@@ -1373,7 +1371,7 @@ msgstr ""
 #: src/dialogs/find.cpp:405
 #, c-format
 msgid "%d object(s) found (out of %d), %s match."
-msgstr "%d objeto(s) encontrado (de %d), %s coinciden."
+msgstr "%d objeto(s) encontrado (de %d), coincidencia %s."
 
 #: src/dialogs/find.cpp:406
 msgid "exact"
@@ -1443,7 +1441,7 @@ msgstr "Espirales"
 #. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
 #: src/dialogs/find.cpp:634
 msgid "Search paths, lines, polylines"
-msgstr "Buscar en trazos, líneas, pilolíneas."
+msgstr "Buscar en trazos, líneas, polilíneas."
 
 #: src/dialogs/find.cpp:634
 msgid "Paths"
@@ -1525,13 +1523,12 @@ msgstr "Seleccionar los objetos que coincidan con todos los campos rellenados"
 #: src/dialogs/item-properties.cpp:125 src/dialogs/item-properties.cpp:420
 #: src/dialogs/item-properties.cpp:549 src/dialogs/item-properties.cpp:553
 msgid "Label"
-msgstr ""
+msgstr "Etiqueta"
 
 #. Create the button for setting the object label
 #: src/dialogs/item-properties.cpp:143
-#, fuzzy
 msgid "Update Properties"
-msgstr "_Propiedades del elemento"
+msgstr "Actualizar propiedades"
 
 #. Create the label for the object title
 #: src/dialogs/item-properties.cpp:154 src/dialogs/rdf.cpp:208
@@ -1569,9 +1566,8 @@ msgid "Ref"
 msgstr "Ref"
 
 #: src/dialogs/item-properties.cpp:551
-#, fuzzy
 msgid "Label invalid"
-msgstr "El ID no es válido"
+msgstr "Etiqueta no válida"
 
 #: src/dialogs/object-attributes.cpp:31
 msgid "Href:"
@@ -1842,8 +1838,7 @@ msgstr "URI"
 #. TRANSLATORS: this is where you put a URL to a page that defines the license
 #: src/dialogs/rdf.cpp:264
 msgid "URI to this document's license's namespace definition."
-msgstr ""
-"URI a la definición del espacio de nombre de la licencia de este documento"
+msgstr "URI a la definición del espacio de nombre de la licencia de este documento"
 
 #. TRANSLATORS: fragment of XML representing the license of the document
 #: src/dialogs/rdf.cpp:268
@@ -1868,21 +1863,21 @@ msgstr "Ancho de trazo"
 #. corners of paths. It can be "miter", "round" or "bevel".
 #: src/dialogs/stroke-style.cpp:1378
 msgid "Join:"
-msgstr "Unir:"
+msgstr "Unión:"
 
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
 #: src/dialogs/stroke-style.cpp:1392
 msgid "Miter join"
-msgstr "Unión inglete"
+msgstr "Unión de tipo inglete"
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
 #: src/dialogs/stroke-style.cpp:1402
 msgid "Round join"
-msgstr "Union redonda"
+msgstr "Unión redonda"
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
@@ -1922,7 +1917,7 @@ msgstr "Tope embutido"
 #. line; the ends of the line are rounded
 #: src/dialogs/stroke-style.cpp:1466
 msgid "Round cap"
-msgstr "Top redondo"
+msgstr "Tope redondo"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
@@ -2011,9 +2006,8 @@ msgid "Color Quantization"
 msgstr "Reducción de colores"
 
 #: src/dialogs/tracedialog.cpp:397
-#, fuzzy
 msgid "Colors:"
-msgstr "Colores"
+msgstr "Colores:"
 
 #: src/dialogs/tracedialog.cpp:402
 msgid "Quantization / Reduction"
@@ -2335,11 +2329,11 @@ msgstr "Seleccione el archivo a abrir"
 #: src/file.cpp:473
 #, c-format
 msgid "Removed <b>%i</b> unused item(s) in &lt;defs&gt;."
-msgstr ""
+msgstr "Se han eliminado <b>%i</b> elementos no usados en &lt;defs&gt;."
 
 #: src/file.cpp:475
 msgid "No unused items in &lt;defs&gt;."
-msgstr ""
+msgstr "No hay elementos sin usar en &lt;defs&gt;."
 
 #: src/file.cpp:499
 #, c-format
@@ -3112,9 +3106,8 @@ msgstr ""
 
 #. Item dialog
 #: src/object-ui.cpp:107
-#, fuzzy
 msgid "Object _Properties"
-msgstr "Propiedades del _objeto..."
+msgstr "_Propiedades del objeto"
 
 #. Select item
 #: src/object-ui.cpp:117
@@ -3168,7 +3161,7 @@ msgstr "_Propiedades de la imagen"
 #. TRANSLATORS: "to trace" means "to vectorize" (to convert a bitmap to vector graphics)
 #: src/object-ui.cpp:355
 msgid "_Trace"
-msgstr "_Trazar"
+msgstr "Vec_torizar"
 
 #. Item dialog
 #: src/object-ui.cpp:396
@@ -3564,7 +3557,7 @@ msgstr "<b>Imagen</b> %d x %d : %s"
 #. TRANSLATORS: "to trace" means "to vectorize" (to convert a bitmap to vector graphics)
 #: src/sp-image.cpp:1067
 msgid "Trace"
-msgstr "Traza"
+msgstr "Vectorizar"
 
 #: src/sp-image.cpp:1214
 #, c-format
@@ -3719,7 +3712,7 @@ msgstr ""
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
 #: src/splivarot.cpp:544
 msgid "Select <b>path(s)</b> to outline."
-msgstr "Seleccione <b>trazos</b> para contornear."
+msgstr "Seleccione uno o más <b>trazos</b> para contornear."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
 #: src/splivarot.cpp:745
@@ -3785,9 +3778,8 @@ msgid "<b>No texts-on-paths</b> in the selection."
 msgstr "<b>No hay trazos en trayecto</b> en la selección."
 
 #: src/text-chemistry.cpp:209 src/text-chemistry.cpp:228
-#, fuzzy
 msgid "Select <b>text(s)</b> to remove kerns from."
-msgstr "Seleccione los <b>trazos</b> que desea revertir."
+msgstr "Seleccione los <b>textos</b> de los que desea eliminar los kerns."
 
 #: src/text-context.cpp:393
 msgid "No-break space"
@@ -4124,39 +4116,35 @@ msgstr ""
 
 #: src/trace/trace.cpp:68 src/trace/trace.cpp:77 src/trace/trace.cpp:85
 msgid "Select an <b>image</b> to trace"
-msgstr "Seleccione una <b>imagen</b> para trazar"
+msgstr "Seleccione una <b>imagen</b> para vectorizar"
 
 #: src/trace/trace.cpp:139
 msgid "Trace: No active document"
-msgstr "Trazar: No hay documento activo"
+msgstr "Vectorizar: No hay documento activo"
 
 #: src/trace/trace.cpp:160
 msgid "Trace: Image has no bitmap data"
-msgstr "Trazar: La imagen no tiene datos de mapa de bits"
+msgstr "Vectorizar: La imagen no tiene datos de mapa de bits"
 
 #: src/verbs.cpp:873
 msgid "New layer created."
 msgstr "Se ha creado una capa nueva."
 
 #: src/verbs.cpp:886
-#, fuzzy
 msgid "Moved to next layer."
-msgstr "Mover a la siguiente capa"
+msgstr "Movido a la siguiente capa."
 
 #: src/verbs.cpp:888
-#, fuzzy
 msgid "Can't move past last layer."
-msgstr "No se puede mover más la capa."
+msgstr "No se puede mover más allá de la última capa."
 
 #: src/verbs.cpp:898
-#, fuzzy
 msgid "Moved to previous layer."
-msgstr "Mover a la capa anterior"
+msgstr "Movido a la capa anterior"
 
 #: src/verbs.cpp:900
-#, fuzzy
 msgid "Can't move past first layer."
-msgstr "No se puede mover más la capa."
+msgstr "No se puede mover más allá de la primera capa."
 
 #: src/verbs.cpp:909 src/verbs.cpp:973
 msgid "No current layer."
@@ -4514,16 +4502,14 @@ msgid "Ungroup selected group(s)"
 msgstr "Desagrupar grupo(s) seleccionado(s)"
 
 #: src/verbs.cpp:1502
-#, fuzzy
 msgid "_Put on Path"
-msgstr "_Poner texto en trayecto"
+msgstr "_Poner en trayecto"
 
 #: src/verbs.cpp:1503
 msgid "Put text on path"
 msgstr "Poner texto en trayecto"
 
 #: src/verbs.cpp:1504
-#, fuzzy
 msgid "_Remove from Path"
 msgstr "_Retirar del trayecto"
 
@@ -4533,12 +4519,11 @@ msgstr "Retirar texto de trayecto"
 
 #: src/verbs.cpp:1506
 msgid "Remove All _Kerns"
-msgstr ""
+msgstr "Eliminar todos los _kerns"
 
 #: src/verbs.cpp:1507
-#, fuzzy
 msgid "Remove all kerns from a text object"
-msgstr "Eliminar transformaciones del objeto"
+msgstr "Eliminar todos los kerns de un objeto de texto"
 
 #: src/verbs.cpp:1509
 msgid "_Union"
@@ -4582,7 +4567,7 @@ msgstr "Cortar el objeto del fondo en pedazos"
 
 #: src/verbs.cpp:1519
 msgid "Cut _Path"
-msgstr "Cortar trazo"
+msgstr "Cor_tar trazo"
 
 #: src/verbs.cpp:1520
 msgid "Cut the bottom object's stroke into pieces, removing fill"
@@ -4688,20 +4673,17 @@ msgstr "_Revertir"
 
 #: src/verbs.cpp:1556
 msgid "Reverses the direction of selected path(s); useful for flipping markers"
-msgstr ""
-"Invierte la dirección de los trazos seleccionados, útil para girar marcadores"
+msgstr "Invierte la dirección de los trazos seleccionados, útil para girar marcadores"
 
 #: src/verbs.cpp:1557
-#, fuzzy
 msgid "_Trace Bitmap"
-msgstr "_Trazar mapa de bits"
+msgstr "Vec_torizar un mapa de bits"
 
 #: src/verbs.cpp:1558
 msgid "Convert bitmap object to paths"
 msgstr "Convierte el objeto mapa de bits en trazos"
 
 #: src/verbs.cpp:1559
-#, fuzzy
 msgid "_Make a Bitmap Copy"
 msgstr "Crear copia en _mapa de bits"
 
@@ -4735,14 +4717,12 @@ msgid "Create a new layer"
 msgstr "Crear una capa nueva"
 
 #: src/verbs.cpp:1569
-#, fuzzy
 msgid "Rename Layer"
-msgstr "Elevar capa"
+msgstr "Cambiar nombre a capa"
 
 #: src/verbs.cpp:1570
-#, fuzzy
 msgid "Rename the current layer"
-msgstr "Elevar la capa actual"
+msgstr "Cambiar nombre a la capa actual"
 
 #: src/verbs.cpp:1571
 msgid "Move to Next Layer"
@@ -4834,7 +4814,6 @@ msgid "Convert selected object(s) to path(s)"
 msgstr "Convierte el objeto seleccionado en trazos"
 
 #: src/verbs.cpp:1595
-#, fuzzy
 msgid "_Unflow Text"
 msgstr "Deshacer fl_ujo de texto"
 
@@ -5204,9 +5183,8 @@ msgid "Align and Distribute dialog"
 msgstr "Diálogo de alineacion y distribución"
 
 #: src/verbs.cpp:1701
-#, fuzzy
 msgid "_Text and Font..."
-msgstr "Texto y tipogra_fía..."
+msgstr "_Texto y tipografía..."
 
 #: src/verbs.cpp:1702
 msgid "Text and Font dialog"
@@ -5446,7 +5424,7 @@ msgstr "Estilos múltiples"
 #. that the currently selected object is a clone.
 #: src/widgets/paint-selector.cpp:676
 msgid "Clone Selected"
-msgstr "Clone seleccionado"
+msgstr "Clon seleccionado"
 
 #: src/widgets/paint-selector.cpp:882
 msgid "No patterns in document"
