@@ -16,15 +16,32 @@
 
 #include <math.h>
 
+
+
+#ifdef __APPLE__
+
+/* MacOSX definition */
+#define isNaN(a) (__isnan(a))
+
+#else
+
 #ifdef WIN32
 
+/* Win32 definition */
 #define isNaN(a) (_isnan(a))
 
 #else
 
+/* Linux definition */
 #define isNaN(a) (isnan(a))
 
 #endif /* WIN32 */
+
+#endif /* __APPLE__ */
+
+
+
+
 
 #endif /* __ISNAN_H__ */
 
