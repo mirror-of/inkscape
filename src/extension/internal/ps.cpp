@@ -323,8 +323,6 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 	_width = sp_document_width (doc);
 	_height = sp_document_height (doc);
 
-	if (_bitmap) return 0;
-
 	NRRect d;
 	bool   pageBoundingBox;
 	bool   pageLandscape;
@@ -344,7 +342,13 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 
 	if (res >= 0) {
 
-		os << "%%Creator: Inkscape " << INKSCAPE_VERSION << "\n";
+		os << "%%Creator: " << PACKAGE_STRING << "\n";
+		// This will become problematic if inkscape gains the
+		// ability to handle multi paged documents. If this is
+		// the case the %%Orientation: comments should be
+		// renamed to %%PageOrientation: and moved to the
+		// respective pages.
+		os << "%%Pages: 1\n";
 		
 		pageLandscape = (d.x1 > d.y1) ? true : false;
 
@@ -354,14 +358,21 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 						<< (int) d.y0 << " "
 						<< (int) ceil (d.y1) << " "
 						<< (int) ceil (d.x1) << "\n";
+			// According to Mike Sweet (the author of CUPS)
+			// HiResBoundingBox is only appropriate
+			// for EPS files. This means that we should
+			// distinguish if we export to ps or eps here.
+			// FIXME: I couldn't find HiResBoundingBox in the PS
+			// reference manual, so I guess we should skip
+			// it.
 			os << "%%HiResBoundingBox: " << d.x0 << " "
 						<< d.y0 << " "
 						<< d.y1 << " "
 						<< d.x1 << "\n";
-			os << 90 << " rotate\n";
 		}
 		else
 		{
+			os << "%%Orientation: Portrait\n";
 			os << "%%BoundingBox: " << (int) d.x0 << " "
 						<< (int) d.y0 << " "
 						<< (int) ceil (d.x1) << " "
@@ -370,11 +381,37 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 						<< d.y0 << " "
 						<< d.x1 << " "
 						<< d.y1 << "\n";
-			os << "0.0 " << sp_document_height (doc) << " translate\n";
 		}
-		os << "0.8 -0.8 scale\n";
-	}
+		
+		os << "%%EndComments\n";
+		// This will become problematic if we print
+		// multi paged documents:
+		os << "%%Page: 1 1\n";
+		
+		if (pageLandscape) {
+			
+			os << 90 << " rotate\n";
+			
+			if (_bitmap)
+			{
+				os << "0 " << (int) -ceil (d.y1) << " translate\n";
+			}
+		}
+		else
+		{
+			if (!_bitmap)
+			{
+				os << "0.0 " << (int) ceil (d.y1) << " translate\n";
+			}
 
+		}
+		
+		if (!_bitmap) 
+		{
+			os << "0.8 -0.8 scale\n";
+		}
+
+	}
 
 	return fprintf (_stream, "%s", os.str().c_str());
 }
