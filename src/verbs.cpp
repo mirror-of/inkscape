@@ -50,6 +50,7 @@
 #include "ui/widget/panel.h"
 #include "ui/dialog/dialog.h"
 #include "dialogs/iconpreview.h"
+#include "dialogs/extensions.h"
 
 #include "extension/effect.h"
 
@@ -1410,6 +1411,13 @@ HelpVerb::perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_HELP_ABOUT:
             sp_help_about ();
             break;
+        case SP_VERB_HELP_ABOUT_EXTENSIONS:
+        {
+            Inkscape::UI::Dialogs::ExtensionsPanel * panel = new Inkscape::UI::Dialogs::ExtensionsPanel();
+            panel->set_full(true);
+            show_panel( *panel );
+        }
+        break;
     default:
         break;
     }
@@ -1914,6 +1922,8 @@ Verb * Verb::_base_verbs[] = {
     /* Help */
     new HelpVerb(SP_VERB_HELP_KEYS, "HelpKeys", N_("_Keys and Mouse"),
         N_("Key and mouse shortcuts reference"), "help_keys"),
+    new HelpVerb(SP_VERB_HELP_ABOUT_EXTENSIONS, "HelpAboutExtensions", N_("_About Extensions"),
+        N_("About Extensions..."), NULL),
     new HelpVerb(SP_VERB_HELP_ABOUT, "HelpAbout", N_("_About Inkscape"),
         N_("About Inkscape"), /*"help_about"*/"inkscape_options"),
 

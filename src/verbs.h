@@ -179,6 +179,7 @@ enum {
     SP_VERB_DIALOG_ITEM,
     /* Help */
     SP_VERB_HELP_KEYS,
+    SP_VERB_HELP_ABOUT_EXTENSIONS,
     SP_VERB_HELP_ABOUT,
     /* Tutorials */
     SP_VERB_TUTORIAL_BASIC,
