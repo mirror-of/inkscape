@@ -12,6 +12,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <time.h>
+#include <gtk/gtk.h>
 #include "macros.h"
 #include "helper/sp-marshal.h"
 #include "document.h"
@@ -101,9 +103,9 @@ sp_view_class_init (SPViewClass *klass)
 					      G_SIGNAL_RUN_FIRST,
 					      G_STRUCT_OFFSET (SPViewClass, status_set),
 					      NULL, NULL,
-					      sp_marshal_NONE__POINTER_BOOLEAN,
+					      sp_marshal_NONE__POINTER_UINT,
 					      G_TYPE_NONE, 2,
-					      G_TYPE_POINTER, G_TYPE_BOOLEAN);
+					      G_TYPE_POINTER, G_TYPE_UINT);
 
 	object_class->dispose = sp_view_dispose;
 }
@@ -196,26 +198,50 @@ sp_view_set_position (SPView *view, gdouble x, gdouble y)
 	g_signal_emit (G_OBJECT (view), signals[POSITION_SET], 0, x, y);
 }
 
-void
-sp_view_set_status (SPView *view, const gchar *status, gboolean isdefault)
-{
-	g_return_if_fail (view != NULL);
-	g_return_if_fail (SP_IS_VIEW (view));
 
-	g_signal_emit (G_OBJECT (view), signals[STATUS_SET], 0, status, isdefault);
-}
 
 void
 sp_view_set_statusf (SPView *view, const gchar *format, ...)
 {
 	va_list args;
 	va_start (args, format);
-	sp_view_set_statusf_va (view, format, args);
+	sp_view_set_statusf_va (view, 0, format, args);
 	va_end (args);
 }
 
 void
-sp_view_set_statusf_va (SPView *view, const gchar *format, va_list args)
+sp_view_set_statusf_timeout (SPView *view, guint msec, const gchar *format, ...)
+{
+	va_list args;
+	va_start (args, format);
+	sp_view_set_statusf_va (view, msec, format, args);
+	va_end (args);
+}
+
+//TODO: make user-settable
+#define STATUSBAR_FLASH_MSEC 1000
+#define STATUSBAR_ERROR_MSEC 5000
+
+void
+sp_view_set_statusf_flash (SPView *view, const gchar *format, ...)
+{
+	va_list args;
+	va_start (args, format);
+	sp_view_set_statusf_va (view, STATUSBAR_FLASH_MSEC, format, args);
+	va_end (args);
+}
+
+void
+sp_view_set_statusf_error (SPView *view, const gchar *format, ...)
+{
+	va_list args;
+	va_start (args, format);
+	sp_view_set_statusf_va (view, STATUSBAR_ERROR_MSEC, format, args);
+	va_end (args);
+}
+
+void
+sp_view_set_statusf_va (SPView *view, guint msec, const gchar *format, va_list args)
 {
 	gchar *status;
 
@@ -226,7 +252,7 @@ sp_view_set_statusf_va (SPView *view, const gchar *format, va_list args)
 
 	g_return_if_fail (status != NULL);
 
-	g_signal_emit (G_OBJECT (view), signals[STATUS_SET], 0, status, TRUE);
+	g_signal_emit (G_OBJECT (view), signals[STATUS_SET], 0, status, msec);
 	g_free (status);
 }
 
@@ -236,8 +262,20 @@ sp_view_clear_status (SPView *view)
 	g_return_if_fail (view != NULL);
 	g_return_if_fail (SP_IS_VIEW (view));
 
-	g_signal_emit (G_OBJECT (view), signals[STATUS_SET], 0, NULL, TRUE);
+	g_signal_emit (G_OBJECT (view), signals[STATUS_SET], 0, NULL, 0);
 }
+
+
+//deprecated, eliminate
+void
+sp_view_set_status (SPView *view, const gchar *status, gboolean isdefault)
+{
+	g_return_if_fail (view != NULL);
+	g_return_if_fail (SP_IS_VIEW (view));
+
+	g_signal_emit (G_OBJECT (view), signals[STATUS_SET], 0, status, 0);
+}
+
 
 static void
 sp_view_document_uri_set (SPDocument *doc, const guchar *uri, SPView *view)

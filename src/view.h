@@ -49,7 +49,7 @@ struct _SPViewClass {
 	/* Cursor position */
 	void (* position_set) (SPView *view, gdouble x, gdouble y);
 	/* Status */
-	void (* status_set) (SPView *view, const guchar *status, gboolean isdefault);
+	void (* status_set) (SPView *view, const guchar *status, guint msec);
 };
 
 GType sp_view_get_type (void);
@@ -60,10 +60,17 @@ void sp_view_set_document (SPView *view, SPDocument *doc);
 
 void sp_view_emit_resized (SPView *view, gdouble width, gdouble height);
 void sp_view_set_position (SPView *view, gdouble x, gdouble y);
-void sp_view_set_status (SPView *view, const gchar *status, gboolean isdefault);
+
+//new
 void sp_view_set_statusf (SPView *view, const gchar *format, ...);
-void sp_view_set_statusf_va (SPView *view, const gchar *format, va_list args);
+void sp_view_set_statusf_timeout (SPView *view, guint msec, const gchar *format, ...);
+void sp_view_set_statusf_flash (SPView *view, const gchar *format, ...);
+void sp_view_set_statusf_error (SPView *view, const gchar *format, ...);
+void sp_view_set_statusf_va (SPView *view, guint msec, const gchar *format, va_list args);
 void sp_view_clear_status (SPView *view);
+
+//deprecated
+void sp_view_set_status (SPView *view, const gchar *status, gboolean isdefault);
 
 gboolean sp_view_shutdown (SPView *view);
 void sp_view_request_redraw (SPView *view);
