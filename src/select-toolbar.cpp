@@ -21,6 +21,7 @@
 #include <gtk/gtkdnd.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkhandlebox.h>
+#include <gdk/gdkkeysyms.h>
 
 #include "macros.h"
 #include "helper/window.h"
@@ -190,6 +191,61 @@ sp_object_layout_any_value_changed (GtkAdjustment *adj, SPWidget *spw)
 	gtk_object_set_data (GTK_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
 }
 
+gboolean 
+spinbutton_keypress (GtkWidget *w, GdkEventKey *event, gpointer data)
+{
+	if (event->keyval == GDK_Escape) { // defocus
+		SPWidget *spw = (SPWidget *) data;
+		GtkWidget *canvas = (GtkWidget *) gtk_object_get_data (GTK_OBJECT (spw), "dtw");
+		if (canvas) {
+			gtk_widget_grab_focus (GTK_WIDGET(canvas));
+		}
+		return TRUE; // I consumed the event
+	}
+	return FALSE; // I didn't consume the event
+}
+
+GtkWidget *
+sp_select_toolbox_spinbutton (gchar *label, gchar *data, float lower_limit, GtkWidget *us, GtkWidget *spw, gchar *tooltip)
+{
+	GtkTooltips *tt;
+	GtkWidget *hb, *l, *sb;
+	GtkObject *a;
+
+	tt = gtk_tooltips_new ();
+
+	PangoFontDescription* pan = pango_font_description_new ();
+	pango_font_description_set_size (pan, AUX_FONT_SIZE);
+
+	hb = gtk_hbox_new (FALSE, 1);
+	l = gtk_label_new (_(label));
+	gtk_tooltips_set_tip (tt, l, tooltip, NULL);
+	gtk_widget_modify_font (l, pan);
+	gtk_widget_show (l);
+	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+	gtk_container_add (GTK_CONTAINER (hb), l);
+
+	a = gtk_adjustment_new (0.0, lower_limit, 1e6, 0.1, 7.0, 7.0);
+	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (a));
+	gtk_object_set_data (GTK_OBJECT (spw), data, a);
+
+	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
+	gtk_tooltips_set_tip (tt, sb, tooltip, NULL);
+	gtk_widget_modify_font (sb, pan);
+	gtk_widget_set_size_request (sb, 57, 22);
+	gtk_widget_show (sb);
+	gtk_signal_connect (GTK_OBJECT (sb), "key-press-event", GTK_SIGNAL_FUNC (spinbutton_keypress), spw);
+	gtk_signal_connect (GTK_OBJECT (sb), "key-release-event", GTK_SIGNAL_FUNC (spinbutton_keypress), spw);
+
+	gtk_container_add (GTK_CONTAINER (hb), sb);
+	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_object_layout_any_value_changed), spw);
+
+	pango_font_description_free (pan);
+
+	return hb;
+}
+
+
 GtkWidget *
 sp_select_toolbox_new (SPDesktop *desktop)
 {
@@ -197,32 +253,28 @@ sp_select_toolbox_new (SPDesktop *desktop)
 	GtkTooltips *tt;
 	SPView *view=SP_VIEW (desktop);
 
-	PangoFontDescription* pan = pango_font_description_new ();
-	pango_font_description_set_size (pan, AUX_FONT_SIZE);
-
 	tt = gtk_tooltips_new ();
 	tb = gtk_hbox_new (FALSE, 0);
 
-	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+	aux_toolbox_space (tb, AUX_BETWEEN_BUTTON_GROUPS);
 
 	sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_SELECTION_GROUP, view, tt);
 	sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_SELECTION_UNGROUP, view, tt);
 
-	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+	aux_toolbox_space (tb, AUX_BETWEEN_BUTTON_GROUPS);
 
 	sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_SELECTION_TO_FRONT, view, tt);
 	sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_SELECTION_TO_BACK, view, tt);
 	sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_SELECTION_RAISE, view, tt);
 	sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_SELECTION_LOWER, view, tt);
 
-	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+	aux_toolbox_space (tb, AUX_BETWEEN_BUTTON_GROUPS);
 
 	sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_OBJECT_ROTATE_90, view, tt);
 	sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_OBJECT_FLIP_HORIZONTAL, view, tt);
 	sp_toolbox_button_normal_new_from_verb(tb, AUX_BUTTON_SIZE, SP_VERB_OBJECT_FLIP_VERTICAL, view, tt);
 
-	GtkWidget *spw, *vb, *l, *us, *sb;
-	GtkObject *a;
+	GtkWidget *spw, *vb, *us;
 
 	// create the parent widget for x y w h tracker
 	spw = sp_widget_new_global (INKSCAPE);
@@ -231,75 +283,26 @@ sp_select_toolbox_new (SPDesktop *desktop)
 	gtk_object_set_data (GTK_OBJECT (spw), "dtw", desktop->owner->canvas);
 
 	// the vb frame holds all other widgets and is used to set sensitivity depending on selection state
-	vb = gtk_hbox_new (FALSE, 4);
+	vb = gtk_hbox_new (FALSE, 0);
 	gtk_widget_show (vb);
 	gtk_container_add (GTK_CONTAINER (spw), vb);
 	gtk_object_set_data (GTK_OBJECT (spw), "frame", vb);
 
 	// create the units menu
 	us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
-	gtk_widget_modify_font (us, pan);
 
 	// four spinbuttons
-	l = gtk_label_new (_("X"));
-	gtk_widget_modify_font (l, pan);
-	gtk_widget_show (l);
-	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_container_add (GTK_CONTAINER (vb), l);
-	a = gtk_adjustment_new (0.0, -1e6, 1e6, 0.1, 7.0, 7.0);
-	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (a));
-	gtk_object_set_data (GTK_OBJECT (spw), "X", a);
-	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
-	gtk_widget_modify_font (sb, pan);
-	gtk_widget_set_size_request (sb, 57, 22);
-	gtk_widget_show (sb);
-	gtk_container_add (GTK_CONTAINER (vb), sb);
-	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_object_layout_any_value_changed), spw);
-
-      l = gtk_label_new (_("Y"));
-	gtk_widget_modify_font (l, pan);
-	gtk_widget_show (l);
-	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_container_add (GTK_CONTAINER (vb), l);
-	a = gtk_adjustment_new (0.0, -1e6, 1e6, 0.1, 7.0, 7.0);
-	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (a));
-	gtk_object_set_data (GTK_OBJECT (spw), "Y", a);
-	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
-	gtk_widget_modify_font (sb, pan);
-	gtk_widget_set_size_request (sb, 57, 22);
-	gtk_widget_show (sb);
-	gtk_container_add (GTK_CONTAINER (vb), sb);
-	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_object_layout_any_value_changed), spw);
-
-      l = gtk_label_new (_("W"));
-	gtk_widget_modify_font (l, pan);
-	gtk_widget_show (l);
-	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_container_add (GTK_CONTAINER (vb), l);
-	a = gtk_adjustment_new (0.0, 1e-3, 1e6, 0.1, 7.0, 7.0);
-	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (a));
-	gtk_object_set_data (GTK_OBJECT (spw), "width", a);
-	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
-	gtk_widget_modify_font (sb, pan);
-	gtk_widget_set_size_request (sb, 57, 22);
-	gtk_widget_show (sb);
-	gtk_container_add (GTK_CONTAINER (vb), sb);
-	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_object_layout_any_value_changed), spw);
-
-      l = gtk_label_new (_("H"));
-	gtk_widget_modify_font (l, pan);
-	gtk_widget_show (l);
-	gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-	gtk_container_add (GTK_CONTAINER (vb), l);
-	a = gtk_adjustment_new (0.0, 1e-3, 1e6, 0.1, 7.0, 7.0);
-	sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (us), GTK_ADJUSTMENT (a));
-	gtk_object_set_data (GTK_OBJECT (spw), "height", a);
-	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
-	gtk_widget_modify_font (sb, pan);
-	gtk_widget_set_size_request (sb, 57, 22);
-	gtk_widget_show (sb);
-	gtk_container_add (GTK_CONTAINER (vb), sb);
-	gtk_signal_connect (GTK_OBJECT (a), "value_changed", GTK_SIGNAL_FUNC (sp_object_layout_any_value_changed), spw);
+	gtk_container_add (GTK_CONTAINER (vb), 
+		sp_select_toolbox_spinbutton ("X", "X", -1e6, us, spw, _("The horizontal coordinate of selection")));
+	aux_toolbox_space (vb, 2);
+	gtk_container_add (GTK_CONTAINER (vb), 
+		sp_select_toolbox_spinbutton ("Y", "Y", -1e6, us, spw, _("The vertical coordinate of selection")));
+	aux_toolbox_space (vb, 2);
+	gtk_container_add (GTK_CONTAINER (vb), 
+		sp_select_toolbox_spinbutton ("W", "width", 1e-3, us, spw, _("The width of selection")));
+	aux_toolbox_space (vb, 2);
+	gtk_container_add (GTK_CONTAINER (vb), 
+		sp_select_toolbox_spinbutton ("H", "height", 1e-3, us, spw, _("The height of selection")));
 
 	// add the units menu
 	gtk_widget_show (us);
@@ -317,8 +320,6 @@ sp_select_toolbox_new (SPDesktop *desktop)
 	gtk_box_pack_start (GTK_BOX (tb), spw, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
 	gtk_widget_show_all (tb);
-
-	pango_font_description_free (pan);
 
 	return tb;
 }
