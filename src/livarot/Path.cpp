@@ -10,6 +10,7 @@
 #include "Path.h"
 #include <libnr/nr-point.h>
 #include <libnr/nr-point-ops.h>
+#include <libnr/nr-matrix-ops.h>
 
 /*
  * manipulation of the path data: path description and polyline
@@ -1103,4 +1104,53 @@ Path::PointAndTangentAt (int piece, double at, NR::Point & pos, NR::Point & tgt)
 			}
 		}
 	}
+}
+
+void  Path::Transform(const NR::Matrix &trans)
+{
+	NR::Matrix  trTrans=trans;
+	trTrans[4]=trTrans[5]=0;
+  for (int i=0;i<descr_nb;i++) {
+    int typ=descr_cmd[i].flags&descr_type_mask;
+    switch ( typ ) {
+      case descr_lineto:
+      {
+        path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + descr_cmd[i].dStart );
+				nData->p=nData->p*trans;
+      }
+        break;
+      case descr_moveto:
+      {
+        path_descr_moveto *nData = reinterpret_cast<path_descr_moveto *>( descr_data + descr_cmd[i].dStart );
+				nData->p=nData->p*trans;
+      }
+        break;
+      case descr_arcto:
+      {
+        path_descr_arcto *nData = reinterpret_cast<path_descr_arcto *>( descr_data + descr_cmd[i].dStart );
+				nData->p=nData->p*trans;
+      }
+        break;
+      case descr_cubicto:
+      {
+        path_descr_cubicto *nData = reinterpret_cast<path_descr_cubicto *>( descr_data + descr_cmd[i].dStart );
+				nData->stD=nData->p*trTrans;
+				nData->enD=nData->p*trTrans;
+				nData->p=nData->p*trans;
+      }
+        break;
+      case descr_bezierto:
+      {
+        path_descr_bezierto *nData = reinterpret_cast<path_descr_bezierto *>( descr_data + descr_cmd[i].dStart );
+				nData->p=nData->p*trans;
+      }
+        break;
+      case descr_interm_bezier:
+      {
+        path_descr_intermbezierto *nData = reinterpret_cast<path_descr_intermbezierto *>( descr_data + descr_cmd[i].dStart );
+				nData->p=nData->p*trans;
+      }
+        break;
+    }
+  }
 }

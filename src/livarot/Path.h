@@ -267,6 +267,8 @@ public:
   
   //utilitaire pour inkscape
   void  LoadArtBPath(void *iP,NR::Matrix const &tr,bool doTransformation);
+	
+	void  Transform(const NR::Matrix &trans);
   
   // decompose le chemin en ses sous-chemin
   // killNoSurf=true -> oublie les chemins de surface nulle
