@@ -319,14 +319,13 @@ static void
 sp_font_selector_emit_set (SPFontSelector *fsel)
 {
 	font_instance *font;
-	
+
 	if (static_cast< unsigned int > (fsel->styleidx) < fsel->styles.length) {
 		font = (font_factory::Default())->FaceFromDescr ((gchar *) ((fsel->styles.records)[fsel->styleidx].descr));
 	} else {
 		font = NULL;
 	}
-	
-	
+
 	if (font != fsel->font || ( font && fsel->fontsize_dirty ) ) {
 		if ( font ) font->Ref();
 		if ( fsel->font ) fsel->font->Unref();
@@ -363,7 +362,7 @@ sp_font_selector_set_font (SPFontSelector *fsel, font_instance *font, double siz
 			
 			unsigned int i;
 			for (i = 0; i < fsel->families.length; i++) {
-				if (!strcmp (family, (gchar *)fsel->families.names[i])) {
+				if (!strcasecmp (family, (gchar *)fsel->families.names[i])) {
 					break;
 				}
 			}
