@@ -718,7 +718,7 @@ overlaps (const NRRect *what, const NRRect *box)
 
 static GSList *
 find_items_in_area (GSList *s, SPGroup *group, NRRect const *area,
-                    int (*test)(const NRRect *, const NRRect *))
+                    int (*test)(const NRRect *, const NRRect *), bool take_insensitive = false)
 {
 	g_return_val_if_fail (SP_IS_GROUP (group), s);
 
@@ -732,7 +732,7 @@ find_items_in_area (GSList *s, SPGroup *group, NRRect const *area,
 			SPItem *child = SP_ITEM(o);
 			NRRect box;
 			sp_item_bbox_desktop (child, &box);
-			if (test (area, &box)) {
+			if (test (area, &box) && (take_insensitive || child->sensitive)) {
 				s = g_slist_append (s, child);
 			}
 		}
@@ -744,7 +744,7 @@ find_items_in_area (GSList *s, SPGroup *group, NRRect const *area,
 extern gdouble nr_arena_global_delta;
 
 SPItem*
-find_item_at_point (gint dkey, SPGroup *group, NR::Point const p, gboolean into_groups)
+find_item_at_point (gint dkey, SPGroup *group, NR::Point const p, gboolean into_groups, bool take_insensitive = false)
 {
 	SPItem *seen = NULL, *newseen = NULL;
 
@@ -762,7 +762,8 @@ find_item_at_point (gint dkey, SPGroup *group, NR::Point const p, gboolean into_
 			NRArenaItem *arenaitem = sp_item_get_arenaitem(child, dkey);
 
 			// seen remembers the last (topmost) of items pickable at this point
-			if (nr_arena_item_invoke_pick (arenaitem, p[NR::X], p[NR::Y], nr_arena_global_delta, 1) != NULL) {
+			if (nr_arena_item_invoke_pick (arenaitem, p[NR::X], p[NR::Y], nr_arena_global_delta, 1) != NULL 
+                           && (take_insensitive || child->sensitive)) {
 				seen = child;
 			}
 		}
