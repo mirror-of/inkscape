@@ -39,6 +39,11 @@ class Point{
 		pt[Y] = y;
 	}
 
+	Point(const NRPoint p) {
+		pt[X] = p.x;
+		pt[Y] = p.y;
+	}
+
 	/** Return a point like this point but rotated -90 degrees.
 	    (If the y axis grows downwards and the x axis grows to the
 	    right, then this is 90 degrees counter-clockwise.)
