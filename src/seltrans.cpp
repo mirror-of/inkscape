@@ -969,7 +969,12 @@ gboolean sp_sel_trans_rotate_request(SPSelTrans *seltrans, SPSelTransHandle cons
 	pt = point * NR::translate(-norm) * ( r2 / r1 ) * NR::translate(norm);
 
 	/* status text */
-	double angle = 180 / M_PI * theta;
+	double angle;
+	if (state & GDK_CONTROL_MASK) {
+          angle = 180 / M_PI * theta;
+      } else {
+          angle = 180 / M_PI * atan2 (NR::dot(NR::rot90(d1), d2), NR::dot(d1, d2));
+      }
 
 	if (angle > 180) angle -= 360;
 	if (angle < -180) angle += 360;
