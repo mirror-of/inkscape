@@ -223,6 +223,16 @@ static char const *const fill_rule_vals[] = {"nonzero", "evenodd", NULL};
 
 static char const *const paint_enum_vals[] = {"none", "currentColor", NULL};
 
+static gchar *
+merge_then_write_string(gchar const *const str, guint const flags)
+{
+    SPStyle *const style = sp_style_new();
+    sp_style_merge_from_style_string(style, str);
+    gchar *const ret = sp_style_write_string(style, flags);
+    sp_style_unref(style);
+    return ret;
+}
+
 static void
 enum_val(char const prop[], char const *const vals[])
 {
@@ -231,14 +241,9 @@ enum_val(char const prop[], char const *const vals[])
 
     for (unsigned i = 0; vals[i]; ++i) {
         char *prop_eq_val = g_strdup_printf("%s:%s", prop, vals[i]);
-        SPStyle *style = sp_style_new();
-        sp_style_merge_from_style_string(style, prop_eq_val);
-        {
-            gchar *ifset_str = sp_style_write_string(style, SP_STYLE_FLAG_IFSET);
-            UTEST_ASSERT(streq(ifset_str, prop_eq_val));
-            g_free(ifset_str);
-        }
-        sp_style_unref(style);
+        gchar *ifset_str = merge_then_write_string(prop_eq_val, SP_STYLE_FLAG_IFSET);
+        UTEST_ASSERT(streq(ifset_str, prop_eq_val));
+        g_free(ifset_str);
         g_free(prop_eq_val);
     }
 }
@@ -287,22 +292,17 @@ number_val(char const prop[], double const min, double const max, double const e
                                  ? max
                                  : min + (propns[i] * (max - min)) ) );
         char *prop_eq_val = g_strdup_printf("%s:%.17g", prop, val);
-        SPStyle *style = sp_style_new();
-        sp_style_merge_from_style_string(style, prop_eq_val);
-        {
-            gchar *ifset_str = sp_style_write_string(style, SP_STYLE_FLAG_IFSET);
-            UTEST_ASSERT(strneq(ifset_str, prop_eq_val, prop_len + 1));
-            char *endptr;
-            double const found_val = g_strtod(ifset_str + prop_len + 1, &endptr);
-            UTEST_ASSERT(*endptr == '\0');
-            if (fabs(val) < 1.) {
-                UTEST_ASSERT(std::fabs(found_val - val) < eps);
-            } else {
-                UTEST_ASSERT(std::fabs(found_val / val - 1.) < eps);
-            }
-            g_free(ifset_str);
+        gchar *ifset_str = merge_then_write_string(prop_eq_val, SP_STYLE_FLAG_IFSET);
+        UTEST_ASSERT(strneq(ifset_str, prop_eq_val, prop_len + 1));
+        char *endptr;
+        double const found_val = g_strtod(ifset_str + prop_len + 1, &endptr);
+        UTEST_ASSERT(*endptr == '\0');
+        if (fabs(val) < 1.) {
+            UTEST_ASSERT(std::fabs(found_val - val) < eps);
+        } else {
+            UTEST_ASSERT(std::fabs(found_val / val - 1.) < eps);
         }
-        sp_style_unref(style);
+        g_free(ifset_str);
         g_free(prop_eq_val);
     }
 }
@@ -423,19 +423,31 @@ test_style()
         sp_style_unref(style);
     }
 
-    UTEST_TEST("sp_style_merge_from_style_string(whitespace)") {
-        SPStyle *style = sp_style_new();
-        sp_style_merge_from_style_string(style, "   \t ");
-        {
-            gchar *str0_all = sp_style_write_string(style, SP_STYLE_FLAG_ALWAYS);
-            gchar *str0_set = sp_style_write_string(style, SP_STYLE_FLAG_IFSET);
-            UTEST_ASSERT(*str0_set == '\0');
-            UTEST_ASSERT(streq(str0_all, str0_all_exp));
-            g_free(str0_all);
-            g_free(str0_set);
-        }
-        sp_style_unref(style);
+    UTEST_TEST("sp_style_merge_from_style_string(whitespace): ifset") {
+        gchar *str0_set = merge_then_write_string("   \t            \t\t", SP_STYLE_FLAG_IFSET);
+        UTEST_ASSERT(*str0_set == '\0');
+        g_free(str0_set);
     }
+
+    UTEST_TEST("sp_style_merge_from_style_string(whitespace): always") {
+        gchar *str0_all = merge_then_write_string("   \t            \t\t", SP_STYLE_FLAG_ALWAYS);
+        UTEST_ASSERT(streq(str0_all, str0_all_exp));
+        g_free(str0_all);
+    }
+
+#if 0 /* fails because of dashoffset:0 vs dashoffset:0.00000000 */
+    UTEST_TEST("sp_style_merge_from_style_string(default): ifset") {
+        gchar *ifset_str = merge_then_write_string(str0_all_exp, SP_STYLE_FLAG_IFSET);
+        UTEST_ASSERT(streq(ifset_str, str0_all_exp));
+        g_free(ifset_str);
+    }
+
+    UTEST_TEST("sp_style_merge_from_style_string(default): always") {
+        gchar *ifset_str = merge_then_write_string(str0_all_exp, SP_STYLE_FLAG_ALWAYS);
+        UTEST_ASSERT(streq(ifset_str, str0_all_exp));
+        g_free(ifset_str);
+    }
+#endif
 
     UTEST_TEST("sp_style_merge_from_style_string") {
         /* Try setting default values, check that the all string is unaffected
@@ -443,17 +455,12 @@ test_style()
         for (unsigned i = 0; i < G_N_ELEMENTS(props); ++i) {
             char *prop_eq_val = g_strdup_printf("%s:%s", props[i].property, props[i].spec_dfl);
             char *exp_set_str = g_strdup_printf("%s:%s", props[i].property, props[i].ink_dfl);
-            SPStyle *style = sp_style_new();
-            sp_style_merge_from_style_string(style, prop_eq_val);
-            {
-                gchar *str0_all = sp_style_write_string(style, SP_STYLE_FLAG_ALWAYS);
-                gchar *str0_set = sp_style_write_string(style, SP_STYLE_FLAG_IFSET);
-                UTEST_ASSERT(streq(str0_all, str0_all_exp));
-                UTEST_ASSERT(streq(str0_set, exp_set_str));
-                g_free(str0_all);
-                g_free(str0_set);
-            }
-            sp_style_unref(style);
+            gchar *str0_all = merge_then_write_string(prop_eq_val, SP_STYLE_FLAG_ALWAYS);
+            gchar *str0_set = merge_then_write_string(prop_eq_val, SP_STYLE_FLAG_IFSET);
+            UTEST_ASSERT(streq(str0_all, str0_all_exp));
+            UTEST_ASSERT(streq(str0_set, exp_set_str));
+            g_free(str0_set);
+            g_free(str0_all);
             g_free(exp_set_str);
             g_free(prop_eq_val);
         }
@@ -464,14 +471,9 @@ test_style()
                 continue;
             }
             char *prop_eq_val = g_strdup_printf("%s:inherit", props[i].property);
-            SPStyle *style = sp_style_new();
-            sp_style_merge_from_style_string(style, prop_eq_val);
-            {
-                gchar *ifset_str = sp_style_write_string(style, SP_STYLE_FLAG_IFSET);
-                UTEST_ASSERT(streq(ifset_str, prop_eq_val));
-                g_free(ifset_str);
-            }
-            sp_style_unref(style);
+            gchar *ifset_str = merge_then_write_string(prop_eq_val, SP_STYLE_FLAG_IFSET);
+            UTEST_ASSERT(streq(ifset_str, prop_eq_val));
+            g_free(ifset_str);
             g_free(prop_eq_val);
         }
 
