@@ -282,10 +282,10 @@ static void
 guide_dialog_mode_changed (GtkWidget * widget)
 {
   if (mode) {
-    gtk_label_set_text (GTK_LABEL (m), " relative by ");
+    gtk_label_set_text (GTK_LABEL (m), _(" relative by "));
     mode = FALSE;
   } else {
-    gtk_label_set_text (GTK_LABEL (m), " absolute to ");
+    gtk_label_set_text (GTK_LABEL (m), _(" absolute to "));
     mode = TRUE;
   }
 }
@@ -359,7 +359,7 @@ sp_dt_simple_guide_dialog (SPGuide *guide, SPDesktop *desktop)
 	if (!GTK_IS_WIDGET (d)) {
 		GtkObject *a;
 		// create dialog
-		d = gtk_dialog_new_with_buttons ("Guideline",
+		d = gtk_dialog_new_with_buttons (_("Guideline"),
 						 NULL,
 						 GTK_DIALOG_MODAL,
 						 GTK_STOCK_OK,
@@ -410,7 +410,7 @@ sp_dt_simple_guide_dialog (SPGuide *guide, SPDesktop *desktop)
 		gtk_signal_connect_while_alive (GTK_OBJECT (but), "clicked", GTK_SIGNAL_FUNC (guide_dialog_mode_changed), 
 						NULL , GTK_OBJECT(but));
 		gtk_widget_show (but);
-		m = gtk_label_new (" absolute to ");
+		m = gtk_label_new (_(" absolute to "));
 		mode = TRUE;
 		gtk_container_add (GTK_CONTAINER (but), m);
 		gtk_widget_show (m);

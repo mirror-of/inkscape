@@ -3,6 +3,7 @@
 	* Makefile.am, configure.in, autogen.sh, toolversions.sh:
       cleaning up some automake misbehavior from the gtkmm patch.
 	  automake 1.4isms snuck back in.
+	* src/desktop-events.cpp: unlocalized strings updated.
 
 2004-07-18  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
