@@ -1289,6 +1289,7 @@ static bool redundant_double_nesting_processor(SPObject **item, SPObject *child,
         return false;
     if (SP_IS_STRING(child)) return false;
     if (is_line_break_object(child)) return false;
+    if (is_line_break_object(*item)) return false;
     TextTagAttributes *attrs = attributes_for_object(child);
     if (attrs && attrs->anyAttributesSet()) return false;
     if (!objects_have_equal_style(SP_OBJECT_PARENT(*item), child)) return false;
@@ -1336,6 +1337,7 @@ static bool redundant_semi_nesting_processor(SPObject **item, SPObject *child, b
         return false;
     if (SP_IS_STRING(child)) return false;
     if (is_line_break_object(child)) return false;
+    if (is_line_break_object(*item)) return false;
     TextTagAttributes *attrs = attributes_for_object(child);
     if (attrs && attrs->anyAttributesSet()) return false;
     attrs = attributes_for_object(*item);
