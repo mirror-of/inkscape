@@ -57,7 +57,7 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 		return NULL;
 	}
 
-	g_print ("GVECTORNORM: Requested vector normalization of gradient %s\n", SP_OBJECT_ID (gr));
+	//g_print ("GVECTORNORM: Requested vector normalization of gradient %s\n", SP_OBJECT_ID (gr));
 
 	doc = SP_OBJECT_DOCUMENT (gr);
 	defs = (SPDefs *) SP_DOCUMENT_DEFS (doc);
@@ -101,7 +101,7 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 	} else {
 		SPObject *child;
 		/* Gradient is in <defs> */
-		g_print ("GVECTORNORM: Gradient %s IS in <defs>\n", SP_OBJECT_ID (gr));
+		//g_print ("GVECTORNORM: Gradient %s IS in <defs>\n", SP_OBJECT_ID (gr));
 		/* First make sure we have vector directly defined */
 		if (!gr->has_stops) {
 			/* We do not have stops ourselves, so flatten stops as well */
@@ -128,7 +128,7 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 					/* Everything is OK, set state flag */
 					/* fixme: I am not sure, whether one should clone, if hrefcount > 1 */
 					gr->state = SP_GRADIENT_STATE_VECTOR;
-					g_print ("GVECTORNORM: Found gradient %s in right position\n", SP_OBJECT_ID (gr));
+					//g_print ("GVECTORNORM: Found gradient %s in right position\n", SP_OBJECT_ID (gr));
 					return gr;
 				}
 				/* If there is private gradient, we have to rearrange ourselves */

@@ -488,6 +488,7 @@ sp_gradient_vector_editor_new (SPGradient *gradient)
 		//		gtk_window_set_title (GTK_WINDOW (dlg), _("Gradient vector"));
 		gtk_container_set_border_width (GTK_CONTAINER (dlg), PAD);
 		//		g_signal_connect (G_OBJECT (dlg), "delete_event", G_CALLBACK (sp_gradient_vector_dialog_delete), dlg);
+
 		wid = (GtkWidget*)sp_gradient_vector_widget_new (gradient);
 		g_object_set_data (G_OBJECT (dlg), "gradient-vector-widget", wid);
 		/* Connect signals */
@@ -523,15 +524,30 @@ sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient
 	if (gradient) {
 		sp_gradient_ensure_vector (gradient);
 
-		/* Set color selector values */
+		// So far we can only handle 2 stops, but eventually we need to support arbitrary number.
+		// Remember _now_ all stop colors of the given gradient in an array, so that they're not botched
+		// by the colorselectors during setting (fixes bug 902319)
+		guint32 *c = g_new (guint32, gradient->vector->nstops);
+		for (int i = 0; i < gradient->vector->nstops; ++i) {
+			c[i] = sp_color_get_rgba32_falpha (&gradient->vector->stops[i].color, gradient->vector->stops[i].opacity);
+		}
+
+		/* Color selector ids */
 		char const *names[] = {"start", "end"};
-		/* TODO: Better handling of the case that gradient->vector->nstops != 2. */
+		// This loop goes over all known color selectors, not all stops!
 		for (int i = 0; i < int(G_N_ELEMENTS(names)); ++i) {
+			// if there's a stop for this color selector,
 			if (i < gradient->vector->nstops) {
-				GtkWidget *w = (GtkWidget*)g_object_get_data (G_OBJECT (widget), names[i]);
-				SPColorSelector *csel = SP_COLOR_SELECTOR(w);
-				SPGradientStop const &s = gradient->vector->stops[i];
-				csel->base->setColorAlpha(s.color, s.opacity);
+
+				// get the color selector by its id
+				SPColorSelector *csel = SP_COLOR_SELECTOR(g_object_get_data (G_OBJECT (widget), names[i]));
+
+				// set its alpha, from the stored array
+				csel->base->setAlpha(SP_RGBA32_A_F (c[i]));
+				SPColor color;
+				sp_color_set_rgb_float (&color, SP_RGBA32_R_F (c[i]), SP_RGBA32_G_F (c[i]), SP_RGBA32_B_F (c[i]));
+				// set its color, from the stored array
+				csel->base->setColor( color );
 			}
 		}
 		/* Fixme: Sensitivity */
