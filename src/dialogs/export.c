@@ -36,6 +36,13 @@
 #include "sp-item.h"
 #include "selection.h"
 #include "file.h"
+#include "macros.h"
+
+#include "dialog-events.h"
+#include "../prefs-utils.h"
+#include "../verbs.h"
+#include "../interface.h"
+
 #include "export.h"
 
 #define SP_EXPORT_MIN_SIZE 16.0
@@ -57,11 +64,30 @@ static float sp_export_value_get (GtkObject *base, const gchar *key);
 static float sp_export_value_get_pt (GtkObject *base, const gchar *key);
 
 static GtkWidget *dlg = NULL;
+static win_data wd;
+static gint x = -1000, y = -1000, w = 0, h = 0; // impossible original values to make sure they are read from prefs
+static gchar *prefs_path = "dialogs.export";
 
 static void
 sp_export_dialog_destroy (GtkObject *object, gpointer data)
 {
-	dlg = NULL;
+	sp_signal_disconnect_by_data (INKSCAPE, dlg);
+	wd.win = dlg = NULL;
+	wd.stop = 0;
+}
+
+static gboolean
+sp_export_dialog_delete (GtkObject *object, GdkEvent *event, gpointer data)
+{
+	gtk_window_get_position ((GtkWindow *) dlg, &x, &y);
+	gtk_window_get_size ((GtkWindow *) dlg, &w, &h);
+
+	prefs_set_int_attribute (prefs_path, "x", x);
+	prefs_set_int_attribute (prefs_path, "y", y);
+	prefs_set_int_attribute (prefs_path, "w", w);
+	prefs_set_int_attribute (prefs_path, "h", h);
+
+	return FALSE; // which means, go ahead and destroy it
 }
 
 static void
@@ -112,8 +138,31 @@ sp_export_dialog (void)
 	if (!dlg) {
 		GtkWidget *vb, *f, *t, *hb, *us, *l, *fe, *hs, *b;
 
-		dlg = sp_window_new (_("Export bitmap"), FALSE);
-		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", GTK_SIGNAL_FUNC (sp_export_dialog_destroy), NULL);
+		gchar title[500];
+		sp_ui_dialog_title_string (SP_VERB_FILE_EXPORT, title);
+
+		dlg = sp_window_new (title, TRUE);
+		if (x == -1000 || y == -1000) {
+			x = prefs_get_int_attribute (prefs_path, "x", 0);
+			y = prefs_get_int_attribute (prefs_path, "y", 0);
+		}
+		if (w ==0 || h == 0) {
+			w = prefs_get_int_attribute (prefs_path, "w", 0);
+			h = prefs_get_int_attribute (prefs_path, "h", 0);
+		}
+		if (x != 0 || y != 0) 
+			gtk_window_move ((GtkWindow *) dlg, x, y);
+		else
+			gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
+		if (w && h) gtk_window_resize ((GtkWindow *) dlg, w, h);
+		sp_transientize (dlg);
+		wd.win = dlg;
+		wd.stop = 0;
+		g_signal_connect (G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd);
+		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_export_dialog_destroy), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_export_dialog_delete), dlg);
+		g_signal_connect (G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_export_dialog_delete), dlg);
 
 		vb = gtk_vbox_new (FALSE, 4);
 		gtk_widget_show (vb);
@@ -174,6 +223,10 @@ sp_export_dialog (void)
 
 		gtk_widget_show_all (f);
 
+		//for now, make sekection toggled by default
+		//fixme: make it remember user choice between invoications
+		//sp_export_area_toggled ((GtkToggleButton *) b, (GtkObject *) dlg); 
+
 		/* Bitmap size frame */
 		f = gtk_frame_new (_("Bitmap size"));
 		gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
@@ -202,10 +255,9 @@ sp_export_dialog (void)
 		gtk_widget_show_all (f);
 
 		/* File entry */
-#if 0
-		fe = gnome_file_entry_new ("export", _("Export png file"));
-#else
-		/* fixme: */
+		f = gtk_frame_new (_("Filename"));
+		gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
+		/* fixme: add browse button, make the direcrory of the document current */
 		fe = gtk_entry_new ();
 		if (SP_ACTIVE_DOCUMENT && SP_DOCUMENT_URI (SP_ACTIVE_DOCUMENT)) {
 			const gchar *name, *dot;
@@ -222,10 +274,9 @@ sp_export_dialog (void)
 			gtk_entry_set_text (GTK_ENTRY (fe), c);
 
 		}
-#endif
-		gtk_widget_show (fe);
-		gtk_box_pack_start (GTK_BOX (vb), fe, FALSE, FALSE, 0);
+		gtk_container_add (GTK_CONTAINER (f), fe);
 		gtk_object_set_data (GTK_OBJECT (dlg), "filename", fe);
+		gtk_widget_show_all (f);
 
 		/* Buttons */
 		hb = gtk_hbox_new (FALSE, 0);
@@ -242,7 +293,7 @@ sp_export_dialog (void)
 		gtk_box_pack_end (GTK_BOX (vb), hs, FALSE, FALSE, 0);
 	}
 
-	gtk_widget_show (dlg);
+	gtk_window_present ((GtkWindow *) dlg);
 }
 
 static void
