@@ -13,9 +13,6 @@ dialogs/all: dialogs/libspdialogs.a
 dialogs/clean:
 	rm -f dialogs/libspdialogs.a $(dialogs_libspdialogs_a_OBJECTS)
 
-dialogs_libspdialogs_a_CPPFLAGS = \
-	-I$(top_srcdir)/src/dialogs
-
 dialogs_libspdialogs_a_SOURCES = \
 	dialogs/align.cpp	\
 	dialogs/align.h	\

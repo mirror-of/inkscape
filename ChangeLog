@@ -1,5 +1,10 @@
 2004-04-24  Peter  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/dialogs/Makefile_insert:
+	* src/display/Makefile_insert:
+	* src/xml/Makefile_insert:
+	  Get rid of unneeded CPPFLAGS specification.
+
 	* src/Makefile.am:
 	* src/Makefile_insert:
 	  New generated file inkscape_version.h, to replace

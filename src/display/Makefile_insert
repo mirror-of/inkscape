@@ -32,12 +32,8 @@ display/clean:
 #nr_sources =
 #endif
 
-display_libspdisplay_a_CPPFLAGS = \
-	-Idisplay	\
-	-I$(srcdir)/display
-
-display_libspdisplay_a-canvas-arena.$(OBJEXT): helper/sp-marshal.h
-display_libspdisplay_a-sp-canvas.$(OBJEXT): helper/sp-marshal.h
+canvas-arena.$(OBJEXT): helper/sp-marshal.h
+sp-canvas.$(OBJEXT): helper/sp-marshal.h
 
 display_libspdisplay_a_SOURCES = \
 	display/nr-arena-forward.h	\
