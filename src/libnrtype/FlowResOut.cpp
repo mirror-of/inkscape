@@ -113,7 +113,7 @@ void flow_res::ApplyPath(int no, Path *i_path)
     if ( i_path == NULL ) {
         return;
     }
-    
+
     for (int i = chunks[no].s_st; i < chunks[no].s_en; i++) {
         for (int j = spans[i].l_st; j < spans[i].l_en; j++) {
             // dummy
@@ -224,8 +224,8 @@ void flow_res::ApplyPath(int no, Path *i_path)
                     NR::Point g_tgt;
                     NR::Point g_nor;
                     i_path->PointAndTangentAt(glyph_p[0].piece, glyph_p[0].t, g_pos, g_tgt);
-                    chunks[i].x_st = g_pos[0];
-                    chunks[i].y = g_pos[1];
+                    spans[i].x_st = g_pos[0];
+                    spans[i].y = g_pos[1];
                 }
             }
         }
