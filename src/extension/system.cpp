@@ -143,8 +143,8 @@ open_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
 		const gchar * ext;
 		gpointer * parray;
 		const gchar * filename;
-		size_t filename_len, ext_len;
 		Inkscape::Extension::Input ** pimod;
+		gchar * filenamelower, * extensionlower;
 
 		parray = (gpointer *)in_data;
 		filename = (const gchar *)parray[0];
@@ -152,17 +152,15 @@ open_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
 
 		ext = dynamic_cast<Inkscape::Extension::Input *>(in_plug)->get_extension();
 
-		filename_len = strlen (filename);
-		ext_len = strlen (ext);
-		if (filename_len < ext_len) {
-			return;
+		filenamelower = g_utf8_strdown(filename, g_utf8_strlen(filename, -1));
+		extensionlower = g_utf8_strdown(ext, g_utf8_strlen(ext, -1));
+
+		if (g_str_has_suffix(filenamelower, extensionlower)) {
+			*pimod = dynamic_cast<Inkscape::Extension::Input *>(in_plug);
 		}
 
-		if (memcmp (ext, filename + filename_len - ext_len, ext_len)) {
-			return;
-		}
-
-		*pimod = dynamic_cast<Inkscape::Extension::Input *>(in_plug);
+		g_free(filenamelower);
+		g_free(extensionlower);
 	}
 
 	return;
@@ -275,7 +273,7 @@ save_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
 		gpointer * parray;
 		const gchar * filename;
 		Inkscape::Extension::Output ** pomod;
-		size_t filename_len, ext_len;
+		gchar * filenamelower, * extensionlower;
 
 		parray = (gpointer *)in_data;
 		filename = (const gchar *)parray[0];
@@ -283,17 +281,15 @@ save_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
 
 		ext = dynamic_cast<Inkscape::Extension::Output *>(in_plug)->get_extension();
 
-		ext_len = strlen (ext);
-		filename_len = strlen (filename);
-		if (filename_len < ext_len) {
-			return;
+		filenamelower = g_utf8_strdown(filename, g_utf8_strlen(filename, -1));
+		extensionlower = g_utf8_strdown(ext, g_utf8_strlen(ext, -1));
+
+		if (g_str_has_suffix(filenamelower, extensionlower)) {
+			*pomod = dynamic_cast<Inkscape::Extension::Output *>(in_plug);
 		}
 
-		if (memcmp (ext, filename + filename_len - ext_len, ext_len)) {
-			return;
-		}
-
-		*pomod = dynamic_cast<Inkscape::Extension::Output *>(in_plug);
+		g_free(filenamelower);
+		g_free(extensionlower);
 	}
 
 	return;
