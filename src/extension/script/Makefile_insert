@@ -7,7 +7,6 @@ extension/script/clean:
 	rm -f $(extension_script_libscript_a_OBJECTS)
         
 extension_script_libscript_a_CXXFLAGS = $(PERL_CFLAGS) $(PYTHON_CFLAGS)
-extension_script_libscript_a_LIBADD = $(PYTHON_LIBS)
 
 
 if WITH_PERL

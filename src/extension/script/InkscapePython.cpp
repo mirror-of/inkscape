@@ -75,8 +75,8 @@ bool InkscapePython::interpretScript(Glib::ustring &script,
         PyObject *errdata      = NULL;
         PyObject *errtraceback = NULL;
 
-	PyErr_Fetch(&errobj, &errdata, &errtraceback);
-	//PyErr_Clear();
+        PyErr_Fetch(&errobj, &errdata, &errtraceback);
+        //PyErr_Clear();
         
         if (errobj && PyString_Check(errobj))
             {

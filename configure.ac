@@ -217,10 +217,10 @@ dnl ******************************
 dnl PERL checking
 dnl ******************************
 
-AC_MSG_CHECKING(whether to use Perl for embedded scripting)
+AC_MSG_CHECKING(for Perl development environment)
 AC_ARG_WITH(perl,
             AC_HELP_STRING([--with-perl], [use Perl for embedded scripting]),
-            [with_perl=$withval], [with_perl=no])
+            [with_perl=$withval], [with_perl=skipped])
 
 if test "x$with_perl" = "xyes"; then
     checkPERL_CFLAGS=`perl -MExtUtils::Embed -e ccopts 2>/dev/null`
@@ -246,44 +246,58 @@ if test "x$with_perl" = "xyes"; then
 	PERL_CFLAGS="$checkPERL_CFLAGS"
 	PERL_LDFLAGS="$checkPERL_LDFLAGS"
         AC_DEFINE(WITH_PERL, 1, [use Perl for embedded scripting])
-        AC_SUBST(PERL_CFLAGS)
-        AC_SUBST(PERL_LDFLAGS)
         ],[
 	with_perl="no"
 	])
-    LDFLAGS="$oldLDFLAGS"
     CFLAGS="$oldCFLAGS"
+    LDFLAGS="$oldLDFLAGS"
 fi
 AM_CONDITIONAL(WITH_PERL, test "x$with_perl" = "xyes")
+AC_SUBST(PERL_CFLAGS)
+AC_SUBST(PERL_LDFLAGS)
 
 dnl ******************************
 dnl Python checking
 dnl ******************************
 
-AC_MSG_CHECKING(whether to use Python for embedded scripting)
+AC_MSG_CHECKING(for Python development environment)
 AC_ARG_WITH(python,
             AC_HELP_STRING([--with-python], [use Python for embedded scripting]),
-            [with_python=$withval], [with_python=no])
+            [with_python=$withval], [with_python=skipped])
 
 if test "x$with_python" = "xyes"; then
-    checkPYTHON_CFLAGS=`python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('INCLUDEPY')" 2>/dev/null`
+    checkPYTHON_CFLAGS=`python -c "import distutils.sysconfig ; print '-I%s' % distutils.sysconfig.get_config_var('INCLUDEPY')" 2>/dev/null`
     if test "$?" -gt "0"; then
         with_python="no"
     else
-        checkPYTHON_LIBS=`python -c "import distutils.sysconfig ; print '%s/%s' % (distutils.sysconfig.get_config_var('LIBPL'),distutils.sysconfig.get_config_var('LIBRARY'))" 2>/dev/null`
+        checkPYTHON_LIBS=`python -c "import distutils.sysconfig ; print '%s/%s %s' % (distutils.sysconfig.get_config_var('LIBPL'),distutils.sysconfig.get_config_var('LIBRARY'),distutils.sysconfig.get_config_var('LIBS'))" 2>/dev/null`
         if test "$?" -gt "0"; then
             with_python="no"
         else
-            PYTHON_CFLAGS="-I$checkPYTHON_CFLAGS"
-            PYTHON_LIBS="$checkPYTHON_LIBS"
-            AC_DEFINE(WITH_PYTHON, 1, [use Python for embedded scripting])
-            AC_SUBST(PYTHON_CFLAGS)
-            AC_SUBST(PYTHON_LIBS)
+            with_python="yes"
         fi
     fi
 fi
 AC_MSG_RESULT([$with_python])
+if test "x$with_python" = "xyes"; then
+    # Test that we actually have the python libraries installed
+    oldCFLAGS="$CFLAGS"
+    oldLIBS="$LIBS"
+    CFLAGS="$CFLAGS $checkPYTHON_CFLAGS"
+    LIBS="$LIBS $checkPYTHON_LIBS"
+    AC_CHECK_FUNC([PyParser_New],[
+	PYTHON_CFLAGS="$checkPYTHON_CFLAGS"
+	PYTHON_LIBS="$checkPYTHON_LIBS"
+        AC_DEFINE(WITH_PYTHON, 1, [use Python for embedded scripting])
+        ],[
+	with_python="no"
+	])
+    CFLAGS="$oldCFLAGS"
+    LIBS="$oldLIBS"
+fi
 AM_CONDITIONAL(WITH_PYTHON, test "x$with_python" = "xyes")
+AC_SUBST(PYTHON_CFLAGS)
+AC_SUBST(PYTHON_LIBS)
 
 dnl ******************************
 dnl   Unconditional dependencies

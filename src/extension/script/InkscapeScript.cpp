@@ -62,34 +62,42 @@ bool InkscapeScript::interpretScript(Glib::ustring &script,
                                  Glib::ustring &error,
                                  ScriptLanguage language)
 {
-
+    char * langname=NULL;
     InkscapeInterpreter *interp = NULL;
     //if() instead of switch() lets us scope vars
     if (language == InkscapeScript::PERL)
         {
 #ifdef WITH_PERL
+        langname="Perl";
         interp = new InkscapePerl();
 #endif
         }
     else if (language == InkscapeScript::PYTHON)
         {
 #ifdef WITH_PYTHON
+        langname="Python";
         interp = new InkscapePython();
 #endif
         }
     else
         {
         //replace with g_error
-        fprintf(stderr, "Unknown Script Language type:%d\n", language);
+        fprintf(stderr, "%s: Unknown Script Language type: %d\n",
+                        __FUNCTION__, language);
         return false;
         }
         
     if (!interp)
+        {
+        fprintf(stderr, "%s: error starting Language '%s'\n",
+                        __FUNCTION__, langname);
         return false;
+        }
 
     if (!interp->interpretScript(script, output, error))
         {
-        fprintf(stderr, "error in executing script\n");
+        fprintf(stderr, "%s: error in executing %s script\n",
+                        __FUNCTION__, langname);
         return false;
         }
         
