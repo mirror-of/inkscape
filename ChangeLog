@@ -1,10 +1,14 @@
+2005-01-20  Kees Cook  <kees@outflux.net>
+
+    * src/file.cpp: added some debug output to help bulia debug bug #1102318.
+
 2005-01-19  Kees Cook  <kees@outflux.net>
 
     * configure.ac: trying to correct the -lgc detection.
     * inkscape.pod: added theme details.
     * src/widgets/widget-sizes.h: went from 20 to 24 for toolbar icon size
       to match other GTK applications.
-    * src/extension/db.cpp: corrected STL "not found" handling.  Should
+    * src/extension/db.cpp: corrected STL "not found" handling.  Didn't
 	  fix bug #1102318.
 
 2005-01-18  Kees Cook  <kees@outflux.net>

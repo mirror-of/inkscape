@@ -544,7 +544,7 @@ sp_file_save_dialog(SPDocument *doc)
     if (default_extension == NULL) {
         default_extension = prefs_get_string_attribute("dialogs.save_as", "default");
     }
-    // printf("Extension: %s\n", default_extension);
+    g_warning("%s: extension name: '%s'", __FUNCTION__, default_extension);
 
     if (doc->uri == NULL) {
         int i = 1;
@@ -552,6 +552,7 @@ sp_file_save_dialog(SPDocument *doc)
         char *temp_filename;
 
         extension = dynamic_cast<Inkscape::Extension::Output *>(Inkscape::Extension::db.get(default_extension));
+        g_warning("%s: extension ptr: 0x%x", __FUNCTION__, (unsigned int)extension);
         if (extension == NULL) {
             filename_extension = ".svg";
         } else {

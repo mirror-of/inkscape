@@ -87,14 +87,9 @@ DB::unregister_ext (Extension * module)
 Extension *
 DB::get (const gchar *key)
 {
-	Extension *mod;
-	std::map<const char *, Extension *, ltstr>::iterator iter;
-
 	if (key == NULL) return NULL;
 
-	if ( ( iter = moduledict.find(key) ) != moduledict.end())
-		mod = (*iter).second;
-
+	Extension *mod = moduledict[key];
 	if ( !mod || mod->deactivated() )
 		return NULL;
 
