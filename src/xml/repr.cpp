@@ -62,7 +62,8 @@ sp_repr_new_comment(gchar const *comment)
 }
 
 SPRepr::SPRepr(SPReprType t, int code)
-: _name(code), _type(t), _child_counts_complete(true), _n_siblings(0)
+: _name(code), _type(t), _child_count(0),
+  _cached_positions_valid(false)
 {
     this->_document = NULL;
     this->_parent = this->_next = this->_children = NULL;
@@ -98,8 +99,9 @@ sp_repr_duplicate(SPRepr const *repr)
 SPRepr::SPRepr(SPRepr const &repr)
 : Anchored(), _name(repr._name),
   _type(repr._type), _content(repr._content),
-  _child_counts_complete(repr._child_counts_complete),
-  _n_siblings(repr._n_siblings)
+  _child_count(repr._child_count),
+  _cached_positions_valid(repr._cached_positions_valid),
+  _cached_position(repr._cached_position)
 {
     this->_document = NULL;
     this->_parent = this->_next = this->_children = NULL;
@@ -107,12 +109,12 @@ SPRepr::SPRepr(SPRepr const &repr)
     this->_last_listener = this->_listeners = NULL;
 
     SPRepr *prev_child_copy=NULL;
-    for ( SPRepr *child = repr._children ; child != NULL ; child = child->_next ) {
+    for ( SPRepr *child = repr._children ; child != NULL ; child = child->next() ) {
         SPRepr *child_copy=child->duplicate();
 
-        child_copy->_parent = this;
+        child_copy->_setParent(this);
         if (prev_child_copy) {
-            prev_child_copy->_next = child_copy;
+            prev_child_copy->_setNext(child_copy);
         } else {
             this->_children = child_copy;
         }
@@ -354,30 +356,38 @@ void
 SPRepr::addChild(SPRepr *child, SPRepr *ref)
 {
     g_assert(child != NULL);
-    g_assert(!ref || ref->_parent == this);
-    g_assert(child->_parent == NULL);
-    g_assert(child->_document == NULL || child->_document == _document);
+    g_assert(!ref || ref->parent() == this);
+    g_assert(child->parent() == NULL);
+    g_assert(child->document() == NULL || child->document() == _document);
 
+    SPRepr *next;
     if (ref) {
-        child->_next = ref->_next;
-        ref->_next = child;
-        this->_children->_n_siblings++;
-        this->_child_counts_complete = false;
+        next = ref->next();
+        ref->_setNext(child);
     } else {
-        child->_next = this->_children;
+        next = this->_children;
         this->_children = child;
-        if (child->_next) {
-            child->_n_siblings = child->_next->_n_siblings + 1;
-        } else {
-            child->_n_siblings = 1;
+    }
+    if (!next) {
+        // update cached positions if appending
+        if (!ref) {
+            // if !next && !ref, child is sole child
+            child->_setCachedPosition(0);
+            _cached_positions_valid = true;
+        } else if (_cached_positions_valid) {
+            child->_setCachedPosition(ref->_cachedPosition() + 1);
         }
+    } else {
+        // invalidate cached positions otherwise
+        _cached_positions_valid = false;
     }
 
-    child->_parent = this;
-
-    if (!child->_document) _bind_document(_document, child);
+    child->_setParent(this);
+    child->_setNext(next);
+    _child_count++;
 
     if (_document) {
+        if (!child->document()) child->_bindDocument(*_document);
         if (_document->_log->is_logging) {
             _document->_log->actions = (new SPReprActionAdd(this, child, ref, _document->_log->actions))->optimizeOne();
         }
@@ -406,43 +416,42 @@ sp_repr_add_child(SPRepr *repr, SPRepr *child, SPRepr *ref)
 }
 
 void
-SPRepr::_bind_document(SPReprDoc *doc, SPRepr *repr) {
-    g_assert(repr->_document == NULL);
+SPRepr::_bindDocument(SPReprDoc &document) {
+    g_assert(!_document);
+    _document = &document;
 
-    repr->_document = doc;
-
-    for ( SPRepr *child = repr->_children ; child != NULL ; child = child->_next )
-    {
-        _bind_document(doc, child);
+    for ( SPRepr *child = _children ; child != NULL ; child = child->next() ) {
+        child->_bindDocument(document);
     }
 }
 
 void SPRepr::removeChild(SPRepr *child) {
     g_assert(child != NULL);
-    g_assert(child->_parent == this);
+    g_assert(child->parent() == this);
 
     SPRepr *ref = NULL;
     if (child != this->_children) {
         ref = this->_children;
-        while (ref->_next != child) {
-            ref = ref->_next;
+        while (ref->next() != child) {
+            ref = ref->next();
         }
     }
 
+    SPRepr *next = child->next();
     if (ref) {
-        ref->_next = child->_next;
-        this->_children->_n_siblings--;
-        this->_child_counts_complete = false;
+        ref->_setNext(next);
     } else {
-        this->_children = child->_next;
-        if (this->_children) {
-            this->_children->_n_siblings = child->_n_siblings - 1;
-        }
+        this->_children = next;
     }
-    child->_n_siblings = 0;
+    if (next) {
+        // removing any child other than the last invalidates
+        // the cached positions
+        _cached_positions_valid = false;
+    }
 
-    child->_parent = NULL;
-    child->_next = NULL;
+    child->_setNext(NULL);
+    child->_setParent(NULL);
+    _child_count--;
 
     if (_document) {
         if (_document->_log->is_logging) {
@@ -467,33 +476,30 @@ sp_repr_remove_child(SPRepr *repr, SPRepr *child)
 
 void SPRepr::changeOrder(SPRepr *child, SPRepr *ref) {
     g_return_if_fail( child != NULL );
-    g_return_if_fail( child->_parent == this );
+    g_return_if_fail( child->parent() == this );
     g_return_if_fail( child != ref );
-    g_return_if_fail( !ref || ref->_parent == this );
+    g_return_if_fail( !ref || ref->parent() == this );
 
     SPRepr *const prev = sp_repr_prev(child);
 
     if (prev == ref) { return; }
 
-    int n_children=this->_children->_n_siblings;
-
     /* Remove from old position. */
     if (prev) {
-        prev->_next = child->_next;
+        prev->_setNext(child->next());
     } else {
-        this->_children = child->_next;
+        this->_children = child->next();
     }
     /* Insert at new position. */
     if (ref) {
-        child->_next = ref->_next;
-        ref->_next = child;
+        child->_setNext(ref->next());
+        ref->_setNext(child);
     } else {
-        child->_next = this->_children;
+        child->_setNext(this->_children);
         this->_children = child;
     }
 
-    this->_children->_n_siblings = n_children;
-    this->_child_counts_complete = false;
+    this->_cached_positions_valid = false;
 
     if (_document) {
         if (_document->_log->is_logging) {
@@ -527,10 +533,10 @@ void SPRepr::setPosition(int pos) {
 
     /* Find the child before child pos of parent (or NULL if pos==0). */
     SPRepr *ref = NULL;
-    SPRepr *cur = parent->_children;
+    SPRepr *cur = parent->firstChild();
     while (pos > 0 && cur) {
         ref = cur;
-        cur = cur->_next;
+        cur = cur->next();
         pos -= 1;
     }
 
@@ -571,7 +577,7 @@ SPRepr::synthesizeEvents(SPReprEventVector const *vector, void *data) {
     if (vector->child_added) {
         SPRepr *ref = NULL;
         SPRepr *child = this->_children;
-        for ( ; child ; ref = child, child = child->_next ) {
+        for ( ; child ; ref = child, child = child->next() ) {
             vector->child_added(this, child, ref, data);
         }
     }
@@ -749,7 +755,8 @@ SPRepr::mergeFrom(SPRepr const *src, gchar const *key) {
 
     this->_content = src->_content;
 
-    for (SPRepr *child = src->_children; child != NULL; child = child->_next) {
+    for ( SPRepr const *child = src->firstChild() ; child != NULL ; child = child->next() )
+    {
         gchar const *id = sp_repr_attr(child, key);
         if (id) {
             SPRepr *rch = sp_repr_lookup_child(this, key, id);

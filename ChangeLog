@@ -1,3 +1,10 @@
+2004-01-21  MenTaLguY  <mental@rydia.net>
+
+	* src/xml/repr-private.h, src/xml/repr-util.cpp, src/xml/repr.cpp:
+
+	  simplify the cacheing of repr position indices, and make it something
+	  that can work with an abstract interface
+
 2005-01-20  Kees Cook  <kees@outflux.net>
 
     * src/file.cpp: added some debug output to help bulia debug bug #1102318.

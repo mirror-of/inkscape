@@ -415,20 +415,21 @@ sp_repr_compare_position(SPRepr *first, SPRepr *second)
 
 unsigned SPRepr::position() const {
     g_return_val_if_fail(_parent != NULL, 0);
+    return _parent->_childPosition(*this);
+}
 
-    if (!_parent->_child_counts_complete) {
-        unsigned n_remaining=( _parent->_children->_n_siblings - 1 );
-        for ( SPRepr *sibling=_parent->_children->_next ;
-              sibling ;
-              sibling = sibling->_next )
+unsigned SPRepr::_childPosition(SPRepr const &child) const {
+    if (!_cached_positions_valid) {
+        unsigned position=0;
+        for ( SPRepr *sibling = _children->next() ;
+              sibling ; sibling = sibling->next() )
         {
-            sibling->_n_siblings = n_remaining;
-            n_remaining--;
+            sibling->_setCachedPosition(position);
+            position++;
         }
-        g_assert(n_remaining == 0);
-        _parent->_child_counts_complete = true;
+        _cached_positions_valid = true;
     }
-    return _parent->_children->_n_siblings - this->_n_siblings;
+    return child._cachedPosition();
 }
 
 /** Returns the position of \a repr among its parent's children (starting with 0 for the first
@@ -445,10 +446,6 @@ sp_repr_position(SPRepr const *repr)
     return repr->position();
 }
 
-unsigned SPRepr::childCount() const {
-    return ( _children ? _children->_n_siblings : 0 );
-}
-
 int
 sp_repr_n_children(SPRepr *repr)
 {
@@ -458,7 +455,7 @@ sp_repr_n_children(SPRepr *repr)
 
 SPRepr *SPRepr::nthChild(unsigned index) {
     SPRepr *child = _children;
-    for ( ; index > 0 && child ; child = child->_next ) {
+    for ( ; index > 0 && child ; child = child->next() ) {
         index--;
     }
     return child;
@@ -473,8 +470,8 @@ SPRepr *sp_repr_nth_child(SPRepr *repr, int n) {
 SPRepr *SPRepr::lastChild() {
     SPRepr *child = _children;
     if (child) {
-        while ( child->_next ) {
-            child = child->_next;
+        while ( child->next() ) {
+            child = child->next();
         }
     }
     return child;

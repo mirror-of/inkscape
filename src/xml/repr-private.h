@@ -41,7 +41,8 @@ enum SPReprType {
 	SP_XML_COMMENT_NODE
 };
 
-struct SPRepr : public Inkscape::GC::Managed<>, public Inkscape::GC::Anchored {
+class SPRepr : public Inkscape::GC::Managed<>, public Inkscape::GC::Anchored {
+public:
 	SPReprType type() const { return _type; }
 
 	gchar const *name() const;
@@ -76,7 +77,7 @@ struct SPRepr : public Inkscape::GC::Managed<>, public Inkscape::GC::Anchored {
 		return const_cast<SPRepr *>(this)->lastChild();
 	}
 
-	unsigned childCount() const;
+	unsigned childCount() const { return _child_count; }
 	SPRepr *nthChild(unsigned index);
 	SPRepr const *nthChild(unsigned index) const {
 		return const_cast<SPRepr *>(this)->nthChild(index);
@@ -113,6 +114,16 @@ protected:
 
 	virtual SPRepr *_duplicate() const=0;
 
+	void _setParent(SPRepr *parent) { _parent = parent; }
+	void _setNext(SPRepr *next) { _next = next; }
+	void _bindDocument(SPReprDoc &document);
+
+	unsigned _childPosition(SPRepr const &child) const;
+	unsigned _cachedPosition() const { return _cached_position; }
+	void _setCachedPosition(unsigned position) const {
+		_cached_position = position;
+	}
+
 	void _changeAttribute(gchar const *key, gchar const *value, bool is_interactive);
 	void _deleteAttribute(gchar const *key, bool is_interactive);
 
@@ -130,13 +141,12 @@ private:
 	SPRepr *_children;
 	SPRepr *_next;
 
-	mutable bool _child_counts_complete;
-	mutable unsigned _n_siblings;
+	unsigned _child_count;
+	mutable bool _cached_positions_valid;
+	mutable unsigned _cached_position;
 
 	SPReprListener *_listeners;
 	SPReprListener *_last_listener;
-
-	void _bind_document(SPReprDoc *doc, SPRepr *repr);
 
 	friend class SPReprDoc;
 };
