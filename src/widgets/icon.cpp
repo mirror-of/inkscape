@@ -33,6 +33,7 @@
 
 
 #include "forward.h"
+#include "prefs-utils.h"
 #include "inkscape-private.h"
 #include "inkscape.h"
 #include "document.h"
@@ -60,6 +61,8 @@ static guchar *sp_icon_image_load ( SPIcon* icon, const gchar *name );
 static guchar *sp_icon_image_load_gtk( SPIcon* icon, const gchar *name );
 
 static int sp_icon_get_phys_size( int size );
+
+static void sp_icon_overlay_pixels( guchar *px, int width, int height, int stride, unsigned int r, unsigned int g, unsigned int b );
 
 static GtkWidgetClass *parent_class;
 
@@ -236,100 +239,116 @@ sp_icon_get_gtk_size (int size)
 
 int sp_icon_get_phys_size( int size )
 {
-  static bool init = false;
-  static int vals[GTK_ICON_SIZE_DIALOG];
+    static bool init = false;
+    static int vals[GTK_ICON_SIZE_DIALOG];
 
-  size = CLAMP( size, GTK_ICON_SIZE_MENU, GTK_ICON_SIZE_DIALOG );
+    size = CLAMP( size, GTK_ICON_SIZE_MENU, GTK_ICON_SIZE_DIALOG );
 
-  if ( !init ) {
-    memset( vals, 0, sizeof(vals) );
-    GtkIconSize gtkSizes[] = {
-      GTK_ICON_SIZE_MENU,
-      GTK_ICON_SIZE_SMALL_TOOLBAR,
-      GTK_ICON_SIZE_LARGE_TOOLBAR,
-      GTK_ICON_SIZE_BUTTON,
-      GTK_ICON_SIZE_DND,
-      GTK_ICON_SIZE_DIALOG
-    };
+    if ( !init ) {
+        gint dump = prefs_get_int_attribute_limited( "debug.icons", "dumpDefault", 0, 0, 1 );
+        if ( dump ) {
+            g_message( "Default icon sizes:" );
+        }
+        memset( vals, 0, sizeof(vals) );
+        GtkIconSize gtkSizes[] = {
+            GTK_ICON_SIZE_MENU,
+            GTK_ICON_SIZE_SMALL_TOOLBAR,
+            GTK_ICON_SIZE_LARGE_TOOLBAR,
+            GTK_ICON_SIZE_BUTTON,
+            GTK_ICON_SIZE_DND,
+            GTK_ICON_SIZE_DIALOG
+        };
+        const gchar* names[] = {
+            "GTK_ICON_SIZE_MENU",
+            "GTK_ICON_SIZE_SMALL_TOOLBAR",
+            "GTK_ICON_SIZE_LARGE_TOOLBAR",
+            "GTK_ICON_SIZE_BUTTON",
+            "GTK_ICON_SIZE_DND",
+            "GTK_ICON_SIZE_DIALOG"
+        };
 
-    GtkWidget *icon = (GtkWidget *)g_object_new (SP_TYPE_ICON, NULL);
+        GtkWidget *icon = (GtkWidget *)g_object_new (SP_TYPE_ICON, NULL);
 
-    for ( int i = 0; i < (int)(sizeof(gtkSizes)/sizeof(gtkSizes[0])); i++ ) {
-      gint width = 0;
-      gint height = 0;
-      if ( gtk_icon_size_lookup(gtkSizes[i], &width, &height ) ) {
-	vals[(int)gtkSizes[i]] = std::max( width, height );
-      }
-      gchar const * id = GTK_STOCK_OPEN;
-      GdkPixbuf* pb = gtk_widget_render_icon( icon, id, gtkSizes[i], NULL);
-      if ( pb ) {
-	width = gdk_pixbuf_get_width(pb);
-	height = gdk_pixbuf_get_height(pb);
-	vals[(int)gtkSizes[i]] = std::max( vals[(int)gtkSizes[i]], std::max( width, height ) );
-	g_object_unref (G_OBJECT (pb));
-      }
+        for ( int i = 0; i < (int)(sizeof(gtkSizes)/sizeof(gtkSizes[0])); i++ ) {
+            gint width = 0;
+            gint height = 0;
+            bool used = false;
+            if ( gtk_icon_size_lookup(gtkSizes[i], &width, &height ) ) {
+                vals[(int)gtkSizes[i]] = std::max( width, height );
+                used = true;
+            }
+            if ( dump ) {
+                g_message( " =--  %d  size:%d  %c(%d, %d)   '%s'", i, gtkSizes[i], (used?' ':'X'), width, height, names[i] );
+            }
+            gchar const * id = GTK_STOCK_OPEN;
+            GdkPixbuf* pb = gtk_widget_render_icon( icon, id, gtkSizes[i], NULL);
+            if ( pb ) {
+                width = gdk_pixbuf_get_width(pb);
+                height = gdk_pixbuf_get_height(pb);
+                int newSize = std::max( width, height );
+                if ( newSize > 0 && newSize != vals[(int)gtkSizes[i]] ) {
+                    // TODO perhaps check a few more stock icons to get a range on sizes
+                    vals[(int)gtkSizes[i]] = newSize;
+                }
+                if ( dump ) {
+                    g_message( "      %d  size:%d   (%d, %d)", i, gtkSizes[i], width, height );
+                }
+
+                g_object_unref (G_OBJECT (pb));
+            }
+        }
+        //g_object_unref(icon);
+        init = true;
     }
-    //g_object_unref(icon);
-    init = true;
-  }
 
-  return vals[size];
+    return vals[size];
 }
 
 guchar *
 sp_icon_image_load_gtk( SPIcon* icon, const gchar *name )
 {
-	/* fixme: Make stock/nonstock configurable */
-	if (!strncmp (name, "gtk-", 4)) {
-	  GtkWidget * host = gtk_button_new();
-//  	  g_warning ("loading '%s' (%d:%d)", name, icon->lsize, icon->psize);
-		GdkPixbuf *pb;
-		guchar *px, *spx; // pixel data is unsigned
-		int srs;
-		int y;
-		pb = gtk_widget_render_icon( host, name, icon->lsize, NULL );
+    gint dump = prefs_get_int_attribute_limited( "debug.icons", "dumpGtk", 0, 0, 1 );
 
-		int width = gdk_pixbuf_get_width(pb);
-		int height = gdk_pixbuf_get_height(pb);
-// 		g_warning ("      --'%s' (%d,%d)", name, width, height);
-		icon->psize = std::max( width, height );
+    /* fixme: Make stock/nonstock configurable */
+    if (!strncmp (name, "gtk-", 4)) {
+        GtkWidget * host = gtk_button_new();
+        if ( dump ) {
+            g_message( "loading gtk '%s' %d:%d", name, icon->lsize, icon->psize );
+        }
+        GdkPixbuf *pb;
+        guchar *px, *spx; // pixel data is unsigned
+        int srs;
+        int y;
+        pb = gtk_widget_render_icon( host, name, icon->lsize, NULL );
 
-		if (!gdk_pixbuf_get_has_alpha (pb)) gdk_pixbuf_add_alpha (pb, FALSE, 0, 0, 0);
-		spx = gdk_pixbuf_get_pixels (pb);
-		srs = gdk_pixbuf_get_rowstride (pb);
-		size_t howBig = 4 * icon->psize * icon->psize;
-		px = nr_new (guchar, howBig);
-		memset( px, 0, howBig );
-		int dstStride = 4 * icon->psize;
-		for (y = 0; y < height; y++) {
-			memcpy( px + y * dstStride, spx + y * srs, 4 * width );
-		}
+        int width = gdk_pixbuf_get_width(pb);
+        int height = gdk_pixbuf_get_height(pb);
+        if ( dump ) {
+            g_message( "          --'%s'  (%d,%d)", name, width, height );
+        }
+        icon->psize = std::max( width, height );
 
-		if ( false ) {
-		  guchar *ptr = px;
-		  ptr[4] = 0xff;
-		  ptr[5] = 0x00;
-		  ptr[6] = 0x00;
-		  ptr[7] = 0xff;
-		  ptr[0+dstStride] = 0xff;
-		  ptr[1+dstStride] = 0x00;
-		  ptr[2+dstStride] = 0x00;
-		  ptr[3+dstStride] = 0xff;
-		  for ( int ii = 0; ii < icon->psize; ii++ )
-		    {
-		      ptr[0] = 0xff;
-		      ptr[1] = 0x00;
-		      ptr[2] = 0xff;
-		      ptr[3] = 0xff;
-		      ptr += 4 * (icon->psize + 1);
-		    }
-		}
+        if (!gdk_pixbuf_get_has_alpha (pb)) gdk_pixbuf_add_alpha (pb, FALSE, 0, 0, 0);
+        spx = gdk_pixbuf_get_pixels (pb);
+        srs = gdk_pixbuf_get_rowstride (pb);
+        size_t howBig = 4 * icon->psize * icon->psize;
+        px = nr_new (guchar, howBig);
+        memset( px, 0, howBig );
+        int dstStride = 4 * icon->psize;
+        for (y = 0; y < height; y++) {
+            memcpy( px + y * dstStride, spx + y * srs, 4 * width );
+        }
 
-		g_object_unref ((GObject *) pb);
-		return px;
-	} else {
-		return sp_icon_image_load( icon, name );
-	}
+        gint useOverlay = prefs_get_int_attribute_limited( "debug.icons", "overlayGtk", 0, 0, 1 );
+        if ( useOverlay ) {
+            sp_icon_overlay_pixels( px, icon->psize, icon->psize, 4 * icon->psize, 0xff, 0x00, 0xff );
+        }
+
+        g_object_unref ((GObject *) pb);
+        return px;
+    } else {
+        return sp_icon_image_load( icon, name );
+    }
 }
 
 static void sp_icon_paint(SPIcon *icon, GdkRectangle const *area)
@@ -357,7 +376,7 @@ static void sp_icon_paint(SPIcon *icon, GdkRectangle const *area)
 				x0, y0,
 				x1 - x0, y1 - y0,
 				GDK_RGB_DITHER_NORMAL, x0, y0);
-	}	
+	}
 }
 
 static guchar *
@@ -425,8 +444,9 @@ sp_icon_image_load_pixmap (const gchar *name, unsigned int lsize, unsigned int p
 // takes doc, root, icon, and icon name to produce pixels
 static guchar *
 sp_icon_doc_icon( SPDocument *doc, NRArenaItem *root,
-		  const gchar *name, unsigned int lsize, unsigned int psize )
+                  const gchar *name, unsigned int lsize, unsigned int psize )
 {
+    gint dump = prefs_get_int_attribute_limited( "debug.icons", "dumpSvg", 0, 0, 1 );
     guchar *px = NULL;
 
     if (doc) {
@@ -434,9 +454,10 @@ sp_icon_doc_icon( SPDocument *doc, NRArenaItem *root,
         object = doc->getObjectById(name);
         if (object && SP_IS_ITEM (object)) {
             /* Find bbox in document */
-	    NR::Matrix const i2doc(sp_item_i2doc_affine(SP_ITEM(object)));
+            NR::Matrix const i2doc(sp_item_i2doc_affine(SP_ITEM(object)));
             NRRect dbox;
             sp_item_invoke_bbox(SP_ITEM(object), &dbox, i2doc, TRUE);
+
             /* This is in document coordinates, i.e. pixels */
             if (!nr_rect_d_test_empty (&dbox))
             {
@@ -447,21 +468,64 @@ sp_icon_doc_icon( SPDocument *doc, NRArenaItem *root,
                 double sf;
                 int width, height, dx, dy;
                 /* Update to renderable state */
-                sf = 0.8;
+                sf = 1.0;
                 nr_matrix_set_scale (&t, sf, sf);
                 nr_arena_item_set_transform (root, &t);
                 nr_matrix_set_identity (&gc.transform);
-                nr_arena_item_invoke_update ( root, NULL, &gc, 
-                                              NR_ARENA_ITEM_STATE_ALL, 
+                nr_arena_item_invoke_update ( root, NULL, &gc,
+                                              NR_ARENA_ITEM_STATE_ALL,
                                               NR_ARENA_ITEM_STATE_NONE );
                 /* Item integer bbox in points */
                 ibox.x0 = (int) floor (sf * dbox.x0 + 0.5);
                 ibox.y0 = (int) floor (sf * dbox.y0 + 0.5);
                 ibox.x1 = (int) floor (sf * dbox.x1 + 0.5);
                 ibox.y1 = (int) floor (sf * dbox.y1 + 0.5);
+
+                if ( dump ) {
+                    g_message( "   box    --'%s'  (%f,%f)-(%f,%f)", name, (double)ibox.x0, (double)ibox.y0, (double)ibox.x1, (double)ibox.y1 );
+                }
+
                 /* Find button visible area */
                 width = ibox.x1 - ibox.x0;
                 height = ibox.y1 - ibox.y0;
+
+                if ( dump ) {
+                    g_message( "   vis    --'%s'  (%d,%d)", name, width, height );
+                }
+
+                {
+                    int block = std::max(width, height);
+                    if (block != psize ) {
+                        if ( dump ) {
+                            g_message("      resizing" );
+                        }
+                        sf = (double)psize / (double)block;
+
+                        nr_matrix_set_scale (&t, sf, sf);
+                        nr_arena_item_set_transform (root, &t);
+                        nr_matrix_set_identity (&gc.transform);
+                        nr_arena_item_invoke_update ( root, NULL, &gc,
+                                                      NR_ARENA_ITEM_STATE_ALL,
+                                                      NR_ARENA_ITEM_STATE_NONE );
+                        /* Item integer bbox in points */
+                        ibox.x0 = (int) floor (sf * dbox.x0 + 0.5);
+                        ibox.y0 = (int) floor (sf * dbox.y0 + 0.5);
+                        ibox.x1 = (int) floor (sf * dbox.x1 + 0.5);
+                        ibox.y1 = (int) floor (sf * dbox.y1 + 0.5);
+
+                        if ( dump ) {
+                            g_message( "   box2   --'%s'  (%f,%f)-(%f,%f)", name, (double)ibox.x0, (double)ibox.y0, (double)ibox.x1, (double)ibox.y1 );
+                        }
+
+                        /* Find button visible area */
+                        width = ibox.x1 - ibox.x0;
+                        height = ibox.y1 - ibox.y0;
+                        if ( dump ) {
+                            g_message( "   vis2   --'%s'  (%d,%d)", name, width, height );
+                        }
+                    }
+                }
+
                 //dx = (psize - width) / 2;
                 //dy = (psize - height) / 2;
                 dx=dy=psize;
@@ -476,18 +540,28 @@ sp_icon_doc_icon( SPDocument *doc, NRArenaItem *root,
                 ua.y0 = MAX (ibox.y0, area.y0);
                 ua.x1 = MIN (ibox.x1, area.x1);
                 ua.y1 = MIN (ibox.y1, area.y1);
+
+                if ( dump ) {
+                    g_message( "   area   --'%s'  (%f,%f)-(%f,%f)", name, (double)area.x0, (double)area.y0, (double)area.x1, (double)area.y1 );
+                    g_message( "   ua     --'%s'  (%f,%f)-(%f,%f)", name, (double)ua.x0, (double)ua.y0, (double)ua.x1, (double)ua.y1 );
+                }
                 /* Set up pixblock */
                 px = nr_new (guchar, 4 * psize * psize);
                 memset (px, 0x00, 4 * psize * psize);
                 /* Render */
-                nr_pixblock_setup_extern ( &B, NR_PIXBLOCK_MODE_R8G8B8A8N,
-                                           ua.x0, ua.y0, ua.x1, ua.y1,
-                                           px + 4 * psize * (ua.y0 - area.y0) + 
-                                           4 * (ua.x0 - area.x0),
-                                           4 * psize, FALSE, FALSE );
-                nr_arena_item_invoke_render ( root, &ua, &B, 
+                 nr_pixblock_setup_extern ( &B, NR_PIXBLOCK_MODE_R8G8B8A8N,
+                                            ua.x0, ua.y0, ua.x1, ua.y1,
+                                            px + 4 * psize * (ua.y0 - area.y0) +
+                                            4 * (ua.x0 - area.x0),
+                                            4 * psize, FALSE, FALSE );
+                nr_arena_item_invoke_render ( root, &ua, &B,
                                               NR_ARENA_ITEM_RENDER_NO_CACHE );
                 nr_pixblock_release (&B);
+
+                gint useOverlay = prefs_get_int_attribute_limited( "debug.icons", "overlaySvg", 0, 0, 1 );
+                if ( useOverlay ) {
+                    sp_icon_overlay_pixels( px, psize, psize, 4 * psize, 0x00, 0x00, 0xff );
+                }
             }
         }
     }
@@ -507,6 +581,8 @@ struct svg_doc_cache_t
 static guchar *
 sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psize )
 {
+    gint dump = prefs_get_int_attribute_limited( "debug.icons", "dumpSvg", 0, 0, 1 );
+
     // it would be nice to figure out how to attach "desctructors" to
     // these maps to keep mem-watching tools like valgrind happy.
     static std::map<Glib::ustring, svg_doc_cache_t *> doc_cache;
@@ -523,7 +599,12 @@ sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psiz
 
     // did we already load this icon at this scale/size?
     guchar *px = px_cache[icon_index];
-    if (px) return px;
+    if (px) {
+        if ( dump ) {
+            g_message( "svg icon cached (%s).", icon_index.c_str() );
+        }
+        return px;
+    }
 
     // fall back from user prefs dir into system locations
     Glib::ustring iconsvg = name;
@@ -545,7 +626,7 @@ sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psiz
         info = doc_cache[Glib::ustring(doc_filename)];
 
         /* Try to load from document */
-        if (!info && 
+        if (!info &&
             Inkscape::IO::file_test( doc_filename, G_FILE_TEST_IS_REGULAR ) &&
             (doc = sp_document_new ( doc_filename, FALSE )) ) {
 
@@ -556,7 +637,7 @@ sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psiz
             /* Create ArenaItem and set transform */
             unsigned int visionkey = sp_item_display_key_new (1);
             /* fixme: Memory manage root if needed (Lauris) */
-            root = sp_item_invoke_show ( SP_ITEM (SP_DOCUMENT_ROOT (doc)), 
+            root = sp_item_invoke_show ( SP_ITEM (SP_DOCUMENT_ROOT (doc)),
                                          arena, visionkey, SP_ITEM_SHOW_DISPLAY );
 
             // store into the cache
@@ -579,13 +660,16 @@ sp_icon_image_load_svg( const gchar *name, unsigned int lsize, unsigned int psiz
         // move on to the next document
         if (!info && !doc) continue;
 
+        if ( dump ) {
+            g_message( "loading svg '%s' (%d:%d)", name, lsize, psize );
+        }
         px = sp_icon_doc_icon( doc, root, name, lsize, psize );
         if (px) {
             px_cache[icon_index] = px;
             break;
         }
     }
-    
+
     return px;
 } // end of sp_icon_image_load_svg()
 
@@ -629,14 +713,83 @@ const Glib::RefPtr<Gdk::Pixbuf> PixBufFactory::getIcon(const ID &id)
 
   //not cached, loading
   int size(id.size());
-  guchar *data = sp_icon_image_load_svg(id.id().c_str(), size, sp_icon_get_phys_size(size));
-  Glib::RefPtr<Gdk::Pixbuf> pixbuf = 
+  int psize = sp_icon_get_phys_size(size);
+  gint dump = prefs_get_int_attribute_limited( "debug.icons", "dumpCache", 0, 0, 1 );
+  if ( dump ) {
+      g_message( "not cached, loading  '%s':%d:%d", id.id().c_str(), size, psize );
+  }
+  guchar *data = sp_icon_image_load_svg(id.id().c_str(), size, psize);
+  Glib::RefPtr<Gdk::Pixbuf> pixbuf =
     Gdk::Pixbuf::create_from_data (
-				   data, 
-				   Gdk::COLORSPACE_RGB, 
-				   true, 
+				   data,
+				   Gdk::COLORSPACE_RGB,
+				   true,
 				   8, size, size, size*4);
   _map[id]=pixbuf;
   return pixbuf;
 }
 
+void sp_icon_overlay_pixels( guchar *px, int width, int height, int stride, unsigned int r, unsigned int g, unsigned int b )
+{
+    for ( int y = 0; y < height; y += 4 ) {
+        guchar *ptr = px + y * stride;
+        for ( int x = 0; x < width; x += 4 ) {
+            *(ptr++) = r;
+            *(ptr++) = g;
+            *(ptr++) = b;
+            *(ptr++) = 0xff;
+
+            ptr += 4 * 3;
+        }
+    }
+
+    if ( width > 1 && height > 1 ) {
+        // point at the last pixel
+        guchar *ptr = px + ((height-1) * stride) + ((width - 1) * 4);
+
+        if ( width > 2 ) {
+            px[4] = r;
+            px[5] = g;
+            px[6] = b;
+            px[7] = 0xff;
+
+            ptr[-12] = r;
+            ptr[-11] = g;
+            ptr[-10] = b;
+            ptr[-9] = 0xff;
+        }
+
+        ptr[-4] = r;
+        ptr[-3] = g;
+        ptr[-2] = b;
+        ptr[-1] = 0xff;
+
+        px[0 + stride] = r;
+        px[1 + stride] = g;
+        px[2 + stride] = b;
+        px[3 + stride] = 0xff;
+
+        ptr[0 - stride] = r;
+        ptr[1 - stride] = g;
+        ptr[2 - stride] = b;
+        ptr[3 - stride] = 0xff;
+
+        if ( height > 2 ) {
+            ptr[0 - stride * 3] = r;
+            ptr[1 - stride * 3] = g;
+            ptr[2 - stride * 3] = b;
+            ptr[3 - stride * 3] = 0xff;
+        }
+    }
+}
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
