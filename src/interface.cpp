@@ -212,6 +212,13 @@ sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view)
 	return sp_view_shutdown (view);
 }
 
+/*
+ * Some day when the right-click menus are ready to start working
+ * smarter with the verbs, we'll need to change this NULL being
+ * sent to sp_action_perform to something useful, or set some kind
+ * of global "right-clicked position" variable for actions to
+ * investigate when they're called.
+ */
 static void
 sp_ui_menu_activate (void *object, SPAction *action)
 {

@@ -37,7 +37,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <pthread.h>
+#if BR_PTHREADS
+# include <pthread.h>
+#endif
 #include <limits.h>
 #include <string.h>
 #include "prefix.h"
