@@ -43,7 +43,7 @@ SPCurve * sp_curve_new (void);
 SPCurve * sp_curve_new_sized (gint length);
 SPCurve * sp_curve_new_from_bpath (ArtBpath * bpath);
 SPCurve * sp_curve_new_from_static_bpath (ArtBpath * bpath);
-SPCurve * sp_curve_new_from_foreign_bpath (ArtBpath * bpath);
+SPCurve *sp_curve_new_from_foreign_bpath(ArtBpath const bpath[]);
 
 SPCurve *sp_curve_ref (SPCurve *curve);
 SPCurve *sp_curve_unref (SPCurve *curve);

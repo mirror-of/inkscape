@@ -1,5 +1,9 @@
 2004-03-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/helper/curve.h, src/helper/curve.cpp
+	(sp_curve_new_from_foreign_bpath and many static functions):
+	Mark various ArtBpath[] parameters as not being written to.
+
 	* src/draw-context.cpp (fit_and_split): Fix to fix to edge case in
 	freehand tool.  (Hopefully to be replaced by different approach.)
 

@@ -21,11 +21,11 @@
 
 #define SP_CURVE_LENSTEP 32
 
-static gboolean sp_bpath_good (ArtBpath * bpath);
-static ArtBpath *sp_bpath_clean (ArtBpath *bpath);
-ArtBpath * sp_bpath_check_subpath (ArtBpath * bpath);
-static gint sp_bpath_length (ArtBpath * bpath);
-static gboolean sp_bpath_closed (ArtBpath * bpath);
+static bool sp_bpath_good(ArtBpath const bpath[]);
+static ArtBpath *sp_bpath_clean (ArtBpath const bpath[]);
+static ArtBpath const *sp_bpath_check_subpath(ArtBpath const bpath[]);
+static gint sp_bpath_length(ArtBpath const bpath[]);
+static bool sp_bpath_closed(ArtBpath const bpath[]);
 
 /* Constructors */
 
@@ -99,14 +99,14 @@ sp_curve_new_from_static_bpath (ArtBpath * bpath)
 {
 	g_return_val_if_fail (bpath != NULL, NULL);
 
-	gboolean sbpath;
+	bool sbpath;
 	if (!sp_bpath_good (bpath)) {
 		ArtBpath *new_bpath = sp_bpath_clean (bpath);
 		g_return_val_if_fail (new_bpath != NULL, NULL);
-		sbpath = FALSE;
+		sbpath = false;
 		bpath = new_bpath;
 	} else {
-		sbpath = TRUE;
+		sbpath = true;
 	}
 
 	SPCurve *curve = g_new (SPCurve, 1);
@@ -130,8 +130,7 @@ sp_curve_new_from_static_bpath (ArtBpath * bpath)
 	return curve;
 }
 
-SPCurve *
-sp_curve_new_from_foreign_bpath (ArtBpath * bpath)
+SPCurve *sp_curve_new_from_foreign_bpath(ArtBpath const bpath[])
 {
 	g_return_val_if_fail (bpath != NULL, NULL);
 
@@ -728,7 +727,10 @@ sp_curve_append_continuous (SPCurve *c0, SPCurve const *c1, gdouble tolerance)
 	ArtBpath *be = sp_curve_last_bpath (c0);
 	if (be) {
 		ArtBpath const *bs = sp_curve_first_bpath (c1);
-		if (bs && (fabs (bs->x3 - be->x3) <= tolerance) && (fabs (bs->y3 - be->y3) <= tolerance)) {
+		if ( bs
+		     && ( fabs( bs->x3 - be->x3 ) <= tolerance )
+		     && ( fabs( bs->y3 - be->y3 ) <= tolerance ) )
+		{
 			/* fixme: Strictly we mess in case of multisegment mixed open/close curves */
 			bool closed = false;
 			for (bs = bs + 1; bs->code != ART_END; bs++) {
@@ -788,30 +790,25 @@ sp_curve_backspace (SPCurve *curve)
 
 /* Private methods */
 
-static gboolean
-sp_bpath_good (ArtBpath *bpath)
+static bool sp_bpath_good(ArtBpath const bpath[])
 {
 	g_return_val_if_fail (bpath != NULL, FALSE);
 
-	if (bpath->code == ART_END) return TRUE;
-
-	ArtBpath *bp = bpath;
-
+	ArtBpath const *bp = bpath;
 	while (bp->code != ART_END) {
 		bp = sp_bpath_check_subpath (bp);
 		if (bp == NULL)
-			return FALSE;
+			return false;
 	}
 
-	return TRUE;
+	return true;
 }
 
-static ArtBpath *
-sp_bpath_clean (ArtBpath *bpath)
+static ArtBpath *sp_bpath_clean(ArtBpath const bpath[])
 {
 	ArtBpath *new_bpath = art_new (ArtBpath, sp_bpath_length(bpath));
 
-	ArtBpath *bp = bpath;
+	ArtBpath const *bp = bpath;
 	ArtBpath *np = new_bpath;
 
 	while (bp->code != ART_END) {
@@ -841,16 +838,15 @@ sp_bpath_clean (ArtBpath *bpath)
 	return new_bpath;
 }
 
-ArtBpath *
-sp_bpath_check_subpath (ArtBpath * bpath)
+static ArtBpath const *sp_bpath_check_subpath(ArtBpath const bpath[])
 {
 	g_return_val_if_fail (bpath != NULL, NULL);
 
-	gboolean closed;
+	bool closed;
 	if (bpath->code == ART_MOVETO) {
-		closed = TRUE;
+		closed = true;
 	} else if (bpath->code == ART_MOVETO_OPEN) {
-		closed = FALSE;
+		closed = false;
 	} else {
 		return NULL;
 	}
@@ -878,8 +874,7 @@ sp_bpath_check_subpath (ArtBpath * bpath)
 	return bpath + i;
 }
 
-static gint
-sp_bpath_length (ArtBpath * bpath)
+static gint sp_bpath_length(ArtBpath const bpath[])
 {
 	g_return_val_if_fail (bpath != NULL, FALSE);
 
@@ -891,13 +886,15 @@ sp_bpath_length (ArtBpath * bpath)
 	return l;
 }
 
-static gboolean
-sp_bpath_closed (ArtBpath * bpath)
+static bool sp_bpath_closed(ArtBpath const bpath[])
 {
 	g_return_val_if_fail (bpath != NULL, FALSE);
 
-	for (ArtBpath *bp = bpath; bp->code != ART_END; bp++)
-		if (bp->code == ART_MOVETO_OPEN) return FALSE;
+	for (ArtBpath const *bp = bpath; bp->code != ART_END; bp++) {
+		if (bp->code == ART_MOVETO_OPEN) {
+			return false;
+		}
+	}
 
-	return TRUE;
+	return true;
 }
