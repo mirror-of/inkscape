@@ -18,13 +18,12 @@ GLIBMM_CFLAGS = `pkg-config --cflags glibmm-2.4`
 GLIBMM_LIBS   = `pkg-config --libs glibmm-2.4`
 
 CFLAGS = -g $(GLIBMM_CFLAGS) $(XSLT_CFLAGS)
-LIBS   = $(GLIBMM_LIBS) $(XSLT_LIBS) -lz
+LIBS   = $(GLIBMM_LIBS) $(XSLT_LIBS) ../uri.o -lz
 
 OBJ = \
 InkscapeStream.o \
 GzipStream.o \
 StringStream.o \
-uri.o \
 UriStream.o \
 XsltStream.o \
 ftos.o
