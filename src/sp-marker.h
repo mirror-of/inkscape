@@ -25,25 +25,12 @@ class SPMarker;
 class SPMarkerClass;
 class SPMarkerView;
 
-/**
- * These enums are to allow us to have 4-element arrays that represent
- * a set of marker locations (all, start, mid, and end).  This allows us
- * to iterate through the array in places where we need to do a process
- * across all of the markers, instead of separate code stanzas for each.
- */
-enum {
-	SP_MARKER_LOC,
-	SP_MARKER_LOC_START,
-	SP_MARKER_LOC_MID,
-	SP_MARKER_LOC_END,
-	SP_MARKER_LOC_QTY
-};
-
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-rect.h>
 #include "svg/svg-types.h"
 #include "enums.h"
 #include "sp-item-group.h"
+#include "sp-marker-loc.h"
 #include "uri-references.h"
 
 struct SPMarker {
