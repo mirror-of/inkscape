@@ -87,16 +87,25 @@ public:
   };
 
   // lists of the nodes and edges
-  int nbPt, maxPt;
+  int maxPt; // [FIXME: remove this]
   std::vector<dg_point> pts;
-  int nbAr, maxAr;
+  int maxAr; // [FIXME: remove this]
   std::vector<dg_arete> aretes;
 
   // flags
   int type;
   int flags;
 
+  int numberOfPoints() const { return nbPt; }
+  bool hasPoints() const { return (nbPt != 0); }
+  int numberOfEdges() const { return nbAr; }
+  bool hasEdges() const { return (nbAr != 0); }
+
 private:
+
+  int nbPt; ///< number of points [FIXME: remove this in favour of pts.size()]
+  int nbAr; ///< number of edges (aretes) [FIXME: remove this in favour of aretes.size()]
+  
   // temporary data for the various algorithms
   struct edge_data
   {

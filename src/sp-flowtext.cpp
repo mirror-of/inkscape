@@ -484,7 +484,7 @@ void SPFlowtext::UpdateFlowDest()
             for (int i = 0; i<c_child->nbComp; i++) {
                 flow_dest *n_d = c_child->computed[i];
                 n_d->rgn_flow->Reset();
-                if ( f_excl->rgn_dest->nbAr > 0 ) {
+                if ( f_excl->rgn_dest->hasEdges() ) {
                     n_d->rgn_flow->Booleen(n_d->rgn_dest, f_excl->rgn_dest, bool_op_diff);
                 } else {
                     n_d->rgn_flow->Copy(n_d->rgn_dest);

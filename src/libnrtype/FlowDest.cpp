@@ -285,9 +285,9 @@ void           flow_dest::Reset(void)
 }
 void           flow_dest::AddShape(Shape* i_shape)
 {
-	if ( rgn_dest->nbAr <= 0 ) {
+	if ( rgn_dest->hasEdges() == false ) {
 		rgn_dest->Copy(i_shape);
-	} else if ( i_shape->nbAr <= 0 ) {
+	} else if ( i_shape->hasEdges() == false ) {
 	} else {
 		Shape* temp=new Shape;
 		temp->Booleen(i_shape,rgn_dest,bool_op_union);

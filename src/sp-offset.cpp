@@ -837,7 +837,7 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
   ((Path *) offset->originalPath)->Fill (theShape, 0);
   theRes->ConvertToShape (theShape, fill_oddEven);
   
-  if (theRes->nbAr <= 1)
+  if (theRes->numberOfEdges() <= 1)
   {
     
   }
@@ -848,7 +848,7 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
     double arDist = -1.0;
     bool arSet = false;
     // first get the minimum distance to the points
-    for (int i = 0; i < theRes->nbPt; i++)
+    for (int i = 0; i < theRes->numberOfPoints(); i++)
     {
       if (theRes->pts[i].dI + theRes->pts[i].dO > 0)
 	    {
@@ -908,7 +908,7 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
 	    }
     }
     // loop over the edges to try to improve the distance
-    for (int i = 0; i < theRes->nbAr; i++)
+    for (int i = 0; i < theRes->numberOfEdges(); i++)
     {
       NR::Point sx = theRes->pts[theRes->aretes[i].st].x;
       NR::Point ex = theRes->pts[theRes->aretes[i].en].x;
@@ -986,7 +986,7 @@ sp_offset_top_point (SPOffset * offset, NR::Point *px)
   finalPath->Convert (1.0);
   finalPath->Fill (theShape, 0);
   
-  if (theShape->nbPt > 0)
+  if (theShape->hasPoints())
   {
     theShape->SortPoints ();
     *px = theShape->pts[0].x;
