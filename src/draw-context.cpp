@@ -622,9 +622,7 @@ spdc_flush_white (SPDrawContext *dc, SPCurve *gc)
 
 static SPDrawAnchor *test_inside(SPDrawContext *dc, NR::Point p)
 {
-	SPDrawAnchor *active;
-
-	active = NULL;
+	SPDrawAnchor *active = NULL;
 
 	/* Test green anchor */
 	if (dc->green_anchor) {
@@ -633,7 +631,8 @@ static SPDrawAnchor *test_inside(SPDrawContext *dc, NR::Point p)
 
 	for (GSList *l = dc->white_anchors; l != NULL; l = l->next) {
 		SPDrawAnchor *na = sp_draw_anchor_test ((SPDrawAnchor *) l->data, p, !active);
-		if (!active && na) active = na;
+		if (!active && na)
+			active = na;
 	}
 
 	return active;
@@ -654,24 +653,28 @@ static void fit_and_split(SPDrawContext *dc)
 		sp_curve_curveto (dc->red_curve, b[1], b[2], b[3]);
 		sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (dc->red_bpath), dc->red_curve);
 	} else {
-		SPCurve *curve;
-		SPCanvasItem *cshape;
 		/* Fit and draw and copy last point */
+
+/* This isn't what we want.  We really want to do the curve fit with
+ * say a 50% overlap with the previous points, but such that the curve
+ * matches the tangent at the exact meeting point.  Probably we want
+ * 2nd order continuity. */
+
 		g_assert (!sp_curve_empty (dc->red_curve));
 		sp_curve_append_continuous (dc->green_curve, dc->red_curve, 0.0625);
-		curve = sp_curve_copy (dc->red_curve);
+		SPCurve *curve = sp_curve_copy (dc->red_curve);
 
 		/* fixme: */
-		cshape = sp_canvas_bpath_new (SP_DT_SKETCH (SP_EVENT_CONTEXT (dc)->desktop), curve);
+		SPCanvasItem *cshape = sp_canvas_bpath_new (SP_DT_SKETCH (SP_EVENT_CONTEXT (dc)->desktop), curve);
 		sp_curve_unref (curve);
 		sp_canvas_bpath_set_stroke (SP_CANVAS_BPATH (cshape), dc->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 
 		dc->green_bpaths = g_slist_prepend (dc->green_bpaths, cshape);
 
-		/* fixme: Shouldn't we be checking that npoints >= 2 ? */
-		dc->p[0] = dc->p[dc->npoints - 2];
-		dc->p[1] = dc->p[dc->npoints - 1];
-		dc->npoints = 2;
+		const int continuity = std::min(2, dc->npoints);
+		for(int i = 0; i < continuity; i++)
+			dc->p[i] = dc->p[dc->npoints - continuity];
+		dc->npoints = continuity;
 	}
 }
 
