@@ -1,6 +1,7 @@
 2004-07-29  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
-	* src/inkview.cpp: 
+	* src/inkview.cpp: Make the window title be the name of the
+	  instead of the current file instead of the first file.
 
 	* src/round-test.cpp: New unit-test file.
 
