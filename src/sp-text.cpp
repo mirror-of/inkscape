@@ -119,37 +119,21 @@ guint
 sp_count_chars_recursive (SPObject *o, SPObject *target)
 {
 
-    if (o == target)
+    if ( o == target ) {
         return INT_MAX; // INT_MAX is a signal to stop searching the tree
-
-
-    if (SP_IS_STRING(o))
-        return (SP_STRING(o)->length);
-
-    // FIXME!!! tspans may recurse, too! To support this, we need to move parent/children tree to SPObject, as is done in SP
-    if (SP_IS_TSPAN(o)) {
-        if (SP_TSPAN(o)->string == target)
-            return  INT_MAX; // INT_MAX is a signal to stop searching the tree
-        else
-            return (SP_STRING(SP_TSPAN(o)->string)->length);
-    }
-
-    if (!SP_IS_TEXT(o))
-        return 0;
-
-    guint n = 0;
-    for (SPObject *child = sp_object_first_child(o) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-        if (child == target) {
-            break;
+    } else if (SP_IS_STRING(o)) {
+	return SP_STRING(o)->length;
+    } else {
+        guint n = 0;
+        for ( SPObject *child = sp_object_first_child(o) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+            guint i = sp_count_chars_recursive (child, target);
+            if ( i == INT_MAX ) { // somewhere under us, target was hit
+                break;
+            }
+            n += i;
         }
-        guint i = sp_count_chars_recursive (child, target);
-        if (i == INT_MAX) { // somewhere under us, target was hit
-            break;
-        }
-        n += i;
+        return n;
     }
-
-    return n;
 }
 
 
@@ -1297,9 +1281,10 @@ sp_tspan_update (SPObject *object, SPCtx *ctx, guint flags)
     for (i = tspan->ly.dy; i != NULL; i = i->next)
         sp_text_update_length ((SPSVGLength *) i->data, style->font_size.computed, style->font_size.computed * 0.5, d);
 
-    if (tspan->string) {
-        if (flags || (tspan->string->uflags & SP_OBJECT_MODIFIED_FLAG)) {
-            sp_object_invoke_update (tspan->string, ctx, flags);
+    SPObject *ochild;
+    for ( ochild = sp_object_first_child(object) ; ochild ; ochild = SP_OBJECT_NEXT(ochild) ) {
+        if ( flags || ( ochild->uflags & SP_OBJECT_MODIFIED_FLAG )) {
+            sp_object_invoke_update (ochild, ctx, flags);
         }
     }
 }
@@ -1312,8 +1297,6 @@ sp_tspan_update (SPObject *object, SPCtx *ctx, guint flags)
 static void
 sp_tspan_modified (SPObject *object, unsigned int flags)
 {
-    SPTSpan *tspan = SP_TSPAN (object);
-
     if (((SPObjectClass *) tspan_parent_class)->modified)
         ((SPObjectClass *) tspan_parent_class)->modified (object, flags);
 
@@ -1321,9 +1304,10 @@ sp_tspan_modified (SPObject *object, unsigned int flags)
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    if (tspan->string) {
-        if (flags || (tspan->string->mflags & SP_OBJECT_MODIFIED_FLAG)) {
-            sp_object_invoke_modified (tspan->string, flags);
+    SPObject *ochild;
+    for ( ochild = sp_object_first_child(object) ; ochild ; ochild = SP_OBJECT_NEXT(ochild) ) {
+        if (flags || (ochild->mflags & SP_OBJECT_MODIFIED_FLAG)) {
+            sp_object_invoke_modified (ochild, flags);
         }
     }
 }
@@ -1353,14 +1337,25 @@ sp_tspan_write (SPObject *object, SPRepr *repr, guint flags)
         sp_repr_set_attr (repr, "sodipodi:role", (tspan->role != SP_TSPAN_ROLE_UNSPECIFIED) ? "line" : NULL);
     }
 
+    /* TODO: we should really hand this off to SPString's own ::build */
     if (flags & SP_OBJECT_WRITE_BUILD) {
-        SPRepr *rstr;
-        /* TEXT element */
-        rstr = sp_xml_document_createTextNode (sp_repr_document (repr), SP_STRING_TEXT (tspan->string));
-        sp_repr_append_child (repr, rstr);
-        sp_repr_unref (rstr);
+	SPObject *ochild;
+	for ( ochild = sp_object_first_child(SP_OBJECT(tspan)) ; ochild ; ochild = SP_OBJECT_NEXT(ochild) ) {
+	    if (SP_IS_STRING(ochild)) {
+                SPRepr *rstr;
+                /* TEXT element */
+                rstr = sp_xml_document_createTextNode (sp_repr_document (repr), SP_STRING_TEXT(SP_STRING(ochild)));
+                sp_repr_append_child (repr, rstr);
+                sp_repr_unref (rstr);
+            }
+	}
     } else {
-        sp_repr_set_content (SP_OBJECT_REPR (tspan->string), SP_STRING_TEXT (tspan->string));
+	SPObject *ochild;
+	for ( ochild = sp_object_first_child(SP_OBJECT(tspan)) ; ochild ; ochild = SP_OBJECT_NEXT(ochild) ) {
+	    if (SP_IS_STRING(ochild)) {
+		sp_repr_set_content (SP_OBJECT_REPR (ochild), SP_STRING_TEXT (SP_STRING(ochild)));
+	    }
+	}
     }
 
     /* fixme: Strictly speaking, item class write 'transform' too */

@@ -10,6 +10,9 @@
       src/sp-object.cpp, src/sp-object.h, src/sp-text.cpp, src/sp-use.cpp:
 	  finished transition to SPObject::children
 
+    * src/sp-text.cpp: reworked SPTSpan a bit so that it copes with
+	  the child changes a little better with respect to SPTSpan::string
+
 2004-03-06  MenTaLguY  <mental@rydia.net>
 
     * src/ast/*: initial work on AST code
