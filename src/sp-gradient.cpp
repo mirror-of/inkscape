@@ -8,8 +8,10 @@
  *
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
+ * Copyright (C) 2004 David Turner
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
+ *
  */
 
 #define noSP_GRADIENT_VERBOSE
@@ -695,13 +697,17 @@ sp_gradient_rebuild_vector (SPGradient *gr)
 		if (SP_IS_STOP (child)) {
 			SPStop *stop = SP_STOP (child);
 			if (!oset) {
+				/* first stop */
 				oset = TRUE;
 				offsets = offsete = stop->offset;
-				len += 1;
-			} else if (stop->offset > (offsete + 1e-9)) {
-				offsete = stop->offset;
-				len += 1;
+			} else {
+			        if (stop->offset < offsete) {
+				        stop->offset = offsete;
+				} else {
+				        offsete = stop->offset;
+				}
 			}
+			len += 1;
 			sp_color_copy (&color, &stop->color);
 			opacity = stop->opacity;
 		}
@@ -732,6 +738,7 @@ sp_gradient_rebuild_vector (SPGradient *gr)
 		gr->vector->nstops = vlen;
 	}
 
+	/*fixme: SVG spec says that if len is 1, treat as solid, if len is 0, treat as none*/
 	if (len < 2) {
 		gr->vector->start = 0.0;
 		gr->vector->end = 1.0;
@@ -750,17 +757,19 @@ sp_gradient_rebuild_vector (SPGradient *gr)
 
 	gint pos = 0;
 	gdouble offset = offsets;
+	gboolean first = TRUE;
 	gr->vector->stops[0].offset = 0.0;
 	for (SPObject *child = sp_object_first_child(SP_OBJECT(gr)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
 		if (SP_IS_STOP (child)) {
 			SPStop *stop;
 			stop = SP_STOP (child);
-			if (stop->offset > (offset + 1e-9)) {
-				pos += 1;
-				g_assert( pos < gr->vector->nstops );
-				gr->vector->stops[pos].offset = (stop->offset - offsets) / (offsete - offsets);
-				offset = stop->offset;
+			if (!first) {
+			  pos += 1;
 			}
+			first = FALSE;
+			g_assert( pos < gr->vector->nstops );
+			gr->vector->stops[pos].offset = (stop->offset - offsets) / (offsete - offsets);
+			offset = stop->offset;
 			sp_color_copy (&gr->vector->stops[pos].color, &stop->color);
 			gr->vector->stops[pos].opacity = stop->opacity;
 		}

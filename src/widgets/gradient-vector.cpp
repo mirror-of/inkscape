@@ -9,8 +9,10 @@
  * Copyright (C) 2001-2002 Lauris Kaplinski
  * Copyright (C) 2001 Ximian, Inc.
  * Copyright (C) 2004 Monash University
+ * Copyright (C) 2004 David Turner
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
+ *
  */
 
 #include <config.h>
@@ -451,12 +453,14 @@ verify_grad(SPGradient *gradient)
 {
 	int i = 0;
 	SPStop *stop = NULL;
+	/* count stops */
 	for ( SPObject *ochild = sp_object_first_child(SP_OBJECT(gradient)) ; ochild != NULL ; ochild = SP_OBJECT_NEXT(ochild) ) {
 		if (SP_IS_STOP (ochild)) {
 			i++;
 			stop = SP_STOP(ochild);
 		}
 	}
+
 	if (i < 1) {
 		gchar c[64];
 		sp_svg_write_color (c, 64, 0x00000000);
@@ -607,12 +611,12 @@ sp_grad_edit_select (GtkOptionMenu *mnu,  GtkWidget *tbl)
 	GtkAdjustment *adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "offset");
 	SPStop *prev = NULL;
 	prev = sp_prev_stop(stop, gradient);
-	if (prev != NULL )  adj->lower = prev->offset+.01;
+	if (prev != NULL )  adj->lower = prev->offset;
 	else adj->lower = 0;
 
 	SPStop *next = NULL;
 	next = sp_next_stop(stop);
-	if (next != NULL )  adj->upper = next->offset-.01;
+	if (next != NULL )  adj->upper = next->offset;
 	else adj->upper = 1.0;
 
 	sp_repr_set_double (SP_OBJECT_REPR (stop), "offset", stop->offset);
