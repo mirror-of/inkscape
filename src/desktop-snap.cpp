@@ -30,8 +30,9 @@
 
 #define SNAP_ON(d) (((d)->gridsnap > 0.0) || ((d)->guidesnap > 0.0))
 
-static gdouble sp_desktop_dim_snap(SPDesktop const *dt, NR::Point &req, unsigned const dim) {
-	g_assert(dim < 2);
+static gdouble sp_desktop_dim_snap(SPDesktop const *dt, NR::Point &req, unsigned const dim)
+{
+	g_assert( dim < 2 );
 	return sp_desktop_vector_snap (dt, req, component_vectors[dim]);
 }
 
@@ -173,8 +174,8 @@ sp_desktop_circular_snap (SPDesktop const * desktop, NR::Point& req, const NR::P
  * They return the updated transformation parameter. 
  */
 
-static double
-sp_desktop_dim_snap_list (SPDesktop const *desktop, NR::Point *p, int const length, double const dx, int const dim)
+static double sp_desktop_dim_snap_list(SPDesktop const *desktop, NR::Point p[], int const length,
+				       double const dx, unsigned const dim)
 {
 	gdouble dist = NR_HUGE;
 	gdouble xdist = dx;
@@ -267,9 +268,10 @@ sp_desktop_vector_snap_list (SPDesktop const *desktop, NRPoint *p, int length, N
 	return ratio;
 }
 
-static double
-sp_desktop_dim_snap_list_scale (SPDesktop const *desktop, NR::Point *p, int const length, NR::Point const &norm, double const sx, int const dim)
+static double sp_desktop_dim_snap_list_scale(SPDesktop const *desktop, NR::Point p[], int const length,
+					     NR::Point const &norm, double const sx, unsigned const dim)
 {
+	g_assert( dim < 2 );
 	if (!SNAP_ON (desktop))
 		return sx;
 
@@ -292,9 +294,10 @@ sp_desktop_dim_snap_list_scale (SPDesktop const *desktop, NR::Point *p, int cons
 	return scale;
 }
 
-static double
-sp_desktop_dim_snap_list_skew (SPDesktop const *desktop, NR::Point *p, int const length, NR::Point const &norm, double const sx, int const dim)
+static double sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, NR::Point p[], int const length,
+					    NR::Point const &norm, double const sx, unsigned const dim)
 {
+	g_assert( dim < 2 );
 	if (!SNAP_ON (desktop))
 		return sx;
 
@@ -305,12 +308,12 @@ sp_desktop_dim_snap_list_skew (SPDesktop const *desktop, NR::Point *p, int const
 		NR::Point q = p[i];
 		NR::Point check = q;
 		// apply shear
-		check[dim] += sx * (q[1- dim] - norm[1- dim]);
-		if (fabs (q[1- dim] - norm[1- dim]) > MIN_DIST_NORM) {
+		check[dim] += sx * (q[!dim] - norm[!dim]);
+		if (fabs (q[!dim] - norm[!dim]) > MIN_DIST_NORM) {
 			const gdouble d = sp_desktop_dim_snap (desktop, check, dim);
 			if ((d < 1e18) && (d < fabs (dist))) {
 				dist = d;
-				skew = (check[dim] - q[dim]) / (q[1- dim] - norm[1- dim]);
+				skew = (check[dim] - q[dim]) / (q[!dim] - norm[!dim]);
 			}
 		}
 	}
@@ -350,22 +353,27 @@ double sp_desktop_vector_snap (SPDesktop const *desktop, NRPoint *req, double dx
 }
 
 
-gdouble sp_desktop_horizontal_snap(SPDesktop const *dt, NRPoint* req) {
+gdouble sp_desktop_horizontal_snap(SPDesktop const *dt, NRPoint *req)
+{
 	NR::Point p = *req;
 	double d = sp_desktop_dim_snap (dt, p, NR::X);
 	*req = p;
 	return d;
 }
 
-gdouble sp_desktop_vertical_snap(SPDesktop const *dt, NRPoint* req) {
+gdouble sp_desktop_vertical_snap(SPDesktop const *dt, NRPoint *req)
+{
 	NR::Point p = *req;
 	double d = sp_desktop_dim_snap (dt, p, NR::Y);
 	*req = p;
 	return d;
 }
 
-static double sp_desktop_dim_snap_list (SPDesktop const *desktop, NRPoint *p, const int length, const double dx, int dim) {
-	NR::Point* l = new NR::Point[length];
+double sp_desktop_dim_snap_list(SPDesktop const *desktop, NRPoint p[], int const length,
+				double const dx, unsigned const dim)
+{
+	g_assert( dim < 2 );
+	NR::Point *l = new NR::Point[length];
 	for(int i = 0; i < length; i++)
 		l[i] = (NR::Point)p[i];
 	double r = sp_desktop_dim_snap_list (desktop, l, length, dx, dim);
@@ -374,17 +382,11 @@ static double sp_desktop_dim_snap_list (SPDesktop const *desktop, NRPoint *p, co
 	return r;
 }
 
-double sp_desktop_horizontal_snap_list (SPDesktop const *desktop, NRPoint *p, const int length, const double dx) {
-	return sp_desktop_dim_snap_list(desktop, p, length, dx, NR::X);
-}
 
-
-double sp_desktop_vertical_snap_list (SPDesktop const *desktop, NRPoint *p, const int length, const double dx) {
-	return sp_desktop_dim_snap_list(desktop, p, length, dx, NR::Y);
-}
-
-
-static double sp_desktop_dim_snap_list_scale (SPDesktop const *desktop, NRPoint *p, const int length, NRPoint const * norm, const double sx, int dim) {
+static double sp_desktop_dim_snap_list_scale(SPDesktop const *desktop, NRPoint p[], int const length,
+					     NRPoint const *norm, double const sx, unsigned const dim)
+{
+	g_assert( dim < 2 );
 	NR::Point* l = new NR::Point[length];
 	for(int i = 0; i < length; i++)
 		l[i] = (NR::Point)p[i];
@@ -395,16 +397,23 @@ static double sp_desktop_dim_snap_list_scale (SPDesktop const *desktop, NRPoint 
 	return r;
 }
 
-double sp_desktop_horizontal_snap_list_scale (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx) {
+double sp_desktop_horizontal_snap_list_scale(SPDesktop const *desktop, NRPoint p[], int const length,
+					     NRPoint const *norm, double const sx)
+{
 	return sp_desktop_dim_snap_list_scale(desktop, p, length, norm, sx, NR::X);
 }
 
-double sp_desktop_vertical_snap_list_scale (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx) {
+double sp_desktop_vertical_snap_list_scale(SPDesktop const *desktop, NRPoint p[], int const length,
+					   NRPoint const *norm, double const sx)
+{
 	return sp_desktop_dim_snap_list_scale(desktop, p, length, norm, sx, NR::Y);
 }
 
 
-double sp_desktop_dim_snap_list_skew (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx, int dim) {
+double sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, NRPoint p[], int const length,
+				     NRPoint const *norm, double const sx, unsigned const dim)
+{
+	g_assert( dim < 2 );
 	NR::Point* l = new NR::Point[length];
 	for(int i = 0; i < length; i++)
 		l[i] = (NR::Point)p[i];
@@ -415,11 +424,15 @@ double sp_desktop_dim_snap_list_skew (SPDesktop const *desktop, NRPoint *p, cons
 	return r;
 }
 
-double sp_desktop_horizontal_snap_list_skew (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx) {
+double sp_desktop_horizontal_snap_list_skew(SPDesktop const *desktop, NRPoint p[], int const length,
+					    NRPoint const *norm, double const sx)
+{
 	return sp_desktop_dim_snap_list_skew(desktop, p, length, norm, sx, NR::X);
 }
 
-double sp_desktop_vertical_snap_list_skew (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx) {
-	return sp_desktop_dim_snap_list_skew(desktop, p, length, norm, sx, NR::Y);	
+double sp_desktop_vertical_snap_list_skew(SPDesktop const *desktop, NRPoint p[], int const length,
+					  NRPoint const *norm, double const sx)
+{
+	return sp_desktop_dim_snap_list_skew(desktop, p, length, norm, sx, NR::Y);
 }
 

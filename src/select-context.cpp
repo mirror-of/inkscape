@@ -53,7 +53,7 @@ static gint sp_select_context_item_handler (SPEventContext * event_context, SPIt
 
 static GtkWidget *sp_select_context_config_widget (SPEventContext *ec);
 
-static void sp_selection_moveto (SPSelTrans * seltrans, double x, double y, guint state);
+static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint state);
 
 static SPEventContextClass * parent_class;
 
@@ -197,9 +197,7 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 	SPSelectContext *sc;
 	SPSelTrans *seltrans;
 	SPSelection *selection;
-	SPItem *item_at_point = NULL, *group_at_point = NULL;
 	GdkCursor *cursor;
-	NRPoint p;
 	gint ret = FALSE;
 
 	desktop = event_context->desktop;
@@ -260,10 +258,12 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 				// motion notify coordinates as given (no snapping back to origin)
 				within_tolerance = false; 
 
-				sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
+				NR::Point const motion_pt(event->motion.x, event->motion.y);
+				NR::Point const p(sp_desktop_w2d_xy_point(desktop, motion_pt));
 				if (!sc->moved) {
-					item_at_point = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
-					group_at_point = sp_desktop_group_at_point (desktop, NR::Point(event->button.x, event->button.y));
+					NR::Point const button_pt(event->button.x, event->button.y);
+					SPItem *item_at_point = sp_desktop_item_at_point(desktop, button_pt, TRUE);
+					SPItem *group_at_point = sp_desktop_group_at_point(desktop, button_pt);
 					// if neither a group nor an item (possibly in a group) at point are selected, set selection to the item passed with the event
 					if ((!item_at_point || !sp_selection_item_selected (selection, item_at_point)) && 
 					    (!group_at_point || !sp_selection_item_selected (selection, group_at_point))) {
@@ -272,11 +272,10 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 						if (!sp_selection_item_selected (selection, sc->item))
 							sp_selection_set_item (selection, sc->item);
 					} // otherwise, do not change selection so that dragging selected-within-group items is possible
-					NR::Point pp = p;
-					sp_sel_trans_grab (seltrans, pp, -1, -1, FALSE);
+					sp_sel_trans_grab(seltrans, p, -1, -1, FALSE);
 					sc->moved = TRUE;
 				}
-				sp_selection_moveto (seltrans, p.x, p.y, event->button.state);
+				sp_selection_moveto(seltrans, p, event->button.state);
 			}
 		}
 		break;
@@ -359,7 +358,6 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 	SPItem *item = NULL, *group = NULL;
 	SPItem *item_at_point = NULL, *group_at_point = NULL, *item_in_group = NULL;
 	gint ret = FALSE;
-	NRPoint p;
 	NRRect b;
 	GSList *l;
 	gdouble nudge;
@@ -383,8 +381,9 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 			yp = (gint) event->button.y;
 			within_tolerance = true;
 
-			sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
-			sp_rubberband_start (desktop, p.x, p.y);
+			NR::Point const button_pt(event->button.x, event->button.y);
+			NR::Point const p(sp_desktop_w2d_xy_point(desktop, button_pt));
+			sp_rubberband_start(desktop, p);
 			sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
 					     GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK,
 					     NULL, event->button.time);
@@ -404,7 +403,8 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (event->motion.state & GDK_BUTTON1_MASK) {
-			sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
+			NR::Point const motion_pt(event->motion.x, event->motion.y);
+			NR::Point const p(sp_desktop_w2d_xy_point(desktop, motion_pt));
 
 			if ( within_tolerance
 			     && ( abs( (gint) event->motion.x - xp ) < tolerance )
@@ -437,17 +437,16 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 							if (item_at_point && !sp_selection_item_selected (selection, item_at_point))
 								sp_selection_set_item (selection, item_at_point);
 						} // otherwise, do not change selection so that dragging selected-within-group items is possible
-						NR::Point pp = p;
-						sp_sel_trans_grab (seltrans, pp, -1, -1, FALSE);
+						sp_sel_trans_grab(seltrans, p, -1, -1, FALSE);
 						sc->moved = TRUE;
-					} 
-					sp_selection_moveto (seltrans, p.x, p.y, event->button.state);
+					}
+					sp_selection_moveto(seltrans, p, event->button.state);
 					ret = TRUE;
 				} else {
 					sc->dragging = FALSE;
 				}
 			} else {
-				sp_rubberband_move (p.x, p.y);
+				sp_rubberband_move(p);
 			}
 		}
 		break;
@@ -755,48 +754,43 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 	return ret;
 }
 
-static void
-sp_selection_moveto (SPSelTrans * seltrans, double x, double y, guint state)
+static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint state)
 {
-	double dx, dy;
-	NRMatrix move;
-	NRPoint p, norm = {0,0};
-	GString * xs, * ys;
-	gchar status[80];
-	SPDesktop * desktop;
+	using NR::X;
+	using NR::Y;
 
-	desktop = seltrans->desktop;
+	SPDesktop *desktop = seltrans->desktop;
 
-	sp_sel_trans_point_desktop (seltrans, &p);
-	dx = x - p.x;
-	dy = y - p.y;
-
+	NR::Point dxy = xy - sp_sel_trans_point_desktop(seltrans);
 	if (state & GDK_MOD1_MASK) {
-		dx /= 10;
-		dy /= 10;
+		dxy /= 10;
 	}
 
-	dx = sp_desktop_horizontal_snap_list (desktop, seltrans->spp, seltrans->spp_length, dx);
-	dy = sp_desktop_vertical_snap_list (desktop, seltrans->spp, seltrans->spp_length, dy);
+	for(unsigned dim = 0 ; dim < 2 ; ++dim) {
+		dxy[dim] = sp_desktop_dim_snap_list(desktop, seltrans->spp, seltrans->spp_length, dxy[dim], dim);
+	}
 
 	if (state & GDK_CONTROL_MASK) {
-		if (fabs (dx) > fabs (dy)) {
-			dy = 0.0;
+		if( fabs(dxy[X]) > fabs(dxy[Y]) ) {
+			dxy[Y] = 0.0;
 		} else {
-			dx = 0.0;
+			dxy[X] = 0.0;
 		}
 	}
 
-	nr_matrix_set_translate (&move, dx, dy);
+	NRMatrix move;
+	nr_matrix_set_translate(&move, dxy[X], dxy[Y]);
+	NRPoint norm = {0, 0};
 	sp_sel_trans_transform (seltrans, &move, &norm);
 
 	// status text
-	xs = SP_PT_TO_METRIC_STRING (dx, SP_DEFAULT_METRIC);
-	ys = SP_PT_TO_METRIC_STRING (dy, SP_DEFAULT_METRIC);
-	sprintf (status, "Move  %s, %s", xs->str, ys->str);
+	GString *xs = SP_PT_TO_METRIC_STRING(dxy[X], SP_DEFAULT_METRIC);
+	GString *ys = SP_PT_TO_METRIC_STRING(dxy[Y], SP_DEFAULT_METRIC);
+	gchar *status = g_strdup_printf("Move  %s, %s", xs->str, ys->str);
+	g_string_free(xs, TRUE);
+	g_string_free(ys, TRUE);
 	sp_view_set_status (SP_VIEW (seltrans->desktop), status, FALSE);
-	g_string_free (xs, FALSE);
-	g_string_free (ys, FALSE);
+	g_free(status);
 }
 
 /* Gtk styff */

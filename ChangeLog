@@ -1,5 +1,16 @@
 2004-01-29  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/desktop-snap.h, src/desktop-snap.cpp (sp_desktop_dim_snap_list):
+	Export this function.
+	(sp_desktop_horizontal_snap_list, sp_desktop_vertical_snap_list):
+	Remove these now-unused functions.
+	* src/select-context.cpp (sp_selection_moveto):
+	Use sp_desktop_dim_snap_list instead of
+	sp_desktop_horizontal_snap_list, sp_desktop_vertical_snap_list.
+
+	* src/select-context.cpp (sp_selection_moveto): Fix what appears to be
+	a memory leak.
+
 	* src/rubberband.h, src/rubberband.cpp (sp_rubberband_move):
 	Add NR::Point version.
 
