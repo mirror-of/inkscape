@@ -501,18 +501,22 @@ void LayerSelector::_prepareLabelRenderer(
         SPObject *layer=( _desktop ? _desktop->currentLayer() : NULL );
         SPObject *root=( _desktop ? _desktop->currentRoot() : NULL );
 
-        gchar const *format;
-        if ( layer && SP_OBJECT_PARENT(object) == SP_OBJECT_PARENT(layer) ||
-             layer == root && SP_OBJECT_PARENT(object) == root
-        ) {
-            if ( object == layer && object != root ) {
-                format="<small>%*s<b>%s</b></small>";
-            } else {
-                format="<small>%*s%s</small>";
-            }
-        } else {
-            format="<small>%*s<small>%s</small></small>";
-        }
+        bool isroot = !( layer && SP_OBJECT_PARENT(object) == SP_OBJECT_PARENT(layer) ||
+                layer == root && SP_OBJECT_PARENT(object) == root);
+
+        bool iscurrent = ( object == layer && object != root );
+
+        gchar *format = g_strdup_printf (
+            "<span size=\"smaller\" %s><tt>%*s%s</tt>%s%s%s%%s%s%s%s</span>",
+            (_desktop && _desktop->itemIsHidden (SP_ITEM(object))) ? "foreground=\"gray50\"" : "",
+            depth ? (depth) : 0, "", iscurrent ? "&#8226;" : (depth? " " : ""),
+            iscurrent? "<b>" : "",
+            (SP_ITEM(object)->isLocked()) ? "[" : "",
+            isroot ? "<small>" : "",
+            isroot ? "</small>" : "",
+            (SP_ITEM(object)->isLocked()) ? "]" : "",
+            iscurrent? "</b>" : ""
+            );
 
         gchar const *label;
         if (depth) {
@@ -525,9 +529,10 @@ void LayerSelector::_prepareLabelRenderer(
             label = "(root)";
         }
 
-        gchar *text=g_markup_printf_escaped(format, depth*3, "", label);
+        gchar *text = g_markup_printf_escaped(format, label); 
         _label_renderer.property_markup() = text;
         g_free(text);
+        g_free(format);
     } else {
         _label_renderer.property_markup() = "<small> </small>";
     }
