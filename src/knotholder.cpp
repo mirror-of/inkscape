@@ -120,6 +120,11 @@ sp_knot_holder_add_full	(SPKnotHolder       *knot_holder,
 
 	g_object_set (G_OBJECT (e->knot->item), "shape", shape, NULL);
 	g_object_set (G_OBJECT (e->knot->item), "mode", mode, NULL);
+
+	// TODO: add a color argument
+	//e->knot->fill [SP_KNOT_STATE_NORMAL] = 0x00ff0000;
+	//g_object_set (G_OBJECT (e->knot->item), "fill_color", 0x00ff0000, NULL);
+
 	knot_holder->entity = g_slist_append (knot_holder->entity, e);
 
 	/* Move to current point. */
