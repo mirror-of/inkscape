@@ -72,7 +72,7 @@
  */
 gboolean sp_bitmap_icons = FALSE;
 
-static Inkscape::Application *inkscape=NULL;
+static Inkscape::Application *inkscape = NULL;
 
 /* Backbones of configuration xml data */
 #include "preferences-skeleton.h"
@@ -331,9 +331,7 @@ inkscape_init (SPObject * object)
 static void
 inkscape_dispose (GObject *object)
 {
-    Inkscape::Application *inkscape;
-
-    inkscape = (Inkscape::Application *) object;
+    Inkscape::Application *inkscape = (Inkscape::Application *) object;
 
     while (inkscape->documents) {
         g_object_unref (G_OBJECT (inkscape->documents->data));
@@ -392,32 +390,28 @@ static void
 inkscape_segv_handler (int signum)
 {
     static gint recursion = FALSE;
-    GSList *savednames, *failednames, *l;
-    const gchar *home;
-    gint count, nllen, len, pos;
-    time_t sptime;
-    struct tm *sptm;
-    gchar sptstr[256];
-    GtkWidget *msgbox;
 
     /* let any SIGABRTs seen from within this handler dump core */
     signal(SIGABRT, SIG_DFL);
 
     /* Kill loops */
-    if (recursion) abort ();
+    if (recursion) {
+        abort ();
+    }
     recursion = TRUE;
 
     g_warning ("Emergency save activated");
 
-    home = g_get_home_dir ();
-    sptime = time (NULL);
-    sptm = localtime (&sptime);
+    const gchar *home = g_get_home_dir ();
+    time_t sptime = time (NULL);
+    struct tm *sptm = localtime (&sptime);
+    gchar sptstr[256];
     strftime (sptstr, 256, "%Y_%m_%d_%H_%M_%S", sptm);
 
-    count = 0;
-    savednames = NULL;
-    failednames = NULL;
-    for (l = inkscape->documents; l != NULL; l = l->next) {
+    gint count = 0;
+    GSList *savednames = NULL;
+    GSList *failednames = NULL;
+    for (GSList *l = inkscape->documents; l != NULL; l = l->next) {
         SPDocument *doc;
         SPRepr *repr;
         doc = (SPDocument *) l->data;
@@ -474,13 +468,13 @@ inkscape_segv_handler (int signum)
     failednames = g_slist_reverse (failednames);
     if (savednames) {
         fprintf (stderr, "\nEmergency save locations:\n");
-        for (l = savednames; l != NULL; l = l->next) {
+        for (GSList *l = savednames; l != NULL; l = l->next) {
             fprintf (stderr, "  %s\n", (gchar *) l->data);
         }
     }
     if (failednames) {
         fprintf (stderr, "Failed to do emergency save for:\n");
-        for (l = failednames; l != NULL; l = l->next) {
+        for (GSList *l = failednames; l != NULL; l = l->next) {
             fprintf (stderr, "  %s\n", (gchar *) l->data);
         }
     }
@@ -498,17 +492,17 @@ inkscape_segv_handler (int signum)
     char const *istr = N_("Inkscape encountered an internal error and will close now.\n");
     char const *sstr = N_("Automatic backups of unsaved documents were done to the following locations:\n");
     char const *fstr = N_("Automatic backup of the following documents failed:\n");
-    nllen = strlen ("\n");
-    len = strlen (istr) + strlen (sstr) + strlen (fstr);
-    for (l = savednames; l != NULL; l = l->next) {
+    gint nllen = strlen ("\n");
+    gint len = strlen (istr) + strlen (sstr) + strlen (fstr);
+    for (GSList *l = savednames; l != NULL; l = l->next) {
         len = len + SP_INDENT + strlen ((gchar *) l->data) + nllen;
     }
-    for (l = failednames; l != NULL; l = l->next) {
+    for (GSList *l = failednames; l != NULL; l = l->next) {
         len = len + SP_INDENT + strlen ((gchar *) l->data) + nllen;
     }
     len += 1;
     gchar *b = g_new (gchar, len);
-    pos = 0;
+    gint pos = 0;
     len = strlen (istr);
     memcpy (b + pos, istr, len);
     pos += len;
@@ -516,7 +510,7 @@ inkscape_segv_handler (int signum)
         len = strlen (sstr);
         memcpy (b + pos, sstr, len);
         pos += len;
-        for (l = savednames; l != NULL; l = l->next) {
+        for (GSList *l = savednames; l != NULL; l = l->next) {
             memset (b + pos, ' ', SP_INDENT);
             pos += SP_INDENT;
             len = strlen ((gchar *) l->data);
@@ -530,7 +524,7 @@ inkscape_segv_handler (int signum)
         len = strlen (fstr);
         memcpy (b + pos, fstr, len);
         pos += len;
-        for (l = failednames; l != NULL; l = l->next) {
+        for (GSList *l = failednames; l != NULL; l = l->next) {
             memset (b + pos, ' ', SP_INDENT);
             pos += SP_INDENT;
             len = strlen ((gchar *) l->data);
@@ -541,7 +535,7 @@ inkscape_segv_handler (int signum)
         }
     }
     *(b + pos) = '\0';
-    msgbox = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "%s", b);
+    GtkWidget *msgbox = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "%s", b);
     gtk_dialog_run (GTK_DIALOG (msgbox));
     gtk_widget_destroy (msgbox);
     g_free (b);
@@ -560,7 +554,9 @@ inkscape_application_init (const gchar *argv0)
     segv_handler = signal (SIGSEGV, inkscape_segv_handler);
     signal (SIGFPE,  inkscape_segv_handler);
     signal (SIGILL,  inkscape_segv_handler);
+#ifndef WIN32    
     signal (SIGBUS,  inkscape_segv_handler);
+#endif    
     signal (SIGABRT, inkscape_segv_handler);
 
     inkscape->argv0 = g_strdup(argv0);
@@ -595,12 +591,7 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
 		      unsigned int skel_size, const gchar *e_notreg, const gchar *e_notxml, 
 		      const gchar *e_notsp, const gchar *warn)
 {
-    gchar *fn;
-    GtkWidget * w;
-    SPReprDoc * doc;
-    SPRepr * root;
-
-    fn = profile_path(filename);
+    gchar *fn = profile_path(filename);
     if (!g_file_test(fn, G_FILE_TEST_EXISTS)) {
         /* No such file */
         inkscape_init_preferences (INKSCAPE);
@@ -610,26 +601,26 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
 
     if (!g_file_test(fn, G_FILE_TEST_IS_REGULAR)) {
         /* Not a regular file */
-        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notreg, fn, warn);
+        GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notreg, fn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
         g_free (fn);
         return FALSE;
     }
 
-    doc = sp_repr_read_file (fn, NULL);
+    SPReprDoc *doc = sp_repr_read_file (fn, NULL);
     if (doc == NULL) {
         /* Not an valid xml file */
-        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notxml, fn, warn);
+        GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notxml, fn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
         g_free (fn);
         return FALSE;
     }
 
-    root = sp_repr_document_root (doc);
+    SPRepr *root = sp_repr_document_root (doc);
     if (strcmp (sp_repr_name (root), "inkscape")) {
-        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notsp, fn, warn);
+        GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notsp, fn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
         sp_repr_document_unref (doc);
@@ -674,9 +665,7 @@ inkscape_load_preferences (Inkscape::Application *inkscape)
 gboolean
 inkscape_save_preferences (Inkscape::Application * inkscape)
 {
-    gchar * fn;
-
-    fn = profile_path(PREFERENCES_FILE);
+    gchar *fn = profile_path(PREFERENCES_FILE);
     gboolean retval = sp_repr_save_file (inkscape->preferences, fn);
 
     g_free (fn);
@@ -689,26 +678,26 @@ inkscape_save_preferences (Inkscape::Application * inkscape)
 SPRepr *
 inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key)
 {
-    SPRepr * repr;
-    gchar const *s;
+    if (key == NULL) {
+        return NULL;
+    }
 
-    if (key == NULL) return NULL;
-
-    repr = sp_repr_document_root (inkscape->preferences);
+    SPRepr *repr = sp_repr_document_root (inkscape->preferences);
     g_assert (!(strcmp (sp_repr_name (repr), "inkscape")));
 
-    s = key;
+    gchar const *s = key;
     while ((s) && (*s)) {
-        gchar const *e;
-        SPRepr * child;
-        guint len;
 
         /* Find next name */
-        if ((e = strchr (s, '.'))) {
+        gchar const *e = strchr (s, '.');
+        guint len;
+        if (e) {
             len = e++ - s;
         } else {
             len = strlen (s);
         }
+        
+        SPRepr* child;
         for (child = repr->children; child != NULL; child = child->next) {
             gchar const *id = sp_repr_attr (child, "id");
             if ((id) && (strlen (id) == len) && (!strncmp (id, s, len)))
@@ -716,7 +705,9 @@ inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key)
                 break;
             }
         }
-        if (child == NULL) return NULL;
+        if (child == NULL) {
+            return NULL;
+        }
 
         repr = child;
         s = e;
@@ -811,8 +802,7 @@ inkscape_remove_desktop (SPDesktop * desktop)
     if (DESKTOP_IS_ACTIVE (desktop)) {
         g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DEACTIVATE_DESKTOP], 0, desktop);
         if (inkscape->desktops->next != NULL) {
-            SPDesktop * new_desktop;
-            new_desktop = (SPDesktop *) inkscape->desktops->next->data;
+            SPDesktop * new_desktop = (SPDesktop *) inkscape->desktops->next->data;
             inkscape->desktops = g_slist_remove (inkscape->desktops, new_desktop);
             inkscape->desktops = g_slist_prepend (inkscape->desktops, new_desktop);
             g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, new_desktop);
@@ -840,17 +830,17 @@ inkscape_remove_desktop (SPDesktop * desktop)
 void
 inkscape_activate_desktop (SPDesktop * desktop)
 {
-    SPDesktop * current;
-
     g_return_if_fail (inkscape != NULL);
     g_return_if_fail (desktop != NULL);
     g_return_if_fail (SP_IS_DESKTOP (desktop));
 
-    if (DESKTOP_IS_ACTIVE (desktop)) return;
+    if (DESKTOP_IS_ACTIVE (desktop)) {
+        return;
+    }
 
     g_assert (g_slist_find (inkscape->desktops, desktop));
 
-    current = (SPDesktop *) inkscape->desktops->data;
+    SPDesktop *current = (SPDesktop *) inkscape->desktops->data;
 
     g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DEACTIVATE_DESKTOP], 0, current);
 
@@ -882,9 +872,7 @@ inkscape_reactivate_desktop (SPDesktop * desktop)
 SPDesktop *
 inkscape_find_desktop_by_dkey (unsigned int dkey)
 {
-    GSList *r;
-
-    for (r = inkscape->desktops; r; r = r->next) {
+    for (GSList *r = inkscape->desktops; r; r = r->next) {
         if (((SPDesktop *) r->data)->dkey == dkey)
             return ((SPDesktop *) r->data);
     }
@@ -897,10 +885,9 @@ inkscape_find_desktop_by_dkey (unsigned int dkey)
 unsigned int
 inkscape_maximum_dkey()
 {
-    GSList *r;
     unsigned int dkey = 0;
 
-    for (r = inkscape->desktops; r; r = r->next) {
+    for (GSList *r = inkscape->desktops; r; r = r->next) {
         if (((SPDesktop *) r->data)->dkey > dkey)
             dkey = ((SPDesktop *) r->data)->dkey;
     }
@@ -915,19 +902,22 @@ inkscape_next_desktop ()
 {
     SPDesktop *d = NULL;
     unsigned int dkey_current = ((SPDesktop *) inkscape->desktops->data)->dkey;
-    unsigned int i;
 
     if (dkey_current < inkscape_maximum_dkey()) {
         // find next existing
-        for (i = dkey_current + 1; i <= inkscape_maximum_dkey(); i++) {
+        for (unsigned int i = dkey_current + 1; i <= inkscape_maximum_dkey(); i++) {
             d = inkscape_find_desktop_by_dkey (i);
-            if (d) break;
+            if (d) {
+                break;
+            }
         }
     } else {
         // find first existing
-        for (i = 0; i <= inkscape_maximum_dkey(); i++) {
+        for (unsigned int i = 0; i <= inkscape_maximum_dkey(); i++) {
             d = inkscape_find_desktop_by_dkey (i);
-            if (d) break;
+            if (d) {
+                break;
+            }
         }
     }
 
@@ -943,13 +933,14 @@ inkscape_prev_desktop ()
 {
     SPDesktop *d = NULL;
     unsigned int dkey_current = ((SPDesktop *) inkscape->desktops->data)->dkey;
-    signed int i;
 
     if (dkey_current > 0) {
         // find prev existing
-        for (i = dkey_current - 1; i >= 0; i--) {
+        for (signed int i = dkey_current - 1; i >= 0; i--) {
             d = inkscape_find_desktop_by_dkey (i);
-            if (d) break;
+            if (d) {
+                break;
+            }
         }
     }
     if (!d) {
@@ -967,9 +958,7 @@ inkscape_prev_desktop ()
 void
 inkscape_switch_desktops_next ()
 {
-    GtkWindow *w;
-
-    w = (GtkWindow *) g_object_get_data (G_OBJECT (inkscape_next_desktop ()), "window");
+    GtkWindow *w = (GtkWindow *) g_object_get_data (G_OBJECT (inkscape_next_desktop ()), "window");
     gtk_window_present (w);
 }
 
@@ -978,9 +967,7 @@ inkscape_switch_desktops_next ()
 void
 inkscape_switch_desktops_prev ()
 {
-    GtkWindow *w;
-
-    w = (GtkWindow *) g_object_get_data (G_OBJECT (inkscape_prev_desktop ()), "window");
+    GtkWindow *w = (GtkWindow *) g_object_get_data (G_OBJECT (inkscape_prev_desktop ()), "window");
     gtk_window_present (w);
 }
 
@@ -1011,10 +998,11 @@ inkscape_dialogs_unhide ()
 void
 inkscape_dialogs_toggle ()
 {
-    if (inkscape->dialogs_toggle)
+    if (inkscape->dialogs_toggle) {
         inkscape_dialogs_hide ();
-    else
+    } else {
         inkscape_dialogs_unhide ();
+    }
 }
 
 
@@ -1056,7 +1044,9 @@ inkscape_remove_document (SPDocument *document)
 SPDesktop *
 inkscape_active_desktop (void)
 {
-    if (inkscape->desktops == NULL) return NULL;
+    if (inkscape->desktops == NULL) {
+        return NULL;
+    }
 
     return (SPDesktop *) inkscape->desktops->data;
 }
@@ -1064,7 +1054,9 @@ inkscape_active_desktop (void)
 SPDocument *
 inkscape_active_document (void)
 {
-    if (SP_ACTIVE_DESKTOP) return SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
+    if (SP_ACTIVE_DESKTOP) {
+        return SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
+    }
 
     return NULL;
 }
@@ -1074,7 +1066,9 @@ inkscape_active_document (void)
 SPEventContext *
 inkscape_active_event_context (void)
 {
-    if (SP_ACTIVE_DESKTOP) return SP_DT_EVENTCONTEXT (SP_ACTIVE_DESKTOP);
+    if (SP_ACTIVE_DESKTOP) {
+        return SP_DT_EVENTCONTEXT (SP_ACTIVE_DESKTOP);
+    }
 
     return NULL;
 }
@@ -1094,16 +1088,12 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 		      const gchar *e_cwf, 
 		      const gchar *warn)
 {
-    gchar * dn, *fn;
-    FILE *fh;
-    GtkWidget * w;
-
-    dn = profile_path(NULL);
+    gchar *dn = profile_path(NULL);
     if (!g_file_test(dn, G_FILE_TEST_EXISTS)) {
         if (mkdir (dn, S_IRWXU | S_IRGRP | S_IXGRP))
         {
             /* Cannot create directory */
-            w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_mkdir, dn, warn);
+            GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_mkdir, dn, warn);
             gtk_dialog_run (GTK_DIALOG (w));
             gtk_widget_destroy (w);
             g_free (dn);
@@ -1111,7 +1101,7 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
         }
     } else if (!g_file_test(dn, G_FILE_TEST_IS_DIR)) {
         /* Not a directory */
-        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notdir, dn, warn);
+        GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notdir, dn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
         g_free (dn);
@@ -1119,12 +1109,12 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
     }
     g_free (dn);
 
-    fn = profile_path(config_name);
+    gchar *fn = profile_path(config_name);
 
-    fh = fopen(fn, "w");
+    FILE *fh = fopen(fn, "w");
     if (!fh) {
         /* Cannot create file */
-        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_ccf, fn, warn);
+        GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_ccf, fn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
         g_free (fn);
@@ -1132,7 +1122,7 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
     }
     if ( fwrite(skeleton, 1, skel_size, fh) != skel_size ) {
         /* Cannot create file */
-        w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_cwf, fn, warn);
+        GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_cwf, fn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
         g_free (fn);
@@ -1140,7 +1130,7 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
         return;
     }
 
-    g_free (fn);
+    g_free(fn);
     fclose(fh);
 }
 
@@ -1168,9 +1158,7 @@ inkscape_init_preferences (Inkscape::Application *inkscape)
 void
 inkscape_refresh_display (Inkscape::Application *inkscape)
 {
-    GSList *l;
-
-    for (l = inkscape->desktops; l != NULL; l = l->next) {
+    for (GSList *l = inkscape->desktops; l != NULL; l = l->next) {
         sp_view_request_redraw (SP_VIEW (l->data));
     }
 }
@@ -1200,7 +1188,7 @@ inkscape_exit (Inkscape::Application *inkscape)
 gchar *
 profile_path(const char *filename)
 {
-    static const gchar *homedir=NULL;
+    static const gchar *homedir = NULL;
     if (!homedir) {
         homedir = g_get_home_dir();
 #ifdef HAS_SHGetSpecialFolderPath
@@ -1218,4 +1206,14 @@ profile_path(const char *filename)
 }
 
 
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
 // vim: expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
