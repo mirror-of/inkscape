@@ -17,6 +17,7 @@
 #include <math.h>
 #include <string.h>
 #include <ctype.h>
+#include <errno.h>
 
 #include <gtk/gtk.h>
 
@@ -541,7 +542,9 @@ sp_namedview_window_from_document (SPDesktop *desktop)
 	}
 
 	// restore zoom and view
-	if (nv->zoom != 0 && nv->cx != HUGE_VAL && nv->cy != HUGE_VAL) {
+	if (nv->zoom != 0 && nv->zoom != HUGE_VAL && !isnan (nv->zoom)
+			&& nv->cx != HUGE_VAL && !isnan (nv->cx) 
+			&& nv->cy != HUGE_VAL && !isnan (nv->cy)) {
 		sp_desktop_zoom_absolute (desktop, nv->cx, nv->cy, nv->zoom);
 	} 
 
