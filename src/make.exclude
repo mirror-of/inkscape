@@ -22,7 +22,8 @@ ecma/svgview.cpp
 ecma/SVGViewer.cpp
 extension/api.cpp
 extension/internal/gnome.cpp
-extension/script/js/js.c
+extension/script
+#extension/script/js/js.c
 extension/plugin
 extract-uri-test.cpp
 helper/units-test.cpp
