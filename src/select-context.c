@@ -427,34 +427,62 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 		break;
 	case GDK_KEY_PRESS: // keybindings for select context
           switch (event->key.keyval) {  
-	  case GDK_Left: // Left - move selection left
-	    if (event->key.state != GDK_CONTROL_MASK) {
-	      if (event->key.state == GDK_SHIFT_MASK) sp_selection_move_screen (-1,0);
-	      else sp_selection_move_screen (-10,0);
-	      ret = TRUE;
-	    }
-	    break;
-	  case GDK_Up: // Up - move selection up
-	    if (event->key.state != GDK_CONTROL_MASK) {
-	      if (event->key.state == GDK_SHIFT_MASK) sp_selection_move_screen (0,1);
-	      else sp_selection_move_screen (0,10);
-	      ret = TRUE;
-	    }
-	    break;
-	  case GDK_Right: // Right - move selection right
-	    if (event->key.state != GDK_CONTROL_MASK) {
-	      if (event->key.state == GDK_SHIFT_MASK) sp_selection_move_screen (1,0);
-	      else sp_selection_move_screen (10,0);
-	      ret = TRUE;
-	    }
-	    break;
-	  case GDK_Down: // Down - move selection down
-	    if (event->key.state != GDK_CONTROL_MASK) {
-	      if (event->key.state == GDK_SHIFT_MASK) sp_selection_move_screen (0,-1);
-	      else sp_selection_move_screen (0,-10);
-	      ret = TRUE;
-	    }
-	    break;
+					case GDK_Left: // move selection left
+					case GDK_KP_Left: 
+						if (!(event->key.state & GDK_CONTROL_MASK)) { // not ctrl
+							if (event->key.state & GDK_MOD1_MASK) { // alt
+								if (event->key.state & GDK_SHIFT_MASK) sp_selection_move_screen (-10, 0); // shift
+								else sp_selection_move_screen (-1, 0); // no shift
+							}
+							else { // no alt
+								if (event->key.state & GDK_SHIFT_MASK) sp_selection_move (-10, 0); // shift
+								else sp_selection_move (-1, 0); // no shift
+							}
+							ret = TRUE;
+						}
+						break;
+					case GDK_Up: // move selection up
+					case GDK_KP_Up: 
+						if (!(event->key.state & GDK_CONTROL_MASK)) { // not ctrl
+							if (event->key.state & GDK_MOD1_MASK) { // alt
+								if (event->key.state & GDK_SHIFT_MASK) sp_selection_move_screen (0, 10); // shift
+								else sp_selection_move_screen (0, 1); // no shift
+							}
+							else { // no alt
+								if (event->key.state & GDK_SHIFT_MASK) sp_selection_move (0, 10); // shift
+								else sp_selection_move (0, 1); // no shift
+							}
+							ret = TRUE;
+						}
+						break;
+					case GDK_Right: // move selection right
+					case GDK_KP_Right: 
+						if (!(event->key.state & GDK_CONTROL_MASK)) { // not ctrl
+							if (event->key.state & GDK_MOD1_MASK) { // alt
+								if (event->key.state & GDK_SHIFT_MASK) sp_selection_move_screen (10, 0); // shift
+								else sp_selection_move_screen (1, 0); // no shift
+							}
+							else { // no alt
+								if (event->key.state & GDK_SHIFT_MASK) sp_selection_move (10, 0); // shift
+								else sp_selection_move (1, 0); // no shift
+							}
+							ret = TRUE;
+						}
+						break;
+					case GDK_Down: // move selection down
+					case GDK_KP_Down: 
+						if (!(event->key.state & GDK_CONTROL_MASK)) { // not ctrl
+							if (event->key.state & GDK_MOD1_MASK) { // alt
+								if (event->key.state & GDK_SHIFT_MASK) sp_selection_move_screen (0, -10); // shift
+								else sp_selection_move_screen (0, -1); // no shift
+							}
+							else { // no alt
+								if (event->key.state & GDK_SHIFT_MASK) sp_selection_move (0, -10); // shift
+								else sp_selection_move (0, -1); // no shift
+							}
+							ret = TRUE;
+						}
+						break;
 	  case GDK_Tab: // Tab - cycle selection forward
 	    sp_selection_item_next ();
 	    ret = TRUE;
