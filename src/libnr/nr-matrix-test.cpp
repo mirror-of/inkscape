@@ -2,12 +2,15 @@
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-matrix-ops.h>
+#include <libnr/nr-matrix-rotate-ops.h>
 #include <libnr/nr-matrix-scale-ops.h>
 #include <libnr/nr-rotate.h>
 #include <libnr/nr-rotate-ops.h>
 #include <libnr/nr-scale-ops.h>
+#include <libnr/nr-scale-translate-ops.h>
 #include <libnr/nr-translate.h>
 #include <libnr/nr-translate-ops.h>
+#include <libnr/nr-translate-scale-ops.h>
 using NR::Matrix;
 using NR::X;
 using NR::Y;
