@@ -1295,6 +1295,10 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
 		return;
 	}
 
+	// remember selection size
+	NR::Rect bbox = sp_selection_bbox (selection);
+	gdouble size = L2(bbox.dimensions());
+
 	bool did = false;
 
 	for (GSList *items = g_slist_copy((GSList *) sp_selection_item_list(SP_DT_SELECTION(desktop)));
@@ -1335,9 +1339,6 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
 		gint pos = sp_repr_position (SP_OBJECT_REPR (item));
 		// remember parent
 		SPRepr *parent = SP_OBJECT_REPR (item)->parent;
-		// remember size
-		NR::Rect bbox = sp_item_bbox_desktop (item);
-		gdouble size = L2(bbox.dimensions());
 
 		sp_selection_remove_item (selection, item);
 		sp_repr_unparent (SP_OBJECT_REPR (item));
