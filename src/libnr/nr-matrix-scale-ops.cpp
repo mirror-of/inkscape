@@ -1,5 +1,6 @@
 #include "libnr/nr-matrix-scale-ops.h"
 #include "libnr/nr-matrix.h"
+#include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-scale.h"
 
 NR::Matrix
@@ -11,6 +12,18 @@ operator/(NR::Matrix const &m, NR::scale const &s)
     ret[2] /= s[X]; ret[3] /= s[Y];
     ret[4] /= s[X]; ret[5] /= s[Y];
     assert_close( ret, m * NR::Matrix(s.inverse()) );
+    return ret;
+}
+
+NR::Matrix
+operator*(NR::Matrix const &m, NR::scale const &s)
+{
+    using NR::X; using NR::Y;
+    NR::Matrix ret(m);
+    ret[0] *= s[X]; ret[1] *= s[Y];
+    ret[2] *= s[X]; ret[3] *= s[Y];
+    ret[4] *= s[X]; ret[5] *= s[Y];
+    assert_close( ret, m * NR::Matrix(s) );
     return ret;
 }
 
