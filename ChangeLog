@@ -1,3 +1,9 @@
+2004-06-21  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/extension/internal/ps.cpp (PrintPS): Initialize _stream to
+	  NULL (fixes segfaults when exporting to an unopenable file), and
+	  initialize _bitmap to false instead of random.
+
 2004-06-20  MenTaLguY  <mental@rydia.net>
 
 	* src/desktop.cpp, src/managed.h, src/message-context.h,

@@ -61,11 +61,11 @@ namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
-PrintPS::PrintPS (void)
+PrintPS::PrintPS() :
+	_stream(NULL),
+ 	_dpi(72),
+	_bitmap(false)
 {
-	_dpi = 72;
-
-	return;
 }
 
 PrintPS::~PrintPS (void)
