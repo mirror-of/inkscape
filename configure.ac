@@ -214,6 +214,44 @@ if pkg-config --exists gtkspell-2.0; then
 fi
 
 dnl ******************************
+dnl PERL checking
+dnl ******************************
+
+AC_MSG_CHECKING(whether to use Perl for embedded scripting)
+AC_ARG_WITH(perl,
+            AC_HELP_STRING([--with-perl], [use Perl for embedded scripting]),
+            [with_perl=$withval], [with_perl=yes])
+
+if test "x$with_perl" = "xno"; then
+       AC_MSG_RESULT(no)
+else
+       AC_MSG_RESULT(yes)
+       LIBS="$LIBS `perl -MExtUtils::Embed -e ldopts`"
+       AC_DEFINE(WITH_PERL, 1, [use Perl for embedded scripting])
+fi
+
+dnl ******************************
+dnl Python checking
+dnl ******************************
+
+AC_MSG_CHECKING(whether to use Python for embedded scripting)
+AC_ARG_WITH(python,
+            AC_HELP_STRING([--with-python], [use Python for embedded scripting]),
+            [with_python=$withval], [with_python=yes])
+
+if test "x$with_python" = "xno"; then
+       AC_MSG_RESULT(no)
+else
+
+       AC_MSG_RESULT(yes)
+       PYTHON_LDPATH=`python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('LIBPL')"`
+       PYTHON_LIB=`python -c "import distutils.sysconfig ; print distutils.sysconfig.get_config_var('LIBRARY')"`
+       LIBS="$LIBS $PYTHON_LDPATH/$PYTHON_LIB"
+       AC_DEFINE(WITH_PYTHON, 1, [use Python for embedded scripting])
+fi
+
+
+dnl ******************************
 dnl   Unconditional dependencies
 dnl ******************************
 
