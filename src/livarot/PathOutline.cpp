@@ -23,169 +23,179 @@
 // outline of a path.
 // computed by making 2 offsets, one of the "left" side of the path, one of the right side, and then glueing the two
 // the left side has to be reversed to make a contour
-void
-Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
-               double miter)
+void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, double miter)
 {
-	if ( descr_flags & descr_adding_bezier ) {
-		CancelBezier();
-	}
-	if ( descr_flags & descr_doing_subpath ) {
-		CloseSubpath();
-	}
-	if (descr_nb <= 1) return;
-	if (dest == NULL) return;
-	dest->Reset ();
-	dest->SetBackData (false);
+    if ( descr_flags & descr_adding_bezier ) {
+        CancelBezier();
+    }
+    if ( descr_flags & descr_doing_subpath ) {
+        CloseSubpath();
+    }
+    if ( descr_nb <= 1 ) {
+        return;
+    }
+    if ( dest == NULL ) {
+        return;
+    }
+    
+    dest->Reset();
+    dest->SetBackData(false);
   
-	outline_callbacks calls;
-	NR::Point endButt, endPos;
-	calls.cubicto = StdCubicTo;
-	calls.bezierto = StdBezierTo;
-	calls.arcto = StdArcTo;
+    outline_callbacks calls;
+    NR::Point endButt;
+    NR::Point endPos;
+    calls.cubicto = StdCubicTo;
+    calls.bezierto = StdBezierTo;
+    calls.arcto = StdArcTo;
   
-	path_descr *sav_descr = descr_cmd;
-	int sav_descr_nb = descr_nb;
+    Path *rev = new Path;
   
-	Path *rev = new Path;
-  
-  // we repeat the offset contour creation for each subpath
-	int curP = 0;
-	do {
-		int lastM = curP;
-		do {
-			curP++;
-			if (curP >= sav_descr_nb) break;
-			int typ = sav_descr[curP].flags & descr_type_mask;
-			if (typ == descr_moveto) break;
-		} while (curP < sav_descr_nb);
-		if (curP >= sav_descr_nb) curP = sav_descr_nb;
-		if (curP > lastM + 1) {
-			// we have isolated a subpath, now we make a reversed version of it
-      // we do so by taking the subpath in the reverse and constructing a path as appropriate
-      // the construct is stored in "rev"
-			int curD = curP - 1;
-			NR::Point curX;
-			NR::Point nextX;
-			bool needClose = false;
-			int firstTyp = sav_descr[curD].flags & descr_type_mask;
-			if (firstTyp == descr_close) needClose = true;
-			while (curD > lastM && (sav_descr[curD].flags & descr_type_mask) == descr_close) curD--;
-			int realP = curD + 1;
-			if (curD > lastM) {
-				descr_cmd = sav_descr;
-				descr_nb = sav_descr_nb;
-				curX = PrevPoint (curD);
-				rev->Reset ();
-				rev->MoveTo (curX);
-				while (curD > lastM) {
-					int typ = sav_descr[curD].flags & descr_type_mask;
-					if (typ == descr_moveto) {
-						//                                              rev->Close();
-						curD--;
-					} else if (typ == descr_forced) {
-						//                                              rev->Close();
-						curD--;
-					} else if (typ == descr_lineto) {
-						nextX = PrevPoint (curD - 1);
-						rev->LineTo (nextX);
-						curX = nextX;
-						curD--;
-					} else if (typ == descr_cubicto) {
-						path_descr_cubicto* nData=(path_descr_cubicto*)(descr_data+sav_descr[curD].dStart);
-						nextX = PrevPoint (curD - 1);
-						NR::Point  isD=-nData->stD;
-						NR::Point  ieD=-nData->enD;
-						rev->CubicTo (nextX, ieD,isD);
-						curX = nextX;
-						curD--;
-					} else if (typ == descr_arcto) {
-						path_descr_arcto* nData=(path_descr_arcto*)(descr_data+sav_descr[curD].dStart);
-						nextX = PrevPoint (curD - 1);
-						rev->ArcTo (nextX, nData->rx,nData->ry,nData->angle,nData->large,nData->clockwise);
-						curX = nextX;
-						curD--;
-					} else if (typ == descr_bezierto) {
-						nextX = PrevPoint (curD - 1);
-						rev->LineTo (nextX);
-						curX = nextX;
-						curD--;
-					}  else if (typ == descr_interm_bezier) {
-						int nD = curD - 1;
-						while (nD > lastM && (sav_descr[nD].flags & descr_type_mask) != descr_bezierto) nD--;
-						if ((sav_descr[nD].flags & descr_type_mask) !=  descr_bezierto)  {
-							// pas trouve le debut!?
-							// Not find the start?!
-							nextX = PrevPoint (nD);
-							rev->LineTo (nextX);
-							curX = nextX;
-						} else {
-							nextX = PrevPoint (nD - 1);
-							rev->BezierTo (nextX);
-							for (int i = curD; i > nD; i--) {
-								path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(descr_data+sav_descr[i].dStart);
-								rev->IntermBezierTo (nData->p);
-							}
-							rev->EndBezierTo ();
-							curX = nextX;
-						}
-						curD = nD - 1;
-					} else {
-						curD--;
-					}
-				}
-        // offset the paths and glue everything
-        // actual offseting is done in SubContractOutline()
-				if (needClose) {
-					rev->Close ();
-					rev->SubContractOutline (dest, calls, 0.0025 * width * width, width,
-								 join, butt, miter, true, false, endPos, endButt);
-					descr_cmd = sav_descr + lastM;
-					descr_nb = realP + 1 - lastM;
-					SubContractOutline (dest, calls, 0.0025 * width * width,
-							    width, join, butt, miter, true, false, endPos, endButt);
-				} else {
-					rev->SubContractOutline (dest, calls,  0.0025 * width * width, width,
-								 join, butt, miter, false, false, endPos, endButt);
-					NR::Point endNor=endButt.ccw();
-					if (butt == butt_round) {
-						dest->ArcTo (endPos+width*endNor,  1.0001 * width, 1.0001 * width, 0.0, true, true);
-					}  else if (butt == butt_square) {
-						dest->LineTo (endPos-width*endNor+width*endButt);
-						dest->LineTo (endPos+width*endNor+width*endButt);
-						dest->LineTo (endPos+width*endNor);
-					}  else if (butt == butt_pointy) {
-						dest->LineTo (endPos+width*endButt);
-						dest->LineTo (endPos+width*endNor);
-					} else {
-						dest->LineTo (endPos+width*endNor);
-					}
-					descr_cmd = sav_descr + lastM;
-					descr_nb = realP - lastM;
-					SubContractOutline (dest, calls, 0.0025 * width * width,  width, join, butt, miter, false, true, endPos, endButt);
-					endNor=endButt.ccw();
-					if (butt == butt_round) {
-						dest->ArcTo (endPos+width*endNor, 1.0001 * width, 1.0001 * width, 0.0, true, true);
-					} else if (butt == butt_square) {
-						dest->LineTo (endPos-width*endNor+width*endButt);
-						dest->LineTo (endPos+width*endNor+width*endButt);
-						dest->LineTo (endPos+width*endNor);
-					} else if (butt == butt_pointy) {
-						dest->LineTo (endPos+width*endButt);
-						dest->LineTo (endPos+width*endNor);
-					} else {
-						dest->LineTo (endPos+width*endNor);
-					}
-					dest->Close ();
-				}
-			}
-		}
-	}
-	while (curP < sav_descr_nb);
+    // we repeat the offset contour creation for each subpath
+    int curP = 0;
+    do {
+        int lastM = curP;
+        do {
+            curP++;
+            if (curP >= descr_nb) {
+                break;
+            }
+            int typ = descr_cmd[curP].flags & descr_type_mask;
+            if (typ == descr_moveto) {
+                break;
+            }
+        } while (curP < descr_nb);
 
-	delete rev;
-	descr_cmd = sav_descr;
-	descr_nb = sav_descr_nb;
+        if (curP >= descr_nb) {
+            curP = descr_nb;
+        }
+        
+        if (curP > lastM + 1) {
+            // we have isolated a subpath, now we make a reversed version of it
+            // we do so by taking the subpath in the reverse and constructing a path as appropriate
+            // the construct is stored in "rev"
+            int curD = curP - 1;
+            NR::Point curX;
+            NR::Point nextX;
+            int firstTyp = descr_cmd[curD].flags & descr_type_mask;
+            bool const needClose = (firstTyp == descr_close);
+            while (curD > lastM && (descr_cmd[curD].flags & descr_type_mask) == descr_close) {
+                curD--;
+            }
+            
+            int realP = curD + 1;
+            if (curD > lastM) {
+                curX = PrevPoint(curD);
+                rev->Reset ();
+                rev->MoveTo(curX);
+                while (curD > lastM) {
+                    int const typ = descr_cmd[curD].flags & descr_type_mask;
+                    if (typ == descr_moveto) {
+                        //                                              rev->Close();
+                        curD--;
+                    } else if (typ == descr_forced) {
+                        //                                              rev->Close();
+                        curD--;
+                    } else if (typ == descr_lineto) {
+                        nextX = PrevPoint (curD - 1);
+                        rev->LineTo (nextX);
+                        curX = nextX;
+                        curD--;
+                    } else if (typ == descr_cubicto) {
+                        path_descr_cubicto* nData=(path_descr_cubicto*)(descr_data+descr_cmd[curD].dStart);
+                        nextX = PrevPoint (curD - 1);
+                        NR::Point  isD=-nData->stD;
+                        NR::Point  ieD=-nData->enD;
+                        rev->CubicTo (nextX, ieD,isD);
+                        curX = nextX;
+                        curD--;
+                    } else if (typ == descr_arcto) {
+                        path_descr_arcto* nData=(path_descr_arcto*)(descr_data+descr_cmd[curD].dStart);
+                        nextX = PrevPoint (curD - 1);
+                        rev->ArcTo (nextX, nData->rx,nData->ry,nData->angle,nData->large,nData->clockwise);
+                        curX = nextX;
+                        curD--;
+                    } else if (typ == descr_bezierto) {
+                        nextX = PrevPoint (curD - 1);
+                        rev->LineTo (nextX);
+                        curX = nextX;
+                        curD--;
+                    }  else if (typ == descr_interm_bezier) {
+                        int nD = curD - 1;
+                        while (nD > lastM && (descr_cmd[nD].flags & descr_type_mask) != descr_bezierto) nD--;
+                        if ((descr_cmd[nD].flags & descr_type_mask) !=  descr_bezierto)  {
+                            // pas trouve le debut!?
+                            // Not find the start?!
+                            nextX = PrevPoint (nD);
+                            rev->LineTo (nextX);
+                            curX = nextX;
+                        } else {
+                            nextX = PrevPoint (nD - 1);
+                            rev->BezierTo (nextX);
+                            for (int i = curD; i > nD; i--) {
+                                path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(descr_data+descr_cmd[i].dStart);
+                                rev->IntermBezierTo (nData->p);
+                            }
+                            rev->EndBezierTo ();
+                            curX = nextX;
+                        }
+                        curD = nD - 1;
+                    } else {
+                        curD--;
+                    }
+                }
+                
+                // offset the paths and glue everything
+                // actual offseting is done in SubContractOutline()
+                if (needClose) {
+                    rev->Close ();
+                    rev->SubContractOutline (rev->descr_cmd, rev->descr_nb,
+                                             dest, calls, 0.0025 * width * width, width,
+                                             join, butt, miter, true, false, endPos, endButt);
+                    SubContractOutline (descr_cmd + lastM, realP + 1 - lastM,
+                                        dest, calls, 0.0025 * width * width,
+                                        width, join, butt, miter, true, false, endPos, endButt);
+                } else {
+                    rev->SubContractOutline (rev->descr_cmd, rev->descr_nb,
+                                             dest, calls,  0.0025 * width * width, width,
+                                             join, butt, miter, false, false, endPos, endButt);
+                    NR::Point endNor=endButt.ccw();
+                    if (butt == butt_round) {
+                        dest->ArcTo (endPos+width*endNor,  1.0001 * width, 1.0001 * width, 0.0, true, true);
+                    }  else if (butt == butt_square) {
+                        dest->LineTo (endPos-width*endNor+width*endButt);
+                        dest->LineTo (endPos+width*endNor+width*endButt);
+                        dest->LineTo (endPos+width*endNor);
+                    }  else if (butt == butt_pointy) {
+                        dest->LineTo (endPos+width*endButt);
+                        dest->LineTo (endPos+width*endNor);
+                    } else {
+                        dest->LineTo (endPos+width*endNor);
+                    }
+                    SubContractOutline (descr_cmd + lastM, realP - lastM,
+                                        dest, calls, 0.0025 * width * width,  width, join, butt,
+                                        miter, false, true, endPos, endButt);
+                    
+                    endNor=endButt.ccw();
+                    if (butt == butt_round) {
+                        dest->ArcTo (endPos+width*endNor, 1.0001 * width, 1.0001 * width, 0.0, true, true);
+                    } else if (butt == butt_square) {
+                        dest->LineTo (endPos-width*endNor+width*endButt);
+                        dest->LineTo (endPos+width*endNor+width*endButt);
+                        dest->LineTo (endPos+width*endNor);
+                    } else if (butt == butt_pointy) {
+                        dest->LineTo (endPos+width*endButt);
+                        dest->LineTo (endPos+width*endNor);
+                    } else {
+                        dest->LineTo (endPos+width*endNor);
+                    }
+                    dest->Close ();
+                }
+            } // if (curD > lastM)
+        } // if (curP > lastM + 1)
+        
+    } while (curP < descr_nb);
+
+    delete rev;
 }
 
 // versions for outlining closed path: they only make one side of the offset contour
@@ -209,7 +219,8 @@ Path::OutsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 	calls.cubicto = StdCubicTo;
 	calls.bezierto = StdBezierTo;
 	calls.arcto = StdArcTo;
-	SubContractOutline (dest, calls, 0.0025 * width * width, width, join, butt,
+	SubContractOutline (descr_cmd, descr_nb,
+                            dest, calls, 0.0025 * width * width, width, join, butt,
 			    miter, true, false, endPos, endButt);
 }
 
@@ -234,9 +245,6 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 	calls.bezierto = StdBezierTo;
 	calls.arcto = StdArcTo;
 
-	path_descr *sav_descr = descr_cmd;
-	int sav_descr_nb = descr_nb;
-
 	Path *rev = new Path;
 
 	int curP = 0;
@@ -244,26 +252,24 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 		int lastM = curP;
 		do {
 			curP++;
-			if (curP >= sav_descr_nb) break;
-			int typ = sav_descr[curP].flags & descr_type_mask;
+			if (curP >= descr_nb) break;
+			int typ = descr_cmd[curP].flags & descr_type_mask;
 			if (typ == descr_moveto) break;
-		} while (curP < sav_descr_nb);
-		if (curP >= sav_descr_nb)  curP = sav_descr_nb;
+		} while (curP < descr_nb);
+		if (curP >= descr_nb)  curP = descr_nb;
 		if (curP > lastM + 1) {
 			// Otherwise there's only one point.  (tr: or "only a point")
 			// [sinon il n'y a qu'un point]
 			int curD = curP - 1;
 			NR::Point curX;
 			NR::Point nextX;
-			while (curD > lastM && (sav_descr[curD].flags & descr_type_mask) == descr_close) curD--;
+			while (curD > lastM && (descr_cmd[curD].flags & descr_type_mask) == descr_close) curD--;
 			if (curD > lastM) {
-				descr_cmd = sav_descr;
-				descr_nb = sav_descr_nb;
 				curX = PrevPoint (curD);
 				rev->Reset ();
 				rev->MoveTo (curX);
 				while (curD > lastM) {
-					int typ = sav_descr[curD].flags & descr_type_mask;
+					int typ = descr_cmd[curD].flags & descr_type_mask;
 					if (typ == descr_moveto) {
 						rev->Close ();
 						curD--;
@@ -275,7 +281,7 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 						curX = nextX;
 						curD--;
 					}  else if (typ == descr_cubicto) {
-						path_descr_cubicto* nData=(path_descr_cubicto*)(descr_data+sav_descr[curD].dStart);
+						path_descr_cubicto* nData=(path_descr_cubicto*)(descr_data+descr_cmd[curD].dStart);
 						nextX = PrevPoint (curD - 1);
 						NR::Point  isD=-nData->stD;
 						NR::Point  ieD=-nData->enD;
@@ -283,7 +289,7 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 						curX = nextX;
 						curD--;
 					} else if (typ == descr_arcto) {
-						path_descr_arcto* nData=(path_descr_arcto*)(descr_data+sav_descr[curD].dStart);
+						path_descr_arcto* nData=(path_descr_arcto*)(descr_data+descr_cmd[curD].dStart);
 						nextX = PrevPoint (curD - 1);
 						rev->ArcTo (nextX, nData->rx,nData->ry,nData->angle,nData->large,nData->clockwise);
 						curX = nextX;
@@ -295,8 +301,8 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 						curD--;
 					} else if (typ == descr_interm_bezier) {
 						int nD = curD - 1;
-						while (nD > lastM && (sav_descr[nD].flags & descr_type_mask) != descr_bezierto) nD--;
-						if (sav_descr[nD].flags & descr_type_mask != descr_bezierto) {
+						while (nD > lastM && (descr_cmd[nD].flags & descr_type_mask) != descr_bezierto) nD--;
+						if (descr_cmd[nD].flags & descr_type_mask != descr_bezierto) {
 							// pas trouve le debut!?
 							nextX = PrevPoint (nD);
 							rev->LineTo (nextX);
@@ -305,7 +311,7 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 							nextX = PrevPoint (nD - 1);
 							rev->BezierTo (nextX);
 							for (int i = curD; i > nD; i--) {
-								path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(descr_data+sav_descr[i].dStart);
+								path_descr_intermbezierto* nData=(path_descr_intermbezierto*)(descr_data+descr_cmd[i].dStart);
 								rev->IntermBezierTo (nData->p);
 							}
 							rev->EndBezierTo ();
@@ -317,16 +323,15 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 					}
 				}
 				rev->Close ();
-				rev->SubContractOutline (dest, calls, 0.0025 * width * width,
+				rev->SubContractOutline (rev->descr_cmd, rev->descr_nb,
+                                                         dest, calls, 0.0025 * width * width,
 							 width, join, butt, miter, true, false,
 							 endPos, endButt);
 			}
 		}
-	}  while (curP < sav_descr_nb);
+	}  while (curP < descr_nb);
   
 	delete rev;
-	descr_cmd = sav_descr;
-	descr_nb = sav_descr_nb;
 }
 
 // decoys
@@ -338,40 +343,42 @@ void
 Path::DoInsideOutline (Path * dest, double width, JoinType join, ButtType butt, double miter, int &stNo, int &enNo)
 {
 }
+
+
 // the offset
 // take each command and offset it.
 // the bezier spline is split in a sequence of bezier curves, and these are transformed in cubic bezier (which is
 // not hard since they are quadratic bezier)
 // joins are put where needed
-void
-Path::SubContractOutline (Path * dest, outline_callbacks & calls,
-                          double tolerance, double width, JoinType join,
-                          ButtType butt, double miter, bool closeIfNeeded,
-                          bool skipMoveto, NR::Point & lastP, NR::Point & lastT)
+void Path::SubContractOutline(path_descr* pd, int num_pd,
+                              Path *dest, outline_callbacks & calls,
+                              double tolerance, double width, JoinType join,
+                              ButtType butt, double miter, bool closeIfNeeded,
+                              bool skipMoveto, NR::Point &lastP, NR::Point &lastT)
 {
-	outline_callback_data callsData;
+    outline_callback_data callsData;
   
-	callsData.orig = this;
-	callsData.dest = dest;
-	int curP = 1;
+    callsData.orig = this;
+    callsData.dest = dest;
+    int curP = 1;
   
-	// le moveto
-	NR::Point curX;
-	{
-		int firstTyp=descr_cmd->flags&descr_type_mask;
-		if ( firstTyp != descr_moveto ) {
-			curX[0]=curX[1]=0;
-			curP=0;
-		} else {
-			path_descr_moveto* nData=(path_descr_moveto*)(descr_data+descr_cmd->dStart);
-			curX = nData->p;
-		}
-	}
-	NR::Point curT(0, 0);
+    // le moveto
+    NR::Point curX;
+    {
+        int firstTyp = descr_cmd->flags & descr_type_mask;
+        if ( firstTyp != descr_moveto ) {
+            curX[0] = curX[1] = 0;
+            curP = 0;
+        } else {
+            path_descr_moveto* nData = (path_descr_moveto*) (descr_data + descr_cmd->dStart);
+            curX = nData->p;
+        }
+    }
+    NR::Point curT(0, 0);
   
-	bool doFirst = true;
-	NR::Point firstP(0, 0);
-	NR::Point firstT(0, 0);
+    bool doFirst = true;
+    NR::Point firstP(0, 0);
+    NR::Point firstT(0, 0);
   
 	// et le reste, 1 par 1
 	while (curP < descr_nb)
@@ -1493,3 +1500,14 @@ Path::StdArcTo (Path::outline_callback_data * data, double tol, double width)
 	data->d.a.enA = 1.0;
 	RecStdArcTo (data, tol, width, 8);
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
