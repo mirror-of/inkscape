@@ -117,7 +117,7 @@ if test "x$with_xft" != "xno" ; then
 				fi
 			else
 				dnl Working Xft1
-				XFT_LIBS="-lXft"
+				XFT_LIBS="-lXft "
 			fi
 		fi
 	fi
@@ -134,6 +134,16 @@ if test "x$xft_ok" = "xyes"; then
 	AC_DEFINE(WITH_XFT, 1, [Use Xft font database])
 fi
 
+dnl ******************************
+dnl pangoft2 for xft
+dnl ******************************
+
+if test "x$xft_ok" = "xyes"; then
+	PKG_CHECK_MODULES(PANGOFT2, pangoft2, pango_ok=yes, pango_ok=no)
+	if test "x$pango_ok" = "xyes"; then
+		XFT_LIBS="$XFT_LIBS $PANGOFT2_LIBS"
+	fi
+fi
 
 dnl ******************************
 dnl GnomePrint checking
