@@ -71,9 +71,6 @@ SPRepr *sp_repr_new_text (const gchar *content);
 SPRepr *sp_repr_ref (SPRepr *repr);
 SPRepr *sp_repr_unref (SPRepr *repr);
 SPRepr *sp_repr_duplicate (const SPRepr *repr);
-#ifdef __cplusplus
-};
-#endif // __cplusplus
 
 /* Documents - 1st step in migrating to real XML */
 
@@ -85,6 +82,10 @@ void sp_repr_document_unref (SPReprDoc * doc);
 
 SPRepr *sp_repr_document_root (const SPReprDoc *doc);
 SPReprDoc *sp_repr_document (const SPRepr *repr);
+
+#ifdef __cplusplus
+};
+#endif // __cplusplus
 
 /* Documents Utility */
 unsigned int sp_repr_document_merge (SPReprDoc *doc, const SPReprDoc *src, const  char *key);
