@@ -1,5 +1,9 @@
 2004-11-14  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/pencil-context.cpp (fit_and_split): Allow the bezier fitter to
+	  choose the middle control points freely except to the extent required
+	  for smooth nodes.
+
 	* src/display/bezier-utils.cpp (generate_bezier):
 	  If either end tangent is specified as zero then estimate the
 	  corresponding control point without constraining its direction

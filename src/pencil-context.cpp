@@ -448,12 +448,9 @@ fit_and_split(SPPencilContext *pc)
     NR::Point b[4];
     g_assert(is_zero(pc->req_tangent)
              || is_unit_vector(pc->req_tangent));
-    NR::Point const tHatStart( is_zero(pc->req_tangent)
-                               ? sp_darray_left_tangent(pc->p, pc->npoints, tolerance_sq)
-                               : pc->req_tangent );
-    NR::Point const tHatEnd(sp_darray_right_tangent(pc->p, pc->npoints, tolerance_sq));
+    NR::Point const tHatEnd(0, 0);
     int const n_segs = sp_bezier_fit_cubic_full(b, pc->p, pc->npoints,
-                                                tHatStart, tHatEnd, tolerance_sq, 0);
+                                                pc->req_tangent, tHatEnd, tolerance_sq, 0);
     if ( n_segs > 0
          && unsigned(pc->npoints) < G_N_ELEMENTS(pc->p) )
     {
