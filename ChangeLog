@@ -1,5 +1,8 @@
 2004-01-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-metrics.h: Increase precision of PT_PER_CM etc.
+	Add FIXME comment.
+
 	* src/dialogs/item-properties.cpp: Address `-Wshadow' warnings.
 
 	* src/nodepath.h, src/nodepath.cpp: Make some functions static.

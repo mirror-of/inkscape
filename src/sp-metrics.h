@@ -20,10 +20,10 @@ typedef enum {
 #define IN_PER_PT (1 / PT_PER_IN)
 #define IN_PER_CM (1 / CM_PER_IN)
 #define IN_PER_MM (1 / MM_PER_IN)
-#define PT_PER_CM (PT_PER_IN * IN_PER_CM)
-#define CM_PER_PT (1 / PT_PER_CM)
-#define PT_PER_MM (PT_PER_IN * IN_PER_MM)
-#define MM_PER_PT (1 / PT_PER_MM)
+#define PT_PER_CM (PT_PER_IN / CM_PER_IN)
+#define CM_PER_PT (CM_PER_IN / PT_PER_IN)
+#define PT_PER_MM (PT_PER_IN / MM_PER_IN)
+#define MM_PER_PT (MM_PER_IN / PT_PER_IN)
 #define PT_PER_PT 1.0
 #define IN_PER_IN 1.0
 
@@ -44,6 +44,14 @@ GString * sp_metric_to_metric_string (gdouble length,  const SPMetric metric_src
 // ruler metrics
 static const GtkRulerMetric sp_ruler_metrics[] =
 {
+  /* FIXME: The first of these items looks strange:
+   *   - The usual abbreviation for pixels is px, not Pi (which might be
+   *     mistaken for pica).
+   *   - Most of inkscape/sodipodi assumes there are 90 px to an inch, not 72.
+   *
+   * More pedantically, there's a big difference between a megametre (Mm) and a millimetre (mm).
+   * Similarly, the standard abbreviation for centimetres is cm, not Cm.
+   */
   {"Pixels",      "Pi", PT_PER_PT, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
   {"Millimeter",  "Mm", PT_PER_MM, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
   {"Centimeters", "Cm", PT_PER_CM, { 1, 2, 5, 10, 25, 50, 100, 250, 500, 1000 }, { 1, 5, 10, 50, 100 }},
