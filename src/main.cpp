@@ -239,22 +239,27 @@ sp_main_gui (int argc, const char **argv)
 
 	sp_modules_init();
 
-	/* We must set LC_NUMERIC to default, or otherwise */
-	/* we'll end with localised SVG files :-( */
-
-	setlocale (LC_NUMERIC, "C");
-
 	/* fixme: Move these to some centralized location (Lauris) */
 	sp_object_type_register ("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
 	sp_object_type_register ("sodipodi:guide", SP_TYPE_GUIDE);
 
+
 #if WITH_POPT
+	// temporarily switch gettext encoding to locale, so that help messages can be output properly
+	const gchar *charset;
+	g_get_charset(&charset);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, charset);
+
 	ctx = poptGetContext (NULL, argc, argv, options, 0);
 	g_return_val_if_fail (ctx != NULL, 1);
 	/* Collect own arguments */
 	fl = sp_process_args (ctx);
 	poptFreeContext (ctx);
+
+	// now switch gettext back to UTF-8 (for GUI)
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 #endif
+
 
 #ifdef WIN32
 	Inkscape::Extension::Internal::PrintWin32::init(); 
@@ -351,20 +356,23 @@ sp_main_console (int argc, const char **argv)
 
 	sp_modules_init();
 
-	/* We must set LC_NUMERIC to default, or otherwise */
-	/* we'll end with localised SVG files :-( */
-
-	setlocale (LC_NUMERIC, "C");
-
 	/* fixme: Move these to some centralized location (Lauris) */
 	sp_object_type_register ("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
 	sp_object_type_register ("sodipodi:guide", SP_TYPE_GUIDE);
 
 #ifdef WITH_POPT
-	ctx = poptGetContext (NULL, argc, argv, options, 0);
-	g_return_val_if_fail (ctx != NULL, 1);
-	fl = sp_process_args (ctx);
-	poptFreeContext (ctx);
+	// temporarily switch gettext encoding to locale, so that help messages can be output properly
+	const gchar *charset;
+	g_get_charset(&charset);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, charset);
+
+       ctx = poptGetContext (NULL, argc, argv, options, 0);
+       g_return_val_if_fail (ctx != NULL, 1);
+       fl = sp_process_args (ctx);
+       poptFreeContext (ctx);
+
+	// now switch gettext back to UTF-8 (for GUI)
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 #endif
 
 	if (fl == NULL) {
