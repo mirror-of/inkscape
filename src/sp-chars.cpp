@@ -104,7 +104,7 @@ sp_chars_release (SPObject *object)
 		SPCharElement *el;
 		el = chars->elements;
 		chars->elements = el->next;
-//    printf("sp_char_release ");
+		//printf("sp_char_release ");
 		if ( el->font ) el->font->Unref();
 		g_free (el);
 	}
@@ -180,7 +180,7 @@ sp_chars_clear (SPChars *chars)
 		SPCharElement *el;
 		el = chars->elements;
 		chars->elements = el->next;
-//    printf("sp_char_clear ");
+		//printf("sp_char_clear ");
 		if ( el->font ) el->font->Unref();
 		g_free (el);
 	}
@@ -209,7 +209,7 @@ sp_chars_add_element (SPChars *chars, guint glyph, font_instance *font, const NR
 
 	el->glyph = glyph;
 	el->font = font;
-//    printf("sp_char_add_elem ");
+	//printf("sp_char_add_elem ");
 	if ( font ) font->Ref();
 
 	el->transform = *transform;

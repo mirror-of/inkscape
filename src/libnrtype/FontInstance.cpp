@@ -158,7 +158,7 @@ static int ft2_cubic_to (FT_Vector * control1, FT_Vector * control2, FT_Vector *
 
 font_instance::font_instance(void)
 {
-	// printf("font instance born\n");
+	//printf("font instance born\n");
 	descr=NULL;
 	pFont=NULL;
 	refCount=0;
@@ -176,7 +176,7 @@ font_instance::font_instance(void)
 font_instance::~font_instance(void)
 {
 	if ( daddy ) daddy->UnrefFace(this);
-	// printf("font instance death\n");
+	//printf("font instance death\n");
 	if ( pFont ) g_object_unref(pFont);
 	pFont=NULL;
 	if ( descr ) pango_font_description_free(descr);
@@ -203,19 +203,17 @@ font_instance::~font_instance(void)
 void font_instance::Ref(void)
 {
 	refCount++;
-	// printf("font %x ref'd %i\n",this,refCount);
-	//	if ( refCount > 1000 || refCount < 0 ) {
-	//		printf("o");
-	//	}
+	//char *tc=pango_font_description_to_string(descr);
+	//printf("font %x %s ref'd %i\n",this,tc,refCount);
+	//free(tc);
 }
 
 void font_instance::Unref(void)
 {
 	refCount--;
-	// printf("font %x unref'd %i\n",this,refCount);
-	//	if ( refCount > 1000 || refCount < 0 ) {
-	//		printf("o");
-	//	}
+	//char *tc=pango_font_description_to_string(descr);
+	//printf("font %x %s unref'd %i\n",this,tc,refCount);
+	//free(tc);
 	if ( refCount <= 0 ) {
 		if ( daddy ) daddy->UnrefFace(this);
 		daddy=NULL;
@@ -710,11 +708,11 @@ raster_font* font_instance::RasterFont(const font_style &nStyle)
 		nR->daddy=this;
 		loadedStyles[nStyle]=nR;
 		res=nR;
+		if ( res ) Ref();
 	} else {
 		res=loadedStyles[nStyle];
 		res->Ref();
 	}
-	if ( res ) Ref();
 	return res;
 }
 
@@ -722,10 +720,11 @@ void font_instance::RemoveRasterFont(raster_font* who)
 {
 	if ( who == NULL ) return;
 	if ( loadedStyles.find(who->style) == loadedStyles.end() ) {
+		printf("RemoveRasterFont failed\n");
 		// not found
 	} else {
 		loadedStyles.erase(loadedStyles.find(who->style));
-		//	printf("RemoveRasterFont ");
+		//printf("RemoveRasterFont ");
 		Unref();
 	}
 }

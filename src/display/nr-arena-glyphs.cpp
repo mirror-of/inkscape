@@ -422,7 +422,7 @@ nr_arena_glyphs_set_path (NRArenaGlyphs *glyphs, SPCurve *curve, unsigned int li
 		}
 	}
 
- //   printf("glyph_setpath ");
+	//printf("glyph_setpath ");
 	if ( font ) font->Ref();
 	if ( glyphs->font ) glyphs->font->Unref();
 	glyphs->font=font;

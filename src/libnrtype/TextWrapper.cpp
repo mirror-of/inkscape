@@ -43,6 +43,8 @@ text_wrapper::text_wrapper(void)
 text_wrapper::~text_wrapper(void)
 {
 	// frees everything
+	//printf("delete\n");
+	g_object_unref(pLayout);
 	if ( utf8_text ) free(utf8_text);
 	if ( uni32_text ) free(uni32_text);
 	if ( glyph_text ) free(glyph_text);
@@ -62,7 +64,6 @@ text_wrapper::~text_wrapper(void)
 	if ( bounds ) free(bounds);
 	default_font=NULL;
 
-	g_object_unref(pLayout);
 }
 
 void            text_wrapper::SetDefaultFont(font_instance* iFont)
@@ -174,6 +175,11 @@ void            text_wrapper::DoLayout(void)
 	if ( default_font == NULL ) return;
 	if ( uni32_length <= 0 || utf8_length <= 0 ) return;
 	// prepare the pangolayout object
+	{
+		//char* tc=pango_font_description_to_string(default_font->descr);
+		//printf("layout with %s\n",tc);
+		//free(tc);
+	}
 	pango_layout_set_font_description(pLayout,default_font->descr);
 	pango_layout_set_text(pLayout,utf8_text,utf8_length);
 	// reset the glyph string
@@ -751,13 +757,16 @@ void            text_wrapper::MeasureBoxes(void)
 		boxes[i].width=0;
 		
 		PangoFont*            curPF=glyph_text[boxes[i].g_st].font;
-		PangoFontDescription* pfd=pango_font_describe(curPF);
-		font_instance*        curF=f_src->Face(pfd);
-		if ( curF ) {
-			curF->FontMetrics(boxes[i].ascent,boxes[i].descent,boxes[i].leading);
-			curF->Unref();
+		if ( curPF ) {
+			PangoFontDescription* pfd=pango_font_describe(curPF);
+			font_instance*        curF=f_src->Face(pfd);
+			if ( curF ) {
+				curF->FontMetrics(boxes[i].ascent,boxes[i].descent,boxes[i].leading);
+				curF->Unref();
+			}
+			pango_font_description_free(pfd);
+			boxes[i].width=glyph_text[boxes[i].g_en].x-glyph_text[boxes[i].g_st].x;
 		}
-		boxes[i].width=glyph_text[boxes[i].g_en].x-glyph_text[boxes[i].g_st].x;
 	}
 }
 

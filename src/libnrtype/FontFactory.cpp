@@ -342,10 +342,13 @@ font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
             if ( res->pFont == NULL ) {
                 // failed to install face -> bitmap font
                 // printf("face failed\n");
+		res->daddy=NULL;
                 delete res;
                 res=NULL;
                 if ( canFail ) {
-                    PANGO_DEBUG ("falling back to Sans\n");
+			char* tc=pango_font_description_to_string(descr);
+                    PANGO_DEBUG ("falling back from %s to Sans because InstallFace failed\n",tc);
+			free(tc);
                     pango_font_description_set_family(descr,"Sans");
                     res=Face(descr,false);
                 }
@@ -560,6 +563,7 @@ void                  font_factory::AddInCache(font_instance* who)
 	for (int i=0;i<nbEnt;i++) ents[i].age*=0.9;
 	for (int i=0;i<nbEnt;i++) {
 		if ( ents[i].f == who ) {
+//			printf("present\n");
 			ents[i].age+=1.0;
 			return;
 		}

@@ -808,6 +808,7 @@ sp_letterspacing_advance (const SPStyle *style)
 static void
 sp_string_calculate_dimensions (SPString *string)
 {
+	//printf("calcdim\n");
     string->bbox.x0 = string->bbox.y0 = 1e18;
     string->bbox.x1 = string->bbox.y1 = -1e18;
     string->advance = NR::Point(0, 0);
@@ -832,7 +833,7 @@ sp_string_calculate_dimensions (SPString *string)
     } else {
         metrics = 0/*NR_TYPEFACE_METRICS_HORIZONTAL*/;
     }
-		font_instance *font=face;
+//		font_instance *font=face;
 
     // calculating letterspacing advance
     NR::Point letterspacing_adv = sp_letterspacing_advance (style);
@@ -840,7 +841,7 @@ sp_string_calculate_dimensions (SPString *string)
     gboolean preserve = (((SPObject*)string)->xml_space.value == SP_XML_SPACE_PRESERVE);
     if (string->text) {
 			text_wrapper*   str_text=new text_wrapper();
-			str_text->SetDefaultFont((font_instance*)font);
+			str_text->SetDefaultFont(face);
 			str_text->AppendUTF8(string->text,-1);
 			if ( dx ) str_text->KernXForLastAddition(g_list_nth(dx,dx_offset),1.0/size);
 			if ( dy ) str_text->KernYForLastAddition(g_list_nth(dy,dy_offset),1.0/size);
@@ -919,7 +920,7 @@ sp_string_calculate_dimensions (SPString *string)
 static void
 sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean *pinspace)
 {
-
+	//printf("setshape\n");
     SPChars *chars = SP_CHARS (string);
     const SPStyle *style = SP_OBJECT_STYLE (SP_OBJECT_PARENT (string));
 
@@ -933,8 +934,8 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
     const gint len = g_utf8_strlen (string->text, -1);
     if (!len) return;
     g_free (string->p);
-    string->p = g_new (NR::Point, len + 1);
-
+	string->p=NULL;
+	
     /* fixme: Adjusted value (Lauris) */
     const gdouble size = style->font_size.computed;
     font_instance *face = (font_factory::Default())->Face(style->text->font_family.value,
@@ -946,7 +947,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
     } else {
         metrics = 0/*NR_TYPEFACE_METRICS_HORIZONTAL*/;
     }
-    font_instance *font = face;
+//    font_instance *font = face;
 
     // calculating letterspacing advance
     NR::Point letterspacing_adv = sp_letterspacing_advance (style);
@@ -964,13 +965,15 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 		{
 			text_wrapper*   str_text=new text_wrapper();
 			int             space_offset=0;
-			str_text->SetDefaultFont((font_instance*)font);
+			str_text->SetDefaultFont(face);
 			str_text->AppendUTF8(string->text,-1);
 			if ( dx ) str_text->KernXForLastAddition(g_list_nth(dx,dx_offset),1.0/size);
 			if ( dy ) str_text->KernYForLastAddition(g_list_nth(dy,dy_offset),1.0/size);
 			if ( str_text->uni32_length > 0 ) {
 				str_text->DoLayout();
 				if ( str_text->glyph_length > 0 ) {
+				    string->p = g_new (NR::Point, str_text->glyph_length+1);
+
 					if ( preserve == false ) str_text->MergeWhiteSpace();
 					if ( NR::LInfty(letterspacing_adv) > 0.001 ) str_text->AddLetterSpacing(letterspacing_adv[0]/size,letterspacing_adv[1]/size);
 					if ( metrics == 1/*NR_TYPEFACE_METRICS_VERTICAL*/ ) str_text->MakeVertical();
@@ -981,7 +984,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 					for (int i=0;i<str_text->glyph_length;i++) {
 						if ( str_text->glyph_text[i].font != curPF ) {
 							curPF=str_text->glyph_text[i].font;
-						//	printf("sp_string_set_shape (1) ");
+							//printf("sp_string_set_shape (1) ");
 							if ( curF ) curF->Unref();
 							curF=NULL;
 							if ( curPF ) {
@@ -1003,7 +1006,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 						if ( curF ) sp_chars_add_element (chars, str_text->glyph_text[i].gl, (font_instance*)curF, a);
 						
 					}
-				//	printf("sp_string_set_shape (2) ");
+					//printf("sp_string_set_shape (2) ");
 					if ( curF ) curF->Unref();
 				// get total advance
 					NR::Point     base_pt(str_text->glyph_text[str_text->glyph_length].x,str_text->glyph_text[str_text->glyph_length].y);
