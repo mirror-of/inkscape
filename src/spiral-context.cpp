@@ -39,6 +39,8 @@
 #include "helper/sp-intl.h"
 #include "prefs-utils.h"
 
+#include <libnr/nr-point-fns.h>
+
 static void sp_spiral_context_class_init (SPSpiralContextClass * klass);
 static void sp_spiral_context_init (SPSpiralContext * spiral_context);
 static void sp_spiral_context_dispose (GObject *object);
@@ -49,7 +51,7 @@ static gint sp_spiral_context_root_handler (SPEventContext * event_context, GdkE
 
 static GtkWidget *sp_spiral_context_config_widget (SPEventContext *ec);
 
-static void sp_spiral_drag (SPSpiralContext * sc, double x, double y, guint state);
+static void sp_spiral_drag (SPSpiralContext * sc, NR::Point p, guint state);
 static void sp_spiral_finish (SPSpiralContext * sc);
 
 static SPEventContextClass * parent_class;
@@ -77,11 +79,8 @@ sp_spiral_context_get_type (void)
 static void
 sp_spiral_context_class_init (SPSpiralContextClass * klass)
 {
-	GObjectClass * object_class;
-	SPEventContextClass * event_context_class;
-
-	object_class = (GObjectClass *) klass;
-	event_context_class = (SPEventContextClass *) klass;
+	GObjectClass *object_class = (GObjectClass *) klass;
+	SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
 
 	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
 
@@ -96,9 +95,7 @@ sp_spiral_context_class_init (SPSpiralContextClass * klass)
 static void
 sp_spiral_context_init (SPSpiralContext * spiral_context)
 {
-	SPEventContext * event_context;
-	
-	event_context = SP_EVENT_CONTEXT (spiral_context);
+	SPEventContext *event_context = SP_EVENT_CONTEXT (spiral_context);
 
 	event_context->cursor_shape = cursor_spiral_xpm;
 	event_context->hot_x = 4;
@@ -114,9 +111,7 @@ sp_spiral_context_init (SPSpiralContext * spiral_context)
 static void
 sp_spiral_context_dispose (GObject *object)
 {
-	SPSpiralContext * sc;
-
-	sc = SP_SPIRAL_CONTEXT (object);
+	SPSpiralContext *sc = SP_SPIRAL_CONTEXT (object);
 
 	/* fixme: This is necessary because we do not grab */
 	if (sc->item) sp_spiral_finish (sc);
@@ -127,10 +122,6 @@ sp_spiral_context_dispose (GObject *object)
 static void
 sp_spiral_context_setup (SPEventContext *ec)
 {
-	SPSpiralContext * sc;
-
-	sc = SP_SPIRAL_CONTEXT (ec);
-
 	if (((SPEventContextClass *) parent_class)->setup)
 		((SPEventContextClass *) parent_class)->setup (ec);
 
@@ -142,9 +133,7 @@ sp_spiral_context_setup (SPEventContext *ec)
 static void
 sp_spiral_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
 {
-	SPSpiralContext *sc;
-
-	sc = SP_SPIRAL_CONTEXT (ec);
+	SPSpiralContext *sc = SP_SPIRAL_CONTEXT (ec);
 
 	if (!strcmp (key, "expansion")) {
 		sc->exp = (val) ? atof (val) : 1.0;
@@ -162,22 +151,17 @@ static gint
 sp_spiral_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 {
 	static gboolean dragging;
-	SPSpiralContext * sc;
-	gint ret;
-	SPDesktop * desktop;
 
-	desktop = event_context->desktop;
-	sc = SP_SPIRAL_CONTEXT (event_context);
-	ret = FALSE;
+	SPDesktop *desktop = event_context->desktop;
+	SPSpiralContext *sc = SP_SPIRAL_CONTEXT (event_context);
+	gint ret = FALSE;
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
-			NRPoint fp;
 			dragging = TRUE;
 			/* Position center */
-			sp_desktop_w2d_xy_point (event_context->desktop, &fp, event->button.x, event->button.y);
-			sc->center = fp;
+			sc->center = sp_desktop_w2d_xy_point (event_context->desktop, NR::Point(event->button.x, event->button.y));
 			/* Snap center to nearest magnetic point */
 			sp_desktop_free_snap (event_context->desktop, sc->center);
 			sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->acetate),
@@ -188,9 +172,7 @@ sp_spiral_context_root_handler (SPEventContext * event_context, GdkEvent * event
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (dragging && event->motion.state && GDK_BUTTON1_MASK) {
-			NRPoint p;
-			sp_desktop_w2d_xy_point (event_context->desktop, &p, event->motion.x, event->motion.y);
-			sp_spiral_drag (sc, p.x, p.y, event->motion.state);
+			sp_spiral_drag (sc, sp_desktop_w2d_xy_point (event_context->desktop, NR::Point(event->motion.x, event->motion.y)), event->motion.state);
 			ret = TRUE;
 		}
 		break;
@@ -228,30 +210,20 @@ sp_spiral_context_root_handler (SPEventContext * event_context, GdkEvent * event
 }
 
 static void
-sp_spiral_drag (SPSpiralContext * sc, double x, double y, guint state)
+sp_spiral_drag (SPSpiralContext * sc, NR::Point p, guint state)
 {
-	SPSpiral *spiral;
-	SPDesktop *desktop;
-	NRPoint p0, p1;
-	gdouble dx, dy, rad, arg;
-	GString *xs, *ys;
-	gchar status[80];
-	NRPoint fp;
-
-	desktop = SP_EVENT_CONTEXT (sc)->desktop;
+	SPDesktop *desktop = SP_EVENT_CONTEXT (sc)->desktop;
 
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
 	if (!sc->item) {
-		SPRepr * repr, * style;
-		SPCSSAttr * css;
 		/* Create object */
-		repr = sp_repr_new ("path");
+		SPRepr *repr = sp_repr_new ("path");
                 sp_repr_set_attr (repr, "sodipodi:type", "spiral");
 		/* Set style */
-		style = inkscape_get_repr (INKSCAPE, "tools.shapes.spiral");
+		SPRepr *style = inkscape_get_repr (INKSCAPE, "tools.shapes.spiral");
 		if (style) {
-			css = sp_repr_css_attr_inherited (style, "style");
+			SPCSSAttr *css = sp_repr_css_attr_inherited (style, "style");
 			sp_repr_css_set (repr, css, "style");
 			sp_repr_css_attr_unref (css);
 		}
@@ -263,38 +235,33 @@ sp_spiral_drag (SPSpiralContext * sc, double x, double y, guint state)
 	}
 
 	/* Free movement for corner point */
-	sp_desktop_dt2root_xy_point (desktop, &fp, sc->center[NR::X], sc->center[NR::Y]);
-	p0.x = fp.x;
-	p0.y = fp.y;
-	sp_desktop_dt2root_xy_point (desktop, &fp, x, y);
-	p1.x = fp.x;
-	p1.y = fp.y;
-	NR::Point pp1(p1);
-	sp_desktop_free_snap (desktop, pp1);
-	p1 = pp1;
+	NR::Point p0 = sp_desktop_dt2root_xy_point (desktop, sc->center);
+	NR::Point p1 = sp_desktop_dt2root_xy_point (desktop, p);
+	sp_desktop_free_snap (desktop, p1);
 	
-	spiral = SP_SPIRAL (sc->item);
+	SPSpiral *spiral = SP_SPIRAL (sc->item);
 
-	dx = p1.x - p0.x;
-	dy = p1.y - p0.y;
-	rad = hypot (dx, dy);
+	NR::Point delta = p1 - p0;
+	gdouble rad = NR::L2 (delta);
 
-	arg = atan2 (dy, dx) - 2.0*M_PI*spiral->revo;
+	gdouble arg = NR::atan2 (delta) - 2.0*M_PI*spiral->revo;
 
   	if (state & GDK_CONTROL_MASK) { 
 		arg = round (arg/(M_PI/snaps))*(M_PI/snaps);
 	} 
 	
         /* Fixme: these parameters should be got from dialog box */
-	sp_spiral_position_set (spiral, p0.x, p0.y,
+	sp_spiral_position_set (spiral, p0[NR::X], p0[NR::Y],
 		       /*expansion*/ sc->exp,
 		       /*revolution*/ sc->revo,
 		       rad, arg,
 		       /*t0*/ sc->t0);
 	
 	/* status text */
-	xs = SP_PT_TO_METRIC_STRING (fabs(p0.x), SP_DEFAULT_METRIC);
-	ys = SP_PT_TO_METRIC_STRING (fabs(p0.y), SP_DEFAULT_METRIC);
+	GString *xs, *ys;
+	gchar status[80];
+	xs = SP_PT_TO_METRIC_STRING (fabs(p0[NR::X]), SP_DEFAULT_METRIC);
+	ys = SP_PT_TO_METRIC_STRING (fabs(p0[NR::Y]), SP_DEFAULT_METRIC);
 	sprintf (status, "Draw spiral at (%s,%s)", xs->str, ys->str);
 	sp_view_set_status (SP_VIEW (desktop), status, FALSE);
 	g_string_free (xs, FALSE);
@@ -305,11 +272,8 @@ static void
 sp_spiral_finish (SPSpiralContext * sc)
 {
 	if (sc->item != NULL) {
-		SPDesktop *desktop;
-		SPSpiral  *spiral;
-
-		desktop = SP_EVENT_CONTEXT (sc)->desktop;
-		spiral = SP_SPIRAL (sc->item);
+		SPDesktop *desktop = SP_EVENT_CONTEXT (sc)->desktop;
+		SPSpiral  *spiral = SP_SPIRAL (sc->item);
 
 		sp_shape_set_shape(SP_SHAPE(spiral));
 		sp_object_invoke_write (SP_OBJECT (spiral), NULL, SP_OBJECT_WRITE_EXT);
@@ -357,11 +321,10 @@ sp_sc_defaults (GtkWidget *widget, GtkObject *obj)
 static GtkWidget *
 sp_spiral_context_config_widget (SPEventContext *ec)
 {
-	SPSpiralContext *sc;
 	GtkWidget *tbl, *l, *sb, *b;
 	GtkObject *a;
 
-	sc = SP_SPIRAL_CONTEXT (ec);
+	SPSpiralContext *sc = SP_SPIRAL_CONTEXT (ec);
 
 	tbl = gtk_table_new (4, 2, FALSE);
 	gtk_container_set_border_width (GTK_CONTAINER (tbl), 4);

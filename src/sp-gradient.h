@@ -188,8 +188,6 @@ void sp_gradient_render_vector_block_rgb (SPGradient *gr, guchar *px, gint w, gi
 NRMatrix *sp_gradient_get_g2d_matrix_f (SPGradient *gr, NRMatrix *ctm, NRRect *bbox, NRMatrix *g2d);
 NRMatrix *sp_gradient_get_gs2d_matrix_f (SPGradient *gr, NRMatrix *ctm, NRRect *bbox, NRMatrix *gs2d);
 void sp_gradient_set_gs2d_matrix_f (SPGradient *gr, NRMatrix *ctm, NRRect *bbox, NRMatrix *gs2d);
-void sp_gradient_from_position_xy (SPGradient *gr, gdouble *ctm, NRRect *bbox, NRPoint *p, float x, float y);
-void sp_gradient_to_position_xy (SPGradient *gr, gdouble *ctm, NRRect *bbox, NRPoint *p, float x, float y);
 
 /*
  * Linear Gradient
