@@ -1096,8 +1096,6 @@ sp_selection_move_screen(gdouble dx, gdouble dy)
     }
 }
 
-static void scroll_to_show_item(SPDesktop *desktop, SPItem *item);
-
 void
 sp_selection_item_next(void)
 {
@@ -1208,7 +1206,7 @@ sp_selection_item_prev(void)
  * If \a item is not entirely visible then adjust visible area to centre on the centre on of
  * \a item.
  */
-static void scroll_to_show_item(SPDesktop *desktop, SPItem *item)
+void scroll_to_show_item(SPDesktop *desktop, SPItem *item)
 {
     NRRect dbox;
     sp_desktop_get_display_area(desktop, &dbox);
