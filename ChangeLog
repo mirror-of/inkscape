@@ -1,10 +1,14 @@
+2004-07-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* autogen.sh: Move unversioned automake to last resort.
+
 2004-07-20  Kees Cook  <kees@outflux.net>
 
-    * src/dialogs/desktop-preferences.cpp: corrected my usage of static
+	* src/dialogs/desktop-preferences.cpp: corrected my usage of static
 	  l18n strings.
-    * src/dialogs/stroke-style.cpp: fixed missing l18n. (bug #994837)
-    * src/dialogs/sp-attribute-widget.cpp: went hunting for other static
-      l18n strings.  Fixed some here too.
+	* src/dialogs/stroke-style.cpp: fixed missing l18n. (bug #994837)
+	* src/dialogs/sp-attribute-widget.cpp: went hunting for other static
+	  l18n strings.  Fixed some here too.
 	* autogen.sh: cleanups and more debugging.
 	* share/extensions/sk2svg.sh: tempfile cleanups from pjrm (patch #990009)
 
@@ -43,7 +47,7 @@
 2004-07-18  Kees Cook  <kees@outflux.net>
 
 	* Makefile.am, configure.in, autogen.sh, toolversions.sh:
-      cleaning up some automake misbehavior from the gtkmm patch.
+	  cleaning up some automake misbehavior from the gtkmm patch.
 	  automake 1.4isms snuck back in.
 	* src/desktop-events.cpp: unlocalized strings updated.
 

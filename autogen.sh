@@ -80,15 +80,19 @@ fi
 
 echo -n "checking for automake >= $AUTOMAKE_REQUIRED_VERSION ... "
 # Prefer earlier versions just so that the earliest supported version gets test coverage by developers.
-if (automake --version) < /dev/null > /dev/null 2>&1; then
-   AUTOMAKE=automake
-   ACLOCAL=aclocal
-elif (automake-1.7 --version) < /dev/null > /dev/null 2>&1; then
+if (automake-1.7 --version) < /dev/null > /dev/null 2>&1; then
    AUTOMAKE=automake-1.7
    ACLOCAL=aclocal-1.7
 elif (automake-1.8 --version) < /dev/null > /dev/null 2>&1; then
    AUTOMAKE=automake-1.8
    ACLOCAL=aclocal-1.8
+elif (automake --version) < /dev/null > /dev/null 2>&1; then
+   # Leave unversioned automake for a last resort: it may be a version earlier
+   # than what we require.
+   # (In particular, it might mean automake 1.4: that version didn't default to
+   #  installing a versioned name.)
+   AUTOMAKE=automake
+   ACLOCAL=aclocal
 else
     echo
     echo "  You must have automake 1.7 or newer installed to compile $PROJECT."
