@@ -1,6 +1,3 @@
-2004-06-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
-
-
 2004-06-19  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/desktop-snap.{cpp,h}: sp_desktop_dim_snap_list returns
@@ -10,6 +7,7 @@
 
 2004-06-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnrtype/FontFactory.cpp, src/libnrtype/FontInstance.cpp
 	* src/extension/internal/ps.cpp (begin): Add some basic error handling.
 
 	* src/extension/internal/ps.cpp (setup): Simplify an expression now that

@@ -122,7 +122,6 @@ desktop-affine.o: \
 	svg/svg-types.h \
 	version.h \
 	view.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 desktop-events.o: \
@@ -252,7 +251,6 @@ desktop-snap.o: \
 	sp-object.h \
 	version.h \
 	view.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 desktop.o: \
@@ -319,6 +317,7 @@ desktop.o: \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	require-config.h \
 	selcue.h \
 	select-context.h \
 	selection.h \
@@ -386,6 +385,7 @@ dialogs/align.o: \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	require-config.h \
 	selection.h \
 	sp-item-transform.h \
 	sp-item.h \
@@ -396,7 +396,6 @@ dialogs/align.o: \
 	view.h \
 	widgets/button.h \
 	widgets/sp-widget.h \
-	xml/repr.h \
 	xml/repr.h \
 	xml/xml-forward.h
 
@@ -445,6 +444,7 @@ dialogs/desktop-properties.o: \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	require-config.h \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object.h \
@@ -461,7 +461,6 @@ dialogs/desktop-properties.o: \
 	widgets/spw-utilities.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
-	xml/repr.h \
 	xml/repr.h \
 	xml/repr.h \
 	xml/xml-forward.h
@@ -505,7 +504,6 @@ dialogs/dialog-events.o: \
 	view.h \
 	widgets/sp-widget.h \
 	xml/repr.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 dialogs/display-settings.o: \
@@ -546,13 +544,13 @@ dialogs/display-settings.o: \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	require-config.h \
 	selcue.h \
 	selcue.h \
 	seltrans.h \
 	verbs.h \
 	verbs.h \
 	view.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 dialogs/export.o: \
@@ -603,6 +601,7 @@ dialogs/export.o: \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	require-config.h \
 	selection.h \
 	sp-item.h \
 	sp-namedview.h \
@@ -747,6 +746,7 @@ dialogs/find.o: \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	require-config.h \
 	selection-chemistry.h \
 	selection-chemistry.h \
 	selection.h \
@@ -811,7 +811,6 @@ dialogs/in-dt-coordsys.o: \
 	sp-root.h \
 	svg/svg-types.h \
 	version.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 dialogs/item-properties.o: \
@@ -856,6 +855,7 @@ dialogs/item-properties.o: \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	require-config.h \
 	selection.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -874,7 +874,6 @@ dialogs/item-properties.o: \
 	version.h \
 	view.h \
 	widgets/sp-widget.h \
-	xml/repr.h \
 	xml/repr.h \
 	xml/xml-forward.h
 
@@ -908,7 +907,6 @@ dialogs/object-attributes.o: \
 	sp-item.h \
 	sp-object.h \
 	version.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 dialogs/object-properties.o: \
@@ -956,11 +954,11 @@ dialogs/object-properties.o: \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	require-config.h \
 	verbs.h \
 	view.h \
 	widgets/icon.h \
 	widgets/sp-widget.h \
-	xml/repr.h \
 	xml/repr.h \
 	xml/xml-forward.h
 
@@ -1117,6 +1115,7 @@ dialogs/text-edit.o: \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	require-config.h \
 	selection.h \
 	sp-chars.h \
 	sp-item-group.h \
@@ -1181,6 +1180,7 @@ dialogs/transformation.o: \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	require-config.h \
 	selection-chemistry.h \
 	selection.h \
 	sp-item.h \
@@ -1189,7 +1189,6 @@ dialogs/transformation.o: \
 	verbs.h \
 	version.h \
 	view.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 dialogs/xml-tree.o: \
@@ -1237,6 +1236,7 @@ dialogs/xml-tree.o: \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	require-config.h \
 	selection.h \
 	sp-chars.h \
 	sp-defs.h \
@@ -1261,7 +1261,6 @@ dialogs/xml-tree.o: \
 	widgets/sp-xmlview-tree.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
-	xml/repr.h \
 	xml/repr.h \
 	xml/repr.h \
 	xml/xml-forward.h
@@ -1500,6 +1499,7 @@ display/nr-arena-glyphs.o: \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
 	livarot/livarot-forward.h \
+	require-config.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -1511,7 +1511,6 @@ display/nr-arena-glyphs.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 display/nr-arena-group.o: \
@@ -1660,7 +1659,6 @@ display/nr-arena-shape.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 display/nr-arena.o: \
@@ -1914,7 +1912,6 @@ document-undo.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 document.o: \
@@ -2114,7 +2111,6 @@ dropper-context.o: \
 	sp-object.h \
 	version.h \
 	view.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 dyna-draw-context.o: \
@@ -2194,7 +2190,6 @@ ecma/EcmaBinding.o: \
 	forward.h \
 	inkscape.h \
 	libnr/nr-forward.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 ecma/SVGViewer.o: \
@@ -2216,7 +2211,6 @@ ecma/SVGViewer.o: \
 	uri.h \
 	uri.h \
 	view.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 ecma/ecmatest.o: \
@@ -2224,7 +2218,6 @@ ecma/ecmatest.o: \
 	ecma/EcmaBinding.h \
 	forward.h \
 	inkscape.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 ecma/svgview.o: \
@@ -2236,7 +2229,6 @@ ecma/svgview.o: \
 	libnr/nr-forward.h \
 	uri.h \
 	uri.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 event-context.o: \
@@ -2284,6 +2276,7 @@ event-context.o: \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	require-config.h \
 	selcue.h \
 	select-context.h \
 	selection-chemistry.h \
@@ -2404,6 +2397,7 @@ extension/implementation/script.o: \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	require-config.h \
 	selection.h \
 	sp-item.h \
 	sp-namedview.h \
@@ -4036,6 +4030,7 @@ extension/system.o: \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	require-config.h \
 	verbs.h \
 	view.h \
 	widgets/menu.h \
@@ -4109,6 +4104,7 @@ file.o: \
 	message.h \
 	prefs-utils.h \
 	print.h \
+	require-config.h \
 	selection-chemistry.h \
 	selection.h \
 	sp-defs.h \
@@ -4190,7 +4186,6 @@ gradient-chemistry.o: \
 	xml/repr-action.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
-	xml/repr.h \
 	xml/repr.h \
 	xml/xml-forward.h
 
@@ -4345,10 +4340,10 @@ helper/window.o: \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	require-config.h \
 	shortcuts.h \
 	verbs.h \
 	view.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 inkjar/jar.o: \
@@ -4402,6 +4397,7 @@ inkscape.o: \
 	message.h \
 	preferences-skeleton.h \
 	prefs-utils.h \
+	require-config.h \
 	selcue.h \
 	selection.h \
 	shortcuts.h \
@@ -4467,6 +4463,7 @@ interface.o: \
 	object-ui.h \
 	path-chemistry.h \
 	prefs-utils.h \
+	require-config.h \
 	selcue.h \
 	selection-chemistry.h \
 	shortcuts.h \
@@ -4530,7 +4527,6 @@ knot.o: \
 	sp-object.h \
 	version.h \
 	view.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 knotholder.o: \
@@ -4578,7 +4574,6 @@ knotholder.o: \
 	uri.h \
 	version.h \
 	view.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 libnr/have_mmx.o: \
@@ -5041,7 +5036,8 @@ libnrtype/FontFactory.o: \
 	libnrtype/nr-type-primitives.h \
 	libnrtype/nrtype-forward.h \
 	livarot/LivarotDefs.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	require-config.h
 
 libnrtype/FontInstance.o: \
 	libnrtype/FontInstance.cpp \
@@ -5075,7 +5071,8 @@ libnrtype/FontInstance.o: \
 	livarot/Path.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	require-config.h
 
 libnrtype/RasterFont.o: \
 	libnrtype/RasterFont.cpp \
@@ -5114,7 +5111,8 @@ libnrtype/RasterFont.o: \
 	livarot/Path.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	require-config.h
 
 libnrtype/TextWrapper.o: \
 	libnrtype/TextWrapper.cpp \
@@ -5141,7 +5139,8 @@ libnrtype/TextWrapper.o: \
 	libnrtype/nr-type-primitives.h \
 	libnrtype/nrtype-forward.h \
 	livarot/LivarotDefs.h \
-	livarot/livarot-forward.h
+	livarot/livarot-forward.h \
+	require-config.h
 
 libnrtype/cp1250.o: \
 	libnrtype/cp1250.cpp
@@ -5218,7 +5217,6 @@ libnrtype/font-style-to-pos.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 libnrtype/nr-type-pos-def.o: \
@@ -5435,23 +5433,10 @@ livarot/ShapeRaster.o: \
 	livarot/ShapeRaster.cpp \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
-	libnr/nr-forward.h \
-	libnr/nr-i-coord.h \
 	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-maybe.h \
 	libnr/nr-point-fns.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-point-l.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
-	libnr/nr-rect-l.h \
-	libnr/nr-rect.h \
-	libnr/nr-rotate.h \
-	libnr/nr-scale.h \
-	libnr/nr-translate.h \
-	libnr/nr-types.h \
-	libnr/nr-values.h \
 	livarot/AVL.h \
 	livarot/AlphaLigne.h \
 	livarot/BitLigne.h \
@@ -5725,7 +5710,6 @@ object-edit.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 object-ui.o: \
@@ -6065,7 +6049,6 @@ satisfied-guide-cns.o: \
 	sp-object.h \
 	version.h \
 	view.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 selcue.o: \
@@ -6109,7 +6092,6 @@ selcue.o: \
 	sp-object.h \
 	version.h \
 	view.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 select-context.o: \
@@ -6174,7 +6156,6 @@ select-context.o: \
 	version.h \
 	view.h \
 	widgets/spw-utilities.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 select-toolbar.o: \
@@ -6228,6 +6209,7 @@ select-toolbar.o: \
 	message.h \
 	path-chemistry.h \
 	prefs-utils.h \
+	require-config.h \
 	select-toolbar.h \
 	selection-chemistry.h \
 	selection.h \
@@ -6330,7 +6312,6 @@ selection-chemistry.o: \
 	xml/repr-action.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
-	xml/repr.h \
 	xml/repr.h \
 	xml/xml-forward.h
 
@@ -6489,6 +6470,7 @@ shortcuts.o: \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	require-config.h \
 	shortcuts.h \
 	verbs.h \
 	view.h
@@ -6530,7 +6512,6 @@ slideshow.o: \
 	svg/svg-types.h \
 	version.h \
 	view.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 sp-anchor.o: \
@@ -6581,7 +6562,6 @@ sp-animation.o: \
 	sp-animation.h \
 	sp-object.h \
 	version.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 sp-chars.o: \
@@ -6628,6 +6608,7 @@ sp-chars.o: \
 	livarot/livarot-forward.h \
 	macros.h \
 	print.h \
+	require-config.h \
 	sp-chars.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -6698,7 +6679,6 @@ sp-defs.o: \
 	version.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
-	xml/repr.h \
 	xml/repr.h \
 	xml/xml-forward.h
 
@@ -6807,7 +6787,6 @@ sp-gradient.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 sp-guide.o: \
@@ -6900,6 +6879,7 @@ sp-image.o: \
 	message-stack.h \
 	message.h \
 	print.h \
+	require-config.h \
 	sp-image.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -7001,7 +6981,6 @@ sp-item-notify-moveto.o: \
 	sp-item.h \
 	sp-object.h \
 	version.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 sp-item-rm-unsatisfied-cns.o: \
@@ -7033,7 +7012,6 @@ sp-item-rm-unsatisfied-cns.o: \
 	sp-item.h \
 	sp-object.h \
 	version.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 sp-item-transform.o: \
@@ -7065,7 +7043,6 @@ sp-item-transform.o: \
 	sp-item.h \
 	sp-object.h \
 	version.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 sp-item-update-cns.o: \
@@ -7098,7 +7075,6 @@ sp-item-update-cns.o: \
 	sp-item.h \
 	sp-object.h \
 	version.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 sp-item.o: \
@@ -7390,7 +7366,6 @@ sp-object-group.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 sp-object-repr.o: \
@@ -7466,7 +7441,6 @@ sp-object-repr.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 sp-object.o: \
@@ -7506,7 +7480,6 @@ sp-object.o: \
 	version.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
-	xml/repr.h \
 	xml/repr.h \
 	xml/xml-forward.h
 
@@ -7569,7 +7542,6 @@ sp-offset.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 sp-paint-server.o: \
@@ -7592,7 +7564,6 @@ sp-paint-server.o: \
 	sp-object.h \
 	sp-paint-server.h \
 	version.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 sp-path.o: \
@@ -7696,7 +7667,6 @@ sp-pattern.o: \
 	xml/repr-action.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
-	xml/repr.h \
 	xml/repr.h \
 	xml/xml-forward.h
 
@@ -8188,6 +8158,7 @@ sp-text.o: \
 	message-stack.h \
 	message.h \
 	print.h \
+	require-config.h \
 	sp-chars.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -8404,6 +8375,7 @@ sp-typeset-utils.o: \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h \
 	livarot/livarot-forward.h \
+	require-config.h \
 	sp-chars.h \
 	sp-item-group.h \
 	sp-item.h \
@@ -8500,7 +8472,6 @@ sp-typeset.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 sp-use-reference.o: \
@@ -8512,7 +8483,6 @@ sp-use-reference.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 sp-use.o: \
@@ -8918,7 +8888,6 @@ svg-view.o: \
 	svg-view.h \
 	version.h \
 	view.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 svg/ftos.o: \
@@ -9120,6 +9089,7 @@ toolbox.o: \
 	nodepath.h \
 	path-chemistry.h \
 	prefs-utils.h \
+	require-config.h \
 	selcue.h \
 	select-toolbar.h \
 	selection-chemistry.h \
@@ -9216,6 +9186,7 @@ tools-switch.o: \
 	nodepath.h \
 	path-chemistry.h \
 	rect-context.h \
+	require-config.h \
 	selcue.h \
 	select-context.h \
 	selection-chemistry.h \
@@ -9255,7 +9226,6 @@ uri-references.o: \
 	uri.h \
 	uri.h \
 	version.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 uri.o: \
@@ -9329,6 +9299,7 @@ verbs.o: \
 	path-chemistry.h \
 	prefs-utils.h \
 	rect-context.h \
+	require-config.h \
 	selcue.h \
 	select-context.h \
 	selection-chemistry.h \
@@ -9381,7 +9352,6 @@ view.o: \
 	message-stack.h \
 	message.h \
 	view.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 widgets/button.o: \
@@ -9413,6 +9383,7 @@ widgets/button.o: \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	require-config.h \
 	shortcuts.h \
 	verbs.h \
 	view.h \
@@ -9457,7 +9428,6 @@ widgets/dash-selector.o: \
 	xml/repr-private.h \
 	xml/repr.h \
 	xml/repr.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 widgets/font-selector.o: \
@@ -9494,6 +9464,7 @@ widgets/font-selector.o: \
 	libnrtype/raster-glyph.h \
 	livarot/LivarotDefs.h \
 	livarot/livarot-forward.h \
+	require-config.h \
 	widgets/font-selector.h
 
 widgets/gradient-image.o: \
@@ -9526,7 +9497,6 @@ widgets/gradient-image.o: \
 	uri.h \
 	version.h \
 	widgets/gradient-image.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 widgets/gradient-position.o: \
@@ -9586,7 +9556,6 @@ widgets/gradient-position.o: \
 	uri.h \
 	version.h \
 	widgets/gradient-position.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 widgets/gradient-selector.o: \
@@ -9688,6 +9657,7 @@ widgets/gradient-vector.o: \
 	message-stack.h \
 	message.h \
 	prefs-utils.h \
+	require-config.h \
 	selection.h \
 	sp-defs.h \
 	sp-gradient.h \
@@ -9717,7 +9687,6 @@ widgets/gradient-vector.o: \
 	xml/repr-action.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
-	xml/repr.h \
 	xml/repr.h \
 	xml/xml-forward.h
 
@@ -9757,7 +9726,6 @@ widgets/icon.o: \
 	sp-object.h \
 	version.h \
 	widgets/icon.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 widgets/menu.o: \
@@ -9977,7 +9945,6 @@ widgets/sp-widget.o: \
 	xml/repr-private.h \
 	xml/repr.h \
 	xml/repr.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 widgets/sp-xmlview-attr-list.o: \
@@ -10052,7 +10019,6 @@ widgets/spinbutton-events.o: \
 	widgets/spinbutton-events.h \
 	widgets/widget-sizes.h \
 	xml/repr.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 widgets/spw-utilities.o: \
@@ -10094,7 +10060,6 @@ widgets/spw-utilities.o: \
 	view.h \
 	widgets/button.h \
 	widgets/spw-utilities.h \
-	xml/repr.h \
 	xml/xml-forward.h
 
 xml/repr-action-test.o: \
@@ -10191,6 +10156,5 @@ zoom-context.o: \
 	sp-object.h \
 	version.h \
 	view.h \
-	xml/repr.h \
 	xml/xml-forward.h \
 	zoom-context.h

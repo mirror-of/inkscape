@@ -519,6 +519,7 @@ print.h
 rect-context.cpp
 rect-context.h
 remove-last.h
+require-config.h
 rubberband.cpp
 rubberband.h
 satisfied-guide-cns.cpp
