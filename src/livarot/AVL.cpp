@@ -14,27 +14,36 @@
  * it's a classic AVL tree rebalancing, nothing fancy
  */
 
-AVLTree::AVLTree (void):
-DblLinked ()
+AVLTree::AVLTree()
 {
-  dad = son[LEFT] = son[RIGHT] = NULL;
-  balance = 0;
-}
-AVLTree::~AVLTree (void)
-{
-}
-void
-AVLTree::MakeNew (void)
-{
-  DblLinked::MakeNew ();
-  dad = son[LEFT] = son[RIGHT] = NULL;
-  balance = 0;
+    MakeNew();
 }
 
-void
-AVLTree::MakeDelete (void)
+AVLTree::~AVLTree()
 {
-  DblLinked::MakeDelete ();
+    MakeDelete();
+}
+
+void AVLTree::MakeNew()
+{
+    for (int i = 0; i < 2; i++)
+    {
+        elem[i] = NULL;
+        son[i] = NULL;
+    }
+
+    dad = NULL;
+    balance = 0;
+}
+
+void AVLTree::MakeDelete()
+{
+    for (int i = 0; i < 2; i++) {
+        if (elem[i]) {
+            elem[i]->elem[1 - i] = elem[1 - i];
+        }
+        elem[i] = NULL;
+    }
 }
 
 AVLTree *AVLTree::Leftmost()
@@ -659,7 +668,11 @@ AVLTree::Remove (AVLTree * &racine, bool rebalance)
 int
 AVLTree::Remove (AVLTree * &racine, AVLTree * &startNode, int &diff)
 {
-  DblLinked::Extract ();
+  if (elem[LEFT])
+    elem[LEFT]->elem[RIGHT] = elem[RIGHT];
+  if (elem[RIGHT])
+    elem[RIGHT]->elem[LEFT] = elem[LEFT];
+  elem[LEFT] = elem[RIGHT] = NULL;
 
   if (son[LEFT] && son[RIGHT])
     {
@@ -823,7 +836,7 @@ AVLTree::Insert (AVLTree * &racine, int insertType, AVLTree * insertL,
 	    }
 	  insertR->son[LEFT] = this;
 	  dad = insertR;
-	  InsertOnLeft (insertR);
+	  insertOn(LEFT, insertR);
 	}
       else if (insertType == found_on_right)
 	{
@@ -834,7 +847,7 @@ AVLTree::Insert (AVLTree * &racine, int insertType, AVLTree * insertL,
 	    }
 	  insertL->son[RIGHT] = this;
 	  dad = insertL;
-	  InsertOnRight (insertL);
+	  insertOn(RIGHT, insertL);
 	}
       else if (insertType == found_between)
 	{
@@ -854,7 +867,7 @@ AVLTree::Insert (AVLTree * &racine, int insertType, AVLTree * insertL,
 	      insertL->son[RIGHT] = this;
 	      dad = insertL;
 	    }
-	  InsertBetween (insertL, insertR);
+	  insertBetween (insertL, insertR);
 	}
       else if (insertType == found_exact)
 	{
@@ -875,13 +888,13 @@ AVLTree::Insert (AVLTree * &racine, int insertType, AVLTree * insertL,
 		}
 	      insertL->son[LEFT] = this;
 	      this->dad = insertL;
-	      InsertBetween (insertL->elem[LEFT], insertL);
+	      insertBetween (insertL->elem[LEFT], insertL);
 	    }
 	  else
 	    {
 	      insertL->son[RIGHT] = this;
 	      dad = insertL;
-	      InsertBetween (insertL, insertL->elem[RIGHT]);
+	      insertBetween (insertL, insertL->elem[RIGHT]);
 	    }
 	}
       else
@@ -896,7 +909,13 @@ AVLTree::Insert (AVLTree * &racine, int insertType, AVLTree * insertL,
 void
 AVLTree::Relocate (AVLTree * to)
 {
-  DblLinked::Relocate (to);
+  if (elem[LEFT])
+    elem[LEFT]->elem[RIGHT] = to;
+  if (elem[RIGHT])
+    elem[RIGHT]->elem[LEFT] = to;
+  to->elem[LEFT] = elem[LEFT];
+  to->elem[RIGHT] = elem[RIGHT];
+    
   if (dad)
     {
       if (dad->son[LEFT] == this)
@@ -915,6 +934,24 @@ AVLTree::Relocate (AVLTree * to)
   to->dad = dad;
   to->son[RIGHT] = son[RIGHT];
   to->son[LEFT] = son[LEFT];
+}
+
+
+void AVLTree::insertOn(Side s, AVLTree *of)
+{
+  elem[1 - s] = of;
+  if (of)
+    of->elem[s] = this;
+}
+
+void AVLTree::insertBetween(AVLTree *l, AVLTree *r)
+{
+  if (l)
+    l->elem[RIGHT] = this;
+  if (r)
+    r->elem[LEFT] = this;
+  elem[LEFT] = l;
+  elem[RIGHT] = r;
 }
 
 /*
