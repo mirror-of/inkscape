@@ -1,3 +1,8 @@
+2004-06-14  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/prefs-utils.cpp:
+	Fix bracketing typo that causes an array to be overrun.
+
 2004-06-14  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-path.cpp: Move some declarations to first use.
