@@ -361,7 +361,7 @@ sp_node_context_item_handler (SPEventContext * event_context, SPItem * item, Gdk
 					// find out clicked item, disregarding groups
 					item_ungrouped = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
 					SP_DT_SELECTION (desktop)->setItem (item_ungrouped);
-					ret = FALSE;
+					ret = TRUE;
 				}
 				break;
 			}
@@ -435,8 +435,12 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 					sp_nodepath_select_rect (nc->nodepath, &b, event->button.state & GDK_SHIFT_MASK);
 				}
 			} else {
-				if (!(nodeedit_rb_escaped)) // unless something was cancelled
-					sp_nodepath_deselect (nc->nodepath); 
+				if (!(nodeedit_rb_escaped)) { // unless something was cancelled
+					if (nc->nodepath && nc->nodepath->selected)
+						sp_nodepath_deselect (nc->nodepath);
+					else 
+						SP_DT_SELECTION(desktop)->clear();
+				}
 			}
 			ret = TRUE;
 			sp_rubberband_stop ();
@@ -595,7 +599,10 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 				sp_rubberband_stop ();
 				nodeedit_rb_escaped = 1;
 			} else {
-				sp_nodepath_deselect (nc->nodepath); // deselect
+				if (nc->nodepath && nc->nodepath->selected)
+					sp_nodepath_deselect (nc->nodepath);
+				else 
+					SP_DT_SELECTION(desktop)->clear();
 			}
 			ret = TRUE;
 			break;
