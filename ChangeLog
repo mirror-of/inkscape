@@ -3,6 +3,21 @@
 	* src/widgets/font-selector.cpp: uint -> guint to fix
 	compile errors.
 
+	* src/desktop-snap.{cpp,h}: make snap functions aware of the
+	type of point they are snapping, so they can decide whether
+	to ignore it.
+
+	* src/arc-context.cpp, src/rect-context.cpp,
+	src/spiral-context.cpp, src/star-context.cpp,
+	src/draw-context.cpp, src/dyna-draw-context.cpp, src/nodepath.cpp,
+	src/selection-chemistry.cpp, src/seltrans.cpp:
+	temporarily update for changes to snapping API.
+
+	* src/sp-namedview.cpp, src/dialogs/desktop-properties.cpp:
+	adapt for small changes to Snapper API.
+
+	* src/select-context.cpp: use new snapping API.
+
 2004-08-17  Bryce Harrington  <bryce@bryceharrington.com>
 
 	*  nodepath.cpp path-chemistry.cpp selection-chemistry.cpp,
