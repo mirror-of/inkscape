@@ -803,11 +803,9 @@ new_objects_style (GtkWidget *vb, GtkTooltips *tt, const gchar *path)
 static GtkWidget *
 options_dropper ()
 {
-    GtkWidget *vb, *b;
-
     GtkTooltips *tt = gtk_tooltips_new();
 
-    vb = gtk_vbox_new (FALSE, VB_MARGIN);
+    GtkWidget *vb = gtk_vbox_new (FALSE, VB_MARGIN);
 
     selcue_checkbox (vb, tt, "tools.dropper");
     gradientdrag_checkbox (vb, tt, "tools.dropper");
