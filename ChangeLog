@@ -1,5 +1,10 @@
 2004-01-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnrtype/nr-rasterfont.cpp
+	(nr_rasterfont_generic_glyph_area_get,
+	nr_rasterfont_generic_glyph_mask_render): Suppress warning:
+	s/CLAMP/MIN/ if the type is unsigned and the lower bound is 0.
+
 	* src/helper/sp-canvas.cpp (paint): Cache canvas->{x0,y0} +
 	GTK_WIDGET(canvas)->allocation.{width,height}.
 	Remove some commented-out variables.

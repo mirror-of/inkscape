@@ -200,7 +200,7 @@ nr_rasterfont_generic_glyph_area_get (NRRasterFont *rf, unsigned int glyph, NRRe
 {
 	NRRFGlyphSlot *slot;
 
-	glyph = CLAMP (glyph, 0, rf->nglyphs);
+	glyph = MIN(glyph, rf->nglyphs);
 
 	slot = nr_rasterfont_ensure_glyph_slot (rf, glyph, NR_RASTERFONT_BBOX_FLAG | NR_RASTERFONT_GMAP_FLAG);
 
@@ -232,7 +232,7 @@ nr_rasterfont_generic_glyph_mask_render (NRRasterFont *rf, unsigned int glyph, N
 	int srs = 0;
 	NRPixBlock spb;
 
-	glyph = CLAMP (glyph, 0, rf->nglyphs);
+	glyph = MIN(glyph, rf->nglyphs);
 
 	slot = nr_rasterfont_ensure_glyph_slot (rf, glyph, NR_RASTERFONT_BBOX_FLAG | NR_RASTERFONT_GMAP_FLAG);
 
