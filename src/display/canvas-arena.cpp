@@ -337,7 +337,7 @@ sp_canvas_arena_event (SPCanvasItem *item, GdkEvent *event)
 	case GDK_ENTER_NOTIFY:
 		if (!arena->cursor) {
 			if (arena->active) {
-				g_warning ("Cursor entered to arena with already active item");
+				//g_warning ("Cursor entered to arena with already active item");
 				nr_object_unref ((NRObject *) arena->active);
 			}
 			arena->cursor = TRUE;
