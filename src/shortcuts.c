@@ -131,6 +131,8 @@ sp_shortcut_table_load (const unsigned char *name)
 	sp_shortcut_set_verb (GDK_Delete, SP_VERB_EDIT_DELETE, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_d, SP_VERB_EDIT_DUPLICATE, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_D, SP_VERB_EDIT_DUPLICATE, FALSE);
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_c, SP_VERB_OBJECT_TO_CURVE, TRUE);
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_C, SP_VERB_OBJECT_TO_CURVE, FALSE);
 	/* Selection */
 	sp_shortcut_set_verb (GDK_Home, SP_VERB_SELECTION_TO_FRONT, TRUE);
 	sp_shortcut_set_verb (GDK_KP_Home, SP_VERB_SELECTION_TO_FRONT, FALSE);
