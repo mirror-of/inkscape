@@ -1,3 +1,11 @@
+2004-01-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/dialogs/align.cpp (sp_quick_align_dialog): Switch to data-driven approach.
+	Mark some things as static.
+	(sp_quick_align_dialog_close) Remove unused function.
+	(sp_align_arrange_clicked) Change aligns constant array from ints to
+	doubles.  Adjust caller.
+
 2004-01-11  Iain <iain@prettypeople.org>
 
 	* src/modules/ps.cpp: Swap the Print and Cancel buttons around, and

@@ -64,7 +64,7 @@ enum {
 	SP_ALIGN_SELECTION,
 };
 
-enum {
+enum align_ixT {
 	SP_ALIGN_TOP_IN,
 	SP_ALIGN_TOP_OUT,
 	SP_ALIGN_RIGHT_IN,
@@ -91,17 +91,26 @@ enum {
 	SP_DISTRIBUTE_VDIST
 };
 
-static const gchar aligns[10][8] = {
-	{0, 0, 0, 2, 0, 0, 0, 2},
-	{0, 0, 0, 2, 0, 0, 2, 0},
-	{0, 2, 0, 0, 0, 2, 0, 0},
-	{0, 2, 0, 0, 2, 0, 0, 0},
-	{0, 0, 2, 0, 0, 0, 2, 0},
-	{0, 0, 2, 0, 0, 0, 0, 2},
-	{2, 0, 0, 0, 2, 0, 0, 0},
-	{2, 0, 0, 0, 0, 2, 0, 0},
-	{1, 1, 0, 0, 1, 1, 0, 0},
-	{0, 0, 1, 1, 0, 0, 1, 1}
+static struct AlignCoeffs {
+	double mx0;
+	double mx1;
+	double my0;
+	double my1;
+	double sx0;
+	double sx1;
+	double sy0;
+	double sy1;
+} const aligns[10] = {
+	{0., 0., 0., 1., 0., 0., 0., 1.},
+	{0., 0., 0., 1., 0., 0., 1., 0.},
+	{0., 1., 0., 0., 0., 1., 0., 0.},
+	{0., 1., 0., 0., 1., 0., 0., 0.},
+	{0., 0., 1., 0., 0., 0., 1., 0.},
+	{0., 0., 1., 0., 0., 0., 0., 1.},
+	{1., 0., 0., 0., 1., 0., 0., 0.},
+	{1., 0., 0., 0., 0., 1., 0., 0.},
+	{.5, .5, 0., 0., .5, .5, 0., 0.},
+	{0., 0., .5, .5, 0., 0., .5, .5}
 };
 
 static const gchar hdist[4][3] = {
@@ -118,11 +127,9 @@ static const gchar vdist[4][3] = {
 	{1, 1, 1}
 };
 
-void sp_align_arrange_clicked (GtkWidget *widget, const gchar *aligns);
-void sp_align_distribute_h_clicked (GtkWidget *widget, const gchar *layout);
-void sp_align_distribute_v_clicked (GtkWidget *widget, const gchar *layout);
-
-void sp_quick_align_dialog_close (void);
+static void sp_align_arrange_clicked (GtkWidget *widget, gconstpointer data);
+static void sp_align_distribute_h_clicked (GtkWidget *widget, const gchar *layout);
+static void sp_align_distribute_v_clicked (GtkWidget *widget, const gchar *layout);
 
 static GtkWidget *sp_align_dialog_create_base_menu (void);
 static void set_base (GtkMenuItem * menuitem, gpointer data);
@@ -219,37 +226,35 @@ sp_quick_align_dialog (void)
 		t = gtk_table_new (2, 5, TRUE);
 		gtk_box_pack_start (GTK_BOX (vb), t, FALSE, FALSE, 0);
 
-		sp_align_add_button (t, 0, 0, G_CALLBACK (sp_align_arrange_clicked), aligns[SP_ALIGN_LEFT_OUT], "al_left_out",
-				     _("Right side of aligned objects to left side of anchor"),
-				     tt);
-		sp_align_add_button (t, 1, 0, G_CALLBACK (sp_align_arrange_clicked), aligns[SP_ALIGN_LEFT_IN], "al_left_in",
-				     _("Left side of aligned objects to left side of anchor"),
-				     tt);
-		sp_align_add_button (t, 2, 0, G_CALLBACK (sp_align_arrange_clicked), aligns[SP_ALIGN_CENTER_HOR], "al_center_hor",
-				     _("Center horizontally"),
-				     tt);
-		sp_align_add_button (t, 3, 0, G_CALLBACK (sp_align_arrange_clicked), aligns[SP_ALIGN_RIGHT_IN], "al_right_in",
-				     _("Right side of aligned objects to right side of anchor"),
-				     tt);
-		sp_align_add_button (t, 4, 0, G_CALLBACK (sp_align_arrange_clicked), aligns[SP_ALIGN_RIGHT_OUT], "al_right_out",
-				     _("Left side of aligned objects to right side of anchor"),
-				     tt);
+		struct {
+			int col;
+			int row;
+			align_ixT ix;
+			gchar const *px;
+			gchar const *tip;
+		} const align_buttons[] = {
+			{0, 0, SP_ALIGN_LEFT_OUT, "al_left_out", _("Right side of aligned objects to left side of anchor")},
+			{1, 0, SP_ALIGN_LEFT_IN, "al_left_in", _("Left side of aligned objects to left side of anchor")},
+			{2, 0, SP_ALIGN_CENTER_HOR, "al_center_hor", _("Center horizontally")},
+			{3, 0, SP_ALIGN_RIGHT_IN, "al_right_in", _("Right side of aligned objects to right side of anchor")},
+			{4, 0, SP_ALIGN_RIGHT_OUT, "al_right_out", _("Left side of aligned objects to right side of anchor")},
 
-		sp_align_add_button (t, 0, 1, G_CALLBACK (sp_align_arrange_clicked), aligns[SP_ALIGN_TOP_OUT], "al_top_out",
-				     _("Bottom of aligned objects to top of anchor"),
-				     tt);
-		sp_align_add_button (t, 1, 1, G_CALLBACK (sp_align_arrange_clicked), aligns[SP_ALIGN_TOP_IN], "al_top_in",
-				     _("Top of aligned objects to top of anchor"),
-				     tt);
-		sp_align_add_button (t, 2, 1, G_CALLBACK (sp_align_arrange_clicked), aligns[SP_ALIGN_CENTER_VER], "al_center_ver",
-				     _("Center vertically"),
-				     tt);
-		sp_align_add_button (t, 3, 1, G_CALLBACK (sp_align_arrange_clicked), aligns[SP_ALIGN_BOTTOM_IN], "al_bottom_in",
-				     _("Bottom of aligned objects to bottom of anchor"),
-				     tt);
-		sp_align_add_button (t, 4, 1, G_CALLBACK (sp_align_arrange_clicked), aligns[SP_ALIGN_BOTTOM_OUT], "al_bottom_out",
-				     _("Top of aligned objects to bottom of anchor"),
-				     tt);
+			{0, 1, SP_ALIGN_TOP_OUT, "al_top_out", _("Bottom of aligned objects to top of anchor")},
+			{1, 1, SP_ALIGN_TOP_IN, "al_top_in", _("Top of aligned objects to top of anchor")},
+			{2, 1, SP_ALIGN_CENTER_VER, "al_center_ver", _("Center vertically")},
+			{3, 1, SP_ALIGN_BOTTOM_IN, "al_bottom_in", _("Bottom of aligned objects to bottom of anchor")},
+			{4, 1, SP_ALIGN_BOTTOM_OUT, "al_bottom_out", _("Top of aligned objects to bottom of anchor")},
+		};
+		for (unsigned i = 0 ; i < G_N_ELEMENTS(align_buttons) ; ++i) {
+			sp_align_add_button (t,
+					     align_buttons[i].col,
+					     align_buttons[i].row,
+					     G_CALLBACK(sp_align_arrange_clicked),
+					     &aligns[align_buttons[i].ix],
+					     align_buttons[i].px,
+					     align_buttons[i].tip,
+					     tt);
+		}
 
 		l = gtk_label_new (_("Align"));
 		gtk_widget_show (l);
@@ -304,14 +309,6 @@ sp_quick_align_dialog (void)
 	gtk_window_present ((GtkWindow *) dlg);
 }
 
-void
-sp_quick_align_dialog_close (void)
-{
-	g_assert (dlg != NULL);
-
-	if (GTK_WIDGET_VISIBLE (dlg)) gtk_widget_hide (dlg);
-}
-
 static void
 sp_align_add_menuitem (GtkWidget *menu, const gchar *label, GCallback handler, int value)
 {
@@ -350,11 +347,10 @@ set_base (GtkMenuItem *menuitem, gpointer data)
 }
 
 
-void
-sp_align_arrange_clicked (GtkWidget *widget, const gchar *aligns)
+static void
+sp_align_arrange_clicked (GtkWidget *widget, gconstpointer data)
 {
-	float mx0, mx1, my0, my1;
-	float sx0, sx1, sy0, sy1;
+	AlignCoeffs const &a = *static_cast<AlignCoeffs const *>(data);
 	SPDesktop * desktop;
 	SPSelection * selection;
 	GSList * slist;
@@ -363,15 +359,6 @@ sp_align_arrange_clicked (GtkWidget *widget, const gchar *aligns)
 	NRPoint mp, sp;
 	GSList * l;
 	gboolean changed;
-
-	mx0 = 0.5 * aligns[0];
-	mx1 = 0.5 * aligns[1];
-	my0 = 0.5 * aligns[2];
-	my1 = 0.5 * aligns[3];
-	sx0 = 0.5 * aligns[4];
-	sx1 = 0.5 * aligns[5];
-	sy0 = 0.5 * aligns[6];
-	sy1 = 0.5 * aligns[7];
 
 	desktop = SP_ACTIVE_DESKTOP;
 	if (!desktop) return;
@@ -387,28 +374,28 @@ sp_align_arrange_clicked (GtkWidget *widget, const gchar *aligns)
 	case SP_ALIGN_SMALLEST:
 		if (!slist->next) return;
 		slist = g_slist_copy (slist);
-		master = sp_quick_align_find_master (slist, (mx0 != 0.0) || (mx1 != 0.0));
+		master = sp_quick_align_find_master (slist, (a.mx0 != 0.0) || (a.mx1 != 0.0));
 		slist = g_slist_remove (slist, master);
 		sp_item_bbox_desktop (master, &b);
-		mp.x = mx0 * b.x0 + mx1 * b.x1;
-		mp.y = my0 * b.y0 + my1 * b.y1;
+		mp.x = a.mx0 * b.x0 + a.mx1 * b.x1;
+		mp.y = a.my0 * b.y0 + a.my1 * b.y1;
 		break;
 	case SP_ALIGN_PAGE:
 		slist = g_slist_copy (slist);
-		mp.x = mx1 * sp_document_width (SP_DT_DOCUMENT (desktop));
-		mp.y = my1 * sp_document_height (SP_DT_DOCUMENT (desktop));
+		mp.x = a.mx1 * sp_document_width (SP_DT_DOCUMENT (desktop));
+		mp.y = a.my1 * sp_document_height (SP_DT_DOCUMENT (desktop));
 		break;
 	case SP_ALIGN_DRAWING:
 		slist = g_slist_copy (slist);
 		sp_item_bbox_desktop ((SPItem *) sp_document_root (SP_DT_DOCUMENT (desktop)), &b);
-		mp.x = mx0 * b.x0 + mx1 * b.x1;
-		mp.y = my0 * b.y0 + my1 * b.y1;
+		mp.x = a.mx0 * b.x0 + a.mx1 * b.x1;
+		mp.y = a.my0 * b.y0 + a.my1 * b.y1;
 		break;
 	case SP_ALIGN_SELECTION:
 		slist = g_slist_copy (slist);
 		sp_selection_bbox (selection, &b);
-		mp.x = mx0 * b.x0 + mx1 * b.x1;
-		mp.y = my0 * b.y0 + my1 * b.y1;
+		mp.x = a.mx0 * b.x0 + a.mx1 * b.x1;
+		mp.y = a.my0 * b.y0 + a.my1 * b.y1;
 		break;
 	default:
 		g_assert_not_reached ();
@@ -420,8 +407,8 @@ sp_align_arrange_clicked (GtkWidget *widget, const gchar *aligns)
 	for (l = slist; l != NULL; l = l->next) {
 		item = (SPItem *) l->data;
 		sp_item_bbox_desktop (item, &b);
-		sp.x = sx0 * b.x0 + sx1 * b.x1;
-		sp.y = sy0 * b.y0 + sy1 * b.y1;
+		sp.x = a.sx0 * b.x0 + a.sx1 * b.x1;
+		sp.y = a.sy0 * b.y0 + a.sy1 * b.y1;
 
 		if ((fabs (mp.x - sp.x) > 1e-9) || (fabs (mp.y - sp.y) > 1e-9)) {
 			sp_item_move_rel (item, mp.x - sp.x, mp.y - sp.y);
@@ -513,14 +500,14 @@ sp_align_bbox_sort (const void *a, const void *b)
 	return 0;
 }
 
-void
+static void
 sp_align_distribute_h_clicked (GtkWidget *widget, const gchar *layout)
 {
 	SPDesktop *desktop;
 	SPSelection *selection;
 	const GSList *slist, *l;
 	struct _SPBBoxSort *bbs;
-	int len, pos;
+	int len;
 	unsigned int changed;
 
 	desktop = SP_ACTIVE_DESKTOP;
@@ -533,12 +520,14 @@ sp_align_distribute_h_clicked (GtkWidget *widget, const gchar *layout)
 
 	len = g_slist_length ((GSList *) slist);
 	bbs = g_new (struct _SPBBoxSort, len);
-	pos = 0;
-	for (l = slist; l != NULL; l = l->next) {
+	{
+	  unsigned pos = 0;
+	  for (l = slist; l != NULL; l = l->next) {
 		bbs[pos].item = SP_ITEM (l->data);
 		sp_item_bbox_desktop (bbs[pos].item, &bbs[pos].bbox);
 		bbs[pos].anchor = 0.5 * layout[0] * bbs[pos].bbox.x0 + 0.5 * layout[1] * bbs[pos].bbox.x1;
-		pos += 1;
+		++pos;
+	  }
 	}
 
 	qsort (bbs, len, sizeof (struct _SPBBoxSort), sp_align_bbox_sort);
@@ -585,14 +574,14 @@ sp_align_distribute_h_clicked (GtkWidget *widget, const gchar *layout)
 	}
 }
 
-void
+static void
 sp_align_distribute_v_clicked (GtkWidget *widget, const gchar *layout)
 {
 	SPDesktop *desktop;
 	SPSelection *selection;
 	const GSList *slist, *l;
 	struct _SPBBoxSort *bbs;
-	int len, pos;
+	int len;
 	unsigned int changed;
 
 	desktop = SP_ACTIVE_DESKTOP;
@@ -605,12 +594,14 @@ sp_align_distribute_v_clicked (GtkWidget *widget, const gchar *layout)
 
 	len = g_slist_length ((GSList *) slist);
 	bbs = g_new (struct _SPBBoxSort, len);
-	pos = 0;
-	for (l = slist; l != NULL; l = l->next) {
+	{
+	  unsigned pos = 0;
+	  for (l = slist; l != NULL; l = l->next) {
 		bbs[pos].item = SP_ITEM (l->data);
 		sp_item_bbox_desktop (bbs[pos].item, &bbs[pos].bbox);
 		bbs[pos].anchor = 0.5 * layout[0] * bbs[pos].bbox.y0 + 0.5 * layout[1] * bbs[pos].bbox.y1;
-		pos += 1;
+		++pos;
+	  }
 	}
 
 	qsort (bbs, len, sizeof (struct _SPBBoxSort), sp_align_bbox_sort);
