@@ -1,3 +1,9 @@
+2004-07-05  Kees Cook  <kees@outflux.net>
+
+	* src/dialogs/desktop-properties.cpp, src/dialogs/rdf.cpp,
+	  src/dialogs/rdf.h: added multiline data entry items, reduced
+	  overall width of the dialog, and created the license entry areas.
+
 2004-07-05  MenTaLguY <mental@rydia.net>
 
 	* src/desktop.cpp: comitted further work which gives us a

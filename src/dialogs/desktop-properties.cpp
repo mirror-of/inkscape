@@ -19,6 +19,7 @@
 #endif
 
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms.h>
 /*
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkhbox.h>
@@ -283,6 +284,15 @@ sp_doc_dialog_license_selected ( GtkWidget *widget, gpointer data )
 }
 
 /**
+ *  \brief Exists to stop tabs from working until we just GTK 2.4+
+ */
+gboolean text_stop_tab (GtkWidget * widget, GdkEventKey *event, gpointer user_data)
+{
+    if ( event->keyval == GDK_Tab ) return TRUE;
+    return FALSE;
+}
+
+/**
  *  \brief   Handles a dialog entry box changing and updates the XML
  *  \param   widget  The GtkEntry widget that changed
  *  \param   data    The pointer to the entity
@@ -298,16 +308,35 @@ sp_doc_dialog_work_entity_changed ( GtkWidget *widget, gpointer data )
     struct rdf_work_entity_t * entity = (struct rdf_work_entity_t *)data;
     g_assert ( entity != NULL );
 
-    GtkWidget *e = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg),
-                                                    entity->name));
+    GtkWidget *e;
+    GtkTextBuffer *buf;
+    GtkTextIter start, end;
+    gchar const * text = NULL;
 
-    if (rdf_set_work_entity( SP_ACTIVE_DOCUMENT, entity,
-                             (gchar*)gtk_entry_get_text ( GTK_ENTRY(e) ) ) ) {
+    switch ( entity->format ) {
+    case RDF_FORMAT_LINE:
+        e = GTK_WIDGET (widget);
+
+        text = (gchar const *)gtk_entry_get_text ( GTK_ENTRY (e) );
+        break;
+    case RDF_FORMAT_MULTILINE:
+        buf = GTK_TEXT_BUFFER (widget);
+
+        gtk_text_buffer_get_start_iter(buf, &start);
+        gtk_text_buffer_get_end_iter(buf, &end);
+
+        text = (gchar const *)gtk_text_buffer_get_text( buf, &start,
+                                                        &end, FALSE );
+        break;
+    default:
+        break;
+    }
+
+    if (rdf_set_work_entity( SP_ACTIVE_DOCUMENT, entity, text )) {
         /* if we changed an RDF entity, mark the document as changed */
         sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
     }
 }
-
 
 /**
  *\brief   Writes the change into the corresponding attribute of the document
@@ -514,42 +543,83 @@ sp_doc_dialog_paper_orientation_selected(GtkWidget *widget, gpointer data)
     gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(FALSE));
 }
 
-static void
+static GtkWidget *
 sp_doc_dialog_add_work_entity( struct rdf_work_entity_t * entity,
-                               GtkWidget * t, GtkTooltips * tt, int row )
+                                GtkWidget * t, GtkTooltips * tt, int row )
 {
     g_assert ( entity != NULL );
     g_assert ( t != NULL );
     g_assert ( tt != NULL );
 
-    if (dlg) {
-        /* translation code for including a ":" 
-        gchar * sep = _(":"); // label separator, the colon in "title:"
-        gint label_length=strlen(entity->title)+strlen(sep)+1;
-        gchar * label_text;
-        label_text = (gchar*)g_malloc(label_length);
-        snprintf(label_text,label_length,_("%s%s"),entity->title,sep);
-        */
+    GtkWidget * packable = NULL;
+    GObject * changable = NULL;
 
+    if (dlg) {
         GtkWidget *l = gtk_label_new (entity->title);
         gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
         gtk_widget_show (l);
-        //gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
         gtk_table_attach( GTK_TABLE(t), l, 0, 1, row, row+1,
                           (GtkAttachOptions)( GTK_SHRINK ),
                           (GtkAttachOptions)0, 0, 0 );
-        GtkWidget *e = gtk_entry_new ();
-        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), e, entity->tip, NULL );
-        gtk_widget_show (e);
-        g_signal_connect ( G_OBJECT (e), "changed",
-                           G_CALLBACK (sp_doc_dialog_work_entity_changed),
-                           (gpointer)(entity));
-        //gtk_box_pack_start (GTK_BOX (hb), e, TRUE, TRUE, 0);
-        gtk_table_attach( GTK_TABLE(t), e, 1, 2, row, row+1,
+
+        GtkWidget * e, * scroller, * view;
+        GtkTextBuffer * buf;
+
+        switch ( entity->format ) {
+        case RDF_FORMAT_LINE:
+            // single line entry
+            e = gtk_entry_new ();
+            gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), e, entity->tip, NULL );
+            gtk_widget_show (e);
+            gtk_object_set_data (GTK_OBJECT (dlg), entity->name, e);
+
+            packable = GTK_WIDGET (e);
+            changable = G_OBJECT (e);
+            break;
+        case RDF_FORMAT_MULTILINE:
+            scroller = gtk_scrolled_window_new ( NULL, NULL );
+            gtk_scrolled_window_set_policy ( GTK_SCROLLED_WINDOW (scroller),
+                                             GTK_POLICY_AUTOMATIC,
+                                             GTK_POLICY_AUTOMATIC );
+            gtk_scrolled_window_set_shadow_type ( GTK_SCROLLED_WINDOW(scroller),
+                                                  GTK_SHADOW_IN );
+            gtk_widget_show (scroller);
+
+            view = gtk_text_view_new ();
+            gtk_text_view_set_wrap_mode ( GTK_TEXT_VIEW (view), GTK_WRAP_WORD );
+// FIXME: available from GTK 2.4 on...
+//            gtk_text_view_set_accepts_tab ( GTK_TEXT_VIEW (view), FALSE );
+//          until then, just kill tabs...
+            g_signal_connect ( G_OBJECT (view), "key-press-event",
+                               G_CALLBACK (text_stop_tab), NULL );
+
+            buf = gtk_text_view_get_buffer (GTK_TEXT_VIEW(view));
+            // FIXME: looks like tool tips don't show up for GtkTextViews
+            gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), scroller, entity->tip, NULL );
+            gtk_widget_show (view);
+            gtk_container_add ( GTK_CONTAINER (scroller), view );
+
+            packable = GTK_WIDGET (scroller);
+            changable = G_OBJECT (buf);
+            break;
+        default:
+            break;
+        }
+
+        g_assert ( changable != NULL );
+        g_assert ( packable != NULL );
+
+        gtk_object_set_data ( GTK_OBJECT (dlg), entity->name, changable);
+        g_signal_connect( G_OBJECT(changable), "changed",
+                          G_CALLBACK(sp_doc_dialog_work_entity_changed),
+                          (gpointer)(entity));
+
+        gtk_table_attach( GTK_TABLE(t), packable, 1, 2, row, row+1,
                           (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
                           (GtkAttachOptions)0, 0, 0 );
-        gtk_object_set_data (GTK_OBJECT (dlg), entity->name, e);
     }
+
+    return packable;
 }
 
 void
@@ -876,32 +946,31 @@ sp_desktop_dialog(void)
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
 
         row=0;
+        /* add generic metadata entry areas */
         GtkTooltips * tip = gtk_tooltips_new ();
-        for (struct rdf_work_entity_t * entity = rdf_work_entities;
-             entity && entity->name; entity++) {
-            if ( entity->interactive ) {
-                sp_doc_dialog_add_work_entity( entity, t, tip, row++ );
+        struct rdf_work_entity_t * entity;
+        for (entity = rdf_work_entities; entity && entity->name; entity++) {
+            if ( entity->editable == RDF_EDIT_GENERIC ) {
+                sp_doc_dialog_add_work_entity ( entity, t, tip, row++ );
             }
         }
-        /* TODO: load the license info */
 
-        vb = gtk_vbox_new (FALSE, 4);
-        gtk_widget_show (vb);
-        gtk_table_attach ( GTK_TABLE (t), vb, 0, 2, row, row+1, 
+        /* add license selector pull-down */
+        f = gtk_frame_new(_("License"));
+        gtk_widget_show(f);
+
+        gtk_table_attach ( GTK_TABLE (t), f, 0, 2, row, row+1, 
                            (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
                            (GtkAttachOptions)0, 0, 0 );
         row++;
 
-        hb = gtk_hbox_new (FALSE, 4);
-        gtk_widget_show (hb);
-        gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
-        l = gtk_label_new (_("License"));
-        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-        gtk_widget_show (l);
-        gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
+        vb = gtk_vbox_new (FALSE, 4);
+        gtk_widget_show (vb);
+        gtk_container_add(GTK_CONTAINER(f), vb);
+
         om = gtk_option_menu_new ();
         gtk_widget_show (om);
-        gtk_box_pack_start (GTK_BOX (hb), om, TRUE, TRUE, 0);
+        gtk_box_pack_start (GTK_BOX (vb), om, TRUE, TRUE, 0);
         gtk_object_set_data (GTK_OBJECT (dlg), "licenses", om);
 
         m = gtk_menu_new ();
@@ -923,7 +992,25 @@ sp_desktop_dialog(void)
                            G_CALLBACK (sp_doc_dialog_license_selected), NULL);
         gtk_menu_prepend (GTK_MENU (m), i);
         gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
-        // end "Description" tab
+
+        t = gtk_table_new (5, 2, FALSE);
+        gtk_widget_show (t);
+        gtk_container_set_border_width (GTK_CONTAINER (t), 4);
+        gtk_table_set_row_spacings (GTK_TABLE (t), 4);
+        gtk_table_set_col_spacings (GTK_TABLE (t), 4);
+
+        gtk_box_pack_start (GTK_BOX (vb), t, TRUE, TRUE, 0);
+        
+        row = 0;
+        /* add license-specific metadata entry areas */
+        entity = rdf_find_entity ( "license_uri" );
+        GtkWidget * w = sp_doc_dialog_add_work_entity ( entity, t, tip, row++ );
+        gtk_widget_set_sensitive ( w, FALSE );
+        entity = rdf_find_entity ( "license_fragment" );
+        w = sp_doc_dialog_add_work_entity ( entity, t, tip, row++ );
+        gtk_widget_set_sensitive ( w, FALSE );
+
+        // end "Metadata" tab
 
 
         g_signal_connect( G_OBJECT(INKSCAPE), "activate_desktop",
@@ -971,15 +1058,29 @@ sp_dtw_deactivate_desktop(Inkscape::Application *inkscape,
 static void
 sp_doc_dialog_update_work_entity( struct rdf_work_entity_t * entity )
 {
-   if (dlg) {
-       g_assert ( entity != NULL );
+    if (dlg) {
+        g_assert ( entity != NULL );
 
-       GtkWidget *e = (GtkWidget *)g_object_get_data(G_OBJECT(dlg),
-                                                      entity->name);
+        GtkWidget *e;
+        GtkTextBuffer *buf;
 
-       const gchar * text = rdf_get_work_entity( SP_ACTIVE_DOCUMENT, entity );
-       gtk_entry_set_text ( GTK_ENTRY (e), text ? text : "" );
-   } 
+        const gchar * text = rdf_get_work_entity( SP_ACTIVE_DOCUMENT, entity );
+    
+        switch ( entity->format ) {
+        case RDF_FORMAT_LINE:
+            e = (GtkWidget *)g_object_get_data(G_OBJECT(dlg),
+                                               entity->name);
+            gtk_entry_set_text ( GTK_ENTRY (e), text ? text : "" );
+            break;
+        case RDF_FORMAT_MULTILINE:
+            buf = (GtkTextBuffer *)g_object_get_data(G_OBJECT(dlg),
+                                                     entity->name);
+            gtk_text_buffer_set_text ( buf, text ? text : "", -1 );
+            break;
+        default:
+            break;
+        }
+    } 
 }
 
 static void
@@ -1178,11 +1279,11 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         /* load the RDF entities */
         for (struct rdf_work_entity_t * entity = rdf_work_entities;
              entity && entity->name; entity++) {
-            if ( entity->interactive ) {
+            if ( entity->editable == RDF_EDIT_GENERIC ) {
                 sp_doc_dialog_update_work_entity( entity );
             }
         }
-        /* TODO: load the license info */
+        /* TODO: match & load the license info */
 
         gtk_object_set_data(GTK_OBJECT(dialog), "update", GINT_TO_POINTER(FALSE));
     }

@@ -182,67 +182,71 @@ struct rdf_license_t rdf_licenses [] = {
 
 struct rdf_work_entity_t rdf_work_entities [] = {
     { "title", N_("Title"), "dc:title", RDF_CONTENT,
-      N_("Name by which this document is formally known."), TRUE,
+      N_("Name by which this document is formally known."), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     { "date", N_("Date"), "dc:date", RDF_CONTENT,
-      N_("Date associated with the creation of this document (YYYY-MM-DD)."), TRUE,
+      N_("Date associated with the creation of this document (YYYY-MM-DD)."), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     { "format", N_("Format"), "dc:format", RDF_CONTENT,
-      N_("The physical or digital manifestation of this document (MIME type)."), FALSE,
+      N_("The physical or digital manifestation of this document (MIME type)."), RDF_FORMAT_LINE, RDF_EDIT_HARDCODED,
     },
     { "type", N_("Type"), "dc:type", RDF_RESOURCE,
-      N_("Type of document (DCMI Type)."), FALSE,
+      N_("Type of document (DCMI Type)."), RDF_FORMAT_LINE, RDF_EDIT_HARDCODED,
     },
 
     { "creator", N_("Creator"), "dc:creator", RDF_AGENT,
-      N_("Name of entity primarily responsible for making the content of this document."), TRUE,
+      N_("Name of entity primarily responsible for making the content of this document."), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     { "rights", N_("Rights"), "dc:rights", RDF_AGENT,
-      N_("Name of entity with rights to the Intellectual Property of this document."), TRUE,
+      N_("Name of entity with rights to the Intellectual Property of this document."), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     { "publisher", N_("Publisher"), "dc:publisher", RDF_AGENT,
-      N_("Name of entity responsible for making this document available."), TRUE,
-    },
-
-    /* this should be a multi-line tag */
-    { "contributor", N_("Contributors"), "dc:contributor", RDF_AGENT,
-      N_("Names of entities responsible for making contributions to the content of this document."), TRUE,
+      N_("Name of entity responsible for making this document available."), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
 
     { "identifier", N_("Identifier"), "dc:identifier", RDF_CONTENT,
-      N_("Unique URI to reference this document."), TRUE,
+      N_("Unique URI to reference this document."), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     { "source", N_("Source"), "dc:source", RDF_CONTENT,
-      N_("Unique URI to reference the source of this document."), TRUE,
+      N_("Unique URI to reference the source of this document."), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     { "relation", N_("Relation"), "dc:relation", RDF_CONTENT,
-      N_("Unique URI to a related document."), TRUE,
+      N_("Unique URI to a related document."), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     { "language", N_("Language"), "dc:language", RDF_CONTENT,
-      N_("Two-letter language tag with optional subtags for the language of this document.  (e.g. 'en-GB')"), TRUE,
+      N_("Two-letter language tag with optional subtags for the language of this document.  (e.g. 'en-GB')"), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     { "subject", N_("Keywords"), "dc:subject", RDF_CONTENT,
-      N_("The topic of this document as key words, phrases, or classification."), TRUE,
+      N_("The topic of this document as key words, phrases, or classification."), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
     // TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
     // For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
     { "coverage", N_("Coverage"), "dc:coverage", RDF_CONTENT,
-      N_("Extent or scope of this document."), TRUE,
+      N_("Extent or scope of this document."), RDF_FORMAT_LINE, RDF_EDIT_GENERIC,
     },
 
-    /* this should be a multi-line tag */
     { "description", N_("Description"), "dc:description", RDF_CONTENT,
-      N_("A short account of the content of this document."), TRUE,
+      N_("A short account of the content of this document."), RDF_FORMAT_MULTILINE, RDF_EDIT_GENERIC,
     },
 
-    /* this uses an element */
-    { "license", N_("License"), "cc:license", RDF_RESOURCE,
+    // FIXME: need to handle 1 agent per line of input
+    { "contributor", N_("Contributors"), "dc:contributor", RDF_AGENT,
+      N_("Names of entities responsible for making contributions to the content of this document."), RDF_FORMAT_MULTILINE, RDF_EDIT_GENERIC,
+    },
+
+    // TRANSLATORS: URL to a page that defines the license for the document
+    { "license_uri", N_("URI"), "cc:license", RDF_RESOURCE,
       // TRANSLATORS: this is where you put a URL to a page that defines the license
-      N_("URI to this document's license's namespace definition."), FALSE,
+      N_("URI to this document's license's namespace definition."), RDF_FORMAT_LINE, RDF_EDIT_SPECIAL,
+    },
+
+      // TRANSLATORS: fragment of XML representing the license of the document
+    { "license_fragment", N_("Fragment"), NULL, RDF_CONTENT,
+      N_("XML fragment for the RDF 'License' section."), RDF_FORMAT_MULTILINE, RDF_EDIT_SPECIAL,
     },
     
     { NULL, NULL, NULL, RDF_CONTENT,
-      NULL, FALSE,
+      NULL, RDF_FORMAT_LINE, RDF_EDIT_HARDCODED,
     }
 };
 
@@ -606,7 +610,7 @@ rdf_set_work_entity(SPDocument * doc, struct rdf_work_entity_t * entity,
     g_return_val_if_fail ( text   != NULL, 0 );
 
     /*
-    printf("need to change '%s' (%s) to '%s'\n",
+    printf("changing '%s' (%s) to '%s'\n",
         entity->title,
         entity->tag,
         text);

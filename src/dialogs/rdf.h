@@ -21,10 +21,28 @@ struct rdf_license_t {
 
 extern rdf_license_t rdf_licenses [];
 
+/**
+ * \brief Describes how a given RDF entity is stored in XML
+ */
 enum RDFType {
-    RDF_CONTENT,
-    RDF_AGENT,
-    RDF_RESOURCE,
+    RDF_CONTENT,  // direct between-XML-tags content
+    RDF_AGENT,    // requires the "Agent" hierarchy before doing content
+    RDF_RESOURCE, // stored in "rdf:resource" element
+};
+
+/**
+ * \brief Describes how a given RDF entity should be edited
+ */
+enum RDF_Format {
+    RDF_FORMAT_LINE,          // uses single line data (GtkEntry)
+    RDF_FORMAT_MULTILINE,     // uses multiline data (GtkTextView)
+    RDF_FORMAT_SPECIAL,       // uses some other edit methods
+};
+
+enum RDF_Editable {
+    RDF_EDIT_GENERIC,       // editable via generic widgets
+    RDF_EDIT_SPECIAL,       // special widgets are needed
+    RDF_EDIT_HARDCODED,     // isn't editable
 };
 
 /**
@@ -32,11 +50,12 @@ enum RDFType {
  */
 struct rdf_work_entity_t {
     char   *name;       /* unique name of this entity for internal reference */
-    gchar  *title;      /* localized name of this entity for data entry labels */
+    gchar  *title;      /* localized title of this entity for data entry */
     gchar  *tag;        /* namespace tag for the RDF/Work element */
     RDFType datatype;   /* how to extract/inject the RDF information */
     gchar  *tip;        /* tool tip to explain the meaning of the entity */
-    bool    interactive;/* is this a directly editable entity? */
+    RDF_Format format;  /* in what format is this data edited? */
+    RDF_Editable editable;/* in what way is the data editable? */
 };
 
 extern rdf_work_entity_t rdf_work_entities [];
