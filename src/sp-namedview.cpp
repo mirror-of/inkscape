@@ -527,17 +527,22 @@ sp_namedview_window_from_document (SPDesktop *desktop)
 	GtkWindow *win = GTK_WINDOW(gtk_object_get_data (GTK_OBJECT(desktop->owner), "window"));
 	gint save_geometry = prefs_get_int_attribute ("options.savewindowgeometry", "value", 0);
 
-	if (nv->zoom != 0 && nv->cx != HUGE_VAL && nv->cy != HUGE_VAL) {
-		sp_desktop_zoom_absolute (desktop, nv->cx, nv->cy, nv->zoom);
-	} 
+	// restore window size and position
 	if (save_geometry && win) {
 		if (nv->window_width != -1 && nv->window_height != -1) {
-			gtk_window_resize (win, nv->window_width, nv->window_height);
+			gtk_window_set_default_size (win, nv->window_width, nv->window_height);
+			gtk_window_reshow_with_initial_size (win);
 		}
 		if (nv->window_x != -1 && nv->window_y != -1) {
 			gtk_window_move (win, nv->window_x, nv->window_y);
 		}
 	}
+
+	// restore zoom and view
+	if (nv->zoom != 0 && nv->cx != HUGE_VAL && nv->cy != HUGE_VAL) {
+		sp_desktop_zoom_absolute (desktop, nv->cx, nv->cy, nv->zoom);
+	} 
+
 	// cancel any history of zooms up to this point
 	if (desktop->zooms_past) {
 		g_list_free (desktop->zooms_past);
