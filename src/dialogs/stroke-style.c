@@ -29,11 +29,9 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtkframe.h>
 #include <gtk/gtktable.h>
-#include <gtk/gtklabel.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkradiobutton.h>
-#include <gtk/gtkspinbutton.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkiconfactory.h>
 
@@ -53,6 +51,7 @@
 #include "../sp-item.h"
 #include "../inkscape.h"
 #include "../inkscape-stock.h"
+#include "dialog-events.h"
 
 #include "stroke-style.h"
 
@@ -568,6 +567,9 @@ sp_stroke_style_line_widget_new (void)
 	gtk_object_set_data (GTK_OBJECT (spw), "width", a);
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.1, 2);
 	gtk_widget_show (sb);
+
+	sp_dialog_defocus_on_enter (sb); 
+
 	gtk_box_pack_start (GTK_BOX (hb), sb, TRUE, TRUE, 0);
 	us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
 	gtk_widget_show (us);

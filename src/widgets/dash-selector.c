@@ -13,6 +13,9 @@
 
 #define DASH_PREVIEW_WIDTH 2
 
+#include <config.h>
+#include <string.h>
+#include <glib.h>
 #include <string.h>
 #include <libnr/nr-values.h>
 #include <libnr/nr-macros.h>
@@ -23,8 +26,20 @@
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkpixmap.h>
 #include <gtk/gtkspinbutton.h>
+#include <gtk/gtkstock.h>
+#include <gtk/gtkadjustment.h>
+#include <gtk/gtkmisc.h>
+#include <gtk/gtklabel.h>
+#include <gtk/gtkframe.h>
+#include <gtk/gtktable.h>
+#include <gtk/gtkradiobutton.h>
+#include <gtk/gtkimage.h>
+#include <gtk/gtkiconfactory.h>
+
 #include "../xml/repr-private.h"
 #include "../style.h"
+#include "../dialogs/dialog-events.h"
+
 #include "dash-selector.h"
 
 typedef struct _SPDashSelectorClass SPDashSelectorClass;
@@ -122,6 +137,7 @@ sp_dash_selector_init (SPDashSelector *dsel)
 
 	dsel->offset = gtk_adjustment_new (0.0, 0.0, 10.0, 0.1, 1.0, 1.0);
 	sb = gtk_spin_button_new (GTK_ADJUSTMENT (dsel->offset), 0.1, 2);
+	sp_dialog_defocus_on_enter (sb); 
 	gtk_widget_show (sb);
 	gtk_box_pack_start (GTK_BOX (dsel), sb, FALSE, FALSE, 0);
 	gtk_signal_connect (dsel->offset, "value_changed", GTK_SIGNAL_FUNC (sp_dash_selector_offset_value_changed), dsel);
