@@ -47,6 +47,7 @@ struct _SPTextContext {
 	gint timeout;
 	guint show : 1;
 	guint phase : 1;
+	guint nascent_object : 1;
 
 	/* Preedit String */
 	gchar* preedit_string;

@@ -126,6 +126,7 @@ sp_text_context_init (SPTextContext *tc)
 	tc->timeout = 0;
 	tc->show = FALSE;
 	tc->phase = 0;
+	tc->nascent_object = 0;
 
 	tc->preedit_string = NULL;
 }
@@ -321,6 +322,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			/* Cursor */
 			tc->show = TRUE;
 			tc->phase = 1;
+			tc->nascent_object = 1; // new object was just created
 			sp_canvas_item_show (tc->cursor);
 			sp_desktop_w2d_xy_point (ec->desktop, &dtp, (float) event->button.x, (float) event->button.y);
 			sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), dtp.x, dtp.y, dtp.x + 32, dtp.y);
@@ -329,120 +331,131 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		}
 		break;
 	case GDK_KEY_PRESS:
-		if (!tc->unimode && tc->imc && gtk_im_context_filter_keypress (tc->imc, (GdkEventKey*) event)) {
-			return TRUE;
-		}
+		if (!sp_selection_is_empty (SP_DT_SELECTION (ec->desktop)) || (tc->nascent_object)) {
+			// there is a selection, or a new object was just created
 
-		if (!tc->text) sp_text_context_setup_text (tc);
-		else sp_text_context_preedit_reset (tc);
-		g_assert (tc->text != NULL);
-		style = SP_OBJECT_STYLE (tc->text);
+			tc->nascent_object = 0; // we don't need it anymore, because now sp_selection_is_empty != NULL
 
-		if (event->key.state & GDK_CONTROL_MASK) {
-			switch (event->key.keyval) {
-			case GDK_space:
-				/* Non-break space */
-				tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, "\302\240", TRUE);
-				sp_document_done (SP_DT_DOCUMENT (ec->desktop));
-				return TRUE;
-			case GDK_U:
-			case GDK_u:
-				/* fixme: We need indication etc. for unicode mode */
-				if (tc->unimode) {
-					tc->unimode = FALSE;
-				} else {
-					tc->unimode = TRUE;
-					tc->unipos = 0;
-				}
-				if (tc->imc) {
-					gtk_im_context_reset (tc->imc);
-				}
-                                return TRUE;
-			default:
-				break;
-			}
-		} else {
-			if (tc->unimode && isxdigit (event->key.keyval)) {
-				tc->uni[tc->unipos] = event->key.keyval;
-				if (tc->unipos == 3) {
-					gchar u[7];
-					guint uv, len;
-					sscanf (tc->uni, "%x", &uv);
-					len = g_unichar_to_utf8 (uv, u);
-					u[len] = '\0';
-					tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, u, FALSE);
-					tc->unipos = 0;
-					sp_document_done (SP_DT_DOCUMENT (ec->desktop));
-					return TRUE;
-				} else {
-					tc->unipos += 1;
-					return TRUE;
-				}
-			}
+			if (tc->unimode || !tc->imc || !gtk_im_context_filter_keypress (tc->imc, (GdkEventKey*) event)) {
+				//IM did not consumed the key, or we're in unimode
 
-			/* Neither unimode nor IM consumed key */
-			switch (event->key.keyval) {
-			case GDK_Return:
-				sp_text_insert_line (SP_TEXT (tc->text), tc->ipos);
-				tc->ipos += 1;
-				sp_document_done (SP_DT_DOCUMENT (ec->desktop));
-				return TRUE;
-			case GDK_BackSpace:
-				tc->ipos = sp_text_delete (SP_TEXT (tc->text), MAX (tc->ipos - 1, 0), tc->ipos);
-				sp_document_done (SP_DT_DOCUMENT (ec->desktop));
-				return TRUE;
-			case GDK_Delete:
-				tc->ipos = sp_text_delete (SP_TEXT (tc->text), tc->ipos, MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text))));
-				sp_document_done (SP_DT_DOCUMENT (ec->desktop));
-				return TRUE;
-			case GDK_Left:
-				if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-					tc->ipos = sp_text_down (SP_TEXT (tc->text), tc->ipos);
+				if (!tc->text) sp_text_context_setup_text (tc);
+				else sp_text_context_preedit_reset (tc);
+				g_assert (tc->text != NULL);
+				style = SP_OBJECT_STYLE (tc->text);
+
+				if (MOD__CTRL_ONLY) {
+					switch (event->key.keyval) {
+					case GDK_space:
+						/* Non-break space */
+						tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, "\302\240");
+						sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+						return TRUE;
+					case GDK_U:
+					case GDK_u:
+						/* fixme: We need indication etc. for unicode mode */
+						if (tc->unimode) {
+							tc->unimode = FALSE;
+						} else {
+							tc->unimode = TRUE;
+							tc->unipos = 0;
+						}
+						if (tc->imc) {
+							gtk_im_context_reset (tc->imc);
+						}
+						return TRUE;
+					default:
+						break;
+					}
 				} else {
-					tc->ipos = MAX (tc->ipos - 1, 0);
+					if (tc->unimode) {
+						if (isxdigit ((guchar) event->key.keyval)) {
+							tc->uni[tc->unipos] = event->key.keyval;
+							if (tc->unipos == 3) {
+								gchar u[7];
+								guint uv, len;
+								sscanf (tc->uni, "%x", &uv);
+								len = g_unichar_to_utf8 (uv, u);
+								u[len] = '\0';
+								tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, u);
+								tc->unipos = 0;
+								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+								return TRUE;
+							} else {
+								tc->unipos += 1;
+								return TRUE;
+							}
+						} else { // non-hex-digit, canceling unimode
+							tc->unimode = FALSE;
+							gtk_im_context_reset (tc->imc);
+							return TRUE;
+						}
+					}
+
+					/* Neither unimode nor IM consumed key */
+					switch (event->key.keyval) {
+					case GDK_Return:
+						sp_text_insert_line (SP_TEXT (tc->text), tc->ipos);
+						tc->ipos += 1;
+						sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+						return TRUE;
+					case GDK_BackSpace:
+						tc->ipos = sp_text_delete (SP_TEXT (tc->text), MAX (tc->ipos - 1, 0), tc->ipos);
+						sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+						return TRUE;
+					case GDK_Delete:
+						tc->ipos = sp_text_delete (SP_TEXT (tc->text), tc->ipos, MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text))));
+						sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+						return TRUE;
+					case GDK_Left:
+						if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+							tc->ipos = sp_text_down (SP_TEXT (tc->text), tc->ipos);
+						} else {
+							tc->ipos = MAX (tc->ipos - 1, 0);
+						}
+						sp_text_context_update_cursor (tc);
+						return TRUE;
+					case GDK_Right:
+						if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+							tc->ipos = sp_text_up (SP_TEXT (tc->text), tc->ipos);
+						} else {
+							tc->ipos = MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text)));
+						}
+						sp_text_context_update_cursor (tc);
+						return TRUE;
+					case GDK_Up:
+						if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+							tc->ipos = MAX (tc->ipos - 1, 0);
+						} else {
+							tc->ipos = sp_text_up (SP_TEXT (tc->text), tc->ipos);
+						}
+						sp_text_context_update_cursor (tc);
+						return TRUE;
+					case GDK_Down:
+						if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+							tc->ipos = MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text)));
+						} else {
+							tc->ipos = sp_text_down (SP_TEXT (tc->text), tc->ipos);
+						}
+						sp_text_context_update_cursor (tc);
+						return TRUE;
+					case GDK_Home:
+						tc->ipos = sp_text_start_of_line (SP_TEXT (tc->text), tc->ipos);
+						sp_text_context_update_cursor (tc);
+						return TRUE;
+					case GDK_End:
+						tc->ipos = sp_text_end_of_line (SP_TEXT (tc->text), tc->ipos);
+						sp_text_context_update_cursor (tc);
+						return TRUE;
+					case GDK_Escape:
+						sp_selection_empty (SP_DT_SELECTION (ec->desktop));
+						return TRUE;
+					default:
+						break;
+					}
 				}
-				sp_text_context_update_cursor (tc);
-				return TRUE;
-			case GDK_Right:
-				if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-					tc->ipos = sp_text_up (SP_TEXT (tc->text), tc->ipos);
-				} else {
-					tc->ipos = MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text)));
-				}
-				sp_text_context_update_cursor (tc);
-				return TRUE;
-			case GDK_Up:
-				if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-					tc->ipos = MAX (tc->ipos - 1, 0);
-				} else {
-					tc->ipos = sp_text_up (SP_TEXT (tc->text), tc->ipos);
-				}
-				sp_text_context_update_cursor (tc);
-				return TRUE;
-			case GDK_Down:
-				if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-					tc->ipos = MIN (tc->ipos + 1, sp_text_get_length (SP_TEXT (tc->text)));
-				} else {
-					tc->ipos = sp_text_down (SP_TEXT (tc->text), tc->ipos);
-				}
-				sp_text_context_update_cursor (tc);
-				return TRUE;
-			case GDK_Home:
-				tc->ipos = sp_text_start_of_line (SP_TEXT (tc->text), tc->ipos);
-				sp_text_context_update_cursor (tc);
-				return TRUE;
-			case GDK_End:
-				tc->ipos = sp_text_end_of_line (SP_TEXT (tc->text), tc->ipos);
-				sp_text_context_update_cursor (tc);
-				return TRUE;
-			case GDK_Escape:
-				sp_selection_empty (SP_DT_SELECTION (ec->desktop));
-				return TRUE;
-			default:
-				return FALSE;
-				break;
-			}
-		}
+			} else return TRUE; // return the "I took care of it" value if it was consumed by the IM
+		} // do nothing if there's no object to type in - the key will be sent to parent context
 		break;
 	case GDK_KEY_RELEASE:
 		if (!tc->unimode && tc->imc && gtk_im_context_filter_keypress (tc->imc, (GdkEventKey*) event)) {
@@ -453,10 +466,11 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		break;
 	}
 
-	if (((SPEventContextClass *) parent_class)->root_handler) {
-		return ((SPEventContextClass *) parent_class)->root_handler (ec, event);
+	// if nobody consumed it so far
+	if (((SPEventContextClass *) parent_class)->root_handler) { // and there's a handler in parent context,
+		return ((SPEventContextClass *) parent_class)->root_handler (ec, event); // send event to parent
 	} else {
-		return FALSE;
+		return FALSE; // return "I did nothing" value so that global shortcuts can be activated
 	}
 }
 
@@ -577,7 +591,7 @@ sptc_commit (GtkIMContext *imc, gchar *string, SPTextContext *tc)
 
 	if (!tc->preedit_string ) sp_text_context_preedit_reset (tc);
 
-	tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, string, TRUE);
+	tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, string);
 
 	sp_document_done (SP_OBJECT_DOCUMENT (tc->text));
 }
@@ -593,7 +607,7 @@ sptc_preedit_changed (GtkIMContext *imc, SPTextContext *tc)
 					   &tc->preedit_string, NULL,
 					   &cursor_pos);
 	if(tc->preedit_string != NULL) {
-		sp_text_insert (SP_TEXT (tc->text), tc->ipos, tc->preedit_string, FALSE);
+		sp_text_insert (SP_TEXT (tc->text), tc->ipos, tc->preedit_string);
 	}
 	sp_document_done (SP_OBJECT_DOCUMENT (tc->text));
 }
