@@ -31,6 +31,7 @@
 #include <file.h>
 #include <sp-object.h>
 #include <sp-namedview.h>
+#include "io/sys.h"
 
 #include "../system.h"
 

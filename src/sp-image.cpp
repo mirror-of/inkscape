@@ -36,6 +36,7 @@
 #include <xml/repr.h>
 
 #include "file.h"
+#include "io/sys.h"
 #include <png.h>
 
 /*

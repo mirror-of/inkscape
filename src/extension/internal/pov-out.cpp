@@ -37,7 +37,7 @@
 #include <vector>
 #include <string>
 
-#include "file.h"
+#include "io/sys.h"
 
 namespace Inkscape {
 namespace Extension {

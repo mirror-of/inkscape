@@ -1,3 +1,14 @@
+2005-01-29  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/file.h, src/file.cpp, src/inkscape.cpp, src/sp-image.cpp,
+	  src/extension/implementation/script.cpp,
+	  src/extension/internal/pov-out.cpp, src/extension/internal/ps.cpp,
+	  src/extension/plugin/gimpgrad.cpp, src/helper/png-write.cpp,
+	  src/io/Makefile_insert, src/io/sys.h, src/io/sys.cpp,
+	  src/trace/imagemap.cpp, src/xml/repr-io.cpp:
+
+	  Refactored open routine to better location.
+
 2004-01-28  Kees Cook  <kees@outflux.net>
 
 	* configure.ac: added test for libgc 6.4 or better.

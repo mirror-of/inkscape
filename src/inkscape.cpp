@@ -61,6 +61,7 @@
 #include "inkscape-private.h"
 #include "prefs-utils.h"
 #include "xml/repr.h"
+#include "io/sys.h"
 
 #include "extension/init.h"
 

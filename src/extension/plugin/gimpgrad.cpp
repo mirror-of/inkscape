@@ -17,7 +17,7 @@
 #include <extension/implementation/implementation.h>
 #include <color-rgba.h>
 #include <document.h>
-#include "file.h"
+#include "io/sys.h"
 
 namespace Inkscape {
 namespace Extension {

@@ -28,7 +28,7 @@
 #include "xml/repr.h"
 #include "xml/sp-repr-attr.h"
 
-#include "file.h"
+#include "io/sys.h"
 
 #include <map>
 #include <glibmm/ustring.h>

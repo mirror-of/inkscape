@@ -158,9 +158,6 @@ void sp_file_vacuum ();
 namespace Inkscape {
 namespace IO {
 
-void dump_fopen_call( char const *utf8name, char const *id );
-FILE *fopen_utf8name( char const *utf8name, char const *mode );
-
 void fixupHrefs( SPDocument *doc, const gchar *uri, gboolean spns );
 
 }

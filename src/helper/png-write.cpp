@@ -17,7 +17,7 @@
 #include <png.h>
 #include <glib.h>
 #include "png-write.h"
-#include "file.h"
+#include "io/sys.h"
 
 /* This is an example of how to use libpng to read and write PNG files.
  * The file libpng.txt is much more verbose then this.  If you have not

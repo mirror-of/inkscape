@@ -5,7 +5,7 @@
 
 #include <glib.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <file.h>
+#include "io/sys.h"
 
 /*#########################################################################
 ### G R A Y   M A P
