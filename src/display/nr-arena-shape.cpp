@@ -108,8 +108,8 @@ nr_arena_shape_init (NRArenaShape *shape)
 
     shape->delayed_shp = false;
 
-    shape->approx_bbox.x0 = shape->approx_bbox.y0 = 0.0;
-    shape->approx_bbox.x1 = shape->approx_bbox.y1 = 0.0;
+    shape->approx_bbox.x0 = shape->approx_bbox.y0 = 0;
+    shape->approx_bbox.x1 = shape->approx_bbox.y1 = 0;
     nr_matrix_set_identity(&shape->cached_fctm);
     nr_matrix_set_identity(&shape->cached_sctm);
 
