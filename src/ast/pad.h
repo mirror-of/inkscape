@@ -9,21 +9,28 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifndef SEEN_INKSCAPE_AST_STRING_NODE_H
-#define SEEN_INKSCAPE_AST_STRING_NODE_H
+#ifndef SEEN_INKSCAPE_AST_PAD_H
+#define SEEN_INKSCAPE_AST_PAD_H
 
-#include "ast/string.h"
-#include "ast/leaf-node.h"
+#include "ast/invalid-branch.h"
+#include "ast/invalid-transformation.h"
+#include "ast/gc.h"
 
 namespace Inkscape {
 namespace AST {
 
-class StringNode : public LeafNode<String> {
-public:
-    explicit StringNode(String const &value) : LeafNode<String>(value) {}
+class Reference;
 
-protected:
-    String const &_toString() const { return value(); }
+class Pad : public FinalizedGCObject<::NoGC> {
+public:
+    Pad(Pad &parent, BranchName const &branch, unsigned pos);
+    Pad(Node const &node);
+
+    void Pad
+    
+private:
+    Pad *_parent;
+    Reference const *_ref;
 };
 
 };

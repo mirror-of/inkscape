@@ -9,23 +9,19 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifndef SEEN_INKSCAPE_AST_STRING_NODE_H
-#define SEEN_INKSCAPE_AST_STRING_NODE_H
+#ifndef SEEN_INKSCAPE_AST_XML_BASE_H
+#define SEEN_INKSCAPE_AST_XML_BASE_H
 
-#include "ast/string.h"
-#include "ast/leaf-node.h"
+#include <cstring>
+#include "ast/node.h"
 
 namespace Inkscape {
 namespace AST {
+namespace XML {
 
-class StringNode : public LeafNode<String> {
-public:
-    explicit StringNode(String const &value) : LeafNode<String>(value) {}
+class Base : public Node {};
 
-protected:
-    String const &_toString() const { return value(); }
 };
-
 };
 };
 

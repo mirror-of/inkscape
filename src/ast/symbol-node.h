@@ -12,24 +12,21 @@
 #ifndef SEEN_INKSCAPE_AST_STRING_NODE_H
 #define SEEN_INKSCAPE_AST_STRING_NODE_H
 
-#include <cstring>
-#include "ast/node.h"
 #include "ast/symbol.h"
+#include "ast/leaf-node.h"
 
 namespace Inkscape {
 namespace AST {
 
-class SymbolNode : public Node {
+class SymbolNode : public LeafNode<Symbol> {
 public:
-    explicit SymbolNode(Symbol symbol) : _symbol(symbol) {}
+    explicit SymbolNode(Symbol const &symbol) : LeafNode<Symbol>(symbol) {}
 
-    Symbol symbol() const { return _symbol; }
-    String const &toString() const { return _symbol.toString(); }
-
-private:
-    void operator=(SymbolNode const &);
-
-    Symbol _symbol;
+protected:
+    void _write(std::ostream &os) const {
+        os << value().toString();
+    }
+    String const &_toString() const { return value().toString(); }
 };
 
 };

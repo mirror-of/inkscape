@@ -101,6 +101,9 @@ public:
         return reinterpret_cast<xmlChar const *>(toPointer());
     }
 
+protected:
+    CString();
+
 private:
     void operator=(CString const &);
 

@@ -13,14 +13,13 @@
 #define SEEN_INKSCAPE_AST_STRING_H
 
 #include <sys/types.h>
-#include <gc/gc_cpp.h>
-#include <new>
+#include "ast/gc.h"
 #include "ast/c-string.h"
 
 namespace Inkscape {
 namespace AST {
 
-struct String : public gc {
+struct String : public SimpleGCObject<> {
 public:
     explicit String(CString const &string)
     : _string(string), _bytes(0), _chars(0) {}

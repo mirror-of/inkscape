@@ -13,7 +13,6 @@
 #define SEEN_INKSCAPE_AST_PATH_FNS_H
 
 #include "ast/path.h"
-#include "ast/node.h"
 
 namespace Inkscape {
 namespace AST {

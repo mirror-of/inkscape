@@ -64,7 +64,9 @@ String const &lookup_symbol(T const &string) throw(std::bad_alloc) {
     return entry->string();
 }
 
-};
+Symbol::Symbol(char const *string) throw(NullPointer, std::bad_alloc) {
+    _string = &lookup_symbol(CString::create(string));
+}
 
 Symbol::Symbol(CString const &string) throw(std::bad_alloc) {
     _string = &lookup_symbol(string);
@@ -74,9 +76,7 @@ Symbol::Symbol(String const &string) throw(std::bad_alloc) {
     _string = &lookup_symbol(string);
 }
 
-Symbol Symbol::intern(char const *string) throw(NullPointer, std::bad_alloc) {
-    return Symbol(CString::create(string));
-}
+};
 
 };
 };

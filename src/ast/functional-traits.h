@@ -9,21 +9,24 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifndef SEEN_INKSCAPE_AST_STRING_NODE_H
-#define SEEN_INKSCAPE_AST_STRING_NODE_H
-
-#include "ast/string.h"
-#include "ast/leaf-node.h"
+#ifndef SEEN_INKSCAPE_AST_FUNCTIONAL_TRAITS_H
+#define SEEN_INKSCAPE_AST_FUNCTIONAL_TRAITS_H
 
 namespace Inkscape {
 namespace AST {
 
-class StringNode : public LeafNode<String> {
-public:
-    explicit StringNode(String const &value) : LeafNode<String>(value) {}
+template <typename T>
+struct FunctionalTraits {
+    typedef T const value_type;
+    typedef T const *pointer_type;
+    typedef T const &reference_type;
+};
 
-protected:
-    String const &_toString() const { return value(); }
+template <typename T>
+struct FunctionalTraits<T &> {
+    typedef T const &value_type;
+    typedef T const *pointer_type;
+    typedef T const &reference_type;
 };
 
 };

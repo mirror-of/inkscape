@@ -9,20 +9,20 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifndef SEEN_INKSCAPE_AST_XML_NODE_H
-#define SEEN_INKSCAPE_AST_XML_NODE_H
-
-#include <cstring>
-#include "ast/node.h"
+#include <osstream>
+#include "ast/cstring.h"
+#include "ast/string.h"
+#include "ast/leaf-node.h"
 
 namespace Inkscape {
 namespace AST {
-namespace XML {
 
-class Node : public AST::Node {
-};
+String const &LeafNodeBase::_toString() const {
+    std::ostringstream os;
+    write(os);
+    return *(new String(CString::create(os.str().c_str())));
+}
 
-};
 };
 };
 

@@ -9,22 +9,18 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifndef SEEN_INKSCAPE_AST_STRING_NODE_H
-#define SEEN_INKSCAPE_AST_STRING_NODE_H
+#ifndef SEEN_INKSCAPE_AST_INVALID_TRANSFORMATION_H
+#define SEEN_INKSCAPE_AST_INVALID_TRANSFORMATION_H
 
-#include "ast/string.h"
-#include "ast/leaf-node.h"
+#include <stdexcept>
 
 namespace Inkscape {
 namespace AST {
 
-class StringNode : public LeafNode<String> {
+class InvalidTransformation : public std::runtime_error {
 public:
-    explicit StringNode(String const &value) : LeafNode<String>(value) {}
-
-protected:
-    String const &_toString() const { return value(); }
-};
+    InvalidTransformation() : runtime_error("invalid transformation") {}
+}
 
 };
 };

@@ -12,41 +12,33 @@
 #ifndef SEEN_INKSCAPE_AST_PATH_H
 #define SEEN_INKSCAPE_AST_PATH_H
 
-#include <new>
-#include <glib/glib.h>
-#include <gc/gc_cpp.h>
+#include "ast/gc.h"
 #include "ast/branch-name.h"
 
 namespace Inkscape {
 namespace AST {
 
+class Reference;
 class Node;
 
-class Path : public gc {
+class Path : public SimpleGCObject<> {
 public:
-    Path(Path const *parent, BranchName const &branch, unsigned pos,
-         Node const &node)
-    : _parent(parent), _branch(branch), _pos(pos), _node(node) {}
+    Path(Reference const &parent, BranchName const &branch, unsigned pos)
+    throw()
+    : _parent(parent), _branch(branch), _pos(pos) {}
 
-    Path const &reparent(Path const *parent) const throw(std::bad_alloc) {
-        return *(new Path(parent, _branch, _pos, _node));
-    }
-    Path const &reseat(Node const &node) const throw(std::bad_alloc) {
-        return *(new Path(_parent, _branch, _pos, node));
-    }
+    Node const *lookup() const throw();
 
-    Path const *parent() const { return _parent; }
-    Node const &node() const { return _node; }
-    BranchName const &branch() const { return _branch; }
-    unsigned pos() const { return _pos; }
+    Reference const &parent() const throw() { return _reference; }
+    BranchName const &branch() cnost throw() { return _branch; }
+    unsigned pos() const throw() { return _pos; }
 
 private:
     void operator=(Path const &);
 
-    Path const *_parent;
-    BranchName _branch;
+    Reference const &_parent;
+    BranchName const _branch;
     unsigned _pos;
-    Node const &_node;
 };
 
 };

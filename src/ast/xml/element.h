@@ -20,7 +20,7 @@ namespace Inkscape {
 namespace AST {
 namespace XML {
 
-class Element : public XML::Node {
+class Element : public Base {
 public:
     Element(Symbol name);
 
@@ -31,39 +31,34 @@ public:
     static Symbol const CHILDREN=Symbol::intern("children");
 
     Symbol name() const throw() { return _name.symbol(); }
-    AST::Node const *attribute(Symbol name) const throw();
-    XML::Node const *child(unsigned pos) const throw();
+    Node const *attribute(Symbol name) const throw();
+    Base const *child(unsigned pos) const throw();
 
-    Element const &setAttribute(Symbol name, CString const &value) const throw(InvalidTransformation, std::bad_alloc);
-    Element const &setAttribute(Symbol name, AST::Node const &value) const throw(InvalidTransformation, std::bad_alloc);
-    Element const &unsetAttribute(Symbol name) const throw(InvalidTransformation, std::bad_alloc);
+    Element const &setAttribute(Symbol name, CString const &value) const throw(InvalidBranch, InvalidTransformation, std::bad_alloc);
+    Element const &setAttribute(Symbol name, Node const &value) const throw(InvalidBranch, InvalidTransformation, std::bad_alloc);
+    Element const &unsetAttribute(Symbol name) const throw(InvalidBranch, InvalidTransformation, std::bad_alloc);
 
-    Element const &insertChildBefore(unsigned pos, XML::Node const &child) const throw(InvalidTransformation, std::bad_alloc);
-    Element const &replaceChildWith(unsigned pos, XML::Node const &child) const throw(InvalidTransformation, std::bad_alloc);
-    Element const &removeChildAt(unsigned pos, XML::Node const &child) const throw(std::bad_alloc);
+    Element const &insertChild(unsigned pos, Base const &child) const throw(InvalidBranch, InvalidTransformation, std::bad_alloc);
+    Element const &replaceChild(unsigned pos, Base const &child) const throw(InvalidBranch, InvalidTransformation, std::bad_alloc);
+    Element const &removeChild(unsigned pos) const throw(std::bad_alloc);
     Element const &reorderChild(unsigned old_pos, unsigned new_pos) const throw(std::bad_alloc);
 
 private:
     Element(Symbol name, unsigned child_count, ChildList const *children, AttributeList const *attributes);
 
-    AST::Node const *_traverse(BranchName const &branch, unsigned pos) const throw();
+    Node const *_lookup(BranchName const &branch, unsigned pos) const throw(InvalidBranch);
 
-    AST::Node const *_insertBefore(BranchName const &branch, unsigned pos, AST::Node const &node) const throw(InvalidTransformation, std::bad_alloc);
-    AST::Node const *_replaceWith(BranchName const &branch, unsigned pos, AST::Node const &node) const throw(InvalidTransformation, std::bad_alloc);
-    AST::Node const *_removeAt(BranchName const &branch, unsigned pos) const throw(InvalidTransformation, std::bad_alloc);
+    Node const &_insert(BranchName const &branch, unsigned pos, Node const &node) const throw(InvalidBranch, InvalidTransformation, std::bad_alloc);
+    Node const &_replace(BranchName const &branch, unsigned pos, Node const &node) const throw(InvalidBranch, InvalidTransformation, std::bad_alloc);
+    Node const &_remove(BranchName const &branch, unsigned pos) const throw(InvalidBranch, InvalidTransformation, std::bad_alloc);
+    Node const &_reorder(BranchName const &branch, unsigned old_pos, unsigned new_pos) const throw(InvalidBranch, InvalidTransformation, std::bad_alloc);
 
-    struct ChildList {
-        ChildList(p, c) : prev(p), child(c) {}
-
-        ChildList const *prev;
-        XML::Node const &child;
-    };
     struct AttributeList {
         AttributeList(nx, nm, v) : next(nx), name(nm), value(v) {}
 
         AttributeList const *next;
         Symbol name;
-        AST::Node const &value;
+        Node const &value;
     };
 
     AST::SymbolNode _name;

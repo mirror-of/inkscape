@@ -23,10 +23,9 @@ class String;
 
 class Symbol {
 public:
+    explicit Symbol(char const *string) throw(NullPointer, std::bad_alloc);
     explicit Symbol(CString const &string) throw(std::bad_alloc);
     explicit Symbol(String const &string) throw(std::bad_alloc);
-
-    static Symbol intern(char const *string);
 
     bool operator==(Symbol const &symbol) const {
         return _string == symbol._string;

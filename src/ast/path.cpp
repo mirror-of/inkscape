@@ -11,10 +11,14 @@
 
 #include "ast/node.h"
 #include "ast/path.h"
-#include "ast/path-fns.h"
+#include "ast/reference.h"
 
 namespace Inkscape {
 namespace AST {
+
+Node const *Path::lookup() const throw() {
+    return _parent.node().lookup(_branch, _pos);
+}
 
 };
 };

@@ -12,12 +12,13 @@
 #ifndef SEEN_INKSCAPE_AST_NODE_H
 #define SEEN_INKSCAPE_AST_NODE_H
 
-#include <new>
 #include <cstdlib>
 #include <iosfwd>
-#include <gc/gc_cpp.h>
 #include <glib/glib.h>
+
+#include "ast/gc.h"
 #include "ast/branch-name.h"
+#include "ast/invalid-branch.h"
 #include "ast/invalid-transformation.h"
 
 namespace Inkscape {
@@ -26,52 +27,45 @@ namespace AST {
 class String;
 class Path;
 
-class Node : public gc {
+class Node : public FinalizedGCObject<> {
 public:
     virtual ~Node();
 
-    class InvalidTransformation : public std::runtime_error {
-    public:
-        InvalidTransformation() : runtime_error("invalid transformation") {}
-    };
-
-    class NotFound : public std::runtime_error {
-    public:
-        NotFound() : runtime_error("node not found") {}
-    };
-
     Node const *lookup(BranchName const &branch, unsigned pos) const
-    throw()
+    throw(InvalidBranch)
     {
         return _lookup(branch, pos);
     }
 
-    Path const &traverse(Path const *from,
-                         BranchName const &branch, unsigned pos) const
-    throw(NotFound, std::bad_alloc);
-
-    Node const &insertBefore(BranchName const &branch, unsigned pos,
-                             Node const &node) const
-    throw(InvalidTransformation, std::bad_alloc)
+    unsigned branchSize(BranchName const &branch) const
+    throw(InvalidBranch)
     {
-        return _insertBefore(branch, pos, node);
+        return _branchSize(branch);
     }
 
-    Node const &replaceWith(BranchName const &branch, unsigned pos,
-                            Node const &node) const
-    throw(InvalidTransformation, std::bad_alloc)
+    Node const &insert(BranchName const &branch, unsigned pos,
+                       Node const &node) const
+    throw(InvalidBranch, InvalidTransformation, std::bad_alloc)
     {
-        return _replaceWith(branch, pos, node);
+        return _insert(branch, pos, node);
     }
 
-    Node const &removeAt(BranchName const &branch, unsigned pos) const
-    throw(InvalidTransformation, std::bad_alloc)
+    Node const &replace(BranchName const &branch, unsigned pos,
+                        Node const &node) const
+    throw(InvalidBranch, InvalidTransformation, std::bad_alloc)
     {
-        return _removeAt(branch, pos);
+        return _replace(branch, pos, node);
     }
 
-    Node const &reorder(BranchName const &branch, unsigned old_pos, unsigned new_pos) const
-    throw(InvalidTransformation, std::bad_alloc)
+    Node const &remove(BranchName const &branch, unsigned pos) const
+    throw(InvalidBranch, InvalidTransformation, std::bad_alloc)
+    {
+        return _remove(branch, pos);
+    }
+
+    Node const &reorder(BranchName const &branch,
+                        unsigned old_pos, unsigned new_pos) const
+    throw(InvalidBranch, InvalidTransformation, std::bad_alloc)
     {
         return _reorder(branch, old_pos, new_pos);
     }
@@ -85,25 +79,28 @@ public:
 
 protected:
     virtual Node const *_lookup(BranchName const &branch, unsigned pos) const
-    throw();
+    throw(InvalidBranch)=0;
 
-    virtual Node const &_insertBefore(BranchName const &branch,
-                                      unsigned pos, Node const &node) const
-    throw(InvalidTransformation, std::bad_alloc);
+    virtual unsigned _branchSize(BranchName const &branch) const
+    throw(InvalidBranch)=0;
 
-    virtual Node const &_replaceWith(BranchName const &branch,
-                                     unsigned pos, Node const &node) const
-    throw(InvalidTransformation, std::bad_alloc);
+    virtual Node const &_insert(BranchName const &branch,
+                                unsigned pos, Node const &node) const
+    throw(InvalidBranch, InvalidTransformation, std::bad_alloc)=0;
 
-    virtual Node const &_removeAt(BranchName const &branch,
-                                  unsigned pos, Node const &node) const
-    throw(InvalidTransformation, std::bad_alloc);
+    virtual Node const &_replace(BranchName const &branch,
+                                 unsigned pos, Node const &node) const
+    throw(InvalidBranch, InvalidTransformation, std::bad_alloc)=0;
 
-    virtual Node const &_reorder(BranchName const &branch, unsigned old_pos,
-                                 unsigned new_pos) const
-    throw(InvalidTransformation, std::bad_alloc);
+    virtual Node const &_remove(BranchName const &branch,
+                                unsigned pos, Node const &node) const
+    throw(InvalidBranch, InvalidTransformation, std::bad_alloc)=0;
 
-    virtual void _write(std::ostream &stream) const;
+    virtual Node const &_reorder(BranchName const &branch,
+                                 unsigned old_pos, unsigned new_pos) const
+    throw(InvalidBranch, InvalidTransformation, std::bad_alloc)=0;
+
+    virtual void _write(std::ostream &stream) const=0;
     virtual String const &_toString() const=0;
 
 private:

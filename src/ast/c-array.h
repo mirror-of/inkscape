@@ -40,6 +40,9 @@ public:
         return toPointer();
     }
 
+protected:
+    CArray();
+
 private:
     void operator=(CArray<T> const &);
 
