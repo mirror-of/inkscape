@@ -15,6 +15,7 @@
 #include "extension/print.h"
 #include "livarot/Path.h"
 #include "libnr/nr-matrix-ops.h"
+#include "libnr/nr-scale-matrix-ops.h"
 #include "font-instance.h"
 #include "display/curve.h"
 #include <pango/pango-types.h>
@@ -127,12 +128,12 @@ void Layout::print(SPPrintContext *ctx, NRRect const *pbox, NRRect const *dbox, 
         NRMatrix glyph_matrix;
         Span const &span = _spans[_characters[_glyphs[glyph_index].in_character].in_span];
         InputStreamTextSource const *text_source = static_cast<InputStreamTextSource const *>(_input_stream[span.in_input_stream_item]);
-        _getGlyphTransformMatrix(glyph_index, &glyph_matrix);
         if (text_to_path) {
             NRBPath bpath;
             bpath.path = (NArtBpath*)span.font->ArtBPath(_glyphs[glyph_index].glyph);
             if (bpath.path) {
 	            NRBPath abp;
+                _getGlyphTransformMatrix(glyph_index, &glyph_matrix);
 	            abp.path = nr_artpath_affine(bpath.path, glyph_matrix);
 	            if (text_source->style->fill.type != SP_PAINT_TYPE_NONE)
 		            sp_print_fill(ctx, &abp, &ctm, text_source->style, pbox, dbox, bbox);
@@ -143,14 +144,18 @@ void Layout::print(SPPrintContext *ctx, NRRect const *pbox, NRRect const *dbox, 
             glyph_index++;
         } else {
             NR::Point g_pos(0,0);    // huh?
-            glyph_matrix.c[4] += span.x_start - _glyphs[glyph_index].x;
-            if (_directions_are_orthogonal(span.block_progression, block_progression))
-                glyph_matrix.c[5] += _characters[_glyphs[glyph_index].in_character].x;
-            else glyph_matrix.c[4] += _characters[_glyphs[glyph_index].in_character].x;
-            Glib::ustring::const_iterator span_iter = _glyphs[glyph_index].span(this).input_stream_first_character;
+            glyph_matrix = NR::Matrix(NR::scale(1.0, -1.0) * NR::Matrix(NR::rotate(_glyphs[glyph_index].rotation)));
+            if (block_progression == LEFT_TO_RIGHT || block_progression == RIGHT_TO_LEFT) {
+                glyph_matrix.c[4] = span.line(this).baseline_y + span.chunk(this).baseline_shift;
+                glyph_matrix.c[5] = span.chunk(this).left_x + span.x_start + _characters[_glyphs[glyph_index].in_character].x;
+            } else {
+                glyph_matrix.c[4] = span.chunk(this).left_x + span.x_start + _characters[_glyphs[glyph_index].in_character].x;
+                glyph_matrix.c[5] = span.line(this).baseline_y + span.chunk(this).baseline_shift;
+            }
+            Glib::ustring::const_iterator span_iter = span.input_stream_first_character;
             unsigned char_index = _glyphs[glyph_index].in_character;
             unsigned original_span = _characters[char_index].in_span;
-            while (char_index && _characters[char_index].in_span == original_span) {
+            while (char_index && _characters[char_index - 1].in_span == original_span) {
                 char_index--;
                 span_iter++;
             }
@@ -158,7 +163,7 @@ void Layout::print(SPPrintContext *ctx, NRRect const *pbox, NRRect const *dbox, 
             Glib::ustring::const_iterator next_char_iter = span_iter;
             next_char_iter++;
             memcpy(text, &*span_iter.base(), next_char_iter.base() - span_iter.base());
-			sp_print_bind(ctx, glyph_matrix,1.0);
+			sp_print_bind(ctx, glyph_matrix, 1.0);
 			sp_print_text (ctx, text, g_pos, text_source->style);
 			sp_print_release(ctx);
 
