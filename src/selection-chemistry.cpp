@@ -925,6 +925,8 @@ sp_selection_move_screen (gdouble dx, gdouble dy)
 	}
 }
 
+static void scroll_to_show_item(SPDesktop *desktop, SPItem *item);
+
 void
 sp_selection_item_next (void)
 {
@@ -975,30 +977,7 @@ sp_selection_item_next (void)
 
 	// adjust visible area to see whole new selection
 	if (SP_CYCLING == SP_CYCLE_FOCUS) {
-		NRRect dbox;
-		sp_desktop_get_display_area (desktop, &dbox);
-		NRRect sbox;
-		sp_item_bbox_desktop (item, &sbox);
-		if ( dbox.x0 > sbox.x0  ||
-		     dbox.y0 > sbox.y0  ||
-		     dbox.x1 < sbox.x1  ||
-		     dbox.y1 < sbox.y1 )
-		{
-			double x, y;
-			x = (sbox.x0 + sbox.x1) / 2;
-			y = (sbox.y0 + sbox.y1) / 2;
-			ArtPoint s;
-			s.x = NR_MATRIX_DF_TRANSFORM_X (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
-			s.y = NR_MATRIX_DF_TRANSFORM_Y (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
-			x = (dbox.x0 + dbox.x1) / 2;
-			y = (dbox.y0 + dbox.y1) / 2;
-			ArtPoint d;
-			d.x = NR_MATRIX_DF_TRANSFORM_X (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
-			d.y = NR_MATRIX_DF_TRANSFORM_Y (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
-			gint dx = (gint) (d.x - s.x);
-			gint dy = (gint) (d.y - s.y);
-			sp_desktop_scroll_world (desktop, dx, dy);
-		}
+		scroll_to_show_item(desktop, item);
 	}
 }
 
@@ -1035,9 +1014,6 @@ sp_selection_item_prev (void)
 		item = SP_ITEM(g_slist_last(children)->data);
 	} else {
 		GSList *l = children;
-		if (l->next == NULL) {
-			item = SP_ITEM(l->data);
-		}
 		while ((l->next != NULL) && (l->next->data != selection->items->data)) {
 			l = l->next;
 		}
@@ -1055,32 +1031,42 @@ sp_selection_item_prev (void)
 
 	// adjust visible area to see whole new selection
 	if (SP_CYCLING == SP_CYCLE_FOCUS) {
-		NRRect dbox;
-		sp_desktop_get_display_area (desktop, &dbox);
-		NRRect sbox;
-		sp_item_bbox_desktop (item, &sbox);
-		if ( dbox.x0 > sbox.x0  ||
-		     dbox.y0 > sbox.y0  ||
-		     dbox.x1 < sbox.x1  ||
-		     dbox.y1 < sbox.y1 )
-		{
-			double x, y;
-			x = (sbox.x0 + sbox.x1) / 2;
-			y = (sbox.y0 + sbox.y1) / 2;
-			ArtPoint s;
-			s.x = NR_MATRIX_DF_TRANSFORM_X (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
-			s.y = NR_MATRIX_DF_TRANSFORM_Y (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
-			x = (dbox.x0 + dbox.x1) / 2;
-			y = (dbox.y0 + dbox.y1) / 2;
-			ArtPoint d;
-			d.x = NR_MATRIX_DF_TRANSFORM_X (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
-			d.y = NR_MATRIX_DF_TRANSFORM_Y (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
-			gint dx = (gint) (d.x - s.x);
-			gint dy = (gint) (d.y - s.y);
-			sp_desktop_scroll_world (desktop, dx, dy);
-		}
+		scroll_to_show_item(desktop, item);
 	}
 }
+
+/**
+ * If \a item is not entirely visible then adjust visible area to centre on the centre on of
+ * \a item.
+ */
+static void scroll_to_show_item(SPDesktop *desktop, SPItem *item)
+{
+	NRRect dbox;
+	sp_desktop_get_display_area (desktop, &dbox);
+	NRRect sbox;
+	sp_item_bbox_desktop (item, &sbox);
+	if ( dbox.x0 > sbox.x0  ||
+	     dbox.y0 > sbox.y0  ||
+	     dbox.x1 < sbox.x1  ||
+	     dbox.y1 < sbox.y1 )
+	{
+		double x, y;
+		x = (sbox.x0 + sbox.x1) / 2;
+		y = (sbox.y0 + sbox.y1) / 2;
+		ArtPoint s;
+		s.x = NR_MATRIX_DF_TRANSFORM_X (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
+		s.y = NR_MATRIX_DF_TRANSFORM_Y (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
+		x = (dbox.x0 + dbox.x1) / 2;
+		y = (dbox.y0 + dbox.y1) / 2;
+		ArtPoint d;
+		d.x = NR_MATRIX_DF_TRANSFORM_X (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
+		d.y = NR_MATRIX_DF_TRANSFORM_Y (NR_MATRIX_D_FROM_DOUBLE (desktop->d2w), x, y);
+		gint dx = (gint) (d.x - s.x);
+		gint dy = (gint) (d.y - s.y);
+		sp_desktop_scroll_world (desktop, dx, dy);
+	}
+}
+
 
 static void
 sp_matrix_d_set_rotate (NRMatrix *m, double theta)

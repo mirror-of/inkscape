@@ -1,8 +1,8 @@
 2004-01-14  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/selection-chemistry.cpp (sp_selection_item_next,
-	sp_selection_item_prev):
-	noop: cleanups (in preparation for possible merging of the two).
+	sp_selection_item_prev): cleanups, including moving some common
+	code into new static function scroll_to_show_item.
 
 	* src/widgets/font-selector.h, src/widgets/font-selector.cpp
 	(sp_font_selector_set_font_fuzzy): Remove this unused function.
