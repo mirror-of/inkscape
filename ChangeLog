@@ -1,3 +1,9 @@
+2004-06-26  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/node-context.cpp: make sure nodepath->nodeContext is set up
+	when the selection changes.  Fixes 936739.
+
+
 2004-06-25  MenTaLguY  <mental@rydia.net>
 
 	* src/display/sp-canvas.cpp: enabled win32 current item workaround on
