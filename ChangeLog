@@ -1,3 +1,9 @@
+2005-03-24  Jon A. Cruz  <jon@joncruz.org>
+    * src/ui/widget/panel.cpp, src/ui/widget/panel.h, src/path-prefix.h,
+      src/dialogs/swatches.cpp, src/dialogs/swatches.h
+      share/palettes/Makefile.am, share/palettes/svg.gpl:
+      Adding palette loading.
+
 2005-03-31 Jean-François Lemaire <jflemaire@skynet.be>
     * share/icons/David_icons.svg: new icon theme by David Christian Berg
 
