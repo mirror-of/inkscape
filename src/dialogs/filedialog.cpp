@@ -29,6 +29,8 @@
 #include <gtk/gtkfilechooser.h>
 #include <gtk/gtkfilefilter.h>
 
+//Another hack
+#include <gtk/gtkentry.h>
 
 
 #include <vector>
@@ -610,7 +612,7 @@ private:
 void FileOpenDialogImpl::updatePreviewCallback()
 {
     Glib::ustring fileName = get_preview_filename();
-    if (!fileName.c_str())
+    if (fileName.length() < 1)
         return;
 
     svgPreview.set(fileName, dialogType);
@@ -796,7 +798,6 @@ FileOpenDialogImpl::FileOpenDialogImpl(char const *dir,
     signal_selection_changed().connect( 
          sigc::mem_fun(*this, &FileOpenDialogImpl::fileSelectedCallback) );
 
-
     add_button(Gtk::Stock::CANCEL, GTK_RESPONSE_CANCEL);
     add_button(Gtk::Stock::OPEN,   GTK_RESPONSE_OK);
 
@@ -934,6 +935,11 @@ private:
     SVGPreview svgPreview;
 
     /**
+     * Fix to allow the user to type the file name 
+     */
+    Gtk::Entry *fileNameEntry;
+
+    /**
      * Callback for seeing if the preview needs to be drawn
      */
     void updatePreviewCallback();
@@ -942,6 +948,12 @@ private:
      *  Create a filter menu for this type of dialog
      */
     void createFilterMenu();
+
+
+    /**
+     * Callback for user input into fileNameEntry
+     */
+    void fileNameEntryChangedCallback();
 
     /**
      * Filter name->extension lookup
@@ -980,6 +992,37 @@ void FileSaveDialogImpl::updatePreviewCallback()
 }
 
 
+
+/**
+ * Callback for fileNameEntry widget
+ */
+void FileSaveDialogImpl::fileNameEntryChangedCallback()
+{
+    if (!fileNameEntry)
+        return;
+    Glib::ustring fName = fileNameEntry->get_text();
+    //g_message("User hit return.  Text is '%s'\n", fName.c_str());
+
+    if (!Glib::path_is_absolute(fName)) {
+        //try appending to the current path
+        // not this way: fName = get_current_folder() + "/" + fName;
+        std::vector<Glib::ustring> pathSegments;
+        pathSegments.push_back( get_current_folder() );
+        pathSegments.push_back( fName );
+        fName = Glib::build_filename(pathSegments);
+    }
+
+    //g_message("path:'%s'\n", fName.c_str());
+
+    if (Glib::file_test(fName, Glib::FILE_TEST_IS_DIR)) {
+        set_current_folder(fName);
+    } else if (/*Glib::file_test(fName, Glib::FILE_TEST_IS_REGULAR)*/1) {
+        //dialog with either (1) select a regular file or (2) cd to dir
+        //simulate an 'OK'
+        set_filename(fName);
+        response(GTK_RESPONSE_OK);
+    }
+}
 
 void FileSaveDialogImpl::createFilterMenu()
 {
@@ -1054,6 +1097,23 @@ void FileSaveDialogImpl::createFilterMenu()
 }
 
 
+void findEntryWidgets(Gtk::Container *parent, std::vector<Gtk::Entry *> &result)
+{
+    if (!parent)
+        return;
+    std::vector<Gtk::Widget *> children = parent->get_children();
+    for (unsigned int i=0; i<children.size() ; i++)
+        {
+        Gtk::Widget *child = children[i];
+        GtkWidget *wid = child->gobj();
+        if (GTK_IS_ENTRY(wid))
+           result.push_back((Gtk::Entry *)child);
+        else if (GTK_IS_CONTAINER(wid))
+            findEntryWidgets((Gtk::Container *)child, result);
+        }
+
+}
+
 
 /**
  * Constructor
@@ -1098,6 +1158,21 @@ FileSaveDialogImpl::FileSaveDialogImpl(char const *dir,
     //Catch selection-changed events, so we can adjust the text widget
     signal_update_preview().connect( 
          sigc::mem_fun(*this, &FileSaveDialogImpl::updatePreviewCallback) );
+
+
+    //Let's do some customization
+    fileNameEntry = NULL;
+    Gtk::Container *cont = get_toplevel();
+    std::vector<Gtk::Entry *> result;
+    findEntryWidgets(cont, result);
+    //g_message("Found %d entry widgets\n", result.size());
+    if (result.size() >=1 )
+        {
+        //Catch when user hits [return] on the text field
+        fileNameEntry = result[0];
+        fileNameEntry->signal_activate().connect( 
+             sigc::mem_fun(*this, &FileSaveDialogImpl::fileNameEntryChangedCallback) );
+        }
 
 
     //if (extension == NULL)
