@@ -47,6 +47,7 @@
 #include <widgets/paint-selector.h>
 #include <style.h>
 #include <gradient-chemistry.h>
+#include "common-style.h"
 #include <document.h>
 #include <desktop-style.h>
 #include <desktop-handles.h>
@@ -55,7 +56,6 @@
 #include <inkscape.h>
 #include <document-private.h>
 #include <file.h>
-#include "common-style.h"
 
 
 #include "fill-style.h"
@@ -823,53 +823,11 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
         }
 
         case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
-
-            if (items) {
-
-                // HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider for all tabs
-                SPCSSAttr *css = sp_repr_css_attr_new ();
-                sp_repr_css_set_property (css, "fill-opacity", "1.0");
-
-                SPGradient *vector = sp_paint_selector_get_gradient_vector (psel);
-                if (!vector) {
-                    /* No vector in paint selector should mean that we just
-                     * changed mode
-                     */
-
-                    bool same = items_have_same_color (items, true);
-                    if (same) {
-                        vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (items->data), true);
-                    }
-
-                    for (GSList const *i = items; i != NULL; i = i->next) {
-                        //FIXME: see above
-                        sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
-
-                        if (!same) {
-                            vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (i->data), true);
-                        }
-
-                        sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
-                    }
-                } else {
-                     // We have changed from another gradient type, or modified spread/units within this gradient type
-                    vector = sp_gradient_ensure_vector_normalized (vector);
-                    for (GSList const *i = items; i != NULL; i = i->next) {
-                        //FIXME: see above
-                        sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
-
-                        SPGradient *gr = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, true);
-                        sp_gradient_selector_attrs_to_gradient (gr, psel);
-                    }
-                }
-
-                sp_document_done (SP_WIDGET_DOCUMENT (spw));
-            }
-            break;
-
         case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
-
             if (items) {
+                SPGradientType const gradient_type = ( psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR
+                                                       ? SP_GRADIENT_TYPE_LINEAR
+                                                       : SP_GRADIENT_TYPE_RADIAL );
 
                 // HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider for all tabs
                 SPCSSAttr *css = sp_repr_css_attr_new ();
@@ -894,22 +852,23 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                             vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (i->data), true);
                         }
 
-                        sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, true);
+                        sp_item_set_gradient ( SP_ITEM (i->data), vector, gradient_type, true);
                     }
-
                 } else {
+                    /* We have changed from another gradient type, or modified spread/units within
+                     * this gradient type. */
                     vector = sp_gradient_ensure_vector_normalized (vector);
                     for (GSList const *i = items; i != NULL; i = i->next) {
                         //FIXME: see above
                         sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
-                        SPGradient *gr = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, true);
+
+                        SPGradient *gr = sp_item_set_gradient ( SP_ITEM (i->data), vector, gradient_type, true);
                         sp_gradient_selector_attrs_to_gradient (gr, psel);
                     }
                 }
 
                 sp_document_done (SP_WIDGET_DOCUMENT (spw));
             }
-
             break;
 
         case SP_PAINT_SELECTOR_MODE_PATTERN:

@@ -47,6 +47,7 @@
 #include "enums.h"
 #include "style.h"
 #include "gradient-chemistry.h"
+#include "common-style.h"
 #include "document.h"
 #include "desktop-handles.h"
 #include "desktop-style.h"
@@ -67,7 +68,6 @@
 #include "widgets/icon.h"
 #include "helper/stock-items.h"
 #include <file.h>
-#include "common-style.h"
 
 #include "dialogs/stroke-style.h"
 
@@ -622,40 +622,11 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
         }
 
         case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
-
-            if (items) {
-                SPGradient *vector = sp_paint_selector_get_gradient_vector(psel);
-
-                if (!vector) {
-                    /* No vector in paint selector should mean that we just
-                     * changed mode
-                     */
-
-                    bool same = items_have_same_color (items, false);
-                    if (same) {
-                        vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (items->data), false);
-                    }
-
-                    for (GSList const *i = items; i != NULL; i = i->next) {
-                        if (!same)
-                            vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (i->data), false);
-                        sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, false);
-                    }
-                } else {
-                    vector = sp_gradient_ensure_vector_normalized(vector);
-                    for (GSList const *i = items; i != NULL; i = i->next) {
-                        SPGradient *gr = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_LINEAR, false);
-                        sp_gradient_selector_attrs_to_gradient (gr, psel);
-                    }
-                }
-
-                sp_document_done(SP_WIDGET_DOCUMENT(spw));
-
-            }
-            break;
-
         case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
             if (items) {
+                SPGradientType const gradient_type = ( psel->mode == SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR
+                                                       ? SP_GRADIENT_TYPE_LINEAR
+                                                       : SP_GRADIENT_TYPE_RADIAL );
                 SPGradient *vector = sp_paint_selector_get_gradient_vector(psel);
                 if (!vector) {
                     /* No vector in paint selector should mean that we just
@@ -670,15 +641,16 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                     for (GSList const *i = items; i != NULL; i = i->next) {
                         if (!same)
                             vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (i->data), false);
-                        sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, false);
+                        sp_item_set_gradient(SP_ITEM(i->data), vector, gradient_type, false);
                     }
                 } else {
                     vector = sp_gradient_ensure_vector_normalized(vector);
                     for (GSList const *i = items; i != NULL; i = i->next) {
-                        SPGradient *gr = sp_item_set_gradient ( SP_ITEM (i->data), vector, SP_GRADIENT_TYPE_RADIAL, false);
+                        SPGradient *gr = sp_item_set_gradient(SP_ITEM(i->data), vector, gradient_type, false);
                         sp_gradient_selector_attrs_to_gradient (gr, psel);
                     }
                 }
+
                 sp_document_done(SP_WIDGET_DOCUMENT(spw));
             }
             break;
