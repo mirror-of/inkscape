@@ -28,7 +28,7 @@ struct _SPNodeContext {
 
 	guint drag : 1;
 
-	SPNodePath *nodepath;
+	Path::Path *nodepath;
 	SPKnotHolder *knot_holder;
 
 	gboolean leftalt;

@@ -30,22 +30,6 @@
 
 
 /**
- * This is a node on a subpath
- */
-typedef struct _SPNodePath SPNodePath;
-
-/**
- * This is a subdivision of a NodePath
- */
-typedef struct _SPNodeSubPath SPNodeSubPath;
-
-/**
- * This is a node (point) along a subpath
- */
-typedef struct _SPPathNode SPPathNode;
-
-
-/**
  *
  */
 class Radial{
@@ -61,31 +45,41 @@ class Radial{
 };
 
 
-/**
- *  What kind of node is this?  This the value for the node->type field.
- * Describes the kind of rendering which shall be done for this node.
- */
-typedef enum {
-/**  A normal node */
-	SP_PATHNODE_NONE,
-/**  This node non-continuously joins two segments*/
-	SP_PATHNODE_CUSP,
-/**  This node continuously joins two segments */
-	SP_PATHNODE_SMOOTH,
-/**  This node is symmetric */
-	SP_PATHNODE_SYMM
-} SPPathNodeType;
-
 
 
 /** defined in node-context.h */
 typedef struct _SPNodeContext SPNodeContext;
 
 
+
+
+
+
+namespace Path{
+
+/**
+ * This is a node on a subpath
+ */
+class Path;
+
+/**
+ * This is a subdivision of a NodePath
+ */
+class SubPath;
+
+class NodeSide;
+
+/**
+ * This is a node (point) along a subpath
+ */
+class Node;
+
+
 /**
  *  This is a collection of subpaths which contain nodes
  */
-struct _SPNodePath {
+class Path {
+ public:
 /**  Pointer to the current desktop, for reporting purposes */
 	SPDesktop * desktop;
 /**  The parent path of this nodepath */
@@ -104,28 +98,39 @@ struct _SPNodePath {
 };
 
 
-
-
-
-
 /**
  *  This is the lowest list item.  A simple list of nodes
  */
-struct _SPNodeSubPath {
+class SubPath {
+ public:
 /**  The parent of this subpath */
-	SPNodePath * nodepath;
+	Path * nodepath;
 /**  Is this path closed (no endpoints) or not?*/
 	gboolean closed;
 /**  The nodes in this subpath. */
 	GList * nodes;
 /**  The first node of the subpath (does not imply open/closed)*/
-	SPPathNode * first;
+	Node * first;
 /**  The last node of the subpath */
-	SPPathNode * last;
+	Node * last;
 };
 
 
 
+/**
+ *  What kind of node is this?  This the value for the node->type field.
+ * Describes the kind of rendering which shall be done for this node.
+ */
+typedef enum {
+/**  A normal node */
+	NODE_NONE,
+/**  This node non-continuously joins two segments*/
+	NODE_CUSP,
+/**  This node continuously joins two segments */
+	NODE_SMOOTH,
+/**  This node is symmetric */
+	NODE_SYMM
+} NodeType;
 
 
 
@@ -133,9 +138,10 @@ struct _SPNodeSubPath {
  * A NodeSide is a datarecord which may be on either side (n or p) of a node,
  * which describes the segment going to the next node.
  */
-typedef struct {
+class NodeSide{
+ public:
 /**  Pointer to the next node, */
-	SPPathNode * other;
+	Node * other;
 /**  Position */
 	NR::Point pos;
 /**  */
@@ -144,19 +150,15 @@ typedef struct {
 	SPCanvasItem * line;
 /**  */
 	Radial origin;
-} SPPathNodeSide;
-
-
-
-
-
+};
 
 /**
  * A node along a NodePath
  */
-struct _SPPathNode {
+class Node {
+ public:
 /**  The parent subpath of this node */
-	SPNodeSubPath * subpath;
+	SubPath * subpath;
 /**  */
 	guint type : 4;
 /**  */
@@ -170,65 +172,67 @@ struct _SPPathNode {
 /**  */
 	SPKnot * knot;
 /**  The NodeSide in the 'next' direction */
-	SPPathNodeSide n;
+	NodeSide n;
 /**  The NodeSide in the 'previous' direction */
-	SPPathNodeSide p;
+	NodeSide p;
+};
+
 };
 
 /**
  *
  */
-SPNodePath * sp_nodepath_new (SPDesktop * desktop, SPItem * item);
+Path::Path * sp_nodepath_new (SPDesktop * desktop, SPItem * item);
 
 /**
  *
  */
-void sp_nodepath_destroy (SPNodePath * nodepath);
+void sp_nodepath_destroy (Path::Path * nodepath);
 
 /**
  *
  */
-void sp_nodepath_deselect (SPNodePath *nodepath);
+void sp_nodepath_deselect (Path::Path *nodepath);
 
 /**
  *
  */
-void sp_nodepath_select_all (SPNodePath *nodepath);
+void sp_nodepath_select_all (Path::Path *nodepath);
 
 /**
  *
  */
-void sp_nodepath_select_next (SPNodePath *nodepath);
+void sp_nodepath_select_next (Path::Path *nodepath);
 
 /**
  *
  */
-void sp_nodepath_select_prev (SPNodePath *nodepath);
+void sp_nodepath_select_prev (Path::Path *nodepath);
 
 /**
  *
  */
-void sp_nodepath_select_rect (SPNodePath * nodepath, NRRect * b, gboolean incremental);
+void sp_nodepath_select_rect (Path::Path * nodepath, NRRect * b, gboolean incremental);
 
 /**
  *
  */
-GList *save_nodepath_selection (SPNodePath *nodepath);
+GList *save_nodepath_selection (Path::Path *nodepath);
 
 /**
  *
  */
-void restore_nodepath_selection (SPNodePath *nodepath, GList *r);
+void restore_nodepath_selection (Path::Path *nodepath, GList *r);
 
 /**
  *
  */
-gboolean nodepath_repr_d_changed (SPNodePath * np, const char *newd);
+gboolean nodepath_repr_d_changed (Path::Path * np, const char *newd);
 
 /**
  *
  */
-gboolean nodepath_repr_typestr_changed (SPNodePath * np, const char *newtypestr);
+gboolean nodepath_repr_typestr_changed (Path::Path * np, const char *newtypestr);
 
 /**
  *
@@ -238,7 +242,7 @@ gboolean node_key (GdkEvent * event);
 /**
  *
  */
-void sp_nodepath_update_statusbar (SPNodePath *nodepath);
+void sp_nodepath_update_statusbar (Path::Path *nodepath);
 
 
 
@@ -285,7 +289,7 @@ void sp_node_selected_delete_segment (void);
 /**
  *
  */
-void sp_node_selected_set_type (SPPathNodeType type);
+void sp_node_selected_set_type (Path::NodeType type);
 
 /**
  *
@@ -303,10 +307,10 @@ void sp_node_selected_move (gdouble dx, gdouble dy);
 void sp_node_selected_move_screen (gdouble dx, gdouble dy);
 
 
-void sp_nodepath_selected_nodes_rotate (SPNodePath * nodepath, gdouble angle, int which);
-void sp_nodepath_selected_nodes_rotate_screen (SPNodePath * nodepath, gdouble angle, int which);
-void sp_nodepath_selected_nodes_scale (SPNodePath * nodepath, gdouble grow, int which);
-void sp_nodepath_selected_nodes_scale_screen (SPNodePath * nodepath, gdouble grow, int which);
+void sp_nodepath_selected_nodes_rotate (Path::Path * nodepath, gdouble angle, int which);
+void sp_nodepath_selected_nodes_rotate_screen (Path::Path * nodepath, gdouble angle, int which);
+void sp_nodepath_selected_nodes_scale (Path::Path * nodepath, gdouble grow, int which);
+void sp_nodepath_selected_nodes_scale_screen (Path::Path * nodepath, gdouble grow, int which);
 
 
 

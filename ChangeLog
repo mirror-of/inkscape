@@ -1,3 +1,8 @@
+2004-02-28  Nathan Hurst <njh@mail.csse.monash.edu.au>
+
+	* src/nodepath.cpp,h: Moved radial to class Radial.  Moved
+	NodePath into namespace Path and partially classified.
+
 2004-02-28  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/nodepath.cpp: Mark several functions as static.
