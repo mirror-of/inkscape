@@ -29,7 +29,6 @@
 .\" real vertical bar.  \*(C+ will give a nicer C++.  Capital omega is used to
 .\" do unbreakable dashes and therefore won't be available.  \*(C` and \*(C'
 .\" expand to `' in nroff, nothing in troff, for use with C<>.
-.tr \(*W-|\(bv\*(Tr
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
 .ie n \{\
 .    ds -- \(*W-
@@ -139,42 +138,42 @@ Inkscape \- an SVG (Scalable Vector Graphics) vector editor.
 options:
 .PP
 .Vb 2
-\&    -?, --help          
-\&        --usage
+\&    \-?, \-\-help          
+\&        \-\-usage
 .Ve
 .PP
 .Vb 2
-\&    -f, --file=FILENAME               
-\&    -s, --slideshow
+\&    \-f, \-\-file=FILENAME               
+\&    \-s, \-\-slideshow
 .Ve
 .PP
 .Vb 9
-\&    -e, --export-png=FILENAME         
-\&    -a, --export-area=x0:y0:x1:y1     
-\&    -i, --export-id=ID     
-\&    -t, --export-use-hints
-\&    -b, --export-background=COLOR     
-\&    -y, --export-background-opacity=VALUE     
-\&    -d, --export-dpi=DPI              
-\&    -w, --export-width=WIDTH          
-\&    -h, --export-height=HEIGHT
+\&    \-e, \-\-export\-png=FILENAME         
+\&    \-a, \-\-export\-area=x0:y0:x1:y1     
+\&    \-i, \-\-export\-id=ID     
+\&    \-t, \-\-export\-use\-hints
+\&    \-b, \-\-export\-background=COLOR     
+\&    \-y, \-\-export\-background\-opacity=VALUE     
+\&    \-d, \-\-export\-dpi=DPI              
+\&    \-w, \-\-export\-width=WIDTH          
+\&    \-h, \-\-export\-height=HEIGHT
 .Ve
 .PP
 .Vb 1
-\&    -l, --export-plain-svg=FILENAME
+\&    \-l, \-\-export\-plain\-svg=FILENAME
 .Ve
 .PP
 .Vb 1
-\&    -p, --print=PRINTER
+\&    \-p, \-\-print=PRINTER
 .Ve
 .PP
 .Vb 1
-\&    -x, --bitmap-icons
+\&    \-x, \-\-bitmap\-icons
 .Ve
 .PP
 .Vb 2
-\&    -g, --with-gui                    
-\&    -z, --without-gui
+\&    \-g, \-\-with\-gui                    
+\&    \-z, \-\-without\-gui
 .Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
@@ -334,19 +333,19 @@ it can be used for doing \s-1SVG\s0 processing on the commandline as well.
 Print an \s-1SVG\s0 file:
 .PP
 .Vb 1
-\&    inkscape filename.svg -p '| lpr'
+\&    inkscape filename.svg \-p \[aq]| lpr\[aq]
 .Ve
 .PP
 Export an \s-1SVG\s0 file into \s-1PNG:\s0
 .PP
 .Vb 1
-\&    inkscape filename.svg --export-png=filename.png -w600 -h400
+\&    inkscape filename.svg \-\-export\-png=filename.png \-w600 \-h400
 .Ve
 .PP
 Convert an Inkscape \s-1SVG\s0 document to plain \s-1SVG:\s0  
 .PP
 .Vb 1
-\&    inkscape filename1.svg --export-plain-svg=filename2.svg
+\&    inkscape filename1.svg \-\-export\-plain\-svg=filename2.svg
 .Ve
 .SH "ENVIRONMENT"
 .IX Header "ENVIRONMENT"
@@ -498,11 +497,11 @@ to Windows and other operating systems, and eliminating dependencies.
 Inkscape was formed in 2003 by four active Sodipodi developers, Bryce
 Harrington, MenTaLguY, Nathan Hurst, and Ted Gould, wanting to take a
 different direction with the codebase in terms of focus on
-\&\s-1SVG\s0 compliance, interface look\-and\-feel, and a desire to open
+\&\s-1SVG\s0 compliance, interface look-and-feel, and a desire to open
 development opportunities to more participants.  
 .SH "COPYRIGHT AND LICENSE"
 .IX Header "COPYRIGHT AND LICENSE"
-\&\fBCopyright (C)\fR 1999\-2004 by Authors.  
+\&\fBCopyright (C)\fR 1999\[en]2004 by Authors.  
 .PP
 \&\fBInkscape\fR is free software; you can redistribute it and/or modify it
 under the terms of the \s-1GPL\s0.  
