@@ -116,7 +116,7 @@ private:
     static CString const &_create_unsafe(char const *string) const
     throw()
     {
-        CArray<char> const &array=CArray<char>::create_unsafe(string);
+        CArray<char> const &array=CArray<char>::_create_unsafe(string);
         return reinterpret_cast<CString const &>(array);
     }
 };

@@ -12,14 +12,20 @@
 #ifndef SEEN_INKSCAPE_AST_C_ARRAY_H
 #define SEEN_INKSCAPE_AST_C_ARRAY_H
 
+#include "ast/null-pointer.h"
+
 namespace Inkscape {
 namespace AST {
 
 template <typename T>
 struct CArray {
 public:
-    static CArray const &create_unsafe(T const *array) throw() {
-        return *reinterpret_cast<CArray<T> const *>(array);
+    static CArray const &create_unsafe(T const *array) throw(NullPointer) {
+        if (array) {
+            return _create_unsafe(array);
+        } else {
+            throw NullPointer();
+        }
     }
 
     T const *toPointer() const throw() {
@@ -36,6 +42,10 @@ public:
 
 private:
     void operator=(CArray<T> const &);
+
+    static CArray const &_create_unsafe(T const *array) throw() {
+        return *reinterpret_cast<CArray<T> const *>(array);
+    }
 };
 
 };

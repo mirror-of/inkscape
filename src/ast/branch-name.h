@@ -12,31 +12,30 @@
 #ifndef SEEN_INKSCAPE_AST_BRANCH_NAME_H
 #define SEEN_INKSCAPE_AST_BRANCH_NAME_H
 
-#include <cstdlib>
-#include <glib/glib.h>
+#include "ast/symbol.h"
 
 namespace Inkscape {
 namespace AST {
 
 class BranchName {
 public:
-    BranchName(GQuark axis=0, GQuark name=0) : _axis(axis), _name(name) {}
+    BranchName(Symbol axis, Symbol name) : _axis(axis), _name(name) {}
 
     BranchName(BranchName const &branch)
     : _axis(branch._axis), _name(branch._name) {}
 
-    GQuark axis() const { return _axis; }
-    GQuark name() const { return _name; }
+    Symbol axis() const { return _axis; }
+    Symbol name() const { return _name; }
 
     bool operator==(BranchName const &branch) const {
-            return _axis == branch._axis && _name == branch._name;
+        return _axis == branch._axis && _name == branch._name;
     }
 
 private:
     void operator=(BranchName const &);
 
-    GQuark _axis;
-    GQuark _name;
+    Symbol _axis;
+    Symbol _name;
 };
 
 };

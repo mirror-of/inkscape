@@ -17,28 +17,12 @@
 
 namespace Inkscape {
 namespace AST {
+namespace XML {
 
-class XMLNode : public Node {
-public:
-    Node const *traverse(BranchName const &branch, unsigned pos) const;
-
-    Node const &insertBefore(BranchName const &branch, unsigned pos,
-                             Node const *node) const
-    throw(InvalidTransformation);
-
-    Node const &replaceWith(BranchName const &branch, unsigned pos,
-                            Node const *node) const
-    throw(InvalidTransformation);
-
-    Node const &removeAt(BranchName const &branch, unsigned pos) const
-    throw(InvalidTransformation);
-
-    void write(std::ostream &os) const;
-    String const &toString() const;
-
-private:
+class Node : public AST::Node {
 };
 
+};
 };
 };
 

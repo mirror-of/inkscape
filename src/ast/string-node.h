@@ -21,8 +21,7 @@ namespace AST {
 
 class StringNode : public Node {
 public:
-    explicit StringNode(CString const &value) : _value(value) {}
-    StringNode(StringNode const &node) : _value(node._value) {}
+    explicit StringNode(String const &value) : _value(value) {}
 
     String const &toString() const { return _value; }
 

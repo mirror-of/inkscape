@@ -26,9 +26,6 @@ public:
     Path(Path const *parent, BranchName const &branch, unsigned pos)
     : _parent(parent), _branch(branch), _pos(pos) {}
 
-    Path(Path const &path)
-    : _parent(path._parent), _branch(path._branch), _pos(path._pos) {}
-
     Path const *parent() const { return _parent; }
     BranchName const &branch() const { return _branch; }
     unsigned pos() const { return _pos; }

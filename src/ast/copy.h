@@ -28,7 +28,7 @@ namespace AST {
 template <typename T>
 T *genericInitVector(T *to, T const *from, size_t count) {
     for ( size_t i=0 ; i < count ; i++ ) {
-        (to+i)->T(from[i]);
+        new (reinterpret_cast<void *>(to+i)) T(from[i]);
     }
     return to;
 }
