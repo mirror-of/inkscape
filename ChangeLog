@@ -5,6 +5,15 @@
 
 	* src/libnr/nr-types.h: Move cross to its sole user, src/geom.cpp.
 
+2004-01-06  bulia byak <bulia@dr.com>
+
+	* src/widgets/spw-utilities.cpp,h: Recursive font setting functions 
+
+	* src/widgets/widget-sizes.h: New: defines sizes and intervals, for toolbars etc.  
+
+	* src/select-toolbar.cpp src/helper/unit-menu.cpp src/toolbox.cpp,h: Use
+	widget-sizes.h and recursive font_set
+
 2004-01-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/desktop-snap.cpp: Make the `horizontal' and `vertical'
