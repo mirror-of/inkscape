@@ -121,6 +121,11 @@ sp_node_context_init (SPNodeContext * node_context)
 	event_context->cursor_shape = cursor_node_xpm;
 	event_context->hot_x = 1;
 	event_context->hot_y = 1;
+
+	node_context -> leftalt = FALSE;
+	node_context -> rightalt = FALSE;
+	node_context -> leftctrl = FALSE;
+	node_context -> rightctrl = FALSE;
 }
 
 static void
@@ -380,6 +385,8 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 	nc = SP_NODE_CONTEXT (event_context);
 	nudge = prefs_get_double_attribute_limited ("options.nudgedistance", "value", 2.8346457, 0, 1000); // default is 1 mm
 	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
+	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
+	gdouble offset = prefs_get_double_attribute_limited ("options.defaultoffsetwidth", "value", 2, 0, 1000); 
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
@@ -600,8 +607,120 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			}
 			ret = TRUE;
 			break;
+
+ 		case GDK_bracketleft:
+			if (MOD__CTRL) {
+				if (nc->leftctrl)
+					sp_nodepath_selected_nodes_rotate (nc->nodepath, M_PI/snaps, -1);
+				if (nc->rightctrl)
+					sp_nodepath_selected_nodes_rotate (nc->nodepath, M_PI/snaps, 1);
+			} else if (MOD__ALT) {
+				if (nc->leftalt && nc->rightalt)
+					sp_nodepath_selected_nodes_rotate_screen (nc->nodepath, 1, 0);
+				else {
+					if (nc->leftalt)
+						sp_nodepath_selected_nodes_rotate_screen (nc->nodepath, 1, -1);
+					if (nc->rightalt)
+						sp_nodepath_selected_nodes_rotate_screen (nc->nodepath, 1, 1);
+				}
+			} else {
+				sp_nodepath_selected_nodes_rotate (nc->nodepath, M_PI/snaps, 0);
+			}
+			ret = TRUE;
+			break;
+ 		case GDK_bracketright:
+			if (MOD__CTRL) {
+				if (nc->leftctrl)
+					sp_nodepath_selected_nodes_rotate (nc->nodepath, -M_PI/snaps, -1);
+				if (nc->rightctrl)
+					sp_nodepath_selected_nodes_rotate (nc->nodepath, -M_PI/snaps, 1);
+			} else if (MOD__ALT) {
+				if (nc->leftalt && nc->rightalt)
+					sp_nodepath_selected_nodes_rotate_screen (nc->nodepath, -1, 0);
+				else {
+					if (nc->leftalt)
+						sp_nodepath_selected_nodes_rotate_screen (nc->nodepath, -1, -1);
+					if (nc->rightalt)
+						sp_nodepath_selected_nodes_rotate_screen (nc->nodepath, -1, 1);
+				}
+			} else {
+				sp_nodepath_selected_nodes_rotate (nc->nodepath, -M_PI/snaps, 0);
+			}
+			ret = TRUE;
+			break;
+ 		case GDK_less:
+ 		case GDK_comma:
+			if (MOD__CTRL) {
+				if (nc->leftctrl)
+					sp_nodepath_selected_nodes_scale (nc->nodepath, -offset, -1);
+				if (nc->rightctrl)
+					sp_nodepath_selected_nodes_scale (nc->nodepath, -offset, 1);
+			} else if (MOD__ALT) {
+				if (nc->leftalt && nc->rightalt)
+					sp_nodepath_selected_nodes_scale_screen (nc->nodepath, -1, 0);
+				else {
+					if (nc->leftalt)
+						sp_nodepath_selected_nodes_scale_screen (nc->nodepath, -1, -1);
+					if (nc->rightalt)
+						sp_nodepath_selected_nodes_scale_screen (nc->nodepath, -1, 1);
+				}
+			} else {
+				sp_nodepath_selected_nodes_scale (nc->nodepath, -offset, 0);
+			}
+			ret = TRUE;
+			break;
+ 		case GDK_greater:
+ 		case GDK_period:
+			if (MOD__CTRL) {
+				if (nc->leftctrl)
+					sp_nodepath_selected_nodes_scale (nc->nodepath, offset, -1);
+				if (nc->rightctrl)
+					sp_nodepath_selected_nodes_scale (nc->nodepath, offset, 1);
+			} else if (MOD__ALT) {
+				if (nc->leftalt && nc->rightalt)
+					sp_nodepath_selected_nodes_scale_screen (nc->nodepath, 1, 0);
+				else {
+					if (nc->leftalt)
+						sp_nodepath_selected_nodes_scale_screen (nc->nodepath, 1, -1);
+					if (nc->rightalt)
+						sp_nodepath_selected_nodes_scale_screen (nc->nodepath, 1, 1);
+				}
+			} else {
+				sp_nodepath_selected_nodes_scale (nc->nodepath, offset, 0);
+			}
+			ret = TRUE;
+			break;
+
+		case GDK_Alt_L:
+			nc->leftalt = TRUE;
+			break;
+		case GDK_Alt_R:
+			nc->rightalt = TRUE;
+			break;
+		case GDK_Control_L:
+			nc->leftctrl = TRUE;
+			break;
+		case GDK_Control_R:
+			nc->rightctrl = TRUE;
+			break;
 		default:
 			ret = node_key (event);
+			break;
+		}
+		break;
+	case GDK_KEY_RELEASE:
+		switch (event->key.keyval) {
+		case GDK_Alt_L:
+			nc->leftalt = FALSE;
+			break;
+		case GDK_Alt_R:
+			nc->rightalt = FALSE;
+			break;
+		case GDK_Control_L:
+			nc->leftctrl = FALSE;
+			break;
+		case GDK_Control_R:
+			nc->rightctrl = FALSE;
 			break;
 		}
 		break;
