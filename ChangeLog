@@ -6,6 +6,10 @@
       all needed icons are present. I didn't create icons for elements 
       that are going to be removed eventually.
 
+    * share/tutorials/tipsandtricks.svg src/help.cpp src/interface.cpp: 
+      added this tutorial so that people 
+      can consolidate their information onto this page.
+
 2004-03-30  Ted Gould  <ted@gould.cx>
 
     * src/file.cpp, src/file.h, src/dialogs/filedialog-win32.cpp,
