@@ -859,18 +859,20 @@ find_item_at_point (unsigned int dkey, SPGroup *group, NR::Point const p, gboole
 }
 
 /**
-Returns the bottommost non-layer group from the descendants of group which is at point
+Returns the topmost non-layer group from the descendants of group which is at point
 p, or NULL if none. Recurses into layers but not into groups.
  */
 SPItem*
 find_group_at_point (unsigned int dkey, SPGroup *group, NR::Point const p)
 {
+	SPItem *seen = NULL;
+
 	for (SPObject *o = sp_object_first_child(SP_OBJECT(group)) ; o != NULL ; o = SP_OBJECT_NEXT(o) ) {
 		if (!SP_IS_ITEM (o)) continue;
 		if (SP_IS_GROUP (o) && SP_GROUP (o)->effectiveLayerMode(dkey) == SPGroup::LAYER) {
 			SPItem *newseen = find_group_at_point (dkey, SP_GROUP (o), p);
 			if (newseen) {
-				return newseen;
+				seen = newseen;
 			}
 		}
 		if (SP_IS_GROUP (o) && SP_GROUP (o)->effectiveLayerMode(dkey) != SPGroup::LAYER ) {
@@ -879,11 +881,11 @@ find_group_at_point (unsigned int dkey, SPGroup *group, NR::Point const p)
 
 			// seen remembers the last (topmost) of groups pickable at this point
 			if (nr_arena_item_invoke_pick (arenaitem, p, nr_arena_global_delta, 1) != NULL) {
-				return child;
+				seen = child;
 			}
 		}
 	}
-	return NULL;
+	return seen;
 }
 
 /*
