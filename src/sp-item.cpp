@@ -40,6 +40,7 @@
 #include "sp-item-rm-unsatisfied-cns.h"
 #include "prefs-utils.h"
 #include "libnr/nr-matrix.h"
+#include "libnr/nr-matrix-div.h"
 #include "libnr/nr-matrix-fns.h"
 #include "libnr/nr-matrix-ops.h"
 #include "libnr/nr-rect.h"
@@ -148,8 +149,7 @@ NR::Matrix partial_xform(SPObject const *object, SPObject const *ancestor) {
 NR::Matrix SPItem::getRelativeTransform(SPObject const *object) const {
     g_return_val_if_fail(object != NULL, NR::identity());
     SPObject const *ancestor = this->nearestCommonAncestor(object);
-    return partial_xform(this, ancestor) *
-           partial_xform(object, ancestor).inverse();
+    return partial_xform(this, ancestor) / partial_xform(object, ancestor);
 }
 
 }
@@ -728,9 +728,7 @@ sp_item_write_transform(SPItem *item, SPRepr *repr, NR::Matrix const &transform,
 
      // compensate for stroke scaling, depending on user preference
     if (prefs_get_int_attribute("options.transform", "stroke", 1) == 0) {
-        double expansion = NR::expansion(advertized_transform.inverse());
-        /* effic: Rather than inverting a matrix, I believe we can just take the reciprocal:
-           double const expansion = 1. / NR::expansion(advertized_transform). */
+        double const expansion = 1. / NR::expansion(advertized_transform);
         sp_item_adjust_stroke_width_recursive(item, expansion);
     }
 

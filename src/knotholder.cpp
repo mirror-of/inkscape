@@ -15,11 +15,13 @@
 
 #include <glib.h>
 #include <gtk/gtksignal.h>
+
 #include "document.h"
 #include "desktop.h"
 #include "sp-item.h"
 #include "sp-shape.h"
 #include "knotholder.h"
+#include <libnr/nr-matrix-div.h>
 #include <libnr/nr-matrix-ops.h>
 
 static void knot_moved_handler (SPKnot *knot, NR::Point *p, guint state, gpointer data);
@@ -135,7 +137,7 @@ knot_moved_handler (SPKnot *knot, NR::Point *p, guint state, gpointer data)
 	for (GSList *el = knot_holder->entity; el; el = el->next) {
 		SPKnotHolderEntity *e = (SPKnotHolderEntity *)el->data;
 		if (e->knot == knot) {
-			NR::Point const q = *p * sp_item_i2d_affine(item).inverse();
+			NR::Point const q = *p / sp_item_i2d_affine(item);
 			e->knot_set (item, q, state);
 			break;
 		}

@@ -18,6 +18,7 @@
 #include <string.h>
 
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-div.h>
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-point-fns.h>
 
@@ -379,8 +380,7 @@ sp_rect_set_transform (SPItem *item, NR::Matrix const &xform)
 	NR::Point pos=NR::Point(rect->x.computed, rect->y.computed) * xform;
 
 	/* Clear translation */
-	NR::Matrix remaining(xform);
-	remaining[4] = remaining[5] = 0.0;
+	NR::Matrix remaining(NR::transform(xform));
 
 	/* Scalers */
 	gdouble sw = sqrt (remaining[0] * remaining[0] + remaining[1] * remaining[1]);
@@ -419,7 +419,7 @@ sp_rect_set_transform (SPItem *item, NR::Matrix const &xform)
 	sp_shape_adjust_stroke (item, sqrt (fabs (sw * sh)));
 
 	// Adjust pattern fill
-	sp_shape_adjust_pattern (item, NR::identity(), xform * remaining.inverse());
+	sp_shape_adjust_pattern(item, NR::identity(), xform / remaining);
 
 	item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 

@@ -1940,7 +1940,7 @@ sp_stroke_style_scale_line(SPWidget *spw)
             if (unit->base == SP_UNIT_ABSOLUTE) {
                 sp_convert_distance( &width_typed, sp_unit_selector_get_unit(us), SP_PS_UNIT );
                 NR::Matrix i2d = sp_item_i2d_affine (SP_ITEM(i->data));
-                width = width_typed * i2d.inverse().expansion();
+                width = width_typed / expansion(i2d);
             } else { // percentage
                 gdouble old_w = SP_OBJECT_STYLE (i->data)->stroke_width.computed;
                 width = old_w * width_typed / 100;

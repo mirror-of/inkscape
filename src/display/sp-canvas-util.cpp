@@ -13,8 +13,10 @@
  */
 
 #include <string.h>
+
+#include "libnr/nr-matrix-div.h"
+#include "libnr/nr-matrix-ops.h"
 #include "sp-canvas-util.h"
-#include <libnr/nr-matrix-ops.h>
 
 void
 sp_canvas_update_bbox (SPCanvasItem *item, int x1, int y1, int x2, int y2)
@@ -100,14 +102,14 @@ NR::Matrix  sp_canvas_item_i2i_affine (SPCanvasItem * from, SPCanvasItem * to)
 	g_assert (from != NULL);
 	g_assert (to != NULL);
 
-	return sp_canvas_item_i2w_affine (from) * sp_canvas_item_i2w_affine (to).inverse();
+	return sp_canvas_item_i2w_affine(from) / sp_canvas_item_i2w_affine(to);
 }
 
 void sp_canvas_item_set_i2w_affine (SPCanvasItem * item,  NR::Matrix const &i2w)
 {
 	g_assert (item != NULL);
 
-	sp_canvas_item_affine_absolute (item, i2w * sp_canvas_item_i2w_affine (item->parent).inverse());
+	sp_canvas_item_affine_absolute(item, i2w / sp_canvas_item_i2w_affine(item->parent));
 }
 
 void sp_canvas_item_move_to_z (SPCanvasItem * item, gint z)

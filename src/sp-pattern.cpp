@@ -640,7 +640,7 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 		// So here I comply with the majority opinion, but leave my interpretation commented out below.
 		// (To get item_transform, I subtract parent from full.)
 
-		//NR::Matrix ps2px = (full_transform * parent_transform.inverse()) * NR::Matrix (pattern_patternTransform (pat)) * parent_transform;
+		//NR::Matrix ps2px = (full_transform / parent_transform) * NR::Matrix (pattern_patternTransform (pat)) * parent_transform;
 		NR::Matrix ps2px = NR::Matrix (pattern_patternTransform (pat)) * full_transform;
 
 		ps2px.copyto (&pp->ps2px);
@@ -678,7 +678,7 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 			pcs2px = pcs2user * full_transform;
 		} else {
 			// see (*)
-			//pcs2px = (full_transform * parent_transform.inverse()) * NR::Matrix (pattern_patternTransform (pat)) * parent_transform;
+			//pcs2px = (full_transform / parent_transform) * NR::Matrix (pattern_patternTransform (pat)) * parent_transform;
 			pcs2px = NR::Matrix (pattern_patternTransform (pat)) * full_transform;
 		}
 

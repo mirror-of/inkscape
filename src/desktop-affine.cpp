@@ -13,6 +13,7 @@
  */
 
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-div.h>
 #include <libnr/nr-matrix-ops.h>
 #include "desktop.h"
 #include "document.h"
@@ -74,7 +75,7 @@ sp_desktop_w2doc_affine (SPDesktop const *desktop, NRMatrix *w2doc)
 	g_return_val_if_fail (SP_IS_DESKTOP (desktop), NULL);
 	g_return_val_if_fail (w2doc != NULL, NULL);
 
-	*w2doc = desktop->w2d * desktop->doc2dt.inverse();
+	*w2doc = desktop->w2d / desktop->doc2dt;
 
 	return w2doc;
 }
@@ -146,7 +147,7 @@ NR::Matrix const sp_desktop_w2doc_affine (SPDesktop const *desktop)
 	g_return_val_if_fail (desktop != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DESKTOP (desktop), NULL);
 
-	return desktop->w2d * desktop->doc2dt.inverse();
+	return desktop->w2d / desktop->doc2dt;
 }
 
 NR::Matrix const sp_desktop_doc2w_affine(SPDesktop const *desktop)
@@ -191,7 +192,7 @@ NR::Point sp_desktop_d2doc_xy_point(SPDesktop const *dt, NR::Point const p)
 	assert (dt != NULL);
 	assert (SP_IS_DESKTOP (dt));
 
-	return p * dt->doc2dt.inverse();
+	return p / dt->doc2dt;
 }
 
 NR::Point sp_desktop_doc2d_xy_point(SPDesktop const *dt, NR::Point const p)
@@ -207,7 +208,7 @@ NR::Point sp_desktop_w2doc_xy_point (SPDesktop const *dt, const NR::Point p)
 	assert (dt != NULL);
 	assert (SP_IS_DESKTOP (dt));
 
-	return p * dt->w2d * dt->doc2dt.inverse();
+	return p * dt->w2d / dt->doc2dt;
 }
 
 NR::Point sp_desktop_doc2w_xy_point(SPDesktop const *dt, NR::Point const p)
