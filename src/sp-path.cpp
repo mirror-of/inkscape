@@ -132,17 +132,13 @@ sp_path_init (SPPath *path)
 static void
 sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 {
-	SPPath *path;
-	SPVersion version;
+	SPPath *path = SP_PATH(object);
 
-	path = SP_PATH (object);
-
-	version = sp_object_get_sodipodi_version (object);
+	SPVersion version = sp_object_get_sodipodi_version(object);
 
 	/* Fixes old Sodipodi nodetype to namespaced parameter */
 	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
-		const gchar *str;
-		str = sp_repr_attr (repr, "SODIPODI-PATH-NODE-TYPES");
+		gchar const *str = sp_repr_attr(repr, "SODIPODI-PATH-NODE-TYPES");
 		sp_repr_set_attr (repr, "sodipodi:nodetypes", str);
 		sp_repr_set_attr (repr, "SODIPODI-PATH-NODE-TYPES", NULL);
 	}
@@ -208,31 +204,27 @@ sp_path_build (SPObject *object, SPDocument *document, SPRepr *repr)
 static void
 sp_path_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	SPPath *path;
-
-	path = (SPPath *) object;
+	SPPath *path = (SPPath *) object;
 
 	switch (key) {
 	case SP_ATTR_D:
 		if (value) {
-			NArtBpath *bpath;
-			SPCurve *curve;
-			bpath = sp_svg_read_path (value);
-			curve = sp_curve_new_from_bpath (bpath);
+			NArtBpath *bpath = sp_svg_read_path(value);
+			SPCurve *curve = sp_curve_new_from_bpath(bpath);
 			if (curve) {
-			  sp_shape_set_curve ((SPShape *) path, curve, TRUE);
-			  sp_curve_unref (curve);
+				sp_shape_set_curve((SPShape *) path, curve, TRUE);
+				sp_curve_unref(curve);
 			}
 		} else {
-			sp_shape_set_curve ((SPShape *) path, NULL, TRUE);
+			sp_shape_set_curve((SPShape *) path, NULL, TRUE);
 		}
 		break;
 	case SP_PROP_MARKER:
 	case SP_PROP_MARKER_START:
 	case SP_PROP_MARKER_MID:
 	case SP_PROP_MARKER_END:
-	      sp_shape_set_marker (object, key,  value);
-	    break;
+		sp_shape_set_marker(object, key, value);
+		break;
  	default:
 		if (((SPObjectClass *) parent_class)->set) {
 			((SPObjectClass *) parent_class)->set (object, key, value);
