@@ -73,6 +73,7 @@ EXTRA_DIST =	\
 	libnrtype/makefile.in	\
 	livarot/makefile.in	\
 	svg/makefile.in	\
+	traits/makefile.in	\
 	utest/makefile.in	\
 	widgets/makefile.in	\
 	xml/makefile.in	\
