@@ -65,6 +65,8 @@ libnr_libnr_a_SOURCES =	\
 	libnr/nr-rotate-fns.cpp	\
 	libnr/nr-rotate-fns.h	\
 	libnr/nr-rotate-ops.h	\
+	libnr/nr-rotate-matrix-ops.cpp	\
+	libnr/nr-rotate-matrix-ops.h	\
 	libnr/nr-rotate.h	\
 	libnr/nr-scale-ops.h	\
 	libnr/nr-scale.h	\
@@ -75,6 +77,8 @@ libnr_libnr_a_SOURCES =	\
 	libnr/nr-svp.h	\
 	libnr/nr-translate-ops.h	\
 	libnr/nr-translate.h	\
+	libnr/nr-translate-rotate-ops.cpp	\
+	libnr/nr-translate-rotate-ops.h 	\
 	libnr/nr-types.cpp	\
 	libnr/nr-types.h	\
 	libnr/nr-values.cpp	\
