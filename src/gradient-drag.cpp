@@ -1,7 +1,7 @@
 #define __GRADIENT_DRAG_C__
 
 /*
- * Helper object for showing selected items
+ * On-canvas gradient dragging
  *
  * Authors:
  *   bulia byak <bulia@users.sf.net>
@@ -55,12 +55,12 @@ SPKnotShapeType gr_knot_shapes [] = {
 };
 
 const gchar *gr_knot_descr [] = {
-    N_("linear gradient start"), //POINT_LG_P1
-    N_("linear gradient end"),
-    N_("radial gradient center"),
-    N_("radial gradient radius"),
-    N_("radial gradient radius"),
-    N_("radial gradient focus") // POINT_RG_FOCUS
+    N_("Linear gradient start"), //POINT_LG_P1
+    N_("Linear gradient end"),
+    N_("Radial gradient center"),
+    N_("Radial gradient radius"),
+    N_("Radial gradient radius"),
+    N_("Radial gradient focus") // POINT_RG_FOCUS
 };
 
 static void 
@@ -160,7 +160,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer da
     }
 
     if (state & GDK_SHIFT_MASK) {
-        if (dragger->draggables->next) {
+        if (dragger->draggables && dragger->draggables->next) {
             // create a new dragger
             GrDragger *dr_new = new GrDragger (dragger->parent, *p, NULL, 
                                                gr_knot_shapes[((GrDraggable *) dragger->draggables->next->data)->point_num]);
@@ -247,7 +247,8 @@ gr_knot_ungrabbed_handler (SPKnot *knot, unsigned int state, gpointer data)
     // check if this draggable is attached to a radial gradient; if so, we need to regenerate all
     // draggers because moving this one affects positions of others. BAD because 1) others will not
     // be updated until mouse is released, 2) we'll need to clumsily save and restore selected
-    // dragger, 3) others will unsnap without warning. However, this is by far the simplest method. 
+    // dragger, 3) others will unsnap without warning; 4) the order of draggables may change which
+    // affects knot shape. However, this is by far the simplest method.
     bool has_dependencies = false;
     for (GSList const* i = dragger->draggables; i != NULL; i = i->next) {
         GrDraggable *draggable = (GrDraggable *) i->data;
@@ -294,10 +295,10 @@ GrDragger::updateTip ()
 
     if (g_slist_length (this->draggables) == 1) {
         GrDraggable *draggable = (GrDraggable *) this->draggables->data;
-        this->knot->tip = g_strdup_printf (_("Drag %s for %s"), 
+        this->knot->tip = g_strdup_printf (_("%s for: %s"), 
                                            gr_knot_descr[draggable->point_num], sp_item_description (draggable->item));
     } else {
-        this->knot->tip = g_strdup_printf (_("Drag gradient point shared by <b>%d</b> gradients; with <b>Shift</b> to unsnap"), 
+        this->knot->tip = g_strdup_printf (_("Gradient point shared by <b>%d</b> gradients; drag with <b>Shift</b> to separate"), 
                                            g_slist_length (this->draggables));
     }
 }
@@ -471,7 +472,7 @@ GrDrag::updateDraggers ()
         if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
             SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (item);
             if (SP_IS_LINEARGRADIENT (server)) {
-                addDraggersLinear(SP_LINEARGRADIENT (server), item, true);
+                addDraggersLinear (SP_LINEARGRADIENT (server), item, true);
             } else if (SP_IS_RADIALGRADIENT (server)) {
                 addDraggersRadial (SP_RADIALGRADIENT (server), item, true);
             }
@@ -480,7 +481,7 @@ GrDrag::updateDraggers ()
         if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) { 
             SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER (item);
             if (SP_IS_LINEARGRADIENT (server)) {
-                addDraggersLinear(SP_LINEARGRADIENT (server), item, false);
+                addDraggersLinear (SP_LINEARGRADIENT (server), item, false);
             } else if (SP_IS_RADIALGRADIENT (server)) {
                 addDraggersRadial (SP_RADIALGRADIENT (server), item, false);
             }
