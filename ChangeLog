@@ -1,6 +1,7 @@
 2005-01-20  Kees Cook  <kees@outflux.net>
 
     * src/file.cpp: added some debug output to help bulia debug bug #1102318.
+    * configure.ac: more attempts at detecting the -lgc libs.
 
 2005-01-19  Kees Cook  <kees@outflux.net>
 

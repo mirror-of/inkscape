@@ -72,17 +72,38 @@ if test "x$png_ok" != "xyes"; then
 	AC_MSG_ERROR([libpng >= 1.2 is needed to compile inkscape])
 fi
 
-gc_libs="" # used to have -lpthread and -ldl in it... doesn't need it now?
-AC_CHECK_LIB(gc, GC_malloc,
-             [AC_CHECK_HEADERS([gc.h gc/gc.h],
-                               [gc_ok=yes; break],
-                               [gc_ok=no])],
-             [gc_ok=no],
-             [$gc_libs])
+AC_CHECK_HEADERS([gc.h gc/gc.h],
+                 [
+		    # To test for the different required libs, I have to
+		    # overcome autoconf's caching system, so I change the
+		    # desired function name.  They're all in libgc.
+		    # The "break" will exit from the top level
+                    # AC_CHECK_HEADERS.
+		    gc_libs=""
+		    AC_CHECK_LIB(gc, GC_init,
+                                 [gc_ok=yes;
+				  LIBS="-lgc $gc_libs $LIBS";
+				  break], [gc_ok=no], [$gc_libs])
+		    gc_libs="-lpthread"
+		    AC_CHECK_LIB(gc, GC_malloc,
+                                 [gc_ok=yes;
+				  LIBS="-lgc $gc_libs $LIBS";
+                                  break], [gc_ok=no], [$gc_libs])
+		    gc_libs="-ldl"
+		    AC_CHECK_LIB(gc, GC_realloc,
+                                 [gc_ok=yes;
+				  LIBS="-lgc $gc_libs $LIBS";
+                                  break], [gc_ok=no], [$gc_libs])
+		    gc_libs="-lpthread -ldl"
+		    AC_CHECK_LIB(gc, GC_free,
+                                 [gc_ok=yes;
+				  LIBS="-lgc $gc_libs $LIBS";
+				  break], [gc_ok=no], [$gc_libs])
+		    break],
+                 [gc_ok=no])
 if test "x$gc_ok" != "xyes"; then
 	AC_MSG_ERROR([libgc (the Boehm Conservative Collector), is needed to compile inkscape])
 fi
-LIBS="-lgc $gc_libs $LIBS"
 
 AC_PATH_PROG(FREETYPE_CONFIG, freetype-config, no)
 if test "x$FREETYPE_CONFIG" = "xno"; then
