@@ -125,11 +125,17 @@ SPObject *sp_object_href (SPObject *object, gpointer owner);
 SPObject *sp_object_hunref (SPObject *object, gpointer owner);
 
 struct SPObject : public GObject {
+	enum CollectionPolicy {
+		COLLECT_WITH_PARENT,
+		ALWAYS_COLLECT
+	};
+
 	unsigned int cloned : 1;
 	unsigned int uflags : 8;
 	unsigned int mflags : 8;
 	SPIXmlSpace xml_space;
 	unsigned int hrefcount; /* number of xlink:href references */
+	unsigned int _total_hrefcount; /* our hrefcount + total descendants */
 	SPDocument *document; /* Document we are part of */
 	SPObject *parent; /* Our parent (only one allowed) */
 	SPObject *children; /* Our children */
@@ -138,12 +144,24 @@ struct SPObject : public GObject {
 	gchar *id; /* Our very own unique id */
 	SPStyle *style;
 
-	void setId(gchar const *id);
+	void _updateTotalHRefCount(int increment);
 
-	void _sendDeleteSignalRecursive (bool propagate_descendants);
+	void setId(gchar const *id);
+	CollectionPolicy collectionPolicy() const { return _collection_policy; }
+	void setCollectionPolicy(CollectionPolicy policy) {
+		_collection_policy = policy;
+	}
+	void queueForCollection();
+	void collectObject() {
+		if ( _total_hrefcount == 0 ) {
+			deleteObject(false);
+		}
+	}
+
+	void _sendDeleteSignalRecursive();
 
 	void deleteObject(bool propagate, bool propagate_descendants);
-	void deleteObject(bool propagate = true) {
+	void deleteObject(bool propagate=true) {
 		deleteObject(propagate, propagate);
 	}
 
@@ -167,6 +185,7 @@ struct SPObject : public GObject {
 
 	SigC::Signal1<void, SPObject *> _delete_signal;
 	SPObject *_successor;
+	CollectionPolicy _collection_policy;
 };
 
 struct SPObjectClass {

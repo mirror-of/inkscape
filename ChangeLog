@@ -1,3 +1,21 @@
+2004-06-06  MenTaLguY  <mental@rydia.net>
+
+	* src/attributes.cpp, src/attributes.h: added inkscape:collect attribute
+	  to specify orphan collection policy (collect with parent, or always
+	  collect)
+
+	* src/document-undo.cpp, src/document.cpp, src/document.h: added an orphan
+	  collection pass as part of comitting an undo step
+	  
+	* src/sp-object.cpp, src/sp-object.h:
+	  add total hrefcount for all descendants, and basic orphan collection
+	  facilities
+
+	* src/gradient-chemistry.cpp, src/dialogs/stroke-style.cpp,
+	  src/extension/internal/gdkpixbuf-input.cpp:
+	  mark automatically added gradients, patterns, and markers for orphan
+	  collection
+
 2004-06-06  Bryce Harrington <bryce@bryceharrington.com>
 
 	* libnrtype/nr-type-xft.cpp, libnrtype/nr-font.cpp,

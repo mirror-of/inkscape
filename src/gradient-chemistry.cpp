@@ -79,6 +79,7 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 		g_print ("GVECTORNORM: Gradient %s attributes flattened\n", SP_OBJECT_ID (gr));
 		/* Step 2 - create new empty gradient and prepend it to <defs> */
 		repr = sp_repr_new ("linearGradient");
+		sp_repr_set_attr(repr, "inkscape:collect", "always");
 		sp_repr_add_child (SP_OBJECT_REPR (defs), repr, NULL);
 		spnew = (SPGradient *) sp_document_lookup_id (doc, sp_repr_attr (repr, "id"));
 		g_assert (gr != NULL);
@@ -339,6 +340,7 @@ sp_gradient_get_private_normalized (SPDocument *document, SPGradient *vector)
 	/* Have to create our own */
 	SPRepr *repr;
 	repr = sp_repr_new ("linearGradient");
+	sp_repr_set_attr(repr, "inkscape:collect", "always");
 	sp_gradient_repr_set_link (repr, vector);
 	/* Append cloned private gradient to defs */
 	sp_repr_append_child (SP_OBJECT_REPR (defs), repr);
@@ -409,6 +411,7 @@ sp_gradient_get_radial_private_normalized (SPDocument *document, SPGradient *vec
 	/* Have to create our own */
 	SPRepr *repr;
 	repr = sp_repr_new ("radialGradient");
+	sp_repr_set_attr(repr, "inkscape:collect", "always");
 	sp_gradient_repr_set_link (repr, vector);
 	/* Append cloned private gradient to defs */
 	sp_repr_append_child (SP_OBJECT_REPR (defs), repr);
@@ -674,6 +677,7 @@ sp_document_default_gradient_vector (SPDocument *document)
 	/* There were no suitable vector gradients - create one */
 	SPRepr *repr, *stop;
 	repr = sp_repr_new ("linearGradient");
+	sp_repr_set_attr(repr, "inkscape:collect", "always");
 	stop = sp_repr_new ("stop");
 	sp_repr_set_attr (stop, "style", "stop-color:#000;stop-opacity:1;");
 	sp_repr_set_attr (stop, "offset", "0");

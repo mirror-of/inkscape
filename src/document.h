@@ -45,6 +45,11 @@ struct SPDocument {
 	const gchar *actionkey;
 	/* Handler ID */
 	guint modified_id;
+
+	GSList *_collection_queue;
+
+	void queueForCollection(SPObject *object);
+	void collectObjects();
 };
 
 struct SPDocumentClass {

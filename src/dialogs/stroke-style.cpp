@@ -916,6 +916,7 @@ sp_marker_load_from_svg(gchar const *name, SPDocument *current_doc)
         if (object && SP_IS_MARKER(object)) {
             SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(current_doc);
             SPRepr *mark_repr = sp_repr_duplicate(SP_OBJECT_REPR(object));
+            sp_repr_set_attr(mark_repr, "inkscape:collect", "always");
             sp_repr_add_child (SP_OBJECT_REPR(defs), mark_repr, NULL);
             sp_repr_unref(mark_repr);
             return true;

@@ -140,12 +140,15 @@ sp_object_init (SPObject * object)
 #endif
 
 	object->hrefcount = 0;
+	object->_total_hrefcount = 0;
 	object->document = NULL;
 	object->children = NULL;
 	object->parent = object->next = NULL;
 	object->repr = NULL;
 	object->id = NULL;
 	object->style = NULL;
+
+	object->_collection_policy = SPObject::COLLECT_WITH_PARENT;
 
 	new (&object->_delete_signal) SigC::Signal1<void, SPObject *>();
 	object->_successor = NULL;
@@ -206,6 +209,7 @@ sp_object_href (SPObject *object, gpointer owner)
 	g_return_val_if_fail (SP_IS_OBJECT (object), NULL);
 
 	object->hrefcount++;
+	object->_updateTotalHRefCount(1);
 
 	return object;
 }
@@ -218,20 +222,42 @@ sp_object_hunref (SPObject *object, gpointer owner)
 	g_return_val_if_fail (object->hrefcount > 0, NULL);
 
 	object->hrefcount--;
+	object->_updateTotalHRefCount(-1);
 
 	return NULL;
+}
+
+void SPObject::_updateTotalHRefCount(int increment) {
+	SPObject *topmost_collectable=NULL;
+	for ( SPObject *iter=this ; iter ; iter = SP_OBJECT_PARENT(iter) ) {
+		iter->_total_hrefcount += increment;
+		if ( iter->_total_hrefcount < iter->hrefcount ) {
+			g_critical("HRefs overcounted");
+		}
+		if ( iter->_total_hrefcount == 0 &&
+		     iter->_collection_policy != COLLECT_WITH_PARENT )
+		{
+			topmost_collectable = iter;
+		}
+	}
+	if (topmost_collectable) {
+		topmost_collectable->queueForCollection();
+	}
+}
+
+void SPObject::queueForCollection() {
+	g_return_if_fail(document != NULL);
+	document->queueForCollection(this);
 }
 
 void SPObject::setId(gchar const *id) {
 	sp_object_set(this, SP_ATTR_ID, id);
 }
 
-void SPObject::_sendDeleteSignalRecursive (bool propagate_descendants) {
+void SPObject::_sendDeleteSignalRecursive() {
 	for (SPObject *child = sp_object_first_child(this); child; child = SP_OBJECT_NEXT (child)) {
-		if (propagate_descendants) {
-			child->_delete_signal.emit(child);
-		}
-		child->_sendDeleteSignalRecursive (propagate_descendants);
+		child->_delete_signal.emit(child);
+		child->_sendDeleteSignalRecursive();
 	}
 }
 
@@ -240,9 +266,8 @@ void SPObject::deleteObject(bool propagate, bool propagate_descendants)
 	if (propagate) {
 		_delete_signal.emit(this);
 	}
-
 	if (propagate_descendants) {
-		this->_sendDeleteSignalRecursive (propagate_descendants);
+		this->_sendDeleteSignalRecursive();
 	}
 
 	SPRepr *repr=SP_OBJECT_REPR(this);
@@ -283,6 +308,8 @@ sp_object_attach_reref (SPObject *parent, SPObject *object, SPObject *next)
 	sp_object_ref (object, parent);
 	g_object_unref (G_OBJECT (object));
 	object->parent = parent;
+	parent->_updateTotalHRefCount(object->_total_hrefcount);
+
 	object->next = next;
 	*ref = object;
 }
@@ -319,8 +346,7 @@ void sp_object_reorder(SPObject *object, SPObject *next)
 	*new_ref = object;
 }
 
-static void detach_object(SPObject *parent, SPObject *object, bool unref)
-{
+void sp_object_detach (SPObject *parent, SPObject *object) {
 	g_return_if_fail (parent != NULL);
 	g_return_if_fail (SP_IS_OBJECT (parent));
 	g_return_if_fail (object != NULL);
@@ -340,20 +366,19 @@ static void detach_object(SPObject *parent, SPObject *object, bool unref)
 	object->parent = NULL;
 
 	sp_object_invoke_release (object);
-
-	if (unref) {
-		sp_object_unref(object, parent);
-	}
-}
-
-void sp_object_detach (SPObject *parent, SPObject *object)
-{
-	detach_object(parent, object, false);
+	parent->_updateTotalHRefCount(-object->_total_hrefcount);
 }
 
 void sp_object_detach_unref (SPObject *parent, SPObject *object)
 {
-	detach_object(parent, object, true);
+	g_return_if_fail (parent != NULL);
+	g_return_if_fail (SP_IS_OBJECT (parent));
+	g_return_if_fail (object != NULL);
+	g_return_if_fail (SP_IS_OBJECT (object));
+	g_return_if_fail (object->parent == parent);
+
+	sp_object_detach(parent, object);
+	sp_object_unref(object, parent);
 }
 
 SPObject *sp_object_first_child(SPObject *parent)
@@ -439,6 +464,7 @@ sp_object_build (SPObject * object, SPDocument * document, SPRepr * repr)
 #endif
 
 	sp_object_read_attr (object, "xml:space");
+	sp_object_read_attr (object, "inkscape:collect");
 
         for (SPRepr *rchild = repr->children; rchild != NULL; rchild = rchild->next) {
 		GType type = sp_repr_type_lookup (rchild);
@@ -598,6 +624,13 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 			//g_warning ("ID of cloned object changed, so document is out of sync");
 		}
 		break;
+	case SP_ATTR_INKSCAPE_COLLECT:
+		if ( value && !strcmp(value, "always") ) {
+			object->setCollectionPolicy(SPObject::ALWAYS_COLLECT);
+		} else {
+			object->setCollectionPolicy(SPObject::COLLECT_WITH_PARENT);
+		}
+		break;
 	case SP_ATTR_XML_SPACE:
 		if (value && !strcmp (value, "preserve")) {
 			object->xml_space.value = SP_XML_SPACE_PRESERVE;
@@ -712,6 +745,9 @@ sp_object_private_write (SPObject *object, SPRepr *repr, guint flags)
 {
 	if (!repr && (flags & SP_OBJECT_WRITE_BUILD)) {
 		repr = sp_repr_duplicate (SP_OBJECT_REPR (object));
+		if (!( flags & SP_OBJECT_WRITE_EXT )) {
+			sp_repr_set_attr(repr, "inkscape:collect", NULL);
+		}
 	} else {
 		sp_repr_set_attr (repr, "id", object->id);
 
@@ -719,6 +755,12 @@ sp_object_private_write (SPObject *object, SPRepr *repr, guint flags)
 			const char *xml_space;
 			xml_space = sp_xml_get_space_string(object->xml_space.value);
 			sp_repr_set_attr (repr, "xml:space", xml_space);
+		}
+
+		if ( object->collectionPolicy() == SPObject::ALWAYS_COLLECT ) {
+			sp_repr_set_attr(repr, "inkscape:collect", "always");
+		} else {
+			sp_repr_set_attr(repr, "inkscape:collect", NULL);
 		}
 	}
 	

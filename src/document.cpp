@@ -148,6 +148,8 @@ sp_document_init (SPDocument *doc)
 	doc->base = NULL;
 	doc->name = NULL;
 
+	doc->_collection_queue = NULL;
+
 	p = g_new (SPDocumentPrivate, 1);
 
 	p->iddef = g_hash_table_new (g_direct_hash, g_direct_equal);
@@ -164,6 +166,27 @@ sp_document_init (SPDocument *doc)
 	doc->priv = p;
 }
 
+void SPDocument::queueForCollection(SPObject *object) {
+	g_return_if_fail(object != NULL);
+	g_return_if_fail(SP_OBJECT_DOCUMENT(object) == this);
+
+	sp_object_ref(object, NULL);
+	_collection_queue = g_slist_prepend(_collection_queue, object);
+}
+
+void SPDocument::collectObjects() {
+	while (_collection_queue) {
+		GSList *objects=_collection_queue;
+		_collection_queue = NULL;
+		for ( GSList *iter=objects ; iter ; iter = iter->next ) {
+			SPObject *object=reinterpret_cast<SPObject *>(iter->data);
+			object->collectObject();
+			sp_object_unref(object, NULL);
+		}
+		g_slist_free(objects);
+	}
+}
+
 /**
  *  This routine removes the given document object from the application,
  *  clearing the undo/redo information, releasing its root object, releasing
@@ -174,6 +197,8 @@ sp_document_dispose (GObject *object)
 {
 	SPDocument *doc = (SPDocument *) object;
 	SPDocumentPrivate *priv = doc->priv;
+
+	doc->collectObjects();
 
 	if (priv) {
 		inkscape_remove_document (doc);
@@ -923,3 +948,5 @@ sp_document_resource_list_free (gpointer key, gpointer value, gpointer data)
 	g_slist_free ((GSList *) value);
 	return TRUE;
 }
+
+

@@ -49,6 +49,7 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
         } else {
             // import as pattern-filled rect
             SPRepr *pat = sp_repr_new ("pattern");
+            sp_repr_set_attr(pat, "inkscape:collect", "always");
             sp_repr_set_attr (pat, "patternUnits", "userSpaceOnUse");
             sp_repr_set_double (pat, "width", gdk_pixbuf_get_width (pb));
             sp_repr_set_double (pat, "height", gdk_pixbuf_get_height (pb));
