@@ -1,0 +1,31 @@
+
+include ./Makefile.mingw.common
+
+
+all:
+	$(MAKE) -C src -f Makefile.mingw
+
+
+dist:
+	rm -rf inkscape
+	mkdir inkscape
+	cp src/inkscape.exe inkscape
+	#copy $(GTK)\bin\*.dll inkscape
+	mkdir inkscape/pixmaps
+	cp glade/*.xpm inkscape/pixmaps
+	cp glade/*.png inkscape/pixmaps
+	cp glade/*.svg inkscape/pixmaps
+	mkdir inkscape/data
+	mkdir inkscape/extensions
+	mkdir inkscape/locale
+	mkdir inkscape/modules
+	mkdir inkscape/samples
+	cp samples/*.svg inkscape/samples
+	cp samples/*.png inkscape/samples
+	jar cMf inkscape-$(VERSION).zip inkscape
+
+clean:
+	$(RM) -rf inkscape
+	$(MAKE) -C src -f Makefile.mingw clean
+
+
