@@ -547,7 +547,8 @@ sp_knot_handler (SPCanvasItem *item, GdkEvent *event, SPKnot *knot)
 				g_signal_emit (G_OBJECT (knot),
 					       knot_signals[UNGRABBED], 0,
 					       event->button.state);
-				sp_document_undo (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
+				sp_document_undo (SP_DT_DOCUMENT (knot->desktop));
+				sp_view_set_statusf_flash (SP_VIEW(knot->desktop), "Handle drag cancelled.");
 			} 
 			grabbed = FALSE;
 			moved = FALSE;
