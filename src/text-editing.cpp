@@ -1016,7 +1016,9 @@ static void overwrite_style_with_string(SPObject *item, gchar const *style_strin
 {
     SPStyle *new_style = sp_style_new();
     sp_style_merge_from_style_string(new_style, style_string);
-    sp_style_merge_from_parent(new_style, SP_OBJECT_STYLE(item));
+    gchar const *item_style_string = SP_OBJECT_REPR(item)->attribute("style");
+    if (item_style_string && *item_style_string)
+        sp_style_merge_from_style_string(new_style, item_style_string);
     gchar *new_style_string = sp_style_write_string(new_style);
     sp_style_unref(new_style);
     SP_OBJECT_REPR(item)->setAttribute("style", new_style_string && *new_style_string ? new_style_string : NULL);
