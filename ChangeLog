@@ -1,5 +1,8 @@
 2004-02-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/desktop.h (SP_DESKTOP_ZOOM): Define in terms of expansion()
+	function instead of implicit casting.
+
 	* src/arc-context.cpp: Cleanups: greater conformance to
 	Coding_Style, combine declaration and first assignment of some
 	vars.

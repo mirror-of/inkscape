@@ -82,7 +82,7 @@ struct _SPDesktopClass {
 #define SP_DESKTOP_SCROLL_LIMIT 4000.0
 #define SP_DESKTOP_ZOOM_MAX 256.0
 #define SP_DESKTOP_ZOOM_MIN 0.03125
-#define SP_DESKTOP_ZOOM(d) NR_MATRIX_DF_EXPANSION(NR_MATRIX_D_FROM_DOUBLE ((d)->d2w))
+#define SP_DESKTOP_ZOOM(d) expansion((d)->d2w)
 #define SP_DESKTOP_EVENT_CONTEXT(d) ((d)->event_context)
 
 void sp_desktop_set_active (SPDesktop *desktop, gboolean active);
