@@ -1,200 +1,235 @@
 Inkscape Release Notes
 ----------------------
 Please see the Inkscape website for the latest news about the project,
-or TODO and ChangeLog for further details about releases. This file only 
-contains the release notes for the current release.
-
-  Inkscape 0.37
+or the ChangeLog for further details about releases. This file contains 
+the release notes for the current release.
 
 
-    In brief:
+  Inkscape 0.38
 
-    * New functionality: boolean operations on paths, dynamic and linked
-      offsets, path outlining, standalone SVG viewer, drag-and-drop,
-      letter-spacing.
-    * More convenient editing: top panel, new color widget, 256x zoom,
-      snapped rotation with Ctrl everywhere, selecting within groups,
-      lots of new shortcuts, and more.
-    * Interface and usability: saving view with the document, zoom
-      history, fullscreen, hide/show all open dialogs, smarter export
-      dialog, helpful statusbar, and much more.
-    * Inkscape internals: built with C++, brand new classes for points,
-      rects, matrices, and URIs, massive cleanups.
-    * Last but not least: tutorial for new users, keys and mouse
-      reference, Inkscape User mailing list, hassle-free Windows builds. 
+
+    In brief
+
+The focus of this release has been our Bug Hunt. Of the 57 open bug
+reports at the time of our last release, only 12 remain; of the 107 bugs
+submitted during this bughunt, all but 17 are now closed; the ratio of
+open to total bugs went down from 33% to 10%. Of the 285 bugs reported
+since the inception of the project, fewer than 30 remain. In total, over
+135 bug reports were closed during the Bug Hunt. Countless other bugs
+were discovered by the developers and exterminated on the spot without
+ever going into the tracker. We are especially appreciative of the many
+users who have helped us identify the various bugs and verify the
+solutions.
+
+Aside from bugfixes, a good deal of new features and usability
+enhancements went into this release:
+
+    * Text and fonts: full kerning and spacing support, better installed
+      font detection, better alternate font matching, better usability
+    * Path operations: new commands to cut paths, less distortions,
+      better usability
+    * Gradients: full support for multi-stop gradients, bugfixes
+    * Shape tools: polygons, dramatically better usability with the top
+      panel, bugfixes
+    * Libinkjar: a library for compound document support of packaged SVG
+      and PNG files
+    * Pure usability: canvas autoscrolling, accelerated scrolling,
+      inversion for visibility, more intuitive cut-and-paste, per-object
+      selection indication, save dialog, new icons
+    * Paraphernalia: new and expanded tutorials, clipart, translation
+      updates 
 
 
     New functionality
 
-    * Boolean operations on shapes are now implemented: union,
-      difference, intersection, and exclusive OR (XOR).
-    * Paths can be inset or outset (i.e., contracted or expanded
-      orthogonally to the path in each point). You can do simple
-      inset/outset of a path, or you can create a dynamic offset object
-      that you can adjust interactively using the node tool. Moreover, a
-      dynamic offset object can be linked to its original path so that
-      editing the path will have the offset updated automatically.
-    * A stroke can now be converted to a closed path (i.e. outlined,
-      taking into account stroke width).
-    * A standalone SVG viewer is now available, which can be used as a
-      slideshow viewer. Just type inkview *.svg; see
-      http://www.inkscape.org/cgi-bin/wiki.pl?Inkview for details.
-    * You can now drag SVG files from Konqueror (and probably other KDE
-      apps, too) to Inkscape. And when The Gimp gets full support for
-      path drag-and-drop, we'll be able to accept drops from them, too.
-    * The Document Options dialog now lets you change the background and
-      border colors of a document, with the background color also used
-      for bitmap exports - which means you can easily produce PNGs with
-      non-transparent background.
-    * Support for the letter-spacing CSS property is implemented. Press
-      Alt+< or Alt+> when editing text to adjust the letterspacing of
-      the current line.
-    * The Help menu contains a new interactive tutorial for beginner
-      users of Inkscape and a complete Keys and Mouse reference in SVG
-      (see an HTML version at http://inkscape.org/doc/keys.html). 
+    * There's a complete support for horizontal and vertical kerning in
+      text objects (the dx and dy attributes in SVG). Text objects with
+      kerns remain fully editable.
+    * New boolean operations: Division (Ctrl+/), when applied to two
+      objects, cuts the bottom object into pieces along the edges of the
+      top object; Cut Path (Ctrl+Alt+/) is similar, but only cuts the
+      stroke of the bottom object (convenient for cutting paths without
+      fill).
+    * Multi-stop gradients are now fully supported: the redesigned
+      gradient editor can add, delete, move, and set color/alpha for an
+      arbitrary number of stops in a gradient.
+    * The star tool now has a polygon mode which generates true polygons
+      instead of stars with flat points, so that you don't get extra
+      points when you convert to path.
+    * There is a new library, libinkjar, which can read OpenOffice
+      .sxw (and some .jar) files. This allows you to bundle a bunch of SVGs 
+      and embedded files like .png for viewing in inkscape or inkview. 
+      This is work in progress. 
 
 
-    More convenient editing
+    Important bugfixes
 
-    * Complete keyboard control in selector and node tool: now you can
-      not only select and move objects/nodes with keyboard, but also
-      rotate them by [] keys and scale by <> keys, with various
-      modifiers. For nodes, rotating and scaling is applied to the
-      control handles of all selected nodes.
-    * The top panel for selector tool provides editable fields for the
-      coordinates, width, and height of the selection. Press Alt+X to
-      access the panel via keyboard.
-    * Maximum zoom was upped from 32x to 256x, which was possible by
-      increasing the coordinate precision used by the program and stored
-      in SVG.
-    * A new color widget on the Fill and Stroke dialog allows you to
-      select between RGB, CMYK, HSV sliders or an HSV color wheel
-      (resize the dialog if you want the wheel to grow larger). Also in
-      that dialog, editing gradients is now easier, as you can drag the
-      control points of linear and radial gradients.
-    * Many new keyboard+mouse modes make mousework a lot more
-      convenient. In selector and node tool, as well as in pen, spiral,
-      and star tools, rotating objects or control handles of a node with
-      Ctrl restricts rotation to 15 degree increments. Dragging nodes
-      may be restricted to horizontal/vertical (with Ctrl) and to the
-      directions of the node's handles (with Ctrl+Alt). Dragging a
-      node's control points with Alt locks the length of the handle, and
-      with Shift, rotates the other handle by the same angle.
-    * In selector, Ctrl+click and Ctrl+Shift+click select objects within
-      groups.
-    * In node tool, Ctrl+click toggles cusp/smooth/symmetric,
-      Ctrl+Alt+click deletes a node.
-    * Previously in selector, mouse dragging from an empty spot started
-      rubberband selection, while dragging from an object moved that
-      object. Now you can press Shift and Inkscape will start rubberband
-      from any spot, object or not. This makes selecting in complex
-      drawings more convenient. 
+    * Inkscape's font support is cleaned up and improved. More installed
+      fonts than before are now seen, displayed, and correctly applied.
+      Font matcher is more intelligent yet faster and supports generic
+      families and multiple family specifications, so bad font
+      substitutions are now rare. Besides, Inkscape will warn you
+      whenever it cannot find the exact match for the family or style
+      requested by the document.
+    * The new polygon intersector code fixed a number of ugly rendering
+      screw-ups and lock-ups.
+    * Previously, Inkscape canvas tended to "stick" after mouse release
+      when you were panning a complex document by middle mouse button.
+      This is now fixed.
+    * Non-ASCII filenames (e.g. Cyrillic) are fully supported for all
+      file operations (opening, saving, importing, exporting).
+    * Problems on localized Windows systems caused by the wrong numeric
+      format (comma as decimal separator in SVG) are resolved.
+    * The show/hide guidelines toggle (the | key) is restored and fully
+      functional.
+    * The Inset and Outset commands create paths with much smaller
+      distortions than before.
+    * A newly created group, or a combined path, now remains at the
+      level of its topmost member, instead of jumping to the top as
+      before. Several other commands are also fixed to preserve the
+      z-order and the parent of the object(s) they work on.
+    * Copy/paste of objects with gradients now works between documents.
+    * The bounding box of an object now includes stroke width (this
+      fixes the truncated bitmap export and some other problems).
+    * Several bugfixes were ported from Sodipodi; notably, the font size
+      mismatch between Windows and Unix is now gone. 
 
 
     Interface and usability
 
-    * When you save a document, Inkscape now remembers the zoom level
-      and the center of view and restores them on load, so you'll be
-      looking at exactly the same point at the same magnification as the
-      last time you saved the document. Optionally, it also saves window
-      size and position for each document and restores them on load.
-      Moreover, Inkscape can read the view template from the preferences
-      to set the zoom level, window geometry, grid settings, and guides
-      in all new documents.
-    * More helpful statusbar display: default hints for all tools,
-      explanations for most non-fatal errors, visual feedback for
-      non-trivial actions (such as Unicode mode in text tool), the
-      number and type of selected nodes in node tool, the font face and
-      size for text objects.
-    * Ctrl+Tab and Shift+Ctrl+Tab cycle forward and backward through the
-      document windows of the program.
-    * Inkscape now preserves the history of zoom settings for each
-      document. The ` key restores previous zoom; pressing ` repeatedly
-      will guide you through all the zoom settings you've used in this
-      session. Shift+` moves forward in the zoom history.
-    * Middle click zooms in, Shift+middle click zooms out (in addition
-      to middle button drag which pans canvas).
-    * All zooming operations via mouse now preserve the point under
-      cursor (no centering).
-    * Improvements in the Export dialog: the Browse button, helpful
-      error messages, and even a progress bar. The dialog remembers and
-      restores the export area and dpi settings.
-    * The fullscreen mode is implemented; press F11 to toggle.
-    * F12 temporarily hides all open dialogs; press F12 again to restore
-      them.
-    * More screen real estate: you can now hide rulers (Ctrl+R) and
-      scrollbars (Ctrl+B). These settings are remembered across sessions.
-    * All menus now have mnemonics.
-    * Many obsolete and confusing console debug messages removed, some
-      of them reworded in plain English and displayed in the statusbar
-      or (for important errors) in modal messageboxes.
-    * Many cosmetic improvements in the UI. 
+    * Complete spacing/kerning control via keyboard in the text tool:
+      when editing, Alt+< and Alt+> adjust letter spacing in the current
+      line, Ctrl+Alt+< and Ctrl+Alt+> adjust spacing between lines, and
+      Alt+arrows shift any character horizontally or vertically.
+    * In text tool, clicking on a text object positions the cursor
+      closest to the click, instead of at the end of the text object as
+      before.
+    * Node tool, text tool, and all shape tools now select objects
+      regardless of grouping. This means you don't need to switch to
+      selector for a Ctrl+click if you want to edit a grouped text
+      object, path, or shape.
+    * The shape tools (Rectangle, Ellipse, Star, and Spiral) are vastly
+      more convenient to use:
+          o All controls, such as the number of sides of a polygon, are
+            moved from the "Tool Options" dialog to the editing window's
+            top panel and are immediately accessible.
+          o The top panel controls affect (any number of) the selected
+            object(s) of the relevant type, not only the next created
+            object as was the case with "Tool Options".
+          o When you have any of the shape tools activated, the selected
+            object now displays editing handles on the canvas, just like
+            it did in the node tool before. This means you can draw a
+            shape and edit it immediately, without switching to node tool.
+          o You can now select objects by clicking (regardless of
+            grouping), or deselect by Esc, while in a shape tool.
+          o There's a two-way connection between the selected object and
+            the top panel: dragging handles updates the relevant top
+            panel controls, and editing the controls moves the handles. 
+    * The Paste command (Ctrl+V) now places the pasted objects(s) right
+      under the mouse cursor. The old behavior - pasting to the original
+      location - is available as the Paste In Place command (Crtl+Alt+V).
+    * The Raise and Lower commands reorder the selected objects only
+      relative to those objects that overlap them, instead of all
+      objects in the document.
+    * Autoscrolling: The canvas now scrolls automatically when you drag
+      an object or node, or do a rubberband selection, and go near or
+      beyond the edge of the canvas. Similarly, autoscrolling keeps the
+      text cursor always visible.
+    * Accelerated scrolling: if you press and hold Ctrl+arrow to scroll
+      canvas, Inkscape will gradually speed up scrolling. This makes
+      navigating in complex documents much faster, without losing
+      precision.
+    * Accelerated Simplify: similar to scrolling, a single Simplify
+      (Ctrl+L) does a slight simplification, but invoking it several
+      times in quick succession makes it act more and more aggressively
+      on the selected objects. It is thus easy to apply the exact amount
+      of simplification you need for each case.
+    * Scale/selection handles and the rubberband selection rectangle now
+      use inversion and are therefore visible on any background. (Even
+      50% gray... our inversion is smart :-) Path nodes and node/shape
+      controls also use inverted elements for better visibility. Text
+      editing cursor is also inverse.
+    * In multi-object selections, every selected object now displays a
+      small inverse diamond mark in the top left corner of its bounding
+      box. This lets you see at once what objects are selected and what
+      are not.
+    * In the linear and radial gradient panes of the Fill and Stroke
+      dialog:
+          o You can press Ctrl while dragging handles to snap the linear
+            gradient angle to 15 degrees increments (makes it easy to
+            create strictly horizontal/vertical gradients).
+          o The handles, bounding box, and gradient axes use inversion
+            for better visibility.
+          o The default linear gradient goes through the center of the
+            object.
+          o The radial gradient displays a radius handle for adjusting
+            the gradient radius. 
+    * The save dialog now remembers output format, can append file
+      extension automatically, and warns when overwriting files. You can
+      now save a file in Postscript format.
+    * Many new icons are added, and many old icons are redrawn to be
+      crisper, more informative, and more laconic. 
 
 
-    Internals
+    Clipart, documentation, translations
 
-    * Inkscape is now built using a C++ compiler. More and more code is
-      being translated from C to C++.
-    * In particular, we now use NR::Point, NR::Matrix and NR::Rect
-      classes instead of the clunky old macros.
-    * We now have the beginnings of an Inkscape::URI class for working
-      with URIs.
-    * Using Inkscape::URIReference, clipping paths, masks, and gradients
-      are updated properly when their id is changed.
-    * Inkscape can use libgnomeprint 2.2 now (Note: it should print to
-      the gnome default printer, but was not fully tested before the
-      release)
-    * Massive cleanups, bugfixes, and trimming dead code. 
+    * Inkscape now ships with a small collection of clipart (when it
+      grows big enough we may separate it into a package of its own).
+    * The Inkscape tutorial is split into two parts, Basic and Advanced,
+      and significantly expanded (new sections on offsets,
+      simplification, compound paths, text tool, and more).
+    * Two new tutorials,"Elements of design" and "Tips and Tricks," are
+      added.
+    * The Basic tutorial is available in Russian translation.
+    * French, Hungarian, Japanese, Russian, and Spanish interface
+      translations are updated. 
 
 
-    Infrastructure and ports
+    Build requirements
 
-    * Join the new Inkscape User mailing list!
-      http://lists.sourceforge.net/mailman/listinfo/inkscape-user
-    * The Windows build is now created daily, available at
-      http://troi.lincom-asg.com/~rjamison/inkscape/. What's better, now
-      it does not require installing any external libraries - just unzip
-      and run! 
+Based on RH/FC-1/SuSE rpm builds:
 
+    * XFree86-devel >= 4.0
+    * libgnomeprintui-devel >= 2.2.0
+    * libpng-devel
+    * desktop-file-utils
+    * gettext
+    * libart_lgpl-devel >= 2.3.10
+    * freetype2-devel
+    * libxml2-devel >= 2.4.24
+    * gtk2-devel
+    * pango-devel
+    * atk-devel
+    * pkgconfig
+    * libsigc++2 >= 1.2.5
+    * perl-XML-Parser 
 
-    Known problems
-
-    * Some window managers, notably Sawfish, interact badly with the
-      "Autoraise Dialogs" feature and do not display dialog window
-      decorations, making it difficult to use them. For the present,
-      users of such window managers can turn this option off in the
-      Dialogs menu. This will be fixed in a future release.
-    * The Autoraise Dialogs option has no effect on Windows.
-    * When using Copy and Paste (or Paste style) commands, you cannot
-      copy gradients or arrowheads from one document to another.
-      Workaround: use the XML editor to copy the content of the <defs>
-      element from the source document to the target document, then
-      copying gradients and arrowheads will work.
-    * Pasting text directly into a text object on the canvas does not
-      work. Workaround: open the Text dialog (Shift+Ctrl+T) and paste
-      into the text editing area there, then click Apply.
-    * The RGBA field in the Fill and Stroke dialog may sometimes lose
-      its value. We are investigating the cause. 
+Note: SuSE 9.0 users need libsigc2++, which is available at :
+http://guru.unixtech.be/rpm/packages/Development/libsigc++/
 
 
-    How you can help
+    Known issues
 
-    * Help answer questions on the new Inkscape User mailing list
-      (http://lists.sourceforge.net/mailman/listinfo/inkscape-user)
-    * We are always looking for more developers. Come join us, Inkscape
-      development is fun!
-    * We need doc writers to build Inkscape documentation.
-    * We need translators to translate the interface.
-    * We need artists to create new and consistent icons. Many new
-      commands are without icons, and some old icons are quite ugly.
-      (Yes, you can draw icons for Inkscape using Inkscape!)
-    * Above all, we want you to use Inkscape as much as possible and
-      report any problems or suggestions. Bug tracker, RFE tracker,
-      mailing lists, Wiki - any form of feedback is valuable. 
+    * Saving as (or printing via) Postscript does not support gradients
+      or transparency. The workaround is to export to bitmap (or print
+      as bitmap).
+    * Pasting text from another application into a text object on the
+      canvas does not work. Workaround: open the Text dialog
+      (Shift+Ctrl+T) and paste into the text editing area there, then
+      click Apply.
+    * Windows builds do not fully support SVGZ (gzipped SVG) format -
+      they can read it but not write.
+    * Windows builds may stop responding to mouse when you drag outside
+      of the canvas. Workaround: press any tool switching key (e.g. F3)
+      to unfreeze.
+    * Windows builds still cannot handle non-ASCII characters in
+      filenames or in text tool. 
 
 
     Previous releases
 
+    * ReleaseNotes037 
+      (http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes037)
     * ReleaseNotes036 
       (http://inkscape.org/cgi-bin/wiki.pl?ReleaseNotes036) 
 
