@@ -154,17 +154,26 @@ void sp_item_set_item_transform (SPItem *item, const NRMatrixF *transform);
 
 void sp_item_bbox_desktop (SPItem *item, NRRectF *bbox);
 
-NRMatrixF *sp_item_i2doc_affine (SPItem *item, NRMatrixF *transform);
-NRMatrixF *sp_item_i2root_affine (SPItem *item, NRMatrixF *transform);
+NRMatrixF *sp_item_i2doc_affine (SPItem const *item, NRMatrixF *transform);
+NRMatrixF *sp_item_i2root_affine (SPItem const *item, NRMatrixF *transform);
 /* Transformation to normalized (0,0-1,1) viewport */
-NRMatrixF *sp_item_i2vp_affine (SPItem *item, NRMatrixF *transform);
+NRMatrixF *sp_item_i2vp_affine (SPItem const *item, NRMatrixF *transform);
 
 /* fixme: - these are evil, but OK */
 
-NRMatrixF *sp_item_i2d_affine (SPItem *item, NRMatrixF *transform);
-void sp_item_set_i2d_affine (SPItem *item, const NRMatrixF *transform);
+/* Fill *TRANSFORM with the item-to-desktop transform.  See doc/coordinates.txt
+ * for a description of `Desktop coordinates'; though see also mental's comment
+ * at the top of that file.
+ *
+ * Returns TRANSFORM.
+ */
+NRMatrixD *sp_item_i2d_affine_d (SPItem const *item, NRMatrixD *transform);
+NRMatrixF *sp_item_i2d_affine (SPItem const *item, NRMatrixF *transform);
 
-NRMatrixF *sp_item_dt2i_affine (SPItem *item, SPDesktop *dt, NRMatrixF *transform);
+void sp_item_set_i2d_affine_d (SPItem *item, NRMatrixD const *transform);
+void sp_item_set_i2d_affine (SPItem *item, NRMatrixF const *transform);
+
+NRMatrixD *sp_item_dt2i_affine_d (SPItem const *item, SPDesktop *dt, NRMatrixD *transform);
 
 /* Convert distances into SVG units */
 

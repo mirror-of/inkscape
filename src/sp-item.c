@@ -656,20 +656,19 @@ sp_item_set_item_transform (SPItem *item, const NRMatrixF *transform)
 	}
 }
 
-NRMatrixF *
-sp_item_i2doc_affine (SPItem *item, NRMatrixF *affine)
+NRMatrixD *
+sp_item_i2doc_affine_d (SPItem const *item, NRMatrixD *affine_d)
 {
-	NRMatrixD td;
-	SPRoot *root;
+	SPRoot const *root;
 
 	g_return_val_if_fail (item != NULL, NULL);
 	g_return_val_if_fail (SP_IS_ITEM (item), NULL);
-	g_return_val_if_fail (affine != NULL, NULL);
+	g_return_val_if_fail (affine_d != NULL, NULL);
 
-	nr_matrix_d_set_identity (&td);
+	nr_matrix_d_set_identity (affine_d);
 
 	while (SP_OBJECT_PARENT (item)) {
-		nr_matrix_multiply_ddf (&td, &td, &item->transform);
+		nr_matrix_multiply_ddf (affine_d, affine_d, &item->transform);
 		item = (SPItem *) SP_OBJECT_PARENT (item);
 	}
 
@@ -678,16 +677,23 @@ sp_item_i2doc_affine (SPItem *item, NRMatrixF *affine)
 	root = SP_ROOT (item);
 
 	/* fixme: (Lauris) */
-	nr_matrix_multiply_ddd (&td, &td, &root->c2p);
-	nr_matrix_multiply_ddf (&td, &td, &item->transform);
+	nr_matrix_multiply_ddd (affine_d, affine_d, &root->c2p);
+	nr_matrix_multiply_ddf (affine_d, affine_d, &item->transform);
 
-	nr_matrix_f_from_d (affine, &td);
-
-	return affine;
+	return affine_d;
 }
 
 NRMatrixF *
-sp_item_i2root_affine (SPItem *item, NRMatrixF *affine)
+sp_item_i2doc_affine (SPItem const *item, NRMatrixF *affine_f)
+{
+	NRMatrixD affine_d;
+	sp_item_i2doc_affine_d (item, &affine_d);
+	nr_matrix_f_from_d (affine_f, &affine_d);
+	return affine_f;
+}
+
+NRMatrixF *
+sp_item_i2root_affine (SPItem const *item, NRMatrixF *affine)
 {
 	NRMatrixD td;
 	SPRoot *root;
@@ -710,6 +716,9 @@ sp_item_i2root_affine (SPItem *item, NRMatrixF *affine)
 	/* fixme: (Lauris) */
 	nr_matrix_multiply_ddd (&td, &td, &root->c2p);
 	nr_matrix_multiply_ddf (&td, &td, &item->transform);
+	/* fixme: The above line looks strange to me (pjrm).  I'd have thought
+	   it should either be removed or moved to before the c2p multiply.
+	   Can someone pls add a comment?  Similarly for i2doc_affine. */
 
 	nr_matrix_f_from_d (affine, &td);
 
@@ -719,7 +728,7 @@ sp_item_i2root_affine (SPItem *item, NRMatrixF *affine)
 /* Transformation to normalized (0,0-1,1) viewport */
 
 NRMatrixF *
-sp_item_i2vp_affine (SPItem *item, NRMatrixF *affine)
+sp_item_i2vp_affine (SPItem const *item, NRMatrixF *affine)
 {
 	NRMatrixD td;
 	SPRoot *root;
@@ -757,56 +766,77 @@ sp_item_i2vp_affine (SPItem *item, NRMatrixF *affine)
 
 /* fixme: This is EVIL!!! */
 
-NRMatrixF *
-sp_item_i2d_affine (SPItem *item, NRMatrixF *affine)
+NRMatrixD *
+sp_item_i2d_affine_d (SPItem const *item, NRMatrixD *affine_d)
 {
 	NRMatrixD doc2dt;
 
 	g_return_val_if_fail (item != NULL, NULL);
 	g_return_val_if_fail (SP_IS_ITEM (item), NULL);
-	g_return_val_if_fail (affine != NULL, NULL);
+	g_return_val_if_fail (affine_d != NULL, NULL);
 
-	sp_item_i2doc_affine (item, affine);
+	sp_item_i2doc_affine_d (item, affine_d);
 	nr_matrix_d_set_scale (&doc2dt, 0.8, -0.8);
 	doc2dt.c[5] = sp_document_height (SP_OBJECT_DOCUMENT (item));
-	nr_matrix_multiply_ffd (affine, affine, &doc2dt);
+	nr_matrix_multiply_ddd (affine_d, affine_d, &doc2dt);
 
-	return affine;
+	return affine_d;
+}
+
+NRMatrixF *
+sp_item_i2d_affine (SPItem const *item, NRMatrixF *affine_f)
+{
+	NRMatrixD affine_d;
+	sp_item_i2d_affine_d (item, &affine_d);
+	nr_matrix_f_from_d (affine_f, &affine_d);
+	return affine_f;
 }
 
 void
-sp_item_set_i2d_affine (SPItem *item, const NRMatrixF *affine)
+sp_item_set_i2d_affine_d (SPItem *item, NRMatrixD const *affine_d)
 {
-	NRMatrixF p2d, d2p, i2p;
+	NRMatrixD p2dt; /* item parent to desktop transform */
+	NRMatrixD dt2p; /* desktop to item parent transform */
+	NRMatrixF i2p; /* item to parent transform */
 
 	g_return_if_fail (item != NULL);
 	g_return_if_fail (SP_IS_ITEM (item));
-	g_return_if_fail (affine != NULL);
+	g_return_if_fail (affine_d != NULL);
 
 	if (SP_OBJECT_PARENT (item)) {
-		sp_item_i2d_affine ((SPItem *) SP_OBJECT_PARENT (item), &p2d);
+		sp_item_i2d_affine_d ((SPItem *) SP_OBJECT_PARENT (item), &p2dt);
 	} else {
-		nr_matrix_f_set_scale (&p2d, 0.8, -0.8);
-		p2d.c[5] = sp_document_height (SP_OBJECT_DOCUMENT (item));
+		nr_matrix_d_set_scale (&p2dt, 0.8, -0.8);
+		p2dt.c[5] = sp_document_height (SP_OBJECT_DOCUMENT (item));
 	}
 
-	nr_matrix_f_invert (&d2p, &p2d);
+	nr_matrix_d_invert (&dt2p, &p2dt);
 
-	nr_matrix_multiply_fff (&i2p, affine, &d2p);
+	nr_matrix_multiply_fdd (&i2p, affine_d, &dt2p);
 
 	sp_item_set_item_transform (item, &i2p);
 }
 
-NRMatrixF *
-sp_item_dt2i_affine (SPItem *item, SPDesktop *dt, NRMatrixF *affine)
+void
+sp_item_set_i2d_affine (SPItem *item, NRMatrixF const *affine_f)
 {
-	NRMatrixF i2dt;
+	NRMatrixD affine_d;
+
+	nr_matrix_d_from_f (&affine_d, affine_f);
+	sp_item_set_i2d_affine_d (item, &affine_d);
+}
+
+
+NRMatrixD *
+sp_item_dt2i_affine_d (SPItem const *item, SPDesktop *dt, NRMatrixD *affine_d)
+{
+	NRMatrixD i2dt;
 
 	/* fixme: Implement the right way (Lauris) */
-	sp_item_i2d_affine (item, &i2dt);
-	nr_matrix_f_invert (affine, &i2dt);
+	sp_item_i2d_affine_d (item, &i2dt);
+	nr_matrix_d_invert (affine_d, &i2dt);
 
-	return affine;
+	return affine_d;
 }
 
 /* Item views */
@@ -870,6 +900,10 @@ sp_item_distance_to_svg_viewport (SPItem *item, gdouble distance, const SPUnit *
 	dx = i2doc.c[0] + i2doc.c[2];
 	dy = i2doc.c[1] + i2doc.c[3];
 	u2a = sqrt (dx * dx + dy * dy) * M_SQRT1_2;
+	/* todo: It's probably safe to use of hypot(X,Y) for these
+	   sqrt(X*X + Y*Y) calculations.  hypot has less numerical
+	   error; don't know about speed difference.  njh thinks hypot
+	   is typically slower. */
 	a2u = u2a > 1e-9 ? 1 / u2a : 1e9;
 
 	if (unit->base == SP_UNIT_DIMENSIONLESS) {
