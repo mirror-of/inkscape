@@ -124,7 +124,7 @@ sp_desktop_dt2root_affine (SPDesktop *dt, NRMatrix *dt2root)
 }
 
 NRPoint *
-sp_desktop_w2d_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
+sp_desktop_w2d_xy_point (SPDesktop *dt, NRPoint *p, double x, double y)
 {
 	g_return_val_if_fail (dt != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DESKTOP (dt), NULL);
@@ -137,7 +137,7 @@ sp_desktop_w2d_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
 }
 
 NRPoint *
-sp_desktop_d2w_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
+sp_desktop_d2w_xy_point (SPDesktop *dt, NRPoint *p, double x, double y)
 {
 	g_return_val_if_fail (dt != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DESKTOP (dt), NULL);
@@ -150,7 +150,7 @@ sp_desktop_d2w_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
 }
 
 NRPoint *
-sp_desktop_d2doc_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
+sp_desktop_d2doc_xy_point (SPDesktop *dt, NRPoint *p, double x, double y)
 {
 	NRMatrix dt2doc;
 
@@ -167,7 +167,7 @@ sp_desktop_d2doc_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
 }
 
 NRPoint *
-sp_desktop_doc2d_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
+sp_desktop_doc2d_xy_point (SPDesktop *dt, NRPoint *p, double x, double y)
 {
 	g_return_val_if_fail (dt != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DESKTOP (dt), NULL);
@@ -180,7 +180,7 @@ sp_desktop_doc2d_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
 }
 
 NRPoint *
-sp_desktop_w2doc_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
+sp_desktop_w2doc_xy_point (SPDesktop *dt, NRPoint *p, double x, double y)
 {
 	NRMatrix dt2doc;
 	double dtx, dty;
@@ -200,7 +200,7 @@ sp_desktop_w2doc_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
 }
 
 NRPoint *
-sp_desktop_doc2w_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
+sp_desktop_doc2w_xy_point (SPDesktop *dt, NRPoint *p, double x, double y)
 {
 	double dtx, dty;
 
@@ -217,7 +217,7 @@ sp_desktop_doc2w_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
 }
 
 NRPoint *
-sp_desktop_root2dt_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
+sp_desktop_root2dt_xy_point (SPDesktop *dt, NRPoint *p, double x, double y)
 {
 	NRMatrix root2dt;
 
@@ -230,7 +230,7 @@ sp_desktop_root2dt_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
 }
 
 NRPoint *
-sp_desktop_dt2root_xy_point (SPDesktop *dt, NRPoint *p, float x, float y)
+sp_desktop_dt2root_xy_point (SPDesktop *dt, NRPoint *p, double x, double y)
 {
 	NRMatrix dt2root;
 
