@@ -1022,12 +1022,14 @@ sp_tspan_set (SPObject *object, unsigned int key, const gchar *value)
 			tspan->ly.dx = NULL;
 		}
 		/* fixme: Re-layout it */
+		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_DY:
 		if (!(tspan->ly.dy = sp_svg_length_list_read (value))) {
 			tspan->ly.dy = NULL;
 		}
 		/* fixme: Re-layout it */
+		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_ROTATE:
 		/* fixme: Implement SVGNumber or something similar (Lauris) */
@@ -1404,12 +1406,14 @@ sp_text_set (SPObject *object, unsigned int key, const gchar *value)
 			text->ly.dx = NULL;
 		}
 		/* fixme: Re-layout it */
+		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_DY:
 		if (!(text->ly.dy = sp_svg_length_list_read (value))) {
 			text->ly.dy = NULL;
 		}
 		/* fixme: Re-layout it */
+		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_ROTATE:
 		/* fixme: Implement SVGNumber or something similar (Lauris) */
