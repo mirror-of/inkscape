@@ -301,17 +301,24 @@ NR::Rect SPSelection::boundsInDocument() const {
  */
 std::vector<NR::Point> SPSelection::getSnapPoints() const {
     GSList const *items = const_cast<SPSelection *>(this)->itemList();
+    std::vector<NR::Point> all;
+    for (GSList const *iter = items; iter != NULL; iter = iter->next) {
+	std::vector<NR::Point> p = sp_item_snappoints(const_cast<SPSelection *>(this)->singleItem());
+	copy(p.begin(), p.end(), back_inserter(all));
+    }
+
+    return all;
+}
+
+std::vector<NR::Point> SPSelection::getBBoxPoints() const {
+    GSList const *items = const_cast<SPSelection *>(this)->itemList();
     std::vector<NR::Point> p;
-    if (!items->next) { // one item
-        /* selection has only one item -> take snappoints of item */
-        p = sp_item_snappoints(const_cast<SPSelection *>(this)->singleItem());
-    } else { // multiple items
-        /* selection has more than one item -> take corners of selection */
-        /* Just a pair of opposite corners of the bounding box suffices given that we don't
-           yet support angled guide lines. */
-        NR::Rect bbox = bounds();
-	p.push_back(bbox.min());
-	p.push_back(bbox.max());
+    for (GSList const *iter = items; iter != NULL; iter = iter->next) {
+	SPItem *item = SP_ITEM(iter->data);
+	NRRect b;
+	sp_item_bbox_desktop(item, &b);
+	p.push_back(NR::Point(b.x0, b.y0));
+	p.push_back(NR::Point(b.x1, b.y1));
     }
 
     return p;
