@@ -67,7 +67,7 @@ AC_MSG_CHECKING([for Win32 platform])
 case "$host" in
   *-*-mingw*)
     platform_win32=yes
-    CXXFLAGS="$CXXFLAGS -mms-bitfields -DLIBXML_STATIC"
+    INKSCAPE_CFLAGS="$INKSCAPE_CFLAGS -mms-bitfields -DLIBXML_STATIC"
     ;;
   *)
     platform_win32=no
