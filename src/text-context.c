@@ -274,6 +274,7 @@ sp_text_context_setup_text (SPTextContext *tc)
 
 	/* Create <text> */
 	rtext = sp_repr_new ("text");
+	sp_repr_set_attr (rtext, "xml:space", "preserve"); // we preserve spaces in the text objects we create
 	/* Set style */
 	style = inkscape_get_repr (INKSCAPE, "tools.text");
 	if (style) {
@@ -286,7 +287,6 @@ sp_text_context_setup_text (SPTextContext *tc)
 	sp_repr_set_double_attribute (rtext, "y", tc->pdoc.y);
 	/* Create <tspan> */
 	rtspan = sp_repr_new ("tspan");
-	sp_repr_set_attr (rtspan, "xml:space", "preserve"); // we preserve spaces in the text objects we create
 	sp_repr_add_child (rtext, rtspan, NULL);
 	sp_repr_unref (rtspan);
 	/* Create TEXT */
