@@ -111,7 +111,7 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
     _tooltips.set_tip(_visibility_toggle, _("Toggle current layer visibility"));
     pack_start(_visibility_toggle, Gtk::PACK_EXPAND_PADDING);
 
-    label = Gtk::manage(new AlternateIcons(11, "blank", "width_height_lock"));
+    label = Gtk::manage(new AlternateIcons(11, "lock_unlocked", "width_height_lock"));
     _lock_toggle.add(*label);
     _lock_toggle.signal_toggled().connect(
         sigc::compose(
