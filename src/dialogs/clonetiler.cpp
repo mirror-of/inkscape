@@ -598,9 +598,6 @@ Center of bbox of item
 NR::Point
 unclump_center (SPItem *item)
 {
-    // without this, sometimes bbox is wrong for just-moved objects
-    sp_document_ensure_up_to_date(SP_OBJECT_DOCUMENT(item));
-
     NRRect r;
     sp_item_invoke_bbox(item, &r, sp_item_i2d_affine(item), TRUE);
     NR::Point c = NR::Point ((r.x0 + r.x1)/2, (r.y0 + r.y1)/2); 
@@ -616,9 +613,6 @@ item2.
 double
 unclump_dist (SPItem *item1, SPItem *item2)
 {
-    // without this, sometimes bbox is wrong for just-moved objects
-    sp_document_ensure_up_to_date(SP_OBJECT_DOCUMENT(item1));
-
     NRRect r2;
     sp_item_invoke_bbox(item2, &r2, sp_item_i2d_affine(item2), TRUE);
     NR::Point c2 = NR::Point ((r2.x0 + r2.x1)/2, (r2.y0 + r2.y1)/2); 
@@ -728,7 +722,7 @@ unclump_remove_behind (SPItem *item, SPItem *closest, GSList *rest)
     // substitute the item into it:
     double val_item = A * it[NR::X] + B * it[NR::Y] + C;
 
-    GSList *out = g_slist_copy (rest);
+    GSList *out = NULL;
 
     for (GSList *i = rest; i != NULL; i = i->next) {
         SPItem *other = SP_ITEM (i->data);
@@ -740,8 +734,9 @@ unclump_remove_behind (SPItem *item, SPItem *closest, GSList *rest)
         double val_other = A * o[NR::X] + B * o[NR::Y] + C;
 
         if (val_item * val_other <= 1e-6) {
-            // different signs, which means item and other are on the different sides of p1-p2 line
-            out = g_slist_remove (out, other);
+            // different signs, which means item and other are on the different sides of p1-p2 line; skip
+        } else {
+            out = g_slist_prepend (out, other);
         }
     }
 
@@ -830,6 +825,9 @@ unclump (GSList *items)
             if (fabs (ave) < 1e6 && fabs (dist_closest) < 1e6 && fabs (dist_farest) < 1e6) { // otherwise the items are bogus
                 unclump_push (closest, item, (ave - dist_closest) / 3 ); // reduce this divisor to make unclumping more aggressive
                 unclump_pull (farest, item, (dist_farest - ave) / 3 );
+
+                // without this, sometimes bbox is wrong for just-moved objects
+                sp_document_ensure_up_to_date(SP_OBJECT_DOCUMENT(item));
             }
         }
     }
