@@ -476,7 +476,7 @@ sp_item_gradient_set_coords (SPItem *item, guint point_num, NR::Point p_w, bool 
 		SPRadialGradient *rg = SP_RADIALGRADIENT(gradient);
 		NR::Point c (rg->cx.computed, rg->cy.computed);
 		NR::Point c_w = c * gradient->gradientTransform * i2d; // in desktop coords
-           if (NR::L2 (p_w - c_w) < 1e-3)
+           if ((point_num == POINT_RG_R1 || point_num == POINT_RG_R2) && NR::L2 (p_w - c_w) < 1e-3) 
                return;
 		NR::Matrix new_transform;
 		bool transform_set = false;
