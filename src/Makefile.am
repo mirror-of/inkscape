@@ -17,6 +17,7 @@ INCLUDES = \
 	-DINKSCAPE_PIXMAPDIR=\""$(datadir)/inkscape/icons"\" \
 	-DINKSCAPE_SCREENSDIR=\""$(datadir)/inkscape/screens"\" \
 	-DINKSCAPE_TUTORIALSDIR=\""$(datadir)/inkscape/tutorials"\" \
+	-DINKSCAPE_MARKERSDIR=\""$(datadir)/inkscape/markers"\" \
 	-DINKSCAPE_DATADIR=\""$(datadir)"\" \
 	-I$(srcdir) \
 	-I$(srcdir)/xml \
