@@ -1,21 +1,44 @@
 #! /usr/bin/perl -w
-# Try to detect markup typos in translations.
-# Currently it doesn't start by joining up strings spread over multiple lines.
+# Try to detect markup errors in translations.
 
-# egrep version.
-# (As written, it can't detect problems that span a line, e.g. unterminated `<b>'.
-# One way of doing the s/"\n"//g thing would be with tr and sed, but that requires
-# a sed that allows arbitrary line lengths, which many seds don't.)
+# Author: Peter Moulder <pmoulder@mail.csse.monash.edu.au>
+# Copyright (C) 2004 Monash University
+# License: GNU GPL v2 or (at your option) any later version.
+
+# Initial egrep version:
 #mydir=`dirname "$0"`
 #egrep '<b>[^<>]*(>|<([^/]|/([^b"]|b[^>])))' "$mydir"/*.po
+# Somewhat simplified by use of negative lookahead in perl.
+# (The egrep version as written can't detect problems that span a line,
+# e.g. unterminated `<b>'.  One way of doing the s/"\n"//g thing would be with
+# tr and sed, but that requires a sed that allows arbitrary line lengths, which
+# many non-GNU seds don't.)
 
 use strict;
 
+my $com = qr/(?:\#[^\n]*\n)/;
+my $str = qr/(?:"(?:[^"\\]|\\.)*"\n)/;
+
+my $rc = 0;
 $/ = '';
 while(<>) {
 	s/"\n"//g;
-	if (m{<b>[^<>]*($|>|<([^/]|/([^b"]|b[^>])))}) {
-		print "$ARGV: $_";
+	if (!m{\A${com}*msgid[^\n]*\n${com}*msgstr[^\n]*\n${com}*\Z}) {
+		print "$ARGV: Not in msg format:\n$_";
+		$rc = 1;
 	}
+	elsif (!m{\A${com}*msgid ${str}${com}*msgstr ${str}${com}*\Z}) {
+		print "$ARGV: Mismatched quotes:\n$_";
+		$rc = 1;
+	}
+	elsif (m{<b>(?![^<>]*</b>)}) {
+		print "$ARGV: unclosed <b>:\n$_";
+		$rc = 1;
+	}
+
+	# Should also check that we don't have a </b> without a corresponding <b>.
 }
-	
+
+# Some makefiles (currently the top-level Makefile.am) expect this script to
+# exit 1 if any problems found.
+exit $rc;
