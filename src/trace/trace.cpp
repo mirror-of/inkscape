@@ -21,6 +21,7 @@
 #include <inkscape.h>
 #include <desktop.h>
 #include <document.h>
+#include <helper/sp-intl.h>
 #include <selection.h>
 #include <sp-image.h>
 #include <sp-path.h>
@@ -52,30 +53,36 @@ Trace::~Trace()
 static SPImage *
 getSelectedSPImage()
 {
-    if (!SP_ACTIVE_DESKTOP)
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (!desktop)
         {
-        g_warning("Trace::convertImageToPath: no active desktop\n");
+        g_warning("Trace: no active desktop\n");
         return NULL;
         }
 
-    SPSelection *sel = SP_ACTIVE_DESKTOP->selection;
+    SPSelection *sel = desktop->selection;
     if (!sel)
         {
-        g_warning("Trace::convertImageToPath: nothing selected\n");
+        char *msg = _("Trace: Nothing selected");
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
+        //g_warning(msg);
         return NULL;
         }
-
 
     SPItem *item = sel->singleItem();
     if (!item)
         {
-        g_warning("Trace::convertImageToPath: null image\n");
+        char *msg = _("Trace: Nothing selected");  //same as above
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
+        //g_warning(msg);
         return NULL;
         }
 
     if (!SP_IS_IMAGE(item))
         {
-        g_warning("Trace::convertImageToPath: object not an image\n");
+        char *msg = _("Trace: Selected object is not an image");
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
+        //g_warning(msg);
         return NULL;
         }
 
@@ -114,9 +121,18 @@ void Trace::convertImageToPathThread()
     //## see if the main thread wants us to stop
     keepGoing = true;
 
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (!desktop)
+        {
+        g_warning("Trace: no active desktop\n");
+        return;
+        }
+
     if (!SP_ACTIVE_DOCUMENT)
         {
-        g_warning("Trace::convertImageToPath: no active document\n");
+        char *msg = _("Trace: no active document");
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
+        //g_warning(msg);
         engine = NULL;
         return;
         }
@@ -133,7 +149,9 @@ void Trace::convertImageToPathThread()
 
     if (!pixbuf)
         {
-        g_warning("Trace::convertImageToPath: image has no bitmap data\n");
+        char *msg = _("Trace: mage has no bitmap data");
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
+        //g_warning(msg);
         engine = NULL;
         return;
         }
