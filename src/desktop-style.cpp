@@ -67,12 +67,18 @@ sp_desktop_apply_css_recursive (SPObject *o, SPCSSAttr *css, bool skip_lines)
         sp_repr_css_change (SP_OBJECT_REPR (o), css, "style");
     }
 
-    // Unset properties which are accumulating and thus should not be set recursively. 
-    // For example, setting opacity 0.5 on a group recursively would result in the visible opacity of 0.25 for an item in the group.
-    sp_repr_css_set_property (css, "opacity", NULL);
-
     for (SPObject *child = sp_object_first_child(SP_OBJECT(o)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-        sp_desktop_apply_css_recursive (child, css, skip_lines);
+        if (sp_repr_css_property (css, "opacity", NULL) != NULL) {
+            // Unset properties which are accumulating and thus should not be set recursively. 
+            // For example, setting opacity 0.5 on a group recursively would result in the visible opacity of 0.25 for an item in the group.
+            SPCSSAttr *css_recurse = sp_repr_css_attr_new ();
+            sp_repr_css_merge (css_recurse, css);
+            sp_repr_css_set_property (css_recurse, "opacity", NULL);
+            sp_desktop_apply_css_recursive (child, css_recurse, skip_lines);
+            sp_repr_css_attr_unref (css_recurse);
+        } else {
+            sp_desktop_apply_css_recursive (child, css, skip_lines);
+        }
     }
 }
 
