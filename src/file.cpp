@@ -208,7 +208,7 @@ file_save (SPDocument *doc, const gchar *uri, Inkscape::Extension::Extension *ke
         return FALSE;
 
 	try {
-		sp_module_system_save (key, doc, uri, (bool)prefs_get_int_attribute("dialogs.save_as", "append_extension", 1), saveas); // save officially, with inkscape: attributes set
+		sp_module_system_save (key, doc, uri, saveas && (bool)prefs_get_int_attribute("dialogs.save_as", "append_extension", 1), saveas, TRUE); // save officially, with inkscape: attributes set
 	} catch (Inkscape::Extension::Output::no_extension_found &e) {
 		gchar * text;
 		text = g_strdup_printf(_("No Inkscape extension found to save document (%s).  This may have been caused by an unknown filename extension."), uri);

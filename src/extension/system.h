@@ -26,7 +26,8 @@ void         sp_module_system_save                (Inkscape::Extension::Extensio
                                                    SPDocument *   doc,
                                                    const gchar *  filename,
 												   bool setextension,
-												   bool check_overwrite);
+												   bool check_overwrite,
+												   bool official);
 void         sp_module_system_filter              (GtkObject * object,
                                                    const gchar *  key);
 Inkscape::Extension::Print * sp_module_system_get_print (const gchar * key);

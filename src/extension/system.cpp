@@ -194,7 +194,7 @@ open_internal (Inkscape::Extension::Extension * in_plug, gpointer in_data)
 	Lastly, the save function is called in the module itself.
 */
 void
-sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, const gchar * filename, bool setextension, bool check_overwrite)
+sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, const gchar * filename, bool setextension, bool check_overwrite, bool official)
 {
 	Inkscape::Extension::Output * omod;
 	gpointer parray[2];
@@ -257,6 +257,9 @@ sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, c
 		g_free(fileName);
 		throw Inkscape::Extension::Output::no_overwrite();
 	}
+
+	if (official)
+		sp_document_set_uri (doc, fileName);
 
 	omod->save(doc, fileName);
 

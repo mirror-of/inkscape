@@ -803,7 +803,6 @@ Output::save (SPDocument * doc, const gchar * uri)
 
 	repr = sp_document_repr_root(doc);
 
-	sp_document_set_uri (doc, uri);
 	sp_document_set_undo_sensitive (doc, FALSE);
 	sp_repr_set_attr(repr, "inkscape:output_extension", NULL);
 	sp_repr_set_attr(repr, "inkscape:dataloss", NULL);
@@ -812,7 +811,6 @@ Output::save (SPDocument * doc, const gchar * uri)
 
     imp->save(this, doc, uri);
 
-	sp_document_set_uri (doc, uri);
 	sp_document_set_undo_sensitive (doc, FALSE);
 	sp_repr_set_attr(repr, "inkscape:output_extension", get_id());
 	if (dataloss) {

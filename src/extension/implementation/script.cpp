@@ -326,9 +326,9 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
 	}
 
 	if (helper_extension == NULL) {
-		sp_module_system_save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE), doc, tempfilename_in, FALSE, FALSE);
+		sp_module_system_save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE), doc, tempfilename_in, FALSE, FALSE, FALSE);
 	} else {
-		sp_module_system_save(Inkscape::Extension::db.get(helper_extension), doc, tempfilename_in, FALSE, FALSE);
+		sp_module_system_save(Inkscape::Extension::db.get(helper_extension), doc, tempfilename_in, FALSE, FALSE, FALSE);
 	}
 
 	execute(command, (gchar *)tempfilename_in, (gchar *)filename);
@@ -413,7 +413,7 @@ Script::effect (Inkscape::Extension::Effect * module, SPDocument * doc)
 		}
 	}
 
-	sp_module_system_save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE), doc, tempfilename_in, FALSE, FALSE);
+	sp_module_system_save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE), doc, tempfilename_in, FALSE, FALSE, FALSE);
 
 	/* TODO: I don't think this is the best way to do this, plus,
 	         it needs to handle all of the cases where there is more
