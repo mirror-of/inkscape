@@ -1,5 +1,9 @@
 2003-12-18  Jon A. Cruz <jon@joncruz.org>
 
+	* fix for 859133; Reduced number of generated events.
+
+2003-12-18  Jon A. Cruz <jon@joncruz.org>
+
 	* src/widgets/sp-color-gtkselector.cpp: fix for 859131; Changed descriptive name of GTK+
 	selector.
 
