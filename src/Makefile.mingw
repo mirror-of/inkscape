@@ -12,11 +12,11 @@ include ../Makefile.mingw.common
 all: helper/sp-marshal.h helper/sp-marshal.cpp inkscape.exe
 
 helper/sp-marshal.h: helper/sp-marshal.h.mingw
-	$(CP) $< $@
+	$(CP) $(subst /,$(S), $<) $(subst /,$(S), $@)
 
 
 helper/sp-marshal.cpp: helper/sp-marshal.cpp.mingw
-	$(CP) $< $@
+	$(CP) $(subst /,$(S), $<) $(subst /,$(S), $@)
 
 include ./make.ofiles
 include ./make.dep
@@ -25,8 +25,7 @@ INC += $(INCLUDEPATH)
 
 OBJ = $(OBJECTS)
 
-#RES=inkres.o
-RES=
+RES=inkres.o
 
 inkscape.exe: libinkscape.a main.o winmain.o $(RES) 
 	$(CXX) -o inkscape.exe main.o winmain.o inkscape.o $(RES) libinkscape.a $(LIBS)

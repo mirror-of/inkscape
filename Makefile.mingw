@@ -11,7 +11,7 @@ config.h: config.h.mingw
 
 dist:
 	$(MAKE) -C src -f Makefile.mingw
-	$(RMDIR) inkscape
+	-$(RMDIR) inkscape
 	$(MKDIR) inkscape
 	$(CP) src$(S)inkscape.exe inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libsigc-1.2-5.dll inkscape
