@@ -355,8 +355,6 @@ font_instance* font_factory::Face(const char* family, NRTypePosDef apos)
 		pango_font_description_set_style (temp_descr, PANGO_STYLE_NORMAL);
 	}
 
-  g_print ("weight %d\n", apos.weight);
-
 	if ( apos.weight <= NR_POS_WEIGHT_ULTRA_LIGHT ) {
 		pango_font_description_set_weight (temp_descr, PANGO_WEIGHT_ULTRALIGHT);
 	} else if ( apos.weight <= NR_POS_WEIGHT_LIGHT ) {
