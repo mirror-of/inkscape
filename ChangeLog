@@ -4,6 +4,11 @@
 	  reversed the sense of a test in SPObject::requestModified(),
 	  such that CHILD_MODIFIED notifications were never being sent
 
+	* src/widgets/sp-color-notebook.cpp: always assume colors are
+	  8-digit hex rrggbbaa, and zero-fill accordingly
+
+	  HAPPY NATHAN#@$?#$#@$!?!?!?
+
 2004-07-03  Kees Cook  <kees@outflux.net>
 
 	* src/document.cpp, src/dialogs/desktop-properties.cpp, 

@@ -440,14 +440,10 @@ void ColorNotebook::_rgbaEntryChanged(GtkEntry* entry)
 
 	if (t) {
 		rgba = strtoul (t, &e, 16);
-		if (e && e != t) {
-			if (strlen (t) < 5) {
-				/* treat as rgba instead of rrggbbaa */
-				rgba = ((rgba << 16) & 0xf0000000) |
-					((rgba << 12) & 0xff00000) |
-					((rgba << 8) & 0xff000) |
-					((rgba << 4) & 0xff0) |
-					(rgba & 0xf);
+		if ( e != t ) {
+			ptrdiff_t len=e-t;
+			if ( len < 8 ) {
+				rgba = rgba << ( 4 * ( 8 - len ) );
 			}
 			_updatingrgba = TRUE;
 			sp_color_set_rgb_rgba32 (&color, rgba);
