@@ -25,6 +25,9 @@
 #include "display/sodipodi-ctrlrect.h"
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-ops.h"
+
+#include "xml/repr.h"
+
 #include "prefs-utils.h"
 #include "sp-item.h"
 #include "style.h"
@@ -85,6 +88,70 @@ gr_drag_sel_modified (SPSelection *selection, guint flags, gpointer data)
     drag->updateLevels ();
 }
 
+bool
+gr_drag_style_set (const SPCSSAttr *css, gpointer data)
+{
+    GrDrag *drag = (GrDrag *) data;
+
+    if (!drag->selected)
+        return false;
+
+    SPCSSAttr *stop = sp_repr_css_attr_new ();
+
+    // See if the css contains interesting properties, and if so, translate them into the format
+    // acceptable for gradient stops
+
+    // any of color properties, in order of increasing priority:
+    if (css->attribute("flood-color"))
+        sp_repr_css_set_property (stop, "stop-color", css->attribute("flood-color"));
+
+    if (css->attribute("lighting-color"))
+        sp_repr_css_set_property (stop, "stop-color", css->attribute("lighting-color"));
+
+    if (css->attribute("color"))
+        sp_repr_css_set_property (stop, "stop-color", css->attribute("color"));
+
+    if (css->attribute("stroke"))
+        sp_repr_css_set_property (stop, "stop-color", css->attribute("stroke"));
+
+    if (css->attribute("fill"))
+        sp_repr_css_set_property (stop, "stop-color", css->attribute("fill"));
+
+    if (css->attribute("stop-color"))
+        sp_repr_css_set_property (stop, "stop-color", css->attribute("stop-color"));
+
+    // any of opacity properties, in order of increasing priority:
+    if (css->attribute("flood-opacity"))
+        sp_repr_css_set_property (stop, "stop-opacity", css->attribute("flood-color"));
+
+    if (css->attribute("opacity")) // TODO: multiply
+        sp_repr_css_set_property (stop, "stop-opacity", css->attribute("color"));
+
+    if (css->attribute("stroke-opacity")) // TODO: multiply
+        sp_repr_css_set_property (stop, "stop-opacity", css->attribute("stroke-opacity"));
+
+    if (css->attribute("fill-opacity")) // TODO: multiply
+        sp_repr_css_set_property (stop, "stop-opacity", css->attribute("fill-opacity"));
+
+    if (css->attribute("stop-opacity"))
+        sp_repr_css_set_property (stop, "stop-opacity", css->attribute("stop-opacity"));
+
+    if (!stop->attributeList()) { // nothing for us here, pass it on
+        sp_repr_css_attr_unref(stop);
+        return false;
+    }
+
+    for (GSList const* i = drag->selected->draggables; i != NULL; i = i->next) { // for all draggables of dragger
+           GrDraggable *draggable = (GrDraggable *) i->data;
+
+           drag->local_change = true;
+           sp_item_gradient_set_stop (draggable->item, draggable->point_num, draggable->fill_or_stroke, stop);
+    }
+
+    //sp_repr_css_print(stop);
+    sp_repr_css_attr_unref(stop);
+    return true;
+}
 
 GrDrag::GrDrag(SPDesktop *desktop) {
 
@@ -113,6 +180,12 @@ GrDrag::GrDrag(SPDesktop *desktop) {
             (gpointer)this )
         );
 
+    this->style_set_connection = this->desktop->connectSetStyle(
+        sigc::bind(
+            sigc::ptr_fun(&gr_drag_style_set),
+            (gpointer)this )
+        );
+
     this->updateDraggers ();
     this->updateLines ();
     this->updateLevels ();
@@ -122,6 +195,7 @@ GrDrag::~GrDrag()
 {
 	this->sel_changed_connection.disconnect();
 	this->sel_modified_connection.disconnect();
+	this->style_set_connection.disconnect();
 
 	for (GList *l = this->draggers; l != NULL; l = l->next) {
           delete ((GrDragger *) l->data);
