@@ -459,6 +459,7 @@ sp_use_unlink (SPUse *use)
 {
 	SPRepr *repr = SP_OBJECT_REPR(use);
 	SPRepr *parent = sp_repr_parent (repr);
+	gchar *id = g_strdup (sp_repr_attr (repr, "id"));
       gint pos = sp_repr_position (repr);
 	SPDocument *document = SP_OBJECT(use)->document;
 
@@ -495,9 +496,13 @@ sp_use_unlink (SPUse *use)
 	// create copy of the original
 	SPRepr *copy = sp_repr_duplicate (SP_OBJECT_REPR(orig));
 
-	// add it to the document, preserving parent and position
+	// remove the use
+	sp_repr_unparent (SP_OBJECT_REPR (use));
+
+	// add it to the document, preserving id, parent, and position
 	sp_repr_append_child (parent, copy);
       sp_repr_set_position_absolute (copy, pos > 0 ? pos : 0);
+	sp_repr_set_attr (copy, "id", id);
 
 	// retrieve the SPItem of the resulting repr
 	SPObject *unlinked = sp_document_lookup_id (document, sp_repr_attr (copy, "id"));
@@ -508,9 +513,6 @@ sp_use_unlink (SPUse *use)
 		NRMatrix ctrans = t;
 		sp_item_write_transform (item, SP_OBJECT_REPR (item), &ctrans);
 	}
-
-	// remove the use
-	sp_repr_unparent (SP_OBJECT_REPR (use));
 
 	return SP_ITEM(unlinked);
 }
