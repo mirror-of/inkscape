@@ -12,7 +12,6 @@ io_libio_a_SOURCES = \
 	io/gzipstream.h \
 	io/inkscapestream.cpp \
 	io/inkscapestream.h \
-	io/streamtest.cpp \
 	io/stringstream.cpp \
 	io/stringstream.h \
 	io/sys.h \
