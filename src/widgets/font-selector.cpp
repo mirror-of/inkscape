@@ -376,19 +376,6 @@ sp_font_selector_set_font (SPFontSelector *fsel, NRFont *font)
 	}
 }
 
-void
-sp_font_selector_set_font_fuzzy (SPFontSelector *fsel, const gchar *family, const gchar *style)
-{
-	NRTypeFace *tf;
-	NRFont *font;
-
-	tf = nr_type_directory_lookup_fuzzy (family, style);
-	font = nr_font_new_default (tf, NR_TYPEFACE_METRICS_DEFAULT, fsel->fontsize);
-	nr_typeface_unref (tf);
-	sp_font_selector_set_font (fsel, font);
-	if (font) nr_font_unref (font);
-}
-
 NRFont*
 sp_font_selector_get_font (SPFontSelector *fsel)
 {

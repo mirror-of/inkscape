@@ -1,5 +1,8 @@
 2004-01-14  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/widgets/font-selector.h, src/widgets/font-selector.cpp
+	(sp_font_selector_set_font_fuzzy): Remove this unused function.
+
 	* src/sp-text.cpp (sp_text_font_style_to_lookup),
 	src/dialogs/text-edit.cpp (sp_text_edit_dialog_font_style_to_lookup):
 	Move this duplicated function to src/libnrtype/font-style-to-pos.cpp
