@@ -26,6 +26,7 @@ extern "C" {
 #  define INKSCAPE_GRADIENTSDIR   BR_DATADIR( "/inkscape/gradients" )
 #  define INKSCAPE_PIXMAPDIR      BR_DATADIR( "/inkscape/icons" )
 #  define INKSCAPE_MARKERSDIR     BR_DATADIR( "/inkscape/markers" )
+#  define INKSCAPE_PALETTESDIR    BR_DATADIR( "/inkscape/palettes" )
 #  define INKSCAPE_PATTERNSDIR    BR_DATADIR( "/inkscape/patterns" )
 #  define INKSCAPE_SCREENSDIR     BR_DATADIR( "/inkscape/screens" )
 #  define INKSCAPE_TUTORIALSDIR   BR_DATADIR( "/inkscape/tutorials" )
@@ -39,6 +40,7 @@ extern "C" {
 #    define INKSCAPE_GRADIENTSDIR "share\\gradients"
 #    define INKSCAPE_PIXMAPDIR    "share\\icons"
 #    define INKSCAPE_MARKERSDIR   "share\\markers"
+#    define INKSCAPE_PALETTESDIR  "share\\palettes"
 #    define INKSCAPE_PATTERNSDIR  "share\\patterns"
 #    define INKSCAPE_SCREENSDIR   "share\\screens"
 #    define INKSCAPE_TUTORIALSDIR "share\\tutorials"
@@ -51,6 +53,7 @@ extern "C" {
 #    define INKSCAPE_GRADIENTSDIR "Inkscape.app/Contents/Resources/gradients"
 #    define INKSCAPE_PIXMAPDIR    "Inkscape.app/Contents/Resources/icons"
 #    define INKSCAPE_MARKERSDIR   "Inkscape.app/Contents/Resources/markers"
+#    define INKSCAPE_PALETTESDIR  "Inkscape.app/Contents/Resources/palettes"
 #    define INKSCAPE_PATTERNSDIR  "Inkscape.app/Contents/Resources/patterns"
 #    define INKSCAPE_SCREENSDIR   "Inkscape.app/Contents/Resources/screens"
 #    define INKSCAPE_TUTORIALSDIR "Inkscape.app/Contents/Resources/tutorials"
@@ -63,6 +66,7 @@ extern "C" {
 #    define INKSCAPE_GRADIENTSDIR INKSCAPE_DATADIR "/inkscape/gradients"
 #    define INKSCAPE_PIXMAPDIR    INKSCAPE_DATADIR "/inkscape/icons"
 #    define INKSCAPE_MARKERSDIR   INKSCAPE_DATADIR "/inkscape/markers"
+#    define INKSCAPE_PALETTESDIR  INKSCAPE_DATADIR "/inkscape/palettes"
 #    define INKSCAPE_PATTERNSDIR  INKSCAPE_DATADIR "/inkscape/patterns"
 #    define INKSCAPE_SCREENSDIR   INKSCAPE_DATADIR "/inkscape/screens"
 #    define INKSCAPE_TUTORIALSDIR INKSCAPE_DATADIR "/inkscape/tutorials"
