@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-01 23:23+0100\n"
+"POT-Creation-Date: 2004-11-04 21:41+1100\n"
 "PO-Revision-Date: 2004-10-30 19:59+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
@@ -87,7 +87,7 @@ msgid "Zoom drawing if window size changes"
 msgstr "Forstørr teikninga ved endring av vindaugestorleik"
 
 #: src/desktop.cpp:937 src/dialogs/display-settings.cpp:1081
-#: src/verbs.cpp:1625
+#: src/verbs.cpp:1629
 msgid "Zoom"
 msgstr "Forstørr"
 
@@ -487,7 +487,7 @@ msgstr "Eining:"
 #. Stroke width
 #: src/dialogs/desktop-properties.cpp:1044 src/dialogs/export.cpp:301
 #: src/dialogs/export.cpp:408 src/dialogs/object-attributes.cpp:76
-#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1351
+#: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1355
 #: src/toolbox.cpp:1815
 msgid "Width:"
 msgstr "Breidd:"
@@ -546,7 +546,7 @@ msgstr "Objektmerke:"
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:257 src/dialogs/display-settings.cpp:393
 #: src/dialogs/display-settings.cpp:448 src/dialogs/display-settings.cpp:1412
-#: src/dialogs/stroke-style.cpp:1065 src/interface.cpp:660 src/verbs.cpp:1418
+#: src/dialogs/stroke-style.cpp:1069 src/interface.cpp:660 src/verbs.cpp:1418
 msgid "None"
 msgstr "Ingen"
 
@@ -812,8 +812,8 @@ msgstr ""
 "Kor raskt lerret skal rulla automatisk når du dreg utanfor kanten (0 for å "
 "slå av automatisk rulling)."
 
-#: src/dialogs/display-settings.cpp:997 src/dialogs/tracedialog.cpp:344
-#: src/dialogs/tracedialog.cpp:374
+#: src/dialogs/display-settings.cpp:997 src/dialogs/tracedialog.cpp:367
+#: src/dialogs/tracedialog.cpp:397
 msgid "Threshold:"
 msgstr "Terskel:"
 
@@ -903,23 +903,23 @@ msgstr "Node"
 msgid "Shapes"
 msgstr "Figurar"
 
-#: src/dialogs/display-settings.cpp:1095 src/verbs.cpp:1609
+#: src/dialogs/display-settings.cpp:1095 src/verbs.cpp:1613
 msgid "Rectangle"
 msgstr "Rektangel"
 
-#: src/dialogs/display-settings.cpp:1101 src/verbs.cpp:1611
+#: src/dialogs/display-settings.cpp:1101 src/verbs.cpp:1615
 msgid "Ellipse"
 msgstr "Ellipse"
 
-#: src/dialogs/display-settings.cpp:1107 src/verbs.cpp:1613
+#: src/dialogs/display-settings.cpp:1107 src/verbs.cpp:1617
 msgid "Star"
 msgstr "Stjerne"
 
-#: src/dialogs/display-settings.cpp:1113 src/verbs.cpp:1615
+#: src/dialogs/display-settings.cpp:1113 src/verbs.cpp:1619
 msgid "Spiral"
 msgstr "Spiral"
 
-#: src/dialogs/display-settings.cpp:1126 src/verbs.cpp:1617
+#: src/dialogs/display-settings.cpp:1126 src/verbs.cpp:1621
 msgid "Pencil"
 msgstr "Blyant"
 
@@ -935,16 +935,16 @@ msgstr ""
 "Kor glatte handteikna linjer skal gjerast. Lågare verdiare gjev meir ujamne "
 "baner med fleire nodar."
 
-#: src/dialogs/display-settings.cpp:1146 src/verbs.cpp:1619
+#: src/dialogs/display-settings.cpp:1146 src/verbs.cpp:1623
 msgid "Pen"
 msgstr "Penn"
 
 #: src/dialogs/display-settings.cpp:1155 src/dialogs/text-edit.cpp:345
-#: src/verbs.cpp:1623
+#: src/verbs.cpp:1627
 msgid "Text"
 msgstr "Tekst"
 
-#: src/dialogs/display-settings.cpp:1164 src/verbs.cpp:1627
+#: src/dialogs/display-settings.cpp:1164 src/verbs.cpp:1631
 msgid "Dropper"
 msgstr "Fargeplukkar"
 
@@ -1837,40 +1837,40 @@ msgstr "Fragment"
 msgid "XML fragment for the RDF 'License' section."
 msgstr "XML-fragment for den RDF-baserte «License»-blokka."
 
-#: src/dialogs/stroke-style.cpp:1048 src/widgets/gradient-vector.cpp:261
+#: src/dialogs/stroke-style.cpp:1052 src/widgets/gradient-vector.cpp:261
 #: src/widgets/paint-selector.cpp:876
 msgid "No document selected"
 msgstr "Ingen dokument valt"
 
-#: src/dialogs/stroke-style.cpp:1358
+#: src/dialogs/stroke-style.cpp:1362
 msgid "Stroke width"
 msgstr "Strekbreidd"
 
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
-#: src/dialogs/stroke-style.cpp:1378
+#: src/dialogs/stroke-style.cpp:1382
 msgid "Join:"
 msgstr "Hjørne:"
 
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1392
+#: src/dialogs/stroke-style.cpp:1396
 msgid "Miter join"
 msgstr "Spist hjørne"
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1402
+#: src/dialogs/stroke-style.cpp:1406
 msgid "Round join"
 msgstr "Rundt hjørne"
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1412
+#: src/dialogs/stroke-style.cpp:1416
 msgid "Bevel join"
 msgstr "Skrått hjørne"
 
@@ -1881,54 +1881,54 @@ msgstr "Skrått hjørne"
 #. spike that extends well beyond the connection point. The purpose of the
 #. miter limit is to cut off such spikes (i.e. convert them into bevels)
 #. when they become too long.
-#: src/dialogs/stroke-style.cpp:1423
+#: src/dialogs/stroke-style.cpp:1427
 msgid "Miter limit:"
 msgstr "Største spisslengd:"
 
-#: src/dialogs/stroke-style.cpp:1431
+#: src/dialogs/stroke-style.cpp:1435
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr "Største lengd ein spiss kan ha (i same einingar om strekbreidda)"
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
-#: src/dialogs/stroke-style.cpp:1444
+#: src/dialogs/stroke-style.cpp:1448
 msgid "Cap:"
 msgstr "Ende:"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1457
+#: src/dialogs/stroke-style.cpp:1461
 msgid "Butt cap"
 msgstr "Kort ende"
 
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: src/dialogs/stroke-style.cpp:1466
+#: src/dialogs/stroke-style.cpp:1470
 msgid "Round cap"
 msgstr "Avrunda ende"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1475
+#: src/dialogs/stroke-style.cpp:1479
 msgid "Square cap"
 msgstr "Firkanta ende"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:1481
+#: src/dialogs/stroke-style.cpp:1485
 msgid "Dashes:"
 msgstr "Stipla linje:"
 
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
-#: src/dialogs/stroke-style.cpp:1502
+#: src/dialogs/stroke-style.cpp:1506
 msgid "Start Markers:"
 msgstr "Startmerke:"
 
-#: src/dialogs/stroke-style.cpp:1512
+#: src/dialogs/stroke-style.cpp:1516
 msgid "Mid Markers:"
 msgstr "Midtmerke:"
 
-#: src/dialogs/stroke-style.cpp:1523
+#: src/dialogs/stroke-style.cpp:1527
 msgid "End Markers:"
 msgstr "Sluttmerke:"
 
@@ -1961,27 +1961,27 @@ msgstr "Loddrett tekst"
 msgid "Line spacing:"
 msgstr "Linjeavstand:"
 
-#: src/dialogs/text-edit.cpp:386
+#: src/dialogs/text-edit.cpp:391
 msgid "Set as default"
 msgstr "Set som standard"
 
 #. ##Set up the Potrace panel
 #. #### brightness ####
-#: src/dialogs/tracedialog.cpp:334
+#: src/dialogs/tracedialog.cpp:357
 msgid "Brightness"
 msgstr "Lysstyrke"
 
-#: src/dialogs/tracedialog.cpp:349
+#: src/dialogs/tracedialog.cpp:372
 msgid "Image Brightness"
 msgstr "Lysstyrke"
 
 #. #### canny edge detection ####
 #. TRANSLATORS: "Canny" is the name of the inventor of this edge detection method
-#: src/dialogs/tracedialog.cpp:355
+#: src/dialogs/tracedialog.cpp:378
 msgid "Optimal Edge Detection (Canny)"
 msgstr "Optimal kantattkjenning"
 
-#: src/dialogs/tracedialog.cpp:379
+#: src/dialogs/tracedialog.cpp:402
 msgid "Edge Detection"
 msgstr "Kantattkjenning"
 
@@ -1989,37 +1989,37 @@ msgstr "Kantattkjenning"
 #. TRANSLATORS: Color Quantization: the process of reducing the number of colors
 #. in an image by selecting an optimized set of representative colors and then
 #. re-applying this reduced set to the original image.
-#: src/dialogs/tracedialog.cpp:387
+#: src/dialogs/tracedialog.cpp:410
 msgid "Color Quantization"
 msgstr "Fargeredusering"
 
-#: src/dialogs/tracedialog.cpp:397
+#: src/dialogs/tracedialog.cpp:420
 #, fuzzy
 msgid "Colors:"
 msgstr "Fargar"
 
-#: src/dialogs/tracedialog.cpp:402
+#: src/dialogs/tracedialog.cpp:425
 msgid "Quantization / Reduction"
 msgstr "Fargeredusering"
 
 #. #### Preview ####
-#: src/dialogs/tracedialog.cpp:407 src/dialogs/tracedialog.cpp:414
+#: src/dialogs/tracedialog.cpp:430 src/dialogs/tracedialog.cpp:437
 msgid "Preview"
 msgstr "Førehandsvising"
 
 #. #### quantization ####
-#: src/dialogs/tracedialog.cpp:419
+#: src/dialogs/tracedialog.cpp:442
 msgid "Invert"
 msgstr "Inverter"
 
-#: src/dialogs/tracedialog.cpp:429
+#: src/dialogs/tracedialog.cpp:452
 msgid "Credits"
 msgstr "Bidragsytarar"
 
 #. done
 #. TRANSLATORS: Potrace is an application for transforming bitmaps into
 #. vector graphics (http://potrace.sourceforge.net/)
-#: src/dialogs/tracedialog.cpp:436
+#: src/dialogs/tracedialog.cpp:459
 msgid "Potrace"
 msgstr "Potrace"
 
@@ -2269,7 +2269,7 @@ msgstr ""
 "Bruk «> filnamn» for å lagra utskrifta i ei fil.\n"
 "Bruk «| prog arg ...» for å senda ho vidare til eit program."
 
-#: src/extension/internal/ps.cpp:977
+#: src/extension/internal/ps.cpp:979
 msgid "write error occurred"
 msgstr "Det oppstod ein skrivefeil."
 
@@ -2378,7 +2378,7 @@ msgstr "Vel fila du vil importera"
 msgid "about.svg"
 msgstr "om.svg"
 
-#: src/help.cpp:81 src/verbs.cpp:1718
+#: src/help.cpp:81 src/verbs.cpp:1722
 msgid "About Inkscape"
 msgstr "Om Inkscape."
 
@@ -3320,23 +3320,23 @@ msgstr "Ingenting å angra."
 msgid "Nothing to redo."
 msgstr "Ingenting å gjera om."
 
-#: src/selection-chemistry.cpp:745
+#: src/selection-chemistry.cpp:760
 msgid "Nothing was copied."
 msgstr "Ingenting vart kopiert."
 
-#: src/selection-chemistry.cpp:858 src/selection-chemistry.cpp:909
+#: src/selection-chemistry.cpp:873 src/selection-chemistry.cpp:924
 msgid "Nothing on the clipboard."
 msgstr "Ingenting på utklippstavla."
 
-#: src/selection-chemistry.cpp:915
+#: src/selection-chemistry.cpp:930
 msgid "Select <b>object(s)</b> to paste style to."
 msgstr "Merk <b>objekta</b> du vil lim inn stilen på."
 
-#: src/selection-chemistry.cpp:1459
+#: src/selection-chemistry.cpp:1474
 msgid "Select an <b>object</b> to clone."
 msgstr "Merk <b>objektet</b> du vil klona."
 
-#: src/selection-chemistry.cpp:1465
+#: src/selection-chemistry.cpp:1480
 msgid ""
 "If you want to clone several objects, <b>group</b> them and <b>clone the "
 "group</b>."
@@ -3344,15 +3344,15 @@ msgstr ""
 "Vil du klona fleire objekt, kan du <b>gruppera</b> dei og så <b>klona "
 "gruppa</b>."
 
-#: src/selection-chemistry.cpp:1496
+#: src/selection-chemistry.cpp:1511
 msgid "Select a <b>clone</b> to unlink."
 msgstr "Merk <b>klonen</b> du vil kopla laus."
 
-#: src/selection-chemistry.cpp:1527
+#: src/selection-chemistry.cpp:1542
 msgid "<b>No clones to unlink</b> in the selection."
 msgstr "Det finst <b>ingen klonar som kan koplast laus</b> i dette utvalet."
 
-#: src/selection-chemistry.cpp:1544
+#: src/selection-chemistry.cpp:1559
 msgid ""
 "Select a <b>clone</b> to go to its original. Select a <b>linked offset</b> "
 "to go to its source. Select a <b>text on path</b> to go to the path."
@@ -3360,7 +3360,7 @@ msgstr ""
 "Merk ein <b>klon</b> for å gå til opphavet. Merk ei <b>lenkja forskyving</b> "
 "for å gå til kjelda. Merk ein <b>tekst på bane</b> for å gå til bana."
 
-#: src/selection-chemistry.cpp:1565
+#: src/selection-chemistry.cpp:1580
 msgid ""
 "<b>Cannot find</b> the object to select (orphaned clone, offset, or "
 "textpath?)"
@@ -3368,26 +3368,26 @@ msgstr ""
 "<b>Finn ikkje</b> objektet som skal merkjast (foreldrelaus klon, forskyving "
 "eller tekstbane?)."
 
-#: src/selection-chemistry.cpp:1571
+#: src/selection-chemistry.cpp:1586
 msgid ""
 "The object you're trying to select is <b>not visible</b> (it is in &lt;"
 "defs&gt;)"
 msgstr ""
 "Objektet er prøver å velja <b>ikkje synleg</b> (det er i &lt;defs&gt;)."
 
-#: src/selection-chemistry.cpp:1598
+#: src/selection-chemistry.cpp:1613
 msgid "Select <b>object(s)</b> to tile."
 msgstr "Merk <b>objekta</b> du vil bruka som mønster."
 
-#: src/selection-chemistry.cpp:1672
+#: src/selection-chemistry.cpp:1699
 msgid "Select an <b>object with pattern fill</b> to untile."
 msgstr "Merk <b>objektet</b> du vil henta mønsteret frå."
 
-#: src/selection-chemistry.cpp:1725
+#: src/selection-chemistry.cpp:1752
 msgid "<b>No pattern fills</b> to untile in the selection."
 msgstr "Det finst <b>ingen mønsterfyll</b> du kan henta i dette utvalet."
 
-#: src/selection-chemistry.cpp:1745
+#: src/selection-chemistry.cpp:1772
 msgid "Select <b>object(s)</b> to make a bitmap copy."
 msgstr "Merk <b>objekta</b> du vil laga ein punktbiletekopi av."
 
@@ -3446,8 +3446,8 @@ msgid ""
 "<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> "
 "to rotate around the opposite corner"
 msgstr ""
-"<b>Roter</b> utvalet. Bruk <b>Ctrl</b> for stegrotering og <b>Shift</b> for å "
-"rotera rundt motståande hjørne."
+"<b>Roter</b> utvalet. Bruk <b>Ctrl</b> for stegrotering og <b>Shift</b> for "
+"å rotera rundt motståande hjørne."
 
 #: src/seltrans.cpp:776 src/seltrans.cpp:856
 #, c-format
@@ -3511,28 +3511,28 @@ msgid "<b>Image</b> %d x %d: %s"
 msgstr "<b>Bilete</b> %d × %d: %s"
 
 #. TRANSLATORS: "to trace" means "to vectorize" (to convert a bitmap to vector graphics)
-#: src/sp-image.cpp:1067
+#: src/sp-image.cpp:1037
 msgid "Trace"
 msgstr "Spor"
 
-#: src/sp-image.cpp:1214
+#: src/sp-image.cpp:1184
 #, c-format
 msgid "Error writing %s: %s"
 msgstr "Klarte ikkje skriva «%s»: %s"
 
-#: src/sp-image.cpp:1248
+#: src/sp-image.cpp:1218
 msgid "Untitled"
 msgstr "Namnlaus"
 
-#: src/sp-image.cpp:1253
+#: src/sp-image.cpp:1223
 msgid "Document Name:"
 msgstr "Dokumentnamn:"
 
-#: src/sp-image.cpp:1266
+#: src/sp-image.cpp:1236
 msgid "Unknown"
 msgstr "Ukjend"
 
-#: src/sp-image.cpp:1272
+#: src/sp-image.cpp:1242
 msgid "Image URI:"
 msgstr "Biletadresse:"
 
@@ -3541,7 +3541,7 @@ msgstr "Biletadresse:"
 msgid "<b>Group</b> of <b>%d</b> objects"
 msgstr "<b>Gruppe</b> på <b>%d</b> objekt."
 
-#: src/sp-item.cpp:592
+#: src/sp-item.cpp:598
 msgid "Object"
 msgstr "Objekt"
 
@@ -3722,28 +3722,28 @@ msgstr ""
 msgid "Select <b>a text on path</b> to remove it from path."
 msgstr "Merk ein <b>tekst på ei bane</b> for å fjerna han frå bana."
 
-#: src/text-chemistry.cpp:181
+#: src/text-chemistry.cpp:163
 msgid "<b>No texts-on-paths</b> in the selection."
 msgstr "Det finst <b>ikkje nokon tekstar på baner</b> i utvalet."
 
-#: src/text-chemistry.cpp:209 src/text-chemistry.cpp:228
+#: src/text-chemistry.cpp:191 src/text-chemistry.cpp:210
 msgid "Select <b>text(s)</b> to remove kerns from."
 msgstr "Merk <b>tekstobjekta</b> du vil fjerna kniping frå."
 
-#: src/text-context.cpp:393
+#: src/text-context.cpp:392
 msgid "No-break space"
 msgstr "Hardt mellomrom"
 
-#: src/text-context.cpp:404
+#: src/text-context.cpp:403
 msgid "Unicode: "
 msgstr "Unicode: "
 
-#: src/text-context.cpp:418
+#: src/text-context.cpp:417
 #, c-format
 msgid "Unicode: %c%c%c%c"
 msgstr "Unicode: %c%c%c%c"
 
-#: src/text-context.cpp:431
+#: src/text-context.cpp:430
 msgid "Non-printable character"
 msgstr "Usynleg teikn"
 
@@ -4513,729 +4513,733 @@ msgstr "_Objektoppdeling"
 msgid "Cut the bottom object into pieces"
 msgstr "Del opp det nedste objektet i delar."
 
-#: src/verbs.cpp:1519
+#. TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
+#. Advanced tutorial for more info
+#: src/verbs.cpp:1521
 msgid "Cut _Path"
 msgstr "_Baneoppdeling"
 
-#: src/verbs.cpp:1520
+#: src/verbs.cpp:1522
 msgid "Cut the bottom object's stroke into pieces, removing fill"
 msgstr "Del bana til det nedste objektet opp i delar og fjern fyllet."
 
 #. TRANSLATORS: "outset": expand a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
 #. See also the Advanced Tutorial for explanation.
-#: src/verbs.cpp:1524
+#: src/verbs.cpp:1526
 msgid "Ou_tset"
 msgstr "Skubb _ut"
 
-#: src/verbs.cpp:1525
+#: src/verbs.cpp:1527
 msgid "Outset selected path(s)"
 msgstr "Skubb ut merkt bane."
 
-#: src/verbs.cpp:1527
+#: src/verbs.cpp:1529
 msgid "O_utset Path by 1px"
 msgstr "Skubb _ut 1 piksel"
 
-#: src/verbs.cpp:1528
+#: src/verbs.cpp:1530
 msgid "Outset selected path(s) by 1px"
 msgstr "Skubb _ut merkt bane 1 piksel"
 
-#: src/verbs.cpp:1530
+#: src/verbs.cpp:1532
 msgid "O_utset Path by 10px"
 msgstr "Skubb _ut 10 pikslar"
 
-#: src/verbs.cpp:1531
+#: src/verbs.cpp:1533
 msgid "Outset selected path(s) by 10px"
 msgstr "Skubb _ut merkt bane 10 pikslar"
 
 #. TRANSLATORS: "inset": contract a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
 #. See also the Advanced Tutorial for explanation.
-#: src/verbs.cpp:1535
+#: src/verbs.cpp:1537
 msgid "I_nset"
 msgstr "Skubb _inn"
 
-#: src/verbs.cpp:1536
+#: src/verbs.cpp:1538
 msgid "Inset selected path(s)"
 msgstr "Skubb inn merkt bane."
 
-#: src/verbs.cpp:1538
+#: src/verbs.cpp:1540
 msgid "I_nset Path by 1px"
 msgstr "Skubb _inn 1 piksel"
 
-#: src/verbs.cpp:1539
+#: src/verbs.cpp:1541
 msgid "Inset selected path(s) by 1px"
 msgstr "Skubb inn merkt bane 1 piksel."
 
-#: src/verbs.cpp:1541
+#: src/verbs.cpp:1543
 msgid "I_nset Path by 10px"
 msgstr "Skubb _inn 10 pikslar"
 
-#: src/verbs.cpp:1542
+#: src/verbs.cpp:1544
 msgid "Inset selected path(s) by 10px"
 msgstr "Skubb inn merkt bane 10 pikslar."
 
-#: src/verbs.cpp:1544
+#: src/verbs.cpp:1546
 msgid "D_ynamic Offset"
 msgstr "Dyna_misk forskyving"
 
-#: src/verbs.cpp:1544
+#: src/verbs.cpp:1546
 msgid "Create a dynamic offset object"
 msgstr "Lag ei  dynamisk forskyving."
 
-#: src/verbs.cpp:1546
+#: src/verbs.cpp:1548
 msgid "_Linked Offset"
 msgstr "_Kopla forskyving"
 
-#: src/verbs.cpp:1547
+#: src/verbs.cpp:1549
 msgid "Create a dynamic offset object linked to the original path"
 msgstr "Lag ei dynamisk forskyving kopla til opphavsbana."
 
-#: src/verbs.cpp:1549
+#: src/verbs.cpp:1551
 msgid "_Stroke to Path"
 msgstr "Strek til ba_ne"
 
-#: src/verbs.cpp:1550
+#: src/verbs.cpp:1552
 msgid "Convert selected stroke(s) to path(s)"
 msgstr "Gjer merkte strekar om til baner."
 
-#: src/verbs.cpp:1551
+#: src/verbs.cpp:1553
 msgid "Si_mplify"
 msgstr "_Forenkla"
 
-#: src/verbs.cpp:1552
+#: src/verbs.cpp:1554
 msgid "Simplify selected path(s) by removing extra nodes"
 msgstr "Forenkla merkt(e) bane(r) ved å fjerna nodar."
 
-#: src/verbs.cpp:1553
+#: src/verbs.cpp:1555
 msgid "Cl_eanup"
 msgstr "Rydd o_pp"
 
-#: src/verbs.cpp:1554
+#: src/verbs.cpp:1556
 msgid "Clean up selected path(s)"
 msgstr "Rydd opp i merkt(e) bane(r)."
 
-#: src/verbs.cpp:1555
+#: src/verbs.cpp:1557
 msgid "_Reverse"
 msgstr "Snu _retning"
 
-#: src/verbs.cpp:1556
+#: src/verbs.cpp:1558
 msgid "Reverses the direction of selected path(s); useful for flipping markers"
 msgstr ""
 "Snur retninga på merkt(e) bane(r). Dette er nyttig for å endra retninga på "
 "pilmarkørar."
 
-#: src/verbs.cpp:1557
+#: src/verbs.cpp:1559
 msgid "_Trace Bitmap"
 msgstr "_Teikn av punktbilete"
 
-#: src/verbs.cpp:1558
+#: src/verbs.cpp:1560
 msgid "Convert bitmap object to paths"
 msgstr "Gjer om punktbilete til baner"
 
-#: src/verbs.cpp:1559
+#: src/verbs.cpp:1561
 msgid "_Make a Bitmap Copy"
 msgstr "_Lag punktbiletekopi"
 
-#: src/verbs.cpp:1560
+#: src/verbs.cpp:1562
 msgid "Export selection to a bitmap and insert it into document"
 msgstr ""
 "Eksporter utvalet til eit punktbilete, og sett dette inni i dokumentet."
 
-#: src/verbs.cpp:1561
+#: src/verbs.cpp:1563
 msgid "_Combine"
 msgstr "_Slå saman"
 
-#: src/verbs.cpp:1562
+#: src/verbs.cpp:1564
 msgid "Combine several paths into one"
 msgstr "Slå saman fleire baner til éi."
 
-#: src/verbs.cpp:1563
+#. TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
+#. Advanced tutorial for more info
+#: src/verbs.cpp:1567
 msgid "Break _Apart"
 msgstr "Br_yt opp"
 
-#: src/verbs.cpp:1564
+#: src/verbs.cpp:1568
 msgid "Break selected path(s) into subpaths"
 msgstr "Bryt opp merkt(e) bane(r) til delbaner."
 
 #. Layer
-#: src/verbs.cpp:1567
+#: src/verbs.cpp:1571
 msgid "New Layer"
 msgstr "Nytt lag"
 
-#: src/verbs.cpp:1568
+#: src/verbs.cpp:1572
 msgid "Create a new layer"
 msgstr "Lag eit nytt lag."
 
-#: src/verbs.cpp:1569
+#: src/verbs.cpp:1573
 msgid "Rename Layer"
 msgstr "Endra namn på lag"
 
-#: src/verbs.cpp:1570
+#: src/verbs.cpp:1574
 msgid "Rename the current layer"
 msgstr "Endra namn på laget."
 
-#: src/verbs.cpp:1571
+#: src/verbs.cpp:1575
 msgid "Move to Next Layer"
 msgstr "Flytt til neste lag"
 
-#: src/verbs.cpp:1572
+#: src/verbs.cpp:1576
 msgid "Switch to the next layer in the document"
 msgstr "Byt til neste lag i dokumentet."
 
-#: src/verbs.cpp:1573
+#: src/verbs.cpp:1577
 msgid "Move to Previous Layer"
 msgstr "Flytt til førre lag"
 
-#: src/verbs.cpp:1574
+#: src/verbs.cpp:1578
 msgid "Switch to the previous layer in the document"
 msgstr "Byt til førre lag i dokumentet."
 
-#: src/verbs.cpp:1575
+#: src/verbs.cpp:1579
 msgid "Layer to Top"
 msgstr "Send lag fremst"
 
-#: src/verbs.cpp:1576
+#: src/verbs.cpp:1580
 msgid "Raise the current layer to the top"
 msgstr "Sendt laget fremst."
 
-#: src/verbs.cpp:1577
+#: src/verbs.cpp:1581
 msgid "Layer to Bottom"
 msgstr "Send lag bakarst"
 
-#: src/verbs.cpp:1578
+#: src/verbs.cpp:1582
 msgid "Lower the current layer to the bottom"
 msgstr "Send laget bakarst."
 
-#: src/verbs.cpp:1579
+#: src/verbs.cpp:1583
 msgid "Raise Layer"
 msgstr "Hev lag"
 
-#: src/verbs.cpp:1580
+#: src/verbs.cpp:1584
 msgid "Raise the current layer"
 msgstr "Hev laget."
 
-#: src/verbs.cpp:1581
+#: src/verbs.cpp:1585
 msgid "Lower Layer"
 msgstr "Senk lag"
 
-#: src/verbs.cpp:1582
+#: src/verbs.cpp:1586
 msgid "Lower the current layer"
 msgstr "Senk laget."
 
-#: src/verbs.cpp:1583
+#: src/verbs.cpp:1587
 msgid "Delete Current Layer"
 msgstr "Slett lag"
 
-#: src/verbs.cpp:1584
+#: src/verbs.cpp:1588
 msgid "Delete the current layer"
 msgstr "Slett laget."
 
 #. Object
-#: src/verbs.cpp:1587
+#: src/verbs.cpp:1591
 msgid "Rotate _90 deg CW"
 msgstr "Roter _90° mot høgre"
 
-#: src/verbs.cpp:1588
+#: src/verbs.cpp:1592
 msgid "Rotate selection 90 degrees clockwise"
 msgstr "Roter utvalet 90° med klokka."
 
-#: src/verbs.cpp:1589
+#: src/verbs.cpp:1593
 msgid "Rotate 9_0 deg CCW"
 msgstr "Roter 9_0° mot venstre"
 
-#: src/verbs.cpp:1590
+#: src/verbs.cpp:1594
 msgid "Rotate selection 90 degrees counter-clockwise"
 msgstr "Roter utvalet 90° mot klokka."
 
-#: src/verbs.cpp:1591
+#: src/verbs.cpp:1595
 msgid "Remove _Transformations"
 msgstr "Fjern _transformeringar"
 
-#: src/verbs.cpp:1592
+#: src/verbs.cpp:1596
 msgid "Remove transformations from object"
 msgstr "Fjern transformeringar frå objektet"
 
-#: src/verbs.cpp:1593
+#: src/verbs.cpp:1597
 msgid "_Object to Path"
 msgstr "Objekt til b_ane"
 
-#: src/verbs.cpp:1594
+#: src/verbs.cpp:1598
 msgid "Convert selected object(s) to path(s)"
 msgstr "Gjer merkt(e) objekt om til bane(r)."
 
-#: src/verbs.cpp:1595
+#: src/verbs.cpp:1599
 msgid "_Unflow Text"
 msgstr "_Fikser tekst"
 
-#: src/verbs.cpp:1596
+#: src/verbs.cpp:1600
 msgid "Convert selected flowtext to text"
 msgstr "Gjer merkt flyttekst om til tekst."
 
-#: src/verbs.cpp:1598
+#: src/verbs.cpp:1602
 msgid "Flip _Horizontally"
 msgstr "Spegla _vassrett"
 
-#: src/verbs.cpp:1598
+#: src/verbs.cpp:1602
 msgid "Flip selection horizontally"
 msgstr "Spegla utvalet vassrett."
 
-#: src/verbs.cpp:1601
+#: src/verbs.cpp:1605
 msgid "Flip _Vertically"
 msgstr "Spegla _loddrett"
 
-#: src/verbs.cpp:1601
+#: src/verbs.cpp:1605
 msgid "Flip selection vertically"
 msgstr "Spegla utvalet loddrett."
 
 #. Tools
-#: src/verbs.cpp:1605
+#: src/verbs.cpp:1609
 msgid "Select"
 msgstr "Vel"
 
-#: src/verbs.cpp:1606
+#: src/verbs.cpp:1610
 msgid "Select and transform objects"
 msgstr "Merk og transformer objekt."
 
-#: src/verbs.cpp:1607
+#: src/verbs.cpp:1611
 msgid "Node Edit"
 msgstr "Noderedigering"
 
-#: src/verbs.cpp:1608
+#: src/verbs.cpp:1612
 msgid "Edit path nodes or control handles"
 msgstr "Rediger banenodar og kontrollpunkt."
 
-#: src/verbs.cpp:1610
+#: src/verbs.cpp:1614
 msgid "Create rectangles and squares"
 msgstr "Teikn rektangel og kvadrat."
 
-#: src/verbs.cpp:1612
+#: src/verbs.cpp:1616
 msgid "Create circles, ellipses, and arcs"
 msgstr "Teikn sirklar, ellipsar og bogar."
 
-#: src/verbs.cpp:1614
+#: src/verbs.cpp:1618
 msgid "Create stars and polygons"
 msgstr "Teikn stjerner og mangekantar."
 
-#: src/verbs.cpp:1616
+#: src/verbs.cpp:1620
 msgid "Create spirals"
 msgstr "Teikn spiralar."
 
-#: src/verbs.cpp:1618
+#: src/verbs.cpp:1622
 msgid "Draw freehand lines"
 msgstr "Teikn frihandslinjer."
 
-#: src/verbs.cpp:1620
+#: src/verbs.cpp:1624
 msgid "Draw Bezier curves and straight lines"
 msgstr "Teikn Bezier-kurver og rette linjer."
 
-#: src/verbs.cpp:1621
+#: src/verbs.cpp:1625
 msgid "Calligraphy"
 msgstr "Kalligrafi"
 
-#: src/verbs.cpp:1622
+#: src/verbs.cpp:1626
 msgid "Draw calligraphic lines"
 msgstr "Teikn kalligrafiske linjer."
 
-#: src/verbs.cpp:1624
+#: src/verbs.cpp:1628
 msgid "Create and edit text objects"
 msgstr "Lag og endra tekstobjekt."
 
-#: src/verbs.cpp:1626
+#: src/verbs.cpp:1630
 msgid "Zoom in or out"
 msgstr "Forstørr inn og ut."
 
-#: src/verbs.cpp:1628
+#: src/verbs.cpp:1632
 msgid "Pick averaged colors from image"
 msgstr "Plukk opp snittfargar frå biletet."
 
 #. Tool prefs
-#: src/verbs.cpp:1631
+#: src/verbs.cpp:1635
 msgid "Selector Preferences"
 msgstr "_Veljaroppsett"
 
-#: src/verbs.cpp:1632
+#: src/verbs.cpp:1636
 msgid "Open Inkscape Preferences for the Selector tool"
 msgstr "Opna oppsettdialogen for objektveljarverktøyet."
 
-#: src/verbs.cpp:1633
+#: src/verbs.cpp:1637
 msgid "Node Tool Preferences"
 msgstr "Nodeverktøyoppsett"
 
-#: src/verbs.cpp:1634
+#: src/verbs.cpp:1638
 msgid "Open Inkscape Preferences for the Node tool"
 msgstr "Opna oppsettdialogen for nodeverktøyet."
 
-#: src/verbs.cpp:1635
+#: src/verbs.cpp:1639
 msgid "Rectangle Preferences"
 msgstr "Rektangeloppsett"
 
-#: src/verbs.cpp:1636
+#: src/verbs.cpp:1640
 msgid "Open Inkscape Preferences for the Rectangle tool"
 msgstr "Opna oppsettdialogen for rektangelverktøyet."
 
-#: src/verbs.cpp:1637
+#: src/verbs.cpp:1641
 msgid "Ellipse Preferences"
 msgstr "Ellipseoppsett"
 
-#: src/verbs.cpp:1638
+#: src/verbs.cpp:1642
 msgid "Open Inkscape Preferences for the Ellipse tool"
 msgstr "Opna oppsettdialogen for ellipseverktøyet."
 
-#: src/verbs.cpp:1639
+#: src/verbs.cpp:1643
 msgid "Star Preferences"
 msgstr "Stjerneoppsett"
 
-#: src/verbs.cpp:1640
+#: src/verbs.cpp:1644
 msgid "Open Inkscape Preferences for the Star tool"
 msgstr "Opna oppsettdialogen for stjerneverktøyet."
 
-#: src/verbs.cpp:1641
+#: src/verbs.cpp:1645
 msgid "Spiral Preferences"
 msgstr "Spiraloppsett"
 
-#: src/verbs.cpp:1642
+#: src/verbs.cpp:1646
 msgid "Open Inkscape Preferences for the Spiral tool"
 msgstr "Opna oppsettdialogen for spiralverktøyet."
 
-#: src/verbs.cpp:1643
+#: src/verbs.cpp:1647
 msgid "Pencil Preferences"
 msgstr "Blyantoppsett"
 
-#: src/verbs.cpp:1644
+#: src/verbs.cpp:1648
 msgid "Open Inkscape Preferences for the Pencil tool"
 msgstr "Opna oppsettdialogen for blyantverktøyet."
 
-#: src/verbs.cpp:1645
+#: src/verbs.cpp:1649
 msgid "Pen Preferences"
 msgstr "Pennoppsett"
 
-#: src/verbs.cpp:1646
+#: src/verbs.cpp:1650
 msgid "Open Inkscape Preferences for the Pen tool"
 msgstr "Opna oppsettdialogen for pennverktøyet."
 
-#: src/verbs.cpp:1647
+#: src/verbs.cpp:1651
 msgid "Calligraphic Preferences"
 msgstr "Kalligrafioppsett"
 
-#: src/verbs.cpp:1648
+#: src/verbs.cpp:1652
 msgid "Open Inkscape Preferences for the Calligraphy tool"
 msgstr "Opna oppsettdialogen for kalligrafiverktøyet."
 
-#: src/verbs.cpp:1649
+#: src/verbs.cpp:1653
 msgid "Text Preferences"
 msgstr "Tekstoppsett"
 
-#: src/verbs.cpp:1650
+#: src/verbs.cpp:1654
 msgid "Open Inkscape Preferences for the Text tool"
 msgstr "Opna oppsettdialogen for tekstverktøyet."
 
-#: src/verbs.cpp:1651
+#: src/verbs.cpp:1655
 msgid "Zoom Preferences"
 msgstr "Forstørringsoppsett"
 
-#: src/verbs.cpp:1652
+#: src/verbs.cpp:1656
 msgid "Open Inkscape Preferences for the Zoom tool"
 msgstr "Opna oppsettdialogen for forstørringsverktøyet."
 
-#: src/verbs.cpp:1653
+#: src/verbs.cpp:1657
 msgid "Dropper Preferences"
 msgstr "Fargeplukkaroppsett"
 
-#: src/verbs.cpp:1654
+#: src/verbs.cpp:1658
 msgid "Open Inkscape Preferences for the Dropper tool"
 msgstr "Opna oppsettdialogen for fargeplukkarverktøyet."
 
 #. Zooming
-#: src/verbs.cpp:1657
+#: src/verbs.cpp:1661
 msgid "Zoom In"
 msgstr "Forstørr"
 
-#: src/verbs.cpp:1657
+#: src/verbs.cpp:1661
 msgid "Zoom in"
 msgstr "Forstørr"
 
-#: src/verbs.cpp:1658
+#: src/verbs.cpp:1662
 msgid "Zoom Out"
 msgstr "Forminsk."
 
-#: src/verbs.cpp:1658
+#: src/verbs.cpp:1662
 msgid "Zoom out"
 msgstr "Forminsk"
 
-#: src/verbs.cpp:1659
+#: src/verbs.cpp:1663
 msgid "_Rulers"
 msgstr "_Linjalar"
 
-#: src/verbs.cpp:1659
+#: src/verbs.cpp:1663
 msgid "Show or hide the canvas rulers"
 msgstr "Vis eller skjul linjalar."
 
-#: src/verbs.cpp:1660
+#: src/verbs.cpp:1664
 msgid "Scroll_bars"
 msgstr "_Rullefelt"
 
-#: src/verbs.cpp:1660
+#: src/verbs.cpp:1664
 msgid "Show or hide the canvas scrollbars"
 msgstr "Vis eller skjul rullefelt."
 
-#: src/verbs.cpp:1661
+#: src/verbs.cpp:1665
 msgid "_Grid"
 msgstr "_Rutenett"
 
-#: src/verbs.cpp:1661
+#: src/verbs.cpp:1665
 msgid "Show or hide grid"
 msgstr "Vis eller skjul rutenett."
 
-#: src/verbs.cpp:1662
+#: src/verbs.cpp:1666
 msgid "G_uides"
 msgstr "_Hjelpelinjer"
 
-#: src/verbs.cpp:1662
+#: src/verbs.cpp:1666
 msgid "Show or hide guides"
 msgstr "Vis eller skjul hjelpelinjer."
 
-#: src/verbs.cpp:1663
+#: src/verbs.cpp:1667
 msgid "Nex_t Zoom"
 msgstr "_Neste forstørring"
 
-#: src/verbs.cpp:1663
+#: src/verbs.cpp:1667
 msgid "Next zoom (from the history of zooms)"
 msgstr "Neste forstørring (frå forstørringsloggen)."
 
-#: src/verbs.cpp:1665
+#: src/verbs.cpp:1669
 msgid "Pre_vious Zoom"
 msgstr "_Førre forstørring"
 
-#: src/verbs.cpp:1665
+#: src/verbs.cpp:1669
 msgid "Previous zoom (from the history of zooms)"
 msgstr "Førre forstørring (frå forstørringsloggen)."
 
-#: src/verbs.cpp:1667
+#: src/verbs.cpp:1671
 msgid "Zoom 1:_1"
 msgstr "Forstørr 1:_1"
 
-#: src/verbs.cpp:1667
+#: src/verbs.cpp:1671
 msgid "Zoom to 1:1"
 msgstr "Forstørr til 1:1."
 
-#: src/verbs.cpp:1669
+#: src/verbs.cpp:1673
 msgid "Zoom 1:_2"
 msgstr "Forstørr 1:_2"
 
-#: src/verbs.cpp:1669
+#: src/verbs.cpp:1673
 msgid "Zoom to 1:2"
 msgstr "Forstørr til 1:2."
 
-#: src/verbs.cpp:1671
+#: src/verbs.cpp:1675
 msgid "_Zoom 2:1"
 msgstr "F_orstørr 2:1"
 
-#: src/verbs.cpp:1671
+#: src/verbs.cpp:1675
 msgid "Zoom to 2:1"
 msgstr "Forstørr til 2:1."
 
-#: src/verbs.cpp:1674
+#: src/verbs.cpp:1678
 msgid "_Fullscreen"
 msgstr "Fulls_kjerm"
 
-#: src/verbs.cpp:1674
+#: src/verbs.cpp:1678
 msgid "Stretch this document window to full screen"
 msgstr "Strekk dokumentvindauget til å dekkja heile skjermen."
 
-#: src/verbs.cpp:1677
+#: src/verbs.cpp:1681
 msgid "D_uplicate Window"
 msgstr "_Lag kopi av vindauge"
 
-#: src/verbs.cpp:1677
+#: src/verbs.cpp:1681
 msgid "Open a new window with the same document"
 msgstr "Opna eit nytt vindauge med same dokumentet."
 
-#: src/verbs.cpp:1679
+#: src/verbs.cpp:1683
 msgid "_New View Preview"
 msgstr "_Førehandsvising av ny vising"
 
-#: src/verbs.cpp:1680
+#: src/verbs.cpp:1684
 msgid "New View Preview"
 msgstr "Førehandsvising av ny vising"
 
 #. "view_new_preview"
-#: src/verbs.cpp:1681
+#: src/verbs.cpp:1685
 msgid "_Page"
 msgstr "_Side"
 
-#: src/verbs.cpp:1682
+#: src/verbs.cpp:1686
 msgid "Zoom to fit page in window"
 msgstr "Forstørr til å visa heile sida i vindauget."
 
-#: src/verbs.cpp:1683
+#: src/verbs.cpp:1687
 msgid "Page _Width"
 msgstr "Side_breidd"
 
-#: src/verbs.cpp:1684
+#: src/verbs.cpp:1688
 msgid "Zoom to fit page width in window"
 msgstr "Forstørr til å visa heile sidebreidda i vindauget."
 
-#: src/verbs.cpp:1685
+#: src/verbs.cpp:1689
 msgid "_Drawing"
 msgstr "_Teikning"
 
-#: src/verbs.cpp:1686
+#: src/verbs.cpp:1690
 msgid "Zoom to fit drawing in window"
 msgstr "Forstørr slik at teikninga dekkjer heile vindauget."
 
-#: src/verbs.cpp:1687
+#: src/verbs.cpp:1691
 msgid "_Selection"
 msgstr "_Utval"
 
-#: src/verbs.cpp:1688
+#: src/verbs.cpp:1692
 msgid "Zoom to fit selection in window"
 msgstr "Forstørr slik at utvalet dekkjer heile vindauget."
 
 #. Dialogs
-#: src/verbs.cpp:1691
+#: src/verbs.cpp:1695
 msgid "In_kscape Preferences..."
 msgstr "_Inkscape-oppsett ..."
 
-#: src/verbs.cpp:1692
+#: src/verbs.cpp:1696
 msgid "Global Inkscape preferences"
 msgstr "Globale Inkscape-innstillingar."
 
-#: src/verbs.cpp:1693
+#: src/verbs.cpp:1697
 msgid "_Document Preferences..."
 msgstr "_Dokumentoppsett"
 
-#: src/verbs.cpp:1694
+#: src/verbs.cpp:1698
 msgid "Preferences saved with the document"
 msgstr "Innstillingar lagra i dokumentet."
 
-#: src/verbs.cpp:1695
+#: src/verbs.cpp:1699
 msgid "_Fill and Stroke..."
 msgstr "_Fyll og strek ..."
 
-#: src/verbs.cpp:1696
+#: src/verbs.cpp:1700
 msgid "Fill and Stroke dialog"
 msgstr "«Fyll og strek»-dialog."
 
-#: src/verbs.cpp:1697
+#: src/verbs.cpp:1701
 msgid "Transfor_m..."
 msgstr "_Transformer ..."
 
-#: src/verbs.cpp:1698
+#: src/verbs.cpp:1702
 msgid "Transform dialog"
 msgstr "Transformasjonsdialog."
 
-#: src/verbs.cpp:1699
+#: src/verbs.cpp:1703
 msgid "_Align and Distribute..."
 msgstr "_Juster og fordel ..."
 
-#: src/verbs.cpp:1700
+#: src/verbs.cpp:1704
 msgid "Align and Distribute dialog"
 msgstr "«Juster og fordel»-dialog."
 
-#: src/verbs.cpp:1701
+#: src/verbs.cpp:1705
 msgid "_Text and Font..."
 msgstr "_Tekst og skrift ..."
 
-#: src/verbs.cpp:1702
+#: src/verbs.cpp:1706
 msgid "Text and Font dialog"
 msgstr "«Tekst og skrift»-dialog."
 
-#: src/verbs.cpp:1703
+#: src/verbs.cpp:1707
 msgid "_XML Editor..."
 msgstr "_XML-redigering ..."
 
-#: src/verbs.cpp:1704
+#: src/verbs.cpp:1708
 msgid "XML Editor"
 msgstr "XML-redigering."
 
-#: src/verbs.cpp:1705
+#: src/verbs.cpp:1709
 msgid "_Find..."
 msgstr "_Finn ..."
 
-#: src/verbs.cpp:1706
+#: src/verbs.cpp:1710
 msgid "Find objects in document"
 msgstr "Søk etter objekt i dokument."
 
-#: src/verbs.cpp:1707
+#: src/verbs.cpp:1711
 msgid "_Messages..."
 msgstr "_Meldingar ..."
 
-#: src/verbs.cpp:1708
+#: src/verbs.cpp:1712
 msgid "View debug messages"
 msgstr "Vis feilsøkingsmeldingar."
 
-#: src/verbs.cpp:1709
+#: src/verbs.cpp:1713
 msgid "Show/_Hide Dialogs"
 msgstr "V_is/skjul dialogar"
 
-#: src/verbs.cpp:1710
+#: src/verbs.cpp:1714
 msgid "Show or hide all active dialogs"
 msgstr "Vis eller skjul alle aktive dialogar."
 
-#: src/verbs.cpp:1711
+#: src/verbs.cpp:1715
 msgid "_Object Properties..."
 msgstr "_Objekteigenskapar ..."
 
-#: src/verbs.cpp:1712
+#: src/verbs.cpp:1716
 msgid "Object Properties dialog"
 msgstr "«Objekteigenskapar»-dialog."
 
 #. Help
-#: src/verbs.cpp:1715
+#: src/verbs.cpp:1719
 msgid "_Keys and Mouse"
 msgstr "_Tastatur og mus"
 
-#: src/verbs.cpp:1716
+#: src/verbs.cpp:1720
 msgid "Key and mouse shortcuts reference"
 msgstr "Oversikt over snøggtastar og musebindingar."
 
-#: src/verbs.cpp:1717
+#: src/verbs.cpp:1721
 msgid "_About Inkscape"
 msgstr "_Om Inkscape"
 
 #. "help_about"
 #. Tutorials
-#: src/verbs.cpp:1721
+#: src/verbs.cpp:1725
 msgid "Inkscape: _Basic"
 msgstr "Inkscape: _Det grunnleggjande"
 
-#: src/verbs.cpp:1722
+#: src/verbs.cpp:1726
 msgid "Getting started with Inkscape"
 msgstr "Kom i gang med Inkscape"
 
 #. "tutorial_basic"
-#: src/verbs.cpp:1723
+#: src/verbs.cpp:1727
 msgid "Inkscape: _Shapes"
 msgstr "Inkscape: _Figurarar"
 
-#: src/verbs.cpp:1724
+#: src/verbs.cpp:1728
 msgid "Using shape tools to create and edit shapes"
 msgstr "Bruk figurverktøya til å laga og redigera figurar."
 
-#: src/verbs.cpp:1725
+#: src/verbs.cpp:1729
 msgid "Inkscape: _Advanced"
 msgstr "Inkscape: _Meir avansert"
 
-#: src/verbs.cpp:1726
+#: src/verbs.cpp:1730
 msgid "Advanced Inkscape topics"
 msgstr "Avanserte Inkscape-emne"
 
 #. "tutorial_advanced"
-#: src/verbs.cpp:1727
+#: src/verbs.cpp:1731
 msgid "_Elements of Design"
 msgstr "_Grafisk formgjeving"
 
-#: src/verbs.cpp:1728
+#: src/verbs.cpp:1732
 msgid "Elements of Design tutorial"
 msgstr "Innføring i grafisk formgjeving."
 
 #. "tutorial_design"
-#: src/verbs.cpp:1729
+#: src/verbs.cpp:1733
 msgid "_Tips and Tricks"
 msgstr "_Tips og triks"
 
-#: src/verbs.cpp:1730
+#: src/verbs.cpp:1734
 msgid "Miscellaneous Tips and Tricks"
 msgstr "Ymse tips og triks."
 
@@ -5261,7 +5265,7 @@ msgstr "Stil"
 msgid "Font size:"
 msgstr "Skriftstorleik:"
 
-#: src/widgets/font-selector.cpp:540
+#: src/widgets/font-selector.cpp:544
 msgid "AaBbCcIiPpQq12368.;/()"
 msgstr "AaBbCcIiPpQqÆæØøÅå12368.;/()–«»"
 
@@ -5380,6 +5384,10 @@ msgstr "Klon vald"
 #: src/widgets/paint-selector.cpp:882
 msgid "No patterns in document"
 msgstr "Ingen mønster i dokumentet"
+
+#: src/widgets/paint-selector.cpp:997
+msgid "Use <b>Edit &gt; Tile</b> to create a new pattern from selection."
+msgstr ""
 
 #: src/widgets/paint-selector.cpp:1010
 msgid "Pattern fill"
