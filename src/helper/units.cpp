@@ -34,14 +34,14 @@
  */
 SPUnit const sp_units[] = {
     {SP_UNIT_SCALE, SP_UNIT_DIMENSIONLESS, 1.0, NONE, N_("Unit"), "", N_("Units"), ""},
-    {SP_UNIT_PT, SP_UNIT_ABSOLUTE, PT_PER_PT, SP_PT, N_("Point"), N_("pt"), N_("Points"), N_("Pt")},
-    {SP_UNIT_PX, SP_UNIT_DEVICE, PT_PER_PX, SP_PX, N_("Pixel"), N_("px"), N_("Pixels"), N_("Px")}, 
+    {SP_UNIT_PT, SP_UNIT_ABSOLUTE, PX_PER_PT, SP_PT, N_("Point"), N_("pt"), N_("Points"), N_("Pt")},
+    {SP_UNIT_PX, SP_UNIT_DEVICE, PX_PER_PX, SP_PX, N_("Pixel"), N_("px"), N_("Pixels"), N_("Px")}, 
     /* You can add new elements from this point forward */
     {SP_UNIT_PERCENT, SP_UNIT_DIMENSIONLESS, 0.01, NONE, N_("Percent"), N_("%"), N_("Percents"), N_("%")},
-    {SP_UNIT_MM, SP_UNIT_ABSOLUTE, PT_PER_MM, SP_MM, N_("Millimeter"), N_("mm"), N_("Millimeters"), N_("mm")},
-    {SP_UNIT_CM, SP_UNIT_ABSOLUTE, PT_PER_CM, SP_CM, N_("Centimeter"), N_("cm"), N_("Centimeters"), N_("cm")},
-    {SP_UNIT_M, SP_UNIT_ABSOLUTE, PT_PER_M, SP_M, N_("Meter"), N_("m"), N_("Meters"), N_("m")},
-    {SP_UNIT_IN, SP_UNIT_ABSOLUTE, PT_PER_IN, SP_IN, N_("Inch"), N_("in"), N_("Inches"), N_("in")},
+    {SP_UNIT_MM, SP_UNIT_ABSOLUTE, PX_PER_MM, SP_MM, N_("Millimeter"), N_("mm"), N_("Millimeters"), N_("mm")},
+    {SP_UNIT_CM, SP_UNIT_ABSOLUTE, PX_PER_CM, SP_CM, N_("Centimeter"), N_("cm"), N_("Centimeters"), N_("cm")},
+    {SP_UNIT_M, SP_UNIT_ABSOLUTE, PX_PER_M, SP_M, N_("Meter"), N_("m"), N_("Meters"), N_("m")},
+    {SP_UNIT_IN, SP_UNIT_ABSOLUTE, PX_PER_IN, SP_IN, N_("Inch"), N_("in"), N_("Inches"), N_("in")},
     /* Volatiles do not have default, so there are none here */
     // TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
     {SP_UNIT_EM, SP_UNIT_VOLATILE, 1.0, NONE, N_("Em square"), N_("em"), N_("Em squares"), N_("em")},
@@ -190,10 +190,10 @@ gdouble
 sp_units_get_pixels(gdouble const units, SPUnit const &unit)
 {
     if (unit.base == SP_UNIT_ABSOLUTE || unit.base == SP_UNIT_DEVICE) {
-        return units * PX_PER_PT * unit.unittobase;
+        return units * unit.unittobase;
     } else {
         g_warning("Different unit bases: No exact unit conversion available");
-        return units * PX_PER_PT * unit.unittobase;
+        return units * unit.unittobase;
     }
 }
 
@@ -201,10 +201,10 @@ gdouble
 sp_pixels_get_units(gdouble const pixels, SPUnit const &unit)
 {
     if (unit.base == SP_UNIT_ABSOLUTE || unit.base == SP_UNIT_DEVICE) {
-        return pixels / (unit.unittobase * PX_PER_PT);
+        return pixels / unit.unittobase;
     } else {
         g_warning("Different unit bases: No exact unit conversion available");
-        return pixels / (unit.unittobase * PX_PER_PT);
+        return pixels / unit.unittobase;
     }
 }
 
