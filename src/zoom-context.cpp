@@ -127,6 +127,7 @@ sp_zoom_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 	desktop = event_context->desktop;
 
 	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
+	gdouble zoom_inc = prefs_get_double_attribute_limited ("options.zoomincrement", "value", 1.414213562, 1.01, 10);
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
@@ -173,9 +174,9 @@ sp_zoom_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			} else {
 				sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
 				if (event->button.state & GDK_SHIFT_MASK) {
-					sp_desktop_zoom_relative (desktop, p.x, p.y, 1/SP_DESKTOP_ZOOM_INC);
+					sp_desktop_zoom_relative_keep_point (desktop, p.x, p.y, 1/zoom_inc);
 				} else {
-					sp_desktop_zoom_relative (desktop, p.x, p.y, SP_DESKTOP_ZOOM_INC);
+					sp_desktop_zoom_relative_keep_point (desktop, p.x, p.y, zoom_inc);
 				}
 			}
 			ret = TRUE;
