@@ -26,6 +26,8 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <signal.h>
+#include <errno.h>
 
 #include <libnr/nr-macros.h>
 #include <libnr/nr-matrix.h>
@@ -128,7 +130,11 @@ sp_module_print_plain_finalize (GObject *object)
 
 	gpmod = (SPModulePrintPlain *) object;
 	
+	/* fixme: should really use pclose for popen'd streams */
 	if (gpmod->stream) fclose (gpmod->stream);
+
+	/* restore default signal handling for SIGPIPE */
+	(void) signal(SIGPIPE, SIG_DFL);
 
 	G_OBJECT_CLASS (print_plain_parent_class)->finalize (object);
 }
@@ -278,7 +284,7 @@ sp_module_print_plain_setup (SPModulePrint *mod)
 				pmod->stream = osf;
 			} else {
 				gchar *qn;
-				qn = g_strdup_printf ("lpr %s", fn);
+				qn = g_strdup_printf ("lpr -P %s", fn);
 #ifndef WIN32
 				osp = popen (qn, "w");
 #else
@@ -288,7 +294,11 @@ sp_module_print_plain_setup (SPModulePrint *mod)
 				pmod->stream = osp;
 			}
 		}
-		if (pmod->stream) ret = TRUE;
+		if (pmod->stream) {
+			/* fixme: this is kinda icky */
+			(void) signal(SIGPIPE, SIG_IGN);
+			ret = TRUE;
+		}
 	}
 
 	gtk_widget_destroy (dlg);
@@ -305,6 +315,20 @@ sp_module_print_plain_begin (SPModulePrint *mod, SPDocument *doc)
 	pmod = (SPModulePrintPlain *) mod;
 
 	res = fprintf (pmod->stream, "%%!\n");
+	/* flush this to test output stream as early as possible */
+	if (fflush(pmod->stream)) {
+/*		g_print("caught error in sp_module_print_plain_begin\n");*/
+		if (ferror(pmod->stream)) {
+			g_print("Error %d on output stream: %s\n", errno,
+				g_strerror(errno));
+		}
+		g_print("Printing failed\n");
+		/* fixme: should use pclose() for pipes */
+		fclose(pmod->stream);
+		pmod->stream = NULL;
+		fflush(stdout);
+		return 0;
+	}
 	pmod->width = sp_document_width (doc);
 	pmod->height = sp_document_height (doc);
 
@@ -324,6 +348,7 @@ sp_module_print_plain_finish (SPModulePrint *mod)
 	SPModulePrintPlain *pmod;
 
 	pmod = (SPModulePrintPlain *) mod;
+	if (!pmod->stream) return 0;
 
 	if (pmod->bitmap) {
 		double x0, y0, x1, y1;
