@@ -81,15 +81,18 @@ sp_document_maybe_done (SPDocument *doc, const gchar *key)
 	log = sp_repr_coalesce_log (doc->priv->partial, sp_repr_commit_undoable (doc->rdoc));
 	doc->priv->partial = NULL;
 
-	if (!log) return;
+	if (!log) {
+		sp_repr_begin_transaction (doc->rdoc);
+		return;
+	}
 
 	if (key && doc->actionkey && !strcmp (key, doc->actionkey) && doc->priv->undo) {
 		doc->priv->undo->data = sp_repr_coalesce_log ((SPReprAction *)doc->priv->undo->data, log);
 	} else {
 		doc->priv->undo = g_slist_prepend (doc->priv->undo, log);
-		doc->priv->undo_size++;
+		doc->priv->history_size++;
 
-		if (doc->priv->undo_size > MAX_UNDO) {
+		if (doc->priv->history_size > MAX_UNDO) {
 			GSList *bottom;
 	
 			g_message ("DEBUG: trimming undo list");
@@ -102,7 +105,7 @@ sp_document_maybe_done (SPDocument *doc, const gchar *key)
 			g_slist_free (bottom->next);
 			bottom->next = NULL;
 
-			doc->priv->undo_size = MAX_UNDO;
+			doc->priv->history_size = MAX_UNDO;
 		}
 	}
 
@@ -202,7 +205,7 @@ sp_document_clear_undo (SPDocument *doc)
 
 		current = doc->priv->undo;
 		doc->priv->undo = current->next;
-		doc->priv->undo_size--;
+		doc->priv->history_size--;
 
 		sp_repr_free_log ((SPReprAction *)current->data);
 		g_slist_free_1 (current);
@@ -217,7 +220,7 @@ sp_document_clear_redo (SPDocument *doc)
 
 		current = doc->priv->redo;
 		doc->priv->redo = current->next;
-		doc->priv->undo_size--;
+		doc->priv->history_size--;
 
 		sp_repr_free_log ((SPReprAction *)current->data);
 		g_slist_free_1 (current);

@@ -30,7 +30,7 @@ struct _SPDocumentPrivate {
 	/* Undo/Redo state */
 	guint sensitive: 1; /* If we save actions to undo stack */
 	SPReprAction * partial; /* partial undo log when interrupted */
-	int undo_size;
+	int history_size;
 	GSList * undo; /* Undo stack of reprs */
 	GSList * redo; /* Redo stack of reprs */
 };

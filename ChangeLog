@@ -19,6 +19,12 @@
 
 2003-11-28 MenTaLguY <mental@rydia.net>
 
+	* src/document.c, src/document-undo.c, src/document-private.h:
+	  renamed SPDocumentPrivate::undo_size to ::history_size.  Fixed
+	  long-standing undo bug, where maybe_done() would neglect to
+	  start a new transaction if the previous transaction log were
+	  empty.
+
 	* src/xml/repr-action-test.c, src/utest/utest.inc: made test
 	  control structure a little clearer (hopefully) by hiding it.
           Also some initial Doxygenification of the unit testing stuff.

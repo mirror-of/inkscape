@@ -50,10 +50,6 @@ static gint sp_document_idle_handler (gpointer data);
 
 gboolean sp_document_resource_list_free (gpointer key, gpointer value, gpointer data);
 
-#ifdef SP_DOCUMENT_DEBUG_UNDO
-static gboolean sp_document_warn_undo_stack (SPDocument *doc);
-#endif
-
 static GObjectClass * parent_class;
 static guint signals[LAST_SIGNAL] = {0};
 static gint doc_count = 0;
@@ -139,7 +135,7 @@ sp_document_init (SPDocument *doc)
 
 	p->sensitive = FALSE;
 	p->partial = NULL;
-	p->undo_size = 0;
+	p->history_size = 0;
 	p->undo = NULL;
 	p->redo = NULL;
 
