@@ -1,5 +1,10 @@
 2003-11-18 Ted Gould <ted@gould.cx>
 
+	* src/widgets/sp-toolbox.c: Adding in an include for gtkimage.h
+	to get the stock functions.  This fixes the build under g++.
+
+2003-11-18 Ted Gould <ted@gould.cx>
+
 	* src/modules/extension.c: Changing mkstemp to g_mkstemp for
 	compatibility.
 

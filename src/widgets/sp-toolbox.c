@@ -21,6 +21,7 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtkhseparator.h>
 #include <gtk/gtktogglebutton.h>
+#include <gtk/gtkimage.h>
 #include "helper/sp-intl.h"
 #include "helper/window.h"
 #include "icon.h"
