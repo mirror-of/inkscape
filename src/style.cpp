@@ -420,9 +420,6 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
 	SPS_READ_PENUM_IF_UNSET (&style->stroke_linejoin, repr, "stroke-linejoin", enum_stroke_linejoin, TRUE);
  
         /* markers */
-#ifdef DEBUG_MARKERS
-	g_message("Freeing and unsetting markers");
-#endif
 	if (!style->marker[SP_MARKER_LOC].set) {
 		val = sp_repr_attr (repr, "marker");
 		if (val) {
@@ -1025,9 +1022,6 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
 	}
 
 	/* Markers - Free the old value and make copy of the new */
-#ifdef DEBUG_MARKERS
-	g_message("sp_style_merge_from_parent:  Merging markers");
-#endif
 	for (i=SP_MARKER_LOC; i<SP_MARKER_LOC_QTY; i++) {
 		if (!style->marker[i].set || style->marker[i].inherit) {
 			g_free(style->marker[i].value);
@@ -1317,9 +1311,6 @@ sp_style_clear (SPStyle *style)
 	style->writing_mode.set = FALSE;
 	style->writing_mode.computed = SP_CSS_WRITING_MODE_LR;
 
-#ifdef DEBUG_MARKERS
-	g_message("Freeing and unsetting markers");
-#endif
 	for (i=SP_MARKER_LOC; i<SP_MARKER_LOC_QTY; i++) {
 	  g_free(style->marker[i].value);
 	  style->marker[i].set      = FALSE;

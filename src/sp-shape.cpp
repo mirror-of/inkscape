@@ -448,9 +448,6 @@ sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 	sp_item_invoke_bbox (item, &paintbox, NULL, TRUE);
 	nr_arena_shape_set_paintbox (NR_ARENA_SHAPE (arenaitem), &paintbox);
 
-#ifdef DEBUG_MARKERS
-	g_message("sp_shape_show:  Showing markers");
-#endif
 	if (shape->curve && (shape->marker[SP_MARKER_LOC_START] ||
 			     shape->marker[SP_MARKER_LOC_MID] || 
 			     shape->marker[SP_MARKER_LOC_END])) {
@@ -507,9 +504,6 @@ sp_shape_hide (SPItem *item, unsigned int key)
 
 	shape = (SPShape *) item;
 
-#ifdef DEBUG_MARKERS
-	g_message("sp_shape_hide:  Hiding markers");
-#endif
 	for (i=SP_MARKER_LOC_START; i<SP_MARKER_LOC_QTY; i++) {
 	  if (shape->marker[i]) {
 	    for (v = item->display; v != NULL; v = v->next) {
