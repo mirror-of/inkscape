@@ -299,7 +299,7 @@ font_instance* font_factory::FaceFromDescr(const char* descr)
 {
 	PangoFontDescription* temp_descr=pango_font_description_from_string(descr);
 	font_instance *res=Face(temp_descr);
-//	pango_font_description_free(temp_descr);
+	pango_font_description_free(temp_descr);
 	return res;
 }
 

@@ -842,10 +842,12 @@ void                         pango_text_chunker::AddDullGlyphs(to_SVG_context *h
   hungry->AddFontFamily(theFace);
   hungry->AddFontSize(theSize);
   double startX=cumul;
+	int    nbLetter=0;
   for (int i=c_st;i<=c_en;i++) {
+		if ( i > c_st && theText->glyph_text[i].char_start ) nbLetter++;
     NR::Point at(theSize*theText->glyph_text[i].x-startX,theSize*theText->glyph_text[i].y);
-    hungry->AddGlyph(c_st,theText->glyph_text[i].uni_st,theText->glyph_text[i].uni_en,at,theSize*(theText->glyph_text[i+1].x-theText->glyph_text[i].x));
-  }
+    hungry->AddGlyph(nbLetter,theText->glyph_text[i].uni_st,theText->glyph_text[i].uni_en,at,theSize*(theText->glyph_text[i+1].x-theText->glyph_text[i].x));
+	}
 }
 
 /*
@@ -1191,6 +1193,8 @@ void            path_to_SVG_context::AddGlyph(int a_g,int f_c,int l_c,const NR::
   if ( l_c <= f_c ) return;
   
   NR::Point at=oat;
+	at[0]+=((double)a_g)*letter_spacing;
+	
   int              nbp=0;
   double           mid_glyph=at[0]+0.5*advance;
   mid_glyph+=path_delta;

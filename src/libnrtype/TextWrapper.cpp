@@ -43,7 +43,6 @@ text_wrapper::~text_wrapper(void)
 	if ( glyph_text ) free(glyph_text);
 	if ( utf8_codepoint ) free(utf8_codepoint);
 	if ( uni32_codepoint ) free(uni32_codepoint);
-//	printf("text_wrapper::~text_wrapper ");
 	if ( default_font ) default_font->Unref();
 	if ( boxes ) free(boxes);
 	if ( paras ) free(paras);
@@ -63,7 +62,6 @@ text_wrapper::~text_wrapper(void)
 
 void            text_wrapper::SetDefaultFont(font_instance* iFont)
 {
-//	printf("text_wrapper::SetDefaultFont ");
 	if ( iFont ) iFont->Ref();
 	if ( default_font ) default_font->Unref();
 	default_font=iFont;
@@ -336,7 +334,6 @@ void            text_wrapper::MakeVertical(void)
 	int      nbLetter=0;
 	PangoFont*     curPF=NULL;
 	font_instance* curF=NULL;
-//	printf("text_wrapper::MakeVertical ");
 	do {
 		g_st=g_en;
 		do {
@@ -426,10 +423,11 @@ void            text_wrapper::AddLetterSpacing(double dx,double dy,int g_st,int 
 	int   nbLetter=0;
 
 	for (int i=g_st;i<g_en;i++) {
+		if ( i > g_st && glyph_text[i].char_start ) nbLetter++;
 		glyph_text[i].x+=dx*nbLetter;
 		glyph_text[i].y+=dy*nbLetter;
-		if ( glyph_text[i].char_start ) nbLetter++;
 	}
+	if ( glyph_text[g_en].char_start ) nbLetter++;
 	glyph_text[g_en].x+=dx*nbLetter;
 	glyph_text[g_en].y+=dy*nbLetter;
 }
@@ -670,7 +668,6 @@ bool            text_wrapper::Contains(int bnd_type,int g_st,int g_en,int &c_st,
 void            text_wrapper::MeasureBoxes(void)
 {
 	font_factory* f_src=font_factory::Default();
-//	printf("text_wrapper::MeasureBoxes ");
 	for (int i=0;i<nbBox;i++) {
 		boxes[i].ascent=0;
 		boxes[i].descent=0;
