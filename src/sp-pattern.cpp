@@ -483,7 +483,7 @@ pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix t
                 sp_repr_set_attr(repr, "patternTransform", NULL);
             }
 
-	sp_repr_add_child (defsrepr, repr, NULL);
+	sp_repr_append_child (defsrepr, repr);
 	const gchar *pat_id = sp_repr_attr (repr, "id");
 	SPObject *pat_object = document->getObjectById(pat_id);
 
