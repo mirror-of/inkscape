@@ -28,6 +28,10 @@ GtkWidget *
 spw_hbox(GtkWidget *table, int width, int col, int row);
 
 GtkWidget *
+spw_vbox_checkbutton(GtkWidget *dialog, GtkWidget *table,
+		     const gchar *label, gchar *key, GCallback cb);
+
+GtkWidget *
 spw_checkbutton(GtkWidget *dialog, GtkWidget *table,
 		gchar const *label, gchar *key, int col, int row,
 		int sensitive, GCallback cb);

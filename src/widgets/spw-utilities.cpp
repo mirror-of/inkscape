@@ -80,8 +80,29 @@ spw_hbox(GtkWidget * table, int width, int col, int row)
 }
 
 /**
- * Creates a checkbutton widget.  This is a compound widget that includes a
- * label.
+ * Creates a checkbutton widget and adds it to a vbox.
+ * This is a compound widget that includes a label.
+ */
+GtkWidget *spw_vbox_checkbutton(GtkWidget *dialog, GtkWidget *vbox,
+				const gchar *label, gchar *key, GCallback cb)
+{
+  g_assert (dialog != NULL);
+  g_assert (vbox != NULL);
+
+  GtkWidget *b = gtk_check_button_new_with_label (label);
+  g_assert (b != NULL);
+  gtk_widget_show (b);
+  gtk_box_pack_start (GTK_BOX (vbox), b, FALSE, FALSE, 0);
+  gtk_object_set_data (GTK_OBJECT (b), "key", key);
+  gtk_object_set_data (GTK_OBJECT (dialog), key, b);
+  g_signal_connect (G_OBJECT (b), "toggled", cb, dialog);
+  return b;
+}
+
+
+/**
+ * Creates a checkbutton widget and adds it to a table.
+ * This is a compound widget that includes a label.
  */
 GtkWidget *
 spw_checkbutton(GtkWidget * dialog, GtkWidget * table,
