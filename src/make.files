@@ -1,3 +1,5 @@
+FilePath.cpp
+FilePath.h
 application.cpp
 application.h
 arc-context.cpp
@@ -227,6 +229,8 @@ libnrtype/nr-type-directory.h
 libnrtype/nr-type-ft2.cpp
 libnrtype/nr-type-ft2.h
 libnrtype/nr-type-gnome.h
+libnrtype/nr-type-pos-def.cpp
+libnrtype/nr-type-pos-def.h
 libnrtype/nr-type-primitives.cpp
 libnrtype/nr-type-primitives.h
 libnrtype/nr-type-w32.cpp
