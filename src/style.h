@@ -203,6 +203,12 @@ struct _SPStyle {
 	/* SVG */
 	SPIEnum text_anchor;
 	SPIEnum writing_mode;
+
+        /* markers */
+        SPIEnum marker;
+        SPIEnum marker_start;
+        SPIEnum marker_mid;
+        SPIEnum marker_end;
 };
 
 SPStyle *sp_style_new (void);

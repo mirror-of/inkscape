@@ -529,15 +529,25 @@ static void sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr);
 
 static void sp_stroke_style_set_join_buttons (SPWidget *spw, GtkWidget *active);
 static void sp_stroke_style_set_cap_buttons (SPWidget *spw, GtkWidget *active);
+static void sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active);
 static void sp_stroke_style_width_changed (GtkAdjustment *adj, SPWidget *spw);
 static void sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw);
 static void sp_stroke_style_line_dash_changed (SPDashSelector *dsel, SPWidget *spw);
 
+
+/**
+ * Helper function for creating radio buttons.  This should probably be re-thought out
+ * when reimplementing this with Gtkmm.  
+ */
 GtkWidget*
 sp_stroke_radio_button(GtkWidget* tb, const char* n, const char* xpm,
 		       GtkWidget* hb, GtkWidget* spw,
 		       const gchar* key, const gchar* data) {
   GtkWidget *px;
+
+  g_assert(xpm != NULL);
+  g_assert(hb  != NULL);
+  g_assert(spw != NULL);
   
   if (tb == NULL) {
     tb = gtk_radio_button_new (NULL);
@@ -553,10 +563,11 @@ sp_stroke_radio_button(GtkWidget* tb, const char* n, const char* xpm,
 		      GTK_SIGNAL_FUNC (sp_stroke_style_any_toggled),
 		      spw);
   px = gtk_image_new_from_file (xpm);
+  g_assert(px != NULL);
   gtk_widget_show (px);
   gtk_container_add (GTK_CONTAINER (tb), px);
 
-	return (tb);
+  return (tb);
 }
 
 
@@ -669,7 +680,7 @@ sp_stroke_style_line_widget_new (void)
 	gtk_signal_connect (GTK_OBJECT (ds), "changed", GTK_SIGNAL_FUNC (sp_stroke_style_line_dash_changed), spw);
 	i++;
 
-
+#ifdef MARKERS
 	/* Start Marker */
 	l = gtk_label_new (_("Start Markers:"));
 	gtk_widget_show (l);
@@ -692,7 +703,8 @@ sp_stroke_style_line_widget_new (void)
 			       INKSCAPE_GLADEDIR "/cap_square.xpm",
 			       hb, spw, "start_marker", "mArrow");
 	i++;
-	
+#endif
+
 	/* General (I think) style dialog signals */
 	gtk_signal_connect (GTK_OBJECT (spw), "construct", GTK_SIGNAL_FUNC (sp_stroke_style_line_construct), NULL);
 	gtk_signal_connect (GTK_OBJECT (spw), "modify_selection", GTK_SIGNAL_FUNC (sp_stroke_style_line_modify_selection), NULL);
@@ -972,19 +984,16 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
 	}
 	sp_stroke_style_set_cap_buttons (spw, tb);
 
-       /* TODO
-       marker_type = marker_string_to_int(style->marker_start.value);
-       tb = gtk_object_get_data (GTK_OBJECT (spw), marker_type);
-       sp_stroke_style_set_marker_start (spw, tb);
-
-       marker_type = marker_string_to_int(style->marker_mid.value);
-       tb = gtk_object_get_data (GTK_OBJECT (spw), marker_type);
-       sp_stroke_style_set_marker_mid (spw, tb);
-
-       marker_type = marker_string_to_int(style->marker_end.value);
-       tb = gtk_object_get_data (GTK_OBJECT (spw), marker_type);
-       sp_stroke_style_set_marker_end (spw, tb);
-*/
+	/* Toggle buttons for markers - marker-start, marker-mid, and marker-end */
+	/* TODO:  There's also a generic 'marker' that applies to all, but we'll leave that for later */
+	tb = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (spw), marker_id_to_string(style->marker_start.value));
+	sp_stroke_style_set_marker_buttons (spw, tb);
+	  
+	tb = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (spw), marker_id_to_string(style->marker_mid.value));
+	sp_stroke_style_set_marker_buttons (spw, tb);
+	
+	tb = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (spw), marker_id_to_string(style->marker_end.value));
+	sp_stroke_style_set_marker_buttons (spw, tb);
 
 	/* Dash */
 	if (style->stroke_dash.n_dash > 0) {
@@ -1305,17 +1314,31 @@ sp_stroke_style_set_cap_buttons (SPWidget *spw, GtkWidget *active)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
 }
 
+/**
+ * Creates a set of marker buttons.  This routine creates togglebuttons for the
+ * line markers.  Currently it provides just three options - none, filled or
+ * hollow arrows.  This is intended only as a quicky way to get proof of concept
+ * arrowhead functionality and is intended to be replaced by a more powerful and
+ * flexible system later on.
+ * 
+ * spw - the widget to put the buttons onto.
+ * active - the currently selected button.
+ */
 static void
 sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active)
 {
+  /* A toggle button */
   GtkWidget *tb;
   
   tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_START_NONE));
+  g_assert(tb != NULL);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
+
   tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_START_FILLED_ARROW));
+  g_assert(tb != NULL);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
+
   tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), INKSCAPE_STOCK_START_HOLLOW_ARROW));
+  g_assert(tb != NULL);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
 }
-                                                                                                                                        
-
