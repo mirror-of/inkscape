@@ -1,3 +1,8 @@
+2004-01-08  MenTaLguY  <mental@rydia.net>
+
+	* src/Makefile_insert, src/gc-anchored.cpp, src/gc-anchored.h:
+	  abstracted allocation of anchors
+
 2004-01-06  Ted Gould  <ted@gould.cx>
 
 	* src/interface.cpp, src/extension/effect.cpp,

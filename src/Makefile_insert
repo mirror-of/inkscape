@@ -62,7 +62,7 @@ libinkpre_a_SOURCES =	\
 	fontsize-expansion.cpp fontsize-expansion.h	\
 	forward.h	\
 	gc-alloc.h \
-	gc-anchored.h \
+	gc-anchored.h gc-anchored.cpp \
 	gc-core.h \
 	gc-finalized.h \
 	gc-managed.h \

@@ -48,14 +48,14 @@ class Anchored {
 public:
     void anchor() const {
         if (!_anchor) {
-            _anchor = new Anchor(this);
+            _anchor = _new_anchor();
         }
         _anchor->refcount++;
     }
 
     void release() const {
         if (!--_anchor->refcount) {
-            delete _anchor;
+            _free_anchor(_anchor);
             _anchor = NULL;
         }
     }
@@ -72,10 +72,13 @@ private:
         void const *base;
     };
 
+    mutable Anchor *_anchor;
+
+    Anchor *_new_anchor() const;
+    void _free_anchor(Anchor *anchor) const;
+
     Anchored(Anchored const &); // no copy
     void operator=(Anchored const &); // no assign
-
-    mutable Anchor *_anchor;
 };
 
 /**
