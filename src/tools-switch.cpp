@@ -32,6 +32,7 @@
 #include "path-chemistry.h"
 #include "shortcuts.h"
 #include "verbs.h"
+#include "helper/sp-intl.h"
 
 #include "tools-switch.h"
 
@@ -114,67 +115,67 @@ tools_switch (SPDesktop *dt, int num)
 		sp_desktop_set_event_context (dt, SP_TYPE_NODE_CONTEXT, tool_names[num]);
 		sp_desktop_activate_guides (dt, TRUE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		sp_view_set_statusf (SP_VIEW(dt), "To edit a path, click, Shift+click, drag around nodes to select. To edit a shape, drag its controls.");
+		sp_view_set_statusf (SP_VIEW(dt), _("To edit a path, click, Shift+click, drag around nodes to select. To edit a shape, drag its controls."));
 		break; 
 	case TOOLS_SHAPES_RECT:
 		sp_desktop_set_event_context (dt, SP_TYPE_RECT_CONTEXT, tool_names[num]);
 		sp_desktop_activate_guides (dt, FALSE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		sp_view_set_statusf (SP_VIEW(dt), "Drag to create a rectangle. Use node editor to round corners.");
+		sp_view_set_statusf (SP_VIEW(dt), _("Drag to create a rectangle. Use node tool to round corners."));
 		break;
 	case TOOLS_SHAPES_ARC:
 		sp_desktop_set_event_context (dt, SP_TYPE_ARC_CONTEXT, tool_names[num]);
 		sp_desktop_activate_guides (dt, FALSE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		sp_view_set_statusf (SP_VIEW(dt), "Drag to create an ellipse. Use node editor to make an arc or segment.");
+		sp_view_set_statusf (SP_VIEW(dt), _("Drag to create an ellipse. Use node tool to make an arc or segment."));
 		break;
 	case TOOLS_SHAPES_STAR:
 		sp_desktop_set_event_context (dt, SP_TYPE_STAR_CONTEXT, tool_names[num]);
 		sp_desktop_activate_guides (dt, FALSE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		sp_view_set_statusf (SP_VIEW(dt), "Drag to create a star. Use node editor to edit the star shape.");
+		sp_view_set_statusf (SP_VIEW(dt), _("Drag to create a star. Use node tool to edit the star shape."));
 		break;
 	case TOOLS_SHAPES_SPIRAL:
 		sp_desktop_set_event_context (dt, SP_TYPE_SPIRAL_CONTEXT, tool_names[num]);
 		sp_desktop_activate_guides (dt, FALSE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		sp_view_set_statusf (SP_VIEW(dt), "Drag to create a spiral. Use node editor to edit the spiral shape.");
+		sp_view_set_statusf (SP_VIEW(dt), _("Drag to create a spiral. Use node tool to edit the spiral shape."));
 		break;
 	case TOOLS_FREEHAND_PENCIL:
 		sp_desktop_set_event_context (dt, SP_TYPE_PENCIL_CONTEXT, tool_names[num]);
 		sp_desktop_activate_guides (dt, FALSE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		sp_view_set_statusf (SP_VIEW(dt), "Drag to create a freehand line. Press 'a' to toggle Append/New.");
+		sp_view_set_statusf (SP_VIEW(dt), _("Drag to create a freehand line. Press 'a' to toggle Append/New."));
 		break;
 	case TOOLS_FREEHAND_PEN:
 		sp_desktop_set_event_context (dt, SP_TYPE_PEN_CONTEXT, tool_names[num]);
 		sp_desktop_activate_guides (dt, FALSE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		sp_view_set_statusf (SP_VIEW(dt), "Click to create a node, click and drag to create a smooth node. Press 'a' to toggle Append/New.");
+		sp_view_set_statusf (SP_VIEW(dt), _("Click to create a node, click and drag to create a smooth node. Press 'a' to toggle Append/New."));
 		break;
 	case TOOLS_CALLIGRAPHIC:
 		sp_desktop_set_event_context (dt, SP_TYPE_DYNA_DRAW_CONTEXT, tool_names[num]);
 		sp_desktop_activate_guides (dt, FALSE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		sp_view_set_statusf (SP_VIEW(dt), "Drag to paint a calligraphic stroke.");
+		sp_view_set_statusf (SP_VIEW(dt), _("Drag to paint a calligraphic stroke."));
 		break;
 	case TOOLS_TEXT:
 		sp_desktop_set_event_context (dt, SP_TYPE_TEXT_CONTEXT, tool_names[num]);
 		sp_desktop_activate_guides (dt, FALSE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		sp_view_set_statusf (SP_VIEW(dt), "Click to select or create text object, then type.");
+		sp_view_set_statusf (SP_VIEW(dt), _("Click to select or create text object, then type."));
 		break;
 	case TOOLS_ZOOM:
 		sp_desktop_set_event_context (dt, SP_TYPE_ZOOM_CONTEXT, tool_names[num]);
 		sp_desktop_activate_guides (dt, FALSE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		sp_view_set_statusf (SP_VIEW(dt), "Click to zoom in, Shift+click to zoom out, drag around the area to zoom in.");
+		sp_view_set_statusf (SP_VIEW(dt), _("Click to zoom in, Shift+click to zoom out, drag around the area to zoom in."));
 		break;
 	case TOOLS_DROPPER:
 		sp_desktop_set_event_context (dt, SP_TYPE_DROPPER_CONTEXT, tool_names[num]);
 		sp_desktop_activate_guides (dt, FALSE);
 		inkscape_eventcontext_set (SP_DT_EVENTCONTEXT (dt));
-		sp_view_set_statusf (SP_VIEW(dt), "Click to pick a color, click and drag to pick the average color of an area.");
+		sp_view_set_statusf (SP_VIEW(dt), _("Click to pick a color, click and drag to pick the average color of an area."));
 		break;
 	}
 }
