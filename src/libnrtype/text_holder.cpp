@@ -990,6 +990,7 @@ void					 text_holder::Construct(int i_st_pos,int i_en_pos,bool flow_rtl,flow_ea
 		for (int i=st_pos;i>=0&&i<en_pos;i=boxes[i].next) {
 			int    p_st=boxes[i].st;
 			int    p_en=boxes[i].en;
+			//printf("construct box %i (%i -> %i)\n",i,p_st,p_en);
 			if ( p_st < p_en ) {
 				if ( boxes[i].rtl == flow_rtl ) {
 					if ( p_en > utf8_end ) {

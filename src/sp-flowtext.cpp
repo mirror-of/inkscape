@@ -6,8 +6,6 @@
 #include <config.h>
 #include <string.h>
 
-#include "helper/sp-intl.h"
-
 #include "attributes.h"
 #include "xml/repr.h"
 #include "svg/svg.h"
@@ -18,6 +16,8 @@
 #include "desktop-handles.h"
 #include "desktop.h"
 #include "print.h"
+
+#include "helper/sp-intl.h"
 
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-point.h"
@@ -340,7 +340,7 @@ sp_flowtext_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsign
 	flow_res*  comp=group->f_res;
 	if ( comp && comp->nbGroup > 0 && comp->nbGlyph > 0 ) {
 		for (int i=0;i<comp->nbGroup;i++) {
-			NR::Matrix  f_tr(NR::scale(comp->groups[i].style->with_style->font_size.computed, -comp->groups[i].style->with_style->font_size.computed));
+			NR::Matrix  f_tr(NR::scale(comp->groups[i].style->with_style->font_size.computed,-comp->groups[i].style->with_style->font_size.computed));
 			font_instance*  curF=comp->groups[i].style->theFont;
 			if ( curF ) {
 				for (int j=comp->groups[i].st;j<comp->groups[i].en;j++) {
@@ -384,22 +384,53 @@ sp_flowtext_print (SPItem * item, SPPrintContext *ctx)
 	
 	flow_res*  comp=group->f_res;
 	if ( comp && comp->nbGroup > 0 && comp->nbGlyph > 0 && comp->nbChar > 0 ) {
-		for (int i=0;i<comp->nbGroup;i++) {
-			text_style*     curS=comp->groups[i].style;
-			font_instance*  curF=curS->theFont;
-			const char*     curFam = pango_font_description_get_family(curF->descr);
-			char*           savFam = curS->with_style->text->font_family.value;
-			curS->with_style->text->font_family.value = (gchar*) curFam;
-			for (int j=comp->groups[i].st;j<comp->groups[i].en;j++) {
-				NR::Point   g_pos(comp->glyphs[j].g_x,comp->glyphs[j].g_y);
-				char*       g_txt=comp->chars+comp->glyphs[j].g_st;
-				int         g_len=comp->glyphs[j].g_en-comp->glyphs[j].g_st;
-				char savC=g_txt[g_len];
-				g_txt[g_len]=0;
-				sp_print_text (ctx, g_txt, g_pos, curS->with_style);
-				g_txt[g_len]=savC;
+		bool text_to_path=ctx->module->textToPath();
+		if ( text_to_path ) {
+			for (int i=0;i<comp->nbGroup;i++) {
+				text_style*     curS=comp->groups[i].style;
+				font_instance*  curF=curS->theFont;
+				const char*     curFam=pango_font_description_get_family(curF->descr);
+				char*           savFam=curS->with_style->text->font_family.value;
+				curS->with_style->text->font_family.value=(gchar*)curFam;
+				NR::Matrix  f_tr(NR::scale(comp->groups[i].style->with_style->font_size.computed,-comp->groups[i].style->with_style->font_size.computed));
+				for (int j=comp->groups[i].st;j<comp->groups[i].en;j++) {
+					NR::Matrix  g_tr(NR::translate(comp->glyphs[j].g_x,comp->glyphs[j].g_y));
+					g_tr=f_tr*g_tr;
+					NRBPath     bpath;
+					if ( curF ) bpath.path=(NArtBpath*)curF->ArtBPath(comp->glyphs[j].g_id); else bpath.path=NULL;
+					if ( bpath.path ) {
+						NRBPath abp;
+						abp.path = nr_artpath_affine (bpath.path, g_tr);
+						if (curS->with_style->fill.type != SP_PAINT_TYPE_NONE) {
+							sp_print_fill (ctx, &abp, &ctm, curS->with_style, &pbox, &dbox, &bbox);
+						}
+						
+						if (curS->with_style->stroke.type != SP_PAINT_TYPE_NONE) {
+							sp_print_stroke (ctx, &abp, &ctm, curS->with_style, &pbox, &dbox, &bbox);
+						}
+						nr_free (abp.path);
+					}
+				}
+				curS->with_style->text->font_family.value=savFam;
 			}
-			curS->with_style->text->font_family.value=savFam;
+		} else {
+			for (int i=0;i<comp->nbGroup;i++) {
+				text_style*     curS=comp->groups[i].style;
+				font_instance*  curF=curS->theFont;
+				const char*     curFam=pango_font_description_get_family(curF->descr);
+				char*           savFam=curS->with_style->text->font_family.value;
+				curS->with_style->text->font_family.value=(gchar*)curFam;
+				for (int j=comp->groups[i].st;j<comp->groups[i].en;j++) {
+					NR::Point   g_pos(comp->glyphs[j].g_x,comp->glyphs[j].g_y);
+					char*       g_txt=comp->chars+comp->glyphs[j].g_st;
+					int         g_len=comp->glyphs[j].g_en-comp->glyphs[j].g_st;
+					char savC=g_txt[g_len];
+					g_txt[g_len]=0;
+					sp_print_text (ctx, g_txt, g_pos, curS->with_style);
+					g_txt[g_len]=savC;
+				}
+				curS->with_style->text->font_family.value=savFam;
+			}
 		}
 	}
 	
@@ -455,6 +486,8 @@ flow_res::~flow_res(void)
 {
 	for (int i=0;i<nbChunk;i++) {
 		if ( chunks[i].c_txt ) free(chunks[i].c_txt);
+		if ( chunks[i].kern_x ) free(chunks[i].kern_x);
+		if ( chunks[i].kern_y ) free(chunks[i].kern_y);
 	}
 	if ( chunks ) free(chunks);
 	if ( chars ) free(chars);
@@ -528,10 +561,10 @@ void							 flow_res::AddChunk(char* iText,int iLen,text_style* i_style,double x
 	if ( iLen <= 0 ) return;
 	gunichar  nc=g_utf8_get_char(iText);
 	bool      is_white=g_unichar_isspace(nc);
-	double the_x=x;
+	double    the_x=x;
 	if ( last_c_style != i_style ) {
 		if ( is_white ) {
-                     // will be eaten at the start of a tspan, so we skip it
+			// will be eaten at the start of a tspan, so we skip it
 			return;
 		}
 		if ( nbChunk >= maxChunk ) {
@@ -544,11 +577,14 @@ void							 flow_res::AddChunk(char* iText,int iLen,text_style* i_style,double x
 		chunks[nbChunk].c_style=i_style;
 		chunks[nbChunk].x=x;
 		chunks[nbChunk].y=y;
+		chunks[nbChunk].last_add=0;
+		chunks[nbChunk].c_ucs4_l=0;
+		chunks[nbChunk].kern_x=chunks[nbChunk].kern_y=NULL;
 		chunks[nbChunk].spc=cur_spacing;
 		nbChunk++;
 	} else {
 		if ( nbChunk > 0 ) {
-			if ( rtl == false ) the_x=chunks[nbChunk-1].x;
+			if ( rtl == false || iText[0] == ' ' ) the_x=chunks[nbChunk-1].x;
 		}
 	}
 	last_c_style=i_style;
@@ -559,6 +595,40 @@ void							 flow_res::AddChunk(char* iText,int iLen,text_style* i_style,double x
 	memcpy(cur->c_txt+cur->c_len,iText,iLen*sizeof(char));
 	cur->c_len+=iLen;
 	cur->c_txt[cur->c_len]=0;
+	int  ucs4_add=0;
+	for (char* p=iText;*p;p=g_utf8_next_char(p)) {
+		int d=((int)p)-((int)iText);
+		if ( d >= iLen ) break;
+		ucs4_add++;
+	}
+	cur->last_add=cur->c_ucs4_l;
+	cur->c_ucs4_l+=ucs4_add;
+	if ( cur->kern_x ) {
+		cur->kern_x=(double*)realloc(cur->kern_x,cur->c_ucs4_l*sizeof(double));
+		for (int i=cur->last_add;i<cur->c_ucs4_l;i++) cur->kern_x[i]=0;
+	}
+	if ( cur->kern_y ) {
+		cur->kern_y=(double*)realloc(cur->kern_y,cur->c_ucs4_l*sizeof(double));
+		for (int i=cur->last_add;i<cur->c_ucs4_l;i++) cur->kern_y[i]=0;
+	}
+}
+void              flow_res::KernLastAddition(double* with,bool is_x)
+{
+	if ( nbChunk <= 0 ) return;
+	flow_styled_chunk* cur=chunks+(nbChunk-1);
+	if ( is_x ) {
+		if ( cur->kern_x == NULL ) {
+			cur->kern_x=(double*)malloc(cur->c_ucs4_l*sizeof(double));
+			for (int i=0;i<cur->c_ucs4_l;i++) cur->kern_x[i]=0;
+		}
+		for (int i=cur->last_add;i<cur->c_ucs4_l;i++) cur->kern_x[i]=with[i-cur->last_add];
+	} else {
+		if ( cur->kern_y == NULL ) {
+			cur->kern_y=(double*)malloc(cur->c_ucs4_l*sizeof(double));
+			for (int i=0;i<cur->c_ucs4_l;i++) cur->kern_y[i]=0;
+		}
+		for (int i=cur->last_add;i<cur->c_ucs4_l;i++) cur->kern_y[i]=with[i-cur->last_add];
+	}
 }
 void              flow_res::AfficheChunks(void)
 {
@@ -783,14 +853,14 @@ void convert_to_text(void)
 			SPStyle*        curSPS=curS->with_style;
 			const char*     curFam=pango_font_description_get_family(curF->descr);
 			char*           savFam=curSPS->text->font_family.value;
-			curS->with_style->text->font_family.value = (gchar*) curFam;
+			curS->with_style->text->font_family.value=(gchar*)curFam;
 			SPILength				sav_spc=curSPS->text->letterspacing;
 			curSPS->text->letterspacing.set=1;
 			curSPS->text->letterspacing.inherit=0;
 			curSPS->text->letterspacing.unit=SP_CSS_UNIT_PX;
 			curSPS->text->letterspacing.computed=comp->chunks[i].spc;
 			curSPS->text->letterspacing.value=comp->chunks[i].spc;
-			gchar   *nstyle=sp_style_write_string (comp->chunks[i].c_style->with_style, SP_STYLE_FLAG_ALWAYS);
+			gchar   *nstyle=sp_style_write_string (comp->chunks[i].c_style->with_style ,SP_STYLE_FLAG_ALWAYS);
 			curSPS->text->letterspacing=sav_spc;
 			curS->with_style->text->font_family.value=savFam;
 			
@@ -798,6 +868,49 @@ void convert_to_text(void)
 			sp_repr_set_double (srepr, "y", comp->chunks[i].y);
 			sp_repr_set_attr (srepr, "style", nstyle);
 			g_free(nstyle);
+			
+			if ( comp->chunks[i].kern_x ) {
+				bool zero=true;
+				for (int j=0;j<comp->chunks[i].c_ucs4_l;j++) {
+					if ( fabs(comp->chunks[i].kern_x[j]) > 0.1 ) {zero=false;break;}
+				}
+				if ( zero == false ) {
+					gchar c[32];
+					gchar *s = NULL;
+					
+					for (int j=0;j<comp->chunks[i].c_ucs4_l;j++) {
+					g_ascii_formatd (c, sizeof (c), "%.8g", comp->chunks[i].kern_x[j]);
+						if ( s == NULL ) {
+							s = g_strdup (c);
+						}  else {
+							s = g_strjoin (" ", s, c, NULL);
+						}
+					}
+					sp_repr_set_attr (srepr, "dx", s);
+					g_free(s);
+				}
+			}
+			if ( comp->chunks[i].kern_y ) {
+				bool zero=true;
+				for (int j=0;j<comp->chunks[i].c_ucs4_l;j++) {
+					if ( fabs(comp->chunks[i].kern_y[j]) > 0.1 ) {zero=false;break;}
+				}
+				if ( zero == false ) {
+					gchar c[32];
+					gchar *s = NULL;
+					
+					for (int j=0;j<comp->chunks[i].c_ucs4_l;j++) {
+						g_ascii_formatd (c, sizeof (c), "%.8g", comp->chunks[i].kern_y[j]-((j>0)?comp->chunks[i].kern_y[j-1]:0));
+						if ( s == NULL ) {
+							s = g_strdup (c);
+						}  else {
+							s = g_strjoin (" ", s, c, NULL);
+						}
+					}
+					sp_repr_set_attr (srepr, "dy", s);
+					g_free(s);
+				}
+			}
 			
 			SPRepr* rstr = sp_xml_document_createTextNode (sp_repr_document (repr),comp->chunks[i].c_txt);
 			sp_repr_append_child (srepr, rstr);

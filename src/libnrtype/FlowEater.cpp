@@ -28,7 +28,7 @@ flow_eater::~flow_eater(void)
 
 void          flow_eater::StartLine(bool rtl,double x,double y,double l_spacing)
 {
-//	printf("start line rtl=%i at=%f %f\n",(rtl)?1:0,x,y);
+	//printf("start line rtl=%i at=%f %f spc=%f\n",(rtl)?1:0,x,y,l_spacing);
 	line_rtl=rtl;
 	cur_length=word_length=next_length=0;
 	cur_letter=word_letter=next_letter=0;
@@ -52,84 +52,45 @@ void          flow_eater::StartWord(bool rtl,int nb_letter,double length)
 	word_rtl=rtl;
 	if ( word_rtl == line_rtl ) {
 		word_letter=cur_letter;
-		if ( word_rtl ) {
-			word_length=cur_length+length+nb_letter*line_spc;
-			if ( first_letter ) word_length-=line_spc;
-		} else {
-			word_length=cur_length;
-		}
+		word_length=cur_length;
 	} else {
-		word_letter=cur_letter+nb_letter;
-		if ( word_rtl ) {
-			word_length=cur_length;
-		} else {
-			word_length=cur_length+length+nb_letter*line_spc;
-			if ( first_letter ) word_length-=line_spc;
-		}
+		word_letter=next_letter;
+		word_length=next_length;
 	}
+	//printf("start word rtl=%i nb_l=%i l=%f\n",(rtl)?1:0,nb_letter,length);
+	//printf("  -> word=%f %i  next=%f %i\n",word_length,word_letter,next_length,next_letter);
 }
 void          flow_eater::StartLetter(void)
 {
 //	printf("start letter\n");
 	if ( word_rtl == line_rtl ) {
 		word_letter++;
-		if ( first_letter == false ) {
-			if ( word_rtl ) {
-				word_length-=line_spc;
-			} else {
-				word_length+=line_spc;
-			}
-		}
+		if ( first_letter == false ) word_length+=line_spc;
 	} else {
 		word_letter--;
-		if ( word_rtl ) {
-			word_length+=line_spc;
-		} else {
-			word_length-=line_spc;
-		}
+		word_length-=line_spc; // reverse, so always linespacing
 	}
 	first_letter=false;
 }
 void          flow_eater::Eat(int g_id,text_style* g_s,double g_x,double g_y,double g_w)
 {
-	if ( word_rtl == line_rtl ) {
-		if ( word_rtl ) {
-//			word_length-=g_w;
-		} else {
-//			word_length+=g_w;
-		}
-	} else {
-		if ( word_rtl ) {
-//			word_length+=g_w;
-		} else {
-//			word_length-=g_w;
-		}
-	}
 	double   px=line_st_x;
 	if ( line_rtl ) {
 		px-=word_length;
 	} else {
 		px+=word_length;
 	}
+	if ( word_rtl ) px-=g_w;
 	if ( the_flow ) the_flow->AddGlyph(g_id,px+g_x,line_st_y+g_y,g_s);
 //	printf("glyph %i at %f %f  w=%f -> p=%f\n",g_id,g_x,g_y,g_w,px);
 	if ( word_rtl == line_rtl ) {
-		if ( word_rtl ) {
-			word_length-=g_w;
-		} else {
-			word_length+=g_w;
-		}
+		word_length+=g_w;
 	} else {
-		if ( word_rtl ) {
-			word_length+=g_w;
-		} else {
-			word_length-=g_w;
-		}
+		word_length-=g_w;
 	}
 }
 void          flow_eater::StartBox(bool rtl,int nb_letter,double length)
 {
-	//printf("start box rtl=%i nb_l=%i l=%f\n",(rtl)?1:0,nb_letter,length);
 	cur_length=next_length;
 	cur_letter=next_letter;
 	next_length+=length+nb_letter*line_spc;
@@ -140,32 +101,42 @@ void          flow_eater::StartBox(bool rtl,int nb_letter,double length)
 		word_letter=cur_letter;
 		word_length=cur_length;
 	} else {
-		if ( the_flow ) {
-			the_flow->last_c_style=NULL;
-		}
-		word_letter=cur_letter+nb_letter;
-		word_length=cur_length+length+nb_letter*line_spc;
-		if ( first_letter ) word_length-=line_spc;
+		if ( the_flow ) the_flow->last_c_style=NULL;
+		word_letter=next_letter;
+		word_length=next_length;
 	}
+	//printf("start box rtl=%i nb_l=%i l=%f\n",(rtl)?1:0,nb_letter,length);
+	//printf("  -> word=%f %i  next=%f %i\n",word_length,word_letter,next_length,next_letter);
 }
-void          flow_eater::Eat(char* iText,int iLen,double i_w,int i_l,text_style* i_style,double* k_x,double* k_y,int k_offset)
+void          flow_eater::Eat(char* iText,int iLen,double i_w,int i_l,text_style* i_style,double* k_x,double* k_y)
 {
+	if ( i_l <= 0 ) return;
+	double  n_w=i_w+((double)i_l)*line_spc;
+	if ( first_letter ) n_w-=line_spc;
+	first_letter=false;
+
 	double   px=line_st_x;
 	if ( line_rtl ) {
 		px-=word_length;
-		if ( word_rtl ) px-=i_w;
 	} else {
 		px+=word_length;
 	}
-	
-	if ( the_flow ) the_flow->AddChunk(iText,iLen,i_style,px,line_st_y,word_rtl);
-	
+	if ( word_rtl ) { // because the tspan are always ltr
+		px-=n_w;
+	}
+
+	//printf("eat box tLen=%i w=%f l=%i\n",iLen,i_w,i_l);
+	if ( the_flow ) {
+		the_flow->AddChunk(iText,iLen,i_style,px,line_st_y,word_rtl);
+		if ( k_x ) the_flow->KernLastAddition(k_x,true);
+		if ( k_y ) the_flow->KernLastAddition(k_y,false);
+	}
 	if ( word_rtl == line_rtl ) {
-		word_length+=i_w;
 		word_letter+=i_l;
+		word_length+=n_w;
 	} else {
-		word_length-=i_w;
 		word_letter-=i_l;
+		word_length-=n_w;
 	}
 }
 

@@ -149,73 +149,98 @@ void             text_style::Feed(char* iText,int iLen,int hyphen,PangoAnalysis 
 	pan.font=theFont->pFont;
 	pango_shape(iText,uLen,&pan,pGlyphs);
 	double pango_scale=1.0/((double)PANGO_SCALE);
-	for (int i=0;i<pGlyphs->num_glyphs;i++) {
-		double x=pango_scale*((double)pGlyphs->glyphs[i].geometry.x_offset);
-		double y=pango_scale*((double)pGlyphs->glyphs[i].geometry.y_offset);
-		double w=pango_scale*((double)pGlyphs->glyphs[i].geometry.width);
-		w/=512;
-		w*=theSize;
-		x/=512;
-		x*=theSize;
-		y/=512;
-		y*=theSize;
-		y+=baseline_shift;
-		int  g_st=pGlyphs->log_clusters[i];
-		int  g_en=g_st;
-		if ( pan.level ) {
-			g_en=(i>0)?pGlyphs->log_clusters[i-1]:pGlyphs->num_glyphs;
-		} else {
-			g_en=(i<pGlyphs->num_glyphs-1)?pGlyphs->log_clusters[i+1]:pGlyphs->num_glyphs;
-		}
-		if ( kern_x ) {
-			int l_kx_st=(i>0)?pGlyphs->log_clusters[i-1]:0;
-			int kx_st=pGlyphs->log_clusters[i];
-			if ( l_kx_st < kx_st ) {
-				int l_kx_pos=0;
+	if ( pan.level ) {
+		int l_kx_st=0;
+		int l_kx_pos=0;
+		for (int i=pGlyphs->num_glyphs-1;i>=0;i--) {
+			double x=pango_scale*((double)pGlyphs->glyphs[i].geometry.x_offset);
+			double y=pango_scale*((double)pGlyphs->glyphs[i].geometry.y_offset);
+			double w=pango_scale*((double)pGlyphs->glyphs[i].geometry.width);
+			w/=512;
+			w*=theSize;
+			x/=512;
+			x*=theSize;
+			y/=512;
+			y*=theSize;
+			y+=baseline_shift;
+			int  g_st=pGlyphs->log_clusters[i];
+			int  g_en=(i>0)?pGlyphs->log_clusters[i-1]:pGlyphs->num_glyphs;
+			if ( kern_x ) {
+				int kx_st=pGlyphs->log_clusters[i];
+				int kx_pos=l_kx_pos;
+				if ( l_kx_st > kx_st ) {
+					for (char* p=iText+kx_st;*p;p=g_utf8_next_char(p)) {
+						int d=((int)p)-((int)iText);
+						w+=kern_x[kx_pos];
+						if ( d >= l_kx_st ) break;
+						kx_pos++;
+					}
+				}
+				l_kx_st=kx_st;
+				l_kx_pos=kx_pos;
+			}
+			if ( kern_y ) {
+				int gLen=pGlyphs->log_clusters[i];
+				int k_pos=0;
+				double last_k=0;
 				for (char* p=iText;*p;p=g_utf8_next_char(p)) {
 					int d=((int)p)-((int)iText);
-					if ( d >= l_kx_st ) break;
-					l_kx_pos++;
+					last_k=kern_y[k_pos];
+					if ( d >= gLen ) break;
+					k_pos++;
 				}
+				y+=last_k;
+			}
+			if ( pGlyphs->glyphs[i].attr.is_cluster_start ) baby->StartLetter();
+			baby->Eat(pGlyphs->glyphs[i].glyph,this,x,y,w);
+			if ( baby->the_flow ) baby->the_flow->SetLastText(iText+g_st,g_en-g_st);
+		}
+	} else {
+		int l_kx_st=0;
+		int l_kx_pos=0;
+		for (int i=0;i<pGlyphs->num_glyphs;i++) {
+			double x=pango_scale*((double)pGlyphs->glyphs[i].geometry.x_offset);
+			double y=pango_scale*((double)pGlyphs->glyphs[i].geometry.y_offset);
+			double w=pango_scale*((double)pGlyphs->glyphs[i].geometry.width);
+			w/=512;
+			w*=theSize;
+			x/=512;
+			x*=theSize;
+			y/=512;
+			y*=theSize;
+			y+=baseline_shift;
+			int  g_st=pGlyphs->log_clusters[i];
+			int  g_en=(i<pGlyphs->num_glyphs-1)?pGlyphs->log_clusters[i+1]:pGlyphs->num_glyphs;
+			if ( kern_x ) {
+				int kx_st=pGlyphs->log_clusters[i];
 				int kx_pos=l_kx_pos;
-				for (char* p=iText+l_kx_st;*p;p=g_utf8_next_char(p)) {
-					int d=((int)p)-((int)iText);
-					w+=kern_x[kx_pos];
-					if ( d >= kx_st ) break;
-					kx_pos++;
+				if ( l_kx_st < kx_st ) {
+					for (char* p=iText+l_kx_st;*p;p=g_utf8_next_char(p)) {
+						int d=((int)p)-((int)iText);
+						w+=kern_x[kx_pos];
+						if ( d >= kx_st ) break;
+						kx_pos++;
+					}
 				}
-			} else if ( l_kx_st > kx_st ) {
-				int l_kx_pos=0;
+				l_kx_st=kx_st;
+				l_kx_pos=kx_pos;
+			}
+			if ( kern_y ) {
+				int gLen=pGlyphs->log_clusters[i];
+				int k_pos=0;
+				double last_k=0;
 				for (char* p=iText;*p;p=g_utf8_next_char(p)) {
 					int d=((int)p)-((int)iText);
-					if ( d >= kx_st ) break;
-					l_kx_pos++;
+					last_k=kern_y[k_pos];
+					if ( d >= gLen ) break;
+					k_pos++;
 				}
-				int kx_pos=l_kx_pos;
-				for (char* p=iText+kx_st;*p;p=g_utf8_next_char(p)) {
-					int d=((int)p)-((int)iText);
-					w+=kern_x[kx_pos];
-					if ( d >= l_kx_st ) break;
-					kx_pos++;
-				}
+				y+=last_k;
 			}
+			if ( pGlyphs->glyphs[i].attr.is_cluster_start ) baby->StartLetter();
+			baby->Eat(pGlyphs->glyphs[i].glyph,this,x,y,w);
+			if ( baby->the_flow ) baby->the_flow->SetLastText(iText+g_st,g_en-g_st);
 		}
-		if ( kern_y ) {
-			int gLen=pGlyphs->log_clusters[i];
-			int k_pos=0;
-			double last_k=0;
-			for (char* p=iText;*p;p=g_utf8_next_char(p)) {
-				int d=((int)p)-((int)iText);
-				last_k=kern_y[k_pos];
-				if ( d >= gLen ) break;
-				k_pos++;
-			}
-			y+=last_k;
-		}
-		if ( pGlyphs->glyphs[i].attr.is_cluster_start ) baby->StartLetter();
-		baby->Eat(pGlyphs->glyphs[i].glyph,this,x,y,w);
-		if ( baby->the_flow ) baby->the_flow->SetLastText(iText+g_st,g_en-g_st);
-		
 	}
 		
 	pango_glyph_string_free(pGlyphs);
@@ -282,8 +307,7 @@ void             text_style::Construct(char* iText,int iLen,int hyphen,PangoAnal
 		sizes.ascent+=-min_y;
 		sizes.descent+=max_y;
 	}
-	
-	baby->Eat(iText,uLen,sizes.width,sizes.nb_letter,this,NULL,NULL,0);
+	baby->Eat(iText,uLen,sizes.width,sizes.nb_letter,this,kern_x,kern_y);
 		
 	pango_glyph_string_free(pGlyphs);
 	

@@ -27,16 +27,19 @@
 static void sp_flowdiv_class_init (SPFlowdivClass *klass);
 static void sp_flowdiv_init (SPFlowdiv *group);
 static SPRepr *sp_flowdiv_write (SPObject *object, SPRepr *repr, guint flags);
+static void sp_flowdiv_update (SPObject *object, SPCtx *ctx, unsigned int flags);
 static void sp_flowdiv_modified (SPObject *object, guint flags);
 
 static void sp_flowtspan_class_init (SPFlowtspanClass *klass);
 static void sp_flowtspan_init (SPFlowtspan *group);
 static SPRepr *sp_flowtspan_write (SPObject *object, SPRepr *repr, guint flags);
+static void sp_flowtspan_update (SPObject *object, SPCtx *ctx, unsigned int flags);
 static void sp_flowtspan_modified (SPObject *object, guint flags);
 
 static void sp_flowpara_class_init (SPFlowparaClass *klass);
 static void sp_flowpara_init (SPFlowpara *group);
 static SPRepr *sp_flowpara_write (SPObject *object, SPRepr *repr, guint flags);
+static void sp_flowpara_update (SPObject *object, SPCtx *ctx, unsigned int flags);
 static void sp_flowpara_modified (SPObject *object, guint flags);
 
 static void sp_flowline_class_init (SPFlowlineClass *klass);
@@ -89,6 +92,7 @@ sp_flowdiv_class_init (SPFlowdivClass *klass)
 	flowdiv_parent_class = (SPItemClass *)g_type_class_ref (SP_TYPE_ITEM);
 	
 	sp_object_class->write = sp_flowdiv_write;
+	sp_object_class->update = sp_flowdiv_update;
 	sp_object_class->modified = sp_flowdiv_modified;
 }
 
@@ -97,6 +101,42 @@ sp_flowdiv_init (SPFlowdiv */*group*/)
 {
 }
 
+static void
+sp_flowdiv_update (SPObject *object, SPCtx *ctx, unsigned int flags)
+{
+//	SPFlowdiv *group=SP_FLOWDIV (object);
+	SPItemCtx *ictx=(SPItemCtx *) ctx;
+	SPItemCtx cctx=*ictx;
+
+	if (((SPObjectClass *) (flowdiv_parent_class))->update)
+		((SPObjectClass *) (flowdiv_parent_class))->update (object, ctx, flags);
+	
+	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
+	flags &= SP_OBJECT_MODIFIED_CASCADE;
+	
+	GSList* l = NULL;
+	for (SPObject *child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+		g_object_ref (G_OBJECT (child));
+		l = g_slist_prepend (l, child);
+	}
+	l = g_slist_reverse (l);
+	while (l) {
+		SPObject *child = SP_OBJECT (l->data);
+		l = g_slist_remove (l, child);
+		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
+			if (SP_IS_ITEM (child)) {
+				SPItem *chi;
+				chi = SP_ITEM (child);
+				nr_matrix_multiply (&cctx.i2doc, &chi->transform, &ictx->i2doc);
+				nr_matrix_multiply (&cctx.i2vp, &chi->transform, &ictx->i2vp);
+				child->updateDisplay((SPCtx *)&cctx, flags);
+			} else {
+				child->updateDisplay(ctx, flags);
+			}
+		}
+		g_object_unref (G_OBJECT (child));
+	}
+}
 static void
 sp_flowdiv_modified (SPObject *object, guint flags)
 {
@@ -208,6 +248,7 @@ sp_flowtspan_class_init (SPFlowtspanClass *klass)
 	flowtspan_parent_class = (SPItemClass *)g_type_class_ref (SP_TYPE_ITEM);
 	
 	sp_object_class->write = sp_flowtspan_write;
+	sp_object_class->update = sp_flowtspan_update;
 	sp_object_class->modified = sp_flowtspan_modified;
 }
 
@@ -216,6 +257,42 @@ sp_flowtspan_init (SPFlowtspan */*group*/)
 {
 }
 
+static void
+sp_flowtspan_update (SPObject *object, SPCtx *ctx, unsigned int flags)
+{
+//	SPFlowtspan *group=SP_FLOWTSPAN (object);
+	SPItemCtx *ictx=(SPItemCtx *) ctx;
+	SPItemCtx cctx=*ictx;
+	
+	if (((SPObjectClass *) (flowtspan_parent_class))->update)
+		((SPObjectClass *) (flowtspan_parent_class))->update (object, ctx, flags);
+	
+	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
+	flags &= SP_OBJECT_MODIFIED_CASCADE;
+	
+	GSList* l = NULL;
+	for (SPObject *child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+		g_object_ref (G_OBJECT (child));
+		l = g_slist_prepend (l, child);
+	}
+	l = g_slist_reverse (l);
+	while (l) {
+		SPObject *child = SP_OBJECT (l->data);
+		l = g_slist_remove (l, child);
+		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
+			if (SP_IS_ITEM (child)) {
+				SPItem *chi;
+				chi = SP_ITEM (child);
+				nr_matrix_multiply (&cctx.i2doc, &chi->transform, &ictx->i2doc);
+				nr_matrix_multiply (&cctx.i2vp, &chi->transform, &ictx->i2vp);
+				child->updateDisplay((SPCtx *)&cctx, flags);
+			} else {
+				child->updateDisplay(ctx, flags);
+			}
+		}
+		g_object_unref (G_OBJECT (child));
+	}
+}
 static void
 sp_flowtspan_modified (SPObject *object, guint flags)
 {
@@ -328,6 +405,7 @@ sp_flowpara_class_init (SPFlowparaClass *klass)
 	flowpara_parent_class = (SPItemClass *)g_type_class_ref (SP_TYPE_ITEM);
 	
 	sp_object_class->write = sp_flowpara_write;
+	sp_object_class->update = sp_flowpara_update;
 	sp_object_class->modified = sp_flowpara_modified;
 }
 
@@ -336,6 +414,42 @@ sp_flowpara_init (SPFlowpara */*group*/)
 {
 }
 
+static void
+sp_flowpara_update (SPObject *object, SPCtx *ctx, unsigned int flags)
+{
+//	SPFlowpara *group=SP_FLOWPARA (object);
+	SPItemCtx *ictx=(SPItemCtx *) ctx;
+	SPItemCtx cctx=*ictx;
+	
+	if (((SPObjectClass *) (flowpara_parent_class))->update)
+		((SPObjectClass *) (flowpara_parent_class))->update (object, ctx, flags);
+	
+	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
+	flags &= SP_OBJECT_MODIFIED_CASCADE;
+	
+	GSList* l = NULL;
+	for (SPObject *child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+		g_object_ref (G_OBJECT (child));
+		l = g_slist_prepend (l, child);
+	}
+	l = g_slist_reverse (l);
+	while (l) {
+		SPObject *child = SP_OBJECT (l->data);
+		l = g_slist_remove (l, child);
+		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
+			if (SP_IS_ITEM (child)) {
+				SPItem *chi;
+				chi = SP_ITEM (child);
+				nr_matrix_multiply (&cctx.i2doc, &chi->transform, &ictx->i2doc);
+				nr_matrix_multiply (&cctx.i2vp, &chi->transform, &ictx->i2vp);
+				child->updateDisplay((SPCtx *)&cctx, flags);
+			} else {
+				child->updateDisplay(ctx, flags);
+			}
+		}
+		g_object_unref (G_OBJECT (child));
+	}
+}
 static void
 sp_flowpara_modified (SPObject *object, guint flags)
 {

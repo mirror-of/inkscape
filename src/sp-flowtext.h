@@ -37,6 +37,9 @@ public:
 	typedef struct flow_styled_chunk {
 		int            c_len;
 		char*          c_txt;
+		int            c_ucs4_l,last_add;
+		double*        kern_x;
+		double*        kern_y;
 		text_style*    c_style;
 		double         x,y,spc;
 	} flow_styled_chunk;
@@ -63,6 +66,7 @@ public:
 	
 	void							 SetLastText(char* iText,int iLen);
 	void							 AddChunk(char* iText,int iLen,text_style* i_style,double x,double y,bool rtl);
+	void               KernLastAddition(double* with,bool is_x);
 	void               AfficheChunks(void);
 };
 
