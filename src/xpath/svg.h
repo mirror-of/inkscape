@@ -106,7 +106,7 @@ class SVGException : public DOMException
 /**
  *
  */
-class SVGElement : Element
+class SVGElement : virtual public Element
 {
 
     /**
@@ -831,7 +831,7 @@ class SVGAnimatedAngle
 /**
  *
  */
-class SVGColor : css::CSSValue 
+class SVGColor : virtual public css::CSSValue 
 {
 
 
@@ -1127,7 +1127,7 @@ class SVGLocatable
 /**
  *
  */
-class SVGTransformable : SVGLocatable 
+class SVGTransformable : virtual public SVGLocatable 
 {
 
 
@@ -1324,8 +1324,8 @@ class SVGZoomAndPan
  *
  */
 class SVGViewSpec : 
-                SVGZoomAndPan,
-                SVGFitToViewBox 
+                virtual public SVGZoomAndPan,
+                virtual public SVGFitToViewBox 
 {
 
 
@@ -1399,7 +1399,7 @@ class SVGURIReference
 /**
  *
  */
-class SVGCSSRule : css::CSSRule 
+class SVGCSSRule : virtual public css::CSSRule 
 {
 
 
@@ -1455,9 +1455,8 @@ class SVGRenderingIntent
 /**
  *
  */
-class SVGDocument : 
-                Document,
-                events::DocumentEvent 
+class SVGDocument : virtual public Document,
+                    virtual public events::DocumentEvent 
 {
 
 
@@ -1502,19 +1501,18 @@ class SVGDocument :
 /**
  *
  */
-class SVGSVGElement : 
-                SVGElement,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGLocatable,
-                SVGFitToViewBox,
-                SVGZoomAndPan,
-                events::EventTarget,
-                events::DocumentEvent,
-                css::ViewCSS,
-                css::DocumentCSS 
+class SVGSVGElement : virtual public SVGElement,
+                      virtual public SVGTests,
+                      virtual public SVGLangSpace,
+                      virtual public SVGExternalResourcesRequired,
+                      virtual public SVGStylable,
+                      virtual public SVGLocatable,
+                      virtual public SVGFitToViewBox,
+                      virtual public SVGZoomAndPan,
+                      virtual public events::EventTarget,
+                      virtual public events::DocumentEvent,
+                      virtual public css::ViewCSS,
+                      virtual public css::DocumentCSS 
 {
 
 
@@ -1753,14 +1751,14 @@ class SVGSVGElement :
 /**
  *
  */
-class SVGGElement : 
-                SVGElement,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGTransformable,
-                events::EventTarget
+class SVGGElement :
+                    virtual public SVGElement,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGTransformable,
+                    virtual public events::EventTarget
 {
 
 };
@@ -1775,13 +1773,13 @@ class SVGGElement :
  *
  */
 class SVGDefsElement : 
-                SVGElement,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGTransformable,
-                events::EventTarget
+                    virtual public SVGElement,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGTransformable,
+                    virtual public events::EventTarget
 {
 
 };
@@ -1796,9 +1794,9 @@ class SVGDefsElement :
  *
  */
 class SVGDescElement : 
-                SVGElement,
-                SVGLangSpace,
-                SVGStylable
+                    virtual public SVGElement,
+                    virtual public SVGLangSpace,
+                    virtual public SVGStylable
 {
 
 };
@@ -1813,9 +1811,9 @@ class SVGDescElement :
  *
  */
 class SVGTitleElement : 
-                SVGElement,
-                SVGLangSpace,
-                SVGStylable
+                    virtual public SVGElement,
+                    virtual public SVGLangSpace,
+                    virtual public SVGStylable
 {
 
 };
@@ -1830,12 +1828,12 @@ class SVGTitleElement :
  *
  */
 class SVGSymbolElement : 
-                SVGElement,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGFitToViewBox,
-                events::EventTarget
+                    virtual public SVGElement,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGFitToViewBox,
+                    virtual public events::EventTarget
 {
 
 };
@@ -1850,14 +1848,14 @@ class SVGSymbolElement :
  *
  */
 class SVGUseElement : 
-                SVGElement,
-                SVGURIReference,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGTransformable,
-                events::EventTarget 
+                    virtual public SVGElement,
+                    virtual public SVGURIReference,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGTransformable,
+                    virtual public events::EventTarget 
 {
 
 
@@ -1908,7 +1906,7 @@ class SVGUseElement :
 /**
  *
  */
-class SVGElementInstance : events::EventTarget 
+class SVGElementInstance : virtual public events::EventTarget 
 {
 
     /**
@@ -1996,14 +1994,14 @@ class SVGElementInstanceList
  *
  */
 class SVGImageElement : 
-                SVGElement,
-                SVGURIReference,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGTransformable,
-                events::EventTarget 
+                    virtual public SVGElement,
+                    virtual public SVGURIReference,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGTransformable,
+                    virtual public events::EventTarget 
 {
 
 
@@ -2049,13 +2047,13 @@ class SVGImageElement :
  *
  */
 class SVGSwitchElement : 
-                SVGElement,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGTransformable,
-                events::EventTarget
+                    virtual public SVGElement,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGTransformable,
+                    virtual public events::EventTarget
 {
 
 };
@@ -2091,7 +2089,7 @@ class GetSVGDocument
 /**
  *
  */
-class SVGStyleElement : SVGElement 
+class SVGStyleElement : virtual public SVGElement 
 {
 
     /**
@@ -2321,9 +2319,6 @@ class SVGMatrix
      *
      */
     virtual void setF(float val) throw (DOMException) =0;
-
-
-
 
     /**
      *
@@ -2738,7 +2733,7 @@ class SVGPathSeg
 /**
  *
  */
-class SVGPathSegClosePath : SVGPathSeg
+class SVGPathSegClosePath : virtual public SVGPathSeg
 {
 
 };
@@ -2752,7 +2747,7 @@ class SVGPathSegClosePath : SVGPathSeg
 /**
  *
  */
-class SVGPathSegMovetoAbs : SVGPathSeg 
+class SVGPathSegMovetoAbs : virtual public SVGPathSeg 
 {
     /**
      *
@@ -2787,7 +2782,7 @@ class SVGPathSegMovetoAbs : SVGPathSeg
 /**
  *
  */
-class SVGPathSegMovetoRel : SVGPathSeg 
+class SVGPathSegMovetoRel : virtual public SVGPathSeg 
 {
     /**
      *
@@ -2822,7 +2817,7 @@ class SVGPathSegMovetoRel : SVGPathSeg
 /**
  *
  */
-class SVGPathSegLinetoAbs : SVGPathSeg 
+class SVGPathSegLinetoAbs : virtual public SVGPathSeg 
 {
     /**
      *
@@ -2857,7 +2852,7 @@ class SVGPathSegLinetoAbs : SVGPathSeg
 /**
  *
  */
-class SVGPathSegLinetoRel : SVGPathSeg 
+class SVGPathSegLinetoRel : virtual public SVGPathSeg 
 {
     /**
      *
@@ -2892,7 +2887,7 @@ class SVGPathSegLinetoRel : SVGPathSeg
 /**
  *
  */
-class SVGPathSegCurvetoCubicAbs : SVGPathSeg 
+class SVGPathSegCurvetoCubicAbs : virtual public SVGPathSeg 
 {
     /**
      *
@@ -2967,7 +2962,7 @@ class SVGPathSegCurvetoCubicAbs : SVGPathSeg
 /**
  *
  */
-class SVGPathSegCurvetoCubicRel : SVGPathSeg 
+class SVGPathSegCurvetoCubicRel : virtual public SVGPathSeg 
 {
     /**
      *
@@ -3042,7 +3037,7 @@ class SVGPathSegCurvetoCubicRel : SVGPathSeg
 /**
  *
  */
-class SVGPathSegCurvetoQuadraticAbs : SVGPathSeg 
+class SVGPathSegCurvetoQuadraticAbs : virtual public SVGPathSeg 
 {
     /**
      *
@@ -3097,7 +3092,7 @@ class SVGPathSegCurvetoQuadraticAbs : SVGPathSeg
 /**
  *
  */
-class SVGPathSegCurvetoQuadraticRel : SVGPathSeg 
+class SVGPathSegCurvetoQuadraticRel : virtual public SVGPathSeg 
 {
     /**
      *
@@ -3152,7 +3147,7 @@ class SVGPathSegCurvetoQuadraticRel : SVGPathSeg
 /**
  *
  */
-class SVGPathSegArcAbs : SVGPathSeg 
+class SVGPathSegArcAbs : virtual public SVGPathSeg 
 {
 
 
@@ -3239,7 +3234,7 @@ class SVGPathSegArcAbs : SVGPathSeg
 /**
  *
  */
-class SVGPathSegArcRel : SVGPathSeg 
+class SVGPathSegArcRel : virtual public SVGPathSeg 
 {
     /**
      *
@@ -3324,7 +3319,7 @@ class SVGPathSegArcRel : SVGPathSeg
 /**
  *
  */
-class SVGPathSegLinetoHorizontalAbs : SVGPathSeg 
+class SVGPathSegLinetoHorizontalAbs : virtual public SVGPathSeg 
 {
     /**
      *
@@ -3349,7 +3344,7 @@ class SVGPathSegLinetoHorizontalAbs : SVGPathSeg
 /**
  *
  */
-class SVGPathSegLinetoHorizontalRel : SVGPathSeg 
+class SVGPathSegLinetoHorizontalRel : virtual public SVGPathSeg 
 {
     /**
      *
@@ -3374,7 +3369,7 @@ class SVGPathSegLinetoHorizontalRel : SVGPathSeg
 /**
  *
  */
-class SVGPathSegLinetoVerticalAbs : SVGPathSeg 
+class SVGPathSegLinetoVerticalAbs : virtual public SVGPathSeg 
 {
     /**
      *
@@ -3399,7 +3394,7 @@ class SVGPathSegLinetoVerticalAbs : SVGPathSeg
 /**
  *
  */
-class SVGPathSegLinetoVerticalRel : SVGPathSeg 
+class SVGPathSegLinetoVerticalRel : virtual public SVGPathSeg 
 {
     /**
      *
@@ -3424,7 +3419,7 @@ class SVGPathSegLinetoVerticalRel : SVGPathSeg
 /**
  *
  */
-class SVGPathSegCurvetoCubicSmoothAbs : SVGPathSeg 
+class SVGPathSegCurvetoCubicSmoothAbs : virtual public SVGPathSeg 
 {
     /**
      *
@@ -3479,7 +3474,7 @@ class SVGPathSegCurvetoCubicSmoothAbs : SVGPathSeg
 /**
  *
  */
-class SVGPathSegCurvetoCubicSmoothRel : SVGPathSeg 
+class SVGPathSegCurvetoCubicSmoothRel : virtual public SVGPathSeg 
 {
     /**
      *
@@ -3534,7 +3529,7 @@ class SVGPathSegCurvetoCubicSmoothRel : SVGPathSeg
 /**
  *
  */
-class SVGPathSegCurvetoQuadraticSmoothAbs : SVGPathSeg 
+class SVGPathSegCurvetoQuadraticSmoothAbs : virtual public SVGPathSeg 
 {
     /**
      *
@@ -3569,7 +3564,7 @@ class SVGPathSegCurvetoQuadraticSmoothAbs : SVGPathSeg
 /**
  *
  */
-class SVGPathSegCurvetoQuadraticSmoothRel : SVGPathSeg 
+class SVGPathSegCurvetoQuadraticSmoothRel : virtual public SVGPathSeg 
 {
     /**
      *
@@ -3712,14 +3707,14 @@ class SVGAnimatedPathData
  *
  */
 class SVGPathElement : 
-                SVGElement,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGTransformable,
-                events::EventTarget,
-                SVGAnimatedPathData 
+                    virtual public SVGElement,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGTransformable,
+                    virtual public events::EventTarget,
+                    virtual public SVGAnimatedPathData 
 {
 
 
@@ -3885,13 +3880,13 @@ class SVGPathElement :
  *
  */
 class SVGRectElement : 
-                SVGElement,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGTransformable,
-                events::EventTarget 
+                    virtual public SVGElement,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGTransformable,
+                    virtual public events::EventTarget 
 {
 
 
@@ -3944,13 +3939,13 @@ class SVGRectElement :
  *
  */
 class SVGCircleElement : 
-                SVGElement,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGTransformable,
-                events::EventTarget 
+                    virtual public SVGElement,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGTransformable,
+                    virtual public events::EventTarget 
 {
 
 
@@ -3985,13 +3980,13 @@ class SVGCircleElement :
  *
  */
 class SVGEllipseElement : 
-                SVGElement,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGTransformable,
-                events::EventTarget 
+                    virtual public SVGElement,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGTransformable,
+                    virtual public events::EventTarget 
 {
     /**
      *
@@ -4026,13 +4021,13 @@ class SVGEllipseElement :
  *
  */
 class SVGLineElement : 
-                SVGElement,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGTransformable,
-                events::EventTarget 
+                    virtual public SVGElement,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGTransformable,
+                    virtual public events::EventTarget 
 {
     /**
      *
@@ -4096,14 +4091,14 @@ class SVGAnimatedPoints
  *
  */
 class SVGPolylineElement : 
-                SVGElement,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGTransformable,
-                events::EventTarget,
-                SVGAnimatedPoints
+                    virtual public SVGElement,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGTransformable,
+                    virtual public events::EventTarget,
+                    virtual public SVGAnimatedPoints
 {
 
 };
@@ -4118,14 +4113,14 @@ class SVGPolylineElement :
  *
  */
 class SVGPolygonElement : 
-                SVGElement,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGTransformable,
-                events::EventTarget,
-                SVGAnimatedPoints
+                    virtual public SVGElement,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGTransformable,
+                    virtual public events::EventTarget,
+                    virtual public SVGAnimatedPoints
 {
 
 };
@@ -4140,12 +4135,12 @@ class SVGPolygonElement :
  *
  */
 class SVGTextContentElement : 
-                SVGElement,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                events::EventTarget 
+                    virtual public SVGElement,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public events::EventTarget 
 {
 
 
@@ -4239,7 +4234,7 @@ class SVGTextContentElement :
 /**
  *
  */
-class SVGTextPositioningElement : SVGTextContentElement 
+class SVGTextPositioningElement : virtual public SVGTextContentElement 
 {
 
 
@@ -4287,7 +4282,7 @@ class SVGTextPositioningElement : SVGTextContentElement
  */
 class SVGTextElement : 
                 SVGTextPositioningElement,
-                SVGTransformable
+                    virtual public SVGTransformable
 {
 
 };
@@ -4301,7 +4296,7 @@ class SVGTextElement :
 /**
  *
  */
-class SVGTSpanElement : SVGTextPositioningElement
+class SVGTSpanElement : virtual public SVGTextPositioningElement
 {
 
 };
@@ -4316,8 +4311,8 @@ class SVGTSpanElement : SVGTextPositioningElement
  *
  */
 class SVGTRefElement : 
-                SVGTextPositioningElement,
-                SVGURIReference
+                    virtual public SVGTextPositioningElement,
+                    virtual public SVGURIReference
 {
 
 };
@@ -4332,8 +4327,8 @@ class SVGTRefElement :
  *
  */
 class SVGTextPathElement : 
-                SVGTextContentElement,
-                SVGURIReference 
+                    virtual public SVGTextContentElement,
+                    virtual public SVGURIReference 
 {
 
 
@@ -4390,8 +4385,8 @@ class SVGTextPathElement :
  *
  */
 class SVGAltGlyphElement : 
-                SVGTextPositioningElement,
-                SVGURIReference 
+                    virtual public SVGTextPositioningElement,
+                    virtual public SVGURIReference 
 {
 
     /**
@@ -4430,7 +4425,7 @@ class SVGAltGlyphElement :
 /**
  *
  */
-class SVGAltGlyphDefElement : SVGElement
+class SVGAltGlyphDefElement : virtual public SVGElement
 {
 
 };
@@ -4444,7 +4439,7 @@ class SVGAltGlyphDefElement : SVGElement
 /**
  *
  */
-class SVGAltGlyphItemElement : SVGElement
+class SVGAltGlyphItemElement : virtual public SVGElement
 {
 
 };
@@ -4459,9 +4454,9 @@ class SVGAltGlyphItemElement : SVGElement
  *
  */
 class SVGGlyphRefElement : 
-                SVGElement,
-                SVGURIReference,
-                SVGStylable 
+                    virtual public SVGElement,
+                    virtual public SVGURIReference,
+                    virtual public SVGStylable 
 {
     /**
      *
@@ -4539,7 +4534,7 @@ class SVGGlyphRefElement :
 /**
  *
  */
-class SVGPaint : SVGColor 
+class SVGPaint : virtual public SVGColor 
 {
 
 
@@ -4599,11 +4594,11 @@ class SVGPaint : SVGColor
  *
  */
 class SVGMarkerElement : 
-                SVGElement,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGFitToViewBox 
+                    virtual public SVGElement,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGFitToViewBox 
 {
 
 
@@ -4691,9 +4686,9 @@ class SVGMarkerElement :
  *
  */
 class SVGColorProfileElement : 
-                SVGElement,
-                SVGURIReference,
-                SVGRenderingIntent 
+                    virtual public SVGElement,
+                    virtual public SVGURIReference,
+                    virtual public SVGRenderingIntent 
 {
     /**
      *
@@ -4741,8 +4736,8 @@ class SVGColorProfileElement :
  *
  */
 class SVGColorProfileRule : 
-                SVGCSSRule,
-                SVGRenderingIntent 
+                    virtual public SVGCSSRule,
+                    virtual public SVGRenderingIntent 
 {
    /**
      *
@@ -4790,11 +4785,11 @@ class SVGColorProfileRule :
  *
  */
 class SVGGradientElement : 
-                SVGElement,
-                SVGURIReference,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGUnitTypes 
+                    virtual public SVGElement,
+                    virtual public SVGURIReference,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGUnitTypes 
 {
 
 
@@ -4841,7 +4836,7 @@ class SVGGradientElement :
 /**
  *
  */
-class SVGLinearGradientElement : SVGGradientElement 
+class SVGLinearGradientElement : virtual public SVGGradientElement 
 {
 
 
@@ -4879,7 +4874,7 @@ class SVGLinearGradientElement : SVGGradientElement
 /**
  *
  */
-class SVGRadialGradientElement : SVGGradientElement 
+class SVGRadialGradientElement : virtual public SVGGradientElement 
 {
 
 
@@ -4929,8 +4924,8 @@ class SVGRadialGradientElement : SVGGradientElement
  *
  */
 class SVGStopElement : 
-                SVGElement,
-                SVGStylable 
+                    virtual public SVGElement,
+                    virtual public SVGStylable 
 {
 
     /**
@@ -4954,14 +4949,14 @@ class SVGStopElement :
  *
  */
 class SVGPatternElement : 
-                SVGElement,
-                SVGURIReference,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGFitToViewBox,
-                SVGUnitTypes 
+                    virtual public SVGElement,
+                    virtual public SVGURIReference,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGFitToViewBox,
+                    virtual public SVGUnitTypes 
 {
 
 
@@ -5018,13 +5013,13 @@ class SVGPatternElement :
  *
  */
 class SVGClipPathElement : 
-                SVGElement,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGTransformable,
-                SVGUnitTypes 
+                    virtual public SVGElement,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGTransformable,
+                    virtual public SVGUnitTypes 
 {
     /**
      *
@@ -5048,12 +5043,12 @@ class SVGClipPathElement :
  *
  */
 class SVGMaskElement : 
-                SVGElement,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGUnitTypes 
+                    virtual public SVGElement,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGUnitTypes 
 {
 
 
@@ -5102,12 +5097,12 @@ class SVGMaskElement :
  *
  */
 class SVGFilterElement : 
-                SVGElement,
-                SVGURIReference,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGUnitTypes 
+                    virtual public SVGElement,
+                    virtual public SVGURIReference,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGUnitTypes 
 {
 
 
@@ -5174,7 +5169,7 @@ class SVGFilterElement :
 /**
  *
  */
-class SVGFilterPrimitiveStandardAttributes : SVGStylable 
+class SVGFilterPrimitiveStandardAttributes : virtual public SVGStylable 
 {
 
 
@@ -5220,8 +5215,8 @@ class SVGFilterPrimitiveStandardAttributes : SVGStylable
  *
  */
 class SVGFEBlendElement : 
-                SVGElement,
-                SVGFilterPrimitiveStandardAttributes 
+                    virtual public SVGElement,
+                    virtual public SVGFilterPrimitiveStandardAttributes 
 {
 
 
@@ -5268,8 +5263,8 @@ class SVGFEBlendElement :
  *
  */
 class SVGFEColorMatrixElement : 
-                SVGElement,
-                SVGFilterPrimitiveStandardAttributes 
+                    virtual public SVGElement,
+                    virtual public SVGFilterPrimitiveStandardAttributes 
 {
 
 
@@ -5318,8 +5313,8 @@ class SVGFEColorMatrixElement :
  *
  */
 class SVGFEComponentTransferElement : 
-                SVGElement,
-                SVGFilterPrimitiveStandardAttributes 
+                    virtual public SVGElement,
+                    virtual public SVGFilterPrimitiveStandardAttributes 
 {
     /**
      *
@@ -5339,7 +5334,7 @@ class SVGFEComponentTransferElement :
 /**
  *
  */
-class SVGComponentTransferFunctionElement : SVGElement 
+class SVGComponentTransferFunctionElement : virtual public SVGElement 
 {
 
 
@@ -5406,7 +5401,7 @@ class SVGComponentTransferFunctionElement : SVGElement
 /**
  *
  */
-class SVGFEFuncRElement : SVGComponentTransferFunctionElement
+class SVGFEFuncRElement : virtual public SVGComponentTransferFunctionElement
 {
 
 };
@@ -5420,7 +5415,7 @@ class SVGFEFuncRElement : SVGComponentTransferFunctionElement
 /**
  *
  */
-class SVGFEFuncGElement : SVGComponentTransferFunctionElement
+class SVGFEFuncGElement : virtual public SVGComponentTransferFunctionElement
 {
 
 };
@@ -5434,7 +5429,7 @@ class SVGFEFuncGElement : SVGComponentTransferFunctionElement
 /**
  *
  */
-class SVGFEFuncBElement : SVGComponentTransferFunctionElement
+class SVGFEFuncBElement : virtual public SVGComponentTransferFunctionElement
 {
 
 };
@@ -5448,7 +5443,7 @@ class SVGFEFuncBElement : SVGComponentTransferFunctionElement
 /**
  *
  */
-class SVGFEFuncAElement : SVGComponentTransferFunctionElement
+class SVGFEFuncAElement : virtual public SVGComponentTransferFunctionElement
 {
 
 };
@@ -5463,8 +5458,8 @@ class SVGFEFuncAElement : SVGComponentTransferFunctionElement
  *
  */
 class SVGFECompositeElement : 
-                SVGElement,
-                SVGFilterPrimitiveStandardAttributes 
+                    virtual public SVGElement,
+                    virtual public SVGFilterPrimitiveStandardAttributes 
 {
 
 
@@ -5534,8 +5529,8 @@ class SVGFECompositeElement :
  *
  */
 class SVGFEConvolveMatrixElement : 
-                SVGElement,
-                SVGFilterPrimitiveStandardAttributes 
+                    virtual public SVGElement,
+                    virtual public SVGFilterPrimitiveStandardAttributes 
 {
 
 
@@ -5623,8 +5618,8 @@ class SVGFEConvolveMatrixElement :
  *
  */
 class SVGFEDiffuseLightingElement : 
-                SVGElement,
-                SVGFilterPrimitiveStandardAttributes 
+                    virtual public SVGElement,
+                    virtual public SVGFilterPrimitiveStandardAttributes 
 {
 
     /**
@@ -5657,7 +5652,7 @@ class SVGFEDiffuseLightingElement :
 /**
  *
  */
-class SVGFEDistantLightElement : SVGElement 
+class SVGFEDistantLightElement : virtual public SVGElement 
 {
 
     /**
@@ -5686,7 +5681,7 @@ class SVGFEDistantLightElement : SVGElement
 /**
  *
  */
-class SVGFEPointLightElement : SVGElement 
+class SVGFEPointLightElement : virtual public SVGElement 
 {
     /**
      *
@@ -5717,7 +5712,7 @@ class SVGFEPointLightElement : SVGElement
 /**
  *
  */
-class SVGFESpotLightElement : SVGElement 
+class SVGFESpotLightElement : virtual public SVGElement 
 {
 
     /**
@@ -5777,8 +5772,8 @@ class SVGFESpotLightElement : SVGElement
  *
  */
 class SVGFEDisplacementMapElement : 
-                SVGElement,
-                SVGFilterPrimitiveStandardAttributes 
+                    virtual public SVGElement,
+                    virtual public SVGFilterPrimitiveStandardAttributes 
 {
 
 
@@ -5837,8 +5832,8 @@ class SVGFEDisplacementMapElement :
  *
  */
 class SVGFEFloodElement : 
-                SVGElement,
-                SVGFilterPrimitiveStandardAttributes 
+                    virtual public SVGElement,
+                    virtual public SVGFilterPrimitiveStandardAttributes 
 {
     /**
      *
@@ -5860,8 +5855,8 @@ class SVGFEFloodElement :
  *
  */
 class SVGFEGaussianBlurElement : 
-                SVGElement,
-                SVGFilterPrimitiveStandardAttributes 
+                    virtual public SVGElement,
+                    virtual public SVGFilterPrimitiveStandardAttributes 
 {
     /**
      *
@@ -5901,11 +5896,11 @@ class SVGFEGaussianBlurElement :
  *
  */
 class SVGFEImageElement : 
-                SVGElement,
-                SVGURIReference,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGFilterPrimitiveStandardAttributes
+                    virtual public SVGElement,
+                    virtual public SVGURIReference,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGFilterPrimitiveStandardAttributes
 {
 
 };
@@ -5920,8 +5915,8 @@ class SVGFEImageElement :
  *
  */
 class SVGFEMergeElement : 
-                SVGElement,
-                SVGFilterPrimitiveStandardAttributes
+                    virtual public SVGElement,
+                    virtual public SVGFilterPrimitiveStandardAttributes
 {
 
 };
@@ -5935,7 +5930,7 @@ class SVGFEMergeElement :
 /**
  *
  */
-class SVGFEMergeNodeElement : SVGElement 
+class SVGFEMergeNodeElement : virtual public SVGElement 
 {
     /**
      *
@@ -5957,8 +5952,8 @@ class SVGFEMergeNodeElement : SVGElement
  *
  */
 class SVGFEMorphologyElement : 
-                SVGElement,
-                SVGFilterPrimitiveStandardAttributes 
+                    virtual public SVGElement,
+                    virtual public SVGFilterPrimitiveStandardAttributes 
 {
 
 
@@ -6011,8 +6006,8 @@ class SVGFEMorphologyElement :
  *
  */
 class SVGFEOffsetElement : 
-                SVGElement,
-                SVGFilterPrimitiveStandardAttributes 
+                    virtual public SVGElement,
+                    virtual public SVGFilterPrimitiveStandardAttributes 
 {
 
 
@@ -6049,8 +6044,8 @@ class SVGFEOffsetElement :
  *
  */
 class SVGFESpecularLightingElement : 
-                SVGElement,
-                SVGFilterPrimitiveStandardAttributes 
+                    virtual public SVGElement,
+                    virtual public SVGFilterPrimitiveStandardAttributes 
 {
 
     /**
@@ -6088,8 +6083,8 @@ class SVGFESpecularLightingElement :
  *
  */
 class SVGFETileElement : 
-                SVGElement,
-                SVGFilterPrimitiveStandardAttributes 
+                    virtual public SVGElement,
+                    virtual public SVGFilterPrimitiveStandardAttributes 
 {
 
 
@@ -6114,8 +6109,8 @@ class SVGFETileElement :
  *
  */
 class SVGFETurbulenceElement : 
-                SVGElement,
-                SVGFilterPrimitiveStandardAttributes 
+                    virtual public SVGElement,
+                    virtual public SVGFilterPrimitiveStandardAttributes 
 {
 
 
@@ -6188,10 +6183,10 @@ class SVGFETurbulenceElement :
  *
  */
 class SVGCursorElement : 
-                SVGElement,
-                SVGURIReference,
-                SVGTests,
-                SVGExternalResourcesRequired 
+                    virtual public SVGElement,
+                    virtual public SVGURIReference,
+                    virtual public SVGTests,
+                    virtual public SVGExternalResourcesRequired 
 {
     /**
      *
@@ -6217,14 +6212,14 @@ class SVGCursorElement :
  *
  */
 class SVGAElement : 
-                SVGElement,
-                SVGURIReference,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGTransformable,
-                events::EventTarget 
+                    virtual public SVGElement,
+                    virtual public SVGURIReference,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGTransformable,
+                    virtual public events::EventTarget 
 {
 
     /**
@@ -6248,10 +6243,10 @@ class SVGAElement :
  *
  */
 class SVGViewElement : 
-                SVGElement,
-                SVGExternalResourcesRequired,
-                SVGFitToViewBox,
-                SVGZoomAndPan 
+                    virtual public SVGElement,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGFitToViewBox,
+                    virtual public SVGZoomAndPan 
 {
 
     /**
@@ -6275,9 +6270,9 @@ class SVGViewElement :
  *
  */
 class SVGScriptElement : 
-                SVGElement,
-                SVGURIReference,
-                SVGExternalResourcesRequired 
+                    virtual public SVGElement,
+                    virtual public SVGURIReference,
+                    virtual public SVGExternalResourcesRequired 
 {
 
     /**
@@ -6362,11 +6357,11 @@ class SVGZoomEvent : events::UIEvent
  *
  */
 class SVGAnimationElement : 
-                SVGElement,
-                SVGTests,
-                SVGExternalResourcesRequired,
-                smil::ElementTimeControl,
-                events::EventTarget 
+                    virtual public SVGElement,
+                    virtual public SVGTests,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public smil::ElementTimeControl,
+                    virtual public events::EventTarget 
 {
 
 
@@ -6408,7 +6403,7 @@ class SVGAnimationElement :
 /**
  *
  */
-class SVGAnimateElement : SVGAnimationElement
+class SVGAnimateElement : virtual public SVGAnimationElement
 {
 
 };
@@ -6422,7 +6417,7 @@ class SVGAnimateElement : SVGAnimationElement
 /**
  *
  */
-class SVGSetElement : SVGAnimationElement
+class SVGSetElement : virtual public SVGAnimationElement
 {
 
 };
@@ -6436,7 +6431,7 @@ class SVGSetElement : SVGAnimationElement
 /**
  *
  */
-class SVGAnimateMotionElement : SVGAnimationElement
+class SVGAnimateMotionElement : virtual public SVGAnimationElement
 {
 
 };
@@ -6451,9 +6446,9 @@ class SVGAnimateMotionElement : SVGAnimationElement
  *
  */
 class SVGMPathElement : 
-                SVGElement,
-                SVGURIReference,
-                SVGExternalResourcesRequired
+                    virtual public SVGElement,
+                    virtual public SVGURIReference,
+                    virtual public SVGExternalResourcesRequired
 {
 
 };
@@ -6467,7 +6462,7 @@ class SVGMPathElement :
 /**
  *
  */
-class SVGAnimateColorElement : SVGAnimationElement
+class SVGAnimateColorElement : virtual public SVGAnimationElement
 {
 
 };
@@ -6481,7 +6476,7 @@ class SVGAnimateColorElement : SVGAnimationElement
 /**
  *
  */
-class SVGAnimateTransformElement : SVGAnimationElement
+class SVGAnimateTransformElement : virtual public SVGAnimationElement
 {
 
 };
@@ -6496,9 +6491,9 @@ class SVGAnimateTransformElement : SVGAnimationElement
  *
  */
 class SVGFontElement : 
-                SVGElement,
-                SVGExternalResourcesRequired,
-                SVGStylable
+                    virtual public SVGElement,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable
 {
 
 };
@@ -6513,8 +6508,8 @@ class SVGFontElement :
  *
  */
 class SVGGlyphElement : 
-                SVGElement,
-                SVGStylable
+                    virtual public SVGElement,
+                    virtual public SVGStylable
 {
 
 };
@@ -6529,8 +6524,8 @@ class SVGGlyphElement :
  *
  */
 class SVGMissingGlyphElement : 
-                SVGElement,
-                SVGStylable
+                    virtual public SVGElement,
+                    virtual public SVGStylable
 {
 
 };
@@ -6544,7 +6539,7 @@ class SVGMissingGlyphElement :
 /**
  *
  */
-class SVGHKernElement : SVGElement
+class SVGHKernElement : virtual public SVGElement
 {
 
 };
@@ -6558,7 +6553,7 @@ class SVGHKernElement : SVGElement
 /**
  *
  */
-class SVGVKernElement : SVGElement
+class SVGVKernElement : virtual public SVGElement
 {
 
 };
@@ -6572,7 +6567,7 @@ class SVGVKernElement : SVGElement
 /**
  *
  */
-class SVGFontFaceElement : SVGElement
+class SVGFontFaceElement : virtual public SVGElement
 {
 
 };
@@ -6586,7 +6581,7 @@ class SVGFontFaceElement : SVGElement
 /**
  *
  */
-class SVGFontFaceSrcElement : SVGElement
+class SVGFontFaceSrcElement : virtual public SVGElement
 {
 
 };
@@ -6600,7 +6595,7 @@ class SVGFontFaceSrcElement : SVGElement
 /**
  *
  */
-class SVGFontFaceUriElement : SVGElement
+class SVGFontFaceUriElement : virtual public SVGElement
 {
 
 };
@@ -6614,7 +6609,7 @@ class SVGFontFaceUriElement : SVGElement
 /**
  *
  */
-class SVGFontFaceFormatElement : SVGElement
+class SVGFontFaceFormatElement : virtual public SVGElement
 {
 
 };
@@ -6628,7 +6623,7 @@ class SVGFontFaceFormatElement : SVGElement
 /**
  *
  */
-class SVGFontFaceNameElement : SVGElement
+class SVGFontFaceNameElement : virtual public SVGElement
 {
 
 };
@@ -6642,7 +6637,7 @@ class SVGFontFaceNameElement : SVGElement
 /**
  *
  */
-class SVGDefinitionSrcElement : SVGElement
+class SVGDefinitionSrcElement : virtual public SVGElement
 {
 
 };
@@ -6656,7 +6651,7 @@ class SVGDefinitionSrcElement : SVGElement
 /**
  *
  */
-class SVGMetadataElement : SVGElement
+class SVGMetadataElement : virtual public SVGElement
 {
 
 };
@@ -6670,13 +6665,13 @@ class SVGMetadataElement : SVGElement
  *
  */
 class SVGForeignObjectElement : 
-                SVGElement,
-                SVGTests,
-                SVGLangSpace,
-                SVGExternalResourcesRequired,
-                SVGStylable,
-                SVGTransformable,
-                events::EventTarget 
+                    virtual public SVGElement,
+                    virtual public SVGTests,
+                    virtual public SVGLangSpace,
+                    virtual public SVGExternalResourcesRequired,
+                    virtual public SVGStylable,
+                    virtual public SVGTransformable,
+                    virtual public events::EventTarget 
 {
 
 
