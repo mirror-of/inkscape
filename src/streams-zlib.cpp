@@ -1,3 +1,14 @@
+/*
+ * IO layer : zlib streambuf
+ *
+ * Authors:
+ *   Johan Ceuppens <jceuppen at easynet dot be>
+ *
+ * Copyright (C) 2004 Johan Ceuppens
+ *
+ * Released under GNU LGPL, read the file 'COPYING.LIB' for more information
+ */
+
 #include "streams-zlib.h"
 #include <cstring>
 

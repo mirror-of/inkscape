@@ -1,3 +1,14 @@
+/*
+ * IO layer : handles for URIs
+ *
+ * Authors:
+ *   Johan Ceuppens <jceuppen at easynet dot be>
+ *
+ * Copyright (C) 2004 Johan Ceuppens
+ *
+ * Released under GNU LGPL, read the file 'COPYING.LIB' for more information
+ */
+
 #ifndef __STREAM_HANDLES_H_
 #define __STREAM_HANDLES_H_
 

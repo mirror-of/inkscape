@@ -1,3 +1,14 @@
+/*
+ * IO layer : gzip streambuf and streams
+ *
+ * Authors:
+ *   Johan Ceuppens <jceuppen at easynet dot be>
+ *
+ * Copyright (C) 2004 Johan Ceuppens
+ *
+ * Released under GNU LGPL, read the file 'COPYING.LIB' for more information
+ */
+
 #include "streams-gzip.h"
 
 namespace Inkscape {
