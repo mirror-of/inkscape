@@ -7,6 +7,7 @@
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Frank Felfe <innerspace@iname.com>
+ *   Carl Hetherington <inkscape@carlh.net>
  *
  * Copyright (C) 2000-2002 Lauris Kaplinski
  *
@@ -17,6 +18,36 @@
 
 struct SPDesktop;
 namespace NR { class scale; }
+
+/* FIXME: these classes are work-in-progress */
+
+///< Parent for classes that can snap points to something
+class Snapper
+{
+ public:
+  Snapper(NR::Coord const d);
+
+  void setDistance(NR::Coord const d);
+  NR::Coord getDistance() const;
+
+ private:
+  NR::Coord _distance;
+};
+
+///< Snap to grid
+class GridSnapper : public Snapper
+{
+ public:
+  GridSnapper(NR::Coord const d);
+};
+
+///< Snap to guides
+class GuideSnapper : public Snapper
+{
+ public:
+  GuideSnapper(NR::Coord const d);
+};
+
 
 /* Single point methods */
 double sp_desktop_free_snap (SPDesktop const *desktop, NR::Point &req);

@@ -20,6 +20,7 @@
 #include <math.h>
 #include "sp-guide.h"
 #include "sp-namedview.h"
+#include "desktop.h"
 #include "desktop-snap.h"
 #include "desktop.h"
 #include "geom.h"
@@ -31,7 +32,7 @@
 /* Minimal distance to norm before point is considered for snap. */
 #define MIN_DIST_NORM 1.0
 
-#define SNAP_ON(d) (((d)->gridsnap > 0.0) || ((d)->guidesnap > 0.0))
+#define SNAP_ON(d) (((d)->grid_snapper.getDistance() > 0.0) || ((d)->guide_snapper.getDistance() > 0.0))
 
 /**
  *    Try to snap `req' in one dimension.
@@ -134,7 +135,7 @@ NR::Coord sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point &req, NR::
     NR::Point snapped = req;
 
     if (nv.snaptoguides) {
-        upper = desktop->guidesnap;
+        upper = desktop->guide_snapper.getDistance();
         for (GSList const *l = nv.guides; l != NULL; l = l->next) {
             SPGuide const &g = *SP_GUIDE(l->data);
             NR::Point trial(req);
@@ -155,7 +156,7 @@ NR::Coord sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point &req, NR::
          *  the vector to the requested point.  If the distance along the
          *  vector is less than the snap distance then snap.
          */
-        upper = MIN(best, desktop->gridsnap);
+        upper = MIN(best, desktop->grid_snapper.getDistance());
         
         for (unsigned int i = 0; i < 2; ++i) {
             NR::Point trial(req);
@@ -307,6 +308,31 @@ double sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, const std::vector
     return skew;
 }
 
+
+Snapper::Snapper(NR::Coord const d) : _distance(d)
+{
+
+}
+
+void Snapper::setDistance(NR::Coord const d)
+{
+    _distance = d;
+}
+
+NR::Coord Snapper::getDistance() const
+{
+    return _distance;
+}
+
+GridSnapper::GridSnapper(NR::Coord const d) : Snapper(d)
+{
+
+}
+
+GuideSnapper::GuideSnapper(NR::Coord const d) : Snapper(d)
+{
+
+}
 
 /*
   Local Variables:
