@@ -15,7 +15,6 @@
 #include <glib.h>
 #include <trace.h>
 
-#include "imagemap.h"
 
 namespace Inkscape
 {
@@ -46,6 +45,10 @@ class PotraceTracingEngine : public TracingEngine
         {
         useQuantization = val;
         }
+    bool getUseQuantization()
+        {
+        return useQuantization;
+        }
 
     /**
      * Sets the halfway point for black/white
@@ -53,6 +56,10 @@ class PotraceTracingEngine : public TracingEngine
     void setQuantizationNrColors(int val)
         {
         quantizationNrColors = val;
+        }
+    int getQuantizationNrColors()
+        {
+        return quantizationNrColors;
         }
 
 
@@ -63,6 +70,10 @@ class PotraceTracingEngine : public TracingEngine
         {
         useBrightness = val;
         }
+    bool getUseBrightness()
+        {
+        return useBrightness;
+        }
 
     /**
      * Sets the halfway point for black/white
@@ -70,6 +81,10 @@ class PotraceTracingEngine : public TracingEngine
     void setBrightnessThreshold(double val)
         {
         brightnessThreshold = val;
+        }
+    double getBrightnessThreshold()
+        {
+        return brightnessThreshold;
         }
 
 
@@ -81,6 +96,10 @@ class PotraceTracingEngine : public TracingEngine
         {
         useCanny = val;
         }
+    bool getUseCanny()
+        {
+        return useCanny;
+        }
 
 
     /**
@@ -90,6 +109,10 @@ class PotraceTracingEngine : public TracingEngine
         {
         cannyLowThreshold = val;
         }
+    double getCannyLowThreshold()
+        {
+        return cannyLowThreshold;
+        }
 
     /**
      * Sets upper cutoff for canny non-maximalizing
@@ -98,16 +121,15 @@ class PotraceTracingEngine : public TracingEngine
         {
         cannyHighThreshold = val;
         }
+    double getCannyHighThreshold()
+        {
+        return cannyHighThreshold;
+        }
 
     /**
      *
      */
     virtual char *getPathDataFromPixbuf(GdkPixbuf *pixbuf);
-
-    /**
-     *
-     */
-    GrayMap *filter(GdkPixbuf * pixbuf);
 
     /**
      *

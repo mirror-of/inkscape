@@ -131,28 +131,30 @@ writePaths(path_t *plist, Inkscape::SVGOStringStream& data)
         }
 }
 
-GrayMap *
-PotraceTracingEngine::filter(GdkPixbuf * pixbuf)
+static GrayMap *
+filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
 {
     if (!pixbuf)
         return NULL;
 
     /*### Color quantization -- banding ###*/
-    if (useQuantization)
+    if (engine.getUseQuantization())
         {
         RgbMap *rgbmap = gdkPixbufToRgbMap(pixbuf);
-        GrayMap *newGm = quantizeBand(rgbmap, quantizationNrColors);
+        GrayMap *newGm = quantizeBand(rgbmap,
+                            engine.getQuantizationNrColors());
         rgbmap->destroy(rgbmap);
         return newGm;
         }
 
     /*### Brightness threshold ###*/
-    else if (useBrightness)
+    else if (engine.getUseBrightness())
         {
         GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
 
         GrayMap *newGm = GrayMapCreate(gm->width, gm->height);
-        double cutoff =  3.0 * ( brightnessThreshold * 256.0 );
+        double cutoff =  3.0 *
+               ( engine.getBrightnessThreshold() * 256.0 );
         for (int y=0 ; y<gm->height ; y++)
             {
             for (int x=0 ; x<gm->width ; x++)
@@ -171,10 +173,11 @@ PotraceTracingEngine::filter(GdkPixbuf * pixbuf)
         }
 
     /*### Canny edge detection ###*/
-    else if (useCanny)
+    else if (engine.getUseCanny())
         {
         GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
-        GrayMap *newGm = grayMapCanny(gm, cannyLowThreshold, cannyHighThreshold);
+        GrayMap *newGm = grayMapCanny(gm, 
+               engine.getCannyLowThreshold(), engine.getCannyHighThreshold());
         gm->destroy(gm);
         //newGm->writePPM(newGm, "canny.ppm");
         return newGm;
@@ -184,10 +187,13 @@ PotraceTracingEngine::filter(GdkPixbuf * pixbuf)
     return NULL;//none of the above
 }
 
+
+
+
 GdkPixbuf *
 PotraceTracingEngine::preview(GdkPixbuf * pixbuf)
 {
-    GrayMap *gm = filter(pixbuf);
+    GrayMap *gm = filter(*this, pixbuf);
     if (!gm)
         return NULL;
 
@@ -206,7 +212,7 @@ PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * thePixbuf)
     if (!thePixbuf)
         return NULL;
 
-    GrayMap *grayMap = filter(thePixbuf);
+    GrayMap *grayMap = filter(*this, thePixbuf);
 
     bitmap_t *bm = bm_new(grayMap->width, grayMap->height);
     bm_clear(bm, 0);
