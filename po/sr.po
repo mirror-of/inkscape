@@ -4202,7 +4202,7 @@ msgstr ""
 msgid ""
 "<b>Skew</b> selection; with <b>Shift</b> to skew around the opposite side"
 msgstr ""
-"<b>Искривљавање</b> избора; <b>Shift<b> за искривљавање супротних страна"
+"<b>Искривљавање</b> избора; <b>Shift</b> за искривљавање супротних страна"
 
 #. fixme: CTRL SNAP!!! remove "skew and scale"
 #: src/seltrans.cpp:484
@@ -4794,7 +4794,7 @@ msgid ""
 "<b>Click</b> to select."
 msgstr ""
 "<b>Повуците</b> за исцртавање звезде. <b>Повлачите ручке</b> за промену "
-"облика звезде. <b>Клик<b> за избор."
+"облика звезде. <b>Клик</b> за избор."
 
 #: src/tools-switch.cpp:153
 msgid ""
