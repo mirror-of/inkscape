@@ -14,24 +14,11 @@
  */
 
 
-
-
-
 #include <config.h>
 
 #include <glib.h>
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtksignal.h>
-#include <gtk/gtknotebook.h>
-#include <gtk/gtkvbox.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkhseparator.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkiconfactory.h>
+#include <gtk/gtk.h>
 
 #include "helper/sp-intl.h"
 #include "helper/window.h"
@@ -44,9 +31,15 @@
 #include "dialog-events.h"
 #include "verbs.h"
 #include "interface.h"
+#include "selection.h"
+#include "style.h"
 #include "object-properties.h"
 #include "inkscape-stock.h"
 #include "prefs-utils.h"
+#include "../svg/stringstream.h"
+#include "desktop-style.h"
+#include "document.h"
+
 
 static GtkWidget *dlg = NULL;
 static win_data wd;
@@ -55,6 +48,10 @@ static win_data wd;
 static gint x = -1000, y = -1000, w = 0, h = 0; 
 static gchar *prefs_path = "dialogs.fillstroke";
 
+
+static void sp_fillstroke_selection_modified ( Inkscape::Application *inkscape, SPDesktop *desktop, guint flags, GtkObject *base );
+static void sp_fillstroke_selection_changed ( Inkscape::Application *inkscape, SPDesktop *desktop, GtkObject *base );
+static void sp_fillstroke_opacity_changed (GtkAdjustment *a, SPWidget *dlg);
 
 
 static void
@@ -183,6 +180,44 @@ sp_object_properties_dialog (void)
                     INKSCAPE_STOCK_PROPERTIES_STROKE_PAGE);
         }
 
+    /* Opacity */
+
+    GtkWidget *o_vb = gtk_vbox_new (FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (vb), o_vb, FALSE, FALSE, 2);
+    gtk_object_set_data (GTK_OBJECT (dlg), "master_opacity", o_vb);
+
+    GtkWidget *l_hb = gtk_hbox_new (FALSE, 4);
+    GtkWidget *l = gtk_label_new (_("Master opacity"));
+    gtk_misc_set_alignment (GTK_MISC (l), 0.0, 1.0);
+    gtk_box_pack_start (GTK_BOX (l_hb), l, FALSE, FALSE, 4);
+    gtk_box_pack_start (GTK_BOX (o_vb), l_hb, FALSE, FALSE, 0);
+    
+    GtkWidget *hb = gtk_hbox_new (FALSE, 4);
+    gtk_box_pack_start (GTK_BOX (o_vb), hb, FALSE, FALSE, 0);
+
+    GtkObject *a = gtk_adjustment_new (1.0, 0.0, 1.0, 0.01, 0.1, 0.0);
+    gtk_object_set_data(GTK_OBJECT(dlg), "master_opacity_adjustment", a);
+
+    GtkWidget *s = gtk_hscale_new (GTK_ADJUSTMENT (a));
+    gtk_scale_set_draw_value (GTK_SCALE (s), FALSE);
+    gtk_box_pack_start (GTK_BOX (hb), s, TRUE, TRUE, 4);
+
+    GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
+    gtk_box_pack_start (GTK_BOX (hb), sb, FALSE, FALSE, 0);
+
+    gtk_signal_connect ( a, "value_changed", 
+                         GTK_SIGNAL_FUNC (sp_fillstroke_opacity_changed),
+                         dlg );
+
+    gtk_widget_show_all (o_vb);
+
+       // these callbacks are only for the master opacity update; the tabs above take care of themselves
+        g_signal_connect ( G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (sp_fillstroke_selection_changed), dlg );
+        g_signal_connect ( G_OBJECT (INKSCAPE), "modify_selection", G_CALLBACK (sp_fillstroke_selection_modified), dlg );
+        g_signal_connect ( G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_fillstroke_selection_changed), dlg );
+
+        sp_fillstroke_selection_changed ( NULL, NULL, NULL );
+
         gtk_widget_show (dlg);
         
     } else {
@@ -218,6 +253,77 @@ void sp_object_properties_fill (void)
     gtk_notebook_set_page (GTK_NOTEBOOK (nb), 0);
     
 }
+
+
+static void
+sp_fillstroke_selection_modified ( Inkscape::Application *inkscape, 
+                              SPDesktop *desktop, 
+                              guint flags,
+                              GtkObject *base )
+{
+    sp_fillstroke_selection_changed ( NULL, NULL, NULL ); 
+}
+
+
+static void
+sp_fillstroke_selection_changed ( Inkscape::Application *inkscape, 
+                              SPDesktop *desktop, 
+                              GtkObject *base )
+{
+    if (gtk_object_get_data (GTK_OBJECT (dlg), "blocked"))
+        return;
+    gtk_object_set_data (GTK_OBJECT (dlg), "blocked", GUINT_TO_POINTER (TRUE));
+
+    SPSelection *sel = SP_DT_SELECTION (SP_ACTIVE_DESKTOP);
+
+    GtkWidget *opa = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg), "master_opacity"));
+    GtkAdjustment *a = GTK_ADJUSTMENT(gtk_object_get_data(GTK_OBJECT(dlg), "master_opacity_adjustment"));
+
+    if ( !sel || sel->isEmpty() ) {
+        gtk_widget_set_sensitive (opa, FALSE);
+        gtk_object_set_data (GTK_OBJECT (dlg), "blocked", GUINT_TO_POINTER (FALSE));
+        return;
+    }
+
+    gtk_widget_set_sensitive (opa, TRUE);
+
+    // calculate the average opacity of items
+    gdouble opacity = 0;
+    guint opacity_items = 0;
+    for (GSList const *i = sel->itemList(); i != NULL; i = i->next) {
+        SPStyle *style = SP_OBJECT_STYLE (i->data);
+        opacity += SP_SCALE24_TO_FLOAT(style->opacity.value);
+        opacity_items ++;
+    }
+    opacity /= opacity_items;
+
+    gtk_adjustment_set_value(a, opacity);
+
+    gtk_object_set_data (GTK_OBJECT (dlg), "blocked", GUINT_TO_POINTER (FALSE));
+}
+
+static void
+sp_fillstroke_opacity_changed (GtkAdjustment *a, SPWidget *dlg)
+{
+    if (gtk_object_get_data (GTK_OBJECT (dlg), "blocked"))
+        return;
+
+    gtk_object_set_data (GTK_OBJECT (dlg), "blocked", GUINT_TO_POINTER (TRUE));
+
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+    
+    Inkscape::SVGOStringStream os;	
+    os << CLAMP (a->value, 0.0, 1.0);
+    sp_repr_css_set_property (css, "opacity", os.str().c_str());
+
+    sp_desktop_set_style (SP_ACTIVE_DESKTOP, css);
+
+    sp_repr_css_attr_unref (css);
+
+    sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
+
+    gtk_object_set_data (GTK_OBJECT (dlg), "blocked", GUINT_TO_POINTER (FALSE));
+} 
 
 
 /*

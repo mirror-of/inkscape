@@ -62,7 +62,6 @@ static void sp_item_widget_sensitivity_toggled (GtkWidget *widget, SPWidget *spw
 static void sp_item_widget_printability_toggled (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_visibility_toggled (GtkWidget *widget, SPWidget *spw);
 static void sp_item_widget_id_changed (GtkWidget *widget, SPWidget *spw);
-static void sp_item_widget_opacity_value_changed (GtkAdjustment *a, SPWidget *spw);
 static void sp_item_widget_transform_value_changed (GtkWidget *widget, SPWidget *spw);
 
 static void
@@ -98,7 +97,7 @@ GtkWidget *
 sp_item_widget_new (void)
 {
 
-    GtkWidget *spw, *vb, *hb, *t, *cb, *l, *sb, *f, *s, *tf, *pb;
+    GtkWidget *spw, *vb, *hb, *t, *cb, *l, *sb, *f, *tf, *pb;
     GtkObject *a;
 
     /* Create container widget */
@@ -187,32 +186,6 @@ sp_item_widget_new (void)
     gtk_object_set_data (GTK_OBJECT (spw), "printable", cb);
 
     
-    /* Opacity */
-    
-    hb = gtk_hbox_new (FALSE, 0);
-    gtk_widget_show (hb);
-    gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
-
-    l = gtk_label_new (_("Opacity:"));
-    gtk_widget_show (l);
-    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-    gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
-
-    a = gtk_adjustment_new (1.0, 0.0, 1.0, 0.01, 0.1, 0.0);
-
-    s = gtk_hscale_new (GTK_ADJUSTMENT (a));
-    gtk_scale_set_draw_value (GTK_SCALE (s), FALSE);
-    gtk_widget_show (s);
-    gtk_box_pack_start (GTK_BOX (hb), s, TRUE, TRUE, 0);
-
-    sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
-    gtk_widget_show (sb);
-    gtk_box_pack_start (GTK_BOX (hb), sb, FALSE, FALSE, 0);
-
-    gtk_object_set_data (GTK_OBJECT (spw), "opacity", a);
-    gtk_signal_connect ( a, "value_changed", 
-                         GTK_SIGNAL_FUNC (sp_item_widget_opacity_value_changed),
-                         spw );
 
     f = gtk_frame_new (_("Transformation matrix"));
     gtk_widget_show (f);
@@ -349,7 +322,6 @@ sp_item_widget_setup ( SPWidget *spw, SPSelection *selection )
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
 
     SPItem *item = SP_WIDGET_SELECTION(spw)->singleItem();
-    SPStyle *style = SP_OBJECT_STYLE (item);
 
     /* Sensitive */
     GtkWidget *w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "sensitive"));
@@ -358,12 +330,6 @@ sp_item_widget_setup ( SPWidget *spw, SPSelection *selection )
     /* Printable */
     w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "printable"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (w), item->printable);
-
-    /* Opacity */
-    {
-        GtkAdjustment *a = GTK_ADJUSTMENT(gtk_object_get_data(GTK_OBJECT(spw), "opacity"));
-        gtk_adjustment_set_value(a, SP_SCALE24_TO_FLOAT(style->opacity.value));
-    }
 
     /* Transform */
     {
@@ -542,32 +508,6 @@ sp_item_widget_id_changed (GtkWidget *widget, SPWidget *spw)
     gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (FALSE));
 
 } // end of sp_item_widget_id_changed()
-
-
-
-static void
-sp_item_widget_opacity_value_changed (GtkAdjustment *a, SPWidget *spw)
-{
-    if (gtk_object_get_data (GTK_OBJECT (spw), "blocked"))
-        return;
-
-    gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (TRUE));
-
-    SPCSSAttr *css = sp_repr_css_attr_new ();
-    
-    Inkscape::SVGOStringStream os;	
-    os << CLAMP (a->value, 0.0, 1.0);
-    sp_repr_css_set_property (css, "opacity", os.str().c_str());
-
-    sp_desktop_set_style (SP_ACTIVE_DESKTOP, css);
-
-    sp_repr_css_attr_unref (css);
-
-    sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "ItemDialog:style");
-
-    gtk_object_set_data (GTK_OBJECT (spw), "blocked", GUINT_TO_POINTER (FALSE));
-} 
-
 
 
 static void
