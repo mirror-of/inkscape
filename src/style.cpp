@@ -1100,14 +1100,21 @@ sp_style_merge_from_parent (SPStyle *style, SPStyle *parent)
     if (!style->stroke_width.set || style->stroke_width.inherit) {
         style->stroke_width.unit = parent->stroke_width.unit;
         style->stroke_width.value = parent->stroke_width.value;
+        /* TODO: The above looks suspicious.  What if the unit is em or ex, and the parent has
+           different font-size or font-family (x height) from the child?  The spec says that only
+           the computed value is inherited.  I think we should be ignoring value if (!set ||
+           inherit).  Hence, I think we should remove the above two lines, as they may be hiding
+           bugs. */
         style->stroke_width.computed = parent->stroke_width.computed;
-    } else if (style->stroke_width.unit == SP_CSS_UNIT_EM) {
-        /* fixme: Must have sure font size is updated BEFORE us */
-        style->stroke_width.computed = style->font_size.computed;
-    } else if (style->stroke_width.unit == SP_CSS_UNIT_EX) {
-        /* fixme: Must have sure font size is updated BEFORE us */
-        /* fixme: Real x height - but should this go to item? (Lauris) */
-        style->stroke_width.computed = style->font_size.computed * 0.5;
+    } else {
+        /* Update computed value for any change in font inherited from parent. */
+        double const em = style->font_size.computed;
+        if (style->stroke_width.unit == SP_CSS_UNIT_EM) {
+            style->stroke_width.computed = style->stroke_width.value * em;
+        } else if (style->stroke_width.unit == SP_CSS_UNIT_EX) {
+            double const ex = em * 0.5;  // fixme: Get x height from libnrtype or pango.
+            style->stroke_width.computed = style->stroke_width.value * ex;
+        }
     }
     if (!style->stroke_linecap.set || style->stroke_linecap.inherit) {
         style->stroke_linecap.computed = parent->stroke_linecap.computed;
@@ -2624,9 +2631,9 @@ sp_css_attr_scale (SPCSSAttr *css, double ex)
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
