@@ -323,7 +323,7 @@ sp_node_toolbox_new (SPDesktop *desktop)
 		GTK_SIGNAL_FUNC (sp_node_path_edit_cusp), tt, _("Make selected nodes corner"));
 	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_smooth",
 		GTK_SIGNAL_FUNC (sp_node_path_edit_smooth), tt, _("Make selected nodes smooth"));
-	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_symetric",
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_symmetric",
 		GTK_SIGNAL_FUNC (sp_node_path_edit_symmetrical), tt, _("Make selected nodes symmetric"));
 
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
@@ -411,7 +411,7 @@ toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup
 	}
 }
 
-static void 
+static void
 setup_tool_toolbox (GtkWidget *toolbox, SPDesktop *desktop)
 {
 	GtkTooltips *tooltips=GTK_TOOLTIPS (g_object_get_data (G_OBJECT (toolbox), "tooltips"));
