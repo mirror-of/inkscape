@@ -58,6 +58,9 @@ struct SPRepr : public Inkscape::GC::Managed<>, public Inkscape::GC::Anchored {
 
 	SPRepr *duplicate() const { return _duplicate(); }
 
+	mutable bool _child_counts_complete;
+	mutable unsigned _n_siblings;
+
 protected:
 	SPRepr(SPReprType t, int code);
 	SPRepr(SPRepr const &repr);

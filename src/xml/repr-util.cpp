@@ -436,28 +436,25 @@ sp_repr_position(SPRepr const *repr)
     SPRepr const *parent = sp_repr_parent(repr);
     g_assert(parent != NULL);
 
-    int pos = 0;
-    for (SPRepr *sibling = parent->children; sibling != NULL; sibling = sibling->next) {
-        if ( repr == sibling ) {
-            return pos;
+    if (!parent->_child_counts_complete) {
+        unsigned n_remaining=( parent->children->_n_siblings - 1 );
+        for ( SPRepr *sibling=parent->children->next ;
+              sibling ;
+              sibling = sibling->next )
+        {
+            sibling->_n_siblings = n_remaining;
+            n_remaining--;
         }
-        ++pos;
+        g_assert(n_remaining == 0);
+        parent->_child_counts_complete = true;
     }
-
-    g_assert_not_reached();
-    return -1;
+    return (int)parent->children->_n_siblings - (int)repr->_n_siblings;
 }
 
 int
 sp_repr_n_children(SPRepr *repr)
 {
-    int n=0;
-    g_assert(repr != NULL);
-    for ( SPRepr *child=repr->children ; child ; child = child->next )
-    {
-        n++;
-    }
-    return n;
+    return ( repr->children ? repr->children->_n_siblings : 0 );
 }
 
 SPRepr *sp_repr_nth_child(SPRepr *repr, int n) {
@@ -469,20 +466,6 @@ SPRepr *sp_repr_nth_child(SPRepr *repr, int n) {
     }
 
     return child;
-}
-
-int sp_repr_pos_of(SPRepr *repr) {
-    g_assert(repr != NULL);
-    g_assert(repr->parent != NULL);
-
-    SPRepr *sibling=repr->parent->children;
-
-    int n=0;
-    for ( ; sibling && sibling != repr ; sibling = sibling->next ) {
-        n++;
-    }
-
-    return ( sibling ? n : 0 );
 }
 
 void

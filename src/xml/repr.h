@@ -223,10 +223,6 @@ SPRepr *sp_repr_next(SPRepr *repr);
 unsigned int sp_repr_add_child(SPRepr *repr, SPRepr *child, SPRepr *ref);
 unsigned int sp_repr_remove_child(SPRepr *repr, SPRepr *child);
 
-int sp_repr_n_children(SPRepr *repr);
-SPRepr *sp_repr_nth_child(SPRepr *repr, int n);
-int sp_repr_pos_of(SPRepr *repr);
-
 /* IO */
 
 SPReprDoc *sp_repr_read_file(gchar const *filename, gchar const *default_ns);
@@ -281,6 +277,7 @@ int sp_repr_compare_position(SPRepr *first, SPRepr *second);
 int sp_repr_position(SPRepr const *repr);
 void sp_repr_set_position_absolute(SPRepr *repr, int pos);
 int sp_repr_n_children(SPRepr *repr);
+SPRepr *sp_repr_nth_child(SPRepr *repr, int n);
 void sp_repr_append_child(SPRepr *repr, SPRepr *child);
 
 gchar const *sp_repr_doc_attr(SPRepr *repr, gchar const *key);

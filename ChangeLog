@@ -1,9 +1,21 @@
 2004-11-16  MenTaLguY  <mental@rydia.net>
 
 	* src/widgets/document-tree-model.cpp, src/widgets/document-tree-model.h,
-	  src/widgets/Makefile_insert:
+	  src/widgets/layer-selector.cpp, src/widgets/Makefile_insert:
 
-	  removed because unused
+	  removed Widgets::DocumentTreeModel because unused
+
+	* src/xml/repr-private.h, src/xml/repr-util.cpp, src/xml/repr.cpp,
+	  src/xml/repr.h:
+
+	  cache successive sibling counts (self+subsequent siblings) in SPRepr
+	  to make sp_repr_n_children() and sp_repr_position() more efficient,
+	  which will be needed later for e.g. GTK tree models.
+	  
+	  sp_repr_nth_child() isn't any faster as a result of the changes,
+	  but it probably won't need to be
+
+	* src/xml/repr.cpp: fixed refcount leak in SPRepr::SPRepr(SPRepr const &)
 
 2004-11-15  MenTaLguY  <mental@rydia.net>
 

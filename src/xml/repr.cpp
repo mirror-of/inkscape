@@ -87,7 +87,9 @@ sp_repr_new_comment(gchar const *comment)
     return repr;
 }
 
-SPRepr::SPRepr(SPReprType t, int code) : type(t), name(code) {
+SPRepr::SPRepr(SPReprType t, int code)
+: type(t), name(code), _child_counts_complete(true), _n_siblings(0)
+{
     this->doc = NULL;
     this->parent = this->next = this->children = NULL;
     this->attributes = NULL;
@@ -115,19 +117,6 @@ SPRepr *sp_repr_unref(SPRepr *repr) {
     return NULL;
 }
 
-static SPRepr *
-sp_repr_attach(SPRepr *parent, SPRepr *child)
-{
-    g_assert(parent != NULL);
-    g_assert(child != NULL);
-    g_assert(child->parent == NULL);
-    g_assert(child->doc == NULL && parent->doc == NULL);
-
-    child->parent = parent;
-
-    return child;
-}
-
 SPRepr *
 sp_repr_duplicate(SPRepr const *repr)
 {
@@ -136,29 +125,44 @@ sp_repr_duplicate(SPRepr const *repr)
 }
 
 SPRepr::SPRepr(SPRepr const &repr)
-: Anchored(), type(repr.type), name(repr.name), content(repr.content)
+: Anchored(), type(repr.type), name(repr.name), content(repr.content),
+  _child_counts_complete(repr._child_counts_complete),
+  _n_siblings(repr._n_siblings)
 {
     this->doc = NULL;
     this->parent = this->next = this->children = NULL;
     this->attributes = NULL;
     this->last_listener = this->listeners = NULL;
 
-    SPRepr *lastchild = NULL;
-    for (SPRepr *child = repr.children; child != NULL; child = child->next) {
-        if (lastchild) {
-            lastchild = lastchild->next = sp_repr_attach(this, sp_repr_duplicate(child));
+    SPRepr *prev_child_copy=NULL;
+    for ( SPRepr *child = repr.children ; child != NULL ; child = child->next ) {
+        SPRepr *child_copy=child->duplicate();
+
+        child_copy->parent = this;
+        if (prev_child_copy) {
+            prev_child_copy->next = child_copy;
         } else {
-            lastchild = this->children = sp_repr_attach(this, sp_repr_duplicate(child));
+            this->children = child_copy;
         }
+        sp_repr_unref(child_copy); // even duplicates are created with a refcount
+                                   // of one; unref here to avoid a leak: reprs
+                                   // in the child list are managed by the
+                                   // garbage collector
+
+        prev_child_copy = child_copy;
     }
 
-    SPReprAttr *lastattr = NULL;
-    for (SPReprAttr *attr = repr.attributes; attr != NULL; attr = attr->next) {
-        if (lastattr) {
-            lastattr = lastattr->next = new SPReprAttr(*attr);
+    SPReprAttr *prev_attr_copy=NULL;
+    for ( SPReprAttr *attr = repr.attributes ; attr != NULL ; attr = attr->next ) {
+        SPReprAttr *attr_copy=new SPReprAttr(*attr);
+
+        if (prev_attr_copy) {
+            prev_attr_copy->next = attr_copy;
         } else {
-            lastattr = this->attributes = new SPReprAttr(*attr);
+            this->attributes = attr_copy;
         }
+
+        prev_attr_copy = attr_copy;
     }
 }
 
@@ -415,12 +419,19 @@ sp_repr_add_child(SPRepr *repr, SPRepr *child, SPRepr *ref)
     }
 
     if (allowed) {
-        if (ref != NULL) {
+        if (ref) {
             child->next = ref->next;
             ref->next = child;
+            repr->children->_n_siblings++;
+            repr->_child_counts_complete = false;
         } else {
             child->next = repr->children;
             repr->children = child;
+            if (child->next) {
+                child->_n_siblings = child->next->_n_siblings + 1;
+            } else {
+                child->_n_siblings = 1;
+            }
         }
 
         child->parent = repr;
@@ -498,9 +509,15 @@ sp_repr_remove_child(SPRepr *repr, SPRepr *child)
     if (allowed) {
         if (ref) {
             ref->next = child->next;
+            repr->children->_n_siblings--;
+            repr->_child_counts_complete = false;
         } else {
             repr->children = child->next;
+            if (repr->children) {
+                repr->children->_n_siblings = child->_n_siblings - 1;
+            }
         }
+
         child->parent = NULL;
         child->next = NULL;
 
@@ -545,6 +562,8 @@ sp_repr_change_order(SPRepr *const repr, SPRepr *const child, SPRepr *const ref)
     }
 
     if (allowed) {
+        int n_children=repr->children->_n_siblings;
+
         /* Remove from old position. */
         if (prev) {
             prev->next = child->next;
@@ -559,6 +578,9 @@ sp_repr_change_order(SPRepr *const repr, SPRepr *const child, SPRepr *const ref)
             child->next = repr->children;
             repr->children = child;
         }
+
+        repr->children->_n_siblings = n_children;
+        repr->_child_counts_complete = false;
 
         if (repr->doc) {
             if (repr->doc->is_logging) {

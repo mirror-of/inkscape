@@ -21,7 +21,6 @@
 #include "selection.h"
 
 #include "widgets/layer-selector.h"
-#include "widgets/document-tree-model.h"
 #include "widgets/shrink-wrap-button.h"
 #include "widgets/icon.h"
 
