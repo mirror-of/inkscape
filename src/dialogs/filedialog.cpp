@@ -404,21 +404,22 @@ static void createFilterMenu(Gtk::FileChooserDialog *dlg,
         Inkscape::Extension::DB::IOExtensionDescription * ioext = 
               reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
 
-        if ( strcmp(".svg",  ioext->file_extension)==0 ||
-             strcmp(".svgz", ioext->file_extension)==0 )
-            continue;
-        Gtk::FileFilter filter;
-        Glib::ustring uname(_(ioext->name));
-        filter.set_name(uname);
         Glib::ustring upattern("*");
         upattern += ioext->file_extension;
+        if ( !(strcmp(".svg",  ioext->file_extension)==0 ||
+             strcmp(".svgz", ioext->file_extension)==0) )
+            {
+            Gtk::FileFilter filter;
+            Glib::ustring uname(_(ioext->name));
+            filter.set_name(uname);
+            filter.add_pattern(upattern);
+            dlg->add_filter(filter);
+            (*extensionMap)[uname]=ioext->extension;
+            }
         //g_message("ext %s:%s '%s'\n", ioext->name, ioext->mimetype, upattern.c_str());
-        filter.add_pattern(upattern);
         allInkscapeFilter.add_pattern(upattern);
         if ( strncmp("image", ioext->mimetype, 5)==0 )
             allImageFilter.add_pattern(upattern);
-        dlg->add_filter(filter);
-        (*extensionMap)[uname]=ioext->extension;
 
     }
 
