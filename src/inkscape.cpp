@@ -24,7 +24,8 @@
 #else
 #include <direct.h>
 #define _WIN32_IE 0x0400
-#define USE_SHGetSpecialFolderPath
+#define HAS_SHGetSpecialFolderPath
+#define HAS_GetModuleFileName
 #include <shlobj.h> //to get appdata path
 #endif
 
@@ -1123,7 +1124,7 @@ profile_path(const char *filename)
 	static const gchar *homedir=NULL;
 	if (!homedir) {
 		homedir = g_get_home_dir();
-#ifdef USE_SHGetSpecialFolderPath
+#ifdef HAS_SHGetSpecialFolderPath
 		if (!homedir) { //only try this is previous attempt fails
 			char pathBuf[MAX_PATH+1];
 			if (SHGetSpecialFolderPath(NULL, pathBuf, CSIDL_APPDATA, 1))
@@ -1140,14 +1141,16 @@ profile_path(const char *filename)
 gchar *
 executable_path(void)
 {
-  gchar *path="";
-  int   strLen;
+  gchar *path  = "";
+  int   strLen = 0;
 #ifdef HAS_PROC_SELF_EXE
   char  pathBuf[PATH_MAX+1];
   strLen = readlink("/proc/self/exe", pathBuf, PATH_MAX);
 #else
+#ifdef HAS_GetModuleFileName
   char  pathBuf[MAX_PATH+1];
   strLen = (int)GetModuleFileName(NULL, pathBuf, MAX_PATH);
+#endif
 #endif
   if (strLen <= 0)
     {
