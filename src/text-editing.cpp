@@ -50,6 +50,7 @@
 #include "sp-text.h"
 #include "sp-flowtext.h"
 #include "sp-flowdiv.h"
+#include "sp-flowregion.h"
 #include "sp-tspan.h"
 #include "sp-string.h"
 #include "display/nr-arena-shape.h"
@@ -1047,8 +1048,11 @@ static bool objects_have_equal_style(SPObject const *parent, SPObject const *chi
 
     Glib::ustring child_style_construction;
     while (child != parent) {
-        child_style_construction += SP_OBJECT_REPR(child)->attribute("style");
-        child_style_construction += ';';
+        char const *style_text = SP_OBJECT_REPR(child)->attribute("style");
+        if (style_text && *style_text) {
+            child_style_construction += style_text;
+            child_style_construction += ';';
+        }
         child = SP_OBJECT_PARENT(child);
     }
     child_style_construction += parent_style;   // sp_style_merge_from_style_string() works backwards, ie earlier properties take precedence over later
@@ -1060,6 +1064,23 @@ static bool objects_have_equal_style(SPObject const *parent, SPObject const *chi
     g_free(child_style);
     g_free(parent_style);
     return equal;
+}
+
+/** apply the given style string to \a root and all of its children
+recursively. This is necessary because when the user applies a particular
+style, they want to overrule any existing style, which includes that
+applied to leaf elements. */
+static void overwrite_styles_in_tree_with_string(SPObject *root, gchar const *style)
+{
+    for (SPObject *child = root->firstChild() ; child != NULL ; child = SP_OBJECT_NEXT(child)) {
+        if (SP_IS_STRING(child) || SP_IS_FLOWREGION(child) || SP_IS_FLOWREGIONEXCLUDE(child))
+            continue;
+        if (child->hasChildren())
+            overwrite_styles_in_tree_with_string(child, style);
+        else
+            overwrite_style_with_string(child, style);
+    }
+    overwrite_style_with_string(root, style);
 }
 
 /** applies the given style to all the objects at the given level and below
@@ -1150,7 +1171,7 @@ static void recursively_apply_style(SPObject *common_ancestor, gchar const *styl
                 sp_repr_unref(child_span);
 
             } else if (child != end_item) {   // not a string and we're applying to the entire object. This is easy
-                overwrite_style_with_string(child, style);
+                overwrite_styles_in_tree_with_string(child, style);
             }
 
         } else {  // !passed_start
@@ -1247,6 +1268,8 @@ static bool tidy_operator_excessive_nesting(SPObject **item)
 {
     if (!(*item)->hasChildren()) return false;
     if ((*item)->firstChild() != (*item)->lastChild()) return false;
+    if (SP_IS_FLOWREGION((*item)->firstChild()) || SP_IS_FLOWREGIONEXCLUDE((*item)->firstChild()))
+        return false;
     if (SP_IS_STRING((*item)->firstChild())) return false;
     if (is_line_break_object((*item)->firstChild())) return false;
     TextTagAttributes *attrs = attributes_for_object((*item)->firstChild());
@@ -1262,6 +1285,8 @@ static bool tidy_operator_excessive_nesting(SPObject **item)
 /** helper for tidy_operator_redundant_double_nesting() */
 static bool redundant_double_nesting_processor(SPObject **item, SPObject *child, bool prepend)
 {
+    if (SP_IS_FLOWREGION(child) || SP_IS_FLOWREGIONEXCLUDE(child))
+        return false;
     if (SP_IS_STRING(child)) return false;
     if (is_line_break_object(child)) return false;
     TextTagAttributes *attrs = attributes_for_object(child);
@@ -1307,6 +1332,8 @@ string if \a child were a child of the parent of *item and compares the
 two. */
 static bool redundant_semi_nesting_processor(SPObject **item, SPObject *child, bool prepend)
 {
+    if (SP_IS_FLOWREGION(child) || SP_IS_FLOWREGIONEXCLUDE(child))
+        return false;
     if (SP_IS_STRING(child)) return false;
     if (is_line_break_object(child)) return false;
     TextTagAttributes *attrs = attributes_for_object(child);
@@ -1355,6 +1382,8 @@ static bool tidy_operator_redundant_semi_nesting(SPObject **item)
 /* possible tidy operators that are not yet implemented, either because
 they are difficult, occur infrequently, or because I'm not sure that the
 output is tidier in all cases:
+    duplicate styles in line break elements: <div italic><para italic>abc</para></div>
+                                              -> <div italic><para>abc</para></div>
     style inversion: <font a>abc<font b>def<font a>ghi</font>jkl</font>mno</font>
                       -> <font a>abc<font b>def</font>ghi<font b>jkl</font>mno</font>
     mistaken precedence: <font a,size 1>abc</font><size 1>def</size>
@@ -1386,6 +1415,10 @@ static bool tidy_xml_tree_recursively(SPObject *root)
     bool changes = false;
 
     for (SPObject *child = root->firstChild() ; child != NULL ; ) {
+        if (SP_IS_FLOWREGION(child) || SP_IS_FLOWREGIONEXCLUDE(child)) {
+            child = SP_OBJECT_NEXT(child);
+            continue;
+        }
         if (child->hasChildren())
             changes |= tidy_xml_tree_recursively(child);
 
