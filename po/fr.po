@@ -1,4 +1,4 @@
-﻿# translation of fr.po to Français
+# translation of fr.po to Français
 # French translation of Inkscape.
 # Copyright (C) 2000-2003 Free Software Foundation, Inc.
 # Christophe Merlet (RedFox) <redfox@redfoxcenter.org>, 2000-2002.
@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: Inkscape_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-11-18 12:48-0700\n"
-"PO-Revision-Date: 2004-11-18 12:31+0100\n"
+"PO-Revision-Date: 2004-11-19 14:36+1100\n"
 "Last-Translator: Matiphas <matiphas _a_ free _point_ fr>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
@@ -982,7 +982,7 @@ msgstr "Les dialogues sont cachés dans la barre des taches"
 #: src/dialogs/display-settings.cpp:1197
 msgid "Whether dialog windows are to be hidden in the window manager taskbar"
 msgstr ""
-"Les bo�tes de dialogues sont cachées dans la barre des taches du "
+"Les boîtes de dialogues sont cachées dans la barre des taches du "
 "gestionnaire de fenêtre"
 
 #: src/dialogs/display-settings.cpp:1204
@@ -1141,7 +1141,7 @@ msgstr "Résolution d'exportation par défaut :"
 
 #: src/dialogs/display-settings.cpp:1360
 msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
-msgstr "Résolution par défaut (point par pouce) dans la bo�te d'exportation"
+msgstr "Résolution par défaut (point par pouce) dans la boîte d'exportation"
 
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
 #: src/dialogs/display-settings.cpp:1361 src/dialogs/export.cpp:418
