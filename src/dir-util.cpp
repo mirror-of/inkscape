@@ -158,7 +158,7 @@ inkscape_rel2abs (const char *path, const char *base, char *result, const size_t
     }
   /* down to leaf. */
   length = bp - base;
-  if (length >= size)
+  if (length >= static_cast<int>(size))
     goto erange;
   strncpy (result, base, length);
   rp = result + length;
