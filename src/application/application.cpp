@@ -52,7 +52,6 @@ Application::Application(int argc, char **argv, gboolean use_gui, gboolean new_g
     }
 
     if (new_gui) {
-        g_warning("Creating new Gtk::Main");
         _gtk_main = new Gtk::Main(argc, argv, true);
 
         // TODO:  Determine class by arguments

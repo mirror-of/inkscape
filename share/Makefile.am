@@ -1,18 +1,3 @@
-##SUBDIRS = \
-##    clipart \
-##    extensions \
-##    icons \
-##    keyboards \
-##    palettes \
-##    screens \
-##    fonts \
-##    patterns \
-##    templates \
-##    examples \
-##    gradients \
-##    markers \
-##    tutorials
-
 SUBDIRS = clipart \
           examples \
           extensions \

@@ -55,9 +55,7 @@ Editor::EditorImpl::EditorImpl()
     initActions();
     initAccelMap();
     initUIManager();
-    g_warning("Done with UIManager");
     initLayout();
-    g_warning("Done in Editor::EditorImpl");
 }
 
 Editor::EditorImpl::~EditorImpl()
@@ -86,13 +84,11 @@ Editor::EditorImpl::initUIManager()
 void
 Editor::EditorImpl::initLayout()
 {
-    g_warning("In initLayout");
     set_title("New document 1 - Inkscape");
     set_resizable();
     set_default_size(640, 480);
 
     // top level window into which all other portions of the UI get inserted
-    g_warning("Adding main window table");
     add(_main_window_table);
     // attach box for horizontal toolbars
     _main_window_table.attach(_toolbars_vbox, 0, 1, 1, 2, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
@@ -102,16 +98,11 @@ Editor::EditorImpl::initLayout()
     _sub_window_hbox.pack_end(_viewport_table);
 
     // Menus and Bars
-    g_warning("Adding menu bar");
     initMenuBar();
-    g_warning("Adding commands bar");
     initCommandsBar();
-    g_warning("Adding tool controls bar");
     initToolControlsBar();
-    g_warning("Adding tools bar");
     initToolsBar();
 
-    g_warning("Adding ruler");
     // Canvas Viewport
     initLeftRuler();
     initTopRuler();
@@ -119,11 +110,9 @@ Editor::EditorImpl::initLayout()
     initBottomScrollbar();
     initRightScrollbar();
 
-    g_warning("Adding status bar");
     // The statusbar comes last and appears at the bottom of _main_window_table
     initStatusbar();
 
-    g_warning("Showing all children");
     show_all_children();
 }
 
@@ -929,27 +918,20 @@ Editor::EditorImpl::initAccelMap()
 void
 Editor::EditorImpl::initMenuBar()
 {
-    g_warning("In initMenuBar");
     g_assert(_ui_mgr);
     Gtk::MenuBar *menu = static_cast<Gtk::MenuBar*>(_ui_mgr->get_widget("/MenuBar"));
     g_assert(menu != NULL);
-    g_warning("Attaching to main window table");
     _main_window_table.attach(*Gtk::manage(menu), 0, 1, 0, 1, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK);
-    g_warning("Done in initMenuBar");
 }
 
 void
 Editor::EditorImpl::initCommandsBar()
 {
-    g_warning("In initCommandsBar");
     g_assert(_ui_mgr);
-    g_warning("Creating Toolbox");
     Toolbox *bar = new Toolbox(static_cast<Gtk::Toolbar*>(_ui_mgr->get_widget("/CommandsBar")),
                                Gtk::TOOLBAR_ICONS);
     g_assert(bar != NULL);
-    g_warning("Adding toolbar to vbox");
     _toolbars_vbox.pack_start(*Gtk::manage(bar), Gtk::PACK_SHRINK);
-    g_warning("Done in initCommandsBar");
 }
 
 void

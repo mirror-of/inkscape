@@ -43,9 +43,7 @@ Editor::Editor(gint argc, char **argv, gboolean use_gui)
       _save_preferences(true),
       _use_gui(use_gui)
 {
-    g_warning("In Editor::Editor");
     rep = new EditorImpl();
-    g_warning("Created a new EditorImpl object");
 
     // Store the arguments
 //    if (_argv != NULL) {

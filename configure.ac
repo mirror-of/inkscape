@@ -660,6 +660,7 @@ share/patterns/Makefile
 share/screens/Makefile
 share/templates/Makefile
 share/tutorials/Makefile
+share/ui/Makefile
 inkscape.spec
 Info.plist
 inkview.1
