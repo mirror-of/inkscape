@@ -158,6 +158,7 @@ helper/units.cpp
 helper/units.h
 helper/window.cpp
 helper/window.h
+ink-snprintf.h
 inkjar/jar.cpp
 inkjar/jar.h
 inkscape-private.h
@@ -283,8 +284,14 @@ libnrtype/nr-typeface.cpp
 libnrtype/nr-typeface.h
 livarot/AVL.cpp
 livarot/AVL.h
+livarot/AlphaLigne.cpp
+livarot/AlphaLigne.h
+livarot/BitLigne.cpp
+livarot/BitLigne.h
 livarot/DblLinked.cpp
 livarot/DblLinked.h
+livarot/Ligne.cpp
+livarot/Ligne.h
 livarot/Livarot.h
 livarot/LivarotDefs.h
 livarot/MyMath.h
@@ -293,6 +300,7 @@ livarot/MySeg.h
 livarot/Path.cpp
 livarot/Path.h
 livarot/PathConversion.cpp
+livarot/PathCutting.cpp
 livarot/PathOutline.cpp
 livarot/PathSimplify.cpp
 livarot/PathStroke.cpp
@@ -300,6 +308,7 @@ livarot/Shape.cpp
 livarot/Shape.h
 livarot/ShapeDraw.cpp
 livarot/ShapeMisc.cpp
+livarot/ShapeRaster.cpp
 livarot/ShapeSweep.cpp
 livarot/ShapeSweepUtils.cpp
 livarot/ShapeUtils.h
@@ -428,6 +437,12 @@ splivarot.cpp
 splivarot.h
 star-context.cpp
 star-context.h
+streams-gzip.cpp
+streams-gzip.h
+streams-handles.cpp
+streams-handles.h
+streams-zlib.cpp
+streams-zlib.h
 style.cpp
 style.h
 svg-view.cpp

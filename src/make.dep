@@ -109,6 +109,7 @@ desktop-events.o: \
 	desktop-events.h \
 	desktop-handles.h \
 	desktop.h \
+	dialogs/dialog-events.h \
 	display/nr-arena-forward.h \
 	document.h \
 	event-context.h \
@@ -1205,6 +1206,14 @@ display/nr-arena-shape.o: \
 	libnr/nr-svp.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	livarot/AVL.h \
+	livarot/AlphaLigne.h \
+	livarot/DblLinked.h \
+	livarot/Ligne.h \
+	livarot/LivarotDefs.h \
+	livarot/Path.h \
+	livarot/Shape.h \
+	livarot/ShapeUtils.h \
 	sp-item-group.h \
 	sp-item.h \
 	sp-marker.h \
@@ -3283,9 +3292,25 @@ livarot/AVL.o: \
 	livarot/DblLinked.h \
 	livarot/LivarotDefs.h
 
+livarot/AlphaLigne.o: \
+	livarot/AlphaLigne.cpp \
+	livarot/AlphaLigne.h \
+	livarot/LivarotDefs.h
+
+livarot/BitLigne.o: \
+	livarot/BitLigne.cpp \
+	livarot/BitLigne.h \
+	livarot/LivarotDefs.h
+
 livarot/DblLinked.o: \
 	livarot/DblLinked.cpp \
 	livarot/DblLinked.h
+
+livarot/Ligne.o: \
+	livarot/Ligne.cpp \
+	livarot/BitLigne.h \
+	livarot/Ligne.h \
+	livarot/LivarotDefs.h
 
 livarot/MySeg.o: \
 	livarot/MySeg.cpp \
@@ -3326,6 +3351,35 @@ livarot/PathConversion.o: \
 	livarot/Path.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h
+
+livarot/PathCutting.o: \
+	livarot/PathCutting.cpp \
+	helper/canvas-bpath.h \
+	helper/curve.h \
+	helper/helper-forward.h \
+	helper/sp-canvas.h \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix-fns.h \
+	libnr/nr-matrix-ops.h \
+	libnr/nr-matrix.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rect.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-values.h \
+	livarot/LivarotDefs.h \
+	livarot/Path.h
 
 livarot/PathOutline.o: \
 	livarot/PathOutline.cpp \
@@ -3409,6 +3463,36 @@ livarot/ShapeMisc.o: \
 	livarot/DblLinked.h \
 	livarot/LivarotDefs.h \
 	livarot/Path.h \
+	livarot/Shape.h \
+	livarot/ShapeUtils.h
+
+livarot/ShapeRaster.o: \
+	livarot/ShapeRaster.cpp \
+	libnr/nr-coord.h \
+	libnr/nr-dim2.h \
+	libnr/nr-forward.h \
+	libnr/nr-i-coord.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
+	libnr/nr-maybe.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-fns.h \
+	libnr/nr-point-l.h \
+	libnr/nr-point-ops.h \
+	libnr/nr-point.h \
+	libnr/nr-rect-l.h \
+	libnr/nr-rect.h \
+	libnr/nr-rotate.h \
+	libnr/nr-scale.h \
+	libnr/nr-translate.h \
+	libnr/nr-types.h \
+	libnr/nr-values.h \
+	livarot/AVL.h \
+	livarot/AlphaLigne.h \
+	livarot/BitLigne.h \
+	livarot/DblLinked.h \
+	livarot/Ligne.h \
+	livarot/LivarotDefs.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h
 
@@ -5586,6 +5670,11 @@ sp-shape.o: \
 	libnr/nr-svp.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	livarot/AVL.h \
+	livarot/DblLinked.h \
+	livarot/LivarotDefs.h \
+	livarot/Shape.h \
+	livarot/ShapeUtils.h \
 	macros.h \
 	marker-status.h \
 	print.h \
@@ -6039,6 +6128,27 @@ star-context.o: \
 	version.h \
 	view.h \
 	xml/repr.h
+
+streams-gzip.o: \
+	streams-gzip.cpp \
+	streams-gzip.h \
+	streams-handles.h \
+	streams-zlib.h \
+	uri.h \
+	uri.h
+
+streams-handles.o: \
+	streams-handles.cpp \
+	streams-handles.h \
+	uri.h \
+	uri.h
+
+streams-zlib.o: \
+	streams-zlib.cpp \
+	streams-handles.h \
+	streams-zlib.h \
+	uri.h \
+	uri.h
 
 style.o: \
 	style.cpp \

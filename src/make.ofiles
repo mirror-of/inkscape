@@ -139,16 +139,21 @@ OBJECTS = \
 	libnrtype/nr-type-w32.o \
 	libnrtype/nr-typeface.o \
 	livarot/AVL.o \
+	livarot/AlphaLigne.o \
+	livarot/BitLigne.o \
 	livarot/DblLinked.o \
+	livarot/Ligne.o \
 	livarot/MySeg.o \
 	livarot/Path.o \
 	livarot/PathConversion.o \
+	livarot/PathCutting.o \
 	livarot/PathOutline.o \
 	livarot/PathSimplify.o \
 	livarot/PathStroke.o \
 	livarot/Shape.o \
 	livarot/ShapeDraw.o \
 	livarot/ShapeMisc.o \
+	livarot/ShapeRaster.o \
 	livarot/ShapeSweep.o \
 	livarot/ShapeSweepUtils.o \
 	marker-status.o \
@@ -211,6 +216,9 @@ OBJECTS = \
 	spiral-context.o \
 	splivarot.o \
 	star-context.o \
+	streams-gzip.o \
+	streams-handles.o \
+	streams-zlib.o \
 	style.o \
 	svg-view.o \
 	svg/gnome-canvas-bpath-util.o \
@@ -399,16 +407,21 @@ LINTS = \
 	libnrtype/nr-type-w32.lint \
 	libnrtype/nr-typeface.lint \
 	livarot/AVL.lint \
+	livarot/AlphaLigne.lint \
+	livarot/BitLigne.lint \
 	livarot/DblLinked.lint \
+	livarot/Ligne.lint \
 	livarot/MySeg.lint \
 	livarot/Path.lint \
 	livarot/PathConversion.lint \
+	livarot/PathCutting.lint \
 	livarot/PathOutline.lint \
 	livarot/PathSimplify.lint \
 	livarot/PathStroke.lint \
 	livarot/Shape.lint \
 	livarot/ShapeDraw.lint \
 	livarot/ShapeMisc.lint \
+	livarot/ShapeRaster.lint \
 	livarot/ShapeSweep.lint \
 	livarot/ShapeSweepUtils.lint \
 	marker-status.lint \
@@ -471,6 +484,9 @@ LINTS = \
 	spiral-context.lint \
 	splivarot.lint \
 	star-context.lint \
+	streams-gzip.lint \
+	streams-handles.lint \
+	streams-zlib.lint \
 	style.lint \
 	svg-view.lint \
 	svg/gnome-canvas-bpath-util.lint \
