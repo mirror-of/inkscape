@@ -139,21 +139,21 @@ Inkscape \- a 2D Scalable Vector Graphics editing program.
 options:
 .PP
 .Vb 15
-\&    -?, --help          
-\&    -a, --export-area=x0:y0:x1:y1     
-\&    -b, --export-background=COLOR     
-\&    -d, --export-dpi=DPI              
-\&    -e, --export-png=FILENAME         
-\&    -f, --file=FILENAME               
-\&    -h, --export-height=HEIGHT        
-\&    -i, --bitmap-icons                
-\&    -p, --print=FILENAME              
-\&    -s, --slideshow                   
-\&    -w, --export-width=WIDTH          
-\&    -x, --with-gui                    
-\&    -z, --without-gui                 
-\&        --export-svg=FILENAME             
-\&        --usage
+\&    \-?, \-\-help          
+\&    \-a, \-\-export\-area=x0:y0:x1:y1     
+\&    \-b, \-\-export\-background=COLOR     
+\&    \-d, \-\-export\-dpi=DPI              
+\&    \-e, \-\-export\-png=FILENAME         
+\&    \-f, \-\-file=FILENAME               
+\&    \-h, \-\-export\-height=HEIGHT        
+\&    \-i, \-\-bitmap\-icons                
+\&    \-p, \-\-print=FILENAME              
+\&    \-s, \-\-slideshow                   
+\&    \-w, \-\-export\-width=WIDTH          
+\&    \-x, \-\-with\-gui                    
+\&    \-z, \-\-without\-gui                 
+\&        \-\-export\-svg=FILENAME             
+\&        \-\-usage
 .Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
@@ -161,15 +161,15 @@ options:
 drawing files, with capabilities similar to \fBAdobe Illustrator\fR,
 \&\fBCorelDraw\fR, \fBVisio\fR, etc. Supported \s-1SVG\s0 features include basic
 shapes, paths, text, alpha blending, transforms, gradients, node
-editing, svg-to-png export, grouping, and more.  .  The interface is
+editing, svg-to-png export, grouping, and more.  The interface is
 designed to be comfortable and efficient for skilled users, while
 remaining conformant to \fB\s-1GNOME\s0\fR standards so that users familiar with
-other \s-1GNOME\s0 applications can learn it's interface rapidly.
+other \s-1GNOME\s0 applications can learn its interface rapidly.
 .PP
-\&\fB\s-1SVG\s0\fR is a W3C standard \s-1XML\s0 format for 2D vector drawing, that allows
+\&\fB\s-1SVG\s0\fR is a W3C standard \s-1XML\s0 format for 2D vector drawing.  It allows
 defining objects in the drawing using points, paths, and primitive
 shapes.  Colors, fonts, line thicknesses, and so forth are specified as
-\&'style' attributes to these objects.  The intent is that since \s-1SVG\s0 is a
+\&`style' attributes to these objects.  The intent is that since \s-1SVG\s0 is a
 standard, and since its files are text/xml instead of binary, it is be
 possible to use \s-1SVG\s0 files in a sizeable number of programs and for a
 wide range of uses.
@@ -206,10 +206,10 @@ The height of generated bitmap in pixels (overwrites dpi)
 Prefer bitmap (xpm) icons to \s-1SVG\s0 ones
 .IP "\fB\-p\fR \fI\s-1FILENAME\s0\fR, \fB\-\-print\fR=\fI\s-1FILENAME\s0\fR" 8
 .IX Item "-p FILENAME, --print=FILENAME"
-Print document(s) to specified output file (use '| program' for pipe)
+Print document(s) to specified output file (use `| program' for pipe)
 .IP "\fB\-s\fR, \fB\-\-slideshow\fR" 8
 .IX Item "-s, --slideshow"
-Show given files one\-by\-one, switch to next on any key/mouse event
+Show given files one-by-one, switch to next on any key/mouse event
 .IP "\fB\-w\fR \fI\s-1WIDTH\s0\fR, \fB\-\-export\-width\fR=\fI\s-1WIDTH\s0\fR" 8
 .IX Item "-w WIDTH, --export-width=WIDTH"
 The width of generated bitmap in pixels (overwrites dpi)
@@ -228,7 +228,7 @@ Export document to plain \s-1SVG\s0 file (no \*(L"xmlns:sodipodi\*(R" namespace)
 Display brief usage message
 .SH "KEYBINDINGS"
 .IX Header "KEYBINDINGS"
-See the "Keys and Mouse" item in the Help-Menu for a listing of keybindings.
+See the "Keys and Mouse" item in the Help menu for a listing of keybindings.
 .SH "DIAGNOSTICS"
 .IX Header "DIAGNOSTICS"
 The program returns zero on success or non-zero on failure.
@@ -248,20 +248,20 @@ better suited for production \s-1SVG\s0 processing.)
 Printing an \s-1SVG\s0 file directly:
 .PP
 .Vb 1
-\&    inkscape filename.svg -p | lpr
+\&    inkscape filename.svg \-p | lpr
 .Ve
 .PP
 Converting \s-1SVG\s0 file to a png:
 .PP
 .Vb 1
-\&    inkscape --export-png=filename.png --export-height=400 --export-width=600
+\&    inkscape \-\-export\-png=filename.png \-\-export\-height=400 \-\-export\-width=600
 .Ve
 .PP
 Convert an \s-1SVG\s0 document using items in the sodipodi namespace to plain
 \&\s-1SVG:\s0  
 .PP
 .Vb 1
-\&    inkscape filename1.svg e --export-svg=filename2.svg
+\&    inkscape filename1.svg e \-\-export\-svg=filename2.svg
 .Ve
 .SH "ENVIRONMENT"
 .IX Header "ENVIRONMENT"
@@ -350,7 +350,7 @@ This man page was put together by Bryce Harrington
 .SH "HISTORY"
 .IX Header "HISTORY"
 The codebase that would become Inkscape began life in 1999 as the
-program '\s-1GILL\s0', the \s-1GNOME\s0 Illustrator application, created by Raph
+program `\s-1GILL\s0', the \s-1GNOME\s0 Illustrator application, created by Raph
 Levien.  The stated objective for Gill was to eventually support all of
 \&\s-1SVG\s0.  Raph implemented the PostScript bezier imaging model, including
 stroking and filling, line cap style, line join style, text, etc.  
@@ -366,7 +366,7 @@ to Windows and other operating systems, and eliminating dependencies.
 .PP
 Inkscape was formed in 2003 by a number of active Sodipodi developers
 wanting to take a different direction with the codebase in terms of
-focus on SVG\-compliance, interface look\-and\-feel, and a desire to open
+focus on SVG\-compliance, interface look-and-feel, and a desire to open
 development opportunities to more participants.  In a way, this
 direction marks a return to the codebase's Gill roots.
 .SH "COPYRIGHT AND LICENSE"
