@@ -232,6 +232,19 @@ sp_selected_path_boolop (bool_op bop)
 	delete theShapeB;
 	for (int i=0;i<nbOriginaux;i++) delete originaux[i];
 		
+	if ( res->descr_nb <= 1 ) {
+		// pas vraiment de points sur le resultat		
+		// donc il ne reste rien
+		for (l = il; l != NULL; l = l->next) {
+			sp_repr_unparent (SP_OBJECT_REPR (l->data));
+		}
+		sp_document_done (SP_DT_DOCUMENT (desktop));
+		sp_selection_empty (selection);
+
+		delete res;
+		g_slist_free (il);
+		return;
+	}
 	d = liv_svg_dump_path(res);
 	delete res;
 	
@@ -482,6 +495,18 @@ void sp_selected_path_outline(void)
 	
 	sp_repr_unparent (SP_OBJECT_REPR (item));
 
+	if ( orig->descr_nb <= 1 ) {
+		// pas vraiment de points sur le resultat		
+		// donc il ne reste rien
+		sp_document_done (SP_DT_DOCUMENT (desktop));
+		sp_selection_empty (selection);
+		
+		delete res;
+		delete orig;
+		g_free (style);
+		return;
+	}
+
 	{
 		gchar tstr[80];
 		
@@ -671,7 +696,18 @@ void        sp_selected_path_do_offset(bool expand)
 	sp_curve_unref (curve);
 	sp_repr_unparent (SP_OBJECT_REPR (item));
 	
-
+	if ( res->descr_nb <= 1 ) {
+		// pas vraiment de points sur le resultat		
+		// donc il ne reste rien
+		sp_document_done (SP_DT_DOCUMENT (desktop));
+		sp_selection_empty (selection);
+		
+		delete res;
+		delete orig;
+		g_free (style);
+		return;
+	}
+	
 	{
 		SPCSSAttr *css;
 		const gchar *val;
