@@ -379,7 +379,7 @@ void sp_sel_trans_ungrab(SPSelTrans *seltrans)
         seltrans->_message_context.clear();
 }
 
-/* fixme: This is really bad, as we compare positoons for each stamp (Lauris) */
+/* fixme: This is really bad, as we compare positions for each stamp (Lauris) */
 /* fixme: IMHO the best way to keep sort cache would be to implement timestamping at last */
 
 static int
