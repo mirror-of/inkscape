@@ -1,5 +1,8 @@
 2004-02-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/seltrans.cpp (sp_sel_trans_handle_new_event,
+	sp_sel_trans_handle_request): NR::Point'ification.
+
 	* src/seltrans-handles.cpp, src/seltrans-handles.h, src/seltrans.cpp: 
 	Preserve constness of SPSelTransHandle's.
 

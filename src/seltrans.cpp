@@ -43,8 +43,8 @@ static void sp_show_handles(SPSelTrans *seltrans, SPKnot *knot[], SPSelTransHand
 
 static void sp_sel_trans_handle_grab(SPKnot *knot, guint state, gpointer data);
 static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint state, gpointer data);
-static void sp_sel_trans_handle_new_event(SPKnot *knot, NRPoint *position, guint32 state, gpointer data);
-static gboolean sp_sel_trans_handle_request(SPKnot *knot, NRPoint *p, guint state, gboolean *data);
+static void sp_sel_trans_handle_new_event(SPKnot *knot, NR::Point *position, guint32 state, gpointer data);
+static gboolean sp_sel_trans_handle_request(SPKnot *knot, NR::Point *p, guint state, gboolean *data);
 
 static void sp_sel_trans_sel_changed(SPSelection *selection, gpointer data);
 static void sp_sel_trans_sel_modified(SPSelection *selection, guint flags, gpointer data);
@@ -595,7 +595,7 @@ static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint state, gpointer data)
 	
 }
 
-static void sp_sel_trans_handle_new_event(SPKnot *knot, NRPoint *position, guint state, gpointer data)
+static void sp_sel_trans_handle_new_event(SPKnot *knot, NR::Point *position, guint state, gpointer data)
 {
 	if (!SP_KNOT_IS_GRABBED(knot)) {
 		return;
@@ -604,16 +604,14 @@ static void sp_sel_trans_handle_new_event(SPKnot *knot, NRPoint *position, guint
 	SPDesktop *desktop = knot->desktop;
 	SPSelTrans *seltrans = &SP_SELECT_CONTEXT(desktop->event_context)->seltrans;
 	SPSelTransHandle const &handle = *(SPSelTransHandle const *) data;
-	NR::Point p = *position;
-	handle.action(seltrans, handle, p, state);
-	*position = p;
+	handle.action(seltrans, handle, *position, state);
 
-	//sp_desktop_coordinate_status (desktop, position->x, position->y, 4);
+	//sp_desktop_coordinate_status (desktop, position, 4);
 }
 
 /* fixme: Highly experimental test :) */
 
-static gboolean sp_sel_trans_handle_request(SPKnot *knot, NRPoint *position, guint state, gboolean *data)
+static gboolean sp_sel_trans_handle_request(SPKnot *knot, NR::Point *position, guint state, gboolean *data)
 {
 	using NR::X;
 	using NR::Y;
@@ -624,14 +622,12 @@ static gboolean sp_sel_trans_handle_request(SPKnot *knot, NRPoint *position, gui
 	SPSelTrans *seltrans = &SP_SELECT_CONTEXT(desktop->event_context)->seltrans;
 	SPSelTransHandle const &handle = *(SPSelTransHandle const *) data;
 
-	sp_desktop_set_coordinate_status (desktop, position->x, position->y, 0);
-	sp_view_set_position (SP_VIEW (desktop), position->x, position->y);
+	sp_desktop_set_coordinate_status(desktop, *position, 0);
+	sp_view_set_position(SP_VIEW(desktop), *position);
 
 	if (state & GDK_MOD1_MASK) {
-		NRPoint point;
-		sp_sel_trans_point_desktop (seltrans, &point);
-		position->x = point.x + (position->x - point.x) / 10;
-		position->y = point.y + (position->y - point.y) / 10;
+		NR::Point const &point = seltrans->point;
+		*position = point + ( *position - point ) / 10;
 	}
 
 	if (!(state & GDK_SHIFT_MASK) == !(seltrans->state == SP_SELTRANS_STATE_ROTATE)) {
@@ -639,14 +635,12 @@ static gboolean sp_sel_trans_handle_request(SPKnot *knot, NRPoint *position, gui
 	} else {
 		seltrans->origin = seltrans->center;
 	}
-	NR::Point p = *position;
-	if (handle.request(seltrans, handle, p, state)) {
-		sp_knot_set_position (knot, &p, state);
-		*position = p;
-		sp_ctrl_moveto (SP_CTRL (seltrans->grip), position->x, position->y);
-		sp_ctrl_moveto (SP_CTRL (seltrans->norm), seltrans->origin[X], seltrans->origin[Y]);
+	if (handle.request(seltrans, handle, *position, state)) {
+		sp_knot_set_position(knot, position, state);
+		sp_ctrl_moveto(SP_CTRL(seltrans->grip), *position);
+		sp_ctrl_moveto(SP_CTRL(seltrans->norm), seltrans->origin);
 	}
-	
+
 	return TRUE;
 }
 
@@ -872,8 +866,8 @@ gboolean sp_sel_trans_rotate_request(SPSelTrans *seltrans, SPSelTransHandle cons
 	NR::Point const norm = seltrans->origin;
 
 	// rotate affine in rotate
-	NR::Point d1 = point - norm;
-	NR::Point d2 = pt    - norm;
+	NR::Point const d1 = point - norm;
+	NR::Point const d2 = pt    - norm;
 
 	NR::Coord h1 = NR::L2 (d1);
 	if (h1 < 1e-15) return FALSE;
