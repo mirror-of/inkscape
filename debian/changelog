@@ -1,118 +1,43 @@
 inkscape (0.37) unstable; urgency=high
 
-  * Boolean operations on shapes are now implemented: union,
-	difference, intersection, and exclusive OR (XOR).
-  * Paths can be inset or outset (i.e., contracted or expanded
-	orthogonally to the path in each point). You can do simple
-	inset/outset of a path, or you can create a dynamic offset object
-	that you can adjust interactively using the node tool. Moreover, a
-	dynamic offset object can be linked to its original path so that
-	editing the path will have the offset updated automatically.
-  * A stroke can now be converted to a closed path (i.e. outlined,
-	taking into account stroke width).
-  * A standalone SVG viewer is now available, which can be used as a
-	slideshow viewer. Just type inkview *.svg; see
-	http://www.inkscape.org/cgi-bin/wiki.pl?Inkview for details.
-  * You can now drag SVG files from Konqueror (and probably other
-	KDE apps, too) to Inkscape. And when The Gimp gets full support
-	for path drag-and-drop, we'll be able to accept drops from them,
-	too.
-  * The Document Options dialog now lets you change the background
-	and border colors of a document, with the background color also
-	used for bitmap exports - which means you can easily produce PNGs
-	with non-transparent background.
-  * Support for the letter-spacing CSS property is
-	implemented. Press Alt+< or Alt+> when editing text to adjust the
-	letterspacing of the current line.
-  * The Help menu contains a new interactive tutorial for beginner
-	users of Inkscape and a complete Keys and Mouse reference in SVG
-	(see an HTML version at http://inkscape.org/doc/keys.html).
+  * Boolean operations on shapes are now implemented: union, difference, intersection, and exclusive OR (XOR).
+  * Paths can be inset or outset (i.e., contracted or expanded orthogonally to the path in each point). You can do simple inset/outset of a path, or you can create a dynamic offset object that you can adjust interactively using the node tool. Moreover, a dynamic offset object can be linked to its original path so that editing the path will have the offset updated automatically.
+  * A stroke can now be converted to a closed path (i.e. outlined, taking into account stroke width).
+  * A standalone SVG viewer is now available, which can be used as a slideshow viewer. Just type inkview *.svg; see http://www.inkscape.org/cgi-bin/wiki.pl?Inkview for details.
+  * You can now drag SVG files from Konqueror (and probably other KDE apps, too) to Inkscape. And when The Gimp gets full support for path drag-and-drop, we'll be able to accept drops from them, too.
+  * The Document Options dialog now lets you change the background and border colors of a document, with the background color also used for bitmap exports - which means you can easily produce PNGs with non-transparent background.
+  * Support for the letter-spacing CSS property is implemented. Press Alt+< or Alt+> when editing text to adjust the letterspacing of the current line.
+  * The Help menu contains a new interactive tutorial for beginner users of Inkscape and a complete Keys and Mouse reference in SVG (see an HTML version at http://inkscape.org/doc/keys.html). 
 
-  * Complete keyboard control in selector and node tool: now you can
-	not only select and move objects/nodes with keyboard, but also
-	rotate them by [] keys and scale by <> keys, with various
-	modifiers. For nodes, rotating and scaling is applied to the
-	control handles of all selected nodes.
-  * The top panel for selector tool provides editable fields for the
-	coordinates, width, and height of the selection. Press Alt+X to
-	access the panel via keyboard.
-  * Maximum zoom was upped from 32x to 256x, which was possible by
-	increasing the coordinate precision used by the program and stored
-	in SVG.
-  * A new color widget on the Fill and Stroke dialog allows you to
-	select between RGB, CMYK, HSV sliders or an HSV color wheel
-	(resize the dialog if you want the wheel to grow larger). Also in
-	that dialog, editing gradients is now easier, as you can drag the
-	control points of linear and radial gradients.
-  * Many new keyboard+mouse modes make mousework a lot more
-	convenient. In selector and node tool, as well as in pen, spiral,
-	and star tools, rotating objects or control handles of a node with
-	Ctrl restricts rotation to 15 degree increments. Dragging nodes
-	may be restricted to horizontal/vertical (with Ctrl) and to the
-	directions of the node's handles (with Ctrl+Alt). Dragging a
-	node's control points with Alt locks the length of the handle, and
-	with Shift, rotates the other handle by the same angle.
-  * In selector, Ctrl+click and Ctrl+Shift+click select objects
-	within groups.
-  * In node tool, Ctrl+click toggles cusp/smooth/symmetric,
-	Ctrl+Alt+click deletes a node.
-  * Previously in selector, mouse dragging from an empty spot
-	started rubberband selection, while dragging from an object moved
-	that object. Now you can press Shift and Inkscape will start
-	rubberband from any spot, object or not. This makes selecting in
-	complex drawings more convenient.
+  * Complete keyboard control in selector and node tool: now you can not only select and move objects/nodes with keyboard, but also rotate them by [] keys and scale by <> keys, with various modifiers. For nodes, rotating and scaling is applied to the control handles of all selected nodes.
+  * The top panel for selector tool provides editable fields for the coordinates, width, and height of the selection. Press Alt+X to access the panel via keyboard.
+  * Maximum zoom was upped from 32x to 256x, which was possible by increasing the coordinate precision used by the program and stored in SVG.
+  * A new color widget on the Fill and Stroke dialog allows you to select between RGB, CMYK, HSV sliders or an HSV color wheel (resize the dialog if you want the wheel to grow larger). Also in that dialog, editing gradients is now easier, as you can drag the control points of linear and radial gradients.
+  * Many new keyboard+mouse modes make mousework a lot more convenient. In selector and node tool, as well as in pen, spiral, and star tools, rotating objects or control handles of a node with Ctrl restricts rotation to 15 degree increments. Dragging nodes may be restricted to horizontal/vertical (with Ctrl) and to the directions of the node's handles (with Ctrl+Alt). Dragging a node's control points with Alt locks the length of the handle, and with Shift, rotates the other handle by the same angle.
+  * In selector, Ctrl+click and Ctrl+Shift+click select objects within groups.
+  * In node tool, Ctrl+click toggles cusp/smooth/symmetric, Ctrl+Alt+click deletes a node.
+  * Previously in selector, mouse dragging from an empty spot started rubberband selection, while dragging from an object moved that object. Now you can press Shift and Inkscape will start rubberband from any spot, object or not. This makes selecting in complex drawings more convenient. 
 
-  * When you save a document, Inkscape now remembers the zoom level
-	and the center of view and restores them on load, so you'll be
-	looking at exactly the same point at the same magnification as the
-	last time you saved the document. Optionally, it also saves window
-	size and position for each document and restores them on
-	load. Moreover, Inkscape can read the view template from the
-	preferences to set the zoom level, window geometry, grid settings,
-	and guides in all new documents.
-  * More helpful statusbar display: default hints for all tools,
-	explanations for most non-fatal errors, visual feedback for
-	non-trivial actions (such as Unicode mode in text tool), the
-	number and type of selected nodes in node tool, the font face and
-	size for text objects.
-  * Ctrl+Tab and Shift+Ctrl+Tab cycle forward and backward through
-	the document windows of the program.
-  * Inkscape now preserves the history of zoom settings for each
-	document. The ` key restores previous zoom; pressing ` repeatedly
-	will guide you through all the zoom settings you've used in this
-	session. Shift+` moves forward in the zoom history.
-  * Middle click zooms in, Shift+middle click zooms out (in addition
-	to middle button drag which pans canvas).
-  * All zooming operations via mouse now preserve the point under
-	cursor (no centering).
-  * Improvements in the Export dialog: the Browse button, helpful
-	error messages, and even a progress bar. The dialog remembers and
-	restores the export area and dpi settings.
+  * When you save a document, Inkscape now remembers the zoom level and the center of view and restores them on load, so you'll be looking at exactly the same point at the same magnification as the last time you saved the document. Optionally, it also saves window size and position for each document and restores them on load. Moreover, Inkscape can read the view template from the preferences to set the zoom level, window geometry, grid settings, and guides in all new documents.
+  * More helpful statusbar display: default hints for all tools, explanations for most non-fatal errors, visual feedback for non-trivial actions (such as Unicode mode in text tool), the number and type of selected nodes in node tool, the font face and size for text objects.
+  * Ctrl+Tab and Shift+Ctrl+Tab cycle forward and backward through the document windows of the program.
+  * Inkscape now preserves the history of zoom settings for each document. The ` key restores previous zoom; pressing ` repeatedly will guide you through all the zoom settings you've used in this session. Shift+` moves forward in the zoom history.
+  * Middle click zooms in, Shift+middle click zooms out (in addition to middle button drag which pans canvas).
+  * All zooming operations via mouse now preserve the point under cursor (no centering).
+  * Improvements in the Export dialog: the Browse button, helpful error messages, and even a progress bar. The dialog remembers and restores the export area and dpi settings.
   * The fullscreen mode is implemented; press F11 to toggle.
-  * F12 temporarily hides all open dialogs; press F12 again to
-	restore them.
-  * More screen real estate: you can now hide rulers (Ctrl+R) and
-	scrollbars (Ctrl+B). These settings are remembered across
-	sessions.
+  * F12 temporarily hides all open dialogs; press F12 again to restore them.
+  * More screen real estate: you can now hide rulers (Ctrl+R) and scrollbars (Ctrl+B). These settings are remembered across sessions.
   * All menus now have mnemonics.
-  * Many obsolete and confusing console debug messages removed, some
-	of them reworded in plain English and displayed in the statusbar
-	or (for important errors) in modal messageboxes.
-  * Many cosmetic improvements in the UI.
+  * Many obsolete and confusing console debug messages removed, some of them reworded in plain English and displayed in the statusbar or (for important errors) in modal messageboxes.
+  * Many cosmetic improvements in the UI. 
 
-  * Inkscape is now built using a C++ compiler. More and more code
-	is being translated from C to C++.
-  * In particular, we now use NR::Point, NR::Matrix and NR::Rect
-	classes instead of the clunky old macros.
-  * We now have the beginnings of an Inkscape::URI class for working
-	with URIs.
-  * Using Inkscape::URIReference, clipping paths, masks, and
-	gradients are updated properly when their id is changed.
-  * Inkscape can use libgnomeprint 2.2 now (Note: it should print to
-	the gnome default printer, but was not fully tested before the
-	release)
-  * Massive cleanups, bugfixes, and trimming dead code.
-
+  * Inkscape is now built using a C++ compiler. More and more code is being translated from C to C++.
+  * In particular, we now use NR::Point, NR::Matrix and NR::Rect classes instead of the clunky old macros.
+  * We now have the beginnings of an Inkscape::URI class for working with URIs.
+  * Using Inkscape::URIReference, clipping paths, masks, and gradients are updated properly when their id is changed.
+  * Inkscape can use libgnomeprint 2.2 now (Note: it should print to the gnome default printer, but was not fully tested before the release)
+  * Massive cleanups, bugfixes, and trimming dead code. 
 
  -- Nathan Hurst <njh@mail.csse.monash.edu.au>  Tue, 3 Feb 2004 22:11:00 +1100
 
