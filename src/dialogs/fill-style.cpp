@@ -82,6 +82,9 @@ static void sp_fill_style_widget_update             ( SPWidget *spw,
 static void sp_fill_style_widget_paint_mode_changed ( SPPaintSelector *psel,
                                                       SPPaintSelectorMode mode,
                                                       SPWidget *spw );
+static void sp_fill_style_widget_fillrule_changed ( SPPaintSelector *psel,
+                                          SPPaintSelectorFillRule mode,
+                                                    SPWidget *spw );
 
 static void sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw );
 static void sp_fill_style_widget_paint_changed (SPPaintSelector *psel, SPWidget *spw );
@@ -100,7 +103,7 @@ sp_fill_style_widget_new (void)
     gtk_widget_show (vb);
     gtk_container_add (GTK_CONTAINER (spw), vb);
 
-    GtkWidget *psel = sp_paint_selector_new ();
+    GtkWidget *psel = sp_paint_selector_new (true); // with fillrule selector
     gtk_widget_show (psel);
     gtk_box_pack_start (GTK_BOX (vb), psel, TRUE, TRUE, 0);
     g_object_set_data (G_OBJECT (spw), "paint-selector", psel);
@@ -117,49 +120,10 @@ sp_fill_style_widget_new (void)
                        G_CALLBACK (sp_fill_style_widget_paint_changed),
                        spw );
 
-    GtkWidget *hb = gtk_hbox_new (FALSE, 4);
-    gtk_widget_show (hb);
-    gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
-    GtkTooltips *ttips = gtk_tooltips_new ();
-
-    GtkWidget *l = gtk_label_new (_("Fill:"));
-    gtk_widget_show (l);
-    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-    gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
-
-    GtkWidget *om = gtk_option_menu_new ();
-    gtk_widget_show (om);
-    gtk_box_pack_start (GTK_BOX (hb), om, FALSE, FALSE, 0);
-    g_object_set_data (G_OBJECT (spw), "fill-rule", om);
-    gtk_tooltips_set_tip (ttips, om,
-    // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
-                          _("Specifies the method of filling overlapping areas when an object intersects itself. "
-                            "With the \"winding fill\" method (fill-rule:nonzero), all overlapping areas are filled; "
-                            "with the \"alternating fill\" method (fill-rule:evenodd), every other of them is filled."), NULL);
-
-    /* 0 - nonzero 1 - evenodd */
-    GtkWidget *m = gtk_menu_new ();
-    gtk_widget_show (m);
-
-    /* TRANSLATORS: Use the "winding fill" method (fill-rule:nonzero): all overlapping areas are filled. */
-    GtkWidget *mi = gtk_menu_item_new_with_label (_("winding"));
-    gtk_widget_show (mi);
-    gtk_menu_append (GTK_MENU (m), mi);
-    g_object_set_data ( G_OBJECT (mi), "fill-rule",
-                        (void *)"nonzero" );
-    g_signal_connect ( G_OBJECT (mi), "activate",
-                       G_CALLBACK (sp_fill_style_widget_fill_rule_activate),
-                       spw );
-    /* TRANSLATORS: Use the "alternating fill" method (fill-rule:evenodd): areas with odd number of overlaps are filled. */
-    mi = gtk_menu_item_new_with_label (_("alternating"));
-    gtk_widget_show (mi);
-    gtk_menu_append (GTK_MENU (m), mi);
-    g_object_set_data (G_OBJECT (mi), "fill-rule", (void *)"evenodd");
-    g_signal_connect ( G_OBJECT (mi), "activate",
-                       G_CALLBACK (sp_fill_style_widget_fill_rule_activate),
+    g_signal_connect ( G_OBJECT (psel), "fillrule_changed",
+                       G_CALLBACK (sp_fill_style_widget_fillrule_changed),
                        spw );
 
-    gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
 
     g_signal_connect ( G_OBJECT (spw), "construct",
                        G_CALLBACK (sp_fill_style_widget_construct), psel);
@@ -395,10 +359,8 @@ sp_fill_style_widget_update ( SPWidget *spw, Inkscape::Selection *sel )
 
     } // end of switch
 
-    GtkWidget *fillrule = GTK_WIDGET(g_object_get_data (G_OBJECT (spw), "fill-rule"));
-    gtk_option_menu_set_history ( GTK_OPTION_MENU (fillrule),
-            (SP_OBJECT_STYLE
-                (object)->fill_rule.computed == ART_WIND_RULE_NONZERO) ? 0 : 1);
+    sp_paint_selector_set_fillrule (psel, SP_OBJECT_STYLE(object)->fill_rule.computed == ART_WIND_RULE_NONZERO? 
+        SP_PAINT_SELECTOR_FILLRULE_NONZERO : SP_PAINT_SELECTOR_FILLRULE_EVENODD);
 
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
 
@@ -419,6 +381,27 @@ sp_fill_style_widget_paint_mode_changed ( SPPaintSelector *psel,
     sp_fill_style_widget_paint_changed (psel, spw);
 }
 
+static void
+sp_fill_style_widget_fillrule_changed ( SPPaintSelector *psel,
+                                          SPPaintSelectorFillRule mode,
+                                          SPWidget *spw )
+{
+    if (g_object_get_data (G_OBJECT (spw), "update"))
+        return;
+
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
+    SPCSSAttr *css = sp_repr_css_attr_new ();
+    sp_repr_css_set_property (css, "fill-rule", mode == SP_PAINT_SELECTOR_FILLRULE_EVENODD? "evenodd":"nonzero");
+
+    sp_desktop_set_style (desktop, css);
+
+    sp_repr_css_attr_unref (css);
+
+    if (spw->inkscape) {
+        sp_document_done (SP_WIDGET_DOCUMENT (spw));
+    }
+}
 
 /**
 This is called repeatedly while you are dragging a color slider or a gradient node. Therefore it
@@ -721,33 +704,6 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
 
 
 } // end of sp_fill_style_widget_paint_changed()
-
-
-
-static void
-sp_fill_style_widget_fill_rule_activate (GtkWidget *w, SPWidget *spw)
-{
-    if (g_object_get_data (G_OBJECT (spw), "update"))
-        return;
-
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-
-    SPCSSAttr *css = sp_repr_css_attr_new ();
-    sp_repr_css_set_property ( css, "fill-rule",
-                               (gchar const *)g_object_get_data (G_OBJECT (w),
-                               "fill-rule") );
-
-    sp_desktop_set_style (desktop, css);
-
-    sp_repr_css_attr_unref (css);
-
-    if (spw->inkscape) {
-        sp_document_done (SP_WIDGET_DOCUMENT (spw));
-    }
-
-}
-
-
 
 static void
 sp_fill_style_get_average_color_rgba(GSList const *objects, gfloat *c)

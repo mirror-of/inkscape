@@ -55,13 +55,13 @@
 
 #include "paint-selector.h"
 
-
 enum {
 	MODE_CHANGED,
 	GRABBED,
 	DRAGGED,
 	RELEASED,
 	CHANGED,
+	FILLRULE_CHANGED,
 	LAST_SIGNAL
 };
 
@@ -71,6 +71,7 @@ static void sp_paint_selector_destroy (GtkObject *object);
 
 static GtkWidget *sp_paint_selector_style_button_add (SPPaintSelector *psel, const gchar *px, SPPaintSelectorMode mode, GtkRadioButton *last, GtkTooltips *tt, const gchar *tip);
 static void sp_paint_selector_style_button_toggled (GtkToggleButton *tb, SPPaintSelector *psel);
+static void sp_paint_selector_fillrule_toggled (GtkToggleButton *tb, SPPaintSelector *psel);
 
 static void sp_paint_selector_set_mode_empty (SPPaintSelector *psel);
 static void sp_paint_selector_set_mode_multiple (SPPaintSelector *psel);
@@ -145,6 +146,12 @@ sp_paint_selector_class_init (SPPaintSelectorClass *klass)
 						 GTK_SIGNAL_OFFSET (SPPaintSelectorClass, changed),
 						 gtk_marshal_NONE__NONE,
 						 GTK_TYPE_NONE, 0);
+	psel_signals[FILLRULE_CHANGED] = gtk_signal_new ("fillrule_changed",
+						 (GtkSignalRunType)(GTK_RUN_FIRST | GTK_RUN_NO_RECURSE),
+						 GTK_CLASS_TYPE(object_class),
+						 GTK_SIGNAL_OFFSET (SPPaintSelectorClass, fillrule_changed),
+						 gtk_marshal_NONE__UINT,
+						 GTK_TYPE_NONE, 1, GTK_TYPE_UINT);
 
 	object_class->destroy = sp_paint_selector_destroy;
 }
@@ -178,6 +185,35 @@ sp_paint_selector_init (SPPaintSelector *psel)
                                SP_PAINT_SELECTOR_MODE_PATTERN, GTK_RADIO_BUTTON (psel->radial), tt, _("Pattern"));
 	psel->unset = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_UNSET,
                                SP_PAINT_SELECTOR_MODE_UNSET, GTK_RADIO_BUTTON (psel->pattern), tt, _("Unset paint (make it undefined so it can be inherited)"));
+
+	/* Fillrule */
+	{
+	psel->fillrulebox = gtk_hbox_new (FALSE, 0);
+	gtk_box_pack_end (GTK_BOX (psel->style), psel->fillrulebox, FALSE, FALSE, 0);
+
+	GtkWidget *w;
+	psel->evenodd = gtk_radio_button_new (NULL);
+	gtk_button_set_relief (GTK_BUTTON (psel->evenodd), GTK_RELIEF_NONE);
+	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON(psel->evenodd), FALSE);
+    // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
+	gtk_tooltips_set_tip (tt, psel->evenodd, _("Any path self-intersections or subpaths create holes in the fill (fill-rule: evenodd)"), NULL);
+	gtk_object_set_data (GTK_OBJECT (psel->evenodd), "mode", GUINT_TO_POINTER (SP_PAINT_SELECTOR_FILLRULE_EVENODD));
+	w = sp_icon_new (GTK_ICON_SIZE_MENU, "fillrule_evenodd");
+	gtk_container_add (GTK_CONTAINER (psel->evenodd), w);
+	gtk_box_pack_start (GTK_BOX (psel->fillrulebox), psel->evenodd, FALSE, FALSE, 0);
+	gtk_signal_connect (GTK_OBJECT (psel->evenodd), "toggled", GTK_SIGNAL_FUNC (sp_paint_selector_fillrule_toggled), psel);
+
+	psel->nonzero = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (psel->evenodd)));
+	gtk_button_set_relief (GTK_BUTTON (psel->nonzero), GTK_RELIEF_NONE);
+	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON(psel->nonzero), FALSE);
+    // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
+	gtk_tooltips_set_tip (tt, psel->nonzero, _("Fill is solid unless a subpath is counterdirectional (fill-rule: nonzero)"), NULL);
+	gtk_object_set_data (GTK_OBJECT (psel->nonzero), "mode", GUINT_TO_POINTER (SP_PAINT_SELECTOR_FILLRULE_NONZERO));
+	w = sp_icon_new (GTK_ICON_SIZE_MENU, "fillrule_nonzero");
+	gtk_container_add (GTK_CONTAINER (psel->nonzero), w);
+	gtk_box_pack_start (GTK_BOX (psel->fillrulebox), psel->nonzero, FALSE, FALSE, 0);
+	gtk_signal_connect (GTK_OBJECT (psel->nonzero), "toggled", GTK_SIGNAL_FUNC (sp_paint_selector_fillrule_toggled), psel);
+	}
 
 	/* Frame */
 	psel->frame = gtk_frame_new ("");
@@ -213,6 +249,8 @@ sp_paint_selector_style_button_add (SPPaintSelector *psel, const gchar *pixmap, 
 
 	gtk_container_set_border_width (GTK_CONTAINER (b), 0);
 
+	gtk_button_set_relief (GTK_BUTTON (b), GTK_RELIEF_NONE);
+
 	gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
 	gtk_object_set_data (GTK_OBJECT (b), "mode", GUINT_TO_POINTER (mode));
 
@@ -234,14 +272,42 @@ sp_paint_selector_style_button_toggled (GtkToggleButton *tb, SPPaintSelector *ps
 	}
 }
 
+static void
+sp_paint_selector_fillrule_toggled (GtkToggleButton *tb, SPPaintSelector *psel)
+{
+	if (!psel->update && gtk_toggle_button_get_active (tb)) {
+		SPPaintSelectorFillRule fr = (SPPaintSelectorFillRule)GPOINTER_TO_UINT (gtk_object_get_data (GTK_OBJECT (tb), "mode"));
+		gtk_signal_emit (GTK_OBJECT (psel), psel_signals[FILLRULE_CHANGED], fr);
+	}
+}
+
+void
+sp_paint_selector_show_fillrule (SPPaintSelector *psel, bool is_fill)
+{
+	if (psel->fillrulebox) {
+		if (is_fill) {
+			gtk_widget_show_all (psel->fillrulebox);
+		} else {
+			gtk_widget_destroy (psel->fillrulebox);
+			psel->fillrulebox = NULL;
+		}
+	}
+}
+
+
 GtkWidget *
-sp_paint_selector_new (void)
+sp_paint_selector_new (bool is_fill)
 {
 	SPPaintSelector *psel;
 
 	psel = (SPPaintSelector*)gtk_type_new (SP_TYPE_PAINT_SELECTOR);
 
 	sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_MULTIPLE);
+
+     // This silliness is here because I don't know how to pass a parameter to the
+     // GtkObject "constructor" (sp_paint_selector_init). Remove it when paint_selector
+     // becomes a normal class.
+	sp_paint_selector_show_fillrule (psel, is_fill); 
 
 	return GTK_WIDGET (psel);
 }
@@ -285,6 +351,15 @@ sp_paint_selector_set_mode (SPPaintSelector *psel, SPPaintSelectorMode mode)
 		psel->mode = mode;
 		gtk_signal_emit (GTK_OBJECT (psel), psel_signals[MODE_CHANGED], psel->mode);
 		psel->update = FALSE;
+	}
+}
+
+void
+sp_paint_selector_set_fillrule (SPPaintSelector *psel, SPPaintSelectorFillRule fillrule)
+{
+	if (psel->fillrulebox) {
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (psel->evenodd), (fillrule == SP_PAINT_SELECTOR_FILLRULE_EVENODD));
+		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (psel->nonzero), (fillrule == SP_PAINT_SELECTOR_FILLRULE_NONZERO));
 	}
 }
 

@@ -39,6 +39,11 @@ typedef enum {
     SP_PAINT_SELECTOR_MODE_UNSET
 } SPPaintSelectorMode;
 
+typedef enum {
+	SP_PAINT_SELECTOR_FILLRULE_NONZERO,
+	SP_PAINT_SELECTOR_FILLRULE_EVENODD
+} SPPaintSelectorFillRule;
+
 struct SPPaintSelector {
 	GtkVBox vbox;
 
@@ -48,6 +53,10 @@ struct SPPaintSelector {
 
 	GtkWidget *style;
 	GtkWidget *none, *solid, *gradient, *radial, *pattern, *unset;
+
+	GtkWidget *fillrulebox;
+	GtkWidget *evenodd, *nonzero;
+
 	GtkWidget *frame, *selector;
 
 	SPColor color;
@@ -63,13 +72,15 @@ struct SPPaintSelectorClass {
 	void (* dragged) (SPPaintSelector *psel);
 	void (* released) (SPPaintSelector *psel);
 	void (* changed) (SPPaintSelector *psel);
+	void (* fillrule_changed) (SPPaintSelector *psel, SPPaintSelectorFillRule fillrule);
 };
 
 GtkType sp_paint_selector_get_type (void);
 
-GtkWidget *sp_paint_selector_new (void);
+GtkWidget *sp_paint_selector_new (bool is_fill);
 
 void sp_paint_selector_set_mode (SPPaintSelector *psel, SPPaintSelectorMode mode);
+void sp_paint_selector_set_fillrule (SPPaintSelector *psel, SPPaintSelectorFillRule fillrule);
 
 void sp_paint_selector_set_color_alpha (SPPaintSelector *psel, const SPColor *color, float alpha);
 

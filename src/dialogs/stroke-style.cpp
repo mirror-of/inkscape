@@ -98,7 +98,7 @@ sp_stroke_style_paint_widget_new(void)
 
     spw = sp_widget_new_global(INKSCAPE);
 
-    psel = sp_paint_selector_new();
+    psel = sp_paint_selector_new(false); // without fillrule selector
     gtk_widget_show(psel);
     gtk_container_add(GTK_CONTAINER(spw), psel);
     gtk_object_set_data(GTK_OBJECT(spw), "paint-selector", psel);
