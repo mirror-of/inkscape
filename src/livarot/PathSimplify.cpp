@@ -177,8 +177,13 @@ double    DistanceToCubic(NR::Point &start,Path::path_descr_cubicto res,NR::Poin
 //  return RecDistanceToCubic(start,res.stD,res.p,res.enD,pt,nle,8,0.0,1.0);
 }
 // simplification on a subpath
+#ifdef pseudo_douglas_pecker
 void
 Path::DoSimplify (double treshhold,int recLevel)
+#else 
+void
+Path::DoSimplify (double treshhold,int /*recLevel*/)
+#endif
 {
 #ifdef pseudo_douglas_pecker
   if ( nbPt <= 2 ) {
@@ -243,20 +248,20 @@ Path::DoSimplify (double treshhold,int recLevel)
   
   char *savPts = pts;
   int savNbPt = nbPt;
+  fitting_tables  data;
+  data.Xk=data.Yk=data.Qk=NULL;
+  data.tk=data.lk=NULL;
+  data.fk=NULL;
+  data.totLen=0;
+  data.nbPt=data.maxPt=data.inPt=0;
+  
   NR::Point moveToPt, endToPt;
-  if (back)
-  {
-	{
+  if (back) {
 	  path_lineto_b *tp = (path_lineto_b *) savPts;
 	  moveToPt = tp[0].p;
-	}
-  }
-  else
-  {
-	{
+  } else {
 	  path_lineto *tp = (path_lineto *) savPts;
 	  moveToPt = tp[0].p;
-	}
   }
   MoveTo (moveToPt);
   endToPt = moveToPt;
@@ -265,55 +270,40 @@ Path::DoSimplify (double treshhold,int recLevel)
   {
     int lastP = curP + 1;
     nbPt = 2;
-    if (back)
-    {
-    {
+    if (back) {
       path_lineto_b *tp = (path_lineto_b *) savPts;
       pts = (char *) (tp + curP);
-    }
-    }
-    else
-    {
-    {
+    } else {
       path_lineto *tp = (path_lineto *) savPts;
       pts = (char *) (tp + curP);
     }
-    }
     
+    // remettre a zero
+    data.inPt=data.nbPt=0;
+
     path_descr_cubicto res;
     bool contains_forced = false;
     int step=64;
     while ( step > 0 ) {   
       int  forced_pt=-1;
       int  worstP=-1;
-      do
-      {
-        if (back)
-        {
-        {
+      do {
+        if (back) {
           path_lineto_b *tp = (path_lineto_b *) savPts;
-          if ((tp + lastP)->isMoveTo == polyline_forced)
-            contains_forced = true;
+          if ((tp + lastP)->isMoveTo == polyline_forced) contains_forced = true;
           forced_pt=lastP;
-        }
-        }
-        else
-        {
-        {
+        } else {
           path_lineto *tp = (path_lineto *) savPts;
-          if ((tp + lastP)->isMoveTo == polyline_forced)
-            contains_forced = true;
+          if ((tp + lastP)->isMoveTo == polyline_forced) contains_forced = true;
           forced_pt=lastP;
-        }
         }
         lastP+=step;
         nbPt+=step;
         //        if (kissGoodbye)
         //          break;
       }
-      while (lastP < savNbPt
-             && AttemptSimplify ((contains_forced) ? 0.1 * treshhold : treshhold,
-                                 res,worstP));
+      while (lastP < savNbPt && ExtendFit(data,(contains_forced) ? 0.1 * treshhold : treshhold,res,worstP) );
+      //       && AttemptSimplify ((contains_forced) ? 0.1 * treshhold : treshhold, res,worstP));
       
       if (lastP >= savNbPt)
       {
@@ -334,35 +324,30 @@ Path::DoSimplify (double treshhold,int recLevel)
       step/=2;
     }
     
-    if (back)
-    {
-    {
+    if (back) {
       path_lineto_b *tp = (path_lineto_b *) savPts;
       endToPt = tp[lastP].p;
-    }
-    }
-    else
-    {
-    {
+    } else {
       path_lineto *tp = (path_lineto *) savPts;
       endToPt = tp[lastP].p;
     }
-    }
-    if (nbPt <= 2)
-    {
+    if (nbPt <= 2) {
       LineTo (endToPt);
-    }
-    else
-    {
+    } else {
       CubicTo (endToPt, res.stD, res.enD);
     }
-    
+        
     curP = lastP;
   }
   
-  if (NR::LInfty (endToPt - moveToPt) < 0.00001)
-    Close ();
+  if (NR::LInfty (endToPt - moveToPt) < 0.00001) Close ();
   
+  if ( data.Xk ) free(data.Xk);
+  if ( data.Yk ) free(data.Yk);
+  if ( data.Qk ) free(data.Qk);
+  if ( data.tk ) free(data.tk);
+  if ( data.lk ) free(data.lk);
+  if ( data.fk ) free(data.fk);
   pts = savPts;
   nbPt = savNbPt;
 #endif
@@ -371,7 +356,408 @@ Path::DoSimplify (double treshhold,int recLevel)
 // warning: slow
 #define with_splotch_killer
 
+// primitive= calc the cubic bezier patche that fits Xk and Yk best
+// Qk est deja alloue
+// retourne false si probleme (matrice non-inversible)
+bool Path::FitCubic(NR::Point &start,path_descr_cubicto & res,double* Xk,double* Yk,double* Qk,double* tk,int nbPt)
+{
+  NR::Point end=res.p;
+  NR::Point cp1,cp2;
+  NR::Point P,Q;
+  // la matrice tNN
+  NR::Matrix M(0, 0, 0, 0, 0, 0);
+  for (int i = 1; i < nbPt - 1; i++)
+  {
+    M[0] += N13 (tk[i]) * N13 (tk[i]);
+    M[1] += N23 (tk[i]) * N13 (tk[i]);
+    M[2] += N13 (tk[i]) * N23 (tk[i]);
+    M[3] += N23 (tk[i]) * N23 (tk[i]);
+  }
+  
+  double det=M.det();
+  if (fabs (det) < 0.000001) {
+    res.stD[0]=res.stD[1]=0.0;
+    res.enD[0]=res.enD[1]=0.0;
+    return false;
+  }
+  {
+    NR::Matrix  iM=M.inverse();
+    M=iM;
+  }
+  
+  // phase 1: abcisses
+  // calcul des Qk
+  Xk[0] = start[0];
+  Yk[0] = start[1];
+  Xk[nbPt - 1] = end[0];
+  Yk[nbPt - 1] = end[1];
+  
+  for (int i = 1; i < nbPt - 1; i++) Qk[i] = Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
+  
+  // le vecteur Q
+  Q[0] = Q[1] = 0;
+  for (int i = 1; i < nbPt - 1; i++) {
+    Q[0] += N13 (tk[i]) * Qk[i];
+    Q[1] += N23 (tk[i]) * Qk[i];
+  }
+  
+  P = Q * M;
+  //  L_MAT_MulV (M, Q, P);
+  cp1[0] = P[0];
+  cp2[0] = P[1];
+  
+  // phase 2: les ordonnees
+  for (int i = 1; i < nbPt - 1; i++) Qk[i] = Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
+  
+  // le vecteur Q
+  Q[0] = Q[1] = 0;
+  for (int i = 1; i < nbPt - 1; i++) {
+    Q[0] += N13 (tk[i]) * Qk[i];
+    Q[1] += N23 (tk[i]) * Qk[i];
+  }
+  
+  P = Q * M;
+  //  L_MAT_MulV (M, Q, P);
+  cp1[1] = P[0];
+  cp2[1] = P[1];
+  
+  res.stD = 3.0 * (cp1 - start);
+  res.enD = 3.0 * (end - cp2 );
+
+  return true;
+}
+/*typedef struct fitting_tables {
+  int      nbPt,maxPt,inPt;
+  double   *Xk;
+  double   *Yk;
+  double   *Qk;
+  double   *tk;
+  double   *lk;
+  char     *fk;
+} fitting_tables;*/
+bool   Path::ExtendFit(fitting_tables &data,double treshhold, path_descr_cubicto & res,int &worstP)
+{
+  if ( nbPt >= data.maxPt ) {
+    data.maxPt=2*nbPt+1;
+    data.Xk=(double*)realloc(data.Xk,data.maxPt*sizeof(double));
+    data.Yk=(double*)realloc(data.Yk,data.maxPt*sizeof(double));
+    data.Qk=(double*)realloc(data.Qk,data.maxPt*sizeof(double));
+    data.tk=(double*)realloc(data.tk,data.maxPt*sizeof(double));
+    data.lk=(double*)realloc(data.lk,data.maxPt*sizeof(double));
+    data.fk=(char*)realloc(data.fk,data.maxPt*sizeof(char));
+  }
+  if ( nbPt > data.inPt ) {
+    if ( back ) {
+      path_lineto_b*  tp=(path_lineto_b*)pts;
+      for (int i=data.inPt;i<nbPt;i++) {
+        data.Xk[i] = tp[i].p[0];
+        data.Yk[i] = tp[i].p[1];
+        data.fk[i]=( tp[i].isMoveTo == polyline_forced )? 0x01:0x00;        
+      }
+    } else {
+      path_lineto*  tp=(path_lineto*)pts;
+      for (int i=data.inPt;i<nbPt;i++) {
+        data.Xk[i] = tp[i].p[0];
+        data.Yk[i] = tp[i].p[1];
+        data.fk[i]=( tp[i].isMoveTo == polyline_forced )? 0x01:0x00;        
+      }
+    }
+    data.lk[0]=0;
+    data.tk[0]=0;
+    double  prevLen=0;
+    for (int i=0;i<data.inPt;i++) prevLen+=data.lk[i];
+    data.totLen=prevLen;
+    for (int i=((data.inPt>0)?data.inPt:1);i<nbPt;i++) {
+      NR::Point diff;
+      diff[0] = data.Xk[i] - data.Xk[i-1];
+      diff[1] = data.Yk[i] - data.Yk[i-1];
+      data.lk[i] = NR::L2(diff);
+      data.totLen+=data.lk[i];
+      data.tk[i] = data.totLen;
+    }
+    for (int i=0;i<data.inPt;i++) {
+      data.tk[i]*=prevLen;
+      data.tk[i]/=data.totLen;
+    }
+    for (int i=data.inPt;i<nbPt;i++) data.tk[i]/=data.totLen;
+     data.inPt=nbPt;
+  }
+  if ( nbPt < data.nbPt ) {
+    // on est allŽ trop loin
+    // faut recalculer les tk
+    data.totLen=0;
+    data.tk[0]=0;
+    data.lk[0]=0;
+    for (int i=1;i<nbPt;i++) {
+      data.totLen+=data.lk[i];
+      data.tk[i]=data.totLen;
+    }
+    for (int i=1;i<nbPt;i++) data.tk[i]/=data.totLen;
+  }
+  
+  data.nbPt=nbPt;
+  
+  if ( data.nbPt <= 0 ) return false;
+  
+  res.p[0]=data.Xk[data.nbPt-1];
+  res.p[1]=data.Yk[data.nbPt-1];
+  res.stD[0]=res.stD[1]=0;
+  res.enD[0]=res.enD[1]=0;
+  worstP=1;
+  if ( nbPt <= 2 ) return true;
+  
+  if ( data.totLen < 0.0001 ) {
+    double    worstD=0;
+    NR::Point start;
+    worstP=-1;
+    start[0]=data.Xk[0];
+    start[1]=data.Yk[0];
+    for (int i=1;i<nbPt;i++) {
+      NR::Point nPt;
+      bool      isForced=data.fk[i];
+      nPt[0]=data.Xk[i];
+      nPt[1]=data.Yk[i];
+      
+      double nle=DistanceToCubic(start,res,nPt);
+      if ( isForced ) {
+        // forced points are favored for splitting the recursion; we do this by increasing their distance
+        if ( worstP < 0 || 2*nle > worstD ) {
+          worstP=i;
+          worstD=2*nle;
+        }
+      } else {
+        if ( worstP < 0 || nle > worstD ) {
+          worstP=i;
+          worstD=nle;
+        }
+      }
+    }
+    return true;
+  }
+  
+  return AttemptSimplify(data,treshhold,res,worstP);
+}
 // fit a polyline to a bezier patch, return true is treshhold not exceeded (ie: you can continue)
+// version that uses tables from the previous iteration, to minimize amount of work done
+bool Path::AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cubicto & res,int &worstP)
+{
+  NR::Point start,end;
+  // pour une coordonnee
+  NR::Point P,Q;
+  NR::Point cp1, cp2;
+  
+  worstP=1;
+  if (nbPt == 2) {
+    return true;
+  }
+  
+  start[0]=data.Xk[0];
+  start[1]=data.Yk[0];
+  cp1[0]=data.Xk[1];
+  cp1[1]=data.Yk[1];
+  end[0]=data.Xk[data.nbPt-1];
+  end[1]=data.Yk[data.nbPt-1];
+  cp2=cp1;
+  
+  if (nbPt == 3)
+  {
+    // start -> cp1 -> end
+    res.stD = cp1 - start;
+    res.enD = end - cp1;
+    worstP=1;
+    return true;
+  }
+  
+  if ( FitCubic(start,res,data.Xk,data.Yk,data.Qk,data.tk,data.nbPt) ) {
+    cp1=start+res.stD/3;
+    cp2=end-res.enD/3;
+  } else {
+    // aie, non-inversible
+    double worstD=0;
+    worstP=-1;
+    for (int i=1;i<data.nbPt;i++) {
+      NR::Point nPt;
+      nPt[0]=data.Xk[i];
+      nPt[1]=data.Yk[i];
+      double nle=DistanceToCubic(start,res,nPt);
+      if ( data.fk[i] ) {
+        // forced points are favored for splitting the recursion; we do this by increasing their distance
+        if ( worstP < 0 || 2*nle > worstD ) {
+          worstP=i;
+          worstD=2*nle;
+        }
+      } else {
+        if ( worstP < 0 || nle > worstD ) {
+          worstP=i;
+          worstD=nle;
+        }
+      }
+    }
+    return false;
+  }
+   
+  // calcul du delta= pondere par les longueurs des segments
+  double delta = 0;
+  {
+    double worstD=0;
+    worstP=-1;
+    NR::Point   prevAppP;
+    NR::Point   prevP;
+    double      prevDist;
+    prevP[0]=data.Xk[0];
+    prevP[1]=data.Yk[0];
+    prevAppP=prevP; // le premier seulement
+    prevDist=0;
+    for (int i = 1; i < data.nbPt - 1; i++)
+    {
+      NR::Point curAppP;
+      NR::Point curP;
+      double    curDist;
+#ifdef with_splotch_killer
+      NR::Point midAppP;
+      NR::Point midP;
+      double    midDist;
+#endif
+      
+      curAppP[0] = N13 (data.tk[i]) * cp1[0] + N23 (data.tk[i]) * cp2[0] + N03 (data.tk[i]) * data.Xk[0] + N33 (data.tk[i]) * data.Xk[data.nbPt - 1];
+      curAppP[1] = N13 (data.tk[i]) * cp1[1] + N23 (data.tk[i]) * cp2[1] + N03 (data.tk[i]) * data.Yk[0] + N33 (data.tk[i]) * data.Yk[data.nbPt - 1];
+      curP[0]=data.Xk[i];
+      curP[1]=data.Yk[i];
+#ifdef with_splotch_killer
+      double mtk=0.5*(data.tk[i]+data.tk[i-1]);
+      midAppP[0] = N13 (mtk) * cp1[0] + N23 (mtk) * cp2[0] + N03 (mtk) * data.Xk[0] + N33 (mtk) * data.Xk[data.nbPt - 1];
+      midAppP[1] = N13 (mtk) * cp1[1] + N23 (mtk) * cp2[1] + N03 (mtk) * data.Yk[0] + N33 (mtk) * data.Yk[data.nbPt - 1];
+      midP=0.5*(curP+prevP);
+#endif
+      
+      NR::Point diff;
+      diff=curAppP-curP;
+      curDist=dot(diff,diff);
+#ifdef with_splotch_killer
+      diff=midAppP-midP;
+      midDist=dot(diff,diff);
+     
+      delta+=0.3333*(curDist+prevDist+midDist)/* *data.lk[i]*/;
+#else
+      delta+=curDist;
+#endif
+      if ( curDist > worstD ) {
+        worstD=curDist;
+        worstP=i;
+      } else if ( data.fk[i] && 2*curDist > worstD ) {
+        worstD=2*curDist;
+        worstP=i;
+      }
+      prevP=curP;
+      prevAppP=curAppP;
+      prevDist=curDist;
+    }
+#ifdef with_splotch_killer
+//    delta/=data.totLen;
+#endif
+  }
+  
+  if (delta < treshhold * treshhold)
+  {
+    // premier jet
+    
+    // Refine a little.
+    for (int i = 1; i < data.nbPt - 1; i++)
+    {
+      NR::Point
+	    pt;
+      pt[0] = data.Xk[i];
+      pt[1] = data.Yk[i];
+      data.tk[i] = RaffineTk (pt, start, cp1, cp2, end, data.tk[i]);
+      if (data.tk[i] < data.tk[i - 1])
+	    {
+	      // Force tk to be monotonic non-decreasing.
+	      data.tk[i] = data.tk[i - 1];
+	    }
+    }
+    
+    if ( FitCubic(start,res,data.Xk,data.Yk,data.Qk,data.tk,data.nbPt) ) {
+    } else {
+      // ca devrait jamais arriver, mais bon
+      res.stD = 3.0 * (cp1 - start);
+      res.enD = 3.0 * (end - cp2 );
+      return true;
+    }
+    double ndelta = 0;
+    {
+      double worstD=0;
+      worstP=-1;
+      NR::Point   prevAppP;
+      NR::Point   prevP;
+      double      prevDist;
+      prevP[0]=data.Xk[0];
+      prevP[1]=data.Yk[0];
+      prevAppP=prevP; // le premier seulement
+      prevDist=0;
+      for (int i = 1; i < data.nbPt - 1; i++)
+      {
+        NR::Point curAppP;
+        NR::Point curP;
+        double    curDist;
+#ifdef with_splotch_killer
+        NR::Point midAppP;
+        NR::Point midP;
+        double    midDist;
+#endif
+        
+        curAppP[0] = N13 (data.tk[i]) * cp1[0] + N23 (data.tk[i]) * cp2[0] + N03 (data.tk[i]) * data.Xk[0] + N33 (data.tk[i]) * data.Xk[data.nbPt - 1];
+        curAppP[1] = N13 (data.tk[i]) * cp1[1] + N23 (data.tk[i]) * cp2[1] + N03 (data.tk[i]) * data.Yk[0] + N33 (data.tk[i]) * data.Yk[data.nbPt - 1];
+        curP[0]=data.Xk[i];
+        curP[1]=data.Yk[i];
+#ifdef  with_splotch_killer
+        double mtk=0.5*(data.tk[i]+data.tk[i-1]);
+        midAppP[0] = N13 (mtk) * cp1[0] + N23 (mtk) * cp2[0] + N03 (mtk) * data.Xk[0] + N33 (mtk) * data.Xk[data.nbPt - 1];
+        midAppP[1] = N13 (mtk) * cp1[1] + N23 (mtk) * cp2[1] + N03 (mtk) * data.Yk[0] + N33 (mtk) * data.Yk[data.nbPt - 1];
+        midP=0.5*(curP+prevP);
+#endif
+        
+        NR::Point diff;
+        diff=curAppP-curP;
+        curDist=dot(diff,diff);
+#ifdef with_splotch_killer
+        diff=midAppP-midP;
+        midDist=dot(diff,diff);
+        
+        ndelta+=0.3333*(curDist+prevDist+midDist)/* *data.lk[i]*/;
+#else
+        ndelta+=curDist;
+#endif
+        if ( curDist > worstD ) {
+          worstD=curDist;
+          worstP=i;
+        } else if ( data.fk[i] && 2*curDist > worstD ) {
+          worstD=2*curDist;
+          worstP=i;
+        }
+        prevP=curP;
+        prevAppP=curAppP;
+        prevDist=curDist;
+      }
+#ifdef with_splotch_killer
+//      ndelta/=data.totLen;
+#endif
+    }
+    
+    if (ndelta < delta + 0.00001)
+    {
+      return true;
+    } else {
+      // nothing better to do
+      res.stD = 3.0 * (cp1 - start);
+      res.enD = 3.0 * (end - cp2 );
+    }
+    return true;
+  } else {    
+    // nothing better to do
+  }
+  
+  return false;
+}
 bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &worstP)
 {
   NR::Point start,end;
@@ -511,20 +897,11 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
   double   totLen=tk[nbPt - 1];
   for (int i = 1; i < nbPt - 1; i++) tk[i] /= totLen;
   
-  // la matrice tNN
-  NR::Matrix M(0, 0, 0, 0, 0, 0);
-  for (int i = 1; i < nbPt - 1; i++)
-  {
-    M[0] += N13 (tk[i]) * N13 (tk[i]);
-    M[1] += N23 (tk[i]) * N13 (tk[i]);
-    M[2] += N13 (tk[i]) * N23 (tk[i]);
-    M[3] += N23 (tk[i]) * N23 (tk[i]);
-  }
-  
-  double
-    det=M.det();
-  if (fabs (det) < 0.000001)
-  {
+  res.p=end;
+  if ( FitCubic(start,res,Xk,Yk,Qk,tk,nbPt) ) {
+    cp1=start+res.stD/3;
+    cp2=end+res.enD/3;
+  } else {
     // aie, non-inversible
     res.stD[0]=res.stD[1]=0;
     res.enD[0]=res.enD[1]=0;
@@ -557,51 +934,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
     free (lk);
     return false;
   }
-  {
-    NR::Matrix  iM=M.inverse();
-    M=iM;
-  }
-  
-  // phase 1: abcisses
-  // calcul des Qk
-  Xk[0] = start[0];
-  Yk[0] = start[1];
-  Xk[nbPt - 1] = end[0];
-  Yk[nbPt - 1] = end[1];
-  
-  for (int i = 1; i < nbPt - 1; i++)
-    Qk[i] = Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
-  
-  // le vecteur Q
-  Q[0] = Q[1] = 0;
-  for (int i = 1; i < nbPt - 1; i++)
-  {
-    Q[0] += N13 (tk[i]) * Qk[i];
-    Q[1] += N23 (tk[i]) * Qk[i];
-  }
-  
-  P = Q * M;
-  //  L_MAT_MulV (M, Q, P);
-  cp1[0] = P[0];
-  cp2[0] = P[1];
-  
-  // phase 2: les ordonnees
-  for (int i = 1; i < nbPt - 1; i++)
-    Qk[i] = Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
-  
-  // le vecteur Q
-  Q[0] = Q[1] = 0;
-  for (int i = 1; i < nbPt - 1; i++)
-  {
-    Q[0] += N13 (tk[i]) * Qk[i];
-    Q[1] += N23 (tk[i]) * Qk[i];
-  }
-  
-  P = Q * M;
-  //  L_MAT_MulV (M, Q, P);
-  cp1[1] = P[0];
-  cp2[1] = P[1];
-  
+   
   // calcul du delta= pondere par les longueurs des segments
   double delta = 0;
   {
@@ -684,77 +1017,19 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
 	    }
     }
     
-    // la matrice tNN
-    M[0] = M[2] = M[1] = M[3] = M[4] = M[5] = 0;
-    for (int i = 1; i < nbPt - 1; i++)
-    {
-      M[0] += N13 (tk[i]) * N13 (tk[i]);
-      M[1] += N23 (tk[i]) * N13 (tk[i]);
-      M[2] += N13 (tk[i]) * N23 (tk[i]);
-      M[3] += N23 (tk[i]) * N23 (tk[i]);
-    }
-    
-    det=M.det();
-    if (fabs (det) < 0.000001)
-    {
-      // aie, non-invertible
-      
+    if ( FitCubic(start,res,Xk,Yk,Qk,tk,nbPt) ) {
+    } else {
+      // ca devrait jamais arriver, mais bon
+      res.stD = 3.0 * (cp1 - start);
+      res.enD = -3.0 * (cp2 - end);
       free (tk);
       free (Qk);
       free (Xk);
       free (Yk);
       free(fk);
       free (lk);
-      res.stD[0]=res.stD[1]=0;
-      res.enD[0]=res.enD[1]=0;
       return true;
     }
-    {
-      NR::Matrix  iM=M.inverse();
-      M=iM;
-    }
-    
-    
-    // phase 1: abcisses
-    // calcul des Qk
-    Xk[0] = start[0];
-    Yk[0] = start[1];
-    Xk[nbPt - 1] = end[0];
-    Yk[nbPt - 1] = end[1];
-    
-    for (int i = 1; i < nbPt - 1; i++)
-      Qk[i] = Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
-    
-    // le vecteur Q
-    Q[0] = Q[1] = 0;
-    for (int i = 1; i < nbPt - 1; i++)
-    {
-      Q[0] += N13 (tk[i]) * Qk[i];
-      Q[1] += N23 (tk[i]) * Qk[i];
-    }
-    
-    P = Q * M;
-    //      L_MAT_MulV (M, Q, P);
-    cp1[0] = P[0];
-    cp2[0] = P[1];
-    
-    // phase 2: les ordonnees
-    for (int i = 1; i < nbPt - 1; i++)
-      Qk[i] = Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
-    
-    // le vecteur Q
-    Q[0] = Q[1] = 0;
-    for (int i = 1; i < nbPt - 1; i++)
-    {
-      Q[0] += N13 (tk[i]) * Qk[i];
-      Q[1] += N23 (tk[i]) * Qk[i];
-    }
-    
-    P = Q * M;
-    //      L_MAT_MulV (M, Q, P);
-    cp1[1] = P[0];
-    cp2[1] = P[1];
-    
     double ndelta = 0;
     {
       double worstD=0;
@@ -823,20 +1098,15 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
     
     if (ndelta < delta + 0.00001)
     {
-      res.stD = 3.0 * (cp1 - start);
-      res.enD = -3.0 * (cp2 - end);
-      res.p = end;
       return true;
     } else {
       // nothing better to do
       res.stD = 3.0 * (cp1 - start);
       res.enD = -3.0 * (cp2 - end);
     }
-    return false;
+    return true;
   } else {    
     // nothing better to do
-    res.stD = 3.0 * (cp1 - start);
-    res.enD = -3.0 * (cp2 - end);
   }
   
   free (tk);

@@ -456,6 +456,19 @@ private:
 
   void DoSimplify (double treshhold,int recLevel=0);
   bool AttemptSimplify (double treshhold, path_descr_cubicto & res,int &worstP);
+  static bool FitCubic(NR::Point &start,path_descr_cubicto & res,double* Xk,double* Yk,double* Qk,double* tk,int nbPt);
+  typedef struct fitting_tables {
+    int      nbPt,maxPt,inPt;
+    double   *Xk;
+    double   *Yk;
+    double   *Qk;
+    double   *tk;
+    double   *lk;
+    char     *fk;
+    double   totLen;
+  } fitting_tables;
+  bool   AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cubicto & res,int &worstP);
+  bool   ExtendFit(fitting_tables &data,double treshhold, path_descr_cubicto & res,int &worstP);
   double RaffineTk (NR::Point pt, NR::Point p0, NR::Point p1, NR::Point p2, NR::Point p3, double it);
   void   FlushPendingAddition(Path* dest,path_descr &lastAddition,path_descr_cubicto &lastCubic,int lastAD);
 };
