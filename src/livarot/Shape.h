@@ -57,7 +57,6 @@ enum
   has_voronoi_data = 1024
 };
 
-class FloatLigne;
 class IntLigne;
 class BitLigne;
 class AlphaLigne;
