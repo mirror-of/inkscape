@@ -1,3 +1,29 @@
+2003-11-22 bulia byak <bulia@dr.com>
+	
+	* unified handling of arrow keys in selector and node editor
+	* lots of new keys for switching tools and calling dialogs
+	* space works as temporary selector toggle
+	* new: tools-switch.{c,h} utilities for switching tools
+	* cleaned up zoom shortcts (1-5)
+	* keys for toggling grid (#) and guides (|)
+	* esc deselects, cancels rubberband selection, dragging or transformation 
+	  (in selector)
+	* quit (ctrl-q) now works everywhere
+	* new document is opened on startup if none was given on command line
+	* closing last open document shuts down the program
+	* floating toolbox is at most one copy, as are other dialogs
+	* toolbox command is moved to the dialogs menu, ctrl-` as shortcut
+	* document windows closeable by ctrl-f4
+	* cleaned up status line messages, changed "items" to "objects"
+	* quit confirmation dialog appears near the cursor and is transient
+	* fix: killing quit confirmation dialog was interpreted as No instead 
+	  of Cancel
+	* preferences are now saved in case of a crash
+	* preferences are saved on exit
+	* new: prefs-utils.{c,h} utilities for handling preferences
+	* misc fixes
+	* misc shortcuts
+
 2003-11-18 Ted Gould <ted@gould.cx>
 	
 	* src/modules/system.c: Passed the wrong pointer.  Fix is by
