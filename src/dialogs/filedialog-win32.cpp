@@ -258,6 +258,9 @@ FileSaveDialog::FileSaveDialog(
       Inkscape::Extension::DB::IOExtensionDescription* d =
 	reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription*>(i->data);
 
+	  if (!d->sensitive)
+		  continue;
+
       int w = snprintf (p, N, "%s", d->name);
       N -= w + 1;
       p += w + 1;
