@@ -133,7 +133,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 			int    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
-			cb=getPoint(nPt).firstA;
+			cb=getPoint(nPt).incidentEdge[FIRST];
       // count the number of edge coming in nPt from above if nbUp, and the number of edge exiting nPt to go below in nbDn
       // upNo and dnNo are one of these edges, if any exist
 			while ( cb >= 0 && cb < numberOfEdges() ) {
@@ -157,7 +157,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
       
 			if ( nbUp > 0 ) {
         // first remove edges coming from above
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) { // we salvage the edge upNo to plug the edges we'll be addingat its place
@@ -199,7 +199,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
       
       // add the remaining edges
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
@@ -225,7 +225,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 			int    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
-			cb=getPoint(nPt).firstA;
+			cb=getPoint(nPt).incidentEdge[FIRST];
 			while ( cb >= 0 && cb < numberOfEdges() ) {
 				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 					upNo=cb;
@@ -246,7 +246,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 			}
       
 			if ( nbUp > 0 ) {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) {
@@ -286,7 +286,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 			}
       
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
@@ -330,7 +330,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			int    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
-			cb=getPoint(nPt).firstA;
+			cb=getPoint(nPt).incidentEdge[FIRST];
 			while ( cb >= 0 && cb < numberOfEdges() ) {
 				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 					upNo=cb;
@@ -351,7 +351,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			}
 
 			if ( nbUp > 0 ) {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) {
@@ -377,7 +377,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			}
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
@@ -400,7 +400,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			int    cb;
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
-			cb=getPoint(nPt).firstA;
+			cb=getPoint(nPt).incidentEdge[FIRST];
 			while ( cb >= 0 && cb < numberOfEdges() ) {
 				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 					upNo=cb;
@@ -421,7 +421,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			}
 
 			if ( nbUp > 0 ) {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) {
@@ -448,7 +448,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 			}
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
@@ -796,167 +796,199 @@ void              Shape::DirectQuickScan(float &pos,int &curP,float to,bool doSo
 }
 
 
-// scan and compute coverage, FloatLigne version
-// coverage of the line is bult in 2 parts: first a set of rectangles of height the height of the line (here: "step")
-// one rectangle for each portion of the sweepline that is in the polygon at the beginning of the scan. then a set ot trapezoids
-// are added or removed to these rectangles, one trapezoid for each edge destroyed or edge crossing the entire line. think of
-// it as a refinement of the coverage by rectangles
-void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,bool exact,float step)
+// scan and compute coverage, FloatLigne version coverage of the line is bult in 2 parts: first a
+// set of rectangles of height the height of the line (here: "step") one rectangle for each portion
+// of the sweepline that is in the polygon at the beginning of the scan.  then a set ot trapezoids
+// are added or removed to these rectangles, one trapezoid for each edge destroyed or edge crossing
+// the entire line. think of it as a refinement of the coverage by rectangles
+
+void Shape::Scan(float &pos, int &curP, float to, FloatLigne *line, bool exact, float step)
 {
-  if ( numberOfEdges() <= 1 ) return;
-	if ( pos >= to ) return;
-	if ( pos < to ) {
-    // first step: the rectangles
-    // since we read the sweepline left to right, we know the boundaries of the rectangles are appended in a list, hence
-    // the AppendBord(). we salvage the guess value for the trapezoids the edges will induce
- 		if ( sTree->racine ) {
-			SweepTree* curS=static_cast <SweepTree*> (sTree->racine->Leftmost());
-			while ( curS ) {
-				int    lastGuess=-1;
-				int    cb=curS->bord;
-				//				printf("%i %i %f/ ",cb,(swrData[cb].sens)?1:0,swrData[cb].curX);
-				if ( swrData[cb].sens == false && curS->elem[LEFT] ) {
-					int  lb=(static_cast <SweepTree*> (curS->elem[LEFT]))->bord;
-					lastGuess=line->AppendBord(swrData[lb].curX,to-swrData[lb].curY,swrData[cb].curX,to-swrData[cb].curY,0.0);
-					swrData[lb].guess=lastGuess-1;
-					swrData[cb].guess=lastGuess;
-				} else {
-					int  lb=curS->bord;
-					swrData[lb].guess=-1;
+    if ( numberOfEdges() <= 1 ) {
+        return;
+    }
+    
+    if ( pos >= to ) {
+        return;
+    }
+    
+    if ( pos < to ) {
+
+        // first step: the rectangles since we read the sweepline left to right, we know the
+        // boundaries of the rectangles are appended in a list, hence the AppendBord(). we salvage
+        // the guess value for the trapezoids the edges will induce
+        
+        if ( sTree->racine ) {
+            SweepTree *curS = static_cast<SweepTree*>(sTree->racine->Leftmost());
+            while ( curS ) {
+
+                int lastGuess = -1;
+                int cb = curS->bord;
+
+                if ( swrData[cb].sens == false && curS->elem[LEFT] ) {
+
+                    int lb= (static_cast<SweepTree*>(curS->elem[LEFT]))->bord;
+
+                    lastGuess = line->AppendBord(swrData[lb].curX,
+                                                 to - swrData[lb].curY,
+                                                 swrData[cb].curX,
+                                                 to - swrData[cb].curY,0.0);
+                    
+                    swrData[lb].guess = lastGuess - 1;
+                    swrData[cb].guess = lastGuess;
+                } else {
+                    int lb = curS->bord;
+                    swrData[lb].guess=-1;
+                }
+                
+                curS=static_cast <SweepTree*> (curS->elem[RIGHT]);
+            }
         }
-				curS=static_cast <SweepTree*> (curS->elem[RIGHT]);
-			}
-			//			printf("\n");
-		}
-		int    curPt=curP;
-		while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
-			int           nPt=-1;
-			nPt=curPt++;
 
-      // same thing as the usual Scan(), just with a hardcoded "indegree+outdegree=2" case, since it's the most common one
-			int    cb;
-			int    nbUp=0,nbDn=0;
-			int    upNo=-1,dnNo=-1;
-			if ( getPoint(nPt).totalDegree() == 2 ) {
-				cb=getPoint(nPt).firstA;
-				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					upNo=cb;
-					nbUp++;
-				}
-				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					dnNo=cb;
-					nbDn++;
-				}
-				cb=getPoint(nPt).lastA;
-				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					upNo=cb;
-					nbUp++;
-				}
-				if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-					dnNo=cb;
-					nbDn++;
-				}
+	int curPt = curP;
+        while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
 
-			} else {
-				cb=getPoint(nPt).firstA;
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						upNo=cb;
-						nbUp++;
-					}
-					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						dnNo=cb;
-						nbDn++;
-					}
-					cb=NextAt(nPt,cb);
-				}
-			}
+            int nPt = curPt++;
 
-			if ( nbDn <= 0 ) {
-				upNo=-1;
-			}
-			if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
-				upNo=-1;
-			}
+      // same thing as the usual Scan(), just with a hardcoded "indegree+outdegree=2" case, since
+      // it's the most common one
 
-			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
-				cb=getPoint(nPt).firstA;
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						if ( cb != upNo ) {
-							SweepTree* node=swrData[cb].misc;
-							if ( node ) {
-								swrData[cb].lastX=swrData[cb].curX;
-								swrData[cb].lastY=swrData[cb].curY;
-								swrData[cb].curX=getPoint(nPt).x[0];
-								swrData[cb].curY=getPoint(nPt).x[1];
-								swrData[cb].misc=NULL;
-								DestroyEdge(cb,to,line,step); // create trapezoid for the chunk of edge intersecting with the line
+            int cb;
+            int nbUp = 0;
+            int nbDn = 0;
+            int upNo = -1;
+            int dnNo = -1;
+            if ( getPoint(nPt).totalDegree() == 2 ) {
 
-								node->Remove(*sTree,*sEvts,true);
-							}
-						}
-					}
-					cb=NextAt(nPt,cb);
-				}
-			}
+                for (int i = 0; i < 2; i++) {
+                    cb = getPoint(nPt).incidentEdge[i];
+                    Shape::dg_arete const &e = getEdge(cb);
+                    if ( ( e.st < e.en && nPt == e.en ) || ( e.st > e.en && nPt == e.st ) ) {
+                        upNo = cb;
+                        nbUp++;
+                    }
+                    if ( ( e.st > e.en && nPt == e.en ) || ( e.st < e.en && nPt == e.st ) ) {
+                        dnNo = cb;
+                        nbDn++;
+                    }
+                }
+                
+            } else {
 
-			// traitement du "upNo devient dnNo"
-			SweepTree* insertionNode=NULL;
-			if ( dnNo >= 0 ) {
-				if ( upNo >= 0 ) {
-					SweepTree* node=swrData[upNo].misc;
-					swrData[upNo].misc=NULL;
-					swrData[upNo].lastX=swrData[upNo].curX;
-					swrData[upNo].lastY=swrData[upNo].curY;
-					swrData[upNo].curX=getPoint(nPt).x[0];
-					swrData[upNo].curY=getPoint(nPt).x[1];
-					DestroyEdge(upNo,to,line,step);
+                cb = getPoint(nPt).incidentEdge[FIRST];
+                while ( cb >= 0 && cb < numberOfEdges() ) {
+                    Shape::dg_arete const &e = getEdge(cb);
+                    if ( ( e.st < e.en && nPt == e.en ) || ( e.st > e.en && nPt == e.st ) ) {
+                        upNo = cb;
+                        nbUp++;
+                    }
+                    if ( ( e.st > e.en && nPt == e.en ) || ( e.st < e.en && nPt == e.st ) ) {
+                        dnNo = cb;
+                        nbDn++;
+                    }
+                    cb=NextAt(nPt,cb);
+                }
+            }
 
-					node->ConvertTo(this,dnNo,1,nPt);
 
-					swrData[dnNo].misc=node;
-					insertionNode=node;
-					CreateEdge(dnNo,to,step);
-					swrData[dnNo].guess=swrData[upNo].guess;
-				} else {
-					SweepTree* node=sTree->add(this,dnNo,1,nPt,this);
-					swrData[dnNo].misc=node;
-					node->Insert(*sTree,*sEvts,this,nPt,true);
-					insertionNode=node;
-					CreateEdge(dnNo,to,step);
-				}
-			}
+            if ( nbDn <= 0 ) {
+                upNo=-1;
+            }
+            if ( upNo >= 0 && swrData[upNo].misc == NULL ) {
+                upNo=-1;
+            }
 
-			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).firstA;
-				while ( cb >= 0 && cb < numberOfEdges() ) {
-					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
-						if ( cb != dnNo ) {
-							SweepTree* node=sTree->add(this,cb,1,nPt,this);
-							swrData[cb].misc=node;
-							node->InsertAt(*sTree,*sEvts,this,insertionNode,nPt,true);
-							CreateEdge(cb,to,step);
-						}
-					}
-					cb=NextAt(nPt,cb);
-				}
-			}
-		}
-		curP=curPt;
-		if ( curPt > 0 ) pos=getPoint(curPt-1).x[1]; else pos=to;
-	}
-  // update intersections with the sweepline, and add trapezoids for edges crossing the line
-  pos=to;
-	if ( sTree->racine ) {
-		SweepTree* curS=static_cast <SweepTree*> (sTree->racine->Leftmost());
-		while ( curS ) {
-			int    cb=curS->bord;
-			AvanceEdge(cb,to,line,exact,step);
-			curS=static_cast <SweepTree*> (curS->elem[RIGHT]);
-		}
-	}
+            if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
+                cb = getPoint(nPt).incidentEdge[FIRST];
+                while ( cb >= 0 && cb < numberOfEdges() ) {
+                    Shape::dg_arete const &e = getEdge(cb);
+                    if ( ( e.st < e.en && nPt == e.en ) || ( e.st > e.en && nPt == e.st ) ) {
+                        if ( cb != upNo ) {
+                            SweepTree* node = swrData[cb].misc;
+                            if ( node ) {
+                                swrData[cb].lastX = swrData[cb].curX;
+                                swrData[cb].lastY = swrData[cb].curY;
+                                swrData[cb].curX = getPoint(nPt).x[0];
+                                swrData[cb].curY = getPoint(nPt).x[1];
+                                swrData[cb].misc = NULL;
+                                // create trapezoid for the chunk of edge intersecting with the line
+                                DestroyEdge(cb,to,line,step);
+                                node->Remove(*sTree, *sEvts, true);
+                            }
+                        }
+                    }
+                    
+                    cb = NextAt(nPt,cb);
+                }
+            }
+
+            // traitement du "upNo devient dnNo"
+            SweepTree *insertionNode = NULL;
+            if ( dnNo >= 0 ) {
+                if ( upNo >= 0 ) {
+                    SweepTree* node = swrData[upNo].misc;
+                    swrData[upNo].misc = NULL;
+                    swrData[upNo].lastX = swrData[upNo].curX;
+                    swrData[upNo].lastY = swrData[upNo].curY;
+                    swrData[upNo].curX = getPoint(nPt).x[0];
+                    swrData[upNo].curY = getPoint(nPt).x[1];
+                    DestroyEdge(upNo, to, line, step);
+
+                    node->ConvertTo(this, dnNo, 1, nPt);
+
+                    swrData[dnNo].misc = node;
+                    insertionNode = node;
+                    CreateEdge(dnNo, to, step);
+                    swrData[dnNo].guess = swrData[upNo].guess;
+                } else {
+                    SweepTree *node = sTree->add(this, dnNo, 1, nPt, this);
+                    swrData[dnNo].misc = node;
+                    node->Insert(*sTree, *sEvts, this, nPt, true);
+                    insertionNode = node;
+                    CreateEdge(dnNo, to, step);
+                }
+            }
+
+            if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
+                cb = getPoint(nPt).incidentEdge[FIRST];
+                while ( cb >= 0 && cb < numberOfEdges() ) {
+                    Shape::dg_arete const &e = getEdge(cb);
+                    if ( ( e.st > e.en && nPt == e.en ) || ( e.st < e.en && nPt == e.st ) ) {
+                        if ( cb != dnNo ) {
+                            SweepTree *node = sTree->add(this, cb, 1, nPt, this);
+                            swrData[cb].misc = node;
+                            node->InsertAt(*sTree, *sEvts, this, insertionNode, nPt, true);
+                            CreateEdge(cb, to, step);
+                        }
+                    }
+                    cb = NextAt(nPt,cb);
+                }
+            }
+        }
+        
+        curP = curPt;
+        if ( curPt > 0 ) {
+            pos = getPoint(curPt - 1).x[1];
+        } else {
+            pos = to;
+        } 
+    }
+    
+    // update intersections with the sweepline, and add trapezoids for edges crossing the line
+    pos = to;
+    if ( sTree->racine ) {
+        SweepTree* curS = static_cast<SweepTree*>(sTree->racine->Leftmost());
+        while ( curS ) {
+            int cb = curS->bord;
+            AvanceEdge(cb, to, line, exact, step);
+            curS = static_cast<SweepTree*>(curS->elem[RIGHT]);
+        }
+    }
 }
+
+
+
+
 void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,BitLigne* line,bool exact,float step)
 {
   if ( numberOfEdges() <= 1 ) return;
@@ -1020,7 +1052,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
 			if ( getPoint(nPt).totalDegree() == 2 ) {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 					upNo=cb;
 					nbUp++;
@@ -1029,7 +1061,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 					dnNo=cb;
 					nbDn++;
 				}
-				cb=getPoint(nPt).lastA;
+				cb=getPoint(nPt).incidentEdge[LAST];
 				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 					upNo=cb;
 					nbUp++;
@@ -1040,7 +1072,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 				}
 
 			} else {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						upNo=cb;
@@ -1062,7 +1094,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 			}
 
 			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) {
@@ -1110,7 +1142,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 			}
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
@@ -1166,7 +1198,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
 			if ( getPoint(nPt).totalDegree() == 2 ) {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 					upNo=cb;
 					nbUp++;
@@ -1175,7 +1207,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 					dnNo=cb;
 					nbDn++;
 				}
-				cb=getPoint(nPt).lastA;
+				cb=getPoint(nPt).incidentEdge[LAST];
 				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 					upNo=cb;
 					nbUp++;
@@ -1186,7 +1218,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 				}
 
 			} else {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						upNo=cb;
@@ -1208,7 +1240,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 			}
 
 			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) {
@@ -1257,7 +1289,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 			}
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
@@ -1321,7 +1353,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
 			if ( getPoint(nPt).totalDegree() == 2 ) {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 					upNo=cb;
 					nbUp++;
@@ -1330,7 +1362,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 					dnNo=cb;
 					nbDn++;
 				}
-				cb=getPoint(nPt).lastA;
+				cb=getPoint(nPt).incidentEdge[LAST];
 				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 					upNo=cb;
 					nbUp++;
@@ -1341,7 +1373,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 				}
 
 			} else {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						upNo=cb;
@@ -1363,7 +1395,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 			}
 
 			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) {
@@ -1403,7 +1435,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 			}
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
@@ -1489,7 +1521,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
 			if ( getPoint(nPt).totalDegree() == 2 ) {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 					upNo=cb;
 					nbUp++;
@@ -1498,7 +1530,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 					dnNo=cb;
 					nbDn++;
 				}
-				cb=getPoint(nPt).lastA;
+				cb=getPoint(nPt).incidentEdge[LAST];
 				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 					upNo=cb;
 					nbUp++;
@@ -1509,7 +1541,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 				}
 
 			} else {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						upNo=cb;
@@ -1531,7 +1563,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 			}
 
 			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) {
@@ -1569,7 +1601,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 			}
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
@@ -1630,7 +1662,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 			int    nbUp=0,nbDn=0;
 			int    upNo=-1,dnNo=-1;
 			if ( getPoint(nPt).totalDegree() == 2 ) {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 					upNo=cb;
 					nbUp++;
@@ -1639,7 +1671,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 					dnNo=cb;
 					nbDn++;
 				}
-				cb=getPoint(nPt).lastA;
+				cb=getPoint(nPt).incidentEdge[LAST];
 				if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 					upNo=cb;
 					nbUp++;
@@ -1650,7 +1682,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 				}
 
 			} else {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						upNo=cb;
@@ -1672,7 +1704,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 			}
 
 			if ( nbUp > 1 || ( nbUp == 1 && upNo < 0 ) ) {
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != upNo ) {
@@ -1711,7 +1743,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 			}
 
 			if ( nbDn > 1 ) { // si nbDn == 1 , alors dnNo a deja ete traite
-				cb=getPoint(nPt).firstA;
+				cb=getPoint(nPt).incidentEdge[FIRST];
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
