@@ -43,6 +43,8 @@
 #include "document.h"
 #include "style.h"
 #include "version.h"
+#include "inkscape.h"
+#include "view.h"
 
 #include "sp-text.h"
 
@@ -2011,11 +2013,7 @@ sp_text_insert (SPText *text, gint pos, const gchar *utf8)
 
 	u = g_utf8_get_char (utf8);
 	if (u == (gunichar) -1) {
-		g_warning ("Bad UTF-8 character");
-		return pos;
-	}
-	if (!g_unichar_isprint (u)) {
-		g_warning ("Non-printable character");
+		g_warning ("Bad UTF-8 character"); // this can only happen due to a bug, so it goes to the console
 		return pos;
 	}
 
