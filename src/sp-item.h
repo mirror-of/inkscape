@@ -121,6 +121,9 @@ struct SPItemClass {
 	NRArenaItem * (* show) (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 	void (* hide) (SPItem *item, unsigned int key);
 
+	/* Return a vector of points that should be considered for snapping
+	** as the item's `nodes'.
+	*/
 	std::vector<NR::Point> (* snappoints) (SPItem *item);
 
 	/* Apply the transform optimally, and return any residual transformation */
