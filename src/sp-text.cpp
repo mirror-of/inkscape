@@ -347,25 +347,22 @@ sp_text_modified (SPObject *object, guint flags)
 static SPRepr *
 sp_text_write (SPObject *object, SPRepr *repr, guint flags)
 {
-    SPObject *child;
-    SPRepr *crepr;
-
     SPText *text = SP_TEXT (object);
 
     if (flags & SP_OBJECT_WRITE_BUILD) {
         if (!repr)
             repr = sp_repr_new ("text");
         GSList *l = NULL;
-        for (child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+        for (SPObject *child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+            SPRepr *crepr = NULL;
             if (SP_IS_TSPAN (child)) {
                 crepr = child->updateRepr(NULL, flags);
-                if (crepr) l = g_slist_prepend (l, crepr);
             } else if (SP_IS_TEXTPATH (child)) {
                 crepr = child->updateRepr(NULL, flags);
-                if (crepr) l = g_slist_prepend (l, crepr);
             } else {
                 crepr = sp_xml_document_createTextNode (sp_repr_document (repr), SP_STRING_TEXT (child));
             }
+            if (crepr) l = g_slist_prepend (l, crepr);
         }
         while (l) {
             sp_repr_add_child (repr, (SPRepr *) l->data, NULL);
@@ -373,7 +370,7 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
             l = g_slist_remove (l, l->data);
         }
     } else {
-        for (child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+        for (SPObject *child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
             if (SP_IS_TSPAN (child)) {
                 child->updateRepr(flags);
             } else if (SP_IS_TEXTPATH (child)) {
