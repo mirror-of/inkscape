@@ -11,6 +11,6 @@
 		<output_extension>org.inkscape.output.ai</output_extension>
     </input>
     <script>
-        <command location="extensions">ill2svg.pl</command>
+        <command reldir="extensions">ill2svg.pl</command>
     </script>
 </inkscape-extension>
