@@ -74,7 +74,7 @@ Shape::~Shape (void)
 
 void Shape::Affiche(void)
 {
-  printf("sh=%x nbPt=%i nbAr=%i\n",this,nbPt,nbAr);
+  printf("sh=%p nbPt=%i nbAr=%i\n",this,nbPt,nbAr);
   for (int i=0;i<nbPt;i++) {
     printf("pt %i : x=(%f %f) dI=%i dO=%i\n",i,pts[i].x[0],pts[i].x[1],pts[i].dI,pts[i].dO);
   }

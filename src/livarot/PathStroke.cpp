@@ -352,10 +352,9 @@ Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Poin
 	}
 	if (angSi < 0)
 	{
-		NR::Point x;
 		{
-			NR::Point biss = next - prev;
 #if 0
+			NR::Point biss = next - prev;
 			double c2 = cross (biss, next);
 			double l = width / c2;
 			double projn = l * (dot (biss, next));
@@ -446,8 +445,8 @@ Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Poin
 	else
 	{
 		{
-			NR::Point biss = next - prev;
 #if 0
+			NR::Point biss = next - prev;
 			double c2 = cross (next, biss);
 			double l = width / c2;
 			double projn = l * (dot (biss, next));

@@ -547,7 +547,6 @@ bool Path::AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cu
 {
   NR::Point start,end;
   // pour une coordonnee
-  NR::Point P,Q;
   NR::Point cp1, cp2;
   
   worstP=1;
@@ -823,8 +822,6 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
   double * tk;				// les tk
   double *  Qk;				// les Qk
   char *    fk;       // si point force
-  NR::Point P;
-  NR::Point Q;
   
   NR::Point cp1, cp2;
   
@@ -1228,7 +1225,7 @@ Path::RaffineTk (NR::Point pt, NR::Point p0, NR::Point p1, NR::Point p2, NR::Poi
 {
   // Refinement of the tk values. 
   // Just one iteration of Newtow Raphson, given that we're approaching the curve anyway.
-  // [fr: vu que de toute facon la courbe est approchée]
+  // [fr: vu que de toute facon la courbe est approchC)e]
   double Ax, Bx, Cx;
   double Ay, By, Cy;
   Ax =

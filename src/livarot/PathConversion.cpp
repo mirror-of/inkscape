@@ -784,7 +784,6 @@ void Path::CubicTangent(double t, NR::Point &oPt, const NR::Point &iS, const NR:
 	NR::Point ax = ieD-2*iE+2*iS+isD;
 	NR::Point bx = 3*iE-ieD-2*isD-3*iS;
 	NR::Point cx = isD;
-	NR::Point dx = iS;
 	
 	oPt = 3*t*t*ax+2*t*bx+cx;
 }
@@ -1062,7 +1061,6 @@ void Path::RecBezierTo(NR::Point const &iP,
 	if ( lev <= 0 ) return;
 	NR::Point ps=iS-iP;
 	NR::Point pe=iE-iP;
-	NR::Point se=iE-iS;
 	const double s = fabs(cross(pe,ps));
 	if ( s < tresh ) return ;
 	
@@ -1185,7 +1183,6 @@ void Path::RecBezierTo(NR::Point const &iP, NR::Point const &iS,NR::Point const 
 	if ( lev <= 0 ) return;
 	const NR::Point ps=iS-iP;
 	const NR::Point pe=iE-iP;
-	const NR::Point se=iE-iS;
 	const double s = fabs(cross(pe,ps));
 	if ( s < tresh ) doneSub=true ;
   

@@ -865,7 +865,7 @@ void        Path::ConvertPositionsToForced(int nbPos,cut_position* poss)
           int  add=SizeForData(descr_lineto);
           ShiftDData(lastPos,add);
           
-          descr_cmd[i].dStart=lastPos; // dStart a ete changÂŽ par shift
+          descr_cmd[i].dStart=lastPos; // dStart a ete changBŽ par shift
           descr_cmd[i].flags&=~descr_type_mask;
           descr_cmd[i].flags|=descr_lineto;
           path_descr_lineto *nData = reinterpret_cast<path_descr_lineto *>( descr_data + descr_cmd[i].dStart );
@@ -1151,7 +1151,6 @@ void        Path::ConvertPositionsToMoveTo(int nbPos,cut_position* poss)
   Path*  res=new Path;
   
   NR::Point    lastP(0,0);
-  bool         hasMoved=false;
   for (int i=0;i<descr_nb;i++) {
     int typ=descr_cmd[i].flags&descr_type_mask;
     if ( typ == descr_moveto ) {

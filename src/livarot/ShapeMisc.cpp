@@ -1005,8 +1005,6 @@ Shape::ReFormeBezierTo (int bord, int curBord, Path * dest, Path * from)
   }
 
   g_return_val_if_fail(nBData != NULL, 0);
-  NR::Point bstx = from->PrevPoint (inBezier - 1);
-  NR::Point benx = nBData->p;
   
   if (pe == ps)
   {
