@@ -35,12 +35,15 @@
 #include "sp-shape.h"
 
 #include "sp-offset.h"
+#include "sp-use-reference.h"
+#include "prefs-utils.h"
 
 #include "libnr/nr-point.h"
 #include <libnr/nr-point-fns.h>
 #include <libnr/nr-point-ops.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
+#include <libnr/nr-matrix-ops.h>
 
 #define noOFFSET_VERBOSE
 
@@ -65,6 +68,7 @@
 
 static void sp_offset_class_init (SPOffsetClass * klass);
 static void sp_offset_init (SPOffset * offset);
+static void sp_offset_finalize(GObject *obj);
 
 static void sp_offset_build (SPObject * object, SPDocument * document,
                              SPRepr * repr);
@@ -83,52 +87,13 @@ Path *bpath_to_liv_path (NArtBpath * bpath);
 
 void   refresh_offset_source(SPOffset* offset);
 
-// pour recevoir les changements de l'objet source
-static void sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
-                                           const gchar * oldval,
-                                           const gchar * newval,
-					   bool is_interactive, void * data);
-static void sp_offset_source_destroy (SPRepr * repr, void *data);
-static void sp_offset_source_child_added (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data);
-static void sp_offset_source_child_removed (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data);
-static void sp_offset_source_content_changed (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, void * data);
+static void sp_offset_start_listening(SPOffset *offset,SPObject* to);
+static void sp_offset_quit_listening(SPOffset *offset);
+static void sp_offset_href_changed(SPObject *old_ref, SPObject *ref, SPOffset *offset);
+static void sp_offset_move_compensate(NR::Matrix const *mp, SPItem *original, SPOffset *self);
+static void sp_offset_delete_self(SPObject *deleted, SPOffset *self);
+static void sp_offset_source_modified (SPObject *iSource, guint flags, SPItem *item);
 
-// the regular listener vector
-SPReprEventVector offset_source_event_vector = {
-  sp_offset_source_destroy,
-  NULL,				/* Add child */
-  sp_offset_source_child_added,
-  NULL,
-  sp_offset_source_child_removed,				/* Child removed */
-  NULL,
-  sp_offset_source_attr_changed,
-  NULL,				/* Change content */
-  sp_offset_source_content_changed,
-  NULL,				/* change_order */
-  NULL
-};
-
-// listener vector for sons of source object
-// it is intended to deal with text elements
-// indeed, text is mostly stored in tspans (or text itself), so we need to listen to these
-// the text object has listener attached that will track adding and removal of children,
-// and add this listener vector to them
-// theoritically, children should get the same listener vector as their parents, but that would require us to
-// track in the sp-offset what is the source and what is the childrens. having only one object with the
-// offset_source_event_vector makes that easy
-SPReprEventVector offset_source_child_event_vector = {
-  sp_offset_source_destroy,
-  NULL,				/* Add child */
-  NULL,
-  NULL,
-  NULL,				/* Child removed */
-  NULL,
-  NULL,
-  NULL,				/* Change content */
-  sp_offset_source_content_changed,
-  NULL,				/* change_order */
-  NULL
-};
 
 // slow= source path->polygon->offset of polygon->polygon->path
 // fast= source path->offset of source path->polygon->path
@@ -170,12 +135,15 @@ sp_offset_get_type (void)
 static void
 sp_offset_class_init (SPOffsetClass * klass)
 {
+	GObjectClass  *gobject_class = (GObjectClass *) klass;
   SPObjectClass *sp_object_class = (SPObjectClass *) klass;
-  SPItemClass *item_class = (SPItemClass *) klass;
-  SPShapeClass *shape_class = (SPShapeClass *) klass;
+  SPItemClass   *item_class = (SPItemClass *) klass;
+  SPShapeClass  *shape_class = (SPShapeClass *) klass;
   
   parent_class = (SPShapeClass *) g_type_class_ref (SP_TYPE_SHAPE);
   
+	gobject_class->finalize = sp_offset_finalize;
+
   sp_object_class->build = sp_offset_build;
   sp_object_class->write = sp_offset_write;
   sp_object_class->set = sp_offset_set;
@@ -195,9 +163,28 @@ sp_offset_init (SPOffset * offset)
   offset->original = NULL;
   offset->originalPath = NULL;
   offset->knotSet = false;
-  offset->sourceObject = NULL;
+	offset->sourceDirty=false;
+	offset->isUpdating=false;
+	// init various connections
+  offset->sourceHref = NULL;
   offset->sourceRepr = NULL;
-  offset->sourceDirty=false;
+  offset->sourceObject = NULL;
+	new (&offset->_delete_connection) SigC::Connection();
+	new (&offset->_changed_connection) SigC::Connection();
+	new (&offset->_transformed_connection) SigC::Connection();
+	// set up the uri reference
+	offset->sourceRef = new SPUseReference(SP_OBJECT(offset));
+	offset->_changed_connection = offset->sourceRef->changedSignal().connect(SigC::bind(SigC::slot(sp_offset_href_changed), offset));
+}
+static void
+sp_offset_finalize(GObject *obj)
+{
+	SPOffset *offset = (SPOffset *) obj;
+	
+	delete offset->sourceRef;
+	offset->_delete_connection.~Connection();
+	offset->_changed_connection.~Connection();
+	offset->_transformed_connection.~Connection();
 }
 
 static void
@@ -224,14 +211,21 @@ sp_offset_build (SPObject * object, SPDocument * document, SPRepr * repr)
     
     sp_object_read_attr (object, "inkscape:original");
   }
-  if ( sp_repr_attr (object->repr, "inkscape:href") ) {
-    sp_object_read_attr (object, "inkscape:href");
+  if ( sp_repr_attr (object->repr, "xlink:href") ) {
+    sp_object_read_attr (object, "xlink:href");
   } else {
-    const gchar* oldA=sp_repr_attr(object->repr,"xlink:href");
-    sp_repr_set_attr(object->repr,"inkscape:href",oldA);
-    sp_repr_set_attr(object->repr,"xlink:href",NULL);
-    
-    sp_object_read_attr (object, "inkscape:href");
+    const gchar* oldA=sp_repr_attr(object->repr,"inkscape:href");
+		if ( oldA ) {
+			int   lA=strlen(oldA);
+			char* nA=(char*)malloc((lA+1)*sizeof(char));
+			memcpy(nA+1,oldA,lA*sizeof(char));
+			nA[0]='#';
+			nA[lA+1]=0;
+			sp_repr_set_attr(object->repr,"xlink:href",nA);
+			free(nA);
+			sp_repr_set_attr(object->repr,"inkscape:href",NULL);
+    }
+    sp_object_read_attr (object, "xlink:href");
   }
 }
 
@@ -251,7 +245,7 @@ sp_offset_write (SPObject * object, SPRepr * repr, guint flags)
     sp_repr_set_attr (repr, "sodipodi:type", "inkscape:offset");
     sp_repr_set_double (repr, "inkscape:radius", offset->rad);
     sp_repr_set_attr (repr, "inkscape:original", offset->original);
-    sp_repr_set_attr (repr, "inkscape:href", offset->sourceObject);
+    sp_repr_set_attr (repr, "inkscape:href", offset->sourceHref);
   }
 
 
@@ -278,27 +272,19 @@ sp_offset_release (SPObject * object)
 {
   SPOffset *offset = (SPOffset *) object;
   
-  if (offset->original)
-    free (offset->original);
-  if (offset->originalPath)
-    delete ((Path *) offset->originalPath);
-  
+  if (offset->original) free (offset->original);
+  if (offset->originalPath) delete ((Path *) offset->originalPath);
   offset->original = NULL;
   offset->originalPath = NULL;
   
-  if (offset->sourceObject)
-    free (offset->sourceObject);
-  offset->sourceObject = NULL;
-  
-  if (offset->sourceRepr)
-  {
-    sp_repr_remove_listener_by_data (offset->sourceRepr, offset);
-    for (SPRepr *child=offset->sourceRepr->children;child;child=child->next) sp_repr_remove_listener_by_data (child, offset);
-  }
-  offset->sourceRepr = NULL;
-  
-  if (((SPObjectClass *) parent_class)->release)
-  {
+	sp_offset_quit_listening(offset);
+	
+	offset->_changed_connection.disconnect();
+	g_free(offset->sourceHref);
+	offset->sourceHref = NULL;
+	offset->sourceRef->detach();
+    
+  if (((SPObjectClass *) parent_class)->release) {
     ((SPObjectClass *) parent_class)->release (object);
   }
   
@@ -317,13 +303,9 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
   {
     case SP_ATTR_INKSCAPE_ORIGINAL:
     case SP_ATTR_SODIPODI_ORIGINAL:
-      if (value == NULL)
-      {
-      }
-      else
-      {
-        if (offset->original)
-        {
+      if (value == NULL) {
+      } else {
+        if (offset->original) {
           free (offset->original);
           delete ((Path *) offset->originalPath);
           offset->original = NULL;
@@ -341,80 +323,38 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
         sp_curve_unref (curve);
         
         offset->knotSet = false;
-        object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        if ( offset->isUpdating == false ) object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
       }
       break;
     case SP_ATTR_INKSCAPE_RADIUS:
     case SP_ATTR_SODIPODI_RADIUS:
-	if (!sp_svg_length_read_computed_absolute (value, &offset->rad)) {
+			if (!sp_svg_length_read_computed_absolute (value, &offset->rad)) {
         if (fabs (offset->rad) < 0.01)
           offset->rad = (offset->rad < 0) ? -0.01 : 0.01;
         offset->knotSet = false; // knotset=false because it's not set from the context
       }
-      object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+      if ( offset->isUpdating == false ) object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
       break;
     case SP_ATTR_INKSCAPE_HREF:
     case SP_ATTR_XLINK_HREF:
-      if (value)
-      {
-        if (offset->sourceObject)
-        {
-          if (strcmp (value, offset->sourceObject) == 0)
-            return;
-          free (offset->sourceObject);
-          offset->sourceObject = strdup (value);
-        }
-        else
-        {
-          offset->sourceObject = strdup (value);
-        }
-        if (offset->sourceRepr)
-        {
-          sp_repr_remove_listener_by_data (offset->sourceRepr, offset);
-        }
-        offset->sourceRepr = NULL;
-        SPObject *refobj;
-        refobj =
-          SP_OBJECT (offset)->document->getObjectById(
-                                 offset->sourceObject);
-        if (refobj)
-          offset->sourceRepr = refobj->repr;
-        if (offset->sourceRepr)
-        {
-          sp_repr_add_listener (offset->sourceRepr,
-                                &offset_source_event_vector, offset);
-          // et les enfants s'il y en a (pour le texte)
-          SPRepr   *cur_child=offset->sourceRepr->children;
-          while ( cur_child ) {
-            sp_repr_add_listener (cur_child,
-                                  &offset_source_child_event_vector, offset);
-            cur_child=cur_child->next;
-          }
-        }
-        else
-        {
-          free (offset->sourceObject);
-          offset->sourceObject = NULL;
-        }
-        if (offset->sourceRepr)
-        {
-          refresh_offset_source(offset);
-        }
-      }
-      else
-      {
-        if (offset->sourceObject)
-        {
-          free (offset->sourceObject);
-          offset->sourceObject = NULL;
-          if (offset->sourceRepr)
-          {
-            sp_repr_remove_listener_by_data (offset->sourceRepr,
-                                             offset);
-          }
-          offset->sourceRepr = NULL;
-        }
-      }
+			if ( value == NULL ) {
+				sp_offset_quit_listening(offset);
+				if ( offset->sourceHref ) g_free(offset->sourceHref);
+				offset->sourceHref = NULL;
+				offset->sourceRef->detach();
+			} else {
+				if ( offset->sourceHref && ( strcmp(value, offset->sourceHref) == 0 ) ) {
+				} else {
+					if ( offset->sourceHref ) g_free(offset->sourceHref);
+					offset->sourceHref = g_strdup(value);
+					try {
+						offset->sourceRef->attach(Inkscape::URI(value));
+					} catch (Inkscape::BadURIException &e) {
+						g_warning("%s", e.what());
+						offset->sourceRef->detach();
+					}
+				}
+			}
       break;
     default:
       if (((SPObjectClass *) parent_class)->set)
@@ -428,13 +368,14 @@ static void
 sp_offset_update (SPObject * object, SPCtx * ctx, guint flags)
 {
   SPOffset* offset = SP_OFFSET(object);
+	offset->isUpdating=true; // prevent sp_offset_set from requesting updates
   if ( offset->sourceDirty ) refresh_offset_source(offset);
   if (flags &
       (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG |
-       SP_OBJECT_VIEWPORT_MODIFIED_FLAG))
-  {
+       SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
     sp_shape_set_shape ((SPShape *) object);
   }
+	offset->isUpdating=false;
   
   if (((SPObjectClass *) parent_class)->update)
     ((SPObjectClass *) parent_class)->update (object, ctx, flags);
@@ -1111,167 +1052,96 @@ sp_offset_top_point (SPOffset * offset, NR::Point *px)
 }
 
 // the listening functions
-static void
-sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
-                               const gchar * /*oldval*/, const gchar * newval,
-                               bool is_interactive, void * data)
+static void sp_offset_start_listening(SPOffset *offset,SPObject* to)
 {
-  SPOffset *offset = (SPOffset *) data;
-  if ( offset == NULL ) return;
-  if (repr == NULL ||  repr != offset->sourceRepr ) {
-    return; 
-  }
-  
-  // deux dans lesquels on ne fera rien
-  if (strcmp ((const char *) key, "id") == 0)
-    return;
-  if (strcmp ((const char *) key, "transform") == 0)
-    return;
-  if (strcmp ((const char *) key, "inkscape:original") == 0)
-    return;
-  
-  Path *orig = NULL;
-  // le bon cas: il y a un attribut d
-  if (strcmp ((const char *) key, "d") == 0)
-  {
-    if (!newval)
-      return;
-    //    sp_repr_set_attr (SP_OBJECT(offset)->repr, "inkscape:original", newval);
-    
-    
-    NArtBpath *bpath;
-    SPCurve *curve;
-    
-    bpath = sp_svg_read_path (newval);
-    curve = sp_curve_new_from_bpath (bpath);	// curve se chargera de detruire bpath
-    g_assert(curve != NULL);
-    orig = bpath_to_liv_path (curve->bpath);
-    sp_curve_unref (curve);
-  }
-  else
-  {
-    // le mauvais cas: pas d'attribut d => il faut verifier que c'est une SPShape puis prendre le contour
-    SPObject *refobj;
-    refobj =
-      SP_OBJECT (offset)->document->getObjectById(
-                             offset->sourceObject);
-    SPItem *item = SP_ITEM (refobj);
-    
-    SPCurve *curve=NULL;
-    if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
-      return;
-    if (SP_IS_SHAPE (item))
-    {
-      curve = sp_shape_get_curve (SP_SHAPE (item));
-      if (curve == NULL)
-        return;
-    }
-    if (SP_IS_TEXT (item))
-    {
-      curve = sp_text_normalized_bpath (SP_TEXT (item));
-      if (curve == NULL)
-        return;
-    }
-    orig = bpath_to_liv_path (curve->bpath);
-    sp_curve_unref (curve);
-  }
-  
-  // finalisons
-  {
-    SPCSSAttr *css;
-    const gchar *val;
-    Shape *theShape = new Shape;
-    Shape *theRes = new Shape;
-    
-    orig->ConvertWithBackData (1.0);
-    orig->Fill (theShape, 0);
-    
-    css = sp_repr_css_attr (repr /*SP_OBJECT_REPR (repr) */ , "style");
-    val = sp_repr_css_property (css, "fill-rule", NULL);
-    if (val && strcmp (val, "nonzero") == 0)
-    {
-      theRes->ConvertToShape (theShape, fill_nonZero);
-    }
-    else if (val && strcmp (val, "evenodd") == 0)
-    {
-      theRes->ConvertToShape (theShape, fill_oddEven);
-    }
-    else
-    {
-      theRes->ConvertToShape (theShape, fill_nonZero);
-    }
-    
-    Path *originaux[1];
-    originaux[0] = orig;
-    Path *res = new Path;
-    theRes->ConvertToForme (res, 1, originaux);
-    
-    delete theShape;
-    delete theRes;
-    
-    char *res_d = liv_svg_dump_path2 (res);
-    delete res;
-    delete orig;
-    
-    sp_repr_set_attr (SP_OBJECT (offset)->repr, "inkscape:original", res_d);
-    
-    free (res_d);
-  }
-  
+	if ( to == NULL ) return;	
+	offset->sourceObject = to;
+	offset->sourceRepr = SP_OBJECT_REPR(to);
+//	if (offset->sourceRepr) {
+//		sp_repr_add_listener (offset->sourceRepr, &offset_source_event_vector, offset);
+//	}
+	offset->_delete_connection = SP_OBJECT(to)->connectDelete(SigC::bind(SigC::slot(&sp_offset_delete_self), offset));
+	offset->_transformed_connection = SP_ITEM(to)->connectTransformed(SigC::bind(SigC::slot(&sp_offset_move_compensate), offset));
+	offset->_modified_connection = g_signal_connect (G_OBJECT (to), "modified", G_CALLBACK (sp_offset_source_modified), offset);
+}
+static void sp_offset_quit_listening(SPOffset *offset)
+{
+	if ( offset->sourceObject == NULL )  return;
+	g_signal_handler_disconnect (offset->sourceObject, offset->_modified_connection);
+	offset->_delete_connection.disconnect();
+	offset->_transformed_connection.disconnect();
+//	if ( offset->sourceRepr ) {
+//		sp_repr_remove_listener_by_data (offset->sourceRepr, offset);
+//	}
+	offset->sourceRepr = NULL;
+	offset->sourceObject = NULL;
 }
 
 static void
-sp_offset_source_destroy (SPRepr * repr, void *data)
+sp_offset_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, SPOffset *offset)
 {
-  SPOffset *offset = (SPOffset *) data;
-  if (offset == NULL)
-    return;
-  if ( repr == NULL || repr != offset->sourceRepr ) return;
-  if (offset->sourceObject)
-  {
-    free (offset->sourceObject);
-    offset->sourceObject = NULL;
-  }
-  if (offset->sourceRepr)
-  {
-    offset->sourceRepr = NULL;
-    // pas besoin d'enlever le listener
-  }
+//	SPItem *item = SP_ITEM(offset);
+	sp_offset_quit_listening(offset);
+	if (offset->sourceRef) {
+		SPItem *refobj = offset->sourceRef->getObject();
+		if (refobj) sp_offset_start_listening(offset,refobj);
+		offset->sourceDirty=true;
+		SP_OBJECT(offset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+	}
 }
-static void sp_offset_source_child_added (SPRepr *repr, SPRepr *child, SPRepr */*ref*/, void * data)
-{
-  SPOffset *offset = (SPOffset *) data;
-  if (offset == NULL)
-    return;
-  if ( child == NULL ) return;
-  if ( repr == NULL || offset->sourceRepr != repr ) return; // juste le premier niveau.
-  
-  sp_repr_add_listener (child,&offset_source_child_event_vector, offset);
-  
-  offset->sourceDirty=true;
-  SP_OBJECT(offset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+
+static void
+sp_offset_move_compensate(NR::Matrix const *mp, SPItem *original, SPOffset *self)
+{	
+	guint mode = prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL);
+	if (mode == SP_CLONE_COMPENSATION_NONE) return;
+	
+	NR::Matrix m(*mp);
+	if (!(m.is_translation())) return;
+	NR::Matrix t = NR::Matrix(&(SP_ITEM(self)->transform));
+	NR::Matrix clone_move = t.inverse() * m * t;
+	
+	// calculate the compensation matrix and the advertized movement matrix
+	NR::Matrix advertized_move;
+	if (mode == SP_CLONE_COMPENSATION_PARALLEL) {
+//		clone_move = clone_move.inverse();
+		advertized_move.set_identity();
+	} else if (mode == SP_CLONE_COMPENSATION_UNMOVED) {
+		clone_move = clone_move.inverse() * m;
+		advertized_move = m;
+	} else {
+		g_assert_not_reached();
+	}
+	
+	// commit the compensation
+	SPItem *item = SP_ITEM(self);
+	NRMatrix clone_move_nr = clone_move;
+	nr_matrix_multiply(&item->transform, &item->transform, &clone_move_nr);
+	sp_item_write_transform(item, SP_OBJECT_REPR(item), &item->transform, &advertized_move);
+	SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
-static void sp_offset_source_child_removed (SPRepr *repr, SPRepr *child, SPRepr */*ref*/, void * data)
+static void
+sp_offset_delete_self(SPObject */*deleted*/, SPOffset *offset)
 {
-  SPOffset *offset = (SPOffset *) data;
-  if (offset == NULL)
-    return;
-  if ( child == NULL ) return;
-  if ( repr == NULL || offset->sourceRepr != repr ) return; // juste le premier niveau.
-  
-  sp_repr_remove_listener_by_data (child, offset);
-  
-  offset->sourceDirty=true;
-  SP_OBJECT(offset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+	guint const mode = prefs_get_int_attribute("options.cloneorphans", "value",
+																						 SP_CLONE_ORPHANS_UNLINK);
+	
+	if (mode == SP_CLONE_ORPHANS_UNLINK) {
+		// leave it be. just forget about the source
+		sp_offset_quit_listening(offset);
+		if ( offset->sourceHref ) g_free(offset->sourceHref);
+		offset->sourceHref = NULL;
+		offset->sourceRef->detach();
+	} else if (mode == SP_CLONE_ORPHANS_DELETE) {
+		SP_OBJECT(offset)->deleteObject();
+	}
 }
-static void sp_offset_source_content_changed (SPRepr */*repr*/, const gchar */*oldcontent*/, const gchar */*newcontent*/, void * data)
+static void
+sp_offset_source_modified (SPObject *iSource, guint flags, SPItem *item)
 {
-  SPOffset *offset = (SPOffset *) data;
-  if (offset == NULL)
-    return;
-  
-  offset->sourceDirty=true;
-  SP_OBJECT(offset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+	SPOffset *offset = SP_OFFSET(item);
+	offset->sourceDirty=true;
+	SP_OBJECT(offset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void   refresh_offset_source(SPOffset* offset)
@@ -1281,24 +1151,18 @@ void   refresh_offset_source(SPOffset* offset)
   Path *orig = NULL;
   
   // le mauvais cas: pas d'attribut d => il faut verifier que c'est une SPShape puis prendre le contour
-  SPObject *refobj;
-  refobj = SP_OBJECT (offset)->document->getObjectById(
-                                  offset->sourceObject);
+  SPObject *refobj=offset->sourceObject;
   if ( refobj == NULL ) return;
-  
   SPItem *item = SP_ITEM (refobj);
   
   SPCurve *curve=NULL;
-  if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
-  	return;
-  if (SP_IS_SHAPE (item))
-  {
+  if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item)) return;
+  if (SP_IS_SHAPE (item)) {
     curve = sp_shape_get_curve (SP_SHAPE (item));
     if (curve == NULL)
       return;
   }
-  if (SP_IS_TEXT (item))
- 	{
+  if (SP_IS_TEXT (item)) {
  	  curve = sp_text_normalized_bpath (SP_TEXT (item));
  	  if (curve == NULL)
 	    return;

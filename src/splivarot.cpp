@@ -978,7 +978,13 @@ sp_selected_path_create_offset_object (int expand,bool updating)
         g_free (str);
     
         if ( updating ) {
-            sp_repr_set_attr (repr, "inkscape:href", sp_repr_attr(SP_OBJECT(item)->repr,"id"));
+					int   l_uri=strlen(sp_repr_attr(SP_OBJECT(item)->repr,"id"));
+					char* n_uri=(char*)malloc((l_uri+1)*sizeof(char));
+					memcpy(n_uri+1,sp_repr_attr(SP_OBJECT(item)->repr,"id"),l_uri*sizeof(char));
+					n_uri[0]='#';
+					n_uri[1+l_uri]=0;
+					sp_repr_set_attr (repr, "xlink:href", n_uri);
+					free(n_uri);
         } else {
             sp_repr_set_attr (repr, "inkscape:href", NULL);
         }

@@ -16,7 +16,7 @@
 
 #include "sp-shape.h"
 
-
+#include <sigc++/sigc++.h>
 
 #define SP_TYPE_OFFSET            (sp_offset_get_type ())
 #define SP_OFFSET(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_OFFSET, SPOffset))
@@ -26,6 +26,7 @@
 
 class SPOffset;
 class SPOffsetClass;
+class SPUseReference;
 
 struct SPOffset
 {
@@ -39,12 +40,23 @@ struct SPOffset
   void *originalPath; // will be a livarot Path, just don't declare it here to please the gcc linker
   char *original;     // SVG description of the source path
   float rad;			/* offset radius */
-  char *sourceObject; // id of the source object for linked offsets
-  SPRepr *sourceRepr; // the repr associated with that id
-  bool   sourceDirty;
 
+	// for interactive setting of the radius
   bool knotSet;
   NR::Point knot;
+	
+	bool           sourceDirty;
+	bool           isUpdating;
+
+	gchar					 *sourceHref;
+	SPUseReference *sourceRef;
+  SPRepr         *sourceRepr; // the repr associated with that id
+	SPObject			 *sourceObject;
+	
+	gulong           _modified_connection;
+	SigC::Connection _delete_connection;
+	SigC::Connection _changed_connection;
+	SigC::Connection _transformed_connection;
 };
 
 struct SPOffsetClass

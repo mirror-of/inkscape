@@ -719,7 +719,7 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 		nr_rect_d_matrix_transform (&tr_tile, &one_tile, &pp->ps2px);
 		int       tr_width=(int)ceil(1.3*(tr_tile.x1-tr_tile.x0));
 		int       tr_height=(int)ceil(1.3*(tr_tile.y1-tr_tile.y0));
-		if ( tr_width < 10000 && tr_height < 10000 && tr_width*tr_height < 1000000 ) {
+//		if ( tr_width < 10000 && tr_height < 10000 && tr_width*tr_height < 1000000 ) {
 			pp->use_cached_tile=true;
 			if ( tr_width > 1000 ) tr_width=1000;
 			if ( tr_height > 1000 ) tr_height=1000;
@@ -740,9 +740,9 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 			pp->ca2pa.c[3]=(one_tile.y1-one_tile.y0)/((double)tr_height);
 			pp->ca2pa.c[4]=one_tile.x0;
 			pp->ca2pa.c[5]=one_tile.y0;
-		} else {
-			pp->use_cached_tile=false;
-		}
+//		} else {
+//			pp->use_cached_tile=false;
+//		}
 	}
 	
 	NRGC gc(NULL);
