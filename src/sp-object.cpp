@@ -1184,7 +1184,7 @@ sp_object_get_unique_id (SPObject * object, const gchar * id)
 	size_t const count_buflen = buflen - name_len;
 	do {
 		++count;
-		g_snprintf(count_buf, count_buflen, "%ul", count);
+		g_snprintf(count_buf, count_buflen, "%lu", count);
 	} while ( object->document->getObjectById(buf) != NULL );
 	return buf;
 }
