@@ -8,5 +8,6 @@ gen_nr_config
 makefile
 .dirstamp
 *-test
-testrunnr
-testrunnr.cpp
+test-nr
+test-nr.cpp
+test-nr-main.cpp

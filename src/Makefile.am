@@ -148,7 +148,7 @@ TESTS =	\
 	libnr/nr-scale-test$(EXEEXT)	\
 	libnr/nr-translate-test$(EXEEXT)	\
 	libnr/nr-types-test$(EXEEXT)	\
-	libnr/testrunnr$(EXEEXT)	\
+	libnr/test-nr$(EXEEXT)	\
 	xml/quote-test$(EXEEXT)	\
 	xml/repr-action-test$(EXEEXT)
 
@@ -177,7 +177,7 @@ check_PROGRAMS =	\
 	libnr/nr-scale-test	\
 	libnr/nr-translate-test	\
 	libnr/nr-types-test	\
-	libnr/testrunnr	\
+	libnr/test-nr	\
 	xml/quote-test	\
 	xml/repr-action-test
 

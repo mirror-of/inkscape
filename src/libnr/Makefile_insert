@@ -108,12 +108,13 @@ libnr_testnr_LDADD =	\
 	-lglib-2.0
 
 
-libnr/testrunnr.cpp: $(libnr_testrunnr_includes)
-	cxxtestgen.pl --error-printer -o libnr/testrunnr.cpp $(libnr_testrunnr_includes)
+libnr/test-nr-main.cpp: libnr/test-nr.cpp
+	cxxtestgen.pl --error-printer -root -o libnr/test-nr-main.cpp
 
-#	cxxtestgen.pl --gui=X11Gui --error-printer -o libnr/testrunnr.cpp $(libnr_testrunnr_includes)
+libnr/test-nr.cpp: $(libnr_test_nr_includes)
+	cxxtestgen.pl -part -o libnr/test-nr.cpp $(libnr_test_nr_includes)
 
-libnr_testrunnr_includes = \
+libnr_test_nr_includes = \
 	$(srcdir)/libnr/nr-types-test.h	\
 	$(srcdir)/libnr/nr-translate-test.h	\
 	$(srcdir)/libnr/nr-rotate-test.h	\
@@ -123,10 +124,11 @@ libnr_testrunnr_includes = \
 	$(srcdir)/libnr/in-svg-plane-test.h	\
 	$(srcdir)/libnr/nr-matrix-test.h
 
-libnr_testrunnr_SOURCES =	\
-	libnr/testrunnr.cpp
+libnr_test_nr_SOURCES =	\
+	libnr/test-nr.cpp	\
+	libnr/test-nr-main.cpp
 
-libnr_testrunnr_LDADD =	\
+libnr_test_nr_LDADD =	\
 	libnr/libnr.a	\
 	-lglib-2.0
 
