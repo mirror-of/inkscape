@@ -287,7 +287,11 @@ sp_document_create (SPReprDoc *rdoc,
 
 	// base is simply the part of the path before filename; e.g. when running "inkscape ../file.svg" the base is "../"
 	// which is why we use g_get_current_dir() in calculating the abs path above
-	document->base = g_strdup (base);
+        //This is NULL for a new document
+	if (base)
+            document->base = g_strdup (base);
+        else
+            document->base = NULL;
 	document->name = g_strdup (name);
 
 	document->root = sp_object_repr_build_tree (document, rroot);
@@ -318,7 +322,8 @@ sp_document_create (SPReprDoc *rdoc,
 	if (uri) {
 		/* fixme: Think, what this means for images (Lauris) */
 		sp_repr_set_attr (rroot, "sodipodi:docname", uri);
-		sp_repr_set_attr (rroot, "sodipodi:docbase", document->base);
+		if (document->base)
+                    sp_repr_set_attr (rroot, "sodipodi:docbase", document->base);
 	}
 	/* End of quick hack 3 */
 	/* between 0 and 0.25 */
@@ -421,7 +426,6 @@ sp_document_new (const gchar *uri, unsigned int advertize, unsigned int keepaliv
 	}
 
         //# These should be set by now
-        g_assert (base);
         g_assert (name);
 
 	doc = sp_document_create (rdoc, uri, base, name, advertize, keepalive);
