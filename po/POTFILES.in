@@ -15,6 +15,7 @@ src/desktop-events.cpp
 src/desktop-handles.cpp
 src/desktop.cpp
 src/dialogs/align.cpp
+src/dialogs/clonetiler.cpp
 src/dialogs/debugdialog.cpp
 src/dialogs/desktop-properties.cpp
 src/dialogs/dialog-events.cpp
@@ -30,6 +31,7 @@ src/dialogs/layer-properties.cpp
 src/dialogs/object-attributes.cpp
 src/dialogs/object-properties.cpp
 src/dialogs/rdf.cpp
+src/dialogs/scriptdialog.cpp
 src/dialogs/sp-attribute-widget.cpp
 src/dialogs/stroke-style.cpp
 src/dialogs/text-edit.cpp
