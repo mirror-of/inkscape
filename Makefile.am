@@ -37,10 +37,20 @@ EXTRA_DIST = \
 	inkscape.png \
 	inkscape.ico inkscape16.ico inkscape32.ico inkscape64.ico \
 	debian/changelog \
-	debian/copyright \
+	debian/compat	\
 	debian/control \
-	debian/rules \
-	debian/inkscape.menu
+	debian/copyright	\
+	debian/dirs	\
+	debian/docs	\
+	debian/inkscape.applications	\
+	debian/inkscape.menu	\
+	debian/inkscape.xpm	\
+	debian/mime	\
+	debian/rules
+# Note: it isn't clear that debian/* belongs in the tar file:
+# tarfile users should be able to use the official Debian packages.
+# They were added to EXTRA_DIST in v1.5, in response to a message on
+# inkscape-devel from "Carlos Ingelmo <carlsalam@te...>" on 2003-11-12 01:35.
 
 DISTCLEANFILES = inkscape.desktop \
                  intltool-extract \
