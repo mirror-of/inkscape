@@ -23,6 +23,7 @@
 #include "helper/sp-intl.h"
 #include "sp-object.h"
 #include "sp-path.h"
+#include "sp-rect.h"
 #include "sp-text.h"
 #include "sp-tspan.h"
 #include "style.h"
@@ -95,6 +96,12 @@ text_put_on_path (void)
 		return;
 	}
 
+      if (SP_IS_RECT (shape)) {
+            // rect is the only SPShape which is not <path> yet, and thus SVG forbids us from putting text on it
+		desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot put text on a rectangle in this version. Convert rectangle to path first."));
+		return;
+	}
+
 	// remove transform from text, but recursively scale text's fontsize by the expansion
       scale_text_recursive (text, NR::expansion(SP_ITEM(text)->transform));
       sp_repr_set_attr (SP_OBJECT_REPR (text), "transform", NULL);
@@ -125,6 +132,11 @@ text_put_on_path (void)
 		// put its copy into under textPath
 		sp_repr_add_child (textpath, copy, NULL); // fixme: copy id
 	}
+
+      // x/y are useless with textpath, and confuse Batik 1.5
+      SP_TEXT(text)->x.set = FALSE;
+      SP_TEXT(text)->y.set = FALSE;
+      SP_OBJECT (text)->updateRepr();
 
 	sp_document_done(SP_DT_DOCUMENT(desktop));
 	g_slist_free(text_reprs);
