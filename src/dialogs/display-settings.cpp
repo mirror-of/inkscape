@@ -1214,7 +1214,7 @@ options_checkbox (
 
         // Clone compensation
         {
-            GtkWidget *f = gtk_frame_new (_("When the original moves, its clones:"));
+            GtkWidget *f = gtk_frame_new (_("When the original moves, its clones and linked offsets:"));
             gtk_widget_show (f);
             gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
 
