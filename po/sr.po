@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.39cvs20040603\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-04 22:21+0200\n"
+"POT-Creation-Date: 2004-07-06 20:17+0200\n"
 "PO-Revision-Date: 2004-06-03 19:37+0200\n"
 "Last-Translator: Александар Урошевић <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -45,21 +45,25 @@ msgstr "%s на %s"
 msgid "Move %s"
 msgstr "Помери %s"
 
-#: src/desktop.cpp:839
+#: src/desktop.cpp:864
 msgid "Zoom drawing if window size changes"
 msgstr "Зумирај цртеж када се промени величина прозора"
 
-#: src/desktop.cpp:861 src/dialogs/display-settings.cpp:923 src/verbs.cpp:969
+#: src/desktop.cpp:886 src/dialogs/display-settings.cpp:923 src/verbs.cpp:969
 msgid "Zoom"
 msgstr "Увећај"
 
 #. FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
-#: src/desktop.cpp:885
+#: src/desktop.cpp:910
 msgid "Cursor coordinates"
 msgstr "Координате показивача миша"
 
+#: src/desktop.cpp:917
+msgid "Current layer"
+msgstr ""
+
 #. display the initial welcome message in the statusbar
-#: src/desktop.cpp:895
+#: src/desktop.cpp:925
 msgid ""
 "Welcome to Inkscape! Use shape or freehand tools to create objects; use "
 "selector (arrow) to move or transform them."
@@ -68,17 +72,17 @@ msgstr ""
 "да би исцртали објекте; користите изборник (стрелицу) за њихово померање и "
 "промену облика."
 
-#: src/desktop.cpp:934
+#: src/desktop.cpp:964
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr "%s: %d - Инкскејп"
 
-#: src/desktop.cpp:936
+#: src/desktop.cpp:966
 #, c-format
 msgid "%s - Inkscape"
 msgstr "%s - Инкскејп"
 
-#: src/desktop.cpp:1078
+#: src/desktop.cpp:1108
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -92,11 +96,11 @@ msgstr ""
 "Ако напустите програм без памћења измена, измене које сте начинили ће бити "
 "занемарене."
 
-#: src/desktop.cpp:1092 src/desktop.cpp:1151
+#: src/desktop.cpp:1122 src/desktop.cpp:1181
 msgid "Close _without saving"
 msgstr "Затвори _без снимања"
 
-#: src/desktop.cpp:1136
+#: src/desktop.cpp:1166
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -109,25 +113,25 @@ msgstr ""
 "\n"
 "Желите ли да сачувате ову датотеку у неком другом формату?"
 
-#: src/desktop.cpp:1536
+#: src/desktop.cpp:1566
 msgid "No previous zoom."
 msgstr "Нема више умањења."
 
-#: src/desktop.cpp:1565
+#: src/desktop.cpp:1595
 msgid "No next zoom."
 msgstr "Нема више увећања."
 
 #. Page page
-#: src/desktop.cpp:1963 src/dialogs/align.cpp:445
-#: src/dialogs/desktop-properties.cpp:701 src/dialogs/export.cpp:277
+#: src/desktop.cpp:1993 src/dialogs/align.cpp:445
+#: src/dialogs/desktop-properties.cpp:866 src/dialogs/export.cpp:113
 msgid "Page"
 msgstr "Страна"
 
-#: src/desktop.cpp:1967 src/dialogs/align.cpp:448 src/dialogs/export.cpp:284
+#: src/desktop.cpp:1997 src/dialogs/align.cpp:448 src/dialogs/export.cpp:113
 msgid "Drawing"
 msgstr "Цртеж"
 
-#: src/desktop.cpp:1971 src/dialogs/align.cpp:451 src/dialogs/export.cpp:291
+#: src/desktop.cpp:2001 src/dialogs/align.cpp:451 src/dialogs/export.cpp:113
 msgid "Selection"
 msgstr "Избор"
 
@@ -228,172 +232,172 @@ msgid "Smallest item"
 msgstr "Најмања ставка"
 
 #. Notebook tab
-#: src/dialogs/desktop-properties.cpp:608
+#: src/dialogs/desktop-properties.cpp:773
 msgid "Grid"
 msgstr "Мрежа"
 
 #. Checkbuttons
-#: src/dialogs/desktop-properties.cpp:616
+#: src/dialogs/desktop-properties.cpp:781
 msgid "Show grid"
 msgstr "Прикажи мрежу"
 
-#: src/dialogs/desktop-properties.cpp:617
+#: src/dialogs/desktop-properties.cpp:782
 msgid "Snap to grid"
 msgstr "Пријањање уз мрежу"
 
-#: src/dialogs/desktop-properties.cpp:618
+#: src/dialogs/desktop-properties.cpp:783
 #, fuzzy
 msgid "Snap bounding boxes to grid"
 msgstr "Пријањање тачака уз мрежу"
 
-#: src/dialogs/desktop-properties.cpp:619
+#: src/dialogs/desktop-properties.cpp:784
 #, fuzzy
 msgid "Snap points to grid"
 msgstr "Пријањање тачака уз мрежу"
 
-#: src/dialogs/desktop-properties.cpp:637
+#: src/dialogs/desktop-properties.cpp:802
 msgid "Grid units:"
 msgstr "Јединица мере мреже:"
 
-#: src/dialogs/desktop-properties.cpp:639
+#: src/dialogs/desktop-properties.cpp:804
 msgid "Origin X:"
 msgstr "Почетак X:"
 
-#: src/dialogs/desktop-properties.cpp:642
+#: src/dialogs/desktop-properties.cpp:807
 msgid "Origin Y:"
 msgstr "Почетак Y:"
 
-#: src/dialogs/desktop-properties.cpp:645
+#: src/dialogs/desktop-properties.cpp:810
 msgid "Spacing X:"
 msgstr "Водоравни корак:"
 
-#: src/dialogs/desktop-properties.cpp:648
+#: src/dialogs/desktop-properties.cpp:813
 msgid "Spacing Y:"
 msgstr "Усправни корак:"
 
-#: src/dialogs/desktop-properties.cpp:652
-#: src/dialogs/desktop-properties.cpp:685
+#: src/dialogs/desktop-properties.cpp:817
+#: src/dialogs/desktop-properties.cpp:850
 msgid "Snap units:"
 msgstr "Јединица мере пријањања:"
 
-#: src/dialogs/desktop-properties.cpp:655
-#: src/dialogs/desktop-properties.cpp:688
+#: src/dialogs/desktop-properties.cpp:820
+#: src/dialogs/desktop-properties.cpp:853
 msgid "Snap distance:"
 msgstr "Удаљеност за пријањање:"
 
-#: src/dialogs/desktop-properties.cpp:658
+#: src/dialogs/desktop-properties.cpp:823
 msgid "Grid color:"
 msgstr "Боја мреже:"
 
-#: src/dialogs/desktop-properties.cpp:659
+#: src/dialogs/desktop-properties.cpp:824
 msgid "Grid color"
 msgstr "Боја мреже"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:663
+#: src/dialogs/desktop-properties.cpp:828
 msgid "Guides"
 msgstr "Вођице"
 
-#: src/dialogs/desktop-properties.cpp:671
+#: src/dialogs/desktop-properties.cpp:836
 msgid "Show guides"
 msgstr "Прикажи вођице"
 
-#: src/dialogs/desktop-properties.cpp:672
+#: src/dialogs/desktop-properties.cpp:837
 msgid "Snap to guides"
 msgstr "Пријањање уз вођице"
 
-#: src/dialogs/desktop-properties.cpp:673
+#: src/dialogs/desktop-properties.cpp:838
 #, fuzzy
 msgid "Snap bounding boxes to guides"
 msgstr "Пријањање уз вођице"
 
-#: src/dialogs/desktop-properties.cpp:674
+#: src/dialogs/desktop-properties.cpp:839
 #, fuzzy
 msgid "Snap points to guides"
 msgstr "Пријањање тачака уз мрежу"
 
-#: src/dialogs/desktop-properties.cpp:692
+#: src/dialogs/desktop-properties.cpp:857
 #, fuzzy
 msgid "Guide color:"
 msgstr "Боја вођица:"
 
-#: src/dialogs/desktop-properties.cpp:693
+#: src/dialogs/desktop-properties.cpp:858
 msgid "Guideline color"
 msgstr "Боја вођица"
 
-#: src/dialogs/desktop-properties.cpp:695
+#: src/dialogs/desktop-properties.cpp:860
 msgid "Highlight color:"
 msgstr "Боја истакнутих вођица:"
 
-#: src/dialogs/desktop-properties.cpp:696
+#: src/dialogs/desktop-properties.cpp:861
 msgid "Highlighted guideline color"
 msgstr "Боја истакнутих вођица"
 
-#: src/dialogs/desktop-properties.cpp:710
+#: src/dialogs/desktop-properties.cpp:875
 msgid "Background (also for export):"
 msgstr "Позадина (и за извоз):"
 
-#: src/dialogs/desktop-properties.cpp:711
+#: src/dialogs/desktop-properties.cpp:876
 msgid "Background color"
 msgstr "Боја позадине"
 
-#: src/dialogs/desktop-properties.cpp:715
+#: src/dialogs/desktop-properties.cpp:880
 msgid "Show canvas border"
 msgstr "Прикажи оквир платна"
 
-#: src/dialogs/desktop-properties.cpp:718
+#: src/dialogs/desktop-properties.cpp:883
 msgid "Border on top of drawing"
 msgstr "Оквир изнад цртежа"
 
-#: src/dialogs/desktop-properties.cpp:728
+#: src/dialogs/desktop-properties.cpp:893
 msgid "Border color:"
 msgstr "Боја оквира:"
 
-#: src/dialogs/desktop-properties.cpp:729
+#: src/dialogs/desktop-properties.cpp:894
 msgid "Canvas border color"
 msgstr "Боја линије оквира платна"
 
-#: src/dialogs/desktop-properties.cpp:745
+#: src/dialogs/desktop-properties.cpp:910
 msgid "Paper size:"
 msgstr "Величина папира:"
 
-#: src/dialogs/desktop-properties.cpp:769
+#: src/dialogs/desktop-properties.cpp:934 src/dialogs/export.cpp:113
 msgid "Custom"
 msgstr "Прилагођено"
 
-#: src/dialogs/desktop-properties.cpp:780
+#: src/dialogs/desktop-properties.cpp:945
 msgid "Paper orientation:"
 msgstr "Оријентација папира:"
 
-#: src/dialogs/desktop-properties.cpp:792
+#: src/dialogs/desktop-properties.cpp:957
 msgid "Landscape"
 msgstr "Водоравно"
 
-#: src/dialogs/desktop-properties.cpp:798
+#: src/dialogs/desktop-properties.cpp:963
 msgid "Portrait"
 msgstr "Усправно"
 
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:807
+#: src/dialogs/desktop-properties.cpp:972
 msgid "Custom paper"
 msgstr "Прилагођени папир"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:819 src/dialogs/export.cpp:305
+#: src/dialogs/desktop-properties.cpp:984 src/dialogs/export.cpp:239
 #: src/dialogs/transformation.cpp:519 src/dialogs/transformation.cpp:716
 msgid "Units:"
 msgstr "Јединица мере:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:821 src/dialogs/export.cpp:321
-#: src/dialogs/export.cpp:356 src/dialogs/object-attributes.cpp:76
+#: src/dialogs/desktop-properties.cpp:986 src/dialogs/export.cpp:277
+#: src/dialogs/export.cpp:384 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1378
 #: src/toolbox.cpp:1753
 msgid "Width:"
 msgstr "Ширина:"
 
-#: src/dialogs/desktop-properties.cpp:843 src/dialogs/export.cpp:337
-#: src/dialogs/export.cpp:371 src/dialogs/object-attributes.cpp:77
+#: src/dialogs/desktop-properties.cpp:1008 src/dialogs/export.cpp:293
+#: src/dialogs/export.cpp:399 src/dialogs/object-attributes.cpp:77
 #: src/dialogs/object-attributes.cpp:85
 msgid "Height:"
 msgstr "Висина:"
@@ -402,20 +406,20 @@ msgstr "Висина:"
 #.
 #. * Ownership metadata tab
 #.
-#: src/dialogs/desktop-properties.cpp:869
+#: src/dialogs/desktop-properties.cpp:1034
 msgid "Metadata"
 msgstr ""
 
-#. this uses an element
-#: src/dialogs/desktop-properties.cpp:898 src/dialogs/rdf.cpp:239
+#. add license selector pull-down
+#: src/dialogs/desktop-properties.cpp:1054
 msgid "License"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:920
+#: src/dialogs/desktop-properties.cpp:1084
 msgid "Proprietary"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:1396
+#: src/dialogs/desktop-properties.cpp:1579
 msgid "Close"
 msgstr "Затвори"
 
@@ -446,7 +450,7 @@ msgstr "Обележавање изабраног објекта"
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:234 src/dialogs/display-settings.cpp:365
 #: src/dialogs/display-settings.cpp:420 src/dialogs/display-settings.cpp:1206
-#: src/interface.cpp:985 src/verbs.cpp:797
+#: src/interface.cpp:996 src/verbs.cpp:797
 msgid "None"
 msgstr "Без обележавања"
 
@@ -964,8 +968,8 @@ msgstr ""
 "Подразумевана резолуција битмапе (тачака по инчу) у Извозном прозорчету"
 
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
-#: src/dialogs/display-settings.cpp:1151 src/dialogs/export.cpp:366
-#: src/dialogs/export.cpp:382
+#: src/dialogs/display-settings.cpp:1151 src/dialogs/export.cpp:394
+#: src/dialogs/export.cpp:410
 msgid "dpi"
 msgstr "тпи"
 
@@ -1024,67 +1028,71 @@ msgstr "8x8"
 msgid "16x16"
 msgstr "16x16"
 
-#. Export area frame
-#: src/dialogs/export.cpp:264
+#: src/dialogs/export.cpp:228
 msgid "Export area"
 msgstr "Извоз површине"
 
-#: src/dialogs/export.cpp:311
+#: src/dialogs/export.cpp:267
 msgid "x0:"
 msgstr "x0:"
 
-#: src/dialogs/export.cpp:316
+#: src/dialogs/export.cpp:272
 msgid "x1:"
 msgstr "x1:"
 
-#: src/dialogs/export.cpp:327
+#: src/dialogs/export.cpp:283
 msgid "y0:"
 msgstr "y0:"
 
-#: src/dialogs/export.cpp:332
+#: src/dialogs/export.cpp:288
 msgid "y1:"
 msgstr "y1:"
 
 #. Bitmap size frame
-#: src/dialogs/export.cpp:346
+#: src/dialogs/export.cpp:374
 msgid "Bitmap size"
 msgstr "Величина битмапе"
 
-#: src/dialogs/export.cpp:356 src/dialogs/export.cpp:371
+#: src/dialogs/export.cpp:384 src/dialogs/export.cpp:399
 msgid "pixels"
 msgstr "тачака"
 
 #. File entry
-#: src/dialogs/export.cpp:388
+#: src/dialogs/export.cpp:416
 msgid "Filename"
 msgstr "Назив датотеке"
 
-#: src/dialogs/export.cpp:423
+#: src/dialogs/export.cpp:442
 msgid "Browse..."
 msgstr "Тражи..."
 
-#: src/dialogs/export.cpp:440
+#: src/dialogs/export.cpp:461
 msgid "Export"
 msgstr "Извези"
 
-#: src/dialogs/export.cpp:705
+#: src/dialogs/export.cpp:786
 msgid "You have to enter a filename"
 msgstr "Морате унети назив датотеке"
 
-#: src/dialogs/export.cpp:718
+#: src/dialogs/export.cpp:791
+msgid "The chosen area to be exported is invalid"
+msgstr "Одабрана површина за извоз је нерегуларна"
+
+#: src/dialogs/export.cpp:798
+#, c-format
+msgid "Directory %s does not exist or is not a directory.\n"
+msgstr ""
+
+#: src/dialogs/export.cpp:812
 msgid "Export in progress"
 msgstr "Извоз је у току"
 
-#: src/dialogs/export.cpp:724
+#: src/dialogs/export.cpp:818
 #, c-format
 msgid "Exporting [%d x %d] %s"
 msgstr "Извоз [%d x %d] %s"
 
-#: src/dialogs/export.cpp:755
-msgid "The chosen area to be exported is invalid"
-msgstr "Одабрана површина за извоз је нерегуларна"
-
-#: src/dialogs/export.cpp:772
+#: src/dialogs/export.cpp:885
 msgid "Select a filename for exporting"
 msgstr "Одаберите назив датотеке за извоз"
 
@@ -1545,151 +1553,165 @@ msgstr "Слободна рука и оловка"
 msgid "Calligraphic line"
 msgstr "Калиграфска линија"
 
-#: src/dialogs/rdf.cpp:184
+#: src/dialogs/rdf.cpp:206
 #, fuzzy
 msgid "Title"
 msgstr "Наслов:"
 
-#: src/dialogs/rdf.cpp:185
+#: src/dialogs/rdf.cpp:207
 msgid "Name by which this document is formally known."
 msgstr ""
 
-#: src/dialogs/rdf.cpp:187
+#: src/dialogs/rdf.cpp:209
 #, fuzzy
 msgid "Date"
 msgstr "У_баци"
 
-#: src/dialogs/rdf.cpp:188
+#: src/dialogs/rdf.cpp:210
 msgid "Date associated with the creation of this document (YYYY-MM-DD)."
-msgstr ""
-
-#: src/dialogs/rdf.cpp:190
-#, fuzzy
-msgid "Format"
-msgstr "Нормално"
-
-#: src/dialogs/rdf.cpp:191
-msgid "The physical or digital manifestation of this document (MIME type)."
-msgstr ""
-
-#: src/dialogs/rdf.cpp:193
-#, fuzzy
-msgid "Type"
-msgstr "Врста:"
-
-#: src/dialogs/rdf.cpp:194
-msgid "Type of document (DCMI Type)."
-msgstr ""
-
-#: src/dialogs/rdf.cpp:197
-#, fuzzy
-msgid "Creator"
-msgstr "Направи"
-
-#: src/dialogs/rdf.cpp:198
-msgid ""
-"Name of entity primarily responsible for making the content of this document."
-msgstr ""
-
-#: src/dialogs/rdf.cpp:200
-#, fuzzy
-msgid "Rights"
-msgstr "Висина:"
-
-#: src/dialogs/rdf.cpp:201
-msgid ""
-"Name of entity with rights to the Intellectual Property of this document."
-msgstr ""
-
-#: src/dialogs/rdf.cpp:203
-msgid "Publisher"
-msgstr ""
-
-#: src/dialogs/rdf.cpp:204
-msgid "Name of entity responsible for making this document available."
-msgstr ""
-
-#. this should be a multi-line tag
-#: src/dialogs/rdf.cpp:208
-#, fuzzy
-msgid "Contributors"
-msgstr "центиметара"
-
-#: src/dialogs/rdf.cpp:209
-msgid ""
-"Names of entities responsible for making contributions to the content of "
-"this document."
 msgstr ""
 
 #: src/dialogs/rdf.cpp:212
 #, fuzzy
-msgid "Identifier"
-msgstr "центиметар"
+msgid "Format"
+msgstr "Нормално"
 
 #: src/dialogs/rdf.cpp:213
-msgid "Unique URI to reference this document."
+msgid "The physical or digital manifestation of this document (MIME type)."
 msgstr ""
 
 #: src/dialogs/rdf.cpp:215
+#, fuzzy
+msgid "Type"
+msgstr "Врста:"
+
+#: src/dialogs/rdf.cpp:216
+msgid "Type of document (DCMI Type)."
+msgstr ""
+
+#: src/dialogs/rdf.cpp:219
+#, fuzzy
+msgid "Creator"
+msgstr "Направи"
+
+#: src/dialogs/rdf.cpp:220
+msgid ""
+"Name of entity primarily responsible for making the content of this document."
+msgstr ""
+
+#: src/dialogs/rdf.cpp:222
+#, fuzzy
+msgid "Rights"
+msgstr "Висина:"
+
+#: src/dialogs/rdf.cpp:223
+msgid ""
+"Name of entity with rights to the Intellectual Property of this document."
+msgstr ""
+
+#: src/dialogs/rdf.cpp:225
+msgid "Publisher"
+msgstr ""
+
+#: src/dialogs/rdf.cpp:226
+msgid "Name of entity responsible for making this document available."
+msgstr ""
+
+#: src/dialogs/rdf.cpp:229
+#, fuzzy
+msgid "Identifier"
+msgstr "центиметар"
+
+#: src/dialogs/rdf.cpp:230
+msgid "Unique URI to reference this document."
+msgstr ""
+
+#: src/dialogs/rdf.cpp:232
 msgid "Source"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:216
+#: src/dialogs/rdf.cpp:233
 msgid "Unique URI to reference the source of this document."
 msgstr ""
 
-#: src/dialogs/rdf.cpp:218
+#: src/dialogs/rdf.cpp:235
 #, fuzzy
 msgid "Relation"
 msgstr "Резолуција:"
 
-#: src/dialogs/rdf.cpp:219
+#: src/dialogs/rdf.cpp:236
 #, fuzzy
 msgid "Unique URI to a related document."
 msgstr "Неименовани документ"
 
-#: src/dialogs/rdf.cpp:221
+#: src/dialogs/rdf.cpp:238
 msgid "Language"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:222
+#: src/dialogs/rdf.cpp:239
 msgid ""
 "Two-letter language tag with optional subtags for the language of this "
 "document.  (e.g. 'en-GB')"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:224
+#: src/dialogs/rdf.cpp:241
 msgid "Keywords"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:225
+#: src/dialogs/rdf.cpp:242
 msgid "The topic of this document as key words, phrases, or classification."
 msgstr ""
 
 #. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
 #. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
-#: src/dialogs/rdf.cpp:229
+#: src/dialogs/rdf.cpp:246
 msgid "Coverage"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:230
+#: src/dialogs/rdf.cpp:247
 msgid "Extent or scope of this document."
 msgstr ""
 
-#. this should be a multi-line tag
-#: src/dialogs/rdf.cpp:234
+#: src/dialogs/rdf.cpp:250
 #, fuzzy
 msgid "Description"
 msgstr "Избор"
 
-#: src/dialogs/rdf.cpp:235
+#: src/dialogs/rdf.cpp:251
 #, fuzzy
 msgid "A short account of the content of this document."
 msgstr "Отварање једног од последње отвараних докумената"
 
+#. FIXME: need to handle 1 agent per line of input
+#: src/dialogs/rdf.cpp:255
+#, fuzzy
+msgid "Contributors"
+msgstr "центиметара"
+
+#: src/dialogs/rdf.cpp:256
+msgid ""
+"Names of entities responsible for making contributions to the content of "
+"this document."
+msgstr ""
+
+#. TRANSLATORS: URL to a page that defines the license for the document
+#: src/dialogs/rdf.cpp:260
+msgid "URI"
+msgstr ""
+
 #. TRANSLATORS: this is where you put a URL to a page that defines the license
-#: src/dialogs/rdf.cpp:241
+#: src/dialogs/rdf.cpp:262
 msgid "URI to this document's license's namespace definition."
+msgstr ""
+
+#. TRANSLATORS: fragment of XML representing the license of the document
+#: src/dialogs/rdf.cpp:266
+#, fuzzy
+msgid "Fragment"
+msgstr "Аргумент:"
+
+#: src/dialogs/rdf.cpp:267
+msgid "XML fragment for the RDF 'License' section."
 msgstr ""
 
 #: src/dialogs/stroke-style.cpp:1075 src/widgets/gradient-vector.cpp:262
@@ -1952,27 +1974,27 @@ msgstr "Завршавање оловке"
 
 #. alpha of color under cursor, to show in the statusbar
 #. locale-sensitive printf is OK, since this goes to the UI, not into SVG
-#: src/dropper-context.cpp:271
+#: src/dropper-context.cpp:272
 #, c-format
 msgid " alpha %.3g"
 msgstr " провидност %.3g"
 
 #. where the color is picked, to show in the statusbar
-#: src/dropper-context.cpp:273
+#: src/dropper-context.cpp:274
 #, c-format
 msgid ", averaged with radius %d"
 msgstr ", пресек полупречника %d"
 
-#: src/dropper-context.cpp:273
+#: src/dropper-context.cpp:274
 msgid " under cursor"
 msgstr " под курсором"
 
 #. message, to show in the statusbar
-#: src/dropper-context.cpp:275
+#: src/dropper-context.cpp:276
 msgid "Release mouse to set color."
 msgstr "Отпустите тастер миша за постављање боје."
 
-#: src/dropper-context.cpp:275
+#: src/dropper-context.cpp:276
 msgid ""
 "Click to pick fill color, Shift+click to pick stroke color. Drag to pick the "
 "average color of an area."
@@ -2475,25 +2497,30 @@ msgstr "_Линија"
 msgid "_Help"
 msgstr "_Помоћ"
 
-#: src/interface.cpp:930
-msgid "Ascend to Parent Layer"
+#: src/interface.cpp:934
+msgid "Edit parent layer"
 msgstr ""
 
-#. TRANSLATORS: "Make Current Layer" means "Make it the current layer"
-#: src/interface.cpp:937
-msgid "Make Current Layer"
+#: src/interface.cpp:940
+#, fuzzy
+msgid "Edit root"
+msgstr "Уређивање"
+
+#: src/interface.cpp:947
+#, c-format
+msgid "Edit group #%s as layer"
 msgstr ""
 
-#: src/interface.cpp:1021
+#: src/interface.cpp:1032
 msgid "Could not parse SVG data"
 msgstr "Не могу да обрадим СВГ податке"
 
-#: src/interface.cpp:1183
+#: src/interface.cpp:1194
 #, c-format
 msgid "Overwrite %s"
 msgstr "Препиши %s"
 
-#: src/interface.cpp:1201
+#: src/interface.cpp:1212
 #, c-format
 msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "
@@ -2891,51 +2918,51 @@ msgstr "Нема понављања акције."
 msgid "Nothing was copied."
 msgstr "Ништа није умножено."
 
-#: src/selection-chemistry.cpp:765 src/selection-chemistry.cpp:816
+#: src/selection-chemistry.cpp:766 src/selection-chemistry.cpp:817
 #, fuzzy
 msgid "Nothing on the clipboard."
 msgstr "Нема ничега у клипборду."
 
-#: src/selection-chemistry.cpp:822
+#: src/selection-chemistry.cpp:823
 msgid "Select objects to paste style to."
 msgstr "Изаберите објекат на који ће се пренети стил."
 
-#: src/selection-chemistry.cpp:1272
+#: src/selection-chemistry.cpp:1273
 msgid "Select an object to clone."
 msgstr "Изаберите објекат за клонирање."
 
-#: src/selection-chemistry.cpp:1278
+#: src/selection-chemistry.cpp:1279
 msgid "If you want to clone several objects, group them and clone the group."
 msgstr ""
 "Ако желите да клонирате више објеката, групишите их па клонирајте групу."
 
-#: src/selection-chemistry.cpp:1309
+#: src/selection-chemistry.cpp:1310
 msgid "Select a clone to unlink."
 msgstr "Изаберите клон за одвезивање."
 
-#: src/selection-chemistry.cpp:1340
+#: src/selection-chemistry.cpp:1341
 msgid "No clones to unlink in the selection."
 msgstr "Нема клона за одвезивање међу изабраним клоновима."
 
-#: src/selection-chemistry.cpp:1357
+#: src/selection-chemistry.cpp:1358
 msgid "Select a single clone to go to its original."
 msgstr "Изаберите један клон за проналажење његовог оригинала."
 
-#: src/selection-chemistry.cpp:1365
+#: src/selection-chemistry.cpp:1366
 msgid "This clone's original is not a visible object (it is in <defs>)"
 msgstr ""
 
-#: src/selection-chemistry.cpp:1392
+#: src/selection-chemistry.cpp:1393
 #, fuzzy
 msgid "Select an object to tile."
 msgstr "Изаберите објекат за клонирање."
 
-#: src/selection-chemistry.cpp:1456
+#: src/selection-chemistry.cpp:1457
 #, fuzzy
 msgid "Select an object with pattern fill to untile."
 msgstr "Изаберите објекат за клонирање."
 
-#: src/selection-chemistry.cpp:1507
+#: src/selection-chemistry.cpp:1508
 #, fuzzy
 msgid "No pattern fills to untile in the selection."
 msgstr "У избору нема линија скупљање или ширење."
@@ -2959,22 +2986,22 @@ msgid "%i objects selected. %s."
 msgstr "%i објеката изабрано. %s."
 
 #. status text
-#: src/seltrans.cpp:766 src/seltrans.cpp:828
+#: src/seltrans.cpp:767 src/seltrans.cpp:829
 #, c-format
 msgid "Scale %0.2f%%, %0.2f%%"
 msgstr "Скалирање %0.2f%%, %0.2f%%"
 
-#: src/seltrans.cpp:896
+#: src/seltrans.cpp:897
 #, c-format
 msgid "Skew %0.2f%c %0.2f%c"
 msgstr "Искривљавање %0.2f%c %0.2f%c"
 
-#: src/seltrans.cpp:943
+#: src/seltrans.cpp:944
 #, c-format
 msgid "Rotate by %0.2f deg"
 msgstr "Ротирање за %0.2f степени"
 
-#: src/seltrans.cpp:972
+#: src/seltrans.cpp:973
 #, c-format
 msgid "Center at (%s,%s)"
 msgstr "Центар на (%s,%s)"
@@ -3040,7 +3067,7 @@ msgid "Image URI:"
 msgstr "Адреса слике:"
 
 # bug: plural-forms
-#: src/sp-item-group.cpp:317
+#: src/sp-item-group.cpp:328
 #, c-format
 msgid "Group of %d objects"
 msgstr "Група од %d објеката"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-04 22:21+0200\n"
+"POT-Creation-Date: 2004-07-06 20:17+0200\n"
 "PO-Revision-Date: 2002-01-15 13:30+0100\n"
 "Last-Translator: Keld Simonsen <keld@dkuug.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -45,38 +45,42 @@ msgstr ""
 msgid "Move %s"
 msgstr "Flyt"
 
-#: src/desktop.cpp:839
+#: src/desktop.cpp:864
 #, fuzzy
 msgid "Zoom drawing if window size changes"
 msgstr "Zoom til tegning"
 
-#: src/desktop.cpp:861 src/dialogs/display-settings.cpp:923 src/verbs.cpp:969
+#: src/desktop.cpp:886 src/dialogs/display-settings.cpp:923 src/verbs.cpp:969
 msgid "Zoom"
 msgstr "Zoom"
 
 #. FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
-#: src/desktop.cpp:885
+#: src/desktop.cpp:910
 msgid "Cursor coordinates"
 msgstr ""
 
+#: src/desktop.cpp:917
+msgid "Current layer"
+msgstr ""
+
 #. display the initial welcome message in the statusbar
-#: src/desktop.cpp:895
+#: src/desktop.cpp:925
 msgid ""
 "Welcome to Inkscape! Use shape or freehand tools to create objects; use "
 "selector (arrow) to move or transform them."
 msgstr ""
 
-#: src/desktop.cpp:934
+#: src/desktop.cpp:964
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:936
+#: src/desktop.cpp:966
 #, c-format
 msgid "%s - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:1078
+#: src/desktop.cpp:1108
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -85,11 +89,11 @@ msgid ""
 "If you close without saving, your changes will be discarded."
 msgstr ""
 
-#: src/desktop.cpp:1092 src/desktop.cpp:1151
+#: src/desktop.cpp:1122 src/desktop.cpp:1181
 msgid "Close _without saving"
 msgstr ""
 
-#: src/desktop.cpp:1136
+#: src/desktop.cpp:1166
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -98,25 +102,25 @@ msgid ""
 "Do you want to save this file in another format?"
 msgstr ""
 
-#: src/desktop.cpp:1536
+#: src/desktop.cpp:1566
 msgid "No previous zoom."
 msgstr ""
 
-#: src/desktop.cpp:1565
+#: src/desktop.cpp:1595
 msgid "No next zoom."
 msgstr ""
 
 #. Page page
-#: src/desktop.cpp:1963 src/dialogs/align.cpp:445
-#: src/dialogs/desktop-properties.cpp:701 src/dialogs/export.cpp:277
+#: src/desktop.cpp:1993 src/dialogs/align.cpp:445
+#: src/dialogs/desktop-properties.cpp:866 src/dialogs/export.cpp:113
 msgid "Page"
 msgstr "Side"
 
-#: src/desktop.cpp:1967 src/dialogs/align.cpp:448 src/dialogs/export.cpp:284
+#: src/desktop.cpp:1997 src/dialogs/align.cpp:448 src/dialogs/export.cpp:113
 msgid "Drawing"
 msgstr "Tegning"
 
-#: src/desktop.cpp:1971 src/dialogs/align.cpp:451 src/dialogs/export.cpp:291
+#: src/desktop.cpp:2001 src/dialogs/align.cpp:451 src/dialogs/export.cpp:113
 msgid "Selection"
 msgstr "Valg"
 
@@ -225,180 +229,180 @@ msgid "Smallest item"
 msgstr "Mindste element"
 
 #. Notebook tab
-#: src/dialogs/desktop-properties.cpp:608
+#: src/dialogs/desktop-properties.cpp:773
 msgid "Grid"
 msgstr "Gitter"
 
 #. Checkbuttons
-#: src/dialogs/desktop-properties.cpp:616
+#: src/dialogs/desktop-properties.cpp:781
 msgid "Show grid"
 msgstr "Vis gitter"
 
-#: src/dialogs/desktop-properties.cpp:617
+#: src/dialogs/desktop-properties.cpp:782
 msgid "Snap to grid"
 msgstr "Fastsæt til gitter"
 
-#: src/dialogs/desktop-properties.cpp:618
+#: src/dialogs/desktop-properties.cpp:783
 #, fuzzy
 msgid "Snap bounding boxes to grid"
 msgstr "Fastsæt til gitter"
 
-#: src/dialogs/desktop-properties.cpp:619
+#: src/dialogs/desktop-properties.cpp:784
 #, fuzzy
 msgid "Snap points to grid"
 msgstr "Fastsæt til gitter"
 
-#: src/dialogs/desktop-properties.cpp:637
+#: src/dialogs/desktop-properties.cpp:802
 msgid "Grid units:"
 msgstr "Enheder for gitter:"
 
-#: src/dialogs/desktop-properties.cpp:639
+#: src/dialogs/desktop-properties.cpp:804
 msgid "Origin X:"
 msgstr "Udgangspunkt X:"
 
-#: src/dialogs/desktop-properties.cpp:642
+#: src/dialogs/desktop-properties.cpp:807
 msgid "Origin Y:"
 msgstr "Udgangspunkt Y:"
 
-#: src/dialogs/desktop-properties.cpp:645
+#: src/dialogs/desktop-properties.cpp:810
 msgid "Spacing X:"
 msgstr "Afstand X:"
 
-#: src/dialogs/desktop-properties.cpp:648
+#: src/dialogs/desktop-properties.cpp:813
 msgid "Spacing Y:"
 msgstr "Afstand Y:"
 
-#: src/dialogs/desktop-properties.cpp:652
-#: src/dialogs/desktop-properties.cpp:685
+#: src/dialogs/desktop-properties.cpp:817
+#: src/dialogs/desktop-properties.cpp:850
 msgid "Snap units:"
 msgstr "Fastsætnings enheder:"
 
-#: src/dialogs/desktop-properties.cpp:655
-#: src/dialogs/desktop-properties.cpp:688
+#: src/dialogs/desktop-properties.cpp:820
+#: src/dialogs/desktop-properties.cpp:853
 msgid "Snap distance:"
 msgstr "Fastgørelsesafstand"
 
-#: src/dialogs/desktop-properties.cpp:658
+#: src/dialogs/desktop-properties.cpp:823
 msgid "Grid color:"
 msgstr "Gitterfarve:"
 
-#: src/dialogs/desktop-properties.cpp:659
+#: src/dialogs/desktop-properties.cpp:824
 msgid "Grid color"
 msgstr "Hjælpelinjefarve"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:663
+#: src/dialogs/desktop-properties.cpp:828
 msgid "Guides"
 msgstr "Hjælpelinjer"
 
-#: src/dialogs/desktop-properties.cpp:671
+#: src/dialogs/desktop-properties.cpp:836
 msgid "Show guides"
 msgstr "Vis hjælpelinier"
 
-#: src/dialogs/desktop-properties.cpp:672
+#: src/dialogs/desktop-properties.cpp:837
 msgid "Snap to guides"
 msgstr "Fastsæt til hjælpelinier"
 
-#: src/dialogs/desktop-properties.cpp:673
+#: src/dialogs/desktop-properties.cpp:838
 #, fuzzy
 msgid "Snap bounding boxes to guides"
 msgstr "Fastsæt til hjælpelinier"
 
-#: src/dialogs/desktop-properties.cpp:674
+#: src/dialogs/desktop-properties.cpp:839
 #, fuzzy
 msgid "Snap points to guides"
 msgstr "Fastsæt til gitter"
 
-#: src/dialogs/desktop-properties.cpp:692
+#: src/dialogs/desktop-properties.cpp:857
 #, fuzzy
 msgid "Guide color:"
 msgstr "Farve for hjælpelinjer:"
 
-#: src/dialogs/desktop-properties.cpp:693
+#: src/dialogs/desktop-properties.cpp:858
 msgid "Guideline color"
 msgstr "Farver for hjælpelinier"
 
-#: src/dialogs/desktop-properties.cpp:695
+#: src/dialogs/desktop-properties.cpp:860
 msgid "Highlight color:"
 msgstr "Farve for fremhævning:"
 
-#: src/dialogs/desktop-properties.cpp:696
+#: src/dialogs/desktop-properties.cpp:861
 #, fuzzy
 msgid "Highlighted guideline color"
 msgstr "Farve for fremhævede hjælpelinjer"
 
-#: src/dialogs/desktop-properties.cpp:710
+#: src/dialogs/desktop-properties.cpp:875
 msgid "Background (also for export):"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:711
+#: src/dialogs/desktop-properties.cpp:876
 #, fuzzy
 msgid "Background color"
 msgstr "Slutfarve"
 
-#: src/dialogs/desktop-properties.cpp:715
+#: src/dialogs/desktop-properties.cpp:880
 #, fuzzy
 msgid "Show canvas border"
 msgstr "Vis gitter"
 
-#: src/dialogs/desktop-properties.cpp:718
+#: src/dialogs/desktop-properties.cpp:883
 #, fuzzy
 msgid "Border on top of drawing"
 msgstr "Zoom til tegning"
 
-#: src/dialogs/desktop-properties.cpp:728
+#: src/dialogs/desktop-properties.cpp:893
 #, fuzzy
 msgid "Border color:"
 msgstr "Gitterfarve:"
 
-#: src/dialogs/desktop-properties.cpp:729
+#: src/dialogs/desktop-properties.cpp:894
 msgid "Canvas border color"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:745
+#: src/dialogs/desktop-properties.cpp:910
 msgid "Paper size:"
 msgstr "Papirstørrelse:"
 
-#: src/dialogs/desktop-properties.cpp:769
+#: src/dialogs/desktop-properties.cpp:934 src/dialogs/export.cpp:113
 msgid "Custom"
 msgstr "Tilpas"
 
-#: src/dialogs/desktop-properties.cpp:780
+#: src/dialogs/desktop-properties.cpp:945
 #, fuzzy
 msgid "Paper orientation:"
 msgstr "Mætning:"
 
-#: src/dialogs/desktop-properties.cpp:792
+#: src/dialogs/desktop-properties.cpp:957
 #, fuzzy
 msgid "Landscape"
 msgstr "Sodipodi: %s: %s: %d"
 
-#: src/dialogs/desktop-properties.cpp:798
+#: src/dialogs/desktop-properties.cpp:963
 #, fuzzy
 msgid "Portrait"
 msgstr "Punkt"
 
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:807
+#: src/dialogs/desktop-properties.cpp:972
 msgid "Custom paper"
 msgstr "Tilpasset papir"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:819 src/dialogs/export.cpp:305
+#: src/dialogs/desktop-properties.cpp:984 src/dialogs/export.cpp:239
 #: src/dialogs/transformation.cpp:519 src/dialogs/transformation.cpp:716
 msgid "Units:"
 msgstr "Enheder:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:821 src/dialogs/export.cpp:321
-#: src/dialogs/export.cpp:356 src/dialogs/object-attributes.cpp:76
+#: src/dialogs/desktop-properties.cpp:986 src/dialogs/export.cpp:277
+#: src/dialogs/export.cpp:384 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1378
 #: src/toolbox.cpp:1753
 msgid "Width:"
 msgstr "Bredde:"
 
-#: src/dialogs/desktop-properties.cpp:843 src/dialogs/export.cpp:337
-#: src/dialogs/export.cpp:371 src/dialogs/object-attributes.cpp:77
+#: src/dialogs/desktop-properties.cpp:1008 src/dialogs/export.cpp:293
+#: src/dialogs/export.cpp:399 src/dialogs/object-attributes.cpp:77
 #: src/dialogs/object-attributes.cpp:85
 msgid "Height:"
 msgstr "Højde:"
@@ -407,21 +411,21 @@ msgstr "Højde:"
 #.
 #. * Ownership metadata tab
 #.
-#: src/dialogs/desktop-properties.cpp:869
+#: src/dialogs/desktop-properties.cpp:1034
 msgid "Metadata"
 msgstr ""
 
-#. this uses an element
-#: src/dialogs/desktop-properties.cpp:898 src/dialogs/rdf.cpp:239
+#. add license selector pull-down
+#: src/dialogs/desktop-properties.cpp:1054
 #, fuzzy
 msgid "License"
 msgstr "tommer"
 
-#: src/dialogs/desktop-properties.cpp:920
+#: src/dialogs/desktop-properties.cpp:1084
 msgid "Proprietary"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:1396
+#: src/dialogs/desktop-properties.cpp:1579
 #, fuzzy
 msgid "Close"
 msgstr "Luk vindue"
@@ -457,7 +461,7 @@ msgstr "Omform valgte ting til kurver"
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:234 src/dialogs/display-settings.cpp:365
 #: src/dialogs/display-settings.cpp:420 src/dialogs/display-settings.cpp:1206
-#: src/interface.cpp:985 src/verbs.cpp:797
+#: src/interface.cpp:996 src/verbs.cpp:797
 msgid "None"
 msgstr "Ingen"
 
@@ -951,8 +955,8 @@ msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
 msgstr ""
 
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
-#: src/dialogs/display-settings.cpp:1151 src/dialogs/export.cpp:366
-#: src/dialogs/export.cpp:382
+#: src/dialogs/display-settings.cpp:1151 src/dialogs/export.cpp:394
+#: src/dialogs/export.cpp:410
 msgid "dpi"
 msgstr "dpi"
 
@@ -1006,76 +1010,80 @@ msgstr "8x8"
 msgid "16x16"
 msgstr "16x16"
 
-#. Export area frame
-#: src/dialogs/export.cpp:264
+#: src/dialogs/export.cpp:228
 #, fuzzy
 msgid "Export area"
 msgstr "Eksporteret som"
 
-#: src/dialogs/export.cpp:311
+#: src/dialogs/export.cpp:267
 #, fuzzy
 msgid "x0:"
 msgstr "T0:"
 
-#: src/dialogs/export.cpp:316
+#: src/dialogs/export.cpp:272
 #, fuzzy
 msgid "x1:"
 msgstr "R1:"
 
-#: src/dialogs/export.cpp:327
+#: src/dialogs/export.cpp:283
 #, fuzzy
 msgid "y0:"
 msgstr "T0:"
 
-#: src/dialogs/export.cpp:332
+#: src/dialogs/export.cpp:288
 #, fuzzy
 msgid "y1:"
 msgstr "R1:"
 
 #. Bitmap size frame
-#: src/dialogs/export.cpp:346
+#: src/dialogs/export.cpp:374
 #, fuzzy
 msgid "Bitmap size"
 msgstr "Billedstørrelse"
 
-#: src/dialogs/export.cpp:356 src/dialogs/export.cpp:371
+#: src/dialogs/export.cpp:384 src/dialogs/export.cpp:399
 msgid "pixels"
 msgstr "piksler"
 
 #. File entry
-#: src/dialogs/export.cpp:388
+#: src/dialogs/export.cpp:416
 #, fuzzy
 msgid "Filename"
 msgstr "Filnavn:"
 
-#: src/dialogs/export.cpp:423
+#: src/dialogs/export.cpp:442
 msgid "Browse..."
 msgstr ""
 
-#: src/dialogs/export.cpp:440
+#: src/dialogs/export.cpp:461
 msgid "Export"
 msgstr "Eksportér"
 
-#: src/dialogs/export.cpp:705
+#: src/dialogs/export.cpp:786
 #, fuzzy
 msgid "You have to enter a filename"
 msgstr "Gem tegning under nyt filnavn"
 
-#: src/dialogs/export.cpp:718
+#: src/dialogs/export.cpp:791
+msgid "The chosen area to be exported is invalid"
+msgstr ""
+
+#: src/dialogs/export.cpp:798
+#, c-format
+msgid "Directory %s does not exist or is not a directory.\n"
+msgstr ""
+
+#: src/dialogs/export.cpp:812
 #, fuzzy
 msgid "Export in progress"
 msgstr "Eksporteret som"
 
-#: src/dialogs/export.cpp:724
+#: src/dialogs/export.cpp:818
 #, c-format
 msgid "Exporting [%d x %d] %s"
 msgstr ""
 
-#: src/dialogs/export.cpp:755
-msgid "The chosen area to be exported is invalid"
-msgstr ""
-
-#: src/dialogs/export.cpp:772
+#: src/dialogs/export.cpp:885
 #, fuzzy
 msgid "Select a filename for exporting"
 msgstr "Vælg fil der skal importeres"
@@ -1544,150 +1552,164 @@ msgstr "Frihånd"
 msgid "Calligraphic line"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:184
+#: src/dialogs/rdf.cpp:206
 #, fuzzy
 msgid "Title"
 msgstr "Titel:"
 
-#: src/dialogs/rdf.cpp:185
+#: src/dialogs/rdf.cpp:207
 msgid "Name by which this document is formally known."
 msgstr ""
 
-#: src/dialogs/rdf.cpp:187
+#: src/dialogs/rdf.cpp:209
 #, fuzzy
 msgid "Date"
 msgstr "Tegn tekst"
 
-#: src/dialogs/rdf.cpp:188
+#: src/dialogs/rdf.cpp:210
 msgid "Date associated with the creation of this document (YYYY-MM-DD)."
 msgstr ""
 
-#: src/dialogs/rdf.cpp:190
+#: src/dialogs/rdf.cpp:212
 msgid "Format"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:191
+#: src/dialogs/rdf.cpp:213
 msgid "The physical or digital manifestation of this document (MIME type)."
 msgstr ""
 
-#: src/dialogs/rdf.cpp:193
+#: src/dialogs/rdf.cpp:215
 #, fuzzy
 msgid "Type"
 msgstr "Type:"
 
-#: src/dialogs/rdf.cpp:194
+#: src/dialogs/rdf.cpp:216
 msgid "Type of document (DCMI Type)."
 msgstr ""
 
-#: src/dialogs/rdf.cpp:197
+#: src/dialogs/rdf.cpp:219
 #, fuzzy
 msgid "Creator"
 msgstr "Opret lænke"
 
-#: src/dialogs/rdf.cpp:198
+#: src/dialogs/rdf.cpp:220
 msgid ""
 "Name of entity primarily responsible for making the content of this document."
 msgstr ""
 
-#: src/dialogs/rdf.cpp:200
+#: src/dialogs/rdf.cpp:222
 #, fuzzy
 msgid "Rights"
 msgstr "Højde"
 
-#: src/dialogs/rdf.cpp:201
+#: src/dialogs/rdf.cpp:223
 msgid ""
 "Name of entity with rights to the Intellectual Property of this document."
 msgstr ""
 
-#: src/dialogs/rdf.cpp:203
+#: src/dialogs/rdf.cpp:225
 msgid "Publisher"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:204
+#: src/dialogs/rdf.cpp:226
 msgid "Name of entity responsible for making this document available."
 msgstr ""
 
-#. this should be a multi-line tag
-#: src/dialogs/rdf.cpp:208
-#, fuzzy
-msgid "Contributors"
-msgstr "Centimeter"
-
-#: src/dialogs/rdf.cpp:209
-msgid ""
-"Names of entities responsible for making contributions to the content of "
-"this document."
-msgstr ""
-
-#: src/dialogs/rdf.cpp:212
+#: src/dialogs/rdf.cpp:229
 #, fuzzy
 msgid "Identifier"
 msgstr "Centrér"
 
-#: src/dialogs/rdf.cpp:213
+#: src/dialogs/rdf.cpp:230
 msgid "Unique URI to reference this document."
 msgstr ""
 
-#: src/dialogs/rdf.cpp:215
+#: src/dialogs/rdf.cpp:232
 msgid "Source"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:216
+#: src/dialogs/rdf.cpp:233
 msgid "Unique URI to reference the source of this document."
 msgstr ""
 
-#: src/dialogs/rdf.cpp:218
+#: src/dialogs/rdf.cpp:235
 #, fuzzy
 msgid "Relation"
 msgstr "Omdrejning:"
 
-#: src/dialogs/rdf.cpp:219
+#: src/dialogs/rdf.cpp:236
 #, fuzzy
 msgid "Unique URI to a related document."
 msgstr "Unavngivet dokument %d"
 
-#: src/dialogs/rdf.cpp:221
+#: src/dialogs/rdf.cpp:238
 #, fuzzy
 msgid "Language"
 msgstr "vinkel"
 
-#: src/dialogs/rdf.cpp:222
+#: src/dialogs/rdf.cpp:239
 msgid ""
 "Two-letter language tag with optional subtags for the language of this "
 "document.  (e.g. 'en-GB')"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:224
+#: src/dialogs/rdf.cpp:241
 msgid "Keywords"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:225
+#: src/dialogs/rdf.cpp:242
 msgid "The topic of this document as key words, phrases, or classification."
 msgstr ""
 
 #. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
 #. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
-#: src/dialogs/rdf.cpp:229
+#: src/dialogs/rdf.cpp:246
 msgid "Coverage"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:230
+#: src/dialogs/rdf.cpp:247
 msgid "Extent or scope of this document."
 msgstr ""
 
-#. this should be a multi-line tag
-#: src/dialogs/rdf.cpp:234
+#: src/dialogs/rdf.cpp:250
 #, fuzzy
 msgid "Description"
 msgstr "Position"
 
-#: src/dialogs/rdf.cpp:235
+#: src/dialogs/rdf.cpp:251
 msgid "A short account of the content of this document."
 msgstr ""
 
+#. FIXME: need to handle 1 agent per line of input
+#: src/dialogs/rdf.cpp:255
+#, fuzzy
+msgid "Contributors"
+msgstr "Centimeter"
+
+#: src/dialogs/rdf.cpp:256
+msgid ""
+"Names of entities responsible for making contributions to the content of "
+"this document."
+msgstr ""
+
+#. TRANSLATORS: URL to a page that defines the license for the document
+#: src/dialogs/rdf.cpp:260
+msgid "URI"
+msgstr ""
+
 #. TRANSLATORS: this is where you put a URL to a page that defines the license
-#: src/dialogs/rdf.cpp:241
+#: src/dialogs/rdf.cpp:262
 msgid "URI to this document's license's namespace definition."
+msgstr ""
+
+#. TRANSLATORS: fragment of XML representing the license of the document
+#: src/dialogs/rdf.cpp:266
+#, fuzzy
+msgid "Fragment"
+msgstr "Argument:"
+
+#: src/dialogs/rdf.cpp:267
+msgid "XML fragment for the RDF 'License' section."
 msgstr ""
 
 #: src/dialogs/stroke-style.cpp:1075 src/widgets/gradient-vector.cpp:262
@@ -1972,27 +1994,27 @@ msgstr ""
 
 #. alpha of color under cursor, to show in the statusbar
 #. locale-sensitive printf is OK, since this goes to the UI, not into SVG
-#: src/dropper-context.cpp:271
+#: src/dropper-context.cpp:272
 #, c-format
 msgid " alpha %.3g"
 msgstr ""
 
 #. where the color is picked, to show in the statusbar
-#: src/dropper-context.cpp:273
+#: src/dropper-context.cpp:274
 #, c-format
 msgid ", averaged with radius %d"
 msgstr ""
 
-#: src/dropper-context.cpp:273
+#: src/dropper-context.cpp:274
 msgid " under cursor"
 msgstr ""
 
 #. message, to show in the statusbar
-#: src/dropper-context.cpp:275
+#: src/dropper-context.cpp:276
 msgid "Release mouse to set color."
 msgstr ""
 
-#: src/dropper-context.cpp:275
+#: src/dropper-context.cpp:276
 msgid ""
 "Click to pick fill color, Shift+click to pick stroke color. Drag to pick the "
 "average color of an area."
@@ -2478,25 +2500,30 @@ msgstr ""
 msgid "_Help"
 msgstr "_Hjælp"
 
-#: src/interface.cpp:930
-msgid "Ascend to Parent Layer"
+#: src/interface.cpp:934
+msgid "Edit parent layer"
 msgstr ""
 
-#. TRANSLATORS: "Make Current Layer" means "Make it the current layer"
-#: src/interface.cpp:937
-msgid "Make Current Layer"
+#: src/interface.cpp:940
+#, fuzzy
+msgid "Edit root"
+msgstr "Redigér noder"
+
+#: src/interface.cpp:947
+#, c-format
+msgid "Edit group #%s as layer"
 msgstr ""
 
-#: src/interface.cpp:1021
+#: src/interface.cpp:1032
 msgid "Could not parse SVG data"
 msgstr ""
 
-#: src/interface.cpp:1183
+#: src/interface.cpp:1194
 #, c-format
 msgid "Overwrite %s"
 msgstr ""
 
-#: src/interface.cpp:1201
+#: src/interface.cpp:1212
 #, c-format
 msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "
@@ -2900,53 +2927,53 @@ msgstr ""
 msgid "Nothing was copied."
 msgstr ""
 
-#: src/selection-chemistry.cpp:765 src/selection-chemistry.cpp:816
+#: src/selection-chemistry.cpp:766 src/selection-chemistry.cpp:817
 #, fuzzy
 msgid "Nothing on the clipboard."
 msgstr "Kopiér det markerede til klippebord"
 
-#: src/selection-chemistry.cpp:822
+#: src/selection-chemistry.cpp:823
 #, fuzzy
 msgid "Select objects to paste style to."
 msgstr "Omform valgte ting til kurver"
 
-#: src/selection-chemistry.cpp:1272
+#: src/selection-chemistry.cpp:1273
 #, fuzzy
 msgid "Select an object to clone."
 msgstr "Omform valgte ting til kurver"
 
-#: src/selection-chemistry.cpp:1278
+#: src/selection-chemistry.cpp:1279
 msgid "If you want to clone several objects, group them and clone the group."
 msgstr ""
 
-#: src/selection-chemistry.cpp:1309
+#: src/selection-chemistry.cpp:1310
 #, fuzzy
 msgid "Select a clone to unlink."
 msgstr "Vælg fil der skal åbnes"
 
-#: src/selection-chemistry.cpp:1340
+#: src/selection-chemistry.cpp:1341
 msgid "No clones to unlink in the selection."
 msgstr ""
 
-#: src/selection-chemistry.cpp:1357
+#: src/selection-chemistry.cpp:1358
 msgid "Select a single clone to go to its original."
 msgstr ""
 
-#: src/selection-chemistry.cpp:1365
+#: src/selection-chemistry.cpp:1366
 msgid "This clone's original is not a visible object (it is in <defs>)"
 msgstr ""
 
-#: src/selection-chemistry.cpp:1392
+#: src/selection-chemistry.cpp:1393
 #, fuzzy
 msgid "Select an object to tile."
 msgstr "Omform valgte ting til kurver"
 
-#: src/selection-chemistry.cpp:1456
+#: src/selection-chemistry.cpp:1457
 #, fuzzy
 msgid "Select an object with pattern fill to untile."
 msgstr "Omform valgte ting til kurver"
 
-#: src/selection-chemistry.cpp:1507
+#: src/selection-chemistry.cpp:1508
 msgid "No pattern fills to untile in the selection."
 msgstr ""
 
@@ -2967,22 +2994,22 @@ msgid "%i objects selected. %s."
 msgstr ""
 
 #. status text
-#: src/seltrans.cpp:766 src/seltrans.cpp:828
+#: src/seltrans.cpp:767 src/seltrans.cpp:829
 #, c-format
 msgid "Scale %0.2f%%, %0.2f%%"
 msgstr ""
 
-#: src/seltrans.cpp:896
+#: src/seltrans.cpp:897
 #, c-format
 msgid "Skew %0.2f%c %0.2f%c"
 msgstr ""
 
-#: src/seltrans.cpp:943
+#: src/seltrans.cpp:944
 #, c-format
 msgid "Rotate by %0.2f deg"
 msgstr ""
 
-#: src/seltrans.cpp:972
+#: src/seltrans.cpp:973
 #, c-format
 msgid "Center at (%s,%s)"
 msgstr ""
@@ -3053,7 +3080,7 @@ msgstr "Ukendt element :-("
 msgid "Image URI:"
 msgstr "Billede"
 
-#: src/sp-item-group.cpp:317
+#: src/sp-item-group.cpp:328
 #, c-format
 msgid "Group of %d objects"
 msgstr "Gruppe med %d ting"
@@ -5626,9 +5653,6 @@ msgstr "Værdi"
 
 #~ msgid "Edit font style of selected objects"
 #~ msgstr "Redigér skriftsnitstil for valgte ting"
-
-#~ msgid "Edit nodes"
-#~ msgstr "Redigér noder"
 
 #~ msgid "Edit stroke style of selected objects"
 #~ msgstr "Redigér stregningsstil for valgte ting"
