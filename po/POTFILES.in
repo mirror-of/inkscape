@@ -1,7 +1,6 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
 inkscape.desktop.in
-src/application.cpp
 src/arc-context.cpp
 src/attributes.cpp
 src/bonobo/canvas-translator.cpp
