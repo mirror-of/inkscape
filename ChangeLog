@@ -1,3 +1,10 @@
+2004-08-29  MenTaLguY <mental@rydia.net>
+
+	* src/gc-core.h:
+	
+	  turn off scanning of dynamic library data segments; we don't need
+	  it, and it seems to cause problems on FC2
+
 2004-08-27  MenTaLguY <mental@rydia.net>
 
 	* src/traits/function.h: add typedefs for all argument positions,

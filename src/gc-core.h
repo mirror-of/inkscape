@@ -28,6 +28,7 @@ namespace GC {
 inline void init() {
 #ifdef USE_LIBGC
     GC_finalize_on_demand = 1;
+    GC_no_dls = 1;
     GC_INIT();
     // ensure that finalizers are called at sane times
     g_idle_add(GSourceFunc(GC_invoke_finalizers), NULL);
