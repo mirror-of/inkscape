@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.41\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-30 12:27+0100\n"
+"POT-Creation-Date: 2005-02-01 19:51+0100\n"
 "PO-Revision-Date: 2005-01-28 22:56+0100\n"
 "Last-Translator: Александар Урошевић <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -89,22 +89,22 @@ msgstr "Вођице"
 msgid "Move %s"
 msgstr "Помери %s"
 
-#: src/desktop.cpp:930
+#: src/desktop.cpp:933
 msgid "Zoom drawing if window size changes"
 msgstr "Зумирај цртеж када се промени величина прозора"
 
-#: src/desktop.cpp:952 src/dialogs/display-settings.cpp:1082
+#: src/desktop.cpp:955 src/dialogs/display-settings.cpp:1082
 #: src/verbs.cpp:1753
 msgid "Zoom"
 msgstr "Увећај"
 
-#: src/desktop.cpp:976
+#: src/desktop.cpp:979
 msgid "Cursor coordinates"
 msgstr "Координате показивача миша"
 
 #. sp_set_font_size (dtw->select_status, STATUS_BAR_FONT_SIZE);  // setting absolute size is bad, in some themes it ends up being larger!
 #. display the initial welcome message in the statusbar
-#: src/desktop.cpp:991
+#: src/desktop.cpp:994
 msgid ""
 "<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; "
 "use selector (arrow) to move or transform them."
@@ -113,17 +113,17 @@ msgstr ""
 "руком да би исцртали објекте; користите изборник (стрелицу) за њихово "
 "померање и промену облика."
 
-#: src/desktop.cpp:1036
+#: src/desktop.cpp:1039
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr "%s: %d - Inkscape"
 
-#: src/desktop.cpp:1038
+#: src/desktop.cpp:1041
 #, c-format
 msgid "%s - Inkscape"
 msgstr "%s - Inkscape"
 
-#: src/desktop.cpp:1184
+#: src/desktop.cpp:1187
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -137,11 +137,11 @@ msgstr ""
 "Ако напустите програм без памћења измена, измене које сте начинили ће бити "
 "занемарене."
 
-#: src/desktop.cpp:1197 src/desktop.cpp:1255
+#: src/desktop.cpp:1200 src/desktop.cpp:1258
 msgid "Close _without saving"
 msgstr "Затвори _без снимања"
 
-#: src/desktop.cpp:1241
+#: src/desktop.cpp:1244
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -154,27 +154,27 @@ msgstr ""
 "\n"
 "Желите ли да сачувате ову датотеку у неком другом формату?"
 
-#: src/desktop.cpp:1642
+#: src/desktop.cpp:1645
 msgid "No previous zoom."
 msgstr "Нема више умањења."
 
-#: src/desktop.cpp:1665
+#: src/desktop.cpp:1668
 msgid "No next zoom."
 msgstr "Нема више увећања."
 
 #. Page page
-#: src/desktop.cpp:2064 src/dialogs/align.cpp:556 src/dialogs/align.cpp:1098
-#: src/dialogs/desktop-properties.cpp:1025 src/dialogs/export.cpp:130
+#: src/desktop.cpp:2067 src/dialogs/align.cpp:556 src/dialogs/align.cpp:1098
+#: src/dialogs/desktop-properties.cpp:1025 src/dialogs/export.cpp:132
 msgid "Page"
 msgstr "Страна"
 
-#: src/desktop.cpp:2068 src/dialogs/align.cpp:557 src/dialogs/align.cpp:1101
-#: src/dialogs/export.cpp:130
+#: src/desktop.cpp:2071 src/dialogs/align.cpp:557 src/dialogs/align.cpp:1101
+#: src/dialogs/export.cpp:132
 msgid "Drawing"
 msgstr "Цртеж"
 
-#: src/desktop.cpp:2072 src/dialogs/align.cpp:558 src/dialogs/align.cpp:1104
-#: src/dialogs/export.cpp:130
+#: src/desktop.cpp:2075 src/dialogs/align.cpp:558 src/dialogs/align.cpp:1104
+#: src/dialogs/export.cpp:132
 msgid "Selection"
 msgstr "Избор"
 
@@ -603,7 +603,7 @@ msgstr "Поруке"
 
 #. ## Add a menu for clear()
 #: src/dialogs/debugdialog.cpp:144 src/dialogs/scriptdialog.cpp:194
-#: src/interface.cpp:1080
+#: src/interface.cpp:1082
 msgid "_File"
 msgstr "_Датотека"
 
@@ -765,7 +765,7 @@ msgstr "Јединица мере за алате, лењире и статус�
 msgid "Canvas size:"
 msgstr "Величина платна:"
 
-#: src/dialogs/desktop-properties.cpp:1100 src/dialogs/export.cpp:130
+#: src/dialogs/desktop-properties.cpp:1100 src/dialogs/export.cpp:132
 msgid "Custom"
 msgstr "Прилагођено"
 
@@ -787,21 +787,21 @@ msgid "Custom canvas"
 msgstr "Прилагођено платно"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:1150 src/dialogs/export.cpp:265
+#: src/dialogs/desktop-properties.cpp:1150 src/dialogs/export.cpp:267
 #: src/dialogs/transformation.cpp:515 src/dialogs/transformation.cpp:710
 msgid "Units:"
 msgstr "Јединица мере:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:1152 src/dialogs/export.cpp:305
-#: src/dialogs/export.cpp:412 src/dialogs/object-attributes.cpp:88
-#: src/dialogs/object-attributes.cpp:96 src/dialogs/stroke-style.cpp:1360
+#: src/dialogs/desktop-properties.cpp:1152 src/dialogs/export.cpp:307
+#: src/dialogs/export.cpp:414 src/dialogs/object-attributes.cpp:88
+#: src/dialogs/object-attributes.cpp:96 src/dialogs/stroke-style.cpp:1361
 #: src/toolbox.cpp:1810
 msgid "Width:"
 msgstr "Ширина:"
 
-#: src/dialogs/desktop-properties.cpp:1174 src/dialogs/export.cpp:321
-#: src/dialogs/export.cpp:427 src/dialogs/object-attributes.cpp:89
+#: src/dialogs/desktop-properties.cpp:1174 src/dialogs/export.cpp:323
+#: src/dialogs/export.cpp:429 src/dialogs/object-attributes.cpp:89
 #: src/dialogs/object-attributes.cpp:97
 msgid "Height:"
 msgstr "Висина:"
@@ -853,8 +853,8 @@ msgstr "Обележавање изабраног објекта"
 
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:258 src/dialogs/display-settings.cpp:394
-#: src/dialogs/display-settings.cpp:449 src/dialogs/display-settings.cpp:1455
-#: src/dialogs/stroke-style.cpp:1071 src/interface.cpp:696 src/verbs.cpp:1533
+#: src/dialogs/display-settings.cpp:449 src/dialogs/display-settings.cpp:1466
+#: src/dialogs/stroke-style.cpp:1072 src/interface.cpp:698 src/verbs.cpp:1533
 msgid "None"
 msgstr "Без ознака"
 
@@ -1062,7 +1062,7 @@ msgstr ""
 "померај"
 
 #: src/dialogs/display-settings.cpp:927 src/dialogs/display-settings.cpp:942
-#: src/dialogs/export.cpp:412 src/dialogs/export.cpp:427
+#: src/dialogs/export.cpp:414 src/dialogs/export.cpp:429
 msgid "pixels"
 msgstr "тачака"
 
@@ -1482,8 +1482,8 @@ msgstr ""
 "Подразумевана резолуција битмапе (тачака по инчу) у Извозном прозорчету"
 
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
-#: src/dialogs/display-settings.cpp:1397 src/dialogs/export.cpp:422
-#: src/dialogs/export.cpp:438
+#: src/dialogs/display-settings.cpp:1397 src/dialogs/export.cpp:424
+#: src/dialogs/export.cpp:440
 msgid "dpi"
 msgstr "тпи"
 
@@ -1501,22 +1501,35 @@ msgstr ""
 "Када је активно, увежена битмапа је <image> елемент; у супротном је "
 "правоугаоник са битмапираном попуном"
 
+#. TRANSLATORS: When on, the print out (currently Postscript) will have
+#. * a comment with the each object's label visible, marking the section
+#. * of the printing commands that represent the given object.
+#: src/dialogs/display-settings.cpp:1419
+msgid "Add label comments to printing output"
+msgstr ""
+
+#: src/dialogs/display-settings.cpp:1420
+msgid ""
+"When on, a comment will be added to the raw print output, marking the "
+"rendered output for an object with its label"
+msgstr ""
+
 #. TRANSLATORS: The maximum length of the Open Recent list in the File menu.
-#: src/dialogs/display-settings.cpp:1417
+#: src/dialogs/display-settings.cpp:1428
 msgid "Max recent documents:"
 msgstr "Највише последње коришћених докумената:"
 
-#: src/dialogs/display-settings.cpp:1418
+#: src/dialogs/display-settings.cpp:1429
 msgid "The maximum length of the Open Recent list in the File menu"
 msgstr ""
 "Максималан број докумената у листи „Отвори последње коришћене“ у менију "
 "„Датотека“"
 
-#: src/dialogs/display-settings.cpp:1428
+#: src/dialogs/display-settings.cpp:1439
 msgid "Simplification threshold:"
 msgstr "Праг поједностављивања:"
 
-#: src/dialogs/display-settings.cpp:1429
+#: src/dialogs/display-settings.cpp:1440
 msgid ""
 "How strong is the Simplify command by default. If you invoke this command "
 "several times in quick succession, it will act more and more aggressively; "
@@ -1526,92 +1539,92 @@ msgstr ""
 "наредбу више пута узастопно, примењиваће се све агресивније; поновно "
 "позивање након кратке паузе враћа праг на подразумевану вредност."
 
-#: src/dialogs/display-settings.cpp:1444
+#: src/dialogs/display-settings.cpp:1455
 msgid "Oversample bitmaps:"
 msgstr "Преувеличавање битмапа:"
 
-#: src/dialogs/display-settings.cpp:1461
+#: src/dialogs/display-settings.cpp:1472
 msgid "2x2"
 msgstr "2x2"
 
-#: src/dialogs/display-settings.cpp:1467
+#: src/dialogs/display-settings.cpp:1478
 msgid "4x4"
 msgstr "4x4"
 
-#: src/dialogs/display-settings.cpp:1473
+#: src/dialogs/display-settings.cpp:1484
 msgid "8x8"
 msgstr "8x8"
 
-#: src/dialogs/display-settings.cpp:1479
+#: src/dialogs/display-settings.cpp:1490
 msgid "16x16"
 msgstr "16x16"
 
-#: src/dialogs/export.cpp:251
+#: src/dialogs/export.cpp:253
 msgid "Export area"
 msgstr "Извоз површине"
 
-#: src/dialogs/export.cpp:295
+#: src/dialogs/export.cpp:297
 msgid "x0:"
 msgstr "x0:"
 
-#: src/dialogs/export.cpp:300
+#: src/dialogs/export.cpp:302
 msgid "x1:"
 msgstr "x1:"
 
-#: src/dialogs/export.cpp:311
+#: src/dialogs/export.cpp:313
 msgid "y0:"
 msgstr "y0:"
 
-#: src/dialogs/export.cpp:316
+#: src/dialogs/export.cpp:318
 msgid "y1:"
 msgstr "y1:"
 
 #. Bitmap size frame
-#: src/dialogs/export.cpp:402
+#: src/dialogs/export.cpp:404
 msgid "Bitmap size"
 msgstr "Величина битмапе"
 
 #. File entry
-#: src/dialogs/export.cpp:444
+#: src/dialogs/export.cpp:446
 msgid "Filename"
 msgstr "Назив датотеке"
 
-#: src/dialogs/export.cpp:506
+#: src/dialogs/export.cpp:508
 msgid "Browse..."
 msgstr "Тражи..."
 
-#: src/dialogs/export.cpp:527
+#: src/dialogs/export.cpp:529
 msgid "Export"
 msgstr "Извези"
 
-#: src/dialogs/export.cpp:960
+#: src/dialogs/export.cpp:962
 msgid "You have to enter a filename"
 msgstr "Морате унети назив датотеке"
 
-#: src/dialogs/export.cpp:965
+#: src/dialogs/export.cpp:967
 msgid "The chosen area to be exported is invalid"
 msgstr "Одабрана површина за извоз је нерегуларна"
 
-#: src/dialogs/export.cpp:972
+#: src/dialogs/export.cpp:975
 #, c-format
 msgid "Directory %s does not exist or is not a directory.\n"
 msgstr "Директоријум %s не постоји или није директоријум.\n"
 
-#: src/dialogs/export.cpp:986
+#: src/dialogs/export.cpp:990
 msgid "Export in progress"
 msgstr "Извоз је у току"
 
-#: src/dialogs/export.cpp:992
+#: src/dialogs/export.cpp:996
 #, c-format
 msgid "Exporting [%d x %d] %s"
 msgstr "Извоз [%d x %d] %s"
 
-#: src/dialogs/export.cpp:1018
+#: src/dialogs/export.cpp:1023
 #, c-format
 msgid "Could not export to filename %s.\n"
 msgstr "Не могу да извезем у датотеку %s.\n"
 
-#: src/dialogs/export.cpp:1123
+#: src/dialogs/export.cpp:1129
 msgid "Select a filename for exporting"
 msgstr "Одаберите назив датотеке за извоз"
 
@@ -1941,7 +1954,7 @@ msgid "Ref"
 msgstr "Референца"
 
 #: src/dialogs/item-properties.cpp:433 src/dialogs/item-properties.cpp:512
-#: src/dialogs/item-properties.cpp:519 src/main.cpp:192 src/main.cpp:199
+#: src/dialogs/item-properties.cpp:519 src/main.cpp:194 src/main.cpp:201
 msgid "ID"
 msgstr "ИД"
 
@@ -2300,40 +2313,40 @@ msgstr "Излаз"
 msgid "Errors"
 msgstr "Грешке"
 
-#: src/dialogs/stroke-style.cpp:1054 src/widgets/gradient-vector.cpp:263
+#: src/dialogs/stroke-style.cpp:1055 src/widgets/gradient-vector.cpp:263
 #: src/widgets/paint-selector.cpp:879
 msgid "No document selected"
 msgstr "Нисте изабрали документ"
 
-#: src/dialogs/stroke-style.cpp:1367
+#: src/dialogs/stroke-style.cpp:1368
 msgid "Stroke width"
 msgstr "Ширина потеза"
 
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
-#: src/dialogs/stroke-style.cpp:1390
+#: src/dialogs/stroke-style.cpp:1391
 msgid "Join:"
 msgstr "Прикључи:"
 
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1402
+#: src/dialogs/stroke-style.cpp:1403
 msgid "Miter join"
 msgstr "Оштри спојевиви"
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1410
+#: src/dialogs/stroke-style.cpp:1411
 msgid "Round join"
 msgstr "Заобљени спојеви"
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1418
+#: src/dialogs/stroke-style.cpp:1419
 msgid "Bevel join"
 msgstr "Равни спојеви"
 
@@ -2344,54 +2357,54 @@ msgstr "Равни спојеви"
 #. spike that extends well beyond the connection point. The purpose of the
 #. miter limit is to cut off such spikes (i.e. convert them into bevels)
 #. when they become too long.
-#: src/dialogs/stroke-style.cpp:1429
+#: src/dialogs/stroke-style.cpp:1430
 msgid "Miter limit:"
 msgstr "Граница оштрих спојева:"
 
-#: src/dialogs/stroke-style.cpp:1437
+#: src/dialogs/stroke-style.cpp:1438
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr "Максимална дужина оштрих спојева (у јединицама ширине линије)"
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
-#: src/dialogs/stroke-style.cpp:1450
+#: src/dialogs/stroke-style.cpp:1451
 msgid "Cap:"
 msgstr "Завршетак:"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1461
+#: src/dialogs/stroke-style.cpp:1462
 msgid "Butt cap"
 msgstr "Раван завршетак"
 
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: src/dialogs/stroke-style.cpp:1468
+#: src/dialogs/stroke-style.cpp:1469
 msgid "Round cap"
 msgstr "Заобљени завршетак"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1475
+#: src/dialogs/stroke-style.cpp:1476
 msgid "Square cap"
 msgstr "Квадратни завршетак"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:1481
+#: src/dialogs/stroke-style.cpp:1482
 msgid "Dashes:"
 msgstr "Линија:"
 
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
-#: src/dialogs/stroke-style.cpp:1502
+#: src/dialogs/stroke-style.cpp:1503
 msgid "Start Markers:"
 msgstr "Почетна ознака:"
 
-#: src/dialogs/stroke-style.cpp:1512
+#: src/dialogs/stroke-style.cpp:1513
 msgid "Mid Markers:"
 msgstr "Средишња ознака:"
 
-#: src/dialogs/stroke-style.cpp:1523
+#: src/dialogs/stroke-style.cpp:1524
 msgid "End Markers:"
 msgstr "Завршна ознака:"
 
@@ -2873,6 +2886,11 @@ msgstr "Проширење:"
 msgid "\" failed to load because "
 msgstr "Не моћу да учитам захтевану датотеку %s"
 
+#: src/extension/extension.cpp:811
+#, fuzzy, c-format
+msgid "Could not create extension error log file '%s'"
+msgstr "Не могу да извезем у датотеку %s.\n"
+
 #. This is some filler text, needs to change before relase
 #: src/extension/error-file.cpp:54
 msgid ""
@@ -2889,16 +2907,16 @@ msgstr ""
 msgid "Show dialog on startup"
 msgstr ""
 
-#: src/extension/init.cpp:152
+#: src/extension/init.cpp:153
 msgid "Null external module directory name.  Modules will not be loaded."
 msgstr ""
 "Нема назива директоријума за екстерне модуле. Никакви модули неће бити "
 "учитани."
 
-#: src/extension/init.cpp:161
-#, c-format
+#: src/extension/init.cpp:163
+#, fuzzy, c-format
 msgid ""
-"Modules directory (%s) is unavailable.  External modules in that directory "
+"Modules directory (%s) is unavailable.\t External modules in that directory "
 "will not be loaded."
 msgstr ""
 "Директоријум са модулима (%s) је недоступан. Спољашњи модули у том "
@@ -2982,7 +3000,7 @@ msgstr ""
 "Користите „> датотека“ за штампање у датотеку.\n"
 "Користите „| програм аргумент...“ за прослеђивање програму."
 
-#: src/extension/internal/ps.cpp:1043
+#: src/extension/internal/ps.cpp:1052
 msgid "write error occurred"
 msgstr "грешка при писању"
 
@@ -3020,46 +3038,46 @@ msgid "Format autodetect failed. The file is being opened as SVG."
 msgstr ""
 "Аутоматско препознавање формата није успело. Датотека је отворена као СВГ."
 
-#: src/file.cpp:181 src/file.cpp:812
+#: src/file.cpp:184 src/file.cpp:822
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "Не моћу да учитам захтевану датотеку %s"
 
-#: src/file.cpp:205
+#: src/file.cpp:209
 msgid "Document not saved yet.  Cannot revert."
 msgstr "Документ још увек није сачуван. Не могу да повратим пређашње стање."
 
-#: src/file.cpp:211
+#: src/file.cpp:215
 #, c-format
 msgid "Changes will be lost!  Are you sure you want to reload document %s?"
 msgstr ""
 "Измене ће бити изгубљене! Да ли сте сигурни да желите поново да учитате "
 "документ %s?"
 
-#: src/file.cpp:238
+#: src/file.cpp:242
 msgid "Document reverted."
 msgstr "Документ повраћен на пређашње стање."
 
-#: src/file.cpp:240
+#: src/file.cpp:244
 msgid "Document not reverted."
 msgstr "Документ није повраћен на пређашње стање."
 
-#: src/file.cpp:352
+#: src/file.cpp:356
 msgid "Select file to open"
 msgstr "Изаберите коју датотеку желите да отворите"
 
-#: src/file.cpp:444
+#: src/file.cpp:448
 #, c-format
 msgid "Removed <b>%i</b> unused item in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused items in &lt;defs&gt;."
 msgstr[0] "Уклоњена <b>%i</b> неискоришћена ставка у &lt;defs&gt;."
 msgstr[1] "Уклоњено <b>%i</b> неискоришћених ставки у &lt;defs&gt;."
 
-#: src/file.cpp:449
+#: src/file.cpp:453
 msgid "No unused items in &lt;defs&gt;."
 msgstr "Нема неискоришћених ставки у &lt;defs&gt;."
 
-#: src/file.cpp:473
+#: src/file.cpp:478
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
@@ -3068,38 +3086,38 @@ msgstr ""
 "Инкскејп екстензија за чување документа није пронађена (%s). Могући разлог "
 "овоме је непозната екстензија датотеке."
 
-#: src/file.cpp:474 src/file.cpp:480
+#: src/file.cpp:479 src/file.cpp:487
 msgid "Document not saved."
 msgstr "Документ није сачуван."
 
-#: src/file.cpp:479
+#: src/file.cpp:486
 #, c-format
 msgid "File %s could not be saved."
 msgstr "Датотека %s не може бити сачувана."
 
-#: src/file.cpp:488
+#: src/file.cpp:496
 msgid "Document saved."
 msgstr "Документ је сачуван."
 
-#: src/file.cpp:536
+#: src/file.cpp:544
 #, c-format
 msgid "drawing%s"
 msgstr "цртеж%s"
 
-#: src/file.cpp:542
+#: src/file.cpp:550
 #, c-format
 msgid "drawing-%d%s"
 msgstr "цртеж-%d%s"
 
-#: src/file.cpp:575
+#: src/file.cpp:585
 msgid "Select file to save to"
 msgstr "Изаберите датотеку у коју желите да сачувате документ"
 
-#: src/file.cpp:659
+#: src/file.cpp:669
 msgid "No changes need to be saved."
 msgstr "Нема измена потребних за снимање."
 
-#: src/file.cpp:838
+#: src/file.cpp:848
 msgid "Select file to import"
 msgstr "Одаберите датотеку за увоз"
 
@@ -3239,26 +3257,26 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "екс квадрати"
 
-#: src/inkscape.cpp:462
+#: src/inkscape.cpp:466
 msgid "Untitled document"
 msgstr "Неименовани документ"
 
 #. Show nice dialog box
-#: src/inkscape.cpp:493
+#: src/inkscape.cpp:497
 msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr "ИнкСкејп је наишао на унутрашњу грешку и сада ће се затворити.\n"
 
-#: src/inkscape.cpp:494
+#: src/inkscape.cpp:498
 msgid ""
 "Automatic backups of unsaved documents were done to the following "
 "locations:\n"
 msgstr "Аутоматски резервни примерци несачуваних докумената се чувају у:\n"
 
-#: src/inkscape.cpp:495
+#: src/inkscape.cpp:499
 msgid "Automatic backup of the following documents failed:\n"
 msgstr "Није успело аутоматско снимање резервног примерака документа:\n"
 
-#: src/inkscape.cpp:667
+#: src/inkscape.cpp:677
 #, c-format
 msgid ""
 "%s is not a regular file.\n"
@@ -3267,7 +3285,7 @@ msgstr ""
 "%s није права датотека.\n"
 "%s"
 
-#: src/inkscape.cpp:668
+#: src/inkscape.cpp:678
 #, c-format
 msgid ""
 "%s not a valid XML file, or\n"
@@ -3278,7 +3296,7 @@ msgstr ""
 "немате права читања за њу.\n"
 "%s"
 
-#: src/inkscape.cpp:670
+#: src/inkscape.cpp:680
 #, c-format
 msgid ""
 "%s is not a valid preferences file.\n"
@@ -3287,7 +3305,7 @@ msgstr ""
 "%s није исправна датотека подешавања.\n"
 "%s"
 
-#: src/inkscape.cpp:671
+#: src/inkscape.cpp:681
 msgid ""
 "Inkscape will run with default settings.\n"
 "New settings will not be saved."
@@ -3295,7 +3313,7 @@ msgstr ""
 "ИнкСкејп ће бити покренут са подразумеваним подешавањима.\n"
 "Нова подешавања неће бити сачувана."
 
-#: src/inkscape.cpp:1188
+#: src/inkscape.cpp:1206
 #, c-format
 msgid ""
 "Cannot create directory %s.\n"
@@ -3304,7 +3322,7 @@ msgstr ""
 "Не могу да направим директоријум %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1189
+#: src/inkscape.cpp:1207
 #, c-format
 msgid ""
 "%s is not a valid directory.\n"
@@ -3313,7 +3331,7 @@ msgstr ""
 "%s није исправан директоријум.\n"
 "%s"
 
-#: src/inkscape.cpp:1190
+#: src/inkscape.cpp:1208
 #, c-format
 msgid ""
 "Cannot create file %s.\n"
@@ -3322,7 +3340,7 @@ msgstr ""
 "Не могу да направим датотеку %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1191
+#: src/inkscape.cpp:1209
 #, c-format
 msgid ""
 "Cannot write file %s.\n"
@@ -3331,7 +3349,7 @@ msgstr ""
 "Не могу да запишем датотеку %s.\n"
 "%s"
 
-#: src/inkscape.cpp:1192
+#: src/inkscape.cpp:1210
 msgid ""
 "Although Inkscape will run, it will use default settings,\n"
 "and any changes made in preferences will not be saved."
@@ -3339,27 +3357,27 @@ msgstr ""
 "Иако ће ИнкСкејп бити покренут, користиће се подразумевана подешавања,\n"
 "и било какве измене у подешавањима неће бити сачуване."
 
-#: src/interface.cpp:706
+#: src/interface.cpp:708
 msgid "_New"
 msgstr "_Ново"
 
-#: src/interface.cpp:706
+#: src/interface.cpp:708
 msgid "Create new document"
 msgstr "Направи нови СВГ документ"
 
-#: src/interface.cpp:715
+#: src/interface.cpp:717
 msgid "Open _Recent"
 msgstr "Отвори _последње коришћене"
 
-#: src/interface.cpp:715
+#: src/interface.cpp:717
 msgid "Open one of the recently visited documents"
 msgstr "Отварање једног од последње отвараних докумената"
 
-#: src/interface.cpp:944
+#: src/interface.cpp:946
 msgid "_Show/Hide"
 msgstr "_Прикажи или сакриј"
 
-#: src/interface.cpp:944
+#: src/interface.cpp:946
 msgid ""
 "Show or hide parts of the document window (differently for normal and "
 "fullscreen modes)"
@@ -3369,35 +3387,35 @@ msgstr ""
 
 #. sp_ui_menu_append_check_item_from_verb (m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
 #. checkitem_toggled, checkitem_update, 0);
-#: src/interface.cpp:949
+#: src/interface.cpp:951
 msgid "Commands Bar"
 msgstr "Линија наредби"
 
-#: src/interface.cpp:949
+#: src/interface.cpp:951
 msgid "Show or hide the Commands bar (under the menu)"
 msgstr "Прикажи или сакриј траку наредби (испод менија)"
 
-#: src/interface.cpp:951
+#: src/interface.cpp:953
 msgid "Tool Controls"
 msgstr "Контрола алата"
 
-#: src/interface.cpp:951
+#: src/interface.cpp:953
 msgid "Show or hide the Tool Controls panel"
 msgstr "Прикажи или сакриј траку за контролна подешавања алата"
 
-#: src/interface.cpp:953
+#: src/interface.cpp:955
 msgid "_Toolbox"
 msgstr "_Алатке"
 
-#: src/interface.cpp:953
+#: src/interface.cpp:955
 msgid "Show or hide the main toolbox (on the left)"
 msgstr "Прикажи или сакриј главну траку алата (уз леву ивицу)"
 
-#: src/interface.cpp:959
+#: src/interface.cpp:961
 msgid "_Statusbar"
 msgstr "_Статусна линија"
 
-#: src/interface.cpp:959
+#: src/interface.cpp:961
 msgid "Show or hide the statusbar (at the bottom of the window)"
 msgstr "Прикажи или сакриј статустну линију (на дну прозора)"
 
@@ -3405,70 +3423,70 @@ msgstr "Прикажи или сакриј статустну линију (на
 #. * list of verb arguments) in the verb system right now, so we have to build
 #. * the submenu by hand.  Luckily, we can populate it using the same verb system.
 #.
-#: src/interface.cpp:1054
+#: src/interface.cpp:1056
 msgid "_Tutorials"
 msgstr "_Вежбе"
 
-#: src/interface.cpp:1054
+#: src/interface.cpp:1056
 msgid "Interactive Inkscape tutorials"
 msgstr "Интерактивне ИнкСкејп вежбе"
 
-#: src/interface.cpp:1086
+#: src/interface.cpp:1088
 msgid "_Edit"
 msgstr "_Уређивање"
 
-#: src/interface.cpp:1092
+#: src/interface.cpp:1094
 msgid "_View"
 msgstr "_Преглед"
 
-#: src/interface.cpp:1098
+#: src/interface.cpp:1100
 msgid "_Layer"
 msgstr "_Слој"
 
-#: src/interface.cpp:1104
+#: src/interface.cpp:1106
 msgid "_Object"
 msgstr "_Објекат"
 
-#: src/interface.cpp:1110
+#: src/interface.cpp:1112
 msgid "_Path"
 msgstr "_Крива"
 
-#: src/interface.cpp:1116
+#: src/interface.cpp:1118
 msgid "_Text"
 msgstr "_Текст"
 
-#: src/interface.cpp:1123
+#: src/interface.cpp:1125
 msgid "Effects"
 msgstr "Ефекти"
 
-#: src/interface.cpp:1130
+#: src/interface.cpp:1132
 msgid "_Help"
 msgstr "_Помоћ"
 
 #. TRANSLATORS: #%s is the id of the group e.g. <g id="#g7">, not a number.
-#: src/interface.cpp:1202
+#: src/interface.cpp:1204
 #, c-format
 msgid "Enter group #%s"
 msgstr "Уђи у групу #%s"
 
-#: src/interface.cpp:1213
+#: src/interface.cpp:1215
 msgid "Go to parent"
 msgstr "Прелазак на родитељски слој"
 
-#: src/interface.cpp:1219
+#: src/interface.cpp:1221
 msgid "Go to root"
 msgstr "Прелазак на корени слој"
 
-#: src/interface.cpp:1249
+#: src/interface.cpp:1251
 msgid "Could not parse SVG data"
 msgstr "Не могу да обрадим СВГ податке"
 
-#: src/interface.cpp:1340
+#: src/interface.cpp:1344
 #, c-format
 msgid "Overwrite %s"
 msgstr "Препиши %s"
 
-#: src/interface.cpp:1358
+#: src/interface.cpp:1362
 #, c-format
 msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "
@@ -3481,47 +3499,51 @@ msgstr ""
 msgid "Node or handle drag canceled."
 msgstr "Превлачење чвора или ручке је отказано."
 
-#: src/main.cpp:141
+#: src/libnrtype/FontFactory.cpp:342
+msgid "Ignoring font without family that will crash Pango"
+msgstr ""
+
+#: src/main.cpp:143
 msgid "Print the Inkscape version number"
 msgstr "Штампај ознаку верзије Инкскејпа"
 
-#: src/main.cpp:146
+#: src/main.cpp:148
 msgid "Do not use X server (only process files from console)"
 msgstr "Не користи X сервер (само обрађуј датотеке преко конзоле)"
 
-#: src/main.cpp:151
+#: src/main.cpp:153
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr ""
 "Покушај да користиш X сервер (чак иако променљива $DISPLAY није постављена)"
 
-#: src/main.cpp:156
+#: src/main.cpp:158
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "Отвори наведене документе (ниска опција се може прескочити)"
 
-#: src/main.cpp:157 src/main.cpp:162 src/main.cpp:167 src/main.cpp:219
+#: src/main.cpp:159 src/main.cpp:164 src/main.cpp:169 src/main.cpp:221
 msgid "FILENAME"
 msgstr "НАЗИВ ДАТОТЕКЕ"
 
-#: src/main.cpp:161
+#: src/main.cpp:163
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "Штампај документе у наведену излазну датотеку (користите „| програм“ за "
 "цевку)"
 
-#: src/main.cpp:166
+#: src/main.cpp:168
 msgid "Export document to a PNG file"
 msgstr "Извоз документа у PNG датотеку"
 
-#: src/main.cpp:171
+#: src/main.cpp:173
 msgid "The resolution used for exporting SVG into bitmap (default 90)"
 msgstr ""
 "Резолуција која се користи за претварање СВГ-а у битмапу (подразумевано 90)"
 
-#: src/main.cpp:172
+#: src/main.cpp:174
 msgid "DPI"
 msgstr "ТПИ"
 
-#: src/main.cpp:176
+#: src/main.cpp:178
 msgid ""
 "Exported area in SVG pixels (default is full document; 0,0 is lower-left "
 "corner)"
@@ -3529,75 +3551,75 @@ msgstr ""
 "Површина за извоз у СВГ пикселима (подразумевано је цео документ, 0,0 је "
 "доњи-леви угао)"
 
-#: src/main.cpp:177
+#: src/main.cpp:179
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: src/main.cpp:181
+#: src/main.cpp:183
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr "Ширина образоване битмапе у тачкама (преписује извозни ТПИ)"
 
-#: src/main.cpp:182
+#: src/main.cpp:184
 msgid "WIDTH"
 msgstr "ШИРИНА"
 
-#: src/main.cpp:186
+#: src/main.cpp:188
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr "Висина образоване битмапе у тачкама (занемарује атрибут „export-dpi“)"
 
-#: src/main.cpp:187
+#: src/main.cpp:189
 msgid "HEIGHT"
 msgstr "ВИСИНА"
 
-#: src/main.cpp:191
+#: src/main.cpp:193
 msgid "The ID of the object to export (overrides export-area)"
 msgstr "ИД објекта за извоз (занемарује атрибут „export-area“)"
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
-#: src/main.cpp:198
+#: src/main.cpp:200
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 "Извози само објекат са атрибутом „export-id“, сакрива све друге (само са "
 "атрибутом „export-id“)"
 
-#: src/main.cpp:203
+#: src/main.cpp:205
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
 "Користи сачувани назив датотеке и ТПИ резолуцију при извозу (само са "
 "атрибутом „export-id“)"
 
-#: src/main.cpp:208
+#: src/main.cpp:210
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 "Боја позадине битмапе за образовање (било која ознака боје коју подржава СВГ)"
 
-#: src/main.cpp:209
+#: src/main.cpp:211
 msgid "COLOR"
 msgstr "БОЈА"
 
-#: src/main.cpp:213
+#: src/main.cpp:215
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr "Боја позадине битмапе за образовање (било од 0.0 до 1.0, или 1 до 255)"
 
-#: src/main.cpp:214
+#: src/main.cpp:216
 msgid "VALUE"
 msgstr "ВРЕДНОСТ"
 
-#: src/main.cpp:218
+#: src/main.cpp:220
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "Извези документ у обичну СВГ датотеку (без атрибута „sodipodi“ или "
 "„inkscape“)"
 
-#: src/main.cpp:223
+#: src/main.cpp:225
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "Прикажи дате датотеке једну по једну, пређи на следећу након било каквог "
 "догађаја са тастерима или мишем"
 
-#: src/main.cpp:330 src/main.cpp:412
+#: src/main.cpp:332 src/main.cpp:414
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -3770,32 +3792,32 @@ msgid ""
 "randomize"
 msgstr ""
 
-#: src/object-edit.cpp:881
+#: src/object-edit.cpp:883
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
 msgstr ""
 
-#: src/object-edit.cpp:883
+#: src/object-edit.cpp:885
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate"
 msgstr ""
 
-#: src/object-edit.cpp:920
+#: src/object-edit.cpp:922
 msgid "Adjust the <b>offset distance</b>"
 msgstr "Подеси <b>удаљеност помераја</b>"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
-#: src/object-edit.cpp:951
+#: src/object-edit.cpp:953
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr "<b>Померање</b> попуне мустром унутар објекта"
 
-#: src/object-edit.cpp:953
+#: src/object-edit.cpp:955
 msgid "<b>Scale</b> the pattern fill uniformly"
 msgstr "Јединствена <b>промена величине</b> попуне мустром"
 
-#: src/object-edit.cpp:955
+#: src/object-edit.cpp:957
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr ""
 "<b>Ротирање</b> попуне мустром; притисните <b>Ctrl</b> за пријањање на углао"

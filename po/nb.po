@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-30 12:27+0100\n"
+"POT-Creation-Date: 2005-02-01 19:51+0100\n"
 "PO-Revision-Date: 2003-01-25 00:49+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
@@ -81,39 +81,39 @@ msgstr "Farge på retningslinje"
 msgid "Move %s"
 msgstr "Flytt"
 
-#: src/desktop.cpp:930
+#: src/desktop.cpp:933
 #, fuzzy
 msgid "Zoom drawing if window size changes"
 msgstr "Redigeringsvindu"
 
-#: src/desktop.cpp:952 src/dialogs/display-settings.cpp:1082
+#: src/desktop.cpp:955 src/dialogs/display-settings.cpp:1082
 #: src/verbs.cpp:1753
 msgid "Zoom"
 msgstr "Zoom"
 
-#: src/desktop.cpp:976
+#: src/desktop.cpp:979
 msgid "Cursor coordinates"
 msgstr ""
 
 #. sp_set_font_size (dtw->select_status, STATUS_BAR_FONT_SIZE);  // setting absolute size is bad, in some themes it ends up being larger!
 #. display the initial welcome message in the statusbar
-#: src/desktop.cpp:991
+#: src/desktop.cpp:994
 msgid ""
 "<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; "
 "use selector (arrow) to move or transform them."
 msgstr ""
 
-#: src/desktop.cpp:1036
+#: src/desktop.cpp:1039
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:1038
+#: src/desktop.cpp:1041
 #, c-format
 msgid "%s - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:1184
+#: src/desktop.cpp:1187
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -122,11 +122,11 @@ msgid ""
 "If you close without saving, your changes will be discarded."
 msgstr ""
 
-#: src/desktop.cpp:1197 src/desktop.cpp:1255
+#: src/desktop.cpp:1200 src/desktop.cpp:1258
 msgid "Close _without saving"
 msgstr ""
 
-#: src/desktop.cpp:1241
+#: src/desktop.cpp:1244
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -135,27 +135,27 @@ msgid ""
 "Do you want to save this file in another format?"
 msgstr ""
 
-#: src/desktop.cpp:1642
+#: src/desktop.cpp:1645
 msgid "No previous zoom."
 msgstr ""
 
-#: src/desktop.cpp:1665
+#: src/desktop.cpp:1668
 msgid "No next zoom."
 msgstr ""
 
 #. Page page
-#: src/desktop.cpp:2064 src/dialogs/align.cpp:556 src/dialogs/align.cpp:1098
-#: src/dialogs/desktop-properties.cpp:1025 src/dialogs/export.cpp:130
+#: src/desktop.cpp:2067 src/dialogs/align.cpp:556 src/dialogs/align.cpp:1098
+#: src/dialogs/desktop-properties.cpp:1025 src/dialogs/export.cpp:132
 msgid "Page"
 msgstr "Side"
 
-#: src/desktop.cpp:2068 src/dialogs/align.cpp:557 src/dialogs/align.cpp:1101
-#: src/dialogs/export.cpp:130
+#: src/desktop.cpp:2071 src/dialogs/align.cpp:557 src/dialogs/align.cpp:1101
+#: src/dialogs/export.cpp:132
 msgid "Drawing"
 msgstr "Tegning"
 
-#: src/desktop.cpp:2072 src/dialogs/align.cpp:558 src/dialogs/align.cpp:1104
-#: src/dialogs/export.cpp:130
+#: src/desktop.cpp:2075 src/dialogs/align.cpp:558 src/dialogs/align.cpp:1104
+#: src/dialogs/export.cpp:132
 msgid "Selection"
 msgstr "Valg"
 
@@ -601,7 +601,7 @@ msgstr ""
 
 #. ## Add a menu for clear()
 #: src/dialogs/debugdialog.cpp:144 src/dialogs/scriptdialog.cpp:194
-#: src/interface.cpp:1080
+#: src/interface.cpp:1082
 #, fuzzy
 msgid "_File"
 msgstr "Fil"
@@ -781,7 +781,7 @@ msgstr ""
 msgid "Canvas size:"
 msgstr "Skriftstørrelse"
 
-#: src/dialogs/desktop-properties.cpp:1100 src/dialogs/export.cpp:130
+#: src/dialogs/desktop-properties.cpp:1100 src/dialogs/export.cpp:132
 msgid "Custom"
 msgstr "Tilpasset"
 
@@ -807,21 +807,21 @@ msgid "Custom canvas"
 msgstr "Egendefinert papir"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:1150 src/dialogs/export.cpp:265
+#: src/dialogs/desktop-properties.cpp:1150 src/dialogs/export.cpp:267
 #: src/dialogs/transformation.cpp:515 src/dialogs/transformation.cpp:710
 msgid "Units:"
 msgstr "Enheter:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:1152 src/dialogs/export.cpp:305
-#: src/dialogs/export.cpp:412 src/dialogs/object-attributes.cpp:88
-#: src/dialogs/object-attributes.cpp:96 src/dialogs/stroke-style.cpp:1360
+#: src/dialogs/desktop-properties.cpp:1152 src/dialogs/export.cpp:307
+#: src/dialogs/export.cpp:414 src/dialogs/object-attributes.cpp:88
+#: src/dialogs/object-attributes.cpp:96 src/dialogs/stroke-style.cpp:1361
 #: src/toolbox.cpp:1810
 msgid "Width:"
 msgstr "Bredde:"
 
-#: src/dialogs/desktop-properties.cpp:1174 src/dialogs/export.cpp:321
-#: src/dialogs/export.cpp:427 src/dialogs/object-attributes.cpp:89
+#: src/dialogs/desktop-properties.cpp:1174 src/dialogs/export.cpp:323
+#: src/dialogs/export.cpp:429 src/dialogs/object-attributes.cpp:89
 #: src/dialogs/object-attributes.cpp:97
 msgid "Height:"
 msgstr "Høyde:"
@@ -876,8 +876,8 @@ msgstr ""
 
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:258 src/dialogs/display-settings.cpp:394
-#: src/dialogs/display-settings.cpp:449 src/dialogs/display-settings.cpp:1455
-#: src/dialogs/stroke-style.cpp:1071 src/interface.cpp:696 src/verbs.cpp:1533
+#: src/dialogs/display-settings.cpp:449 src/dialogs/display-settings.cpp:1466
+#: src/dialogs/stroke-style.cpp:1072 src/interface.cpp:698 src/verbs.cpp:1533
 msgid "None"
 msgstr "Ingen"
 
@@ -1076,7 +1076,7 @@ msgid ""
 msgstr ""
 
 #: src/dialogs/display-settings.cpp:927 src/dialogs/display-settings.cpp:942
-#: src/dialogs/export.cpp:412 src/dialogs/export.cpp:427
+#: src/dialogs/export.cpp:414 src/dialogs/export.cpp:429
 msgid "pixels"
 msgstr "piksler"
 
@@ -1482,8 +1482,8 @@ msgid "Default bitmap resolution (in dots per inch) in the Export dialog"
 msgstr ""
 
 #. FIXME: add "Used for new exports; once exported, documents remember this value on per-object basis" when implemented
-#: src/dialogs/display-settings.cpp:1397 src/dialogs/export.cpp:422
-#: src/dialogs/export.cpp:438
+#: src/dialogs/display-settings.cpp:1397 src/dialogs/export.cpp:424
+#: src/dialogs/export.cpp:440
 msgid "dpi"
 msgstr "dpi"
 
@@ -1500,115 +1500,128 @@ msgid ""
 "rectangle with bitmap fill"
 msgstr ""
 
+#. TRANSLATORS: When on, the print out (currently Postscript) will have
+#. * a comment with the each object's label visible, marking the section
+#. * of the printing commands that represent the given object.
+#: src/dialogs/display-settings.cpp:1419
+msgid "Add label comments to printing output"
+msgstr ""
+
+#: src/dialogs/display-settings.cpp:1420
+msgid ""
+"When on, a comment will be added to the raw print output, marking the "
+"rendered output for an object with its label"
+msgstr ""
+
 #. TRANSLATORS: The maximum length of the Open Recent list in the File menu.
-#: src/dialogs/display-settings.cpp:1417
+#: src/dialogs/display-settings.cpp:1428
 #, fuzzy
 msgid "Max recent documents:"
 msgstr "Skriv ut dokument"
 
-#: src/dialogs/display-settings.cpp:1418
+#: src/dialogs/display-settings.cpp:1429
 msgid "The maximum length of the Open Recent list in the File menu"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1428
+#: src/dialogs/display-settings.cpp:1439
 msgid "Simplification threshold:"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1429
+#: src/dialogs/display-settings.cpp:1440
 msgid ""
 "How strong is the Simplify command by default. If you invoke this command "
 "several times in quick succession, it will act more and more aggressively; "
 "invoking it again after a pause restores the default threshold."
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1444
+#: src/dialogs/display-settings.cpp:1455
 msgid "Oversample bitmaps:"
 msgstr "Oversample bitkart:"
 
-#: src/dialogs/display-settings.cpp:1461
+#: src/dialogs/display-settings.cpp:1472
 msgid "2x2"
 msgstr "2x2"
 
-#: src/dialogs/display-settings.cpp:1467
+#: src/dialogs/display-settings.cpp:1478
 msgid "4x4"
 msgstr "4x4"
 
-#: src/dialogs/display-settings.cpp:1473
+#: src/dialogs/display-settings.cpp:1484
 msgid "8x8"
 msgstr "8x8"
 
-#: src/dialogs/display-settings.cpp:1479
+#: src/dialogs/display-settings.cpp:1490
 msgid "16x16"
 msgstr "16x16"
 
-#: src/dialogs/export.cpp:251
+#: src/dialogs/export.cpp:253
 msgid "Export area"
 msgstr "Eksporter område"
 
-#: src/dialogs/export.cpp:295
+#: src/dialogs/export.cpp:297
 msgid "x0:"
 msgstr "x0:"
 
-#: src/dialogs/export.cpp:300
+#: src/dialogs/export.cpp:302
 msgid "x1:"
 msgstr "x1:"
 
-#: src/dialogs/export.cpp:311
+#: src/dialogs/export.cpp:313
 msgid "y0:"
 msgstr "y0:"
 
-#: src/dialogs/export.cpp:316
+#: src/dialogs/export.cpp:318
 msgid "y1:"
 msgstr "y1:"
 
 #. Bitmap size frame
-#: src/dialogs/export.cpp:402
+#: src/dialogs/export.cpp:404
 msgid "Bitmap size"
 msgstr "Størrelse på bitkart"
 
 #. File entry
-#: src/dialogs/export.cpp:444
+#: src/dialogs/export.cpp:446
 #, fuzzy
 msgid "Filename"
 msgstr "Fil"
 
-#: src/dialogs/export.cpp:506
+#: src/dialogs/export.cpp:508
 msgid "Browse..."
 msgstr ""
 
-#: src/dialogs/export.cpp:527
+#: src/dialogs/export.cpp:529
 msgid "Export"
 msgstr "Eksporter"
 
-#: src/dialogs/export.cpp:960
+#: src/dialogs/export.cpp:962
 msgid "You have to enter a filename"
 msgstr ""
 
-#: src/dialogs/export.cpp:965
+#: src/dialogs/export.cpp:967
 msgid "The chosen area to be exported is invalid"
 msgstr ""
 
-#: src/dialogs/export.cpp:972
+#: src/dialogs/export.cpp:975
 #, c-format
 msgid "Directory %s does not exist or is not a directory.\n"
 msgstr ""
 
-#: src/dialogs/export.cpp:986
+#: src/dialogs/export.cpp:990
 #, fuzzy
 msgid "Export in progress"
 msgstr "Eksporter område"
 
-#: src/dialogs/export.cpp:992
+#: src/dialogs/export.cpp:996
 #, fuzzy, c-format
 msgid "Exporting [%d x %d] %s"
 msgstr "Fargebilde %d x %d: %s"
 
-#: src/dialogs/export.cpp:1018
+#: src/dialogs/export.cpp:1023
 #, c-format
 msgid "Could not export to filename %s.\n"
 msgstr ""
 
-#: src/dialogs/export.cpp:1123
+#: src/dialogs/export.cpp:1129
 #, fuzzy
 msgid "Select a filename for exporting"
 msgstr "Velg fil som skal importeres"
@@ -1967,7 +1980,7 @@ msgid "Ref"
 msgstr ""
 
 #: src/dialogs/item-properties.cpp:433 src/dialogs/item-properties.cpp:512
-#: src/dialogs/item-properties.cpp:519 src/main.cpp:192 src/main.cpp:199
+#: src/dialogs/item-properties.cpp:519 src/main.cpp:194 src/main.cpp:201
 msgid "ID"
 msgstr ""
 
@@ -2347,12 +2360,12 @@ msgstr "Klipp ut"
 msgid "Errors"
 msgstr ""
 
-#: src/dialogs/stroke-style.cpp:1054 src/widgets/gradient-vector.cpp:263
+#: src/dialogs/stroke-style.cpp:1055 src/widgets/gradient-vector.cpp:263
 #: src/widgets/paint-selector.cpp:879
 msgid "No document selected"
 msgstr "Ingen dokumenter valgt"
 
-#: src/dialogs/stroke-style.cpp:1367
+#: src/dialogs/stroke-style.cpp:1368
 #, fuzzy
 msgid "Stroke width"
 msgstr "Ingen maling"
@@ -2360,28 +2373,28 @@ msgstr "Ingen maling"
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
-#: src/dialogs/stroke-style.cpp:1390
+#: src/dialogs/stroke-style.cpp:1391
 msgid "Join:"
 msgstr "Slå sammen:"
 
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1402
+#: src/dialogs/stroke-style.cpp:1403
 msgid "Miter join"
 msgstr ""
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1410
+#: src/dialogs/stroke-style.cpp:1411
 msgid "Round join"
 msgstr ""
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
-#: src/dialogs/stroke-style.cpp:1418
+#: src/dialogs/stroke-style.cpp:1419
 msgid "Bevel join"
 msgstr ""
 
@@ -2392,56 +2405,56 @@ msgstr ""
 #. spike that extends well beyond the connection point. The purpose of the
 #. miter limit is to cut off such spikes (i.e. convert them into bevels)
 #. when they become too long.
-#: src/dialogs/stroke-style.cpp:1429
+#: src/dialogs/stroke-style.cpp:1430
 msgid "Miter limit:"
 msgstr ""
 
-#: src/dialogs/stroke-style.cpp:1437
+#: src/dialogs/stroke-style.cpp:1438
 msgid "Maximum length of the miter (in units of stroke width)"
 msgstr ""
 
 #. Cap type
 #. TRANSLATORS: cap type specifies the shape for the ends of lines
-#: src/dialogs/stroke-style.cpp:1450
+#: src/dialogs/stroke-style.cpp:1451
 msgid "Cap:"
 msgstr "Cap:"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1461
+#: src/dialogs/stroke-style.cpp:1462
 msgid "Butt cap"
 msgstr ""
 
 #. TRANSLATORS: Round cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are rounded
-#: src/dialogs/stroke-style.cpp:1468
+#: src/dialogs/stroke-style.cpp:1469
 msgid "Round cap"
 msgstr ""
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
-#: src/dialogs/stroke-style.cpp:1475
+#: src/dialogs/stroke-style.cpp:1476
 msgid "Square cap"
 msgstr ""
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:1481
+#: src/dialogs/stroke-style.cpp:1482
 #, fuzzy
 msgid "Dashes:"
 msgstr "Masse:"
 
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
-#: src/dialogs/stroke-style.cpp:1502
+#: src/dialogs/stroke-style.cpp:1503
 #, fuzzy
 msgid "Start Markers:"
 msgstr "Egenskaper for stjerne"
 
-#: src/dialogs/stroke-style.cpp:1512
+#: src/dialogs/stroke-style.cpp:1513
 msgid "Mid Markers:"
 msgstr ""
 
-#: src/dialogs/stroke-style.cpp:1523
+#: src/dialogs/stroke-style.cpp:1524
 msgid "End Markers:"
 msgstr ""
 
@@ -2933,6 +2946,11 @@ msgstr "Utvidelse"
 msgid "\" failed to load because "
 msgstr ""
 
+#: src/extension/extension.cpp:811
+#, c-format
+msgid "Could not create extension error log file '%s'"
+msgstr ""
+
 #. This is some filler text, needs to change before relase
 #: src/extension/error-file.cpp:54
 msgid ""
@@ -2949,14 +2967,14 @@ msgstr ""
 msgid "Show dialog on startup"
 msgstr ""
 
-#: src/extension/init.cpp:152
+#: src/extension/init.cpp:153
 msgid "Null external module directory name.  Modules will not be loaded."
 msgstr ""
 
-#: src/extension/init.cpp:161
+#: src/extension/init.cpp:163
 #, c-format
 msgid ""
-"Modules directory (%s) is unavailable.  External modules in that directory "
+"Modules directory (%s) is unavailable.\t External modules in that directory "
 "will not be loaded."
 msgstr ""
 
@@ -3037,7 +3055,7 @@ msgid ""
 "Use '| prog arg...' to pipe to a program."
 msgstr ""
 
-#: src/extension/internal/ps.cpp:1043
+#: src/extension/internal/ps.cpp:1052
 msgid "write error occurred"
 msgstr ""
 
@@ -3079,88 +3097,88 @@ msgstr "Oppføring er referanse"
 msgid "Format autodetect failed. The file is being opened as SVG."
 msgstr ""
 
-#: src/file.cpp:181 src/file.cpp:812
+#: src/file.cpp:184 src/file.cpp:822
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr ""
 
-#: src/file.cpp:205
+#: src/file.cpp:209
 #, fuzzy
 msgid "Document not saved yet.  Cannot revert."
 msgstr "Dokumentnavn:"
 
-#: src/file.cpp:211
+#: src/file.cpp:215
 #, c-format
 msgid "Changes will be lost!  Are you sure you want to reload document %s?"
 msgstr ""
 
-#: src/file.cpp:238
+#: src/file.cpp:242
 #, fuzzy
 msgid "Document reverted."
 msgstr "Dokumentnavn:"
 
-#: src/file.cpp:240
+#: src/file.cpp:244
 #, fuzzy
 msgid "Document not reverted."
 msgstr "Dokumentnavn:"
 
-#: src/file.cpp:352
+#: src/file.cpp:356
 msgid "Select file to open"
 msgstr "Velg fil som skal åpnes"
 
-#: src/file.cpp:444
+#: src/file.cpp:448
 #, c-format
 msgid "Removed <b>%i</b> unused item in &lt;defs&gt;."
 msgid_plural "Removed <b>%i</b> unused items in &lt;defs&gt;."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/file.cpp:449
+#: src/file.cpp:453
 msgid "No unused items in &lt;defs&gt;."
 msgstr ""
 
-#: src/file.cpp:473
+#: src/file.cpp:478
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
 msgstr ""
 
-#: src/file.cpp:474 src/file.cpp:480
+#: src/file.cpp:479 src/file.cpp:487
 #, fuzzy
 msgid "Document not saved."
 msgstr "Dokumentnavn:"
 
-#: src/file.cpp:479
+#: src/file.cpp:486
 #, c-format
 msgid "File %s could not be saved."
 msgstr ""
 
-#: src/file.cpp:488
+#: src/file.cpp:496
 #, fuzzy
 msgid "Document saved."
 msgstr "Dokumentnavn:"
 
-#: src/file.cpp:536
+#: src/file.cpp:544
 #, fuzzy, c-format
 msgid "drawing%s"
 msgstr "Tegning"
 
-#: src/file.cpp:542
+#: src/file.cpp:550
 #, fuzzy, c-format
 msgid "drawing-%d%s"
 msgstr "Tegning"
 
-#: src/file.cpp:575
+#: src/file.cpp:585
 #, fuzzy
 msgid "Select file to save to"
 msgstr "Velg fil som skal åpnes"
 
-#: src/file.cpp:659
+#: src/file.cpp:669
 msgid "No changes need to be saved."
 msgstr ""
 
-#: src/file.cpp:838
+#: src/file.cpp:848
 msgid "Select file to import"
 msgstr "Velg fil som skal importeres"
 
@@ -3301,17 +3319,17 @@ msgstr "ex"
 msgid "Ex squares"
 msgstr "Ex kvadrat"
 
-#: src/inkscape.cpp:462
+#: src/inkscape.cpp:466
 msgid "Untitled document"
 msgstr "Dokument uten navn"
 
 #. Show nice dialog box
-#: src/inkscape.cpp:493
+#: src/inkscape.cpp:497
 #, fuzzy
 msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr "Det oppsto en intern feil i sodipodi og programmet vil lukkes nå.\n"
 
-#: src/inkscape.cpp:494
+#: src/inkscape.cpp:498
 #, fuzzy
 msgid ""
 "Automatic backups of unsaved documents were done to the following "
@@ -3320,19 +3338,19 @@ msgstr ""
 "Automatiske sikkerhetskopier av dokumenter som ikke er lagret ble utført til "
 "følgende lokasjoner:\n"
 
-#: src/inkscape.cpp:495
+#: src/inkscape.cpp:499
 #, fuzzy
 msgid "Automatic backup of the following documents failed:\n"
 msgstr "Automatisk sikkerhetskopiering av følgende dokumenter feilet:\n"
 
-#: src/inkscape.cpp:667
+#: src/inkscape.cpp:677
 #, c-format
 msgid ""
 "%s is not a regular file.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:668
+#: src/inkscape.cpp:678
 #, c-format
 msgid ""
 "%s not a valid XML file, or\n"
@@ -3340,77 +3358,77 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:670
+#: src/inkscape.cpp:680
 #, c-format
 msgid ""
 "%s is not a valid preferences file.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:671
+#: src/inkscape.cpp:681
 msgid ""
 "Inkscape will run with default settings.\n"
 "New settings will not be saved."
 msgstr ""
 
-#: src/inkscape.cpp:1188
+#: src/inkscape.cpp:1206
 #, c-format
 msgid ""
 "Cannot create directory %s.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:1189
+#: src/inkscape.cpp:1207
 #, c-format
 msgid ""
 "%s is not a valid directory.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:1190
+#: src/inkscape.cpp:1208
 #, c-format
 msgid ""
 "Cannot create file %s.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:1191
+#: src/inkscape.cpp:1209
 #, c-format
 msgid ""
 "Cannot write file %s.\n"
 "%s"
 msgstr ""
 
-#: src/inkscape.cpp:1192
+#: src/inkscape.cpp:1210
 msgid ""
 "Although Inkscape will run, it will use default settings,\n"
 "and any changes made in preferences will not be saved."
 msgstr ""
 
-#: src/interface.cpp:706
+#: src/interface.cpp:708
 #, fuzzy
 msgid "_New"
 msgstr "Ny"
 
-#: src/interface.cpp:706
+#: src/interface.cpp:708
 #, fuzzy
 msgid "Create new document"
 msgstr "Opprett nytt SVG-dokument"
 
-#: src/interface.cpp:715
+#: src/interface.cpp:717
 msgid "Open _Recent"
 msgstr ""
 
-#: src/interface.cpp:715
+#: src/interface.cpp:717
 msgid "Open one of the recently visited documents"
 msgstr ""
 
-#: src/interface.cpp:944
+#: src/interface.cpp:946
 #, fuzzy
 msgid "_Show/Hide"
 msgstr "Vis rutenett"
 
-#: src/interface.cpp:944
+#: src/interface.cpp:946
 msgid ""
 "Show or hide parts of the document window (differently for normal and "
 "fullscreen modes)"
@@ -3418,38 +3436,38 @@ msgstr ""
 
 #. sp_ui_menu_append_check_item_from_verb (m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
 #. checkitem_toggled, checkitem_update, 0);
-#: src/interface.cpp:949
+#: src/interface.cpp:951
 msgid "Commands Bar"
 msgstr ""
 
-#: src/interface.cpp:949
+#: src/interface.cpp:951
 #, fuzzy
 msgid "Show or hide the Commands bar (under the menu)"
 msgstr "Vis rutenett"
 
-#: src/interface.cpp:951
+#: src/interface.cpp:953
 #, fuzzy
 msgid "Tool Controls"
 msgstr "Alternativer for verktøy"
 
-#: src/interface.cpp:951
+#: src/interface.cpp:953
 #, fuzzy
 msgid "Show or hide the Tool Controls panel"
 msgstr "Vis rutenett"
 
-#: src/interface.cpp:953
+#: src/interface.cpp:955
 msgid "_Toolbox"
 msgstr ""
 
-#: src/interface.cpp:953
+#: src/interface.cpp:955
 msgid "Show or hide the main toolbox (on the left)"
 msgstr ""
 
-#: src/interface.cpp:959
+#: src/interface.cpp:961
 msgid "_Statusbar"
 msgstr ""
 
-#: src/interface.cpp:959
+#: src/interface.cpp:961
 msgid "Show or hide the statusbar (at the bottom of the window)"
 msgstr ""
 
@@ -3457,78 +3475,78 @@ msgstr ""
 #. * list of verb arguments) in the verb system right now, so we have to build
 #. * the submenu by hand.  Luckily, we can populate it using the same verb system.
 #.
-#: src/interface.cpp:1054
+#: src/interface.cpp:1056
 msgid "_Tutorials"
 msgstr ""
 
-#: src/interface.cpp:1054
+#: src/interface.cpp:1056
 msgid "Interactive Inkscape tutorials"
 msgstr ""
 
-#: src/interface.cpp:1086
+#: src/interface.cpp:1088
 #, fuzzy
 msgid "_Edit"
 msgstr "Rediger"
 
-#: src/interface.cpp:1092
+#: src/interface.cpp:1094
 #, fuzzy
 msgid "_View"
 msgstr "Visning"
 
-#: src/interface.cpp:1098
+#: src/interface.cpp:1100
 #, fuzzy
 msgid "_Layer"
 msgstr "Senk"
 
-#: src/interface.cpp:1104
+#: src/interface.cpp:1106
 #, fuzzy
 msgid "_Object"
 msgstr "Objekt"
 
-#: src/interface.cpp:1110
+#: src/interface.cpp:1112
 msgid "_Path"
 msgstr ""
 
-#: src/interface.cpp:1116
+#: src/interface.cpp:1118
 #, fuzzy
 msgid "_Text"
 msgstr "Tekst"
 
-#: src/interface.cpp:1123
+#: src/interface.cpp:1125
 #, fuzzy
 msgid "Effects"
 msgstr "Objekt"
 
-#: src/interface.cpp:1130
+#: src/interface.cpp:1132
 msgid "_Help"
 msgstr ""
 
 #. TRANSLATORS: #%s is the id of the group e.g. <g id="#g7">, not a number.
-#: src/interface.cpp:1202
+#: src/interface.cpp:1204
 #, fuzzy, c-format
 msgid "Enter group #%s"
 msgstr "Rediger"
 
-#: src/interface.cpp:1213
+#: src/interface.cpp:1215
 #, fuzzy
 msgid "Go to parent"
 msgstr "Ingen maling"
 
-#: src/interface.cpp:1219
+#: src/interface.cpp:1221
 #, fuzzy
 msgid "Go to root"
 msgstr "Rediger"
 
-#: src/interface.cpp:1249
+#: src/interface.cpp:1251
 msgid "Could not parse SVG data"
 msgstr ""
 
-#: src/interface.cpp:1340
+#: src/interface.cpp:1344
 #, c-format
 msgid "Overwrite %s"
 msgstr ""
 
-#: src/interface.cpp:1358
+#: src/interface.cpp:1362
 #, c-format
 msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "
@@ -3539,45 +3557,49 @@ msgstr ""
 msgid "Node or handle drag canceled."
 msgstr ""
 
-#: src/main.cpp:141
+#: src/libnrtype/FontFactory.cpp:342
+msgid "Ignoring font without family that will crash Pango"
+msgstr ""
+
+#: src/main.cpp:143
 msgid "Print the Inkscape version number"
 msgstr ""
 
-#: src/main.cpp:146
+#: src/main.cpp:148
 msgid "Do not use X server (only process files from console)"
 msgstr "Ikke bruk X-tjeneren (prosesser filer fra konsollet)"
 
-#: src/main.cpp:151
+#: src/main.cpp:153
 #, fuzzy
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr "Prøv å bruke X-tjeneren selv om ikke $DISPLAY er satt."
 
-#: src/main.cpp:156
+#: src/main.cpp:158
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr "Åpne spesifisert(e) dokument(er) (alternativ-streng kan eksluderes)"
 
-#: src/main.cpp:157 src/main.cpp:162 src/main.cpp:167 src/main.cpp:219
+#: src/main.cpp:159 src/main.cpp:164 src/main.cpp:169 src/main.cpp:221
 msgid "FILENAME"
 msgstr "FILNAVN"
 
-#: src/main.cpp:161
+#: src/main.cpp:163
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr "Skriv ut dokument(er) til spesifisert utfil (bruk '| program' for rør)"
 
-#: src/main.cpp:166
+#: src/main.cpp:168
 #, fuzzy
 msgid "Export document to a PNG file"
 msgstr "Eksporter dokument som en png-fil"
 
-#: src/main.cpp:171
+#: src/main.cpp:173
 msgid "The resolution used for exporting SVG into bitmap (default 90)"
 msgstr ""
 
-#: src/main.cpp:172
+#: src/main.cpp:174
 msgid "DPI"
 msgstr "DPI"
 
-#: src/main.cpp:176
+#: src/main.cpp:178
 #, fuzzy
 msgid ""
 "Exported area in SVG pixels (default is full document; 0,0 is lower-left "
@@ -3586,69 +3608,69 @@ msgstr ""
 "Eksportert område i millimeter (forvalg er hele dokumentet, 0,0 er nedre "
 "venstre hjørne)"
 
-#: src/main.cpp:177
+#: src/main.cpp:179
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: src/main.cpp:181
+#: src/main.cpp:183
 msgid "The width of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
 
-#: src/main.cpp:182
+#: src/main.cpp:184
 msgid "WIDTH"
 msgstr "BREDDE"
 
-#: src/main.cpp:186
+#: src/main.cpp:188
 msgid "The height of exported bitmap in pixels (overrides export-dpi)"
 msgstr ""
 
-#: src/main.cpp:187
+#: src/main.cpp:189
 msgid "HEIGHT"
 msgstr "HØYDE"
 
-#: src/main.cpp:191
+#: src/main.cpp:193
 msgid "The ID of the object to export (overrides export-area)"
 msgstr ""
 
 #. TRANSLATORS: this means: "Only export the object whose id is given in --export-id".
 #. See "man inkscape" for details.
-#: src/main.cpp:198
+#: src/main.cpp:200
 msgid ""
 "Export just the object with export-id, hide all others (only with export-id)"
 msgstr ""
 
-#: src/main.cpp:203
+#: src/main.cpp:205
 msgid "Use stored filename and DPI hints when exporting (only with export-id)"
 msgstr ""
 
-#: src/main.cpp:208
+#: src/main.cpp:210
 msgid "Background color of exported bitmap (any SVG-supported color string)"
 msgstr ""
 
-#: src/main.cpp:209
+#: src/main.cpp:211
 msgid "COLOR"
 msgstr "FARGE"
 
-#: src/main.cpp:213
+#: src/main.cpp:215
 msgid "Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"
 msgstr ""
 
-#: src/main.cpp:214
+#: src/main.cpp:216
 msgid "VALUE"
 msgstr ""
 
-#: src/main.cpp:218
+#: src/main.cpp:220
 #, fuzzy
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "Eksporter dokument til en vanlig SVG-fil (ingen «xmlns:sodipodi» navneområde)"
 
-#: src/main.cpp:223
+#: src/main.cpp:225
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "Vis oppgitte filer en-etter-en, bytt til neste ved tastatur-/mus-hendelse"
 
-#: src/main.cpp:330 src/main.cpp:412
+#: src/main.cpp:332 src/main.cpp:414
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -3800,33 +3822,33 @@ msgid ""
 "randomize"
 msgstr ""
 
-#: src/object-edit.cpp:881
+#: src/object-edit.cpp:883
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
 msgstr ""
 
-#: src/object-edit.cpp:883
+#: src/object-edit.cpp:885
 msgid ""
 "Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Shift</b> to scale/rotate"
 msgstr ""
 
-#: src/object-edit.cpp:920
+#: src/object-edit.cpp:922
 msgid "Adjust the <b>offset distance</b>"
 msgstr ""
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
-#: src/object-edit.cpp:951
+#: src/object-edit.cpp:953
 msgid "<b>Move</b> the pattern fill inside the object"
 msgstr ""
 
-#: src/object-edit.cpp:953
+#: src/object-edit.cpp:955
 #, fuzzy
 msgid "<b>Scale</b> the pattern fill uniformly"
 msgstr "Klipp ut valgte objekter til utklippstavlen"
 
-#: src/object-edit.cpp:955
+#: src/object-edit.cpp:957
 msgid "<b>Rotate</b> the pattern fill; with <b>Ctrl</b> to snap angle"
 msgstr ""
 
