@@ -184,7 +184,7 @@ sp_zoom_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 		default:
 			break;
 		}
-		if (sp_rubberband_rect (&b)) sp_rubberband_stop ();
+		sp_rubberband_stop ();
 		xp = yp = 0; 
 		break;
 	default:

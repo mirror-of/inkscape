@@ -223,7 +223,7 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 			xp = (gint) event->button.x; 
 			yp = (gint) event->button.y;
 			within_tolerance = true;
-	
+
 			if (!(event->button.state & GDK_SHIFT_MASK || event->button.state & GDK_CONTROL_MASK)) {
 				// if shift or ctrl was pressed, do not move objects; 
 				// pass the event to root handler which will perform rubberband, shift-click, ctrl-click, ctrl-drag
@@ -231,6 +231,8 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 				sc->dragging = TRUE;
 				sc->moved = FALSE;
 				sc->item = item;
+
+				rb_escaped = drag_escaped = 0;
 
  				sp_canvas_item_grab (SP_CANVAS_ITEM (desktop->drawing),
  						 GDK_KEY_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
@@ -375,7 +377,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 			// save drag origin
 			xp = (gint) event->button.x; 
 			yp = (gint) event->button.y;
-			within_tolerance = TRUE;
+			within_tolerance = true;
 
 			sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
 			sp_rubberband_start (desktop, p.x, p.y);
@@ -391,6 +393,8 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 
 			sc->moved = FALSE;
 
+			rb_escaped = drag_escaped = 0;
+
 			ret = TRUE;
 		}
 		break;
@@ -398,9 +402,15 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 		if (event->motion.state & GDK_BUTTON1_MASK) {
 			sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
 
-			if (within_tolerance && abs((gint) event->motion.x - xp) < tolerance && abs((gint) event->motion.y - yp) < tolerance) 
-				break; // do not drag if we're still within tolerance from origin
-			within_tolerance = FALSE; // once tolerance limit is trespassed, it should not affect us anymore (no snapping back to origin)
+			if ( within_tolerance
+			     && ( abs( (gint) event->motion.x - xp ) < tolerance )
+			     && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
+				break; // do not drag if we're within tolerance from origin
+			}
+			// Once the user has moved farther than tolerance from the original location 
+			// (indicating they intend to move the object, not click), then always process the 
+			// motion notify coordinates as given (no snapping back to origin)
+			within_tolerance = false; 
 
 			if (sc->button_press_ctrl) // if ctrl was pressed and we're away from the origin, we want to ctrl-drag rather than click
 				sc->dragging = TRUE;
@@ -408,7 +418,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 			if (sc->dragging) {
 				/* User has dragged fast, so we get events on root (lauris)*/
 				// not only that; we will end up here when ctrl-dragging as well
-				if (sp_rubberband_rect (&b)) sp_rubberband_stop ();
+				sp_rubberband_stop ();
 				item_at_point = sp_desktop_item_at_point (desktop, event->button.x, event->button.y, FALSE);
 				if (item_at_point || sc->moved) { // drag only if starting from a point, or if something is already grabbed
 					if (!sc->moved) {
@@ -473,7 +483,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 				sc->dragging = FALSE;
 				sc->item = NULL;
 			} else {
-				if (sp_rubberband_rect (&b) && fabs(b.x1 - b.x0) > tolerance && fabs(b.y1 - b.y0) > tolerance) {
+				if (sp_rubberband_rect (&b) && !within_tolerance) {
 					// this was a rubberband drag
 					sp_rubberband_stop ();
 					sp_sel_trans_reset_state (seltrans);
@@ -496,8 +506,8 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 						sp_selection_set_item_list (selection, l);
 					}
 				} else { // it was just a click, or a too small rubberband
-					if (sp_rubberband_rect (&b)) sp_rubberband_stop ();
-					if (sc->button_press_shift) {
+					sp_rubberband_stop ();
+					if (sc->button_press_shift && !rb_escaped && !drag_escaped) {
 						// this was a shift-click, select what was clicked upon
 
 						sc->button_press_shift = FALSE;
@@ -525,7 +535,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 							item = NULL;
 						}
 
-					} else if (sc->button_press_ctrl) { // ctrl-click 
+					} else if (sc->button_press_ctrl && !rb_escaped && !drag_escaped) { // ctrl-click 
 
 						sc->button_press_ctrl = FALSE;
 

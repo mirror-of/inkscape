@@ -67,6 +67,7 @@ gint nodeedit_rb_escaped = 0; // if non-zero, rubberband was canceled by esc, so
 
 static gint xp = 0, yp = 0; // where drag started
 static gint tolerance = 0;
+static bool within_tolerance = false;
 
 GType
 sp_node_context_get_type (void)
@@ -163,7 +164,7 @@ sp_node_context_setup (SPEventContext *ec)
 	if (((SPEventContextClass *) parent_class)->setup)
 		((SPEventContextClass *) parent_class)->setup (ec);
 
-	g_signal_connect (G_OBJECT (SP_DT_SELECTION (ec->desktop)),
+	g_signal_connect (G_OBJECT (SP_DT_SELECTION (ec->desktop)), 
 		"changed", G_CALLBACK (sp_node_context_selection_changed), nc);
 
 	item = sp_selection_item (SP_DT_SELECTION (ec->desktop));
@@ -386,6 +387,7 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			// save drag origin
 			xp = (gint) event->button.x; 
 			yp = (gint) event->button.y;
+			within_tolerance = true;
 
 			sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
 			sp_rubberband_start (desktop, p.x, p.y);
@@ -398,8 +400,15 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 	case GDK_MOTION_NOTIFY:
 		if (event->motion.state & GDK_BUTTON1_MASK) {
 
-			if (abs((gint) event->motion.x - xp) < tolerance && abs((gint) event->motion.y - yp) < tolerance) 
+			if ( within_tolerance
+			     && ( abs( (gint) event->motion.x - xp ) < tolerance )
+			     && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
 				break; // do not drag if we're within tolerance from origin
+			}
+			// Once the user has moved farther than tolerance from the original location 
+			// (indicating they intend to move the object, not click), then always process the 
+			// motion notify coordinates as given (no snapping back to origin)
+			within_tolerance = false; 
 
 			sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
 			sp_rubberband_move (p.x, p.y);
@@ -408,22 +417,18 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 		}
 		break;
 	case GDK_BUTTON_RELEASE:
+		xp = yp = 0; 
 		if (event->button.button == 1) {
-			if (sp_rubberband_rect (&b)) {
-				if (abs((gint) event->button.x - xp) < tolerance && abs((gint) event->button.y - yp) < tolerance) {
-					// consider it a click, we're within tolerance from origin
-					if (!(nodeedit_rb_escaped)) // unless something was cancelled
-						sp_nodepath_deselect (nc->nodepath); 
-				} else if (nc->nodepath) {
+			if (sp_rubberband_rect (&b) && !within_tolerance) { // drag
+				if (nc->nodepath) {
 					sp_nodepath_select_rect (nc->nodepath, &b, event->button.state & GDK_SHIFT_MASK);
 				}
-				ret = TRUE;
 			} else {
 				if (!(nodeedit_rb_escaped)) // unless something was cancelled
 					sp_nodepath_deselect (nc->nodepath); 
 			}
+			ret = TRUE;
 			sp_rubberband_stop ();
-			xp = yp = 0;
 			nodeedit_rb_escaped = 0;
 			nc->drag = FALSE;
 			break;
