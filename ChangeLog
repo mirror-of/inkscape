@@ -8,6 +8,8 @@
 
     * src/text-context.cpp: merged Carl's fix for signal cleanup
 
+    * src/selection.h: marked wrappers for old API as deprecated
+
 2004-04-20  Carl Hetherington <inkscape@carlh.net>
 
 	* src/extension/internal/ps.cpp, src/extension/internal/ps.h:
