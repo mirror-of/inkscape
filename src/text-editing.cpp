@@ -64,66 +64,23 @@ Inkscape::Text::Layout const * te_get_layout (SPItem *item)
     return NULL;
 }
 
+static void te_update_layout_now (SPItem *item)
+{
+    if (SP_IS_TEXT(item))
+        SP_TEXT(item)->rebuildLayout();
+    else if (SP_IS_FLOWTEXT (item))
+        SP_FLOWTEXT(item)->rebuildLayout();
+}
+
 bool
 sp_te_is_empty (SPItem *item)
 {
-    int tlen = sp_te_get_length (item);
-    if ( tlen > 0 ) return false;
-    return true;
-}
-
-
-/* This gives us SUM (strlen (STRING)) + (LINES - 1) */
-gint
-sp_te_get_length (SPItem *item)
-{  //RH: is it OK to rely on the output having been built?
     Inkscape::Text::Layout const *layout = te_get_layout(item);
-    if (layout) return layout->iteratorToCharIndex(layout->end());
-    return 0;
+    return layout->begin() == layout->end();
 }
 
-gint
-sp_te_up (SPItem *item, gint i_position)
-{
-    Inkscape::Text::Layout const *layout = te_get_layout(item);
-    //RH: we must store the iterator itself, not the position because as it is this
-    //    code loses the x-coordinate for repeated up/down movement
-    Inkscape::Text::Layout::iterator it = layout->charIndexToIterator(i_position);
-    it.cursorUp();
-    return layout->iteratorToCharIndex(it);
-}
 
-gint
-sp_te_down (SPItem *item, gint i_position)
-{
-    Inkscape::Text::Layout const *layout = te_get_layout(item);
-    //RH: we must store the iterator itself, not the position because as it is this
-    //    code loses the x-coordinate for repeated up/down movement
-    Inkscape::Text::Layout::iterator it = layout->charIndexToIterator(i_position);
-    it.cursorDown();
-    return layout->iteratorToCharIndex(it);
-}
-
-gint
-sp_te_start_of_line (SPItem *item, gint i_position)
-{
-    Inkscape::Text::Layout const *layout = te_get_layout(item);
-    Inkscape::Text::Layout::iterator it = layout->charIndexToIterator(i_position);
-    it.thisStartOfLine();
-    return layout->iteratorToCharIndex(it);
-}
-
-gint
-sp_te_end_of_line (SPItem *item, gint i_position)
-{
-    Inkscape::Text::Layout const *layout = te_get_layout(item);
-    Inkscape::Text::Layout::iterator it = layout->charIndexToIterator(i_position);
-    if (it.nextStartOfLine())
-        it.prevCursorPosition();
-    return layout->iteratorToCharIndex(it);
-}
-
-guint
+Inkscape::Text::Layout::iterator
 sp_te_get_position_by_coords (SPItem *item, NR::Point &i_p)
 {
     NR::Matrix  im=sp_item_i2d_affine (item);
@@ -131,8 +88,7 @@ sp_te_get_position_by_coords (SPItem *item, NR::Point &i_p)
 
     NR::Point p = i_p * im;
     Inkscape::Text::Layout const *layout = te_get_layout(item);
-    Inkscape::Text::Layout::iterator it = layout->getNearestCursorPositionTo(p);
-    return layout->iteratorToCharIndex(it);
+    return layout->getNearestCursorPositionTo(p);
 }
 
 /*
@@ -149,6 +105,12 @@ char * dump_hexy(const gchar * utf8)
     return buffer;
 }
 */
+
+Inkscape::Text::Layout::iterator sp_te_replace(SPItem *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, gchar const *utf8)
+{
+    Inkscape::Text::Layout::iterator new_start = sp_te_delete(item, start, end);
+    return sp_te_insert(item, new_start, utf8);
+}
 
 static bool is_line_break_object(SPObject const*object)
 {
@@ -278,21 +240,20 @@ static SPObject* split_text_object_tree_at(SPObject *split_obj, unsigned char_in
     return duplicate_obj->firstChild();
 }
 
-bool sp_te_insert_line (SPItem *item, gint i_ucs4_pos)
+Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *item, Inkscape::Text::Layout::iterator const &position)
 {
     // Disable newlines in a textpath; TODO: maybe on Enter in a textpath, separate it into two
     // texpaths attached to the same path, with a vertical shift
     if (SP_IS_TEXT_TEXTPATH (item)) 
-        return 0;
+        return position;
 
     Inkscape::Text::Layout const *layout = te_get_layout(item);
     SPObject *split_obj;
     Glib::ustring::iterator split_text_iter;
-    Inkscape::Text::Layout::iterator it_split = layout->charIndexToIterator(i_ucs4_pos);
-    if (it_split == layout->end())
+    if (position == layout->end())
         split_obj = NULL;
     else
-        layout->getSourceOfCharacter(it_split, (void**)&split_obj, &split_text_iter);
+        layout->getSourceOfCharacter(position, (void**)&split_obj, &split_text_iter);
 
     if (split_obj == NULL || is_line_break_object(split_obj)) {
         if (split_obj == NULL) split_obj = item->lastChild();
@@ -316,9 +277,11 @@ bool sp_te_insert_line (SPItem *item, gint i_ucs4_pos)
         // TODO
         // I think the only case to put here is arbitrary gaps, which nobody uses yet
     }
-    SP_OBJECT(item)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(item)),SP_OBJECT_WRITE_EXT);
-    SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    return 1;
+    item->updateRepr(SP_OBJECT_REPR(item),SP_OBJECT_WRITE_EXT);
+    unsigned char_index = layout->iteratorToCharIndex(position);
+    te_update_layout_now(item);
+    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    return layout->charIndexToIterator(char_index + 1);
 }
 
 /** finds the first SPString after the given position, including children, excluding parents */
@@ -367,22 +330,22 @@ static void insert_into_spstring(SPString *string_item, Glib::ustring::iterator 
  * \pre \a utf8[] is valid UTF-8 text.
 Returns position after inserted
  */
-gint
-sp_te_insert(SPItem *item, gint i_ucs4_pos, gchar const *utf8)
+Inkscape::Text::Layout::iterator
+sp_te_insert(SPItem *item, Inkscape::Text::Layout::iterator const &position, gchar const *utf8)
 {
     if ( g_utf8_validate(utf8,-1,NULL) != TRUE ) {
         g_warning("Trying to insert invalid utf8");
-        return i_ucs4_pos;
+        return position;
     }
 
     Inkscape::Text::Layout const *layout = te_get_layout(item);
-    Inkscape::Text::Layout::iterator it = layout->charIndexToIterator(i_ucs4_pos);
     SPObject *source_obj;
     Glib::ustring::iterator iter_text;
     // we want to insert after the previous char, not before the current char.
     // it makes a difference at span boundaries
-    bool cursor_at_start = !it.prevCharacter();
-    layout->getSourceOfCharacter(it, (void**)&source_obj, &iter_text);
+    Inkscape::Text::Layout::iterator it_prev_char = position;
+    bool cursor_at_start = !it_prev_char.prevCharacter();
+    layout->getSourceOfCharacter(it_prev_char, (void**)&source_obj, &iter_text);
     if (SP_IS_STRING(source_obj)) {
         // the simple case
         if (!cursor_at_start) iter_text++;
@@ -410,11 +373,16 @@ sp_te_insert(SPItem *item, gint i_ucs4_pos, gchar const *utf8)
         }
     }
 
-    SP_OBJECT(item)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(item)),SP_OBJECT_WRITE_EXT);
-    SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    return i_ucs4_pos + g_utf8_strlen(utf8, -1);
+    item->updateRepr(SP_OBJECT_REPR(item),SP_OBJECT_WRITE_EXT);
+    unsigned char_index = layout->iteratorToCharIndex(position);
+    te_update_layout_now(item);
+    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    return layout->charIndexToIterator(char_index + g_utf8_strlen(utf8, -1));
 }
 
+/** moves all the children of \a from_repr to \a to_repr, either before
+the existing children or after them. Order is maintained. The empty
+\a from_repr is not deleted. */
 static void move_child_nodes(Inkscape::XML::Node *from_repr, Inkscape::XML::Node *to_repr, bool prepend = false)
 {
     while (from_repr->childCount()) {
@@ -603,19 +571,18 @@ static void erase_from_spstring(SPString *string_item, Glib::ustring::iterator i
 }
 
 /* Returns start position */
-gint
-sp_te_delete (SPItem *item, gint i_start, gint i_end)
+Inkscape::Text::Layout::iterator
+sp_te_delete (SPItem *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end)
 {
-    g_assert(i_start <= i_end);
+    if (start == end) return start;
+    g_assert(start < end);
     Inkscape::Text::Layout const *layout = te_get_layout(item);
-    Inkscape::Text::Layout::iterator it_start = layout->charIndexToIterator(i_start);
-    Inkscape::Text::Layout::iterator it_end = layout->charIndexToIterator(i_end);
     SPObject *start_item, *end_item;
     Glib::ustring::iterator start_text_iter, end_text_iter;
-    layout->getSourceOfCharacter(it_start, (void**)&start_item, &start_text_iter);
-    layout->getSourceOfCharacter(it_end, (void**)&end_item, &end_text_iter);
+    layout->getSourceOfCharacter(start, (void**)&start_item, &start_text_iter);
+    layout->getSourceOfCharacter(end, (void**)&end_item, &end_text_iter);
     if (start_item == NULL)
-        return i_start;   // start is at end of text
+        return start;   // start is at end of text
     if (is_line_break_object(start_item))
         move_to_end_of_paragraph(&start_item, &start_text_iter);
     if (end_item == NULL) {
@@ -697,17 +664,20 @@ sp_te_delete (SPItem *item, gint i_start, gint i_end)
         }
     }
 
-    SP_OBJECT(item)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(item)),SP_OBJECT_WRITE_EXT);
-    SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    return i_start;
+    item->updateRepr(SP_OBJECT_REPR(item),SP_OBJECT_WRITE_EXT);
+    te_update_layout_now(item);
+    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    Inkscape::Text::Layout::iterator start_copy = start;
+    layout->validateIterator(&start_copy);
+    return start_copy;
 }
 
 void
-sp_te_get_cursor_coords (SPItem *item, gint i_position, NR::Point &p0, NR::Point &p1)
+sp_te_get_cursor_coords (SPItem *item, Inkscape::Text::Layout::iterator const &position, NR::Point &p0, NR::Point &p1)
 {
     Inkscape::Text::Layout const *layout = te_get_layout(item);
     double height, rotation;
-    layout->queryCursorShape(layout->charIndexToIterator(i_position), &p0, &height, &rotation);
+    layout->queryCursorShape(position, &p0, &height, &rotation);
     p1 = NR::Point(p0[NR::X] + height * sin(rotation), p0[NR::Y] - height * cos(rotation));
 }
 
@@ -789,7 +759,7 @@ sp_te_set_repr_text_multiline(SPItem *text, gchar const *str)
 }
 
 void
-sp_te_adjust_kerning_screen (SPItem *item, gint i_position, SPDesktop *desktop, NR::Point by)
+sp_te_adjust_kerning_screen (SPItem *item, Inkscape::Text::Layout::iterator const &position, SPDesktop *desktop, NR::Point by)
 {
     g_return_if_fail (item != NULL);
     g_return_if_fail (SP_IS_TEXT(item));   // flowtext doesn't support kerning yet
@@ -797,8 +767,7 @@ sp_te_adjust_kerning_screen (SPItem *item, gint i_position, SPDesktop *desktop, 
 
     SPObject *source_item;
     Glib::ustring::iterator source_text_iter;
-    Inkscape::Text::Layout::iterator iter_layout = text->layout.charIndexToIterator(i_position);
-    text->layout.getSourceOfCharacter(iter_layout, (void**)&source_item, &source_text_iter);
+    text->layout.getSourceOfCharacter(position, (void**)&source_item, &source_text_iter);
 
     if (!SP_IS_STRING(source_item)) return;
     Glib::ustring *string = &SP_STRING(source_item)->string;
@@ -822,7 +791,7 @@ sp_te_adjust_kerning_screen (SPItem *item, gint i_position, SPDesktop *desktop, 
 }
 
 void
-sp_te_adjust_tspan_letterspacing_screen(SPItem *text, gint i_position, SPDesktop *desktop, gdouble by)
+sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Inkscape::Text::Layout::iterator const &position, SPDesktop *desktop, gdouble by)
 {
     g_return_if_fail (text != NULL);
     g_return_if_fail (SP_IS_TEXT(text) || SP_IS_FLOWTEXT(text));
@@ -830,10 +799,9 @@ sp_te_adjust_tspan_letterspacing_screen(SPItem *text, gint i_position, SPDesktop
     Inkscape::Text::Layout const *layout = te_get_layout(text);
 
     gdouble val;
-    Inkscape::Text::Layout::iterator it = layout->charIndexToIterator(i_position);
     SPObject *source_obj;
     unsigned nb_let;
-    layout->getSourceOfCharacter(it, (void**)&source_obj);
+    layout->getSourceOfCharacter(position, (void**)&source_obj);
     if (source_obj == NULL) {    // end of text
         source_obj = text->lastChild();
         nb_let = sp_text_get_length(source_obj);

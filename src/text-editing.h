@@ -17,28 +17,23 @@ struct SPItem;
 namespace NR { class Point; }
 
 
+Inkscape::Text::Layout const * te_get_layout (SPItem *item);
 bool sp_te_is_empty (SPItem *item);
-gint sp_te_get_length (SPItem *item);
 
-gint sp_te_up (SPItem *item, gint i_position);
-gint sp_te_down (SPItem *item, gint i_position);
-gint sp_te_start_of_line (SPItem *item, gint i_position);
-gint sp_te_end_of_line (SPItem *item, gint i_position);
-
-// confusing with sp_te_get_length(), I'll change the name of the other later
 unsigned sp_text_get_length(SPObject *item);
 
-guint sp_te_get_position_by_coords (SPItem *item, NR::Point &i_p);
-void sp_te_get_cursor_coords (SPItem *item, gint i_position, NR::Point &p0, NR::Point &p1);
+Inkscape::Text::Layout::iterator sp_te_get_position_by_coords (SPItem *item, NR::Point &i_p);
+void sp_te_get_cursor_coords (SPItem *item, Inkscape::Text::Layout::iterator const &i_position, NR::Point &p0, NR::Point &p1);
 
-gint sp_te_insert(SPItem *item, gint i_ucs4_pos, gchar const *utf8);
-gint sp_te_delete (SPItem *item, gint i_start, gint i_end);
-bool sp_te_insert_line (SPItem *text, gint i_ucs4_pos);
+Inkscape::Text::Layout::iterator sp_te_insert(SPItem *item, Inkscape::Text::Layout::iterator const &position, gchar const *utf8);
+Inkscape::Text::Layout::iterator sp_te_replace(SPItem *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, gchar const *utf8);
+Inkscape::Text::Layout::iterator sp_te_delete (SPItem *item, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end);
+Inkscape::Text::Layout::iterator sp_te_insert_line (SPItem *text, Inkscape::Text::Layout::iterator const &position);
 
 gchar *sp_te_get_string_multiline(SPItem *text);
 void sp_te_set_repr_text_multiline(SPItem *text, gchar const *str);
-void sp_te_adjust_kerning_screen(SPItem *text, gint pos, SPDesktop *desktop, NR::Point by);
-void sp_te_adjust_tspan_letterspacing_screen(SPItem *text, gint pos, SPDesktop *desktop, gdouble by);
+void sp_te_adjust_kerning_screen(SPItem *text, Inkscape::Text::Layout::iterator const &position, SPDesktop *desktop, NR::Point by);
+void sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Inkscape::Text::Layout::iterator const &position, SPDesktop *desktop, gdouble by);
 void sp_te_adjust_linespacing_screen(SPItem *text, SPDesktop *desktop, gdouble by);
 
 #endif

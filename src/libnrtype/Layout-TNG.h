@@ -726,15 +726,15 @@ public:
     // no copy constructor required, the default does what we want
     bool operator== (iterator const &other) const
         {return _glyph_index == other._glyph_index && _char_index == other._char_index;}
-    bool operator!= (iterator const &other)
+    bool operator!= (iterator const &other) const
         {return _glyph_index != other._glyph_index || _char_index != other._char_index;}
-    bool operator< (iterator const &other)
+    bool operator< (iterator const &other) const
         {return _glyph_index < other._glyph_index || _char_index < other._char_index;}
-    bool operator<= (iterator const &other)
+    bool operator<= (iterator const &other) const
         {return _glyph_index <= other._glyph_index && _char_index <= other._char_index;}
-    bool operator> (iterator const &other)
+    bool operator> (iterator const &other) const
         {return _glyph_index > other._glyph_index || _char_index > other._char_index;}
-    bool operator>= (iterator const &other)
+    bool operator>= (iterator const &other) const
         {return _glyph_index >= other._glyph_index && _char_index >= other._char_index;}
 
     /* **** visual-oriented methods **** */

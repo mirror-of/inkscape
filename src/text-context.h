@@ -20,6 +20,7 @@
 #include "event-context.h"
 #include <display/display-forward.h>
 #include <libnr/nr-point.h>
+#include "libnrtype/Layout-TNG.h"
 
 #define SP_TYPE_TEXT_CONTEXT (sp_text_context_get_type ())
 #define SP_TEXT_CONTEXT(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_TEXT_CONTEXT, SPTextContext))
@@ -43,7 +44,8 @@ struct SPTextContext {
 	/* Text item position in root coordinates */
 	NR::Point pdoc;
 	/* Insertion point position */
-	int ipos;
+	Inkscape::Text::Layout::iterator text_sel_start;
+	Inkscape::Text::Layout::iterator text_sel_end;
 
 	gchar uni[5];
 	gchar unimode;
