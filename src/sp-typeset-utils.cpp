@@ -1171,12 +1171,7 @@ void                         pango_text_chunker::AddBox(int st,int en,bool whit,
     }
     NR::Point t_adv;
     if ( cur_g < from->num_glyphs ) {
-      if ( from->glyphs[cur_g].glyph > 10000 ) {
-        // probably a return; i need a way to track these before they're "converted" to glyphs
-        t_adv=NR::Point(0,0);
-      } else {
-        t_adv=nr_font_glyph_advance_get (inkFont, from->glyphs[cur_g].glyph);
-      }
+      t_adv=nr_font_glyph_advance_get (inkFont, from->glyphs[cur_g].glyph);
     } else {
       t_adv=NR::Point(0,0);
     }
@@ -1233,8 +1228,6 @@ void                         pango_text_chunker::SetTextWithAttrs(text_with_info
     tAttr=pango_attr_list_new();
   }
   
-  int       next_par_end=0;
-  int       next_par_start=0;
   {
     for (int i=0;i<=srcLen;i++) charas[i].code_point=0;
     for (int i=0;i<theText->UnicodeLength();i++) {
@@ -1242,8 +1235,22 @@ void                         pango_text_chunker::SetTextWithAttrs(text_with_info
     }
     charas[theText->UTF8Length()].code_point=theText->UnicodeLength();
   }
-  GList*  pItems=pango_itemize(pContext,theText->UTF8Text(),0,theText->UTF8Length(),tAttr,NULL);
+
+  int       next_par_end=0;
+  int       next_par_start=0;
+  int       cur_par_start=0;
+  pango_find_paragraph_boundary(theText->UTF8Text(),-1,&next_par_end,&next_par_start);
+  GList*  pItems=NULL;
   GList*  pGlyphs=NULL;
+  do {
+    GList* nItems=pango_itemize(pContext,theText->UTF8Text(),cur_par_start,next_par_end-cur_par_start,tAttr,NULL);
+    if ( nItems ) pItems=g_list_concat(pItems,nItems);
+    cur_par_start=next_par_start;
+    pango_find_paragraph_boundary(theText->UTF8Text()+cur_par_start,-1,&next_par_end,&next_par_start);
+    next_par_start+=cur_par_start;
+    next_par_end+=cur_par_start;
+  } while ( cur_par_start < srcLen );
+  
   for (GList* l=pItems;l;l=l->next) {
     PangoItem*  theItem=(PangoItem*)l->data;
     pango_get_log_attrs((theText->UTF8Text())+theItem->offset,theItem->length,-1,theItem->analysis.language,pAttrs+theItem->offset,theItem->length+1);
@@ -1268,17 +1275,16 @@ void                         pango_text_chunker::SetTextWithAttrs(text_with_info
         }
       }
     }
-  }
+  }  
   
   int       t_pos=0/*,l_pos=0*/;
   NR::Point cumul(0,0);
   double    pango_rise=0;
 //  bool      inWhite=false;
-  
+    
   next_par_end=0;
   next_par_start=0;
   pango_find_paragraph_boundary(theText->UTF8Text(),-1,&next_par_end,&next_par_start);
-  
   PangoAttrIterator* theIt=(tAttr)?pango_attr_list_get_iterator (tAttr):NULL;
   
   for (GList* l=pItems,*g=pGlyphs;l&&g;l=l->next,g=g->next) {
