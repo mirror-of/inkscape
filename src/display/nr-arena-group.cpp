@@ -90,11 +90,8 @@ nr_arena_group_init (NRArenaGroup *group)
 static void
 nr_arena_group_finalize (NRObject *object)
 {
-	NRArenaItem *item;
-	NRArenaGroup *group;
-
-	item = NR_ARENA_ITEM (object);
-	group = NR_ARENA_GROUP (object);
+	NRArenaItem *item = NR_ARENA_ITEM (object);
+	NRArenaGroup *group = NR_ARENA_GROUP (object);
 
 	while (group->children) {
 		group->children = nr_arena_item_detach_unref (item, group->children);
@@ -106,9 +103,7 @@ nr_arena_group_finalize (NRObject *object)
 static NRArenaItem *
 nr_arena_group_children (NRArenaItem *item)
 {
-	NRArenaGroup *group;
-
-	group = NR_ARENA_GROUP (item);
+	NRArenaGroup *group = NR_ARENA_GROUP (item);
 
 	return group->children;
 }
@@ -116,9 +111,7 @@ nr_arena_group_children (NRArenaItem *item)
 static void
 nr_arena_group_add_child (NRArenaItem *item, NRArenaItem *child, NRArenaItem *ref)
 {
-	NRArenaGroup *group;
-
-	group = NR_ARENA_GROUP (item);
+	NRArenaGroup *group = NR_ARENA_GROUP (item);
 
 	if (!ref) {
 		group->children = nr_arena_item_attach_ref (item, child, NULL, group->children);
@@ -134,9 +127,7 @@ nr_arena_group_add_child (NRArenaItem *item, NRArenaItem *child, NRArenaItem *re
 static void
 nr_arena_group_remove_child (NRArenaItem *item, NRArenaItem *child)
 {
-	NRArenaGroup *group;
-
-	group = NR_ARENA_GROUP (item);
+	NRArenaGroup *group = NR_ARENA_GROUP (item);
 
 	if (child == group->last) group->last = child->prev;
 
@@ -152,9 +143,7 @@ nr_arena_group_remove_child (NRArenaItem *item, NRArenaItem *child)
 static void
 nr_arena_group_set_child_position (NRArenaItem *item, NRArenaItem *child, NRArenaItem *ref)
 {
-	NRArenaGroup *group;
-
-	group = NR_ARENA_GROUP (item);
+	NRArenaGroup *group = NR_ARENA_GROUP (item);
 
 	nr_arena_item_ref (child);
 
@@ -182,15 +171,13 @@ nr_arena_group_set_child_position (NRArenaItem *item, NRArenaItem *child, NRAren
 static unsigned int
 nr_arena_group_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int state, unsigned int reset)
 {
-	NRArenaGroup *group;
-	NRArenaItem *child;
-	unsigned int newstate, beststate;
+	unsigned int newstate;
 
-	group = NR_ARENA_GROUP (item);
+	NRArenaGroup *group = NR_ARENA_GROUP (item);
 
-	beststate = NR_ARENA_ITEM_STATE_ALL;
+	unsigned int beststate = NR_ARENA_ITEM_STATE_ALL;
 
-	for (child = group->children; child != NULL; child = child->next) {
+	for (NRArenaItem *child = group->children; child != NULL; child = child->next) {
 		NRGC cgc;
 		nr_matrix_multiply (&cgc.transform, &group->child_transform, &gc->transform);
 		newstate = nr_arena_item_invoke_update (child, area, &cgc, state, reset);
@@ -199,7 +186,7 @@ nr_arena_group_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int 
 
 	if (beststate & NR_ARENA_ITEM_STATE_BBOX) {
 		nr_rect_l_set_empty (&item->bbox);
-		for (child = group->children; child != NULL; child = child->next) {
+		for (NRArenaItem *child = group->children; child != NULL; child = child->next) {
 			nr_rect_l_union (&item->bbox, &item->bbox, &child->bbox);
 		}
 	}
@@ -210,16 +197,12 @@ nr_arena_group_update (NRArenaItem *item, NRRectL *area, NRGC *gc, unsigned int 
 static unsigned int
 nr_arena_group_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigned int flags)
 {
-	NRArenaGroup *group;
-	NRArenaItem *child;
-	unsigned int ret;
+	NRArenaGroup *group = NR_ARENA_GROUP (item);
 
-	group = NR_ARENA_GROUP (item);
-
-	ret = item->state;
+	unsigned int ret = item->state;
 
 	/* Just compose children into parent buffer */
-	for (child = group->children; child != NULL; child = child->next) {
+	for (NRArenaItem *child = group->children; child != NULL; child = child->next) {
 		ret = nr_arena_item_invoke_render (child, area, pb, flags);
 		if (ret & NR_ARENA_ITEM_STATE_INVALID) break;
 	}
@@ -230,16 +213,12 @@ nr_arena_group_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
 static unsigned int
 nr_arena_group_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb)
 {
-	NRArenaGroup *group;
-	NRArenaItem *child;
-	unsigned int ret;
+	NRArenaGroup *group = NR_ARENA_GROUP (item);
 
-	group = NR_ARENA_GROUP (item);
-
-	ret = item->state;
+	unsigned int ret = item->state;
 
 	/* Just compose children into parent buffer */
-	for (child = group->children; child != NULL; child = child->next) {
+	for (NRArenaItem *child = group->children; child != NULL; child = child->next) {
 		ret = nr_arena_item_invoke_clip (child, area, pb);
 		if (ret & NR_ARENA_ITEM_STATE_INVALID) break;
 	}
