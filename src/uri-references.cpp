@@ -71,6 +71,8 @@ sp_uri_add_callback(SPDocument *document, const gchar *uri, SPURICallbackFunc fu
 	gchar *id;
 	SPURICallback *callback;
 
+	/* FIXME !!! add signal handler for document 'destroy' signal to disable this callback if the document is destroyed */
+
 	id = uri_to_id(document, uri);
 	if (!id) return NULL;
 
