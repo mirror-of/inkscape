@@ -1,6 +1,6 @@
 /*
     Author:  Ted Gould <ted@gould.cx>
-    Copyright (c) 2004
+    Copyright (c) 2004-2005
 
     This code is licensed under the GNU GPL.  See COPYING for details.
 */
@@ -35,6 +35,8 @@ typedef SPDocument *(*inkscape_plugin_open)(inkscape_extension * in_ext, const g
 typedef GtkDialog * (*inkscape_plugin_prefs_input)(inkscape_extension * in_ext, gchar const * filename);
 /** \brief  The C prototype of an effect function.  */
 typedef void (*inkscape_plugin_effect)(inkscape_extension * in_ext, SPView * view);
+/** \brief  The C prototype of an effect prefs function.  */
+typedef unsigned int (*inkscape_plugin_prefs_effect)(inkscape_extension * in_ext, SPView * view);
 
 /** \brief  The name of the symbol for the plugin.  Should match
             \c INKSCAPE_PLUGIN_NAME_STR (minus the quotes). */
@@ -60,6 +62,8 @@ typedef struct {
 	inkscape_plugin_prefs_input prefs_input; /**< Input preferences function, called to get
 											      further parameters for an input plugin. */
 	inkscape_plugin_effect effect;           /**< Effect function, called to cause an effect
+											      on a document. */
+	inkscape_plugin_prefs_effect prefs_effect;/**< Effect preferences, on call could cause settings
 											      on a document. */
 } inkscape_plugin_function_table;
 

@@ -61,7 +61,7 @@
 #include "message-context.h"
 
 /* Define this to have an Effects menu in the menu bar. */
-//#define WITH_EFFECT_MENU 1
+// #define WITH_EFFECT_MENU 1
 
 /* forward declaration */
 static gint sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view);

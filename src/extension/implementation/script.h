@@ -5,7 +5,7 @@
  *   Bryce Harrington <bryce@osdl.org>
  *   Ted Gould <ted@gould.cx>
  *
- * Copyright (C) 2002-2004 Authors
+ * Copyright (C) 2002-2005 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -52,7 +52,9 @@ public:
     virtual void          save         (Inkscape::Extension::Output *module,
                                         SPDocument *doc,
                                         gchar const *filename);
-    virtual GtkDialog *   prefs_effect (Inkscape::Extension::Effect *module);
+    virtual Gdk::NativeWindow
+                          prefs_effect (Inkscape::Extension::Effect *module,
+                                        SPView * view);
     virtual void          effect       (Inkscape::Extension::Effect *module,
                                         SPView *doc);
 

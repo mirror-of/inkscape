@@ -1,6 +1,6 @@
 /*
     Author:  Ted Gould <ted@gould.cx>
-    Copyright (c) 2003-2004
+    Copyright (c) 2003-2005
 
     This code is licensed under the GNU GPL.  See COPYING for details.
  
@@ -13,6 +13,7 @@
 #define __INKSCAPE_EXTENSION_IMPLEMENTATION_H__
 
 #include <gtk/gtkdialog.h>
+#include <gdkmm/types.h>
 
 #include <forward.h>
 #include <extension/extension-forward.h>
@@ -54,7 +55,7 @@ public:
 
     /* ----- Effect functions ----- */
     /** Find out information about the file. */
-    virtual GtkDialog *prefs_effect(Inkscape::Extension::Effect *module);
+    virtual Gdk::NativeWindow prefs_effect(Inkscape::Extension::Effect *module, SPView * view);
     /* TODO: need to figure out what we need here */
 
     virtual void effect(Inkscape::Extension::Effect *module,

@@ -1,6 +1,6 @@
 /*
     Author:  Ted Gould <ted@gould.cx>
-    Copyright (c) 2004
+    Copyright (c) 2004-2005
 
     This code is licensed under the GNU GPL.  See COPYING for details.
 */
@@ -58,7 +58,7 @@ public:
 
     /* ----- Effect functions ----- */
     /** Find out information about the file. */
-    virtual GtkDialog *prefs_effect(Inkscape::Extension::Effect *module);
+    virtual Gdk::NativeWindow prefs_effect(Inkscape::Extension::Effect *module, SPView * view);
     /* TODO: need to figure out what we need here */
 
     virtual void effect(Inkscape::Extension::Effect *module,

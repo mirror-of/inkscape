@@ -1,3 +1,19 @@
+2004-01-06  Ted Gould  <ted@gould.cx>
+
+	* src/interface.cpp, src/extension/effect.cpp,
+	src/extension/implementation/implementation.cpp,
+	src/extension/implementation/implementation.h,
+	src/extension/implementation/plugin-link.h,
+	src/extension/implementation/plugin.cpp,
+	src/extension/implementation/plugin.h,
+	src/extension/implementation/script.cpp,
+	src/extension/implementation/script.h, src/extension/plugin/gimpgrad.cpp,
+	src/extension/plugin/grid.cpp:
+
+	Changing the effects preferences so that it uses sockets and plugs which
+	will allow out of process GUIs to work too.  This is a first pass with
+	nothing beautiful, but it does seem to work.
+
 2004-01-03  MenTaLguY  <mental@rydia.net>
 
 	* src/document.cpp, src/main.cpp, src/sp-root.cpp:

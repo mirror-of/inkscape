@@ -5,7 +5,7 @@
  *   Bryce Harrington <bryce@osdl.org>
  *   Ted Gould <ted@gould.cx>
  *
- * Copyright (C) 2002-2004 Authors
+ * Copyright (C) 2002-2005 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -348,11 +348,11 @@ Script::prefs_output (Inkscape::Extension::Output * module)
 
     This function should really do something, right now it doesn't.
 */
-GtkDialog *
-Script::prefs_effect (Inkscape::Extension::Effect * module)
+Gdk::NativeWindow
+Script::prefs_effect (Inkscape::Extension::Effect * module, SPView * view)
 {
     /* Sad, this should really do something... */
-    return NULL;
+    return 0;
 }
 
 /**

@@ -2,12 +2,16 @@
  * Authors:
  *   Ted Gould <ted@gould.cx>
  *
- * Copyright (C) 2002-2004 Authors
+ * Copyright (C) 2002-2005 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
 #include <helper/action.h>
+
+#include <gtkmm/dialog.h>
+#include <gtkmm/socket.h>
+#include <gtkmm/stock.h>
 
 #include "implementation/implementation.h"
 #include "effect.h"
@@ -41,21 +45,34 @@ Effect::check (void)
 bool
 Effect::prefs (SPView * doc)
 {
-    GtkDialog * dialog;
-
     if (!loaded())
         set_state(Extension::STATE_LOADED);
     if (!loaded()) return false;
 
-    dialog = imp->prefs_effect(this);
-    if (dialog == NULL)
-        /* If there is no dialog, just say everything is okay */
+    Gdk::NativeWindow plug;
+    plug = imp->prefs_effect(this, doc);
+    if (plug == 0) {
+        std::cout << "No preferences for Effect" << std::endl;
         return true;
+    }
 
-    gint response = gtk_dialog_run(dialog);
-    gtk_widget_destroy(GTK_WIDGET(dialog));
-    if (response == GTK_RESPONSE_OK)
-        return true;
+    /* Note: these are pointers with new... the reason for this is
+     * because I can do a delete, which deletes them in teh proper order,
+     * while the auto-delete in the function does not. */
+    Gtk::Dialog * dialog = new Gtk::Dialog("Effect Preferences", true, true);
+    Gtk::Socket * socket = new Gtk::Socket();
+    dialog->get_vbox()->pack_start(*socket, true, true, 5);
+    socket->add_id(plug);
+    socket->show();
+    dialog->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+    dialog->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
+    int response = dialog->run();
+    dialog->hide();
+
+    delete dialog;
+
+    if (response == Gtk::RESPONSE_OK) return true;
+
     return false;
 }
 
@@ -94,7 +111,7 @@ Effect::EffectVerb::perform (SPAction *action, void * data, void *pdata)
     if (effect == NULL) return;
     if (current_view == NULL) return;
 
-    // std::cout << "Executing: " << effect->get_name() << std::endl;
+    std::cout << "Executing: " << effect->get_name() << std::endl;
     if (effect->prefs(current_view))
         effect->effect(current_view);
 

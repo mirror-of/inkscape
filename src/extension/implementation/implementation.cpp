@@ -1,6 +1,6 @@
 /*
     Author:  Ted Gould <ted@gould.cx>
-    Copyright (c) 2003-2004
+    Copyright (c) 2003-2005
 
     This code is licensed under the GNU GPL.  See COPYING for details.
  
@@ -64,10 +64,9 @@ Implementation::save (Inkscape::Extension::Output * module, SPDocument * doc, co
 	return;
 } /* Implementation::save */
 
-GtkDialog *
-Implementation::prefs_effect (Inkscape::Extension::Effect * module) {
-
-	return NULL;
+Gdk::NativeWindow
+Implementation::prefs_effect (Inkscape::Extension::Effect * module, SPView * view) {
+	return (Gdk::NativeWindow)0;
 } /* Implementation::prefs_effect */
 
 void

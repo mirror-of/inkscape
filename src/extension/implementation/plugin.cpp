@@ -1,6 +1,6 @@
 /*
     Author:  Ted Gould <ted@gould.cx>
-    Copyright (c) 2004
+    Copyright (c) 2004-2005
 
     This code is licensed under the GNU GPL.  See COPYING for details.
  
@@ -220,10 +220,14 @@ Plugin::save(Inkscape::Extension::Output *module, SPDocument *doc, gchar const *
     return Inkscape::Extension::Implementation::Implementation::save(module, doc, filename);
 }
 
-GtkDialog *
-Plugin::prefs_effect(Inkscape::Extension::Effect *module)
+Gdk::NativeWindow
+Plugin::prefs_effect(Inkscape::Extension::Effect *module, SPView * view)
 {
-    return Inkscape::Extension::Implementation::Implementation::prefs_effect(module);
+    if (_symTable->prefs_effect != NULL) {
+        return (Gdk::NativeWindow)_symTable->prefs_effect((inkscape_extension *)module, view);
+    } else {
+        return Inkscape::Extension::Implementation::Implementation::prefs_effect(module, view);
+    }
 }
 
 void 

@@ -1,5 +1,20 @@
+/**
+    \file grid.cpp
+ 
+    A plug-in to add a grid creation effect into Inkscape.
+*/
+/*
+ * Authors:
+ *   Ted Gould <ted@gould.cx>
+ *
+ * Copyright (C) 2004-2005 Authors
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
 
 #include <glibmm/ustring.h>
+#include <gtkmm/plug.h>
+#include <gtkmm/label.h>
 
 #include <view.h>
 #include <document.h>
@@ -24,6 +39,7 @@ class Grid : public Inkscape::Extension::Implementation::Implementation {
 public:
     bool load(Inkscape::Extension::Extension *module);
     void effect(Inkscape::Extension::Effect *module, SPView *document);
+    Gdk::NativeWindow prefs_effect(Inkscape::Extension::Effect *module, SPView * view);
 };
 
 /**
@@ -126,19 +142,35 @@ Grid::effect (Inkscape::Extension::Effect *module, SPView *document)
     Glib::ustring style("fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000");
     style += ";stroke-width:";
     gchar floatstring[64];
-    sprintf(floatstring, "%f", (line_width * 4.0) / 5.0);
+    sprintf(floatstring, "%f", line_width);
     style += floatstring;
     style += "pt";
     sp_repr_set_attr(path, "style", style.c_str());
 
-    Glib::ustring transform("scale(1.25 1.25)");
-    sp_repr_set_attr(path, "transform", transform.c_str());
+    // Glib::ustring transform("scale(1.25 1.25)");
+    // sp_repr_set_attr(path, "transform", transform.c_str());
 
     sp_repr_append_child(current_layer, path);
 
     return;
 }
 
+Gdk::NativeWindow
+Grid::prefs_effect(Inkscape::Extension::Effect *module, SPView * view)
+{
+    Gtk::Plug * socket;
+
+    socket = new Gtk::Plug((unsigned int)0);
+
+    Gtk::Label * label;
+    label = new Gtk::Label("Ted was here!");
+    label->show();
+
+    socket->add(*label);
+    socket->show();
+
+    return socket->get_id();
+}
 
 
 }; /* namespace Plugin */
@@ -184,6 +216,13 @@ effect (inkscape_extension * in_ext, SPView * view)
 {
     return myplug->effect(reinterpret_cast<Inkscape::Extension::Effect *>(in_ext), view);
 }
+
+unsigned int
+prefs_effect (inkscape_extension * in_ext, SPView * view)
+{
+    return (unsigned int)myplug->prefs_effect(reinterpret_cast<Inkscape::Extension::Effect *>(in_ext), view);
+}
+
 /**
     \brief  A structure holding all the functions that Inkscape uses to
             communicate with this plugin.  These are all C-prototype based
@@ -195,7 +234,8 @@ inkscape_plugin_function_table INKSCAPE_PLUGIN_NAME = {
     unload,
     NULL,
     NULL,
-    effect
+    effect,
+    prefs_effect
 };
 
 /*
