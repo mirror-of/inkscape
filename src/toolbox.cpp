@@ -1449,6 +1449,8 @@ static void sp_ddc_defaults(GtkWidget *, SPWidget *tbl)
         GtkAdjustment &adj = *static_cast<GtkAdjustment *>(gtk_object_get_data(GTK_OBJECT(tbl), kv.key));
         gtk_adjustment_set_value(&adj, kv.value);
     }
+
+    spinbutton_defocus (GTK_OBJECT (tbl));
 }
 
 static GtkWidget *
@@ -1745,6 +1747,7 @@ sp_arctb_open_state_changed (GtkWidget *widget, GtkObject *tbl)
         }
     }
     if (modmade) sp_document_done (SP_DT_DOCUMENT (desktop));
+    spinbutton_defocus (GTK_OBJECT (tbl));
 }
 
 static void sp_arctb_defaults(GtkWidget *, SPWidget *tbl)
@@ -1763,6 +1766,7 @@ static void sp_arctb_defaults(GtkWidget *, SPWidget *tbl)
         GtkAdjustment &adj = *static_cast<GtkAdjustment *>(gtk_object_get_data(GTK_OBJECT(tbl), kv.key));
         gtk_adjustment_set_value(&adj, kv.value);
     }
+    spinbutton_defocus (GTK_OBJECT (tbl));
 }
 
 static void
