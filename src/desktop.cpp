@@ -35,6 +35,7 @@
 #include "helper/sp-marshal.h"
 #include "display/gnome-canvas-acetate.h"
 #include "display/sodipodi-ctrlrect.h"
+#include "display/sp-canvas-util.h"
 #include "helper/units.h"
 #include "helper/sp-intl.h"
 #include "libnr/nr-matrix-ops.h"
@@ -335,6 +336,7 @@ sp_desktop_document_resized (SPView *view, SPDocument *doc, gdouble width, gdoub
     sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (desktop->drawing), desktop->doc2dt);
 
     sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page), 0.0, 0.0, width, height);
+    sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page_border), 0.0, 0.0, width, height);
 }
 
 void
@@ -399,9 +401,9 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
     g_signal_connect (G_OBJECT (desktop->acetate), "event", G_CALLBACK (sp_desktop_root_handler), desktop);
     desktop->main = (SPCanvasGroup *) sp_canvas_item_new (root, SP_TYPE_CANVAS_GROUP, NULL);
     g_signal_connect (G_OBJECT (desktop->main), "event", G_CALLBACK (sp_desktop_root_handler), desktop);
-    /* fixme: */
-    /* page = (SPCanvasGroup *) sp_canvas_item_new (desktop->main, SP_TYPE_CANVAS_GROUP, NULL); */
+
     desktop->page = sp_canvas_item_new (desktop->main, SP_TYPE_CTRLRECT, NULL);
+    desktop->page_border = sp_canvas_item_new (desktop->main, SP_TYPE_CTRLRECT, NULL);
 
     desktop->drawing = sp_canvas_item_new (desktop->main, SP_TYPE_CANVAS_ARENA, NULL);
     g_signal_connect (G_OBJECT (desktop->drawing), "arena_event", G_CALLBACK (arena_handler), desktop);
@@ -419,9 +421,9 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
     // context ever?
     sp_desktop_push_event_context (desktop, SP_TYPE_SELECT_CONTEXT, "tools.select", SP_EVENT_CONTEXT_STATIC);
 
-    // display rect and zoom are now handled in sp_desktop_widget_realize(), 
-    /* desktop->page = sp_canvas_item_new (page, SP_TYPE_CTRLRECT, NULL); */
+    // display rect and zoom are now handled in sp_desktop_widget_realize() 
     sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
+    sp_ctrlrect_set_area (SP_CTRLRECT (desktop->page_border), 0.0, 0.0, sp_document_width (document), sp_document_height (document));
         
     /* the following sets the page shadow on the canvas
        It was originally set to 5, which is really cheesy!
@@ -430,7 +432,7 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
     */        
 
     if ( desktop->namedview->pageshadow != 0 ) {
-        sp_ctrlrect_set_shadow (SP_CTRLRECT (desktop->page), desktop->namedview->pageshadow, 0x3f3f3fff);
+        sp_ctrlrect_set_shadow (SP_CTRLRECT (desktop->page_border), desktop->namedview->pageshadow, 0x3f3f3fff);
     }
 
     /* Connect event for page resize */
@@ -478,36 +480,39 @@ static void
 sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop)
 {
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
+
         /* Recalculate snap distances */
         sp_dt_update_snap_distances (desktop);
+
+        /* Show/hide page background */
+        if (nv->pagecolor & 0xff) {
+            sp_canvas_item_show (desktop->page);
+            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->page, 0x00000000, TRUE, nv->pagecolor);
+            sp_canvas_item_move_to_z (desktop->page, 0);
+        } else {
+            sp_canvas_item_hide (desktop->page);
+        }
+
         /* Show/hide page border */
         if (nv->showborder) {
-            sp_canvas_item_show (desktop->page);
-            int order = sp_canvas_item_order (desktop->page);
-            if (nv->borderlayer == SP_BORDER_LAYER_BOTTOM) {
-                if (order) sp_canvas_item_lower (desktop->page, order);
-            } else {
-                int morder = sp_canvas_item_order (desktop->drawing);
-                if (morder > order) sp_canvas_item_raise (desktop->page, morder - order);
-            }
-            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->page,
-                                   nv->bordercolor,
-                                   (nv->pagecolor & 0xffffff00) != 0xffffff00,
-                                   nv->pagecolor | 0xff);
+            // show
+            sp_canvas_item_show (desktop->page_border);
+            // set color and shadow
+            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->page_border, nv->bordercolor, FALSE, 0x00000000);
             if (nv->pageshadow)
-                sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page, nv->pageshadow, nv->bordercolor);
-        } else {
-            if (!(nv->bordercolor & 0xff) && !(nv->pagecolor & 0xff)) {
-                sp_canvas_item_hide (desktop->page);
+                sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border, nv->pageshadow, nv->bordercolor);
+            // place in the z-order stack
+            if (nv->borderlayer == SP_BORDER_LAYER_BOTTOM) {
+                 sp_canvas_item_move_to_z (desktop->page_border, 0);
             } else {
-                sp_ctrlrect_set_color ((SPCtrlRect *) desktop->page,
-                                       0x00000000,
-                                       nv->pagecolor & 0xff,
-                                       nv->pagecolor);
-                if (nv->pageshadow)
-                    sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page, 0,
-                                            0x00000000);
+                int order = sp_canvas_item_order (desktop->page_border);
+                int morder = sp_canvas_item_order (desktop->drawing);
+                if (morder > order) sp_canvas_item_raise (desktop->page_border, morder - order);
             }
+        } else {
+                sp_canvas_item_hide (desktop->page_border);
+                if (nv->pageshadow)
+                    sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page, 0, 0x00000000);
         }
     }
 }

@@ -92,10 +92,13 @@ struct SPDesktop : public SPView {
 	SPCanvasItem *drawing;
 	SPCanvasGroup *sketch;
 	SPCanvasGroup *controls;
-	SPCanvasItem *page;
+
+	SPCanvasItem *page; // background
+	SPCanvasItem *page_border; // border
+
 	NR::Matrix d2w, w2d, doc2dt;
 
-        gint number;
+	gint number;
 	gboolean active;
 
 	/* fixme: This has to be implemented in different way */
