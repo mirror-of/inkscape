@@ -575,7 +575,7 @@ sp_stroke_radio_button(GtkWidget* tb, const char* n, const char* xpm,
 GtkWidget *
 sp_stroke_style_line_widget_new (void)
 {
-	GtkWidget *spw, *f, *t, *l, *hb, *sb, *us, *tb, *px, *ds, *ms;
+	GtkWidget *spw, *f, *t, *l, *hb, *sb, *us, *tb, *ds;
 	GtkObject *a;
 	gint i;
 
@@ -923,7 +923,6 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
 	const SPUnit *unit;
 	gdouble swidth;
 	GtkWidget *tb;
-	const gchar *marker_type;
 
 	if (gtk_object_get_data (GTK_OBJECT (spw), "update")) return;
 
