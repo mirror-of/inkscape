@@ -226,6 +226,12 @@ can leave your ideas and requests there.</p>
 </group>
 
 <group>
+<title>Tile</title>
+<keys><key><alt/>T</key>	 <action>tile selection</action></keys> 
+<note>This converts the selection to a rectangle with tiled pattern fill.</note>
+</group>
+
+<group>
 <title>Group</title>
 <keys> <key><shift/><ctrl/>U</key>  <key><ctrl/>G</key> <action>group selected objects</action></keys>
 <note>Use Ctrl+click to select objects within group.</note>
@@ -615,6 +621,11 @@ can leave your ideas and requests there.</p>
 <mouse><key><shift/><left-drag/></key> <action>rotate both handles</action></mouse> 
 <mouse><key><alt/><left-drag/></key> <action>lock the handle length</action></mouse>
 <note>Ctrl, Shift, Alt can be combined when dragging handles.</note>
+</group>
+
+<group>
+<title>Reverse</title>
+<keys><key>r</key>  <action>reverse path direction</action></keys> 
 </group>
 
 <group>
