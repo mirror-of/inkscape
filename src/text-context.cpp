@@ -322,7 +322,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
 			/* Button 1, set X & Y & new item */
-			sp_selection_empty (SP_DT_SELECTION (ec->desktop));
+			SP_DT_SELECTION(ec->desktop)->clear();
 			NR::Point dtp = sp_desktop_w2d_xy_point (ec->desktop, NR::Point(event->button.x, event->button.y));
 			tc->pdoc = sp_desktop_dt2root_xy_point (ec->desktop, dtp);
 
@@ -549,7 +549,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						}
 						return TRUE;
 					case GDK_Escape:
-						sp_selection_empty (SP_DT_SELECTION (ec->desktop));
+						SP_DT_SELECTION(ec->desktop)->clear();
 						return TRUE;
 					case GDK_less:
 					case GDK_comma:
@@ -624,10 +624,15 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 	}
 }
 
+/**
+ * \param selection Should not be NULL.
+ */
 static void
 sp_text_context_selection_changed (SPSelection *selection, SPTextContext *tc)
 {
-	SPItem *item = sp_selection_item (selection);
+	g_assert (selection != NULL);
+	
+	SPItem *item = selection->singleItem();
 
 	if (tc->text && (item != tc->text)) {
 		sp_text_context_forget_text (tc);

@@ -704,7 +704,7 @@ sp_event_root_menu_popup (SPDesktop *desktop, SPItem *item, GdkEvent *event)
 
 	/* fixme: This is not what I want but works for now (Lauris) */
 	if (event->type == GDK_KEY_PRESS) {
-		item = sp_selection_item (SP_DT_SELECTION (desktop));
+		item = SP_DT_SELECTION(desktop)->singleItem();
 	}
 	menu = sp_ui_context_menu (SP_VIEW (desktop), item);
 	gtk_widget_show (menu);
