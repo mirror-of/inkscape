@@ -190,8 +190,9 @@ sp_canvas_item_compare_z (SPCanvasItem * a, SPCanvasItem * b)
 	const gint o_a = sp_canvas_item_order (a);
 	const gint o_b = sp_canvas_item_order (b);
 
-	if (a > b) return -1; // XXX: shouldn't these be o_a, o_b ?
-	if (a < b) return 1;
+	if (o_a > o_b) return -1;
+	if (o_a < o_b) return 1;
+
 	return 0;
 }
 
