@@ -32,6 +32,7 @@
 #include "widgets/button.h"
 #include "widgets/sp-toolbox.h"
 
+#include "inkscape-stock.h"
 #include "verbs.h"
 #include "file.h"
 #include "selection-chemistry.h"
@@ -324,7 +325,7 @@ sp_toolbox_file_create (void)
 	gtk_widget_show (t);
 
 	tt = gtk_tooltips_new ();
-	tb = sp_toolbox_new (t, _("File"), "file", "toolbox_file", tt);
+	tb = sp_toolbox_new (t, _("File"), "file", INKSCAPE_STOCK_TOOLBOX_FILE, tt);
 
 	sp_toolbox_button_new_from_verb (t, 0, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_NEW, tt);
 	sp_toolbox_button_new_from_verb (t, 4, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_OPEN, tt);
@@ -375,7 +376,7 @@ sp_toolbox_edit_create (void)
 	gtk_widget_show (t);
 
 	tt = gtk_tooltips_new ();
-	tb = sp_toolbox_new (t, _("Edit"), "edit", "toolbox_edit", tt);
+	tb = sp_toolbox_new (t, _("Edit"), "edit", INKSCAPE_STOCK_TOOLBOX_EDIT, tt);
 
 	sp_toolbox_button_new_from_verb (t, 0, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_UNDO, tt);
 	sp_toolbox_button_new_from_verb (t, 1, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_REDO, tt);
@@ -409,7 +410,7 @@ sp_toolbox_object_create (void)
 	gtk_widget_show (t);
 
 	tt = gtk_tooltips_new ();
-	tb = sp_toolbox_new (t, _("Object"), "object", "toolbox_object", tt);
+	tb = sp_toolbox_new (t, _("Object"), "object", INKSCAPE_STOCK_TOOLBOX_OBJECT, tt);
 
 	sp_toolbox_button_new (t, 0, "object_stroke", GTK_SIGNAL_FUNC (sp_object_properties_stroke), tt, _("Stroke settings"));
 	sp_toolbox_button_new (t, 1, "object_fill", GTK_SIGNAL_FUNC (sp_object_properties_fill), tt, _("Fill settings"));
@@ -458,7 +459,7 @@ sp_toolbox_selection_create (void)
 	gtk_widget_show (t);
 
 	tt = gtk_tooltips_new ();
-	tb = sp_toolbox_new (t, _("Selection"), "selection", "toolbox_select", tt);
+	tb = sp_toolbox_new (t, _("Selection"), "selection", INKSCAPE_STOCK_TOOLBOX_SELECT, tt);
 
 	sp_toolbox_button_new_from_verb (t, 0, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_TO_FRONT, tt);
 	sp_toolbox_button_new_from_verb (t, 1, SP_BUTTON_TYPE_NORMAL, SP_VERB_SELECTION_RAISE, tt);
@@ -492,7 +493,7 @@ sp_toolbox_draw_create (void)
 	gtk_widget_show (t);
 	
 	tt = gtk_tooltips_new ();
-	tb = sp_toolbox_new (t, _("Draw"), "draw", "toolbox_draw", tt);
+	tb = sp_toolbox_new (t, _("Draw"), "draw", INKSCAPE_STOCK_TOOLBOX_DRAW, tt);
 	
 	sp_toolbox_button_new_from_verb (t, 0, SP_BUTTON_TYPE_TOGGLE, SP_VERB_CONTEXT_SELECT, tt);
 	sp_toolbox_button_new_from_verb (t, 1, SP_BUTTON_TYPE_TOGGLE, SP_VERB_CONTEXT_NODE, tt);
@@ -553,7 +554,7 @@ sp_toolbox_extension_create (void)
 	/* Create the extension toolbox */
 	/* Todo: Make it able to create required boxes dynamically */
 	tt = gtk_tooltips_new ();
-	tb = sp_toolbox_new (t, _("Extension"), "extension", INKSCAPE_PIXMAPDIR "/toolbox_zoom.xpm", tt);
+	tb = sp_toolbox_new (t, _("Extension"), "extension", INKSCAPE_STOCK_TOOLBOX_ZOOM, tt);
 
 	/* Loop over the list of extensions in spx structure */
 	extensions_repr = inkscape_get_repr (INKSCAPE, "extensions");
@@ -596,7 +597,7 @@ sp_toolbox_zoom_create (void)
 	gtk_widget_show (t);
 
 	tt = gtk_tooltips_new ();
-	tb = sp_toolbox_new (t, _("Zoom"), "zoom", "toolbox_zoom", tt);
+	tb = sp_toolbox_new (t, _("Zoom"), "zoom", INKSCAPE_STOCK_TOOLBOX_ZOOM, tt);
 
 	sp_toolbox_button_new_from_verb (t, 0, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_IN, tt);
 	sp_toolbox_button_new_from_verb (t, 1, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_2_1, tt);
@@ -630,7 +631,7 @@ sp_toolbox_node_create (void)
 	gtk_widget_show (t);
 
 	tt = gtk_tooltips_new ();
-	tb = sp_toolbox_new (t, _("Nodes"), "node", "toolbox_node", tt);
+	tb = sp_toolbox_new (t, _("Nodes"), "node", INKSCAPE_STOCK_TOOLBOX_NODE, tt);
 
 	sp_toolbox_button_new (t, 0, "node_insert", GTK_SIGNAL_FUNC (sp_node_path_edit_add), tt, _("Insert new nodes into selected segments"));
 	sp_toolbox_button_new (t, 1, "node_break", GTK_SIGNAL_FUNC (sp_node_path_edit_break), tt, _("Break line at selected nodes"));
