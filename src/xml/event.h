@@ -19,6 +19,9 @@ class Event
 : public Inkscape::GC::Managed<Inkscape::GC::SCANNED, Inkscape::GC::MANUAL>
 {
 public:
+        
+        virtual ~Event() {}
+
 	Event *next;
 	int serial;
 	Node *repr;

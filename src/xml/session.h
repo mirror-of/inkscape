@@ -28,6 +28,9 @@ namespace XML {
 
 class Session {
 public:
+    Session() {}
+    virtual ~Session() {}
+    
     virtual bool inTransaction()=0;
 
     virtual void beginTransaction()=0;
