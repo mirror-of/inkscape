@@ -428,6 +428,10 @@ public:
     /** for latin text, the left side of the character, on the baseline */
     NR::Point characterAnchorPoint(iterator const &it) const;
 
+    /** this is that value to apply to the x,y attributes of tspan role=line
+    elements, so it takes alignment into account. */
+    NR::Point chunkAnchorPoint(iterator const &it) const;
+
     NR::Rect characterBoundingBox(iterator const &it, double *rotation = NULL) const;
 
     /** Basically uses characterBoundingBox() on all the characters from
@@ -638,7 +642,8 @@ private:
         unsigned in_shape;
     };
     struct Paragraph {
-        Direction base_direction;
+        Direction base_direction;    /// can be overridden by child Span objects
+        Alignment alignment;
     };
     std::vector<Paragraph> _paragraphs;
     std::vector<Line> _lines;

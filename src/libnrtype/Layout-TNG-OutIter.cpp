@@ -292,6 +292,36 @@ NR::Point Layout::characterAnchorPoint(iterator const &it) const
     }
 }
 
+NR::Point Layout::chunkAnchorPoint(iterator const &it) const
+{
+    unsigned chunk_index;
+
+    if (_chunks.empty())
+        return NR::Point(0.0, 0.0);
+
+    if (_characters.empty())
+        chunk_index = 0;
+    else if (it._char_index == _characters.size())
+        chunk_index = _chunks.size() - 1;
+    else chunk_index = _characters[it._char_index].span(this).in_chunk;
+
+    Alignment alignment = _paragraphs[_lines[_chunks[chunk_index].in_line].in_paragraph].alignment;
+    if (alignment == LEFT || alignment == FULL)
+        return NR::Point(_chunks[chunk_index].left_x, _lines[chunk_index].baseline_y);
+
+    double chunk_width = 0.0;
+    unsigned span_index = _lineToSpan(_chunks[chunk_index].in_line);
+    for ( ; span_index < _spans.size() && _spans[span_index].in_chunk < chunk_index ; span_index++);
+    for ( ; span_index < _spans.size() && _spans[span_index].in_chunk <= chunk_index ; span_index++) {
+        if (_spans[span_index].in_chunk < chunk_index) continue;
+        chunk_width = std::max(chunk_width, (double)std::max(_spans[span_index].x_start, _spans[span_index].x_end));
+    }
+    if (alignment == RIGHT)
+        return NR::Point(_chunks[chunk_index].left_x + chunk_width, _lines[chunk_index].baseline_y);
+    //centre
+    return NR::Point(_chunks[chunk_index].left_x + chunk_width * 0.5, _lines[chunk_index].baseline_y);
+}
+
 NR::Rect Layout::characterBoundingBox(iterator const &it, double *rotation) const
 {
     NR::Point top_left, bottom_right;

@@ -566,11 +566,9 @@ void SPText::rebuildLayout()
         if (tspan->role == SP_TSPAN_ROLE_UNSPECIFIED) continue;
         if (!tspan->attributes.singleXYCoordinates()) continue;
         Inkscape::Text::Layout::iterator iter = layout.sourceToIterator(tspan);
-        if (iter.thisStartOfParagraph()) {   // the iterator will point just before the line break
-            NR::Point anchor_point = layout.characterAnchorPoint(iter);
-            sp_repr_set_double(SP_OBJECT_REPR(tspan), "x", anchor_point[NR::X]);
-            sp_repr_set_double(SP_OBJECT_REPR(tspan), "y", anchor_point[NR::Y]);
-        }
+        NR::Point anchor_point = layout.chunkAnchorPoint(iter);
+        sp_repr_set_double(SP_OBJECT_REPR(tspan), "x", anchor_point[NR::X]);
+        sp_repr_set_double(SP_OBJECT_REPR(tspan), "y", anchor_point[NR::Y]);
     }
 }
 

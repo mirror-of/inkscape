@@ -1196,6 +1196,7 @@ public:
             TRACE("para prepared, adding as #%d", _flow._paragraphs.size());
             Layout::Paragraph new_paragraph;
             new_paragraph.base_direction = para.direction;
+            new_paragraph.alignment = para.alignment;
             _flow._paragraphs.push_back(new_paragraph);
 
             // start scanning lines
