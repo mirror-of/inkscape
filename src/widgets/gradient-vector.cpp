@@ -429,7 +429,7 @@ static void update_stop_list( GtkWidget *mnu, SPGradient *gradient, SPStop *new_
 
 static gboolean blocked = FALSE;
 
-static void grad_edit_dia_stopremoved (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer data)
+static void grad_edit_dia_stop_added_or_removed (SPRepr *repr, SPRepr *child, SPRepr *ref, gpointer data)
 {
    GtkWidget *vb = GTK_WIDGET(data);
    GtkWidget *mnu = (GtkWidget *)g_object_get_data (G_OBJECT(vb), "stopmenu");
@@ -437,10 +437,13 @@ static void grad_edit_dia_stopremoved (SPRepr *repr, SPRepr *child, SPRepr *ref,
    update_stop_list (mnu, gradient, NULL);
 }
 
+//FIXME!!! We must also listen to attr changes on all children (i.e. stops) too,
+//otherwise the dialog does not reflect undoing color or offset change. This is a major
+//hassle, unless we have a "one of the descendants changed in some way" signal.
 static SPReprEventVector grad_edit_dia_repr_events =
 {
-    NULL, /* child_added */
-    grad_edit_dia_stopremoved, /* child_removed */
+    grad_edit_dia_stop_added_or_removed, /* child_added */
+    grad_edit_dia_stop_added_or_removed, /* child_removed */
     NULL, /* attr_changed*/
     NULL, /* content_changed */
     NULL  /* order_changed */
@@ -489,25 +492,28 @@ verify_grad(SPGradient *gradient)
 static SPStop*
 sp_prev_stop(SPStop *stop, SPGradient *gradient)
 {
-	if (sp_repr_attr(SP_OBJECT_REPR(sp_object_first_child(SP_OBJECT(gradient))),"id") == sp_repr_attr(SP_OBJECT_REPR(SP_OBJECT(stop)),"id")) 
+	if (sp_object_first_child(SP_OBJECT(gradient)) == SP_OBJECT(stop)) 
 		return NULL;
+	SPObject *found = NULL;
 	for ( SPObject *ochild = sp_object_first_child(SP_OBJECT(gradient)) ; ochild != NULL ; ochild = SP_OBJECT_NEXT(ochild) ) {
 		if (SP_IS_STOP (ochild)) {
-			if (sp_repr_attr(SP_OBJECT_REPR(SP_OBJECT_NEXT(ochild)),"id") == sp_repr_attr(SP_OBJECT_REPR(SP_OBJECT(stop)),"id")) 
-				return SP_STOP(ochild);
+			found = ochild;
+		}
+		if (SP_OBJECT_NEXT(ochild) == SP_OBJECT(stop) || SP_OBJECT(ochild) == SP_OBJECT(stop)) {
+			break;
 		}
 	}
-	return NULL;
+	return SP_STOP(found);
 }
 
 static SPStop*
 sp_next_stop(SPStop *stop)
 {
-  SPObject *ochild = SP_OBJECT_NEXT(stop);
-  if (ochild != NULL && SP_IS_STOP (ochild)) 
+  for (SPObject *ochild = SP_OBJECT_NEXT(stop); ochild != NULL; ochild = SP_OBJECT_NEXT(ochild)) {
+	if (SP_IS_STOP (ochild))
 		return SP_STOP(ochild);
-  else 
-		return NULL;
+  }
+  return NULL;
 }
 
 
@@ -517,6 +523,8 @@ update_stop_list( GtkWidget *mnu, SPGradient *gradient, SPStop *new_stop)
 
 	if (!SP_IS_GRADIENT (gradient))
 		return;
+
+	blocked = TRUE;
 
 	/* Clear old menu, if there is any */
 	if (gtk_option_menu_get_menu (GTK_OPTION_MENU (mnu))) {
@@ -574,11 +582,15 @@ update_stop_list( GtkWidget *mnu, SPGradient *gradient, SPStop *new_stop)
 		int i = 0;
 		for ( SPObject *ochild = sp_object_first_child(SP_OBJECT(gradient)) ; ochild != NULL ; ochild = SP_OBJECT_NEXT(ochild) ) {
 			if (SP_IS_STOP (ochild)) {
-				if (sp_repr_attr(SP_OBJECT_REPR(ochild),"id") == sp_repr_attr(SP_OBJECT_REPR(SP_OBJECT(new_stop)),"id")) gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), i);
+				if (SP_OBJECT (ochild) == SP_OBJECT(new_stop)) {
+					gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), i);
+					break;
+				} 
+				i++;
 			}
-			i++;
 		}
 	}
+	blocked = FALSE;
 }
 
 
@@ -588,9 +600,13 @@ sp_grad_edit_select (GtkOptionMenu *mnu,  GtkWidget *tbl)
 {
 	SPGradient *gradient = (SPGradient *)g_object_get_data (G_OBJECT(tbl), "gradient");
 
-	if (!g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop")) return;
-	SPStop *stop = SP_STOP(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop"));
-	SPColorSelector *csel = (SPColorSelector*)g_object_get_data (G_OBJECT (tbl), "stop");
+	GObject *item = G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu))));
+	SPStop *stop = SP_STOP (g_object_get_data (item, "stop"));
+	if (!stop) return;
+
+	blocked = TRUE;
+
+	SPColorSelector *csel = (SPColorSelector*)g_object_get_data (G_OBJECT (tbl), "cselector");
 	guint32 c = sp_color_get_rgba32_falpha (&stop->color, stop->opacity);
 	csel->base->setAlpha(SP_RGBA32_A_F (c));
 	SPColor color;
@@ -631,10 +647,11 @@ sp_grad_edit_select (GtkOptionMenu *mnu,  GtkWidget *tbl)
 		gtk_widget_set_sensitive (GTK_WIDGET (offspin), FALSE);
 	}
 
-	sp_repr_set_double (SP_OBJECT_REPR (stop), "offset", stop->offset);
 	gtk_adjustment_set_value (adj, stop->offset);
 
 	gtk_adjustment_changed (adj);
+
+	blocked = FALSE;
 }
 
 
@@ -643,6 +660,11 @@ sp_grad_edit_select (GtkOptionMenu *mnu,  GtkWidget *tbl)
 static void
 offadjustmentChanged( GtkAdjustment *adjustment, GtkWidget *vb)
 {
+	if (blocked)
+		return;
+
+	blocked = TRUE;
+
     GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(vb), "stopmenu");
     if (!g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop")) return;
     SPStop *stop = SP_STOP(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop"));
@@ -651,6 +673,8 @@ offadjustmentChanged( GtkAdjustment *adjustment, GtkWidget *vb)
     sp_repr_set_double (SP_OBJECT_REPR (stop), "offset", stop->offset);
 
     sp_document_done (SP_OBJECT_DOCUMENT (stop));
+
+	blocked = FALSE;
 }
 
 guint32
@@ -839,7 +863,7 @@ sp_gradient_vector_widget_new (SPGradient *gradient)
 	gtk_widget_show (f);
 	gtk_box_pack_start (GTK_BOX (vb), f, TRUE, TRUE, PAD);
 	csel = (GtkWidget*)sp_color_selector_new (SP_TYPE_COLOR_NOTEBOOK, SP_COLORSPACE_TYPE_NONE);
-	g_object_set_data (G_OBJECT (vb), "stop", csel);
+	g_object_set_data (G_OBJECT (vb), "cselector", csel);
 	gtk_widget_show (csel);
 	gtk_container_add (GTK_CONTAINER (f), csel);
 	g_signal_connect (G_OBJECT (csel), "dragged", G_CALLBACK (sp_gradient_vector_color_dragged), vb);
@@ -924,6 +948,8 @@ sp_gradient_vector_editor_new (SPGradient *gradient)
 static void
 sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient)
 {
+	blocked = TRUE;
+
 	SPGradient *old;
 
 	old = (SPGradient*)g_object_get_data (G_OBJECT (widget), "gradient");
@@ -942,25 +968,18 @@ sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient
 	if (gradient) {
 		sp_gradient_ensure_vector (gradient);
 
-		// So far we can only handle 2 stops, but eventually we need to support arbitrary number.
-		// Remember _now_ all stop colors of the given gradient in an array, so that they're not botched
-		// by the colorselectors during setting (fixes bug 902319)
 		GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(widget), "stopmenu");
 		SPStop *stop = SP_STOP(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop"));
 		guint32 c = sp_color_get_rgba32_falpha (&stop->color, stop->opacity);
 
-
-		/// get the color selector by its id
-			SPColorSelector *csel = SP_COLOR_SELECTOR(g_object_get_data (G_OBJECT (widget), "stop"));
-
-			// set its alpha, from the stored array
-			csel->base->setAlpha(SP_RGBA32_A_F (c));
-			SPColor color;
-			sp_color_set_rgb_float (&color, SP_RGBA32_R_F (c), SP_RGBA32_G_F (c), SP_RGBA32_B_F (c));
-			// set its color, from the stored array
-			csel->base->setColor( color );
-
-			/* Fixme: Sensitivity */
+		/// get the color selector 
+		SPColorSelector *csel = SP_COLOR_SELECTOR(g_object_get_data (G_OBJECT (widget), "cselector"));
+		// set alpha
+		csel->base->setAlpha(SP_RGBA32_A_F (c));
+		SPColor color;
+		sp_color_set_rgb_float (&color, SP_RGBA32_R_F (c), SP_RGBA32_G_F (c), SP_RGBA32_B_F (c));
+		// set color
+		csel->base->setColor( color );
 	}
 
 	/* Fill preview */
@@ -971,7 +990,15 @@ sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient
 	update_stop_list (GTK_WIDGET(mnu), gradient, NULL);
 
 	// Once the user edits a gradient, it stops being auto-collectable
-	sp_repr_set_attr (SP_OBJECT_REPR(gradient), "inkscape:collect", NULL);
+	if (sp_repr_attr (SP_OBJECT_REPR(gradient), "inkscape:collect")) {
+		SPDocument *document = SP_OBJECT_DOCUMENT (gradient);
+		gboolean saved = sp_document_get_undo_sensitive(document);
+		sp_document_set_undo_sensitive (document, FALSE);
+		sp_repr_set_attr (SP_OBJECT_REPR(gradient), "inkscape:collect", NULL);
+		sp_document_set_undo_sensitive (document, saved);
+	}
+
+	blocked = FALSE;
 }
 
 static void
@@ -1005,7 +1032,7 @@ sp_gradient_vector_widget_destroy (GtkObject *object, gpointer data)
 
 	gradient = (GObject*)g_object_get_data (G_OBJECT (object), "gradient");
 
-	if (gradient) {
+	if (gradient && SP_OBJECT_REPR(gradient)) {
 		/* Remove signals connected to us */
 		/* fixme: may use _connect_while_alive as well */
 		sp_signal_disconnect_by_data (gradient, object);
@@ -1098,7 +1125,7 @@ sp_gradient_vector_color_changed (SPColorSelector *csel, GtkObject *object)
 	GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(object), "stopmenu");
 	SPStop *stop = SP_STOP(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "stop"));
 
-	csel = (SPColorSelector*)g_object_get_data (G_OBJECT (object), "stop");
+	csel = (SPColorSelector*)g_object_get_data (G_OBJECT (object), "cselector");
 	csel->base->getColorAlpha( color, &alpha );
 	rgb = sp_color_get_rgba32_ualpha (&color, 0x00);
 
