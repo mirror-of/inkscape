@@ -22,6 +22,10 @@ my $str = qr/(?:"(?:[^"\\]|\\.)*"\n)/;
 my $rc = 0;
 $/ = '';
 while(<>) {
+	if (m{\A${com}*\Z}) {
+		next;
+	}
+
 	s/"\n"//g;
 	if (!m{\A${com}*msgid[^\n]*\n${com}*msgstr[^\n]*\n${com}*\Z}) {
 		print "$ARGV: Not in msg format:\n$_";
