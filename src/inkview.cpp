@@ -82,6 +82,9 @@ static void usage();
 
 static GtkWidget *ctrlwin = NULL;
 
+/* TODO !!! make this temporary stub unnecessary */
+Inkscape::Application *inkscape_get_instance() { return NULL; }
+
 static int
 sp_svgview_main_delete (GtkWidget *widget, GdkEvent *event, struct _SPSlideShow *ss)
 {

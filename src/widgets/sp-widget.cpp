@@ -183,8 +183,8 @@ sp_widget_destroy (GtkObject *object)
 		/* Disconnect signals */
 		// the checks are necessary because when destroy is caused by the the program shutting down, 
 		// the inkscape object may already be (partly?) invalid --bb
-		if (G_IS_OBJECT(inkscape) && G_OBJECT_GET_CLASS(G_OBJECT(inkscape)))
-  			sp_signal_disconnect_by_data (inkscape, spw);
+		if (G_IS_OBJECT(spw->inkscape) && G_OBJECT_GET_CLASS(G_OBJECT(spw->inkscape)))
+  			sp_signal_disconnect_by_data (spw->inkscape, spw);
 		spw->inkscape = NULL;
 	}
 
@@ -211,9 +211,9 @@ sp_widget_show (GtkWidget *widget)
 
 	if (spw->inkscape) {
 		/* Connect signals */
-		g_signal_connect (G_OBJECT (inkscape), "modify_selection", G_CALLBACK (sp_widget_modify_selection), spw);
-		g_signal_connect (G_OBJECT (inkscape), "change_selection", G_CALLBACK (sp_widget_change_selection), spw);
-		g_signal_connect (G_OBJECT (inkscape), "set_selection", G_CALLBACK (sp_widget_set_selection), spw);
+		g_signal_connect (G_OBJECT (spw->inkscape), "modify_selection", G_CALLBACK (sp_widget_modify_selection), spw);
+		g_signal_connect (G_OBJECT (spw->inkscape), "change_selection", G_CALLBACK (sp_widget_change_selection), spw);
+		g_signal_connect (G_OBJECT (spw->inkscape), "set_selection", G_CALLBACK (sp_widget_set_selection), spw);
 	}
 
 	if (spw->repr) {
@@ -233,7 +233,7 @@ sp_widget_hide (GtkWidget *widget)
 
 	if (spw->inkscape) {
 		/* Disconnect signals */
-		sp_signal_disconnect_by_data (inkscape, spw);
+		sp_signal_disconnect_by_data (spw->inkscape, spw);
 	}
 
 	if (spw->repr) {
@@ -355,7 +355,7 @@ sp_widget_construct_repr (SPWidget *spw, SPRepr *repr)
 	}
 	if (spw->inkscape) {
 		if (GTK_WIDGET_VISIBLE (spw)) {
-			sp_signal_disconnect_by_data (inkscape, spw);
+			sp_signal_disconnect_by_data (spw->inkscape, spw);
 		}
 		spw->inkscape = NULL;
 	}

@@ -2,6 +2,10 @@
 
     * src/xml/repr-util.cpp, src/xml/repr.h: added RDF namespace by default
 
+	* src/inkscape.cpp, src/inkscape.h, src/widgets/sp-widget.cpp,
+	  src/inkview.cpp: nuked global 'inkscape' variable and replaced
+	  it with a module-local variable and an accessor function.
+
 2004-02-20  bulia byak <bulia@users.sourceforge.net>
 
 	* src/text-context.cpp: [shift+]alt+arrows to kern

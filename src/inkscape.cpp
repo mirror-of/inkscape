@@ -62,6 +62,8 @@
 #define mkdir(d,m) _mkdir((d))
 #endif
 
+static Inkscape::Application *inkscape=NULL;
+
 /* Backbones of configuration xml data */
 #include "preferences-skeleton.h"
 
@@ -140,8 +142,6 @@ struct Inkscape::ApplicationClass {
 
 static GObjectClass * parent_class;
 static guint inkscape_signals[LAST_SIGNAL] = {0};
-
-Inkscape::Application *inkscape = NULL;
 
 static void (* segv_handler) (int) = NULL;
 
@@ -536,12 +536,10 @@ inkscape_segv_handler (int signum)
 
 
 
-Inkscape::Application *
-inkscape_application_new (const gchar *argv0)
+void
+inkscape_application_init (const gchar *argv0)
 {
-    Inkscape::Application *sp;
-
-    sp = (Inkscape::Application *)g_object_new (SP_TYPE_INKSCAPE, NULL);
+    inkscape = (Inkscape::Application *)g_object_new (SP_TYPE_INKSCAPE, NULL);
     /* fixme: load application defaults */
 
 #ifndef WIN32
@@ -550,12 +548,16 @@ inkscape_application_new (const gchar *argv0)
     signal (SIGILL, inkscape_segv_handler);
 #endif
 
-    sp->argv0 = g_strdup(argv0);
+    inkscape->argv0 = g_strdup(argv0);
 
-    return sp;
+    inkscape_load_preferences(inkscape);
 }
 
-
+Inkscape::Application *
+inkscape_get_instance()
+{
+	return inkscape;
+}
 
 /**
  * Preference management

@@ -34,18 +34,16 @@
 #include "xml/repr.h"
 #include "forward.h"
 
-#define INKSCAPE inkscape
+#define INKSCAPE inkscape_get_instance()
 
-#ifndef __INKSCAPE_C__
-	extern Inkscape::Application * inkscape;
-#endif
-
-Inkscape::Application * inkscape_application_new (const gchar *argv0);
+void inkscape_application_init (const gchar *argv0);
 
 /* Preference management */
 void inkscape_load_preferences (Inkscape::Application * inkscape);
 void inkscape_save_preferences (Inkscape::Application * inkscape);
 SPRepr *inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key);
+
+Inkscape::Application *inkscape_get_instance();
 
 #define SP_ACTIVE_EVENTCONTEXT inkscape_active_event_context ()
 SPEventContext * inkscape_active_event_context (void);
