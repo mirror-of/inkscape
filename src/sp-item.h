@@ -22,11 +22,7 @@
 
 #include "sp-object.h"
 
-namespace Inkscape {
-
-class URIReference;
-
-};
+namespace Inkscape { class URIReference; }
 
 /* fixme: This is just placeholder */
 /*
@@ -95,8 +91,8 @@ struct _SPItem {
 
 	NRMatrix transform;
 
-	Inkscape::URIReference *clip_ref;
-	Inkscape::URIReference *mask_ref;
+	SPClipPathReference *clip_ref;
+	SPMaskReference *mask_ref;
 
 	SPItemView *display;
 };

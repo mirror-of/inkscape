@@ -23,17 +23,24 @@ static gchar *uri_to_id(SPDocument *document, const gchar *uri);
 
 namespace Inkscape {
 
-URIReference::URIReference() : _obj(NULL) {}
+URIReference::URIReference(SPObject *owner)
+: _owner(owner), _obj(NULL), _uri(NULL)
+{
+	g_assert(_owner != NULL);
+	/* FIXME !!! attach to owner's destroy signal to clean up in case */
+}
 
 URIReference::~URIReference() {
 	detach();
 }
 
-void URIReference::attach(SPDocument *rel_document, const URI &uri)
-  throw(BadURIException)
+void URIReference::attach(const URI &uri) throw(BadURIException)
 {
+	SPDocument *document;
 	const gchar *fragment;
 	gchar *id;
+
+	document = SP_OBJECT_DOCUMENT(_owner);
 
 	fragment = uri.getFragment();
 	if ( !uri.isRelative() || uri.getQuery() || !fragment ) {
@@ -62,34 +69,44 @@ void URIReference::attach(SPDocument *rel_document, const URI &uri)
 
 	/* FIXME !!! validate id as an NCName somewhere */
 
-	_connection.disconnect(); /* is this needed? */
-	_setObject(sp_document_lookup_id(rel_document, id));
-	_connection = sp_document_id_changed_connect(rel_document, id, SigC::slot(*this, &URIReference::_setObject));
+	if (_uri) {
+		delete _uri;
+	}
+	_uri = new URI(uri);
+
+	_connection.disconnect();
+	_setObject(sp_document_lookup_id(document, id));
+	_connection = sp_document_id_changed_connect(document, id, SigC::slot(*this, &URIReference::_setObject));
 
 	g_free(id);
 }
 
 void URIReference::detach() {
 	_connection.disconnect();
+	delete _uri;
+	_uri = NULL;
 	_setObject(NULL);
 }
 
 void URIReference::_setObject(SPObject *obj) {
+	if ( obj && !_acceptObject(obj) ) {
+		obj = NULL;
+	}
 
-	if (obj == _obj) return;
+	if ( obj == _obj ) return;
 
 	SPObject *old_obj=_obj;
 	_obj = obj;
 
 	if (_obj) {
-		sp_object_href(_obj, NULL);
+		sp_object_href(_obj, _owner);
 		g_signal_connect(G_OBJECT(_obj), "release", G_CALLBACK(&URIReference::_release), reinterpret_cast<gpointer>(this));
 	}
 	_changed_signal.emit(old_obj, _obj);
 	if (old_obj) {
 		/* release the old object _after_ the signal emission */
 		g_signal_handlers_disconnect_by_func(G_OBJECT(old_obj), (void *)&URIReference::_release, reinterpret_cast<gpointer>(this));
-		sp_object_hunref(old_obj, NULL);
+		sp_object_hunref(old_obj, _owner);
 	}
 }
 
@@ -102,7 +119,7 @@ void URIReference::_release(SPObject *obj, URIReference *reference) {
 	reference->_setObject(NULL);
 }
 
-}; /* namespace Inkscape */
+} /* namespace Inkscape */
 
 static gchar *
 uri_to_id(SPDocument *document, const gchar *uri)

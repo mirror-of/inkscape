@@ -29,6 +29,7 @@
 #include "document-private.h"
 #include "sp-object-repr.h"
 #include "sp-gradient.h"
+#include "uri-references.h"
 
 #define SP_MACROS_SILENT
 #include "macros.h"
@@ -185,11 +186,12 @@ static void sp_gradient_remove_child (SPObject *object, SPRepr *child);
 static void sp_gradient_modified (SPObject *object, guint flags);
 static SPRepr *sp_gradient_write (SPObject *object, SPRepr *repr, guint flags);
 
-static void sp_gradient_href_release (SPObject *href, SPGradient *gradient);
-static void sp_gradient_href_modified (SPObject *href, guint flags, SPGradient *gradient);
+static void gradient_ref_modified (SPObject *href, guint flags, SPGradient *gradient);
 
 static void sp_gradient_invalidate_vector (SPGradient *gr);
 static void sp_gradient_rebuild_vector (SPGradient *gr);
+
+static void gradient_ref_changed(SPObject *old_ref, SPObject *ref, SPGradient *gradient);
 
 static SPPaintServerClass * gradient_parent_class;
 
@@ -236,9 +238,10 @@ sp_gradient_class_init (SPGradientClass *klass)
 static void
 sp_gradient_init (SPGradient *gr)
 {
-	/* fixme: There is one problem - if reprs are rearranged, state has to be cleared somehow */
-	/* fixme: Maybe that is not problem at all, as no force can rearrange childrens of <defs> */
-	/* fixme: But keep that in mind, if messing with XML tree (Lauris) */
+	gr->ref = new SPGradientReference(SP_OBJECT(gr));
+	gr->ref->changedSignal().connect(SigC::bind(SigC::slot(gradient_ref_changed), gr));
+
+	/* FIXME !!! reprs being rearranged (e.g. via the XML editor) may require us to clear the state */
 	gr->state = SP_GRADIENT_STATE_UNKNOWN;
 
 	gr->units = SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX;
@@ -313,9 +316,10 @@ sp_gradient_release (SPObject *object)
 		sp_document_remove_resource (SP_OBJECT_DOCUMENT (object), "gradient", SP_OBJECT (object));
 	}
 
-	if (gradient->href) {
-		sp_signal_disconnect_by_data (gradient->href, gradient);
-		gradient->href = (SPGradient *) sp_object_hunref (SP_OBJECT (gradient->href), object);
+	if (gradient->ref) {
+		gradient->ref->detach();
+		delete gradient->ref;
+		gradient->ref = NULL;
 	}
 
 	if (gradient->color) {
@@ -386,28 +390,37 @@ sp_gradient_set (SPObject *object, unsigned int key, const gchar *value)
 		}
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
-	case SP_ATTR_XLINK_HREF:
-		if (gr->href) {
- 			sp_signal_disconnect_by_data (gr->href, gr);
-			gr->href = (SPGradient *) sp_object_hunref (SP_OBJECT (gr->href), object);
-		}
-		if (value && *value == '#') {
-			SPObject *href;
-			href = sp_document_lookup_id (object->document, value + 1);
-			if (SP_IS_GRADIENT (href)) {
-				gr->href = (SPGradient *) sp_object_href (href, object);
-				g_signal_connect (G_OBJECT (href), "release", G_CALLBACK (sp_gradient_href_release), gr);
-				g_signal_connect (G_OBJECT (href), "modified", G_CALLBACK (sp_gradient_href_modified), gr);
+	case SP_ATTR_XLINK_HREF: {
+		if (value) {
+			try {
+				gr->ref->attach(Inkscape::URI(value));
+			} catch (Inkscape::BadURIException &e) {
+				g_warning("%s", e.what());
+				gr->ref->detach();
 			}
+		} else {
+			gr->ref->detach();
 		}
-		sp_gradient_invalidate_vector (gr);
-		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
+	}
 	default:
 		if (((SPObjectClass *) gradient_parent_class)->set)
 			((SPObjectClass *) gradient_parent_class)->set (object, key, value);
 		break;
 	}
+}
+
+static void
+gradient_ref_changed(SPObject *old_ref, SPObject *ref, SPGradient *gr)
+{
+	if (old_ref) {
+		sp_signal_disconnect_by_data(old_ref, gr);
+	}
+	if (SP_IS_GRADIENT (ref)) {
+		g_signal_connect(G_OBJECT (ref), "modified", G_CALLBACK (gradient_ref_modified), gr);
+	}
+	/* FIXME !!! what should the flags (second) argument be? */
+	gradient_ref_modified(ref, 0, gr);
 }
 
 static void
@@ -550,11 +563,10 @@ sp_gradient_write (SPObject *object, SPRepr *repr, guint flags)
 		}
 	}
 
-	if (gr->href) {
-		gchar *str;
-		str = g_strdup_printf ("#%s", SP_OBJECT_ID (gr->href));
-		sp_repr_set_attr (repr, "xlink:href", str);
-		g_free (str);
+	if (gr->ref->getURI()) {
+		gchar *uri_string = gr->ref->getURI()->toString();
+		sp_repr_set_attr(repr, "xlink:href", uri_string);
+		g_free(uri_string);
 	}
 
 	if ((flags & SP_OBJECT_WRITE_ALL) || gr->units_set) {
@@ -711,15 +723,7 @@ sp_gradient_repr_set_vector (SPGradient *gr, SPRepr *repr, SPGradientVector *vec
 }
 
 static void
-sp_gradient_href_release (SPObject *href, SPGradient *gradient)
-{
-	gradient->href = (SPGradient *) sp_object_hunref (href, gradient);
-	sp_gradient_invalidate_vector (gradient);
-	sp_object_request_modified (SP_OBJECT (gradient), SP_OBJECT_MODIFIED_FLAG);
-}
-
-static void
-sp_gradient_href_modified (SPObject *href, guint flags, SPGradient *gradient)
+gradient_ref_modified (SPObject *href, guint flags, SPGradient *gradient)
 {
 	sp_gradient_invalidate_vector (gradient);
 	sp_object_request_modified (SP_OBJECT (gradient), SP_OBJECT_MODIFIED_FLAG);
@@ -775,15 +779,18 @@ sp_gradient_rebuild_vector (SPGradient *gr)
 
 	gr->has_stops = (len != 0);
 
-	if ((len == 0) && (gr->href)) {
-		/* Copy vector from parent */
-		sp_gradient_ensure_vector (gr->href);
-		if (!gr->vector || (gr->vector->nstops != gr->href->vector->nstops)) {
+	SPGradient *ref=gr->ref->getObject();
+	if ( !len && ref ) {
+		/* Copy vector from referenced gradient */
+		sp_gradient_ensure_vector(ref);
+		if ( !gr->vector ||
+		     ( gr->vector->nstops != ref->vector->nstops ) )
+		{
 			if (gr->vector) g_free (gr->vector);
-			gr->vector = (SPGradientVector *)g_malloc (sizeof (SPGradientVector) + (gr->href->vector->nstops - 1) * sizeof (SPGradientStop));
-			gr->vector->nstops = gr->href->vector->nstops;
+			gr->vector = (SPGradientVector *)g_malloc (sizeof (SPGradientVector) + (ref->vector->nstops - 1) * sizeof (SPGradientStop));
+			gr->vector->nstops = ref->vector->nstops;
 		}
-		memcpy (gr->vector, gr->href->vector, sizeof (SPGradientVector) + (gr->vector->nstops - 1) * sizeof (SPGradientStop));
+		memcpy (gr->vector, ref->vector, sizeof (SPGradientVector) + (gr->vector->nstops - 1) * sizeof (SPGradientStop));
 		return;
 	}
 

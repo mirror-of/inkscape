@@ -23,8 +23,11 @@ typedef struct _SPClipPathView SPClipPathView;
 
 #include "display/nr-arena-forward.h"
 #include "sp-object-group.h"
+#include "uri-references.h"
 
 struct _SPClipPath {
+	class Reference;
+
 	SPObjectGroup group;
 
 	unsigned int clipPathUnits_set : 1;
@@ -38,6 +41,18 @@ struct _SPClipPathClass {
 };
 
 GType sp_clippath_get_type (void);
+
+class SPClipPathReference : public Inkscape::URIReference {
+public:
+	SPClipPathReference(SPObject *obj) : URIReference(obj) {}
+	SPClipPath *getObject() const {
+		return (SPClipPath *)URIReference::getObject();
+	}
+protected:
+	bool _acceptObject(SPObject *obj) const {
+		return SP_IS_CLIPPATH(obj);
+	}
+};
 
 NRArenaItem *sp_clippath_show (SPClipPath *cp, NRArena *arena, unsigned int key);
 void sp_clippath_hide (SPClipPath *cp, unsigned int key);

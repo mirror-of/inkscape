@@ -145,6 +145,7 @@ typedef struct _SPStopClass SPStopClass;
 
 typedef struct _SPGradient SPGradient;
 typedef struct _SPGradientClass SPGradientClass;
+class SPGradientReference;
 
 typedef struct _SPLinearGradient SPLinearGradient;
 typedef struct _SPLinearGradientClass SPLinearGradientClass;
@@ -156,6 +157,9 @@ typedef struct _SPPattern SPPattern;
 
 typedef struct _SPClipPath SPClipPath;
 typedef struct _SPClipPathClass SPClipPathClass;
+class SPClipPathReference;
+
+class SPMaskReference;
 
 typedef struct _SPAnchor SPAnchor;
 typedef struct _SPAnchorClass SPAnchorClass;

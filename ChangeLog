@@ -1,4 +1,16 @@
+2004-01-18 MenTaLguY <mental@rydia.net>
+
+	* src/uri.h, src/uri.cpp, src/uri-reference.h, src/uri-reference.cpp,
+	  src/sp-item.h, src/sp-item.cpp, src/sp-clippath.h,
+	  src/sp-gradient.h, src/sp-gradient.cpp, src/sp-mask.h,
+	  src/sp-item.h, src/sp-item.cpp:
+
+	  Reworked URIs to use libxml, and URIReferences to be specialized
+	  for particular object types.  Also switched gradients to using
+	  URIReferences.
+
 2004-01-17 Jon <jon@protofunk.org>
+
         * src/desktop.cpp: Changed the document shadow to 1 pixel. It as
           set to 5, which is really cheesy. I changed it in the 
           constructor for SP_desktop_new in the function 

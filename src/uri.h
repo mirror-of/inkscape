@@ -26,8 +26,11 @@ public:
 	~URI();
 
 	bool isRelative() const { return _impl->isRelative(); }
+	const gchar *getScheme() const { return _impl->getScheme(); }
 	const gchar *getQuery() const { return _impl->getQuery(); }
 	const gchar *getFragment() const { return _impl->getFragment(); }
+
+	gchar *toString() const { return _impl->toString(); }
 private:
 	class Impl {
 	public:
@@ -36,8 +39,10 @@ private:
 		void unreference();
 
 		bool isRelative() const;
+		const gchar *getScheme() const;
 		const gchar *getQuery() const;
 		const gchar *getFragment() const;
+		gchar *toString() const;
 	private:
 		Impl(xmlURIPtr uri);
 		~Impl();

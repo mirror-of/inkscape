@@ -111,7 +111,7 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 			g_print ("GVECTORNORM: Added stops to %s\n", SP_OBJECT_ID (gr));
 		}
 		/* Nof break free hrefing */
-		if (gr->href) {
+		if (gr->ref->getObject()) {
 			/* We are hrefing someone, so require flattening */
 			sp_object_invoke_write ((SPObject *) gr, ((SPObject *) gr)->repr,
 						SP_OBJECT_WRITE_EXT | SP_OBJECT_WRITE_ALL);
@@ -170,7 +170,7 @@ sp_gradient_ensure_private_normalized (SPGradient *gr, SPGradient *vector)
 
 	/* If we are already normalized private, change href and return */
 	if ((gr->state == SP_GRADIENT_STATE_PRIVATE) && (SP_OBJECT_HREFCOUNT (gr) == 1)) {
-		if (gr->href != vector) {
+		if ( gr->ref->getObject() != vector) {
 			/* href is not vector */
 			sp_gradient_repr_set_link (SP_OBJECT_REPR (gr), vector);
 		}
@@ -240,7 +240,7 @@ sp_gradient_ensure_radial_private_normalized (SPGradient *gr, SPGradient *vector
 
 	/* If we are already normalized private, change href and return */
 	if ((gr->state == SP_GRADIENT_STATE_PRIVATE) && (SP_OBJECT_HREFCOUNT (gr) == 1)) {
-		if (gr->href != vector) {
+		if ( gr->ref->getObject() != vector ) {
 			/* href is not vector */
 			sp_gradient_repr_set_link (SP_OBJECT_REPR (gr), vector);
 		}
@@ -314,7 +314,7 @@ sp_gradient_vector_release_references (SPGradient *gradient)
 			SPGradient *gr;
 			gr = SP_GRADIENT (l->data);
 			if (SP_OBJECT_HREFCOUNT (gr) < 1) {
-				if (gr->href == gradient) {
+				if ( gr->ref->getObject() == gradient ) {
 					sp_repr_set_attr (SP_OBJECT_REPR (gr), "xlink:href", NULL);
 				}
 			}
@@ -514,7 +514,7 @@ sp_item_force_fill_lineargradient_vector (SPItem *item, SPGradient *gr)
 		} else {
 			/* ig is private gradient, so change href to vector */
 			g_assert (ig->state == SP_GRADIENT_STATE_PRIVATE);
-			if (ig->href != gr) {
+			if ( ig->ref->getObject() != gr ) {
 				/* href is not vector */
 				sp_gradient_repr_set_link (SP_OBJECT_REPR (ig), gr);
 			}
@@ -565,7 +565,7 @@ sp_item_force_stroke_lineargradient_vector (SPItem *item, SPGradient *gr)
 		}
 		/* ig is private gradient, so change href to vector */
 		g_assert (ig->state == SP_GRADIENT_STATE_PRIVATE);
-		if (ig->href != gr) {
+		if ( ig->ref->getObject() != gr ) {
 			/* href is not vector */
 			sp_gradient_repr_set_link (SP_OBJECT_REPR (ig), gr);
 		}
@@ -614,7 +614,7 @@ sp_item_force_fill_radialgradient_vector (SPItem *item, SPGradient *gr)
 		} else {
 			/* ig is private gradient, so change href to vector */
 			g_assert (ig->state == SP_GRADIENT_STATE_PRIVATE);
-			if (ig->href != gr) {
+			if ( ig->ref->getObject() != gr ) {
 				/* href is not vector */
 				sp_gradient_repr_set_link (SP_OBJECT_REPR (ig), gr);
 			}
@@ -665,7 +665,7 @@ sp_item_force_stroke_radialgradient_vector (SPItem *item, SPGradient *gr)
 		}
 		/* ig is private gradient, so change href to vector */
 		g_assert (ig->state == SP_GRADIENT_STATE_PRIVATE);
-		if (ig->href != gr) {
+		if ( ig->ref->getObject() != gr ) {
 			/* href is not vector */
 			sp_gradient_repr_set_link (SP_OBJECT_REPR (ig), gr);
 		}
@@ -775,10 +775,17 @@ sp_document_default_gradient_vector (SPDocument *document)
 SPGradient *
 sp_gradient_get_vector (SPGradient *gradient, gboolean force_private)
 {
+	SPGradient *ref;
 	g_return_val_if_fail (gradient != NULL, NULL);
 	g_return_val_if_fail (SP_IS_GRADIENT (gradient), NULL);
 
-	while (!SP_GRADIENT_HAS_STOPS (gradient) && gradient->href) gradient = gradient->href;
+	/* follow the chain of references to find the first gradient
+	 * with gradient stops */
+	ref = gradient;
+	while ( !SP_GRADIENT_HAS_STOPS(gradient) && ref ) {
+		gradient = ref;
+		ref = gradient->ref->getObject();
+	}
 
 	return (force_private) ? sp_gradient_ensure_vector_normalized (gradient) : gradient;
 }

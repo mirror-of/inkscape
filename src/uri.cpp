@@ -1,4 +1,16 @@
+/*
+ * Classes for representing and manipulating URIs.
+ *
+ * Authors:
+ *   MenTaLguY <mental@rydia.net>
+ *
+ * Copyright (C) 2003 MenTaLguY
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
 #include <glib.h>
+#include <libxml/xmlmemory.h>
 #include "uri.h"
 
 namespace Inkscape {
@@ -49,12 +61,28 @@ bool URI::Impl::isRelative() const {
 	return !_uri->scheme;
 }
 
+const gchar *URI::Impl::getScheme() const {
+	return (gchar *)_uri->scheme;
+}
+
 const gchar *URI::Impl::getQuery() const {
 	return (gchar *)_uri->query;
 }
 
 const gchar *URI::Impl::getFragment() const {
 	return (gchar *)_uri->fragment;
+}
+
+gchar *URI::Impl::toString() const {
+	xmlChar *string = xmlSaveUri(_uri);
+	if (string) {
+		/* hand the string off to glib memory management */
+		gchar *glib_string = g_strdup((gchar *)string);
+		xmlFree(string);
+		return glib_string;
+	} else {
+		return NULL;
+	}
 }
 
 };

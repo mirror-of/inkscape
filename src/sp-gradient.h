@@ -15,8 +15,6 @@
 
 #include <glib.h>
 
-
-
 #define SP_TYPE_STOP (sp_stop_get_type ())
 #define SP_STOP(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_STOP, SPStop))
 #define SP_STOP_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), SP_TYPE_STOP, SPStopClass))
@@ -46,6 +44,7 @@
 #include "forward.h"
 #include "color.h"
 #include "sp-paint-server.h"
+#include "uri-references.h"
 
 /*
  * Gradient Stop
@@ -117,7 +116,7 @@ typedef enum {
 struct _SPGradient {
 	SPPaintServer paint_server;
 	/* Reference (href) */
-	SPGradient *href;
+	SPGradientReference *ref;
 	/* State in Inkscape gradient system */
 	guint state : 2;
 	/* gradientUnits attribute */
@@ -145,6 +144,18 @@ struct _SPGradientClass {
 };
 
 GType sp_gradient_get_type (void);
+
+class SPGradientReference : public Inkscape::URIReference {
+public:
+	SPGradientReference(SPObject *obj) : URIReference(obj) {}
+	SPGradient *getObject() const {
+		return (SPGradient *)URIReference::getObject();
+	}
+protected:
+	bool _acceptObject(SPObject *obj) const {
+		return SP_IS_GRADIENT(obj);
+	}
+};
 
 /* Forces vector to be built, if not present (i.e. changed) */
 void sp_gradient_ensure_vector (SPGradient *gradient);

@@ -37,9 +37,8 @@ class URIReference : public SigC::Object {
 public:
 	/**
 	 * Constructor.
-	 *
 	 */
-	URIReference();
+	URIReference(SPObject *owner);
 
 	/**
 	 * Destructor.  Calls shutdown() if the reference has not been
@@ -56,8 +55,7 @@ public:
 	 * @param rel_document document for relative URIs
 	 * @param uri the URI to watch
 	 */
-	void attach(SPDocument *document, const URI &uri)
-	  throw(BadURIException);
+	void attach(const URI &uri) throw(BadURIException);
 
 	/**
 	 * Detaches from the currently attached URI target, if any;
@@ -71,7 +69,7 @@ public:
 	 *
 	 * @return a pointer to the referenced SPObject or NULL
 	 */
-	SPObject *getObject();
+	SPObject *getObject() const { return _obj; }
 
 	/**
 	 * Accessor for the referrent change notification signal;
@@ -83,11 +81,37 @@ public:
 	 *
 	 * @returns a signal
 	 */
-	SigC::Signal2<void, SPObject *, SPObject *> changedSignal();
+	SigC::Signal2<void, SPObject *, SPObject *> changedSignal() {
+		return _changed_signal;
+	}
+
+	/**
+	 * Returns a pointer to a URI containing the currently attached
+	 * URI, or NULL if no URI is currently attached.
+	 *
+	 * @returns the currently attached URI, or NULL
+	 */
+	const URI *getURI() const {
+		return _uri;
+	}
+
+	/**
+	 * Returns true if there is currently an attached URI
+	 *
+	 * @returns true if there is an attached URI
+	 */
+	bool isAttached() const {
+		return (bool)_uri;
+	}
+
+protected:
+	virtual bool _acceptObject(SPObject *obj) const { return true; }
 
 private:
+	SPObject *_owner;
 	SigC::Connection _connection;
 	SPObject *_obj;
+	URI *_uri;
 
 	SigC::Signal2<void, SPObject *, SPObject *> _changed_signal;
 
@@ -95,14 +119,6 @@ private:
 	static void _release(SPObject *object, URIReference *reference);
 	void operator=(const URIReference &ref) {}
 };
-
-inline SigC::Signal2<void, SPObject *, SPObject *> URIReference::changedSignal(){
-	return _changed_signal;
-}
-
-inline SPObject *URIReference::getObject() {
-	return _obj;
-}
 
 }
 

@@ -24,6 +24,7 @@ typedef struct _SPMaskView SPMaskView;
 
 #include "display/nr-arena-forward.h"
 #include "sp-object-group.h"
+#include "uri-references.h"
 
 struct _SPMask {
 	SPObjectGroup group;
@@ -42,6 +43,18 @@ struct _SPMaskClass {
 };
 
 GType sp_mask_get_type (void);
+
+class SPMaskReference : public Inkscape::URIReference {
+public:
+	SPMaskReference(SPObject *obj) : URIReference(obj) {}
+	SPMask *getObject() const {
+		return (SPMask *)URIReference::getObject();
+	}
+protected:
+	bool _acceptObject(SPObject *obj) const {
+		return SP_IS_MASK(obj);
+	}
+};
 
 NRArenaItem *sp_mask_show (SPMask *mask, NRArena *arena, unsigned int key);
 void sp_mask_hide (SPMask *mask, unsigned int key);
