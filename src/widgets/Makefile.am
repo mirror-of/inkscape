@@ -35,7 +35,8 @@ libspwidgets_a_SOURCES = \
 	sp-xmlview-attr-list.cpp sp-xmlview-attr-list.h \
 	sp-xmlview-content.cpp sp-xmlview-content.h \
 	spw-utilities.cpp spw-utilities.h \
-	sp-widget.cpp sp-widget.h
+	sp-widget.cpp sp-widget.h\
+	spinbutton-events.cpp spinbutton-events.h
 
 #	sp-value-winder.c sp-value-winder.h
 #	sp-spin-button.cpp sp-spin-button.h
