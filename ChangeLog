@@ -1,3 +1,16 @@
+2004-06-23  MenTaLguY  <mental@rydia.net>
+
+	* src/libnrtype/Makefile_insert, src/libnrtype/codepages.h,
+	  src/libnrtype/cp1250.cpp, src/libnrtype/cp1251.cpp,
+	  src/libnrtype/cp1252.cpp, src/libnrtype/cp1253.cpp,
+	  src/libnrtype/cp1254.cpp, src/libnrtype/cp1255.cpp,
+	  src/libnrtype/cp1256.cpp, src/libnrtype/cp1257.cpp,
+	  src/libnrtype/cp1258.cpp, src/libnrtype/cp874.cpp,
+	  src/libnrtype/cp932.cpp, src/libnrtype/cp936.cpp,
+	  src/libnrtype/cp949.cpp, src/libnrtype/cp950.cpp:
+
+	  removed unused Win32 codepage crap
+
 2004-06-23  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/inkscape.cpp: Don't connect to SIGBUS on Win32, as

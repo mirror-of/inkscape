@@ -5,30 +5,6 @@ libnrtype/all: libnrtype/libnrtype.a
 libnrtype/clean:
 	rm -f libnrtype/libnrtype.a $(libnrtype_libnrtype_a_OBJECTS)
 
-if USE_XFT
-libnrtype_xft_sources =	
-
-endif
-
-if PLATFORM_WIN32
-libnrtype_win32_sources =	\
-	libnrtype/codepages.h	\
-	libnrtype/cp1250.cpp	\
-	libnrtype/cp1251.cpp	\
-	libnrtype/cp1252.cpp	\
-	libnrtype/cp1253.cpp	\
-	libnrtype/cp1254.cpp	\
-	libnrtype/cp1255.cpp	\
-	libnrtype/cp1256.cpp	\
-	libnrtype/cp1257.cpp	\
-	libnrtype/cp1258.cpp	\
-	libnrtype/cp874.cpp	\
-	libnrtype/cp932.cpp	\
-	libnrtype/cp936.cpp	\
-	libnrtype/cp949.cpp	\
-	libnrtype/cp950.cpp	
-endif 
-
 libnrtype_libnrtype_a_CPPFLAGS =	\
 	$(FREETYPE_CFLAGS)	\
 	$(GNOME_PRINT_CFLAGS)	\
@@ -53,6 +29,5 @@ libnrtype_libnrtype_a_SOURCES =	\
 	libnrtype/raster-glyph.h	\
 	libnrtype/raster-position.h	\
 	libnrtype/TextWrapper.cpp \
-	libnrtype/TextWrapper.h \
-	$(libnrtype_win32_sources)	\
-	$(libnrtype_xft_sources)
+	libnrtype/TextWrapper.h 
+
