@@ -139,6 +139,20 @@
 	* src/gc-core.h: bump up free space divisor -- collections should
 	  happen ~32x more frequently
 
+2004-09-19  Carl Hetherington <inkscape@carlh.net>
+
+	* src/display/canvas-bpath.cpp, src/display/nr-arena-shape.cpp,
+	src/display/sp-ctrlline.cpp, src/libnrtype/RasterFont.cpp,
+	src/livarot/Shape.h, src/livarot/ShapeRaster.cpp: remove some
+	unused parameters from calls to raster code.
+
+	* src/livarot/ShapeRaster.cpp: coding style cleanups.
+
+	* src/livarot/Shape.h, src/livarot/ShapeRaster.cpp: factored out
+	_updateIntersection().
+
+	* src/livarot/AVL.cpp, src/livarot/AVL.h: remove DblLinked.  Cleanups.
+
 2004-09-18  MenTaLguY <mental@rydia.net>
 
 	* src/dialogs/filedialog.cpp: unref the preview document we created
@@ -148,8 +162,27 @@
 	* src/livarot/AVL.cpp, src/livarot/AVL.h,
 	src/livarot/DblLinked.cpp, src/livarot/DblLinked.h,
 	src/livarot/LivarotDefs.h, src/livarot/ShapeRaster.cpp,
-	src/livarot/ShapeSweep.cpp, src/livarot/sweep-tree.cpp: replace
-	leftFoo and rightFoo with foo[2] in a few places.
+	src/livarot/ShapeSweep.cpp, src/livarot/sweep-tree.cpp,
+	src/livarot/sweep-tree.h, src/sweep-event.h: replace leftFoo and
+	rightFoo with foo[2] in a few places.  Associated cleanups.
+
+	* src/livarot/Shape.h: use Side rather than a bool for
+	TesteIntersection.  Add some methods.  Remove some unused variables.
+
+	* src/livarot/ShapeSweep.cpp: simplify TesteIntersection with use
+	of Side.
+
+	* src/livarot/sweep-event.h: const fix.
+
+	* src/livarot/sweep-event.cpp: simplifications with use of Side.
+
+	* src/sp-offset.cpp, src/splivarot.cpp, src/livarot/Shape.cpp,
+	src/livarot/ShapeMisc.cpp, src/ShapeSweep.cpp: lastA/firstA in
+	Shape::dg_point -> incidentEdge[2].
+
+	* src/livarot/LivarotDefs.h: add FirstOrLast enum.
+
+	* src/livarot/ShapeRaster.cpp: coding style cleanups and refactoring.
 
 2004-09-17  Carl Hetherington <inkscape@carlh.net>
 
