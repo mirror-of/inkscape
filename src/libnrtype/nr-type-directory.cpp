@@ -105,7 +105,7 @@ compare_warnings (const void *a, const void *b)
 typedef struct {
 	gchar *fam;
 	guint spec;
-	NRTypeFace *face;
+	NRTypeFaceDef *face;
 } cache_unit;
 
 guint 
@@ -127,7 +127,7 @@ compare_cache (const void *a, const void *b)
 	}
 }
 
-NRTypeFace *
+NRTypeFaceDef *
 search_cache (gchar *fam, NRTypePosDef a)
 {
 	cache_unit c;
@@ -141,7 +141,7 @@ search_cache (gchar *fam, NRTypePosDef a)
 }
 
 void
-add_to_cache (gchar *fam, NRTypePosDef a, NRTypeFace *face)
+add_to_cache (gchar *fam, NRTypePosDef a, NRTypeFaceDef *face)
 {
 	cache_unit *p = g_new (cache_unit, 1);
 	p->fam = g_strdup (fam);
@@ -161,10 +161,14 @@ nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 
 	if (!typedict) nr_type_directory_build ();
 
-	NRTypeFace *from_cache = search_cache ((gchar *) family, apos);
+	NRTypeFaceDef *from_cache = search_cache ((gchar *) family, apos);
 	if (from_cache) {
-		nr_typeface_ref (from_cache);
-		return from_cache;
+		if (!from_cache->typeface) {
+			from_cache->typeface = nr_typeface_new (from_cache);
+		} else {
+			nr_typeface_ref (from_cache->typeface);
+		}
+		return from_cache->typeface;
 	}
 
 	unsigned fbest = ~0u;
@@ -216,13 +220,13 @@ nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 		style_warnings = g_slist_prepend (style_warnings, (gpointer) g_strdup (besttdef->name));
 	}
 
+	add_to_cache ((gchar *) family, apos, besttdef);
+
 	if (!besttdef->typeface) {
 		besttdef->typeface = nr_typeface_new (besttdef);
 	} else {
 		nr_typeface_ref (besttdef->typeface);
 	}
-
-	add_to_cache ((gchar *) family, apos, besttdef->typeface);
 
 	return besttdef->typeface;
 }
