@@ -458,7 +458,7 @@ NewtonRaphsonRootFind(BezierCurve const Q, NR::Point const &P, gdouble const u)
         for (double proportion = .125; ; proportion += .125) {
             if ( lensq( bezier_pt(3, Q, improved_u) - P ) > diff_lensq ) {
                 if ( proportion > 1.0 ) {
-                    g_warning("found proportion %g", proportion);
+                    //g_warning("found proportion %g", proportion);
                     improved_u = u;
                     break;
                 }
