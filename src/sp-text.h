@@ -15,6 +15,7 @@
 
 #include <glib.h>
 
+#include <sigc++/sigc++.h>
 
 
 #define SP_TYPE_TEXT (sp_text_get_type ())
@@ -29,6 +30,12 @@
 #define SP_IS_TSPAN(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_TSPAN))
 #define SP_IS_TSPAN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_TSPAN))
 
+#define SP_TYPE_TEXTPATH (sp_textpath_get_type ())
+#define SP_TEXTPATH(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_TEXTPATH, SPTextPath))
+#define SP_TEXTPATH_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_TEXTPATH, SPTextPathClass))
+#define SP_IS_TEXTPATH(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_TEXTPATH))
+#define SP_IS_TEXTPATH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_TEXTPATH))
+
 #define SP_TYPE_STRING (sp_string_get_type ())
 #define SP_STRING(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_STRING, SPString))
 #define SP_STRING_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_STRING, SPStringClass))
@@ -40,12 +47,14 @@
 #define SP_TEXT_LAYOUT_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 
 #define SP_TSPAN_STRING(t) ((SPString *) SP_TSPAN (t)->string)
+#define SP_TEXTPATH_STRING(t) ((SPString *) SP_TEXTPATH (t)->string)
 
 #include <libnr/nr-point.h>
 #include "svg/svg-types.h"
 #include "sp-chars.h"
 
 class SPLayoutData;
+class SPUseReference;
 
 struct SPLayoutData {
 	/* fixme: Vectors */
@@ -111,6 +120,36 @@ struct SPTSpanClass {
 };
 
 GType sp_tspan_get_type ();
+
+/* SPTextPath */
+
+class Path;
+struct SPTextPath {
+	SPItem        item;
+	SPLayoutData  ly;
+	SPObject      *string;
+
+  Path           *originalPath; // will be a livarot Path, just don't declare it here to please the gcc linker
+  char           *original;     // SVG description of the source path
+
+	bool           sourceDirty;
+	bool           isUpdating;
+	
+	gchar					 *sourceHref;
+	SPUseReference *sourceRef;
+  SPRepr         *sourceRepr; // the repr associated with that id
+	SPObject			 *sourceObject;
+	
+	gulong           _modified_connection;
+	SigC::Connection _delete_connection;
+	SigC::Connection _changed_connection;
+};
+
+struct SPTextPathClass {
+	SPItemClass  parent_class;
+};
+
+GType sp_textpath_get_type();
 
 /* SPText */
 

@@ -11,6 +11,7 @@
 #include <libnr/nr-point.h>
 #include <libnr/nr-point-ops.h>
 #include <libnr/nr-matrix-ops.h>
+#include "../svg/stringstream.h"
 
 /*
  * manipulation of the path data: path description and polyline
@@ -1154,6 +1155,7 @@ void  Path::Transform(const NR::Matrix &trans)
     }
   }
 }
+
 void        Path::FastBBox(double &l,double &t,double &r,double &b)
 {
 	l=t=r=b=0;
@@ -1271,3 +1273,57 @@ void        Path::FastBBox(double &l,double &t,double &r,double &b)
   }
 }
 
+char *
+Path::svg_dump_path ()
+{
+	Inkscape::SVGOStringStream os;
+  
+	for (int i = 0; i < descr_nb; i++) {
+
+		Path::path_descr theD = descr_cmd[i];
+		int typ = theD.flags & descr_type_mask;
+
+		if (typ == descr_moveto) {
+			Path::path_descr_moveto*  nData=(Path::path_descr_moveto*)(descr_data+theD.dStart);
+			os << "M " << nData->p[0] << " " << nData->p[1] << " ";
+		}
+
+		else if (typ == descr_lineto) {
+			Path::path_descr_lineto*  nData=(Path::path_descr_lineto*)(descr_data+theD.dStart);
+			os << "L " << nData->p[0] << " " << nData->p[1] << " ";
+		}
+
+		else if (typ == descr_cubicto) {
+			Path::path_descr_cubicto*  nData=(Path::path_descr_cubicto*)(descr_data+theD.dStart);
+			float lastX, lastY;
+			{
+				NR::Point tmp = PrevPoint (i - 1);
+				lastX=tmp[0];
+				lastY=tmp[1];
+			}
+			os << "C " << lastX + nData->stD[0] / 3 << " "
+				 << lastY + nData->stD[1] / 3 << " "
+				 << nData->p[0] - nData->enD[0] / 3 << " "
+				 << nData->p[1] - nData->enD[1] / 3 << " "
+				 << nData->p[0] << " "
+				 << nData->p[1] << " ";
+		}
+
+		else if (typ == descr_arcto) {
+			Path::path_descr_arcto*  nData=(Path::path_descr_arcto*)(descr_data+theD.dStart);
+			os << "A " << nData->rx << " "
+				 << nData->ry << " "
+				 << nData->angle << " "
+				 << ((nData->large) ? "1" : "0") << " "
+				 << ((nData->clockwise) ? "0" : "1") << " "
+				 << nData->p[NR::X] << " "
+				 << nData->p[NR::Y] << " ";
+		}
+
+		else if (typ == descr_close) {
+			os << "z ";
+		}
+	}
+  
+	return g_strdup (os.str().c_str());
+}

@@ -38,12 +38,17 @@
 
 #include <libnrtype/TextWrapper.h>
 
+#include <livarot/LivarotDefs.h>
+#include <livarot/Shape.h>
+#include <livarot/Path.h>
+
 #include <glib.h>
 #include <gtk/gtk.h>
 
 #include "helper/sp-intl.h"
 #include "xml/repr-private.h"
 #include "svg/svg.h"
+#include "svg/stringstream.h"
 #include "display/nr-arena-group.h"
 #include "display/nr-arena-glyphs.h"
 #include "attributes.h"
@@ -55,8 +60,11 @@
 #include "view.h"
 #include "print.h"
 
+#include "sp-shape.h"
 #include "sp-text.h"
 
+#include "sp-use-reference.h"
+#include "prefs-utils.h"
 
 
 /*#####################################################
@@ -607,7 +615,7 @@ static void sp_string_read_content (SPObject *object);
 static void sp_string_update (SPObject *object, SPCtx *ctx, unsigned int flags);
 
 static void sp_string_calculate_dimensions (SPString *string);
-static void sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean *inspace);
+static void sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean *inspace,Path* with_path);
 
 static SPCharsClass *string_parent_class;
 
@@ -689,7 +697,9 @@ sp_string_build (SPObject *object, SPDocument *doc, SPRepr *repr)
     if (SP_IS_TEXT(parent)) {
         string->ly = &SP_TEXT(parent)->ly;
     } else if (SP_IS_TSPAN(parent)) {
-	string->ly = &SP_TSPAN(parent)->ly;
+			string->ly = &SP_TSPAN(parent)->ly;
+    } else if (SP_IS_TEXTPATH(parent)) {
+			string->ly = &SP_TEXTPATH(parent)->ly;
     } else {
         string->ly = NULL;
     }
@@ -858,7 +868,6 @@ sp_string_calculate_dimensions (SPString *string)
 					for (int i=0;i<str_text->glyph_length;i++) {
 						if ( str_text->glyph_text[i].font != curPF ) {
 							curPF=str_text->glyph_text[i].font;
-						//	printf("sp_string_calculate_dimensions (1) ");
 							if ( curF ) curF->Unref();
 							curF=NULL;
 							if ( curPF ) {
@@ -879,7 +888,6 @@ sp_string_calculate_dimensions (SPString *string)
 							string->bbox.y1 = MAX (string->bbox.y1, base_pt[NR::Y] - size * (bbox.min())[1]);
 						}
 					}
-				//	printf("sp_string_calculate_dimensions (2) ");
 					if ( curF ) curF->Unref();
 					string->advance=NR::Point(str_text->glyph_text[str_text->glyph_length].x,str_text->glyph_text[str_text->glyph_length].y);
 					string->advance*=size;
@@ -901,7 +909,6 @@ sp_string_calculate_dimensions (SPString *string)
 			delete str_text;
     }
 
-	//	printf("sp_string_calculate_dimensions (3) ");
     if (face) face->Unref();
 		
     if (nr_rect_d_test_empty (&string->bbox)) {
@@ -918,7 +925,7 @@ sp_string_calculate_dimensions (SPString *string)
  * fixme: Should values be parsed by parent?
  */
 static void
-sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean *pinspace)
+sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean *pinspace,Path* with_path)
 {
 	//printf("setshape\n");
     SPChars *chars = SP_CHARS (string);
@@ -953,8 +960,9 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
     NR::Point letterspacing_adv = sp_letterspacing_advance (style);
 
     /* fixme: Find a way how to manipulate these */
-//    NR::Point pt = cp;
-
+    NR::Point pt = cp;
+		if ( with_path ) pt=NR::Point(0,0);
+		
     /* fixme: SPChars should do this upright instead */
     NR::scale const flip_y(size, -size);
 
@@ -993,15 +1001,42 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, NR::Point &cp, gboolean
 						NR::Point     base_pt(str_text->glyph_text[i].x,str_text->glyph_text[i].y);
 												
 						base_pt*=size;
-						base_pt+=cp;
+						if ( with_path == NULL ) base_pt+=cp;
 						
 						string->p[i]=base_pt;
 						
-						NR::Matrix add_rot=NR::identity();
-						if ( ly->rotate_set ) add_rot=NR::identity()*NR::rotate(M_PI*ly->rotate/180);
-						NR::Matrix const a( NR::Matrix(flip_y) * add_rot * NR::translate(base_pt) );
-						if ( curF ) sp_chars_add_element (chars, str_text->glyph_text[i].gl, (font_instance*)curF, a);
-						
+						if ( curF ) {
+							if ( with_path ) {
+								int   nb_glyph_p;
+								double glyph_a=base_pt[0];
+								Path::cut_position* glyph_p=with_path->CurvilignToPosition(1,&glyph_a,nb_glyph_p);
+								if ( glyph_p ) {
+									if ( glyph_p[0].piece >= 0 ) {
+										NR::Point  g_pos,g_tgt,g_nor;
+										with_path->PointAndTangentAt (glyph_p[0].piece,glyph_p[0].t,g_pos,g_tgt);
+										g_nor=g_tgt.ccw();
+										double g_wid=curF->Advance(str_text->glyph_text[i].gl, (metrics));
+										g_pos+=base_pt[1]*g_nor+0.5*g_wid*g_tgt;
+										g_tgt*=size;
+										g_nor*=size;
+										NR::Matrix  a;
+										a[0]=g_tgt[0];
+										a[2]=g_nor[0];
+										a[4]=g_pos[0];
+										a[1]=g_tgt[1];
+										a[3]=g_nor[1];
+										a[5]=g_pos[1];
+										sp_chars_add_element (chars, str_text->glyph_text[i].gl, (font_instance*)curF, a);
+									}
+									free(glyph_p);
+								}
+							} else {
+								NR::Matrix add_rot=NR::identity();
+								if ( ly->rotate_set ) add_rot=NR::identity()*NR::rotate(M_PI*ly->rotate/180);
+								NR::Matrix const a( NR::Matrix(flip_y) * add_rot * NR::translate(base_pt) );
+								sp_chars_add_element (chars, str_text->glyph_text[i].gl, (font_instance*)curF, a);
+							}
+						}
 					}
 					//printf("sp_string_set_shape (2) ");
 					if ( curF ) curF->Unref();
@@ -1490,9 +1525,603 @@ sp_tspan_hide (SPItem *item, unsigned int key)
  *
  */
 static void
-sp_tspan_set_shape (SPTSpan *tspan, SPLayoutData *ly, NR::Point &cp, gboolean firstline, gboolean *inspace)
+sp_tspan_set_shape (SPTSpan *tspan, SPLayoutData */*ly*/, NR::Point &cp, gboolean /*firstline*/, gboolean *inspace)
 {
-    sp_string_set_shape (SP_STRING (tspan->string), &tspan->ly, cp, inspace);
+    sp_string_set_shape (SP_STRING (tspan->string), &tspan->ly, cp, inspace,NULL);
+}
+
+
+/*#####################################################
+#  SPTEXTPATH
+#####################################################*/
+
+static void sp_textpath_class_init (SPTextPathClass *classname);
+static void sp_textpath_init (SPTextPath *textpath);
+static void sp_textpath_finalize(GObject *obj);
+	
+static void sp_textpath_build (SPObject * object, SPDocument * document, SPRepr * repr);
+static void sp_textpath_release (SPObject *object);
+static void sp_textpath_set (SPObject *object, unsigned int key, const gchar *value);
+static void sp_textpath_child_added (SPObject *object, SPRepr *rch, SPRepr *ref);
+static void sp_textpath_remove_child (SPObject *object, SPRepr *rch);
+static void sp_textpath_update (SPObject *object, SPCtx *ctx, guint flags);
+static void sp_textpath_modified (SPObject *object, unsigned int flags);
+static SPRepr *sp_textpath_write (SPObject *object, SPRepr *repr, guint flags);
+
+static void sp_textpath_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
+static NRArenaItem *sp_textpath_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
+static void sp_textpath_hide (SPItem *item, unsigned int key);
+
+static void sp_textpath_set_shape (SPTextPath *textpath, SPLayoutData *ly, NR::Point &cp, gboolean firstline, gboolean *inspace);
+
+static SPItemClass *textpath_parent_class;
+
+static void sp_textpath_href_changed(SPObject *old_ref, SPObject *ref, SPTextPath *offset);
+static void sp_textpath_delete_self(SPObject *deleted, SPTextPath *offset);
+static void sp_textpath_source_modified (SPObject *iSource, guint flags, SPItem *item);
+void   refresh_textpath_source(SPTextPath* offset);
+static void sp_textpath_start_listening(SPTextPath *offset,SPObject* to);
+static void sp_textpath_quit_listening(SPTextPath *offset);
+
+
+/**
+ *
+ */
+GType
+sp_textpath_get_type ()
+{
+    static GType type = 0;
+    if (!type) {
+        GTypeInfo info = {
+            sizeof (SPTextPathClass),
+            NULL,    /* base_init */
+            NULL,    /* base_finalize */
+            (GClassInitFunc) sp_textpath_class_init,
+            NULL,    /* class_finalize */
+            NULL,    /* class_data */
+            sizeof (SPTextPath),
+            16,    /* n_preallocs */
+            (GInstanceInitFunc) sp_textpath_init,
+            NULL,    /* value_table */
+        };
+        type = g_type_register_static (SP_TYPE_ITEM, "SPTextPath", &info, (GTypeFlags)0);
+    }
+    return type;
+}
+
+
+
+/**
+ *
+ */
+static void
+sp_textpath_class_init (SPTextPathClass *classname)
+{
+	  GObjectClass  *gobject_class = (GObjectClass *) classname;
+    SPObjectClass * sp_object_class;
+    SPItemClass * item_class;
+
+    sp_object_class = (SPObjectClass *) classname;
+    item_class = (SPItemClass *) classname;
+
+    textpath_parent_class = (SPItemClass*)g_type_class_ref (SP_TYPE_ITEM);
+
+		gobject_class->finalize = sp_textpath_finalize;
+
+    sp_object_class->build = sp_textpath_build;
+    sp_object_class->release = sp_textpath_release;
+    sp_object_class->set = sp_textpath_set;
+    sp_object_class->child_added = sp_textpath_child_added;
+    sp_object_class->remove_child = sp_textpath_remove_child;
+    sp_object_class->update = sp_textpath_update;
+    sp_object_class->modified = sp_textpath_modified;
+    sp_object_class->write = sp_textpath_write;
+
+    item_class->bbox = sp_textpath_bbox;
+    item_class->show = sp_textpath_show;
+    item_class->hide = sp_textpath_hide;
+}
+
+
+
+/**
+ *
+ */
+static void
+sp_textpath_init (SPTextPath *textpath)
+{
+    /* fixme: Initialize layout */
+    sp_svg_length_unset (&textpath->ly.x, SP_SVG_UNIT_NONE, 0.0, 0.0);
+    sp_svg_length_unset (&textpath->ly.y, SP_SVG_UNIT_NONE, 0.0, 0.0);
+    textpath->ly.dx = NULL;
+    textpath->ly.dy = NULL;
+    textpath->ly.linespacing = 1.0;
+    textpath->string = NULL;
+
+		textpath->original = NULL;
+		textpath->originalPath = NULL;
+		textpath->sourceDirty=false;
+		textpath->isUpdating=false;
+		// init various connections
+		textpath->sourceHref = NULL;
+		textpath->sourceRepr = NULL;
+		textpath->sourceObject = NULL;
+		new (&textpath->_delete_connection) sigc::connection();
+		new (&textpath->_changed_connection) sigc::connection();
+		// set up the uri reference
+		textpath->sourceRef = new SPUseReference(SP_OBJECT(textpath));
+		textpath->_changed_connection = textpath->sourceRef->changedSignal().connect(sigc::bind(sigc::ptr_fun(sp_textpath_href_changed), textpath));
+}
+static void
+sp_textpath_finalize(GObject *obj)
+{
+	SPTextPath *textpath = (SPTextPath *) obj;
+	
+	delete textpath->sourceRef;
+	textpath->_delete_connection.~connection();
+	textpath->_changed_connection.~connection();
+}
+
+
+// the listening functions
+static void sp_textpath_start_listening(SPTextPath *tp, SPObject* to)
+{
+	if ( to == NULL ) 
+		return;
+
+	tp->sourceObject = to;
+	tp->sourceRepr = SP_OBJECT_REPR(to);
+
+	tp->_delete_connection = SP_OBJECT(to)->connectDelete(sigc::bind(sigc::ptr_fun(&sp_textpath_delete_self), tp));
+	tp->_modified_connection = g_signal_connect (G_OBJECT (to), "modified", G_CALLBACK (sp_textpath_source_modified), tp);
+}
+
+static void sp_textpath_quit_listening(SPTextPath *tp)
+{
+	if ( tp->sourceObject == NULL )  
+		return;
+
+	g_signal_handler_disconnect (tp->sourceObject, tp->_modified_connection);
+	tp->_delete_connection.disconnect();
+
+	tp->sourceRepr = NULL;
+	tp->sourceObject = NULL;
+}
+
+static void
+sp_textpath_href_changed(SPObject */*old_ref*/, SPObject */*ref*/, SPTextPath *offset)
+{
+	//	SPItem *item = SP_ITEM(offset);
+	sp_textpath_quit_listening(offset);
+	if (offset->sourceRef) {
+		SPItem *refobj = offset->sourceRef->getObject();
+		if (refobj) sp_textpath_start_listening(offset,refobj);
+		offset->sourceDirty=true;
+		SP_OBJECT(offset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+	}
+}
+
+static void
+sp_textpath_delete_self(SPObject */*deleted*/, SPTextPath *offset)
+{
+	guint const mode = prefs_get_int_attribute("options.cloneorphans", "value", SP_CLONE_ORPHANS_UNLINK);
+	
+	if (mode == SP_CLONE_ORPHANS_UNLINK) {
+		// leave it be. just forget about the source
+		sp_textpath_quit_listening(offset);
+		if ( offset->sourceHref ) g_free(offset->sourceHref);
+		offset->sourceHref = NULL;
+		offset->sourceRef->detach();
+		// FIXME: convert to paths!
+	} else if (mode == SP_CLONE_ORPHANS_DELETE) {
+		SP_OBJECT(offset)->deleteObject();
+	}
+}
+
+static void
+sp_textpath_source_modified (SPObject */*iSource*/, guint /*flags*/, SPItem *item)
+{
+	SPTextPath *offset = SP_TEXTPATH(item);
+	offset->sourceDirty=true;
+	SP_OBJECT(offset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
+
+/**
+ *
+ */
+static void
+sp_textpath_build (SPObject *object, SPDocument *doc, SPRepr *repr)
+{
+    SPTextPath *textpath = SP_TEXTPATH (object);
+
+    sp_object_read_attr (object, "dx");
+    sp_object_read_attr (object, "dy");
+    sp_object_read_attr (object, "xlink:href");
+
+    
+    SPRepr *rch;
+    for (rch = repr->children; rch != NULL; rch = rch->next) {
+        if (rch->type == SP_XML_TEXT_NODE) break;
+    }
+
+    if (!rch) {
+        rch = sp_xml_document_createTextNode (sp_repr_document (repr), "");
+        sp_repr_add_child (repr, rch, NULL);
+    }
+
+    if (((SPObjectClass *) textpath_parent_class)->build)
+        ((SPObjectClass *) textpath_parent_class)->build (object, doc, repr);
+
+    SPObject *ochild;
+    for ( ochild = sp_object_first_child(object) ; ochild ; ochild = SP_OBJECT_NEXT(ochild) ) {
+	if (SP_IS_STRING(ochild)) {
+	    textpath->string = ochild;
+	    break;
+	}
+    }
+}
+
+
+
+
+/**
+ *
+ */
+static void
+sp_textpath_release (SPObject *object)
+{
+    SPTextPath *textpath = SP_TEXTPATH (object);
+
+    if (textpath->string) {
+	textpath->string = NULL;
+    } else {
+        g_print ("NULL textpath content\n");
+    }
+
+		if (textpath->original) free (textpath->original);
+		if (textpath->originalPath) delete textpath->originalPath;
+		textpath->original = NULL;
+		textpath->originalPath = NULL;
+		
+		sp_textpath_quit_listening(textpath);
+		
+		textpath->_changed_connection.disconnect();
+		g_free(textpath->sourceHref);
+		textpath->sourceHref = NULL;
+		textpath->sourceRef->detach();
+
+    if (((SPObjectClass *) textpath_parent_class)->release)
+        ((SPObjectClass *) textpath_parent_class)->release (object);
+}
+
+
+
+
+/**
+ *
+ */
+static void
+sp_textpath_set (SPObject *object, unsigned int key, const gchar *value)
+{
+    SPTextPath *textpath = SP_TEXTPATH (object);
+
+    /* fixme: Vectors */
+    switch (key) {
+    case SP_ATTR_DX:
+        if (!(textpath->ly.dx = sp_svg_length_list_read (value))) {
+            textpath->ly.dx = NULL;
+        }
+        /* fixme: Re-layout it */
+        object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        break;
+    case SP_ATTR_DY:
+        if (!(textpath->ly.dy = sp_svg_length_list_read (value))) {
+            textpath->ly.dy = NULL;
+        }
+        /* fixme: Re-layout it */
+        object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        break;
+    case SP_ATTR_XLINK_HREF:
+			if ( value == NULL ) {
+				sp_textpath_quit_listening(textpath);
+				if ( textpath->sourceHref ) g_free(textpath->sourceHref);
+				textpath->sourceHref = NULL;
+				textpath->sourceRef->detach();
+			} else {
+				if ( textpath->sourceHref && ( strcmp(value, textpath->sourceHref) == 0 ) ) {
+				} else {
+					if ( textpath->sourceHref ) g_free(textpath->sourceHref);
+					textpath->sourceHref = g_strdup(value);
+					try {
+						textpath->sourceRef->attach(Inkscape::URI(value));
+					} catch (Inkscape::BadURIException &e) {
+						g_warning("%s", e.what());
+						textpath->sourceRef->detach();
+					}
+				}
+			}
+      break;
+    default:
+        if (((SPObjectClass *) textpath_parent_class)->set)
+            (((SPObjectClass *) textpath_parent_class)->set) (object, key, value);
+        break;
+    }
+}
+
+
+
+/**
+ *
+ */
+static void
+sp_textpath_child_added (SPObject *object, SPRepr *rch, SPRepr *ref)
+{
+    SPTextPath *textpath = SP_TEXTPATH (object);
+
+    if (((SPObjectClass *) textpath_parent_class)->child_added)
+        ((SPObjectClass *) textpath_parent_class)->child_added (object, rch, ref);
+
+    SPObject *ochild;
+    textpath->string = NULL;
+    for ( ochild = sp_object_first_child(object) ; ochild ; ochild = SP_OBJECT_NEXT(ochild) ) {
+        if (SP_IS_STRING(ochild)) {
+            textpath->string = ochild;
+	    break;
+	}
+    }
+}
+
+
+
+/**
+ *
+ */
+static void
+sp_textpath_remove_child (SPObject *object, SPRepr *rch)
+{
+    SPTextPath *textpath = SP_TEXTPATH (object);
+
+    if (((SPObjectClass *) textpath_parent_class)->remove_child)
+        ((SPObjectClass *) textpath_parent_class)->remove_child (object, rch);
+
+    SPObject *ochild;
+    textpath->string = NULL;
+    for ( ochild = sp_object_first_child(object) ; ochild ; ochild = SP_OBJECT_NEXT(ochild) ) {
+        if (SP_IS_STRING(ochild)) {
+            textpath->string = ochild;
+	    break;
+	}
+    }
+}
+
+
+
+/**
+ *
+ */
+static void
+sp_textpath_update (SPObject *object, SPCtx *ctx, guint flags)
+{
+    SPTextPath *textpath = SP_TEXTPATH (object);
+    SPStyle *style = SP_OBJECT_STYLE (object);
+    SPItemCtx *ictx = (SPItemCtx *) ctx;
+    GList *i;
+
+		textpath->isUpdating=true;
+		if ( textpath->sourceDirty ) refresh_textpath_source(textpath);
+		textpath->isUpdating=false;
+		
+		if (((SPObjectClass *) textpath_parent_class)->update)
+        ((SPObjectClass *) textpath_parent_class)->update (object, ctx, flags);
+
+    if (flags & SP_OBJECT_MODIFIED_FLAG)
+        flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
+    flags &= SP_OBJECT_MODIFIED_CASCADE;
+
+    /* Update relative distances */
+    const double d = 1.0 / NR_MATRIX_DF_EXPANSION (&ictx->i2vp);
+    sp_text_update_length (&textpath->ly.x, style->font_size.computed, style->font_size.computed * 0.5, d);
+    sp_text_update_length (&textpath->ly.y, style->font_size.computed, style->font_size.computed * 0.5, d);
+
+    for (i = textpath->ly.dx; i != NULL; i = i->next)
+        sp_text_update_length ((SPSVGLength *) i->data, style->font_size.computed, style->font_size.computed * 0.5, d);
+    for (i = textpath->ly.dy; i != NULL; i = i->next)
+        sp_text_update_length ((SPSVGLength *) i->data, style->font_size.computed, style->font_size.computed * 0.5, d);
+
+    SPObject *ochild;
+    for ( ochild = sp_object_first_child(object) ; ochild ; ochild = SP_OBJECT_NEXT(ochild) ) {
+        if ( flags || ( ochild->uflags & SP_OBJECT_MODIFIED_FLAG )) {
+	    ochild->updateDisplay(ctx, flags);
+        }
+    }
+}
+
+
+void   refresh_textpath_source(SPTextPath* offset)
+{
+  if ( offset == NULL ) return;
+  offset->sourceDirty=false;
+  Path *orig = NULL;
+  
+  // le mauvais cas: pas d'attribut d => il faut verifier que c'est une SPShape puis prendre le contour
+  SPObject *refobj=offset->sourceObject;
+  if ( refobj == NULL ) return;
+  SPItem *item = SP_ITEM (refobj);
+  
+  SPCurve *curve=NULL;
+  if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item)) return;
+  if (SP_IS_SHAPE (item)) {
+    curve = sp_shape_get_curve (SP_SHAPE (item));
+    if (curve == NULL)
+      return;
+  }
+  if (SP_IS_TEXT (item)) {
+ 	  curve = sp_text_normalized_bpath (SP_TEXT (item));
+ 	  if (curve == NULL)
+	    return;
+  }
+  orig = new Path;
+	NR::Matrix dummy;
+	orig->LoadArtBPath(curve->bpath,dummy,false);
+  sp_curve_unref (curve);
+
+ // finalisons
+ {
+   char *orig_d = orig->svg_dump_path ();
+
+               if (offset->original) {
+                       free (offset->original);
+                       delete offset->originalPath;
+                       offset->original = NULL;
+                       offset->originalPath = NULL;
+               }
+
+               offset->original = orig_d;
+               offset->originalPath = orig;
+               offset->originalPath->ConvertWithBackData(0.5);
+ } 
+}
+
+
+/**
+ *
+ */
+static void
+sp_textpath_modified (SPObject *object, unsigned int flags)
+{
+    if (((SPObjectClass *) textpath_parent_class)->modified)
+        ((SPObjectClass *) textpath_parent_class)->modified (object, flags);
+
+    if (flags & SP_OBJECT_MODIFIED_FLAG)
+        flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
+    flags &= SP_OBJECT_MODIFIED_CASCADE;
+
+    SPObject *ochild;
+    for ( ochild = sp_object_first_child(object) ; ochild ; ochild = SP_OBJECT_NEXT(ochild) ) {
+        if (flags || (ochild->mflags & SP_OBJECT_MODIFIED_FLAG)) {
+            ochild->emitModified(flags);
+        }
+    }
+}
+
+
+
+/**
+ *
+ */
+static SPRepr *
+sp_textpath_write (SPObject *object, SPRepr *repr, guint flags)
+{
+    SPTextPath *textpath = SP_TEXTPATH (object);
+
+    if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
+        repr = sp_repr_new ("textpath");
+    }
+
+    if (textpath->ly.dx && sp_length_list_notallzeroes (textpath->ly.dx)) {
+		sp_repr_set_length_list (repr, "dx", textpath->ly.dx);
+    } else {
+		sp_repr_set_attr (repr, "dx", NULL);
+    }
+    if (textpath->ly.dy && sp_length_list_notallzeroes (textpath->ly.dy)) {
+		sp_repr_set_length_list (repr, "dy", textpath->ly.dy);
+    } else {
+		sp_repr_set_attr (repr, "dy", NULL);
+    }
+    sp_repr_set_attr (repr, "xlink:href", textpath->sourceHref);
+
+    /* TODO: we should really hand this off to SPString's own ::build */
+    if (flags & SP_OBJECT_WRITE_BUILD) {
+	SPObject *ochild;
+	for ( ochild = sp_object_first_child(SP_OBJECT(textpath)) ; ochild ; ochild = SP_OBJECT_NEXT(ochild) ) {
+	    if (SP_IS_STRING(ochild)) {
+                SPRepr *rstr;
+                /* TEXT element */
+                rstr = sp_xml_document_createTextNode (sp_repr_document (repr), SP_STRING_TEXT(SP_STRING(ochild)));
+                sp_repr_append_child (repr, rstr);
+                sp_repr_unref (rstr);
+            }
+	}
+    } else {
+	SPObject *ochild;
+	for ( ochild = sp_object_first_child(SP_OBJECT(textpath)) ; ochild ; ochild = SP_OBJECT_NEXT(ochild) ) {
+	    if (SP_IS_STRING(ochild)) {
+		sp_repr_set_content (SP_OBJECT_REPR (ochild), SP_STRING_TEXT (SP_STRING(ochild)));
+	    }
+	}
+    }
+
+    /* fixme: Strictly speaking, item class write 'transform' too */
+    /* fixme: This is harmless as long as textpath affine is identity (lauris) */
+    if (((SPObjectClass *) textpath_parent_class)->write)
+        ((SPObjectClass *) textpath_parent_class)->write (object, repr, flags);
+
+    return repr;
+}
+
+
+/**
+ *
+ */
+static void
+sp_textpath_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
+{
+    SPTextPath *textpath = SP_TEXTPATH(item);
+
+    if (textpath->string) {
+        sp_item_invoke_bbox_full(SP_ITEM(textpath->string), bbox, transform, flags, FALSE);
+    }
+}
+
+
+/**
+ *
+ */
+static NRArenaItem *
+sp_textpath_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags)
+{
+    SPTextPath *textpath = SP_TEXTPATH (item);
+
+    if (textpath->string) {
+        NRArenaItem *ai, *ac;
+        ai = NRArenaGroup::create(arena);
+        nr_arena_group_set_transparent (NR_ARENA_GROUP (ai), FALSE);
+        ac = sp_item_invoke_show (SP_ITEM (textpath->string), arena, key, flags);
+        if (ac) {
+            nr_arena_item_add_child (ai, ac, NULL);
+            nr_arena_item_unref (ac);
+        }
+        return ai;
+    }
+
+    return NULL;
+}
+
+
+/**
+ *
+ */
+static void
+sp_textpath_hide (SPItem *item, unsigned int key)
+{
+    SPTextPath *textpath = SP_TEXTPATH (item);
+
+    if (textpath->string)
+        sp_item_invoke_hide (SP_ITEM (textpath->string), key);
+
+    if (((SPItemClass *) textpath_parent_class)->hide)
+        ((SPItemClass *) textpath_parent_class)->hide (item, key);
+}
+
+
+/**
+ *
+ */
+static void
+sp_textpath_set_shape (SPTextPath *textpath, SPLayoutData */*ly*/, NR::Point &cp, gboolean /*firstline*/, gboolean *inspace)
+{
+    sp_string_set_shape (SP_STRING (textpath->string), &textpath->ly, cp, inspace,textpath->originalPath);
 }
 
 
@@ -1640,10 +2269,10 @@ sp_text_build (SPObject *object, SPDocument *doc, SPRepr *repr)
         next = SP_OBJECT_NEXT(ochild);
         if (SP_IS_STRING(ochild)) {
 	    SP_STRING(ochild)->ly = &text->ly;
-        } else if (!SP_IS_TSPAN(ochild)) {
-	    /* at present we don't know what to do with non-tspan children */
-            sp_object_detach_unref(object, ochild);
-	}
+        } else if (!SP_IS_TSPAN(ochild) && !SP_IS_TEXTPATH(ochild)) {
+					/* at present we don't know what to do with non-tspan children */
+					sp_object_detach_unref(object, ochild);
+				}
     }
 
     sp_text_update_immediate_state (text);
@@ -1724,7 +2353,7 @@ sp_text_child_added (SPObject *object, SPRepr *rch, SPRepr *ref)
         if (SP_IS_STRING(ochild)) {
 	    SPString *string=SP_STRING(ochild);
             string->ly = &text->ly;
-	} else if (!SP_IS_TSPAN(ochild)) {
+				} else if (!SP_IS_TSPAN(ochild)&& !SP_IS_TEXTPATH(ochild)) {
             /* ugly, but right now SPText assumes it won't have any non-tspan children :/ */
 	    sp_object_detach_unref(object, ochild);
 	    ochild = NULL;
@@ -1879,6 +2508,9 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
             if (SP_IS_TSPAN (child)) {
                 crepr = child->updateRepr(NULL, flags);
                 if (crepr) l = g_slist_prepend (l, crepr);
+            } else if (SP_IS_TEXTPATH (child)) {
+							crepr = child->updateRepr(NULL, flags);
+							if (crepr) l = g_slist_prepend (l, crepr);
             } else {
                 crepr = sp_xml_document_createTextNode (sp_repr_document (repr), SP_STRING_TEXT (child));
             }
@@ -1892,6 +2524,8 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
         for (child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
             if (SP_IS_TSPAN (child)) {
                 child->updateRepr(flags);
+            } else if (SP_IS_TEXTPATH (child)) {
+							child->updateRepr(flags);
             } else {
                 sp_repr_set_content (SP_OBJECT_REPR (child), SP_STRING_TEXT (child));
             }
@@ -2068,7 +2702,12 @@ sp_text_set_shape (SPText *text)
                 /* Error */
                 break;
             }
-        } else {
+        } else if ( SP_IS_TEXTPATH(child) ) {
+					SPTextPath *textpath;
+					/* fixme: Maybe break this up into 2 pieces - relayout and set shape (Lauris) */
+					textpath = SP_TEXTPATH (child);
+					string = SP_TEXTPATH_STRING (textpath);
+				} else {
             string = SP_STRING (child);
         }
         /* Calculate block bbox */
@@ -2092,6 +2731,10 @@ sp_text_set_shape (SPText *text)
                     break;
 
                 string = SP_TSPAN_STRING (tspan);
+            } else if (SP_IS_TEXTPATH (next)) {
+							SPTextPath *textpath;
+							textpath = SP_TEXTPATH (next);
+							string = SP_TEXTPATH_STRING (textpath);
             } else {
                 string = SP_STRING (next);
             }
@@ -2128,12 +2771,17 @@ sp_text_set_shape (SPText *text)
         /* Set child shapes */
         for (next = child; (next != NULL) && (next != spnew); next = next->next) {
             if (SP_IS_STRING (next)) {
-                sp_string_set_shape (SP_STRING (next), &text->ly, cp, &inspace);
-            } else {
-                SPTSpan *tspan;
-                tspan = SP_TSPAN (next);
-
-                sp_tspan_set_shape (tspan, &text->ly, cp, isfirstline, &inspace);
+                sp_string_set_shape (SP_STRING (next), &text->ly, cp, &inspace,NULL);
+            } else if (SP_IS_TSPAN(next) ) {
+							SPTSpan *tspan;
+							tspan = SP_TSPAN (next);
+							
+							sp_tspan_set_shape (tspan, &text->ly, cp, isfirstline, &inspace);
+            } else if (SP_IS_TEXTPATH(next) ) {
+							SPTextPath *textpath;
+							textpath = SP_TEXTPATH (next);
+							
+							sp_textpath_set_shape (textpath, &text->ly, cp, isfirstline, &inspace);
             }
         }
         child = next;
@@ -2147,7 +2795,9 @@ sp_text_set_shape (SPText *text)
         SPString *string;
         if (SP_IS_TSPAN (child)) {
             string = SP_TSPAN_STRING (child);
-        } else {
+        } else if (SP_IS_TEXTPATH (child)) {
+					string = SP_TEXTPATH_STRING (child);
+				} else {
             string = SP_STRING (child);
         }
         sp_chars_set_paintbox (SP_CHARS (string), &paintbox);
@@ -2190,20 +2840,33 @@ sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
     text->ly.y = pos[NR::Y];
 
     for (SPObject *child = sp_object_first_child(SP_OBJECT(text)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) { 
-        if (SP_IS_TSPAN (child)) {
-            SPTSpan *tspan;
-            tspan = SP_TSPAN (child);
-            if (tspan->ly.x.set || tspan->ly.y.set) {
-		double x, y;
-                x = (tspan->ly.x.set) ? tspan->ly.x.computed : text->ly.x.computed;
-                y = (tspan->ly.y.set) ? tspan->ly.y.computed : text->ly.y.computed;
-		pos = NR::Point(x, y) * xform * p2i;
-		tspan->ly.x = pos[NR::X];
-		tspan->ly.y = pos[NR::Y];
-
-		SP_OBJECT(tspan)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
-            }
-        }
+			if (SP_IS_TSPAN (child)) {
+				SPTSpan *tspan;
+				tspan = SP_TSPAN (child);
+				if (tspan->ly.x.set || tspan->ly.y.set) {
+					double x, y;
+					x = (tspan->ly.x.set) ? tspan->ly.x.computed : text->ly.x.computed;
+					y = (tspan->ly.y.set) ? tspan->ly.y.computed : text->ly.y.computed;
+					pos = NR::Point(x, y) * xform * p2i;
+					tspan->ly.x = pos[NR::X];
+					tspan->ly.y = pos[NR::Y];
+					
+					SP_OBJECT(tspan)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+				}
+			}
+			if (SP_IS_TEXTPATH (child)) {
+				SPTextPath *textpath=SP_TEXTPATH (child);
+				if (textpath->ly.x.set || textpath->ly.y.set) {
+					double x, y;
+					x = (textpath->ly.x.set) ? textpath->ly.x.computed : text->ly.x.computed;
+					y = (textpath->ly.y.set) ? textpath->ly.y.computed : text->ly.y.computed;
+					pos = NR::Point(x, y) * xform * p2i;
+					textpath->ly.x = pos[NR::X];
+					textpath->ly.y = pos[NR::Y];
+					
+					SP_OBJECT(textpath)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+				}
+			}
     }
 
     SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
@@ -2238,6 +2901,8 @@ sp_text_print (SPItem *item, SPPrintContext *ctx)
       for (SPObject *ch = sp_object_first_child(SP_OBJECT(text)) ; ch != NULL ; ch = SP_OBJECT_NEXT(ch) ) {
         if (SP_IS_TSPAN (ch)) {
 	  sp_chars_do_print (SP_CHARS (SP_TSPAN (ch)->string), ctx, &ctm, &pbox, &dbox, &bbox);
+        } else if (SP_IS_TEXTPATH (ch)) {
+					sp_chars_do_print (SP_CHARS (SP_TEXTPATH (ch)->string), ctx, &ctm, &pbox, &dbox, &bbox);
         } else if (SP_IS_STRING (ch)) {
 	  sp_chars_do_print (SP_CHARS (ch), ctx, &ctm, &pbox, &dbox, &bbox);
         }
@@ -2252,6 +2917,8 @@ sp_text_print (SPItem *item, SPPrintContext *ctx)
 	  s = SP_STRING(ch);
 	} else if (SP_IS_TSPAN (ch)) {
 	  s = SP_STRING(SP_TSPAN(ch)->string);
+	} else if (SP_IS_TEXTPATH (ch)) {
+	  s = SP_STRING(SP_TEXTPATH(ch)->string);
 	}
 
 	if (s && strlen(s->text) > 0) {
@@ -2299,6 +2966,11 @@ sp_text_get_string_multiline (SPText *text)
             if (tspan->string && SP_STRING (tspan->string)->text) {
                 strs = g_slist_prepend (strs, SP_STRING (tspan->string)->text);
             }
+        } else if (SP_IS_TEXTPATH (ch)) {
+					SPTextPath *textpath = SP_TEXTPATH (ch);
+					if (textpath->string && SP_STRING (textpath->string)->text) {
+						strs = g_slist_prepend (strs, SP_STRING (textpath->string)->text);
+					}
         } else if (SP_IS_STRING (ch) && SP_STRING (ch)->text) {
             strs = g_slist_prepend (strs, SP_STRING (ch)->text);
         } else {
@@ -2398,9 +3070,13 @@ sp_text_normalized_bpath (SPText *text)
         if (SP_IS_STRING (child)) {
             c = sp_chars_normalized_bpath (SP_CHARS (child));
         } else if (SP_IS_TSPAN (child)) {
-            SPTSpan *tspan;
-            tspan = SP_TSPAN (child);
-            c = sp_chars_normalized_bpath (SP_CHARS (tspan->string));
+					SPTSpan *tspan;
+					tspan = SP_TSPAN (child);
+					c = sp_chars_normalized_bpath (SP_CHARS (tspan->string));
+        } else if (SP_IS_TEXTPATH (child)) {
+					SPTextPath *textpath;
+					textpath = SP_TEXTPATH (child);
+					c = sp_chars_normalized_bpath (SP_CHARS (textpath->string));
         } else {
             c = NULL;
         }
@@ -2437,6 +3113,8 @@ sp_text_update_immediate_state (SPText *text)
         SPString *string;
         if (SP_IS_TSPAN (child)) {
             string = SP_TSPAN_STRING (child);
+        } else if (SP_IS_TEXTPATH (child)) {
+					string = SP_TEXTPATH_STRING (child);
         } else {
             string = SP_STRING (child);
         }
@@ -2482,8 +3160,10 @@ sp_text_get_length (SPText *text)
     SPString *string;
     if (SP_IS_STRING (child)) {
         string = SP_STRING (child);
+    } else if ( SP_IS_TEXTPATH(child) ) {
+			string = SP_TEXTPATH_STRING (child);
     } else {
-        string = SP_TSPAN_STRING (child);
+			string = SP_TSPAN_STRING (child);
     }
 
     return string->start + string->length;

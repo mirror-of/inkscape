@@ -49,7 +49,6 @@
 #include "livarot/LivarotDefs.h"
 
 Path   *Path_for_item (SPItem * item,bool doTransformation, bool transformFull = true);
-gchar  *liv_svg_dump_path (Path * path);
 SPRepr *LCA (SPRepr * a, SPRepr * b);
 bool   Ancetre (SPRepr * a, SPRepr * who);
 SPRepr *AncetreFils (SPRepr * a, SPRepr * d);
@@ -469,7 +468,7 @@ sp_selected_path_boolop (bool_op bop)
 
         // add all the pieces resulting from cut or slice
         for (int i=0;i<nbRP;i++) {
-            gchar *d = liv_svg_dump_path (resPath[i]);
+            gchar *d = resPath[i]->svg_dump_path ();
       
             SPRepr *repr = sp_repr_new ("path");
             sp_repr_set_attr (repr, "style", style);
@@ -507,7 +506,7 @@ sp_selected_path_boolop (bool_op bop)
         if ( resPath ) free(resPath);
 
     } else {
-        gchar *d = liv_svg_dump_path (res);
+        gchar *d = res->svg_dump_path ();
 
         SPRepr *repr = sp_repr_new ("path");
         sp_repr_set_attr (repr, "style", style);
@@ -711,7 +710,7 @@ sp_selected_path_outline ()
      
             sp_repr_css_attr_unref (ncss);
 
-            gchar *str = liv_svg_dump_path (orig);
+            gchar *str = orig->svg_dump_path ();
             sp_repr_set_attr (repr, "d", str);
             g_free (str);
 
@@ -980,7 +979,7 @@ sp_selected_path_create_offset_object (int expand,bool updating)
             sp_repr_set_double (repr, "inkscape:radius",  0);
         }
 
-        str = liv_svg_dump_path (res);
+        str = res->svg_dump_path ();
         sp_repr_set_attr (repr, "inkscape:original", str);
         g_free (str);
     
@@ -1232,7 +1231,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 
             sp_repr_set_attr (repr, "style", style);
 
-            gchar *str = liv_svg_dump_path (res);
+            gchar *str = res->svg_dump_path ();
             sp_repr_set_attr (repr, "d", str);
             g_free (str);
 
@@ -1364,7 +1363,7 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
 
             sp_repr_set_attr (repr, "style", style);
 
-            gchar *str = liv_svg_dump_path (orig);
+            gchar *str = orig->svg_dump_path ();
             sp_repr_set_attr (repr, "d", str);
             g_free (str);
 
@@ -1529,66 +1528,6 @@ Path_for_item (SPItem * item, bool doTransformation, bool transformFull)
     }
     return dest;
 }
-
-gchar *
-liv_svg_dump_path (Path * path)
-{
-    Inkscape::SVGOStringStream os;
-  
-    for (int i = 0; i < path->descr_nb; i++)
-    {
-        Path::path_descr theD = path->descr_cmd[i];
-        int typ = theD.flags & descr_type_mask;
-        if (typ == descr_moveto)
-        {
-            Path::path_descr_moveto*  nData=(Path::path_descr_moveto*)(path->descr_data+theD.dStart);
-            os << "M " << nData->p[0] << " " << nData->p[1] << " ";
-        }
-        else if (typ == descr_lineto)
-        {
-            Path::path_descr_lineto*  nData=(Path::path_descr_lineto*)(path->descr_data+theD.dStart);
-            os << "L " << nData->p[0] << " " << nData->p[1] << " ";
-        }
-        else if (typ == descr_cubicto)
-        {
-            Path::path_descr_cubicto*  nData=(Path::path_descr_cubicto*)(path->descr_data+theD.dStart);
-            float lastX, lastY;
-            {
-                NR::Point tmp = path->PrevPoint (i - 1);
-                lastX=tmp[0];
-                lastY=tmp[1];
-            }
-            os << "C " << lastX + nData->stD[0] / 3 << " "
-               << lastY + nData->stD[1] / 3 << " "
-               << nData->p[0] - nData->enD[0] / 3 << " "
-               << nData->p[1] - nData->enD[1] / 3 << " "
-               << nData->p[0] << " "
-               << nData->p[1] << " ";
-	}
-        else if (typ == descr_arcto)
-        {
-            Path::path_descr_arcto*  nData=(Path::path_descr_arcto*)(path->descr_data+theD.dStart);
-            os << "A " << nData->rx << " "
-               << nData->ry << " "
-               << nData->angle << " "
-               << ((nData->large) ? "1" : "0") << " "
-               << ((nData->clockwise) ? "0" : "1") << " "
-               << nData->p[NR::X] << " "
-               << nData->p[NR::Y] << " ";
-        }
-        else if (typ == descr_close)
-        {
-            os << "z ";
-        }
-        else
-        {
-        }
-    }
-  
-    return g_strdup (os.str().c_str());
-
-}
-
 
 /*
   Local Variables:

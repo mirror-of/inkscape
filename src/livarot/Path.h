@@ -298,7 +298,9 @@ public:
   void             ConvertPositionsToMoveTo(int nbPos,cut_position* poss);
   void             ConvertPositionsToForced(int nbPos,cut_position* poss);
 
-    void  Affiche(void);
+  void  Affiche(void);
+  char *svg_dump_path ();
+
 private:
     // path storage primitives
   void AlloueDCmd (int addNb);

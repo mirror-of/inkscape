@@ -113,6 +113,7 @@ sp_object_type_lookup (const gchar * name)
 		g_hash_table_insert (dtable, (void *)"text", GINT_TO_POINTER (SP_TYPE_TEXT));
 		g_hash_table_insert (dtable, (void *)"tspan", GINT_TO_POINTER (SP_TYPE_TSPAN));
 		g_hash_table_insert (dtable, (void *)"use", GINT_TO_POINTER (SP_TYPE_USE));
+		g_hash_table_insert (dtable, (void *)"textPath", GINT_TO_POINTER (SP_TYPE_TEXTPATH));		
 		g_hash_table_insert (dtable, (void *)"flowDiv", GINT_TO_POINTER (SP_TYPE_FLOWDIV));
 		g_hash_table_insert (dtable, (void *)"flowSpan", GINT_TO_POINTER (SP_TYPE_FLOWTSPAN));
 		g_hash_table_insert (dtable, (void *)"flowPara", GINT_TO_POINTER (SP_TYPE_FLOWPARA));

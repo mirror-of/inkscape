@@ -466,60 +466,6 @@ bpath_to_liv_path (NArtBpath * bpath)
   return dest;
 }
 
-// write the livarot Path into a "d" element to be placed in the xml
-gchar *
-liv_svg_dump_path2 (Path * path)
-{
-  Inkscape::SVGOStringStream os; 
- 
-  for (int i = 0; i < path->descr_nb; i++)
-  {
-    Path::path_descr theD = path->descr_cmd[i];
-    int typ = theD.flags & descr_type_mask;
-    if (typ == descr_moveto)
-    {
-      Path::path_descr_moveto*  nData=(Path::path_descr_moveto*)(path->descr_data+theD.dStart);
-      os << "M " << nData->p[0] << " " << nData->p[1] << " ";
-    }
-    else if (typ == descr_lineto)
-    {
-      Path::path_descr_lineto*  nData=(Path::path_descr_lineto*)(path->descr_data+theD.dStart);
-      os << "L " << nData->p[0] << " " << nData->p[1] << " ";
-    }
-    else if (typ == descr_cubicto)
-    {
-      Path::path_descr_cubicto*  nData=(Path::path_descr_cubicto*)(path->descr_data+theD.dStart);
-      float lastX, lastY;
-      {
-        NR::Point tmp = path->PrevPoint (i - 1);
-        lastX=tmp[0];
-        lastY=tmp[1];
-      }
-		os << "C " 
-			<< lastX + nData->stD[0] / 3 << " "
-			<< lastY + nData->stD[1] / 3 << " "
-			<< nData->p[0] - nData->enD[0] / 3 << " "
-			<< nData->p[1] - nData->enD[1] / 3 << " "
-			<< nData->p[0] << " " << nData->p[1] << " ";
-    }
-    else if (typ == descr_arcto)
-    {
-      Path::path_descr_arcto*  nData=(Path::path_descr_arcto*)(path->descr_data+theD.dStart);
-		os << "A " << nData->rx << " " << nData->ry << " " << nData->angle << " "
-			<< ((nData->large) ? "1" : "0") << " " << ((nData->clockwise) ? "0" : "1") << " "
-			<< nData->p[0] << " " << nData->p[1] << " ";
-    }
-    else if (typ == descr_close)
-    {
-		os << "z ";
-    }
-    else
-    {
-    }
-  }
-  
-  return g_strdup(os.str().c_str());
-}
 
 static void
 sp_offset_set_shape (SPShape * shape)
@@ -789,7 +735,7 @@ sp_offset_set_shape (SPShape * shape)
     else
     {
       
-      res_d = liv_svg_dump_path2 (orig);
+      res_d = orig->svg_dump_path ();
     } 
     delete orig;
     
@@ -1054,25 +1000,25 @@ sp_offset_top_point (SPOffset * offset, NR::Point *px)
 // the listening functions
 static void sp_offset_start_listening(SPOffset *offset,SPObject* to)
 {
-	if ( to == NULL ) return;	
+	if ( to == NULL ) 
+		return;
+
 	offset->sourceObject = to;
 	offset->sourceRepr = SP_OBJECT_REPR(to);
-//	if (offset->sourceRepr) {
-//		sp_repr_add_listener (offset->sourceRepr, &offset_source_event_vector, offset);
-//	}
+
 	offset->_delete_connection = SP_OBJECT(to)->connectDelete(sigc::bind(sigc::ptr_fun(&sp_offset_delete_self), offset));
 	offset->_transformed_connection = SP_ITEM(to)->connectTransformed(sigc::bind(sigc::ptr_fun(&sp_offset_move_compensate), offset));
 	offset->_modified_connection = g_signal_connect (G_OBJECT (to), "modified", G_CALLBACK (sp_offset_source_modified), offset);
 }
 static void sp_offset_quit_listening(SPOffset *offset)
 {
-	if ( offset->sourceObject == NULL )  return;
+	if ( offset->sourceObject == NULL )  
+		return;
+
 	g_signal_handler_disconnect (offset->sourceObject, offset->_modified_connection);
 	offset->_delete_connection.disconnect();
 	offset->_transformed_connection.disconnect();
-//	if ( offset->sourceRepr ) {
-//		sp_repr_remove_listener_by_data (offset->sourceRepr, offset);
-//	}
+
 	offset->sourceRepr = NULL;
 	offset->sourceObject = NULL;
 }
@@ -1204,7 +1150,7 @@ void   refresh_offset_source(SPOffset* offset)
     delete theShape;
     delete theRes;
     
-    char *res_d = liv_svg_dump_path2 (res);
+    char *res_d = res->svg_dump_path ();
     delete res;
     delete orig;
     
