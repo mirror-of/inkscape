@@ -1,7 +1,7 @@
 
 =head1 NAME
 
-B<Inkscape> - a 2D vector graphics editing program.
+Inkscape - a 2D vector graphics editing program.
 
 =head1 SYNOPSIS
 
