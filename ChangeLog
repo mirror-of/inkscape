@@ -1,3 +1,13 @@
+2004-10-25  Bryce Harringotn <bryce@bryceharrington.org>
+
+	* file.cpp, file.h, dialogs/export.cpp: Adding error return logic
+	  for png export code so that failure to write can be tracked.
+	  Adding an error dialog for when this occurs.  Fixes bug 1038932. 
+
+	* extension/system.cpp:  Changing sp_ui_error_dialog to g_warning
+ 	  so won't crash when running from commandline.  Fixes bug
+	  1000350. 
+
 2004-10-26  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/livarot/PathCutting.cpp: fix a couple of bugs that I
@@ -17,7 +27,6 @@
 	src/helper/png-write.cpp, src/trace/imagemap.cpp, src/xml/repr-io.cpp:
 
 	Refactoring filenames and file opening
-
 
 2004-10-24  MenTaLguY  <mental@rydia.net>
 
