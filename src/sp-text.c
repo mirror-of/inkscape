@@ -61,7 +61,7 @@ static void sp_string_read_content (SPObject *object);
 static void sp_string_update (SPObject *object, SPCtx *ctx, unsigned int flags);
 
 static void sp_string_calculate_dimensions (SPString *string);
-static void sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean inspace);
+static void sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean *inspace);
 
 static SPCharsClass *string_parent_class;
 
@@ -106,13 +106,13 @@ sp_string_class_init (SPStringClass *classname)
 static void
 sp_string_init (SPString *string)
 {
-	string->text = NULL;
+	/*	string->text = NULL;
 	string->p = NULL;
 	string->start = 0;
 	string->length = 0;
 	string->bbox.x0 = string->bbox.y0 = 0.0;
 	string->bbox.x1 = string->bbox.y1 = 0.0;
-	string->advance.x = string->advance.y = 0.0;
+	string->advance.x = string->advance.y = 0.0;*/
 }
 
 static void
@@ -214,14 +214,13 @@ sp_string_calculate_dimensions (SPString *string)
 		spadv.y = 0.0;
 	}
 	spglyph = nr_typeface_lookup_default (face, ' ');
-	if (spglyph > 0) {
-		nr_font_glyph_advance_get (font, spglyph, &spadv);
-	}
+	nr_font_glyph_advance_get (font, spglyph, &spadv);
 
 	if (string->text) {
 		const gchar *p;
-		gboolean inspace, intext;
+		gboolean preserve, inspace, intext;
 
+		preserve = (((SPObject*)string)->xml_space.value == SP_XML_SPACE_PRESERVE);
 		inspace = FALSE;
 		intext = FALSE;
 
@@ -230,8 +229,12 @@ sp_string_calculate_dimensions (SPString *string)
 			
 			unival = g_utf8_get_char (p);
 
-			if (unival == ' ') {
-				if (intext) inspace = TRUE;
+			if (g_unichar_isspace (unival) && (unival != g_utf8_get_char ("\302\240"))) { // space but not non-break space
+				if (preserve) {
+					string->advance.x += spadv.x;
+					string->advance.y -= spadv.y;
+				}
+				if (unival != '\n' && unival != '\r') inspace = TRUE;
 			} else {
 				NRRectF bbox;
 				NRPointF adv;
@@ -239,7 +242,7 @@ sp_string_calculate_dimensions (SPString *string)
 
 				glyph = nr_typeface_lookup_default (face, unival);
 
-				if (inspace) {
+				if (!preserve && inspace && intext) {
 					string->advance.x += spadv.x;
 					string->advance.y -= spadv.y;
 					inspace = FALSE;
@@ -255,6 +258,7 @@ sp_string_calculate_dimensions (SPString *string)
 					string->advance.x += adv.x;
 					string->advance.y -= adv.y;
 				}
+				inspace = FALSE;
 				intext = TRUE;
 			}
 		}
@@ -263,7 +267,7 @@ sp_string_calculate_dimensions (SPString *string)
 	nr_font_unref (font);
 	nr_typeface_unref (face);
 
-	if (art_drect_empty (&string->bbox)) {
+	if (nr_rect_f_test_empty (&string->bbox)) {
 		string->bbox.x0 = string->bbox.y0 = 0.0;
 		string->bbox.x1 = string->bbox.y1 = 0.0;
 	}
@@ -273,7 +277,7 @@ sp_string_calculate_dimensions (SPString *string)
 /* fixme: Should values be parsed by parent? */
 
 static void
-sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean inspace)
+sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean *pinspace)
 {
 	SPChars *chars;
 	SPStyle *style;
@@ -284,6 +288,8 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean 
 	gdouble x, y;
 	NRMatrixF a;
 	const gchar *p;
+	gboolean preserve;
+	gboolean inspace;
 	gboolean intext;
 	gint len, pos;
 	unsigned int metrics;
@@ -318,9 +324,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean 
 		spadv.y = 0.0;
 	}
 	spglyph = nr_typeface_lookup_default (face, ' ');
-	if (spglyph > 0) {
-		nr_font_glyph_advance_get (font, spglyph, &spadv);
-	}
+	nr_font_glyph_advance_get (font, spglyph, &spadv);
 
 	/* fixme: Find a way how to manipulate these */
 	x = cp->x;
@@ -330,10 +334,13 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean 
 	nr_matrix_f_set_scale (&a, 1.0, -1.0);
 
 	intext = FALSE;
+	preserve = (((SPObject*)string)->xml_space.value == SP_XML_SPACE_PRESERVE);
+	inspace = pinspace ? *pinspace : FALSE;
 	pos = 0;
 	for (p = string->text; p && *p; p = g_utf8_next_char (p)) {
 		gunichar unival;
-		if (inspace) {
+               if (!preserve && inspace && intext) {
+                       /* SP_XML_SPACE_DEFAULT */
 			string->p[pos].x = x + spadv.x;
 			string->p[pos].y = y - spadv.y;
 		} else {
@@ -341,18 +348,21 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean 
 			string->p[pos].y = y;
 		}
 		unival = g_utf8_get_char (p);
-		if (unival == ' ') {
-			if (intext) inspace = TRUE;
+             if (g_unichar_isspace(unival) && (unival != g_utf8_get_char ("\302\240"))) { // space but not non-break space
+                       if (preserve) {
+                               x += spadv.x;
+                               y -= spadv.y;
+                       }
+                       if (unival != '\n' && unival != '\r') inspace = TRUE;
 		} else {
 			NRPointF adv;
 			gint glyph;
 
 			glyph = nr_typeface_lookup_default (face, unival);
 
-			if (inspace) {
+			if (!preserve && inspace && intext) {
 				x += spadv.x;
 				y -= spadv.y;
-				inspace = FALSE;
 			}
 
 			a.c[4] = x;
@@ -363,6 +373,7 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean 
 				x += adv.x;
 				y -= adv.y;
 			}
+			inspace = FALSE;
 			intext = TRUE;
 		}
 		pos += 1;
@@ -371,16 +382,13 @@ sp_string_set_shape (SPString *string, SPLayoutData *ly, ArtPoint *cp, gboolean 
 	nr_font_unref (font);
 	nr_typeface_unref (face);
 
-	if (inspace) {
-		string->p[pos].x = x + spadv.x;
-		string->p[pos].y = y - spadv.y;
-	} else {
-		string->p[pos].x = x;
-		string->p[pos].y = y;
-	}
+	string->p[pos].x = x;
+	string->p[pos].y = y;
 
 	cp->x = x;
 	cp->y = y;
+
+	if (pinspace) *pinspace = inspace;
 }
 
 /* SPTSpan */
@@ -401,7 +409,7 @@ static void sp_tspan_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transfo
 static NRArenaItem *sp_tspan_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_tspan_hide (SPItem *item, unsigned int key);
 
-static void sp_tspan_set_shape (SPTSpan *tspan, SPLayoutData *ly, ArtPoint *cp, gboolean firstline, gboolean inspace);
+static void sp_tspan_set_shape (SPTSpan *tspan, SPLayoutData *ly, ArtPoint *cp, gboolean firstline, gboolean *inspace);
 
 static SPItemClass *tspan_parent_class;
 
@@ -475,6 +483,13 @@ sp_tspan_build (SPObject *object, SPDocument *doc, SPRepr *repr)
 	if (((SPObjectClass *) tspan_parent_class)->build)
 		((SPObjectClass *) tspan_parent_class)->build (object, doc, repr);
 
+	sp_object_read_attr (object, "x");
+	sp_object_read_attr (object, "y");
+	sp_object_read_attr (object, "dx");
+	sp_object_read_attr (object, "dy");
+	sp_object_read_attr (object, "rotate");
+	sp_object_read_attr (object, "sodipodi:role");
+
 	for (rch = repr->children; rch != NULL; rch = rch->next) {
 		if (rch->type == SP_XML_TEXT_NODE) break;
 	}
@@ -489,13 +504,6 @@ sp_tspan_build (SPObject *object, SPDocument *doc, SPRepr *repr)
 	tspan->string = sp_object_attach_reref (object, SP_OBJECT (string), NULL);
 	string->ly = &tspan->ly;
 	sp_object_invoke_build (tspan->string, doc, rch, SP_OBJECT_IS_CLONED (object));
-
-	sp_object_read_attr (object, "x");
-	sp_object_read_attr (object, "y");
-	sp_object_read_attr (object, "dx");
-	sp_object_read_attr (object, "dy");
-	sp_object_read_attr (object, "rotate");
-	sp_object_read_attr (object, "sodipodi:role");
 }
 
 static void
@@ -745,7 +753,7 @@ sp_tspan_hide (SPItem *item, unsigned int key)
 }
 
 static void
-sp_tspan_set_shape (SPTSpan *tspan, SPLayoutData *ly, ArtPoint *cp, gboolean firstline, gboolean inspace)
+sp_tspan_set_shape (SPTSpan *tspan, SPLayoutData *ly, ArtPoint *cp, gboolean firstline, gboolean *inspace)
 {
 	SPStyle *style;
 
@@ -766,6 +774,7 @@ static void sp_text_child_added (SPObject *object, SPRepr *rch, SPRepr *ref);
 static void sp_text_remove_child (SPObject *object, SPRepr *rch);
 static void sp_text_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_text_modified (SPObject *object, guint flags);
+static unsigned int sp_text_sequence (SPObject *object, SPObject *target, unsigned int *seq);
 static SPRepr *sp_text_write (SPObject *object, SPRepr *repr, guint flags);
 
 static void sp_text_bbox (SPItem *item, NRRectF *bbox, const NRMatrixD *transform, unsigned int flags);
@@ -858,8 +867,15 @@ sp_text_build (SPObject *object, SPDocument *doc, SPRepr *repr)
 
 	if (((SPObjectClass *) text_parent_class)->build)
 		((SPObjectClass *) text_parent_class)->build (object, doc, repr);
+	sp_object_read_attr (object, "x");
+	sp_object_read_attr (object, "y");
+	sp_object_read_attr (object, "dx");
+	sp_object_read_attr (object, "dy");
+	sp_object_read_attr (object, "rotate");
+	sp_object_read_attr (object, "sodipodi:linespacing");
 
 	version = sp_object_get_sodipodi_version (object);
+
 	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
 		const gchar *content;
 		for (rch = repr->children; rch != NULL; rch = rch->next) {
@@ -899,14 +915,6 @@ sp_text_build (SPObject *object, SPDocument *doc, SPRepr *repr)
 			continue;
 		}
 	}
-
-	/* We can safely set these after building tree, as modified is scheduled anyways (Lauris) */
-	sp_object_read_attr (object, "x");
-	sp_object_read_attr (object, "y");
-	sp_object_read_attr (object, "dx");
-	sp_object_read_attr (object, "dy");
-	sp_object_read_attr (object, "rotate");
-	sp_object_read_attr (object, "sodipodi:linespacing");
 
 	sp_text_update_immediate_state (text);
 }
@@ -1369,7 +1377,7 @@ sp_text_set_shape (SPText *text)
 {
 	ArtPoint cp;
 	SPObject *child;
-	gboolean isfirstline, haslast, lastwastspan;
+	gboolean isfirstline, inspace;
 	NRRectF paintbox;
 
 	/* The logic should be: */
@@ -1380,8 +1388,7 @@ sp_text_set_shape (SPText *text)
 	cp.y = text->ly.y.computed;
 
 	isfirstline = TRUE;
-	haslast = FALSE;
-	lastwastspan = FALSE;
+	inspace = FALSE;
 
 	child = text->children;
 	while (child != NULL) {
@@ -1494,17 +1501,13 @@ sp_text_set_shape (SPText *text)
 		/* Set child shapes */
 		for (next = child; (next != NULL) && (next != spnew); next = next->next) {
 			if (SP_IS_STRING (next)) {
-				sp_string_set_shape (SP_STRING (next), &text->ly, &cp, haslast);
-				haslast = TRUE;
-				lastwastspan = FALSE;
+				sp_string_set_shape (SP_STRING (next), &text->ly, &cp, &inspace);
 			} else {
 				SPTSpan *tspan;
 				tspan = SP_TSPAN (next);
 				if (tspan->ly.dx.set) cp.x += tspan->ly.dx.computed;
 				if (tspan->ly.dy.set) cp.y += tspan->ly.dy.computed;
-				sp_tspan_set_shape (tspan, &text->ly, &cp, isfirstline, haslast && !lastwastspan);
-				haslast = TRUE;
-				lastwastspan = TRUE;
+				sp_tspan_set_shape (tspan, &text->ly, &cp, isfirstline, &inspace);
 			}
 		}
 		child = next;
@@ -1559,7 +1562,6 @@ sp_text_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *t)
 	NRMatrixF i2p, p2i;
 	gdouble px, py, x, y;
 	SPObject *child;
-	gchar c[80];
 
 	text = SP_TEXT (item);
 
@@ -1592,11 +1594,12 @@ sp_text_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *t)
 		}
 	}
 
-	if (sp_svg_transform_write (c, 80, &i2p)) {
+	/*	if (sp_svg_transform_write (c, 80, &i2p)) {
 		sp_repr_set_attr (repr, "transform", c);
 	} else {
 		sp_repr_set_attr (repr, "transform", NULL);
-	}
+		}*/
+	*t = i2p;
 }
 
 static void
@@ -1997,6 +2000,7 @@ sp_text_insert (SPText *text, gint pos, const gchar *utf8, gboolean preservews)
 	SPString *string;
 	gchar *spnew, *ip;
 	int slen, ulen, i;
+	gunichar u; 
 
 	g_return_val_if_fail (text != NULL, -1);
 	g_return_val_if_fail (SP_IS_TEXT (text), -1);
@@ -2005,26 +2009,36 @@ sp_text_insert (SPText *text, gint pos, const gchar *utf8, gboolean preservews)
 	if (!utf8) return pos;
 	if (!*utf8) return pos;
 
+	u = g_utf8_get_char (utf8);
+	if (u == (gunichar) -1) {
+		g_warning ("Bad UTF-8 character");
+		return pos;
+	}
+	if (!g_unichar_isprint (u)) {
+		g_warning ("Non-printable character");
+		return pos;
+	}
+
 	child = sp_text_get_child_by_position (text, pos);
 	if (!child) return sp_text_append (text, utf8);
 	string = SP_TEXT_CHILD_STRING (child);
 
 	ip = g_utf8_offset_to_pointer (string->text, pos - string->start);
+
 	/* fixme: Do it the right way (Lauris) */
+	// perhaps this can be removed now, as well as the preservews argument, as we now have xml:space support
 	if (!preservews && !strcmp (utf8, " ") && (ip > string->text) && *(ip - 1) == ' ') {
 		return pos;
 	}
 
 	slen = ip - string->text;
 	ulen = strlen (utf8);
+
 	spnew = g_new (gchar, strlen (string->text) + ulen + 1);
 	/* Copy start */
 	memcpy (spnew, string->text, slen);
-	/* Copy string */
+	/* Copy insertion */
 	memcpy (spnew + slen, utf8, ulen);
-	for (i = slen; i < slen + ulen; i++) {
-		if ((spnew[i] < 32) && ((spnew[i] != 9) && (spnew[i] != 10) && (spnew[i] != 13))) spnew[i] = 32;
-	}
 	/* Copy end */
 	strcpy (spnew + slen + ulen, ip);
 	sp_repr_set_content (SP_OBJECT_REPR (string), spnew);
