@@ -932,8 +932,7 @@ sp_item_event(SPItem *item, SPEvent *event)
     return FALSE;
 }
 
-/* Sets item private transform (not propagated to repr) */
-
+/** Sets item private transform (not propagated to repr). */
 static void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform)
 {
     g_return_if_fail(item != NULL);
