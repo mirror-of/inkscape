@@ -13,6 +13,9 @@
 	  Inkscape::ObjectHierarchy to permit falling back to parents if
 	  the current layer is removed.
 
+	* src/object-ui.cpp, src/interface.cpp: really crude hack of
+	  Sodipodi-like "enter group" and "leave group"
+
 2004-06-26  MenTaLguY  <mental@rydia.net>
 
 	* src/refcounted.h: allow reffing/unreffing const objects

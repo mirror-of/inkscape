@@ -563,7 +563,7 @@ sp_item_group_set_mode (SPGroup *group, SPGroupMode mode)
 
 	/* FIXME !!! this probably dips a little too deeply into
 	             SPItem's internals... */
-	for ( view = group->item.display ; view ; view = view->next ) {
+	for ( view = group->display ; view ; view = view->next ) {
 		NRArenaGroup *arena_group=NR_ARENA_GROUP (view->arenaitem);
 		if (!arena_group) {
 			g_warning ("SPGroup has a non-NRArenaGroup attached to an SPItemView");

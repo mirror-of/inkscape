@@ -26,8 +26,7 @@ typedef enum _SPGroupMode {
 	SP_GROUP_MODE_LAYER
 } SPGroupMode;
 
-struct SPGroup {
-	SPItem item;
+struct SPGroup : public SPItem {
 	SPGroupMode mode;
 };
 

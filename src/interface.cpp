@@ -893,6 +893,10 @@ sp_ui_main_menubar (SPView *view)
 	return mbar;
 }
 
+static void leave_group(GtkMenuItem *, SPDesktop *desktop) {
+    desktop->setCurrentLayer(SP_OBJECT_PARENT(desktop->currentLayer()));
+}
+
 GtkWidget *
 sp_ui_context_menu (SPView *view, SPItem *item)
 {
@@ -920,6 +924,13 @@ sp_ui_context_menu (SPView *view, SPItem *item)
 	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_DUPLICATE, view);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_DELETE, view);
 
+        if ( dt && dt->currentLayer() != dt->currentRoot() ) {
+            sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
+            GtkWidget *w = gtk_menu_item_new_with_label(_("Leave Group"));
+            g_signal_connect(G_OBJECT(w), "activate", GCallback(leave_group), dt);
+            gtk_widget_show(w);
+            gtk_menu_shell_append(GTK_MENU_SHELL(m), w);
+        }
 	/* Item menu */
 	if (item) {
 		sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
