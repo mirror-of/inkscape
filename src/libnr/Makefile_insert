@@ -38,6 +38,7 @@ libnr_libnr_a_SOURCES =	\
 	libnr/nr-matrix-ops.h	\
 	libnr/nr-matrix-scale-ops.cpp	\
 	libnr/nr-matrix-scale-ops.h	\
+	libnr/nr-matrix-translate-ops.cpp	\
 	libnr/nr-matrix-translate-ops.h	\
 	libnr/nr-matrix.cpp	\
 	libnr/nr-matrix.h	\
@@ -72,6 +73,7 @@ libnr_libnr_a_SOURCES =	\
 	libnr/nr-rotate-matrix-ops.cpp	\
 	libnr/nr-rotate-matrix-ops.h	\
 	libnr/nr-rotate.h	\
+	libnr/nr-scale-matrix-ops.cpp	\
 	libnr/nr-scale-matrix-ops.h	\
 	libnr/nr-scale-ops.h	\
 	libnr/nr-scale.h	\
@@ -80,6 +82,8 @@ libnr_libnr_a_SOURCES =	\
 	libnr/nr-svp-render.h	\
 	libnr/nr-svp.cpp	\
 	libnr/nr-svp.h	\
+	libnr/nr-translate-matrix-ops.cpp	\
+	libnr/nr-translate-matrix-ops.h	\
 	libnr/nr-translate-ops.h	\
 	libnr/nr-translate.h	\
 	libnr/nr-translate-rotate-ops.cpp	\
