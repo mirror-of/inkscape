@@ -30,9 +30,9 @@ enum {
 
 gdouble nr_arena_global_delta;
 
-static void sp_canvas_arena_class_init (SPCanvasArenaClass * klass);
-static void sp_canvas_arena_init (SPCanvasArena * group);
-static void sp_canvas_arena_destroy (GtkObject * object);
+static void sp_canvas_arena_class_init(SPCanvasArenaClass *klass);
+static void sp_canvas_arena_init(SPCanvasArena *group);
+static void sp_canvas_arena_destroy(GtkObject *object);
 
 static void sp_canvas_arena_update (SPCanvasItem *item, double *affine, unsigned int flags);
 static void sp_canvas_arena_render (SPCanvasItem *item, SPCanvasBuf *buf);
