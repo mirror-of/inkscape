@@ -1,3 +1,7 @@
+2004-08-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/libnr/nr-path.h (c, setC): new methods.
+
 2004-08-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/desktop-affine.cpp (sp_desktop_w2doc_affine,
