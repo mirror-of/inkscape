@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-25 22:31+1100\n"
+"POT-Creation-Date: 2004-11-25 14:46+0100\n"
 "PO-Revision-Date: 2004-07-12 11:55+00:00\n"
 "Last-Translator: Juarez Rudsatz <juarez@correio.com>\n"
 "Language-Team: Brazillian Portuguese <ldp-br@bazar.conectiva.com.br>\n"
@@ -133,7 +133,7 @@ msgstr ""
 "<span weight=\"bold\" size=\"larger\">Salvar as modificações do desenho \"%s"
 "\" antes de fechar?</span>\n"
 "\n"
-"Se voce fechar sem salvar, suas modificações serão descartadas."
+"Se você fechar sem salvar, suas modificações serão descartadas."
 
 #: src/desktop.cpp:1176 src/desktop.cpp:1235
 msgid "Close _without saving"
@@ -3075,8 +3075,8 @@ msgid ""
 "Select <b>two non-endpoint nodes</b> on a path between which to delete "
 "segments."
 msgstr ""
-"Você precisa selecionar <b>dois pontos não finais</b> num caminho para "
-"apagar os segmentos"
+"Você precisa selecionar <b>dois pontos não finais<b> num caminho para apagar "
+"os segmentos"
 
 #: src/nodepath.cpp:1464
 msgid "Cannot find path between nodes."
@@ -3170,12 +3170,12 @@ msgstr ""
 #: src/object-edit.cpp:606
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr ""
-"Ajustar a <b>largura</b> da elipse, com <b>Ctrl</b> para formar um círculo"
+"Ajustar a <b>largura</b> da elipse, com <b>Ctrl<b> para formar um círculo"
 
 #: src/object-edit.cpp:608
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr ""
-"Ajustar a <b>altura</b> da elipse, com <b>Ctrl</b> para formar um círculo"
+"Ajustar a <b>altura</b> da elipse, com <b>Ctrl<b> para formar um círculo"
 
 #: src/object-edit.cpp:610
 msgid ""
@@ -3219,7 +3219,9 @@ msgstr ""
 msgid ""
 "Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
 "with <b>Alt</b> to converge/diverge"
-msgstr "Enrolar/Desenrolar a espiral do <b>interior</b>; "
+msgstr ""
+"Enrolar/Desenrolar a espiral do <b>interior</b>; com <b>Ctrl</b> para "
+"agarrar; com <b>Alt</b> para convergir/divergir"
 
 #: src/object-edit.cpp:884
 msgid ""
@@ -3813,22 +3815,22 @@ msgstr ""
 #: src/splivarot.cpp:111
 msgid "Select <b>at least 2 paths</b> to perform a boolean operation."
 msgstr ""
-"Selecione <b>pelo menos dois caminhos</b> para fazer uma operação booleana."
+"Selecione <b>pelo menos dois caminhos<b> para fazer uma operação booleana."
 
 #: src/splivarot.cpp:117
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, XOR, division, or path "
 "cut."
 msgstr ""
-"Selecione <b>exatamente dois caminhos</b> para fazer diferença, ou-"
-"exclusivo, divisão ou corte de caminho."
+"Selecione <b>exatamente dois caminhos<b> para fazer diferença, ou-exclusivo, "
+"divisão ou corte de caminho."
 
 #: src/splivarot.cpp:134 src/splivarot.cpp:149
 msgid ""
 "Unable to determine the <b>z-order</b> of the objects selected for "
 "difference, XOR, division, or path cut."
 msgstr ""
-"Incapaz de determinar a <b>ordem-z</b> dos objetos selecionados para "
+"Incapaz de determinar a <b>ordem-z<b> dos objetos selecionados para "
 "diferença,ou-exclusivo, divisão ou corte de caminho."
 
 #: src/splivarot.cpp:179
@@ -3846,24 +3848,24 @@ msgstr "Selecione <b>algum caminho</b> para contornar."
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
 #: src/splivarot.cpp:745
 msgid "<b>No stroked paths</b> to outline in the selection."
-msgstr "<b>Nenhum caminho com traço</b> para contornar na seleção."
+msgstr "<b>Nenhum caminho com traço<b> para contornar na seleção."
 
 #: src/splivarot.cpp:831
 msgid "Selected object is <b>not a path</b>, cannot inset/outset."
 msgstr ""
-"O objeto selecionado <b>não é um caminho</b>. Não é possível avançar/recuar"
+"O objeto selecionado <b>não é um caminho<b>. Não é possível avançar/recuar"
 
 #: src/splivarot.cpp:1053
 msgid "Select <b>path(s)</b> to inset/outset."
-msgstr "Selecione <b>algum caminho</b> para avançar/recuar"
+msgstr "Selecione <b>algum caminho<b> para avançar/recuar"
 
 #: src/splivarot.cpp:1270
 msgid "<b>No paths</b> to inset/outset in the selection."
-msgstr "<b>Nenhum camimho</b> para avançar/recuar na seleção"
+msgstr "<b>Nenhum camimho<b> para avançar/recuar na seleção"
 
 #: src/splivarot.cpp:1314
 msgid "Select <b>path(s)</b> to simplify."
-msgstr "Selecione <b>algum caminho</b> para simplificar."
+msgstr "Selecione <b>algum caminho<b> para simplificar."
 
 #: src/splivarot.cpp:1415
 msgid "<b>No paths</b> to simplify in the selection."
@@ -4202,8 +4204,8 @@ msgid ""
 "object to select."
 msgstr ""
 "Para alterar um caminho, <b>clique</b>, <b>clique com Shift</b> ou "
-"<b>arraste ao redor</b> dos nós para selecioná-los, e daí <b>arraste</b> "
-"seus nós e alças. <b>Clique</b> em um objeto para selecioná-lo."
+"<b>arraste ao redor</b> dos nós para selecioná-los, e daí <b>arraste</b>seus "
+"nós e alças. <b>Clique</b> em um objeto para selecioná-lo."
 
 #: src/tools-switch.cpp:135
 msgid ""
@@ -4241,7 +4243,7 @@ msgstr ""
 msgid ""
 "<b>Drag</b> to create a freehand line. Press <b>a</b> to toggle Append/New."
 msgstr ""
-"<b>Arraste</b> para criar uma linha à mão-livre. Pressione <b>a</b> para "
+"<b>Arraste</b> para criar uma linha à mão-livre. Pressione <b>a<b> para "
 "trocar entre Acrescentar/Novo."
 
 #: src/tools-switch.cpp:165
@@ -5496,7 +5498,7 @@ msgstr "Inkscape: _Básico"
 #: src/verbs.cpp:1751
 #, fuzzy
 msgid "Using the Calligraphy pen tool"
-msgstr "Imprimir o número de versão do Inkscape"
+msgstr "A largura da caneta caligráfica"
 
 #: src/verbs.cpp:1752
 msgid "_Elements of Design"
