@@ -1,3 +1,8 @@
+2005-01-25  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/interface.cpp: Passed file import call to shared code.
+	  Fixed bug #1108620.
+
 2004-01-25  MenTaLguY  <mental@rydia.net>
 
 	* src/xml/simple-node.cpp: fixed bug #1108231

@@ -1299,150 +1299,17 @@ sp_ui_import_one_file_with_check(gpointer filename, gpointer unused)
 	}
 }
 
-/**
- * Returns true iff \a filename appears to reference an SVG file.
- *
- * The current implementation looks solely at the filename string rather than at the content of the
- * file.
- *
- * Hence, it currently doesn't matter whether \a filename is a utf8name or a filename in whatever
- * charset, so long as the charset includes ASCII as a subset (specifically [a-z.]).  Our current
- * sole caller passes a utf8name.
- */
-static bool
-is_svg_filename(char const *filename)
-{
-    /* TODO: Consider looking at content rather than just filename.  Maybe libxml could be used to
-     * do so. */
-    size_t const filename_len = strlen(filename);
-    if (filename_len < 5) {
-        return false;
-    }
-    char const *extension = filename + filename_len - 4;
-    return ((memcmp(extension, ".svg", 4) == 0) ||
-            (memcmp(extension, ".xml", 4) == 0)   );
-}
-
-/**
- * Returns true iff \a filename appears to reference a bitmap file suitable for \<image\>.
- *
- * The current implementation looks solely at the filename string rather than at the content of the
- * file (see TODO comment in code).
- *
- * Hence, it currently doesn't matter whether \a filename is a utf8name or a filename in whatever
- * charset, so long as the charset includes ASCII as a subset (specifically [a-z.]).  Our current
- * sole caller passes a utf8name.
- */
-static bool
-is_bitmap_filename(char const *filename)
-{
-    /* TODO: Look at content rather than just filename.  See the `magic' file from the file(1)
-     * program / libmagic.
-     *
-     * (We could instead link against libmagic, but we only need to support the small number of
-     * formats allowed by SVG.  Note that libmagic isn't appropriate for detecting SVG files, at
-     * the time of writing.) */
-    size_t const filename_len = strlen(filename);
-    if (filename_len < 5) {
-        return false;
-    }
-    if (filename[filename_len - 4] == '.') {
-        char const *ext = filename + filename_len - 3;
-        return (memeq(ext, "png", 3) ||
-                memeq(ext, "jpg", 3) ||
-                memeq(ext, "jpe", 3) ||
-                memeq(ext, "bmp", 3) ||
-                memeq(ext, "gif", 3) ||
-                memeq(ext, "xpm", 3) ||
-                memeq(ext, "PNG", 3) ||
-                memeq(ext, "JPG", 3) ||
-                memeq(ext, "JPE", 3) ||
-                memeq(ext, "BMP", 3) ||
-                memeq(ext, "GIF", 3) ||
-                memeq(ext, "XPM", 3));
-    }
-    if (filename_len >= 6
-        && filename[filename_len - 5] == '.') {
-        char const *ext = filename + filename_len - 4;
-        return (memeq(ext, "jpeg", 4) ||
-                memeq(ext, "tiff", 4) ||
-                memeq(ext, "JPEG", 4) ||
-                memeq(ext, "TIFF", 4)   );
-    }
-    return false;
-}
-
-/* Cut&Paste'ed from file.c:file_import_ok */
 static void
 sp_ui_import_one_file(char const *filename)
 {
-	SPDocument *doc = SP_ACTIVE_DOCUMENT;
-	if (!SP_IS_DOCUMENT(doc)) return;
+    SPDocument *doc = SP_ACTIVE_DOCUMENT;
+    if (!SP_IS_DOCUMENT(doc)) return;
 
-      SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (filename == NULL) return;
 
-	if (filename == NULL) return;
-
-	SPRepr *rdoc = sp_document_repr_root (doc);
-
-	gchar const *docbase = sp_repr_attr(rdoc, "sodipodi:docbase");
-	char const *relname = sp_relative_path_from_path(filename, docbase);
-
-	if (is_svg_filename(filename)) {
-             // importing SVG
-		SPReprDoc *rnewdoc = sp_repr_read_file (filename, SP_SVG_NS_URI);
-		if (rnewdoc == NULL) return;
-		SPRepr *repr = sp_repr_document_root (rnewdoc);
-		const gchar *style = sp_repr_attr (repr, "style");
-
-		SPRepr *newgroup = sp_repr_new ("svg:g");
-		sp_repr_set_attr (newgroup, "style", style);
-
-		for (SPRepr *child = repr->firstChild() ; child != NULL; child = child->next() ) {
-			SPRepr * newchild;
-			newchild = sp_repr_duplicate (child);
-			sp_repr_append_child (newgroup, newchild);
-		}
-
-		sp_repr_document_unref (rnewdoc);
-
-            // Add it to the current layer
-            desktop->currentLayer()->appendChildRepr(newgroup);
-
-		sp_repr_unref (newgroup);
-		sp_document_done (doc);
-
-	} else if (is_bitmap_filename(filename)) {
-            // importing bitmap
-		gsize bytesRead = 0;
-		gsize bytesWritten = 0;
-		GError* error = NULL;
-		gchar* localFilename = g_filename_from_utf8 ( filename,
-													  -1,
-													  &bytesRead,
-													  &bytesWritten,
-													  &error);
-		GdkPixbuf *pb = gdk_pixbuf_new_from_file (localFilename, NULL);
-		if (pb) {
-			/* We are readable */
-			SPRepr *repr = sp_repr_new ("svg:image");
-			sp_repr_set_attr (repr, "xlink:href", relname);
-			sp_repr_set_attr (repr, "sodipodi:absref", filename);
-			sp_repr_set_double (repr, "width", gdk_pixbuf_get_width (pb));
-			sp_repr_set_double (repr, "height", gdk_pixbuf_get_height (pb));
-
-                   // Add it to the current layer
-                   desktop->currentLayer()->appendChildRepr(repr);
-
-			sp_repr_unref (repr);
-			sp_document_done (doc);
-			gdk_pixbuf_unref (pb);
-		}
-		if ( localFilename != NULL )
-		{
-			g_free (localFilename);
-		}
-	}
+    // Pass off to common implementation
+    // TODO might need to get the proper type of Inkscape::Extension::Extension
+    file_import( doc, filename, NULL );
 }
 
 void
