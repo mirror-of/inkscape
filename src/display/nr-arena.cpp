@@ -15,6 +15,7 @@
 #include "nr-arena-item.h"
 #include "nr-arena.h"
 #include <libnr/nr-rect.h>
+#include <libnr/nr-blit.h>
 
 static void nr_arena_class_init (NRArenaClass *klass);
 static void nr_arena_init (NRArena *arena);
@@ -99,3 +100,29 @@ nr_arena_request_render_rect (NRArena *arena, NRRectL *area)
 	}
 }
 
+void 
+nr_arena_render_paintserver_fill (NRPixBlock *pb, NRRectL *area, SPPainter *painter, float opacity, NRPixBlock *mask)
+{
+	NRPixBlock cb, cb_opa;
+	nr_pixblock_setup_fast (&cb, NR_PIXBLOCK_MODE_R8G8B8A8N, area->x0, area->y0, area->x1, area->y1, TRUE);
+	nr_pixblock_setup_fast (&cb_opa, NR_PIXBLOCK_MODE_R8G8B8A8N, area->x0, area->y0, area->x1, area->y1, TRUE);
+
+	/* Need separate gradient buffer (lauris)*/
+	// do the filling
+	painter->fill (painter, &cb);
+	cb.empty = FALSE;
+
+	// do the fill-opacity and mask composite 
+	if (opacity < 1.0) {
+		nr_blit_pixblock_pixblock_alpha (&cb_opa, &cb, (int) floor (255 * opacity));
+		cb_opa.empty = FALSE;
+		nr_blit_pixblock_pixblock_mask (pb, &cb_opa, mask);
+	} else {
+		nr_blit_pixblock_pixblock_mask (pb, &cb, mask);
+	}
+
+	pb->empty = FALSE;
+
+	nr_pixblock_release (&cb);
+	nr_pixblock_release (&cb_opa);
+}

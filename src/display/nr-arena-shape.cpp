@@ -680,15 +680,7 @@ nr_arena_shape_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
 	    break;
 	case NRArenaShape::Paint::SERVER:
 	    if (shape->fill_painter) {
-		NRPixBlock cb;
-		/* Need separate gradient buffer */
-		nr_pixblock_setup_fast (&cb, NR_PIXBLOCK_MODE_R8G8B8A8N, area->x0, area->y0, area->x1, area->y1, TRUE);
-		shape->fill_painter->fill (shape->fill_painter, &cb);
-		cb.empty = FALSE;
-		/* Composite */
-		nr_blit_pixblock_pixblock_mask (pb, &cb, &m);
-		pb->empty = FALSE;
-		nr_pixblock_release (&cb);
+              nr_arena_render_paintserver_fill (pb, area, shape->fill_painter, shape->_fill.opacity, &m);
 	    }
 	    break;
 	default:
@@ -720,15 +712,7 @@ nr_arena_shape_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
 	    break;
 	case NRArenaShape::Paint::SERVER:
 	    if (shape->stroke_painter) {
-		NRPixBlock cb;
-		/* Need separate gradient buffer */
-		nr_pixblock_setup_fast (&cb, NR_PIXBLOCK_MODE_R8G8B8A8N, area->x0, area->y0, area->x1, area->y1, TRUE);
-		shape->stroke_painter->fill (shape->stroke_painter, &cb);
-		cb.empty = FALSE;
-		/* Composite */
-		nr_blit_pixblock_pixblock_mask (pb, &cb, &m);
-		pb->empty = FALSE;
-		nr_pixblock_release (&cb);
+              nr_arena_render_paintserver_fill (pb, area, shape->stroke_painter, shape->_stroke.opacity, &m);
 	    }
 	    break;
 	default:

@@ -20,6 +20,7 @@
 #include <libnr/nr-forward.h>
 #include <libnr/nr-object.h>
 #include "nr-arena-forward.h"
+#include "sp-paint-server.h"
 
 NRType nr_arena_get_type (void);
 
@@ -40,5 +41,7 @@ struct NRArenaClass : public NRActiveObjectClass {
 
 void nr_arena_request_update (NRArena *arena, NRArenaItem *item);
 void nr_arena_request_render_rect (NRArena *arena, NRRectL *area);
+
+void nr_arena_render_paintserver_fill (NRPixBlock *pb, NRRectL *area, SPPainter *painter, float opacity, NRPixBlock *mask);
 
 #endif

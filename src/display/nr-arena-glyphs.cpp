@@ -637,14 +637,14 @@ nr_arena_glyphs_group_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, 
 
 	/* Fill */
 	if (style->fill.type != SP_PAINT_TYPE_NONE) {
-		NRPixBlock mb;
+		NRPixBlock m;
 		guint32 rgba;
-		nr_pixblock_setup_fast (&mb, NR_PIXBLOCK_MODE_A8, area->x0, area->y0, area->x1, area->y1, TRUE);
+		nr_pixblock_setup_fast (&m, NR_PIXBLOCK_MODE_A8, area->x0, area->y0, area->x1, area->y1, TRUE);
 		/* Render children fill mask */
 		for (child = group->children; child != NULL; child = child->next) {
-			ret = nr_arena_glyphs_fill_mask (NR_ARENA_GLYPHS (child), area, &mb);
+			ret = nr_arena_glyphs_fill_mask (NR_ARENA_GLYPHS (child), area, &m);
 			if (!(ret & NR_ARENA_ITEM_STATE_RENDER)) {
-				nr_pixblock_release (&mb);
+				nr_pixblock_release (&m);
 				return ret;
 			}
 		}
@@ -659,26 +659,18 @@ nr_arena_glyphs_group_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, 
         rgba = sp_color_get_rgba32_falpha (&style->fill.value.color,
 							   SP_SCALE24_TO_FLOAT (style->fill_opacity.value));
       }
-			nr_blit_pixblock_mask_rgba32 (pb, &mb, rgba);
+			nr_blit_pixblock_mask_rgba32 (pb, &m, rgba);
 			pb->empty = FALSE;
 			break;
 		case SP_PAINT_TYPE_PAINTSERVER:
 			if (ggroup->fill_painter) {
-				NRPixBlock cb;
-				/* Need separate gradient buffer */
-				nr_pixblock_setup_fast (&cb, NR_PIXBLOCK_MODE_R8G8B8A8N, area->x0, area->y0, area->x1, area->y1, TRUE);
-				ggroup->fill_painter->fill (ggroup->fill_painter, &cb);
-				cb.empty = FALSE;
-				/* Composite */
-				nr_blit_pixblock_pixblock_mask (pb, &cb, &mb);
-				pb->empty = FALSE;
-				nr_pixblock_release (&cb);
+				nr_arena_render_paintserver_fill (pb, area, ggroup->fill_painter, SP_SCALE24_TO_FLOAT (style->fill_opacity.value), &m);
 			}
 			break;
 		default:
 			break;
 		}
-		nr_pixblock_release (&mb);
+		nr_pixblock_release (&m);
 	}
 
 	/* Stroke */
@@ -710,15 +702,7 @@ nr_arena_glyphs_group_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, 
 			break;
 		case SP_PAINT_TYPE_PAINTSERVER:
 			if (ggroup->stroke_painter) {
-				NRPixBlock cb;
-				/* Need separate gradient buffer */
-				nr_pixblock_setup_fast (&cb, NR_PIXBLOCK_MODE_R8G8B8A8N, area->x0, area->y0, area->x1, area->y1, TRUE);
-				ggroup->stroke_painter->fill (ggroup->stroke_painter, &cb);
-				cb.empty = FALSE;
-				/* Composite */
-				nr_blit_pixblock_pixblock_mask (pb, &cb, &m);
-				pb->empty = FALSE;
-				nr_pixblock_release (&cb);
+				nr_arena_render_paintserver_fill (pb, area, ggroup->stroke_painter, SP_SCALE24_TO_FLOAT (style->stroke_opacity.value), &m);
 			}
 			break;
 		default:
