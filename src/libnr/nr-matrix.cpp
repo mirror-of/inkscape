@@ -20,7 +20,7 @@
  *  Multiply two NRMatrices together, storing the result in d.
  */
 NRMatrix *
-nr_matrix_multiply (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1)
+nr_matrix_multiply (NRMatrix *d, NRMatrix const *m0, NRMatrix const *m1)
 {
 	if (m0) {
 		if (m1) {
@@ -62,13 +62,13 @@ nr_matrix_multiply (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1)
  *  Store the inverted value of Matrix m in d
  */
 NRMatrix *
-nr_matrix_invert (NRMatrix *d, const NRMatrix *m)
+nr_matrix_invert (NRMatrix *d, NRMatrix const *m)
 {
 	if (m) {
-		NR::Coord det = m->c[0] * m->c[3] - m->c[1] * m->c[2];
+		NR::Coord const det = m->c[0] * m->c[3] - m->c[1] * m->c[2];
 		if (!NR_DF_TEST_CLOSE (det, 0.0, NR_EPSILON)) {
 
-			NR::Coord idet  = 1.0 / det;
+			NR::Coord const idet = 1.0 / det;
                         NR::Coord *dest = d->c;
 
 			/* Cache m->c[0] and m->c[4] in case d == m. */
@@ -100,7 +100,7 @@ nr_matrix_invert (NRMatrix *d, const NRMatrix *m)
  *  Set this matrix to a translation of x and y
  */
 NRMatrix *
-nr_matrix_set_translate (NRMatrix *m, const NR::Coord x, const NR::Coord y)
+nr_matrix_set_translate(NRMatrix *m, NR::Coord const x, NR::Coord const y)
 {
         NR::Coord *dest = m->c;
 
@@ -122,7 +122,7 @@ nr_matrix_set_translate (NRMatrix *m, const NR::Coord x, const NR::Coord y)
  *  Set this matrix to a scaling transform in sx and sy
  */
 NRMatrix *
-nr_matrix_set_scale (NRMatrix *m, const NR::Coord sx, const NR::Coord sy)
+nr_matrix_set_scale(NRMatrix *m, NR::Coord const sx, NR::Coord const sy)
 {
         NR::Coord *dest = m->c;
 
@@ -144,11 +144,11 @@ nr_matrix_set_scale (NRMatrix *m, const NR::Coord sx, const NR::Coord sy)
  *  Set this matrix to a rotating transform of angle 'theta' radians
  */
 NRMatrix *
-nr_matrix_set_rotate (NRMatrix *m, const NR::Coord theta)
+nr_matrix_set_rotate (NRMatrix *m, NR::Coord const theta)
 {
 
-	NR::Coord s = sin (theta);
-	NR::Coord c = cos (theta);
+	NR::Coord const s = sin(theta);
+	NR::Coord const c = cos(theta);
 
         NR::Coord *dest = m->c;
 
@@ -182,12 +182,13 @@ namespace NR {
 /**
  *  Constructor.  Assign to nr if not null, else identity
  */
-Matrix::Matrix(const NRMatrix *nr)
+Matrix::Matrix(NRMatrix const *nr)
 {
-	if (nr)
+	if (nr) {
 		assign(nr->c);
-	else
+	} else {
 		set_identity();
+	}
 }
 
 
@@ -199,12 +200,12 @@ Matrix::Matrix(const NRMatrix *nr)
  */
 Matrix operator*(Matrix const &m0, Matrix const &m1)
 {
-        NR::Coord d0 = m0[0] * m1[0]    +    m0[1] * m1[2];
-        NR::Coord d1 = m0[0] * m1[1]    +    m0[1] * m1[3];
-        NR::Coord d2 = m0[2] * m1[0]    +    m0[3] * m1[2];
-        NR::Coord d3 = m0[2] * m1[1]    +    m0[3] * m1[3];
-        NR::Coord d4 = m0[4] * m1[0]    +    m0[5] * m1[2] + m1[4];
-        NR::Coord d5 = m0[4] * m1[1]    +    m0[5] * m1[3] + m1[5];
+        NR::Coord const d0 = m0[0] * m1[0]    +    m0[1] * m1[2];
+        NR::Coord const d1 = m0[0] * m1[1]    +    m0[1] * m1[3];
+        NR::Coord const d2 = m0[2] * m1[0]    +    m0[3] * m1[2];
+        NR::Coord const d3 = m0[2] * m1[1]    +    m0[3] * m1[3];
+        NR::Coord const d4 = m0[4] * m1[0]    +    m0[5] * m1[2] + m1[4];
+        NR::Coord const d5 = m0[4] * m1[1]    +    m0[5] * m1[3] + m1[5];
 
 	Matrix ret( d0, d1, d2, d3, d4, d5 );
 
@@ -245,8 +246,8 @@ Matrix &Matrix::operator*=(scale const &other)
 	}
         */
 
-        NR::Coord xscale = other[0];
-        NR::Coord yscale = other[1];
+        NR::Coord const xscale = other[0];
+        NR::Coord const yscale = other[1];
         NR::Coord *dest  = _c;
 
         /*i=0 j=0*/  *dest++ *= xscale;
@@ -271,10 +272,10 @@ Matrix Matrix::inverse() const
 {
 	Matrix d(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	
-	NR::Coord det = _c[0] * _c[3] - _c[1] * _c[2];
+	NR::Coord const det = _c[0] * _c[3] - _c[1] * _c[2];
 	if (!NR_DF_TEST_CLOSE (det, 0.0, NR_EPSILON)) {
 
-                NR::Coord idet  = 1.0 / det;
+                NR::Coord const idet = 1.0 / det;
                 NR::Coord *dest = d._c;
 
 		/*0*/ *dest++ =  _c[3] * idet;
@@ -333,7 +334,7 @@ Matrix identity ()
 /**
  *
  */
-Matrix from_basis(const Point x_basis, const Point y_basis, const Point offset) {
+Matrix from_basis(Point const x_basis, Point const y_basis, Point const offset) {
 	Matrix const ret(x_basis[X], y_basis[X],
 			 x_basis[Y], y_basis[Y],
 			 offset[X], offset[Y]);
@@ -398,11 +399,11 @@ NR::Coord Matrix::descrim() const{
 /**
  *  Assign a matrix to a given coordinate array
  */
-Matrix &Matrix::assign(const Coord *array) {
+Matrix &Matrix::assign(Coord const *array) {
 
 	assert(array != NULL);
 
-        const Coord *src  = array;
+        Coord const *src = array;
         Coord *dest = _c;
 
         *dest++ = *src++;  //0
@@ -426,7 +427,7 @@ NRMatrix *Matrix::copyto(NRMatrix *nrm) const {
 
 	assert(nrm != NULL);
 	
-        const Coord *src  = _c;
+        Coord const *src = _c;
         Coord *dest = nrm->c;
 
         *dest++ = *src++;  //0
@@ -449,7 +450,7 @@ NR::Coord *Matrix::copyto(NR::Coord *array) const {
 
 	assert(array != NULL);
 
-        const Coord *src  = _c;
+        Coord const *src  = _c;
         Coord *dest = array;
 
         *dest++ = *src++;  //0
@@ -513,7 +514,7 @@ double Matrix::expansionY() const {
 /**
  *
  */
-bool Matrix::is_translation(const Coord eps) const {
+bool Matrix::is_translation(Coord const eps) const {
     return ( fabs(_c[0]-1.0) < eps && 
              fabs(_c[3]-1.0) < eps &&
              fabs(_c[1])     < eps && 
@@ -593,11 +594,3 @@ void assert_close(Matrix const &a, Matrix const &b)
 
 
 };//namespace NR
-
-
-
-
-
-
-
-
