@@ -395,7 +395,7 @@ public:
   // the result is NOT a polygon; you need a subsequent call to ConvertToShape to get a real polygon
   int MakeOffset (Shape * of, double dec, JoinType join, double miter);
   
-  double            Distance(NR::Point thePt);
+  bool DistanceLE(NR::Point thePt, double const max_dist);
   int               PtWinding (const NR::Point px) const ; // plus rapide
   int               Winding (const NR::Point px) const ;
   

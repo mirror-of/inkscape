@@ -723,9 +723,7 @@ nr_arena_shape_pick (NRArenaItem *item, double x, double y, double delta, unsign
 			}
 		}
 #else 
-    NR::Point  thePt;
-    thePt[0]=x;
-    thePt[1]=y;
+    NR::Point const thePt(x, y);
 		if (shape->fill_shp && (shape->style->fill.type != SP_PAINT_TYPE_NONE)) {
 			if (shape->fill_shp->PtWinding(thePt) > 0 ) return item;
 		}
@@ -734,11 +732,10 @@ nr_arena_shape_pick (NRArenaItem *item, double x, double y, double delta, unsign
 		}
 		if (delta > 1e-3) {
 			if (shape->fill_shp && (shape->style->fill.type != SP_PAINT_TYPE_NONE)) {
-				if (shape->fill_shp->Distance(thePt) <= delta) return item;
+				if (shape->fill_shp->DistanceLE(thePt, delta)) return item;
 			}
 			if (shape->stroke_shp && (shape->style->stroke.type != SP_PAINT_TYPE_NONE)) {
-        double theD=shape->stroke_shp->Distance(thePt);
-				if ( theD <= delta) return item;
+				if ( shape->stroke_shp->DistanceLE(thePt, delta)) return item;
 			}
 		}
 #endif

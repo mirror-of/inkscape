@@ -2216,40 +2216,61 @@ Shape::GetFlag (int nFlag)
   return (flags & nFlag);
 }
 
-// distance to the shape, ie min of distance to its points and distnce to its edges
-// points without edges are considered, which is maybe unwanted...
-double            Shape::Distance(NR::Point thePt)
+/** Returns true iff the L2 distance from \a thePt to this shape is <= \a max_l2.
+ *  Distance = the min of distance to its points and distance to its edges.
+ *  Points without edges are considered, which is maybe unwanted...
+ */
+bool Shape::DistanceLE(NR::Point const thePt, double const max_l2)
 {
-  if ( nbPt <= 0 ) return 1000000;
-  NR::Point d=thePt-pts[0].x;
-  double    l=NR::L2(d);
-  for (int i=1;i<nbPt;i++) {
-    d=thePt-pts[i].x;
-    double nl=NR::L2(d);
-    if ( nl < l ) l=nl;
+  if ( nbPt <= 0 ) {
+    return false;
   }
-  for (int i=0;i<nbAr;i++) {
-    NR::Point   s,e;
-    if ( aretes[i].st >= 0 && aretes[i].en >= 0 ) {
-      s=pts[aretes[i].st].x;
-      e=pts[aretes[i].en].x;
-      d=thePt-s;
-      e=e-s;
-      double el=NR::L2(e);
+
+  /* TODO: Consider using bbox to return early, perhaps conditional on nbPt or nbAr. */
+
+  /* Test thePt against pts[i].x for all i. */
+  {
+    /* effic: In one test case (scribbling with the freehand tool to create a small number of long
+     * path elements), changing from a Distance method to a DistanceLE method reduced this
+     * function's CPU time from about 21% of total inkscape CPU time to 14-15% of total inkscape
+     * CPU time, due to allowing early termination.  I don't know how much the L1 test helps, it
+     * may well be a case of premature optimization.  Consider testing dot(offset, offset)
+     * instead.
+     */
+    double const max_l1 = max_l2 * M_SQRT2;
+    for (int i = 0; i < nbPt; i++) {
+      NR::Point const offset( thePt - pts[i].x );
+      double const l1 = NR::L1(offset);
+      if ( ( l1 <= max_l2 )
+	   || ( ( l1 <= max_l1 )
+		&& ( NR::L2(offset) <= max_l2 ) ) )
+	{
+	  return true;
+	}
+    }
+  }
+
+  for (int i = 0; i < nbAr; i++) {
+    if ( aretes[i].st >= 0 &&
+	 aretes[i].en >= 0 ) {
+      NR::Point const st(pts[aretes[i].st].x);
+      NR::Point const en(pts[aretes[i].en].x);
+      NR::Point const d( thePt - st );
+      NR::Point const e( en - st );
+      double const el = NR::L2(e);
       if ( el > 0.001 ) {
-        double nl=NR::cross(d,e);
-        double npr=NR::dot(d,e);
-        nl/=el;
-        if ( npr > 0 && npr < el*el ) {
-          if ( nl < 0 ) nl=-nl;
-          if ( nl < l ) {
-            l=nl;
+	NR::Point const e_unit( e / el );
+        double const npr = NR::dot(d, e_unit);
+        if ( npr > 0 && npr < el ) {
+	  double const nl = fabs( NR::cross(d, e_unit) );
+          if ( nl <= max_l2 ) {
+	    return true;
           }
         }
       }
     }
   }
-  return l;
+  return false;
 }
 
 // winding of a point with respect to the Shape
@@ -2264,15 +2285,14 @@ Shape::PtWinding (const NR::Point px) const
   
   for (int i = 0; i < nbAr; i++)
   {
-    NR::Point adir, diff, ast, aen;
-    adir = aretes[i].dx;
+    NR::Point const adir = aretes[i].dx;
+
+    NR::Point const ast = pts[aretes[i].st].x;
+    NR::Point const aen = pts[aretes[i].en].x;
     
-    ast = pts[aretes[i].st].x;
-    aen = pts[aretes[i].en].x;
-    
-//    int nWeight = eData[i].weight;
-    int nWeight=1;
-    
+    //int const nWeight = eData[i].weight;
+    int const nWeight = 1;
+
     if (ast[0] < aen[0]) {
       if (ast[0] > px[0]) continue;
       if (aen[0] < px[0]) continue;
@@ -2298,9 +2318,9 @@ Shape::PtWinding (const NR::Point px) const
     } else {
       if (aen[1] >= px[1]) continue;
     }
-    
-    diff = px - ast;
-    double cote = cross (diff,adir);
+
+    NR::Point const diff = px - ast;
+    double const cote = cross(diff, adir);
     if (cote == 0) continue;
     if (cote < 0) {
       if (ast[0] > px[0]) lr += nWeight;

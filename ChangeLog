@@ -1,3 +1,9 @@
+2004-03-04  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/livarot/Shape.cpp (Distance): Convert to DistanceLE(p, d)
+	function returning true iff Distance(p) <= d.  (Saves 7% of total
+	inkscape CPU time for "big scribbles" test cases.)  Update callers.
+
 2004-03-04  Ted Gould  <ted@gould.cx>
 
 	* src/extension/system.cpp, src/extension/system.h,
