@@ -4268,7 +4268,7 @@ msgstr "<b>Control</b>: ajusta l'angle, conserva els rajos radials"
 #: src/star-context.cpp:480
 #, c-format
 msgid "<b>Polygon</b>: radius %s, angle %5g; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Polígon</b>: radi %s, angle %5g; amb <b>control<b> per ajustar l'angle"
+msgstr "<b>Polígon</b>: radi %s, angle %5g; amb <b>control</b> per ajustar l'angle"
 
 #: src/star-context.cpp:481
 #, c-format
