@@ -224,12 +224,16 @@ sp_select_context_abort(SPEventContext *event_context)
             sc->dragging = FALSE;
             drag_escaped = 1;
 
-            // only undo if the item is still valid
-            if (SP_OBJECT_DOCUMENT( SP_OBJECT(sc->item))) {
-              sp_document_undo(SP_DT_DOCUMENT(desktop));
+            if (sc->button_press_ctrl && sc->item == NULL) {
+                g_warning("BUG:  ctrl-move cannot be canceled properly because sc->item is not defined\n");
             }
 
             if (sc->item) {
+                // only undo if the item is still valid
+                if (SP_OBJECT_DOCUMENT( SP_OBJECT(sc->item))) {
+                    sp_document_undo(SP_DT_DOCUMENT(desktop));
+                }
+
                 sp_object_unref( SP_OBJECT(sc->item), NULL);
             }
             sc->item = NULL;
