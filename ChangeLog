@@ -1,3 +1,7 @@
+2004-02-27  Alexander Clausen <alex@skip86.com>
+
+	* src/desktop-events.cpp: fix my last fix *sigh*
+
 2004-02-27  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/dialogs/stroke-style.cpp (sp_stroke_style_set_marker_buttons):

@@ -270,9 +270,9 @@ guide_dialog_mode_changed (GtkWidget * widget)
 }
 
 static void
-guide_dialog_close (GtkWidget * widget, GtkDialog * d)
+guide_dialog_close (GtkWidget * widget, gpointer data)
 {
-	gtk_widget_hide(GTK_WIDGET(d));
+	gtk_widget_hide (GTK_WIDGET(d));
 }
 
 static void guide_dialog_apply(SPGuide &guide)
@@ -323,6 +323,8 @@ guide_dialog_response (GtkDialog *dialog, gint response, gpointer data)
 		break;
 	case GTK_RESPONSE_CLOSE:
 		guide_dialog_close (widget, (GtkDialog*)data);
+		break;
+	case GTK_RESPONSE_DELETE_EVENT:
 		break;
 /*	case GTK_RESPONSE_APPLY:
 		guide_dialog_apply (widget, data);
@@ -418,6 +420,7 @@ sp_dt_simple_guide_dialog (SPGuide *guide, SPDesktop *desktop)
 		// dialog
 		gtk_dialog_set_default_response (GTK_DIALOG (d), GTK_RESPONSE_OK);
 		gtk_signal_connect (GTK_OBJECT(d), "response", GTK_SIGNAL_FUNC(guide_dialog_response), &g);
+		gtk_signal_connect (GTK_OBJECT(d), "delete_event", GTK_SIGNAL_FUNC(gtk_widget_hide_on_delete), GTK_WIDGET(d));
 	}
 
 	// initialize dialog
