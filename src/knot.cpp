@@ -12,6 +12,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 #include <math.h>
 #include <glib-object.h>
 #include <gtk/gtksignal.h>

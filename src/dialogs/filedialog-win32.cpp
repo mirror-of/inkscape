@@ -1,4 +1,7 @@
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 #include "filedialog.h"
 
 //#include "extension/internal/win32.h"

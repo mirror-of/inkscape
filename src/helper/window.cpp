@@ -9,6 +9,9 @@
  * This code is in public domain
  */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 #include <gtk/gtkwindow.h>
 
 #include "inkscape.h"

@@ -1,3 +1,6 @@
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 #include "geom.h"
 #include <math.h>
 #include <libnr/nr-point-fns.h>

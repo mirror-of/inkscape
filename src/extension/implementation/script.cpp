@@ -12,6 +12,9 @@
 
 #define __INKSCAPE_EXTENSION_IMPLEMENTATION_SCRIPT_C__
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>

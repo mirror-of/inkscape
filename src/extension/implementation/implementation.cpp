@@ -10,6 +10,9 @@
     contains the base class for all of that.
 */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 #include "../extension.h"
 #include "implementation.h"
 #include <libnr/nr-point.h>

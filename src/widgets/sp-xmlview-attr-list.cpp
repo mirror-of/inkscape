@@ -11,6 +11,9 @@
  * Released under the GNU GPL; see COPYING for details
  */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 #include <string.h>
 #include <glib.h>
 #include <gtk/gtkmain.h>

@@ -4,6 +4,9 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 #include "RasterFont.h"
 
 #include <livarot/Ligne.h>

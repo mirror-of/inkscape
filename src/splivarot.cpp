@@ -12,6 +12,9 @@
  * contains lots of stitched pieces of path-chemistry.c
  */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 #include <time.h>
 #include <string.h>
 

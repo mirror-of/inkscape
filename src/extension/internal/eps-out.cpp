@@ -7,6 +7,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 #include "eps-out.h"
 #include <gtk/gtk.h>
 #include <print.h>
