@@ -41,6 +41,9 @@
 #define GR_KNOT_COLOR_NORMAL 0xffffff00
 #define GR_KNOT_COLOR_SELECTED 0x0000ff00
 
+#define GR_LINE_COLOR_FILL 0x0000ff7f
+#define GR_LINE_COLOR_STROKE 0x9999007f
+
 // screen pixels between knots when they snap:
 #define SNAP_DIST 5
 
@@ -452,6 +455,23 @@ gr_knot_clicked_handler(SPKnot *knot, guint state, gpointer data)
    dragger->parent->setSelected (dragger);
 }
 
+/**
+Called when a dragger knot is doubleclicked; opens gradient editor with the stop from the first draggable
+*/
+static void
+gr_knot_doubleclicked_handler (SPKnot *knot, guint state, gpointer data)
+{
+   GrDragger *dragger = (GrDragger *) data;
+
+   dragger->point_original = dragger->point;
+
+   if (dragger->draggables == NULL)
+       return;
+
+   GrDraggable *draggable = (GrDraggable *) dragger->draggables->data;
+   sp_item_gradient_edit_stop (draggable->item, draggable->point_num, draggable->fill_or_stroke);
+}
+
 /**  
 Act upon all draggables of the dragger, setting them to the dragger's point
 */
@@ -678,6 +698,7 @@ GrDragger::GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable)
     // connect knot's signals
     this->handler_id = g_signal_connect (G_OBJECT (this->knot), "moved", G_CALLBACK (gr_knot_moved_handler), this);
     g_signal_connect (G_OBJECT (this->knot), "clicked", G_CALLBACK (gr_knot_clicked_handler), this);
+    g_signal_connect (G_OBJECT (this->knot), "doubleclicked", G_CALLBACK (gr_knot_doubleclicked_handler), this);
     g_signal_connect (G_OBJECT (this->knot), "ungrabbed", G_CALLBACK (gr_knot_ungrabbed_handler), this);
 
     // add the initial draggable
@@ -755,13 +776,14 @@ GrDrag::setSelected (GrDragger *dragger)
 Create a line from p1 to p2 and add it to the lines list
  */
 void
-GrDrag::addLine (NR::Point p1, NR::Point p2) 
+GrDrag::addLine (NR::Point p1, NR::Point p2, guint32 rgba) 
 {
     SPCanvasItem *line = sp_canvas_item_new(SP_DT_CONTROLS(this->desktop),
                                                             SP_TYPE_CTRLLINE, NULL);
     sp_ctrlline_set_coords(SP_CTRLLINE(line), p1, p2);
+    if (rgba != GR_LINE_COLOR_FILL) // fill is the default, so don't set color for it to speed up redraw
+        sp_ctrlline_set_rgba32 (SP_CTRLLINE(line), rgba);
     sp_canvas_item_show (line);
-    sp_canvas_item_move_to_z (line, 0); // just low enough to not get in the way of other draggable knots
     this->lines = g_slist_append (this->lines, line);
 }
 
@@ -891,22 +913,22 @@ GrDrag::updateLines ()
         if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
             SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (item);
             if (SP_IS_LINEARGRADIENT (server)) {
-                this->addLine (sp_item_gradient_get_coords (item, POINT_LG_P1, true), sp_item_gradient_get_coords (item, POINT_LG_P2, true));
+                this->addLine (sp_item_gradient_get_coords (item, POINT_LG_P1, true), sp_item_gradient_get_coords (item, POINT_LG_P2, true), GR_LINE_COLOR_FILL);
             } else if (SP_IS_RADIALGRADIENT (server)) {
                 NR::Point center = sp_item_gradient_get_coords (item, POINT_RG_CENTER, true);
-                this->addLine (center, sp_item_gradient_get_coords (item, POINT_RG_R1, true));
-                this->addLine (center, sp_item_gradient_get_coords (item, POINT_RG_R2, true));
+                this->addLine (center, sp_item_gradient_get_coords (item, POINT_RG_R1, true), GR_LINE_COLOR_FILL);
+                this->addLine (center, sp_item_gradient_get_coords (item, POINT_RG_R2, true), GR_LINE_COLOR_FILL);
             }
         }
 
         if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) { 
             SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER (item);
             if (SP_IS_LINEARGRADIENT (server)) {
-                this->addLine (sp_item_gradient_get_coords (item, POINT_LG_P1, false), sp_item_gradient_get_coords (item, POINT_LG_P2, false));
+                this->addLine (sp_item_gradient_get_coords (item, POINT_LG_P1, false), sp_item_gradient_get_coords (item, POINT_LG_P2, false), GR_LINE_COLOR_STROKE);
             } else if (SP_IS_RADIALGRADIENT (server)) {
                 NR::Point center = sp_item_gradient_get_coords (item, POINT_RG_CENTER, false);
-                this->addLine (center, sp_item_gradient_get_coords (item, POINT_RG_R1, false));
-                this->addLine (center, sp_item_gradient_get_coords (item, POINT_RG_R2, false));
+                this->addLine (center, sp_item_gradient_get_coords (item, POINT_RG_R1, false), GR_LINE_COLOR_STROKE);
+                this->addLine (center, sp_item_gradient_get_coords (item, POINT_RG_R2, false), GR_LINE_COLOR_STROKE);
             }
         }
     }

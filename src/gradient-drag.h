@@ -96,7 +96,7 @@ struct GrDrag {
 	GrDrag(SPDesktop *desktop);
 	~GrDrag();
 
-	void addLine (NR::Point p1, NR::Point p2);
+	void addLine (NR::Point p1, NR::Point p2, guint32 rgba);
 
 	void addDragger (GrDraggable *draggable);
 
