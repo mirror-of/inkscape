@@ -31,3 +31,11 @@
 #define sp_signal_disconnect_by_data(o,d) g_signal_handlers_disconnect_matched (o, G_SIGNAL_MATCH_DATA, 0, 0, 0, 0, d)
 
 #endif
+
+// keyboard modifiers in an event
+#define MOD__SHIFT (event->key.state & GDK_SHIFT_MASK)
+#define MOD__CTRL (event->key.state & GDK_CONTROL_MASK)
+#define MOD__ALT (event->key.state & GDK_MOD1_MASK)
+#define MOD__SHIFT_ONLY ((event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK))
+#define MOD__CTRL_ONLY (!(event->key.state & GDK_SHIFT_MASK) && (event->key.state & GDK_CONTROL_MASK) && !(event->key.state & GDK_MOD1_MASK))
+#define MOD__ALT_ONLY (!(event->key.state & GDK_SHIFT_MASK) && !(event->key.state & GDK_CONTROL_MASK) && (event->key.state & GDK_MOD1_MASK))
