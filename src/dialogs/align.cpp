@@ -350,7 +350,7 @@ sp_quick_align_dialog (void)
                               G_CALLBACK (sp_align_distribute_h_clicked), 
                               hdist[SP_DISTRIBUTE_HCENTRE], 
                               "distribute_hcentre",
-                              _("Distribute centres of objects at even " 
+                              _("Distribute centers of objects at even " 
                                 "distances horizontally"),
                               tt );
                               
@@ -379,7 +379,7 @@ sp_quick_align_dialog (void)
                               G_CALLBACK (sp_align_distribute_v_clicked), 
                               vdist[SP_DISTRIBUTE_VCENTRE], 
                               "distribute_vcentre",
-                              _("Distribute centres of objects at even " 
+                              _("Distribute centers of objects at even " 
                                 "distances vertically"),
                               tt );
                               
