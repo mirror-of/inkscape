@@ -3,6 +3,29 @@
 #include <string.h>
 
 /**
+Given a font name or style name, returns a constant describing its apparent style (normal/italic/oblique).
+*/
+int
+parse_name_for_style (char const *cc)
+{
+	gchar *c = g_ascii_strdown (cc, -1);
+
+	gint style;
+	// first dab at i18n... french and german 
+	if (strstr (c, "italic") || strstr (c, "italique") || strstr (c, "kursiv")) { 
+		style = NR_POS_STYLE_ITALIC;
+	} else if (strstr (c, "oblique")) { 
+		style = NR_POS_STYLE_OBLIQUE;
+	} else {
+		style = NR_POS_STYLE_NORMAL;
+	}
+
+	g_free (c);
+	return style;
+}
+
+
+/**
 Given a font name or style name, returns a constant describing its apparent weight.
 */
 int
@@ -95,6 +118,29 @@ parse_name_for_variant (char const *cc)
 	g_free (c);
 	return variant;
 }
+
+/**
+Given a style constant, returns the CSS value for font-style.
+*/
+const char *
+style_to_css (int style)
+{
+	switch (style) {
+	case NR_POS_STYLE_NORMAL:
+		return "normal";
+		break;
+  case NR_POS_STYLE_ITALIC:
+		return "italic";
+		break;
+  case NR_POS_STYLE_OBLIQUE:
+		return "oblique";
+		break;
+	default:
+		break;
+	}
+	return NULL;
+}
+
 
 /**
 Given a weight constant, returns the CSS value for font-weight.

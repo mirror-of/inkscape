@@ -1,6 +1,10 @@
 #ifndef __NR_TYPE_POS_DEF_H__
 #define __NR_TYPE_POS_DEF_H__
 
+#define NR_POS_STYLE_NORMAL		 0
+#define NR_POS_STYLE_ITALIC		 1
+#define NR_POS_STYLE_OBLIQUE		 2
+
 #define NR_POS_WEIGHT_THIN		 32
 #define NR_POS_WEIGHT_EXTRA_LIGHT	 64
 #define NR_POS_WEIGHT_ULTRA_LIGHT	 64
@@ -81,9 +85,11 @@ public:
 
 };
 
+int parse_name_for_style (char const *c);
 int parse_name_for_weight (char const *c);
 int parse_name_for_stretch (char const *c);
 int parse_name_for_variant (char const *c);
+const char *style_to_css (int style);
 const char *weight_to_css (int weight);
 const char *stretch_to_css (int stretch);
 const char *variant_to_css (int variant);

@@ -244,7 +244,10 @@ nr_typeface_ft2_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, uns
 	} else if (!strcmp (key, "family")) {
 		val = tf->def->family;
 	} else if (!strcmp (key, "style")) {
-		val = (tff->ft_face->style_flags & FT_STYLE_FLAG_ITALIC) ? "italic" : "normal";
+		if ((tff->ft_face->style_flags & FT_STYLE_FLAG_ITALIC)) {
+			gint w = parse_name_for_style (tff->ft_face->style_name);
+			val = style_to_css (w);
+		}
 
 		// The only font style information that FT provides is the italic and bold bits.
 		// We will use the italic bit, but for weight and stretch, the only thing we 
