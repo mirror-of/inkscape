@@ -210,6 +210,37 @@ sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view)
 	return sp_view_shutdown (view);
 }
 
+static void
+sp_ui_menu_activate (void *object, SPAction *action)
+{
+    sp_action_perform (action, NULL);
+}
+
+static void
+sp_ui_menu_select_action (void *object, SPAction *action)
+{
+	sp_view_set_statusf (action->view, "%s", action->tip);
+}
+
+static void
+sp_ui_menu_deselect_action (void *object, SPAction *action)
+{
+	sp_view_pop_statusf (action->view);
+}
+
+static void
+sp_ui_menu_select (gpointer object, gpointer tip)
+{
+	SPView *view = SP_VIEW (g_object_get_data (G_OBJECT (object), "view"));
+	sp_view_set_statusf (view, "%s", (gchar *) tip);
+}
+
+static void
+sp_ui_menu_deselect (gpointer object)
+{
+	SPView *view = SP_VIEW (g_object_get_data (G_OBJECT (object), "view"));
+	sp_view_pop_statusf (view);
+}
 
 /**
  * sp_ui_menuitem_add_icon
@@ -236,7 +267,7 @@ sp_ui_menuitem_add_icon ( GtkWidget *item, gchar * icon_name )
 
 static GtkWidget *
 sp_ui_menu_append_item ( GtkMenu *menu, const gchar *stock, 
-                         const gchar *label, GCallback callback, 
+                         const gchar *label, const gchar *tip, SPView *view, GCallback callback, 
                          gpointer data, gboolean with_mnemonic = TRUE )
 {
     GtkWidget *item;
@@ -256,19 +287,18 @@ sp_ui_menu_append_item ( GtkMenu *menu, const gchar *stock,
     if (callback) {
         g_signal_connect (G_OBJECT (item), "activate", callback, data);
     }
+
+    if (tip && view) {
+        g_object_set_data (G_OBJECT (item), "view", (gpointer) view);
+        g_signal_connect ( G_OBJECT (item), "select", G_CALLBACK (sp_ui_menu_select), (gpointer) tip );
+        g_signal_connect ( G_OBJECT (item), "deselect", G_CALLBACK (sp_ui_menu_deselect), NULL);
+    }
+
     gtk_menu_append (GTK_MENU (menu), item);
 
     return item;
 
 } // end of sp_ui_menu_append_item()
-
-
-
-static void
-sp_ui_menu_activate (void *object, SPAction *action)
-{
-    sp_action_perform (action, NULL);
-}
 
 
 static void
@@ -404,6 +434,9 @@ sp_ui_menu_append_item_from_verb (GtkMenu *menu, sp_verb_t verb, SPView *view)
                            G_CALLBACK (sp_ui_menu_activate), action );
         g_signal_connect ( G_OBJECT (item), "key_press_event", 
                            G_CALLBACK (sp_ui_menu_key_press), (void *) verb);
+
+        g_signal_connect ( G_OBJECT (item), "select", G_CALLBACK (sp_ui_menu_select_action), action );
+        g_signal_connect ( G_OBJECT (item), "deselect", G_CALLBACK (sp_ui_menu_deselect_action), action );
     }
 
     gtk_widget_show (item);
@@ -466,7 +499,7 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
 
     sp_ui_menu_append (fm, file_verbs_one, view);
 
-    item_recent = sp_ui_menu_append_item (fm, NULL, _("Open _Recent"), NULL, NULL);
+    item_recent = sp_ui_menu_append_item (fm, NULL, _("Open _Recent"), _("Open one of the recently visited documents"), view, NULL, NULL);
     sp_ui_menuitem_add_icon (item_recent, "file_open_recent");
     menu_recent = gtk_menu_new ();
     sp_menu_append_recent_documents (GTK_WIDGET (menu_recent));
@@ -518,18 +551,18 @@ static void
 sp_ui_object_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
     static const sp_verb_t selection[] = {
-       SP_VERB_DIALOG_ITEM,
-	SP_VERB_DIALOG_FILL_STROKE,
+        SP_VERB_DIALOG_FILL_STROKE,
+        SP_VERB_DIALOG_ITEM,
         SP_VERB_NONE,
 
         SP_VERB_SELECTION_GROUP,
         SP_VERB_SELECTION_UNGROUP,
 
         SP_VERB_NONE,
-        SP_VERB_SELECTION_TO_FRONT,
-        SP_VERB_SELECTION_TO_BACK,
         SP_VERB_SELECTION_RAISE,
         SP_VERB_SELECTION_LOWER,
+        SP_VERB_SELECTION_TO_FRONT,
+        SP_VERB_SELECTION_TO_BACK,
 
         SP_VERB_NONE,
         //		SP_VERB_OBJECT_FLATTEN,
@@ -539,8 +572,8 @@ sp_ui_object_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
         SP_VERB_OBJECT_FLIP_VERTICAL,
 
         SP_VERB_NONE,
-       SP_VERB_DIALOG_TRANSFORM,
-       SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
+        SP_VERB_DIALOG_TRANSFORM,
+        SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
 
         SP_VERB_LAST
     };
@@ -649,18 +682,23 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
     sp_ui_menu_append (menu, view_verbs1, view);
 
 #ifndef WIN32
-     GtkWidget *window_policy_check = 
-         gtk_check_menu_item_new_with_label(_("Autoraise Dialogs"));
+    // FIXME: make a function for checkbox menu items
+    GtkWidget *window_policy_check = 
+        gtk_check_menu_item_new_with_label(_("Autoraise Dialogs"));
 
-     gtk_widget_show(window_policy_check);
+    gtk_widget_show(window_policy_check);
 
-     gtk_menu_shell_append(GTK_MENU_SHELL(menu), window_policy_check);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), window_policy_check);
 
-     g_signal_connect( G_OBJECT(window_policy_check), "toggled",
-                       (GCallback)window_policy_toggled, NULL );
+    g_signal_connect( G_OBJECT(window_policy_check), "toggled",
+                      (GCallback)window_policy_toggled, NULL );
 
-     g_signal_connect( G_OBJECT(window_policy_check), "expose_event",
-                       (GCallback)window_policy_update, NULL);
+    g_signal_connect( G_OBJECT(window_policy_check), "expose_event",
+                      (GCallback)window_policy_update, NULL);
+
+    g_object_set_data (G_OBJECT (window_policy_check), "view", (gpointer) view);
+    g_signal_connect ( G_OBJECT (window_policy_check), "select", G_CALLBACK (sp_ui_menu_select), (gpointer) _("Whether dialog windows are always on top of document window") );
+    g_signal_connect ( G_OBJECT (window_policy_check), "deselect", G_CALLBACK (sp_ui_menu_deselect), NULL);
 #endif
 
     sp_ui_menu_append (menu, view_verbs2, view);
@@ -698,7 +736,7 @@ sp_ui_help_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
      * list of verb arguments) in the verb system right now, so we have to build
      * the submenu by hand.  Luckily, we can populate it using the same verb system.
      */
-    item_tutorials = sp_ui_menu_append_item (fm, NULL, _("_Tutorials"), NULL, NULL);
+    item_tutorials = sp_ui_menu_append_item (fm, NULL, _("_Tutorials"), _("Interactive Inkscape tutorials"), view, NULL, NULL);
     /* should sp_ui_menu_append_item be modified to take an image name? */
     sp_ui_menuitem_add_icon (item_tutorials, "help_tutorials");
     menu_tutorials = gtk_menu_new ();
@@ -784,21 +822,21 @@ sp_ui_context_menu (SPView *view, SPItem *item)
 	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_REDO, view);
 
 	/* Separator */
-	sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL);
+	sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
 
 	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_CUT, view);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_COPY, view);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_PASTE, view);
 
 	/* Separator */
-	sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL);
+	sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
 
 	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_DUPLICATE, view);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (m), SP_VERB_EDIT_DELETE, view);
 
 	/* Item menu */
 	if (item) {
-		sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL);
+		sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
 		sp_object_menu ((SPObject *) item, dt, GTK_MENU (m));
 	}
 
@@ -1072,3 +1110,14 @@ sp_ui_overwrite_file (const gchar * filename)
 
 	return return_value;
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
