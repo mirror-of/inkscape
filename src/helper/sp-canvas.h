@@ -157,6 +157,9 @@ void sp_canvas_request_redraw (SPCanvas *canvas, int x1, int y1, int x2, int y2)
 void sp_canvas_window_to_world (SPCanvas *canvas, double winx, double winy, double *worldx, double *worldy);
 void sp_canvas_world_to_window (SPCanvas *canvas, double worldx, double worldy, double *winx, double *winy);
 
+NR::Point sp_canvas_window_to_world (SPCanvas *canvas, NR::Point const win);
+NR::Point sp_canvas_world_to_window (SPCanvas *canvas, NR::Point const world);
+
 NRRect *sp_canvas_get_viewbox (SPCanvas *canvas, NRRect *viewbox);
 
 

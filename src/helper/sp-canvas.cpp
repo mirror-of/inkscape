@@ -2047,6 +2047,22 @@ sp_canvas_world_to_window (SPCanvas *canvas, double worldx, double worldy, doubl
 	if (winy) *winy = worldy - canvas->y0;
 }
 
+NR::Point sp_canvas_window_to_world (SPCanvas *canvas, NR::Point const win)
+{
+	g_assert (canvas != NULL);
+	g_assert (SP_IS_CANVAS (canvas));
+
+	return NR::Point(canvas->x0 + win[0], canvas->y0 + win[1]);
+}
+
+NR::Point sp_canvas_world_to_window (SPCanvas *canvas, NR::Point const world)
+{
+	g_assert (canvas != NULL);
+	g_assert (SP_IS_CANVAS (canvas));
+
+	return NR::Point(world[0] - canvas->x0, world[1] - canvas->y0);
+}
+
 NRRect *
 sp_canvas_get_viewbox (SPCanvas *canvas, NRRect *viewbox)
 {

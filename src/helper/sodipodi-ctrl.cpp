@@ -499,3 +499,13 @@ sp_ctrl_moveto (SPCtrl * ctrl, double x, double y)
 
 	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (ctrl), affine);
 }
+
+void
+sp_ctrl_moveto (SPCtrl * ctrl, NR::Point const p)
+{
+	double affine[6];
+
+	art_affine_translate (affine, p[0], p[1]);
+
+	sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (ctrl), affine);
+}
