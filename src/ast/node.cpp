@@ -10,37 +10,44 @@
  */
 
 #include "ast/node.h"
+#include "ast/path.h"
 
 namespace Inkscape {
 namespace AST {
 
-Node const *Node::_traverse(BranchName const &branch, unsigned pos) const {
+Path const &Node::traverse(Path const *from,
+                           BranchName const &branch, unsigned pos) const
+throw(Node::NotFound, std::bad_alloc)
+{
+}
+
+Node const *Node::_lookup(BranchName const &branch, unsigned pos) const throw() {
     return NULL;
 }
 
 Node const &Node::_insertBefore(BranchName const &branch, unsigned pos,
                                 Node const &node) const
-throw(InvalidTransformation, std::bad_alloc)
+throw(Node::InvalidTransformation, std::bad_alloc)
 {
     throw InvalidTransformation();
 }
 
 Node const &Node::_replaceWith(BranchName const &branch, unsigned pos,
                                Node const &node) const
-throw(InvalidTransformation, std::bad_alloc)
+throw(Node::InvalidTransformation, std::bad_alloc)
 {
     throw InvalidTransformation();
 }
 
 Node const &Node::_removeAt(BranchName const &branch, unsigned pos) const
-throw(InvalidTransformation, std::bad_alloc)
+throw(Node::InvalidTransformation, std::bad_alloc)
 {
     throw InvalidTransformation();
 }
 
 Node const &Node::_reorder(BranchName const &branch, unsigned old_pos,
                            unsigned new_pos) const
-throw(InvalidTransformation, std::bad_alloc)
+throw(Node::InvalidTransformation, std::bad_alloc)
 {
     throw InvalidTransformation();
 }

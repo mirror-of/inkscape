@@ -24,6 +24,7 @@ namespace Inkscape {
 namespace AST {
 
 class String;
+class Path;
 
 class Node : public gc {
 public:
@@ -34,11 +35,20 @@ public:
         InvalidTransformation() : runtime_error("invalid transformation") {}
     };
 
-    Node const *traverse(BranchName const &branch, unsigned pos) const
+    class NotFound : public std::runtime_error {
+    public:
+        NotFound() : runtime_error("node not found") {}
+    };
+
+    Node const *lookup(BranchName const &branch, unsigned pos) const
     throw()
     {
-        return _traverse(branch, pos);
+        return _lookup(branch, pos);
     }
+
+    Path const &traverse(Path const *from,
+                         BranchName const &branch, unsigned pos) const
+    throw(NotFound, std::bad_alloc);
 
     Node const &insertBefore(BranchName const &branch, unsigned pos,
                              Node const &node) const
@@ -74,7 +84,7 @@ public:
     }
 
 protected:
-    virtual Node const *_traverse(BranchName const &branch, unsigned pos) const
+    virtual Node const *_lookup(BranchName const &branch, unsigned pos) const
     throw();
 
     virtual Node const &_insertBefore(BranchName const &branch,
