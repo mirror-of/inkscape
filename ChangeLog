@@ -1,3 +1,12 @@
+2004-02-28  Jon Phillips <jon@protofunk.org>
+
+    * share/*: Move extensions, icons, and made a new folder screens for 
+      screens that are pulled up in using inkscape. Please test this heavily 
+      as it implements the most troublesome chunks of the dir. reorganization.
+    
+    * Makefile.am Makefile.mingw config.h.mingw configure.in: I changed these 
+      all to coincide with the new changes.
+
 2004-02-28  Nathan Hurst <njh@mail.csse.monash.edu.au>
 
 	* src/nodepath.cpp,h: Moved radial to class Radial.  Moved
