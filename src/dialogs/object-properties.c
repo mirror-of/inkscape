@@ -17,6 +17,7 @@
 
 #include <glib.h>
 #include <libart_lgpl/art_affine.h>
+#include <gdk/gdkkeysyms.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkvbox.h>
@@ -101,6 +102,24 @@ sp_object_properties_color_set (Inkscape *inkscape, SPColor *color, double opaci
 	}
 }
 
+static gboolean
+sp_object_properties_dialog_handler (GtkWindow * w, GdkEvent * event, gpointer data)
+{
+	gboolean ret = FALSE; 
+
+	switch (event->type) {
+	case GDK_KEY_PRESS:
+		switch (event->key.keyval) {
+		case GDK_Escape: 
+			gtk_widget_destroy (dlg);
+			ret = TRUE; 
+			break;
+		}
+	}
+
+	return ret; 
+}
+
 void
 sp_object_properties_dialog (void)
 {
@@ -109,6 +128,7 @@ sp_object_properties_dialog (void)
 
 		dlg = sp_window_new (_("Object style"), TRUE);
 		gtk_signal_connect (GTK_OBJECT (dlg), "destroy", GTK_SIGNAL_FUNC (sp_object_properties_dialog_destroy), dlg);
+		gtk_signal_connect (GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_object_properties_dialog_handler), dlg);
 
 		vb = gtk_vbox_new (FALSE, 0);
 		gtk_widget_show (vb);
