@@ -1880,7 +1880,7 @@ node_clicked (SPKnot * knot, guint state, gpointer data)
 	n = (SPPathNode *) data;
 
 	if (state & GDK_CONTROL_MASK) {
-		if (state & GDK_MOD1_MASK) {
+		if (state & GDK_MOD1_MASK) { // ctrl+alt+click: toggle node type
 			if (n->type == SP_PATHNODE_CUSP) {
 				sp_nodepath_set_node_type (n, SP_PATHNODE_SMOOTH);
 			} else if (n->type == SP_PATHNODE_SMOOTH) {
@@ -1888,11 +1888,16 @@ node_clicked (SPKnot * knot, guint state, gpointer data)
 			} else {
 				sp_nodepath_set_node_type (n, SP_PATHNODE_CUSP);
 			}
-		} else {
-			if (n->type == SP_PATHNODE_CUSP) {
-				sp_nodepath_set_node_type (n, SP_PATHNODE_SMOOTH);
+		} else { //ctrl+click: delete node
+			SPNodePath *nodepath = n->subpath->nodepath;
+			sp_nodepath_node_destroy (n);
+			if (g_list_length (nodepath->subpaths) == 0) { // if the entire nodepath is removed, delete the selected object
+				sp_nodepath_destroy (nodepath);
+				sp_selection_delete (NULL, NULL);
 			} else {
-				sp_nodepath_set_node_type (n, SP_PATHNODE_CUSP);
+				sp_nodepath_ensure_ctrls (nodepath);
+				update_repr (nodepath);
+				sp_nodepath_update_statusbar (nodepath);
 			}
 		}
 	} else {
@@ -2675,9 +2680,9 @@ sp_nodepath_update_statusbar (SPNodePath *nodepath)
 		sel = nodepath->desktop->selection;
 		GSList *i = sel->items;
 		if (g_slist_length (sel->items) == 0)
-		sp_view_set_statusf (SP_VIEW(nodepath->desktop), "Select one path object with selector first, then switch back to node editor.");
+			sp_view_set_statusf (SP_VIEW(nodepath->desktop), "Select one path object with selector first, then switch back to node editor.");
 		else 
-		sp_view_set_statusf (SP_VIEW(nodepath->desktop), "No nodes selected. Click, Shift+click, drag around nodes to select.");
+			sp_view_set_statusf (SP_VIEW(nodepath->desktop), "0 out of %i nodes selected. Click, Shift+click, drag around nodes to select.", total);
 	} else if (selected == 1) {
 		sp_view_set_statusf (SP_VIEW(nodepath->desktop), "%i of %i nodes selected; %s. %s.", selected, total, sp_node_type_description ((SPPathNode *) nodepath->selected->data), when_selected);
 	} else {
