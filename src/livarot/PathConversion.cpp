@@ -14,9 +14,12 @@
 
 void            Path::ConvertWithBackData(double treshhold)
 {
-	if ( descr_flags&descr_adding_bezier ) CancelBezier();
-	if ( descr_flags&descr_doing_subpath ) CloseSubpath(0);
-	
+	if ( descr_flags & descr_adding_bezier ) {
+		CancelBezier();
+	}
+	if ( descr_flags & descr_doing_subpath ) {
+		CloseSubpath();
+	}
 	SetBackData(true);
 	ResetPoints(descr_nb);
 	if ( descr_nb <= 0 ) return;
@@ -148,9 +151,12 @@ void            Path::ConvertWithBackData(double treshhold)
 }
 void            Path::ConvertForOffset(double treshhold,Path* orig,double off_dec)
 {
-	if ( descr_flags&descr_adding_bezier ) CancelBezier();
-	if ( descr_flags&descr_doing_subpath ) CloseSubpath(0);
-	
+	if ( descr_flags & descr_adding_bezier ) {
+		CancelBezier();
+	}
+	if ( descr_flags & descr_doing_subpath ) {
+		CloseSubpath();
+	}
 	SetBackData(true);
 	ResetPoints(descr_nb);
 	if ( descr_nb <= 0 ) return;
@@ -319,9 +325,12 @@ void            Path::ConvertForOffset(double treshhold,Path* orig,double off_de
 }
 void            Path::Convert(double treshhold)
 {
-	if ( descr_flags&descr_adding_bezier ) CancelBezier();
-	if ( descr_flags&descr_doing_subpath ) CloseSubpath(0);
-	
+	if ( descr_flags & descr_adding_bezier ) {
+		CancelBezier();
+	}
+	if ( descr_flags & descr_doing_subpath ) {
+		CloseSubpath();
+	}
 	SetBackData(false);
 	ResetPoints(descr_nb);
 	if ( descr_nb <= 0 ) return;
@@ -507,9 +516,12 @@ void            Path::Convert(double treshhold)
 }
 void            Path::ConvertEvenLines(double treshhold)
 {
-	if ( descr_flags&descr_adding_bezier ) CancelBezier();
-	if ( descr_flags&descr_doing_subpath ) CloseSubpath(0);
-	
+	if ( descr_flags & descr_adding_bezier ) {
+		CancelBezier();
+	}
+	if ( descr_flags & descr_doing_subpath ) {
+		CloseSubpath();
+	}
 	SetBackData(false);
 	ResetPoints(descr_nb);
 	if ( descr_nb <= 0 ) return;
@@ -709,11 +721,11 @@ void            Path::ConvertEvenLines(double treshhold)
 	}
 }
 
-#include <assert.h>
-
 const NR::Point Path::PrevPoint(int i) const
 {
-	assert( i >= 0 );
+	/* TODO: I suspect this should assert `(unsigned) i < descr_nb'.  We can probably change
+	   the argument to unsigned.  descr_nb should probably be changed to unsigned too. */
+	g_assert( i >= 0 );
 	switch ( descr_cmd[i].flags & descr_type_mask ) {
 		case descr_moveto: {
 			path_descr_moveto *nData=(path_descr_moveto*)(descr_data+descr_cmd[i].dStart);
@@ -741,8 +753,10 @@ const NR::Point Path::PrevPoint(int i) const
 			return PrevPoint(i-1);
 		default:
 			g_assert_not_reached();
+			return descr_data[descr_cmd[i].dStart];
 	}
 }
+
 void Path::QuadraticPoint(double t, NR::Point &oPt, 
                           const NR::Point &iS, const NR::Point &iM, const NR::Point &iE)
 {

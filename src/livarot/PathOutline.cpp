@@ -14,8 +14,12 @@ void
 Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
                double miter)
 {
-	if (descr_flags & descr_adding_bezier) CancelBezier ();
-	if (descr_flags & descr_doing_subpath)  CloseSubpath (0);
+	if ( descr_flags & descr_adding_bezier ) {
+		CancelBezier();
+	}
+	if ( descr_flags & descr_doing_subpath ) {
+		CloseSubpath();
+	}
 	if (descr_nb <= 2) return;
 	if (dest == NULL) return;
 	dest->Reset ();
@@ -117,14 +121,14 @@ Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
 				if (needClose) {
 					rev->Close ();
 					rev->SubContractOutline (dest, calls, 0.0025 * width * width, width,
-											 join, butt, miter, true, false, endPos, endButt);
+								 join, butt, miter, true, false, endPos, endButt);
 					descr_cmd = sav_descr + lastM;
 					descr_nb = realP + 1 - lastM;
 					SubContractOutline (dest, calls, 0.0025 * width * width,
-										width, join, butt, miter, true, false, endPos, endButt);
+							    width, join, butt, miter, true, false, endPos, endButt);
 				} else {
 					rev->SubContractOutline (dest, calls,  0.0025 * width * width, width,
-											 join, butt, miter, false, false, endPos, endButt);
+								 join, butt, miter, false, false, endPos, endButt);
 					NR::Point endNor=endButt.ccw();
 					if (butt == butt_round) {
 						dest->ArcTo (endPos+width*endNor,  1.0001 * width, 1.0001 * width, 0.0, true, true);
@@ -160,19 +164,22 @@ Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
 		}
 	}
 	while (curP < sav_descr_nb);
-  
+
 	delete rev;
 	descr_cmd = sav_descr;
 	descr_nb = sav_descr_nb;
-  
 }
 
 void
 Path::OutsideOutline (Path * dest, double width, JoinType join, ButtType butt,
                       double miter)
 {
-	if (descr_flags & descr_adding_bezier) CancelBezier ();
-	if (descr_flags & descr_doing_subpath) CloseSubpath (0);
+	if (descr_flags & descr_adding_bezier) {
+		CancelBezier();
+	}
+	if (descr_flags & descr_doing_subpath) {
+		CloseSubpath();
+	}
 	if (descr_nb <= 2) return;
 	if (dest == NULL) return;
 	dest->Reset ();
@@ -184,31 +191,35 @@ Path::OutsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 	calls.bezierto = StdBezierTo;
 	calls.arcto = StdArcTo;
 	SubContractOutline (dest, calls, 0.0025 * width * width, width, join, butt,
-						miter, true, false, endPos, endButt);
+			    miter, true, false, endPos, endButt);
 }
 
 void
 Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
                      double miter)
 {
-	if (descr_flags & descr_adding_bezier)  CancelBezier ();
-	if (descr_flags & descr_doing_subpath) CloseSubpath (0);
+	if ( descr_flags & descr_adding_bezier ) {
+		CancelBezier();
+	}
+	if ( descr_flags & descr_doing_subpath ) {
+		CloseSubpath();
+	}
 	if (descr_nb <= 2) return;
 	if (dest == NULL) return;
 	dest->Reset ();
 	dest->SetBackData (false);
-  
+
 	outline_callbacks calls;
 	NR::Point endButt, endPos;
 	calls.cubicto = StdCubicTo;
 	calls.bezierto = StdBezierTo;
 	calls.arcto = StdArcTo;
-  
+
 	path_descr *sav_descr = descr_cmd;
 	int sav_descr_nb = descr_nb;
-  
+
 	Path *rev = new Path;
-  
+
 	int curP = 0;
 	do {
 		int lastM = curP;
@@ -220,7 +231,8 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 		} while (curP < sav_descr_nb);
 		if (curP >= sav_descr_nb)  curP = sav_descr_nb;
 		if (curP > lastM + 1) {
-			// sinon il n'y a qu'un point
+			// Otherwise there's only one point.  (tr: or "only a point")
+			// [sinon il n'y a qu'un point]
 			int curD = curP - 1;
 			NR::Point curX;
 			NR::Point nextX;
@@ -287,8 +299,8 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 				}
 				rev->Close ();
 				rev->SubContractOutline (dest, calls, 0.0025 * width * width,
-										 width, join, butt, miter, true, false,
-										 endPos, endButt);
+							 width, join, butt, miter, true, false,
+							 endPos, endButt);
 			}
 		}
 	}  while (curP < sav_descr_nb);

@@ -552,8 +552,12 @@ Path::RaffineTk (NR::Point pt, NR::Point p0, NR::Point p1, NR::Point p2, NR::Poi
 void
 Path::Coalesce (double tresh)
 {
-  if (descr_flags & descr_adding_bezier) CancelBezier ();
-  if (descr_flags & descr_doing_subpath) CloseSubpath (0);
+  if ( descr_flags & descr_adding_bezier ) {
+    CancelBezier();
+  }
+  if ( descr_flags & descr_doing_subpath ) {
+    CloseSubpath();
+  }
   if (descr_nb <= 2) return;
   
   SetBackData (false);
@@ -565,7 +569,8 @@ Path::Coalesce (double tresh)
   
   int                 lastP = 0;
   int                 lastAP=-1;
-  // comme les elements sont stockes dans un tableau a part, plus la peine d'optimiser la rŽŽcriture dans la meme tableau
+  // As the elements are stored in a separate tableau, it's no longer worth optimizing the rewriting in the same tableau.
+  // [[comme les elements sont stockes dans un tableau a part, plus la peine d'optimiser la rŽŽcriture dans la meme tableau]]
 //  int writeP = 0; 
   int lastA = descr_cmd[0].associated;
   int prevA = lastA;
