@@ -96,7 +96,7 @@ endif
 VERSION = \"0.39cvs-${DTG}\"
 
 # the XP_WIN def is necessary for libjs.a
-CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION) -DXP_WIN
+CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION) -DXP_WIN -DHAVE_CONFIG_H
 
 
 .cpp.o:
