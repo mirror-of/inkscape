@@ -7,8 +7,10 @@
  */
 
 gdouble
-sp_absolute_metric_to_metric (gdouble length_src, const SPMetric metric_src, const SPMetric metric_dst) {
-  gdouble src = 1, dst = 1;
+sp_absolute_metric_to_metric (gdouble length_src, const SPMetric metric_src, const SPMetric metric_dst)
+{
+  gdouble src = 1;
+  gdouble dst = 1;
 
   switch (metric_src) {
   case SP_MM:
@@ -50,13 +52,12 @@ sp_absolute_metric_to_metric (gdouble length_src, const SPMetric metric_src, con
 }
 
 GString *
-sp_metric_to_metric_string (gdouble length,  const SPMetric metric_src, const SPMetric metric_dst, gboolean m) {
-  GString * str;
-  gdouble len;
-  Inkscape::SVGOStringStream os;	
-
-  len = sp_absolute_metric_to_metric (length, metric_src, metric_dst);
-  str = g_string_new ("");
+sp_metric_to_metric_string (gdouble length,  const SPMetric metric_src, const SPMetric metric_dst, gboolean m)
+{
+  gdouble len = sp_absolute_metric_to_metric (length, metric_src, metric_dst);
+  GString *str = g_string_new ("");
+  Inkscape::SVGOStringStream os;
+  
   switch (metric_dst) {
   case SP_MM:
     os << len << (m?" mm":"");

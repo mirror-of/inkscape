@@ -62,20 +62,14 @@ sp_line_get_type (void)
 static void
 sp_line_class_init (SPLineClass *klass)
 {
-	GObjectClass * gobject_class;
-	SPObjectClass * sp_object_class;
-	SPItemClass * item_class;
+	parent_class = (SPShapeClass *) g_type_class_ref (SP_TYPE_SHAPE);
 
-	gobject_class = (GObjectClass *) klass;
-	sp_object_class = (SPObjectClass *) klass;
-	item_class = (SPItemClass *) klass;
-
-	parent_class = (SPShapeClass *)g_type_class_ref (SP_TYPE_SHAPE);
-
+	SPObjectClass *sp_object_class = (SPObjectClass *) klass;
 	sp_object_class->build = sp_line_build;
 	sp_object_class->set = sp_line_set;
 	sp_object_class->write = sp_line_write;
 
+	SPItemClass *item_class = (SPItemClass *) klass;
 	item_class->description = sp_line_description;
 	item_class->set_transform = sp_line_set_transform;
 }
@@ -93,9 +87,9 @@ sp_line_init (SPLine * line)
 static void
 sp_line_build (SPObject * object, SPDocument * document, SPRepr * repr)
 {
-
-	if (((SPObjectClass *) parent_class)->build)
+        if (((SPObjectClass *) parent_class)->build) {
 		((SPObjectClass *) parent_class)->build (object, document, repr);
+        }
 
 	sp_object_read_attr (object, "x1");
 	sp_object_read_attr (object, "y1");
@@ -106,9 +100,7 @@ sp_line_build (SPObject * object, SPDocument * document, SPRepr * repr)
 static void
 sp_line_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	SPLine * line;
-
-	line = SP_LINE (object);
+	SPLine * line = SP_LINE (object);
 
 	/* fixme: we should really collect updates */
 
@@ -147,10 +139,6 @@ sp_line_set (SPObject *object, unsigned int key, const gchar *value)
 static SPRepr *
 sp_line_write (SPObject *object, SPRepr *repr, guint flags)
 {
-	SPLine *line;
-
-	line = SP_LINE (object);
-
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 		repr = sp_repr_new ("line");
 	}
@@ -174,11 +162,7 @@ sp_line_description (SPItem * item)
 static NR::Matrix
 sp_line_set_transform (SPItem *item, NR::Matrix const &xform)
 {
-	double sw, sh;
-	SPLine *line;
-
-	line = SP_LINE (item);
-
+	SPLine *line = SP_LINE (item);
 	NR::Point points[2];
 
 	points[0] = NR::Point(line->x1.computed, line->y1.computed);
@@ -195,8 +179,8 @@ sp_line_set_transform (SPItem *item, NR::Matrix const &xform)
 	sp_line_set_shape(line);
 
 	/* Scalers */
-	sw = sqrt (xform[0] * xform[0] + xform[1] * xform[1]);
-	sh = sqrt (xform[2] * xform[2] + xform[3] * xform[3]);
+	const double sw = sqrt (xform[0] * xform[0] + xform[1] * xform[1]);
+	const double sh = sqrt (xform[2] * xform[2] + xform[3] * xform[3]);
 
 	/* Scale changed, so we have to adjust stroke width */
 	if ((fabs (sw - 1.0) > 1e-9) || (fabs (sh - 1.0) > 1e-9)) {
@@ -212,11 +196,11 @@ sp_line_set_transform (SPItem *item, NR::Matrix const &xform)
 static void
 sp_line_set_shape (SPLine * line)
 {
-	SPCurve * c;
-	
-	if (hypot (line->x2.computed - line->x1.computed, line->y2.computed - line->y1.computed) < 1e-12) return;
+	if (hypot (line->x2.computed - line->x1.computed, line->y2.computed - line->y1.computed) < 1e-12) {
+                return;
+        }
 
-	c = sp_curve_new ();
+	SPCurve *c = sp_curve_new ();
 
 	sp_curve_moveto (c, line->x1.computed, line->y1.computed);
 	sp_curve_lineto (c, line->x2.computed, line->y2.computed);

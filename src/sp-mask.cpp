@@ -71,14 +71,9 @@ sp_mask_get_type (void)
 static void
 sp_mask_class_init (SPMaskClass *klass)
 {
-	GObjectClass * gobject_class;
-	SPObjectClass * sp_object_class;
+	parent_class = (SPObjectGroupClass*) g_type_class_ref (SP_TYPE_OBJECTGROUP);
 
-	gobject_class = (GObjectClass *) klass;
-	sp_object_class = (SPObjectClass *) klass;
-
-	parent_class = (SPObjectGroupClass*)g_type_class_ref (SP_TYPE_OBJECTGROUP);
-
+	SPObjectClass *sp_object_class = (SPObjectClass *) klass;
 	sp_object_class->build = sp_mask_build;
 	sp_object_class->release = sp_mask_release;
 	sp_object_class->set = sp_mask_set;
@@ -103,12 +98,9 @@ sp_mask_init (SPMask *mask)
 static void
 sp_mask_build (SPObject *object, SPDocument *document, SPRepr *repr)
 {
-	SPMask *mask;
-
-	mask = SP_MASK (object);
-
-	if (((SPObjectClass *) parent_class)->build)
+	if (((SPObjectClass *) parent_class)->build) {
 		((SPObjectClass *) parent_class)->build (object, document, repr);
+	}
 
 	sp_object_read_attr (object, "maskUnits");
 	sp_object_read_attr (object, "maskContentUnits");
@@ -120,30 +112,26 @@ sp_mask_build (SPObject *object, SPDocument *document, SPRepr *repr)
 static void
 sp_mask_release (SPObject * object)
 {
-	SPMask *cp;
-
-	cp = SP_MASK (object);
-
 	if (SP_OBJECT_DOCUMENT (object)) {
 		/* Unregister ourselves */
 		sp_document_remove_resource (SP_OBJECT_DOCUMENT (object), "mask", object);
 	}
 
+	SPMask *cp = SP_MASK (object);
 	while (cp->display) {
 		/* We simply unref and let item to manage this in handler */
 		cp->display = sp_mask_view_list_remove (cp->display, cp->display);
 	}
 
-	if (((SPObjectClass *) (parent_class))->release)
+	if (((SPObjectClass *) (parent_class))->release) {
 		((SPObjectClass *) parent_class)->release (object);
+	}
 }
 
 static void
 sp_mask_set (SPObject *object, unsigned int key, const gchar *value)
 {
-	SPMask *mask;
-
-	mask = SP_MASK (object);
+	SPMask *mask = SP_MASK (object);
 
 	switch (key) {
 	case SP_ATTR_MASKUNITS:
@@ -182,21 +170,18 @@ sp_mask_set (SPObject *object, unsigned int key, const gchar *value)
 static void
 sp_mask_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 {
-	SPMask *cp;
-	SPObject *ochild;
-
-	cp = SP_MASK (object);
-
 	/* Invoke SPObjectGroup implementation */
 	((SPObjectClass *) (parent_class))->child_added (object, child, ref);
 
 	/* Show new object */
-	ochild = sp_document_lookup_id (SP_OBJECT_DOCUMENT (object), sp_repr_attr (child, "id"));
+	SPObject *ochild = sp_document_lookup_id (SP_OBJECT_DOCUMENT (object), sp_repr_attr (child, "id"));
 	if (SP_IS_ITEM (ochild)) {
-		SPMaskView *v;
-		for (v = cp->display; v != NULL; v = v->next) {
-			NRArenaItem *ac;
-			ac = sp_item_invoke_show (SP_ITEM (ochild), NR_ARENA_ITEM_ARENA (v->arenaitem), v->key, SP_ITEM_REFERENCE_FLAGS);
+		SPMask *cp = SP_MASK (object);
+		for (SPMaskView *v = cp->display; v != NULL; v = v->next) {
+			NRArenaItem *ac = sp_item_invoke_show (SP_ITEM (ochild),
+							       NR_ARENA_ITEM_ARENA (v->arenaitem),
+							       v->key,
+							       SP_ITEM_REFERENCE_FLAGS);
 			if (ac) {
 				nr_arena_item_add_child (v->arenaitem, ac, NULL);
 				nr_arena_item_unref (ac);
@@ -208,26 +193,21 @@ sp_mask_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 static void
 sp_mask_update (SPObject *object, SPCtx *ctx, guint flags)
 {
-	SPObjectGroup *og;
-	SPMask *mask;
-	SPObject *child;
-	SPMaskView *v;
-	GSList *l;
-
-	og = SP_OBJECTGROUP (object);
-	mask = SP_MASK (object);
-
-	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
+	if (flags & SP_OBJECT_MODIFIED_FLAG) {
+		flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
+	}
+	
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-	l = NULL;
-	for (child = sp_object_first_child(SP_OBJECT(og)); child != NULL; child = SP_OBJECT_NEXT(child)) {
+	SPObjectGroup *og = SP_OBJECTGROUP (object);
+	GSList *l = NULL;
+	for (SPObject *child = sp_object_first_child(SP_OBJECT(og)); child != NULL; child = SP_OBJECT_NEXT(child)) {
 		g_object_ref (G_OBJECT (child));
 		l = g_slist_prepend (l, child);
 	}
 	l = g_slist_reverse (l);
 	while (l) {
-		child = SP_OBJECT (l->data);
+		SPObject *child = SP_OBJECT (l->data);
 		l = g_slist_remove (l, child);
 		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
 			sp_object_invoke_update (child, ctx, flags);
@@ -235,7 +215,8 @@ sp_mask_update (SPObject *object, SPCtx *ctx, guint flags)
 		g_object_unref (G_OBJECT (child));
 	}
 
-	for (v = mask->display; v != NULL; v = v->next) {
+	SPMask *mask = SP_MASK (object);
+	for (SPMaskView *v = mask->display; v != NULL; v = v->next) {
 		if (mask->maskContentUnits == SP_CONTENT_UNITS_OBJECTBOUNDINGBOX) {
 			NRMatrix t;
 			nr_matrix_set_scale (&t, v->bbox.x1 - v->bbox.x0, v->bbox.y1 - v->bbox.y0);
@@ -251,25 +232,21 @@ sp_mask_update (SPObject *object, SPCtx *ctx, guint flags)
 static void
 sp_mask_modified (SPObject *object, guint flags)
 {
-	SPObjectGroup *og;
-	SPMask *cp;
-	SPObject *child;
-	GSList *l;
-
-	og = SP_OBJECTGROUP (object);
-	cp = SP_MASK (object);
-
-	if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
+	if (flags & SP_OBJECT_MODIFIED_FLAG) {
+		flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
+	}
+	
 	flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-	l = NULL;
-	for (child = sp_object_first_child(SP_OBJECT(og)); child != NULL; child = SP_OBJECT_NEXT(child)) {
+	SPObjectGroup *og = SP_OBJECTGROUP (object);
+	GSList *l = NULL;
+	for (SPObject *child = sp_object_first_child(SP_OBJECT(og)); child != NULL; child = SP_OBJECT_NEXT(child)) {
 		g_object_ref (G_OBJECT (child));
 		l = g_slist_prepend (l, child);
 	}
 	l = g_slist_reverse (l);
 	while (l) {
-		child = SP_OBJECT (l->data);
+		SPObject *child = SP_OBJECT (l->data);
 		l = g_slist_remove (l, child);
 		if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
 			sp_object_invoke_modified (child, flags);
@@ -281,10 +258,6 @@ sp_mask_modified (SPObject *object, guint flags)
 static SPRepr *
 sp_mask_write (SPObject *object, SPRepr *repr, guint flags)
 {
-	SPMask *cp;
-
-	cp = SP_MASK (object);
-
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 		repr = sp_repr_new ("mask");
 	}
@@ -298,20 +271,17 @@ sp_mask_write (SPObject *object, SPRepr *repr, guint flags)
 NRArenaItem *
 sp_mask_show (SPMask *mask, NRArena *arena, unsigned int key)
 {
-	NRArenaItem *ai, *ac;
-	SPObject *child;
-
 	g_return_val_if_fail (mask != NULL, NULL);
 	g_return_val_if_fail (SP_IS_MASK (mask), NULL);
 	g_return_val_if_fail (arena != NULL, NULL);
 	g_return_val_if_fail (NR_IS_ARENA (arena), NULL);
 
-	ai = NRArenaGroup::create(arena);
+	NRArenaItem *ai = NRArenaGroup::create(arena);
 	mask->display = sp_mask_view_new_prepend (mask->display, key, ai);
 
-	for (child = sp_object_first_child(SP_OBJECT(mask)) ; child != NULL; child = SP_OBJECT_NEXT(child)) {
+	for (SPObject *child = sp_object_first_child(SP_OBJECT(mask)) ; child != NULL; child = SP_OBJECT_NEXT(child)) {
 		if (SP_IS_ITEM (child)) {
-			ac = sp_item_invoke_show (SP_ITEM (child), arena, key, SP_ITEM_REFERENCE_FLAGS);
+			NRArenaItem *ac = sp_item_invoke_show (SP_ITEM (child), arena, key, SP_ITEM_REFERENCE_FLAGS);
 			if (ac) {
 				/* The order is not important in mask */
 				nr_arena_item_add_child (ai, ac, NULL);
@@ -334,19 +304,16 @@ sp_mask_show (SPMask *mask, NRArena *arena, unsigned int key)
 void
 sp_mask_hide (SPMask *cp, unsigned int key)
 {
-	SPMaskView *v;
-	SPObject *child;
-
 	g_return_if_fail (cp != NULL);
 	g_return_if_fail (SP_IS_MASK (cp));
 
-	for (child = sp_object_first_child(SP_OBJECT(cp)); child != NULL; child = SP_OBJECT_NEXT(child)) {
+	for (SPObject *child = sp_object_first_child(SP_OBJECT(cp)); child != NULL; child = SP_OBJECT_NEXT(child)) {
 		if (SP_IS_ITEM (child)) {
 			sp_item_invoke_hide (SP_ITEM (child), key);
 		}
 	}
 
-	for (v = cp->display; v != NULL; v = v->next) {
+	for (SPMaskView *v = cp->display; v != NULL; v = v->next) {
 		if (v->key == key) {
 			/* We simply unref and let item to manage this in handler */
 			cp->display = sp_mask_view_list_remove (cp->display, v);
@@ -360,9 +327,7 @@ sp_mask_hide (SPMask *cp, unsigned int key)
 void
 sp_mask_set_bbox (SPMask *mask, unsigned int key, NRRect *bbox)
 {
-	SPMaskView *v;
-
-	for (v = mask->display; v != NULL; v = v->next) {
+	for (SPMaskView *v = mask->display; v != NULL; v = v->next) {
 		if (v->key == key) {
 			if (!NR_DF_TEST_CLOSE (v->bbox.x0, bbox->x0, NR_EPSILON) ||
 			    !NR_DF_TEST_CLOSE (v->bbox.y0, bbox->y0, NR_EPSILON) ||
@@ -381,9 +346,7 @@ sp_mask_set_bbox (SPMask *mask, unsigned int key, NRRect *bbox)
 SPMaskView *
 sp_mask_view_new_prepend (SPMaskView *list, unsigned int key, NRArenaItem *arenaitem)
 {
-	SPMaskView *new_mask_view;
-
-	new_mask_view = g_new (SPMaskView, 1);
+	SPMaskView *new_mask_view = g_new (SPMaskView, 1);
 
 	new_mask_view->next = list;
 	new_mask_view->key = key;
