@@ -433,7 +433,7 @@ sp_dtw_grid_emp_spacing_changed (GtkAdjustment *adjustment,
     SPRepr *repr = SP_OBJECT_REPR(dt->namedview);
 
     Inkscape::SVGOStringStream os;
-    int value = adjustment->value;
+    int value = int(adjustment->value);
     os << value;
 
     sp_repr_set_attr(repr, "gridempspacing", os.str().c_str());
