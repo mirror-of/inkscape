@@ -1,3 +1,7 @@
+2005-02-20  MenTaLguY  <mental@rydia.net>
+
+	* src/inkscape.cpp: removed unused signals
+
 2005-02-19  MenTaLguY  <mental@rydia.net>
 
 	* src/arc-context.cpp, src/desktop.cpp, src/document-private.h,

@@ -81,12 +81,8 @@ enum {
     CHANGE_SELECTION,
     SET_SELECTION,
     SET_EVENTCONTEXT,
-    NEW_DESKTOP,
-    DESTROY_DESKTOP,
     ACTIVATE_DESKTOP,
     DEACTIVATE_DESKTOP,
-    NEW_DOCUMENT,
-    DESTROY_DOCUMENT,
     SHUTDOWN_SIGNAL,
     DIALOGS_HIDE,
     DIALOGS_UNHIDE,
@@ -139,11 +135,8 @@ struct Inkscape::ApplicationClass {
     void (* modify_selection) (Inkscape::Application * inkscape, SPSelection * selection, guint flags);
     void (* set_selection) (Inkscape::Application * inkscape, SPSelection * selection);
     void (* set_eventcontext) (Inkscape::Application * inkscape, SPEventContext * eventcontext);
-    void (* new_desktop) (Inkscape::Application * inkscape, SPDesktop * desktop);
-    void (* destroy_desktop) (Inkscape::Application * inkscape, SPDesktop * desktop);
     void (* activate_desktop) (Inkscape::Application * inkscape, SPDesktop * desktop);
     void (* deactivate_desktop) (Inkscape::Application * inkscape, SPDesktop * desktop);
-    void (* new_document) (Inkscape::Application *inkscape, SPDocument *doc);
     void (* destroy_document) (Inkscape::Application *inkscape, SPDocument *doc);
     void (* color_set) (Inkscape::Application *inkscape, SPColor *color, double opacity);
     void (* shut_down) (Inkscape::Application *inkscape);
@@ -234,22 +227,6 @@ inkscape_class_init (Inkscape::ApplicationClass * klass)
                                sp_marshal_NONE__POINTER,
                                G_TYPE_NONE, 1,
                                G_TYPE_POINTER);
-    inkscape_signals[NEW_DESKTOP] =      g_signal_new ("new_desktop",
-                               G_TYPE_FROM_CLASS (klass),
-                               G_SIGNAL_RUN_FIRST,
-                               G_STRUCT_OFFSET (Inkscape::ApplicationClass, new_desktop),
-                               NULL, NULL,
-                               sp_marshal_NONE__POINTER,
-                               G_TYPE_NONE, 1,
-                               G_TYPE_POINTER);
-    inkscape_signals[DESTROY_DESKTOP] =  g_signal_new ("destroy_desktop",
-                               G_TYPE_FROM_CLASS (klass),
-                               G_SIGNAL_RUN_FIRST,
-                               G_STRUCT_OFFSET (Inkscape::ApplicationClass, destroy_desktop),
-                               NULL, NULL,
-                               sp_marshal_NONE__POINTER,
-                               G_TYPE_NONE, 1,
-                               G_TYPE_POINTER);
     inkscape_signals[ACTIVATE_DESKTOP] = g_signal_new ("activate_desktop",
                                G_TYPE_FROM_CLASS (klass),
                                G_SIGNAL_RUN_FIRST,
@@ -262,22 +239,6 @@ inkscape_class_init (Inkscape::ApplicationClass * klass)
                                G_TYPE_FROM_CLASS (klass),
                                G_SIGNAL_RUN_FIRST,
                                G_STRUCT_OFFSET (Inkscape::ApplicationClass, deactivate_desktop),
-                               NULL, NULL,
-                               sp_marshal_NONE__POINTER,
-                               G_TYPE_NONE, 1,
-                               G_TYPE_POINTER);
-    inkscape_signals[NEW_DOCUMENT] =     g_signal_new ("new_document",
-                               G_TYPE_FROM_CLASS (klass),
-                               G_SIGNAL_RUN_FIRST,
-                               G_STRUCT_OFFSET (Inkscape::ApplicationClass, new_document),
-                               NULL, NULL,
-                               sp_marshal_NONE__POINTER,
-                               G_TYPE_NONE, 1,
-                               G_TYPE_POINTER);
-    inkscape_signals[DESTROY_DOCUMENT] = g_signal_new ("destroy_document",
-                               G_TYPE_FROM_CLASS (klass),
-                               G_SIGNAL_RUN_FIRST,
-                               G_STRUCT_OFFSET (Inkscape::ApplicationClass, destroy_document),
                                NULL, NULL,
                                sp_marshal_NONE__POINTER,
                                G_TYPE_NONE, 1,
@@ -809,8 +770,6 @@ inkscape_add_desktop (SPDesktop * desktop)
 
     inkscape->desktops = g_slist_append (inkscape->desktops, desktop);
 
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[NEW_DESKTOP], 0, desktop);
-
     if (DESKTOP_IS_ACTIVE (desktop)) {
         g_signal_emit (G_OBJECT (inkscape), inkscape_signals[ACTIVATE_DESKTOP], 0, desktop);
         g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_EVENTCONTEXT], 0, SP_DT_EVENTCONTEXT (desktop));
@@ -845,8 +804,6 @@ inkscape_remove_desktop (SPDesktop * desktop)
 	    desktop->selection->clear();
         }
     }
-
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DESTROY_DESKTOP], 0, desktop);
 
     inkscape->desktops = g_slist_remove (inkscape->desktops, desktop);
 
@@ -1049,8 +1006,6 @@ inkscape_add_document (SPDocument *document)
     g_assert (!g_slist_find (inkscape->documents, document));
 
     inkscape->documents = g_slist_append (inkscape->documents, document);
-
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[NEW_DOCUMENT], 0, document);
 }
 
 
@@ -1062,8 +1017,6 @@ inkscape_remove_document (SPDocument *document)
     g_return_if_fail (document != NULL);
 
     g_assert (g_slist_find (inkscape->documents, document));
-
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[DESTROY_DOCUMENT], 0, document);
 
     inkscape->documents = g_slist_remove (inkscape->documents, document);
 
