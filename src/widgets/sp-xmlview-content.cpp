@@ -62,11 +62,7 @@ sp_xmlview_content_new (SPRepr * repr)
 
 	g_signal_connect (G_OBJECT (tb), "changed", G_CALLBACK (sp_xmlview_content_changed), text);
 
-#if 0
-	gtk_text_set_adjustments (GTK_TEXT (text),
-				  GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 1.0, 0.2, 1.0, 1.0)),
-				  GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 1.0, 0.2, 1.0, 1.0)));
-#endif
+	/* should we alter the scrolling adjustments here? */
 
 	sp_xmlview_content_set_repr (text, repr);
 
@@ -153,23 +149,12 @@ event_content_changed (SPRepr * repr, const gchar * old_content, const gchar * n
 
 	text->blocked = TRUE;
 
-#if 0
-	gtk_text_freeze (GTK_TEXT (text));
-	gtk_editable_delete_text (GTK_EDITABLE (text), 0, -1);
-	if (new_content) {
-		gtk_editable_delete_text (GTK_EDITABLE (text), 0, -1);
-		gtk_editable_insert_text (GTK_EDITABLE (text), new_content, strlen (new_content), 0);
-	}
-	gtk_editable_set_editable (GTK_EDITABLE (text), new_content != NULL);
-	gtk_text_thaw (GTK_TEXT (text));
-#else
 	if (new_content) {
 		gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (text)), new_content, strlen (new_content));
 	} else {
 		gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (text)), "", 0);
 	}
 	gtk_text_view_set_editable (GTK_TEXT_VIEW (text), new_content != NULL);
-#endif
 
 	text->blocked = FALSE;
 }
