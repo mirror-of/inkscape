@@ -370,7 +370,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceBrightnessVBox.pack_start(potraceBrightnessBox, false, false, MARGIN);
 
     potraceBrightnessFrame.set_label(_("Image Brightness"));
-    potraceBrightnessFrame.set_shadow_type(Gtk::SHADOW_NONE);
+    //potraceBrightnessFrame.set_shadow_type(Gtk::SHADOW_NONE);
     potraceBrightnessFrame.add(potraceBrightnessVBox);
     potraceBox.pack_start(potraceBrightnessFrame, false, false, 0);
 
@@ -401,7 +401,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceCannyVBox.pack_start(potraceCannyBox, false, false, MARGIN);
 
     potraceCannyFrame.set_label(_("Edge Detection"));
-    potraceCannyFrame.set_shadow_type(Gtk::SHADOW_NONE);
+    //potraceCannyFrame.set_shadow_type(Gtk::SHADOW_NONE);
     potraceCannyFrame.add(potraceCannyVBox);
     potraceBox.pack_start(potraceCannyFrame, false, false, 0);
 
@@ -425,7 +425,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceQuantVBox.pack_start(potraceQuantBox, false, false, MARGIN);
 
     potraceQuantFrame.set_label(_("Quantization / Reduction"));
-    potraceQuantFrame.set_shadow_type(Gtk::SHADOW_NONE);
+    //potraceQuantFrame.set_shadow_type(Gtk::SHADOW_NONE);
     potraceQuantFrame.add(potraceQuantVBox);
     potraceBox.pack_start(potraceQuantFrame, false, false, 0);
   
