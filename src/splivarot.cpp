@@ -413,6 +413,16 @@ sp_selected_path_boolop (bool_op bop)
       
       sp_selection_add_item (selection, item);
       
+      {
+        SPCSSAttr *css;        
+        
+        css = sp_repr_css_attr_new ();
+        sp_repr_css_set_property (css, "fill", "none");
+ 
+        sp_repr_css_change (SP_OBJECT_REPR (item), css, "style");
+        
+        sp_repr_css_attr_unref (css);
+      }
       delete resPath[i];
     }
     sp_document_done (SP_DT_DOCUMENT (desktop));
