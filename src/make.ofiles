@@ -157,6 +157,8 @@ OBJECTS = \
 	livarot/ShapeSweep.o \
 	livarot/ShapeSweepUtils.o \
 	marker-status.o \
+	mod360-test.o \
+	mod360.o \
 	node-context.o \
 	nodepath.o \
 	object-edit.o \
@@ -218,6 +220,7 @@ OBJECTS = \
 	star-context.o \
 	streams-gzip.o \
 	streams-handles.o \
+	streams-jar.o \
 	streams-zlib.o \
 	style.o \
 	svg-view.o \
@@ -317,7 +320,6 @@ LINTS = \
 	extension/internal/ps.lint \
 	extension/internal/svg.lint \
 	extension/internal/win32.lint \
-	extension/menu.lint \
 	extension/system.lint \
 	extract-uri-test.lint \
 	extract-uri.lint \
@@ -426,6 +428,8 @@ LINTS = \
 	livarot/ShapeSweep.lint \
 	livarot/ShapeSweepUtils.lint \
 	marker-status.lint \
+	mod360-test.lint \
+	mod360.lint \
 	node-context.lint \
 	nodepath.lint \
 	object-edit.lint \
@@ -487,6 +491,7 @@ LINTS = \
 	star-context.lint \
 	streams-gzip.lint \
 	streams-handles.lint \
+	streams-jar.lint \
 	streams-zlib.lint \
 	style.lint \
 	svg-view.lint \
