@@ -1,19 +1,12 @@
 
-Inkscape
---------
+Inkscape. Draw Freely.
+======================
 
-Inkscape is (or at least should be) a vector illustrator program for
-the GNOME environment.  It is currently in active development and
-approaching general usability.
+http://www.inkscape.org
 
-If you are more interested in hacking, you can also try out
-KIllustrator, Gill and sketch. Inkscape eagerly borrows code from
-every other free program under the Sun (hey - isn't it the main point
-about free software?)
+Inkscape is an open source drawing tool with capabilities similar to Illustrator, Freehand, and CorelDraw that uses the W3C standard scalable vector graphics  format (SVG). Some supported SVG features include basic shapes, paths, text, markers, clones, alpha blending, transforms, gradients, and grouping. In addition, Inkscape supports Creative Commons meta-data, node-editing, layers, complex path operations, text-on-path, and SVG XML editing. It also imports several formats like EPS, Postscript, JPEG, PNG, BMP, and TIFF and exports PNG as well as multiple vector-based formats.
 
-You can always find the freshest Inkscape at GNOME CVS.  The official
-homepage is http://inkscape.org/ You can also find links
-to the binary & source code packages there.
+Inkscape's main motivation is to provide the Open Source community with a fully W3C compliant XML, SVG, and CSS2 drawing tool. Additional planned work includes conversion of the codebase from C/Gtk to C++/Gtkmm, emphasizing a lightweight core with powerful features added through an extension mechanism, and the establishment of a friendly, open, community-oriented development processes.
 
 Inkscape uses the standard procedure for compilation and installation: 
 
@@ -26,27 +19,9 @@ the "./autogen.sh" command, which calls in turn a number of other
 programs such as automake and autoconf.  See INSTALL for more
 details. 
 
-You need reasonably recent gnome installation including the -devel-
-libraries. Helix Gnome + gnome-print 0.21 (or higher) + bonobo 0.17
-(or higher) should do it.  You can also add --without-bonobo to
-configure command line to disable HIGHLY EXPERIMENTAL bonobo support
+Please see www.inkscape.org for the most current dependencies.
 
 If you modify Inkscape in any usable way, please let us know also.
 
-Some demo pictures could have absolute paths for imported images. So if they
-do not display correctly, tune them with a good text editor.
-
-Some guidelines:
-
-Command line:
--z, --without-gui         do not open GUI, useful for printing SVG documents
--f --file filename        open file
--p --print outputfile     prints file (use "| lpr" for pipelining)
-
-Ctrl & Shift modify dragging behaviour in some modes
-Shift click/rubberband usually toggles selection
-Snapping to guidelines/grid work only for certain modes
-To break line (or add node) select its endpoints
-It should import png, bmp, jpg, xpm & gif bitmaps and svg vector images.
-Open can handle only svg graphics
+Please see the file HACKING for further information on developing Inkscape.
 
