@@ -17,6 +17,8 @@
 
 #include "display/nr-arena-group.h"
 #include "xml/repr-private.h"
+#include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
 #include "sp-object-repr.h"
 #include "svg/svg.h"
 #include "document.h"
@@ -24,6 +26,7 @@
 #include "attributes.h"
 
 #include "sp-root.h"
+#include "sp-use.h"
 #include "sp-item-group.h"
 #include "helper/sp-intl.h"
 
@@ -134,6 +137,7 @@ sp_group_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 
 		for (v = item->display; v != NULL; v = v->next) {
 			ac = sp_item_invoke_show (SP_ITEM (ochild), NR_ARENA_ITEM_ARENA (v->arenaitem), v->key, v->flags);
+
 			if (ac) {
 				nr_arena_item_add_child (v->arenaitem, ac, NULL);
 				nr_arena_item_set_order (ac, position);
@@ -378,6 +382,7 @@ sp_group_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 	                                group->mode != SP_GROUP_MODE_GROUP);
 
 	ar = NULL;
+
 	for (o = sp_object_first_child(SP_OBJECT(item)) ; o != NULL; o = SP_OBJECT_NEXT(o) ) {
 		if (SP_IS_ITEM (o)) {
 			child = SP_ITEM (o);
@@ -450,8 +455,17 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 
 			citem = SP_ITEM (child);
 
+			if (SP_IS_USE(citem) && (SP_OBJECT_PARENT (sp_use_get_original (SP_USE(citem))) == SP_OBJECT(group))) {
+				// make sure a clone's effective transform is the same as was under group
+				NR::Matrix g (&(gitem->transform));
+				NR::Matrix i (&(citem->transform));
+				NR::Matrix muse = g.inverse() * i * g;
+				ctrans = muse.operator const NRMatrix&();
+			} else {
+				nr_matrix_multiply (&ctrans, &citem->transform, &gitem->transform);
+			}
+
 			// FIXME: cannot call sp_item_write_transform here - the repr is unattached at this point, has no item. rethink!
-			nr_matrix_multiply (&ctrans, &citem->transform, &gitem->transform);
 			if (sp_svg_transform_write (affinestr, 79, &ctrans)) {
 				sp_repr_set_attr (nrepr, "transform", affinestr);
 			} else {
