@@ -788,7 +788,7 @@ sp_darray_center_tangent(NR::Point const d[],
     if ( d[center + 1] == d[center - 1] ) {
         /* Rotate 90 degrees in an arbitrary direction. */
         NR::Point const diff = d[center] - d[center - 1];
-        ret = rot90(diff);
+        ret = NR::rot90(diff);
     } else {
         ret = d[center - 1] - d[center + 1];
     }

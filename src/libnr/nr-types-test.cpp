@@ -60,8 +60,8 @@ int main(int argc, char *argv[]) {
 	UTEST_TEST("dot") {
 		UTEST_ASSERT( dot(a, b) == ( a[X] * b[X]  +
 					     a[Y] * b[Y] ) );
-		UTEST_ASSERT( dot(a, rot90(a)) == 0.0 );
-		UTEST_ASSERT( dot(-a, rot90(a)) == 0.0 );
+		UTEST_ASSERT( dot(a, NR::rot90(a)) == 0.0 );
+		UTEST_ASSERT( dot(-a, NR::rot90(a)) == 0.0 );
 	}
 
 	double const small = pow(2.0, -1070);

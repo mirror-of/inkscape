@@ -342,7 +342,7 @@ NR::Coord Snapper::intersector_a_vector_snap(NR::Point &req, NR::Point const &mv
     NR::Point const req0(req);
     /* Implement "move from req0 by some multiple of mv" as "dot product with something
        orthogonal to mv remains unchanged". */
-    NR::Point const n2(rot90(mv));
+    NR::Point const n2(NR::rot90(mv));
     NR::Coord const d2 = dot(n2, req);
     if (sp_intersector_line_intersection(n2, d2, n, d, req) == intersects) {
         return L2(req - req0);

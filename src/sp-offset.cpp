@@ -776,6 +776,7 @@ vectors_are_clockwise (NR::Point A, NR::Point B, NR::Point C)
  *  dot(A, rot90(B))*dot(C, rot90(B)) == -1.  
  *    -- njh */
 {
+    using NR::rot90;
     double ab_s = dot(A, rot90(B));
     double ab_c = dot(A, B);
     double bc_s = dot(B, rot90(C));

@@ -54,7 +54,7 @@ sp_intersector_kind sp_intersector_line_intersection(NR::Point const &n0, double
  * 
  * if the denominator (bd-ae) is 0 then the lines are parallel, if the
  * numerators are then 0 then the lines coincide. */
-	double denominator = dot(rot90(n0), n1);
+	double denominator = dot(NR::rot90(n0), n1);
 	double X = (n1[NR::Y] * d0  -
 		    n0[NR::Y] * d1);
 	/* X = (-d1, d0) dot (n0[Y], n1[Y]) */
@@ -85,7 +85,7 @@ sp_intersector_ccw(const NR::Point p0, const NR::Point p1, const NR::Point p2)
 	NR::Point d1 = p1 - p0;
 	NR::Point d2 = p2 - p0;
 /* compare slopes but avoid division operation */
-	double c = dot(rot90(d1), d2);
+	double c = dot(NR::rot90(d1), d2);
 	if(c > 0)
 		return +1; // ccw - do these match def'n in header?
 	if(c < 0)
