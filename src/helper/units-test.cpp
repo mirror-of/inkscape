@@ -12,9 +12,8 @@ approx_equal(double const x, double const y)
     return fabs(x / y - 1) < 1e-15;
 }
 
-
-int
-main(int argc, char *argv[])
+static bool
+test_conversions()
 {
     utest_start("sp_units_get_points, sp_points_get_units");
 
@@ -61,10 +60,52 @@ main(int argc, char *argv[])
             UTEST_ASSERT(approx_equal(tmp, c.x));
         }
     }
+    return utest_end();
+}
 
-    return ( utest_end()
-             ? EXIT_SUCCESS
-             : EXIT_FAILURE );
+static bool
+test_bases()
+{
+    utest_start("sp_unit_get_identity");
+#define CASE(_base) { _base, #_base }
+    struct BaseCase { SPUnitBase base; char const *name; } const cases[] = {
+        CASE(SP_UNIT_DIMENSIONLESS),
+        CASE(SP_UNIT_ABSOLUTE),
+        CASE(SP_UNIT_DEVICE),
+        CASE(SP_UNIT_VOLATILE)
+    };
+#undef CASE
+
+    unsigned done = 0;
+    for (unsigned i = 0; i < G_N_ELEMENTS(cases); ++i) {
+        UTEST_TEST(cases[i].name) {
+            SPUnitBase const base = cases[i].base;
+            UTEST_ASSERT((base & (base - 1)) == 0);
+            UTEST_ASSERT(base != 0);
+            done |= base;
+            if (base != SP_UNIT_VOLATILE) {
+                /* SP_UNIT_VOLATILE has no base unit. */
+                SPUnit const &unit = *sp_unit_get_identity(base);
+                UTEST_ASSERT(unit.base == base);
+                UTEST_ASSERT(unit.unittobase == 1.0);
+            }
+        }
+    }
+    UTEST_TEST("coverage") {
+        UTEST_ASSERT(done == SP_UNITS_ALL);
+    }
+
+    return utest_end();
+}
+
+int
+main(int argc, char *argv[])
+{
+    int const ret = ( ( test_conversions()
+                        && test_bases() )
+                      ? EXIT_SUCCESS
+                      : EXIT_FAILURE );
+    return ret;
 }
 
 
