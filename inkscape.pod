@@ -1,0 +1,240 @@
+
+=head1 NAME
+
+B<Inkscape> - a 2D vector graphics editing program.
+
+=head1 SYNOPSIS
+
+C<inkscape [options] [filename ...]>
+
+options:
+
+    -?, --help		
+    -a, --export-area=x0:y0:x1:y1     
+    -b, --export-background=COLOR     
+    -d, --export-dpi=DPI              
+    -e, --export-png=FILENAME         
+    -f, --file=FILENAME               
+    -h, --export-height=HEIGHT        
+    -i, --bitmap-icons                
+    -p, --print=FILENAME              
+    -s, --slideshow                   
+    -w, --export-width=WIDTH          
+    -x, --with-gui                    
+    -z, --without-gui                 
+        --export-svg=FILENAME             
+        --usage       
+
+=head1 DESCRIPTION
+
+B<Inkscape> is a GUI editor for B<Scalable Vector Graphics (SVG)> format
+drawing files, with capabilities similar to B<Illustrator>, B<CorelDraw>,
+B<Visio>, etc. Supported SVG features include basic shapes, paths, text,
+alpha blending, transforms, gradients, node editing, svg-to-png export,
+grouping, and more.  .  The interface is designed to be comfortable and
+efficient for skilled users, while remaining conformant to B<GNOME>
+standards so that users familiar with other GNOME applications can learn
+it's interface rapidly.
+
+B<SVG> is a W3C standard XML format for 2D vector drawing, that allows
+defining objects in the drawing using points, paths, and primitive
+shapes.  Colors, fonts, line thicknesses, and so forth are specified as
+'style' attributes to these objects.  The intent is that since SVG is a
+standard, and since its files are text/xml instead of binary, it is be
+possible to use SVG files in a sizeable number of programs and for a
+wide range of uses.
+
+B<Inkscape> uses SVG as its native document format, and has the goal of
+becoming the most fully compliant drawing program for SVG files
+available in the Open Source community.
+
+
+=head1 OPTIONS
+
+=over 8
+
+=item B<-?>, B<--help>
+
+Show help message
+
+=item B<-a> I<x0:y0:x1:y1>, B<--export-area>=I<x0:y0:x1:y1>
+
+Exported area in millimeters (default is full document, 0,0 is
+lower-left corner)
+
+=item B<-b> I<COLOR>, B<--export-background>=I<COLOR>
+
+Background color of exported bitmap (any SVG supported color string)
+
+=item B<-d> I<DPI>, B<--export-dpi>=I<DPI>
+
+The resolution used for converting SVG into bitmap (default 72.0)
+
+=item B<-e> I<FILENAME>, B<--export-png>=I<FILENAME>
+
+Export document to png file
+
+=item B<-f> I<FILENAME>, B<--file>=I<FILENAME>
+
+Open specified document(s) (option string may be excluded)
+
+=item B<-h> I<HEIGHT>, B<--export-height>=I<HEIGHT>
+
+The height of generated bitmap in pixels (overwrites dpi)
+
+=item B<-i>, B<--bitmap-icons>
+
+Prefer bitmap (xpm) icons to SVG ones
+
+=item B<-p> I<FILENAME>, B<--print>=I<FILENAME>
+
+Print document(s) to specified output file (use '| program' for pipe)
+
+=item B<-s>, B<--slideshow>
+
+Show given files one-by-one, switch to next on any key/mouse event
+
+=item B<-w> I<WIDTH>, B<--export-width>=I<WIDTH>
+
+The width of generated bitmap in pixels (overwrites dpi)
+
+=item B<-x>, B<--with-gui>
+
+Try to use X server even if $DISPLAY is not set)
+
+=item B<-z>, B<--without-gui>
+
+Do not open GUI and do not use X server (only process files from console).
+Useful for printing SVG documents.
+
+=item B<--export-svg>=I<FILENAME>
+
+Export document to plain SVG file (no "xmlns:sodipodi" namespace)
+
+=item B<--usage>
+
+Display brief usage message
+
+=back
+
+=head1 KEYBINDINGS
+
+See keybindings.txt for a listing of keybindings.
+
+=head1 DIAGNOSTICS
+
+The program returns zero on success or non-zero on failure.
+
+A variety of error messages and warnings are printed to STDERR or
+STDOUT.  If the program behaves erratically with a particular SVG file
+or crashes, it is sometimes useful to look at this output for clues.
+For example, it may indicate if a given SVG file contains elements or
+attributes that are not yet supported by the codebase.
+
+=head1 EXAMPLES
+
+While obviously B<Inkscape> is primarily intended as a GUI application,
+it can be used for doing SVG processing on the commandline as well.
+(Note though that other SVG tools and libraries such as librsvg may be
+better suited for production SVG processing.)
+
+Printing an SVG file directly:
+
+    inkscape filename.svg -p | lpr
+
+Converting SVG file to a png:
+
+    inkscape --export-png=filename.png --export-height=400 --export-width=600
+
+Convert an SVG document using items in the sodipodi namespace to plain
+SVG:  
+
+    inkscape filename1.svg e --export-svg=filename2.svg
+
+=head1 ENVIRONMENT
+
+B<DISPLAY> to get the default host and display number.
+
+=head1 FILES
+
+B<$HOME>/.inkscape/preferences.xml - The user's preference settings. 
+
+B<$HOME>/.inkscape/extensions.xml - The filter programs to be used in
+the application.
+
+=head1 OTHER INFO
+
+The canonical place to find B<Inkscape> info is at
+http://www.inkscape.org/.  The website includes links to other relevant
+documentation, tutorials, user manual, examples, mailing list archives,
+the latest released version of the program, and more. 
+
+=head1 SEE ALSO
+
+gimp(1)
+
+=head1 NOTES
+
+Ctrl & Shift modify dragging behaviour in some modes
+
+Shift click/rubberband usually toggles selection
+
+Snapping to guidelines/grid work only for certain modes
+
+To break line (or add node) select its endpoints
+
+It should import png, bmp, jpg, xpm & gif bitmaps and svg vector images.
+
+Open can handle only svg graphics
+
+=head1 BUGS
+
+When importing svg generated with ill2svg, all paths are usually grouped.
+Ungroup these manually.
+
+Many bugs are known; please refer to the website for reviewing the
+reported ones and to report newly found issues.
+
+=head1 AUTHORS
+
+This codebase owes its existance to a large number of contributors
+throughout its various incarnations.  The following list is certainly
+incomplete, but serves to recognize the many shoulders on which this
+application sits:
+
+[% INCLUDE "AUTHORS" %]
+
+This man page was put together by Bryce Harrington
+E<lt>brycehar@bryceharrington.comE<gt>
+
+=head1 HISTORY
+
+The codebase that would become Inkscape began life in 1999 as the
+program 'GILL', the GNOME Illustrator application, created by Raph
+Levien.  The stated objective for Gill was to eventually support all of
+SVG.  Raph implemented the PostScript bezier imaging model, including
+stroking and filling, line cap style, line join style, text, etc.  A Bonobo
+Raph's Gill page is at http://www.levien.com/svg/.  Work on Gill appears
+to have slowed or ceased in 2000, perhaps in part due to frustrations
+dealing with implementing DOM and SVG.
+
+The next incarnation of the codebase was to become the highly popular
+program Sodipodi, led by Lauris Kaplinkski.  The codebase was turned
+into a very usable illustration program over the course of several
+year's work, adding several new features, multi-lingual support, porting
+to Windows and other operating systems, and eliminating dependencies.
+
+Inkscape was formed in 2003 by a number of active Sodipodi developers
+wanting to take a different direction with the codebase in terms of
+focus on SVG-compliance, interface look-and-feel, and a desire to open
+development opportunities to more participants.  In a way, this
+direction marks a return to the codebase's Gill roots.
+
+=head1 COPYRIGHT AND LICENSE
+
+B<Copyright (C)> 1999, 2000, 2001, 2002, 2003 by Authors.  
+
+B<Inkscape> is free software; you can redistribute it and/or modify it
+under the terms of the GPL.  
+
+
