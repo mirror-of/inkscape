@@ -701,15 +701,14 @@ sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr)
 	dt = fmod (ge->end - ge->start, SP_2PI);
 	if (fabs (dt) < 1e-6) {
 		NR::Point ph = sp_arc_get_xy (arc, (ge->start + ge->end) / 2.0);
-		g_snprintf (c, ARC_BUFSIZE, "M %f %f A %f %f 0 %d %d %f,%f A %g %g 0 %d %d %g %g L %f %f z",
+		g_snprintf (c, ARC_BUFSIZE, "M %f %f A %f %f 0 %d %d %f,%f A %g %g 0 %d %d %g %g z",
 			    p1[NR::X], p1[NR::Y],
 			    ge->rx.computed, ge->ry.computed,
 			    1, (dt > 0),
 			    ph[NR::X], ph[NR::Y],
 			    ge->rx.computed, ge->ry.computed,
 			    1, (dt > 0),
-			    p2[NR::X], p2[NR::Y],
-			    ge->cx.computed, ge->cy.computed);
+			    p2[NR::X], p2[NR::Y]);
 	} else {
 		fa = (fabs (dt) > M_PI) ? 1 : 0;
 		fs = (dt > 0) ? 1 : 0;
@@ -739,10 +738,11 @@ sp_arc_write (SPObject *object, SPRepr *repr, guint flags)
 	SPGenericEllipse *ge = SP_GENERICELLIPSE (object);
 	SPArc *arc = SP_ARC (object);
 
+	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
+		repr = sp_repr_new ("path");
+	}
+
 	if (flags & SP_OBJECT_WRITE_EXT) {
-		if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-			repr = sp_repr_new ("path");
-		}
 		sp_repr_set_attr (repr, "sodipodi:type", "arc");
 		sp_repr_set_double (repr, "sodipodi:cx", ge->cx.computed);
 		sp_repr_set_double (repr, "sodipodi:cy", ge->cy.computed);
@@ -761,27 +761,10 @@ sp_arc_write (SPObject *object, SPRepr *repr, guint flags)
 			sp_repr_set_attr (repr, "sodipodi:start", NULL);
 			sp_repr_set_attr (repr, "sodipodi:open", NULL);
 		}
-
-		sp_arc_set_elliptical_path_attribute (arc, repr);
-
-	} else {
-		gdouble dt;
-		dt = fmod (ge->end - ge->start, SP_2PI);
-		if (fabs (dt) < 1e-6) {
-			if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-				repr = sp_repr_new ("ellipse");
-			}
-			sp_repr_set_double (repr, "cx", ge->cx.computed);
-			sp_repr_set_double (repr, "cy", ge->cy.computed);
-			sp_repr_set_double (repr, "rx", ge->rx.computed);
-			sp_repr_set_double (repr, "ry", ge->ry.computed);
-		} else {
-			if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-				repr = sp_repr_new ("path");
-			}
-			sp_arc_set_elliptical_path_attribute (arc, repr);
-		}
 	}
+
+	// write d=
+	sp_arc_set_elliptical_path_attribute (arc, repr);
 
 	if (((SPObjectClass *) arc_parent_class)->write)
 		((SPObjectClass *) arc_parent_class)->write (object, repr, flags);
