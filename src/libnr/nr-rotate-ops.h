@@ -15,6 +15,12 @@ inline rotate operator*(rotate const &a, rotate const &b)
     return rotate( a.vec * b );
 }
 
+inline rotate &rotate::operator*=(rotate const &b)
+{
+    *this = *this * b;
+    return *this;
+}
+
 inline rotate operator/(rotate const &numer, rotate const &denom)
 {
     return numer * denom.inverse();

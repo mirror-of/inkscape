@@ -19,6 +19,8 @@
 	* src/libnr/Makefile_insert, src/Makefile.am: Reference new files,
 	  add to unit tests.
 
+	* src/libnr/nr-rotate-ops.h (operator*=): New method.
+
 	* src/libnr/nr-point-fns.h (point_equalp): New function.
 
 	* src/radial.h: Remove this unused header.
