@@ -1,3 +1,5 @@
+/** \file Some utility functions for filenames. */
+
 #define DIR_UTIL_C
 
 #include <errno.h>
@@ -6,39 +8,55 @@
 #include "dir-util.h"
 #include <string.h>
 
-const gchar *
-sp_relative_path_from_path (const gchar * path, const gchar * base)
+/** Returns a form of \a path relative to \a base if that is easy to construct (e.g. if \a path
+    appears to be in the directory specified by \a base), otherwise returns \a path.
+
+    N.B. The return value is a pointer into the \a path string.
+
+    \a base is expected to be the absolute path of a directory.
+
+    \a path is expected to be an absolute path.
+
+    \see inkscape_abs2rel for a more sophisticated version.
+    \see prepend_current_dir_if_relative.
+*/
+char const *
+sp_relative_path_from_path(char const *const path, char const *const base)
 {
-	const gchar * p, * b, * r;
+	/* TODO: Make sure that we're doing the right thing if base ends in G_DIR_SEPARATOR.  As a
+	   special case, make sure that it does the right thing if base is "/" (and G_DIR_SEPARATOR
+	   is '/'). */
 
-	if (path == NULL) return NULL;
-	if (base == NULL) return path;
-
-	p = path;
-	b = base;
-	r = path;
-
-	while ((* p == * b) && (* p != '\0') && (* b != '\0')) {
-		if (* p == G_DIR_SEPARATOR) r = p + 1;
-		p++;
-		b++;
+	size_t base_len = strlen(base);
+	while (base_len != 0
+	       && (base[base_len - 1] == G_DIR_SEPARATOR))
+	{
+		--base_len;
 	}
 
-	if ((* b == '\0') && (* p == G_DIR_SEPARATOR))
-		return p + 1;
-	if ((* b == '\0') && (* p != '\0'))
-		return p;
+	if ((memcmp(path, base, base_len) == 0)
+	    && (path[base_len] == G_DIR_SEPARATOR))
+	{
+		char const *ret = path + base_len + 1;
+		while (*ret == G_DIR_SEPARATOR) {
+			++ret;
+		}
+		if (*ret != '\0') {
+			return ret;
+		}
+	}
+
 	return path;
 }
 
-const gchar *
-sp_extension_from_path (const gchar * path)
+char const *
+sp_extension_from_path(char const *const path)
 {
-	const gchar * p;
+	if (path == NULL) {
+		return NULL;
+	}
 
-	if (path == NULL) return NULL;
-
-	p = path;
+	char const *p = path;
 	while (*p != '\0') p++;
 
 	while ((p >= path) && (*p != G_DIR_SEPARATOR) && (*p != '.')) p--;
@@ -50,9 +68,9 @@ sp_extension_from_path (const gchar * path)
 
 
 /* current == "./", parent == "../" */
-static char dots[] = {'.', '.', G_DIR_SEPARATOR, '\0'};
-static char *parent = dots;
-static char *current = dots + 1;
+static char const dots[] = {'.', '.', G_DIR_SEPARATOR, '\0'};
+static char const *const parent = dots;
+static char const *const current = dots + 1;
 
 /**
  * \brief   Convert a relative path name into absolute. If path is already absolute, does nothing except copying path to result.

@@ -1,3 +1,9 @@
+2004-12-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/dir-util.cpp (sp_relative_path_from_path):
+	  Fix when base is a string prefix of path but a directory prefix
+	  (e.g. path=/foo/barney, base=/foo/bar).
+
 2004-12-10  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-conn-end.cpp (sp_conn_end_move_compensate):
