@@ -288,7 +288,7 @@ nodepath_repr_changed (SPNodePath * np)
 }
 
 void
-update_repr (SPNodePath * np)
+update_repr_internal (SPNodePath * np)
 {
 	SPCurve * curve;
 	gchar * typestr;
@@ -304,12 +304,25 @@ update_repr (SPNodePath * np)
 	sp_repr_set_attr (SP_OBJECT (np->path)->repr, "d", svgpath);
 	sp_repr_set_attr (SP_OBJECT (np->path)->repr, "sodipodi:nodetypes", typestr);
 
-	sp_document_done (SP_DT_DOCUMENT (np->desktop));
-
 	g_free (svgpath);
 	g_free (typestr);
 	sp_curve_unref (curve);
 }
+
+void
+update_repr (SPNodePath * np)
+{
+	update_repr_internal (np);
+	sp_document_done (SP_DT_DOCUMENT (np->desktop));
+}
+
+void
+update_repr_keyed (SPNodePath * np, gchar *key)
+{
+	update_repr_internal (np);
+	sp_document_maybe_done (SP_DT_DOCUMENT (np->desktop), key);
+}
+
 
 static void
 stamp_repr  (SPNodePath * np)
@@ -801,7 +814,13 @@ sp_node_selected_move (gdouble dx, gdouble dy)
 	if (!nodepath) return;
 
 	sp_nodepath_selected_nodes_move (nodepath, dx, dy);
-	update_repr (nodepath);
+
+	if (dx == 0) {
+		update_repr_keyed (nodepath, "node:move:vertical");
+	} else if (dy == 0) {
+		update_repr_keyed (nodepath, "node:move:horizontal");
+	} else 
+		update_repr (nodepath);
 }
 
 void
@@ -824,7 +843,13 @@ sp_node_selected_move_screen (gdouble dx, gdouble dy)
 	if (!nodepath) return;
 
 	sp_nodepath_selected_nodes_move (nodepath, zdx, zdy);
-	update_repr (nodepath);
+
+	if (dx == 0) {
+		update_repr_keyed (nodepath, "node:move:vertical");
+	} else if (dy == 0) {
+		update_repr_keyed (nodepath, "node:move:horizontal");
+	} else 
+		update_repr (nodepath);
 }
 
 static void

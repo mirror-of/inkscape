@@ -797,7 +797,13 @@ sp_selection_move (gdouble dx, gdouble dy)
   sp_selection_move_relative (selection, dx, dy);
 
   sp_selection_changed (selection);
-  sp_document_done (SP_DT_DOCUMENT (desktop));
+
+	if (dx == 0) {
+		sp_document_maybe_done (SP_DT_DOCUMENT (desktop), "selector:move:vertical");
+	} else if (dy == 0) {
+		sp_document_maybe_done (SP_DT_DOCUMENT (desktop), "selector:move:horizontal");
+	} else 
+		sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
 void
@@ -820,7 +826,13 @@ sp_selection_move_screen (gdouble dx, gdouble dy)
   sp_selection_move_relative (selection, zdx, zdy);
 
   sp_selection_changed (selection);
-  sp_document_done (SP_DT_DOCUMENT (desktop));
+
+	if (dx == 0)
+		sp_document_maybe_done (SP_DT_DOCUMENT (desktop), "selector:move:vertical");
+	else if (dy == 0)
+		sp_document_maybe_done (SP_DT_DOCUMENT (desktop), "selector:move:horizontal");
+	else 
+		sp_document_done (SP_DT_DOCUMENT (desktop));
 }
 
 void
