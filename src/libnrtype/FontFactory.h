@@ -8,7 +8,8 @@
 #define my_font_factory
 
 #include <functional>
-#include <hash_map.h>
+#include <algorithm>
+#include <ext/hash_map>
 
 #include <pango/pango.h>
 #include "nr-type-primitives.h"
@@ -27,10 +28,10 @@
 class font_instance;
 
 // for the hashmap
-struct font_descr_hash : public unary_function<PangoFontDescription*,size_t> {
+struct font_descr_hash : public std::unary_function<PangoFontDescription*,size_t> {
 	size_t  operator()( PangoFontDescription* const&x) const;
 };
-struct font_descr_equal : public binary_function<PangoFontDescription*,PangoFontDescription*,bool> {
+struct font_descr_equal : public std::binary_function<PangoFontDescription*,PangoFontDescription*,bool> {
   bool  operator()( PangoFontDescription* const&a, PangoFontDescription* const&b);
 };
 
@@ -46,7 +47,7 @@ public:
 	PangoWin32FontCache*  wCache;
 #endif
 	
-  hash_map<PangoFontDescription*,font_instance*,font_descr_hash,font_descr_equal>     loadedFaces;
+	__gnu_cxx::hash_map<PangoFontDescription*,font_instance*,font_descr_hash,font_descr_equal>     loadedFaces;
 	
 	font_factory(void);
 	~font_factory(void);

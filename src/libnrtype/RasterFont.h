@@ -7,7 +7,8 @@
 #ifndef my_raster_font
 #define my_raster_font
 
-#include <hash_map.h>
+#include <algorithm>
+#include <ext/hash_map>
 
 #include <livarot/Ligne.h>
 #include <libnr/nr-pixblock.h>
@@ -27,7 +28,7 @@ public:
 	
 	font_style                    style;  
 	
-  hash_map<int,int>             glyph_id_to_raster_glyph_no;
+	__gnu_cxx::hash_map<int,int>             glyph_id_to_raster_glyph_no;
   int                           nbBase,maxBase;
   raster_glyph**                bases;
 	

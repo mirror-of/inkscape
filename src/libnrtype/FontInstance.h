@@ -8,7 +8,8 @@
 #define my_font_instance
 
 #include <functional>
-#include <hash_map.h>
+#include <algorithm>
+#include <ext/hash_map>
 
 #include <livarot/LivarotDefs.h>
 
@@ -48,10 +49,10 @@ typedef struct font_style {
 	void          Apply(Path* src,Shape* dst);
 } font_style;
 
-struct font_style_hash : public unary_function<font_style,size_t> {
+struct font_style_hash : public std::unary_function<font_style,size_t> {
   size_t  operator()(const font_style &x) const;
 };
-struct font_style_equal : public binary_function<font_style,font_style,bool> {
+struct font_style_equal : public std::binary_function<font_style,font_style,bool> {
   bool  operator()(const font_style &a,const font_style &b);
 };
 
@@ -65,7 +66,7 @@ typedef struct font_glyph {
 
 class font_instance {
 public:
-	hash_map<font_style,raster_font*,font_style_hash,font_style_equal>     loadedStyles;
+	__gnu_cxx::hash_map<font_style,raster_font*,font_style_hash,font_style_equal>     loadedStyles;
 
 	PangoFont*            pFont;
 #ifdef WITH_XFT
@@ -81,7 +82,7 @@ public:
 	font_factory*         daddy;
 	
 	// common glyph definitions for all the rasterfonts
-  hash_map<int,int>     id_to_no;
+	__gnu_cxx::hash_map<int,int>     id_to_no;
   int                   nbGlyph,maxGlyph;
   font_glyph*           glyphs;
 
