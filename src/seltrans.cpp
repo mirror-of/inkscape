@@ -330,37 +330,37 @@ void sp_sel_trans_ungrab(SPSelTrans *seltrans)
 {
 	g_return_if_fail(seltrans->grabbed);
 
+	SPSelection *selection = SP_DT_SELECTION(seltrans->desktop);
+
 	bool updh = true;
 	if (!seltrans->empty && seltrans->changed) {
-		GSList const *l = sp_selection_item_list(SP_DT_SELECTION(seltrans->desktop));
 
-		gchar tstr[80];
-		tstr[79] = '\0';
-		while (l != NULL) {
+		for (GSList const *l = selection->itemList(); l != NULL; l = l->next) {
 			SPItem *item = SP_ITEM(l->data);
+
 			/* fixme: We do not have to set it here (Lauris) */
 			if (seltrans->show == SP_SELTRANS_SHOW_OUTLINE) {
 				NR::Matrix const i2dnew( sp_item_i2d_affine(item) * seltrans->current );
 				sp_item_set_i2d_affine(item, i2dnew);
 			}
+
 #if 0 /* Re-enable this once persistent guides have a graphical indication.
 	 At the time of writing, this is the only place to re-enable. */
 			sp_item_update_cns(*item, *seltrans->desktop);
 #endif
+
+			// FIXME: make preserve/optimize switch global and leave only _write_transform call here
 			if (seltrans->transform == SP_SELTRANS_TRANSFORM_OPTIMIZE) {
 				sp_item_write_transform (item, SP_OBJECT_REPR (item), &item->transform);
-				/* because item/repr affines may be out of sync, invoke reread */
-				/* fixme: We should test equality to avoid unnecessary rereads */
-				/* fixme: This probably is not needed (Lauris) */
-				sp_object_read_attr (SP_OBJECT (item), "transform");
 			} else {
+				gchar tstr[80];
+				tstr[79] = '\0';
 				if (sp_svg_transform_write (tstr, 79, &item->transform)) {
 					sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", tstr);
 				} else {
 					sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", NULL);
 				}
 			}
-			l = l->next;
 		}
 		seltrans->center *= seltrans->current;
 
