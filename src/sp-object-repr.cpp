@@ -44,21 +44,17 @@
 SPObject *
 sp_object_repr_build_tree (SPDocument *document, SPRepr *repr)
 {
-	const gchar * name;
-	GType type;
-	SPObject * object;
-
 	g_assert (document != NULL);
 	g_assert (SP_IS_DOCUMENT (document));
 	g_assert (repr != NULL);
 
-	name = sp_repr_name (repr);
+	gchar const * const name = sp_repr_name(repr);
 	g_assert (name != NULL);
-	type = sp_object_type_lookup (name);
+	GType const type = sp_object_type_lookup(name);
 	g_assert (g_type_is_a (type, SP_TYPE_ROOT));
-	object = SP_OBJECT(g_object_new (type, 0));
-	g_assert (object != NULL);
-	sp_object_invoke_build (object, document, repr, FALSE);
+	SPObject * const object = SP_OBJECT(g_object_new(type, 0));
+	g_assert(object != NULL);
+	sp_object_invoke_build(object, document, repr, FALSE);
 
 	return object;
 }
@@ -66,15 +62,15 @@ sp_object_repr_build_tree (SPDocument *document, SPRepr *repr)
 GType
 sp_repr_type_lookup (SPRepr *repr)
 {
-	const gchar *name;
-
 	if ( repr->type == SP_XML_TEXT_NODE ) {
 		return SP_TYPE_STRING;
 	} else if ( repr->type == SP_XML_ELEMENT_NODE ) {
-		name = sp_repr_attr (repr, "sodipodi:type");
-		if (!name) name = sp_repr_name (repr);
+		gchar const * const type_name = sp_repr_attr(repr, "sodipodi:type");
+		gchar const * const name = ( type_name
+					     ? type_name
+					     : sp_repr_name(repr) );
 
-		return sp_object_type_lookup (name);
+		return sp_object_type_lookup(name);
 	} else {
 		return 0;
 	}
@@ -85,8 +81,6 @@ static GHashTable *dtable = NULL;
 GType
 sp_object_type_lookup (const gchar * name)
 {
-	gpointer data;
-
 	if (!dtable) {
 		dtable = g_hash_table_new (g_str_hash, g_str_equal);
 		g_hash_table_insert (dtable, (void *)"a", GINT_TO_POINTER (SP_TYPE_ANCHOR));
@@ -120,21 +114,23 @@ sp_object_type_lookup (const gchar * name)
 		g_hash_table_insert (dtable, (void *)"typeset", GINT_TO_POINTER (SP_TYPE_TYPESET));
 	}
 
-	data = g_hash_table_lookup (dtable, name);
-
-	if (data == NULL) return SP_TYPE_OBJECT;
-
-	return  (GType)data;
+	gpointer const data = g_hash_table_lookup(dtable, name);
+	return ( ( data == NULL )
+		 ? SP_TYPE_OBJECT
+		 : GPOINTER_TO_INT(data) );
 }
 
-/* Return TRUE on success */
-
-GType
-sp_object_type_register (const gchar *name, GType type)
+void
+sp_object_type_register(gchar const *name, GType const gtype)
 {
-	GType current;
-	current = sp_object_type_lookup (name);
-	if (current != SP_TYPE_OBJECT) return FALSE;
-	g_hash_table_insert (dtable, (char *) name, GINT_TO_POINTER (type));
-	return TRUE;
+	GType const current = sp_object_type_lookup(name);
+	if (current == SP_TYPE_OBJECT) {
+		g_hash_table_insert(dtable, const_cast<gchar *>(name), GINT_TO_POINTER(gtype));
+	} else {
+		/* Already registered. */
+		if (current != gtype) {
+			g_warning("repr type `%s' already registered as type #%lu, ignoring attempt to re-register as #%lu.",
+				  name, current, gtype);
+		}
+	}
 }

@@ -1,7 +1,11 @@
 2004-06-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-object-repr.cpp: Move some declarations to first use.
+	* src/sp-object-repr.h, src/sp-object-repr.cpp (sp_object_type_register):
+	  Change return type to void.
+
 	* src/sp-item.cpp (sp_item_repr_compare_position):
-	  Implement as shallow wrapper around sp_repr_compare_position.
+	  Reimplement as shallow wrapper around sp_repr_compare_position.
 
 	* src/helper/units.h, src/helper/units.cpp:
 	  SPUnitId: new enum, to allow replacing string lookups.

@@ -20,9 +20,7 @@ SPObject *sp_object_repr_build_tree (SPDocument *document, SPRepr *repr);
 GType sp_repr_type_lookup (SPRepr *repr);
 GType sp_object_type_lookup (const gchar *name);
 
-/* Return TRUE on success */
-
-GType sp_object_type_register (const gchar *name, GType type);
+void sp_object_type_register(gchar const *name, GType type);
 
 #endif
 
