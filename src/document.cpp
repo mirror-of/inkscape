@@ -271,17 +271,9 @@ sp_document_create (SPReprDoc *rdoc,
 	document->rroot = rroot;
 
 #ifndef WIN32
-	if (uri) { // compute absolute path
-		 char *full_path = (char *) g_malloc (1000);
-		inkscape_rel2abs (uri, g_get_current_dir(), full_path, 1000);
-		document->uri = g_strdup (full_path);
-		g_free (full_path);
-	} else {
-		document->uri = NULL;
-	}
+	prepend_current_dir_if_relative (&(document->uri), uri);
 #else
-	//TODO:WIN32: program the windows equivalent of the above code for finding out 
-	// the normalized absolute path of the file, including the drive letter
+	// FIXME: it may be that prepend_current_dir_if_relative works OK on windows too, test!
 	document->uri = g_strdup (uri);
 #endif
 
@@ -317,6 +309,8 @@ sp_document_create (SPReprDoc *rdoc,
 	if (!sp_repr_attr (rroot, "width")) sp_repr_set_attr (rroot, "width", A4_WIDTH_STR);
 	if (!sp_repr_attr (rroot, "height")) sp_repr_set_attr (rroot, "height", A4_HEIGHT_STR);
         /* End of quick hack 2 */
+
+	g_print ("1u %s  b %s\n", document->uri, sp_repr_attr (rroot, "sodipodi:docbase"));
 
 	/* Quick hack 3 - Set uri attributes */
 	if (uri) {
@@ -524,15 +518,9 @@ void sp_document_set_uri(SPDocument *document, gchar const *uri)
 	if (uri) {
 
 #ifndef WIN32
-		// compute absolute path
-		char *full_path;
-		full_path = (char *) g_malloc (1000);
-		inkscape_rel2abs (uri, g_get_current_dir(), full_path, 1000);
-		document->uri = g_strdup (full_path);
-		g_free (full_path);
+		prepend_current_dir_if_relative (&(document->uri), uri);
 #else
-	//TODO:WIN32: program the windows equivalent of the above code for finding out 
-	// the normalized absolute path of the file, including the drive letter
+		// FIXME: it may be that prepend_current_dir_if_relative works OK on windows too, test!
 		document->uri = g_strdup (uri);
 #endif
 	
@@ -552,6 +540,9 @@ void sp_document_set_uri(SPDocument *document, gchar const *uri)
 	sp_document_set_undo_sensitive (document, FALSE);
 	if (document->base)
             sp_repr_set_attr (repr, "sodipodi:docbase", document->base);
+
+	g_print ("2u %s  b %s\n", document->uri, sp_repr_attr (repr, "sodipodi:docbase"));
+
 	sp_repr_set_attr (repr, "sodipodi:docname", document->name);
 	sp_document_set_undo_sensitive (document, TRUE);
 

@@ -55,7 +55,7 @@ static char *parent = dots;
 static char *current = dots + 1;
 
 /**
- * \brief   Convert an relative path name into absolute.
+ * \brief   Convert a relative path name into absolute. If path is already absolute, does nothing except copying path to result.
  *
  *	\param path	relative path
  *	\param base	base directory (must be absolute path)
@@ -228,3 +228,30 @@ erange:
   errno = ERANGE;
   return (NULL);
 }
+
+void
+prepend_current_dir_if_relative (char **result, const gchar *uri)
+{
+	if (!uri) {
+		*(result) = NULL;
+		return;
+	}
+
+	char *full_path = (char *) g_malloc (1001);
+	char *cwd = g_get_current_dir();
+
+	gsize bytesRead = 0;
+	gsize bytesWritten = 0;
+	GError* error = NULL;
+	gchar* cwd_utf8 = g_filename_to_utf8 ( cwd,
+                                                  -1,
+                                                  &bytesRead,
+                                                  &bytesWritten,
+                                                  &error);
+
+	inkscape_rel2abs (uri, cwd_utf8, full_path, 1000);
+	*(result) = g_strdup (full_path);
+	g_free (full_path);
+}
+
+
