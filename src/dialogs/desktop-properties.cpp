@@ -5,7 +5,9 @@
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
- *
+ *   Jon Phillips <jon@rejon.org>
+ * 
+ * Copyright (C) Jon Phillips 2005
  * Copyright (C) Lauris Kaplinski 2000-2002
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
