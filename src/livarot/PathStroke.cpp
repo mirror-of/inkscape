@@ -27,24 +27,24 @@ void            Path::Stroke(Shape* dest,bool doClose,float width,JoinType join,
 		if ( back ) {
 			if ( weighted ) {
 				path_lineto_wb* tp=(path_lineto_wb*)savPts;
-				while ( lastP < savNbPt && (tp+lastP)->isMoveTo < 0 ) lastP++;
+				while ( lastP < savNbPt && ( (tp+lastP)->isMoveTo == polyline_lineto  || (tp+lastP)->isMoveTo == polyline_forced )) lastP++;
 				pts=(char*)(tp+lastM);
 				nbPt=lastP-lastM;
 			} else {
 				path_lineto_b* tp=(path_lineto_b*)savPts;
-				while ( lastP < savNbPt && (tp+lastP)->isMoveTo < 0 ) lastP++;
+				while ( lastP < savNbPt && ( (tp+lastP)->isMoveTo == polyline_lineto  || (tp+lastP)->isMoveTo == polyline_forced ) ) lastP++;
 				pts=(char*)(tp+lastM);
 				nbPt=lastP-lastM;
 			}
 		} else {
 			if ( weighted ) {
 				path_lineto_w* tp=(path_lineto_w*)savPts;
-				while ( lastP < savNbPt && (tp+lastP)->isMoveTo < 0 ) lastP++;
+				while ( lastP < savNbPt && ( (tp+lastP)->isMoveTo == polyline_lineto  || (tp+lastP)->isMoveTo == polyline_forced ) ) lastP++;
 				pts=(char*)(tp+lastM);
 				nbPt=lastP-lastM;
 			} else {
 				path_lineto* tp=(path_lineto*)savPts;
-				while ( lastP < savNbPt && (tp+lastP)->isMoveTo < 0 ) lastP++;
+				while ( lastP < savNbPt && ( (tp+lastP)->isMoveTo == polyline_lineto  || (tp+lastP)->isMoveTo == polyline_forced ) ) lastP++;
 				pts=(char*)(tp+lastM);
 				nbPt=lastP-lastM;
 			}
@@ -568,7 +568,7 @@ void            Path::DoLeftJoin(Shape* dest,float width,JoinType join,vec2 pos,
 		return;
 	}
 	if ( angSi < 0 ) {
-		vec2     biss;
+/*		vec2     biss;
 		biss.x=next.x-prev.x;
 		biss.y=next.y-prev.y;
 		float   c2=Dot(biss,next);
@@ -580,7 +580,7 @@ void            Path::DoLeftJoin(Shape* dest,float width,JoinType join,vec2 pos,
 			x=pos.x+l*biss.x;
 			y=pos.y+l*biss.y;
 			leftEnNo=leftStNo=dest->AddPoint(x,y);
-		} else {
+		} else {*/
 			float   x,y;
 			x=pos.x+width*pnor.x;
 			y=pos.y+width*pnor.y;
@@ -588,8 +588,12 @@ void            Path::DoLeftJoin(Shape* dest,float width,JoinType join,vec2 pos,
 			x=pos.x+width*nnor.x;
 			y=pos.y+width*nnor.y;
 			leftEnNo=dest->AddPoint(x,y);
-			dest->AddEdge(leftEnNo,leftStNo);
-		}
+			x=pos.x;
+			y=pos.y;
+			int midNo=dest->AddPoint(x,y);
+			dest->AddEdge(leftEnNo,midNo);
+			dest->AddEdge(midNo,leftStNo);
+//		}
 	} else {
 		float   x,y;
 		if ( join == join_pointy ) {
@@ -789,7 +793,7 @@ void            Path::DoRightJoin(Shape* dest,float width,JoinType join,vec2 pos
 			dest->AddEdge(rightStNo,rightEnNo);
 		}
 	} else {
-		vec2     biss;
+/*		vec2     biss;
 		biss.x=next.x-prev.x;
 		biss.y=next.y-prev.y;
 		float   c2=Dot(next,biss);
@@ -801,7 +805,7 @@ void            Path::DoRightJoin(Shape* dest,float width,JoinType join,vec2 pos
 			x=pos.x+l*biss.x;
 			y=pos.y+l*biss.y;
 			rightEnNo=rightStNo=dest->AddPoint(x,y);
-		} else {
+		} else {*/
 			float   x,y;
 			x=pos.x-width*pnor.x;
 			y=pos.y-width*pnor.y;
@@ -809,8 +813,12 @@ void            Path::DoRightJoin(Shape* dest,float width,JoinType join,vec2 pos
 			x=pos.x-width*nnor.x;
 			y=pos.y-width*nnor.y;
 			rightEnNo=dest->AddPoint(x,y);
-			dest->AddEdge(rightStNo,rightEnNo);
-		}
+			x=pos.x;
+			y=pos.y;
+			int midNo=dest->AddPoint(x,y);
+			dest->AddEdge(rightStNo,midNo);
+			dest->AddEdge(midNo,rightEnNo);
+//		}
 	}
 }
 
@@ -841,6 +849,7 @@ void            Path::RecRound(Shape* dest,int sNo,int eNo,float px,float py,flo
 	RecRound(dest,mNo,eNo,mdx,mdy,mx,my,ex,ey,tresh,lev-1);
 }
 
+
 /*
  *
  * dashed version
@@ -870,24 +879,24 @@ void            Path::Stroke(Shape* dest,bool doClose,float width,JoinType join,
 		if ( back ) {
 			if ( weighted ) {
 				path_lineto_wb* tp=(path_lineto_wb*)savPts;
-				while ( lastP < savNbPt && (tp+lastP)->isMoveTo < 0 ) lastP++;
+				while ( lastP < savNbPt && ( (tp+lastP)->isMoveTo == polyline_lineto  || (tp+lastP)->isMoveTo == polyline_forced ) ) lastP++;
 				pts=(char*)(tp+lastM);
 				nbPt=lastP-lastM;
 			} else {
 				path_lineto_b* tp=(path_lineto_b*)savPts;
-				while ( lastP < savNbPt && (tp+lastP)->isMoveTo < 0 ) lastP++;
+				while ( lastP < savNbPt && ( (tp+lastP)->isMoveTo == polyline_lineto  || (tp+lastP)->isMoveTo == polyline_forced ) ) lastP++;
 				pts=(char*)(tp+lastM);
 				nbPt=lastP-lastM;
 			}
 		} else {
 			if ( weighted ) {
 				path_lineto_w* tp=(path_lineto_w*)savPts;
-				while ( lastP < savNbPt && (tp+lastP)->isMoveTo < 0 ) lastP++;
+				while ( lastP < savNbPt && ( (tp+lastP)->isMoveTo == polyline_lineto  || (tp+lastP)->isMoveTo == polyline_forced ) ) lastP++;
 				pts=(char*)(tp+lastM);
 				nbPt=lastP-lastM;
 			} else {
 				path_lineto* tp=(path_lineto*)savPts;
-				while ( lastP < savNbPt && (tp+lastP)->isMoveTo < 0 ) lastP++;
+				while ( lastP < savNbPt && ( (tp+lastP)->isMoveTo == polyline_lineto  || (tp+lastP)->isMoveTo == polyline_forced ) ) lastP++;
 				pts=(char*)(tp+lastM);
 				nbPt=lastP-lastM;
 			}

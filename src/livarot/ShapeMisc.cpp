@@ -324,7 +324,7 @@ void          Shape::AddContour(Path* dest,int nbP,Path* *orig,int startBord,int
 			// segment batard
 			dest->LineTo(pts[aretes[bord].en].x,pts[aretes[bord].en].y);
 			bord=swdData[bord].suivParc;
-	} else {
+		} else {
 			Path* from=orig[nPath];
 			if ( nPiece < 0 || nPiece >= from->descr_nb ) {
 				// segment batard
@@ -332,7 +332,7 @@ void          Shape::AddContour(Path* dest,int nbP,Path* *orig,int startBord,int
 				bord=swdData[bord].suivParc;
 			} else {
 				int   nType=from->descr_data[nPiece].flags&descr_type_mask;
-				if ( nType == descr_close || nType == descr_moveto ) {
+				if ( nType == descr_close || nType == descr_moveto || nType == descr_forced ) {
 					// devrait pas arriver
 					dest->LineTo(pts[aretes[bord].en].x,pts[aretes[bord].en].y);
 					bord=swdData[bord].suivParc;
@@ -355,6 +355,7 @@ void          Shape::AddContour(Path* dest,int nbP,Path* *orig,int startBord,int
 					dest->LineTo(pts[aretes[bord].en].x,pts[aretes[bord].en].y);
 					bord=swdData[bord].suivParc;
 				}
+				if ( bord >= 0 && (/* pts[aretes[bord].st].oldDegree > 2 ||*/ pts[aretes[bord].st].dI+pts[aretes[bord].st].dO > 2 ) ) dest->ForcePoint();
 			}
 		}
 	}
@@ -370,7 +371,7 @@ int          Shape::ReFormeLineTo(int bord,int curBord,Path *dest,Path *orig)
 	float  nx=pts[aretes[bord].en].x,ny=pts[aretes[bord].en].y;
 	bord=swdData[bord].suivParc;
 	while ( bord >= 0 ) {
-		if ( pts[aretes[bord].st].dI+pts[aretes[bord].st].dO > 2 ) {
+		if ( pts[aretes[bord].st].dI+pts[aretes[bord].st].dO > 2 || pts[aretes[bord].st].oldDegree > 2 ) {
 			break;
 		}
 		if ( ebData[bord].pieceID == nPiece && ebData[bord].pathID == nPath ) {
@@ -395,7 +396,7 @@ int          Shape::ReFormeArcTo(int bord,int curBord,Path *dest,Path* from)
 	float  nx=pts[aretes[bord].en].x,ny=pts[aretes[bord].en].y;
 	bord=swdData[bord].suivParc;
 	while ( bord >= 0 ) {
-		if ( pts[aretes[bord].st].dI+pts[aretes[bord].st].dO > 2 ) {
+		if ( pts[aretes[bord].st].dI+pts[aretes[bord].st].dO > 2 || pts[aretes[bord].st].oldDegree > 2 ) {
 			break;
 		}
 		if ( ebData[bord].pieceID == nPiece && ebData[bord].pathID == nPath ) {
@@ -453,7 +454,7 @@ int          Shape::ReFormeCubicTo(int bord,int curBord,Path *dest,Path *from)
 	float  nx=pts[aretes[bord].en].x,ny=pts[aretes[bord].en].y;
 	bord=swdData[bord].suivParc;
 	while ( bord >= 0 ) {
-		if ( pts[aretes[bord].st].dI+pts[aretes[bord].st].dO > 2 ) {
+		if ( pts[aretes[bord].st].dI+pts[aretes[bord].st].dO > 2 || pts[aretes[bord].st].oldDegree > 2 ) {
 			break;
 		}
 		if ( ebData[bord].pieceID == nPiece && ebData[bord].pathID == nPath ) {
@@ -516,7 +517,7 @@ int          Shape::ReFormeBezierTo(int bord,int curBord,Path *dest,Path *from)
 	}
 	bord=swdData[bord].suivParc;
 	while ( bord >= 0 ) {
-		if ( pts[aretes[bord].st].dI+pts[aretes[bord].st].dO > 2 ) {
+		if ( pts[aretes[bord].st].dI+pts[aretes[bord].st].dO > 2 || pts[aretes[bord].st].oldDegree > 2 ) {
 			break;
 		}
 		if ( ebData[bord].pathID == nPath ) {

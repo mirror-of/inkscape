@@ -110,12 +110,12 @@ sp_selected_path_boolop (bool_op bop)
 			SPRepr* as=AncetreFils(a,dad);
 			SPRepr* bs=AncetreFils(b,dad);
 			for (SPRepr* child=dad->children;child;child=child->next) {
-				if ( child == a ) {
+				if ( child == as ) {
 					// a en premier->mauvais sens
 					reverseOrderForOp=true;
 					break;
 				}
-				if ( child == b ) break;
+				if ( child == bs ) break;
 			}
 		}
 	}	
@@ -457,13 +457,10 @@ void sp_selected_path_outline(void)
 	
 	sp_curve_unref (curve);
 	
-	{
-
+		{
+		
 		orig->Outline(res,0.5*o_width,o_join,o_butt,o_miter);
 	
-		res->ConvertEvenLines(0.1*o_width);
-		res->Simplify(0.05*o_width);
-
 		Shape*  theShape=new Shape;
 		res->ConvertWithBackData(1.0);
 		res->Fill(theShape,0);
@@ -475,10 +472,43 @@ void sp_selected_path_outline(void)
 		orig->Reset();
 		theRes->ConvertToForme(orig,1,originaux);
 		
+		orig->ConvertEvenLines(0.1*o_width);
+		orig->Simplify(0.05*o_width);
+		
 		delete theShape;
 		delete theRes;
 		
 	}
+	
+/*	{
+		Shape*  theIn=new Shape;
+		Shape*  theOut=new Shape;
+		Shape*  theShape=new Shape;
+		
+
+		orig->Convert(1.0);
+		
+		orig->Fill(theShape,0);
+		theIn->ConvertToShape(theShape,fill_oddEven);
+		theShape->MakeOffset(theIn,-0.5*o_width,o_join,o_miter);
+		theIn->ConvertToShape(theShape,fill_positive);
+		
+		orig->Fill(theShape,0);
+		theOut->ConvertToShape(theShape,fill_oddEven);
+		theShape->MakeOffset(theOut,0.5*o_width,o_join,o_miter);
+		theOut->ConvertToShape(theShape,fill_positive);
+		
+		theShape->Booleen(theOut,theIn,bool_op_diff);
+		
+		theShape->ConvertToForme(orig);
+		orig->ConvertEvenLines(0.5*o_width);
+		orig->Simplify(0.25*o_width);
+		
+		delete theShape;
+		delete theIn;
+		delete theOut;
+		
+	}*/
 	
 	if ( orig->descr_nb <= 1 ) {
 		// ca a merdŽ, ou bien le resultat est vide
@@ -655,6 +685,10 @@ void        sp_selected_path_do_offset(bool expand)
 		orig->ConvertWithBackData(1.0);
 		orig->Fill(theShape,0);
 		
+/*		printf("original\n");
+		orig->Affiche();
+		fflush(stdout);*/
+
 		css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
 		val = sp_repr_css_property (css, "fill-rule", NULL);
 		if ( val && strcmp (val,"nonzero") == 0 ) {
@@ -664,9 +698,18 @@ void        sp_selected_path_do_offset(bool expand)
 		} else {
 			theRes->ConvertToShape(theShape,fill_nonZero);
 		}
-		Path*  originaux[1];
+		
+		theShape->MakeOffset(theRes,0.5*o_width,o_join,o_miter);
+		theRes->ConvertToShape(theShape,fill_positive);
+		theRes->ConvertToForme(res);
+		
+/*		Path*  originaux[1];
 		originaux[0]=orig;
 		theRes->ConvertToForme(res,1,originaux);
+		
+		printf("intersecte\n");
+		res->Affiche();
+		fflush(stdout);
 		
 		// et maintenant: offset
 		if ( expand ) {
@@ -674,8 +717,10 @@ void        sp_selected_path_do_offset(bool expand)
 		} else {
 			res->OutsideOutline(orig,-0.5*o_width,o_join,o_butt,o_miter);
 		}
-		orig->ConvertEvenLines(0.1*o_width);
-		orig->Simplify(0.05*o_width);
+
+		printf("offsete\n");
+		orig->Affiche();
+		fflush(stdout);
 
 		orig->ConvertWithBackData(1.0);
 		orig->Fill(theShape,0);
@@ -683,6 +728,17 @@ void        sp_selected_path_do_offset(bool expand)
 		
 		originaux[0]=orig;
 		theRes->ConvertToForme(res,1,originaux);
+		
+		printf("offsete intersecte\n");
+		res->Affiche();
+		fflush(stdout);*/
+		
+		res->ConvertEvenLines(0.5*o_width);
+		res->Simplify(0.1*o_width);
+
+/*		printf("simplifie\n");
+		res->Affiche();
+		fflush(stdout);*/
 		
 		delete theShape;
 		delete theRes;
@@ -705,8 +761,8 @@ void        sp_selected_path_do_offset(bool expand)
 	}
 	
 	{
-		SPCSSAttr *css;
-		const gchar *val;
+//		SPCSSAttr *css;
+//		const gchar *val;
 		gchar tstr[80];
 		
 		tstr[79] = '\0';

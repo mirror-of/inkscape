@@ -36,7 +36,10 @@ void            Path::ConvertWithBackData(float treshhold)
 		int          nType=curD->flags&descr_type_mask;
 		bool         nWeight=curD->flags&descr_weighted;
 		float        nextX,nextY,nextW;
-		if ( nType == descr_moveto ) {
+		if ( nType == descr_forced ) {
+			if ( weighted ) AddForcedPoint(curX,curY,curW,curP,1.0); else AddForcedPoint(curX,curY,curP,1.0);
+			curP++;
+		} else if ( nType == descr_moveto ) {
 			nextX=curD->d.m.x;
 			nextY=curD->d.m.y;
 			if ( nWeight ) nextW=curD->d.m.w; else nextW=1;
@@ -226,7 +229,10 @@ void            Path::Convert(float treshhold)
 		int          nType=curD->flags&descr_type_mask;
 		bool         nWeight=curD->flags&descr_weighted;
 		float        nextX,nextY,nextW;
-		if ( nType == descr_moveto ) {
+		if ( nType == descr_forced ) {
+			if ( weighted ) AddForcedPoint(curX,curY,curW); else AddForcedPoint(curX,curY);
+			curP++;
+		} else if ( nType == descr_moveto ) {
 			nextX=curD->d.m.x;
 			nextY=curD->d.m.y;
 			if ( nWeight ) nextW=curD->d.m.w; else nextW=1;
@@ -412,7 +418,10 @@ void            Path::ConvertEvenLines(float treshhold)
 		int          nType=curD->flags&descr_type_mask;
 		bool         nWeight=curD->flags&descr_weighted;
 		float        nextX,nextY,nextW;
-		if ( nType == descr_moveto ) {
+		if ( nType == descr_forced ) {
+			if ( weighted ) AddForcedPoint(curX,curY,curW); else AddForcedPoint(curX,curY);
+			curP++;
+		} else if ( nType == descr_moveto ) {
 			nextX=curD->d.m.x;
 			nextY=curD->d.m.y;
 			if ( nWeight ) nextW=curD->d.m.w; else nextW=1;
@@ -613,7 +622,9 @@ void						Path::PrevPoint(int i,float &x,float &y)
 {
 	if ( i < 0 ) return;
 	int t=descr_data[i].flags&descr_type_mask;
-	if ( t == descr_moveto ) {
+	if ( t == descr_forced ) {
+		PrevPoint(i-1,x,y);
+	} else if ( t == descr_moveto ) {
 		x=descr_data[i].d.m.x;
 		y=descr_data[i].d.m.y;
 	} else if ( t == descr_lineto ) {
@@ -1333,7 +1344,7 @@ void            Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeede
 					path_lineto_wb*    sbp=((path_lineto_wb*)pts)+curP;
 					path_lineto_wb*    lm=((path_lineto_wb*)pts)+lastM;
 					path_lineto_wb*    prp=((path_lineto_wb*)pts)+pathEnd;
-					if ( sbp->isMoveTo >= 0 ) {
+					if ( sbp->isMoveTo == polyline_moveto ) {
 						if ( closeIfNeeded ) {
 							if ( closed && lEdge >= 0 ) {
 								dest->DisconnectEnd(lEdge);
@@ -1398,7 +1409,7 @@ void            Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeede
 					path_lineto_b*    sbp=((path_lineto_b*)pts)+curP;
 					path_lineto_b*    lm=((path_lineto_b*)pts)+lastM;
 					path_lineto_b*    prp=((path_lineto_b*)pts)+pathEnd;
-					if ( sbp->isMoveTo >= 0 ) {
+					if ( sbp->isMoveTo == polyline_moveto ) {
 						if ( closeIfNeeded ) {
 							if ( closed && lEdge >= 0 ) {
 								dest->DisconnectEnd(lEdge);
@@ -1465,7 +1476,7 @@ void            Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeede
 					path_lineto_w*    sbp=((path_lineto_w*)pts)+curP;
 					path_lineto_w*    lm=((path_lineto_w*)pts)+lastM;
 					path_lineto_w*    prp=((path_lineto_w*)pts)+pathEnd;
-					if ( sbp->isMoveTo >= 0 ) {
+					if ( sbp->isMoveTo == polyline_moveto ) {
 						if ( closeIfNeeded ) {
 							if ( closed && lEdge >= 0 ) {
 								dest->DisconnectEnd(lEdge);
@@ -1513,7 +1524,7 @@ void            Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeede
 					path_lineto*    sbp=((path_lineto*)pts)+curP;
 					path_lineto*    lm=((path_lineto*)pts)+lastM;
 					path_lineto*    prp=((path_lineto*)pts)+pathEnd;
-					if ( sbp->isMoveTo >= 0 ) {
+					if ( sbp->isMoveTo == polyline_moveto ) {
 						if ( closeIfNeeded ) {
 							if ( closed && lEdge >= 0 ) {
 								dest->DisconnectEnd(lEdge);

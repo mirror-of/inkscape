@@ -65,6 +65,9 @@ int               Shape::Reoriente(Shape* a)
 		pts[i].x=pData[i].rx;
 		pts[i].y=pData[i].ry;
 	}
+	for (int i=0;i<nbPt;i++) {
+		pts[i].oldDegree=pts[i].dI+pts[i].dO;
+	}
 	for (int i=0;i<a->nbAr;i++) {
 		eData[i].rdx=pData[aretes[i].en].rx-pData[aretes[i].st].rx;
 		eData[i].rdy=pData[aretes[i].en].ry-pData[aretes[i].st].ry;
@@ -511,6 +514,9 @@ SweepEvent::ExtractFromQueue(intersL,intersR,ptX,ptY,ptL,ptR,sEvts);
 	
 	AssembleAretes();
 
+	for (int i=0;i<nbPt;i++) {
+		pts[i].oldDegree=pts[i].dI+pts[i].dO;
+	}
 	
 //	Validate();
 
@@ -1123,6 +1129,10 @@ SweepEvent::ExtractFromQueue(intersL,intersR,ptX,ptY,ptL,ptR,sEvts);
 //	Plot(190,70,6,400,400,true,false,true,true);
 
 	AssembleAretes();
+
+	for (int i=0;i<nbPt;i++) {
+		pts[i].oldDegree=pts[i].dI+pts[i].dO;
+	}
 
 	SetFlag(need_edges_sorting,true);
 	GetWindings(a,b,mod,false);

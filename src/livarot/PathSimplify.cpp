@@ -42,24 +42,24 @@ void            Path::Simplify(float treshhold)
 		if ( back ) {
 			if ( weighted ) {
 				path_lineto_wb* tp=(path_lineto_wb*)savPts;
-				while ( lastP < savNbPt && (tp+lastP)->isMoveTo < 0 ) lastP++;
+				while ( lastP < savNbPt && ( (tp+lastP)->isMoveTo == polyline_lineto || (tp+lastP)->isMoveTo == polyline_forced ) ) lastP++;
 				pts=(char*)(tp+lastM);
 				nbPt=lastP-lastM;
 			} else {
 				path_lineto_b* tp=(path_lineto_b*)savPts;
-				while ( lastP < savNbPt && (tp+lastP)->isMoveTo < 0 ) lastP++;
+				while ( lastP < savNbPt && ( (tp+lastP)->isMoveTo == polyline_lineto || (tp+lastP)->isMoveTo == polyline_forced ) ) lastP++;
 				pts=(char*)(tp+lastM);
 				nbPt=lastP-lastM;
 			}
 		} else {
 			if ( weighted ) {
 				path_lineto_w* tp=(path_lineto_w*)savPts;
-				while ( lastP < savNbPt && (tp+lastP)->isMoveTo < 0 ) lastP++;
+				while ( lastP < savNbPt && ( (tp+lastP)->isMoveTo == polyline_lineto || (tp+lastP)->isMoveTo == polyline_forced ) ) lastP++;
 				pts=(char*)(tp+lastM);
 				nbPt=lastP-lastM;
 			} else {
 				path_lineto* tp=(path_lineto*)savPts;
-				while ( lastP < savNbPt && (tp+lastP)->isMoveTo < 0 ) lastP++;
+				while ( lastP < savNbPt && ( (tp+lastP)->isMoveTo == polyline_lineto || (tp+lastP)->isMoveTo == polyline_forced ) ) lastP++;
 				pts=(char*)(tp+lastM);
 				nbPt=lastP-lastM;
 			}
@@ -128,8 +128,27 @@ void                   Path::DoSimplify(float treshhold)
 		
 		path_descr_cubicto   res;
 		do {
+			bool kissGoodbye=false;
+			if ( back ) {
+				if ( weighted ) {
+					path_lineto_wb* tp=(path_lineto_wb*)savPts;
+					if ( (tp+lastP)->isMoveTo == polyline_forced ) kissGoodbye=true;
+				} else {
+					path_lineto_b* tp=(path_lineto_b*)savPts;
+					if ( (tp+lastP)->isMoveTo == polyline_forced ) kissGoodbye=true;
+				}
+			} else {
+				if ( weighted ) {
+					path_lineto_w* tp=(path_lineto_w*)savPts;
+					if ( (tp+lastP)->isMoveTo == polyline_forced ) kissGoodbye=true;
+				} else {
+					path_lineto* tp=(path_lineto*)savPts;
+					if ( (tp+lastP)->isMoveTo == polyline_forced ) kissGoodbye=true;
+				}
+			}
 			lastP++;
 			nbPt++;
+			if ( kissGoodbye ) break;
 		} while ( lastP < savNbPt && AttemptSimplify(treshhold,res) );
 		
 		if ( lastP >= savNbPt ) {

@@ -63,6 +63,9 @@ void						Path::Outline(Path* dest,float width,JoinType join,ButtType butt,float
 					if ( typ == descr_moveto ) {
 						//						rev->Close();
 						curD--;
+					} else if ( typ == descr_forced ) {
+						//						rev->Close();
+						curD--;
 					} else if ( typ == descr_lineto ) {
 						PrevPoint(curD-1,nextX,nextY);
 						rev->LineTo(nextX,nextY);
@@ -224,6 +227,8 @@ void            Path::InsideOutline(Path* dest,float width,JoinType join,ButtTyp
 					if ( typ == descr_moveto ) {
 						rev->Close();
 						curD--;
+					} else if ( typ == descr_forced ) {
+						curD--;
 					} else if ( typ == descr_lineto ) {
 						PrevPoint(curD-1,nextX,nextY);
 						rev->LineTo(nextX,nextY);
@@ -322,7 +327,9 @@ void						Path::SubContractOutline(Path* dest,outline_callbacks &calls,float tol
 		float        nextX,nextY,nextW;
 		vec2         stPos,enPos,stTgt,enTgt,stNor,enNor;
 		float        stRad,enRad,stTle,enTle;
-		if ( nType == descr_moveto ) {
+		if ( nType == descr_forced ) {
+			curP++;
+		} else if ( nType == descr_moveto ) {
 			nextX=curD->d.m.x;
 			nextY=curD->d.m.y;
 			if ( nWeight ) nextW=curD->d.m.w; else nextW=1;

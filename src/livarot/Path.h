@@ -26,10 +26,17 @@ enum {
 	descr_arcto          =4,
 	descr_close					 =5,
 	descr_interm_bezier  =6,
+	descr_forced         =7,
 	
-	descr_type_mask      =7,
+	descr_type_mask      =15,
 	
-	descr_weighted       =8
+	descr_weighted       =16
+};
+
+enum {
+	polyline_lineto      =0,
+	polyline_moveto      =1,
+	polyline_forced      =2
 };
 
 class Shape;
@@ -164,6 +171,7 @@ public:
 	void					  Affiche(void);
 
 	// the commands...
+	void            ForcePoint(void);
 	void            Close(void);
 	void            MoveTo(float ix,float iy);
 	void            MoveTo(float ix,float iy,float iw);
@@ -198,7 +206,11 @@ public:
 	int             AddPoint(float ix,float iy,float iw,bool mvto=false);
 	int             AddPoint(float ix,float iy,int ip,float it,bool mvto=false);
 	int             AddPoint(float ix,float iy,float iw,int ip,float it,bool mvto=false);
-
+	int             AddForcedPoint(float ix,float iy); // add point
+	int             AddForcedPoint(float ix,float iy,float iw);
+	int             AddForcedPoint(float ix,float iy,int ip,float it);
+	int             AddForcedPoint(float ix,float iy,float iw,int ip,float it);
+	
 	// transform in a polygon (in a graph, in fact; a subsequent call to ConvertToShape is needed)
 	//  - fills the polyline; justAdd=true doesn't reset the Shape dest, but simply adds the polyline into it
 	// closeIfNeeded=false prevent the function from closing the path (resulting in a non-eulerian graph

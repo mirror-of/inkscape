@@ -49,7 +49,9 @@ void					  Path::Affiche(void)
 		printf("  ");
 		if ( (descr_data+i)->flags&descr_weighted ) printf(" w ");
 		int ty=(descr_data+i)->flags&descr_type_mask;
-		if ( ty == descr_moveto ) {
+		if ( ty == descr_forced ) {
+			printf("F\n");
+		} else if ( ty == descr_moveto ) {
 			printf("M %f %f %i\n",(descr_data+i)->d.m.x,(descr_data+i)->d.m.y,(descr_data+i)->d.m.pathLength);
 		} else if ( ty == descr_lineto ) {
 			printf("L %f %f\n",(descr_data+i)->d.l.x,(descr_data+i)->d.l.y);
@@ -93,6 +95,18 @@ void            Path::CloseSubpath(int add)
 	pending_moveto=-1;
 }
 
+void            Path::ForcePoint(void)
+{
+	if ( descr_flags&descr_adding_bezier ) EndBezierTo();
+	if ( descr_flags&descr_doing_subpath ) {
+	} else {
+		return;
+	}
+	Alloue(1);
+	path_descr *nElem=descr_data+descr_nb;
+	descr_nb++;
+	nElem->flags=descr_forced;
+}
 void            Path::Close(void)
 {
 	if ( descr_flags&descr_adding_bezier ) CancelBezier();
@@ -522,7 +536,7 @@ int             Path::AddPoint(float ix,float iy,bool mvto)
 	if ( mvto == false && nbPt > 0 && ((path_lineto*)pts)[nbPt-1].x == ix && ((path_lineto*)pts)[nbPt-1].y == iy ) return -1;
 	int   n=nbPt++;
 	sizePt=nextSize;
-	if ( mvto ) ((path_lineto*)pts)[n].isMoveTo=0; else ((path_lineto*)pts)[n].isMoveTo=-1;
+	if ( mvto ) ((path_lineto*)pts)[n].isMoveTo=polyline_moveto; else ((path_lineto*)pts)[n].isMoveTo=polyline_lineto;
 	((path_lineto*)pts)[n].x=ix;
 	((path_lineto*)pts)[n].y=iy;
 	return n;
@@ -545,7 +559,7 @@ int             Path::AddPoint(float ix,float iy,float iw,bool mvto)
 	if ( mvto == false && nbPt > 0 && ((path_lineto_w*)pts)[nbPt-1].x == ix && ((path_lineto_w*)pts)[nbPt-1].y == iy ) return -1;
 	int   n=nbPt++;
 	sizePt=nextSize;
-	if ( mvto ) ((path_lineto_w*)pts)[n].isMoveTo=0; else ((path_lineto_w*)pts)[n].isMoveTo=-1;
+	if ( mvto ) ((path_lineto_w*)pts)[n].isMoveTo=polyline_moveto; else ((path_lineto_w*)pts)[n].isMoveTo=polyline_lineto;
 	((path_lineto_w*)pts)[n].x=ix;
 	((path_lineto_w*)pts)[n].y=iy;
 	((path_lineto_w*)pts)[n].w=iw;
@@ -568,7 +582,7 @@ int             Path::AddPoint(float ix,float iy,int ip,float it,bool mvto)
 	if ( mvto == false && nbPt > 0 && ((path_lineto_b*)pts)[nbPt-1].x == ix && ((path_lineto_b*)pts)[nbPt-1].y == iy ) return -1;
 	int   n=nbPt++;
 	sizePt=nextSize;
-	if ( mvto ) ((path_lineto_b*)pts)[n].isMoveTo=0; else ((path_lineto_b*)pts)[n].isMoveTo=-1;
+	if ( mvto ) ((path_lineto_b*)pts)[n].isMoveTo=polyline_moveto; else ((path_lineto_b*)pts)[n].isMoveTo=polyline_lineto;
 	((path_lineto_b*)pts)[n].x=ix;
 	((path_lineto_b*)pts)[n].y=iy;
 	((path_lineto_b*)pts)[n].piece=ip;
@@ -593,12 +607,108 @@ int             Path::AddPoint(float ix,float iy,float iw,int ip,float it,bool m
 	if ( mvto == false && nbPt > 0 && ((path_lineto_wb*)pts)[nbPt-1].x == ix && ((path_lineto_wb*)pts)[nbPt-1].y == iy ) return -1;
 	int   n=nbPt++;
 	sizePt=nextSize;
-	if ( mvto ) ((path_lineto_wb*)pts)[n].isMoveTo=0; else ((path_lineto_wb*)pts)[n].isMoveTo=-1;
+	if ( mvto ) ((path_lineto_wb*)pts)[n].isMoveTo=polyline_moveto; else ((path_lineto_wb*)pts)[n].isMoveTo=polyline_lineto;
 	((path_lineto_wb*)pts)[n].x=ix;
 	((path_lineto_wb*)pts)[n].y=iy;
 	((path_lineto_wb*)pts)[n].w=iw;
 	((path_lineto_wb*)pts)[n].piece=ip;
 	((path_lineto_wb*)pts)[n].t=it;
+	return n;
+}
+int             Path::AddForcedPoint(float ix,float iy)
+{
+	if ( back ) {
+		return AddForcedPoint(ix,iy,-1,0.0);
+	} else {
+		if ( weighted ) {
+			return AddForcedPoint(ix,iy,1.0);
+		}
+	}
+	int  nextSize=sizePt+sizeof(path_lineto);
+	if ( nextSize > maxPt ) {
+		maxPt=2*sizePt+sizeof(path_lineto);
+		pts=(char*)realloc(pts,maxPt);
+	}
+	if ( nbPt <= 0 || ((path_lineto*)pts)[nbPt-1].isMoveTo != polyline_lineto ) return-1 ;
+	int   n=nbPt++;
+	sizePt=nextSize;
+	((path_lineto*)pts)[n].isMoveTo=polyline_forced;
+	((path_lineto*)pts)[n].x=((path_lineto*)pts)[n-1].x;
+	((path_lineto*)pts)[n].y=((path_lineto*)pts)[n-1].y;
+	return n;
+}
+int             Path::AddForcedPoint(float ix,float iy,float iw)
+{
+	if ( back ) {
+		return AddForcedPoint(ix,iy,iw,-1,0.0);
+	} else {
+		if ( weighted ) {
+		} else {
+			return AddForcedPoint(ix,iy);
+		}
+	}
+	int  nextSize=sizePt+sizeof(path_lineto_w);
+	if ( nextSize > maxPt ) {
+		maxPt=2*sizePt+sizeof(path_lineto_w);
+		pts=(char*)realloc(pts,maxPt);
+	}
+	if ( nbPt <= 0 || ((path_lineto_w*)pts)[nbPt-1].isMoveTo != polyline_lineto ) return -1;
+	int   n=nbPt++;
+	sizePt=nextSize;
+	((path_lineto_w*)pts)[n].isMoveTo=polyline_forced;
+	((path_lineto_w*)pts)[n].x=((path_lineto_w*)pts)[n-1].x;
+	((path_lineto_w*)pts)[n].y=((path_lineto_w*)pts)[n-1].y;
+	((path_lineto_w*)pts)[n].w=((path_lineto_w*)pts)[n-1].w;
+	return n;
+}
+int             Path::AddForcedPoint(float ix,float iy,int ip,float it)
+{
+	if ( back ) {
+		if ( weighted ) {
+			return AddForcedPoint(ix,iy,1.0,ip,it);
+		}
+	} else {
+		return AddForcedPoint(ix,iy);
+	}
+	int  nextSize=sizePt+sizeof(path_lineto_b);
+	if ( nextSize > maxPt ) {
+		maxPt=2*sizePt+sizeof(path_lineto_b);
+		pts=(char*)realloc(pts,maxPt);
+	}
+	if ( nbPt <= 0 || ((path_lineto_b*)pts)[nbPt-1].isMoveTo != polyline_lineto ) return -1;
+	int   n=nbPt++;
+	sizePt=nextSize;
+	((path_lineto_b*)pts)[n].isMoveTo=polyline_forced;
+	((path_lineto_b*)pts)[n].x=((path_lineto_b*)pts)[n-1].x;
+	((path_lineto_b*)pts)[n].y=((path_lineto_b*)pts)[n-1].y;
+	((path_lineto_b*)pts)[n].piece=((path_lineto_b*)pts)[n-1].piece;
+	((path_lineto_b*)pts)[n].t=((path_lineto_b*)pts)[n-1].t;
+	return n;
+}
+int             Path::AddForcedPoint(float ix,float iy,float iw,int ip,float it)
+{
+	if ( back ) {
+		if ( weighted ) {
+		} else {
+			return AddForcedPoint(ix,iy,ip,it);
+		}
+	} else {
+		return AddForcedPoint(ix,iy,iw);
+	}
+	int  nextSize=sizePt+sizeof(path_lineto_wb);
+	if ( nextSize > maxPt ) {
+		maxPt=2*sizePt+sizeof(path_lineto_wb);
+		pts=(char*)realloc(pts,maxPt);
+	}
+	if ( nbPt <= 0 || ((path_lineto*)pts)[nbPt-1].isMoveTo != polyline_lineto ) return -1;
+	int   n=nbPt++;
+	sizePt=nextSize;
+	((path_lineto_wb*)pts)[n].isMoveTo=polyline_forced;
+	((path_lineto_wb*)pts)[n].x=((path_lineto_wb*)pts)[n-1].x;
+	((path_lineto_wb*)pts)[n].y=((path_lineto_wb*)pts)[n-1].y;
+	((path_lineto_wb*)pts)[n].w=((path_lineto_wb*)pts)[n-1].w;
+	((path_lineto_wb*)pts)[n].piece=((path_lineto_wb*)pts)[n-1].piece;
+	((path_lineto_wb*)pts)[n].t=((path_lineto_wb*)pts)[n-1].t;
 	return n;
 }
 

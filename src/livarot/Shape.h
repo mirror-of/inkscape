@@ -59,6 +59,7 @@ public:
 		float           x,y;          // position
 		int             dI,dO;        // indegree and outdegree
 		int             firstA,lastA; // first and last incident edge
+		int             oldDegree;
 	} dg_point;
 	typedef struct dg_arete {
 		float           dx,dy;        // edge vector
