@@ -356,11 +356,14 @@ sp_item_write (SPObject *object, SPRepr *repr, guint flags)
 
 	if (SP_OBJECT_PARENT (object)) {
 		s = sp_style_write_difference (SP_OBJECT_STYLE (object), SP_OBJECT_STYLE (SP_OBJECT_PARENT (object)));
-		sp_repr_set_attr (repr, "style", (s && *s) ? s : NULL);
-		g_free (s);
-	} else {
-		sp_repr_set_attr (repr, "style", NULL);
-	}
+		if (s) {
+			sp_repr_set_attr (repr, "style", (*s) ? s : NULL);
+			g_free (s);
+		}
+	} 
+	//else {
+	//		sp_repr_set_attr (repr, "style", NULL);
+	//	}
 
 	if (flags & SP_OBJECT_WRITE_EXT) {
 		sp_repr_set_attr (repr, "sodipodi:insensitive", item->sensitive ? NULL : "true");
