@@ -79,9 +79,17 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
 
     private:
 
-    Gtk::Label      spinlabel;
 
-    Gtk::SpinButton spinner;
+    Gtk::Notebook   notebook;
+
+    // Potrace items
+    Gtk::VBox       potraceBox;
+    Gtk::HBox       potraceBrightnessBox;
+    Gtk::SpinButton potraceBrightnessSpinner;
+    Gtk::Label      potraceBrightnessLabel;
+
+    // Other items
+    Gtk::VBox       otherBox;
 
 
 
@@ -105,12 +113,18 @@ void TraceDialogImpl::responseCallback(int response_id)
         return;
         }
 
-    Inkscape::Trace tracer;
-    Inkscape::Potrace::PotraceTracingEngine pte;
-    double threshold = spinner.get_value();
-    pte.setBrightnessThreshold(threshold);
-    tracer.setTracingEngine(&pte);
-    tracer.convertImageToPath();
+    int panelNr = notebook.get_current_page();
+    //g_message("selected panel:%d\n", panelNr);
+
+    if (panelNr == 0)
+        {
+        Inkscape::Trace tracer;
+        Inkscape::Potrace::PotraceTracingEngine pte;
+        double threshold = potraceBrightnessSpinner.get_value();
+        pte.setBrightnessThreshold(threshold);
+        tracer.setTracingEngine(&pte);
+        tracer.convertImageToPath();
+        }
 
 
 }
@@ -126,27 +140,36 @@ TraceDialogImpl::TraceDialogImpl()
 {
 
     set_title(_("Bitmap Tracing"));
-    set_size_request(250, 100);
+    set_size_request(250, 150);
 
     Gtk::VBox *mainVBox = get_vbox();
 
-    //##Set up the spinbutton
-    spinlabel.set_text(_("Brightness Threshold"));
-    mainVBox->pack_start(spinlabel);
-    spinner.set_digits(5);
-    spinner.set_increments(0.05, 0.25);
-    spinner.set_range(0.0, 1.0);
-    spinner.set_value(0.5);
-    mainVBox->pack_start(spinner);
 
-    add_button(Gtk::Stock::CANCEL, GTK_RESPONSE_CANCEL);
+    //##Set up the Potrace panel
+    potraceBrightnessLabel.set_text(_("Brightness Threshold"));
+    potraceBrightnessBox.pack_start(potraceBrightnessLabel);
+    potraceBrightnessSpinner.set_digits(5);
+    potraceBrightnessSpinner.set_increments(0.05, 0.25);
+    potraceBrightnessSpinner.set_range(0.0, 1.0);
+    potraceBrightnessSpinner.set_value(0.5);
+    potraceBrightnessBox.pack_start(potraceBrightnessSpinner);
+    potraceBox.pack_start(potraceBrightnessBox);
+    notebook.append_page(potraceBox, _("Potrace"));
+
+    //##Set up the Other panel
+    notebook.append_page(otherBox, _("Other"));
+
+    //##Put the notebook on the dialog
+    mainVBox->pack_start(notebook);
+
+    //## The OK button
     add_button(Gtk::Stock::OK,     GTK_RESPONSE_OK);
-
-    signal_response().connect( 
-         sigc::mem_fun(*this, &TraceDialogImpl::responseCallback) );
 
     show_all_children();
 
+    //## Connect the signal
+    signal_response().connect( 
+         sigc::mem_fun(*this, &TraceDialogImpl::responseCallback) );
 }
 
 /**
