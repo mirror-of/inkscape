@@ -54,7 +54,7 @@ static Path::cut_position PointToCurvilignPosition(Path const &path, NR::Point c
 {
     unsigned bestSeg = 0;
     double bestRangeSquared = DBL_MAX;
-    double bestT;
+    double bestT = 0.0;
 
     for (unsigned i = 1 ; i < path.pts.size() ; i++) {
         if (path.pts[i].isMoveTo == polyline_moveto) continue;

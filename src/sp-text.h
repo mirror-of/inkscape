@@ -22,9 +22,9 @@
 #include "sp-string.h"
 #include "display/display-forward.h"
 #include "libnr/nr-point.h"
-#include "libnrtype/FlowSrc.h"
 #include "svg/svg-types.h"
 #include "libnrtype/Layout-TNG.h"
+#include "libnrtype/FlowSrc.h"
 
 
 #define SP_TYPE_TEXT (sp_text_get_type())
@@ -37,9 +37,6 @@
 #define SP_TEXT_CONTENT_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 #define SP_TEXT_LAYOUT_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 
-
-class flow_src;
-class flow_res;
 
 /* SPText */
 
@@ -67,13 +64,6 @@ gchar *sp_text_get_string_multiline(SPText *text);
 void sp_text_set_repr_text_multiline(SPText *text, gchar const *str);
 
 SPCurve *sp_text_normalized_bpath(SPText *text);
-
-/* fixme: Think about these (Lauris) */
-
-SPTSpan *sp_text_append_line(SPText *text);
-int sp_text_insert_line(SPText *text, gint pos);
-
-gint sp_text_append(SPText *text, gchar const *utf8);
 
 void sp_adjust_kerning_screen(SPText *text, gint pos, SPDesktop *desktop, NR::Point by);
 void sp_adjust_tspan_letterspacing_screen(SPText *text, gint pos, SPDesktop *desktop, gdouble by);

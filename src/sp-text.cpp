@@ -35,14 +35,6 @@
 #include <libnrtype/font-style-to-pos.h>
 #include <libnrtype/FlowDefs.h>
 
-#include <libnrtype/FlowRes.h>
-#include <libnrtype/FlowSrc.h>
-#include <libnrtype/FlowEater.h>
-#include <libnrtype/FlowStyle.h>
-#include <libnrtype/FlowBoxes.h>
-
-#include <libnrtype/TextWrapper.h>
-
 #include <livarot/LivarotDefs.h>
 #include <livarot/Shape.h>
 #include <livarot/Path.h>
@@ -67,7 +59,6 @@
 #include "print.h"
 #include "sp-metrics.h"
 #include "xml/repr.h"
-#include "xml/attribute-record.h"
 
 #include "sp-item.h"
 #include "sp-text.h"
@@ -602,12 +593,13 @@ sp_text_set_shape (SPText *text)
     text->layout.calculateFlow();
     for (SPObject *child = sp_object_first_child(text) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
         if (SP_IS_TEXTPATH (child) && SP_TEXTPATH(child)->originalPath != NULL) {
-            SPSVGLength offset={0};
-            g_print(text->layout.dumpAsText().c_str());
+            SPSVGLength offset;
+            offset = 0.0;
+            //g_print(text->layout.dumpAsText().c_str());
             text->layout.fitToPathAlign(offset, *SP_TEXTPATH(child)->originalPath);
         }
     }
-    g_print(text->layout.dumpAsText().c_str());
+    //g_print(text->layout.dumpAsText().c_str());
     // todo: set the x,y attributes on role:line spans
 
     NRRect paintbox;
@@ -871,168 +863,6 @@ sp_text_request_relayout (SPText *text, guint flags)
     SP_OBJECT (text)->requestDisplayUpdate(flags);
 }
 
-
-SPTSpan *
-sp_text_append_line(SPText *text)
-{
-    g_return_val_if_fail (text != NULL, NULL);
-    g_return_val_if_fail (SP_IS_TEXT (text), NULL);
-
-    SPStyle *style = SP_OBJECT_STYLE (text);
-
-    NR::Point cp(text->x.computed, text->y.computed);
-
-    for (SPObject *child = sp_object_first_child(SP_OBJECT(text)) ; child != NULL; child = SP_OBJECT_NEXT(child)) {
-        if (SP_IS_TSPAN (child)) {
-            SPTSpan *tspan = SP_TSPAN (child);
-            if (tspan->role == SP_TSPAN_ROLE_LINE) {
-                cp[NR::X] = tspan->x.computed;
-                cp[NR::Y] = tspan->y.computed;
-            }
-        }
-    }
-
-    /* Create <tspan> */
-    Inkscape::XML::Node *rtspan = sp_repr_new ("svg:tspan");
-    if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
-        /* fixme: real line height */
-        /* fixme: What to do with mixed direction tspans? */
-        sp_repr_set_double (rtspan, "x", cp[NR::X] - style->font_size.computed);
-        sp_repr_set_double (rtspan, "y", cp[NR::Y]);
-    } else {
-        sp_repr_set_double (rtspan, "x", cp[NR::X]);
-        sp_repr_set_double (rtspan, "y", cp[NR::Y] + style->font_size.computed);
-    }
-    sp_repr_set_attr (rtspan, "sodipodi:role", "line");
-
-    /* Create TEXT */
-    Inkscape::XML::Node *rstring = sp_repr_new_text("");
-    sp_repr_add_child (rtspan, rstring, NULL);
-    sp_repr_unref (rstring);
-    /* Append to text */
-    SP_OBJECT_REPR (text)->appendChild(rtspan);
-    sp_repr_unref (rtspan);
-
-    return (SPTSpan *) SP_OBJECT_DOCUMENT (text)->getObjectByRepr(rtspan);
-}
-
-static bool is_line_break_object(SPObject *object)
-{
-    return    SP_IS_TEXT(object)
-           || (SP_IS_TSPAN(object) && SP_TSPAN(object)->role != SP_TSPAN_ROLE_UNSPECIFIED);
-}    
-
-static Inkscape::XML::Node* duplicate_node_without_children(Inkscape::XML::Node const *old_node)
-{
-    switch (old_node->type()) {
-        case Inkscape::XML::ELEMENT_NODE: {
-            Inkscape::XML::Node *new_node = sp_repr_new(old_node->name());
-            Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attributes = old_node->attributeList();
-            GQuark const id_key = g_quark_from_string("id");
-            for ( ; attributes ; attributes++) {
-                if (attributes->key == id_key) continue;
-                new_node->setAttribute(g_quark_to_string(attributes->key), attributes->value);
-            }
-            return new_node;
-        }
-
-        case Inkscape::XML::TEXT_NODE:
-            return sp_repr_new_text(old_node->content());
-
-        case Inkscape::XML::COMMENT_NODE:
-            return sp_repr_new_comment(old_node->content());
-
-        case Inkscape::XML::DOCUMENT_NODE:
-            return NULL;   // this had better never happen
-    }
-    return NULL;
-}
-
-/** recursively divides the XML node tree into two objects: the original will
-contain all objects up to and including \a split_obj and the returned value
-will be the new leaf which represents the copy of \a split_obj and extends
-down the tree with new elements all the way to the common root which is the
-parent of the first line break node encountered.
-*/
-static SPObject* split_text_object_tree_at(SPObject *split_obj)
-{
-    if (is_line_break_object(split_obj)) {
-        Inkscape::XML::Node *new_node = duplicate_node_without_children(SP_OBJECT_REPR(split_obj));
-        SP_OBJECT_REPR(SP_OBJECT_PARENT(split_obj))->addChild(new_node, SP_OBJECT_REPR(split_obj));
-        sp_repr_unref(new_node);
-        return SP_OBJECT_NEXT(split_obj);
-    }
-
-    SPObject *duplicate_obj = split_text_object_tree_at(SP_OBJECT_PARENT(split_obj));
-    // copy the split node
-    if (SP_IS_TSPAN(duplicate_obj) && duplicate_obj->hasChildren()) {
-        // workaround for the old code adding a string child we don't want
-        SP_OBJECT_REPR(duplicate_obj)->removeChild(SP_OBJECT_REPR(duplicate_obj->firstChild()));
-    }
-    Inkscape::XML::Node *new_node = duplicate_node_without_children(SP_OBJECT_REPR(split_obj));
-    SP_OBJECT_REPR(duplicate_obj)->appendChild(new_node);
-    sp_repr_unref(new_node);
-    // TODO: I think this an appropriate place to sort out the copied attributes (x/y/dx/dy/rotate)
-
-    // then move all the subsequent nodes
-    split_obj = SP_OBJECT_NEXT(split_obj);
-    while (split_obj) {
-        Inkscape::XML::Node *move_repr = SP_OBJECT_REPR(split_obj);
-        SPObject *next_obj = SP_OBJECT_NEXT(split_obj);  // this is about to become invalidated by removeChild()
-        sp_repr_ref(move_repr);
-        SP_OBJECT_REPR(SP_OBJECT_PARENT(split_obj))->removeChild(move_repr);
-        SP_OBJECT_REPR(duplicate_obj)->appendChild(move_repr);
-        sp_repr_unref(move_repr);
-
-        split_obj = next_obj;
-    }
-    return duplicate_obj->firstChild();
-}
-
-int
-sp_text_insert_line (SPText *text, gint i_ucs4_pos)
-{
-    // Disable newlines in a textpath; TODO: maybe on Enter in a textpath, separate it into two
-    // texpaths attached to the same path, with a vertical shift
-    if (SP_IS_TEXT_TEXTPATH (text)) 
-        return 0;
-
-    Inkscape::Text::Layout::iterator it_split = text->layout.charIndexToIterator(i_ucs4_pos);
-    if (it_split == text->layout.end()) {
-        sp_text_append_line(text);
-        return 1;
-    }
-    SPObject *split_obj;
-    Glib::ustring::iterator split_text_iter;
-    text->layout.getSourceOfCharacter(it_split, (void**)&split_obj, &split_text_iter);
-
-    if (SP_IS_STRING(split_obj)) {
-        Glib::ustring *string = &SP_STRING(split_obj)->string;
-        // we need to split the entire text tree into two
-        SPString *new_string = SP_STRING(split_text_object_tree_at(split_obj));
-        SP_OBJECT_REPR(new_string)->setContent(&*split_text_iter.base());   // a little ugly
-        string->erase(split_text_iter, string->end());
-        SP_OBJECT_REPR(split_obj)->setContent(string->c_str());
-    } else if (is_line_break_object(split_obj)) {
-        if (SP_OBJECT_PREV(split_obj)) {   // always true
-            split_obj = SP_OBJECT_PREV(split_obj);
-            Inkscape::XML::Node *new_node = duplicate_node_without_children(SP_OBJECT_REPR(split_obj));
-            SP_OBJECT_REPR(SP_OBJECT_PARENT(split_obj))->addChild(new_node, SP_OBJECT_REPR(split_obj));
-            sp_repr_unref(new_node);
-        }
-    } else {
-        // TODO
-        // I think the only case to put here is arbitrary gaps, which nobody uses yet
-    }
-    SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    return 1;
-}
-
-gint
-sp_text_append (SPText */*text*/, gchar const */*utf8*/)
-{
-    return 0;
-}
 
 void
 sp_adjust_kerning_screen (SPText *text, gint i_position, SPDesktop *desktop, NR::Point by)

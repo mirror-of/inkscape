@@ -20,13 +20,12 @@
 #define SP_IS_TEXTPATH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_TEXTPATH))
 
 #include <libnr/nr-point.h>
-#include "svg/svg-types.h"
 #include "libnrtype/FlowSrc.h"
+#include "svg/svg-types.h"
 #include "sp-item.h"
 
 class SPUsePath;
 class Path;
-class flow_src;
 /* SPTSpan */
 
 enum {

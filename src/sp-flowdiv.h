@@ -7,8 +7,6 @@
 #include "sp-object.h"
 #include "sp-item.h"
 
-#include "libnrtype/FlowSrc.h"
-
 #define SP_TYPE_FLOWDIV            (sp_flowdiv_get_type ())
 #define SP_FLOWDIV(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_FLOWDIV, SPFlowdiv))
 #define SP_FLOWDIV_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_FLOWDIV, SPFlowdivClass))
@@ -38,8 +36,6 @@
 #define SP_FLOWREGIONBREAK_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_FLOWREGIONBREAK, SPFlowregionbreakClass))
 #define SP_IS_FLOWREGIONBREAK(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_FLOWREGIONBREAK))
 #define SP_IS_FLOWREGIONBREAK_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FLOWREGIONBREAK))
-
-class flow_src;
 
 // these 3 are derivatives of SPItem to get the automatic style handling
 struct SPFlowdiv : public SPItem {

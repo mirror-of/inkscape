@@ -112,7 +112,7 @@ class Layout::Calculator
     public:
         PangoGlyphStringAutoPtr() {}
         PangoGlyphStringAutoPtr(PangoGlyphString *p) : std::auto_ptr<PangoGlyphString>(p) {}
-        PangoGlyphStringAutoPtr(PangoGlyphStringAutoPtr const &other) {*this = const_cast<PangoGlyphStringAutoPtr&>(other);}
+        PangoGlyphStringAutoPtr(PangoGlyphStringAutoPtr const &other) : std::auto_ptr<PangoGlyphString>(const_cast<PangoGlyphStringAutoPtr&>(other)) {}
         ~PangoGlyphStringAutoPtr() {if (get()) pango_glyph_string_free(release());}
     };
 
@@ -1174,7 +1174,7 @@ public:
                 if (para_end_input_index + 1 < _flow._input_stream.size()) {
                     // we've got to add an invisible character between paragraphs so that we can position iterators
                     // (and hence cursors) both before and after the paragraph break
-                    Layout::Character new_character = {0};
+                    Layout::Character new_character;
                     new_character.in_span = _flow._spans.size() - 1;
                     new_character.char_attributes.is_line_break = 1;
                     new_character.char_attributes.is_mandatory_break = 1;

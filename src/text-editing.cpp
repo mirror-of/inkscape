@@ -18,19 +18,6 @@
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-rotate.h>
-//#include <libnrtype/nr-typeface.h>
-#include <libnrtype/FontFactory.h>
-#include <libnrtype/font-instance.h>
-#include <libnrtype/font-style-to-pos.h>
-#include <libnrtype/FlowDefs.h>
-
-#include <libnrtype/FlowRes.h>
-#include <libnrtype/FlowSrc.h>
-#include <libnrtype/FlowEater.h>
-#include <libnrtype/FlowStyle.h>
-#include <libnrtype/FlowBoxes.h>
-
-#include <libnrtype/TextWrapper.h>
 
 #include <livarot/LivarotDefs.h>
 #include <livarot/Shape.h>
@@ -55,10 +42,12 @@
 #include "print.h"
 
 #include "xml/repr.h"
+#include "xml/attribute-record.h"
 
 #include "sp-shape.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
+#include "sp-flowdiv.h"
 #include "sp-tspan.h"
 #include "sp-string.h"
 
@@ -160,6 +149,166 @@ char * dump_hexy(const gchar * utf8)
 }
 */
 
+static bool is_line_break_object(SPObject *object)
+{
+    return    SP_IS_TEXT(object)
+           || (SP_IS_TSPAN(object) && SP_TSPAN(object)->role != SP_TSPAN_ROLE_UNSPECIFIED)
+           || SP_IS_TEXTPATH(object)
+           || SP_IS_FLOWDIV(object)
+           || SP_IS_FLOWPARA(object)
+           || SP_IS_FLOWLINE(object)
+           || SP_IS_FLOWREGIONBREAK(object);
+}    
+
+static SPTSpan* sp_te_append_line(SPText *text)
+{
+    g_return_val_if_fail (text != NULL, NULL);
+    g_return_val_if_fail (SP_IS_TEXT (text), NULL);
+
+    SPStyle *style = SP_OBJECT_STYLE (text);
+
+    NR::Point cp(text->x.computed, text->y.computed);
+
+    for (SPObject *child = sp_object_first_child(SP_OBJECT(text)) ; child != NULL; child = SP_OBJECT_NEXT(child)) {
+        if (SP_IS_TSPAN (child)) {
+            SPTSpan *tspan = SP_TSPAN (child);
+            if (tspan->role == SP_TSPAN_ROLE_LINE) {
+                cp[NR::X] = tspan->x.computed;
+                cp[NR::Y] = tspan->y.computed;
+            }
+        }
+    }
+
+    /* Create <tspan> */
+    Inkscape::XML::Node *rtspan = sp_repr_new ("svg:tspan");
+    if (style->writing_mode.computed == SP_CSS_WRITING_MODE_TB) {
+        /* fixme: real line height */
+        /* fixme: What to do with mixed direction tspans? */
+        sp_repr_set_double (rtspan, "x", cp[NR::X] - style->font_size.computed);
+        sp_repr_set_double (rtspan, "y", cp[NR::Y]);
+    } else {
+        sp_repr_set_double (rtspan, "x", cp[NR::X]);
+        sp_repr_set_double (rtspan, "y", cp[NR::Y] + style->font_size.computed);
+    }
+    sp_repr_set_attr (rtspan, "sodipodi:role", "line");
+
+    /* Create TEXT */
+    Inkscape::XML::Node *rstring = sp_repr_new_text("");
+    sp_repr_add_child (rtspan, rstring, NULL);
+    sp_repr_unref (rstring);
+    /* Append to text */
+    SP_OBJECT_REPR (text)->appendChild(rtspan);
+    sp_repr_unref (rtspan);
+
+    return (SPTSpan *) SP_OBJECT_DOCUMENT (text)->getObjectByRepr(rtspan);
+}
+
+static Inkscape::XML::Node* duplicate_node_without_children(Inkscape::XML::Node const *old_node)
+{
+    switch (old_node->type()) {
+        case Inkscape::XML::ELEMENT_NODE: {
+            Inkscape::XML::Node *new_node = sp_repr_new(old_node->name());
+            Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attributes = old_node->attributeList();
+            GQuark const id_key = g_quark_from_string("id");
+            for ( ; attributes ; attributes++) {
+                if (attributes->key == id_key) continue;
+                new_node->setAttribute(g_quark_to_string(attributes->key), attributes->value);
+            }
+            return new_node;
+        }
+
+        case Inkscape::XML::TEXT_NODE:
+            return sp_repr_new_text(old_node->content());
+
+        case Inkscape::XML::COMMENT_NODE:
+            return sp_repr_new_comment(old_node->content());
+
+        case Inkscape::XML::DOCUMENT_NODE:
+            return NULL;   // this had better never happen
+    }
+    return NULL;
+}
+
+/** recursively divides the XML node tree into two objects: the original will
+contain all objects up to and including \a split_obj and the returned value
+will be the new leaf which represents the copy of \a split_obj and extends
+down the tree with new elements all the way to the common root which is the
+parent of the first line break node encountered.
+*/
+static SPObject* split_text_object_tree_at(SPObject *split_obj)
+{
+    if (is_line_break_object(split_obj)) {
+        Inkscape::XML::Node *new_node = duplicate_node_without_children(SP_OBJECT_REPR(split_obj));
+        SP_OBJECT_REPR(SP_OBJECT_PARENT(split_obj))->addChild(new_node, SP_OBJECT_REPR(split_obj));
+        sp_repr_unref(new_node);
+        return SP_OBJECT_NEXT(split_obj);
+    }
+
+    SPObject *duplicate_obj = split_text_object_tree_at(SP_OBJECT_PARENT(split_obj));
+    // copy the split node
+    if (SP_IS_TSPAN(duplicate_obj) && duplicate_obj->hasChildren()) {
+        // workaround for the old code adding a string child we don't want
+        SP_OBJECT_REPR(duplicate_obj)->removeChild(SP_OBJECT_REPR(duplicate_obj->firstChild()));
+    }
+    Inkscape::XML::Node *new_node = duplicate_node_without_children(SP_OBJECT_REPR(split_obj));
+    SP_OBJECT_REPR(duplicate_obj)->appendChild(new_node);
+    sp_repr_unref(new_node);
+    // TODO: I think this an appropriate place to sort out the copied attributes (x/y/dx/dy/rotate)
+
+    // then move all the subsequent nodes
+    split_obj = SP_OBJECT_NEXT(split_obj);
+    while (split_obj) {
+        Inkscape::XML::Node *move_repr = SP_OBJECT_REPR(split_obj);
+        SPObject *next_obj = SP_OBJECT_NEXT(split_obj);  // this is about to become invalidated by removeChild()
+        sp_repr_ref(move_repr);
+        SP_OBJECT_REPR(SP_OBJECT_PARENT(split_obj))->removeChild(move_repr);
+        SP_OBJECT_REPR(duplicate_obj)->appendChild(move_repr);
+        sp_repr_unref(move_repr);
+
+        split_obj = next_obj;
+    }
+    return duplicate_obj->firstChild();
+}
+
+bool sp_te_insert_line (SPText *text, gint i_ucs4_pos)
+{
+    // Disable newlines in a textpath; TODO: maybe on Enter in a textpath, separate it into two
+    // texpaths attached to the same path, with a vertical shift
+    if (SP_IS_TEXT_TEXTPATH (text)) 
+        return 0;
+
+    Inkscape::Text::Layout::iterator it_split = text->layout.charIndexToIterator(i_ucs4_pos);
+    if (it_split == text->layout.end()) {
+        sp_te_append_line(text);
+        return 1;
+    }
+    SPObject *split_obj;
+    Glib::ustring::iterator split_text_iter;
+    text->layout.getSourceOfCharacter(it_split, (void**)&split_obj, &split_text_iter);
+
+    if (SP_IS_STRING(split_obj)) {
+        Glib::ustring *string = &SP_STRING(split_obj)->string;
+        // we need to split the entire text tree into two
+        SPString *new_string = SP_STRING(split_text_object_tree_at(split_obj));
+        SP_OBJECT_REPR(new_string)->setContent(&*split_text_iter.base());   // a little ugly
+        string->erase(split_text_iter, string->end());
+        SP_OBJECT_REPR(split_obj)->setContent(string->c_str());
+        // TODO: if the split point was at the beginning of a span we have a whole load of empty elements to clean up
+    } else if (is_line_break_object(split_obj)) {
+        if (SP_OBJECT_PREV(split_obj)) {   // always true
+            split_obj = SP_OBJECT_PREV(split_obj);
+            Inkscape::XML::Node *new_node = duplicate_node_without_children(SP_OBJECT_REPR(split_obj));
+            SP_OBJECT_REPR(SP_OBJECT_PARENT(split_obj))->addChild(new_node, SP_OBJECT_REPR(split_obj));
+            sp_repr_unref(new_node);
+        }
+    } else {
+        // TODO
+        // I think the only case to put here is arbitrary gaps, which nobody uses yet
+    }
+    SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    return 1;
+}
+
 /** finds the first SPString after the given position, including children, excluding parents */
 static SPString* sp_te_seek_next_string_recursive(SPObject *start_obj)
 {
@@ -202,7 +351,7 @@ sp_te_insert(SPItem *item, gint i_ucs4_pos, gchar const *utf8)
         if (!cursor_at_start) iter_text++;
         string->replace(iter_text, iter_text, utf8);
     } else {
-        // the not-so-simple case where we're at a line break or other control char; add to the last child/sibling SPString
+        // the not-so-simple case where we're at a line break or other control char; add to the next child/sibling SPString
         if (cursor_at_start) {
             source_obj = item;
             if (source_obj->hasChildren())
@@ -210,9 +359,9 @@ sp_te_insert(SPItem *item, gint i_ucs4_pos, gchar const *utf8)
         }
         SPString *string_item = sp_te_seek_next_string_recursive(source_obj);
         if (string_item == NULL) {
-            // need to add one in this (pathological) case
+            // need to add an SPString in this (pathological) case
             Inkscape::XML::Node *rstring = sp_repr_new_text("");
-            SP_OBJECT_REPR(source_obj)->addChild(rstring, NULL);        // this magically adds to the spobject tree too
+            SP_OBJECT_REPR(source_obj)->addChild(rstring, NULL);
             sp_repr_unref(rstring);
             g_assert(SP_IS_STRING(source_obj->firstChild()));
             string_item = SP_STRING(source_obj->firstChild());
@@ -223,6 +372,52 @@ sp_te_insert(SPItem *item, gint i_ucs4_pos, gchar const *utf8)
     SP_OBJECT(item)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(item)),SP_OBJECT_WRITE_EXT);
     SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     return i_ucs4_pos + g_utf8_strlen(utf8, -1);
+}
+
+/** if \a object and \a other are the same type and the same style and \a other
+isn't needed for layout reasons (ie it's a line break) then all the children
+of \a other are removed and put in to object and other is deleted. It works
+if \a object and \a other are both SPString objects too. */
+static bool merge_nodes_if_possible(SPObject *object, SPObject *other)
+{
+    if (object == NULL || other == NULL) return false;
+
+    Inkscape::XML::Node *object_repr = SP_OBJECT_REPR(object);
+    Inkscape::XML::Node *other_repr = SP_OBJECT_REPR(other);
+
+    if (object_repr->type() != other_repr->type()) return false;
+
+    if (SP_IS_STRING(object) && SP_IS_STRING(other)) {
+        // also amalgamate consecutive SPStrings into one
+        SP_STRING(object)->string.append(SP_STRING(other)->string);
+        other_repr->parent()->removeChild(other_repr);
+        return true;
+    }
+
+    // merge consecutive spans with identical styles into one
+    if (object_repr->type() != Inkscape::XML::ELEMENT_NODE) return false;
+    if (strcmp(object_repr->name(), other_repr->name()) != 0) return false;
+    if (is_line_break_object(other)) return false;
+    gchar const *object_style = object_repr->attribute("style");
+    gchar const *other_style = other_repr->attribute("style");
+    if (!((object_style == NULL && other_style == NULL)
+          || (object_style != NULL && other_style != NULL && !strcmp(object_style, other_style))))
+        return false;
+    if (SP_IS_TSPAN(other)) {
+        div_flow_src const *contents = &SP_TSPAN(other)->contents;
+        if (contents->nb_dx || contents->nb_dy || contents->nb_rot || contents->nb_x || contents->nb_y)
+            return false;
+    }
+    // all our tests passed: do the merge
+    while (other_repr->childCount()) {
+        Inkscape::XML::Node *child = other_repr->firstChild();
+        sp_repr_ref(child);
+        other_repr->removeChild(child);
+        object_repr->appendChild(child);
+        sp_repr_unref(child);
+    }
+    other_repr->parent()->removeChild(other_repr);
+    return true;
 }
 
 /* Returns start position */
@@ -250,13 +445,22 @@ sp_te_delete (SPItem *item, gint i_start, gint i_end)
                 if (SP_IS_STRING(sub_item)) {
                     Glib::ustring *string = &SP_STRING(sub_item)->string;
                     string->erase(string->begin(), end_text_iter);
-                    if (SP_OBJECT_PREV(sub_item) && SP_IS_STRING(SP_OBJECT_PREV(sub_item))) {
-                        // consecutive SPString amalgamation below only works on leaving the second string.
-                        // the last string doesn't leave in the same way, so amalgamate here
-                        SP_STRING(SP_OBJECT_PREV(sub_item))->string.append(*string);
-                        SP_OBJECT_REPR(SP_OBJECT_PARENT(sub_item))->removeChild(SP_OBJECT_REPR(sub_item));
-                    }
+                    SPObject *prev_item = SP_OBJECT_PREV(sub_item);
+                    if (merge_nodes_if_possible(prev_item, sub_item))
+                        sub_item = prev_item;
                 }
+                do {
+                    sub_item = SP_OBJECT_PARENT(sub_item);
+                    SPObject *prev_item = SP_OBJECT_PREV(sub_item);
+                    if (prev_item) {
+                        SPObject *last_child = prev_item->lastChild();
+                        if (merge_nodes_if_possible(prev_item, sub_item)) {
+                            sub_item = prev_item;
+                            if (last_child)
+                                merge_nodes_if_possible(last_child, SP_OBJECT_NEXT(last_child));
+                        }
+                    }
+                } while (!is_line_break_object(sub_item));
                 break;
             }
             if (SP_IS_STRING(sub_item)) {
@@ -264,14 +468,14 @@ sp_te_delete (SPItem *item, gint i_start, gint i_end)
                 if (sub_item == start_item)
                     string->erase(start_text_iter, string->end());
                 else
-                    string->erase();   // the SPObject itself will be deleted below
+                    string->erase();
             }
             if (SP_IS_TSPAN(sub_item) && SP_TSPAN(sub_item)->role != SP_TSPAN_ROLE_UNSPECIFIED) {
                 Inkscape::XML::Node *tspan_repr = SP_OBJECT_REPR(sub_item);
                 tspan_repr->setAttribute("sodipodi:role", NULL);
                 tspan_repr->setAttribute("x", NULL);
                 tspan_repr->setAttribute("y", NULL);
-                // the actual merging of two tspans will be done below (if they're the same style) (TODO)
+                // the actual merging of two tspans will be done below (if they're the same style)
             }
             // walk to the next item in the tree
             if (sub_item->hasChildren())
@@ -286,20 +490,14 @@ sp_te_delete (SPItem *item, gint i_start, gint i_end)
                         is_sibling = false;
                     }
 
-                    // delete empty objects we're leaving
-                    if (SP_IS_STRING(sub_item)) {
-                        if (SP_STRING(sub_item)->string.empty())
-                            SP_OBJECT_REPR(SP_OBJECT_PARENT(sub_item))->removeChild(SP_OBJECT_REPR(sub_item));
-                        else if (SP_OBJECT_PREV(sub_item) && SP_IS_STRING(SP_OBJECT_PREV(sub_item))) {
-                            // also amalgamate consecutive SPStrings into one
-                            SP_STRING(SP_OBJECT_PREV(sub_item))->string.append(SP_STRING(sub_item)->string);
-                            SP_OBJECT_REPR(SP_OBJECT_PARENT(sub_item))->removeChild(SP_OBJECT_REPR(sub_item));
-                        }
-                    } else if (!sub_item->hasChildren()) {
-                        if (!SP_IS_TSPAN(sub_item) || SP_TSPAN(sub_item)->role == SP_TSPAN_ROLE_UNSPECIFIED)
-                            SP_OBJECT_REPR(SP_OBJECT_PARENT(sub_item))->removeChild(SP_OBJECT_REPR(sub_item));
+                    Inkscape::XML::Node *this_repr = SP_OBJECT_REPR(sub_item);
+                    if (SP_IS_STRING(sub_item) && SP_STRING(sub_item)->string.empty())
+                        this_repr->parent()->removeChild(this_repr);
+
+                    else if (!merge_nodes_if_possible(SP_OBJECT_PREV(sub_item), sub_item)) {
+                        if (!SP_IS_STRING(sub_item) && !sub_item->hasChildren() && !is_line_break_object(sub_item))
+                            this_repr->parent()->removeChild(this_repr);
                     }
-                    // TODO: merging of consecutive spans with identical styles into one
 
                     sub_item = next_item;
                     if (is_sibling) break;

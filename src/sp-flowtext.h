@@ -8,7 +8,6 @@
 
 #include "display/nr-arena-forward.h"
 
-#include "libnrtype/FlowSrc.h"
 #include "libnrtype/Layout-TNG.h"
 
 #define SP_TYPE_FLOWTEXT            (sp_flowtext_get_type ())
