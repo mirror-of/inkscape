@@ -27,6 +27,8 @@
 
 #include "../livarot/Shape.h"
 
+NRType nr_arena_shape_get_type (void);
+
 struct NRArenaShape : public NRArenaItem{
 	/* Shape data */
 	SPCurve *curve;
@@ -61,13 +63,17 @@ struct NRArenaShape : public NRArenaItem{
 	Shape    *cached_stroke;
 	/* Markers */
 	NRArenaItem *markers;
+
+	static NRArenaShape *create(NRArena *arena) {
+		NRArenaShape *obj=reinterpret_cast<NRArenaShape *>(nr_object_new(NR_TYPE_ARENA_SHAPE));
+		obj->init(arena);
+		return obj;
+	}
 };
 
 struct NRArenaShapeClass {
 	NRArenaItemClass parent_class;
 };
-
-NRType nr_arena_shape_get_type (void);
 
 void nr_arena_shape_set_path(NRArenaShape *shape, SPCurve *curve, bool justTrans);
 void nr_arena_shape_set_style (NRArenaShape *shape, SPStyle *style);

@@ -1428,7 +1428,7 @@ sp_tspan_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 
     if (tspan->string) {
         NRArenaItem *ai, *ac;
-        ai = nr_arena_item_new (arena, NR_TYPE_ARENA_GROUP);
+        ai = NRArenaGroup::create(arena);
         nr_arena_group_set_transparent (NR_ARENA_GROUP (ai), FALSE);
         ac = sp_item_invoke_show (SP_ITEM (tspan->string), arena, key, flags);
         if (ac) {
@@ -1919,7 +1919,7 @@ sp_text_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned in
 static NRArenaItem *
 sp_text_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags)
 {
-    NRArenaItem *ai = nr_arena_item_new (arena, NR_TYPE_ARENA_GROUP);
+    NRArenaItem *ai = NRArenaGroup::create(arena);
     nr_arena_group_set_transparent (NR_ARENA_GROUP (ai), FALSE);
 
     NRArenaItem *ar = NULL;

@@ -580,7 +580,7 @@ sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 	object = SP_OBJECT (item);
 	shape = SP_SHAPE (item);
 
-	arenaitem = nr_arena_item_new (arena, NR_TYPE_ARENA_SHAPE);
+	arenaitem = NRArenaShape::create(arena);
 	nr_arena_shape_set_style (NR_ARENA_SHAPE (arenaitem), object->style);
 	nr_arena_shape_set_path(NR_ARENA_SHAPE(arenaitem), shape->curve,false);
 	sp_item_invoke_bbox (item, &paintbox, NULL, TRUE);

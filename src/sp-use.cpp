@@ -328,7 +328,7 @@ sp_use_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags)
 	SPUse *use = SP_USE (item);
 
 	NRArenaItem *ai;
-	ai = nr_arena_item_new (arena, NR_TYPE_ARENA_GROUP);
+	ai = NRArenaGroup::create(arena);
 	nr_arena_group_set_transparent (NR_ARENA_GROUP (ai), FALSE);
 
 	if (use->child) {

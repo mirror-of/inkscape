@@ -1,3 +1,20 @@
+2004-05-02  MenTaLguY <mental@rydia.net>
+
+	* src/file.cpp, src/print.cpp, src/sp-chars.cpp, src/sp-clippath.cpp,
+	  src/sp-image.cpp, src/sp-item-group.cpp, src/sp-mask.cpp,
+	  src/sp-pattern.cpp, src/sp-shape.cpp, src/sp-text.cpp,
+	  src/sp-use.cpp, src/dialogs/stroke-style.cpp,
+	  src/display/canvas-arena.cpp, src/display/nr-arena-glyphs.cpp,
+	  src/display/nr-arena-glyphs.h, src/display/nr-arena-group.h,
+	  src/display/nr-arena-image.h, src/display/nr-arena-item.cpp,
+	  src/display/nr-arena-item.h, src/display/nr-arena-shape.h,
+	  src/display/nr-arena.h, src/libnr/nr-object.h, src/widgets/icon.cpp:
+
+	  removed nr_arena_item_new in favor of static ::create() functions
+	  which call NRArenaItem::init() to perform setup (i.e. setting
+	  NRArenaItem::arena).  Eventually NRArenaItem::init() and
+	  nr_arena_item_init will merge and become NRArenaItem's constructor.
+
 2004-04-30  MenTaLguY <mental@rydia.net>
 
     * src/sp-use.cpp: call parent class' write methods rather than

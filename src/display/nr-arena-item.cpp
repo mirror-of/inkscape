@@ -729,24 +729,6 @@ nr_arena_item_request_render (NRArenaItem *item)
 /* Public */
 
 NRArenaItem *
-nr_arena_item_new (NRArena *arena, unsigned int type)
-{
-	NRArenaItem *item;
-
-	nr_return_val_if_fail (arena != NULL, NULL);
-	nr_return_val_if_fail (NR_IS_ARENA (arena), NULL);
-	nr_return_val_if_fail (nr_type_is_a (type, NR_TYPE_ARENA_ITEM), NULL);
-
-	item = (NRArenaItem *) nr_object_new (type);
-
-	item->arena = arena;
-
-	/* nr_arena_item_added (arena, item); */
-
-	return item;
-}
-
-NRArenaItem *
 nr_arena_item_unparent (NRArenaItem *item)
 {
 	nr_return_val_if_fail (item != NULL, NULL);

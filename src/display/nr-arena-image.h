@@ -20,6 +20,8 @@
 #include <libnr/nr-matrix.h>
 #include "nr-arena-item.h"
 
+NRType nr_arena_image_get_type (void);
+
 struct NRArenaImage : public NRArenaItem{
 	unsigned char *px;
 	unsigned int pxw;
@@ -31,13 +33,17 @@ struct NRArenaImage : public NRArenaItem{
 
 	/* From GRID to PIXELS */
 	NR::Matrix grid2px;
+
+	static NRArenaImage *create(NRArena *arena) {
+		NRArenaImage *obj=reinterpret_cast<NRArenaImage *>(nr_object_new(NR_TYPE_ARENA_IMAGE));
+		obj->init(arena);
+		return obj;
+	}
 };
 
 struct NRArenaImageClass {
 	NRArenaItemClass parent_class;
 };
-
-NRType nr_arena_image_get_type (void);
 
 void nr_arena_image_set_pixels (NRArenaImage *image, const unsigned char *px, unsigned int pxw, unsigned int pxh, unsigned int pxrs);
 void nr_arena_image_set_geometry (NRArenaImage *image, double x, double y, double width, double height);

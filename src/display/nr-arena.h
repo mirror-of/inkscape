@@ -21,24 +21,22 @@
 #include <libnr/nr-object.h>
 #include "nr-arena-forward.h"
 
+NRType nr_arena_get_type (void);
+
 struct NRArenaEventVector {
-	NRObjectEventVector object_vector;
+	NRObjectEventVector parent;
 	void (* request_update) (NRArena *arena, NRArenaItem *item, void *data);
 	void (* request_render) (NRArena *arena, NRRectL *area, void *data);
 };
 
-struct NRArena : public NRActiveObject{
+struct NRArena : public NRActiveObject {
+	static NRArena *create() {
+		return reinterpret_cast<NRArena *>(nr_object_new(NR_TYPE_ARENA));
+	}
 };
 
-struct NRArenaClass {
-	NRActiveObjectClass parent_class;
+struct NRArenaClass : public NRActiveObjectClass {
 };
-
-NRType nr_arena_get_type (void);
-
-/* Following are meant stricktly for subclass/item implementations */
-/* void nr_arena_item_added (NRArena *arena, NRArenaItem *item); */
-/* void nr_arena_remove_item (NRArena *arena, NRArenaItem *item); */
 
 void nr_arena_request_update (NRArena *arena, NRArenaItem *item);
 void nr_arena_request_render_rect (NRArena *arena, NRRectL *area);

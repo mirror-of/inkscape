@@ -361,7 +361,7 @@ sp_group_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 
 	group = (SPGroup *) item;
 
-	ai = nr_arena_item_new (arena, NR_TYPE_ARENA_GROUP);
+	ai = NRArenaGroup::create(arena);
 	nr_arena_group_set_transparent (NR_ARENA_GROUP (ai),
 	                                group->mode != SP_GROUP_MODE_GROUP);
 

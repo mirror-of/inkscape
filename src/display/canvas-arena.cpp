@@ -105,8 +105,8 @@ sp_canvas_arena_init (SPCanvasArena *arena)
 {
 	arena->sticky = FALSE;
 
-	arena->arena = (NRArena *) nr_object_new (NR_TYPE_ARENA);
-	arena->root = nr_arena_item_new (arena->arena, NR_TYPE_ARENA_GROUP);
+	arena->arena = NRArena::create();
+	arena->root = NRArenaGroup::create(arena->arena);
 	nr_arena_group_set_transparent (NR_ARENA_GROUP (arena->root), TRUE);
 
 #ifdef arena_item_tile_cache

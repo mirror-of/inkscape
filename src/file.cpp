@@ -751,7 +751,7 @@ sp_export_png_file (SPDocument *doc, const gchar *filename,
     ebp.a      = NR_RGBA32_A (bgcolor);
 
     /* Create new arena */
-    NRArena *arena = (NRArena *) nr_object_new (NR_TYPE_ARENA);
+    NRArena *arena = NRArena::create();
     unsigned int dkey = sp_item_display_key_new (1);
 
     /* Create ArenaItem and set transform */

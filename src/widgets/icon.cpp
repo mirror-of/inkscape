@@ -360,7 +360,7 @@ sp_icon_image_load_svg ( const gchar *name,
             unsigned int visionkey;
             sp_document_ensure_up_to_date (doc);
             /* Create new arena */
-            arena = (NRArena *) nr_object_new (NR_TYPE_ARENA);
+            arena = NRArena::create();
             /* Create ArenaItem and set transform */
             visionkey = sp_item_display_key_new (1);
             /* fixme: Memory manage root if needed (Lauris) */

@@ -19,18 +19,24 @@
 
 #include "nr-arena-item.h"
 
+NRType nr_arena_group_get_type (void);
+
 struct NRArenaGroup : public NRArenaItem{
 	unsigned int transparent : 1;
 	NRArenaItem *children;
 	NRArenaItem *last;
 	NRMatrix child_transform;
+
+	static NRArenaGroup *create(NRArena *arena) {
+		NRArenaGroup *obj=reinterpret_cast<NRArenaGroup *>(nr_object_new(NR_TYPE_ARENA_GROUP));
+		obj->init(arena);
+		return obj;
+	}
 };
 
 struct NRArenaGroupClass {
 	NRArenaItemClass parent_class;
 };
-
-NRType nr_arena_group_get_type (void);
 
 void nr_arena_group_set_transparent (NRArenaGroup *group, unsigned int transparent);
 

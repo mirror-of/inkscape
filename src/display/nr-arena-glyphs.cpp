@@ -720,7 +720,7 @@ nr_arena_glyphs_group_add_component (NRArenaGlyphsGroup *sg, NRFont *font, int g
 		curve = sp_curve_new_from_foreign_bpath (bpath.path);
 		if (curve) {
 			NRArenaItem *new_arena;
-			new_arena = nr_arena_item_new (NR_ARENA_ITEM (group)->arena, NR_TYPE_ARENA_GLYPHS);
+			new_arena = NRArenaGlyphs::create(group->arena);
 			nr_arena_item_append_child (NR_ARENA_ITEM (group), new_arena);
 			nr_arena_item_unref (new_arena);
 			nr_arena_glyphs_set_path (NR_ARENA_GLYPHS (new_arena), curve, FALSE, font, glyph, transform);

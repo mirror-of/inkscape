@@ -503,12 +503,12 @@ sp_pattern_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRect *bbo
 	/* fixme: Create arena */
 	/* fixme: Actually we need some kind of constructor function */
 	/* fixme: But to do that, we need actual arena implementaion */
-	pp->arena = (NRArena *) nr_object_new (NR_TYPE_ARENA);
+	pp->arena = NRArena::create();
 
 	pp->dkey = sp_item_display_key_new (1);
 
 	/* fixme: Create group */
-	pp->root = nr_arena_item_new (pp->arena, NR_TYPE_ARENA_GROUP);
+	pp->root = NRArenaGroup::create(pp->arena);
 
 	/* fixme: Show items */
 	/* fixme: Among other thing we want to traverse href here */

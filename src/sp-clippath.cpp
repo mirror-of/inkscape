@@ -290,7 +290,7 @@ sp_clippath_show (SPClipPath *cp, NRArena *arena, unsigned int key)
 	g_return_val_if_fail (arena != NULL, NULL);
 	g_return_val_if_fail (NR_IS_ARENA (arena), NULL);
 
-	ai = nr_arena_item_new (arena, NR_TYPE_ARENA_GROUP);
+	ai = NRArenaGroup::create(arena);
 	cp->display = sp_clippath_view_new_prepend (cp->display, key, ai);
 
 	for (child = sp_object_first_child(SP_OBJECT(cp)) ; child != NULL; child = SP_OBJECT_NEXT(child)) {

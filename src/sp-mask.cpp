@@ -306,7 +306,7 @@ sp_mask_show (SPMask *mask, NRArena *arena, unsigned int key)
 	g_return_val_if_fail (arena != NULL, NULL);
 	g_return_val_if_fail (NR_IS_ARENA (arena), NULL);
 
-	ai = nr_arena_item_new (arena, NR_TYPE_ARENA_GROUP);
+	ai = NRArenaGroup::create(arena);
 	mask->display = sp_mask_view_new_prepend (mask->display, key, ai);
 
 	for (child = sp_object_first_child(SP_OBJECT(mask)) ; child != NULL; child = SP_OBJECT_NEXT(child)) {

@@ -101,11 +101,13 @@ struct NRArenaItem : public NRObject{
 
 	/* Single data member */
 	void *data;
+
+	void init(NRArena *arena) {
+		this->arena = arena;
+	}
 };
 
-struct NRArenaItemClass {
-	NRObjectClass parent_class;
-
+struct NRArenaItemClass : public NRObjectClass {
 	NRArenaItem * (* children) (NRArenaItem *item);
 	void (* add_child) (NRArenaItem *item, NRArenaItem *child, NRArenaItem *ref);
 	void (* remove_child) (NRArenaItem *item, NRArenaItem *child);
@@ -155,8 +157,6 @@ void nr_arena_item_request_update (NRArenaItem *item, unsigned int reset, unsign
 void nr_arena_item_request_render (NRArenaItem *item);
 
 /* Public */
-
-NRArenaItem *nr_arena_item_new (NRArena *arena, unsigned int type);
 
 NRArenaItem *nr_arena_item_unparent (NRArenaItem *item);
 

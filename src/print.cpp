@@ -121,7 +121,7 @@ sp_print_preview_document (SPDocument *doc)
 		/* fixme: This has to go into module constructor somehow */
 		/* Create new arena */
 		mod->base = SP_ITEM (sp_document_root (doc));
-		mod->arena = (NRArena *) nr_object_new (NR_TYPE_ARENA);
+		mod->arena = NRArena::create();
 		mod->dkey = sp_item_display_key_new (1);
 		mod->root = sp_item_invoke_show (mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_PRINT);
 		/* Print document */
@@ -163,7 +163,7 @@ sp_print_document (SPDocument *doc, unsigned int direct)
 		/* fixme: This has to go into module constructor somehow */
 		/* Create new arena */
 		mod->base = SP_ITEM (sp_document_root (doc));
-		mod->arena = (NRArena *) nr_object_new (NR_TYPE_ARENA);
+		mod->arena = NRArena::create();
 		mod->dkey = sp_item_display_key_new (1);
 		mod->root = sp_item_invoke_show (mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_PRINT);
 		/* Print document */
@@ -202,7 +202,7 @@ sp_print_document_to_file (SPDocument *doc, const gchar *filename)
 	/* fixme: This has to go into module constructor somehow */
 	/* Create new arena */
 	mod->base = SP_ITEM (sp_document_root (doc));
-	mod->arena = (NRArena *) nr_object_new (NR_TYPE_ARENA);
+	mod->arena = NRArena::create();
 	mod->dkey = sp_item_display_key_new (1);
 	mod->root = sp_item_invoke_show (mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_PRINT);
 	/* Print document */

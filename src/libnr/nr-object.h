@@ -108,13 +108,11 @@ struct NRObjectCallbackBlock {
 	NRObjectListener listeners[1];
 };
 
-struct NRActiveObject {
-	NRObject object;
+struct NRActiveObject : public NRObject {
 	NRObjectCallbackBlock *callbacks;
 };
 
-struct NRActiveObjectClass {
-	NRObjectClass parent_class;
+struct NRActiveObjectClass : public NRObjectClass {
 };
 
 NRType nr_active_object_get_type (void);

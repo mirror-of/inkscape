@@ -152,7 +152,7 @@ sp_chars_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 
 	chars = SP_CHARS (item);
 
-	arenaitem = nr_arena_item_new (arena, NR_TYPE_ARENA_GLYPHS_GROUP);
+	arenaitem = NRArenaGlyphsGroup::create(arena);
 
 	nr_arena_glyphs_group_set_style (NR_ARENA_GLYPHS_GROUP (arenaitem), SP_OBJECT_STYLE (item));
 

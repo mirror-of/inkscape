@@ -363,7 +363,7 @@ sp_image_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 
 	image = (SPImage *) item;
 
-	ai = nr_arena_item_new (arena, NR_TYPE_ARENA_IMAGE);
+	ai = NRArenaImage::create(arena);
 
 	if (image->pixbuf) {
 		nr_arena_image_set_pixels (NR_ARENA_IMAGE (ai),
