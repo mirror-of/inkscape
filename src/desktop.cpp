@@ -829,6 +829,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     g_signal_connect (G_OBJECT (dtw->zoom_status), "input", G_CALLBACK (sp_dtw_zoom_input), dtw);
     g_signal_connect (G_OBJECT (dtw->zoom_status), "output", G_CALLBACK (sp_dtw_zoom_output), dtw);
     gtk_object_set_data (GTK_OBJECT (dtw->zoom_status), "dtw", dtw->canvas);
+    gtk_object_set_data (GTK_OBJECT (dtw), "altz", dtw->zoom_status);
     gtk_signal_connect (GTK_OBJECT (dtw->zoom_status), "focus-in-event", GTK_SIGNAL_FUNC (spinbutton_focus_in), dtw->zoom_status);
     gtk_signal_connect (GTK_OBJECT (dtw->zoom_status), "key-press-event", GTK_SIGNAL_FUNC (spinbutton_keypress), dtw->zoom_status);
     dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "value_changed", G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
@@ -971,6 +972,11 @@ sp_desktop_widget_realize (GtkWidget *widget)
 static gint
 sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 {
+    if (event->type == GDK_BUTTON_PRESS) {
+		// defocus any spinbuttons
+		gtk_widget_grab_focus (GTK_WIDGET(dtw->canvas));
+    }
+
     if ((event->type == GDK_BUTTON_PRESS) && (event->button.button == 3)) {
         if (event->button.state & GDK_SHIFT_MASK) {
             sp_canvas_arena_set_sticky (SP_CANVAS_ARENA (dtw->desktop->drawing), TRUE);
@@ -1841,6 +1847,8 @@ sp_dtw_zoom_value_changed (GtkSpinButton *spin, gpointer data)
     g_signal_handler_block (spin, dtw->zoom_update);
     sp_desktop_zoom_absolute (desktop, (d.x0 + d.x1) / 2, (d.y0 + d.y1) / 2, zoom_factor);
     g_signal_handler_unblock (spin, dtw->zoom_update);
+
+    spinbutton_defocus (GTK_OBJECT (spin));
 }
 
 void

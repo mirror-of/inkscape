@@ -23,14 +23,11 @@
 #include "display/sp-canvas.h"
 #include "xml/repr-private.h"
 #include "sp-cursor.h"
-
 #include "shortcuts.h"
-
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "desktop-affine.h"
 #include "selection.h"
-#include "event-context.h"
 #include "sp-item.h"
 #include "zoom-context.h"
 #include "select-context.h"
@@ -43,6 +40,9 @@
 #include "tools-switch.h"
 #include "prefs-utils.h"
 #include "message-context.h"
+#include "widgets/spw-utilities.h"
+
+#include "event-context.h"
 
 static void sp_event_context_class_init (SPEventContextClass *klass);
 static void sp_event_context_init (SPEventContext *event_context);
@@ -473,6 +473,18 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
 		case GDK_space:
 			sp_toggle_selector (desktop);
 			ret= TRUE;
+			break;
+		case GDK_z:
+		case GDK_Z:
+                   if (MOD__ALT_ONLY) {
+                        gpointer hb = gtk_object_get_data (GTK_OBJECT (desktop->owner), "altz");
+                        if (hb && GTK_IS_WIDGET(hb)) {
+                            gtk_widget_grab_focus(GTK_WIDGET(hb));
+                        }
+                        ret = TRUE;
+			}
+			break;
+		default:
 			break;
 		}
 		break;
