@@ -158,6 +158,7 @@ libinkscape_a_SOURCES = \
 	streams-gzip.h streams-gzip.cpp \
 	streams-handles.h streams-handles.cpp \
 	streams-zlib.h streams-zlib.cpp \
+	streams-jar.h streams-jar.cpp \
 	style.cpp style.h \
 	svg-view.cpp svg-view.h \
 	text-context.cpp text-context.h \
