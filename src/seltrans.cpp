@@ -673,6 +673,14 @@ sp_sel_trans_sel_modified (SPSelection *selection, guint flags, gpointer data)
  * handlers for handle move-request
  */
 
+/** Returns -1 or 1 according to the sign of x.  Returns 1 for 0 and NaN. */
+static double sign(double const x)
+{
+	return ( x < 0
+		 ? -1
+		 : 1 );
+}
+
 gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const &, NR::Point &pt, guint state)
 {
 	using NR::X;
@@ -684,7 +692,7 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
 	NR::Point const norm(seltrans->origin);
 
 	NR::Point d = point - norm;
-	NR::Point s = d;
+	NR::scale s(d);
 	for ( unsigned i = 0 ; i < 2 ; i++ ) {
 		if ( fabs(s[i]) > 0.001 ) {
 			s[i] = ( pt[i] - norm[i] ) / ( point[i] - norm[i] );
@@ -706,14 +714,13 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
 		for ( unsigned i = 0 ; i < 2 ; i++ ) {
 			unsigned oi = 1 - i;
 			if ( fabs(s[i]) > fabs(s[oi]) ) {
-				s[i] = fabs(s[oi]) * s[i] / fabs(s[i]); 
+				s[i] = fabs(s[oi]) * sign(s[i]); 
 				break;
 			}
 		}
 		r = fabs(sp_desktop_vector_snap_list(desktop, seltrans->spp, seltrans->spp_length, norm, s));
-		/* FIXME: Confirm that the behaviour is correct for 0 \in {sx, sy} (which involves 0/0). */
 		for ( unsigned i = 0 ; i < 2 ; i++ ) {
-			s[i] = r * s[i] / fabs(s[i]);
+			s[i] = r * sign(s[i]);
 		}
 	} else {
 		for ( unsigned i = 0 ; i < 2 ; i++ ) {
@@ -723,7 +730,7 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
 		}
 	}
 
-	pt = ( point - norm ) * NR::scale(s) + norm;
+	pt = ( point - norm ) * s + norm;
 
 	// status text
 	gchar *status;
@@ -736,58 +743,57 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
 
 gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle const &handle, NR::Point &pt, guint state)
 {
+	using NR::X;
+	using NR::Y;
 	double ratio;
 
 	SPDesktop *desktop = seltrans->desktop;
  
 	NR::Point point = seltrans->point;
 	NR::Point const norm(seltrans->origin);
-	NR::Point s(1.0, 1.0);
 
 	NR::Dim2 axis, perp;
 
 	switch (handle.cursor) {
 	case GDK_TOP_SIDE:
 	case GDK_BOTTOM_SIDE:
-		axis = NR::X;
-		perp = NR::Y;
+		axis = NR::Y;
+		perp = NR::X;
 		break;
 	case GDK_LEFT_SIDE:
 	case GDK_RIGHT_SIDE:
-		axis = NR::Y;
-		perp = NR::X;
+		axis = NR::X;
+		perp = NR::Y;
 		break;
 	default:
 		g_assert_not_reached();
 		return TRUE;
 	};
 
-	s = ( pt - norm ) * NR::scale( point - norm ).inverse();
-
 	if ( fabs( point[axis] - norm[axis] ) < 1e-15 ) {
-		if ( fabs(s[axis]) < 1e-15 ) {
-			s[axis] = 1e-15;
-		}
-		if ( state & GDK_CONTROL_MASK ) {
-			if ( fabs(s[axis]) > 1 ) {
-				s[axis] /= fabs(s[axis]);
-			}
-			s[perp] = fabs(s[axis]);
+		return FALSE;
+	}
 
-			ratio = sp_desktop_vector_snap_list(desktop, seltrans->spp, seltrans->spp_length, norm, s);
-
-			s[axis] /= fabs(s[axis]);
-
-			if ( fabs(ratio) < 1 ) {
-				fabs(ratio) * s[axis];
-			}
-			s[perp] = s[axis];
-		} else {
-			s[axis] = sp_desktop_dim_snap_list_scale(desktop, seltrans->spp, seltrans->spp_length, norm, s[axis], axis);
-		}
+	NR::scale s(1, 1);
+	s[axis] = ( ( pt[axis] - norm[axis] )
+		    / ( point[axis] - norm[axis] ) );
+	if ( fabs(s[axis]) < 1e-15 ) {
+		s[axis] = 1e-15;
+	}
+	if ( state & GDK_CONTROL_MASK ) {
+		s[perp] = fabs(s[axis]);
+		ratio = sp_desktop_vector_snap_list(desktop, seltrans->spp, seltrans->spp_length, norm, s);
+		s[axis] = fabs(ratio) * sign(s[axis]);
+		s[perp] = fabs(s[axis]);
+	} else {
+		s[axis] = sp_desktop_dim_snap_list_scale(desktop, seltrans->spp, seltrans->spp_length, norm, s[axis], axis);
 	}
 
 	pt = ( point - norm ) * NR::scale(s) + norm;
+	if (isnan(pt[X] + pt[Y])) {
+		g_warning("point=(%g, %g), norm=(%g, %g), s=(%g, %g)\n",
+			  point[X], point[Y], norm[X], norm[Y], s[X], s[Y]);
+	}
 
 	// status text
 	gchar *status;
@@ -824,9 +830,9 @@ gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const 
 	  if (state & GDK_CONTROL_MASK) {
 	    sx = sp_desktop_dim_snap_list_scale(desktop, seltrans->spp, seltrans->spp_length, norm, sx, X);
 	  } else {
-	    if (fabs (sx) < 1e-15) sx = 1e-15;
-	    if (fabs (sx) < 1) sx = fabs (sx) / sx;
-	    sx = (double)((int)(sx + 0.5*(fabs(sx)/sx)));
+	    if ( fabs(sx) < 1e-15 ) sx = 1e-15;
+	    if ( fabs(sx) < 1 ) sx = sign(sx);
+	    sx = floor( sx + 0.5 );
 	  }
 	  if (fabs (sx) < 1e-15) sx = 1e-15;
 	  pt[X] = ( point[X] - norm[X] ) * sx + norm[X];
@@ -843,9 +849,9 @@ gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const 
 	  if (state & GDK_CONTROL_MASK) {
 	    sy = sp_desktop_dim_snap_list_scale(desktop, seltrans->spp, seltrans->spp_length, norm, sy, Y);
 	  } else {
-	    if (fabs (sy) < 1e-15) sy = 1e-15;
-	    if (fabs (sy) < 1) sy = fabs (sy) / sy;
-	    sy = (double)((int)(sy + 0.5*(fabs(sy)/sy)));
+	    if ( fabs(sy) < 1e-15 ) sy = 1e-15;
+	    if ( fabs(sy) < 1 ) sy = sign(sy);
+	    sy = floor( sy + 0.5 );
 	  }
 	  if (fabs (sy) < 1e-15) sy = 1e-15;
 	  pt[Y] = ( point[Y] - norm[Y] ) * sy + norm[Y];
@@ -968,30 +974,27 @@ void sp_sel_trans_stretch(SPSelTrans *seltrans, SPSelTransHandle const &handle, 
 		abort();		
 		break;
 	}
-	
-	NR::Point s(1, 1);
 
-	const NR::Point point = seltrans->point;
-	NR::Point norm = seltrans->origin;
-	const NR::Point offset = point - norm;
-	
-	if (fabs (offset[dim]) < 1e-15)
+	NR::Point const scale_origin(seltrans->origin);
+	double const offset = seltrans->point[dim] - scale_origin[dim];
+	if (!( fabs(offset) >= 1e-15 )) {
 		return;
-	s[dim] = (pt[dim] - norm[dim]) / (offset[dim]);
-	if (fabs (s[dim]) < 1e-15)
-		s[dim] = 1e-15;
-	if (state & GDK_CONTROL_MASK) {
-		if (fabs (s[dim]) > fabs (s[1-dim]))
-			s[dim] = s[dim] / fabs (s[dim]);
-		if (fabs (s[dim]) < fabs (s[1-dim]))
-			s[1-dim] = fabs (s[dim]) * s[1-dim] / fabs (s[1-dim]);
 	}
-	
-	for(int i = 0; i < 2; i++)
-		if (fabs (s[i]) < 1e-15)
-			s[i] = 1e-15;
-	NR::Matrix const stretch((NR::scale(s)));
-	sp_sel_trans_transform (seltrans, stretch, norm);
+	NR::scale s(1, 1);
+	s[dim] = ( pt[dim] - scale_origin[dim] ) / offset;
+	if (isnan(s[dim])) {
+		g_warning("s[dim]=%g, pt[dim]=%g, scale_origin[dim]=%g, point[dim]=%g\n",
+			  s[dim], pt[dim], scale_origin[dim], seltrans->point[dim]);
+	}
+	if (!( fabs(s[dim]) >= 1e-15 )) {
+		s[dim] = 1e-15;
+	}
+	if (state & GDK_CONTROL_MASK) {
+		/* Preserve aspect ratio, but never flip in the dimension not being edited. */
+		s[!dim] = fabs(s[dim]);
+	}
+	NR::Matrix const stretch(s);
+	sp_sel_trans_transform(seltrans, stretch, scale_origin);
 }
 
 void sp_sel_trans_scale(SPSelTrans *seltrans, SPSelTransHandle const &, NR::Point &pt, guint state)
