@@ -447,7 +447,7 @@ static void move_child_nodes(Inkscape::XML::Node *from_repr, Inkscape::XML::Node
 tspan or textpath. */
 static TextTagAttributes* attributes_for_object(SPObject *object)
 {
-    if (SP_IS_TSPAN(object))    // actually in these cases it would be possible to move the attributes over to the preceding element
+    if (SP_IS_TSPAN(object))
         return &SP_TSPAN(object)->attributes;
     if (SP_IS_TEXT(object))
         return &SP_TEXT(object)->attributes;
@@ -1025,6 +1025,43 @@ static void overwrite_style_with_string(SPObject *item, gchar const *style_strin
     g_free(new_style_string);
 }
 
+/** Returns true if the style of \a parent and the style of \a child are
+equivalent (and hence the children of both will appear the same). It is a
+limitation of the current implementation that \a parent must be a (not
+necessarily immediate) ancestor of \a child. */
+static bool objects_have_equal_style(SPObject const *parent, SPObject const *child)
+{
+    // the obvious implementation of strcmp(style_write_all(parent), style_write_all(child))
+    // will not work. Firstly because of an inheritance bug in style.cpp that has
+    // implications too large for me to feel safe fixing, but mainly because the css spec
+    // requires that the computed value is inherited, not the specified value.
+    g_assert(parent->isAncestorOf(child));
+    gchar *parent_style = sp_style_write_string(parent->style, SP_STYLE_FLAG_ALWAYS);
+    // we have to write parent_style then read it again, because some properties format their values
+    // differently depending on whether they're set or not (*cough*dash-offset*cough*)
+    SPStyle *parent_spstyle = sp_style_new();
+    sp_style_merge_from_style_string(parent_spstyle, parent_style);
+    g_free(parent_style);
+    parent_style = sp_style_write_string(parent_spstyle, SP_STYLE_FLAG_ALWAYS);
+    sp_style_unref(parent_spstyle);
+
+    Glib::ustring child_style_construction;
+    while (child != parent) {
+        child_style_construction += SP_OBJECT_REPR(child)->attribute("style");
+        child_style_construction += ';';
+        child = SP_OBJECT_PARENT(child);
+    }
+    child_style_construction += parent_style;   // sp_style_merge_from_style_string() works backwards, ie earlier properties take precedence over later
+    SPStyle *child_spstyle = sp_style_new();
+    sp_style_merge_from_style_string(child_spstyle, child_style_construction.c_str());
+    gchar *child_style = sp_style_write_string(child_spstyle, SP_STYLE_FLAG_ALWAYS);
+    sp_style_unref(child_spstyle);
+    bool equal = !strcmp(child_style, parent_style);
+    g_free(child_style);
+    g_free(parent_style);
+    return equal;
+}
+
 /** applies the given style to all the objects at the given level and below
 which are between \a start_item and \a end_item, creating spans as necessary.
 If \a start_item or \a end_item are NULL then the style is applied to all
@@ -1075,6 +1112,7 @@ static void recursively_apply_style(SPObject *common_ancestor, gchar const *styl
                     } else if (child == end_item) {
                         // eg "ABCdef" -> <span>"ABC"</span>"def"
                         //  (includes case where start_text_iter == begin())
+                        // NB: we might create an empty string here. Doesn't matter, it'll get cleaned up later
                         unsigned end_char_index = char_index_of_iterator(string_item->string, end_text_iter);
 
                         SP_OBJECT_REPR(common_ancestor)->addChild(child_span, prev_repr);
@@ -1178,12 +1216,7 @@ static bool tidy_operator_inexplicable_spans(SPObject **item)
     if (is_line_break_object(*item)) return false;
     TextTagAttributes *attrs = attributes_for_object(*item);
     if (attrs && attrs->anyAttributesSet()) return false;
-    gchar *parent_style = sp_style_write_string(SP_OBJECT_STYLE(SP_OBJECT_PARENT(*item)), SP_STYLE_FLAG_ALWAYS);
-    gchar *item_style = sp_style_write_string(SP_OBJECT_STYLE(*item), SP_STYLE_FLAG_ALWAYS);
-    bool styles_differ = strcmp(parent_style, item_style) != 0;
-    g_free(parent_style);
-    g_free(item_style);
-    if (styles_differ) return false;
+    if (!objects_have_equal_style(SP_OBJECT_PARENT(*item), *item)) return false;
     SPObject *next = *item;
     while ((*item)->hasChildren()) {
         Inkscape::XML::Node *repr = SP_OBJECT_REPR((*item)->firstChild());
@@ -1233,12 +1266,7 @@ static bool redundant_double_nesting_processor(SPObject **item, SPObject *child,
     if (is_line_break_object(child)) return false;
     TextTagAttributes *attrs = attributes_for_object(child);
     if (attrs && attrs->anyAttributesSet()) return false;
-    gchar *parent_style = sp_style_write_string(SP_OBJECT_STYLE(SP_OBJECT_PARENT(*item)), SP_STYLE_FLAG_ALWAYS);
-    gchar *child_style = sp_style_write_string(SP_OBJECT_STYLE(child), SP_STYLE_FLAG_ALWAYS);
-    bool styles_differ = strcmp(parent_style, child_style) != 0;
-    g_free(parent_style);
-    g_free(child_style);
-    if (styles_differ) return false;
+    if (!objects_have_equal_style(SP_OBJECT_PARENT(*item), child)) return false;
 
     Inkscape::XML::Node *insert_after_repr;
     if (prepend) insert_after_repr = SP_OBJECT_REPR(SP_OBJECT_PREV(*item));
@@ -1310,7 +1338,9 @@ static bool redundant_semi_nesting_processor(SPObject **item, SPObject *child, b
 }
 
 /**    redundant semi-nesting: <font a><font b>abc</font>def</font>
-                                -> <font b>abc</font><font>def</font>   */
+                                -> <font b>abc</font><font>def</font>
+test this by applying a colour to a region, then a different colour to
+a partially-overlapping region. */
 static bool tidy_operator_redundant_semi_nesting(SPObject **item)
 {
     if (!(*item)->hasChildren()) return false;
