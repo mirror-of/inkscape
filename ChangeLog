@@ -2,7 +2,10 @@
 
 	* src/dialogs/stroke-style.cpp, src/Makefile.am, src/dialogs/Makefile.am,
 	  src/widgets/Makefile.am, configure.in: fixed up INKSCAPE_*DIR paths so CVS
-      will compile happily for me.
+      will compile happily for me.  This way if paths change, files will be
+	  recompiled.  The old way would let configure run again (changing the
+	  datadir path) without forcing a recompile, which could break the
+	  compiled paths.
 
 2004-04-13  John Cliff	<simarilius@yahoo.com>
 	* src/sp-shape.cpp, src/dialogs/stroke-style.cpp:

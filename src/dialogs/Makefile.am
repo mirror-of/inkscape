@@ -11,8 +11,6 @@ INCLUDES = \
 	-I.. \
 	-I$(top_srcdir)/src \
 	-I$(top_srcdir)/src/dialogs \
-        -DINKSCAPE_PIXMAPDIR=\""$(pkgdatadir)/icons"\" \
-        -DINKSCAPE_MARKERSDIR=\""$(pkgdatadir)/markers"\" \
 	$(INKSCAPE_CFLAGS)
 
 noinst_LIBRARIES = libspdialogs.a

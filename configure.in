@@ -22,13 +22,6 @@ ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 
 dnl AC_PROG_RANLIB
 
-dnl Set PACKAGE_LOCALE_DIR in config.h.
-dnl if test "x${prefix}" = "xNONE"; then
-dnl 	AC_DEFINE_UNQUOTED(PACKAGE_LOCALE_DIR, "${ac_default_prefix}/${DATADIRNAME}/locale", [Localization directory])
-dnl else
-dnl 	AC_DEFINE_UNQUOTED(PACKAGE_LOCALE_DIR, "${prefix}/${DATADIRNAME}/locale", [Localization directory])
-dnl fi
-
 AM_PROG_LIBTOOL
 
 dnl ******************************
@@ -372,6 +365,42 @@ else
 fi
 
 AM_CONDITIONAL(USE_MMX, test x$use_mmx_asm = xyes)
+
+
+dnl Figure out where the datadir actually is
+if test "x${datadir}" = 'x${prefix}/share'; then
+  if test "x${prefix}" = "xNONE"; then
+    runtime_datadir="${ac_default_prefix}/share"
+  else
+    runtime_datadir="${prefix}/share"
+  fi
+else
+  runtime_datadir="${datadir}"
+fi
+inkscape_sharedir="${runtime_datadir}/${PACKAGE_NAME}"
+
+dnl Define our data paths for config.h
+AC_SUBST(INKSCAPE_DATADIR)
+AC_DEFINE_UNQUOTED([INKSCAPE_DATADIR], "${runtime_datadir}",
+					[Common data directory])
+AC_SUBST(PACKAGE_LOCALE_DIR)
+AC_DEFINE_UNQUOTED([PACKAGE_LOCALE_DIR], "${runtime_datadir}/locale",
+					[Localization directory])
+dnl It would be nice to rename "..._PIXMAPDIR" to "..._ICONSDIR" everywhere,
+dnl then this list can be replaced with a nice "for" loop.
+AC_SUBST(INKSCAPE_PIXMAPDIR)
+AC_DEFINE_UNQUOTED([INKSCAPE_PIXMAPDIR], "${inkscape_sharedir}/icons",
+					[Common icon directory])
+AC_SUBST(INKSCAPE_SCREENSDIR)
+AC_DEFINE_UNQUOTED([INKSCAPE_SCREENSDIR], "${inkscape_sharedir}/screens",
+					[Common screens directory])
+AC_SUBST(INKSCAPE_TUTORIALSDIR)
+AC_DEFINE_UNQUOTED([INKSCAPE_TUTORIALSDIR], "${inkscape_sharedir}/tutorials",
+					[Common tutorials directory])
+AC_SUBST(INKSCAPE_MARKERSDIR)
+AC_DEFINE_UNQUOTED([INKSCAPE_MARKERSDIR], "${inkscape_sharedir}/markers",
+					[Common markers directory])
+
 
 dnl Have to add module makefiles (lauris)
 

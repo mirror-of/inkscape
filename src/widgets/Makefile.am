@@ -6,8 +6,7 @@
 INCLUDES = \
 	-I.. \
 	-I$(top_srcdir)/src \
-	$(INKSCAPE_CFLAGS) \
-	-DINKSCAPE_PIXMAPDIR=\""$(pkgdatadir)/icons"\"
+	$(INKSCAPE_CFLAGS)
 
 noinst_LIBRARIES = libspwidgets.a
 

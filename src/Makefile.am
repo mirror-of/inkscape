@@ -17,12 +17,6 @@ AM_CPPFLAGS = \
 # during a "make install" (I think) if the user defines "prefix" to be
 # somewhere else.  See dialogs/Makefile.am too.
 INCLUDES = \
-	-DINKSCAPE_DATADIR=\""$(datadir)"\" \
-	-DPACKAGE_LOCALE_DIR=\""$(datadir)/locale"\" \
-	-DINKSCAPE_PIXMAPDIR=\""$(pkgdatadir)/icons"\" \
-	-DINKSCAPE_SCREENSDIR=\""$(pkgdatadir)/screens"\" \
-	-DINKSCAPE_TUTORIALSDIR=\""$(pkgdatadir)/tutorials"\" \
-	-DINKSCAPE_MARKERSDIR=\""$(pkgdatadir)/markers"\" \
 	-I$(srcdir) \
 	-I$(srcdir)/xml \
 	-I$(srcdir)/svg \
