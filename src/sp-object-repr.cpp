@@ -31,6 +31,7 @@
 #include "sp-spiral.h" 
 #include "sp-offset.h"
 #include "sp-line.h"
+#include "sp-metadata.h"
 #include "sp-polyline.h"
 #include "sp-polygon.h"
 #include "sp-text.h" 
@@ -115,6 +116,7 @@ populate_dtables()
 		{ "linearGradient", SP_TYPE_LINEARGRADIENT },
 		{ "marker", SP_TYPE_MARKER },
 		{ "mask", SP_TYPE_MASK },
+		{ "metadata", SP_TYPE_METADATA },
 		{ "path", SP_TYPE_PATH },
 		{ "pattern", SP_TYPE_PATTERN },
 		{ "polygon", SP_TYPE_POLYGON },

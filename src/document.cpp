@@ -348,6 +348,16 @@ sp_document_create (SPReprDoc *rdoc,
 		sp_repr_unref (rnew);
 	}
 
+	// Create metadata if it doesn't already exist
+	if (!sp_item_group_get_child_by_name ((SPGroup *) document->root, NULL, "metadata")) {
+		// create repr
+		SPRepr * rnew = sp_repr_new ("metadata");
+		// insert into the document
+		sp_repr_add_child (rroot, rnew, NULL);
+		// clean up
+		sp_repr_unref (rnew);
+	}
+
 	/* Defs */
 	if (!SP_ROOT (document->root)->defs) {
 		SPRepr *r;

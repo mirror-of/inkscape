@@ -154,6 +154,7 @@ libinkpre_a_SOURCES =	\
 	sp-marker.cpp sp-marker.h	\
 	sp-marker-loc.h	\
 	sp-mask.cpp sp-mask.h	\
+	sp-metadata.cpp sp-metadata.h	\
 	sp-metrics.cpp sp-metrics.h	\
 	sp-namedview.cpp sp-namedview.h	\
 	sp-object.cpp sp-object.h	\
