@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
-"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 <svg
+   xmlns:xml="http://www.w3.org/XML/1998/namespace"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
    sodipodi:version="0.32"
-   inkscape:version="0.39cvs"
+   inkscape:version="0.40+cvs"
    width="256pt"
    height="1720.4000pt"
    sodipodi:docname="tipsandtricks.svg"
-   sodipodi:docbase="C:\cvs\inkscape\inkscape\share\tutorials"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:cc="http://web.resource.org/cc/"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:xml="http://www.w3.org/XML/1998/namespace"
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:xlink="http://www.w3.org/1999/xlink">
+   sodipodi:docbase="/home/d/ink/inkscape/share/tutorials">
   <defs
      id="defs3">
     <linearGradient
@@ -483,9 +482,9 @@
   </defs>
   <sodipodi:namedview
      id="base"
-     inkscape:zoom="2.5000000"
-     inkscape:cx="128.00000"
-     inkscape:cy="1644.1535"
+     inkscape:zoom="2.0000000"
+     inkscape:cx="158.00000"
+     inkscape:cy="2050.5000"
      inkscape:window-width="780"
      inkscape:window-height="580"
      inkscape:window-x="0"
@@ -906,7 +905,7 @@
          sodipodi:linespacing="100%"
          transform="translate(0.000000,-78.93704)"><tspan
            x="5.5156250"
-           y="981.45313"
+           y="981.45312"
            sodipodi:role="line"
            id="tspan1841">Changing the rulers' unit of measure</tspan></text>
       <text
@@ -931,10 +930,11 @@
            id="tspan1847">change this from the Grid section of the Document Options dialog.</tspan></text>
     </g>
     <g
-       id="g4234">
+       id="g4234"
+       transform="translate(0.000000,-8.000000)">
       <text
          xml:space="preserve"
-         style="font-size:8.0000000;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
+         style="font-size:8.0000000;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr-tb"
          x="5.515625"
          y="1442.0831"
          id="text2659"
@@ -946,7 +946,7 @@
            id="tspan1899">Using the grid for drawing icons</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+         style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr-tb"
          x="6.1679688"
          y="1458.1749"
          id="text2662"
@@ -959,7 +959,7 @@
            x="6.1679688"
            y="1469.3469"
            sodipodi:role="line"
-           id="tspan1903">create a 24x24 mm image and set the grid to 0.5 mm (48x48 gridlines). </tspan><tspan
+           id="tspan1903">create a 24x24 px image and set the grid to 0.5 px (48x48 gridlines). </tspan><tspan
            x="6.1679688"
            y="1480.5189"
            sodipodi:role="line"
@@ -967,18 +967,22 @@
            x="6.1679688"
            y="1491.6909"
            sodipodi:role="line"
-           id="tspan1907">odd gridlines with the stroke width in mm being an even number, and </tspan><tspan
+           id="tspan1907">odd gridlines with the stroke width in px being an even number, and </tspan><tspan
            x="6.1679688"
            y="1502.8629"
            sodipodi:role="line"
-           id="tspan1909">export it so that 1 mm becomes 1 pixel, we get a crisp image.</tspan></text>
+           id="tspan1909">export it at 90dpi (so that 1 px becomes 1 bitmap pixel), we get a </tspan><tspan
+           sodipodi:role="line"
+           id="tspan1"
+           x="6.1679688"
+           y="1514.0349">crisp image.</tspan></text>
     </g>
     <g
        id="g4534">
       <text
          xml:space="preserve"
-         style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:bold;font-size:8.0000000;text-anchor:start;writing-mode:lr;stroke-opacity:1;stroke-width:3pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;"
-         x="5.5156250"
+         style="font-size:8.0000000;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr-tb"
+         x="5.515625"
          y="83.953087"
          id="text1142"
          sodipodi:linespacing="100%"><tspan
@@ -988,7 +992,7 @@
            id="tspan2201">Non-linear gradients</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
+         style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr-tb"
          x="6.1679688"
          y="100.04535"
          id="text1145"
@@ -1588,10 +1592,11 @@
            id="tspan2807">and starting from an arbitrary anchor continues the existing line.</tspan></text>
     </g>
     <g
-       id="g4263">
+       id="g4263"
+       transform="translate(0.000000,-4.000000)">
       <text
          xml:space="preserve"
-         style="font-size:8.0000000;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
+         style="font-size:8.0000000;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr-tb"
          x="5.515625"
          y="1349.9568"
          id="text2627"
@@ -1603,7 +1608,7 @@
            id="tspan1887">Entering Unicode values</tspan></text>
       <text
          xml:space="preserve"
-         style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+         style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr-tb"
          x="6.1679688"
          y="1366.0496"
          id="text2630"

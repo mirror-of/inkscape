@@ -313,9 +313,9 @@
   </defs>
   <sodipodi:namedview
      id="base"
-     inkscape:zoom="2.5000000"
-     inkscape:cx="128.74419"
-     inkscape:cy="1263.5938"
+     inkscape:zoom="2.0"
+     inkscape:cx="160"
+     inkscape:cy="1579"
      inkscape:window-width="780"
      inkscape:window-height="580"
      inkscape:window-x="0"
@@ -890,7 +890,7 @@ http://www.inkscape.org/</dc:description>
          y="119.30886"
          sodipodi:role="line"
          id="tspan1569"
-         style="stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none">Currently we employ the Potrace bitmap tracing tool </tspan><tspan
+         style="stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none">Currently Inkscape employs the Potrace bitmap tracing engine </tspan><tspan
          x="11.150325"
          y="130.22886"
          sodipodi:role="line"

@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
-"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
 <svg
+   xmlns:xml="http://www.w3.org/XML/1998/namespace"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg1"
    sodipodi:version="0.32"
-   inkscape:version="0.39cvs"
+   inkscape:version="0.40+cvs"
    width="256pt"
    height="3170.0000pt"
    sodipodi:docname="tutorial-basic.svg"
-   sodipodi:docbase="C:\cvs\inkscape\inkscape\share\tutorials"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:cc="http://web.resource.org/cc/"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:xml="http://www.w3.org/XML/1998/namespace"
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:xlink="http://www.w3.org/1999/xlink">
+   sodipodi:docbase="/home/d/ink/inkscape/share/tutorials">
   <defs
      id="defs3">
     <linearGradient
@@ -537,9 +536,9 @@
   </defs>
   <sodipodi:namedview
      id="base"
-     inkscape:zoom="2.5000000"
-     inkscape:cx="128.80000"
-     inkscape:cy="3091.2057"
+     inkscape:zoom="2.0000000"
+     inkscape:cx="160.00000"
+     inkscape:cy="3864.0000"
      inkscape:window-width="780"
      inkscape:window-height="580"
      inkscape:window-x="0"
@@ -895,7 +894,7 @@
      sodipodi:insensitive="1">
     <text
        xml:space="preserve"
-       style="font-size:7.5000000;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
+       style="font-size:7.5000000;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr-tb"
        x="37.181152"
        y="46.682785"
        id="text653"
@@ -929,11 +928,11 @@
          sodipodi:role="line"
          id="tspan3219"
          x="37.181152"
-         y="102.93279">grouping, setting fill and stroke, alignment, and z-order. For other topics,</tspan><tspan
+         y="102.93279">grouping, setting fill and stroke, alignment, and z-order. For more advanced </tspan><tspan
          sodipodi:role="line"
-         id="tspan1412"
+         id="tspan1"
          x="37.181152"
-         y="114.18279">check out the Advanced tutorial in the Help menu.</tspan></text>
+         y="114.18279">topics, check out the other tutorials in the Help menu.</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
@@ -1214,7 +1213,7 @@
        sodipodi:rx="5.8803120"
        sodipodi:ry="5.8803120"
        d="M 19.993060 926.59326 A 5.8803120 5.8803120 0 1 1  8.2324362,926.59326 A 5.8803120 5.8803120 0 1 1  19.993060 926.59326 z"
-       transform="matrix(0.500000,0.000000,0.000000,0.500000,7.056373,649.4005)" />
+       transform="matrix(0.500000,0.000000,0.000000,0.500000,7.056373,661.4005)" />
     <path
        sodipodi:type="arc"
        style="font-size:12.000000;fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt"
@@ -1224,7 +1223,7 @@
        sodipodi:rx="5.8803120"
        sodipodi:ry="5.8803120"
        d="M 19.993060 926.59326 A 5.8803120 5.8803120 0 1 1  8.2324362,926.59326 A 5.8803120 5.8803120 0 1 1  19.993060 926.59326 z"
-       transform="matrix(0.500000,0.000000,0.000000,0.500000,7.056373,683.3087)" />
+       transform="matrix(0.500000,0.000000,0.000000,0.500000,7.056373,695.3087)" />
     <path
        sodipodi:type="arc"
        style="font-size:12.000000;fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt"
@@ -1234,7 +1233,7 @@
        sodipodi:rx="5.8803120"
        sodipodi:ry="5.8803120"
        d="M 19.993060 926.59326 A 5.8803120 5.8803120 0 1 1  8.2324362,926.59326 A 5.8803120 5.8803120 0 1 1  19.993060 926.59326 z"
-       transform="matrix(0.500000,0.000000,0.000000,0.500000,7.056373,737.9832)" />
+       transform="matrix(0.500000,0.000000,0.000000,0.500000,7.056373,747.9832)" />
     <path
        sodipodi:type="arc"
        style="font-size:12.000000;fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt"
@@ -1244,7 +1243,7 @@
        sodipodi:rx="5.8803120"
        sodipodi:ry="5.8803120"
        d="M 19.993060 926.59326 A 5.8803120 5.8803120 0 1 1  8.2324362,926.59326 A 5.8803120 5.8803120 0 1 1  19.993060 926.59326 z"
-       transform="matrix(0.500000,0.000000,0.000000,0.500000,7.056373,782.8803)" />
+       transform="matrix(0.500000,0.000000,0.000000,0.500000,7.056373,792.8803)" />
     <text
        xml:space="preserve"
        style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
@@ -1640,47 +1639,45 @@
    id="tspan19660">Shift+Ctrl+Z</tspan>.)</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr-tb"
        x="21.711798"
-       y="1093.7947"
+       y="1128.2947"
        id="text868"
-       sodipodi:linespacing="133%"
-       transform="translate(0.000000,22.50000)"><tspan
+       sodipodi:linespacing="133%"><tspan
          x="21.711798"
-         y="1093.7947"
+         y="1128.2947"
          sodipodi:role="line"
          id="tspan901"></tspan><tspan
          id="tspan903">Move the object by dragging it. (Press <tspan
    style="font-weight:bold"
    id="tspan19675">Ctrl</tspan> to restrict movement</tspan><tspan
          x="21.711798"
-         y="1104.9667"
+         y="1139.4667"
          sodipodi:role="line"
          id="tspan905">to horizontal and vertical.)</tspan><tspan
          x="21.711798"
-         y="1116.1387"
+         y="1150.6387"
          sodipodi:role="line"
          id="tspan907"></tspan><tspan
          x="21.711798"
-         y="1127.3107"
+         y="1161.8107"
          sodipodi:role="line"
          id="tspan909">Scale the object by dragging any handle. (Press <tspan
    style="font-weight:bold"
    id="tspan19684">Ctrl</tspan> to preserve</tspan><tspan
          x="21.711798"
-         y="1138.4827"
+         y="1172.9827"
          sodipodi:role="line"
          id="tspan911">the original height/width ratio.)</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
+       style="font-size:8.3999996;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr-tb"
        x="21.711798"
-       y="1182.3776"
+       y="1214.8776"
        id="text928"
-       sodipodi:linespacing="133%"
-       transform="translate(0.000000,22.50000)"><tspan
+       sodipodi:linespacing="133%"><tspan
          x="21.711798"
-         y="1182.3776"
+         y="1214.8776"
          sodipodi:role="line"
          id="tspan929"></tspan><tspan
          id="tspan931">Rotate the object by dragging corner handles. (Press <tspan
@@ -1689,23 +1686,23 @@
          sodipodi:role="line"
          id="tspan943"
          x="21.711798"
-         y="1193.5496">restrict rotation to 15 degree steps. Drag the cross mark to </tspan><tspan
+         y="1226.0496">restrict rotation to 15 degree steps. Drag the cross mark to </tspan><tspan
          sodipodi:role="line"
          id="tspan1478"
          x="21.711798"
-         y="1204.7216">position the center of rotation.)</tspan><tspan
+         y="1237.2216">position the center of rotation.)</tspan><tspan
          x="21.711798"
-         y="1215.8936"
+         y="1248.3936"
          sodipodi:role="line"
          id="tspan935"></tspan><tspan
          x="21.711798"
-         y="1227.0656"
+         y="1259.5656"
          sodipodi:role="line"
          id="tspan937">Shear (skew) the object by dragging non-corner handles.</tspan><tspan
          sodipodi:role="line"
          id="tspan945"
          x="21.711798"
-         y="1238.2376"></tspan></text>
+         y="1270.7376"></tspan></text>
     <text
        xml:space="preserve"
        style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr"
