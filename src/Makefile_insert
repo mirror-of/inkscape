@@ -258,5 +258,8 @@ extract_uri_test_LDADD = libinkpre.a -lglib-2.0
 round_test_SOURCES = round-test.cpp
 round_test_LDADD = libinkpost.a
 
+sp_gradient_test_SOURCES = sp-gradient-test.cpp
+sp_gradient_test_LDADD = $(all_libs) 
+
 inkscape_version.h: ../configure.in
 	echo '#define INKSCAPE_VERSION "$(VERSION)"' > inkscape_version.h

@@ -1,3 +1,9 @@
+2004-09-26  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/sp-gradient-test.cpp: New unit test file.  I believe this is the
+	  first test that tests an SPObject.
+	* src/Makefile_insert, src/Makefile.am: Invoke the new test.
+
 2004-09-24  MenTaLguY <mental@rydia.net>
 
 	* src/selection-chemistry.cpp:
