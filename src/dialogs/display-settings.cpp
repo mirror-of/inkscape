@@ -1130,7 +1130,7 @@ sp_display_dialog (void)
                 _("This value affects the amount of smoothing applied to freehand lines; lower values produce more uneven paths with more nodes"), tt,
                 "",
                 vb_tool,
-                0.0, 100.0, 0.01, 1.0, 1.0,
+                0.0, 100.0, 0.5, 1.0, 1.0,
                 "tools.freehand.pencil", "tolerance", 10.0,
                 false, false,
                 options_freehand_tolerance_changed
