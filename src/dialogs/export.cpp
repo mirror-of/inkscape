@@ -545,9 +545,11 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
         
     selection_type key;
     key = (selection_type)((int)gtk_object_get_data (GTK_OBJECT (tb), "key"));
+/*
     if (key == (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"))) {
         return;
     }
+*/
     gtk_object_set_data(GTK_OBJECT(base), "selection-type", (gpointer)key);
 
     for (int i = 0; i < SELECTION_NUMBER_OF; i++) {
