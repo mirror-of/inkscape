@@ -550,7 +550,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 		prepr->appendChild(repr);
 		// restore position; since the items list was prepended (i.e. reverse), we now add
 		// all children at the same pos, which inverts the order once again
-		sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+		repr->setPosition(pos > 0 ? pos : 0);
 
 		// fill in the children list if non-null
 		SPItem *nitem = (SPItem *) doc->getObjectByRepr(repr);
