@@ -223,7 +223,7 @@ inkview_SOURCES = \
 
 
 inkview_LDADD = \
-	$(all_libs)
+	$(all_libs)	\
 	$(inkjar_libs)
 
 

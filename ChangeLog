@@ -1,9 +1,13 @@
+2004-03-05  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/Makefile.am: Fix missing backslash at end of line.
+
 2004-03-05  Ted Gould  <ted@gould.cx>
 	* src/extension/impelementation/implementation.cpp,
 	  src/extension/impelementation/implementation.h,
 	  src/extension/impelementation/script.h,
 	  src/extension/impelementation/script.cpp:
-    Adding in some more comments and doing some general cleanup
+	Adding in some more comments and doing some general cleanup
 	of the code.  It is getting better everyday.
 
 2004-03-05  Ted Gould  <ted@gould.cx>
