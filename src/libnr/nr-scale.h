@@ -17,6 +17,8 @@ public:
     scale(double const x, double const y) : _p(x, y) {}
     inline Coord operator[](Dim2 const d) const { return _p[d]; }
     inline Coord operator[](unsigned const d) const { return _p[d]; }
+    inline Coord &operator[](Dim2 const d) { return _p[d]; }
+    inline Coord &operator[](unsigned const d) { return _p[d]; }
 
     bool operator==(scale const &o) const {
         return _p == o._p;

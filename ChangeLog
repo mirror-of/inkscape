@@ -5,6 +5,8 @@
 	* src/seltrans.cpp (sp_sel_trans_stretch_request, sp_sel_trans_stretch):
 	Fix #906221.  Also change the behaviour to allow growing.
 
+	* src/libnr/nr-scale.h: operator[]: new versions returning writable reference.
+
 	* src/desktop-snap.h, src/desktop-snap.cpp
 	(sp_desktop_vector_snap_list):
 	Change final arg from NR::Point to NR::scale.  Update callers.
