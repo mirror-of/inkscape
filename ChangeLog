@@ -4,7 +4,11 @@
        src/dialogs/object-attributes.cpp, src/dialogs/object-attributes.h, 
        src/dialogs/object-properties.cpp, src/dialogs/object-properties.h, 
        src/dialogs/sp-attribute-widget.cpp, src/dialogs/sp-attribute-widget.h, 
-       src/dialogs/stroke-style.cpp, src/dialogs/stroke-style.h: Converted 
+       src/dialogs/stroke-style.cpp, src/dialogs/stroke-style.h, 
+       src/dialogs/text-edit.cpp, src/dialogs/text-edit.h, 
+       src/dialogs/tool-options.cpp, src/dialogs/tool-options.h,
+       src/dialogs/transformation.cpp, src/dialogs/transformation.h,
+       src/dialogs/xml-tree.cpp, src/dialogs/xml-tree.h: Converted 
        the aforementioned to coding style.
 
 
