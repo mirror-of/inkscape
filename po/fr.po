@@ -91,7 +91,7 @@ msgstr ""
 "<span weight=\"bold\" size=\"larger\">Sauvegarder les changements du "
 "document \"%s\" avant de fermer ?</span>\n"
 "\n"
-"Si vous fermé sans sauver vos changements seront perdus."
+"Si vous fermez sans sauver vos changements seront perdus."
 
 #: src/desktop.cpp:1032 src/desktop.cpp:1091
 msgid "Close _without saving"
