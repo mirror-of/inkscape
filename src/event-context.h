@@ -30,68 +30,81 @@ struct GrDrag;
 namespace Inkscape { class MessageContext; }
 
 struct SPEventContext : public GObject {
-	void enableSelectionCue(bool enable=true);
-	void enableGrDrag(bool enable=true);
+    void enableSelectionCue(bool enable=true);
+    void enableGrDrag(bool enable=true);
 
-	/* Desktop eventcontext stack */
-	SPEventContext *next;
-	unsigned int key;
-	SPDesktop *desktop;
-	SPRepr *repr;
-	gchar **cursor_shape;
-	gint hot_x, hot_y;
-	GdkCursor *cursor;
+    /* Desktop eventcontext stack */
+    SPEventContext *next;
+    unsigned key;
+    SPDesktop *desktop;
+    SPRepr *repr;
+    gchar **cursor_shape;
+    gint hot_x, hot_y;
+    GdkCursor *cursor;
 
-	gint xp , yp; // where drag started
-	gint tolerance;
-	bool within_tolerance; // are we still within tolerance of origin
+    gint xp , yp; // where drag started
+    gint tolerance;
+    bool within_tolerance; // are we still within tolerance of origin
 
-	SPItem *item_to_select; // the item where mouse_press occurred, to be selected if this is a click not drag
+    SPItem *item_to_select; // the item where mouse_press occurred, to be selected if this is a click not drag
 
-	Inkscape::MessageContext *defaultMessageContext() {
-		return _message_context;
-	}
+    Inkscape::MessageContext *defaultMessageContext() {
+        return _message_context;
+    }
 
-	Inkscape::MessageContext *_message_context;
+    Inkscape::MessageContext *_message_context;
 
-	SPSelCue *_selcue;
+    SPSelCue *_selcue;
 
-	GrDrag *_grdrag;
+    GrDrag *_grdrag;
 };
 
 struct SPEventContextClass : public GObjectClass {
-	void (* setup) (SPEventContext *ec);
-	void (* finish) (SPEventContext *ec);
-	void (* set) (SPEventContext *ec, const gchar *key, const gchar *val);
-	void (* activate) (SPEventContext *ec);
-	void (* deactivate) (SPEventContext *ec);
-	gint (* root_handler) (SPEventContext *ec, GdkEvent *event);
-	gint (* item_handler) (SPEventContext *ec, SPItem *item, GdkEvent *event);
+    void (* setup)(SPEventContext *ec);
+    void (* finish)(SPEventContext *ec);
+    void (* set)(SPEventContext *ec, gchar const *key, gchar const *val);
+    void (* activate)(SPEventContext *ec);
+    void (* deactivate)(SPEventContext *ec);
+    gint (* root_handler)(SPEventContext *ec, GdkEvent *event);
+    gint (* item_handler)(SPEventContext *ec, SPItem *item, GdkEvent *event);
 };
 
-#define SP_EVENT_CONTEXT_DESKTOP(e) (SP_EVENT_CONTEXT (e)->desktop)
-#define SP_EVENT_CONTEXT_REPR(e) (SP_EVENT_CONTEXT (e)->repr)
+#define SP_EVENT_CONTEXT_DESKTOP(e) (SP_EVENT_CONTEXT(e)->desktop)
+#define SP_EVENT_CONTEXT_REPR(e) (SP_EVENT_CONTEXT(e)->repr)
 
 #define SP_EVENT_CONTEXT_STATIC 0
 
-SPEventContext *sp_event_context_new (GType type, SPDesktop *desktop, SPRepr *repr, unsigned int key);
-void sp_event_context_finish (SPEventContext *ec);
-void sp_event_context_read (SPEventContext *ec, const gchar *key);
-void sp_event_context_activate (SPEventContext *ec);
-void sp_event_context_deactivate (SPEventContext *ec);
+SPEventContext *sp_event_context_new(GType type, SPDesktop *desktop, SPRepr *repr, unsigned key);
+void sp_event_context_finish(SPEventContext *ec);
+void sp_event_context_read(SPEventContext *ec, gchar const *key);
+void sp_event_context_activate(SPEventContext *ec);
+void sp_event_context_deactivate(SPEventContext *ec);
 
-gint sp_event_context_root_handler (SPEventContext *ec, GdkEvent *event);
-gint sp_event_context_item_handler (SPEventContext *ec, SPItem *item, GdkEvent *event);
+gint sp_event_context_root_handler(SPEventContext *ec, GdkEvent *event);
+gint sp_event_context_item_handler(SPEventContext *ec, SPItem *item, GdkEvent *event);
 
-void sp_event_root_menu_popup (SPDesktop *desktop, SPItem *item, GdkEvent *event);
+void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event);
 
-gint gobble_key_events (guint keyval, gint mask);
-gint gobble_motion_events (gint mask);
+gint gobble_key_events(guint keyval, gint mask);
+gint gobble_motion_events(gint mask);
 
-void sp_event_context_update_cursor (SPEventContext *ec);
+void sp_event_context_update_cursor(SPEventContext *ec);
 
-void sp_event_show_modifier_tip (Inkscape::MessageContext *message_context, GdkEvent *event, const gchar *ctrl_tip, const gchar *shift_tip, const gchar *alt_tip);
+void sp_event_show_modifier_tip(Inkscape::MessageContext *message_context, GdkEvent *event,
+                                gchar const *ctrl_tip, gchar const *shift_tip, gchar const *alt_tip);
 
-guint get_group0_keyval (GdkEventKey *event);
+guint get_group0_keyval(GdkEventKey *event);
 
 #endif
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
