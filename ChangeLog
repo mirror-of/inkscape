@@ -1,3 +1,13 @@
+2004-04-24  Ted Gould  <ted@gould.cx>
+
+	* share/extensions/ill2svg.pl:
+
+	Applying a patch made to the Sodipodi list by Tuukka Pasanen which adds in
+	support for text in Illustrator files.  Also, I backed out the changes
+	which removed being able to specify the line endings.  This will, by
+	default, force them back to mac compatible.  Mac files didn't work with
+	those changes.
+
 2004-04-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/extension/extension.cpp (Extension):

@@ -1,7 +1,15 @@
 #!/usr/bin/perl
 
 # convert an illustrator file (on stdin) to svg (on stdout)
+use Getopt::Std;
 
+my %args;
+getopts('hl:', \%args);
+
+if ($args{h}) { usage() && exit }
+if ($args{l}) {
+	$/ = ($args{l} =~ /^dos/i) ? "\015\012" : (($args{l} =~ /^mac/i) ? "\015" : "\012");
+}
 $color = "#000";
 
 sub cmyk_to_css {
@@ -32,9 +40,11 @@ sub xform_xy {
 
     for my $i (0..$#_) {
 	if ($i & 1) {
-	    push @result, 1000 - $_[$i];
+	    #push @result, 1000 - $_[$i];
+	    push @result, 1052.36218 - $_[$i];
 	} else {
-	    push @result, $_[$i] - 100;
+	    #push @result, $_[$i] - 100;
+	    push @result, $_[$i];
 	}
     }
     return join ' ', map { nice_float ($_) } @result;
@@ -48,8 +58,19 @@ sub strokeparams {
     return $result;
 }
 
+sub usage {
+	print STDERR qq|Usage: ill2svg [-l "string" -h] infile > outfile
+options: 
+	-l specify the file's line-ending convention: dos, mac, or unix; the default	   is unix
+
+	-h print this message and exit
+|;
+}
+
 print "<svg>\n";
 while (<>) {
+	chomp;
+	next if /^%_/;
     if (/^([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) k$/) {
 	$fillcolor = cmyk_to_css ($1, $2, $3, $4);
     } elsif (/^([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) K$/) {
@@ -93,23 +114,65 @@ while (<>) {
 	$path = '';
     } elsif (/^f$/i) {
 	$path .= 'z';
-	print " <g style=\"fill: $fillcolor\">\n";
+	print " <g style=\"fill: $fillcolor;\">\n";
 	print "  <path d=\"$path\"/>\n";
 	print " </g>\n";
 	$path = '';
     } elsif (/^s$/) {
 	$path .= 'z';
 	$strokeparams = strokeparams ();
-	print " <g style=\"$strokeparams\">\n";
+	#print " <g style=\"fill:none;stroke:black;stroke-opacity:1; $strokeparams\">\n";
+	print " <g style=\"fill:none; $strokeparams\">\n";
 	print "  <path d=\"$path\"/>\n";
 	print " </g>\n";
 	$path = '';
     } elsif (/^S$/) {
 	$strokeparams = strokeparams ();
-	print " <g style=\"$strokeparams\">\n";
+	#print " <g style=\"fill:none; $strokeparams\">\n";
+	print " <g style=\"fill:none;stroke:black;$strokeparams;\">\n";
 	print "  <path d=\"$path\"/>\n";
 	print " </g>\n";
 	$path = '';
+    } elsif (/^1 XR$/) {
+       #printf( "\nbegin\r\n" );
+
+       if( $firstChar != 0){
+         print ("</tspan>\n</text>\n");
+       }
+
+       $firstChar = 0;	
+    } elsif (/^TP$/) {
+       #Something do with the text;)
+    } elsif (/^([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) ([\d\.]+) Tp$/i) {
+ 
+       # Text position etc;
+       $cpx=$5;
+       $cpy=1052.36218 - $6;         
+       ## print ("x:$5 y:$6\r\n");
+       
+    } elsif (/^\/_([\S\s]+) ([\d\.]+) Tf$/) {
+       $FontName = $1;
+       $FontSize = $2;
+
+       ## When we know font name we can render this.
+       if( $firstChar != 1){
+	 print ("<text x=\"$cpx\" y=\"$cpy\"");  
+         print (" style=\"font-size:$FontSize;font-weight:normal;stroke-width:1;");
+         print ("fill:$fillcolor;fill-opacity:1;");
+         print ("font-family:$FontName;\" id=\"text$5\">\n<tspan>");
+	 $firstChar = 1;
+       } else {
+	 print ("</tspan>\n<tspan x=\"$cpx\" y=\"$cpy\"");
+	 print (" style=\"font-size:$FontSize;font-weight:normal;stroke-width:1;");
+         print ("fill:$fillcolor;fill-opacity:1;");
+         print ("font-family:$FontName;\" id=\"text$5\">");
+
+       }
+
+    } elsif (/^\(([\S\s]+)\) Tx$/) {
+	# Normal text
+        	print ("$1");
+
     } elsif (/([\d\.]+) w$/) {
 	$strokewidth = $1;
     } else {
@@ -117,4 +180,7 @@ while (<>) {
 #	print " <!--$_-->\n";
     }
 }
+    if( $firstChar != 0){
+       print ("</tspan>\n</text>\n");
+    }
 print "</svg>\n";
