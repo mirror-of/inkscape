@@ -232,8 +232,10 @@ can leave your ideas and requests there.</p>
 
 <group>
 <title>Tile</title>
-<keys><key><alt/>T</key>	 <action>tile selection</action></keys> 
+<keys><key><alt/>I</key>	 <action>tile selection</action></keys> 
 <note>This converts the selection to a rectangle with tiled pattern fill.</note>
+<keys><key><shift/><alt/>I</key>	 <action>untile selection</action></keys> 
+<note>Each selected object with pattern fill is broken into the same object without fill and a single tile object.</note>
 </group>
 
 <group>
