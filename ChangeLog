@@ -1,3 +1,24 @@
+2004-02-05  bulia byak <bulia@users.sourceforge.net>
+
+    * src/sp-text.cpp src/sp-text.h: Function to adjust letterspacing
+
+    * src/style.cpp: Comments
+
+    * src/text-context.cpp: Alt+<> adjust letterspacing
+
+    * src/helper/png-write.cpp: PNG comment: Software: www.inkscape.org
+
+    * src/text-context.cpp: Support keypad keys, keypad +/- always zoom even when editing
+
+    * src/shortcuts.cpp: Enable keypad Del
+
+    * src/event-context.cpp: Enable keypad arrows with Ctrl to scroll canvas
+
+    * src/zoom-context.cpp src/rect-context.cpp src/arc-context.cpp src/star-context.cpp
+    src/spiral-context.cpp src/draw-context.cpp src/dyna-draw-context.cpp
+    src/text-context.cpp src/dropper-context.cpp: Swallow keypad up/down keys too,
+    preventing them from focusing the zoom field
+
 2004-02-05  Jon Phillips <kidproto@users.sf.net>
 
     *  src/dialogs/item-properties.cpp, src/dialogs/item-properties.h, 
