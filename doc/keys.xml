@@ -24,6 +24,7 @@ can leave your ideas and requests there.</p>
 <keys><key><keyf f="F8"/></key><key>t</key>	 <action>text tool</action></keys>
 <keys><key><keyf f="F9"/></key><key>i</key>	 <action>spiral tool</action></keys>
 <keys><key><shift/><keyf f="F9"/></key><key>*</key>	 <action>star tool</action></keys>
+<note>Double click on the tool buttons opens the Preferences dialog showing the page of the corresponding tool.</note>
 </group>
 </section>
 
