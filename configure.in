@@ -396,6 +396,7 @@ po/Makefile.in
 icons/Makefile
 inkscape.spec
 inkscape.1
+inkview.1
 ])
 
 AH_BOTTOM([

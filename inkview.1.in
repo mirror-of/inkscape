@@ -1,0 +1,47 @@
+.TH inkview 1 "January 11, 2004" INKSCAPE "Inkscape\-0.36"
+.SH NAME
+inkview \- slideshow program which uses SVG files
+
+.SH SYNOPSIS
+.B inkview
+[\fIFILES\fR] ... [\fIsomewhere/*.svg\fR] ...
+
+.SH DESCRIPTION
+Inkview is a slideshow program which uses SVG files. One or more \fIFILES\fR
+may be specified on the command-line and the slideshow will consist of the
+files supplied on the command line in the given order.
+
+.SH KEYBINDINGS
+ Left: show previous slide
+ Right: show next slide
+ Up: go to first slide
+ Down: go to last slide
+ Escape: quit
+ F11: go to fullscreen mode/revert back to window mode
+ Return: pop up window with slide buttons (first, prev, next, last)
+
+.SH EXAMPLES
+On the Debian Distribution you can use the command
+.B inkview /usr/share/doc/inkscape/examples/*.svg{,.gz}
+to browse throug the examples inkcluded in the inkscape package
+
+.SH OPTIONS
+There are no options yet.
+
+.SH TODO
+ add a default SVG for when a document does not load.
+ add a usage/help command line switch
+
+.SH "SEE ALSO"
+.BR inkscape(1)
+
+.I http://www.inkscape.org
+
+.SH AUTHORS
+
+Johan Ceuppens
+
+This codebase owes its existance to a large number of contributors
+throughout its various incarnations.  See inkscape(1) for more information.
+
+This man-page was written by Wolfram Quester <wolfi@mittelerde.physik.uni\-konstanz.de>

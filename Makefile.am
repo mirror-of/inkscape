@@ -16,7 +16,8 @@ dist-hook:
 	cp $(srcdir)/samples/*png $(distdir)/samples
 
 
-man_MANS = inkscape.1
+man_MANS = inkscape.1 \
+		inkview.1
 
 EXTRA_DIST = \
 	intltool-extract.in	\
