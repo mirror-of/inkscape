@@ -1,3 +1,7 @@
+2003-12-07 MenTaLguY <mental@rydia.net>
+
+	* src/widgets/button.c: fixed unsignedness warning
+
 2003-12-06  bulia byak <bulia@dr.com>
 
 	* src/dialogs/align.c: tooltip fix (from sodipodi)

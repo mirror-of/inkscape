@@ -47,7 +47,7 @@ static void sp_button_clicked (GtkButton *button);
 static void sp_button_perform_action (SPButton *button, gpointer data);
 
 static void sp_button_set_action (SPButton *button, SPAction *action);
-static void sp_button_action_set_active (SPAction *action, unsigned int active, void *data);
+static void sp_button_action_set_active (SPAction *action, gboolean active, void *data);
 static void sp_button_action_set_sensitive (SPAction *action, unsigned int sensitive, void *data);
 static void sp_button_action_set_shortcut (SPAction *action, unsigned int shortcut, void *data);
 static void sp_button_set_composed_tooltip (GtkTooltips *tooltips, GtkWidget *widget, SPAction *action);
@@ -221,7 +221,7 @@ sp_button_set_action (SPButton *button, SPAction *action)
 }
 
 static void
-sp_button_action_set_active (SPAction *action, unsigned int active, void *data)
+sp_button_action_set_active (SPAction *action, gboolean active, void *data)
 {
 	SPButton *button;
 	button = (SPButton *) data;
@@ -230,7 +230,7 @@ sp_button_action_set_active (SPAction *action, unsigned int active, void *data)
 	}
 
 	/* temporarily lobotomized until SPActions are per-view */
-	if (0 && active != SP_BUTTON_IS_DOWN (button)) {
+	if (0 && !active != !SP_BUTTON_IS_DOWN (button)) {
 		sp_button_toggle_set_down (button, active);
 	}
 }
