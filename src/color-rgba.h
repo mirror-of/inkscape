@@ -1,3 +1,11 @@
+/*
+    Author:
+      bulia byak <buliabyak@gmail.com>
+
+    Copyright (C) 2004 Authors
+
+    Released under GNU GPL, read the file 'COPYING' for more information
+*/
 #ifndef SEEN_COLOR_RGBA_H
 #define SEEN_COLOR_RGBA_H
 
