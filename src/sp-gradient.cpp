@@ -651,6 +651,7 @@ sp_gradient_set_units (SPGradient *gr, SPGradientUnits units)
 {
 	if (units != gr->units) {
 		gr->units = units;
+		gr->units_set = TRUE;
 		sp_object_request_modified (SP_OBJECT (gr), SP_OBJECT_MODIFIED_FLAG);
 	}
 }
