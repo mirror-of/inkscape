@@ -79,8 +79,6 @@ struct SPDesktop : public SPView {
 
 	sigc::connection sel_changed_connection;
 
-
-
 	SPEventContext *event_context;
 
 	unsigned int dkey;
@@ -106,7 +104,6 @@ struct SPDesktop : public SPView {
 
 	GList *zooms_past;
 	GList *zooms_future;
-	gboolean can_go_forward;
 
 	gboolean is_fullscreen;
 
@@ -191,7 +188,7 @@ NR::Point sp_desktop_point (SPDesktop const *desktop);
 
 NRRect *sp_desktop_get_display_area (SPDesktop *dt, NRRect *area);
 
-void sp_desktop_set_display_area (SPDesktop *dt, double x0, double y0, double x1, double y1, double border);
+void sp_desktop_set_display_area (SPDesktop *dt, double x0, double y0, double x1, double y1, double border, bool log = true);
 void sp_desktop_zoom_absolute (SPDesktop *dt, double cx, double cy, double zoom);
 void sp_desktop_zoom_relative (SPDesktop *dt, double cx, double cy, double zoom);
 void sp_desktop_zoom_relative_keep_point (SPDesktop *dt, double cx, double cy, double zoom);

@@ -211,7 +211,7 @@ sp_desktop_init (SPDesktop *desktop)
 
     desktop->zooms_past = NULL;
     desktop->zooms_future = NULL;
-    desktop->can_go_forward = FALSE;
+
     desktop->is_fullscreen = FALSE;
 
     new (&desktop->sel_modified_connection) sigc::connection();
@@ -1533,46 +1533,46 @@ sp_desktop_toggle_menubar (SPDesktop *dt)
     }
 }
 
+void
+sp_push_current_zoom (SPDesktop *dt, GList **history)
+{
+    NRRect area;
+    sp_desktop_get_display_area (dt, &area);
 
-/*
- * Sooner or later we want to implement two sets of methods
- * sp_desktop_... and sp_desktop_widget_...
- * To jump from first to second we probably want to
- * add single VEPV instead of filling desktop with signals
- * (Lauris)
- */
+    NRRect *old_zoom = g_new(NRRect, 1);
+    old_zoom->x0 = area.x0;
+    old_zoom->x1 = area.x1;
+    old_zoom->y0 = area.y0;
+    old_zoom->y1 = area.y1;
+    if ( *history == NULL
+         || !( ( ((NRRect *) ((*history)->data))->x0 == old_zoom->x0 ) &&
+               ( ((NRRect *) ((*history)->data))->x1 == old_zoom->x1 ) &&
+               ( ((NRRect *) ((*history)->data))->y0 == old_zoom->y0 ) &&
+               ( ((NRRect *) ((*history)->data))->y1 == old_zoom->y1 ) ) )
+    {
+        *history = g_list_prepend (*history, old_zoom);
+    }
+}
 
 void
-sp_desktop_set_display_area (SPDesktop *dt, double x0, double y0, double x1, double y1, double border)
+sp_desktop_set_display_area (SPDesktop *dt, double x0, double y0, double x1, double y1, double border, bool log)
 {
     SPDesktopWidget *dtw = (SPDesktopWidget*)g_object_get_data (G_OBJECT (dt), "widget");
     if (!dtw) return;
+
+    // save the zoom 
+    if (log) {
+        sp_push_current_zoom (dt, &(dt->zooms_past));
+        // if we do a logged zoom, our zoom-forward list is invalidated, so delete it
+        g_list_free (dt->zooms_future);
+        dt->zooms_future = NULL;
+    }
 
     double cx = 0.5 * (x0 + x1);
     double cy = 0.5 * (y0 + y1);
 
     NRRect viewbox;
     sp_canvas_get_viewbox (dtw->canvas, &viewbox);
-
-    // save the zoom 
-    NRRect *old_zoom = g_new(NRRect, 1);
-    old_zoom->x0 = x0;
-    old_zoom->x1 = x1;
-    old_zoom->y0 = y0;
-    old_zoom->y1 = y1;
-    if ( dt->zooms_past == NULL
-	 || !( ( ((NRRect *) dt->zooms_past->data)->x0 == old_zoom->x0 ) &&
-	       ( ((NRRect *) dt->zooms_past->data)->x1 == old_zoom->x1 ) &&
-	       ( ((NRRect *) dt->zooms_past->data)->y0 == old_zoom->y0 ) &&
-	       ( ((NRRect *) dt->zooms_past->data)->y1 == old_zoom->y1 ) ) )
-    {
-        dt->zooms_past = g_list_prepend (dt->zooms_past, old_zoom);
-        if (dt->can_go_forward == FALSE) {
-            g_list_free (dt->zooms_future);
-            dt->zooms_future = NULL;
-        }
-        dt->can_go_forward = FALSE;
-    }
 
     viewbox.x0 += border;
     viewbox.y0 += border;
@@ -1613,39 +1613,36 @@ sp_desktop_set_display_area (SPDesktop *dt, double x0, double y0, double x1, dou
 void
 sp_desktop_prev_zoom (SPDesktop *dt)
 {
-    if (dt->zooms_past == NULL || dt->zooms_past->next == NULL) {
+    if (dt->zooms_past == NULL) {
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No previous zoom."));
         return;
     }
 
+    // push current zoom into forward zooms list
+    sp_push_current_zoom (dt, &(dt->zooms_future));
+
     // restore previous zoom
     sp_desktop_set_display_area (dt, 
-                                 ((NRRect *) dt->zooms_past->next->data)->x0,
-                                 ((NRRect *) dt->zooms_past->next->data)->y0, 
-                                 ((NRRect *) dt->zooms_past->next->data)->x1, 
-                                 ((NRRect *) dt->zooms_past->next->data)->y1, 
-                                 0);
+                                 ((NRRect *) dt->zooms_past->data)->x0,
+                                 ((NRRect *) dt->zooms_past->data)->y0, 
+                                 ((NRRect *) dt->zooms_past->data)->x1, 
+                                 ((NRRect *) dt->zooms_past->data)->y1, 
+                                 0, false);
 
-    // having stepped backwards, we can now go forward
-    dt->can_go_forward = TRUE;
-
-    // remove the just-added zoom from the list
-    if (dt->zooms_past)
-        dt->zooms_past = g_list_remove (dt->zooms_past, ((NRRect *) dt->zooms_past->data));
-    // remove the current zoom, but save it in the zooms_future list
-    if (dt->zooms_past) {
-        dt->zooms_future = g_list_prepend (dt->zooms_future, ((NRRect *) dt->zooms_past->data));
-        dt->zooms_past = g_list_remove (dt->zooms_past, ((NRRect *) dt->zooms_past->data));
-    }
+    // remove the just-added zoom from the past zooms list
+    dt->zooms_past = g_list_remove (dt->zooms_past, ((NRRect *) dt->zooms_past->data));
 }
 
 void
 sp_desktop_next_zoom (SPDesktop *dt)
 {
-    if (dt->zooms_future == NULL || dt->can_go_forward == FALSE) {
+    if (dt->zooms_future == NULL) {
         dt->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No next zoom."));
         return;
     }
+
+    // push current zoom into past zooms list
+    sp_push_current_zoom (dt, &(dt->zooms_past));
 
     // restore next zoom
     sp_desktop_set_display_area (dt, 
@@ -1653,10 +1650,7 @@ sp_desktop_next_zoom (SPDesktop *dt)
                                  ((NRRect *) dt->zooms_future->data)->y0, 
                                  ((NRRect *) dt->zooms_future->data)->x1, 
                                  ((NRRect *) dt->zooms_future->data)->y1, 
-                                 0);
-
-    // we still can go forward
-    dt->can_go_forward = TRUE;
+                                 0, false);
 
     // remove the just-used zoom from the zooms_future list
     dt->zooms_future = g_list_remove (dt->zooms_future, ((NRRect *) dt->zooms_future->data));
