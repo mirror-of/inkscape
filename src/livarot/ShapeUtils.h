@@ -18,94 +18,12 @@
 #include "LivarotDefs.h"
 #include "AVL.h"
 
+#include "../libnr/nr-types.h"
+
+
 class SweepTree;
 class SweepEvent;
 class Shape;
-class FloatLigne;
-class IntLigne;
-
-// one contour: a list of points and a flag to tell if it's a hole
-typedef struct boucle
-{
-  bool hole;			// is a hole?
-  int nbPt;			// number of points (x2)
-  float *pts;			// coordinates
-
-  void Init (void)
-  {
-    hole = false;
-    nbPt = 0;
-    pts = NULL;
-  };				// init contour
-  void Kill (void)
-  {
-    if (pts)
-      {
-	free (pts);
-      }
-    nbPt = 0;
-    pts = NULL;
-  };				// destroy the pts array
-  void AddPoint (float x, float y)
-  {				// add point to the contour
-    int n = nbPt;
-    nbPt += 2;
-    pts = (float *) realloc (pts, nbPt * sizeof (float));
-    pts[n] = x;
-    pts[n + 1] = y;
-  };
-  // debug
-  void Affiche (void)
-  {
-    if (hole)
-      printf ("hole ");
-    for (int i = 0; i < nbPt; i += 2)
-      printf (" (%f ; %f)", pts[i], pts[i + 1]);
-    printf ("\n");
-  };
-}
-
-boucle;
-
-// one polygon: a set of contour
-typedef struct forme
-{
-  int nbBcl;			// number of contours
-  boucle *bcls;			// contour list
-
-  void Init (void)
-  {
-    nbBcl = 0;
-    bcls = NULL;
-  };				// init polygon
-  // kill the polygon (kills the contours too)
-  void Kill (void)
-  {
-    if (bcls)
-      {
-	for (int i = 0; i < nbBcl; i++)
-	  bcls[i].Kill ();
-	free (bcls);
-      }
-    nbBcl = 0;
-    bcls = NULL;
-  };
-  void AddBoucle (boucle & iB)
-  {				// add one contour
-    int n = nbBcl++;
-    bcls = (boucle *) realloc (bcls, nbBcl * sizeof (boucle));
-    bcls[n] = iB;
-  };
-  // debug
-  void Affiche (void)
-  {
-    for (int i = 0; i < nbBcl; i++)
-      bcls[i].Affiche ();
-    printf ("\n");
-  };
-}
-
-forme;
 
 // the structure to hold the intersections events encountered during the sweep
 // it's an array of SweepEvent (not allocated with "new SweepEvent[n]" but with a malloc)
@@ -127,7 +45,7 @@ public:
   SweepTree * leftSweep;	// sweep element associated with the left edge of the intersection
   SweepTree *rightSweep;	// sweep element associated with the right edge 
 
-  float posx, posy;		// coordinates of the intersection
+  NR::Point posx;		// coordinates of the intersection
   float tl, tr;			// coordinates of the intersection on the left edge (tl) and on the right edge (tr)
 
   int ind;			// index in the binary heap
@@ -136,7 +54,7 @@ public:
    ~SweepEvent (void);		// not used
 
   // inits a SweepEvent structure
-  void MakeNew (SweepTree * iLeft, SweepTree * iRight, float px, float py,
+   void MakeNew (SweepTree * iLeft, SweepTree * iRight, NR::Point &iPt,
 		float itl, float itr);
   // voids a SweepEvent structure
   void MakeDelete (void);
@@ -147,17 +65,16 @@ public:
   static void DestroyQueue (SweepEventQueue & queue);
   // add one intersection in the binary heap
   static SweepEvent *AddInQueue (SweepTree * iLeft, SweepTree * iRight,
-				 float px, float py, float itl, float itr,
+				 NR::Point &iPt, float itl, float itr,
 				 SweepEventQueue & queue);
   // the calling SweepEvent removes itself from the binary heap
   void SupprFromQueue (SweepEventQueue & queue);
   // look for the topmost intersection in the heap
-  static bool PeekInQueue (SweepTree * &iLeft, SweepTree * &iRight, float &px,
-			   float &py, float &itl, float &itr,
+  static bool PeekInQueue (SweepTree * &iLeft, SweepTree * &iRight, NR::Point &oPt, float &itl, float &itr,
 			   SweepEventQueue & queue);
   // extract the topmost intersection from the heap
   static bool ExtractFromQueue (SweepTree * &iLeft, SweepTree * &iRight,
-				float &px, float &py, float &itl, float &itr,
+				NR::Point &oPt, float &itl, float &itr,
 				SweepEventQueue & queue);
 
   // misc: change a SweepEvent structure's postion in the heap
@@ -200,9 +117,9 @@ public:
 			       int iStartPoint, SweepTreeList & list,
 			       Shape * iDst);
 
-  int Find (float px, float py, SweepTree * newOne, SweepTree * &insertL,
+  int Find (NR::Point &iPt, SweepTree * newOne, SweepTree * &insertL,
 	    SweepTree * &insertR, bool sweepSens = true);
-  int Find (float px, float py, SweepTree * &insertL, SweepTree * &insertR);
+  int Find (NR::Point &iPt, SweepTree * &insertL, SweepTree * &insertR);
   void RemoveEvents (SweepEventQueue & queue);
   void RemoveEvent (SweepEventQueue & queue, bool onLeft);
   int Remove (SweepTreeList & list, SweepEventQueue & queue, bool rebalance =

@@ -83,85 +83,85 @@ sp_selected_path_boolop (bool_op bop)
   SPRepr *repr;
   SPItem *item;
   gchar *d, *style;
-
+  
   desktop = SP_ACTIVE_DESKTOP;
   if (!SP_IS_DESKTOP (desktop))
     return;
   selection = SP_DT_SELECTION (desktop);
-
+  
   il = (GSList *) sp_selection_item_list (selection);
-
+  
   if (g_slist_length (il) < 2) {
     sp_view_set_statusf_error(SP_VIEW(desktop), _("Select at least 2 paths to perform a boolean operation."));
-   return;
+    return;
   }
-
+  
   if (g_slist_length (il) > 2)
+  {
+    if (bop == bool_op_diff || bop == bool_op_symdiff)
     {
-      if (bop == bool_op_diff || bop == bool_op_symdiff)
-	{
-	  sp_view_set_statusf_error(SP_VIEW(desktop), _("Select exactly 2 paths to perform difference or XOR."));
-	  return;
-	}
+      sp_view_set_statusf_error(SP_VIEW(desktop), _("Select exactly 2 paths to perform difference or XOR."));
+      return;
     }
-
-
+  }
+  
+  
   bool reverseOrderForOp = false;
   // mettre les elements de la liste dans l'ordre pour ces operations
   if (bop == bool_op_diff || bop == bool_op_symdiff)
+  {
+    SPRepr *a = SP_OBJECT_REPR (il->data);
+    SPRepr *b = SP_OBJECT_REPR (il->next->data);
+    if (a == NULL || b == NULL)
     {
-      SPRepr *a = SP_OBJECT_REPR (il->data);
-      SPRepr *b = SP_OBJECT_REPR (il->next->data);
-      if (a == NULL || b == NULL)
-	{
-	  sp_view_set_statusf_error(SP_VIEW(desktop), _("Unable to determine the z-order of the objects selected for difference."));
-	  return;
-	}
-      if (Ancetre (a, b))
-	{
-	}
-      else if (Ancetre (b, a))
-	{
-	  // mauvais sens
-	  reverseOrderForOp = true;
-	}
-      else
-	{
-	  SPRepr *dad = LCA (a, b);
-	  if (dad == NULL)
+      sp_view_set_statusf_error(SP_VIEW(desktop), _("Unable to determine the z-order of the objects selected for difference."));
+      return;
+    }
+    if (Ancetre (a, b))
+    {
+    }
+    else if (Ancetre (b, a))
+    {
+      // mauvais sens
+      reverseOrderForOp = true;
+    }
+    else
+    {
+      SPRepr *dad = LCA (a, b);
+      if (dad == NULL)
 	    {
-	  sp_view_set_statusf_error(SP_VIEW(desktop), _("Unable to determine the z-order of the objects selected for difference."));
+        sp_view_set_statusf_error(SP_VIEW(desktop), _("Unable to determine the z-order of the objects selected for difference."));
 	      return;
 	    }
-	  SPRepr *as = AncetreFils (a, dad);
-	  SPRepr *bs = AncetreFils (b, dad);
-	  for (SPRepr * child = dad->children; child; child = child->next)
+      SPRepr *as = AncetreFils (a, dad);
+      SPRepr *bs = AncetreFils (b, dad);
+      for (SPRepr * child = dad->children; child; child = child->next)
 	    {
 	      if (child == as)
-		{
-		  // a en premier->mauvais sens
-		  reverseOrderForOp = true;
-		  break;
-		}
+        {
+          // a en premier->mauvais sens
+          reverseOrderForOp = true;
+          break;
+        }
 	      if (child == bs)
-		break;
+          break;
 	    }
-	}
     }
-
+  }
+  
   il = g_slist_copy (il);
-
+  
   for (l = il; l != NULL; l = l->next)
+  {
+    item = (SPItem *) l->data;
+    if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
     {
-      item = (SPItem *) l->data;
-      if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
-	{
-	  sp_view_set_statusf_error(SP_VIEW(desktop), _("One of the objects is not a path, cannot perform boolean operation."));
-	  g_slist_free (il);
-	  return;
-	}
+      sp_view_set_statusf_error(SP_VIEW(desktop), _("One of the objects is not a path, cannot perform boolean operation."));
+      g_slist_free (il);
+      return;
     }
-
+  }
+  
   // choper les originaux pour faire l'operation demandŽe
   int nbOriginaux = g_slist_length (il);
   Path *originaux[nbOriginaux];
@@ -169,171 +169,173 @@ sp_selected_path_boolop (bool_op bop)
   {
     curOrig = 0;
     for (l = il; l != NULL; l = l->next)
+    {
+      originaux[curOrig] = Path_for_item ((SPItem *) l->data);
+      if (originaux[curOrig] == NULL || originaux[curOrig]->descr_nb <= 1)
       {
-	originaux[curOrig] = Path_for_item ((SPItem *) l->data);
-	if (originaux[curOrig] == NULL || originaux[curOrig]->descr_nb <= 1)
-	  {
-	    for (int i = curOrig; i >= 0; i--)
-	      delete originaux[i];
-	    g_slist_free (il);
-	    return;
-	  }
-	curOrig++;
+        for (int i = curOrig; i >= 0; i--)
+          delete originaux[i];
+        g_slist_free (il);
+        return;
       }
+      curOrig++;
+    }
   }
-
+  
   Shape *theShapeA = new Shape;
   Shape *theShapeB = new Shape;
   Shape *theShape = new Shape;
   Path *res = new Path;
   res->SetWeighted (false);
   res->SetBackData (false);
-
+  
   {
     SPCSSAttr *css;
     const gchar *val;
-
+    
     originaux[0]->ConvertWithBackData (1.0);
-
+     
     originaux[0]->Fill (theShape, 0);
     {
       NRMatrix i2root;
       sp_item_i2root_affine (SP_ITEM (il->data), &i2root);
       for (int i = 0; i < theShape->nbPt; i++)
-	{
-	  float x =
-	    i2root.c[0] * theShape->pts[i].x +
-	    i2root.c[2] * theShape->pts[i].y + i2root.c[4];
-	  float y =
-	    i2root.c[1] * theShape->pts[i].x +
-	    i2root.c[3] * theShape->pts[i].y + i2root.c[5];
-	  theShape->pts[i].x = x;
-	  theShape->pts[i].y = y;
-	}
+      {
+        NR::Point x;
+        x.pt[0]=
+        i2root.c[0] * theShape->pts[i].x.pt[0] +
+        i2root.c[2] * theShape->pts[i].x.pt[1] + i2root.c[4];
+        x.pt[1] =
+          i2root.c[1] * theShape->pts[i].x.pt[0] +
+          i2root.c[3] * theShape->pts[i].x.pt[1] + i2root.c[5];
+        theShape->pts[i].x.pt[0] = x.pt[0];
+        theShape->pts[i].x.pt[1] = x.pt[1];
+      }
     }
     css = sp_repr_css_attr (SP_OBJECT_REPR (il->data), "style");
     val = sp_repr_css_property (css, "fill-rule", NULL);
     if (val && strcmp (val, "nonzero") == 0)
-      {
-	theShapeA->ConvertToShape (theShape, fill_nonZero);
-      }
+    {
+      theShapeA->ConvertToShape (theShape, fill_nonZero);
+    }
     else if (val && strcmp (val, "evenodd") == 0)
-      {
-	theShapeA->ConvertToShape (theShape, fill_oddEven);
-      }
+    {
+      theShapeA->ConvertToShape (theShape, fill_oddEven);
+    }
     else
-      {
-	theShapeA->ConvertToShape (theShape, fill_nonZero);
-      }
+    {
+      theShapeA->ConvertToShape (theShape, fill_nonZero);
+    }
   }
-
+  
   curOrig = 1;
   for (l = il->next; l != NULL; l = l->next)
+  {
+    SPCSSAttr *css;
+    const gchar *val;
+    
+    originaux[curOrig]->ConvertWithBackData (1.0);
+    
+    originaux[curOrig]->Fill (theShape, curOrig);
+    
     {
-      SPCSSAttr *css;
-      const gchar *val;
-
-      originaux[curOrig]->ConvertWithBackData (1.0);
-
-      originaux[curOrig]->Fill (theShape, curOrig);
-
+      NRMatrix i2root;
+      sp_item_i2root_affine (SP_ITEM (l->data), &i2root);
+      for (int i = 0; i < theShape->nbPt; i++)
       {
-	NRMatrix i2root;
-	sp_item_i2root_affine (SP_ITEM (l->data), &i2root);
-	for (int i = 0; i < theShape->nbPt; i++)
-	  {
-	    float x =
-	      i2root.c[0] * theShape->pts[i].x +
-	      i2root.c[2] * theShape->pts[i].y + i2root.c[4];
-	    float y =
-	      i2root.c[1] * theShape->pts[i].x +
-	      i2root.c[3] * theShape->pts[i].y + i2root.c[5];
-	    theShape->pts[i].x = x;
-	    theShape->pts[i].y = y;
-	  }
+        NR::Point x;
+        x.pt[0]=
+	      i2root.c[0] * theShape->pts[i].x.pt[0] +
+	      i2root.c[2] * theShape->pts[i].x.pt[1] + i2root.c[4];
+        x.pt[1] =
+          i2root.c[1] * theShape->pts[i].x.pt[0] +
+          i2root.c[3] * theShape->pts[i].x.pt[1] + i2root.c[5];
+        theShape->pts[i].x.pt[0] = x.pt[0];
+        theShape->pts[i].x.pt[1] = x.pt[1];
       }
-      css = sp_repr_css_attr (SP_OBJECT_REPR (l->data), "style");
-      val = sp_repr_css_property (css, "fill-rule", NULL);
-      if (val && strcmp (val, "nonzero") == 0)
-	{
-	  theShapeB->ConvertToShape (theShape, fill_nonZero);
-	}
-      else if (val && strcmp (val, "evenodd") == 0)
-	{
-	  theShapeB->ConvertToShape (theShape, fill_oddEven);
-	}
-      else
-	{
-	  theShapeB->ConvertToShape (theShape, fill_nonZero);
-	}
-
-      // les elements arrivent en ordre inverse dans la liste
-      if (reverseOrderForOp)
-	{
-	  theShape->Booleen (theShapeA, theShapeB, bop);
-	}
-      else
-	{
-	  theShape->Booleen (theShapeB, theShapeA, bop);
-	}
-
-      {
-	Shape *swap = theShape;
-	theShape = theShapeA;
-	theShapeA = swap;
-      }
-      curOrig++;
     }
+    css = sp_repr_css_attr (SP_OBJECT_REPR (l->data), "style");
+    val = sp_repr_css_property (css, "fill-rule", NULL);
+    if (val && strcmp (val, "nonzero") == 0)
+    {
+      theShapeB->ConvertToShape (theShape, fill_nonZero);
+    }
+    else if (val && strcmp (val, "evenodd") == 0)
+    {
+      theShapeB->ConvertToShape (theShape, fill_oddEven);
+    }
+    else
+    {
+      theShapeB->ConvertToShape (theShape, fill_nonZero);
+    }
+    
+    // les elements arrivent en ordre inverse dans la liste
+    if (reverseOrderForOp)
+    {
+      theShape->Booleen (theShapeA, theShapeB, bop);
+    }
+    else
+    {
+      theShape->Booleen (theShapeB, theShapeA, bop);
+    }
+    
+    {
+      Shape *swap = theShape;
+      theShape = theShapeA;
+      theShapeA = swap;
+    }
+    curOrig++;
+  }
   // pour compenser le swap juste avant
   {
     Shape *swap = theShape;
     theShape = theShapeA;
     theShapeA = swap;
   }
-
+  
   theShape->ConvertToForme (res, nbOriginaux, originaux);
-
+  
   delete theShape;
   delete theShapeA;
   delete theShapeB;
   for (int i = 0; i < nbOriginaux; i++)
     delete originaux[i];
-
+  
   if (res->descr_nb <= 1)
-    {
-      // pas vraiment de points sur le resultat               
-      // donc il ne reste rien
-      for (l = il; l != NULL; l = l->next)
-	{
-	  sp_repr_unparent (SP_OBJECT_REPR (l->data));
-	}
-      sp_document_done (SP_DT_DOCUMENT (desktop));
-      sp_selection_empty (selection);
-
-      delete res;
-      g_slist_free (il);
-      return;
-    }
-  d = liv_svg_dump_path (res);
-  delete res;
-
-  if (reverseOrderForOp)
-    {
-      style = g_strdup (sp_repr_attr ((SP_OBJECT (il->data))->repr, "style"));
-    }
-  else
-    {
-      style =
-	g_strdup (sp_repr_attr ((SP_OBJECT (il->next->data))->repr, "style"));
-    }
-
-  for (l = il; l != NULL; l = l->next)
+  {
+    // pas vraiment de points sur le resultat               
+    // donc il ne reste rien
+    for (l = il; l != NULL; l = l->next)
     {
       sp_repr_unparent (SP_OBJECT_REPR (l->data));
     }
-
+    sp_document_done (SP_DT_DOCUMENT (desktop));
+    sp_selection_empty (selection);
+    
+    delete res;
+    g_slist_free (il);
+    return;
+  }
+  d = liv_svg_dump_path (res);
+  delete res;
+  
+  if (reverseOrderForOp)
+  {
+    style = g_strdup (sp_repr_attr ((SP_OBJECT (il->data))->repr, "style"));
+  }
+  else
+  {
+    style =
+    g_strdup (sp_repr_attr ((SP_OBJECT (il->next->data))->repr, "style"));
+  }
+  
+  for (l = il; l != NULL; l = l->next)
+  {
+    sp_repr_unparent (SP_OBJECT_REPR (l->data));
+  }
+  
   g_slist_free (il);
-
+  
   repr = sp_repr_new ("path");
   sp_repr_set_attr (repr, "style", style);
   g_free (style);
@@ -342,8 +344,8 @@ sp_selected_path_boolop (bool_op bop)
   item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
   sp_document_done (SP_DT_DOCUMENT (desktop));
   sp_repr_unref (repr);
-
-     sp_selection_empty (selection);
+  
+  sp_selection_empty (selection);
   sp_selection_set_item (selection, item);
 }
 
@@ -360,138 +362,138 @@ sp_selected_path_outline ()
   JoinType o_join;
   ButtType o_butt;
   NRMatrix i2root;
-
+  
   curve = NULL;
-
+  
   desktop = SP_ACTIVE_DESKTOP;
   if (!SP_IS_DESKTOP (desktop))
     return;
-
+  
   selection = SP_DT_SELECTION (desktop);
-
+  
   item = sp_selection_item (selection);
-
+  
   if (item == NULL || ( !SP_IS_SHAPE (item) && !SP_IS_TEXT (item) ) ) {
     sp_view_set_statusf_error(SP_VIEW(desktop), _("Selected object is not a path, cannot outline."));
     return;
   }
   if (SP_IS_SHAPE (item))
-    {
-      curve = sp_shape_get_curve (SP_SHAPE (item));
-      if (curve == NULL)
-	return;
-    }
+  {
+    curve = sp_shape_get_curve (SP_SHAPE (item));
+    if (curve == NULL)
+      return;
+  }
   if (SP_IS_TEXT (item))
-    {
-      curve = sp_text_normalized_bpath (SP_TEXT (item));
-      if (curve == NULL)
-	return;
-    }
-
+  {
+    curve = sp_text_normalized_bpath (SP_TEXT (item));
+    if (curve == NULL)
+      return;
+  }
+  
   {
     SPCSSAttr *css;
     const gchar *val;
-
+    
     css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
     val = sp_repr_css_property (css, "stroke", NULL);
-
+    
     if (val == NULL || strcmp (val, "none") == 0)
-      {
-	// pas de stroke pas de chocolat
-	sp_curve_unref (curve);
-	return;
-      }
+    {
+      // pas de stroke pas de chocolat
+      sp_curve_unref (curve);
+      return;
+    }
   }
-
+  
   sp_item_i2root_affine (item, &i2root);
   style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
-
+  
   {
     SPStyle *i_style = SP_OBJECT (item)->style;
     int jointype, captype;
-
+    
     o_width = 1.0;
     o_miter = 4 * o_width;
     o_join = join_straight;
     o_butt = butt_straight;
-
+    
     jointype = i_style->stroke_linejoin.value;
     captype = i_style->stroke_linecap.value;
     o_width = i_style->stroke_width.computed;
     if (jointype == SP_STROKE_LINEJOIN_MITER)
-      {
-	o_join = join_pointy;
-      }
+    {
+      o_join = join_pointy;
+    }
     else if (jointype == SP_STROKE_LINEJOIN_ROUND)
-      {
-	o_join = join_round;
-      }
+    {
+      o_join = join_round;
+    }
     else
-      {
-	o_join = join_straight;
-      }
+    {
+      o_join = join_straight;
+    }
     if (captype == SP_STROKE_LINECAP_SQUARE)
-      {
-	o_butt = butt_square;
-      }
+    {
+      o_butt = butt_square;
+    }
     else if (captype == SP_STROKE_LINECAP_ROUND)
-      {
-	o_butt = butt_round;
-      }
+    {
+      o_butt = butt_round;
+    }
     else
-      {
-	o_butt = butt_straight;
-      }
+    {
+      o_butt = butt_straight;
+    }
     if (o_width < 0.1)
       o_width = 0.1;
     o_miter = 4 * o_width;
   }
-
+  
   Path *orig = Path_for_item (item);
   if (orig == NULL)
-    {
-      g_free (style);
-      sp_curve_unref (curve);
-      return;
-    }
-
+  {
+    g_free (style);
+    sp_curve_unref (curve);
+    return;
+  }
+  
   Path *res = new Path;
   res->SetWeighted (false);
   res->SetBackData (false);
-
+  
   sp_curve_unref (curve);
-
+  
   {
-
+    
     orig->Outline (res, 0.5 * o_width, o_join, o_butt, o_miter);
-
+    
     //              orig->ConvertEvenLines(0.1*o_width);
     //              orig->Simplify(0.05*o_width);
     orig->Coalesce (0.5 * o_width);
-
-
+    
+    
     Shape *theShape = new Shape;
     Shape *theRes = new Shape;
-
+    
     res->ConvertWithBackData (1.0);
     res->Fill (theShape, 0);
     theRes->ConvertToShape (theShape, fill_positive);
-
+    
     Path *originaux[1];
     originaux[0] = res;
     theRes->ConvertToForme (orig, 1, originaux);
-
+    
     delete theShape;
     delete theRes;
-
+    
   }
-
-/*	{
+  
+  /*	{
 		Shape*  theIn=new Shape;
 		Shape*  theOut=new Shape;
 		Shape*  theShape=new Shape;
 		
-
+  
 		orig->Convert(1.0);
 		
 		orig->Fill(theShape,0);
@@ -515,49 +517,49 @@ sp_selected_path_outline ()
 		delete theOut;
 		
 	}*/
-
+  
   if (orig->descr_nb <= 1)
-    {
-      // ca a merdŽ, ou bien le resultat est vide
-      delete res;
-      delete orig;
-      g_free (style);
-
-      return;
-    }
-
+  {
+    // ca a merdŽ, ou bien le resultat est vide
+    delete res;
+    delete orig;
+    g_free (style);
+    
+    return;
+  }
+  
   sp_repr_unparent (SP_OBJECT_REPR (item));
-
+  
   if (orig->descr_nb <= 1)
-    {
-      // pas vraiment de points sur le resultat               
-      // donc il ne reste rien
-      sp_document_done (SP_DT_DOCUMENT (desktop));
-      sp_selection_empty (selection);
-
-      delete res;
-      delete orig;
-      g_free (style);
-      return;
-    }
-
+  {
+    // pas vraiment de points sur le resultat               
+    // donc il ne reste rien
+    sp_document_done (SP_DT_DOCUMENT (desktop));
+    sp_selection_empty (selection);
+    
+    delete res;
+    delete orig;
+    g_free (style);
+    return;
+  }
+  
   {
     gchar tstr[80];
-
+    
     tstr[79] = '\0';
-
+    
     repr = sp_repr_new ("path");
     if (sp_svg_transform_write (tstr, 80, &i2root))
-      {
-	sp_repr_set_attr (repr, "transform", tstr);
-      }
+    {
+      sp_repr_set_attr (repr, "transform", tstr);
+    }
     else
-      {
-	sp_repr_set_attr (repr, "transform", NULL);
-      }
-
+    {
+      sp_repr_set_attr (repr, "transform", NULL);
+    }
+    
     sp_repr_set_attr (repr, "style", style);
-
+    
     str = liv_svg_dump_path (orig);
     sp_repr_set_attr (repr, "d", str);
     g_free (str);
@@ -565,30 +567,30 @@ sp_selected_path_outline ()
     sp_repr_unref (repr);
     sp_selection_empty (selection);
     sp_selection_add_item (selection, item);
-
+    
     {
       SPCSSAttr *ocss;
       SPCSSAttr *css;
       const gchar *val;
-
+      
       ocss = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
       val = sp_repr_css_property (ocss, "stroke", NULL);
-
+      
       css = sp_repr_css_attr_new ();
-
+      
       sp_repr_css_set_property (css, "stroke", "none");
       sp_repr_css_set_property (css, "fill", val);
       sp_repr_css_change (SP_OBJECT_REPR (item), css, "style");
-
+      
       sp_repr_css_attr_unref (css);
     }
   }
-
+  
   sp_document_done (SP_DT_DOCUMENT (desktop));
-
+  
   delete res;
   delete orig;
-
+  
   g_free (style);
 }
 
@@ -644,157 +646,157 @@ sp_selected_path_create_offset_object (int expand,bool updating)
   JoinType o_join;
   ButtType o_butt;
   NRMatrix i2root;
-
+  
   curve = NULL;
-
+  
   desktop = SP_ACTIVE_DESKTOP;
   if (!SP_IS_DESKTOP (desktop))
     return;
-
+  
   selection = SP_DT_SELECTION (desktop);
-
+  
   item = sp_selection_item (selection);
-
+  
   if (item == NULL || ( !SP_IS_SHAPE (item) && !SP_IS_TEXT (item) ) ) {
     sp_view_set_statusf_error(SP_VIEW(desktop), _("Selected object is not a path, cannot inset/outset."));
     return;
   }
   if (SP_IS_SHAPE (item))
-    {
-      curve = sp_shape_get_curve (SP_SHAPE (item));
-      if (curve == NULL)
-	return;
-    }
+  {
+    curve = sp_shape_get_curve (SP_SHAPE (item));
+    if (curve == NULL)
+      return;
+  }
   if (SP_IS_TEXT (item))
-    {
-      curve = sp_text_normalized_bpath (SP_TEXT (item));
-      if (curve == NULL)
-	return;
-    }
-
+  {
+    curve = sp_text_normalized_bpath (SP_TEXT (item));
+    if (curve == NULL)
+      return;
+  }
+  
   sp_item_i2root_affine (item, &i2root);
   style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
-
+  
   {
     SPStyle *i_style = SP_OBJECT (item)->style;
     int jointype, captype;
-
+    
     o_width = 1.0;
     o_miter = 4 * o_width;
     o_join = join_straight;
     o_butt = butt_straight;
-
+    
     jointype = i_style->stroke_linejoin.value;
     captype = i_style->stroke_linecap.value;
     o_width = i_style->stroke_width.computed;
     if (jointype == SP_STROKE_LINEJOIN_MITER)
-      {
-	o_join = join_pointy;
-      }
+    {
+      o_join = join_pointy;
+    }
     else if (jointype == SP_STROKE_LINEJOIN_ROUND)
-      {
-	o_join = join_round;
-      }
+    {
+      o_join = join_round;
+    }
     else
-      {
-	o_join = join_straight;
-      }
+    {
+      o_join = join_straight;
+    }
     if (captype == SP_STROKE_LINECAP_SQUARE)
-      {
-	o_butt = butt_square;
-      }
+    {
+      o_butt = butt_square;
+    }
     else if (captype == SP_STROKE_LINECAP_ROUND)
-      {
-	o_butt = butt_round;
-      }
+    {
+      o_butt = butt_round;
+    }
     else
-      {
-	o_butt = butt_straight;
-      }
- 
-   {
+    {
+      o_butt = butt_straight;
+    }
+    
+    {
       double    prefOffset=1.0;
       prefOffset=prefs_get_double_attribute("options.defaultoffsetwidth","value",prefOffset);
       o_width=prefOffset;
     }
-
+    
     if (o_width < 0.25)
       o_width = 0.25;               
     o_miter = 4 * o_width;
   }
-
+  
   Path *orig = Path_for_item (item);
   if (orig == NULL)
-    {
-      g_free (style);
-      sp_curve_unref (curve);
-      return;
-    }
-
+  {
+    g_free (style);
+    sp_curve_unref (curve);
+    return;
+  }
+  
   Path *res = new Path;
   res->SetWeighted (false);
   res->SetBackData (false);
-
+  
   {
     SPCSSAttr *css;
     const gchar *val;
-
+    
     Shape *theShape = new Shape;
     Shape *theRes = new Shape;
-
+    
     orig->ConvertWithBackData (1.0);
     orig->Fill (theShape, 0);
-
+    
     css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
     val = sp_repr_css_property (css, "fill-rule", NULL);
     if (val && strcmp (val, "nonzero") == 0)
-      {
-	theRes->ConvertToShape (theShape, fill_nonZero);
-      }
+    {
+      theRes->ConvertToShape (theShape, fill_nonZero);
+    }
     else if (val && strcmp (val, "evenodd") == 0)
-      {
-	theRes->ConvertToShape (theShape, fill_oddEven);
-      }
+    {
+      theRes->ConvertToShape (theShape, fill_oddEven);
+    }
     else
-      {
-	theRes->ConvertToShape (theShape, fill_nonZero);
-      }
-
+    {
+      theRes->ConvertToShape (theShape, fill_nonZero);
+    }
+    
     Path *originaux[1];
     originaux[0] = orig;
     theRes->ConvertToForme (res, 1, originaux);
-
+    
     delete theShape;
     delete theRes;
   }
-
+  
   sp_curve_unref (curve);
   if ( updating ) {
     // on conserve l'original
   } else {
     sp_repr_unparent (SP_OBJECT_REPR (item));
   }
-     
+  
   if (res->descr_nb <= 1)
-    {
-      // pas vraiment de points sur le resultat
-      // donc il ne reste rien
-      sp_document_done (SP_DT_DOCUMENT (desktop));
-      sp_selection_empty (selection);
-
-      delete res;
-      delete orig;
-      g_free (style);
-      return;
-    }
-
   {
-//              SPCSSAttr *css;
-//              const gchar *val;
+    // pas vraiment de points sur le resultat
+    // donc il ne reste rien
+    sp_document_done (SP_DT_DOCUMENT (desktop));
+    sp_selection_empty (selection);
+    
+    delete res;
+    delete orig;
+    g_free (style);
+    return;
+  }
+  
+  {
+    //              SPCSSAttr *css;
+    //              const gchar *val;
     gchar tstr[80];
-
+    
     tstr[79] = '\0';
-
+    
     repr = sp_repr_new ("path");
     sp_repr_set_attr (repr, "sodipodi:type", "offset");
     if (expand > 0)
@@ -809,10 +811,11 @@ sp_selected_path_create_offset_object (int expand,bool updating)
       {
 	sp_repr_set_double_attribute (repr, "sodipodi:radius", 0);
       }
+
     str = liv_svg_dump_path (res);
     sp_repr_set_attr (repr, "sodipodi:original", str);
     g_free (str);
-
+    
     if ( updating ) {
       sp_repr_set_attr (repr, "xlink:href", sp_repr_attr(SP_OBJECT(item)->repr,"id"));
     } else {
@@ -820,27 +823,27 @@ sp_selected_path_create_offset_object (int expand,bool updating)
     }
     
     if (sp_svg_transform_write (tstr, 80, &i2root))
-      {
-	sp_repr_set_attr (repr, "transform", tstr);
-      }
+    {
+      sp_repr_set_attr (repr, "transform", tstr);
+    }
     else
-      {
-	sp_repr_set_attr (repr, "transform", NULL);
-      }
-
+    {
+      sp_repr_set_attr (repr, "transform", NULL);
+    }
+    
     sp_repr_set_attr (repr, "style", style);
     SPItem* nitem = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
     sp_repr_unref (repr);
     sp_selection_empty (selection);
     sp_selection_add_item (selection, nitem);
-
+    
   }
-
+  
   sp_document_done (SP_DT_DOCUMENT (desktop));
-
+  
   delete res;
   delete orig;
-
+  
   g_free (style);
 }
 
@@ -857,244 +860,250 @@ sp_selected_path_do_offset (bool expand)
   JoinType o_join;
   ButtType o_butt;
   NRMatrix i2root;
-
+  
   curve = NULL;
-
+  
   desktop = SP_ACTIVE_DESKTOP;
   if (!SP_IS_DESKTOP (desktop))
     return;
-
+  
   selection = SP_DT_SELECTION (desktop);
-
+  
   item = sp_selection_item (selection);
-
+  
   if (item == NULL || (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))) {
     sp_view_set_statusf_error(SP_VIEW(desktop), _("Selected object is not a path, cannot inset/outset."));
     return;
   }
   if (SP_IS_SHAPE (item))
-    {
-      curve = sp_shape_get_curve (SP_SHAPE (item));
-      if (curve == NULL)
-	return;
-    }
+  {
+    curve = sp_shape_get_curve (SP_SHAPE (item));
+    if (curve == NULL)
+      return;
+  }
   if (SP_IS_TEXT (item))
-    {
-      curve = sp_text_normalized_bpath (SP_TEXT (item));
-      if (curve == NULL)
-	return;
-    }
-
-/*  {
+  {
+    curve = sp_text_normalized_bpath (SP_TEXT (item));
+    if (curve == NULL)
+      return;
+  }
+  
+  /*  {
     SPCSSAttr *css;
-    const gchar *val;
-
-    css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
-    val = sp_repr_css_property (css, "stroke", NULL);
-
-    if (val == NULL || strcmp (val, "none") == 0)
-      {
-	// pas de stroke pas de chocolat
+  const gchar *val;
+  
+  css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
+  val = sp_repr_css_property (css, "stroke", NULL);
+  
+  if (val == NULL || strcmp (val, "none") == 0)
+  {
+    // pas de stroke pas de chocolat
 	  sp_view_set_statusf_error(SP_VIEW(desktop),"the offset/inset operation uses the stroke width as offset value: give a stroke to the object");
-	sp_curve_unref (curve);
-	return;
-      }
+    sp_curve_unref (curve);
+    return;
+  }
   }*/
-
+  
   sp_item_i2root_affine (item, &i2root);
   style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
-
+  
   {
     SPStyle *i_style = SP_OBJECT (item)->style;
     int jointype, captype;
-
+    
     o_width = 1.0;
     o_miter = 4 * o_width;
     o_join = join_straight;
     o_butt = butt_straight;
-
+    
     jointype = i_style->stroke_linejoin.value;
     captype = i_style->stroke_linecap.value;
     o_width = i_style->stroke_width.computed;
     if (jointype == SP_STROKE_LINEJOIN_MITER)
-      {
-	o_join = join_pointy;
-      }
+    {
+      o_join = join_pointy;
+    }
     else if (jointype == SP_STROKE_LINEJOIN_ROUND)
-      {
-	o_join = join_round;
-      }
+    {
+      o_join = join_round;
+    }
     else
-      {
-	o_join = join_straight;
-      }
+    {
+      o_join = join_straight;
+    }
     if (captype == SP_STROKE_LINECAP_SQUARE)
-      {
-	o_butt = butt_square;
-      }
+    {
+      o_butt = butt_square;
+    }
     else if (captype == SP_STROKE_LINECAP_ROUND)
-      {
-	o_butt = butt_round;
-      }
+    {
+      o_butt = butt_round;
+    }
     else
-      {
-	o_butt = butt_straight;
-      }
-   
+    {
+      o_butt = butt_straight;
+    }
+    
     // recuperer l'offset dans les preferences
     {
       double    prefOffset=1.0;
       prefOffset=prefs_get_double_attribute("options.defaultoffsetwidth","value",prefOffset);
       o_width=prefOffset;
     }
-
+    
     if (o_width < 0.1)
       o_width = 0.1;
     o_miter = 4 * o_width;
   }
-
+  
   Path *orig = Path_for_item (item);
   if (orig == NULL)
-    {
-      g_free (style);
-      sp_curve_unref (curve);
-      return;
-    }
-
+  {
+    g_free (style);
+    sp_curve_unref (curve);
+    return;
+  }
+  
   Path *res = new Path;
   res->SetWeighted (false);
   res->SetBackData (false);
-
+  
   {
     SPCSSAttr *css;
     const gchar *val;
-
+    
     Shape *theShape = new Shape;
     Shape *theRes = new Shape;
-
+    
     orig->ConvertWithBackData (1.0);
     orig->Fill (theShape, 0);
-
+    
     css = sp_repr_css_attr (SP_OBJECT_REPR (item), "style");
     val = sp_repr_css_property (css, "fill-rule", NULL);
     if (val && strcmp (val, "nonzero") == 0)
-      {
-	theRes->ConvertToShape (theShape, fill_nonZero);
-      }
+    {
+      theRes->ConvertToShape (theShape, fill_nonZero);
+    }
     else if (val && strcmp (val, "evenodd") == 0)
-      {
-	theRes->ConvertToShape (theShape, fill_oddEven);
-      }
+    {
+      theRes->ConvertToShape (theShape, fill_oddEven);
+    }
     else
-      {
-	theRes->ConvertToShape (theShape, fill_nonZero);
-      }
-
+    {
+      theRes->ConvertToShape (theShape, fill_nonZero);
+    }
+    
     Path *originaux[1];
     originaux[0] = orig;
     theRes->ConvertToForme (res, 1, originaux);
-
+    
     // et maintenant: offset
     // methode inexacte
-    /*   if (expand)
-      {
-	res->OutsideOutline (orig, 0.5 * o_width, o_join, o_butt, o_miter);
-      }
+ /*      if (expand)
+    {
+      res->OutsideOutline (orig, 0.5 * o_width, o_join, o_butt, o_miter);
+    }
     else
-      {
-	res->OutsideOutline (orig, -0.5 * o_width, o_join, o_butt, o_miter);
-      }
-
+    {
+      res->OutsideOutline (orig, -0.5 * o_width, o_join, o_butt, o_miter);
+    }
+    
     orig->ConvertWithBackData (1.0);
     orig->Fill (theShape, 0);
     theRes->ConvertToShape (theShape, fill_positive);
     originaux[0] = orig;
     theRes->ConvertToForme (res, 1, originaux);
-
+    
     if (o_width >= 0.5)
-      {
-	res->Coalesce (1.0);
-      }
+    {
+ //     res->Coalesce (1.0);
+      res->ConvertEvenLines (1.0);
+      res->Simplify (1.0);
+    }
     else
-      {
-	res->Coalesce (o_width);
-	}*/
+    {
+//      res->Coalesce (o_width);
+      res->ConvertEvenLines (1.0*o_width);
+      res->Simplify (1.0 * o_width);
+    }*/
     // methode par makeoffset
     if (expand)
-      {
-	theShape->MakeOffset(theRes,0.5 * o_width, o_join, o_miter);
-      }
+    {
+      theShape->MakeOffset(theRes, o_width, o_join, o_miter);
+    }
     else
-      {
-	theShape->MakeOffset(theRes,-0.5 * o_width, o_join, o_miter);
-      }
+    {
+      theShape->MakeOffset(theRes, -o_width, o_join, o_miter);
+    }
     theRes->ConvertToShape(theShape,fill_positive);
+    
+    res->Reset();
     theRes->ConvertToForme (res);
-
+        
     if (o_width >= 1.0)
-      {
-	res->ConvertEvenLines (0.1);
-	res->Simplify (0.5);
-      }
+    {
+      res->ConvertEvenLines (1.0);
+      res->Simplify (1.0);
+    }
     else
-      {
-	res->ConvertEvenLines (0.1*o_width);
-	res->Simplify (0.5 * o_width);
-      }
-
+    {
+      res->ConvertEvenLines (1.0*o_width);
+      res->Simplify (1.0 * o_width);
+    }
+    
     delete theShape;
     delete theRes;
   }
-
+  
   sp_curve_unref (curve);
   sp_repr_unparent (SP_OBJECT_REPR (item));
-
+  
   if (res->descr_nb <= 1)
-    {
-      // pas vraiment de points sur le resultat               
-      // donc il ne reste rien
-      sp_document_done (SP_DT_DOCUMENT (desktop));
-      sp_selection_empty (selection);
-
-      delete res;
-      delete orig;
-      g_free (style);
-      return;
-    }
-
   {
-//              SPCSSAttr *css;
-//              const gchar *val;
+    // pas vraiment de points sur le resultat               
+    // donc il ne reste rien
+    sp_document_done (SP_DT_DOCUMENT (desktop));
+    sp_selection_empty (selection);
+    
+    delete res;
+    delete orig;
+    g_free (style);
+    return;
+  }
+  
+  {
+    //              SPCSSAttr *css;
+    //              const gchar *val;
     gchar tstr[80];
-
+    
     tstr[79] = '\0';
-
+    
     repr = sp_repr_new ("path");
     if (sp_svg_transform_write (tstr, 80, &i2root))
-      {
-	sp_repr_set_attr (repr, "transform", tstr);
-      }
+    {
+      sp_repr_set_attr (repr, "transform", tstr);
+    }
     else
-      {
-	sp_repr_set_attr (repr, "transform", NULL);
-      }
-
+    {
+      sp_repr_set_attr (repr, "transform", NULL);
+    }
+    
     sp_repr_set_attr (repr, "style", style);
     str = liv_svg_dump_path (res);
     sp_repr_set_attr (repr, "d", str);
     g_free (str);
     item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
     sp_repr_unref (repr);
-     sp_selection_empty (selection);
+    sp_selection_empty (selection);
     sp_selection_add_item (selection, item);
-
+    
   }
-
+  
   sp_document_done (SP_DT_DOCUMENT (desktop));
-
+  
   delete res;
   delete orig;
-
+  
   g_free (style);
 }
 
@@ -1108,86 +1117,86 @@ sp_selected_path_simplify ()
   gchar *style, *str;
   SPDesktop *desktop;
   NRMatrix i2root;
-
+  
   curve = NULL;
-
+  
   desktop = SP_ACTIVE_DESKTOP;
   if (!SP_IS_DESKTOP (desktop))
     return;
-
+  
   selection = SP_DT_SELECTION (desktop);
-
+  
   item = sp_selection_item (selection);
-
+  
   if (item == NULL)
     return;
   if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
     return;
   if (SP_IS_SHAPE (item))
-    {
-      curve = sp_shape_get_curve (SP_SHAPE (item));
-      if (curve == NULL)
-	return;
-    }
+  {
+    curve = sp_shape_get_curve (SP_SHAPE (item));
+    if (curve == NULL)
+      return;
+  }
   if (SP_IS_TEXT (item))
-    {
-      curve = sp_text_normalized_bpath (SP_TEXT (item));
-      if (curve == NULL)
-	return;
-    }
-
+  {
+    curve = sp_text_normalized_bpath (SP_TEXT (item));
+    if (curve == NULL)
+      return;
+  }
+  
   sp_item_i2root_affine (item, &i2root);
   style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
-
+  
   Path *orig = Path_for_item (item);
   if (orig == NULL)
-    {
-      g_free (style);
-      sp_curve_unref (curve);
-      return;
-    }
-
+  {
+    g_free (style);
+    sp_curve_unref (curve);
+    return;
+  }
+  
   sp_curve_unref (curve);
   sp_repr_unparent (SP_OBJECT_REPR (item));
-
+  
   {
     orig->ConvertEvenLines (1.0);
     orig->Simplify (0.5);
   }
-
+  
   {
     gchar tstr[80];
-
+    
     tstr[79] = '\0';
-
+    
     repr = sp_repr_new ("path");
     if (sp_svg_transform_write (tstr, 80, &i2root))
-      {
-	sp_repr_set_attr (repr, "transform", tstr);
-      }
+    {
+      sp_repr_set_attr (repr, "transform", tstr);
+    }
     else
-      {
-	sp_repr_set_attr (repr, "transform", NULL);
-      }
-
+    {
+      sp_repr_set_attr (repr, "transform", NULL);
+    }
+    
     sp_repr_set_attr (repr, "style", style);
-
+    
     str = liv_svg_dump_path (orig);
     sp_repr_set_attr (repr, "d", str);
     g_free (str);
     item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
     sp_repr_unref (repr);
-     sp_selection_empty (selection);
+    sp_selection_empty (selection);
     sp_selection_add_item (selection, item);
-
+    
   }
-
+  
   sp_document_done (SP_DT_DOCUMENT (desktop));
-
+  
   delete orig;
-
+  
   g_free (style);
-
+  
 }
 
 
@@ -1230,29 +1239,29 @@ Path *
 Path_for_item (SPItem * item)
 {
   SPCurve *curve;
-
+  
   if (!item)
     return NULL;
-
+  
   if (SP_IS_SHAPE (item))
-    {
-      curve = sp_shape_get_curve (SP_SHAPE (item));
-    }
+  {
+    curve = sp_shape_get_curve (SP_SHAPE (item));
+  }
   else if (SP_IS_TEXT (item))
-    {
-      curve = sp_text_normalized_bpath (SP_TEXT (item));
-    }
+  {
+    curve = sp_text_normalized_bpath (SP_TEXT (item));
+  }
   else
-    {
-      curve = NULL;
-    }
-
+  {
+    curve = NULL;
+  }
+  
   if (!curve)
     return NULL;
   ArtBpath *bpath = curve->bpath;
   if (bpath == NULL)
     return NULL;
-
+  
   Path *dest = new Path;
   dest->SetWeighted (false);
   dest->SetBackData (false);
@@ -1261,48 +1270,59 @@ Path_for_item (SPItem * item)
     bool  closed = false;
     float lastX  = 0.0;
     float lastY  = 0.0;
-
-
-
+    
+    
+    
     for (i = 0; bpath[i].code != ART_END; i++)
+    {
+      switch (bpath[i].code)
       {
-	switch (bpath[i].code)
-	  {
-	  case ART_LINETO:
-	    lastX = bpath[i].x3;
-	    lastY = bpath[i].y3;
-	    dest->LineTo (lastX, lastY);
-	    break;
-
-	  case ART_CURVETO:
-	    dest->CubicTo (bpath[i].x3, bpath[i].y3,
-			   3 * (bpath[i].x1 - lastX),
-			   3 * (bpath[i].y1 - lastY),
-			   3 * (bpath[i].x3 - bpath[i].x2),
-			   3 * (bpath[i].y3 - bpath[i].y2));
-	    lastX = bpath[i].x3;
-	    lastY = bpath[i].y3;
-	    break;
-
-	  case ART_MOVETO_OPEN:
-	  case ART_MOVETO:
-	    if (closed)
-	      dest->Close ();
-	    closed = (bpath[i].code == ART_MOVETO);
-	    lastX = bpath[i].x3;
-	    lastY = bpath[i].y3;
-	    dest->MoveTo (lastX, lastY);
-	    break;
-	  default:
-	    break;
-	  }
+        case ART_LINETO:
+          lastX = bpath[i].x3;
+          lastY = bpath[i].y3;
+          {
+            NR::Point  tmp(lastX,lastY);
+            dest->LineTo (tmp);
+          }
+            break;
+          
+        case ART_CURVETO:
+        {
+          NR::Point  tmp,tms,tme;
+          tmp.pt[0]=bpath[i].x3;
+          tmp.pt[1]=bpath[i].y3;
+          tms.pt[0]=3 * (bpath[i].x1 - lastX);
+          tms.pt[1]=3 * (bpath[i].y1 - lastY);
+          tme.pt[0]=3 * (bpath[i].x3 - bpath[i].x2);
+          tme.pt[1]=3 * (bpath[i].y3 - bpath[i].y2);
+          dest->CubicTo (tmp,tms,tme);
+        }
+          lastX = bpath[i].x3;
+          lastY = bpath[i].y3;
+          break;
+          
+        case ART_MOVETO_OPEN:
+        case ART_MOVETO:
+          if (closed)
+            dest->Close ();
+          closed = (bpath[i].code == ART_MOVETO);
+          lastX = bpath[i].x3;
+          lastY = bpath[i].y3;
+          {
+            NR::Point  tmp(lastX,lastY);
+            dest->MoveTo (tmp);
+          }
+            break;
+        default:
+          break;
       }
+    }
     if (closed)
       dest->Close ();
   }
-
+  
   sp_curve_unref (curve);
-
+  
   return dest;
 }
 
@@ -1311,51 +1331,56 @@ liv_svg_dump_path (Path * path)
 {
   GString *result;
   result = g_string_sized_new (40);
-
+  
   for (int i = 0; i < path->descr_nb; i++)
+  {
+    Path::path_descr theD = path->descr_data[i];
+    int typ = theD.flags & descr_type_mask;
+    if (typ == descr_moveto)
     {
-      Path::path_descr theD = path->descr_data[i];
-      int typ = theD.flags & descr_type_mask;
-      if (typ == descr_moveto)
-	{
-	  g_string_sprintfa (result, "M %lf %lf ", theD.d.m.x, theD.d.m.y);
-	}
-      else if (typ == descr_lineto)
-	{
-	  g_string_sprintfa (result, "L %lf %lf ", theD.d.l.x, theD.d.l.y);
-	}
-      else if (typ == descr_cubicto)
-	{
-	  float lastX, lastY;
-	  path->PrevPoint (i - 1, lastX, lastY);
-	  g_string_sprintfa (result, "C %lf %lf %lf %lf %lf %lf ",
-			     lastX + theD.d.c.stDx / 3,
-			     lastY + theD.d.c.stDy / 3,
-			     theD.d.c.x - theD.d.c.enDx / 3,
-			     theD.d.c.y - theD.d.c.enDy / 3, theD.d.c.x,
-			     theD.d.c.y);
-	}
-      else if (typ == descr_arcto)
-	{
-//                      g_string_sprintfa (result, "L %lf %lf ",theD.d.a.x,theD.d.a.y);
-	  g_string_sprintfa (result, "A %g %g %g %i %i %g %g ", theD.d.a.rx,
-			     theD.d.a.ry, theD.d.a.angle,
-			     (theD.d.a.large) ? 1 : 0,
-			     (theD.d.a.clockwise) ? 0 : 1, theD.d.a.x,
-			     theD.d.a.y);
-	}
-      else if (typ == descr_close)
-	{
-	  g_string_sprintfa (result, "z ");
-	}
-      else
-	{
-	}
+      g_string_sprintfa (result, "M %lf %lf ", theD.d.m.p.pt[0], theD.d.m.p.pt[1]);
     }
-
+    else if (typ == descr_lineto)
+    {
+      g_string_sprintfa (result, "L %lf %lf ", theD.d.l.p.pt[0], theD.d.l.p.pt[1]);
+    }
+    else if (typ == descr_cubicto)
+    {
+      float lastX, lastY;
+      {
+        NR::Point tmp;
+        path->PrevPoint (i - 1, tmp);
+        lastX=tmp.pt[0];
+        lastY=tmp.pt[1];
+      }
+      g_string_sprintfa (result, "C %lf %lf %lf %lf %lf %lf ",
+                         lastX + theD.d.c.stD.pt[0] / 3,
+                         lastY + theD.d.c.stD.pt[1] / 3,
+                         theD.d.c.p.pt[0] - theD.d.c.enD.pt[0] / 3,
+                         theD.d.c.p.pt[1] - theD.d.c.enD.pt[1] / 3, theD.d.c.p.pt[0],
+                         theD.d.c.p.pt[1]);
+    }
+    else if (typ == descr_arcto)
+    {
+      //                      g_string_sprintfa (result, "L %lf %lf ",theD.d.a.x,theD.d.a.y);
+      g_string_sprintfa (result, "A %g %g %g %i %i %g %g ", theD.d.a.rx,
+                         theD.d.a.ry, theD.d.a.angle,
+                         (theD.d.a.large) ? 1 : 0,
+                         (theD.d.a.clockwise) ? 0 : 1, theD.d.a.p.pt[0],
+                         theD.d.a.p.pt[1]);
+    }
+    else if (typ == descr_close)
+    {
+      g_string_sprintfa (result, "z ");
+    }
+    else
+    {
+    }
+  }
+  
   char *res;
   res = result->str;
   g_string_free (result, FALSE);
-
+  
   return res;
 }

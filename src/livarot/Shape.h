@@ -17,6 +17,7 @@
 //#include <iostream.h>
 
 #include "ShapeUtils.h"
+#include "../libnr/nr-types.h"
 
 // possible values for the "type" field in the Shape class:
 enum
@@ -59,7 +60,7 @@ public:
   // topological information: who links who?
   typedef struct dg_point
   {
-    float x, y;			// position
+    NR::Point x;			// position
     int dI, dO;			// indegree and outdegree
     int firstA, lastA;		// first and last incident edge
     int oldDegree;
@@ -67,7 +68,7 @@ public:
   dg_point;
   typedef struct dg_arete
   {
-    float dx, dy;		// edge vector
+    NR::Point dx;		// edge vector
     int st, en;			// start and end points of the edge
     int nextS, prevS;		// next and previous edge in the double-linked list at the start point
     int nextE, prevE;		// next and previous edge in the double-linked list at the end point
@@ -89,7 +90,7 @@ private:
   typedef struct edge_data
   {
     int weight;			// weight of the edge (to handle multiple edges)
-    float rdx, rdy;		// rounded edge vector
+    NR::Point rdx;		// rounded edge vector
     double length, sqlength, ilength, isqlength;	// length^2, length, 1/length^2, 1/length
     double siEd, coEd;		// siEd=abs(rdy/length) and coEd=rdx/length
     // used to determine the "most horizontal" edge between 2 edges
@@ -148,7 +149,7 @@ private:
     int nextLinkedPoint;	// not used
     Shape *askForWindingS;
     int askForWindingB;
-    float rx, ry;		// rounded coordinates of the point
+    NR::Point  rx;		// rounded coordinates of the point
   }
   point_data;
   typedef struct incidenceData
@@ -234,7 +235,7 @@ public:
   // -reset the graph, and ensure there's room for n points and m edges
   void Reset (int n = 0, int m = 0);
   //  -points:
-  int AddPoint (float x, float y);	// as the function name says
+  int AddPoint (NR::Point x);	// as the function name says
   // returns the index at which the point has been added in the array
   void SubPoint (int p);	// removes the point at index p
   // nota: this function relocates the last point to the index p
@@ -356,18 +357,18 @@ public:
   // be careful when using this function
 
   // the coordinate rounding function
-  static float Round (float x)
+  static double Round (double x)
   {
-    return ldexpf (roundf (ldexpf (x, 5)), -5);
+    return ldexp (round (ldexp (x, 5)), -5);
   };
   // 2 miscannellous variations on it, to scale to and back the rounding grid
-  static float HalfRound (float x)
+  static double HalfRound (double x)
   {
-    return ldexpf (x, -5);
+    return ldexp (x, -5);
   };
-  static float IHalfRound (float x)
+  static double IHalfRound (double x)
   {
-    return ldexpf (x, 5);
+    return ldexp (x, 5);
   };
 
   // boolean operations on polygons (requests intersection-free poylygons)
@@ -441,19 +442,18 @@ private:
   {				// temporary array of edges for easier sorting
     int no;
     bool starting;
-    float x, y;
+    NR::Point x;
   }
   edge_list;
   void SortEdgesList (edge_list * edges, int s, int e);	// edge sorting function
-  static int CmpToVert (float ax, float ay, float bx, float by);	// edge direction comparison function
+  static int CmpToVert (NR::Point ax, NR::Point bx);	// edge direction comparison function
 
   void TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff);	// test if there is an intersection
-  bool TesteIntersection (SweepTree * iL, SweepTree * iR, float &atx,
-			  float &aty, float &atL, float &atR, bool onlyDiff);
+  bool TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, float &atL, float &atR, bool onlyDiff);
   bool TesteIntersection (Shape * iL, Shape * iR, int ilb, int irb,
-			  float &atx, float &aty, float &atL, float &atR,
+			  NR::Point &atx, float &atL, float &atR,
 			  bool onlyDiff);
-  bool TesteAdjacency (Shape * iL, int ilb, float atx, float aty, int nPt,
+  bool TesteAdjacency (Shape * iL, int ilb, NR::Point atx, int nPt,
 		       bool push);
   int PushIncidence (Shape * a, int cb, int pt, float theta);
   int CreateIncidence (Shape * a, int cb, int pt);
@@ -473,7 +473,7 @@ private:
   void GetWindings (Shape * a, Shape * b = NULL, BooleanOp mod =
 		    bool_op_union, bool brutal = false);
   void Validate (void);
-  int Winding (float px, float py);
+  int Winding (NR::Point px);
   int Winding (int nPt);
   void SortPointsRounded (void);
   void SortPointsRounded (int s, int e);
@@ -502,7 +502,7 @@ private:
   int ReFormeArcTo (int bord, int curBord, Path * dest, Path * orig);
   int ReFormeCubicTo (int bord, int curBord, Path * dest, Path * orig);
   int ReFormeBezierTo (int bord, int curBord, Path * dest, Path * orig);
-  void ReFormeBezierChunk (float px, float py, float nx, float ny,
+  void ReFormeBezierChunk (NR::Point px, NR::Point nx,
 			   Path * dest, int inBezier, int nbInterm,
 			   Path * from, int p, float ts, float te);
 

@@ -446,7 +446,8 @@ sp_offset_offset_set (SPItem *item, const NRPoint *p, guint state)
 
 	offset = SP_OFFSET (item);
 
-	offset->rad = sp_offset_distance_to_original(offset,p->x,p->y);
+  NR::Point  np(p->x,p->y);
+	offset->rad = sp_offset_distance_to_original(offset,np);
   offset->knotx=p->x;
   offset->knoty=p->y;
   offset->knotSet=true;
@@ -462,7 +463,10 @@ sp_offset_offset_get (SPItem *item, NRPoint *p)
 
 	offset = SP_OFFSET (item);
 
-  sp_offset_top_point(offset,&(p->x),&(p->y));
+  NR::Point   np(p->x,p->y);
+  sp_offset_top_point(offset,&np);
+  p->x=np.pt[0];
+  p->y=np.pt[1];
 }
 
 static SPKnotHolder *

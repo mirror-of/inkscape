@@ -16,7 +16,9 @@
 //#include <iostream.h>
 
 #include "LivarotDefs.h"
-#include "MyMath.h"
+//#include "MyMath.h"
+
+#include "../libnr/nr-types.h"
 
 enum
 {
@@ -45,14 +47,13 @@ class Shape;
 
 typedef struct dashTo_info
 {
-  float nDashAbs;
-  vec2 prevP;
-  vec2 curP;
-  vec2 prevD;
-  float prevW;
-  float curW;
-}
-dashTo_info;
+  float     nDashAbs;
+  NR::Point prevP;
+  NR::Point curP;
+  NR::Point prevD;
+  float     prevW;
+  float     curW;
+} dashTo_info;
 
 // path creation: 2 phases: first the path is given as a succession of commands (MoveTo, LineTo, CurveTo...); then it
 // is converted in a polyline
@@ -66,7 +67,7 @@ public:
   // lineto: a point, maybe with a weight
   typedef struct path_descr_moveto
   {
-    float x, y;
+    NR::Point  p;
     int pathLength;		// number of description for this subpath
   }
   path_descr_moveto;
@@ -81,7 +82,7 @@ public:
   // MoveTos fit in this category
   typedef struct path_descr_lineto
   {
-    float x, y;
+    NR::Point  p;
   }
   path_descr_lineto;
   typedef struct path_descr_lineto_w:public path_descr_lineto
@@ -94,7 +95,7 @@ public:
   typedef struct path_descr_bezierto
   {
     int nb;
-    float x, y;			// the endpoint's coordinates
+    NR::Point    p;			// the endpoint's coordinates
   }
   path_descr_bezierto;
   typedef struct path_descr_bezierto_w:public path_descr_bezierto
@@ -104,7 +105,7 @@ public:
   path_descr_bezierto_w;
   typedef struct path_descr_intermbezierto
   {
-    float x, y;			// controm point coordinates
+    NR::Point    p;			// control point coordinates
   }
   path_descr_intermbezierto;
   typedef struct path_descr_intermbezierto_w:public path_descr_intermbezierto
@@ -116,9 +117,9 @@ public:
   // cubic spline curve: 2 tangents and one endpoint
   typedef struct path_descr_cubicto
   {
-    float x, y;
-    float stDx, stDy;
-    float enDx, enDy;
+    NR::Point    p;
+    NR::Point    stD;
+    NR::Point    enD;
   }
   path_descr_cubicto;
   typedef struct path_descr_cubicto_w:public path_descr_cubicto
@@ -130,9 +131,10 @@ public:
   // arc: endpoint, 2 radii and one angle, plus 2 booleans to choose the arc (svg style)
   typedef struct path_descr_arcto
   {
-    float x, y;
-    float rx, ry, angle;
-    bool large, clockwise;
+    NR::Point    p;
+    float        rx,ry;
+    float        angle;
+    bool         large, clockwise;
   }
   path_descr_arcto;
   typedef struct path_descr_arcto_w:public path_descr_arcto
@@ -146,7 +148,7 @@ public:
     int flags;
     int associated;		// le no du moveto/lineto dans la polyligne. ou alors no de la piece dans l'original
     float tSt, tEn;
-    union
+    struct
     {
       path_descr_moveto_w m;
       path_descr_lineto_w l;
@@ -178,7 +180,7 @@ public:
   typedef struct path_lineto
   {
     int isMoveTo;
-    float x, y;
+    NR::Point  p;
   }
   path_lineto;
   typedef struct path_lineto_w:public path_lineto
@@ -200,7 +202,7 @@ public:
   path_lineto_wb;
 
 public:
-    bool weighted;
+  bool weighted;
   bool back;
   int nbPt, maxPt, sizePt;
   char *pts;
@@ -218,27 +220,25 @@ public:
   // the commands...
   int ForcePoint (void);
   int Close (void);
-  int MoveTo (float ix, float iy);
-  int MoveTo (float ix, float iy, float iw);
-  int LineTo (float ix, float iy);
-  int LineTo (float ix, float iy, float iw);
-  int CubicTo (float ix, float iy, float isDx, float isDy, float ieDx,
-	       float ieDy);
-  int CubicTo (float ix, float iy, float isDx, float isDy, float ieDx,
-	       float ieDy, float iw);
-  int ArcTo (float ix, float iy, float iRx, float iRy, float angle,
+  int MoveTo (NR::Point &ip);
+  int MoveTo (NR::Point &ip, float iw);
+  int LineTo (NR::Point &ip);
+  int LineTo (NR::Point &ip, float iw);
+  int CubicTo (NR::Point &ip, NR::Point &iStD, NR::Point &iEnD);
+  int CubicTo (NR::Point &ip, NR::Point &iStD, NR::Point &iEnD, float iw);
+  int ArcTo (NR::Point &ip, float iRx, float iRy, float angle,
 	     bool iLargeArc, bool iClockwise);
-  int ArcTo (float ix, float iy, float iRx, float iRy, float angle,
+  int ArcTo (NR::Point &ip, float iRx, float iRy, float angle,
 	     bool iLargeArc, bool iClockwise, float iw);
-  int IntermBezierTo (float ix, float iy);	// add a quadratic bezier spline control point
-  int IntermBezierTo (float ix, float iy, float iw);
-  int BezierTo (float ix, float iy);	// quadratic bezier spline to this point (control points can be added after this)
-  int BezierTo (float ix, float iy, float iw);
+  int IntermBezierTo (NR::Point &ip);	// add a quadratic bezier spline control point
+  int IntermBezierTo (NR::Point &ip, float iw);
+  int BezierTo (NR::Point &ip);	// quadratic bezier spline to this point (control points can be added after this)
+  int BezierTo (NR::Point &ip, float iw);
   int TempBezierTo (void);	// start a quadratic bezier spline (control points can be added after this)
   int TempBezierToW (void);
   int EndBezierTo (void);
-  int EndBezierTo (float ix, float iy);	// ends a quadratic bezier spline (for curves started with TempBezierTo)
-  int EndBezierTo (float ix, float iy, float iw);
+  int EndBezierTo (NR::Point &ip);	// ends a quadratic bezier spline (for curves started with TempBezierTo)
+  int EndBezierTo (NR::Point &ip, float iw);
 
   // transforms a description in a polyline (for stroking and filling)
   // treshhold is the max length^2 (sort of)
@@ -253,15 +253,15 @@ public:
   void SetWeighted (bool nVal);	// is weighted?
   void SetBackData (bool nVal);	// has back data?
   void ResetPoints (int expected = 0);	// resets to the empty polyline
-  int AddPoint (float ix, float iy, bool mvto = false);	// add point
-  int AddPoint (float ix, float iy, float iw, bool mvto = false);
-  int AddPoint (float ix, float iy, int ip, float it, bool mvto = false);
-  int AddPoint (float ix, float iy, float iw, int ip, float it, bool mvto =
+  int AddPoint (NR::Point &iPt, bool mvto = false);	// add point
+  int AddPoint (NR::Point &iPt, float iw, bool mvto = false);
+  int AddPoint (NR::Point &iPt, int ip, float it, bool mvto = false);
+  int AddPoint (NR::Point &iPt, float iw, int ip, float it, bool mvto =
 		false);
-  int AddForcedPoint (float ix, float iy);	// add point
-  int AddForcedPoint (float ix, float iy, float iw);
-  int AddForcedPoint (float ix, float iy, int ip, float it);
-  int AddForcedPoint (float ix, float iy, float iw, int ip, float it);
+  int AddForcedPoint (NR::Point &iPt);	// add point
+  int AddForcedPoint (NR::Point &iPt, float iw);
+  int AddForcedPoint (NR::Point &iPt, int ip, float it);
+  int AddForcedPoint (NR::Point &iPt, float iw, int ip, float it);
 
   // transform in a polygon (in a graph, in fact; a subsequent call to ConvertToShape is needed)
   //  - fills the polyline; justAdd=true doesn't reset the Shape dest, but simply adds the polyline into it
@@ -296,10 +296,10 @@ public:
   void Coalesce (float tresh);
 
   // utilities
-  void PointAt (int piece, float at, vec2 & pos);
-  void PointAndTangentAt (int piece, float at, vec2 & pos, vec2 & tgt);
+  void PointAt (int piece, float at, NR::Point & pos);
+  void PointAndTangentAt (int piece, float at, NR::Point & pos, NR::Point & tgt);
 
-  void PrevPoint (int i, float &x, float &y);
+  void PrevPoint (int i, NR::Point &oPt);
 private:
   void Alloue (int addSize);
   void CancelBezier (void);
@@ -308,39 +308,35 @@ private:
   int Winding (void);
 
   // fonctions utilisees par la conversion
-  void DoArc (float sx, float sy, float ex, float ey, float rx, float ry,
+  void DoArc (NR::Point &iS, NR::Point &iE, float rx, float ry,
 	      float angle, bool large, bool wise, float tresh);
-  void DoArc (float sx, float sy, float sw, float ex, float ey, float ew,
+  void DoArc (NR::Point &iS, float sw, NR::Point &iE, float ew,
 	      float rx, float ry, float angle, bool large, bool wise,
 	      float tresh);
-  void RecCubicTo (float sx, float sy, float sdx, float sdy, float ex,
-		   float ey, float edx, float edy, float tresh, int lev,
+  void RecCubicTo (NR::Point &iS, NR::Point &iSd, NR::Point &iE, NR::Point &iEd, float tresh, int lev,
 		   float maxL = -1.0);
-  void RecCubicTo (float sx, float sy, float sw, float sdx, float sdy,
-		   float ex, float ey, float ew, float edx, float edy,
+  void RecCubicTo (NR::Point &iS, float sw, NR::Point &iSd,
+		   NR::Point &iE, float ew, NR::Point &iEd,
 		   float tresh, int lev, float maxL = -1.0);
-  void RecBezierTo (float px, float py, float sx, float sy, float ex,
-		    float ey, float treshhold, int lev, float maxL = -1.0);
-  void RecBezierTo (float px, float py, float pw, float sx, float sy,
-		    float sw, float ex, float ey, float ew, float treshhold,
+  void RecBezierTo (NR::Point &iPt, NR::Point &iS, NR::Point &iE, float treshhold, int lev, float maxL = -1.0);
+  void RecBezierTo (NR::Point &iPt, float pw, NR::Point &iS,
+		    float sw, NR::Point &iE, float ew, float treshhold,
 		    int lev, float maxL = -1.0);
 
-  void DoArc (float sx, float sy, float ex, float ey, float rx, float ry,
+  void DoArc (NR::Point &iS, NR::Point &iE, float rx, float ry,
 	      float angle, bool large, bool wise, float tresh, int piece);
-  void DoArc (float sx, float sy, float sw, float ex, float ey, float ew,
+  void DoArc (NR::Point &iS, float sw, NR::Point &iE, float ew,
 	      float rx, float ry, float angle, bool large, bool wise,
 	      float tresh, int piece);
-  void RecCubicTo (float sx, float sy, float sdx, float sdy, float ex,
-		   float ey, float edx, float edy, float tresh, int lev,
+  void RecCubicTo (NR::Point &iS, NR::Point &iSd, NR::Point &iE, NR::Point &iEd, float tresh, int lev,
 		   float st, float et, int piece);
-  void RecCubicTo (float sx, float sy, float sw, float sdx, float sdy,
-		   float ex, float ey, float ew, float edx, float edy,
+  void RecCubicTo (NR::Point &iS, float sw, NR::Point &iSd,
+		   NR::Point &iE, float ew, NR::Point &iEd,
 		   float tresh, int lev, float st, float et, int piece);
-  void RecBezierTo (float px, float py, float sx, float sy, float ex,
-		    float ey, float treshhold, int lev, float st, float et,
+  void RecBezierTo (NR::Point &iPt, NR::Point &iS, NR::Point &iE, float treshhold, int lev, float st, float et,
 		    int piece);
-  void RecBezierTo (float px, float py, float pw, float sx, float sy,
-		    float sw, float ex, float ey, float ew, float treshhold,
+  void RecBezierTo (NR::Point &iPt, float pw, NR::Point &iS,
+		    float sw, NR::Point &iE, float ew, float treshhold,
 		    int lev, float st, float et, int piece);
 
   typedef struct offset_orig
@@ -351,25 +347,24 @@ private:
     float off_dec;
   }
   offset_orig;
-  void DoArc (float sx, float sy, float ex, float ey, float rx, float ry,
+  void DoArc (NR::Point &iS, NR::Point &iE, float rx, float ry,
 	      float angle, bool large, bool wise, float tresh, int piece,
 	      offset_orig & orig);
-  void RecCubicTo (float sx, float sy, float sdx, float sdy, float ex,
-		   float ey, float edx, float edy, float tresh, int lev,
+  void RecCubicTo (NR::Point &iS, NR::Point &iSd, NR::Point &iE, NR::Point &iEd, float tresh, int lev,
 		   float st, float et, int piece, offset_orig & orig);
-  void RecBezierTo (float px, float py, float sx, float sy, float ex,
-		    float ey, float treshhold, int lev, float st, float et,
+  void RecBezierTo (NR::Point &iPt, NR::Point &iS, NR::Point &iE, float treshhold, int lev, float st, float et,
 		    int piece, offset_orig & orig);
 
-  static void ArcAngles (float sx, float sy, float ex, float ey, float rx,
-			 float ry, float angle, bool large, bool wise,
-			 float &sang, float &eang);
-  static void QuadraticPoint (float t, float &ox, float &oy, float sx,
-			      float sy, float mx, float my, float ex,
-			      float ey);
-  static void CubicTangent (float t, float &ox, float &oy, float sx, float sy,
-			    float sdx, float sdy, float ex, float ey,
-			    float edx, float edy);
+  static void ArcAngles (NR::Point &iS, NR::Point &iE, float rx,
+                         float ry, float angle, bool large, bool wise,
+                         float &sang, float &eang);
+  static void ArcAnglesAndCenter (NR::Point &iS, NR::Point &iE, float rx,
+                         float ry, float angle, bool large, bool wise,
+                                  float &sang, float &eang,NR::Point &dr);
+  static void QuadraticPoint (float t, NR::Point &oPt,  NR::Point &iS,  NR::Point &iM,  NR::Point &iE);
+  static void CubicTangent (float t, NR::Point &oPt, NR::Point &iS,
+			    NR::Point &iSd, NR::Point &iE,
+			    NR::Point &iEd);
 
   typedef struct outline_callback_data
   {
@@ -415,7 +410,7 @@ private:
   void SubContractOutline (Path * dest, outline_callbacks & calls,
 			   float tolerance, float width, JoinType join,
 			   ButtType butt, float miter, bool closeIfNeeded,
-			   bool skipMoveto, vec2 & lastP, vec2 & lastT);
+			   bool skipMoveto, NR::Point & lastP, NR::Point & lastT);
   void DoOutsideOutline (Path * dest, float width, JoinType join,
 			 ButtType butt, float miter, int &stNo, int &enNo);
   void DoInsideOutline (Path * dest, float width, JoinType join,
@@ -426,23 +421,23 @@ private:
 		 ButtType butt, float miter, int nbDash, one_dash * dashs,
 		 bool justAdd = false);
 
-  static void TangentOnSegAt (float at, float sx, float sy,
-			      path_descr_lineto & fin, vec2 & pos, vec2 & tgt,
+  static void TangentOnSegAt (float at, NR::Point &iS,
+			      path_descr_lineto & fin, NR::Point & pos, NR::Point & tgt,
 			      float &len);
-  static void TangentOnArcAt (float at, float sx, float sy,
-			      path_descr_arcto & fin, vec2 & pos, vec2 & tgt,
+  static void TangentOnArcAt (float at, NR::Point &iS,
+			      path_descr_arcto & fin, NR::Point & pos, NR::Point & tgt,
 			      float &len, float &rad);
-  static void TangentOnCubAt (float at, float sx, float sy,
+  static void TangentOnCubAt (float at, NR::Point &iS,
 			      path_descr_cubicto & fin, bool before,
-			      vec2 & pos, vec2 & tgt, float &len, float &rad);
-  static void TangentOnBezAt (float at, float sx, float sy,
+			      NR::Point & pos, NR::Point & tgt, float &len, float &rad);
+  static void TangentOnBezAt (float at, NR::Point &iS,
 			      path_descr_intermbezierto & mid,
 			      path_descr_bezierto & fin, bool before,
-			      vec2 & pos, vec2 & tgt, float &len, float &rad);
-  static void OutlineJoin (Path * dest, vec2 pos, vec2 stNor, vec2 enNor,
+			      NR::Point & pos, NR::Point & tgt, float &len, float &rad);
+  static void OutlineJoin (Path * dest, NR::Point pos, NR::Point stNor, NR::Point enNor,
 			   float width, JoinType join, float miter);
 
-  static bool IsNulCurve (path_descr * curD, float curX, float curY);
+  static bool IsNulCurve (path_descr * curD, NR::Point &curX);
 
   static void RecStdCubicTo (outline_callback_data * data, float tol,
 			     float width, int lev);
@@ -456,20 +451,20 @@ private:
 
 
   // fonctions annexes pour le stroke
-  static void DoButt (Shape * dest, float width, ButtType butt, vec2 pos,
-		      vec2 dir, int &leftNo, int &rightNo);
-  static void DoJoin (Shape * dest, float width, JoinType join, vec2 pos,
-		      vec2 prev, vec2 next, float miter, float prevL,
+  static void DoButt (Shape * dest, float width, ButtType butt, NR::Point pos,
+		      NR::Point dir, int &leftNo, int &rightNo);
+  static void DoJoin (Shape * dest, float width, JoinType join, NR::Point pos,
+		      NR::Point prev, NR::Point next, float miter, float prevL,
 		      float nextL, int &leftStNo, int &leftEnNo,
 		      int &rightStNo, int &rightEnNo);
-  static void DoLeftJoin (Shape * dest, float width, JoinType join, vec2 pos,
-			  vec2 prev, vec2 next, float miter, float prevL,
+  static void DoLeftJoin (Shape * dest, float width, JoinType join, NR::Point pos,
+			  NR::Point prev, NR::Point next, float miter, float prevL,
 			  float nextL, int &leftStNo, int &leftEnNo,int pathID=-1,int pieceID=0,float tID=0.0);
-  static void DoRightJoin (Shape * dest, float width, JoinType join, vec2 pos,
-			   vec2 prev, vec2 next, float miter, float prevL,
+  static void DoRightJoin (Shape * dest, float width, JoinType join, NR::Point pos,
+			   NR::Point prev, NR::Point next, float miter, float prevL,
 			   float nextL, int &rightStNo, int &rightEnNo,int pathID=-1,int pieceID=0,float tID=0.0);
-  static void RecRound (Shape * dest, int sNo, int eNo, float px, float py,
-			float sx, float sy, float ex, float ey, float tresh,
+  static void RecRound (Shape * dest, int sNo, int eNo, NR::Point &iPt,
+			NR::Point &iS, NR::Point &iE, float tresh,
 			int lev);
   static void DashTo (Shape * dest, dashTo_info * dTo, float &dashAbs,
 		      int &dashNo, float &dashPos, bool & inGap,
@@ -480,6 +475,6 @@ private:
 
   void DoSimplify (float treshhold);
   bool AttemptSimplify (float treshhold, path_descr_cubicto & res);
-  float RaffineTk (vec2 pt, vec2 p0, vec2 p1, vec2 p2, vec2 p3, float it);
+  float RaffineTk (NR::Point pt, NR::Point p0, NR::Point p1, NR::Point p2, NR::Point p3, float it);
 };
 #endif

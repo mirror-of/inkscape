@@ -2,11 +2,11 @@
 #include <math.h>
 #include <libnr/nr-point-fns.h>
 
-
-static inline double
-cross(NR::Point const &a, NR::Point const &b) {
-	return dot(b, rot90(a));
-}
+// moved to nr-types.h
+//static inline double
+//cross(NR::Point const &a, NR::Point const &b) {
+//	return dot(b, rot90(a));
+//}
 
 
 /* Intersect two lines */

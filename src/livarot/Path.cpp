@@ -17,7 +17,7 @@ Path::Path (void)
   descr_data = NULL;
   pending_bezier = -1;
   pending_moveto = -1;
-
+  
   weighted = false;
   back = false;
   nbPt = maxPt = sizePt = 0;
@@ -26,15 +26,15 @@ Path::Path (void)
 Path::~Path (void)
 {
   if (descr_data)
-    {
-      free (descr_data);
-      descr_data = NULL;
-    }
+  {
+    free (descr_data);
+    descr_data = NULL;
+  }
   if (pts)
-    {
-      free (pts);
-      pts = NULL;
-    }
+  {
+    free (pts);
+    pts = NULL;
+  }
   descr_max = descr_nb = 0;
   descr_data = NULL;
   nbPt = maxPt = sizePt = 0;
@@ -49,57 +49,85 @@ Path::Affiche (void)
 {
   printf ("path descr %i elems\n", descr_nb);
   for (int i = 0; i < descr_nb; i++)
+  {
+    printf ("  ");
+    printf ("[ %i %f %f ] ", (descr_data + i)->associated,
+            (descr_data + i)->tSt, (descr_data + i)->tEn);
+    if ((descr_data + i)->flags & descr_weighted)
+      printf (" w ");
+    int ty = (descr_data + i)->flags & descr_type_mask;
+    if (ty == descr_forced)
     {
-      printf ("  ");
-      printf ("[ %i %f %f ] ", (descr_data + i)->associated,
-	      (descr_data + i)->tSt, (descr_data + i)->tEn);
-      if ((descr_data + i)->flags & descr_weighted)
-	printf (" w ");
-      int ty = (descr_data + i)->flags & descr_type_mask;
-      if (ty == descr_forced)
-	{
-	  printf ("F\n");
-	}
-      else if (ty == descr_moveto)
-	{
-	  printf ("M %f %f %i\n", (descr_data + i)->d.m.x,
-		  (descr_data + i)->d.m.y, (descr_data + i)->d.m.pathLength);
-	}
-      else if (ty == descr_lineto)
-	{
-	  printf ("L %f %f\n", (descr_data + i)->d.l.x,
-		  (descr_data + i)->d.l.y);
-	}
-      else if (ty == descr_arcto)
-	{
-	  printf ("A %f %f %f %f %i %i\n", (descr_data + i)->d.a.x,
-		  (descr_data + i)->d.a.y, (descr_data + i)->d.a.rx,
-		  (descr_data + i)->d.a.ry,
-		  ((descr_data + i)->d.a.large) ? 1 : 0,
-		  ((descr_data + i)->d.a.clockwise) ? 1 : 0);
-	}
-      else if (ty == descr_cubicto)
-	{
-	  printf ("C %f %f %f %f %f %f\n", (descr_data + i)->d.c.x,
-		  (descr_data + i)->d.c.y, (descr_data + i)->d.c.stDx,
-		  (descr_data + i)->d.c.stDy, (descr_data + i)->d.c.enDx,
-		  (descr_data + i)->d.c.enDy);
-	}
-      else if (ty == descr_bezierto)
-	{
-	  printf ("B %f %f %i\n", (descr_data + i)->d.b.x,
-		  (descr_data + i)->d.b.y, (descr_data + i)->d.b.nb);
-	}
-      else if (ty == descr_interm_bezier)
-	{
-	  printf ("I %f %f\n", (descr_data + i)->d.i.x,
-		  (descr_data + i)->d.i.y);
-	}
-      else if (ty == descr_close)
-	{
-	  printf ("Z\n");
-	}
+      printf ("F\n");
     }
+    else if (ty == descr_moveto)
+    {
+      printf ("M %f %f %i\n", (descr_data + i)->d.m.p.pt[0],
+              (descr_data + i)->d.m.p.pt[1], (descr_data + i)->d.m.pathLength);
+    }
+    else if (ty == descr_lineto)
+    {
+      printf ("L %f %f\n", (descr_data + i)->d.l.p.pt[0],
+              (descr_data + i)->d.l.p.pt[1]);
+    }
+    else if (ty == descr_arcto)
+    {
+      printf ("A %f %f %f %f %i %i\n", (descr_data + i)->d.a.p.pt[0],
+              (descr_data + i)->d.a.p.pt[1], (descr_data + i)->d.a.rx,
+              (descr_data + i)->d.a.ry,
+              ((descr_data + i)->d.a.large) ? 1 : 0,
+              ((descr_data + i)->d.a.clockwise) ? 1 : 0);
+    }
+    else if (ty == descr_cubicto)
+    {
+      printf ("C %f %f %f %f %f %f\n", (descr_data + i)->d.c.p.pt[0],
+              (descr_data + i)->d.c.p.pt[1], (descr_data + i)->d.c.stD.pt[0],
+              (descr_data + i)->d.c.stD.pt[1], (descr_data + i)->d.c.enD.pt[0],
+              (descr_data + i)->d.c.enD.pt[1]);
+    }
+    else if (ty == descr_bezierto)
+    {
+      printf ("B %f %f %i\n", (descr_data + i)->d.b.p.pt[0],
+              (descr_data + i)->d.b.p.pt[1], (descr_data + i)->d.b.nb);
+    }
+    else if (ty == descr_interm_bezier)
+    {
+      printf ("I %f %f\n", (descr_data + i)->d.i.p.pt[0],
+              (descr_data + i)->d.i.p.pt[1]);
+    }
+    else if (ty == descr_close)
+    {
+      printf ("Z\n");
+    }
+  }
+  printf("nbPt: %i\n",nbPt);
+  if ( back ) {
+    if ( weighted ) {
+      path_lineto_wb  *tp=(path_lineto_wb*)pts;
+      for (int i=0;i<nbPt;i++) {
+        printf("[ %f %f  %f %i %f ] ",tp[i].p.pt[0],tp[i].p.pt[1],tp[i].w,tp[i].piece,tp[i].t);
+      }
+    } else {
+      path_lineto_b  *tp=(path_lineto_b*)pts;
+      for (int i=0;i<nbPt;i++) {
+        printf("[ %f %f %i %f ] ",tp[i].p.pt[0],tp[i].p.pt[1],tp[i].piece,tp[i].t);
+      }
+    }
+  } else {
+    if ( weighted ) {
+      path_lineto_w  *tp=(path_lineto_w*)pts;
+      for (int i=0;i<nbPt;i++) {
+        printf("[ %f %f  %f ] ",tp[i].p.pt[0],tp[i].p.pt[1],tp[i].w);
+      }
+    } else {
+      path_lineto  *tp=(path_lineto*)pts;
+      for (int i=0;i<nbPt;i++) {
+        printf("[ %f %f ] ",tp[i].p.pt[0],tp[i].p.pt[1]);
+      }
+    }
+  }
+  printf("\n\n");
+  fflush(stdout);
 }
 void
 Path::Reset (void)
@@ -115,11 +143,11 @@ Path::Copy (Path * who)
 {
   ResetPoints (0);
   if (who->descr_nb > descr_max)
-    {
-      descr_max = who->descr_nb;
-      descr_data =
-	(path_descr *) realloc (descr_data, descr_max * sizeof (path_descr));
-    }
+  {
+    descr_max = who->descr_nb;
+    descr_data =
+      (path_descr *) realloc (descr_data, descr_max * sizeof (path_descr));
+  }
   SetWeighted (who->weighted);
   descr_nb = who->descr_nb;
   memcpy (descr_data, who->descr_data, descr_nb * sizeof (path_descr));
@@ -129,24 +157,24 @@ void
 Path::Alloue (int addSize)
 {
   if (descr_nb + addSize > descr_max)
-    {
-      descr_max = 2 * descr_nb + addSize;
-      descr_data =
-	(path_descr *) realloc (descr_data, descr_max * sizeof (path_descr));
-    }
+  {
+    descr_max = 2 * descr_nb + addSize;
+    descr_data =
+      (path_descr *) realloc (descr_data, descr_max * sizeof (path_descr));
+  }
 }
 void
 Path::CloseSubpath (int add)
 {
   for (int i = descr_nb - 1; i >= 0; i--)
+  {
+    int ty = (descr_data + i)->flags & descr_type_mask;
+    if (ty == descr_moveto)
     {
-      int ty = (descr_data + i)->flags & descr_type_mask;
-      if (ty == descr_moveto)
-	{
-	  (descr_data + i)->d.m.pathLength = descr_nb - i + add;	// il faut compter le close qui n'est pas encore ajouté
-	  break;
-	}
+      (descr_data + i)->d.m.pathLength = descr_nb - i + add;	// il faut compter le close qui n'est pas encore ajouté
+      break;
     }
+  }
   descr_flags &= ~(descr_doing_subpath);
   pending_moveto = -1;
 }
@@ -157,12 +185,12 @@ Path::ForcePoint (void)
   if (descr_flags & descr_adding_bezier)
     EndBezierTo ();
   if (descr_flags & descr_doing_subpath)
-    {
-    }
+  {
+  }
   else
-    {
-      return -1;
-    }
+  {
+    return -1;
+  }
   if (descr_nb <= 0)
     return -1;
   Alloue (1);
@@ -181,14 +209,14 @@ Path::Close (void)
   if (descr_flags & descr_adding_bezier)
     CancelBezier ();
   if (descr_flags & descr_doing_subpath)
-    {
-      CloseSubpath (1);
-    }
+  {
+    CloseSubpath (1);
+  }
   else
-    {
-      // rien a fermer => byebye
-      return -1;
-    }
+  {
+    // rien a fermer => byebye
+    return -1;
+  }
   Alloue (1);
   path_descr *nElem = descr_data + descr_nb;
   descr_nb++;
@@ -202,13 +230,13 @@ Path::Close (void)
 }
 
 int
-Path::MoveTo (float ix, float iy)
+Path::MoveTo (NR::Point &iPt)
 {
   if (descr_flags & descr_adding_bezier)
-    EndBezierTo (ix, iy);
+    EndBezierTo (iPt);
   if (descr_flags & descr_doing_subpath)
     CloseSubpath (0);
-
+  
   pending_moveto = descr_nb;
   Alloue (1);
   path_descr *nElem = descr_data + descr_nb;
@@ -217,21 +245,20 @@ Path::MoveTo (float ix, float iy)
   nElem->tSt = 0.0;
   nElem->tEn = 1.0;
   nElem->flags = descr_moveto;
-  nElem->d.m.x = ix;
-  nElem->d.m.y = iy;
+  nElem->d.m.p = iPt;
   nElem->d.m.pathLength = 0;
   descr_flags |= descr_doing_subpath;
   return descr_nb - 1;
 }
 
 int
-Path::MoveTo (float ix, float iy, float iw)
+Path::MoveTo (NR::Point &iPt, float iw)
 {
   if (descr_flags & descr_adding_bezier)
-    EndBezierTo (ix, iy, iw);
+    EndBezierTo (iPt, iw);
   if (descr_flags & descr_doing_subpath)
     CloseSubpath (0);
-
+  
   pending_moveto = descr_nb;
   Alloue (1);
   path_descr *nElem = descr_data + descr_nb;
@@ -240,8 +267,7 @@ Path::MoveTo (float ix, float iy, float iw)
   nElem->tSt = 0.0;
   nElem->tEn = 1.0;
   nElem->flags = descr_moveto | descr_weighted;
-  nElem->d.m.x = ix;
-  nElem->d.m.y = iy;
+  nElem->d.m.p = iPt;
   nElem->d.m.w = iw;
   nElem->d.m.pathLength = 0;
   descr_flags |= descr_doing_subpath;
@@ -249,17 +275,17 @@ Path::MoveTo (float ix, float iy, float iw)
 }
 
 int
-Path::LineTo (float ix, float iy)
+Path::LineTo (NR::Point &iPt)
 {
   if (descr_flags & descr_adding_bezier)
-    EndBezierTo (ix, iy);
+    EndBezierTo (iPt);
   if (descr_flags & descr_doing_subpath)
-    {
-    }
+  {
+  }
   else
-    {
-      return MoveTo (ix, iy);
-    }
+  {
+    return MoveTo (iPt);
+  }
   Alloue (1);
   path_descr *nElem = descr_data + descr_nb;
   descr_nb++;
@@ -267,23 +293,22 @@ Path::LineTo (float ix, float iy)
   nElem->tSt = 0.0;
   nElem->tEn = 1.0;
   nElem->flags = descr_lineto;
-  nElem->d.l.x = ix;
-  nElem->d.l.y = iy;
+  nElem->d.l.p = iPt;
   return descr_nb - 1;
 }
 
 int
-Path::LineTo (float ix, float iy, float iw)
+Path::LineTo (NR::Point &iPt, float iw)
 {
   if (descr_flags & descr_adding_bezier)
-    EndBezierTo (ix, iy, iw);
+    EndBezierTo (iPt, iw);
   if (descr_flags & descr_doing_subpath)
-    {
-    }
+  {
+  }
   else
-    {
-      return MoveTo (ix, iy, iw);
-    }
+  {
+    return MoveTo (iPt, iw);
+  }
   Alloue (1);
   path_descr *nElem = descr_data + descr_nb;
   descr_nb++;
@@ -291,25 +316,23 @@ Path::LineTo (float ix, float iy, float iw)
   nElem->tSt = 0.0;
   nElem->tEn = 1.0;
   nElem->flags = descr_lineto | descr_weighted;
-  nElem->d.l.x = ix;
-  nElem->d.l.y = iy;
+  nElem->d.l.p = iPt;
   nElem->d.l.w = iw;
   return descr_nb - 1;
 }
 
 int
-Path::CubicTo (float ix, float iy, float isDx, float isDy, float ieDx,
-	       float ieDy)
+Path::CubicTo (NR::Point &iPt, NR::Point &iStD, NR::Point &iEnD)
 {
   if (descr_flags & descr_adding_bezier)
-    EndBezierTo (ix, iy);
+    EndBezierTo (iPt);
   if (descr_flags & descr_doing_subpath)
-    {
-    }
+  {
+  }
   else
-    {
-      return MoveTo (ix, iy);
-    }
+  {
+    return MoveTo (iPt);
+  }
   Alloue (1);
   path_descr *nElem = descr_data + descr_nb;
   descr_nb++;
@@ -317,28 +340,24 @@ Path::CubicTo (float ix, float iy, float isDx, float isDy, float ieDx,
   nElem->tSt = 0.0;
   nElem->tEn = 1.0;
   nElem->flags = descr_cubicto;
-  nElem->d.c.x = ix;
-  nElem->d.c.y = iy;
-  nElem->d.c.stDx = isDx;
-  nElem->d.c.stDy = isDy;
-  nElem->d.c.enDx = ieDx;
-  nElem->d.c.enDy = ieDy;
+  nElem->d.c.p = iPt;
+  nElem->d.c.stD = iStD;
+  nElem->d.c.enD = iEnD;
   return descr_nb - 1;
 }
 
 int
-Path::CubicTo (float ix, float iy, float isDx, float isDy, float ieDx,
-	       float ieDy, float iw)
+Path::CubicTo (NR::Point &iPt, NR::Point &iStD, NR::Point &iEnD, float iw)
 {
   if (descr_flags & descr_adding_bezier)
-    EndBezierTo (ix, iy, iw);
+    EndBezierTo (iPt, iw);
   if (descr_flags & descr_doing_subpath)
-    {
-    }
+  {
+  }
   else
-    {
-      return MoveTo (ix, iy, iw);
-    }
+  {
+    return MoveTo (iPt, iw);
+  }
   Alloue (1);
   path_descr *nElem = descr_data + descr_nb;
   descr_nb++;
@@ -346,29 +365,26 @@ Path::CubicTo (float ix, float iy, float isDx, float isDy, float ieDx,
   nElem->tSt = 0.0;
   nElem->tEn = 1.0;
   nElem->flags = descr_cubicto | descr_weighted;
-  nElem->d.c.x = ix;
-  nElem->d.c.y = iy;
+  nElem->d.c.p = iPt;
   nElem->d.c.w = iw;
-  nElem->d.c.stDx = isDx;
-  nElem->d.c.stDy = isDy;
-  nElem->d.c.enDx = ieDx;
-  nElem->d.c.enDy = ieDy;
+  nElem->d.c.stD = iStD;
+  nElem->d.c.enD = iEnD;
   return descr_nb - 1;
 }
 
 int
-Path::ArcTo (float ix, float iy, float iRx, float iRy, float angle,
-	     bool iLargeArc, bool iClockwise)
+Path::ArcTo (NR::Point &iPt, float iRx, float iRy, float angle,
+             bool iLargeArc, bool iClockwise)
 {
   if (descr_flags & descr_adding_bezier)
-    EndBezierTo (ix, iy);
+    EndBezierTo (iPt);
   if (descr_flags & descr_doing_subpath)
-    {
-    }
+  {
+  }
   else
-    {
-      return MoveTo (ix, iy);
-    }
+  {
+    return MoveTo (iPt);
+  }
   Alloue (1);
   path_descr *nElem = descr_data + descr_nb;
   descr_nb++;
@@ -376,8 +392,7 @@ Path::ArcTo (float ix, float iy, float iRx, float iRy, float angle,
   nElem->tSt = 0.0;
   nElem->tEn = 1.0;
   nElem->flags = descr_arcto;
-  nElem->d.a.x = ix;
-  nElem->d.a.y = iy;
+  nElem->d.a.p = iPt;
   nElem->d.a.rx = iRx;
   nElem->d.a.ry = iRy;
   nElem->d.a.angle = angle;
@@ -387,18 +402,18 @@ Path::ArcTo (float ix, float iy, float iRx, float iRy, float angle,
 }
 
 int
-Path::ArcTo (float ix, float iy, float iRx, float iRy, float angle,
-	     bool iLargeArc, bool iClockwise, float iw)
+Path::ArcTo (NR::Point &iPt, float iRx, float iRy, float angle,
+             bool iLargeArc, bool iClockwise, float iw)
 {
   if (descr_flags & descr_adding_bezier)
-    EndBezierTo (ix, iy, iw);
+    EndBezierTo (iPt, iw);
   if (descr_flags & descr_doing_subpath)
-    {
-    }
+  {
+  }
   else
-    {
-      return MoveTo (ix, iy, iw);
-    }
+  {
+    return MoveTo (iPt, iw);
+  }
   Alloue (1);
   path_descr *nElem = descr_data + descr_nb;
   descr_nb++;
@@ -406,8 +421,7 @@ Path::ArcTo (float ix, float iy, float iRx, float iRy, float angle,
   nElem->tSt = 0.0;
   nElem->tEn = 1.0;
   nElem->flags = descr_arcto | descr_weighted;
-  nElem->d.a.x = ix;
-  nElem->d.a.y = iy;
+  nElem->d.a.p = iPt;
   nElem->d.a.w = iw;
   nElem->d.a.rx = iRx;
   nElem->d.a.ry = iRy;
@@ -423,13 +437,13 @@ Path::TempBezierTo (void)
   if (descr_flags & descr_adding_bezier)
     CancelBezier ();
   if (descr_flags & descr_doing_subpath)
-    {
-    }
+  {
+  }
   else
-    {
-      // pas de pt de départ-> pas bon
-      return -1;
-    }
+  {
+    // pas de pt de départ-> pas bon
+    return -1;
+  }
   pending_bezier = descr_nb;
   Alloue (1);
   path_descr *nElem = descr_data + descr_nb;
@@ -450,13 +464,13 @@ Path::TempBezierToW (void)
   if (descr_flags & descr_adding_bezier)
     CancelBezier ();
   if (descr_flags & descr_doing_subpath)
-    {
-    }
+  {
+  }
   else
-    {
-      // pas de pt de départ-> pas bon
-      return -1;
-    }
+  {
+    // pas de pt de départ-> pas bon
+    return -1;
+  }
   pending_bezier = descr_nb;
   Alloue (1);
   path_descr *nElem = descr_data + descr_nb;
@@ -486,44 +500,43 @@ int
 Path::EndBezierTo (void)
 {
   if (descr_flags & descr_delayed_bezier)
-    {
-      CancelBezier ();
-    }
+  {
+    CancelBezier ();
+  }
   else
-    {
-      pending_bezier = -1;
-      descr_flags &= ~(descr_adding_bezier);
-      descr_flags &= ~(descr_delayed_bezier);
-    }
+  {
+    pending_bezier = -1;
+    descr_flags &= ~(descr_adding_bezier);
+    descr_flags &= ~(descr_delayed_bezier);
+  }
   return -1;
 }
 
 int
-Path::EndBezierTo (float ix, float iy)
+Path::EndBezierTo (NR::Point &iPt)
 {
   if (descr_flags & descr_adding_bezier)
-    {
-    }
+  {
+  }
   else
-    {
-      return LineTo (ix, iy);
-    }
+  {
+    return LineTo (iPt);
+  }
   if (descr_flags & descr_doing_subpath)
-    {
-    }
+  {
+  }
   else
-    {
-      return MoveTo (ix, iy);
-    }
+  {
+    return MoveTo (iPt);
+  }
   if (descr_flags & descr_delayed_bezier)
-    {
-    }
+  {
+  }
   else
-    {
-      return EndBezierTo ();
-    }
-  (descr_data + pending_bezier)->d.b.x = ix;
-  (descr_data + pending_bezier)->d.b.y = iy;
+  {
+    return EndBezierTo ();
+  }
+  (descr_data + pending_bezier)->d.b.p = iPt;
   if ((descr_data + pending_bezier)->flags & descr_weighted)
     (descr_data + pending_bezier)->d.b.w = 1;
   pending_bezier = -1;
@@ -533,31 +546,30 @@ Path::EndBezierTo (float ix, float iy)
 }
 
 int
-Path::EndBezierTo (float ix, float iy, float iw)
+Path::EndBezierTo (NR::Point &iPt, float iw)
 {
   if (descr_flags & descr_adding_bezier)
-    {
-    }
+  {
+  }
   else
-    {
-      return LineTo (ix, iy, iw);
-    }
+  {
+    return LineTo (iPt, iw);
+  }
   if (descr_flags & descr_doing_subpath)
-    {
-    }
+  {
+  }
   else
-    {
-      return MoveTo (ix, iy, iw);
-    }
+  {
+    return MoveTo (iPt, iw);
+  }
   if (descr_flags & descr_delayed_bezier)
-    {
-    }
+  {
+  }
   else
-    {
-      return EndBezierTo ();
-    }
-  (descr_data + pending_bezier)->d.b.x = ix;
-  (descr_data + pending_bezier)->d.b.y = iy;
+  {
+    return EndBezierTo ();
+  }
+  (descr_data + pending_bezier)->d.b.p = iPt;
   (descr_data + pending_bezier)->d.b.w = iw;
   pending_bezier = -1;
   descr_flags &= ~(descr_adding_bezier);
@@ -566,96 +578,94 @@ Path::EndBezierTo (float ix, float iy, float iw)
 }
 
 int
-Path::IntermBezierTo (float ix, float iy)
+Path::IntermBezierTo (NR::Point &iPt)
 {
   if (descr_flags & descr_adding_bezier)
-    {
-    }
+  {
+  }
   else
-    {
-      return LineTo (ix, iy);
-    }
+  {
+    return LineTo (iPt);
+  }
   if (descr_flags & descr_doing_subpath)
-    {
-    }
+  {
+  }
   else
-    {
-      return MoveTo (ix, iy);
-    }
-
+  {
+    return MoveTo (iPt);
+  }
+  
   if ((descr_data + pending_bezier)->flags & descr_weighted)
-    {
-      return IntermBezierTo (ix, iy, 1);
-    }
+  {
+    return IntermBezierTo (iPt, 1);
+  }
   else
-    {
-      Alloue (1);
-      path_descr *nElem = descr_data + descr_nb;
-      descr_nb++;
-      nElem->associated = -1;
-      nElem->tSt = 0.0;
-      nElem->tEn = 1.0;
-      nElem->flags = descr_interm_bezier;
-      nElem->d.i.x = ix;
-      nElem->d.i.y = iy;
-      (descr_data + pending_bezier)->d.b.nb++;
-      return descr_nb - 1;
-    }
+  {
+    Alloue (1);
+    path_descr *nElem = descr_data + descr_nb;
+    descr_nb++;
+    nElem->associated = -1;
+    nElem->tSt = 0.0;
+    nElem->tEn = 1.0;
+    nElem->flags = descr_interm_bezier;
+    nElem->d.i.p = iPt;
+    (descr_data + pending_bezier)->d.b.nb++;
+    return descr_nb - 1;
+  }
   return -1;
 }
 
 int
-Path::IntermBezierTo (float ix, float iy, float iw)
+Path::IntermBezierTo (NR::Point &iPt, float iw)
 {
   if (descr_flags & descr_adding_bezier)
-    {
-    }
+  {
+  }
   else
-    {
-      return LineTo (ix, iy, iw);
-    }
+  {
+    return LineTo (iPt, iw);
+  }
   if (descr_flags & descr_doing_subpath)
-    {
-    }
+  {
+  }
   else
-    {
-      return MoveTo (ix, iy, iw);
-    }
-
+  {
+    return MoveTo (iPt, iw);
+  }
+  
   if ((descr_data + pending_bezier)->flags & descr_weighted)
-    {
-      Alloue (1);
-      path_descr *nElem = descr_data + descr_nb;
-      descr_nb++;
-      nElem->associated = -1;
-      nElem->tSt = 0.0;
-      nElem->tEn = 1.0;
-      nElem->flags = descr_interm_bezier | descr_weighted;
-      nElem->d.i.x = ix;
-      nElem->d.i.y = iy;
-      nElem->d.i.w = iw;
-      (descr_data + pending_bezier)->d.b.nb++;
-      return descr_nb - 1;
-    }
+  {
+    Alloue (1);
+    path_descr *nElem = descr_data + descr_nb;
+    descr_nb++;
+    nElem->associated = -1;
+    nElem->tSt = 0.0;
+    nElem->tEn = 1.0;
+    nElem->flags = descr_interm_bezier | descr_weighted;
+    nElem->d.i.p = iPt;
+    nElem->d.i.w = iw;
+    (descr_data + pending_bezier)->d.b.nb++;
+    return descr_nb - 1;
+  }
   else
-    {
-      return IntermBezierTo (ix, iy);
-    }
+  {
+    return IntermBezierTo (iPt);
+  }
   return -1;
 }
 
 int
-Path::BezierTo (float ix, float iy)
+Path::BezierTo (NR::Point &iPt)
 {
   if (descr_flags & descr_adding_bezier)
-    EndBezierTo (ix, iy);
+    EndBezierTo (iPt);
   if (descr_flags & descr_doing_subpath)
-    {
-    }
+  {
+  }
   else
-    {
-      return MoveTo (ix, iy);
-    }
+  {
+    return MoveTo (iPt);
+  }
   pending_bezier = descr_nb;
   Alloue (1);
   path_descr *nElem = descr_data + descr_nb;
@@ -665,25 +675,24 @@ Path::BezierTo (float ix, float iy)
   nElem->tEn = 1.0;
   nElem->flags = descr_bezierto;
   nElem->d.b.nb = 0;
-  nElem->d.b.x = ix;
-  nElem->d.b.y = iy;
+  nElem->d.b.p = iPt;
   descr_flags |= descr_adding_bezier;
   descr_flags &= ~(descr_delayed_bezier);
   return descr_nb - 1;
 }
 
 int
-Path::BezierTo (float ix, float iy, float iw)
+Path::BezierTo (NR::Point &iPt, float iw)
 {
   if (descr_flags & descr_adding_bezier)
-    EndBezierTo (ix, iy, iw);
+    EndBezierTo (iPt, iw);
   if (descr_flags & descr_doing_subpath)
-    {
-    }
+  {
+  }
   else
-    {
-      return MoveTo (ix, iy, iw);
-    }
+  {
+    return MoveTo (iPt, iw);
+  }
   pending_bezier = descr_nb;
   Alloue (1);
   path_descr *nElem = descr_data + descr_nb;
@@ -693,8 +702,7 @@ Path::BezierTo (float ix, float iy, float iw)
   nElem->tEn = 1.0;
   nElem->flags = descr_bezierto | descr_weighted;
   nElem->d.b.nb = 0;
-  nElem->d.b.x = ix;
-  nElem->d.b.y = iy;
+  nElem->d.b.p = iPt;
   nElem->d.b.w = iw;
   descr_flags |= descr_adding_bezier;
   descr_flags &= ~(descr_delayed_bezier);
@@ -709,116 +717,115 @@ void
 Path::SetWeighted (bool nVal)
 {
   if (back == false)
+  {
+    if (nVal == true && weighted == false)
     {
-      if (nVal == true && weighted == false)
-	{
-	  weighted = true;
-	  ResetPoints (nbPt);
-	}
-      else if (nVal == false && weighted == true)
-	{
-	  weighted = false;
-	  ResetPoints (nbPt);
-	}
+      weighted = true;
+      ResetPoints (nbPt);
     }
+    else if (nVal == false && weighted == true)
+    {
+      weighted = false;
+      ResetPoints (nbPt);
+    }
+  }
   else
+  {
+    if (nVal == true && weighted == false)
     {
-      if (nVal == true && weighted == false)
-	{
-	  weighted = true;
-	  ResetPoints (nbPt);
-	}
-      else if (nVal == false && weighted == true)
-	{
-	  weighted = false;
-	  ResetPoints (nbPt);
-	}
+      weighted = true;
+      ResetPoints (nbPt);
     }
+    else if (nVal == false && weighted == true)
+    {
+      weighted = false;
+      ResetPoints (nbPt);
+    }
+  }
 }
 void
 Path::SetBackData (bool nVal)
 {
   if (back == false)
+  {
+    if (nVal == true && back == false)
     {
-      if (nVal == true && back == false)
-	{
-	  back = true;
-	  ResetPoints (nbPt);
-	}
-      else if (nVal == false && back == true)
-	{
-	  back = false;
-	  ResetPoints (nbPt);
-	}
+      back = true;
+      ResetPoints (nbPt);
     }
+    else if (nVal == false && back == true)
+    {
+      back = false;
+      ResetPoints (nbPt);
+    }
+  }
   else
+  {
+    if (nVal == true && back == false)
     {
-      if (nVal == true && back == false)
-	{
-	  back = true;
-	  ResetPoints (nbPt);
-	}
-      else if (nVal == false && back == true)
-	{
-	  back = false;
-	  ResetPoints (nbPt);
-	}
+      back = true;
+      ResetPoints (nbPt);
     }
+    else if (nVal == false && back == true)
+    {
+      back = false;
+      ResetPoints (nbPt);
+    }
+  }
 }
 void
 Path::ResetPoints (int expected)
 {
   nbPt = 0;
   if (back)
+  {
+    if (weighted)
     {
-      if (weighted)
-	{
-	  sizePt = expected * sizeof (path_lineto_wb);
-	}
-      else
-	{
-	  sizePt = expected * sizeof (path_lineto_b);
-	}
+      sizePt = expected * sizeof (path_lineto_wb);
     }
+    else
+    {
+      sizePt = expected * sizeof (path_lineto_b);
+    }
+  }
   else
+  {
+    if (weighted)
     {
-      if (weighted)
-	{
-	  sizePt = expected * sizeof (path_lineto_w);
-	}
-      else
-	{
-	  sizePt = expected * sizeof (path_lineto);
-	}
+      sizePt = expected * sizeof (path_lineto_w);
     }
+    else
+    {
+      sizePt = expected * sizeof (path_lineto);
+    }
+  }
   if (sizePt > maxPt)
-    {
-      maxPt = sizePt;
-      pts = (char *) realloc (pts, maxPt);
-    }
+  {
+    maxPt = sizePt;
+    pts = (char *) realloc (pts, maxPt);
+  }
 }
 int
-Path::AddPoint (float ix, float iy, bool mvto)
+Path::AddPoint (NR::Point &iPt, bool mvto)
 {
   if (back)
-    {
-      return AddPoint (ix, iy, -1, 0.0, mvto);
-    }
+  {
+    return AddPoint (iPt, -1, 0.0, mvto);
+  }
   else
+  {
+    if (weighted)
     {
-      if (weighted)
-	{
-	  return AddPoint (ix, iy, 1.0, mvto);
-	}
+      return AddPoint (iPt, 1.0, mvto);
     }
+  }
   int nextSize = sizePt + sizeof (path_lineto);
   if (nextSize > maxPt)
-    {
-      maxPt = 2 * sizePt + sizeof (path_lineto);
-      pts = (char *) realloc (pts, maxPt);
-    }
-  if (mvto == false && nbPt > 0 && ((path_lineto *) pts)[nbPt - 1].x == ix
-      && ((path_lineto *) pts)[nbPt - 1].y == iy)
+  {
+    maxPt = 2 * sizePt + sizeof (path_lineto);
+    pts = (char *) realloc (pts, maxPt);
+  }
+  if (mvto == false && nbPt > 0 && ((path_lineto *) pts)[nbPt - 1].p == iPt)
     return -1;
   int n = nbPt++;
   sizePt = nextSize;
@@ -826,36 +833,34 @@ Path::AddPoint (float ix, float iy, bool mvto)
     ((path_lineto *) pts)[n].isMoveTo = polyline_moveto;
   else
     ((path_lineto *) pts)[n].isMoveTo = polyline_lineto;
-  ((path_lineto *) pts)[n].x = ix;
-  ((path_lineto *) pts)[n].y = iy;
+  ((path_lineto *) pts)[n].p = iPt;
   return n;
 }
 
 int
-Path::AddPoint (float ix, float iy, float iw, bool mvto)
+Path::AddPoint (NR::Point &iPt, float iw, bool mvto)
 {
   if (back)
-    {
-      return AddPoint (ix, iy, iw, -1, 0.0, mvto);
-    }
+  {
+    return AddPoint (iPt, iw, -1, 0.0, mvto);
+  }
   else
+  {
+    if (weighted)
     {
-      if (weighted)
-	{
-	}
-      else
-	{
-	  return AddPoint (ix, iy, mvto);
-	}
     }
+    else
+    {
+      return AddPoint (iPt, mvto);
+    }
+  }
   int nextSize = sizePt + sizeof (path_lineto_w);
   if (nextSize > maxPt)
-    {
-      maxPt = 2 * sizePt + sizeof (path_lineto_w);
-      pts = (char *) realloc (pts, maxPt);
-    }
-  if (mvto == false && nbPt > 0 && ((path_lineto_w *) pts)[nbPt - 1].x == ix
-      && ((path_lineto_w *) pts)[nbPt - 1].y == iy)
+  {
+    maxPt = 2 * sizePt + sizeof (path_lineto_w);
+    pts = (char *) realloc (pts, maxPt);
+  }
+  if (mvto == false && nbPt > 0 && ((path_lineto_w *) pts)[nbPt - 1].p == iPt)
     return -1;
   int n = nbPt++;
   sizePt = nextSize;
@@ -863,34 +868,32 @@ Path::AddPoint (float ix, float iy, float iw, bool mvto)
     ((path_lineto_w *) pts)[n].isMoveTo = polyline_moveto;
   else
     ((path_lineto_w *) pts)[n].isMoveTo = polyline_lineto;
-  ((path_lineto_w *) pts)[n].x = ix;
-  ((path_lineto_w *) pts)[n].y = iy;
+  ((path_lineto_w *) pts)[n].p = iPt;
   ((path_lineto_w *) pts)[n].w = iw;
   return n;
 }
 
 int
-Path::AddPoint (float ix, float iy, int ip, float it, bool mvto)
+Path::AddPoint (NR::Point &iPt, int ip, float it, bool mvto)
 {
   if (back)
+  {
+    if (weighted)
     {
-      if (weighted)
-	{
-	  return AddPoint (ix, iy, 1.0, ip, it, mvto);
-	}
+      return AddPoint (iPt, 1.0, ip, it, mvto);
     }
+  }
   else
-    {
-      return AddPoint (ix, iy, mvto);
-    }
+  {
+    return AddPoint (iPt, mvto);
+  }
   int nextSize = sizePt + sizeof (path_lineto_b);
   if (nextSize > maxPt)
-    {
-      maxPt = 2 * sizePt + sizeof (path_lineto_b);
-      pts = (char *) realloc (pts, maxPt);
-    }
-  if (mvto == false && nbPt > 0 && ((path_lineto_b *) pts)[nbPt - 1].x == ix
-      && ((path_lineto_b *) pts)[nbPt - 1].y == iy)
+  {
+    maxPt = 2 * sizePt + sizeof (path_lineto_b);
+    pts = (char *) realloc (pts, maxPt);
+  }
+  if (mvto == false && nbPt > 0 && ((path_lineto_b *) pts)[nbPt - 1].p == iPt)
     return -1;
   int n = nbPt++;
   sizePt = nextSize;
@@ -898,38 +901,36 @@ Path::AddPoint (float ix, float iy, int ip, float it, bool mvto)
     ((path_lineto_b *) pts)[n].isMoveTo = polyline_moveto;
   else
     ((path_lineto_b *) pts)[n].isMoveTo = polyline_lineto;
-  ((path_lineto_b *) pts)[n].x = ix;
-  ((path_lineto_b *) pts)[n].y = iy;
+  ((path_lineto_b *) pts)[n].p = iPt;
   ((path_lineto_b *) pts)[n].piece = ip;
   ((path_lineto_b *) pts)[n].t = it;
   return n;
 }
 
 int
-Path::AddPoint (float ix, float iy, float iw, int ip, float it, bool mvto)
+Path::AddPoint (NR::Point &iPt, float iw, int ip, float it, bool mvto)
 {
   if (back)
+  {
+    if (weighted)
     {
-      if (weighted)
-	{
-	}
-      else
-	{
-	  return AddPoint (ix, iy, ip, it, mvto);
-	}
     }
+    else
+    {
+      return AddPoint (iPt, ip, it, mvto);
+    }
+  }
   else
-    {
-      return AddPoint (ix, iy, iw, mvto);
-    }
+  {
+    return AddPoint (iPt, iw, mvto);
+  }
   int nextSize = sizePt + sizeof (path_lineto_wb);
   if (nextSize > maxPt)
-    {
-      maxPt = 2 * sizePt + sizeof (path_lineto_wb);
-      pts = (char *) realloc (pts, maxPt);
-    }
-  if (mvto == false && nbPt > 0 && ((path_lineto_wb *) pts)[nbPt - 1].x == ix
-      && ((path_lineto_wb *) pts)[nbPt - 1].y == iy)
+  {
+    maxPt = 2 * sizePt + sizeof (path_lineto_wb);
+    pts = (char *) realloc (pts, maxPt);
+  }
+  if (mvto == false && nbPt > 0 && ((path_lineto_wb *) pts)[nbPt - 1].p == iPt )
     return -1;
   int n = nbPt++;
   sizePt = nextSize;
@@ -937,8 +938,7 @@ Path::AddPoint (float ix, float iy, float iw, int ip, float it, bool mvto)
     ((path_lineto_wb *) pts)[n].isMoveTo = polyline_moveto;
   else
     ((path_lineto_wb *) pts)[n].isMoveTo = polyline_lineto;
-  ((path_lineto_wb *) pts)[n].x = ix;
-  ((path_lineto_wb *) pts)[n].y = iy;
+  ((path_lineto_wb *) pts)[n].p = iPt;
   ((path_lineto_wb *) pts)[n].w = iw;
   ((path_lineto_wb *) pts)[n].piece = ip;
   ((path_lineto_wb *) pts)[n].t = it;
@@ -946,135 +946,131 @@ Path::AddPoint (float ix, float iy, float iw, int ip, float it, bool mvto)
 }
 
 int
-Path::AddForcedPoint (float ix, float iy)
+Path::AddForcedPoint (NR::Point &iPt)
 {
   if (back)
-    {
-      return AddForcedPoint (ix, iy, -1, 0.0);
-    }
+  {
+    return AddForcedPoint (iPt, -1, 0.0);
+  }
   else
+  {
+    if (weighted)
     {
-      if (weighted)
-	{
-	  return AddForcedPoint (ix, iy, 1.0);
-	}
+      return AddForcedPoint (iPt, 1.0);
     }
+  }
   int nextSize = sizePt + sizeof (path_lineto);
   if (nextSize > maxPt)
-    {
-      maxPt = 2 * sizePt + sizeof (path_lineto);
-      pts = (char *) realloc (pts, maxPt);
-    }
+  {
+    maxPt = 2 * sizePt + sizeof (path_lineto);
+    pts = (char *) realloc (pts, maxPt);
+  }
   if (nbPt <= 0
       || ((path_lineto *) pts)[nbPt - 1].isMoveTo != polyline_lineto)
     return -1;
   int n = nbPt++;
   sizePt = nextSize;
   ((path_lineto *) pts)[n].isMoveTo = polyline_forced;
-  ((path_lineto *) pts)[n].x = ((path_lineto *) pts)[n - 1].x;
-  ((path_lineto *) pts)[n].y = ((path_lineto *) pts)[n - 1].y;
+  ((path_lineto *) pts)[n].p = ((path_lineto *) pts)[n - 1].p;
   return n;
 }
 
 int
-Path::AddForcedPoint (float ix, float iy, float iw)
+Path::AddForcedPoint (NR::Point &iPt, float iw)
 {
   if (back)
-    {
-      return AddForcedPoint (ix, iy, iw, -1, 0.0);
-    }
+  {
+    return AddForcedPoint (iPt, iw, -1, 0.0);
+  }
   else
+  {
+    if (weighted)
     {
-      if (weighted)
-	{
-	}
-      else
-	{
-	  return AddForcedPoint (ix, iy);
-	}
     }
+    else
+    {
+      return AddForcedPoint (iPt);
+    }
+  }
   int nextSize = sizePt + sizeof (path_lineto_w);
   if (nextSize > maxPt)
-    {
-      maxPt = 2 * sizePt + sizeof (path_lineto_w);
-      pts = (char *) realloc (pts, maxPt);
-    }
+  {
+    maxPt = 2 * sizePt + sizeof (path_lineto_w);
+    pts = (char *) realloc (pts, maxPt);
+  }
   if (nbPt <= 0
       || ((path_lineto_w *) pts)[nbPt - 1].isMoveTo != polyline_lineto)
     return -1;
   int n = nbPt++;
   sizePt = nextSize;
   ((path_lineto_w *) pts)[n].isMoveTo = polyline_forced;
-  ((path_lineto_w *) pts)[n].x = ((path_lineto_w *) pts)[n - 1].x;
-  ((path_lineto_w *) pts)[n].y = ((path_lineto_w *) pts)[n - 1].y;
+  ((path_lineto_w *) pts)[n].p = ((path_lineto_w *) pts)[n - 1].p;
   ((path_lineto_w *) pts)[n].w = ((path_lineto_w *) pts)[n - 1].w;
   return n;
 }
 
 int
-Path::AddForcedPoint (float ix, float iy, int ip, float it)
+Path::AddForcedPoint (NR::Point &iPt, int ip, float it)
 {
   if (back)
+  {
+    if (weighted)
     {
-      if (weighted)
-	{
-	  return AddForcedPoint (ix, iy, 1.0, ip, it);
-	}
+      return AddForcedPoint (iPt, 1.0, ip, it);
     }
+  }
   else
-    {
-      return AddForcedPoint (ix, iy);
-    }
+  {
+    return AddForcedPoint (iPt);
+  }
   int nextSize = sizePt + sizeof (path_lineto_b);
   if (nextSize > maxPt)
-    {
-      maxPt = 2 * sizePt + sizeof (path_lineto_b);
-      pts = (char *) realloc (pts, maxPt);
-    }
+  {
+    maxPt = 2 * sizePt + sizeof (path_lineto_b);
+    pts = (char *) realloc (pts, maxPt);
+  }
   if (nbPt <= 0
       || ((path_lineto_b *) pts)[nbPt - 1].isMoveTo != polyline_lineto)
     return -1;
   int n = nbPt++;
   sizePt = nextSize;
   ((path_lineto_b *) pts)[n].isMoveTo = polyline_forced;
-  ((path_lineto_b *) pts)[n].x = ((path_lineto_b *) pts)[n - 1].x;
-  ((path_lineto_b *) pts)[n].y = ((path_lineto_b *) pts)[n - 1].y;
+  ((path_lineto_b *) pts)[n].p = ((path_lineto_b *) pts)[n - 1].p;
   ((path_lineto_b *) pts)[n].piece = ((path_lineto_b *) pts)[n - 1].piece;
   ((path_lineto_b *) pts)[n].t = ((path_lineto_b *) pts)[n - 1].t;
   return n;
 }
 
 int
-Path::AddForcedPoint (float ix, float iy, float iw, int ip, float it)
+Path::AddForcedPoint (NR::Point &iPt, float iw, int ip, float it)
 {
   if (back)
+  {
+    if (weighted)
     {
-      if (weighted)
-	{
-	}
-      else
-	{
-	  return AddForcedPoint (ix, iy, ip, it);
-	}
     }
+    else
+    {
+      return AddForcedPoint (iPt, ip, it);
+    }
+  }
   else
-    {
-      return AddForcedPoint (ix, iy, iw);
-    }
+  {
+    return AddForcedPoint (iPt, iw);
+  }
   int nextSize = sizePt + sizeof (path_lineto_wb);
   if (nextSize > maxPt)
-    {
-      maxPt = 2 * sizePt + sizeof (path_lineto_wb);
-      pts = (char *) realloc (pts, maxPt);
-    }
+  {
+    maxPt = 2 * sizePt + sizeof (path_lineto_wb);
+    pts = (char *) realloc (pts, maxPt);
+  }
   if (nbPt <= 0
       || ((path_lineto *) pts)[nbPt - 1].isMoveTo != polyline_lineto)
     return -1;
   int n = nbPt++;
   sizePt = nextSize;
   ((path_lineto_wb *) pts)[n].isMoveTo = polyline_forced;
-  ((path_lineto_wb *) pts)[n].x = ((path_lineto_wb *) pts)[n - 1].x;
-  ((path_lineto_wb *) pts)[n].y = ((path_lineto_wb *) pts)[n - 1].y;
+  ((path_lineto_wb *) pts)[n].p = ((path_lineto_wb *) pts)[n - 1].p;
   ((path_lineto_wb *) pts)[n].w = ((path_lineto_wb *) pts)[n - 1].w;
   ((path_lineto_wb *) pts)[n].piece = ((path_lineto_wb *) pts)[n - 1].piece;
   ((path_lineto_wb *) pts)[n].t = ((path_lineto_wb *) pts)[n - 1].t;
@@ -1084,293 +1080,264 @@ Path::AddForcedPoint (float ix, float iy, float iw, int ip, float it)
 int
 Path::Winding (void)
 {
-  if (nbPt <= 1)
-    return 0;
+  // dead code; was used to compute the winding number of a path (a path without self-intersections)
+  return 0;
+  /*  if (nbPt <= 1)
+  return 0;
   float sum = 0;
   if (weighted)
+{
+    for (int i = 0; i < nbPt - 1; i++)
     {
-      for (int i = 0; i < nbPt - 1; i++)
-	{
-	  sum +=
+      sum +=
 	    (((path_lineto_w *) pts)[i].x +
 	     ((path_lineto_w *) pts)[i + 1].x) * (((path_lineto_w *) pts)[i +
-									  1].
-						  y -
-						  ((path_lineto_w *) pts)[i].
-						  y);
-	}
-      sum +=
-	(((path_lineto_w *) pts)[nbPt - 1].x +
-	 ((path_lineto_w *) pts)[0].x) * (((path_lineto_w *) pts)[0].y -
-					  ((path_lineto_w *) pts)[nbPt -
-								  1].y);
+         1].
+                                            y -
+                                            ((path_lineto_w *) pts)[i].
+                                            y);
     }
-  else
-    {
-      for (int i = 0; i < nbPt - 1; i++)
+    sum +=
+    (((path_lineto_w *) pts)[nbPt - 1].x +
+     ((path_lineto_w *) pts)[0].x) * (((path_lineto_w *) pts)[0].y -
+                                      ((path_lineto_w *) pts)[nbPt -
+                                        1].y);
+}
+else
+{
+  for (int i = 0; i < nbPt - 1; i++)
 	{
 	  sum +=
-	    (((path_lineto *) pts)[i].x +
-	     ((path_lineto *) pts)[i + 1].x) * (((path_lineto *) pts)[i +
-								      1].y -
-						((path_lineto *) pts)[i].y);
+    (((path_lineto *) pts)[i].x +
+     ((path_lineto *) pts)[i + 1].x) * (((path_lineto *) pts)[i +
+       1].y -
+                                        ((path_lineto *) pts)[i].y);
 	}
-      sum +=
+  sum +=
 	(((path_lineto *) pts)[nbPt - 1].x +
 	 ((path_lineto *) pts)[0].x) * (((path_lineto *) pts)[0].y -
-					((path_lineto *) pts)[nbPt - 1].y);
-    }
-  return (sum > 0) ? 1 : -1;
+                                  ((path_lineto *) pts)[nbPt - 1].y);
+}
+return (sum > 0) ? 1 : -1;*/
 }
 
 // utilities
 void
-Path::PointAt (int piece, float at, vec2 & pos)
+Path::PointAt (int piece, float at, NR::Point & pos)
 {
   if (piece < 0 || piece >= descr_nb)
-    {
-      pos.x = pos.y = 0;
-      return;
-    }
+  {
+    // this shouldn't happen: the piece we are asked for doesn't exist in the path
+    pos.pt[0] = pos.pt[1] = 0;
+    return;
+  }
   path_descr theD = descr_data[piece];
   int typ = theD.flags & descr_type_mask;
   if (typ == descr_moveto)
-    {
-      return PointAt (piece + 1, 0.0, pos);
-    }
+  {
+    return PointAt (piece + 1, 0.0, pos);
+  }
   else if (typ == descr_close || typ == descr_forced)
-    {
-      return PointAt (piece - 1, 1.0, pos);
-    }
+  {
+    return PointAt (piece - 1, 1.0, pos);
+  }
   else if (typ == descr_lineto)
-    {
-      vec2 stP;
-      PrevPoint (piece - 1, stP.x, stP.y);
-      vec2 tgt;
-      float len;
-      TangentOnSegAt (at, stP.x, stP.y, theD.d.l, pos, tgt, len);
-    }
+  {
+    NR::Point stP;
+    PrevPoint (piece - 1, stP);
+    NR::Point tgt;
+    float len;
+    TangentOnSegAt (at, stP, theD.d.l, pos, tgt, len);
+  }
   else if (typ == descr_arcto)
-    {
-      vec2 stP;
-      PrevPoint (piece - 1, stP.x, stP.y);
-      vec2 tgt;
-      float len, rad;
-      TangentOnArcAt (at, stP.x, stP.y, theD.d.a, pos, tgt, len, rad);
-    }
+  {
+    NR::Point stP;
+    PrevPoint (piece - 1, stP);
+    NR::Point tgt;
+    float len, rad;
+    TangentOnArcAt (at,stP, theD.d.a, pos, tgt, len, rad);
+  }
   else if (typ == descr_cubicto)
-    {
-      vec2 stP;
-      PrevPoint (piece - 1, stP.x, stP.y);
-      vec2 tgt;
-      float len, rad;
-      TangentOnCubAt (at, stP.x, stP.y, theD.d.c, false, pos, tgt, len, rad);
-    }
+  {
+    NR::Point stP;
+    PrevPoint (piece - 1, stP);
+    NR::Point tgt;
+    float len, rad;
+    TangentOnCubAt (at, stP, theD.d.c, false, pos, tgt, len, rad);
+  }
   else if (typ == descr_bezierto || typ == descr_interm_bezier)
+  {
+    int bez_st = piece;
+    while (bez_st >= 0)
     {
-      int bez_st = piece;
-      while (bez_st >= 0)
-	{
-	  int nt = descr_data[bez_st].flags & descr_type_mask;
-	  if (nt == descr_bezierto)
-	    break;
-	  bez_st--;
-	}
-      if (bez_st < 0)
-	return PointAt (piece - 1, 1.0, pos);
-
-      path_descr_bezierto_w stB = descr_data[bez_st].d.b;
-      if (piece > bez_st + stB.nb)
-	return PointAt (piece - 1, 1.0, pos);
-      int k = piece - bez_st;
-      if (stB.nb == 1 || k <= 0)
-	{
-	  vec2 stP;
-	  PrevPoint (bez_st - 1, stP.x, stP.y);
-	  vec2 tgt;
-	  float len, rad;
-	  TangentOnBezAt (at, stP.x, stP.y, descr_data[bez_st + 1].d.i,
-			  descr_data[bez_st].d.b, false, pos, tgt, len, rad);
-	}
-      else
-	{
-	  // forcement plus grand que 1
-	  if (k == 1)
-	    {
-	      vec2 stP;
-	      PrevPoint (bez_st - 1, stP.x, stP.y);
-	      vec2 tgt;
-	      float len, rad;
-	      path_descr_bezierto fin;
-	      fin.nb = 1;
-	      fin.x =
-		(descr_data[bez_st + 1].d.i.x +
-		 descr_data[bez_st + 2].d.i.x) / 2;
-	      fin.y =
-		(descr_data[bez_st + 1].d.i.y +
-		 descr_data[bez_st + 2].d.i.y) / 2;
-	      TangentOnBezAt (at, stP.x, stP.y, descr_data[bez_st + 1].d.i,
-			      fin, false, pos, tgt, len, rad);
-	    }
-	  else if (k == stB.nb)
-	    {
-	      vec2 stP;
-	      vec2 tgt;
-	      float len, rad;
-	      stP.x =
-		(descr_data[bez_st + k].d.i.x +
-		 descr_data[bez_st + k - 1].d.i.x) / 2;
-	      stP.y =
-		(descr_data[bez_st + k].d.i.y +
-		 descr_data[bez_st + k - 1].d.i.y) / 2;
-	      TangentOnBezAt (at, stP.x, stP.y, descr_data[bez_st + k].d.i,
-			      descr_data[bez_st].d.b, false, pos, tgt, len,
-			      rad);
-	    }
-	  else
-	    {
-	      vec2 stP;
-	      vec2 tgt;
-	      float len, rad;
-	      stP.x =
-		(descr_data[bez_st + k].d.i.x +
-		 descr_data[bez_st + k - 1].d.i.x) / 2;
-	      stP.y =
-		(descr_data[bez_st + k].d.i.y +
-		 descr_data[bez_st + k - 1].d.i.y) / 2;
-	      path_descr_bezierto fin;
-	      fin.nb = 1;
-	      fin.x =
-		(descr_data[bez_st + k].d.i.x +
-		 descr_data[bez_st + k + 1].d.i.x) / 2;
-	      fin.y =
-		(descr_data[bez_st + k].d.i.y +
-		 descr_data[bez_st + k + 1].d.i.y) / 2;
-	      TangentOnBezAt (at, stP.x, stP.y, descr_data[bez_st + k].d.i,
-			      fin, false, pos, tgt, len, rad);
-	    }
-	}
+      int nt = descr_data[bez_st].flags & descr_type_mask;
+      if (nt == descr_bezierto)
+        break;
+      bez_st--;
     }
+    if (bez_st < 0)
+      return PointAt (piece - 1, 1.0, pos);
+    
+    path_descr_bezierto_w stB = descr_data[bez_st].d.b;
+    if (piece > bez_st + stB.nb)
+      return PointAt (piece - 1, 1.0, pos);
+    int k = piece - bez_st;
+    if (stB.nb == 1 || k <= 0)
+    {
+      NR::Point stP;
+      PrevPoint (bez_st - 1, stP);
+      NR::Point tgt;
+      float len, rad;
+      TangentOnBezAt (at, stP, descr_data[bez_st + 1].d.i,
+                      descr_data[bez_st].d.b, false, pos, tgt, len, rad);
+    }
+    else
+    {
+      // forcement plus grand que 1
+      if (k == 1)
+	    {
+	      NR::Point stP;
+	      PrevPoint (bez_st - 1, stP);
+	      NR::Point tgt;
+	      float len, rad;
+	      path_descr_bezierto fin;
+	      fin.nb = 1;
+	      fin.p = 0.5*(descr_data[bez_st + 1].d.i.p +
+           descr_data[bez_st + 2].d.i.p) ;
+	      TangentOnBezAt (at, stP, descr_data[bez_st + 1].d.i,
+                        fin, false, pos, tgt, len, rad);
+	    }
+      else if (k == stB.nb)
+	    {
+	      NR::Point stP;
+	      NR::Point tgt;
+	      float len, rad;
+	      stP = 0.5*(descr_data[bez_st + k].d.i.p +
+           descr_data[bez_st + k - 1].d.i.p) ;
+	      TangentOnBezAt (at, stP, descr_data[bez_st + k].d.i,
+                        descr_data[bez_st].d.b, false, pos, tgt, len,
+                        rad);
+	    }
+      else
+	    {
+	      NR::Point stP;
+	      NR::Point tgt;
+	      float len, rad;
+	      stP = 0.5* (descr_data[bez_st + k].d.i.p +
+           descr_data[bez_st + k - 1].d.i.p);
+	      path_descr_bezierto fin;
+	      fin.nb = 1;
+	      fin.p = 0.5* (descr_data[bez_st + k].d.i.p +
+           descr_data[bez_st + k + 1].d.i.p);
+	      TangentOnBezAt (at, stP, descr_data[bez_st + k].d.i,
+                        fin, false, pos, tgt, len, rad);
+	    }
+    }
+  }
 }
 void
-Path::PointAndTangentAt (int piece, float at, vec2 & pos, vec2 & tgt)
+Path::PointAndTangentAt (int piece, float at, NR::Point & pos, NR::Point & tgt)
 {
   if (piece < 0 || piece >= descr_nb)
-    {
-      pos.x = pos.y = 0;
-      tgt.x = tgt.y = 0;
-      return;
-    }
+  {
+    pos.pt[0] = pos.pt[1] = 0;
+    tgt.pt[0] = tgt.pt[1] = 0;
+    return;
+  }
   path_descr theD = descr_data[piece];
   int typ = theD.flags & descr_type_mask;
   if (typ == descr_moveto)
-    {
-      return PointAndTangentAt (piece + 1, 0.0, pos, tgt);
-    }
+  {
+    return PointAndTangentAt (piece + 1, 0.0, pos, tgt);
+  }
   else if (typ == descr_close || typ == descr_forced)
-    {
-      return PointAndTangentAt (piece - 1, 1.0, pos, tgt);
-    }
+  {
+    return PointAndTangentAt (piece - 1, 1.0, pos, tgt);
+  }
   else if (typ == descr_lineto)
-    {
-      vec2 stP;
-      PrevPoint (piece - 1, stP.x, stP.y);
-      float len;
-      TangentOnSegAt (at, stP.x, stP.y, theD.d.l, pos, tgt, len);
-    }
+  {
+    NR::Point stP;
+    PrevPoint (piece - 1,stP);
+    float len;
+    TangentOnSegAt (at,stP, theD.d.l, pos, tgt, len);
+  }
   else if (typ == descr_arcto)
-    {
-      vec2 stP;
-      PrevPoint (piece - 1, stP.x, stP.y);
-      float len, rad;
-      TangentOnArcAt (at, stP.x, stP.y, theD.d.a, pos, tgt, len, rad);
-    }
+  {
+    NR::Point stP;
+    PrevPoint (piece - 1,stP);
+    float len, rad;
+    TangentOnArcAt (at,stP, theD.d.a, pos, tgt, len, rad);
+  }
   else if (typ == descr_cubicto)
-    {
-      vec2 stP;
-      PrevPoint (piece - 1, stP.x, stP.y);
-      float len, rad;
-      TangentOnCubAt (at, stP.x, stP.y, theD.d.c, false, pos, tgt, len, rad);
-    }
+  {
+    NR::Point stP;
+    PrevPoint (piece - 1,stP);
+    float len, rad;
+    TangentOnCubAt (at,stP, theD.d.c, false, pos, tgt, len, rad);
+  }
   else if (typ == descr_bezierto || typ == descr_interm_bezier)
+  {
+    int bez_st = piece;
+    while (bez_st >= 0)
     {
-      int bez_st = piece;
-      while (bez_st >= 0)
-	{
-	  int nt = descr_data[bez_st].flags & descr_type_mask;
-	  if (nt == descr_bezierto)
-	    break;
-	  bez_st--;
-	}
-      if (bez_st < 0)
-	return PointAndTangentAt (piece - 1, 1.0, pos, tgt);
-
-      path_descr_bezierto_w stB = descr_data[bez_st].d.b;
-      if (piece > bez_st + stB.nb)
-	return PointAndTangentAt (piece - 1, 1.0, pos, tgt);
-      int k = piece - bez_st;
-      if (stB.nb == 1 || k <= 0)
-	{
-	  vec2 stP;
-	  PrevPoint (bez_st - 1, stP.x, stP.y);
-	  float len, rad;
-	  TangentOnBezAt (at, stP.x, stP.y, descr_data[bez_st + 1].d.i,
-			  descr_data[bez_st].d.b, false, pos, tgt, len, rad);
-	}
-      else
-	{
-	  // forcement plus grand que 1
-	  if (k == 1)
-	    {
-	      vec2 stP;
-	      PrevPoint (bez_st - 1, stP.x, stP.y);
-	      float len, rad;
-	      path_descr_bezierto fin;
-	      fin.nb = 1;
-	      fin.x =
-		(descr_data[bez_st + 1].d.i.x +
-		 descr_data[bez_st + 2].d.i.x) / 2;
-	      fin.y =
-		(descr_data[bez_st + 1].d.i.y +
-		 descr_data[bez_st + 2].d.i.y) / 2;
-	      TangentOnBezAt (at, stP.x, stP.y, descr_data[bez_st + 1].d.i,
-			      fin, false, pos, tgt, len, rad);
-	    }
-	  else if (k == stB.nb)
-	    {
-	      vec2 stP;
-	      float len, rad;
-	      stP.x =
-		(descr_data[bez_st + k].d.i.x +
-		 descr_data[bez_st + k - 1].d.i.x) / 2;
-	      stP.y =
-		(descr_data[bez_st + k].d.i.y +
-		 descr_data[bez_st + k - 1].d.i.y) / 2;
-	      TangentOnBezAt (at, stP.x, stP.y, descr_data[bez_st + k].d.i,
-			      descr_data[bez_st].d.b, false, pos, tgt, len,
-			      rad);
-	    }
-	  else
-	    {
-	      vec2 stP;
-	      float len, rad;
-	      stP.x =
-		(descr_data[bez_st + k].d.i.x +
-		 descr_data[bez_st + k - 1].d.i.x) / 2;
-	      stP.y =
-		(descr_data[bez_st + k].d.i.y +
-		 descr_data[bez_st + k - 1].d.i.y) / 2;
-	      path_descr_bezierto fin;
-	      fin.nb = 1;
-	      fin.x =
-		(descr_data[bez_st + k].d.i.x +
-		 descr_data[bez_st + k + 1].d.i.x) / 2;
-	      fin.y =
-		(descr_data[bez_st + k].d.i.y +
-		 descr_data[bez_st + k + 1].d.i.y) / 2;
-	      TangentOnBezAt (at, stP.x, stP.y, descr_data[bez_st + k].d.i,
-			      fin, false, pos, tgt, len, rad);
-	    }
-	}
+      int nt = descr_data[bez_st].flags & descr_type_mask;
+      if (nt == descr_bezierto)
+        break;
+      bez_st--;
     }
+    if (bez_st < 0)
+      return PointAndTangentAt (piece - 1, 1.0, pos, tgt);
+    
+    path_descr_bezierto_w stB = descr_data[bez_st].d.b;
+    if (piece > bez_st + stB.nb)
+      return PointAndTangentAt (piece - 1, 1.0, pos, tgt);
+    int k = piece - bez_st;
+    if (stB.nb == 1 || k <= 0)
+    {
+      NR::Point stP;
+      PrevPoint (bez_st - 1,stP);
+      float len, rad;
+      TangentOnBezAt (at,stP, descr_data[bez_st + 1].d.i,
+                      descr_data[bez_st].d.b, false, pos, tgt, len, rad);
+    }
+    else
+    {
+      // forcement plus grand que 1
+      if (k == 1)
+	    {
+	      NR::Point stP;
+	      PrevPoint (bez_st - 1,stP);
+	      float len, rad;
+	      path_descr_bezierto fin;
+	      fin.nb = 1;
+	      fin.p = 0.5*(descr_data[bez_st + 1].d.i.p +
+           descr_data[bez_st + 2].d.i.p);
+	      TangentOnBezAt (at,stP, descr_data[bez_st + 1].d.i,
+                        fin, false, pos, tgt, len, rad);
+	    }
+      else if (k == stB.nb)
+	    {
+	      NR::Point stP;
+	      float len, rad;
+	      stP = 0.5*(descr_data[bez_st + k].d.i.p +
+           descr_data[bez_st + k - 1].d.i.p) ;
+	      TangentOnBezAt (at,stP, descr_data[bez_st + k].d.i,
+                        descr_data[bez_st].d.b, false, pos, tgt, len,
+                        rad);
+	    }
+      else
+	    {
+	      NR::Point stP;
+	      float len, rad;
+	      stP = 0.5* (descr_data[bez_st + k].d.i.p +
+           descr_data[bez_st + k - 1].d.i.p);
+	      path_descr_bezierto fin;
+	      fin.nb = 1;
+	      fin.p = 0.5* (descr_data[bez_st + k].d.i.p +
+           descr_data[bez_st + k + 1].d.i.p) ;
+	      TangentOnBezAt (at,stP, descr_data[bez_st + k].d.i,
+                        fin, false, pos, tgt, len, rad);
+	    }
+    }
+  }
 }

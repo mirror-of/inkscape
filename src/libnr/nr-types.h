@@ -99,10 +99,31 @@ class Point{
 		}
 		return *this;
 	}
-
+  
+	Point &operator-=(Point const &o) {
+		for(unsigned i = 0; i < 2; ++i) {
+			pt[i] -= o.pt[i];
+		}
+		return *this;
+	}
+  
 	Point &operator/=(double s) {
 		for(unsigned i = 0; i < 2; ++i) {
 			pt[i] /= s;
+		}
+		return *this;
+	}
+
+	Point &operator*=(double s) {
+		for(unsigned i = 0; i < 2; ++i) {
+			pt[i] *= s;
+		}
+		return *this;
+	}
+  
+	Point &operator*=(Point const &s) {
+		for(unsigned i = 0; i < 2; ++i) {
+			pt[i] *= s[i];
 		}
 		return *this;
 	}
@@ -123,6 +144,14 @@ operator-(Point const &a, Point const &b) {
 	for(int i = 0; i < 2; i++) {
 		r.pt[i] = a.pt[i] - b.pt[i];
 	}
+	return r;
+}
+
+inline Point
+operator^(Point const &a, Point const &b) { // this is a rotation (sort of)
+	Point r;
+  r.pt[0] = a.pt[0] * b.pt[0] - a.pt[1] * b.pt[1];
+  r.pt[1] = a.pt[1] * b.pt[0] + a.pt[0] * b.pt[1];
 	return r;
 }
 
@@ -159,6 +188,14 @@ dot(Point const &a, Point const &b) {
 	for(int i = 0; i < 2; i++) {
 		ret += a.pt[i] * b.pt[i];
 	}
+	return ret;
+}
+
+inline Coord
+cross(Point const &a, Point const &b) { // defined as dot(a,b.cw())
+	Coord ret = 0;
+  ret -= a.pt[0] * b.pt[1];
+  ret += a.pt[1] * b.pt[0];
 	return ret;
 }
 

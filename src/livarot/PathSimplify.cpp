@@ -7,8 +7,9 @@
  */
 
 #include "Path.h"
-#include "MyMath.h"
+//#include "MyMath.h"
 #include <math.h>
+#include "../libnr/nr-matrix.h"
 
 // algo d'origine: http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/INT-APP/CURVE-APP-global.html
 
@@ -107,20 +108,18 @@ Path::DoSimplify (float treshhold)
 
   char *savPts = pts;
   int savNbPt = nbPt;
-  vec2 moveToPt, endToPt;
+  NR::Point moveToPt, endToPt;
   if (back)
     {
       if (weighted)
 	{
 	  path_lineto_wb *tp = (path_lineto_wb *) savPts;
-	  moveToPt.x = tp[0].x;
-	  moveToPt.y = tp[0].y;
+	  moveToPt = tp[0].p;
 	}
       else
 	{
 	  path_lineto_b *tp = (path_lineto_b *) savPts;
-	  moveToPt.x = tp[0].x;
-	  moveToPt.y = tp[0].y;
+	  moveToPt = tp[0].p;
 	}
     }
   else
@@ -128,17 +127,15 @@ Path::DoSimplify (float treshhold)
       if (weighted)
 	{
 	  path_lineto_w *tp = (path_lineto_w *) savPts;
-	  moveToPt.x = tp[0].x;
-	  moveToPt.y = tp[0].y;
+	  moveToPt = tp[0].p;
 	}
       else
 	{
 	  path_lineto *tp = (path_lineto *) savPts;
-	  moveToPt.x = tp[0].x;
-	  moveToPt.y = tp[0].y;
+	  moveToPt = tp[0].p;
 	}
     }
-  MoveTo (moveToPt.x, moveToPt.y);
+  MoveTo (moveToPt);
   endToPt = moveToPt;
 
   while (curP < savNbPt - 1)
@@ -242,14 +239,12 @@ Path::DoSimplify (float treshhold)
 	  if (weighted)
 	    {
 	      path_lineto_wb *tp = (path_lineto_wb *) savPts;
-	      endToPt.x = tp[lastP].x;
-	      endToPt.y = tp[lastP].y;
+	      endToPt = tp[lastP].p;
 	    }
 	  else
 	    {
 	      path_lineto_b *tp = (path_lineto_b *) savPts;
-	      endToPt.x = tp[lastP].x;
-	      endToPt.y = tp[lastP].y;
+	      endToPt = tp[lastP].p;
 	    }
 	}
       else
@@ -257,31 +252,28 @@ Path::DoSimplify (float treshhold)
 	  if (weighted)
 	    {
 	      path_lineto_w *tp = (path_lineto_w *) savPts;
-	      endToPt.x = tp[lastP].x;
-	      endToPt.y = tp[lastP].y;
+	      endToPt = tp[lastP].p;
 	    }
 	  else
 	    {
 	      path_lineto *tp = (path_lineto *) savPts;
-	      endToPt.x = tp[lastP].x;
-	      endToPt.y = tp[lastP].y;
+	      endToPt = tp[lastP].p;
 	    }
 	}
       if (nbPt <= 2)
 	{
-	  LineTo (endToPt.x, endToPt.y);
+	  LineTo (endToPt);
 	}
       else
 	{
-	  CubicTo (endToPt.x, endToPt.y, res.stDx, res.stDy, res.enDx,
-		   res.enDy);
+	  CubicTo (endToPt, res.stD, res.enD);
 	}
 
       curP = lastP;
     }
 
-  if (fabs (endToPt.x - moveToPt.x) < 0.00001
-      && fabs (endToPt.y - moveToPt.y) < 0.00001)
+  if (fabs (endToPt.pt[0] - moveToPt.pt[0]) < 0.00001
+      && fabs (endToPt.pt[1] - moveToPt.pt[1]) < 0.00001)
     Close ();
 
   pts = savPts;
@@ -290,28 +282,17 @@ Path::DoSimplify (float treshhold)
 
 bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
 {
-  vec2
-    start,
-    end;
+  NR::Point start,end;
   // pour une coordonnee
-  double *
-    Xk;				// la coordonnee traitee (x puis y)
-  double *
-    Yk;				// la coordonnee traitee (x puis y)
-  double *
-    tk;				// les tk
-  double *
-    Qk;				// les Qk
-  mat2d
-    M;				// la matrice tNN
-  vec2d
-    P;
-  vec2d
-    Q;
+  double * Xk;				// la coordonnee traitee (x puis y)
+  double * Yk;				// la coordonnee traitee (x puis y)
+  double * tk;				// les tk
+  double *  Qk;				// les Qk
+  NR::Matrix M;				// la matrice tNN
+  NR::Point P;
+  NR::Point Q;
 
-  vec2
-    cp1,
-    cp2;
+  NR::Point cp1, cp2;
 
   if (nbPt == 2)
     return true;
@@ -323,24 +304,18 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
 	  path_lineto_wb *
 	    tp = (path_lineto_wb *)
 	    pts;
-	  start.x = tp[0].x;
-	  start.y = tp[0].y;
-	  cp1.x = tp[1].x;
-	  cp1.y = tp[1].y;
-	  end.x = tp[nbPt - 1].x;
-	  end.y = tp[nbPt - 1].y;
+	  start = tp[0].p;
+	  cp1 = tp[1].p;
+	  end = tp[nbPt - 1].p;
 	}
       else
 	{
 	  path_lineto_b *
 	    tp = (path_lineto_b *)
 	    pts;
-	  start.x = tp[0].x;
-	  start.y = tp[0].y;
-	  cp1.x = tp[1].x;
-	  cp1.y = tp[1].y;
-	  end.x = tp[nbPt - 1].x;
-	  end.y = tp[nbPt - 1].y;
+	  start = tp[0].p;
+	  cp1 = tp[1].p;
+	  end = tp[nbPt - 1].p;
 	}
     }
   else
@@ -350,36 +325,27 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
 	  path_lineto_w *
 	    tp = (path_lineto_w *)
 	    pts;
-	  start.x = tp[0].x;
-	  start.y = tp[0].y;
-	  cp1.x = tp[1].x;
-	  cp1.y = tp[1].y;
-	  end.x = tp[nbPt - 1].x;
-	  end.y = tp[nbPt - 1].y;
+	  start = tp[0].p;
+	  cp1 = tp[1].p;
+	  end = tp[nbPt - 1].p;
 	}
       else
 	{
 	  path_lineto *
 	    tp = (path_lineto *)
 	    pts;
-	  start.x = tp[0].x;
-	  start.y = tp[0].y;
-	  cp1.x = tp[1].x;
-	  cp1.y = tp[1].y;
-	  end.x = tp[nbPt - 1].x;
-	  end.y = tp[nbPt - 1].y;
+	  start = tp[0].p;
+	  cp1 = tp[1].p;
+	  end = tp[nbPt - 1].p;
 	}
     }
 
   if (nbPt == 3)
     {
       // start -> cp1 -> end
-      res.x = end.x;
-      res.y = end.y;
-      res.stDx = cp1.x - start.x;
-      res.stDy = cp1.y - start.y;
-      res.enDx = end.x - cp1.x;
-      res.enDy = end.y - cp1.y;
+      res.p = end;
+      res.stD = cp1 - start;
+      res.enD = end - cp1;
       return true;
     }
 
@@ -392,9 +358,8 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
   // chord length method
   tk[0] = 0.0;
   {
-    vec2
-      prevP =
-      start;
+    NR::Point
+      prevP =start;
     for (int i = 1; i < nbPt; i++)
       {
 	if (back)
@@ -404,16 +369,16 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
 		path_lineto_wb *
 		  tp = (path_lineto_wb *)
 		  pts;
-		Xk[i] = tp[i].x;
-		Yk[i] = tp[i].y;
+		Xk[i] = tp[i].p.pt[0];
+		Yk[i] = tp[i].p.pt[1];
 	      }
 	    else
 	      {
 		path_lineto_b *
 		  tp = (path_lineto_b *)
 		  pts;
-		Xk[i] = tp[i].x;
-		Yk[i] = tp[i].y;
+		Xk[i] = tp[i].p.pt[0];
+		Yk[i] = tp[i].p.pt[1];
 	      }
 	  }
 	else
@@ -423,27 +388,24 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
 		path_lineto_w *
 		  tp = (path_lineto_w *)
 		  pts;
-		Xk[i] = tp[i].x;
-		Yk[i] = tp[i].y;
+		Xk[i] = tp[i].p.pt[0];
+		Yk[i] = tp[i].p.pt[1];
 	      }
 	    else
 	      {
 		path_lineto *
 		  tp = (path_lineto *)
 		  pts;
-		Xk[i] = tp[i].x;
-		Yk[i] = tp[i].y;
+		Xk[i] = tp[i].p.pt[0];
+		Yk[i] = tp[i].p.pt[1];
 	      }
 	  }
-	vec2
-	  diff;
-	diff.x = Xk[i] - prevP.x;
-	diff.y = Yk[i] - prevP.y;
-	prevP.x = Xk[i];
-	prevP.y = Yk[i];
-	float
-	  l =
-	  sqrt (diff.x * diff.x + diff.y * diff.y);
+	NR::Point diff;
+	diff.pt[0] = Xk[i] - prevP.pt[0];
+	diff.pt[1] = Yk[i] - prevP.pt[1];
+	prevP.pt[0] = Xk[i];
+	prevP.pt[1] = Yk[i];
+	float l =sqrt (dot(diff,diff));
 	tk[i] = tk[i - 1] + l;
       }
   }
@@ -460,101 +422,100 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
     tk[i] /= tk[nbPt - 1];
 
   // la matrice tNN
-  M.xx = M.xy = M.yx = M.yy = 0;
+  M.c[0] = M.c[2] = M.c[1] = M.c[3] = M.c[4] = M.c[5] = 0;
   for (int i = 1; i < nbPt - 1; i++)
     {
-      M.xx += N13 (tk[i]) * N13 (tk[i]);
-      M.xy += N23 (tk[i]) * N13 (tk[i]);
-      M.yx += N13 (tk[i]) * N23 (tk[i]);
-      M.yy += N23 (tk[i]) * N23 (tk[i]);
+      M.c[0] += N13 (tk[i]) * N13 (tk[i]);
+      M.c[1] += N23 (tk[i]) * N13 (tk[i]);
+      M.c[2] += N13 (tk[i]) * N23 (tk[i]);
+      M.c[3] += N23 (tk[i]) * N23 (tk[i]);
     }
 
   double
-    det;
-  L_MAT_Det (M, det);
+    det=M.det();
   if (fabs (det) < 0.000001)
     {
       // aie, non-inversible
-
       free (tk);
       free (Qk);
       free (Xk);
       free (Yk);
       return false;
     }
-  L_MAT_Inv (M);
-
+  {
+  NR::Matrix  iM=M.inverse();
+  M=iM;
+  }
 
   // phase 1: abcisses
   // calcul des Qk
-  Xk[0] = start.x;
-  Yk[0] = start.y;
-  Xk[nbPt - 1] = end.x;
-  Yk[nbPt - 1] = end.y;
+  Xk[0] = start.pt[0];
+  Yk[0] = start.pt[1];
+  Xk[nbPt - 1] = end.pt[0];
+  Yk[nbPt - 1] = end.pt[1];
 
   for (int i = 1; i < nbPt - 1; i++)
     Qk[i] = Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
 
   // le vecteur Q
-  Q.x = Q.y = 0;
+  Q.pt[0] = Q.pt[1] = 0;
   for (int i = 1; i < nbPt - 1; i++)
     {
-      Q.x += N13 (tk[i]) * Qk[i];
-      Q.y += N23 (tk[i]) * Qk[i];
+      Q.pt[0] += N13 (tk[i]) * Qk[i];
+      Q.pt[1] += N23 (tk[i]) * Qk[i];
     }
 
-  L_MAT_MulV (M, Q, P);
-  cp1.x = P.x;
-  cp2.x = P.y;
+  P=M*Q;
+//  L_MAT_MulV (M, Q, P);
+  cp1.pt[0] = P.pt[0];
+  cp2.pt[0] = P.pt[1];
 
   // phase 2: les ordonnees
   for (int i = 1; i < nbPt - 1; i++)
     Qk[i] = Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
 
   // le vecteur Q
-  Q.x = Q.y = 0;
+  Q.pt[0] = Q.pt[1] = 0;
   for (int i = 1; i < nbPt - 1; i++)
     {
-      Q.x += N13 (tk[i]) * Qk[i];
-      Q.y += N23 (tk[i]) * Qk[i];
+      Q.pt[0] += N13 (tk[i]) * Qk[i];
+      Q.pt[1] += N23 (tk[i]) * Qk[i];
     }
 
-  L_MAT_MulV (M, Q, P);
-  cp1.y = P.x;
-  cp2.y = P.y;
+  P=M*Q;
+//  L_MAT_MulV (M, Q, P);
+  cp1.pt[1] = P.pt[0];
+  cp2.pt[1] = P.pt[1];
 
   float
     delta =
     0;
   for (int i = 1; i < nbPt - 1; i++)
     {
-      vec2
+      NR::Point
 	appP;
-      appP.x = N13 (tk[i]) * cp1.x + N23 (tk[i]) * cp2.x;
-      appP.y = N13 (tk[i]) * cp1.y + N23 (tk[i]) * cp2.y;
-      appP.x -= Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
-      appP.y -= Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
-      delta += appP.x * appP.x + appP.y * appP.y;
+      appP.pt[0] = N13 (tk[i]) * cp1.pt[0] + N23 (tk[i]) * cp2.pt[0];
+      appP.pt[1] = N13 (tk[i]) * cp1.pt[1] + N23 (tk[i]) * cp2.pt[1];
+      appP.pt[0] -= Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
+      appP.pt[1] -= Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
+      delta += dot(appP,appP);
     }
 
 
   if (delta < treshhold * treshhold)
     {
       // premier jet
-      res.stDx = 3.0 * (cp1.x - start.x);
-      res.stDy = 3.0 * (cp1.y - start.y);
-      res.enDx = -3.0 * (cp2.x - end.x);
-      res.enDy = -3.0 * (cp2.y - end.y);
-      res.x = end.x;
-      res.y = end.y;
+      res.stD = 3.0 * (cp1 - start);
+      res.enD = -3.0 * (cp2 - end);
+      res.p = end;
 
       // Refine a little.
       for (int i = 1; i < nbPt - 1; i++)
 	{
-	  vec2
+	  NR::Point
 	    pt;
-	  pt.x = Xk[i];
-	  pt.y = Yk[i];
+	  pt.pt[0] = Xk[i];
+	  pt.pt[1] = Yk[i];
 	  tk[i] = RaffineTk (pt, start, cp1, cp2, end, tk[i]);
 	  if (tk[i] < tk[i - 1])
 	    {
@@ -564,16 +525,16 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
 	}
 
       // la matrice tNN
-      M.xx = M.xy = M.yx = M.yy = 0;
+      M.c[0] = M.c[2] = M.c[1] = M.c[3] = M.c[4] = M.c[5] = 0;
       for (int i = 1; i < nbPt - 1; i++)
 	{
-	  M.xx += N13 (tk[i]) * N13 (tk[i]);
-	  M.xy += N23 (tk[i]) * N13 (tk[i]);
-	  M.yx += N13 (tk[i]) * N23 (tk[i]);
-	  M.yy += N23 (tk[i]) * N23 (tk[i]);
+	  M.c[0] += N13 (tk[i]) * N13 (tk[i]);
+	  M.c[1] += N23 (tk[i]) * N13 (tk[i]);
+	  M.c[2] += N13 (tk[i]) * N23 (tk[i]);
+	  M.c[3] += N23 (tk[i]) * N23 (tk[i]);
 	}
 
-      L_MAT_Det (M, det);
+      det=M.det();
       if (fabs (det) < 0.000001)
 	{
 	  // aie, non-invertible
@@ -584,59 +545,64 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
 	  free (Yk);
 	  return true;
 	}
-      L_MAT_Inv (M);
-
+      {
+        NR::Matrix  iM=M.inverse();
+        M=iM;
+      }
+      
 
       // phase 1: abcisses
       // calcul des Qk
-      Xk[0] = start.x;
-      Yk[0] = start.y;
-      Xk[nbPt - 1] = end.x;
-      Yk[nbPt - 1] = end.y;
+      Xk[0] = start.pt[0];
+      Yk[0] = start.pt[1];
+      Xk[nbPt - 1] = end.pt[0];
+      Yk[nbPt - 1] = end.pt[1];
 
       for (int i = 1; i < nbPt - 1; i++)
 	Qk[i] = Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
 
       // le vecteur Q
-      Q.x = Q.y = 0;
+      Q.pt[0] = Q.pt[1] = 0;
       for (int i = 1; i < nbPt - 1; i++)
 	{
-	  Q.x += N13 (tk[i]) * Qk[i];
-	  Q.y += N23 (tk[i]) * Qk[i];
+	  Q.pt[0] += N13 (tk[i]) * Qk[i];
+	  Q.pt[1] += N23 (tk[i]) * Qk[i];
 	}
 
-      L_MAT_MulV (M, Q, P);
-      cp1.x = P.x;
-      cp2.x = P.y;
+      P=M*Q;
+//      L_MAT_MulV (M, Q, P);
+      cp1.pt[0] = P.pt[0];
+      cp2.pt[0] = P.pt[1];
 
       // phase 2: les ordonnees
       for (int i = 1; i < nbPt - 1; i++)
 	Qk[i] = Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
 
       // le vecteur Q
-      Q.x = Q.y = 0;
+      Q.pt[0] = Q.pt[1] = 0;
       for (int i = 1; i < nbPt - 1; i++)
 	{
-	  Q.x += N13 (tk[i]) * Qk[i];
-	  Q.y += N23 (tk[i]) * Qk[i];
+	  Q.pt[0] += N13 (tk[i]) * Qk[i];
+	  Q.pt[1] += N23 (tk[i]) * Qk[i];
 	}
 
-      L_MAT_MulV (M, Q, P);
-      cp1.y = P.x;
-      cp2.y = P.y;
+      P=M*Q;
+//      L_MAT_MulV (M, Q, P);
+      cp1.pt[1] = P.pt[0];
+      cp2.pt[1] = P.pt[1];
 
       float
 	ndelta =
 	0;
       for (int i = 1; i < nbPt - 1; i++)
 	{
-	  vec2
+	  NR::Point
 	    appP;
-	  appP.x = N13 (tk[i]) * cp1.x + N23 (tk[i]) * cp2.x;
-	  appP.y = N13 (tk[i]) * cp1.y + N23 (tk[i]) * cp2.y;
-	  appP.x -= Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
-	  appP.y -= Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
-	  ndelta += appP.x * appP.x + appP.y * appP.y;
+	  appP.pt[0] = N13 (tk[i]) * cp1.pt[0] + N23 (tk[i]) * cp2.pt[0];
+	  appP.pt[1] = N13 (tk[i]) * cp1.pt[1] + N23 (tk[i]) * cp2.pt[1];
+	  appP.pt[0] -= Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
+	  appP.pt[1] -= Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
+	  ndelta += dot(appP,appP);
 	}
 
       free (tk);
@@ -646,12 +612,9 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
 
       if (ndelta < delta + 0.00001)
 	{
-	  res.stDx = 3.0 * (cp1.x - start.x);
-	  res.stDy = 3.0 * (cp1.y - start.y);
-	  res.enDx = -3.0 * (cp2.x - end.x);
-	  res.enDy = -3.0 * (cp2.y - end.y);
-	  res.x = end.x;
-	  res.y = end.y;
+	  res.stD = 3.0 * (cp1 - start);
+	  res.enD = -3.0 * (cp2 - end);
+	  res.p = end;
 	  return true;
 	}
 
@@ -667,29 +630,29 @@ bool Path::AttemptSimplify (float treshhold, path_descr_cubicto & res)
 }
 
 float
-Path::RaffineTk (vec2 pt, vec2 p0, vec2 p1, vec2 p2, vec2 p3, float it)
+Path::RaffineTk (NR::Point pt, NR::Point p0, NR::Point p1, NR::Point p2, NR::Point p3, float it)
 {
-  // Refinement of the tk values.  ("raffine" in french = "refine".)
+  // Refinement of the tk values. 
   // Just one iteration of Newtow Raphson, given that we're approaching the curve anyway.
   // [fr: vu que de toute facon la courbe est approchée]
   double Ax, Bx, Cx;
   double Ay, By, Cy;
   Ax =
-    pt.x - p0.x * N03 (it) - p1.x * N13 (it) - p2.x * N23 (it) -
-    p3.x * N33 (it);
+    pt.pt[0] - p0.pt[0] * N03 (it) - p1.pt[0] * N13 (it) - p2.pt[0] * N23 (it) -
+    p3.pt[0] * N33 (it);
   Bx =
-    (p1.x - p0.x) * N02 (it) + (p2.x - p1.x) * N12 (it) + (p3.x -
-							   p2.x) * N22 (it);
+    (p1.pt[0] - p0.pt[0]) * N02 (it) + (p2.pt[0] - p1.pt[0]) * N12 (it) + (p3.pt[0] -
+							   p2.pt[0]) * N22 (it);
   Cx =
-    (p0.x - 2 * p1.x + p2.x) * N01 (it) + (p3.x - 2 * p2.x + p1.x) * N11 (it);
+    (p0.pt[0] - 2 * p1.pt[0] + p2.pt[0]) * N01 (it) + (p3.pt[0] - 2 * p2.pt[0] + p1.pt[0]) * N11 (it);
   Ay =
-    pt.y - p0.y * N03 (it) - p1.y * N13 (it) - p2.y * N23 (it) -
-    p3.y * N33 (it);
+    pt.pt[1] - p0.pt[1] * N03 (it) - p1.pt[1] * N13 (it) - p2.pt[1] * N23 (it) -
+    p3.pt[1] * N33 (it);
   By =
-    (p1.y - p0.y) * N02 (it) + (p2.y - p1.y) * N12 (it) + (p3.y -
-							   p2.y) * N22 (it);
+    (p1.pt[1] - p0.pt[1]) * N02 (it) + (p2.pt[1] - p1.pt[1]) * N12 (it) + (p3.pt[1] -
+							   p2.pt[1]) * N22 (it);
   Cy =
-    (p0.y - 2 * p1.y + p2.y) * N01 (it) + (p3.y - 2 * p2.y + p1.y) * N11 (it);
+    (p0.pt[1] - 2 * p1.pt[1] + p2.pt[1]) * N01 (it) + (p3.pt[1] - 2 * p2.pt[1] + p1.pt[1]) * N11 (it);
   double dF, ddF;
   dF = -6 * (Ax * Bx + Ay * By);
   ddF = 18 * (Bx * Bx + By * By) - 12 * (Ax * Cx + Ay * Cy);
@@ -719,7 +682,7 @@ Path::Coalesce (float tresh)
   int writeP = 0;
   int lastA = descr_data[0].associated;
   int prevA = lastA;
-  vec2 firstP;
+  NR::Point firstP;
   path_descr lastAddition;
   lastAddition.flags = descr_moveto;
   for (int curP = 0; curP < descr_nb; curP++)
@@ -737,8 +700,7 @@ Path::Coalesce (float tresh)
 	  // Added automatically (too bad about multiple moveto's).
 	  // [fr: (tant pis pour les moveto multiples)]
 
-	  firstP.x = descr_data[curP].d.m.x;
-	  firstP.y = descr_data[curP].d.m.y;
+	  firstP = descr_data[curP].d.m.p;
 	  lastA = descr_data[curP].associated;
 	  prevA = lastA;
 	  lastP = curP;
@@ -758,13 +720,10 @@ Path::Coalesce (float tresh)
 	      if (AttemptSimplify (tresh, res))
 		{
 		  lastAddition.flags = descr_cubicto;
-		  lastAddition.d.c.x = res.x;
-		  lastAddition.d.c.y = res.y;
-		  lastAddition.d.c.stDx = res.stDx;
-		  lastAddition.d.c.stDy = res.stDy;
-		  lastAddition.d.c.enDx = res.enDx;
-		  lastAddition.d.c.enDy = res.enDy;
-		}
+		  lastAddition.d.c.p = res.p;
+		  lastAddition.d.c.stD = res.stD;
+		  lastAddition.d.c.enD = res.enD;
+			}
 	      else
 		{
 		}
@@ -831,13 +790,10 @@ Path::Coalesce (float tresh)
 	      if (AttemptSimplify (tresh, res))
 		{
 		  lastAddition.flags = descr_cubicto;
-		  lastAddition.d.c.x = res.x;
-		  lastAddition.d.c.y = res.y;
-		  lastAddition.d.c.stDx = res.stDx;
-		  lastAddition.d.c.stDy = res.stDy;
-		  lastAddition.d.c.enDx = res.enDx;
-		  lastAddition.d.c.enDy = res.enDy;
-		  lastAddition.associated = lastA;
+          lastAddition.d.c.p = res.p;
+          lastAddition.d.c.stD = res.stD;
+          lastAddition.d.c.enD = res.enD;
+          lastAddition.associated = lastA;
 		  lastP = curP;
 		}
 	      else

@@ -8,11 +8,12 @@
 
 #include "Shape.h"
 #include "LivarotDefs.h"
-#include "MyMath.h"
+//#include "MyMath.h"
 
 SweepEvent::SweepEvent ()
 {
-  MakeNew (NULL, NULL, 0, 0, 0, 0);
+  NR::Point dummy(0,0);
+  MakeNew (NULL, NULL,dummy, 0, 0);
 }
 SweepEvent::~SweepEvent (void)
 {
@@ -20,12 +21,10 @@ SweepEvent::~SweepEvent (void)
 }
 
 void
-SweepEvent::MakeNew (SweepTree * iLeft, SweepTree * iRight, float px,
-		     float py, float itl, float itr)
+SweepEvent::MakeNew (SweepTree * iLeft, SweepTree * iRight, NR::Point &px, float itl, float itr)
 {
   ind = -1;
   posx = px;
-  posy = py;
   tl = itl;
   tr = itr;
   leftSweep = iLeft;
@@ -92,14 +91,13 @@ SweepEvent::DestroyQueue (SweepEventQueue & queue)
 }
 
 SweepEvent *
-SweepEvent::AddInQueue (SweepTree * iLeft, SweepTree * iRight, float px,
-			float py, float itl, float itr,
+SweepEvent::AddInQueue (SweepTree * iLeft, SweepTree * iRight, NR::Point &px, float itl, float itr,
 			SweepEventQueue & queue)
 {
   if (queue.nbEvt >= queue.maxEvt)
     return NULL;
   int n = queue.nbEvt++;
-  queue.events[n].MakeNew (iLeft, iRight, px, py, itl, itr);
+  queue.events[n].MakeNew (iLeft, iRight, px, itl, itr);
 
   if (iLeft->src->aretes[iLeft->bord].st < iLeft->src->aretes[iLeft->bord].en)
     {
@@ -127,8 +125,8 @@ SweepEvent::AddInQueue (SweepTree * iLeft, SweepTree * iRight, float px,
     {
       int half = (curInd - 1) / 2;
       int no = queue.inds[half];
-      if (py < queue.events[no].posy
-	  || (py == queue.events[no].posy && px < queue.events[no].posx))
+      if (px.pt[1] < queue.events[no].posx.pt[1]
+	  || (px.pt[1] == queue.events[no].posx.pt[1] && px.pt[0] < queue.events[no].posx.pt[0]))
 	{
 	  queue.events[n].ind = half;
 	  queue.events[no].ind = curInd;
@@ -167,15 +165,14 @@ SweepEvent::SupprFromQueue (SweepEventQueue & queue)
   queue.inds[n] = to;
 
   int curInd = n;
-  float px = queue.events[to].posx;
-  float py = queue.events[to].posy;
+  NR::Point px = queue.events[to].posx;
   bool didClimb = false;
   while (curInd > 0)
     {
       int half = (curInd - 1) / 2;
       int no = queue.inds[half];
-      if (py < queue.events[no].posy
-	  || (py == queue.events[no].posy && px < queue.events[no].posx))
+      if (px.pt[1] < queue.events[no].posx.pt[1]
+	  || (px.pt[1] == queue.events[no].posx.pt[1] && px.pt[0] < queue.events[no].posx.pt[0]))
 	{
 	  queue.events[to].ind = half;
 	  queue.events[no].ind = curInd;
@@ -199,13 +196,13 @@ SweepEvent::SupprFromQueue (SweepEventQueue & queue)
       int no2 = queue.inds[son2];
       if (son2 < queue.nbEvt)
 	{
-	  if (py > queue.events[no1].posy
-	      || (py == queue.events[no1].posy
-		  && px > queue.events[no1].posx))
+	  if (px.pt[1] > queue.events[no1].posx.pt[1]
+	      || (px.pt[1] == queue.events[no1].posx.pt[1]
+		  && px.pt[0] > queue.events[no1].posx.pt[0]))
 	    {
-	      if (queue.events[no2].posy > queue.events[no1].posy
-		  || (queue.events[no2].posy == queue.events[no1].posy
-		      && queue.events[no2].posx > queue.events[no1].posx))
+	      if (queue.events[no2].posx.pt[1] > queue.events[no1].posx.pt[1]
+		  || (queue.events[no2].posx.pt[1] == queue.events[no1].posx.pt[1]
+		      && queue.events[no2].posx.pt[0] > queue.events[no1].posx.pt[0]))
 		{
 		  queue.events[to].ind = son1;
 		  queue.events[no1].ind = curInd;
@@ -224,9 +221,9 @@ SweepEvent::SupprFromQueue (SweepEventQueue & queue)
 	    }
 	  else
 	    {
-	      if (py > queue.events[no2].posy
-		  || (py == queue.events[no2].posy
-		      && px > queue.events[no2].posx))
+	      if (px.pt[1] > queue.events[no2].posx.pt[1]
+		  || (px.pt[1] == queue.events[no2].posx.pt[1]
+		      && px.pt[0] > queue.events[no2].posx.pt[0]))
 		{
 		  queue.events[to].ind = son2;
 		  queue.events[no2].ind = curInd;
@@ -242,9 +239,9 @@ SweepEvent::SupprFromQueue (SweepEventQueue & queue)
 	}
       else
 	{
-	  if (py > queue.events[no1].posy
-	      || (py == queue.events[no1].posy
-		  && px > queue.events[no1].posx))
+	  if (px.pt[1] > queue.events[no1].posx.pt[1]
+	      || (px.pt[1] == queue.events[no1].posx.pt[1]
+		  && px.pt[0] > queue.events[no1].posx.pt[0]))
 	    {
 	      queue.events[to].ind = son1;
 	      queue.events[no1].ind = curInd;
@@ -256,8 +253,7 @@ SweepEvent::SupprFromQueue (SweepEventQueue & queue)
     }
 }
 bool
-SweepEvent::PeekInQueue (SweepTree * &iLeft, SweepTree * &iRight, float &px,
-			 float &py, float &itl, float &itr,
+SweepEvent::PeekInQueue (SweepTree * &iLeft, SweepTree * &iRight, NR::Point &px, float &itl, float &itr,
 			 SweepEventQueue & queue)
 {
   if (queue.nbEvt <= 0)
@@ -265,7 +261,6 @@ SweepEvent::PeekInQueue (SweepTree * &iLeft, SweepTree * &iRight, float &px,
   iLeft = queue.events[queue.inds[0]].leftSweep;
   iRight = queue.events[queue.inds[0]].rightSweep;
   px = queue.events[queue.inds[0]].posx;
-  py = queue.events[queue.inds[0]].posy;
   itl = queue.events[queue.inds[0]].tl;
   itr = queue.events[queue.inds[0]].tr;
   return true;
@@ -273,7 +268,7 @@ SweepEvent::PeekInQueue (SweepTree * &iLeft, SweepTree * &iRight, float &px,
 
 bool
 SweepEvent::ExtractFromQueue (SweepTree * &iLeft, SweepTree * &iRight,
-			      float &px, float &py, float &itl, float &itr,
+                              NR::Point &px, float &itl, float &itr,
 			      SweepEventQueue & queue)
 {
   if (queue.nbEvt <= 0)
@@ -281,7 +276,6 @@ SweepEvent::ExtractFromQueue (SweepTree * &iLeft, SweepTree * &iRight,
   iLeft = queue.events[queue.inds[0]].leftSweep;
   iRight = queue.events[queue.inds[0]].rightSweep;
   px = queue.events[queue.inds[0]].posx;
-  py = queue.events[queue.inds[0]].posy;
   itl = queue.events[queue.inds[0]].tl;
   itr = queue.events[queue.inds[0]].tr;
   queue.events[queue.inds[0]].SupprFromQueue (queue);
@@ -295,7 +289,6 @@ SweepEvent::Relocate (SweepEventQueue & queue, int to)
     return;			// j'y suis deja
 
   queue.events[to].posx = posx;
-  queue.events[to].posy = posy;
   queue.events[to].tl = tl;
   queue.events[to].tr = tr;
   queue.events[to].leftSweep = leftSweep;
@@ -402,57 +395,51 @@ SweepTree::AddInList (Shape * iSrc, int iBord, int iWeight, int iStartPoint,
 }
 
 int
-SweepTree::Find (float px, float py, SweepTree * newOne, SweepTree * &insertL,
+SweepTree::Find (NR::Point &px, SweepTree * newOne, SweepTree * &insertL,
 		 SweepTree * &insertR, bool sweepSens)
 {
-  vec2d bOrig, bNorm;
-  bOrig.x = src->pData[src->aretes[bord].st].rx;
-  bOrig.y = src->pData[src->aretes[bord].st].ry;
-  bNorm.x = src->eData[bord].rdx;
-  bNorm.y = src->eData[bord].rdy;
+  NR::Point bOrig, bNorm;
+  bOrig = src->pData[src->aretes[bord].st].rx;
+  bNorm = src->eData[bord].rdx;
   if (src->aretes[bord].st > src->aretes[bord].en)
     {
-      bNorm.x = -bNorm.x;
-      bNorm.y = -bNorm.y;
+      bNorm = -bNorm;
     }
-  RotCCW (bNorm);
+  bNorm=bNorm.ccw();
 
-  vec2d diff;
-  diff.x = px - bOrig.x;
-  diff.y = py - bOrig.y;
+  NR::Point diff;
+  diff = px - bOrig;
 
   double y = 0;
   //      if ( startPoint == newOne->startPoint ) {
   //             y=0;
   //     } else {
-  y = Cross (bNorm, diff);
+  y = dot (bNorm, diff);
   //      }
   //      y*=invDirLength;
   if (y == 0)
     {
       // prendre en compte les directions
-      vec2d nNorm;
-      nNorm.x = newOne->src->eData[newOne->bord].rdx;
-      nNorm.y = newOne->src->eData[newOne->bord].rdy;
+      NR::Point nNorm;
+      nNorm = newOne->src->eData[newOne->bord].rdx;
       if (newOne->src->aretes[newOne->bord].st >
 	  newOne->src->aretes[newOne->bord].en)
 	{
-	  nNorm.x = -nNorm.x;
-	  nNorm.y = -nNorm.y;
+	  nNorm = -nNorm;
 	}
-      RotCCW (nNorm);
+      nNorm=nNorm.ccw();
 
       if (sweepSens)
 	{
-	  y = Dot (bNorm, nNorm);
+	  y = cross (nNorm, bNorm);
 	}
       else
 	{
-	  y = Dot (nNorm, bNorm);
+	  y = cross (bNorm, nNorm);
 	}
       if (y == 0)
 	{
-	  y = Cross (bNorm, nNorm);
+	  y = dot (bNorm, nNorm);
 	  if (y == 0)
 	    {
 	      insertL = this;
@@ -465,7 +452,7 @@ SweepTree::Find (float px, float py, SweepTree * newOne, SweepTree * &insertL,
     {
       if (sonL)
 	{
-	  return (static_cast < SweepTree * >(sonL))->Find (px, py, newOne,
+	  return (static_cast < SweepTree * >(sonL))->Find (px, newOne,
 							    insertL, insertR,
 							    sweepSens);
 	}
@@ -487,7 +474,7 @@ SweepTree::Find (float px, float py, SweepTree * newOne, SweepTree * &insertL,
     {
       if (sonR)
 	{
-	  return (static_cast < SweepTree * >(sonR))->Find (px, py, newOne,
+	  return (static_cast < SweepTree * >(sonR))->Find (px, newOne,
 							    insertL, insertR,
 							    sweepSens);
 	}
@@ -509,27 +496,23 @@ SweepTree::Find (float px, float py, SweepTree * newOne, SweepTree * &insertL,
 }
 
 int
-SweepTree::Find (float px, float py, SweepTree * &insertL,
+SweepTree::Find (NR::Point &px, SweepTree * &insertL,
 		 SweepTree * &insertR)
 {
-  vec2d bOrig, bNorm;
-  bOrig.x = src->pData[src->aretes[bord].st].rx;
-  bOrig.y = src->pData[src->aretes[bord].st].ry;
-  bNorm.x = src->eData[bord].rdx;
-  bNorm.y = src->eData[bord].rdy;
+  NR::Point bOrig, bNorm;
+  bOrig = src->pData[src->aretes[bord].st].rx;
+  bNorm = src->eData[bord].rdx;
   if (src->aretes[bord].st > src->aretes[bord].en)
     {
-      bNorm.x = -bNorm.x;
-      bNorm.y = -bNorm.y;
+      bNorm = -bNorm;
     }
-  RotCCW (bNorm);
+ bNorm=bNorm.ccw();
 
-  vec2d diff;
-  diff.x = px - bOrig.x;
-  diff.y = py - bOrig.y;
+  NR::Point diff;
+  diff = px - bOrig;
 
   double y = 0;
-  y = Cross (bNorm, diff);
+  y = dot (bNorm, diff);
   if (y == 0)
     {
       insertL = this;
@@ -540,7 +523,7 @@ SweepTree::Find (float px, float py, SweepTree * &insertL,
     {
       if (sonL)
 	{
-	  return (static_cast < SweepTree * >(sonL))->Find (px, py, insertL,
+	  return (static_cast < SweepTree * >(sonL))->Find (px, insertL,
 							    insertR);
 	}
       else
@@ -561,7 +544,7 @@ SweepTree::Find (float px, float py, SweepTree * &insertL,
     {
       if (sonR)
 	{
-	  return (static_cast < SweepTree * >(sonR))->Find (px, py, insertL,
+	  return (static_cast < SweepTree * >(sonR))->Find (px, insertL,
 							    insertR);
 	}
       else
@@ -645,7 +628,7 @@ SweepTree::Insert (SweepTreeList & list, SweepEventQueue & queue,
   SweepTree *insertL = NULL;
   SweepTree *insertR = NULL;
   int insertion =
-    list.racine->Find (iDst->pts[iAtPoint].x, iDst->pts[iAtPoint].y, this,
+    list.racine->Find (iDst->pts[iAtPoint].x, this,
 		       insertL, insertR, sweepSens);
   if (insertion == found_on_left)
     {
@@ -692,36 +675,30 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
       return avl_no_err;
     }
 
-  vec2 fromP;
-  fromP.x = src->pData[fromPt].rx;
-  fromP.y = src->pData[fromPt].ry;
-  vec2d nNorm;
-  nNorm.x = src->aretes[bord].dx;
-  nNorm.y = src->aretes[bord].dy;
+  NR::Point fromP;
+  fromP = src->pData[fromPt].rx;
+  NR::Point nNorm;
+  nNorm = src->aretes[bord].dx;
   if (src->aretes[bord].st > src->aretes[bord].en)
     {
-      nNorm.x = -nNorm.x;
-      nNorm.y = -nNorm.y;
+      nNorm = -nNorm;
     }
   if (sweepSens == false)
     {
-      nNorm.x = -nNorm.x;
-      nNorm.y = -nNorm.y;
+      nNorm = -nNorm;
     }
 
-  vec2d bNorm;
-  bNorm.x = insNode->src->aretes[insNode->bord].dx;
-  bNorm.y = insNode->src->aretes[insNode->bord].dy;
+  NR::Point bNorm;
+  bNorm = insNode->src->aretes[insNode->bord].dx;
   if (insNode->src->aretes[insNode->bord].st >
       insNode->src->aretes[insNode->bord].en)
     {
-      bNorm.x = -bNorm.x;
-      bNorm.y = -bNorm.y;
+      bNorm = -bNorm;
     }
 
   SweepTree *insertL = NULL;
   SweepTree *insertR = NULL;
-  double ang = Dot (bNorm, nNorm);
+  double ang = cross (nNorm, bNorm);
   if (ang == 0)
     {
       insertL = insNode;
@@ -746,23 +723,21 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
 	    {
 	      int ils = insertL->src->aretes[insertL->bord].st;
 	      int ile = insertL->src->aretes[insertL->bord].en;
-	      if ((insertL->src->pData[ils].rx != fromP.x
-		   || insertL->src->pData[ils].ry != fromP.y)
-		  && (insertL->src->pData[ile].rx != fromP.x
-		      || insertL->src->pData[ile].ry != fromP.y))
+	      if ((insertL->src->pData[ils].rx.pt[0] != fromP.pt[0]
+		   || insertL->src->pData[ils].rx.pt[1] != fromP.pt[1])
+		  && (insertL->src->pData[ile].rx.pt[0] != fromP.pt[0]
+		      || insertL->src->pData[ile].rx.pt[1] != fromP.pt[1]))
 		{
 		  break;
 		}
 	    }
-	  bNorm.x = insertL->src->aretes[insertL->bord].dx;
-	  bNorm.y = insertL->src->aretes[insertL->bord].dy;
+	  bNorm = insertL->src->aretes[insertL->bord].dx;
 	  if (insertL->src->aretes[insertL->bord].st >
 	      insertL->src->aretes[insertL->bord].en)
 	    {
-	      bNorm.x = -bNorm.x;
-	      bNorm.y = -bNorm.y;
+	      bNorm = -bNorm;
 	    }
-	  ang = Dot (bNorm, nNorm);
+	  ang = cross (nNorm, bNorm);
 	  if (ang <= 0)
 	    {
 	      break;
@@ -790,23 +765,21 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
 	    {
 	      int ils = insertR->src->aretes[insertR->bord].st;
 	      int ile = insertR->src->aretes[insertR->bord].en;
-	      if ((insertR->src->pData[ils].rx != fromP.x
-		   || insertR->src->pData[ils].ry != fromP.y)
-		  && (insertR->src->pData[ile].rx != fromP.x
-		      || insertR->src->pData[ile].ry != fromP.y))
+	      if ((insertR->src->pData[ils].rx.pt[0] != fromP.pt[0]
+		   || insertR->src->pData[ils].rx.pt[1] != fromP.pt[1])
+		  && (insertR->src->pData[ile].rx.pt[0] != fromP.pt[0]
+		      || insertR->src->pData[ile].rx.pt[1] != fromP.pt[1]))
 		{
 		  break;
 		}
 	    }
-	  bNorm.x = insertR->src->aretes[insertR->bord].dx;
-	  bNorm.y = insertR->src->aretes[insertR->bord].dy;
+	  bNorm = insertR->src->aretes[insertR->bord].dx;
 	  if (insertR->src->aretes[insertR->bord].st >
 	      insertR->src->aretes[insertR->bord].en)
 	    {
-	      bNorm.x = -bNorm.x;
-	      bNorm.y = -bNorm.y;
+	      bNorm = -bNorm;
 	    }
-	  ang = Dot (bNorm, nNorm);
+	  ang = cross (nNorm, bNorm);
 	  if (ang > 0)
 	    {
 	      break;

@@ -56,9 +56,8 @@ struct _SPOffsetClass
 /* Standard Gtk function */
 GType sp_offset_get_type (void);
 
-double sp_offset_distance_to_original (SPOffset * offset, double px,
-				       double py);
-void sp_offset_top_point (SPOffset * offset, double *px, double *py);
+double sp_offset_distance_to_original (SPOffset * offset, NR::Point px);
+void sp_offset_top_point (SPOffset * offset, NR::Point *px);
 
 
 #endif
