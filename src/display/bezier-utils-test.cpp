@@ -193,12 +193,6 @@ int main(int argc, char *argv[]) {
         {Point(6.0, 2.0), 0.5, 4.0 + 9.0/64.0},
         {c[3], 1.0, 0.0},
     };
-    UTEST_TEST("compute_error") {
-        for (unsigned i = 0; i < G_N_ELEMENTS(err_tst); ++i) {
-            Err_tst const &t = err_tst[i];
-            UTEST_ASSERT( compute_error(t.pt, t.u, c) == t.err );
-        }
-    }
 
     UTEST_TEST("compute_max_error_ratio") {
         Point d[G_N_ELEMENTS(err_tst)];
@@ -210,7 +204,6 @@ int main(int argc, char *argv[]) {
         }
         g_assert( G_N_ELEMENTS(u) == G_N_ELEMENTS(d) );
         unsigned max_ix = ~0u;
-
         double const err_ratio = compute_max_error_ratio(d, u, G_N_ELEMENTS(d), c, 1.0, &max_ix);
         UTEST_ASSERT( sqrt(err_tst[4].err) == err_ratio );
         UTEST_ASSERT( max_ix == 4 );

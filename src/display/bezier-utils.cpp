@@ -50,12 +50,14 @@ static void reparameterize(NR::Point const d[], unsigned len, double u[], Bezier
 static gdouble NewtonRaphsonRootFind(BezierCurve const Q, NR::Point const &P, gdouble u);
 static NR::Point bezier_pt(unsigned degree, NR::Point const V[], gdouble t);
 static NR::Point sp_darray_center_tangent(NR::Point const d[], unsigned center, unsigned length);
+static NR::Point sp_darray_right_tangent(NR::Point const d[], unsigned const len);
 static unsigned copy_without_nans_or_adjacent_duplicates(NR::Point const src[], unsigned src_len, NR::Point dest[]);
 static void chord_length_parameterize(NR::Point const d[], gdouble u[], unsigned len);
 static double compute_max_error_ratio(NR::Point const d[], double const u[], unsigned len,
                                       BezierCurve const bezCurve, double tolerance,
                                       unsigned *splitPoint);
-static double compute_error(NR::Point const &d, double const u, BezierCurve const bezCurve);
+static double compute_hook(NR::Point const &a, NR::Point const &b, double const u, BezierCurve const bezCurve,
+                           double const tolerance);
 
 
 /*
@@ -195,6 +197,7 @@ sp_bezier_fit_cubic_full(NR::Point bezier[],
 
     /*  Parameterize points, and attempt to fit curve */
     unsigned splitPoint;   /* Point to split point set at. */
+    bool is_corner;
     {
         double *u = g_new(double, len);
         chord_length_parameterize(data, u, len);
@@ -215,19 +218,19 @@ sp_bezier_fit_cubic_full(NR::Point bezier[],
         double const tolerance = sqrt(error + 1e-9);
         double maxErrorRatio = compute_max_error_ratio(data, u, len, bezier, tolerance, &splitPoint);
 
-        if ( maxErrorRatio <= 1.0 ) {
+        if ( fabs(maxErrorRatio) <= 1.0 ) {
             BEZIER_ASSERT(bezier);
             g_free(u);
             return 1;
         }
 
         /* If error not too large, then try some reparameterization and iteration. */
-        if ( maxErrorRatio <= 3.0 ) {
+        if ( 0.0 <= maxErrorRatio && maxErrorRatio <= 3.0 ) {
             for (int i = 0; i < maxIterations; i++) {
                 generate_bezier(bezier, data, u, len, tHat1, tHat2);
                 reparameterize(data, len, u, bezier);
                 maxErrorRatio = compute_max_error_ratio(data, u, len, bezier, tolerance, &splitPoint);
-                if ( maxErrorRatio <= 1.0 ) {
+                if ( fabs(maxErrorRatio) <= 1.0 ) {
                     BEZIER_ASSERT(bezier);
                     g_free(u);
                     return 1;
@@ -235,6 +238,32 @@ sp_bezier_fit_cubic_full(NR::Point bezier[],
             }
         }
         g_free(u);
+        is_corner = (maxErrorRatio < 0);
+    }
+
+    if (is_corner) {
+        g_assert(splitPoint < unsigned(len));
+        if (splitPoint == 0) {
+            NR::Point newTHat1 = sp_darray_left_tangent(data, len, error);
+            if (newTHat1 == tHat1) {
+                newTHat1 = sp_darray_left_tangent(data, len);
+                if (newTHat1 == tHat1) {
+                    return -1;
+                }
+            }
+            return sp_bezier_fit_cubic_full(bezier, data, len, newTHat1, tHat2,
+                                            error, lg_max_beziers);
+        } else if (splitPoint == unsigned(len - 1)) {
+            NR::Point newTHat2 = sp_darray_right_tangent(data, len, error);
+            if (newTHat2 == tHat2) {
+                newTHat2 = sp_darray_right_tangent(data, len);
+                if (newTHat2 == tHat2) {
+                    return -1;
+                }
+            }
+            return sp_bezier_fit_cubic_full(bezier, data, len, tHat1, newTHat2,
+                                            error, lg_max_beziers);
+        }
     }
 
     if ( 0 < lg_max_beziers ) {
@@ -243,10 +272,20 @@ sp_bezier_fit_cubic_full(NR::Point bezier[],
          */
         gint const rec_lg_max_beziers = lg_max_beziers - 1;
 
-        /* Unit tangent vector at splitPoint. */
-        NR::Point tHatCenter = sp_darray_center_tangent(data, splitPoint, len);
+        NR::Point recTHat2, recTHat1;
+        if (is_corner) {
+            g_return_val_if_fail(0 < splitPoint && splitPoint < unsigned(len - 1), -1);
+            /* Relevance: preconditions. */
+
+            recTHat2 = sp_darray_right_tangent(data, splitPoint + 1, error);
+            recTHat1 = sp_darray_left_tangent(data + splitPoint, len - splitPoint, error);
+        } else {
+            /* Unit tangent vector at splitPoint. */
+            recTHat2 = sp_darray_center_tangent(data, splitPoint, len);
+            recTHat1 = -recTHat2;
+        }
         gint const nsegs1 = sp_bezier_fit_cubic_full(bezier, data, splitPoint + 1,
-                                                     tHat1, tHatCenter, error, rec_lg_max_beziers);
+                                                     tHat1, recTHat2, error, rec_lg_max_beziers);
         if ( nsegs1 < 0 ) {
 #ifdef BEZIER_DEBUG
             g_print("fit_cubic[1]: recursive call failed\n");
@@ -254,10 +293,9 @@ sp_bezier_fit_cubic_full(NR::Point bezier[],
             return -1;
         }
         g_assert( nsegs1 != 0 );
-        tHatCenter = -tHatCenter;
         gint const nsegs2 = sp_bezier_fit_cubic_full(bezier + nsegs1*4,
                                                      data + splitPoint, len - splitPoint,
-                                                     tHatCenter, tHat2, error, rec_lg_max_beziers);
+                                                     recTHat1, tHat2, error, rec_lg_max_beziers);
         if ( nsegs2 < 0 ) {
 #ifdef BEZIER_DEBUG
             g_print("fit_cubic[2]: recursive call failed\n");
@@ -730,11 +768,13 @@ chord_length_parameterize(NR::Point const d[], gdouble u[], unsigned const len)
  * \pre u[0] == 0.
  * \pre u[len - 1] == 1.0.
  * \post ((ret == 0.0)
- *        || ((0 \< *splitPoint) \&\& (*splitPoint \< len - 1))).
+ *        || ((*splitPoint \< len - 1)
+ *            \&\& (*splitPoint != 0 || ret \< 0.0))).
  */
 static gdouble
 compute_max_error_ratio(NR::Point const d[], double const u[], unsigned const len,
-                        BezierCurve const bezCurve, double const tolerance, unsigned *splitPoint)
+                        BezierCurve const bezCurve, double const tolerance,
+                        unsigned *const splitPoint)
 {
     g_assert( 2 <= len );
     unsigned const last = len - 1;
@@ -748,24 +788,68 @@ compute_max_error_ratio(NR::Point const d[], double const u[], unsigned const le
      */
 
     double maxDistsq = 0.0; /* Maximum error */
-    for (unsigned i = 1; i < last; i++) {
-        double const distsq = compute_error(d[i], u[i], bezCurve);
+    double max_hook_ratio = 0.0;
+    unsigned snap_end = 0;
+    NR::Point prev = bezCurve[0];
+    for (unsigned i = 1; i <= last; i++) {
+        NR::Point const curr = bezier_pt(3, bezCurve, u[i]);
+        double const distsq = lensq( curr - d[i] );
         if ( distsq > maxDistsq ) {
             maxDistsq = distsq;
             *splitPoint = i;
         }
+        double const hook_ratio = compute_hook(prev, curr, .5 * (u[i - 1] + u[i]), bezCurve, tolerance);
+        if (max_hook_ratio < hook_ratio) {
+            max_hook_ratio = hook_ratio;
+            snap_end = i;
+        }
+        prev = curr;
     }
 
-    g_assert( maxDistsq == 0.0
-              || ( ( 0 < *splitPoint )
-                   && ( *splitPoint < last ) ) );
-    return sqrt(maxDistsq) / tolerance;
+    double const dist_ratio = sqrt(maxDistsq) / tolerance;
+    double ret;
+    if (max_hook_ratio <= dist_ratio) {
+        ret = dist_ratio;
+    } else {
+        g_assert(0 < snap_end);
+        ret = -max_hook_ratio;
+        *splitPoint = snap_end - 1;
+    }
+    g_assert( ret == 0.0
+              || ( ( *splitPoint < last )
+                   && ( *splitPoint != 0 || ret < 0. ) ) );
+    return ret;
 }
 
-static double compute_error(NR::Point const &d, double const u, BezierCurve const bezCurve) {
+/** Whereas compute_max_error_ratio checks for itself that each data point is near some point on
+ *  the curve, compute_hook checks that each point on the curve is near some data point (or near
+ *  some point on the polyline defined by the data points, or something like that: we allow for a
+ *  "reasonable curviness" from such a polyline).  "Reasonable curviness" means we draw a circle
+ *  centred at the midpoint of a..b, of radius proportional to the length |a - b|, and require that
+ *  each point on the segment of bezCurve between the parameters of a and b be within that circle.
+ *  If any point P on the bezCurve segment is outside of that allowable region (circle), then we
+ *  return some metric that increases with the distance from P to the circle.
+ *
+ *  Given that this is a fairly arbitrary criterion for finding appropriate places for sharp
+ *  corners, we test only one point on bezCurve, namely the point on bezCurve with parameter half
+ *  way between our estimated parameters for a and b.  (Alternatives are taking the farthest of a
+ *  few parameters between those of a and b, or even using a variant of NewtonRaphsonFindRoot for
+ *  finding the maximum rather than minimum distance.)
+ */
+static double
+compute_hook(NR::Point const &a, NR::Point const &b, double const u, BezierCurve const bezCurve,
+             double const tolerance)
+{
     NR::Point const P = bezier_pt(3, bezCurve, u);
-    NR::Point const diff = P - d;
-    return dot(diff, diff);
+    NR::Point const diff = .5 * (a + b) - P;
+    double const dist = NR::L2(diff);
+    if (dist < tolerance) {
+        return 0;
+    }
+    double const allowed = NR::L2(b - a) + tolerance;
+    return dist / allowed;
+    /* effic: Hooks are very rare.  We could start by comparing distsq, only resorting to the more
+       expensive L2 in cases of uncertainty. */
 }
 
 /*

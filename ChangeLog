@@ -1,5 +1,9 @@
 2004-11-14  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/display/bezier-utils.cpp (sp_bezier_fit_cubic_full):
+	  Detect & prevent "ghost spikes", by allowing a corner node if
+	  the specified tangent would result in a spike.
+
 	* src/display/bezier-utils.cpp (generate_bezier): Better handling
 	  of the case of infinite solutions for the lengths of the two
 	  tangent vectors: try requiring that the lengths equal each other,
