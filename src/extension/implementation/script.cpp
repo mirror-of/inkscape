@@ -62,11 +62,11 @@ namespace Implementation {
    officially in the load function.  This allows for less allocation
    of memory in the unloaded state.
 */
-Script::Script (void) : Implementation::Implementation()
+Script::Script() :
+    Implementation(),
+    command(NULL),
+    helper_extension(NULL)
 {
-	command = NULL;
-	helper_extension = NULL;
-	return;
 }
 
 /**
