@@ -212,6 +212,14 @@ sp_text_context_item_handler (SPEventContext *ec, SPItem *item, GdkEvent *event)
 			item_ungrouped = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
 			if (SP_IS_TEXT (item_ungrouped)) {
 				sp_selection_set_item (SP_DT_SELECTION (ec->desktop), item_ungrouped);
+				if (tc->text) {
+					// find out click point in document coordinates
+					NR::Point p = sp_desktop_w2d_xy_point (ec->desktop, NR::Point(event->button.x, event->button.y));
+					// set the cursor closest to that point
+					tc->ipos = sp_text_get_position_by_coords (SP_TEXT (tc->text), p);
+					// update display
+					sp_text_context_update_cursor (tc);
+				}
 				ret = TRUE;
 			}
 		}

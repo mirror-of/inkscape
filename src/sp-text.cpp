@@ -2773,7 +2773,7 @@ sp_text_end_of_line (SPText *text, gint pos)
 
 
 /**
- *
+ Returns coordinates of the two ends of the cursor line for given position in the given text object
  */
 void
 sp_text_get_cursor_coords (SPText *text, gint position, NR::Point &p0, NR::Point &p1)
@@ -2825,6 +2825,35 @@ sp_text_get_child_by_position (SPText *text, gint pos)
     return child;
 }
 
+/**
+Returns the position of the cursor in the given text obhect closest to the given point
+*/
+guint
+sp_text_get_position_by_coords (SPText *text, NR::Point &p)
+{
+	guint posmax = sp_text_get_length (text);
+	gdouble dmin = 1e18, d;
+	guint posmin = 0;
+
+	// Do not try to optimize this by counting first by lines and then by chars in a line;
+	// this brute force method is the only one that works for text objects with arbitrary hor/vert kerns
+	for (guint pos = 0; pos <= posmax; pos ++) {
+		NR::Point p0, p1;
+
+		sp_text_get_cursor_coords (text, pos, p0, p1);
+		p1 = (p1 + p0) / 2;
+		p1 = p1 * sp_item_i2d_affine(SP_ITEM(text));
+
+		d = NR::LInfty( p1 - p );
+
+		if (d < dmin) {
+			posmin = pos;
+			dmin = d;
+		}
+	}
+
+	return posmin;
+}
 
 
 /**
