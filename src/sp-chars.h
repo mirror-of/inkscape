@@ -14,7 +14,7 @@
  */
 
 #include <libnrtype/nr-font.h>
-#include "helper/curve.h"
+#include "display/curve.h"
 #include "sp-item.h"
 
 #define SP_TYPE_CHARS (sp_chars_get_type ())

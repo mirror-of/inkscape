@@ -19,7 +19,7 @@
 #include <gtk/gtklabel.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkstock.h>
-#include "helper/guideline.h"
+#include "display/guideline.h"
 #include "helper/unit-menu.h"
 #include "libnr/nr-matrix-ops.h"
 #include "widgets/icon.h"

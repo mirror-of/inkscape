@@ -28,7 +28,7 @@ typedef struct _SPGradientPositionClass SPGradientPositionClass;
 
 #include <libnr/nr-gradient.h>
 #include <gtk/gtkwidget.h>
-#include "helper/nr-gradient-gpl.h"
+#include "display/nr-gradient-gpl.h"
 #include "sp-gradient.h"
 
 enum {

@@ -12,7 +12,7 @@
  */
 
 
-#include "helper/sodipodi-ctrlrect.h"
+#include "display/sodipodi-ctrlrect.h"
 #include "libnr/nr-matrix-ops.h"
 #include "desktop.h"
 #include "desktop-handles.h"

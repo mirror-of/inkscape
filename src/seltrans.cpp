@@ -38,8 +38,8 @@
 #include "seltrans.h"
 #include "sp-metrics.h"
 #include "helper/sp-intl.h"
-#include "helper/sp-ctrlline.h"
-#include "helper/sodipodi-ctrlrect.h"
+#include "display/sp-ctrlline.h"
+#include "display/sodipodi-ctrlrect.h"
 #include "prefs-utils.h"
 
 static void sp_sel_trans_update_handles(SPSelTrans &seltrans);

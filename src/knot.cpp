@@ -18,8 +18,8 @@
 #include <gdk/gdkkeysyms.h>
 #include "helper/sp-intl.h"
 #include "helper/sp-marshal.h"
-#include "helper/sp-canvas-util.h"
-#include "helper/sodipodi-ctrl.h"
+#include "display/sp-canvas-util.h"
+#include "display/sodipodi-ctrl.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "desktop-events.h"

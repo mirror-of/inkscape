@@ -17,7 +17,7 @@
 #include <libnr/nr-pixblock.h>
 
 #include "macros.h"
-#include "helper/canvas-bpath.h"
+#include "display/canvas-bpath.h"
 #include "display/canvas-arena.h"
 #include "enums.h"
 #include "color.h"

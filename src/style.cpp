@@ -29,7 +29,7 @@
 #include "svg/svg.h"
 
 #include "enums.h"
-#include "helper/canvas-bpath.h"
+#include "display/canvas-bpath.h"
 #include "attributes.h"
 #include "document.h"
 #include "extract-uri.h"

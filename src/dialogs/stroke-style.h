@@ -16,7 +16,7 @@
 #include <gtk/gtkwidget.h>
 
 #include "forward.h"
-#include "helper/canvas-bpath.h"
+#include "display/canvas-bpath.h"
 
 GtkWidget *sp_stroke_style_paint_widget_new (void);
 GtkWidget *sp_stroke_style_line_widget_new (void);

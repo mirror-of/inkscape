@@ -18,7 +18,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "helper/curve.h"
+#include "display/curve.h"
 #include "event-context.h"
 
 #define SP_TYPE_DYNA_DRAW_CONTEXT (sp_dyna_draw_context_get_type())

@@ -14,7 +14,7 @@
  */
 
 #include <string.h>
-#include "helper/guideline.h"
+#include "display/guideline.h"
 #include "svg/svg.h"
 #include "attributes.h"
 #include "sp-guide.h"

@@ -18,7 +18,7 @@
 
 #include <gtk/gtk.h>
 
-#include "helper/canvas-grid.h"
+#include "display/canvas-grid.h"
 #include "svg/svg.h"
 #include "attributes.h"
 #include "document.h"

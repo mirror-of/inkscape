@@ -26,7 +26,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtklayout.h>
 
-#include "helper-forward.h"
+#include <helper/helper-forward.h>
 
 #define canvas_tiled_redraw
 

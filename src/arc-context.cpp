@@ -20,7 +20,7 @@
 
 #include "macros.h"
 #include "helper/sp-intl.h"
-#include "helper/sp-canvas.h"
+#include "display/sp-canvas.h"
 #include "inkscape.h"
 #include "sp-ellipse.h"
 #include "document.h"

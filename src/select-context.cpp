@@ -18,7 +18,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include "macros.h"
-#include "helper/sp-canvas-util.h"
+#include "display/sp-canvas-util.h"
 #include "rubberband.h"
 #include "inkscape-private.h"
 #include "document.h"

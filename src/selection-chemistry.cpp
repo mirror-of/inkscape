@@ -29,7 +29,7 @@
 #include "sp-item-group.h"
 #include "sp-path.h"
 #include "helper/sp-intl.h"
-#include "helper/sp-canvas.h"
+#include "display/sp-canvas.h"
 #include "path-chemistry.h"
 #include "desktop-affine.h"
 #include "libnr/nr-matrix.h"

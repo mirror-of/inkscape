@@ -311,7 +311,7 @@ void Path::DashSubPath(int spL,char* spP,float head,float tail,float body,int nb
     }
   }
 }
-#include "../helper/canvas-bpath.h"
+#include "../display/canvas-bpath.h"
 
 void  Path::LoadArtBPath(void *iV,NR::Matrix const &trans,bool doTransformation)
 {

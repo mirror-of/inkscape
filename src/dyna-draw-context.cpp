@@ -42,10 +42,10 @@
 
 #include "svg/svg.h"
 #include "helper/sp-intl.h"
-#include "helper/curve.h"
-#include "helper/canvas-bpath.h"
-#include "helper/sodipodi-ctrl.h"
-#include "helper/bezier-utils.h"
+#include "display/curve.h"
+#include "display/canvas-bpath.h"
+#include "display/sodipodi-ctrl.h"
+#include "display/bezier-utils.h"
 
 #include "macros.h"
 #include "enums.h"

@@ -26,7 +26,7 @@
 #include <gtk/gtkcheckbutton.h>
 
 #include "macros.h"
-#include "helper/sp-canvas.h"
+#include "display/sp-canvas.h"
 #include "sp-star.h"
 #include "inkscape.h"
 #include "document.h"

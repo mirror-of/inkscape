@@ -18,7 +18,7 @@
 #include <string.h>
 
 #include "helper/sp-intl.h"
-#include "helper/sp-canvas.h"
+#include "display/sp-canvas.h"
 #include "dialogs/object-attributes.h"
 #include "attributes.h"
 #include "sp-anchor.h"

@@ -13,7 +13,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "helper/curve.h"
+#include "display/curve.h"
 
 #include "sp-item.h"
 #include "sp-marker.h"

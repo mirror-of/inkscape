@@ -21,7 +21,7 @@
 
 #include "svg/svg.h"
 #include "attributes.h"
-#include "helper/bezier-utils.h"
+#include "display/bezier-utils.h"
 #include "dialogs/object-attributes.h"
 #include "helper/sp-intl.h"
 

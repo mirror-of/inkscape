@@ -20,7 +20,7 @@
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-pixblock.h>
-#include <helper/canvas-bpath.h>
+#include <display/canvas-bpath.h>
 
 #include <glib.h>
 #include <gtk/gtkdialog.h>

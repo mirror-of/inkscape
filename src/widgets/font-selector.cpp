@@ -43,7 +43,7 @@
 #include <gtk/gtkentry.h>
 #include <gtk/gtkdrawingarea.h>
 
-#include "../helper/nr-plain-stuff-gdk.h"
+#include "../display/nr-plain-stuff-gdk.h"
 #include "../helper/sp-intl.h"
 
 #include "font-selector.h"

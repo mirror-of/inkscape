@@ -21,7 +21,7 @@
 
 #include <libart_lgpl/art_svp.h>
 
-#include "helper/curve.h"
+#include "display/curve.h"
 #include "forward.h"
 #include "sp-paint-server.h"
 #include "nr-arena-item.h"

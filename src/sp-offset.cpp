@@ -23,7 +23,7 @@
 #include "svg/stringstream.h"
 #include "attributes.h"
 #include "document.h"
-#include "helper/bezier-utils.h"
+#include "display/bezier-utils.h"
 #include "dialogs/object-attributes.h"
 #include "helper/sp-intl.h"
 #include "xml/repr-private.h"

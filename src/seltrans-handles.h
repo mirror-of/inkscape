@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "helper/sodipodi-ctrl.h"
+#include "display/sodipodi-ctrl.h"
 #include "seltrans.h"
 
 class SPSelTransHandle;

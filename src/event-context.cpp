@@ -19,7 +19,7 @@
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenuitem.h>
 
-#include "helper/sp-canvas.h"
+#include "display/sp-canvas.h"
 #include "xml/repr-private.h"
 #include "sp-cursor.h"
 

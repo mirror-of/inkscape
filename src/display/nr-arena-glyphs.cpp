@@ -35,7 +35,7 @@
 #include "nr-arena-glyphs.h"
 
 #ifdef test_glyph_liv
-#include "../helper/canvas-bpath.h"
+#include "../display/canvas-bpath.h"
 #include "../livarot/LivarotDefs.h"
 #include "../livarot/Path.h"
 #include "../livarot/Shape.h"

@@ -16,7 +16,7 @@
 #include "macros.h"
 #include "xml/repr.h"
 #include "svg/svg.h"
-#include "helper/sp-canvas-util.h"
+#include "display/sp-canvas-util.h"
 #include "object-edit.h"
 #include "sp-path.h"
 #include "rubberband.h"

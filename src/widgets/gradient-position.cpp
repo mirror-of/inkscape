@@ -21,8 +21,8 @@
 #include <libart_lgpl/art_affine.h>
 #include <gtk/gtksignal.h>
 #include "../helper/sp-intl.h"
-#include "../helper/nr-plain-stuff.h"
-#include "../helper/nr-plain-stuff-gdk.h"
+#include "../display/nr-plain-stuff.h"
+#include "../display/nr-plain-stuff-gdk.h"
 #include "../macros.h"
 #include "../prefs-utils.h"
 #include "gradient-position.h"

@@ -14,7 +14,7 @@
  * Released under GNU GPL
  */
 
-#include "helper/curve.h"
+#include "display/curve.h"
 #include "event-context.h"
 
 /* Freehand context */

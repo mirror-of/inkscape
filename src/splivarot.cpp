@@ -29,7 +29,7 @@
 #include "path-chemistry.h"
 #include "desktop.h"
 #include "splivarot.h"
-#include "helper/canvas-bpath.h"
+#include "display/canvas-bpath.h"
 #include "helper/sp-intl.h"
 #include "view.h"
 #include "prefs-utils.h"

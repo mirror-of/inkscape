@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "helper/sp-canvas.h"
+#include "display/sp-canvas.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 

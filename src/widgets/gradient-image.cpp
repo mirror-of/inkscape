@@ -15,8 +15,8 @@
 #include <libnr/nr-pixblock-pattern.h>
 #include <gtk/gtksignal.h>
 #include "macros.h"
-#include "../helper/nr-plain-stuff.h"
-#include "../helper/nr-plain-stuff-gdk.h"
+#include "../display/nr-plain-stuff.h"
+#include "../display/nr-plain-stuff-gdk.h"
 #include "gradient-image.h"
 
 #define VBLOCK 16

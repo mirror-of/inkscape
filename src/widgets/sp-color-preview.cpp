@@ -12,7 +12,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "../helper/nr-plain-stuff-gdk.h"
+#include "../display/nr-plain-stuff-gdk.h"
 #include "sp-color-preview.h"
 
 #define SPCP_DEFAULT_WIDTH 32

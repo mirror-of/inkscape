@@ -22,7 +22,7 @@
 
 #include <gtk/gtksignal.h>
 
-#include "helper/nr-gradient-gpl.h"
+#include "display/nr-gradient-gpl.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "xml/repr-private.h"

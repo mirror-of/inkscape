@@ -15,8 +15,8 @@
 #include <string.h>
 #include <libnr/nr-blit.h>
 #include <gtk/gtksignal.h>
-#include "../helper/sp-canvas.h"
-#include "../helper/sp-canvas-util.h"
+#include "../display/sp-canvas.h"
+#include "../display/sp-canvas-util.h"
 #include "../helper/sp-marshal.h"
 #include "nr-arena.h"
 #include "nr-arena-group.h"

@@ -22,7 +22,7 @@ typedef struct _SPCanvasArenaClass SPCanvasArenaClass;
 #define SP_IS_CANVAS_ARENA(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_CANVAS_ARENA))
 #define SP_IS_CANVAS_ARENA_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_CANVAS_ARENA))
 
-#include "../helper/sp-canvas.h"
+#include "../display/sp-canvas.h"
 #include "nr-arena-item.h"
 
 struct _SPCanvasArena {
