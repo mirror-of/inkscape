@@ -49,6 +49,7 @@ GType sp_tspan_get_type ();
 
 struct SPTextPath : public SPItem {
     TextTagAttributes attributes;
+    SPSVGLength  startOffset;
 	
   Path           *originalPath;
 	bool           isUpdating;	

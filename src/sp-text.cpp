@@ -550,11 +550,12 @@ void SPText::rebuildLayout()
     _buildLayoutInput(this, optional_attrs, 0);
     layout.calculateFlow();
     for (SPObject *child = firstChild() ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-        if (SP_IS_TEXTPATH(child) && SP_TEXTPATH(child)->originalPath != NULL) {
-            SPSVGLength offset;
-            offset = 0.0;     // FIXME (value is not read by SPTextPath yet)
-            //g_print(layout.dumpAsText().c_str());
-            layout.fitToPathAlign(offset, *SP_TEXTPATH(child)->originalPath);
+        if (SP_IS_TEXTPATH(child)) {
+            SPTextPath const *textpath = SP_TEXTPATH(child);
+            if (textpath->originalPath != NULL) {
+                //g_print(layout.dumpAsText().c_str());
+                layout.fitToPathAlign(textpath->startOffset, *textpath->originalPath);
+            }
         }
     }
     //g_print(layout.dumpAsText().c_str());

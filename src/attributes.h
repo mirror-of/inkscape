@@ -146,6 +146,8 @@ enum {
 	SP_ATTR_SODIPODI_ROLE,
 	/* SPText */
 	SP_ATTR_SODIPODI_LINESPACING,
+    /* SPTextPath */
+    SP_ATTR_STARTOFFSET,
 	/* SPStop */
 	SP_ATTR_OFFSET,
 	/* SPGradient */

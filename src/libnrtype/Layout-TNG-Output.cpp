@@ -272,7 +272,12 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
 {
     double offset = 0.0;
 
-    if (startOffset.set) offset = startOffset.computed;
+    if (startOffset.set) {
+        if (startOffset.unit == SP_SVG_UNIT_PERCENT)
+            offset = startOffset.computed * const_cast<Path&>(path).Length();
+        else
+            offset = startOffset.computed;
+    }
 
     for (unsigned span_index = 0 ; span_index < _spans.size() ; span_index++) {
         _spans[span_index].x_start += offset;

@@ -334,6 +334,7 @@ sp_textpath_init(SPTextPath *textpath)
 {
     new (&textpath->attributes) TextTagAttributes;
 	
+    textpath->startOffset.set = 0;
     textpath->originalPath = NULL;
     textpath->isUpdating=false;
     // set up the uri reference
@@ -373,6 +374,7 @@ sp_textpath_build(SPObject *object, SPDocument *doc, Inkscape::XML::Node *repr)
     sp_object_read_attr(object, "dx");
     sp_object_read_attr(object, "dy");
     sp_object_read_attr(object, "rotate");
+    sp_object_read_attr(object, "startOffset");
     sp_object_read_attr(object, "xlink:href");
 	
     bool  no_content=true;
@@ -400,6 +402,12 @@ sp_textpath_set(SPObject *object, unsigned key, gchar const *value)
         switch (key) {
             case SP_ATTR_XLINK_HREF:
                 textpath->sourcePath->link((char*)value);
+                break;
+            case SP_ATTR_STARTOFFSET:
+                if (!sp_svg_length_read(value, &textpath->startOffset)) {
+                    sp_svg_length_unset(&textpath->startOffset, SP_SVG_UNIT_NONE, 0.0, 0.0);
+                }
+                object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
                 break;
             default:
                 if (((SPObjectClass *) textpath_parent_class)->set)
@@ -480,6 +488,8 @@ sp_textpath_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     }
 	
     textpath->attributes.writeTo(repr);
+    if (textpath->startOffset.set)
+        sp_repr_set_double(repr, "startOffset", textpath->startOffset.computed);
 
     if ( textpath->sourcePath->sourceHref ) sp_repr_set_attr(repr, "xlink:href", textpath->sourcePath->sourceHref);
 	

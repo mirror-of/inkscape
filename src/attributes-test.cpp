@@ -214,7 +214,7 @@ static struct {char const *attr; bool supported;} const all_attrs[] = {
     {"specularConstant", false},
     {"specularExponent", false},
     {"spreadMethod", true},
-    {"startOffset", false},
+    {"startOffset", true},
     {"stdDeviation", false},
     {"stemh", false},
     {"stemv", false},

@@ -483,7 +483,6 @@ void SPFlowtext::convert_to_text()
 	        Inkscape::XML::Node *span_tspan = sp_repr_new("svg:tspan");
             NR::Point anchor_point = group->layout.characterAnchorPoint(it);
             sp_repr_set_double(span_tspan, "x", anchor_point[0]);  // FIXME: this will pick up the wrong end of counter-directional runs
-                                                                   //   (and Text::Layout will render it wrong too, two wrongs make a right :-) )
             sp_repr_set_double(span_tspan, "y", anchor_point[1]);
             // TODO: dx attributes from justification (or maybe letter-spacing and word-spacing)
             SPObject *source_obj;
