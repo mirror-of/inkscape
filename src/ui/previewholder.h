@@ -30,6 +30,8 @@ public:
     virtual void clear();
     virtual void addPreview( Previewable* preview );
     virtual void setStyle(Gtk::BuiltinIconSize size, ViewType view);
+    virtual Gtk::BuiltinIconSize getPreviewSize() const { return _baseSize; }
+    virtual ViewType getPreviewType() const { return _view; }
 
 private:
     void rebuildUI();

@@ -155,7 +155,7 @@ IconPreviewPanel::IconPreviewPanel() :
     refreshButton->signal_clicked().connect( sigc::mem_fun(*this, &IconPreviewPanel::refreshPreview) );
 
 
-    add( iconBox );
+    pack_start(iconBox, Gtk::PACK_EXPAND_WIDGET);
 
     show_all_children();
 }

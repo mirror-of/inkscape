@@ -640,23 +640,8 @@ SwatchesPanel::SwatchesPanel() :
         _holder->addPreview(item);
     }
 
-
-    Gtk::HBox* box = manage(new Gtk::HBox());
-    Gtk::Button *btn = manage(new Gtk::Button("Foo"));
-    btn->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &SwatchesPanel::changeItTo), 0) );
-    box->pack_start(*btn, Gtk::PACK_EXPAND_WIDGET);
-
-    btn = manage(new Gtk::Button("Bar"));
-    btn->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &SwatchesPanel::changeItTo), 1) );
-    box->pack_start(*btn, Gtk::PACK_EXPAND_WIDGET);
-
-    btn = manage(new Gtk::Button("Baz"));
-    btn->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &SwatchesPanel::changeItTo), 2) );
-    box->pack_start(*btn, Gtk::PACK_EXPAND_WIDGET);
-
-    pack_start(*box, Gtk::PACK_SHRINK);
-
     pack_start(*_holder, Gtk::PACK_EXPAND_WIDGET);
+    setTargetFillable(_holder);
 
     show_all_children();
 }

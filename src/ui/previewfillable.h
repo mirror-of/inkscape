@@ -26,6 +26,8 @@ public:
     virtual void clear() = 0;
     virtual void addPreview( Previewable* preview ) = 0;
     virtual void setStyle(Gtk::BuiltinIconSize size, ViewType type) = 0;
+    virtual Gtk::BuiltinIconSize getPreviewSize() const = 0;
+    virtual ViewType getPreviewType() const = 0;
 };
 
 

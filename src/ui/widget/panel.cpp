@@ -6,6 +6,7 @@
  *   Jon A. Cruz <jon@joncruz.org>
  *
  * Copyright (C) 2004 Bryce Harrington
+ * Copyright (C) 2005 Jon A. Cruz
  *
  * Released under GNU GPL.  Read the file 'COPYING' for more information
  */
@@ -17,6 +18,11 @@
 #include <gtkmm/frame.h>
 #include <gtkmm/label.h>
 #include <gtkmm/table.h>
+#include <gtkmm/menuitem.h>
+#include <gtkmm/separatormenuitem.h>
+#include <gtkmm/radiomenuitem.h>
+#include <gtk/gtkmain.h>
+
 #include "panel.h"
 
 namespace Inkscape {
@@ -29,24 +35,65 @@ namespace Widget {
  *    \param label Label.
  */
 
-Panel::Panel()
+Panel::Panel() :
+    _fillable(0)
 {
     init();
 }
 
-Panel::Panel(Glib::ustring const &label)
+Panel::Panel(Glib::ustring const &label) :
+    _fillable(0)
 {
     this->label = label;
     init();
 }
 
+Panel::~Panel()
+{
+}
+
 void Panel::init()
 {
+    Glib::ustring tmp("<");
     tabTitle.set_label(this->label);
-    tabButton.set_label("<");
+
+    tabButton.set_menu(menu);
+    Gtk::MenuItem* dummy = manage(new Gtk::MenuItem(tmp));
+    menu.append( *dummy );
+    menu.append( *manage(new Gtk::SeparatorMenuItem()) );
+    {
+        const char *things[] = {
+            "small",
+            "medium",
+            "large",
+            "huge"
+        };
+        Gtk::RadioMenuItem::Group groupOne;
+        for ( unsigned int i = 0; i < G_N_ELEMENTS(things); i++ ) {
+            Glib::ustring foo(things[i]);
+            Gtk::RadioMenuItem* single = manage(new Gtk::RadioMenuItem(groupOne, foo));
+            menu.append(*single);
+            if ( i == 1 ) {
+                single->set_active(true);
+            }
+            single->signal_activate().connect( sigc::bind<int, int>( sigc::mem_fun(*this, &Panel::bounceCall), 0, i) );
+       }
+    }
+    menu.append( *manage(new Gtk::SeparatorMenuItem()) );
+    Gtk::RadioMenuItem::Group group;
+    Glib::ustring oneLab("List");
+    Glib::ustring twoLab("Grid");
+    Gtk::RadioMenuItem *one = manage(new Gtk::RadioMenuItem(group, oneLab));
+    Gtk::RadioMenuItem *two = manage(new Gtk::RadioMenuItem(group, twoLab));
+    one->set_active(true);
+    menu.append( *one );
+    menu.append( *two );
+    menu.append( *manage(new Gtk::SeparatorMenuItem()) );
+    one->signal_activate().connect( sigc::bind<int, int>( sigc::mem_fun(*this, &Panel::bounceCall), 1, 0) );
+    two->signal_activate().connect( sigc::bind<int, int>( sigc::mem_fun(*this, &Panel::bounceCall), 1, 1) );
+
     closeButton.set_label("X");
 
-/*
     topBar.pack_start(tabTitle);
 
 
@@ -54,7 +101,6 @@ void Panel::init()
     topBar.pack_end(tabButton, false, false);
 
     pack_start( topBar, false, false );
-*/
 
     show_all_children();
 }
@@ -65,9 +111,66 @@ void Panel::setLabel(Glib::ustring const &label)
     tabTitle.set_label(this->label);
 }
 
+
+void Panel::bounceCall(int i, int j)
+{
+    menu.set_active(0);
+    switch ( i ) {
+    case 0:
+        if ( _fillable ) {
+            ViewType currType = _fillable->getPreviewType();
+            switch ( j ) {
+            case 0:
+            {
+                _fillable->setStyle(Gtk::ICON_SIZE_MENU, currType);
+            }
+            break;
+            case 1:
+            {
+                _fillable->setStyle(Gtk::ICON_SIZE_BUTTON, currType);
+            }
+            break;
+            default:
+                ;
+            }
+        }
+        break;
+    case 1:
+        if ( _fillable ) {
+            Gtk::BuiltinIconSize currSize = _fillable->getPreviewSize();
+            switch ( j ) {
+            case 0:
+            {
+                _fillable->setStyle(currSize, VIEW_TYPE_LIST);
+            }
+            break;
+            case 1:
+            {
+                _fillable->setStyle(currSize, VIEW_TYPE_GRID);
+            }
+            break;
+            default:
+                break;
+            }
+        }
+        break;
+    default:
+        ;
+    }
+}
+
+
+
+
+
 Glib::ustring const &Panel::getLabel() const
 {
     return label;
+}
+
+void Panel::setTargetFillable( PreviewFillable *target )
+{
+    _fillable = target;
 }
 
 
