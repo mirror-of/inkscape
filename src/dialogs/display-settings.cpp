@@ -130,6 +130,15 @@ options_selcue_toggled (GtkToggleButton *button)
 }
 
 static void
+options_scale_origin_toggled (GtkToggleButton *button)
+{
+	if (gtk_toggle_button_get_active (button)) {
+                const gchar *val = (const gchar *) gtk_object_get_data (GTK_OBJECT (button), "value");
+		prefs_set_string_attribute ("tools.select", "scale_origin", val);
+	}
+}
+
+static void
 options_dropper_pick_toggled (GtkToggleButton *button)
 {
 	if (gtk_toggle_button_get_active (button)) {
@@ -239,6 +248,30 @@ options_selector ()
         options_selcue_toggled
         );
 
+    f = gtk_frame_new (_("Default scale origin:"));
+    gtk_widget_show (f);
+    gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
+
+    fb = gtk_vbox_new (FALSE, 0);
+    gtk_widget_show (fb);
+    gtk_container_add (GTK_CONTAINER (f), fb);
+
+    gchar const *scale_orig = prefs_get_string_attribute ("tools.select", "scale_origin");
+
+    b = sp_select_context_add_radio (
+        NULL, fb, tt, _("On bounding box"),
+        _("Default scale origin will be on the bounding box of the item"), "bbox", 0, false,
+        (scale_orig == NULL) || !strcmp (scale_orig, "bbox"),
+        options_scale_origin_toggled
+        );
+
+    sp_select_context_add_radio (
+        b, fb, tt, _("On outermost point"),
+        _("Default scale origin will be on the bounding box of the item's points"), "points", 0, false,
+        scale_orig && !strcmp (scale_orig, "points"),
+        options_scale_origin_toggled
+        );
+    
     return vb;
 }
 
