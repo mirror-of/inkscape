@@ -23,6 +23,7 @@
 #define INKSCAPE_PIXMAPDIR     "share\\icons"
 #define INKSCAPE_ICONS_DIR     "share\\icons"
 #define INKSCAPE_SCREENSDIR    "share\\screens"
+#define INKSCAPE_TUTORIALSDIR  "share\\tutorials"
 
 #define GETTEXT_PACKAGE "inkscape"
 

@@ -1,10 +1,10 @@
 
-tutorialsdir = $(datadir)/inkscape/tutorials
+tutorialdir = $(datadir)/inkscape/tutorials
 
-tutorials_DATA = \
+tutorial_DATA = \
     tutorial.svg \
     elementsofdesign.svg
 
 
-EXTRA_DIST = $(tutorials_DATA)
+EXTRA_DIST = $(tutorial_DATA)
 

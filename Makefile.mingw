@@ -61,6 +61,7 @@ dist:
 	$(RMDIR) inkscape$(S)share$(S)extensions$(S)CVS
 	$(RMDIR) inkscape$(S)share$(S)clipart$(S)CVS
 	$(RMDIR) inkscape$(S)share$(S)clipart$(S)road_signs$(S)CVS
+	$(RMDIR) inkscape$(S)share$(S)tutorials$(S)CVS
 	$(CPDIR) doc inkscape$(S)doc
 	$(RMDIR) inkscape$(S)doc$(S)CVS
 	$(MKDIR) inkscape$(S)data
@@ -68,9 +69,6 @@ dist:
 #	$(MKDIR) inkscape$(S)extensions
 	$(MKDIR) inkscape$(S)locale
 	$(MKDIR) inkscape$(S)modules
-	$(MKDIR) inkscape$(S)samples
-	$(CP) samples$(S)*.svg inkscape$(S)samples
-	$(CP) samples$(S)*.png inkscape$(S)samples
 	@echo "##################### D O N E ####################"
 
 clean:
