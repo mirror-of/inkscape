@@ -1,3 +1,8 @@
+2004-04-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/libnr/Makefile_insert (libnr_libnr_a_SOURCES):
+	  Add libnr/nr-convex-hull.h, needed by sp-canvas.cpp.
+
 2004-04-24  Ted Gould  <ted@gould.cx>
 
 	* src/Makefile_include, src/prefix.cpp:
@@ -17,7 +22,7 @@
 	foreach functions (which causes instability with the glib hash
 	table).
 
-2004-04-24  Peter  <pmoulder@mail.csse.monash.edu.au>
+2004-04-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/dialogs/Makefile_insert:
 	* src/display/Makefile_insert:
@@ -689,7 +694,7 @@
 	Changing it so that SVG documents open and default to with
 	extension namespace.  Also, autodetect is reenabled.
 
-2004-04-03  Peter  <pmoulder@river>
+2004-04-03  Peter Moulder <pmoulder@mail.csse.monash.edu.au>
 
 	* src/helper/bezier-utils.cpp (NewtonRaphsonRootFind): Fix my
 	previous commit.
