@@ -4,12 +4,12 @@ msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-11-25 14:46+0100\n"
-"PO-Revision-Date: 2004-11-22 11:53+0100\n"
+"PO-Revision-Date: 2004-11-26 09:50+0100\n"
 "Last-Translator: Lucas Vieites <lucas@asixinformatica.com>\n"
 "Language-Team: Spanish/Spain <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: inkscape.desktop.in.h:1
 msgid "Inkscape SVG Vector Illustrator"
@@ -34,13 +34,13 @@ msgstr "<b>Mayús</b>: dibujar alrededor del punto inicial"
 #: src/pen-context.cpp:272 src/pencil-context.cpp:180 src/rect-context.cpp:465
 #: src/spiral-context.cpp:425 src/star-context.cpp:437
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to draw on it."
-msgstr ""
+msgstr "<b>La capa actual está oculta</b>. Debe estar visible para poder dibujar en ella."
 
 #: src/arc-context.cpp:433 src/dyna-draw-context.cpp:461
 #: src/pen-context.cpp:276 src/pencil-context.cpp:184 src/rect-context.cpp:469
 #: src/spiral-context.cpp:429 src/star-context.cpp:441
 msgid "<b>Current layer is locked</b>. Unlock it to be able to draw on it."
-msgstr ""
+msgstr "<b>La capa actual está bloqueada</b>. Debe desbloquearla para poder dibujar en ella."
 
 #: src/arc-context.cpp:512
 #, c-format
@@ -1017,9 +1017,8 @@ msgid "Clones"
 msgstr "Clones"
 
 #: src/dialogs/display-settings.cpp:1217
-#, fuzzy
 msgid "When the original moves, its clones and linked offsets:"
-msgstr "Cuando se mueve el original, sus clones:"
+msgstr "Cuando se mueve el original, sus clones y desplazamientos enlazados:"
 
 #: src/dialogs/display-settings.cpp:1229
 msgid "Move in parallel"
@@ -1431,9 +1430,9 @@ msgstr ""
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
 #: src/dialogs/find.cpp:430
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%d</b> object(s) found (out of <b>%d</b>), %s match."
-msgstr "%d objeto(s) encontrado (de %d), coincidencia %s."
+msgstr "<b>%d</b> objeto(s) encontrado (de <b>%d</b>), coinciden %s."
 
 #: src/dialogs/find.cpp:431
 msgid "exact"
@@ -1539,11 +1538,11 @@ msgstr "Imágenes"
 
 #: src/dialogs/find.cpp:684
 msgid "Search offset objects"
-msgstr "Buscar objetos de offset"
+msgstr "Buscar objetos desplazados"
 
 #: src/dialogs/find.cpp:684
 msgid "Offsets"
-msgstr "Offsets"
+msgstr "Desplazamientos"
 
 #: src/dialogs/find.cpp:744
 msgid "_Text: "
@@ -1570,32 +1569,28 @@ msgid "Limit search to the current selection"
 msgstr "Limitar la búsqueda a la selección actual"
 
 #: src/dialogs/find.cpp:770
-#, fuzzy
 msgid "Search in current _layer"
-msgstr "Enviar la capa actual hacia abajo"
+msgstr "Buscar en la capa actua_l"
 
 #: src/dialogs/find.cpp:774
-#, fuzzy
 msgid "Limit search to the current layer"
-msgstr "Limitar la búsqueda a la selección actual"
+msgstr "Limitar la búsqueda a la capa actual"
 
 #: src/dialogs/find.cpp:779
 msgid "Include _hidden"
-msgstr ""
+msgstr "Incluir _ocultas"
 
 #: src/dialogs/find.cpp:783
-#, fuzzy
 msgid "Include hidden objects in search"
-msgstr "Ignorar objetos ocultos"
+msgstr "Incluir objetos ocultos en la búsqueda"
 
 #: src/dialogs/find.cpp:788
 msgid "Include l_ocked"
-msgstr ""
+msgstr "Incluir b_loqueadas"
 
 #: src/dialogs/find.cpp:792
-#, fuzzy
 msgid "Include locked objects in search"
-msgstr "Ignorar objetos bloqueados"
+msgstr "Incluir objetos bloqueados en la búsqueda"
 
 #: src/dialogs/find.cpp:803
 msgid "Clear values"
@@ -1697,14 +1692,12 @@ msgid "Layer Name:"
 msgstr "Nombre de la capa:"
 
 #: src/dialogs/layer-properties.cpp:130
-#, fuzzy
 msgid "Rename Layer"
-msgstr "Capa renombrada"
+msgstr "Renombrar capa"
 
 #: src/dialogs/layer-properties.cpp:133
-#, fuzzy
 msgid "_Rename"
-msgstr "Nombre de archivo"
+msgstr "_Renombrar"
 
 #. TRANSLATORS: This means "The layer has been renamed"
 #: src/dialogs/layer-properties.cpp:144
@@ -1712,14 +1705,12 @@ msgid "Renamed layer"
 msgstr "Capa renombrada"
 
 #: src/dialogs/layer-properties.cpp:148
-#, fuzzy
 msgid "Create Layer"
-msgstr "Crear una capa nueva"
+msgstr "Crear una capa"
 
 #: src/dialogs/layer-properties.cpp:150
-#, fuzzy
 msgid "C_reate"
-msgstr "Crear"
+msgstr "C_rear"
 
 #: src/dialogs/layer-properties.cpp:164
 msgid "New layer created."
@@ -2913,19 +2904,17 @@ msgstr "A_yuda"
 
 #. TRANSLATORS: #%s is the id of the group e.g. <g id="#g7">, not a number.
 #: src/interface.cpp:1118
-#, fuzzy, c-format
+#, c-format
 msgid "Enter group #%s"
-msgstr "Editar el grupo #%s"
+msgstr "Entrar en el grupo #%s"
 
 #: src/interface.cpp:1129
-#, fuzzy
 msgid "Go to parent"
-msgstr "Sin pintura"
+msgstr "Ir al padre"
 
 #: src/interface.cpp:1135
-#, fuzzy
 msgid "Go to root"
-msgstr "Editar raíz"
+msgstr "Ir a la raíz"
 
 #: src/interface.cpp:1173
 msgid "Could not parse SVG data"
@@ -3277,7 +3266,7 @@ msgstr ""
 
 #: src/object-edit.cpp:921
 msgid "Adjust the <b>offset distance</b>"
-msgstr "Ajustar la distancia de <b>offset</b>"
+msgstr "Ajustar la distancia de <b>desplazamiento</b>"
 
 #. TRANSLATORS: This refers to the pattern that's inside the object
 #: src/object-edit.cpp:952
@@ -3323,14 +3312,12 @@ msgstr "_Crear enlace"
 
 #. Add Text to shape
 #: src/object-ui.cpp:152
-#, fuzzy
 msgid "_Flow Text into Shape"
 msgstr "_Añadir texto a la forma"
 
 #: src/object-ui.cpp:227
-#, fuzzy
 msgid "Select <b>a shape</b> to flow text into."
-msgstr "Seleccione uno o más <b>trazos</b> para contornear."
+msgstr "Seleccione una <b>forma</b> a la que añadir el texto."
 
 #. "Ungroup"
 #: src/object-ui.cpp:317 src/verbs.cpp:1514
@@ -3558,11 +3545,11 @@ msgstr "No se ha copiado nada."
 
 #: src/selection-chemistry.cpp:929
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to paste to it."
-msgstr ""
+msgstr "<b>La capa actual está oculta</b>. Debe hacerla visible para poder pegar en ella."
 
 #: src/selection-chemistry.cpp:933
 msgid "<b>Current layer is locked</b>. Unlock it to be able to paste to it."
-msgstr ""
+msgstr "<b>La capa actual está bloqueada</b>. Debe desbloquearla antes de poder pegar en ella."
 
 #: src/selection-chemistry.cpp:946 src/selection-chemistry.cpp:997
 msgid "Nothing on the clipboard."
@@ -3596,7 +3583,7 @@ msgid ""
 "Select a <b>clone</b> to go to its original. Select a <b>linked offset</b> "
 "to go to its source. Select a <b>text on path</b> to go to the path."
 msgstr ""
-"Seleccione un <b>clon</b> para ir a su original. Seleccione <b>offset "
+"Seleccione un <b>clon</b> para ir a su original. Seleccione <b>desplazamiento "
 "enlazado</b> para ir a su origen. Seleccione <b>texto en trayecto</b> para "
 "ir al trayecto."
 
@@ -3605,7 +3592,7 @@ msgid ""
 "<b>Cannot find</b> the object to select (orphaned clone, offset, or "
 "textpath?)"
 msgstr ""
-"<b>No se pudo encontrar</b> el objeto (¿clon huérfano, offset, o trayecto de "
+"<b>No se pudo encontrar</b> el objeto (¿clon huérfano, desplazamiento, o trayecto de "
 "un texto?)"
 
 #: src/selection-chemistry.cpp:1682
@@ -3616,20 +3603,16 @@ msgstr ""
 "El objeto que desea seleccionar <b>no es visible</b> (está en &lt;defs&gt;)"
 
 #: src/selection-chemistry.cpp:1709
-#, fuzzy
 msgid "Select <b>object(s)</b> to convert to pattern."
-msgstr "Seleccione los <b>objetos</b> que desea convertir en trazos."
+msgstr "Seleccione los <b>objetos</b> que desea convertir en patrón."
 
 #: src/selection-chemistry.cpp:1795
-#, fuzzy
 msgid "Select an <b>object with pattern fill</b> to extract objects from."
-msgstr ""
-"Seleccione un <b>objeto con relleno de mosaico</b> para eliminar el mosaico."
+msgstr "Seleccione un <b>objeto con relleno de mosaico</b> del que extraer objetos."
 
 #: src/selection-chemistry.cpp:1848
-#, fuzzy
 msgid "<b>No pattern fills</b> in the selection."
-msgstr "No hay <b>rellenos de mosaico</b> desechables en la selección."
+msgstr "No hay <b>rellenos de mosaico</b> en la selección."
 
 #: src/selection-chemistry.cpp:1868
 msgid "Select <b>object(s)</b> to make a bitmap copy."
@@ -3779,7 +3762,7 @@ msgstr "Objeto"
 msgid ""
 "<b>Linked offset</b>, %s by %f pt. Use <b>Shift+D</b> to look up original"
 msgstr ""
-"<b>Offset enlazado</b>, %s por %f pt. Utilice <b>Mayús+D</b> para buscar el "
+"<b>Desplazamiento enlazado</b>, %s por %f pt. Utilice <b>Mayús+D</b> para buscar el "
 "original."
 
 #: src/sp-offset.cpp:396 src/sp-offset.cpp:400
@@ -3794,7 +3777,7 @@ msgstr "reducir"
 #: src/sp-offset.cpp:399
 #, c-format
 msgid "<b>Dynamic offset</b>, %s by %f pt"
-msgstr "<b>Offset dinámico</b>, %s por %f pt"
+msgstr "<b>Desplazamiento dinámico</b>, %s por %f pt"
 
 #: src/sp-path.cpp:125
 #, c-format
@@ -3976,11 +3959,11 @@ msgstr "Seleccione los <b>textos</b> de los que desea eliminar los kerns."
 
 #: src/text-context.cpp:353
 msgid "<b>Current layer is hidden</b>. Unhide it to be able to add text."
-msgstr ""
+msgstr "<b>La capa actual está oculta</b>. Debe hacerla visible para poder añadr texto."
 
 #: src/text-context.cpp:357
 msgid "<b>Current layer is locked</b>. Unlock it to be able to add text."
-msgstr ""
+msgstr "<b>La capa actual está bloqueada</b>. Debe desbloquearla para poder añadir texto."
 
 #: src/text-context.cpp:409
 msgid "No-break space"
@@ -4090,7 +4073,6 @@ msgid "Base radius to tip radius ratio"
 msgstr "Relación entre el radio base y el radio de la punta"
 
 #: src/toolbox.cpp:1217
-#, fuzzy
 msgid "Rounded:"
 msgstr "Redondez:"
 
@@ -4099,9 +4081,8 @@ msgid "How much rounded are the corners (0 for sharp)"
 msgstr "Lo redondos que son las esquinas (0 para agudo)"
 
 #: src/toolbox.cpp:1227
-#, fuzzy
 msgid "Randomized:"
-msgstr "Aleatorización:"
+msgstr "Aleatorio:"
 
 #: src/toolbox.cpp:1227
 msgid "Scatter randomly the corners and angles"
@@ -4385,14 +4366,14 @@ msgid "No current layer."
 msgstr "No hay capa actual."
 
 #: src/verbs.cpp:939
-#, fuzzy, c-format
+#, c-format
 msgid "Raised layer <b>%s</b>."
-msgstr "Capa elevada."
+msgstr "Capa elevada <b>%s</b>."
 
 #: src/verbs.cpp:943
-#, fuzzy, c-format
+#, c-format
 msgid "Lowered layer <b>%s</b>."
-msgstr "Capa enviada al fondo."
+msgstr "Capa enviada al fondo·<b>%s</b>."
 
 #: src/verbs.cpp:952
 msgid "Can't move layer any further."
@@ -4420,14 +4401,12 @@ msgid "tutorial-advanced.svg"
 msgstr "tutorial-advanced.svg"
 
 #: src/verbs.cpp:1341
-#, fuzzy
 msgid "tutorial-tracing.svg"
-msgstr "tutorial-basic.svg"
+msgstr "tutorial-tracing.svg"
 
 #: src/verbs.cpp:1344
-#, fuzzy
 msgid "tutorial-calligraphy.svg"
-msgstr "tutorial-basic.svg"
+msgstr "tutorial-calligraphy.svg"
 
 #: src/verbs.cpp:1347
 msgid "elementsofdesign.svg"
@@ -4665,9 +4644,8 @@ msgstr "Seleccione el objeto al que está conectado el clon."
 
 #. TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
 #: src/verbs.cpp:1491
-#, fuzzy
 msgid "O_bject(s) to Pattern"
-msgstr "_Objeto a trazo"
+msgstr "O_bjeto(s) a patrón"
 
 #: src/verbs.cpp:1492
 msgid "Convert selection to a rectangle with tiled pattern fill"
@@ -4675,9 +4653,8 @@ msgstr "Convertir la selección a un rectángulo con un relleno de mosaico"
 
 #. TRANSLATORS: Extract objects from a tiled pattern fill
 #: src/verbs.cpp:1494
-#, fuzzy
 msgid "Pattern to Ob_ject(s)"
-msgstr "Offset del patrón"
+msgstr "Patrón a ob_jeto(s)"
 
 #: src/verbs.cpp:1495
 msgid "Extract objects from a tiled pattern fill"
@@ -4882,19 +4859,19 @@ msgstr "Reducir los trazos seleccionados 10 px"
 
 #: src/verbs.cpp:1561
 msgid "D_ynamic Offset"
-msgstr "Offset d_inámico"
+msgstr "Desplazamiento d_inámico"
 
 #: src/verbs.cpp:1561
 msgid "Create a dynamic offset object"
-msgstr "Crear un objeto de offset dinámico"
+msgstr "Crear un objeto de desplazamiento dinámico"
 
 #: src/verbs.cpp:1563
 msgid "_Linked Offset"
-msgstr "Offset en_lazado"
+msgstr "Desplazamiento en_lazado"
 
 #: src/verbs.cpp:1564
 msgid "Create a dynamic offset object linked to the original path"
-msgstr "Crear un objeto de offset dinámico enlazado al trazo original"
+msgstr "Crear un objeto de desplazamiento dinámico enlazado al trazo original"
 
 #: src/verbs.cpp:1566
 msgid "_Stroke to Path"
@@ -5526,34 +5503,29 @@ msgstr "Temas avanzados de Inkscape"
 #. "tutorial_advanced"
 #. TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
 #: src/verbs.cpp:1748
-#, fuzzy
 msgid "Inkscape: T_racing"
-msgstr "Inkscape: _Básico"
+msgstr "Inkscape: Vecto_rizar"
 
 #: src/verbs.cpp:1749
-#, fuzzy
 msgid "Using bitmap tracing"
-msgstr "Trazado de mapa de bits"
+msgstr "Usar trazado de mapa de bits"
 
 #. "tutorial_tracing"
 #: src/verbs.cpp:1750
-#, fuzzy
 msgid "Inkscape: _Calligraphy"
-msgstr "Inkscape: _Básico"
+msgstr "Inkscape: _Caligrafía"
 
 #: src/verbs.cpp:1751
-#, fuzzy
 msgid "Using the Calligraphy pen tool"
-msgstr "Mostrar el número de versión de Inkscape"
+msgstr "Cómo usar la herramienta de pluma caligráfica"
 
 #: src/verbs.cpp:1752
 msgid "_Elements of Design"
 msgstr "_Elementos de diseño"
 
 #: src/verbs.cpp:1753
-#, fuzzy
 msgid "Principles of design in the tutorial form"
-msgstr "Tutorial de elementos de diseño"
+msgstr "Principios de diseño en forma de tutorial"
 
 #. "tutorial_design"
 #: src/verbs.cpp:1754
@@ -5561,7 +5533,6 @@ msgid "_Tips and Tricks"
 msgstr "_Trucos y consejos"
 
 #: src/verbs.cpp:1755
-#, fuzzy
 msgid "Miscellaneous tips and tricks"
 msgstr "Trucos y consejos varios"
 
@@ -5571,7 +5542,7 @@ msgstr "Patrón de rayas"
 
 #: src/widgets/dash-selector.cpp:119
 msgid "Pattern offset"
-msgstr "Offset del patrón"
+msgstr "Desplazamiento del patrón"
 
 #. Family frame
 #: src/widgets/font-selector.cpp:154
@@ -5660,7 +5631,7 @@ msgstr "Eliminar el control de parada actual"
 #. Label
 #: src/widgets/gradient-vector.cpp:783
 msgid "Offset:"
-msgstr "Offset:"
+msgstr "Desplazamiento:"
 
 #. TRANSLATORS: "Stop" means: a "phase" of a gradient
 #: src/widgets/gradient-vector.cpp:828
@@ -5722,12 +5693,11 @@ msgid "No patterns in document"
 msgstr "Sin patrones en el documento"
 
 #: src/widgets/paint-selector.cpp:1000
-#, fuzzy
 msgid ""
 "Use <b>Edit &gt; Object(s) to Pattern</b> to create a new pattern from "
 "selection."
 msgstr ""
-"Utilice <b>Edición &gt; Mosaico</b> para crear un patrón de mosaico desde la "
+"Utilice <b>Edición &gt; Objeto(s) a patrón</b> para crear un patrón de mosaico desde la "
 "selección."
 
 #: src/widgets/paint-selector.cpp:1013
