@@ -8,6 +8,7 @@
 
 INCLUDES = \
 	$(INKSCAPE_CFLAGS) \
+	-I$(top_srcdir)/src \
 	-I$(includedir)
 
 TESTS = repr-action-test$(EXEEXT)

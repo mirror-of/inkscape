@@ -2,7 +2,7 @@
 #define INKSCAPE_STRINGSTREAM_H
 
 #include <sstream>
-#include "src/svg/ftos.h"
+#include "svg/ftos.h"
 
 namespace Inkscape {
 	class SVGOStringStream : public std::ostringstream {
