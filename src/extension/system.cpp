@@ -176,7 +176,7 @@ open_internal (Extension * in_plug, gpointer in_data)
 	\param    key       Identifier of which module to use
 	\param    doc       The document to be saved
 	\param    filename  The file that the document should be saved to
-      \param official  (optional) whether to set :output_module and :modified in the 
+    \param    official  (optional) whether to set :output_module and :modified in the 
                         document; is true for normal save, false for temporary saves
 
 	First things first, are we looking at an autodetection?  Well if

@@ -1,3 +1,15 @@
+2004-04-13  Ted Gould <ted@gould.cx>
+
+	* configure.in, share/Makefile.am, share/clipart/Makefile.am,
+      share/examples/Makefile.am, share/fonts/Makefile.am
+      share/gradients/Makefile.am, share/keyboards/Makefile.am
+      share/markers/Makefile.am, share/palettes/Makefile.am
+      share/screens/Makefile.am, share/templates/Makefile.am:
+	Making it so that the clipart and everything else gets put in
+	the tarball, and also get installed in the share directory.  Many
+	of these have just 'README' files, but they now have good place-
+	holders for further development.
+
 2004-04-12  Kees Cook <kees@outflux.net>
 
 	* src/dialogs/stroke-style.cpp, src/Makefile.am, src/dialogs/Makefile.am,

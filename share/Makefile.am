@@ -13,7 +13,19 @@
 ##    markers \
 ##    tutorials
 
-SUBDIRS = icons screens extensions tutorials markers
+SUBDIRS = clipart \
+          examples \
+          extensions \
+          fonts \
+          gradients \
+          icons \
+          keyboards \
+          markers \
+          palettes \
+          patterns \
+          screens \
+          templates \
+          tutorials
 
 ## COPY THE REST OF THE FOLDERS TO THE PROPER LOCATION
 
