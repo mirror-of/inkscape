@@ -1,5 +1,9 @@
 2003-12-02  bulia byak <bulia@dr.com>
 
+	* src/file.c: made open and save dialogs modal and transient
+
+2003-12-02  bulia byak <bulia@dr.com>
+
 	* src/interface.c: removed tool attributes command
 	* src/preferences-skeleton.h: added branch for export dialog
 	* src/file.c: made import dialog transient
