@@ -42,9 +42,9 @@ extern gint nr_arena_image_x_sample;
 extern gint nr_arena_image_y_sample;
 extern gdouble nr_arena_global_delta;
 
-#define SB_WIDTH 50
+#define SB_WIDTH 70
 #define SB_MARGIN 1
-#define SUFFIX_WIDTH 50
+#define SUFFIX_WIDTH 70
 #define HB_MARGIN 4
 #define VB_MARGIN 4
 #define VB_SKIP 1
@@ -247,19 +247,104 @@ sp_display_dialog_set_oversample (GtkMenuItem *item, gpointer data)
 
     prefs_set_int_attribute ( "options.bitmapoversample", "value", os );
     
-} // end of sp_display_dialog_set_oversample()
+} 
 
+
+static void
+options_rotation_steps_changed (GtkMenuItem *item, gpointer data)
+{
+    gint snaps_new = GPOINTER_TO_INT (data);
+    prefs_set_int_attribute ( "options.rotationsnapsperpi", "value", snaps_new );
+} 
+
+void 
+options_rotation_steps (GtkWidget *vb, GtkTooltips *tt)
+{
+    GtkWidget *hb = gtk_hbox_new (FALSE, HB_MARGIN);
+    gtk_widget_show (hb);
+    gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
+
+    {
+        GtkWidget *l = gtk_label_new (_("degrees"));
+        gtk_misc_set_alignment (GTK_MISC (l), 0.0, 0.5);
+        gtk_widget_set_usize (l, SUFFIX_WIDTH, -1);
+        gtk_widget_show (l);
+        gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
+    }
+
+    {
+        GtkWidget *om = gtk_option_menu_new ();
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), om, _("Rotating with Ctrl pressed snaps every that much degrees; also, pressing [ or ] rotates by this amount"), NULL);
+        gtk_widget_set_usize (om, SB_WIDTH, -1);
+        gtk_widget_show (om);
+        gtk_box_pack_end (GTK_BOX (hb), om, FALSE, FALSE, SB_MARGIN);
+
+        GtkWidget *m = gtk_menu_new ();
+        gtk_widget_show (m);
+
+        int snaps_current = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
+        int position_current = 0;
+
+        struct RotSteps {
+            double degrees;
+            int snaps;
+        } const rot_snaps[] = {
+            {90, 2},
+            {60, 3},
+            {45, 4},
+            {30, 6},
+            {15, 12},
+            {10, 18},
+            {7.5, 24},
+            {6, 30},
+            {3, 60},
+            {2, 90},
+            {1, 180},
+            {1, 0},
+        };
+
+        for (unsigned j = 0; j < G_N_ELEMENTS(rot_snaps); ++j) {
+            RotSteps const &rs = rot_snaps[j];
+
+            const gchar *label = NULL;
+            if (rs.snaps == 0) {
+                // sorationsnapsperpi == 0 means no snapping
+                label = _("None");
+            } else {
+                label = g_strdup_printf ("%.2g", rs.degrees);
+            }
+
+            if (rs.snaps == snaps_current)
+                position_current = j;
+
+            GtkWidget *item = gtk_menu_item_new_with_label (label);
+            gtk_signal_connect ( GTK_OBJECT (item), "activate", 
+                                 GTK_SIGNAL_FUNC (options_rotation_steps_changed),
+                                 GINT_TO_POINTER (rs.snaps) );
+            gtk_widget_show (item);
+            gtk_menu_append (GTK_MENU (m), item);
+        }
+
+        gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
+        gtk_option_menu_set_history ( GTK_OPTION_MENU (om), position_current);
+    }
+
+    {
+        GtkWidget *l = gtk_label_new (_("Rotation snaps every:"));
+        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+        gtk_widget_show (l);
+        gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+    }
+}
 
 
 static void
 sp_display_dialog_cursor_tolerance_changed (GtkAdjustment *adj, gpointer data)
 {
-
     nr_arena_global_delta = adj->value;
     prefs_set_double_attribute ( "options.cursortolerance", "value", 
                                  nr_arena_global_delta );
-
-} // end of sp_display_dialog_cursor_tolerance_changed()
+} 
 
 
 static void
@@ -276,6 +361,13 @@ options_changed_int (GtkAdjustment *adj, gpointer data)
     prefs_set_int_attribute (prefs_path, "value",  (int) adj->value);
 }
 
+static void
+options_changed_percent (GtkAdjustment *adj, gpointer data)
+{
+    const gchar *prefs_path = (const gchar *) data;
+    prefs_set_double_attribute (prefs_path, "value",  (adj->value)/100.0);
+}
+
 void 
 options_sb (
     gchar const *label, 
@@ -284,7 +376,7 @@ options_sb (
     GtkWidget *box,
     gdouble lower, gdouble upper, gdouble step_increment, gdouble page_increment, gdouble page_size,
     gchar const *prefs_path, gchar const *attr, gdouble def,
-    bool isint,
+    bool isint, bool ispercent,
     void (*changed)(GtkAdjustment *, gpointer)
 )
 {
@@ -305,7 +397,10 @@ options_sb (
 
         gdouble value; 
         if (isint)
-            value = (gdouble) prefs_get_int_attribute_limited (prefs_path, attr, (int) def, (int) lower, (int) upper);
+            if (ispercent) 
+                value = 100 * (gdouble) prefs_get_double_attribute_limited (prefs_path, attr, def, lower/100.0, upper/100.0);
+            else 
+                value = (gdouble) prefs_get_int_attribute_limited (prefs_path, attr, (int) def, (int) lower, (int) upper);
         else 
             value = prefs_get_double_attribute_limited (prefs_path, attr, def, lower, upper);
 
@@ -417,7 +512,7 @@ options_sb (
     vb,
     0.0, 30.0, 1.0, 1.0, 1.0,
     "options.cursortolerance", "value", 8.0,
-    true,
+    true, false,
     sp_display_dialog_cursor_tolerance_changed
     );
 
@@ -428,7 +523,7 @@ options_sb (
     vb,
     0.0, 20.0, 1.0, 1.0, 1.0,
     "options.dragtolerance", "value", 4.0,
-    true,
+    true, false,
     options_changed_int
     );
 
@@ -448,7 +543,7 @@ options_sb (
     vb,
     0.0, 1000.0, 1.0, 1.0, 1.0,
     "options.wheelscroll", "value", 40.0,
-    true,
+    true, false,
     options_changed_int
     );
 
@@ -466,7 +561,7 @@ options_sb (
     vbvb,
     0.0, 1000.0, 1.0, 1.0, 1.0,
     "options.keyscroll", "value", 10.0,
-    true,
+    true, false,
     options_changed_int
     );
 
@@ -477,7 +572,7 @@ options_sb (
     vbvb,
     0.0, 5.0, 0.01, 1.0, 1.0,
     "options.scrollingacceleration", "value", 0.35,
-    false,
+    false, false,
     options_changed_double
     );
 
@@ -495,20 +590,75 @@ options_sb (
     vbvb,
     0.0, 5.0, 0.01, 1.0, 1.0,
     "options.autoscrollspeed", "value", 0.7,
-    false,
+    false, false,
     options_changed_double
     );
 
 options_sb (
     _("Threshold:"), 
-    _("How far (in pixels) you need to be from the edge to trigger autoscroll; positive is outside the canvas, negative is within the canvas"), tt,
+    _("How far (in pixels) you need to be from the canvas edge to trigger autoscroll; positive is outside the canvas, negative is within the canvas"), tt,
     _("px"),
     vbvb,
     -600.0, 600.0, 1.0, 1.0, 1.0,
     "options.autoscrolldistance", "value", -10.0,
-    true,
+    true, false,
     options_changed_int
     );
+
+// Steps
+        l = gtk_label_new (_("Steps"));
+        gtk_widget_show (l);
+        vb = gtk_vbox_new (FALSE, 4);
+        gtk_widget_show (vb);
+        gtk_container_set_border_width (GTK_CONTAINER (vb), VB_MARGIN);
+        gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
+
+options_sb (
+    _("Arrow keys move by:"), 
+    _("Pressing an arrow key moves selected object(s) or node(s) by this distance (in points)"), tt,
+    _("pt"),
+    vb,
+    0.0, 3000.0, 0.01, 1.0, 1.0,
+    "options.nudgedistance", "value", 2.0,
+    false, false,
+    options_changed_double
+    );
+
+options_sb (
+    _("> and < scale by:"), 
+    _("Pressing > or < scales selection up or down by this increment (in points)"), tt,
+    _("pt"),
+    vb,
+    0.0, 3000.0, 0.01, 1.0, 1.0,
+    "options.defaultscale", "value", 2.0,
+    false, false,
+    options_changed_double
+    );
+
+options_sb (
+    _("Inset/Outset by:"), 
+    _("Inset and Outset commands displace the path by this distance (in points)"), tt,
+    _("pt"),
+    vb,
+    0.0, 3000.0, 0.01, 1.0, 1.0,
+    "options.defaultoffsetwidth", "value", 2.0,
+    false, false,
+    options_changed_double
+    );
+
+options_rotation_steps (vb, tt);
+
+options_sb (
+    _("Zoom in/out by:"), 
+    _("Zoom tool click, +/- keys, and middle click zoom in and out by this multiplier"), tt,
+    _("%"),
+    vb,
+    101.0, 500.0, 1.0, 1.0, 1.0,
+    "options.zoomincrement", "value", 1.414213562,
+    true, true,
+    options_changed_percent
+    );
+
 
 
 
