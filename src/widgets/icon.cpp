@@ -283,11 +283,31 @@ sp_icon_image_load_pixmap (const gchar *name, unsigned int size, unsigned int sc
 	GdkPixbuf *pb;
 
 	path = (gchar *) g_strdup_printf ("%s/%s.png", INKSCAPE_PIXMAPDIR, name);
-	pb = gdk_pixbuf_new_from_file ((const char *) path, NULL);
+	// TODO: bulia, please look over
+	gsize bytesRead = 0;
+	gsize bytesWritten = 0;
+	GError* error = NULL;
+	gchar* localFilename = g_filename_from_utf8 ( path,
+												  -1,
+												  &bytesRead,
+												  &bytesWritten,
+												  &error);
+	pb = gdk_pixbuf_new_from_file (localFilename, NULL);
+	g_free (localFilename);
 	g_free (path);
 	if (!pb) {
 		path = (gchar *) g_strdup_printf ("%s/%s.xpm", INKSCAPE_PIXMAPDIR, name);
-		pb = gdk_pixbuf_new_from_file ((const char *) path, NULL);
+		// TODO: bulia, please look over
+		gsize bytesRead = 0;
+		gsize bytesWritten = 0;
+		GError* error = NULL;
+		gchar* localFilename = g_filename_from_utf8 ( path,
+													  -1,
+													  &bytesRead,
+													  &bytesWritten,
+													  &error);
+		pb = gdk_pixbuf_new_from_file (localFilename, NULL);
+		g_free (localFilename);
 		g_free (path);
 	}
 	if (pb) {

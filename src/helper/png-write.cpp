@@ -76,7 +76,18 @@ sp_png_write_rgba_striped (const gchar *filename, int width, int height,
 
 	/* open the file */
 
-	fp = fopen (filename, "wb");
+	// TODO: bulia, please look over
+	gsize bytesRead = 0;
+	gsize bytesWritten = 0;
+	GError* error = NULL;
+	gchar* localFilename = g_filename_from_utf8 ( filename,
+												  -1,
+												  &bytesRead,
+												  &bytesWritten,
+												  &error);
+
+	fp = fopen (localFilename, "wb");
+	g_free (localFilename);
 	g_return_val_if_fail (fp != NULL, FALSE);
 
 	/* Create and initialize the png_struct with the desired error handler
