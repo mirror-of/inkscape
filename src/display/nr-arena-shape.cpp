@@ -124,10 +124,6 @@ nr_arena_shape_finalize (NRObject *object)
     NRArenaItem *item = (NRArenaItem *) object;
     NRArenaShape *shape = (NRArenaShape *) (object);
 
-    while (shape->markers) {
-	shape->markers = nr_arena_item_detach_unref (item, shape->markers);
-    }
-
     if (shape->fill_shp) delete shape->fill_shp;
     if (shape->stroke_shp) delete shape->stroke_shp;
     if (shape->cached_fill) delete shape->cached_fill;
@@ -137,9 +133,6 @@ nr_arena_shape_finalize (NRObject *object)
 
     if (shape->style) sp_style_unref (shape->style);
     if (shape->curve) sp_curve_unref (shape->curve);
-
-    shape->_fill.~FillStyle();
-    shape->_stroke.~StrokeStyle();
 
     ((NRObjectClass *) shape_parent_class)->finalize (object);
 }
@@ -185,8 +178,6 @@ nr_arena_shape_set_child_position (NRArenaItem *item, NRArenaItem *child, NRAren
 {
     NRArenaShape *shape = (NRArenaShape *) item;
 
-    nr_arena_item_ref (child);
-
     if (child->prev) {
 	nr_arena_item_detach_unref (item, child);
     } else {
@@ -198,8 +189,6 @@ nr_arena_shape_set_child_position (NRArenaItem *item, NRArenaItem *child, NRAren
     } else {
 	ref->next = nr_arena_item_attach_ref (item, child, ref, ref->next);
     }
-
-    nr_arena_item_unref (child);
 
     nr_arena_item_request_render (child);
 }

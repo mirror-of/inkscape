@@ -88,8 +88,8 @@ protected:
 	NRObject() {}
 
 private:
-	NRObject(NRObject const &);
-	void operator=(NRObject const &);
+	NRObject(NRObject const &); // no copy
+	void operator=(NRObject const &); // no assign
 
 	void *operator new(size_t size, void *placement) { return placement; }
 };

@@ -70,7 +70,7 @@ throw(std::bad_alloc)
     if (!mem) {
         throw std::bad_alloc();
     }
-    if ( collect == Inkscape::GC::AUTO && cleanup ) {
+    if (cleanup) {
         GC_REGISTER_FINALIZER_IGNORE_SELF(mem, cleanup, data, NULL, NULL);
     }
     return mem;

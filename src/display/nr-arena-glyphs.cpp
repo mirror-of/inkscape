@@ -109,9 +109,7 @@ nr_arena_glyphs_init (NRArenaGlyphs *glyphs)
 static void
 nr_arena_glyphs_finalize (NRObject *object)
 {
-	NRArenaGlyphs *glyphs;
-
-	glyphs = NR_ARENA_GLYPHS (object);
+	NRArenaGlyphs *glyphs=static_cast<NRArenaGlyphs *>(object);
 
 //	if (glyphs->cached_shp) {
 //		delete glyphs->cached_shp;
@@ -434,9 +432,7 @@ nr_arena_glyphs_group_init (NRArenaGlyphsGroup *group)
 static void
 nr_arena_glyphs_group_finalize (NRObject *object)
 {
-	NRArenaGlyphsGroup *group;
-
-	group = NR_ARENA_GLYPHS_GROUP (object);
+	NRArenaGlyphsGroup *group=static_cast<NRArenaGlyphsGroup *>(object);
 
 	if (group->fill_painter) {
 		sp_painter_free (group->fill_painter);
@@ -453,7 +449,7 @@ nr_arena_glyphs_group_finalize (NRObject *object)
 		group->style = NULL;
 	}
 
-		((NRObjectClass *) group_parent_class)->finalize (object);
+	((NRObjectClass *) group_parent_class)->finalize (object);
 }
 
 static guint

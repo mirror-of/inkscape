@@ -154,6 +154,16 @@ nr_class_tree_object_invoke_init (NRObjectClass *klass, NRObject *object)
 	klass->iinit (object);
 }
 
+namespace {
+
+void finalize_object(void *base, void *) {
+	NRObject *object=reinterpret_cast<NRObject *>(base);
+	object->klass->finalize(object);
+	object->~NRObject();
+}
+
+}
+
 NRObject *NRObject::alloc(NRType type) {
 	nr_return_val_if_fail (type < classes_len, NULL);
 
@@ -163,7 +173,7 @@ NRObject *NRObject::alloc(NRType type) {
 		g_error("Cannot instantiate NRObject class %s which has not registered a C++ constructor\n", klass->name);
 	}
 
-	NRObject *object = reinterpret_cast<NRObject *>(::operator new(klass->isize, Inkscape::GC::SCANNED));
+	NRObject *object = reinterpret_cast<NRObject *>(::operator new(klass->isize, Inkscape::GC::SCANNED, Inkscape::GC::AUTO, &finalize_object, NULL));
 	memset(object, 0xf0, klass->isize);
 
 	object->klass = klass;

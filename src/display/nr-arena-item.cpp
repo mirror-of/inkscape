@@ -70,6 +70,13 @@ nr_arena_item_class_init (NRArenaItemClass *klass)
 	object_class->cpp_ctor = NRObject::invoke_ctor<NRArenaItem>;
 }
 
+NRArenaItem::NRArenaItem() {
+	// clear all reverse-pointing pointers before finalization
+	clearOnceInaccessible(&arena);
+	clearOnceInaccessible(&parent);
+	clearOnceInaccessible(&prev);
+}
+
 static void
 nr_arena_item_init (NRArenaItem *item)
 {
@@ -103,28 +110,11 @@ nr_arena_item_init (NRArenaItem *item)
 static void
 nr_arena_item_private_finalize (NRObject *object)
 {
-	NRArenaItem *item;
-
-	item = (NRArenaItem *) object;
-
-	/* Parent has to refcount children */
-	assert (!item->parent);
-	assert (!item->prev);
-	assert (!item->next);
+	NRArenaItem *item=static_cast<NRArenaItem *>(object);
 
 #ifdef arena_item_tile_cache
   remove_caches(item);
 #endif
-
-	if (item->clip) {
-		nr_arena_item_detach_unref (item, item->clip);
-	}
-
-	if (item->mask) {
-		nr_arena_item_detach_unref (item, item->mask);
-	}
-
-	/* nr_arena_remove_item (item->arena, item); */
 
 	if (item->px) {
 		nr_free (item->px);
@@ -921,8 +911,6 @@ nr_arena_item_attach_ref (NRArenaItem *parent, NRArenaItem *child, NRArenaItem *
 	nr_return_val_if_fail (!next || (next->parent == parent), NULL);
 	nr_return_val_if_fail (!next || (next->prev == prev), NULL);
 
-	nr_arena_item_ref (child);
-
 	child->parent = parent;
 	child->prev = prev;
 	child->next = next;
@@ -950,8 +938,6 @@ nr_arena_item_detach_unref (NRArenaItem *parent, NRArenaItem *child)
 	child->parent = NULL;
 	child->prev = NULL;
 	child->next = NULL;
-
-	nr_arena_item_unref (child);
 
 	if (prev) prev->next = next;
 	if (next) next->prev = prev;

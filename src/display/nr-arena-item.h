@@ -67,10 +67,7 @@ struct NRGC {
 };
 
 struct NRArenaItem : public NRObject {
-	NRArenaItem() {
-		clearOnceInaccessible(&arena);
-		clearOnceInaccessible(&parent);
-	}
+	NRArenaItem();
 
 	NRArena *arena;
 	NRArenaItem *parent;

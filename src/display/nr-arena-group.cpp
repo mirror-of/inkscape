@@ -21,7 +21,6 @@
 
 static void nr_arena_group_class_init (NRArenaGroupClass *klass);
 static void nr_arena_group_init (NRArenaGroup *group);
-static void nr_arena_group_finalize (NRObject *object);
 
 static NRArenaItem *nr_arena_group_children (NRArenaItem *item);
 static void nr_arena_group_add_child (NRArenaItem *item, NRArenaItem *child, NRArenaItem *ref);
@@ -61,7 +60,6 @@ nr_arena_group_class_init (NRArenaGroupClass *klass)
 
 	parent_class = (NRArenaItemClass *) ((NRObjectClass *) klass)->parent;
 
-	object_class->finalize = nr_arena_group_finalize;
 	object_class->cpp_ctor = NRObject::invoke_ctor<NRArenaGroup>;
 
 	item_class->children = nr_arena_group_children;
@@ -86,19 +84,6 @@ nr_arena_group_init (NRArenaGroup *group)
   group->skipCaching=true;
 #endif
 
-}
-
-static void
-nr_arena_group_finalize (NRObject *object)
-{
-	NRArenaItem *item = NR_ARENA_ITEM (object);
-	NRArenaGroup *group = NR_ARENA_GROUP (object);
-
-	while (group->children) {
-		group->children = nr_arena_item_detach_unref (item, group->children);
-	}
-
-	((NRObjectClass *) (parent_class))->finalize (object);
 }
 
 static NRArenaItem *
@@ -146,8 +131,6 @@ nr_arena_group_set_child_position (NRArenaItem *item, NRArenaItem *child, NRAren
 {
 	NRArenaGroup *group = NR_ARENA_GROUP (item);
 
-	nr_arena_item_ref (child);
-
 	if (child == group->last) group->last = child->prev;
 
 	if (child->prev) {
@@ -163,8 +146,6 @@ nr_arena_group_set_child_position (NRArenaItem *item, NRArenaItem *child, NRAren
 	}
 
 	if (ref == group->last) group->last = child;
-
-	nr_arena_item_unref (child);
 
 	nr_arena_item_request_render (child);
 }

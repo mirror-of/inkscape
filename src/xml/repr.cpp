@@ -97,7 +97,6 @@ SPReprDoc::SPReprDoc(int code) : SPRepr(SP_XML_DOCUMENT_NODE, code) {
     this->doc = this;
     this->log = NULL;
     this->is_logging = false;
-    clearOnceInaccessible(&this->log);
     clearOnceInaccessible(&this->children);
     clearOnceInaccessible(&this->doc);
 }
