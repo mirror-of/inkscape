@@ -23,6 +23,7 @@
 #include "inkscape.h"
 #include "inkscape-private.h"
 #include "extension/db.h"
+#include "extension/effect.h"
 #include "widgets/icon.h"
 #include "prefs-utils.h"
 #include "path-prefix.h"
@@ -966,6 +967,21 @@ sp_ui_effect_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
     };
 
     sp_ui_menu_append (menu, effect_verbs, view);
+
+    Inkscape::Extension::DB::EffectList effectlist;
+    Inkscape::Extension::db.get_effect_list(effectlist);
+
+    for (Inkscape::Extension::DB::EffectList::iterator current_item = effectlist.begin();
+         current_item != effectlist.end(); current_item++) {
+         Inkscape::Extension::Effect * emod = *current_item;
+
+         Inkscape::Verb * verb = emod->get_verb();
+
+         if (verb != NULL)
+             sp_ui_menu_append_item_from_verb(GTK_MENU(menu), verb, view);
+    }
+
+    return;
 }
 
 static void

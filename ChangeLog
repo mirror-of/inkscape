@@ -1,5 +1,16 @@
 2004-12-24  Ted Gould  <ted@gould.cx>
 
+	* src/interface.cpp, src/verbs.cpp, src/verbs.h, src/extension/effect.cpp,
+	src/extension/effect.h:
+
+	Getting the Effects menu basically working.  This included some fixes to
+	the verbs where they were incrementing the database incorrectly.  The
+	effects are the first component to take advantage of the dynamically
+	created verbs, and exercised new code.  Now the basic menu is available,
+	but there is no functionality there.
+
+2004-12-24  Ted Gould  <ted@gould.cx>
+
 	* src/interface.cpp, src/verbs.cpp, src/verbs.h:
 
 	Basic code for the effects menu.

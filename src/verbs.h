@@ -257,7 +257,7 @@ public:
     gchar const * get_id (void) { return _id; }
 
 protected:
-    SPAction * make_action_helper (SPView * view, SPActionEventVector * vector);
+    SPAction * make_action_helper (SPView * view, SPActionEventVector * vector, void * in_pntr = NULL);
     virtual SPAction * make_action (SPView * view);
 
 public:
@@ -270,14 +270,15 @@ public:
 
         This function also sets \c _actions to NULL.
 
-        \warning NO DATA IS COPIED BY CALLING THIS FUNCTION.  In many
-        respects this is very bad object oriented design, but it is done
-        for a reason.  All verbs today are of two types: 1) static or
-        2) created for extension.  In the static case all of the strings
-        are constants in the code, and thus don't really need to be copied.
-        In the extensions case the strings are identical to the ones
-        already created in the extension object, copying them would be
-        a waste of memory.
+        \warning NO DATA IS COPIED BY CALLING THIS FUNCTION.
+        
+        In many respects this is very bad object oriented design, but it
+        is done for a reason.  All verbs today are of two types: 1) static
+        or 2) created for extension.  In the static case all of the
+        strings are constants in the code, and thus don't really need to
+        be copied.  In the extensions case the strings are identical to
+        the ones already created in the extension object, copying them
+        would be a waste of memory.
     */
     Verb(const unsigned int code,
          gchar const * id,

@@ -300,13 +300,16 @@ Verb::VerbTable Verb::_verbs;
     each call it is incremented.  The list of allocated verbs is kept
     in the \c _verbs hashtable which is indexed by the \c code.
 */
-Verb::Verb(gchar const * id, gchar const * name, gchar const * tip, gchar const * image)
+Verb::Verb(gchar const * id, gchar const * name, gchar const * tip, gchar const * image) :
+        _actions(NULL), _id(id), _name(name), _tip(tip), _image(image)
 {
     static int count = SP_VERB_LAST;
 
     count++;
-    Verb(count, id, name, tip, image);
+    _code = count;
     _verbs.insert(VerbTable::value_type(count, this));
+
+    return;
 }
 
 /** \brief  Destroy a verb.
@@ -473,7 +476,7 @@ TutorialVerb::make_action (SPView * view)
     the vector that is passed in.
 */
 SPAction *
-Verb::make_action_helper (SPView * view, SPActionEventVector * vector)
+Verb::make_action_helper (SPView * view, SPActionEventVector * vector, void * in_pntr)
 {
     SPAction *action;
     
@@ -482,12 +485,21 @@ Verb::make_action_helper (SPView * view, SPActionEventVector * vector)
                            _(_tip), _image, this);
 
     if (action != NULL) {
-        nr_active_object_add_listener (
-            (NRActiveObject *) action,
-            (NRObjectEventVector *) vector,
-            sizeof (SPActionEventVector),
-            reinterpret_cast<void *>(_code)
-        );
+        if (in_pntr == NULL) {
+            nr_active_object_add_listener (
+                (NRActiveObject *) action,
+                (NRObjectEventVector *) vector,
+                sizeof (SPActionEventVector),
+                reinterpret_cast<void *>(_code)
+            );
+        } else {
+            nr_active_object_add_listener (
+                (NRActiveObject *) action,
+                (NRObjectEventVector *) vector,
+                sizeof (SPActionEventVector),
+                in_pntr
+            );
+        }
     }
 
     return action;
@@ -536,6 +548,7 @@ void
 Verb::delete_view (SPView * view)
 {
     if (_actions == NULL) return;
+    if (_actions->empty()) return;
 
 #if 0
     static int count = 0;
@@ -571,9 +584,9 @@ Verb::delete_all_view (SPView * view)
 
     if (!_verbs.empty()) {
         for (VerbTable::iterator thisverb = _verbs.begin();
-             thisverb != _verbs.end();
-             thisverb = thisverb++) {
+             thisverb != _verbs.end(); thisverb++) {
             Inkscape::Verb * verbpntr = thisverb->second;
+            // std::cout << "Delete In Verb: " << verbpntr->_name << std::endl;
             verbpntr->delete_view(view);
         }
     }
