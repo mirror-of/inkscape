@@ -419,9 +419,15 @@ sp_dt_simple_guide_dialog (SPGuide *guide, SPDesktop *desktop)
 		mode = TRUE;
 		gtk_container_add (GTK_CONTAINER (but), m);
 		gtk_widget_show (m);
+
+		// unitmenu
+		/* fixme: We should allow percents here too, as percents of the canvas size */
+		u = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
+		sp_unit_selector_set_unit (SP_UNIT_SELECTOR(u), sp_desktop_get_default_unit (desktop));
     
 		// spinbutton
 		a = gtk_adjustment_new (0.0, -SP_DESKTOP_SCROLL_LIMIT, SP_DESKTOP_SCROLL_LIMIT, 1.0, 10.0, 10.0);
+		sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (u), GTK_ADJUSTMENT (a));
 		e = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0 , 2);
 		gtk_widget_show (e);
 		gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (e), TRUE);
@@ -430,13 +436,11 @@ sp_dt_simple_guide_dialog (SPGuide *guide, SPDesktop *desktop)
 					  GTK_SIGNAL_FUNC(gtk_window_activate_default), 
 					  GTK_OBJECT(d));
 /*  		gnome_dialog_editable_enters (GNOME_DIALOG (d), GTK_EDITABLE (e));  */
-		// unitmenu
-		/* fixme: We should allow percents here too */
-		u = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
+
 		gtk_widget_show (u);
 		gtk_box_pack_start (GTK_BOX (b4), u, FALSE, FALSE, 0);
-		sp_unit_selector_set_unit (SP_UNIT_SELECTOR (u), sp_unit_get_identity (SP_UNIT_ABSOLUTE));
-		sp_unit_selector_add_adjustment (SP_UNIT_SELECTOR (u), GTK_ADJUSTMENT (a));
+
+
 		// dialog
 		gtk_dialog_set_default_response (GTK_DIALOG (d), GTK_RESPONSE_OK);
 		gtk_signal_connect (GTK_OBJECT(d), "response", GTK_SIGNAL_FUNC(guide_dialog_response), &g);
@@ -455,7 +459,7 @@ sp_dt_simple_guide_dialog (SPGuide *guide, SPDesktop *desktop)
 	}
 
 	SPUnit const &unit = *sp_unit_selector_get_unit(SP_UNIT_SELECTOR(u));
-	gdouble const val = sp_units_get_points(oldpos, unit);
+	gdouble const val = sp_points_get_units (oldpos, unit);
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (e), val);
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (e), val);
 	gtk_widget_grab_focus (e);
