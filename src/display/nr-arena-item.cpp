@@ -777,7 +777,14 @@ nr_arena_item_append_child (NRArenaItem *parent, NRArenaItem *child)
 }
 
 void
-nr_arena_item_set_transform (NRArenaItem *item, const NRMatrix *transform)
+nr_arena_item_set_transform(NRArenaItem *item, NR::Matrix const &transform)
+{
+	NRMatrix const t(transform);
+	nr_arena_item_set_transform(item, &t);
+}
+
+void
+nr_arena_item_set_transform(NRArenaItem *item, NRMatrix const *transform)
 {
 	const NRMatrix *ms, *md;
 
