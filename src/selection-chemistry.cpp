@@ -714,7 +714,7 @@ sp_selection_apply_affine (SPSelection * selection, double affine[6]) {
 
 		item = SP_ITEM (l->data);
 
-		sp_item_i2d_affine_d (item, &curaff);
+		sp_item_i2d_affine(item, &curaff);
 		nr_matrix_multiply (&newaff, &curaff, NR_MATRIX_D_FROM_DOUBLE (affine));
 		/* fixme: This is far from elegant (Lauris) */
 		sp_item_set_i2d_affine(item, &newaff);

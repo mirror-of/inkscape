@@ -337,7 +337,7 @@ spdc_attach_selection (SPDrawContext *dc, SPSelection *sel)
 		/* Curve list */
 		/* We keep it in desktop coordinates to eliminate calculation errors */
 		norm = sp_shape_get_curve (SP_SHAPE (item));
-		sp_item_i2d_affine_d (dc->white_item, &i2dt);
+		sp_item_i2d_affine(dc->white_item, &i2dt);
 		norm = sp_curve_transform (norm, NR_MATRIX_D_TO_DOUBLE (&i2dt));
 		g_return_if_fail (norm != NULL);
 		dc->white_curves = sp_curve_split (norm);
@@ -578,9 +578,9 @@ spdc_flush_white (SPDrawContext *dc, SPCurve *gc)
 
 	/* Now we have to go back to item coordinates at last */
 	if (dc->white_item) {
-		NRMatrix d2itemd;
-		sp_item_dt2i_affine_d (dc->white_item, SP_EVENT_CONTEXT_DESKTOP (dc), &d2itemd);
-		c = sp_curve_transform (c, NR_MATRIX_D_TO_DOUBLE (&d2itemd));
+		NRMatrix d2item;
+		sp_item_dt2i_affine(dc->white_item, SP_EVENT_CONTEXT_DESKTOP(dc), &d2item);
+		c = sp_curve_transform(c, NR_MATRIX_D_TO_DOUBLE(&d2item));
 	} else {
 		gdouble d2item[6];
 		sp_desktop_dt2root_affine (SP_EVENT_CONTEXT_DESKTOP (dc), (NRMatrix *) d2item);

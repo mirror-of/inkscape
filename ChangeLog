@@ -12,8 +12,9 @@
 	* src/libnr/nr-matrix.h, src/libnr/nr-matrix.cpp (nr_matrix_d_from_f):
 	Remove.
 
-	* src/sp-item.h, src/sp-item.cpp (sp_item_set_i2d_affine_d):
-	Merge with sp_item_set_i2d_affine.  Update callers.
+	* src/sp-item.h, src/sp-item.cpp (sp_item_set_i2d_affine_d,
+	sp_item_i2doc_affine_d, sp_item_i2d_affine_d, sp_item_dt2i_affine_d):
+	Merge _d version with non-_d version.  Update callers.
 
 	* src/rubberband.h, src/rubberband.cpp (sp_rubberband_start):
 	Add NR::Point version.
