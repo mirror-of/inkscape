@@ -40,8 +40,8 @@
 #include "isnan.h" //temp fox for isnan().  include last
 
 #define DEFAULTTOLERANCE 0.4
-#define DEFAULTGRIDCOLOR 0x3f3fff2f
-#define DEFAULTGRIDEMPCOLOR 0x3f3fff52
+#define DEFAULTGRIDCOLOR 0x3f3fff25
+#define DEFAULTGRIDEMPCOLOR 0x3f3fff60
 #define DEFAULTGRIDEMPSPACING 5
 #define DEFAULTGUIDECOLOR 0x0000ff7f
 #define DEFAULTGUIDEHICOLOR 0xff00007f
@@ -221,8 +221,6 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 	SPNamedView *nv = SP_NAMEDVIEW(object);
 
 	SPUnit const * const pt = &sp_unit_get_by_id(SP_UNIT_PT);
-	SPUnit const * const px = &sp_unit_get_by_id(SP_UNIT_PX);
-	SPUnit const * const mm = &sp_unit_get_by_id(SP_UNIT_MM);
 
 	switch (key) {
 	case SP_ATTR_VIEWONLY:
