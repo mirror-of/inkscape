@@ -12,6 +12,9 @@
  *
  * Licensed under GNU GPL
  */
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include <string.h>
 #include <gtk/gtksignal.h>
@@ -21,6 +24,7 @@
 #include "macros.h"
 #include "document.h"
 #include "sp-object.h"
+#include "helper/sp-intl.h"
 
 #include "sp-attribute-widget.h"
 
@@ -575,7 +579,7 @@ sp_attribute_table_set_object ( SPAttributeTable *spat,
             const gchar *val;
 
             spat->attributes[i] = g_strdup (attributes[i]);
-            w = gtk_label_new (labels[i]);
+            w = gtk_label_new (_(labels[i]));
             gtk_widget_show (w);
             gtk_misc_set_alignment (GTK_MISC (w), 1.0, 0.5);
             gtk_table_attach ( GTK_TABLE (spat->table), w, 0, 1, i, i + 1, 
