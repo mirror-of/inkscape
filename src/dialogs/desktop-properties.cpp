@@ -850,20 +850,31 @@ sp_desktop_dialog(void)
         spw_unit_selector(dlg, t, _("Snap distance:"), "gridtolerance", row++, us,
                           G_CALLBACK(sp_dtw_grid_snap_distance_changed));
 
-        sp_color_picker_button(dlg, t, _("Grid color:"), "gridcolor",
+        sp_color_picker_button(dlg, t, _("Minor grid line color:"), "gridcolor",
                                _("Grid color"), "gridopacity", row++);
 
-        sp_color_picker_button(dlg, t, _("Grid emphasis color:"), "gridempcolor",
+        sp_color_picker_button(dlg, t, _("Minor grid line color:"), "gridempcolor",
                                _("Grid emphasis color"), "gridempopacity", row++);
 
         if (1) {
-            spw_label(t, _("Grid emphasis spacing:"), 0, row);
+            spw_label(t, _("Major grid line spacing:"), 0, row);
             GtkObject * a = gtk_adjustment_new (0.0, 0.0, 25.0, 1.0, 1.0, 1.0);
             gtk_object_set_data(GTK_OBJECT(a), (const gchar *)"key", (gpointer)"gridempspacing");
             gtk_object_set_data(GTK_OBJECT(dlg), "gridempspacing", a);
+
+            GtkWidget * hbox = gtk_hbox_new(FALSE, 2);
+
             GtkWidget * sb = gtk_spin_button_new (GTK_ADJUSTMENT(a), 1.0, 0);
             gtk_widget_show(sb);
-            gtk_table_attach(GTK_TABLE(t), sb, 1, 2, row, row+1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+
+            GtkWidget * label = gtk_label_new(_("lines"));
+            gtk_widget_show(label);
+
+            gtk_box_pack_start(GTK_BOX(hbox), sb, TRUE, TRUE, 0);
+            gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+            gtk_widget_show(hbox);
+
+            gtk_table_attach(GTK_TABLE(t), hbox, 1, 2, row, row+1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
             g_signal_connect(G_OBJECT(a), "value_changed", G_CALLBACK(sp_dtw_grid_emp_spacing_changed), dlg);
             row++;
         }
