@@ -22,7 +22,7 @@
 #include "document.h"
 #include "desktop.h"
 #include "sp-defs.h"
-/* #include "sp-namedview.h" */
+#include "sp-item.h"
 #include "sp-root.h"
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-ops.h>
@@ -170,6 +170,9 @@ sp_root_build (SPObject *object, SPDocument *document, SPRepr *repr)
 			break;
 		}
 	}
+
+	// clear transform, if any was read in - SVG does not allow transform= on <svg>
+	SP_ITEM(object)->transform = NR::identity();
 }
 
 /** sp_root_release(object)
