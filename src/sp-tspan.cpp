@@ -173,6 +173,7 @@ static void
 sp_tspan_init (SPTSpan *tspan)
 {
 	tspan->role=SP_TSPAN_ROLE_UNSPECIFIED;
+	tspan->last_tspan=false;
 	new (&tspan->contents) div_flow_src(SP_OBJECT(tspan),txt_tline);
 }
 static void
@@ -313,7 +314,7 @@ sp_tspan_write (SPObject *object, SPRepr *repr, guint flags)
 	
 	bool  became_empty=false;
 	if ( tspan->role != SP_TSPAN_ROLE_UNSPECIFIED ) {
-		if ( tspan->contents.type == txt_tline && tspan->contents.utf8_st >= tspan->contents.utf8_en ) {
+		if ( tspan->contents.type == txt_tline && tspan->last_tspan == false && tspan->contents.utf8_st >= tspan->contents.utf8_en ) {
 			became_empty=true;
 		}
 	}

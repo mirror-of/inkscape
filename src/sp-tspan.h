@@ -38,6 +38,7 @@ enum {
 struct SPTSpan {
 	SPItem       item;
 	guint        role : 2;
+	bool         last_tspan;
 	
 	div_flow_src     contents;
 

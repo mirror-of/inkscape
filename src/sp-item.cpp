@@ -121,10 +121,16 @@ sp_item_init(SPItem *item)
     item->display = NULL;
 
     item->clip_ref = new SPClipPathReference(SP_OBJECT(item));
-    item->clip_ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(clip_ref_changed), item));
-
+		{
+			sigc::signal<void, SPObject *, SPObject *> cs1=item->clip_ref->changedSignal();
+			sigc::slot2<void,SPObject*, SPObject *> sl1=sigc::bind(sigc::ptr_fun(clip_ref_changed), item);
+			cs1.connect(sl1);
+		}
+		
     item->mask_ref = new SPMaskReference(SP_OBJECT(item));
-    item->mask_ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(mask_ref_changed), item));
+		sigc::signal<void, SPObject *, SPObject *> cs2=item->mask_ref->changedSignal();
+		sigc::slot2<void,SPObject*, SPObject *> sl2=sigc::bind(sigc::ptr_fun(mask_ref_changed), item);
+    cs2.connect(sl2);
 
     if (!object->style) object->style = sp_style_new_from_object(SP_OBJECT(item));
 

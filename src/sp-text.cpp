@@ -1508,6 +1508,22 @@ void SPText::UpdateFlowSource(void)
     one_flow_src *last = NULL;
     bool first_line = true;
     TextReLink(object, last, NULL, first_line);
+		{
+			one_flow_src *cur=&contents;
+			one_flow_src *last_line=NULL;
+			while ( cur ) {
+				if ( cur->Type() == txt_tline ) {
+					last_line=cur;
+					SPTSpan *cspan = SP_TSPAN(cur->me);
+					cspan->last_tspan=false;
+				}
+				cur=cur->next;
+			}
+			if ( last_line ) {
+				SPTSpan *cspan = SP_TSPAN(last_line->me);
+				cspan->last_tspan=true;
+			}
+		}
     contents.DoPositions(true);
     contents.DoFill(f_src);
 
