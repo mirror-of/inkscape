@@ -7,15 +7,15 @@
    width="766.00000pt"
    height="256pt"
    sodipodi:docname="icons.svg"
-   inkscape:version="0.39cvs"
-   sodipodi:docbase="/home/monnier/cvs/inkscape/share/icons"
+   inkscape:version="0.40cvs"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:cc="http://web.resource.org/cc/"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:xlink="http://www.w3.org/1999/xlink">
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   sodipodi:docbase="/home/d/ink/inkscape/share/icons">
   <defs
      id="defs3">
     <marker
@@ -433,9 +433,9 @@
      showgrid="false"
      snaptogrid="false"
      gridtolerance="1.02pt"
-     inkscape:zoom="1.2823837"
-     inkscape:cx="535.12706"
-     inkscape:cy="178.59638"
+     inkscape:zoom="5.1295348"
+     inkscape:cx="507.32882"
+     inkscape:cy="218.59145"
      inkscape:window-width="665"
      inkscape:window-height="660"
      inkscape:window-x="351"
@@ -5462,7 +5462,7 @@
      transform="matrix(1.239118,0.000000,0.000000,1.239118,-165.4821,-59.26425)" />
   <path
      style="font-size:24.000000;stroke-width:1.0957551;"
-     d="M 616.37877,51.351047 L 622.86745,51.351047 L 629.73942,70.680177 L 624.04402,70.680177 L 622.94156,67.954367 L 616.14038,67.954367 L 615.03791,70.680177 L 609.47942,70.680177 L 616.37877,51.351047 z M 621.89316,64.218887 L 619.55466,56.116267 L 617.16140,64.218887 L 621.89316,64.218887 z "
+     d="M 616.37877,49.645238 L 622.86745,49.645238 L 629.73942,68.974368 L 624.04402,68.974368 L 622.94156,66.248558 L 616.14038,66.248558 L 615.03791,68.974368 L 609.47942,68.974368 L 616.37877,49.645238 z M 621.89316,62.513078 L 619.55466,54.410458 L 617.16140,62.513078 L 621.89316,62.513078 z "
      id="path1953"
      sodipodi:nodetypes="ccccccccccccc" />
   <g
