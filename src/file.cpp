@@ -483,7 +483,8 @@ file_import (SPDocument *doc, const gchar *filename)
 	    (strcmp (e, "xpm") == 0)) {
 		/* Try pixbuf */
 		GdkPixbuf *pb;
-		pb = gdk_pixbuf_new_from_file (filename, NULL);
+        GError *err = NULL;
+		pb = gdk_pixbuf_new_from_file (filename, &err);
 		if (pb) {
 			/* We are readable */
 			repr = sp_repr_new ("image");
@@ -495,7 +496,18 @@ file_import (SPDocument *doc, const gchar *filename)
 			sp_repr_unref (repr);
 			sp_document_done (doc);
 			gdk_pixbuf_unref (pb);
-		}
+		} else {
+            //error stuff here
+            if (err) {
+                gchar *text;
+		        text = g_strdup_printf(
+                      _("Unable to import image '%s': %s"),
+                      filename, err->message);
+                sp_ui_error_dialog (text);
+                g_free (text);
+                g_error_free (err);
+            }
+        }
 	}
 }
 
