@@ -467,19 +467,11 @@ struct listener_data_matches {
 }
 
 void SimpleNode::removeListenerByData(void *data) {
-    using Inkscape::Algorithms::find_if_before;
-
-    if (_listeners.empty()) {
-        return;
-    }
-
-    if ( _listeners.front().data == data ) {
-        _listeners.pop_front();
-    } else {
-        Listeners::iterator pos=find_if_before(_listeners.begin(), _listeners.end(), listener_data_matches(data));
-        if (pos) {
-            _listeners.erase_after(pos);
-        }
+    Listeners::iterator const pos(std::find_if(_listeners.begin(),
+                                               _listeners.end(),
+                                               listener_data_matches(data)));
+    if (pos != _listeners.end()) {
+        _listeners.erase(pos);
     }
 }
 
