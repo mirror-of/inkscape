@@ -10,8 +10,14 @@
  */
 
 #include "InkscapeScript.h"
+
+#ifdef HAVE_PERL
 #include "InkscapePerl.h"
+#endif
+
+#ifdef HAVE_PYTHON
 #include "InkscapePython.h"
+#endif
 
 #include <iostream>
 #include <stdio.h>
@@ -59,11 +65,15 @@ bool InkscapeScript::interpretScript(Glib::ustring &script,
     //if() instead of switch() lets us scope vars
     if (language == InkscapeScript::PERL)
         {
+#ifdef HAVE_PERL
         interp = new InkscapePerl();
+#endif
         }
     else if (language == InkscapeScript::PYTHON)
         {
+#ifdef HAVE_PYTHON
         interp = new InkscapePython();
+#endif
         }
     else
         {
@@ -99,11 +109,15 @@ bool InkscapeScript::interpretUri(Glib::ustring &uri,
     //if() instead of switch() lets us scope vars
     if (language == InkscapeScript::PERL)
         {
+#ifdef HAVE_PERL
         interp = new InkscapePerl();
+#endif
         }
     else if (language == InkscapeScript::PYTHON)
         {
+#ifdef HAVE_PYTHON
         interp = new InkscapePython();
+#endif
         }
     else
         {

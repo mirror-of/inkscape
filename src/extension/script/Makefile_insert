@@ -20,21 +20,32 @@ PYTHON_CFLAGS := -I`python -c "import distutils.sysconfig ; print distutils.sysc
 
 extension_script_libscript_a_CXXFLAGS = $(PERL_CFLAGS) $(PYTHON_CFLAGS)
 
+if HAVE_PERL
+perl_sources = \
+	extension/script/InkscapePerl.h \
+	extension/script/InkscapePerl.cpp \
+	extension/script/inkscape_perl_wrap.cpp \
+	extension/script/inkscape_perl.pm \
+	extension/script/inkscape_perl.pm.h
+endif
+
+if HAVE_PYTHON
+python_sources = \
+	extension/script/InkscapePython.h \
+	extension/script/InkscapePython.cpp \
+	extension/script/inkscape_py_wrap.cpp \
+	extension/script/inkscape_py.py \
+	extension/script/iinkscape_py.py.h
+endif
+
 extension_script_libscript_a_SOURCES =	\
 	extension/script/InkscapeBinding.h \
 	extension/script/InkscapeBinding.cpp \
 	extension/script/InkscapeInterpreter.h \
 	extension/script/InkscapeInterpreter.cpp \
-	extension/script/InkscapePerl.h \
-	extension/script/InkscapePerl.cpp \
-	extension/script/inkscape_perl_wrap.cpp \
-	extension/script/inkscape_perl.pm \
-	extension/script/inkscape_perl.pm.h \
-	extension/script/InkscapePython.h \
-	extension/script/InkscapePython.cpp \
-	extension/script/inkscape_py_wrap.cpp \
-	extension/script/inkscape_py.py \
-	extension/script/iinkscape_py.py.h \
 	extension/script/InkscapeScript.h \
-	extension/script/InkscapeScript.cpp
+	extension/script/InkscapeScript.cpp \
+	$(perl_sources)	\
+	$(python_sources)
+
 
