@@ -9,10 +9,15 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "config.h"
+#include "helper/sp-intl.h"
+
 #include <cstring>
 #include <algorithm>
 #include <functional>
 #include <gtkmm/liststore.h>
+#include <gtk/gtktooltips.h>
+
 #include "desktop-handles.h"
 #include "selection.h"
 #include "widgets/layer-selector.h"
@@ -20,6 +25,7 @@
 #include "util/list.h"
 #include "util/reverse-list.h"
 #include "util/filter-list.h"
+#include "widgets/button.h"
 #include "sp-object.h"
 #include "desktop.h"
 #include "xml/repr.h"
@@ -36,9 +42,21 @@ namespace Widgets {
 LayerSelector::LayerSelector(SPDesktop *desktop)
 : _desktop(NULL)
 {
-    pack_start(_lock_button, Gtk::PACK_SHRINK);
-    pack_start(_hide_button, Gtk::PACK_SHRINK);
+    Gtk::Widget *button;
+
+    GtkTooltips *tooltips = gtk_tooltips_new();
+
+    button = Glib::wrap(sp_button_new_from_data(11, SP_BUTTON_TYPE_TOGGLE, desktop, "visible", _("Toggle visibility of current layer"), tooltips));
+    pack_start(*button, Gtk::PACK_EXPAND_PADDING);
+
+    button = Glib::wrap(sp_button_new_from_data(11, SP_BUTTON_TYPE_TOGGLE, desktop, "width_height_lock", _("Lock or unlock current layer"), tooltips));
+    pack_start(*button, Gtk::PACK_EXPAND_PADDING);
+
     pack_start(_selector, Gtk::PACK_EXPAND_WIDGET);
+    gtk_tooltips_set_tip(tooltips, GTK_WIDGET(_selector.gobj()), _("Current layer"), NULL);
+
+    // SPButtons will keep it referenced
+    g_object_unref(G_OBJECT(tooltips));
 
     _layer_model = Gtk::ListStore::create(_model_columns);
     _selector.set_model(_layer_model);

@@ -57,8 +57,6 @@ private:
     SPDesktop *_desktop;
 
     Gtk::ComboBox _selector;
-    Gtk::ToggleButton _lock_button;
-    Gtk::ToggleButton _hide_button;
 
     LayerModelColumns _model_columns;
     Gtk::CellRendererText _label_renderer;

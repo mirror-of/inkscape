@@ -7,6 +7,10 @@
 
 	* share/icons/icons.svg: gave bulia's eye icons ids
 
+	* src/widgets/layer-selector.h, src/widgets/layers-selector.cpp:
+	  fixed up visibility/lock toggles... now to make them actually do
+	  something
+
 2004-10-31  MenTaLguY  <mental@rydia.net>
 
 	* src/util/glib-list.h: adaptor for glib lists
