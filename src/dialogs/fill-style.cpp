@@ -221,29 +221,6 @@ sp_fill_style_widget_new (void)
 } // end of sp_fill_style_widget_new()
 
 
-
-void
-sp_fill_style_widget_system_color_set ( GtkWidget *widget, 
-                                        SPColor *color, 
-                                        float opacity )
-{
-    SPPaintSelector *psel = SP_PAINT_SELECTOR( g_object_get_data (G_OBJECT (widget), 
-                                                                  "paint-selector") );
-
-    switch (psel->mode) {
-        case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
-        case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
-            sp_paint_selector_system_color_set (psel, color, opacity);
-            break;
-        
-        default:
-            break;
-    }
-
-} // end of sp_fill_style_widget_system_color_set()
-
-
-
 static void
 sp_fill_style_widget_construct ( SPWidget *spw, SPPaintSelector *psel )
 {

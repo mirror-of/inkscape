@@ -154,37 +154,6 @@ sp_object_properties_page( GtkWidget *nb,
 }
 
 
-
-static void
-sp_object_properties_color_set ( Inkscape::Application *inkscape, 
-                                 SPColor *color, 
-                                 double opacity, 
-                                 GObject *dlg )
-{
-
-    GtkNotebook *nb;
-    int pnum;
-
-    nb = (GtkNotebook *)g_object_get_data (dlg, "notebook");
-    pnum = gtk_notebook_get_current_page (nb);
-
-    if (pnum == 0) {
-    
-        GtkWidget *fs;
-        fs = (GtkWidget *)g_object_get_data (dlg, "fill");
-        sp_fill_style_widget_system_color_set (fs, color, opacity);
-    
-    } else if (pnum == 1) {
-        
-        GtkWidget *ss;
-        ss = (GtkWidget *)g_object_get_data (dlg, "stroke-paint");
-        sp_stroke_style_paint_system_color_set (ss, color, opacity);
-    }
-    
-}
-
-
-
 void
 sp_object_properties_dialog (void)
 {
@@ -325,11 +294,6 @@ sp_object_properties_dialog (void)
         gtk_widget_show_all (m);
 
         gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
-
-        g_signal_connect ( G_OBJECT (INKSCAPE), 
-                           "color_set", 
-                           G_CALLBACK (sp_object_properties_color_set), 
-                           dlg );
 
         gtk_widget_show (dlg);
         

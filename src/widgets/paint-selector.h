@@ -94,8 +94,5 @@ void sp_paint_selector_get_gradient_position_floatv (SPPaintSelector *psel, gflo
 void sp_paint_selector_write_lineargradient (SPPaintSelector *psel, SPLinearGradient *lg, SPItem *item);
 void sp_paint_selector_write_radialgradient (SPPaintSelector *psel, SPRadialGradient *rg, SPItem *item);
 
-void sp_paint_selector_system_color_set (SPPaintSelector *psel, const SPColor *color, float opacity);
-
-
 
 #endif

@@ -12,25 +12,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-/*
- * inkscape.h
- *
- * Signals:
- * "selection_changed"
- * "selection_set"
- * "eventcontext_set"
- * "new_desktop"
- * "destroy_desktop"
- * "desktop_activate"
- * "desktop_deactivate"
- * "new_document"
- * "destroy_document"
- * "document_activate"
- * "document_deactivate"
- * "color_set"
- *
- */
-
 #include "xml/repr.h"
 #include "forward.h"
 

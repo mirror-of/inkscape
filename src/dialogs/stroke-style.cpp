@@ -123,27 +123,6 @@ sp_stroke_style_paint_widget_new(void)
 }
 
 
-
-void
-sp_stroke_style_paint_system_color_set(GtkWidget *widget, SPColor *color, float opacity)
-{
-    SPPaintSelector *psel;
-
-    psel = SP_PAINT_SELECTOR( g_object_get_data(G_OBJECT(widget),
-                                                "paint-selector") );
-
-    switch (psel->mode) {
-        case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
-        case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
-            sp_paint_selector_system_color_set(psel, color, opacity);
-            break;
-        default:
-            break;
-    }
-}
-
-
-
 static void
 sp_stroke_style_paint_construct(SPWidget *spw, SPPaintSelector *psel)
 {

@@ -23,10 +23,6 @@ GtkWidget *sp_fill_style_widget_new (void);
 
 void sp_fill_style_dialog (void);
 
-void sp_fill_style_widget_system_color_set ( GtkWidget *widget, 
-                                             SPColor *color, 
-                                             float opacity );
-
 #endif
 
 /*

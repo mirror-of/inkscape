@@ -21,10 +21,6 @@
 GtkWidget *sp_stroke_style_paint_widget_new (void);
 GtkWidget *sp_stroke_style_line_widget_new (void);
 
-void sp_stroke_style_paint_system_color_set ( GtkWidget *widget, 
-                                              SPColor *color, 
-                                              float opacity );
-
 #endif
 
 /*

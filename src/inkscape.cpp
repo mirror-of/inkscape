@@ -86,7 +86,6 @@ enum {
     DEACTIVATE_DESKTOP,
     NEW_DOCUMENT,
     DESTROY_DOCUMENT,
-    COLOR_SET,
     SHUTDOWN_SIGNAL,
     DIALOGS_HIDE,
     DIALOGS_UNHIDE,
@@ -282,14 +281,6 @@ inkscape_class_init (Inkscape::ApplicationClass * klass)
                                sp_marshal_NONE__POINTER,
                                G_TYPE_NONE, 1,
                                G_TYPE_POINTER);
-    inkscape_signals[COLOR_SET] =        g_signal_new ("color_set",
-                               G_TYPE_FROM_CLASS (klass),
-                               G_SIGNAL_RUN_FIRST,
-                               G_STRUCT_OFFSET (Inkscape::ApplicationClass, color_set),
-                               NULL, NULL,
-                               sp_marshal_NONE__POINTER_DOUBLE,
-                               G_TYPE_NONE, 2,
-                               G_TYPE_POINTER, G_TYPE_DOUBLE);
     inkscape_signals[SHUTDOWN_SIGNAL] =        g_signal_new ("shut_down",
                                G_TYPE_FROM_CLASS (klass),
                                G_SIGNAL_RUN_FIRST,
@@ -1075,14 +1066,6 @@ inkscape_remove_document (SPDocument *document)
             sp_repr_set_attr (child, "name", SP_DOCUMENT_NAME (document));
         }
     }
-}
-
-
-
-void
-inkscape_set_color (SPColor *color, float opacity)
-{
-    g_signal_emit (G_OBJECT (inkscape), inkscape_signals[COLOR_SET], 0, color, (double) opacity);
 }
 
 

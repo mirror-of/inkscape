@@ -566,16 +566,6 @@ sp_paint_selector_write_radialgradient (SPPaintSelector *psel, SPRadialGradient 
 	sp_radialgradient_set_position (rg, p[0], p[1], p[2], p[3], p[4]);
 }
 
-void
-sp_paint_selector_system_color_set (SPPaintSelector *psel, const SPColor *color, float opacity)
-{
-	g_return_if_fail( ( 0.0 <= opacity ) && ( opacity <= 1.0 ) );
-	if ((psel->mode == SP_PAINT_SELECTOR_MODE_COLOR_RGB) ||
-	    (psel->mode == SP_PAINT_SELECTOR_MODE_COLOR_CMYK)) {
-		sp_paint_selector_set_color_alpha (psel, color, opacity);
-	}
-}
-
 static void
 sp_paint_selector_set_mode_empty (SPPaintSelector *psel)
 {
