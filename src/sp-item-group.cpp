@@ -414,7 +414,7 @@ sp_group_hide (SPItem *item, unsigned int key)
 }
 
 void
-sp_item_group_ungroup (SPGroup *group, GSList **children)
+sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 {
 	SPDocument *doc;
 	SPItem *gitem, *pitem;
@@ -498,7 +498,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children)
 	}
 
 	sp_repr_unparent (grepr);
-	sp_document_done (doc);
+	if (do_done) sp_document_done (doc);
 }
 
 /*

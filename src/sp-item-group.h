@@ -37,7 +37,7 @@ struct SPGroupClass {
 
 GType sp_group_get_type (void);
 
-void sp_item_group_ungroup (SPGroup *group, GSList **children);
+void sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done = true);
 
 SPGroupMode sp_item_group_get_mode (SPGroup *group);
 void sp_item_group_set_mode (SPGroup *group, SPGroupMode mode);
