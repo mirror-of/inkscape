@@ -8,6 +8,7 @@
  *
  * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
+ * Copyright (C) 2004 John Cliff
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -310,7 +311,8 @@ sp_shape_marker_required (SPShape* shape, int m, ArtBpath* bp)
     if (m == SP_MARKER_LOC_END && (bp[1].code != ART_LINETO) && (bp[1].code != ART_CURVETO))
         return 1;
 
-    if (m == SP_MARKER_LOC_MID)
+    if (m == SP_MARKER_LOC_MID && ((bp->code != ART_MOVETO && bp->code != ART_MOVETO_OPEN)
+                && ((bp[1].code == ART_LINETO) || (bp[1].code == ART_CURVETO))))
         return 1;
 
     return 0;
@@ -370,9 +372,21 @@ sp_shape_marker_get_transform (SPShape* shape, int m, ArtBpath* bp)
 			if ((bp->code == ART_LINETO) && (bp > shape->curve->bpath)) {
 				dx = bp->x3 - (bp - 1)->x3;
 				dy = bp->y3 - (bp - 1)->y3;
-			} else if (bp[1].code == ART_CURVETO) {
+            } else if (bp->code == ART_CURVETO) {
 				dx = bp->x3 - bp->x2;
 				dy = bp->y3 - bp->y2;
+
+                /* If the second Bezier control point x2 and the end y3
+                ** are coincident, the arrow will not be rotated in a
+                ** sensible fashion.  In this case, this code tries to
+                ** use the second control point on a previous segment to decide
+                ** the arrow's direction.  FIXME: this may not actually
+                ** be in spec for SVG...
+                */
+                if (hypot (dx, dy) < 1e-9 && (bp > shape->curve->bpath)) {
+                    dx = (bp - 1)->x2 - bp->x3;
+                    dy = (bp - 1)->y2 - bp->y3;
+                }
 			} else {
 				dx = 1.0;
 				dy = 0.0;
@@ -391,9 +405,49 @@ sp_shape_marker_get_transform (SPShape* shape, int m, ArtBpath* bp)
             break;
 			}
 
+        /* the following works on the average of the incoming
+        and outgoing curve tangents.*/
+
         case SP_MARKER_LOC_MID:
+        {
+            float dx, dy, h;
+            if ((bp->code == ART_LINETO) && (bp > shape->curve->bpath)) {
+                dx = ((bp->x3 - (bp - 1)->x3)+(bp[1].x3 - bp[0].x3))/2;
+                dy = ((bp->y3 - (bp - 1)->y3)+(bp[1].y3 - bp[0].y3))/2;
+            } else if (bp->code == ART_CURVETO) {
+                dx = ((bp->x3 - bp->x2) + (bp[1].x1 - bp[0].x3))/2;
+                dy = ((bp->y3 - bp->y2) + (bp[1].y1 - bp[0].y3))/2;
+
+                /* If the second Bezier control point x2 and the end y3
+                ** are coincident, the arrow will not be rotated in a
+                ** sensible fashion.  In this case, this code tries to
+                ** use the second control point on a previous segment to decide
+                ** the arrow's direction.  FIXME: this may not actually
+                ** be in spec for SVG...
+                */
+                if (hypot (dx, dy) < 1e-9 && (bp > shape->curve->bpath)) {
+                    dx = (bp - 1)->x2 - bp->x3 ;
+                    dy = (bp - 1)->y2 - bp->y3 ;
+
+                }
+            } else {
+                dx = 1.0;
+                dy = 0.0;
+            }
+            h = hypot (dx, dy);
+            if (h > 1e-9) {
+                t.c[0] = dx / h;
+                t.c[1] = dy / h;
+                t.c[2] = -dy / h;
+                t.c[3] = dx / h;
+                t.c[4] = bp->x3;
+                t.c[5] = bp->y3;
+            } else {
             nr_matrix_set_translate (&t, bp->x3, bp->y3);
+            }
             break;
+    }
+
     }
 
     return t;
@@ -532,10 +586,14 @@ sp_shape_print (SPItem *item, SPPrintContext *ctx)
             for (int m = SP_MARKER_LOC_START; m < SP_MARKER_LOC_QTY; m++) {
                 if (sp_shape_marker_required (shape, m, bp)) {
 
+                    SPMarker* marker = SP_MARKER (shape->marker[m]);
                     SPItem* marker_path = SP_ITEM (shape->marker[m]->children);
 
+                    NRMatrix tr = sp_shape_marker_get_transform (shape, m, bp);
+                    nr_matrix_multiply (&tr, &marker->c2p, &tr);
+
                     NRMatrix old_tr = marker_path->transform;
-                    marker_path->transform = sp_shape_marker_get_transform (shape, m, bp);
+                    marker_path->transform = tr;
                     sp_item_invoke_print (marker_path, ctx);
                     marker_path->transform = old_tr;
                 }
