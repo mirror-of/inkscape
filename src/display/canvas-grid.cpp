@@ -232,9 +232,9 @@ sp_cgrid_render (SPCanvasItem * item, SPCanvasBuf * buf)
     buf->is_bg = FALSE;
 
     const gdouble sxg = floor ((buf->rect.x0 - grid->ow[NR::X]) / grid->sw[NR::X]) * grid->sw[NR::X] + grid->ow[NR::X];
-    const gint  xlinestart = Inkscape::round((sxg - grid->ow[NR::X]) / grid->sw[NR::X]);
+    const gint  xlinestart = (gint) Inkscape::round((sxg - grid->ow[NR::X]) / grid->sw[NR::X]);
     const gdouble syg = floor ((buf->rect.y0 - grid->ow[NR::Y]) / grid->sw[NR::Y]) * grid->sw[NR::Y] + grid->ow[NR::Y];
-    const gint  ylinestart = Inkscape::round((syg - grid->ow[NR::Y]) / grid->sw[NR::Y]);
+    const gint  ylinestart = (gint) Inkscape::round((syg - grid->ow[NR::Y]) / grid->sw[NR::Y]);
 
     gint ylinenum;
     gdouble y;
