@@ -39,6 +39,8 @@
 #include "dialogs/find.h"
 #include "dialogs/debugdialog.h"
 
+#include "potrace/inkscape-potrace.h"
+
 #include "tools-switch.h"
 #include "inkscape-private.h"
 #include "file.h"
@@ -404,6 +406,9 @@ sp_verb_action_selection_perform (SPAction *action, void * data, void * pdata)
             break;
         case SP_VERB_SELECTION_REVERSE:
             sp_selected_path_reverse ();
+            break;
+        case SP_VERB_SELECTION_POTRACE:
+            Inkscape::Potrace::Potrace::convertImageToPath();
             break;
 
         case SP_VERB_SELECTION_COMBINE:
@@ -938,6 +943,8 @@ static const SPVerbActionDef props[] = {
         N_("Clean up selected path(s)"), "selection_cleanup"},
     {SP_VERB_SELECTION_REVERSE, "SelectionReverse", N_("_Reverse"),
         N_("Reverses the direction of selected path(s); useful for flipping markers"), NULL},
+    {SP_VERB_SELECTION_POTRACE, "SelectionPotrace", N_("_Trace bitmap"),
+        N_("Convert bitmap object to paths"), NULL},
     {SP_VERB_SELECTION_COMBINE, "SelectionCombine", N_("_Combine"),
         N_("Combine several paths into one"), "selection_combine"},
     {SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break _Apart"),

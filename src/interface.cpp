@@ -796,6 +796,7 @@ sp_ui_path_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
     static const sp_verb_t selection[] = {
         SP_VERB_OBJECT_TO_CURVE,
         SP_VERB_SELECTION_OUTLINE,
+        SP_VERB_SELECTION_POTRACE,
 
         SP_VERB_NONE,
         SP_VERB_SELECTION_UNION,
