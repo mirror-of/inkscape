@@ -21,6 +21,9 @@
 
 
 namespace Inkscape {
+
+namespace Trace {
+
 namespace Potrace {
 
 
@@ -187,8 +190,9 @@ class PotraceTracingEngine : public TracingEngine
 
 
 
-}  //namespace Potrace
-}  //namespace Inkscape
+}  // namespace Potrace
+}  // namespace Trace
+}  // namespace Inkscape
 
 
 #endif  //__INKSCAPE_POTRACE_H__

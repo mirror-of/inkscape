@@ -23,6 +23,8 @@
 
 namespace Inkscape {
 
+namespace Trace {
+
 /**
  *
  */
@@ -76,7 +78,7 @@ class TracingEngine
  *  to a variety of tracing engines, while maintaining a 
  *  consistent interface.
  */
-class Trace
+class Tracer
 {
     public:
 
@@ -84,13 +86,13 @@ class Trace
     /**
      *
      */
-    Trace();
+    Tracer();
 
 
     /**
      *
      */
-    ~Trace();
+    ~Tracer();
 
 
     /**
@@ -147,16 +149,14 @@ class Trace
     SPItem *selectedItem;
 
 
-};//class Trace
+};//class Tracer
 
 
 
 
+} // namespace Trace
 
-
-
-
-}//namespace Inkscape
+} // namespace Inkscape
 
 
 

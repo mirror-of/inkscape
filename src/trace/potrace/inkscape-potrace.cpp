@@ -60,8 +60,8 @@ static int potraceStatus(char *msg, void *userData)
 
     //g_message("msg:%s\n", msg);
 
-    Inkscape::Potrace::PotraceTracingEngine *engine =
-          (Inkscape::Potrace::PotraceTracingEngine *)userData;
+    Inkscape::Trace::Potrace::PotraceTracingEngine *engine =
+          (Inkscape::Trace::Potrace::PotraceTracingEngine *)userData;
     
     return engine->keepGoing;
 
@@ -74,6 +74,9 @@ static int potraceStatus(char *msg, void *userData)
 struct info info;
 
 namespace Inkscape {
+
+namespace Trace {
+
 namespace Potrace {
 
 
@@ -438,6 +441,7 @@ PotraceTracingEngine::abort()
 
 
 
-}  //namespace Potrace
-}  //namespace Inkscape
+}  // namespace Potrace
+}  // namespace Trace
+}  // namespace Inkscape
 

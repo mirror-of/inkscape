@@ -30,12 +30,15 @@
 #include <xml/repr.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
+
 namespace Inkscape {
+
+namespace Trace {
 
 /**
  *
  */
-Trace::Trace()
+Tracer::Tracer()
 {
     engine = NULL;
     selectedItem = NULL;
@@ -46,13 +49,13 @@ Trace::Trace()
 /**
  *
  */
-Trace::~Trace()
+Tracer::~Tracer()
 {
 }
 
 
 SPImage *
-Trace::getSelectedSPImage()
+Tracer::getSelectedSPImage()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (!desktop)
@@ -97,7 +100,7 @@ Trace::getSelectedSPImage()
 
 
 GdkPixbuf *
-Trace::getSelectedImage()
+Tracer::getSelectedImage()
 {
 
     SPImage *img = getSelectedSPImage();
@@ -115,7 +118,7 @@ Trace::getSelectedImage()
 /**
  *  Threaded method that actually does the conversion
  */
-void Trace::convertImageToPathThread()
+void Tracer::convertImageToPathThread()
 {
     //## Remember. NEVER leave this method without setting
     //## engine back to NULL
@@ -242,7 +245,7 @@ void Trace::convertImageToPathThread()
 /**
  *  Static no-knowledge version
  */
-void Trace::convertImageToPath(TracingEngine *theEngine)
+void Tracer::convertImageToPath(TracingEngine *theEngine)
 {
     //Check if we are already running
     if (engine)
@@ -257,7 +260,7 @@ void Trace::convertImageToPath(TracingEngine *theEngine)
 
     //Create our thread and run it
     Glib::Thread::create(
-        sigc::mem_fun(*this, &Trace::convertImageToPathThread), false);
+        sigc::mem_fun(*this, &Tracer::convertImageToPathThread), false);
 #else
     convertImageToPathThread();
 #endif
@@ -269,10 +272,8 @@ void Trace::convertImageToPath(TracingEngine *theEngine)
 /**
  *  Abort the thread that is executing convertImageToPath()
  */
-void Trace::abort()
+void Tracer::abort()
 {
-
-    //g_message("Trace::abort() soon to be implemented\n");
 
     //## Inform Trace's working thread
     keepGoing = false;
@@ -292,11 +293,11 @@ void Trace::abort()
 /**
  *  Static no-knowledge version
  */
-gboolean Trace::staticConvertImageToPath()
+gboolean Tracer::staticConvertImageToPath()
 {
-    Trace trace;
-    Inkscape::Potrace::PotraceTracingEngine engine;
-    trace.convertImageToPath(&engine);
+    Tracer tracer;
+    Inkscape::Trace::Potrace::PotraceTracingEngine engine;
+    tracer.convertImageToPath(&engine);
     return true;
 }
 
@@ -307,7 +308,9 @@ gboolean Trace::staticConvertImageToPath()
 
 
 
-}//namespace Inkscape
+} // namespace Trace
+
+} // namespace Inkscape
 
 
 //#########################################################################

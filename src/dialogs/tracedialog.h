@@ -13,8 +13,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <trace/trace.h>
-
 namespace Inkscape {
 namespace UI {
 namespace Dialogs {
@@ -26,13 +24,13 @@ namespace Dialogs {
 class TraceDialog
 {
 
-    public:
+public:
     
 
     /**
      * Constructor
      */
-    TraceDialog() { trace = NULL; };
+    TraceDialog() {  };
 
 
     /**
@@ -65,17 +63,6 @@ class TraceDialog
      * Show the instance above
      */
     static void showInstance();
-
-
-    void setTrace(Inkscape::Trace *val)
-        { trace = val; }
-
-    Inkscape::Trace *getTrace()
-        { return trace; }
-
-    private:
-
-    Inkscape::Trace *trace;
 
 };
 

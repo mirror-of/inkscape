@@ -89,7 +89,7 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
     /**
      * This is the big almighty McGuffin
      */
-    Inkscape::Trace tracer;
+    Inkscape::Trace::Tracer tracer;
 
     /**
      * This does potrace processing
@@ -109,8 +109,8 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
     //########## Potrace items
     Gtk::VBox             potraceBox;
     Gtk::RadioButtonGroup potraceGroup;
-    Gtk::CheckButton     potraceInvertButton;
-    Gtk::HBox               potraceInvertBox;
+    Gtk::CheckButton      potraceInvertButton;
+    Gtk::HBox             potraceInvertBox;
     Gtk::Button           *potraceOkButton;
     Gtk::Button           *potraceCancelButton;
 
@@ -173,7 +173,7 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
 void TraceDialogImpl::potraceProcess(bool do_i_trace)
 {
     //##### Get the tracer and engine
-    Inkscape::Potrace::PotraceTracingEngine pte;
+    Inkscape::Trace::Potrace::PotraceTracingEngine pte;
 
     //##### Get the settings
     /* which one? */
