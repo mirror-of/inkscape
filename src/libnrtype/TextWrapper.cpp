@@ -7,7 +7,7 @@
 #include "TextWrapper.h"
 
 #include "FontFactory.h"
-#include "FontInstance.h"
+#include <libnrtype/font-instance.h>
 
 #include <svg/svg.h>
 

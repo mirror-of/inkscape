@@ -6,7 +6,7 @@
  */
 
 #include "FontFactory.h"
-#include "FontInstance.h"
+#include <libnrtype/font-instance.h>
 
 #include <pango/pango.h>
 

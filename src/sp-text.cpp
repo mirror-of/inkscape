@@ -33,7 +33,7 @@
 #include <libnr/nr-rotate.h>
 //#include <libnrtype/nr-typeface.h>
 #include <libnrtype/FontFactory.h>
-#include <libnrtype/FontInstance.h>
+#include <libnrtype/font-instance.h>
 #include <libnrtype/font-style-to-pos.h>
 
 #include <libnrtype/TextWrapper.h>
