@@ -48,6 +48,21 @@ void MessageContext::setVF(MessageType type, gchar const *format, va_list args)
     g_free(message);
 }
 
+void MessageContext::flash(MessageType type, gchar const *message) {
+    _stack->flash(type, message);
+}
+
+void MessageContext::flashF(MessageType type, gchar const *format, ...) {
+    va_list args;
+    va_start(args, format);
+    _stack->flashVF(type, format, args);
+    va_end(args);
+}
+
+void MessageContext::flashVF(MessageType type, gchar const *format, va_list args) {
+    _stack->flashVF(type, format, args);
+}
+
 void MessageContext::clear() {
     if (_message_id) {
         _stack->cancel(_message_id);

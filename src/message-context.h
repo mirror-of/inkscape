@@ -65,6 +65,33 @@ public:
       */
     void setVF(MessageType type, gchar const *format, va_list args);
 
+    /** @brief pushes a message onto the stack for a brief period of time
+      *        without disturbing our "current" message
+      *
+      * @param type the message type
+      * @param message the message text
+      */
+    void flash(MessageType type, gchar const *message);
+
+    /** @brief pushes a message onto the stack for a brief period of time
+      *        using printf-style formatting, without disturbing our current
+      *        message
+      *
+      * @param type the message type
+      * @param format a printf-style formatting string
+      */
+    void flashF(MessageType type, gchar const *format, ...);
+
+    /** @brief pushes a message onto the stack for a brief period of time
+      *        using printf-style formatting and a stdarg argument list;
+      *        it does not disturb our "current" message
+      *
+      * @param type the message type
+      * @param format a printf-style formatting string
+      * @param args printf-style arguments
+      */
+    void flashVF(MessageType type, gchar const *format, va_list args);
+
     /** @brief removes our current message from the stack */
     void clear();
 
