@@ -105,51 +105,11 @@ static void gr_toggle_fillstroke (GtkWidget *button, gpointer data) {
 }
 
 void
-gr_apply_gradient (SPSelection *selection, GrDrag *drag, SPGradient *gr)
+gr_apply_gradient_to_item (SPItem *item, SPGradient *gr, SPGradientType new_type, guint new_fill, bool do_fill, bool do_stroke)
 {
-    SPGradientType new_type = (SPGradientType) prefs_get_int_attribute ("tools.gradient", "newgradient", SP_GRADIENT_TYPE_LINEAR);
-    guint new_fill = prefs_get_int_attribute ("tools.gradient", "newfillorstroke", 1);
+    SPStyle *style = SP_OBJECT_STYLE (item);
 
-    if (drag && drag->selected) {
-        GrDragger *dragger = drag->selected;
-        for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
-            GrDraggable *draggable = (GrDraggable *) i->data;
-            SPItem *item = draggable->item;
-            SPStyle *style = SP_OBJECT_STYLE (item);
-
-            if (draggable->fill_or_stroke) {
-                if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER) && 
-                    SP_IS_GRADIENT (SP_OBJECT_STYLE_FILL_SERVER (item))) {
-                    SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (item);
-                    if (SP_IS_LINEARGRADIENT (server)) {
-                        sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_LINEAR, true);
-                    } else if (SP_IS_RADIALGRADIENT (server)) {
-                        sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_RADIAL, true);
-                    } 
-                } else if (new_fill) {
-                    sp_item_set_gradient(item, gr, new_type, true);
-                }
-            } else {
-                if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER) && 
-                    SP_IS_GRADIENT (SP_OBJECT_STYLE_STROKE_SERVER (item))) {
-                    SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER (item);
-                    if (SP_IS_LINEARGRADIENT (server)) {
-                        sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_LINEAR, false);
-                    } else if (SP_IS_RADIALGRADIENT (server)) {
-                        sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_RADIAL, false);
-                    } 
-                } else if (!new_fill) {
-                    sp_item_set_gradient(item, gr, new_type, false);
-                }
-            }
-        }
-        return;
-    }
-
-   for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
-        SPItem *item = SP_ITEM(i->data);
-        SPStyle *style = SP_OBJECT_STYLE (item);
-
+    if (do_fill) {
         if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER) && 
             SP_IS_GRADIENT (SP_OBJECT_STYLE_FILL_SERVER (item))) {
             SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (item);
@@ -159,9 +119,11 @@ gr_apply_gradient (SPSelection *selection, GrDrag *drag, SPGradient *gr)
                 sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_RADIAL, true);
             } 
         } else if (new_fill) {
-                sp_item_set_gradient(item, gr, new_type, true);
+            sp_item_set_gradient(item, gr, new_type, true);
         }
+    } 
 
+    if (do_stroke) {
         if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER) && 
             SP_IS_GRADIENT (SP_OBJECT_STYLE_STROKE_SERVER (item))) {
             SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER (item);
@@ -171,8 +133,36 @@ gr_apply_gradient (SPSelection *selection, GrDrag *drag, SPGradient *gr)
                 sp_item_set_gradient(item, gr, SP_GRADIENT_TYPE_RADIAL, false);
             } 
         } else if (!new_fill) {
-                sp_item_set_gradient(item, gr, new_type, false);
+            sp_item_set_gradient(item, gr, new_type, false);
         }
+    }
+}
+
+/**
+Applies gradient vector gr to the gradients attached to the selected dragger of drag, or if none,
+to all objects in selection. If there was no previous gradient on an item, uses gradient type and
+fill/stroke setting from preferences to create new default (linear: left/right; radial: centered)
+gradient.
+*/
+void
+gr_apply_gradient (SPSelection *selection, GrDrag *drag, SPGradient *gr)
+{
+    SPGradientType new_type = (SPGradientType) prefs_get_int_attribute ("tools.gradient", "newgradient", SP_GRADIENT_TYPE_LINEAR);
+    guint new_fill = prefs_get_int_attribute ("tools.gradient", "newfillorstroke", 1);
+
+    // First try selected dragger
+    if (drag && drag->selected) {
+        GrDragger *dragger = drag->selected;
+        for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
+            GrDraggable *draggable = (GrDraggable *) i->data;
+            gr_apply_gradient_to_item (draggable->item, gr, new_type, new_fill, draggable->fill_or_stroke, !draggable->fill_or_stroke);
+        }
+        return;
+    }
+
+   // If no drag or no dragger selected, act on selection
+   for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
+       gr_apply_gradient_to_item (SP_ITEM(i->data), gr, new_type, new_fill, true, true);
    }
 }
 
