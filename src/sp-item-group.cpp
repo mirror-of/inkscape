@@ -482,7 +482,8 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 
 			NR::Matrix ctrans;
 			NR::Matrix const g(gitem->transform);
-			if (SP_IS_USE(citem) && SP_OBJECT_PARENT (sp_use_get_original (SP_USE(citem))) == SP_OBJECT(group)) {
+			if (SP_IS_USE(citem) && sp_use_get_original (SP_USE(citem)) && 
+					SP_OBJECT_PARENT (sp_use_get_original (SP_USE(citem))) == SP_OBJECT(group)) {
 				// make sure a clone's effective transform is the same as was under group
 				ctrans = g.inverse() * citem->transform * g;
 			} else {
