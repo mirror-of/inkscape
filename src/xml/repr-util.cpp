@@ -71,7 +71,7 @@ sp_xml_dtoa (gchar *buf, double val, unsigned int tprec, unsigned int fprec, uns
     i = 0;
     if (val < 0.0) {
         buf[i++] = '-';
-        val = fabs (val);
+        val = -val;
     }
     /* Determine number of integral digits */
     if (val >= 1.0) {
@@ -529,9 +529,9 @@ sp_repr_lookup_child (SPRepr       *repr,
                       const gchar *key,
                       const gchar *value)
 {
-    g_return_val_if_fail (repr != NULL, NULL);
-    g_return_val_if_fail (key != NULL, NULL);
-    g_return_val_if_fail (value != NULL, NULL);
+    g_return_val_if_fail(repr != NULL, NULL);
+    g_return_val_if_fail(key != NULL, NULL);
+    g_return_val_if_fail(value != NULL, NULL);
 
     GQuark const quark = g_quark_from_string (key);
 
@@ -542,8 +542,8 @@ sp_repr_lookup_child (SPRepr       *repr,
             if ( ( attr->key == quark )
                  && !strcmp(attr->value, value) ) {
                 return child;
+            }
         }
-    }
     }
 
     return NULL;
