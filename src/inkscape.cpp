@@ -1267,7 +1267,6 @@ profile_path(const char *filename)
             gchar* utf8Path = g_filename_to_utf8( homedir, -1, NULL, NULL, NULL );
             if ( utf8Path )
             {
-                g_free(const_cast<gchar*>(homedir));
                 homedir = utf8Path;
                 if (!g_utf8_validate(homedir, -1, NULL)) {
                     g_warning( "g_get_home_dir() post A IS NOT UTF-8" );
@@ -1275,14 +1274,14 @@ profile_path(const char *filename)
             }
         }
         if (!homedir) {
-            homedir = g_path_get_dirname(INKSCAPE->argv0);
-            if (!g_utf8_validate(homedir, -1, NULL)) {
+            gchar * path = g_path_get_dirname(INKSCAPE->argv0);
+            if (!g_utf8_validate(path, -1, NULL)) {
                 g_warning( "g_path_get_dirname() IS NOT UTF-8" );
             }
-            gchar* utf8Path = g_filename_to_utf8( homedir, -1, NULL, NULL, NULL );
+            gchar* utf8Path = g_filename_to_utf8( path, -1, NULL, NULL, NULL );
+            g_free(path);
             if ( utf8Path )
             {
-                g_free(const_cast<gchar*>(homedir));
                 homedir = utf8Path;
                 if (!g_utf8_validate(homedir, -1, NULL)) {
                     g_warning( "g_get_home_dir() post B IS NOT UTF-8" );
