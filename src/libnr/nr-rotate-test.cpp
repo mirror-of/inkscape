@@ -4,20 +4,10 @@
 #include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-matrix-fns.h>        /* identity, matrix_equalp */
 #include <libnr/nr-rotate.h>
+#include <libnr/nr-rotate-fns.h>
 #include <libnr/nr-rotate-ops.h>
 using NR::X;
 using NR::Y;
-
-inline bool point_equalp(NR::Point const &a, NR::Point const &b)
-{
-    return ( NR_DF_TEST_CLOSE(a[X], b[X], 1e-5) &&
-             NR_DF_TEST_CLOSE(a[Y], b[Y], 1e-5) );
-}
-
-static bool rotate_equalp(NR::rotate const &a, NR::rotate const &b, double const eps)
-{
-    return matrix_equalp(NR::Matrix(a), NR::Matrix(b), eps);
-}
 
 int main(int argc, char *argv[])
 {
@@ -64,7 +54,9 @@ int main(int argc, char *argv[])
         UTEST_ASSERT( r_id * rot234 == rot234 );
         UTEST_ASSERT(rotate_equalp(rot234 * rot234.inverse(), r_id, 1e-14));
         UTEST_ASSERT(rotate_equalp(rot234.inverse() * rot234, r_id, 1e-14));
-        UTEST_ASSERT(point_equalp(( NR::rotate(0.25) * NR::rotate(.5) ).vec, NR::rotate(.75).vec));
+        UTEST_ASSERT(rotate_equalp(( NR::rotate(0.25) * NR::rotate(.5) ),
+                                   NR::rotate(.75),
+                                   1e-10));
     }
 
     UTEST_TEST("operator/(rotate, rotate)") {
