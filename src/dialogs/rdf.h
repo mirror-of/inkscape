@@ -35,7 +35,7 @@ enum RDFType {
     RDF_AGENT,    // requires the "Agent" hierarchy before doing content
     RDF_RESOURCE, // stored in "rdf:resource" element
     RDF_XML,      // literal XML
-    RDF_BAG,      // rdf:Bag resources
+    RDF_BAG       // rdf:Bag resources
 };
 
 /**
@@ -44,13 +44,13 @@ enum RDFType {
 enum RDF_Format {
     RDF_FORMAT_LINE,          // uses single line data (GtkEntry)
     RDF_FORMAT_MULTILINE,     // uses multiline data (GtkTextView)
-    RDF_FORMAT_SPECIAL,       // uses some other edit methods
+    RDF_FORMAT_SPECIAL        // uses some other edit methods
 };
 
 enum RDF_Editable {
     RDF_EDIT_GENERIC,       // editable via generic widgets
     RDF_EDIT_SPECIAL,       // special widgets are needed
-    RDF_EDIT_HARDCODED,     // isn't editable
+    RDF_EDIT_HARDCODED      // isn't editable
 };
 
 /**
