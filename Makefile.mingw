@@ -54,6 +54,8 @@ dist:
 	$(MKDIR) inkscape$(S)locale
 	$(MAKE) -C po -f Makefile.mingw dist
 	$(MKDIR) inkscape$(S)modules
+	$(MKDIR) inkscape$(S)plugins
+	$(CP) src$(S)extension$(S)plugin$(S)*.dll inkscape$(S)plugins
 	@echo "##################### D O N E ####################"
 
 clean:
