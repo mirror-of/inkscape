@@ -49,8 +49,8 @@ unsigned int nr_emit_fail_warning (const gchar *file, unsigned int line, const g
 
 NRType nr_type_is_a (NRType type, NRType test);
 
-void *nr_object_check_instance_cast (void *ip, NRType tc);
-unsigned int nr_object_check_instance_type (void *ip, NRType tc);
+void const *nr_object_check_instance_cast(void const *ip, NRType tc);
+unsigned int nr_object_check_instance_type(void const *ip, NRType tc);
 
 NRType nr_object_register_type (NRType parent,
 				gchar const *name,
