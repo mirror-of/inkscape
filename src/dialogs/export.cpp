@@ -579,7 +579,7 @@ sp_export_selection_changed ( Inkscape::Application *inkscape,
                               GtkObject *base )
 {
 //  std::cout << "Selection Changed" << std::endl;
-    static bool was_empty;
+    static bool was_empty = TRUE;
     selection_type current_key;
     current_key = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
 
