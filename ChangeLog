@@ -1,3 +1,7 @@
+2003-12-17  MenTaLguY <mental@rydia.net>
+
+	* src/toolbox.cpp: removed spiral button
+
 2003-12-16  bulia byak <bulia@dr.com>
 
 	* src/nodepath.cpp src/nodepath.h: node drag is now restricted to hor/vert by ctrl
