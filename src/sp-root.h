@@ -25,7 +25,7 @@
 #include "sp-item-group.h"
 #include "version.h"
 
-struct _SPRoot {
+struct SPRoot {
 	SPGroup group;
 
 	struct {
@@ -53,7 +53,7 @@ struct _SPRoot {
 	SPDefs *defs;
 };
 
-struct _SPRootClass {
+struct SPRootClass {
 	SPGroupClass parent_class;
 };
 

@@ -19,8 +19,8 @@
 #define SP_IS_IMAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_IMAGE))
 #define SP_IS_IMAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_IMAGE))
 
-typedef struct _SPImage SPImage;
-typedef struct _SPImageClass SPImageClass;
+class SPImage;
+class SPImageClass;
 
 /* SPImage */
 
@@ -34,7 +34,7 @@ typedef struct _SPImageClass SPImageClass;
 
 #define SP_IMAGE_HREF_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 
-struct _SPImage {
+struct SPImage {
 	SPItem item;
 
 	SPSVGLength x;
@@ -47,7 +47,7 @@ struct _SPImage {
 	GdkPixbuf *pixbuf;
 };
 
-struct _SPImageClass {
+struct SPImageClass {
 	SPItemClass parent_class;
 };
 

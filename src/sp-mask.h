@@ -18,15 +18,15 @@
 #define SP_IS_MASK(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_MASK))
 #define SP_IS_MASK_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_MASK))
 
-typedef struct _SPMask SPMask;
-typedef struct _SPMaskClass SPMaskClass;
-typedef struct _SPMaskView SPMaskView;
+class SPMask;
+class SPMaskClass;
+class SPMaskView;
 
 #include "display/nr-arena-forward.h"
 #include "sp-object-group.h"
 #include "uri-references.h"
 
-struct _SPMask {
+struct SPMask {
 	SPObjectGroup group;
 
 	unsigned int maskUnits_set : 1;
@@ -38,7 +38,7 @@ struct _SPMask {
 	SPMaskView *display;
 };
 
-struct _SPMaskClass {
+struct SPMaskClass {
 	SPObjectGroupClass parent_class;
 };
 

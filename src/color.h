@@ -50,7 +50,7 @@ typedef enum {
 	SP_COLORSPACE_TYPE_CMYK
 } SPColorSpaceType;
 
-struct _SPColor {
+struct SPColor {
 	const SPColorSpace *colorspace;
 	union {
 		float c[4];

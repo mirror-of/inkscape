@@ -26,7 +26,7 @@
 
 #include "sp-clippath.h"
 
-struct _SPClipPathView {
+struct SPClipPathView {
 	SPClipPathView *next;
 	unsigned int key;
 	NRArenaItem *arenaitem;

@@ -23,10 +23,10 @@
 #define SP_IS_RECT_CONTEXT(obj)         (GTK_CHECK_TYPE ((obj), SP_TYPE_RECT_CONTEXT))
 #define SP_IS_RECT_CONTEXT_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_RECT_CONTEXT))
 
-typedef struct _SPRectContext SPRectContext;
-typedef struct _SPRectContextClass SPRectContextClass;
+class SPRectContext;
+class SPRectContextClass;
 
-struct _SPRectContext {
+struct SPRectContext {
 	SPEventContext event_context;
 	SPItem *item;
 	NR::Point center;
@@ -38,7 +38,7 @@ struct _SPRectContext {
   	gdouble ry_ratio;	/* roundness ratio (y direction) */
 };
 
-struct _SPRectContextClass {
+struct SPRectContextClass {
 	SPEventContextClass parent_class;
 };
 

@@ -23,10 +23,10 @@
 #define SP_IS_STAR_CONTEXT(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_STAR_CONTEXT))
 #define SP_IS_STAR_CONTEXT_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_STAR_CONTEXT))
 
-typedef struct _SPStarContext SPStarContext;
-typedef struct _SPStarContextClass SPStarContextClass;
+class SPStarContext;
+class SPStarContextClass;
 
-struct _SPStarContext {
+struct SPStarContext {
 	SPEventContext event_context;
 	SPItem *item;
 	NR::Point center;
@@ -42,7 +42,7 @@ struct _SPStarContext {
     SPRepr *repr;
 };
 
-struct _SPStarContextClass {
+struct SPStarContextClass {
 	SPEventContextClass parent_class;
 };
 

@@ -42,7 +42,7 @@
 
 /* Identity typedef */
 
-struct _SPPrintContext {
+struct SPPrintContext {
 	Inkscape::Extension::Print * module;
 };
 

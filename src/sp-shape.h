@@ -28,7 +28,7 @@
 
 #define SP_SHAPE_WRITE_PATH (1 << 2)
 
-struct _SPShape {
+struct SPShape {
 	SPItem item;
 
 	SPCurve *curve;
@@ -36,7 +36,7 @@ struct _SPShape {
         SPObject *marker[SP_MARKER_LOC_QTY];
 };
 
-struct _SPShapeClass {
+struct SPShapeClass {
 	SPItemClass item_class;
 
 	/* Build bpath from extra shape attributes */

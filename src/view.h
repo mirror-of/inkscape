@@ -15,8 +15,8 @@
 
 #include <libnr/nr-point.h>
 
-typedef struct _SPView SPView;
-typedef struct _SPViewClass SPViewClass;
+class SPView;
+class SPViewClass;
 
 #define SP_TYPE_VIEW (sp_view_get_type ())
 #define SP_VIEW(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_VIEW, SPView))
@@ -26,13 +26,13 @@ typedef struct _SPViewClass SPViewClass;
 #include <gtk/gtkeventbox.h>
 #include "forward.h"
 
-struct _SPView {
+struct SPView {
 	GObject object;
 
 	SPDocument *doc;
 };
 
-struct _SPViewClass {
+struct SPViewClass {
 	GObjectClass parent_class;
 
 	/* Request shutdown */
@@ -84,8 +84,8 @@ void sp_view_request_redraw (SPView *view);
 
 /* SPViewWidget */
 
-typedef struct _SPViewWidget SPViewWidget;
-typedef struct _SPViewWidgetClass SPViewWidgetClass;
+class SPViewWidget;
+class SPViewWidgetClass;
 
 #define SP_TYPE_VIEW_WIDGET (sp_view_widget_get_type ())
 #define SP_VIEW_WIDGET(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_VIEW_WIDGET, SPViewWidget))
@@ -93,13 +93,13 @@ typedef struct _SPViewWidgetClass SPViewWidgetClass;
 #define SP_IS_VIEW_WIDGET(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_VIEW_WIDGET))
 #define SP_IS_VIEW_WIDGET_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_VIEW_WIDGET))
 
-struct _SPViewWidget {
+struct SPViewWidget {
 	GtkEventBox eventbox;
 
 	SPView *view;
 };
 
-struct _SPViewWidgetClass {
+struct SPViewWidgetClass {
 	GtkEventBoxClass parent_class;
 
 	/* Vrtual method to set/change/remove view */

@@ -33,17 +33,17 @@ gchar *parse_css_url(const gchar *string);
 
 };
 
-typedef struct _SPIFloat SPIFloat;
-typedef struct _SPIScale24 SPIScale24;
-typedef struct _SPIInt SPIInt;
-typedef struct _SPIShort SPIShort;
-typedef struct _SPIEnum SPIEnum;
-typedef struct _SPIString SPIString;
-typedef struct _SPILength SPILength;
-typedef struct _SPIPaint SPIPaint;
-typedef struct _SPIFontSize SPIFontSize;
+class SPIFloat;
+class SPIScale24;
+class SPIInt;
+class SPIShort;
+class SPIEnum;
+class SPIString;
+class SPILength;
+class SPIPaint;
+class SPIFontSize;
 
-struct _SPIFloat {
+struct SPIFloat {
 	unsigned int set : 1;
 	unsigned int inherit : 1;
 	unsigned int data : 30;
@@ -54,34 +54,34 @@ struct _SPIFloat {
 #define SP_SCALE24_TO_FLOAT(v) ((float) ((double) (v) / SP_SCALE24_MAX))
 #define SP_SCALE24_FROM_FLOAT(v) ((int) ((v) * ((double) SP_SCALE24_MAX + 0.9999)))
 
-struct _SPIScale24 {
+struct SPIScale24 {
 	unsigned int set : 1;
 	unsigned int inherit : 1;
 	unsigned int value : 24;
 };
 
-struct _SPIInt {
+struct SPIInt {
 	unsigned int set : 1;
 	unsigned int inherit : 1;
 	unsigned int data : 30;
 	int value;
 };
 
-struct _SPIShort {
+struct SPIShort {
 	unsigned int set : 1;
 	unsigned int inherit : 1;
 	unsigned int data : 14;
 	int value : 16;
 };
 
-struct _SPIEnum {
+struct SPIEnum {
 	unsigned int set : 1;
 	unsigned int inherit : 1;
 	unsigned int value : 8;
 	unsigned int computed : 8;
 };
 
-struct _SPIString {
+struct SPIString {
 	unsigned int set : 1;
 	unsigned int inherit : 1;
 	unsigned int data : 30;
@@ -101,7 +101,7 @@ enum {
 	SP_CSS_UNIT_PERCENT
 };
 
-struct _SPILength {
+struct SPILength {
 	unsigned int set : 1;
 	unsigned int inherit : 1;
 	unsigned int unit : 4;
@@ -120,7 +120,7 @@ enum {
 	SP_PAINT_TYPE_PAINTSERVER
 };
 
-struct _SPIPaint {
+struct SPIPaint {
 	unsigned int set : 1;
 	unsigned int inherit : 1;
 	unsigned int currentcolor : 1;
@@ -145,7 +145,7 @@ enum {
 #define SP_F8_16_TO_FLOAT(v) ((gdouble) (v) / (1 << 16))
 #define SP_F8_16_FROM_FLOAT(v) ((int) ((v) * ((1 << 16) + 0.9999)))
 
-struct _SPIFontSize {
+struct SPIFontSize {
 	unsigned int set : 1;
 	unsigned int inherit : 1;
 	unsigned int type : 2;
@@ -153,9 +153,9 @@ struct _SPIFontSize {
 	float computed;
 };
 
-typedef struct _SPTextStyle SPTextStyle;
+class SPTextStyle;
 
-struct _SPStyle {
+struct SPStyle {
 	int refcount;
 	/** Object we are attached to */
 	SPObject *object;
@@ -366,7 +366,7 @@ typedef enum {
 	SP_CSS_WRITING_MODE_TB
 } SPWritingMode;
 
-struct _SPTextStyle {
+struct SPTextStyle {
 	int refcount;
 
 	/* CSS font properties */

@@ -23,7 +23,7 @@ class SPGuideAttachment;
 #define SP_IS_GUIDE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_GUIDE))
 
 /* Represents the constraint on p that dot(g.direction, p) == g.position. */
-struct _SPGuide {
+struct SPGuide {
 	SPObject object;
 	NR::Point normal;
 	gdouble position;
@@ -33,7 +33,7 @@ struct _SPGuide {
 	std::vector<SPGuideAttachment> attached_items;
 };
 
-struct _SPGuideClass {
+struct SPGuideClass {
 	SPObjectClass parent_class;
 };
 

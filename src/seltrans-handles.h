@@ -15,7 +15,7 @@
 #include "helper/sodipodi-ctrl.h"
 #include "seltrans.h"
 
-typedef struct _SPSelTransHandle SPSelTransHandle;
+class SPSelTransHandle;
 
 // request handlers
 gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const &handle, NR::Point &p, guint state);
@@ -31,7 +31,7 @@ void sp_sel_trans_skew(SPSelTrans *seltrans, SPSelTransHandle const &handle, NR:
 void sp_sel_trans_rotate(SPSelTrans *seltrans, SPSelTransHandle const &handle, NR::Point &p, guint state);
 void sp_sel_trans_center(SPSelTrans *seltrans, SPSelTransHandle const &handle, NR::Point &p, guint state);
 
-struct _SPSelTransHandle {
+struct SPSelTransHandle {
 	GtkAnchorType anchor;
 	GdkCursorType cursor;
 	guint control;

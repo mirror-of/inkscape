@@ -21,10 +21,10 @@
 #define SP_DROPPER_CONTEXT(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_DROPPER_CONTEXT, SPDropperContext))
 #define SP_IS_DROPPER_CONTEXT(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_DROPPER_CONTEXT))
 
-typedef struct _SPDropperContext SPDropperContext;
-typedef struct _SPDropperContextClass SPDropperContextClass;
+class SPDropperContext;
+class SPDropperContextClass;
 
-struct _SPDropperContext {
+struct SPDropperContext {
 	SPEventContext event_context;
 
 	unsigned int dragging : 1;
@@ -33,7 +33,7 @@ struct _SPDropperContext {
 	NR::Point centre;
 };
 
-struct _SPDropperContextClass {
+struct SPDropperContextClass {
 	SPEventContextClass parent_class;
 };
 

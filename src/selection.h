@@ -18,7 +18,7 @@
 
 
 
-struct _SPSelection {
+struct SPSelection {
 	GObject object;
 	SPDesktop *desktop;
 	GSList *reprs;
@@ -27,7 +27,7 @@ struct _SPSelection {
 	guint flags;
 };
 
-struct _SPSelectionClass {
+struct SPSelectionClass {
 	GObjectClass parent_class;
 
 	void (* changed) (SPSelection *selection);

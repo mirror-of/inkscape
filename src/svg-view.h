@@ -13,8 +13,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-typedef struct _SPSVGView SPSVGView;
-typedef struct _SPSVGViewClass SPSVGViewClass;
+class SPSVGView;
+class SPSVGViewClass;
 
 #define SP_TYPE_SVG_VIEW (sp_svg_view_get_type ())
 #define SP_SVG_VIEW(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_SVG_VIEW, SPSVGView))
@@ -27,7 +27,7 @@ typedef struct _SPSVGViewClass SPSVGViewClass;
 
 
 
-struct _SPSVGView {
+struct SPSVGView {
 	SPView view;
 
 	unsigned int dkey;
@@ -42,7 +42,7 @@ struct _SPSVGView {
 	gdouble width, height;
 };
 
-struct _SPSVGViewClass {
+struct SPSVGViewClass {
 	SPViewClass parent_class;
 };
 
@@ -55,8 +55,8 @@ void sp_svg_view_set_rescale (SPSVGView *view, gboolean rescale, gboolean keepas
 
 /* SPSVGViewWidget */
 
-typedef struct _SPSVGViewWidget SPSVGViewWidget;
-typedef struct _SPSVGViewWidgetClass SPSVGViewWidgetClass;
+class SPSVGViewWidget;
+class SPSVGViewWidgetClass;
 
 #define SP_TYPE_SVG_VIEW_WIDGET (sp_svg_view_widget_get_type ())
 #define SP_SVG_VIEW_WIDGET(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_SVG_VIEW_WIDGET, SPSVGViewWidget))
@@ -64,7 +64,7 @@ typedef struct _SPSVGViewWidgetClass SPSVGViewWidgetClass;
 #define SP_IS_SVG_VIEW_WIDGET(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_SVG_VIEW_WIDGET))
 #define SP_IS_SVG_VIEW_WIDGET_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_SVG_VIEW_WIDGET))
 
-struct _SPSVGViewWidget {
+struct SPSVGViewWidget {
 	SPViewWidget widget;
 
 	GtkWidget *sw;
@@ -75,7 +75,7 @@ struct _SPSVGViewWidget {
 	gdouble maxwidth, maxheight;
 };
 
-struct _SPSVGViewWidgetClass {
+struct SPSVGViewWidgetClass {
 	SPViewWidgetClass parent_class;
 };
 

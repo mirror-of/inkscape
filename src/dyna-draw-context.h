@@ -27,12 +27,12 @@
 #define SP_IS_DYNA_DRAW_CONTEXT(o) (GTK_CHECK_TYPE((o), SP_TYPE_DYNA_DRAW_CONTEXT))
 #define SP_IS_DYNA_DRAW_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_TYPE((k), SP_TYPE_DYNA_DRAW_CONTEXT))
 
-typedef struct _SPDynaDrawContext SPDynaDrawContext;
-typedef struct _SPDynaDrawContextClass SPDynaDrawContextClass;
+class SPDynaDrawContext;
+class SPDynaDrawContextClass;
 
 #define SAMPLING_SIZE 16        /* fixme: ?? */
 
-struct _SPDynaDrawContext
+struct SPDynaDrawContext
 {
     SPEventContext event_context;
 
@@ -73,7 +73,7 @@ struct _SPDynaDrawContext
     double width;
 };
 
-struct _SPDynaDrawContextClass
+struct SPDynaDrawContextClass
 {
     SPEventContextClass parent_class;
 };

@@ -15,8 +15,8 @@
  *
  */
 
-typedef struct _SPDesktopWidget SPDesktopWidget;
-typedef struct _SPDesktopWidgetClass SPDesktopWidgetClass;
+class SPDesktopWidget;
+class SPDesktopWidgetClass;
 
 #define SP_TYPE_DESKTOP_WIDGET (sp_desktop_widget_get_type ())
 #define SP_DESKTOP_WIDGET(o) (GTK_CHECK_CAST ((o), SP_TYPE_DESKTOP_WIDGET, SPDesktopWidget))
@@ -32,7 +32,7 @@ typedef struct _SPDesktopWidgetClass SPDesktopWidgetClass;
 #include "forward.h"
 #include "view.h"
 
-struct _SPDesktop {
+struct SPDesktop {
 	SPView view;
 
 	SPDesktopWidget *owner;
@@ -71,7 +71,7 @@ struct _SPDesktop {
 #endif /* HAVE_GTK_FULLSCREEN */
 };
 
-struct _SPDesktopClass {
+struct SPDesktopClass {
 	SPViewClass parent_class;
 
 	void (* activate) (SPDesktop *desktop);
@@ -158,7 +158,7 @@ const SPUnit *sp_desktop_get_default_unit (SPDesktop *dt);
 
 /* SPDesktopWidget */
 
-struct _SPDesktopWidget {
+struct SPDesktopWidget {
 	SPViewWidget viewwidget;
 
 	unsigned int update : 1;
@@ -192,7 +192,7 @@ struct _SPDesktopWidget {
 	GtkAdjustment *hadj, *vadj;
 };
 
-struct _SPDesktopWidgetClass {
+struct SPDesktopWidgetClass {
 	SPViewWidgetClass parent_class;
 };
 

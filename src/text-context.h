@@ -23,10 +23,10 @@
 #define SP_IS_TEXT_CONTEXT(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_TEXT_CONTEXT))
 #define SP_IS_TEXT_CONTEXT_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_TEXT_CONTEXT))
 
-typedef struct _SPTextContext SPTextContext;
-typedef struct _SPTextContextClass SPTextContextClass;
+class SPTextContext;
+class SPTextContextClass;
 
-struct _SPTextContext {
+struct SPTextContext {
 	SPEventContext event_context;
 
 	GtkIMContext *imc;
@@ -53,7 +53,7 @@ struct _SPTextContext {
 	gchar* preedit_string;
 };
 
-struct _SPTextContextClass {
+struct SPTextContextClass {
 	SPEventContextClass parent_class;
 };
 

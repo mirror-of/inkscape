@@ -19,7 +19,7 @@
 #include "desktop-handles.h"
 #include <vector>
 
-typedef struct _SPSelTrans SPSelTrans;
+class SPSelTrans;
 
 enum {
 	SP_SELTRANS_SHOW_CONTENT,
@@ -44,7 +44,7 @@ enum {
 
 #define SP_SELTRANS_SPP_SIZE 1024
 
-struct _SPSelTrans {
+struct SPSelTrans {
 	SPDesktop *desktop;
 	SPSelection *selection;
 

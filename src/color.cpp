@@ -16,7 +16,7 @@
 #include <glib.h>
 #include "color.h"
 
-struct _SPColorSpace {
+struct SPColorSpace {
 	gchar const *name;
 };
 

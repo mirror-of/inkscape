@@ -23,22 +23,22 @@
 #define SP_IS_CHARS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_CHARS))
 #define SP_IS_CHARS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_CHARS))
 
-typedef struct _SPCharElement SPCharElement;
+class SPCharElement;
 
-struct _SPCharElement {
+struct SPCharElement {
 	SPCharElement *next;
 	guint glyph;
 	NRFont *font;
 	NRMatrix transform;
 };
 
-struct _SPChars {
+struct SPChars {
 	SPItem item;
 	SPCharElement *elements;
 	ArtDRect paintbox;
 };
 
-struct _SPCharsClass {
+struct SPCharsClass {
 	SPItemClass parent_class;
 };
 

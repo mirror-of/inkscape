@@ -30,9 +30,9 @@
  * Pattern
  */
 
-typedef struct _SPPatPainter SPPatPainter;
+class SPPatPainter;
 
-struct _SPPatPainter {
+struct SPPatPainter {
 	SPPainter painter;
 	SPPattern *pat;
 

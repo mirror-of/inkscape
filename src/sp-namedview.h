@@ -29,7 +29,7 @@ enum {
 	SP_BORDER_LAYER_TOP
 };
 
-struct _SPNamedView {
+struct SPNamedView {
 	SPObjectGroup objectgroup;
 	unsigned int editable : 1;
 	unsigned int showgrid : 1;
@@ -71,7 +71,7 @@ struct _SPNamedView {
 	gint viewcount;
 };
 
-struct _SPNamedViewClass {
+struct SPNamedViewClass {
 	SPObjectGroupClass parent_class;
 };
 

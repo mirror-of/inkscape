@@ -25,10 +25,10 @@
 #define SP_IS_GENERICELLIPSE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_GENERICELLIPSE))
 #define SP_IS_GENERICELLIPSE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_GENERICELLIPSE))
 
-typedef struct _SPGenericEllipse SPGenericEllipse;
-typedef struct _SPGenericEllipseClass SPGenericEllipseClass;
+class SPGenericEllipse;
+class SPGenericEllipseClass;
 
-struct _SPGenericEllipse {
+struct SPGenericEllipse {
 	SPShape shape;
 	SPSVGLength cx;
 	SPSVGLength cy;
@@ -39,7 +39,7 @@ struct _SPGenericEllipse {
 	double start, end;
 };
 
-struct _SPGenericEllipseClass {
+struct SPGenericEllipseClass {
 	SPShapeClass parent_class;
 };
 
@@ -56,11 +56,11 @@ void sp_genericellipse_normalize (SPGenericEllipse *ellipse);
 #define SP_IS_ELLIPSE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_ELLIPSE))
 #define SP_IS_ELLIPSE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_ELLIPSE))
 
-struct _SPEllipse {
+struct SPEllipse {
 	SPGenericEllipse genericellipse;
 };
 
-struct _SPEllipseClass {
+struct SPEllipseClass {
 	SPGenericEllipseClass parent_class;
 };
 
@@ -76,11 +76,11 @@ void sp_ellipse_position_set (SPEllipse * ellipse, gdouble x, gdouble y, gdouble
 #define SP_IS_CIRCLE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_CIRCLE))
 #define SP_IS_CIRCLE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_CIRCLE))
 
-struct _SPCircle {
+struct SPCircle {
 	SPGenericEllipse genericellipse;
 };
 
-struct _SPCircleClass {
+struct SPCircleClass {
 	SPGenericEllipseClass parent_class;
 };
 
@@ -94,11 +94,11 @@ GType sp_circle_get_type (void);
 #define SP_IS_ARC(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_ARC))
 #define SP_IS_ARC_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_ARC))
 
-struct _SPArc {
+struct SPArc {
 	SPGenericEllipse genericellipse;
 };
 
-struct _SPArcClass {
+struct SPArcClass {
 	SPGenericEllipseClass parent_class;
 };
 

@@ -55,7 +55,7 @@ operator NR::Point() const
 
 
 /** defined in node-context.h */
-typedef struct _SPNodeContext SPNodeContext;
+class SPNodeContext;
 
 
 

@@ -23,10 +23,10 @@
 #define SP_IS_LINE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_LINE))
 #define SP_IS_LINE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_LINE))
 
-typedef struct _SPLine SPLine;
-typedef struct _SPLineClass SPLineClass;
+class SPLine;
+class SPLineClass;
 
-struct _SPLine {
+struct SPLine {
 	SPShape shape;
 
 	SPSVGLength x1;
@@ -35,7 +35,7 @@ struct _SPLine {
 	SPSVGLength y2;
 };
 
-struct _SPLineClass {
+struct SPLineClass {
 	SPShapeClass parent_class;
 };
 

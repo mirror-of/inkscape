@@ -24,10 +24,10 @@
 #define SP_IS_OFFSET(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_OFFSET))
 #define SP_IS_OFFSET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_OFFSET))
 
-typedef struct _SPOffset SPOffset;
-typedef struct _SPOffsetClass SPOffsetClass;
+class SPOffset;
+class SPOffsetClass;
 
-struct _SPOffset
+struct SPOffset
 {
   SPShape shape;
 
@@ -47,7 +47,7 @@ struct _SPOffset
   NR::Point knot;
 };
 
-struct _SPOffsetClass
+struct SPOffsetClass
 {
   SPShapeClass parent_class;
 };

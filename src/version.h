@@ -15,9 +15,9 @@
 #define SVG_VERSION "1.0"
 #define SODIPODI_VERSION "0.32"
 
-typedef struct _SPVersion {
+struct SPVersion {
 	unsigned major, minor;
-} SPVersion;
+};
 
 #define SP_VERSION_IS_ZERO (v) (!(v).major && !(v).minor)
 

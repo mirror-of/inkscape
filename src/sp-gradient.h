@@ -49,7 +49,7 @@
  * Gradient Stop
  */
 
-struct _SPStop {
+struct SPStop {
 	SPObject object;
 
 	/* fixme: Should be SPSVGPercentage */
@@ -60,7 +60,7 @@ struct _SPStop {
 	gfloat opacity;
 };
 
-struct _SPStopClass {
+struct SPStopClass {
 	SPObjectClass parent_class;
 };
 
@@ -73,16 +73,16 @@ GType sp_stop_get_type (void);
  * fixme: Implement more here (Lauris)
  */
 
-typedef struct _SPGradientStop SPGradientStop;
-typedef struct _SPGradientVector SPGradientVector;
+class SPGradientStop;
+class SPGradientVector;
 
-struct _SPGradientStop {
+struct SPGradientStop {
 	gdouble offset;
 	SPColor color;
 	gfloat opacity;
 };
 
-struct _SPGradientVector {
+struct SPGradientVector {
 	gint nstops;
 	gdouble start, end;
 	SPGradientStop stops[1];
@@ -112,7 +112,7 @@ typedef enum {
 #define SP_GRADIENT_SPREAD(g) (SP_GRADIENT (g)->spread)
 #define SP_GRADIENT_UNITS(g) (SP_GRADIENT (g)->units)
 
-struct _SPGradient {
+struct SPGradient {
 	SPPaintServer paint_server;
 	/* Reference (href) */
 	SPGradientReference *ref;
@@ -137,7 +137,7 @@ struct _SPGradient {
 	gdouble len;
 };
 
-struct _SPGradientClass {
+struct SPGradientClass {
 	SPPaintServerClass parent_class;
 };
 
@@ -191,7 +191,7 @@ void sp_gradient_set_gs2d_matrix_f (SPGradient *gr, NRMatrix *ctm, NRRect *bbox,
  * Linear Gradient
  */
 
-struct _SPLinearGradient {
+struct SPLinearGradient {
 	SPGradient gradient;
 
 	SPSVGLength x1;
@@ -200,7 +200,7 @@ struct _SPLinearGradient {
 	SPSVGLength y2;
 };
 
-struct _SPLinearGradientClass {
+struct SPLinearGradientClass {
 	SPGradientClass parent_class;
 };
 
@@ -216,7 +216,7 @@ SPRepr *sp_lineargradient_build_repr (SPLinearGradient *lg, gboolean vector);
  * Radial Gradient
  */
 
-struct _SPRadialGradient {
+struct SPRadialGradient {
 	SPGradient gradient;
 
 	SPSVGLength cx;
@@ -226,7 +226,7 @@ struct _SPRadialGradient {
 	SPSVGLength fy;
 };
 
-struct _SPRadialGradientClass {
+struct SPRadialGradientClass {
 	SPGradientClass parent_class;
 };
 

@@ -12,9 +12,9 @@
 
 #include <glib.h>
 
-typedef struct _SPApp SPApp;
+class SPApp;
 
-struct _SPApp {
+struct SPApp {
 	gint dummy;
 };
 

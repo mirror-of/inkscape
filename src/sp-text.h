@@ -45,9 +45,9 @@
 #include "svg/svg-types.h"
 #include "sp-chars.h"
 
-typedef struct _SPLayoutData SPLayoutData;
+class SPLayoutData;
 
-struct _SPLayoutData {
+struct SPLayoutData {
 	/* fixme: Vectors */
 	SPSVGLength x;
 	SPSVGLength y;
@@ -65,7 +65,7 @@ struct _SPLayoutData {
 
 /* SPString */
 
-struct _SPString {
+struct SPString {
 	SPChars chars;
 	/* Link to parent layout */
 	SPLayoutData *ly;
@@ -80,7 +80,7 @@ struct _SPString {
 	NR::Point advance;
 };
 
-struct _SPStringClass {
+struct SPStringClass {
 	SPCharsClass parent_class;
 };
 
@@ -96,7 +96,7 @@ enum {
 	SP_TSPAN_ROLE_LINE
 };
 
-struct _SPTSpan {
+struct SPTSpan {
 	SPItem item;
 
 	guint role : 2;
@@ -106,7 +106,7 @@ struct _SPTSpan {
 	SPObject *string;
 };
 
-struct _SPTSpanClass {
+struct SPTSpanClass {
 	SPItemClass parent_class;
 };
 
@@ -114,7 +114,7 @@ GType sp_tspan_get_type ();
 
 /* SPText */
 
-struct _SPText {
+struct SPText {
 	SPItem item;
 
 	SPLayoutData ly;
@@ -122,7 +122,7 @@ struct _SPText {
 	guint relayout : 1;
 };
 
-struct _SPTextClass {
+struct SPTextClass {
 	SPItemClass parent_class;
 };
 

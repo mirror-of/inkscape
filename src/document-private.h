@@ -21,7 +21,7 @@
 
 #define SP_DOCUMENT_DEFS(d) ((SPObject *) SP_ROOT (SP_DOCUMENT_ROOT (d))->defs)
 
-struct _SPDocumentPrivate {
+struct SPDocumentPrivate {
 	GHashTable *iddef;	/**< Dictionary of id -> SPObject mappings */
 	GHashTable *idsignals; /**< Dictionary of signals for id changes */
 

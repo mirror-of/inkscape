@@ -26,7 +26,7 @@
 #include "sp-namedview.h"
 #include "sp-marker.h"
 
-struct _SPMarkerView {
+struct SPMarkerView {
 	SPMarkerView *next;
 	unsigned int key;
 	unsigned int size;

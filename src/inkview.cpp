@@ -61,7 +61,7 @@ Inkscape::Application *inkscape;
 #define bind_textdomain_codeset(p,c)
 #endif
 
-struct _SPSlideShow {
+struct SPSlideShow {
     char **slides;
     int size;
     int length;
@@ -71,11 +71,11 @@ struct _SPSlideShow {
     bool fullscreen;
 };
 
-static GtkWidget *sp_svgview_control_show (struct _SPSlideShow *ss);
-static void sp_svgview_show_next (struct _SPSlideShow *ss);
-static void sp_svgview_show_prev (struct _SPSlideShow *ss);
-static void sp_svgview_goto_first (struct _SPSlideShow *ss);
-static void sp_svgview_goto_last (struct _SPSlideShow *ss);
+static GtkWidget *sp_svgview_control_show (struct SPSlideShow *ss);
+static void sp_svgview_show_next (struct SPSlideShow *ss);
+static void sp_svgview_show_prev (struct SPSlideShow *ss);
+static void sp_svgview_goto_first (struct SPSlideShow *ss);
+static void sp_svgview_goto_last (struct SPSlideShow *ss);
 
 static int sp_svgview_show_next_cb (GtkWidget *widget, void *data);
 static int sp_svgview_show_prev_cb (GtkWidget *widget, void *data);
@@ -90,14 +90,14 @@ static GtkWidget *ctrlwin = NULL;
 
 
 static int
-sp_svgview_main_delete (GtkWidget *widget, GdkEvent *event, struct _SPSlideShow *ss)
+sp_svgview_main_delete (GtkWidget *widget, GdkEvent *event, struct SPSlideShow *ss)
 {
     gtk_main_quit ();
     return FALSE;
 }
 
 static int
-sp_svgview_main_key_press (GtkWidget *widget, GdkEventKey *event, struct _SPSlideShow *ss)
+sp_svgview_main_key_press (GtkWidget *widget, GdkEventKey *event, struct SPSlideShow *ss)
 {
     switch (event->keyval) {
     case GDK_Up:
@@ -144,7 +144,7 @@ main (int argc, const char **argv)
 	usage();
     }
     
-    struct _SPSlideShow ss; 
+    struct SPSlideShow ss; 
 	
     GtkWidget *w;
     int i;
@@ -283,7 +283,7 @@ sp_svgview_ctrlwin_delete (GtkWidget *widget, GdkEvent *event, void *data)
 }
 
 static GtkWidget *
-sp_svgview_control_show (struct _SPSlideShow *ss)
+sp_svgview_control_show (struct SPSlideShow *ss)
 {
     if (!ctrlwin) {
 	GtkWidget *t, *b;
@@ -326,33 +326,33 @@ sp_svgview_control_show (struct _SPSlideShow *ss)
 static int 
 sp_svgview_show_next_cb (GtkWidget *widget, void *data)
 {
-    sp_svgview_show_next(static_cast<_SPSlideShow *>(data));
+    sp_svgview_show_next(static_cast<struct SPSlideShow *>(data));
     return FALSE;
 }
 
 static int 
 sp_svgview_show_prev_cb (GtkWidget *widget, void *data)
 {
-    sp_svgview_show_prev(static_cast<struct _SPSlideShow *>(data));
+    sp_svgview_show_prev(static_cast<struct SPSlideShow *>(data));
     return FALSE;
 }
 
 static int 
 sp_svgview_goto_first_cb (GtkWidget *widget, void *data)
 {
-    sp_svgview_goto_first(static_cast<struct _SPSlideShow *>(data));
+    sp_svgview_goto_first(static_cast<struct SPSlideShow *>(data));
     return FALSE;
 }
 
 static int 
 sp_svgview_goto_last_cb (GtkWidget *widget, void *data)
 {
-    sp_svgview_goto_last(static_cast<struct _SPSlideShow *>(data));
+    sp_svgview_goto_last(static_cast<struct SPSlideShow *>(data));
     return FALSE;
 }
 
 static void
-sp_svgview_show_next (struct _SPSlideShow *ss)
+sp_svgview_show_next (struct SPSlideShow *ss)
 {
     SPDocument *doc;
     int current;
@@ -370,7 +370,7 @@ sp_svgview_show_next (struct _SPSlideShow *ss)
 }
 
 static void
-sp_svgview_show_prev (struct _SPSlideShow *ss)
+sp_svgview_show_prev (struct SPSlideShow *ss)
 {
     SPDocument *doc;
     int current;
@@ -388,7 +388,7 @@ sp_svgview_show_prev (struct _SPSlideShow *ss)
 }
 
 static void
-sp_svgview_goto_first (struct _SPSlideShow *ss)
+sp_svgview_goto_first (struct SPSlideShow *ss)
 {
     SPDocument *doc = NULL;
     int current = 0;
@@ -404,7 +404,7 @@ sp_svgview_goto_first (struct _SPSlideShow *ss)
 }
 
 static void
-sp_svgview_goto_last (struct _SPSlideShow *ss)
+sp_svgview_goto_last (struct SPSlideShow *ss)
 {
     SPDocument *doc = NULL;
     int current = ss->length - 1;

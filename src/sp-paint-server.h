@@ -22,7 +22,7 @@
 
 
 
-typedef struct _SPPainter SPPainter;
+class SPPainter;
 
 #define SP_TYPE_PAINT_SERVER (sp_paint_server_get_type ())
 #define SP_PAINT_SERVER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_PAINT_SERVER, SPPaintServer))
@@ -38,7 +38,7 @@ typedef enum {
 typedef void (* SPPainterFillFunc) (SPPainter *painter, NRPixBlock *pb);
 
 /* fixme: I do not like that class thingie (Lauris) */
-struct _SPPainter {
+struct SPPainter {
 	SPPainter *next;
 	SPPaintServer *server;
 	GType server_type;
@@ -46,13 +46,13 @@ struct _SPPainter {
 	SPPainterFillFunc fill;
 };
 
-struct _SPPaintServer {
+struct SPPaintServer {
 	SPObject object;
 	/* List of paints */
 	SPPainter *painters;
 };
 
-struct _SPPaintServerClass {
+struct SPPaintServerClass {
 	SPObjectClass sp_object_class;
 	/* Get SPPaint instance */
 	SPPainter * (* painter_new) (SPPaintServer *ps, const gdouble *affine, const NRRect *bbox);

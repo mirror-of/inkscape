@@ -21,9 +21,9 @@
 #define SP_MARKER(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_MARKER, SPMarker))
 #define SP_IS_MARKER(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_MARKER))
 
-typedef struct _SPMarker SPMarker;
-typedef struct _SPMarkerClass SPMarkerClass;
-typedef struct _SPMarkerView SPMarkerView;
+class SPMarker;
+class SPMarkerClass;
+class SPMarkerView;
 
 /**
  * These enums are to allow us to have 4-element arrays that represent
@@ -46,7 +46,7 @@ enum {
 #include "sp-item-group.h"
 #include "uri-references.h"
 
-struct _SPMarker {
+struct SPMarker {
 	SPGroup group;
 
 	/* units */
@@ -82,7 +82,7 @@ struct _SPMarker {
 	SPMarkerView *views;
 };
 
-struct _SPMarkerClass {
+struct SPMarkerClass {
 	SPGroupClass parent_class;
 };
 

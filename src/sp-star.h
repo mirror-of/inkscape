@@ -24,15 +24,15 @@
 #define SP_IS_STAR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_STAR))
 #define SP_IS_STAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_STAR))
 
-typedef struct _SPStar SPStar;
-typedef struct _SPStarClass SPStarClass;
+class SPStar;
+class SPStarClass;
 
 typedef enum {
 	SP_STAR_POINT_KNOT1,
 	SP_STAR_POINT_KNOT2
 } SPStarPoint;
 
-struct _SPStar {
+struct SPStar {
 	SPPolygon polygon;
 
 	gint sides;
@@ -43,7 +43,7 @@ struct _SPStar {
 	bool flatsided;
 };
 
-struct _SPStarClass {
+struct SPStarClass {
 	SPPolygonClass parent_class;
 };
 

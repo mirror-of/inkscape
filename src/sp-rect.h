@@ -25,10 +25,10 @@
 #define SP_IS_RECT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_RECT))
 #define SP_IS_RECT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_RECT))
 
-typedef struct _SPRect SPRect;
-typedef struct _SPRectClass SPRectClass;
+class SPRect;
+class SPRectClass;
 
-struct _SPRect {
+struct SPRect {
 	SPShape shape;
 
 	SPSVGLength x;
@@ -39,7 +39,7 @@ struct _SPRect {
 	SPSVGLength ry;
 };
 
-struct _SPRectClass {
+struct SPRectClass {
 	SPShapeClass parent_class;
 };
 

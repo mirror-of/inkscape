@@ -20,10 +20,10 @@
 #define SP_IS_NODE_CONTEXT(obj)         (GTK_CHECK_TYPE ((obj), SP_TYPE_NODE_CONTEXT))
 #define SP_IS_NODE_CONTEXT_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_NODE_CONTEXT))
 
-typedef struct _SPNodeContext SPNodeContext;
-typedef struct _SPNodeContextClass SPNodeContextClass;
+class SPNodeContext;
+class SPNodeContextClass;
 
-struct _SPNodeContext {
+struct SPNodeContext {
 	SPEventContext event_context;
 
 	guint drag : 1;
@@ -37,7 +37,7 @@ struct _SPNodeContext {
 	gboolean rightctrl;
 };
 
-struct _SPNodeContextClass {
+struct SPNodeContextClass {
 	SPEventContextClass parent_class;
 };
 

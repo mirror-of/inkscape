@@ -24,10 +24,10 @@
 #define SP_IS_ARC_CONTEXT(obj)         (GTK_CHECK_TYPE ((obj), SP_TYPE_ARC_CONTEXT))
 #define SP_IS_ARC_CONTEXT_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_ARC_CONTEXT))
 
-typedef struct _SPArcContext SPArcContext;
-typedef struct _SPArcContextClass SPArcContextClass;
+class SPArcContext;
+class SPArcContextClass;
 
-struct _SPArcContext {
+struct SPArcContext {
 	SPEventContext event_context;
 	SPItem * item;
 	NR::Point center;
@@ -37,7 +37,7 @@ struct _SPArcContext {
 
 };
 
-struct _SPArcContextClass {
+struct SPArcContextClass {
 	SPEventContextClass parent_class;
 };
 

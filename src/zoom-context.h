@@ -19,14 +19,14 @@
 #define SP_ZOOM_CONTEXT(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_ZOOM_CONTEXT, SPZoomContext))
 #define SP_IS_ZOOM_CONTEXT(obj) (GTK_CHECK_TYPE ((obj), SP_TYPE_ZOOM_CONTEXT))
 
-typedef struct _SPZoomContext SPZoomContext;
-typedef struct _SPZoomContextClass SPZoomContextClass;
+class SPZoomContext;
+class SPZoomContextClass;
 
-struct _SPZoomContext {
+struct SPZoomContext {
 	SPEventContext event_context;
 };
 
-struct _SPZoomContextClass {
+struct SPZoomContextClass {
 	SPEventContextClass parent_class;
 };
 

@@ -21,11 +21,11 @@
 #define SP_PATH(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_PATH, SPPath))
 #define SP_IS_PATH(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_PATH))
 
-struct _SPPath {
+struct SPPath {
 	SPShape shape;
 };
 
-struct _SPPathClass {
+struct SPPathClass {
 	SPShapeClass shape_class;
 };
 

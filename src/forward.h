@@ -28,8 +28,8 @@ struct ApplicationClass;
 
 /* Editing window */
 
-typedef struct _SPDesktop SPDesktop;
-typedef struct _SPDesktopClass SPDesktopClass;
+class SPDesktop;
+class SPDesktopClass;
 
 #define SP_TYPE_DESKTOP (sp_desktop_get_type ())
 #define SP_DESKTOP(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_DESKTOP, SPDesktop))
@@ -37,8 +37,8 @@ typedef struct _SPDesktopClass SPDesktopClass;
 
 GType sp_desktop_get_type ();
 
-typedef struct _SPSelection SPSelection;
-typedef struct _SPSelectionClass SPSelectionClass;
+class SPSelection;
+class SPSelectionClass;
 
 #define SP_TYPE_SELECTION (sp_selection_get_type ())
 #define SP_SELECTION(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_SELECTION, SPSelection))
@@ -46,8 +46,8 @@ typedef struct _SPSelectionClass SPSelectionClass;
 
 GType sp_selection_get_type ();
 
-typedef struct _SPEventContext SPEventContext;
-typedef struct _SPEventContextClass SPEventContextClass;
+class SPEventContext;
+class SPEventContextClass;
 
 #define SP_TYPE_EVENT_CONTEXT (sp_event_context_get_type ())
 #define SP_EVENT_CONTEXT(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_EVENT_CONTEXT, SPEventContext))
@@ -57,8 +57,8 @@ GType sp_event_context_get_type ();
 
 /* Document tree */
 
-typedef struct _SPDocument SPDocument;
-typedef struct _SPDocumentClass SPDocumentClass;
+class SPDocument;
+class SPDocumentClass;
 
 #define SP_TYPE_DOCUMENT (sp_document_get_type ())
 #define SP_DOCUMENT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_DOCUMENT, SPDocument))
@@ -68,8 +68,8 @@ GType sp_document_get_type ();
 
 /* Objects */
 
-typedef struct _SPObject SPObject;
-typedef struct _SPObjectClass SPObjectClass;
+class SPObject;
+class SPObjectClass;
 
 #define SP_TYPE_OBJECT (sp_object_get_type ())
 #define SP_OBJECT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_OBJECT, SPObject))
@@ -77,8 +77,8 @@ typedef struct _SPObjectClass SPObjectClass;
 
 GType sp_object_get_type ();
 
-typedef struct _SPItem SPItem;
-typedef struct _SPItemClass SPItemClass;
+class SPItem;
+class SPItemClass;
 
 #define SP_TYPE_ITEM (sp_item_get_type ())
 #define SP_ITEM(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_ITEM, SPItem))
@@ -86,94 +86,94 @@ typedef struct _SPItemClass SPItemClass;
 
 GType sp_item_get_type ();
 
-typedef struct _SPGroup SPGroup;
-typedef struct _SPGroupClass SPGroupClass;
+class SPGroup;
+class SPGroupClass;
 
-typedef struct _SPDefs SPDefs;
-typedef struct _SPDefsClass SPDefsClass;
+class SPDefs;
+class SPDefsClass;
 
-typedef struct _SPRoot SPRoot;
-typedef struct _SPRootClass SPRootClass;
+class SPRoot;
+class SPRootClass;
 
-typedef struct _SPHeader SPHeader;
-typedef struct _SPHeaderClass SPHeaderClass;
+class SPHeader;
+class SPHeaderClass;
 
-typedef struct _SPNamedView SPNamedView;
-typedef struct _SPNamedViewClass SPNamedViewClass;
+class SPNamedView;
+class SPNamedViewClass;
 
-typedef struct _SPGuide SPGuide;
-typedef struct _SPGuideClass SPGuideClass;
+class SPGuide;
+class SPGuideClass;
 
-typedef struct _SPObjectGroup SPObjectGroup;
-typedef struct _SPObjectGroupClass SPObjectGroupClass;
+class SPObjectGroup;
+class SPObjectGroupClass;
 
-typedef struct _SPPath SPPath;
-typedef struct _SPPathClass SPPathClass;
+class SPPath;
+class SPPathClass;
 
-typedef struct _SPShape SPShape;
-typedef struct _SPShapeClass SPShapeClass;
+class SPShape;
+class SPShapeClass;
 
-typedef struct _SPPolygon SPPolygon;
-typedef struct _SPPolygonClass SPPolygonClass;
+class SPPolygon;
+class SPPolygonClass;
 
-typedef struct _SPEllipse SPEllipse;
-typedef struct _SPEllipseClass SPEllipseClass;
+class SPEllipse;
+class SPEllipseClass;
 
-typedef struct _SPCircle SPCircle;
-typedef struct _SPCircleClass SPCircleClass;
+class SPCircle;
+class SPCircleClass;
 
-typedef struct _SPArc SPArc;
-typedef struct _SPArcClass SPArcClass;
+class SPArc;
+class SPArcClass;
 
-typedef struct _SPChars SPChars;
-typedef struct _SPCharsClass SPCharsClass;
+class SPChars;
+class SPCharsClass;
 
-typedef struct _SPText SPText;
-typedef struct _SPTextClass SPTextClass;
+class SPText;
+class SPTextClass;
 
-typedef struct _SPTSpan SPTSpan;
-typedef struct _SPTSpanClass SPTSpanClass;
+class SPTSpan;
+class SPTSpanClass;
 
-typedef struct _SPString SPString;
-typedef struct _SPStringClass SPStringClass;
+class SPString;
+class SPStringClass;
 
-typedef struct _SPPaintServer SPPaintServer;
-typedef struct _SPPaintServerClass SPPaintServerClass;
+class SPPaintServer;
+class SPPaintServerClass;
 
-typedef struct _SPStop SPStop;
-typedef struct _SPStopClass SPStopClass;
+class SPStop;
+class SPStopClass;
 
-typedef struct _SPGradient SPGradient;
-typedef struct _SPGradientClass SPGradientClass;
+class SPGradient;
+class SPGradientClass;
 class SPGradientReference;
 
-typedef struct _SPLinearGradient SPLinearGradient;
-typedef struct _SPLinearGradientClass SPLinearGradientClass;
+class SPLinearGradient;
+class SPLinearGradientClass;
 
-typedef struct _SPRadialGradient SPRadialGradient;
-typedef struct _SPRadialGradientClass SPRadialGradientClass;
+class SPRadialGradient;
+class SPRadialGradientClass;
 
-typedef struct _SPPattern SPPattern;
+class SPPattern;
 
-typedef struct _SPClipPath SPClipPath;
-typedef struct _SPClipPathClass SPClipPathClass;
+class SPClipPath;
+class SPClipPathClass;
 class SPClipPathReference;
 
 class SPMaskReference;
 
-typedef struct _SPAnchor SPAnchor;
-typedef struct _SPAnchorClass SPAnchorClass;
+class SPAnchor;
+class SPAnchorClass;
 
 /* Misc */
 
-typedef struct _SPColorSpace SPColorSpace;
-typedef struct _SPColor SPColor;
+class SPColorSpace;
+class SPColor;
 
-typedef struct _SPStyle SPStyle;
+class SPStyle;
 
-typedef struct _SPEvent SPEvent;
+class SPEvent;
 
-typedef struct _SPPrintContext SPPrintContext;
+class SPPrintContext;
 
 
 #endif /* !__FORWARD_H__ */

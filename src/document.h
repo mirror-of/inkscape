@@ -21,9 +21,9 @@
 #include "forward.h"
 #include "libnr/nr-forward.h"
 
-typedef struct _SPDocumentPrivate SPDocumentPrivate;
+class SPDocumentPrivate;
 
-struct _SPDocument {
+struct SPDocument {
 	GObject object;
 
 	unsigned int advertize : 1;
@@ -47,7 +47,7 @@ struct _SPDocument {
 	guint modified_id;
 };
 
-struct _SPDocumentClass {
+struct SPDocumentClass {
 	GObjectClass parent_class;
 
 	void (* modified) (SPDocument *document, guint flags);

@@ -21,8 +21,8 @@
 #define SP_SYMBOL(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_SYMBOL, SPSymbol))
 #define SP_IS_SYMBOL(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_SYMBOL))
 
-typedef struct _SPSymbol SPSymbol;
-typedef struct _SPSymbolClass SPSymbolClass;
+class SPSymbol;
+class SPSymbolClass;
 
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-rect.h>
@@ -30,7 +30,7 @@ typedef struct _SPSymbolClass SPSymbolClass;
 #include "enums.h"
 #include "sp-item-group.h"
 
-struct _SPSymbol {
+struct SPSymbol {
 	SPGroup group;
 
 	/* viewBox; */
@@ -46,7 +46,7 @@ struct _SPSymbol {
 	NRMatrix c2p;
 };
 
-struct _SPSymbolClass {
+struct SPSymbolClass {
 	SPGroupClass parent_class;
 };
 

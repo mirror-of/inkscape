@@ -24,18 +24,18 @@ typedef NR::Point (* SPKnotHolderGetFunc) (SPItem *item);
 /* fixme: Think how to make callbacks most sensitive (Lauris) */
 typedef void (* SPKnotHolderReleasedFunc) (SPItem *item);
 
-typedef struct _SPKnotHolderEntity SPKnotHolderEntity;
-typedef struct _SPKnotHolder       SPKnotHolder;
+class SPKnotHolderEntity;
+class       SPKnotHolder;
 
 
-struct _SPKnotHolderEntity {
+struct SPKnotHolderEntity {
 	SPKnot *knot;
 	guint   handler_id;
 	void (* knot_set) (SPItem *item, NR::Point const &p, guint state);
 	NR::Point (* knot_get) (SPItem *item);
 };
 
-struct _SPKnotHolder {
+struct SPKnotHolder {
 	SPDesktop *desktop;
 	SPItem *item;
 	GSList *entity;

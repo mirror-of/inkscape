@@ -24,10 +24,10 @@
 #define SP_IS_USE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_USE))
 #define SP_IS_USE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_USE))
 
-typedef struct _SPUse SPUse;
-typedef struct _SPUseClass SPUseClass;
+class SPUse;
+class SPUseClass;
 
-struct _SPUse {
+struct SPUse {
 	SPItem item;
 	SPObject *child;
 	SPSVGLength x;
@@ -37,7 +37,7 @@ struct _SPUse {
 	gchar *href;
 };
 
-struct _SPUseClass {
+struct SPUseClass {
 	SPItemClass parent_class;
 };
 

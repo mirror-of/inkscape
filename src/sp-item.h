@@ -44,14 +44,14 @@ enum {
 	SP_EVENT_MOUSEOUT
 };
 
-struct _SPEvent {
+struct SPEvent {
 	unsigned int type;
 	gpointer data;
 };
 
-typedef struct _SPItemView SPItemView;
+class SPItemView;
 
-struct _SPItemView {
+struct SPItemView {
 	SPItemView *next;
 	unsigned int flags;
 	unsigned int key;
@@ -72,9 +72,9 @@ struct _SPItemView {
  */
 #define SP_ITEM_REFERENCE_FLAGS SP_ITEM_SHOW_PRINT
 
-typedef struct _SPItemCtx SPItemCtx;
+class SPItemCtx;
 
-struct _SPItemCtx {
+struct SPItemCtx {
 	SPCtx ctx;
 	/* Item to document transformation */
 	NRMatrix i2doc;
@@ -84,7 +84,7 @@ struct _SPItemCtx {
 	NRMatrix i2vp;
 };
 
-struct _SPItem {
+struct SPItem {
 	SPObject object;
 
 	unsigned int sensitive : 1;
@@ -101,7 +101,7 @@ struct _SPItem {
 	std::vector<SPGuideConstraint> constraints;
 };
 
-struct _SPItemClass {
+struct SPItemClass {
 	SPObjectClass parent_class;
 
 	/* BBox union in given coordinate system */

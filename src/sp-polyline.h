@@ -12,14 +12,14 @@
 #define SP_IS_POLYLINE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_POLYLINE))
 #define SP_IS_POLYLINE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_POLYLINE))
 
-typedef struct _SPPolyLine SPPolyLine;
-typedef struct _SPPolyLineClass SPPolyLineClass;
+class SPPolyLine;
+class SPPolyLineClass;
 
-struct _SPPolyLine {
+struct SPPolyLine {
 	SPShape shape;
 };
 
-struct _SPPolyLineClass {
+struct SPPolyLineClass {
 	SPShapeClass parent_class;
 };
 

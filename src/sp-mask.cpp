@@ -25,7 +25,7 @@
 
 #include "sp-mask.h"
 
-struct _SPMaskView {
+struct SPMaskView {
 	SPMaskView *next;
 	unsigned int key;
 	NRArenaItem *arenaitem;

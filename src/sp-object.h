@@ -81,18 +81,18 @@ typedef enum {
 	SP_INVALID_ACCESS_ERR
 } SPExceptionType;
 
-typedef struct _SPException SPException;
+class SPException;
 
-struct _SPException {
+struct SPException {
 	SPExceptionType code;
 };
 
 #define SP_EXCEPTION_INIT(ex) {(ex)->code = SP_NO_EXCEPTION;}
 #define SP_EXCEPTION_IS_OK(ex) (!(ex) || ((ex)->code == SP_NO_EXCEPTION))
 
-typedef struct _SPCtx SPCtx;
+class SPCtx;
 
-struct _SPCtx {
+struct SPCtx {
 	/* Unused */
 	unsigned int flags;
 };
@@ -102,13 +102,13 @@ enum {
 	SP_XML_SPACE_PRESERVE
 };
 
-typedef struct _SPIXmlSpace SPIXmlSpace;
-struct _SPIXmlSpace {
+class SPIXmlSpace;
+struct SPIXmlSpace {
 	guint set : 1;
 	guint value : 1;
 };
 
-struct _SPObject {
+struct SPObject {
 	GObject object;
 	unsigned int cloned : 1;
 	unsigned int uflags : 8;
@@ -124,7 +124,7 @@ struct _SPObject {
 	SPStyle *style;
 };
 
-struct _SPObjectClass {
+struct SPObjectClass {
 	GObjectClass parent_class;
 
 	void (* build) (SPObject *object, SPDocument *doc, SPRepr *repr);

@@ -50,7 +50,7 @@
 
 /* Drawing anchors */
 
-struct _SPDrawAnchor {
+struct SPDrawAnchor {
     SPDrawContext *dc;
     SPCurve *curve;
     guint start : 1;

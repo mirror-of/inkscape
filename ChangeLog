@@ -1,5 +1,7 @@
 2004-04-15  MenTaLguY <mental@rydia.net>
 
+	* most files in src/: removed many old "compatable" struct typedefs
+
 	* configure.in: added gtkmm dependency
 
 2004-04-14  Kees Cook <kees@outflux.net>

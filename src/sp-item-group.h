@@ -26,12 +26,12 @@ typedef enum _SPGroupMode {
 	SP_GROUP_MODE_LAYER
 } SPGroupMode;
 
-struct _SPGroup {
+struct SPGroup {
 	SPItem item;
 	SPGroupMode mode;
 };
 
-struct _SPGroupClass {
+struct SPGroupClass {
 	SPItemClass parent_class;
 };
 

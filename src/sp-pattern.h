@@ -20,7 +20,7 @@
 #define SP_IS_PATTERN(o) (GTK_CHECK_TYPE ((o), SP_TYPE_PATTERN))
 #define SP_IS_PATTERN_CLASS(k) (GTK_CHECK_CLASS_TYPE ((k), SP_TYPE_PATTERN))
 
-typedef struct _SPPatternClass SPPatternClass;
+class SPPatternClass;
 
 #include <libnr/nr-rect.h>
 #include "svg/svg-types.h"
@@ -31,7 +31,7 @@ enum {
 	SP_PATTERN_UNITS_OBJECTBOUNDINGBOX
 };
 
-struct _SPPattern {
+struct SPPattern {
 	SPPaintServer paint_server;
 
 	/* Reference (href) */
@@ -54,7 +54,7 @@ struct _SPPattern {
 	guint viewBox_set : 1;
 };
 
-struct _SPPatternClass {
+struct SPPatternClass {
 	SPPaintServerClass parent_class;
 };
 

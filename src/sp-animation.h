@@ -22,14 +22,14 @@
 #define SP_ANIMATION(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_ANIMATION, SPAnimation))
 #define SP_IS_ANIMATION(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_ANIMATION))
 
-typedef struct _SPAnimation SPAnimation;
-typedef struct _SPAnimationClass SPAnimationClass;
+class SPAnimation;
+class SPAnimationClass;
 
-struct _SPAnimation {
+struct SPAnimation {
 	SPObject object;
 };
 
-struct _SPAnimationClass {
+struct SPAnimationClass {
 	SPObjectClass parent_class;
 };
 
@@ -41,14 +41,14 @@ GType sp_animation_get_type (void);
 #define SP_IANIMATION(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_IANIMATION, SPIAnimation))
 #define SP_IS_IANIMATION(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_IANIMATION))
 
-typedef struct _SPIAnimation SPIAnimation;
-typedef struct _SPIAnimationClass SPIAnimationClass;
+class SPIAnimation;
+class SPIAnimationClass;
 
-struct _SPIAnimation {
+struct SPIAnimation {
 	SPAnimation animation;
 };
 
-struct _SPIAnimationClass {
+struct SPIAnimationClass {
 	SPAnimationClass parent_class;
 };
 
@@ -60,14 +60,14 @@ GType sp_ianimation_get_type (void);
 #define SP_ANIMATE(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_ANIMATE, SPAnimate))
 #define SP_IS_ANIMATE(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_ANIMATE))
 
-typedef struct _SPAnimate SPAnimate;
-typedef struct _SPAnimateClass SPAnimateClass;
+class SPAnimate;
+class SPAnimateClass;
 
-struct _SPAnimate {
+struct SPAnimate {
 	SPIAnimation animation;
 };
 
-struct _SPAnimateClass {
+struct SPAnimateClass {
 	SPIAnimationClass parent_class;
 };
 

@@ -24,10 +24,10 @@
 #define SP_IS_SPIRAL_CONTEXT(obj)         (GTK_CHECK_TYPE ((obj), SP_TYPE_SPIRAL_CONTEXT))
 #define SP_IS_SPIRAL_CONTEXT_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_SPIRAL_CONTEXT))
 
-typedef struct _SPSpiralContext SPSpiralContext;
-typedef struct _SPSpiralContextClass SPSpiralContextClass;
+class SPSpiralContext;
+class SPSpiralContextClass;
 
-struct _SPSpiralContext {
+struct SPSpiralContext {
 	SPEventContext event_context;
 	SPItem * item;
 	NR::Point center;
@@ -40,7 +40,7 @@ struct _SPSpiralContext {
 
 };
 
-struct _SPSpiralContextClass {
+struct SPSpiralContextClass {
 	SPEventContextClass parent_class;
 };
 

@@ -19,13 +19,13 @@
 #define SP_IS_CLIPPATH(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_CLIPPATH))
 #define SP_IS_CLIPPATH_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_CLIPPATH))
 
-typedef struct _SPClipPathView SPClipPathView;
+class SPClipPathView;
 
 #include "display/nr-arena-forward.h"
 #include "sp-object-group.h"
 #include "uri-references.h"
 
-struct _SPClipPath {
+struct SPClipPath {
 	class Reference;
 
 	SPObjectGroup group;
@@ -36,7 +36,7 @@ struct _SPClipPath {
 	SPClipPathView *display;
 };
 
-struct _SPClipPathClass {
+struct SPClipPathClass {
 	SPObjectGroupClass parent_class;
 };
 

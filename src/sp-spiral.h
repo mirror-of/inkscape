@@ -32,10 +32,10 @@
 #define SP_IS_SPIRAL(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_SPIRAL))
 #define SP_IS_SPIRAL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_SPIRAL))
 
-typedef struct _SPSpiral SPSpiral;
-typedef struct _SPSpiralClass SPSpiralClass;
+class SPSpiral;
+class SPSpiralClass;
 
-struct _SPSpiral {
+struct SPSpiral {
 	SPShape shape;
 	
 	/*
@@ -54,7 +54,7 @@ struct _SPSpiral {
 	float t0;
 };
 
-struct _SPSpiralClass {
+struct SPSpiralClass {
 	SPShapeClass parent_class;
 };
 

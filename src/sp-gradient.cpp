@@ -1054,9 +1054,9 @@ sp_gradient_set_gs2d_matrix_f (SPGradient *gr, NRMatrix *ctm, NRRect *bbox, NRMa
  * Linear Gradient
  */
 
-typedef struct _SPLGPainter SPLGPainter;
+class SPLGPainter;
 
-struct _SPLGPainter {
+struct SPLGPainter {
 	SPPainter painter;
 	SPLinearGradient *lg;
 
@@ -1352,9 +1352,9 @@ sp_lg_fill (SPPainter *painter, NRPixBlock *pb)
  * Radial Gradient
  */
 
-typedef struct _SPRGPainter SPRGPainter;
+class SPRGPainter;
 
-struct _SPRGPainter {
+struct SPRGPainter {
 	SPPainter painter;
 	SPRadialGradient *rg;
 	NRRGradientRenderer rgr;

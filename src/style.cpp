@@ -107,7 +107,7 @@ gchar *parse_css_url(const gchar *string) {
 #define SP_STYLE_FLAG_IFSET (1 << 0)
 #define SP_STYLE_FLAG_IFDIFF (1 << 1)
 
-typedef struct _SPStyleEnum SPStyleEnum;
+class SPStyleEnum;
 
 /*#########################
 ## FORWARD DECLARATIONS
@@ -160,7 +160,7 @@ static void sp_style_paint_clear (SPStyle *style, SPIPaint *paint, unsigned int 
 #define SPS_READ_IFONTSIZE_IF_UNSET(v,s) if (!(v)->set) {sp_style_read_ifontsize ((v), (s));}
 #define SPS_READ_PFONTSIZE_IF_UNSET(v,r,k) if (!(v)->set) {sp_style_read_pfontsize ((v), (r), (k));}
 
-struct _SPStyleEnum {
+struct SPStyleEnum {
     const gchar *key;
     gint value;
 };

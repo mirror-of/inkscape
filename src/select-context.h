@@ -21,10 +21,10 @@
 #define SP_IS_SELECT_CONTEXT(obj)         (GTK_CHECK_TYPE ((obj), SP_TYPE_SELECT_CONTEXT))
 #define SP_IS_SELECT_CONTEXT_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_SELECT_CONTEXT))
 
-typedef struct _SPSelectContext SPSelectContext;
-typedef struct _SPSelectContextClass SPSelectContextClass;
+class SPSelectContext;
+class SPSelectContextClass;
 
-struct _SPSelectContext {
+struct SPSelectContext {
 	SPEventContext event_context;
 	guint dragging : 1;
 	guint moved : 1;
@@ -35,7 +35,7 @@ struct _SPSelectContext {
 	SPSelTrans seltrans;
 };
 
-struct _SPSelectContextClass {
+struct SPSelectContextClass {
 	SPEventContextClass parent_class;
 };
 

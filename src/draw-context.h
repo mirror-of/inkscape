@@ -25,13 +25,13 @@
 #define SP_IS_DRAW_CONTEXT(o) (GTK_CHECK_TYPE((o), SP_TYPE_DRAW_CONTEXT))
 #define SP_IS_DRAW_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_TYPE((k), SP_TYPE_DRAW_CONTEXT))
 
-typedef struct _SPDrawContext SPDrawContext;
-typedef struct _SPDrawContextClass SPDrawContextClass;
-typedef struct _SPDrawAnchor SPDrawAnchor;
+class SPDrawContext;
+class SPDrawContextClass;
+class SPDrawAnchor;
 
 #define SP_DRAW_POINTS_MAX 16
 
-struct _SPDrawContext {
+struct SPDrawContext {
     SPEventContext event_context;
 
     SPSelection *selection;
@@ -71,7 +71,7 @@ struct _SPDrawContext {
     char red_curve_is_valid;
 };
 
-struct _SPDrawContextClass {
+struct SPDrawContextClass {
     SPEventContextClass parent_class;
 };
 
@@ -85,8 +85,8 @@ GtkType sp_draw_context_get_type(void);
 #define SP_IS_PENCIL_CONTEXT(o) (GTK_CHECK_TYPE((o), SP_TYPE_PENCIL_CONTEXT))
 #define SP_IS_PENCIL_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_TYPE((k), SP_TYPE_PENCIL_CONTEXT))
 
-typedef struct _SPPencilContext SPPencilContext;
-typedef struct _SPPencilContextClass SPPencilContextClass;
+class SPPencilContext;
+class SPPencilContextClass;
 
 enum {
     SP_PENCIL_CONTEXT_IDLE,
@@ -94,13 +94,13 @@ enum {
     SP_PENCIL_CONTEXT_FREEHAND
 };
 
-struct _SPPencilContext {
+struct SPPencilContext {
     SPDrawContext draw_context;
 
     guint state : 2;
 };
 
-struct _SPPencilContextClass {
+struct SPPencilContextClass {
     SPEventContextClass parent_class;
 };
 
@@ -114,8 +114,8 @@ GtkType sp_pencil_context_get_type(void);
 #define SP_IS_PEN_CONTEXT(o) (GTK_CHECK_TYPE((o), SP_TYPE_PEN_CONTEXT))
 #define SP_IS_PEN_CONTEXT_CLASS(k) (GTK_CHECK_CLASS_TYPE((k), SP_TYPE_PEN_CONTEXT))
 
-typedef struct _SPPenContext SPPenContext;
-typedef struct _SPPenContextClass SPPenContextClass;
+class SPPenContext;
+class SPPenContextClass;
 
 enum {
     SP_PEN_CONTEXT_POINT,
@@ -129,7 +129,7 @@ enum {
     SP_PEN_CONTEXT_MODE_DRAG
 };
 
-struct _SPPenContext {
+struct SPPenContext {
     SPDrawContext draw_context;
 
     unsigned int mode : 1;
@@ -139,7 +139,7 @@ struct _SPPenContext {
     SPCanvasItem *c0, *c1, *cl0, *cl1;
 };
 
-struct _SPPenContextClass {
+struct SPPenContextClass {
     SPEventContextClass parent_class;
 };
 

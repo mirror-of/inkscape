@@ -22,11 +22,11 @@
 #define SP_IS_POLYGON(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_POLYGON))
 #define SP_IS_POLYGON_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_POLYGON))
 
-struct _SPPolygon {
+struct SPPolygon {
 	SPShape shape;
 };
 
-struct _SPPolygonClass {
+struct SPPolygonClass {
 	SPShapeClass parent_class;
 };
 

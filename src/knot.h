@@ -49,8 +49,8 @@ enum {
 	SP_KNOT_GRABBED = 1 << 3
 };
 
-typedef struct _SPKnot SPKnot;
-typedef struct _SPKnotClass SPKnotClass;
+class SPKnot;
+class SPKnotClass;
 
 #define SP_TYPE_KNOT            (sp_knot_get_type ())
 #define SP_KNOT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_KNOT, SPKnot))
@@ -58,7 +58,7 @@ typedef struct _SPKnotClass SPKnotClass;
 #define SP_IS_KNOT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_KNOT))
 #define SP_IS_KNOT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_KNOT))
 
-struct _SPKnot {
+struct SPKnot {
 	GObject object;
 	SPDesktop * desktop;		/* Desktop we are on */
 	SPCanvasItem * item;		/* Our CanvasItem */
@@ -82,7 +82,7 @@ struct _SPKnot {
         gpointer pixbuf;
 };
 
-struct _SPKnotClass {
+struct SPKnotClass {
 	GObjectClass parent_class;
 
 	gint (* event) (SPKnot * knot, GdkEvent * event);

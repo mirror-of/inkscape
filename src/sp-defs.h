@@ -20,11 +20,11 @@
 #define SP_IS_DEFS(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_DEFS))
 #define SP_IS_DEFS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_DEFS))
 
-struct _SPDefs {
+struct SPDefs {
 	SPObject object;
 };
 
-struct _SPDefsClass {
+struct SPDefsClass {
 	SPObjectClass parent_class;
 };
 
