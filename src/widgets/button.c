@@ -47,7 +47,7 @@ static void sp_button_clicked (GtkButton *button);
 static void sp_button_perform_action (SPButton *button, gpointer data);
 
 static void sp_button_set_action (SPButton *button, SPAction *action);
-static void sp_button_action_set_active (SPAction *action, gboolean active, void *data);
+static void sp_button_action_set_active (SPAction *action, unsigned int active, void *data);
 static void sp_button_action_set_sensitive (SPAction *action, unsigned int sensitive, void *data);
 static void sp_button_action_set_shortcut (SPAction *action, unsigned int shortcut, void *data);
 static void sp_button_set_composed_tooltip (GtkTooltips *tooltips, GtkWidget *widget, SPAction *action);
@@ -186,9 +186,9 @@ void
 sp_button_toggle_set_down (SPButton *button, gboolean down)
 {
 	g_return_if_fail (button->type == SP_BUTTON_TYPE_TOGGLE);
-	g_signal_handlers_block_by_func (G_OBJECT (button), G_CALLBACK (sp_button_perform_action), NULL);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), down);
-	g_signal_handlers_unblock_by_func (G_OBJECT (button), G_CALLBACK (sp_button_perform_action), NULL);
+	g_signal_handlers_block_by_func (G_OBJECT (button), (gpointer)G_CALLBACK (sp_button_perform_action), NULL);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), (unsigned int)down);
+	g_signal_handlers_unblock_by_func (G_OBJECT (button), (gpointer)G_CALLBACK (sp_button_perform_action), NULL);
 }
 
 static void
@@ -221,7 +221,7 @@ sp_button_set_action (SPButton *button, SPAction *action)
 }
 
 static void
-sp_button_action_set_active (SPAction *action, gboolean active, void *data)
+sp_button_action_set_active (SPAction *action, unsigned int active, void *data)
 {
 	SPButton *button;
 	button = (SPButton *) data;

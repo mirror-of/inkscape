@@ -1,3 +1,7 @@
+2003-12-08 MenTaLguY <mental@rydia.net>
+
+	* src/widgets/button.c: put errors to rest for now
+
 2003-12-07 MenTaLguY <mental@rydia.net>
 
 	* src/widgets/button.c: fixed unsignedness warning
