@@ -236,18 +236,24 @@ static GrayMap *canny(GrayMap *gm)
 
 
 
-void doCanny(GrayMap *gm)
+static GrayMap *
+doCanny(GrayMap *gm)
 {
     if (!gm)
-        return;
+        return NULL;
     GrayMap *gaussGm = gaussian(gm);
     if (!gaussGm)
-        return;
-    gaussGm->writePPM(gaussGm, "gauss.ppm");
+        return NULL;
+    /*gaussGm->writePPM(gaussGm, "gauss.ppm");*/
+
     GrayMap *cannyGm = canny(gaussGm);
     if (!cannyGm)
-        return;
-    cannyGm->writePPM(cannyGm, "canny.ppm");
+        return NULL;
+    /*cannyGm->writePPM(cannyGm, "canny.ppm");*/
+
+    gaussGm->destroy(gaussGm);
+
+    return cannyGm;
 }
 
 
@@ -260,15 +266,19 @@ GdkPixbuf *gdkCanny(GdkPixbuf *img)
     if (!grayMap)
         return NULL;
 
-    grayMap->writePPM(grayMap, "gbefore.ppm");
+    /*grayMap->writePPM(grayMap, "gbefore.ppm");*/
 
-    doCanny(grayMap);
-
-    grayMap->writePPM(grayMap, "gafter.ppm");
-
-    GdkPixbuf *newImg = grayMapToGdkPixbuf(grayMap);
+    GrayMap *cannyGm = doCanny(grayMap);
 
     grayMap->destroy(grayMap);
+
+    if (!cannyGm)
+        return NULL;
+
+    /*grayMap->writePPM(grayMap, "gafter.ppm");*/
+
+    GdkPixbuf *newImg = grayMapToGdkPixbuf(cannyGm);
+
 
     return newImg;
 }
