@@ -268,7 +268,7 @@ PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 		}
 	}
 
-	g_free(fn);
+	g_free(local_fn);
 
 	if (_stream) {
 		/* fixme: this is kinda icky */

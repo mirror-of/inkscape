@@ -163,8 +163,8 @@
 
 using namespace std;
 
-#ifdef __FreeBSD__
-#include <stdio>
+#ifndef HAS_ECVT
+#include <cstdio>
 #endif
 
 #include "ftos.h"
@@ -274,11 +274,11 @@ string ftos(double val, char mode, int sigfig, int precision, int options)
     int sign = 0;
     int decimal=0;
 
-#ifdef __FreeBSD__
-    register char *p;
-    asprintf(&p, "%.0f", val);
+#ifdef HAS_ECVT
+     char *p = ecvt(val, count, &decimal, &sign);
 #else
-     register char *p = ecvt(val, count, &decimal, &sign);
+    char *p;
+    asprintf(&p, "%.0f", val);
 #endif
     
 #ifdef DEBUG
