@@ -113,6 +113,7 @@ sp_event_context_init (SPEventContext *event_context)
 	event_context->cursor = NULL;
 	event_context->_message_context = NULL;
 	event_context->_selcue = NULL;
+	event_context->_grdrag = NULL;
 }
 
 static void
@@ -640,6 +641,19 @@ void SPEventContext::enableSelectionCue(bool enable) {
 		if (_selcue) {
 			delete _selcue;
 			_selcue = NULL;
+		}
+	}
+}
+
+void SPEventContext::enableGrDrag(bool enable) {
+	if (enable) {
+		if (!_grdrag) {
+			_grdrag = new GrDrag(desktop);
+		}
+	} else {
+		if (_grdrag) {
+			delete _grdrag;
+			_grdrag = NULL;
 		}
 	}
 }

@@ -20,6 +20,7 @@
 #include <glib-object.h>
 #include <gtk/gtkwidget.h>
 #include "selcue.h"
+#include "gradient-drag.h"
 
 #include "forward.h"
 
@@ -29,6 +30,7 @@ namespace Inkscape { class MessageContext; }
 
 struct SPEventContext : public GObject {
 	void enableSelectionCue(bool enable=true);
+	void enableGrDrag(bool enable=true);
 
 	/* Desktop eventcontext stack */
 	SPEventContext *next;
@@ -52,6 +54,8 @@ struct SPEventContext : public GObject {
 	Inkscape::MessageContext *_message_context;
 
 	SPSelCue *_selcue;
+
+	GrDrag *_grdrag;
 };
 
 struct SPEventContextClass : public GObjectClass {
