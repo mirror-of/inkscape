@@ -156,6 +156,8 @@ sp_object_init (SPObject * object)
 
 	new (&object->_delete_signal) sigc::signal<void, SPObject *>();
 	object->_successor = NULL;
+
+	object->_label = NULL;
 }
 
 static void
@@ -284,6 +286,10 @@ SPObject *SPObject::appendChildRepr(SPRepr *repr) {
 		g_critical("Attempt to append repr as child of cloned object");
 		return NULL;
 	}
+}
+
+void SPObject::setLabel(gchar const *label) {
+	sp_repr_set_attr(SP_OBJECT_REPR(this), label, false);
 }
 
 void SPObject::requestOrphanCollection() {
@@ -513,6 +519,7 @@ sp_object_build (SPObject * object, SPDocument * document, SPRepr * repr)
 #endif
 
 	sp_object_read_attr (object, "xml:space");
+	sp_object_read_attr (object, "inkscape:label");
 	sp_object_read_attr (object, "inkscape:collect");
 
         for (SPRepr *rchild = repr->children; rchild != NULL; rchild = rchild->next) {
@@ -675,6 +682,14 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 			// The child of an SPUse has a cloned flag set - I have little idea of what it is used for.
 			// Anyway, the warning is useless, because the child has no repr of its own, and therefore no id conflict may ensue in XML.
 			//g_warning ("ID of cloned object changed, so document is out of sync");
+		}
+		break;
+	case SP_ATTR_INKSCAPE_LABEL:
+		g_free(object->_label);
+		if (value) {
+			object->_label = g_strdup(value);
+		} else {
+			object->_label = NULL;
 		}
 		break;
 	case SP_ATTR_INKSCAPE_COLLECT:

@@ -543,7 +543,7 @@ sp_offset_set_shape (SPShape * shape)
   
   theRes->ConvertToForme (orig, 1, originaux);
 
-		SPItem *item = &(shape->item);
+		SPItem *item = shape;
 		NR::Rect bbox = sp_item_bbox_desktop (item);
 		if (!bbox.isEmpty()) {
 			gdouble size = L2(bbox.dimensions());

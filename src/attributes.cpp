@@ -26,6 +26,7 @@ static const SPStyleProp props[] = {
 	/* SPObject */
 	{SP_ATTR_ID, "id"},
 	{SP_ATTR_INKSCAPE_COLLECT, "inkscape:collect"},
+	{SP_ATTR_INKSCAPE_LABEL, "inkscape:label"},
 	/* SPItem */
 	{SP_ATTR_TRANSFORM, "transform"},
 	{SP_ATTR_SODIPODI_INSENSITIVE, "sodipodi:insensitive"},

@@ -27,9 +27,7 @@
 
 #define SP_SHAPE_WRITE_PATH (1 << 2)
 
-struct SPShape {
-	SPItem item;
-
+struct SPShape : public SPItem {
 	SPCurve *curve;
 
       SPObject *marker[SP_MARKER_LOC_QTY];

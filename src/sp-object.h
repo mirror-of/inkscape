@@ -182,32 +182,124 @@ struct SPObject : public GObject {
 
 	SPObject *appendChildRepr(SPRepr *repr);
 
+	/** @brief Gets the author-visible label for this object. */ 
+	gchar const *label() const { return _label; }
+	/** @brief Sets the author-visible label for this object.
+	 *
+	 * Sets the author-visible label for the object.
+	 *
+	 * @param label the new label
+	 */
+	void setLabel(gchar const *label);
+
+	/** @brief Set the policy under which this object will be
+	 *         orphan-collected.
+	 *
+	 * Orphan-collection is the process of deleting all objects which
+	 * no longer have hyper-references pointing to them.  The policy
+	 * determines when this happens.  Many objects should not be deleted
+	 * simply because they are no longer referred to; other objects
+	 * (like "intermediate" gradients) are more or less throw-away
+	 * and should always be collected when no longer in use.
+	 *
+	 * Along these lines, there are currently two orphan-collection
+	 * policies:
+	 *
+	 *  COLLECT_WITH_PARENT - don't worry about the object's hrefcount;
+	 *                        if its parent is collected, this object
+	 *                        will be too
+	 *
+	 *  COLLECT_ALWAYS - always collect the object as soon as its
+	 *                   hrefcount reaches zero
+	 *
+	 * @returns the current collection policy in effect for this object
+	 */
 	CollectionPolicy collectionPolicy() const { return _collection_policy; }
+
+	/** @brief Sets the orphan-collection policy in effect for this object.
+	 *
+	 * @see SPObject::collectionPolicy
+	 *
+	 * @param policy the new policy to adopt
+	 */
 	void setCollectionPolicy(CollectionPolicy policy) {
 		_collection_policy = policy;
 	}
+
+	/** @brief Requests a later automatic call to collectOrphan().
+	 *
+	 * This method requests that collectOrphan() be called during
+	 * the document update cycle, deleting the object if it is
+	 * no longer used.
+	 *
+	 * If the current collection policy is COLLECT_WITH_PARENT,
+	 * this function has no effect.
+	 *
+	 * @see SPObject::collectOrphan
+	 */
 	void requestOrphanCollection();
+
+	/** @brief Unconditionally delete the object if it is not referenced.
+	 *
+	 * Unconditionally delete the object if there are no outstanding
+	 * hyper-references to it.  Observers are not notified of the object's
+	 * deletion (at the SPObject level; XML tree notifications still fire).
+	 *
+	 * @see SPObject::deleteObject
+	 */
 	void collectOrphan() {
 		if ( _total_hrefcount == 0 ) {
 			deleteObject(false);
 		}
 	}
 
+	/** @brief Deletes an object.
+	 *
+	 * Detaches the object's repr, and optionally sends notification
+	 * that the object has been deleted.
+	 *
+	 * @param propagate notify observers that the object has been
+	 *                  deleted?
+	 *
+	 * @param propagate_descendants notify observers of children that
+	 *                              they have been deleted?
+	 */
 	void deleteObject(bool propagate, bool propagate_descendants);
+
+	/** @brief Deletes on object.
+	 *
+	 * @param propagate notify observers of this object and its
+	 *                  children that they have been deleted?
+	 */
 	void deleteObject(bool propagate=true) {
 		deleteObject(propagate, propagate);
 	}
 
+	/** @brief Connects a slot to be called when an object is deleted.
+	 *
+	 * This connects a slot to an object's internal delete signal,
+	 * which is invoked when the object is deleted
+	 *
+	 * The signal is mainly useful for e.g. knowing when to break hrefs
+	 * or dissociate clones.
+	 *
+	 * @param slot the slot to connect
+	 *
+	 * @see SPObject::deleteObject
+	 */
 	sigc::connection connectDelete(sigc::slot<void, SPObject *> slot) {
 		return _delete_signal.connect(slot);
 	}
 
-	/* successor is the SPObject which has replaced this one (if any);
-	 * it is mainly useful for ensuring we can correctly perform a
+	/** @brief Returns the object which supercedes this one (if any).
+	 *
+	 * This is mainly useful for ensuring we can correctly perform a
 	 * series of moves or deletes, even if the objects in question
 	 * have been replaced in the middle of the sequence.
 	 */
 	SPObject *successor() { return _successor; }
+
+	/** @brief Indicates that another object supercedes this one. */
 	void setSuccessor(SPObject *successor) {
 		g_assert(successor != NULL);
 		g_assert(_successor == NULL);
@@ -221,6 +313,12 @@ struct SPObject : public GObject {
 	 * really part of its public interface.  However,
 	 * other parts of the code to occasionally use them at
 	 * present. */
+
+	/* the no-argument version of updateRepr() is intended to be
+	 * a bit more public, however -- it essentially just flushes
+	 * any changes back to the backing store (the repr layer);
+	 * maybe it should be called something else and made public
+	 * at that point. */
 
 	/** @brief Updates the object's repr based on the object's
 	 *         state.
@@ -320,6 +418,7 @@ struct SPObject : public GObject {
 	sigc::signal<void, SPObject *> _delete_signal;
 	SPObject *_successor;
 	CollectionPolicy _collection_policy;
+	gchar *_label;
 };
 
 struct SPObjectClass {
