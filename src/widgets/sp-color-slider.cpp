@@ -452,7 +452,7 @@ sp_color_slider_paint (SPColorSlider *slider, GdkRectangle *area)
 	carea.height = widget->allocation.height - 2 * carea.y;
 
 	/* Arrow area */
-	aarea.x = (int)(slider->value * carea.width - ARROW_SIZE / 2 + carea.x);
+	aarea.x = (int)(slider->value * (carea.width - 1) - ARROW_SIZE / 2 + carea.x);
 	aarea.width = ARROW_SIZE;
 	aarea.y = carea.y;
 	aarea.height = carea.height;
