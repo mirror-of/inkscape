@@ -17,9 +17,9 @@
 #include <libnr/nr-compose.h>
 #include "nr-plain-stuff.h"
 
-#define NR_DEFAULT_CHECKERSIZEP2 3
+#define NR_DEFAULT_CHECKERSIZEP2 4
 #define NR_DEFAULT_CHECKERCOLOR0 0xbfbfbfff
-#define NR_DEFAULT_CHECKERCOLOR1 0x7f7f7fff
+#define NR_DEFAULT_CHECKERCOLOR1 0x808080ff
 
 #define COMPOSE4(bc,fc,ba,fa,da) (((255 - fa) * (bc * ba) + fa * 255 * fc) / da)
 
