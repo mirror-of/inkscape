@@ -32,6 +32,12 @@ Bugs/suggestions can be sent to bryce@users.sourceforge.net
 
 namespace Inkscape
 {
+
+/**
+ * Instead of using various and possibly mismatching buffer sizes,
+ * people should standardize on one.  How about this?
+ * Inkscape::MAXPATH
+ */
 #ifdef MAX_PATH
 const int MAXPATH = MAX_PATH;
 #else
