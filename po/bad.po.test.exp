@@ -29,17 +29,17 @@ bad.po.test: unclosed <b>:
 msgid "bad8"
 msgstr "<b>a>"
 
-bad.po.test: unclosed <b>:
+bad.po.test: unclosed <i>:
 msgid "bad9"
-msgstr "<b>a"
+msgstr "<i>a"
 
-bad.po.test: unclosed <b>:
+bad.po.test: unclosed <u>:
 msgid "bad10"
-msgstr "<b><"
+msgstr "<u><"
 
-bad.po.test: unclosed <b>:
+bad.po.test: unclosed <sub>:
 msgid "bad11"
-msgstr "<b>a<"
+msgstr "<sub>a<"
 
 bad.po.test: unclosed <b>:
 msgid "bad12"
@@ -61,3 +61,10 @@ bad.po.test: unclosed <b>:
 msgid "bad16"
 msgstr "<b>a</b"
 
+bad.po.test: Unexpected characters in <b> tag:
+msgid "bad17"
+msgstr "<b face=\"bold\">hi</b>"
+
+bad.po.test: Unexpected <span> attribute:
+msgid "bad18"
+msgstr "<span fdsa=\"bold\">hi</span>"

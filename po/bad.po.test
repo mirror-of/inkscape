@@ -29,13 +29,13 @@ msgid "bad8"
 msgstr "<b>a>"
 
 msgid "bad9"
-msgstr "<b>a"
+msgstr "<i>a"
 
 msgid "bad10"
-msgstr "<b><"
+msgstr "<u><"
 
 msgid "bad11"
-msgstr "<b>a<"
+msgstr "<sub>a<"
 
 msgid "bad12"
 msgstr "<b>a<b></b>"
@@ -72,4 +72,11 @@ msgstr ""
 #~ msgid "VALID"
 #~ msgstr "dead string"
 
+msgid "bad17"
+msgstr "<b face=\"bold\">hi</b>"
 
+msgid "VALID"
+msgstr "<span weight=\"bold\">hi</span>"
+
+msgid "bad18"
+msgstr "<span fdsa=\"bold\">hi</span>"

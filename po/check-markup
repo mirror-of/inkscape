@@ -18,6 +18,8 @@ use strict;
 
 my $com = qr/(?:\#[^\n]*\n)/;
 my $str = qr/(?:"(?:[^"\\]|\\.)*"\n)/;
+my $attrs = qr/(?: +[^<>]*)?/;
+my $span_attr = qr/(?: +(?:font_(?:desc|family)|face|size|style|weight|variant|stretch|(?:fore|back)ground|underline|rise|strikethrough|fallback|lang)\=\\\"[^\\\"]*\\\")/;
 
 my $rc = 0;
 
@@ -30,6 +32,10 @@ sub po_error ($) {
 }
 
 $/ = '';
+
+# Reference for the markup language:
+# http://developer.gnome.org/doc/API/2.0/pango/PangoMarkupFormat.html
+# (though not all translation strings will be pango markup strings).
 while(<>) {
 	if (m{\A${com}*\Z}) {
 	    next;
@@ -42,11 +48,19 @@ while(<>) {
 	elsif (!m{\A${com}*msgid ${str}${com}*msgstr ${str}${com}*\Z}) {
 	    po_error('Mismatched quotes');
 	}
-	elsif (m{<b>(?![^<>]*</b>)}) {
-	    po_error('unclosed <b>');
+	elsif (m{<([bisu]|big|su[bp]|small|span|tt)${attrs}>(?![^<>]*</\1>)}) {
+	    po_error("unclosed <$1>");
+	}
+	elsif (m{<([bisu]|big|su[bp]|small|tt)\b(?! *>)}) {
+	    po_error("Unexpected characters in <$1> tag");
+	}
+	elsif (m{<span(?!${span_attr}* *>)}) {
+	    po_error("Unexpected <span> attribute");
+	    #m{<span(?>${span_attr}*)([^<>]*)};
+	    #po_error("Unexpected <span> attribute `$1'");
 	}
 
-	# Should also check that we don't have a </b> without a corresponding <b>.
+	# Should also check that we don't have a </ELEM> without a corresponding <ELEM>.
 }
 
 # Some makefiles (currently the top-level Makefile.am) expect this script to
