@@ -18,6 +18,7 @@
 
 #include "ShapeUtils.h"
 #include "libnr/nr-point.h"
+#include "livarot/livarot-forward.h"
 
 /*
  * the Shape class (was the Digraph class, as the header says) stores digraphs (no kidding!) of which 
@@ -56,7 +57,6 @@ enum
   has_voronoi_data = 1024
 };
 
-class Path;
 class FloatLigne;
 class IntLigne;
 class BitLigne;

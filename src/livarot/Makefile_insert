@@ -34,7 +34,8 @@ livarot_libvarot_a_SOURCES =	\
 	livarot/ShapeRaster.cpp	\
 	livarot/ShapeSweep.cpp	\
 	livarot/ShapeSweepUtils.cpp	\
-	livarot/ShapeUtils.h
+	livarot/ShapeUtils.h	\
+	livarot/livarot-forward.h
 
 livarot_Path_test_SOURCES = livarot/Path-test.cpp
 livarot_Path_test_LDADD = livarot/libvarot.a libnr/libnr.a -lglib-2.0

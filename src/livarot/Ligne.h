@@ -16,6 +16,7 @@
 #include <string.h>
 
 #include "LivarotDefs.h"
+#include <livarot/livarot-forward.h>
 
 /*
  * pixel coverage classes. the goal is to salvage exact coverage info in the sweepline performed by Scan() or QuickScan(), then
@@ -29,11 +30,11 @@ class IntLigne;
 class BitLigne;
 
 // a coverage portion with floating point boundaries
-typedef struct float_ligne_run {
+struct float_ligne_run {
 	float       st,en;
 	float       vst,ven;
 	float       pente;   // (ven-vst)/(en-st)
-} float_ligne_run;
+};
 
 // temporary data for the FloatLigne()
 // each float_ligne_bord is a boundary of some coverage

@@ -10,7 +10,7 @@
 #define my_path
 
 #include "LivarotDefs.h"
-
+#include "livarot/livarot-forward.h"
 #include "libnr/nr-point.h"
 
 /*

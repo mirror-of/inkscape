@@ -1,3 +1,10 @@
+2004-06-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/livarot/livarot-forward.h: New file.
+	* src/livarot/Ligne.h, src/livarot/Path.h, src/livarot/Shape.h:
+	  #include it (replacing local declarations in some cases).
+	* src/livarot/Makefile_insert: Add it to SOURCES.
+
 2004-08-18  Ted Gould  <ted@gould.cx>
 
 	* src/file.cpp, src/preferences-skeleton.h:
