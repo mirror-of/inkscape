@@ -30,6 +30,7 @@
 #include "pixmaps/cursor-node-m.xpm"
 #include "pixmaps/cursor-node-d.xpm"
 #include "document.h"
+#include "prefs-utils.h"
 
 static void sp_node_context_class_init (SPNodeContextClass * klass);
 static void sp_node_context_init (SPNodeContext * node_context);
@@ -193,11 +194,13 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 	NRPointF p;
 	NRRectD b;
 	gint ret;
+	double nudge;
 
 	ret = FALSE;
 
 	desktop = event_context->desktop;
 	nc = SP_NODE_CONTEXT (event_context);
+	nudge = prefs_get_double_attribute ("options.nudgedistance", "value", 2.8346457); // default is 1 mm
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
@@ -304,56 +307,60 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			// maybe we could make this a shared function?
 		case GDK_Left: // move selection left
 		case GDK_KP_Left: 
+		case GDK_KP_4: 
 			if (!MOD__CTRL) { // not ctrl
 				if (MOD__ALT) { // alt
 					if (MOD__SHIFT) sp_node_selected_move_screen (-10, 0); // shift
 					else sp_node_selected_move_screen (-1, 0); // no shift
 				}
 				else { // no alt
-					if (MOD__SHIFT) sp_node_selected_move (-10, 0); // shift
-					else sp_node_selected_move (-1, 0); // no shift
+					if (MOD__SHIFT) sp_node_selected_move (-10*nudge, 0); // shift
+					else sp_node_selected_move (-nudge, 0); // no shift
 				}
 				ret = TRUE;
 			}
 			break;
 		case GDK_Up: // move selection up
 		case GDK_KP_Up: 
+		case GDK_KP_8: 
 			if (!MOD__CTRL) { // not ctrl
 				if (MOD__ALT) { // alt
 					if (MOD__SHIFT) sp_node_selected_move_screen (0, 10); // shift
 					else sp_node_selected_move_screen (0, 1); // no shift
 				}
 				else { // no alt
-					if (MOD__SHIFT) sp_node_selected_move (0, 10); // shift
-					else sp_node_selected_move (0, 1); // no shift
+					if (MOD__SHIFT) sp_node_selected_move (0, 10*nudge); // shift
+					else sp_node_selected_move (0, nudge); // no shift
 				}
 				ret = TRUE;
 			}
 			break;
 		case GDK_Right: // move selection right
 		case GDK_KP_Right: 
+		case GDK_KP_6: 
 			if (!MOD__CTRL) { // not ctrl
 				if (MOD__ALT) { // alt
 					if (MOD__SHIFT) sp_node_selected_move_screen (10, 0); // shift
 					else sp_node_selected_move_screen (1, 0); // no shift
 				}
 				else { // no alt
-					if (MOD__SHIFT) sp_node_selected_move (10, 0); // shift
-					else sp_node_selected_move (1, 0); // no shift
+					if (MOD__SHIFT) sp_node_selected_move (10*nudge, 0); // shift
+					else sp_node_selected_move (nudge, 0); // no shift
 				}
 				ret = TRUE;
 			}
 			break;
 		case GDK_Down: // move selection down
 		case GDK_KP_Down: 
+		case GDK_KP_2: 
 			if (!MOD__CTRL) { // not ctrl
 				if (MOD__ALT) { // alt
 					if (MOD__SHIFT) sp_node_selected_move_screen (0, -10); // shift
 					else sp_node_selected_move_screen (0, -1); // no shift
 				}
 				else { // no alt
-					if (MOD__SHIFT) sp_node_selected_move (0, -10); // shift
-					else sp_node_selected_move (0, -1); // no shift
+					if (MOD__SHIFT) sp_node_selected_move (0, -10*nudge); // shift
+					else sp_node_selected_move (0, -nudge); // no shift
 				}
 				ret = TRUE;
 			}

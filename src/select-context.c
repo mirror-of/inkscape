@@ -39,6 +39,7 @@
 #include "sp-metrics.h"
 #include "sp-item.h"
 #include "desktop-snap.h"
+#include "prefs-utils.h"
 
 static void sp_select_context_class_init (SPSelectContextClass * klass);
 static void sp_select_context_init (SPSelectContext * select_context);
@@ -318,11 +319,13 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 	NRPointF p;
 	NRRectD b;
 	GSList *l;
+	double nudge;
 
 	desktop = event_context->desktop;
 	sc = SP_SELECT_CONTEXT (event_context);
 	seltrans = &sc->seltrans;
 	selection = SP_DT_SELECTION (desktop);
+	nudge = prefs_get_double_attribute ("options.nudgedistance", "value", 2.8346457); // default is 1 mm
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
@@ -434,95 +437,95 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 		} 
 		break;
 	case GDK_KEY_PRESS: // keybindings for select context
-          switch (event->key.keyval) {  
-					case GDK_Left: // move selection left
-					case GDK_KP_Left: 
-					case GDK_KP_4: 
-						if (!MOD__CTRL) { // not ctrl
-							if (MOD__ALT) { // alt
-								if (MOD__SHIFT) sp_selection_move_screen (-10, 0); // shift
-								else sp_selection_move_screen (-1, 0); // no shift
-							}
-							else { // no alt
-								if (MOD__SHIFT) sp_selection_move (-10, 0); // shift
-								else sp_selection_move (-1, 0); // no shift
-							}
-							ret = TRUE;
-						}
-						break;
-					case GDK_Up: // move selection up
-					case GDK_KP_Up: 
-					case GDK_KP_8: 
-						if (!MOD__CTRL) { // not ctrl
-							if (MOD__ALT) { // alt
-								if (MOD__SHIFT) sp_selection_move_screen (0, 10); // shift
-								else sp_selection_move_screen (0, 1); // no shift
-							}
-							else { // no alt
-								if (MOD__SHIFT) sp_selection_move (0, 10); // shift
-								else sp_selection_move (0, 1); // no shift
-							}
-							ret = TRUE;
-						}
-						break;
-					case GDK_Right: // move selection right
-					case GDK_KP_Right: 
-					case GDK_KP_6: 
-						if (!MOD__CTRL) { // not ctrl
-							if (MOD__ALT) { // alt
-								if (MOD__SHIFT) sp_selection_move_screen (10, 0); // shift
-								else sp_selection_move_screen (1, 0); // no shift
-							}
-							else { // no alt
-								if (MOD__SHIFT) sp_selection_move (10, 0); // shift
-								else sp_selection_move (1, 0); // no shift
-							}
-							ret = TRUE;
-						}
-						break;
-					case GDK_Down: // move selection down
-					case GDK_KP_Down: 
-					case GDK_KP_2: 
-						if (!MOD__CTRL) { // not ctrl
-							if (MOD__ALT) { // alt
-								if (MOD__SHIFT) sp_selection_move_screen (0, -10); // shift
-								else sp_selection_move_screen (0, -1); // no shift
-							}
-							else { // no alt
-								if (MOD__SHIFT) sp_selection_move (0, -10); // shift
-								else sp_selection_move (0, -1); // no shift
-							}
-							ret = TRUE;
-						}
-						break;
-					case GDK_Escape:
-						if (sc->dragging) {
-							if (sc->moved) { // cancel dragging an object
-								sp_sel_trans_ungrab (seltrans);
-								sc->moved = FALSE;
-								sc->dragging = FALSE;
-								sc->item = NULL;
-								sp_view_set_status (SP_VIEW (desktop), NULL, FALSE);
-								sp_document_undo (SP_DT_DOCUMENT (desktop));
-								drag_escaped = 1;
-							}
-						} else {
-							if (sp_rubberband_rect (&b)) { // cancel rubberband
-								sp_rubberband_stop ();
-								rb_escaped = 1;
-							} else {
-								sp_selection_empty (selection); // deselect
-							}
-						}
-						ret = TRUE;
-						break;
-					case GDK_a:
-					case GDK_A:
-						if (MOD__CTRL_ONLY) {
-							sp_edit_select_all (NULL, NULL);
-							ret = TRUE;
-						}
-						break;
+		switch (event->key.keyval) {  
+		case GDK_Left: // move selection left
+		case GDK_KP_Left: 
+		case GDK_KP_4: 
+			if (!MOD__CTRL) { // not ctrl
+				if (MOD__ALT) { // alt
+					if (MOD__SHIFT) sp_selection_move_screen (-10, 0); // shift
+					else sp_selection_move_screen (-1, 0); // no shift
+				}
+				else { // no alt
+					if (MOD__SHIFT) sp_selection_move (-10*nudge, 0); // shift
+					else sp_selection_move (-nudge, 0); // no shift
+				}
+				ret = TRUE;
+			}
+			break;
+		case GDK_Up: // move selection up
+		case GDK_KP_Up: 
+		case GDK_KP_8: 
+			if (!MOD__CTRL) { // not ctrl
+				if (MOD__ALT) { // alt
+					if (MOD__SHIFT) sp_selection_move_screen (0, 10); // shift
+					else sp_selection_move_screen (0, 1); // no shift
+				}
+				else { // no alt
+					if (MOD__SHIFT) sp_selection_move (0, 10*nudge); // shift
+					else sp_selection_move (0, nudge); // no shift
+				}
+				ret = TRUE;
+			}
+			break;
+		case GDK_Right: // move selection right
+		case GDK_KP_Right: 
+		case GDK_KP_6: 
+			if (!MOD__CTRL) { // not ctrl
+				if (MOD__ALT) { // alt
+					if (MOD__SHIFT) sp_selection_move_screen (10, 0); // shift
+					else sp_selection_move_screen (1, 0); // no shift
+				}
+				else { // no alt
+					if (MOD__SHIFT) sp_selection_move (10*nudge, 0); // shift
+					else sp_selection_move (nudge, 0); // no shift
+				}
+				ret = TRUE;
+			}
+			break;
+		case GDK_Down: // move selection down
+		case GDK_KP_Down: 
+		case GDK_KP_2: 
+			if (!MOD__CTRL) { // not ctrl
+				if (MOD__ALT) { // alt
+					if (MOD__SHIFT) sp_selection_move_screen (0, -10); // shift
+					else sp_selection_move_screen (0, -1); // no shift
+				}
+				else { // no alt
+					if (MOD__SHIFT) sp_selection_move (0, -10*nudge); // shift
+					else sp_selection_move (0, -nudge); // no shift
+				}
+				ret = TRUE;
+			}
+			break;
+		case GDK_Escape:
+			if (sc->dragging) {
+				if (sc->moved) { // cancel dragging an object
+					sp_sel_trans_ungrab (seltrans);
+					sc->moved = FALSE;
+					sc->dragging = FALSE;
+					sc->item = NULL;
+					sp_view_set_status (SP_VIEW (desktop), NULL, FALSE);
+					sp_document_undo (SP_DT_DOCUMENT (desktop));
+					drag_escaped = 1;
+				}
+			} else {
+				if (sp_rubberband_rect (&b)) { // cancel rubberband
+					sp_rubberband_stop ();
+					rb_escaped = 1;
+				} else {
+					sp_selection_empty (selection); // deselect
+				}
+			}
+			ret = TRUE;
+			break;
+		case GDK_a:
+		case GDK_A:
+			if (MOD__CTRL_ONLY) {
+				sp_edit_select_all (NULL, NULL);
+				ret = TRUE;
+			}
+			break;
 	  case GDK_Tab: // Tab - cycle selection forward
 	    sp_selection_item_next ();
 	    ret = TRUE;
@@ -539,7 +542,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 				ret = TRUE;
 			}
 	    break;
-          }
+		}
 	  break;
 	default:
 	  break;
