@@ -512,7 +512,7 @@ public:
     ColorItem(ColorItem const &other);
     virtual ColorItem &operator=(ColorItem const &other);
 
-    virtual Gtk::Widget* getPreview(Gtk::BuiltinIconSize size);
+    virtual Gtk::Widget* getPreview(PreviewStyle style, Gtk::BuiltinIconSize size);
 
     void buttonClicked();
 
@@ -554,23 +554,31 @@ ColorItem &ColorItem::operator=(ColorItem const &other)
 }
 
 
-Gtk::Widget* ColorItem::getPreview(Gtk::BuiltinIconSize size)
+Gtk::Widget* ColorItem::getPreview(PreviewStyle style, Gtk::BuiltinIconSize size)
 {
-    Glib::ustring blank("          ");
-    if ( size == Gtk::ICON_SIZE_MENU ) {
-        blank = " ";
+    Gtk::Widget* widget = 0;
+    if ( style == PREVIEW_STYLE_BLURB ) {
+        Gtk::Label *lbl = new Gtk::Label(_name);
+        lbl->set_alignment(Gtk::ALIGN_LEFT, Gtk::ALIGN_CENTER);
+        widget = lbl;
+    } else {
+        Glib::ustring blank("          ");
+        if ( size == Gtk::ICON_SIZE_MENU ) {
+            blank = " ";
+        }
+
+        Gtk::Button *btn = new Gtk::Button(blank);
+        Gdk::Color color;
+        color.set_rgb(_r << 8, _g << 8, _b << 8);
+        btn->modify_bg(Gtk::STATE_NORMAL, color);
+        btn->modify_bg(Gtk::STATE_ACTIVE, color);
+        btn->modify_bg(Gtk::STATE_PRELIGHT, color);
+        btn->modify_bg(Gtk::STATE_SELECTED, color);
+        btn->signal_clicked().connect( sigc::mem_fun(*this, &ColorItem::buttonClicked) );
+        widget = btn;
     }
 
-    Gtk::Button *btn = new Gtk::Button(blank);
-    Gdk::Color color;
-    color.set_rgb(_r << 8, _g << 8, _b << 8);
-    btn->modify_bg(Gtk::STATE_NORMAL, color);
-    btn->modify_bg(Gtk::STATE_ACTIVE, color);
-    btn->modify_bg(Gtk::STATE_PRELIGHT, color);
-    btn->modify_bg(Gtk::STATE_SELECTED, color);
-    btn->signal_clicked().connect( sigc::mem_fun(*this, &ColorItem::buttonClicked) );
-
-    return btn;
+    return widget;
 }
 
 void ColorItem::buttonClicked()
@@ -623,15 +631,13 @@ SwatchesPanel& SwatchesPanel::getInstance()
  * Constructor
  */
 SwatchesPanel::SwatchesPanel() :
-    _scroller(0),
-    _baseSize(Gtk::ICON_SIZE_BUTTON),
-    _isList(true)
+    _holder(0)
 {
-    colors.reserve(G_N_ELEMENTS(colorSet));
+    _holder = new PreviewHolder();
     for ( unsigned int i = 0; i < G_N_ELEMENTS(colorSet); i++ ) {
         Glib::ustring str(colorSet[i].name);
-        ColorItem tmp( colorSet[i].r, colorSet[i].g, colorSet[i].b, str );
-        colors.push_back(tmp);
+        ColorItem *item = new ColorItem( colorSet[i].r, colorSet[i].g, colorSet[i].b, str );
+        _holder->addPreview(item);
     }
 
 
@@ -650,20 +656,13 @@ SwatchesPanel::SwatchesPanel() :
 
     pack_start(*box, Gtk::PACK_SHRINK);
 
-    _scroller = manage(new Gtk::ScrolledWindow());
-    pack_start(*_scroller, Gtk::PACK_EXPAND_WIDGET);
-
-    rebuildUI();
+    pack_start(*_holder, Gtk::PACK_EXPAND_WIDGET);
 
     show_all_children();
 }
 
 SwatchesPanel::~SwatchesPanel()
 {
-    if ( _scroller ) {
-        delete _scroller;
-        _scroller = 0;
-    }
 }
 
 void SwatchesPanel::changeItTo(int val)
@@ -671,70 +670,21 @@ void SwatchesPanel::changeItTo(int val)
     switch ( val ) {
         case 0:
         {
-            _isList = true;
-            _baseSize = Gtk::ICON_SIZE_BUTTON;
+            _holder->setStyle(Gtk::ICON_SIZE_BUTTON, VIEW_TYPE_LIST);
         }
         break;
 
         case 1:
         {
-            _isList = false;
-            _baseSize = Gtk::ICON_SIZE_BUTTON;
+            _holder->setStyle(Gtk::ICON_SIZE_BUTTON, VIEW_TYPE_GRID);
         }
         break;
 
         default:
         {
-            _isList = false;
-            _baseSize = Gtk::ICON_SIZE_MENU;
+            _holder->setStyle(Gtk::ICON_SIZE_MENU, VIEW_TYPE_GRID);
         }
     }
-    rebuildUI();
-}
-
-void SwatchesPanel::rebuildUI()
-{
-    _scroller->remove();
-
-    if ( _isList ) {
-        Gtk::Table* stuff = manage(new Gtk::Table( 1, 2 ));
-        stuff->set_col_spacings( 8 );
-
-        for ( unsigned int i = 0; i < colors.size(); i++ ) {
-            Glib::ustring label(colors[i]._name);
-
-            Gtk::Label *lbl = new Gtk::Label(label);
-            lbl->set_alignment(Gtk::ALIGN_LEFT, Gtk::ALIGN_CENTER);
-
-            Gtk::Widget* thing = manage(colors[i].getPreview(_baseSize));
-
-            stuff->attach( *thing, 0, 1, i, i+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
-            stuff->attach( *lbl, 1, 2, i, i+1, Gtk::FILL|Gtk::EXPAND, Gtk::SHRINK );
-        }
-        _scroller->add(*stuff);
-    } else {
-        int width = _baseSize == Gtk::ICON_SIZE_MENU ? 16 : 8;
-        int height = (colors.size() + (width - 1)) / width;
-
-        Gtk::Table* stuff = manage(new Gtk::Table( width, height ));
-        int col = 0;
-        int row = 0;
-
-        for ( unsigned int i = 0; i < colors.size(); i++ ) {
-            Gtk::Widget* thing = manage(colors[i].getPreview(_baseSize));
-
-            stuff->attach( *thing, col, col+1, row, row+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
-            col++;
-            if ( col >= width ) {
-                col = 0;
-                row++;
-            }
-        }
-        _scroller->add(*stuff);
-    }
-
-    _scroller->show_all_children();
-    _scroller->queue_draw();
 }
 
 

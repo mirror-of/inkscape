@@ -1,3 +1,11 @@
+2005-03-24  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/ui/Makefile_insert, src/dialogs/swatches.cpp,
+	  src/dialogs/swatches.h, src/ui/previewable.h,
+	  src/ui/previewfillable.h, src/ui/previewholder.cpp,
+	  src/ui/previewholder.h:
+	  Refactoring previewable functionality to be more generic
+
 2005-03-24  cyreve  <cyreve@users.sourceforge.net>
 
 	* src/: text-context.cpp, text-editing.cpp, text-editing.h:

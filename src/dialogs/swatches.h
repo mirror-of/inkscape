@@ -7,26 +7,24 @@
  * Authors:
  *   Jon A. Cruz
  *
- * Copyright (C) 2005 The Inkscape Organization
+ * Copyright (C) 2005 Jon A. Cruz
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
 #include <gtkmm.h>
 #include <gtkmm/textview.h>
-#include <gtkmm/scrolledwindow.h>
 
 #include <vector>
 
 #include "sp-object.h"
 #include "ui/widget/panel.h"
+#include "ui/previewholder.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialogs {
 
-
-class ColorItem;
 
 /**
  * A panel that displays color swatches.
@@ -44,15 +42,10 @@ private:
     SwatchesPanel &operator=(SwatchesPanel const &); // no assign
 
     void changeItTo(int val);
-    void rebuildUI();
 
     static SwatchesPanel* instance;
 
-    Gtk::ScrolledWindow* _scroller;
-    std::vector<ColorItem> colors;
-
-    Gtk::BuiltinIconSize _baseSize;
-    bool _isList;
+    PreviewHolder* _holder;
 };
 
 } //namespace Dialogs
