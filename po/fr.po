@@ -1,4 +1,5 @@
 # translation of fr.po to 
+# translation of fr.po to
 # translation of fr.po to Français
 # French translation of Inkscape.
 # Copyright (C) 2000-2003, 2004 Free Software Foundation, Inc.
@@ -13,7 +14,7 @@ msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-07-03 00:24+0200\n"
-"PO-Revision-Date: 2004-07-27 13:15+0200\n"
+"PO-Revision-Date: 2004-07-27 13:28+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <fr@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -437,7 +438,7 @@ msgstr "Afficher seulement un boite de contours lors des déplacement ou des tra
 
 #: src/dialogs/display-settings.cpp:223
 msgid "Per-object selection cue:"
-msgstr ""
+msgstr "Poignée de sélection par objet:"
 
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:234 src/dialogs/display-settings.cpp:365
@@ -525,7 +526,7 @@ msgstr "Afficher les poignées de sélection"
 
 #: src/dialogs/display-settings.cpp:625
 msgid "Whether selected objects display a selection cue (the same as in selector)"
-msgstr ""
+msgstr "l'objet sélectionné affiche les poignées de sélection"
 
 #: src/dialogs/display-settings.cpp:642
 msgid "Picking colors:"
@@ -803,7 +804,7 @@ msgstr "Lors que l'orginal est déplacé, ses clones :"
 
 #: src/dialogs/display-settings.cpp:1040
 msgid "Move in parallel"
-msgstr "Sont déplacé en parallèle"
+msgstr "Sont déplacés en parallèle"
 
 #: src/dialogs/display-settings.cpp:1040
 msgid "Clones are translated by the same vector as their original."
@@ -1071,7 +1072,7 @@ msgstr ""
 
 #: src/dialogs/fill-style.cpp:199
 msgid "alternating"
-msgstr ""
+msgstr "alternant"
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
 #: src/dialogs/find.cpp:317
@@ -1556,32 +1557,32 @@ msgstr "Coiffe terminale"
 #. line; the ends of the line are rounded
 #: src/dialogs/stroke-style.cpp:1493
 msgid "Round cap"
-msgstr "Coiffe arrondi"
+msgstr "Coiffe arrondie"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
 #: src/dialogs/stroke-style.cpp:1502
 msgid "Square cap"
-msgstr "Coiffe carré"
+msgstr "Coiffe carrée"
 
 #. Dash
 #: src/dialogs/stroke-style.cpp:1508
 msgid "Dashes:"
-msgstr "Pointiller :"
+msgstr "Pointillés :"
 
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
 #: src/dialogs/stroke-style.cpp:1529
 msgid "Start Markers:"
-msgstr "Marqueurs d'attaches, débuts :"
+msgstr "Marqueurs de débuts :"
 
 #: src/dialogs/stroke-style.cpp:1539
 msgid "Mid Markers:"
-msgstr "Marqueurs d'attaches, intermédiaires :"
+msgstr "Marqueurs intermédiaires :"
 
 #: src/dialogs/stroke-style.cpp:1550
 msgid "End Markers:"
-msgstr "Marqueurs d'attaches, fins :"
+msgstr "Marqueurs de fin :"
 
 #. Layout
 #: src/dialogs/text-edit.cpp:244
@@ -1927,7 +1928,7 @@ msgstr "dessin-%d%s"
 
 #: src/file.cpp:404
 msgid "Select file to save to"
-msgstr "Sélectionner le fichier dans le quel enregistrer"
+msgstr "Sélectionner le fichier dans lequel enregistrer"
 
 #: src/file.cpp:481
 msgid "No changes need to be saved."
@@ -2251,7 +2252,7 @@ msgstr "_Aide"
 
 #: src/interface.cpp:925
 msgid "Leave Group"
-msgstr ""
+msgstr "Laisser le groupe"
 
 #: src/interface.cpp:1007
 msgid "Could not parse SVG data"
@@ -2275,7 +2276,7 @@ msgstr "Déplacement de nœud ou de contrôle annulé."
 
 #: src/main.cpp:128
 msgid "Print the Inkscape version number"
-msgstr "Afficher le version d'Inkscape"
+msgstr "Afficher la version d'Inkscape"
 
 #: src/main.cpp:130
 msgid "Do not use X server (only process files from console)"
@@ -2378,7 +2379,7 @@ msgstr ""
 #: src/nodepath.cpp:1003 src/nodepath.cpp:1015 src/nodepath.cpp:1095
 #: src/nodepath.cpp:1107
 msgid "To join, you must have two endnodes selected."
-msgstr "Pour joindre, vous devez avoir sélectionnés deux nœueds."
+msgstr "Pour joindre, vous devez avoir sélectionnés deux nœuds."
 
 #: src/nodepath.cpp:1232 src/nodepath.cpp:1246
 msgid ""
@@ -2393,11 +2394,11 @@ msgstr "Impossible de trouver un chemin entre les nœuds."
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
 #: src/nodepath.cpp:2719
 msgid "cusp"
-msgstr ""
+msgstr "dur"
 
 #: src/nodepath.cpp:2721
 msgid "smooth"
-msgstr "Affiner"
+msgstr "doux"
 
 #: src/nodepath.cpp:2723
 msgid "symmetric"
@@ -2409,9 +2410,7 @@ msgstr "Déplacer les nœuds ou les points de contrôles pour éditer le chemin"
 
 #: src/nodepath.cpp:2748
 msgid "Select one path object with selector first, then switch back to node tool."
-msgstr ""
-"Sélectionner un chemin avec l'outil \"sélection\", en suite prendre l'outil "
-"\"nœud\"."
+msgstr "Sélectionner un chemin avec l'outil sélectio, ensuite prendre l'outil nœud."
 
 #: src/nodepath.cpp:2751
 #, c-format
@@ -2465,7 +2464,7 @@ msgstr "_Dégrouper"
 
 #: src/object-ui.cpp:250
 msgid "Enter Group"
-msgstr ""
+msgstr "Entrer dans le groupe"
 
 #. Link dialog
 #: src/object-ui.cpp:298
@@ -2716,7 +2715,7 @@ msgstr "Mise à l'échelle de %0.2f%%, %0.2f%%"
 #: src/seltrans.cpp:896
 #, c-format
 msgid "Skew %0.2f%c %0.2f%c"
-msgstr ""
+msgstr "Incliner %0.2f%c %0.2f%c"
 
 #: src/seltrans.cpp:943
 #, c-format
@@ -2810,7 +2809,7 @@ msgstr "Étoile à %d cotés"
 #: src/sp-star.cpp:274
 #, c-format
 msgid "Polygon of %d sides"
-msgstr "Polygone de %d cotées"
+msgstr "Polygone de %d côtés"
 
 #: src/sp-text.cpp:2009
 #, c-format
@@ -2830,11 +2829,11 @@ msgstr "Sélectionner au moins 1 texte et 1 forme pour créer un objet typeset."
 
 #: src/sp-typeset.cpp:1128
 msgid "You cannot build a typeset from objects of different groups or layers."
-msgstr "Vous ne pouvais créer un typeset avec des objets de différents groupes ou calques."
+msgstr "Vous ne pouvez créer un typeset avec des objets de différents groupes ou calques."
 
 #: src/sp-typeset.cpp:1169
 msgid "You cannot build a typeset without some actual text."
-msgstr "Vous ne pouvais créer un typeset sans un texte préexistant."
+msgstr "Vous ne pouvez créer un typeset sans un texte préexistant."
 
 #: src/sp-use.cpp:306
 #, c-format
@@ -2949,7 +2948,7 @@ msgstr "Joindre les chemins aux nœuds sélectionnés avec des nouveaux segments
 
 #: src/toolbox.cpp:392
 msgid "Split path between two non-endpoint nodes"
-msgstr "Découper un chemin entre deux nœuds non termineaux"
+msgstr "Découper un chemin entre deux nœuds non terminaux"
 
 #: src/toolbox.cpp:395
 msgid "Break path at selected nodes"
@@ -3000,7 +2999,7 @@ msgstr "Rayon :"
 #. Base radius is the same for the closest handle.
 #: src/toolbox.cpp:1126
 msgid "Base radius to tip radius ratio"
-msgstr ""
+msgstr "Ration de rayon principal au rayon éloigné "
 
 #: src/toolbox.cpp:1141
 msgid "Roundedness:"
@@ -3412,7 +3411,7 @@ msgstr "Créer un clone de l'objet sélectionné (une copie liée à l'original)
 
 #: src/verbs.cpp:849
 msgid "Unlin_k Clone"
-msgstr "Détacher le Clone (_k)"
+msgstr "Libérer le Clone (_k)"
 
 #: src/verbs.cpp:850
 msgid "Cut the clone's link to its original"
@@ -3424,11 +3423,11 @@ msgstr "Sélectionner l'original"
 
 #: src/verbs.cpp:852
 msgid "Select the object to which the clone is linked"
-msgstr "Sélectionner l'objet auquel le clone est liée"
+msgstr "Sélectionner l'objet auquel le clone est lié"
 
 #: src/verbs.cpp:853
 msgid "_Tile"
-msgstr "Paver (_t)"
+msgstr "_Transformer en motif"
 
 #: src/verbs.cpp:854
 msgid "Convert selection to a rectangle with tiled pattern fill"
@@ -3436,7 +3435,7 @@ msgstr "Convertir la sélection en rectangle pavé avec le motif de remplissage"
 
 #: src/verbs.cpp:855
 msgid "_Untile"
-msgstr "Dépaver (_u)"
+msgstr "Ann_uler le motif"
 
 #: src/verbs.cpp:856
 msgid "Extract objects from a tiled pattern fill"
@@ -3648,7 +3647,7 @@ msgstr "Simplifier les chemin(s) sélectionné(s) en enlevant les nœuds superfl
 
 #: src/verbs.cpp:922
 msgid "Cl_eanup"
-msgstr "N_ettoyage"
+msgstr "N_ettoyer"
 
 #: src/verbs.cpp:923
 msgid "Clean up selected path(s)"
@@ -3767,7 +3766,7 @@ msgstr "Dessiner des lignes à main levée (F6)"
 
 #: src/verbs.cpp:964
 msgid "Draw Bezier curves and straight lines (Shift+F6)"
-msgstr "Trace des courbe de Bézier et des segments droites (Maj+F6)"
+msgstr "Trace des courbes de Bézier et des segments droites (Maj+F6)"
 
 #: src/verbs.cpp:965
 msgid "Calligraphy"
@@ -3828,7 +3827,7 @@ msgstr "_Grille"
 
 #: src/verbs.cpp:979
 msgid "Show or hide grid"
-msgstr "Afficher/Cacher la grille"
+msgstr "Afficher/Masquer la grille"
 
 #: src/verbs.cpp:980
 msgid "G_uides"
@@ -3836,7 +3835,7 @@ msgstr "G_uides"
 
 #: src/verbs.cpp:980
 msgid "Show or hide guides"
-msgstr "Afficher/Cacher les guides"
+msgstr "Afficher/Masque les guides"
 
 #: src/verbs.cpp:981
 msgid "Nex_t Zoom"
@@ -4135,7 +4134,7 @@ msgstr "Aucun"
 
 #: src/widgets/gradient-selector.cpp:207
 msgid "reflected"
-msgstr "Réfléchit"
+msgstr "Réfléchi"
 
 #: src/widgets/gradient-selector.cpp:211
 msgid "direct"
@@ -4238,7 +4237,7 @@ msgstr "RVB"
 
 #: src/widgets/sp-color-scales.cpp:75
 msgid "HSV"
-msgstr "TSV"
+msgstr "TSL"
 
 #: src/widgets/sp-color-scales.cpp:75
 msgid "CMYK"
