@@ -29,6 +29,7 @@
 #include "system.h"
 #include "db.h"
 #include "implementation/script.h"
+#include "implementation/plugin.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -355,6 +356,7 @@ build_from_reprdoc(SPReprDoc *doc, Implementation::Implementation *in_imp)
 {
     enum {
         MODULE_EXTENSION,
+        MODULE_PLUGIN,
         MODULE_UNKNOWN_IMP
     } module_implementation_type = MODULE_UNKNOWN_IMP;
     enum {
@@ -390,6 +392,8 @@ build_from_reprdoc(SPReprDoc *doc, Implementation::Implementation *in_imp)
             module_functional_type = MODULE_PRINT;
         } else if (!strcmp(element_name, "script")) {
             module_implementation_type = MODULE_EXTENSION;
+        } else if (!strcmp(element_name, "plugin")) {
+            module_implementation_type = MODULE_PLUGIN;
         }
 
         //SPRepr *old_repr = child_repr;
@@ -403,6 +407,11 @@ build_from_reprdoc(SPReprDoc *doc, Implementation::Implementation *in_imp)
             case MODULE_EXTENSION: {
                 Implementation::Script *script = new Implementation::Script();
                 imp = dynamic_cast<Implementation::Implementation *>(script);
+                break;
+            }
+            case MODULE_PLUGIN: {
+                Implementation::Plugin *plugin = new Implementation::Plugin();
+                imp = dynamic_cast<Implementation::Implementation *>(plugin);
                 break;
             }
             default: {

@@ -273,6 +273,26 @@ public:
     bool          textToPath  (void);
 };
 
+/*
+
+This is a prototype for how collections should work.  Whoever gets
+around to implementing this gets to decide what a 'folder' and an
+'item' really is.  That is the joy of implementing it, eh?
+
+class Collection : public Extension {
+
+public:
+    folder  get_root (void);
+    int     get_count (folder);
+    thumbnail get_thumbnail(item);
+    item[]  get_items(folder);
+    folder[]  get_folders(folder);
+    metadata get_metadata(item);
+    image   get_image(item);
+
+};
+*/
+
 }; /* namespace Extension */
 }; /* namespace Inkscape */
 

@@ -461,6 +461,7 @@ if test "x${datadir}" = 'x${prefix}/share'; then
 else
   runtime_datadir="${datadir}"
 fi
+
 inkscape_sharedir="${runtime_datadir}/${PACKAGE_NAME}"
 
 dnl Define our data paths for config.h
@@ -470,6 +471,9 @@ AC_DEFINE_UNQUOTED([INKSCAPE_DATADIR], "${runtime_datadir}",
 AC_SUBST(PACKAGE_LOCALE_DIR)
 AC_DEFINE_UNQUOTED([PACKAGE_LOCALE_DIR], "${runtime_datadir}/locale",
 					[Localization directory])
+AC_SUBST(INKSCAPE_LIBDIR)
+AC_DEFINE_UNQUOTED([INKSCAPE_LIBDIR], "${prefix}/lib",
+					[Base library directory -- only path-prefix.h should use it!])
 
 dnl Have to add module makefiles (lauris)
 
@@ -482,6 +486,7 @@ src/display/makefile
 src/extension/makefile
 src/extension/implementation/makefile
 src/extension/internal/makefile
+src/extension/plugin/makefile
 src/helper/makefile
 src/inkjar/makefile
 src/libnr/makefile

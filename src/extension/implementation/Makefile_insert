@@ -15,4 +15,6 @@ extension_implementation_libimplementation_a_SOURCES =	\
 	extension/implementation/implementation.cpp	\
 	extension/implementation/implementation.h	\
 	extension/implementation/script.cpp	\
-	extension/implementation/script.h
+	extension/implementation/script.h \
+	extension/implementation/plugin.cpp	\
+	extension/implementation/plugin.h

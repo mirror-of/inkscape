@@ -25,6 +25,20 @@ public:
         return _c[i];
     }
 
+    bool operator== (ColorRGBA other) const {
+        return ((_c[0] == other[0]) &&
+                (_c[1] == other[1]) &&
+                (_c[2] == other[2]) &&
+                (_c[3] == other[3]));
+    }
+
+    ColorRGBA average (ColorRGBA second, float weight = 0.5) {
+        return ColorRGBA((_c[0] + second[0]) * weight,
+                         (_c[1] + second[1]) * weight,
+                         (_c[2] + second[2]) * weight,
+                         (_c[3] + second[3]) * weight);
+    }
+
 private:
     float _c[4];
 };

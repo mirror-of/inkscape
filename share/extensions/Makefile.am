@@ -31,7 +31,8 @@ modules = \
 	dropshadow.inkmod \
 	dia.inkmod \
 	epsi_output.inkmod \
-	txt2svg.inkmod
+	txt2svg.inkmod \
+	gimpgrad.inkmod
 
 extension_SCRIPTS = \
 	$(extensions)

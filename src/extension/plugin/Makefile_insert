@@ -1,0 +1,18 @@
+## Makefile.am fragment sourced by src/Makefile.am.
+
+plugindir = $(libdir)/inkscape/plugins
+
+plugin_LTLIBRARIES = \
+	extension/plugin/libgimpgrad.la
+
+extension/plugin/clean:
+	rm -f $(plugin_LTLIBRARIES)
+
+extension_plugin_libgimpgrad_la_CPPFLAGS = \
+	-Iextension	\
+	-I$(top_srcdir)/src/extension
+
+extension_plugin_libgimpgrad_la_SOURCES = \
+	extension/plugin/gimpgrad.cpp
+
+## extension_plugin_libtest_la_LDFLAGS = $(PLUGIN_LIBTOOL_FLAGS)

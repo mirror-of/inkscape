@@ -1,0 +1,13 @@
+<inkscape-extension>
+    <name>GIMP Gradients</name>
+    <id>org.inkscape.input.gimpgrad</id>
+    <input>
+        <extension>.ggr</extension>
+        <mimetype>application/x-gimp-gradient</mimetype>
+        <filetypename>GIMP Gradient (*.ggr)</filetypename>
+        <filetypetooltip>Gradients used in GIMP</filetypetooltip>
+    </input>
+    <plugin>
+		<name>gimpgrad</name>
+    </plugin>
+</inkscape-extension>

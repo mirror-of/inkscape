@@ -1,35 +1,39 @@
 /*
     Author:  Ted Gould <ted@gould.cx>
-    Copyright (c) 2003-2004
+    Copyright (c) 2004
 
     This code is licensed under the GNU GPL.  See COPYING for details.
- 
-    This file is the backend to the extensions system.  These are
-    the parts of the system that most users will never see, but are
-    important for implementing the extensions themselves.  This file
-    contains the base class for all of that.
 */
-#ifndef __INKSCAPE_EXTENSION_IMPLEMENTATION_H__
-#define __INKSCAPE_EXTENSION_IMPLEMENTATION_H__
+/**
+    \filename plugin.h
 
-#include <gtk/gtkdialog.h>
+    The prototypes for the Implementation class to work with plugins.
+*/
+#ifndef __INKSCAPE_EXTENSION_IMPLEMENTATION_PLUGIN_H__
+#define __INKSCAPE_EXTENSION_IMPLEMENTATION_PLUGIN_H__
 
-#include <forward.h>
-#include <extension/extension-forward.h>
-#include <libnr/nr-forward.h>
-#include <libnr/nr-point.h>
+#include <extension/implementation/implementation.h>
+#include <glibmm/module.h>
+#include "plugin-link.h"
 
 namespace Inkscape {
 namespace Extension {
 namespace Implementation {
 
-/**
- * Base class for all implementations of modules.  This is whether they are done systematically by
- * having something like the scripting system, or they are implemented internally they all derive
- * from this class.
- */
-class Implementation {
+/** \brief  For the most part this is a direct steal from \c implementation.h
+            in that all the functions have the same prototypes.  The two
+            added things are a pointer to the loaded module and a pointer
+            to the symbol table in that. */
+class Plugin : public Implementation {
+    /** \brief A pointer to the module created when loading the plugin. */
+    Glib::Module * _module;
+    /** \brief The symbol table that is in the plugin.  It is pulled out
+               here so that it doesn't have to be grabbed as often. */
+    inkscape_plugin_function_table * _symTable;
+
 public:
+    Plugin(void);
+
     /* ----- Basic functions for all Extension ----- */
     virtual bool load(Inkscape::Extension::Extension *module);
 
@@ -105,7 +109,7 @@ public:
 }; /* namespace Extension */
 }; /* namespace Inkscape */
 
-#endif /* __INKSCAPE_EXTENSION_IMPLEMENTATION_H__ */
+#endif /* __INKSCAPE_EXTENSION_IMPLEMENTATION_PLUGIN_H__ */
 
 /*
   Local Variables:
