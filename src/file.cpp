@@ -126,24 +126,23 @@ sp_file_open (const gchar *uri, Inkscape::Extension::Extension * key)
     }
 
     if (doc) {
-        // If the current desktop is empty, open the document there
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         SPDocument *existing = desktop ? SP_DT_DOCUMENT (desktop) : NULL;
         if (existing && existing->virgin) {
+            // If the current desktop is empty, open the document there
             sp_desktop_change_document (desktop, doc);
-            sp_document_unref (doc);
-            /* in situations where the document is marked virgin, but there
-             * are things in it (like for a "revert"), unselect everything
-             * after we load
-             */
-            sp_selection_empty(SP_DT_SELECTION(desktop));
         }
         else {
+            // create a whole new desktop and window
             SPViewWidget *dtw = sp_desktop_widget_new (sp_document_namedview (doc, NULL));
-            sp_document_unref (doc);
             sp_create_window (dtw, TRUE);
             desktop = SP_DESKTOP(dtw->view);
         }
+        // everyone who cares now has a reference, get rid of ours
+        sp_document_unref (doc); 
+        // resize the window to match the document properties
+        // (this may be redundant for new windows... if so, move to the "virgin"
+        //  section above)
         sp_namedview_window_from_document (desktop);
         doc->virgin = FALSE;
         return TRUE;

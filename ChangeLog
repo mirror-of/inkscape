@@ -1,3 +1,9 @@
+2004-04-20  Kees Cook <kees@outflux.net>
+
+	* src/file.cpp, src/desktop.cpp: moved sp_file_open unselection code into
+	  sp_desktop_change_document.  Generalized Carl's fix for unref counting
+	  since it applies in both cases.  (My bad!)
+
 2004-04-20  MenTaLguY <mental@rydia.net>
 
     * src/text-context.cpp: merged Carl's fix for signal cleanup
