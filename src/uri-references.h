@@ -51,7 +51,9 @@ public:
 	 */
 	URIReference(SPDocument *rel_document, const gchar *uri);
 	/**
-	 * Destructor.
+	 * Destructor.  Emits the changed signal indicating the
+	 * reference has gone away before the current object is
+	 * unreffed.
 	 */
 	virtual ~URIReference();
 
