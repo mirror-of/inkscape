@@ -58,22 +58,15 @@ sp_intersector_line_intersection(const NR::Point n0, const double d0, const NR::
  * if the denominator (bd-ae) is 0 then the lines are parallel, if the
  * numerators are then 0 then the lines coincide. */
 {
-	double denominator;
-	double X, Y;
-
-	denominator = cross(n0,n1);
+	double denominator = cross(n0,n1);
+	double X = (d0*n1.pt[NR::Y] - d1*n0.pt[NR::Y]);
 	if(denominator == 0) {
-		/*printf("Parallel!  So (%f, %f) should equal k(%f %f)\n", 
-		       n0->x, n0.pt[NR::Y],
-		       n1->x, n1.pt[NR::Y]);*/
-		if(d1*n0.pt[NR::Y] - d0*n1.pt[NR::Y] == 0)
+		if(X == 0)
 			return coincident;
 		return parallel;
 	}
-	denominator = 1.0/denominator;
-	X = (d0*n1.pt[NR::Y] - d1*n0.pt[NR::Y]); // replace with cross?
-	Y = -(d0*n1.pt[NR::X] - d1*n0.pt[NR::X]);
-	result = denominator*NR::Point(X, Y);
+	double Y = -(d0*n1.pt[NR::X] - d1*n0.pt[NR::X]);
+	result = NR::Point(X, Y)/denominator;
 	return intersects;
 }
 
@@ -116,13 +109,11 @@ sp_intersector_segment_intersect(const NR::Point p00, const NR::Point p01, const
    the intersection, use the line_intersect funcction above */
 {
 	if(sp_intersector_segment_intersectp(p00, p01, p10, p11)) {
-		double d0, d1;
-
 		NR::Point n0 = (p00 - p01).ccw();
-		d0 = dot(n0,p00); // cross?
+		double d0 = dot(n0,p00);
 
 		NR::Point n1 = (p10 - p11).ccw();
-		d1 = dot(n1,p10);
+		double d1 = dot(n1,p10);
 		return sp_intersector_line_intersection(n0, d0, n1, d1, result);
 	} else {
 		return no_intersection;
