@@ -127,7 +127,6 @@ static void on_attr_unselect_row_clear_text (GtkCList *list, gint row, gint colu
 static void on_editable_changed_enable_if_valid_xml_name (GtkEditable * editable, gpointer data);
 
 static void on_desktop_selection_changed (SPSelection * selection);
-static gboolean on_desktop_shutdown (SPDesktop * desktop, gpointer data);
 static void on_document_uri_set (SPDocument * document, const gchar * uri, gpointer data);
 
 static void on_clicked_get_editable_text (GtkWidget * widget, gpointer data);
@@ -148,9 +147,7 @@ static void cmd_set_attr (GtkObject * object, gpointer data);
 void
 sp_xml_tree_dialog (void)
 {
-    SPDesktop * desktop;
-
-    desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     
     if (!desktop)
         return;
@@ -188,26 +185,16 @@ sp_xml_tree_dialog (void)
         sp_transientize (dlg);
         wd.win = dlg;
         wd.stop = 0;
-        g_signal_connect   ( G_OBJECT (INKSCAPE), "activate_desktop", 
-                             G_CALLBACK (sp_transientize_callback), &wd );
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd );
                              
-        gtk_signal_connect ( GTK_OBJECT (dlg), "event", 
-                             GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
+        gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
                              
-        gtk_signal_connect ( GTK_OBJECT (dlg), "destroy",
-                             G_CALLBACK (on_destroy), dlg);
+        gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", G_CALLBACK (on_destroy), dlg);
+        gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", G_CALLBACK (on_delete), dlg);
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (on_delete), dlg);
                              
-        gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", 
-                             G_CALLBACK (on_delete), dlg);
-                             
-        g_signal_connect   ( G_OBJECT (INKSCAPE), "shut_down", 
-                             G_CALLBACK (on_delete), dlg);
-                             
-        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_hide", 
-                             G_CALLBACK (sp_dialog_hide), dlg);
-                             
-        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_unhide", 
-                             G_CALLBACK (sp_dialog_unhide), dlg);
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg);
+        g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg);
 
                              
         gtk_container_set_border_width (GTK_CONTAINER (dlg), 0);
@@ -582,11 +569,8 @@ set_tree_desktop (SPDesktop * desktop)
     }
     current_desktop = desktop;
     if (desktop) {
-        g_signal_connect ( G_OBJECT (desktop), "shutdown", 
-                           G_CALLBACK (on_desktop_shutdown), dlg );
         sel_changed_connection = SP_DT_SELECTION(desktop)->connectChanged(SigC::slot(&on_desktop_selection_changed)); 
         set_tree_document (SP_DT_DOCUMENT (desktop));
-        
     } else {
         set_tree_document (NULL);
     }
@@ -825,7 +809,7 @@ after_tree_move ( GtkCTree * tree,
 
 
 
-void
+static void
 on_destroy (GtkObject * object, gpointer data)
 {
     set_tree_desktop (NULL);
@@ -1151,18 +1135,6 @@ on_desktop_selection_changed (SPSelection * selection)
     }
     blocked--;
 }
-
-
-
-gboolean
-on_desktop_shutdown (SPDesktop * desktop, gpointer data)
-{
-    g_assert (dlg != NULL);
-    gtk_widget_destroy (dlg);
-
-    return FALSE;
-}
-
 
 
 void
