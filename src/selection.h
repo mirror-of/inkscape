@@ -101,11 +101,15 @@ public:
 	/**
 	 * @brief Removes an item from the set of selected items
 	 *
+	 * It is ok to call this method for an unselected item.
+	 *
 	 * @param item the item to unselect
 	 */
 	void removeItem(SPItem *item);
 	/**
 	 * @brief Removes an item from the set of selected items
+	 *
+	 * It is ok to call this method for an unselected item.
 	 *
 	 * @param repr the xml node of the item to remove
 	 */
@@ -253,79 +257,5 @@ private:
 struct SPSelectionClass {
 	GObjectClass parent_class;
 };
-
-
-/* these wrappers are all obsolete and should be replaced with their
- * contents at their call sites */
-
-inline __attribute__ ((deprecated))
-void sp_selection_set_item_list(SPSelection *selection, GSList const *list)
-{
-	selection->setItemList(list);
-}
-inline __attribute__ ((deprecated))
-void sp_selection_set_repr_list(SPSelection *selection, GSList const *list)
-{
-	selection->setReprList(list);
-}
-inline __attribute__ ((deprecated))
-void sp_selection_empty(SPSelection *selection)
-{
-	selection->clear();
-}
-inline __attribute__ ((deprecated))
-GSList const *sp_selection_item_list (SPSelection *selection)
-{
-	g_return_val_if_fail(selection != NULL, NULL);
-	return selection->itemList();
-}
-inline __attribute__ ((deprecated))
-GSList const *sp_selection_repr_list (SPSelection *selection)
-{
-	g_return_val_if_fail(selection != NULL, NULL);
-	return selection->reprList();
-}
-inline __attribute__ ((deprecated))
-SPItem *sp_selection_item (SPSelection *selection)
-{
-	g_return_val_if_fail(selection != NULL, NULL);
-	return selection->singleItem();
-}
-inline __attribute__ ((deprecated))
-SPRepr *sp_selection_repr (SPSelection *selection)
-{
-	g_return_val_if_fail(selection != NULL, NULL);
-	return selection->singleRepr();
-}
-
-inline __attribute__ ((deprecated))
-NRRect *sp_selection_bbox (SPSelection *selection, NRRect *bbox)
-{
-	return selection->bounds(bbox);
-}
-inline __attribute__ ((deprecated))
-NR::Rect sp_selection_bbox (SPSelection *selection)
-{
-	return selection->bounds();
-}
-inline __attribute__ ((deprecated))
-NRRect *sp_selection_bbox_document (SPSelection *selection,
-                                           NRRect *bbox)
-{
-	return selection->boundsInDocument(bbox);
-}
-inline __attribute__ ((deprecated))
-NR::Rect sp_selection_bbox_document (SPSelection *selection)
-{
-	return selection->boundsInDocument();
-}
-
-inline __attribute__ ((deprecated))
-int sp_selection_snappoints(SPSelection *selection,
-                            NR::Point points[], int size)
-{
-	return selection->getSnapPoints(points, size);
-}
-
 
 #endif /* !__SP_SELECTION_H__ */
