@@ -211,7 +211,8 @@ libinkpost_a_SOURCES =	\
 	fixes.cpp \
 	gradient-chemistry.cpp gradient-chemistry.h	\
 	memeq.h	\
-	round.h
+	round.h	\
+	streq.h
 
 inkscape_private_libs =	\
 	libinkpre.a	\

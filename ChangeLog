@@ -1,5 +1,8 @@
 2004-12-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* streq.h (streq), memeq.h (memeq): New convenience functions
+	  for strcmp(a,b)==0 and memcmp(a,b,n)==0.
+
 	* src/dir-util.cpp (sp_relative_path_from_path):
 	  Fix when base is a string prefix of path but a directory prefix
 	  (e.g. path=/foo/barney, base=/foo/bar).
