@@ -1,0 +1,190 @@
+
+# Sense whether we are on a DOS box or cross-compiling
+ifdef ComSpec
+BUILD=native
+DOSSHELL=CMD_EXE
+else
+ifdef COMSPEC
+BUILD=native
+DOSSHELL=COMMAND_COM
+else
+BUILD=cross
+endif
+endif
+
+
+
+
+BSLASH := \\#
+FSLASH := /
+
+
+
+ifeq ($(BUILD),cross)
+
+###########################
+# CROSS COMPILER SETTINGS
+###########################
+
+DTG := $(shell date +%y%m%d.%H%M)
+
+CC      = i686-pc-mingw32-gcc
+CXX     = i686-pc-mingw32-g++
+AS      = i686-pc-mingw32-as
+AR      = i686-pc-mingw32-ar
+RANLIB  = i686-pc-mingw32-ranlib
+WINDRES = i686-pc-mingw32-windres
+DLLWRAP = i686-pc-mingw32-dllwrap
+
+# file separator
+S = $(FSLASH)
+
+# file manipulation programs
+CP     = cp
+RMDIR  = rm -rf 
+MKDIR  = mkdir
+CPDIR  = cp -rf 
+MSGFMT = msgfmt
+
+# Where is your GTK directory?
+GTK=$(HOME)/xmingw/gtk
+#Same thing, file system style
+GTKDOS=$(GTK)
+
+else
+
+###########################
+# NATIVE COMPILER SETTINGS
+###########################
+
+
+# change me!!
+DTG := 20040415
+
+CC      = mingw32-gcc
+CXX     = mingw32-g++
+AS      = as
+AR      = mingw32-ar
+RANLIB  = ranlib
+WINDRES = windres
+DLLWRAP = dllwrap
+
+# file separator
+S = $(BSLASH)
+
+# file manipulation programs
+CP = copy
+#are we on WinNt and beyond?
+ifeq ($(DOSSHELL),CMD_EXE)
+RMDIR = rmdir /s /q
+RM    = del
+else
+RMDIR = deltree /y
+RM    = del
+endif
+MKDIR = mkdir
+CPDIR = xcopy /e /i
+
+# Where is your GTK directory?
+GTK=c:/gtk
+#Same thing, DOS style
+GTKDOS=c:\gtk
+
+MSGFMT = $(GTKDOS)\bin\msgfmt
+
+endif
+
+
+#VERSION = \"0.37\"
+VERSION = \"0.39cvs-${DTG}\"
+
+# the XP_WIN def is necessary for libjs.a
+CFLAGS = -O3  -Wall -mms-bitfields -DVERSION=$(VERSION) \
+-DXP_WIN -D_INTL_REDIRECT_INLINE -DHAVE_CONFIG_H
+
+
+.cpp.o:
+	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
+
+.c.o:
+	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+
+
+
+
+
+#########################################
+# INCLUDES AND LIBRARIES
+#########################################
+
+###########################
+# DYNAMIC LINKING
+###########################
+POPT=c:/ink/popt
+
+GTKINC = -I$(GTK)/include/gtkmm-2.0 -I$(GTK)/lib/gtkmm-2.0/include \
+-I$(GTK)/include/sigc++-1.2 -I$(GTK)/lib/sigc++-1.2/include \
+-I$(GTK)/include/gtk-2.0 -I$(GTK)/lib/gtk-2.0/include \
+-I$(GTK)/include/atk-1.0 -I$(GTK)/include/pango-1.0 \
+-I$(GTK)/include/glib-2.0 -I$(GTK)/lib/glib-2.0/include
+
+GTKLIB = -L$(GTK)/lib \
+-lsigc-1.2.dll\
+-lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 \
+-lgdk_pixbuf-2.0 -lm -lpangoft2-1.0 -lpangowin32-1.0 -lpango-1.0 \
+-lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lglib-2.0
+
+INC = -I. -I.. -I../.. $(GTKINC) -I$(GTK)/include \
+-I$(GTK)/include/libart-2.0 -DLIBXML_STATIC -I$(GTK)/include/libxml2 \
+-I$(GTK)/include/freetype2
+
+LIBS = $(GTKLIB) -lxml2 \
+$(GTK)/lib/art_lgpl_2.lib $(GTK)/lib/iconv.lib \
+-lfreetype -lpng -lpopt $(GTK)/lib/libz.lib \
+-mwindows -lws2_32 -lintl
+
+
+###########################
+# STATIC LINKING
+###########################
+# Worry about these later when statics are done
+#GTKS=c:/ink/gtk2
+GTKS=$(HOME)/xmingw32/gtk2
+#Same thing, DOS style
+GTKSDOS=c:\ink\gtk2
+
+GTKSINC = \
+-I$(GTKS)/include \
+-I$(GTKS)/include/sigc++-1.2 \
+-I$(GTKS)/include/gtk-2.0 \
+-I$(GTKS)/include/atk-1.0 \
+-I$(GTKS)/include/pango-1.0 \
+-I$(GTKS)/include/glib-2.0 \
+-I$(GTKS)/include/freetype2  \
+-I$(GTKS)/include/libxml2 \
+-I$(GTKS)/include/libart-2.0
+
+
+GTKSLIB = \
+-mwindows -L$(GTKS)/lib -lsigc++-1.2.4 \
+-lgtk-2.0 -lpango-1.0 -lglib-2.0 -latk-1.0 \
+-lfreetype -lart_lgpl -ltiff -lpng -ljpeg -lz \
+-lxml2 -lintl -liconv -lws2_32
+
+
+#INC = -I. -I.. -I../.. $(GTKSINC)
+
+#LIBS = $(GTKSLIB) -mwindows -lws2_32 -limm32 -lole32
+
+#########################################
+# END INCLUDES AND LIBRARIES
+#########################################
+
+
+
+
+
+
+
+
+
