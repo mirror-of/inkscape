@@ -108,9 +108,10 @@ void sp_file_export_dialog (void *widget);
 
 /**
  * Export the given document as a Portable Network Graphics (PNG)
- * file.
+ * file.  Returns FALSE if an error was encountered while writing
+ * the file, TRUE otherwise.
  */
-void sp_export_png_file (SPDocument *doc, const gchar *filename,
+int sp_export_png_file (SPDocument *doc, const gchar *filename,
 			 double x0, double y0, double x1, double y1,
 			 unsigned int width, unsigned int height,
 			 unsigned long bgcolor,

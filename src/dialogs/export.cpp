@@ -1008,10 +1008,15 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
     gtk_widget_show_all (dlg);
     
     /* Do export */
-    sp_export_png_file (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP), filename, 
-            x0, y0, x1, y1, width, height, 
-            nv->pagecolor, 
-            sp_export_progress_callback, base);
+    if (!sp_export_png_file (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP), filename, 
+                             x0, y0, x1, y1, width, height, 
+                             nv->pagecolor, 
+                             sp_export_progress_callback, base)) {
+        gchar * error;
+        error = g_strdup_printf(_("Could not export to filename %s.\n"), filename);
+        sp_ui_error_dialog(error);
+        g_free(error);
+    }
             
     /* Reset the filename so that it can be changed again by changing
        selections and all that */

@@ -964,9 +964,10 @@ hide_other_items_recursively (SPObject *o, GSList *list, unsigned dkey)
 
 /**
  *  Render the SVG drawing onto a PNG raster image, then save to
- *  a file.
+ *  a file.  Returns TRUE if succeeded in writing the file, 
+ *  FALSE otherwise.
  */
-void
+int
 sp_export_png_file(SPDocument *doc, gchar const *filename,
                    double x0, double y0, double x1, double y1,
                    unsigned width, unsigned height,
@@ -975,14 +976,15 @@ sp_export_png_file(SPDocument *doc, gchar const *filename,
                    void *data, bool force_overwrite,
                    GSList *items_only)
 {
-    g_return_if_fail(doc != NULL);
-    g_return_if_fail(SP_IS_DOCUMENT(doc));
-    g_return_if_fail(filename != NULL);
-    g_return_if_fail(width >= 1);
-    g_return_if_fail(height >= 1);
+    int write_status = TRUE;
+    g_return_val_if_fail(doc != NULL, FALSE);
+    g_return_val_if_fail(SP_IS_DOCUMENT(doc), FALSE);
+    g_return_val_if_fail(filename != NULL, FALSE);
+    g_return_val_if_fail(width >= 1, FALSE);
+    g_return_val_if_fail(height >= 1, FALSE);
 
     if (!force_overwrite && !sp_ui_overwrite_file(filename)) {
-        return;
+        return FALSE;
     }
 
     sp_document_ensure_up_to_date(doc);
@@ -1046,12 +1048,12 @@ sp_export_png_file(SPDocument *doc, gchar const *filename,
     if ((width < 256) || ((width * height) < 32768)) {
         ebp.px = nr_pixelstore_64K_new(FALSE, 0);
         ebp.sheight = 65536 / (4 * width);
-        sp_png_write_rgba_striped(filename, width, height, sp_export_get_rows, &ebp);
+        write_status = sp_png_write_rgba_striped(filename, width, height, sp_export_get_rows, &ebp);
         nr_pixelstore_64K_free(ebp.px);
     } else {
         ebp.px = nr_new(guchar, 4 * 64 * width);
         ebp.sheight = 64;
-        sp_png_write_rgba_striped(filename, width, height, sp_export_get_rows, &ebp);
+        write_status = sp_png_write_rgba_striped(filename, width, height, sp_export_get_rows, &ebp);
         nr_free(ebp.px);
     }
 
@@ -1061,6 +1063,7 @@ sp_export_png_file(SPDocument *doc, gchar const *filename,
     /* Free Arena and ArenaItem */
     nr_arena_item_unref(ebp.root);
     nr_object_unref((NRObject *) arena);
+    return write_status;
 }
 
 
