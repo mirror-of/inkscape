@@ -236,7 +236,7 @@ sp_item_set(SPObject *object, unsigned key, gchar const *value)
                 }
                 g_free(uri);
             } else {
-                item->clip_ref->detach();
+                item->mask_ref->detach();
             }
 
             break;

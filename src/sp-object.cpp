@@ -766,14 +766,15 @@ sp_object_repr_change_attr (SPRepr *repr, const gchar *key, const gchar *oldval,
 
 	if (strcmp ((const char*)key, "id") == 0) {
 		if (!newval) {
-			g_critical("Attempt to clear id of bound SPRepr (%p)", repr);
+			// this will get cleared up when we no longer force
+			// ids on reprs (and institute direct mapping between
+			// SPObjects and SPReprs)
+			// g_warning("Attempt to clear id of bound SPRepr (%p)", repr);
 			return FALSE;
 		}
 		SPObject *defid = object->document->getObjectById(newval);
-		if (!defid) {
-			g_critical("Attempt to set id of bound SPRepr (%p) without having registered the SPObject in the document's id table", repr);
-			return FALSE;
-		} else if ( defid != object ) {
+		// it's nominally ok if we don't collide with anyone
+		if ( defid && defid != object ) {
 			g_critical("The id '%s' is already claimed by SPObject %p", newval, defid);
 			return FALSE;
 		} else {

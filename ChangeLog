@@ -1,3 +1,9 @@
+2004-07-01  MenTaLguY  <mental@rydia.net>
+
+	* src/sp-item.cpp: fix clip path loading bug
+
+	* src/sp-object.cpp: relax analness about object ids a little
+
 2004-06-30  Kees Cook  <kees@outflux.net>
 
 	* src/dialogs/desktop-properties.cpp, src/dialogs/rdf.h,
