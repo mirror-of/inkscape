@@ -67,9 +67,9 @@ sp_selected_path_combine (void)
 		}
 	}
 
-	SPRepr *parent = SP_OBJECT_REPR ((SPItem *) items->data)->parent;
+	SPRepr *parent = SP_OBJECT_REPR ((SPItem *) items->data)->parent();
 	for (GSList *i = items; i != NULL; i = i->next) {
-		if ( SP_OBJECT_REPR ((SPItem *) i->data)->parent != parent ) {
+		if ( SP_OBJECT_REPR ((SPItem *) i->data)->parent() != parent ) {
 		    desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot combine objects from <b>different groups</b> or <b>layers</b>."));
 		    return;
 		}
@@ -177,7 +177,7 @@ sp_selected_path_break_apart (void)
 
 		did = true;
 
-		SPRepr *parent = SP_OBJECT_REPR (item)->parent;
+		SPRepr *parent = SP_OBJECT_REPR (item)->parent();
 		gint pos = sp_repr_position (SP_OBJECT_REPR (item));
 		const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
 
@@ -274,7 +274,7 @@ sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 		// remember the position of the item
 		gint pos = sp_repr_position (SP_OBJECT_REPR (item));
 		// remember parent
-		SPRepr *parent = SP_OBJECT_REPR (item)->parent;
+		SPRepr *parent = SP_OBJECT_REPR (item)->parent();
 		// remember id
 		const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
 

@@ -156,7 +156,7 @@ sp_selected_path_boolop (bool_op bop)
             SPRepr *bs = AncetreFils (b, dad);
 
             // find out which comes first
-            for (SPRepr * child = dad->children; child; child = child->next) {
+            for (SPRepr * child = dad->firstChild(); child; child = child->next()) {
                 if (child == as) {
                     // a en premier->mauvais sens
                     reverseOrderForOp = true;
@@ -708,7 +708,7 @@ sp_selected_path_outline ()
         // remember the position of the item
         gint pos = sp_repr_position (SP_OBJECT_REPR (item));
         // remember parent
-        SPRepr *parent = SP_OBJECT_REPR (item)->parent;
+        SPRepr *parent = SP_OBJECT_REPR (item)->parent();
         // remember id
         const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
 
@@ -868,7 +868,7 @@ sp_selected_path_create_offset_object (int expand, bool updating)
     // remember the position of the item
     gint pos = sp_repr_position (SP_OBJECT_REPR (item));
     // remember parent
-    SPRepr *parent = SP_OBJECT_REPR (item)->parent;
+    SPRepr *parent = SP_OBJECT_REPR (item)->parent();
   
     {
         SPStyle *i_style = SP_OBJECT (item)->style;
@@ -1239,7 +1239,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
         // remember the position of the item
         gint pos = sp_repr_position (SP_OBJECT_REPR (item));
         // remember parent
-        SPRepr *parent = SP_OBJECT_REPR (item)->parent;
+        SPRepr *parent = SP_OBJECT_REPR (item)->parent();
         // remember id
         const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
 
@@ -1353,7 +1353,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop, SPSelection *selection, SPIte
     // remember the position of the item
     gint pos = sp_repr_position (SP_OBJECT_REPR (item));
     // remember parent
-    SPRepr *parent = SP_OBJECT_REPR (item)->parent;
+    SPRepr *parent = SP_OBJECT_REPR (item)->parent();
     // remember id
     const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
 

@@ -1257,7 +1257,7 @@ sp_ui_drag_data_received (GtkWidget * widget,
 		SPRepr *newgroup = sp_repr_new ("svg:g");
 		sp_repr_set_attr (newgroup, "style", style);
 
-		for (SPRepr *child = repr->children; child != NULL; child = child->next) {
+		for (SPRepr *child = repr->firstChild(); child != NULL; child = child->next()) {
 			SPRepr * newchild = sp_repr_duplicate (child);
 			sp_repr_append_child (newgroup, newchild);
 		}
@@ -1390,7 +1390,7 @@ sp_ui_import_one_file(char const *filename)
 		SPRepr *newgroup = sp_repr_new ("svg:g");
 		sp_repr_set_attr (newgroup, "style", style);
 
-		for (SPRepr *child = repr->children; child != NULL; child = child->next) {
+		for (SPRepr *child = repr->firstChild() ; child != NULL; child = child->next() ) {
 			SPRepr * newchild;
 			newchild = sp_repr_duplicate (child);
 			sp_repr_append_child (newgroup, newchild);

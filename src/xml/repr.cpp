@@ -38,8 +38,6 @@
 
 using Inkscape::Util::SharedCString;
 
-static void bind_document(SPReprDoc *doc, SPRepr *repr);
-
 SPRepr *
 sp_repr_new(gchar const *name)
 {
@@ -64,24 +62,21 @@ sp_repr_new_comment(gchar const *comment)
 }
 
 SPRepr::SPRepr(SPReprType t, int code)
-: name(code), _child_counts_complete(true), _n_siblings(0), _type(t)
+: _name(code), _type(t), _child_counts_complete(true), _n_siblings(0)
 {
-    this->doc = NULL;
-    this->parent = this->next = this->children = NULL;
-    this->attributes = NULL;
-    this->last_listener = this->listeners = NULL;
+    this->_document = NULL;
+    this->_parent = this->_next = this->_children = NULL;
+    this->_attributes = NULL;
+    this->_last_listener = this->_listeners = NULL;
 }
 
 SPReprDoc::SPReprDoc(int code) : SPRepr(SP_XML_DOCUMENT_NODE, code) {
-    this->doc = this;
-    this->log = NULL;
-    this->is_logging = false;
-    clearOnceInaccessible(&this->children);
-    clearOnceInaccessible(&this->doc);
+    this->_log = new Log();
+    this->_document = this;
 }
 
-SPReprDoc::~SPReprDoc() {
-    sp_repr_free_log(this->log);
+SPReprDoc::Log::~Log() {
+    sp_repr_free_log(actions);
 }
 
 SPRepr *sp_repr_ref(SPRepr *repr) {
@@ -101,24 +96,25 @@ sp_repr_duplicate(SPRepr const *repr)
 }
 
 SPRepr::SPRepr(SPRepr const &repr)
-: Anchored(), name(repr.name), content(repr.content),
+: Anchored(), _name(repr._name),
+  _type(repr._type), _content(repr._content),
   _child_counts_complete(repr._child_counts_complete),
-  _n_siblings(repr._n_siblings), _type(repr._type)
+  _n_siblings(repr._n_siblings)
 {
-    this->doc = NULL;
-    this->parent = this->next = this->children = NULL;
-    this->attributes = NULL;
-    this->last_listener = this->listeners = NULL;
+    this->_document = NULL;
+    this->_parent = this->_next = this->_children = NULL;
+    this->_attributes = NULL;
+    this->_last_listener = this->_listeners = NULL;
 
     SPRepr *prev_child_copy=NULL;
-    for ( SPRepr *child = repr.children ; child != NULL ; child = child->next ) {
+    for ( SPRepr *child = repr._children ; child != NULL ; child = child->_next ) {
         SPRepr *child_copy=child->duplicate();
 
-        child_copy->parent = this;
+        child_copy->_parent = this;
         if (prev_child_copy) {
-            prev_child_copy->next = child_copy;
+            prev_child_copy->_next = child_copy;
         } else {
-            this->children = child_copy;
+            this->_children = child_copy;
         }
         sp_repr_unref(child_copy); // even duplicates are created with a refcount
                                    // of one; unref here to avoid a leak: reprs
@@ -129,38 +125,60 @@ SPRepr::SPRepr(SPRepr const &repr)
     }
 
     SPReprAttr *prev_attr_copy=NULL;
-    for ( SPReprAttr *attr = repr.attributes ; attr != NULL ; attr = attr->next ) {
+    for ( SPReprAttr *attr = repr._attributes ; attr != NULL ; attr = attr->next ) {
         SPReprAttr *attr_copy=new SPReprAttr(*attr);
 
         if (prev_attr_copy) {
             prev_attr_copy->next = attr_copy;
         } else {
-            this->attributes = attr_copy;
+            this->_attributes = attr_copy;
         }
 
         prev_attr_copy = attr_copy;
     }
 }
 
-SPReprDoc::SPReprDoc(SPReprDoc const &doc) : SPRepr(doc), Finalized() {
-    this->log = NULL;
-    this->is_logging = false;
+SPReprDoc::SPReprDoc(SPReprDoc const &doc) : SPRepr(doc) {
+    this->_log = new Log();
+}
+
+gchar const *SPRepr::name() const {
+    return g_quark_to_string(_name);
 }
 
 gchar const *
 sp_repr_name(SPRepr const *repr)
 {
     g_return_val_if_fail(repr != NULL, NULL);
+    return repr->name();
+}
 
-    return g_quark_to_string(repr->name);
+gchar const *
+SPRepr::content() const {
+    return this->_content;
 }
 
 gchar const *
 sp_repr_content(SPRepr const *repr)
 {
     g_assert(repr != NULL);
+    return repr->content();
+}
 
-    return repr->content;
+gchar const *
+SPRepr::attribute(gchar const *key) const {
+    g_return_val_if_fail(key != NULL, NULL);
+
+    /* retrieve an int identifier specific to this string */
+    GQuark const q = g_quark_from_string(key);
+
+    for (SPReprAttr *ra = this->_attributes; ra != NULL; ra = ra->next) {
+        if ( ra->key == q ) {
+            return ra->value;
+        }
+    }
+
+    return NULL;
 }
 
 /**
@@ -171,18 +189,21 @@ gchar const *
 sp_repr_attr(SPRepr const *repr, gchar const *key)
 {
     g_return_val_if_fail(repr != NULL, NULL);
-    g_return_val_if_fail(key != NULL, NULL);
+    return repr->attribute(key);
+}
 
-    /* retrieve an int identifier specific to this string */
-    GQuark const q = g_quark_from_string(key);
+bool
+SPRepr::matchAttributeName(gchar const *partial_name) const {
+    g_return_val_if_fail(partial_name != NULL, false);
 
-    for (SPReprAttr *ra = repr->attributes; ra != NULL; ra = ra->next) {
-        if ( ra->key == q ) {
-            return ra->value;
+    for (SPReprAttr *ra = this->_attributes; ra != NULL; ra = ra->next) {
+        gchar const *attr_name = g_quark_to_string(ra->key);
+        if (strstr(attr_name, partial_name) != NULL) {
+            return true;
         }
     }
 
-    return NULL;
+    return false;
 }
 
 /**
@@ -193,57 +214,49 @@ bool
 sp_repr_has_attr(SPRepr const *repr, gchar const *partial_name)
 {
     g_return_val_if_fail(repr != NULL, false);
-    g_return_val_if_fail(partial_name != NULL, false);
+    return repr->matchAttributeName(partial_name);
+}
 
-    for (SPReprAttr *ra = repr->attributes; ra != NULL; ra = ra->next) {
-        gchar const *attr_name = g_quark_to_string(ra->key);
-        if (strstr(attr_name, partial_name) != NULL) {
-            return true;
+void
+SPRepr::setContent(gchar const *newcontent)
+{
+    SharedCString oldcontent = this->_content;
+
+    if (newcontent) {
+        this->_content = SharedCString::copy(newcontent);
+    } else {
+        this->_content = SharedCString();
+    }
+    if (_document) {
+        if (_document->_log->is_logging) {
+            _document->_log->actions = (new SPReprActionChgContent(this, oldcontent, this->_content, _document->_log->actions))->optimizeOne();
         }
     }
 
-    return false;
+    for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {
+        if (rl->vector->content_changed) {
+            (* rl->vector->content_changed)(this, oldcontent, this->_content, rl->data);
+        }
+    }
 }
 
 unsigned
-sp_repr_set_content(SPRepr *repr, gchar const *newcontent)
-{
+sp_repr_set_content(SPRepr *repr, gchar const *newcontent) {
     g_return_val_if_fail(repr != NULL, FALSE);
-
-    SharedCString oldcontent = repr->content;
-
-    if (newcontent) {
-        repr->content = SharedCString::copy(newcontent);
-    } else {
-        repr->content = SharedCString();
-    }
-    if (repr->doc) {
-        if (repr->doc->is_logging) {
-            repr->doc->log = (new SPReprActionChgContent(repr, oldcontent, repr->content, repr->doc->log))->optimizeOne();
-        }
-        repr->doc->_emitContentChanged(repr, oldcontent, repr->content);
-    }
-
-    for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
-        if (rl->vector->content_changed) {
-            (* rl->vector->content_changed)(repr, oldcontent, repr->content, rl->data);
-        }
-    }
-
+    repr->setContent(newcontent);
     return true;
 }
 
-static unsigned
-sp_repr_del_attr(SPRepr *repr, gchar const *key, bool is_interactive)
+void
+SPRepr::_deleteAttribute(gchar const *key, bool is_interactive)
 {
-    g_return_val_if_fail(repr != NULL, FALSE);
-    g_return_val_if_fail(key != NULL, FALSE);
-    g_return_val_if_fail(*key != '\0', FALSE);
+    g_return_if_fail(key != NULL);
+    g_return_if_fail(*key != '\0');
 
     GQuark const q = g_quark_from_string(key);
     SPReprAttr *prev = NULL;
     SPReprAttr *attr;
-    for (attr = repr->attributes; attr && (attr->key != q); attr = attr->next) {
+    for (attr = this->_attributes; attr && (attr->key != q); attr = attr->next) {
         prev = attr;
     }
 
@@ -251,41 +264,37 @@ sp_repr_del_attr(SPRepr *repr, gchar const *key, bool is_interactive)
         if (prev) {
             prev->next = attr->next;
         } else {
-            repr->attributes = attr->next;
+            this->_attributes = attr->next;
         }
-        if (repr->doc) {
-            if (repr->doc->is_logging) {
-                repr->doc->log = (new SPReprActionChgAttr(repr, q, attr->value, SharedCString(), repr->doc->log))->optimizeOne();
+        if (_document) {
+            if (_document->_log->is_logging) {
+                _document->_log->actions = (new SPReprActionChgAttr(this, q, attr->value, SharedCString(), _document->_log->actions))->optimizeOne();
             }
-            repr->doc->_emitAttrChanged(repr, key, attr->value, NULL);
         }
 
-        for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
+        for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {
             if (rl->vector->attr_changed) {
-                (* rl->vector->attr_changed)(repr, key, attr->value, NULL, is_interactive, rl->data);
+                (* rl->vector->attr_changed)(this, key, attr->value, NULL, is_interactive, rl->data);
             }
         }
     }
-
-    return true;
 }
 
-static unsigned
-sp_repr_chg_attr(SPRepr *repr, gchar const *key, gchar const *value, bool is_interactive)
+void
+SPRepr::_changeAttribute(gchar const *key, gchar const *value, bool is_interactive)
 {
-    g_return_val_if_fail(repr != NULL, FALSE);
-    g_return_val_if_fail(key != NULL, FALSE);
-    g_return_val_if_fail(*key != '\0', FALSE);
+    g_return_if_fail(key != NULL);
+    g_return_if_fail(*key != '\0');
 
     GQuark const q = g_quark_from_string(key);
     SPReprAttr *prev = NULL;
     SPReprAttr *attr;
-    for (attr = repr->attributes; attr && (attr->key != q); attr = attr->next) {
+    for (attr = this->_attributes; attr && (attr->key != q); attr = attr->next) {
         prev = attr;
     }
 
     if ( attr && !strcmp(attr->value, value) ) {
-        return TRUE;
+        return;
     }
 
     SharedCString oldval = ( attr ? attr->value : SharedCString() );
@@ -297,107 +306,154 @@ sp_repr_chg_attr(SPRepr *repr, gchar const *key, gchar const *value, bool is_int
         if (prev) {
             prev->next = attr;
         } else {
-            repr->attributes = attr;
+            this->_attributes = attr;
         }
     }
-    if (repr->doc) {
-        if (repr->doc->is_logging) {
-            repr->doc->log = (new SPReprActionChgAttr(repr, q, oldval, attr->value, repr->doc->log))->optimizeOne();
+    if (_document) {
+        if (_document->_log->is_logging) {
+            _document->_log->actions = (new SPReprActionChgAttr(this, q, oldval, attr->value, _document->_log->actions))->optimizeOne();
         }
-        repr->doc->_emitAttrChanged(repr, key, oldval, attr->value);
     }
 
-    for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
+    for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {
         if (rl->vector->attr_changed) {
-            (* rl->vector->attr_changed)(repr, key, oldval, attr->value, is_interactive, rl->data);
+            (* rl->vector->attr_changed)(this, key, oldval, attr->value, is_interactive, rl->data);
         }
     }
+}
 
-    return true;
+void
+SPRepr::setAttribute(gchar const *key, gchar const *value, bool const is_interactive)
+{
+    g_return_if_fail(key != NULL);
+    g_return_if_fail(*key != '\0');
+
+    if (!value) {
+        _deleteAttribute(key, is_interactive);
+    } else {
+        _changeAttribute(key, value, is_interactive);
+    }
 }
 
 unsigned
 sp_repr_set_attr(SPRepr *repr, gchar const *key, gchar const *value, bool const is_interactive)
 {
     g_return_val_if_fail(repr != NULL, FALSE);
-    g_return_val_if_fail(key != NULL, FALSE);
-    g_return_val_if_fail(*key != '\0', FALSE);
-
-    if (!value) {
-        return sp_repr_del_attr(repr, key, is_interactive);
-    } else {
-        return sp_repr_chg_attr(repr, key, value, is_interactive);
-    }
+    repr->setAttribute(key, value, is_interactive);
+    return true;
 }
 
 SPRepr *
 sp_repr_parent(SPRepr const *repr)
 {
     g_assert(repr != NULL);
+    return const_cast<SPRepr *>(repr->parent());
+}
 
-    return repr->parent;
+void
+SPRepr::addChild(SPRepr *child, SPRepr *ref)
+{
+    g_assert(child != NULL);
+    g_assert(!ref || ref->_parent == this);
+    g_assert(child->_parent == NULL);
+    g_assert(child->_document == NULL || child->_document == _document);
+
+    if (ref) {
+        child->_next = ref->_next;
+        ref->_next = child;
+        this->_children->_n_siblings++;
+        this->_child_counts_complete = false;
+    } else {
+        child->_next = this->_children;
+        this->_children = child;
+        if (child->_next) {
+            child->_n_siblings = child->_next->_n_siblings + 1;
+        } else {
+            child->_n_siblings = 1;
+        }
+    }
+
+    child->_parent = this;
+
+    if (!child->_document) _bind_document(_document, child);
+
+    if (_document) {
+        if (_document->_log->is_logging) {
+            _document->_log->actions = (new SPReprActionAdd(this, child, ref, _document->_log->actions))->optimizeOne();
+        }
+    }
+
+    for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {
+        if (rl->vector->child_added) {
+            (* rl->vector->child_added)(this, child, ref, rl->data);
+        }
+    }
 }
 
 /** Make \a child a child of \a repr, inserting after \a ref if non-null, or as the first
  *  child if \a ref is null.
  *
  *  \pre See block of g_asserts in the definition.
- *  \pre ( ( child->doc == repr->doc )
+ *  \pre ( ( child->doc == _document )
  *         || all of child's children (recursively) have null doc ).
  */
 unsigned
 sp_repr_add_child(SPRepr *repr, SPRepr *child, SPRepr *ref)
 {
     g_assert(repr != NULL);
-    g_assert(child != NULL);
-    g_assert(!ref || ref->parent == repr);
-    g_assert(child->parent == NULL);
-    g_assert(child->doc == NULL || child->doc == repr->doc);
-
-    if (ref) {
-        child->next = ref->next;
-        ref->next = child;
-        repr->children->_n_siblings++;
-        repr->_child_counts_complete = false;
-    } else {
-        child->next = repr->children;
-        repr->children = child;
-        if (child->next) {
-            child->_n_siblings = child->next->_n_siblings + 1;
-        } else {
-            child->_n_siblings = 1;
-        }
-    }
-
-    child->parent = repr;
-
-    if (child->doc == NULL) bind_document(repr->doc, child);
-
-    if (repr->doc) {
-        if (repr->doc->is_logging) {
-            repr->doc->log = (new SPReprActionAdd(repr, child, ref, repr->doc->log))->optimizeOne();
-        }
-        repr->doc->_emitNodeMoved(child, NULL, NULL, repr, ref);
-    }
-
-    for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
-        if (rl->vector->child_added) {
-            (* rl->vector->child_added)(repr, child, ref, rl->data);
-        }
-    }
-
+    repr->addChild(child, ref);
     return true;
 }
 
-static void
-bind_document(SPReprDoc *doc, SPRepr *repr) {
-    g_assert(repr->doc == NULL);
+void
+SPRepr::_bind_document(SPReprDoc *doc, SPRepr *repr) {
+    g_assert(repr->_document == NULL);
 
-    repr->doc = doc;
+    repr->_document = doc;
 
-    for ( SPRepr *child = repr->children ; child != NULL ; child = child->next )
+    for ( SPRepr *child = repr->_children ; child != NULL ; child = child->_next )
     {
-        bind_document(doc, child);
+        _bind_document(doc, child);
+    }
+}
+
+void SPRepr::removeChild(SPRepr *child) {
+    g_assert(child != NULL);
+    g_assert(child->_parent == this);
+
+    SPRepr *ref = NULL;
+    if (child != this->_children) {
+        ref = this->_children;
+        while (ref->_next != child) {
+            ref = ref->_next;
+        }
+    }
+
+    if (ref) {
+        ref->_next = child->_next;
+        this->_children->_n_siblings--;
+        this->_child_counts_complete = false;
+    } else {
+        this->_children = child->_next;
+        if (this->_children) {
+            this->_children->_n_siblings = child->_n_siblings - 1;
+        }
+    }
+    child->_n_siblings = 0;
+
+    child->_parent = NULL;
+    child->_next = NULL;
+
+    if (_document) {
+        if (_document->_log->is_logging) {
+            _document->_log->actions = (new SPReprActionDel(this, child, ref, _document->_log->actions))->optimizeOne();
+        }
+    }
+
+    for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {
+        if (rl->vector->child_removed) {
+            (* rl->vector->child_removed)(this, child, ref, rl->data);
+        }
     }
 }
 
@@ -405,97 +461,90 @@ unsigned
 sp_repr_remove_child(SPRepr *repr, SPRepr *child)
 {
     g_assert(repr != NULL);
-    g_assert(child != NULL);
-    g_assert(child->parent == repr);
-
-    SPRepr *ref = NULL;
-    if (child != repr->children) {
-        ref = repr->children;
-        while (ref->next != child) {
-            ref = ref->next;
-        }
-    }
-
-    if (ref) {
-        ref->next = child->next;
-        repr->children->_n_siblings--;
-        repr->_child_counts_complete = false;
-    } else {
-        repr->children = child->next;
-        if (repr->children) {
-            repr->children->_n_siblings = child->_n_siblings - 1;
-        }
-    }
-
-    child->parent = NULL;
-    child->next = NULL;
-
-    if (repr->doc) {
-        if (repr->doc->is_logging) {
-            repr->doc->log = (new SPReprActionDel(repr, child, ref, repr->doc->log))->optimizeOne();
-        }
-        repr->doc->_emitNodeMoved(child, repr, ref, NULL, NULL);
-    }
-
-    for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
-        if (rl->vector->child_removed) {
-            (* rl->vector->child_removed)(repr, child, ref, rl->data);
-        }
-    }
-
+    repr->removeChild(child);
     return true;
+}
+
+void SPRepr::changeOrder(SPRepr *child, SPRepr *ref) {
+    g_return_if_fail( child != NULL );
+    g_return_if_fail( child->_parent == this );
+    g_return_if_fail( child != ref );
+    g_return_if_fail( !ref || ref->_parent == this );
+
+    SPRepr *const prev = sp_repr_prev(child);
+
+    if (prev == ref) { return; }
+
+    int n_children=this->_children->_n_siblings;
+
+    /* Remove from old position. */
+    if (prev) {
+        prev->_next = child->_next;
+    } else {
+        this->_children = child->_next;
+    }
+    /* Insert at new position. */
+    if (ref) {
+        child->_next = ref->_next;
+        ref->_next = child;
+    } else {
+        child->_next = this->_children;
+        this->_children = child;
+    }
+
+    this->_children->_n_siblings = n_children;
+    this->_child_counts_complete = false;
+
+    if (_document) {
+        if (_document->_log->is_logging) {
+            _document->_log->actions = (new SPReprActionChgOrder(this, child, prev, ref, _document->_log->actions))->optimizeOne();
+        }
+    }
+
+    for (SPReprListener *rl = this->_listeners; rl != NULL; rl = rl->next) {
+        if (rl->vector->order_changed) {
+            (* rl->vector->order_changed)(this, child, prev, ref, rl->data);
+        }
+    }
 }
 
 unsigned
 sp_repr_change_order(SPRepr *const repr, SPRepr *const child, SPRepr *const ref)
 {
-    g_return_val_if_fail(child != NULL, FALSE);
-    g_return_val_if_fail(child->parent == repr, FALSE);
-    g_return_val_if_fail(child != ref, FALSE);
-    g_return_val_if_fail(( !ref || ( repr
-                                     && ( ref->parent == repr ) ) ),
-                         FALSE);
-
-    SPRepr *const prev = sp_repr_prev(child);
-
-    if (prev == ref) {
-        return TRUE;
-    }
-
-    int n_children=repr->children->_n_siblings;
-
-    /* Remove from old position. */
-    if (prev) {
-        prev->next = child->next;
-    } else {
-        repr->children = child->next;
-    }
-    /* Insert at new position. */
-    if (ref) {
-        child->next = ref->next;
-        ref->next = child;
-    } else {
-        child->next = repr->children;
-        repr->children = child;
-    }
-
-    repr->children->_n_siblings = n_children;
-    repr->_child_counts_complete = false;
-
-    if (repr->doc) {
-        if (repr->doc->is_logging) {
-            repr->doc->log = (new SPReprActionChgOrder(repr, child, prev, ref, repr->doc->log))->optimizeOne();
-        }
-        repr->doc->_emitNodeMoved(child, repr, prev, repr, ref);
-    }
-
-    for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
-        if (rl->vector->order_changed) {
-            (* rl->vector->order_changed)(repr, child, prev, ref, rl->data);
-        }
-    }
-
+    g_assert( repr != NULL );
+    repr->changeOrder(child, ref);
     return true;
+}
+
+void SPRepr::setPosition(int pos) {
+    SPRepr *parent = this->_parent;
+
+    if (pos < 0) {
+        pos = 0x7fffffff;
+        /* fixme: Would INT__MAX be better?  Better yet, should pos be unsigned?  Perhaps
+           call g_warning?  -- pjrm. */
+    }
+
+    /* Find the child before child pos of parent (or NULL if pos==0). */
+    SPRepr *ref = NULL;
+    SPRepr *cur = parent->_children;
+    while (pos > 0 && cur) {
+        ref = cur;
+        cur = cur->_next;
+        pos -= 1;
+    }
+
+    if (ref == this) {
+        /* FIXME: I think this test should be moved into the above loop, i.e.  we want prev to be
+           number (pos-1) of the children other than repr.  I.e. only decrement pos if ref != repr.
+           Consider the case of repr==parent->_children && pos==2. */
+        ref = this->_next;
+        if (!ref) {
+            return;
+        }
+    }
+
+    parent->changeOrder(this, ref);
 }
 
 /** Note: Many if not all existing callers would be better off calling sp_repr_prev in
@@ -509,94 +558,77 @@ sp_repr_change_order(SPRepr *const repr, SPRepr *const child, SPRepr *const ref)
 void
 sp_repr_set_position_absolute(SPRepr *repr, int pos)
 {
-    SPRepr *parent = repr->parent;
+    repr->setPosition(pos);
+}
 
-    if (pos < 0) {
-        pos = 0x7fffffff;
-        /* fixme: Would INT__MAX be better?  Better yet, should pos be unsigned?  Perhaps
-           call g_warning?  -- pjrm. */
-    }
-
-    /* Find the child before child pos of parent (or NULL if pos==0). */
-    SPRepr *ref = NULL;
-    {
-        SPRepr *cur = parent->children;
-        while (pos > 0 && cur) {
-            ref = cur;
-            cur = cur->next;
-            pos -= 1;
+void
+SPRepr::synthesizeEvents(SPReprEventVector const *vector, void *data) {
+    if (vector->attr_changed) {
+        for (SPReprAttr *attr = this->_attributes ; attr ; attr = attr->next ) {
+            vector->attr_changed(this, g_quark_to_string(attr->key), NULL, attr->value, false, data);
         }
     }
-
-    if (ref == repr) {
-        /* FIXME: I think this test should be moved into the above loop, i.e.  we want prev to be
-           number (pos-1) of the children other than repr.  I.e. only decrement pos if ref != repr.
-           Consider the case of repr==parent->children && pos==2. */
-        ref = repr->next;
-        if (!ref) {
-            return;
+    if (vector->child_added) {
+        SPRepr *ref = NULL;
+        SPRepr *child = this->_children;
+        for ( ; child ; ref = child, child = child->_next ) {
+            vector->child_added(this, child, ref, data);
         }
     }
-
-    sp_repr_change_order(parent, repr, ref);
+    if (vector->content_changed) {
+        vector->content_changed(this, NULL, this->_content, data);
+    }
 }
 
 void
 sp_repr_synthesize_events(SPRepr *repr, SPReprEventVector const *vector, void *data)
 {
-    if (vector->attr_changed) {
-        for (SPReprAttr *attr = repr->attributes ; attr ; attr = attr->next ) {
-            vector->attr_changed(repr, g_quark_to_string(attr->key), NULL, attr->value, false, data);
-        }
+    repr->synthesizeEvents(vector, data);
+}
+
+void SPRepr::addListener(SPReprEventVector const *vector, void *data) {
+    g_assert(vector != NULL);
+
+    SPReprListener *rl = new SPReprListener(vector, data);
+
+    if (_last_listener) {
+        _last_listener->next = rl;
+    } else {
+        _listeners = rl;
     }
-    if (vector->child_added) {
-        SPRepr *ref = NULL;
-        SPRepr *child = repr->children;
-        for ( ; child ; ref = child, child = child->next ) {
-            vector->child_added(repr, child, ref, data);
-        }
-    }
-    if (vector->content_changed) {
-        vector->content_changed(repr, NULL, repr->content, data);
-    }
+    _last_listener = rl;
 }
 
 void
 sp_repr_add_listener(SPRepr *repr, SPReprEventVector const *vector, void *data)
 {
     g_assert(repr != NULL);
-    g_assert(vector != NULL);
+    repr->addListener(vector, data);
+}
 
-    SPReprListener *rl = new SPReprListener(vector, data);
-
-    if (repr->last_listener) {
-        repr->last_listener->next = rl;
-    } else {
-        repr->listeners = rl;
+void SPRepr::removeListenerByData(void *data) {
+    SPReprListener *prev = NULL;
+    for (SPReprListener *rl = _listeners; rl != NULL; rl = rl->next) {
+        if (rl->data == data) {
+            if (prev) {
+                prev->next = rl->next;
+            } else {
+                _listeners = rl->next;
+            }
+            if (!rl->next) {
+                _last_listener = prev;
+            }
+            return;
+        }
+        prev = rl;
     }
-    repr->last_listener = rl;
 }
 
 void
 sp_repr_remove_listener_by_data(SPRepr *repr, void *data)
 {
     g_return_if_fail(repr != NULL);
-
-    SPReprListener *prev = NULL;
-    for (SPReprListener *rl = repr->listeners; rl != NULL; rl = rl->next) {
-        if (rl->data == data) {
-            if (prev) {
-                prev->next = rl->next;
-            } else {
-                repr->listeners = rl->next;
-            }
-            if (!rl->next) {
-                repr->last_listener = prev;
-            }
-            return;
-        }
-        prev = rl;
-    }
+    repr->removeListenerByData(data);
 }
 
 
@@ -610,10 +642,6 @@ sp_repr_document_new(char const *rootname)
     if (!strcmp(rootname, "svg:svg")) {
         sp_repr_set_attr(doc, "version", "1.0");
         sp_repr_set_attr(doc, "standalone", "no");
-        sp_repr_set_attr(doc, "doctype",
-                         "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\"\n"
-                         "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">\n");
-
         SPRepr *comment = sp_repr_new_comment(" Created with Inkscape (http://www.inkscape.org/) ");
         sp_repr_append_child(doc, comment);
         sp_repr_unref(comment);
@@ -644,11 +672,11 @@ sp_repr_document_new_list(GSList *reprs)
     g_assert(reprs != NULL);
 
     SPReprDoc *doc = sp_repr_document_new("void");
-    sp_repr_remove_child(doc, doc->children);
+    doc->removeChild(doc->firstChild());
 
     for ( GSList *iter = reprs ; iter ; iter = iter->next ) {
         SPRepr *repr = (SPRepr *) iter->data;
-        sp_repr_append_child(doc, repr);
+        doc->appendChild(repr);
     }
 
     g_assert(sp_repr_document_root(doc) != NULL);
@@ -659,26 +687,41 @@ sp_repr_document_new_list(GSList *reprs)
 SPRepr *
 sp_repr_document_first_child(SPReprDoc const *doc)
 {
-    return doc->children;
+    return const_cast<SPRepr *>(doc->firstChild());
 }
 
 SPReprDoc *
 sp_repr_document(SPRepr const *repr)
 {
-    return repr->doc;
+    return const_cast<SPReprDoc *>(repr->document());
+}
+
+SPRepr *SPRepr::root() {
+    SPRepr *parent=this;
+    while (parent->parent()) {
+        parent = parent->parent();
+    }
+
+    if ( parent->type() == SP_XML_DOCUMENT_NODE ) {
+        for ( SPRepr *child = _document->firstChild() ;
+              child ; child = child->next() )
+        {
+            if ( child->type() == SP_XML_ELEMENT_NODE ) {
+                return child;
+            }
+        }
+        return NULL;
+    } else if ( parent->type() == SP_XML_ELEMENT_NODE ) {
+        return parent;
+    } else {
+        return NULL;
+    }
 }
 
 SPRepr *sp_repr_document_root(SPReprDoc const *doc)
 {
     g_assert( doc != NULL );
-
-    /* We can have comments before the root node. */
-    for (SPRepr *repr = doc->children ; repr ; repr = repr->next ) {
-        if ( repr->type() == SP_XML_ELEMENT_NODE ) {
-            return repr;
-        }
-    }
-    return NULL;
+    return const_cast<SPRepr *>(doc->root());
 }
 
 /*
@@ -699,6 +742,36 @@ sp_repr_document_merge(SPReprDoc *doc, SPReprDoc const *src, gchar const *key)
     return sp_repr_merge(rdoc, rsrc, key);
 }
 
+void
+SPRepr::mergeFrom(SPRepr const *src, gchar const *key) {
+    g_return_if_fail(src != NULL);
+    g_return_if_fail(key != NULL);
+
+    this->_content = src->_content;
+
+    for (SPRepr *child = src->_children; child != NULL; child = child->_next) {
+        gchar const *id = sp_repr_attr(child, key);
+        if (id) {
+            SPRepr *rch = sp_repr_lookup_child(this, key, id);
+            if (rch) {
+                rch->mergeFrom(child, key);
+            } else {
+                rch = sp_repr_duplicate(child);
+                sp_repr_append_child(this, rch);
+                sp_repr_unref(rch);
+            }
+        } else {
+            SPRepr *rch = sp_repr_duplicate(child);
+            sp_repr_append_child(this, rch);
+            sp_repr_unref(rch);
+        }
+    }
+
+    for (SPReprAttr *attr = src->_attributes; attr != NULL; attr = attr->next) {
+        this->setAttribute(SP_REPR_ATTRIBUTE_KEY(attr), SP_REPR_ATTRIBUTE_VALUE(attr));
+    }
+}
+
 /**
  * Duplicates all attributes and children from src into doc.
  * Does NOT erase original attributes and children.
@@ -707,33 +780,7 @@ unsigned
 sp_repr_merge(SPRepr *repr, SPRepr const *src, gchar const *key)
 {
     g_return_val_if_fail(repr != NULL, FALSE);
-    g_return_val_if_fail(src != NULL, FALSE);
-    g_return_val_if_fail(key != NULL, FALSE);
-
-    repr->content = src->content;
-
-    for (SPRepr *child = src->children; child != NULL; child = child->next) {
-        gchar const *id = sp_repr_attr(child, key);
-        if (id) {
-            SPRepr *rch = sp_repr_lookup_child(repr, key, id);
-            if (rch) {
-                sp_repr_merge(rch, child, key);
-            } else {
-                rch = sp_repr_duplicate(child);
-                sp_repr_append_child(repr, rch);
-                sp_repr_unref(rch);
-            }
-        } else {
-            SPRepr *rch = sp_repr_duplicate(child);
-            sp_repr_append_child(repr, rch);
-            sp_repr_unref(rch);
-        }
-    }
-
-    for (SPReprAttr *attr = src->attributes; attr != NULL; attr = attr->next) {
-        sp_repr_set_attr(repr, SP_REPR_ATTRIBUTE_KEY(attr), SP_REPR_ATTRIBUTE_VALUE(attr));
-    }
-
+    repr->mergeFrom(src, key);
     return TRUE;
 }
 

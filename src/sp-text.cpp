@@ -866,8 +866,8 @@ sp_text_set_repr_text_multiline(SPText *text, gchar const *str)
     gchar *content = g_strdup (str);
 
     sp_repr_set_content (SP_OBJECT_REPR (text), "");
-    while (repr->children) {
-        sp_repr_remove_child (repr, repr->children);
+    while (repr->firstChild()) {
+        repr->removeChild(repr->firstChild());
     }
 
     NR::Point cp(text->x.computed, text->y.computed);

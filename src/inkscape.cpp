@@ -712,7 +712,7 @@ inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key)
         }
         
         SPRepr* child;
-        for (child = repr->children; child != NULL; child = child->next) {
+        for (child = repr->firstChild(); child != NULL; child = child->next()) {
             gchar const *id = sp_repr_attr (child, "id");
             if ((id) && (strlen (id) == len) && (!strncmp (id, s, len)))
             {

@@ -203,7 +203,7 @@ sp_tspan_build(SPObject *object, SPDocument *doc, SPRepr *repr)
     sp_object_read_attr(object, "sodipodi:role");
 	
     bool no_content = true;
-    for (SPRepr* rch = repr->children; rch != NULL; rch = rch->next) {
+    for (SPRepr* rch = repr->firstChild() ; rch != NULL; rch = rch->next()) {
         if ( rch->type() == SP_XML_TEXT_NODE ) {
             no_content = false;
             break;
@@ -524,7 +524,7 @@ sp_textpath_build(SPObject *object, SPDocument *doc, SPRepr *repr)
     sp_object_read_attr(object, "xlink:href");
 	
     bool  no_content=true;
-    for (SPRepr* rch = repr->children; rch != NULL; rch = rch->next) {
+    for (SPRepr* rch = repr->firstChild() ; rch != NULL; rch = rch->next()) {
         if ( rch->type() == SP_XML_TEXT_NODE ) {no_content=false;break;}
     }
 	
@@ -749,7 +749,7 @@ sp_textpath_to_text(SPObject *tp)
 
     // make a list of textpath children
     GSList *tp_reprs = NULL;
-    for (SPObject *o = SP_OBJECT(tp)->children; o != NULL; o = o->next) {
+    for (SPObject *o = SP_OBJECT(tp)->firstChild() ; o != NULL; o = o->next) {
         tp_reprs = g_slist_prepend(tp_reprs, SP_OBJECT_REPR(o));
     }
 

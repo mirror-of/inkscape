@@ -137,10 +137,10 @@ void sp_selection_duplicate()
 
     selection->clear();
 
-    SPRepr *parent = ((SPRepr *) reprs->data)->parent;
+    SPRepr *parent = ((SPRepr *) reprs->data)->parent();
     gboolean sort = TRUE;
     for (GSList *i = reprs->next; i; i = i->next) {
-        if ((((SPRepr *) i->data)->parent) != parent) {
+        if ((((SPRepr *) i->data)->parent()) != parent) {
             // We can duplicate items from different parents, but we need not do sorting in this
             // case because dupes will remain in their own parents. FIXME: However, we need to sort those
             // subsets of selection which are siblings (how?).
@@ -154,7 +154,7 @@ void sp_selection_duplicate()
     GSList *newsel = NULL;
 
     while (reprs) {
-        parent = ((SPRepr *) reprs->data)->parent;
+        parent = ((SPRepr *) reprs->data)->parent();
         SPRepr *copy = sp_repr_duplicate((SPRepr *) reprs->data);
 
         sp_repr_append_child(parent, copy);
@@ -362,9 +362,9 @@ void sp_selection_group()
 
     // Check if all selected objects have common parent.
     GSList *reprs = g_slist_copy((GSList *) selection->reprList());
-    SPRepr *parent = ((SPRepr *) reprs->data)->parent;
+    SPRepr *parent = ((SPRepr *) reprs->data)->parent();
     for (GSList *i = reprs->next; i; i = i->next) {
-        if ((((SPRepr *) i->data)->parent) != parent) {
+        if ((((SPRepr *) i->data)->parent()) != parent) {
             desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You cannot group objects from <b>different groups</b> or <b>layers</b>."));
             return;
         }

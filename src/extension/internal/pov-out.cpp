@@ -74,7 +74,7 @@ findElementsByTagName(std::vector<SPRepr *> &results, SPRepr *node, const char *
     else if (strcmp(sp_repr_name(node), name) == 0)
         results.push_back(node);
 
-    for (SPRepr *child = node->children; child ; child = child->next)
+    for (SPRepr *child = node->firstChild() ; child ; child = child->next())
         findElementsByTagName ( results, child, name );
 
 }

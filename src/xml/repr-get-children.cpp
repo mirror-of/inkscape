@@ -11,14 +11,7 @@
 SPRepr *
 sp_repr_last_child(SPRepr const * const parent)
 {
-    SPRepr *last = NULL;
-    SPRepr *child = parent->children;
-    while (child) {
-        last = child;
-        child = child->next;
-    }
-
-    return last;
+    return const_cast<SPRepr *>(parent)->lastChild();
 }
 
 /** Returns the sibling before \a child in \a child's parent's children, or NULL if \a child is the
@@ -38,12 +31,12 @@ sp_repr_last_child(SPRepr const * const parent)
 SPRepr *
 sp_repr_prev(SPRepr const *const child)
 {
-    if (!child || !child->parent) {
+    if (!child || !child->parent()) {
         return NULL;
     }
 
-    SPRepr *prev = NULL;
-    for (SPRepr *curr = child->parent->children; curr != child; curr = curr->next) {
+    SPRepr const *prev = NULL;
+    for (SPRepr const *curr = child->parent()->firstChild(); curr != child; curr = curr->next()) {
         if (!curr) {
             g_warning("child repr not found in its parent's list of children");
             return NULL;
@@ -53,9 +46,9 @@ sp_repr_prev(SPRepr const *const child)
     }
 
     g_assert(prev == NULL
-             ? child->parent->children == child
-             : prev->next == child);
-    return prev;
+             ? child->parent()->firstChild() == child
+             : prev->next() == child);
+    return const_cast<SPRepr *>(prev);
 }
 
 

@@ -137,11 +137,11 @@ prefs_set_recent_file (const gchar * uri, const gchar * name) {
                 sp_repr_change_order (recent, child, NULL);
             } else {
                 if (sp_repr_n_children (recent) >= max_documents) {
-                    child = recent->children;
+                    child = recent->firstChild();
                     // count to the last
-                    for (i = 0; i < max_documents - 2; i ++) child = child->next;
+                    for (i = 0; i < max_documents - 2; i ++) child = child->next();
                     // remove all after the last
-                    while (child->next) sp_repr_unparent (child->next);
+                    while (child->next()) sp_repr_unparent (child->next());
                 }
                 child = sp_repr_new ("document");
                 sp_repr_set_attr (child, "uri", uri);
@@ -168,9 +168,9 @@ prefs_get_recent_files(void) {
 
 		datalst = (const gchar **)g_malloc(sizeof(gchar *) * ((docs * 2) + 1));
 
-		for (i = 0, child = recent->children;
+		for (i = 0, child = recent->firstChild();
 				child != NULL;
-				child = child->next, i += 2) {
+				child = child->next(), i += 2) {
 			const gchar *uri, *name;
 			uri = sp_repr_attr (child, "uri");
 			name = sp_repr_attr (child, "name");

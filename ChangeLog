@@ -1,3 +1,19 @@
+2005-01-17  MenTaLguY  <mental@rydia.net>
+
+	* src/desktop-style.cpp, src/inkscape.cpp, src/interface.cpp,
+	  src/path-chemistry.cpp, src/prefs-utils.cpp, src/selection-chemistry.cpp,
+	  src/sp-flowtext.cpp, src/sp-gradient.cpp, src/sp-object.cpp,
+	  src/sp-text.cpp, src/sp-tspan.cpp, src/splivarot.cpp,
+	  src/dialogs/xml-tree.cpp, src/extension/internal/pov-out.cpp,
+	  src/widgets/dash-selector.cpp, src/xml/repr-css.cpp,
+	  src/xml/repr-get-children.cpp, src/xml/repr-io.cpp,
+	  src/xml/repr-private.h, src/xml/repr-util.cpp, src/xml/repr.cpp,
+	  src/xml/sp-repr-action.cpp:
+
+	  Made all SPRepr fields private, and moved most functionality into
+	  member functions.  Also shuffled SPReprDoc members, to avoid
+	  need for SPReprDoc to be finalized.
+
 2005-01-17  Kees Cook  <kees@outflux.net>
 
     * share/markers/markers.svg: applied patch #990884, which provides a

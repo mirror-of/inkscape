@@ -44,22 +44,68 @@ enum SPReprType {
 struct SPRepr : public Inkscape::GC::Managed<>, public Inkscape::GC::Anchored {
 	SPReprType type() const { return _type; }
 
-	int name;
+	gchar const *name() const;
+	int code() const { return _name; }
+	void setCodeUnsafe(int code) {
+		g_assert(!_document && !_listeners);
+		_name = code;
+	}
 
-	SPReprDoc *doc;
-	SPRepr *parent;
-	SPRepr *next;
-	SPRepr *children;
-
-	SPReprAttr *attributes;
-	SPReprListener *listeners;
-	SPReprListener *last_listener;
-	Inkscape::Util::SharedCString content;
+	SPReprDoc *document() { return _document; }
+	SPReprDoc const *document() const {
+		return const_cast<SPRepr *>(this)->document();
+	}
 
 	SPRepr *duplicate() const { return _duplicate(); }
 
-	mutable bool _child_counts_complete;
-	mutable unsigned _n_siblings;
+	SPRepr *root();
+	SPRepr const *root() const {
+		return const_cast<SPRepr *>(this)->root();
+	}
+
+	SPRepr *parent() { return _parent; }
+	SPRepr const *parent() const { return _parent; }
+
+	SPRepr *next() { return _next; }
+	SPRepr const *next() const { return _next; }
+
+	SPRepr *firstChild() { return _children; }
+	SPRepr const *firstChild() const { return _children; }
+	SPRepr *lastChild();
+	SPRepr const *lastChild() const {
+		return const_cast<SPRepr *>(this)->lastChild();
+	}
+
+	unsigned childCount() const;
+	SPRepr *nthChild(unsigned index);
+	SPRepr const *nthChild(unsigned index) const {
+		return const_cast<SPRepr *>(this)->nthChild(index);
+	}
+
+	void addChild(SPRepr *child, SPRepr *ref);
+	void appendChild(SPRepr *child) {
+		addChild(child, lastChild());
+	}
+	void removeChild(SPRepr *child);
+	void changeOrder(SPRepr *child, SPRepr *ref);
+
+	unsigned position() const;
+	void setPosition(int pos);
+
+	gchar const *attribute(gchar const *key) const;
+	void setAttribute(gchar const *key, gchar const *value, bool is_interactive=false);
+	bool matchAttributeName(gchar const *partial_name) const;
+
+	gchar const *content() const;
+	void setContent(gchar const *value);
+
+	void mergeFrom(SPRepr const *src, gchar const *key);
+
+	SPReprAttr const *attributeList() const { return _attributes; }
+
+	void synthesizeEvents(SPReprEventVector const *vector, void *data);
+	void addListener(SPReprEventVector const *vector, void *data);
+	void removeListenerByData(void *data);
 
 protected:
 	SPRepr(SPReprType t, int code);
@@ -67,10 +113,32 @@ protected:
 
 	virtual SPRepr *_duplicate() const=0;
 
+	void _changeAttribute(gchar const *key, gchar const *value, bool is_interactive);
+	void _deleteAttribute(gchar const *key, bool is_interactive);
+
 private:
 	void operator=(SPRepr const &); // no assign
 
+	int _name;
+
+	SPReprDoc *_document;
+
 	SPReprType _type;
+	SPReprAttr *_attributes;
+	Inkscape::Util::SharedCString _content;
+	SPRepr *_parent;
+	SPRepr *_children;
+	SPRepr *_next;
+
+	mutable bool _child_counts_complete;
+	mutable unsigned _n_siblings;
+
+	SPReprListener *_listeners;
+	SPReprListener *_last_listener;
+
+	void _bind_document(SPReprDoc *doc, SPRepr *repr);
+
+	friend class SPReprDoc;
 };
 
 struct SPReprElement : public SPRepr {
@@ -84,7 +152,7 @@ struct SPReprText : public SPRepr {
 	SPReprText(Inkscape::Util::SharedCString content)
 	: SPRepr(SP_XML_TEXT_NODE, g_quark_from_static_string("string"))
 	{
-		this->content = content;
+		setContent(content);
 	}
 
 protected:
@@ -95,52 +163,41 @@ struct SPReprComment : public SPRepr {
 	explicit SPReprComment(Inkscape::Util::SharedCString content)
 	: SPRepr(SP_XML_COMMENT_NODE, g_quark_from_static_string("comment"))
 	{
-		this->content = content;
+		setContent(content);
 	}
 
 protected:
 	SPRepr *_duplicate() const { return new SPReprComment(*this); }
 };
 
-struct SPReprDoc : public SPRepr, public Inkscape::GC::Finalized {
+struct SPReprDoc : public SPRepr {
 	explicit SPReprDoc(int code);
-	~SPReprDoc();
 
-	typedef sigc::signal<void, SPRepr *, SPRepr *, SPRepr *, SPRepr *, SPRepr *> NodeMovedSignal;
-	typedef sigc::signal<void, SPRepr *, gchar const *, gchar const *, gchar const *> AttrChangedSignal;
-	typedef sigc::signal<void, SPRepr *, gchar const *, gchar const *> ContentChangedSignal;
+	void beginTransaction();
+	void commit();
+	SPReprAction *commitUndoable();
+	void rollback();
 
-	sigc::connection connectNodeMoved(NodeMovedSignal::slot_type slot) {
-		return _node_moved_signal.connect(slot);
-	}
-	sigc::connection connectAttrChanged(AttrChangedSignal::slot_type slot) {
-		return _attr_changed_signal.connect(slot);
-	}
-	sigc::connection connectContentChanged(ContentChangedSignal::slot_type slot) {
-		return _content_changed_signal.connect(slot);
-	}
-
-	void _emitNodeMoved(SPRepr *node, SPRepr *old_parent, SPRepr *old_ref, SPRepr *new_parent, SPRepr *new_ref) {
-		_node_moved_signal.emit(node, old_parent, old_ref, new_parent, new_ref);
-	}
-	void _emitAttrChanged(SPRepr *node, gchar const *name, gchar const *old_value, gchar const *new_value) {
-		_attr_changed_signal.emit(node, name, old_value, new_value);
-	}
-	void _emitContentChanged(SPRepr *node, gchar const *old_content, gchar const *new_content) {
-		_content_changed_signal.emit(node, old_content, new_content);
-	}
-
-	bool is_logging;
-	SPReprAction *log;
+	bool inTransaction() { return _log->is_logging; }
 
 protected:
-	NodeMovedSignal _node_moved_signal;
-	AttrChangedSignal _attr_changed_signal;
-	ContentChangedSignal _content_changed_signal;
+	struct Log : public Inkscape::GC::Managed<Inkscape::GC::ATOMIC>,
+	             public Inkscape::GC::Finalized
+        {
+		Log() : is_logging(false), actions(NULL) {}
+		~Log();
+
+		bool is_logging;
+		SPReprAction *actions;
+	};
+
+	Log *_log;
 
 	SPReprDoc(SPReprDoc const &doc);
 
 	SPRepr *_duplicate() const { return new SPReprDoc(*this); }
+
+	friend class SPRepr;
 };
 
 struct SPXMLNs {

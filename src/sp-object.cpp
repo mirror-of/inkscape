@@ -615,7 +615,7 @@ sp_object_build (SPObject * object, SPDocument * document, SPRepr * repr)
 	sp_object_read_attr (object, "inkscape:label");
 	sp_object_read_attr (object, "inkscape:collect");
 
-        for (SPRepr *rchild = repr->children; rchild != NULL; rchild = rchild->next) {
+        for (SPRepr *rchild = repr->firstChild() ; rchild != NULL; rchild = rchild->next()) {
 		GType type = sp_repr_type_lookup (rchild);
 		if (!type) {
 			continue;

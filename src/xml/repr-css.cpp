@@ -118,7 +118,7 @@ sp_repr_css_double_property (SPCSSAttr * css, const gchar * name, double defval)
 void
 sp_repr_css_set (SPRepr * repr, SPCSSAttr * css, const gchar * attr)
 {
-	SPReprAttr * a;
+	SPReprAttr const * a;
 	const char *key;
 	const char *val;
 	char c[4096], *p;
@@ -130,7 +130,7 @@ sp_repr_css_set (SPRepr * repr, SPCSSAttr * css, const gchar * attr)
 	c[0] = '\0';
 	p = c;
 
-	for (a = ((SPRepr *) css)->attributes; a != NULL; a = a->next) {
+	for (a = ((SPRepr *) css)->attributeList() ; a != NULL; a = a->next) {
 		key = SP_REPR_ATTRIBUTE_KEY (a);
 		val = SP_REPR_ATTRIBUTE_VALUE (a);
 		p += g_snprintf (p, c + 4096 - p, "%s:%s;", key, val);
@@ -149,13 +149,13 @@ sp_repr_css_set (SPRepr * repr, SPCSSAttr * css, const gchar * attr)
 void
 sp_repr_css_merge (SPCSSAttr * dst, SPCSSAttr * src)
 {
-	SPReprAttr * attr;
+	SPReprAttr const * attr;
 	const char * key, * val;
 
 	g_assert (dst != NULL);
 	g_assert (src != NULL);
 
-	for (attr = ((SPRepr *) src)->attributes; attr != NULL; attr = attr->next) {
+	for (attr = ((SPRepr *) src)->attributeList() ; attr != NULL; attr = attr->next) {
 		key = SP_REPR_ATTRIBUTE_KEY (attr);
 		val = SP_REPR_ATTRIBUTE_VALUE (attr);
 		sp_repr_set_attr ((SPRepr *) dst, key, val);
@@ -192,7 +192,7 @@ void
 sp_repr_css_print (SPCSSAttr * css)
 {
 	g_print ("== SPCSSAttr:\n");
-	for (SPReprAttr *attr = ((SPRepr *) css)->attributes; attr != NULL; attr = attr->next) {
+	for (SPReprAttr const *attr = ((SPRepr *) css)->attributeList(); attr != NULL; attr = attr->next) {
 		g_print("%s: %s\n", SP_REPR_ATTRIBUTE_KEY(attr), SP_REPR_ATTRIBUTE_VALUE(attr).cString());
 	}
 }
@@ -224,7 +224,7 @@ sp_repr_css_change_recursive (SPRepr * repr, SPCSSAttr * css, const gchar * attr
 
 	sp_repr_css_change (repr, css, attr);
 
-	for (child = repr->children; child != NULL; child = child->next) {
+	for (child = repr->firstChild(); child != NULL; child = child->next()) {
 		sp_repr_css_change_recursive (child, css, attr);
 	}
 }

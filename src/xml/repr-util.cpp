@@ -297,7 +297,7 @@ sp_repr_children (SPRepr *repr)
 
     if (!repr)
         return NULL;
-    return repr->children;
+    return repr->firstChild();
 }
 
 /** Returns the next sibling of \a repr, or NULL if \a repr is the last sibling (or if repr is
@@ -316,7 +316,7 @@ sp_repr_next (SPRepr *repr)
 
     if (!repr)
         return NULL;
-    return repr->next;
+    return repr->next();
 }
 
 int sp_repr_attr_is_set (SPRepr * repr, const char * key)
@@ -413,6 +413,23 @@ sp_repr_compare_position(SPRepr *first, SPRepr *second)
        pjrm */
 }
 
+unsigned SPRepr::position() const {
+    g_return_val_if_fail(_parent != NULL, 0);
+
+    if (!_parent->_child_counts_complete) {
+        unsigned n_remaining=( _parent->_children->_n_siblings - 1 );
+        for ( SPRepr *sibling=_parent->_children->_next ;
+              sibling ;
+              sibling = sibling->_next )
+        {
+            sibling->_n_siblings = n_remaining;
+            n_remaining--;
+        }
+        g_assert(n_remaining == 0);
+        _parent->_child_counts_complete = true;
+    }
+    return _parent->_children->_n_siblings - this->_n_siblings;
+}
 
 /** Returns the position of \a repr among its parent's children (starting with 0 for the first
  *  child).
@@ -425,56 +442,51 @@ int
 sp_repr_position(SPRepr const *repr)
 {
     g_assert(repr != NULL);
-    SPRepr const *parent = sp_repr_parent(repr);
-    g_assert(parent != NULL);
+    return repr->position();
+}
 
-    if (!parent->_child_counts_complete) {
-        unsigned n_remaining=( parent->children->_n_siblings - 1 );
-        for ( SPRepr *sibling=parent->children->next ;
-              sibling ;
-              sibling = sibling->next )
-        {
-            sibling->_n_siblings = n_remaining;
-            n_remaining--;
-        }
-        g_assert(n_remaining == 0);
-        parent->_child_counts_complete = true;
-    }
-    return (int)parent->children->_n_siblings - (int)repr->_n_siblings;
+unsigned SPRepr::childCount() const {
+    return ( _children ? _children->_n_siblings : 0 );
 }
 
 int
 sp_repr_n_children(SPRepr *repr)
 {
-    return ( repr->children ? repr->children->_n_siblings : 0 );
+    g_assert(repr != NULL);
+    return (int)repr->childCount();
+}
+
+SPRepr *SPRepr::nthChild(unsigned index) {
+    SPRepr *child = _children;
+    for ( ; index > 0 && child ; child = child->_next ) {
+        index--;
+    }
+    return child;
 }
 
 SPRepr *sp_repr_nth_child(SPRepr *repr, int n) {
     g_assert(repr != NULL);
+    g_return_val_if_fail(n < 0, NULL);
+    return repr->nthChild((unsigned)n);
+}
 
-    SPRepr *child=repr->children;
-    for ( ; n > 0 && child ; child = child->next ) {
-        n--;
+SPRepr *SPRepr::lastChild() {
+    SPRepr *child = _children;
+    if (child) {
+        while ( child->_next ) {
+            child = child->_next;
+        }
     }
-
     return child;
 }
 
 void
 sp_repr_append_child (SPRepr * repr, SPRepr * child)
 {
-    SPRepr * ref;
-
     g_assert (repr != NULL);
     g_assert (child != NULL);
 
-    ref = NULL;
-    if (repr->children) {
-        ref = repr->children;
-        while (ref->next) ref = ref->next;
-    }
-
-    sp_repr_add_child (repr, child, ref);
+    return repr->appendChild(child);
 }
 
 void sp_repr_unparent (SPRepr * repr)
@@ -498,22 +510,14 @@ sp_repr_lookup_child (SPRepr       *repr,
                       const gchar *value)
 {
     g_return_val_if_fail(repr != NULL, NULL);
-    g_return_val_if_fail(key != NULL, NULL);
-    g_return_val_if_fail(value != NULL, NULL);
-
-    GQuark const quark = g_quark_from_string (key);
-
-    /* Fixme: we should use hash table for faster lookup? */
-    
-    for (SPRepr *child = repr->children; child != NULL; child = child->next) {
-        for (SPReprAttr *attr = child->attributes; attr != NULL; attr = attr->next) {
-            if ( ( attr->key == quark )
-                 && !strcmp(attr->value, value) ) {
-                return child;
-            }
+    for ( SPRepr *child = repr->firstChild() ; child ; child = child->next() ) {
+        gchar const *child_value = child->attribute(key);
+        if ( child_value == value ||
+             value && child_value && !strcmp(child_value, value) )
+        {
+            return child;
         }
     }
-
     return NULL;
 }
 
@@ -532,14 +536,14 @@ sp_repr_lookup_name ( SPRepr *repr, gchar const *name, gint maxdepth )
 
     GQuark const quark = g_quark_from_string (name);
 
-    if ( (unsigned)repr->name == quark ) return repr;
+    if ( (GQuark)repr->code() == quark ) return repr;
     if ( maxdepth == 0 ) return NULL;
 
     // maxdepth == -1 means unlimited
     if ( maxdepth == -1 ) maxdepth = 0;
 
     SPRepr * found = NULL;
-    for (SPRepr *child = repr->children; child && !found; child = child->next) {
+    for (SPRepr *child = repr->firstChild() ; child && !found; child = child->next() ) {
         found = sp_repr_lookup_name ( child, name, maxdepth-1 );
     }
 

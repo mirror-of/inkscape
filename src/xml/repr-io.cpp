@@ -40,7 +40,7 @@ static SPRepr *sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, 
 static gint sp_repr_qualified_name (gchar *p, gint len, xmlNsPtr ns, const xmlChar *name, const gchar *default_ns, GHashTable *prefix_map);
 static void sp_repr_write_stream_root_element (SPRepr *repr, FILE *file, gboolean add_whitespace, gchar const *default_ns);
 static void sp_repr_write_stream (SPRepr *repr, FILE *file, gint indent_level, gboolean add_whitespace, Glib::QueryQuark elide_prefix);
-static void sp_repr_write_stream_element (SPRepr *repr, FILE *file, gint indent_level, gboolean add_whitespace, Glib::QueryQuark elide_prefix, SPReprAttr *attributes);
+static void sp_repr_write_stream_element (SPRepr *repr, FILE *file, gint indent_level, gboolean add_whitespace, Glib::QueryQuark elide_prefix, SPReprAttr const *attributes);
 
 #ifdef HAVE_LIBWMF
 static xmlDocPtr sp_wmf_convert (const char * file_name);
@@ -153,9 +153,10 @@ namespace {
 
 void promote_to_svg_namespace(SPRepr *repr) {
     if ( repr->type() == SP_XML_ELEMENT_NODE ) {
-        if (!qname_prefix(repr->name).id()) {
-            gchar *svg_name = g_strconcat("svg:", g_quark_to_string(repr->name), NULL);
-            repr->name = g_quark_from_string(svg_name);
+        GQuark code = repr->code();
+        if (!qname_prefix(code).id()) {
+            gchar *svg_name = g_strconcat("svg:", g_quark_to_string(code), NULL);
+            repr->setCodeUnsafe(g_quark_from_string(svg_name));
             g_free(svg_name);
         }
         for ( SPRepr *child = sp_repr_children(repr) ; child ; child = sp_repr_next(child) ) {
@@ -248,10 +249,6 @@ sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *pre
     xmlAttrPtr prop;
     xmlNodePtr child;
     gchar c[256];
-
-#ifdef SP_REPR_IO_VERBOSE
-    g_print ("Node type %d, name %s, contains |%s|\n", node->type, node->name, node->content);
-#endif
 
     if (node->type == XML_TEXT_NODE || node->type == XML_CDATA_SECTION_NODE) {
 
@@ -421,8 +418,8 @@ void add_ns_map_entry(NSMap &ns_map, Glib::QueryQuark prefix) {
 
 void populate_ns_map(NSMap &ns_map, SPRepr &repr) {
     if ( repr.type() == SP_XML_ELEMENT_NODE ) {
-        add_ns_map_entry(ns_map, qname_prefix(repr.name));
-        for ( SPReprAttr *attr=repr.attributes ;
+        add_ns_map_entry(ns_map, qname_prefix(repr.code()));
+        for ( SPReprAttr const *attr=repr.attributeList() ;
               attr ; attr = attr->next )
         {
             Glib::QueryQuark prefix=qname_prefix(attr->key);
@@ -454,7 +451,7 @@ sp_repr_write_stream_root_element (SPRepr *repr, FILE *file, gboolean add_whites
         elide_prefix = g_quark_from_string(sp_xml_ns_uri_prefix(default_ns, NULL));
     }
 
-    SPReprAttr *attributes=repr->attributes;
+    SPReprAttr const *attributes=repr->attributeList();
     for ( NSMap::iterator iter=ns_map.begin() ; iter != ns_map.end() ; ++iter ) 
     {
         Glib::QueryQuark prefix=(*iter).first;
@@ -462,13 +459,13 @@ sp_repr_write_stream_root_element (SPRepr *repr, FILE *file, gboolean add_whites
 
         if (prefix.id()) {
             if ( elide_prefix == prefix ) {
-                attributes = new SPReprAttr(g_quark_from_static_string("xmlns"), ns_uri, attributes);
+                attributes = new SPReprAttr(g_quark_from_static_string("xmlns"), ns_uri, const_cast<SPReprAttr *>(attributes));
             }
 
             Glib::ustring attr_name="xmlns:";
             attr_name.append(g_quark_to_string(prefix));
             GQuark key = g_quark_from_string(attr_name.c_str());
-            attributes = new SPReprAttr(key, ns_uri, attributes); 
+            attributes = new SPReprAttr(key, ns_uri, const_cast<SPReprAttr *>(attributes)); 
         } else {
             // if there are non-namespaced elements, we can't globally
             // use a default namespace
@@ -488,7 +485,7 @@ sp_repr_write_stream (SPRepr *repr, FILE *file, gint indent_level,
     } else if (repr->type() == SP_XML_COMMENT_NODE) {
         fprintf (file, "<!--%s-->", sp_repr_content (repr));
     } else if (repr->type() == SP_XML_ELEMENT_NODE) {
-        sp_repr_write_stream_element(repr, file, indent_level, add_whitespace, elide_prefix, repr->attributes);
+        sp_repr_write_stream_element(repr, file, indent_level, add_whitespace, elide_prefix, repr->attributeList());
     } else {
         g_assert_not_reached();
     }
@@ -498,7 +495,7 @@ void
 sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
                               gboolean add_whitespace,
                               Glib::QueryQuark elide_prefix,
-                              SPReprAttr *attributes)
+                              SPReprAttr const *attributes)
 {
     SPRepr *child;
     gboolean loose;
@@ -516,11 +513,12 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
         }
     }
 
+    GQuark code = repr->code();
     gchar const *element_name;
-    if ( elide_prefix == qname_prefix(repr->name) ) {
-        element_name = qname_local_name(repr->name);
+    if ( elide_prefix == qname_prefix(code) ) {
+        element_name = qname_local_name(code);
     } else {
-        element_name = g_quark_to_string(repr->name);
+        element_name = g_quark_to_string(code);
     }
     fprintf (file, "<%s", element_name);
 
@@ -533,7 +531,7 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
         add_whitespace = FALSE;
     }
 
-    for ( SPReprAttr *attr = attributes ; attr != NULL ; attr = attr->next ) {
+    for ( SPReprAttr const *attr = attributes ; attr != NULL ; attr = attr->next ) {
         gchar const * const key = SP_REPR_ATTRIBUTE_KEY(attr);
         gchar const * const val = SP_REPR_ATTRIBUTE_VALUE(attr);
         fputs ("\n", file);
@@ -546,18 +544,18 @@ sp_repr_write_stream_element (SPRepr * repr, FILE * file, gint indent_level,
     }
 
     loose = TRUE;
-    for (child = repr->children; child != NULL; child = child->next) {
+    for (child = repr->firstChild() ; child != NULL; child = child->next()) {
         if (child->type() == SP_XML_TEXT_NODE) {
             loose = FALSE;
             break;
         }
     }
-    if (repr->children) {
+    if (repr->firstChild()) {
         fputs (">", file);
         if (loose && add_whitespace) {
             fputs ("\n", file);
         }
-        for (child = repr->children; child != NULL; child = child->next) {
+        for (child = repr->firstChild(); child != NULL; child = child->next()) {
             sp_repr_write_stream (child, file, (loose) ? (indent_level + 1) : 0, add_whitespace, elide_prefix);
         }
 

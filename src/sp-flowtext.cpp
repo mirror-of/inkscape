@@ -607,7 +607,7 @@ void convert_to_text(void)
 
     selection->clear();
 
-    SPRepr *parent = SP_OBJECT_REPR(object)->parent;
+    SPRepr *parent = SP_OBJECT_REPR(object)->parent();
     SPRepr *repr = sp_repr_new("svg:text");
     sp_repr_set_attr(repr, "style", sp_repr_attr(SP_OBJECT_REPR(object), "style"));
     sp_repr_append_child(parent, repr);

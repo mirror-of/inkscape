@@ -25,51 +25,71 @@ using Inkscape::Util::reverse_list;
 
 int SPReprAction::_next_serial=0;
 
+void SPReprDoc::beginTransaction() {
+	if (_log->is_logging) {
+		/* FIXME !!! rethink discarding the existing log? */
+		sp_repr_free_log (_log->actions);
+		_log->actions = NULL;
+	} else {
+		_log->is_logging = true;
+	}
+}
+
 void
 sp_repr_begin_transaction (SPReprDoc *doc)
 {
-	if (doc->is_logging) {
-		/* FIXME !!! rethink discarding the existing log? */
-		sp_repr_free_log (doc->log);
-		doc->log = NULL;
-	} else {
-		doc->is_logging = true;
+	g_assert(doc != NULL);
+	doc->beginTransaction();
+}
+
+void SPReprDoc::rollback() {
+	if (_log->is_logging) {
+		_log->is_logging = false;
+		sp_repr_undo_log (_log->actions);
+		sp_repr_free_log (_log->actions);
+		_log->actions = NULL;
 	}
 }
 
 void
 sp_repr_rollback (SPReprDoc *doc)
 {
-	if (doc->is_logging) {
-		doc->is_logging = false;
-		sp_repr_undo_log (doc->log);
-		sp_repr_free_log (doc->log);
-		doc->log = NULL;
+	g_assert(doc != NULL);
+	doc->rollback();
+}
+
+void SPReprDoc::commit() {
+	if (_log->is_logging) {
+		_log->is_logging = false;
+		sp_repr_free_log (_log->actions);
+		_log->actions = NULL;
 	}
 }
 
 void
 sp_repr_commit (SPReprDoc *doc)
 {
-	if (doc->is_logging) {
-		doc->is_logging = false;
-		sp_repr_free_log (doc->log);
-		doc->log = NULL;
+	g_assert(doc != NULL);
+	doc->commit();
+}
+
+SPReprAction *SPReprDoc::commitUndoable() {
+	SPReprAction *log=NULL;
+
+	if (_log->is_logging) {
+		log = _log->actions;
+		_log->actions = NULL;
+		_log->is_logging = false;
 	}
+
+	return log;
 }
 
 SPReprAction *
 sp_repr_commit_undoable (SPReprDoc *doc)
 {
-	SPReprAction *log=NULL;
-
-	if (doc->is_logging) {
-		log = doc->log;
-		doc->log = NULL;
-		doc->is_logging = false;
-	}
-
-	return log;
+	g_assert(doc != NULL);
+	return doc->commitUndoable();
 }
 
 void
@@ -78,7 +98,7 @@ sp_repr_undo_log (SPReprAction *log)
 	SPReprAction *action;
 
 	if (log) {
-		g_assert(!log->repr->doc->is_logging);
+		g_assert(!log->repr->document()->inTransaction());
 	}
 
 	for ( action = log ; action ; action = action->next ) {
@@ -110,7 +130,7 @@ void
 sp_repr_replay_log (SPReprAction *log)
 {
 	if (log) {
-		g_assert(!log->repr->doc->is_logging);
+		g_assert(!log->repr->document()->inTransaction());
 	}
 
 	List<SPReprAction &> reversed(

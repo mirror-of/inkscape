@@ -1179,13 +1179,14 @@ on_tree_select_row_enable_if_indentable ( GtkCTree * tree, GtkCTreeNode * node,
         SPRepr * repr, * prev;
         repr = sp_xmlview_tree_node_get_repr (SP_XMLVIEW_TREE (tree), node);
 
-        if ( repr->parent && repr != repr->parent->children ) {
-            g_assert (repr->parent->children);
+        SPRepr *parent=repr->parent();
+        if ( parent && repr != parent->firstChild() ) {
+            g_assert (parent->firstChild());
 
             // skip to the child just before the current repr
-            for ( prev = repr->parent->children ;
-                  prev && prev->next != repr ;
-                  prev = prev->next );
+            for ( prev = parent->firstChild() ;
+                  prev && prev->next() != repr ;
+                  prev = prev->next() );
 
             if (prev && prev->type() == SP_XML_ELEMENT_NODE) {
                 indentable = TRUE;
@@ -1207,7 +1208,8 @@ on_tree_select_row_enable_if_not_first_child ( GtkCTree * tree,
     SPRepr * repr;
     repr = sp_xmlview_tree_node_get_repr (SP_XMLVIEW_TREE (tree), node);
 
-    if ( repr->parent && repr != repr->parent->children ) {
+    SPRepr *parent=repr->parent();
+    if ( parent && repr != parent->firstChild() ) {
         gtk_widget_set_sensitive (GTK_WIDGET (data), TRUE);
     } else {
         gtk_widget_set_sensitive (GTK_WIDGET (data), FALSE);
@@ -1224,7 +1226,8 @@ on_tree_select_row_enable_if_not_last_child ( GtkCTree * tree,
     SPRepr * repr;
     repr = sp_xmlview_tree_node_get_repr (SP_XMLVIEW_TREE (tree), node);
 
-    if ( repr->parent && repr->parent->parent && repr->next ) {
+    SPRepr *parent=repr->parent();
+    if ( parent && parent->parent() && repr->next() ) {
         gtk_widget_set_sensitive (GTK_WIDGET (data), TRUE);
     } else {
         gtk_widget_set_sensitive (GTK_WIDGET (data), FALSE);
@@ -1527,13 +1530,13 @@ cmd_raise_node (GtkObject * object, gpointer data)
 
     parent = sp_repr_parent (selected_repr);
     g_return_if_fail (parent != NULL);
-    g_return_if_fail (parent->children != selected_repr);
+    g_return_if_fail (parent->firstChild() != selected_repr);
 
     ref = NULL;
-    before = parent->children;
-    while (before && before->next != selected_repr) {
+    before = parent->firstChild() ;
+    while (before && before->next() != selected_repr) {
         ref = before;
-        before = before->next;
+        before = before->next();
     }
 
     sp_repr_change_order (parent, selected_repr, ref);
@@ -1551,10 +1554,10 @@ cmd_lower_node (GtkObject * object, gpointer data)
 {
     SPRepr * parent;
     g_assert (selected_repr != NULL);
-    g_return_if_fail (selected_repr->next != NULL);
+    g_return_if_fail (selected_repr->next() != NULL);
     parent = sp_repr_parent (selected_repr);
 
-    sp_repr_change_order (parent, selected_repr, selected_repr->next);
+    sp_repr_change_order (parent, selected_repr, selected_repr->next());
 
     sp_document_done (current_document);
 
@@ -1574,17 +1577,17 @@ cmd_indent_node (GtkObject * object, gpointer data)
     g_assert (repr != NULL);
     parent = sp_repr_parent (repr);
     g_return_if_fail (parent != NULL);
-    g_return_if_fail (parent->children != repr);
+    g_return_if_fail (parent->firstChild() != repr);
 
-    prev = parent->children;
-    while (prev && prev->next != repr) {
-        prev = prev->next;
+    prev = parent->firstChild();
+    while (prev && prev->next() != repr) {
+        prev = prev->next();
     }
     g_return_if_fail (prev != NULL);
     g_return_if_fail (prev->type() == SP_XML_ELEMENT_NODE);
 
-    if (prev->children) {
-        for ( ref = prev->children ; ref->next ; ref = ref->next );
+    if (prev->firstChild()) {
+        for ( ref = prev->firstChild() ; ref->next() ; ref = ref->next() );
     } else {
         ref = NULL;
     }
