@@ -61,7 +61,7 @@ Shape::ForceToPolygon (void)
 }
 
 int
-Shape::Reoriente (Shape * a)
+Shape::Reoriente (Shape *a)
 {
   Reset (0, 0);
   if (a->pts.size() <= 1 || a->aretes.size() <= 1)
@@ -108,24 +108,24 @@ Shape::Reoriente (Shape * a)
       swdData[i].leW %= 2;
       swdData[i].riW %= 2;
       if (swdData[i].leW < 0)
-	swdData[i].leW = -swdData[i].leW;
+        swdData[i].leW = -swdData[i].leW;
       if (swdData[i].riW < 0)
-	swdData[i].riW = -swdData[i].riW;
+        swdData[i].riW = -swdData[i].riW;
       if (swdData[i].leW > 0 && swdData[i].riW <= 0)
-	{
-	  eData[i].weight = 1;
-	}
+        {
+          eData[i].weight = 1;
+        }
       else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
-	{
-	  Inverse (i);
-	  eData[i].weight = 1;
-	}
+        {
+          Inverse (i);
+          eData[i].weight = 1;
+        }
       else
-	{
-	  eData[i].weight = 0;
-	  SubEdge (i);
-	  i--;
-	}
+        {
+          eData[i].weight = 0;
+          SubEdge (i);
+          i--;
+        }
     }
 
   MakePointData (false);
@@ -181,17 +181,17 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     {
       a->eData[i].rdx =
 	a->pData[a->aretes[i].en].rx - a->pData[a->aretes[i].st].rx;
-	a->eData[i].length = dot(a->eData[i].rdx,a->eData[i].rdx);
+      a->eData[i].length = dot(a->eData[i].rdx,a->eData[i].rdx);
       a->eData[i].ilength = 1 / a->eData[i].length;
       a->eData[i].sqlength = sqrt (a->eData[i].length);
       a->eData[i].isqlength = 1 / a->eData[i].sqlength;
       a->eData[i].siEd = a->eData[i].rdx[1] * a->eData[i].isqlength;
       a->eData[i].coEd = a->eData[i].rdx[0] * a->eData[i].isqlength;
       if (a->eData[i].siEd < 0)
-	{
-	  a->eData[i].siEd = -a->eData[i].siEd;
-	  a->eData[i].coEd = -a->eData[i].coEd;
-	}
+        {
+          a->eData[i].siEd = -a->eData[i].siEd;
+          a->eData[i].coEd = -a->eData[i].coEd;
+        }
 
       a->swsData[i].misc = NULL;
       a->swsData[i].firstLinkedPoint = -1;
@@ -229,8 +229,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       int nPt = -1;
       Shape *ptSh = NULL;
       bool isIntersection = false;
-      if (SweepEvent::
-	  PeekInQueue (intersL, intersR, ptX, ptL, ptR, sEvts))
+      if (SweepEvent::PeekInQueue (intersL, intersR, ptX, ptL, ptR, sEvts))
 	{
 	  if (a->pData[curAPt].pending > 0
 	      || (a->pData[curAPt].rx[1] > ptX[1]
@@ -325,18 +324,18 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
 	  for (int i = lastChgtPt; i < lastI; i++) {
 	    if (pData[i].askForWindingS) {
-		    Shape *windS = pData[i].askForWindingS;
-		    int windB = pData[i].askForWindingB;
-		    pData[i].nextLinkedPoint = windS->swsData[windB].firstLinkedPoint;
-		    windS->swsData[windB].firstLinkedPoint = i;
-		  }
-	   }
+              Shape *windS = pData[i].askForWindingS;
+              int windB = pData[i].askForWindingB;
+              pData[i].nextLinkedPoint = windS->swsData[windB].firstLinkedPoint;
+              windS->swsData[windB].firstLinkedPoint = i;
+            }
+          }
 
 	  pts.resize(lastI + 1);
 	  _resizeAuxVectors();
-    if (lastI < lastPointNo) {
-	   pts[lastI] = pts[lastPointNo];
-	   pData[lastI] = pData[lastPointNo];
+          if (lastI < lastPointNo) {
+            pts[lastI] = pts[lastPointNo];
+            pData[lastI] = pData[lastPointNo];
 	  }
 	  lastPointNo = lastI;
 
@@ -415,10 +414,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 			{
 			  SweepTree *node =
 			    (SweepTree *) ptSh->swsData[cb].misc;
-			  if (node == NULL)
-			    {
-			    }
-			  else
+			  if (node != NULL)
 			    {
 			      AddChgt (lastPointNo, lastChgtPt, shapeHead,
 				       edgeHead, 1, node->src, node->bord,
@@ -966,10 +962,10 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
       b->eData[i].siEd = b->eData[i].rdx[1] * b->eData[i].isqlength;
       b->eData[i].coEd = b->eData[i].rdx[0] * b->eData[i].isqlength;
       if (b->eData[i].siEd < 0)
-      {
-        b->eData[i].siEd = -b->eData[i].siEd;
-        b->eData[i].coEd = -b->eData[i].coEd;
-      }
+        {
+          b->eData[i].siEd = -b->eData[i].siEd;
+          b->eData[i].coEd = -b->eData[i].coEd;
+        }
       b->swsData[i].misc = NULL;
       b->swsData[i].firstLinkedPoint = -1;
       b->swsData[i].stPt = b->swsData[i].enPt = -1;
@@ -986,9 +982,10 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   chgts = NULL;
   nbChgt = maxChgt = 0;
 
-  double lastChange =
-    (a->pData[0].rx[1] <
-     b->pData[0].rx[1]) ? a->pData[0].rx[1] - 1.0 : b->pData[0].rx[1] - 1.0;
+  double lastChange = ((a->pData[0].rx[1] <
+                        b->pData[0].rx[1]  )
+                       ? a->pData[0].rx[1] - 1.0
+                       : b->pData[0].rx[1] - 1.0);
   int lastChgtPt = 0;
   int edgeHead = -1;
   Shape *shapeHead = NULL;
@@ -1001,20 +998,20 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 
   while (curAPt < a->pts.size() || curBPt < b->pts.size() || sEvts.nbEvt > 0)
     {
-/*		for (int i=0;i<sEvts.nbEvt;i++) {
+      /*		for (int i=0;i<sEvts.nbEvt;i++) {
 			printf("%f %f %i %i\n",sEvts.events[i].posx,sEvts.events[i].posy,sEvts.events[i].leftSweep->bord,sEvts.events[i].rightSweep->bord); // localizing ok
-		}
-		//		cout << endl;
-		if ( sTree.racine ) {
+                        }
+                        //		cout << endl;
+                        if ( sTree.racine ) {
 			SweepTree*  ct=static_cast <SweepTree*> (sTree.racine->Leftmost());
 			while ( ct ) {
-				printf("%i %i [%i\n",ct->bord,ct->startPoint,(ct->src==a)?1:0);
-				ct=static_cast <SweepTree*> (ct->rightElem);
+                        printf("%i %i [%i\n",ct->bord,ct->startPoint,(ct->src==a)?1:0);
+                        ct=static_cast <SweepTree*> (ct->rightElem);
 			}
-		}
-		printf("\n");*/
+                        }
+                        printf("\n");*/
 
-    NR::Point ptX;
+      NR::Point ptX;
       double ptL, ptR;
       SweepTree *intersL = NULL;
       SweepTree *intersR = NULL;
@@ -1022,8 +1019,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
       Shape *ptSh = NULL;
       bool isIntersection = false;
 
-      if (SweepEvent::
-	  PeekInQueue (intersL, intersR, ptX, ptL, ptR, sEvts))
+      if (SweepEvent::PeekInQueue (intersL, intersR, ptX, ptL, ptR, sEvts))
 	{
 	  if (curAPt < a->pts.size())
 	    {
@@ -1157,7 +1153,6 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	{
 	  int lastI = AssemblePoints (lastChgtPt, lastPointNo);
 
-
 	  Shape *curSh = shapeHead;
 	  int curBo = edgeHead;
 	  while (curSh)
@@ -1290,7 +1285,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	      upNo = -1;
 	    }
 
-//                      upNo=-1;
+          //                      upNo=-1;
 
 	  bool doWinding = true;
 
@@ -1346,7 +1341,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 				  SweepTree *onLeft =
 				    (SweepTree *) onLeftS->swsData[onLeftB].
 				    misc;
-//                                                                      SweepTree* onRight=(SweepTree*)onRightS->swsData[onRightB].misc;
+                                  //                                                                      SweepTree* onRight=(SweepTree*)onRightS->swsData[onRightB].misc;
 				  if (onLeftS == ptSh
 				      && (onLeftS->aretes[onLeftB].en == nPt
 					  || onLeftS->aretes[onLeftB].st ==
@@ -1452,7 +1447,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 			    SweepTree::AddInList (ptSh, cb, 1, lastPointNo,
 						  sTree, this);
 			  ptSh->swsData[cb].misc = node;
-//                                                      node->Insert(sTree,sEvts,this,lastPointNo,true);
+                          //                                                      node->Insert(sTree,sEvts,this,lastPointNo,true);
 			  node->InsertAt (sTree, sEvts, this, insertionNode,
 					  nPt, true);
 
@@ -1564,11 +1559,11 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   nbChgt = maxChgt = 0;
 
 
-//      MakeAretes(a,true);
-/*	if ( mod == bool_op_diff || mod == bool_op_symdiff ) {
-		MakeAretes(b,false);
+  //      MakeAretes(a,true);
+  /*	if ( mod == bool_op_diff || mod == bool_op_symdiff ) {
+        MakeAretes(b,false);
 	} else {
-		MakeAretes(b,true);
+        MakeAretes(b,true);
 	}*/
 
   if (iData)
@@ -1576,7 +1571,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   iData = NULL;
   nbInc = maxInc = 0;
 
-//      Plot(190,70,6,400,400,true,false,true,true);
+  //      Plot(190,70,6,400,400,true,false,true,true);
 
   if ( mod == bool_op_cut ) {
     AssembleAretes (fill_justDont);
@@ -1618,130 +1613,130 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   } else {
     GetWindings (a, b, mod, false);
   }
-//      Plot(190,70,6,400,400,true,true,true,true);
+  //      Plot(190,70,6,400,400,true,true,true,true);
 
   if (mod == bool_op_symdiff)
-  {
-    for (unsigned i = 0; i < aretes.size(); i++)
     {
-      swdData[i].leW = swdData[i].leW % 2;
-      if (swdData[i].leW < 0)
-        swdData[i].leW = -swdData[i].leW;
-      swdData[i].riW = swdData[i].riW;
-      if (swdData[i].riW < 0)
-        swdData[i].riW = -swdData[i].riW;
+      for (unsigned i = 0; i < aretes.size(); i++)
+        {
+          swdData[i].leW = swdData[i].leW % 2;
+          if (swdData[i].leW < 0)
+            swdData[i].leW = -swdData[i].leW;
+          swdData[i].riW = swdData[i].riW;
+          if (swdData[i].riW < 0)
+            swdData[i].riW = -swdData[i].riW;
       
-      if (swdData[i].leW > 0 && swdData[i].riW <= 0)
-	    {
-	      eData[i].weight = 1;
-	    }
-      else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
-	    {
-	      Inverse (i);
-	      eData[i].weight = 1;
-	    }
-      else
-	    {
-	      eData[i].weight = 0;
-	      SubEdge (i);
-	      i--;
-	    }
+          if (swdData[i].leW > 0 && swdData[i].riW <= 0)
+            {
+              eData[i].weight = 1;
+            }
+          else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
+            {
+              Inverse (i);
+              eData[i].weight = 1;
+            }
+          else
+            {
+              eData[i].weight = 0;
+              SubEdge (i);
+              i--;
+            }
+        }
     }
-  }
   else if (mod == bool_op_union || mod == bool_op_diff)
-  {
-    for (unsigned i = 0; i < aretes.size(); i++)
     {
-      if (swdData[i].leW > 0 && swdData[i].riW <= 0)
-	    {
-	      eData[i].weight = 1;
-	    }
-      else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
-	    {
-	      Inverse (i);
-	      eData[i].weight = 1;
-	    }
-      else
-	    {
-	      eData[i].weight = 0;
-	      SubEdge (i);
-	      i--;
-	    }
+      for (unsigned i = 0; i < aretes.size(); i++)
+        {
+          if (swdData[i].leW > 0 && swdData[i].riW <= 0)
+            {
+              eData[i].weight = 1;
+            }
+          else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
+            {
+              Inverse (i);
+              eData[i].weight = 1;
+            }
+          else
+            {
+              eData[i].weight = 0;
+              SubEdge (i);
+              i--;
+            }
+        }
     }
-  }
   else if (mod == bool_op_inters)
-  {
-    for (unsigned i = 0; i < aretes.size(); i++)
     {
-      if (swdData[i].leW > 1 && swdData[i].riW <= 1)
-	    {
-	      eData[i].weight = 1;
-	    }
-      else if (swdData[i].leW <= 1 && swdData[i].riW > 1)
-	    {
-	      Inverse (i);
-	      eData[i].weight = 1;
-	    }
-      else
-	    {
-	      eData[i].weight = 0;
-	      SubEdge (i);
-	      i--;
-	    }
-    }
-  } else if ( mod == bool_op_cut ) {
-    // inverser les aretes de la coupe au besoin
-    for (unsigned i=0;i<aretes.size();i++) {
-      if ( aretes[i].st < 0 || aretes[i].en < 0 ) {
-        if ( i < aretes.size()-1 ) {
-          // decaler les askForWinding
-          int cp = swsData[aretes.size()-1].firstLinkedPoint;
-          while (cp >= 0) {
-            pData[cp].askForWindingB = i;
-            cp = pData[cp].nextLinkedPoint;
+      for (unsigned i = 0; i < aretes.size(); i++)
+        {
+          if (swdData[i].leW > 1 && swdData[i].riW <= 1)
+            {
+              eData[i].weight = 1;
+            }
+          else if (swdData[i].leW <= 1 && swdData[i].riW > 1)
+            {
+              Inverse (i);
+              eData[i].weight = 1;
+            }
+          else
+            {
+              eData[i].weight = 0;
+              SubEdge (i);
+              i--;
+            }
+        }
+    } else if ( mod == bool_op_cut ) {
+      // inverser les aretes de la coupe au besoin
+      for (unsigned i=0;i<aretes.size();i++) {
+        if ( aretes[i].st < 0 || aretes[i].en < 0 ) {
+          if ( i < aretes.size()-1 ) {
+            // decaler les askForWinding
+            int cp = swsData[aretes.size()-1].firstLinkedPoint;
+            while (cp >= 0) {
+              pData[cp].askForWindingB = i;
+              cp = pData[cp].nextLinkedPoint;
+            }
+          }
+          SwapEdges(i,aretes.size()-1);
+          SubEdge(aretes.size()-1);
+          //        SubEdge(i);
+          i--;
+        } else if ( ebData[i].pathID == cutPathID ) {
+          swdData[i].leW=swdData[i].leW%2;
+          swdData[i].riW=swdData[i].riW%2;
+          if ( swdData[i].leW < swdData[i].riW ) {
+            Inverse(i);
           }
         }
-        SwapEdges(i,aretes.size()-1);
-        SubEdge(aretes.size()-1);
-//        SubEdge(i);
-        i--;
-      } else if ( ebData[i].pathID == cutPathID ) {
-        swdData[i].leW=swdData[i].leW%2;
-        swdData[i].riW=swdData[i].riW%2;
-        if ( swdData[i].leW < swdData[i].riW ) {
-          Inverse(i);
+      }
+    } else if ( mod == bool_op_slice ) {
+      // supprimer les aretes de la coupe
+      for (unsigned i = aretes.size(); i--;) {
+        if ( ebData[i].pathID == cutPathID || aretes[i].st < 0 || aretes[i].en < 0 ) {
+          SubEdge(i);
         }
       }
     }
-  } else if ( mod == bool_op_slice ) {
-    // supprimer les aretes de la coupe
-    for (unsigned i = aretes.size(); i--;) {
-      if ( ebData[i].pathID == cutPathID || aretes[i].st < 0 || aretes[i].en < 0 ) {
-        SubEdge(i);
-      }
-    }
-  }
   else
-  {
-    for (unsigned i = 0; i < aretes.size(); i++)
     {
-      if (swdData[i].leW > 0 && swdData[i].riW <= 0)
-	    {
-	      eData[i].weight = 1;
-	    }
-      else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
-	    {
-	      Inverse (i);
-	      eData[i].weight = 1;
-	    }
-      else
-	    {
-	      eData[i].weight = 0;
-	      SubEdge (i);
-	      i--;
-	    }
+      for (unsigned i = 0; i < aretes.size(); i++)
+        {
+          if (swdData[i].leW > 0 && swdData[i].riW <= 0)
+            {
+              eData[i].weight = 1;
+            }
+          else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
+            {
+              Inverse (i);
+              eData[i].weight = 1;
+            }
+          else
+            {
+              eData[i].weight = 0;
+              SubEdge (i);
+              i--;
+            }
+        }
     }
-  }
   
   if (GetFlag (has_sweep_data))
     {
@@ -1762,7 +1757,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 
   if (Eulerian (true) == false)
     {
-//              printf( "pas euclidian2");
+      //              printf( "pas euclidian2");
       Reset(0, 0);
       return shape_euler_err;
     }
@@ -1779,8 +1774,8 @@ Shape::TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff)
       SweepTree *tL = static_cast < SweepTree * >(t->leftElem);
       if (tL)
 	{
-        NR::Point atx;
-        double     atl, atr;
+          NR::Point atx;
+          double     atl, atr;
 	  if (TesteIntersection (tL, t, atx, atl, atr, onlyDiff))
 	    {
 	      SweepEvent::AddInQueue (tL, t, atx, atl, atr, sEvts);
@@ -1792,7 +1787,7 @@ Shape::TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff)
       SweepTree *tR = static_cast < SweepTree * >(t->rightElem);
       if (tR)
 	{
-        NR::Point  atx;
+          NR::Point  atx;
 	  double atl, atr;
 	  if (TesteIntersection (t, tR, atx, atl, atr, onlyDiff))
 	    {
@@ -1801,6 +1796,7 @@ Shape::TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff)
 	}
     }
 }
+
 // a crucial piece of code: computing intersections between segments
 bool
 Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, double &atL, double &atR, bool onlyDiff)
@@ -1869,10 +1865,10 @@ Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, double
     }
 
   double ang = cross (rdir, ldir);
-//      ang*=iL->src->eData[iL->bord].isqlength;
-//      ang*=iR->src->eData[iR->bord].isqlength;
+  //      ang*=iL->src->eData[iL->bord].isqlength;
+  //      ang*=iR->src->eData[iR->bord].isqlength;
   if (ang <= 0) return false;		// edges in opposite directions:  <-left  ... right ->
-                                // they can't intersect
+  // they can't intersect
 
   // d'abord tester les bords qui partent d'un meme point
   if (iL->src == iR->src && lSt == rSt)
@@ -2082,7 +2078,7 @@ Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, double
 	return false;
       }
 
-/*		double  slb=slDot-elDot,srb=srDot-erDot;
+    /*		double  slb=slDot-elDot,srb=srDot-erDot;
 		if ( slb < 0 ) slb=-slb;
 		if ( srb < 0 ) srb=-srb;*/
     if (iL->src->eData[iL->bord].siEd > iR->src->eData[iR->bord].siEd)
@@ -2245,47 +2241,47 @@ int
 Shape::AssemblePoints (int const st, int const en)
 {
   if (en > st) {
-   for (int i = st; i < en; i++) pData[i].oldInd = i;
-//              SortPoints(st,en-1);
+    for (int i = st; i < en; i++) pData[i].oldInd = i;
+    //              SortPoints(st,en-1);
     SortPointsByOldInd (st, en - 1); // SortPointsByOldInd() is required here, because of the edges we have
-                                       // associated with the point for later computation of winding numbers.
-                                       // specifically, we need the first point we treated, it's the only one with a valid
-                                       // associated edge (man, that was a nice bug).
-     for (int i = st; i < en; i++) pData[pData[i].oldInd].newInd = i;
+    // associated with the point for later computation of winding numbers.
+    // specifically, we need the first point we treated, it's the only one with a valid
+    // associated edge (man, that was a nice bug).
+    for (int i = st; i < en; i++) pData[pData[i].oldInd].newInd = i;
 
-     int lastI = st;
-     for (int i = st; i < en; i++) {
-	      pData[i].pending = lastI++;
-	      if (i > st && pts[i - 1].x[0] == pts[i].x[0] && pts[i - 1].x[1] == pts[i].x[1]) {
-	        pData[i].pending = pData[i - 1].pending;
-	        if (pData[pData[i].pending].askForWindingS == NULL) {
-		        pData[pData[i].pending].askForWindingS = pData[i].askForWindingS;
-		        pData[pData[i].pending].askForWindingB = pData[i].askForWindingB;
-		      } else {
-		        if (pData[pData[i].pending].askForWindingS == pData[i].askForWindingS
-		      && pData[pData[i].pending].askForWindingB == pData[i].askForWindingB) {
-		      // meme bord, c bon
-		        } else {
-		      // meme point, mais pas le meme bord: ouille!
-		      // il faut prendre le bord le plus a gauche
-		      // en pratique, n'arrive que si 2 maxima sont dans la meme case -> le mauvais choix prend une arete incidente 
-		      // au bon choix
-//                                              printf("doh");
-		        }
-		      }
-	        lastI--;
-	      } else {
-	        if (i > pData[i].pending) {
-		        pts[pData[i].pending].x = pts[i].x;
-		        pData[pData[i].pending].rx = pts[i].x;
-		        pData[pData[i].pending].askForWindingS = pData[i].askForWindingS;
-		        pData[pData[i].pending].askForWindingB = pData[i].askForWindingB;
-		      }
-	      }
-	    }
-      for (int i = st; i < en; i++) pData[i].newInd = pData[pData[i].newInd].pending;
-      g_assert(st <= lastI);
-      return lastI;
+    int lastI = st;
+    for (int i = st; i < en; i++) {
+      pData[i].pending = lastI++;
+      if (i > st && pts[i - 1].x[0] == pts[i].x[0] && pts[i - 1].x[1] == pts[i].x[1]) {
+        pData[i].pending = pData[i - 1].pending;
+        if (pData[pData[i].pending].askForWindingS == NULL) {
+          pData[pData[i].pending].askForWindingS = pData[i].askForWindingS;
+          pData[pData[i].pending].askForWindingB = pData[i].askForWindingB;
+        } else {
+          if (pData[pData[i].pending].askForWindingS == pData[i].askForWindingS
+              && pData[pData[i].pending].askForWindingB == pData[i].askForWindingB) {
+            // meme bord, c bon
+          } else {
+            // meme point, mais pas le meme bord: ouille!
+            // il faut prendre le bord le plus a gauche
+            // en pratique, n'arrive que si 2 maxima sont dans la meme case -> le mauvais choix prend une arete incidente 
+            // au bon choix
+            //                                              printf("doh");
+          }
+        }
+        lastI--;
+      } else {
+        if (i > pData[i].pending) {
+          pts[pData[i].pending].x = pts[i].x;
+          pData[pData[i].pending].rx = pts[i].x;
+          pData[pData[i].pending].askForWindingS = pData[i].askForWindingS;
+          pData[pData[i].pending].askForWindingB = pData[i].askForWindingB;
+        }
+      }
+    }
+    for (int i = st; i < en; i++) pData[i].newInd = pData[pData[i].newInd].pending;
+    g_assert(st <= lastI);
+    return lastI;
   }
   return en;
 }
@@ -2309,6 +2305,7 @@ Shape::AssemblePoints (Shape * a)
       _resizeAuxVectors();
     }
 }
+
 void
 Shape::AssembleAretes (FillRule directed)
 {
@@ -2340,7 +2337,6 @@ Shape::AssembleAretes (FillRule directed)
           }
         }
         if ( doublon ) eData[cc].weight = 0;
-      } else {
       }
       if ( doublon ) {
         if (aretes[cb].st == aretes[cc].st) {
@@ -2348,9 +2344,9 @@ Shape::AssembleAretes (FillRule directed)
         } else {
           eData[cb].weight -= eData[cc].weight;
         }
- 	      eData[cc].weight = 0;
+        eData[cc].weight = 0;
         
-	      if (swsData[cc].firstLinkedPoint >= 0) {
+        if (swsData[cc].firstLinkedPoint >= 0) {
           int cp = swsData[cc].firstLinkedPoint;
           while (cp >= 0) {
             pData[cp].askForWindingB = cb;
@@ -2367,30 +2363,30 @@ Shape::AssembleAretes (FillRule directed)
           }
         }
         
-	      DisconnectStart (cc);
-	      DisconnectEnd (cc);
-	      if (aretes.size() > 1) {
+        DisconnectStart (cc);
+        DisconnectEnd (cc);
+        if (aretes.size() > 1) {
           int cp = swsData[aretes.size() - 1].firstLinkedPoint;
           while (cp >= 0) {
             pData[cp].askForWindingB = cc;
             cp = pData[cp].nextLinkedPoint;
           }
         }
-	      SwapEdges (cc, aretes.size() - 1);
-	      if (cb == aretes.size() - 1) {
+        SwapEdges (cc, aretes.size() - 1);
+        if (cb == aretes.size() - 1) {
           cb = cc;
         }
-	      aretes.pop_back();
-	      _resizeAuxVectors();
-	    }
+        aretes.pop_back();
+        _resizeAuxVectors();
+      }
     } else {
       int cb;
       cb = pts[i].firstA;
       while (cb >= 0 && cb < aretes.size()) {
-	      int other = Other (i, cb);
-	      int cc;
-	      cc = pts[i].firstA;
-	      while (cc >= 0 && cc < aretes.size()) {
+        int other = Other (i, cb);
+        int cc;
+        cc = pts[i].firstA;
+        while (cc >= 0 && cc < aretes.size()) {
           int ncc = NextAt (i, cc);
           bool  doublon=false;
           if (cc != cb && Other (i, cc) == other ) doublon=true;
@@ -2412,7 +2408,7 @@ Shape::AssembleAretes (FillRule directed)
           } else {
           }
           if ( doublon ) {
-//            if (cc != cb && Other (i, cc) == other) {
+            //            if (cc != cb && Other (i, cc) == other) {
             // doublon
             if (aretes[cb].st == aretes[cc].st) {
               eData[cb].weight += eData[cc].weight;
@@ -2454,21 +2450,21 @@ Shape::AssembleAretes (FillRule directed)
             if (ncc == aretes.size() - 1) {
               ncc = cc;
             }
-	    aretes.pop_back();
-	    _resizeAuxVectors();
+            aretes.pop_back();
+            _resizeAuxVectors();
           }
           cc = ncc;
         }
-	      cb = NextAt (i, cb);
-	    }
+        cb = NextAt (i, cb);
+      }
     }
   }
   
   if ( directed == fill_justDont ) {
     for (unsigned i = 0; i < aretes.size(); i++)  {
       if (eData[i].weight == 0) {
-//        SubEdge(i);
- //       i--;
+        //        SubEdge(i);
+        //       i--;
       } else {
         if (eData[i].weight < 0) Inverse (i);
       }
@@ -2484,6 +2480,7 @@ Shape::AssembleAretes (FillRule directed)
     }
   }
 }
+
 void
 Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 {
@@ -2533,17 +2530,17 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 			outsideW = Winding (fi);
 		      }
 		  }
-    if ( pts[fi].dI+pts[fi].dO == 1 ) {
-      if ( fi == aretes[startBord].en ) {
-        if ( eData[startBord].weight == 0 ) {
-          // on se contente d'inverser
-          Inverse(startBord);
-        } else {
-          // on passe le askForWinding (sinon ca va rester startBord)
-          pData[aretes[startBord].st].askForWindingB=pData[aretes[startBord].en].askForWindingB;
-        }
-      }
-    }
+                if ( pts[fi].dI+pts[fi].dO == 1 ) {
+                  if ( fi == aretes[startBord].en ) {
+                    if ( eData[startBord].weight == 0 ) {
+                      // on se contente d'inverser
+                      Inverse(startBord);
+                    } else {
+                      // on passe le askForWinding (sinon ca va rester startBord)
+                      pData[aretes[startBord].st].askForWindingB=pData[aretes[startBord].en].askForWindingB;
+                    }
+                  }
+                }
 		if (aretes[startBord].en == fi)
 		  outsideW += eData[startBord].weight;
 	      }
@@ -2555,7 +2552,7 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 	  swdData[startBord].misc = (void *) 1;
 	  swdData[startBord].leW = outsideW;
 	  swdData[startBord].riW = outsideW - eData[startBord].weight;
-//    if ( doDebug ) printf("part de %d\n",startBord);
+          //    if ( doDebug ) printf("part de %d\n",startBord);
 	  int curBord = startBord;
 	  bool curDir = true;
 	  swdData[curBord].precParc = -1;
@@ -2568,7 +2565,7 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 	      else
 		cPt = aretes[curBord].st;
 	      int nb = curBord;
-//        if ( doDebug ) printf("de curBord= %d avec leF= %d et riF= %d  -> ",curBord,swdData[curBord].leW,swdData[curBord].riW);
+              //        if ( doDebug ) printf("de curBord= %d avec leF= %d et riF= %d  -> ",curBord,swdData[curBord].leW,swdData[curBord].riW);
 	      do
 		{
 		  int nnb = -1;
@@ -2600,7 +2597,7 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 		  else
 		    oPt = aretes[curBord].en;
 		  curBord = swdData[curBord].precParc;
-//    if ( doDebug ) printf("retour vers %d\n",curBord);
+                  //    if ( doDebug ) printf("retour vers %d\n",curBord);
 		  if (curBord < 0)
 		    break;
 		  if (oPt == aretes[curBord].en)
@@ -2625,7 +2622,7 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 		  swdData[nb].precParc = curBord;
 		  swdData[curBord].suivParc = nb;
 		  curBord = nb;
-//		  if ( doDebug ) printf("suite %d\n",curBord);
+                  //		  if ( doDebug ) printf("suite %d\n",curBord);
 		  if (cPt == aretes[nb].en)
 		    curDir = false;
 		  else
@@ -2637,7 +2634,7 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 	}
     }
   while (lastPtUsed < pts.size());
-//      fflush(stdout);
+  //      fflush(stdout);
 }
 
 bool
@@ -2760,7 +2757,7 @@ Shape::TesteIntersection (Shape * ils, Shape * irs, int ilb, int irb,
       atL = sDot / (sDot - eDot);
 
       sDiff = irs->pData[rSt].rx - ils->pData[lSt].rx;
-       eDiff = irs->pData[rEn].rx - ils->pData[lSt].rx;
+      eDiff = irs->pData[rEn].rx - ils->pData[lSt].rx;
       sDot = cross (sDiff,ldir );
       eDot = cross (eDiff,ldir );
 
@@ -2853,7 +2850,7 @@ Shape::TesteAdjacency (Shape * a, int no, const NR::Point atx, int nPt,
 }
 
 void
-Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * shapeHead,
+Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape *shapeHead,
 			 int edgeHead)
 {
   for (int cCh = 0; cCh < nbChgt; cCh++)
@@ -2870,7 +2867,7 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * shapeHead,
 	    chLeN = lftN;
 	  if (rgtN > chRiN)
 	    chRiN = rgtN;
-//                      for (int n=lftN;n<=rgtN;n++) CreateIncidence(lS,lB,n);
+          //                      for (int n=lftN;n<=rgtN;n++) CreateIncidence(lS,lB,n);
 	  for (int n = lftN - 1; n >= lastChgtPt; n--)
 	    {
 	      if (TesteAdjacency (lS, lB, pts[n].x, n, false) ==
@@ -2896,7 +2893,7 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * shapeHead,
 	    chLeN = lftN;
 	  if (rgtN > chRiN)
 	    chRiN = rgtN;
-//                      for (int n=lftN;n<=rgtN;n++) CreateIncidence(rS,rB,n);
+          //                      for (int n=lftN;n<=rgtN;n++) CreateIncidence(rS,rB,n);
 	  for (int n = lftN - 1; n >= lastChgtPt; n--)
 	    {
 	      if (TesteAdjacency (rS, rB, pts[n].x, n, false) ==
@@ -3053,7 +3050,7 @@ Shape::CheckAdjacencies (int lastPointNo, int lastChgtPt, Shape * shapeHead,
 
 void
 Shape::AddChgt (int lastPointNo, int lastChgtPt, Shape * &shapeHead,
-		int &edgeHead, int type, Shape * lS, int lB, Shape * rS,
+		int &edgeHead, int type, Shape *lS, int lB, Shape *rS,
 		int rB)
 {
   if (nbChgt >= maxChgt)
@@ -3182,11 +3179,14 @@ Shape::Validate (void)
     {
       for (unsigned j = i + 1; j < aretes.size(); j++)
 	{
-        NR::Point atx;
-        double   atL, atR;
+          NR::Point atx;
+          double   atL, atR;
 	  if (TesteIntersection (this, this, i, j, atx, atL, atR, false))
 	    {
-	      printf ("%i %i  %f %f di=%f %f  dj=%f %f\n", i, j, atx[0],atx[1],aretes[i].dx[0],aretes[i].dx[1],aretes[j].dx[0],aretes[j].dx[1]);
+	      printf ("%u %u  %f %f di=%f %f  dj=%f %f\n",
+                      i, j, atx[0],atx[1],
+                      aretes[i].dx[0], aretes[i].dx[1],
+                      aretes[j].dx[0], aretes[j].dx[1]);
 	    }
 	}
     }
@@ -3194,7 +3194,7 @@ Shape::Validate (void)
 }
 
 void
-Shape::CheckEdges (int lastPointNo, int lastChgtPt, Shape * a, Shape * b,
+Shape::CheckEdges (int lastPointNo, int lastChgtPt, Shape *a, Shape *b,
 		   BooleanOp mod)
 {
 
@@ -3209,8 +3209,8 @@ Shape::CheckEdges (int lastPointNo, int lastChgtPt, Shape * a, Shape * b,
     }
   for (int cCh = 0; cCh < nbChgt; cCh++)
     {
-//              int   chLeN=chgts[cCh].ptNo;
-//              int   chRiN=chgts[cCh].ptNo;
+      //              int   chLeN=chgts[cCh].ptNo;
+      //              int   chRiN=chgts[cCh].ptNo;
       if (chgts[cCh].src)
 	{
 	  Shape *lS = chgts[cCh].src;
@@ -3267,12 +3267,12 @@ Shape::CheckEdges (int lastPointNo, int lastChgtPt, Shape * a, Shape * b,
 }
 
 void
-Shape::Avance (int lastPointNo, int lastChgtPt, Shape * lS, int lB, Shape * a,
+Shape::Avance (int lastPointNo, int lastChgtPt, Shape *lS, int lB, Shape *a,
 	       Shape * b, BooleanOp mod)
 {
   double dd = HalfRound (1);
   bool avoidDiag = false;
-//      if ( lastChgtPt > 0 && pts[lastChgtPt-1].y+dd == pts[lastChgtPt].y ) avoidDiag=true;
+  //      if ( lastChgtPt > 0 && pts[lastChgtPt-1].y+dd == pts[lastChgtPt].y ) avoidDiag=true;
 
   bool direct = true;
   if (lS == b && (mod == bool_op_diff || mod == bool_op_symdiff))
@@ -3416,7 +3416,7 @@ Shape::Avance (int lastPointNo, int lastChgtPt, Shape * lS, int lB, Shape * a,
 }
 
 void
-Shape::DoEdgeTo (Shape * iS, int iB, int iTo, bool direct, bool sens)
+Shape::DoEdgeTo (Shape *iS, int iB, int iTo, bool direct, bool sens)
 {
   int lp = iS->swsData[iB].curPoint;
   int ne = -1;
@@ -3445,12 +3445,12 @@ Shape::DoEdgeTo (Shape * iS, int iB, int iTo, bool direct, bool sens)
       else
 	{
 	  double bdl = iS->eData[iB].ilength;
-    NR::Point bpx = iS->pData[iS->aretes[iB].st].rx;
+          NR::Point bpx = iS->pData[iS->aretes[iB].st].rx;
 	  NR::Point bdx = iS->eData[iB].rdx;
 	  NR::Point psx = pts[aretes[ne].st].x;
 	  NR::Point pex = pts[aretes[ne].en].x;
-        NR::Point psbx=psx-bpx;
-        NR::Point pebx=pex-bpx;
+          NR::Point psbx=psx-bpx;
+          NR::Point pebx=pex-bpx;
 	  double pst = dot(psbx,bdx) * bdl;
 	  double pet = dot(pebx,bdx) * bdl;
 	  pst = iS->ebData[iB].tSt * (1 - pst) + iS->ebData[iB].tEn * pst;
@@ -3472,3 +3472,15 @@ Shape::DoEdgeTo (Shape * iS, int iB, int iTo, bool direct, bool sens)
       iS->swsData[iB].firstLinkedPoint = -1;
     }
 }
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"gnu"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  tab-width:8
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=2:tabstop=8:softtabstop=2 :
