@@ -339,8 +339,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
 	  intersL->SwapWithRight (*sTree, *sEvts);
 
-	  TesteIntersection (intersL, true, false);
-	  TesteIntersection (intersR, false, false);
+	  TesteIntersection (intersL, LEFT, false);
+	  TesteIntersection (intersR, RIGHT, false);
 	}
       else
 	{
@@ -450,8 +450,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 					}
 				      else
 					{
-					  TesteIntersection (onLeft, false,
-							     false);
+					  TesteIntersection (onLeft, RIGHT, false);
 					}
 				    }
 				}
@@ -478,8 +477,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 		  node->RemoveEvents (*sEvts);
 		  node->ConvertTo (ptSh, dnNo, 1, lastPointNo);
 		  ptSh->swsData[dnNo].misc = node;
-		  TesteIntersection (node, false, false);
-		  TesteIntersection (node, true, false);
+		  TesteIntersection (node, RIGHT, false);
+		  TesteIntersection (node, LEFT, false);
 		  insertionNode = node;
 
 		  ptSh->swsData[dnNo].curPoint = lastPointNo;
@@ -506,8 +505,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 			}
 		      doWinding = false;
 		    }
-		  TesteIntersection (node, false, false);
-		  TesteIntersection (node, true, false);
+		  TesteIntersection (node, RIGHT, false);
+		  TesteIntersection (node, LEFT, false);
 		  insertionNode = node;
 
 		  ptSh->swsData[dnNo].curPoint = lastPointNo;
@@ -549,8 +548,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 				}
 			      doWinding = false;
 			    }
-			  TesteIntersection (node, false, false);
-			  TesteIntersection (node, true, false);
+			  TesteIntersection (node, RIGHT, false);
+			  TesteIntersection (node, LEFT, false);
 
 			  ptSh->swsData[cb].curPoint = lastPointNo;
 			  AddChgt (lastPointNo, lastChgtPt, shapeHead,
@@ -1163,8 +1162,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 
 	  intersL->SwapWithRight (*sTree, *sEvts);
 
-	  TesteIntersection (intersL, true, true);
-	  TesteIntersection (intersR, false, true);
+	  TesteIntersection (intersL, RIGHT, true);
+	  TesteIntersection (intersR, LEFT, true);
 	}
       else
 	{
@@ -1277,8 +1276,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 					}
 				      else
 					{
-					  TesteIntersection (onLeft, false,
-							     true);
+					  TesteIntersection (onLeft, RIGHT, true);
 					}
 				    }
 				}
@@ -1305,8 +1303,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 		  node->RemoveEvents (*sEvts);
 		  node->ConvertTo (ptSh, dnNo, 1, lastPointNo);
 		  ptSh->swsData[dnNo].misc = node;
-		  TesteIntersection (node, false, true);
-		  TesteIntersection (node, true, true);
+		  TesteIntersection (node, RIGHT, true);
+		  TesteIntersection (node, LEFT, true);
 		  insertionNode = node;
 
 		  ptSh->swsData[dnNo].curPoint = lastPointNo;
@@ -1336,8 +1334,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 		      doWinding = false;
 		    }
 
-		  TesteIntersection (node, false, true);
-		  TesteIntersection (node, true, true);
+		  TesteIntersection (node, RIGHT, true);
+		  TesteIntersection (node, LEFT, true);
 		  insertionNode = node;
 
 		  ptSh->swsData[dnNo].curPoint = lastPointNo;
@@ -1383,8 +1381,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 			      doWinding = false;
 			    }
 
-			  TesteIntersection (node, false, true);
-			  TesteIntersection (node, true, true);
+			  TesteIntersection (node, RIGHT, true);
+			  TesteIntersection (node, LEFT, true);
 
 			  ptSh->swsData[cb].curPoint = lastPointNo;
 
@@ -1666,36 +1664,24 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 }
 
 // frontend to the TesteIntersection() below
-void
-Shape::TesteIntersection (SweepTree * t, bool onLeft, bool onlyDiff)
+void Shape::TesteIntersection(SweepTree *t, Side s, bool onlyDiff)
 {
-  if (onLeft)
-    {
-      SweepTree *tL = static_cast < SweepTree * >(t->elem[LEFT]);
-      if (tL)
-	{
-        NR::Point atx;
-        double     atl, atr;
-	  if (TesteIntersection (tL, t, atx, atl, atr, onlyDiff))
-	    {
-	      sEvts->add(tL, t, atx, atl, atr);
-	    }
-	}
+    SweepTree *tt = static_cast<SweepTree*>(t->elem[s]);
+    if (tt == NULL) {
+	return;
     }
-  else
-    {
-      SweepTree *tR = static_cast < SweepTree * >(t->elem[RIGHT]);
-      if (tR)
-	{
-        NR::Point  atx;
-	  double atl, atr;
-	  if (TesteIntersection (t, tR, atx, atl, atr, onlyDiff))
-	    {
-	      sEvts->add(t, tR, atx, atl, atr);
-	    }
-	}
+
+    SweepTree *a = (s == LEFT) ? tt : t;
+    SweepTree *b = (s == LEFT) ? t : tt;
+
+    NR::Point atx;
+    double atl;
+    double atr;
+    if (TesteIntersection(a, b, atx, atl, atr, onlyDiff)) {
+	sEvts->add(a, b, atx, atl, atr);
     }
 }
+
 // a crucial piece of code: computing intersections between segments
 bool
 Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, double &atL, double &atR, bool onlyDiff)
