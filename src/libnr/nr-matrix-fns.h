@@ -1,5 +1,5 @@
-#ifndef __NR_MATRIX_FNS_H__
-#define __NR_MATRIX_FNS_H__
+#ifndef SEEN_NR_MATRIX_FNS_H
+#define SEEN_NR_MATRIX_FNS_H
 
 #include "nr-matrix.h"
 
@@ -12,10 +12,10 @@ Matrix elliptic_quadratic_form(Matrix const &m);
 /** Given a matrix (ignoring the translation) this returns the eigen
  * values and vectors. */
 class Eigen{
- public:
-	Point vectors[2];
-	Point values;
-	Eigen(Matrix const &m);
+public:
+    Point vectors[2];
+    Point values;
+    Eigen(Matrix const &m);
 };
 
 // Matrix factories
@@ -29,6 +29,19 @@ bool transform_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilo
 bool translate_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilon);
 bool matrix_equalp(Matrix const &m0, Matrix const &m1, NR::Coord const epsilon);
 
+Matrix transform(Matrix const &m);
+
 };
 
-#endif
+#endif /* !SEEN_NR_MATRIX_FNS_H */
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

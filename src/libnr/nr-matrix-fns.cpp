@@ -2,22 +2,45 @@
 #include <libnr/nr-matrix-fns.h>
 
 namespace NR{
+
 Matrix elliptic_quadratic_form(Matrix const &m) {
-	const double od = m[0]*m[1]+m[2]*m[3];
-	return Matrix((m[0]*m[0] + m[1]*m[1]), od,
-				  od, (m[2]*m[2] + m[3]*m[3]),
-				  0, 0);
+    double const od = m[0] * m[1]  +  m[2] * m[3];
+    return Matrix((m[0]*m[0] + m[1]*m[1]), od,
+                  od, (m[2]*m[2] + m[3]*m[3]),
+                  0, 0);
 /* def quadratic_form((a, b), (c, d)):
    return ((a*a + c*c), a*c+b*d),(a*c+b*d, (b*b + d*d)) */
 }
 
 Eigen::Eigen(Matrix const &m) {
-	const double B = -m[0] - m[3];
-	const double C = m[0]*m[3] - m[1]*m[2];
-	const double center = -B/2.0;
-	const double delta = sqrt(B*B-4*C)/2.0;
-	values = Point(center + delta, center - delta);
-	for(int i = 0; i < 2; i++)
-		vectors[i] = unit_vector(rot90(Point(m[0]-values[i], m[1])));
+    double const B = -m[0] - m[3];
+    double const C = m[0]*m[3] - m[1]*m[2];
+    double const center = -B/2.0;
+    double const delta = sqrt(B*B-4*C)/2.0;
+    values = Point(center + delta, center - delta);
+    for (int i = 0; i < 2; i++) {
+        vectors[i] = unit_vector(rot90(Point(m[0]-values[i], m[1])));
+    }
 }
+
+/** Returns just the scale/rotate/skew part of the matrix without the translation part. */
+Matrix transform(Matrix const &m) {
+    Matrix const ret(m[0], m[1],
+                     m[2], m[3],
+                     0, 0);
+    return ret;
+}
+
 };
+
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
