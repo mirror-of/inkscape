@@ -70,6 +70,11 @@ sp_shortcut_init ()
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_i, SP_VERB_FILE_IMPORT, true);
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_I, SP_VERB_FILE_IMPORT, false);
 
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_Tab, SP_VERB_FILE_NEXT_DESKTOP, true);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_Tab, SP_VERB_FILE_PREV_DESKTOP, true);
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_ISO_Left_Tab, SP_VERB_FILE_PREV_DESKTOP, false);
+	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_ISO_Left_Tab, SP_VERB_FILE_PREV_DESKTOP, false);
+
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_q, SP_VERB_FILE_QUIT, true);
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_Q, SP_VERB_FILE_QUIT, true);
 
