@@ -90,8 +90,8 @@ sp_shortcut_table_load (const unsigned char *name)
 	sp_shortcut_set_verb (GDK_F9, SP_VERB_CONTEXT_SPIRAL, FALSE);
 	sp_shortcut_set_verb (GDK_i, SP_VERB_CONTEXT_SPIRAL, TRUE);
 	sp_shortcut_set_verb (GDK_I, SP_VERB_CONTEXT_SPIRAL, FALSE);
-	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | GDK_F9, SP_VERB_CONTEXT_STAR, TRUE);
-	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | GDK_asterisk, SP_VERB_CONTEXT_STAR, TRUE);
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | GDK_F9, SP_VERB_CONTEXT_STAR, FALSE);
+	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | GDK_asterisk, SP_VERB_CONTEXT_STAR, FALSE);
 	sp_shortcut_set_verb (GDK_KP_Multiply, SP_VERB_CONTEXT_STAR, TRUE);
 	/* Zooming and desktop */
 	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | GDK_plus, SP_VERB_ZOOM_IN, TRUE);
