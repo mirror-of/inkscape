@@ -38,8 +38,11 @@
 #define INKSCAPE_STOCK_CAP_ROUND       "cap_round"
 #define INKSCAPE_STOCK_CAP_SQUARE      "cap_square"
 /*object properties*/
+#define INKSCAPE_STOCK_ROTATE_LEFT      "rotate_left"
+#define INKSCAPE_STOCK_SCALE_HOR      "scale_hor"
+#define INKSCAPE_STOCK_SCALE_VER      "scale_ver"
 #define INKSCAPE_STOCK_ARROWS_HOR      "arrows_hor"
-#define INKSCAPE_STOCK_ARROWS_VER      "arrows_hor"
+#define INKSCAPE_STOCK_ARROWS_VER      "arrows_ver"
 #define INKSCAPE_STOCK_DIMENSION_HOR      "dimension_hor"
 #define INKSCAPE_STOCK_DIMENSION_VER      "dimension_hor"
 
@@ -59,6 +62,59 @@
 #define INKSCAPE_STOCK_FILL_RADIAL      "fill_radial"
 #define INKSCAPE_STOCK_FILL_PATTERN      "fill_pattern"
 #define INKSCAPE_STOCK_FILL_FRACTAL      "fill_fractal"
+
+#define INKSCAPE_STOCK_GUIDE_DIALOG      "guide_dialog"
+
+#define INKSCAPE_STOCK_TOOLBOX_FILE      "toolbox_file"
+#define INKSCAPE_STOCK_TOOLBOX_EDIT      "toolbox_edit"
+#define INKSCAPE_STOCK_TOOLBOX_OBJECT      "toolbox_object"
+#define INKSCAPE_STOCK_TOOLBOX_SELECT      "toolbox_select"
+#define INKSCAPE_STOCK_TOOLBOX_DRAW      "toolbox_draw"
+#define INKSCAPE_STOCK_TOOLBOX_ZOOM      "toolbox_zoom"
+#define INKSCAPE_STOCK_TOOLBOX_NODE      "toolbox_file"
+#define INKSCAPE_STOCK_SEPARATE_TOOL      "separate_tool"
+
+#define INKSCAPE_STOCK_EDIT_DUPLICATE      "edit_duplicate"
+
+#define INKSCAPE_STOCK_SELECTION_TOP      "selection_top"
+#define INKSCAPE_STOCK_SELECTION_BOT      "selection_bot"
+#define INKSCAPE_STOCK_SELECTION_UP       "selection_up"
+#define INKSCAPE_STOCK_SELECTION_DOWN      "selection_down"
+#define INKSCAPE_STOCK_SELECTION_GROUP      "selection_group"
+#define INKSCAPE_STOCK_SELECTION_UNGROUP      "selection_ungroup"
+#define INKSCAPE_STOCK_SELECTION_COMBINE      "selection_combine"
+#define INKSCAPE_STOCK_SELECTION_BREAK      "selection_break"
+
+#define INKSCAPE_STOCK_OBJECT_ROTATE      "object_rotate"
+#define INKSCAPE_STOCK_OBJECT_RESET      "object_reset"
+#define INKSCAPE_STOCK_OBJECT_TOCURVE      "object_tocurve"
+
+#define INKSCAPE_STOCK_DRAW_SELECT      "draw_select"
+#define INKSCAPE_STOCK_DRAW_NODE      "draw_node"
+#define INKSCAPE_STOCK_DRAW_RECT      "draw_rect"
+#define INKSCAPE_STOCK_DRAW_ARC      "draw_arc"
+#define INKSCAPE_STOCK_DRAW_STAR      "draw_star"
+#define INKSCAPE_STOCK_DRAW_SPIRAL      "draw_spiral"
+#define INKSCAPE_STOCK_DRAW_FREEHAND      "draw_freehand"
+#define INKSCAPE_STOCK_DRAW_PEN      "draw_pen"
+#define INKSCAPE_STOCK_DRAW_DYNAHAND      "draw_dynahand"
+#define INKSCAPE_STOCK_DRAW_TEXT      "draw_text"
+#define INKSCAPE_STOCK_DRAW_ZOOM      "draw_zoom"
+#define INKSCAPE_STOCK_DRAW_DROPPER      "draw_dropper"
+
+#define INKSCAPE_STOCK_ZOOM_IN      "zoom_in"
+#define INKSCAPE_STOCK_ZOOM_OUT      "zoom_out"
+#define INKSCAPE_STOCK_TOGGLE_GRID      "toggle_grid"
+#define INKSCAPE_STOCK_TOGGLE_GUIDES      "toggle_guides"
+#define INKSCAPE_STOCK_ZOOM_PAGE      "zoom_page"
+#define INKSCAPE_STOCK_ZOOM_DRAW      "zoom_draw"
+#define INKSCAPE_STOCK_ZOOM_SELECT      "zoom_select"
+
+#define INKSCAPE_STOCK_OBJECT_LAYOUT      "object_layout"
+#define INKSCAPE_STOCK_OBJECT_TRANS      "object_trans"
+#define INKSCAPE_STOCK_OBJECT_ALIGN      "object_align"
+#define INKSCAPE_STOCK_OBJECT_FONT      "object_font"
+
 
 /**
  * Sets up the inkscape stock repository.
