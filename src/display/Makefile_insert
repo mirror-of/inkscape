@@ -11,8 +11,8 @@ display/all: display/libspdisplay.a
 display/clean:
 	rm -f display/libspdisplay.a $(display_libspdisplay_a_OBJECTS)
 
-canvas-arena.$(OBJEXT) display/canvas-arena.$(OBJEXT): helper/sp-marshal.h
-sp-canvas.$(OBJEXT) display/sp-canvas.$(OBJEXT): helper/sp-marshal.h
+display/canvas-arena.$(OBJEXT): helper/sp-marshal.h
+display/sp-canvas.$(OBJEXT): helper/sp-marshal.h
 
 display_libspdisplay_a_SOURCES = \
 	display/nr-arena-forward.h	\
