@@ -243,8 +243,11 @@ void sp_edit_select_all()
     } else {
         GSList *all_items = get_all_items (NULL, dt->currentRoot(), dt, onlyvisible, onlysensitive);
         for ( GSList const *iter = all_items ; iter != NULL ; iter = iter->next ) {
-            if (!selection->includes(SP_OBJECT (iter->data))) {
-                selection->add (SP_OBJECT (iter->data));
+            SPObject *const obj = SP_OBJECT(iter->data);
+            if (obj == NULL) {
+                g_warning("get_all_items returned null element");
+            } else if (!selection->includes(obj)) {
+                selection->add(obj);
             }
         }
     }
