@@ -600,12 +600,12 @@ GrDragger::GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable)
 
 GrDragger::~GrDragger ()
 {
-    /* unref should call destroy */
-    g_object_unref (G_OBJECT (this->knot));
-
     // unselect if it was selected
     if (this->parent->selected == this)
-        this->parent->selected = NULL;
+        this->parent->setSelected (NULL);
+
+    /* unref should call destroy */
+    g_object_unref (G_OBJECT (this->knot));
 
     // delete all draggables
     for (GSList const* i = this->draggables; i != NULL; i = i->next) {
@@ -659,6 +659,8 @@ GrDrag::setSelected (GrDragger *dragger)
         g_object_set (G_OBJECT (dragger->knot->item), "fill_color", GR_KNOT_COLOR_SELECTED, NULL);
     }
     this->selected = dragger;
+
+    this->desktop->emitToolSubselectionChanged((gpointer) dragger);
 }
 
 /**
