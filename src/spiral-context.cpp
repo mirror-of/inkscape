@@ -148,11 +148,8 @@ sp_spiral_context_dispose (GObject *object)
 
 static void shape_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data)
 {
-    SPSpiralContext *sc;
-    SPEventContext *ec;
-
-    sc = SP_SPIRAL_CONTEXT (data);
-    ec = SP_EVENT_CONTEXT (sc);
+    SPSpiralContext *sc = SP_SPIRAL_CONTEXT (data);
+    SPEventContext *ec = SP_EVENT_CONTEXT (sc);
 
     if (sc->knot_holder) {
         sp_knot_holder_destroy (sc->knot_holder);
@@ -188,11 +185,8 @@ destroys old and creates new knotholder
 void
 sp_spiral_context_selection_changed (SPSelection * selection, gpointer data)
 {
-    SPSpiralContext *sc;
-    SPEventContext *ec;
-
-    sc = SP_SPIRAL_CONTEXT (data);
-    ec = SP_EVENT_CONTEXT (sc);
+    SPSpiralContext *sc = SP_SPIRAL_CONTEXT (data);
+    SPEventContext *ec = SP_EVENT_CONTEXT (sc);
 
     if (sc->knot_holder) { // desktroy knotholder
         sp_knot_holder_destroy (sc->knot_holder);
@@ -387,7 +381,7 @@ sp_spiral_drag (SPSpiralContext * sc, NR::Point p, guint state)
 {
 	SPDesktop *desktop = SP_EVENT_CONTEXT (sc)->desktop;
 
-	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
+	const int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
 	if (!sc->item) {
 		/* Create object */
@@ -410,14 +404,14 @@ sp_spiral_drag (SPSpiralContext * sc, NR::Point p, guint state)
 	}
 
 	/* Free movement for corner point */
-	NR::Point p0 = sp_desktop_dt2root_xy_point (desktop, sc->center);
+	const NR::Point p0 = sp_desktop_dt2root_xy_point (desktop, sc->center);
 	NR::Point p1 = sp_desktop_dt2root_xy_point (desktop, p);
 	namedview_free_snap (desktop->namedview, Snapper::SNAP_POINT, p1);
 	
 	SPSpiral *spiral = SP_SPIRAL (sc->item);
 
-	NR::Point delta = p1 - p0;
-	gdouble rad = NR::L2 (delta);
+	const NR::Point delta = p1 - p0;
+	const gdouble rad = NR::L2 (delta);
 
 	gdouble arg = NR::atan2 (delta) - 2.0*M_PI*spiral->revo;
 
@@ -433,12 +427,10 @@ sp_spiral_drag (SPSpiralContext * sc, NR::Point p, guint state)
 		       /*t0*/ sc->t0);
 	
 	/* status text */
-	GString *xs, *ys;
-	gchar status[80];
-	xs = SP_PT_TO_METRIC_STRING (fabs(p0[NR::X]), SP_DEFAULT_METRIC);
-	ys = SP_PT_TO_METRIC_STRING (fabs(p0[NR::Y]), SP_DEFAULT_METRIC);
-	sprintf (status, _("Draw spiral at (%s,%s)"), xs->str, ys->str);
-	sp_view_set_status (SP_VIEW (desktop), status, FALSE);
+	GString *xs = SP_PT_TO_METRIC_STRING (fabs(p0[NR::X]), SP_DEFAULT_METRIC);
+	GString *ys = SP_PT_TO_METRIC_STRING (fabs(p0[NR::Y]), SP_DEFAULT_METRIC);
+	sc->defaultMessageContext()->setF(Inkscape::NORMAL_MESSAGE,
+					 _("Draw spiral at (%s,%s)"), xs->str, ys->str);
 	g_string_free (xs, FALSE);
 	g_string_free (ys, FALSE);
 }
