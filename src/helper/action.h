@@ -19,13 +19,11 @@
 /** A macro to check whether or not something is an action */
 #define SP_IS_ACTION(o) (NR_CHECK_INSTANCE_TYPE ((o), SP_TYPE_ACTION))
 
-struct SPAction;
-struct SPActionClass;
-
+#include <helper/helper-forward.h>
 #include <libnr/nr-object.h>
+#include <forward.h>
 #include <view.h>
 
-struct SPActionEventVector;
 
 /** This is a structure that is used to hold all the possible
     actions that can be taken with an action.  These are the
