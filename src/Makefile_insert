@@ -42,6 +42,7 @@ libinkpre_a_SOURCES =	\
 	brokenimage.xpm	\
 	color.cpp color.h	\
 	color-rgba.h	\
+	common-style.cpp common-style.h	fill-or-stroke.h \
 	desktop-affine.cpp desktop-affine.h	\
 	desktop.cpp desktop.h	\
 	desktop-events.cpp desktop-events.h	\
