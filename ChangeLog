@@ -1,3 +1,22 @@
+2004-03-16  bulia byak <bulia@users.sourceforge.net>
+
+	* nr-type-directory.cpp: Cache NRTypeFaceDef *, not NRTypeFace *, fixes 916155 
+
+	* src/arc-context.cpp src/arc-context.h src/event-context.h src/rect-context.cpp
+	src/spiral-context.cpp src/spiral-context.h src/star-context.cpp
+	src/star-context.h src/toolbox.cpp: John Cliff's patch #2 for shape tools,
+	with my fixes
+ 
+	* icons.svg: Tweaks: stroke to curve, flip/rotate, text 
+
+	* src/sp-ellipse.cpp: Fixes: SPArc never writes <ellipse>; in d=, no L to the center when start==end
+ 
+	* src/nodepath.cpp: Fix for 916119 
+
+	* src/widgets/icon.cpp: Remove not-enough-room-for-icon warning
+ 
+	* src/dialogs/text-edit.cpp src/dialogs/dialog-events.cpp: Do not eat key events in the text view
+
 2004-03-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/widgets/gradient-vector.cpp
