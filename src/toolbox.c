@@ -23,6 +23,7 @@
 #include <gtk/gtktooltips.h>
 #include <gtk/gtkdnd.h>
 #include <gtk/gtklabel.h>
+#include <gtk/gtkhandlebox.h>
 
 #include "macros.h"
 #include "helper/window.h"
@@ -56,7 +57,7 @@
 #include "dialogs/node-edit.h"
 #include "dialogs/dialog-events.h"
 
-#define TOOL_BUTTON_SIZE 26
+#define TOOL_BUTTON_SIZE 28
 #define AUX_BUTTON_SIZE 22
 
 static GtkWidget * sp_select_toolbox_new (void);
@@ -130,7 +131,7 @@ sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, unsigned int t
 GtkWidget *
 sp_tool_toolbox_new ()
 {
-	GtkWidget *tb;
+	GtkWidget *tb, *hb;
 	GtkTooltips *tt;
 	int i;
 	
@@ -148,7 +149,15 @@ sp_tool_toolbox_new ()
 	update_tool_toolbox (NULL, NULL, tb);
 	gtk_widget_set_sensitive (tb, FALSE);
 
-	return tb;
+	hb = gtk_handle_box_new ();
+	gtk_handle_box_set_handle_position (GTK_HANDLE_BOX (hb), GTK_POS_TOP);
+	gtk_handle_box_set_shadow_type (GTK_HANDLE_BOX (hb), GTK_SHADOW_OUT);
+	gtk_handle_box_set_snap_edge (GTK_HANDLE_BOX (hb), GTK_POS_LEFT);
+
+	gtk_container_add (GTK_CONTAINER (hb), tb);
+	gtk_widget_show (GTK_WIDGET (tb));
+
+	return hb;
 }
 
 static void
@@ -164,7 +173,7 @@ aux_toolbox_size_request (GtkWidget *widget,
 GtkWidget *
 sp_aux_toolbox_new ()
 {
-	GtkWidget *tb;
+	GtkWidget *tb, *hb;
 	int i;
 
 	tb = gtk_vbox_new (FALSE, 0);
@@ -183,7 +192,15 @@ sp_aux_toolbox_new ()
 
 	g_signal_connect_after(G_OBJECT(tb), "size_request", G_CALLBACK(aux_toolbox_size_request), NULL);
 
-	return tb;
+	hb = gtk_handle_box_new ();
+	gtk_handle_box_set_handle_position (GTK_HANDLE_BOX (hb), GTK_POS_LEFT);
+	gtk_handle_box_set_shadow_type (GTK_HANDLE_BOX (hb), GTK_SHADOW_OUT);
+	gtk_handle_box_set_snap_edge (GTK_HANDLE_BOX (hb), GTK_POS_LEFT);
+
+	gtk_container_add (GTK_CONTAINER (hb), tb);
+	gtk_widget_show (GTK_WIDGET (tb));
+
+	return hb;
 }
 
 static GtkWidget *
@@ -254,13 +271,13 @@ sp_zoom_toolbox_new ()
 void
 sp_tool_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop)
 {
-	toolbox_set_desktop (toolbox, desktop, update_tool_toolbox);
+	toolbox_set_desktop (gtk_bin_get_child (GTK_BIN (toolbox)), desktop, update_tool_toolbox);
 }
 
 void
 sp_aux_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop)
 {
-	toolbox_set_desktop (toolbox, desktop, update_aux_toolbox);
+	toolbox_set_desktop (gtk_bin_get_child (GTK_BIN (toolbox)), desktop, update_aux_toolbox);
 }
 
 static void

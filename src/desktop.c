@@ -663,7 +663,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	GtkWidget *tbl;
 	GtkWidget *w;
 
-	GtkWidget *hbox, *vbox, *vbox2;
+	GtkWidget *hbox, *vbox;
 	GtkWidget *sbar;
 	GtkWidget *eventbox;
 	GtkTooltips *tt;
@@ -682,26 +682,21 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	/* Main table */
 	vbox = gtk_vbox_new (FALSE, 0);
 	gtk_container_add (GTK_CONTAINER (dtw), vbox);
-	gtk_widget_show (vbox);
 
 	mbar = sp_ui_main_menubar ();
 	gtk_box_pack_start (GTK_BOX (vbox), mbar, FALSE, FALSE, 0);
 
+	dtw->aux_toolbox = sp_aux_toolbox_new ();
+	gtk_box_pack_start (GTK_BOX (vbox), dtw->aux_toolbox, FALSE, TRUE, 0);
+
 	hbox = gtk_hbox_new (FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
-	gtk_widget_show (hbox);
 
 	dtw->tool_toolbox = sp_tool_toolbox_new ();
 	gtk_box_pack_start (GTK_BOX (hbox), dtw->tool_toolbox, FALSE, TRUE, 0);
 
-	vbox2 = gtk_vbox_new (FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 1);
-	
-	dtw->aux_toolbox = sp_aux_toolbox_new ();
-	gtk_box_pack_start (GTK_BOX (vbox2), dtw->aux_toolbox, FALSE, TRUE, 0);
-
 	tbl = gtk_table_new (4, 3, FALSE);
-	gtk_box_pack_start (GTK_BOX (vbox2), tbl, TRUE, TRUE, 1);
+	gtk_box_pack_start (GTK_BOX (hbox), tbl, TRUE, TRUE, 1);
 
 	/* Horizontal ruler */
 	eventbox = gtk_event_box_new ();
