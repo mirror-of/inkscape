@@ -17,7 +17,6 @@
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-rect.h>
 
-#include "helper/units.h"
 #include "display/nr-arena-forward.h"
 #include "forward.h"
 #include "sp-object.h"

@@ -29,7 +29,6 @@ class SPDesktopWidgetClass;
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
 #include "helper/helper-forward.h"
-#include "helper/units.h"
 #include "forward.h"
 #include "view.h"
 
