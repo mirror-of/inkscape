@@ -136,7 +136,6 @@
       <menuitem action='FlipHoriz'/>
       <menuitem action='FlipVert'/>
       <separator/>
-      <menuitem action='Transform'/>
       <menuitem action='Transformation'/>
       <menuitem action='AlignAndDistribute'/>
     </menu>
