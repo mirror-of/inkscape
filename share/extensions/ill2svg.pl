@@ -1,8 +1,21 @@
 #!/usr/bin/perl
-
 # convert an illustrator file (on stdin) to svg (on stdout)
+use strict;
+use warnings;
 use Getopt::Std;
-use Image::Magick;
+
+my $skip_images;
+
+BEGIN {
+  $skip_images = 0;
+  eval "use Image::Magick;";
+  if ($@) {
+    warn "Couldn't load Perl module Image::Magick.  Images will be skipped.\n";
+    warn "$@\n";
+    $skip_images = 1;
+  }
+}
+
 
 my %args;
 
@@ -13,7 +26,6 @@ my $NL_UNX = "\012";
 
 getopts('h:', \%args);
 
-my $pagesize=1052.36218;
 my @ImageData;
 my $pagesize=1052.36218;
 my $imagewidth = 128;
@@ -21,11 +33,18 @@ my $imageheight = 88;
 my $imagex = 0;
 my $imagey = 0;
 my $imagenum = 0;
+my $strokeparams;
+my $strokecolor;
+my $strokewidth;
+my $fillcolor;
+my $firstChar = 0;
 my $image;
+my $path;
 my $color = 0;
 my $weareinimage=0;
 my $weareintext=0;
 my($red,$green,$blue);
+my($cpx,$cpy);
 
 if ($args{h}) { usage() && exit }
 
@@ -36,13 +55,13 @@ sub addImageLine {
  chomp($data);
  #push (@ImageData, $data);
   
- $len = length( $data );
- $count = 0;
+ my $len = length( $data );
+ my $count = 0;
  
  #printf("%s %d\r\n",$data,$len);
  #for( $loop=1; $loop < ($len - 2); $loop += 2){
- for( $loop=1; $loop < $len; $loop += 2){
- 	$value = substr( $data, $loop, 2);
+ for( my $loop=1; $loop < $len; $loop += 2){
+ 	my $value = substr( $data, $loop, 2);
 	
 	#printf("[%d:%s]",$loop,$value);
          
@@ -59,15 +78,16 @@ sub addImageLine {
 
         } else {
 	  $blue = $value;
-	  $pixel="pixel[${imagex},${imagey}]";
-	  $rbg=sprintf("#%s%s%s",$red,$green,$blue);
+	  my $pixel="pixel[${imagex},${imagey}]";
+	  my $rgb=sprintf("#%s%s%s",$red,$green,$blue);
 	  #$image->Set($pixel=>$rgb);                    
-	  $image->Set("pixel[${imagex},${imagey}]"=>"#${red}${green}${blue}");
+	  $image->Set("pixel[${imagex},${imagey}]"=>"#${red}${green}${blue}")
+		unless ($skip_images);
 	  #printf("PIXX: %d ",$image->Get($pixel));
 	  $color = 0;
           $imagex++;
 
-          #printf("Color:BLUE: %s, X: %d Y: %d %dx%d  %s [%s]\r\n",$blue,$imagex,$imagey,$imagewidth,$imageheight,$rbg,$pixel); 
+          #printf("Color:BLUE: %s, X: %d Y: %d %dx%d  %s [%s]\r\n",$blue,$imagex,$imagey,$imagewidth,$imageheight,$rgb,$pixel); 
 
          if( $imagex == $imagewidth ){
           $imagex = 0;
@@ -232,8 +252,8 @@ sub process_line {
       } 
     
     } elsif (/^\/_([\S\s]+) ([\d\.]+) Tf$/) {
-       $FontName = $1;
-       $FontSize = $2;
+       my $FontName = $1;
+       my $FontSize = $2;
       
        ## When we know font name we can render this.
        if( $firstChar != 1){
@@ -252,7 +272,7 @@ sub process_line {
 
     } elsif (/^\(([\S\s]+)\) Tx$/) {
         # Normal text
- 	$text = $1;
+ 	my $text = $1;
         $text =~ s/ä/Ã¤/;
         $text =~ s/ö/Ã¶/;
         $text =~ s/å/Ã¥/;
@@ -272,16 +292,16 @@ sub process_line {
           #it ends like they allways do.
 	  #we just save it after this..
           $weareinimage=0;
-	  $imagename="${imagenum}.png";
-	  $image->Write($imagename);
+	  my $imagename="${imagenum}.png";
+	  $image->Write($imagename) unless ($skip_images);
           $imagenum++;       
     } elsif (/\[(.*)\](.*)Xh/) {
 	   my @imagepos = split(/ /, $1);
 	   my @imageinfo = split(/ /, $2);
-	   $imagewidth = @imageinfo[1];
-	   $imageheight = @imageinfo[2];
-	   $imageposx = @imagepos[4];
-	   $imageposy = $pagesize - @imagepos[5];
+	   $imagewidth = $imageinfo[1];
+	   $imageheight = $imageinfo[2];
+	   my $imageposx = $imagepos[4];
+	   my $imageposy = $pagesize - $imagepos[5];
 	   
 	   #printf("%s %d %d Position x: %f 9y: %f\r\n",$1,@imagepos[4],@imagepos[5],$imageposx,$imageposy);
 	   printf("<image");
@@ -292,11 +312,13 @@ sub process_line {
            printf(" y=\"%f\"",$imageposy);  
 	   printf("/>\r\n");
 	   
-	   $size = "${imagewidth}x${imageheight}";
+	   my $size = "${imagewidth}x${imageheight}";
 
-           $image = Image::Magick->new(size=>$size);
-	   $image->Set('density'=>'72');
-	   $image->Read("xc:white");
+           if (!$skip_images) {
+             $image = Image::Magick->new(size=>$size);
+	     $image->Set('density'=>'72');
+	     $image->Read("xc:white");
+           }
 	   $imagex=0;
 	   $imagey=0;
     
