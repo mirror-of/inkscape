@@ -1,3 +1,12 @@
+2003-12-22  bulia byak <bulia@dr.com>
+
+	* src/nodepath.cpp src/nodepath.h>: restrict control handle movement with ctrl, alt,
+	shift; utility functions for radial coordinates; fixed several crashes when nodepath
+	operations are called but there's no nodepath
+
+	* src/desktop.cpp: filled in sp_desktop_set_coordinate_status implementation, added
+	comment
+
 2003-12-22  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/helper/bezier-utils.cpp (sp_darray_center_tangent,
