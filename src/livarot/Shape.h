@@ -256,18 +256,18 @@ public:
     // be careful when using this function
 
     // the coordinate rounding function
-    static double Round(double x)
+    inline static double Round(double x)
     {
 	return ldexp(rint(ldexp(x, 5)), -5);
     }
     
     // 2 miscannellous variations on it, to scale to and back the rounding grid
-    static double HalfRound(double x)
+    inline static double HalfRound(double x)
     {
 	return ldexp(x, -5);
     }
     
-    static double IHalfRound(double x)
+    inline static double IHalfRound(double x)
     {
 	return ldexp(x, 5);
     }
@@ -351,15 +351,15 @@ public:
     // flags
     int type;
     
-    int numberOfPoints() const { return _pts.size(); }
-    bool hasPoints() const { return (_pts.empty() == false); }
-    int numberOfEdges() const { return _aretes.size(); }
-    bool hasEdges() const { return (_aretes.empty() == false); }
+    inline int numberOfPoints() const { return _pts.size(); }
+    inline bool hasPoints() const { return (_pts.empty() == false); }
+    inline int numberOfEdges() const { return _aretes.size(); }
+    inline bool hasEdges() const { return (_aretes.empty() == false); }
 
-    void needPointsSorting() { _need_points_sorting = true; }
-    void needEdgesSorting()  { _need_edges_sorting = true; }
+    inline void needPointsSorting() { _need_points_sorting = true; }
+    inline void needEdgesSorting()  { _need_edges_sorting = true; }
     
-    bool hasBackData() const { return _has_back_data; }
+    inline bool hasBackData() const { return _has_back_data; }
     
     inline dg_point const &getPoint(int n) const { return _pts[n]; }
     inline dg_arete const &getEdge(int n) const { return _aretes[n]; }
