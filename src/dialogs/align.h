@@ -1,8 +1,8 @@
 #ifndef __SP_QUICK_ALIGN_H__
 #define __SP_QUICK_ALIGN_H__
 
-/*
- * Object align dialog
+/**
+ * \brief  Object align dialog
  *
  * Authors:
  *   Frank Felfe <innerspace@iname.com>

@@ -1,8 +1,8 @@
 #ifndef __SP_DESKTOP_PROPERTIES_H__
 #define __SP_DESKTOP_PROPERTIES_H__
 
-/*
- * Desktop configuration dialog
+/**
+ * \brief Desktop configuration dialog
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
