@@ -19,8 +19,6 @@
 
 /* Generic */
 
-unsigned int sp_svg_boolean_read (const gchar *str, unsigned int *val);
-
 /*
  * These are very-very simple:
  * - they accept everything libc strtod accepts
@@ -34,9 +32,6 @@ unsigned int sp_svg_number_read_d (const gchar *str, double *val);
 /*
  * No buffer overflow checking is done, so better wrap them if needed
  */
-
-unsigned int sp_svg_number_write_i (gchar *buf, int val);
-unsigned int sp_svg_number_write_d (gchar *buf, double val, unsigned int tprec, unsigned int fprec, unsigned int padf);
 unsigned int sp_svg_number_write_de (gchar *buf, double val, unsigned int tprec, unsigned int padf);
 
 /* Length */
@@ -54,7 +49,6 @@ unsigned int sp_svg_length_read (const gchar *str, SPSVGLength *length);
 unsigned int sp_svg_length_read_absolute (const gchar *str, SPSVGLength *length);
 unsigned int sp_svg_length_read_computed_absolute (const gchar *str, float *length);
 GList *sp_svg_length_list_read (const gchar *str);
-unsigned int sp_svg_length_read_lff (const gchar *str, SPSVGLengthUnit *unit, float *value, float *computed, char **next);
 unsigned int sp_svg_length_read_ldd (const gchar *str, SPSVGLengthUnit *unit, double *value, double *computed);
 
 void sp_svg_length_set (SPSVGLength *length, SPSVGLengthUnit unit, float value, float computed);
@@ -67,7 +61,6 @@ unsigned sp_svg_transform_write(gchar str[], unsigned size, NR::Matrix const &tr
 unsigned sp_svg_transform_write(gchar str[], unsigned size, NRMatrix const *transform);
 
 double sp_svg_read_percentage (const char * str, double def);
-int sp_svg_write_percentage (char * buf, int buflen, double val);
 
 unsigned int sp_svg_read_color (const gchar * str, unsigned int def);
 int sp_svg_write_color (char * buf, int buflen, unsigned int color);
@@ -78,7 +71,6 @@ int sp_svg_write_color (char * buf, int buflen, unsigned int color);
 
 NArtBpath * sp_svg_read_path (const char * str);
 char * sp_svg_write_path (const NArtBpath * bpath);
-
 
 
 #endif

@@ -23,31 +23,11 @@
 
 #include <glib.h>
 
+static unsigned sp_svg_length_read_lff(gchar const *str, SPSVGLengthUnit *unit, float *val, float *computed, char **next);
+
 #ifndef MAX
 #define MAX(a,b) ((a < b) ? (b) : (a))
 #endif
-
-unsigned int
-sp_svg_boolean_read (const gchar *str, unsigned int *val)
-{
-	unsigned int v;
-	char *e;
-	if (!val) return 0;
-	if (!g_strcasecmp (str, "true") || !g_strcasecmp (str, "yes")) {
-		*val = 1;
-		return 1;
-	}
-	if (!g_strcasecmp (str, "false") || !g_strcasecmp (str, "no")) {
-		*val = 0;
-		return 1;
-	}
-	v = strtoul (str, &e, 10);
-	if ((const gchar *) e != str) {
-		*val = v;
-		return 1;
-	}
-	return 0;
-}
 
 unsigned int
 sp_svg_number_read_f (const gchar *str, float *val)
@@ -75,7 +55,7 @@ sp_svg_number_read_d (const gchar *str, double *val)
 	return 1;
 }
 
-unsigned int
+static unsigned
 sp_svg_number_write_i (gchar *buf, int val)
 {
 	char c[32];
@@ -96,7 +76,7 @@ sp_svg_number_write_i (gchar *buf, int val)
 	return p;
 }
 
-unsigned int
+static unsigned
 sp_svg_number_write_d (gchar *buf, double val, unsigned int tprec, unsigned int fprec, unsigned int padf)
 {
 	double dival, fval;
@@ -254,7 +234,7 @@ sp_svg_length_list_read (const gchar *str)
 
 #define UVAL(a,b) (((unsigned int) (a) << 8) | (unsigned int) (b))
 
-unsigned int
+static unsigned
 sp_svg_length_read_lff (const gchar *str, SPSVGLengthUnit *unit, float *val, float *computed, char **next)
 {
 	const gchar *e;
@@ -393,13 +373,5 @@ sp_svg_read_percentage (const char * str, double def)
 	if (*u == '%') v /= 100.0;
 
 	return v;
-}
-
-int
-sp_svg_write_percentage (char * buf, int buflen, double val)
-{
-	Inkscape::SVGOStringStream os;
-       os << val * 100.0 << "%";
-	return g_strlcpy (buf, os.str().c_str(), buflen);
 }
 

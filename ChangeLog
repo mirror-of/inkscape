@@ -1,5 +1,11 @@
 2004-11-30  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/svg/svg.h, src/svg/sp-svg.def, src/svg/svg-length.cpp:
+	  (sp_svg_boolean_read, sp_svg_write_percentage):
+	  Remove these unused functions.
+	  (sp_svg_length_read_lff, sp_svg_number_write_d,
+	  sp_svg_number_write_i): Mark static.
+
 	* configure.ac:
 	  When adding -lgc to LIBS, also add its dependencies -lpthread -ldl.
 
