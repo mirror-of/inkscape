@@ -1,3 +1,7 @@
+2003-12-18  Nathan Hurst <njh@csse.monash.edu.au>
+
+	* Merged NRPointF and D, similarly Matrix and Rect.
+
 2003-12-18  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/toolbox.cpp: re-added spiral button (reverting MenTaLguY's change).
@@ -12,7 +16,7 @@
 
 2003-12-17 Nathan Hurst <njh@csse.monash.edu.au>
 
-	* provided some initial though on how to do Points uniformly across inkscape.  geom.h
+	* provided some initial thoughts on how to do Points uniformly across inkscape.  geom.h
 	* partial currying of zoom menu
 	
 2003-12-17  MenTaLguY <mental@rydia.net>
