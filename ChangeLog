@@ -1,3 +1,13 @@
+2004-04-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/helper/bezier-utils.cpp (sp_darray_left_tangent,
+	sp_darray_right_tangent):
+	Switch to using just the two end points for calculating the gradient.
+	(The old code could sometimes cause g_warning's.) 
+	Correct the documentation of requirements.
+	(sp_darray_center_tangent): Similarly remove the #if'ed out code for
+	looking at more than two points.
+
 2004-03-31  Ted Gould <ted@gould.cx>
 
 	* src/interface.cpp:  Changing the default size so that it matches
@@ -6,7 +16,7 @@
 
 2004-03-31  Ted Gould <ted@gould.cx>
 	* src/file.cpp, src/dialogs/filedialog.cpp, src/extension/db.cpp,
-      src/extension/db.h, src/extension/system.cpp:
+	  src/extension/db.h, src/extension/system.cpp:
 	  A bunch of changes for Bulia's bug 925875.  Basically now the
 	  save dialog remembers which extension you've used.  This also
 	  means that save works with non-standard extensions.  Also, it
@@ -26,27 +36,26 @@
 
 2004-03-30  Jon Phillips <kidproto@users.sf.net>
 
-    * share/icons/icons.svg src/interface.cpp src/verbs.cpp src/verbs.h: 
-      Added rest of icons for the menu. I think they are a good start. 
-      There still needs to be continuity between styles, but at least 
-      all needed icons are present. I didn't create icons for elements 
-      that are going to be removed eventually.
+	* share/icons/icons.svg src/interface.cpp src/verbs.cpp src/verbs.h:
+	  Added rest of icons for the menu. I think they are a good start.
+	  There still needs to be continuity between styles, but at least
+	  all needed icons are present. I didn't create icons for elements
+	  that are going to be removed eventually.
 
-    * share/tutorials/tipsandtricks.svg src/help.cpp src/interface.cpp: 
-      added this tutorial so that people 
-      can consolidate their information onto this page.
+	* share/tutorials/tipsandtricks.svg src/help.cpp src/interface.cpp:
+	  Added this tutorial so that people can consolidate their information
+	  onto this page.
 
 2004-03-30  Ted Gould  <ted@gould.cx>
 
-    * src/file.cpp, src/file.h, src/dialogs/filedialog-win32.cpp,
-      src/dialogs/filedialog.cpp, src/dialogs/filedialog.h
-      src/extension/system.cpp, src/extension/system.h,
-      src/extension/implementation/script.cpp:
-	  
+	* src/file.cpp, src/file.h, src/dialogs/filedialog-win32.cpp,
+	  src/dialogs/filedialog.cpp, src/dialogs/filedialog.h
+	  src/extension/system.cpp, src/extension/system.h,
+	  src/extension/implementation/script.cpp:
 	  Making all of the file operations have lists of the extensions
 	  that can be used to save and open.  This also fixes the bug
 	  which talks about mis-saving file without an error - there is
-	  and error message now.  Probably not the most clear, but you
+	  an error message now.  Probably not the most clear, but you
 	  won't miss it.
 
 2004-03-29  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>

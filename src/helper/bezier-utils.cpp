@@ -519,19 +519,15 @@ bezier_pt (unsigned degree, NR::Point const V[], gdouble t)
 
     Unlike the center and right versions, this calculates the tangent in the way one might expect,
     i.e. wrt increasing index into d.
+
+    Requires: len >= 2 && d[0] != d[1].
 **/
 static NR::Point
-sp_darray_left_tangent (NR::Point const d[], unsigned len)
+sp_darray_left_tangent(NR::Point const d[], unsigned const len)
 {
-	g_assert (len >= 2);
-	unsigned const half_len = len / 2;
-	NR::Point ret = half_len * (d[1] - d[0]);
-	for (unsigned i = 1; i < half_len; i++) {
-		ret += (half_len - i) * (d[1 + i] - d[0]);
-	}
-	/* fixme: Ensure that ret is never 0 or NaN before calling normalize. */
-	ret.normalize();
-	return ret;
+	g_assert( len >= 2 );
+	g_assert( d[0] != d[1] );
+	return unit_vector( d[1] - d[0] );
 }
 
 /** Estimates the (backward) tangent at d[last - 0.5].
@@ -539,21 +535,16 @@ sp_darray_left_tangent (NR::Point const d[], unsigned len)
     N.B. The tangent is "backwards", i.e. it is with respect to decreasing index rather than
     increasing index.
 
-    Requires: d[last] != d[last - 1].
+    Requires: len >= 2 && d[len - 1] != d[len - 2].
 */
 static NR::Point
-sp_darray_right_tangent (NR::Point const d[], unsigned len)
+sp_darray_right_tangent(NR::Point const d[], unsigned const len)
 {
+	g_assert( len >= 2 );
 	unsigned const last = len - 1;
 	unsigned const prev = last - 1;
-	unsigned const half_len = len / 2;
-	NR::Point ret = half_len * (d[prev] - d[last]);
-	for (unsigned i = 1; i < half_len; i++) {
-		ret += (half_len - i) * (d[prev - i] - d[last]);
-	}
-	/* fixme: Ensure that ret is never 0 or NaN before calling normalize. */
-	ret.normalize();
-	return ret;
+	g_assert( d[last] != d[prev] );
+	return unit_vector( d[prev] - d[last] );
 }
 
 /** Estimates the (backward) tangent at d[center], by averaging the two segments connected to
@@ -562,28 +553,17 @@ sp_darray_right_tangent (NR::Point const d[], unsigned len)
     N.B. The tangent is "backwards", i.e. it is with respect to decreasing index rather than
     increasing index.
 
-    Requires: point_ne (d[center - 1],
-			d[center + 1]).
+    Requires: (0 < center < len - 1) && d is uniqued (at least in the immediate vicinity of
+    \a center).
 */
 static NR::Point
-sp_darray_center_tangent (NR::Point const d[],
-			  unsigned center,
-			  unsigned len)
+sp_darray_center_tangent(NR::Point const d[],
+			 unsigned const center,
+			 unsigned const len)
 {
 	g_assert (center != 0);
 	g_assert (center < len - 1);
 
-#ifdef SOPHISTICATED_BUT_SLOW /* sophisticated but slow (\Omega(n)). */
-	NR::Point tHatA = sp_darray_right_tangent (d, center + 1);
-	NR::Point tHatB = sp_darray_left_tangent (d + center, len - center);
-	if(tHatA == tHatB) {
-		/* Rotate 90 degrees in an arbitrary direction.  We could do better. */
-		ret = rot90(tHatA);
-	} else {
-		ret = tHatA - tHatB;
-		ret.normalize();
-	}
-#else /* Look at just one segment: O(1) */
 	NR::Point ret;
 	if (d[center + 1] == d[center - 1]) {
 		/* Rotate 90 degrees in an arbitrary direction. */
@@ -594,7 +574,6 @@ sp_darray_center_tangent (NR::Point const d[],
 	}
 	ret.normalize();
 	return ret;
-#endif
 }
 
 
