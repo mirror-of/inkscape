@@ -2,6 +2,8 @@
 
 	* src/main.cpp: fpresetsticky -> fpsetsticky
 
+	* src/verbs.cpp: cast width changes
+
 	* src/libnrtype/FlowBoxes.h, src/libnrtype/FlowDefs.h,
 	  src/libnrtype/FlowDest.h, src/libnrtype/FlowEater.h,
 	  src/libnrtype/FlowRes.h, src/libnrtype/FlowSols.h,

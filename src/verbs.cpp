@@ -19,6 +19,9 @@
  * This code is in public domain.
  */
 
+
+#include <cstddef>
+
 #include <assert.h>
 
 #include <gtk/gtkstock.h>
@@ -603,8 +606,7 @@ FileVerb::perform (SPAction *action, void * data, void *pdata)
     SPView * current_view = sp_action_get_view(action);
     SPDocument * current_document = SP_VIEW_DOCUMENT(current_view);
 #endif
-
-    switch ((int) data) {
+    switch ((long) data) {
         case SP_VERB_FILE_NEW:
             sp_file_new_default ();
             break;
@@ -669,7 +671,7 @@ EditVerb::perform (SPAction *action, void * data, void * pdata)
 
     ec = dt->event_context;
 
-    switch ((int) data) {
+    switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_EDIT_UNDO:
             sp_undo (dt, SP_DT_DOCUMENT (dt));
             break;
@@ -746,7 +748,7 @@ SelectionVerb::perform (SPAction *action, void * data, void * pdata)
     if (!dt)
         return;
 
-    switch ((int) data) {
+    switch (reintperpret_cast<std::size_t>(data)) {
         case SP_VERB_SELECTION_TO_FRONT:
             sp_selection_raise_to_top();
             break;
@@ -858,7 +860,7 @@ void
 LayerVerb::perform (SPAction *action, void *data, void *pdata)
 {
     SPDesktop *dt = SP_DESKTOP(sp_action_get_view(action));
-    int verb=reinterpret_cast<int>(data);
+    unsigned int verb=reinterpret_cast<std::size_t>(data);
 
     if ( !dt || !dt->currentLayer() ) {
         return;
@@ -995,7 +997,7 @@ ObjectVerb::perform ( SPAction *action, void *data, void *pdata )
 
     NR::Point const center(sel->bounds().midpoint());
 
-    switch ((int) data) {
+    switch (reintperpret_cast<std::size_t>(data)) {
         case SP_VERB_OBJECT_ROTATE_90_CW:
             sp_selection_rotate_90_cw ();
             break;
@@ -1180,7 +1182,7 @@ ZoomVerb::perform (SPAction *action, void * data, void * pdata)
         prefs_get_double_attribute_limited ( "options.zoomincrement",
                                              "value", 1.414213562, 1.01, 10 );
 
-    switch ((int) data) {
+    switch (reintperpret_cast<std::size_t>(data)) {
         case SP_VERB_ZOOM_IN:
             sp_desktop_get_display_area (dt, &d);
             sp_desktop_zoom_relative ( dt, (d.x0 + d.x1) / 2,
@@ -1262,7 +1264,7 @@ DialogVerb::perform (SPAction *action, void * data, void * pdata)
         inkscape_dialogs_unhide ();
     }
 
-    switch ((int) data) {
+    switch (reintperpret_cast<std::size_t>(data)) {
         case SP_VERB_DIALOG_DISPLAY:
             sp_display_dialog ();
             break;
@@ -1306,7 +1308,7 @@ DialogVerb::perform (SPAction *action, void * data, void * pdata)
 void
 HelpVerb::perform (SPAction *action, void * data, void * pdata)
 {
-    switch ((int) data) {
+    switch (reintperpret_cast<std::size_t>(data)) {
         case SP_VERB_HELP_KEYS:
             sp_help_open_screen (_("keys.svg"));
             break;
@@ -1322,7 +1324,7 @@ HelpVerb::perform (SPAction *action, void * data, void * pdata)
 void
 TutorialVerb::perform (SPAction *action, void * data, void * pdata)
 {
-    switch ((int) data) {
+    switch (reintperpret_cast<std::size_t>(data)) {
         case SP_VERB_TUTORIAL_BASIC:
             sp_help_open_tutorial (NULL, (gpointer)_("tutorial-basic.svg"));
             break;
