@@ -519,7 +519,7 @@ static void         GetDest(SPObject* child,flow_dest* computed,NR::Matrix itr_m
 		delete temp;
 		sp_curve_unref(curve);
 	} else {
-		printf("no curve\n");
+//		printf("no curve\n");
 	}
 }
 
