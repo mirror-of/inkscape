@@ -1229,9 +1229,7 @@ Path::OutlineJoin (Path * dest, NR::Point pos, NR::Point stNor, NR::Point enNor,
 							 false);
 			}
 		} else if (join == join_pointy) {
-			const NR::Point biss = NR::rot90( stNor - enNor );
-			const double lb = NR::L2(biss);
-			biss /= lb;
+			NR::Point const biss = unit_vector(NR::rot90( stNor - enNor ));
 			double c2 = NR::dot (biss, enNor);
 			double l = width / c2;
 			if ( fabs(l) > miter) {
