@@ -65,8 +65,12 @@ sp_intersector_kind sp_intersector_line_intersection(NR::Point const &n0, double
 	return intersects;
 }
 
+/*
+ New code which we are not yet using
+*/
+#ifdef HAVE_NEW_INTERSECTOR_CODE
 
-#if 0 /* not yet used */
+
 /* ccw exists as a building block */
 static int
 sp_intersector_ccw(const NR::Point p0, const NR::Point p1, const NR::Point p2)
@@ -138,4 +142,5 @@ sp_intersector_segment_intersect(NR::Point const &p00, NR::Point const &p01,
 	}
 }
 
-#endif /* end yet-unused code */
+#endif /* end yet-unused HAVE_NEW_INTERSECTOR_CODE code */
+

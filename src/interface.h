@@ -17,23 +17,58 @@
 #include "view.h"
 #include <verbs.h>
 
+
+/**
+ *  Create a new document window.
+ */
 void sp_create_window (SPViewWidget *vw, gboolean editable);
 
+/**
+ *
+ */
 void sp_ui_new_view (GtkWidget *widget);
+
+/**
+ *
+ */
 void sp_ui_new_view_preview (GtkWidget *widget);
+
+/**
+ *
+ */
 void sp_ui_close_view (GtkWidget *widget);
 
+/**
+ *
+ */
 unsigned int sp_ui_close_all (void);
 
-/* I am not sure, what is the right place for that (Lauris) */
-
+/**
+ *
+ */
 GtkWidget *sp_ui_main_menubar (SPView *view);
+
+/**
+ *
+ */
 GtkWidget *sp_ui_context_menu (SPView *v, SPItem *item);
 
+
+/**
+ *
+ */
 void sp_menu_append_recent_documents (GtkWidget *menu);
 
+
+/**
+ *
+ */
 void sp_ui_dialog_title_string (sp_verb_t verb, gchar* c);
 
+
+/**
+ *
+ */
 void sp_ui_error_dialog (const gchar * message);
 
 #endif

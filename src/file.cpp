@@ -13,6 +13,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+/**
+ * Note: This file needs to be cleaned up extensively.
+ * What it probably needs is to have one .h file for
+ * the API, and two or more .cpp files for the implementations.
+ */
+
 #include <config.h>
 
 #include <string.h>
@@ -57,10 +63,22 @@
 static void sp_file_save_ok (GtkWidget *save_dialog, SPDocument *doc, const gchar *key);
 #endif
 
-gchar *open_path = NULL;
-gchar *save_path = NULL;
+/**
+ * 'Current' paths.  Used to remember which directory
+ * had the last file accessed.
+ * Static globals are evil.  This will be gone soon
+ * as C++ification continues
+ */
+gchar *open_path   = NULL;
+gchar *save_path   = NULL;
 gchar *import_path = NULL;
 gchar *export_path = NULL;
+
+
+
+/*######################
+## N E W
+######################*/
 
 void
 sp_file_new (void)
@@ -78,6 +96,23 @@ sp_file_new (void)
 	sp_create_window (dtw, TRUE);
       sp_namedview_window_from_document (SP_DESKTOP(dtw->view));
 }
+
+
+/*######################
+## D E L E T E
+######################*/
+
+void
+sp_file_exit (void)
+{
+	sp_ui_close_all ();
+	// no need to call inkscape_exit here; last document being closed will take care of that
+}
+
+
+/*######################
+## O P E N
+######################*/
 
 void
 sp_file_open (const gchar *uri, const gchar *key)
@@ -101,8 +136,11 @@ sp_file_open (const gchar *uri, const gchar *key)
 	}
 }
 
+/**
+ * OK callback for GTK dialog
+ */
 static void
-file_open_ok (GtkWidget *widget, GtkFileSelection *fs)
+file_open_dialog_ok (GtkWidget *widget, GtkFileSelection *fs)
 {
 	gchar *filename;
 
@@ -133,14 +171,20 @@ file_open_ok (GtkWidget *widget, GtkFileSelection *fs)
 	gtk_widget_destroy (GTK_WIDGET (fs));
 }
 
+/**
+ * Cancel callback for GTK dialog
+ */
 static void
-file_open_cancel (GtkButton *b, GtkFileSelection *fs)
+file_open_dialog_cancel (GtkButton *b, GtkFileSelection *fs)
 {
 	gtk_widget_destroy (GTK_WIDGET (fs));
 }
 
+/**
+ * Type pulldown menu selection callback for GTK dialog
+ */
 static void
-sp_file_open_dialog_type_selected (SPMenu *menu, gpointer itemdata, GObject *fsel)
+file_open_dialog_type_selected (SPMenu *menu, gpointer itemdata, GObject *fsel)
 {
 	g_object_set_data (fsel, "type-key", itemdata);
 }
@@ -167,8 +211,8 @@ sp_file_open_dialog (gpointer object, gpointer data)
 	fsel = (GtkFileSelection *) gtk_file_selection_new (_("Select file to open"));
 	gtk_file_selection_hide_fileop_buttons (fsel);
 
-	g_signal_connect (G_OBJECT (fsel->ok_button), "clicked", G_CALLBACK (file_open_ok), fsel);
-	g_signal_connect (G_OBJECT (fsel->cancel_button), "clicked", G_CALLBACK (file_open_cancel), fsel);
+	g_signal_connect (G_OBJECT (fsel->ok_button), "clicked", G_CALLBACK (file_open_dialog_ok), fsel);
+	g_signal_connect (G_OBJECT (fsel->cancel_button), "clicked", G_CALLBACK (file_open_dialog_cancel), fsel);
 
 	if (open_path) gtk_file_selection_set_filename (fsel, open_path);
 
@@ -180,7 +224,7 @@ sp_file_open_dialog (gpointer object, gpointer data)
 
  	m = GTK_WIDGET(sp_module_menu_open ());
 	g_object_set_data (G_OBJECT (fsel), "type-key", ((SPMenu *) m)->activedata);
-	g_signal_connect (G_OBJECT (m), "selected", G_CALLBACK (sp_file_open_dialog_type_selected), fsel);
+	g_signal_connect (G_OBJECT (m), "selected", G_CALLBACK (file_open_dialog_type_selected), fsel);
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
 	l = gtk_label_new (_("File type:"));
 	gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
@@ -193,10 +237,18 @@ sp_file_open_dialog (gpointer object, gpointer data)
 #endif
 }
 
-/* Save */
 
+
+
+/*######################
+## S A V E
+######################*/
+
+/**
+ * This 'save' function called by the others below
+ */
 static void
-sp_file_do_save (SPDocument *doc, const gchar *uri, const gchar *key)
+file_save (SPDocument *doc, const gchar *uri, const gchar *key)
 {
 	if (!doc) return;
 	if (!uri) return;
@@ -213,7 +265,7 @@ sp_file_save_dialog (SPDocument *doc)
 	unsigned int spns;
 	filename = sp_win32_get_save_filename ((unsigned char *)save_path, &spns);
 	if (filename && *filename) {
-		sp_file_do_save (doc, filename, (spns) ? SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE : SP_MODULE_KEY_OUTPUT_SVG);
+		file_save (doc, filename, (spns) ? SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE : SP_MODULE_KEY_OUTPUT_SVG);
 		g_free (save_path);
 		save_path = g_dirname (filename);
 		save_path = g_strdup (save_path);
@@ -288,12 +340,12 @@ sp_file_save_ok (GtkWidget *save_dialog, SPDocument *doc, gchar const *key)
 		} else {
 			/* TODO: Handle overwriting files differently - TJG */
 			gtk_widget_set_sensitive (GTK_WIDGET (fs), FALSE);
-			sp_file_do_save (doc, filename, key);
+			file_save (doc, filename, key);
 			gtk_widget_set_sensitive (GTK_WIDGET (fs), TRUE);
 		}
 	} else {
 		gtk_widget_set_sensitive (GTK_WIDGET (fs), FALSE);
-		sp_file_do_save (doc, filename, key);
+		file_save (doc, filename, key);
 		gtk_widget_set_sensitive (GTK_WIDGET (fs), TRUE);
 	}
 }
@@ -316,7 +368,7 @@ sp_file_save_document (SPDocument *doc)
 		} else {
 			/* TODO: This currently requires a recognizable extension to
 				 be on the file name - odd stuff won't work */
-			sp_file_do_save(doc, fn, SP_MODULE_KEY_AUTODETECT);
+			file_save(doc, fn, SP_MODULE_KEY_AUTODETECT);
 			success = TRUE;
 		}
 
@@ -357,8 +409,15 @@ sp_file_save_as (gpointer object, gpointer data)
 	sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), "Document saved.");
 }
 
+
+
+
+/*######################
+## I M P O R T
+######################*/
+
 static void
-sp_file_do_import (SPDocument *doc, const gchar *filename)
+file_import (SPDocument *doc, const gchar *filename)
 {
 	SPRepr *rdoc;
 	const gchar *e, *docbase, *relname;
@@ -459,7 +518,7 @@ sp_file_import (GtkWidget * widget)
 					     "SVG files\0*.svg\0"
 					     "All files\0*\0", (unsigned char *)_("Select file to import"));
 	if (filename) {
-		sp_file_do_import (doc, filename);
+		file_import (doc, filename);
 		g_free (filename);
 	}
 #else
@@ -473,47 +532,18 @@ sp_file_import (GtkWidget * widget)
 	if (b == GTK_RESPONSE_OK) {
 		const gchar *filename;
 		filename = gtk_file_selection_get_filename (GTK_FILE_SELECTION (w));
-		sp_file_do_import (doc, filename);
+		file_import (doc, filename);
 	}
 
 	gtk_widget_destroy (w);
 #endif
 }
 
-void
-sp_file_print (void)
-{
-	SPDocument *doc;
-	doc = SP_ACTIVE_DOCUMENT;
-	if (doc) sp_print_document (doc, FALSE);
-}
 
-void
-sp_file_print_direct (void)
-{
-	SPDocument *doc;
-	doc = SP_ACTIVE_DOCUMENT;
-	if (doc) sp_print_document (doc, TRUE);
-}
 
-void
-sp_file_print_preview (gpointer object, gpointer data)
-{
-	SPDocument *doc;
-
-	doc = SP_ACTIVE_DOCUMENT;
-
-	if (doc) {
-		sp_print_preview_document (doc);
-	}
-}
-
-void
-sp_file_exit (void)
-{
-	sp_ui_close_all ();
-	// no need to call inkscape_exit here; last document being closed will take care of that
-}
+/*######################
+## E X P O R T
+######################*/
 
 void
 sp_file_export_dialog (void *widget)
@@ -672,3 +702,38 @@ sp_export_png_file (SPDocument *doc, const gchar *filename,
 	nr_arena_item_unref (ebp.root);
 	nr_object_unref ((NRObject *) arena);
 }
+
+
+/*######################
+## P R I N T
+######################*/
+
+
+void
+sp_file_print (void)
+{
+	SPDocument *doc;
+	doc = SP_ACTIVE_DOCUMENT;
+	if (doc) sp_print_document (doc, FALSE);
+}
+
+void
+sp_file_print_direct (void)
+{
+	SPDocument *doc;
+	doc = SP_ACTIVE_DOCUMENT;
+	if (doc) sp_print_document (doc, TRUE);
+}
+
+void
+sp_file_print_preview (gpointer object, gpointer data)
+{
+	SPDocument *doc;
+
+	doc = SP_ACTIVE_DOCUMENT;
+
+	if (doc) {
+		sp_print_preview_document (doc);
+	}
+}
+

@@ -50,6 +50,7 @@
 
 #include "dialogs/dialog-events.h"
 
+/* forward declaration */
 static gint sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view);
 
 /* Drag and Drop */
@@ -235,42 +236,46 @@ sp_key_name (guint keyval)
 {
 	gchar const *n = gdk_keyval_name (gdk_keyval_to_upper (keyval));
 	
-	if (!strcmp (n, "asciicircum")) return "^";
-	else if (!strcmp (n, "parenleft")) return "(";
-	else if (!strcmp (n, "parenright")) return ")";
-	else if (!strcmp (n, "plus")) return "+";
-	else if (!strcmp (n, "minus")) return "-";
-	else if (!strcmp (n, "asterisk")) return "*";
-	else if (!strcmp (n, "KP_Multiply")) return "*";
-	else if (!strcmp (n, "Delete")) return "Del";
-	else if (!strcmp (n, "Page_Up")) return "PgUp";
-	else if (!strcmp (n, "Page_Down")) return "PgDn";
-	else if (!strcmp (n, "grave")) return "`";
-	else if (!strcmp (n, "numbersign")) return "#";
+	if      (!strcmp (n, "asciicircum"))  return "^";
+	else if (!strcmp (n, "parenleft"  ))  return "(";
+	else if (!strcmp (n, "parenright" ))  return ")";
+	else if (!strcmp (n, "plus"       ))  return "+";
+	else if (!strcmp (n, "minus"      ))  return "-";
+	else if (!strcmp (n, "asterisk"   ))  return "*";
+	else if (!strcmp (n, "KP_Multiply"))  return "*";
+	else if (!strcmp (n, "Delete"     ))  return "Del";
+	else if (!strcmp (n, "Page_Up"    ))  return "PgUp";
+	else if (!strcmp (n, "Page_Down"  ))  return "PgDn";
+	else if (!strcmp (n, "grave"      ))  return "`";
+	else if (!strcmp (n, "numbersign" ))  return "#";
 	else return n;
 }
 
 void
 sp_ui_shortcut_string (unsigned int shortcut, gchar* c)
 {
-	const gchar *as, *cs, *ss;
-	as = (shortcut & SP_SHORTCUT_ALT_MASK) ? "Alt+" : "";
-	cs = (shortcut & SP_SHORTCUT_CONTROL_MASK) ? "Ctrl+" : "";
-	ss = (shortcut & SP_SHORTCUT_SHIFT_MASK) ? "Shift+" : "";
-	g_snprintf (c, 256, "%s%s%s%s", ss, cs, as, sp_key_name (shortcut & 0xffffff));
+	const gchar *altStr, *ctrlStr, *shiftStr;
+
+	altStr   = (shortcut & SP_SHORTCUT_ALT_MASK    ) ? "Alt+"   : "";
+	ctrlStr  = (shortcut & SP_SHORTCUT_CONTROL_MASK) ? "Ctrl+"  : "";
+	shiftStr = (shortcut & SP_SHORTCUT_SHIFT_MASK  ) ? "Shift+" : "";
+
+	g_snprintf (c, 256, "%s%s%s%s", shiftStr, ctrlStr, altStr,
+         sp_key_name (shortcut & 0xffffff));
 }
 
 void
 sp_ui_dialog_title_string (sp_verb_t verb, gchar* c)
 {
-	SPAction *action;
+	SPAction     *action;
 	unsigned int shortcut;
-	gchar *s; 
-	gchar key[256];
-	gchar *atitle;
+	gchar        *s; 
+	gchar        key[256];
+	gchar        *atitle;
 
 	action = sp_verb_get_action (verb, NULL);
-	if (!action) return; 
+	if (!action)
+        return; 
 	
 	atitle = sp_action_get_title (action);
 	
@@ -533,11 +538,10 @@ sp_ui_help_menu(GtkWidget *m)
 	sp_ui_menu_append_item (GTK_MENU (m), NULL, _("_About Inkscape"), G_CALLBACK(sp_help_about), NULL);
 
 #ifdef WITH_MODULES
-#if 0
-	/* TODO: Modules need abouts too */
+	/* TODO: Modules need abouts too
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM(sp_ui_menu_append_item (GTK_MENU (m), NULL, _("About Modules"), NULL, NULL)),
 			                   GTK_WIDGET(sp_module_menu_about()));
-#endif
+    */
 #endif /* WITH_MODULES */
 }
 

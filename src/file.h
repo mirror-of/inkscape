@@ -17,34 +17,116 @@
 #include "forward.h"
 #include "module.h"
 
+/*######################
+## N E W
+######################*/
+
+/**
+ * Creates a new Inkscape document and window
+ */
 void sp_file_new (void);
 
-void sp_file_open (const gchar *uri, const gchar *key);
-void sp_file_open_dialog (gpointer object, gpointer data);
+/*######################
+## D E L E T E
+######################*/
 
-void sp_file_save (gpointer object, gpointer data);
-void sp_file_save_as (gpointer object, gpointer data);
-
-gboolean sp_file_save_document (SPDocument *document);
-
-void sp_file_import (GtkWidget * widget);
-
-void sp_file_print (void);
-void sp_file_print_direct (void);
-void sp_file_print_preview (gpointer object, gpointer data);
-
-#if 0
-void sp_do_file_print (SPDocument *doc);
-void sp_do_file_print_to_file (SPDocument * doc, gchar *filename);
-#endif
-
+/**
+ * Close the document/view
+ */
 void sp_file_exit (void);
 
+/*######################
+## O P E N
+######################*/
+
+/**
+ * Opens a new file and window from the given URI
+ */
+void sp_file_open (const gchar *uri, const gchar *key);
+
+/**
+ * Displays a file open dialog. Calls sp_file_open on
+ * an OK.
+ */
+void sp_file_open_dialog (gpointer object, gpointer data);
+
+/*######################
+## S A V E
+######################*/
+
+/**
+ *
+ */
+void sp_file_save (gpointer object, gpointer data);
+
+/**
+ *  Saves the given document.  Displays a file select dialog
+ *  to choose the new name.
+ */
+void sp_file_save_as (gpointer object, gpointer data);
+
+/**
+ *  Saves the given document.  Displays a file select dialog
+ *  if needed.
+ */
+gboolean sp_file_save_document (SPDocument *document);
+
+
+/*######################
+## I M P O R T
+######################*/
+
+/**
+ * Displays a file selector dialog, to allow the
+ * user to import data into the current document.
+ */
+void sp_file_import (GtkWidget * widget);
+
+
+/*######################
+## E X P O R T
+######################*/
+
+/**
+ * Displays a "Save as" dialog for the user, with an
+ * additional type selection, to allow the user to export
+ * the a document as a given type.
+ */
 void sp_file_export_dialog (void *widget);
+
+/**
+ * Export the given document as a Portable Network Graphics (PNG)
+ * file.
+ */
 void sp_export_png_file (SPDocument *doc, const gchar *filename,
 			 double x0, double y0, double x1, double y1,
 			 unsigned int width, unsigned int height,
 			 unsigned long bgcolor,
 			 unsigned int (*status) (float, void *), void *data);
+
+
+/*######################
+## P R I N T
+######################*/
+
+/* These functions are redundant now, but
+would be useful as instance methods
+*/
+
+/**
+ *
+ */
+void sp_file_print (void);
+
+/**
+ *
+ */
+void sp_file_print_direct (void);
+
+/**
+ *
+ */
+void sp_file_print_preview (gpointer object, gpointer data);
+
 
 #endif
