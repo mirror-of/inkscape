@@ -44,4 +44,39 @@ NRMatrix *nr_matrix_set_rotate (NRMatrix *m, double theta);
 #define NR_MATRIX_DF_EXPANSION2(m) (fabs ((m)->c[0] * (m)->c[3] - (m)->c[1] * (m)->c[2]))
 #define NR_MATRIX_DF_EXPANSION(m) (sqrt (NR_MATRIX_DF_EXPANSION2 (m)))
 
+namespace NR{
+class Matrix{
+ public:
+	double c[6]; // should this be a pointer?
+
+	Matrix() {
+	}
+
+	Matrix(NRMatrix nr);
+
+	operator NRMatrix() const;
+	
+	bool test_identity() const;
+	Matrix inverse() const;
+	
+	void set_identity();
+	void set_translate(Point p);
+	void set_scale(Point s);
+	void set_rotate(const double angle);
+	
+	// What do these do?  some kind of norm?
+	double DF_EXPANSION2() const;
+	double DF_EXPANSION() const;
+};
+
+bool operator==(const Matrix a, const Matrix b);
+Matrix operator*(const Matrix a, const Matrix b);
+Point operator*(const Matrix a, const Point v);
+
+bool transform_equalp(const Matrix m0, const Matrix m1, const double epsilon);
+bool translate_equalp(const Matrix m0, const Matrix m1, const double epsilon);
+
+
+};
+
 #endif

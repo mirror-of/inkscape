@@ -21,6 +21,8 @@ typedef struct _NRPoint {
 	double x, y;
 } NRPoint;
 
+#define NR_POINT_DF_TEST_CLOSE(a,b,e) (NR_DF_TEST_CLOSE ((a)->x, (b)->x, e) && NR_DF_TEST_CLOSE ((a)->y, (b)->y, e))
+
 namespace NR {
 
 enum dimT { X, Y };
@@ -135,6 +137,7 @@ inline void Point::Normalize() {
 	if(d > 0.0001) // Why this number?
 		*this = (1/d)**this;
 }
+
 }
 
 typedef struct _NRPointL {

@@ -131,3 +131,102 @@ nr_matrix_set_rotate (NRMatrix *m, double theta)
 	return m;
 }
 
+
+namespace NR {
+
+Matrix::Matrix(NRMatrix nr) {
+	for(int i = 0; i < 6; i++)
+		c[i] = nr.c[i];
+}
+	
+Matrix::operator NRMatrix() const {
+	NRMatrix nrm;
+	for(int i = 0; i < 6; i++)
+		nrm.c[i] = c[i];
+	return nrm;
+}
+
+};
+
+/*
+Matrix Matrix::multiply (const Matrix m0, const Matrix m1)
+{
+	Matrix d;
+	double d0, d1, d2, d3, d4, d5;
+	
+	for(int i = 0; i < 3; i++)
+		for(int j = 0; j < 2; j++)
+			d.c[] = m0.c[i*2]*
+	d.c[0] = m0.c[0] * m1.c[0] + m0.c[1] * m1.c[2];
+	d.c[1] = m0.c[0] * m1.c[1] + m0.c[1] * m1.c[3];
+	d.c[2] = m0.c[2] * m1.c[0] + m0.c[3] * m1.c[2];
+	d.c[3] = m0.c[2] * m1.c[1] + m0.c[3] * m1.c[3];
+	d.c[4] = m0.c[4] * m1.c[0] + m0.c[5] * m1.c[2] + m1.c[4];
+	d.c[5] = m0.c[4] * m1.c[1] + m0.c[5] * m1.c[3] + m1.c[5];
+
+	return d;
+}
+
+Matrix Matrix::invert ()
+{
+	Matrix d;
+	if (m) {
+		double det;
+		det = m.c[0] * m.c[3] - m.c[1] * m.c[2];
+		if (!NR_DF_TEST_CLOSE (det, 0.0, NR_EPSILON)) {
+			double rdet, t;
+			rdet = 1.0 / det;
+			t = m.c[3] * rdet;
+			d.c[3] = m.c[0] * rdet;
+			d.c[0] = t;
+			t = -m.c[1] * rdet;
+			d.c[1] = -m.c[1] * rdet;
+			d.c[2] = -m.c[2] * rdet;
+			d.c[4] = -m.c[4] * d.c[0] - m.c[5] * d.c[2];
+			d.c[5] = -m.c[4] * d.c[1] - m.c[5] * d.c[3];
+		} else {
+			nr_matrix_set_identity (d);
+		}
+	} else {
+		nr_matrix_set_identity (d);
+	}
+
+	return d;
+}
+
+Matrix Matrix::set_translate (Point p)
+{
+	c[0] = 1.0; c[2] = 0.0;
+	c[1] = 0.0; c[3] = 1.0;
+	// translation
+	c[4] = x;
+	c[5] = y;
+
+	return m;
+}
+
+void set_scale (Point scale)
+{
+	c[0] = sx;  c[2] = 0.0;
+	c[1] = 0.0; c[3] = sy;
+	// translation
+	c[4] = 0.0;
+	c[5] = 0.0;
+
+	return m;
+}
+
+void set_rotate (const double theta)
+{
+	double s = sin (theta);
+	double c = cos (theta);
+	c[0] = c; c[2] = -s;
+	c[1] = s; c[3] = c;
+	// translation
+	c[4] = 0.0;
+	c[5] = 0.0;
+	return m;
+}
+
+};
+*/
