@@ -1,5 +1,9 @@
 2004-06-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/Makefile.am (EXTRA_DIST): Remove reference to deleted files
+	  libnrtype/nr-type-w32.cpp, libnrtype/nr-type-w32.h,
+	  libnrtype/nr-type-xft.cpp, libnrtype/nr-type-xft.h.
+
 	* src/config.h.win32: Define PACKAGE_TARNAME, for require-config.h.
 	  More accurate mathematical constants (20 decimal places instead of 3).
 

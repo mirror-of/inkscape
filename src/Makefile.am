@@ -75,10 +75,6 @@ EXTRA_DIST =	\
 	extension/internal/win32.h	\
 	helper/sp-marshal.list	\
 	libnrtype/codepages.h	\
-	libnrtype/nr-type-w32.cpp	\
-	libnrtype/nr-type-w32.h	\
-	libnrtype/nr-type-xft.cpp	\
-	libnrtype/nr-type-xft.h	\
 	utest/utest.h
 
 EXTRA_PROGRAMS =	\
