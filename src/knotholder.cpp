@@ -210,7 +210,7 @@ knot_ungrabbed_handler (SPKnot *knot, unsigned int state, SPKnotHolder *kh)
 	} else {
 		SPObject *object = (SPObject *) kh->item;
 		object->updateRepr(object->repr, SP_OBJECT_WRITE_EXT);
-		sp_document_done (SP_OBJECT_DOCUMENT (kh->item));
+		sp_document_done (SP_OBJECT_DOCUMENT (object));
 	}
 }
 
