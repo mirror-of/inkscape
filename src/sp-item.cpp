@@ -610,7 +610,7 @@ sp_item_invoke_hide (SPItem *item, unsigned int key)
 }
 
 /**
-Finds out the difference between the previous transform of an item (from its repr) and the new transform
+Find out the difference between the previous transform of an item (from its repr) and the new transform
 */
 NR::Matrix
 sp_item_transform_delta (SPItem *item, NRMatrix *transform)
@@ -626,6 +626,9 @@ sp_item_transform_delta (SPItem *item, NRMatrix *transform)
 	return t_old.inverse() * NR::Matrix(transform);
 }
 
+/**
+ Scale stroke width in the item; both style field and the CSS in the repr are written to
+*/
 void
 sp_item_adjust_stroke_width (SPItem *item, double expansion)
 {
@@ -641,6 +644,9 @@ sp_item_adjust_stroke_width (SPItem *item, double expansion)
 	sp_repr_css_change (SP_OBJECT_REPR(item), css, "style");
 }
 
+/**
+ Recursively scale stroke width in \a item and its children by \a expansion
+*/
 void
 sp_item_adjust_stroke_width_recursive (SPItem *item, double expansion)
 {
@@ -652,6 +658,12 @@ sp_item_adjust_stroke_width_recursive (SPItem *item, double expansion)
 	}
 }
 
+/**
+Set a new transform on an object. Compensate for stroke scaling and gradient/pattern
+fill transform, if necessary. Call the object's set_transform method if transforms are
+stored optimized. Send _transformed_signal. Invoke _write method so that the repr is
+updated with the new transform.
+ */
 void
 sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Matrix *adv)
 {
@@ -659,22 +671,24 @@ sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Ma
 	g_return_if_fail (SP_IS_ITEM (item));
 	g_return_if_fail (repr != NULL);
 
-	// calculate the relative transform, if not given by the adv attribute, and send it as a _transformed_signal
+	// calculate the relative transform, if not given by the adv attribute 
 	NR::Matrix advertized_transform;
 	if (adv != NULL) {
 		advertized_transform = *adv;
 	} else {
 		advertized_transform = sp_item_transform_delta (item, transform);
 	}
+
 	NR::Matrix xform(transform);
 
+	// compensate for stroke scaling, depending on user preference
 	if (prefs_get_int_attribute("options.scalestroke", "value", 1) == 0) {
 		double expansion = NR::expansion(advertized_transform.inverse());
 		sp_item_adjust_stroke_width_recursive (item, expansion);
 	}
- 
-	gint preserve = prefs_get_int_attribute ("options.preservetransform", "value", 0);
 
+	// run the object's set_transform if transforms are stored optimized  
+	gint preserve = prefs_get_int_attribute ("options.preservetransform", "value", 0);
 	if (!transform) {
 		sp_item_set_item_transform(item, NR::identity());
 	} else {
@@ -684,6 +698,7 @@ sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Ma
 		sp_item_set_item_transform(item, xform);
 	}
 
+	// send the relative transform with a _transformed_signal
 	item->_transformed_signal.emit (&advertized_transform, item);
 
 	sp_object_invoke_write(SP_OBJECT(item), SP_OBJECT_REPR(item), SP_OBJECT_WRITE_EXT);
