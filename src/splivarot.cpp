@@ -805,7 +805,7 @@ void sp_selected_path_create_updating_inset ()
 }
 
 void
-sp_selected_path_create_offset_object (int expand,bool updating)
+sp_selected_path_create_offset_object (int expand, bool updating)
 {
     SPSelection *selection;
     SPRepr *repr;
@@ -845,6 +845,9 @@ sp_selected_path_create_offset_object (int expand,bool updating)
     }
   
     NR::Matrix const transform(item->transform);
+
+    sp_item_write_transform(item, SP_OBJECT_REPR(item), NR::identity());
+
     style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
 
     // remember the position of the item
@@ -940,11 +943,6 @@ sp_selected_path_create_offset_object (int expand,bool updating)
     }
   
     sp_curve_unref (curve);
-    if ( updating ) {
-        // on conserve l'original
-    } else {
-        SP_OBJECT (item)->deleteObject(false);
-    }
   
     if (res->descr_nb <= 1)
     {
@@ -986,13 +984,10 @@ sp_selected_path_create_offset_object (int expand,bool updating)
         g_free (str);
     
         if ( updating ) {
-					int   l_uri=strlen(sp_repr_attr(SP_OBJECT(item)->repr,"id"));
-					char* n_uri=(char*)malloc((l_uri+1)*sizeof(char));
-					memcpy(n_uri+1,sp_repr_attr(SP_OBJECT(item)->repr,"id"),l_uri*sizeof(char));
-					n_uri[0]='#';
-					n_uri[1+l_uri]=0;
-					sp_repr_set_attr (repr, "xlink:href", n_uri);
-					free(n_uri);
+            const char *id = sp_repr_attr(SP_OBJECT(item)->repr,"id");
+            const char *uri = g_strdup_printf ("#%s", id);
+            sp_repr_set_attr (repr, "xlink:href", uri);
+            g_free ((void *) uri);
         } else {
             sp_repr_set_attr (repr, "inkscape:href", NULL);
         }
@@ -1006,7 +1001,16 @@ sp_selected_path_create_offset_object (int expand,bool updating)
         sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
 
         SPItem *nitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
-        sp_item_write_transform (nitem, repr, transform);
+
+        if ( updating ) {
+            // on conserve l'original
+            // we reapply the transform to the original (offset will feel it)
+            sp_item_write_transform (item, SP_OBJECT_REPR(item), transform);
+        } else {
+            // delete original, apply the transform to the offset
+            SP_OBJECT (item)->deleteObject(false);
+            sp_item_write_transform (nitem, repr, transform);
+        }
 
         // The object just created from a temporary repr is only a seed. 
         // We need to invoke its write which will update its real repr (in particular adding d=)
@@ -1073,6 +1077,10 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
                 continue;
         }
 
+        NR::Matrix const transform(item->transform);
+
+        sp_item_write_transform(item, SP_OBJECT_REPR(item), NR::identity());
+
         gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR (item), "style"));
 
         float o_width, o_miter;
@@ -1118,7 +1126,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
             o_miter = i_style->stroke_miterlimit.value * o_width;
         }
 
-        Path *orig = Path_for_item (item, true, false);
+        Path *orig = Path_for_item (item, false);
         if (orig == NULL) {
             g_free (style);
             sp_curve_unref (curve);
@@ -1243,6 +1251,11 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
             // move to the saved position 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
 
+            SPItem *newitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
+
+            // reapply the transform
+            sp_item_write_transform (newitem, repr, transform);
+
             sp_repr_set_attr (repr, "id", id);
 
             selection->addRepr (repr);
@@ -1329,7 +1342,14 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
                 continue;
         }
 
+        // save the transform, to re-apply it after simplification
         NR::Matrix const transform(item->transform);
+
+        // reset the transform, effectively transforming the item by transform.inverse();
+        // this is necessary so that the item is transformed twice back and forth,
+        // allowing all compensations to cancel out regardless of the preferences
+        sp_item_write_transform(item, SP_OBJECT_REPR(item), NR::identity());
+
         gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR (item), "style"));
 
         Path *orig = Path_for_item (item, false);
@@ -1379,6 +1399,8 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
 
             SPItem *newitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
+
+            // reapply the transform
             sp_item_write_transform (newitem, repr, transform);
 
             selection->addRepr (repr);
