@@ -174,7 +174,14 @@ sp_text_context_setup (SPEventContext *ec)
 	if (tc->imc) {
 		GtkWidget *canvas = GTK_WIDGET (SP_DT_CANVAS (desktop));
 
+		/* im preedit handling is very broken in inkscape for
+		 * multi-byte characters.  See bug 1086769.
+		 * We need to let the IM handle the preediting, and
+		 * just take in the characters when they're finished being
+		 * entered.
 		gtk_im_context_set_use_preedit (tc->imc, TRUE);
+		*/
+		gtk_im_context_set_use_preedit (tc->imc, FALSE);
 		gtk_im_context_set_client_window (tc->imc, canvas->window);
 
 		g_signal_connect (G_OBJECT (canvas), "focus_in_event", G_CALLBACK (sptc_focus_in), tc);

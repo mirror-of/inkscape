@@ -15,6 +15,8 @@
 	* src/dialogs/filedialog.cpp, src/extension/extension.h,
 	  src/extension/internal/svg.cpp: .svgz loading works again as
 	  expected.  Non-functioning modules are not listed in file dialogs.
+	* src/text-context.cpp, src/text-editing.cpp: preedit modes don't
+	  work correctly for multi-byte characters.  See bug 1086769.
 
 2005-01-31  Jon A. Cruz  <jon@joncruz.org>
 	* src/file.cpp, src/inkscape.cpp, src/interface.cpp,

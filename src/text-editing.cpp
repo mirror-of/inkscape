@@ -291,6 +291,20 @@ sp_te_get_position_by_coords (SPItem *item, NR::Point &i_p)
     return 0;
 }
 
+/*
+ * for debugging input
+ *
+char * dump_hexy(const gchar * utf8)
+{
+    static char buffer[1024];
+
+    buffer[0]='\0';
+    for (const char *ptr=utf8; *ptr; ptr++) {
+        sprintf(buffer+strlen(buffer),"x%02X",(unsigned char)*ptr);
+    }
+    return buffer;
+}
+*/
 
 
 /**
@@ -310,12 +324,12 @@ sp_te_insert(SPItem *item, gint i_ucs4_pos, gchar const *utf8)
     div_flow_src *contents = te_get_contents (item);
 
  	int utf8_pos=contents->Do_UCS4_2_UTF8(i_ucs4_pos);
-   //printf("insert %s at %i\n",utf8,pos);
     int  utf8_len=strlen(utf8);
     int  ucs4_len=0;
     for (gchar const *p = utf8; *p; p = g_utf8_next_char(p)) {
         ucs4_len++;
     }
+    //g_print("insert '%s'(utf8:%d ucs4:%d) at %i\n",dump_hexy(utf8),utf8_len,ucs4_len,utf8_pos);
     if ( f_src == NULL ) { // no source text?
         return i_ucs4_pos;
     }
