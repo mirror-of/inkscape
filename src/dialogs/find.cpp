@@ -281,6 +281,8 @@ type_checkbox (GtkWidget *widget, const gchar *data)
 bool 
 item_type_match (SPItem *item, GtkWidget *widget)
 {
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
     if (SP_IS_RECT(item)) {
         return (type_checkbox (widget, "shapes") || type_checkbox (widget, "rects"));
 
@@ -299,7 +301,7 @@ item_type_match (SPItem *item, GtkWidget *widget)
     } else if (SP_IS_TEXT(item) || SP_IS_TSPAN(item) || SP_IS_STRING(item)) {
         return (type_checkbox (widget, "texts"));
 
-    } else if (SP_IS_GROUP(item)) {
+    } else if (SP_IS_GROUP(item) && !desktop->isLayer(item) ) { // never select layers!
         return (type_checkbox (widget, "groups"));
 
     } else if (SP_IS_USE(item)) {
@@ -349,8 +351,10 @@ filter_list (GSList *l, GObject *dlg, bool exact)
 }
 
 GSList *
-all_items (SPObject *r, GSList *l)
+all_items (SPObject *r, GSList *l, bool hidden, bool locked)
 {
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
     if (SP_IS_DEFS(r))
         return l; // we're not interested in items in defs 
 
@@ -358,22 +362,32 @@ all_items (SPObject *r, GSList *l)
         return l; // we're not interested in metadata
 
     for (SPObject *child = sp_object_first_child(r); child; child = SP_OBJECT_NEXT (child)) {
-        if (SP_IS_ITEM (child) && !SP_OBJECT_IS_CLONED (child)) {
-            l = g_slist_prepend (l, child);
+        if (SP_IS_ITEM (child) && !SP_OBJECT_IS_CLONED (child) && !desktop->isLayer(SP_ITEM(child))) {
+                if ((hidden || !desktop->itemIsHidden(SP_ITEM(child))) && (locked || !SP_ITEM(child)->isLocked())) {
+                    l = g_slist_prepend (l, child);
+                }
         }
-        l = all_items (child, l);
+        l = all_items (child, l, hidden, locked);
     }
     return l;
 }
 
 GSList *
-all_selection_items (SPSelection *s, GSList *l)
+all_selection_items (SPSelection *s, GSList *l, SPObject *ancestor, bool hidden, bool locked)
 {
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
    for (GSList *i = (GSList *) s->itemList(); i != NULL; i = i->next) {
-        if (SP_IS_ITEM (i->data) && !SP_OBJECT_IS_CLONED (i->data)) {
-            l = g_slist_prepend (l, i->data);
+        if (SP_IS_ITEM (i->data) && !SP_OBJECT_IS_CLONED (i->data) && !desktop->isLayer(SP_ITEM(i->data))) {
+            if (!ancestor || ancestor->isAncestorOf(SP_OBJECT (i->data))) {
+                if ((hidden || !desktop->itemIsHidden(SP_ITEM(i->data))) && (locked || !SP_ITEM(i->data)->isLocked())) {
+                    l = g_slist_prepend (l, i->data);
+                }
+            }
         }
-        l = all_items (SP_OBJECT (i->data), l);
+        if (!ancestor || ancestor->isAncestorOf(SP_OBJECT (i->data))) {
+            l = all_items (SP_OBJECT (i->data), l, hidden, locked);
+        }
     }
     return l;
 }
@@ -383,11 +397,22 @@ void sp_find_dialog_find(GObject *, GObject *dlg)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
+    bool hidden = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (dlg), "includehidden")));
+    bool locked = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (dlg), "includelocked")));
+
     GSList *l = NULL;
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (dlg), "inselection")))) {
-        l = all_selection_items (desktop->selection, l);
+        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (dlg), "inlayer")))) {
+            l = all_selection_items (desktop->selection, l, desktop->currentLayer(), hidden, locked);
+        } else {
+            l = all_selection_items (desktop->selection, l, NULL, hidden, locked);
+        }
     } else {
-        l = all_items (SP_DOCUMENT_ROOT (SP_DT_DOCUMENT (desktop)), l);
+        if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (dlg), "inlayer")))) {
+            l = all_items (desktop->currentLayer(), l, hidden, locked);
+        } else {
+            l = all_items (SP_DOCUMENT_ROOT (SP_DT_DOCUMENT (desktop)), l, hidden, locked);
+        }
     }
     guint all = g_slist_length (l);
 
@@ -402,7 +427,7 @@ void sp_find_dialog_find(GObject *, GObject *dlg)
     if (n != NULL) {
         desktop->messageStack()->flashF(Inkscape::NORMAL_MESSAGE,
                                         // TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-                                        _("%d object(s) found (out of %d), %s match."),
+                                        _("<b>%d</b> object(s) found (out of <b>%d</b>), %s match."),
                                         g_slist_length (n), all, exact? _("exact") : _("partial"));
 
         SPSelection *selection = SP_DT_SELECTION (desktop);
@@ -732,12 +757,41 @@ sp_find_dialog_old (void)
             gtk_widget_show (w);
             gtk_box_pack_start (GTK_BOX (vb), w, FALSE, FALSE, 3);
 
+            {
             GtkWidget *b  = gtk_check_button_new_with_mnemonic (_("Search in s_election"));
             gtk_widget_show (b);
             gtk_toggle_button_set_active ((GtkToggleButton *) b, FALSE);
             gtk_object_set_data (GTK_OBJECT (dlg), "inselection", b);
             gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, _("Limit search to the current selection"), NULL);
             gtk_box_pack_start (GTK_BOX (vb), b, FALSE, FALSE, 0);
+            }
+
+            {
+            GtkWidget *b  = gtk_check_button_new_with_mnemonic (_("Search in current _layer"));
+            gtk_widget_show (b);
+            gtk_toggle_button_set_active ((GtkToggleButton *) b, FALSE);
+            gtk_object_set_data (GTK_OBJECT (dlg), "inlayer", b);
+            gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, _("Limit search to the current layer"), NULL);
+            gtk_box_pack_start (GTK_BOX (vb), b, FALSE, FALSE, 0);
+            }
+
+            {
+            GtkWidget *b  = gtk_check_button_new_with_mnemonic (_("Include _hidden"));
+            gtk_widget_show (b);
+            gtk_toggle_button_set_active ((GtkToggleButton *) b, FALSE);
+            gtk_object_set_data (GTK_OBJECT (dlg), "includehidden", b);
+            gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, _("Include hidden objects in search"), NULL);
+            gtk_box_pack_start (GTK_BOX (vb), b, FALSE, FALSE, 0);
+            }
+
+            {
+            GtkWidget *b  = gtk_check_button_new_with_mnemonic (_("Include l_ocked"));
+            gtk_widget_show (b);
+            gtk_toggle_button_set_active ((GtkToggleButton *) b, FALSE);
+            gtk_object_set_data (GTK_OBJECT (dlg), "includelocked", b);
+            gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), b, _("Include locked objects in search"), NULL);
+            gtk_box_pack_start (GTK_BOX (vb), b, FALSE, FALSE, 0);
+            }
         }
 
         {
