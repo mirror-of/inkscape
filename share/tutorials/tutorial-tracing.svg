@@ -494,8 +494,8 @@
   <sodipodi:namedview
      id="base"
      inkscape:zoom="2.6875000"
-     inkscape:cx="128.37209"
-     inkscape:cy="1263.6682"
+     inkscape:cx="128.74419"
+     inkscape:cy="1263.5938"
      inkscape:window-width="780"
      inkscape:window-height="580"
      inkscape:window-x="0"
@@ -1057,7 +1057,7 @@ http://www.inkscape.org/</dc:description>
      id="layer2">
     <text
        xml:space="preserve"
-       style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;color:#000000;fill:#000000;fill-opacity:1.0000000;fill-rule:nonzero;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.00000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;font-family:Bitstream Vera Serif;letter-spacing:0.00000000;text-anchor:start;writing-mode:lr;"
+       style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;color:#000000;fill:#000000;fill-opacity:1.0000000;fill-rule:nonzero;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.00000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;font-family:Bitstream Vera Serif;letter-spacing:0.00000000;text-anchor:start;writing-mode:lr"
        x="11.150325"
        y="119.30886"
        id="text1582"
@@ -1183,9 +1183,9 @@ http://www.inkscape.org/</dc:description>
          sodipodi:role="line"
          id="tspan1616"
          style="stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none">and select the <tspan
-   style="font-weight:bold"
-   id="tspan5811">Path/Trace Bitmap</tspan> item, or <tspan
-   style="font-weight:bold"
+   style="font-weight:bold;stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none"
+   id="tspan5811">Path&gt;Trace Bitmap</tspan> item, or <tspan
+   style="font-weight:bold;stroke-dashoffset:0.00000000;marker:none;marker-start:none;marker-mid:none;marker-end:none"
    id="tspan5814">Shift+Alt+B</tspan>.</tspan></text>
     <text
        xml:space="preserve"
@@ -1211,7 +1211,7 @@ http://www.inkscape.org/</dc:description>
        id="g6289">
       <text
          xml:space="preserve"
-         style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
+         style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr"
          x="9.0108232"
          y="264.98944"
          id="text1557"
@@ -1494,7 +1494,7 @@ http://www.inkscape.org/</dc:description>
            sodipodi:role="line"
            id="tspan6600"><tspan
    style="font-weight:bold"
-   id="tspan5969">Path/Simplify (Ctrl+L)</tspan> on the output path, to reduce the number </tspan><tspan
+   id="tspan5969">Path&gt;Simplify (Ctrl+L)</tspan> on the output path, to reduce the number </tspan><tspan
            x="9.0108232"
            y="1018.4694"
            sodipodi:role="line"
