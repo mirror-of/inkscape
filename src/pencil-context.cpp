@@ -41,8 +41,8 @@ static gint pencil_handle_button_release(SPPencilContext *const pc, GdkEventButt
 static gint pencil_handle_key_press(SPPencilContext *const pc, guint const keyval, guint const state);
 
 static void spdc_set_startpoint(SPPencilContext *pc, NR::Point p, guint state);
-static void spdc_set_endpoint(SPPencilContext *pc, NR::Point p, guint state);
-static void spdc_finish_endpoint(SPPencilContext *pc, NR::Point p, gboolean snap, guint state);
+static void spdc_set_endpoint(SPPencilContext *pc, NR::Point p);
+static void spdc_finish_endpoint(SPPencilContext *pc);
 static void spdc_add_freehand_point(SPPencilContext *pc, NR::Point p, guint state);
 static void fit_and_split(SPPencilContext *pc);
 
@@ -111,6 +111,13 @@ static void
 sp_pencil_context_dispose(GObject *object)
 {
     G_OBJECT_CLASS(pencil_parent_class)->dispose(object);
+}
+
+/** Snaps new node relative to the previous node. */
+static void
+spdc_endpoint_snap(SPPencilContext const *pc, NR::Point &p, guint const state)
+{
+    spdc_endpoint_snap_internal(pc, p, pc->p[0], state);
 }
 
 gint
@@ -211,8 +218,10 @@ pencil_handle_motion_notify(SPPencilContext *const pc, GdkEventMotion const &mev
             /* Set red endpoint */
             if (anchor) {
                 p = anchor->dp;
+            } else {
+                spdc_endpoint_snap(pc, p, mevent.state);
             }
-            spdc_set_endpoint(pc, p, mevent.state);
+            spdc_set_endpoint(pc, p);
             ret = TRUE;
             break;
         default:
@@ -265,9 +274,12 @@ pencil_handle_button_release(SPPencilContext *const pc, GdkEventButton const &re
                 /* Finish segment now */
                 if (anchor) {
                     p = anchor->dp;
+                } else {
+                    spdc_endpoint_snap(pc, p, revent.state);
                 }
                 pc->ea = anchor;
-                spdc_finish_endpoint(pc, p, !anchor, revent.state);
+                spdc_set_endpoint(pc, p);
+                spdc_finish_endpoint(pc);
                 pc->state = SP_PENCIL_CONTEXT_IDLE;
                 ret = TRUE;
                 break;
@@ -327,13 +339,6 @@ pencil_handle_key_press(SPPencilContext *const pc, guint const keyval, guint con
     return ret;
 }
 
-/** Snaps new node relative to the previous node. */
-static void
-spdc_endpoint_snap(SPPencilContext const *pc, NR::Point &p, guint const state)
-{
-    spdc_endpoint_snap_internal(pc, p, pc->p[0], state);
-}
-
 /**
  * Reset points and set new starting point.
  */
@@ -360,11 +365,9 @@ spdc_set_startpoint(SPPencilContext *const pc, NR::Point p, guint const state)
  * We change RED curve.
  */
 static void
-spdc_set_endpoint(SPPencilContext *const pc, NR::Point p, guint const state)
+spdc_set_endpoint(SPPencilContext *const pc, NR::Point const p)
 {
     g_assert( pc->npoints > 0 );
-
-    spdc_endpoint_snap(pc, p, state);
 
     pc->p[1] = p;
     pc->npoints = 2;
@@ -376,43 +379,26 @@ spdc_set_endpoint(SPPencilContext *const pc, NR::Point p, guint const state)
     pc->red_curve_is_valid = true;
 }
 
-/*
- * Set endpoint final position and end addline mode
- * fixme: I'd like remove red reset from concat colors (lauris)
- * fixme: Still not sure, how it will make most sense
+/**
+ * Set endpoint final position and end addline mode.
+ * fixme: I'd like remove red reset from concat colors (lauris).
+ * fixme: Still not sure, how it will make most sense.
+ * todo: Update this comment.  Check for overlap with set_endpoint.
  */
-
 static void
-spdc_finish_endpoint(SPPencilContext *const pc, NR::Point p, gboolean const snap,
-                     guint const state)
+spdc_finish_endpoint(SPPencilContext *const pc)
 {
-    if ( SP_CURVE_LENGTH(pc->red_curve) < 2 ) {
-        /* Just a click, reset red curve and continue */
-        sp_curve_reset(pc->red_curve);
-        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), NULL);
-    } else if ( SP_CURVE_LENGTH(pc->red_curve) > 2 ) {
+    if ( ( SP_CURVE_LENGTH(pc->red_curve) != 2 )
+         || ( SP_CURVE_SEGMENT(pc->red_curve, 0)->c(3) ==
+              SP_CURVE_SEGMENT(pc->red_curve, 1)->c(3)   ) )
+    {
         sp_curve_reset(pc->red_curve);
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), NULL);
     } else {
-        NArtBpath *s, *e;
-        /* We have actual line */
-        if (snap) {
-            /* Do (bogus?) snap */
-            spdc_endpoint_snap(pc, p, state);
-        }
-        /* fixme: We really should test start and end anchors instead */
-        s = SP_CURVE_SEGMENT(pc->red_curve, 0);
-        e = SP_CURVE_SEGMENT(pc->red_curve, 1);
-        if ( ( e->x3 == s->x3 ) && ( e->y3 == s->y3 ) ) {
-            /* Empty line, reset red curve and continue */
-            sp_curve_reset(pc->red_curve);
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), NULL);
-        } else {
-            /* Write curves to object */
-            spdc_concat_colors_and_flush(pc, FALSE);
-            pc->sa = NULL;
-            pc->ea = NULL;
-        }
+        /* Write curves to object. */
+        spdc_concat_colors_and_flush(pc, FALSE);
+        pc->sa = NULL;
+        pc->ea = NULL;
     }
 }
 

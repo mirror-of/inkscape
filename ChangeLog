@@ -1,3 +1,8 @@
+2004-10-22  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/pencil-context.cpp: Fix bug: undesirable interaction between
+	  snapping and snap-to-anchor.
+
 2004-10-21  MenTaLguY  <mental@rydia.net>
 
 	* src/desktop.cpp: SPDesktop::currentRoot() should pull from
