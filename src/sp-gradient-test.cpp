@@ -2,6 +2,7 @@
 #include "inkscape-private.h"
 #include "sp-gradient.h"
 #include "sp-object.h"
+#include "document.h"
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-fns.h"
 #include "libnr/nr-matrix-ops.h"
