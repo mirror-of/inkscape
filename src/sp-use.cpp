@@ -709,7 +709,7 @@ sp_use_unlink (SPUse *use)
 
 	// set the accummulated transform
 	{
-		NRMatrix ctrans = t;
+		NRMatrix ctrans = t.operator const NRMatrix&();
 		sp_item_write_transform (item, SP_OBJECT_REPR (item), &ctrans);
 	}
 
