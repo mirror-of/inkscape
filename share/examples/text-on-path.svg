@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 <svg
+   xmlns:xml="http://www.w3.org/XML/1998/namespace"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="605.28000pt"
    height="297mm"
    id="svg1"
    sodipodi:version="0.32"
-   inkscape:version="0.40cvs"
-   sodipodi:docbase="/home/b/ink/inkscape/share/examples"
-   sodipodi:docname="text-on-path.svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:cc="http://web.resource.org/cc/"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:xml="http://www.w3.org/XML/1998/namespace"
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:xlink="http://www.w3.org/1999/xlink">
+   inkscape:version="0.41+cvs"
+   sodipodi:docbase="/home/d/ink/inkscape/share/examples"
+   sodipodi:docname="text-on-path.svg">
   <defs
      id="defs3" />
   <sodipodi:namedview
@@ -25,9 +26,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.29"
-     inkscape:cx="403"
-     inkscape:cy="647"
+     inkscape:zoom="1.2900000"
+     inkscape:cx="427.03100"
+     inkscape:cy="636.14729"
      inkscape:window-width="923"
      inkscape:window-height="722"
      inkscape:window-x="0"
@@ -67,8 +68,6 @@
   <text
      xml:space="preserve"
      style="font-size:9.0000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
-     x="443.30743"
-     y="436.51605"
      id="text2252"
      transform="matrix(1.000000,0.000000,0.000000,2.251099,-21.25875,-634.2331)"
      sodipodi:linespacing="100%"><textPath
@@ -80,8 +79,6 @@
   <text
      xml:space="preserve"
      style="font-size:9.0000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
-     x="447.37915"
-     y="462.47318"
      id="text2255"
      transform="matrix(1.000000,0.000000,0.000000,1.403056,-17.05781,-255.5465)"
      sodipodi:linespacing="100%"><textPath
@@ -93,8 +90,6 @@
   <text
      xml:space="preserve"
      style="font-size:9.0000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
-     x="448.90604"
-     y="493.51999"
      id="text2258"
      transform="matrix(1.111838,0.000000,0.000000,0.970866,-46.58320,-31.24526)"
      sodipodi:linespacing="100%"><textPath
@@ -106,8 +101,6 @@
   <text
      xml:space="preserve"
      style="font-size:9.0000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
-     x="450.94189"
-     y="554.08667"
      id="text2264"
      transform="translate(0.122982,-4.828527)"
      sodipodi:linespacing="100%"><textPath
@@ -124,8 +117,6 @@
   <text
      xml:space="preserve"
      style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
-     x="217.32751"
-     y="664.02283"
      id="text2927"
      transform="translate(15.77788,-10.17928)"><textPath
        xlink:href="#path6098"
@@ -134,8 +125,6 @@
   <text
      xml:space="preserve"
      style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
-     x="232.08746"
-     y="717.97302"
      id="text2933"
      transform="translate(1.577177,20.05106)"><textPath
        xlink:href="#path6098"
@@ -144,8 +133,6 @@
   <text
      xml:space="preserve"
      style="font-size:8.0000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
-     x="228.01576"
-     y="771.92316"
      id="text2936"
      transform="translate(-27.01395,2.842171e-14)"
      sodipodi:linespacing="100%"><textPath
@@ -159,8 +146,6 @@
   <text
      xml:space="preserve"
      style="font-size:5.9636002;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
-     x="332.8623"
-     y="787.19208"
      id="text2939"
      sodipodi:linespacing="100%"><textPath
        xlink:href="#path8260"
@@ -169,8 +154,6 @@
   <text
      xml:space="preserve"
      style="font-size:5.9636002;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
-     x="337.44296"
-     y="804.49683"
      id="text2942"
      sodipodi:linespacing="100%"><textPath
        xlink:href="#path8189"
@@ -183,8 +166,6 @@
     <text
        xml:space="preserve"
        style="font-size:23.000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;opacity:0.083032437;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Times New Roman;text-anchor:start;writing-mode:lr;"
-       x="160.83255"
-       y="629.92224"
        id="text2969"
        sodipodi:linespacing="100%"
        transform="translate(-0.179946,0.667297)"><textPath
@@ -203,8 +184,6 @@
     <text
        xml:space="preserve"
        style="font-size:6.0000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Times New Roman;text-anchor:start;writing-mode:lr;"
-       x="160.83255"
-       y="629.92224"
        id="text2948"
        sodipodi:linespacing="100%"><textPath
          xlink:href="#path2951"
@@ -218,8 +197,6 @@
   <text
      xml:space="preserve"
      style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
-     x="481.47971"
-     y="395.79895"
      id="text5470"><textPath
        xlink:href="#path1003"
        id="textPath5473"><tspan
@@ -232,8 +209,6 @@
   <text
      xml:space="preserve"
      style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
-     x="499.29343"
-     y="628.39539"
      id="text2930"
      transform="translate(3.601625,0.940172)"><textPath
        xlink:href="#path6098"
@@ -248,8 +223,6 @@
   <text
      xml:space="preserve"
      style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
-     x="228.01576"
-     y="771.92316"
      id="text7446"
      transform="translate(-30.55726,92.12600)"><textPath
        xlink:href="#path7440"
@@ -259,8 +232,6 @@
   <text
      xml:space="preserve"
      style="font-size:14.371643;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
-     x="249.9012"
-     y="566.30182"
      id="text8182"><textPath
        xlink:href="#path7440"
        id="textPath8185"><tspan
@@ -282,8 +253,6 @@
   <text
      xml:space="preserve"
      style="font-size:14.371643;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
-     x="249.9012"
-     y="566.30182"
      id="text9512"
      transform="translate(0.000000,92.12597)"><textPath
        xlink:href="#path7440"
@@ -295,8 +264,6 @@
   <text
      xml:space="preserve"
      style="font-size:16.799999;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
-     x="311.65088"
-     y="513.81232"
      id="text9517"
      sodipodi:linespacing="100%"><textPath
        xlink:href="#path9529"
@@ -306,20 +273,18 @@
    dy="0 0 -2.5747409 0.48571482 0 0 0 0 0 0 0 -6.4368515 3.4329886 -3.8621111 3.4329875 -2.5747406 2.1456172 4.7203579 1.7164935 -3.8621109 0.42912343 0 0 0 0 0 0 0 -0.42912349 0 0"
    dx="0 0 0 -0.86956501 -0.66499919 0 0 0 -0.99749881 -0.831249 0 0.85824668 -0.24724384 -0.98186892 -2.5747406 -0.85824686 -0.85824686 -1.2873703 0 -1.2873707 -1.2873704 -0.85824692 -0.42912343 -0.42912343 0 0 0 -0.831249 -1.2873698 0 -2.5747404">  Vertical kerning works, too.</tspan></textPath></text>
   <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.81250221;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:0.81250232 2.4375070 ;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;"
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.81250221;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dasharray:0.81250232 2.4375070 ;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000"
      d="M 324.22793,521.94662 C 414.58908,437.38499 478.30914,507.40301 515.07981,543.21492"
      id="path9529"
      sodipodi:nodetypes="cs" />
   <path
-     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;"
-     d="M 209.83484,598.81897 C 223.57939,619.71758 252.49007,629.12411 276.03247,616.98520 C 306.50556,601.27269 318.32347,572.47961 345.67526,549.26059 C 370.54148,528.15158 401.47400,544.20765 418.29118,566.23443 C 429.96697,581.52712 444.22769,595.82024 463.86357,601.44408 C 488.94789,608.62840 522.02961,618.58103 541.68217,596.97556 C 560.96417,575.77747 547.90188,544.79861 552.36357,519.00692 C 556.48813,495.16407 577.50217,476.12513 602.28375,475.44843 C 623.90820,474.85794 634.30167,474.57606 657.42335,469.44194 C 677.86220,464.90354 724.75475,432.05101 723.79155,407.11091 C 721.08992,337.15805 643.07824,341.20605 605.95961,376.41135 C 582.62094,398.54701 590.90192,473.61420 668.42968,437.28376 C 690.57673,426.90539 616.41102,247.03777 626.09585,221.33711 C 634.94066,197.86563 736.71137,447.46366 713.53443,447.61422 C 704.21817,447.67474 727.49578,168.77727 718.16559,168.97151"
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000"
+     d="M 209.83484,598.81897 C 223.57939,619.71758 252.49007,629.12411 276.03247,616.98520 C 306.50556,601.27269 318.32347,572.47961 345.67526,549.26059 C 370.54148,528.15158 401.47400,544.20765 418.29118,566.23443 C 429.96697,581.52712 444.22769,595.82024 463.86357,601.44408 C 488.94789,608.62840 522.02961,618.58103 541.68217,596.97556 C 560.96417,575.77747 547.90188,544.79861 552.36357,519.00692 C 556.48813,495.16407 577.50217,476.12513 602.28375,475.44843 C 623.90820,474.85794 634.30167,474.57606 657.42335,469.44194 C 677.86220,464.90354 724.75475,432.05101 723.79155,407.11091 C 721.08992,337.15805 643.07824,341.20605 605.95961,376.41135 C 582.62094,398.54701 590.90192,473.61420 668.42968,437.28376 C 690.57673,426.90539 706.55286,399.09903 687.33616,379.47664 C 662.07244,353.67958 569.26951,408.70397 654.61970,423.58321"
      id="path10162"
-     sodipodi:nodetypes="cssssssssssssss" />
+     sodipodi:nodetypes="csssssssssssss" />
   <text
      xml:space="preserve"
      style="font-size:18.000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#ff0023;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
-     x="306.73087"
-     y="561.09399"
      id="text10159"
      sodipodi:linespacing="100%"><textPath
        xlink:href="#path10162"
@@ -332,8 +297,6 @@
   <text
      xml:space="preserve"
      style="font-size:8.3999996;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
-     x="311.50247"
-     y="630.62732"
      id="text10797"
      transform="matrix(1.011635,7.468780e-2,-7.468780e-2,1.011635,-128.7397,-6.707906e-2)"><textPath
        xlink:href="#path10803"
@@ -376,8 +339,6 @@
     <text
        xml:space="preserve"
        style="font-size:7.0000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
-       x="614.03088"
-       y="496.23105"
        id="text12220"
        sodipodi:linespacing="100%"><textPath
          xlink:href="#path12219"
@@ -391,8 +352,6 @@
   <text
      xml:space="preserve"
      style="font-size:10.894934;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Serif;text-anchor:start;writing-mode:lr;"
-     x="586.95654"
-     y="204.5361"
      id="text1252"><textPath
        xlink:href="#path1255"
        id="textPath1351"><tspan
