@@ -18,7 +18,7 @@ INCLUDES = \
 	$(INKSCAPE_CFLAGS) \
 	$(GNOME_PRINT_CFLAGS)
 
-bin_PROGRAMS = inkscape
+bin_PROGRAMS = inkscape inkview
 
 inkscapelib_src = \
 	macros.h \
@@ -163,18 +163,19 @@ inkscape_LDADD = \
 
 inkscape_LDFLAGS = --export-dynamic $(kdeldflags)
 
-EXTRA_PROGRAMS = spsvgview
+EXTRA_PROGRAMS = inkview
 
-spsvgview_SOURCES = \
-	spsvgview.cpp \
+inkview_SOURCES = \
+	inkview.cpp \
 	view.cpp view.h \
 	svg-view.cpp svg-view.h \
 	dir-util.cpp dir-util.h \
 	modules/ps.cpp modules/ps.h \
 	module.cpp module.h \
-	print.cpp print.h
+	print.cpp print.h \
+	prefs-utils.cpp prefs-utils.h
 
-spsvgview_LDADD = \
+inkview_LDADD = \
 	$(spproglibs) \
 	$(module_libs) \
 	xml/libspxml.a \
@@ -184,6 +185,7 @@ spsvgview_LDADD = \
 	libnrtype/libnrtype.a \
 	libnr/libnr.a \
 	libarikkei/libarikkei.a \
+	livarot/libvarot.a \
 	$(INKSCAPE_LIBS) \
 	$(GNOME_PRINT_LIBS) \
 	$(XFT_LIBS) \

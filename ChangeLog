@@ -1,3 +1,8 @@
+2004-01-02  Alexander Clausen <alex@skip86.com>
+	
+	* src/spsvgview.cpp src/inkview.cpp src/Makefile.am: re-enabled svg viewer,
+	  renamed to inkview to avoid name clash with spsvgview from sodipodi
+
 2004-01-01  bulia byak <bulia@dr.com>
 
 	* src/desktop.cpp: Pass keyboard events from desktop widget to event contexts (if
