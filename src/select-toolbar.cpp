@@ -448,7 +448,7 @@ sp_select_toolbox_new(SPDesktop *desktop)
     GtkWidget *cbox = gtk_hbox_new (FALSE, 0);
 
     {
-    GtkWidget *button = sp_button_new_from_data(9,
+    GtkWidget *button = sp_button_new_from_data(11,
                                               SP_BUTTON_TYPE_TOGGLE,
                                               NULL,
                                               "transform_stroke",
@@ -460,7 +460,7 @@ sp_select_toolbox_new(SPDesktop *desktop)
     }
 
     {
-    GtkWidget *button = sp_button_new_from_data(9,
+    GtkWidget *button = sp_button_new_from_data(11,
                                               SP_BUTTON_TYPE_TOGGLE,
                                               NULL,
                                               "transform_corners",
@@ -472,7 +472,7 @@ sp_select_toolbox_new(SPDesktop *desktop)
     }
 
     {
-    GtkWidget *button = sp_button_new_from_data(9,
+    GtkWidget *button = sp_button_new_from_data(11,
                                               SP_BUTTON_TYPE_TOGGLE,
                                               NULL,
                                               "transform_gradient",
@@ -484,7 +484,7 @@ sp_select_toolbox_new(SPDesktop *desktop)
     }
 
     {
-    GtkWidget *button = sp_button_new_from_data(9,
+    GtkWidget *button = sp_button_new_from_data(11,
                                               SP_BUTTON_TYPE_TOGGLE,
                                               NULL,
                                               "transform_pattern",
