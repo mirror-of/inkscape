@@ -1,5 +1,16 @@
-#ifndef __CANNY_H__
-#define __CANNY_H__
+/*
+ * Some filters for Potrace in Inkscape
+ *
+ * Authors:
+ *   Bob Jamison <rjamison@titan.com>
+ *
+ * Copyright (C) 2004 Bob Jamison
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
+#ifndef __FILTERSET_H__
+#define __FILTERSET_H__
 
 #include "imagemap.h"
 
@@ -30,13 +41,16 @@ GdkPixbuf *gdkCanny(GdkPixbuf *img,
             double lowThreshold, double highThreshold);
 
 
+GrayMap *quantizeBand(RgbMap *rgbmap, int nrColors);
+
+
 
 #ifdef __cplusplus
 }
 #endif
 
 
-#endif /* __CANNY_H__ */
+#endif /* __FILTERSET_H__ */
 
 /*#########################################################################
 ### E N D    O F    F I L E

@@ -15,26 +15,24 @@ potrace_libpotrace_a_SOURCES =	\
 	potrace/bitmap.h \
 	potrace/bits.cpp \
 	potrace/bits.h \
-	potrace/canny.cpp	\
-	potrace/canny.h	\
 	potrace/curve.cpp \
 	potrace/curve.h \
 	potrace/flate.cpp \
 	potrace/flate.h \
-	potrace/imagemap-gdk.cpp	\
-	potrace/imagemap-gdk.h	\
-	potrace/imagemap.cpp	\
-	potrace/imagemap.h	\
-	potrace/quantize.cpp	\
-	potrace/quantize.h	\
 	potrace/greymap.cpp \
 	potrace/greymap.h \
-	potrace/inkscape-potrace.cpp	\
-	potrace/inkscape-potrace.h	\
 	potrace/lists.h \
 	potrace/lzw.h	\
 	potrace/main.h	\
 	potrace/path.cpp \
 	potrace/path.h \
 	potrace/render.cpp \
-	potrace/render.h
+	potrace/render.h \
+	potrace/inkscape-potrace.cpp	\
+	potrace/inkscape-potrace.h	\
+	potrace/imagemap-gdk.cpp	\
+	potrace/imagemap-gdk.h	\
+	potrace/imagemap.cpp	\
+	potrace/imagemap.h	\
+	potrace/filterset.cpp	\
+	potrace/filterset.h

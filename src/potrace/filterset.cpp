@@ -1,10 +1,21 @@
+/*
+ * Some filters for Potrace in Inkscape
+ *
+ * Authors:
+ *   Bob Jamison <rjamison@titan.com>
+ *
+ * Copyright (C) 2004 Bob Jamison
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <math.h>
 
-#include "canny.h"
+#include "filterset.h"
 
 #include "imagemap-gdk.h"
 
@@ -232,6 +243,36 @@ GdkPixbuf *gdkCanny(GdkPixbuf *img, double lowThreshold, double highThreshold)
 
     return newImg;
 }
+
+
+
+
+/*#########################################################################
+### Q U A N T I Z A T I O N
+#########################################################################*/
+
+
+
+
+GrayMap *quantizeBand(RgbMap *rgbmap, int nrColors)
+{
+
+    GrayMap *gm = GrayMapCreate(rgbmap->width, rgbmap->height);
+
+    return gm;
+}
+
+
+
+
+
+
+
+/*#########################################################################
+### E N D    O F    F I L E
+#########################################################################*/
+
+
 
 
 

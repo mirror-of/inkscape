@@ -9,8 +9,7 @@
 #include "bitmap.h"
 
 //## New stuff - bob
-#include "canny.h"
-#include "quantize.h"
+#include "filterset.h"
 #include "imagemap-gdk.h"
 
 #include <inkscape.h>
