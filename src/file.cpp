@@ -1121,7 +1121,7 @@ void Inkscape::IO::dump_fopen_call( char const *utf8name, char const *id )
         {
             str += "\\\\";
         }
-        if ( (utf8name[i] >= 0x20) && ((0x0ff & utf8name[i]) <= 0x7f) )
+        else if ( (utf8name[i] >= 0x20) && ((0x0ff & utf8name[i]) <= 0x7f) )
         {
             str += utf8name[i];
         }
