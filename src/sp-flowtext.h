@@ -17,10 +17,28 @@
 #define SP_IS_FLOWTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_FLOWTEXT))
 
 struct SPFlowtext : public SPItem {
+    /** Completely recalculates the layout. */
+    void rebuildLayout();
+
+    /** Converts the current selection (which must be a flowroot) into
+    a \<text\> tree, keeping all the formatting and positioning, but losing
+    the automatic wrapping ability. */
+    static void convert_to_text();
+
+//semiprivate:  (need to be accessed by the C-style functions still)
     Inkscape::Text::Layout layout;
 
-	void              ClearFlow(NRArenaGroup* in_arena);
-	void              BuildFlow(NRArenaGroup* in_arena, 	NRRect *paintbox);
+    /** discards the NRArena objects representing this text. */
+	void _clearFlow(NRArenaGroup* in_arena);
+
+private:
+    /** Recursively walks the xml tree adding tags and their contents. */
+    void _buildLayoutInput(SPObject *root, Shape const *exclusion_shape, std::list<Shape> *shapes, SPObject **pending_line_break_object);
+
+    /** calculates the union of all the \<flowregionexclude\> children
+    of this flowroot. */
+    Shape* _buildExclusionShape() const;
+
 };
 
 struct SPFlowtextClass {
@@ -28,9 +46,5 @@ struct SPFlowtextClass {
 };
 
 GType sp_flowtext_get_type (void);
-
-void sp_item_flowtext_to_text (SPFlowtext *flowt);
-
-void convert_to_text(void);
 
 #endif

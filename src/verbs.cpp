@@ -72,8 +72,7 @@
 #include "prefs-utils.h"
 #include "splivarot.h"
 #include "sp-namedview.h"
-//#include "sp-flowtext.h"   conflict between the two classes named Path. We only need one function, though.
-void convert_to_text(void);
+#include "sp-flowtext.h"
 #include "layer-fns.h"
 #include "node-context.h"
 #include "verbs.h"
@@ -1090,7 +1089,7 @@ ObjectVerb::perform ( SPAction *action, void *data, void *pdata )
             sp_selected_path_to_curves ();
             break;
         case SP_VERB_OBJECT_FLOWTEXT_TO_TEXT:
-            convert_to_text ();
+            SPFlowtext::convert_to_text ();
             break;
         case SP_VERB_OBJECT_FLIP_HORIZONTAL:
             // TODO: make tool-sensitive, in node edit flip selected node(s)

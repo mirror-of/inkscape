@@ -142,61 +142,6 @@ sp_flowtext_remove_child(SPObject *object, Inkscape::XML::Node *child)
     object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
-//RH:fixme: these should be member functions
-static void BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Shape const *exclusion_shape, std::list<Shape> *shapes, SPObject **pending_line_break_object)
-{
-    if (*pending_line_break_object) {
-        if (SP_IS_FLOWREGIONBREAK(*pending_line_break_object))
-            layout->appendControlCode(Inkscape::Text::Layout::SHAPE_BREAK, *pending_line_break_object);
-        else
-            layout->appendControlCode(Inkscape::Text::Layout::PARAGRAPH_BREAK, *pending_line_break_object);
-        *pending_line_break_object = NULL;
-    }
-
-    for (SPObject *child = sp_object_first_child(root) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-        if (SP_IS_STRING(child)) {
-            layout->appendText(SP_STRING(child)->string, root->style, child);
-        } else if (SP_IS_FLOWREGION(child)) {
-            for (int i = 0 ; i < SP_FLOWREGION(child)->nbComp ; i++) {
-                shapes->push_back(Shape());
-                if (exclusion_shape->hasEdges())
-                    shapes->back().Booleen(SP_FLOWREGION(child)->computed[i]->rgn_dest, const_cast<Shape*>(exclusion_shape), bool_op_diff);
-                else
-                    shapes->back().Copy(SP_FLOWREGION(child)->computed[i]->rgn_dest);
-                layout->appendWrapShape(&shapes->back());
-            }
-        }
-        else if (!SP_IS_FLOWREGIONEXCLUDE(child))
-            BuildLayoutInput(child, layout, exclusion_shape, shapes, pending_line_break_object);
-    }
-
-    if (SP_IS_FLOWDIV(root) || SP_IS_FLOWPARA(root) || SP_IS_FLOWREGIONBREAK(root) || SP_IS_FLOWLINE(root)) {
-        if (!root->hasChildren())
-            layout->appendText("", root->style, root);
-        *pending_line_break_object = root;
-    }
-}
-
-static Shape* BuildExclusionShape(SPObject *object)
-{
-    Shape *shape = new Shape;
-    Shape *shape_temp = new Shape;
-
-    for (SPObject *child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-        // RH: is it right that this shouldn't be recursive?
-        if ( SP_IS_FLOWREGIONEXCLUDE(child) ) {
-            SPFlowregionExclude *c_child = SP_FLOWREGIONEXCLUDE(child);
-            if (shape->hasEdges()) {
-                shape_temp->Booleen(shape, c_child->computed->rgn_dest, bool_op_union);
-                std::swap(shape, shape_temp);
-            } else
-                shape->Copy(c_child->computed->rgn_dest);
-        }
-    }
-    delete shape_temp;
-    return shape;
-}
-
 static void
 sp_flowtext_update(SPObject *object, SPCtx *ctx, unsigned flags)
 {
@@ -232,25 +177,14 @@ sp_flowtext_update(SPObject *object, SPCtx *ctx, unsigned flags)
         g_object_unref(G_OBJECT(child));
     }
 
-    for (SPItemView *v = group->display; v != NULL; v = v->next) {
-        group->ClearFlow(NR_ARENA_GROUP(v->arenaitem));
-    }
-
-    std::list<Shape> shapes;
-
-    group->layout.clear();
-    Shape *exclusion_shape = BuildExclusionShape(group);
-    SPObject *pending_line_break_object = NULL;
-    BuildLayoutInput(group, &group->layout, exclusion_shape, &shapes, &pending_line_break_object);
-    delete exclusion_shape;
-    group->layout.calculateFlow();
-    //g_print(group->layout.dumpAsText().c_str());
+    group->rebuildLayout();
 
     // pass the bbox of the flowtext object as paintbox (used for paintserver fills)	
     NRRect paintbox;
     sp_item_invoke_bbox(group, &paintbox, NR::identity(), TRUE);
     for (SPItemView *v = group->display; v != NULL; v = v->next) {
-        group->BuildFlow(NR_ARENA_GROUP(v->arenaitem), &paintbox);
+        group->_clearFlow(NR_ARENA_GROUP(v->arenaitem));
+        group->layout.show(NR_ARENA_GROUP(v->arenaitem), &paintbox);
     }
 }
 
@@ -411,7 +345,7 @@ sp_flowtext_show(SPItem *item, NRArena *arena, unsigned/* key*/, unsigned /*flag
     // pass the bbox of the flowtext object as paintbox (used for paintserver fills)	
     NRRect paintbox;
     sp_item_invoke_bbox(item, &paintbox, NR::identity(), TRUE);
-    group->BuildFlow(flowed, &paintbox);
+    group->layout.show(flowed, &paintbox);
 
     return flowed;
 }
@@ -428,7 +362,74 @@ sp_flowtext_hide(SPItem *item, unsigned int key)
  *
  */
 
-void SPFlowtext::ClearFlow(NRArenaGroup *in_arena)
+void SPFlowtext::_buildLayoutInput(SPObject *root, Shape const *exclusion_shape, std::list<Shape> *shapes, SPObject **pending_line_break_object)
+{
+    if (*pending_line_break_object) {
+        if (SP_IS_FLOWREGIONBREAK(*pending_line_break_object))
+            layout.appendControlCode(Inkscape::Text::Layout::SHAPE_BREAK, *pending_line_break_object);
+        else
+            layout.appendControlCode(Inkscape::Text::Layout::PARAGRAPH_BREAK, *pending_line_break_object);
+        *pending_line_break_object = NULL;
+    }
+
+    for (SPObject *child = sp_object_first_child(root) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+        if (SP_IS_STRING(child)) {
+            layout.appendText(SP_STRING(child)->string, root->style, child);
+        } else if (SP_IS_FLOWREGION(child)) {
+            for (int i = 0 ; i < SP_FLOWREGION(child)->nbComp ; i++) {
+                shapes->push_back(Shape());
+                if (exclusion_shape->hasEdges())
+                    shapes->back().Booleen(SP_FLOWREGION(child)->computed[i]->rgn_dest, const_cast<Shape*>(exclusion_shape), bool_op_diff);
+                else
+                    shapes->back().Copy(SP_FLOWREGION(child)->computed[i]->rgn_dest);
+                layout.appendWrapShape(&shapes->back());
+            }
+        }
+        else if (!SP_IS_FLOWREGIONEXCLUDE(child))
+            _buildLayoutInput(child, exclusion_shape, shapes, pending_line_break_object);
+    }
+
+    if (SP_IS_FLOWDIV(root) || SP_IS_FLOWPARA(root) || SP_IS_FLOWREGIONBREAK(root) || SP_IS_FLOWLINE(root)) {
+        if (!root->hasChildren())
+            layout.appendText("", root->style, root);
+        *pending_line_break_object = root;
+    }
+}
+
+Shape* SPFlowtext::_buildExclusionShape() const
+{
+    Shape *shape = new Shape;
+    Shape *shape_temp = new Shape;
+
+    for (SPObject *child = children ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+        // RH: is it right that this shouldn't be recursive?
+        if ( SP_IS_FLOWREGIONEXCLUDE(child) ) {
+            SPFlowregionExclude *c_child = SP_FLOWREGIONEXCLUDE(child);
+            if (shape->hasEdges()) {
+                shape_temp->Booleen(shape, c_child->computed->rgn_dest, bool_op_union);
+                std::swap(shape, shape_temp);
+            } else
+                shape->Copy(c_child->computed->rgn_dest);
+        }
+    }
+    delete shape_temp;
+    return shape;
+}
+
+void SPFlowtext::rebuildLayout()
+{
+    std::list<Shape> shapes;
+
+    layout.clear();
+    Shape *exclusion_shape = _buildExclusionShape();
+    SPObject *pending_line_break_object = NULL;
+    _buildLayoutInput(this, exclusion_shape, &shapes, &pending_line_break_object);
+    delete exclusion_shape;
+    layout.calculateFlow();
+    //g_print(group->layout.dumpAsText().c_str());
+}
+
+void SPFlowtext::_clearFlow(NRArenaGroup *in_arena)
 {
     nr_arena_item_request_render(NR_ARENA_ITEM(in_arena));
     for (NRArenaItem *child = in_arena->children; child != NULL; ) {
@@ -441,12 +442,7 @@ void SPFlowtext::ClearFlow(NRArenaGroup *in_arena)
     }
 }
 
-void SPFlowtext::BuildFlow(NRArenaGroup *in_arena, NRRect *paintbox)
-{
-    layout.show(in_arena, paintbox);
-}
-
-void convert_to_text(void)
+void SPFlowtext::convert_to_text()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (!SP_IS_DESKTOP(desktop)) return;
@@ -527,7 +523,6 @@ void convert_to_text(void)
     item->deleteObject();
 
     sp_document_done(SP_DT_DOCUMENT(desktop));
-    return;
 }
 
 /*
