@@ -145,20 +145,15 @@ sp_convert_distance (gdouble *distance, const SPUnit *from, const SPUnit *to)
 	}
 	if ((from->base == SP_UNIT_VOLATILE) || (to->base == SP_UNIT_VOLATILE)) return FALSE;
 
-	if ((from->base == SP_UNIT_DEVICE) && (to->base == SP_UNIT_ABSOLUTE)) {
-		*distance = *distance * (from->unittobase * DEVICESCALE) / to->unittobase;
-		return TRUE;
-	}
-
-	if ((from->base == SP_UNIT_ABSOLUTE) && (to->base == SP_UNIT_DEVICE)) {
-		*distance = *distance * from->unittobase / (to->unittobase * DEVICESCALE);
+	if ((from->base == SP_UNIT_DEVICE) && (to->base == SP_UNIT_ABSOLUTE) || 
+			(from->base == SP_UNIT_ABSOLUTE) && (to->base == SP_UNIT_DEVICE)) {
+		*distance = *distance * from->unittobase / to->unittobase;
 		return TRUE;
 	}
 
 	if (from->base != to->base) return FALSE;
 
 	*distance = *distance * from->unittobase / to->unittobase;
-
 	return TRUE;
 }
 
@@ -189,14 +184,8 @@ sp_convert_distance_full(gdouble const from_dist, SPUnit const &from, SPUnit con
 	gdouble absolute;
 	switch (from.base) {
 	case SP_UNIT_ABSOLUTE:
-		absolute = from_dist * from.unittobase;
-		break;
 	case SP_UNIT_DEVICE:
-		if (!(devicescale > 0)) {
-			g_error("conversion from device units requested but devicescale=%g",
-				devicescale);
-		}
-		absolute = from_dist * from.unittobase * devicescale;
+		absolute = from_dist * from.unittobase;
 		break;
 	default:
 		g_warning("file %s: line %d: Illegal unit (base 0x%x)", __FILE__, __LINE__, from.base);
@@ -209,15 +198,8 @@ sp_convert_distance_full(gdouble const from_dist, SPUnit const &from, SPUnit con
 		g_warning("file %s: line %d: Illegal unit (base 0x%x)", __FILE__, __LINE__, to.base);
 		/* FALL-THROUGH */
 	case SP_UNIT_ABSOLUTE:
-		ret = absolute / to.unittobase;
-		break;
-
 	case SP_UNIT_DEVICE:
-		if (!(devicescale > 0)) {
-			g_error("conversion from device units requested but devicescale=%g",
-				devicescale);
-		}
-		ret = absolute / (to.unittobase * devicescale);
+		ret = absolute / to.unittobase;
 		break;
 	}
 
@@ -230,10 +212,8 @@ sp_convert_distance_full(gdouble const from_dist, SPUnit const &from, SPUnit con
 gdouble
 sp_units_get_points(gdouble const units, SPUnit const &unit)
 {
-	if (unit.base == SP_UNIT_ABSOLUTE) {
+	if (unit.base == SP_UNIT_ABSOLUTE || unit.base == SP_UNIT_DEVICE) {
 		return units * unit.unittobase;
-	} else if (unit.base == SP_UNIT_DEVICE) {
-		return units * unit.unittobase * DEVICESCALE;
 	} else {
 		g_warning("Different unit bases: No exact unit conversion available");
 		return units * unit.unittobase;
@@ -243,10 +223,8 @@ sp_units_get_points(gdouble const units, SPUnit const &unit)
 gdouble
 sp_points_get_units(gdouble const points, SPUnit const &unit)
 {
-	if (unit.base == SP_UNIT_ABSOLUTE) {
+	if (unit.base == SP_UNIT_ABSOLUTE || unit.base == SP_UNIT_DEVICE) {
 		return points / unit.unittobase;
-	} else if (unit.base == SP_UNIT_DEVICE) {
-		return points / (unit.unittobase * DEVICESCALE);
 	} else {
 		g_warning("Different unit bases: No exact unit conversion available");
 		return points / unit.unittobase;
