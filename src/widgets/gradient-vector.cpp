@@ -8,6 +8,7 @@
  *
  * Copyright (C) 2001-2002 Lauris Kaplinski
  * Copyright (C) 2001 Ximian, Inc.
+ * Copyright (C) 2004 Monash University
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -505,7 +506,6 @@ static void
 sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient)
 {
 	SPGradient *old;
-	GtkWidget *w;
 
 	old = (SPGradient*)g_object_get_data (G_OBJECT (widget), "gradient");
 	if (old != gradient) {
@@ -524,16 +524,21 @@ sp_gradient_vector_widget_load_gradient (GtkWidget *widget, SPGradient *gradient
 		sp_gradient_ensure_vector (gradient);
 
 		/* Set color selector values */
-		w = (GtkWidget*)g_object_get_data (G_OBJECT (widget), "start");
-		SP_COLOR_SELECTOR( w )->base->setColorAlpha( gradient->vector->stops[0].color, gradient->vector->stops[0].opacity );
-		w = (GtkWidget*)g_object_get_data (G_OBJECT (widget), "end");
-		SP_COLOR_SELECTOR( w )->base->setColorAlpha( gradient->vector->stops[1].color, gradient->vector->stops[1].opacity );
-
+		char const *names[] = {"start", "end"};
+		/* TODO: Better handling of the case that gradient->vector->nstops != 2. */
+		for (int i = 0; i < int(G_N_ELEMENTS(names)); ++i) {
+			if (i < gradient->vector->nstops) {
+				GtkWidget *w = (GtkWidget*)g_object_get_data (G_OBJECT (widget), names[i]);
+				SPColorSelector *csel = SP_COLOR_SELECTOR(w);
+				SPGradientStop const &s = gradient->vector->stops[i];
+				csel->base->setColorAlpha(s.color, s.opacity);
+			}
+		}
 		/* Fixme: Sensitivity */
 	}
 
 	/* Fill preview */
-	w = (GtkWidget*)g_object_get_data (G_OBJECT (widget), "preview");
+	GtkWidget *w = static_cast<GtkWidget *>(g_object_get_data(G_OBJECT(widget), "preview"));
 	sp_gradient_image_set_gradient (SP_GRADIENT_IMAGE (w), gradient);
 }
 
@@ -593,12 +598,9 @@ sp_gradient_vector_gradient_modified (SPGradient *gradient, guint flags, GtkWidg
 	}
 }
 
-static void
-sp_gradient_vector_color_dragged (SPColorSelector *csel, GtkObject *object)
+static void sp_gradient_vector_color_dragged(SPColorSelector *, GtkObject *object)
 {
 	SPGradient *gradient, *ngr;
-	SPGradientVector *vector;
-	size_t needed;
 
 	if (blocked) return;
 
@@ -615,22 +617,23 @@ sp_gradient_vector_color_dragged (SPColorSelector *csel, GtkObject *object)
 
 	sp_gradient_ensure_vector (ngr);
 
-	needed = sizeof (SPGradientVector) + sizeof (SPGradientStop);
-	vector = (SPGradientVector*)alloca (needed);
-#ifdef HAVE_MEMSET
-	memset (vector, 0, needed);
-#endif
-	vector->nstops = 2;
+	struct { char const *name; double offset; } const places[] = {
+		{"start", 0.0},
+		{"end", 1.0}
+	};
+	size_t const needed = sizeof(SPGradientVector) + ( G_N_ELEMENTS(places) - 1 ) * sizeof(SPGradientStop);
+	SPGradientVector *vector = static_cast<SPGradientVector *>(alloca(needed));
+	vector->nstops = G_N_ELEMENTS(places);
 	vector->start = ngr->vector->start;
 	vector->end = ngr->vector->end;
-
-	csel = (SPColorSelector*)g_object_get_data (G_OBJECT (object), "start");
-	vector->stops[0].offset = 0.0;
-	csel->base->getColorAlpha( vector->stops[0].color, &vector->stops[0].opacity );
-
-	csel = (SPColorSelector*)g_object_get_data (G_OBJECT (object), "end");
-	vector->stops[1].offset = 1.0;
-	csel->base->getColorAlpha( vector->stops[1].color, &vector->stops[1].opacity );
+	for (unsigned i = 0; i < G_N_ELEMENTS(places); ++i) {
+		SPColorSelector &csel = *static_cast<SPColorSelector *>(g_object_get_data(G_OBJECT(object),
+											  places[i].name));
+		SPGradientStop &stop = vector->stops[i];
+		stop.offset = places[i].offset;
+		csel.base->getColorAlpha(stop.color,
+					 &stop.opacity);
+	}
 
 	sp_gradient_set_vector (ngr, vector);
 

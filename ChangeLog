@@ -1,5 +1,9 @@
 2004-03-15  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/widgets/gradient-vector.cpp
+	(sp_gradient_vector_widget_load_gradient, sp_gradient_vector_color_dragged):
+	Cleanup: Convert to table-driven style.
+
 	* src/style.cpp (sp_style_read_from_object): Additional check.
 
 	* src/rect-context.cpp: Minor cleanups (mostly fixing mixed tab usage).
