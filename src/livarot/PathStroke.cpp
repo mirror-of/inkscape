@@ -268,224 +268,161 @@ void Path::DoButt(Shape *dest, double width, ButtType butt, NR::Point pos, NR::P
 		dest->AddEdge (rightNo, leftNo);
 	}
 }
-void
-Path::DoJoin (Shape * dest, double width, JoinType join, NR::Point pos, NR::Point prev,
-              NR::Point next, double miter, double prevL, double nextL, int &leftStNo,
-              int &leftEnNo, int &rightStNo, int &rightEnNo)
+void Path::DoJoin (Shape *dest, double width, JoinType join, NR::Point pos, NR::Point prev,
+                   NR::Point next, double miter, double prevL, double nextL, int &leftStNo,
+                   int &leftEnNo, int &rightStNo, int &rightEnNo)
 {
-//	      DoLeftJoin(dest,width,join,pos,prev,next,miter,prevL,nextL,leftStNo,leftEnNo);
-//	      DoRightJoin(dest,width,join,pos,prev,next,miter,prevL,nextL,rightStNo,rightEnNo);
-//	      return;
-  
-	NR::Point pnor=prev.ccw();
-	NR::Point nnor=next.ccw();
-	double angSi = cross (next, prev);
-	if (angSi > -0.0001 && angSi < 0.0001)
-	{
-		double angCo = dot (prev, next);
-		if (angCo > 0.9999)
-		{
-			// tout droit
-			leftStNo = leftEnNo = dest->AddPoint (pos + width * pnor);
-			rightStNo = rightEnNo = dest->AddPoint (pos - width * pnor);
-		}
-		else
-		{
-			// demi-tour
-			leftStNo = rightEnNo = dest->AddPoint (pos + width * pnor);
-			rightStNo = leftEnNo = dest->AddPoint (pos - width * pnor);
-			dest->AddEdge (leftEnNo, leftStNo);
-			dest->AddEdge (rightStNo, rightEnNo);
-		}
-		return;
-	}
-	if (angSi < 0)
-	{
-		{
-#if 0
-			NR::Point biss = next - prev;
-			double c2 = cross (biss, next);
-			double l = width / c2;
-			double projn = l * (dot (biss, next));
-			double projp = -l * (dot (biss, prev));
-			if (projp <= 0.5 * prevL && projn <= 0.5 * nextL)
-			{
-				leftEnNo = leftStNo = dest->AddPoint (pos + l * biss);
-			}
-			else
-#endif
-			{
-				int midNo = dest->AddPoint (pos);
-				leftStNo = dest->AddPoint (pos + width * pnor);
-				leftEnNo = dest->AddPoint (pos + width * nnor);
-				dest->AddEdge (leftEnNo, midNo);
-				dest->AddEdge (midNo, leftStNo);
-			}
-		}
-		if (join == join_pointy)
-		{
-			rightStNo = dest->AddPoint (pos - width * pnor);
-			rightEnNo = dest->AddPoint (pos - width * nnor);
-      
-			//                      dest->AddEdge(rightStNo,rightEnNo);
-			const NR::Point biss = StrokeNormalize (prev - next /*pnor + nnor*/);
-			double c2 = dot (biss, nnor);
-			double l = width / c2;
-			double emiter = width * c2;
-			if (emiter < miter) emiter = miter;
-			int nrightStNo, nrightEnNo;
-			if (fabs(l) < miter /*l <= emiter*/)
-			{
-				nrightStNo = nrightEnNo = dest->AddPoint (pos - l * biss);
-        dest->AddEdge (rightStNo, nrightStNo);
-        dest->AddEdge (nrightEnNo, rightEnNo);
-			} else {
-/*				double s2 = cross (biss, nnor);
-				double dec = (l - emiter) * c2 / s2;
-				NR::Point tbiss=biss.ccw();
+    NR::Point pnor = prev.ccw();
+    NR::Point nnor = next.ccw();
+    double angSi = cross(next, prev);
+
+    /* FIXME: this special case causes bug 1028953 */
+    if (angSi > -0.0001 && angSi < 0.0001) {
+        double angCo = dot (prev, next);
+        if (angCo > 0.9999) {
+            // tout droit
+            leftStNo = leftEnNo = dest->AddPoint(pos + width * pnor);
+            rightStNo = rightEnNo = dest->AddPoint(pos - width * pnor);
+        } else {
+            // demi-tour
+            leftStNo = rightEnNo = dest->AddPoint (pos + width * pnor);
+            rightStNo = leftEnNo = dest->AddPoint (pos - width * pnor);
+            dest->AddEdge(leftEnNo, leftStNo);
+            dest->AddEdge(rightStNo, rightEnNo);
+        }
+        return;
+    }
+    
+    if (angSi < 0) {
+        int midNo = dest->AddPoint(pos);
+        leftStNo = dest->AddPoint(pos + width * pnor);
+        leftEnNo = dest->AddPoint(pos + width * nnor);
+        dest->AddEdge(leftEnNo, midNo);
+        dest->AddEdge(midNo, leftStNo);
         
-				nrightStNo = dest->AddPoint (pos - emiter*biss - dec*tbiss);
-				nrightEnNo = dest->AddPoint (pos - emiter*biss + dec*tbiss);
-        dest->AddEdge (rightStNo, nrightStNo);
-        if ( nrightEnNo != nrightStNo ) dest->AddEdge (nrightStNo, nrightEnNo);
-        dest->AddEdge (nrightEnNo, rightEnNo);*/
-        dest->AddEdge (rightStNo, rightEnNo);
-			}
-		}
-		else if (join == join_round)
-		{
-			NR::Point sx = pos - width * pnor;
-			rightStNo = dest->AddPoint (sx);
-			NR::Point ex = pos - width * nnor;
-			rightEnNo = dest->AddPoint (ex);
+        if (join == join_pointy) {
+
+            rightStNo = dest->AddPoint(pos - width * pnor);
+            rightEnNo = dest->AddPoint(pos - width * nnor);
       
-			const NR::Point biss = StrokeNormalize (pnor + nnor);
-			double c2 = dot (biss, nnor);
-			double l = width / c2;
-			double typ = dot (pnor, nnor);
-			if (typ >= 0)
-			{
-				RecRound (dest, rightStNo, rightEnNo, pos - l * biss, 
-						  sx, ex, 5.0, 8,pos,width);
-			}
-			else
-			{
-				double s2 = cross (biss, nnor);
-				double dec = (l - width) * c2 / s2;
-				NR::Point tbiss=biss.cw();
-        
-				NR::Point nsx = pos - width * biss - dec * tbiss;
-				NR::Point nex = pos - width * biss + dec * tbiss;
-				NR::Point mx = pos - width * biss;
-				int midNo = dest->AddPoint (mx);
-				RecRound (dest, rightStNo, midNo, nsx, sx, mx, 5.0,
-						  8,pos,width);
-				RecRound (dest, midNo, rightEnNo, nex, mx, ex, 5.0,
-						  8,pos,width);
-			}
-		}
-		else
-		{
-			rightStNo = dest->AddPoint (pos - width * pnor);
-			rightEnNo = dest->AddPoint (pos - width * nnor);
-			dest->AddEdge (rightStNo, rightEnNo);
-		}
-	}
-	else
-	{
-		{
-#if 0
-			NR::Point biss = next - prev;
-			double c2 = cross (next, biss);
-			double l = width / c2;
-			double projn = l * (dot (biss, next));
-			double projp = -l * (dot (biss, prev));
-			if (projp <= 0.5 * prevL && projn <= 0.5 * nextL)
-			{
-				rightEnNo = rightStNo = dest->AddPoint (pos + l * biss);
-			}
-			else
-#endif
-			{
-				int midNo = dest->AddPoint (pos);
-				rightStNo = dest->AddPoint (pos - width * pnor);
-				rightEnNo = dest->AddPoint (pos - width * nnor);
-				dest->AddEdge (rightStNo, midNo);
-				dest->AddEdge (midNo, rightEnNo);
-			}
-		}
-		if (join == join_pointy)
-		{
-			leftStNo = dest->AddPoint (pos + width * pnor);
-			leftEnNo = dest->AddPoint (pos + width * nnor);
-			//              dest->AddEdge(leftEnNo,leftStNo);
+            const NR::Point biss = StrokeNormalize(prev - next);
+            double c2 = dot(biss, nnor);
+            double l = width / c2;
+            double emiter = width * c2;
+            if (emiter < miter) {
+                emiter = miter;
+            }
+            
+            int nrightStNo;
+            int nrightEnNo;
+            if (fabs(l) < miter) {
+                nrightStNo = nrightEnNo = dest->AddPoint(pos - l * biss);
+                dest->AddEdge(rightStNo, nrightStNo);
+                dest->AddEdge(nrightEnNo, rightEnNo);
+            } else {
+                dest->AddEdge(rightStNo, rightEnNo);
+            }
+            
+        } else if (join == join_round) {
+
+            NR::Point sx = pos - width * pnor;
+            rightStNo = dest->AddPoint(sx);
+            NR::Point ex = pos - width * nnor;
+            rightEnNo = dest->AddPoint(ex);
       
-			const NR::Point biss = StrokeNormalize (next - prev/*pnor + nnor*/);
-			double c2 = dot (biss, nnor);
-			double l = width / c2;
-			double emiter = width * c2;
-			if (emiter < miter)
-				emiter = miter;
-			int nleftStNo, nleftEnNo;
-			if ( fabs(l) < miter /*l <= emiter*/)
-			{
-				nleftStNo = nleftEnNo = dest->AddPoint (pos + l * biss);
-        dest->AddEdge (leftEnNo, nleftEnNo);
-        dest->AddEdge (nleftStNo, leftStNo);
-			}
-			else
-			{
-/*				double s2 = cross (biss, nnor);
-				double dec = (l - emiter) * c2 / s2;
-				NR::Point tbiss=biss.cw();
+            const NR::Point biss = StrokeNormalize(pnor + nnor);
+            double c2 = dot(biss, nnor);
+            double l = width / c2;
+            double typ = dot(pnor, nnor);
+            if (typ >= 0) {
+                RecRound(dest, rightStNo, rightEnNo, pos - l * biss, 
+                         sx, ex, 5.0, 8,pos,width);
+            } else {
+                double s2 = cross(biss, nnor);
+                double dec = (l - width) * c2 / s2;
+                NR::Point tbiss = biss.cw();
         
-				nleftStNo = dest->AddPoint (pos + emiter*biss + dec*tbiss);
-				nleftEnNo = dest->AddPoint (pos + emiter*biss - dec*tbiss);
-        dest->AddEdge (leftEnNo, nleftEnNo);
-        if ( nleftEnNo != nleftStNo ) dest->AddEdge (nleftEnNo, nleftStNo);
-        dest->AddEdge (nleftStNo, leftStNo);*/
-        dest->AddEdge (leftEnNo, leftStNo);
-			}
-		}
-		else if (join == join_round)
-		{
-			NR::Point sx = pos + width * pnor;
-			leftStNo = dest->AddPoint (sx);
-			NR::Point ex = pos + width * nnor;
-			leftEnNo = dest->AddPoint (ex);
+                NR::Point nsx = pos - width * biss - dec * tbiss;
+                NR::Point nex = pos - width * biss + dec * tbiss;
+                NR::Point mx = pos - width * biss;
+                int midNo = dest->AddPoint(mx);
+                RecRound(dest, rightStNo, midNo, nsx, sx, mx, 5.0, 8, pos, width);
+                RecRound(dest, midNo, rightEnNo, nex, mx, ex, 5.0, 8, pos, width);
+            }
+            
+        } else {
+            
+            rightStNo = dest->AddPoint(pos - width * pnor);
+            rightEnNo = dest->AddPoint(pos - width * nnor);
+            dest->AddEdge(rightStNo, rightEnNo);
+        }
+        
+    } else {
+        
+        int midNo = dest->AddPoint(pos);
+        rightStNo = dest->AddPoint(pos - width * pnor);
+        rightEnNo = dest->AddPoint(pos - width * nnor);
+        dest->AddEdge(rightStNo, midNo);
+        dest->AddEdge(midNo, rightEnNo);
+        
+        if (join == join_pointy) {
+            
+            leftStNo = dest->AddPoint(pos + width * pnor);
+            leftEnNo = dest->AddPoint(pos + width * nnor);
       
-			const NR::Point biss = StrokeNormalize (pnor + nnor);
-			double c2 = dot (biss, nnor);
-			double l = width / c2;
-			double typ = dot (pnor, nnor);
-			if (typ >= 0)
-			{
-				RecRound (dest, leftEnNo, leftStNo, 
-						  pos + l * biss, ex, sx, 5.0, 8,pos,width);
-			}
-			else
-			{
-				double s2 = cross (biss, nnor);
-				double dec = (l - width) * c2 / s2;
-				NR::Point tbiss=biss.cw();
-        
-				NR::Point nsx = pos + width * biss + dec * tbiss;
-				NR::Point nex = pos + width * biss - dec * tbiss;
-				NR::Point mx = pos + width * biss;
-				int midNo = dest->AddPoint (mx);
-        RecRound (dest, leftEnNo, midNo, nex, ex, mx, 5.0,
-						  8,pos,width);
-				RecRound (dest, midNo, leftStNo, nsx, mx, sx, 5.0,
-						  8,pos,width);
-			}
-		}
-		else
-		{
-			leftStNo = dest->AddPoint (pos + width * pnor);
-			leftEnNo = dest->AddPoint (pos + width * nnor);
-			dest->AddEdge (leftEnNo, leftStNo);
-		}
-	}
+            const NR::Point biss = StrokeNormalize(next - prev);
+            double c2 = dot(biss, nnor);
+            double l = width / c2;
+            double emiter = width * c2;
+            if (emiter < miter) {
+                emiter = miter;
+            }
+            int nleftStNo;
+            int nleftEnNo;
+            if ( fabs(l) < miter) {
+                nleftStNo = nleftEnNo = dest->AddPoint (pos + l * biss);
+                dest->AddEdge (leftEnNo, nleftEnNo);
+                dest->AddEdge (nleftStNo, leftStNo);
+            }
+            else
+            {
+                dest->AddEdge (leftEnNo, leftStNo);
+            }
+            
+        } else if (join == join_round) {
+
+            NR::Point sx = pos + width * pnor;
+            leftStNo = dest->AddPoint(sx);
+            NR::Point ex = pos + width * nnor;
+            leftEnNo = dest->AddPoint(ex);
+      
+            const NR::Point biss = StrokeNormalize(pnor + nnor);
+            double c2 = dot(biss, nnor);
+            double l = width / c2;
+            double typ = dot(pnor, nnor);
+            if (typ >= 0) {
+                RecRound (dest, leftEnNo, leftStNo, pos + l * biss, ex, sx, 5.0, 8, pos, width);
+            } else {
+                double s2 = cross (biss, nnor);
+                double dec = (l - width) * c2 / s2;
+                NR::Point tbiss = biss.cw();
+                
+                NR::Point nsx = pos + width * biss + dec * tbiss;
+                NR::Point nex = pos + width * biss - dec * tbiss;
+                NR::Point mx = pos + width * biss;
+                int midNo = dest->AddPoint (mx);
+                RecRound(dest, leftEnNo, midNo, nex, ex, mx, 5.0, 8, pos, width);
+                RecRound(dest, midNo, leftStNo, nsx, mx, sx, 5.0, 8, pos, width);
+            }
+            
+        } else {
+            
+            leftStNo = dest->AddPoint(pos + width * pnor);
+            leftEnNo = dest->AddPoint(pos + width * nnor);
+            dest->AddEdge(leftEnNo, leftStNo);
+            
+        }
+    }
 }
 
 void
