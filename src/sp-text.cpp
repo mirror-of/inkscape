@@ -699,12 +699,9 @@ sp_text_adjust_fontsize_recursive (SPItem *item, double ex)
 
     if (style && !NR_DF_TEST_CLOSE (ex, 1.0, NR_EPSILON)) {
         style->font_size.computed *= ex;
-        style->font_size.set = TRUE;
         if (style->text) {
             style->text->letterspacing.computed *= ex;
-            style->text->letterspacing.set = TRUE;
             style->text->wordspacing.computed *= ex;
-            style->text->wordspacing.set = TRUE;
         }
         SP_OBJECT(item)->updateRepr();
     }
