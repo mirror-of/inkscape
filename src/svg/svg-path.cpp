@@ -31,6 +31,7 @@
 #include <libart_lgpl/art_misc.h>
 #include "gnome-canvas-bpath-util.h"
 #include "svg.h"
+#include "stringstream.h"
 
 #include <locale>
 #include <sstream>
@@ -629,14 +630,10 @@ ArtBpath *sp_svg_read_path(gchar const *str)
 
 gchar *sp_svg_write_path(ArtBpath const *bpath)
 {
-    std::ostringstream os;
+    Inkscape::SVGOStringStream os;
     bool closed=false;
     
     g_return_val_if_fail (bpath != NULL, NULL);
-
-    os.imbue(std::locale::classic());
-    os.setf(std::ios::showpoint);
-    os.precision(8);
 
     for (int i = 0; bpath[i].code != ART_END; i++){
         if (i) {
@@ -669,7 +666,7 @@ gchar *sp_svg_write_path(ArtBpath const *bpath)
         os << " z ";
     }
 
-    return g_strdup((gchar const *)os.str().c_str());
+    return g_strdup(os.gcharp());
 }
 
 /*
