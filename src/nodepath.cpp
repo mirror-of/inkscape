@@ -1318,7 +1318,9 @@ sp_node_selected_delete (void)
 	update_repr (nodepath);
 
 	if (nodepath->subpaths == NULL) { // if the entire nodepath is removed, delete the selected object.
-		sp_nodepath_destroy (nodepath);
+		//The nodepath does not need to be deleted here
+		//It is done later when the context is changed
+		//sp_nodepath_destroy (nodepath);
 		sp_selection_delete (NULL, NULL);
 	}
 
@@ -1406,7 +1408,9 @@ sp_node_selected_delete_segment (void)
 	update_repr (nodepath);
 
 	if (nodepath->subpaths == NULL) { // if the entire nodepath is removed, delete the selected object.
-		sp_nodepath_destroy (nodepath);
+		//The nodepath does not need to be deleted here
+		//It is done later when the context is changed
+		//sp_nodepath_destroy (nodepath);
 		sp_selection_delete (NULL, NULL);
 	}
 
@@ -2730,7 +2734,7 @@ sp_nodepath_update_statusbar (SPNodePath *nodepath)
 
 	if (selected == 0) {
 		SPSelection *sel = nodepath->desktop->selection;
-		if (sel->items == NULL)
+		if (!sel || !sel->items)
 			sp_view_set_statusf (SP_VIEW(nodepath->desktop), _("Select one path object with selector first, then switch back to node tool."));
 		else 
 			sp_view_set_statusf (SP_VIEW(nodepath->desktop), _("0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."), total);

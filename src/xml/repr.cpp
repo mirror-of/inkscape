@@ -762,6 +762,9 @@ sp_repr_remove_listener_by_data (SPRepr *repr, void *data)
 {
 	SPReprListener * last, * rl;
 
+	if (repr == NULL)
+		return;
+
 	last = NULL;
 	for (rl = repr->listeners; rl != NULL; rl = rl->next) {
 		if (rl->data == data) {
