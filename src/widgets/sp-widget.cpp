@@ -39,7 +39,6 @@ static void sp_widget_destroy (GtkObject *object);
 
 static void sp_widget_show (GtkWidget *widget);
 static void sp_widget_hide (GtkWidget *widget);
-/*  static void sp_widget_draw (GtkWidget *widget, GdkRectangle *area); */
 static gint sp_widget_expose (GtkWidget *widget, GdkEventExpose *event);
 static void sp_widget_size_request (GtkWidget *widget, GtkRequisition *requisition);
 static void sp_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation);
@@ -158,7 +157,6 @@ sp_widget_class_init (SPWidgetClass *klass)
 
 	widget_class->show = sp_widget_show;
 	widget_class->hide = sp_widget_hide;
-/*  	widget_class->draw = sp_widget_draw; */
 	widget_class->expose_event = sp_widget_expose;
 	widget_class->size_request = sp_widget_size_request;
 	widget_class->size_allocate = sp_widget_size_allocate;
@@ -245,15 +243,6 @@ sp_widget_hide (GtkWidget *widget)
 	if (((GtkWidgetClass *) parent_class)->hide)
 		(* ((GtkWidgetClass *) parent_class)->hide) (widget);
 }
-
-#if 0
-static void
-sp_widget_draw (GtkWidget *widget, GdkRectangle *area)
-{
-	if (((GtkBin *) widget)->child)
-		gtk_widget_draw (((GtkBin *) widget)->child, area);
-}
-#endif
 
 static gint
 sp_widget_expose (GtkWidget *widget, GdkEventExpose *event)

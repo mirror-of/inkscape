@@ -247,20 +247,6 @@ sp_gradient_position_size_allocate (GtkWidget *widget, GtkAllocation *allocation
 	}
 }
 
-#if 0
-static void
-sp_gradient_position_draw (GtkWidget *widget, GdkRectangle *area)
-{
-	SPGradientPosition *pos;
-
-	pos = SP_GRADIENT_POSITION (widget);
-
-	if (GTK_WIDGET_DRAWABLE (widget)) {
-		sp_gradient_position_paint (widget, area);
-	}
-}
-#endif
-
 static gint
 sp_gradient_position_expose (GtkWidget *widget, GdkEventExpose *event)
 {
@@ -400,50 +386,9 @@ sp_gradient_position_motion_notify (GtkWidget *widget, GdkEventMotion *event)
 	if (pos->mode == SP_GRADIENT_POSITION_MODE_LINEAR) {
 		if (pos->dragging) {
 			if (event->state & GDK_CONTROL_MASK) {
-#if 0
-				NRMatrix n2gs, gs2n, n2w, w2n, s2n;
-				float x1, y1, x2, y2;
-				float cx, cy, ncx, ncy, nx, ny;
-				x1 = pos->gdata.linear.x1;
-				y1 = pos->gdata.linear.y1;
-				x2 = pos->gdata.linear.x2;
-				y2 = pos->gdata.linear.y2;
-				n2gs.c[0] = x2 - x1;
-				n2gs.c[1] = y2 - y1;
-				n2gs.c[2] = y2 - y1;
-				n2gs.c[3] = x1 - x2;
-				n2gs.c[4] = x1;
-				n2gs.c[5] = y1;
-				nr_matrix_invert (&gs2n, &n2gs);
-				nr_matrix_multiply (&n2w, &n2gs, &pos->gs2w);
-				nr_matrix_invert (&w2n, &n2w);
-
-				cx = (x1 + x2) / 2.0;
-				cy = (y1 + y2) / 2.0;
-				ncx = NR_MATRIX_DF_TRANSFORM_X (&gs2n, cx, cy);
-				ncy = NR_MATRIX_DF_TRANSFORM_Y (&gs2n, cx, cy);
-				nx = NR_MATRIX_DF_TRANSFORM_X (&w2n, event->x, event->y);
-				ny = NR_MATRIX_DF_TRANSFORM_Y (&w2n, event->x, event->y);
-
-				/* cx + s2n[2] * cy = x + s2n[2] * y */
-
-				s2n.c[0] = 1.0;
-				s2n.c[1] = 0.0;
-				s2n.c[2] = !NR_DF_TEST_CLOSE (ncy, ny, NR_EPSILON) ? (nx - ncx) / (ny - ncy) : 0.0;
-				s2n.c[3] = 1.0;
-				s2n.c[4] = 0.0;
-				s2n.c[5] = 0.0;
-
-				nr_matrix_multiply (&gs2n, &gs2n, &s2n);
-				nr_matrix_multiply (&gs2n, &gs2n, &n2gs);
-				nr_matrix_multiply (&pos->gs2w, &gs2n, &pos->gs2w);
-
-				nr_matrix_invert (&pos->w2gs, &pos->gs2w);
-				nr_matrix_multiply (&pos->gs2d, &pos->gs2w, &pos->w2d);
-#else
 				pos->gdata.linear.x2 = NR_MATRIX_DF_TRANSFORM_X (&pos->w2gs, event->x, event->y);
 				pos->gdata.linear.y2 = NR_MATRIX_DF_TRANSFORM_Y (&pos->w2gs, event->x, event->y);
-#endif
+
 			} else {
 				pos->gdata.linear.x2 = NR_MATRIX_DF_TRANSFORM_X (&pos->w2gs, event->x, event->y);
 				pos->gdata.linear.y2 = NR_MATRIX_DF_TRANSFORM_Y (&pos->w2gs, event->x, event->y);
@@ -467,6 +412,13 @@ sp_gradient_position_motion_notify (GtkWidget *widget, GdkEventMotion *event)
 			} else {
 				float x, y;
 #if 0
+				/* 
+				   This attempts to do a rotate * translate.
+				   Probably the author was having trouble figuring out how to
+				   normalize an affine transform into a rotate*scale.
+
+				   This could be replaced with NR::translate(p1) * NR::rotate(p2-p1)
+				 */
 				if (1 || !NR_DF_TEST_CLOSE (pos->w2gs.c[0], pos->w2gs.c[3], NR_EPSILON) ||
 				    !NR_DF_TEST_CLOSE (pos->w2gs.c[1], 0.0, NR_EPSILON) ||
 				    !NR_DF_TEST_CLOSE (pos->w2gs.c[2], 0.0, NR_EPSILON)) {
