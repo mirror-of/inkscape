@@ -6,32 +6,36 @@
 
 static BonoboObject *
 sp_svg_factory (BonoboGenericFactory *factory,
-		const char           *component_id,
-		gpointer              closure)
+        const char           *component_id,
+        gpointer              closure)
 {
-	if (!strcmp (component_id, "OAFIID:GNOME_Inkscape_Embeddable"))
-		return sp_embeddable_document_new ();
+    if (! strcmp ( component_id, "OAFIID:GNOME_Inkscape_Embeddable" ) ) {
+        
+        return sp_embeddable_document_new ();
 
-	else if (!strcmp (component_id, "OAFIID:GNOME_Inkscape_CanvasItem"))
-		g_warning ("SodiPodi's canvas item code is dysfunctional");
-	
-	else
-		g_warning ("Inkscape cannot activate unknown id '%s'",
-			   component_id);
+    } else if (! strcmp ( component_id, "OAFIID:GNOME_Inkscape_CanvasItem" ) ) {
+    
+        g_warning ( "SodiPodi's canvas item code is dysfunctional" );
 
-	return NULL;
+    } else {
+        
+        g_warning ( "Inkscape cannot activate unknown id '%s'",
+                    component_id );
+
+    return NULL;
 }
 
 void
 sp_svg_doc_factory_init (void)
 {
-	static BonoboGenericFactory *doc_factory = NULL;
+    static BonoboGenericFactory *doc_factory = NULL;
 
-	doc_factory = bonobo_generic_factory_new_multi (
-		"OAFIID:GNOME_Inkscape_ComponentFactory",
-		sp_svg_factory, NULL);
+    doc_factory = bonobo_generic_factory_new_multi (
+        "OAFIID:GNOME_Inkscape_ComponentFactory",
+        sp_svg_factory, NULL);
 
-	if (doc_factory == NULL)
-		g_error (_("Could not create sodipodi-svg-doc factory"));
+    if (doc_factory == NULL) {
+        g_error (_("Could not create sodipodi-svg-doc factory"));
+    }
 }
 

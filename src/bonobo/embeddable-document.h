@@ -21,12 +21,12 @@ typedef struct _SPEmbeddableDocument SPEmbeddableDocument;
 typedef struct _SPEmbeddableDocumentClass SPEmbeddableDocumentClass;
 
 struct _SPEmbeddableDocument {
-	BonoboEmbeddable embeddable;
-	SPDocument * document;
+    BonoboEmbeddable embeddable;
+    SPDocument * document;
 };
 
 struct _SPEmbeddableDocumentClass {
-	BonoboEmbeddableClass parent_class;
+    BonoboEmbeddableClass parent_class;
 };
 
 GtkType sp_embeddable_document_get_type (void);

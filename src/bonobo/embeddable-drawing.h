@@ -21,14 +21,14 @@ typedef struct _SPEmbeddableDrawing SPEmbeddableDrawing;
 typedef struct _SPEmbeddableDrawingClass SPEmbeddableDrawingClass;
 
 struct _SPEmbeddableDrawing {
-	BonoboCanvasComponent parent;
-	SPEmbeddableDocument * edocument;
-	SPDocument * spdocument;
-	GnomeCanvasGroup * drawing;
+    BonoboCanvasComponent parent;
+    SPEmbeddableDocument * edocument;
+    SPDocument * spdocument;
+    GnomeCanvasGroup * drawing;
 };
 
 struct _SPEmbeddableDrawingClass {
-	BonoboCanvasComponentClass parent_class;
+    BonoboCanvasComponentClass parent_class;
 };
 
 GtkType sp_embeddable_drawing_get_type (void);
@@ -37,13 +37,15 @@ GtkType sp_embeddable_drawing_get_type (void);
  * Constructor
  */
 
-BonoboCanvasComponent * sp_embeddable_drawing_factory (BonoboEmbeddable * embeddable,
-						       GnomeCanvas * canvas, gpointer data);
+BonoboCanvasComponent * sp_embeddable_drawing_factory ( BonoboEmbeddable * embeddable,
+                                                        GnomeCanvas * canvas, 
+                                                        gpointer data );
 
 /*
  * Notify drawing, that underlying SPDocument has changed
  */
 
-void sp_embeddable_drawing_new_doc (BonoboCanvasComponent * component, gpointer data);
+void sp_embeddable_drawing_new_doc ( BonoboCanvasComponent * component, 
+                                     gpointer data );
 
 #endif

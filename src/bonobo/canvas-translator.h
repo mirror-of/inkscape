@@ -13,11 +13,11 @@ typedef struct _SPCanvasTranslator SPCanvasTranslator;
 typedef struct _SPCanvasTranslatorClass SPCanvasTranslatorClass;
 
 struct _SPCanvasTranslator {
-	GnomeCanvasGroup group;
+    GnomeCanvasGroup group;
 };
 
 struct _SPCanvasTranslatorClass {
-	GnomeCanvasGroupClass parent_class;
+    GnomeCanvasGroupClass parent_class;
 };
 
 

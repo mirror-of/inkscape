@@ -23,13 +23,13 @@ typedef struct _SPEmbeddableDesktop SPEmbeddableDesktop;
 typedef struct _SPEmbeddableDesktopClass SPEmbeddableDesktopClass;
 
 struct _SPEmbeddableDesktop {
-	BonoboView view;
-	SPEmbeddableDocument * document;
-	SPDesktopWidget * desktop;
+    BonoboView view;
+    SPEmbeddableDocument * document;
+    SPDesktopWidget * desktop;
 };
 
 struct _SPEmbeddableDesktopClass {
-	BonoboViewClass parent_class;
+    BonoboViewClass parent_class;
 };
 
 GtkType sp_embeddable_desktop_get_type (void);
@@ -38,13 +38,14 @@ GtkType sp_embeddable_desktop_get_type (void);
  * Constructor
  */
 
-BonoboView * sp_embeddable_desktop_factory (BonoboEmbeddable * embeddable,
-	const Bonobo_ViewFrame view_frame, gpointer data);
+BonoboView * sp_embeddable_desktop_factory ( BonoboEmbeddable * embeddable, 
+                                             const Bonobo_ViewFrame view_frame, 
+                                             gpointer data );
 
 /*
  * Notify desktop, that underlying SPDocument has changed
  */
 
-void sp_embeddable_desktop_new_doc (BonoboView * view, gpointer data);
+void sp_embeddable_desktop_new_doc ( BonoboView * view, gpointer data );
 
 #endif
