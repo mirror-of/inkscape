@@ -5,6 +5,9 @@
 
 2004-03-01  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* configure.in: If -Wno-unused-parameter isn't recognized (g++ 3.2 and
+	earlier) then use -Wno-unused.
+
 	* src/libnr/nr-point.h: NR::Point: Add explicit copy constructor and
 	operator= in the hope of fixing #907059.
 
