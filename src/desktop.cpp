@@ -576,8 +576,11 @@ sp_desktop_pop_event_context (SPDesktop *dt, unsigned int key)
 
 /* Private helpers */
 
-/* fixme: The idea to have underlines is good, but have to fit it into desktop/widget framework (Lauris) */
+//TODO: below comment is by lauris; I don't quite understand his underlines idea. Let's wait and see if this 
+//ever gets implemented in sodipodi. I filled in a simple implementation for sp_desktop_set_coordinate_status
+//which was empty. --bb
 
+/* fixme: The idea to have underlines is good, but have to fit it into desktop/widget framework (Lauris) */
 /* set the coordinate statusbar underline single coordinates with undeline-mask 
  * x and y are document coordinates
  * underline :
@@ -587,20 +590,26 @@ sp_desktop_pop_event_context (SPDesktop *dt, unsigned int key)
 void
 sp_desktop_set_coordinate_status (SPDesktop *desktop, gdouble x, gdouble y, guint underline)
 {
-}
+	gchar cstr[64];
 
-SPItem *
-sp_desktop_item_at_point (SPDesktop *desktop, gdouble x, gdouble y)
-{
-	SPDocument *document=SP_VIEW (desktop)->doc;
-	g_return_val_if_fail (document != NULL, NULL);
-	return sp_document_item_at_point (document, desktop->dkey, x, y);
+	g_snprintf (cstr, 64, "%6.1f, %6.1f", x, y);
+
+	gtk_statusbar_pop (GTK_STATUSBAR (desktop->owner->coord_status), 0);
+	gtk_statusbar_push (GTK_STATUSBAR (desktop->owner->coord_status), 0, cstr);
 }
 
 const SPUnit *
 sp_desktop_get_default_unit (SPDesktop *dt)
 {
 	return dt->namedview->gridunit;
+}
+
+SPItem *
+sp_desktop_item_at_point (SPDesktop *desktop, gdouble x, gdouble y)
+{
+       SPDocument *document=SP_VIEW (desktop)->doc;
+       g_return_val_if_fail (document != NULL, NULL);
+       return sp_document_item_at_point (document, desktop->dkey, x, y);
 }
 
 /* SPDesktopWidget */
