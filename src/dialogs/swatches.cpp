@@ -534,6 +534,9 @@ SwatchesPanel::SwatchesPanel()
         Gdk::Color color;
         color.set_rgb(colorSet[i].r << 8, colorSet[i].g << 8, colorSet[i].b << 8);
         btn->modify_bg(Gtk::STATE_NORMAL, color);
+        btn->modify_bg(Gtk::STATE_ACTIVE, color);
+        btn->modify_bg(Gtk::STATE_PRELIGHT, color);
+        btn->modify_bg(Gtk::STATE_SELECTED, color);
         btn->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &SwatchesPanel::buttonClicked), i) );
 
         stuff->attach( *btn, 0, 1, i, i+1, Gtk::FILL|Gtk::EXPAND, Gtk::FILL|Gtk::EXPAND );
