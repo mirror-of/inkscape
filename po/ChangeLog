@@ -1,3 +1,7 @@
+2004-02-11  buliabyak@users.sf.net
+
+	* fr.po update from f.rodrigo@tuxfamily.org
+
 2003-12-21  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* POTFILES.in, *.po: Change .c filenames to .cpp.
