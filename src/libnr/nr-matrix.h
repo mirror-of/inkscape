@@ -59,7 +59,7 @@ class rotate : public Point{
 class translate : public Point{};
 
 inline Point operator *(const rotate r, const Point v) {
-	return Point(dot(r, v), cross(r, v));
+	return Point(r[0]* v[0] - r[1]*v[1], r[1]*v[0] + r[0]*v[1]);
 }
 
 inline Point operator *(const translate t, const Point v) {
