@@ -40,7 +40,7 @@ static NR::Point bezier_pt (unsigned degree, NR::Point const V[], gdouble t);
 static NR::Point sp_darray_left_tangent (NR::Point const d[], unsigned length);
 static NR::Point sp_darray_right_tangent (NR::Point const d[], unsigned length);
 static NR::Point sp_darray_center_tangent (NR::Point const d[], unsigned center, unsigned length);
-static unsigned copy_without_nans_or_adjacent_duplicates (NRPoint const src[], unsigned src_len, NR::Point dest[]);
+static unsigned copy_without_nans_or_adjacent_duplicates (NR::Point const src[], unsigned src_len, NR::Point dest[]);
 static void chord_length_parameterize(NR::Point const d[], gdouble u[], unsigned len);
 static double compute_max_error (NR::Point const d[], double const u[], unsigned len, BezierCurve const bezCurve, unsigned *splitPoint);
 static double compute_error(NR::Point const &d, double const u, BezierCurve const bezCurve);
@@ -78,7 +78,7 @@ static double compute_error(NR::Point const &d, double const u, BezierCurve cons
  */
 
 gint
-sp_bezier_fit_cubic (NRPoint *bezier, const NRPoint *data, gint len, gdouble error)
+sp_bezier_fit_cubic (NR::Point *bezier, const NR::Point *data, gint len, gdouble error)
 {
 	return sp_bezier_fit_cubic_r (bezier, data, len, error, 1);
 }
@@ -92,7 +92,7 @@ sp_bezier_fit_cubic (NRPoint *bezier, const NRPoint *data, gint len, gdouble err
  * return value: number of segments generated, or -1 on error.
  */
 gint
-sp_bezier_fit_cubic_r (NRPoint *cbezier, NRPoint const *data, gint len, gdouble error, gint max_depth)
+sp_bezier_fit_cubic_r (NR::Point *cbezier, NR::Point const *data, gint len, gdouble error, gint max_depth)
 {
 	g_return_val_if_fail (cbezier != NULL, -1);
 	g_return_val_if_fail (data != NULL, -1);
@@ -122,22 +122,22 @@ sp_bezier_fit_cubic_r (NRPoint *cbezier, NRPoint const *data, gint len, gdouble 
 	gint ret = sp_bezier_fit_cubic_full (bezier, uniqued_data, uniqued_len, tHat1, tHat2, error, max_depth);
 	g_free(uniqued_data);
 	for(gint i = 0; i < ret * 4; ++i) {
-		cbezier[i] = NRPoint(bezier[i]);
+		cbezier[i] = NR::Point(bezier[i]);
 	}
 	g_free(bezier);
 	return ret;
 }
 
 static unsigned
-copy_without_nans_or_adjacent_duplicates (NRPoint const src[], unsigned src_len, NR::Point dest[])
+copy_without_nans_or_adjacent_duplicates (NR::Point const src[], unsigned src_len, NR::Point dest[])
 {
 	unsigned si = 0;
 	for(;;) {
 		if(si == src_len) {
 			return 0;
 		}
-		if(!isnan(src[si].x) &&
-		   !isnan(src[si].y)) {
+		if(!isnan(src[si][NR::X]) &&
+		   !isnan(src[si][NR::Y])) {
 			dest[0] = NR::Point(src[si]);
 			++si;
 			break;

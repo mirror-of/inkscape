@@ -21,9 +21,9 @@
 
 /* Bezier approximation utils */
 
-gint sp_bezier_fit_cubic (NRPoint *bezier, const NRPoint *data, gint len, gdouble error);
+gint sp_bezier_fit_cubic (NR::Point *bezier, const NR::Point *data, gint len, gdouble error);
 
-gint sp_bezier_fit_cubic_r (NRPoint *bezier, const NRPoint *data, gint len, gdouble error, gint max_depth);
+gint sp_bezier_fit_cubic_r (NR::Point *bezier, const NR::Point *data, gint len, gdouble error, gint max_depth);
 
 gint sp_bezier_fit_cubic_full (NR::Point *bezier, NR::Point const data[], gint len,
 			       NR::Point const &tHat1, NR::Point const &tHat2, gdouble error, gint max_depth);

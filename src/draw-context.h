@@ -66,7 +66,7 @@ struct _SPDrawContext {
 	/* End anchor */
 	SPDrawAnchor *ea;
 
-	NRPoint p[SP_DRAW_POINTS_MAX];
+	NR::Point p[SP_DRAW_POINTS_MAX];
 	gint npoints;
 };
 

@@ -44,8 +44,8 @@ struct _SPDynaDrawContext
 	SPCurve *cal1;
 	SPCurve *cal2;
 	/* temporary work area */
-	NRPoint point1[SAMPLING_SIZE];
-	NRPoint point2[SAMPLING_SIZE];
+	NR::Point point1[SAMPLING_SIZE];
+	NR::Point point2[SAMPLING_SIZE];
 	gint npoints;
 
 	/* repr */
@@ -55,12 +55,12 @@ struct _SPDynaDrawContext
 	gint timer_id;
 
 	/* DynaDraw */
-	double curx, cury;
-	double velx, vely, vel;
-	double accx, accy, acc;
-	double angx, angy;
-	double lastx, lasty;
-	double delx, dely;
+	NR::Point cur;
+	NR::Point vel;
+	NR::Point acc;
+	NR::Point ang;
+	NR::Point last;
+	NR::Point del;
 	/* attributes */
 	/* fixme: shuld be merge dragging and dynahand ?? */
 	guint dragging : 1;           /* mouse state: mouse is dragging */

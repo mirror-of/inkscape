@@ -44,6 +44,8 @@
 #include "style.h"
 #include "draw-context.h"
 
+#include <libnr/nr-point-fns.h>
+
 #define SPDC_EVENT_MASK (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK)
 
 /* Drawing anchors */
@@ -53,8 +55,8 @@ struct _SPDrawAnchor {
 	SPCurve *curve;
 	guint start : 1;
 	guint active : 1;
-	NRPoint dp;
-	NRPoint wp;
+	NR::Point dp;
+	NR::Point wp;
 	SPCanvasItem *ctrl;
 };
 
@@ -83,12 +85,12 @@ static void spdc_reset_colors (SPDrawContext *dc);
 static void spdc_reset_white (SPDrawContext *dc);
 static void spdc_free_colors (SPDrawContext *dc);
 
-static SPDrawAnchor *test_inside (SPDrawContext * dc, gdouble wx, gdouble wy);
-static SPDrawAnchor *sp_draw_anchor_test (SPDrawAnchor *anchor, gdouble wx, gdouble wy, gboolean activate);
+static SPDrawAnchor *test_inside (SPDrawContext * dc, NR::Point p);
+static SPDrawAnchor *sp_draw_anchor_test (SPDrawAnchor *anchor, NR::Point w, gboolean activate);
 
 static void fit_and_split (SPDrawContext * dc);
 
-static SPDrawAnchor *sp_draw_anchor_new (SPDrawContext *dc, SPCurve *curve, gboolean start, gdouble x, gdouble y);
+static SPDrawAnchor *sp_draw_anchor_new (SPDrawContext *dc, SPCurve *curve, gboolean start, NR::Point p);
 static SPDrawAnchor *sp_draw_anchor_destroy (SPDrawAnchor *anchor);
 
 static SPEventContextClass *draw_parent_class;
@@ -147,9 +149,7 @@ sp_draw_context_init (SPDrawContext *dc)
 static void
 sp_draw_context_dispose (GObject *object)
 {
-	SPDrawContext *dc;
-
-	dc = SP_DRAW_CONTEXT (object);
+	SPDrawContext *dc = SP_DRAW_CONTEXT (object);
 
 	if (dc->grab) {
 		sp_canvas_item_ungrab (dc->grab, GDK_CURRENT_TIME);
@@ -169,11 +169,8 @@ sp_draw_context_dispose (GObject *object)
 static void
 sp_draw_context_setup (SPEventContext *ec)
 {
-	SPDrawContext *dc;
-	SPDesktop *dt;
-
-	dc = SP_DRAW_CONTEXT (ec);
-	dt = ec->desktop;
+	SPDrawContext *dc = SP_DRAW_CONTEXT (ec);
+	SPDesktop *dt = ec->desktop;
 
 	if (((SPEventContextClass *) draw_parent_class)->setup)
 		((SPEventContextClass *) draw_parent_class)->setup (ec);
@@ -207,9 +204,7 @@ sp_draw_context_setup (SPEventContext *ec)
 static void
 sp_draw_context_finish (SPEventContext *ec)
 {
-	SPDrawContext *dc;
-
-	dc = SP_DRAW_CONTEXT (ec);
+	SPDrawContext *dc = SP_DRAW_CONTEXT (ec);
 
 	if (dc->grab) {
 		sp_canvas_item_ungrab (dc->grab, GDK_CURRENT_TIME);
@@ -226,20 +221,14 @@ sp_draw_context_finish (SPEventContext *ec)
 static void
 sp_draw_context_set (SPEventContext *ec, const gchar *key, const gchar *value)
 {
-	SPDrawContext *dc;
-
-	dc = SP_DRAW_CONTEXT (ec);
 }
 
 gint
 sp_draw_context_root_handler (SPEventContext *ec, GdkEvent *event)
 {
-	SPDrawContext *dc;
-	gint ret;
+	SPDrawContext *dc = SP_DRAW_CONTEXT (ec);
 
-	dc = SP_DRAW_CONTEXT (ec);
-
-	ret = FALSE;
+	gint ret = FALSE;
 
 	switch (event->type) {
 	case GDK_KEY_PRESS:
@@ -319,32 +308,28 @@ spdc_selection_modified (SPSelection *sel, guint flags, SPDrawContext *dc)
 static void
 spdc_attach_selection (SPDrawContext *dc, SPSelection *sel)
 {
-	SPItem *item;
-
 	/* We reset white and forget white/start/end anchors */
 	spdc_reset_white (dc);
 	dc->sa = NULL;
 	dc->ea = NULL;
 
-	item = sp_selection_item (dc->selection);
+	SPItem *item = sp_selection_item (dc->selection);
 
 	if (item && SP_IS_PATH (item)) {
-		SPCurve *norm;
 		NRMatrix i2dt;
-		GSList *l;
 		/* Create new white data */
 		/* Item */
 		dc->white_item = item;
 		/* Curve list */
 		/* We keep it in desktop coordinates to eliminate calculation errors */
-		norm = sp_shape_get_curve (SP_SHAPE (item));
+		SPCurve *norm = sp_shape_get_curve (SP_SHAPE (item));
 		sp_item_i2d_affine(dc->white_item, &i2dt);
 		norm = sp_curve_transform (norm, NR_MATRIX_D_TO_DOUBLE (&i2dt));
 		g_return_if_fail (norm != NULL);
 		dc->white_curves = sp_curve_split (norm);
 		sp_curve_unref (norm);
 		/* Anchor list */
-		for (l = dc->white_curves; l != NULL; l = l->next) {
+		for (GSList *l = dc->white_curves; l != NULL; l = l->next) {
 			SPCurve *c;
 			c = (SPCurve*)l->data;
 			g_return_if_fail (c->end > 1);
@@ -353,9 +338,9 @@ spdc_attach_selection (SPDrawContext *dc, SPSelection *sel)
 				SPDrawAnchor *a;
 				s = sp_curve_first_bpath (c);
 				e = sp_curve_last_bpath (c);
-				a = sp_draw_anchor_new (dc, c, TRUE, s->x3, s->y3);
+				a = sp_draw_anchor_new (dc, c, TRUE, NR::Point(s->x3, s->y3));
 				dc->white_anchors = g_slist_prepend (dc->white_anchors, a);
-				a = sp_draw_anchor_new (dc, c, FALSE, e->x3, e->y3);
+				a = sp_draw_anchor_new (dc, c, FALSE, NR::Point(e->x3, e->y3));
 				dc->white_anchors = g_slist_prepend (dc->white_anchors, a);
 			}
 		}
@@ -380,7 +365,7 @@ spdc_detach_selection (SPDrawContext *dc, SPSelection *sel)
 \param state  keyboard state to check if ctrl was pressed
 */
 static void
-spdc_endpoint_snap_internal (SPDrawContext *dc, NRPoint *p, NRPoint *o, guint state)
+spdc_endpoint_snap_internal (SPDrawContext *dc, NR::Point &p, NR::Point const o, guint state)
 {
 	if (state & GDK_CONTROL_MASK) {
 		/* Constrained motion */
@@ -389,46 +374,38 @@ spdc_endpoint_snap_internal (SPDrawContext *dc, NRPoint *p, NRPoint *o, guint st
 		/* 0 means no snapping. */
 
 		/* mirrored by fabs, so this corresponds to 15 degrees */
-		double bx = 0, by = 0; /* best solution */
+		NR::Point best; /* best solution */
 		double bn = 1e18; /* best normal */
 		double bdot = 0;
-		double vx = 0, vy = 1;
+		NR::Point v = NR::Point(0, 1);
 		double const r00 = cos (M_PI / snaps), r01 = sin (M_PI / snaps);
 		double const r10 = -r01, r11 = r00;
 
-		double const dx = p->x - o->x;
-		double const dy = p->y - o->y;
+		NR::Point delta = p - o;
 
 		for(unsigned i = 0; i < snaps; i++) {
-			double const ndot = fabs(vy*dx - vx*dy);
-			double const tx = r00*vx + r01*vy;
-			double const ty = r10*vx + r11*vy;
+			double const ndot = fabs(dot(v,NR::rot90(delta)));
+			NR::Point t(r00*v[NR::X] + r01*v[NR::Y],
+				    r10*v[NR::X] + r11*v[NR::Y]);
 			if (ndot < bn) { 
 				/* I think it is better numerically to use the normal, rather than the */
 				/* dot product to assess solutions, but I haven't proven it */
 				bn = ndot;
-				bx = vx;
-				by = vy;
-				bdot = vx*dx + vy*dy;
+				best = v;
+				bdot = dot(v, delta);
 			}
-			vx = tx;
-			vy = ty;
+			v = t;
 		}
 
 		if (fabs (bdot) > 0) {
-			p->x = o->x + bdot * bx;
-			p->y = o->y + bdot * by;
+			p = o + bdot * best;
 
 			/* Snap it along best vector */
-			NR::Point pp(*p);
-			sp_desktop_vector_snap (SP_EVENT_CONTEXT_DESKTOP (dc), pp, NR::Point(bx, by));
-			*p = pp;
+			sp_desktop_vector_snap (SP_EVENT_CONTEXT_DESKTOP (dc), p, best);
 		}
 	} else {
 		/* Free */
-		NR::Point pp(*p);
-		sp_desktop_free_snap (SP_EVENT_CONTEXT_DESKTOP (dc), pp);
-		*p = pp;
+		sp_desktop_free_snap (SP_EVENT_CONTEXT_DESKTOP (dc), p);
 	}
 }
 
@@ -436,21 +413,21 @@ spdc_endpoint_snap_internal (SPDrawContext *dc, NRPoint *p, NRPoint *o, guint st
 \brief  Snaps new node relative to the previous node
 */
 static void
-spdc_endpoint_snap (SPDrawContext *dc, NRPoint *p, guint state)
+spdc_endpoint_snap (SPDrawContext *dc, NR::Point &p, guint state)
 {
-	spdc_endpoint_snap_internal (dc, p, &(dc->p[0]), state);
+	spdc_endpoint_snap_internal (dc, p, dc->p[0], state);
 }
 
 /**
 \brief  Snaps new node's handle relative to the new node
 */
 static void
-spdc_endpoint_snap_handle (SPDrawContext *dc, NRPoint *p, guint state)
+spdc_endpoint_snap_handle (SPDrawContext *dc, NR::Point &p, guint state)
 {
 	if (dc->npoints == 5)
-		spdc_endpoint_snap_internal (dc, p, &(dc->p[3]), state);
+		spdc_endpoint_snap_internal (dc, p, dc->p[3], state);
 	else 
-		spdc_endpoint_snap_internal (dc, p, &(dc->p[0]), state);
+		spdc_endpoint_snap_internal (dc, p, dc->p[0], state);
 }
 
 
@@ -643,8 +620,7 @@ spdc_flush_white (SPDrawContext *dc, SPCurve *gc)
  * Returns FIRST active anchor (the activated one)
  */
 
-static SPDrawAnchor *
-test_inside (SPDrawContext *dc, gdouble wx, gdouble wy)
+static SPDrawAnchor * test_inside (SPDrawContext *dc, NR::Point p)
 {
 	GSList *l;
 	SPDrawAnchor *active;
@@ -653,22 +629,20 @@ test_inside (SPDrawContext *dc, gdouble wx, gdouble wy)
 
 	/* Test green anchor */
 	if (dc->green_anchor) {
-		active = sp_draw_anchor_test (dc->green_anchor, wx, wy, TRUE);
+		active = sp_draw_anchor_test (dc->green_anchor, p, TRUE);
 	}
 
 	for (l = dc->white_anchors; l != NULL; l = l->next) {
-		SPDrawAnchor *na;
-		na = sp_draw_anchor_test ((SPDrawAnchor *) l->data, wx, wy, !active);
+		SPDrawAnchor *na = sp_draw_anchor_test ((SPDrawAnchor *) l->data, p, !active);
 		if (!active && na) active = na;
 	}
 
 	return active;
 }
 
-static void
-fit_and_split (SPDrawContext * dc)
+static void fit_and_split (SPDrawContext * dc)
 {
-	NRPoint b[4];
+	NR::Point b[4];
 	gdouble tolerance;
 
 	g_assert (dc->npoints > 1);
@@ -679,8 +653,8 @@ fit_and_split (SPDrawContext * dc)
 	if (sp_bezier_fit_cubic (b, dc->p, dc->npoints, tolerance) > 0 && dc->npoints < SP_DRAW_POINTS_MAX) {
 		/* Fit and draw and reset state */
 		sp_curve_reset (dc->red_curve);
-		sp_curve_moveto (dc->red_curve, b[0].x, b[0].y);
-		sp_curve_curveto (dc->red_curve, b[1].x, b[1].y, b[2].x, b[2].y, b[3].x, b[3].y);
+		sp_curve_moveto (dc->red_curve, b[0]);
+		sp_curve_curveto (dc->red_curve, b[1], b[2], b[3]);
 		sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (dc->red_bpath), dc->red_curve);
 	} else {
 		SPCurve *curve;
@@ -794,22 +768,20 @@ spdc_free_colors (SPDrawContext *dc)
  */
 
 static SPDrawAnchor *
-sp_draw_anchor_new (SPDrawContext *dc, SPCurve *curve, gboolean start, gdouble dx, gdouble dy)
+sp_draw_anchor_new (SPDrawContext *dc, SPCurve *curve, gboolean start, NR::Point delta)
 {
-	SPDrawAnchor *a;
 	SPDesktop *dt=SP_EVENT_CONTEXT_DESKTOP (SP_EVENT_CONTEXT (dc));
 
-	sp_view_set_statusf_flash (SP_VIEW (dt), "Creating anchor at %g %g", dx, dy);
+	sp_view_set_statusf_flash (SP_VIEW (dt), "Creating anchor at %g %g", delta[NR::X], delta[NR::Y]);
 
-	a = g_new (SPDrawAnchor, 1);
+	SPDrawAnchor *a = g_new (SPDrawAnchor, 1);
 
 	a->dc = dc;
 	a->curve = curve;
 	a->start = start;
 	a->active = FALSE;
-	a->dp.x = dx;
-	a->dp.y = dy;
-	sp_desktop_d2w_xy_point (dt, &a->wp, dx, dy);
+	a->dp = delta;
+	a->wp = sp_desktop_d2w_xy_point (dt, delta);
 	a->ctrl = sp_canvas_item_new (SP_DT_CONTROLS (dt), SP_TYPE_CTRL,
 					 "size", 4.0,
 					 "filled", 0,
@@ -818,7 +790,7 @@ sp_draw_anchor_new (SPDrawContext *dc, SPCurve *curve, gboolean start, gdouble d
 					 "stroke_color", 0x000000ff,
 					 NULL);
 
-	sp_ctrl_moveto (SP_CTRL (a->ctrl), dx, dy);
+	sp_ctrl_moveto (SP_CTRL (a->ctrl), delta);
 
 	return a;
 }
@@ -836,9 +808,9 @@ sp_draw_anchor_destroy (SPDrawAnchor *anchor)
 #define A_SNAP 4.0
 
 static SPDrawAnchor *
-sp_draw_anchor_test (SPDrawAnchor *anchor, gdouble wx, gdouble wy, gboolean activate)
+sp_draw_anchor_test (SPDrawAnchor *anchor, NR::Point w, gboolean activate)
 {
-	if (activate && (fabs (wx - anchor->wp.x) <= A_SNAP) && (fabs (wy - anchor->wp.y) <= A_SNAP)) {
+	if (activate && (NR::LInfty(w - anchor->wp) <= A_SNAP)) {
 		if (!anchor->active) {
 			sp_canvas_item_set ((GtkObject *) anchor->ctrl, "filled", TRUE, NULL);
 			anchor->active = TRUE;
@@ -861,10 +833,10 @@ static void sp_pencil_context_dispose (GObject *object);
 
 static gint sp_pencil_context_root_handler (SPEventContext * event_context, GdkEvent * event);
 
-static void spdc_set_startpoint (SPPencilContext *dc, NRPoint *p, guint state);
-static void spdc_set_endpoint (SPPencilContext *dc, NRPoint *p, guint state);
-static void spdc_finish_endpoint (SPPencilContext *dc, NRPoint *p, gboolean snap, guint state);
-static void spdc_add_freehand_point (SPPencilContext *dc, NRPoint *p, guint state);
+static void spdc_set_startpoint (SPPencilContext *dc, NR::Point p, guint state);
+static void spdc_set_endpoint (SPPencilContext *dc, NR::Point p, guint state);
+static void spdc_finish_endpoint (SPPencilContext *dc, NR::Point p, gboolean snap, guint state);
+static void spdc_add_freehand_point (SPPencilContext *dc, NR::Point p, guint state);
 
 static SPDrawContextClass *pencil_parent_class;
 
@@ -940,11 +912,10 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		if (event->button.button == 1) {
 
 			/* Find desktop coordinates */
-			NRPoint p;
-			sp_desktop_w2d_xy_point (dt, &p, event->button.x, event->button.y);
+			NR::Point p = sp_desktop_w2d_xy_point (dt, NR::Point(event->button.x, event->button.y));
 
 			/* Test whether we hit any anchor. */
-			anchor = test_inside (dc, event->button.x, event->button.y);
+			anchor = test_inside (dc, NR::Point(event->button.x, event->button.y));
 
 			switch (pc->state) {
 			case SP_PENCIL_CONTEXT_ADDLINE:
@@ -957,7 +928,7 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					p = anchor->dp;
 				}
 				dc->sa = anchor;
-				spdc_set_startpoint (pc, &p, event->button.state);
+				spdc_set_startpoint (pc, p, event->button.state);
 				ret = TRUE;
 				break;
 			}
@@ -973,11 +944,10 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		}
 
 		/* Find desktop coordinates */
-		NRPoint p;
-		sp_desktop_w2d_xy_point (dt, &p, event->motion.x, event->motion.y);
+		NR::Point p = sp_desktop_w2d_xy_point (dt, NR::Point(event->motion.x, event->motion.y));
 
 		/* Test whether we hit any anchor. */
-		anchor = test_inside (dc, event->button.x, event->button.y);
+		anchor = test_inside (dc, NR::Point(event->button.x, event->button.y));
 
 		switch (pc->state) {
 		case SP_PENCIL_CONTEXT_ADDLINE:
@@ -985,7 +955,7 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			if (anchor) {
 				p = anchor->dp;
 			}
-			spdc_set_endpoint (pc, &p, event->motion.state);
+			spdc_set_endpoint (pc, p, event->motion.state);
 			ret = TRUE;
 			break;
 		default:
@@ -994,18 +964,16 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				pc->state = SP_PENCIL_CONTEXT_FREEHAND;
 				if (!dc->sa && !dc->green_anchor) {
 					/* Create green anchor */
-					dc->green_anchor = sp_draw_anchor_new (dc, dc->green_curve, TRUE, dc->p[0].x, dc->p[0].y);
+					dc->green_anchor = sp_draw_anchor_new (dc, dc->green_curve, TRUE, dc->p[0]);
 				}
-				/* fixme: I am not sure, whether we want to snap to anchors in middle of freehand (Lauris) */
+				/* fixme: I am not sure whether we want to snap to anchors in middle of freehand (Lauris) */
 				if (anchor) {
 					p = anchor->dp;
 				} else {
-					NR::Point pp(p);
-					sp_desktop_free_snap (dt, pp);
-					p = pp;
+					sp_desktop_free_snap (dt, p);
 				}
 				if (dc->npoints != 0) { // buttonpress may have happened before we entered draw context!
-					spdc_add_freehand_point (pc, &p, event->motion.state);
+					spdc_add_freehand_point (pc, p, event->motion.state);
 					ret = TRUE;
 				}
 			}
@@ -1016,11 +984,10 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 	case GDK_BUTTON_RELEASE:
 		if (event->button.button == 1) {
 			/* Find desktop coordinates */
-			NRPoint p;
-			sp_desktop_w2d_xy_point (dt, &p, event->motion.x, event->motion.y);
+			NR::Point p = sp_desktop_w2d_xy_point (dt, NR::Point(event->motion.x, event->motion.y));
 
 			/* Test whether we hit any anchor. */
-			anchor = test_inside (dc, event->button.x, event->button.y);
+			anchor = test_inside (dc, NR::Point(event->button.x, event->button.y));
 
 			switch (pc->state) {
 			case SP_PENCIL_CONTEXT_IDLE:
@@ -1035,7 +1002,7 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					p = anchor->dp;
 				}
 				dc->ea = anchor;
-				spdc_finish_endpoint (pc, &p, !anchor, event->button.state);
+				spdc_finish_endpoint (pc, p, !anchor, event->button.state);
 				pc->state = SP_PENCIL_CONTEXT_IDLE;
 				ret = TRUE;
 				break;
@@ -1103,16 +1070,14 @@ sp_pencil_context_root_handler (SPEventContext *ec, GdkEvent *event)
  */
 
 static void
-spdc_set_startpoint (SPPencilContext *pc, NRPoint *p, guint state)
+spdc_set_startpoint (SPPencilContext *pc, NR::Point p, guint state)
 {
 	SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
 
-	NR::Point pp(*p);
-	sp_desktop_free_snap (SP_EVENT_CONTEXT_DESKTOP (dc), pp);
-	*p = pp;
+	sp_desktop_free_snap (SP_EVENT_CONTEXT_DESKTOP (dc), p);
 
 	dc->npoints = 0;
-	dc->p[dc->npoints++] = *p;
+	dc->p[dc->npoints++] = p;
 }
 
 /*
@@ -1126,22 +1091,20 @@ spdc_set_startpoint (SPPencilContext *pc, NRPoint *p, guint state)
  */
 
 static void
-spdc_set_endpoint (SPPencilContext *pc, NRPoint *p, guint state)
+spdc_set_endpoint (SPPencilContext *pc, NR::Point p, guint state)
 {
-	SPDrawContext *dc;
-
-	dc = SP_DRAW_CONTEXT (pc);
+	SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
 
 	g_assert (dc->npoints > 0);
 
 	spdc_endpoint_snap (dc, p, state);
 
-	dc->p[1] = *p;
+	dc->p[1] = p;
 	dc->npoints = 2;
 
 	sp_curve_reset (dc->red_curve);
-	sp_curve_moveto (dc->red_curve, dc->p[0].x, dc->p[0].y);
-	sp_curve_lineto (dc->red_curve, dc->p[1].x, dc->p[1].y);
+	sp_curve_moveto (dc->red_curve, dc->p[0]);
+	sp_curve_lineto (dc->red_curve, dc->p[1]);
 	sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (dc->red_bpath), dc->red_curve);
 }
 
@@ -1152,11 +1115,9 @@ spdc_set_endpoint (SPPencilContext *pc, NRPoint *p, guint state)
  */
 
 static void
-spdc_finish_endpoint (SPPencilContext *pc, NRPoint *p, gboolean snap, guint state)
+spdc_finish_endpoint (SPPencilContext *pc, NR::Point p, gboolean snap, guint state)
 {
-	SPDrawContext *dc;
-
-	dc = SP_DRAW_CONTEXT (pc);
+	SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
 
 	if (SP_CURVE_LENGTH (dc->red_curve) < 2) {
 		/* Just a click, reset red curve and continue */
@@ -1193,17 +1154,15 @@ spdc_finish_endpoint (SPPencilContext *pc, NRPoint *p, gboolean snap, guint stat
 }
 
 static void
-spdc_add_freehand_point (SPPencilContext *pc, NRPoint *p, guint state)
+spdc_add_freehand_point (SPPencilContext *pc, NR::Point p, guint state)
 {
-	SPDrawContext *dc;
-
-	dc = SP_DRAW_CONTEXT (pc);
+	SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
 
 	/* fixme: Cleanup following (Lauris) */
 	g_assert (dc->npoints > 0);
-	if ((p->x != dc->p[dc->npoints - 1].x) ||
-	    (p->y != dc->p[dc->npoints - 1].y)) {
-		dc->p[dc->npoints++] = *p;
+	if ((p[NR::X] != dc->p[dc->npoints - 1][NR::X]) ||
+	    (p[NR::Y] != dc->p[dc->npoints - 1][NR::Y])) {
+		dc->p[dc->npoints++] = p;
 		fit_and_split (dc);
 	}
 }
@@ -1219,10 +1178,10 @@ static void sp_pen_context_finish (SPEventContext *ec);
 static void sp_pen_context_set (SPEventContext *ec, const gchar *key, const gchar *val);
 static gint sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event);
 
-static void spdc_pen_set_initial_point (SPPenContext *pc, NRPoint const *p);
-static void spdc_pen_set_subsequent_point (SPPenContext *pc, NRPoint const *p);
-static void spdc_pen_set_ctrl (SPPenContext *pc, NRPoint const *p, guint state);
-static void spdc_pen_finish_segment (SPPenContext *pc, NRPoint *p, guint state);
+static void spdc_pen_set_initial_point (SPPenContext *pc, NR::Point const p);
+static void spdc_pen_set_subsequent_point (SPPenContext *pc, NR::Point const p);
+static void spdc_pen_set_ctrl (SPPenContext *pc, NR::Point const p, guint state);
+static void spdc_pen_finish_segment (SPPenContext *pc, NR::Point p, guint state);
 
 static void spdc_pen_finish (SPPenContext *pc, gboolean closed);
 
@@ -1390,11 +1349,10 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			within_tolerance = true;
 
 			/* Find desktop coordinates */
-			NRPoint p;
-			sp_desktop_w2d_xy_point (dt, &p, event->button.x, event->button.y);
+			NR::Point p = sp_desktop_w2d_xy_point (dt, NR::Point(event->button.x, event->button.y));
 
 			/* Test whether we hit any anchor. */
-			anchor = test_inside (dc, event->button.x, event->button.y);
+			anchor = test_inside (dc, NR::Point(event->button.x, event->button.y));
 
 			switch (pc->mode) {
 			case SP_PEN_CONTEXT_MODE_CLICK:
@@ -1425,16 +1383,16 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 							p = anchor->dp;
 						} else {
 							/* Create green anchor */
-							dc->green_anchor = sp_draw_anchor_new (dc, dc->green_curve, TRUE, p.x, p.y);
+							dc->green_anchor = sp_draw_anchor_new (dc, dc->green_curve, TRUE, p);
 						}
-						spdc_pen_set_initial_point (pc, &p);
+						spdc_pen_set_initial_point (pc, p);
 					} else {
 						/* Set end anchor */
 						dc->ea = anchor;
 						if (!anchor) { 	/* Snap node only if not hitting anchor */
-							spdc_endpoint_snap (dc, &p, event->motion.state);
+							spdc_endpoint_snap (dc, p, event->motion.state);
 						}
-						spdc_pen_set_subsequent_point (pc, &p);
+						spdc_pen_set_subsequent_point (pc, p);
 						if (dc->green_anchor && dc->green_anchor->active) {
 							pc->state = SP_PEN_CONTEXT_CLOSE;
 							ret = TRUE;
@@ -1478,11 +1436,10 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		}
 
 		/* Find desktop coordinates */
-		NRPoint p;
-		sp_desktop_w2d_xy_point (dt, &p, event->motion.x, event->motion.y);
+		NR::Point p = sp_desktop_w2d_xy_point (dt, NR::Point(event->motion.x, event->motion.y));
 
 		/* Test, whether we hit any anchor */
-		anchor = test_inside (dc, event->button.x, event->button.y);
+		anchor = test_inside (dc, NR::Point(event->button.x, event->button.y));
 
 		switch (pc->mode) {
 		case SP_PEN_CONTEXT_MODE_CLICK:
@@ -1490,16 +1447,16 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			case SP_PEN_CONTEXT_POINT:
 				if (dc->npoints != 0) {
 					/* Only set point, if we are already appending */
-					spdc_endpoint_snap (dc, &p, event->motion.state);
-					spdc_pen_set_subsequent_point (pc, &p);
+					spdc_endpoint_snap (dc, p, event->motion.state);
+					spdc_pen_set_subsequent_point (pc, p);
 					ret = TRUE;
 				}
 				break;
 			case SP_PEN_CONTEXT_CONTROL:
 			case SP_PEN_CONTEXT_CLOSE:
 				/* Placing controls is last operation in CLOSE state */
-				spdc_endpoint_snap (dc, &p, event->motion.state);
-				spdc_pen_set_ctrl (pc, &p, event->motion.state);
+				spdc_endpoint_snap (dc, p, event->motion.state);
+				spdc_pen_set_ctrl (pc, p, event->motion.state);
 				ret = TRUE;
 				break;
 			case SP_PEN_CONTEXT_STOP:
@@ -1516,10 +1473,10 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					/* Only set point, if we are already appending */
 
 					if (!anchor) { 	/* Snap node only if not hitting anchor */
-						spdc_endpoint_snap (dc, &p, event->motion.state);
+						spdc_endpoint_snap (dc, p, event->motion.state);
 					}
 
-					spdc_pen_set_subsequent_point (pc, &p);
+					spdc_pen_set_subsequent_point (pc, p);
 					ret = TRUE;
 				}
 				break;
@@ -1528,9 +1485,9 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				/* Placing controls is last operation in CLOSE state */
 
 				// snap the handle
-				spdc_endpoint_snap_handle (dc, &p, event->motion.state);
+				spdc_endpoint_snap_handle (dc, p, event->motion.state);
 
-				spdc_pen_set_ctrl (pc, &p, event->motion.state);
+				spdc_pen_set_ctrl (pc, p, event->motion.state);
 				ret = TRUE;
 				break;
 			case SP_PEN_CONTEXT_STOP:
@@ -1549,11 +1506,10 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		xp = yp = 0;
 		if (event->button.button == 1) {
 			/* Find desktop coordinates */
-			NRPoint p;
-			sp_desktop_w2d_xy_point (dt, &p, event->motion.x, event->motion.y);
+			NR::Point p = sp_desktop_w2d_xy_point (dt, NR::Point(event->motion.x, event->motion.y));
 
 			/* Test whether we hit any anchor. */
-			anchor = test_inside (dc, event->button.x, event->button.y);
+			anchor = test_inside (dc, NR::Point(event->button.x, event->button.y));
 
 			switch (pc->mode) {
 			case SP_PEN_CONTEXT_MODE_CLICK:
@@ -1565,8 +1521,8 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 							p = anchor->dp;
 						}
 						dc->sa = anchor;
-						spdc_endpoint_snap (dc, &p, event->motion.state);
-						spdc_pen_set_initial_point (pc, &p);
+						spdc_endpoint_snap (dc, p, event->motion.state);
+						spdc_pen_set_initial_point (pc, p);
 					} else {
 						/* Set end anchor here */
 						dc->ea = anchor;
@@ -1576,17 +1532,17 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					break;
 				case SP_PEN_CONTEXT_CONTROL:
 					/* End current segment */
-					spdc_endpoint_snap (dc, &p, event->motion.state);
-					spdc_pen_finish_segment (pc, &p, event->button.state);
+					spdc_endpoint_snap (dc, p, event->motion.state);
+					spdc_pen_finish_segment (pc, p, event->button.state);
 					pc->state = SP_PEN_CONTEXT_POINT;
 					ret = TRUE;
 					break;
 				case SP_PEN_CONTEXT_CLOSE:
 					/* End current segment */
 					if (!anchor) { 	/* Snap node only if not hitting anchor */
-						spdc_endpoint_snap (dc, &p, event->motion.state);
+						spdc_endpoint_snap (dc, p, event->motion.state);
 					}
-					spdc_pen_finish_segment (pc, &p, event->button.state);
+					spdc_pen_finish_segment (pc, p, event->button.state);
 					spdc_pen_finish (pc, TRUE);
 					pc->state = SP_PEN_CONTEXT_POINT;
 					ret = TRUE;
@@ -1604,12 +1560,12 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				switch (pc->state) {
 				case SP_PEN_CONTEXT_POINT:
 				case SP_PEN_CONTEXT_CONTROL:
-					spdc_endpoint_snap (dc, &p, event->motion.state);
-					spdc_pen_finish_segment (pc, &p, event->button.state);
+					spdc_endpoint_snap (dc, p, event->motion.state);
+					spdc_pen_finish_segment (pc, p, event->button.state);
 					break;
 				case SP_PEN_CONTEXT_CLOSE:
-					spdc_endpoint_snap (dc, &p, event->motion.state);
-					spdc_pen_finish_segment (pc, &p, event->button.state);
+					spdc_endpoint_snap (dc, p, event->motion.state);
+					spdc_pen_finish_segment (pc, p, event->button.state);
 					spdc_pen_finish (pc, TRUE);
 					break;
 				case SP_PEN_CONTEXT_STOP:
@@ -1666,7 +1622,7 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				ret = TRUE;
 				break;
 			} else {
-				NRPoint pt;
+				NR::Point pt;
 				ArtBpath *p;
 				gint e;
 				/* Reset red curve */
@@ -1681,16 +1637,12 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					g_warning ("Green curve length is %d", e);
 					break;
 				}
-				dc->p[0].x = p[e - 2].x3;
-				dc->p[0].y = p[e - 2].y3;
-				dc->p[1].x = p[e - 1].x1;
-				dc->p[1].y = p[e - 1].y1;
+				dc->p[0] = NR::Point(p[e - 2].x3, p[e - 2].y3);
+				dc->p[1] = NR::Point(p[e - 1].x1, p[e - 1].y1);
 				if (dc->npoints < 4) {
-					pt.x = p[e - 1].x3;
-					pt.y = p[e - 1].y3;
+					pt = NR::Point(p[e - 1].x3, p[e - 1].y3);
 				} else {
-					pt.x = dc->p[3].x;
-					pt.y = dc->p[3].y;
+					pt = dc->p[3];
 				}
 				dc->npoints = 2;
 				sp_curve_backspace (dc->green_curve);
@@ -1699,7 +1651,7 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				sp_canvas_item_hide (pc->cl0);
 				sp_canvas_item_hide (pc->cl1);
 				pc->state = SP_PEN_CONTEXT_POINT;
-				spdc_pen_set_subsequent_point (pc, &pt);
+				spdc_pen_set_subsequent_point (pc, pt);
 				ret = TRUE;
 			}
 			break;
@@ -1720,96 +1672,86 @@ sp_pen_context_root_handler (SPEventContext *ec, GdkEvent *event)
 }
 
 static void
-spdc_pen_set_initial_point (SPPenContext *pc, NRPoint const *p)
+spdc_pen_set_initial_point (SPPenContext *pc, NR::Point const p)
 {
 	SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
 	g_assert (dc->npoints == 0);
 
-	dc->p[0] = *p;
-	dc->p[1] = *p;
+	dc->p[0] = p;
+	dc->p[1] = p;
 	dc->npoints = 2;
 	sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (dc->red_bpath), NULL);
 }
 
 static void
-spdc_pen_set_subsequent_point (SPPenContext *pc, NRPoint const *p)
+spdc_pen_set_subsequent_point (SPPenContext *pc, NR::Point const p)
 {
 	SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
 	g_assert (dc->npoints != 0);
 
-	dc->p[2] = *p;
-	dc->p[3] = *p;
-	dc->p[4] = *p;
+	dc->p[2] = p;
+	dc->p[3] = p;
+	dc->p[4] = p;
 	dc->npoints = 5;
 	sp_curve_reset (dc->red_curve);
-	sp_curve_moveto (dc->red_curve, dc->p[0].x, dc->p[0].y);
+	sp_curve_moveto (dc->red_curve, dc->p[0]);
 	if ((pc->onlycurves)
-	    || (dc->p[1].x != dc->p[0].x)
-	    || (dc->p[1].y != dc->p[0].y))
+	    || (dc->p[1][NR::X] != dc->p[0][NR::X])
+	    || (dc->p[1][NR::Y] != dc->p[0][NR::Y]))
 	{
-		sp_curve_curveto (dc->red_curve, dc->p[1].x, dc->p[1].y, dc->p[2].x, dc->p[2].y, dc->p[3].x, dc->p[3].y);
+		sp_curve_curveto (dc->red_curve, dc->p[1], dc->p[2], dc->p[3]);
 	} else {
-		sp_curve_lineto (dc->red_curve, dc->p[3].x, dc->p[3].y);
+		sp_curve_lineto (dc->red_curve, dc->p[3]);
 	}
 	sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (dc->red_bpath), dc->red_curve);
 }
 
 static void
-spdc_pen_set_ctrl (SPPenContext *pc, NRPoint const *p, guint state)
+spdc_pen_set_ctrl (SPPenContext *pc, NR::Point const p, guint state)
 {
-	SPDrawContext *dc;
-
-	dc = SP_DRAW_CONTEXT (pc);
+	SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
 
 	sp_canvas_item_show (pc->c1);
 	sp_canvas_item_show (pc->cl1);
 
 	if (dc->npoints == 2) {
-		dc->p[1] = *p;
+		dc->p[1] = p;
 		sp_canvas_item_hide (pc->c0);
 		sp_canvas_item_hide (pc->cl0);
-		sp_ctrl_moveto (SP_CTRL (pc->c1), dc->p[1].x, dc->p[1].y);
-		sp_ctrlline_set_coords (SP_CTRLLINE (pc->cl1), dc->p[0].x, dc->p[0].y, dc->p[1].x, dc->p[1].y);
+		sp_ctrl_moveto (SP_CTRL (pc->c1), dc->p[1]);
+		sp_ctrlline_set_coords (SP_CTRLLINE (pc->cl1), dc->p[0], dc->p[1]);
 	} else if (dc->npoints == 5) {
-		dc->p[4] = *p;
+		dc->p[4] = p;
 		sp_canvas_item_show (pc->c0);
 		sp_canvas_item_show (pc->cl0);
 		if (((pc->mode == SP_PEN_CONTEXT_MODE_CLICK) && (state & GDK_CONTROL_MASK)) ||
 		    ((pc->mode == SP_PEN_CONTEXT_MODE_DRAG) && !(state & GDK_SHIFT_MASK))) {
-			gdouble dx, dy;
-			dx = p->x - dc->p[3].x;
-			dy = p->y - dc->p[3].y;
-			dc->p[2].x = dc->p[3].x - dx;
-			dc->p[2].y = dc->p[3].y - dy;
+			NR::Point delta = p - dc->p[3];
+			dc->p[2] = dc->p[3] - delta;
 			sp_curve_reset (dc->red_curve);
-			sp_curve_moveto (dc->red_curve, dc->p[0].x, dc->p[0].y);
-			sp_curve_curveto (dc->red_curve, dc->p[1].x, dc->p[1].y, dc->p[2].x, dc->p[2].y, dc->p[3].x, dc->p[3].y);
+			sp_curve_moveto (dc->red_curve, dc->p[0]);
+			sp_curve_curveto (dc->red_curve, dc->p[1], dc->p[2], dc->p[3]);
 			sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (dc->red_bpath), dc->red_curve);
 		}
-		sp_ctrl_moveto (SP_CTRL (pc->c0), dc->p[2].x, dc->p[2].y);
-		sp_ctrlline_set_coords (SP_CTRLLINE (pc->cl0), dc->p[3].x, dc->p[3].y, dc->p[2].x, dc->p[2].y);
-		sp_ctrl_moveto (SP_CTRL (pc->c1), dc->p[4].x, dc->p[4].y);
-		sp_ctrlline_set_coords (SP_CTRLLINE (pc->cl1), dc->p[3].x, dc->p[3].y, dc->p[4].x, dc->p[4].y);
+		sp_ctrl_moveto (SP_CTRL (pc->c0), dc->p[2]);
+		sp_ctrlline_set_coords (SP_CTRLLINE (pc->cl0), dc->p[3], dc->p[2]);
+		sp_ctrl_moveto (SP_CTRL (pc->c1), dc->p[4]);
+		sp_ctrlline_set_coords (SP_CTRLLINE (pc->cl1), dc->p[3], dc->p[4]);
 	} else {
 		g_warning ("Something bad happened - npoints is %d", dc->npoints);
 	}
 }
 
 static void
-spdc_pen_finish_segment (SPPenContext *pc, NRPoint *p, guint state)
+spdc_pen_finish_segment (SPPenContext *pc, NR::Point p, guint state)
 {
-	SPDrawContext *dc;
-
-	dc = SP_DRAW_CONTEXT (pc);
+	SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
 
 	if (!sp_curve_empty (dc->red_curve)) {
-		SPCurve *curve;
-		SPCanvasItem *cshape;
-
 		sp_curve_append_continuous (dc->green_curve, dc->red_curve, 0.0625);
-		curve = sp_curve_copy (dc->red_curve);
+		SPCurve *curve = sp_curve_copy (dc->red_curve);
 		/* fixme: */
-		cshape = sp_canvas_bpath_new (SP_DT_SKETCH (SP_EVENT_CONTEXT (dc)->desktop), curve);
+		SPCanvasItem *cshape = sp_canvas_bpath_new (SP_DT_SKETCH (SP_EVENT_CONTEXT (dc)->desktop), curve);
 		sp_curve_unref (curve);
 		sp_canvas_bpath_set_stroke (SP_CANVAS_BPATH (cshape), dc->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 
@@ -1826,9 +1768,7 @@ spdc_pen_finish_segment (SPPenContext *pc, NRPoint *p, guint state)
 static void
 spdc_pen_finish (SPPenContext *pc, gboolean closed)
 {
-	SPDrawContext *dc;
-
-	dc = SP_DRAW_CONTEXT (pc);
+	SPDrawContext *dc = SP_DRAW_CONTEXT (pc);
 
 	sp_view_set_statusf_flash (SP_VIEW (SP_EVENT_CONTEXT (dc)->desktop), "Finishing pen");
 

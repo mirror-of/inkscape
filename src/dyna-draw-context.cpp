@@ -26,24 +26,7 @@
  *  - Bug fix.
  */
 
-#define noDYNA_DRAW_DEBUG
 #define noDYNA_DRAW_VERBOSE
-#define NORMALIZED_COORDINATE
-
-#ifdef DYNA_DRAW_DEBUG
-#define BEZIER_ASSERT(b) { \
-      g_assert ((b[0].x > -8000.0) && (b[0].x < 8000.0)); \
-      g_assert ((b[0].y > -8000.0) && (b[0].y < 8000.0)); \
-      g_assert ((b[1].x > -8000.0) && (b[1].x < 8000.0)); \
-      g_assert ((b[1].y > -8000.0) && (b[1].y < 8000.0)); \
-      g_assert ((b[2].x > -8000.0) && (b[2].x < 8000.0)); \
-      g_assert ((b[2].y > -8000.0) && (b[2].y < 8000.0)); \
-      g_assert ((b[3].x > -8000.0) && (b[3].x < 8000.0)); \
-      g_assert ((b[3].y > -8000.0) && (b[3].y < 8000.0)); \
-      }
-#else
-#define BEZIER_ASSERT(b)
-#endif
 
 #include <config.h>
 #include <math.h>
@@ -75,6 +58,8 @@
 #include "desktop-snap.h"
 #include "dyna-draw-context.h"
 
+#include <libnr/nr-point-fns.h>
+
 #define DDC_RED_RGBA 0xff0000ff
 #define DDC_GREEN_RGBA 0x000000ff
 
@@ -83,11 +68,7 @@
 #define TOLERANCE_CALLIGRAPHIC 3.0
 #define DYNA_EPSILON 1.0e-6
 
-#ifdef NORMALIZED_COORDINATE
 #define DYNA_MIN_WIDTH 1.0e-6
-#else
-#define DYNA_MIN_WIDTH 1.0
-#endif
 
 #define DRAG_MIN 0.0
 #define DRAG_DEFAULT 0.5
@@ -112,10 +93,10 @@ static void fit_and_split (SPDynaDrawContext *ddc, gboolean release);
 static void fit_and_split_line (SPDynaDrawContext *ddc, gboolean release);
 static void fit_and_split_calligraphics (SPDynaDrawContext *ddc, gboolean release);
 
-static void sp_dyna_draw_reset (SPDynaDrawContext *ddc, double x, double y);
-static void sp_dyna_draw_get_npoint (const SPDynaDrawContext *ddc, gdouble vx, gdouble vy, gdouble *nx, gdouble *ny);
-static void sp_dyna_draw_get_vpoint (const SPDynaDrawContext *ddc, gdouble nx, gdouble ny, gdouble *vx, gdouble *vy);
-static void sp_dyna_draw_get_curr_vpoint (const SPDynaDrawContext *ddc, gdouble *vx, gdouble *vy);
+static void sp_dyna_draw_reset (SPDynaDrawContext *ddc, NR::Point p);
+static NR::Point sp_dyna_draw_get_npoint (const SPDynaDrawContext *ddc, NR::Point v);
+static NR::Point sp_dyna_draw_get_vpoint (const SPDynaDrawContext *ddc, NR::Point n);
+static NR::Point sp_dyna_draw_get_curr_vpoint (const SPDynaDrawContext *ddc);
 static void draw_temporary_box (SPDynaDrawContext *dc);
 
 
@@ -144,11 +125,8 @@ sp_dyna_draw_context_get_type (void)
 static void
 sp_dyna_draw_context_class_init (SPDynaDrawContextClass *klass)
 {
-	GObjectClass *object_class;
-	SPEventContextClass *event_context_class;
-
-	object_class = (GObjectClass *) klass;
-	event_context_class = (SPEventContextClass *) klass;
+	GObjectClass *object_class = (GObjectClass *) klass;
+	SPEventContextClass *event_context_class = (SPEventContextClass *) klass;
 
 	parent_class = (SPEventContextClass*)g_type_class_peek_parent (klass);
 
@@ -173,18 +151,12 @@ sp_dyna_draw_context_init (SPDynaDrawContext *ddc)
 	ddc->repr = NULL;
 
 	/* DynaDraw values */
-	ddc->curx = 0.0;
-	ddc->cury = 0.0;
-	ddc->lastx = 0.0;
-	ddc->lasty = 0.0;
-	ddc->velx = 0.0;
-	ddc->vely = 0.0;
-	ddc->accx = 0.0;
-	ddc->accy = 0.0;
-	ddc->angx = 0.0;
-	ddc->angy = 0.0;
-	ddc->delx = 0.0;
-	ddc->dely = 0.0;
+	ddc->cur = NR::Point(0,0);
+	ddc->last = NR::Point(0,0);
+	ddc->vel = NR::Point(0,0);
+	ddc->acc = NR::Point(0,0);
+	ddc->ang = NR::Point(0,0);
+	ddc->del = NR::Point(0,0);
 
 	/* attributes */
 	ddc->fixed_angle = FALSE;
@@ -194,25 +166,16 @@ sp_dyna_draw_context_init (SPDynaDrawContext *ddc)
 	ddc->dragging = FALSE;
 	ddc->dynahand = FALSE;
 
-#ifdef NORMALIZED_COORDINATE
 	ddc->mass = 0.3;
 	ddc->drag = DRAG_DEFAULT;
 	ddc->angle = 30.0;
 	ddc->width = 0.2;
-#else
-	ddc->mass = 0.2;
-	ddc->drag = DRAG_DEFAULT;
-	ddc->angle = 30.0;
-	ddc->width = 0.1;
-#endif
 }
 
 static void
 sp_dyna_draw_context_dispose (GObject *object)
 {
-	SPDynaDrawContext *ddc;
-
-	ddc = SP_DYNA_DRAW_CONTEXT (object);
+	SPDynaDrawContext *ddc = SP_DYNA_DRAW_CONTEXT (object);
 
 	if (ddc->accumulated) ddc->accumulated = sp_curve_unref (ddc->accumulated);
 
@@ -236,9 +199,7 @@ sp_dyna_draw_context_dispose (GObject *object)
 static void
 sp_dyna_draw_context_setup (SPEventContext *ec)
 {
-	SPDynaDrawContext *ddc;
-
-	ddc = SP_DYNA_DRAW_CONTEXT (ec);
+	SPDynaDrawContext *ddc = SP_DYNA_DRAW_CONTEXT (ec);
 
 	if (((SPEventContextClass *) parent_class)->setup)
 		((SPEventContextClass *) parent_class)->setup (ec);
@@ -265,10 +226,9 @@ sp_dyna_draw_context_setup (SPEventContext *ec)
 static void
 sp_dyna_draw_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
 {
-	SPDynaDrawContext *ddc;
 	gdouble dval;
 
-	ddc = SP_DYNA_DRAW_CONTEXT (ec);
+	SPDynaDrawContext *ddc = SP_DYNA_DRAW_CONTEXT (ec);
 
 	if (!strcmp (key, "mass")) {
 		dval = (val) ? atof (val) : 0.2;
@@ -295,140 +255,86 @@ flerp (double f0, double f1, double p)
 }
 
 /* Get normalized point */
-static void
-sp_dyna_draw_get_npoint (const SPDynaDrawContext *dc,
-                         gdouble            vx,
-                         gdouble            vy,
-                         gdouble           *nx,
-                         gdouble           *ny)
+static NR::Point
+sp_dyna_draw_get_npoint (const SPDynaDrawContext *dc, NR::Point v)
 {
-#ifdef NORMALIZED_COORDINATE
 	NRRect drect;
 
 	sp_desktop_get_display_area (SP_EVENT_CONTEXT(dc)->desktop, &drect);
-	*nx = (vx - drect.x0)/(drect.x1 - drect.x0);
-	*ny = (vy - drect.y0)/(drect.y1 - drect.y0);
-#else
-	*nx = vx;
-	*ny = vy;
-#endif
-
-/*    g_print ("NP:: vx:%g vy:%g => nx:%g ny:%g\n", vx, vy, *nx, *ny); */
-/*    g_print ("NP:: x0:%g y0:%g x1:%g y1:%g\n", drect.x0, drect.y0, drect.y1, drect.y1); */
+	return NR::Point((v[NR::X] - drect.x0)/(drect.x1 - drect.x0),
+			 (v[NR::Y] - drect.y0)/(drect.y1 - drect.y0));
 }
 
 /* Get view point */
-static void
-sp_dyna_draw_get_vpoint (const SPDynaDrawContext *dc,
-                         gdouble            nx,
-                         gdouble            ny,
-                         gdouble           *vx,
-                         gdouble           *vy)
+static NR::Point
+sp_dyna_draw_get_vpoint (const SPDynaDrawContext *dc, NR::Point n)
 {
-#ifdef NORMALIZED_COORDINATE
 	NRRect drect;
 
 	sp_desktop_get_display_area (SP_EVENT_CONTEXT(dc)->desktop, &drect);
-	*vx = nx * (drect.x1 - drect.x0) + drect.x0;
-	*vy = ny * (drect.y1 - drect.y0) + drect.y0;
-#else
-	*vx = nx;
-	*vy = ny;
-#endif
-
-/*    g_print ("VP:: nx:%g ny:%g => vx:%g vy:%g\n", nx, ny, *vx, *vy); */
+	return NR::Point(n[NR::X] * (drect.x1 - drect.x0) + drect.x0,
+			 n[NR::Y] * (drect.y1 - drect.y0) + drect.y0);
 }
 
 /* Get current view point */
-static void
-sp_dyna_draw_get_curr_vpoint (const SPDynaDrawContext * dc,
-                              gdouble *vx,
-                              gdouble *vy)
+static NR::Point sp_dyna_draw_get_curr_vpoint (const SPDynaDrawContext * dc)
 {
-#ifdef NORMALIZED_COORDINATE
 	NRRect drect;
 
 	sp_desktop_get_display_area (SP_EVENT_CONTEXT(dc)->desktop, &drect);
-	*vx = dc->curx * (drect.x1 - drect.x0) + drect.x0;
-	*vy = dc->cury * (drect.y1 - drect.y0) + drect.y0;
-#else
-	*vx = dc->curx;
-	*vy = dc->cury;
-#endif
+	return NR::Point(dc->cur[NR::X] * (drect.x1 - drect.x0) + drect.x0,
+			 dc->cur[NR::Y] * (drect.y1 - drect.y0) + drect.y0);
 }
 
 static void
-sp_dyna_draw_reset (SPDynaDrawContext * dc, double x, double y)
+sp_dyna_draw_reset (SPDynaDrawContext * dc, NR::Point p)
 {
-  gdouble nx, ny;
-
-  sp_dyna_draw_get_npoint (dc, x, y, &nx, &ny);
-
-  dc->curx = nx;
-  dc->cury = ny;
-  dc->lastx = nx;
-  dc->lasty = ny;
-  dc->velx = 0.0;
-  dc->vely = 0.0;
-  dc->accx = 0.0;
-  dc->accy = 0.0;
-  dc->angx = 0.0;
-  dc->angy = 0.0;
-  dc->delx = 0.0;
-  dc->dely = 0.0;
+  dc->last = dc->cur = sp_dyna_draw_get_npoint (dc, p);
+  dc->vel = NR::Point(0,0);
+  dc->acc = NR::Point(0,0);
+  dc->ang = NR::Point(0,0);
+  dc->del = NR::Point(0,0);
 }
 
 static gboolean
-sp_dyna_draw_apply (SPDynaDrawContext * dc, double x, double y)
+sp_dyna_draw_apply (SPDynaDrawContext * dc, NR::Point p)
 {
   double mass, drag;
-  double fx, fy;
-  double nx, ny;                /* normalized coordinates */
 
-  sp_dyna_draw_get_npoint (dc, x, y, &nx, &ny);
+  NR::Point n = sp_dyna_draw_get_npoint (dc, p);
 
   /* Calculate mass and drag */
   mass = flerp (1.0, 160.0, dc->mass);
   drag = flerp (0.0, 0.5, dc->drag * dc->drag);
 
   /* Calculate force and acceleration */
-  fx = nx - dc->curx;
-  fy = ny - dc->cury;
-  dc->acc = hypot(fx, fy);
-  if (dc->acc < DYNA_EPSILON)
+  NR::Point force = n - dc->cur;
+  if (NR::L2(force) < DYNA_EPSILON)
     return FALSE;
 
-  dc->accx = fx / mass;
-  dc->accy = fy / mass;
+  dc->acc = force / mass;
 
   /* Calculate new velocity */
-  dc->velx += dc->accx;
-  dc->vely += dc->accy;
-  dc->vel = hypot (dc->velx, dc->vely);
+  dc->vel += dc->acc;
 
   /* Calculate angle of drawing tool */
-  if (dc->fixed_angle)
-    {
-      dc->angx = cos (dc->angle * M_PI / 180.0);
-      dc->angy = -sin (dc->angle * M_PI / 180.0);
-    }
-  else
-    {
-      if (dc->vel < DYNA_EPSILON)
-        return FALSE;
-      dc->angx = -dc->vely / dc->vel;
-      dc->angy =  dc->velx / dc->vel;
-    }
+  if (dc->fixed_angle) {
+	  // should this be -sin, cos?
+	  dc->ang = NR::Point(cos (dc->angle * M_PI / 180.0),
+			      -sin (dc->angle * M_PI / 180.0));
+  } else {
+	  gdouble mag_vel = NR::L2(dc->vel);
+	  if (mag_vel < DYNA_EPSILON)
+		  return FALSE;
+	  dc->ang = NR::rot90(dc->vel) / mag_vel;
+  }
 
   /* Apply drag */
-  dc->velx *= 1.0 - drag;
-  dc->vely *= 1.0 - drag;
+  dc->vel *= 1.0 - drag;
 
   /* Update position */
-  dc->lastx = dc->curx;
-  dc->lasty = dc->cury;
-  dc->curx += dc->velx;
-  dc->cury += dc->vely;
+  dc->last = dc->cur;
+  dc->cur += dc->vel;
 
   return TRUE;
 }
@@ -440,43 +346,19 @@ sp_dyna_draw_brush (SPDynaDrawContext *dc)
 
 	if (dc->use_calligraphic) {
 		/* calligraphics */
-		double width;
-		double delx, dely;
-		NRPoint *vp;
-		double xd, yd;
 
 		/* fixme: */
-#ifdef NORMALIZED_COORDINATE
-		width = (0.05 - dc->vel) * dc->width;
-#else
-		width = (100.0 - dc->vel) * dc->width;
-#endif
+		double width = (0.05 - NR::L2(dc->vel)) * dc->width;
 		if (width < DYNA_MIN_WIDTH)
 			width = DYNA_MIN_WIDTH;
-		delx = dc->angx * width;
-		dely = dc->angy * width;
+		NR::Point del = width * dc->ang;
 
-#if DYNA_DRAW_VERBOSE
-		g_print ("brush:: [w:%g] [dc->w:%g] [dc->vel:%g]\n", width, dc->width, dc->vel);
-		g_print("brush:: [del: %g, %g]\n", delx, dely);
-#endif
+		dc->point1[dc->npoints] = sp_dyna_draw_get_vpoint (dc, dc->cur + del);
+		dc->point2[dc->npoints] = sp_dyna_draw_get_vpoint (dc, dc->cur - del);
 
-		vp = &dc->point1[dc->npoints];
-		sp_dyna_draw_get_vpoint (dc, dc->curx + delx, dc->cury + dely, &xd, &yd);
-		vp->x = xd;
-		vp->y = yd;
-		vp = &dc->point2[dc->npoints];
-		sp_dyna_draw_get_vpoint (dc, dc->curx - delx, dc->cury - dely, &xd, &yd);
-		vp->x = xd;
-		vp->y = yd;
-
-		dc->delx = delx;
-		dc->dely = dely;
+		dc->del = del;
 	} else {
-		double xd, yd;
-		sp_dyna_draw_get_curr_vpoint (dc, &xd, &yd);
-		dc->point1[dc->npoints].x = xd;
-		dc->point1[dc->npoints].y = yd;
+		dc->point1[dc->npoints] = sp_dyna_draw_get_curr_vpoint (dc);
 	}
 
 	dc->npoints++;
@@ -485,37 +367,24 @@ sp_dyna_draw_brush (SPDynaDrawContext *dc)
 static gint
 sp_dyna_draw_timeout_handler (gpointer data)
 {
-	SPDynaDrawContext *dc;
-	SPDesktop *desktop;
-	SPCanvas *canvas;
-	double xd, yd;
-	int x, y;
-	NRPoint p;
-
-	dc = SP_DYNA_DRAW_CONTEXT (data);
-	desktop = SP_EVENT_CONTEXT(dc)->desktop;
-	canvas = SP_CANVAS (SP_DT_CANVAS (desktop));
+	SPDynaDrawContext *dc = SP_DYNA_DRAW_CONTEXT (data);
+	SPDesktop *desktop = SP_EVENT_CONTEXT(dc)->desktop;
+	SPCanvas *canvas = SP_CANVAS (SP_DT_CANVAS (desktop));
 
 	dc->dragging = TRUE;
 	dc->dynahand = TRUE;
   
+	int x, y;
 	gtk_widget_get_pointer (GTK_WIDGET(canvas), &x, &y);
-	sp_canvas_window_to_world (canvas, x, y, &xd, &yd);
-	p.x = xd;
-	p.y = yd;
-	sp_desktop_w2d_xy_point (desktop, &p, p.x, p.y);
-	/* g_print ("(%d %d)=>(%g %g)\n", x, y, p.x, p.y); */
-	if (! sp_dyna_draw_apply (dc, p.x, p.y)) {
+	NR::Point p = sp_canvas_window_to_world (canvas, NR::Point(x, y));
+	p = sp_desktop_w2d_xy_point (desktop, p);
+	if (! sp_dyna_draw_apply (dc, p)) {
 		return TRUE;
 	}
-	sp_dyna_draw_get_curr_vpoint (dc, &xd, &yd);
-	p.x = xd;
-	p.y = yd;
-	NR::Point pp(p);
-	sp_desktop_free_snap (desktop, pp);
-	p = pp;
-  
-	if ((dc->curx != dc->lastx) || (dc->cury != dc->lasty)) {
+	p = sp_dyna_draw_get_curr_vpoint (dc);
+	sp_desktop_free_snap (desktop, p);
+	// something's not right here
+	if ((dc->cur[NR::X] != dc->last[NR::X]) || (dc->cur[NR::Y] != dc->last[NR::Y])) {
 		sp_dyna_draw_brush (dc);
 		g_assert (dc->npoints > 0);
 		fit_and_split (dc, FALSE);
@@ -528,29 +397,19 @@ gint
 sp_dyna_draw_context_root_handler (SPEventContext * event_context,
 				   GdkEvent * event)
 {
-	SPDynaDrawContext *dc;
-	SPDesktop *desktop;
-	NRPoint p;
-	gint ret;
+	SPDynaDrawContext *dc = SP_DYNA_DRAW_CONTEXT (event_context);
+	SPDesktop *desktop = event_context->desktop;
 
-	dc = SP_DYNA_DRAW_CONTEXT (event_context);
-	desktop = event_context->desktop;
-
-	ret = FALSE;
+	gint ret = FALSE;
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
-			double xd, yd;
-			sp_desktop_w2d_xy_point (desktop, &p, event->button.x, event->button.y);
-			sp_dyna_draw_reset (dc, p.x, p.y);
-			sp_dyna_draw_apply (dc, p.x, p.y);
-			sp_dyna_draw_get_curr_vpoint (dc, &xd, &yd);
-			p.x = xd;
-			p.y = yd;
-			NR::Point pp(p);
-			sp_desktop_free_snap (desktop, pp);
-			p = pp;
+			NR::Point p = sp_desktop_w2d_xy_point (desktop,NR::Point(event->button.x, event->button.y));
+			sp_dyna_draw_reset (dc, p);
+			sp_dyna_draw_apply (dc, p);
+			p = sp_dyna_draw_get_curr_vpoint (dc);
+			sp_desktop_free_snap (desktop, p);
 			sp_curve_reset (dc->accumulated);
 			if (dc->repr) {
 				dc->repr = NULL;
@@ -580,30 +439,20 @@ sp_dyna_draw_context_root_handler (SPEventContext * event_context,
 		break;
 	case GDK_MOTION_NOTIFY:
 		if (!dc->use_timeout && (event->motion.state & GDK_BUTTON1_MASK)) {
-			double xd, yd;
-
 			dc->dragging = TRUE;
 			dc->dynahand = TRUE;
 
-			sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
+			NR::Point p = sp_desktop_w2d_xy_point (desktop, NR::Point(event->motion.x, event->motion.y));
 
-#if DYNA_DRAW_VERBOSE
-			g_print ("(%g %g)=>(%g %g)\n", event->motion.x, event->motion.y, p.x, p.y);
-#endif
-
-			if (! sp_dyna_draw_apply (dc, p.x, p.y)) {
+			if (! sp_dyna_draw_apply (dc, p)) {
 				ret = TRUE;
 				break;
 			}
-			sp_dyna_draw_get_curr_vpoint (dc, &xd, &yd);
-			p.x = xd;
-			p.y = yd;
+			p = sp_dyna_draw_get_curr_vpoint (dc);
 			
-			NR::Point pp(p);
-			sp_desktop_free_snap (desktop, pp);
-			p = pp;
+			sp_desktop_free_snap (desktop, p);
 
-			if ((dc->curx != dc->lastx) || (dc->cury != dc->lasty)) {
+			if ((dc->cur[NR::X] != dc->last[NR::X]) || (dc->cur[NR::Y] != dc->last[NR::Y])) {
 				sp_dyna_draw_brush (dc);
 				g_assert (dc->npoints > 0);
 				fit_and_split (dc, FALSE);
@@ -693,9 +542,7 @@ clear_current (SPDynaDrawContext * dc)
 static void
 set_to_accumulated (SPDynaDrawContext * dc)
 {
-  SPDesktop *desktop;
-
-  desktop = SP_EVENT_CONTEXT (dc)->desktop;
+  SPDesktop *desktop = SP_EVENT_CONTEXT (dc)->desktop;
 
   if (!sp_curve_empty (dc->accumulated))
     {
@@ -778,12 +625,10 @@ concat_current_line (SPDynaDrawContext * dc)
 static void
 accumulate_calligraphic (SPDynaDrawContext * dc)
 {
-  SPCurve *rev_cal2;
-
   if (!sp_curve_empty (dc->cal1) && !sp_curve_empty(dc->cal2))
     {
       sp_curve_reset (dc->accumulated); /*  Is this required ?? */
-      rev_cal2 = sp_curve_reverse (dc->cal2);
+      SPCurve *rev_cal2 = sp_curve_reverse (dc->cal2);
       sp_curve_append (dc->accumulated, dc->cal1, FALSE);
       sp_curve_append (dc->accumulated, rev_cal2, TRUE);
       sp_curve_closepath(dc->accumulated);
@@ -799,21 +644,18 @@ static void
 fit_and_split (SPDynaDrawContext *dc,
                gboolean           release)
 {
-  if (dc->use_calligraphic)
-    {
-      fit_and_split_calligraphics (dc, release);
-    }
-  else
-    {
-      fit_and_split_line (dc, release);
-    }
+	if (dc->use_calligraphic) {
+		fit_and_split_calligraphics (dc, release);
+	} else {
+		fit_and_split_line (dc, release);
+	}
 }
 
 static void
 fit_and_split_line (SPDynaDrawContext *dc,
                     gboolean           release)
 {
-	NRPoint b[4];
+	NR::Point b[4];
 	gdouble tolerance;
 
 	tolerance = SP_EVENT_CONTEXT (dc)->desktop->w2d[0] * TOLERANCE_LINE;
@@ -826,11 +668,9 @@ fit_and_split_line (SPDynaDrawContext *dc,
 #ifdef DYNA_DRAW_VERBOSE
 		g_print ("%d", dc->npoints);
 #endif
-		/*        BEZIER_ASSERT (b); */
 		sp_curve_reset (dc->currentcurve);
-		sp_curve_moveto (dc->currentcurve, b[0].x, b[0].y);
-		sp_curve_curveto (dc->currentcurve, b[1].x, b[1].y, b[2].x, b[2].y,
-				  b[3].x, b[3].y);
+		sp_curve_moveto (dc->currentcurve, b[0]);
+		sp_curve_curveto (dc->currentcurve, b[1], b[2], b[3]);
 		sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (dc->currentshape), dc->currentcurve);
 	}
 	else
@@ -863,9 +703,7 @@ fit_and_split_line (SPDynaDrawContext *dc,
 static void
 fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 {
-	gdouble tolerance;
-
-	tolerance = SP_EVENT_CONTEXT (dc)->desktop->w2d[0] * TOLERANCE_CALLIGRAPHIC;
+	gdouble tolerance = SP_EVENT_CONTEXT (dc)->desktop->w2d[0] * TOLERANCE_CALLIGRAPHIC;
 	tolerance = tolerance * tolerance;
 
 #ifdef DYNA_DRAW_VERBOSE
@@ -879,7 +717,7 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 #define BEZIER_MAX_DEPTH  4
 #define BEZIER_MAX_LENGTH (BEZIER_SIZE << (BEZIER_MAX_DEPTH-1))
 		SPCurve *curve;
-		NRPoint b1[BEZIER_MAX_LENGTH], b2[BEZIER_MAX_LENGTH];
+		NR::Point b1[BEZIER_MAX_LENGTH], b2[BEZIER_MAX_LENGTH];
 		gint nb1, nb2;            /* number of blocks */
 
 #ifdef DYNA_DRAW_VERBOSE
@@ -894,8 +732,8 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 			sp_curve_reset (dc->cal1);
 			sp_curve_reset (dc->cal2);
           
-			sp_curve_moveto (dc->cal1, dc->point1[0].x, dc->point1[0].y);
-			sp_curve_moveto (dc->cal2, dc->point2[0].x, dc->point2[0].y);
+			sp_curve_moveto (dc->cal1, dc->point1[0]);
+			sp_curve_moveto (dc->cal2, dc->point2[0]);
 		}
 
 		nb1 = sp_bezier_fit_cubic_r (b1, dc->point1, dc->npoints,
@@ -905,7 +743,7 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 					     tolerance, BEZIER_MAX_DEPTH);
 		g_assert (nb2 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b2)));
 		if (nb1 != -1 && nb2 != -1) {
-			NRPoint *bp1, *bp2;
+			NR::Point *bp1, *bp2;
 			/* Fit and draw and reset state */
 #ifdef DYNA_DRAW_VERBOSE
 			g_print ("nb1:%d nb2:%d\n", nb1, nb2);
@@ -913,19 +751,15 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 			/* CanvasShape */
 			if (! release) {
 				sp_curve_reset (dc->currentcurve);
-				sp_curve_moveto (dc->currentcurve, b1[0].x, b1[0].y);
+				sp_curve_moveto (dc->currentcurve, b1[0]);
 				for (bp1 = b1; bp1 < b1 + BEZIER_SIZE*nb1; bp1 += BEZIER_SIZE) {
-					BEZIER_ASSERT (bp1);
-					sp_curve_curveto (dc->currentcurve, bp1[1].x, bp1[1].y,
-							  bp1[2].x, bp1[2].y, bp1[3].x, bp1[3].y);
+					sp_curve_curveto (dc->currentcurve, bp1[1],
+							  bp1[2], bp1[3]);
 				}
 				sp_curve_lineto (dc->currentcurve,
-						 b2[BEZIER_SIZE*(nb2-1) + 3].x,
-						 b2[BEZIER_SIZE*(nb2-1) + 3].y);
+						 b2[BEZIER_SIZE*(nb2-1) + 3]);
 				for (bp2 = b2 + BEZIER_SIZE*(nb2-1); bp2 >= b2; bp2 -= BEZIER_SIZE) {
-					BEZIER_ASSERT (bp2);
-					sp_curve_curveto (dc->currentcurve, bp2[2].x, bp2[2].y,
-							  bp2[1].x, bp2[1].y, bp2[0].x, bp2[0].y);
+					sp_curve_curveto (dc->currentcurve, bp2[2], bp2[1], bp2[0]);
 				}
 				sp_curve_closepath (dc->currentcurve);
 				sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (dc->currentshape), dc->currentcurve);
@@ -933,12 +767,10 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
           
 			/* Current calligraphic */
 			for (bp1 = b1; bp1 < b1 + BEZIER_SIZE*nb1; bp1 += BEZIER_SIZE) {
-				sp_curve_curveto (dc->cal1, bp1[1].x, bp1[1].y,
-						  bp1[2].x, bp1[2].y, bp1[3].x, bp1[3].y);
+				sp_curve_curveto (dc->cal1, bp1[1], bp1[2], bp1[3]);
 			}
 			for (bp2 = b2; bp2 < b2 + BEZIER_SIZE*nb2; bp2 += BEZIER_SIZE) {
-				sp_curve_curveto (dc->cal2, bp2[1].x, bp2[1].y,
-						  bp2[2].x, bp2[2].y, bp2[3].x, bp2[3].y);
+				sp_curve_curveto (dc->cal2, bp2[1], bp2[2], bp2[3]);
 			}
 		} else {
 			gint  i;
@@ -949,9 +781,9 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 			draw_temporary_box (dc);
 
 			for (i = 1; i < dc->npoints; i++)
-				sp_curve_lineto (dc->cal1, dc->point1[i].x, dc->point1[i].y);
+				sp_curve_lineto (dc->cal1, dc->point1[i]);
 			for (i = 1; i < dc->npoints; i++)
-				sp_curve_lineto (dc->cal2, dc->point2[i].x, dc->point2[i].y);
+				sp_curve_lineto (dc->cal2, dc->point2[i]);
 		}
 
 		/* Fit and draw and copy last point */
@@ -959,11 +791,9 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 		g_print ("[%d]Yup\n", dc->npoints);
 #endif
 		if (!release) {
-			SPCanvasItem *cbp;
-
 			g_assert (!sp_curve_empty (dc->currentcurve));
 
-			cbp = sp_canvas_item_new (SP_DT_SKETCH (SP_EVENT_CONTEXT (dc)->desktop), SP_TYPE_CANVAS_BPATH, NULL);
+			SPCanvasItem *cbp = sp_canvas_item_new (SP_DT_SKETCH (SP_EVENT_CONTEXT (dc)->desktop), SP_TYPE_CANVAS_BPATH, NULL);
 			curve = sp_curve_copy (dc->currentcurve);
 			sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (cbp), curve);
 			sp_curve_unref (curve);
@@ -986,15 +816,13 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 static void
 draw_temporary_box (SPDynaDrawContext *dc)
 {
-	gint  i;
-  
 	sp_curve_reset (dc->currentcurve);
-	sp_curve_moveto (dc->currentcurve, dc->point1[0].x, dc->point1[0].y);
-	for (i = 1; i < dc->npoints; i++) {
-		sp_curve_lineto (dc->currentcurve, dc->point1[i].x, dc->point1[i].y);
+	sp_curve_moveto (dc->currentcurve, dc->point1[0]);
+	for (gint i = 1; i < dc->npoints; i++) {
+		sp_curve_lineto (dc->currentcurve, dc->point1[i]);
 	}
-	for (i = dc->npoints-1; i >= 0; i--) {
-		sp_curve_lineto (dc->currentcurve, dc->point2[i].x, dc->point2[i].y);
+	for (gint i = dc->npoints-1; i >= 0; i--) {
+		sp_curve_lineto (dc->currentcurve, dc->point2[i]);
 	}
 	sp_curve_closepath (dc->currentcurve);
 	sp_canvas_bpath_set_bpath (SP_CANVAS_BPATH (dc->currentshape), dc->currentcurve);
