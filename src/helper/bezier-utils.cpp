@@ -577,7 +577,7 @@ sp_darray_center_tangent (NR::Point const d[],
 	g_assert (center != 0);
 	g_assert (center < len - 1);
 
-#if 0 /* sophisticated but slow (\Omega(n)). */
+#ifdef SOPHISTICATED_BUT_SLOW /* sophisticated but slow (\Omega(n)). */
 	NR::Point tHatA = sp_darray_right_tangent (d, center + 1);
 	NR::Point tHatB = sp_darray_left_tangent (d + center, len - center);
 	if(tHatA == tHatB) {

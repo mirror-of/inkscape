@@ -39,14 +39,10 @@ static void sp_matrix_d_set_rotate (NRMatrix *m, double theta);
 void
 sp_selection_delete (gpointer object, gpointer data)
 {
-	SPDesktop *desktop;
-	SPSelection *selection;
-	GSList *selected;
-
-	desktop = SP_ACTIVE_DESKTOP;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
 
-	selection = SP_DT_SELECTION (desktop);
+	SPSelection *selection = SP_DT_SELECTION (desktop);
 
 	// check if something is selected
 	if (sp_selection_is_empty (selection)) {
@@ -54,7 +50,7 @@ sp_selection_delete (gpointer object, gpointer data)
 		return;
 	}
 
-	selected = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
+	GSList *selected = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
 	sp_selection_empty (selection);
 
 	while (selected) {
@@ -69,17 +65,10 @@ sp_selection_delete (gpointer object, gpointer data)
 /* fixme: sequencing */
 void sp_selection_duplicate (gpointer object, gpointer data)
 {
-	SPDesktop * desktop;
-	SPSelection * selection;
-	GSList *reprs, *newsel, *i;
-	SPRepr *copy, *parent;
-	//	SPItem *item;
-	gboolean sort = TRUE;
-
-	desktop = SP_ACTIVE_DESKTOP;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
 
-	selection = SP_DT_SELECTION (desktop);
+	SPSelection *selection = SP_DT_SELECTION (desktop);
 
 	// check if something is selected
 	if (sp_selection_is_empty (selection)) {
@@ -87,12 +76,13 @@ void sp_selection_duplicate (gpointer object, gpointer data)
 		return;
 	}
 
-	reprs = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
+	GSList *reprs = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
 
 	sp_selection_empty (selection);
 
-	parent = ((SPRepr *) reprs->data)->parent;
-	for (i = reprs->next; i; i = i->next) {
+	SPRepr *parent = ((SPRepr *) reprs->data)->parent;
+	gboolean sort = TRUE;
+	for (GSList *i = reprs->next; i; i = i->next) {
 		if ((((SPRepr *) i->data)->parent) != parent) {
 			// We can duplicate items from different parents, but we cannot do sorting in this case
 			sort = FALSE;
@@ -102,11 +92,11 @@ void sp_selection_duplicate (gpointer object, gpointer data)
 	if (sort)
 		reprs = g_slist_sort (reprs, (GCompareFunc) sp_repr_compare_position);
 
-	newsel = NULL;
+	GSList *newsel = NULL;
 
 	while (reprs) {
 		parent = ((SPRepr *) reprs->data)->parent;
-		copy = sp_repr_duplicate ((SPRepr *) reprs->data);
+		SPRepr *copy = sp_repr_duplicate ((SPRepr *) reprs->data);
 
 		sp_repr_append_child (parent, copy);
 
@@ -128,16 +118,12 @@ void sp_selection_duplicate (gpointer object, gpointer data)
 void
 sp_edit_clear_all (gpointer object, gpointer data)
 {
-	SPDesktop *dt;
-	SPDocument *doc;
-	GSList *items;
-
-	dt = SP_ACTIVE_DESKTOP;
+	SPDesktop *dt = SP_ACTIVE_DESKTOP;
 	if (!dt) return;
-	doc = SP_DT_DOCUMENT (dt);
+	SPDocument *doc = SP_DT_DOCUMENT (dt);
 	sp_selection_set_empty (SP_DT_SELECTION (dt));
 
-	items = sp_item_group_item_list (SP_GROUP (sp_document_root (doc)));
+	GSList *items = sp_item_group_item_list (SP_GROUP (sp_document_root (doc)));
 
 	while (items) {
 		sp_repr_unparent (SP_OBJECT_REPR (items->data));
@@ -150,20 +136,14 @@ sp_edit_clear_all (gpointer object, gpointer data)
 void
 sp_edit_select_all (gpointer object, gpointer data)
 {
-	SPDesktop *dt;
-	SPDocument *doc;
-	GSList *items;
-	SPSelection * selection;
-	SPRepr * repr;
-	
-	dt = SP_ACTIVE_DESKTOP;
+	SPDesktop *dt = SP_ACTIVE_DESKTOP;
 	if (!dt) return ;
-	doc 	  = SP_DT_DOCUMENT (dt);
-	selection = SP_DT_SELECTION (dt);
-	items = sp_item_group_item_list (SP_GROUP (sp_document_root (doc)));
+	SPDocument *doc = SP_DT_DOCUMENT (dt);
+	SPSelection *selection = SP_DT_SELECTION (dt);
+	GSList *items = sp_item_group_item_list (SP_GROUP (sp_document_root (doc)));
 	
 	while (items) {
-		repr = SP_OBJECT_REPR (items->data);
+		SPRepr *repr = SP_OBJECT_REPR (items->data);
 		if (!sp_selection_repr_selected (selection, repr))
 			sp_selection_add_repr (selection, repr);
 		items = g_slist_remove (items, items->data);
@@ -174,11 +154,8 @@ sp_edit_select_all (gpointer object, gpointer data)
 static void
 sp_group_cleanup (SPGroup *group)
 {
-	SPObject *child;
-	GSList *l;
-
-	l = NULL;
-	for (child = group->children; child != NULL; child = child->next) {
+	GSList *l = NULL;
+	for (SPObject *child = group->children; child != NULL; child = child->next) {
 		sp_object_ref (child, NULL);
 		l = g_slist_prepend (l, child);
 	}
@@ -197,7 +174,7 @@ sp_group_cleanup (SPGroup *group)
 	if (!strcmp (sp_repr_name (SP_OBJECT_REPR (group)), "g")) {
 		gint numitems;
 		numitems = 0;
-		for (child = group->children; child != NULL; child = child->next) {
+		for (SPObject *child = group->children; child != NULL; child = child->next) {
 			if (SP_IS_ITEM (child)) numitems += 1;
 		}
 		if (numitems <= 1) {
@@ -209,16 +186,13 @@ sp_group_cleanup (SPGroup *group)
 void
 sp_edit_cleanup (gpointer object, gpointer data)
 {
-	SPDocument *doc;
-	SPGroup *root;
-
-	doc = SP_ACTIVE_DOCUMENT;
+	SPDocument *doc = SP_ACTIVE_DOCUMENT;
 	if (!doc) return;
 	if (SP_ACTIVE_DESKTOP) {
 		sp_selection_empty (SP_DT_SELECTION (SP_ACTIVE_DESKTOP));
 	}
 
-	root = SP_GROUP (SP_DOCUMENT_ROOT (doc));
+	SPGroup *root = SP_GROUP (SP_DOCUMENT_ROOT (doc));
 
 	sp_group_cleanup (root);
 
@@ -230,19 +204,17 @@ sp_edit_cleanup (gpointer object, gpointer data)
 void
 sp_selection_group (gpointer object, gpointer data)
 {
-	SPDesktop * desktop;
-	SPSelection * selection;
 	SPRepr * current;
 	SPRepr * group;
 	const GSList * l;
 	GSList *p, *i, *reprs;
 	SPRepr *parent;
 
-	desktop = SP_ACTIVE_DESKTOP;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
 	if (desktop == NULL) return;
 
-	selection = SP_DT_SELECTION (desktop);
+	SPSelection *selection = SP_DT_SELECTION (desktop);
 
 	// check if something is selected
 	if (sp_selection_is_empty (selection)) {
@@ -297,13 +269,12 @@ sp_selection_group (gpointer object, gpointer data)
 void
 sp_selection_ungroup (gpointer object, gpointer data)
 {
-	SPDesktop *desktop;
 	SPItem *group;
 	GSList *children, *items;
 	GSList *new_select = NULL;
 	int ungrouped = 0;
 
-	desktop = SP_ACTIVE_DESKTOP;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (!desktop) return;
 
 	if (sp_selection_is_empty (SP_DT_SELECTION(desktop))) {
@@ -345,10 +316,8 @@ sp_selection_ungroup (gpointer object, gpointer data)
 static SPGroup *
 sp_item_list_common_parent_group (const GSList *items)
 {
-	SPObject *parent;
-
 	if (!items) return NULL;
-	parent = SP_OBJECT_PARENT (items->data); 
+	SPObject *parent = SP_OBJECT_PARENT (items->data); 
 	/* Strictly speaking this CAN happen, if user selects <svg> from XML editor */
 	if (!SP_IS_GROUP (parent)) return NULL;
 	for (items = items->next; items; items = items->next) {
@@ -358,33 +327,19 @@ sp_item_list_common_parent_group (const GSList *items)
 	return SP_GROUP (parent);
 }
 
-#if 0
-#define PRINT_STR(s) g_print (s)
-#define PRINT_OBJ(s, o) g_print ("%s: %s\n", s, (o) ? (gchar *) sp_repr_attr (SP_OBJECT_REPR (o), "id") : "NULL")
-#else
-#define PRINT_STR(s)
-#define PRINT_OBJ(s, o)
-#endif
-
 void sp_selection_raise (GtkWidget * widget)
 {
-	SPDesktop *dt;
-	const GSList *items;
-	SPGroup *group;
-	SPRepr *grepr;
-	SPObject *child, *newref;
-	GSList *rev;
-
-	dt = SP_ACTIVE_DESKTOP;
+	SPDesktop *dt = SP_ACTIVE_DESKTOP;
 	if (!dt) return;
-	items = sp_selection_item_list (SP_DT_SELECTION (dt));
+	GSList const *items = sp_selection_item_list (SP_DT_SELECTION (dt));
 	if (!items) return;
-	group = sp_item_list_common_parent_group (items);
+	SPGroup const *group = sp_item_list_common_parent_group (items);
 	if (!group) return;
-	grepr = SP_OBJECT_REPR (group);
+	SPRepr *grepr = SP_OBJECT_REPR (group);
 
 	/* construct reverse-ordered list of selected children */
-	rev = NULL;
+	GSList *rev = NULL;
+	SPObject *child;
 	for (child = group->children; child; child = child->next) {
 		if (g_slist_find ((GSList *) items, child)) {
 			rev = g_slist_prepend (rev, child);
@@ -393,7 +348,7 @@ void sp_selection_raise (GtkWidget * widget)
 
 	while (rev) {
 		child = SP_OBJECT (rev->data);
-		for (newref = child->next; newref; newref = newref->next) {
+		for (SPObject *newref = child->next; newref; newref = newref->next) {
 			if (SP_IS_ITEM (newref)) {
 				if (!g_slist_find ((GSList *) items, newref)) {
 					/* Found available position */
@@ -410,24 +365,17 @@ void sp_selection_raise (GtkWidget * widget)
 
 void sp_selection_raise_to_top (GtkWidget * widget)
 {
-	SPDocument * document;
-	SPSelection * selection;
-	SPDesktop * desktop;
-	SPRepr * repr;
-	GSList * rl;
-	GSList * l;
-
-	desktop = SP_ACTIVE_DESKTOP;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (desktop == NULL) return;
-	document = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
-	selection = SP_DT_SELECTION (SP_ACTIVE_DESKTOP);
+	SPDocument *document = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
+	SPSelection *selection = SP_DT_SELECTION (SP_ACTIVE_DESKTOP);
 
 	if (sp_selection_is_empty (selection)) return;
 
-	rl = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
+	GSList *rl = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
 
-	for (l = rl; l != NULL; l = l->next) {
-		repr = (SPRepr *) l->data;
+	for (GSList *l = rl; l != NULL; l = l->next) {
+		SPRepr *repr = (SPRepr *) l->data;
 		sp_repr_set_position_absolute (repr, -1);
 	}
 
@@ -454,7 +402,6 @@ sp_selection_lower (GtkWidget *widget)
 	if (!group) return;
 	grepr = SP_OBJECT_REPR (group);
 
-	PRINT_STR ("STARTING\n");
 	/* Start from beginning */
 	skip = TRUE;
 	newref = NULL;
@@ -469,10 +416,6 @@ sp_selection_lower (GtkWidget *widget)
 				/* Need lower */
 				if (newref != oldref) {
 					if (sp_repr_change_order (grepr, SP_OBJECT_REPR (child), (newref) ? SP_OBJECT_REPR (newref) : NULL)) {
-						PRINT_STR ("Change order succeeded\n");
-						PRINT_OBJ ("  child", child);
-						PRINT_OBJ ("  oldref", oldref);
-						PRINT_OBJ ("  newref", newref);
 						/* Order change succeeded */
 						/* Next available position */
 						newref = child;
@@ -480,10 +423,6 @@ sp_selection_lower (GtkWidget *widget)
 						/* Continue from oldref */
 						child = oldref->next;
 					} else {
-						PRINT_STR ("Change order failed\n");
-						PRINT_OBJ ("  child", child);
-						PRINT_OBJ ("  oldref", oldref);
-						PRINT_OBJ ("  newref", newref);
 						/* Order change did not succeed */
 						newref = oldref;
 						oldref = child;
@@ -497,20 +436,12 @@ sp_selection_lower (GtkWidget *widget)
 					child = child->next;
 				}
 			} else {
-				PRINT_STR ("Item not in list\n");
-				PRINT_OBJ ("  child", child);
-				PRINT_OBJ ("  oldref", oldref);
-				PRINT_OBJ ("  newref", newref);
 				/* We were item, but not in list */
 				newref = oldref;
 				oldref = child;
 				child = child->next;
 			}
 		} else {
-			PRINT_STR ("Not an item\n");
-			PRINT_OBJ ("  child", child);
-			PRINT_OBJ ("  oldref", oldref);
-			PRINT_OBJ ("  newref", newref);
 			/* We want to refind newref only to skip initial non-items */
 			if (skip) newref = child;
 			oldref = child;
