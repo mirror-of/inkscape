@@ -55,7 +55,7 @@ fi
 dnl ******************************
 dnl Gettext stuff
 dnl ******************************
-GETTEXT_PACKAGE="$PACKAGE_NAME"
+GETTEXT_PACKAGE="AC_PACKAGE_NAME"
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE",[Translation domain used])
 dnl Add the languages which your application supports here.
