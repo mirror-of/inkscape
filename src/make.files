@@ -1,5 +1,3 @@
-application.cpp
-application.h
 approx-equal.h
 arc-context.cpp
 arc-context.h
@@ -456,6 +454,7 @@ libnrtype/nr-type-primitives.h
 libnrtype/nrtype-forward.h
 libnrtype/raster-glyph.h
 libnrtype/raster-position.h
+libnrtype/test.cc
 livarot/AVL.cpp
 livarot/AVL.h
 livarot/AlphaLigne.cpp
@@ -532,6 +531,8 @@ select-toolbar.cpp
 select-toolbar.h
 selection-chemistry.cpp
 selection-chemistry.h
+selection-describer.cpp
+selection-describer.h
 selection.cpp
 selection.h
 seltrans-handles.cpp
