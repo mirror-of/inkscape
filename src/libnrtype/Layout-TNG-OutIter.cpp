@@ -264,6 +264,7 @@ Layout::iterator Layout::getLetterAt(double x, double y) const
 Layout::iterator Layout::sourceToIterator(void *source_cookie, Glib::ustring::const_iterator text_iterator) const
 {
     unsigned source_index;
+    if (_characters.empty()) return end();
     for (source_index = 0 ; source_index < _input_stream.size() ; source_index++)
         if (_input_stream[source_index]->source_cookie == source_cookie) break;
     if (source_index == _input_stream.size()) return end();
