@@ -10,6 +10,8 @@
 	  src/svg/svg-length.cpp, src/widgets/icon.cpp:
 	  cleaning up memory leaks detected by valgrind.
 	* src/extension/dependancy.cpp: made repr-attr tags untranslatable.
+	* src/extension/system.cpp: correcting extension autodetection when
+	  there are conflicting matching modules.
 
 2005-01-31  Jon A. Cruz  <jon@joncruz.org>
 	* src/file.cpp, src/inkscape.cpp, src/interface.cpp,

@@ -148,17 +148,25 @@ open_internal(Extension *in_plug, gpointer in_data)
         gchar const *filename = (gchar const *)parray[0];
         Input **pimod = (Input **)parray[1];
 
-        gchar const *ext = dynamic_cast<Input *>(in_plug)->get_extension();
+        // skip all the rest if we already found someone to open it
+        // since they're ordered by preference now.
+        if (!*pimod) {
+            gchar const *ext = dynamic_cast<Input *>(in_plug)->get_extension();
 
-        gchar *filenamelower = g_utf8_strdown(filename, -1);
-        gchar *extensionlower = g_utf8_strdown(ext, -1);
+            gchar *filenamelower = g_utf8_strdown(filename, -1);
+            gchar *extensionlower = g_utf8_strdown(ext, -1);
 
-        if (g_str_has_suffix(filenamelower, extensionlower)) {
-            *pimod = dynamic_cast<Input *>(in_plug);
+            //g_print("trying '%s' against '%s': ",filenamelower,extensionlower);
+
+            if (g_str_has_suffix(filenamelower, extensionlower)) {
+                *pimod = dynamic_cast<Input *>(in_plug);
+                //g_print("yup\n");
+            }
+            //else { g_print("nope\n"); }
+
+            g_free(filenamelower);
+            g_free(extensionlower);
         }
-
-        g_free(filenamelower);
-        g_free(extensionlower);
     }
 
     return;
@@ -294,17 +302,21 @@ save_internal(Extension *in_plug, gpointer in_data)
         gchar const *filename = (gchar const *)parray[0];
         Output **pomod = (Output **)parray[1];
 
-        gchar const *ext = dynamic_cast<Output *>(in_plug)->get_extension();
+        // skip all the rest if we already found someone to save it
+        // since they're ordered by preference now.
+        if (!*pomod) {
+            gchar const *ext = dynamic_cast<Output *>(in_plug)->get_extension();
 
-        gchar *filenamelower = g_utf8_strdown(filename, -1);
-        gchar *extensionlower = g_utf8_strdown(ext, -1);
+            gchar *filenamelower = g_utf8_strdown(filename, -1);
+            gchar *extensionlower = g_utf8_strdown(ext, -1);
 
-        if (g_str_has_suffix(filenamelower, extensionlower)) {
-            *pomod = dynamic_cast<Output *>(in_plug);
+            if (g_str_has_suffix(filenamelower, extensionlower)) {
+                *pomod = dynamic_cast<Output *>(in_plug);
+            }
+
+            g_free(filenamelower);
+            g_free(extensionlower);
         }
-
-        g_free(filenamelower);
-        g_free(extensionlower);
     }
 
     return;
