@@ -42,6 +42,7 @@ SPSelection * sp_selection_new (SPDesktop * desktop);
 /* This are private methods & will be removed from this file */
 
 void sp_selection_changed (SPSelection * selection);
+void sp_current_selection_changed ();
 void sp_selection_update_statusbar (SPSelection * selection);
 
 gboolean sp_selection_item_selected (SPSelection * selection, SPItem *item);

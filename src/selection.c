@@ -227,6 +227,20 @@ sp_selection_changed (SPSelection * selection)
 	sp_selection_update_statusbar (selection);
 }
 
+void
+sp_current_selection_changed ()
+{
+	SPDesktop * desktop;
+	SPSelection * selection;
+
+	desktop = SP_ACTIVE_DESKTOP;
+	if (desktop == NULL) return;
+	selection = SP_DT_SELECTION (desktop);
+	if (!SP_IS_SELECTION (selection)) return;
+
+	sp_selection_changed (selection);
+}
+
 SPSelection *
 sp_selection_new (SPDesktop * desktop)
 {
