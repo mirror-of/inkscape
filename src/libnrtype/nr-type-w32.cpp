@@ -188,7 +188,7 @@ nr_typeface_w32_setup (NRTypeFace *tface, NRTypeFaceDef *def)
     tfw32->otm = (LPOUTLINETEXTMETRIC) nr_new (unsigned char, otmsize);
     GetOutlineTextMetrics (hdc, otmsize, tfw32->otm);
 
-    tfw32->typeface.nglyphs = tfw32->otm->otmTextMetrics.tmLastChar - tfw32->otm->otmTextMetrics.tmFirstChar + 1;
+    tfw32->nglyphs = tfw32->otm->otmTextMetrics.tmLastChar - tfw32->otm->otmTextMetrics.tmFirstChar + 1;
 
     tfw32->hgidx = NULL;
     tfw32->vgidx = NULL;
@@ -735,8 +735,8 @@ nr_typeface_w32_ensure_slot (NRTypeFaceW32 *tfw32, unsigned int glyph, unsigned 
 
     if (metrics == NR_TYPEFACE_METRICS_VERTICAL) {
         if (!tfw32->vgidx) {
-            tfw32->vgidx = nr_new (int, tfw32->typeface.nglyphs);
-            for (guint i = 0; i < tfw32->typeface.nglyphs; i++) 
+            tfw32->vgidx = nr_new (int, tfw32->nglyphs);
+            for (guint i = 0; i < tfw32->nglyphs; i++) 
                 tfw32->vgidx[i] = -1;
         }
         gidx = tfw32->vgidx[glyph];
@@ -744,8 +744,8 @@ nr_typeface_w32_ensure_slot (NRTypeFaceW32 *tfw32, unsigned int glyph, unsigned 
     } else {
 
         if (!tfw32->hgidx) {
-            tfw32->hgidx = nr_new (int, tfw32->typeface.nglyphs);
-            for (guint i = 0; i < tfw32->typeface.nglyphs; i++)
+            tfw32->hgidx = nr_new (int, tfw32->nglyphs);
+            for (guint i = 0; i < tfw32->nglyphs; i++)
                 tfw32->hgidx[i] = -1;
         }
         gidx = tfw32->hgidx[glyph];
