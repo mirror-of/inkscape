@@ -42,18 +42,14 @@
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-point.h"
 #include "xml/repr.h"
-#include "xml/sp-repr-iterators.h"
-
-#include "algorithms/longest-common-suffix.h"
+#include "xml/repr-sorting.h"
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
 #include "livarot/LivarotDefs.h"
 
 Path   *Path_for_item (SPItem * item,bool doTransformation, bool transformFull = true);
-SPRepr *LCA (SPRepr * a, SPRepr * b);
 bool   Ancetre (SPRepr * a, SPRepr * who);
-SPRepr *AncetreFils (SPRepr * a, SPRepr * d);
 
 void sp_selected_path_boolop (bool_op bop);
 void sp_selected_path_do_offset (bool expand, double prefOffset);
@@ -1491,15 +1487,6 @@ sp_selected_path_simplify (void)
 
 
 // fonctions utilitaires
-SPRepr *
-AncetreFils (SPRepr * a, SPRepr * d)
-{
-    if (a == NULL || d == NULL)
-        return NULL;
-    if (sp_repr_parent (a) == d)
-        return a;
-    return AncetreFils (sp_repr_parent (a), d);
-}
 
 bool
 Ancetre (SPRepr * a, SPRepr * who)
@@ -1509,28 +1496,6 @@ Ancetre (SPRepr * a, SPRepr * who)
     if (who == a)
         return true;
     return Ancetre (sp_repr_parent (a), who);
-}
-
-namespace {
-
-bool same_repr(SPRepr &a, SPRepr &b) {
-    return &a == &b;
-}
-
-}
-
-SPRepr *
-LCA (SPRepr * a, SPRepr * b)
-{
-    using Inkscape::Algorithms::longest_common_suffix;
-    SPRepr *ancestor=longest_common_suffix<SPReprParentIterator>(
-        a, b, NULL, &same_repr
-    );
-    if ( ancestor && ancestor->type() != SP_XML_DOCUMENT_NODE ) {
-        return ancestor;
-    } else {
-        return NULL;
-    }
 }
 
 Path *

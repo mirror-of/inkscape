@@ -12,3 +12,4 @@ inkview
 spsvgview
 inkscape.def
 *.dll
+*-test

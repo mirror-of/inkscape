@@ -22,6 +22,7 @@ static struct {char const *attr; bool supported;} const all_attrs[] = {
     {"additive", true},
     {"font", true},
     {"marker", true},
+    {"line-height", true},
 
     {"accent-height", false},
     {"accumulate", true},

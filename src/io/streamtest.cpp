@@ -1,6 +1,10 @@
 
 
 #include <stdio.h>
+#include <limits.h> // realpath
+#include <stdlib.h> // mkdtemp, realpath
+#include <unistd.h> // chdir
+#include <string.h> // strlen, strncpy, strrchr
 
 #include "inkscapestream.h"
 #include "base64stream.h"
@@ -9,10 +13,19 @@
 #include "uristream.h"
 #include "xsltstream.h"
 
+// quick way to pass the name of the executable into the test
+char myself[PATH_MAX];
+
+// names and path storage for other tests
+char *xmlname = "crystalegg.xml";
+char xmlpath[PATH_MAX];
+char *xslname = "doc2html.xsl";
+char xslpath[PATH_MAX];
+
 bool testUriStream()
 {
     printf("######### UriStream copy ############\n");
-    Inkscape::URI inUri("streamtest");
+    Inkscape::URI inUri(myself);
     Inkscape::IO::UriInputStream  ins(inUri);
     Inkscape::URI outUri("streamtest.copy");
     Inkscape::IO::UriOutputStream outs(outUri);
@@ -53,7 +66,7 @@ bool testStdWriter()
 bool testBase64()
 {
     printf("######### Base64 Out ############\n");
-    Inkscape::URI plainInUri("crystalegg.xml");
+    Inkscape::URI plainInUri(xmlpath);
     Inkscape::IO::UriInputStream ins1(plainInUri);
 
     Inkscape::URI b64OutUri("crystalegg.xml.b64");
@@ -84,12 +97,12 @@ bool testBase64()
 bool testXslt()
 {
     printf("######### XSLT Sheet ############\n");
-    Inkscape::URI xsltSheetUri("doc2html.xsl");
+    Inkscape::URI xsltSheetUri(xslpath);
     Inkscape::IO::UriInputStream  xsltSheetIns(xsltSheetUri);
     Inkscape::IO::XsltStyleSheet stylesheet(xsltSheetIns);
     xsltSheetIns.close();
    
-    Inkscape::URI sourceUri("crystalegg.xml");
+    Inkscape::URI sourceUri(xmlpath);
     Inkscape::IO::UriInputStream  xmlIns(sourceUri);
 
     printf("######### XSLT Input ############\n");
@@ -122,7 +135,7 @@ bool testGzip()
 
     printf("######### Gzip Output ############\n");
     Inkscape::URI gzUri("test.gz");
-    Inkscape::URI sourceUri("crystalegg.xml");
+    Inkscape::URI sourceUri(xmlpath);
     Inkscape::IO::UriInputStream  sourceIns(sourceUri);
     Inkscape::IO::UriOutputStream  gzOuts(gzUri);
 
@@ -174,12 +187,54 @@ bool doTest()
     return true;
 }
 
+void path_init(char *path, char *name)
+{
+    if (strlen(name)>PATH_MAX-strlen(myself))
+    {
+	    printf("merging paths would be too long\n");
+	    exit(1);
+    }
+    strncpy(path,myself,PATH_MAX);
+    char * ptr = strrchr(path,'/');
+    if (!ptr)
+    {
+	    printf("path '%s' is missing any slashes\n",path);
+	    exit(1);
+    }
+    strncpy(ptr+1,name,strlen(name)+1);
+    printf("'%s'\n",path);
+}
+
 
 int main(int argc, char **argv)
 {
+    if (!realpath(argv[0],myself))
+    {
+	    perror("realpath");
+	    return 1;
+    }
+    path_init(xmlpath,xmlname);
+    path_init(xslpath,xslname);
+
+    // create temp files somewhere else instead of current dir
+    // TODO: clean them up too
+    char * testpath = strdup("/tmp/streamtest-XXXXXX");
+    testpath = mkdtemp(testpath);
+    if (!testpath)
+    {
+	    perror("mkdtemp");
+	    return 1;
+    }
+    if (chdir(testpath))
+    {
+	    perror("chdir");
+	    return 1;
+    }
+
     if (!doTest())
         {
         printf("#### Test failed\n");
+	return 1;
         }
     else
         {

@@ -82,6 +82,8 @@ EXTRA_DIST =	\
 	helper/makefile.in	\
 	inkjar/makefile.in	\
 	io/makefile.in  	\
+	io/crystalegg.xml  	\
+	io/doc2html.xsl  	\
 	libnr/makefile.in	\
 	libnrtype/makefile.in	\
 	livarot/makefile.in	\
@@ -131,6 +133,10 @@ TESTS =	\
 	xml/quote-test$(EXEEXT)	\
 	xml/repr-action-test$(EXEEXT)
 
+# streamtest is unfinished and can't handle the relocations done during
+# "make distcheck".  Not needed for the 0.41 release.
+#	io/streamtest$(EXEEXT)
+
 # automake adds $(EXEEXT) to check_PROGRAMS items but not to TESTS items:
 # TESTS items can be scripts etc.
 
@@ -154,6 +160,9 @@ check_PROGRAMS =	\
 	libnr/nr-types-test	\
 	xml/quote-test	\
 	xml/repr-action-test
+
+#	io/streamtest
+
 
 
 # ################################################

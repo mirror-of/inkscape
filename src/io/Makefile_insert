@@ -6,6 +6,8 @@ io/clean:
 	rm -f io/libio.a $(io_libio_a_OBJECTS)
 
 io_libio_a_SOURCES = \
+	io/base64stream.h \
+	io/base64stream.cpp \
 	io/ftos.cpp \
 	io/ftos.h \
 	io/gzipstream.cpp \
@@ -21,3 +23,5 @@ io_libio_a_SOURCES = \
 	io/xsltstream.cpp \
 	io/xsltstream.h
 
+io_streamtest_SOURCES = io/streamtest.cpp
+io_streamtest_LDADD =   $(all_libs)

@@ -34,6 +34,7 @@
 #include "svg/stringstream.h"
 
 #include "xml/repr.h"
+#include "xml/repr-sorting.h"
 #include "xml/sp-repr-attr.h"
 
 struct SPXMLNs {
@@ -63,12 +64,6 @@ struct SPXMLNs {
 
 static void sp_xml_ns_register_defaults ();
 static char *sp_xml_ns_auto_prefix (const char *uri);
-
-// The following are in splivarot.cpp but probably should be moved
-// here...
-SPRepr *LCA (SPRepr * a, SPRepr * b);
-bool   Ancetre (SPRepr * a, SPRepr * who);
-SPRepr *AncetreFils (SPRepr * a, SPRepr * d);
 
 /*#####################
 # UTILITY

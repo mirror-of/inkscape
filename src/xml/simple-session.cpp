@@ -28,24 +28,24 @@ void SimpleSession::beginTransaction() {
 
 void SimpleSession::rollback() {
     g_assert(_in_transaction);
+    _in_transaction = false;
     sp_repr_undo_log(_log);
     sp_repr_free_log(_log);
     _log = NULL;
-    _in_transaction = false;
 }
 
 void SimpleSession::commit() {
     g_assert(_in_transaction);
+    _in_transaction = false;
     sp_repr_free_log(_log);
     _log = NULL;
-    _in_transaction = false;
 }
 
 SPReprAction *SimpleSession::commitUndoable() {
     g_assert(_in_transaction);
+    _in_transaction = false;
     SPReprAction *log=_log;
     _log = NULL;
-    _in_transaction = false;
     return log;
 }
 

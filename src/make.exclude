@@ -47,4 +47,5 @@ winmain.cpp
 xml/quote-test.cpp
 xml/repr-action-test.cpp
 xpath
+io/streamtest.cpp
 

@@ -23,6 +23,8 @@ xml_libspxml_a_SOURCES =	\
 	xml/repr-get-children.cpp	\
 	xml/repr-get-children.h	\
 	xml/repr-io.cpp	\
+	xml/repr-sorting.cpp    \
+	xml/repr-sorting.h      \
 	xml/repr-util.cpp	\
 	xml/repr.cpp	\
 	xml/repr.h	\
@@ -35,6 +37,7 @@ xml_libspxml_a_SOURCES =	\
 	xml/simple-session.h \
 	xml/sp-repr.h \
 	xml/sp-repr-attr.h \
+	xml/sp-css-attr.h \
 	xml/sp-repr-action.cpp	\
 	xml/sp-repr-action.h	\
 	xml/sp-repr-action-fns.h	\
@@ -48,7 +51,7 @@ xml_libspxml_a_SOURCES =	\
 	xml/xml-forward.h
 
 xml_repr_action_test_SOURCES = xml/repr-action-test.cpp
-xml_repr_action_test_LDADD = gc.o xml/libspxml.a util/libinkutil.a libinkpost.a $(INKSCAPE_LIBS)
+xml_repr_action_test_LDADD = xml/libspxml.a util/libinkutil.a libinkpost.a $(INKSCAPE_LIBS)
 
 xml_quote_test_SOURCES = xml/quote-test.cpp
 xml_quote_test_LDADD = $(INKSCAPE_LIBS)
