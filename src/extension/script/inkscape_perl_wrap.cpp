@@ -1043,6 +1043,31 @@ XS(_wrap_Inkscape_getDesktop) {
 }
 
 
+XS(_wrap_Inkscape_about) {
+    {
+        Inkscape::Extension::Script::Inkscape *arg1 = (Inkscape::Extension::Script::Inkscape *) 0 ;
+        int argvi = 0;
+        dXSARGS;
+        
+        if ((items < 1) || (items > 1)) {
+            SWIG_croak("Usage: Inkscape_about(self);");
+        }
+        {
+            if (SWIG_ConvertPtr(ST(0), (void **) &arg1, SWIGTYPE_p_Inkscape__Extension__Script__Inkscape,0) < 0) {
+                SWIG_croak("Type error in argument 1 of Inkscape_about. Expected _p_Inkscape__Extension__Script__Inkscape");
+            }
+        }
+        (arg1)->about();
+        
+        
+        XSRETURN(argvi);
+        fail:
+        ;
+    }
+    croak(Nullch);
+}
+
+
 XS(_wrap_delete_Desktop) {
     {
         Inkscape::Extension::Script::Desktop *arg1 = (Inkscape::Extension::Script::Desktop *) 0 ;
@@ -1175,6 +1200,7 @@ static swig_command_info swig_commands[] = {
 {"inkscape_perlc::getInkscape", _wrap_getInkscape},
 {"inkscape_perlc::delete_Inkscape", _wrap_delete_Inkscape},
 {"inkscape_perlc::Inkscape_getDesktop", _wrap_Inkscape_getDesktop},
+{"inkscape_perlc::Inkscape_about", _wrap_Inkscape_about},
 {"inkscape_perlc::delete_Desktop", _wrap_delete_Desktop},
 {"inkscape_perlc::Desktop_getDocument", _wrap_Desktop_getDocument},
 {"inkscape_perlc::delete_Document", _wrap_delete_Document},

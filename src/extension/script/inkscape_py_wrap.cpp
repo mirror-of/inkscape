@@ -1148,6 +1148,23 @@ static PyObject *_wrap_Inkscape_getDesktop(PyObject *, PyObject *args) {
 }
 
 
+static PyObject *_wrap_Inkscape_about(PyObject *, PyObject *args) {
+    PyObject *resultobj;
+    Inkscape::Extension::Script::Inkscape *arg1 = (Inkscape::Extension::Script::Inkscape *) 0 ;
+    PyObject * obj0 = 0 ;
+    
+    if(!PyArg_ParseTuple(args,(char *)"O:Inkscape_about",&obj0)) goto fail;
+    SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_Inkscape__Extension__Script__Inkscape, SWIG_POINTER_EXCEPTION | 0);
+    if (SWIG_arg_fail(1)) SWIG_fail;
+    (arg1)->about();
+    
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * Inkscape_swigregister(PyObject *, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -1242,6 +1259,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"getInkscape", _wrap_getInkscape, METH_VARARGS, NULL},
 	 { (char *)"delete_Inkscape", _wrap_delete_Inkscape, METH_VARARGS, NULL},
 	 { (char *)"Inkscape_getDesktop", _wrap_Inkscape_getDesktop, METH_VARARGS, NULL},
+	 { (char *)"Inkscape_about", _wrap_Inkscape_about, METH_VARARGS, NULL},
 	 { (char *)"Inkscape_swigregister", Inkscape_swigregister, METH_VARARGS, NULL},
 	 { (char *)"delete_Desktop", _wrap_delete_Desktop, METH_VARARGS, NULL},
 	 { (char *)"Desktop_getDocument", _wrap_Desktop_getDocument, METH_VARARGS, NULL},

@@ -20,6 +20,8 @@ public:
     
     virtual Desktop *getDesktop() = 0;
 
+    virtual void about() = 0;
+
 };
 
 

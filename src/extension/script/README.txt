@@ -20,6 +20,12 @@ mimic such an arrangement.
 Note that this -NOT- the same as ECMAScript binding on an
 SVG page.  That is another task, coupled with XPath.
 
+Currently, the way to update InkscapeBinding is to:
+
+1.  Modify InkscapeBinding.h and InkscapeBinding.cpp
+2.  Run 'make -f Makefile.tmp wraps'
+3.  cd to the src or toplevel directory, and build
+4.  when this works well, commit the files in this directory
 
 #### SWIG is available here:
 

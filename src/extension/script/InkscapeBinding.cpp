@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include "InkscapeBinding.h"
 
+#include "help.h"
+
 namespace Inkscape {
 namespace Extension {
 namespace Script {
@@ -102,6 +104,8 @@ public:
     
     virtual Desktop *getDesktop();
     
+    virtual void about();
+    
 private:
 
     DesktopImpl desktop;
@@ -130,6 +134,12 @@ InkscapeImpl::~InkscapeImpl()
 Desktop *InkscapeImpl::getDesktop()
 {
     return &desktop;
+
+}
+
+void InkscapeImpl::about()
+{
+    sp_help_about();
 
 }
 

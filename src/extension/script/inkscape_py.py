@@ -52,6 +52,7 @@ class Inkscape(_object):
         except: pass
 
     def getDesktop(*args): return _inkscape_py.Inkscape_getDesktop(*args)
+    def about(*args): return _inkscape_py.Inkscape_about(*args)
 
 class InkscapePtr(Inkscape):
     def __init__(self, this):

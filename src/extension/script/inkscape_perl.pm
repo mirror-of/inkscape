@@ -64,6 +64,7 @@ sub DESTROY {
 }
 
 *getDesktop = *inkscape_perlc::Inkscape_getDesktop;
+*about = *inkscape_perlc::Inkscape_about;
 sub DISOWN {
     my $self = shift;
     my $ptr = tied(%$self);
