@@ -63,9 +63,13 @@
 /* #include "extension/menu.h"  */
 #include "extension/system.h"
 
+
 #ifdef WIN32
+#include "uri.h"
+
 // For now to get at is_os_wide().
 #include "extension/internal/win32.h"
+using Inkscape::Extension::Internal::PrintWin32;
 #endif
 
 
@@ -1150,7 +1154,7 @@ FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
             gunichar2 *wideMode = g_utf8_to_utf16( mode, -1, NULL, NULL, NULL );
             if ( wideMode )
             {
-                fp = std::_wfopen( wideName, wideMode );
+                fp = _wfopen( (wchar_t*)wideName, (wchar_t*)wideMode );
                 g_free( wideMode );
                 wideMode = 0;
             }
@@ -1160,7 +1164,7 @@ FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
     }
     else
     {
-        gchar *filename = URI::to_native_filename(uri);
+        gchar *filename = Inkscape::URI::to_native_filename(utf8name);
         fp = std::fopen(filename, mode);
         g_free(filename);
         filename = 0;

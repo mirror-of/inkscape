@@ -76,6 +76,14 @@ const gchar *URI::Impl::getFragment() const {
 	return (gchar *)_uri->fragment;
 }
 
+gchar *URI::to_native_filename(gchar const* uri) throw(BadURIException)
+{
+    gchar *filename = NULL;
+    URI tmp(uri);
+    filename = tmp.toNativeFilename();
+    return filename;
+}
+
 /* TODO !!! proper error handling */
 gchar *URI::toNativeFilename() const throw(BadURIException) {
 	gchar *string = toString();

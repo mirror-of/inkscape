@@ -31,6 +31,7 @@ public:
 	const gchar *getFragment() const { return _impl->getFragment(); }
 
 	static URI from_native_filename(gchar const *path) throw(BadURIException);
+	static gchar *to_native_filename(gchar const* uri) throw(BadURIException);
 
 	gchar *toNativeFilename() const throw(BadURIException);
 	gchar *toString() const { return _impl->toString(); }

@@ -32,7 +32,7 @@ int FileHandle::open(URI const& uri, char const* mode)
 
 FILE *FileHandle::sys_open(URI const& uri, char const* mode)
 {    
-    gchar *filename = URI::to_native_filename(uri);
+    gchar *filename = uri.toNativeFilename();
 
     if ((fp = std::fopen(filename, mode)) == 0) {
 	error("fopen");
