@@ -1,5 +1,8 @@
 2004-02-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-types.h: Change deprecated-cast warning from runtime
+	to compile-time.
+
 	* src/helper/sp-canvas.h, src/helper/sp-canvas.cpp
 	(sp_canvas_world_pt_inside_window): New function.
 
