@@ -49,8 +49,6 @@ static void generate_bezier(NR::Point b[], NR::Point const d[], gdouble const uP
 static void reparameterize(NR::Point const d[], unsigned len, double u[], BezierCurve const bezCurve);
 static gdouble NewtonRaphsonRootFind(BezierCurve const Q, NR::Point const &P, gdouble u);
 static NR::Point bezier_pt(unsigned degree, NR::Point const V[], gdouble t);
-static NR::Point sp_darray_left_tangent(NR::Point const d[], unsigned length);
-static NR::Point sp_darray_right_tangent(NR::Point const d[], unsigned length, double tolerance_sq);
 static NR::Point sp_darray_center_tangent(NR::Point const d[], unsigned center, unsigned length);
 static unsigned copy_without_nans_or_adjacent_duplicates(NR::Point const src[], unsigned src_len, NR::Point dest[]);
 static void chord_length_parameterize(NR::Point const d[], gdouble u[], unsigned len);
@@ -541,7 +539,7 @@ bezier_pt(unsigned const degree, NR::Point const V[], gdouble const t)
 
     \pre (2 \<= len) and (d[0] != d[1]).
 **/
-static NR::Point
+NR::Point
 sp_darray_left_tangent(NR::Point const d[], unsigned const len)
 {
     /* Note: The reason we don't use the tolerance approach of right_tangent is that the current
@@ -580,7 +578,7 @@ sp_darray_right_tangent(NR::Point const d[], unsigned const len)
     \pre d[len - 1] != d[len - 2].
     \pre all[p in d] in_svg_plane(p).
 */
-static NR::Point
+NR::Point
 sp_darray_right_tangent(NR::Point const d[], unsigned const len, double const tolerance_sq)
 {
     g_assert( len >= 2 );
