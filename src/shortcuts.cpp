@@ -60,6 +60,7 @@ sp_shortcut_init ()
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_p, SP_VERB_FILE_PRINT, true);
 	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_P, SP_VERB_FILE_PRINT, false);
 
+	sp_shortcut_set (SP_SHORTCUT_CONTROL_MASK | GDK_F, SP_VERB_FULLSCREEN, false);
 /* commented out until implemented */
 /*	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_p, SP_VERB_FILE_PRINT_PREVIEW, true);*/
 /*	sp_shortcut_set (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_P, SP_VERB_FILE_PRINT_PREVIEW, false);*/

@@ -198,6 +198,8 @@ sp_desktop_init (SPDesktop *desktop)
 	desktop->zooms_past = NULL;
 	desktop->zooms_future = NULL;
 	desktop->can_go_forward = FALSE;
+
+	desktop->is_fullscreen = FALSE;
 }
 
 static void

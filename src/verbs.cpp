@@ -494,6 +494,9 @@ sp_verb_action_zoom_perform (SPAction *action, void * data, void * pdata)
 		sp_repr_get_boolean (repr, "showgrid", &v);
 		sp_repr_set_boolean (repr, "showgrid", !(v));
 		break;
+	case SP_VERB_FULLSCREEN:
+		sp_fullscreen (dt);
+		break;
 	default:
 		break;
 	}
@@ -562,7 +565,7 @@ static SPActionEventVector action_dialog_vector = {{NULL}, sp_verb_action_dialog
 #define SP_VERB_IS_SELECTION(v) ((v >= SP_VERB_SELECTION_TO_FRONT) && (v <= SP_VERB_SELECTION_BREAK_APART))
 #define SP_VERB_IS_OBJECT(v) ((v >= SP_VERB_OBJECT_ROTATE_90) && (v <= SP_VERB_OBJECT_FLIP_VERTICAL))
 #define SP_VERB_IS_CONTEXT(v) ((v >= SP_VERB_CONTEXT_SELECT) && (v <= SP_VERB_CONTEXT_DROPPER))
-#define SP_VERB_IS_ZOOM(v) ((v >= SP_VERB_ZOOM_IN) && (v <= SP_VERB_ZOOM_SELECTION))
+#define SP_VERB_IS_ZOOM(v) ((v >= SP_VERB_ZOOM_IN) && (v <= SP_VERB_FULLSCREEN))
 #define SP_VERB_IS_DIALOG(v) ((v >= SP_VERB_DIALOG_DISPLAY) && (v <= SP_VERB_DIALOG_ITEM))
 
 /**  A structure to hold information about a verb */
@@ -659,6 +662,7 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_ZOOM_PAGE_WIDTH, "ZoomPageWidth", N_("Page _Width"), N_("Fit page width in window"), NULL},
 	{SP_VERB_ZOOM_DRAWING, "ZoomDrawing", N_("_Drawing"), N_("Fit drawing in window"), "zoom_draw"},
 	{SP_VERB_ZOOM_SELECTION, "ZoomSelection", N_("_Selection"), N_("Fit selection in window"), "zoom_select"},
+	{SP_VERB_FULLSCREEN, "FullScreen", N_("_Fullscreen"), N_("Fullscreen"), NULL},
 	/* Dialogs */
 	{SP_VERB_DIALOG_DISPLAY, "DialogDisplay", N_("Inkscape _Options"), N_("Global Inkscape options"), NULL},
 	{SP_VERB_DIALOG_NAMEDVIEW, "DialogNamedview", N_("_Document Options"), N_("Options saved with the document"), NULL},
@@ -728,3 +732,17 @@ sp_verb_register (SPVerbActionFactory *factory)
 	return verb;
 }
 
+void
+sp_fullscreen(SPDesktop *sv)
+{
+	GtkWindow *topw = GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(sv->owner->canvas)));
+	if (GTK_IS_WINDOW(topw)) {
+		if (sv->is_fullscreen) {
+			sv->is_fullscreen = FALSE;
+			gtk_window_unfullscreen(topw);	
+		} else {
+			sv->is_fullscreen = TRUE;
+			gtk_window_fullscreen(topw);
+		}
+	}
+}

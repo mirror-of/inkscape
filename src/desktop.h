@@ -64,6 +64,8 @@ struct _SPDesktop {
 	GList *zooms_past;
 	GList *zooms_future;
 	gboolean can_go_forward;
+
+	gboolean is_fullscreen;
 };
 
 struct _SPDesktopClass {
