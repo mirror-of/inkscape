@@ -669,20 +669,7 @@ sp_selected_path_outline ()
 
         if (res->descr_nb > 1) { // if there's 0 or 1 node left, drop this path altogether
 
-            gchar tstr[80];
-
-            tstr[79] = '\0';
-
             SPRepr *repr = sp_repr_new ("path");
-
-            if (sp_svg_transform_write (tstr, 80, &i2root))
-            {
-                sp_repr_set_attr (repr, "transform", tstr);
-            }
-            else
-            {
-                sp_repr_set_attr (repr, "transform", NULL);
-            }
 
             // restore old style
             sp_repr_set_attr (repr, "style", style);
@@ -701,6 +688,9 @@ sp_selected_path_outline ()
 
             // move to the saved position 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+
+            SPItem *newitem = (SPItem *) sp_document_lookup_id (SP_DT_DOCUMENT (desktop), sp_repr_attr (repr, "id"));
+            sp_item_write_transform (newitem, repr, &i2root);
 
             selection->addRepr (repr);
 
@@ -960,17 +950,7 @@ sp_selected_path_create_offset_object (int expand,bool updating)
         } else {
             sp_repr_set_attr (repr, "inkscape:href", NULL);
         }
-    
-        // pas de transformation, sinon offset pas correct
-/*    if (sp_svg_transform_write (tstr, 80, &i2root))
-      {
-      sp_repr_set_attr (repr, "transform", tstr);
-      }
-      else
-      {
-      sp_repr_set_attr (repr, "transform", NULL);
-      }*/
-    
+      
         sp_repr_set_attr (repr, "style", style);
         SPItem* nitem = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
 
@@ -1326,18 +1306,7 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
         }
 
         {
-            gchar tstr[80];
-
-            tstr[79] = '\0';
-
             SPRepr *repr = sp_repr_new ("path");
-
-            if (sp_svg_transform_write (tstr, 80, &i2root))	{
-                sp_repr_set_attr (repr, "transform", tstr);
-            }
-            else	{
-                sp_repr_set_attr (repr, "transform", NULL);
-            }
 
             sp_repr_set_attr (repr, "style", style);
 
@@ -1353,6 +1322,9 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
 
             // move to the saved position 
             sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+
+            SPItem *newitem = (SPItem *) sp_document_lookup_id (SP_DT_DOCUMENT (desktop), sp_repr_attr (repr, "id"));
+            sp_item_write_transform (newitem, repr, &i2root);
 
             selection->addRepr (repr);
 

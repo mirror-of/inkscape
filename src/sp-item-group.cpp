@@ -450,6 +450,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 
 			citem = SP_ITEM (child);
 
+			// FIXME: cannot call sp_item_write_transform here - the repr is unattached at this point, has no item. rethink!
 			nr_matrix_multiply (&ctrans, &citem->transform, &gitem->transform);
 			if (sp_svg_transform_write (affinestr, 79, &ctrans)) {
 				sp_repr_set_attr (nrepr, "transform", affinestr);
