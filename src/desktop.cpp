@@ -2149,7 +2149,8 @@ sp_desktop_apply_css_recursive (SPObject *o, SPCSSAttr *css, bool skip_lines)
 {
     // tspans with role=line are not regular objects in that they are not assignable style of their own,
     // but must always inherit from the parent text
-    if (!skip_lines || !(SP_IS_TSPAN(o) && SP_TSPAN(o)->role == SP_TSPAN_ROLE_LINE)) {
+    // However, if the line tspan contains some style (old file?), we reluctantly set our style to it too
+    if (!(skip_lines && SP_IS_TSPAN(o) && SP_TSPAN(o)->role == SP_TSPAN_ROLE_LINE && !sp_repr_attr(SP_OBJECT_REPR(o), "style"))) {
         sp_repr_css_change (SP_OBJECT_REPR (o), css, "style");
     }
 
@@ -2168,7 +2169,8 @@ sp_desktop_set_style (SPDesktop *desktop, SPCSSAttr *css)
 // 2. Emit signal
     bool intercepted = desktop->_set_style_signal.emit (css);
 
-// FIXME: in set_style, compensate pattern and gradient fills, stroke style, rect corners for the object's own transform so that pasting fills does not depend on preserve/optimize
+// FIXME: in set_style, compensate pattern and gradient fills, stroke width, rect corners, font
+// size for the object's own transform so that pasting fills does not depend on preserve/optimize
 
 // 3. If nobody has intercepted the signal, apply the style to the selection
     if (!intercepted) {
