@@ -729,22 +729,34 @@ sp_textpath_to_text (SPObject *tp)
 {
 	SPObject *text = SP_OBJECT_PARENT (tp);
 
-        // make a list of textpath children
-        GSList *tp_reprs = NULL;
-        for (SPObject *o = SP_OBJECT(tp)->children; o != NULL; o = o->next) {
-            tp_reprs = g_slist_prepend (tp_reprs, SP_OBJECT_REPR (o));
-        }
+	NRRect bbox;
+	sp_item_invoke_bbox(SP_ITEM (text), &bbox, sp_item_i2doc_affine(SP_ITEM (text)), TRUE);
+	NR::Point xy (bbox.x0, bbox.y0);
 
-        for ( GSList *i = tp_reprs ; i ; i = i->next ) {
-            // make a copy of each textpath child
-            SPRepr *copy = sp_repr_duplicate((SPRepr *) i->data);
-            // remove the old repr from under textpath
-            sp_repr_remove_child(SP_OBJECT_REPR(tp), (SPRepr *) i->data); 
-            // put its copy into under textPath
-            sp_repr_add_child (SP_OBJECT_REPR(text), copy, NULL); // fixme: copy id
-        }
+	// make a list of textpath children
+	GSList *tp_reprs = NULL;
+	for (SPObject *o = SP_OBJECT(tp)->children; o != NULL; o = o->next) {
+		tp_reprs = g_slist_prepend (tp_reprs, SP_OBJECT_REPR (o));
+	}
 
-        //remove textpath
-        tp->deleteObject();
-        g_slist_free(tp_reprs);
+	for ( GSList *i = tp_reprs ; i ; i = i->next ) {
+		// make a copy of each textpath child
+		SPRepr *copy = sp_repr_duplicate((SPRepr *) i->data);
+		// remove the old repr from under textpath
+		sp_repr_remove_child(SP_OBJECT_REPR(tp), (SPRepr *) i->data); 
+		// put its copy into under textPath
+		sp_repr_add_child (SP_OBJECT_REPR(text), copy, NULL); // fixme: copy id
+	}
+
+	//remove textpath
+	tp->deleteObject();
+	g_slist_free(tp_reprs);
+
+	// set x/y on text 
+	if (xy[NR::X] != 1e18 && xy[NR::Y] != 1e18) {
+		SP_TEXT(text)->x.computed = xy[NR::X];
+		SP_TEXT(text)->x.set = TRUE;
+		SP_TEXT(text)->y.computed = xy[NR::Y];
+		SP_TEXT(text)->y.set = TRUE;
+	}
 }
