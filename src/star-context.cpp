@@ -366,7 +366,7 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
         case GDK_Meta_L:  // Meta is when you press Shift+Alt (at least on my machine)
         case GDK_Meta_R:
             sp_event_show_modifier_tip (event_context->defaultMessageContext(), event,
-                                        _("<b>Ctrl:</b> snap angle; keep rays radial"),
+                                        _("<b>Ctrl</b>: snap angle; keep rays radial"),
                                         NULL,
                                         NULL);
             break;
