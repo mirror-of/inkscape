@@ -224,6 +224,30 @@ sp_typeset_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	typeset = SP_TYPESET (object);
 
   if ( typeset->layoutDirty ) {
+    if ( typeset->dstType == has_shape_dest ) {
+      GSList* l=typeset->dstElems;
+      while ( l ) {
+        shape_dest* theData=(shape_dest*)l->data;
+        if ( theData->originalObj == NULL ) {
+          // need to resolve it
+          refresh_typeset_source(typeset,theData);
+          if ( theData->originalObj ) sp_repr_add_listener (theData->originalObj, &typeset_source_event_vector, typeset);
+        }
+        l=l->next;
+      }
+    } else if ( typeset->dstType == has_path_dest ) {
+      GSList* l=typeset->dstElems;
+      while ( l ) {
+        path_dest* theData=(path_dest*)l->data;
+        if ( theData->originalObj == NULL ) {
+          // need to resolve it
+          refresh_typeset_source(typeset,theData);
+          if ( theData->originalObj ) sp_repr_add_listener (theData->originalObj, &typeset_source_event_vector, typeset);
+        }
+        l=l->next;
+      }
+    }
+    
     sp_typeset_relayout(typeset);
     typeset->layoutDirty=false;
   }
@@ -377,22 +401,23 @@ sp_typeset_set (SPObject *object, unsigned int key, const gchar *value)
           while ( epos < max && dup_value[epos] != ']' ) epos++;
           if ( epos < max ) {
             dup_value[epos]=0;
-            SPObject *refobj = sp_document_lookup_id (SP_OBJECT (typeset)->document, dup_value+spos);
-            if ( refobj && refobj->repr )  {
+//            SPObject *refobj = sp_document_lookup_id (SP_OBJECT (typeset)->document, dup_value+spos);
+//            if ( refobj && refobj->repr )  {
               shape_dest  *nSrc=(shape_dest*)malloc(sizeof(shape_dest));
-              nSrc->originalObj = refobj->repr;
+ //             nSrc->originalObj = refobj->repr;
+              nSrc->originalObj = NULL;
               nSrc->originalID = strdup(dup_value+spos);
               nSrc->windingRule=fill_nonZero;
               nSrc->theShape=NULL;
               nSrc->bbox=NR::Rect(NR::Point(0,0),NR::Point(0,0));
-              sp_repr_add_listener (nSrc->originalObj, &typeset_source_event_vector, typeset);
+ //             sp_repr_add_listener (nSrc->originalObj, &typeset_source_event_vector, typeset);
               typeset->dstElems=g_slist_append(typeset->dstElems,nSrc);
               typeset->dstType=has_shape_dest;
               typeset->layoutDirty=true;
               
-              refresh_typeset_source(typeset,nSrc);
-            } else {
-            }
+ //             refresh_typeset_source(typeset,nSrc);
+ //           } else {
+ //           }
             dup_value[epos]=']';
           }
           while ( pos < max && dup_value[pos] != ']' ) pos++;
@@ -416,21 +441,22 @@ sp_typeset_set (SPObject *object, unsigned int key, const gchar *value)
           while ( epos < max && dup_value[epos] != ']' ) epos++;
           if ( epos < max ) {
             dup_value[epos]=0;
-            SPObject *refobj = sp_document_lookup_id (SP_OBJECT (typeset)->document, dup_value+spos);
-            if ( refobj && refobj->repr )  {
+//            SPObject *refobj = sp_document_lookup_id (SP_OBJECT (typeset)->document, dup_value+spos);
+//            if ( refobj && refobj->repr )  {
               path_dest  *nSrc=(path_dest*)malloc(sizeof(path_dest));
-              nSrc->originalObj = refobj->repr;
+//              nSrc->originalObj = refobj->repr;
+              nSrc->originalObj = NULL;
               nSrc->originalID = strdup(dup_value+spos);
               nSrc->thePath=NULL;
               nSrc->length=0;
-              sp_repr_add_listener (nSrc->originalObj, &typeset_source_event_vector, typeset);
+ //             sp_repr_add_listener (nSrc->originalObj, &typeset_source_event_vector, typeset);
               typeset->dstElems=g_slist_append(typeset->dstElems,nSrc);
               typeset->dstType=has_path_dest;
               
-              refresh_typeset_source(typeset,nSrc);
+//              refresh_typeset_source(typeset,nSrc);
               typeset->layoutDirty=true;
-            } else {
-            }
+//            } else {
+//            }
             dup_value[epos]=']';
           }
           while ( pos < max && dup_value[pos] != ']' ) pos++;
@@ -496,6 +522,7 @@ sp_typeset_set (SPObject *object, unsigned int key, const gchar *value)
 }
 void sp_typeset_ditch_dest(SPTypeset *typeset)
 {
+  printf("ditch\n");
   if ( typeset->dstType == has_shape_dest ) {
     GSList* l=typeset->dstElems;
     while ( l ) {
@@ -506,8 +533,9 @@ void sp_typeset_ditch_dest(SPTypeset *typeset)
       l=l->next;
     }
     while ( typeset->dstElems ) {
-//      free(typeset->dstElems->data);
-      typeset->dstElems=g_slist_remove(typeset->dstElems,typeset->dstElems->data);
+      void* cur=(void*)typeset->dstElems->data;
+      typeset->dstElems=g_slist_remove(typeset->dstElems,cur);
+      free(cur);
     }
   } else if ( typeset->dstType == has_path_dest ) {
     GSList* l=typeset->dstElems;
@@ -519,13 +547,15 @@ void sp_typeset_ditch_dest(SPTypeset *typeset)
       l=l->next;
     }
     while ( typeset->dstElems ) {
-//      free(typeset->dstElems->data);
-      typeset->dstElems=g_slist_remove(typeset->dstElems,typeset->dstElems->data);
+      void* cur=(void*)typeset->dstElems->data;
+      typeset->dstElems=g_slist_remove(typeset->dstElems,cur);
+      free(cur);
     }
   } else if ( typeset->dstType != has_no_dest ) {
     while ( typeset->dstElems ) {
-//      free(typeset->dstElems->data);
-      typeset->dstElems=g_slist_remove(typeset->dstElems,typeset->dstElems->data);
+      void* cur=(void*)typeset->dstElems->data;
+      typeset->dstElems=g_slist_remove(typeset->dstElems,cur);
+      free(cur);
     }
   }
   typeset->dstType=has_no_dest;
@@ -537,8 +567,8 @@ static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
                                const gchar * /*oldval*/, const gchar * newval,
                                bool is_interactive, void * data)
 {
-//  printf("attrchg %x tps=%x key=%s nv=%s\n",repr,data,key,newval);
   SPTypeset *typeset = (SPTypeset *) data;
+  printf("attrchg %x of %x to %s\n",repr,typeset,newval);
   if ( typeset == NULL || repr == NULL ) return;
   
   if ( typeset->dstType == has_shape_dest ) {
@@ -553,6 +583,7 @@ static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
       refresh_typeset_source(typeset,cur);
     } else {
       // repr not used in this typeset
+      printf("not fount\n");
     }
   } else if ( typeset->dstType == has_path_dest ) {
     GSList *l=typeset->dstElems;
@@ -566,6 +597,7 @@ static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
       refresh_typeset_source(typeset,cur);
     } else {
       // repr not used in this typeset
+      printf("not fount\n");
     }
   }
 }
@@ -573,6 +605,7 @@ static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
 static void sp_typeset_source_destroy (SPRepr * repr, void *data)
 {
   SPTypeset *typeset = (SPTypeset *) data;
+  printf("destroy %x of %x\n",repr,typeset);
 //  printf("destroy %x tps=%x\n",repr,data);
   if ( typeset == NULL ) return;
   if ( repr == NULL ) return;
@@ -587,12 +620,14 @@ static void sp_typeset_source_destroy (SPRepr * repr, void *data)
       shape_dest *cur=(shape_dest*)l->data;
       if ( cur->theShape ) delete cur->theShape;
       if ( cur->originalID ) free(cur->originalID);
-//      free(l->data);
-      typeset->dstElems=g_slist_remove(typeset->dstElems,l->data);
+      if ( cur->originalObj ) sp_repr_remove_listener_by_data (cur->originalObj, typeset);
+      typeset->dstElems=g_slist_remove(typeset->dstElems,cur);
+      free(cur);
       typeset->layoutDirty=true;
       sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
     } else {
       // repr not used in this typeset
+      printf("not fount\n");
     }
   } else if ( typeset->dstType == has_path_dest ) {
     GSList *l=typeset->dstElems;
@@ -605,12 +640,14 @@ static void sp_typeset_source_destroy (SPRepr * repr, void *data)
       path_dest *cur=(path_dest*)l->data;
       if ( cur->thePath) delete cur->thePath;
       if ( cur->originalID ) free(cur->originalID);
-//      free(l->data);
-      typeset->dstElems=g_slist_remove(typeset->dstElems,l->data);
+      if ( cur->originalObj ) sp_repr_remove_listener_by_data (cur->originalObj, typeset);
+      typeset->dstElems=g_slist_remove(typeset->dstElems,cur);
+      free(cur);
       typeset->layoutDirty=true;
       sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
     } else {
       // repr not used in this typeset
+      printf("not fount\n");
     }
   }
 }
@@ -642,7 +679,10 @@ void   refresh_typeset_source(SPTypeset *typeset,shape_dest *nDst)
   if ( nDst == NULL ) return;
   
   SPObject *refobj = sp_document_lookup_id (SP_OBJECT (typeset)->document, nDst->originalID);
+  nDst->originalObj=NULL;
   if ( refobj == NULL ) return;
+  nDst->originalObj=refobj->repr;
+  
   SPItem *item = SP_ITEM (refobj);
   
   SPCurve *curve=NULL;
@@ -701,7 +741,10 @@ void   refresh_typeset_source(SPTypeset *typeset,path_dest *nDst)
   if ( nDst == NULL ) return;
   
   SPObject *refobj = sp_document_lookup_id (SP_OBJECT (typeset)->document, nDst->originalID);
+  nDst->originalObj=NULL;
   if ( refobj == NULL ) return;
+  nDst->originalObj=refobj->repr;
+
   SPItem *item = SP_ITEM (refobj);
   
   SPCurve *curve=NULL;

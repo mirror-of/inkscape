@@ -66,6 +66,13 @@ typedef struct box_solution {
   bool         finished;
 } box_solution;
 
+typedef struct glyphs_for_span {
+  char            style[256];
+  int             nbG; // arrays are nbG+1 to hold the 'terminating' glyph
+  int             *g_start;
+  int             *g_end;
+  NR::Point       *g_pos; // wrp the start of the span
+} glyphs_for_span;
 
 class text_chunker {
 public:
@@ -75,10 +82,11 @@ public:
 
   virtual void                 SetText(char* inText) {};
   virtual void                 ChangeText(int startPos,int endPos,char* inText) {};
+  virtual int                  MaxIndex(void) {return 0;}; // index in visual text != char index in source text
   
   virtual void                 InitialMetricsAt(int startPos,double &ascent,double &descent) {};
   virtual text_chunk_solution* StuffThatBox(int start_ind,double minLength,double nominalLength,double maxLength,bool strict) {return NULL;};
-  virtual void                 GlyphsAndPositions(int start_ind,int end_ind,int &nbG,int* &starts,NR::Point* &glyphs) {nbG=0;glyphs=NULL;starts=NULL;};
+  virtual void                 GlyphsAndPositions(int start_ind,int end_ind,int &nbS,glyphs_for_span* &spans) {nbS=0;spans=NULL;};
 };
 
 class dest_chunker {
