@@ -33,6 +33,7 @@
 #include "desktop-handles.h"
 #include "desktop-affine.h"
 #include "pixmaps/cursor-text.xpm"
+#include "pixmaps/cursor-text-insert.xpm"
 #include "view.h"
 #include "helper/sp-intl.h"
 #include "prefs-utils.h"
@@ -106,8 +107,8 @@ sp_text_context_init (SPTextContext *tc)
 	SPEventContext *event_context = SP_EVENT_CONTEXT (tc);
 
 	event_context->cursor_shape = cursor_text_xpm;
-	event_context->hot_x = 0;
-	event_context->hot_y = 0;
+	event_context->hot_x = 7;
+	event_context->hot_y = 7;
 
 	tc->imc = NULL;
 
@@ -265,8 +266,14 @@ sp_text_context_item_handler (SPEventContext *ec, SPItem *item, GdkEvent *event)
 			sp_item_bbox_desktop(item_ungrouped, &bbox);
 			sp_canvas_item_show (tc->indicator);
 			sp_ctrlrect_set_area (SP_CTRLRECT (tc->indicator), 
-					      bbox.x0, bbox.y0, 
-					      bbox.x1, bbox.y1);
+								bbox.x0, bbox.y0, 
+								bbox.x1, bbox.y1);
+
+			ec->cursor_shape = cursor_text_insert_xpm;
+			ec->hot_x = 7;
+			ec->hot_y = 10;
+			sp_event_context_update_cursor (ec);
+
 			ret = TRUE;
 		}
 		break;
@@ -327,6 +334,12 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 	sp_canvas_item_hide (tc->indicator);
 
 	switch (event->type) {
+	case GDK_MOTION_NOTIFY:
+		ec->cursor_shape = cursor_text_xpm;
+		ec->hot_x = 7;
+		ec->hot_y = 7;
+		sp_event_context_update_cursor (ec);
+		break;
 	case GDK_BUTTON_PRESS:
 		if (event->button.button == 1) {
 			/* Button 1, set X & Y & new item */
