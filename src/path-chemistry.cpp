@@ -15,7 +15,10 @@
 #include <string.h>
 #include <libart_lgpl/art_misc.h>
 #include "xml/repr.h"
+#include "xml/repr-private.h"
 #include "svg/svg.h"
+#include "helper/sp-intl.h"
+#include "sp-object.h"
 #include "sp-path.h"
 #include "sp-text.h"
 #include "style.h"
@@ -40,123 +43,173 @@ enum {
 void
 sp_selected_path_combine (void)
 {
-	SPDesktop * desktop;
-	SPSelection * selection;
-	GSList * il;
-	GSList * l;
-	SPRepr * repr;
-	SPItem * item;
-	SPPath * path;
-	SPCurve * c;
-	ArtBpath * abp;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+	if (!SP_IS_DESKTOP(desktop)) return;
+	SPSelection *selection = SP_DT_SELECTION (desktop);
+
+	GSList *items = (GSList *) sp_selection_item_list (selection);
+
+	if (g_slist_length (items) < 2) {
+		sp_view_set_statusf_flash (SP_VIEW (desktop), _("Select at least 2 objects to combine."));
+		return;
+	}
+
+	for (GSList *i = items; i != NULL; i = i->next) {
+		SPItem *item = (SPItem *) i->data;
+		if (!SP_IS_SHAPE (item) && !SP_IS_TEXT(item)) {
+			sp_view_set_statusf_flash (SP_VIEW (desktop), _("One of the objects is not a path, cannot combine."));
+			return;
+		}
+	}
+
+	SPRepr *parent = SP_OBJECT_REPR ((SPItem *) items->data)->parent;
+	for (GSList *i = items; i != NULL; i = i->next) {
+		if ( SP_OBJECT_REPR ((SPItem *) i->data)->parent != parent ) {
+			sp_view_set_statusf_error (SP_VIEW (desktop), _("You cannot combine objects from different groups or layers."));
+			return;
+		}
+	}
 
 	sp_selected_path_to_curves0 (FALSE, 0);
 
-	desktop = SP_ACTIVE_DESKTOP;
-	if (!SP_IS_DESKTOP(desktop)) return;
-	selection = SP_DT_SELECTION (desktop);
+	items = (GSList *) sp_selection_item_list (selection);
 
-	il = (GSList *) sp_selection_item_list (selection);
+	items = g_slist_copy (items);
 
-	if (g_slist_length (il) < 2) return;
+	items = g_slist_sort (items, (GCompareFunc) sp_item_repr_compare_position);
 
-	for (l = il; l != NULL; l = l->next) {
-		item = (SPItem *) l->data;
-		if (!SP_IS_SHAPE (item)) return;
-	}
+	// remember the position of the topmost object
+	gint topmost = sp_repr_position (SP_OBJECT_REPR ((SPItem *) g_slist_last(items)->data));
 
-	il = g_slist_copy (il);
-
-	gchar *style = g_strdup (sp_repr_attr ((SP_OBJECT (il->data))->repr, "style"));
+	// FIXME: merge styles of combined objects instead of using the first one's style
+	gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR ((SPItem *) items->data), "style"));
 
 	GString *dstring = g_string_new("");
-	for (l = il; l != NULL; l = l->next) {
-		path = (SPPath *) l->data;
-		c = sp_shape_get_curve (SP_SHAPE (path));
+	for (GSList *i = items; i != NULL; i = i->next) {
+
+		SPPath *path = (SPPath *) i->data;
+		SPCurve *c = sp_shape_get_curve (SP_SHAPE (path));
+
 		NRMatrix i2root;
 		sp_item_i2root_affine (SP_ITEM (path), &i2root);
-		abp = art_bpath_affine_transform(c->bpath, NR_MATRIX_D_TO_DOUBLE(&i2root));
+
+		ArtBpath *abp = art_bpath_affine_transform (c->bpath, NR_MATRIX_D_TO_DOUBLE (&i2root));
 		sp_curve_unref (c);
 		gchar *str = sp_svg_write_path (abp);
 		art_free (abp);
+
 		dstring = g_string_append(dstring, str);
 		g_free (str);
+
 		sp_repr_unparent (SP_OBJECT_REPR (path));
+		topmost --;
 	}
 
-	g_slist_free (il);
+	g_slist_free (items);
 
-	repr = sp_repr_new ("path");
+	SPRepr *repr = sp_repr_new ("path");
+
 	sp_repr_set_attr (repr, "style", style);
 	g_free (style);
+
 	sp_repr_set_attr (repr, "d", dstring->str);
 	g_string_free (dstring, TRUE);
-	item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
-	sp_document_done (SP_DT_DOCUMENT (desktop));
-	sp_repr_unref (repr);
 
-	sp_selection_set_item (selection, item);
+	// add the new group to the group members' common parent
+	sp_repr_append_child (parent, repr);
+
+	// move to the position of the topmost, reduced by the number of deleted items
+	sp_repr_set_position_absolute (repr, topmost > 0 ? topmost + 1 : 0);
+
+	sp_document_done (SP_DT_DOCUMENT (desktop));
+
+	sp_selection_set_repr (selection, repr);
+
+	sp_repr_unref (repr);
 }
 
 void
 sp_selected_path_break_apart (void)
 {
-	SPSelection * selection;
-	SPRepr * repr;
-	SPItem * item;
-	SPPath * path;
-	SPCurve * curve;
-	ArtBpath * abp;
-	gchar * style, * str;
-	GSList * list, * l;
-	SPDesktop * desktop;
-	
-	desktop = SP_ACTIVE_DESKTOP;
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 	if (!SP_IS_DESKTOP(desktop)) return;
+	SPSelection *selection = SP_DT_SELECTION (desktop);
 
-	selection = SP_DT_SELECTION (desktop);
-
-	item = sp_selection_item (selection);
-
-	if (item == NULL) return;
-	if (!SP_IS_PATH (item)) return;
-
-	path = SP_PATH (item);
-
-	curve = sp_shape_get_curve (SP_SHAPE (path));
-	if (curve == NULL) return;
-
-	NRMatrix i2root;
-	sp_item_i2root_affine (SP_ITEM (path), &i2root);
-	style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
-
-	abp = art_bpath_affine_transform(curve->bpath, NR_MATRIX_D_TO_DOUBLE(&i2root));
-
-	sp_curve_unref (curve);
-	sp_repr_unparent (SP_OBJECT_REPR (item));
-
-	curve = sp_curve_new_from_bpath (abp);
-
-	list = sp_curve_split (curve);
-
-	sp_curve_unref (curve);
-
-	for (l = list; l != NULL; l = l->next) {
-		curve = (SPCurve *) l->data;
-
-		repr = sp_repr_new ("path");
-		sp_repr_set_attr (repr, "style", style);
-		str = sp_svg_write_path (curve->bpath);
-		sp_repr_set_attr (repr, "d", str);
-		g_free (str);
-		item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
-		sp_repr_unref (repr);
-		sp_selection_add_item (selection, item);
+	if (sp_selection_is_empty (selection)) {
+		sp_view_set_statusf_flash (SP_VIEW(desktop), _("Select some paths to break apart."));
+		return;
 	}
-	sp_document_done (SP_DT_DOCUMENT (desktop));
 
-	g_slist_free (list);
-	g_free (style);
+	bool did = false;
+
+	for (GSList *items = g_slist_copy((GSList *) sp_selection_item_list(SP_DT_SELECTION(desktop)));
+			 items != NULL;
+			 items = items->next) {
+
+		SPItem *item = (SPItem *) items->data;
+
+		if (!SP_IS_PATH (item)) 
+			continue;
+
+		SPPath *path = SP_PATH (item);
+
+		SPCurve *curve = sp_shape_get_curve (SP_SHAPE (path));
+		if (curve == NULL) 
+			continue;
+
+		did = true;
+
+		SPRepr *parent = SP_OBJECT_REPR (item)->parent;
+		gint pos = sp_repr_position (SP_OBJECT_REPR (item));
+
+		NRMatrix i2root;
+		sp_item_i2root_affine (SP_ITEM (path), &i2root);
+
+		gchar *style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
+
+		ArtBpath *abp = art_bpath_affine_transform (curve->bpath, NR_MATRIX_D_TO_DOUBLE(&i2root));
+
+		sp_curve_unref (curve);
+		sp_repr_unparent (SP_OBJECT_REPR (item));
+
+		curve = sp_curve_new_from_bpath (abp);
+
+		GSList *list = sp_curve_split (curve);
+
+		sp_curve_unref (curve);
+
+		for (GSList *l = list; l != NULL; l = l->next) {
+			curve = (SPCurve *) l->data;
+
+			SPRepr *repr = sp_repr_new ("path");
+			sp_repr_set_attr (repr, "style", style);
+
+			gchar *str = sp_svg_write_path (curve->bpath);
+			sp_repr_set_attr (repr, "d", str);
+			g_free (str);
+
+			// add the new repr to the parent
+			sp_repr_append_child (parent, repr);
+
+			// move to the saved position 
+			sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+
+			sp_selection_add_repr (selection, repr);
+
+			sp_repr_unref (repr);
+		}
+
+		g_slist_free (list);
+		g_free (style);
+
+	}
+
+ 	if (did) {
+		sp_document_done (SP_DT_DOCUMENT (desktop));
+	} else {
+		sp_view_set_statusf_flash (SP_VIEW(desktop), _("No paths to break apart in the selection."));
+		return;
+	} 
 }
 
 /* This function is an entry point from GUI */
