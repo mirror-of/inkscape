@@ -49,14 +49,14 @@ Shape::Plot (double ix, double iy, double ir, double mx, double my, bool doPoint
   fprintf(outFile,"     inkscape:window-y=\"42\" />\n");
   
 	if ( doPoint ) {
-		for (int i=0;i<nbPt;i++) {
+		for (int i=0;i<numberOfPoints();i++) {
 			double   ph=(getPoint(i).x[0]-ix)*ir+mx;
 			double   pv=(getPoint(i).x[1]-iy)*ir+my;
       fprintf(outFile,"     <circle cx=\"%f\" cy=\"%f\" r=\"5\" fill=\"none\" stroke=\"red\" stroke-width=\"0.25\" />\n",ph,pv); // localizing ok
     }
 	}
   if ( pointsNo ) {
-		for (int i=0;i<nbPt;i++) {
+		for (int i=0;i<numberOfPoints();i++) {
 			double   ph=(getPoint(i).x[0]-ix)*ir+mx;
 			double   pv=(getPoint(i).x[1]-iy)*ir+my;
       fprintf(outFile,"     <text x=\"%f\" y=\"%f\" font-family=\"Monaco\" font-size=\"5\" fill=\"blue\" >\n",ph-2,pv+1); // localizing ok

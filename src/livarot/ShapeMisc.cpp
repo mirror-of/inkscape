@@ -34,7 +34,7 @@
 void
 Shape::ConvertToForme (Path * dest)
 {
-  if (nbPt <= 1 || nbAr <= 1)
+  if (numberOfPoints() <= 1 || nbAr <= 1)
     return;
   if (Eulerian (true) == false)
     return;
@@ -46,7 +46,7 @@ Shape::ConvertToForme (Path * dest)
   MakeEdgeData (true);
   MakeSweepDestData (true);
   
-  for (int i = 0; i < nbPt; i++)
+  for (int i = 0; i < numberOfPoints(); i++)
   {
     pData[i].rx[0] = Round (getPoint(i).x[0]);
     pData[i].rx[1] = Round (getPoint(i).x[1]);
@@ -80,13 +80,13 @@ Shape::ConvertToForme (Path * dest)
     int startBord = -1;
     {
       int fi = 0;
-      for (fi = lastPtUsed; fi < nbPt; fi++)
+      for (fi = lastPtUsed; fi < numberOfPoints(); fi++)
       {
         if (getPoint(fi).firstA >= 0 && swdData[getPoint(fi).firstA].misc == 0)
           break;
       }
       lastPtUsed = fi + 1;
-      if (fi < nbPt)
+      if (fi < numberOfPoints())
       {
         int bestB = getPoint(fi).firstA;
         while (bestB >= 0 && aretes[bestB].st != fi)
@@ -166,7 +166,7 @@ Shape::ConvertToForme (Path * dest)
       // fin du cas non-oriente
     }
   }
-  while (lastPtUsed < nbPt);
+  while (lastPtUsed < numberOfPoints());
   
   MakePointData (false);
   MakeEdgeData (false);
@@ -179,7 +179,7 @@ Shape::ConvertToForme (Path * dest)
 void
 Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
 {
-  if (nbPt <= 1 || nbAr <= 1)
+  if (numberOfPoints() <= 1 || nbAr <= 1)
     return;
 //  if (Eulerian (true) == false)
 //    return;
@@ -196,7 +196,7 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
   MakeEdgeData (true);
   MakeSweepDestData (true);
   
-  for (int i = 0; i < nbPt; i++)
+  for (int i = 0; i < numberOfPoints(); i++)
   {
     pData[i].rx[0] = Round (getPoint(i).x[0]);
     pData[i].rx[1] = Round (getPoint(i).x[1]);
@@ -222,13 +222,13 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
     int startBord = -1;
     {
       int fi = 0;
-      for (fi = lastPtUsed; fi < nbPt; fi++)
+      for (fi = lastPtUsed; fi < numberOfPoints(); fi++)
       {
         if (getPoint(fi).firstA >= 0 && swdData[getPoint(fi).firstA].misc == 0)
           break;
       }
       lastPtUsed = fi + 1;
-      if (fi < nbPt)
+      if (fi < numberOfPoints())
       {
         int bestB = getPoint(fi).firstA;
         while (bestB >= 0 && aretes[bestB].st != fi)
@@ -319,7 +319,7 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig, bool splitWhenForced)
       // fin du cas non-oriente
     }
   }
-  while (lastPtUsed < nbPt);
+  while (lastPtUsed < numberOfPoints());
   
   MakePointData (false);
   MakeEdgeData (false);
@@ -332,7 +332,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
   contStart=NULL;
   nbNest=0;
 
-  if (nbPt <= 1 || nbAr <= 1)
+  if (numberOfPoints() <= 1 || nbAr <= 1)
     return;
   //  if (Eulerian (true) == false)
   //    return;
@@ -349,7 +349,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
   MakeEdgeData (true);
   MakeSweepDestData (true);
   
-  for (int i = 0; i < nbPt; i++)
+  for (int i = 0; i < numberOfPoints(); i++)
   {
     pData[i].rx[0] = Round (getPoint(i).x[0]);
     pData[i].rx[1] = Round (getPoint(i).x[1]);
@@ -376,7 +376,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
     int startBord = -1;
     {
       int fi = 0;
-      for (fi = lastPtUsed; fi < nbPt; fi++)
+      for (fi = lastPtUsed; fi < numberOfPoints(); fi++)
       {
         if (getPoint(fi).firstA >= 0 && swdData[getPoint(fi).firstA].misc == 0)
           break;
@@ -391,7 +391,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
         }
       }
       lastPtUsed = fi + 1;
-      if (fi < nbPt)
+      if (fi < numberOfPoints())
       {
         int bestB = getPoint(fi).firstA;
         while (bestB >= 0 && aretes[bestB].st != fi)
@@ -518,7 +518,7 @@ Shape::ConvertToFormeNested (Path * dest, int nbP, Path * *orig, int wildPath,in
       // fin du cas non-oriente
     }
   }
-  while (lastPtUsed < nbPt);
+  while (lastPtUsed < numberOfPoints());
   
   MakePointData (false);
   MakeEdgeData (false);
@@ -538,15 +538,14 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
   
   if (dec == 0)
   {
-    nbPt = a->nbPt;
-    if (nbPt > maxPt)
+    _pts = a->_pts;
+    if (numberOfPoints() > maxPt)
     {
-      maxPt = nbPt;
+      maxPt = numberOfPoints();
       if (_has_points_data)
         pData =
           (point_data *) g_realloc(pData, maxPt * sizeof (point_data));
     }
-    _pts = a->_pts;
     
     nbAr = a->nbAr;
     if (nbAr > maxAr)
@@ -573,7 +572,7 @@ Shape::MakeOffset (Shape * a, double dec, JoinType join, double miter)
     aretes = a->aretes;
     return 0;
   }
-  if (a->nbPt <= 1 || a->nbAr <= 1 || a->type != shape_polygon)
+  if (a->numberOfPoints() <= 1 || a->nbAr <= 1 || a->type != shape_polygon)
     return shape_input_err;
   
   a->SortEdges ();

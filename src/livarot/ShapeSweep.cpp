@@ -65,19 +65,18 @@ int
 Shape::Reoriente (Shape * a)
 {
   Reset (0, 0);
-  if (a->nbPt <= 1 || a->nbAr <= 1)
+  if (a->numberOfPoints() <= 1 || a->nbAr <= 1)
     return 0;
   if (a->Eulerian (true) == false)
     return shape_input_err;
 
-  nbPt = a->nbPt;
-  if (nbPt > maxPt)
+  _pts = a->_pts;
+  if (numberOfPoints() > maxPt)
     {
-      maxPt = nbPt;
+      maxPt = numberOfPoints();
       if (_has_points_data)
 	pData = (point_data *) g_realloc(pData, maxPt * sizeof (point_data));
     }
-  _pts = a->_pts;
 
   nbAr = a->nbAr;
   if (nbAr > maxAr)
@@ -104,7 +103,7 @@ Shape::Reoriente (Shape * a)
   MakeEdgeData (true);
   MakeSweepDestData (true);
 
-  for (int i = 0; i < nbPt; i++)
+  for (int i = 0; i < numberOfPoints(); i++)
     {
       pData[i].pending = 0;
       pData[i].edgeOnLeft = -1;
@@ -113,7 +112,7 @@ Shape::Reoriente (Shape * a)
       pData[i].rx[1] = Round (getPoint(i).x[1]);
       _pts[i].x = pData[i].rx;
     }
-  for (int i = 0; i < nbPt; i++)
+  for (int i = 0; i < numberOfPoints(); i++)
     {
       _pts[i].oldDegree = getPoint(i).totalDegree();
     }
@@ -162,7 +161,8 @@ Shape::Reoriente (Shape * a)
   if (Eulerian (true) == false)
     {
 //              printf( "pas euclidian2");
-      nbPt = nbAr = 0;
+      nbAr = 0;
+      _pts.clear();
       return shape_euler_err;
     }
 
@@ -174,7 +174,7 @@ int
 Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 {
   Reset (0, 0);
-  if (a->nbPt <= 1 || a->nbAr <= 1)
+  if (a->numberOfPoints() <= 1 || a->nbAr <= 1)
     return 0;
   if ( directed == fill_justDont ) {
   } else {
@@ -196,7 +196,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   MakeSweepDestData (true);
   MakeBackData(a->_has_back_data);
 
-  for (int i = 0; i < a->nbPt; i++)
+  for (int i = 0; i < a->numberOfPoints(); i++)
     {
       a->pData[i].pending = 0;
       a->pData[i].edgeOnLeft = -1;
@@ -247,7 +247,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
   int curAPt = 0;
 
-  while (curAPt < a->nbPt || sEvts.nbEvt > 0)
+  while (curAPt < a->numberOfPoints() || sEvts.nbEvt > 0)
     {
 /*		if ( nbPt > 0 && pts[nbPt-1].y >= 250.4 && pts[nbPt-1].y <= 250.6 ) {
 			for (int i=0;i<sEvts.nbEvt;i++) {
@@ -381,7 +381,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	   pData[lastI] = pData[lastPointNo];
 	  }
 	  lastPointNo = lastI;
-	  nbPt = lastI + 1;
+	  _pts.resize(lastI + 1);
 
 	  lastChgtPt = lastPointNo;
 	  lastChange = rPtX[1];
@@ -631,7 +631,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	}
     }
   {
-    int lastI = AssemblePoints (lastChgtPt, nbPt);
+    int lastI = AssemblePoints (lastChgtPt, numberOfPoints());
 
 
     Shape *curSh = shapeHead;
@@ -692,7 +692,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	  }
       }
 
-    nbPt = lastI;
+    _pts.resize(lastI);
 
     edgeHead = -1;
     shapeHead = NULL;
@@ -718,7 +718,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
 //  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
 
-  for (int i = 0; i < nbPt; i++)
+  for (int i = 0; i < numberOfPoints(); i++)
     {
       _pts[i].oldDegree = getPoint(i).totalDegree();
     }
@@ -900,7 +900,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       MakeSweepSrcData (false);
       MakeSweepDestData (false);
       a->CleanupSweep ();
-      nbPt = nbAr = 0;
+      nbAr = 0;
+      _pts.clear();
       return shape_euler_err;
     }
   }
@@ -922,9 +923,9 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   if (a == b || a == NULL || b == NULL)
     return shape_input_err;
   Reset (0, 0);
-  if (a->nbPt <= 1 || a->nbAr <= 1)
+  if (a->numberOfPoints() <= 1 || a->nbAr <= 1)
     return 0;
-  if (b->nbPt <= 1 || b->nbAr <= 1)
+  if (b->numberOfPoints() <= 1 || b->nbAr <= 1)
     return 0;
   if ( mod == bool_op_cut ) {
   } else if ( mod == bool_op_slice ) {
@@ -957,7 +958,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
       MakeBackData (false);
     }
 
-  for (int i = 0; i < a->nbPt; i++)
+  for (int i = 0; i < a->numberOfPoints(); i++)
     {
       a->pData[i].pending = 0;
       a->pData[i].edgeOnLeft = -1;
@@ -965,7 +966,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
       a->pData[i].rx[0] = Round (a->getPoint(i).x[0]);
       a->pData[i].rx[1] = Round (a->getPoint(i).x[1]);
     }
-  for (int i = 0; i < b->nbPt; i++)
+  for (int i = 0; i < b->numberOfPoints(); i++)
     {
       b->pData[i].pending = 0;
       b->pData[i].edgeOnLeft = -1;
@@ -1043,7 +1044,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   int curAPt = 0;
   int curBPt = 0;
 
-  while (curAPt < a->nbPt || curBPt < b->nbPt || sEvts.nbEvt > 0)
+  while (curAPt < a->numberOfPoints() || curBPt < b->numberOfPoints() || sEvts.nbEvt > 0)
     {
 /*		for (int i=0;i<sEvts.nbEvt;i++) {
 			printf("%f %f %i %i\n",sEvts.events[i].posx,sEvts.events[i].posy,sEvts.events[i].leftSweep->bord,sEvts.events[i].rightSweep->bord); // localizing ok
@@ -1069,9 +1070,9 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
       if (SweepEvent::
 	  PeekInQueue (intersL, intersR, ptX, ptL, ptR, sEvts))
 	{
-	  if (curAPt < a->nbPt)
+	  if (curAPt < a->numberOfPoints())
 	    {
-	      if (curBPt < b->nbPt)
+	      if (curBPt < b->numberOfPoints())
 		{
 		  if (a->pData[curAPt].rx[1] < b->pData[curBPt].rx[1]
 		      || (a->pData[curAPt].rx[1] == b->pData[curBPt].rx[1]
@@ -1152,9 +1153,9 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	}
       else
 	{
-	  if (curAPt < a->nbPt)
+	  if (curAPt < a->numberOfPoints())
 	    {
-	      if (curBPt < b->nbPt)
+	      if (curBPt < b->numberOfPoints())
 		{
 		  if (a->pData[curAPt].rx[1] < b->pData[curBPt].rx[1]
 		      || (a->pData[curAPt].rx[1] == b->pData[curBPt].rx[1]
@@ -1271,7 +1272,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	      pData[lastI] = pData[lastPointNo];
 	    }
 	  lastPointNo = lastI;
-	  nbPt = lastI + 1;
+	  _pts.resize(lastI + 1);
 
 	  lastChgtPt = lastPointNo;
 	  lastChange = rPtX[1];
@@ -1533,7 +1534,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	}
     }
   {
-    int lastI = AssemblePoints (lastChgtPt, nbPt);
+    int lastI = AssemblePoints (lastChgtPt, numberOfPoints());
 
 
     Shape *curSh = shapeHead;
@@ -1594,7 +1595,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	  }
       }
 
-    nbPt = lastI;
+    _pts.resize(lastI);
 
     edgeHead = -1;
     shapeHead = NULL;
@@ -1648,7 +1649,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
     AssembleAretes ();
   }
   
-  for (int i = 0; i < nbPt; i++)
+  for (int i = 0; i < numberOfPoints(); i++)
     {
       _pts[i].oldDegree = getPoint(i).totalDegree();
     }
@@ -1804,7 +1805,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   if (Eulerian (true) == false)
     {
 //              printf( "pas euclidian2");
-      nbPt = nbAr = 0;
+      nbAr = 0;
+      _pts.clear();
       return shape_euler_err;
     }
   type = shape_polygon;
@@ -2329,9 +2331,9 @@ Shape::AssemblePoints (int st, int en)
 void
 Shape::AssemblePoints (Shape * a)
 {
-  if (nbPt > 0)
+  if (hasPoints())
     {
-      int lastI = AssemblePoints (0, nbPt);
+      int lastI = AssemblePoints (0, numberOfPoints());
 
       for (int i = 0; i < a->nbAr; i++)
 	{
@@ -2341,7 +2343,7 @@ Shape::AssemblePoints (Shape * a)
       for (int i = 0; i < nbInc; i++)
 	iData[i].pt = pData[iData[i].pt].newInd;
 
-      nbPt = lastI;
+      _pts.resize(lastI);
     }
 }
 void
@@ -2351,7 +2353,7 @@ Shape::AssembleAretes (FillRule directed)
     directed=fill_nonZero;
   }
   
-  for (int i = 0; i < nbPt; i++) {
+  for (int i = 0; i < numberOfPoints(); i++) {
     if (getPoint(i).totalDegree() == 2) {
       int cb, cc;
       cb = getPoint(i).firstA;
@@ -2541,13 +2543,13 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
       int outsideW = 0;
       {
 	int fi = 0;
-	for (fi = lastPtUsed; fi < nbPt; fi++)
+	for (fi = lastPtUsed; fi < numberOfPoints(); fi++)
 	  {
 	    if (getPoint(fi).firstA >= 0 && swdData[getPoint(fi).firstA].misc == 0)
 	      break;
 	  }
 	lastPtUsed = fi + 1;
-	if (fi < nbPt)
+	if (fi < numberOfPoints())
 	  {
 	    int bestB = getPoint(fi).firstA;
 	    if (bestB >= 0)
@@ -2671,7 +2673,7 @@ Shape::GetWindings (Shape * a, Shape * b, BooleanOp mod, bool brutal)
 	  // fin du cas non-oriente
 	}
     }
-  while (lastPtUsed < nbPt);
+  while (lastPtUsed < numberOfPoints());
 //      fflush(stdout);
 }
 
@@ -3205,7 +3207,7 @@ Shape::AddChgt (int lastPointNo, int lastChgtPt, Shape * &shapeHead,
 void
 Shape::Validate (void)
 {
-  for (int i = 0; i < nbPt; i++)
+  for (int i = 0; i < numberOfPoints(); i++)
     {
       pData[i].rx = getPoint(i).x;
     }
@@ -3373,7 +3375,7 @@ Shape::Avance (int lastPointNo, int lastChgtPt, Shape * lS, int lB, Shape * a,
 		{
 		  if (avoidDiag && p == rgtN && getPoint(rgtN).x[0] == getPoint(lp).x[0] - dd)
 		    {
-		      if (rgtN < nbPt && rgtN + 1 < lastPointNo
+		      if (rgtN < numberOfPoints() && rgtN + 1 < lastPointNo
 			  && getPoint(rgtN + 1).x[0] == getPoint(lp).x[0])
 			{
 			  DoEdgeTo (lS, lB, rgtN + 1, direct, true);
@@ -3401,7 +3403,7 @@ Shape::Avance (int lastPointNo, int lastChgtPt, Shape * lS, int lB, Shape * a,
 		{
 		  if (avoidDiag && p == rgtN && getPoint(rgtN).x[0] == getPoint(lp).x[0] - dd)
 		    {
-		      if (rgtN < nbPt && rgtN + 1 < lastPointNo
+		      if (rgtN < numberOfPoints() && rgtN + 1 < lastPointNo
 			  && getPoint(rgtN + 1).x[0] == getPoint(lp).x[0])
 			{
 			  DoEdgeTo (lS, lB, rgtN + 1, direct, false);

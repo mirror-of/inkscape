@@ -32,7 +32,7 @@ Shape::Shape (void)
     _has_voronoi_data(false)
 {
   leftX = topY = rightX = bottomY = 0;
-  nbPt = maxPt = 0;
+  maxPt = 0;
   nbAr = maxAr = 0;
 
   type = shape_polygon;
@@ -49,7 +49,7 @@ Shape::Shape (void)
 }
 Shape::~Shape (void)
 {
-  nbPt = maxPt = 0;
+  maxPt = 0;
   nbAr = maxAr = 0;
   g_free(eData);
   g_free(ebData);
@@ -287,8 +287,7 @@ Shape::Copy (Shape * who)
       _has_sweep_data = false;
     }
 
-  Reset (who->nbPt, who->nbAr);
-  nbPt = who->nbPt;
+  Reset (who->numberOfPoints(), who->nbAr);
   nbAr = who->nbAr;
   type = who->type;
   _need_points_sorting = who->_need_points_sorting;
@@ -310,7 +309,8 @@ Shape::Copy (Shape * who)
 void
 Shape::Reset (int n, int m)
 {
-  nbPt = 0;
+  _pts.clear();
+  
   nbAr = 0;
   type = shape_polygon;
   if (n > maxPt)
@@ -343,7 +343,6 @@ Shape::Reset (int n, int m)
 	voreData =
 	  (voronoi_edge *) g_realloc(voreData, maxAr * sizeof (voronoi_edge));
     }
-  _pts.resize(n);
   aretes.resize(m);
   _need_points_sorting = false;
   _need_edges_sorting = false;
@@ -352,9 +351,9 @@ Shape::Reset (int n, int m)
 int
 Shape::AddPoint (const NR::Point x)
 {
-  if (nbPt >= maxPt)
+  if (numberOfPoints() >= maxPt)
     {
-      maxPt = 2 * nbPt + 1;
+      maxPt = 2 * numberOfPoints() + 1;
       if (_has_points_data)
 	pData = (point_data *) g_realloc(pData, maxPt * sizeof (point_data));
       if (_has_voronoi_data)
@@ -362,11 +361,15 @@ Shape::AddPoint (const NR::Point x)
 	  (voronoi_point *) g_realloc(vorpData,
 				     maxPt * sizeof (voronoi_point));
     }
-  int n = nbPt++;
-  _pts.resize(nbPt);
-  _pts[n].x = x;
-  _pts[n].dI = _pts[n].dO = 0;
-  _pts[n].firstA = _pts[n].lastA = -1;
+
+  dg_point p;
+  p.x = x;
+  p.dI = p.dO = 0;
+  p.firstA = p.lastA = -1;
+  p.oldDegree = -1;
+  _pts.push_back(p);
+  int const n = _pts.size() - 1;
+
   if (_has_points_data)
     {
       pData[n].pending = 0;
@@ -381,13 +384,14 @@ Shape::AddPoint (const NR::Point x)
       vorpData[n].winding = -2;
     }
   _need_points_sorting = true;
+
   return n;
 }
 
 void
 Shape::SubPoint (int p)
 {
-  if (p < 0 || p >= nbPt)
+  if (p < 0 || p >= numberOfPoints())
     return;
   _need_points_sorting = true;
   int cb;
@@ -414,9 +418,9 @@ Shape::SubPoint (int p)
 	}
     }
   _pts[p].firstA = _pts[p].lastA = -1;
-  if (p < nbPt - 1)
-    SwapPoints (p, nbPt - 1);
-  nbPt--;
+  if (p < numberOfPoints() - 1)
+    SwapPoints (p, numberOfPoints() - 1);
+  _pts.pop_back();
 }
 
 void
@@ -429,20 +433,20 @@ Shape::SwapPoints (int a, int b)
       int cb = getPoint(a).firstA;
       if (aretes[cb].st == a)
 	{
-	  aretes[cb].st = nbPt;
+	  aretes[cb].st = numberOfPoints();
 	}
       else if (aretes[cb].en == a)
 	{
-	  aretes[cb].en = nbPt;
+	  aretes[cb].en = numberOfPoints();
 	}
       cb = getPoint(a).lastA;
       if (aretes[cb].st == a)
 	{
-	  aretes[cb].st = nbPt;
+	  aretes[cb].st = numberOfPoints();
 	}
       else if (aretes[cb].en == a)
 	{
-	  aretes[cb].en = nbPt;
+	  aretes[cb].en = numberOfPoints();
 	}
 
       cb = getPoint(b).firstA;
@@ -465,20 +469,20 @@ Shape::SwapPoints (int a, int b)
 	}
 
       cb = getPoint(a).firstA;
-      if (aretes[cb].st == nbPt)
+      if (aretes[cb].st == numberOfPoints())
 	{
 	  aretes[cb].st = b;
 	}
-      else if (aretes[cb].en == nbPt)
+      else if (aretes[cb].en == numberOfPoints())
 	{
 	  aretes[cb].en = b;
 	}
       cb = getPoint(a).lastA;
-      if (aretes[cb].st == nbPt)
+      if (aretes[cb].st == numberOfPoints())
 	{
 	  aretes[cb].st = b;
 	}
-      else if (aretes[cb].en == nbPt)
+      else if (aretes[cb].en == numberOfPoints())
 	{
 	  aretes[cb].en = b;
 	}
@@ -493,11 +497,11 @@ Shape::SwapPoints (int a, int b)
 	  int ncb = NextAt (a, cb);
 	  if (aretes[cb].st == a)
 	    {
-	      aretes[cb].st = nbPt;
+	      aretes[cb].st = numberOfPoints();
 	    }
 	  else if (aretes[cb].en == a)
 	    {
-	      aretes[cb].en = nbPt;
+	      aretes[cb].en = numberOfPoints();
 	    }
 	  cb = ncb;
 	}
@@ -518,12 +522,12 @@ Shape::SwapPoints (int a, int b)
       cb = getPoint(a).firstA;
       while (cb >= 0)
 	{
-	  int ncb = NextAt (nbPt, cb);
-	  if (aretes[cb].st == nbPt)
+	  int ncb = NextAt (numberOfPoints(), cb);
+	  if (aretes[cb].st == numberOfPoints())
 	    {
 	      aretes[cb].st = b;
 	    }
-	  else if (aretes[cb].en == nbPt)
+	  else if (aretes[cb].en == numberOfPoints())
 	    {
 	      aretes[cb].en = b;
 	    }
@@ -562,16 +566,16 @@ Shape::SwapPoints (int a, int b, int c)
 void
 Shape::SortPoints (void)
 {
-  if (_need_points_sorting && nbPt > 0)
-    SortPoints (0, nbPt - 1);
+  if (_need_points_sorting && hasPoints())
+    SortPoints (0, numberOfPoints() - 1);
   _need_points_sorting = false;
 }
 
 void
 Shape::SortPointsRounded (void)
 {
-  if (nbPt > 0)
-    SortPointsRounded (0, nbPt - 1);
+  if (hasPoints())
+    SortPointsRounded (0, numberOfPoints() - 1);
 }
 
 void
@@ -1525,7 +1529,7 @@ Shape::SortEdges (void)
   _need_edges_sorting = false;
 
   edge_list *list = (edge_list *) g_malloc(nbAr * sizeof (edge_list));
-  for (int p = 0; p < nbPt; p++)
+  for (int p = 0; p < numberOfPoints(); p++)
     {
       int const d = getPoint(p).totalDegree();
       if (d > 1)
@@ -2020,7 +2024,7 @@ Shape::Eulerian (bool directed)
 {
   if (directed)
     {
-      for (int i = 0; i < nbPt; i++)
+      for (int i = 0; i < numberOfPoints(); i++)
 	{
 	  if (getPoint(i).dI != getPoint(i).dO)
 	    {
@@ -2030,7 +2034,7 @@ Shape::Eulerian (bool directed)
     }
   else
     {
-      for (int i = 0; i < nbPt; i++)
+      for (int i = 0; i < numberOfPoints(); i++)
 	{
 	  if (getPoint(i).totalDegree() % 2 == 1)
 	    {
@@ -2089,7 +2093,7 @@ Shape::Inverse (int b)
 void
 Shape::CalcBBox (bool strict_degree)
 {
-  if (nbPt <= 0)
+  if (hasPoints() == false)
   {
     leftX = rightX = topY = bottomY = 0;
     return;
@@ -2097,7 +2101,7 @@ Shape::CalcBBox (bool strict_degree)
   leftX = rightX = getPoint(0).x[0];
   topY = bottomY = getPoint(0).x[1];
   bool not_set=true;
-  for (int i = 0; i < nbPt; i++)
+  for (int i = 0; i < numberOfPoints(); i++)
   {
     if ( strict_degree == false || getPoint(i).dI > 0 || getPoint(i).dO > 0 ) {
       if ( not_set ) {
@@ -2120,7 +2124,7 @@ Shape::CalcBBox (bool strict_degree)
 */
 bool Shape::DistanceLE(NR::Point const thePt, double const max_l2)
 {
-  if ( nbPt <= 0 ) {
+  if ( hasPoints() == false ) {
     return false;
   }
   
@@ -2136,7 +2140,7 @@ bool Shape::DistanceLE(NR::Point const thePt, double const max_l2)
 * instead.
 */
     double const max_l1 = max_l2 * M_SQRT2;
-    for (int i = 0; i < nbPt; i++) {
+    for (int i = 0; i < numberOfPoints(); i++) {
       NR::Point const offset( thePt - getPoint(i).x );
       double const l1 = NR::L1(offset);
       if ( ( l1 <= max_l2 )
@@ -2176,13 +2180,13 @@ bool Shape::DistanceLE(NR::Point const thePt, double const max_l2)
 */
 double Shape::Distance(NR::Point const thePt)
 {
-  if ( nbPt <= 0 ) {
+  if ( hasPoints() == false) {
     return 0.0;
   }
   
   double bdot=NR::dot(thePt-getPoint(0).x,thePt-getPoint(0).x);
   {
-    for (int i = 0; i < nbPt; i++) {
+    for (int i = 0; i < numberOfPoints(); i++) {
       NR::Point const offset( thePt - getPoint(i).x );
       double ndot=NR::dot(offset,offset);
       if ( ndot < bdot ) {

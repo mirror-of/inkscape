@@ -75,8 +75,8 @@ public:
   // flags
   int type;
 
-  int numberOfPoints() const { return nbPt; }
-  bool hasPoints() const { return (nbPt != 0); }
+  int numberOfPoints() const { return _pts.size(); }
+  bool hasPoints() const { return (_pts.empty() == false); }
   int numberOfEdges() const { return nbAr; }
   bool hasEdges() const { return (nbAr != 0); }
 
@@ -91,7 +91,6 @@ private:
 
   std::vector<dg_point> _pts;
   
-  int nbPt; ///< number of points [FIXME: remove this in favour of pts.size()]
   int nbAr; ///< number of edges (aretes) [FIXME: remove this in favour of aretes.size()]
 
   bool _need_points_sorting;  ///< points have been added or removed: we need to sort the points again

@@ -24,7 +24,7 @@
 
 void              Shape::BeginRaster(float &pos,int &curPt,float /*step*/)
 {
-	if ( nbPt <= 1 || nbAr <= 1 ) {
+	if ( numberOfPoints() <= 1 || nbAr <= 1 ) {
 		curPt=0;
 		pos=0;
 		return;
@@ -44,7 +44,7 @@ _has_sweep_data = true;
 	curPt=0;
 	pos = getPoint(0).x[1]-1.0;
 
-	for (int i=0;i<nbPt;i++) {
+	for (int i=0;i<numberOfPoints();i++) {
 		pData[i].pending=0;
 		pData[i].edgeOnLeft=-1;
 		pData[i].nextLinkedPoint=-1;
@@ -69,7 +69,7 @@ void              Shape::EndRaster(void)
 }
 void              Shape::BeginQuickRaster(float &pos,int &curPt,float /*step*/)
 {
-	if ( nbPt <= 1 || nbAr <= 1 ) {
+	if ( numberOfPoints() <= 1 || nbAr <= 1 ) {
 		curPt=0;
 		pos=0;
 		return;
@@ -84,7 +84,7 @@ void              Shape::BeginQuickRaster(float &pos,int &curPt,float /*step*/)
 	curPt=0;
 	pos=getPoint(0).x[1]-1.0;
 
-	for (int i=0;i<nbPt;i++) {
+	for (int i=0;i<numberOfPoints();i++) {
 		pData[i].pending=0;
 		pData[i].edgeOnLeft=-1;
 		pData[i].nextLinkedPoint=-1;
@@ -118,7 +118,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
     // until we reach the wanted position to.
     // don't forget to update curP and pos when we're done
 		int    curPt=curP;
-		while ( curPt < nbPt && getPoint(curPt).x[1] <= to ) {
+		while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
       
@@ -316,7 +316,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,bool doSort,flo
 	if ( pos == to ) return;
 	if ( pos < to ) {
 		int    curPt=curP;
-		while ( curPt < nbPt && getPoint(curPt).x[1] <= to ) {
+		while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
 
@@ -662,7 +662,7 @@ void              Shape::DirectScan(float &pos,int &curP,float to,float step)
     // until we reach the wanted position to.
     // don't forget to update curP and pos when we're done
 		int    curPt=curP;
-		while ( curPt < nbPt && getPoint(curPt).x[1] <= to ) curPt++;
+		while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) curPt++;
     for (int i=0;i<nbAr;i++) {
       if ( swrData[i].misc ) {
         SweepTree* node=swrData[i].misc;
@@ -734,7 +734,7 @@ void              Shape::DirectQuickScan(float &pos,int &curP,float to,bool doSo
     // until we reach the wanted position to.
     // don't forget to update curP and pos when we're done
 		int    curPt=curP;
-		while ( curPt < nbPt && getPoint(curPt).x[1] <= to ) curPt++;
+		while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) curPt++;
     for (int i=0;i<nbAr;i++) {
       if ( qrsData[i].ind < 0 ) {
         QuickRasterSubEdge(i);
@@ -822,7 +822,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 			//			printf("\n");
 		}
 		int    curPt=curP;
-		while ( curPt < nbPt && getPoint(curPt).x[1] <= to ) {
+		while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
 
@@ -1005,7 +1005,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 			}
 		}
 		int    curPt=curP;
-		while ( curPt < nbPt && getPoint(curPt).x[1] <= to ) {
+		while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
 
@@ -1151,7 +1151,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 			//			printf("\n");
 		}*/
 		int    curPt=curP;
-		while ( curPt < nbPt && getPoint(curPt).x[1] <= to ) {
+		while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
 
@@ -1306,7 +1306,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FloatLigne* lin
 			}
 		}
 		int    curPt=curP;
-		while ( curPt < nbPt && getPoint(curPt).x[1] <= to ) {
+		while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
 
@@ -1474,7 +1474,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,FillRule direct
 			}
 		}
 		int    curPt=curP;
-		while ( curPt < nbPt && getPoint(curPt).x[1] <= to ) {
+		while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
 
@@ -1615,7 +1615,7 @@ void              Shape::QuickScan(float &pos,int &curP,float to,AlphaLigne* lin
 			}
 		}*/
 		int    curPt=curP;
-		while ( curPt < nbPt && getPoint(curPt).x[1] <= to ) {
+		while ( curPt < numberOfPoints() && getPoint(curPt).x[1] <= to ) {
 			int           nPt=-1;
 			nPt=curPt++;
 
