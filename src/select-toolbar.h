@@ -1,5 +1,5 @@
-#ifndef __SP_SELECT_TOOLBAR_H__
-#define __SP_SELECT_TOOLBAR_H__
+#ifndef SEEN_SELECT_TOOLBAR_H
+#define SEEN_SELECT_TOOLBAR_H
 
 /*
  * Selector aux toolbar
@@ -13,9 +13,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-GtkWidget* sp_select_toolbox_new (SPDesktop *desktop);
+#include <gtk/gtkstyle.h>
 
-#endif
+#include <forward.h>
+
+GtkWidget *sp_select_toolbox_new(SPDesktop *desktop);
+
+
+#endif /* !SEEN_SELECT_TOOLBAR_H */
 
 /*
   Local Variables:

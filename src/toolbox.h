@@ -1,5 +1,5 @@
-#ifndef __SP_MAINTOOLBOX_H__
-#define __SP_MAINTOOLBOX_H__
+#ifndef SEEN_TOOLBOX_H
+#define SEEN_TOOLBOX_H
 
 /**
  * \brief Main toolbox
@@ -14,25 +14,30 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gtk/gtkstyle.h>
+#include <gtk/gtktooltips.h>
+
 #include "forward.h"
+#include "verbs.h"
 
-GtkWidget *sp_tool_toolbox_new (void);
-void sp_tool_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop);
+GtkWidget *sp_tool_toolbox_new(void);
+void sp_tool_toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop);
 
-GtkWidget *sp_aux_toolbox_new (void);
-void sp_aux_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop);
+GtkWidget *sp_aux_toolbox_new(void);
+void sp_aux_toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop);
 
-void show_aux_toolbox (GtkWidget *toolbox);
+void show_aux_toolbox(GtkWidget *toolbox);
 
-GtkWidget *sp_toolbox_button_normal_new_from_verb ( GtkWidget *t,
-                                                    unsigned int size,
-                                                    sp_verb_t verb,
-                                                    SPView *view,
-                                                    GtkTooltips *tt );
+GtkWidget *sp_toolbox_button_normal_new_from_verb(GtkWidget *t,
+                                                  unsigned size,
+                                                  sp_verb_t verb,
+                                                  SPView *view,
+                                                  GtkTooltips *tt);
 
-void aux_toolbox_space (GtkWidget *tb, gint space);
+void aux_toolbox_space(GtkWidget *tb, gint space);
 
-#endif
+
+#endif /* !SEEN_TOOLBOX_H */
 
 /*
   Local Variables:

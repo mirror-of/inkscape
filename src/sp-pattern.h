@@ -23,6 +23,7 @@
 class SPPatternClass;
 
 #include <libnr/nr-rect.h>
+#include <libnr/nr-matrix.h>
 #include "svg/svg-types.h"
 #include "sp-paint-server.h"
 

@@ -29,6 +29,7 @@
 #include <ctype.h>
 
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-values.h>
 #include <glib.h>
 #include "svg.h"
 

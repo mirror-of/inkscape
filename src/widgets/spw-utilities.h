@@ -18,33 +18,34 @@
    SPObject, that reacts to modification.
 */
 
-#include <glib.h>
+#include <glib/gtypes.h>
+#include <gtk/gtkstyle.h>      /* GtkWidget */
 
 GtkWidget *
-spw_label(GtkWidget * table, const gchar *label_text, int col, int row);
+spw_label(GtkWidget *table, gchar const *label_text, int col, int row);
 
 GtkWidget *
-spw_hbox(GtkWidget * table, int width, int col, int row);
+spw_hbox(GtkWidget *table, int width, int col, int row);
 
 GtkWidget *
-spw_checkbutton(GtkWidget * dialog, GtkWidget * table,
-		const gchar * label, gchar * key, int col, int row,
+spw_checkbutton(GtkWidget *dialog, GtkWidget *table,
+		gchar const *label, gchar *key, int col, int row,
 		int sensitive, GCallback cb);
 
 GtkWidget *
-spw_dropdown(GtkWidget * dialog, GtkWidget * table,
-	     const gchar * label, gchar * key, int row,
-	     GtkWidget * selector
+spw_dropdown(GtkWidget *dialog, GtkWidget *table,
+	     gchar const *label, gchar *key, int row,
+	     GtkWidget *selector
 	     );
 
 GtkWidget *
-spw_unit_selector(GtkWidget * dialog, GtkWidget * table,
-		  const gchar * label, gchar * key, int row,
-		  GtkWidget * us, GCallback cb);
+spw_unit_selector(GtkWidget *dialog, GtkWidget *table,
+		  gchar const *label, gchar *key, int row,
+		  GtkWidget *us, GCallback cb);
 
 void sp_set_font_size (GtkWidget *w, guint font);
 
-gpointer sp_search_by_data_recursive (GtkWidget *w, gpointer data);
-GtkWidget *sp_search_by_value_recursive (GtkWidget *w, gchar *key, gchar *value);
+gpointer sp_search_by_data_recursive(GtkWidget *w, gpointer data);
+GtkWidget *sp_search_by_value_recursive(GtkWidget *w, gchar *key, gchar *value);
 
 #endif

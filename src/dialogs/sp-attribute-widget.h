@@ -39,7 +39,9 @@ struct SPAttributeTableClass;
 
 #include <gtk/gtkentry.h>
 #include <gtk/gtkvbox.h>
-#include "../forward.h"
+
+#include <forward.h>
+#include <xml/xml-forward.h>
 
 struct SPAttributeWidget {
     GtkEntry entry;

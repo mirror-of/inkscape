@@ -12,6 +12,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gtk/gtkstyle.h>
+#include <gtk/gtkwindow.h>
+#include <forward.h>
  
 /*
  * event callback can only accept one argument, but we need two,

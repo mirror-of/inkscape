@@ -1,5 +1,5 @@
-#ifndef __SP_ARC_CONTEXT_H__
-#define __SP_ARC_CONTEXT_H__
+#ifndef SEEN_ARC_CONTEXT_H
+#define SEEN_ARC_CONTEXT_H
 
 /*
  * Ellipse drawing context
@@ -15,24 +15,27 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <sigc++/connection.h>
+
+#include <libnr/nr-point.h>
 #include "event-context.h"
 #include "knotholder.h"
 
-#define SP_TYPE_ARC_CONTEXT            (sp_arc_context_get_type ())
-#define SP_ARC_CONTEXT(obj)            (GTK_CHECK_CAST ((obj), SP_TYPE_ARC_CONTEXT, SPArcContext))
-#define SP_ARC_CONTEXT_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), SP_TYPE_ARC_CONTEXT, SPArcContextClass))
-#define SP_IS_ARC_CONTEXT(obj)         (GTK_CHECK_TYPE ((obj), SP_TYPE_ARC_CONTEXT))
-#define SP_IS_ARC_CONTEXT_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), SP_TYPE_ARC_CONTEXT))
+#define SP_TYPE_ARC_CONTEXT            (sp_arc_context_get_type())
+#define SP_ARC_CONTEXT(obj)            (GTK_CHECK_CAST((obj), SP_TYPE_ARC_CONTEXT, SPArcContext))
+#define SP_ARC_CONTEXT_CLASS(klass)    (GTK_CHECK_CLASS_CAST((klass), SP_TYPE_ARC_CONTEXT, SPArcContextClass))
+#define SP_IS_ARC_CONTEXT(obj)         (GTK_CHECK_TYPE((obj), SP_TYPE_ARC_CONTEXT))
+#define SP_IS_ARC_CONTEXT_CLASS(klass) (GTK_CHECK_CLASS_TYPE((klass), SP_TYPE_ARC_CONTEXT))
 
 class SPArcContext;
 class SPArcContextClass;
 
 struct SPArcContext {
-	SPEventContext event_context;
-	SPItem * item;
-	NR::Point center;
+    SPEventContext event_context;
+    SPItem *item;
+    NR::Point center;
 
-	SigC::Connection sel_changed_connection;
+    SigC::Connection sel_changed_connection;
 
     SPKnotHolder *knot_holder;
     SPRepr *repr;
@@ -40,11 +43,23 @@ struct SPArcContext {
 };
 
 struct SPArcContextClass {
-	SPEventContextClass parent_class;
+    SPEventContextClass parent_class;
 };
 
 /* Standard Gtk function */
 
-GtkType sp_arc_context_get_type (void);
+GtkType sp_arc_context_get_type(void);
 
-#endif
+
+#endif /* !SEEN_ARC_CONTEXT_H */
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

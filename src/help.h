@@ -1,5 +1,5 @@
-#ifndef __SP_HELP_H__
-#define __SP_HELP_H__
+#ifndef SEEN_HELP_H
+#define SEEN_HELP_H
 
 /**
  * Help/About window
@@ -13,11 +13,15 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-void sp_help_about (void);
-void sp_help_open_tutorial (GtkMenuItem *menuitem, gpointer data);
-void sp_help_open_screen (const gchar * name);
+#include <glib/gtypes.h>
+#include <gtk/gtkmenuitem.h>
 
-#endif
+void sp_help_about(void);
+void sp_help_open_tutorial(GtkMenuItem *menuitem, gpointer data);
+void sp_help_open_screen(gchar const *name);
+
+
+#endif /* !SEEN_HELP_H */
 
 /*
   Local Variables:

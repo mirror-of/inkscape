@@ -16,6 +16,7 @@
 #include <sigc++/sigc++.h>
 #include "svg/svg-types.h"
 #include "sp-item.h"
+#include "uri-references.h"
 
 class SPUseReference : public Inkscape::URIReference {
 public:

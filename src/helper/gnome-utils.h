@@ -15,9 +15,11 @@
 #ifndef __GNOME_UTILS_H__
 #define __GNOME_UTILS_H__
 
-GList *gnome_uri_list_extract_uris (const gchar* uri_list);
+#include <glib/gtypes.h>
 
-GList *gnome_uri_list_extract_filenames (const gchar* uri_list);
+GList *gnome_uri_list_extract_uris(gchar const *uri_list);
+
+GList *gnome_uri_list_extract_filenames(gchar const *uri_list);
 
 #endif /* __GNOME_UTILS_H__ */
 

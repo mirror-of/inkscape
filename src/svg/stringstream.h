@@ -1,6 +1,7 @@
 #ifndef INKSCAPE_STRINGSTREAM_H
 #define INKSCAPE_STRINGSTREAM_H
 
+#include <glib/gtypes.h>
 #include <sstream>
 #include "svg/ftos.h"
 

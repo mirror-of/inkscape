@@ -1,6 +1,10 @@
 #ifndef __SP_XML_REPR_ACTION_H__
 #define __SP_XML_REPR_ACTION_H__
 
+#include <glib/gtypes.h>
+
+#include <xml/xml-forward.h>
+
 struct SPReprAction;
 struct SPReprActionAdd;
 struct SPReprActionDel;

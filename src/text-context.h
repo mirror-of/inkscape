@@ -16,7 +16,10 @@
 /*  #include <gdk/gdkic.h> */
 #include <sigc++/sigc++.h>
 #include <gtk/gtkimcontext.h>
+
 #include "event-context.h"
+#include <helper/helper-forward.h>
+#include <libnr/nr-point.h>
 
 #define SP_TYPE_TEXT_CONTEXT (sp_text_context_get_type ())
 #define SP_TEXT_CONTEXT(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_TEXT_CONTEXT, SPTextContext))

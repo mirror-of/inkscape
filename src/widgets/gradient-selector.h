@@ -26,6 +26,7 @@
 #include <libnr/nr-forward.h>
 #include <gtk/gtkvbox.h>
 #include "../forward.h"
+#include <sp-gradient.h>
 
 enum {
 	SP_GRADIENT_SELECTOR_MODE_LINEAR,

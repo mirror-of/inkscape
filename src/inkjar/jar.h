@@ -6,11 +6,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glib/garray.h>
+#include <glib/gtypes.h>
 #include <zlib.h>
 #include <inttypes.h>
 namespace Inkjar {
 
-const unsigned int RDSZ  = 4096;
+unsigned const RDSZ  = 4096;
 
 //#define DEBUG 1 //uncommment for debug messages
 
@@ -81,13 +83,13 @@ public:
     bool close();
     int read(guint8 *buf, int count);
 
-    JarFile(JarFile const& rhs);
-    JarFile& operator=(JarFile const& rhs);
+    JarFile(JarFile const &rhs);
+    JarFile &operator=(JarFile const &rhs);
 
 private:
 
     int fd;
-    gchar * _filename;
+    gchar *_filename;
     z_stream _zs;
     gchar *_last_filename;
 
@@ -98,7 +100,7 @@ private:
     bool check_compression_method(guint16 method, guint16 flags);
     bool check_crc(guint32 oldcrc, guint32 crc, guint16 flags);
     guint8 *get_compressed_file(guint32 compressed_size,
-				unsigned int& file_length,
+				unsigned int &file_length,
 				guint32 oldcrc, guint16 flags);
     guint8 *get_uncompressed_file(guint32 compressed_szie, guint32 crc, 
 				  guint16 eflen, guint16 flags);
@@ -123,10 +125,10 @@ public:
     //fixme return types are incorrect
     GByteArray *get_next_file();//fixme clean up return type
     void set_filename(gchar const *new_filename);
-    void set_jarfile(JarFile const& new_jarfile);
+    void set_jarfile(JarFile const &new_jarfile);
     gchar *get_last_filename() const { return _jarfile.get_last_filename(); };
-    JarFileReader(JarFileReader const& rhs);
-    JarFileReader& operator=(JarFileReader const& rhs);
+    JarFileReader(JarFileReader const &rhs);
+    JarFileReader &operator=(JarFileReader const &rhs);
 private:
     JarFileReaderState _state;    
     JarFile _jarfile;
@@ -135,3 +137,14 @@ private:
 
 } // namespace Inkjar
 #endif // header guard
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

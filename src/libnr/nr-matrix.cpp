@@ -10,6 +10,7 @@
  */
 
 #include "nr-matrix.h"
+#include "nr-values.h"
 
 NRMatrix *
 nr_matrix_multiply (NRMatrix *d, const NRMatrix *m0, const NRMatrix *m1)

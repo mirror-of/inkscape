@@ -1,7 +1,9 @@
 #ifndef SEEN_NR_POINT_L_H
 #define SEEN_NR_POINT_L_H
 
+#include <stdexcept>
 #include <libnr/nr-i-coord.h>
+#include <libnr/nr-point.h>
 
 struct NRPointL {
     NR::ICoord x, y;

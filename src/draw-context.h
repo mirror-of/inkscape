@@ -17,6 +17,8 @@
 #include <sigc++/sigc++.h>
 #include "display/curve.h"
 #include "event-context.h"
+#include <helper/helper-forward.h>
+#include <libnr/nr-point.h>
 
 class SPSelection;
 

@@ -9,6 +9,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glib/gtypes.h>
+#include <gtk/gtkstyle.h>      /* GtkWidget */
+#include <gtk/gtktypeutils.h>  /* GtkObject */
+
 gboolean spinbutton_focus_in (GtkWidget *w, GdkEventKey *event, gpointer data);
 void spinbutton_undo (GtkWidget *w);
 gboolean spinbutton_keypress (GtkWidget *w, GdkEventKey *event, gpointer data);

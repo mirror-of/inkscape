@@ -24,6 +24,7 @@ class SPClipPathView;
 #include "display/nr-arena-forward.h"
 #include "sp-object-group.h"
 #include "uri-references.h"
+#include <libnr/nr-forward.h>
 
 struct SPClipPath {
 	class Reference;
@@ -54,9 +55,9 @@ protected:
 	}
 };
 
-NRArenaItem *sp_clippath_show (SPClipPath *cp, NRArena *arena, unsigned int key);
-void sp_clippath_hide (SPClipPath *cp, unsigned int key);
+NRArenaItem *sp_clippath_show(SPClipPath *cp, NRArena *arena, unsigned int key);
+void sp_clippath_hide(SPClipPath *cp, unsigned int key);
 
-void sp_clippath_set_bbox (SPClipPath *cp, unsigned int key, NRRect *bbox);
+void sp_clippath_set_bbox(SPClipPath *cp, unsigned int key, NRRect *bbox);
 
 #endif

@@ -17,8 +17,7 @@
 
 #include <glib.h>
 
-
-
+#include <libnr/nr-matrix.h>
 #include <libnr/nr-rect.h>
 #include <libnr/nr-rect-l.h>
 #include <gdk/gdk.h>

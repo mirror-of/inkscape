@@ -23,6 +23,7 @@ class SPMaskClass;
 class SPMaskView;
 
 #include "display/nr-arena-forward.h"
+#include "libnr/nr-forward.h"
 #include "sp-object-group.h"
 #include "uri-references.h"
 

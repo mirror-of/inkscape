@@ -23,6 +23,9 @@
 #include <gtk/gtkvbox.h>
 
 #include "../forward.h"
+#include <color.h>
+#include <libnr/nr-forward.h>
+#include <sp-gradient.h>
 
 typedef enum {
 	SP_PAINT_SELECTOR_MODE_EMPTY,

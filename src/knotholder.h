@@ -15,9 +15,10 @@
  *
  */
 
-#include <glib.h>
+#include <glib/gtypes.h>
 #include "knot.h"
 #include "forward.h"
+#include <xml/xml-forward.h>
 
 typedef void (* SPKnotHolderSetFunc) (SPItem *item, NR::Point const &p, guint state);
 typedef NR::Point (* SPKnotHolderGetFunc) (SPItem *item);

@@ -9,6 +9,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#ifndef SEEN_TOOLS_SWITCH_H
+#define SEEN_TOOLS_SWITCH_H
+
+#include <forward.h>
+
 enum {
   TOOLS_INVALID,
   TOOLS_SELECT,
@@ -25,10 +30,13 @@ enum {
   TOOLS_DROPPER
 };
 
-int tools_isactive (SPDesktop *dt, unsigned num);
-int tools_active (SPDesktop *dt);
-void tools_switch (SPDesktop *dt, int num);
-void tools_switch_current (int num);
+int tools_isactive(SPDesktop *dt, unsigned num);
+int tools_active(SPDesktop *dt);
+void tools_switch(SPDesktop *dt, int num);
+void tools_switch_current(int num);
+
+
+#endif /* !SEEN_TOOLS_SWITCH_H */
 
 /*
   Local Variables:
