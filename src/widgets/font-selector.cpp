@@ -339,8 +339,6 @@ sp_font_selector_new (void)
   
 	fsel = (SPFontSelector*)gtk_type_new (SP_TYPE_FONT_SELECTOR);
   
-	gtk_clist_select_row (GTK_CLIST (fsel->family), 0, 0);
-
 	return (GtkWidget *) fsel;
 }
 
