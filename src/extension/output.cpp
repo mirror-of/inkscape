@@ -1,3 +1,12 @@
+/*
+ * Authors:
+ *   Ted Gould <ted@gould.cx>
+ *
+ * Copyright (C) 2002-2004 Authors
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
 #include "implementation/implementation.h"
 #include "output.h"
 
