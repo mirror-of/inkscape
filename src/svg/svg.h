@@ -51,7 +51,10 @@ unsigned int sp_svg_number_write_de (gchar *buf, double val, unsigned int tprec,
  */
 
 unsigned int sp_svg_length_read (const gchar *str, SPSVGLength *length);
-unsigned int sp_svg_length_read_lff (const gchar *str, unsigned long *unit, float *value, float *computed);
+unsigned int sp_svg_length_read_absolute (const gchar *str, SPSVGLength *length);
+unsigned int sp_svg_length_read_computed_absolute (const gchar *str, float *length);
+GList *sp_svg_length_list_read (const gchar *str);
+unsigned int sp_svg_length_read_lff (const gchar *str, unsigned long *unit, float *value, float *computed, char **next);
 unsigned int sp_svg_length_read_ldd (const gchar *str, unsigned long *unit, double *value, double *computed);
 
 void sp_svg_length_set (SPSVGLength *length, unsigned long unit, float value, float computed);

@@ -164,7 +164,8 @@ sp_svg_length_read (const gchar *str, SPSVGLength *length)
 
 	if (!str) return 0;
 
-	if (!sp_svg_length_read_lff (str, &unit, &value, &computed)) return 0;
+	if (!sp_svg_length_read_lff (str, &unit, &value, &computed, NULL)) 
+		return 0;
 
 	length->set = 1;
 	length->unit = unit;
@@ -174,10 +175,85 @@ sp_svg_length_read (const gchar *str, SPSVGLength *length)
 	return 1;
 }
 
+unsigned int
+sp_svg_length_read_absolute (const gchar *str, SPSVGLength *length)
+{
+	unsigned long unit;
+	float value, computed;
+
+	if (!str) return 0;
+
+	if (!sp_svg_length_read_lff (str, &unit, &value, &computed, NULL)) 
+		return 0;
+
+	if ((unit == SP_SVG_UNIT_EM) || (unit == SP_SVG_UNIT_EX) || (unit == SP_SVG_UNIT_PERCENT))
+		//not an absolute unit
+		return 0;
+
+	length->set = 1;
+	length->unit = unit;
+	length->value = value;
+	length->computed = computed;
+
+	return 1;
+}
+
+
+unsigned int
+sp_svg_length_read_computed_absolute (const gchar *str, float *length)
+{
+	unsigned long unit;
+	float computed;
+
+	if (!str) return 0;
+
+	if (!sp_svg_length_read_lff (str, &unit, NULL, &computed, NULL)) 
+		// failed to read
+		return 0;
+
+	if ((unit == SP_SVG_UNIT_EM) || (unit == SP_SVG_UNIT_EX) || (unit == SP_SVG_UNIT_PERCENT))
+		//not an absolute unit
+		return 0;
+
+	*length = computed;
+
+	return 1;
+}
+
+GList *
+sp_svg_length_list_read (const gchar *str)
+{
+	unsigned long unit;
+	float value, computed;
+	char *next = (char *) str;
+	GList *list = NULL;
+
+	if (!str) return NULL;
+
+	while (sp_svg_length_read_lff (next, &unit, &value, &computed, &next) && next) {
+
+		SPSVGLength *length = g_new (SPSVGLength, 1);
+
+		length->set = 1;
+		length->unit = unit;
+		length->value = value;
+		length->computed = computed;
+
+		while (*next == ',' && next) next++;
+
+		list = g_list_append (list, length);
+
+		if (!*next) break;
+	}
+
+	return list;
+}
+
+
 #define UVAL(a,b) (((unsigned int) (a) << 8) | (unsigned int) (b))
 
 unsigned int
-sp_svg_length_read_lff (const gchar *str, unsigned long *unit, float *val, float *computed)
+sp_svg_length_read_lff (const gchar *str, unsigned long *unit, float *val, float *computed, char **next)
 {
 	const gchar *e;
 	float v;
@@ -190,6 +266,7 @@ sp_svg_length_read_lff (const gchar *str, unsigned long *unit, float *val, float
 		if (unit) *unit = SP_SVG_UNIT_NONE;
 		if (val) *val = v;
 		if (computed) *computed = v;
+		if (next) *next = NULL; // no more values
 		return 1;
 	} else if (!isalnum (e[0])) {
 		/* Unitless or percent */
@@ -198,11 +275,14 @@ sp_svg_length_read_lff (const gchar *str, unsigned long *unit, float *val, float
 			if (e[1] && isalnum (e[1])) return 0;
 			if (unit) *unit = SP_SVG_UNIT_PERCENT;
 			if (val) *val = v * 0.01;
+			if (next) *next = (char *) e + 1; 
 			return 1;
 		} else {
+			/* Unitless */
 			if (unit) *unit = SP_SVG_UNIT_NONE;
 			if (val) *val = v;
 			if (computed) *computed = v;
+			if (next) *next = (char *) e; 
 			return 1;
 		}
 	} else if (e[1] && !isalnum (e[2])) {
@@ -246,6 +326,7 @@ sp_svg_length_read_lff (const gchar *str, unsigned long *unit, float *val, float
 			break;
 		}
 		if (val) *val = v;
+		if (next) *next = (char *) e + 2; 
 		return 1;
 	}
 
@@ -255,7 +336,7 @@ sp_svg_length_read_lff (const gchar *str, unsigned long *unit, float *val, float
 
 unsigned int sp_svg_length_read_ldd (const gchar *str, unsigned long *unit, double *value, double *computed) {
 	float a, b;
-	unsigned int r = sp_svg_length_read_lff (str, unit, &a, &b);
+	unsigned int r = sp_svg_length_read_lff (str, unit, &a, &b, NULL);
 	if(value) *value = a;
 	if(computed) *computed = b;
 	return r;
