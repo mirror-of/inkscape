@@ -1,9 +1,14 @@
 2004-03-28  Jon Phillips <jon@users.sourceforge.net>
 
-	* src/interface.cpp src/select-toolbar.cpp src/verbs.cpp src/verbs.h: 
+    * src/interface.cpp src/select-toolbar.cpp src/verbs.cpp src/verbs.h: 
       Changed rotate verb to be SP_VERB_OBJECT_ROTATE_90_CW so that I can 
       now install SP_VERB_OBJECT_ROTATE_90_CCW.
 
+    * share/icons/icons.svg src/interface.cpp src/select-toolbar.cpp        
+      src/selection-chemistry.cpp src/selection-chemistry.h 
+      src/verbs.cpp src/verbs.h: Added rotation 90 degrees CCW to the menu, 
+      icons, and the interface. It was a pretty simple thing to do but was 
+      not available on the interface.
 
 2004-03-28  MenTaLguY <mental@rydia.net>
 
