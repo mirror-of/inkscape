@@ -66,6 +66,7 @@
 #include "inkscape.h"
 #include "view.h"
 #include "print.h"
+#include "sp-metrics.h"
 
 #include "sp-shape.h"
 #include "sp-text.h"
@@ -483,10 +484,12 @@ sp_text_description(SPItem *item)
         n = _("<no name found>");
     }
 
+    GString *xs = SP_PX_TO_METRIC_STRING(style->font_size.computed, sp_desktop_get_default_metric(SP_ACTIVE_DESKTOP));
+
     if (SP_IS_TEXT_TEXTPATH(item)) {
-        return g_strdup_printf (_("<b>Text on path</b> (%s, %.5gpt)"), n, style->font_size.computed );
+        return g_strdup_printf (_("<b>Text on path</b> (%s, %s)"), n, xs->str);
     } else {
-        return g_strdup_printf (_("<b>Text</b> (%s, %.5gpt)"), n, style->font_size.computed );
+        return g_strdup_printf (_("<b>Text</b> (%s, %s)"), n, xs->str);
     }
 }
 
