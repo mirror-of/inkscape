@@ -208,8 +208,7 @@ sp_selection_update_statusbar (SPSelection * selection)
 	if (len == 1) {
 		message = sp_item_description (SP_ITEM (selection->items->data));
 	} else {
-		message = g_strdup_printf ("%i objects",
-			 g_slist_length (selection->items));
+		message = g_strdup_printf ("%i objects", len);
 	}
 
 	sp_view_set_status (SP_VIEW (SP_ACTIVE_DESKTOP), message, TRUE);

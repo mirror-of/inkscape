@@ -26,8 +26,8 @@ unsigned int sp_ui_close_all (void);
 
 /* I am not sure, what is the right place for that (Lauris) */
 
-GtkWidget *sp_ui_main_menu (void);
-GtkWidget *sp_ui_generic_menu (SPView *v, SPItem *item);
+GtkWidget *sp_ui_main_menubar (void);
+GtkWidget *sp_ui_context_menu (SPView *v, SPItem *item);
 
 void sp_menu_append_recent_documents (GtkWidget *menu);
 

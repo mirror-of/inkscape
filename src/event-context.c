@@ -557,7 +557,7 @@ sp_event_root_menu_popup (SPDesktop *desktop, SPItem *item, GdkEvent *event)
 	if (event->type == GDK_KEY_PRESS) {
 		item = sp_selection_item (SP_DT_SELECTION (desktop));
 	}
-	menu = sp_ui_generic_menu (SP_VIEW (desktop), item);
+	menu = sp_ui_context_menu (SP_VIEW (desktop), item);
 	gtk_widget_show (menu);
 
 	switch (event->type) {

@@ -44,7 +44,9 @@
 #include "sp-namedview.h"
 #include "sp-item.h"
 #include "sp-root.h"
+#include "interface.h"
 #include "dialogs/dialog-events.h"
+#include "toolbox.h"
 
 /* fixme: Lauris */
 #include "file.h"
@@ -55,6 +57,7 @@ enum {
 	ACTIVATE,
 	DEACTIVATE,
 	MODIFIED,
+	EVENT_CONTEXT_CHANGED,
 	LAST_SIGNAL
 };
 
@@ -76,8 +79,6 @@ static void sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *d
 static void sp_desktop_selection_modified (SPSelection *selection, guint flags, SPDesktop *desktop);
 
 static void sp_dt_update_snap_distances (SPDesktop *desktop);
-
-static gint sp_desktop_menu_popup (GtkWidget * widget, GdkEventButton * event, gpointer data);
 
 static gint sp_dtw_zoom_input (GtkSpinButton *spin, gdouble *new_val, gpointer data);
 static gboolean sp_dtw_zoom_output (GtkSpinButton *spin, gpointer data);
@@ -149,6 +150,14 @@ sp_desktop_class_init (SPDesktopClass *klass)
 					  sp_marshal_NONE__UINT,
 					  G_TYPE_NONE, 1,
 					  G_TYPE_UINT);
+	signals[EVENT_CONTEXT_CHANGED] = g_signal_new ("event_context_changed",
+	                                               G_TYPE_FROM_CLASS(klass),
+	                                               G_SIGNAL_RUN_FIRST,
+	                                               G_STRUCT_OFFSET (SPDesktopClass, event_context_changed),
+	                                               NULL, NULL,
+	                                               sp_marshal_NONE__POINTER,
+	                                               G_TYPE_NONE, 1,
+	                                               G_TYPE_POINTER);
 
 	object_class->dispose = sp_desktop_dispose;
 
@@ -508,6 +517,7 @@ sp_desktop_set_event_context (SPDesktop *dt, GtkType type, const gchar *config)
 	ec->next = dt->event_context;
 	dt->event_context = ec;
 	sp_event_context_activate (ec);
+	g_signal_emit (G_OBJECT (dt), signals[EVENT_CONTEXT_CHANGED], 0, ec);
 }
 
 void
@@ -532,6 +542,7 @@ sp_desktop_push_event_context (SPDesktop *dt, GtkType type, const gchar *config,
 	ec->next = dt->event_context;
 	dt->event_context = ec;
 	sp_event_context_activate (ec);
+	g_signal_emit (G_OBJECT (dt), signals[EVENT_CONTEXT_CHANGED], 0, ec);
 }
 
 void
@@ -546,6 +557,7 @@ sp_desktop_pop_event_context (SPDesktop *dt, unsigned int key)
 		sp_event_context_deactivate (ec);
 		dt->event_context = ec->next;
 		sp_event_context_activate (dt->event_context);
+		g_signal_emit (G_OBJECT (dt), signals[EVENT_CONTEXT_CHANGED], 0, ec);
 	}
 
 	ref = dt->event_context;
@@ -572,34 +584,6 @@ sp_desktop_pop_event_context (SPDesktop *dt, unsigned int key)
 void
 sp_desktop_set_coordinate_status (SPDesktop *desktop, gdouble x, gdouble y, guint underline)
 {
-#if 0
-	static gchar cstr[64];
-	gchar coord_pattern [20]= "                    ";
-	GString * x_str, * y_str;
-	gint i=0,j=0;
-
-	g_snprintf (cstr, 64, "%.2g%s, %.2g%s", x, y);
-	x_str = SP_PT_TO_STRING (x, SP_DEFAULT_METRIC);
-	y_str = SP_PT_TO_STRING (y, SP_DEFAULT_METRIC);
-	sprintf (coord_str, "%s, %s", x_str->str, y_str->str);
-	gnome_appbar_set_status (GNOME_APPBAR (desktop->owner->coord_status), coord_str);
-	// set underline
-	if (underline & SP_COORDINATES_UNDERLINE_X) for (; i<x_str->len; i++) coord_pattern[i]='_';
-	i = x_str->len + 2;
-	if (underline & SP_COORDINATES_UNDERLINE_Y) for (; j<y_str->len; j++,i++) coord_pattern[i]='_';
-	if (underline) gtk_label_set_pattern(GTK_LABEL(gnome_appbar_get_status(GNOME_APPBAR (desktop->owner->coord_status))), coord_pattern);
-
-	g_string_free (x_str, TRUE);
-	g_string_free (y_str, TRUE);
-#endif
-}
-
-static gint
-sp_desktop_menu_popup (GtkWidget *widget, GdkEventButton *event, gpointer data)
-{
-	sp_event_root_menu_popup (SP_DESKTOP_WIDGET (data)->desktop, NULL, (GdkEvent *)event);
-
-	return FALSE;
 }
 
 const SPUnit *
@@ -618,8 +602,6 @@ static void sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *a
 static void sp_desktop_widget_realize (GtkWidget *widget);
 
 static gint sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
-
-static void sp_dtw_status_frame_size_request (GtkWidget *widget, GtkRequisition *req, gpointer data);
 
 static void sp_desktop_widget_view_position_set (SPView *view, gdouble x, gdouble y, SPDesktopWidget *dtw);
 static void sp_desktop_widget_view_status_set (SPView *view, const gchar *status, gboolean isdefault, SPDesktopWidget *dtw);
@@ -678,10 +660,12 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	GtkWidget *tbl;
 	GtkWidget *w;
 
-	GtkWidget * hbox;
-	GtkWidget * eventbox;
+	GtkWidget *hbox, *vbox, *vbox2;
+	GtkWidget *sbar;
+	GtkWidget *eventbox;
 	GtkTooltips *tt;
 	GtkStyle *style;
+	GtkWidget *mbar;
 
 	widget = GTK_WIDGET (dtw);
 
@@ -693,24 +677,37 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	tt = gtk_tooltips_new ();
 
 	/* Main table */
-	tbl = gtk_table_new (4, 3, FALSE);
-	gtk_container_add (GTK_CONTAINER (dtw), tbl);
+	vbox = gtk_vbox_new (FALSE, 0);
+	gtk_container_add (GTK_CONTAINER (dtw), vbox);
+	gtk_widget_show (vbox);
 
-	/* Menu button */
-	dtw->mbtn = gtk_button_new ();
-        GTK_WIDGET_UNSET_FLAGS ((dtw->mbtn), GTK_CAN_FOCUS);
-      	gtk_button_set_relief (GTK_BUTTON (dtw->mbtn), GTK_RELIEF_NONE);
-	gtk_table_attach (GTK_TABLE (tbl), dtw->mbtn, 0, 1, 0, 1, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, 0);
-	w = gtk_arrow_new (GTK_ARROW_RIGHT, GTK_SHADOW_IN);
-	gtk_container_add (GTK_CONTAINER (dtw->mbtn), w);
-	g_signal_connect (G_OBJECT (dtw->mbtn), "button_press_event", G_CALLBACK (sp_desktop_menu_popup), dtw);
+	mbar = sp_ui_main_menubar ();
+	gtk_box_pack_start (GTK_BOX (vbox), mbar, FALSE, FALSE, 0);
+
+	hbox = gtk_hbox_new (FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
+	gtk_widget_show (hbox);
+
+	/* FIXME !!! the various toolbars should take care of their initial hidden/shown state themselves; as it is we have to hack around it a bit */
+
+	dtw->tool_toolbox = sp_tool_toolbox_new ();
+	gtk_box_pack_start (GTK_BOX (hbox), dtw->tool_toolbox, FALSE, TRUE, 0);
+
+	vbox2 = gtk_vbox_new (FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 1);
+	
+	dtw->aux_toolbox = sp_aux_toolbox_new ();
+	gtk_box_pack_start (GTK_BOX (vbox2), dtw->aux_toolbox, FALSE, TRUE, 0);
+
+	tbl = gtk_table_new (4, 3, FALSE);
+	gtk_box_pack_start (GTK_BOX (vbox2), tbl, TRUE, TRUE, 1);
 
 	/* Horizontal ruler */
 	eventbox = gtk_event_box_new ();
 	dtw->hruler = sp_hruler_new ();
 	sp_ruler_set_metric (GTK_RULER (dtw->hruler), SP_PT);
 	gtk_container_add (GTK_CONTAINER (eventbox), dtw->hruler);
-	gtk_table_attach (GTK_TABLE (tbl), eventbox, 1, 2, 0, 1, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), widget->style->xthickness, 0);
+	gtk_table_attach (GTK_TABLE (tbl), eventbox, 1, 3, 0, 1, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), widget->style->xthickness, 0);
 	g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_hruler_event), dtw);
 	g_signal_connect (G_OBJECT (eventbox), "button_release_event", G_CALLBACK (sp_dt_hruler_event), dtw);
 	g_signal_connect (G_OBJECT (eventbox), "motion_notify_event", G_CALLBACK (sp_dt_hruler_event), dtw);
@@ -719,7 +716,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	dtw->vruler = sp_vruler_new ();
 	sp_ruler_set_metric (GTK_RULER (dtw->vruler), SP_PT);
 	gtk_container_add (GTK_CONTAINER (eventbox), GTK_WIDGET (dtw->vruler));
-	gtk_table_attach (GTK_TABLE (tbl), eventbox, 0, 1, 1, 2, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, widget->style->ythickness);
+	gtk_table_attach (GTK_TABLE (tbl), eventbox, 0, 1, 1, 3, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, widget->style->ythickness);
 	g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_vruler_event), dtw);
 	g_signal_connect (G_OBJECT (eventbox), "button_release_event", G_CALLBACK (sp_dt_vruler_event), dtw);
 	g_signal_connect (G_OBJECT (eventbox), "motion_notify_event", G_CALLBACK (sp_dt_vruler_event), dtw);
@@ -744,36 +741,19 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	g_signal_connect (G_OBJECT (dtw->canvas), "event", G_CALLBACK (sp_desktop_widget_event), dtw);
       	gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (dtw->canvas));
 
-	/* Sticky zoom */
+	/* Status bars */
+       	sbar = gtk_hbox_new (FALSE,0);
+	gtk_box_pack_start (GTK_BOX (vbox), sbar, FALSE, TRUE, 0);
+
 	dtw->sticky_zoom = sp_button_new_from_data (SP_ICON_SIZE_BUTTON,
 						    SP_BUTTON_TYPE_TOGGLE,
 						    "sticky_zoom",
 						    _("Zoom drawing if window size changes"),
 						    tt);
-	gtk_table_attach (GTK_TABLE (tbl), dtw->sticky_zoom, 2, 3, 0, 1, (GtkAttachOptions)(GTK_FILL), (GtkAttachOptions)(GTK_FILL), 0, 0);
-
-	/* Status bars */
-       	hbox = gtk_hbox_new (FALSE,0);
-	gtk_box_set_spacing (GTK_BOX (hbox), 2);
-	gtk_table_attach (GTK_TABLE (tbl), hbox, 0, 3, 3, 4, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(0), 0, 0);
-
-	w = gtk_frame_new (NULL);
-	gtk_widget_set_usize (w, 96, 0);
-	gtk_frame_set_shadow_type (GTK_FRAME (w), GTK_SHADOW_IN);
-	gtk_box_pack_start (GTK_BOX (hbox), w, FALSE, FALSE, 0);
-	dtw->coord_status = gtk_label_new ("");
-	gtk_misc_set_alignment (GTK_MISC (dtw->coord_status), 0.0, 0.5);
-	gtk_container_add (GTK_CONTAINER (w), dtw->coord_status);
-
-	w = gtk_frame_new (NULL);
-	gtk_frame_set_shadow_type (GTK_FRAME (w), GTK_SHADOW_IN);
-	gtk_box_pack_start (GTK_BOX (hbox), w, TRUE, TRUE, 0);
-	dtw->select_status = gtk_label_new ("");
-	gtk_misc_set_alignment (GTK_MISC (dtw->select_status), 0.0, 0.5);
-	gtk_container_add (GTK_CONTAINER (w), dtw->select_status);
-	g_signal_connect (G_OBJECT (w), "size_request", G_CALLBACK (sp_dtw_status_frame_size_request), dtw);
+	gtk_box_pack_start (GTK_BOX (sbar), dtw->sticky_zoom, FALSE, FALSE, 0);
 
 	dtw->zoom_status = gtk_spin_button_new_with_range (log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
+	gtk_tooltips_set_tip (tt, dtw->zoom_status, _("Zoom"), _("Zoom"));
 	gtk_widget_set_usize (dtw->zoom_status, 64, -1);
 	gtk_entry_set_width_chars (GTK_ENTRY (dtw->zoom_status), 5);
 	gtk_editable_set_editable (GTK_EDITABLE (dtw->zoom_status), FALSE);
@@ -784,14 +764,23 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	g_signal_connect (G_OBJECT (dtw->zoom_status), "output", G_CALLBACK (sp_dtw_zoom_output), dtw);
 	dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "value_changed", G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
 	dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "populate_popup", G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
-	gtk_box_pack_end (GTK_BOX (hbox), dtw->zoom_status, FALSE, FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (sbar), dtw->zoom_status, FALSE, FALSE, 0);
 
 	/* connecting canvas, scrollbars, rulers, statusbar */
 	g_signal_connect (G_OBJECT (dtw->hadj), "value-changed", G_CALLBACK (sp_desktop_widget_adjustment_value_changed), dtw);
 	g_signal_connect (G_OBJECT (dtw->vadj), "value-changed", G_CALLBACK (sp_desktop_widget_adjustment_value_changed), dtw);
 
-	/* Be cautious about decorations (Lauris) */
-	gtk_widget_show_all (tbl);
+	dtw->coord_status = gtk_statusbar_new ();
+	gtk_widget_set_usize (dtw->coord_status, 128, 0);
+	gtk_statusbar_push (GTK_STATUSBAR (dtw->coord_status), 0, "");
+	gtk_box_pack_start (GTK_BOX (sbar), dtw->coord_status, FALSE, FALSE, 2);
+
+	dtw->select_status = gtk_statusbar_new ();
+	gtk_statusbar_push (GTK_STATUSBAR (dtw->select_status), 0, "");
+	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (dtw->select_status), TRUE);
+	gtk_box_pack_start (GTK_BOX (sbar), dtw->select_status, TRUE, TRUE, 0);
+
+	gtk_widget_show_all (vbox);
 }
 
 static void
@@ -918,12 +907,6 @@ sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dt
 	return FALSE;
 }
 
-static void
-sp_dtw_status_frame_size_request (GtkWidget *widget, GtkRequisition *req, gpointer data)
-{
-	req->width = 1;
-}
-
 void
 sp_dtw_desktop_activate (SPDesktop *desktop, SPDesktopWidget *dtw)
 {
@@ -1039,6 +1022,9 @@ sp_desktop_widget_new (SPNamedView *namedview)
 	/* Listen on namedview modification */
 	g_signal_connect (G_OBJECT (namedview), "modified", G_CALLBACK (sp_desktop_widget_namedview_modified), dtw);
 
+	sp_tool_toolbox_set_desktop (dtw->tool_toolbox, dtw->desktop);
+	sp_aux_toolbox_set_desktop (dtw->aux_toolbox, dtw->desktop);
+	
 	// gtk_widget_grab_focus ((GtkWidget *) dtw->canvas);
 
 	return SP_VIEW_WIDGET (dtw);
@@ -1056,7 +1042,9 @@ sp_desktop_widget_view_position_set (SPView *view, gdouble x, gdouble y, SPDeskt
 	gtk_ruler_draw_pos (GTK_RULER (dtw->vruler));
 
 	g_snprintf (cstr, 64, "%6.1f, %6.1f", dtw->dt2r * (x - dtw->rx0), dtw->dt2r * (y - dtw->ry0));
-	gtk_label_set_text (GTK_LABEL (dtw->coord_status), cstr);
+
+	gtk_statusbar_pop (GTK_STATUSBAR (dtw->coord_status), 0);
+	gtk_statusbar_push (GTK_STATUSBAR (dtw->coord_status), 0, cstr);
 }
 
 /*
@@ -1074,7 +1062,8 @@ sp_desktop_widget_view_position_set (SPView *view, gdouble x, gdouble y, SPDeskt
 static void 
 sp_desktop_widget_view_status_set (SPView *view, const gchar *status, gboolean isdefault, SPDesktopWidget *dtw)
 {
-	gtk_label_set_text (GTK_LABEL (dtw->select_status), status);
+	gtk_statusbar_pop (GTK_STATUSBAR (dtw->select_status), 0);
+	gtk_statusbar_push (GTK_STATUSBAR (dtw->select_status), 0, status ? status : "");
 }
 
 static void
@@ -1130,14 +1119,12 @@ sp_desktop_widget_show_decorations (SPDesktopWidget *dtw, gboolean show)
 			gtk_widget_show (GTK_WIDGET (dtw->vscrollbar));
 			gtk_widget_show (GTK_WIDGET (dtw->hruler));
 			gtk_widget_show (GTK_WIDGET (dtw->vruler));
-			gtk_widget_show (GTK_WIDGET (dtw->mbtn));
 			gtk_widget_show (GTK_WIDGET (dtw->sticky_zoom));
 		} else {
 			gtk_widget_hide (GTK_WIDGET (dtw->hscrollbar));
 			gtk_widget_hide (GTK_WIDGET (dtw->vscrollbar));
 			gtk_widget_hide (GTK_WIDGET (dtw->hruler));
 			gtk_widget_hide (GTK_WIDGET (dtw->vruler));
-			gtk_widget_hide (GTK_WIDGET (dtw->mbtn));
 			gtk_widget_hide (GTK_WIDGET (dtw->sticky_zoom));
 		}
 	}

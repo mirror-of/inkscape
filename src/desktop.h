@@ -34,9 +34,7 @@ typedef struct _SPDesktopWidgetClass SPDesktopWidgetClass;
 struct _SPDesktop {
 	SPView view;
 
-#if 1
 	SPDesktopWidget *owner;
-#endif
 	Inkscape *inkscape;
 
 	SPNamedView *namedview;
@@ -70,6 +68,7 @@ struct _SPDesktopClass {
 	void (* activate) (SPDesktop *desktop);
 	void (* deactivate) (SPDesktop *desktop);
 	void (* modified) (SPDesktop *desktop, guint flags);
+	void (* event_context_changed) (SPDesktop *desktop, SPEventContext *ctx);
 };
 
 #define SP_DESKTOP_SCROLL_LIMIT 4000.0
@@ -77,6 +76,7 @@ struct _SPDesktopClass {
 #define SP_DESKTOP_ZOOM_MAX 32.0
 #define SP_DESKTOP_ZOOM_MIN 0.03125
 #define SP_DESKTOP_ZOOM(d) NR_MATRIX_DF_EXPANSION(NR_MATRIX_D_FROM_DOUBLE ((d)->d2w))
+#define SP_DESKTOP_EVENT_CONTEXT(d) ((d)->event_context)
 #define SP_MOUSEMOVE_STEP 40
 
 void sp_desktop_set_active (SPDesktop *desktop, gboolean active);
@@ -133,6 +133,8 @@ struct _SPDesktopWidget {
         GtkWidget *mbtn;
 
 	GtkWidget *hscrollbar, *vscrollbar;
+
+	GtkWidget *tool_toolbox, *aux_toolbox;
 
 	/* Rulers */
 	GtkWidget *hruler, *vruler;

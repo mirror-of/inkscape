@@ -250,8 +250,6 @@ sp_main_gui (int argc, const char **argv)
 		inkscape = inkscape_application_new ();
 		inkscape_load_preferences (inkscape);
 		inkscape_load_extensions (inkscape);
-		sp_maintoolbox_create_toplevel ();
-		inkscape_unref ();
 
 		if (!fl) // no documents on command line, create empty
 			sp_file_new();
@@ -270,6 +268,7 @@ sp_main_gui (int argc, const char **argv)
 			}
 			fl = g_slist_remove (fl, fl->data);
 		}
+		inkscape_unref ();
 	} else {
 		if (fl) {
 			GtkWidget *ss;

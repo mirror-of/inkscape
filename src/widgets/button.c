@@ -616,7 +616,8 @@ sp_button_action_set_active (SPAction *action, unsigned int active, void *data)
 			if (action == button->options[aidx].action) break;
 		}
 		if ((active) && (aidx != button->option)) sp_button_set_option (button, aidx);
-		if ((aidx == button->option) && (active != button->down)) sp_button_toggle_set_down (button, active, FALSE);
+		/* temporarily lobotomized so globalness of SPAction state won't confuse multiple toolboxes */
+		if (0 && (aidx == button->option) && (active != button->down)) sp_button_toggle_set_down (button, active, FALSE);
 	}
 }
 

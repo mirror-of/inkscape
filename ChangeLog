@@ -1,3 +1,35 @@
+2003-11-27 MenTaLguY <mental@rydia.net>
+
+	* src/desktop.c: reshuffled the widgets, switched to an embedded
+	  toolbox, switched to using real GtkStatusbars for the status bar,
+	  and (for the present) nuked the body of
+	  sp_desktop_set_coordinate_status() since it had been #ifdeffed
+	  out for ages anyway
+
+	* src/desktop.h: removed another constant #ifdef
+
+	* src/widgets/button.c: lobotomized toggle buttons temporarily,
+	  so multiple windows having independent tool states wouldn't confuse
+	  toolboxes :/ .. the real fix is to rework SPAction and friends
+	  to not be so global-minded
+
+	* src/event-context.h: changed sp_ui_generic_menu to
+	  sp_ui_context_menu
+
+	* src/interface.c: reworked the menu structure and introduced
+	  sp_ui_main_menubar to create the menubar; changed sp_ui_generic_menu
+	  to sp_ui_context_menu
+
+	* src/main.c: remove the floating toolbox
+
+	* src/shortcuts.c: remove shortcuts related to the floating toolbox
+
+	* src/verbs.c, src.verbs.h: removing floating toolbox verb
+
+	* src/widgets/sp-toolbox.c,
+	  src/widgets/sp-toolbox.h,
+	  src/widgets/Makefile.am: nuked floating toolbox window
+
 2003-11-25 bulia byak <bulia@dr.com>
 
 	* src/select-context.c src/preferences-skeleton.h: new option: drag tolerance

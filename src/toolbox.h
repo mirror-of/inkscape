@@ -14,8 +14,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-GtkWidget *sp_maintoolbox_new (void);
+#include "forward.h"
 
-void sp_maintoolbox_create_toplevel (void);
+GtkWidget *sp_tool_toolbox_new ();
+void sp_tool_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop);
+
+GtkWidget *sp_aux_toolbox_new ();
+void sp_aux_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop);
 
 #endif
