@@ -901,16 +901,16 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                     sp_repr_css_set_property (css, "fill", urltext);
 
                     for (const GSList *i = items; i != NULL; i = i->next) {
-                         SPRepr *selrepr = SP_OBJECT_REPR (items->data);
-                         SPObject *selobj = SP_OBJECT (items->data);
+                         SPRepr *selrepr = SP_OBJECT_REPR (i->data);
+                         SPObject *selobj = SP_OBJECT (i->data);
                          if (!selrepr)
                              continue;
 
                          SPStyle *style = SP_OBJECT_STYLE (selobj);
                          if (style && style->fill.type == SP_PAINT_TYPE_PAINTSERVER) {
                              SPObject *server = SP_OBJECT_STYLE_FILL_SERVER (selobj);
-                             if (SP_IS_PATTERN (server) && pattern_getroot (SP_PATTERN(server)) == pattern) 
-                                 // only if this object's pattern is not rooted in our selected pattern, apply
+                             if (SP_IS_PATTERN (server) && pattern_getroot (SP_PATTERN(server)) == pattern)
+                                // only if this object's pattern is not rooted in our selected pattern, apply
                                  continue;
                          }
 

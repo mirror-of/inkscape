@@ -703,15 +703,15 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                     sp_repr_css_set_property (css, "stroke", urltext);
 
                     for (const GSList *i = items; i != NULL; i = i->next) {
-                         SPRepr *selrepr = SP_OBJECT_REPR (items->data);
-                         SPObject *selobj = SP_OBJECT (items->data);
+                         SPRepr *selrepr = SP_OBJECT_REPR (i->data);
+                         SPObject *selobj = SP_OBJECT (i->data);
                          if (!selrepr)
                              continue;
 
                          SPStyle *style = SP_OBJECT_STYLE (selobj);
                          if (style && style->stroke.type == SP_PAINT_TYPE_PAINTSERVER) {
                              SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER (selobj);
-                             if (SP_IS_PATTERN (server) && pattern_getroot (SP_PATTERN(server)) == pattern) 
+                             if (SP_IS_PATTERN (server) && pattern_getroot (SP_PATTERN(server)) == pattern)
                                  // only if this object's pattern is not rooted in our selected pattern, apply
                                  continue;
                          }
@@ -1204,7 +1204,7 @@ stroke_average_width (GSList const *objects)
         SPObject *object = SP_OBJECT(l->data);
 
         if ( object->style->stroke.type == SP_PAINT_TYPE_NONE ) {
-            continue;            
+            continue;
         } else {
             notstroked = false;
         }
@@ -1286,24 +1286,24 @@ static gboolean stroke_width_set_unit(SPUnitSelector *,
                                                  GObject *dlg)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    
+
     if (!desktop) {
         return FALSE;
     }
-    
+
     SPSelection *selection = SP_DT_SELECTION (desktop);
-    
+
     if (selection->isEmpty())
         return FALSE;
 
     GSList const *objects = selection->itemList();
 
-    if ((old->base == SP_UNIT_ABSOLUTE) && 
+    if ((old->base == SP_UNIT_ABSOLUTE) &&
        (new_units->base == SP_UNIT_DIMENSIONLESS)) {
-       
+
         /* Absolute to percentage */
         g_object_set_data (dlg, "update", GUINT_TO_POINTER (TRUE));
- 
+
         GtkAdjustment *a = GTK_ADJUSTMENT(g_object_get_data (dlg, "width"));
         float w = sp_units_get_points (a->value, old);
 
@@ -1316,10 +1316,10 @@ static gboolean stroke_width_set_unit(SPUnitSelector *,
 
         g_object_set_data (dlg, "update", GUINT_TO_POINTER (FALSE));
         return TRUE;
-        
-    } else if ((old->base == SP_UNIT_DIMENSIONLESS) && 
+
+    } else if ((old->base == SP_UNIT_DIMENSIONLESS) &&
               (new_units->base == SP_UNIT_ABSOLUTE)) {
-              
+
         /* Percentage to absolute */
         g_object_set_data (dlg, "update", GUINT_TO_POINTER (TRUE));
 
@@ -1945,7 +1945,7 @@ sp_stroke_style_scale_line(SPWidget *spw)
         }
 
         if (unit->base != SP_UNIT_ABSOLUTE) {
-            // reset to 100 percent 
+            // reset to 100 percent
             gtk_adjustment_set_value (wadj, 100.0);
         }
 
