@@ -1,3 +1,10 @@
+2004-06-19  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/desktop-snap.{cpp,h}: sp_desktop_dim_snap_list returns
+	whether or not it snapped anything.
+
+	* src/select-context.cpp: fix snap on move behaviour (again)
+	
 2004-06-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/libnrtype/Makefile_insert, src/libnrtype/FontInstance.h,
