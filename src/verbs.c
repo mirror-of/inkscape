@@ -217,6 +217,9 @@ sp_verb_action_selection_perform (SPAction *action, void *data)
 	case SP_VERB_SELECTION_OUTLINE:
 		sp_selected_path_outline ();
 		break;
+	case SP_VERB_SELECTION_SIMPLIFY:
+		sp_selected_path_simplify ();
+		break;
 
 
 	case SP_VERB_SELECTION_COMBINE:
@@ -489,18 +492,19 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_SELECTION_GROUP, "SelectionGroup", N_("Group"), N_("Group selected objects"), "selection_group"},
 	{SP_VERB_SELECTION_UNGROUP, "SelectionUnGroup", N_("Ungroup"), N_("Ungroup selected group"), "selection_ungroup"},
 	{SP_VERB_SELECTION_UNION, "SelectionUnion", N_("Union"), N_("Union of selected objects"), NULL},
-	{SP_VERB_SELECTION_INTERSECT, "SelectionIntersect", N_("Intersect"), N_("Intersection of selected objects"), NULL},
+	{SP_VERB_SELECTION_INTERSECT, "SelectionIntersect", N_("Intersection"), N_("Intersection of selected objects"), NULL},
 	{SP_VERB_SELECTION_DIFF, "SelectionDiff", N_("Difference"), N_("Difference of selected objects"), NULL},
-	{SP_VERB_SELECTION_SYMDIFF, "SelectionSymDiff", N_("SymDifference"), N_("SymDifference of selected objects"), NULL},
-	{SP_VERB_SELECTION_OFFSET, "SelectionOffset", N_("Offset"), N_("Offset selected path"), NULL},
-	{SP_VERB_SELECTION_INSET, "SelectionInset", N_("Inset"), N_("Inset selected path"), NULL},
-	{SP_VERB_SELECTION_OUTLINE, "SelectionOutline", N_("Outline"), N_("Convert selected stroke to shape"), NULL},
+	{SP_VERB_SELECTION_SYMDIFF, "SelectionSymDiff", N_("XOR"), N_("Exclusive OR of selected objects"), NULL},
+	{SP_VERB_SELECTION_OFFSET, "SelectionOffset", N_("Offset path"), N_("Offset selected path"), NULL},
+	{SP_VERB_SELECTION_INSET, "SelectionInset", N_("Inset path"), N_("Inset selected path"), NULL},
+	{SP_VERB_SELECTION_OUTLINE, "SelectionOutline", N_("Stoke to path"), N_("Convert selected stroke to path"), NULL},
+	{SP_VERB_SELECTION_SIMPLIFY, "SelectionSimplify", N_("Simplify path"), N_("Simplify selected path"), NULL},
 	{SP_VERB_SELECTION_COMBINE, "SelectionCombine", N_("Combine"), N_("Combine multiple paths"), "selection_combine"},
 	{SP_VERB_SELECTION_BREAK_APART, "SelectionBreakApart", N_("Break Apart"), N_("Break selected path to subpaths"), "selection_break"},
 	/* Object */
 	{SP_VERB_OBJECT_ROTATE_90, "ObjectRotate90", N_("Rotate 90 degrees"), N_("Rotate object 90 degrees clockwise"), "object_rotate"},
 	{SP_VERB_OBJECT_FLATTEN, "ObjectFlatten", N_("Remove transformations"), N_("Remove transformations from object"), "object_reset"},
-	{SP_VERB_OBJECT_TO_CURVE, "ObjectToCurve", N_("Convert to Curves"), N_("Convert selected objects to paths"), "object_tocurve"},
+	{SP_VERB_OBJECT_TO_CURVE, "ObjectToCurve", N_("Object to path"), N_("Convert selected objects to paths"), "object_tocurve"},
 	{SP_VERB_OBJECT_FLIP_HORIZONTAL, "ObjectFlipHorizontally", N_("Flip Horizontally"),
 	 N_("Flip selected objects horizontally"), "object_flip_hor"},
 	{SP_VERB_OBJECT_FLIP_VERTICAL, "ObjectFlipVertically", N_("Flip Vertically"),
