@@ -2,6 +2,7 @@
 
     * share/markers/markers.svg: applied patch #990884, which provides a
 	  few mirrored arrows until marker transforms are finished.
+	* share/icons/icons.svg: updates per Bulia's request.
 
 2005-01-16  MenTaLguY  <mental@rydia.net>
 
