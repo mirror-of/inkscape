@@ -15,7 +15,11 @@ arc-context.o: \
 	document.h \
 	enums.h \
 	event-context.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -32,6 +36,7 @@ arc-context.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -113,7 +118,11 @@ desktop-events.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	event-context.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/guideline.h \
 	helper/helper-forward.h \
@@ -135,6 +144,7 @@ desktop-events.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -231,6 +241,8 @@ desktop.o: \
 	enums.h \
 	event-context.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	extension/menu.h \
 	file.h \
@@ -352,8 +364,13 @@ dialogs/desktop-properties.o: \
 	desktop.h \
 	dialogs/desktop-properties.h \
 	dialogs/dialog-events.h \
+	display/nr-arena-forward.h \
 	document.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/action.h \
 	helper/helper-forward.h \
@@ -374,6 +391,7 @@ dialogs/desktop-properties.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-object.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -471,6 +489,7 @@ dialogs/export.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
 	extension/menu.h \
 	file.h \
 	forward.h \
@@ -519,15 +538,7 @@ dialogs/export.o: \
 
 dialogs/filedialog-win32.o: \
 	dialogs/filedialog-win32.cpp \
-	dialogs/filedialog.h \
-	display/nr-arena-forward.h \
-	extension/extension.h \
-	extension/internal/win32.h \
-	extension/menu.h \
-	forward.h \
-	libnr/nr-forward.h \
-	libnr/nr-path.h \
-	xml/repr.h
+	dialogs/filedialog.h
 
 dialogs/fill-style.o: \
 	dialogs/fill-style.cpp \
@@ -537,7 +548,11 @@ dialogs/fill-style.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	forward.h \
 	gradient-chemistry.h \
@@ -553,6 +568,7 @@ dialogs/fill-style.o: \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
@@ -621,7 +637,11 @@ dialogs/item-properties.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	forward.h \
 	helper/helper-forward.h \
@@ -636,6 +656,7 @@ dialogs/item-properties.o: \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -759,7 +780,11 @@ dialogs/stroke-style.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	forward.h \
 	gradient-chemistry.h \
@@ -781,6 +806,7 @@ dialogs/stroke-style.o: \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
@@ -1359,7 +1385,11 @@ draw-context.o: \
 	draw-context.h \
 	enums.h \
 	event-context.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/bezier-utils.h \
 	helper/canvas-bpath.h \
@@ -1382,6 +1412,7 @@ draw-context.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -1459,11 +1490,16 @@ dyna-draw-context.o: \
 	desktop-handles.h \
 	desktop-snap.h \
 	desktop.h \
+	display/nr-arena-forward.h \
 	document.h \
 	dyna-draw-context.h \
 	enums.h \
 	event-context.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/bezier-utils.h \
 	helper/canvas-bpath.h \
@@ -1485,6 +1521,7 @@ dyna-draw-context.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -1507,6 +1544,7 @@ event-context.o: \
 	display/nr-arena-forward.h \
 	event-context.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
 	extension/menu.h \
 	file.h \
 	forward.h \
@@ -1562,6 +1600,7 @@ extension/db.o: \
 	display/nr-arena-forward.h \
 	extension/db.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
 	extension/menu.h \
 	forward.h \
 	libnr/nr-forward.h \
@@ -1576,6 +1615,7 @@ extension/extension.o: \
 	extension/db.h \
 	extension/extension.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
 	extension/menu.h \
 	forward.h \
 	helper/sp-intl.h \
@@ -1586,6 +1626,19 @@ extension/extension.o: \
 	version.h \
 	xml/repr.h
 
+extension/implementation/implementation.o: \
+	extension/implementation/implementation.cpp \
+	display/nr-arena-forward.h \
+	extension/extension.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
+	extension/menu.h \
+	forward.h \
+	libnr/nr-forward.h \
+	libnr/nr-path.h \
+	xml/repr.h
+
 extension/implementation/script.o: \
 	extension/implementation/script.cpp \
 	desktop-handles.h \
@@ -1594,6 +1647,9 @@ extension/implementation/script.o: \
 	document.h \
 	extension/extension.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/implementation/script.h \
 	extension/internal/svg.h \
 	extension/menu.h \
@@ -1603,7 +1659,6 @@ extension/implementation/script.o: \
 	helper/action.h \
 	helper/helper-forward.h \
 	helper/units.h \
-	inkscape.h \
 	interface.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
@@ -1643,8 +1698,15 @@ extension/init.o: \
 	extension/extension.h \
 	extension/extension.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/implementation/script.h \
+	extension/internal/gnome.h \
+	extension/internal/ps.h \
 	extension/internal/svg.h \
+	extension/internal/win32.h \
 	extension/menu.h \
 	extension/system.h \
 	forward.h \
@@ -1662,8 +1724,11 @@ extension/internal/ps.o: \
 	document.h \
 	enums.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/ps.h \
 	extension/menu.h \
+	extension/system.h \
 	forward.h \
 	helper/canvas-bpath.h \
 	helper/curve.h \
@@ -1708,7 +1773,8 @@ extension/internal/svg.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	extension/extension.h \
-	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
 	extension/menu.h \
 	extension/system.h \
@@ -1728,8 +1794,11 @@ extension/internal/win32.o: \
 	display/nr-arena.h \
 	document.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/win32.h \
 	extension/menu.h \
+	extension/system.h \
 	forward.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
@@ -1759,6 +1828,7 @@ extension/menu.o: \
 	extension/db.h \
 	extension/extension.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
 	extension/menu.h \
 	extension/menu.h \
 	extension/system.h \
@@ -1776,7 +1846,8 @@ extension/system.o: \
 	extension/db.h \
 	extension/extension.h \
 	extension/extension.h \
-	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/implementation/script.h \
 	extension/menu.h \
 	extension/system.h \
@@ -1809,6 +1880,7 @@ file.o: \
 	display/nr-arena.h \
 	document.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
 	extension/menu.h \
 	extension/menu.h \
 	extension/system.h \
@@ -1921,6 +1993,7 @@ help.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
 	extension/menu.h \
 	file.h \
 	forward.h \
@@ -2298,6 +2371,7 @@ inkscape.o: \
 	document.h \
 	event-context.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
 	extension/menu.h \
 	file.h \
 	forward.h \
@@ -2349,6 +2423,7 @@ interface.o: \
 	event-context.h \
 	extension/db.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
 	extension/menu.h \
 	extension/menu.h \
 	file.h \
@@ -3200,6 +3275,7 @@ libnrtype/nr-type-ft2.o: \
 	libnrtype/nr-font.h \
 	libnrtype/nr-rasterfont.h \
 	libnrtype/nr-type-ft2.h \
+	libnrtype/nr-type-pos-def.h \
 	libnrtype/nr-typeface.h
 
 libnrtype/nr-type-pos-def.o: \
@@ -3546,7 +3622,11 @@ node-context.o: \
 	document.h \
 	enums.h \
 	event-context.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -3565,6 +3645,7 @@ node-context.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -3608,7 +3689,11 @@ nodepath.o: \
 	document.h \
 	enums.h \
 	event-context.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -3632,6 +3717,7 @@ nodepath.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -3772,7 +3858,11 @@ path-chemistry.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -3834,6 +3924,7 @@ prefs-utils.o: \
 	enums.h \
 	event-context.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
 	extension/menu.h \
 	file.h \
 	forward.h \
@@ -3904,10 +3995,13 @@ print.o: \
 	enums.h \
 	extension/extension.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/gnome.h \
 	extension/internal/ps.h \
 	extension/internal/win32.h \
 	extension/menu.h \
+	extension/system.h \
 	forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
@@ -3954,7 +4048,11 @@ rect-context.o: \
 	document.h \
 	enums.h \
 	event-context.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -3972,6 +4070,7 @@ rect-context.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -4074,7 +4173,11 @@ select-context.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	event-context.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/helper-forward.h \
 	helper/helper-forward.h \
@@ -4095,6 +4198,7 @@ select-context.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -4129,6 +4233,7 @@ select-toolbar.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
 	extension/menu.h \
 	file.h \
 	forward.h \
@@ -4199,7 +4304,11 @@ selection-chemistry.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -4218,6 +4327,7 @@ selection-chemistry.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -4324,7 +4434,11 @@ seltrans.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	event-context.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/helper-forward.h \
 	helper/helper-forward.h \
@@ -4346,6 +4460,7 @@ seltrans.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -4581,7 +4696,11 @@ sp-ellipse.o: \
 	color.h \
 	display/nr-arena-forward.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/units.h \
@@ -4595,6 +4714,7 @@ sp-ellipse.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -4625,7 +4745,11 @@ sp-gradient.o: \
 	document-private.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/nr-gradient-gpl.h \
 	helper/units.h \
@@ -4637,6 +4761,7 @@ sp-gradient.o: \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
@@ -4672,7 +4797,11 @@ sp-guide.o: \
 	sp-guide.cpp \
 	attributes.h \
 	display/nr-arena-forward.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/guideline.h \
 	helper/helper-forward.h \
@@ -4687,6 +4816,7 @@ sp-guide.o: \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -4717,7 +4847,11 @@ sp-image.o: \
 	display/nr-arena-item.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	forward.h \
 	helper/action.h \
@@ -4773,7 +4907,11 @@ sp-item-group.o: \
 	display/nr-arena-item.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
@@ -4785,6 +4923,7 @@ sp-item-group.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-object.h \
+	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
@@ -4880,7 +5019,11 @@ sp-item-rm-unsatisfied-cns.o: \
 sp-item-transform.o: \
 	sp-item-transform.cpp \
 	display/nr-arena-forward.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -4893,6 +5036,7 @@ sp-item-transform.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -4950,7 +5094,11 @@ sp-item.o: \
 	display/nr-arena.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
@@ -5003,7 +5151,11 @@ sp-line.o: \
 	color.h \
 	display/nr-arena-forward.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/sp-intl.h \
@@ -5015,6 +5167,7 @@ sp-line.o: \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -5047,7 +5200,11 @@ sp-marker.o: \
 	display/nr-arena-item.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/helper-forward.h \
 	helper/units.h \
@@ -5130,8 +5287,17 @@ sp-mask.o: \
 
 sp-metrics.o: \
 	sp-metrics.cpp \
+	display/nr-arena-forward.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	sp-metrics.h
+	extension/menu.h \
+	forward.h \
+	libnr/nr-forward.h \
+	libnr/nr-path.h \
+	sp-metrics.h \
+	xml/repr.h
 
 sp-namedview.o: \
 	sp-namedview.cpp \
@@ -5141,7 +5307,11 @@ sp-namedview.o: \
 	desktop.h \
 	display/nr-arena-forward.h \
 	document.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/canvas-grid.h \
 	helper/helper-forward.h \
@@ -5157,6 +5327,7 @@ sp-namedview.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -5308,7 +5479,11 @@ sp-offset.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	forward.h \
 	helper/bezier-utils.h \
@@ -5380,7 +5555,11 @@ sp-path.o: \
 	color.h \
 	display/nr-arena-forward.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/units.h \
@@ -5423,7 +5602,11 @@ sp-pattern.o: \
 	display/nr-arena-item.h \
 	display/nr-arena.h \
 	document.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/units.h \
 	libnr/nr-coord.h \
@@ -5434,6 +5617,7 @@ sp-pattern.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-object.h \
+	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
@@ -5539,7 +5723,11 @@ sp-rect.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	forward.h \
 	helper/curve.h \
@@ -5555,6 +5743,7 @@ sp-rect.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -5588,7 +5777,11 @@ sp-root.o: \
 	display/nr-arena-item.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/helper-forward.h \
 	helper/units.h \
@@ -5638,7 +5831,11 @@ sp-shape.o: \
 	display/nr-arena-shape.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/canvas-bpath.h \
 	helper/curve.h \
@@ -5701,7 +5898,11 @@ sp-spiral.o: \
 	dialogs/object-attributes.h \
 	display/nr-arena-forward.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	forward.h \
 	helper/bezier-utils.h \
@@ -5715,6 +5916,7 @@ sp-spiral.o: \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -5744,7 +5946,11 @@ sp-star.o: \
 	dialogs/object-attributes.h \
 	display/nr-arena-forward.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	forward.h \
 	helper/curve.h \
@@ -5760,6 +5966,7 @@ sp-star.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -5793,7 +6000,11 @@ sp-symbol.o: \
 	display/nr-arena-item.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/helper-forward.h \
 	helper/units.h \
@@ -5844,7 +6055,11 @@ sp-text.o: \
 	display/nr-arena-item.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -5909,7 +6124,11 @@ sp-use.o: \
 	display/nr-arena-group.h \
 	display/nr-arena-item.h \
 	document.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
@@ -5924,6 +6143,7 @@ sp-use.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
 	libnr/nr-object.h \
+	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
@@ -5953,7 +6173,11 @@ spiral-context.o: \
 	document.h \
 	enums.h \
 	event-context.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -5972,6 +6196,7 @@ spiral-context.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -6007,7 +6232,11 @@ splivarot.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/canvas-bpath.h \
 	helper/curve.h \
@@ -6083,7 +6312,11 @@ star-context.o: \
 	document.h \
 	enums.h \
 	event-context.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	forward.h \
 	helper/curve.h \
 	helper/helper-forward.h \
@@ -6101,6 +6334,7 @@ star-context.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -6157,7 +6391,11 @@ style.o: \
 	display/nr-arena-forward.h \
 	document.h \
 	enums.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
 	extract-uri.h \
 	forward.h \
 	helper/canvas-bpath.h \
@@ -6172,6 +6410,7 @@ style.o: \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
@@ -6239,7 +6478,13 @@ svg/gnome-canvas-bpath-util.o: \
 
 svg/svg-affine.o: \
 	svg/svg-affine.cpp \
+	display/nr-arena-forward.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
+	forward.h \
 	libnr/nr-coord.h \
 	libnr/nr-dim2.h \
 	libnr/nr-forward.h \
@@ -6247,6 +6492,7 @@ svg/svg-affine.o: \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
 	libnr/nr-maybe.h \
+	libnr/nr-path.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-point-ops.h \
 	libnr/nr-point.h \
@@ -6254,20 +6500,48 @@ svg/svg-affine.o: \
 	libnr/nr-rotate.h \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
-	libnr/nr-values.h
+	libnr/nr-values.h \
+	xml/repr.h
 
 svg/svg-color.o: \
 	svg/svg-color.cpp \
-	extension/internal/svg.h
+	display/nr-arena-forward.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
+	extension/internal/svg.h \
+	extension/menu.h \
+	forward.h \
+	libnr/nr-forward.h \
+	libnr/nr-path.h \
+	xml/repr.h
 
 svg/svg-length.o: \
 	svg/svg-length.cpp \
-	extension/internal/svg.h
+	display/nr-arena-forward.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
+	extension/internal/svg.h \
+	extension/menu.h \
+	forward.h \
+	libnr/nr-forward.h \
+	libnr/nr-path.h \
+	xml/repr.h
 
 svg/svg-path.o: \
 	svg/svg-path.cpp \
+	display/nr-arena-forward.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
-	svg/gnome-canvas-bpath-util.h
+	extension/menu.h \
+	forward.h \
+	libnr/nr-forward.h \
+	libnr/nr-path.h \
+	svg/gnome-canvas-bpath-util.h \
+	xml/repr.h
 
 text-context.o: \
 	text-context.cpp \
@@ -6345,6 +6619,7 @@ toolbox.o: \
 	document.h \
 	enums.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
 	extension/menu.h \
 	file.h \
 	forward.h \
@@ -6420,6 +6695,7 @@ tools-switch.o: \
 	enums.h \
 	event-context.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
 	extension/menu.h \
 	file.h \
 	forward.h \
@@ -6520,6 +6796,7 @@ verbs.o: \
 	enums.h \
 	event-context.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
 	extension/menu.h \
 	file.h \
 	forward.h \
@@ -6930,6 +7207,7 @@ widgets/menu.o: \
 	extension/db.h \
 	extension/extension.h \
 	extension/extension.h \
+	extension/implementation/implementation.h \
 	extension/menu.h \
 	extension/menu.h \
 	extension/system.h \
@@ -6985,10 +7263,19 @@ widgets/paint-selector.o: \
 
 widgets/ruler.o: \
 	widgets/ruler.cpp \
+	display/nr-arena-forward.h \
+	extension/extension.h \
+	extension/implementation/implementation.h \
+	extension/implementation/implementation.h \
 	extension/internal/svg.h \
+	extension/menu.h \
+	forward.h \
+	libnr/nr-forward.h \
+	libnr/nr-path.h \
 	sp-metrics.h \
 	widgets/ruler.h \
-	widgets/widget-sizes.h
+	widgets/widget-sizes.h \
+	xml/repr.h
 
 widgets/sp-color-gtkselector.o: \
 	widgets/sp-color-gtkselector.cpp \

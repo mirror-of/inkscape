@@ -87,6 +87,8 @@ extension/db.cpp
 extension/db.h
 extension/extension.cpp
 extension/extension.h
+extension/implementation/implementation.cpp
+extension/implementation/implementation.h
 extension/implementation/script.cpp
 extension/implementation/script.h
 extension/init.cpp
@@ -158,7 +160,6 @@ helper/units.cpp
 helper/units.h
 helper/window.cpp
 helper/window.h
-ink-snprintf.h
 inkjar/jar.cpp
 inkjar/jar.h
 inkscape-private.h

@@ -43,6 +43,7 @@ OBJECTS = \
 	event-context.o \
 	extension/db.o \
 	extension/extension.o \
+	extension/implementation/implementation.o \
 	extension/implementation/script.o \
 	extension/init.o \
 	extension/internal/ps.o \
@@ -311,6 +312,7 @@ LINTS = \
 	event-context.lint \
 	extension/db.lint \
 	extension/extension.lint \
+	extension/implementation/implementation.lint \
 	extension/implementation/script.lint \
 	extension/init.lint \
 	extension/internal/ps.lint \

@@ -61,12 +61,13 @@ public:
 
 	/* Print functions */
 	virtual unsigned int setup (Inkscape::Extension::Print * module);
-	virtual unsigned int set_preview (Inkscape::Extension::Print * module);
+	//virtual unsigned int set_preview (Inkscape::Extension::Print * module);
 
 	virtual unsigned int begin (Inkscape::Extension::Print * module, SPDocument *doc);
 	virtual unsigned int finish (Inkscape::Extension::Print * module);
 
 	/* Rendering methods */
+	/*
 	virtual unsigned int bind (Inkscape::Extension::Print * module, const NRMatrix *transform, float opacity);
 	virtual unsigned int release (Inkscape::Extension::Print * module);
 	virtual unsigned int fill (Inkscape::Extension::Print * module, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
@@ -75,7 +76,7 @@ public:
 				 const NRRect *pbox, const NRRect *dbox, const NRRect *bbox);
 	virtual unsigned int image (Inkscape::Extension::Print * module, unsigned char *px, unsigned int w, unsigned int h, unsigned int rs,
 				const NRMatrix *transform, const SPStyle *style);
-
+        */
 	static void init (void);
 
 };
