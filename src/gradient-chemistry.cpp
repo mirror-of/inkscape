@@ -25,9 +25,6 @@
 // "vector" is a gradient that has stops but not position coords. It can be referenced by one or more privates. Objects should not refer to it directly. It has no radial/linear distinction.
 // "private" is a gradient that has no stops but has position coords (e.g. center, radius etc for a radial). It references a vector for the actual colors. Each private is only used by one object. It is either linear or radial.
 
-static SPGradient *sp_gradient_get_private_normalized (SPDocument *document, SPGradient *vector);
-static SPGradient *sp_gradient_get_radial_private_normalized (SPDocument *document, SPGradient *vector);
-
 static void sp_gradient_repr_set_link (SPRepr *repr, SPGradient *gr);
 static void sp_item_repr_set_style_gradient (SPRepr *repr, const gchar *property, SPGradient *gr);
 static gchar *sp_style_change_property (const gchar *sstr, const gchar *key, const gchar *value);
@@ -90,8 +87,7 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 		/* Now we have successfully created new normalized vector, and cleared old stops */
 		return spnew;
 	} else {
-		/* Gradient is in <defs> */
-		//g_print ("GVECTORNORM: Gradient %s IS in <defs>\n", SP_OBJECT_ID (gr));
+		/* Normal situation: gradient is in <defs> */
 
 		/* First make sure we have vector directly defined (i.e. gr has its own stops) */
 		if (!gr->has_stops) {
@@ -117,17 +113,47 @@ sp_gradient_ensure_vector_normalized (SPGradient *gr)
 	}
 }
 
-/*
- * Either normalizes given gradient to private, or returns fresh normalized
- * private - gradient is flattened in any case, and vector set
- * Vector has to be normalized beforehand
+/**
+ * Creates new private gradient for the given vector
+ */
+
+static SPGradient *
+sp_gradient_get_private_normalized (SPDocument *document, SPGradient *vector, bool islinear)
+{
+	g_return_val_if_fail (document != NULL, NULL);
+	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
+	g_return_val_if_fail (vector != NULL, NULL);
+	g_return_val_if_fail (SP_IS_GRADIENT (vector), NULL);
+	g_return_val_if_fail (vector->state == SP_GRADIENT_STATE_VECTOR, NULL);
+
+	SPDefs *defs = (SPDefs *) SP_DOCUMENT_DEFS (document);
+
+	// create a new private gradient of the requested type
+	SPRepr *repr = islinear? sp_repr_new ("linearGradient") : sp_repr_new ("radialGradient");
+	sp_repr_set_attr(repr, "inkscape:collect", "always");
+	sp_gradient_repr_set_link (repr, vector);
+	/* Append the new private gradient to defs */
+	sp_repr_append_child (SP_OBJECT_REPR (defs), repr);
+	sp_repr_unref (repr);
+
+	// get corresponding object
+	SPGradient *gr = (SPGradient *) document->getObjectByRepr(repr);
+	g_assert (gr != NULL);
+	g_assert (SP_IS_GRADIENT (gr));
+	// set state
+	gr->state = SP_GRADIENT_STATE_PRIVATE;
+
+	return gr;
+}
+
+/**
+ * If gr has users already, create a new private; also checks if gr links to vector, relinks if not
  */
 
 SPGradient *
-sp_gradient_ensure_private_normalized (SPGradient *gr, SPGradient *vector)
+sp_gradient_clone_private_if_necessary (SPGradient *gr, SPGradient *vector, bool islinear)
 {
 	g_return_val_if_fail (gr != NULL, NULL);
-	g_return_val_if_fail (SP_IS_GRADIENT (gr), NULL);
 	g_return_val_if_fail (vector != NULL, NULL);
 	g_return_val_if_fail (SP_IS_GRADIENT (vector), NULL);
 	g_return_val_if_fail (vector->state == SP_GRADIENT_STATE_VECTOR, NULL);
@@ -135,13 +161,11 @@ sp_gradient_ensure_private_normalized (SPGradient *gr, SPGradient *vector)
 	/* If we are already normalized private, change href and return */
 	if ((gr->state == SP_GRADIENT_STATE_PRIVATE) && (SP_OBJECT_HREFCOUNT (gr) == 1)) {
 		if ( gr->ref->getObject() != vector) {
-			/* href is not vector; relink */
+			/* our href is not the vector; relink */
 			sp_gradient_repr_set_link (SP_OBJECT_REPR (gr), vector);
 		}
 		return gr;
 	}
-
-	//g_print ("Private normalization of gradient %s requested\n", SP_OBJECT_ID (gr));
 
 	SPDocument *doc = SP_OBJECT_DOCUMENT (gr);
 	SPObject *defs = SP_DOCUMENT_DEFS (doc);
@@ -151,220 +175,44 @@ sp_gradient_ensure_private_normalized (SPGradient *gr, SPGradient *vector)
 	    (SP_OBJECT_PARENT (gr) != SP_OBJECT (defs)) ||
 	    (SP_OBJECT_HREFCOUNT (gr) > 1)) {
        	// we have to clone a fresh new private gradient for the given vector
-		return sp_gradient_get_private_normalized (SP_OBJECT_DOCUMENT (gr), vector);
+		return sp_gradient_get_private_normalized (doc, vector, islinear);
 	} else {
-
 		/* Set state */
 		gr->state = SP_GRADIENT_STATE_PRIVATE;
 		return gr;
 	}
+}
+
+/*
+ * Either normalizes given gradient to private, or returns fresh normalized
+ * private - gradient is flattened in any case, and vector set.
+ * Vector has to be normalized beforehand.
+ */
+
+SPGradient *
+sp_gradient_ensure_private_normalized (SPGradient *gr, SPGradient *vector)
+{
+	g_return_val_if_fail (SP_IS_GRADIENT (gr), NULL);
+
+	gr = sp_gradient_clone_private_if_necessary (gr, vector, true);
+
+	// add converting to userspaceonuse here
+
+	return gr;
 }
 
 SPGradient *
 sp_gradient_ensure_radial_private_normalized (SPGradient *gr, SPGradient *vector)
 {
-	g_return_val_if_fail (gr != NULL, NULL);
 	g_return_val_if_fail (SP_IS_RADIALGRADIENT (gr), NULL);
-	g_return_val_if_fail (vector != NULL, NULL);
-	g_return_val_if_fail (SP_IS_GRADIENT (vector), NULL);
-	g_return_val_if_fail (vector->state == SP_GRADIENT_STATE_VECTOR, NULL);
 
-	/* If we are already normalized private, change href and return */
-	if ((gr->state == SP_GRADIENT_STATE_PRIVATE) && (SP_OBJECT_HREFCOUNT (gr) == 1)) {
-		if ( gr->ref->getObject() != vector ) {
-			/* href is not vector */
-			sp_gradient_repr_set_link (SP_OBJECT_REPR (gr), vector);
-		}
-		return gr;
-	}
+	gr = sp_gradient_clone_private_if_necessary (gr, vector, false);
 
-	//	g_print ("Private normalization of radial gradient %s requested\n", SP_OBJECT_ID (gr));
-
-	SPDocument *doc = SP_OBJECT_DOCUMENT (gr);
-	SPObject *defs = SP_DOCUMENT_DEFS (doc);
-
-	/* Determine, whether we have to clone fresh new gradient */
-	if ((gr->has_stops) ||
-	    (gr->state != SP_GRADIENT_STATE_UNKNOWN) ||
-	    (SP_OBJECT_PARENT (gr) != SP_OBJECT (defs)) ||
-	    (SP_OBJECT_HREFCOUNT (gr) > 1)) {
-		return sp_gradient_get_radial_private_normalized (SP_OBJECT_DOCUMENT (gr), vector);
-	} else {
-
-		/* Set state */
-		gr->state = SP_GRADIENT_STATE_PRIVATE;
-		return gr;
-	}
-}
-
-/*
- * Releases all stale gradient references to given gradient vector,
- * preparing it for deletion (if no referenced by real objects)
- */
-
-void
-sp_gradient_vector_release_references (SPGradient *gradient)
-{
-	g_return_if_fail (gradient != NULL);
-	g_return_if_fail (SP_IS_GRADIENT (gradient));
-
-	if (SP_OBJECT_HREFCOUNT (gradient) > 0) {
-		const GSList *glist, *l;
-		glist = sp_document_get_resource_list (SP_OBJECT_DOCUMENT (gradient), "gradient");
-		for (l = glist; l != NULL; l = l->next) {
-			SPGradient *gr;
-			gr = SP_GRADIENT (l->data);
-			if (SP_OBJECT_HREFCOUNT (gr) < 1) {
-				if ( gr->ref->getObject() == gradient ) {
-					sp_repr_set_attr (SP_OBJECT_REPR (gr), "xlink:href", NULL);
-				}
-			}
-		}
-	}
-}
-
-/*
- * Finds and normalizes first free gradient
- */
-
-static SPGradient *
-sp_gradient_get_private_normalized (SPDocument *document, SPGradient *vector)
-{
-	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
-	g_return_val_if_fail (vector != NULL, NULL);
-	g_return_val_if_fail (SP_IS_GRADIENT (vector), NULL);
-	g_return_val_if_fail (vector->state == SP_GRADIENT_STATE_VECTOR, NULL);
-
-	SPDefs *defs = (SPDefs *) SP_DOCUMENT_DEFS (document);
-
-	for (SPObject *child = sp_object_first_child(SP_OBJECT(defs)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-		if (SP_IS_LINEARGRADIENT (child)) {
-			SPGradient *gr;
-			gr = SP_GRADIENT (child);
-			if (SP_OBJECT_HREFCOUNT (gr) == 0) {
-				if (gr->state == SP_GRADIENT_STATE_PRIVATE) {
-					SPRepr *repr;
-					repr = SP_OBJECT_REPR (gr);
-					sp_repr_set_attr (repr, "gradientUnits", NULL);
-					sp_repr_set_attr (repr, "gradientTransform", NULL);
-					sp_repr_set_attr (repr, "spreadMethod", NULL);
-					sp_gradient_repr_set_link (repr, vector);
-					sp_repr_set_attr (repr, "x1", NULL);
-					sp_repr_set_attr (repr, "y1", NULL);
-					sp_repr_set_attr (repr, "x2", NULL);
-					sp_repr_set_attr (repr, "y2", NULL);
-					return gr;
-				} else if (gr->state == SP_GRADIENT_STATE_UNKNOWN) {
-					/* fixme: This is plain wrong - what if out gradient is not at private position? */
-					sp_gradient_ensure_vector (gr);
-					if (!gr->has_stops) {
-						SPRepr *repr;
-						gr = sp_gradient_ensure_private_normalized (gr, vector);
-						repr = SP_OBJECT_REPR (gr);
-						sp_repr_set_attr (repr, "gradientUnits", NULL);
-						sp_repr_set_attr (repr, "gradientTransform", NULL);
-						sp_repr_set_attr (repr, "spreadMethod", NULL);
-						sp_repr_set_attr (repr, "x1", NULL);
-						sp_repr_set_attr (repr, "y1", NULL);
-						sp_repr_set_attr (repr, "x2", NULL);
-						sp_repr_set_attr (repr, "y2", NULL);
-						return gr;
-					}
-				}
-			}
-		}
-	}
-
-	/* Have to create our own */
-	SPRepr *repr;
-	repr = sp_repr_new ("linearGradient");
-	sp_repr_set_attr(repr, "inkscape:collect", "always");
-	sp_gradient_repr_set_link (repr, vector);
-	/* Append cloned private gradient to defs */
-	sp_repr_append_child (SP_OBJECT_REPR (defs), repr);
-	sp_repr_unref (repr);
-	/* fixme: This does not look like nice */
-	SPGradient *gr;
-	gr = (SPGradient *) document->getObjectByRepr(repr);
-	g_assert (gr != NULL);
-	g_assert (SP_IS_GRADIENT (gr));
-	/* fixme: Maybe add extra sanity check here */
-	gr->state = SP_GRADIENT_STATE_PRIVATE;
+	// add converting to userspaceonuse here
 
 	return gr;
 }
 
-static SPGradient *
-sp_gradient_get_radial_private_normalized (SPDocument *document, SPGradient *vector)
-{
-	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
-	g_return_val_if_fail (vector != NULL, NULL);
-	g_return_val_if_fail (SP_IS_GRADIENT (vector), NULL);
-	g_return_val_if_fail (vector->state == SP_GRADIENT_STATE_VECTOR, NULL);
-
-	SPDefs *defs = (SPDefs *) SP_DOCUMENT_DEFS (document);
-
-	for (SPObject *child = sp_object_first_child(SP_OBJECT(defs)) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
-		if (SP_IS_RADIALGRADIENT (child)) {
-			SPGradient *gr;
-			gr = SP_GRADIENT (child);
-			if (SP_OBJECT_HREFCOUNT (gr) == 0) {
-				if (gr->state == SP_GRADIENT_STATE_PRIVATE) {
-					SPRepr *repr;
-					repr = SP_OBJECT_REPR (gr);
-					sp_repr_set_attr (repr, "gradientUnits", NULL);
-					sp_repr_set_attr (repr, "gradientTransform", NULL);
-					sp_repr_set_attr (repr, "spreadMethod", NULL);
-					sp_gradient_repr_set_link (repr, vector);
-					sp_repr_set_attr (repr, "cx", NULL);
-					sp_repr_set_attr (repr, "cy", NULL);
-					sp_repr_set_attr (repr, "fx", NULL);
-					sp_repr_set_attr (repr, "fy", NULL);
-					sp_repr_set_attr (repr, "r", NULL);
-					return gr;
-				} else if (gr->state == SP_GRADIENT_STATE_UNKNOWN) {
-					/* fixme: This is plain wrong - what if out gradient is not at private position? */
-					sp_gradient_ensure_vector (gr);
-					if (!gr->has_stops) {
-						SPRepr *repr;
-						gr = sp_gradient_ensure_radial_private_normalized (gr, vector);
-						repr = SP_OBJECT_REPR (gr);
-						sp_repr_set_attr (repr, "gradientUnits", NULL);
-						sp_repr_set_attr (repr, "gradientTransform", NULL);
-						sp_repr_set_attr (repr, "spreadMethod", NULL);
-						sp_gradient_repr_set_link (repr, vector);
-						sp_repr_set_attr (repr, "cx", NULL);
-						sp_repr_set_attr (repr, "cy", NULL);
-						sp_repr_set_attr (repr, "fx", NULL);
-						sp_repr_set_attr (repr, "fy", NULL);
-						sp_repr_set_attr (repr, "r", NULL);
-						return gr;
-					}
-				}
-			}
-		}
-	}
-
-	/* Have to create our own */
-	SPRepr *repr;
-	repr = sp_repr_new ("radialGradient");
-	sp_repr_set_attr(repr, "inkscape:collect", "always");
-	sp_gradient_repr_set_link (repr, vector);
-	/* Append cloned private gradient to defs */
-	sp_repr_append_child (SP_OBJECT_REPR (defs), repr);
-	sp_repr_unref (repr);
-	/* fixme: This does not look like nice */
-	SPGradient *gr;
-	gr = (SPGradient *) document->getObjectByRepr(repr);
-	g_assert (gr != NULL);
-	g_assert (SP_IS_GRADIENT (gr));
-	/* fixme: Maybe add extra sanity check here */
-	gr->state = SP_GRADIENT_STATE_PRIVATE;
-
-	return gr;
-}
 
 /*
  * Sets item fill to lineargradient with given vector, creating
@@ -387,7 +235,7 @@ sp_item_force_fill_lineargradient_vector (SPItem *item, SPGradient *gr)
 
 	if ((style->fill.type != SP_PAINT_TYPE_PAINTSERVER) || !SP_IS_LINEARGRADIENT (SP_STYLE_FILL_SERVER (style))) {
 		/* Current fill style is not lineargradient, so construct everything */
-		pg = sp_gradient_get_private_normalized (SP_OBJECT_DOCUMENT (item), gr);
+		pg = sp_gradient_get_private_normalized (SP_OBJECT_DOCUMENT (item), gr, true);
 		sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), "fill", pg);
 		return pg;
 	} else {
@@ -432,7 +280,7 @@ sp_item_force_stroke_lineargradient_vector (SPItem *item, SPGradient *gr)
 
 	if ((style->stroke.type != SP_PAINT_TYPE_PAINTSERVER) || !SP_IS_LINEARGRADIENT (SP_STYLE_STROKE_SERVER (style))) {
 		/* Current fill style is not lineargradient, so construct everything */
-		pg = sp_gradient_get_private_normalized (SP_OBJECT_DOCUMENT (item), gr);
+		pg = sp_gradient_get_private_normalized (SP_OBJECT_DOCUMENT (item), gr, true);
 		sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), "stroke", pg);
 		return pg;
 	} else {
@@ -475,7 +323,7 @@ sp_item_force_fill_radialgradient_vector (SPItem *item, SPGradient *gr)
 
 	if ((style->fill.type != SP_PAINT_TYPE_PAINTSERVER) || !SP_IS_RADIALGRADIENT (SP_STYLE_FILL_SERVER (style))) {
 		/* Current fill style is not radialgradient, so construct everything */
-		pg = sp_gradient_get_radial_private_normalized (SP_OBJECT_DOCUMENT (item), gr);
+		pg = sp_gradient_get_private_normalized (SP_OBJECT_DOCUMENT (item), gr, false);
 		sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), "fill", pg);
 		return pg;
 	} else {
@@ -520,7 +368,7 @@ sp_item_force_stroke_radialgradient_vector (SPItem *item, SPGradient *gr)
 
 	if ((style->stroke.type != SP_PAINT_TYPE_PAINTSERVER) || !SP_IS_RADIALGRADIENT (SP_STYLE_STROKE_SERVER (style))) {
 		/* Current fill style is not radialgradient, so construct everything */
-		pg = sp_gradient_get_radial_private_normalized (SP_OBJECT_DOCUMENT (item), gr);
+		pg = sp_gradient_get_private_normalized (SP_OBJECT_DOCUMENT (item), gr, false);
 		sp_item_repr_set_style_gradient (SP_OBJECT_REPR (item), "stroke", pg);
 		return pg;
 	} else {
