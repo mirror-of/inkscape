@@ -71,6 +71,7 @@ libnr_libnr_a_SOURCES =	\
 	libnr/nr-rotate-matrix-ops.cpp	\
 	libnr/nr-rotate-matrix-ops.h	\
 	libnr/nr-rotate.h	\
+	libnr/nr-scale-matrix-ops.h	\
 	libnr/nr-scale-ops.h	\
 	libnr/nr-scale.h	\
 	libnr/nr-svp-private.h	\
