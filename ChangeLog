@@ -3,6 +3,13 @@
 	* src/livarot/Path.h, src/livarot/PathSimplify.cpp: coding style
 	and const cleanups.
 
+	* src/livarot/PathSimplify.cpp: some very minor cleanups, and
+	temporary comments for myself.
+
+	* src/livarot/PathConversion.cpp: coding style cleanups.
+
+	* src/livarot/PathConversion.cpp: fix for bug 1048827.
+
 2004-10-17  MenTaLguY  <mental@rydia.net>
 
 	* share/templates/Makefile.am, share/templates/layers.svg:
