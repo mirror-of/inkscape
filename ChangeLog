@@ -1,3 +1,7 @@
+2004-04-15  MenTaLguY <mental@rydia.net>
+
+	* configure.in: added gtkmm dependency
+
 2004-04-14  Kees Cook <kees@outflux.net>
 
 	* src/helper/unit-menu.cpp: Turns out I found a 2nd bug while
