@@ -37,6 +37,7 @@
 #include "seltrans-handles.h"
 #include "seltrans.h"
 #include "sp-metrics.h"
+#include "helper/sp-intl.h"
 #include "helper/sp-ctrlline.h"
 #include "helper/sodipodi-ctrlrect.h"
 #include "prefs-utils.h"
@@ -737,7 +738,7 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
 
 	// status text
 	gchar *status;
-	status = g_strdup_printf("Scale  %0.2f%%, %0.2f%%", 100 * s[NR::X], 100 * s[NR::Y]);
+	status = g_strdup_printf(_("Scale %0.2f%%, %0.2f%%"), 100 * s[NR::X], 100 * s[NR::Y]);
 	sp_view_set_status (SP_VIEW (seltrans->desktop), status, FALSE);
 	g_free(status);
 
@@ -867,7 +868,7 @@ gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const 
 
 	// status text
         gchar status[80];
-	sprintf (status, "Skew  %0.2f%c %0.2f%c", 100 * fabs(skew[2]), '%', 100 * fabs(skew[1]), '%');
+	sprintf (status, _("Skew %0.2f%c %0.2f%c"), 100 * fabs(skew[2]), '%', 100 * fabs(skew[1]), '%');
 	sp_view_set_status (SP_VIEW (seltrans->desktop), status, FALSE);
 
 	return TRUE;
@@ -914,7 +915,7 @@ gboolean sp_sel_trans_rotate_request(SPSelTrans *seltrans, SPSelTransHandle cons
 	if (angle > 180) angle -= 360;
 	if (angle < -180) angle += 360;
 
-	sp_view_set_statusf (SP_VIEW (seltrans->desktop), "Rotate by %0.2f deg", angle);
+	sp_view_set_statusf (SP_VIEW (seltrans->desktop), _("Rotate by %0.2f deg"), angle);
 
 	return TRUE;
 }
@@ -943,7 +944,7 @@ gboolean sp_sel_trans_center_request(SPSelTrans *seltrans, SPSelTransHandle cons
 	// status text
 	GString *xs = SP_PT_TO_METRIC_STRING(pt[X], SP_DEFAULT_METRIC);
 	GString *ys = SP_PT_TO_METRIC_STRING(pt[Y], SP_DEFAULT_METRIC);
-	gchar *status = g_strdup_printf("Center  %s, %s", xs->str, ys->str);
+	gchar *status = g_strdup_printf(_("Center at (%s,%s)"), xs->str, ys->str);
 	sp_view_set_status (SP_VIEW (seltrans->desktop), status, FALSE);
 	g_free(status);
 	g_string_free (xs, FALSE);

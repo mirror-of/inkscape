@@ -452,7 +452,7 @@ sp_spiral_drag (SPSpiralContext * sc, NR::Point p, guint state)
 	gchar status[80];
 	xs = SP_PT_TO_METRIC_STRING (fabs(p0[NR::X]), SP_DEFAULT_METRIC);
 	ys = SP_PT_TO_METRIC_STRING (fabs(p0[NR::Y]), SP_DEFAULT_METRIC);
-	sprintf (status, "Draw spiral at (%s,%s)", xs->str, ys->str);
+	sprintf (status, _("Draw spiral at (%s,%s)"), xs->str, ys->str);
 	sp_view_set_status (SP_VIEW (desktop), status, FALSE);
 	g_string_free (xs, FALSE);
 	g_string_free (ys, FALSE);

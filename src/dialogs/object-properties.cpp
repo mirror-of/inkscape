@@ -246,17 +246,17 @@ sp_object_properties_dialog (void)
 
         /* Fill page */
         page = sp_fill_style_widget_new ();
-        sp_object_properties_page(nb, page, "Fill", "fill",
+        sp_object_properties_page(nb, page, _("Fill"), "fill",
                     INKSCAPE_STOCK_PROPERTIES_FILL_PAGE);
 
         /* Stroke paint page */
         page = sp_stroke_style_paint_widget_new ();
-        sp_object_properties_page(nb, page, "Stroke paint", "stroke-paint",
+        sp_object_properties_page(nb, page, _("Stroke paint"), "stroke-paint",
                     INKSCAPE_STOCK_PROPERTIES_STROKE_PAINT_PAGE);
 
         /* Stroke line page */
         page = sp_stroke_style_line_widget_new ();
-        sp_object_properties_page(nb, page, "Stroke style", "stroke-line",
+        sp_object_properties_page(nb, page, _("Stroke style"), "stroke-line",
                     INKSCAPE_STOCK_PROPERTIES_STROKE_PAGE);
 
         /* Modify style selector */

@@ -790,7 +790,7 @@ sp_draw_anchor_new(SPDrawContext *dc, SPCurve *curve, gboolean start, NR::Point 
 {
     SPDesktop *dt=SP_EVENT_CONTEXT_DESKTOP(SP_EVENT_CONTEXT(dc));
 
-    sp_view_set_statusf_flash(SP_VIEW(dt), "Creating anchor at %g %g", delta[NR::X], delta[NR::Y]);
+    sp_view_set_statusf_flash(SP_VIEW(dt), _("Creating anchor at (%g,%g)"), delta[NR::X], delta[NR::Y]);
 
     SPDrawAnchor *a = g_new(SPDrawAnchor, 1);
 
@@ -1029,7 +1029,7 @@ sp_pencil_context_root_handler(SPEventContext *ec, GdkEvent *event)
                 dc->ea = anchor;
                 /* Write curves to object */
 
-                sp_view_set_statusf_flash(SP_VIEW(dt), "Finishing freehand");
+                sp_view_set_statusf_flash(SP_VIEW(dt), _("Finishing freehand"));
 
                 spdc_concat_colors_and_flush(dc, FALSE);
                 dc->sa = NULL;
@@ -1778,7 +1778,7 @@ spdc_pen_finish(SPPenContext *pc, gboolean closed)
 {
     SPDrawContext *dc = SP_DRAW_CONTEXT(pc);
 
-    sp_view_set_statusf_flash(SP_VIEW(SP_EVENT_CONTEXT(dc)->desktop), "Finishing pen");
+    sp_view_set_statusf_flash(SP_VIEW(SP_EVENT_CONTEXT(dc)->desktop), _("Finishing pen"));
 
     sp_curve_reset(dc->red_curve);
     spdc_concat_colors_and_flush(dc, closed);

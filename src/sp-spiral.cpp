@@ -255,7 +255,7 @@ sp_spiral_update (SPObject *object, SPCtx *ctx, guint flags)
 static gchar *
 sp_spiral_description (SPItem * item)
 {
-	return g_strdup ("Spiral");
+	return g_strdup (_("Spiral"));
 }
 
 static bool

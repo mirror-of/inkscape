@@ -285,7 +285,7 @@ void ColorNotebook::init()
 			SPColorNotebookTracker *entry = reinterpret_cast< SPColorNotebookTracker* > (g_ptr_array_index (_trackerList, i));
 			if ( entry )
 			{
-				item = gtk_check_menu_item_new_with_label (entry->name);
+				item = gtk_check_menu_item_new_with_label (_(entry->name));
 				gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), entry->enabledFull);
 				gtk_widget_show (item);
 				gtk_menu_append (menu, item);
@@ -556,7 +556,7 @@ GtkWidget* ColorNotebook::addPage(GType page_type, guint submode)
 		}
 		gtk_widget_show (page);
         int index = csel->base ? csel->base->getSubmode() : 0;
-        const gchar* str = SP_COLOR_SELECTOR_GET_CLASS (csel)->name[index];
+        const gchar* str = _(SP_COLOR_SELECTOR_GET_CLASS (csel)->name[index]);
 //         g_message( "Hitting up for tab for '%s'", str );
 		tab_label = gtk_label_new( str );
 		gtk_notebook_append_page( GTK_NOTEBOOK (_book), page, tab_label );

@@ -445,8 +445,8 @@ sp_star_drag (SPStarContext * sc, NR::Point p, guint state)
     GString *xs = SP_PT_TO_METRIC_STRING (fabs(p0[NR::X]), SP_DEFAULT_METRIC);
     GString *ys = SP_PT_TO_METRIC_STRING (fabs(p0[NR::Y]), SP_DEFAULT_METRIC);
     if (isflat)
-         sprintf (status, "Draw poly at (%s,%s)", xs->str, ys->str);
-    else sprintf (status, "Draw star at (%s,%s)", xs->str, ys->str);
+         sprintf (status, _("Draw polygon at (%s,%s)"), xs->str, ys->str);
+    else sprintf (status, _("Draw star at (%s,%s)"), xs->str, ys->str);
     sp_view_set_status (SP_VIEW (desktop), status, FALSE);
     g_string_free (xs, FALSE);
     g_string_free (ys, FALSE);

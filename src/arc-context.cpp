@@ -19,6 +19,7 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "macros.h"
+#include "helper/sp-intl.h"
 #include "helper/sp-canvas.h"
 #include "inkscape.h"
 #include "sp-ellipse.h"
@@ -448,7 +449,7 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
 	gchar status[80];
 	GString *xs = SP_PT_TO_METRIC_STRING (fabs(x1-x0), SP_DEFAULT_METRIC);
 	GString *ys = SP_PT_TO_METRIC_STRING (fabs(y1-y0), SP_DEFAULT_METRIC);
-	sprintf (status, "Draw arc  %s x %s", xs->str, ys->str);
+	sprintf (status, _("Draw arc: %s x %s"), xs->str, ys->str);
 	sp_view_set_status (SP_VIEW (desktop), status, FALSE);
 	g_string_free (xs, FALSE);
 	g_string_free (ys, FALSE);

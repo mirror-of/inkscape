@@ -24,6 +24,7 @@
 #include "attributes.h"
 #include "style.h"
 #include "version.h"
+#include "helper/sp-intl.h"
 
 #include "sp-ellipse.h"
 
@@ -435,7 +436,7 @@ sp_ellipse_set (SPObject *object, unsigned int key, const gchar *value)
 
 static gchar *sp_ellipse_description(SPItem *item)
 {
-	return g_strdup("Ellipse");
+	return g_strdup(_("Ellipse"));
 }
 
 
@@ -580,7 +581,7 @@ sp_circle_set (SPObject *object, unsigned int key, const gchar *value)
 
 static gchar *sp_circle_description (SPItem *item)
 {
-	return g_strdup("Circle");
+	return g_strdup(_("Circle"));
 }
 
 /* <path sodipodi:type="arc"> element */
@@ -861,7 +862,7 @@ sp_arc_modified (SPObject *object, guint flags)
 
 static gchar *sp_arc_description(SPItem *item)
 {
-	return g_strdup("Arc");
+	return g_strdup(_("Arc"));
 }
 
 void

@@ -133,7 +133,7 @@ void ColorWheelSelector::init()
     row++;
 
     /* Label */
-    _label = gtk_label_new ("Alpha:");
+    _label = gtk_label_new (_("Alpha:"));
     gtk_misc_set_alignment (GTK_MISC (_label), 1.0, 0.5);
     gtk_widget_show (_label);
     gtk_table_attach (GTK_TABLE (t), _label, 0, 1, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
