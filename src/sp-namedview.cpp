@@ -49,6 +49,8 @@ static void sp_namedview_child_added (SPObject * object, SPRepr * child, SPRepr 
 static void sp_namedview_remove_child (SPObject *object, SPRepr *child);
 static SPRepr *sp_namedview_write (SPObject *object, SPRepr *repr, guint flags);
 
+static void sp_namedview_setup_guides (SPNamedView * nv);
+
 static void sp_namedview_setup_grid (SPNamedView * nv);
 static void sp_namedview_setup_grid_item (SPNamedView * nv, SPCanvasItem * item);
 
@@ -105,7 +107,7 @@ sp_namedview_init (SPNamedView * nv)
 	nv->editable = TRUE;
 	nv->showgrid = FALSE;
 	nv->snaptogrid = FALSE;
-	nv->showguides = FALSE;
+	nv->showguides = TRUE;
 	nv->snaptoguides = FALSE;
 	nv->showborder = TRUE;
 
@@ -231,7 +233,12 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SHOWGUIDES:
-		nv->showguides = sp_str_to_bool (value);
+		if (!value) { // show guides if not specified, for backwards compatibility
+			nv->showguides = TRUE;
+		} else {
+			nv->showguides = sp_str_to_bool (value);
+		}
+		sp_namedview_setup_guides (nv);
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SNAPTOGUIDES:
@@ -410,7 +417,7 @@ sp_namedview_child_added (SPObject * object, SPRepr * child, SPRepr * ref)
 	SPNamedView * nv;
 	SPObject * no;
 	const gchar * id;
-	GSList * l;
+	GSList *l, *v;
 
 	nv = (SPNamedView *) object;
 
@@ -431,8 +438,17 @@ sp_namedview_child_added (SPObject * object, SPRepr * child, SPRepr * ref)
 				sp_guide_show (g, SP_DESKTOP (l->data)->guides, (GCallback)sp_dt_guide_event);
 				if (SP_DESKTOP (l->data)->guides_active) 
 					sp_guide_sensitize (g, 
-							    SP_DT_CANVAS(SP_DESKTOP (l->data)), 
-							    TRUE);
+									SP_DT_CANVAS(SP_DESKTOP (l->data)), 
+									TRUE);
+				if (nv->showguides) {
+					for (v = SP_GUIDE (g)->views; v != NULL; v = v->next) {
+						sp_canvas_item_show (SP_CANVAS_ITEM (v->data));
+					}
+				} else {
+					for (v = SP_GUIDE (g)->views; v != NULL; v = v->next) {
+						sp_canvas_item_hide (SP_CANVAS_ITEM (v->data));
+					}
+				}
 			}
 		}
 	}
@@ -483,7 +499,7 @@ void
 sp_namedview_show (SPNamedView * nv, gpointer desktop)
 {
 	SPDesktop * dt;
-	GSList * l;
+	GSList * l, *v;
 	SPCanvasItem * item;
 
 	dt = SP_DESKTOP (desktop);
@@ -491,6 +507,15 @@ sp_namedview_show (SPNamedView * nv, gpointer desktop)
 	for (l = nv->guides; l != NULL; l = l->next) {
 		sp_guide_show (SP_GUIDE (l->data), dt->guides, (GCallback)sp_dt_guide_event);
 		if (dt->guides_active) sp_guide_sensitize (SP_GUIDE (l->data), SP_DT_CANVAS (dt), TRUE);
+		if (nv->showguides) {
+			for (v = SP_GUIDE (l->data)->views; v != NULL; v = v->next) {
+				sp_canvas_item_show (SP_CANVAS_ITEM (v->data));
+			}
+		} else {
+			for (v = SP_GUIDE (l->data)->views; v != NULL; v = v->next) {
+				sp_canvas_item_hide (SP_CANVAS_ITEM (v->data));
+			}
+		}
 	}
 
 	nv->views = g_slist_prepend (nv->views, desktop);
@@ -602,6 +627,58 @@ sp_namedview_activate_guides (SPNamedView * nv, gpointer desktop, gboolean activ
 
 	for (l = nv->guides; l != NULL; l = l->next) {
 		sp_guide_sensitize (SP_GUIDE (l->data), SP_DT_CANVAS (dt), active);
+	}
+}
+
+static void
+sp_namedview_setup_guides (SPNamedView *nv)
+{
+	GSList *l, *v;
+
+	for (l = nv->guides; l != NULL; l = l->next) {
+		if (nv->showguides) {
+			for (v = SP_GUIDE (l->data)->views; v != NULL; v = v->next) {
+				sp_canvas_item_show (SP_CANVAS_ITEM (v->data));
+			}
+		} else {
+			for (v = SP_GUIDE (l->data)->views; v != NULL; v = v->next) {
+				sp_canvas_item_hide (SP_CANVAS_ITEM (v->data));
+			}
+		}
+	}
+}
+
+void
+sp_namedview_toggle_guides (SPRepr *repr)
+{
+	unsigned int v;
+	unsigned int set = sp_repr_get_boolean (repr, "showguides", &v);
+	if (!set) { // hide guides if not specified, for backwards compatibility
+		v = FALSE;
+	} else {
+		v = !v;
+	}
+	sp_repr_set_boolean (repr, "showguides", v);
+
+	if (v) {
+		sp_repr_set_boolean (repr, "snaptoguides", TRUE);
+	} else {
+		sp_repr_set_boolean (repr, "snaptoguides", FALSE);
+	}
+}
+
+void
+sp_namedview_toggle_grid (SPRepr *repr)
+{
+	unsigned int v;
+	sp_repr_get_boolean (repr, "showgrid", &v);
+	v = !v;
+	sp_repr_set_boolean (repr, "showgrid", v);
+
+	if (v) {
+		sp_repr_set_boolean (repr, "snaptogrid", TRUE);
+	} else {
+		sp_repr_set_boolean (repr, "snaptogrid", FALSE);
 	}
 }
 
