@@ -55,7 +55,7 @@ class Shape;
 
 // a little structure you shouldnt pay attention to
 // created because the function invocation was starting to be 2 lines long
-typedef struct dashTo_info
+struct dashTo_info
 {
   double     nDashAbs;
   NR::Point prevP;
@@ -63,7 +63,7 @@ typedef struct dashTo_info
   NR::Point prevD;
   double     prevW;
   double     curW;
-} dashTo_info;
+};
 
 // path creation: 2 phases: first the path is given as a succession of commands (MoveTo, LineTo, CurveTo...); then it
 // is converted in a polyline
@@ -76,62 +76,55 @@ public:
   // command list structures
 
   // lineto: a point
-  typedef struct path_descr_moveto
+  struct path_descr_moveto
   {
     NR::Point  p;
-  }
-  path_descr_moveto;
+  };
 
   // lineto: a point
   // MoveTos fit in this category
-  typedef struct path_descr_lineto
+  struct path_descr_lineto
   {
     NR::Point  p;
-  }
-  path_descr_lineto;
+  };
 
   // quadratic bezier curves: a set of control points, and an endpoint
-  typedef struct path_descr_bezierto
+  struct path_descr_bezierto
   {
     NR::Point    p;			// the endpoint's coordinates
     int nb;             // number of control points, stored in the next path description commands
-  }
-  path_descr_bezierto;
-  typedef struct path_descr_intermbezierto
+  };
+  
+  struct path_descr_intermbezierto
   {
     NR::Point    p;			// control point coordinates
-  }
-  path_descr_intermbezierto;
+  };
 
   // cubic spline curve: 2 tangents and one endpoint
-  typedef struct path_descr_cubicto
+  struct path_descr_cubicto
   {
     NR::Point    p;
     NR::Point    stD;
     NR::Point    enD;
-  }
-  path_descr_cubicto;
+  };
 
   // arc: endpoint, 2 radii and one angle, plus 2 booleans to choose the arc (svg style)
-  typedef struct path_descr_arcto
+  struct path_descr_arcto
   {
     NR::Point    p;
     double       rx,ry;
     double       angle;
     bool         large, clockwise;
-  }
-  path_descr_arcto;
+  };
 
-  
-  typedef struct path_descr
+  struct path_descr
   {
     int    flags;         // most notably contains the path command no
     int    associated;		// index in the polyline of the point that ends the path portion of this command
     double tSt, tEn;
     int    dStart;        // commands' data is stored in a separate array; dStart is the index of the 
                           // start of the storage for this command
-  }
-  path_descr;
+  };
 
   // flags for the path construction
   enum
@@ -159,46 +152,44 @@ public:
   NR::Point   *descr_data;
 
   // polyline storage: a series of coordinates (and maybe weights)
-  typedef struct path_lineto
+  struct path_lineto
   {
     int isMoveTo;
     NR::Point  p;
-  }
-  path_lineto;
+  };
   
   // back data: info on where this polyline's segment comes from, ie wich command in the path description: "piece"
   // and what abcissis on the chunk of path for this command: "t"
   // t=0 means it's at the start of the command's chunk, t=1 it's at the end
-  typedef struct path_lineto_b:public path_lineto
+  struct path_lineto_b : public path_lineto
   {
     int piece;
     double t;
-  }
-  path_lineto_b;
+  };
   
   int     nbPt, maxPt, sizePt;
   char    *pts;
 
   bool back;
 
-  Path (void);
-  ~Path (void);
+  Path();
+  ~Path();
 
   // creation of the path description
-  void Reset (void);		// reset to the empty description
+  void Reset();		// reset to the empty description
   void Copy (Path * who);
 
   // the commands...
-  int ForcePoint (void);
-  int Close (void);
+  int ForcePoint();
+  int Close();
   int MoveTo ( NR::Point const &ip);
   int LineTo ( NR::Point const &ip);
   int CubicTo ( NR::Point const &ip,  NR::Point const &iStD,  NR::Point const &iEnD);
   int ArcTo ( NR::Point const &ip, double iRx, double iRy, double angle, bool iLargeArc, bool iClockwise);
   int IntermBezierTo ( NR::Point const &ip);	// add a quadratic bezier spline control point
   int BezierTo ( NR::Point const &ip);	// quadratic bezier spline to this point (control points can be added after this)
-  int TempBezierTo (void);	// start a quadratic bezier spline (control points can be added after this)
-  int EndBezierTo (void);
+  int TempBezierTo();	// start a quadratic bezier spline (control points can be added after this)
+  int EndBezierTo();
   int EndBezierTo ( NR::Point const &ip);	// ends a quadratic bezier spline (for curves started with TempBezierTo)
 
   // transforms a description in a polyline (for stroking and filling)
@@ -267,7 +258,7 @@ public:
   
   //utilitaire pour inkscape
   void  LoadArtBPath(void *iP,NR::Matrix const &tr,bool doTransformation);
-	void* MakeArtBPath(void);
+	void* MakeArtBPath();
 	
 	void  Transform(const NR::Matrix &trans);
   
@@ -279,26 +270,26 @@ public:
   // conts= debut de chaque contour
   // nesting= parent de chaque contour
   Path**      SubPathsWithNesting(int &outNb,bool killNoSurf,int nbNest,int* nesting,int* conts);
-  // surface du chemin (considéré comme fermé)
-  double      Surface(void);
+  // surface du chemin (considere comme ferme)
+  double      Surface();
   void        PolylineBoundingBox(double &l,double &t,double &r,double &b);
   void        FastBBox(double &l,double &t,double &r,double &b);
   // longueur (totale des sous-chemins)
-  double      Length(void);
+  double      Length();
   
-  void             ConvertForcedToMoveTo(void);
-  void             ConvertForcedToVoid(void);
-  typedef struct cut_position {
+  void             ConvertForcedToMoveTo();
+  void             ConvertForcedToVoid();
+  struct cut_position {
     int          piece;
     float        t;
-  } cut_position;
+  };
   cut_position*    CurvilignToPosition(int nbCv,double* cvAbs,int &nbCut);
   
   // caution: not tested on quadratic b-splines, most certainly buggy
   void             ConvertPositionsToMoveTo(int nbPos,cut_position* poss);
   void             ConvertPositionsToForced(int nbPos,cut_position* poss);
 
-  void  Affiche(void);
+  void  Affiche();
   char *svg_dump_path ();
 
 private:
@@ -308,7 +299,7 @@ private:
   void ShiftDCmd(int at,int dec);
   void ShiftDData(int at,int dec);
   // utilitary functions for the path contruction
-  void CancelBezier (void);
+  void CancelBezier ();
   void CloseSubpath();
   void InsertMoveTo (NR::Point const &iPt,int at);
   void InsertForcePoint (int at);
@@ -340,14 +331,13 @@ private:
 		    int piece);
 
   // don't pay attention
-  typedef struct offset_orig
+  struct offset_orig
   {
     Path *orig;
     int piece;
     double tSt, tEn;
     double off_dec;
-  }
-  offset_orig;
+  };
   void DoArc ( NR::Point const &iS,  NR::Point const &iE, double rx, double ry,
 	      double angle, bool large, bool wise, double tresh, int piece,
 	      offset_orig & orig);
@@ -364,7 +354,7 @@ private:
 			     NR::Point const &iSd,  NR::Point const &iE,
 			     NR::Point const &iEd);
 
-  typedef struct outline_callback_data
+  struct outline_callback_data
   {
     Path *orig;
     int piece;
@@ -392,17 +382,15 @@ private:
       a;
     }
     d;
-  }
-  outline_callback_data;
+  };
 
   typedef void (outlineCallback) (outline_callback_data * data, double tol,  double width);
-  typedef struct outline_callbacks
+  struct outline_callbacks
   {
     outlineCallback *cubicto;
     outlineCallback *bezierto;
     outlineCallback *arcto;
-  }
-  outline_callbacks;
+  };
 
   void SubContractOutline (Path * dest, outline_callbacks & calls,
 			   double tolerance, double width, JoinType join,
@@ -473,7 +461,7 @@ private:
   void DoSimplify (double treshhold,int recLevel=0);
   bool AttemptSimplify (double treshhold, path_descr_cubicto & res,int &worstP);
   static bool FitCubic(NR::Point &start,path_descr_cubicto & res,double* Xk,double* Yk,double* Qk,double* tk,int nbPt);
-  typedef struct fitting_tables {
+  struct fitting_tables {
     int      nbPt,maxPt,inPt;
     double   *Xk;
     double   *Yk;
@@ -482,7 +470,7 @@ private:
     double   *lk;
     char     *fk;
     double   totLen;
-  } fitting_tables;
+  };
   bool   AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cubicto & res,int &worstP);
   bool   ExtendFit(fitting_tables &data,double treshhold, path_descr_cubicto & res,int &worstP);
   double RaffineTk (NR::Point pt, NR::Point p0, NR::Point p1, NR::Point p2, NR::Point p3, double it);

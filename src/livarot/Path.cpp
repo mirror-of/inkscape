@@ -20,7 +20,7 @@
  */
 
 
-Path::Path (void)
+Path::Path()
 {
 	descr_max = descr_nb = 0;
 	descr_cmd = NULL;
@@ -35,7 +35,7 @@ Path::Path (void)
 	pts = NULL;
 }
 
-Path::~Path (void)
+Path::~Path()
 {
 	g_free(descr_cmd);
 	descr_cmd = NULL;
@@ -50,7 +50,7 @@ Path::~Path (void)
 
 // debug function do dump the path contents on stdout
 void
-Path::Affiche(void)
+Path::Affiche()
 {
   printf("path: %i cmds, %i data (%i %i max)\n",descr_nb,ddata_nb,descr_max,ddata_max);
   for (int i=0;i<descr_nb;i++) {
@@ -100,7 +100,7 @@ Path::Affiche(void)
 }
 
 void
-Path::Reset (void)
+Path::Reset()
 {
   ddata_nb = 0;
 	descr_nb = 0;
@@ -300,7 +300,7 @@ Path::InsertForcePoint (int at)
 }
 
 int
-Path::Close (void)
+Path::Close()
 {
     if ( descr_flags & descr_adding_bezier ) {
         CancelBezier();
@@ -573,7 +573,7 @@ Path::InsertArcTo (NR::Point const &iPt, double iRx, double iRy, double angle,
 }
 
 int
-Path::TempBezierTo (void)
+Path::TempBezierTo()
 {
 	if (descr_flags & descr_adding_bezier) CancelBezier ();
 	if (descr_flags & descr_doing_subpath) {
@@ -601,7 +601,7 @@ Path::TempBezierTo (void)
 }
 
 void
-Path::CancelBezier (void)
+Path::CancelBezier()
 {
 	descr_flags &= ~(descr_adding_bezier);
 	descr_flags &= ~(descr_delayed_bezier);
@@ -612,7 +612,7 @@ Path::CancelBezier (void)
 }
 
 int
-Path::EndBezierTo (void)
+Path::EndBezierTo()
 {
 	if (descr_flags & descr_delayed_bezier) {
 		CancelBezier ();
