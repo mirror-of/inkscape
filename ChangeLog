@@ -26,6 +26,9 @@
 	src/livarot/float-line.h, src/livarot/int-line.cpp: use
 	std::vector for arrays in FloatLigne.
 
+	* src/livarot/float-line.cpp, src/livarot/float-line.h: remove
+	lots of dead code.  Make some methods private.
+
 2004-10-12  MenTaLguY  <mental@rydia.net>
 
 	* src/Makefile.am: added files
