@@ -1326,6 +1326,95 @@ sp_node_selected_delete (void)
 }
 
 void
+sp_node_selected_delete_segment (void)
+{
+	SPNodePath * nodepath;
+	SPPathNode * a,     *b;      //Selected nodes, not inclusive
+	SPPathNode *start, *end;     //Start , end nodes.  not inclusive
+	SPPathNode *curr, *next;     //Iterators
+
+	nodepath = sp_nodepath_current ();
+	if (!nodepath) return; // there's no nodepath when editing rects, stars, spirals or ellipses
+
+	if (g_list_length (nodepath->selected) != 2) {
+		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop),
+                "You must select two nodes on a path between which to delete segments.");
+		return;
+	}
+
+	a = (SPPathNode *) nodepath->selected->data;
+	b = (SPPathNode *) nodepath->selected->next->data;
+
+	if ( ( a==b)                       ||  //same node
+	     (a->subpath->closed        )  ||
+             (a->subpath  != b->subpath )  ||  //not the same path
+             (!a->p.other || !a->n.other)  ||  //one of a's sides does not have a segment
+             (!b->p.other || !b->n.other) )    //one of b's sides does not have a segment
+		{
+		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop),
+		"You must select two nodes on a path between which to delete segments.");
+		return;
+		}
+
+
+	//We need to get the direction of the list between A and B
+	//Can we walk from a to b?
+	start = NULL;
+	for (curr = a->n.other ; curr && curr!=a ; curr=curr->n.other) {
+		if (curr==b) {
+			start = a;  //did it!  we go from a to b
+			end   = b;
+			//printf("A to B\n");
+			break;
+		}
+	}
+	if (!start) {//didn't work?  let's try the other direction
+		for (curr = b->n.other ; curr && curr!=b ; curr=curr->n.other) {
+			if (curr==a) {
+				start = b;  //did it!  we go from b to a
+				end   = a;
+				//printf("B to A\n");
+				break;
+			}
+		}
+	}
+	if (!start) {
+		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop),
+		"Cannot find path between nodes.");
+		return;
+	}
+
+
+
+	//Copy everything after 'end' to a new subpath
+	ArtPathcode code = (ArtPathcode)start->subpath->first->n.other->code;
+	SPNodeSubPath *t = sp_nodepath_subpath_new (nodepath);
+	//sp_nodepath_node_new (t, NULL, SP_PATHNODE_CUSP, ART_MOVETO, &end->n.pos, &end->pos, &end->p.pos);
+	for (curr=end ; curr ; curr=curr->n.other) {
+		sp_nodepath_node_new (t, NULL, (SPPathNodeType)curr->type, (ArtPathcode)curr->code,
+			&curr->p.pos, &curr->pos, &curr->n.pos);
+	}
+
+	//Now let us do our deletion.  Since the tail has been saved, go all the way to the end of the list
+	for (curr = start->n.other ; curr  ; curr=next) {
+		next = curr->n.other;
+		sp_nodepath_node_destroy (curr);
+	}
+
+	sp_nodepath_ensure_ctrls (nodepath);
+
+	update_repr (nodepath);
+
+	if (nodepath->subpaths == NULL) { // if the entire nodepath is removed, delete the selected object.
+		sp_nodepath_destroy (nodepath);
+		sp_selection_delete (NULL, NULL);
+	}
+
+	sp_nodepath_update_statusbar (nodepath);
+}
+
+
+void
 sp_node_selected_set_line_type (ArtPathcode code)
 {
 	SPNodePath * nodepath;

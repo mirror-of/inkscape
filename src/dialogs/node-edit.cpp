@@ -29,6 +29,12 @@ sp_node_path_edit_delete (void)
 }
 
 void
+sp_node_path_edit_delete_segment (void)
+{
+	sp_node_selected_delete_segment ();
+}
+
+void
 sp_node_path_edit_break (void)
 {
 	sp_node_selected_break ();
