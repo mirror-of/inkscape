@@ -486,34 +486,6 @@ verify_grad(SPGradient *gradient)
 	}
 }
 
-static SPStop*
-sp_prev_stop(SPStop *stop, SPGradient *gradient)
-{
-	if (sp_object_first_child(SP_OBJECT(gradient)) == SP_OBJECT(stop)) 
-		return NULL;
-	SPObject *found = NULL;
-	for ( SPObject *ochild = sp_object_first_child(SP_OBJECT(gradient)) ; ochild != NULL ; ochild = SP_OBJECT_NEXT(ochild) ) {
-		if (SP_IS_STOP (ochild)) {
-			found = ochild;
-		}
-		if (SP_OBJECT_NEXT(ochild) == SP_OBJECT(stop) || SP_OBJECT(ochild) == SP_OBJECT(stop)) {
-			break;
-		}
-	}
-	return SP_STOP(found);
-}
-
-static SPStop*
-sp_next_stop(SPStop *stop)
-{
-  for (SPObject *ochild = SP_OBJECT_NEXT(stop); ochild != NULL; ochild = SP_OBJECT_NEXT(ochild)) {
-	if (SP_IS_STOP (ochild))
-		return SP_STOP(ochild);
-  }
-  return NULL;
-}
-
-
 static void
 update_stop_list( GtkWidget *mnu, SPGradient *gradient, SPStop *new_stop)
 {
