@@ -12,6 +12,12 @@ INCLUDES = \
 	$(cflags) \
 	$(INKSCAPE_CFLAGS)
 
+TESTS = bezier-utils-test$(EXEEXT)
+# automake adds $(EXEEXT) to check_PROGRAMS items but not to TESTS items:
+# TESTS items can be scripts etc.
+
+check_PROGRAMS = bezier-utils-test
+
 libspchelp_a_SOURCES = \
 	sp-intl.h \
 	helper-forward.h \
@@ -54,3 +60,6 @@ sp-marshal.c sp-marshal.h: Makefile
 EXTRA_DIST = sp-marshal.list
 
 DISTCLEANFILES = sp-marshal.c sp-marshal.h
+
+bezier_utils_test_SOURCES = bezier-utils-test.cpp
+bezier_utils_test_LDADD = ../libnr/nr-point-fns.o ../libnr/nr-types.o -lglib-2.0
