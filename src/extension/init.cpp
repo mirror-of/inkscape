@@ -126,9 +126,9 @@ check_extensions_internal (Extension * in_plug, gpointer in_data)
 {
 	int * count = (int *)in_data;
 
-	if (!in_plug->check()) {
+	if (!in_plug->deactivated() && !in_plug->check()) {
 		printf("Deleting Extension: %s\n", in_plug->get_name());
-		delete in_plug;
+		in_plug->deactivate();
 		(*count)++;
 	}
 

@@ -58,6 +58,7 @@ Extension::Extension (SPRepr * in_repr, Implementation::Implementation * in_imp)
     name = NULL;
     state = STATE_UNLOADED;
     parameters = NULL;
+	_deactivated = FALSE;
 
     if (in_imp == NULL) {
         imp = new Implementation::Implementation();
@@ -200,6 +201,20 @@ gchar *
 Extension::get_name (void)
 {
     return name;
+}
+
+void
+Extension::deactivate (void)
+{
+	_deactivated = TRUE;
+
+	return;
+}
+
+bool
+Extension::deactivated (void)
+{
+	return _deactivated;
 }
 
 /**

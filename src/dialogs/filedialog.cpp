@@ -120,9 +120,12 @@ FileOpenDialog::FileOpenDialog(const char *dir,
 	for (current_item = g_slist_next(extension_list);
             current_item != NULL;
             current_item = g_slist_next(current_item)) {
-		item = gtk_menu_item_new_with_label((reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data))->name);
+		Inkscape::Extension::DB::IOExtensionDescription * ioext = reinterpret_cast<Inkscape::Extension::DB::IOExtensionDescription *>(current_item->data);
+
+		item = gtk_menu_item_new_with_label(ioext->name);
 		g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(menu_switch), (gpointer)(&extension));
 		g_object_set_data(G_OBJECT(item), IO_STORAGE_NAME, current_item->data);
+		gtk_widget_set_sensitive(item, ioext->sensitive);
 		gtk_widget_show(item);
 		gtk_menu_append(GTK_MENU(menu), item);
 	}
@@ -264,6 +267,7 @@ FileSaveDialog::FileSaveDialog(
 		g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK(menu_switch), (gpointer)(&extension));
 		g_object_set_data(G_OBJECT(item), IO_STORAGE_NAME, current_item->data);
 		gtk_widget_show(item);
+		gtk_widget_set_sensitive(item, currentIO->sensitive);
 		gtk_menu_append(GTK_MENU(menu), item);
 
 		if (default_key != NULL &&

@@ -82,6 +82,7 @@ private:
     gchar *id;                            /**< The unique identifier for the Extension */
     gchar *name;                          /**< A user friendly name for the Extension */
     state_t state;                        /**< Which state the Extension is currently in */
+	bool   _deactivated;                   /**< If the extension still exists, but shouldn't be used */
 
 protected:
     SPRepr *repr;                         /**< The XML description of the Extension */
@@ -99,6 +100,8 @@ public:
     SPRepr *      get_repr     (void);
     gchar *       get_id       (void);
     gchar *       get_name     (void);
+	void          deactivate   (void);
+	bool          deactivated  (void);
 
 
 /* Parameter Stuff */

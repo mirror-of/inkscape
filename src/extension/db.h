@@ -54,11 +54,13 @@ public:
         const gchar *     file_extension; /**< Extension of file for this extension */
         const gchar *     mimetype;       /**< MIME type of file */
         Extension *       extension;      /**< Key used to pass back to the extension system */
+		bool              sensitive;      /**< Whether or not the extension should be sensitive in UI elements */
 
         IOExtensionDescription   (const gchar *      in_name,
                                   const gchar *      in_file_extension,
                                   const gchar *      in_mime,
-                                  Extension *        in_extension);
+                                  Extension *        in_extension,
+								  bool               in_sensitive);
         ~IOExtensionDescription(void);
     };
 

@@ -142,7 +142,7 @@ open (Extension * key, const gchar * filename)
 static void
 open_internal (Extension * in_plug, gpointer in_data)
 {
-	if (dynamic_cast<Input *>(in_plug)) {
+	if (!in_plug->deactivated() && dynamic_cast<Input *>(in_plug)) {
 		const gchar * ext;
 		gpointer * parray;
 		const gchar * filename;
@@ -302,7 +302,7 @@ save (Extension * key, SPDocument * doc, const gchar * filename, bool setextensi
 static void
 save_internal (Extension * in_plug, gpointer in_data)
 {
-	if (dynamic_cast<Output *>(in_plug)) {
+	if (!in_plug->deactivated() && dynamic_cast<Output *>(in_plug)) {
 		const gchar * ext;
 		gpointer * parray;
 		const gchar * filename;

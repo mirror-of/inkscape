@@ -28,13 +28,6 @@ DB db;
 
 /* Types */
 
-/** Holds the callback and user-supplied data used by sp_module_db_foreach_internal()
- * */
-struct ModuleDBForeachClosure {
-	void (* in_func)(Inkscape::Extension::Extension * in_plug, gpointer in_data);
-	gpointer in_data;
-};
-
 DB::DB (void) {
 	return;
 }
@@ -86,6 +79,9 @@ DB::get (const gchar *key)
 
 	mod = (*moduledict.find(key)).second;
 
+	if (mod->deactivated())
+		return NULL;
+
 	return mod;
 }
 
@@ -109,24 +105,6 @@ DB::foreach (void (*in_func)(Extension * in_plug, gpointer in_data), gpointer in
 	}
 
 	return;
-}
-
-/**
-	\brief     Adaptor used by sp_module_db_foreach()
-	\param     in_key    The key of the object being pulled out of the
-	                     hash table.
-	\param     in_value  The actual module (a pointer to it) that is
-	                     located in the hash table.
-	\param     in_data   A pointer to a ModuleDBForeachClosure struct
-
-	This function serves as an adaptor to use sp_module_db_foreach()'s
-	callbacks with g_hash_table_foreach().
-*/
-void
-DB::foreach_internal (gpointer in_key, gpointer in_value, gpointer in_data)
-{
-	ModuleDBForeachClosure *closure=reinterpret_cast<ModuleDBForeachClosure *>(in_data);
-	closure->in_func(reinterpret_cast<Inkscape::Extension::Extension *>(in_value), closure->in_data);
 }
 
 /**
@@ -159,7 +137,7 @@ DB::input_internal (Extension * in_plug, gpointer data)
 
 		tooltip = imod->get_filetypetooltip();
 
-		desc = new IOExtensionDescription(name, extension, mimetype, in_plug);
+		desc = new IOExtensionDescription(name, extension, mimetype, in_plug, !in_plug->deactivated());
 		g_slist_append((GSList *)data, (gpointer)desc);
 	}
 
@@ -186,7 +164,7 @@ DB::output_internal (Extension * in_plug, gpointer data)
 
 		tooltip = omod->get_filetypetooltip();
 
-		desc = new IOExtensionDescription(name, extension, mimetype, in_plug);
+		desc = new IOExtensionDescription(name, extension, mimetype, in_plug, !in_plug->deactivated());
 		g_slist_append((GSList *)data, (gpointer)desc);
 	}
 
@@ -199,7 +177,7 @@ DB::get_input_list (void)
 	GSList * retlist = NULL;
 	IOExtensionDescription * desc;
 
-	desc = new IOExtensionDescription(_("Autodetect"), NULL, NULL, NULL);
+	desc = new IOExtensionDescription(_("Autodetect"), NULL, NULL, NULL, TRUE);
 	retlist = g_slist_append(retlist, (gpointer)desc);
 	foreach(input_internal, (gpointer)retlist);
 
@@ -212,7 +190,7 @@ DB::get_output_list (void)
 	GSList * retlist = NULL;
 	IOExtensionDescription * desc;
 
-	desc = new IOExtensionDescription(_("Autodetect"), NULL, NULL, NULL);
+	desc = new IOExtensionDescription(_("Autodetect"), NULL, NULL, NULL, TRUE);
 	retlist = g_slist_append(retlist, (gpointer)desc);
 	foreach(output_internal, (gpointer)retlist);
 
@@ -225,12 +203,13 @@ DB::free_list (GSList * in_list)
 	return;
 }
 
-DB::IOExtensionDescription::IOExtensionDescription(const gchar * in_name, const gchar * in_file_extension, const gchar * in_mime, Extension * in_extension)
+DB::IOExtensionDescription::IOExtensionDescription(const gchar * in_name, const gchar * in_file_extension, const gchar * in_mime, Extension * in_extension, bool in_sensitive)
 {
 	name = in_name;
 	file_extension = in_file_extension;
 	mimetype = in_mime;
 	extension = in_extension;
+	sensitive = in_sensitive;
 	return;
 }
 

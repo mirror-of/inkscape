@@ -1,3 +1,18 @@
+2004-04-26  Ted Gould  <ted@gould.cx>
+
+	* share/extensions/epsi_output.inkmod:
+
+	Added in a check for ps2epsi
+
+	* src/dialogs/filedialog.cpp, src/extension/db.cpp, src/extension/db.h,
+	src/extension/extension.cpp, src/extension/extension.h,
+	src/extension/init.cpp, src/extension/system.cpp:
+
+	Implementing a 'deactivated' extension.  This means that it should
+	still exist, but show up as insensitive in any GUI element that could use
+	it.  The idea here is that users should know what they don't have, but
+	Inkscape supports.
+
 2004-04-26 Nathan Hurst <njh@mail.csse.monash.edu.au>
 
 	* src/{libnr,libnrtype,widgets,display,helper,.}*.{h,cpp}: moved
