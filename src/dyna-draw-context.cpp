@@ -274,8 +274,8 @@ sp_dyna_draw_get_npoint(SPDynaDrawContext const *dc, NR::Point v)
 {
     NRRect drect;
     sp_desktop_get_display_area(SP_EVENT_CONTEXT(dc)->desktop, &drect);
-    return NR::Point(( v[NR::X] - drect.x0 ) / ( drect.x1 - drect.x0 ),
-                     ( v[NR::Y] - drect.y0 ) / ( drect.y1 - drect.y0 ));
+    double max = MAX (( drect.x1 - drect.x0 ), ( drect.y1 - drect.y0 ));
+    return NR::Point(( v[NR::X] - drect.x0 ) / max,  ( v[NR::Y] - drect.y0 ) / max);
 }
 
 /* Get view point */
@@ -284,8 +284,8 @@ sp_dyna_draw_get_vpoint(SPDynaDrawContext const *dc, NR::Point n)
 {
     NRRect drect;
     sp_desktop_get_display_area(SP_EVENT_CONTEXT(dc)->desktop, &drect);
-    return NR::Point(n[NR::X] * ( drect.x1 - drect.x0 ) + drect.x0,
-                     n[NR::Y] * ( drect.y1 - drect.y0 ) + drect.y0);
+    double max = MAX (( drect.x1 - drect.x0 ), ( drect.y1 - drect.y0 ));
+    return NR::Point(n[NR::X] * max + drect.x0, n[NR::Y] * max + drect.y0);
 }
 
 /* Get current view point */
@@ -293,8 +293,8 @@ static NR::Point sp_dyna_draw_get_curr_vpoint(SPDynaDrawContext const *dc)
 {
     NRRect drect;
     sp_desktop_get_display_area(SP_EVENT_CONTEXT(dc)->desktop, &drect);
-    return NR::Point(dc->cur[NR::X] * ( drect.x1 - drect.x0 ) + drect.x0,
-                     dc->cur[NR::Y] * ( drect.y1 - drect.y0 ) + drect.y0);
+    double max = MAX (( drect.x1 - drect.x0 ), ( drect.y1 - drect.y0 ));
+    return NR::Point(dc->cur[NR::X] * max + drect.x0, dc->cur[NR::Y] * max + drect.y0);
 }
 
 static void
@@ -379,11 +379,11 @@ sp_dyna_draw_brush(SPDynaDrawContext *dc)
         /* calligraphics */
 
         // How much velocity thins strokestyle
-        double vel_thin = flerp (0, 20, dc->vel_thin);
+        double vel_thin = flerp (0, 160, dc->vel_thin);
 
         double width = ( 1 - vel_thin * NR::L2(dc->vel) ) * dc->width;
-        if ( width < 0.1 * dc->width ) {
-            width = 0.1 * dc->width;
+        if ( width < 0.02 * dc->width ) {
+            width = 0.02 * dc->width;
         }
 
         NR::Point del = 0.05 * width * dc->ang;
