@@ -602,8 +602,8 @@ sp_dyna_draw_context_root_handler(SPEventContext *event_context,
         case GDK_KP_Left:
             if (!MOD__CTRL_ONLY) {
                 dc->width -= 0.01;
-                if (dc->width < 0.0) 
-                    dc->width = 0.0;
+                if (dc->width < 0.01) 
+                    dc->width = 0.01;
                 sp_ddc_update_toolbox (desktop, "altx-calligraphy", dc->width); 
                 ret = TRUE;
             }
