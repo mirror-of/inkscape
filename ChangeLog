@@ -1,5 +1,8 @@
 2004-01-04  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/inkscape.cpp (inkscape_remove_desktop): Change
+	`g_slist_length (foo) == 0' to `foo == NULL'.
+
 	* src/dyna-draw-context.cpp (fit_and_split_calligraphics): Fix the
 	calculation of BEZIER_MAX_LENGTH.
 	Add assertions that the corresponding buffers haven't been overrun.

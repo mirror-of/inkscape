@@ -738,8 +738,9 @@ inkscape_remove_desktop (SPDesktop * desktop)
 	inkscape->desktops = g_slist_remove (inkscape->desktops, desktop);
 
 	// if this was the last desktop, shut down the program
-	if (g_slist_length (inkscape->desktops) == 0)
+	if (inkscape->desktops == NULL) {
 		inkscape_exit (inkscape);
+	}
 }
 
 void
