@@ -12,7 +12,9 @@
  * contains lots of stitched pieces of path-chemistry.c
  */
 
+#include <time.h>
 #include <string.h>
+
 #include <libart_lgpl/art_misc.h>
 #include "xml/repr.h"
 #include "svg/svg.h"
@@ -1212,104 +1214,143 @@ sp_selected_path_do_offset (bool expand)
   g_free (style);
 }
 
+// globals for keeping track of accelerated simplify
+static double prev_time = 0;
+static gdouble simplify_multiply = 1;
+
 void
 sp_selected_path_simplify (void)
 {
-  sp_selected_path_simplify_withparams (1.0,true,0.0,false);
+	gdouble simplify_threshold = prefs_get_double_attribute ("options.simplifythreshold","value", 0.02);
+	bool simplify_justcoalesce = (bool) prefs_get_int_attribute ("options.simplifyjustcoalesce","value", 1);
+
+	GTimeVal cu;
+	g_get_current_time (&cu);
+	double current = cu.tv_sec * 1000000 + cu.tv_usec;
+
+	if (prev_time != 0 && current - prev_time < 500000) {
+		simplify_multiply += 0.5;
+		simplify_threshold *= simplify_multiply;
+	} else {
+		simplify_multiply = 1;
+	}
+	prev_time = current;
+
+	//g_print ("%g\n", simplify_threshold);
+
+	sp_selected_path_simplify_withparams (simplify_threshold, simplify_justcoalesce, 0.0, false);
 }
+
 void
-sp_selected_path_simplify_withparams (float treshhold,bool justCoalesce,float angleLimit,bool breakableAngles)
+sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float angleLimit, bool breakableAngles)
 {
-  SPSelection *selection;
-  SPRepr *repr;
-  SPItem *item;
-  SPCurve *curve;
-  gchar *style, *str;
-  SPDesktop *desktop;
-  NRMatrix i2root;
-  
-  curve = NULL;
-  
-  desktop = SP_ACTIVE_DESKTOP;
-  if (!SP_IS_DESKTOP (desktop))
-    return;
-  
-  selection = SP_DT_SELECTION (desktop);
-  
-  item = sp_selection_item (selection);
-  
-  if (item == NULL)
-    return;
-  if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
-    return;
-  if (SP_IS_SHAPE (item))
-  {
-    curve = sp_shape_get_curve (SP_SHAPE (item));
-    if (curve == NULL)
-      return;
-  }
-  if (SP_IS_TEXT (item))
-  {
-    curve = sp_text_normalized_bpath (SP_TEXT (item));
-    if (curve == NULL)
-      return;
-  }
-  
-  sp_item_i2root_affine (item, &i2root);
-  style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
-  
-  Path *orig = Path_for_item (item,false);
-  if (orig == NULL)
-  {
-    g_free (style);
-    sp_curve_unref (curve);
-    return;
-  }
-  
-  sp_curve_unref (curve);
-  sp_repr_unparent (SP_OBJECT_REPR (item));
-  
-  if ( justCoalesce ) {
-    orig->Coalesce (treshhold);
-  } else {
-    orig->ConvertEvenLines (treshhold);
-    orig->Simplify (treshhold);
-  }
-  
-  {
-    gchar tstr[80];
-    
-    tstr[79] = '\0';
-    
-    repr = sp_repr_new ("path");
-    if (sp_svg_transform_write (tstr, 80, &i2root))
-    {
-      sp_repr_set_attr (repr, "transform", tstr);
-    }
-    else
-    {
-      sp_repr_set_attr (repr, "transform", NULL);
-    }
-    
-    sp_repr_set_attr (repr, "style", style);
-    
-    str = liv_svg_dump_path (orig);
-    sp_repr_set_attr (repr, "d", str);
-    g_free (str);
-    item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
-    sp_repr_unref (repr);
-    sp_selection_empty (selection);
-    sp_selection_add_item (selection, item);
-    
-  }
-  
-  sp_document_done (SP_DT_DOCUMENT (desktop));
-  
-  delete orig;
-  
-  g_free (style);
-  
+	SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+	if (!SP_IS_DESKTOP (desktop))
+		return;
+
+	SPSelection *selection = SP_DT_SELECTION (desktop);
+
+	if (sp_selection_is_empty (selection)) {
+		sp_view_set_statusf_flash (SP_VIEW(desktop), _("Select some paths to simplify."));
+		return;
+	}
+
+	bool did = false;
+
+	for (GSList *items = g_slist_copy((GSList *) sp_selection_item_list(SP_DT_SELECTION(desktop)));
+	      items != NULL;
+	      items = items->next) {
+
+		SPItem *item = (SPItem *) items->data;
+
+		if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
+			continue;
+
+		SPCurve *curve = NULL;
+		if (SP_IS_SHAPE (item)) {
+			curve = sp_shape_get_curve (SP_SHAPE (item));
+			if (curve == NULL)
+				continue;
+		}
+		if (SP_IS_TEXT (item)) {
+			curve = sp_text_normalized_bpath (SP_TEXT (item));
+			if (curve == NULL)
+				continue;
+		}
+
+		NRMatrix i2root;
+		sp_item_i2root_affine (item, &i2root);
+		gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR (item), "style"));
+
+		Path *orig = Path_for_item (item, false);
+		if (orig == NULL) {
+			g_free (style);
+			sp_curve_unref (curve);
+			continue;
+		}
+
+		did = true;
+		sp_curve_unref (curve);
+		// remember the position of the item
+		gint pos = sp_repr_position (SP_OBJECT_REPR (item));
+		// remember parent
+		SPRepr *parent = SP_OBJECT_REPR (item)->parent;
+		// remember size
+		NR::Rect bbox = sp_item_bbox_desktop (item);
+		gdouble size = L2(bbox.dimensions());
+
+		sp_selection_remove_item (selection, item);
+		sp_repr_unparent (SP_OBJECT_REPR (item));
+
+		{
+			if ( justCoalesce ) {
+				orig->Coalesce (threshold * size);
+			} else {
+				orig->ConvertEvenLines (threshold * size);
+				orig->Simplify (threshold * size);
+			}
+		}
+
+		{
+			gchar tstr[80];
+
+			tstr[79] = '\0';
+
+			SPRepr *repr = sp_repr_new ("path");
+
+			if (sp_svg_transform_write (tstr, 80, &i2root))	{
+				sp_repr_set_attr (repr, "transform", tstr);
+			}
+			else	{
+				sp_repr_set_attr (repr, "transform", NULL);
+			}
+
+			sp_repr_set_attr (repr, "style", style);
+
+			gchar *str = liv_svg_dump_path (orig);
+			sp_repr_set_attr (repr, "d", str);
+			g_free (str);
+
+			// add the new repr to the parent
+			sp_repr_append_child (parent, repr);
+
+			// move to the saved position 
+			sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+
+			sp_selection_add_repr (selection, repr);
+
+			sp_repr_unref (repr);
+		}
+	}
+
+	if (did) {
+		sp_document_done (SP_DT_DOCUMENT (desktop));
+	} else {
+		sp_view_set_statusf_flash (SP_VIEW(desktop), _("No paths to simplify in the selection."));
+		return;
+	}
 }
+
 
 
 // fonctions utilitaires

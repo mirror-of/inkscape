@@ -104,7 +104,8 @@ static const char preferences_skeleton[] =
 "    <group id=\"transientpolicy\" value=\"1\"/>"
 "    <group id=\"scrollingacceleration\" value=\"0.35\"/>"
 "    <group id=\"autoscrollspeed\" value=\"0.7\"/>"
-"    <group id=\"autoscrolldistance\" value=\"-8\"/>"
+"    <group id=\"autoscrolldistance\" value=\"-10\"/>"
+"    <group id=\"simplifythreshold\" value=\"0.02\"/>"
 "  </group>"
 
 "</inkscape>";
