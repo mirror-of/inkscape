@@ -2,6 +2,9 @@
 
 	* src/gc-core.h: don't defer finalizers
 
+	* src/gc-core.h: bump up free space divisor -- collections should
+	  happen ~32x more frequently
+
 2004-09-18  MenTaLguY <mental@rydia.net>
 
 	* src/dialogs/filedialog.cpp: unref the preview document we created
