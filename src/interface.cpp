@@ -441,9 +441,11 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
 	SP_VERB_FILE_REVERT,
         SP_VERB_FILE_SAVE,
         SP_VERB_FILE_SAVE_AS,
+
         SP_VERB_NONE,
         SP_VERB_FILE_IMPORT,
         SP_VERB_FILE_EXPORT,
+
         SP_VERB_NONE,
         /* commented out until implemented */
 	// SP_VERB_FILE_PRINT_PREVIEW,
@@ -451,6 +453,11 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
 #if defined(WIN32) || defined(WITH_GNOME_PRINT)
 	SP_VERB_FILE_PRINT_DIRECT,
 #endif
+
+        SP_VERB_NONE,
+       SP_VERB_DIALOG_NAMEDVIEW,
+       SP_VERB_DIALOG_DISPLAY,
+
         SP_VERB_NONE,
 	SP_VERB_FILE_CLOSE_VIEW,
 	SP_VERB_FILE_QUIT,
@@ -476,20 +483,28 @@ sp_ui_edit_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
     static const sp_verb_t edit_verbs[] = {
         SP_VERB_EDIT_UNDO,
         SP_VERB_EDIT_REDO,
+
         SP_VERB_NONE,
         SP_VERB_EDIT_CUT,
         SP_VERB_EDIT_COPY,
         SP_VERB_EDIT_PASTE,
         SP_VERB_EDIT_PASTE_IN_PLACE,
         SP_VERB_EDIT_PASTE_STYLE,
+
         SP_VERB_NONE,
         SP_VERB_EDIT_DUPLICATE,
         SP_VERB_EDIT_CLONE,
         SP_VERB_EDIT_UNLINK_CLONE,
         SP_VERB_EDIT_DELETE,
+
         SP_VERB_NONE,
         SP_VERB_EDIT_SELECT_ALL,
         SP_VERB_EDIT_DESELECT,
+
+        SP_VERB_NONE,
+       SP_VERB_DIALOG_TEXT,
+       SP_VERB_DIALOG_XML_EDITOR,
+
         SP_VERB_LAST
     };
     sp_ui_menu_append (menu, edit_verbs, view);
@@ -500,6 +515,10 @@ static void
 sp_ui_object_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
     static const sp_verb_t selection[] = {
+       SP_VERB_DIALOG_ITEM,
+	SP_VERB_DIALOG_FILL_STROKE,
+        SP_VERB_NONE,
+
         SP_VERB_SELECTION_GROUP,
         SP_VERB_SELECTION_UNGROUP,
 
@@ -515,6 +534,10 @@ sp_ui_object_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
         SP_VERB_OBJECT_ROTATE_90_CCW,
         SP_VERB_OBJECT_FLIP_HORIZONTAL,
         SP_VERB_OBJECT_FLIP_VERTICAL,
+
+        SP_VERB_NONE,
+       SP_VERB_DIALOG_TRANSFORM,
+       SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
 
         SP_VERB_LAST
     };
@@ -555,46 +578,6 @@ sp_ui_path_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
     sp_ui_menu_append (menu, selection, view);
 } // end of sp_ui_path_menu
 
-
-
-static void
-sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
-{
-    static const sp_verb_t view_verbs[] = {
-	SP_VERB_ZOOM_1_1,
-	SP_VERB_ZOOM_1_2,
-	SP_VERB_ZOOM_2_1,
-        SP_VERB_NONE,
-	SP_VERB_ZOOM_SELECTION,
-	SP_VERB_ZOOM_DRAWING,
-	SP_VERB_ZOOM_PAGE,
-	SP_VERB_ZOOM_PAGE_WIDTH,
-        SP_VERB_NONE,
-	SP_VERB_ZOOM_NEXT,
-	SP_VERB_ZOOM_PREV,
-        SP_VERB_NONE,
-	SP_VERB_TOGGLE_GRID,
-	SP_VERB_TOGGLE_GUIDES,
-	SP_VERB_TOGGLE_RULERS,
-	SP_VERB_TOGGLE_SCROLLBARS,
-#ifdef HAVE_GTK_WINDOW_FULLSCREEN
-        SP_VERB_NONE,
-	SP_VERB_FULLSCREEN,
-#endif /* HAVE_GTK_WINDOW_FULLSCREEN */
-        SP_VERB_NONE,
-	SP_VERB_FILE_NEXT_DESKTOP,
-	SP_VERB_FILE_PREV_DESKTOP,
-        SP_VERB_NONE,
-	SP_VERB_VIEW_NEW,
-	// SP_VERB_VIEW_NEW_PREVIEW,
-        SP_VERB_LAST
-    };
-
-    sp_ui_menu_append (menu, view_verbs, view);
-} // end of sp_ui_view_menu()
-
-
-
 #ifndef WIN32
 static void window_policy_toggled(GtkCheckMenuItem *menuitem,
                                   gpointer user_data)
@@ -617,45 +600,69 @@ static gboolean window_policy_update(GtkWidget *widget,
 #endif
 
 static void
-sp_ui_dialogs_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
+sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 {
-    static const sp_verb_t dialog_verbs[] = {
-       SP_VERB_DIALOG_FILL_STROKE,
-       SP_VERB_DIALOG_TEXT,
-//                SP_VERB_DIALOG_SIZE_POSITION,
-       SP_VERB_DIALOG_TRANSFORM,
-       SP_VERB_DIALOG_ALIGN_DISTRIBUTE,
-       SP_VERB_DIALOG_XML_EDITOR,
-//                SP_VERB_DIALOG_DOCUMENT,
-       SP_VERB_DIALOG_NAMEDVIEW,
- //       SP_VERB_DIALOG_TOOL_OPTIONS,
-//                SP_VERB_DIALOG_TOOL_ATTRIBUTES,
-       SP_VERB_DIALOG_DISPLAY,
-       SP_VERB_DIALOG_ITEM,
+    static const sp_verb_t view_verbs1[] = {
+	SP_VERB_ZOOM_1_1,
+	SP_VERB_ZOOM_1_2,
+	SP_VERB_ZOOM_2_1,
 
-       SP_VERB_NONE,
-       SP_VERB_DIALOG_TOGGLE,
+        SP_VERB_NONE,
+	SP_VERB_ZOOM_SELECTION,
+	SP_VERB_ZOOM_DRAWING,
+	SP_VERB_ZOOM_PAGE,
+	SP_VERB_ZOOM_PAGE_WIDTH,
 
-       SP_VERB_LAST
+        SP_VERB_NONE,
+	SP_VERB_ZOOM_NEXT,
+	SP_VERB_ZOOM_PREV,
+
+        SP_VERB_NONE,
+	SP_VERB_TOGGLE_GRID,
+	SP_VERB_TOGGLE_GUIDES,
+	SP_VERB_TOGGLE_RULERS,
+	SP_VERB_TOGGLE_SCROLLBARS,
+
+        SP_VERB_NONE,
+	SP_VERB_DIALOG_TOGGLE,
+        SP_VERB_LAST
+	};
+
+    static const sp_verb_t view_verbs2[] = {
+#ifdef HAVE_GTK_WINDOW_FULLSCREEN
+        SP_VERB_NONE,
+	SP_VERB_FULLSCREEN,
+#endif /* HAVE_GTK_WINDOW_FULLSCREEN */
+        SP_VERB_NONE,
+	SP_VERB_FILE_NEXT_DESKTOP,
+	SP_VERB_FILE_PREV_DESKTOP,
+        SP_VERB_NONE,
+	SP_VERB_VIEW_NEW,
+	// SP_VERB_VIEW_NEW_PREVIEW,
+        SP_VERB_LAST
     };
 
-    sp_ui_menu_append (menu, dialog_verbs, view);
+    sp_ui_menu_append (menu, view_verbs1, view);
 
 #ifndef WIN32
-    GtkWidget *window_policy_check = 
-        gtk_check_menu_item_new_with_label(_("Autoraise Dialogs"));
+     GtkWidget *window_policy_check = 
+         gtk_check_menu_item_new_with_label(_("Autoraise Dialogs"));
 
-    gtk_widget_show(window_policy_check);
+     gtk_widget_show(window_policy_check);
 
-    gtk_menu_shell_append(GTK_MENU_SHELL(menu), window_policy_check);
+     gtk_menu_shell_append(GTK_MENU_SHELL(menu), window_policy_check);
 
-    g_signal_connect( G_OBJECT(window_policy_check), "toggled",
-                      (GCallback)window_policy_toggled, NULL );
+     g_signal_connect( G_OBJECT(window_policy_check), "toggled",
+                       (GCallback)window_policy_toggled, NULL );
 
-    g_signal_connect( G_OBJECT(window_policy_check), "expose_event",
-                      (GCallback)window_policy_update, NULL);
+     g_signal_connect( G_OBJECT(window_policy_check), "expose_event",
+                       (GCallback)window_policy_update, NULL);
 #endif
-}
+
+    sp_ui_menu_append (menu, view_verbs2, view);
+
+} // end of sp_ui_view_menu()
+
 
 /* Menus */
 
@@ -743,11 +750,11 @@ sp_ui_main_menubar (SPView *view)
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
 
-	mitem = gtk_menu_item_new_with_mnemonic (_("_Dialogs"));
-	menu = gtk_menu_new ();
-	sp_ui_dialogs_menu (GTK_MENU (menu), NULL, view);
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
-	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
+// 	mitem = gtk_menu_item_new_with_mnemonic (_("_Dialogs"));
+// 	menu = gtk_menu_new ();
+// 	sp_ui_dialogs_menu (GTK_MENU (menu), NULL, view);
+// 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
+// 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
 
 	mitem = gtk_menu_item_new_with_mnemonic (_("_Help"));
 	menu = gtk_menu_new ();
