@@ -1,5 +1,9 @@
 2004-01-30  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/display/nr-arena-group.h, src/display/nr-arena-group.cpp
+	(nr_arena_group_set_child_transform):
+	Indicate that matrix isn't written to.
+
 	* src/nodepath.cpp (sp_nodepath_new),
 	src/path-chemistry.cpp (sp_selected_path_combine, sp_selected_path_break_apart),
 	src/selection-chemistry.cpp (sp_selection_apply_affine),
