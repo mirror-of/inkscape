@@ -107,15 +107,15 @@ extern guint update_in_progress;
     }\
     if ( dumpD )\
     {\
-        GtkWidget *dialog = gtk_message_dialog_new (NULL,\
-                                                    GTK_DIALOG_DESTROY_WITH_PARENT,\
-                                                    GTK_MESSAGE_INFO,\
-                                                    GTK_BUTTONS_OK,\
-                                                    __VA_ARGS__\
-                                                    );\
-        g_signal_connect_swapped (dialog, "response",\
-                                  G_CALLBACK (gtk_widget_destroy),\
-                                  dialog);\
+        GtkWidget *dialog = gtk_message_dialog_new(NULL,\
+                                                   GTK_DIALOG_DESTROY_WITH_PARENT, \
+                                                   GTK_MESSAGE_INFO,    \
+                                                   GTK_BUTTONS_OK,      \
+                                                   __VA_ARGS__          \
+                                                   );\
+        g_signal_connect_swapped(dialog, "response",\
+                                 G_CALLBACK(gtk_widget_destroy),        \
+                                 dialog);                               \
         gtk_widget_show_all( dialog );\
     }\
 }
@@ -129,7 +129,7 @@ extern guint update_in_progress;
  * Create a blank document and add it to the desktop
  */
 void
-sp_file_new(const gchar *templ)
+sp_file_new(gchar const *templ)
 {
     SPDocument *doc = sp_document_new(templ, TRUE, TRUE, true);
     g_return_if_fail(doc != NULL);
@@ -143,13 +143,13 @@ sp_file_new(const gchar *templ)
 }
 
 void
-sp_file_new_default ()
+sp_file_new_default()
 {
     char *default_template = g_build_filename(INKSCAPE_TEMPLATESDIR, "/default.svg", NULL);
-    if (g_file_test (default_template, G_FILE_TEST_IS_REGULAR)) {
-        sp_file_new (default_template);
+    if (g_file_test(default_template, G_FILE_TEST_IS_REGULAR)) {
+        sp_file_new(default_template);
     } else {
-        sp_file_new (NULL);
+        sp_file_new(NULL);
     }
 }
 
@@ -266,112 +266,90 @@ sp_file_revert_dialog()
 
         if (reverted) {
             desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Document reverted."));
-        }
-        else {
+        } else {
             desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not reverted."));
         }
-    }
-    else {
+    } else {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Document not modified.  No need to revert."));
     }
 }
 
-void dump_str( const gchar* str, const gchar* prefix )
+void dump_str(gchar const *str, gchar const *prefix)
 {
     Glib::ustring tmp;
     tmp = prefix;
     tmp += " [";
-    int total = strlen(str);
-    for ( int i = 0; i < total; i++ )
-    {
-        gchar* tmp2 = g_strdup_printf( " %02x", (0x0ff & str[i]) );
+    size_t const total = strlen(str);
+    for (unsigned i = 0; i < total; i++) {
+        gchar *const tmp2 = g_strdup_printf(" %02x", (0x0ff & str[i]));
         tmp += tmp2;
-        g_free( tmp2 );
+        g_free(tmp2);
     }
 
     tmp += "]";
-    g_message( tmp.c_str() );
+    g_message(tmp.c_str());
 }
 
 void ::dump_ustr( const Glib::ustring& ustr )
 {
-    const char* cstr = ustr.c_str();
-    const char* data = ustr.data();
-    Glib::ustring::size_type byteLen = ustr.bytes();
-    Glib::ustring::size_type dataLen = ustr.length();
-    Glib::ustring::size_type cstrLen = strlen(cstr);
+    char const *cstr = ustr.c_str();
+    char const *data = ustr.data();
+    Glib::ustring::size_type const byteLen = ustr.bytes();
+    Glib::ustring::size_type const dataLen = ustr.length();
+    Glib::ustring::size_type const cstrLen = strlen(cstr);
 
     g_message("   size: %d\n   length: %d\n   bytes: %d\n    clen: %d", ustr.size(), dataLen, byteLen, cstrLen );
     g_message( "  ASCII? %s", (ustr.is_ascii() ? "yes":"no") );
     g_message( "  UTF-8? %s", (ustr.validate() ? "yes":"no") );
 
-    try
-    {
+    try {
         Glib::ustring tmp;
-        for ( Glib::ustring::size_type i = 0; i < ustr.bytes(); i++ )
-        {
+        for (Glib::ustring::size_type i = 0; i < ustr.bytes(); i++) {
             tmp = "    ";
-            if ( i < dataLen )
-            {
+            if (i < dataLen) {
                 Glib::ustring::value_type val = ustr.at(i);
                 gchar* tmp2 = g_strdup_printf( (((val & 0xff00) == 0) ? "  %02x" : "%04x"), val );
                 tmp += tmp2;
                 g_free( tmp2 );
-            }
-            else
-            {
+            } else {
                 tmp += "    ";
             }
 
-            if ( i < byteLen )
-            {
+            if (i < byteLen) {
                 int val = (0x0ff & data[i]);
-                gchar* tmp2 = g_strdup_printf( "    %02x", val );
+                gchar *tmp2 = g_strdup_printf("    %02x", val);
                 tmp += tmp2;
                 g_free( tmp2 );
-                if ( val > 32 && val < 127 )
-                {
+                if ( val > 32 && val < 127 ) {
                     tmp2 = g_strdup_printf( "   '%c'", (gchar)val );
                     tmp += tmp2;
                     g_free( tmp2 );
-                }
-                else
-                {
+                } else {
                     tmp += "    . ";
                 }
-            }
-            else
-            {
+            } else {
                 tmp += "       ";
             }
 
-            if ( i < cstrLen )
-            {
+            if ( i < cstrLen ) {
                 int val = (0x0ff & cstr[i]);
-                gchar* tmp2 = g_strdup_printf( "    %02x", val );
+                gchar* tmp2 = g_strdup_printf("    %02x", val);
                 tmp += tmp2;
-                g_free( tmp2 );
-                if ( val > 32 && val < 127 )
-                {
-                    tmp2 = g_strdup_printf( "   '%c'", (gchar)val );
+                g_free(tmp2);
+                if ( val > 32 && val < 127 ) {
+                    tmp2 = g_strdup_printf("   '%c'", (gchar) val);
                     tmp += tmp2;
                     g_free( tmp2 );
-                }
-                else
-                {
+                } else {
                     tmp += "    . ";
                 }
-            }
-            else
-            {
+            } else {
                 tmp += "            ";
             }
 
             g_message( tmp.c_str() );
         }
-    }
-    catch (...)
-    {
+    } catch (...) {
         g_message("XXXXXXXXXXXXXXXXXX Exception" );
     }
     g_message("---------------");
@@ -385,10 +363,9 @@ static Inkscape::UI::Dialogs::FileOpenDialog *openDialogInstance = NULL;
 void
 sp_file_open_dialog(gpointer object, gpointer data)
 {
-    gchar * open_path = NULL;
-    gchar * open_path2 = NULL;
+    gchar *open_path2 = NULL;
 
-    open_path = g_strdup(prefs_get_string_attribute("dialogs.open", "path"));
+    gchar *open_path = g_strdup(prefs_get_string_attribute("dialogs.open", "path"));
     if (open_path != NULL && open_path[0] == '\0') {
         g_free(open_path);
         open_path = NULL;
@@ -400,14 +377,13 @@ sp_file_open_dialog(gpointer object, gpointer data)
     if (open_path == NULL)
         open_path = g_strconcat(g_get_home_dir(), G_DIR_SEPARATOR_S, NULL);
 
-    if (!openDialogInstance)
-        {
+    if (!openDialogInstance) {
         openDialogInstance =
               Inkscape::UI::Dialogs::FileOpenDialog::create(
                  (char const *)open_path,
                  Inkscape::UI::Dialogs::SVG_TYPES,
                  (char const *)_("Select file to open"));
-        }
+    }
     bool const success = openDialogInstance->show();
     gchar *fileName = ( success
                         ? g_strdup(openDialogInstance->getFilename())
@@ -424,28 +400,24 @@ sp_file_open_dialog(gpointer object, gpointer data)
 #ifdef INK_DUMP_FILENAME_CONV
         dump_str( fileName, "A file pre  is " );
 #endif
-        gchar *newFileName = g_filename_to_utf8( fileName,
-                                                 -1,
-                                                 &bytesRead,
-                                                 &bytesWritten,
-                                                 &error);
-        if ( newFileName != NULL )
-        {
+        gchar *newFileName = g_filename_to_utf8(fileName,
+                                                -1,
+                                                &bytesRead,
+                                                &bytesWritten,
+                                                &error);
+        if ( newFileName != NULL ) {
             g_free(fileName);
             fileName = newFileName;
 #ifdef INK_DUMP_FILENAME_CONV
             dump_str( fileName, "A file post is " );
 #endif
-        }
-        else
-        {
+        } else {
             // TODO: bulia, please look over
             g_warning( "ERROR CONVERTING OPEN FILENAME TO UTF-8" );
         }
 
 
-        if ( !g_utf8_validate(fileName, -1, NULL) )
-        {
+        if ( !g_utf8_validate(fileName, -1, NULL) ) {
             // TODO: bulia, please look over
             g_warning( "INPUT FILENAME IS NOT UTF-8" );
         }
@@ -477,27 +449,24 @@ sp_file_open_dialog(gpointer object, gpointer data)
 void
 sp_file_vacuum()
 {
-    SPDocument* doc = SP_ACTIVE_DOCUMENT;
+    SPDocument *doc = SP_ACTIVE_DOCUMENT;
     SPDefs *defs = SP_ROOT(SP_DOCUMENT_ROOT(doc))->defs;
 
     int before = 0;
     for (SPObject *i = sp_object_first_child(defs); i != NULL; i = SP_OBJECT_NEXT(i)) {
-        before ++;
+        before++;
     }
 
-    for ( SPObject* def = defs->firstChild () ;
-          def ; def = SP_OBJECT_NEXT (def) )
-    {
-
+    for (SPObject *def = defs->firstChild(); def; def = SP_OBJECT_NEXT(def)) {
         /* fixme: some inkscape-internal nodes in the future might not be collectable */
-        def->requestOrphanCollection ();
+        def->requestOrphanCollection();
     }
 
-    sp_document_done (doc);
+    sp_document_done(doc);
 
     int after = 0;
     for (SPObject *i = sp_object_first_child(defs); i != NULL; i = SP_OBJECT_NEXT(i)) {
-        after ++;
+        after++;
     }
 
     SPDesktop *dt = SP_ACTIVE_DESKTOP;
@@ -611,7 +580,7 @@ sp_file_save_dialog(SPDocument *doc)
 #ifdef INK_DUMP_FILENAME_CONV
         dump_str( save_loc, "B file pre  is " );
 #endif
-        gchar* save_loc_local = g_filename_from_utf8 ( save_loc, -1, &bytesRead, &bytesWritten, &error);
+        gchar* save_loc_local = g_filename_from_utf8( save_loc, -1, &bytesRead, &bytesWritten, &error);
 
         if ( save_loc_local != NULL ) {
             g_free(save_loc);
@@ -624,8 +593,7 @@ sp_file_save_dialog(SPDocument *doc)
         }
     }
 
-    if (!saveDialogInstance)
-        {
+    if (!saveDialogInstance) {
         saveDialogInstance =
              Inkscape::UI::Dialogs::FileSaveDialog::create(
                  (char const *) save_loc,
@@ -633,7 +601,7 @@ sp_file_save_dialog(SPDocument *doc)
                  (char const *) _("Select file to save to"),
                  default_extension
             );
-        }
+    }
     bool success = saveDialogInstance->show();
     char *fileName = ( success
                        ? g_strdup(saveDialogInstance->getFilename())
@@ -642,7 +610,9 @@ sp_file_save_dialog(SPDocument *doc)
         saveDialogInstance->getSelectionType();
     g_free(save_loc);
     g_free(save_path);
-    if (!success) return success;
+    if (!success) {
+        return success;
+    }
 
     if (fileName && *fileName) {
         gsize bytesRead = 0;
@@ -651,34 +621,31 @@ sp_file_save_dialog(SPDocument *doc)
 #ifdef INK_DUMP_FILENAME_CONV
         dump_str( fileName, "C file pre  is " );
 #endif
-        gchar *newFileName = g_filename_to_utf8( fileName,
-                                                 -1,
-                                                 &bytesRead,
-                                                 &bytesWritten,
-                                                 &error);
-        if ( newFileName != NULL )
-        {
+        gchar *newFileName = g_filename_to_utf8(fileName,
+                                                -1,
+                                                &bytesRead,
+                                                &bytesWritten,
+                                                &error);
+        if ( newFileName != NULL ) {
             g_free(fileName);
             fileName = newFileName;
 #ifdef INK_DUMP_FILENAME_CONV
             dump_str( fileName, "C file post is " );
 #endif
-        }
-        else
-        {
+        } else {
             g_warning( "Error converting save filename to UTF-8." );
         }
 
-        if ( !g_utf8_validate(fileName, -1, NULL) )
-        {
+        if (!g_utf8_validate(fileName, -1, NULL)) {
             // TODO: bulia, please look over
             g_warning( "The filename is not UTF-8." );
         }
 
         success = file_save(doc, fileName, selectionType, TRUE);
 
-        if (success)
+        if (success) {
             prefs_set_recent_file(SP_DOCUMENT_URI(doc), SP_DOCUMENT_NAME(doc));
+        }
 
         save_path = g_dirname(fileName);
         prefs_set_string_attribute("dialogs.save_as", "path", save_path);
@@ -704,8 +671,9 @@ sp_file_save_document(SPDocument *doc)
 
     gchar const *fn = sp_repr_attr(repr, "sodipodi:modified");
     if (fn != NULL) {
-        if (doc->uri == NULL ||
-            sp_repr_attr(repr, "inkscape:output_extension") == NULL) {
+        if (doc->uri == NULL
+            || sp_repr_attr(repr, "inkscape:output_extension") == NULL)
+        {
             return sp_file_save_dialog(doc);
         } else {
             fn = g_strdup(doc->uri);
@@ -788,14 +756,17 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
         SPObject *in_defs = SP_DOCUMENT_DEFS(in_doc);
         SPObject *defs = SP_DOCUMENT_DEFS(doc);
         SPRepr *last_def = sp_repr_last_child(SP_OBJECT_REPR(in_defs));
-        for (SPObject *child = sp_object_first_child(defs); child != NULL; child = SP_OBJECT_NEXT(child) ) {
+        for (SPObject *child = sp_object_first_child(defs);
+             child != NULL; child = SP_OBJECT_NEXT(child))
+        {
             // FIXME: in case of id conflict, newly added thing will be re-ided and thus likely break a reference to it from imported stuff
             sp_repr_add_child(SP_OBJECT_REPR(in_defs), sp_repr_duplicate(SP_OBJECT_REPR(child)), last_def);
         }
 
         SPRepr *repr = sp_document_repr_root(doc);
         guint items_count = 0;
-        for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
+        for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc));
+             child != NULL; child = SP_OBJECT_NEXT(child)) {
             if (SP_IS_ITEM(child))
                 items_count ++;
         }
@@ -848,15 +819,15 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
             SPSelection *selection = SP_DT_SELECTION(desktop);
             selection->setItem(SP_ITEM(new_obj));
 
-            // to move the imported object, we must temporarily set the "transform pattern with
-            // object" option
+            // To move the imported object, we must temporarily set the "transform pattern with
+            // object" option.
             {
-            int saved_pref = prefs_get_int_attribute("options.transform", "pattern", 1);
-            prefs_set_int_attribute ("options.transform", "pattern", 1);
-            sp_document_ensure_up_to_date(SP_DT_DOCUMENT(desktop));
-            NR::Point m( sp_desktop_point(desktop) - selection->bounds().midpoint() );
-            sp_selection_move_relative(selection, m[NR::X], m[NR::Y]);
-            prefs_set_int_attribute ("options.transform", "pattern", saved_pref);
+                int const saved_pref = prefs_get_int_attribute("options.transform", "pattern", 1);
+                prefs_set_int_attribute("options.transform", "pattern", 1);
+                sp_document_ensure_up_to_date(SP_DT_DOCUMENT(desktop));
+                NR::Point m( sp_desktop_point(desktop) - selection->bounds().midpoint() );
+                sp_selection_move_relative(selection, m);
+                prefs_set_int_attribute("options.transform", "pattern", saved_pref);
             }
         }
 
@@ -885,14 +856,13 @@ sp_file_import(GtkWidget *widget)
     if (!SP_IS_DOCUMENT(doc))
         return;
 
-    if (!importDialogInstance)
-        {
+    if (!importDialogInstance) {
         importDialogInstance =
              Inkscape::UI::Dialogs::FileOpenDialog::create(
                  (char const *)import_path,
                  Inkscape::UI::Dialogs::IMPORT_TYPES,
                  (char const *)_("Select file to import"));
-        }
+    }
     bool success = importDialogInstance->show();
     char *fileName = ( success
                        ? g_strdup(importDialogInstance->getFilename())
@@ -913,23 +883,19 @@ sp_file_import(GtkWidget *widget)
                                                  &bytesRead,
                                                  &bytesWritten,
                                                  &error);
-        if ( newFileName != NULL )
-        {
+        if ( newFileName != NULL ) {
             g_free(fileName);
             fileName = newFileName;
 #ifdef INK_DUMP_FILENAME_CONV
             dump_str( fileName, "D file post is " );
 #endif
-        }
-        else
-        {
+        } else {
             // TODO: bulia, please look over
             g_warning( "ERROR CONVERTING OPEN FILENAME TO UTF-8" );
         }
 
 
-        if ( !g_utf8_validate(fileName, -1, NULL) )
-        {
+        if (!g_utf8_validate(fileName, -1, NULL)) {
             // TODO: bulia, please look over
             g_warning( "INPUT FILENAME IS NOT UTF-8" );
         }
@@ -968,7 +934,7 @@ struct SPEBP {
     guchar r, g, b, a;
     NRArenaItem *root; // the root arena item to show; it is assumed that all unneeded items are hidden
     guchar *px;
-    unsigned (*status) (float, void *);
+    unsigned (*status)(float, void *);
     void *data;
 };
 
@@ -1031,16 +997,21 @@ sp_export_get_rows(guchar const **rows, int row, int num_rows, void *data)
 Hide all items which are not listed in list, recursively, skipping groups and defs
 */
 void
-hide_other_items_recursively (SPObject *o, GSList *list, unsigned dkey)
+hide_other_items_recursively(SPObject *o, GSList *list, unsigned dkey)
 {
-    if (SP_IS_ITEM(o) && !SP_IS_DEFS(o) && !SP_IS_ROOT(o) && !SP_IS_GROUP(o) && !g_slist_find (list, o)) {
+    if (SP_IS_ITEM(o)
+        && !SP_IS_DEFS(o)
+        && !SP_IS_ROOT(o)
+        && !SP_IS_GROUP(o)
+        && !g_slist_find(list, o))
+    {
         sp_item_invoke_hide(SP_ITEM(o), dkey);
     }
 
      // recurse
-    if (!g_slist_find (list, o)) {
+    if (!g_slist_find(list, o)) {
         for (SPObject *child = sp_object_first_child(o) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-            hide_other_items_recursively (child, list, dkey);
+            hide_other_items_recursively(child, list, dkey);
         }
     }
 }
@@ -1118,12 +1089,12 @@ sp_export_png_file(SPDocument *doc, gchar const *filename,
 
     /* Create ArenaItems and set transform */
     ebp.root = sp_item_invoke_show(SP_ITEM(sp_document_root(doc)), arena, dkey, SP_ITEM_SHOW_DISPLAY);
-    nr_arena_item_set_transform(NR_ARENA_ITEM (ebp.root), NR::Matrix (&affine));
+    nr_arena_item_set_transform(NR_ARENA_ITEM(ebp.root), NR::Matrix(&affine));
 
     // We show all and then hide all items we don't want, instead of showing only requested items,
     // because that would not work if the shown item references something in defs
     if (items_only) {
-        hide_other_items_recursively (sp_document_root(doc), items_only, dkey);
+        hide_other_items_recursively(sp_document_root(doc), items_only, dkey);
     }
 
     ebp.status = status;
@@ -1360,16 +1331,16 @@ void Inkscape::IO::fixupHrefs( SPDocument *doc, const gchar *base, gboolean spns
         g_message("+------");
     }
 
-    GSList const *images = sp_document_get_resource_list (doc, "image");
+    GSList const *images = sp_document_get_resource_list(doc, "image");
     for (GSList const *l = images; l != NULL; l = l->next) {
-        SPRepr *ir = SP_OBJECT_REPR (l->data);
+        SPRepr *ir = SP_OBJECT_REPR(l->data);
 
-        const gchar *href = sp_repr_attr (ir, "xlink:href");
+        const gchar *href = sp_repr_attr(ir, "xlink:href");
 
         // First try to figure out an absolute path to the asset
         g_message("image href [%s]", href );
-        if (spns && !g_path_is_absolute (href)) {
-            const gchar *absref = sp_repr_attr (ir, "sodipodi:absref");
+        if (spns && !g_path_is_absolute(href)) {
+            const gchar *absref = sp_repr_attr(ir, "sodipodi:absref");
             g_message("      absr [%s]", absref );
 
             if ( absref && g_file_test(absref, G_FILE_TEST_EXISTS) )
@@ -1381,10 +1352,10 @@ void Inkscape::IO::fixupHrefs( SPDocument *doc, const gchar *base, gboolean spns
         }
 
         // Once we have an absolute path, convert it relative to the new location
-        if (href && g_path_is_absolute (href)) {
-            const gchar *relname = sp_relative_path_from_path (href, base);
+        if (href && g_path_is_absolute(href)) {
+            const gchar *relname = sp_relative_path_from_path(href, base);
             g_message("     setting to [%s]", relname );
-            sp_repr_set_attr (ir, "xlink:href", relname);
+            sp_repr_set_attr(ir, "xlink:href", relname);
         }
 // TODO next refinement is to make the first choice keeping the relative path as-is if
 //      based on the new location it gives us a valid file.
