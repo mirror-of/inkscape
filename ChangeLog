@@ -1,3 +1,42 @@
+2004-01-26  bulia byak <bulia@users.sourceforge.net>
+
+	* src/inkscape.cpp: failed assertion fix 
+
+	* src/shortcuts.cpp: Linked/dynamic offset shortcuts, zoom to page width 
+
+	* src/preferences-skeleton.h: Add inkscape:pageopacity, borderopacity
+
+	* src/attributes.cpp,h src/sp-namedview.cpp,h: Add inkscape:pageopacity
+
+	* src/dialogs/desktop-properties.cpp: Get/set inkscape:pageopacity in the page
+	background color picker; reword and rearrange labels, spacing fix
+
+	* src/dialogs/export.cpp: Use inkscape:pageopacity for export background; fix crash on
+	exit
+
+	* src/file.cpp: Remove debug output when exporting
+
+	* src/sp-gradient.cpp src/svg/svg-path.cpp src/libnr/nr-compose.cpp src/dir-util.cpp
+	src/desktop.cpp: Fixes from sodipodi
+
+	* src/main.cpp: Fix PNG size limits when exporting from commandline 
+
+	* src/style.cpp src/style.h: currentColor support from sodipodi
+
+	* src/sp-gradient.cpp: Fix for 876614 from sodipodi
+
+	* src/dialogs/desktop-properties.cpp: Convert meters to cm on writing (to make
+	svg/@height and svg/@width SVG compliant)
+ 
+	* src/sp-rect.cpp: Fix in description
+ 
+	* src/dialogs/text-edit.cpp: Fix bug: undo broken when font applied to more than one
+	text object. And another bug: do not apply text, only style, when more than one text
+	object selected.
+
+	* src/widgets/font-selector.cpp: Make font and style lists scroll automatically to
+	show selected row
+ 
 2004-01-26  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* config.h.win32: Remove this outdated and apparently-unused file.
