@@ -1,6 +1,7 @@
 2004-02-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/verbs.cpp: Add g++-2.95 portability for hash_map.
+	(Still using hash_map, though, not yet GHashTable.)
 
 	* src/uri-references.h (operator=): Remove definition, forcing link
 	errors for accidental usage.
@@ -20,7 +21,8 @@
 
 	* src/arc-context.cpp, src/selection.cpp, src/selection.h,
 	src/sp-ellipse.cpp, src/sp-image.cpp, src/sp-offset.cpp,
-	src/sp-rect.cpp, src/sp-spiral.cpp, src/sp-star.cpp, src/sp-text.cpp:
+	src/sp-rect.cpp, src/sp-spiral.cpp, src/sp-star.cpp, src/sp-text.cpp,
+	src/bonobo/canvas-translator.cpp:
 	Cleanups: greater conformance to Coding_Style, combine declaration
 	and first assignment of some vars.
 

@@ -13,18 +13,18 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include "canvas-translator.h"
 
-static void sp_canvas_translator_class_init (SPCanvasTranslatorClass * klass);
-static void sp_canvas_translator_init (SPCanvasTranslator * group);
-static void sp_canvas_translator_destroy (GtkObject * object);
+static void sp_canvas_translator_class_init(SPCanvasTranslatorClass *klass);
+static void sp_canvas_translator_init(SPCanvasTranslator *group);
+static void sp_canvas_translator_destroy(GtkObject *object);
 
-static void sp_canvas_translator_realize (GnomeCanvasItem * item);
-static void sp_canvas_translator_unrealize (GnomeCanvasItem * item);
-static void sp_canvas_translator_map (GnomeCanvasItem * item);
-static void sp_canvas_translator_unmap (GnomeCanvasItem * item);
-static void sp_canvas_translator_draw (GnomeCanvasItem * item, 
-                                       GdkDrawable * drawable, 
-                                       int x, int y, 
-                                       int width, int height);
+static void sp_canvas_translator_realize(GnomeCanvasItem *item);
+static void sp_canvas_translator_unrealize(GnomeCanvasItem *item);
+static void sp_canvas_translator_map(GnomeCanvasItem *item);
+static void sp_canvas_translator_unmap(GnomeCanvasItem *item);
+static void sp_canvas_translator_draw(GnomeCanvasItem *item,
+				      GdkDrawable *drawable, 
+				      int x, int y, 
+				      int width, int height);
 
 static GnomeCanvasGroupClass *parent_class;
 
@@ -69,8 +69,7 @@ sp_canvas_translator_class_init (SPCanvasTranslatorClass *klass)
     item_class->draw = sp_canvas_translator_draw;
 }
 
-static void
-sp_canvas_translator_init (SPCanvasTranslator * translator)
+static void sp_canvas_translator_init(SPCanvasTranslator *)
 {
 }
 
@@ -82,46 +81,36 @@ sp_canvas_translator_destroy (GtkObject *object)
         (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
-static void
-sp_canvas_translator_realize (GnomeCanvasItem * item)
+static void sp_canvas_translator_realize(GnomeCanvasItem *item)
 {
     GTK_OBJECT_SET_FLAGS (item, GNOME_CANVAS_ITEM_REALIZED);
 
     gnome_canvas_item_request_update (item);
 }
 
-static void
-sp_canvas_translator_unrealize (GnomeCanvasItem * item)
+static void sp_canvas_translator_unrealize(GnomeCanvasItem *item)
 {
-    GTK_OBJECT_UNSET_FLAGS (item, GNOME_CANVAS_ITEM_REALIZED);
+    GTK_OBJECT_UNSET_FLAGS(item, GNOME_CANVAS_ITEM_REALIZED);
 }
 
-static void
-sp_canvas_translator_map (GnomeCanvasItem * item)
+static void sp_canvas_translator_map(GnomeCanvasItem *item)
 {
     GTK_OBJECT_SET_FLAGS (item, GNOME_CANVAS_ITEM_MAPPED);
 }
 
-static void
-sp_canvas_translator_unmap (GnomeCanvasItem * item)
+static void sp_canvas_translator_unmap(GnomeCanvasItem *item)
 {
     GTK_OBJECT_UNSET_FLAGS (item, GNOME_CANVAS_ITEM_MAPPED);
 }
 
 static void
-sp_canvas_translator_draw (GnomeCanvasItem * item, GdkDrawable * drawable, 
-                           int x, int y, int width, int height )
+sp_canvas_translator_draw(GnomeCanvasItem *item, GdkDrawable *drawable,
+			  int x, int y, int width, int height)
 {
-    GnomeCanvasGroup * group;
-    GnomeCanvasItem * child;
-    GList * l;
+    GnomeCanvasGroup *group = GNOME_CANVAS_GROUP(item);
+
+    GdkPixbuf *pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, width, height);
     GnomeCanvasBuf buf;
-    GdkPixbuf * pixbuf;
-    gboolean rendered;
-
-    group = GNOME_CANVAS_GROUP (item);
-
-    pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, width, height);
     buf.buf = gdk_pixbuf_get_pixels (pixbuf);
     buf.buf_rowstride = gdk_pixbuf_get_rowstride (pixbuf);
     buf.rect.x0 = x;
@@ -138,10 +127,9 @@ sp_canvas_translator_draw (GnomeCanvasItem * item, GdkDrawable * drawable,
     buf.is_bg = FALSE;
     buf.is_buf = TRUE;
 
-    rendered = FALSE;
-
-    for (l = group->item_list; l != NULL; l = l->next) {
-        child = GNOME_CANVAS_ITEM (l->data);
+    bool rendered = false;
+    for (GList *l = group->item_list; l != NULL; l = l->next) {
+        GnomeCanvasItem *child = GNOME_CANVAS_ITEM(l->data);
 
         if ((child->object.flags & GNOME_CANVAS_ITEM_VISIBLE) &&
             ((child->x1 < (x + width)) &&
@@ -153,7 +141,7 @@ sp_canvas_translator_draw (GnomeCanvasItem * item, GdkDrawable * drawable,
             
                 (* GNOME_CANVAS_ITEM_CLASS (child->object.klass)->render) (item, &buf);
 
-                rendered = TRUE;
+                rendered = true;
             }
         }
     }
