@@ -1,3 +1,40 @@
+2004-03-05  bulia byak <bulia@users.sourceforge.net>
+
+	* src/desktop.cpp src/preferences-skeleton.h: Autoscroll now accepts
+	distance-from-edge parameter, may be negative, default is
+	options.autoscrolldistance = -10
+
+	* src/style.cpp src/style.h src/document.cpp: Store uri for paintsever and
+	serialize it back instead of paintserver id. find_items functions do not find
+	insensitive items by default.
+
+	* src/sp-item.cpp: tentative fix: do not remove style attribute if
+	write_difference fails or object has no parent
+
+	* src/desktop-events.cpp: transientize guide dialog
+
+	* splivarot.cpp, livarot/*: fred's new rasterizer, fixes
+
+	* src/widgets/gradient-vector.cpp: fix 906301
+
+	* src/dialogs/text-edit.cpp: do not rebuild text of object if not changed in the
+	dialog, fixes 906279
+
+	* src/selection.cpp: suppress a few meningless warnings 
+
+	* src/xml/repr.cpp: fix for 907056, 906222
+
+	* about.svg: redrawn from rejon's draft, with a highlight on lauris :)
+
+	* libnrtype: Full font-variant, font-weight, font-stretch support. Better family
+	and style matching algorithm. Support for generic families and multiple family
+	specifications. Xft sees all font styles, reads pfa fonts again. Font styles
+	are sorted in the list and use the native style names with Xft.
+
+	* src/sp-text.cpp,h src/text-context.cpp: Keys, function for adjusting linespacing
+
+	* keys.xml,svg,html: Linespacing keys
+
 2004-03-05  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/draw-context.cpp (fit_and_split,
