@@ -59,6 +59,7 @@ libinkpre_a_SOURCES =	\
 	file.cpp file.h	\
 	forward.h	\
 	gc-core.h \
+	gc-object.h \
 	geom.cpp geom.h	\
 	help.cpp help.h	\
 	inkscape.cpp inkscape.h inkscape-private.h	\

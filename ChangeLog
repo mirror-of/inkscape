@@ -3,6 +3,15 @@
 	* configure.in: sigc++ 2.0.2 (and before?) has a bug that
 	  causes us to crash.  require >= 2.0.3
 
+	* src/Makefile.am, src/Makefile_insert, src/gc-core.h,
+	  src/gc-object.h, src/algorithms/longest-common-suffix.h,
+	  src/traits/list.h, src/traits/reference.h, src/util/flip.h,
+	  src/util/fold.h, src/util/list-iterator.h, src/util/list.h,
+	  src/util/map.h, src/util/parent-axis.h, src/util/reverse.h,
+	  src/util/sibling-axis.h, src/util/tuple.h, src/util/zip.h:
+
+	  more "functional" work
+
 2004-08-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/display/curve.cpp, src/display/curve.h:

@@ -18,14 +18,14 @@ namespace Traits {
 
 template <typename T>
 struct Reference {
-    typedef T const &Copy;
-    typedef T &Assign;
+    typedef T const &RValue;
+    typedef T &LValue;
 };
 
 template <typename T>
 struct Reference<T &> {
-    typedef T &Copy;
-    typedef T &Assign;
+    typedef T &RValue;
+    typedef T &LValue;
 };
 
 }

@@ -28,8 +28,8 @@ struct List<ListSample> {
     static bool is_null(ListSample);
     static ListSample null();
 
-    static ListSampleData head(ListSample);
-    static ListSample tail(ListSample);
+    static ListSampleData first(ListSample);
+    static ListSample rest(ListSample);
 };
 
 }

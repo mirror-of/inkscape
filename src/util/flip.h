@@ -19,7 +19,7 @@ namespace Inkscape {
 namespace Util {
 
 template <typename F>
-class Flip {
+class FlipTraits {
 public:
     typedef typename Traits::Function<F>::Result Result;
     typedef typename Traits::Function<F>::Arg0 First;
@@ -34,18 +34,18 @@ private:
 };
 
 template <typename F>
-Flip<F> flip(F &f) { return Flip<F>(f); }
+FlipTraits<F> flip(F &f) { return FlipTraits<F>(f); }
 
 }
 
 namespace Traits {
 
 template <typename F>
-struct Function<Util::Flip<F> > {
-    typedef typename Util::Flip<F>::Result Result;
+struct Function<Util::FlipTraits<F> > {
+    typedef typename Util::FlipTraits<F>::Result Result;
 
-    typedef typename Util::Flip<F>::Second Arg0;
-    typedef typename Util::Flip<F>::First Arg1;
+    typedef typename Util::FlipTraits<F>::Second Arg0;
+    typedef typename Util::FlipTraits<F>::First Arg1;
 };
 
 }

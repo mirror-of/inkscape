@@ -28,8 +28,8 @@ enum ScanPolicy {
 };
 
 enum CollectionPolicy {
-    COLLECTABLE,
-    UNCOLLECTABLE
+    AUTO,
+    MANUAL
 };
 
 }

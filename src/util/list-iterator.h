@@ -25,9 +25,17 @@ class ListIterator {
     ListIterator(T const &list) : _list(list) {}
     operator T const &() const { return _list; }
 
-    void operator ++(int) { _list = ListT::tail(_list); }
-    void operator ++() { _list = ListT::tail(_list); }
-    ListT::Data operator*() const { return ListT::head(_list); }
+    void operator ++(int) { _list = ListT::rest(_list); }
+    void operator ++() { _list = ListT::rest(_list); }
+    ListT::Data operator*() const { return ListT::first(_list); }
+
+    bool operator==(ListIterator<T> const &other) {
+        return ( *this == other ) ||
+               ( ListT::is_null(*this) && ListT::is_null(other) );
+    }
+    bool operator!=(ListIterator<T> const &other) {
+        return !( *this == other );
+    }
 
 private:
     T _list;

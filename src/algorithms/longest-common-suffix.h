@@ -36,7 +36,7 @@ List longest_common_suffix(List a, List b) {
     for ( int i=0 ; i < 2 ; i++ ) {
         for ( List iter=lists[i] ;
               !ListT::is_null(iter) ;
-              iter=ListT::tail(iter) )
+              iter=ListT::rest(iter) )
         {
             // TODO: == is ambiguous; in scheme terms, I mean roughly:
             // (eqv? iter (vector-ref lists (- 1 i)))
@@ -63,7 +63,7 @@ List longest_common_suffix(List a, List b) {
             // TODO: == is ambiguous here also; in scheme terms I mean roughly:
             // (equal? (car (vector-ref iters 0)) (car (vector-ref iters 1)))
             // maybe we should make the equality predicate the third parameter
-            ListT::head(*iters[0]) == ListT::head(*iters[1]) )
+            ListT::first(*iters[0]) == ListT::first(*iters[1]) )
     {
         longest_common = *iters[0];
         ++iters[0];

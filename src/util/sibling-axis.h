@@ -55,10 +55,10 @@ struct List<Inkscape::Util::SiblingAxis<T> > {
         return ListType::coerce(TreeIterator<T>::null());
     }
 
-    static Data head(ListType list) {
+    static Data first(ListType list) {
         return ListType::coerce(TreeIterator<T>::node(list));
     }
-    static ListType tail(ListType list) {
+    static ListType rest(ListType list) {
         return ListType::coerce(TreeIterator<T>::next(list));
     }
 };
