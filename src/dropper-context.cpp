@@ -140,7 +140,13 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		}
 		break;
 	case GDK_MOTION_NOTIFY:
-		{
+		if (event->motion.state & GDK_BUTTON2_MASK) {
+			// pass on middle-drag
+			ret = FALSE;
+			break;
+		} else {
+			// otherwise, constantly calculate color no matter is any button pressed or not
+
 			double rw = 0.0;
 			double W(0), R(0), G(0), B(0), A(0);
 
@@ -248,7 +254,7 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			// where the color is picked, to show in the statusbar
 			gchar *where = dc->dragging ? g_strdup_printf (_(", averaged with radius %d"), (int) rw) : g_strdup_printf (_(" under cursor"));
 			// message, to show in the statusbar
-			const gchar *message = dc->dragging ? _("Release mouse to set color.") : _("Click to pick, click and drag to pick the average color of an area.");
+			const gchar *message = dc->dragging ? _("Release mouse to set color.") : _("Click to pick fill color, Shift+click to pick stroke color. Drag to pick the average color of an area.");
 
 			gchar *status = g_strdup_printf ("%s%s%s. %s", 
 										 c, 
@@ -290,6 +296,7 @@ sp_dropper_context_root_handler (SPEventContext *ec, GdkEvent *event)
 		default:
 			break;
 		}
+		break;
 	default:
 		break;
 	}
