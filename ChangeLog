@@ -1,3 +1,10 @@
+2004-01-24  MenTaLguY <mental@rydia.net>
+
+	* src/xml/repr-action.h, src/xml/repr-action.c: made the
+	SPReprAction::act union anonymous, and reworked the transaction
+	log optimization code.  sp_repr_coalesce_log() should be a bit
+	faster now, and no more strcmp()s.
+
 2004-01-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/livarot/Path.h, src/livarot/Path.cpp (Path::Affiche): remove

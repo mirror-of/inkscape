@@ -52,7 +52,7 @@ struct _SPReprAction {
 		SPReprActionChgAttr chgattr;
 		SPReprActionChgContent chgcontent;
 		SPReprActionChgOrder chgorder;
-	} act;
+	};
 };
 
 void sp_repr_begin_transaction (SPReprDoc *doc);

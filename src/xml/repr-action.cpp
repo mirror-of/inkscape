@@ -5,6 +5,7 @@
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   MenTaLguY  <mental@rydia.net>
  *
+ * Copyright (C) 2004 MenTaLguY
  * Copyright (C) 1999-2003 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  * g++ port Copyright (C) 2003 Nathan Hurst
@@ -20,12 +21,17 @@
 #include "repr-action.h"
 
 static SPReprAction *reverse_log (SPReprAction *log);
-static void coalesce_chgattr (SPReprAction *action);
-static void coalesce_chgcontent (SPReprAction *action);
 static SPReprAction *new_action (SPReprAction *log,
                                  SPReprActionType type,
                                  SPRepr *repr);
 static void free_action (SPReprAction *action);
+
+static SPReprAction *coalesce_action(SPReprAction *action);
+static SPReprAction *coalesce_add(SPReprAction *action);
+static SPReprAction *coalesce_remove(SPReprAction *action);
+static SPReprAction *coalesce_chgattr(SPReprAction *action);
+static SPReprAction *coalesce_chgcontent(SPReprAction *action);
+static SPReprAction *coalesce_chgorder(SPReprAction *action);
 
 void
 sp_repr_begin_transaction (SPReprDoc *doc)
@@ -82,26 +88,26 @@ sp_repr_undo_log (SPReprAction *log)
 		switch (action->type) {
 		case SP_REPR_ACTION_ADD:
 			sp_repr_remove_child (action->repr,
-			                      action->act.add.child);
+			                      action->add.child);
 			break;
 		case SP_REPR_ACTION_DEL:
 			sp_repr_add_child (action->repr,
-			                   action->act.del.child,
-			                   action->act.del.ref);
+			                   action->del.child,
+			                   action->del.ref);
 			break;
 		case SP_REPR_ACTION_CHGATTR:
 			sp_repr_set_attr (action->repr,
-			                  g_quark_to_string (action->act.chgattr.key),
-			                  action->act.chgattr.oldval);
+			                  g_quark_to_string (action->chgattr.key),
+			                  action->chgattr.oldval);
 			break;
 		case SP_REPR_ACTION_CHGCONTENT:
 			sp_repr_set_content (action->repr,
-			                     action->act.chgattr.oldval);
+			                     action->chgattr.oldval);
 			break;
 		case SP_REPR_ACTION_CHGORDER:
 			sp_repr_change_order (action->repr,
-			                      action->act.chgorder.child,
-			                      action->act.chgorder.oldref);
+			                      action->chgorder.child,
+			                      action->chgorder.oldref);
 			break;
 		default:
 			g_assert_not_reached ();
@@ -121,26 +127,26 @@ sp_repr_replay_log (SPReprAction *log)
 		switch (action->type) {
 		case SP_REPR_ACTION_ADD:
 			sp_repr_add_child (action->repr,
-			                   action->act.add.child,
-			                   action->act.add.ref);
+			                   action->add.child,
+			                   action->add.ref);
 			break;
 		case SP_REPR_ACTION_DEL:
 			sp_repr_remove_child (action->repr,
-			                      action->act.del.child);
+			                      action->del.child);
 			break;
 		case SP_REPR_ACTION_CHGATTR:
 			sp_repr_set_attr (action->repr,
-			                  g_quark_to_string (action->act.chgattr.key),
-			                  action->act.chgattr.newval);
+			                  g_quark_to_string (action->chgattr.key),
+			                  action->chgattr.newval);
 			break;
 		case SP_REPR_ACTION_CHGCONTENT:
 			sp_repr_set_content (action->repr,
-			                     action->act.chgcontent.newval);
+			                     action->chgcontent.newval);
 			break;
 		case SP_REPR_ACTION_CHGORDER:
 			sp_repr_change_order (action->repr,
-			                      action->act.chgorder.child,
-			                      action->act.chgorder.newref);
+			                      action->chgorder.child,
+			                      action->chgorder.newref);
 			break;
 		default:
 			g_assert_not_reached ();
@@ -151,11 +157,10 @@ sp_repr_replay_log (SPReprAction *log)
 	reverse_log (log);
 }
 
-/** \brief Reverse the action linked list LOG in-place, i.e. rewrite its `next' pointers.
+/** \brief Reverse the action linked list LOG in-place
     \return The head of the resulting reversed list.
 
-    Changes only `next' fields; e.g. does not change the "direction" of each action
-    (add <-> delete).
+    This only changes the raw ordering of events in the list; it leaves their types and saved values alone.
 */
 static SPReprAction *
 reverse_log (SPReprAction *log)
@@ -179,102 +184,26 @@ SPReprAction *
 sp_repr_coalesce_log (SPReprAction *a, SPReprAction *b)
 {
 	SPReprAction *action;
+	SPReprAction **prev_ptr;
 
 	if (!b) return a;
 	if (!a) return b;
 
-	for ( action = b ; action->next ; action = action->next );
+	/* find the earliest action in the second log */
+	/* (also noting the pointer that references it, so we can
+	 *  replace it later) */
+	prev_ptr = &b;
+	for ( action = b ; action->next ; action = action->next ) {
+		prev_ptr = &action->next;
+	}
+
+	/* add the first log after it */
 	action->next = a;
 
-	for ( action = b ; action ; action = action->next ) {
-		if (action->next) switch (action->type) {
-		case SP_REPR_ACTION_CHGATTR:
-			coalesce_chgattr (action);
-			break;
-		case SP_REPR_ACTION_CHGCONTENT:
-			coalesce_chgcontent (action);
-			break;
-		case SP_REPR_ACTION_ADD:
-		case SP_REPR_ACTION_DEL:
-		case SP_REPR_ACTION_CHGORDER:
-			break;
-		default:
-			g_assert_not_reached ();
-		}
-	}
+	/* optimize the result */
+	*prev_ptr = coalesce_action(action);
 
 	return b;
-}
-
-
-static void
-coalesce_chgattr (SPReprAction *action)
-{
-	SPReprAction *iter, *prev, *next;
-	static int id_key=0;
-
-	if (!id_key) id_key = g_quark_from_static_string ("id");
-
-	if (!action) return;
-
-	prev = action;
-	for ( iter = action->next ;
-	      iter && iter->type == SP_REPR_ACTION_CHGATTR ;
-	      iter = next )
-	{
-		next = iter->next;
-		if ( action->repr == iter->repr &&
-		     action->act.chgattr.key == iter->act.chgattr.key )
-		{
-			/* ensure changes are continuous */
-			if (action->act.chgattr.oldval && iter->act.chgattr.newval && strcmp(action->act.chgattr.oldval, 
-			           iter->act.chgattr.newval)) break;
-
-			g_free (action->act.chgattr.oldval);
-
-			action->act.chgattr.oldval = iter->act.chgattr.oldval;
-			iter->act.chgattr.oldval = NULL;
-			free_action (iter);
-			prev->next = next;
-		} else if ( action->act.chgattr.key == id_key ) {
-			/* id changes tend to be sensitive to reordering */
-			break;
-		} else {
-			prev = iter;
-		}
-	}
-}
-
-static void
-coalesce_chgcontent (SPReprAction *action)
-{
-	SPReprAction *iter, *prev, *next;
-
-	if (!action) return;
-
-	prev = action;
-	for ( iter = action->next ;
-	      iter && iter->type == SP_REPR_ACTION_CHGCONTENT ;
-	      iter = next )
-	{
-		next = iter->next;
-		if ( action->repr == iter->repr ) {
-			/* ensure changes are continuous */
-			if (strcmp(action->act.chgcontent.oldval, 
-			           iter->act.chgcontent.newval)) break;
-
-			g_free (action->act.chgcontent.oldval);
-
-			action->act.chgcontent.oldval =
-			  iter->act.chgcontent.oldval;
-
-			iter->act.chgcontent.oldval = NULL;
-			free_action (iter);
-			prev->next = next;
-		} else {
-			prev = iter;
-		}
-	}
 }
 
 void
@@ -297,13 +226,13 @@ sp_repr_log_add (SPReprAction *log, SPRepr *repr,
 	g_assert (child != NULL);
 
 	action = new_action (log, SP_REPR_ACTION_ADD, repr);
-	action->act.add.child = child;
-	action->act.add.ref = ref;
+	action->add.child = child;
+	action->add.ref = ref;
 
 	sp_repr_ref (child);
 	if (ref) sp_repr_ref (ref);
 
-	return action;
+	return coalesce_action(action);
 }
 
 SPReprAction *
@@ -316,13 +245,13 @@ sp_repr_log_remove (SPReprAction *log, SPRepr *repr,
 	g_assert (child != NULL);
 
 	action = new_action (log, SP_REPR_ACTION_DEL, repr);
-	action->act.del.child = child;
-	action->act.del.ref = ref;
+	action->del.child = child;
+	action->del.ref = ref;
 
 	sp_repr_ref (child);
 	if (ref) sp_repr_ref (ref);
 
-	return action;
+	return coalesce_action(action);
 }
 
 SPReprAction *
@@ -335,11 +264,11 @@ sp_repr_log_chgattr (SPReprAction *log, SPRepr *repr,
 	g_assert (repr != NULL);
 
 	action = new_action (log, SP_REPR_ACTION_CHGATTR, repr);
-	action->act.chgattr.key = key;
-	action->act.chgattr.oldval = oldval;
-	action->act.chgattr.newval = ( newval ? g_strdup (newval) : NULL );
+	action->chgattr.key = key;
+	action->chgattr.oldval = oldval;
+	action->chgattr.newval = ( newval ? g_strdup (newval) : NULL );
 
-	return action;
+	return coalesce_action(action);
 }
 
 SPReprAction *
@@ -351,10 +280,10 @@ sp_repr_log_chgcontent (SPReprAction *log, SPRepr *repr,
 	g_assert (repr != NULL);
 
 	action = new_action (log, SP_REPR_ACTION_CHGCONTENT, repr);
-	action->act.chgcontent.oldval = oldval;
-	action->act.chgcontent.newval = ( newval ? g_strdup (newval) : NULL );
+	action->chgcontent.oldval = oldval;
+	action->chgcontent.newval = ( newval ? g_strdup (newval) : NULL );
 
-	return action;
+	return coalesce_action(action);
 }
 
 SPReprAction *
@@ -367,15 +296,15 @@ sp_repr_log_chgorder (SPReprAction *log, SPRepr *repr,
 	g_assert (child != NULL);
 
 	action = new_action (log, SP_REPR_ACTION_CHGORDER, repr);
-	action->act.chgorder.child = child;
-	action->act.chgorder.oldref = oldref;
-	action->act.chgorder.newref = newref;
+	action->chgorder.child = child;
+	action->chgorder.oldref = oldref;
+	action->chgorder.newref = newref;
 
 	sp_repr_ref (child);
 	if (oldref) sp_repr_ref (oldref);
 	if (newref) sp_repr_ref (newref);
 
-	return action;
+	return coalesce_action(action);
 }
 
 #define SP_REPR_ACTION_ALLOC_SIZE 256
@@ -419,29 +348,29 @@ free_action (SPReprAction *action)
 {
 	switch (action->type) {
 	case SP_REPR_ACTION_ADD:
-		sp_repr_unref (action->act.add.child);
-		if (action->act.add.ref)
-		  sp_repr_unref (action->act.add.ref);
+		sp_repr_unref (action->add.child);
+		if (action->add.ref)
+		  sp_repr_unref (action->add.ref);
 		break;
 	case SP_REPR_ACTION_DEL:
-		sp_repr_unref (action->act.del.child);
-		if (action->act.del.ref)
-		  sp_repr_unref (action->act.del.ref);
+		sp_repr_unref (action->del.child);
+		if (action->del.ref)
+		  sp_repr_unref (action->del.ref);
 		break;
 	case SP_REPR_ACTION_CHGATTR:
-		g_free (action->act.chgattr.oldval);
-		g_free (action->act.chgattr.newval);
+		g_free (action->chgattr.oldval);
+		g_free (action->chgattr.newval);
 		break;
 	case SP_REPR_ACTION_CHGCONTENT:
-		g_free (action->act.chgcontent.oldval);
-		g_free (action->act.chgcontent.newval);
+		g_free (action->chgcontent.oldval);
+		g_free (action->chgcontent.newval);
 		break;
 	case SP_REPR_ACTION_CHGORDER:
-		sp_repr_unref (action->act.chgorder.child);
-		if (action->act.chgorder.oldref)
-		  sp_repr_unref (action->act.chgorder.oldref);
-		if (action->act.chgorder.newref)
-		  sp_repr_unref (action->act.chgorder.newref);
+		sp_repr_unref (action->chgorder.child);
+		if (action->chgorder.oldref)
+		  sp_repr_unref (action->chgorder.oldref);
+		if (action->chgorder.newref)
+		  sp_repr_unref (action->chgorder.newref);
 		break;
 	default:
 		g_assert_not_reached ();
@@ -453,5 +382,160 @@ free_action (SPReprAction *action)
 
 	action->next = action_pool;
 	action_pool = action;
+}
+
+static SPReprAction *
+coalesce_action(SPReprAction *action)
+{
+	if ( !action || !action->next ) {
+		return action;
+	}
+
+	switch (action->type) {
+		case SP_REPR_ACTION_ADD: {
+			return coalesce_add(action);
+		}
+		case SP_REPR_ACTION_DEL: {
+			return coalesce_remove(action);
+		}
+		case SP_REPR_ACTION_CHGATTR: {
+			return coalesce_chgattr(action);
+		}
+		case SP_REPR_ACTION_CHGCONTENT: {
+			return coalesce_chgcontent(action);
+		}
+		case SP_REPR_ACTION_CHGORDER: {
+			return coalesce_chgorder(action);
+		}
+		default: {
+			g_assert_not_reached();
+			return action;
+		}
+	};
+}
+
+static SPReprAction *
+coalesce_add(SPReprAction *action)
+{
+	SPReprAction *next=action->next;
+
+	/* an add and a matching remove cancel each other out */
+	if ( next->type == SP_REPR_ACTION_DEL &&
+	     next->repr == action->repr &&
+	     next->del.child == action->add.child &&
+	     next->del.ref == action->add.ref )
+	{
+		SPReprAction *after=next->next;
+
+		free_action(action);
+		free_action(next);
+
+		return action = after;
+	}
+
+	return action;
+}
+
+static SPReprAction *
+coalesce_remove(SPReprAction *action)
+{
+	SPReprAction *next=action->next;
+
+	/* an add and a matching remove cancel each other out */
+	if ( next->type == SP_REPR_ACTION_ADD &&
+	     next->repr == action->repr &&
+	     next->add.child == action->del.child &&
+	     next->add.ref == action->del.ref )
+	{
+		SPReprAction *after=next->next;
+
+		free_action(action);
+		free_action(next);
+
+		action = after;
+	}
+
+	return action;
+}
+
+static SPReprAction *
+coalesce_chgattr(SPReprAction *action)
+{
+	SPReprAction *next=action->next;
+
+	/* consecutive chgattrs on the same key can be combined */
+	if ( next->type == SP_REPR_ACTION_CHGATTR &&
+	     next->repr == action->repr &&
+	     next->chgattr.key == action->chgattr.key )
+	{
+		/* replace our oldval with next's */
+		g_free(action->chgattr.oldval);
+		action->chgattr.oldval = next->chgattr.oldval;
+		next->chgattr.oldval = NULL;
+
+		/* get rid of next */
+		action->next = next->next;
+		free_action(next);
+	}
+
+	return action;
+}
+
+static SPReprAction *
+coalesce_chgcontent(SPReprAction *action)
+{
+	SPReprAction *next=action->next;
+
+	/* consecutive content changes can be combined */
+	if ( next->type == SP_REPR_ACTION_CHGCONTENT &&
+	     next->repr == action->repr )
+	{
+		/* replace our oldval with next's */
+		g_free(action->chgcontent.oldval);
+		action->chgcontent.oldval = next->chgcontent.oldval;
+		next->chgcontent.oldval = NULL;
+
+		/* get rid of next */
+		action->next = next->next;
+		free_action(next);
+	}
+
+	return action;
+}
+
+static SPReprAction *
+coalesce_chgorder(SPReprAction *action)
+{
+	SPReprAction *next=action->next;
+
+	/* consecutive chgorders for the same child may be combined or
+	 * canceled out */
+	if ( next->type == SP_REPR_ACTION_CHGORDER &&
+	     next->repr == action->repr &&
+	     next->chgorder.child == action->chgorder.child )
+	{
+		if ( next->chgorder.oldref == action->chgorder.newref ) {
+			/* cancel them out */
+			SPReprAction *after=next->next;
+
+			free_action(action);
+			free_action(next);
+
+			action = after;
+		} else {
+			/* combine them */
+			if (action->chgorder.oldref) {
+				sp_repr_unref(action->chgorder.oldref);
+			}
+			action->chgorder.oldref = next->chgorder.oldref;
+			next->chgorder.oldref = NULL;
+
+			/* get rid of next */
+			action->next = next->next;
+			free_action(next);
+		}
+	}
+
+	return action;
 }
 
