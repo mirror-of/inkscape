@@ -3075,7 +3075,7 @@ msgid ""
 "Select <b>two non-endpoint nodes</b> on a path between which to delete "
 "segments."
 msgstr ""
-"Você precisa selecionar <b>dois pontos não finais<b> num caminho para apagar "
+"Você precisa selecionar <b>dois pontos não finais</b> num caminho para apagar "
 "os segmentos"
 
 #: src/nodepath.cpp:1464
@@ -3170,12 +3170,12 @@ msgstr ""
 #: src/object-edit.cpp:606
 msgid "Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"
 msgstr ""
-"Ajustar a <b>largura</b> da elipse, com <b>Ctrl<b> para formar um círculo"
+"Ajustar a <b>largura</b> da elipse, com <b>Ctrl</b> para formar um círculo"
 
 #: src/object-edit.cpp:608
 msgid "Adjust ellipse <b>height</b>, with <b>Ctrl</b> to make circle"
 msgstr ""
-"Ajustar a <b>altura</b> da elipse, com <b>Ctrl<b> para formar um círculo"
+"Ajustar a <b>altura</b> da elipse, com <b>Ctrl</b> para formar um círculo"
 
 #: src/object-edit.cpp:610
 msgid ""
@@ -3813,14 +3813,14 @@ msgstr ""
 #: src/splivarot.cpp:111
 msgid "Select <b>at least 2 paths</b> to perform a boolean operation."
 msgstr ""
-"Selecione <b>pelo menos dois caminhos<b> para fazer uma operação booleana."
+"Selecione <b>pelo menos dois caminhos</b> para fazer uma operação booleana."
 
 #: src/splivarot.cpp:117
 msgid ""
 "Select <b>exactly 2 paths</b> to perform difference, XOR, division, or path "
 "cut."
 msgstr ""
-"Selecione <b>exatamente dois caminhos<b> para fazer diferença, ou-exclusivo, "
+"Selecione <b>exatamente dois caminhos</b> para fazer diferença, ou-exclusivo, "
 "divisão ou corte de caminho."
 
 #: src/splivarot.cpp:134 src/splivarot.cpp:149
