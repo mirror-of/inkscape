@@ -1539,6 +1539,18 @@ sp_desktop_scroll_to_point (SPDesktop *desktop, NR::Point const *p)
 {
 	NRRect dbox;
 	sp_desktop_get_display_area (desktop, &dbox);
+
+	gdouble autoscrolldistance = (gdouble) prefs_get_int_attribute_limited ("options.autoscrolldistance", "value", 0, -1000, 10000);
+
+	// autoscrolldistance is in screen pixels, but the display area is in document units
+	autoscrolldistance /= SP_DESKTOP_ZOOM (desktop);
+
+	// FIXME: njh: we need an expandBy function for rects
+	dbox.x0 -= autoscrolldistance;
+	dbox.x1 += autoscrolldistance;
+	dbox.y0 -= autoscrolldistance;
+	dbox.y1 += autoscrolldistance;
+
 	if (!((*p)[NR::X] > dbox.x0 && (*p)[NR::X] < dbox.x1) || !((*p)[NR::Y] > dbox.y0 && (*p)[NR::Y] < dbox.y1)) {
 
 		NR::Point const s_w( (*p) * desktop->d2w );
@@ -1566,7 +1578,7 @@ sp_desktop_scroll_to_point (SPDesktop *desktop, NR::Point const *p)
 		gdouble autoscrollspeed = prefs_get_double_attribute_limited ("options.autoscrollspeed", "value", 1, 0, 10);
 
 		if (autoscrollspeed != 0)
-			sp_desktop_scroll_world(desktop, autoscrollspeed*moved_w);
+			sp_desktop_scroll_world(desktop, autoscrollspeed * moved_w);
 
 		return true;
 	}
