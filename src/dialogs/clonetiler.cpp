@@ -172,9 +172,11 @@ clonetiler_get_transform (
     NR::Matrix flip_y = NR::translate(-cx, -cy) * NR::scale (1, -1) * NR::translate(cx, cy);
 
     switch (type) {
+
     case TILE_P1:
         return d_s_r * rect_translate;
         break;
+
     case TILE_P2:
         if (x % 2 == 0) {
             return d_s_r * rect_translate;
@@ -182,6 +184,7 @@ clonetiler_get_transform (
             return d_s_r * rotate_180_c * rect_translate;
         }
         break;
+
     case TILE_PM:
         if (x % 2 == 0) {
             return d_s_r * rect_translate;
@@ -189,6 +192,7 @@ clonetiler_get_transform (
             return d_s_r * flip_x * rect_translate;
         }
         break;
+
     case TILE_PG:
         if (y % 2 == 0) {
             return d_s_r * rect_translate;
@@ -196,6 +200,7 @@ clonetiler_get_transform (
             return d_s_r * flip_x * rect_translate;
         }
         break;
+
     case TILE_CM:
         if ((x + y) % 2 == 0) {
             return d_s_r * rect_translate;
@@ -203,6 +208,7 @@ clonetiler_get_transform (
             return d_s_r * flip_x * rect_translate;
         }
         break;
+
     case TILE_PMM:
         if (y % 2 == 0) {
             if (x % 2 == 0) {
@@ -218,6 +224,7 @@ clonetiler_get_transform (
             }
         }
         break;
+
     case TILE_PMG:
         if (y % 4 == 0) {
             return d_s_r * rect_translate;
@@ -229,6 +236,7 @@ clonetiler_get_transform (
             return d_s_r * flip_x * flip_y * rect_translate;
         }
         break;
+
     case TILE_PGG:
         if (y % 2 == 0) {
             if (x % 2 == 0) {
@@ -244,6 +252,7 @@ clonetiler_get_transform (
             }
         }
         break;
+
     case TILE_CMM:
         if (y % 4 == 0) {
             if (x % 2 == 0) {
@@ -271,6 +280,7 @@ clonetiler_get_transform (
             }
         }
         break;
+
     case TILE_P4:
     {
         NR::Matrix ori (NR::translate ((w + h) * (x/2) + dx,  (h + w) * (y/2) + dy));
@@ -291,6 +301,7 @@ clonetiler_get_transform (
         }
     }
     break;
+
     case TILE_P4M:
     {
         double max = MAX(w, h);
@@ -320,6 +331,7 @@ clonetiler_get_transform (
         }
     }
     break;
+
     case TILE_P4G:
     {
         double max = MAX(w, h);
@@ -349,6 +361,7 @@ clonetiler_get_transform (
         }
     }
     break;
+
     case TILE_P3:
     {
         double width;
@@ -376,6 +389,7 @@ clonetiler_get_transform (
         }
     }
     break;
+
     case TILE_P31M:
     {
         NR::Matrix ori;
@@ -412,8 +426,51 @@ clonetiler_get_transform (
     }
     break;
 
+    case TILE_P3M1:
+    {
+        double width;
+        double height;
+        NR::Matrix dia1;
+        NR::Matrix dia2;
+        NR::Matrix dia3;
+        NR::Matrix dia4;
+        if (w > h) {
+            width = w + w * cos(M_PI/3);
+            height = 2 * w * sin(M_PI/3);
+            dia1= NR::Matrix (NR::translate (0, h/2) * NR::translate (w/2, 0) * NR::translate (w/2 * cos(M_PI/3), -w/2 * sin(M_PI/3)) * NR::translate (-h/2 * cos(M_PI/6), -h/2 * sin(M_PI/6)) );
+            dia2= NR::Matrix (NR::translate (h * cos(M_PI/6), h * sin(M_PI/6)));
+            dia3= NR::Matrix (NR::translate (0, 2 * (w/2 * sin(M_PI/3) - h/2 * sin(M_PI/6))));
+            dia4= NR::Matrix (NR::translate (-h * cos(M_PI/6), h * sin(M_PI/6)));
+        } else {
+            width = 2 * h * cos (M_PI/6);
+            height = 2 * h;
+            dia1 = NR::Matrix (NR::translate (0, -h/2) * NR::translate (h/2 * cos(M_PI/6), h/2 * sin(M_PI/6)));
+            dia2 = NR::Matrix (NR::translate (h * cos(M_PI/6), h * sin(M_PI/6)));
+            dia3 = NR::Matrix (NR::translate (0, h/2));
+            dia4 = NR::Matrix (NR::translate (-h * cos(M_PI/6), h * sin(M_PI/6)));
+        }
+        NR::Matrix ori (NR::translate (width * (2*(x/6) + y%2) + dx,  (height/2) * y + dy));
+            if (x % 6 == 0) {
+                return d_s_r * ori;
+            } else if (x % 6 == 1) {
+                return d_s_r * flip_y * rotate_m120_c * dia1 * ori;
+            } else if (x % 6 == 2) {
+                return d_s_r * rotate_m120_c * dia1 * dia2 * ori;
+            } else if (x % 6 == 3) {
+                return d_s_r * flip_y * rotate_120_c * dia1 * dia2 * dia3 * ori;
+            } else if (x % 6 == 4) {
+                return d_s_r * rotate_120_c * dia1 * dia2 * dia3 * dia4 * ori;
+            } else if (x % 6 == 5) {
+                return d_s_r * flip_y * NR::translate(0, h) * ori;
+            }
+    }
+    break;
+
+
+
+
+
 /*
-      case TILE_P3M1:
       case TILE_P6:
       case TILE_P6M:
 		*/
