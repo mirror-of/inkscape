@@ -1,4 +1,3 @@
-# translation of new.po to Français
 # translation of fr.po to Français
 # French translation of Inkscape.
 # Copyright (C) 2000-2003 Free Software Foundation, Inc.
@@ -10,11 +9,11 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: fr\n"
+"Project-Id-Version: Inkscape_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-11-07 20:47+0100\n"
-"PO-Revision-Date: 2004-11-10 16:57+0100\n"
-"Last-Translator: Matiphas <matiphas _a_ free _point_ fr>\n"
+"PO-Revision-Date: 2004-11-10 21:27+0100\n"
+"Last-Translator: Frederic Rodrigo <f.rodrigo free.fr>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -825,11 +824,11 @@ msgstr "> ou < mettent à l'échelle de (en points)"
 
 #: src/dialogs/display-settings.cpp:1033
 msgid "Inset/Outset by:"
-msgstr "Eroder/Dilater de :"
+msgstr "Éroder/Dilater de :"
 
 #: src/dialogs/display-settings.cpp:1034
 msgid "Inset and Outset commands displace the path by this distance (in points)"
-msgstr "Les commandes Eroder et Dilater déplacent le chemin de cette distance (en points)"
+msgstr "Les commandes Éroder et Dilater déplacent le chemin de cette distance (en points)"
 
 #: src/dialogs/display-settings.cpp:1046
 msgid "Zoom in/out by:"
@@ -1189,7 +1188,7 @@ msgstr "Impossible d'exporter dans le fichier %s.\n"
 
 #: src/dialogs/export.cpp:1118
 msgid "Select a filename for exporting"
-msgstr "Sélectionnez un fichier pour exporter"
+msgstr "Sélectionnez un nom de fichier pour exporter"
 
 #: src/dialogs/filedialog.cpp:360
 msgid "No preview"
@@ -2615,7 +2614,7 @@ msgstr "Ouvre le(s) fichier(s) spécifié(s) (la chaîne d'option peut être exc
 #: src/main.cpp:171
 #: src/main.cpp:223
 msgid "FILENAME"
-msgstr "NOMFICHIER"
+msgstr "NOM_DE_FICHIER"
 
 #: src/main.cpp:165
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
@@ -2716,7 +2715,7 @@ msgstr ""
 
 #: src/node-context.cpp:355
 msgid "<b>Ctrl</b>: toggle node type, snap handle angle, move hor/vert; <b>Ctrl+Alt</b>: move along handles"
-msgstr "<b>Ctrl</b> : selon le contexte,  modifier le type des nœuds, forcer la modification des angles de leurs contrôles par incréments, forcer le déplacement hor/vert; <b>Ctrl+Alt</b> : déplacer le long des contrôles"
+msgstr "<b>Ctrl</b> : selon le contexte, modifier le type des nœuds, forcer la modification des angles de leurs contrôles par incréments, forcer le déplacement hor/vert; <b>Ctrl+Alt</b> : déplacer le long des contrôles"
 
 #: src/node-context.cpp:356
 msgid "<b>Shift</b>: toggle node selection, disable snapping, rotate both handles"
@@ -2775,7 +2774,7 @@ msgstr "Sélectionner un chemin avec l'outil sélection, ensuite prendre l'outil
 #: src/nodepath.cpp:2905
 #, c-format
 msgid "<b>0</b> out of <b>%i</b> nodes selected. Click, Shift+click, or drag around nodes to select."
-msgstr "<b>0</b> nœud sur <b>%i</b> sélectionné(s). Sélectionnez des nœuds par Clic, Maj+Clic ou  Cliquer-déplacer."
+msgstr "<b>0</b> nœud sur <b>%i</b> sélectionné(s). Sélectionnez des nœuds par Clic, Maj+Clic ou Cliquer-déplacer."
 
 #: src/nodepath.cpp:2909
 #, c-format
@@ -3374,7 +3373,7 @@ msgstr "Un des objets n'est <b>pas un chemin</b>, impossible d'effectuer une op�
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
 #: src/splivarot.cpp:544
 msgid "Select <b>path(s)</b> to outline."
-msgstr "Sélectionner <b>un(des) chemin(s)</b> pour en surligner le contour."
+msgstr "Sélectionner <b>un(des) chemin(s)</b> pour en tracer le contour."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
 #: src/splivarot.cpp:745
@@ -3732,7 +3731,7 @@ msgstr "<b>Cliquer-déplacer</b> pour tracer des lignes à la plume calligraphiq
 
 #: src/tools-switch.cpp:177
 msgid "<b>Click</b> to select or create text object, then type."
-msgstr "<b>Clic</b> pour créer ou sélectionner un objet texte et pouvoir  ensuite taper/modifier le texte."
+msgstr "<b>Clic</b> pour créer ou sélectionner un objet texte et pouvoir ensuite taper/modifier le texte."
 
 #: src/tools-switch.cpp:183
 msgid "<b>Click</b> or <b>drag around an area</b> to zoom in, <b>Shift+click</b> to zoom out."
@@ -4235,23 +4234,23 @@ msgstr "Eroder (_n)"
 
 #: src/verbs.cpp:1538
 msgid "Inset selected path(s)"
-msgstr "Eroder le(s) chemin(s) sélectionné(s)"
+msgstr "Éroder le(s) chemin(s) sélectionné(s)"
 
 #: src/verbs.cpp:1540
 msgid "I_nset Path by 1px"
-msgstr "Eroder le chemi_n de 1px"
+msgstr "Éroder le chemi_n de 1px"
 
 #: src/verbs.cpp:1541
 msgid "Inset selected path(s) by 1px"
-msgstr "Eroder les chemin(s) sélectionné(s) de 1px"
+msgstr "Éroder les chemin(s) sélectionné(s) de 1px"
 
 #: src/verbs.cpp:1543
 msgid "I_nset Path by 10px"
-msgstr "Eroder le chemi_n de 10px"
+msgstr "Éroder le chemi_n de 10px"
 
 #: src/verbs.cpp:1544
 msgid "Inset selected path(s) by 10px"
-msgstr "Eroder le(s) chemin(s) sélectionné(s) de 1px"
+msgstr "Éroder le(s) chemin(s) sélectionné(s) de 1px"
 
 #: src/verbs.cpp:1546
 msgid "D_ynamic Offset"
@@ -4567,7 +4566,7 @@ msgstr "Préférences des Étoiles"
 
 #: src/verbs.cpp:1644
 msgid "Open Inkscape Preferences for the Star tool"
-msgstr "Ouvrir les préférences de l'outil  Étoile d'Inkscape"
+msgstr "Ouvrir les préférences de l'outil Étoile d'Inkscape"
 
 #: src/verbs.cpp:1645
 msgid "Spiral Preferences"
