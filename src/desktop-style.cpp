@@ -240,6 +240,12 @@ sp_desktop_get_font_size_tool(SPDesktop *desktop)
     return ret;
 }
 
+int
+sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
+{
+    return desktop->_query_style_signal.emit(style, property);
+}
+
 
 /*
   Local Variables:

@@ -24,6 +24,20 @@ struct Node;
 }
 }
 
+enum { // what kind of a style the query is returning
+    QUERY_STYLE_NOTHING,
+    QUERY_STYLE_SINGLE,
+    QUERY_STYLE_MULTIPLE_SAME,
+    QUERY_STYLE_MULTIPLE_DIFFERENT,
+    QUERY_STYLE_MULTIPLE_AVERAGED
+};
+
+enum { // which property was queried (add when you need more)
+    QUERY_STYLE_PROPERTY_EVERYTHING,
+    QUERY_STYLE_PROPERTY_FILLSTROKE,  // fill, fill-opacity, stroke, stroke-opacity
+    QUERY_STYLE_PROPERTY_STROKESTYLE, // markers, dasharray, miterlimit, stroke-width, stroke-cap, stroke-join
+    QUERY_STYLE_PROPERTY_TEXT // font-family, font-size, font-style, font-variant, line-height, text-anchor...
+};
 
 void sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines);
 void sp_desktop_set_color(SPDesktop *desktop, ColorRGBA const &color, bool is_relative, bool fill);
@@ -32,6 +46,8 @@ SPCSSAttr *sp_desktop_get_style(SPDesktop *desktop, bool with_text);
 guint32 sp_desktop_get_color (SPDesktop *desktop, bool is_fill);
 double sp_desktop_get_font_size_tool (SPDesktop *desktop);
 void sp_desktop_apply_style_tool(SPDesktop *desktop, Inkscape::XML::Node *repr, char const *tool, bool with_text);
+
+int sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property);
 
 #endif
 
