@@ -99,7 +99,7 @@ struct SPItem : public SPObject {
 
 	sigc::signal<void, NR::Matrix const *, SPItem *> _transformed_signal;
 
-	NR::Matrix getRelativeTransform(SPObject *obj);
+	NR::Matrix getRelativeTransform(SPObject const *obj) const;
 
 
 

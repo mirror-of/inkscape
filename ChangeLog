@@ -3,7 +3,8 @@
 	* display/nr-arena-item.cpp, display/nr-arena-item.h:
 	  Add NR::Matrix version of nr_arena_item_set_transform.
 
-	* src/sp-item.cpp (partial_xform): Mark pointers as not written through.
+	* src/sp-item.h, src/sp-item.cpp (getRelativeTransform, partial_xform):
+	  Mark pointers as not written through.
 
 	* src/arc-context.cpp, src/draw-context.cpp, src/dyna-draw-context.cpp,
 	  src/path-chemistry.cpp, src/rect-context.cpp,

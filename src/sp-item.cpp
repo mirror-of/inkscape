@@ -130,6 +130,9 @@ sp_item_init(SPItem *item)
 
 namespace {
 
+/** Requires: \a ancestor really is an ancestor (>=) of \a object.
+ * ("Ancestor (>=)" here includes as far as \a object itself.)
+ */
 NR::Matrix partial_xform(SPObject const *object, SPObject const *ancestor) {
     NR::Matrix xform = NR::identity();
     while ( object != ancestor ) {
@@ -141,9 +144,10 @@ NR::Matrix partial_xform(SPObject const *object, SPObject const *ancestor) {
     return xform;
 }
 
-NR::Matrix SPItem::getRelativeTransform(SPObject *object) {
+/* todo: Consider moving this and nearestCommonAncestor to be functions on SPObject. */
+NR::Matrix SPItem::getRelativeTransform(SPObject const *object) const {
     g_return_val_if_fail(object != NULL, NR::identity());
-    SPObject *ancestor=this->nearestCommonAncestor(object);
+    SPObject const *ancestor = this->nearestCommonAncestor(object);
     return partial_xform(this, ancestor) *
            partial_xform(object, ancestor).inverse();
 }
