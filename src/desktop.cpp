@@ -1547,7 +1547,7 @@ void sp_desktop_scroll_world(SPDesktop *dt, double dx, double dy)
 }
 
 bool
-sp_desktop_scroll_to_point (SPDesktop *desktop, NR::Point const *p)
+sp_desktop_scroll_to_point (SPDesktop *desktop, NR::Point const *p, gdouble autoscrollspeed)
 {
 	NRRect dbox;
 	sp_desktop_get_display_area (desktop, &dbox);
@@ -1587,7 +1587,8 @@ sp_desktop_scroll_to_point (SPDesktop *desktop, NR::Point const *p)
 		NR::Point const d_w( d_dt * desktop->d2w );
 		NR::Point const moved_w( d_w - s_w );
 
-		gdouble autoscrollspeed = prefs_get_double_attribute_limited ("options.autoscrollspeed", "value", 1, 0, 10);
+		if (autoscrollspeed == 0)
+			autoscrollspeed = prefs_get_double_attribute_limited ("options.autoscrollspeed", "value", 1, 0, 10);
 
 		if (autoscrollspeed != 0)
 			sp_desktop_scroll_world(desktop, autoscrollspeed * moved_w);

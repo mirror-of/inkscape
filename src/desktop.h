@@ -142,7 +142,7 @@ void sp_desktop_zoom_page_width (SPDesktop *dt);
 void sp_desktop_zoom_drawing (SPDesktop *dt);
 void sp_desktop_zoom_selection (SPDesktop *dt);
 void sp_desktop_scroll_world(SPDesktop *dt, double dx, double dy);
-bool sp_desktop_scroll_to_point (SPDesktop *desktop, NR::Point const *s_dt);
+bool sp_desktop_scroll_to_point (SPDesktop *desktop, NR::Point const *s_dt, gdouble autoscrollspeed = 0);
 
 inline void sp_desktop_scroll_world(SPDesktop *dt, NR::Point const scroll)
 {
