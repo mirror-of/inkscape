@@ -408,6 +408,13 @@ sp_item_bbox_desktop (SPItem *item, NRRect *bbox)
 	sp_item_invoke_bbox(item, bbox, &i2d, TRUE);
 }
 
+NR::Rect sp_item_bbox_desktop(SPItem *item)
+{
+	NRRect ret;
+	sp_item_bbox_desktop(item, &ret);
+	return NR::Rect(ret);
+}
+
 static int sp_item_private_snappoints(SPItem *item, NR::Point p[], int size)
 {
 	if (size < 2) return 0;

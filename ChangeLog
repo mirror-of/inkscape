@@ -1,5 +1,8 @@
 2004-02-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-item.h, src/sp-item.cpp (sp_item_bbox_desktop):
+	Add NR::Rect version.
+
 	* src/inkview.cpp: Address compiler warning: declare is_jar iff it is
 	defined, i.e. #ifdef WITH_INKJAR.
 

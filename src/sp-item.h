@@ -155,6 +155,7 @@ gint sp_item_event (SPItem *item, SPEvent *event);
 NRArenaItem *sp_item_get_arenaitem (SPItem *item, unsigned int key);
 
 void sp_item_bbox_desktop (SPItem *item, NRRect *bbox);
+NR::Rect sp_item_bbox_desktop(SPItem *item);
 
 NR::Matrix sp_item_i2doc_affine(SPItem const *item);
 
