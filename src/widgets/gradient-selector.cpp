@@ -251,10 +251,7 @@ sp_gradient_selector_set_vector (SPGradientSelector *sel, SPDocument *doc, SPGra
 	g_return_if_fail (!vector || (SP_OBJECT_DOCUMENT (vector) == doc));
 
 	if (vector && !SP_GRADIENT_HAS_STOPS (vector))
-		return; // this happens when undoing change from gradient to flat color, as this
-				// does sp_document_done twice, and the mid-state (after the first ctrl+z
-				// before the second) may be bogus. This will be fixed when (and if)
-				// fill&stroke will be castrated to not set gradients/patterns
+		return; 
 
 	sp_gradient_vector_selector_set_gradient (SP_GRADIENT_VECTOR_SELECTOR (sel->vectors), doc, vector);
 
