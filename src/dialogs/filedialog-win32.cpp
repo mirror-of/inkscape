@@ -272,15 +272,24 @@ FileSaveDialog::FileSaveDialog(
 	default_item = n;
 	extension = d->extension;
       }
-
+      
       n++;
     }
 
     *p = '\0';
-
+    
     nativeData->fnbuf[0] = '\0';
-    if (dir)
-      strncpy(nativeData->fnbuf, dir, sizeof(nativeData->fnbuf));
+    
+    if (dir) {
+      /* We must check that dir is not something like
+      ** c:\foo\ (ie with a trailing \).  If it is,
+      ** GetSaveFileName will give an error.
+      */
+      int n = strlen(dir);
+      if (n > 0 && dir[n - 1] != '\\') {
+	strncpy(nativeData->fnbuf, dir, sizeof(nativeData->fnbuf));
+      }
+    }
 
     OPENFILENAME ofn = {
         sizeof (OPENFILENAME),
