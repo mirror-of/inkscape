@@ -30,6 +30,7 @@
 
 #define SNAP_ON(d) (((d)->gridsnap > 0.0) || ((d)->guidesnap > 0.0))
 
+/** Returns the distance moved. */
 gdouble sp_desktop_dim_snap(SPDesktop const *dt, NR::Point &req, unsigned const dim)
 {
 	g_assert( dim < 2 );
