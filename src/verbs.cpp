@@ -244,11 +244,11 @@ sp_verb_action_edit_perform (SPAction *action, void * data, void * pdata)
 	  	sp_edit_clear_all (NULL, NULL);
 		break;
 	case SP_VERB_EDIT_SELECT_ALL:
-		if (tools_isactive (dt, TOOLS_NODES)) {
-			sp_nodepath_select_all (SP_NODE_CONTEXT(ec)->nodepath);
-		} else {
-			sp_edit_select_all (NULL, NULL);
-		}
+ 		if (tools_isactive (dt, TOOLS_NODES)) {
+ 			sp_nodepath_select_all (SP_NODE_CONTEXT(ec)->nodepath);
+ 		} else {
+ 			sp_edit_select_all (NULL, NULL);
+ 		}
 		break;
 	default:
 		break;
@@ -473,6 +473,12 @@ sp_verb_action_zoom_perform (SPAction *action, void * data, void * pdata)
 	case SP_VERB_ZOOM_PREV:
 		sp_desktop_prev_zoom (dt);
 		break;
+	case SP_VERB_TOGGLE_RULERS:
+		sp_desktop_toggle_rulers (dt);
+		break;
+	case SP_VERB_TOGGLE_SCROLLBARS:
+		sp_desktop_toggle_scrollbars (dt);
+		break;
 	case SP_VERB_TOGGLE_GUIDES:
 		sp_repr_get_boolean (repr, "showguides", &v);
 		sp_repr_set_boolean (repr, "showguides", !(v));
@@ -640,8 +646,10 @@ static const SPVerbActionDef props[] = {
 	/* Zooming */
 	{SP_VERB_ZOOM_IN, "ZoomIn", N_("Zoom In"), N_("Zoom in"), "zoom_in"},
 	{SP_VERB_ZOOM_OUT, "ZoomOut", N_("Zoom Out"), N_("Zoom out"), "zoom_out"},
-	{SP_VERB_TOGGLE_GRID, "ToggleGrid", N_("Grid"), N_("Toggle grid"), "toggle_grid"},
-	{SP_VERB_TOGGLE_GUIDES, "ToggleGuides", N_("Guides"), N_("Toggle guides"), "toggle_guides"},
+	{SP_VERB_TOGGLE_RULERS, "ToggleRulers", N_("Rulers"), N_("Show/hide rulers"), NULL},
+	{SP_VERB_TOGGLE_SCROLLBARS, "ToggleScrollbars", N_("Scrollbars"), N_("Show/hide scrollbars"), NULL},
+	{SP_VERB_TOGGLE_GRID, "ToggleGrid", N_("Grid"), N_("Show/hide grid"), NULL},
+	{SP_VERB_TOGGLE_GUIDES, "ToggleGuides", N_("Guides"), N_("Show/hide guides"), "toggle_guides"},
 	{SP_VERB_ZOOM_NEXT, "ZoomNext", N_("Nex_t zoom"), N_("Next zoom"), NULL},
 	{SP_VERB_ZOOM_PREV, "ZoomPrev", N_("Pre_v zoom"), N_("Previous zoom"), NULL},
 	{SP_VERB_ZOOM_1_1, "Zoom1:0", N_("Zoom 1:_1"), N_("Zoom to 1:1"), "zoom_1_to_1"},
