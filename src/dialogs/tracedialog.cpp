@@ -370,6 +370,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceBrightnessVBox.pack_start(potraceBrightnessBox, false, false, MARGIN);
 
     potraceBrightnessFrame.set_label(_("Image Brightness"));
+    potraceBrightnessFrame.set_shadow_type(Gtk::SHADOW_NONE);
     potraceBrightnessFrame.add(potraceBrightnessVBox);
     potraceBox.pack_start(potraceBrightnessFrame, false, false, 0);
 
@@ -400,6 +401,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceCannyVBox.pack_start(potraceCannyBox, false, false, MARGIN);
 
     potraceCannyFrame.set_label(_("Edge Detection"));
+    potraceCannyFrame.set_shadow_type(Gtk::SHADOW_NONE);
     potraceCannyFrame.add(potraceCannyVBox);
     potraceBox.pack_start(potraceCannyFrame, false, false, 0);
 
@@ -423,6 +425,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceQuantVBox.pack_start(potraceQuantBox, false, false, MARGIN);
 
     potraceQuantFrame.set_label(_("Quantization / Reduction"));
+    potraceQuantFrame.set_shadow_type(Gtk::SHADOW_NONE);
     potraceQuantFrame.add(potraceQuantVBox);
     potraceBox.pack_start(potraceQuantFrame, false, false, 0);
   
@@ -435,6 +438,7 @@ TraceDialogImpl::TraceDialogImpl()
     //potracePreviewImage.set_alignment (Gtk::ALIGN_CENTER, Gtk::ALIGN_CENTER);
     potracePreviewBox.pack_start(potracePreviewImage, true, true, 0);
     potracePreviewFrame.set_label(_("Preview")); // I guess it's correct to call the "intermediate bitmap" a preview of the trace
+    //potracePreviewFrame.set_shadow_type(Gtk::SHADOW_NONE);
     potracePreviewFrame.add(potracePreviewBox);
     potraceBox.pack_start(potracePreviewFrame, true, true, 0);
 
@@ -450,6 +454,7 @@ TraceDialogImpl::TraceDialogImpl()
                          );
     potraceCreditsVBox.pack_start(potraceCreditsLabel, false, false, MARGIN);
     potraceCreditsFrame.set_label(_("Credits"));
+    potraceCreditsFrame.set_shadow_type(Gtk::SHADOW_NONE);
     potraceCreditsFrame.add(potraceCreditsVBox);
     potraceBox.pack_start(potraceCreditsFrame, false, false, 0);
 
