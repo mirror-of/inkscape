@@ -1,3 +1,9 @@
+2004-01-30  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/rubberband.h, src/rubberband.cpp (sp_rubberband_start):
+	Add NR::Point version.
+	Implement x,y version as call to NR::Point version.
+
 2004-01-29  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/desktop-snap.h, src/desktop-snap.cpp (sp_desktop_dim_snap_list):

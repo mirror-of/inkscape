@@ -22,17 +22,19 @@ SPCtrlRect * sp_rb = NULL;
 gboolean sp_rb_dragging = FALSE;
 ArtDRect sp_rb_rect;
 
-void
-sp_rubberband_start (SPDesktop * desktop, double x, double y)
+void sp_rubberband_start (SPDesktop * desktop, NR::Point const &p)
 {
+	using NR::X;
+	using NR::Y;
+
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
 	if (sp_rb) sp_rubberband_stop ();
 
 	sp_rb_desktop = desktop;
-	sp_rb_rect.x0 = x;
-	sp_rb_rect.y0 = y;
+	sp_rb_rect.x0 = p[X];
+	sp_rb_rect.y0 = p[Y];
 	sp_rb_dragging = TRUE;
 }
 

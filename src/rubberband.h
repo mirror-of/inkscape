@@ -18,7 +18,13 @@
 
 /* fixme: do multidocument safe */
 
-void sp_rubberband_start (SPDesktop *desktop, double x, double y);
+void sp_rubberband_start(SPDesktop *desktop, NR::Point const &p);
+
+inline void sp_rubberband_start (SPDesktop *desktop, double x, double y)
+{
+  sp_rubberband_start(desktop, NR::Point(x, y));
+}
+
 void sp_rubberband_move(NR::Point const &p);
 void sp_rubberband_move (double x, double y);
 void sp_rubberband_stop (void);
