@@ -1110,9 +1110,9 @@ static void sp_lineargradient_class_init(SPLinearGradientClass *klass)
 static void sp_lineargradient_init(SPLinearGradient *lg)
 {
 	sp_svg_length_unset (&lg->x1, SP_SVG_UNIT_PERCENT, 0.0, 0.0);
-	sp_svg_length_unset (&lg->y1, SP_SVG_UNIT_PERCENT, 0.0, 0.0);
+	sp_svg_length_unset (&lg->y1, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
 	sp_svg_length_unset (&lg->x2, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
-	sp_svg_length_unset (&lg->y2, SP_SVG_UNIT_PERCENT, 0.0, 0.0);
+	sp_svg_length_unset (&lg->y2, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
 }
 
 static void sp_lineargradient_build(SPObject *object, SPDocument *document, SPRepr *repr)
@@ -1140,7 +1140,7 @@ sp_lineargradient_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	case SP_ATTR_Y1:
 		if (!sp_svg_length_read (value, &lg->y1)) {
-			sp_svg_length_unset (&lg->y1, SP_SVG_UNIT_PERCENT, 0.0, 0.0);
+			sp_svg_length_unset (&lg->y1, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
 		}
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
@@ -1152,7 +1152,7 @@ sp_lineargradient_set (SPObject *object, unsigned int key, const gchar *value)
 		break;
 	case SP_ATTR_Y2:
 		if (!sp_svg_length_read (value, &lg->y2)) {
-			sp_svg_length_unset (&lg->y2, SP_SVG_UNIT_PERCENT, 0.0, 0.0);
+			sp_svg_length_unset (&lg->y2, SP_SVG_UNIT_PERCENT, 0.5, 0.5);
 		}
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
