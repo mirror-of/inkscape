@@ -400,7 +400,7 @@ void Layout::queryCursorShape(iterator const &it, NR::Point *position, double *h
             if (it._char_index >= _characters.size()) {
                 span = &_spans.back();
                 (*position)[0] = _chunks[span->in_chunk].left_x + span->x_end;
-                *rotation = _glyphs.back().rotation;
+                *rotation = _glyphs.empty() ? 0.0 : _glyphs.back().rotation;
             } else {
                 span = &_spans[_characters[it._char_index].in_span];
                 (*position)[0] = _chunks[span->in_chunk].left_x + span->x_start + _characters[it._char_index].x;
