@@ -2407,7 +2407,13 @@ static Path::SubPath *sp_nodepath_subpath_new(Path::Path *nodepath)
 	s->first = NULL;
 	s->last = NULL;
 
-	nodepath->subpaths = g_list_prepend (nodepath->subpaths, s);
+  // do not use prepend here because:
+  // if you have a path like "subpath_1 subpath_2 ... subpath_k" in the svg, you end up with
+  // subpath_k -> ... ->subpath_1 in the nodepath structure. thus the i-th node of the svg is not
+  // the i-th node in the nodepath (only if there are multiple subpaths)
+  // note that the problem only arise when called from subpath_from_bpath(), since for all the other
+  // cases, the repr is updated after the call to sp_nodepath_subpath_new()
+	nodepath->subpaths = g_list_append /*g_list_prepend*/ (nodepath->subpaths, s);
 
 	return s;
 }
