@@ -1559,6 +1559,11 @@ sp_style_clear (SPStyle *style)
     style->text->letterspacing.computed = 0.0;
     style->text->letterspacing.set = FALSE;
 
+    style->text->wordspacing_normal = TRUE;
+    style->text->wordspacing.value = 0.0;
+    style->text->wordspacing.computed = 0.0;
+    style->text->wordspacing.set = FALSE;
+
     style->font_size.set = FALSE;
     style->font_size.type = SP_FONT_SIZE_LITERAL;
     style->font_size.value = SP_CSS_FONT_SIZE_MEDIUM;

@@ -429,6 +429,9 @@ struct SPTextStyle {
 
 	unsigned int letterspacing_normal : 1;
 	SPILength letterspacing;
+
+	unsigned int wordspacing_normal : 1;
+	SPILength wordspacing;
 };
 
 SPCSSAttr * sp_css_attr_from_style (SPObject *object, guint flags = SP_STYLE_FLAG_IFSET);
