@@ -13,7 +13,7 @@
  *  but it's not clear that any callers need that.
  */
 void NR::Point::normalize() {
-	double len = hypot(pt[0], pt[1]);
+	double len = hypot(_pt[0], _pt[1]);
 	g_return_if_fail(len != 0);
 	g_return_if_fail(!isnan(len));
 	static double const inf = 1e400;
@@ -21,23 +21,24 @@ void NR::Point::normalize() {
 		*this /= len;
 	} else {
 		unsigned n_inf_coords = 0;
-		NR::Point tmp; /* Delay updating pt in case neither coord is infinite. */
-		for(unsigned i = 0; i < 2; ++i) {
-			if(pt[i] == inf) {
+		/* Delay updating pt in case neither coord is infinite. */
+		NR::Point tmp;
+		for ( unsigned i = 0 ; i < 2 ; ++i ) {
+			if ( _pt[i] == inf ) {
 				++n_inf_coords;
 				tmp[i] = 1.0;
-			} else if(pt[i] == -inf) {
+			} else if ( _pt[i] == -inf ) {
 				++n_inf_coords;
 				tmp[i] = -1.0;
 			} else {
 				tmp[i] = 0.0;
 			}
 		}
-		switch(n_inf_coords) {
+		switch (n_inf_coords) {
 		case 0:
 			/* Can happen if both coords are near +/-DBL_MAX. */
 			*this /= 4.0;
-			len = hypot(pt[0], pt[1]);
+			len = hypot(_pt[0], _pt[1]);
 			g_assert(len != inf);
 			*this /= len;
 			break;
@@ -55,8 +56,8 @@ void NR::Point::normalize() {
 
 NR::Point abs(NR::Point const &b) {
 	NR::Point ret;
-	for(int i = 0; i < 2; i++) {
-		ret.pt[i] = fabs(b.pt[i]);
+	for ( int i = 0 ; i < 2 ; i++ ) {
+		ret[i] = fabs(b[i]);
 	}
 	return ret;
 }

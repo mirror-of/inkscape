@@ -125,8 +125,8 @@ SweepEvent::AddInQueue (SweepTree * iLeft, SweepTree * iRight, NR::Point &px, do
     {
       int half = (curInd - 1) / 2;
       int no = queue.inds[half];
-      if (px.pt[1] < queue.events[no].posx.pt[1]
-	  || (px.pt[1] == queue.events[no].posx.pt[1] && px.pt[0] < queue.events[no].posx.pt[0]))
+      if (px[1] < queue.events[no].posx[1]
+	  || (px[1] == queue.events[no].posx[1] && px[0] < queue.events[no].posx[0]))
 	{
 	  queue.events[n].ind = half;
 	  queue.events[no].ind = curInd;
@@ -171,8 +171,8 @@ SweepEvent::SupprFromQueue (SweepEventQueue & queue)
     {
       int half = (curInd - 1) / 2;
       int no = queue.inds[half];
-      if (px.pt[1] < queue.events[no].posx.pt[1]
-	  || (px.pt[1] == queue.events[no].posx.pt[1] && px.pt[0] < queue.events[no].posx.pt[0]))
+      if (px[1] < queue.events[no].posx[1]
+	  || (px[1] == queue.events[no].posx[1] && px[0] < queue.events[no].posx[0]))
 	{
 	  queue.events[to].ind = half;
 	  queue.events[no].ind = curInd;
@@ -196,13 +196,13 @@ SweepEvent::SupprFromQueue (SweepEventQueue & queue)
       int no2 = queue.inds[son2];
       if (son2 < queue.nbEvt)
 	{
-	  if (px.pt[1] > queue.events[no1].posx.pt[1]
-	      || (px.pt[1] == queue.events[no1].posx.pt[1]
-		  && px.pt[0] > queue.events[no1].posx.pt[0]))
+	  if (px[1] > queue.events[no1].posx[1]
+	      || (px[1] == queue.events[no1].posx[1]
+		  && px[0] > queue.events[no1].posx[0]))
 	    {
-	      if (queue.events[no2].posx.pt[1] > queue.events[no1].posx.pt[1]
-		  || (queue.events[no2].posx.pt[1] == queue.events[no1].posx.pt[1]
-		      && queue.events[no2].posx.pt[0] > queue.events[no1].posx.pt[0]))
+	      if (queue.events[no2].posx[1] > queue.events[no1].posx[1]
+		  || (queue.events[no2].posx[1] == queue.events[no1].posx[1]
+		      && queue.events[no2].posx[0] > queue.events[no1].posx[0]))
 		{
 		  queue.events[to].ind = son1;
 		  queue.events[no1].ind = curInd;
@@ -221,9 +221,9 @@ SweepEvent::SupprFromQueue (SweepEventQueue & queue)
 	    }
 	  else
 	    {
-	      if (px.pt[1] > queue.events[no2].posx.pt[1]
-		  || (px.pt[1] == queue.events[no2].posx.pt[1]
-		      && px.pt[0] > queue.events[no2].posx.pt[0]))
+	      if (px[1] > queue.events[no2].posx[1]
+		  || (px[1] == queue.events[no2].posx[1]
+		      && px[0] > queue.events[no2].posx[0]))
 		{
 		  queue.events[to].ind = son2;
 		  queue.events[no2].ind = curInd;
@@ -239,9 +239,9 @@ SweepEvent::SupprFromQueue (SweepEventQueue & queue)
 	}
       else
 	{
-	  if (px.pt[1] > queue.events[no1].posx.pt[1]
-	      || (px.pt[1] == queue.events[no1].posx.pt[1]
-		  && px.pt[0] > queue.events[no1].posx.pt[0]))
+	  if (px[1] > queue.events[no1].posx[1]
+	      || (px[1] == queue.events[no1].posx[1]
+		  && px[0] > queue.events[no1].posx[0]))
 	    {
 	      queue.events[to].ind = son1;
 	      queue.events[no1].ind = curInd;
@@ -723,10 +723,10 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
 	    {
 	      int ils = insertL->src->aretes[insertL->bord].st;
 	      int ile = insertL->src->aretes[insertL->bord].en;
-	      if ((insertL->src->pData[ils].rx.pt[0] != fromP.pt[0]
-		   || insertL->src->pData[ils].rx.pt[1] != fromP.pt[1])
-		  && (insertL->src->pData[ile].rx.pt[0] != fromP.pt[0]
-		      || insertL->src->pData[ile].rx.pt[1] != fromP.pt[1]))
+	      if ((insertL->src->pData[ils].rx[0] != fromP[0]
+		   || insertL->src->pData[ils].rx[1] != fromP[1])
+		  && (insertL->src->pData[ile].rx[0] != fromP[0]
+		      || insertL->src->pData[ile].rx[1] != fromP[1]))
 		{
 		  break;
 		}
@@ -765,10 +765,10 @@ SweepTree::InsertAt (SweepTreeList & list, SweepEventQueue & queue,
 	    {
 	      int ils = insertR->src->aretes[insertR->bord].st;
 	      int ile = insertR->src->aretes[insertR->bord].en;
-	      if ((insertR->src->pData[ils].rx.pt[0] != fromP.pt[0]
-		   || insertR->src->pData[ils].rx.pt[1] != fromP.pt[1])
-		  && (insertR->src->pData[ile].rx.pt[0] != fromP.pt[0]
-		      || insertR->src->pData[ile].rx.pt[1] != fromP.pt[1]))
+	      if ((insertR->src->pData[ils].rx[0] != fromP[0]
+		   || insertR->src->pData[ils].rx[1] != fromP[1])
+		  && (insertR->src->pData[ile].rx[0] != fromP[0]
+		      || insertR->src->pData[ile].rx[1] != fromP[1]))
 		{
 		  break;
 		}

@@ -250,11 +250,11 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 	{
 		unsigned const d = (key == SP_ATTR_GRIDORIGINY);
 		nv->gridunit = mm;
-		nv->gridorigin.pt[d] = 0.0;
+		nv->gridorigin[d] = 0.0;
 		if (value) {
-			sp_nv_read_length (value, SP_UNIT_ABSOLUTE, &nv->gridorigin.pt[d], &nv->gridunit);
+			sp_nv_read_length (value, SP_UNIT_ABSOLUTE, &nv->gridorigin[d], &nv->gridunit);
 		}
-		sp_convert_distance (&nv->gridorigin.pt[d], nv->gridunit, pt);
+		sp_convert_distance (&nv->gridorigin[d], nv->gridunit, pt);
 		sp_namedview_setup_grid (nv);
 		sp_object_request_modified (object, SP_OBJECT_MODIFIED_FLAG);
 		break;
@@ -610,8 +610,8 @@ sp_namedview_setup_grid_item (SPNamedView * nv, SPCanvasItem * item)
 
 	sp_canvas_item_set ((GtkObject *) item,
 			       "color", nv->gridcolor,
-			       "originx", nv->gridorigin.pt[NR::X],
-			       "originy", nv->gridorigin.pt[NR::Y],
+			       "originx", nv->gridorigin[NR::X],
+			       "originy", nv->gridorigin[NR::Y],
 			       "spacingx", nv->gridspacing[NR::X],
 			       "spacingy", nv->gridspacing[NR::Y],
 			       NULL);

@@ -471,8 +471,8 @@ sp_offset_offset_get (SPItem *item, NRPoint *p)
 
   NR::Point   np(p->x,p->y);
   sp_offset_top_point(offset,&np);
-  p->x=np.pt[0];
-  p->y=np.pt[1];
+  p->x=np[NR::X];
+  p->y=np[NR::Y];
 }
 
 static SPKnotHolder *

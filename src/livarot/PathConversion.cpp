@@ -31,7 +31,7 @@ void            Path::ConvertWithBackData(double treshhold)
       curX=((path_descr_moveto*)(descr_data))->p;
     } else {
       curP=0;
-      curX.pt[0]=curX.pt[1]=0;
+      curX[0]=curX[1]=0;
     }
     lastMoveTo=AddPoint(curX,0,0.0,true);
   }
@@ -165,7 +165,7 @@ void            Path::ConvertForOffset(double treshhold,Path* orig,double off_de
       curX=((path_descr_moveto*)(descr_data))->p;
     } else {
       curP=0;
-      curX.pt[0]=curX.pt[1]=0;
+      curX[0]=curX[1]=0;
     }
     lastMoveTo=AddPoint(curX,0,0.0,true);
   }
@@ -336,7 +336,7 @@ void            Path::Convert(double treshhold)
       curX=((path_descr_moveto*)(descr_data))->p;
     } else {
       curP=0;
-      curX.pt[0]=curX.pt[1]=0;
+      curX[0]=curX[1]=0;
     }
     lastMoveTo=AddPoint(curX,true);
   }
@@ -524,7 +524,7 @@ void            Path::ConvertEvenLines(double treshhold)
       curX=((path_descr_moveto*)(descr_data))->p;
     } else {
       curP=0;
-      curX.pt[0]=curX.pt[1]=0;
+      curX[0]=curX[1]=0;
     }
     lastMoveTo=AddPoint(curX,true);
   }
@@ -713,37 +713,34 @@ void            Path::ConvertEvenLines(double treshhold)
 
 const NR::Point Path::PrevPoint(int i) const
 {
-  assert ( i >= 0 );
-	switch(descr_cmd[i].flags & descr_type_mask) {
-    case descr_moveto:
-    {
-      path_descr_moveto *nData=(path_descr_moveto*)(descr_data+descr_cmd[i].dStart);
-      return nData->p;
-    }
-    case descr_lineto:
-    {
-      path_descr_lineto *nData=(path_descr_lineto*)(descr_data+descr_cmd[i].dStart);
-      return nData->p;
-    }
-    case descr_arcto:
-    {
-      path_descr_arcto *nData=(path_descr_arcto*)(descr_data+descr_cmd[i].dStart);
-      return nData->p;
-    }
-    case descr_cubicto:
-    {
-      path_descr_cubicto *nData=(path_descr_cubicto*)(descr_data+descr_cmd[i].dStart);
-      return nData->p;
-    }
-    case descr_bezierto:
-    {
-      path_descr_bezierto *nData=(path_descr_bezierto*)(descr_data+descr_cmd[i].dStart);
-      return nData->p;
-    }
-    case descr_interm_bezier:
-    case descr_close:
-    case descr_forced:
-      return PrevPoint(i-1);
+	assert( i >= 0 );
+	switch ( descr_cmd[i].flags & descr_type_mask ) {
+		case descr_moveto: {
+			path_descr_moveto *nData=(path_descr_moveto*)(descr_data+descr_cmd[i].dStart);
+			return nData->p;
+		}
+		case descr_lineto: {
+			path_descr_lineto *nData=(path_descr_lineto*)(descr_data+descr_cmd[i].dStart);
+			return nData->p;
+		}
+		case descr_arcto: {
+			path_descr_arcto *nData=(path_descr_arcto*)(descr_data+descr_cmd[i].dStart);
+			return nData->p;
+		}
+		case descr_cubicto: {
+			path_descr_cubicto *nData=(path_descr_cubicto*)(descr_data+descr_cmd[i].dStart);
+			return nData->p;
+		}
+		case descr_bezierto: {
+			path_descr_bezierto *nData=(path_descr_bezierto*)(descr_data+descr_cmd[i].dStart);
+			return nData->p;
+		}
+		case descr_interm_bezier:
+		case descr_close:
+		case descr_forced:
+			return PrevPoint(i-1);
+		default:
+			g_assert_not_reached();
 	}
 }
 void Path::QuadraticPoint(double t, NR::Point &oPt, 
@@ -777,8 +774,8 @@ void Path::ArcAnglesAndCenter(const NR::Point &iS, const NR::Point &iE,
 	NR::Point se = iE-iS;
 	NR::Point ca(cos(angle),sin(angle));
 	NR::Point cse(dot(se,ca),cross(se,ca));
-	cse.pt[0] /= rx;
-	cse.pt[1] /= ry;
+	cse[0] /= rx;
+	cse[1] /= ry;
 	double   l = dot(cse,cse);
 	const double d = sqrt(std::max(1-l/4, 0.0));
 	NR::Point   csd = cse.ccw();
@@ -788,31 +785,31 @@ void Path::ArcAnglesAndCenter(const NR::Point &iS, const NR::Point &iE,
   
 	NR::Point  ra;
 	ra=-(csd+0.5*cse);
-	if ( ra.pt[0] <= -1 ) {
+	if ( ra[0] <= -1 ) {
 		sang=M_PI;
-	} else if ( ra.pt[0] >= 1 ) {
+	} else if ( ra[0] >= 1 ) {
 		sang=0;
 	} else {
-		sang=acos(ra.pt[0]);
-		if ( ra.pt[1] < 0 ) sang=2*M_PI-sang;
+		sang=acos(ra[0]);
+		if ( ra[1] < 0 ) sang=2*M_PI-sang;
 	}
 	ra=-csd+0.5*cse;
-	if ( ra.pt[0] <= -1 ) {
+	if ( ra[0] <= -1 ) {
 		eang=M_PI;
-	} else if ( ra.pt[0] >= 1 ) {
+	} else if ( ra[0] >= 1 ) {
 		eang=0;
 	} else {
-		eang=acos(ra.pt[0]);
-		if ( ra.pt[1] < 0 ) eang=2*M_PI-eang;
+		eang=acos(ra[0]);
+		if ( ra[1] < 0 ) eang=2*M_PI-eang;
 	}
 	
-	csd.pt[0]*=rx;csd.pt[1]*=ry;
-	ca.pt[1]=-ca.pt[1]; // because it's the inverse rotation
+	csd[0]*=rx;csd[1]*=ry;
+	ca[1]=-ca[1]; // because it's the inverse rotation
   
-	dr.pt[0]=dot(csd,ca);
-	dr.pt[1]=cross(csd,ca);
+	dr[0]=dot(csd,ca);
+	dr[1]=cross(csd,ca);
   
-	ca.pt[1]=-ca.pt[1];
+	ca[1]=-ca[1];
 	
 	if ( wise ) {
 		if ( large == true ) {

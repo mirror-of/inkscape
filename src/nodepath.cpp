@@ -915,11 +915,13 @@ sp_nodepath_selected_nodes_move (SPNodePath * nodepath, gdouble dx, gdouble dy)
 		p.y = n->pos.y + dy;
 		dist = sp_desktop_horizontal_snap (nodepath->desktop, &p);
 		if (dist < besth) {
+			g_message("Snapping X");
 			besth = dist;
 			bx = p.x - n->pos.x;
 		}
 		dist = sp_desktop_vertical_snap (nodepath->desktop, &p);
 		if (dist < bestv) {
+			g_message("Snapping Y");
 			bestv = dist;
 			by = p.y - n->pos.y;
 		}

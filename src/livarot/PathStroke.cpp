@@ -13,7 +13,7 @@
 #define StrokeNormalize(v) {\
   double _l=sqrt(dot(v,v)); \
     if ( _l < 0.0000001 ) { \
-      v.pt[0]=v.pt[1]=0; \
+      v[0]=v[1]=0; \
     } else { \
       v/=_l; \
     }\

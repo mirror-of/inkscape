@@ -1,3 +1,20 @@
+2004-01-21 MenTaLguY <mental@rydia.net>
+
+	* src/desktop-snap.cpp, src/desktop.cpp, src/nodepath.cpp,
+	  src/object-edit.cpp, src/sp-namedview.cpp, src/sp-offset.cpp,
+	  src/splivarot.cpp, src/uri.h, src/dialogs/desktop-properties.cpp,
+	  src/libnr/nr-matrix.cpp, src/libnr/nr-matrix.h,
+	  src/libnr/nr-point-fns.cpp, src/libnr/nr-point-fns.h,
+	  src/libnr/nr-rect.cpp, src/libnr/nr-types.cpp, src/libnr/nr-types.h,
+	  src/livarot/Path.cpp, src/livarot/PathConversion.cpp,
+	  src/livarot/PathOutline.cpp, src/livarot/PathSimplify.cpp,
+	  src/livarot/PathStroke.cpp, src/livarot/Shape.cpp,
+	  src/livarot/ShapeMisc.cpp, src/livarot/ShapeSweep.cpp,
+	  src/livarot/ShapeSweepUtils.cpp:
+	  Cleanup; made data member of NR::Point private and replaced
+	  a few 'magic' [0] and [1] indices with the more meaningful NR::X
+	  and NR::Y.
+
 2004-01-20 Jon Phillips <jon@protofunk.org>
 
         * src/help.cpp: I cleaned up the code a little according to our coding 

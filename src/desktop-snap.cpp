@@ -45,7 +45,7 @@ sp_desktop_free_snap (SPDesktop const *desktop, NR::Point& req)
 	
 	/* fixme: If allowing arbitrary snap targets, free snap is not the sum of h and v */
 	dh = sp_desktop_dim_snap (desktop, result, NR::X);
-	result.pt[NR::Y] = req.pt[NR::Y];
+	result[NR::Y] = req[NR::Y];
 	dv = sp_desktop_dim_snap (desktop, result, NR::Y);
 	req = result;
 	
@@ -121,7 +121,7 @@ sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point &req, NR::Point cons
 		for(unsigned i = 0; i < 2; ++i) {
 			NR::Point trial(req);
 			double const rounded
-				= round_to_nearest_multiple_plus(req.pt[i],
+				= round_to_nearest_multiple_plus(req[i],
 								 nv->gridspacing[i],
 								 nv->gridorigin[i]);
 
@@ -178,11 +178,11 @@ sp_desktop_dim_snap_list (SPDesktop const *desktop, NR::Point *p, int const leng
 	if (SNAP_ON (desktop))
 		for (int i = 0; i < length; i++) {
 			NR::Point q = p[i];
-			const gdouble pre = q.pt[dim];
-			q.pt[dim] += dx;
+			const gdouble pre = q[dim];
+			q[dim] += dx;
 			const gdouble d = sp_desktop_dim_snap (desktop, q, dim);
 			if (d < dist) {
-				xdist = q.pt[dim] - pre;
+				xdist = q[dim] - pre;
 				dist = d;
 			}
 		}
@@ -275,12 +275,12 @@ sp_desktop_dim_snap_list_scale (SPDesktop const *desktop, NR::Point *p, int cons
 	for (int i = 0; i < length; i++) {
 		NR::Point q = p[i];
 		NR::Point check = q;
-		check.pt[dim] = (sx * (q - norm) + norm).pt[dim];
-		if (fabs (q.pt[dim] - norm.pt[dim]) > MIN_DIST_NORM) {
+		check[dim] = (sx * (q - norm) + norm)[dim];
+		if (fabs (q[dim] - norm[dim]) > MIN_DIST_NORM) {
 			const gdouble d = sp_desktop_dim_snap (desktop, check, dim);
 			if ((d < 1e18) && (d < dist)) {
 				dist = d;
-				scale = (check.pt[dim] - norm.pt[dim]) / (q.pt[dim] - norm.pt[dim]);
+				scale = (check[dim] - norm[dim]) / (q[dim] - norm[dim]);
 			}
 		}
 	}
@@ -301,12 +301,12 @@ sp_desktop_dim_snap_list_skew (SPDesktop const *desktop, NR::Point *p, int const
 		NR::Point q = p[i];
 		NR::Point check = q;
 		// apply shear
-		check.pt[dim] += sx * (q.pt[1- dim] - norm.pt[1- dim]);
-		if (fabs (q.pt[1- dim] - norm.pt[1- dim]) > MIN_DIST_NORM) {
+		check[dim] += sx * (q[1- dim] - norm[1- dim]);
+		if (fabs (q[1- dim] - norm[1- dim]) > MIN_DIST_NORM) {
 			const gdouble d = sp_desktop_dim_snap (desktop, check, dim);
 			if ((d < 1e18) && (d < fabs (dist))) {
 				dist = d;
-				skew = (check.pt[dim] - q.pt[dim]) / (q.pt[1- dim] - norm.pt[1- dim]);
+				skew = (check[dim] - q[dim]) / (q[1- dim] - norm[1- dim]);
 			}
 		}
 	}

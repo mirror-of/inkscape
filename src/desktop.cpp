@@ -1139,12 +1139,12 @@ sp_desktop_widget_view_position_set (SPView *view, double x, double y, SPDesktop
 {
 	NR::Point origin = dtw->dt2r * (NR::Point(x, y) - dtw->ruler_origin);
 	/* fixme: */
-	GTK_RULER (dtw->hruler)->position = origin.pt[0];
+	GTK_RULER (dtw->hruler)->position = origin[0];
 	gtk_ruler_draw_pos (GTK_RULER (dtw->hruler));
-	GTK_RULER (dtw->vruler)->position = origin.pt[1];
+	GTK_RULER (dtw->vruler)->position = origin[1];
 	gtk_ruler_draw_pos (GTK_RULER (dtw->vruler));
 
-	sp_desktop_set_coordinate_status (SP_DESKTOP (view), origin.pt[0], origin.pt[1], 0);
+	sp_desktop_set_coordinate_status (SP_DESKTOP (view), origin[0], origin[1], 0);
 }
 
 /*
@@ -1562,11 +1562,11 @@ sp_desktop_widget_update_rulers (SPDesktopWidget *dtw)
 	double scale, s, e;
 	sp_canvas_get_viewbox (dtw->canvas, &viewbox);
 	scale = SP_DESKTOP_ZOOM (dtw->desktop);
-	s = viewbox.x0 / scale - dtw->ruler_origin.pt[0];
-	e = viewbox.x1 / scale - dtw->ruler_origin.pt[0];
+	s = viewbox.x0 / scale - dtw->ruler_origin[NR::X];
+	e = viewbox.x1 / scale - dtw->ruler_origin[NR::X];
 	gtk_ruler_set_range (GTK_RULER (dtw->hruler), dtw->dt2r * s, dtw->dt2r * e, GTK_RULER (dtw->hruler)->position, dtw->dt2r * (e - s));
-	s = viewbox.y0 / -scale - dtw->ruler_origin.pt[1];
-	e = viewbox.y1 / -scale - dtw->ruler_origin.pt[1];
+	s = viewbox.y0 / -scale - dtw->ruler_origin[NR::Y];
+	e = viewbox.y1 / -scale - dtw->ruler_origin[NR::Y];
 	gtk_ruler_set_range (GTK_RULER (dtw->vruler), dtw->dt2r * s, dtw->dt2r * e, GTK_RULER (dtw->vruler)->position, dtw->dt2r * (e - s));
 }
 

@@ -217,11 +217,11 @@ nr_rect_f_matrix_f_transform (NRRect *d, NRRect *s, NRMatrix *m)
 }
 
 
-namespace NR{
+namespace NR {
 
 /** returns the four corners of the rectangle in sequence for
  * the correct winding order. */
-const Point Rect::corner(unsigned const i) {
+Point Rect::corner(unsigned i) const {
 	switch(i % 4) {
 	case 0:
 		return topleft();
@@ -235,46 +235,47 @@ const Point Rect::corner(unsigned const i) {
 }
 	
 /** returns a vector from topleft to bottom right. */
-	const Point Rect::dimensions() {
-		return max - min;
-	}
+Point Rect::dimensions() const {
+	return _max - _min;
+}
 
 /** returns the midpoint of this rect. */
-	const Point Rect::centre() {
-		return (min + max)/2;
-	}
+Point Rect::centre() const {
+	return ( _min + _max ) / 2;
+}
 
 /** Translates the rectangle by p. */
-	void Rect::offset(Point p) {
-		min += p;
-		max += p;
-	}
+void Rect::offset(Point p) {
+	_min += p;
+	_max += p;
+}
 
 /** Makes this rectangle large enough to include the point p. */
-	void Rect::least_bound(Point p) {
-		for(int i=0; i < 2; i++) {
-			min[i] = MIN(min[i], p[i]);
-			max[i] = MAX(max[i], p[i]);
-		}
+void Rect::least_bound(Point p) {
+	for ( int i=0 ; i < 2 ; i++ ) {
+		_min[i] = MIN(_min[i], p[i]);
+		_max[i] = MAX(_max[i], p[i]);
 	}
+}
 
 /** Returns the set of points shared by both rectangles. */
-	Rect Rect::intersect(const Rect a, const Rect b) {
-		Rect r;
-		for(int i=0; i < 2; i++) {
-			r.min[i] = MAX(a.min[i], b.min[i]);
-			r.max[i] = MIN(a.max[i], b.max[i]);
-		}
-		return r;
+Rect Rect::intersect(const Rect &a, const Rect &b) {
+	Rect r;
+	for(int i=0; i < 2; i++) {
+		r._min[i] = MAX(a._min[i], b._min[i]);
+		r._max[i] = MIN(a._max[i], b._max[i]);
 	}
+	return r;
+}
+
 /** Returns the smallest rectangle that encloses both rectangles. */
-	Rect Rect::least_bound(const Rect a, const Rect b) {
-		Rect r;
-		for(int i=0; i < 2; i++) {
-			r.min[i] = MIN(a.min[i], b.min[i]);
-			r.max[i] = MAX(a.max[i], b.max[i]);
-		}
-		return r;
+Rect Rect::least_bound(const Rect &a, const Rect &b) {
+	Rect r;
+	for ( int i=0 ; i < 2 ; i++ ) {
+		r._min[i] = MIN(a._min[i], b._min[i]);
+		r._max[i] = MAX(a._max[i], b._max[i]);
 	}
+	return r;
+}
 
 };

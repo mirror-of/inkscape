@@ -272,8 +272,8 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
         path_lineto_b *
         tp = (path_lineto_b *)
         pts;
-        Xk[i] = tp[i].p.pt[0];
-        Yk[i] = tp[i].p.pt[1];
+        Xk[i] = tp[i].p[0];
+        Yk[i] = tp[i].p[1];
       }
       }
       else
@@ -282,15 +282,15 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
         path_lineto *
         tp = (path_lineto *)
         pts;
-        Xk[i] = tp[i].p.pt[0];
-        Yk[i] = tp[i].p.pt[1];
+        Xk[i] = tp[i].p[0];
+        Yk[i] = tp[i].p[1];
       }
       }
       NR::Point diff;
-      diff.pt[0] = Xk[i] - prevP.pt[0];
-      diff.pt[1] = Yk[i] - prevP.pt[1];
-      prevP.pt[0] = Xk[i];
-      prevP.pt[1] = Yk[i];
+      diff[0] = Xk[i] - prevP[0];
+      diff[1] = Yk[i] - prevP[1];
+      prevP[0] = Xk[i];
+      prevP[1] = Yk[i];
       const double l = NR::L2(diff);
       tk[i] = tk[i - 1] + l;
     }
@@ -335,43 +335,43 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
   
   // phase 1: abcisses
   // calcul des Qk
-  Xk[0] = start.pt[0];
-  Yk[0] = start.pt[1];
-  Xk[nbPt - 1] = end.pt[0];
-  Yk[nbPt - 1] = end.pt[1];
+  Xk[0] = start[0];
+  Yk[0] = start[1];
+  Xk[nbPt - 1] = end[0];
+  Yk[nbPt - 1] = end[1];
   
   for (int i = 1; i < nbPt - 1; i++)
     Qk[i] = Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
   
   // le vecteur Q
-  Q.pt[0] = Q.pt[1] = 0;
+  Q[0] = Q[1] = 0;
   for (int i = 1; i < nbPt - 1; i++)
   {
-    Q.pt[0] += N13 (tk[i]) * Qk[i];
-    Q.pt[1] += N23 (tk[i]) * Qk[i];
+    Q[0] += N13 (tk[i]) * Qk[i];
+    Q[1] += N23 (tk[i]) * Qk[i];
   }
   
   P=M*Q;
   //  L_MAT_MulV (M, Q, P);
-  cp1.pt[0] = P.pt[0];
-  cp2.pt[0] = P.pt[1];
+  cp1[0] = P[0];
+  cp2[0] = P[1];
   
   // phase 2: les ordonnees
   for (int i = 1; i < nbPt - 1; i++)
     Qk[i] = Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
   
   // le vecteur Q
-  Q.pt[0] = Q.pt[1] = 0;
+  Q[0] = Q[1] = 0;
   for (int i = 1; i < nbPt - 1; i++)
   {
-    Q.pt[0] += N13 (tk[i]) * Qk[i];
-    Q.pt[1] += N23 (tk[i]) * Qk[i];
+    Q[0] += N13 (tk[i]) * Qk[i];
+    Q[1] += N23 (tk[i]) * Qk[i];
   }
   
   P=M*Q;
   //  L_MAT_MulV (M, Q, P);
-  cp1.pt[1] = P.pt[0];
-  cp2.pt[1] = P.pt[1];
+  cp1[1] = P[0];
+  cp2[1] = P[1];
   
   double
     delta =
@@ -380,10 +380,10 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
   {
     NR::Point
     appP;
-    appP.pt[0] = N13 (tk[i]) * cp1.pt[0] + N23 (tk[i]) * cp2.pt[0];
-    appP.pt[1] = N13 (tk[i]) * cp1.pt[1] + N23 (tk[i]) * cp2.pt[1];
-    appP.pt[0] -= Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
-    appP.pt[1] -= Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
+    appP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0];
+    appP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1];
+    appP[0] -= Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
+    appP[1] -= Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
     delta += dot(appP,appP);
   }
   
@@ -400,8 +400,8 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
     {
       NR::Point
 	    pt;
-      pt.pt[0] = Xk[i];
-      pt.pt[1] = Yk[i];
+      pt[0] = Xk[i];
+      pt[1] = Yk[i];
       tk[i] = RaffineTk (pt, start, cp1, cp2, end, tk[i]);
       if (tk[i] < tk[i - 1])
 	    {
@@ -439,43 +439,43 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
     
     // phase 1: abcisses
     // calcul des Qk
-    Xk[0] = start.pt[0];
-    Yk[0] = start.pt[1];
-    Xk[nbPt - 1] = end.pt[0];
-    Yk[nbPt - 1] = end.pt[1];
+    Xk[0] = start[0];
+    Yk[0] = start[1];
+    Xk[nbPt - 1] = end[0];
+    Yk[nbPt - 1] = end[1];
     
     for (int i = 1; i < nbPt - 1; i++)
       Qk[i] = Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
     
     // le vecteur Q
-    Q.pt[0] = Q.pt[1] = 0;
+    Q[0] = Q[1] = 0;
     for (int i = 1; i < nbPt - 1; i++)
     {
-      Q.pt[0] += N13 (tk[i]) * Qk[i];
-      Q.pt[1] += N23 (tk[i]) * Qk[i];
+      Q[0] += N13 (tk[i]) * Qk[i];
+      Q[1] += N23 (tk[i]) * Qk[i];
     }
     
     P=M*Q;
     //      L_MAT_MulV (M, Q, P);
-    cp1.pt[0] = P.pt[0];
-    cp2.pt[0] = P.pt[1];
+    cp1[0] = P[0];
+    cp2[0] = P[1];
     
     // phase 2: les ordonnees
     for (int i = 1; i < nbPt - 1; i++)
       Qk[i] = Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
     
     // le vecteur Q
-    Q.pt[0] = Q.pt[1] = 0;
+    Q[0] = Q[1] = 0;
     for (int i = 1; i < nbPt - 1; i++)
     {
-      Q.pt[0] += N13 (tk[i]) * Qk[i];
-      Q.pt[1] += N23 (tk[i]) * Qk[i];
+      Q[0] += N13 (tk[i]) * Qk[i];
+      Q[1] += N23 (tk[i]) * Qk[i];
     }
     
     P=M*Q;
     //      L_MAT_MulV (M, Q, P);
-    cp1.pt[1] = P.pt[0];
-    cp2.pt[1] = P.pt[1];
+    cp1[1] = P[0];
+    cp2[1] = P[1];
     
     double
       ndelta =
@@ -484,10 +484,10 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res)
     {
       NR::Point
 	    appP;
-      appP.pt[0] = N13 (tk[i]) * cp1.pt[0] + N23 (tk[i]) * cp2.pt[0];
-      appP.pt[1] = N13 (tk[i]) * cp1.pt[1] + N23 (tk[i]) * cp2.pt[1];
-      appP.pt[0] -= Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
-      appP.pt[1] -= Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
+      appP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0];
+      appP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1];
+      appP[0] -= Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
+      appP[1] -= Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
       ndelta += dot(appP,appP);
     }
     
@@ -524,21 +524,21 @@ Path::RaffineTk (NR::Point pt, NR::Point p0, NR::Point p1, NR::Point p2, NR::Poi
   double Ax, Bx, Cx;
   double Ay, By, Cy;
   Ax =
-    pt.pt[0] - p0.pt[0] * N03 (it) - p1.pt[0] * N13 (it) - p2.pt[0] * N23 (it) -
-    p3.pt[0] * N33 (it);
+    pt[0] - p0[0] * N03 (it) - p1[0] * N13 (it) - p2[0] * N23 (it) -
+    p3[0] * N33 (it);
   Bx =
-    (p1.pt[0] - p0.pt[0]) * N02 (it) + (p2.pt[0] - p1.pt[0]) * N12 (it) + (p3.pt[0] -
-                                                                           p2.pt[0]) * N22 (it);
+    (p1[0] - p0[0]) * N02 (it) + (p2[0] - p1[0]) * N12 (it) + (p3[0] -
+                                                                           p2[0]) * N22 (it);
   Cx =
-    (p0.pt[0] - 2 * p1.pt[0] + p2.pt[0]) * N01 (it) + (p3.pt[0] - 2 * p2.pt[0] + p1.pt[0]) * N11 (it);
+    (p0[0] - 2 * p1[0] + p2[0]) * N01 (it) + (p3[0] - 2 * p2[0] + p1[0]) * N11 (it);
   Ay =
-    pt.pt[1] - p0.pt[1] * N03 (it) - p1.pt[1] * N13 (it) - p2.pt[1] * N23 (it) -
-    p3.pt[1] * N33 (it);
+    pt[1] - p0[1] * N03 (it) - p1[1] * N13 (it) - p2[1] * N23 (it) -
+    p3[1] * N33 (it);
   By =
-    (p1.pt[1] - p0.pt[1]) * N02 (it) + (p2.pt[1] - p1.pt[1]) * N12 (it) + (p3.pt[1] -
-                                                                           p2.pt[1]) * N22 (it);
+    (p1[1] - p0[1]) * N02 (it) + (p2[1] - p1[1]) * N12 (it) + (p3[1] -
+                                                                           p2[1]) * N22 (it);
   Cy =
-    (p0.pt[1] - 2 * p1.pt[1] + p2.pt[1]) * N01 (it) + (p3.pt[1] - 2 * p2.pt[1] + p1.pt[1]) * N11 (it);
+    (p0[1] - 2 * p1[1] + p2[1]) * N01 (it) + (p3[1] - 2 * p2[1] + p1[1]) * N11 (it);
   double dF, ddF;
   dF = -6 * (Ax * Bx + Ay * By);
   ddF = 18 * (Bx * Bx + By * By) - 12 * (Ax * Cx + Ay * Cy);

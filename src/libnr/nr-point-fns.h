@@ -4,13 +4,14 @@
 #include <libnr/nr-types.h>
 
 namespace NR {
+
 extern double L1(Point const &p);
 extern double L2(Point const &p);
 extern double LInfty(Point const &p);
 extern double atan2(Point const p);
 
 inline Point rot90(Point const &p) {
-	return Point(-p.pt[Y], p.pt[X]);
+	return Point(-p[Y], p[X]);
 }
 
 } /* namespace NR */

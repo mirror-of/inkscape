@@ -323,7 +323,7 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
   {
     int firstTyp=descr_cmd->flags&descr_type_mask;
     if ( firstTyp != descr_moveto ) {
-      curX.pt[0]=curX.pt[1]=0;
+      curX[0]=curX[1]=0;
       curP=0;
     } else {
       path_descr_moveto* nData=(path_descr_moveto*)(descr_data+descr_cmd->dStart);
@@ -523,14 +523,14 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
       callsData.piece = curP;
       callsData.tSt = 0.0;
       callsData.tEn = 1.0;
-      callsData.x1 = curX.pt[0];
-      callsData.y1 = curX.pt[1];
-      callsData.x2 = nextX.pt[0];
-      callsData.y2 = nextX.pt[1];
-      callsData.d.c.dx1 = nData->stD.pt[0];
-      callsData.d.c.dy1 = nData->stD.pt[1];
-      callsData.d.c.dx2 = nData->enD.pt[0];
-      callsData.d.c.dy2 = nData->enD.pt[1];
+      callsData.x1 = curX[0];
+      callsData.y1 = curX[1];
+      callsData.x2 = nextX[0];
+      callsData.y2 = nextX[1];
+      callsData.d.c.dx1 = nData->stD[0];
+      callsData.d.c.dy1 = nData->stD[1];
+      callsData.d.c.dx2 = nData->enD[0];
+      callsData.d.c.dy2 = nData->enD[1];
       (calls.cubicto) (&callsData, tolerance, width);
       
       curP++;
@@ -579,10 +579,10 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
       callsData.piece = curP;
       callsData.tSt = 0.0;
       callsData.tEn = 1.0;
-      callsData.x1 = curX.pt[0];
-      callsData.y1 = curX.pt[1];
-      callsData.x2 = nextX.pt[0];
-      callsData.y2 = nextX.pt[1];
+      callsData.x1 = curX[0];
+      callsData.y1 = curX[1];
+      callsData.x2 = nextX[0];
+      callsData.y2 = nextX[1];
       callsData.d.a.rx = nData->rx;
       callsData.d.a.ry = nData->ry;
       callsData.d.a.angle = nData->angle;
@@ -669,12 +669,12 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
 	      callsData.piece = curP;
 	      callsData.tSt = 0.0;
 	      callsData.tEn = 1.0;
-	      callsData.x1 = curX.pt[0];
-	      callsData.y1 = curX.pt[1];
-	      callsData.x2 = nextX.pt[0];
-	      callsData.y2 = nextX.pt[1];
-	      callsData.d.b.mx = midX.pt[0];
-	      callsData.d.b.my = midX.pt[1];
+	      callsData.x1 = curX[0];
+	      callsData.y1 = curX[1];
+	      callsData.x2 = nextX[0];
+	      callsData.y2 = nextX[1];
+	      callsData.d.b.mx = midX[0];
+	      callsData.d.b.my = midX[1];
 	      (calls.bezierto) (&callsData, tolerance, width);
         
 	    } else if (nbInterm > 1) {
@@ -731,12 +731,12 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
           callsData.piece = curP + k;
           callsData.tSt = 0.0;
           callsData.tEn = 1.0;
-          callsData.x1 = stx.pt[0];
-          callsData.y1 = stx.pt[1];
-          callsData.x2 = (cx.pt[0] + dx.pt[0]) / 2;
-          callsData.y2 = (cx.pt[1] + dx.pt[1]) / 2;
-          callsData.d.b.mx = cx.pt[0];
-          callsData.d.b.my = cx.pt[1];
+          callsData.x1 = stx[0];
+          callsData.y1 = stx[1];
+          callsData.x2 = (cx[0] + dx[0]) / 2;
+          callsData.y2 = (cx[1] + dx[1]) / 2;
+          callsData.d.b.mx = cx[0];
+          callsData.d.b.my = cx[1];
           (calls.bezierto) (&callsData, tolerance, width);
         }
 	      {
@@ -764,12 +764,12 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
           callsData.piece = curP + nbInterm - 1;
           callsData.tSt = 0.0;
           callsData.tEn = 1.0;
-          callsData.x1 = stx.pt[0];
-          callsData.y1 = stx.pt[1];
-          callsData.x2 = (cx.pt[0] + dx.pt[0]) / 2;
-          callsData.y2 = (cx.pt[1] + dx.pt[1]) / 2;
-          callsData.d.b.mx = cx.pt[0];
-          callsData.d.b.my = cx.pt[1];
+          callsData.x1 = stx[0];
+          callsData.y1 = stx[1];
+          callsData.x2 = (cx[0] + dx[0]) / 2;
+          callsData.y2 = (cx[1] + dx[1]) / 2;
+          callsData.d.b.mx = cx[0];
+          callsData.d.b.my = cx[1];
           (calls.bezierto) (&callsData, tolerance, width);
           
 	      }
@@ -901,11 +901,11 @@ Path::TangentOnArcAt (double at, const NR::Point &iS, path_descr_arcto & fin,
   wise = fin.clockwise;
   
   pos = iS;
-  tgt.pt[0] = tgt.pt[1] = 0;
+  tgt[0] = tgt[1] = 0;
   if (rx <= 0.0001 || ry <= 0.0001)
     return;
   
-  double sex = iE.pt[0] - iS.pt[0], sey = iE.pt[1] - iS.pt[1];
+  double sex = iE[0] - iS[0], sey = iE[1] - iS[1];
   double ca = cos (angle), sa = sin (angle);
   double csex = ca * sex + sa * sey, csey = -sa * sex + ca * sey;
   csex /= rx;
@@ -992,23 +992,23 @@ Path::TangentOnArcAt (double at, const NR::Point &iS, path_descr_arcto & fin,
         sang -= 2 * M_PI;
     }
   }
-  drx += (iS.pt[0] + iE.pt[0]) / 2;
-  dry += (iS.pt[1] + iE.pt[1]) / 2;
+  drx += (iS[0] + iE[0]) / 2;
+  dry += (iS[1] + iE[1]) / 2;
   
   if (wise) {
     if (sang < eang)
       sang += 2 * M_PI;
     double b = sang * (1 - at) + eang * at;
     double cb = cos (b), sb = sin (b);
-    pos.pt[0] = drx + ca * rx * cb - sa * ry * sb;
-    pos.pt[1] = dry + sa * rx * cb + ca * ry * sb;
-    tgt.pt[0] = ca * rx * sb + sa * ry * cb;
-    tgt.pt[1] = sa * rx * sb - ca * ry * cb;
+    pos[0] = drx + ca * rx * cb - sa * ry * sb;
+    pos[1] = dry + sa * rx * cb + ca * ry * sb;
+    tgt[0] = ca * rx * sb + sa * ry * cb;
+    tgt[1] = sa * rx * sb - ca * ry * cb;
     NR::Point dtgt;
-    dtgt.pt[0] = -ca * rx * cb + sa * ry * sb;
-    dtgt.pt[1] = -sa * rx * cb - ca * ry * sb;
+    dtgt[0] = -ca * rx * cb + sa * ry * sb;
+    dtgt[1] = -sa * rx * cb - ca * ry * sb;
     len = L2(tgt);
-    rad = len * dot(tgt, tgt) / (tgt.pt[0] * dtgt.pt[1] - tgt.pt[1] * dtgt.pt[0]);
+    rad = len * dot(tgt, tgt) / (tgt[0] * dtgt[1] - tgt[1] * dtgt[0]);
     tgt /= len;
   }
   else
@@ -1017,15 +1017,15 @@ Path::TangentOnArcAt (double at, const NR::Point &iS, path_descr_arcto & fin,
       sang -= 2 * M_PI;
     double b = sang * (1 - at) + eang * at;
     double cb = cos (b), sb = sin (b);
-    pos.pt[0] = drx + ca * rx * cb - sa * ry * sb;
-    pos.pt[1] = dry + sa * rx * cb + ca * ry * sb;
-    tgt.pt[0] = ca * rx * sb + sa * ry * cb;
-    tgt.pt[1] = sa * rx * sb - ca * ry * cb;
+    pos[0] = drx + ca * rx * cb - sa * ry * sb;
+    pos[1] = dry + sa * rx * cb + ca * ry * sb;
+    tgt[0] = ca * rx * sb + sa * ry * cb;
+    tgt[1] = sa * rx * sb - ca * ry * cb;
     NR::Point dtgt;
-    dtgt.pt[0] = -ca * rx * cb + sa * ry * sb;
-    dtgt.pt[1] = -sa * rx * cb - ca * ry * sb;
+    dtgt[0] = -ca * rx * cb + sa * ry * sb;
+    dtgt[1] = -sa * rx * cb - ca * ry * sb;
     len = L2(tgt);
-    rad = len * dot(tgt, tgt) / (tgt.pt[0] * dtgt.pt[1] - tgt.pt[1] * dtgt.pt[0]);
+    rad = len * dot(tgt, tgt) / (tgt[0] * dtgt[1] - tgt[1] * dtgt[0]);
     tgt /= len;
   }
 }
@@ -1291,24 +1291,24 @@ Path::RecStdCubicTo (outline_callback_data * data, double tol, double width,
 	  desc.tEn = (data->tSt + data->tEn) / 2;
 	  desc.x1 = data->x1;
 	  desc.y1 = data->y1;
-	  desc.x2 = miPos.pt[0];
-	  desc.y2 = miPos.pt[1];
-	  desc.d.c.dx1 = 0.5 * stTle * stTgt.pt[0];
-	  desc.d.c.dy1 = 0.5 * stTle * stTgt.pt[1];
-	  desc.d.c.dx2 = 0.5 * miTle * miTgt.pt[0];
-	  desc.d.c.dy2 = 0.5 * miTle * miTgt.pt[1];
+	  desc.x2 = miPos[0];
+	  desc.y2 = miPos[1];
+	  desc.d.c.dx1 = 0.5 * stTle * stTgt[0];
+	  desc.d.c.dy1 = 0.5 * stTle * stTgt[1];
+	  desc.d.c.dx2 = 0.5 * miTle * miTgt[0];
+	  desc.d.c.dy2 = 0.5 * miTle * miTgt[1];
 	  RecStdCubicTo (&desc, tol, width, lev - 1);
 	  
 	  desc.tSt = (data->tSt + data->tEn) / 2;
 	  desc.tEn = data->tEn;
-	  desc.x1 = miPos.pt[0];
-	  desc.y1 = miPos.pt[1];
+	  desc.x1 = miPos[0];
+	  desc.y1 = miPos[1];
 	  desc.x2 = data->x2;
 	  desc.y2 = data->y2;
-	  desc.d.c.dx1 = 0.5 * miTle * miTgt.pt[0];
-	  desc.d.c.dy1 = 0.5 * miTle * miTgt.pt[1];
-	  desc.d.c.dx2 = 0.5 * enTle * enTgt.pt[0];
-	  desc.d.c.dy2 = 0.5 * enTle * enTgt.pt[1];
+	  desc.d.c.dx1 = 0.5 * miTle * miTgt[0];
+	  desc.d.c.dy1 = 0.5 * miTle * miTgt[1];
+	  desc.d.c.dx2 = 0.5 * enTle * enTgt[0];
+	  desc.d.c.dy2 = 0.5 * enTle * enTgt[1];
 	  RecStdCubicTo (&desc, tol, width, lev - 1);
   }
 }
@@ -1335,10 +1335,10 @@ Path::StdBezierTo (Path::outline_callback_data * data, double tol, double width)
                   stTle, stRad);
   TangentOnBezAt (1.0, tmp, tempi, tempb, true, enPos, enTgt,
                   enTle, enRad);
-  data->d.c.dx1 = stTle * stTgt.pt[0];
-  data->d.c.dy1 = stTle * stTgt.pt[1];
-  data->d.c.dx2 = enTle * enTgt.pt[0];
-  data->d.c.dy2 = enTle * enTgt.pt[1];
+  data->d.c.dx1 = stTle * stTgt[0];
+  data->d.c.dy1 = stTle * stTgt[1];
+  data->d.c.dx2 = enTle * enTgt[0];
+  data->d.c.dy2 = enTle * enTgt[1];
   RecStdCubicTo (data, tol, width, 8);
 }
 
@@ -1353,8 +1353,8 @@ Path::RecStdArcTo (outline_callback_data * data, double tol, double width,
   // un cubic
   {
     path_descr_arcto temp;
-    temp.p.pt[0] = data->x2;
-    temp.p.pt[1] = data->y2;
+    temp.p[0] = data->x2;
+    temp.p[1] = data->y2;
     temp.rx = data->d.a.rx;
     temp.ry = data->d.a.ry;
     temp.angle = data->d.a.angle;

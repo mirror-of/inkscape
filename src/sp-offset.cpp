@@ -461,11 +461,11 @@ bpath_to_liv_path (ArtBpath * bpath)
         {
           NR::Point  tmp(bpath[i].x3, bpath[i].y3);
           NR::Point  tms;
-          tms.pt[0]=3 * (bpath[i].x1 - lastX);
-          tms.pt[1]=3 * (bpath[i].y1 - lastY);
+          tms[0]=3 * (bpath[i].x1 - lastX);
+          tms[1]=3 * (bpath[i].y1 - lastY);
           NR::Point  tme;
-          tme.pt[0]=3 * (bpath[i].x3 - bpath[i].x2);
-          tme.pt[1]= 3 * (bpath[i].y3 - bpath[i].y2);
+          tme[0]=3 * (bpath[i].x3 - bpath[i].x2);
+          tme[1]= 3 * (bpath[i].y3 - bpath[i].y2);
           dest->CubicTo (tmp,tms,tme);
         }
           lastX = bpath[i].x3;
@@ -508,12 +508,12 @@ liv_svg_dump_path2 (Path * path)
     if (typ == descr_moveto)
     {
       Path::path_descr_moveto*  nData=(Path::path_descr_moveto*)(path->descr_data+theD.dStart);
-      g_string_sprintfa (result, "M %lf %lf ", nData->p.pt[0], nData->p.pt[1]);
+      g_string_sprintfa (result, "M %lf %lf ", nData->p[0], nData->p[1]);
     }
     else if (typ == descr_lineto)
     {
       Path::path_descr_lineto*  nData=(Path::path_descr_lineto*)(path->descr_data+theD.dStart);
-      g_string_sprintfa (result, "L %lf %lf ", nData->p.pt[0], nData->p.pt[1]);
+      g_string_sprintfa (result, "L %lf %lf ", nData->p[0], nData->p[1]);
     }
     else if (typ == descr_cubicto)
     {
@@ -521,21 +521,21 @@ liv_svg_dump_path2 (Path * path)
       float lastX, lastY;
       {
         NR::Point tmp = path->PrevPoint (i - 1);
-        lastX=tmp.pt[0];
-        lastY=tmp.pt[1];
+        lastX=tmp[0];
+        lastY=tmp[1];
       }
       g_string_sprintfa (result, "C %lf %lf %lf %lf %lf %lf ",
-                         lastX + nData->stD.pt[0] / 3,
-                         lastY + nData->stD.pt[1] / 3,
-                         nData->p.pt[0] - nData->enD.pt[0] / 3,
-                         nData->p.pt[1] - nData->enD.pt[1] / 3, nData->p.pt[0],nData->p.pt[1]);
+                         lastX + nData->stD[0] / 3,
+                         lastY + nData->stD[1] / 3,
+                         nData->p[0] - nData->enD[0] / 3,
+                         nData->p[1] - nData->enD[1] / 3, nData->p[0],nData->p[1]);
     }
     else if (typ == descr_arcto)
     {
       Path::path_descr_arcto*  nData=(Path::path_descr_arcto*)(path->descr_data+theD.dStart);
      //                      g_string_sprintfa (result, "L %lf %lf ",theD.d.a.x,theD.d.a.y);
       g_string_sprintfa (result, "A %g %g %g %i %i %g %g ", nData->rx,nData->ry, nData->angle,
-                         (nData->large) ? 1 : 0,(nData->clockwise) ? 0 : 1, nData->p.pt[0],nData->p.pt[1]);
+                         (nData->large) ? 1 : 0,(nData->clockwise) ? 0 : 1, nData->p[0],nData->p[1]);
     }
     else if (typ == descr_close)
     {
@@ -826,7 +826,7 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
               nex = -nex;
             }
             
-            if (vectors_are_clockwise (nex.pt[0], nex.pt[1], nx.pt[0], nx.pt[1], prx.pt[0], prx.pt[1]))
+            if (vectors_are_clockwise (nex[0], nex[1], nx[0], nx[1], prx[0], prx[1]))
             {
               if (theRes->aretes[cb].st == i)
               {
@@ -890,14 +890,14 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
 void
 sp_offset_top_point (SPOffset * offset, NR::Point *px)
 {
-  px->pt[0] = px->pt[1] = 0;
+  (*px)[NR::X] = (*px)[NR::Y] = 0;
   if (offset == NULL)
     return;
   
   if (offset->knotSet)
   {
-    px->pt[0] = offset->knotx;
-    px->pt[1] = offset->knoty;
+    (*px)[NR::X] = offset->knotx;
+    (*px)[NR::Y] = offset->knoty;
     return;
   }
   

@@ -201,14 +201,14 @@ sp_selected_path_boolop (bool_op bop)
       for (int i = 0; i < theShape->nbPt; i++)
       {
         NR::Point x;
-        x.pt[0]=
-        i2root.c[0] * theShape->pts[i].x.pt[0] +
-        i2root.c[2] * theShape->pts[i].x.pt[1] + i2root.c[4];
-        x.pt[1] =
-          i2root.c[1] * theShape->pts[i].x.pt[0] +
-          i2root.c[3] * theShape->pts[i].x.pt[1] + i2root.c[5];
-        theShape->pts[i].x.pt[0] = x.pt[0];
-        theShape->pts[i].x.pt[1] = x.pt[1];
+        x[0]=
+        i2root.c[0] * theShape->pts[i].x[0] +
+        i2root.c[2] * theShape->pts[i].x[1] + i2root.c[4];
+        x[1] =
+          i2root.c[1] * theShape->pts[i].x[0] +
+          i2root.c[3] * theShape->pts[i].x[1] + i2root.c[5];
+        theShape->pts[i].x[0] = x[0];
+        theShape->pts[i].x[1] = x[1];
       }
     }*/
     css = sp_repr_css_attr (SP_OBJECT_REPR (il->data), "style");
@@ -243,14 +243,14 @@ sp_selected_path_boolop (bool_op bop)
       for (int i = 0; i < theShape->nbPt; i++)
       {
         NR::Point x;
-        x.pt[0]=
-	      i2root.c[0] * theShape->pts[i].x.pt[0] +
-	      i2root.c[2] * theShape->pts[i].x.pt[1] + i2root.c[4];
-        x.pt[1] =
-          i2root.c[1] * theShape->pts[i].x.pt[0] +
-          i2root.c[3] * theShape->pts[i].x.pt[1] + i2root.c[5];
-        theShape->pts[i].x.pt[0] = x.pt[0];
-        theShape->pts[i].x.pt[1] = x.pt[1];
+        x[0]=
+	      i2root.c[0] * theShape->pts[i].x[0] +
+	      i2root.c[2] * theShape->pts[i].x[1] + i2root.c[4];
+        x[1] =
+          i2root.c[1] * theShape->pts[i].x[0] +
+          i2root.c[3] * theShape->pts[i].x[1] + i2root.c[5];
+        theShape->pts[i].x[0] = x[0];
+        theShape->pts[i].x[1] = x[1];
       }
     }*/
     css = sp_repr_css_attr (SP_OBJECT_REPR (l->data), "style");
@@ -1293,12 +1293,12 @@ Path_for_item (SPItem * item,bool doTransformation)
         case ART_CURVETO:
         {
           NR::Point  tmp,tms,tme;
-          tmp.pt[0]=bpath[i].x3;
-          tmp.pt[1]=bpath[i].y3;
-          tms.pt[0]=3 * (bpath[i].x1 - lastX);
-          tms.pt[1]=3 * (bpath[i].y1 - lastY);
-          tme.pt[0]=3 * (bpath[i].x3 - bpath[i].x2);
-          tme.pt[1]=3 * (bpath[i].y3 - bpath[i].y2);
+          tmp[0]=bpath[i].x3;
+          tmp[1]=bpath[i].y3;
+          tms[0]=3 * (bpath[i].x1 - lastX);
+          tms[1]=3 * (bpath[i].y1 - lastY);
+          tme[0]=3 * (bpath[i].x3 - bpath[i].x2);
+          tme[1]=3 * (bpath[i].y3 - bpath[i].y2);
           dest->CubicTo (tmp,tms,tme);
         }
           lastX = bpath[i].x3;
@@ -1346,12 +1346,12 @@ liv_svg_dump_path (Path * path)
     if (typ == descr_moveto)
     {
       Path::path_descr_moveto*  nData=(Path::path_descr_moveto*)(path->descr_data+theD.dStart);
-      g_string_sprintfa (result, "M %lf %lf ", nData->p.pt[0], nData->p.pt[1]);
+      g_string_sprintfa (result, "M %lf %lf ", nData->p[0], nData->p[1]);
     }
     else if (typ == descr_lineto)
     {
       Path::path_descr_lineto*  nData=(Path::path_descr_lineto*)(path->descr_data+theD.dStart);
-      g_string_sprintfa (result, "L %lf %lf ", nData->p.pt[0], nData->p.pt[1]);
+      g_string_sprintfa (result, "L %lf %lf ", nData->p[0], nData->p[1]);
     }
     else if (typ == descr_cubicto)
     {
@@ -1359,21 +1359,21 @@ liv_svg_dump_path (Path * path)
       float lastX, lastY;
       {
         NR::Point tmp = path->PrevPoint (i - 1);
-        lastX=tmp.pt[0];
-        lastY=tmp.pt[1];
+        lastX=tmp[0];
+        lastY=tmp[1];
       }
       g_string_sprintfa (result, "C %lf %lf %lf %lf %lf %lf ",
-                         lastX + nData->stD.pt[0] / 3,
-                         lastY + nData->stD.pt[1] / 3,
-                         nData->p.pt[0] - nData->enD.pt[0] / 3,
-                         nData->p.pt[1] - nData->enD.pt[1] / 3, nData->p.pt[0],nData->p.pt[1]);
+                         lastX + nData->stD[0] / 3,
+                         lastY + nData->stD[1] / 3,
+                         nData->p[0] - nData->enD[0] / 3,
+                         nData->p[1] - nData->enD[1] / 3, nData->p[0],nData->p[1]);
     }
     else if (typ == descr_arcto)
     {
       Path::path_descr_arcto*  nData=(Path::path_descr_arcto*)(path->descr_data+theD.dStart);
       //                      g_string_sprintfa (result, "L %lf %lf ",theD.d.a.x,theD.d.a.y);
       g_string_sprintfa (result, "A %g %g %g %i %i %g %g ", nData->rx,nData->ry, nData->angle,
-                         (nData->large) ? 1 : 0,(nData->clockwise) ? 0 : 1, nData->p.pt[0],nData->p.pt[1]);
+                         (nData->large) ? 1 : 0,(nData->clockwise) ? 0 : 1, nData->p[NR::X],nData->p[NR::Y]);
     }
     else if (typ == descr_close)
     {

@@ -641,16 +641,16 @@ Shape::SortPoints (int s, int e)
     return;
   if (e == s + 1)
     {
-      if (pts[s].x.pt[1] > pts[e].x.pt[1]
-	  || (pts[s].x.pt[1] == pts[e].x.pt[1] && pts[s].x.pt[0] > pts[e].x.pt[0]))
+      if (pts[s].x[1] > pts[e].x[1]
+	  || (pts[s].x[1] == pts[e].x[1] && pts[s].x[0] > pts[e].x[0]))
 	SwapPoints (s, e);
       return;
     }
 
   int ppos = (s + e) / 2;
   int plast = ppos;
-  double pvalx = pts[ppos].x.pt[0];
-  double pvaly = pts[ppos].x.pt[1];
+  double pvalx = pts[ppos].x[0];
+  double pvaly = pts[ppos].x[1];
 
   int le = s, ri = e;
   while (le < ppos || ri > plast)
@@ -660,17 +660,17 @@ Shape::SortPoints (int s, int e)
 	  do
 	    {
 	      int test = 0;
-	      if (pts[le].x.pt[1] > pvaly)
+	      if (pts[le].x[1] > pvaly)
 		{
 		  test = 1;
 		}
-	      else if (pts[le].x.pt[1] == pvaly)
+	      else if (pts[le].x[1] == pvaly)
 		{
-		  if (pts[le].x.pt[0] > pvalx)
+		  if (pts[le].x[0] > pvalx)
 		    {
 		      test = 1;
 		    }
-		  else if (pts[le].x.pt[0] == pvalx)
+		  else if (pts[le].x[0] == pvalx)
 		    {
 		      test = 0;
 		    }
@@ -716,17 +716,17 @@ Shape::SortPoints (int s, int e)
 	  do
 	    {
 	      int test = 0;
-	      if (pts[ri].x.pt[1] > pvaly)
+	      if (pts[ri].x[1] > pvaly)
 		{
 		  test = 1;
 		}
-	      else if (pts[ri].x.pt[1] == pvaly)
+	      else if (pts[ri].x[1] == pvaly)
 		{
-		  if (pts[ri].x.pt[0] > pvalx)
+		  if (pts[ri].x[0] > pvalx)
 		    {
 		      test = 1;
 		    }
-		  else if (pts[ri].x.pt[0] == pvalx)
+		  else if (pts[ri].x[0] == pvalx)
 		    {
 		      test = 0;
 		    }
@@ -822,8 +822,8 @@ Shape::SortPointsByOldInd (int s, int e)
     return;
   if (e == s + 1)
     {
-      if (pts[s].x.pt[1] > pts[e].x.pt[1] || (pts[s].x.pt[1] == pts[e].x.pt[1] && pts[s].x.pt[0] > pts[e].x.pt[0])
-	  || (pts[s].x.pt[1] == pts[e].x.pt[1] && pts[s].x.pt[0] == pts[e].x.pt[0]
+      if (pts[s].x[1] > pts[e].x[1] || (pts[s].x[1] == pts[e].x[1] && pts[s].x[0] > pts[e].x[0])
+	  || (pts[s].x[1] == pts[e].x[1] && pts[s].x[0] == pts[e].x[0]
 	      && pData[s].oldInd > pData[e].oldInd))
 	SwapPoints (s, e);
       return;
@@ -831,8 +831,8 @@ Shape::SortPointsByOldInd (int s, int e)
 
   int ppos = (s + e) / 2;
   int plast = ppos;
-  double pvalx = pts[ppos].x.pt[0];
-  double pvaly = pts[ppos].x.pt[1];
+  double pvalx = pts[ppos].x[0];
+  double pvaly = pts[ppos].x[1];
   int pvali = pData[ppos].oldInd;
 
   int le = s, ri = e;
@@ -843,17 +843,17 @@ Shape::SortPointsByOldInd (int s, int e)
 	  do
 	    {
 	      int test = 0;
-	      if (pts[le].x.pt[1] > pvaly)
+	      if (pts[le].x[1] > pvaly)
 		{
 		  test = 1;
 		}
-	      else if (pts[le].x.pt[1] == pvaly)
+	      else if (pts[le].x[1] == pvaly)
 		{
-		  if (pts[le].x.pt[0] > pvalx)
+		  if (pts[le].x[0] > pvalx)
 		    {
 		      test = 1;
 		    }
-		  else if (pts[le].x.pt[0] == pvalx)
+		  else if (pts[le].x[0] == pvalx)
 		    {
 		      if (pData[le].oldInd > pvali)
 			{
@@ -910,17 +910,17 @@ Shape::SortPointsByOldInd (int s, int e)
 	  do
 	    {
 	      int test = 0;
-	      if (pts[ri].x.pt[1] > pvaly)
+	      if (pts[ri].x[1] > pvaly)
 		{
 		  test = 1;
 		}
-	      else if (pts[ri].x.pt[1] == pvaly)
+	      else if (pts[ri].x[1] == pvaly)
 		{
-		  if (pts[ri].x.pt[0] > pvalx)
+		  if (pts[ri].x[0] > pvalx)
 		    {
 		      test = 1;
 		    }
-		  else if (pts[ri].x.pt[0] == pvalx)
+		  else if (pts[ri].x[0] == pvalx)
 		    {
 		      if (pData[ri].oldInd > pvali)
 			{
@@ -1027,16 +1027,16 @@ Shape::SortPointsRounded (int s, int e)
     return;
   if (e == s + 1)
     {
-      if (pData[s].rx.pt[1] > pData[e].rx.pt[1]
-	  || (pData[s].rx.pt[1] == pData[e].rx.pt[1] && pData[s].rx.pt[0] > pData[e].rx.pt[0]))
+      if (pData[s].rx[1] > pData[e].rx[1]
+	  || (pData[s].rx[1] == pData[e].rx[1] && pData[s].rx[0] > pData[e].rx[0]))
 	SwapPoints (s, e);
       return;
     }
 
   int ppos = (s + e) / 2;
   int plast = ppos;
-  double pvalx = pData[ppos].rx.pt[0];
-  double pvaly = pData[ppos].rx.pt[1];
+  double pvalx = pData[ppos].rx[0];
+  double pvaly = pData[ppos].rx[1];
 
   int le = s, ri = e;
   while (le < ppos || ri > plast)
@@ -1046,17 +1046,17 @@ Shape::SortPointsRounded (int s, int e)
 	  do
 	    {
 	      int test = 0;
-	      if (pData[le].rx.pt[1] > pvaly)
+	      if (pData[le].rx[1] > pvaly)
 		{
 		  test = 1;
 		}
-	      else if (pData[le].rx.pt[1] == pvaly)
+	      else if (pData[le].rx[1] == pvaly)
 		{
-		  if (pData[le].rx.pt[0] > pvalx)
+		  if (pData[le].rx[0] > pvalx)
 		    {
 		      test = 1;
 		    }
-		  else if (pData[le].rx.pt[0] == pvalx)
+		  else if (pData[le].rx[0] == pvalx)
 		    {
 		      test = 0;
 		    }
@@ -1102,17 +1102,17 @@ Shape::SortPointsRounded (int s, int e)
 	  do
 	    {
 	      int test = 0;
-	      if (pData[ri].rx.pt[1] > pvaly)
+	      if (pData[ri].rx[1] > pvaly)
 		{
 		  test = 1;
 		}
-	      else if (pData[ri].rx.pt[1] == pvaly)
+	      else if (pData[ri].rx[1] == pvaly)
 		{
-		  if (pData[ri].rx.pt[0] > pvalx)
+		  if (pData[ri].rx[0] > pvalx)
 		    {
 		      test = 1;
 		    }
-		  else if (pData[ri].rx.pt[0] == pvalx)
+		  else if (pData[ri].rx[0] == pvalx)
 		    {
 		      test = 0;
 		    }
@@ -1245,7 +1245,7 @@ Shape::AddEdge (int st, int en)
     }
   else
     {
-      aretes[n].dx.pt[0] = aretes[n].dx.pt[1] = 0;
+      aretes[n].dx[0] = aretes[n].dx[1] = 0;
     }
   ConnectStart (st, n);
   ConnectEnd (en, n);
@@ -1329,7 +1329,7 @@ Shape::AddEdge (int st, int en, int leF, int riF)
     }
   else
     {
-      aretes[n].dx.pt[0] = aretes[n].dx.pt[1] = 0;
+      aretes[n].dx[0] = aretes[n].dx[1] = 0;
     }
   ConnectStart (st, n);
   ConnectEnd (en, n);
@@ -1673,21 +1673,21 @@ Shape::CmpToVert (NR::Point ax, NR::Point bx)
   int tstAY = 0;
   int tstBX = 0;
   int tstBY = 0;
-  if (ax.pt[0] > 0)
+  if (ax[0] > 0)
     tstAX = 1;
-  if (ax.pt[0] < 0)
+  if (ax[0] < 0)
     tstAX = -1;
-  if (ax.pt[1] > 0)
+  if (ax[1] > 0)
     tstAY = 1;
-  if (ax.pt[1] < 0)
+  if (ax[1] < 0)
     tstAY = -1;
-  if (bx.pt[0] > 0)
+  if (bx[0] > 0)
     tstBX = 1;
-  if (bx.pt[0] < 0)
+  if (bx[0] < 0)
     tstBX = -1;
-  if (bx.pt[1] > 0)
+  if (bx[1] > 0)
     tstBY = 1;
-  if (bx.pt[1] < 0)
+  if (bx[1] < 0)
     tstBY = -1;
 
   int quadA = 0, quadB = 0;
@@ -2161,18 +2161,18 @@ Shape::CalcBBox (void)
       leftX = rightX = topY = bottomY = 0;
       return;
     }
-  leftX = rightX = pts[0].x.pt[0];
-  topY = bottomY = pts[0].x.pt[1];
+  leftX = rightX = pts[0].x[0];
+  topY = bottomY = pts[0].x[1];
   for (int i = 1; i < nbPt; i++)
     {
-      if (pts[i].x.pt[0] < leftX)
-	leftX = pts[i].x.pt[0];
-      if (pts[i].x.pt[0] > rightX)
-	rightX = pts[i].x.pt[0];
-      if (pts[i].x.pt[1] < topY)
-	topY = pts[i].x.pt[1];
-      if (pts[i].x.pt[1] > bottomY)
-	bottomY = pts[i].x.pt[1];
+      if (pts[i].x[0] < leftX)
+	leftX = pts[i].x[0];
+      if (pts[i].x[0] > rightX)
+	rightX = pts[i].x[0];
+      if (pts[i].x[1] < topY)
+	topY = pts[i].x[1];
+      if (pts[i].x[1] > bottomY)
+	bottomY = pts[i].x[1];
     }
 }
 

@@ -14,8 +14,8 @@ Path::Path (void)
 {
 	descr_max = descr_nb = 0;
 	descr_cmd = NULL;
-  ddata_max = ddata_nb = 0;
-  descr_data=NULL;
+	ddata_max = ddata_nb = 0;
+	descr_data=NULL;
 	descr_flags = 0;
 	pending_bezier_cmd = -1;
 	pending_moveto_cmd = -1;
@@ -30,15 +30,15 @@ Path::~Path (void)
 		free (descr_cmd);
 		descr_cmd = NULL;
 	}
-  if ( descr_data ) {
-    free(descr_data);
-    descr_data=NULL;
-  }
+	if (descr_data) {
+		free(descr_data);
+		descr_data = NULL;
+	}
 	if (pts) {
 		free (pts);
 		pts = NULL;
 	}
-  ddata_max = ddata_nb = 0;
+	ddata_max = ddata_nb = 0;
 	descr_max = descr_nb = 0;
 	nbPt = maxPt = sizePt = 0;
 }
@@ -59,24 +59,24 @@ Path::Affiche (void)
 			printf ("F\n");
 		} else if (ty == descr_moveto) {
       path_descr_moveto  *elem=(path_descr_moveto*)(descr_data+descr_cmd[i].dStart);
-			printf ("M %f %f %i\n", elem->p.pt[0], elem->p.pt[1], elem->pathLength);
+			printf ("M %f %f %i\n", elem->p[0], elem->p[1], elem->pathLength);
 		} else if (ty == descr_lineto) {
       path_descr_lineto  *elem=(path_descr_lineto*)(descr_data+descr_cmd[i].dStart);
-			printf ("L %f %f\n", elem->p.pt[0],
-              elem->p.pt[1]);
+			printf ("L %f %f\n", elem->p[0],
+              elem->p[1]);
 		} else if (ty == descr_arcto) {
       path_descr_arcto  *elem=(path_descr_arcto*)(descr_data+descr_cmd[i].dStart);
-			printf ("A %f %f %f %f %i %i\n", elem->p.pt[0],elem->p.pt[1], elem->rx,elem->ry,(elem->large) ? 1 : 0,(elem->clockwise) ? 1 : 0);
+			printf ("A %f %f %f %f %i %i\n", elem->p[0],elem->p[1], elem->rx,elem->ry,(elem->large) ? 1 : 0,(elem->clockwise) ? 1 : 0);
 		} else if (ty == descr_cubicto) {
       path_descr_cubicto  *elem=(path_descr_cubicto*)(descr_data+descr_cmd[i].dStart);
-			printf ("C %f %f %f %f %f %f\n", elem->p.pt[0],elem->p.pt[1], elem->stD.pt[0],
-              elem->stD.pt[1], elem->enD.pt[0],elem->enD.pt[1]);
+			printf ("C %f %f %f %f %f %f\n", elem->p[0],elem->p[1], elem->stD[0],
+              elem->stD[1], elem->enD[0],elem->enD[1]);
 		} else if (ty == descr_bezierto) {
       path_descr_bezierto  *elem=(path_descr_bezierto*)(descr_data+descr_cmd[i].dStart);
-			printf ("B %f %f %i\n", elem->p.pt[0], elem->p.pt[1], elem->nb);
+			printf ("B %f %f %i\n", elem->p[0], elem->p[1], elem->nb);
 		} else if (ty == descr_interm_bezier) {
       path_descr_intermbezierto  *elem=(path_descr_intermbezierto*)(descr_data+descr_cmd[i].dStart);
-			printf ("I %f %f\n", elem->p.pt[0], elem->p.pt[1]);
+			printf ("I %f %f\n", elem->p[0], elem->p[1]);
 		} else if (ty == descr_close) {
 			printf ("Z\n");
 		}
@@ -85,12 +85,12 @@ Path::Affiche (void)
 	if ( back ) {
     path_lineto_b  *tp=(path_lineto_b*)pts;
     for (int i=0;i<nbPt;i++) {
-      printf("[ %f %f %i %f ] ",tp[i].p.pt[0],tp[i].p.pt[1],tp[i].piece,tp[i].t);
+      printf("[ %f %f %i %f ] ",tp[i].p[0],tp[i].p[1],tp[i].piece,tp[i].t);
     }
 	} else {
     path_lineto  *tp=(path_lineto*)pts;
     for (int i=0;i<nbPt;i++) {
-      printf("[ %f %f ] ",tp[i].p.pt[0],tp[i].p.pt[1]);
+      printf("[ %f %f ] ",tp[i].p[0],tp[i].p[1]);
     }
 	}
 	printf("\n\n");
@@ -606,7 +606,7 @@ Path::PointAt (int piece, double at, NR::Point & pos)
 	if (piece < 0 || piece >= descr_nb)
 	{
 		// this shouldn't happen: the piece we are asked for doesn't exist in the path
-		pos.pt[0] = pos.pt[1] = 0;
+		pos[0] = pos[1] = 0;
 		return;
 	}
 	path_descr theD = descr_cmd[piece];
@@ -678,7 +678,7 @@ Path::PointAndTangentAt (int piece, double at, NR::Point & pos, NR::Point & tgt)
 	if (piece < 0 || piece >= descr_nb)
 	{
 		// this shouldn't happen: the piece we are asked for doesn't exist in the path
-		pos.pt[0] = pos.pt[1] = 0;
+		pos[0] = pos[1] = 0;
 		return;
 	}
 	path_descr theD = descr_cmd[piece];

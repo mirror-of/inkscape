@@ -15,7 +15,7 @@
 #define MiscNormalize(v) {\
   double _l=sqrt(dot(v,v)); \
     if ( _l < 0.0000001 ) { \
-      v.pt[0]=v.pt[1]=0; \
+      v[0]=v[1]=0; \
     } else { \
       v/=_l; \
     }\
@@ -37,8 +37,8 @@ Shape::ConvertToForme (Path * dest)
   
   for (int i = 0; i < nbPt; i++)
   {
-    pData[i].rx.pt[0] = Round (pts[i].x.pt[0]);
-    pData[i].rx.pt[1] = Round (pts[i].x.pt[1]);
+    pData[i].rx[0] = Round (pts[i].x[0]);
+    pData[i].rx[1] = Round (pts[i].x[1]);
   }
   for (int i = 0; i < nbAr; i++)
   {
@@ -170,8 +170,8 @@ Shape::ConvertToForme (Path * dest, int nbP, Path * *orig)
   
   for (int i = 0; i < nbPt; i++)
   {
-    pData[i].rx.pt[0] = Round (pts[i].x.pt[0]);
-    pData[i].rx.pt[1] = Round (pts[i].x.pt[1]);
+    pData[i].rx[0] = Round (pts[i].x[0]);
+    pData[i].rx[1] = Round (pts[i].x[1]);
   }
   for (int i = 0; i < nbAr; i++)
   {

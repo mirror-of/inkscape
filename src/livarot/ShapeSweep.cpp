@@ -83,8 +83,8 @@ Shape::Reoriente (Shape * a)
       pData[i].pending = 0;
       pData[i].edgeOnLeft = -1;
       pData[i].nextLinkedPoint = -1;
-      pData[i].rx.pt[0] = Round (pts[i].x.pt[0]);
-      pData[i].rx.pt[1] = Round (pts[i].x.pt[1]);
+      pData[i].rx[0] = Round (pts[i].x[0]);
+      pData[i].rx[1] = Round (pts[i].x[1]);
       pts[i].x = pData[i].rx;
     }
   for (int i = 0; i < nbPt; i++)
@@ -182,8 +182,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       a->pData[i].pending = 0;
       a->pData[i].edgeOnLeft = -1;
       a->pData[i].nextLinkedPoint = -1;
-      a->pData[i].rx.pt[0] = Round (a->pts[i].x.pt[0]);
-      a->pData[i].rx.pt[1] = Round (a->pts[i].x.pt[1]);
+      a->pData[i].rx[0] = Round (a->pts[i].x[0]);
+      a->pData[i].rx[1] = Round (a->pts[i].x[1]);
     }
   for (int i = 0; i < a->nbAr; i++)
     {
@@ -193,8 +193,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       a->eData[i].ilength = 1 / a->eData[i].length;
       a->eData[i].sqlength = sqrt (a->eData[i].length);
       a->eData[i].isqlength = 1 / a->eData[i].sqlength;
-      a->eData[i].siEd = a->eData[i].rdx.pt[1] * a->eData[i].isqlength;
-      a->eData[i].coEd = a->eData[i].rdx.pt[0] * a->eData[i].isqlength;
+      a->eData[i].siEd = a->eData[i].rdx[1] * a->eData[i].isqlength;
+      a->eData[i].coEd = a->eData[i].rdx[0] * a->eData[i].isqlength;
       if (a->eData[i].siEd < 0)
 	{
 	  a->eData[i].siEd = -a->eData[i].siEd;
@@ -218,7 +218,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   chgts = NULL;
   nbChgt = maxChgt = 0;
 
-  double lastChange = a->pData[0].rx.pt[1] - 1.0;
+  double lastChange = a->pData[0].rx[1] - 1.0;
   int lastChgtPt = 0;
   int edgeHead = -1;
   Shape *shapeHead = NULL;
@@ -256,9 +256,9 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	  PeekInQueue (intersL, intersR, ptX, ptL, ptR, sEvts))
 	{
 	  if (a->pData[curAPt].pending > 0
-	      || (a->pData[curAPt].rx.pt[1] > ptX.pt[1]
-		  || (a->pData[curAPt].rx.pt[1] == ptX.pt[1]
-		      && a->pData[curAPt].rx.pt[0] > ptX.pt[0])))
+	      || (a->pData[curAPt].rx[1] > ptX[1]
+		  || (a->pData[curAPt].rx[1] == ptX[1]
+		      && a->pData[curAPt].rx[0] > ptX[0])))
 	    {
 	      SweepEvent::ExtractFromQueue (intersL, intersR, ptX, ptL,
 					    ptR, sEvts);
@@ -287,13 +287,13 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	}
 
       NR::Point rPtX;
-      rPtX.pt[0]= Round (ptX.pt[0]);
-      rPtX.pt[1]= Round (ptX.pt[1]);
+      rPtX[0]= Round (ptX[0]);
+      rPtX[1]= Round (ptX[1]);
       int lastPointNo = -1;
       lastPointNo = AddPoint (rPtX);
       pData[lastPointNo].rx = rPtX;
 
-      if (rPtX.pt[1] > lastChange)
+      if (rPtX[1] > lastChange)
 	{
 	  int lastI = AssemblePoints (lastChgtPt, lastPointNo);
 
@@ -369,7 +369,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	  nbPt = lastI + 1;
 
 	  lastChgtPt = lastPointNo;
-	  lastChange = rPtX.pt[1];
+	  lastChange = rPtX[1];
 	  nbChgt = 0;
 	  edgeHead = -1;
 	  shapeHead = NULL;
@@ -922,16 +922,16 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
       a->pData[i].pending = 0;
       a->pData[i].edgeOnLeft = -1;
       a->pData[i].nextLinkedPoint = -1;
-      a->pData[i].rx.pt[0] = Round (a->pts[i].x.pt[0]);
-      a->pData[i].rx.pt[1] = Round (a->pts[i].x.pt[1]);
+      a->pData[i].rx[0] = Round (a->pts[i].x[0]);
+      a->pData[i].rx[1] = Round (a->pts[i].x[1]);
     }
   for (int i = 0; i < b->nbPt; i++)
     {
       b->pData[i].pending = 0;
       b->pData[i].edgeOnLeft = -1;
       b->pData[i].nextLinkedPoint = -1;
-      b->pData[i].rx.pt[0] = Round (b->pts[i].x.pt[0]);
-      b->pData[i].rx.pt[1] = Round (b->pts[i].x.pt[1]);
+      b->pData[i].rx[0] = Round (b->pts[i].x[0]);
+      b->pData[i].rx[1] = Round (b->pts[i].x[1]);
     }
   for (int i = 0; i < a->nbAr; i++)
     {
@@ -941,8 +941,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
       a->eData[i].ilength = 1 / a->eData[i].length;
       a->eData[i].sqlength = sqrt (a->eData[i].length);
       a->eData[i].isqlength = 1 / a->eData[i].sqlength;
-      a->eData[i].siEd = a->eData[i].rdx.pt[1] * a->eData[i].isqlength;
-      a->eData[i].coEd = a->eData[i].rdx.pt[0] * a->eData[i].isqlength;
+      a->eData[i].siEd = a->eData[i].rdx[1] * a->eData[i].isqlength;
+      a->eData[i].coEd = a->eData[i].rdx[0] * a->eData[i].isqlength;
       if (a->eData[i].siEd < 0)
 	{
 	  a->eData[i].siEd = -a->eData[i].siEd;
@@ -967,8 +967,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
       b->eData[i].sqlength = sqrt (b->eData[i].length);
       b->eData[i].isqlength = 1 / b->eData[i].sqlength;
 
-      b->eData[i].siEd = b->eData[i].rdx.pt[1] * b->eData[i].isqlength;
-      b->eData[i].coEd = b->eData[i].rdx.pt[0] * b->eData[i].isqlength;
+      b->eData[i].siEd = b->eData[i].rdx[1] * b->eData[i].isqlength;
+      b->eData[i].coEd = b->eData[i].rdx[0] * b->eData[i].isqlength;
       if (b->eData[i].siEd < 0)
       {
         b->eData[i].siEd = -b->eData[i].siEd;
@@ -991,8 +991,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
   nbChgt = maxChgt = 0;
 
   double lastChange =
-    (a->pData[0].rx.pt[1] <
-     b->pData[0].rx.pt[1]) ? a->pData[0].rx.pt[1] - 1.0 : b->pData[0].rx.pt[1] - 1.0;
+    (a->pData[0].rx[1] <
+     b->pData[0].rx[1]) ? a->pData[0].rx[1] - 1.0 : b->pData[0].rx[1] - 1.0;
   int lastChgtPt = 0;
   int edgeHead = -1;
   Shape *shapeHead = NULL;
@@ -1033,14 +1033,14 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
 	    {
 	      if (curBPt < b->nbPt)
 		{
-		  if (a->pData[curAPt].rx.pt[1] < b->pData[curBPt].rx.pt[1]
-		      || (a->pData[curAPt].rx.pt[1] == b->pData[curBPt].rx.pt[1]
-			  && a->pData[curAPt].rx.pt[0] < b->pData[curBPt].rx.pt[0]))
+		  if (a->pData[curAPt].rx[1] < b->pData[curBPt].rx[1]
+		      || (a->pData[curAPt].rx[1] == b->pData[curBPt].rx[1]
+			  && a->pData[curAPt].rx[0] < b->pData[curBPt].rx[0]))
 		    {
 		      if (a->pData[curAPt].pending > 0
-			  || (a->pData[curAPt].rx.pt[1] > ptX.pt[1]
-			      || (a->pData[curAPt].rx.pt[1] == ptX.pt[1]
-				  && a->pData[curAPt].rx.pt[0] > ptX.pt[0])))
+			  || (a->pData[curAPt].rx[1] > ptX[1]
+			      || (a->pData[curAPt].rx[1] == ptX[1]
+				  && a->pData[curAPt].rx[0] > ptX[0])))
 			{
 			  SweepEvent::ExtractFromQueue (intersL, intersR, ptX, ptL, ptR, sEvts);
 			  isIntersection = true;
@@ -1056,9 +1056,9 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
 		  else
 		    {
 		      if (b->pData[curBPt].pending > 0
-			  || (b->pData[curBPt].rx.pt[1] > ptX.pt[1]
-			      || (b->pData[curBPt].rx.pt[1] == ptX.pt[1]
-				  && b->pData[curBPt].rx.pt[0] > ptX.pt[0])))
+			  || (b->pData[curBPt].rx[1] > ptX[1]
+			      || (b->pData[curBPt].rx[1] == ptX[1]
+				  && b->pData[curBPt].rx[0] > ptX[0])))
 			{
 			  SweepEvent::ExtractFromQueue (intersL, intersR, ptX, ptL, ptR, sEvts);
 			  isIntersection = true;
@@ -1075,9 +1075,9 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
 	      else
 		{
 		  if (a->pData[curAPt].pending > 0
-		      || (a->pData[curAPt].rx.pt[1] > ptX.pt[1]
-			  || (a->pData[curAPt].rx.pt[1] == ptX.pt[1]
-			      && a->pData[curAPt].rx.pt[0] > ptX.pt[0])))
+		      || (a->pData[curAPt].rx[1] > ptX[1]
+			  || (a->pData[curAPt].rx[1] == ptX[1]
+			      && a->pData[curAPt].rx[0] > ptX[0])))
 		    {
 		      SweepEvent::ExtractFromQueue (intersL, intersR, ptX, ptL, ptR, sEvts);
 		      isIntersection = true;
@@ -1094,9 +1094,9 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
 	  else
 	    {
 	      if (b->pData[curBPt].pending > 0
-		  || (b->pData[curBPt].rx.pt[1] > ptX.pt[1]
-		      || (b->pData[curBPt].rx.pt[1] == ptX.pt[1]
-			  && b->pData[curBPt].rx.pt[0] > ptX.pt[0])))
+		  || (b->pData[curBPt].rx[1] > ptX[1]
+		      || (b->pData[curBPt].rx[1] == ptX[1]
+			  && b->pData[curBPt].rx[0] > ptX[0])))
 		{
 		  SweepEvent::ExtractFromQueue (intersL, intersR, ptX,  ptL, ptR, sEvts);
 		  isIntersection = true;
@@ -1116,9 +1116,9 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
 	    {
 	      if (curBPt < b->nbPt)
 		{
-		  if (a->pData[curAPt].rx.pt[1] < b->pData[curBPt].rx.pt[1]
-		      || (a->pData[curAPt].rx.pt[1] == b->pData[curBPt].rx.pt[1]
-			  && a->pData[curAPt].rx.pt[0] < b->pData[curBPt].rx.pt[0]))
+		  if (a->pData[curAPt].rx[1] < b->pData[curBPt].rx[1]
+		      || (a->pData[curAPt].rx[1] == b->pData[curBPt].rx[1]
+			  && a->pData[curAPt].rx[0] < b->pData[curBPt].rx[0]))
 		    {
 		      nPt = curAPt++;
 		      ptSh = a;
@@ -1151,13 +1151,13 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
 	}
 
       NR::Point rPtX;
-      rPtX.pt[0]= Round (ptX.pt[0]);
-      rPtX.pt[1]= Round (ptX.pt[1]);
+      rPtX[0]= Round (ptX[0]);
+      rPtX[1]= Round (ptX[1]);
       int lastPointNo = -1;
       lastPointNo = AddPoint (rPtX);
       pData[lastPointNo].rx = rPtX;
 
-      if (rPtX.pt[1] > lastChange)
+      if (rPtX[1] > lastChange)
 	{
 	  int lastI = AssemblePoints (lastChgtPt, lastPointNo);
 
@@ -1233,7 +1233,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod)
 	  nbPt = lastI + 1;
 
 	  lastChgtPt = lastPointNo;
-	  lastChange = rPtX.pt[1];
+	  lastChange = rPtX[1];
 	  nbChgt = 0;
 	  edgeHead = -1;
 	  shapeHead = NULL;
@@ -1764,37 +1764,37 @@ Shape::TesteIntersection (SweepTree * iL, SweepTree * iR, NR::Point &atx, double
       rdir = -rdir;
     }
 
-  if (iL->src->pData[lSt].rx.pt[0] < iL->src->pData[lEn].rx.pt[0])
+  if (iL->src->pData[lSt].rx[0] < iL->src->pData[lEn].rx[0])
     {
-      if (iR->src->pData[rSt].rx.pt[0] < iR->src->pData[rEn].rx.pt[0])
+      if (iR->src->pData[rSt].rx[0] < iR->src->pData[rEn].rx[0])
 	{
-	  if (iL->src->pData[lSt].rx.pt[0] > iR->src->pData[rEn].rx.pt[0])
+	  if (iL->src->pData[lSt].rx[0] > iR->src->pData[rEn].rx[0])
 	    return false;
-	  if (iL->src->pData[lEn].rx.pt[0] < iR->src->pData[rSt].rx.pt[0])
+	  if (iL->src->pData[lEn].rx[0] < iR->src->pData[rSt].rx[0])
 	    return false;
 	}
       else
 	{
-	  if (iL->src->pData[lSt].rx.pt[0] > iR->src->pData[rSt].rx.pt[0])
+	  if (iL->src->pData[lSt].rx[0] > iR->src->pData[rSt].rx[0])
 	    return false;
-	  if (iL->src->pData[lEn].rx.pt[0] < iR->src->pData[rEn].rx.pt[0])
+	  if (iL->src->pData[lEn].rx[0] < iR->src->pData[rEn].rx[0])
 	    return false;
 	}
     }
   else
     {
-      if (iR->src->pData[rSt].rx.pt[0] < iR->src->pData[rEn].rx.pt[0])
+      if (iR->src->pData[rSt].rx[0] < iR->src->pData[rEn].rx[0])
 	{
-	  if (iL->src->pData[lEn].rx.pt[0] > iR->src->pData[rEn].rx.pt[0])
+	  if (iL->src->pData[lEn].rx[0] > iR->src->pData[rEn].rx[0])
 	    return false;
-	  if (iL->src->pData[lSt].rx.pt[0] < iR->src->pData[rSt].rx.pt[0])
+	  if (iL->src->pData[lSt].rx[0] < iR->src->pData[rSt].rx[0])
 	    return false;
 	}
       else
 	{
-	  if (iL->src->pData[lEn].rx.pt[0] > iR->src->pData[rSt].rx.pt[0])
+	  if (iL->src->pData[lEn].rx[0] > iR->src->pData[rSt].rx[0])
 	    return false;
-	  if (iL->src->pData[lSt].rx.pt[0] < iR->src->pData[rEn].rx.pt[0])
+	  if (iL->src->pData[lSt].rx[0] < iR->src->pData[rEn].rx[0])
 	    return false;
 	}
     }
@@ -2097,53 +2097,53 @@ Shape::Winding (const NR::Point px) const
 
       int nWeight = eData[i].weight;
 
-      if (ast.pt[0] < aen.pt[0])
+      if (ast[0] < aen[0])
 	{
-	  if (ast.pt[0] > px.pt[0])
+	  if (ast[0] > px[0])
 	    continue;
-	  if (aen.pt[0] < px.pt[0])
+	  if (aen[0] < px[0])
 	    continue;
 	}
       else
 	{
-	  if (ast.pt[0] < px.pt[0])
+	  if (ast[0] < px[0])
 	    continue;
-	  if (aen.pt[0] > px.pt[0])
+	  if (aen[0] > px[0])
 	    continue;
 	}
-      if (ast.pt[0] == px.pt[0])
+      if (ast[0] == px[0])
 	{
-	  if (ast.pt[1] >= px.pt[1])
+	  if (ast[1] >= px[1])
 	    continue;
-	  if (aen.pt[0] == px.pt[0])
+	  if (aen[0] == px[0])
 	    continue;
-	  if (aen.pt[0] < px.pt[0])
+	  if (aen[0] < px[0])
 	    ll += nWeight;
 	  else
 	    rr -= nWeight;
 	  continue;
 	}
-      if (aen.pt[0] == px.pt[0])
+      if (aen[0] == px[0])
 	{
-	  if (aen.pt[1] >= px.pt[1])
+	  if (aen[1] >= px[1])
 	    continue;
-	  if (ast.pt[0] == px.pt[0])
+	  if (ast[0] == px[0])
 	    continue;
-	  if (ast.pt[0] < px.pt[0])
+	  if (ast[0] < px[0])
 	    ll -= nWeight;
 	  else
 	    rr += nWeight;
 	  continue;
 	}
 
-      if (ast.pt[1] < aen.pt[1])
+      if (ast[1] < aen[1])
 	{
-	  if (ast.pt[1] >= px.pt[1])
+	  if (ast[1] >= px[1])
 	    continue;
 	}
       else
 	{
-	  if (aen.pt[1] >= px.pt[1])
+	  if (aen[1] >= px[1])
 	    continue;
 	}
 
@@ -2153,12 +2153,12 @@ Shape::Winding (const NR::Point px) const
 	continue;
       if (cote < 0)
 	{
-	  if (ast.pt[0] > px.pt[0])
+	  if (ast[0] > px[0])
 	    lr += nWeight;
 	}
       else
 	{
-	  if (ast.pt[0] < px.pt[0])
+	  if (ast[0] < px[0])
 	    lr -= nWeight;
 	}
     }
@@ -2181,7 +2181,7 @@ Shape::AssemblePoints (int st, int en)
       for (int i = st; i < en; i++)
 	{
 	  pData[i].pending = lastI++;
-	  if (i > st && pts[i - 1].x.pt[0] == pts[i].x.pt[0] && pts[i - 1].x.pt[1] == pts[i].x.pt[1])
+	  if (i > st && pts[i - 1].x[0] == pts[i].x[0] && pts[i - 1].x[1] == pts[i].x[1])
 	    {
 	      pData[i].pending = pData[i - 1].pending;
 	      if (pData[pData[i].pending].askForWindingS == NULL)
@@ -2576,8 +2576,8 @@ Shape::TesteIntersection (Shape * ils, Shape * irs, int ilb, int irb,
   ldir = ils->eData[ilb].rdx;
   rdir = irs->eData[irb].rdx;
 
-  double il = ils->pData[lSt].rx.pt[0], it = ils->pData[lSt].rx.pt[1], ir =
-    ils->pData[lEn].rx.pt[0], ib = ils->pData[lEn].rx.pt[1];
+  double il = ils->pData[lSt].rx[0], it = ils->pData[lSt].rx[1], ir =
+    ils->pData[lEn].rx[0], ib = ils->pData[lEn].rx[1];
   if (il > ir)
     {
       double swf = il;
@@ -2590,8 +2590,8 @@ Shape::TesteIntersection (Shape * ils, Shape * irs, int ilb, int irb,
       it = ib;
       ib = swf;
     }
-  double jl = irs->pData[rSt].rx.pt[0], jt = irs->pData[rSt].rx.pt[1], jr =
-    irs->pData[rEn].rx.pt[0], jb = irs->pData[rEn].rx.pt[1];
+  double jl = irs->pData[rSt].rx[0], jt = irs->pData[rSt].rx[1], jr =
+    irs->pData[rEn].rx[0], jb = irs->pData[rEn].rx[1];
   if (jl > jr)
     {
       double swf = jl;
@@ -2655,10 +2655,10 @@ Shape::TesteIntersection (Shape * ils, Shape * irs, int ilb, int irb,
 
   NR::Matrix m;
   // pas sur de l'ordre des coefs de m
-  m.c[0] = ldir.pt[0];
-  m.c[1] = ldir.pt[1];
-  m.c[2] = rdir.pt[0];
-  m.c[3] = rdir.pt[1];
+  m.c[0] = ldir[0];
+  m.c[1] = ldir[1];
+  m.c[2] = rdir[0];
+  m.c[3] = rdir[1];
 
   double det = m.det();
 
@@ -2697,8 +2697,8 @@ Shape::TesteIntersection (Shape * ils, Shape * irs, int ilb, int irb,
     m.c[3] = swap;
   }
 
-  atL = (m.c[0]* usvs.pt[0] + m.c[1] * usvs.pt[1]) / det;
-  atR = -(m.c[2] * usvs.pt[0] + m.c[3] * usvs.pt[1]) / det;
+  atL = (m.c[0]* usvs[0] + m.c[1] * usvs[1]) / det;
+  atR = -(m.c[2] * usvs[0] + m.c[3] * usvs[1]) / det;
   atx = ils->pData[lSt].rx + atL * ldir;
 
 
@@ -2728,14 +2728,14 @@ Shape::TesteAdjacency (Shape * a, int no, const NR::Point atx, int nPt,
   if (-3 < e && e < 3)
     {
       double rad = HalfRound (0.505);
-      diff1.pt[0] = diff.pt[0] - rad;
-      diff1.pt[1] = diff.pt[1] - rad;
-      diff2.pt[0] = diff.pt[0] + rad;
-      diff2.pt[1] = diff.pt[1] - rad;
-      diff3.pt[0] = diff.pt[0] + rad;
-      diff3.pt[1] = diff.pt[1] + rad;
-      diff4.pt[0] = diff.pt[0] - rad;
-      diff4.pt[1] = diff.pt[1] + rad;
+      diff1[0] = diff[0] - rad;
+      diff1[1] = diff[1] - rad;
+      diff2[0] = diff[0] + rad;
+      diff2[1] = diff[1] - rad;
+      diff3[0] = diff[0] + rad;
+      diff3[1] = diff[1] + rad;
+      diff4[0] = diff[0] - rad;
+      diff4[1] = diff[1] + rad;
       double di1, di2;
       bool adjacent = false;
       di1 = cross (diff1,adir);
@@ -3012,7 +3012,7 @@ Shape::AddChgt (int lastPointNo, int lastChgtPt, Shape * &shapeHead,
       else
 	{
 	  int old = lS->swsData[lB].leftRnd;
-	  if (pts[old].x.pt[0] > pts[lastPointNo].x.pt[0])
+	  if (pts[old].x[0] > pts[lastPointNo].x[0])
 	    lS->swsData[lB].leftRnd = lastPointNo;
 	}
       if (lS->swsData[lB].rightRnd < lastChgtPt)
@@ -3022,7 +3022,7 @@ Shape::AddChgt (int lastPointNo, int lastChgtPt, Shape * &shapeHead,
       else
 	{
 	  int old = lS->swsData[lB].rightRnd;
-	  if (pts[old].x.pt[0] < pts[lastPointNo].x.pt[0])
+	  if (pts[old].x[0] < pts[lastPointNo].x[0])
 	    lS->swsData[lB].rightRnd = lastPointNo;
 	}
     }
@@ -3053,7 +3053,7 @@ Shape::AddChgt (int lastPointNo, int lastChgtPt, Shape * &shapeHead,
       else
 	{
 	  int old = rS->swsData[rB].leftRnd;
-	  if (pts[old].x.pt[0] > pts[lastPointNo].x.pt[0])
+	  if (pts[old].x[0] > pts[lastPointNo].x[0])
 	    rS->swsData[rB].leftRnd = lastPointNo;
 	}
       if (rS->swsData[rB].rightRnd < lastChgtPt)
@@ -3063,7 +3063,7 @@ Shape::AddChgt (int lastPointNo, int lastChgtPt, Shape * &shapeHead,
       else
 	{
 	  int old = rS->swsData[rB].rightRnd;
-	  if (pts[old].x.pt[0] < pts[lastPointNo].x.pt[0])
+	  if (pts[old].x[0] < pts[lastPointNo].x[0])
 	    rS->swsData[rB].rightRnd = lastPointNo;
 	}
     }
@@ -3102,7 +3102,7 @@ Shape::Validate (void)
         double   atL, atR;
 	  if (TesteIntersection (this, this, i, j, atx, atL, atR, false))
 	    {
-	      printf ("%i %i  %f %f \n", i, j, atx.pt[0],atx.pt[1]);
+	      printf ("%i %i  %f %f \n", i, j, atx[0],atx[1]);
 	    }
 	}
     }
@@ -3198,12 +3198,12 @@ Shape::Avance (int lastPointNo, int lastChgtPt, Shape * lS, int lB, Shape * a,
   if (lS->swsData[lB].doneTo < lastChgtPt)
     {
       int lp = lS->swsData[lB].curPoint;
-      if (lp >= 0 && pts[lp].x.pt[1] + dd == pts[lastChgtPt].x.pt[1])
+      if (lp >= 0 && pts[lp].x[1] + dd == pts[lastChgtPt].x[1])
 	avoidDiag = true;
-      if (lS->eData[lB].rdx.pt[1] == 0)
+      if (lS->eData[lB].rdx[1] == 0)
 	{
 	  // tjs de gauche a droite et pas de diagonale
-	  if (lS->eData[lB].rdx.pt[0] >= 0)
+	  if (lS->eData[lB].rdx[0] >= 0)
 	    {
 	      for (int p = lftN; p <= rgtN; p++)
 		{
@@ -3220,17 +3220,17 @@ Shape::Avance (int lastPointNo, int lastChgtPt, Shape * lS, int lB, Shape * a,
 		}
 	    }
 	}
-      else if (lS->eData[lB].rdx.pt[1] > 0)
+      else if (lS->eData[lB].rdx[1] > 0)
 	{
-	  if (lS->eData[lB].rdx.pt[0] >= 0)
+	  if (lS->eData[lB].rdx[0] >= 0)
 	    {
 
 	      for (int p = lftN; p <= rgtN; p++)
 		{
-		  if (avoidDiag && p == lftN && pts[lftN].x.pt[0] == pts[lp].x.pt[0] + dd)
+		  if (avoidDiag && p == lftN && pts[lftN].x[0] == pts[lp].x[0] + dd)
 		    {
 		      if (lftN > 0 && lftN - 1 >= lastChgtPt
-			  && pts[lftN - 1].x.pt[0] == pts[lp].x.pt[0])
+			  && pts[lftN - 1].x[0] == pts[lp].x[0])
 			{
 			  DoEdgeTo (lS, lB, lftN - 1, direct, true);
 			  DoEdgeTo (lS, lB, lftN, direct, true);
@@ -3252,10 +3252,10 @@ Shape::Avance (int lastPointNo, int lastChgtPt, Shape * lS, int lB, Shape * a,
 
 	      for (int p = rgtN; p >= lftN; p--)
 		{
-		  if (avoidDiag && p == rgtN && pts[rgtN].x.pt[0] == pts[lp].x.pt[0] - dd)
+		  if (avoidDiag && p == rgtN && pts[rgtN].x[0] == pts[lp].x[0] - dd)
 		    {
 		      if (rgtN < nbPt && rgtN + 1 < lastPointNo
-			  && pts[rgtN + 1].x.pt[0] == pts[lp].x.pt[0])
+			  && pts[rgtN + 1].x[0] == pts[lp].x[0])
 			{
 			  DoEdgeTo (lS, lB, rgtN + 1, direct, true);
 			  DoEdgeTo (lS, lB, rgtN, direct, true);
@@ -3275,15 +3275,15 @@ Shape::Avance (int lastPointNo, int lastChgtPt, Shape * lS, int lB, Shape * a,
 	}
       else
 	{
-	  if (lS->eData[lB].rdx.pt[0] >= 0)
+	  if (lS->eData[lB].rdx[0] >= 0)
 	    {
 
 	      for (int p = rgtN; p >= lftN; p--)
 		{
-		  if (avoidDiag && p == rgtN && pts[rgtN].x.pt[0] == pts[lp].x.pt[0] - dd)
+		  if (avoidDiag && p == rgtN && pts[rgtN].x[0] == pts[lp].x[0] - dd)
 		    {
 		      if (rgtN < nbPt && rgtN + 1 < lastPointNo
-			  && pts[rgtN + 1].x.pt[0] == pts[lp].x.pt[0])
+			  && pts[rgtN + 1].x[0] == pts[lp].x[0])
 			{
 			  DoEdgeTo (lS, lB, rgtN + 1, direct, false);
 			  DoEdgeTo (lS, lB, rgtN, direct, false);
@@ -3305,10 +3305,10 @@ Shape::Avance (int lastPointNo, int lastChgtPt, Shape * lS, int lB, Shape * a,
 
 	      for (int p = lftN; p <= rgtN; p++)
 		{
-		  if (avoidDiag && p == lftN && pts[lftN].x.pt[0] == pts[lp].x.pt[0] + dd)
+		  if (avoidDiag && p == lftN && pts[lftN].x[0] == pts[lp].x[0] + dd)
 		    {
 		      if (lftN > 0 && lftN - 1 >= lastChgtPt
-			  && pts[lftN - 1].x.pt[0] == pts[lp].x.pt[0])
+			  && pts[lftN - 1].x[0] == pts[lp].x[0])
 			{
 			  DoEdgeTo (lS, lB, lftN - 1, direct, false);
 			  DoEdgeTo (lS, lB, lftN, direct, false);

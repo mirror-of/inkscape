@@ -1,3 +1,14 @@
+/*
+ * Classes for representing and manipulating URIs.
+ *
+ * Authors:
+ *   MenTaLguY <mental@rydia.net>
+ *
+ * Copyright (C) 2003 MenTaLguY
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
 #ifndef INKSCAPE_URI_H
 #define INKSCAPE_URI_H
 
@@ -52,6 +63,6 @@ private:
 	Impl *_impl;
 };
 
-};
+}; /* namespace Inkscape */
 
 #endif

@@ -191,8 +191,9 @@ Matrix Matrix::inverse() const
 	m.c[0] = 1.0; m.c[2] = 0.0;
 	m.c[1] = 0.0; m.c[3] = 1.0;
 	// translation
-	for(int i = 0; i < 2; i++)
-		m.c[4+i] = p.pt[i];
+	for ( int i = 0 ; i < 2 ; i++ ) {
+		m.c[4+i] = p[i];
+	}
 	return m;
 }*/
 
@@ -214,9 +215,9 @@ Matrix identity ()
 Matrix from_basis(const Point x_basis, const Point y_basis, const Point offset) {
 	Matrix m;
 	for (int i = 0; i < 2; i++) {
-		m.c[2*i + NR::X] = x_basis.pt[i];
-		m.c[2*i + NR::Y] = y_basis.pt[i];
-		m.c[4+i] = offset.pt[i];
+		m.c[2*i + NR::X] = x_basis[i];
+		m.c[2*i + NR::Y] = y_basis[i];
+		m.c[4+i] = offset[i];
 	}
 	return m;
 }
@@ -224,15 +225,15 @@ Matrix from_basis(const Point x_basis, const Point y_basis, const Point offset) 
 /*Matrix scale (const Point scale)
 {
 	Matrix m;
-	m.c[0] = scale.pt[NR::X];  m.c[2] = 0.0;
-	m.c[1] = 0.0;              m.c[3] = scale.pt[NR::Y];
+	m.c[0] = scale[NR::X];  m.c[2] = 0.0;
+	m.c[1] = 0.0;              m.c[3] = scale[NR::Y];
 	// translation
 	m.c[4] = 0.0;
 	m.c[5] = 0.0;
 	return m;
 }
 
-Matrix rotate (const NR::Coord theta)
+Matrix rotate(const NR::Coord theta)
 {
 	Matrix m;
 	NR::Coord sn = sin (theta);
@@ -245,10 +246,10 @@ Matrix rotate (const NR::Coord theta)
 	return m;
 }*/
 
-rotate::rotate (const NR::Coord theta)
+rotate::rotate(const NR::Coord theta)
 {
-	pt[X] = cos (theta);
-	pt[Y] = sin (theta);
+	(*this)[X] = cos(theta);
+	(*this)[Y] = sin(theta);
 }
 
 NR::Coord Matrix::det() const {
