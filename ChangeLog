@@ -1,3 +1,11 @@
+2004-06-20  MenTaLguY  <mental@rydia.net>
+
+	* src/desktop.cpp, src/managed.h, src/message-context.h,
+	  src/message-stack.h, src/message.h, src/view.cpp:
+
+	  Document classes, and change Managed to have an initial refcount
+	  of one at creation.
+
 2004-06-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/libnrtype/FontFactory.cpp, src/libnrtype/FontInstance.cpp,

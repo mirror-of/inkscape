@@ -348,7 +348,7 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
     desktop->sketch = (SPCanvasGroup *) sp_canvas_item_new (desktop->main, SP_TYPE_CANVAS_GROUP, NULL);
     desktop->controls = (SPCanvasGroup *) sp_canvas_item_new (desktop->main, SP_TYPE_CANVAS_GROUP, NULL);
 
-    desktop->selection = Inkscape::Managed::claim(new SPSelection (desktop));
+    desktop->selection = new SPSelection (desktop);
 
     /* Push select tool to the bottom of stack */
     sp_desktop_push_event_context (desktop, SP_TYPE_SELECT_CONTEXT, "tools.select", SP_EVENT_CONTEXT_STATIC);

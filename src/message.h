@@ -14,12 +14,23 @@
 
 namespace Inkscape {
 
+/**
+ * A hint about the meaning of a message; is it an ordinary message,
+ * a message advising the user of some significant or unexpected condition,
+ * or a message indicating an unambiguous error.
+ */
 enum MessageType {
     NORMAL_MESSAGE,
     WARNING_MESSAGE,
     ERROR_MESSAGE
 };
 
+/**
+ * An integer ID which identifies a displayed message in a particular
+ * Inkscape::MessageStack
+ *
+ * @see Inkscape::MessageStack
+ */
 typedef unsigned long MessageId;
 
 }
