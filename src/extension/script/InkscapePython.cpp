@@ -63,6 +63,7 @@ bool InkscapePython::interpretScript(char *codeStr)
     PyRun_SimpleString("inkscape = _inkscape_py.getInkscape()\n");
     PyRun_SimpleString(codeStr);
     Py_Finalize();
+    return true;
 }
 
     
@@ -81,7 +82,7 @@ bool InkscapePython::interpretFile(char *fileName)
     PyRun_SimpleFile(f, fileName);
     fclose(f);
     Py_Finalize();
-
+    return true;
 }
 
 

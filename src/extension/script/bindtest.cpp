@@ -16,37 +16,37 @@ static char *pythonCodeStr =
 "desktop  = inkscape.getDesktop()\n"
 "document = desktop.getDocument()\n"
 "document.hello()\n"
-"\n";
+"";
 
 int testPython()
 {
     Inkscape::Extension::Script::InkscapeScript scriptEngine;
-    printf("#####Executing Code#####\n");
-    printf("%s\n", pythonCodeStr);
-    printf("#####End#####\n");
+    printf("##### Python Test #####\n");
+    printf("===== CODE ====\n%s\n==============\n", pythonCodeStr);
     scriptEngine.interpretScript(pythonCodeStr, 
           Inkscape::Extension::Script::InkscapeScript::PYTHON);
+    printf("##### End Python #####\n\n");
     return TRUE;
 }
 
 static char *perlCodeStr =
 //"\n"
 //"$inkscape = inkscape_perlc::getInkscape();\n"
-"print \"inkscape: '$inkscape'\n\"; \n"
+"print \"inkscape: '$inkscape'\\n\"; \n"
 "$desktop  = $inkscape->getDesktop();\n"
 "$document = $desktop->getDocument();\n"
 "$document->hello()\n"
 //"reverse 'rekcaH lreP rehtonA tsuJ'\n"
-"\n";
+"";
 
 int testPerl()
 {
     Inkscape::Extension::Script::InkscapeScript scriptEngine;
-    printf("#####Executing Code#####\n");
-    printf("%s\n", perlCodeStr);
-    printf("#####End#####\n");
+    printf("##### Perl Test #####\n");
+    printf("===== CODE ====\n%s\n==============\n", perlCodeStr);
     scriptEngine.interpretScript(perlCodeStr,
          Inkscape::Extension::Script::InkscapeScript::PERL);
+    printf("##### End Perl #####\n\n");
     return TRUE;
 }
 
