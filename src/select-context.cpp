@@ -611,6 +611,30 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 
         case GDK_KEY_PRESS: // keybindings for select context
             switch (event->key.keyval) {
+                case GDK_Alt_L:
+                case GDK_Alt_R:
+                case GDK_Control_L:
+                case GDK_Control_R:
+                case GDK_Shift_L:
+                case GDK_Shift_R:
+                case GDK_Meta_L:  // Meta is when you press Shift+Alt (at least on my machine)
+                case GDK_Meta_R:
+                {
+                    bool shift = MOD__SHIFT || (event->key.keyval == GDK_Shift_L) || (event->key.keyval == GDK_Shift_R);
+                    bool ctrl = MOD__CTRL || (event->key.keyval == GDK_Control_L) || (event->key.keyval == GDK_Control_R);
+                    bool alt = MOD__ALT || (event->key.keyval == GDK_Alt_L) || (event->key.keyval == GDK_Alt_R) 
+                        || (event->key.keyval == GDK_Meta_L) || (event->key.keyval == GDK_Meta_R);
+
+                    gchar *tip = g_strdup_printf ("%s%s%s%s%s", 
+                                                  ctrl? _("Ctrl+click: select in groups") : "",
+                                                  ctrl && shift? "; " : "",
+                                                  shift? _("Shift+click: add to selection, toggle") : "",
+                                                  (ctrl || shift) && alt? "; " : "",
+                                                  alt? _("Alt+click: select under") : ""
+                        );
+			event_context->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, tip);
+                }
+                break;
                 case GDK_Left: // move selection left
                 case GDK_KP_Left:
                 case GDK_KP_4:
@@ -776,7 +800,21 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                     break;
             }
             break;
-
+        case GDK_KEY_RELEASE:
+            switch (event->key.keyval) {
+                case GDK_Alt_L:
+                case GDK_Alt_R:
+                case GDK_Control_L:
+                case GDK_Control_R:
+                case GDK_Shift_L:
+                case GDK_Shift_R:
+                case GDK_Meta_L:  // Meta is when you press Shift+Alt
+                case GDK_Meta_R:
+                    event_context->defaultMessageContext()->clear();
+                    break;
+                default:
+                    break;
+            }
         default:
             break;
     }
