@@ -34,8 +34,6 @@ namespace UI {
 namespace Dialogs {
 
 LayerPropertiesDialog::LayerPropertiesDialog()
-    : _button_apply(_("Apply")),
-      _button_close(_("Close"))
 {
     GtkWidget *dlg = GTK_WIDGET(gobj());
     g_assert(dlg);
@@ -54,13 +52,9 @@ LayerPropertiesDialog::LayerPropertiesDialog()
     mainVBox->pack_start(_layer_name_hbox, false, false, 4);
 
     // Buttons
-    _hbuttonbox.pack_start(_button_apply, false, false);
-    _hbuttonbox.pack_start(_button_close, false, false);
-    mainVBox->pack_end(_hbuttonbox, false, false);
-
-    _button_apply.signal_clicked()
+    add_button(_("Apply"), Gtk::RESPONSE_APPLY)->signal_clicked()
         .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::apply));
-    _button_close.signal_clicked()
+    add_button(_("Close"), Gtk::RESPONSE_CLOSE)->signal_clicked()
         .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::close));
 
     show_all_children();
