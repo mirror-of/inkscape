@@ -22,41 +22,7 @@ namespace Inkscape {
 namespace Util {
 
 template <typename BaseType, typename Strategy>
-class ForwardPointerIterator
-: public ForwardPointerIterator<BaseType const, Strategy>
-{
-public:
-    typedef BaseType value_type;
-    typedef typename Traits::Reference<value_type>::LValue reference;
-    typedef typename Traits::Reference<value_type>::RValue const_reference;
-    typedef typename Traits::Reference<value_type>::Pointer pointer;
-
-    typedef ForwardPointerIterator<BaseType const, Strategy> Ancestor;
-    typedef ForwardPointerIterator<BaseType, Strategy> Self;
-
-    ForwardPointerIterator() : Ancestor() {}
-    ForwardPointerIterator(pointer p) : Ancestor(p) {}
-
-    operator pointer() const {
-        return const_cast<pointer>(Ancestor::operator->());
-    }
-    reference operator*() const {
-        return const_cast<reference>(Ancestor::operator*());
-    }
-    pointer operator->() const {
-        return const_cast<pointer>(Ancestor::operator->());
-    }
-
-    Self &operator++() {
-        Ancestor::operator++();
-        return *this;
-    }
-    Self operator++(int) {
-        Self old(*this);
-        operator++();
-        return old;
-    }
-};
+class ForwardPointerIterator;
 
 template <typename BaseType, typename Strategy>
 class ForwardPointerIterator<BaseType const, Strategy> {
@@ -98,6 +64,43 @@ public:
 
 private:
     pointer _p;
+};
+
+template <typename BaseType, typename Strategy>
+class ForwardPointerIterator
+: public ForwardPointerIterator<BaseType const, Strategy>
+{
+public:
+    typedef BaseType value_type;
+    typedef typename Traits::Reference<value_type>::LValue reference;
+    typedef typename Traits::Reference<value_type>::RValue const_reference;
+    typedef typename Traits::Reference<value_type>::Pointer pointer;
+
+    typedef ForwardPointerIterator<BaseType const, Strategy> Ancestor;
+    typedef ForwardPointerIterator<BaseType, Strategy> Self;
+
+    ForwardPointerIterator() : Ancestor() {}
+    ForwardPointerIterator(pointer p) : Ancestor(p) {}
+
+    operator pointer() const {
+        return const_cast<pointer>(Ancestor::operator->());
+    }
+    reference operator*() const {
+        return const_cast<reference>(Ancestor::operator*());
+    }
+    pointer operator->() const {
+        return const_cast<pointer>(Ancestor::operator->());
+    }
+
+    Self &operator++() {
+        Ancestor::operator++();
+        return *this;
+    }
+    Self operator++(int) {
+        Self old(*this);
+        operator++();
+        return old;
+    }
 };
 
 }

@@ -1,3 +1,10 @@
+2004-10-13  MenTaLguY  <mental@rydia.net>
+
+	* src/util/list.h, src/util/forward-pointer-iterator.h:
+
+	  fixes to (hopefully) build with g++ 3.4 (and generally be less evil
+	  anyway)
+
 2004-10-14  Carl Hetherington <inkscape@carlh.net>
 
 	* src/Path.cpp, src/Path.h, src/PathConversion.cpp,

@@ -23,37 +23,7 @@ namespace Util {
 
 template <typename T> class MutableList;
 
-template <typename T>
-class List : public List<T const> {
-public:
-    typedef T value_type;
-    typedef typename Traits::Reference<value_type>::LValue reference;
-    typedef typename Traits::Reference<value_type>::RValue const_reference;
-    typedef typename Traits::Reference<value_type>::Pointer pointer;
-
-    List() : List<T const>() {}
-    explicit List(const_reference value,
-                  List<T> const &next=List<T>())
-    : List<T const>(value, next) {}
-
-    reference operator*() const { return _cell->value; }
-    pointer operator->() const { return &_cell->value; }
-
-    List<value_type> &operator++() {
-        _cell = _cell->next;
-        return *this;
-    }
-    List<value_type> operator++(int) {
-        List<value_type> old(*this);
-        _cell = _cell->next;
-        return old;
-    }
-
-    List<value_type> next() const {
-        List<value_type> next(*this);
-        return ++next;
-    }
-};
+template <typename T> class List;
 
 template <typename T>
 class List<T const> {
@@ -67,37 +37,41 @@ public:
 
     List() : _cell(NULL) {}
     explicit List(const_reference value,
-                  List<value_type> const &next=List<value_type>())
+                  List<T const> const &next=List<T const>())
     : _cell(new Cell(value, next._cell)) {}
 
     reference operator*() const { return _cell->value; }
     pointer operator->() const { return &_cell->value; }
 
-    bool operator==(List<value_type> const &other) const {
+    bool operator==(List<T const> const &other) const {
         return _cell == other._cell;
     }
-    bool operator!=(List<value_type> const &other) const {
+    bool operator!=(List<T const> const &other) const {
         return _cell != other._cell;
     }
 
-    List<value_type> &operator++() {
+    List<T const> &operator++() {
         _cell = _cell->next;
         return *this;
     }
-    List<value_type> operator++(int) {
-        List<value_type> old(*this);
+    List<T const> operator++(int) {
+        List<T const> old(*this);
         _cell = _cell->next;
         return old;
     }
 
     operator bool() const { return _cell != NULL; }
 
-    List<value_type> next() const {
-        List<value_type> next(*this);
-        return ++next;
+    List<T const> next() const {
+        return List<T const>(_cell->next);
     }
 
 protected:
+    List<value_type> setNext(List<value_type> const &next) {
+        _cell = next._cell;
+    }
+
+private:
     struct Cell : public GC::Managed<> {
         Cell() {}
         Cell(const_reference v, Cell *n) : value(v), next(n) {}
@@ -106,7 +80,47 @@ protected:
         Cell *next;
     };
 
+    explicit List(Cell *cell) : _cell(cell) {}
+
     Cell *_cell;
+};
+
+template <typename T>
+class List : public List<T const> {
+public:
+    typedef T value_type;
+    typedef typename Traits::Reference<value_type>::LValue reference;
+    typedef typename Traits::Reference<value_type>::RValue const_reference;
+    typedef typename Traits::Reference<value_type>::Pointer pointer;
+
+    List() : List<T const>() {}
+    explicit List(const_reference value,
+                  List<T> const &next=List<T>())
+    : List<T const>(value, next) {}
+
+    reference operator*() const {
+        return const_cast<reference>(List<T const>::operator*());
+    }
+    pointer operator->() const {
+        return const_cast<pointer>(List<T const>::operator->());
+    }
+
+    List<T> &operator++() {
+        List<T const>::operator++();
+        return *this;
+    }
+    List<T> operator++(int) {
+        List<T> old(*this);
+        List<T const>::operator++();
+        return old;
+    }
+
+    List<T> next() const {
+        return List<T>(List<T const>::next());
+    }
+
+private:
+    explicit List(List<T const> const &list) : List<T const>(list) {}
 };
 
 template <typename T>
@@ -118,23 +132,25 @@ public:
     : List<T>(value, next) {}
 
     MutableList<T> &operator++() {
-        _cell = _cell->next;
+        List<T>::operator++();
         return *this;
     }
     MutableList<T> operator++(int) {
         MutableList<T> old(*this);
-        _cell = _cell->next;
+        List<T>::operator++();
         return old;
     }
 
     MutableList<T> next() const {
-        MutableList<T> next(*this);
-        return ++next;
+        return MutableList<T>(List<T>::next());
     }
-    MutableList<T> setNext(MutableList<T> next) {
-        _cell->next = next._cell;
+    MutableList<T> setNext(MutableList<T> const &next) {
+        List<T>::setNext(next);
         return next;
     }
+
+private:
+    explicit MutableList(List<T> const &list) : List<T>(list) {}
 };
 
 template <typename T>
