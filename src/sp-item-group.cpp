@@ -369,7 +369,7 @@ static void sp_group_set(SPObject *object, unsigned key, char const *value) {
 
 	switch (key) {
 		case SP_ATTR_INKSCAPE_GROUPMODE: {
-			if (!strcmp(value, "layer")) {
+			if ( value && !strcmp(value, "layer") ) {
 				group->setLayerMode(SPGroup::LAYER);
 			} else {
 				group->setLayerMode(SPGroup::GROUP);
