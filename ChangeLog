@@ -1,3 +1,31 @@
+2003-12-09  bulia byak <bulia@dr.com>
+
+	* src/helper/png-write.c: fix for png comments (from sodipodi)
+
+	* src/nodepath.c: fix for 856700, 856686; a better control point positioning for
+	join_segment
+
+	* src/shortcuts.c: fix default shortcut for star tool
+
+	* src/prefs-utils.c src/prefs-utils.h: new *_limited functions to get data guarding
+	against through-the-roof values
+
+	* src/select-context.c src/node-context.c: using *_limited functions to get preference
+	values
+
+	* src/document-undo.c: fix in sp_document_maybe_done to combine same-key steps
+
+	* src/selection-chemistry.c src/nodepath.c: put subsequent same-direction arrow-key
+	movements into one undo step
+
+	* src/sp-text.c src/sp-text.h: removed the preservews argument of sp_text_insert
+
+	* src/text-context.c src/text-context.h: if there's no text object selected, keys are
+	not consumed; fixed passing unconsumed keys to parent context; any non-hex-digit now
+	cancels unimode
+
+	* src/dialogs/transformation.c: re-fixing pjrm's fix properly
+
 2003-12-08  bulia byak <bulia@dr.com>
 
 	* src/sp-text.c: fixed typing non-ascii chars; copied (with fixes) treatment of
