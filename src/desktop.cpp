@@ -42,6 +42,7 @@
 #include "widgets/icon.h"
 #include "widgets/widget-sizes.h"
 #include "widgets/spw-utilities.h"
+#include "widgets/spinbutton-events.h"
 #include "display/canvas-arena.h"
 #include "forward.h"
 #include "inkscape-private.h"
@@ -608,8 +609,7 @@ sp_desktop_set_coordinate_status (SPDesktop *desktop, gdouble x, gdouble y, guin
 
 	g_snprintf (cstr, 64, "%6.1f, %6.1f", x, y);
 
-	gtk_statusbar_pop (GTK_STATUSBAR (desktop->owner->coord_status), 0);
-	gtk_statusbar_push (GTK_STATUSBAR (desktop->owner->coord_status), 0, cstr);
+	gtk_label_set_text (GTK_LABEL (desktop->owner->coord_status), cstr);
 }
 
 const SPUnit *
@@ -705,6 +705,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 
 	GtkWidget *hbox, *vbox;
 	GtkWidget *sbar;
+	GtkWidget *coord_box;
 	GtkWidget *eventbox;
 	GtkTooltips *tt;
 	GtkStyle *style;
@@ -777,8 +778,7 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 	g_signal_connect (G_OBJECT (dtw->canvas), "event", G_CALLBACK (sp_desktop_widget_event), dtw);
       	gtk_container_add (GTK_CONTAINER (w), GTK_WIDGET (dtw->canvas));
 
-
-	/* Status bars */
+	// sticky zoom buton (FIXME: to be removed when we have this setting in preferences)
 	dtw->sticky_zoom = sp_button_new_from_data (SP_ICON_SIZE_BUTTON,
 						    SP_BUTTON_TYPE_TOGGLE,
 	                                            NULL,
@@ -787,43 +787,40 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
 						    tt);
 	gtk_box_pack_start (GTK_BOX (sbar), dtw->sticky_zoom, FALSE, FALSE, 0);
 
+	// zoom status spinbutton
 	dtw->zoom_status = gtk_spin_button_new_with_range (log(SP_DESKTOP_ZOOM_MIN)/log(2), log(SP_DESKTOP_ZOOM_MAX)/log(2), 0.1);
-	gtk_tooltips_set_tip (tt, dtw->zoom_status, _("Zoom"), _("Zoom"));
+	gtk_tooltips_set_tip (tt, dtw->zoom_status, _("Zoom"), NULL);
 	gtk_widget_set_usize (dtw->zoom_status, STATUS_ZOOM_WIDTH, -1);
 	gtk_entry_set_width_chars (GTK_ENTRY (dtw->zoom_status), 6);
-
-	// fixme
-	gtk_editable_set_editable (GTK_EDITABLE (dtw->zoom_status), FALSE);
-	g_object_set (G_OBJECT (dtw->zoom_status), "can-focus", (gboolean) FALSE, NULL);
-
 	gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (dtw->zoom_status), FALSE);
 	gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (dtw->zoom_status), GTK_UPDATE_ALWAYS);
 	g_signal_connect (G_OBJECT (dtw->zoom_status), "input", G_CALLBACK (sp_dtw_zoom_input), dtw);
 	g_signal_connect (G_OBJECT (dtw->zoom_status), "output", G_CALLBACK (sp_dtw_zoom_output), dtw);
+	gtk_object_set_data (GTK_OBJECT (dtw->zoom_status), "dtw", dtw->canvas);
+	gtk_signal_connect (GTK_OBJECT (dtw->zoom_status), "focus-in-event", GTK_SIGNAL_FUNC (spinbutton_focus_in), dtw->zoom_status);
+	gtk_signal_connect (GTK_OBJECT (dtw->zoom_status), "key-press-event", GTK_SIGNAL_FUNC (spinbutton_keypress), dtw->zoom_status);
 	dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "value_changed", G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
 	dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "populate_popup", G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
-
 	sp_set_font_size (dtw->zoom_status, STATUS_ZOOM_FONT_SIZE);
-
 	gtk_box_pack_start (GTK_BOX (sbar), dtw->zoom_status, FALSE, FALSE, 0);
 
 	/* connecting canvas, scrollbars, rulers, statusbar */
 	g_signal_connect (G_OBJECT (dtw->hadj), "value-changed", G_CALLBACK (sp_desktop_widget_adjustment_value_changed), dtw);
 	g_signal_connect (G_OBJECT (dtw->vadj), "value-changed", G_CALLBACK (sp_desktop_widget_adjustment_value_changed), dtw);
 
-	dtw->coord_status = gtk_statusbar_new ();
+	// cursor coordinates
+	coord_box = gtk_vbox_new (FALSE, 0);
+	dtw->coord_status = gtk_label_new ("");
+	// FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
+	gtk_tooltips_set_tip (tt, dtw->coord_status, _("Cursor coordinates"), NULL);
 	gtk_widget_set_usize (dtw->coord_status, STATUS_COORD_WIDTH, SP_ICON_SIZE_BUTTON);
-	gtk_statusbar_push (GTK_STATUSBAR (dtw->coord_status), 0, "");
-	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (dtw->coord_status), FALSE);
-
 	sp_set_font_size (dtw->coord_status, STATUS_COORD_FONT_SIZE);
+	gtk_box_pack_start (GTK_BOX (coord_box), dtw->coord_status, FALSE, FALSE, 2);
+	gtk_box_pack_start (GTK_BOX (sbar), coord_box, FALSE, FALSE, 1);
 
-	gtk_box_pack_start (GTK_BOX (sbar), dtw->coord_status, FALSE, FALSE, 2);
-
+	// statusbar
 	dtw->select_status = gtk_statusbar_new ();
-
 	sp_set_font_size (dtw->select_status, STATUS_BAR_FONT_SIZE);
-
 	// display the initial welcome message in the statusbar
 	gtk_statusbar_push (GTK_STATUSBAR (dtw->select_status), 0, _("Welcome to Inkscape! Use shape or freehand tools to create objects; use selector (arrow) to move or transform them."));
 	gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (dtw->select_status), TRUE);
@@ -1102,7 +1099,6 @@ sp_desktop_widget_new (SPNamedView *namedview)
 static void
 sp_desktop_widget_view_position_set (SPView *view, double x, double y, SPDesktopWidget *dtw)
 {
-	gchar cstr[64];
 	NR::Point origin = dtw->dt2r * (NR::Point(x, y) - dtw->ruler_origin);
 	/* fixme: */
 	GTK_RULER (dtw->hruler)->position = origin.pt[0];
@@ -1110,10 +1106,7 @@ sp_desktop_widget_view_position_set (SPView *view, double x, double y, SPDesktop
 	GTK_RULER (dtw->vruler)->position = origin.pt[1];
 	gtk_ruler_draw_pos (GTK_RULER (dtw->vruler));
 
-	g_snprintf (cstr, 64, "%6.1f, %6.1f", origin.pt[0], origin.pt[1]);
-
-	gtk_statusbar_pop (GTK_STATUSBAR (dtw->coord_status), 0);
-	gtk_statusbar_push (GTK_STATUSBAR (dtw->coord_status), 0, cstr);
+	sp_desktop_set_coordinate_status (SP_DESKTOP (view), origin.pt[0], origin.pt[1], 0);
 }
 
 /*
@@ -1593,10 +1586,34 @@ sp_desktop_widget_update_zoom (SPDesktopWidget *dtw)
 	g_signal_handlers_unblock_by_func (G_OBJECT (dtw->zoom_status), (gpointer)G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
 }
 
+gdouble
+sp_dtw_zoom_value_to_display (gdouble value)
+{
+	return floor (pow (2, value) * 100.0 + 0.5);
+}
+
+gdouble
+sp_dtw_zoom_display_to_value (gdouble value)
+{
+	return  log (value / 100.0) / log (2);
+}
+
 gint
 sp_dtw_zoom_input (GtkSpinButton *spin, gdouble *new_val, gpointer data)
 {
-	*new_val = gtk_spin_button_get_value (spin);
+	gdouble new_scrolled, new_typed;
+
+	new_scrolled = gtk_spin_button_get_value (spin);
+	const gchar *b = gtk_entry_get_text (GTK_ENTRY (spin));
+	new_typed= atof (b);
+
+	if (sp_dtw_zoom_value_to_display (new_scrolled) == new_typed) { // the new value is set by scrolling
+		*new_val = new_scrolled;
+	} else { // the new value is typed in
+		*new_val = sp_dtw_zoom_display_to_value (new_typed);
+	}
+
+	spinbutton_defocus (GTK_OBJECT (spin));
 	return TRUE;
 }
 
@@ -1604,7 +1621,7 @@ gboolean
 sp_dtw_zoom_output (GtkSpinButton *spin, gpointer data)
 {
 	gchar b[64];
-	g_snprintf (b, 64, "%4.0f%%", pow (2, gtk_spin_button_get_value (spin)) * 100.0);
+	g_snprintf (b, 64, "%4.0f%%", sp_dtw_zoom_value_to_display (gtk_spin_button_get_value (spin)));
 	gtk_entry_set_text (GTK_ENTRY (spin), b);
 	return TRUE;
 }
