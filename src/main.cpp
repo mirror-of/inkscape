@@ -277,9 +277,22 @@ sp_main_gui (int argc, const char **argv)
 			while (fl) {
 				SPDocument *doc;
 
-				doc = sp_module_system_open(NULL, (gchar *)fl->data);
+				try {
+					doc = sp_module_system_open(NULL, (gchar *)fl->data);
+				} catch (Inkscape::Extension::Input::no_extension_found &e) {
+					doc = NULL;
+				} catch (Inkscape::Extension::Input::open_failed &e) {
+					doc = NULL;
+				}
+
 				if (doc == NULL) {
-					doc = sp_module_system_open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), (gchar *)fl->data);
+					try {
+						doc = sp_module_system_open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), (gchar *)fl->data);
+					} catch (Inkscape::Extension::Input::no_extension_found &e) {
+						doc = NULL;
+					} catch (Inkscape::Extension::Input::open_failed &e) {
+						doc = NULL;
+					}
 				}
 				if (doc != NULL) {
 					if (sp_export_png) {

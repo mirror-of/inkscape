@@ -113,7 +113,15 @@ sp_file_exit (void)
 void
 sp_file_open (const gchar *uri, Inkscape::Extension::Extension * key)
 {
-    SPDocument *doc = sp_module_system_open (key, uri);
+    SPDocument *doc;
+	
+	try {
+		doc = sp_module_system_open (key, uri);
+	} catch (Inkscape::Extension::Input::no_extension_found &e) {
+		doc = NULL;
+	} catch (Inkscape::Extension::Input::open_failed &e) {
+		doc = NULL;
+	}
 
     if (doc) {
         SPViewWidget *dtw = sp_desktop_widget_new (sp_document_namedview (doc, NULL));
