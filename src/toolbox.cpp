@@ -1013,7 +1013,7 @@ sp_rtb_rx_value_changed (GtkAdjustment *adj, SPWidget *tbl)
     GtkWidget *us = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (tbl), "units");
     const SPUnit *unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
 
-    bool modmade = FALSE;
+    bool modmade = false;
     SPSelection *selection = SP_DT_SELECTION(desktop);
     const GSList *items = selection->itemList();
     for (; items != NULL; items = items->next) {
