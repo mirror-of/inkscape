@@ -6,8 +6,11 @@
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Frank Felfe <innerspace@iname.com>
+ *   MenTaLguY <mental@rydia.net>
  *
- * Copyright (C) 1999-2002 authors
+ * Copyright (C) 2004 MenTaLguY
+ * Copyright (C) 1999-2002 Frank Felfe
+ * Copyright (C) 1999-2002 Lauris Kaplinski
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -1133,60 +1136,79 @@ sp_selection_move_screen(gdouble dx, gdouble dy)
     }
 }
 
+namespace {
+
+template <typename D>
+SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
+                  bool only_in_viewport);
+
+template <typename D>
+SPItem *next_item_from_list(SPDesktop *desktop, GSList const *items,
+                            SPObject *root, bool only_in_viewport);
+
+struct Forward {
+    typedef SPObject *Iterator;
+
+    static Iterator children(SPObject *o) { return sp_object_first_child(o); }
+    static Iterator siblings_after(SPObject *o) { return SP_OBJECT_NEXT(o); }
+    static void dispose(Iterator i) {}
+
+    static SPObject *object(Iterator i) { return i; }
+    static Iterator next(Iterator i) { return SP_OBJECT_NEXT(i); }
+};
+
+struct Reverse {
+    typedef GSList *Iterator;
+
+    static Iterator children(SPObject *o) {
+        return make_list(o->firstChild(), NULL);
+    }
+    static Iterator siblings_after(SPObject *o) {
+        return make_list(SP_OBJECT_PARENT(o)->firstChild(), o);
+    }
+    static void dispose(Iterator i) {
+        g_slist_free(i);
+    }
+
+    static SPObject *object(Iterator i) {
+        return reinterpret_cast<SPObject *>(i->data);
+    }
+    static Iterator next(Iterator i) { return i->next; }
+
+private:
+    static GSList *make_list(SPObject *object, SPObject *limit) {
+        GSList *list=NULL;
+        while ( object != limit ) {
+            list = g_slist_prepend(list, object);
+            object = SP_OBJECT_NEXT(object);
+        }
+        return list;
+    }
+};
+
+}
+
 void
 sp_selection_item_next(void)
 {
-    SPDocument *document = SP_ACTIVE_DOCUMENT;
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    g_return_if_fail(document != NULL);
     g_return_if_fail(desktop != NULL);
     if (!SP_IS_DESKTOP(desktop)) {
         return;
     }
     SPSelection *selection = SP_DT_SELECTION(desktop);
+    SPObject *root = desktop->currentRoot();
 
-    // Get item list.
-    GSList *children = NULL;
-    if (SP_CYCLING == SP_CYCLE_VISIBLE) {
-        NRRect dbox;
-        sp_desktop_get_display_area(desktop, &dbox);
-        children = sp_document_items_in_box(document, desktop->dkey, &dbox);
-    } else {
-        children = sp_item_group_item_list(SP_GROUP(sp_document_root(document)));
-    }
+    SPItem *item=next_item_from_list<Forward>(desktop, selection->itemList(), root, SP_CYCLING == SP_CYCLE_VISIBLE);
 
-    // Compute next item.
-    if (children == NULL) {
-        return;
-    }
-    SPItem *item = NULL;
-    if (selection->isEmpty()) {
-        item = SP_ITEM(children->data);
-    } else {
-        GSList *l = g_slist_find(children, selection->itemList()->data);
-        if ( ( l == NULL ) || ( l->next == NULL ) ) {
-            item = SP_ITEM(children->data);
-        } else {
-            item = SP_ITEM(l->next->data);
-        }
-    }
-
-    // Set selection to item.
-    if (item != NULL) {
+    if (item) {
         selection->setItem(item);
-    } else {
-        return;
-    }
-
-    g_slist_free(children);
-
-    // Adjust visible area to see whole new selection.
-    if (SP_CYCLING == SP_CYCLE_FOCUS) {
-        scroll_to_show_item(desktop, item);
+        if ( SP_CYCLING == SP_CYCLE_FOCUS ) {
+            scroll_to_show_item(desktop, item);
+        }
     }
 }
 
-/* TODO: Much copy & paste code here; see if can merge with sp_selection_item_next. */
 void
 sp_selection_item_prev(void)
 {
@@ -1198,45 +1220,91 @@ sp_selection_item_prev(void)
         return;
     }
     SPSelection *selection = SP_DT_SELECTION(desktop);
+    SPObject *root = desktop->currentRoot();
 
-    // Get item list.
-    GSList *children = NULL;
-    if (SP_CYCLING == SP_CYCLE_VISIBLE) {
-        NRRect dbox;
-        sp_desktop_get_display_area(desktop, &dbox);
-        children = sp_document_items_in_box(document, desktop->dkey, &dbox);
-    } else {
-        children = sp_item_group_item_list(SP_GROUP(sp_document_root(document)));
-    }
+    SPItem *item=next_item_from_list<Reverse>(desktop, selection->itemList(), root, SP_CYCLING == SP_CYCLE_VISIBLE);
 
-    // Compute prev item.
-    if (children == NULL) {
-        return;
-    }
-    SPItem *item = NULL;
-    if (selection->isEmpty()) {
-        item = SP_ITEM(g_slist_last(children)->data);
-    } else {
-        GSList *l = children;
-        while ((l->next != NULL) && (l->next->data != selection->itemList()->data)) {
-            l = l->next;
-        }
-        item = SP_ITEM(l->data);
-    }
-
-    // Set selection to item.
-    if (item != NULL) {
+    if (item) {
         selection->setItem(item);
+        if ( SP_CYCLING == SP_CYCLE_FOCUS ) {
+            scroll_to_show_item(desktop, item);
+        }
+    }
+}
+
+namespace {
+
+template <typename D>
+SPItem *next_item_from_list(SPDesktop *desktop, GSList const *items,
+                            SPObject *root, bool only_in_viewport)
+{
+    SPObject *current=root;
+    while (items) {
+        SPItem *item=SP_ITEM(items->data);
+        if ( root->isAncestorOf(item) &&
+             ( !only_in_viewport || desktop->isWithinViewport(item) ) )
+        {
+            current = item;
+            break;
+        }
+        items = items->next;
+    }
+
+    GSList *path=NULL;
+    while ( current != root ) {
+        path = g_slist_prepend(path, current);
+        current = SP_OBJECT_PARENT(current);
+    }
+
+    SPItem *next;
+    // first, try from the current object
+    next = next_item<D>(desktop, path, root, only_in_viewport);
+    g_slist_free(path);
+
+    if (!next) { // if we ran out of objects, start over at the root
+        next = next_item<D>(desktop, NULL, root, only_in_viewport);
+    }
+
+    return next;
+}
+
+template <typename D>
+SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
+                  bool only_in_viewport)
+{
+    typename D::Iterator children;
+    typename D::Iterator iter;
+
+    SPItem *found=NULL;
+
+    if (path) {
+        SPObject *object=reinterpret_cast<SPObject *>(path->data);
+        g_assert(SP_OBJECT_PARENT(object) == root);
+        if (desktop->isLayer(object)) {
+            found = next_item<D>(desktop, path->next, object, only_in_viewport);
+        }
+        iter = children = D::siblings_after(object);
     } else {
-        return;
+        iter = children = D::children(root);
     }
 
-    g_slist_free(children);
-
-    // Adjust visible area to see whole new selection.
-    if (SP_CYCLING == SP_CYCLE_FOCUS) {
-        scroll_to_show_item(desktop, item);
+    while ( iter && !found ) {
+        SPObject *object=D::object(iter);
+        if (desktop->isLayer(object)) {
+            found = next_item<D>(desktop, NULL, object, only_in_viewport);
+        } else if ( SP_IS_ITEM(object) &&
+                    ( !only_in_viewport || desktop->isWithinViewport(SP_ITEM(object)) ) )
+        {
+            found = SP_ITEM(object);
+        }
+        iter = D::next(iter);
     }
+
+    D::dispose(children);
+
+    return found;
+}
+
 }
 
 /**

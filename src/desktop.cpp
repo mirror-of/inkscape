@@ -297,6 +297,14 @@ SPObject *SPDesktop::layerForObject(SPObject *object) {
     return object;
 }
 
+bool SPDesktop::isWithinViewport(SPItem *item) const {
+    NRRect viewport;
+    NRRect bbox;
+    sp_desktop_get_display_area(const_cast<SPDesktop *>(this), &viewport);
+    sp_item_bbox_desktop(item, &bbox);
+    return NR::Rect(viewport).contains(NR::Rect(bbox));
+}
+
 static void
 sp_desktop_request_redraw (SPView *view)
 {

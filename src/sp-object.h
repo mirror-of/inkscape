@@ -152,6 +152,7 @@ struct SPObject : public GObject {
 	bool isAncestorOf(SPObject *object);
 	SPObject *nearestCommonAncestor(SPObject *object);
 
+	bool hasChildren() const { return ( children != NULL ); }
 	SPObject *firstChild() { return children; }
 
 	SPObject *appendChildRepr(SPRepr *repr);

@@ -117,9 +117,10 @@ struct SPDesktop : public SPView {
 		return _layer_changed_signal.connect(slot);
 	}
 	SPObject *layerForObject(SPObject *object);
-	bool isLayer(SPObject *object) {
+	bool isLayer(SPObject *object) const {
 		return SP_IS_GROUP(object) && SP_GROUP(object)->effectiveLayerMode(this->dkey) == SPGroup::LAYER;
 	}
+	bool isWithinViewport(SPItem *item) const;
 
 	static void _set_status_message(SPView *view, Inkscape::MessageType type, gchar const *message);
 	static void _layer_activated(SPObject *layer, SPDesktop *desktop);

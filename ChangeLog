@@ -1,3 +1,17 @@
+2004-07-08  MenTaLguY  <mental@rydia.net>
+
+	* src/desktop.h, src/desktop.cpp:
+
+	  added SPDesktop::isWithinViewport() to conveniently determine
+	  if an item is within view
+
+	  also made isLayer() const
+
+	* src/sp-object.h: added SPObject::hasChildren() predicate
+
+	* src/selection-chemistry.cpp: rewrote sp_selection_item_next()
+	  and sp_selection_item_prev() to work with layers
+
 2004-07-08  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/libnrtype/FontFactory.cpp: disable printing of debug
