@@ -256,16 +256,10 @@ static void sp_genericellipse_snappoints(SPItem const *item, SnapPointsIter p)
 
 	NR::Matrix const i2d = sp_item_i2d_affine(item);
 
-	/* Use the bounding box corners */
-	NRRect bbox;
-	sp_item_invoke_bbox(item, &bbox, i2d, TRUE);
-	*p = NR::Point(bbox.x0, bbox.y0);
-	*p = NR::Point(bbox.x1, bbox.y0);
-	*p = NR::Point(bbox.x1, bbox.y1);
-	*p = NR::Point(bbox.x0, bbox.y1);
-
-	/* And the centre */
+	/* Add the centre */
 	*p = NR::Point(ge->cx.computed, ge->cy.computed) * i2d;
+
+	// TODO: add the ends of radii
 }
 
 void
