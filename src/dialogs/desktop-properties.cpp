@@ -1036,7 +1036,7 @@ sp_desktop_dialog(void)
         t = gtk_table_new (5, 2, FALSE);
         gtk_widget_show (t);
         gtk_container_set_border_width (GTK_CONTAINER (t), 4);
-        gtk_table_set_row_spacings (GTK_TABLE (t), 4);
+        gtk_table_set_row_spacings (GTK_TABLE (t), 1);
         gtk_table_set_col_spacings (GTK_TABLE (t), 4);
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
 
