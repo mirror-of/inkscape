@@ -864,7 +864,7 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 	if (dc->npoints == SAMPLING_SIZE-1 || release) {
 #define BEZIER_SIZE       4
 #define BEZIER_MAX_DEPTH  4
-#define BEZIER_MAX_LENGTH (BEZIER_SIZE * (2 << (BEZIER_MAX_DEPTH-1)))
+#define BEZIER_MAX_LENGTH (BEZIER_SIZE << (BEZIER_MAX_DEPTH-1))
 		SPCurve *curve;
 		NRPoint b1[BEZIER_MAX_LENGTH], b2[BEZIER_MAX_LENGTH];
 		gint nb1, nb2;            /* number of blocks */
@@ -887,8 +887,10 @@ fit_and_split_calligraphics (SPDynaDrawContext *dc, gboolean release)
 
 		nb1 = sp_bezier_fit_cubic_r (b1, dc->point1, dc->npoints,
 					     tolerance, BEZIER_MAX_DEPTH);
+		g_assert (nb1 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b1)));
 		nb2 = sp_bezier_fit_cubic_r (b2, dc->point2, dc->npoints,
 					     tolerance, BEZIER_MAX_DEPTH);
+		g_assert (nb2 * BEZIER_SIZE <= gint(G_N_ELEMENTS(b2)));
 		if (nb1 != -1 && nb2 != -1) {
 			NRPoint *bp1, *bp2;
 			/* Fit and draw and reset state */
