@@ -56,6 +56,7 @@ static gint sptc_focus_in (GtkWidget *widget, GdkEventFocus *event, SPTextContex
 static gint sptc_focus_out (GtkWidget *widget, GdkEventFocus *event, SPTextContext *tc);
 static void sptc_commit (GtkIMContext *imc, gchar *string, SPTextContext *tc);
 static void sptc_preedit_changed (GtkIMContext *imc, SPTextContext *tc);
+static void sp_text_context_preedit_reset (SPTextContext *tc);
 
 static SPEventContextClass * parent_class;
 
@@ -285,6 +286,7 @@ sp_text_context_setup_text (SPTextContext *tc)
 	sp_repr_set_double_attribute (rtext, "y", tc->pdoc.y);
 	/* Create <tspan> */
 	rtspan = sp_repr_new ("tspan");
+	sp_repr_set_attr (rtspan, "xml:space", "preserve"); // we preserve spaces in the text objects we create
 	sp_repr_add_child (rtext, rtspan, NULL);
 	sp_repr_unref (rtspan);
 	/* Create TEXT */
@@ -314,31 +316,32 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 			NRPointF dtp;
 			/* Button 1, set X & Y & new item */
 			sp_selection_empty (SP_DT_SELECTION (ec->desktop));
-			sp_desktop_w2d_xy_point (ec->desktop, &dtp, event->button.x, event->button.y);
+			sp_desktop_w2d_xy_point (ec->desktop, &dtp, (float) event->button.x, (float) event->button.y);
 			sp_desktop_dt2root_xy_point (ec->desktop, &tc->pdoc, dtp.x, dtp.y);
 			/* Cursor */
 			tc->show = TRUE;
 			tc->phase = 1;
 			sp_canvas_item_show (tc->cursor);
-			sp_desktop_w2d_xy_point (ec->desktop, &dtp, event->button.x, event->button.y);
+			sp_desktop_w2d_xy_point (ec->desktop, &dtp, (float) event->button.x, (float) event->button.y);
 			sp_ctrlline_set_coords (SP_CTRLLINE (tc->cursor), dtp.x, dtp.y, dtp.x + 32, dtp.y);
 			/* Processed */
 			return TRUE;
 		}
 		break;
 	case GDK_KEY_PRESS:
-		if (!tc->unimode && tc->imc && gtk_im_context_filter_keypress (tc->imc, &event->key)) {
+		if (!tc->unimode && tc->imc && gtk_im_context_filter_keypress (tc->imc, (GdkEventKey*) event)) {
 			return TRUE;
 		}
 
 		if (!tc->text) sp_text_context_setup_text (tc);
+		else sp_text_context_preedit_reset (tc);
 		g_assert (tc->text != NULL);
 		style = SP_OBJECT_STYLE (tc->text);
 
 		if (event->key.state & GDK_CONTROL_MASK) {
 			switch (event->key.keyval) {
 			case GDK_space:
-				/* Nonbreaking space */
+				/* Non-break space */
 				tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, "\302\240", TRUE);
 				sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 				return TRUE;
@@ -354,7 +357,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				if (tc->imc) {
 					gtk_im_context_reset (tc->imc);
 				}
-                                return TRUE;				return TRUE;
+                                return TRUE;
 			default:
 				break;
 			}
@@ -432,14 +435,17 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				tc->ipos = sp_text_end_of_line (SP_TEXT (tc->text), tc->ipos);
 				sp_text_context_update_cursor (tc);
 				return TRUE;
-			default:
+			case GDK_Escape:
+				sp_selection_empty (SP_DT_SELECTION (ec->desktop));
 				return TRUE;
+			default:
+				return FALSE;
 				break;
 			}
 		}
 		break;
 	case GDK_KEY_RELEASE:
-		if (!tc->unimode && tc->imc && gtk_im_context_filter_keypress (tc->imc, &event->key)) {
+		if (!tc->unimode && tc->imc && gtk_im_context_filter_keypress (tc->imc, (GdkEventKey*) event)) {
 			return TRUE;
 		}
 		break;
@@ -539,11 +545,13 @@ static void
 sp_text_context_forget_text (SPTextContext *tc)
 {
 	SPItem *ti;
+	if (! tc->text) return;
+	if( tc->preedit_string ) sp_text_context_preedit_reset (tc);
 	ti = tc->text;
 	/* We have to set it to zero,
 	 * or selection changed signal messes everything up */
 	tc->text = NULL;
-	if (ti && sp_text_is_empty (SP_TEXT (ti))) {
+	if (sp_text_is_empty (SP_TEXT (ti))) {
 		sp_repr_unparent (SP_OBJECT_REPR (ti));
 	}
 }
@@ -567,6 +575,8 @@ sptc_commit (GtkIMContext *imc, gchar *string, SPTextContext *tc)
 {
 	if (!tc->text) sp_text_context_setup_text (tc);
 
+	if (!tc->preedit_string ) sp_text_context_preedit_reset (tc);
+
 	tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, string, TRUE);
 
 	sp_document_done (SP_OBJECT_DOCUMENT (tc->text));
@@ -577,16 +587,24 @@ sptc_preedit_changed (GtkIMContext *imc, SPTextContext *tc)
 {
 	gint cursor_pos;
 
-	if( tc->preedit_string != NULL ) {
-		sp_text_delete (SP_TEXT (tc->text), tc->ipos, tc->ipos + g_utf8_strlen(tc->preedit_string, -1));
-		
-		g_free(tc->preedit_string);
-		tc->preedit_string = NULL;
-	}
+	sp_text_context_preedit_reset (tc);
 
 	gtk_im_context_get_preedit_string (tc->imc,
 					   &tc->preedit_string, NULL,
 					   &cursor_pos);
-	sp_text_insert (SP_TEXT (tc->text), tc->ipos, tc->preedit_string, FALSE);
+	if(tc->preedit_string != NULL) {
+		sp_text_insert (SP_TEXT (tc->text), tc->ipos, tc->preedit_string, FALSE);
+	}
 	sp_document_done (SP_OBJECT_DOCUMENT (tc->text));
+}
+
+static void
+sp_text_context_preedit_reset (SPTextContext *tc)
+{
+       if( tc->preedit_string != NULL ) {
+               sp_text_delete (SP_TEXT (tc->text), tc->ipos, tc->ipos + g_utf8_strlen(tc->preedit_string, -1));
+
+               g_free(tc->preedit_string);
+               tc->preedit_string = NULL;
+       }
 }
