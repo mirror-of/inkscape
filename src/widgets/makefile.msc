@@ -8,14 +8,14 @@ PKG_CFLAGS = \
 	-FImsvc_recommended_pragmas.h \
 	-I$(PRJ_TOP) -I.. \
 	-I..\
-	$(GLIB_CFLAGS) $(LIBART_CFLAGS) $(GTK2_CFLAGS)
+	$(GLIB_CFLAGS) $(GTK2_CFLAGS)
 
 PKG_LINK = \
 	..\libnr\libnr-$(PKG_VER).lib \
 	..\libnrtype\libnrtype-$(PKG_VER).lib \
 	..\xml\sp-xml-$(PKG_VER).lib \
 	..\svg\sp-svg-$(PKG_VER).lib \
-	$(GLIB_LIBS) $(GTK2_LIBS) $(LIBART_LIBS) 
+	$(GLIB_LIBS) $(GTK2_LIBS)
 
 # $(PNG_LIBS) 
 # $(PNG_CFLAGS) 

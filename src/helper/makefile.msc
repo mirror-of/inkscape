@@ -7,11 +7,11 @@ PKG_VER = 0.32
 PKG_CFLAGS = \
 	-FImsvc_recommended_pragmas.h \
 	-I$(PRJ_TOP) -I.. \
-	$(GLIB_CFLAGS) $(LIBART_CFLAGS) $(GTK2_CFLAGS) $(PNG_CFLAGS)
+	$(GLIB_CFLAGS) $(GTK2_CFLAGS) $(PNG_CFLAGS)
 
 PKG_LINK = \
 	..\libnr\libnr-$(PKG_VER).lib \
-	$(GLIB_LIBS) $(GTK2_LIBS) $(LIBART_LIBS) $(PNG_LIBS) 
+	$(GLIB_LIBS) $(GTK2_LIBS) $(PNG_LIBS)
 
 #$(LIBXML2_LIBS) \
 

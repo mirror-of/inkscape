@@ -8,7 +8,7 @@ PKG_CFLAGS = \
 	-FImsvc_recommended_pragmas.h \
 	-I$(PRJ_TOP) -I.. \
 	-I..\
-	$(GLIB_CFLAGS) $(LIBART_CFLAGS) $(GTK2_CFLAGS)
+	$(GLIB_CFLAGS) $(GTK2_CFLAGS)
 
 OBJECTS = \
 	nr-arena.obj \

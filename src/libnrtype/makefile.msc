@@ -18,12 +18,12 @@ PKG_CFLAGS = \
 	-FImsvc_recommended_pragmas.h \
 	-I$(PRJ_TOP) -I.. \
 	-I..\
-	$(GLIB_CFLAGS) $(LIBART_CFLAGS) $(FREETYPE2_CFLAGS)
+	$(GLIB_CFLAGS) $(FREETYPE2_CFLAGS)
 
 PKG_LINK = \
 	cp/sp-cp.lib \
 	../libnr/libnr-$(PKG_VER).lib \
-	$(GLIB_LIBS) $(LIBART_LIBS) $(FREETYPE2_LIBS) \
+	$(GLIB_LIBS) $(FREETYPE2_LIBS) \
 	gdi32.lib
 
 # LDFLAGS = $(LDFLAGS)  /nodefaultlib:libcmt

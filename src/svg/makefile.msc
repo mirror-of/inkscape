@@ -7,10 +7,10 @@ PKG_VER = 0.32
 PKG_CFLAGS = \
 	-FImsvc_recommended_pragmas.h \
 	-I$(PRJ_TOP) -I.. \
-	$(GLIB_CFLAGS) $(LIBART_CFLAGS)
+	$(GLIB_CFLAGS)
 
 PKG_LINK = \
-	$(GLIB_LIBS) $(LIBART_LIBS) \
+	$(GLIB_LIBS)	\
 	..\libnr\libnr-$(PKG_VER).lib
 
 OBJECTS = \
