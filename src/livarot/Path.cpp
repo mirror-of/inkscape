@@ -6,6 +6,7 @@
  *
  */
 
+#include <iostream>
 #include <glib.h>
 #include "Path.h"
 #include "livarot/path-description.h"
@@ -38,54 +39,15 @@ Path::~Path()
 }
 
 // debug function do dump the path contents on stdout
-void
-Path::Affiche()
+void Path::Affiche()
 {
-  printf("path: %i cmds\n",descr_cmd.size());
-  for (int i=0;i<int(descr_cmd.size());i++) {
-    int const typ = descr_cmd[i]->getType();
-    printf("cmd %i : t=%i ",i,typ);
-    switch ( typ ) {
-      case descr_lineto:
-      {
-        PathDescrLineTo *nData = dynamic_cast<PathDescrLineTo *>(descr_cmd[i]);
-        printf("  l %f %f",nData->p[0],nData->p[1]); // localizing ok
-      }
-        break;
-      case descr_moveto:
-      {
-        PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo *>(descr_cmd[i]);
-        printf("  m %f %f",nData->p[0],nData->p[1]); // localizing ok
-      }
-        break;
-      case descr_arcto:
-      {
-        PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[i]);
-        printf("  a %f %f %f %f %f %i %i",nData->p[0],nData->p[1],nData->rx,nData->ry,nData->angle,((nData->clockwise)?1:0),((nData->large)?1:0)); // localizing ok
-      }
-        break;
-      case descr_cubicto:
-      {
-        PathDescrCubicTo *nData = dynamic_cast<PathDescrCubicTo *>(descr_cmd[i]);
-        printf("  c %f %f %f %f %f %f",nData->p[0],nData->p[1],nData->start[0],nData->start[1],nData->end[0],nData->end[1]); // localizing ok
-      }
-        break;
-      case descr_bezierto:
-      {
-        PathDescrBezierTo *nData = dynamic_cast<PathDescrBezierTo *>(descr_cmd[i]);
-        printf("  b %f %f %i",nData->p[0],nData->p[1],nData->nb); // localizing ok
-      }
-        break;
-      case descr_interm_bezier:
-      {
-        PathDescrIntermBezierTo *nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[i]);
-        printf("  i %f %f",nData->p[0],nData->p[1]); // localizing ok
-      }
-        break;
+    std::cout << "path: " << descr_cmd.size() << " commands." << std::endl;
+    for (std::vector<PathDescr*>::const_iterator i = descr_cmd.begin(); i != descr_cmd.end(); i++) {
+        (*i)->dump(std::cout);
+        std::cout << std::endl;
     }
-    printf("\n");
-  }
-  printf("\n");
+
+    std::cout << std::endl;
 }
 
 void
@@ -697,57 +659,8 @@ Path::PointAndTangentAt (int piece, double at, NR::Point & pos, NR::Point & tgt)
 
 void Path::Transform(const NR::Matrix &trans)
 {
-    NR::Matrix trTrans = trans;
-    trTrans[4] = trTrans[5] = 0;
-
-    for (int i = 0; i < int(descr_cmd.size()); i++) {
-        
-        switch ( descr_cmd[i]->getType() ) {
-      
-            case descr_lineto:
-            {
-                PathDescrLineTo *nData = dynamic_cast<PathDescrLineTo *>(descr_cmd[i]);
-                nData->p = nData->p * trans;
-            }
-            break;
-            
-            case descr_moveto:
-            {
-                PathDescrMoveTo *nData = dynamic_cast<PathDescrMoveTo *>(descr_cmd[i]);
-                nData->p = nData->p * trans;
-            }
-            break;
-            
-            case descr_arcto:
-            {
-                PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[i]);
-                nData->p = nData-> p * trans;
-            }
-            break;
-            
-            case descr_cubicto:
-            {
-                PathDescrCubicTo *nData = dynamic_cast<PathDescrCubicTo *>(descr_cmd[i]);
-                nData->start = nData->start * trTrans;
-                nData->end = nData->end * trTrans;
-                nData->p = nData->p * trans;
-            }
-            break;
-
-            case descr_bezierto:
-            {
-                PathDescrBezierTo *nData = dynamic_cast<PathDescrBezierTo *>(descr_cmd[i]);
-                nData->p = nData->p * trans;
-            }
-            break;
-
-            case descr_interm_bezier:
-            {
-                PathDescrIntermBezierTo *nData = dynamic_cast<PathDescrIntermBezierTo *>(descr_cmd[i]);
-                nData->p = nData->p * trans;
-            }
-            break;
-        }
+    for (std::vector<PathDescr*>::iterator i = descr_cmd.begin(); i != descr_cmd.end(); i++) {
+        (*i)->transform(trans);
     }
 }
 

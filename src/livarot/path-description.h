@@ -34,8 +34,10 @@ struct PathDescr
     flags |= t;
   }
   
-  virtual void dumpSVG(Inkscape::SVGOStringStream &s, NR::Point const &last) const {};
+  virtual void dumpSVG(Inkscape::SVGOStringStream &s, NR::Point const &last) const {}
   virtual PathDescr *clone() const = 0;
+  virtual void transform(NR::Matrix const &t) {}
+  virtual void dump(std::ostream &s) const {}
   
   int    flags;         // most notably contains the path command no
   int    associated;		// index in the polyline of the point that ends the path portion of this command
@@ -50,6 +52,8 @@ struct PathDescrMoveTo : public PathDescr
   
   void dumpSVG(Inkscape::SVGOStringStream &s, NR::Point const &last) const;
   PathDescr *clone() const;
+  void transform(NR::Matrix const &t);
+  void dump(std::ostream &s) const;
 
   NR::Point p;
 };
@@ -61,6 +65,8 @@ struct PathDescrLineTo : public PathDescr
   
   void dumpSVG(Inkscape::SVGOStringStream &s, NR::Point const &last) const;
   PathDescr *clone() const;
+  void transform(NR::Matrix const &t);
+  void dump(std::ostream &s) const;
   
   NR::Point p;
 };
@@ -72,6 +78,8 @@ struct PathDescrBezierTo : public PathDescr
     : PathDescr(descr_bezierto), p(pp), nb(n) {}
   
   PathDescr *clone() const;
+  void transform(NR::Matrix const &t);
+  void dump(std::ostream &s) const;
   
   NR::Point p;	      // the endpoint's coordinates
   int nb;             // number of control points, stored in the next path description commands
@@ -86,6 +94,8 @@ struct PathDescrIntermBezierTo : public PathDescr
     : PathDescr(descr_interm_bezier), p(pp) {}
 
   PathDescr *clone() const;
+  void transform(NR::Matrix const &t);
+  void dump(std::ostream &s) const;
   
   NR::Point p;			// control point coordinates
 };
@@ -98,6 +108,8 @@ struct PathDescrCubicTo : public PathDescr
   
   void dumpSVG(Inkscape::SVGOStringStream &s, NR::Point const &last) const;
   PathDescr *clone() const;
+  void transform(NR::Matrix const &t);
+  void dump(std::ostream &s) const;
   
   NR::Point p;
   NR::Point start;
@@ -112,6 +124,8 @@ struct PathDescrArcTo : public PathDescr
   
   void dumpSVG(Inkscape::SVGOStringStream &s, NR::Point const &last) const;
   PathDescr *clone() const;
+  void transform(NR::Matrix const &t);
+  void dump(std::ostream &s) const;
   
   NR::Point p;
   double rx;
