@@ -3368,7 +3368,7 @@ msgstr "%sにリンク"
 
 #: src/sp-ellipse.cpp:437
 msgid "<b>Ellipse</b>"
-msgstr "<b>楕円<b>"
+msgstr "<b>楕円</b>"
 
 #: src/sp-ellipse.cpp:582
 msgid "<b>Circle</b>"

@@ -4108,7 +4108,7 @@ msgid ""
 "<b>Click</b> or <b>drag around an area</b> to zoom in, <b>Shift+click</b> to "
 "zoom out."
 msgstr ""
-"<b>Haga clic</b> o <b>arrastre alrededor de un área<7b> para hacer zoom, "
+"<b>Haga clic</b> o <b>arrastre alrededor de un área</b> para hacer zoom, "
 "<b>Mayús+clic</b> para alejar."
 
 #: src/tools-switch.cpp:189

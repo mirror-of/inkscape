@@ -3546,7 +3546,7 @@ msgstr ""
 #, c-format
 msgid "<b>Scale</b>: %0.2f%% x %0.2f%%; with <b>Ctrl</b> to lock ratio"
 msgstr ""
-"<b>Skalierung</b<: %0.2f%% x %0.2f%%; Höhen-Breitenverhältnis mit <b>Strg</"
+"<b>Skalierung</b>: %0.2f%% x %0.2f%%; Höhen-Breitenverhältnis mit <b>Strg</"
 "b> beibehalten"
 
 # !!!

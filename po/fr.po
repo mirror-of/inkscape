@@ -45,7 +45,7 @@ msgid ""
 "<b>Ellipse</b>: %s x %s; with <b>Ctrl</b> to make circle or integer-ratio "
 "ellipse; with <b>Shift</b> to draw around the starting point"
 msgstr ""
-"<b>Ellipse</B> : %s x %s; <b>Ctrl</b> pour fabriquer des cercles ou des "
+"<b>Ellipse</b> : %s x %s; <b>Ctrl</b> pour fabriquer des cercles ou des "
 "ellipses de rayon entier, <b>Maj</b> pour dessiner autour du point de départ"
 
 #. TRANSLATORS: object factory is an object that produces other objects

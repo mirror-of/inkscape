@@ -3446,7 +3446,7 @@ msgid ""
 "<b>Rotate</b> selection; with <b>Ctrl</b> to snap angle; with <b>Shift</b> "
 "to rotate around the opposite corner"
 msgstr ""
-"<b>Roter</b> utvalet. Bruk <b>Ctrl</b> for stegrotering og <b>Shift</ for å "
+"<b>Roter</b> utvalet. Bruk <b>Ctrl</b> for stegrotering og <b>Shift</b> for å "
 "rotera rundt motståande hjørne."
 
 #: src/seltrans.cpp:776 src/seltrans.cpp:856
