@@ -2,6 +2,9 @@
 
 	* src/interface.c: switched to GNOME HIG menu style
 
+	* src/toolbox.c: gave the aux toolbox a fixed (minimum) size so
+	  the workspace will jiggle less as different tools are selected.
+
 	* src/utest/Makefile.am, src/utest/utest.c, src/utest/utest.h,
 	  src/xml/Makefile.am: turned the utest stuff into a giant .h
 	  file again, which hopefully won't confuse things like the .inc

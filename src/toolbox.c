@@ -151,6 +151,16 @@ sp_tool_toolbox_new ()
 	return tb;
 }
 
+static void
+aux_toolbox_size_request (GtkWidget *widget,
+                          GtkRequisition *requisition,
+                          gpointer user_data)
+{
+	if ( requisition->height < 28 ) {
+		requisition->height = 28;
+	}
+}
+
 GtkWidget *
 sp_aux_toolbox_new ()
 {
@@ -170,6 +180,8 @@ sp_aux_toolbox_new ()
 
 	update_aux_toolbox (NULL, NULL, tb);
 	gtk_widget_set_sensitive (tb, FALSE);
+
+	g_signal_connect_after(G_OBJECT(tb), "size_request", G_CALLBACK(aux_toolbox_size_request), NULL);
 
 	return tb;
 }
