@@ -575,8 +575,21 @@ sp_export_selection_changed ( Inkscape::Application *inkscape,
                               GtkObject *base )
 {
 //  std::cout << "Selection Changed" << std::endl;
+    static bool was_empty;
     selection_type current_key;
     current_key = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
+
+    if ((current_key == SELECTION_DRAWING || current_key == SELECTION_PAGE) &&
+            (SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty() == false &&
+            was_empty) {
+        gtk_toggle_button_set_active 
+            ( GTK_TOGGLE_BUTTON ( gtk_object_get_data (base, selection_names[SELECTION_SELECTION])), 
+              TRUE );
+    }
+    was_empty = (SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty();
+
+    current_key = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
+
     if (inkscape &&
             SP_IS_INKSCAPE (inkscape) &&
             desktop &&
