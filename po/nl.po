@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sodipodi cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-01 01:39-0700\n"
+"POT-Creation-Date: 2004-04-05 22:49-0700\n"
 "PO-Revision-Date: 2003-09-24 22:13+0200\n"
 "Last-Translator: Jeroen van der Vegt <jeroen@dirck.mine.nu>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -44,37 +44,37 @@ msgstr ""
 msgid "Move %s"
 msgstr "Beweeg"
 
-#: src/desktop.cpp:818
+#: src/desktop.cpp:821
 msgid "Zoom drawing if window size changes"
 msgstr "Tekening schalen wanneer de schermgrootte veranderd"
 
-#: src/desktop.cpp:824 src/verbs.cpp:865
+#: src/desktop.cpp:827 src/verbs.cpp:865
 msgid "Zoom"
 msgstr "Zoomen"
 
 #. FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
-#: src/desktop.cpp:847
+#: src/desktop.cpp:850
 msgid "Cursor coordinates"
 msgstr ""
 
 #. display the initial welcome message in the statusbar
-#: src/desktop.cpp:857
+#: src/desktop.cpp:860
 msgid ""
 "Welcome to Inkscape! Use shape or freehand tools to create objects; use "
 "selector (arrow) to move or transform them."
 msgstr ""
 
-#: src/desktop.cpp:906
+#: src/desktop.cpp:909
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:908
+#: src/desktop.cpp:911
 #, c-format
 msgid "%s - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:1042
+#: src/desktop.cpp:1045
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -83,285 +83,294 @@ msgid ""
 "If you close without saving, your changes will be discarded."
 msgstr ""
 
-#: src/desktop.cpp:1056
+#: src/desktop.cpp:1059 src/desktop.cpp:1118
 msgid "Close _without saving"
 msgstr ""
 
-#: src/desktop.cpp:1348
+#: src/desktop.cpp:1103
+#, c-format
+msgid ""
+"<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
+"format (%s) that may cause data loss!</span>\n"
+"\n"
+"Do you want to save this file in another format?"
+msgstr ""
+
+#: src/desktop.cpp:1411
 msgid "No previous zoom."
 msgstr ""
 
-#: src/desktop.cpp:1377
+#: src/desktop.cpp:1440
 msgid "No next zoom."
 msgstr ""
 
 #. Page page
-#: src/desktop.cpp:1771 src/dialogs/align.cpp:453
-#: src/dialogs/desktop-properties.cpp:519 src/dialogs/export.cpp:273
+#: src/desktop.cpp:1834 src/dialogs/align.cpp:452
+#: src/dialogs/desktop-properties.cpp:516 src/dialogs/export.cpp:273
 msgid "Page"
 msgstr "Pagina"
 
-#: src/desktop.cpp:1775 src/dialogs/align.cpp:456 src/dialogs/export.cpp:280
+#: src/desktop.cpp:1838 src/dialogs/align.cpp:455 src/dialogs/export.cpp:280
 msgid "Drawing"
 msgstr "Tekening"
 
-#: src/desktop.cpp:1779 src/dialogs/align.cpp:459 src/dialogs/export.cpp:287
+#: src/desktop.cpp:1842 src/dialogs/align.cpp:458 src/dialogs/export.cpp:287
 msgid "Selection"
 msgstr "Selectie"
 
-#: src/dialogs/align.cpp:290
+#: src/dialogs/align.cpp:289
 msgid "Right side of aligned objects to left side of anchor"
 msgstr "Rechterkant van de objecten oplijnen met de linkerkant van het anker"
 
-#: src/dialogs/align.cpp:292
+#: src/dialogs/align.cpp:291
 msgid "Left side of aligned objects to left side of anchor"
 msgstr "Linkerkant van de objecten oplijnen met de linkerkant van het anker"
 
-#: src/dialogs/align.cpp:294
+#: src/dialogs/align.cpp:293
 msgid "Center horizontally"
 msgstr "Horizontaal centreren"
 
-#: src/dialogs/align.cpp:296
+#: src/dialogs/align.cpp:295
 msgid "Right side of aligned objects to right side of anchor"
 msgstr "Rechterkant van de objecten oplijnen met de rechterkant van het anker"
 
-#: src/dialogs/align.cpp:298
+#: src/dialogs/align.cpp:297
 msgid "Left side of aligned objects to right side of anchor"
 msgstr "Linkerkant van de objecten oplijnen met de rechterkant van de objecten"
 
-#: src/dialogs/align.cpp:301
+#: src/dialogs/align.cpp:300
 msgid "Bottom of aligned objects to top of anchor"
 msgstr "Onderkant van de objecten oplijnen met de bovenkant van het anker"
 
-#: src/dialogs/align.cpp:303
+#: src/dialogs/align.cpp:302
 msgid "Top of aligned objects to top of anchor"
 msgstr "Bovenkant van de objecten oplijnen met de bovenkant van het anker"
 
-#: src/dialogs/align.cpp:305
+#: src/dialogs/align.cpp:304
 msgid "Center vertically"
 msgstr "Vertikaal centreren"
 
-#: src/dialogs/align.cpp:307
+#: src/dialogs/align.cpp:306
 msgid "Bottom of aligned objects to bottom of anchor"
 msgstr "Onderkant van de objecten oplijnen met de onderkant van het anker"
 
-#: src/dialogs/align.cpp:309
+#: src/dialogs/align.cpp:308
 #, fuzzy
 msgid "Top of aligned objects to bottom of anchor"
 msgstr "Bovenkant van de objecten oplijnen met de bovenkant van het anker"
 
-#: src/dialogs/align.cpp:324
+#: src/dialogs/align.cpp:323
 msgid "Align"
 msgstr "Uitlijnen"
 
-#: src/dialogs/align.cpp:345
+#: src/dialogs/align.cpp:344
 msgid "Distribute left sides of objects at even distances"
 msgstr "De linkerzijden van de objecten gelijkmatig verdelen"
 
-#: src/dialogs/align.cpp:353
+#: src/dialogs/align.cpp:352
 #, fuzzy
 msgid "Distribute centers of objects at even distances horizontally"
 msgstr ""
 "De middens van de objecten gelijkmatig in horizontale richting verdelen"
 
-#: src/dialogs/align.cpp:360
+#: src/dialogs/align.cpp:359
 msgid "Distribute right sides of objects at even distances"
 msgstr ""
 "De afstand tussen de rechterzijden van de objecten gelijkmatig verdelen"
 
-#: src/dialogs/align.cpp:367
+#: src/dialogs/align.cpp:366
 msgid "Distribute horizontal distance between objects equally"
 msgstr "De horizontale afstand tussen objecten gelijkmatig verdelen"
 
-#: src/dialogs/align.cpp:374
+#: src/dialogs/align.cpp:373
 msgid "Distribute top sides of objects at even distances"
 msgstr "De bovenkanten van de objecten gelijkmatig verdelen"
 
-#: src/dialogs/align.cpp:382
+#: src/dialogs/align.cpp:381
 #, fuzzy
 msgid "Distribute centers of objects at even distances vertically"
 msgstr "De middens van de objecten gelijkmatig in vertikale richting verdelen"
 
-#: src/dialogs/align.cpp:389
+#: src/dialogs/align.cpp:388
 msgid "Distribute bottom sides of objects at even distances"
 msgstr "De onderkanten van de objecten geijkmatig verdelen."
 
-#: src/dialogs/align.cpp:396
+#: src/dialogs/align.cpp:395
 msgid "Distribute vertical distance between objects equally"
 msgstr "De vertikale afstand tussen de objecten gelijkmatig verdelen."
 
-#: src/dialogs/align.cpp:400
+#: src/dialogs/align.cpp:399
 msgid "Distribute"
 msgstr "Verspreiden"
 
-#: src/dialogs/align.cpp:441
+#: src/dialogs/align.cpp:440
 msgid "Last selected"
 msgstr "Laatst geselecteerde"
 
-#: src/dialogs/align.cpp:444
+#: src/dialogs/align.cpp:443
 msgid "First selected"
 msgstr "Eerst geselecteerde"
 
-#: src/dialogs/align.cpp:447
+#: src/dialogs/align.cpp:446
 msgid "Biggest item"
 msgstr "Grootste onderdeel"
 
-#: src/dialogs/align.cpp:450
+#: src/dialogs/align.cpp:449
 msgid "Smallest item"
 msgstr "Kleinste onderdeel"
 
 #. Grid settings
 #. Notebook tab
-#: src/dialogs/desktop-properties.cpp:427 src/verbs.cpp:877
+#: src/dialogs/desktop-properties.cpp:424 src/verbs.cpp:877
 msgid "Grid"
 msgstr "Raster"
 
-#: src/dialogs/desktop-properties.cpp:440
+#: src/dialogs/desktop-properties.cpp:437
 msgid "Show grid"
 msgstr "Raster weergeven"
 
-#: src/dialogs/desktop-properties.cpp:441
+#: src/dialogs/desktop-properties.cpp:438
 msgid "Snap to grid"
 msgstr "Uitlijnen op raster"
 
-#: src/dialogs/desktop-properties.cpp:444
+#: src/dialogs/desktop-properties.cpp:441
 #, fuzzy
 msgid "Horizontal lines"
 msgstr "Tuimelen"
 
-#: src/dialogs/desktop-properties.cpp:446
+#: src/dialogs/desktop-properties.cpp:443
 #, fuzzy
 msgid "Vertical lines"
 msgstr "Spiegelen"
 
-#: src/dialogs/desktop-properties.cpp:457
+#: src/dialogs/desktop-properties.cpp:454
 msgid "Grid units:"
 msgstr "Rastereenheden:"
 
-#: src/dialogs/desktop-properties.cpp:459
+#: src/dialogs/desktop-properties.cpp:456
 msgid "Origin X:"
 msgstr "X-oorsprong: "
 
-#: src/dialogs/desktop-properties.cpp:462
+#: src/dialogs/desktop-properties.cpp:459
 msgid "Origin Y:"
 msgstr "Y-oorsprong:"
 
-#: src/dialogs/desktop-properties.cpp:465
+#: src/dialogs/desktop-properties.cpp:462
 msgid "Spacing X:"
 msgstr "X tussenafstand:"
 
-#: src/dialogs/desktop-properties.cpp:468
+#: src/dialogs/desktop-properties.cpp:465
 msgid "Spacing Y:"
 msgstr "Y tussenafstand:"
 
-#: src/dialogs/desktop-properties.cpp:472
-#: src/dialogs/desktop-properties.cpp:503
+#: src/dialogs/desktop-properties.cpp:469
+#: src/dialogs/desktop-properties.cpp:500
 msgid "Snap units:"
 msgstr "Uitlijneenheden"
 
-#: src/dialogs/desktop-properties.cpp:475
-#: src/dialogs/desktop-properties.cpp:506
+#: src/dialogs/desktop-properties.cpp:472
+#: src/dialogs/desktop-properties.cpp:503
 msgid "Snap distance:"
 msgstr "Uitlijnafstand:"
 
-#: src/dialogs/desktop-properties.cpp:478
+#: src/dialogs/desktop-properties.cpp:475
 msgid "Grid color:"
 msgstr "Rasterkleur:"
 
-#: src/dialogs/desktop-properties.cpp:479
+#: src/dialogs/desktop-properties.cpp:476
 msgid "Grid color"
 msgstr "Rasterkleur"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:485 src/verbs.cpp:878
+#: src/dialogs/desktop-properties.cpp:482 src/verbs.cpp:878
 msgid "Guides"
 msgstr "Hulplijnen"
 
-#: src/dialogs/desktop-properties.cpp:496
+#: src/dialogs/desktop-properties.cpp:493
 msgid "Show guides"
 msgstr "Hulplijnen weergeven"
 
-#: src/dialogs/desktop-properties.cpp:498
+#: src/dialogs/desktop-properties.cpp:495
 msgid "Snap to guides"
 msgstr "Uitlijnen op hulplijnen"
 
-#: src/dialogs/desktop-properties.cpp:510
+#: src/dialogs/desktop-properties.cpp:507
 msgid "Guides color:"
 msgstr "Hulplijnkleur:"
 
-#: src/dialogs/desktop-properties.cpp:511
+#: src/dialogs/desktop-properties.cpp:508
 msgid "Guideline color"
 msgstr "Hulplijnkleur"
 
-#: src/dialogs/desktop-properties.cpp:513
+#: src/dialogs/desktop-properties.cpp:510
 msgid "Highlight color:"
 msgstr "Oplichtende kleur:"
 
-#: src/dialogs/desktop-properties.cpp:514
+#: src/dialogs/desktop-properties.cpp:511
 msgid "Highlighted guideline color"
 msgstr "Benadrukte hulplijnkleur"
 
-#: src/dialogs/desktop-properties.cpp:528
+#: src/dialogs/desktop-properties.cpp:525
 msgid "Background (also for export):"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:529
+#: src/dialogs/desktop-properties.cpp:526
 #, fuzzy
 msgid "Background color"
 msgstr "Eind kleur"
 
-#: src/dialogs/desktop-properties.cpp:533
+#: src/dialogs/desktop-properties.cpp:530
 #, fuzzy
 msgid "Show canvas border"
 msgstr "Rand weergeven"
 
-#: src/dialogs/desktop-properties.cpp:536
+#: src/dialogs/desktop-properties.cpp:533
 msgid "Border on top of drawing"
 msgstr "Rand aan de bovenkant van de tekening"
 
-#: src/dialogs/desktop-properties.cpp:546
+#: src/dialogs/desktop-properties.cpp:543
 #, fuzzy
 msgid "Border color:"
 msgstr "Rasterkleur:"
 
-#: src/dialogs/desktop-properties.cpp:547
+#: src/dialogs/desktop-properties.cpp:544
 msgid "Canvas border color"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:567
+#: src/dialogs/desktop-properties.cpp:564
 msgid "Paper size:"
 msgstr "Papier grootte:"
 
-#: src/dialogs/desktop-properties.cpp:579
+#: src/dialogs/desktop-properties.cpp:576
 msgid "Custom"
 msgstr "Aangepast"
 
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:588
+#: src/dialogs/desktop-properties.cpp:585
 msgid "Custom paper"
 msgstr "Eigen papier formaat"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:600 src/dialogs/export.cpp:301
+#: src/dialogs/desktop-properties.cpp:597 src/dialogs/export.cpp:301
 #: src/dialogs/transformation.cpp:540 src/dialogs/transformation.cpp:763
 msgid "Units:"
 msgstr "Eenheden:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:614 src/dialogs/export.cpp:317
+#: src/dialogs/desktop-properties.cpp:611 src/dialogs/export.cpp:317
 #: src/dialogs/export.cpp:352 src/dialogs/object-attributes.cpp:69
-#: src/dialogs/object-attributes.cpp:77 src/dialogs/stroke-style.cpp:827
+#: src/dialogs/object-attributes.cpp:77 src/dialogs/stroke-style.cpp:830
 #: src/dyna-draw-context.cpp:943
 msgid "Width:"
 msgstr "Breedte:"
 
-#: src/dialogs/desktop-properties.cpp:636 src/dialogs/export.cpp:333
+#: src/dialogs/desktop-properties.cpp:633 src/dialogs/export.cpp:333
 #: src/dialogs/export.cpp:367 src/dialogs/object-attributes.cpp:70
 #: src/dialogs/object-attributes.cpp:78
 msgid "Height:"
 msgstr "Hoogte:"
 
-#: src/dialogs/desktop-properties.cpp:1064
+#: src/dialogs/desktop-properties.cpp:1061
 msgid "Close"
 msgstr "Sluiten"
 
@@ -477,69 +486,79 @@ msgstr ""
 msgid "Select a filename for exporting"
 msgstr "Selecteer een bestand om te importeren"
 
-#: src/dialogs/fill-style.cpp:127
+#: src/dialogs/filedialog.cpp:108 src/dialogs/filedialog.cpp:244
+#: src/extension/db.cpp:210 src/extension/db.cpp:223 src/extension/menu.cpp:50
+#: src/extension/menu.cpp:114
+msgid "Autodetect"
+msgstr ""
+
+#: src/dialogs/filedialog.cpp:130 src/dialogs/filedialog.cpp:282
+msgid "File type:"
+msgstr "Bestandstype:"
+
+#: src/dialogs/filedialog.cpp:286
+msgid "Append filename extension automatically"
+msgstr ""
+
+#: src/dialogs/filedialog.cpp:330
+msgid "No filename specified.  Unable to save."
+msgstr ""
+
+#: src/dialogs/fill-style.cpp:128
 msgid "Fill style"
 msgstr "Opvulstijl"
 
-#: src/dialogs/fill-style.cpp:176
+#: src/dialogs/fill-style.cpp:177
 msgid "Fill Rule"
 msgstr "Opvulregel"
 
-#: src/dialogs/fill-style.cpp:190
-msgid "nonzero"
-msgstr "niet-nul"
-
-#: src/dialogs/fill-style.cpp:198
-msgid "evenodd"
-msgstr "even-oneven"
-
-#: src/dialogs/item-properties.cpp:89 src/dialogs/item-properties.cpp:367
-#: src/dialogs/item-properties.cpp:516 src/dialogs/item-properties.cpp:523
+#: src/dialogs/item-properties.cpp:90 src/dialogs/item-properties.cpp:368
+#: src/dialogs/item-properties.cpp:517 src/dialogs/item-properties.cpp:524
 msgid "ID"
 msgstr ""
 
-#: src/dialogs/item-properties.cpp:103
+#: src/dialogs/item-properties.cpp:104
 msgid "Set ID"
 msgstr ""
 
-#: src/dialogs/item-properties.cpp:117
+#: src/dialogs/item-properties.cpp:118
 msgid "Sensitive"
 msgstr "Gevoelig"
 
-#: src/dialogs/item-properties.cpp:128
+#: src/dialogs/item-properties.cpp:129
 msgid "Visible"
 msgstr "Zichtbaar"
 
-#: src/dialogs/item-properties.cpp:138
+#: src/dialogs/item-properties.cpp:139
 msgid "Active"
 msgstr "Actief"
 
-#: src/dialogs/item-properties.cpp:146
+#: src/dialogs/item-properties.cpp:147
 msgid "Printable"
 msgstr "Afdrukbaar"
 
-#: src/dialogs/item-properties.cpp:164
+#: src/dialogs/item-properties.cpp:165
 msgid "Opacity:"
 msgstr "Ondoorzichtigheid"
 
-#: src/dialogs/item-properties.cpp:185
+#: src/dialogs/item-properties.cpp:186
 msgid "Transformation matrix"
 msgstr "Transformatie matrix"
 
-#: src/dialogs/item-properties.cpp:359
+#: src/dialogs/item-properties.cpp:360
 msgid "Ref"
 msgstr ""
 
-#: src/dialogs/item-properties.cpp:518
+#: src/dialogs/item-properties.cpp:519
 #, fuzzy
 msgid "ID invalid"
 msgstr "Het ID is geldig"
 
-#: src/dialogs/item-properties.cpp:520
+#: src/dialogs/item-properties.cpp:521
 msgid "ID exists"
 msgstr ""
 
-#: src/dialogs/item-properties.cpp:608 src/verbs.cpp:923
+#: src/dialogs/item-properties.cpp:609 src/verbs.cpp:923
 msgid "Item properties"
 msgstr "Item eigenschappen"
 
@@ -709,63 +728,63 @@ msgstr "Callegrafische lijn"
 msgid "Text"
 msgstr "Tekst"
 
-#: src/dialogs/stroke-style.cpp:812
+#: src/dialogs/stroke-style.cpp:815
 msgid "Stroke settings"
 msgstr "Veeg voorkeuren"
 
 #. Join type
-#: src/dialogs/stroke-style.cpp:851
+#: src/dialogs/stroke-style.cpp:854
 msgid "Join:"
 msgstr "Samenvoegen:"
 
 #. Cap type
-#: src/dialogs/stroke-style.cpp:869
+#: src/dialogs/stroke-style.cpp:872
 msgid "Cap:"
 msgstr ""
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:887
+#: src/dialogs/stroke-style.cpp:890
 msgid "Pattern:"
 msgstr "Patroon:"
 
 #. Start Marker
-#: src/dialogs/stroke-style.cpp:903
+#: src/dialogs/stroke-style.cpp:906
 #, fuzzy
 msgid "Start Markers:"
 msgstr "Ster eigenschappen"
 
 #. Mid Marker
-#: src/dialogs/stroke-style.cpp:923
+#: src/dialogs/stroke-style.cpp:926
 msgid "Mid Markers:"
 msgstr ""
 
 #. End Marker
-#: src/dialogs/stroke-style.cpp:943
+#: src/dialogs/stroke-style.cpp:946
 msgid "End Markers:"
 msgstr ""
 
 #. Layout
-#: src/dialogs/text-edit.cpp:232
+#: src/dialogs/text-edit.cpp:233
 msgid "Layout"
 msgstr "Lay-out"
 
-#: src/dialogs/text-edit.cpp:241
+#: src/dialogs/text-edit.cpp:242
 msgid "Alignment:"
 msgstr "Uitlijning:"
 
-#: src/dialogs/text-edit.cpp:276
+#: src/dialogs/text-edit.cpp:277
 msgid "Orientation:"
 msgstr "Oriëntatie:"
 
-#: src/dialogs/text-edit.cpp:301
+#: src/dialogs/text-edit.cpp:302
 msgid "Line spacing:"
 msgstr "Regel afstand:"
 
-#: src/dialogs/text-edit.cpp:332
+#: src/dialogs/text-edit.cpp:333
 msgid "Text and font"
 msgstr "Text en lettertype"
 
-#: src/dialogs/text-edit.cpp:343
+#: src/dialogs/text-edit.cpp:344
 msgid "Set as default"
 msgstr "Instellen als standaard"
 
@@ -893,17 +912,17 @@ msgstr ""
 msgid "Creating new curve"
 msgstr "Maak een nieuw SVG document"
 
-#: src/draw-context.cpp:793
+#: src/draw-context.cpp:802
 #, c-format
 msgid "Creating anchor at (%g,%g)"
 msgstr ""
 
 #. Write curves to object
-#: src/draw-context.cpp:1032
+#: src/draw-context.cpp:1041
 msgid "Finishing freehand"
 msgstr ""
 
-#: src/draw-context.cpp:1781
+#: src/draw-context.cpp:1795
 msgid "Finishing pen"
 msgstr ""
 
@@ -926,52 +945,52 @@ msgstr "Hoek:"
 msgid "Defaults"
 msgstr "Standaardwaarden"
 
-#: src/file.cpp:124 src/main.cpp:288
+#: src/file.cpp:132 src/main.cpp:300
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr ""
 
-#: src/file.cpp:142
+#: src/file.cpp:150
 msgid "Select file to open"
 msgstr "Selecteer een bestand om te openen"
 
-#: src/file.cpp:205
+#: src/file.cpp:216
 #, c-format
 msgid ""
-"Extension to save document (%s) was not found.  This may have been caused by "
-"an unknown file extension."
+"No Inkscape extension found to save document (%s).  This may have been "
+"caused by an unknown filename extension."
 msgstr ""
 
-#: src/file.cpp:206 src/file.cpp:212
+#: src/file.cpp:217 src/file.cpp:223
 #, fuzzy
 msgid "Document not saved."
 msgstr "Document naam:"
 
-#: src/file.cpp:211
+#: src/file.cpp:222
 #, c-format
-msgid "File %s unable to be saved."
+msgid "File %s could not be saved."
 msgstr ""
 
-#: src/file.cpp:216
+#: src/file.cpp:228
 #, fuzzy
 msgid "Document saved."
 msgstr "Document naam:"
 
-#: src/file.cpp:239
+#: src/file.cpp:251
 #, fuzzy
 msgid "Select file to save"
 msgstr "Selecteer een bestand om te openen"
 
-#: src/file.cpp:316
+#: src/file.cpp:331
 msgid "No changes need to be saved."
 msgstr ""
 
-#: src/file.cpp:452
+#: src/file.cpp:466
 #, c-format
 msgid "Unable to import image '%s': %s"
 msgstr ""
 
-#: src/file.cpp:482
+#: src/file.cpp:496
 msgid "Select file to import"
 msgstr "Selecteer een bestand om te importeren"
 
@@ -1320,7 +1339,7 @@ msgstr ""
 msgid "Overwrite %s"
 msgstr ""
 
-#: src/interface.cpp:1030
+#: src/interface.cpp:1033
 #, c-format
 msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "
@@ -1328,15 +1347,10 @@ msgid ""
 msgstr ""
 
 #: src/knot.cpp:563
-msgid "Knot drag cancelled."
+msgid "Node or handle drag cancelled."
 msgstr ""
 
-#: src/extension/db.cpp:208 src/extension/db.cpp:221 src/extension/menu.cpp:50
-#: src/extension/menu.cpp:114
-msgid "Autodetect"
-msgstr ""
-
-#: src/extension/init.cpp:87
+#: src/extension/init.cpp:89
 #, c-format
 msgid ""
 "Modules directory (%s) is unavailable.  External modules in that directory "
@@ -1345,6 +1359,10 @@ msgstr ""
 
 #: src/extension/menu.cpp:50 src/extension/menu.cpp:114
 msgid "Use the extension of the file to choose a filetype"
+msgstr ""
+
+#: src/extension/system.cpp:102
+msgid "Format autodetect failed. The file is being opened as SVG."
 msgstr ""
 
 #: src/extension/internal/gnome.cpp:71
@@ -1418,50 +1436,50 @@ msgstr ""
 "Geef de doel lpr-wachtrij.Gebruik '> bestandsnaam' om af te drukken naar een "
 "bestand,of '| programma argument....' om het naar een programma te sturen."
 
-#: src/extension/internal/ps.cpp:801
+#: src/extension/internal/ps.cpp:808
 #, fuzzy
 msgid "write error occurred"
 msgstr "schrijffout vond plaats"
 
-#: src/main.cpp:126
+#: src/main.cpp:130
 msgid "Do not use X server (only process files from console)"
 msgstr "X-server niet gebruiken (verwerk alleen bestanden van de terminal)"
 
-#: src/main.cpp:129
+#: src/main.cpp:133
 #, fuzzy
 msgid "Try to use X server (even if $DISPLAY is not set)"
 msgstr "Probeer X-server te gebruiken zelfs als $DISPLAY geen waarde heeft"
 
-#: src/main.cpp:132
+#: src/main.cpp:136
 msgid "Open specified document(s) (option string may be excluded)"
 msgstr ""
 "Open de aangeduidde documenten (optie-tekenreeks hoeft niet te worden "
 "opgegeven)"
 
-#: src/main.cpp:133 src/main.cpp:136 src/main.cpp:139 src/main.cpp:153
+#: src/main.cpp:137 src/main.cpp:140 src/main.cpp:143 src/main.cpp:157
 msgid "FILENAME"
 msgstr "BESTANDSNAAM"
 
-#: src/main.cpp:135
+#: src/main.cpp:139
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
 "Druk de documenten af naar het opgegeven bestand (gebruik '| programma' voor "
 "een pipe)"
 
-#: src/main.cpp:138
+#: src/main.cpp:142
 msgid "Export document to png file"
 msgstr "Document exporteren naar .png bestand."
 
-#: src/main.cpp:141
+#: src/main.cpp:145
 msgid "The resolution used for converting SVG into bitmap (default 72.0)"
 msgstr ""
 "De resolutie die gebruikt is om SVG naar bitmap om te zeten (standaard 72.0)"
 
-#: src/main.cpp:142
+#: src/main.cpp:146
 msgid "DPI"
 msgstr "DPI"
 
-#: src/main.cpp:144
+#: src/main.cpp:148
 msgid ""
 "Exported area in millimeters (default is full document, 0,0 is lower-left "
 "corner)"
@@ -1469,51 +1487,52 @@ msgstr ""
 "Oppervlakte van het geëxporteerde· ebied (standaard het hele documenten; 0,0 "
 "is de hoek linksonder)"
 
-#: src/main.cpp:145
+#: src/main.cpp:149
 msgid "x0:y0:x1:y1"
 msgstr "x0:y0:x1:y1"
 
-#: src/main.cpp:147
+#: src/main.cpp:151
 msgid "The width of generated bitmap in pixels (overwrites dpi)"
 msgstr ""
 "De breedte van de gegenereerde bitmap in pixels (dit overschijft de DPI)"
 
-#: src/main.cpp:147
+#: src/main.cpp:151
 msgid "WIDTH"
 msgstr "BREEDTE"
 
-#: src/main.cpp:149
+#: src/main.cpp:153
 msgid "The height of generated bitmap in pixels (overwrites dpi)"
 msgstr ""
 "De hoogte van de gegenereerde bitmap in pixels (dit overschijft de DPI)"
 
-#: src/main.cpp:149
+#: src/main.cpp:153
 msgid "HEIGHT"
 msgstr "HOOGTE"
 
-#: src/main.cpp:151
+#: src/main.cpp:155
 msgid "Background color of exported bitmap (any SVG supported color string)"
 msgstr ""
 "Achtergrond kleur van de geëxporteerde· itmap (kan iedere door SVG "
 "ondersteunde kleur zijn)"
 
-#: src/main.cpp:151
+#: src/main.cpp:155
 msgid "COLOR"
 msgstr "KLEUR"
 
-#: src/main.cpp:153
-msgid "Export document to plain SVG file (no \"xmlns:sodipodi\" namespace)"
+#: src/main.cpp:157
+#, fuzzy
+msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
 "Document exporteren naar gewoon SVG bestand (geen \"xmlns:sodipodi\" "
 "naamruimte)"
 
-#: src/main.cpp:155
+#: src/main.cpp:159
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
 "De geselecteerde bestanden één voor één weergeven, en naar de volgende gaan "
 "bij muisklik of toetsenbord gebruik"
 
-#: src/main.cpp:157
+#: src/main.cpp:161
 msgid "Prefer bitmap (xpm) icons to SVG ones"
 msgstr "Geef bitmap (xpm) pictogrammen de voorkeur boven de SVG versies."
 
@@ -1842,7 +1861,7 @@ msgstr ""
 msgid "%i objects selected. %s."
 msgstr ""
 
-#: src/seltrans.cpp:741
+#: src/seltrans.cpp:741 src/seltrans.cpp:804
 #, c-format
 msgid "Scale %0.2f%%, %0.2f%%"
 msgstr ""
@@ -1872,15 +1891,15 @@ msgstr "Sodipodi diavoorstelling"
 msgid "Link to %s"
 msgstr "Koppeling naar %s"
 
-#: src/sp-ellipse.cpp:439 src/verbs.cpp:851
+#: src/sp-ellipse.cpp:440 src/verbs.cpp:851
 msgid "Ellipse"
 msgstr "Ellips"
 
-#: src/sp-ellipse.cpp:584
+#: src/sp-ellipse.cpp:585
 msgid "Circle"
 msgstr ""
 
-#: src/sp-ellipse.cpp:865
+#: src/sp-ellipse.cpp:860
 msgid "Arc"
 msgstr ""
 
@@ -3197,8 +3216,10 @@ msgstr "Groen:"
 msgid "Blue:"
 msgstr "Blauw:"
 
+#. Label
 #: src/widgets/sp-color-scales.cpp:376 src/widgets/sp-color-scales.cpp:393
 #: src/widgets/sp-color-scales.cpp:413
+#: src/widgets/sp-color-wheel-selector.cpp:136
 msgid "Alpha:"
 msgstr "Alfa:"
 
@@ -3234,6 +3255,10 @@ msgstr "Zwart (K):"
 msgid "Unnamed"
 msgstr ""
 
+#: src/widgets/sp-color-wheel-selector.cpp:65
+msgid "Wheel"
+msgstr ""
+
 #: src/widgets/sp-xmlview-attr-list.cpp:55
 msgid "Attribute"
 msgstr "Attribuut"
@@ -3241,6 +3266,12 @@ msgstr "Attribuut"
 #: src/widgets/sp-xmlview-attr-list.cpp:56
 msgid "Value"
 msgstr "Waarde"
+
+#~ msgid "nonzero"
+#~ msgstr "niet-nul"
+
+#~ msgid "evenodd"
+#~ msgstr "even-oneven"
 
 #, fuzzy
 #~ msgid ""
@@ -3338,9 +3369,6 @@ msgstr "Waarde"
 #, fuzzy
 #~ msgid "Send to _Back"
 #~ msgstr "Naar achteren sturen"
-
-#~ msgid "File type:"
-#~ msgstr "Bestandstype:"
 
 #~ msgid "Save file"
 #~ msgstr "Bestand opslaan"

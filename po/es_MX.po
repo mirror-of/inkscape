@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-05 11:34-0500\n"
+"POT-Creation-Date: 2004-04-05 22:49-0700\n"
 "PO-Revision-Date: 2004-04-05 01:29-0600\n"
 "Last-Translator: Daniel Díaz <yosoy@danieldiaz.org>\n"
 "Language-Team: none <none>\n"
@@ -117,262 +117,264 @@ msgid "No next zoom."
 msgstr "No hay más zoom."
 
 #. Page page
-#: src/desktop.cpp:1834 src/dialogs/align.cpp:453
-#: src/dialogs/desktop-properties.cpp:519 src/dialogs/export.cpp:273
+#: src/desktop.cpp:1834 src/dialogs/align.cpp:452
+#: src/dialogs/desktop-properties.cpp:516 src/dialogs/export.cpp:273
 msgid "Page"
 msgstr "Página"
 
-#: src/desktop.cpp:1838 src/dialogs/align.cpp:456 src/dialogs/export.cpp:280
+#: src/desktop.cpp:1838 src/dialogs/align.cpp:455 src/dialogs/export.cpp:280
 msgid "Drawing"
 msgstr "Dibujo"
 
-#: src/desktop.cpp:1842 src/dialogs/align.cpp:459 src/dialogs/export.cpp:287
+#: src/desktop.cpp:1842 src/dialogs/align.cpp:458 src/dialogs/export.cpp:287
 msgid "Selection"
 msgstr "Selección"
 
-#: src/dialogs/align.cpp:290
+#: src/dialogs/align.cpp:289
 msgid "Right side of aligned objects to left side of anchor"
 msgstr "Lado derecho de los objetos alineados a la izquierda del ancla"
 
-#: src/dialogs/align.cpp:292
+#: src/dialogs/align.cpp:291
 msgid "Left side of aligned objects to left side of anchor"
 msgstr "Lado izquierdo de los objetos alineados la izquierda del ancla"
 
-#: src/dialogs/align.cpp:294
+#: src/dialogs/align.cpp:293
 msgid "Center horizontally"
 msgstr "Centrar horizontalmente"
 
-#: src/dialogs/align.cpp:296
+#: src/dialogs/align.cpp:295
 msgid "Right side of aligned objects to right side of anchor"
 msgstr "Lado derecho de los objetos alineados a la derecha del ancla"
 
-#: src/dialogs/align.cpp:298
+#: src/dialogs/align.cpp:297
 msgid "Left side of aligned objects to right side of anchor"
 msgstr "Lado izquierdo de los objetos alineados a la derecha del ancla"
 
-#: src/dialogs/align.cpp:301
+#: src/dialogs/align.cpp:300
 msgid "Bottom of aligned objects to top of anchor"
 msgstr "Lado inferior de los objetos alineados por encima del ancla"
 
-#: src/dialogs/align.cpp:303
+#: src/dialogs/align.cpp:302
 msgid "Top of aligned objects to top of anchor"
 msgstr "Lado superior de los objetos alineados por encima del ancla"
 
-#: src/dialogs/align.cpp:305
+#: src/dialogs/align.cpp:304
 msgid "Center vertically"
 msgstr "Centrar verticalmente"
 
-#: src/dialogs/align.cpp:307
+#: src/dialogs/align.cpp:306
 msgid "Bottom of aligned objects to bottom of anchor"
 msgstr "Lado inferior de los objetos alineados por debajo del ancla"
 
-#: src/dialogs/align.cpp:309
+#: src/dialogs/align.cpp:308
 msgid "Top of aligned objects to bottom of anchor"
 msgstr "Lado superior de los objetos alineados al fondo del ancla"
 
-#: src/dialogs/align.cpp:324
+#: src/dialogs/align.cpp:323
 msgid "Align"
 msgstr "Alinear"
 
-#: src/dialogs/align.cpp:345
+#: src/dialogs/align.cpp:344
 msgid "Distribute left sides of objects at even distances"
 msgstr "Distribuir el lado izquierdo de los objetos a distancias equivalentes"
 
-#: src/dialogs/align.cpp:353
+#: src/dialogs/align.cpp:352
 msgid "Distribute centers of objects at even distances horizontally"
-msgstr "Distribuir el centro de los objetos a distancias horizontales equivalentes"
+msgstr ""
+"Distribuir el centro de los objetos a distancias horizontales equivalentes"
 
-#: src/dialogs/align.cpp:360
+#: src/dialogs/align.cpp:359
 msgid "Distribute right sides of objects at even distances"
 msgstr "Distribuir los lados derechos de los objetos a distancias equivalentes"
 
-#: src/dialogs/align.cpp:367
+#: src/dialogs/align.cpp:366
 msgid "Distribute horizontal distance between objects equally"
 msgstr "Distribuir la distancia horizontal entre los objetos igualmente"
 
-#: src/dialogs/align.cpp:374
+#: src/dialogs/align.cpp:373
 msgid "Distribute top sides of objects at even distances"
 msgstr "Distribuir el lado superior de los objetos a la misma distancia"
 
-#: src/dialogs/align.cpp:382
+#: src/dialogs/align.cpp:381
 msgid "Distribute centers of objects at even distances vertically"
-msgstr "Distribuir los centros de los objetos a distancias iguales verticalmente"
+msgstr ""
+"Distribuir los centros de los objetos a distancias iguales verticalmente"
 
-#: src/dialogs/align.cpp:389
+#: src/dialogs/align.cpp:388
 msgid "Distribute bottom sides of objects at even distances"
 msgstr "Distribuir los lados inferiores de los objetos a la misma distancia"
 
-#: src/dialogs/align.cpp:396
+#: src/dialogs/align.cpp:395
 msgid "Distribute vertical distance between objects equally"
 msgstr "Distribuir la distancia vertical entre los objetos igualmente"
 
-#: src/dialogs/align.cpp:400
+#: src/dialogs/align.cpp:399
 msgid "Distribute"
 msgstr "Distribuir"
 
-#: src/dialogs/align.cpp:441
+#: src/dialogs/align.cpp:440
 msgid "Last selected"
 msgstr "Último seleccionado"
 
-#: src/dialogs/align.cpp:444
+#: src/dialogs/align.cpp:443
 msgid "First selected"
 msgstr "Primero seleccionado"
 
-#: src/dialogs/align.cpp:447
+#: src/dialogs/align.cpp:446
 msgid "Biggest item"
 msgstr "Elemento mayor"
 
-#: src/dialogs/align.cpp:450
+#: src/dialogs/align.cpp:449
 msgid "Smallest item"
 msgstr "Elemento menor"
 
 #. Grid settings
 #. Notebook tab
-#: src/dialogs/desktop-properties.cpp:427 src/verbs.cpp:877
+#: src/dialogs/desktop-properties.cpp:424 src/verbs.cpp:877
 msgid "Grid"
 msgstr "Rejilla"
 
-#: src/dialogs/desktop-properties.cpp:440
+#: src/dialogs/desktop-properties.cpp:437
 msgid "Show grid"
 msgstr "Mostrar la rejilla"
 
-#: src/dialogs/desktop-properties.cpp:441
+#: src/dialogs/desktop-properties.cpp:438
 msgid "Snap to grid"
 msgstr "Ajustar a la rejilla"
 
-#: src/dialogs/desktop-properties.cpp:444
+#: src/dialogs/desktop-properties.cpp:441
 msgid "Horizontal lines"
 msgstr "Líneas horizontales"
 
-#: src/dialogs/desktop-properties.cpp:446
+#: src/dialogs/desktop-properties.cpp:443
 msgid "Vertical lines"
 msgstr "Líneas verticales"
 
-#: src/dialogs/desktop-properties.cpp:457
+#: src/dialogs/desktop-properties.cpp:454
 msgid "Grid units:"
 msgstr "Unidades de la rejilla:"
 
-#: src/dialogs/desktop-properties.cpp:459
+#: src/dialogs/desktop-properties.cpp:456
 msgid "Origin X:"
 msgstr "Origen X:"
 
-#: src/dialogs/desktop-properties.cpp:462
+#: src/dialogs/desktop-properties.cpp:459
 msgid "Origin Y:"
 msgstr "Origen Y:"
 
-#: src/dialogs/desktop-properties.cpp:465
+#: src/dialogs/desktop-properties.cpp:462
 msgid "Spacing X:"
 msgstr "Espaciado X:"
 
-#: src/dialogs/desktop-properties.cpp:468
+#: src/dialogs/desktop-properties.cpp:465
 msgid "Spacing Y:"
 msgstr "Espaciado Y:"
 
-#: src/dialogs/desktop-properties.cpp:472
-#: src/dialogs/desktop-properties.cpp:503
+#: src/dialogs/desktop-properties.cpp:469
+#: src/dialogs/desktop-properties.cpp:500
 msgid "Snap units:"
 msgstr "Unidades para el autoajuste:"
 
-#: src/dialogs/desktop-properties.cpp:475
-#: src/dialogs/desktop-properties.cpp:506
+#: src/dialogs/desktop-properties.cpp:472
+#: src/dialogs/desktop-properties.cpp:503
 msgid "Snap distance:"
 msgstr "Distancia de autoajuste:"
 
-#: src/dialogs/desktop-properties.cpp:478
+#: src/dialogs/desktop-properties.cpp:475
 msgid "Grid color:"
 msgstr "Color de la rejilla:"
 
-#: src/dialogs/desktop-properties.cpp:479
+#: src/dialogs/desktop-properties.cpp:476
 msgid "Grid color"
 msgstr "Color de la rejilla"
 
 #. Guidelines page
-#: src/dialogs/desktop-properties.cpp:485 src/verbs.cpp:878
+#: src/dialogs/desktop-properties.cpp:482 src/verbs.cpp:878
 msgid "Guides"
 msgstr "Guías"
 
-#: src/dialogs/desktop-properties.cpp:496
+#: src/dialogs/desktop-properties.cpp:493
 msgid "Show guides"
 msgstr "Mostrar las guías"
 
-#: src/dialogs/desktop-properties.cpp:498
+#: src/dialogs/desktop-properties.cpp:495
 msgid "Snap to guides"
 msgstr "Ajustar a las guías"
 
-#: src/dialogs/desktop-properties.cpp:510
+#: src/dialogs/desktop-properties.cpp:507
 msgid "Guides color:"
 msgstr "Color de las guías:"
 
-#: src/dialogs/desktop-properties.cpp:511
+#: src/dialogs/desktop-properties.cpp:508
 msgid "Guideline color"
 msgstr "Color de las líneas guía"
 
-#: src/dialogs/desktop-properties.cpp:513
+#: src/dialogs/desktop-properties.cpp:510
 msgid "Highlight color:"
 msgstr "Color del resaltado:"
 
-#: src/dialogs/desktop-properties.cpp:514
+#: src/dialogs/desktop-properties.cpp:511
 msgid "Highlighted guideline color"
 msgstr "Color de resaltado de las líneas guías"
 
-#: src/dialogs/desktop-properties.cpp:528
+#: src/dialogs/desktop-properties.cpp:525
 msgid "Background (also for export):"
 msgstr "Fondo (también para exportación):"
 
-#: src/dialogs/desktop-properties.cpp:529
+#: src/dialogs/desktop-properties.cpp:526
 msgid "Background color"
 msgstr "Color de fondo"
 
-#: src/dialogs/desktop-properties.cpp:533
+#: src/dialogs/desktop-properties.cpp:530
 msgid "Show canvas border"
 msgstr "Mostrar contorno del papel"
 
-#: src/dialogs/desktop-properties.cpp:536
+#: src/dialogs/desktop-properties.cpp:533
 msgid "Border on top of drawing"
 msgstr "Contorno encima del dibujo"
 
-#: src/dialogs/desktop-properties.cpp:546
+#: src/dialogs/desktop-properties.cpp:543
 msgid "Border color:"
 msgstr "Color del contorno:"
 
-#: src/dialogs/desktop-properties.cpp:547
+#: src/dialogs/desktop-properties.cpp:544
 msgid "Canvas border color"
 msgstr "Color del contorno del papel"
 
-#: src/dialogs/desktop-properties.cpp:567
+#: src/dialogs/desktop-properties.cpp:564
 msgid "Paper size:"
 msgstr "Tamaño del papel:"
 
-#: src/dialogs/desktop-properties.cpp:579
+#: src/dialogs/desktop-properties.cpp:576
 msgid "Custom"
 msgstr "Personalizar"
 
 #. Custom paper frame
-#: src/dialogs/desktop-properties.cpp:588
+#: src/dialogs/desktop-properties.cpp:585
 msgid "Custom paper"
 msgstr "Personalizar papel"
 
 #. Unit selector
-#: src/dialogs/desktop-properties.cpp:600 src/dialogs/export.cpp:301
+#: src/dialogs/desktop-properties.cpp:597 src/dialogs/export.cpp:301
 #: src/dialogs/transformation.cpp:540 src/dialogs/transformation.cpp:763
 msgid "Units:"
 msgstr "Unidades:"
 
 #. Stroke width
-#: src/dialogs/desktop-properties.cpp:614 src/dialogs/export.cpp:317
+#: src/dialogs/desktop-properties.cpp:611 src/dialogs/export.cpp:317
 #: src/dialogs/export.cpp:352 src/dialogs/object-attributes.cpp:69
-#: src/dialogs/object-attributes.cpp:77 src/dialogs/stroke-style.cpp:827
+#: src/dialogs/object-attributes.cpp:77 src/dialogs/stroke-style.cpp:830
 #: src/dyna-draw-context.cpp:943
 msgid "Width:"
 msgstr "Ancho:"
 
-#: src/dialogs/desktop-properties.cpp:636 src/dialogs/export.cpp:333
+#: src/dialogs/desktop-properties.cpp:633 src/dialogs/export.cpp:333
 #: src/dialogs/export.cpp:367 src/dialogs/object-attributes.cpp:70
 #: src/dialogs/object-attributes.cpp:78
 msgid "Height:"
 msgstr "Alto:"
 
-#: src/dialogs/desktop-properties.cpp:1064
+#: src/dialogs/desktop-properties.cpp:1061
 msgid "Close"
 msgstr "Cerrar"
 
@@ -503,60 +505,60 @@ msgstr "Añadir extensión al nombre de archivo automáticamente"
 msgid "No filename specified.  Unable to save."
 msgstr "No se especificó un nombre de archivo. Imposible guardar."
 
-#: src/dialogs/fill-style.cpp:127
+#: src/dialogs/fill-style.cpp:128
 msgid "Fill style"
 msgstr "Estilo de relleno"
 
-#: src/dialogs/fill-style.cpp:176
+#: src/dialogs/fill-style.cpp:177
 msgid "Fill Rule"
 msgstr "Regla de relleno"
 
-#: src/dialogs/item-properties.cpp:89 src/dialogs/item-properties.cpp:367
-#: src/dialogs/item-properties.cpp:516 src/dialogs/item-properties.cpp:523
+#: src/dialogs/item-properties.cpp:90 src/dialogs/item-properties.cpp:368
+#: src/dialogs/item-properties.cpp:517 src/dialogs/item-properties.cpp:524
 msgid "ID"
 msgstr "ID"
 
-#: src/dialogs/item-properties.cpp:103
+#: src/dialogs/item-properties.cpp:104
 msgid "Set ID"
 msgstr "Ajustar ID"
 
-#: src/dialogs/item-properties.cpp:117
+#: src/dialogs/item-properties.cpp:118
 msgid "Sensitive"
 msgstr "Sensible"
 
-#: src/dialogs/item-properties.cpp:128
+#: src/dialogs/item-properties.cpp:129
 msgid "Visible"
 msgstr "Visible"
 
-#: src/dialogs/item-properties.cpp:138
+#: src/dialogs/item-properties.cpp:139
 msgid "Active"
 msgstr "Activo"
 
-#: src/dialogs/item-properties.cpp:146
+#: src/dialogs/item-properties.cpp:147
 msgid "Printable"
 msgstr "Imprimible"
 
-#: src/dialogs/item-properties.cpp:164
+#: src/dialogs/item-properties.cpp:165
 msgid "Opacity:"
 msgstr "Opacidad:"
 
-#: src/dialogs/item-properties.cpp:185
+#: src/dialogs/item-properties.cpp:186
 msgid "Transformation matrix"
 msgstr "Matriz de transformación"
 
-#: src/dialogs/item-properties.cpp:359
+#: src/dialogs/item-properties.cpp:360
 msgid "Ref"
 msgstr "Ref"
 
-#: src/dialogs/item-properties.cpp:518
+#: src/dialogs/item-properties.cpp:519
 msgid "ID invalid"
 msgstr "El ID no es válido"
 
-#: src/dialogs/item-properties.cpp:520
+#: src/dialogs/item-properties.cpp:521
 msgid "ID exists"
 msgstr "El ID existe"
 
-#: src/dialogs/item-properties.cpp:608 src/verbs.cpp:923
+#: src/dialogs/item-properties.cpp:609 src/verbs.cpp:923
 msgid "Item properties"
 msgstr "Propiedades del elemento"
 
@@ -723,62 +725,62 @@ msgstr "Línea caligráfica"
 msgid "Text"
 msgstr "Texto"
 
-#: src/dialogs/stroke-style.cpp:812
+#: src/dialogs/stroke-style.cpp:815
 msgid "Stroke settings"
 msgstr "Opciones de contorno"
 
 #. Join type
-#: src/dialogs/stroke-style.cpp:851
+#: src/dialogs/stroke-style.cpp:854
 msgid "Join:"
 msgstr "Unión:"
 
 #. Cap type
-#: src/dialogs/stroke-style.cpp:869
+#: src/dialogs/stroke-style.cpp:872
 msgid "Cap:"
 msgstr "Punta:"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:887
+#: src/dialogs/stroke-style.cpp:890
 msgid "Pattern:"
 msgstr "Patrón:"
 
 #. Start Marker
-#: src/dialogs/stroke-style.cpp:903
+#: src/dialogs/stroke-style.cpp:906
 msgid "Start Markers:"
 msgstr "Marcas de inicio:"
 
 #. Mid Marker
-#: src/dialogs/stroke-style.cpp:923
+#: src/dialogs/stroke-style.cpp:926
 msgid "Mid Markers:"
 msgstr "Marcadores medios:"
 
 #. End Marker
-#: src/dialogs/stroke-style.cpp:943
+#: src/dialogs/stroke-style.cpp:946
 msgid "End Markers:"
 msgstr "Marcadores finales:"
 
 #. Layout
-#: src/dialogs/text-edit.cpp:232
+#: src/dialogs/text-edit.cpp:233
 msgid "Layout"
 msgstr "Formato"
 
-#: src/dialogs/text-edit.cpp:241
+#: src/dialogs/text-edit.cpp:242
 msgid "Alignment:"
 msgstr "Alineación:"
 
-#: src/dialogs/text-edit.cpp:276
+#: src/dialogs/text-edit.cpp:277
 msgid "Orientation:"
 msgstr "Orientación:"
 
-#: src/dialogs/text-edit.cpp:301
+#: src/dialogs/text-edit.cpp:302
 msgid "Line spacing:"
 msgstr "Espaciado de líneas:"
 
-#: src/dialogs/text-edit.cpp:332
+#: src/dialogs/text-edit.cpp:333
 msgid "Text and font"
 msgstr "Texto y tipografía"
 
-#: src/dialogs/text-edit.cpp:343
+#: src/dialogs/text-edit.cpp:344
 msgid "Set as default"
 msgstr "Definir como predeterminado"
 
@@ -905,17 +907,17 @@ msgstr "Añadiendo a selección"
 msgid "Creating new curve"
 msgstr "Creando curva nueva"
 
-#: src/draw-context.cpp:793
+#: src/draw-context.cpp:802
 #, c-format
 msgid "Creating anchor at (%g,%g)"
 msgstr "Creando ancla en (%g,%g)"
 
 #. Write curves to object
-#: src/draw-context.cpp:1032
+#: src/draw-context.cpp:1041
 msgid "Finishing freehand"
 msgstr "Terminar mano alzada"
 
-#: src/draw-context.cpp:1781
+#: src/draw-context.cpp:1795
 msgid "Finishing pen"
 msgstr "Terminar pluma"
 
@@ -938,7 +940,7 @@ msgstr "Ángulo:"
 msgid "Defaults"
 msgstr "Predeterminados"
 
-#: src/file.cpp:132 src/main.cpp:309
+#: src/file.cpp:132 src/main.cpp:300
 #, c-format
 msgid "Failed to load the requested file %s"
 msgstr "Error al cargar el archivo %s"
@@ -953,9 +955,8 @@ msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
 msgstr ""
-"No se ha encontrado una extensión de Inkscape que pueda guardar el "
-"documento (%s). Esto pudo ser causado por una extensión de archivo "
-"desconocida."
+"No se ha encontrado una extensión de Inkscape que pueda guardar el documento "
+"(%s). Esto pudo ser causado por una extensión de archivo desconocida."
 
 #: src/file.cpp:217 src/file.cpp:223
 msgid "Document not saved."
@@ -1364,6 +1365,10 @@ msgstr ""
 msgid "Use the extension of the file to choose a filetype"
 msgstr "Utilizar la extensión del archivo para elegir el tipo de archivo"
 
+#: src/extension/system.cpp:102
+msgid "Format autodetect failed. The file is being opened as SVG."
+msgstr ""
+
 #: src/extension/internal/gnome.cpp:71
 msgid "Select printer"
 msgstr "Seleccionar impresora"
@@ -1512,12 +1517,14 @@ msgstr "COLOR"
 
 #: src/main.cpp:157
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
-msgstr "Exportar documento a archivo SVG plano (sin las características "
-"especiales de Inkscape o Sodipodi)"
+msgstr ""
+"Exportar documento a archivo SVG plano (sin las características especiales "
+"de Inkscape o Sodipodi)"
 
 #: src/main.cpp:159
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
-msgstr "Mostrar los archivos uno por uno, cambiar al siguiente al pulsar una tecla o "
+msgstr ""
+"Mostrar los archivos uno por uno, cambiar al siguiente al pulsar una tecla o "
 "el ratón"
 
 #: src/main.cpp:161
@@ -1859,15 +1866,15 @@ msgstr "Muestra de diapositivas Inkscape"
 msgid "Link to %s"
 msgstr "Enlazar a %s"
 
-#: src/sp-ellipse.cpp:439 src/verbs.cpp:851
+#: src/sp-ellipse.cpp:440 src/verbs.cpp:851
 msgid "Ellipse"
 msgstr "Elipse"
 
-#: src/sp-ellipse.cpp:584
+#: src/sp-ellipse.cpp:585
 msgid "Circle"
 msgstr "Círculo"
 
-#: src/sp-ellipse.cpp:865
+#: src/sp-ellipse.cpp:860
 msgid "Arc"
 msgstr "Arco"
 
@@ -2269,7 +2276,6 @@ msgstr "Imprimir documento"
 msgid "Print _Direct"
 msgstr "Impresión _directa"
 
-#. Que me perdone San Antonio de Nebrija... --ddiaz
 #: src/verbs.cpp:728
 msgid "Print directly to file or pipe"
 msgstr "Imprimir directamente a un archivo o pipe"
