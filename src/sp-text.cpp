@@ -837,10 +837,13 @@ sp_adjust_linespacing_screen (SPText *text, SPDesktop *desktop, gdouble by)
     }
 
     unsigned line_count = text->layout.lineIndex(text->layout.end());
+    double all_lines_height = text->layout.characterAnchorPoint(text->layout.end())[NR::Y] - text->layout.characterAnchorPoint(text->layout.begin())[NR::Y];
+    double average_line_height = all_lines_height / (line_count == 0 ? 1 : line_count);
+    if (fabs(average_line_height) < 0.001) average_line_height = 0.001;
 
     // divide increment by zoom and by the number of lines,
     // so that the entire object is expanded by by pixels
-    gdouble zby = by / (SP_DESKTOP_ZOOM (desktop) * (line_count > 1 ? line_count - 1 : 1));
+    gdouble zby = by / (SP_DESKTOP_ZOOM (desktop) * (line_count == 0 ? 1 : line_count));
 
     // divide increment by matrix expansion
     NR::Matrix t = sp_item_i2doc_affine (SP_ITEM(text));
@@ -850,38 +853,40 @@ sp_adjust_linespacing_screen (SPText *text, SPDesktop *desktop, gdouble by)
         case SP_CSS_UNIT_NONE:
         default:
             // multiplier-type units, stored in computed
-            style->line_height.computed += zby;
+            if (fabs(style->line_height.computed) < 0.001) style->line_height.computed = by < 0.0 ? -0.001 : 0.001;    // the formula below could get stuck at zero
+            else style->line_height.computed *= (average_line_height + zby) / average_line_height;
             style->line_height.value = style->line_height.computed;
             break;
         case SP_CSS_UNIT_EM:
         case SP_CSS_UNIT_EX:
         case SP_CSS_UNIT_PERCENT:
             // multiplier-type units, stored in value
-            style->line_height.value += zby;
+            if (fabs(style->line_height.value) < 0.001) style->line_height.value = by < 0.0 ? -0.001 : 0.001;
+            else style->line_height.value *= (average_line_height + zby) / average_line_height;
             break;
             // absolute-type units
 	    case SP_CSS_UNIT_PX:
-            style->line_height.computed += zby / style->font_size.computed;
+            style->line_height.computed += zby;
             style->line_height.value = style->line_height.computed;
             break;
 	    case SP_CSS_UNIT_PT:
-            style->line_height.computed += zby / style->font_size.computed * PT_PER_PX;
+            style->line_height.computed += zby * PT_PER_PX;
             style->line_height.value = style->line_height.computed;
             break;
 	    case SP_CSS_UNIT_PC:
-            style->line_height.computed += zby / style->font_size.computed * (PT_PER_PX / 12);
+            style->line_height.computed += zby * (PT_PER_PX / 12);
             style->line_height.value = style->line_height.computed;
             break;
 	    case SP_CSS_UNIT_MM:
-            style->line_height.computed += zby / style->font_size.computed * MM_PER_PX;
+            style->line_height.computed += zby * MM_PER_PX;
             style->line_height.value = style->line_height.computed;
             break;
 	    case SP_CSS_UNIT_CM:
-            style->line_height.computed += zby / style->font_size.computed * CM_PER_PX;
+            style->line_height.computed += zby * CM_PER_PX;
             style->line_height.value = style->line_height.computed;
             break;
 	    case SP_CSS_UNIT_IN:
-            style->line_height.computed += zby / style->font_size.computed * IN_PER_PX;
+            style->line_height.computed += zby * IN_PER_PX;
             style->line_height.value = style->line_height.computed;
             break;
     }
