@@ -383,8 +383,11 @@ sp_namedview_child_added (SPObject * object, SPRepr * child, SPRepr * ref)
 		g_object_set (G_OBJECT (g), "color", nv->guidecolor, "hicolor", nv->guidehicolor, NULL);
 		if (nv->editable) {
 			for (l = nv->views; l != NULL; l = l->next) {
-				sp_guide_show (g, SP_DESKTOP (l->data)->guides, sp_dt_guide_event);
-				if (SP_DESKTOP (l->data)->guides_active) sp_guide_sensitize (g, SP_DT_CANVAS (l->data), TRUE);
+				sp_guide_show (g, SP_DESKTOP (l->data)->guides, (GCallback)sp_dt_guide_event);
+				if (SP_DESKTOP (l->data)->guides_active) 
+					sp_guide_sensitize (g, 
+							    SP_DT_CANVAS(SP_DESKTOP (l->data)), 
+							    TRUE);
 			}
 		}
 	}
@@ -445,12 +448,12 @@ sp_namedview_show (SPNamedView * nv, gpointer desktop)
 	dt = SP_DESKTOP (desktop);
 
 	for (l = nv->hguides; l != NULL; l = l->next) {
-		sp_guide_show (SP_GUIDE (l->data), dt->guides, sp_dt_guide_event);
+		sp_guide_show (SP_GUIDE (l->data), dt->guides, (GCallback)sp_dt_guide_event);
 		if (dt->guides_active) sp_guide_sensitize (SP_GUIDE (l->data), SP_DT_CANVAS (dt), TRUE);
 	}
 
 	for (l = nv->vguides; l != NULL; l = l->next) {
-		sp_guide_show (SP_GUIDE (l->data), dt->guides, sp_dt_guide_event);
+		sp_guide_show (SP_GUIDE (l->data), dt->guides, (GCallback)sp_dt_guide_event);
 		if (dt->guides_active) sp_guide_sensitize (SP_GUIDE (l->data), SP_DT_CANVAS (dt), TRUE);
 	}
 

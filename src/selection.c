@@ -57,7 +57,7 @@ sp_selection_get_type (void)
 			4,
 			(GInstanceInitFunc) sp_selection_init,
 		};
-		type = g_type_register_static (G_TYPE_OBJECT, "SPSelection", &info, 0);
+		type = g_type_register_static (G_TYPE_OBJECT, "SPSelection", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -69,7 +69,7 @@ sp_selection_class_init (SPSelectionClass *klass)
 
 	object_class = (GObjectClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (GObjectClass*)g_type_class_peek_parent (klass);
 
 	selection_signals [CHANGED] =  g_signal_new ("changed",
 						     G_TYPE_FROM_CLASS(klass),
@@ -233,7 +233,7 @@ sp_selection_new (SPDesktop * desktop)
 {
 	SPSelection * selection;
 
-	selection = g_object_new (SP_TYPE_SELECTION, NULL);
+	selection = (SPSelection*)g_object_new (SP_TYPE_SELECTION, NULL);
 
 	selection->desktop = desktop;
 

@@ -60,7 +60,7 @@ sp_item_rotate_rel (SPItem * item, double angle)
 void
 sp_item_scale_rel (SPItem *item, double dx, double dy)
 {
-	NRMatrixF curaff, new;
+	NRMatrixF curaff, new_transform;
 	NRMatrixD scale, s, t, u, v;
 	char tstr[80];
 	double x, y;
@@ -82,9 +82,9 @@ sp_item_scale_rel (SPItem *item, double dx, double dy)
 	nr_matrix_multiply_dfd (&u, &curaff, &t);
 	nr_matrix_multiply_ddd (&v, &u, &scale);
 	nr_matrix_multiply_ddd (&u, &v, &s);
-	nr_matrix_f_from_d (&new, &u);
+	nr_matrix_f_from_d (&new_transform, &u);
 
-	sp_item_set_i2d_affine (item, &new);
+	sp_item_set_i2d_affine (item, &new_transform);
 
 	//update repr
 	if (sp_svg_transform_write (tstr, 79, &item->transform)) {
@@ -108,7 +108,7 @@ art_affine_skew (double dst[6], double dx, double dy)
 void
 sp_item_skew_rel (SPItem *item, double dx, double dy)
 {
-	NRMatrixF cur, new;
+	NRMatrixF cur, new_transform;
 	double skew[6], s[6], t[6] ,u[6] ,v[6] ,newaff[6];
 	char tstr[80];
 	double x,y;
@@ -129,8 +129,8 @@ sp_item_skew_rel (SPItem *item, double dx, double dy)
 	nr_matrix_multiply_dfd (NR_MATRIX_D_FROM_DOUBLE (u), &cur, NR_MATRIX_D_FROM_DOUBLE (t));
 	art_affine_multiply (v, u, skew);
 	art_affine_multiply (newaff, v, s);
-	nr_matrix_f_from_d (&new, NR_MATRIX_D_FROM_DOUBLE (newaff));
-	sp_item_set_i2d_affine (item, &new);
+	nr_matrix_f_from_d (&new_transform, NR_MATRIX_D_FROM_DOUBLE (newaff));
+	sp_item_set_i2d_affine (item, &new_transform);
 	//update repr
 	if (sp_svg_transform_write (tstr, 79, &item->transform)) {
 		sp_repr_set_attr (SP_OBJECT (item)->repr, "transform", tstr);
@@ -142,7 +142,7 @@ sp_item_skew_rel (SPItem *item, double dx, double dy)
 void
 sp_item_move_rel (SPItem * item, double dx, double dy)
 {
-	NRMatrixF cur, new;
+	NRMatrixF cur, new_transform;
 	double move[6];
 	char tstr[80];
 
@@ -151,8 +151,8 @@ sp_item_move_rel (SPItem * item, double dx, double dy)
 	// move item
 	art_affine_translate (move, dx, dy);
 	sp_item_i2d_affine (item, &cur);
-	nr_matrix_multiply_ffd (&new, &cur, NR_MATRIX_D_FROM_DOUBLE (move));
-	sp_item_set_i2d_affine (item, &new);
+	nr_matrix_multiply_ffd (&new_transform, &cur, NR_MATRIX_D_FROM_DOUBLE (move));
+	sp_item_set_i2d_affine (item, &new_transform);
 
 	//update repr
 	if (sp_svg_transform_write (tstr, 79, &item->transform)) {

@@ -188,7 +188,7 @@ sp_guide_set (SPObject *object, unsigned int key, const gchar *value)
 }
 
 void
-sp_guide_show (SPGuide * guide, SPCanvasGroup * group, gpointer handler)
+sp_guide_show (SPGuide * guide, SPCanvasGroup * group, GCallback handler)
 {
 	SPCanvasItem *item;
 

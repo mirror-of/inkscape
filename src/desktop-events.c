@@ -98,7 +98,7 @@ sp_dt_ruler_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw, gbo
 			guide = sp_guideline_new (desktop->guides, (horiz) ? p.y : p.x, !horiz);
 			sp_guideline_set_color (SP_GUIDELINE (guide), desktop->namedview->guidehicolor);
 			gdk_pointer_grab (widget->window, FALSE,
-					  GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK,
+					  (GdkEventMask)(GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK),
 					  NULL, NULL,
 					  event->button.time);
 		}
@@ -356,7 +356,7 @@ guide_dialog_apply (GtkWidget * widget, SPGuide ** g)
 static void
 guide_dialog_ok (GtkWidget * widget, gpointer g)
 {
-	guide_dialog_apply (NULL, g);
+	guide_dialog_apply (NULL, (SPGuide**)g);
 	guide_dialog_close (NULL, GTK_DIALOG(widget));
 }
 
@@ -381,10 +381,10 @@ guide_dialog_response (GtkDialog *dialog, gint response, gpointer data)
 		guide_dialog_ok (widget, data);
 		break;
 	case -12:
-		guide_dialog_delete (widget, data);
+		guide_dialog_delete (widget, (SPGuide**)data);
 		break;
 	case GTK_RESPONSE_CLOSE:
-		guide_dialog_close (widget, data);
+		guide_dialog_close (widget, (GtkDialog*)data);
 		break;
 /*	case GTK_RESPONSE_APPLY:
 		guide_dialog_apply (widget, data);

@@ -39,7 +39,7 @@ struct _SPGuideClass {
 
 GType sp_guide_get_type (void);
 
-void sp_guide_show (SPGuide * guide, SPCanvasGroup * group, gpointer handler);
+void sp_guide_show (SPGuide * guide, SPCanvasGroup * group, GCallback handler);
 void sp_guide_hide (SPGuide * guide, SPCanvas * canvas);
 void sp_guide_sensitize (SPGuide * guide, SPCanvas * canvas, gboolean sensitive);
 

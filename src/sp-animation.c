@@ -21,7 +21,7 @@ static void sp_animation_init (SPAnimation *animation);
 
 static void sp_animation_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static void sp_animation_release (SPObject *object);
-static void sp_animation_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_animation_set (SPObject *object, unsigned int key, const gchar *value);
 
 static SPObjectClass *animation_parent_class;
 
@@ -40,7 +40,7 @@ sp_animation_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_animation_init,
 		};
-		animation_type = g_type_register_static (SP_TYPE_OBJECT, "SPAnimation", &animation_info, 0);
+		animation_type = g_type_register_static (SP_TYPE_OBJECT, "SPAnimation", &animation_info, (GTypeFlags)0);
 	}
 	return animation_type;
 }
@@ -54,7 +54,7 @@ sp_animation_class_init (SPAnimationClass *klass)
 	gobject_class = (GObjectClass *) klass;
 	sp_object_class = (SPObjectClass *) klass;
 
-	animation_parent_class = g_type_class_peek_parent (klass);
+	animation_parent_class = (SPObjectClass*)g_type_class_peek_parent (klass);
 
 	sp_object_class->build = sp_animation_build;
 	sp_object_class->release = sp_animation_release;
@@ -93,7 +93,7 @@ sp_animation_release (SPObject *object)
 }
 
 static void
-sp_animation_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_animation_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPAnimation * animation;
 
@@ -112,7 +112,7 @@ static void sp_ianimation_init (SPIAnimation *animation);
 
 static void sp_ianimation_build (SPObject *object, SPDocument *document, SPRepr *repr);
 static void sp_ianimation_release (SPObject *object);
-static void sp_ianimation_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_ianimation_set (SPObject *object, unsigned int key, const gchar *value);
 
 static SPObjectClass *ianimation_parent_class;
 
@@ -131,7 +131,7 @@ sp_ianimation_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_ianimation_init,
 		};
-		type = g_type_register_static (SP_TYPE_OBJECT, "SPIAnimation", &info, 0);
+		type = g_type_register_static (SP_TYPE_OBJECT, "SPIAnimation", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -145,7 +145,7 @@ sp_ianimation_class_init (SPIAnimationClass *klass)
 	gobject_class = (GObjectClass *) klass;
 	sp_object_class = (SPObjectClass *) klass;
 
-	ianimation_parent_class = g_type_class_peek_parent (klass);
+	ianimation_parent_class = (SPObjectClass*)g_type_class_peek_parent (klass);
 
 	sp_object_class->build = sp_ianimation_build;
 	sp_object_class->release = sp_ianimation_release;
@@ -181,7 +181,7 @@ sp_ianimation_release (SPObject *object)
 }
 
 static void
-sp_ianimation_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_ianimation_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPIAnimation *ianimation;
 
@@ -200,7 +200,7 @@ static void sp_animate_init (SPAnimate *animate);
 
 static void sp_animate_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static void sp_animate_release (SPObject *object);
-static void sp_animate_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_animate_set (SPObject *object, unsigned int key, const gchar *value);
 
 static SPIAnimationClass *animate_parent_class;
 
@@ -219,7 +219,7 @@ sp_animate_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_animate_init,
 		};
-		type = g_type_register_static (SP_TYPE_IANIMATION, "SPAnimate", &info, 0);
+		type = g_type_register_static (SP_TYPE_IANIMATION, "SPAnimate", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -233,7 +233,7 @@ sp_animate_class_init (SPAnimateClass *klass)
 	gobject_class = (GObjectClass *) klass;
 	sp_object_class = (SPObjectClass *) klass;
 
-	animate_parent_class = g_type_class_peek_parent (klass);
+	animate_parent_class = (SPIAnimationClass*)g_type_class_peek_parent (klass);
 
 	sp_object_class->build = sp_animate_build;
 	sp_object_class->release = sp_animate_release;
@@ -259,7 +259,7 @@ sp_animate_release (SPObject *object)
 }
 
 static void
-sp_animate_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_animate_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPAnimate * animate;
 

@@ -38,7 +38,7 @@ static void sp_clippath_init (SPClipPath *clippath);
 
 static void sp_clippath_build (SPObject *object, SPDocument *document, SPRepr *repr);
 static void sp_clippath_release (SPObject * object);
-static void sp_clippath_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_clippath_set (SPObject *object, unsigned int key, const gchar *value);
 static void sp_clippath_child_added (SPObject *object, SPRepr *child, SPRepr *ref);
 static void sp_clippath_remove_child (SPObject *object, SPRepr *child);
 static void sp_clippath_update (SPObject *object, SPCtx *ctx, guint flags);
@@ -64,7 +64,7 @@ sp_clippath_get_type (void)
 			16,
 			(GInstanceInitFunc) sp_clippath_init,
 		};
-		type = g_type_register_static (SP_TYPE_OBJECTGROUP, "SPClipPath", &info, 0);
+		type = g_type_register_static (SP_TYPE_OBJECTGROUP, "SPClipPath", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -78,7 +78,7 @@ sp_clippath_class_init (SPClipPathClass *klass)
 	gobject_class = (GObjectClass *) klass;
 	sp_object_class = (SPObjectClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_OBJECTGROUP);
+	parent_class = (SPObjectGroupClass*)g_type_class_ref (SP_TYPE_OBJECTGROUP);
 
 	sp_object_class->build = sp_clippath_build;
 	sp_object_class->release = sp_clippath_release;
@@ -137,7 +137,7 @@ sp_clippath_release (SPObject * object)
 }
 
 static void
-sp_clippath_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_clippath_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPClipPath *cp;
 
@@ -377,17 +377,17 @@ sp_clippath_set_bbox (SPClipPath *cp, unsigned int key, NRRectF *bbox)
 SPClipPathView *
 sp_clippath_view_new_prepend (SPClipPathView *list, unsigned int key, NRArenaItem *arenaitem)
 {
-	SPClipPathView *new;
+	SPClipPathView *new_path_view;
 
-	new = g_new (SPClipPathView, 1);
+	new_path_view = g_new (SPClipPathView, 1);
 
-	new->next = list;
-	new->key = key;
-	new->arenaitem = nr_arena_item_ref (arenaitem);
-	new->bbox.x0 = new->bbox.x1 = 0.0;
-	new->bbox.y0 = new->bbox.y1 = 0.0;
+	new_path_view->next = list;
+	new_path_view->key = key;
+	new_path_view->arenaitem = nr_arena_item_ref (arenaitem);
+	new_path_view->bbox.x0 = new_path_view->bbox.x1 = 0.0;
+	new_path_view->bbox.y0 = new_path_view->bbox.y1 = 0.0;
 
-	return new;
+	return new_path_view;
 }
 
 SPClipPathView *

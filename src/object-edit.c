@@ -31,7 +31,7 @@ static SPKnotHolder *sp_spiral_knot_holder (SPItem * item, SPDesktop *desktop);
 SPKnotHolder *
 sp_item_knot_holder (SPItem *item, SPDesktop *desktop)
 {
-	const unsigned char *name;
+	const gchar *name;
 	name = sp_object_tagName_get ((SPObject *) item, NULL);
 	if (SP_IS_RECT (item)) {
 		return sp_rect_knot_holder (item, desktop);
