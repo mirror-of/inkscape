@@ -533,6 +533,7 @@ sp_selected_path_outline ()
     SPSelection *selection = SP_DT_SELECTION (desktop);
 
     if (selection->isEmpty()) {
+        // TRANSLATORS: "to outline" means "to convert stroke to path"
         sp_view_set_statusf_flash (SP_VIEW(desktop), _("Select some paths to outline."));
         return;
     }
@@ -730,6 +731,7 @@ sp_selected_path_outline ()
     if (did) {
         sp_document_done (SP_DT_DOCUMENT (desktop));
     } else {
+        // TRANSLATORS: "to outline" means "to convert stroke to path"
         sp_view_set_statusf_flash (SP_VIEW(desktop), _("No stroked paths to outline in the selection."));
         return;
     } 

@@ -384,6 +384,7 @@ static gchar * sp_typeset_description (SPItem * item)
 	if (((SPItemClass *) (parent_class))->description)
 		return ((SPItemClass *) (parent_class))->description (item);
 
+	// TRANSLATORS: "typeset object" is a text that flows inside a shape
 	return g_strdup_printf(_("typeset object"));
 }
 

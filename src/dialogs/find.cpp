@@ -538,6 +538,8 @@ sp_find_types ()
         }
 
         {
+            // TRANSLATORS: polyline is a set of connected straight line segments
+            // http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
             GtkWidget *c = sp_find_types_checkbox_indented (vb, "paths", TRUE, tt, _("Search paths, lines, polylines"), _("Paths"), NULL, 10);
             gtk_box_pack_start (GTK_BOX (vb_all), c, FALSE, FALSE, 0);
         }
