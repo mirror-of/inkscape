@@ -1,5 +1,14 @@
 2004-04-03  Ted Gould <ted@gould.cx>
 
+	* share/extensions/svgz_input.inkmod, src/file.cpp,
+      src/extension/extension.cpp, src/extension/internal/svg.cpp:
+	Making it so that input extensions can specify the output extension
+	that gets used to save them.  If this field isn't filled in, the value
+	gets set to NULL, and then the Save As dialog is used instead of
+	just trying to save.
+
+2004-04-03  Ted Gould <ted@gould.cx>
+
 	* src/file.cpp, src/main.cpp, src/extension/extension.cpp,
       src/extension/extension.h, src/extension/system.cpp,
       src/extension/internal/svg.cpp:

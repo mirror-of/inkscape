@@ -589,6 +589,7 @@ Input::Input (SPRepr * in_repr, Implementation::Implementation * in_imp) : Exten
     extension = NULL;
     filetypename = NULL;
     filetypetooltip = NULL;
+	output_extension = NULL;
 
     if (repr != NULL) {
         SPRepr * child_repr;
@@ -615,6 +616,10 @@ Input::Input (SPRepr * in_repr, Implementation::Implementation * in_imp) : Exten
                         g_free (filetypetooltip);
                         filetypetooltip = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
                     }
+                    if (!strcmp(sp_repr_name(child_repr), "output_extension")) {
+                        g_free (output_extension);
+                        output_extension = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
+                    }
 
                     child_repr = sp_repr_next(child_repr);
                 }
@@ -626,8 +631,6 @@ Input::Input (SPRepr * in_repr, Implementation::Implementation * in_imp) : Exten
         }
 
     }
-
-	output_extension = NULL;
 
     return;
 }

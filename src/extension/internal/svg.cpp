@@ -53,10 +53,9 @@ Svg::init(void)
 				"<mimetype>image/x-svg</mimetype>\n"
 				"<filetypename>Scalable Vector Graphic (SVG)</filetypename>\n"
 				"<filetypetooltip>Inkscape native file format and W3C standard</filetypetooltip>\n"
+				"<output_extension>" SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "</output_extension>\n"
 			"</input>\n"
 		"</spmodule>", new Svg());
-	/* TODO: a hack, this will go in the XML above shortly */
-	dynamic_cast<Inkscape::Extension::Input *>(ext)->output_extension = g_strdup(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE);
 
 	/* SVG out Inkscape*/
     ext = sp_module_system_build_from_mem(
