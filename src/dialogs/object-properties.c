@@ -37,7 +37,7 @@
 #include "stroke-style.h"
 #include "dialog-events.h"
 #include "verbs.h"
-
+#include "interface.h"
 #include "object-properties.h"
 
 static GtkWidget *dlg = NULL;
