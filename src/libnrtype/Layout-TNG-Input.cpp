@@ -56,7 +56,7 @@ void Layout::appendText(Glib::ustring const &text, SPStyle *style, void *source_
     _input_stream.push_back(new_source);
 }
 
-void Layout::_copyInputVector(std::vector<SPSVGLength> const &input_vector, unsigned input_offset, std::vector<SPSVGLength> *output_vector, unsigned max_length)
+void Layout::_copyInputVector(std::vector<SPSVGLength> const &input_vector, unsigned input_offset, std::vector<SPSVGLength> *output_vector, size_t max_length)
 {
     output_vector->clear();
     if (input_offset >= input_vector.size()) return;
