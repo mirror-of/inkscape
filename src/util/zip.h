@@ -52,6 +52,41 @@ List<typename ZipTraits<L0, L1>::TupleType> *zip(L0 list0, L1 list1) {
     return head;
 }
 
+template <typename L>
+struct UnzipTraits {
+    typedef typename L::Data::A A;
+    typedef typename L::Data::B B;
+    typedef List<A> ListA;
+    typedef List<B> ListB;
+    typedef Tuple<ListA *, ListB *> TupleType;
+};
+
+template <typename L>
+typename UnzipTraits<L>::TupleType unzip(L list) {
+    typedef typename Traits::List<L> ListT;
+    typedef typename UnzipTraits<L>::ListA ListA;
+    typedef typename UnzipTraits<L>::ListB ListB;
+    typedef typename UnzipTraits<L>::TupleType TupleType;
+
+    if (ListT::is_null(list)) {
+        return TupleType(NULL, NULL);
+    }
+
+    TupleType head(new ListA(ListT::first(list).a, NULL),
+                   new ListB(ListT::first(list).b, NULL));
+    TupleType tail(head);
+
+    for ( list = ListT::rest(list) ;
+          !ListT::is_null(list) ;
+          list = ListT::rest(list) )
+    {
+        tail.a = tail.a->setNext(new ListA(ListT::first(list).a, NULL));
+        tail.b = tail.b->setNext(new ListB(ListT::first(list).b, NULL));
+    }
+
+    return head;
+}
+
 }
 
 }
