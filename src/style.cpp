@@ -911,45 +911,57 @@ sp_style_merge_from_style_string (SPStyle *style, const gchar *p)
     gchar value [BMAX];
 
     while (*p) {
-        const gchar *s, *e;
-        gint len, idx, left, right;
+
         /* fixme: Use of isalpha seems to assume that p is valid.  E.g. it skips over
            punctuation, and the behaviour for accented characters varies according to
            LC_CTYPE. */
         while (!isalpha (*p)) {
             if (!*p) return;
-            p += 1;
+            p ++;
         }
-        s = strchr (p, ':');
+
+        const gchar *s = strchr (p, ':');
         if (!s) {
             g_warning ("No separator at style at: %s", p);
             return;
         }
-        e = strchr (p, ';');
+
+        const gchar *e = strchr (p, ';');
         if (!e) {
             e = p + strlen (p);
             // i think this is legal, so no need to warn
             //g_warning ("No end marker at style at: %s", p);
         }
-        len = MIN (s - p, 4095);
+
+        gint len = MIN (s - p, 4095);
         if (len < 1) {
-            g_warning ("Zero length style property at: %s", p);
+            g_warning ("Empty style property at: %s", p);
             return;
         }
+
+        gint left, right;
         trim_space (p, len, &left, &right);
+
+        if (left >= right || right > len) {
+            g_warning ("Empty style property at: %s", p);
+            return;
+        }
+
         memcpy (property, &p[left], right);
         property[right] = '\0';
 
-        idx = sp_attribute_lookup (property);
+        gint idx = sp_attribute_lookup (property);
         if (idx > 0) {
             len = MIN (e - s - 1, 4095);
             if (len > 0) {
                 trim_space (s + 1, len, &left, &right);
-                memcpy (value, s + 1 + left, right);
-                value[right] = '\0';
-                sp_style_merge_property (style, idx, value);
+                if (left < right) {
+                    memcpy (value, s + 1 + left, right);
+                    value[right] = '\0';
+                    sp_style_merge_property (style, idx, value);
+                }
             } else {
-                g_warning ("Strange style property value at: %s", p);
+                g_warning ("No style property value at: %s", p);
             }
         } else {
             g_warning ("Unknown style property at: %s", p);
