@@ -485,18 +485,20 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
                              G_CALLBACK (sp_sel_trans_handle_ungrab), (gpointer) &handle_center);
         }
 
+        sp_remove_handles(&seltrans.chandle, 1);
 	if ( seltrans.state == SP_SELTRANS_STATE_SCALE ) {
 		sp_remove_handles(seltrans.rhandle, 8);
-		sp_remove_handles(&seltrans.chandle, 1);
 		sp_show_handles(seltrans, seltrans.shandle, handles_scale, 8);
-		sp_knot_hide(seltrans.chandle);
 	} else {
 		sp_remove_handles(seltrans.shandle, 8);
-		sp_remove_handles(&seltrans.chandle, 1);
 		sp_show_handles(seltrans, seltrans.rhandle, handles_rotate, 8);
+	}
+        if ( seltrans.state == SP_SELTRANS_STATE_SCALE ) {
+		sp_knot_hide(seltrans.chandle);
+        } else {
 		sp_knot_show(seltrans.chandle);
 		sp_knot_set_position(seltrans.chandle, &seltrans.center, 0);
-	}
+        }
 }
 
 static void sp_sel_trans_update_volatile_state(SPSelTrans &seltrans)

@@ -1,3 +1,8 @@
+2004-06-24  MenTaLguY  <mental@rydia.net>
+
+	* src/seltrans.cpp: slight change to make showing/hiding center
+	  mark easier later on
+
 2004-06-23  MenTaLguY  <mental@rydia.net>
 
 	* src/Makefile_insert, src/desktop.cpp, src/managed.h,
