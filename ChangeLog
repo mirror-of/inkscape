@@ -1,3 +1,27 @@
+2005-01-25  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/dialogs/desktop-properties.cpp: Changed set of paper sizes offered:
+
+	  Removed `Folio' pagesize (which means a different paper size to
+	  different people; will Folio be missed?  If so, can we improve
+	  the name?).
+
+	  Changed ISO page sizes (A0..A10, B0..B10) to match official ISO
+	  specification in mm.
+
+	  Note that these differ from ghostscript's idea of page sizes;
+	  see comment in desktop-properties.cpp for speculation of
+	  possible problems (fuzziness from antialiasing).
+
+	  (Note also that our previous sizes differed even more from
+	  gs_statd.ps...)
+
+	  Coalesced Ledger and Tabloid to a single entry (11x17in);
+	  previously they differed in size.
+
+	  Changed Icon 16x16 from 16pt to 16px; similarly Icon 32x32 and
+	  Banner 468x60.
+
 2004-01-24  MenTaLguY  <mental@rydia.net>
 
 	* src/xml/simple-node.cpp: potential fix for bug #1108231
