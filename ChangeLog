@@ -1,3 +1,39 @@
+2004-03-10  bulia byak <bulia@users.sourceforge.net>
+ 
+	* src/sp-offset.cpp: Coalesce threshold depends on item size (less transform),
+	guarding against invalid item bbox, comments
+
+	* src/sp-text.cpp: TODO comment for effective_dx/dy
+
+	* src/splivarot.cpp src/preferences-skeleton.h: Inset/Outset handle multiple
+	selections, preserve z-order and grouping; Simplify handles multiple
+	selections, preserves z-order and grouping, threshold taken from prefs,
+	accelerated
+
+	* src/node-context.cpp src/text-context.cpp: Disregard groups when clicking
+
+	* src/shortcuts.cpp: Ctrl+/ for division, ctrl-alt-/ for slice (cut path),
+	bigger window for keys
+
+	* src/rect-context.cpp src/rect-context.h: Knotholder, signals and listeners,
+	selection by click, tolerance, Esc deselects
+
+	* src/toolbox.cpp: Rect toolbar: Spinbuttons cosmetics, keys, defocusing,
+	tooltips, fixes
+
+	* src/shortcuts.cpp: Ctrl+e zooms to window, export is ctrl+shift+e now
+
+	* src/selection-chemistry.cpp: Z-order fixes: Raise rewritten, diagnostics,
+	relative raise/lower only for overlapping objects
+
+	* src/verbs.cpp: raise/lower commands named more consistently
+
+	* src/sp-item.cpp src/sp-item.h: Sorting function for items 
+
+	* src/selection-chemistry.cpp: fix for 910017 
+
+	* src/splivarot.cpp: Remove fill for slice
+
 2004-03-09  rejon <jon@protofunk.org>
 
     * samples: I moved the contents of samples into the proper share dirs.
