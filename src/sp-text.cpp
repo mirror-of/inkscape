@@ -48,6 +48,7 @@
 #include "version.h"
 #include "inkscape.h"
 #include "view.h"
+#include "print.h"
 
 #include "sp-text.h"
 
@@ -2214,12 +2215,32 @@ sp_text_print (SPItem *item, SPPrintContext *ctx)
     NRMatrix ctm;
     sp_item_i2d_affine (item, &ctm);
 
-    for (SPObject *ch = sp_object_first_child(SP_OBJECT(text)) ; ch != NULL ; ch = SP_OBJECT_NEXT(ch) ) {
+    bool text_to_path;
+    sp_print_get_param(ctx, "textToPath", &text_to_path);
+    if (text_to_path) {
+      for (SPObject *ch = sp_object_first_child(SP_OBJECT(text)) ; ch != NULL ; ch = SP_OBJECT_NEXT(ch) ) {
         if (SP_IS_TSPAN (ch)) {
-            sp_chars_do_print (SP_CHARS (SP_TSPAN (ch)->string), ctx, &ctm, &pbox, &dbox, &bbox);
+	  sp_chars_do_print (SP_CHARS (SP_TSPAN (ch)->string), ctx, &ctm, &pbox, &dbox, &bbox);
         } else if (SP_IS_STRING (ch)) {
-            sp_chars_do_print (SP_CHARS (ch), ctx, &ctm, &pbox, &dbox, &bbox);
+	  sp_chars_do_print (SP_CHARS (ch), ctx, &ctm, &pbox, &dbox, &bbox);
         }
+      }
+    } else {
+      for (SPObject *ch = sp_object_first_child (SP_OBJECT(text));
+	   ch != NULL;
+	   ch = SP_OBJECT_NEXT (ch)) {
+
+	SPString* s = NULL;
+	if (SP_IS_STRING(ch)) {
+	  s = SP_STRING(ch);
+	} else if (SP_IS_TSPAN (ch)) {
+	  s = SP_STRING(SP_TSPAN(ch)->string);
+	}
+
+	if (s && strlen(s->text) > 0) {
+	  sp_print_text (ctx, s->text, *(s->p), SP_OBJECT_STYLE (ch));
+	}
+      }
     }
 }
 
