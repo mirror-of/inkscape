@@ -40,6 +40,15 @@ OBJECTS = \
 	dropper-context.o \
 	dyna-draw-context.o \
 	event-context.o \
+	extension/db.o \
+	extension/extension.o \
+	extension/implementation/script.o \
+	extension/init.o \
+	extension/internal/ps.o \
+	extension/internal/svg.o \
+	extension/internal/win32.o \
+	extension/menu.o \
+	extension/system.o \
 	file.o \
 	geom.o \
 	gradient-chemistry.o \
@@ -88,10 +97,13 @@ OBJECTS = \
 	libnr/nr-pixblock.o \
 	libnr/nr-point-fns.o \
 	libnr/nr-rect.o \
+	libnr/nr-rotate-test.o \
+	libnr/nr-scale-test.o \
 	libnr/nr-stroke.o \
 	libnr/nr-svp-render.o \
 	libnr/nr-svp-uncross.o \
 	libnr/nr-svp.o \
+	libnr/nr-translate-test.o \
 	libnr/nr-types.o \
 	libnr/nr-uta.o \
 	libnr/nr-values.o \
@@ -136,15 +148,6 @@ OBJECTS = \
 	livarot/ShapeMisc.o \
 	livarot/ShapeSweep.o \
 	livarot/ShapeSweepUtils.o \
-	module.o \
-	modules/db.o \
-	modules/extension.o \
-	modules/init.o \
-	modules/menu.o \
-	modules/ps.o \
-	modules/svg.o \
-	modules/system.o \
-	modules/win32.o \
 	node-context.o \
 	nodepath.o \
 	object-edit.o \
@@ -293,6 +296,15 @@ LINTS = \
 	dropper-context.lint \
 	dyna-draw-context.lint \
 	event-context.lint \
+	extension/db.lint \
+	extension/extension.lint \
+	extension/implementation/script.lint \
+	extension/init.lint \
+	extension/internal/ps.lint \
+	extension/internal/svg.lint \
+	extension/internal/win32.lint \
+	extension/menu.lint \
+	extension/system.lint \
 	file.lint \
 	geom.lint \
 	gradient-chemistry.lint \
@@ -341,10 +353,13 @@ LINTS = \
 	libnr/nr-pixblock.lint \
 	libnr/nr-point-fns.lint \
 	libnr/nr-rect.lint \
+	libnr/nr-rotate-test.lint \
+	libnr/nr-scale-test.lint \
 	libnr/nr-stroke.lint \
 	libnr/nr-svp-render.lint \
 	libnr/nr-svp-uncross.lint \
 	libnr/nr-svp.lint \
+	libnr/nr-translate-test.lint \
 	libnr/nr-types.lint \
 	libnr/nr-uta.lint \
 	libnr/nr-values.lint \
@@ -389,15 +404,6 @@ LINTS = \
 	livarot/ShapeMisc.lint \
 	livarot/ShapeSweep.lint \
 	livarot/ShapeSweepUtils.lint \
-	module.lint \
-	modules/db.lint \
-	modules/extension.lint \
-	modules/init.lint \
-	modules/menu.lint \
-	modules/ps.lint \
-	modules/svg.lint \
-	modules/system.lint \
-	modules/win32.lint \
 	node-context.lint \
 	nodepath.lint \
 	object-edit.lint \
@@ -509,13 +515,17 @@ LINTS = \
 INCLUDEPATH = \
 	-Idialogs \
 	-Idisplay \
+	-Iextension \
+	-Iextension/implementation \
+	-Iextension \
+	-Iextension/internal \
+	-Iextension \
 	-Ihelper \
 	-Iinkjar \
 	-Ilibarikkei \
 	-Ilibnr \
 	-Ilibnrtype \
 	-Ilivarot \
-	-Imodules \
 	-Isvg \
 	-Iutest \
 	-Iwidgets \

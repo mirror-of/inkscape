@@ -24,7 +24,7 @@ libnrtype/nr-type-gnome.cpp
 libnrtype/nr-type-xft.cpp
 livarot/Path-test.cpp
 main.cpp
-modules/gnome.cpp
+extension/internal/gnome.cpp
 svg/gill-svg-path.cpp
 test.c
 test.cpp

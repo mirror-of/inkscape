@@ -1,6 +1,6 @@
 
 #include "filedialog.h"
-#include "modules/win32.h"
+#include "extension/internal/win32.h"
 
 #include <windows.h>
 
