@@ -2293,10 +2293,10 @@ node_rotate_common (Path::Node *n, gdouble angle, int which, gboolean screen)
 		node_rotate_internal (n, angle, rme, rother, both);
 	}
 
-	me->pos += NR::Point(rme);
+	me->pos = n->pos + NR::Point(rme);
 
 	if (both || n->type == Path::NODE_SMOOTH || n->type == Path::NODE_SYMM) {
-		other->pos = NR::Point(rother) + n->pos;
+		other->pos =  n->pos + NR::Point(rother);
 	}
 
 	sp_node_ensure_ctrls (n);
@@ -2364,10 +2364,10 @@ void node_scale(Path::Node *n, gdouble grow, int which)
 		}
 	}
 
-	me->pos = NR::Point(rme) + n->pos;
+	me->pos = n->pos + NR::Point(rme);
 
 	if (both || n->type == Path::NODE_SYMM) {
-		other->pos = NR::Point(rother) + n->pos;
+		other->pos = n->pos + NR::Point(rother);
 	}
 
 	sp_node_ensure_ctrls (n);
