@@ -26,6 +26,7 @@ namespace GC {
 class Finalized {
 public:
     Finalized() {
+#ifdef USE_LIBGC
         void *mem=GC_base(this);
         if (mem) { // only if we were allocated via the GC
             CleanupFunc old_cleanup;
@@ -39,11 +40,14 @@ public:
                                                        NULL, NULL);
             }
         }
+#endif
     }
 
     virtual ~Finalized() {
+#ifdef USE_LIBGC
         // make sure the destructor won't get invoked twice
         GC_register_finalizer_ignore_self(GC_base(this), NULL, NULL, NULL, NULL);
+#endif
     }
 
 private:

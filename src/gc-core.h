@@ -12,9 +12,13 @@
 #ifndef SEEN_INKSCAPE_GC_CORE_H
 #define SEEN_INKSCAPE_GC_CORE_H
 
+#define USE_LIBGC
+
 #include <new>
 #include <cstdlib>
+#ifdef USE_LIBGC
 #include <gc/gc.h>
+#endif
 #include <glib/gmain.h>
 
 namespace Inkscape {
@@ -22,10 +26,12 @@ namespace Inkscape {
 namespace GC {
 
 inline void init() {
+#ifdef USE_LIBGC
     GC_finalize_on_demand = 1;
     GC_INIT();
     // ensure that finalizers are called at sane times
     g_idle_add(GSourceFunc(GC_invoke_finalizers), NULL);
+#endif
 }
 
 enum ScanPolicy {
@@ -56,6 +62,7 @@ inline void *operator new(size_t size,
 throw(std::bad_alloc)
 {
     void *mem;
+#ifdef USE_LIBGC
     if ( collect == Inkscape::GC::AUTO ) {
         if ( scan == Inkscape::GC::SCANNED ) {
             mem = GC_MALLOC(size);
@@ -75,6 +82,9 @@ throw(std::bad_alloc)
     if ( collect == Inkscape::GC::AUTO && cleanup ) {
         GC_REGISTER_FINALIZER_IGNORE_SELF(mem, cleanup, data, NULL, NULL);
     }
+#else
+    mem = ::operator new(size);
+#endif
     return mem;
 }
 
@@ -106,8 +116,17 @@ throw(std::bad_alloc)
     return operator new[](size, scan, Inkscape::GC::AUTO, cleanup, data);
 }
 
-inline void operator delete(void *mem, Inkscape::GC::Delete) { GC_FREE(mem); }
-inline void operator delete[](void *mem, Inkscape::GC::Delete) { GC_FREE(mem); }
+inline void operator delete(void *mem, Inkscape::GC::Delete) {
+#ifdef USE_LIBGC
+    GC_FREE(mem);
+#else
+    ::operator delete(mem);
+#endif
+}
+
+inline void operator delete[](void *mem, Inkscape::GC::Delete) {
+    operator delete(mem, Inkscape::GC::GC);
+}
 
 #endif
 /*

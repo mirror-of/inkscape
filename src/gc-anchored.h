@@ -44,7 +44,11 @@ class Anchored {
 public:
     void anchor() const {
         if (!_anchor) {
+#ifdef USE_LIBGC
             _anchor = new Anchor(GC_base(const_cast<Anchored *>(this)));
+#else
+            _anchor = new Anchor(NULL);
+#endif
         }
         _anchor->refcount++;
     }

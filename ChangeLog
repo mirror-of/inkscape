@@ -9,6 +9,12 @@
 
 	  work around livarot bugs so I can use ElectricFence
 
+	* src/gc-core.h, src/gc-finalized.h, src/gc-anchored.h,
+	  src/libnr/nr-object.cpp:
+	  
+	  make the garbage collector easy to disable by undefining
+	  USE_LIBGC in src/gc-core.h
+
 2004-08-26  MenTaLguY <mental@rydia.net>
 
 	* src/document-private.h, src/document.h, src/document.cpp:
