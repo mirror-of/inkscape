@@ -328,8 +328,8 @@ Path::DoSimplify (double treshhold,int recLevel)
         if ( contains_forced ) {
           lastP=forced_pt;
           nbPt=lastP-curP+1;
-          AttemptSimplify (treshhold,res,worstP);       // ca passe forcement
         }
+        AttemptSimplify (treshhold,res,worstP);       // ca passe forcement
       }
       step/=2;
     }
@@ -368,6 +368,9 @@ Path::DoSimplify (double treshhold,int recLevel)
 #endif
 }
 
+// warning: slow
+#define with_splotch_killer
+
 // fit a polyline to a bezier patch, return true is treshhold not exceeded (ie: you can continue)
 bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &worstP)
 {
@@ -375,6 +378,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
   // pour une coordonnee
   double * Xk;				// la coordonnee traitee (x puis y)
   double * Yk;				// la coordonnee traitee (x puis y)
+  double * lk;				// les longueurs de chaque segment
   double * tk;				// les tk
   double *  Qk;				// les Qk
   char *    fk;       // si point force
@@ -428,10 +432,12 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
   Qk = (double *) malloc (nbPt * sizeof (double));
   Xk = (double *) malloc (nbPt * sizeof (double));
   Yk = (double *) malloc (nbPt * sizeof (double));
+  lk = (double *) malloc (nbPt * sizeof (double));
   fk = (char *) malloc (nbPt * sizeof (char));
   
   // chord length method
   tk[0] = 0.0;
+  lk[0] = 0.0;
   {
     NR::Point prevP =start;
     for (int i = 1; i < nbPt; i++)
@@ -463,18 +469,13 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
       diff[1] = Yk[i] - prevP[1];
       prevP[0] = Xk[i];
       prevP[1] = Yk[i];
-      const double l = NR::L2(diff);
-      tk[i] = tk[i - 1] + l;
+      lk[i] = NR::L2(diff);
+      tk[i] = tk[i - 1] + lk[i];
     }
   }
   if (tk[nbPt - 1] < 0.00001)
   {
     // longueur nulle 
-    free (tk);
-    free (Qk);
-    free (Xk);
-    free (Yk);
-    free (fk);
     res.stD[0]=res.stD[1]=0;
     res.enD[0]=res.enD[1]=0;
     double worstD=0;
@@ -499,10 +500,16 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
         }
       }
     }
+    free (tk);
+    free (Qk);
+    free (Xk);
+    free (Yk);
+    free (fk);
+    free (lk);
     return false;
   }
-  for (int i = 1; i < nbPt - 1; i++)
-    tk[i] /= tk[nbPt - 1];
+  double   totLen=tk[nbPt - 1];
+  for (int i = 1; i < nbPt - 1; i++) tk[i] /= totLen;
   
   // la matrice tNN
   NR::Matrix M(0, 0, 0, 0, 0, 0);
@@ -519,11 +526,6 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
   if (fabs (det) < 0.000001)
   {
     // aie, non-inversible
-    free (tk);
-    free (Qk);
-    free (Xk);
-    free (Yk);
-    free (fk);
     res.stD[0]=res.stD[1]=0;
     res.enD[0]=res.enD[1]=0;
     double worstD=0;
@@ -547,6 +549,12 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
         }
       }
     }
+    free (tk);
+    free (Qk);
+    free (Xk);
+    free (Yk);
+    free (fk);
+    free (lk);
     return false;
   }
   {
@@ -594,27 +602,64 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
   cp1[1] = P[0];
   cp2[1] = P[1];
   
+  // calcul du delta= pondere par les longueurs des segments
   double delta = 0;
   {
     double worstD=0;
     worstP=-1;
+    NR::Point   prevAppP;
+    NR::Point   prevP;
+    double      prevDist;
+    prevP[0]=Xk[0];
+    prevP[1]=Yk[0];
+    prevAppP=prevP; // le premier seulement
+    prevDist=0;
     for (int i = 1; i < nbPt - 1; i++)
     {
-      NR::Point appP;
-      appP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0];
-      appP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1];
-      appP[0] -= Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
-      appP[1] -= Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
-      double nadd= dot(appP,appP);
-      delta+=nadd;
-      if ( nadd > worstD ) {
-        worstD=nadd;
+      NR::Point curAppP;
+      NR::Point curP;
+      double    curDist;
+#ifdef with_splotch_killer
+      NR::Point midAppP;
+      NR::Point midP;
+      double    midDist;
+#endif
+      
+      curAppP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0] + N03 (tk[i]) * Xk[0] + N33 (tk[i]) * Xk[nbPt - 1];
+      curAppP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1] + N03 (tk[i]) * Yk[0] + N33 (tk[i]) * Yk[nbPt - 1];
+      curP[0]=Xk[i];
+      curP[1]=Yk[i];
+#ifdef with_splotch_killer
+      midAppP[0] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[0] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[0] + N03 (0.5*(tk[i]+tk[i-1])) * Xk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Xk[nbPt - 1];
+      midAppP[1] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[1] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[1] + N03 (0.5*(tk[i]+tk[i-1])) * Yk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Yk[nbPt - 1];
+      midP=0.5*(curP+prevP);
+#endif
+      
+      NR::Point diff;
+      diff=curAppP-curP;
+      curDist=dot(diff,diff);
+#ifdef with_splotch_killer
+      diff=midAppP-midP;
+      midDist=dot(diff,diff);
+     
+      delta+=0.3333*(curDist+prevDist+midDist)*lk[i];
+#else
+      delta+=curDist;
+#endif
+      if ( curDist > worstD ) {
+        worstD=curDist;
         worstP=i;
-      } else if ( fk[i] && 2*nadd > worstD ) {
-        worstD=2*nadd;
+      } else if ( fk[i] && 2*curDist > worstD ) {
+        worstD=2*curDist;
         worstP=i;
       }
+      prevP=curP;
+      prevAppP=curAppP;
+      prevDist=curDist;
     }
+#ifdef with_splotch_killer
+    delta/=totLen;
+#endif
   }
   
   if (delta < treshhold * treshhold)
@@ -659,6 +704,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
       free (Xk);
       free (Yk);
       free(fk);
+      free (lk);
       res.stD[0]=res.stD[1]=0;
       res.enD[0]=res.enD[1]=0;
       return true;
@@ -713,23 +759,59 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
     {
       double worstD=0;
       worstP=-1;
+      NR::Point   prevAppP;
+      NR::Point   prevP;
+      double      prevDist;
+      prevP[0]=Xk[0];
+      prevP[1]=Yk[0];
+      prevAppP=prevP; // le premier seulement
+      prevDist=0;
       for (int i = 1; i < nbPt - 1; i++)
       {
-        NR::Point appP;
-        appP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0];
-        appP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1];
-        appP[0] -= Xk[i] - N03 (tk[i]) * Xk[0] - N33 (tk[i]) * Xk[nbPt - 1];
-        appP[1] -= Yk[i] - N03 (tk[i]) * Yk[0] - N33 (tk[i]) * Yk[nbPt - 1];
-        double nadd=dot(appP,appP);
-        ndelta += nadd;
-        if ( nadd > worstD ) {
-          worstD=nadd;
+        NR::Point curAppP;
+        NR::Point curP;
+        double    curDist;
+#ifdef with_splotch_killer
+        NR::Point midAppP;
+        NR::Point midP;
+        double    midDist;
+#endif
+        
+        curAppP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0] + N03 (tk[i]) * Xk[0] + N33 (tk[i]) * Xk[nbPt - 1];
+        curAppP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1] + N03 (tk[i]) * Yk[0] + N33 (tk[i]) * Yk[nbPt - 1];
+        curP[0]=Xk[i];
+        curP[1]=Yk[i];
+#ifdef  with_splotch_killer
+        midAppP[0] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[0] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[0] + N03 (0.5*(tk[i]+tk[i-1])) * Xk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Xk[nbPt - 1];
+        midAppP[1] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[1] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[1] + N03 (0.5*(tk[i]+tk[i-1])) * Yk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Yk[nbPt - 1];
+        midP=0.5*(curP+prevP);
+#endif
+        
+        NR::Point diff;
+        diff=curAppP-curP;
+        curDist=dot(diff,diff);
+#ifdef with_splotch_killer
+        diff=midAppP-midP;
+        midDist=dot(diff,diff);
+        
+        ndelta+=0.3333*(curDist+prevDist+midDist)*lk[i];
+#else
+        ndelta+=curDist;
+#endif
+        if ( curDist > worstD ) {
+          worstD=curDist;
           worstP=i;
-        } else if ( fk[i] && 2*nadd > worstD ) {
-          worstD=2*nadd;
+        } else if ( fk[i] && 2*curDist > worstD ) {
+          worstD=2*curDist;
           worstP=i;
         }
+        prevP=curP;
+        prevAppP=curAppP;
+        prevDist=curDist;
       }
+#ifdef with_splotch_killer
+      ndelta/=totLen;
+#endif
     }
     
     free (tk);
@@ -737,6 +819,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
     free (Xk);
     free (Yk);
     free(fk);
+    free (lk);
     
     if (ndelta < delta + 0.00001)
     {
@@ -761,6 +844,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
   free (Xk);
   free (Yk);
   free(fk);
+  free (lk);
   return false;
 }
 
@@ -816,7 +900,7 @@ Path::Coalesce (double tresh)
   Path*  tempDest=new Path();
   tempDest->SetBackData(false);
   
-  ConvertEvenLines (tresh);
+  ConvertEvenLines (0.25*tresh);
   
   
   int                 lastP = 0;

@@ -378,8 +378,7 @@ private:
   }
   outline_callback_data;
 
-  typedef void (outlineCallback) (outline_callback_data * data, double tol,
-				  double width);
+  typedef void (outlineCallback) (outline_callback_data * data, double tol,  double width);
   typedef struct outline_callbacks
   {
     outlineCallback *cubicto;

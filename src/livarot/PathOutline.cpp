@@ -520,7 +520,7 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
 		{
 			path_descr_cubicto* nData=(path_descr_cubicto*)(descr_data+curD->dStart);
 			nextX = nData->p;
-			// test de nullité du segment
+			// test de nullite du segment
 			if (IsNulCurve (curD, curX,descr_data))
 			{
 				curP++;
@@ -1322,7 +1322,8 @@ Path::RecStdCubicTo (outline_callback_data * data, double tol, double width,
 	}
 	const NR::Point diff = req - chk;
 	const double err = dot(diff,diff);
-	if (err <= tol * tol) {
+	if (err <= tol ) {  // tolerance is given as a quadratic value, no need to use tol*tol here
+//    printf("%f <= %f %i\n",err,tol,lev);
 		int n_d = data->dest->CubicTo (enPos + width*enNor,
 									   stGue*stTgt,
 									   enGue*enTgt);
@@ -1363,7 +1364,7 @@ Path::RecStdCubicTo (outline_callback_data * data, double tol, double width,
 void
 Path::StdCubicTo (Path::outline_callback_data * data, double tol, double width)
 {
-	fflush (stdout);
+//	fflush (stdout);
 	RecStdCubicTo (data, tol, width, 8);
 }
 
