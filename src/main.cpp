@@ -250,7 +250,8 @@ sp_main_gui(int argc, char const **argv)
     GSList *fl = NULL;
 
     //gtk_init(&argc, const_cast<char ***>(&argv));
-	Gtk::Main main_instance (&argc, const_cast<char ***>(&argv));
+    Gtk::Main main_instance (&argc, const_cast<char ***>(&argv));
+
     /* fixme: Move these to some centralized location (Lauris) */
     sp_object_type_register("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
     sp_object_type_register("sodipodi:guide", SP_TYPE_GUIDE);
@@ -310,7 +311,7 @@ sp_main_gui(int argc, char const **argv)
         }
     }
 
-	main_instance.run();
+    main_instance.run();
 
 #ifdef WIN32
     //We might not need anything here
@@ -380,7 +381,7 @@ sp_main_console(int argc, char const **argv)
     }
 
     /* Start up g type system, without requiring X */
-    g_type_init();
+    g_type_init(); /* this is already called above... ? */
     inkscape_application_init(argv[0]);
 
     while (fl) {
