@@ -85,6 +85,11 @@ class Trace
     /**
      *
      */
+    GdkPixbuf *getSelectedImage();
+
+    /**
+     *
+     */
     gboolean convertImageToPath(TracingEngine *engine);
 
     /**

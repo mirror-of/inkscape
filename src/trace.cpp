@@ -49,23 +49,64 @@ Trace::~Trace()
 }
 
 
-/**
- *  Static no-knowledge version
- */
-gboolean Trace::convertImageToPath(TracingEngine *engine)
+static SPImage *
+getSelectedSPImage()
 {
     if (!SP_ACTIVE_DESKTOP)
         {
         g_warning("Trace::convertImageToPath: no active desktop\n");
-        return false;
+        return NULL;
         }
 
     SPSelection *sel = SP_ACTIVE_DESKTOP->selection;
     if (!sel)
         {
         g_warning("Trace::convertImageToPath: nothing selected\n");
-        return false;
+        return NULL;
         }
+
+
+    SPItem *item = sel->singleItem();
+    if (!item)
+        {
+        g_warning("Trace::convertImageToPath: null image\n");
+        return NULL;
+        }
+
+    if (!SP_IS_IMAGE(item))
+        {
+        g_warning("Trace::convertImageToPath: object not an image\n");
+        return NULL;
+        }
+
+    SPImage *img = SP_IMAGE(item);
+
+    return img;
+
+}
+
+
+GdkPixbuf *
+Trace::getSelectedImage()
+{
+
+    SPImage *img = getSelectedSPImage();
+    if (!img)
+        return NULL;
+
+    GdkPixbuf *pixbuf = img->pixbuf;
+
+    return pixbuf;
+
+}
+
+
+/**
+ *  Static no-knowledge version
+ */
+gboolean Trace::convertImageToPath(TracingEngine *engine)
+{
+
 
     if (!SP_ACTIVE_DOCUMENT)
         {
@@ -74,20 +115,9 @@ gboolean Trace::convertImageToPath(TracingEngine *engine)
         }
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
 
-    SPItem *item = sel->singleItem();
-    if (!item)
-        {
-        g_warning("Trace::convertImageToPath: null image\n");
+    SPImage *img = getSelectedSPImage();
+    if (!img)
         return false;
-        }
-
-    if (!SP_IS_IMAGE(item))
-        {
-        g_warning("Trace::convertImageToPath: object not an image\n");
-        return false;
-        }
-
-    SPImage *img = SP_IMAGE(item);
 
     GdkPixbuf *pixbuf = img->pixbuf;
 
