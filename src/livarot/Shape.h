@@ -94,17 +94,20 @@ public:
 
   // flags
   int type;
-  int flags;
 
   int numberOfPoints() const { return nbPt; }
   bool hasPoints() const { return (nbPt != 0); }
   int numberOfEdges() const { return nbAr; }
   bool hasEdges() const { return (nbAr != 0); }
 
+  bool needPointsSorting() { flags |= need_points_sorting; }
+  bool needEdgesSorting()  { flags |= need_edges_sorting; }
+
 private:
 
   int nbPt; ///< number of points [FIXME: remove this in favour of pts.size()]
   int nbAr; ///< number of edges (aretes) [FIXME: remove this in favour of aretes.size()]
+  int flags;
   
   // temporary data for the various algorithms
   struct edge_data

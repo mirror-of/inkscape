@@ -457,7 +457,8 @@ nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
 						     shape->cached_fill->aretes[i].st);
 		    }
 		    shape->fill_shp->ForceToPolygon();
-		    shape->fill_shp->flags|=need_points_sorting | need_edges_sorting;
+		    shape->fill_shp->needPointsSorting();
+                    shape->fill_shp->needEdgesSorting();
 		}
 	    }
 //			shape->ctm = gc->transform;
@@ -568,7 +569,8 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
 						   shape->cached_stroke->aretes[i].st);
 		}
 		shape->stroke_shp->ForceToPolygon();
-		shape->stroke_shp->flags|=need_points_sorting | need_edges_sorting;
+		shape->stroke_shp->needPointsSorting();
+                shape->stroke_shp->needEdgesSorting();
 	    }
 	}
     }
