@@ -741,18 +741,13 @@ static void sp_stroke_style_set_join_buttons ( SPWidget *spw,
 static void sp_stroke_style_set_cap_buttons ( SPWidget *spw, 
                                               GtkWidget *active );
 
-static void sp_stroke_style_set_marker_buttons ( SPWidget *spw, 
-                                                 GtkWidget *active, 
-                                                 const gchar *marker_name );
 static void sp_stroke_style_width_changed (GtkAdjustment *adj, SPWidget *spw);
 static void sp_stroke_style_miterlimit_changed (GtkAdjustment *adj, SPWidget *spw);
 static void sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw);
 static void sp_stroke_style_line_dash_changed ( SPDashSelector *dsel, 
                                                 SPWidget *spw );
-static void sp_stroke_style_update_marker_buttons( SPWidget *spw, 
-                                                   const GSList *objects, 
-                                                   unsigned int loc, 
-                                                   const gchar *stock_type );
+
+static void sp_stroke_style_update_marker_menus( SPWidget *spw, const GSList *objects);
 
 static void sp_stroke_style_ensure_marker (const gchar* n);
 static gchar* ink_extract_marker_name(const gchar *n);
@@ -1131,12 +1126,13 @@ return mnu;
 
 /*user selected existing marker from list*/
 static void
-sp_marker_select (GtkOptionMenu *mnu,  GtkWidget *tbl)
+sp_marker_select (GtkOptionMenu *mnu,  GtkWidget *spw)
 {
     if (gtk_object_get_data (GTK_OBJECT (mnu), "update"))  return;
     SPDesktop *desktop = inkscape_active_desktop();
     SPDocument *doc = SP_DT_DOCUMENT (desktop);
     if (!SP_IS_DOCUMENT(doc)) return;
+
     /* Get Marker */
     if (!g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "marker")) return;
     gchar *markid = (gchar *) g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (mnu)))), "marker");
@@ -1144,13 +1140,14 @@ sp_marker_select (GtkOptionMenu *mnu,  GtkWidget *tbl)
     if (strcmp(markid, "none") != 0){
         if (!sp_document_lookup_id (doc, markid) && !SP_IS_MARKER(sp_document_lookup_id (doc, markid))) sp_marker_load_from_svg ( markid, doc );
         SPMarker *mark = SP_MARKER(sp_document_lookup_id (doc, markid));
-        if (mark){
+        if (mark) {
             SPRepr *repr = SP_OBJECT_REPR(mark);
             marker = g_strconcat ("url(#", sp_repr_attr(repr,"id"), ")",NULL);
         }
-    }else {
+    } else {
         marker = markid;
     }
+
     SPCSSAttr *css = sp_repr_css_attr_new ();
     gchar *menu_id = (gchar *) g_object_get_data (G_OBJECT(mnu), "menu_id");
     sp_repr_css_set_property (css, menu_id, marker);
@@ -1162,11 +1159,8 @@ sp_marker_select (GtkOptionMenu *mnu,  GtkWidget *tbl)
           sp_object_request_update (SP_OBJECT(items->data), SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
         }
+
     sp_repr_css_attr_unref (css);
-    g_free (marker);
-    g_free (menu_id);
-
-
 }
 
 /**
@@ -1304,66 +1298,6 @@ sp_stroke_style_line_widget_new (void)
     gtk_signal_connect ( GTK_OBJECT (ds), "changed", 
                          GTK_SIGNAL_FUNC (sp_stroke_style_line_dash_changed), 
                          spw );
-    i++;
-
-    /* Start Marker */
-    spw_label(t, _("Start Markers:"), 0, i);
-    hb = spw_hbox(t, 3, 1, i);
-    g_assert(hb != NULL);
-
-    tb = NULL;
-    tb = sp_stroke_radio_button ( tb, 
-                INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_NONE,
-                INKSCAPE_PIXMAPDIR "/marker_none_start.xpm",
-                hb, spw, "start_marker", "none" );
-    tb = sp_stroke_radio_button ( tb, 
-                INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_FILLED_ARROW,
-                INKSCAPE_PIXMAPDIR "/marker_triangle_start.xpm",
-                hb, spw, "start_marker", "url(#mTriangle)" );
-    tb = sp_stroke_radio_button ( tb, 
-                INKSCAPE_STOCK_START_MARKER INKSCAPE_STOCK_MARKER_HOLLOW_ARROW,
-                INKSCAPE_PIXMAPDIR "/marker_arrow_start.xpm",
-                hb, spw, "start_marker", "url(#mArrow)" );
-    i++;
-
-    /* Mid Marker */
-    spw_label(t, _("Mid Markers:"), 0, i);
-    hb = spw_hbox(t, 3, 1, i);
-    g_assert(hb != NULL);
-
-    tb = NULL;
-    tb = sp_stroke_radio_button ( tb, 
-                INKSCAPE_STOCK_MID_MARKER INKSCAPE_STOCK_MARKER_NONE,
-                INKSCAPE_PIXMAPDIR "/marker_none_end.xpm",
-                hb, spw, "mid_marker", "none" );
-    tb = sp_stroke_radio_button ( tb, 
-                INKSCAPE_STOCK_MID_MARKER INKSCAPE_STOCK_MARKER_FILLED_ARROW,
-                INKSCAPE_PIXMAPDIR "/marker_triangle_end.xpm",
-                hb, spw, "mid_marker", "url(#mTriangle)" );
-    tb = sp_stroke_radio_button ( tb, 
-                INKSCAPE_STOCK_MID_MARKER INKSCAPE_STOCK_MARKER_HOLLOW_ARROW,
-                INKSCAPE_PIXMAPDIR "/marker_triangle_end.xpm",
-                hb, spw, "mid_marker", "url(#mArrow)" );
-    i++;
-
-    /* End Marker */
-    spw_label(t, _("End Markers:"), 0, i);
-    hb = spw_hbox(t, 3, 1, i);
-    g_assert(hb != NULL);
-
-    tb = NULL;
-    tb = sp_stroke_radio_button ( tb, 
-                INKSCAPE_STOCK_END_MARKER INKSCAPE_STOCK_MARKER_NONE,
-                INKSCAPE_PIXMAPDIR "/marker_none_end.xpm",
-                hb, spw, "end_marker", "none" );
-    tb = sp_stroke_radio_button ( tb, 
-                INKSCAPE_STOCK_END_MARKER INKSCAPE_STOCK_MARKER_FILLED_ARROW,
-                INKSCAPE_PIXMAPDIR "/marker_triangle_end.xpm",
-                hb, spw, "end_marker", "url(#mTriangle)" );
-    tb = sp_stroke_radio_button ( tb, 
-                INKSCAPE_STOCK_END_MARKER INKSCAPE_STOCK_MARKER_HOLLOW_ARROW,
-                INKSCAPE_PIXMAPDIR "/marker_arrow_end.xpm",
-                hb, spw, "end_marker", "url(#mArrow)" );
     i++;
 
     /* Drop down marker selectors*/
@@ -1631,15 +1565,7 @@ sp_stroke_style_line_update ( SPWidget *spw, SPSelection *sel )
     sp_stroke_style_set_cap_buttons (spw, tb);
 
     /* Markers */
-    sp_stroke_style_update_marker_buttons ( spw, objects, 
-                                            SP_MARKER_LOC_START, 
-                                            INKSCAPE_STOCK_START_MARKER );
-    sp_stroke_style_update_marker_buttons ( spw, objects, 
-                                            SP_MARKER_LOC_MID, 
-                                            INKSCAPE_STOCK_MID_MARKER );
-    sp_stroke_style_update_marker_buttons ( spw, objects, 
-                                            SP_MARKER_LOC_END, 
-                                            INKSCAPE_STOCK_END_MARKER );
+    sp_stroke_style_update_marker_menus ( spw, objects ); 
 
     /* Dash */
     if (style->stroke_dash.n_dash > 0) {
@@ -1753,28 +1679,6 @@ sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr)
     } // end of switch()
     
     sp_stroke_style_set_cap_buttons (spw, tb);
-
-    /* Toggle buttons for markers - marker-start, marker-mid, and marker-end */
-    /* TODO:  There's also a generic 'marker' that applies to all, but we'll 
-     * leave that for later 
-     */
-    // tb = (GtkWidget*)gtk_object_get_data (GTK_OBJECT (spw), 
-    //      style->marker[SP_MARKER_LOC_START].value);
-    
-    tb = (GtkWidget*)gtk_object_get_data ( GTK_OBJECT (spw), 
-                                           INKSCAPE_STOCK_START_MARKER );
-    sp_stroke_style_set_marker_buttons ( spw, tb, 
-                                         INKSCAPE_STOCK_START_MARKER );
-
-    tb = (GtkWidget*)gtk_object_get_data ( GTK_OBJECT (spw), 
-                                           INKSCAPE_STOCK_MID_MARKER );
-    sp_stroke_style_set_marker_buttons (spw, tb, INKSCAPE_STOCK_MID_MARKER);
-
-    tb = (GtkWidget*)gtk_object_get_data ( GTK_OBJECT (spw), 
-                                           INKSCAPE_STOCK_END_MARKER );
-    sp_stroke_style_set_marker_buttons (spw, tb, INKSCAPE_STOCK_END_MARKER);
-
-
 
     /* Dash */
     if (style->stroke_dash.n_dash > 0) {
@@ -2018,52 +1922,6 @@ sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw)
                 sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
             }
             sp_stroke_style_set_cap_buttons (spw, GTK_WIDGET (tb));
-        } else if (start_marker) {
-        
-            /* Update the start marker style value based on what's set in 
-            * the widget 
-            */
-                
-            if (start_marker[0] != '\0') {
-                sp_stroke_style_ensure_marker (start_marker);
-            }
-
-            sp_repr_css_set_property (css, "marker-start", start_marker);
-            
-            for (r = reprs; r != NULL; r = r->next) {
-                    sp_repr_css_change_recursive ( (SPRepr *) r->data, css, 
-                                                   "style" );
-            }
-            sp_stroke_style_set_marker_buttons (spw, GTK_WIDGET (tb), 
-                                                 INKSCAPE_STOCK_START_MARKER);
-        
-        } else if (mid_marker) {
-                sp_repr_css_set_property (css, "marker-mid", mid_marker);
-            for (r = reprs; r != NULL; r = r->next) {
-                    sp_repr_css_change_recursive ( (SPRepr *) r->data, css, 
-                                                   "style" );
-            }
-            sp_stroke_style_set_marker_buttons ( spw, GTK_WIDGET (tb), 
-                                                 INKSCAPE_STOCK_MID_MARKER );
-
-            if (mid_marker[0] != '\0') {
-                sp_stroke_style_ensure_marker (mid_marker);
-            }
-
-        } else if (end_marker) {
-            
-            sp_repr_css_set_property (css, "marker-end", end_marker);
-                
-            for (r = reprs; r != NULL; r = r->next) {
-                    sp_repr_css_change_recursive ( (SPRepr *) r->data, css, 
-                                                   "style" );
-            }
-            sp_stroke_style_set_marker_buttons ( spw, GTK_WIDGET (tb), 
-                                                 INKSCAPE_STOCK_END_MARKER );
-
-            if (end_marker[0] != '\0') {
-                sp_stroke_style_ensure_marker (end_marker);
-            }
         }
 
         sp_repr_css_attr_unref (css);
@@ -2233,41 +2091,6 @@ sp_stroke_style_set_cap_buttons (SPWidget *spw, GtkWidget *active)
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
 }
 
-
-/**
-* Creates a set of marker buttons.  This routine creates togglebuttons for the
-* line markers.  Currently it provides just three options - none, filled or
-* hollow arrows.  This is intended only as a quicky way to get proof of concept
-* arrowhead functionality and is intended to be replaced by a more powerful and
-* flexible system later on.
-* 
-* spw - the widget to put the buttons onto.
-* active - the currently selected button.
-*
-*/
-static void
-sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active, const gchar *marker_name)
-{
-    /* Set up the various xpm's as an array so that new kinds of markers 
-     * can be added without having to cut and paste the code itself.
-     */
-    gchar const * const suffixes[] = {
-        INKSCAPE_STOCK_MARKER_NONE,
-        INKSCAPE_STOCK_MARKER_FILLED_ARROW,
-        INKSCAPE_STOCK_MARKER_HOLLOW_ARROW
-    };
-
-    for (unsigned i = 0; i < G_N_ELEMENTS(suffixes); ++i) {
-        gchar * const marker_xpm = g_strconcat(marker_name, suffixes[i], NULL);
-        GtkWidget *tb = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(spw), marker_xpm));
-        g_assert( tb != NULL );
-        if ( tb != NULL ) {
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(tb), ( active == tb ));
-        }
-        g_free(marker_xpm);
-    }
-}
-
 static void
 sp_stroke_style_update_marker_menus ( SPWidget *spw,
                                         const GSList *objects)
@@ -2343,66 +2166,7 @@ sp_stroke_style_update_marker_menus ( SPWidget *spw,
          GtkOptionMenu *mnu = (GtkOptionMenu *)g_object_get_data (G_OBJECT(spw), "end_mark_menu");
          gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), 0);
     }
-
-
 }
-
-
-/**
-* Checks the marker style settings for the selected objects and updates the
-* toggle buttons accordingly.
-*/
-static void
-sp_stroke_style_update_marker_buttons ( SPWidget *spw, 
-                                        const GSList *objects,
-                                        unsigned int loc, 
-                                        const gchar *stock_type) 
-{
-    SPObject *object = SP_OBJECT(objects->data);
-    unsigned int marker_type_set = object->style->marker[loc].set;
-    gchar const *marker_type = object->style->marker[loc].value;
-
-    /* Iterate through the objects and check the styles */
-    bool marker_valid = true;
-    for (GSList *l = objects->next; l != NULL; l = l->next) {
-        SPObject *o = SP_OBJECT(l->data);
-
-        if (marker_type_set != object->style->marker[loc].set) {
-            marker_valid = false;
-        } else if (marker_type_set && object->style->marker[loc].set) {
-            if (g_ascii_strcasecmp (o->style->marker[loc].value, marker_type)) {
-            marker_valid = false;
-        }
-    }
-    }
-
-    /* Work out the widget name that would have been used for this typ
-    ** of marker.  This doesn't seem very neat, but I suppose this code
-    ** will be ripped out when we have a more generic marker system.
-    */
-    gchar* widget_name = NULL;
-    if (marker_type && ! g_ascii_strcasecmp (marker_type, "url(#mTriangle)" ))
-        widget_name = g_strconcat (stock_type, INKSCAPE_STOCK_MARKER_FILLED_ARROW, NULL);
-    else if (marker_type && ! g_ascii_strcasecmp (marker_type, "url(#mArrow)" ))
-        widget_name = g_strconcat (stock_type, INKSCAPE_STOCK_MARKER_HOLLOW_ARROW, NULL );
-    else
-        widget_name = g_strconcat (stock_type, INKSCAPE_STOCK_MARKER_NONE, NULL);
-
-    GtkWidget *tb;
-    if (marker_valid) {
-        marker_status("Widget name is '%s'", widget_name);
-        tb = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), widget_name));
-    } else {
-        tb = NULL;
-    }
-
-    sp_stroke_style_update_marker_menus ( spw, objects);
-
-    g_free(widget_name);
-    sp_stroke_style_set_marker_buttons (spw, GTK_WIDGET (tb), stock_type);
-
-} // end of sp_stroke_style_update_marker_buttons()
-
 
 /**
 * Ensure that the a given marker type is present in the <def> section.
