@@ -211,7 +211,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
   a->SortPointsRounded ();
 
-//      a->Plot(200.0,200.0,2.0,400.0,400.0,true,true,true,true);
+  //      a->Plot(200.0,200.0,2.0,400.0,400.0,true,true,true,true);
 
   chgts = NULL;
   nbChgt = maxChgt = 0;
@@ -355,7 +355,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
       if (isIntersection)
 	{
-//                      printf("(%i %i [%i %i]) ",intersL->bord,intersR->bord,intersL->startPoint,intersR->startPoint);
+          //                      printf("(%i %i [%i %i]) ",intersL->bord,intersR->bord,intersL->startPoint,intersR->startPoint);
 	  intersL->RemoveEvent (sEvts, true);
 	  intersR->RemoveEvent (sEvts, false);
 
@@ -663,14 +663,14 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   chgts = NULL;
   nbChgt = maxChgt = 0;
 
-//  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
-//      Plot(200.0,200.0,2.0,400.0,400.0,true,true,true,true);
+  //  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
+  //      Plot(200.0,200.0,2.0,400.0,400.0,true,true,true,true);
 
   //      AssemblePoints(a);
 
-//      GetAdjacencies(a);
+  //      GetAdjacencies(a);
 
-//      MakeAretes(a);
+  //      MakeAretes(a);
   if (iData)
     free (iData);
   iData = NULL;
@@ -678,13 +678,13 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
   AssembleAretes (directed);
 
-//  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
+  //  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
 
   for (unsigned i = 0; i < pts.size(); i++)
     {
       pts[i].oldDegree = pts[i].dI + pts[i].dO;
     }
-//      Validate();
+  //      Validate();
 
   SetFlag (need_edges_sorting, true);
   if ( directed == fill_justDont ) {
@@ -692,158 +692,158 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   } else {
     GetWindings (a);
   }
-//  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
-//   if ( doDebug ) {
-//   a->CalcBBox();
-//     a->Plot(a->leftX,a->topY,32.0,0.0,0.0,true,true,true,true,"orig.svg");
-//     Plot(a->leftX,a->topY,32.0,0.0,0.0,true,true,true,true,"winded.svg");
-//   }
+  //  Plot (98.0, 112.0, 8.0, 400.0, 400.0, true, true, true, true);
+  //   if ( doDebug ) {
+  //   a->CalcBBox();
+  //     a->Plot(a->leftX,a->topY,32.0,0.0,0.0,true,true,true,true,"orig.svg");
+  //     Plot(a->leftX,a->topY,32.0,0.0,0.0,true,true,true,true,"winded.svg");
+  //   }
   if (directed == fill_positive)
-  {
-    if (invert)
     {
-      for (unsigned i = 0; i < aretes.size(); i++)
+      if (invert)
+        {
+          for (unsigned i = 0; i < aretes.size(); i++)
 	    {
 	      if (swdData[i].leW < 0 && swdData[i].riW >= 0)
-        {
-          eData[i].weight = 1;
-        }
+                {
+                  eData[i].weight = 1;
+                }
 	      else if (swdData[i].leW >= 0 && swdData[i].riW < 0)
-        {
-          Inverse (i);
-          eData[i].weight = 1;
-        }
+                {
+                  Inverse (i);
+                  eData[i].weight = 1;
+                }
 	      else
-        {
-          eData[i].weight = 0;
-          SubEdge (i);
-          i--;
-        }
+                {
+                  eData[i].weight = 0;
+                  SubEdge (i);
+                  i--;
+                }
 	    }
-    }
-    else
-    {
-      for (unsigned i = 0; i < aretes.size(); i++)
+        }
+      else
+        {
+          for (unsigned i = 0; i < aretes.size(); i++)
 	    {
 	      if (swdData[i].leW > 0 && swdData[i].riW <= 0)
-        {
-          eData[i].weight = 1;
-        }
+                {
+                  eData[i].weight = 1;
+                }
 	      else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
-        {
-          Inverse (i);
-          eData[i].weight = 1;
-        }
+                {
+                  Inverse (i);
+                  eData[i].weight = 1;
+                }
 	      else
-        {
-           eData[i].weight = 0;
-          SubEdge (i);
-          i--;
-        }
+                {
+                  eData[i].weight = 0;
+                  SubEdge (i);
+                  i--;
+                }
 	    }
+        }
     }
-  }
   else if (directed == fill_nonZero)
-  {
-    if (invert)
     {
-      for (unsigned i = 0; i < aretes.size(); i++)
+      if (invert)
+        {
+          for (unsigned i = 0; i < aretes.size(); i++)
 	    {
 	      if (swdData[i].leW < 0 && swdData[i].riW == 0)
-        {
-          eData[i].weight = 1;
-        }
+                {
+                  eData[i].weight = 1;
+                }
 	      else if (swdData[i].leW > 0 && swdData[i].riW == 0)
-        {
-          eData[i].weight = 1;
-        }
+                {
+                  eData[i].weight = 1;
+                }
 	      else if (swdData[i].leW == 0 && swdData[i].riW < 0)
-        {
-          Inverse (i);
-          eData[i].weight = 1;
-        }
+                {
+                  Inverse (i);
+                  eData[i].weight = 1;
+                }
 	      else if (swdData[i].leW == 0 && swdData[i].riW > 0)
-        {
-          Inverse (i);
-          eData[i].weight = 1;
-        }
+                {
+                  Inverse (i);
+                  eData[i].weight = 1;
+                }
 	      else
-        {
-          eData[i].weight = 0;
-          SubEdge (i);
-          i--;
-        }
+                {
+                  eData[i].weight = 0;
+                  SubEdge (i);
+                  i--;
+                }
 	    }
-    }
-    else
-    {
-      for (unsigned i = 0; i < aretes.size(); i++)
+        }
+      else
+        {
+          for (unsigned i = 0; i < aretes.size(); i++)
 	    {
 	      if (swdData[i].leW > 0 && swdData[i].riW == 0)
-        {
-          eData[i].weight = 1;
-        }
+                {
+                  eData[i].weight = 1;
+                }
 	      else if (swdData[i].leW < 0 && swdData[i].riW == 0)
-        {
-          eData[i].weight = 1;
-        }
+                {
+                  eData[i].weight = 1;
+                }
 	      else if (swdData[i].leW == 0 && swdData[i].riW > 0)
-        {
-          Inverse (i);
-          eData[i].weight = 1;
-        }
+                {
+                  Inverse (i);
+                  eData[i].weight = 1;
+                }
 	      else if (swdData[i].leW == 0 && swdData[i].riW < 0)
-        {
-          Inverse (i);
-          eData[i].weight = 1;
-        }
+                {
+                  Inverse (i);
+                  eData[i].weight = 1;
+                }
 	      else
-        {
-          eData[i].weight = 0;
-          SubEdge (i);
-          i--;
-        }
+                {
+                  eData[i].weight = 0;
+                  SubEdge (i);
+                  i--;
+                }
 	    }
+        }
     }
-  }
   else if (directed == fill_oddEven)
-  {
-    for (unsigned i = 0; i < aretes.size(); i++)
     {
-      swdData[i].leW %= 2;
-      swdData[i].riW %= 2;
-      if (swdData[i].leW < 0)
-        swdData[i].leW = -swdData[i].leW;
-      if (swdData[i].riW < 0)
-        swdData[i].riW = -swdData[i].riW;
-      if (swdData[i].leW > 0 && swdData[i].riW <= 0)
+      for (unsigned i = 0; i < aretes.size(); i++)
+        {
+          swdData[i].leW %= 2;
+          swdData[i].riW %= 2;
+          if (swdData[i].leW < 0)
+            swdData[i].leW = -swdData[i].leW;
+          if (swdData[i].riW < 0)
+            swdData[i].riW = -swdData[i].riW;
+          if (swdData[i].leW > 0 && swdData[i].riW <= 0)
 	    {
 	      eData[i].weight = 1;
 	    }
-      else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
+          else if (swdData[i].leW <= 0 && swdData[i].riW > 0)
 	    {
 	      Inverse (i);
 	      eData[i].weight = 1;
 	    }
-      else
+          else
 	    {
 	      eData[i].weight = 0;
 	      SubEdge (i);
 	      i--;
 	    }
-    }
-  } else if ( directed == fill_justDont ) {
-    for (unsigned i=0;i<aretes.size();i++) {
-      if ( aretes[i].st < 0 || aretes[i].en < 0 ) {
-        SubEdge(i);
-        i--;
-      } else {
-	      eData[i].weight = 0;
+        }
+    } else if ( directed == fill_justDont ) {
+      for (unsigned i=0;i<aretes.size();i++) {
+        if ( aretes[i].st < 0 || aretes[i].en < 0 ) {
+          SubEdge(i);
+          i--;
+        } else {
+          eData[i].weight = 0;
+        }
       }
     }
-  }
   
-//      Plot(200.0,200.0,2.0,400.0,400.0,true,true,true,true);
+  //      Plot(200.0,200.0,2.0,400.0,400.0,true,true,true,true);
 
   if (GetFlag (has_sweep_data))
     {
@@ -854,17 +854,17 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
   if ( directed == fill_justDont ) {
   } else {
     if (Eulerian (true) == false)
-    {
-//      Validate();
-      //              printf( "pas euclidian2");
-      MakePointData (false);
-      MakeEdgeData (false);
-      MakeSweepSrcData (false);
-      MakeSweepDestData (false);
-      a->CleanupSweep ();
-      Reset(0, 0);
-      return shape_euler_err;
-    }
+      {
+        //      Validate();
+        //              printf( "pas euclidian2");
+        MakePointData (false);
+        MakeEdgeData (false);
+        MakeSweepSrcData (false);
+        MakeSweepDestData (false);
+        a->CleanupSweep ();
+        Reset(0, 0);
+        return shape_euler_err;
+      }
   }
   MakePointData (false);
   MakeEdgeData (false);
