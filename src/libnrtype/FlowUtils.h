@@ -33,6 +33,10 @@ typedef struct flow_requirement {
 		if ( min_elem_no >= 0 && min_elem_pos != a.min_elem_pos ) return false;
 		return true;
 	};
+	flow_requirement() : rtl(false), ascent(0.0), descent(0.0),
+			     leading(0.0), next_line(false),
+			     min_elem_no(0), min_elem_pos(0), min_brk(0),
+			     min_fallback(0), score_malus(0.0) {};
 } flow_requirement;
 
 class flow_brk {
