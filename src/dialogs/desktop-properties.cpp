@@ -278,7 +278,7 @@ sp_doc_dialog_license_selected ( GtkWidget *widget, gpointer data )
 }
 
 static void
-sp_doc_dialog_text_changed ( GtkWidget *widget, gpointer data )
+sp_doc_dialog_work_entity_changed ( GtkWidget *widget, gpointer data )
 {
     if (!dlg || g_object_get_data(G_OBJECT(dlg), "update")) {
         return;
@@ -503,7 +503,7 @@ sp_doc_dialog_paper_orientation_selected(GtkWidget *widget, gpointer data)
 }
 
 static void
-sp_doc_dialog_add_entry( char * name,
+sp_doc_dialog_add_work_entity( char * name,
                          GtkWidget * t, int row )
 {
     g_assert ( t != NULL );
@@ -532,7 +532,7 @@ sp_doc_dialog_add_entry( char * name,
         GtkWidget *e = gtk_entry_new ();
         gtk_widget_show (e);
         g_signal_connect ( G_OBJECT (e), "changed",
-                           G_CALLBACK (sp_doc_dialog_text_changed),
+                           G_CALLBACK (sp_doc_dialog_work_entity_changed),
                            (gpointer)(name));
         //gtk_box_pack_start (GTK_BOX (hb), e, TRUE, TRUE, 0);
         gtk_table_attach( GTK_TABLE(t), e, 1, 2, row, row+1,
@@ -866,16 +866,16 @@ sp_desktop_dialog(void)
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
 
         row=0;
-        sp_doc_dialog_add_entry( "title", t, row++ );
-        sp_doc_dialog_add_entry( "date", t, row++ );
-        sp_doc_dialog_add_entry( "creator", t, row++ );
-        sp_doc_dialog_add_entry( "owner", t, row++ );
-        sp_doc_dialog_add_entry( "publisher", t, row++ );
-        sp_doc_dialog_add_entry( "source", t, row++ );
-        sp_doc_dialog_add_entry( "keywords", t, row++ );
+        sp_doc_dialog_add_work_entity( "title", t, row++ );
+        sp_doc_dialog_add_work_entity( "date", t, row++ );
+        sp_doc_dialog_add_work_entity( "creator", t, row++ );
+        sp_doc_dialog_add_work_entity( "owner", t, row++ );
+        sp_doc_dialog_add_work_entity( "publisher", t, row++ );
+        sp_doc_dialog_add_work_entity( "source", t, row++ );
+        sp_doc_dialog_add_work_entity( "keywords", t, row++ );
 
         /* this needs to be multi-line text entry */
-        sp_doc_dialog_add_entry( "description", t, row++ );
+        sp_doc_dialog_add_work_entity( "description", t, row++ );
 
         vb = gtk_vbox_new (FALSE, 4);
         gtk_widget_show (vb);
@@ -958,6 +958,16 @@ sp_dtw_deactivate_desktop(Inkscape::Application *inkscape,
         sp_repr_remove_listener_by_data(SP_OBJECT_REPR(desktop->namedview), dlg);
     }
     sp_dtw_update(dialog, NULL);
+}
+
+static void
+sp_doc_dialog_update_work_entity( char * name )
+{
+   if (dlg) {
+        GtkWidget *e = (GtkWidget *)g_object_get_data(G_OBJECT(dlg), name);
+
+        gtk_entry_set_text ( GTK_ENTRY (e), rdf_get_work_string( name ) );
+   } 
 }
 
 static void
@@ -1152,6 +1162,15 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         gtk_adjustment_set_value(a, doch);
 
         // end of "document settings" stuff
+
+        sp_doc_dialog_update_work_entity( "title" );
+        sp_doc_dialog_update_work_entity( "date" );
+        sp_doc_dialog_update_work_entity( "creator" );
+        sp_doc_dialog_update_work_entity( "owner" );
+        sp_doc_dialog_update_work_entity( "publisher" );
+        sp_doc_dialog_update_work_entity( "source" );
+        sp_doc_dialog_update_work_entity( "keywords" );
+        sp_doc_dialog_update_work_entity( "description" );
 
         gtk_object_set_data(GTK_OBJECT(dialog), "update", GINT_TO_POINTER(FALSE));
     }

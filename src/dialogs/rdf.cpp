@@ -176,6 +176,10 @@ rdf_find_entity(char * name)
  * useful for testing.  We must merge the rdf struct into the XML DOM for
  * changes to be saved.
  */
+/*
+
+printf_escaped doesn't exist for most people...
+
 gchar *
 rdf_string(struct rdf_t * rdf)
 {
@@ -281,6 +285,7 @@ rdf_string(struct rdf_t * rdf)
 
     return string;
 }
+*/
 
 gchar *
 rdf_get_work_string(char * name)
