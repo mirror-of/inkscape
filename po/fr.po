@@ -1,4 +1,4 @@
-# translation of fr2.po to Français
+# translation of fr.po to Français
 # French translation of Inkscape.
 # Copyright (C) 2000-2003 Free Software Foundation, Inc.
 # Christophe Merlet (RedFox) <redfox@redfoxcenter.org>, 2000-2002.
@@ -8,15 +8,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Inkscape 0.37\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-05 22:49-0700\n"
-"PO-Revision-Date: 2004-02-11 20:58+0100\n"
+"Project-Id-Version: fr\n"
+"POT-Creation-Date: 2004-04-06 18:25-0300\n"
+"PO-Revision-Date: 2004-04-02 20:41+0200\n"
 "Last-Translator: Frederic Rodrigo <f.rodrigo@tuxfamily.org>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
+"X-Generator: KBabel 1.3\n"
 
 #: inkscape.desktop.in.h:1
 msgid "Inkscape"
@@ -575,7 +576,7 @@ msgstr "Rôle :"
 
 #: src/dialogs/object-attributes.cpp:35
 msgid "Arcrole:"
-msgstr "Arcrole :"
+msgstr ""
 
 #: src/dialogs/object-attributes.cpp:36
 msgid "Title:"
@@ -618,9 +619,8 @@ msgid "ARG2:"
 msgstr "ARG2 :"
 
 #: src/dialogs/object-attributes.cpp:50
-#, fuzzy
 msgid "Flatsides:"
-msgstr "Côtés :"
+msgstr "Côtés-plat :"
 
 #. Expansion
 #: src/dialogs/object-attributes.cpp:57 src/spiral-context.cpp:543
@@ -681,7 +681,7 @@ msgstr "Largeur du trait"
 #: src/dialogs/object-properties.cpp:259
 #, fuzzy
 msgid "Stroke style"
-msgstr "Paramètres du tracé"
+msgstr "Largeur du trait"
 
 #: src/dialogs/object-properties.cpp:271
 msgid "Apply to:"
@@ -956,9 +956,8 @@ msgid ""
 msgstr ""
 
 #: src/file.cpp:217 src/file.cpp:223
-#, fuzzy
 msgid "Document not saved."
-msgstr "Nom du document :"
+msgstr "Document non sauvé."
 
 #: src/file.cpp:222
 #, c-format
@@ -966,23 +965,21 @@ msgid "File %s could not be saved."
 msgstr ""
 
 #: src/file.cpp:228
-#, fuzzy
 msgid "Document saved."
-msgstr "Nom du document :"
+msgstr "Document sauvé."
 
 #: src/file.cpp:251
-#, fuzzy
 msgid "Select file to save"
-msgstr "Sélectionnez un fichier à ouvrir"
+msgstr "Sauver le fichier sous ..."
 
 #: src/file.cpp:331
 msgid "No changes need to be saved."
-msgstr ""
+msgstr "Pas de changement à sauver."
 
 #: src/file.cpp:466
 #, c-format
 msgid "Unable to import image '%s': %s"
-msgstr ""
+msgstr "Impossible de d'importer l'image '%s' : %s"
 
 #: src/file.cpp:496
 msgid "Select file to import"
@@ -1236,31 +1233,28 @@ msgid "_New View"
 msgstr "_Nouvelle vue"
 
 #: src/interface.cpp:661
-#, fuzzy
 msgid "Autoraise Dialogs"
-msgstr "Fermer la fenêtre de dialogue"
+msgstr "Remonté auto des dialogues"
 
 #: src/interface.cpp:680
 msgid "_Keys and Mouse"
-msgstr ""
+msgstr "Touches et souris (_K)"
 
 #: src/interface.cpp:682
 msgid "_Tutorials"
-msgstr ""
+msgstr "_Tutorials"
 
 #: src/interface.cpp:684
-#, fuzzy
 msgid "Inkscape: _Basic"
-msgstr "Inkscape"
+msgstr "Inkscape: _Basique"
 
 #: src/interface.cpp:684
 msgid "tutorial-basic.svg"
 msgstr ""
 
 #: src/interface.cpp:685
-#, fuzzy
 msgid "Inkscape: _Advanced"
-msgstr "_Options d'Inkscape"
+msgstr "Inkscape: _Avancé"
 
 #: src/interface.cpp:685
 msgid "tutorial-advanced.svg"
@@ -1268,7 +1262,7 @@ msgstr ""
 
 #: src/interface.cpp:686
 msgid "_Elements of Design"
-msgstr ""
+msgstr "Él_ement de design"
 
 #: src/interface.cpp:686
 msgid "elementsofdesign.svg"
@@ -1380,9 +1374,10 @@ msgid ""
 "file size and can be arbitrarily scaled, but alpha transparency, gradients, "
 "markers, and patterns will be lost."
 msgstr ""
-"Utiliser les opérateurs vectoriels PostScript, l'image résultante sera "
-"(habituellement) plus petite et d'une échelle arbitraire; Par contre, la "
-"transparence alpha, les marqueurs et les modèles seront perdus"
+"Utiliser les opérateurs vectoriels PostScript, l'image résultante sera (en "
+"général) plus petite tout en restant vectorielle; par contre, la "
+"transparence alpha, les dégradés, les marqueurs et les motifs (patterns) "
+"seront perdus"
 
 #: src/extension/internal/ps.cpp:139
 msgid "Print as bitmap"
@@ -1479,7 +1474,7 @@ msgstr "x0:y0:x1:y1"
 
 #: src/main.cpp:151
 msgid "The width of generated bitmap in pixels (overwrites dpi)"
-msgstr "La largeur en pixels du bitmap généré (écrase ppp)"
+msgstr "La largeur en pixels du bitmap généré (écrase les dpi)"
 
 #: src/main.cpp:151
 msgid "WIDTH"
@@ -1487,7 +1482,7 @@ msgstr "LARGEUR"
 
 #: src/main.cpp:153
 msgid "The height of generated bitmap in pixels (overwrites dpi)"
-msgstr "La hauteur en pixels du bitmap généré (écrase ppp)"
+msgstr "La hauteur en pixels du bitmap généré (écrase les dpi)"
 
 #: src/main.cpp:153
 msgid "HEIGHT"
@@ -1507,7 +1502,7 @@ msgstr "COULEUR"
 #, fuzzy
 msgid "Export document to plain SVG file (no sodipodi or inkscape namespaces)"
 msgstr ""
-"Exporter le document en SVG plein (pas de d'espace de nom \"xmlns:sodipodi\")"
+"Exporter le document en SVG plein (pas d'espace de nom \"xmlns:sodipodi\")"
 
 #: src/main.cpp:159
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
@@ -1616,7 +1611,6 @@ msgstr "_Propriétés du lien"
 
 #. Select item
 #: src/object-ui.cpp:295
-#, fuzzy
 msgid "_Follow Link"
 msgstr "Suivre le lien (_F)"
 
@@ -1656,32 +1650,25 @@ msgid "Spiral _Properties"
 msgstr "_Propriétés de la Spirale"
 
 #: src/path-chemistry.cpp:53
-#, fuzzy
 msgid "Select at least 2 objects to combine."
-msgstr "Sélectionner au moins deux objets pour les grouper."
+msgstr "Sélectionner au moins 2 objets pour les combiner."
 
 #: src/path-chemistry.cpp:60
-#, fuzzy
 msgid "One of the objects is not a path, cannot combine."
-msgstr ""
-"Un des objets n'est pas un chemin, impossible d'effectuer une opération "
-"booléenne."
+msgstr "Un des objets n'est pas un chemin, impossible de les combiner."
 
 #: src/path-chemistry.cpp:68
-#, fuzzy
 msgid "You cannot combine objects from different groups or layers."
 msgstr ""
-"Vous ne pouvais pas grouper des objets de différents groupes ou calques."
+"Vous ne pouvais pas combiner des objets de différents groupes ou calques."
 
 #: src/path-chemistry.cpp:139
-#, fuzzy
 msgid "Select some paths to break apart."
-msgstr "Sélectionner les objets à dupliquer."
+msgstr "Sélectionner les chemins à séparer."
 
 #: src/path-chemistry.cpp:210
-#, fuzzy
 msgid "No paths to break apart in the selection."
-msgstr "Pas de groupe à dégrouper dans la sélection."
+msgstr "Pas de groupe de chemins à séparer dans la sélection."
 
 #: src/rect-context.cpp:503
 #, fuzzy, c-format
@@ -1751,7 +1738,6 @@ msgid "Height of selection"
 msgstr "Hauteur de le sélection"
 
 #: src/selection-chemistry.cpp:62
-#, fuzzy
 msgid "Nothing was deleted."
 msgstr "Rien n'a était supprimé."
 
@@ -1781,30 +1767,26 @@ msgid "No groups to ungroup in the selection."
 msgstr "Pas de groupe à dégrouper dans la sélection."
 
 #: src/selection-chemistry.cpp:371
-#, fuzzy
 msgid "Select some objects to raise."
-msgstr "Sélectionner les objets à dupliquer."
+msgstr "Sélectionner des objets pour les faire remonter."
 
 #: src/selection-chemistry.cpp:377 src/selection-chemistry.cpp:450
-#, fuzzy
 msgid "You cannot raise/lower objects from different groups or layers."
 msgstr ""
-"Vous ne pouvais pas grouper des objets de différents groupes ou calques."
+"Vous ne pouvais pas faire remonter/descendre des objets de différents "
+"groupes ou calques."
 
 #: src/selection-chemistry.cpp:419
-#, fuzzy
 msgid "Select some objects to raise to top."
-msgstr "Sélectionner des objets pour pouvoir y coller un style dessus."
+msgstr "Sélectionner des objets pour les faire remonter au premier plan."
 
 #: src/selection-chemistry.cpp:444
-#, fuzzy
 msgid "Select some objects to lower."
-msgstr "Sélectionner les objets à dupliquer."
+msgstr "Sélectionner des objets pour les faire descendre."
 
 #: src/selection-chemistry.cpp:498
-#, fuzzy
 msgid "Select some objects to lower to bottom."
-msgstr "Sélectionner les objets à dupliquer."
+msgstr "Sélectionner des objets pour les faire descendre à l'arrière plan."
 
 #: src/selection-chemistry.cpp:532
 msgid "Nothing to undo."
@@ -1876,8 +1858,9 @@ msgid "Ellipse"
 msgstr "Ellipse"
 
 #: src/sp-ellipse.cpp:585
+#, fuzzy
 msgid "Circle"
-msgstr ""
+msgstr "Fichier"
 
 #: src/sp-ellipse.cpp:860
 msgid "Arc"
@@ -1949,9 +1932,9 @@ msgid "Spiral"
 msgstr "Spirale"
 
 #: src/sp-star.cpp:252
-#, c-format
+#, fuzzy, c-format
 msgid "Star of %d sides"
-msgstr ""
+msgstr "Coller aux guides"
 
 #: src/sp-star.cpp:253
 #, c-format
@@ -2001,20 +1984,19 @@ msgstr ""
 "L'objet sélectionné n'est pas un chemin, impossible d'en faire le contour."
 
 #: src/splivarot.cpp:553
-#, fuzzy
 msgid "Selected object is not stroked, cannot outline."
 msgstr ""
-"L'objet sélectionné n'est pas un chemin, impossible d'en faire le contour."
+"Les objets sélectionnées sont éparpillés (stroked), impossible d'en faire le "
+"contour."
 
 #: src/splivarot.cpp:607
-#, fuzzy
 msgid "Selected object has no curve, cannot outline."
 msgstr ""
-"L'objet sélectionné n'est pas un chemin, impossible d'en faire le contour."
+"L'objet sélectionné n'est pas une courbe, impossible d'en faire le contour."
 
 #: src/splivarot.cpp:678
 msgid "Outline of object could not be computed."
-msgstr ""
+msgstr "Le contour de l'objet ne peut pas être calculé."
 
 #: src/splivarot.cpp:837
 msgid "Selected object is not a path, cannot inset/outset."
@@ -2022,25 +2004,20 @@ msgstr ""
 "L'objet sélectionné n'est pas un chemin, impossible de grouper/dégrouper."
 
 #: src/splivarot.cpp:1038
-#, fuzzy
 msgid "Select some paths to inset/outset."
-msgstr ""
-"L'objet sélectionné n'est pas un chemin, impossible de grouper/dégrouper."
+msgstr "Sélectionner des chemins pour les grouper/dégrouper."
 
 #: src/splivarot.cpp:1263
-#, fuzzy
 msgid "No paths to inset/outset in the selection."
-msgstr "Pas de groupe à dégrouper dans la sélection."
+msgstr "Pas de chemin à grouper/dégrouper dans la sélection."
 
 #: src/splivarot.cpp:1307
-#, fuzzy
 msgid "Select some paths to simplify."
-msgstr "Sélectionner les objets à dupliquer."
+msgstr "Sélectionner les chemin à simplifier."
 
 #: src/splivarot.cpp:1403
-#, fuzzy
 msgid "No paths to simplify in the selection."
-msgstr "Pas de groupe à dégrouper dans la sélection."
+msgstr "Pas de chemin simplifier dans la sélection."
 
 #: src/star-context.cpp:448
 #, c-format
@@ -2065,7 +2042,7 @@ msgstr "Proportion :"
 #. Flat Sides checkbox
 #: src/star-context.cpp:554
 msgid "Flat Sided"
-msgstr ""
+msgstr "Coté aplati"
 
 #: src/toolbox.cpp:326
 msgid "Insert new nodes into selected segments"
@@ -2102,9 +2079,8 @@ msgid "Make selected nodes smooth"
 msgstr "Adoucir les noeuds sélectionnés"
 
 #: src/toolbox.cpp:352
-#, fuzzy
 msgid "Make selected nodes symmetric"
-msgstr "Adoucir les noeuds sélectionnés"
+msgstr "Rendre les noeuds sélectionnés symétriques"
 
 #: src/toolbox.cpp:357
 msgid "Make selected segments lines"
@@ -2116,44 +2092,39 @@ msgstr "Convertir les segments sélectionnés en courbes"
 
 #: src/toolbox.cpp:792
 msgid "Number of corners of a polygon or star"
-msgstr ""
+msgstr "Nombre de sommets des polygone ou des étoiles"
 
 #: src/toolbox.cpp:803
 msgid "Polygon"
-msgstr ""
+msgstr "Polygone"
 
 #: src/toolbox.cpp:810
 msgid "Create polygons instead of stars"
-msgstr ""
+msgstr "Créer des polygones à la place des étoiles"
 
 #: src/toolbox.cpp:819
-#, fuzzy
 msgid "Sharpness:"
-msgstr "Profil"
+msgstr "Adoucissement :"
 
 #: src/toolbox.cpp:826
 msgid "Base radius to tip radius ratio"
 msgstr ""
 
 #: src/toolbox.cpp:845
-#, fuzzy
 msgid "Reset tool options to defaults"
-msgstr ""
-"Réinitialisation de la fenêtre de  dialogue aux valeurs par défaut - Ctl+r"
+msgstr "Réinitialiser les options à celles par défauts"
 
 #: src/toolbox.cpp:1054
-#, fuzzy
 msgid "Rx:"
-msgstr "x0 :"
+msgstr "Rx :"
 
 #: src/toolbox.cpp:1061
 msgid "Corner radius to half-width ratio"
 msgstr ""
 
 #: src/toolbox.cpp:1072
-#, fuzzy
 msgid "Ry:"
-msgstr "y0 :"
+msgstr "Ry :"
 
 #: src/toolbox.cpp:1079
 msgid "Corner radius to half-height ratio"
@@ -2161,29 +2132,27 @@ msgstr ""
 
 #: src/toolbox.cpp:1090
 msgid "Not rounded"
-msgstr ""
+msgstr "Pas d'arrondi"
 
 #: src/toolbox.cpp:1301
-#, fuzzy
 msgid "Turns:"
-msgstr "Transformation"
+msgstr "Tours :"
 
 #: src/toolbox.cpp:1308
 msgid "Number of revolutions"
-msgstr ""
+msgstr "Nombre de révolutions"
 
 #: src/toolbox.cpp:1319
-#, fuzzy
 msgid "Divergence:"
-msgstr "_Différence"
+msgstr "Divergence :"
 
 #: src/toolbox.cpp:1326
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
-msgstr ""
+msgstr "Densité de la révolution; 1 = uniforme"
 
 #: src/toolbox.cpp:1344
 msgid "Radius of the innermost revolution"
-msgstr ""
+msgstr "Rayon intérieur de la révolution"
 
 #: src/tools-switch.cpp:118
 msgid ""
@@ -2373,7 +2342,6 @@ msgid "Do again last undone action"
 msgstr "Refaire l'action annulée"
 
 #: src/verbs.cpp:746
-#, fuzzy
 msgid "Cu_t"
 msgstr "Couper (_t)"
 
@@ -2390,9 +2358,8 @@ msgid "Copy selected objects to clipboard"
 msgstr "Copier les objets sélectionnés vers le presse-papiers"
 
 #: src/verbs.cpp:750
-#, fuzzy
 msgid "_Paste"
-msgstr "Coller (_p)"
+msgstr "Coller (_P)"
 
 #: src/verbs.cpp:751
 msgid "Paste objects from clipboard"
@@ -2407,14 +2374,12 @@ msgid "Apply style of copied object to selection"
 msgstr "Appliquer le style de l'objet copié a la sélection"
 
 #: src/verbs.cpp:754
-#, fuzzy
 msgid "Paste _In Place"
-msgstr "Coller le _Style"
+msgstr "Coller sur place (_I)"
 
 #: src/verbs.cpp:755
-#, fuzzy
 msgid "Paste objects to the original location"
-msgstr "Aligner les objets au milieu horizontal"
+msgstr "Coller les objets à leur emplacement d'origine"
 
 #: src/verbs.cpp:756
 msgid "_Delete"
@@ -2445,25 +2410,22 @@ msgid "Select _All"
 msgstr "Tout sélectionner"
 
 #: src/verbs.cpp:763
-#, fuzzy
 msgid "Select all objects or all nodes"
-msgstr "Sélectionner tous les objets du document"
+msgstr "Sélectionner tous les objets ou tous les noeuds"
 
 #: src/verbs.cpp:764
-#, fuzzy
 msgid "D_eselect"
-msgstr "Sélectionner"
+msgstr "Desél_ectionner"
 
 #: src/verbs.cpp:765
-#, fuzzy
 msgid "Deselect any selected objects or nodes"
-msgstr "Supprimer les objets sélectionnés"
+msgstr "Desélectionner tous les objets ou noeuds"
 
 #. Selection
 #: src/verbs.cpp:768
 #, fuzzy
 msgid "Raise to _Top"
-msgstr "Monter la sélection au premier plan"
+msgstr "Monter au premier plan"
 
 #: src/verbs.cpp:769
 msgid "Raise selection to top"
@@ -2472,14 +2434,13 @@ msgstr "Monter la sélection au premier plan"
 #: src/verbs.cpp:770
 #, fuzzy
 msgid "Lower to _Bottom"
-msgstr "Descendre la sélection en arrière plan"
+msgstr "Descendre en arrière plan"
 
 #: src/verbs.cpp:771
 msgid "Lower selection to bottom"
 msgstr "Descendre la sélection en arrière plan"
 
 #: src/verbs.cpp:772
-#, fuzzy
 msgid "_Raise"
 msgstr "Monter (_R)"
 
@@ -2542,7 +2503,7 @@ msgstr "Ou exclusif (XOR) des objets sélectionnes"
 #: src/verbs.cpp:789
 #, fuzzy
 msgid "Di_vision"
-msgstr "Dimension"
+msgstr "Division"
 
 #: src/verbs.cpp:790
 msgid "Cut the bottom object into pieces"
@@ -2551,7 +2512,7 @@ msgstr ""
 #: src/verbs.cpp:791
 #, fuzzy
 msgid "Cut _Path"
-msgstr "Désassembler le chemin"
+msgstr "Couper le chemin"
 
 #: src/verbs.cpp:792
 msgid "Cut the bottom path into pieces"
@@ -2633,9 +2594,8 @@ msgid "Create a dynamic offset object linked to the original path"
 msgstr "Créer un objet offset dynamique lié avec le chemin original"
 
 #: src/verbs.cpp:815
-#, fuzzy
 msgid "_Stroke to Path"
-msgstr "Contour en chemin (_S)"
+msgstr "Bri_ser en Chemin"
 
 #: src/verbs.cpp:816
 msgid "Convert selected stroke to path"
@@ -2662,7 +2622,6 @@ msgid "Combine multiple paths"
 msgstr "Combiner des chemins multiples"
 
 #: src/verbs.cpp:824
-#, fuzzy
 msgid "Break _Apart"
 msgstr "Briser en morceaux (_A)"
 
@@ -2782,7 +2741,7 @@ msgstr "Calligraphie"
 
 #: src/verbs.cpp:862
 msgid "Draw calligraphic lines (Ctrl+F6)"
-msgstr "Trace des lignes calligraphiques (Ctrl+F6)"
+msgstr "Trace des lignes calligraphique (Ctrl+F6)"
 
 #: src/verbs.cpp:864
 msgid "Create and edit text objects (F8)"
@@ -2915,11 +2874,11 @@ msgstr "Ajuster la sélection à la fenêtre"
 
 #: src/verbs.cpp:899
 msgid "_Fullscreen"
-msgstr ""
+msgstr "Plein écran (_F)"
 
 #: src/verbs.cpp:899
 msgid "Fullscreen"
-msgstr ""
+msgstr "Plein écran"
 
 #. Dialogs
 #: src/verbs.cpp:903
@@ -3063,7 +3022,7 @@ msgstr ""
 #: src/widgets/gradient-vector.cpp:820
 #, fuzzy
 msgid "Stop Color"
-msgstr "Couleur de départ"
+msgstr "Couleur solide"
 
 #: src/widgets/gradient-vector.cpp:846
 #, fuzzy
@@ -3123,7 +3082,7 @@ msgstr "Dégradé radial"
 
 #: src/widgets/sp-color-gtkselector.cpp:60
 msgid "System"
-msgstr ""
+msgstr "Système"
 
 #: src/widgets/sp-color-scales.cpp:81
 msgid "HSV"
@@ -3203,9 +3162,10 @@ msgstr "Valeur"
 #~ "Although inkscape will run, you can\n"
 #~ "neither load nor save preferences\n"
 #~ msgstr ""
-#~ "%s n'est pas un fichier régulié.\n"
-#~ "Bien que inkscape se lance prochainement, vous ne pourrez\n"
-#~ "ni charger ni enregistrer les préférences\n"
+#~ "%s n'est pas un fichier régulier.\n"
+#~ "Bien que inkscape se lance prochainement,\n"
+#~ "vous ne pourrez ni charger ni enregistrer\n"
+#~ "les préférences\n"
 
 #~ msgid ""
 #~ "%s either is not valid xml file or\n"
@@ -3215,9 +3175,10 @@ msgstr "Valeur"
 #~ "preferences."
 #~ msgstr ""
 #~ "Soit %s n'est pas un fichier xml valide soit\n"
-#~ "vous n'avez pas les droits de lecture dessus\n"
+#~ "vous n'avez pas les droits de lecture dessus.\n"
 #~ "Bien que inkscape fonctionne, vous ne\n"
-#~ "pourrez pas lire ou enregistrer les préférences."
+#~ "pourrez pas lire ou enregistrer les\n"
+#~ "préférences."
 
 #~ msgid ""
 #~ "%s is not valid inkscape preferences file.\n"
@@ -3225,9 +3186,10 @@ msgstr "Valeur"
 #~ "are neither able to load nor save\n"
 #~ "preferences."
 #~ msgstr ""
-#~ "%s n'est pas un fichier de préférences d'inkscape valide\n"
-#~ "Bien que inkscape fonctionne, vous ne\n"
-#~ "pourrez pas lire ou enregistrer les préférences."
+#~ "%s n'est pas un fichier de préférences\n"
+#~ "d'Inkscape valide. Bien que inkscape fonctionne,\n"
+#~ "vous ne pourrez pas lire ou enregistrer\n"
+#~ "les préférences."
 
 #~ msgid ""
 #~ "Cannot create directory %s.\n"
@@ -3248,7 +3210,8 @@ msgstr "Valeur"
 #~ msgstr ""
 #~ "%s n'est pas un répertoire valide.\n"
 #~ "Bien que inkscape fonctionne, vous ne\n"
-#~ "pourrez pas lire ou enregistrer les préférences."
+#~ "pourrez pas lire ou enregistrer les\n"
+#~ "préférences."
 
 #~ msgid ""
 #~ "Cannot create file %s.\n"
@@ -3258,7 +3221,8 @@ msgstr "Valeur"
 #~ msgstr ""
 #~ "Le fichier %s n'a pu être créé.\n"
 #~ "Bien que inkscape fonctionne, vous ne\n"
-#~ "pourrez pas lire ou enregistrer les préférences."
+#~ "pourrez pas lire ou enregistrer les\n"
+#~ "préférences."
 
 #~ msgid ""
 #~ "Cannot write file %s.\n"
@@ -3268,7 +3232,11 @@ msgstr "Valeur"
 #~ msgstr ""
 #~ "Le fichier %s n'a pu être enregistré.\n"
 #~ "Bien que inkscape fonctionne, vous ne\n"
-#~ "pourrez pas lire ou enregistrer les préférences."
+#~ "pourrez pas lire ou enregistrer les\n"
+#~ "préférences."
+
+#~ msgid "Start color"
+#~ msgstr "Couleur de départ"
 
 #~ msgid "End color"
 #~ msgstr "Couleur de fin"
@@ -3326,9 +3294,6 @@ msgstr "Valeur"
 
 #~ msgid "Tool has no attributes"
 #~ msgstr "L'outil n'a pas d'attributs"
-
-#~ msgid "File"
-#~ msgstr "Fichier"
 
 #~ msgid "Item"
 #~ msgstr "Élément"
@@ -4320,9 +4285,6 @@ msgstr "Valeur"
 
 #~ msgid "Empty"
 #~ msgstr "Vide"
-
-#~ msgid "Solid color"
-#~ msgstr "Couleur solide"
 
 #~ msgid "Do not use GUI. NB! if exist, should be FIRST argument!"
 #~ msgstr ""
