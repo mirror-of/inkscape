@@ -396,4 +396,6 @@ struct SPTextStyle {
 	SPILength letterspacing;
 };
 
+SPCSSAttr * sp_css_attr_from_style (SPObject *object);
+
 #endif
