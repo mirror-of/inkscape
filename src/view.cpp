@@ -223,7 +223,7 @@ void sp_view_set_document(SPView *view, SPDocument *doc)
 {
     g_return_if_fail(view != NULL);
     g_return_if_fail(SP_IS_VIEW(view));
-    g_return_if_fail(!doc);
+    g_return_if_fail(doc != NULL);
     
     if (((SPViewClass *) G_OBJECT_GET_CLASS(view))->set_document) {
         ((SPViewClass *) G_OBJECT_GET_CLASS(view))->set_document(view, doc);
