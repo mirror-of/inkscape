@@ -49,9 +49,6 @@ struct NRTypeFaceDef {
 struct NRTypeFaceClass {
 	NRObjectClass parent_class;
 
-	/* NRTypeFace *(* new) (NRTypeFaceDef *def); */
-	/* void (* free) (NRTypeFace *tf); */
-
 	void (* setup) (NRTypeFace *tface, NRTypeFaceDef *def);
 
 	unsigned int (* attribute_get) (NRTypeFace *tf, const gchar *key, gchar *str, unsigned int size);
