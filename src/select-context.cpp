@@ -216,10 +216,10 @@ sp_select_context_item_handler(SPEventContext *event_context, SPItem *item, GdkE
                 yp = (gint) event->button.y;
                 within_tolerance = true;
 
-                if (!(event->button.state & GDK_SHIFT_MASK || event->button.state & GDK_CONTROL_MASK)) {
+                if (event->button.state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK)) {
                     // if shift or ctrl was pressed, do not move objects;
                     // pass the event to root handler which will perform rubberband, shift-click, ctrl-click, ctrl-drag
-
+                } else {
                     sc->dragging = TRUE;
                     sc->moved = FALSE;
                     sc->item = item;
