@@ -149,7 +149,7 @@ sp_flowtext_remove_child(SPObject *object, Inkscape::XML::Node *child)
 //RH:fixme: these should be member functions
 static void BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Shape const *exclusion_shape, std::list<Shape> *shapes)
 {
-    if (SP_IS_FLOWDIV(root) || SP_IS_FLOWPARA(root) || SP_IS_FLOWLINE(root))
+    if (SP_IS_FLOWDIV(root) || SP_IS_FLOWPARA(root))
         if (layout->inputExists())
             layout->appendControlCode(Inkscape::Text::Layout::PARAGRAPH_BREAK, root);
     if (SP_IS_FLOWREGIONBREAK(root))
@@ -172,6 +172,9 @@ static void BuildLayoutInput(SPObject *root, Inkscape::Text::Layout *layout, Sha
         else if (!SP_IS_FLOWREGIONEXCLUDE(child))
             BuildLayoutInput(child, layout, exclusion_shape, shapes);
     }
+
+    if (SP_IS_FLOWLINE(root))     // yep, the spec specifies that we break after the content for these. I suspect most people will use it like <br/>, though, so it won't have any content
+        layout->appendControlCode(Inkscape::Text::Layout::PARAGRAPH_BREAK, root);
 }
 
 static Shape* BuildExclusionShape(SPObject *object)
