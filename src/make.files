@@ -727,6 +727,7 @@ xml/repr-private.h
 xml/repr-util.cpp
 xml/repr.cpp
 xml/repr.h
+xml/sp-repr-attr.h
 xml/xml-forward.h
 zoom-context.cpp
 zoom-context.h

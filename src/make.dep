@@ -1027,8 +1027,14 @@ dialogs/object-properties.o: \
 dialogs/rdf.o: \
 	dialogs/rdf.cpp \
 	dialogs/rdf.h \
+	document.h \
+	forward.h \
 	helper/sp-intl.h \
-	require-config.h
+	inkscape.h \
+	libnr/nr-forward.h \
+	require-config.h \
+	xml/repr.h \
+	xml/xml-forward.h
 
 dialogs/sp-attribute-widget.o: \
 	dialogs/sp-attribute-widget.cpp \
@@ -10420,6 +10426,7 @@ xml/repr-css.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
+	xml/sp-repr-attr.h \
 	xml/xml-forward.h
 
 xml/repr-get-children.o: \
@@ -10435,6 +10442,7 @@ xml/repr-io.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
+	xml/sp-repr-attr.h \
 	xml/xml-forward.h
 
 xml/repr-util.o: \
@@ -10444,6 +10452,7 @@ xml/repr-util.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
+	xml/sp-repr-attr.h \
 	xml/xml-forward.h
 
 xml/repr.o: \
@@ -10451,6 +10460,7 @@ xml/repr.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
+	xml/sp-repr-attr.h \
 	xml/xml-forward.h
 
 zoom-context.o: \
