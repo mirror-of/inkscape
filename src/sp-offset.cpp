@@ -608,13 +608,14 @@ sp_offset_set_shape (SPShape * shape)
   
   if (o_width >= 1.0)
   {
-            orig->Coalesce (1.0);
+    orig->Coalesce (0.1);  // small treshhold, since we only want to get rid of small segments
+                           // the curve should already be computed by the Outline() function
  //   orig->ConvertEvenLines (1.0);
  //   orig->Simplify (0.5);
   }
   else
   {
-          orig->Coalesce (o_width);
+          orig->Coalesce (0.1*o_width);
  //   orig->ConvertEvenLines (o_width);
  //   orig->Simplify (0.5 * o_width);
   }

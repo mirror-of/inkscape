@@ -302,7 +302,7 @@ Path::DoSimplify (double treshhold,int /*recLevel*/)
         //        if (kissGoodbye)
         //          break;
       }
-      while (lastP < savNbPt && ExtendFit(data,(contains_forced) ? 0.1 * treshhold : treshhold,res,worstP) );
+      while (lastP < savNbPt && ExtendFit(data,(contains_forced) ? 0.05 * treshhold : treshhold,res,worstP) );
       //       && AttemptSimplify ((contains_forced) ? 0.1 * treshhold : treshhold, res,worstP));
       
       if (lastP >= savNbPt)
@@ -354,6 +354,10 @@ Path::DoSimplify (double treshhold,int /*recLevel*/)
 }
 
 // warning: slow
+// idea behing this feature: splotches appear when trying to fit a small number of points: you can
+// get a cubic bezier that fits the points very well but doesn't fit the polyline itself
+// so we add a bit of the error at the middle of each segment of the polyline
+// also we restrict this to <=20 points, to avoid unnecessary computations
 #define with_splotch_killer
 
 // primitive= calc the cubic bezier patche that fits Xk and Yk best
@@ -608,52 +612,76 @@ bool Path::AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cu
     prevP[1]=data.Yk[0];
     prevAppP=prevP; // le premier seulement
     prevDist=0;
-    for (int i = 1; i < data.nbPt - 1; i++)
-    {
-      NR::Point curAppP;
-      NR::Point curP;
-      double    curDist;
 #ifdef with_splotch_killer
-      NR::Point midAppP;
-      NR::Point midP;
-      double    midDist;
-#endif
-      
-      curAppP[0] = N13 (data.tk[i]) * cp1[0] + N23 (data.tk[i]) * cp2[0] + N03 (data.tk[i]) * data.Xk[0] + N33 (data.tk[i]) * data.Xk[data.nbPt - 1];
-      curAppP[1] = N13 (data.tk[i]) * cp1[1] + N23 (data.tk[i]) * cp2[1] + N03 (data.tk[i]) * data.Yk[0] + N33 (data.tk[i]) * data.Yk[data.nbPt - 1];
-      curP[0]=data.Xk[i];
-      curP[1]=data.Yk[i];
-#ifdef with_splotch_killer
-      double mtk=0.5*(data.tk[i]+data.tk[i-1]);
-      midAppP[0] = N13 (mtk) * cp1[0] + N23 (mtk) * cp2[0] + N03 (mtk) * data.Xk[0] + N33 (mtk) * data.Xk[data.nbPt - 1];
-      midAppP[1] = N13 (mtk) * cp1[1] + N23 (mtk) * cp2[1] + N03 (mtk) * data.Yk[0] + N33 (mtk) * data.Yk[data.nbPt - 1];
-      midP=0.5*(curP+prevP);
-#endif
-      
-      NR::Point diff;
-      diff=curAppP-curP;
-      curDist=dot(diff,diff);
-#ifdef with_splotch_killer
-      diff=midAppP-midP;
-      midDist=dot(diff,diff);
-     
-      delta+=0.3333*(curDist+prevDist+midDist)/* *data.lk[i]*/;
-#else
-      delta+=curDist;
-#endif
-      if ( curDist > worstD ) {
-        worstD=curDist;
-        worstP=i;
-      } else if ( data.fk[i] && 2*curDist > worstD ) {
-        worstD=2*curDist;
-        worstP=i;
+    if ( data.nbPt <= 20 ) {
+      for (int i = 1; i < data.nbPt - 1; i++)
+      {
+        NR::Point curAppP;
+        NR::Point curP;
+        double    curDist;
+        NR::Point midAppP;
+        NR::Point midP;
+        double    midDist;
+        
+        curAppP[0] = N13 (data.tk[i]) * cp1[0] + N23 (data.tk[i]) * cp2[0] + N03 (data.tk[i]) * data.Xk[0] + N33 (data.tk[i]) * data.Xk[data.nbPt - 1];
+        curAppP[1] = N13 (data.tk[i]) * cp1[1] + N23 (data.tk[i]) * cp2[1] + N03 (data.tk[i]) * data.Yk[0] + N33 (data.tk[i]) * data.Yk[data.nbPt - 1];
+        curP[0]=data.Xk[i];
+        curP[1]=data.Yk[i];
+        double mtk=0.5*(data.tk[i]+data.tk[i-1]);
+        midAppP[0] = N13 (mtk) * cp1[0] + N23 (mtk) * cp2[0] + N03 (mtk) * data.Xk[0] + N33 (mtk) * data.Xk[data.nbPt - 1];
+        midAppP[1] = N13 (mtk) * cp1[1] + N23 (mtk) * cp2[1] + N03 (mtk) * data.Yk[0] + N33 (mtk) * data.Yk[data.nbPt - 1];
+        midP=0.5*(curP+prevP);
+        
+        NR::Point diff;
+        diff=curAppP-curP;
+        curDist=dot(diff,diff);
+        diff=midAppP-midP;
+        midDist=dot(diff,diff);
+        
+        delta+=0.3333*(curDist+prevDist+midDist) *data.lk[i];
+        if ( curDist > worstD ) {
+          worstD=curDist;
+          worstP=i;
+        } else if ( data.fk[i] && 2*curDist > worstD ) {
+          worstD=2*curDist;
+          worstP=i;
+        }
+        prevP=curP;
+        prevAppP=curAppP;
+        prevDist=curDist;
       }
-      prevP=curP;
-      prevAppP=curAppP;
-      prevDist=curDist;
-    }
+      delta/=data.totLen;
+    } else {
+#endif
+      for (int i = 1; i < data.nbPt - 1; i++)
+      {
+        NR::Point curAppP;
+        NR::Point curP;
+        double    curDist;
+        
+        curAppP[0] = N13 (data.tk[i]) * cp1[0] + N23 (data.tk[i]) * cp2[0] + N03 (data.tk[i]) * data.Xk[0] + N33 (data.tk[i]) * data.Xk[data.nbPt - 1];
+        curAppP[1] = N13 (data.tk[i]) * cp1[1] + N23 (data.tk[i]) * cp2[1] + N03 (data.tk[i]) * data.Yk[0] + N33 (data.tk[i]) * data.Yk[data.nbPt - 1];
+        curP[0]=data.Xk[i];
+        curP[1]=data.Yk[i];
+      
+        NR::Point diff;
+        diff=curAppP-curP;
+        curDist=dot(diff,diff);
+        delta+=curDist;
+        
+        if ( curDist > worstD ) {
+          worstD=curDist;
+          worstP=i;
+        } else if ( data.fk[i] && 2*curDist > worstD ) {
+          worstD=2*curDist;
+          worstP=i;
+        }
+        prevP=curP;
+        prevAppP=curAppP;
+        prevDist=curDist;
+      }
 #ifdef with_splotch_killer
-//    delta/=data.totLen;
+    }
 #endif
   }
   
@@ -694,52 +722,79 @@ bool Path::AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cu
       prevP[1]=data.Yk[0];
       prevAppP=prevP; // le premier seulement
       prevDist=0;
-      for (int i = 1; i < data.nbPt - 1; i++)
-      {
-        NR::Point curAppP;
-        NR::Point curP;
-        double    curDist;
 #ifdef with_splotch_killer
-        NR::Point midAppP;
-        NR::Point midP;
-        double    midDist;
-#endif
-        
-        curAppP[0] = N13 (data.tk[i]) * cp1[0] + N23 (data.tk[i]) * cp2[0] + N03 (data.tk[i]) * data.Xk[0] + N33 (data.tk[i]) * data.Xk[data.nbPt - 1];
-        curAppP[1] = N13 (data.tk[i]) * cp1[1] + N23 (data.tk[i]) * cp2[1] + N03 (data.tk[i]) * data.Yk[0] + N33 (data.tk[i]) * data.Yk[data.nbPt - 1];
-        curP[0]=data.Xk[i];
-        curP[1]=data.Yk[i];
-#ifdef  with_splotch_killer
-        double mtk=0.5*(data.tk[i]+data.tk[i-1]);
-        midAppP[0] = N13 (mtk) * cp1[0] + N23 (mtk) * cp2[0] + N03 (mtk) * data.Xk[0] + N33 (mtk) * data.Xk[data.nbPt - 1];
-        midAppP[1] = N13 (mtk) * cp1[1] + N23 (mtk) * cp2[1] + N03 (mtk) * data.Yk[0] + N33 (mtk) * data.Yk[data.nbPt - 1];
-        midP=0.5*(curP+prevP);
-#endif
-        
-        NR::Point diff;
-        diff=curAppP-curP;
-        curDist=dot(diff,diff);
-#ifdef with_splotch_killer
-        diff=midAppP-midP;
-        midDist=dot(diff,diff);
-        
-        ndelta+=0.3333*(curDist+prevDist+midDist)/* *data.lk[i]*/;
-#else
-        ndelta+=curDist;
-#endif
-        if ( curDist > worstD ) {
-          worstD=curDist;
-          worstP=i;
-        } else if ( data.fk[i] && 2*curDist > worstD ) {
-          worstD=2*curDist;
-          worstP=i;
+      if ( data.nbPt <= 20 ) {
+        for (int i = 1; i < data.nbPt - 1; i++)
+        {
+          NR::Point curAppP;
+          NR::Point curP;
+          double    curDist;
+          NR::Point midAppP;
+          NR::Point midP;
+          double    midDist;
+          
+          curAppP[0] = N13 (data.tk[i]) * cp1[0] + N23 (data.tk[i]) * cp2[0] + N03 (data.tk[i]) * data.Xk[0] + N33 (data.tk[i]) * data.Xk[data.nbPt - 1];
+          curAppP[1] = N13 (data.tk[i]) * cp1[1] + N23 (data.tk[i]) * cp2[1] + N03 (data.tk[i]) * data.Yk[0] + N33 (data.tk[i]) * data.Yk[data.nbPt - 1];
+          curP[0]=data.Xk[i];
+          curP[1]=data.Yk[i];
+          double mtk=0.5*(data.tk[i]+data.tk[i-1]);
+          midAppP[0] = N13 (mtk) * cp1[0] + N23 (mtk) * cp2[0] + N03 (mtk) * data.Xk[0] + N33 (mtk) * data.Xk[data.nbPt - 1];
+          midAppP[1] = N13 (mtk) * cp1[1] + N23 (mtk) * cp2[1] + N03 (mtk) * data.Yk[0] + N33 (mtk) * data.Yk[data.nbPt - 1];
+          midP=0.5*(curP+prevP);
+          
+          NR::Point diff;
+          diff=curAppP-curP;
+          curDist=dot(diff,diff);
+          
+          diff=midAppP-midP;
+          midDist=dot(diff,diff);
+          
+          ndelta+=0.3333*(curDist+prevDist+midDist) *data.lk[i];
+          
+          if ( curDist > worstD ) {
+            worstD=curDist;
+            worstP=i;
+          } else if ( data.fk[i] && 2*curDist > worstD ) {
+            worstD=2*curDist;
+            worstP=i;
+          }
+          prevP=curP;
+          prevAppP=curAppP;
+          prevDist=curDist;
         }
-        prevP=curP;
-        prevAppP=curAppP;
-        prevDist=curDist;
-      }
+        ndelta/=data.totLen;
+      } else {
+#endif
+        for (int i = 1; i < data.nbPt - 1; i++)
+        {
+          NR::Point curAppP;
+          NR::Point curP;
+          double    curDist;
+          
+          curAppP[0] = N13 (data.tk[i]) * cp1[0] + N23 (data.tk[i]) * cp2[0] + N03 (data.tk[i]) * data.Xk[0] + N33 (data.tk[i]) * data.Xk[data.nbPt - 1];
+          curAppP[1] = N13 (data.tk[i]) * cp1[1] + N23 (data.tk[i]) * cp2[1] + N03 (data.tk[i]) * data.Yk[0] + N33 (data.tk[i]) * data.Yk[data.nbPt - 1];
+          curP[0]=data.Xk[i];
+          curP[1]=data.Yk[i];
+        
+          NR::Point diff;
+          diff=curAppP-curP;
+          curDist=dot(diff,diff);
+
+          ndelta+=curDist;
+
+          if ( curDist > worstD ) {
+            worstD=curDist;
+            worstP=i;
+          } else if ( data.fk[i] && 2*curDist > worstD ) {
+            worstD=2*curDist;
+            worstP=i;
+          }
+          prevP=curP;
+          prevAppP=curAppP;
+          prevDist=curDist;
+        }
 #ifdef with_splotch_killer
-//      ndelta/=data.totLen;
+      }
 #endif
     }
     
@@ -947,51 +1002,76 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
     prevP[1]=Yk[0];
     prevAppP=prevP; // le premier seulement
     prevDist=0;
-    for (int i = 1; i < nbPt - 1; i++)
-    {
-      NR::Point curAppP;
-      NR::Point curP;
-      double    curDist;
 #ifdef with_splotch_killer
-      NR::Point midAppP;
-      NR::Point midP;
-      double    midDist;
-#endif
-      
-      curAppP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0] + N03 (tk[i]) * Xk[0] + N33 (tk[i]) * Xk[nbPt - 1];
-      curAppP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1] + N03 (tk[i]) * Yk[0] + N33 (tk[i]) * Yk[nbPt - 1];
-      curP[0]=Xk[i];
-      curP[1]=Yk[i];
-#ifdef with_splotch_killer
-      midAppP[0] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[0] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[0] + N03 (0.5*(tk[i]+tk[i-1])) * Xk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Xk[nbPt - 1];
-      midAppP[1] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[1] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[1] + N03 (0.5*(tk[i]+tk[i-1])) * Yk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Yk[nbPt - 1];
-      midP=0.5*(curP+prevP);
-#endif
-      
-      NR::Point diff;
-      diff=curAppP-curP;
-      curDist=dot(diff,diff);
-#ifdef with_splotch_killer
-      diff=midAppP-midP;
-      midDist=dot(diff,diff);
-     
-      delta+=0.3333*(curDist+prevDist+midDist)/**lk[i]*/;
-#else
-      delta+=curDist;
-#endif
-      if ( curDist > worstD ) {
-        worstD=curDist;
-        worstP=i;
-      } else if ( fk[i] && 2*curDist > worstD ) {
-        worstD=2*curDist;
-        worstP=i;
+    if ( nbPt <= 20 ) {
+      for (int i = 1; i < nbPt - 1; i++)
+      {
+        NR::Point curAppP;
+        NR::Point curP;
+        double    curDist;
+        NR::Point midAppP;
+        NR::Point midP;
+        double    midDist;
+        
+        curAppP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0] + N03 (tk[i]) * Xk[0] + N33 (tk[i]) * Xk[nbPt - 1];
+        curAppP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1] + N03 (tk[i]) * Yk[0] + N33 (tk[i]) * Yk[nbPt - 1];
+        curP[0]=Xk[i];
+        curP[1]=Yk[i];
+        midAppP[0] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[0] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[0] + N03 (0.5*(tk[i]+tk[i-1])) * Xk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Xk[nbPt - 1];
+        midAppP[1] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[1] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[1] + N03 (0.5*(tk[i]+tk[i-1])) * Yk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Yk[nbPt - 1];
+        midP=0.5*(curP+prevP);
+        
+        NR::Point diff;
+        diff=curAppP-curP;
+        curDist=dot(diff,diff);
+
+        diff=midAppP-midP;
+        midDist=dot(diff,diff);
+        
+        delta+=0.3333*(curDist+prevDist+midDist)/**lk[i]*/;
+
+        if ( curDist > worstD ) {
+          worstD=curDist;
+          worstP=i;
+        } else if ( fk[i] && 2*curDist > worstD ) {
+          worstD=2*curDist;
+          worstP=i;
+        }
+        prevP=curP;
+        prevAppP=curAppP;
+        prevDist=curDist;
       }
-      prevP=curP;
-      prevAppP=curAppP;
-      prevDist=curDist;
-    }
+      delta/=totLen;
+    } else {
+#endif
+      for (int i = 1; i < nbPt - 1; i++)
+      {
+        NR::Point curAppP;
+        NR::Point curP;
+        double    curDist;
+        
+        curAppP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0] + N03 (tk[i]) * Xk[0] + N33 (tk[i]) * Xk[nbPt - 1];
+        curAppP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1] + N03 (tk[i]) * Yk[0] + N33 (tk[i]) * Yk[nbPt - 1];
+        curP[0]=Xk[i];
+        curP[1]=Yk[i];
+        
+        NR::Point diff;
+        diff=curAppP-curP;
+        curDist=dot(diff,diff);
+        delta+=curDist;
+        if ( curDist > worstD ) {
+          worstD=curDist;
+          worstP=i;
+        } else if ( fk[i] && 2*curDist > worstD ) {
+          worstD=2*curDist;
+          worstP=i;
+        }
+        prevP=curP;
+        prevAppP=curAppP;
+        prevDist=curDist;
+      }
 #ifdef with_splotch_killer
-//    delta/=totLen;
+    }
 #endif
   }
   
@@ -1041,51 +1121,76 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
       prevP[1]=Yk[0];
       prevAppP=prevP; // le premier seulement
       prevDist=0;
-      for (int i = 1; i < nbPt - 1; i++)
-      {
-        NR::Point curAppP;
-        NR::Point curP;
-        double    curDist;
 #ifdef with_splotch_killer
-        NR::Point midAppP;
-        NR::Point midP;
-        double    midDist;
-#endif
-        
-        curAppP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0] + N03 (tk[i]) * Xk[0] + N33 (tk[i]) * Xk[nbPt - 1];
-        curAppP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1] + N03 (tk[i]) * Yk[0] + N33 (tk[i]) * Yk[nbPt - 1];
-        curP[0]=Xk[i];
-        curP[1]=Yk[i];
-#ifdef  with_splotch_killer
-        midAppP[0] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[0] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[0] + N03 (0.5*(tk[i]+tk[i-1])) * Xk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Xk[nbPt - 1];
-        midAppP[1] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[1] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[1] + N03 (0.5*(tk[i]+tk[i-1])) * Yk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Yk[nbPt - 1];
-        midP=0.5*(curP+prevP);
-#endif
-        
-        NR::Point diff;
-        diff=curAppP-curP;
-        curDist=dot(diff,diff);
-#ifdef with_splotch_killer
-        diff=midAppP-midP;
-        midDist=dot(diff,diff);
-        
-        ndelta+=0.3333*(curDist+prevDist+midDist)/**lk[i]*/;
-#else
-        ndelta+=curDist;
-#endif
-        if ( curDist > worstD ) {
-          worstD=curDist;
-          worstP=i;
-        } else if ( fk[i] && 2*curDist > worstD ) {
-          worstD=2*curDist;
-          worstP=i;
+      if ( nbPt <= 20 ) {
+        for (int i = 1; i < nbPt - 1; i++)
+        {
+          NR::Point curAppP;
+          NR::Point curP;
+          double    curDist;
+          NR::Point midAppP;
+          NR::Point midP;
+          double    midDist;
+          
+          curAppP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0] + N03 (tk[i]) * Xk[0] + N33 (tk[i]) * Xk[nbPt - 1];
+          curAppP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1] + N03 (tk[i]) * Yk[0] + N33 (tk[i]) * Yk[nbPt - 1];
+          curP[0]=Xk[i];
+          curP[1]=Yk[i];
+          midAppP[0] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[0] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[0] + N03 (0.5*(tk[i]+tk[i-1])) * Xk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Xk[nbPt - 1];
+          midAppP[1] = N13 (0.5*(tk[i]+tk[i-1])) * cp1[1] + N23 (0.5*(tk[i]+tk[i-1])) * cp2[1] + N03 (0.5*(tk[i]+tk[i-1])) * Yk[0] + N33 (0.5*(tk[i]+tk[i-1])) * Yk[nbPt - 1];
+          midP=0.5*(curP+prevP);
+          
+          NR::Point diff;
+          diff=curAppP-curP;
+          curDist=dot(diff,diff);
+          diff=midAppP-midP;
+          midDist=dot(diff,diff);
+          
+          ndelta+=0.3333*(curDist+prevDist+midDist)/**lk[i]*/;
+
+          if ( curDist > worstD ) {
+            worstD=curDist;
+            worstP=i;
+          } else if ( fk[i] && 2*curDist > worstD ) {
+            worstD=2*curDist;
+            worstP=i;
+          }
+          prevP=curP;
+          prevAppP=curAppP;
+          prevDist=curDist;
         }
-        prevP=curP;
-        prevAppP=curAppP;
-        prevDist=curDist;
-      }
+        ndelta/=totLen;
+      } else {
+#endif
+        for (int i = 1; i < nbPt - 1; i++)
+        {
+          NR::Point curAppP;
+          NR::Point curP;
+          double    curDist;
+          
+          curAppP[0] = N13 (tk[i]) * cp1[0] + N23 (tk[i]) * cp2[0] + N03 (tk[i]) * Xk[0] + N33 (tk[i]) * Xk[nbPt - 1];
+          curAppP[1] = N13 (tk[i]) * cp1[1] + N23 (tk[i]) * cp2[1] + N03 (tk[i]) * Yk[0] + N33 (tk[i]) * Yk[nbPt - 1];
+          curP[0]=Xk[i];
+          curP[1]=Yk[i];
+          
+          NR::Point diff;
+          diff=curAppP-curP;
+          curDist=dot(diff,diff);
+          ndelta+=curDist;
+
+          if ( curDist > worstD ) {
+            worstD=curDist;
+            worstP=i;
+          } else if ( fk[i] && 2*curDist > worstD ) {
+            worstD=2*curDist;
+            worstP=i;
+          }
+          prevP=curP;
+          prevAppP=curAppP;
+          prevDist=curDist;
+        }
 #ifdef with_splotch_killer
-//      ndelta/=totLen;
+      }
 #endif
     }
     
@@ -1182,6 +1287,7 @@ Path::Coalesce (double tresh)
   int prevA = lastA;
   NR::Point           firstP;
   path_descr          lastAddition;
+  bool                containsForced=false;
   path_descr_cubicto  pending_cubic;
   
   lastAddition.flags = descr_moveto;
@@ -1199,6 +1305,7 @@ Path::Coalesce (double tresh)
       FlushPendingAddition(tempDest,lastAddition,pending_cubic,lastAP);
       // Added automatically (too bad about multiple moveto's).
       // [fr: (tant pis pour les moveto multiples)]
+      containsForced=false;
       
       path_descr_moveto *nData=(path_descr_moveto*)(descr_data+descr_cmd[curP].dStart);
       firstP = nData->p;
@@ -1217,7 +1324,7 @@ Path::Coalesce (double tresh)
         
 	      path_descr_cubicto res;
         int worstP=-1;
-	      if (AttemptSimplify (tresh, res,worstP))
+	      if (AttemptSimplify ((containsForced)?0.05*tresh:tresh, res,worstP))
         {
           lastAddition.flags = descr_cubicto;
           pending_cubic=res;
@@ -1230,12 +1337,13 @@ Path::Coalesce (double tresh)
 //	      descr_cmd[writeP++] = descr_cmd[curP];
         FlushPendingAddition(tempDest,descr_cmd[curP],pending_cubic,curP);
         
-	      pts = (char *) sav_pts;
+ 	      pts = (char *) sav_pts;
 	      nbPt = sav_nbPt;
 	    } else {
 //	      descr_cmd[writeP++] = descr_cmd[curP];
         FlushPendingAddition(tempDest,descr_cmd[curP],pending_cubic,curP);
 	    }
+      containsForced=false;
       lastAddition.flags = descr_moveto;
       prevA = lastA = nextA;
       lastP = curP;
@@ -1252,9 +1360,10 @@ Path::Coalesce (double tresh)
         
 	      path_descr_cubicto res;
         int worstP=-1;
-	      if (AttemptSimplify (0.1 * tresh, res,worstP))
+	      if (AttemptSimplify (0.05 * tresh, res,worstP))
         {		// plus sensible parce que point force
             // ca passe
+          containsForced=true;
         } else  {
           // on force l'addition
 //          descr_cmd[writeP++] = lastAddition;
@@ -1263,6 +1372,7 @@ Path::Coalesce (double tresh)
           prevA = lastA = nextA;
           lastP = curP;
           lastAP=curP;
+          containsForced=false;
         }
         
 	      pts = (char *) sav_pts;
@@ -1298,6 +1408,7 @@ Path::Coalesce (double tresh)
             pending_cubic=*((path_descr_cubicto*)(descr_data+descr_cmd[curP].dStart));
           }
           lastAP=curP;
+          containsForced=false;
         }
         
 	      pts = (char *) sav_pts;
@@ -1309,6 +1420,7 @@ Path::Coalesce (double tresh)
           pending_cubic=*((path_descr_cubicto*)(descr_data+descr_cmd[curP].dStart));
         }
         lastAP=curP;
+        containsForced=false;
 	    }
       prevA = nextA;
     } else if (typ == descr_bezierto) {
