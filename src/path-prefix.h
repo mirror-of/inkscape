@@ -13,6 +13,7 @@
 #ifndef _PATH_PREFIX_H_
 #define _PATH_PREFIX_H_
 
+#include "require-config.h"  // INKSCAPE_DATADIR
 #include "prefix.h"
 
 #ifdef __cplusplus
