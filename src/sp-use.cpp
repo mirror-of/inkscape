@@ -111,14 +111,14 @@ sp_use_build (SPObject * object, SPDocument * document, SPRepr * repr)
 
 	use = SP_USE (object);
 
-	if (((SPObjectClass *) parent_class)->build)
-		(* ((SPObjectClass *) parent_class)->build) (object, document, repr);
-
 	sp_object_read_attr (object, "x");
 	sp_object_read_attr (object, "y");
 	sp_object_read_attr (object, "width");
 	sp_object_read_attr (object, "height");
 	sp_object_read_attr (object, "xlink:href");
+
+	if (((SPObjectClass *) parent_class)->build)
+		(* ((SPObjectClass *) parent_class)->build) (object, document, repr);
 
 	if (use->href) {
 		SPObject *refobj;
@@ -130,10 +130,9 @@ sp_use_build (SPObject * object, SPDocument * document, SPRepr * repr)
 			type = sp_repr_type_lookup (childrepr);
 			g_return_if_fail (type > G_TYPE_NONE);
 			if (g_type_is_a (type, SP_TYPE_ITEM)) {
-				SPObject *childobj;
-				childobj = (SPObject*)g_object_new (type, 0);
-				use->child = sp_object_attach_reref (object, childobj, NULL);
-				sp_object_invoke_build (childobj, document, childrepr, TRUE);
+				use->child = (SPObject*)g_object_new (type, 0);
+				sp_object_attach_reref (object, use->child, NULL);
+				sp_object_invoke_build (use->child, document, childrepr, TRUE);
 			}
 		}
 	}
@@ -147,7 +146,8 @@ sp_use_release (SPObject *object)
 	use = SP_USE (object);
 
 	if (use->child) {
-		use->child = sp_object_detach_unref (SP_OBJECT (object), use->child);
+		sp_object_detach_unref (SP_OBJECT (object), use->child);
+		use->child = NULL;
 	}
 
 	g_free (use->href);
@@ -322,7 +322,8 @@ sp_use_href_changed (SPUse * use)
 	item = SP_ITEM (use);
 
 	if (use->child) {
-		use->child = sp_object_detach_unref (SP_OBJECT (use), use->child);
+		sp_object_detach_unref (SP_OBJECT (use), use->child);
+		use->child = NULL;
 	}
 
 	if (use->href) {
@@ -335,14 +336,13 @@ sp_use_href_changed (SPUse * use)
 			type = sp_repr_type_lookup (repr);
 			g_return_if_fail (type > G_TYPE_NONE);
 			if (g_type_is_a (type, SP_TYPE_ITEM)) {
-				SPObject * childobj;
 				SPItemView * v;
-				childobj = (SPObject*)g_object_new (type, 0);
-				use->child = sp_object_attach_reref (SP_OBJECT (use), childobj, NULL);
-				sp_object_invoke_build (childobj, SP_OBJECT (use)->document, repr, TRUE);
+				use->child = (SPObject*)g_object_new (type, 0);
+				sp_object_attach_reref (SP_OBJECT (use), use->child, NULL);
+				sp_object_invoke_build (use->child, SP_OBJECT (use)->document, repr, TRUE);
 				for (v = item->display; v != NULL; v = v->next) {
 					NRArenaItem *ai;
-					ai = sp_item_invoke_show (SP_ITEM (childobj), NR_ARENA_ITEM_ARENA (v->arenaitem), v->key, v->flags);
+					ai = sp_item_invoke_show (SP_ITEM (use->child), NR_ARENA_ITEM_ARENA (v->arenaitem), v->key, v->flags);
 					if (ai) {
 						nr_arena_item_add_child (v->arenaitem, ai, NULL);
 						nr_arena_item_unref (ai);

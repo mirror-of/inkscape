@@ -114,6 +114,7 @@ sp_object_type_lookup (const gchar * name)
 		g_hash_table_insert (dtable, (void *)"svg", GINT_TO_POINTER (SP_TYPE_ROOT));
 		g_hash_table_insert (dtable, (void *)"symbol", GINT_TO_POINTER (SP_TYPE_SYMBOL));
 		g_hash_table_insert (dtable, (void *)"text", GINT_TO_POINTER (SP_TYPE_TEXT));
+		g_hash_table_insert (dtable, (void *)"tspan", GINT_TO_POINTER (SP_TYPE_TSPAN));
 		g_hash_table_insert (dtable, (void *)"use", GINT_TO_POINTER (SP_TYPE_USE));
 	}
 

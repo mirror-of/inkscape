@@ -218,16 +218,16 @@ sp_object_hunref (SPObject *object, gpointer owner)
  * Attaching/detaching
  */
 
-SPObject *
+void
 sp_object_attach_reref (SPObject *parent, SPObject *object, SPObject *next)
 {
-	g_return_val_if_fail (parent != NULL, NULL);
-	g_return_val_if_fail (SP_IS_OBJECT (parent), NULL);
-	g_return_val_if_fail (object != NULL, NULL);
-	g_return_val_if_fail (SP_IS_OBJECT (object), NULL);
-	g_return_val_if_fail (!next || SP_IS_OBJECT (next), NULL);
-	g_return_val_if_fail (!object->parent, NULL);
-	g_return_val_if_fail (!object->next, NULL);
+	g_return_if_fail (parent != NULL);
+	g_return_if_fail (SP_IS_OBJECT (parent));
+	g_return_if_fail (object != NULL);
+	g_return_if_fail (SP_IS_OBJECT (object));
+	g_return_if_fail (!next || SP_IS_OBJECT (next));
+	g_return_if_fail (!object->parent);
+	g_return_if_fail (!object->next);
 
 	SPObject **ref;
 	for ( ref = &parent->children ; *ref ; ref = &(*ref)->next ) {
@@ -244,8 +244,6 @@ sp_object_attach_reref (SPObject *parent, SPObject *object, SPObject *next)
 	object->parent = parent;
 	object->next = next;
 	*ref = object;
-
-	return object;
 }
 
 void sp_object_reorder(SPObject *object, SPObject *next) {
@@ -278,12 +276,12 @@ void sp_object_reorder(SPObject *object, SPObject *next) {
 	*new_ref = object;
 }
 
-static SPObject *detach_object(SPObject *parent, SPObject *object, bool unref) {
-	g_return_val_if_fail (parent != NULL, NULL);
-	g_return_val_if_fail (SP_IS_OBJECT (parent), NULL);
-	g_return_val_if_fail (object != NULL, NULL);
-	g_return_val_if_fail (SP_IS_OBJECT (object), NULL);
-	g_return_val_if_fail (object->parent == parent, NULL);
+static void detach_object(SPObject *parent, SPObject *object, bool unref) {
+	g_return_if_fail (parent != NULL);
+	g_return_if_fail (SP_IS_OBJECT (parent));
+	g_return_if_fail (object != NULL);
+	g_return_if_fail (SP_IS_OBJECT (object));
+	g_return_if_fail (object->parent == parent);
 
 	SPObject **ref;
 	for ( ref = &parent->children ; *ref ; ref = &(*ref)->next ) {
@@ -293,7 +291,6 @@ static SPObject *detach_object(SPObject *parent, SPObject *object, bool unref) {
 	}
 	g_assert(*ref == object);
 
-	SPObject *next=object->next;
 	*ref = object->next;
 	object->next = NULL;
 	object->parent = NULL;
@@ -303,16 +300,14 @@ static SPObject *detach_object(SPObject *parent, SPObject *object, bool unref) {
 	if (unref) {
 		sp_object_unref(object, parent);
 	}
-
-	return next;
 }
 
-SPObject *sp_object_detach (SPObject *parent, SPObject *object) {
-	return detach_object(parent, object, false);
+void sp_object_detach (SPObject *parent, SPObject *object) {
+	detach_object(parent, object, false);
 }
 
-SPObject *sp_object_detach_unref (SPObject *parent, SPObject *object) {
-	return detach_object(parent, object, true);
+void sp_object_detach_unref (SPObject *parent, SPObject *object) {
+	detach_object(parent, object, true);
 }
 
 SPObject *sp_object_first_child(SPObject *parent) {

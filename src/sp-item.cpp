@@ -124,15 +124,15 @@ sp_item_init (SPItem *item)
 static void
 sp_item_build (SPObject * object, SPDocument * document, SPRepr * repr)
 {
-	if (((SPObjectClass *) (parent_class))->build)
-		(* ((SPObjectClass *) (parent_class))->build) (object, document, repr);
-
-	sp_object_read_attr (object, "transform");
 	sp_object_read_attr (object, "style");
+	sp_object_read_attr (object, "transform");
 	sp_object_read_attr (object, "clip-path");
 	sp_object_read_attr (object, "mask");
 	sp_object_read_attr (object, "sodipodi:insensitive");
 	sp_object_read_attr (object, "sodipodi:nonprintable");
+
+	if (((SPObjectClass *) (parent_class))->build)
+		(* ((SPObjectClass *) (parent_class))->build) (object, document, repr);
 }
 
 static void

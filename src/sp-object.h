@@ -172,10 +172,10 @@ SPObject *sp_object_hunref (SPObject *object, gpointer owner);
  * Detach returns next object, NULL on error
  */
 
-SPObject *sp_object_attach_reref (SPObject *parent, SPObject *object, SPObject *next);
+void sp_object_attach_reref (SPObject *parent, SPObject *object, SPObject *next);
 void sp_object_reorder(SPObject *object, SPObject *next);
-SPObject *sp_object_detach (SPObject *parent, SPObject *object);
-SPObject *sp_object_detach_unref (SPObject *parent, SPObject *object);
+void sp_object_detach (SPObject *parent, SPObject *object);
+void sp_object_detach_unref (SPObject *parent, SPObject *object);
 
 SPObject *sp_object_first_child(SPObject *parent);
 SPObject *sp_object_get_child_by_repr(SPObject *object, SPRepr *repr);

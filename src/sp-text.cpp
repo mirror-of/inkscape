@@ -670,10 +670,22 @@ sp_string_init (SPString *string)
 static void
 sp_string_build (SPObject *object, SPDocument *doc, SPRepr *repr)
 {
-    if (((SPObjectClass *) string_parent_class)->build)
-        ((SPObjectClass *) string_parent_class)->build (object, doc, repr);
+    SPString *string = SP_STRING(object);
 
     sp_string_read_content (object);
+
+    SPObject *parent=SP_OBJECT_PARENT(object);
+
+    if (SP_IS_TEXT(parent)) {
+        string->ly = &SP_TEXT(parent)->ly;
+    } else if (SP_IS_TSPAN(parent)) {
+	string->ly = &SP_TSPAN(parent)->ly;
+    } else {
+        string->ly = NULL;
+    }
+
+    if (((SPObjectClass *) string_parent_class)->build)
+        ((SPObjectClass *) string_parent_class)->build (object, doc, repr);
 
     /* fixme: This can be waste here, but ensures loaded documents are up-to-date */
     sp_string_calculate_dimensions (SP_STRING (object));
@@ -1098,9 +1110,6 @@ sp_tspan_build (SPObject *object, SPDocument *doc, SPRepr *repr)
 {
     SPTSpan *tspan = SP_TSPAN (object);
 
-    if (((SPObjectClass *) tspan_parent_class)->build)
-        ((SPObjectClass *) tspan_parent_class)->build (object, doc, repr);
-
     sp_object_read_attr (object, "x");
     sp_object_read_attr (object, "y");
     sp_object_read_attr (object, "dx");
@@ -1118,11 +1127,16 @@ sp_tspan_build (SPObject *object, SPDocument *doc, SPRepr *repr)
         sp_repr_add_child (repr, rch, NULL);
     }
 
-    /* fixme: We should really pick up first child always */
-    SPString *string = (SPString*)g_object_new (SP_TYPE_STRING, NULL);
-    tspan->string = sp_object_attach_reref (object, SP_OBJECT (string), NULL);
-    string->ly = &tspan->ly;
-    sp_object_invoke_build (tspan->string, doc, rch, SP_OBJECT_IS_CLONED (object));
+    if (((SPObjectClass *) tspan_parent_class)->build)
+        ((SPObjectClass *) tspan_parent_class)->build (object, doc, repr);
+
+    SPObject *ochild;
+    for ( ochild = sp_object_first_child(object) ; ochild ; ochild = SP_OBJECT_NEXT(ochild) ) {
+	if (SP_IS_STRING(ochild)) {
+	    tspan->string = ochild;
+	    break;
+	}
+    }
 }
 
 
@@ -1137,7 +1151,7 @@ sp_tspan_release (SPObject *object)
     SPTSpan *tspan = SP_TSPAN (object);
 
     if (tspan->string) {
-        tspan->string = sp_object_detach_unref (SP_OBJECT (object), tspan->string);
+	tspan->string = NULL;
     } else {
         g_print ("NULL tspan content\n");
     }
@@ -1220,13 +1234,13 @@ sp_tspan_child_added (SPObject *object, SPRepr *rch, SPRepr *ref)
     if (((SPObjectClass *) tspan_parent_class)->child_added)
         ((SPObjectClass *) tspan_parent_class)->child_added (object, rch, ref);
 
-    if (!tspan->string && rch->type == SP_XML_TEXT_NODE) {
-        SPString *string;
-        /* fixme: We should really pick up first child always */
-        string = (SPString*)g_object_new (SP_TYPE_STRING, 0);
-        tspan->string = sp_object_attach_reref (object, SP_OBJECT (string), NULL);
-        string->ly = &tspan->ly;
-        sp_object_invoke_build (tspan->string, SP_OBJECT_DOCUMENT (object), rch, SP_OBJECT_IS_CLONED (object));
+    SPObject *ochild;
+    tspan->string = NULL;
+    for ( ochild = sp_object_first_child(object) ; ochild ; ochild = SP_OBJECT_NEXT(ochild) ) {
+        if (SP_IS_STRING(ochild)) {
+            tspan->string = ochild;
+	    break;
+	}
     }
 }
 
@@ -1243,8 +1257,13 @@ sp_tspan_remove_child (SPObject *object, SPRepr *rch)
     if (((SPObjectClass *) tspan_parent_class)->remove_child)
         ((SPObjectClass *) tspan_parent_class)->remove_child (object, rch);
 
-    if (tspan->string && (SP_OBJECT_REPR (tspan->string) == rch)) {
-        tspan->string = sp_object_detach_unref (object, tspan->string);
+    SPObject *ochild;
+    tspan->string = NULL;
+    for ( ochild = sp_object_first_child(object) ; ochild ; ochild = SP_OBJECT_NEXT(ochild) ) {
+        if (SP_IS_STRING(ochild)) {
+            tspan->string = ochild;
+	    break;
+	}
     }
 }
 
@@ -1531,15 +1550,15 @@ sp_text_build (SPObject *object, SPDocument *doc, SPRepr *repr)
 {
     SPText *text = SP_TEXT (object);
 
-    if (((SPObjectClass *) text_parent_class)->build)
-        ((SPObjectClass *) text_parent_class)->build (object, doc, repr);
-
     sp_object_read_attr (object, "x");
     sp_object_read_attr (object, "y");
     sp_object_read_attr (object, "dx");
     sp_object_read_attr (object, "dy");
     sp_object_read_attr (object, "rotate");
     sp_object_read_attr (object, "sodipodi:linespacing");
+
+    if (((SPObjectClass *) text_parent_class)->build)
+        ((SPObjectClass *) text_parent_class)->build (object, doc, repr);
 
     SPVersion version = sp_object_get_sodipodi_version (object);
 
@@ -1555,17 +1574,16 @@ sp_text_build (SPObject *object, SPDocument *doc, SPRepr *repr)
         }
     }
 
-
-    for (rch = repr->children; rch != NULL; rch = rch->next) {
-        SPObject *ochild = sp_object_get_child_by_repr(object, rch);
-        if (ochild) {
-	    if (SP_IS_STRING(ochild)) {
-	        SPString *string=SP_STRING(ochild);
-		string->ly = &text->ly;
-            }
+    SPObject *ochild;
+    SPObject *next;
+    for ( ochild = sp_object_first_child(object) ; ochild ; ochild = next ) {
+        next = SP_OBJECT_NEXT(ochild);
+        if (SP_IS_STRING(ochild)) {
+	    SP_STRING(ochild)->ly = &text->ly;
         } else if (!SP_IS_TSPAN(ochild)) {
+	    /* at present we don't know what to do with non-tspan children */
             sp_object_detach_unref(object, ochild);
-        }
+	}
     }
 
     sp_text_update_immediate_state (text);

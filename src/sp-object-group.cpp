@@ -24,8 +24,6 @@ static void sp_objectgroup_remove_child (SPObject * object, SPRepr * child);
 static void sp_objectgroup_order_changed (SPObject * object, SPRepr * child, SPRepr * old_ref, SPRepr * new_ref);
 static SPRepr *sp_objectgroup_write (SPObject *object, SPRepr *repr, guint flags);
 
-static SPObject *sp_objectgroup_get_le_child_by_repr (SPObjectGroup *og, SPRepr *ref);
-
 static SPObjectClass *parent_class;
 
 GType
@@ -75,11 +73,6 @@ sp_objectgroup_init (SPObjectGroup *objectgroup)
 static void
 sp_objectgroup_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 {
-	SPObjectGroup * og;
-	GType type;
-
-	og = SP_OBJECTGROUP (object);
-
 	if (((SPObjectClass *) (parent_class))->child_added)
 		(* ((SPObjectClass *) (parent_class))->child_added) (object, child, ref);
 
@@ -89,11 +82,6 @@ sp_objectgroup_child_added (SPObject *object, SPRepr *child, SPRepr *ref)
 static void
 sp_objectgroup_remove_child (SPObject *object, SPRepr *child)
 {
-	SPObjectGroup *og;
-	SPObject *ref, *oc;
-
-	og = SP_OBJECTGROUP (object);
-
 	if (((SPObjectClass *) (parent_class))->remove_child)
 		(* ((SPObjectClass *) (parent_class))->remove_child) (object, child);
 
@@ -143,31 +131,3 @@ sp_objectgroup_write (SPObject *object, SPRepr *repr, guint flags)
 	return repr;
 }
 
-static SPObject *
-sp_objectgroup_get_le_child_by_repr (SPObjectGroup *og, SPRepr *ref)
-{
-	SPObject *o, *oc;
-	SPRepr *r, *rc;
-
-	if (!ref) return NULL;
-
-	o = NULL;
-	r = SP_OBJECT_REPR (og);
-	rc = r->children;
-	oc = sp_object_first_child(SP_OBJECT(og));
-
-	while (rc) {
-		if (rc == ref) return o;
-		if (oc && (SP_OBJECT_REPR (oc) == rc)) {
-			/* Rewind object */
-			o = oc;
-			oc = SP_OBJECT_NEXT(oc);
-		}
-		/* Rewind repr */
-		rc = rc->next;
-	}
-
-	g_assert_not_reached ();
-
-	return NULL;
-}

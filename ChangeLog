@@ -6,6 +6,10 @@
     * src/sp-object.cpp: fix sp_object_reorder() to correctly handle
 	  next == NULL
 
+	* src/sp-item.cpp, src/sp-object-group.cpp, src/sp-object-repr.cpp,
+      src/sp-object.cpp, src/sp-object.h, src/sp-text.cpp, src/sp-use.cpp:
+	  finished transition to SPObject::children
+
 2004-03-06  MenTaLguY  <mental@rydia.net>
 
     * src/ast/*: initial work on AST code
