@@ -159,5 +159,37 @@ int main(int argc, char *argv[]) {
 		c.erase(c.begin());
 		UTEST_ASSERT(check_values(c, 0));
 	}
+	UTEST_TEST("pop_front") {
+		int const full_ary[] = { 1, 2, 3 };
+		ListContainer<int> t(ARRAY_RANGE(full_ary));
+		UTEST_ASSERT(check_values(t, 3,  1, 2, 3));
+		UTEST_ASSERT(t.back() == 3);
+		t.pop_front();
+		UTEST_ASSERT(check_values(t, 2,  2, 3));
+		UTEST_ASSERT(t.back() == 3);
+		t.push_back(23);
+		UTEST_ASSERT(check_values(t, 3,  2, 3, 23));
+		UTEST_ASSERT(t.back() == 23);
+		t.pop_front();
+		UTEST_ASSERT(check_values(t, 2,  3, 23));
+		UTEST_ASSERT(t.back() == 23);
+		t.pop_front();
+		UTEST_ASSERT(check_values(t, 1,  23));
+		UTEST_ASSERT(t.back() == 23);
+		t.pop_front();
+		UTEST_ASSERT(check_values(t, 0));
+		t.push_back(42);
+		UTEST_ASSERT(check_values(t, 1,  42));
+		UTEST_ASSERT(t.back() == 42);
+	}		
+	UTEST_TEST("erase_after") {
+		int const full_ary[] = { 1, 2, 3, 4 };
+		int const exp_ary[] = { 1, 3, 4 };
+		ListContainer<int> full_list(ARRAY_RANGE(full_ary));
+		ListContainer<int> exp_list(ARRAY_RANGE(exp_ary));
+		UTEST_ASSERT(full_list != exp_list);
+		full_list.erase_after(full_list.begin());
+		UTEST_ASSERT(full_list == exp_list);
+	}		
 	return utest_end() ? 0 : 1;
 }
