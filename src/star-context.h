@@ -15,6 +15,7 @@
  */
 
 #include "event-context.h"
+#include "knotholder.h"
 
 #define SP_TYPE_STAR_CONTEXT (sp_star_context_get_type ())
 #define SP_STAR_CONTEXT(obj) (GTK_CHECK_CAST ((obj), SP_TYPE_STAR_CONTEXT, SPStarContext))
@@ -36,6 +37,11 @@ struct _SPStarContext {
 	gdouble proportion;
 	/* flat sides or not? */
 	bool isflatsided;
+
+    SPKnotHolder *knot_holder;
+    SPRepr *repr;
+
+
 };
 
 struct _SPStarContextClass {

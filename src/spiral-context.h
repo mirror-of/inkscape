@@ -16,6 +16,7 @@
 
 #include "knot.h"
 #include "event-context.h"
+#include "knotholder.h"
 
 #define SP_TYPE_SPIRAL_CONTEXT            (sp_spiral_context_get_type ())
 #define SP_SPIRAL_CONTEXT(obj)            (GTK_CHECK_CAST ((obj), SP_TYPE_SPIRAL_CONTEXT, SPSpiralContext))
@@ -33,6 +34,10 @@ struct _SPSpiralContext {
 	gdouble revo;
 	gdouble exp;
 	gdouble t0;
+
+    SPKnotHolder *knot_holder;
+    SPRepr *repr;
+
 };
 
 struct _SPSpiralContextClass {

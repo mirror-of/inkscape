@@ -16,6 +16,7 @@
  */
 
 #include "event-context.h"
+#include "knotholder.h"
 
 #define SP_TYPE_ARC_CONTEXT            (sp_arc_context_get_type ())
 #define SP_ARC_CONTEXT(obj)            (GTK_CHECK_CAST ((obj), SP_TYPE_ARC_CONTEXT, SPArcContext))
@@ -30,6 +31,10 @@ struct _SPArcContext {
 	SPEventContext event_context;
 	SPItem * item;
 	NR::Point center;
+
+    SPKnotHolder *knot_holder;
+    SPRepr *repr;
+
 };
 
 struct _SPArcContextClass {

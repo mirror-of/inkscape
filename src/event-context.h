@@ -32,6 +32,12 @@ struct _SPEventContext {
 	gchar **cursor_shape;
 	gint hot_x, hot_y;
 	GdkCursor *cursor;
+
+	gint xp , yp; // where drag started
+	gint tolerance;
+	bool within_tolerance; // are we still within tolerance of origin
+
+	SPItem *item_to_select; // the item where mouse_press occurred, to be selected if this is a click not drag
 };
 
 struct _SPEventContextClass {
@@ -45,6 +51,7 @@ struct _SPEventContextClass {
 	gint (* item_handler) (SPEventContext *ec, SPItem *item, GdkEvent *event);
 	/* fixme: I do not like Gtk+ stuff here (Lauris) */
 	GtkWidget * (* config_widget) (SPEventContext *ec);
+
 };
 
 #define SP_EVENT_CONTEXT_DESKTOP(e) (SP_EVENT_CONTEXT (e)->desktop)

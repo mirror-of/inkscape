@@ -56,11 +56,6 @@ static void sp_rect_finish (SPRectContext * rc);
 
 static SPEventContextClass * parent_class;
 
-static gint xp = 0, yp = 0; // where drag started
-static gint tolerance = 0;
-static bool within_tolerance = false;
-
-SPItem *item_to_select = NULL;
 
 GtkType
 sp_rect_context_get_type (void)
@@ -114,11 +109,17 @@ sp_rect_context_init (SPRectContext * rect_context)
 	event_context->cursor_shape = cursor_rect_xpm;
 	event_context->hot_x = 4;
 	event_context->hot_y = 4;
+    event_context->xp = 0;
+    event_context->yp = 0;
+    event_context->tolerance = 0;
+    event_context->within_tolerance = false;
+    event_context->item_to_select = NULL;
 
 	rect_context->item = NULL;
 
 	rect_context->rx_ratio = 0.0;
 	rect_context->ry_ratio = 0.0;
+
 }
 
 static void
@@ -196,7 +197,6 @@ sp_rect_context_selection_changed (SPSelection * selection, gpointer data)
 {
 	SPRectContext *rc;
 	SPEventContext *ec;
-	SPRepr *old_repr = NULL;
 	
 	rc = SP_RECT_CONTEXT (data);
 	ec = SP_EVENT_CONTEXT (rc);
@@ -282,12 +282,12 @@ sp_rect_context_item_handler (SPEventContext * event_context, SPItem * item, Gdk
 		if (event->button.button == 1) {
 
 			// save drag origin
-			xp = (gint) event->button.x; 
-			yp = (gint) event->button.y;
-			within_tolerance = true;
+            event_context->xp = (gint) event->button.x;
+            event_context->yp = (gint) event->button.y;
+            event_context->within_tolerance = true;
 
 			// remember clicked item, disregarding groups
-			item_to_select = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
+            event_context->item_to_select = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
 
 			ret = TRUE;
 		}
@@ -310,7 +310,7 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
 	SPDesktop *desktop = event_context->desktop;
 	SPRectContext *rc = SP_RECT_CONTEXT(event_context);
 
-	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
+    event_context->tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
 
 	gint ret = FALSE;
 	switch (event->type) {
@@ -318,12 +318,12 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
 		if (event->button.button == 1) {
 
 			// save drag origin
-			xp = (gint) event->button.x; 
-			yp = (gint) event->button.y;
-			within_tolerance = true;
+            event_context->xp = (gint) event->button.x;
+            event_context->yp = (gint) event->button.y;
+            event_context->within_tolerance = true;
 
 			// remember clicked item, disregarding groups
-			item_to_select = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
+            event_context->item_to_select = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
 
 			dragging = true;
 			/* Position center */
@@ -341,43 +341,41 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
 		}
 		break;
 	case GDK_MOTION_NOTIFY:
-		gdk_window_set_cursor (GTK_WIDGET (SP_DT_CANVAS (desktop))->window, event_context->cursor);
 		if (dragging && (event->motion.state & GDK_BUTTON1_MASK)) {
 
-			if ( within_tolerance
-			     && ( abs( (gint) event->motion.x - xp ) < tolerance )
-			     && ( abs( (gint) event->motion.y - yp ) < tolerance ) ) {
+			if ( event_context->within_tolerance
+					 && ( abs( (gint) event->motion.x - event_context->xp ) < event_context->tolerance )
+					 && ( abs( (gint) event->motion.y - event_context->yp ) < event_context->tolerance ) ) {
 				break; // do not drag if we're within tolerance from origin
 			}
 			// Once the user has moved farther than tolerance from the original location 
 			// (indicating they intend to draw, not click), then always process the 
 			// motion notify coordinates as given (no snapping back to origin)
-			within_tolerance = false; 
+			event_context->within_tolerance = false;
 
-			NR::Point const motion_w(event->motion.x,
-						 event->motion.y);
+			NR::Point const motion_w(event->motion.x, event->motion.y);
 			NR::Point const motion_dt(sp_desktop_w2d_xy_point(event_context->desktop, motion_w));
 			sp_rect_drag(*rc, motion_dt, event->motion.state);
 			ret = TRUE;
 		}
 		break;
 	case GDK_BUTTON_RELEASE:
-		xp = yp = 0; 
+        event_context->xp = event_context->yp = 0;
 		if (event->button.button == 1) {
 			dragging = false;
 
-			if (!within_tolerance) {
+            if (!event_context->within_tolerance) {
 				// we've been dragging, finish the rect
 				sp_rect_finish (rc);
-			} else if (item_to_select) {
+            } else if (event_context->item_to_select) {
 				// no dragging, select clicked item if any
-				sp_selection_set_item (SP_DT_SELECTION (desktop), item_to_select);
+                sp_selection_set_item (SP_DT_SELECTION (desktop), event_context->item_to_select);
 			} else {
 				// click in an empty space
 				sp_selection_empty (SP_DT_SELECTION (desktop));
 			}
 
-			item_to_select = NULL;
+            event_context->item_to_select = NULL;
 			ret = TRUE;
 			sp_canvas_item_ungrab (SP_CANVAS_ITEM (desktop->acetate), event->button.time);
 		}
