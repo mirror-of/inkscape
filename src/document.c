@@ -75,7 +75,7 @@ sp_document_get_type (void)
 			4,
 			(GInstanceInitFunc) sp_document_init,
 		};
-		type = g_type_register_static (G_TYPE_OBJECT, "SPDocument", &info, 0);
+		type = g_type_register_static (G_TYPE_OBJECT, "SPDocument", &info, (GTypeFlags)0);
 	}
 	return type;
 }
@@ -87,7 +87,7 @@ sp_document_class_init (SPDocumentClass * klass)
 
 	object_class = (GObjectClass *) klass;
 
-	parent_class = g_type_class_peek_parent (klass);
+	parent_class = (GObjectClass*)g_type_class_peek_parent (klass);
 
 	signals[MODIFIED] = g_signal_new ("modified",
 					    G_TYPE_FROM_CLASS(klass),
@@ -227,7 +227,7 @@ sp_document_create (SPReprDoc *rdoc,
 
 	rroot = sp_repr_document_root (rdoc);
 
-	document = g_object_new (SP_TYPE_DOCUMENT, NULL);
+	document = (SPDocument*)g_object_new (SP_TYPE_DOCUMENT, NULL);
 
 	document->advertize = advertize;
 	document->keepalive = keepalive;
@@ -528,7 +528,7 @@ sp_document_lookup_id (SPDocument *doc, const gchar *id)
 	g_return_val_if_fail (SP_IS_DOCUMENT (doc), NULL);
 	g_return_val_if_fail (id != NULL, NULL);
 
-	return g_hash_table_lookup (doc->priv->iddef, id);
+	return (SPObject*)g_hash_table_lookup (doc->priv->iddef, id);
 }
 
 /* Object modification root handler */
@@ -746,7 +746,7 @@ sp_document_add_resource (SPDocument *document, const gchar *key, SPObject *obje
 	g_return_val_if_fail (object != NULL, FALSE);
 	g_return_val_if_fail (SP_IS_OBJECT (object), FALSE);
 
-	rlist = g_hash_table_lookup (document->priv->resources, key);
+	rlist = (GSList*)g_hash_table_lookup (document->priv->resources, key);
 	g_return_val_if_fail (!g_slist_find (rlist, object), FALSE);
 	rlist = g_slist_prepend (rlist, object);
 	g_hash_table_insert (document->priv->resources, (gpointer) key, rlist);
@@ -766,7 +766,7 @@ sp_document_remove_resource (SPDocument *document, const gchar *key, SPObject *o
 	g_return_val_if_fail (object != NULL, FALSE);
 	g_return_val_if_fail (SP_IS_OBJECT (object), FALSE);
 
-	rlist = g_hash_table_lookup (document->priv->resources, key);
+	rlist = (GSList*)g_hash_table_lookup (document->priv->resources, key);
 	g_return_val_if_fail (rlist != NULL, FALSE);
 	g_return_val_if_fail (g_slist_find (rlist, object), FALSE);
 	rlist = g_slist_remove (rlist, object);
@@ -783,7 +783,7 @@ sp_document_get_resource_list (SPDocument *document, const gchar *key)
 	g_return_val_if_fail (key != NULL, NULL);
 	g_return_val_if_fail (*key != '\0', NULL);
 
-	return g_hash_table_lookup (document->priv->resources, key);
+	return (GSList*)g_hash_table_lookup (document->priv->resources, key);
 }
 
 /* Helpers */
