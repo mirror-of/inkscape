@@ -393,7 +393,7 @@ void            text_wrapper::MakeTextBoundaries(PangoLogAttr* pAttrs,int nAttr)
 	int   last_w_st=-1;
 	int   last_s_st=-1;
 	int   last_p_st=0;
-	for (int i=0;i<=nAttr;i++) {
+	for (int i=0;i<nAttr;i++) {
 		text_boundary nbs;
 		text_boundary nbe;
 		nbs.uni_pos=i;
