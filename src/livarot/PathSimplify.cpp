@@ -152,7 +152,11 @@ double DistanceToCubic(NR::Point const &start, Path::path_descr_cubicto res, NR:
 }
 
 
-// simplification on a subpath
+/**
+ *    Simplification on a subpath.
+ *    FIXME: reads points from pts.
+ */
+
 void Path::DoSimplify(double treshhold)
 {
   // non-dichotomic method: grow an interval of points approximated by a curve, until you reach the treshhold, and repeat
@@ -172,8 +176,7 @@ void Path::DoSimplify(double treshhold)
     data.totLen = 0;
     data.nbPt = data.maxPt = data.inPt = 0;
   
-    path_lineto const *tp = (path_lineto *) savPts;
-    NR::Point const moveToPt = tp[0].p;
+    NR::Point const moveToPt = ((path_lineto *) savPts)[0].p;
     MoveTo(moveToPt);
     NR::Point endToPt = moveToPt;
   
@@ -181,8 +184,9 @@ void Path::DoSimplify(double treshhold)
 
         int lastP = curP + 1;
         nbPt = 2;
-        path_lineto const *tp = (path_lineto *) savPts;
-        pts = (char *) (tp + curP);
+
+        /* FIXME: pts munged */
+        pts = (char *) ( ((path_lineto *) savPts) + curP);
     
         // remettre a zero
         data.inPt = data.nbPt = 0;
@@ -196,8 +200,7 @@ void Path::DoSimplify(double treshhold)
             int worstP = -1;
             
             do {
-                path_lineto const *tp = (path_lineto *) savPts;
-                if ((tp + lastP)->isMoveTo == polyline_forced) {
+                if ((((path_lineto *) savPts) + lastP)->isMoveTo == polyline_forced) {
                     contains_forced = true;
                 }
                 forced_pt = lastP;
@@ -205,7 +208,7 @@ void Path::DoSimplify(double treshhold)
                 nbPt += step;
             } while (lastP < savNbPt && ExtendFit(data,
                                                   (contains_forced) ? 0.05 * treshhold : treshhold,
-                                                  res, worstP) );
+                                                  res, worstP) ); // cth103: uses pts
             if (lastP >= savNbPt) {
 
                 lastP -= step;
@@ -220,25 +223,25 @@ void Path::DoSimplify(double treshhold)
                     lastP = forced_pt;
                     nbPt = lastP - curP + 1;
                 }
-                
+
+                // cth103: uses pts
                 AttemptSimplify(treshhold, res, worstP);       // ca passe forcement
             }
             step /= 2;
         }
     
-        tp = (path_lineto *) savPts;
-        endToPt = tp[lastP].p;
+        endToPt = ((path_lineto *) savPts)[lastP].p;
         if (nbPt <= 2) {
-            LineTo(endToPt);
+            LineTo(endToPt); /* cth103: does not use pts */
         } else {
-            CubicTo(endToPt, res.stD, res.enD);
+            CubicTo(endToPt, res.stD, res.enD); /* cth103: does not use pts */
         }
         
         curP = lastP;
     }
   
     if (NR::LInfty(endToPt - moveToPt) < 0.00001) {
-        Close();
+        Close(); /* cth103: does not use pts */
     }
   
     g_free(data.Xk);
@@ -247,7 +250,8 @@ void Path::DoSimplify(double treshhold)
     g_free(data.tk);
     g_free(data.lk);
     g_free(data.fk);
-    
+
+    /* FIXME: pts restored */
     pts = savPts;
     nbPt = savNbPt;
 }
@@ -333,6 +337,10 @@ bool Path::FitCubic(NR::Point const &start, path_descr_cubicto &res,
     return true;
 }
 
+
+/**
+ *    Uses pts.
+ */
 
 bool Path::ExtendFit(fitting_tables &data, double treshhold, path_descr_cubicto &res, int &worstP)
 {
@@ -752,6 +760,9 @@ bool Path::AttemptSimplify (fitting_tables &data,double treshhold, path_descr_cu
 }
 
 
+/**
+ *    Uses pts.
+ */
 
 bool Path::AttemptSimplify(double treshhold, path_descr_cubicto &res,int &worstP)
 {
