@@ -101,7 +101,7 @@ sp_dash_selector_init (SPDashSelector *dsel)
 	GtkTooltips *tt = gtk_tooltips_new();
 
 	dsel->dash = gtk_option_menu_new ();
-	gtk_tooltips_set_tip (tt, dsel->dash, _("Stroke pattern"), NULL);
+	gtk_tooltips_set_tip (tt, dsel->dash, _("Dash pattern"), NULL);
 	gtk_widget_show (dsel->dash);
 	gtk_box_pack_start (GTK_BOX (dsel), dsel->dash, FALSE, FALSE, 0);
 
