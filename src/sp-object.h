@@ -183,13 +183,99 @@ struct SPObject : public GObject {
 		_successor = successor;
 	}
 
+	/* modifications; all three sets of methods should
+	 * probably ultimately be protected, as they are not
+	 * really part of its public interface.  However,
+	 * other parts of the code to occasionally use them at
+	 * present. */
+
+	/** @brief Updates the object's repr based on the object's
+	 *         state.
+	 *
+	 *  This method updates the the repr attached to the object
+	 *  to reflect the object's current state; see the two-argument
+	 *  version for details.
+	 *
+	 *  @param flags object write flags that apply to this update
+	 *
+	 *  @return the updated repr
+	 */
 	SPRepr *updateRepr(unsigned int flags=SP_OBJECT_WRITE_EXT);
+	/** @brief Updates the given repr based on the object's
+	 *         state.
+	 *
+	 *  This method updates the given repr to reflect the object's
+	 *  current state.  There are several flags that affect this:
+	 *
+	 *   SP_OBJECT_WRITE_BUILD - create new reprs
+	 *
+	 *   SP_OBJECT_WRITE_EXT   - write elements and attributes
+	 *                           which are not part of pure SVG
+	 *                           (i.e. the Inkscape and Sodipodi
+	 *                           namespaces)
+	 *
+	 *   SP_OBJECT_WRITE_ALL   - create all nodes and attributes,
+	 *                           even those which might be redundant
+	 *
+	 *  @param repr the repr to update
+	 *  @param flags object write flags that apply to this update
+	 *
+	 *  @return the updated repr
+	 */
 	SPRepr *updateRepr(SPRepr *repr, unsigned int flags);
 
+	/** @brief Queues an deferred update of this object's display.
+	 *
+	 *  This method sets flags to indicate updates to be performed
+	 *  later, during the idle loop.
+	 *
+	 *  There are several flags permitted here:
+	 *
+	 *   SP_OBJECT_MODIFIED_FLAG - the object has been modified
+	 *
+	 *   SP_OBJECT_CHILD_MODIFIED_FLAG - a child of the object has been
+	 *                                   modified
+	 *
+	 *   SP_OBJECT_STYLE_MODIFIED_FLAG - the object's style has been
+	 *                                   modified
+	 *
+	 *  There are also some subclass-specific modified flags
+	 *  which are hardly ever used.
+	 *
+	 *  One of either MODIFIED or CHILD_MODIFIED is required.
+	 *
+	 *  @param flags flags indicating what to update
+	 */
 	void requestDisplayUpdate(unsigned int flags);
+	/** @breif Updates the object's display immediately
+	 *
+	 *  This method is called during the idle loop by SPDocument
+	 *  in order to update the object's display.
+	 *
+	 *  One additional flag is legal here:
+	 *
+	 *   SP_OBJECT_PARENT_MODIFIED_FLAG - the parent has been
+	 *                                    modified
+	 *
+	 *  @param ctx an SPCtx which accumulates various state
+	 *             during the recursive update -- beware! some
+	 *             subclasses try to cast this to an SPItemCtx *
+	 *
+	 *  @param flags flags indicating what to update (in addition
+	 *               to any already set flags)
+	 */
 	void updateDisplay(SPCtx *ctx, unsigned int flags);
 
+	/** @brief Requests that a modification notification signal
+	 *         be emitted later (e.g. during the idle loop)
+	 *
+	 *  @param flags flags indicating what has been modified
+	 */
 	void requestModified(unsigned int flags);
+	/** @brief Emits a modification notification signal
+	 *
+	 *  @param flags indicating what has been modified
+	 */
 	void emitModified(unsigned int flags);
 
 	SigC::Signal1<void, SPObject *> _delete_signal;

@@ -40,6 +40,8 @@
 	  and SPObject::updateRepr; also reworked "minimal" version of
 	  updateRepr.
 
+    * src/sp-object.h: added a little documentation
+
 2004-06-11  Ted Gould  <ted@gould.cx>
 
 	* src/file.cpp, src/inkscape.cpp, src/interface.cpp, src/prefs-utils.cpp,

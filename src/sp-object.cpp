@@ -770,14 +770,23 @@ sp_object_private_write (SPObject *object, SPRepr *repr, guint flags)
 SPRepr *SPObject::updateRepr(unsigned int flags) {
 	if (!SP_OBJECT_IS_CLONED(this)) {
 		SPRepr *repr=SP_OBJECT_REPR(this);
-		g_return_val_if_fail(repr != NULL, NULL);
-		updateRepr(repr, flags);
+		if (repr) {
+			return updateRepr(repr, flags);
+		} else {
+			g_critical("Attempt to update non-existent repr");
+			return NULL;
+		}
 	} else {
+		/* cloned objects have no repr */
 		return NULL;
 	}
 }
 
 SPRepr *SPObject::updateRepr(SPRepr *repr, unsigned int flags) {
+	if (SP_OBJECT_IS_CLONED(this)) {
+		/* cloned objects have no repr */
+		return NULL;
+	}
 	if (((SPObjectClass *) G_OBJECT_GET_CLASS(this))->write) {
 		if (!(flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 			repr = SP_OBJECT_REPR (this);
