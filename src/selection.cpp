@@ -182,6 +182,22 @@ void SPSelection::setList(GSList const *list) {
     _emitChanged();
 }
 
+void SPSelection::addList(GSList const *list) {
+    _invalidateCachedLists();
+
+    if ( list != NULL ) {
+        for ( GSList const *iter = list ; iter != NULL ; iter = iter->next ) {
+		SPObject *obj = reinterpret_cast<SPObject *>(iter->data);
+		if (includes(obj)) {
+			continue;
+		}
+            _add (obj);
+        }
+    }
+
+    _emitChanged();
+}
+
 void SPSelection::setReprList(GSList const *list) {
     _clear();
 

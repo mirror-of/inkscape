@@ -66,30 +66,35 @@ public:
 	 * @param obj the SPObject to add
 	 */
 	void add(SPObject *obj);
+
 	/**
 	 * @brief Add an SPItem to the set of selected objects.
 	 *
 	 * @param item the item to add
 	 */
 	void addItem(SPItem *item) { add(item); }
+
 	/**
 	 * @brief Add an XML node's SPObject to the set of selected objects
 	 *
 	 * @param the xml node of the item to add
 	 */
 	void addRepr(SPRepr *repr) { add(_objectForRepr(repr)); }
+
 	/**
 	 * @brief Set the selection to a single specific object
 	 *
 	 * @param obj the object to select
 	 */
 	void set(SPObject *obj);
+
 	/**
 	 * @brief Set the selection to a single specific object
 	 *
 	 * @param item the item to select
 	 */
 	void setItem(SPItem *item) { set(item); }
+
 	/**
 	 * @brief Set the selection to an XML node's SPObject
 	 *
@@ -105,6 +110,7 @@ public:
 	 * @param item the item to unselect
 	 */
 	void remove(SPObject *obj);
+
 	/**
 	 * @brief Removes an item from the set of selected objects
 	 *
@@ -113,6 +119,7 @@ public:
 	 * @param item the item to unselect
 	 */
 	void removeItem(SPItem *item) { remove(item); }
+
 	/**
 	 * @brief Removes an item from the set of selected objects
 	 *
@@ -121,24 +128,35 @@ public:
 	 * @param repr the xml node of the item to remove
 	 */
 	void removeRepr(SPRepr *repr) { remove(_objectForRepr(repr)); }
+
 	/**
 	 * @brief Selects exactly the specified objects
 	 *
 	 * @param objs the objects to select
 	 */
 	void setList(GSList const *objs);
+
+	/**
+	 * @brief Adds the specified objects to selection, without deselecting first
+	 *
+	 * @param objs the objects to select
+	 */
+	void addList(GSList const *objs);
+
 	/**
 	 * @brief Clears the selection and selects the specified objects 
 	 *
 	 * @param items a list of items to select
 	 */
 	void setItemList(GSList const *items) { setList(items); }
+
 	/**
 	 * @brief Clears the selection and selects the specified objects
 	 *
 	 * @param repr a list of xml nodes for the items to select
 	 */
 	void setReprList(GSList const *reprs);
+
 	/**
 	 * @brief Unselects all selected objects.
 	 */
@@ -148,14 +166,17 @@ public:
 	 * @brief Returns true if no items are selected
 	 */
 	bool isEmpty() const { return _objs == NULL; }
+
 	/**
 	 * @brief Returns true if the given object is selected
 	 */
 	bool includes(SPObject *obj) const;
+
 	/**
 	 * @brief Returns true if the given item is selected
 	 */
 	bool includesItem(SPItem *item) const { return includes(item); }
+
 	/**
 	 * @brief Returns true if the given item is selected
 	 */
@@ -169,12 +190,14 @@ public:
 	 * @return NULL unless exactly one object is selected
 	 */
 	SPObject *single();
+
 	/**
 	 * @brief Returns a single selected item
 	 *
 	 * @return NULL unless exactly one object is selected
 	 */
 	SPItem *singleItem();
+
 	/**
 	 * @brief Returns a single selected object's xml node
 	 *
@@ -204,6 +227,7 @@ public:
 	 * TODO: how is this different from bounds()?
 	 */ 
 	NRRect *boundsInDocument(NRRect *dest) const;
+
 	/**
 	 * @brief Returns the bounding rectangle of the selection
 	 *
@@ -236,6 +260,7 @@ public:
 	sigc::connection connectChanged( const sigc::slot<void, SPSelection *> &slot) {
 		return _changed_signal.connect(slot);
 	}
+
 	/**
 	 * @brief Connects a slot to be notified of selected 
 	 *        object modifications 
