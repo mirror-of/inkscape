@@ -1,3 +1,22 @@
+2003-11-28  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* extensions/ai_input.inkmod, extensions/dia.inkmod,
+	  extensions/svgz_input.inkmod, extensions/svgz_output.inkmod:
+	  Change the filename extension from `foo' to `.foo'; i.e. the
+	  filename must end in `.foo' to be considered a match, rather
+	  than merely ending in `foo'.
+
+	  It appears that the sole users of this data are in src/system.c
+	  (open_internal, save_internal).
+
+	  I've found no documentation needing updating, according to
+	  `rgrep -i extension doc'.
+
+	* src/system.c (open_internal, save_internal): Minor effec tweaks:
+	  fewer strlen calculations.
+
+	* src/dialogs/transformation.c: Fix uninitialized-var bug.
+
 2003-11-28 MenTaLguY <mental@rydia.net>
 
 	* src/xml/repr-action-test.c, src/utest/utest.inc: made test
