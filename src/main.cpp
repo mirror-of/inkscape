@@ -175,6 +175,17 @@ main (int argc, const char **argv)
 #ifndef WIN32
 	use_gui = (getenv ("DISPLAY") != NULL);
 #else
+    /*
+    Set the current directory to the directory of the
+    executable.  This seems redundant, but is needed for
+    when inkscape.exe is executed from another directory.
+    We use relative paths on win32.
+    HKCR\svgfile\shell\open\command is a good example
+    */
+    char *homedir = g_path_get_dirname( argv[0] );
+    SetCurrentDirectory( homedir );
+    g_free( homedir );
+
 	use_gui = TRUE;
 #endif
 	/* Test whether with/without GUI is forced */
