@@ -1,3 +1,9 @@
+2004-02-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/arc-context.cpp: Cleanups: greater conformance to
+	Coding_Style, combine declaration and first assignment of some
+	vars.
+
 2004-02-07 Johan Ceuppens <jceuppen@easynet.be> 
     * src/libnrtype/nr-type-gnome.cpp src/libnrtype/nr-type-directory
       src/libnrtype/nr-type-xft.cpp src/widgets/font-selector.cpp 

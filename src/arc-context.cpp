@@ -35,13 +35,13 @@ static void sp_arc_context_class_init (SPArcContextClass *klass);
 static void sp_arc_context_init (SPArcContext *arc_context);
 static void sp_arc_context_dispose (GObject *object);
 
-static gint sp_arc_context_root_handler (SPEventContext * event_context, GdkEvent * event);
-static gint sp_arc_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event);
+static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent *event);
+static gint sp_arc_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event);
 
-static void sp_arc_drag (SPArcContext * ec, double x, double y, guint state);
-static void sp_arc_finish (SPArcContext * ec);
+static void sp_arc_drag(SPArcContext *ec, double x, double y, guint state);
+static void sp_arc_finish(SPArcContext *ec);
 
-static SPEventContextClass * parent_class;
+static SPEventContextClass *parent_class;
 
 GtkType
 sp_arc_context_get_type (void)
@@ -80,12 +80,9 @@ sp_arc_context_class_init (SPArcContextClass *klass)
 	event_context_class->item_handler = sp_arc_context_item_handler;
 }
 
-static void
-sp_arc_context_init (SPArcContext * arc_context)
+static void sp_arc_context_init(SPArcContext *arc_context)
 {
-	SPEventContext * event_context;
-	
-	event_context = SP_EVENT_CONTEXT (arc_context);
+	SPEventContext *event_context = SP_EVENT_CONTEXT(arc_context);
 
 	event_context->cursor_shape = cursor_arc_xpm;
 	event_context->hot_x = 4;
@@ -94,12 +91,9 @@ sp_arc_context_init (SPArcContext * arc_context)
 	arc_context->item = NULL;
 }
 
-static void
-sp_arc_context_dispose (GObject *object)
+static void sp_arc_context_dispose(GObject *object)
 {
-	SPArcContext * ac;
-
-	ac = SP_ARC_CONTEXT (object);
+	SPArcContext *ac = SP_ARC_CONTEXT(object);
 
 	/* fixme: This is necessary because we do not grab */
 	if (ac->item) sp_arc_finish (ac);
@@ -107,8 +101,7 @@ sp_arc_context_dispose (GObject *object)
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
-static gint
-sp_arc_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event)
+static gint sp_arc_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEvent *event)
 {
 	gint ret;
 
@@ -120,17 +113,13 @@ sp_arc_context_item_handler (SPEventContext * event_context, SPItem * item, GdkE
 	return ret;
 }
 
-static gint
-sp_arc_context_root_handler (SPEventContext * event_context, GdkEvent * event)
+static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent *event)
 {
 	static gboolean dragging;
-	SPArcContext * ac;
-	gint ret;
-	SPDesktop * desktop;
 
-	desktop = event_context->desktop;
-	ac = SP_ARC_CONTEXT (event_context);
-	ret = FALSE;
+	SPDesktop *desktop = event_context->desktop;
+	SPArcContext *ac = SP_ARC_CONTEXT (event_context);
+	gint ret = FALSE;
 
 	switch (event->type) {
 	case GDK_BUTTON_PRESS:
@@ -191,24 +180,21 @@ sp_arc_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 	return ret;
 }
 
-static void
-sp_arc_drag (SPArcContext * ac, double xx, double yy, guint state)
+static void sp_arc_drag(SPArcContext *ac, double xx, double yy, guint state)
 {
 	NR::Point p0, p1;
-	const NR::Point pt(xx, yy);
+	NR::Point const pt(xx, yy);
 
-	SPDesktop * desktop = SP_EVENT_CONTEXT (ac)->desktop;
+	SPDesktop *desktop = SP_EVENT_CONTEXT(ac)->desktop;
 
 	if (!ac->item) {
-		SPRepr * repr, * style;
-		SPCSSAttr * css;
 		/* Create object */
-		repr = sp_repr_new ("path");
+		SPRepr *repr = sp_repr_new("path");
 		sp_repr_set_attr (repr, "sodipodi:type", "arc");
 		/* Set style */
-		style = inkscape_get_repr (INKSCAPE, "tools.shapes.arc");
+		SPRepr *style = inkscape_get_repr(INKSCAPE, "tools.shapes.arc");
 		if (style) {
-			css = sp_repr_css_attr_inherited (style, "style");
+			SPCSSAttr *css = sp_repr_css_attr_inherited(style, "style");
 			sp_repr_css_set (repr, css, "style");
 			sp_repr_css_attr_unref (css);
 		}
@@ -281,18 +267,17 @@ sp_arc_drag (SPArcContext * ac, double xx, double yy, guint state)
 	sp_arc_position_set (SP_ARC (ac->item), (x0 + x1) / 2, (y0 + y1) / 2, (x1 - x0) / 2, (y1 - y0) / 2);
 
 	// status text
-	GString * xs, * ys;
 	gchar status[80];
-	xs = SP_PT_TO_METRIC_STRING (fabs(x1-x0), SP_DEFAULT_METRIC);
-	ys = SP_PT_TO_METRIC_STRING (fabs(y1-y0), SP_DEFAULT_METRIC);
+	GString *xs = SP_PT_TO_METRIC_STRING (fabs(x1-x0), SP_DEFAULT_METRIC);
+	GString *ys = SP_PT_TO_METRIC_STRING (fabs(y1-y0), SP_DEFAULT_METRIC);
 	sprintf (status, "Draw arc  %s x %s", xs->str, ys->str);
 	sp_view_set_status (SP_VIEW (desktop), status, FALSE);
 	g_string_free (xs, FALSE);
 	g_string_free (ys, FALSE);
+	/* FIXME: The above looks like a memory leak: I think arg2 should be TRUE. */
 }
 
-static void
-sp_arc_finish (SPArcContext * ac)
+static void sp_arc_finish(SPArcContext *ac)
 {
 	if (ac->item != NULL) {
 		SPDesktop *desktop = SP_EVENT_CONTEXT (ac)->desktop;
