@@ -14,6 +14,8 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
+#include <map>
+
 #include <glibmm/i18n.h>
 #include "helper/window.h"
 #include "../inkscape.h"
@@ -235,7 +237,7 @@ clonetiler_get_transform (
     case TILE_PMM:
         if (y % 2 == 0) {
             if (x % 2 == 0) {
-                return rect_translate;
+                return d_s_r * rect_translate;
             } else {
                 return d_s_r * flip_x * rect_translate;
             }
@@ -593,15 +595,34 @@ clonetiler_get_transform (
     return NR::identity();
 }
 
+
+
+/***********************
+*        Unclumper
+***********************/
+
+// Taking bbox of an item is an expensive operation, and we need to do it many times, so here we
+// cache the centers, widths, and heights of items
+
+//FIXME: make a class with these cashes as members instead of globals 
+std::map<const gchar *, NR::Point> c_cache;
+std::map<const gchar *, NR::Point> wh_cache;
+
 /**
 Center of bbox of item
 */
 NR::Point
 unclump_center (SPItem *item)
 {
+    std::map<const gchar *, NR::Point>::iterator i = c_cache.find(SP_OBJECT_ID(item));
+    if ( i != c_cache.end() ) {
+        return i->second;
+    }
+
     NRRect r;
     sp_item_invoke_bbox(item, &r, sp_item_i2d_affine(item), TRUE);
     NR::Point c = NR::Point ((r.x0 + r.x1)/2, (r.y0 + r.y1)/2); 
+    c_cache[SP_OBJECT_ID(item)] = c;
     return c; 
 }
 
@@ -614,16 +635,24 @@ item2.
 double
 unclump_dist (SPItem *item1, SPItem *item2)
 {
-    NRRect r2;
-    sp_item_invoke_bbox(item2, &r2, sp_item_i2d_affine(item2), TRUE);
-    NR::Point c2 = NR::Point ((r2.x0 + r2.x1)/2, (r2.y0 + r2.y1)/2); 
-    double w = fabs (r2.x1 - r2.x0); 
-    double h = fabs (r2.y1 - r2.y0); 
-    double r = sqrt (w * h / M_PI); // the radius of the equal-area circle
+    NR::Point c1 = unclump_center (item1);
+    NR::Point c2 = unclump_center (item2);
 
-    NRRect r1;
-    sp_item_invoke_bbox(item1, &r1, sp_item_i2d_affine(item1), TRUE);
-    NR::Point c1 = NR::Point ((r1.x0 + r1.x1)/2, (r1.y0 + r1.y1)/2); 
+    double w;
+    double h;
+    std::map<const gchar *, NR::Point>::iterator i = wh_cache.find(SP_OBJECT_ID(item2));
+    if ( i != wh_cache.end() ) {
+        w = i->second[NR::X];
+        h = i->second[NR::Y];
+    } else {
+        NRRect r2;
+        sp_item_invoke_bbox(item2, &r2, sp_item_i2d_affine(item2), TRUE);
+        w = fabs (r2.x1 - r2.x0);
+        h = fabs (r2.y1 - r2.y0);
+        wh_cache[SP_OBJECT_ID(item2)] = NR::Point(w, h);
+    }
+
+    double r = sqrt (w * h / M_PI); // the radius of the equal-area circle
 
     return (NR::L2 (c2 - c1) - r);
 }
@@ -756,6 +785,11 @@ unclump_push (SPItem *from, SPItem *what, double dist)
 
     NR::Matrix move = NR::Matrix (NR::translate (by));
 
+    std::map<const gchar *, NR::Point>::iterator i = c_cache.find(SP_OBJECT_ID(what));
+    if ( i != c_cache.end() ) {
+        i->second *= move;
+    }
+
     //g_print ("push %s at %g,%g from %g,%g by %g,%g, dist %g\n", SP_OBJECT_ID(what), it[NR::X],it[NR::Y], p[NR::X],p[NR::Y], by[NR::X],by[NR::Y], dist);
 
     sp_item_set_i2d_affine(what, sp_item_i2d_affine(what) * move);
@@ -770,10 +804,14 @@ unclump_pull (SPItem *to, SPItem *what, double dist)
 {
     NR::Point it = unclump_center (what);
     NR::Point p = unclump_center (to);
-
     NR::Point by = dist * NR::unit_vector (p - it);
 
     NR::Matrix move = NR::Matrix (NR::translate (by));
+
+    std::map<const gchar *, NR::Point>::iterator i = c_cache.find(SP_OBJECT_ID(what));
+    if ( i != c_cache.end() ) {
+        i->second *= move;
+    }
 
     //g_print ("pull %s at %g,%g to %g,%g by %g,%g, dist %g\n", SP_OBJECT_ID(what), it[NR::X],it[NR::Y], p[NR::X],p[NR::Y], by[NR::X],by[NR::Y], dist);
 
@@ -790,6 +828,9 @@ grid. May be called repeatedly for stronger effect.
 static void
 unclump (GSList *items)
 {
+    c_cache.clear();
+    wh_cache.clear();
+
     for (GSList *i = items; i != NULL; i = i->next) { //  for each original/clone x: 
         SPItem *item = SP_ITEM (i->data);
 
@@ -824,8 +865,9 @@ unclump (GSList *items)
             //g_print ("NEI %d for item %s    closest %s at %g  farest %s at %g  ave %g\n", g_slist_length(nei), SP_OBJECT_ID(item), SP_OBJECT_ID(closest), dist_closest, SP_OBJECT_ID(farest), dist_farest, ave);
 
             if (fabs (ave) < 1e6 && fabs (dist_closest) < 1e6 && fabs (dist_farest) < 1e6) { // otherwise the items are bogus
-                unclump_push (closest, item, (ave - dist_closest) / 2 ); // reduce this divisor to make unclumping more aggressive
-                unclump_pull (farest, item, (dist_farest - ave) / 2 );
+                // reduce the divisor (3) to make unclumping more aggressive and less stable
+                unclump_push (closest, item, (ave - dist_closest) / 3 ); 
+                unclump_pull (farest, item, (dist_farest - ave) / 3 );
 
                 // without this, sometimes bbox is wrong for just-moved objects
                 sp_document_ensure_up_to_date(SP_OBJECT_DOCUMENT(item));
