@@ -966,13 +966,14 @@ sp_item_write_transform(SPItem *item, Inkscape::XML::Node *repr, NR::Matrix cons
     // recursively compensate pattern fill if it's not to be transformed 
     if (prefs_get_int_attribute("options.transform", "pattern", 1) == 0) {
         sp_item_adjust_paint_recursive (item, advertized_transform.inverse(), NR::identity(), true);
-    }
+    } // FIXME: add the same else branch as for gradients below, to convert patterns to userSpaceOnUse as well
 
     // recursively compensate gradient fill if it's not to be transformed
     if (prefs_get_int_attribute("options.transform", "gradient", 1) == 0) {
         sp_item_adjust_paint_recursive (item, advertized_transform.inverse(), NR::identity(), false);
     } else {
-        // this converts the gradient fill, if any, to userspace; we need to do it here _before_ the new transform is set, so as to use the pre-transform bbox
+        // this converts the gradient/pattern fill/stroke, if any, to userSpaceOnUse; we need to do
+        // it here _before_ the new transform is set, so as to use the pre-transform bbox
         sp_item_adjust_paint_recursive (item, NR::identity(), NR::identity(), false);
     }
 
