@@ -241,12 +241,6 @@ sp_event_context_private_root_handler (SPEventContext *event_context, GdkEvent *
 				ret = TRUE;
 			}
 			break;
-		case GDK_q: // Ctrl q - quit
-			if (event->key.state & GDK_CONTROL_MASK) {
-				sp_file_exit ();
-				ret = TRUE;
-			}
-			break;
 		case GDK_Left: // Ctrl Left 
 			if (event->key.state & GDK_CONTROL_MASK) {
 				sp_desktop_scroll_world (event_context->desktop, 10, 0);
