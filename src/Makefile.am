@@ -34,7 +34,6 @@ inkscapelib_src = \
 	forward.h \
 	enums.h \
 	attributes.cpp attributes.h \
-	monostd.h	\
 	sp-object.cpp sp-object.h \
 	sp-object-repr.cpp sp-object-repr.h \
 	sp-object-group.cpp sp-object-group.h \
