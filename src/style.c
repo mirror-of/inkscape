@@ -20,6 +20,7 @@
 #include "svg/svg.h"
 
 #include "enums.h"
+#include "helper/canvas-bpath.h"
 #include "attributes.h"
 #include "document.h"
 #include "uri-references.h"
