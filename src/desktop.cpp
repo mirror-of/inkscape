@@ -698,6 +698,7 @@ static gint sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDeskt
 
 static void sp_desktop_widget_view_position_set (SPView *view, gdouble x, gdouble y, SPDesktopWidget *dtw);
 static void sp_desktop_widget_view_status_set (SPView *view, const gchar *status, guint msec, SPDesktopWidget *dtw);
+static void sp_desktop_widget_view_status_pop (SPView *view, SPDesktopWidget *dtw);
 gboolean sp_desktop_widget_view_status_remove (gpointer data);
 
 static void sp_dtw_desktop_activate (SPDesktop *desktop, SPDesktopWidget *dtw);
@@ -1191,6 +1192,7 @@ sp_desktop_widget_new (SPNamedView *namedview)
 
     g_signal_connect (G_OBJECT (dtw->desktop), "position_set", G_CALLBACK (sp_desktop_widget_view_position_set), dtw);
     g_signal_connect (G_OBJECT (dtw->desktop), "status_set", G_CALLBACK (sp_desktop_widget_view_status_set), dtw);
+    g_signal_connect (G_OBJECT (dtw->desktop), "status_pop", G_CALLBACK (sp_desktop_widget_view_status_pop), dtw);
 
     /* Connect activation signals to update indicator */
     g_signal_connect (G_OBJECT (dtw->desktop), "activate", G_CALLBACK (sp_dtw_desktop_activate), dtw);
@@ -1257,6 +1259,12 @@ sp_desktop_widget_view_status_set (SPView *view, const gchar *status, guint msec
         // call the remove function with this data
         gtk_timeout_add (msec, (GtkFunction) sp_desktop_widget_view_status_remove, d);  
     }
+}
+
+static void 
+sp_desktop_widget_view_status_pop (SPView *view, SPDesktopWidget *dtw)
+{
+    gtk_statusbar_pop (GTK_STATUSBAR (dtw->select_status), 0);
 }
 
 gboolean
@@ -1907,3 +1915,14 @@ fullscreen(SPDesktop *dt)
     }
 }
 #endif /* HAVE_GTK_WINDOW_FULLSCREEN */
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

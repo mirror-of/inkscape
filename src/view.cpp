@@ -26,6 +26,7 @@ enum {
 	RESIZED,
 	POSITION_SET,
 	STATUS_SET,
+	STATUS_POP,
 	LAST_SIGNAL
 };
 
@@ -147,6 +148,13 @@ sp_view_class_init (SPViewClass *klass)
 					      sp_marshal_NONE__POINTER_UINT,
 					      G_TYPE_NONE, 2,
 					      G_TYPE_POINTER, G_TYPE_UINT);
+	signals[STATUS_POP] =   g_signal_new ("status_pop",
+					      G_TYPE_FROM_CLASS(klass),
+					      G_SIGNAL_RUN_FIRST,
+					      G_STRUCT_OFFSET (SPViewClass, status_pop),
+					      NULL, NULL,
+					      sp_marshal_NONE__NONE,
+					      G_TYPE_NONE, 0);
 
 	object_class->dispose = sp_view_dispose;
 }
@@ -245,9 +253,9 @@ sp_view_set_position (SPView *view, gdouble x, gdouble y)
 
 /**
 \brief Sets statusbar message permanently. The format string and the rest of arguments
-are as in printf(). Not to be used normally, because the message nev er disappears
-unless replaced by another message. In the majority of situations, one of the _flash or
-_error functions should be used instead.
+are as in printf(). Use it only if you plan to pop the message using sp_view_pop_statusf.
+Otherwise message never disappears unless replaced by another message. In the majority of 
+situations, one of the _flash or _error functions should be used instead.
 */
 void
 sp_view_set_statusf (SPView *view, const gchar *format, ...)
@@ -258,6 +266,23 @@ sp_view_set_statusf (SPView *view, const gchar *format, ...)
 	va_end (args);
 }
 
+/**
+\brief Remove statusbar message set by sp_view_set_statusf, restoring the message which was
+in the statusbar before that.
+*/
+void
+sp_view_pop_statusf (SPView *view)
+{
+
+	g_return_if_fail (view != NULL);
+	g_return_if_fail (SP_IS_VIEW (view));
+
+	g_signal_emit (G_OBJECT (view), signals[STATUS_POP], 0);
+}
+
+/**
+\brief Sets statusbar message with a given timeout.
+*/
 void
 sp_view_set_statusf_timeout (SPView *view, guint msec, const gchar *format, ...)
 {
@@ -323,7 +348,7 @@ sp_view_set_statusf_va (SPView *view, guint msec, const gchar *format, va_list a
 }
 
 /**
-\brief Clears statusbar message permanently. Not to be used normally. In the majority of
+\brief Clears statusbar message permanently, until the next sp_view_pop_statusf. In the majority of
 situations, one of the _flash or _error functions should be used instead.
 */
 void

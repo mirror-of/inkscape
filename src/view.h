@@ -52,6 +52,7 @@ struct SPViewClass {
 	void (* position_set) (SPView *view, gdouble x, gdouble y);
 	/* Status */
 	void (* status_set) (SPView *view, const guchar *status, guint msec);
+	void (* status_pop) (SPView *view);
 };
 
 GType sp_view_get_type (void);
@@ -70,6 +71,7 @@ inline void sp_view_set_position(SPView *view, NR::Point const &p)
 
 //new
 void sp_view_set_statusf (SPView *view, const gchar *format, ...);
+void sp_view_pop_statusf (SPView *view);
 void sp_view_set_statusf_timeout (SPView *view, guint msec, const gchar *format, ...);
 void sp_view_set_statusf_flash (SPView *view, const gchar *format, ...);
 void sp_view_set_statusf_error (SPView *view, const gchar *format, ...);
