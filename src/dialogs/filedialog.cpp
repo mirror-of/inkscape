@@ -468,7 +468,7 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
             return FALSE;
         }
     }
-    if (dialogType == SVG_TYPES &&
+    if (dialogType == SVG_TYPES || dialogType == IMPORT_TYPES &&
            (g_str_has_suffix(fName, ".svg") ||   g_str_has_suffix(fName, ".svgz"))
          )
     {
@@ -477,13 +477,14 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
         return retval;
     } else if (/*(dialogType == IMPORT_TYPES || dialogType == EXPORT_TYPES) &&*/
                  (
-                  g_str_has_suffix(fName, ".bmp" ) ||
-                  g_str_has_suffix(fName, ".gif" ) ||
-                  g_str_has_suffix(fName, ".jpg" ) ||
-                  g_str_has_suffix(fName, ".jpeg") ||
-                  g_str_has_suffix(fName, ".png" ) ||
-                  g_str_has_suffix(fName, ".tif" ) ||
-                  g_str_has_suffix(fName, ".tiff")
+                  g_str_has_suffix(fName, ".bmp" )  ||
+                  g_str_has_suffix(fName, ".gif" )  ||
+                  g_str_has_suffix(fName, ".jpg" )  ||
+                  g_str_has_suffix(fName, ".jpeg")  ||
+                  g_str_has_suffix(fName, ".png" )  ||
+                  g_str_has_suffix(fName, ".tif" )  ||
+                  g_str_has_suffix(fName, ".tiff")  ||
+                  g_str_has_suffix(fName, ".xpm")
                  )
              )
     {
@@ -834,6 +835,7 @@ FileOpenDialogImpl::~FileOpenDialogImpl()
 bool
 FileOpenDialogImpl::show()
 {
+    set_current_folder(get_current_folder()); //hack to force initial dir listing
     set_modal (TRUE);                      //Window
     sp_transientize((GtkWidget *)gobj());  //Make transient
     gint b = run();                        //Dialog
@@ -1140,6 +1142,7 @@ FileSaveDialogImpl::~FileSaveDialogImpl()
 bool
 FileSaveDialogImpl::show()
 {
+    set_current_folder(get_current_folder()); //hack to force initial dir listing
     set_modal (TRUE);                      //Window
     sp_transientize((GtkWidget *)gobj());  //Make transient
     gint b = run();                        //Dialog
