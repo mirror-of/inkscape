@@ -256,18 +256,20 @@ sp_bezier_fit_cubic_full(NR::Point bezier[],
         g_assert(splitPoint < unsigned(len));
         if (splitPoint == 0) {
             if (is_zero(tHat1)) {
-                g_warning("Got spike even with unconstrained initial tangent.");
-                return -1;
+                /* Got spike even with unconstrained initial tangent. */
+                ++splitPoint;
+            } else {
+                return sp_bezier_fit_cubic_full(bezier, data, len, unconstrained_tangent, tHat2,
+                                                error, lg_max_beziers);
             }
-            return sp_bezier_fit_cubic_full(bezier, data, len, unconstrained_tangent, tHat2,
-                                            error, lg_max_beziers);
         } else if (splitPoint == unsigned(len - 1)) {
             if (is_zero(tHat2)) {
-                g_warning("Got spike even with unconstrained final tangent.");
-                return -1;
+                /* Got spike even with unconstrained final tangent. */
+                --splitPoint;
+            } else {
+                return sp_bezier_fit_cubic_full(bezier, data, len, tHat1, unconstrained_tangent,
+                                                error, lg_max_beziers);
             }
-            return sp_bezier_fit_cubic_full(bezier, data, len, tHat1, unconstrained_tangent,
-                                            error, lg_max_beziers);
         }
     }
 
