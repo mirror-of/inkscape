@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
 module_libs = modules/libspmodules.a
-module_src = module.c module.h
+module_src = module.cpp module.h
 
 SUBDIRS = libarikkei libnr livarot libnrtype xml svg helper widgets dialogs display modules utest
 
@@ -24,45 +24,45 @@ inkscapelib_src = \
 	macros.h \
 	forward.h \
 	enums.h \
-	attributes.c attributes.h \
-	sp-object.c sp-object.h \
-	sp-object-repr.c sp-object-repr.h \
-	sp-object-group.c sp-object-group.h \
-	sp-defs.c sp-defs.h \
-	sp-item.c sp-item.h \
-	sp-item-group.c sp-item-group.h \
-	sp-symbol.c sp-symbol.h \
-	sp-marker.c sp-marker.h \
-	sp-use.c sp-use.h \
-	sp-anchor.c sp-anchor.h \
-	sp-root.c sp-root.h \
-	sp-image.c sp-image.h \
+	attributes.cpp attributes.h \
+	sp-object.cpp sp-object.h \
+	sp-object-repr.cpp sp-object-repr.h \
+	sp-object-group.cpp sp-object-group.h \
+	sp-defs.cpp sp-defs.h \
+	sp-item.cpp sp-item.h \
+	sp-item-group.cpp sp-item-group.h \
+	sp-symbol.cpp sp-symbol.h \
+	sp-marker.cpp sp-marker.h \
+	sp-use.cpp sp-use.h \
+	sp-anchor.cpp sp-anchor.h \
+	sp-root.cpp sp-root.h \
+	sp-image.cpp sp-image.h \
 	brokenimage.xpm \
-	sp-path.c sp-path.h \
-	sp-shape.c sp-shape.h \
-	sp-rect.c sp-rect.h \
-	sp-ellipse.c sp-ellipse.h \
-	sp-star.c sp-star.h \
-	sp-spiral.c sp-spiral.h \
-	sp-line.c sp-line.h \
-	sp-polyline.c sp-polyline.h \
-	sp-polygon.c sp-polygon.h \
-	sp-chars.c sp-chars.h \
-	sp-text.c sp-text.h \
-	sp-paint-server.c sp-paint-server.h \
-	sp-gradient.c sp-gradient.h \
-	sp-pattern.c sp-pattern.h \
-	sp-clippath.c sp-clippath.h \
-	sp-mask.c sp-mask.h \
-	sp-animation.c sp-animation.h \
+	sp-path.cpp sp-path.h \
+	sp-shape.cpp sp-shape.h \
+	sp-rect.cpp sp-rect.h \
+	sp-ellipse.cpp sp-ellipse.h \
+	sp-star.cpp sp-star.h \
+	sp-spiral.cpp sp-spiral.h \
+	sp-line.cpp sp-line.h \
+	sp-polyline.cpp sp-polyline.h \
+	sp-polygon.cpp sp-polygon.h \
+	sp-chars.cpp sp-chars.h \
+	sp-text.cpp sp-text.h \
+	sp-paint-server.cpp sp-paint-server.h \
+	sp-gradient.cpp sp-gradient.h \
+	sp-pattern.cpp sp-pattern.h \
+	sp-clippath.cpp sp-clippath.h \
+	sp-mask.cpp sp-mask.h \
+	sp-animation.cpp sp-animation.h \
 	\
-	color.c color.h \
-	style.c style.h \
+	color.cpp color.h \
+	style.cpp style.h \
 	\
-	document.c document.h document-private.h \
-	document-undo.c \
-	uri-references.c uri-references.h \
-	version.c version.h
+	document.cpp document.h document-private.h \
+	document-undo.cpp \
+	uri-references.cpp uri-references.h \
+	version.cpp version.h
 
 noinst_LTLIBRARIES = libinkscape.la
 libinkscape_la_SOURCES = $(inkscapelib_src)
@@ -71,66 +71,66 @@ spproglibs = libinkscape.la
 inkscape_SOURCES = \
 	$(spprogsrc) \
 	\
-	inkscape.c inkscape.h inkscape-private.h \
+	inkscape.cpp inkscape.h inkscape-private.h \
 	\
-	inkscape-stock.c inkscape-stock.h\
+	inkscape-stock.cpp inkscape-stock.h\
 	\
-	sp-namedview.c sp-namedview.h \
-	sp-guide.c sp-guide.h \
+	sp-namedview.cpppp sp-namedview.h \
+	sp-guide.cpp sp-guide.h \
 	\
-	view.c view.h \
-	svg-view.c svg-view.h \
-	selection.c selection.h \
-	desktop.c desktop.h \
+	view.cpp view.h \
+	svg-view.cpppp svg-view.h \
+	selection.cpp selection.h \
+	desktop.cpp desktop.h \
 	desktop-units.h \
-	desktop-events.c desktop-events.h \
-	desktop-handles.c desktop-handles.h \
-	desktop-affine.c desktop-affine.h \
-	desktop-snap.c desktop-snap.h \
-	sp-metrics.c sp-metrics.h \
-	toolbox.c toolbox.h \
+	desktop-events.cpp desktop-events.h \
+	desktop-handles.cpp desktop-handles.h \
+	desktop-affine.cpp desktop-affine.h \
+	desktop-snap.cpp desktop-snap.h \
+	sp-metrics.cpp sp-metrics.h \
+	toolbox.cpp toolbox.h \
 	\
-	verbs.c verbs.h \
-	shortcuts.c shortcuts.h \
-	event-context.c event-context.h \
-	seltrans-handles.c seltrans-handles.h \
-	seltrans.c seltrans.h \
-	select-context.c select-context.h \
-	node-context.c node-context.h \
-	nodepath.c nodepath.h \
-	knotholder.c knotholder.h \
-	object-edit.c object-edit.h \
-	rect-context.c rect-context.h \
-	arc-context.c arc-context.h \
-	star-context.c star-context.h \
-	spiral-context.c spiral-context.h \
-	draw-context.c draw-context.h \
-	dyna-draw-context.c dyna-draw-context.h \
-	text-context.c text-context.h \
-	zoom-context.c zoom-context.h \
-	dropper-context.c dropper-context.h \
-	tools-switch.c tools-switch.h\
-	prefs-utils.c prefs-utils.h\
+	verbs.cpp verbs.h \
+	shortcuts.cpp shortcuts.h \
+	event-context.cpp event-context.h \
+	seltrans-handles.cpp seltrans-handles.h \
+	seltrans.cpp seltrans.h \
+	select-context.cpp select-context.h \
+	node-context.cpp node-context.h \
+	nodepath.cpp nodepath.h \
+	knotholder.cpp knotholder.h \
+	object-edit.cpp object-edit.h \
+	rect-context.cpp rect-context.h \
+	arc-context.cpp arc-context.h \
+	star-context.cpp star-context.h \
+	spiral-context.cpp spiral-context.h \
+	draw-context.cpp draw-context.h \
+	dyna-draw-context.cpppp dyna-draw-context.h \
+	text-context.cpp text-context.h \
+	zoom-context.cpp zoom-context.h \
+	dropper-context.cpp dropper-context.h \
+	tools-switch.cpp tools-switch.h\
+	prefs-utils.cpp prefs-utils.h\
 	\
-	knot.c knot.h \
+	knot.cpp knot.h \
 	\
-	main.c \
-	help.c help.h \
-	sp-cursor.c sp-cursor.h \
-	dir-util.c dir-util.h \
-	rubberband.c rubberband.h \
-	path-chemistry.c path-chemistry.h \
-	selection-chemistry.c selection-chemistry.h \
-	gradient-chemistry.c gradient-chemistry.h \
-	sp-item-transform.c sp-item-transform.h \
+	main.cpp \
+	help.cpp help.h \
+	sp-cursor.cpp sp-cursor.h \
+	dir-util.cpp dir-util.h \
+	rubberband.cpp rubberband.h \
+	path-chemistry.cpp path-chemistry.h \
+	selection-chemistry.cpp selection-chemistry.h \
+	gradient-chemistry.cpp gradient-chemistry.h \
+	sp-item-transform.cpp sp-item-transform.h \
 	\
 	splivarot.cpp splivarot.h \
 	\
-	file.c file.h \
-	print.c print.h \
-	interface.c interface.h \
-	object-ui.c object-ui.h \
-	slideshow.c slideshow.h \
+	file.cpp file.h \
+	print.cpp print.h \
+	interface.cpp interface.h \
+	object-ui.cpp object-ui.h \
+	slideshow.cpp slideshow.h \
 	$(module_src) \
 	\
 	preferences-skeleton.h
@@ -163,13 +163,13 @@ inkscape_LDFLAGS = --export-dynamic $(kdeldflags)
 EXTRA_PROGRAMS = spsvgview
 
 spsvgview_SOURCES = \
-	spsvgview.c \
-	view.c view.h \
-	svg-view.c svg-view.h \
-	dir-util.c dir-util.h \
+	spsvgview.cpppp \
+	view.cpp view.h \
+	svg-view.cpppp svg-view.h \
+	dir-util.cpp dir-util.h \
 	modules/ps.c modules/ps.h \
-	module.c module.h \
-	print.c print.h
+	module.cpp module.h \
+	print.cpp print.h
 
 spsvgview_LDADD = \
 	$(spproglibs) \

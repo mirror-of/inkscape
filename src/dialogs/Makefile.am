@@ -19,24 +19,24 @@ INCLUDES = \
 noinst_LIBRARIES = libspdialogs.a
 
 libspdialogs_a_SOURCES = \
-	sp-attribute-widget.c sp-attribute-widget.h \
-	text-edit.c text-edit.h \
-	export.c export.h \
-	xml-tree.c xml-tree.h \
-	align.c align.h	\
-	display-settings.c display-settings.h \
-	desktop-properties.c desktop-properties.h \
-	document-properties.c document-properties.h \
-	object-properties.c object-properties.h \
-	item-properties.c item-properties.h \
-	object-attributes.c object-attributes.h \
-	tool-options.c tool-options.h \
-	tool-attributes.c tool-attributes.h \
-	fill-style.c fill-style.h \
-	stroke-style.c stroke-style.h \
-	transformation.c transformation.h \
-	node-edit.c node-edit.h\
-	dialog-events.c dialog-events.h
+	sp-attribute-widget.cpp sp-attribute-widget.h \
+	text-edit.cpp text-edit.h \
+	export.cpp export.h \
+	xml-tree.cpp xml-tree.h \
+	align.cpp align.h	\
+	display-settings.cpp display-settings.h \
+	desktop-properties.cpp desktop-properties.h \
+	document-properties.cpp document-properties.h \
+	object-properties.cpp object-properties.h \
+	item-properties.cpp item-properties.h \
+	object-attributes.cpp object-attributes.h \
+	tool-options.cpp tool-options.h \
+	tool-attributes.cpp tool-attributes.h \
+	fill-style.cpp fill-style.h \
+	stroke-style.cpp stroke-style.h \
+	transformation.cpp transformation.h \
+	node-edit.cpp node-edit.h\
+	dialog-events.cpp dialog-events.h
 
 #	sp-widget.c sp-widget.h \
 #	gradient-vector.c gradient-vector.h \

@@ -28,30 +28,30 @@ libnr_a_SOURCES = \
 	nr-types.h \
 	nr-forward.h \
 	nr-macros.h \
-	nr-values.c nr-values.h \
-	nr-matrix.c nr-matrix.h \
-	nr-rect.c nr-rect.h \
+	nr-values.cpp nr-values.h \
+	nr-matrix.cpp nr-matrix.h \
+	nr-rect.cpp nr-rect.h \
 	nr-pixops.h \
-	nr-compose.c nr-compose.h \
-	nr-compose-transform.c nr-compose-transform.h \
-	nr-pixblock.c nr-pixblock.h \
-	nr-pixblock-pixel.c nr-pixblock-pixel.h \
-	nr-pixblock-line.c nr-pixblock-line.h \
-	nr-pixblock-pattern.c nr-pixblock-pattern.h \
-	nr-blit.c nr-blit.h \
+	nr-compose.cpp nr-compose.h \
+	nr-compose-transform.cpp nr-compose-transform.h \
+	nr-pixblock.cpp nr-pixblock.h \
+	nr-pixblock-pixel.cpp nr-pixblock-pixel.h \
+	nr-pixblock-line.cpp nr-pixblock-line.h \
+	nr-pixblock-pattern.cpp nr-pixblock-pattern.h \
+	nr-blit.cpp nr-blit.h \
 	nr-render.h \
-	nr-gradient.c nr-gradient.h \
-	nr-path.c nr-path.h \
-	nr-svp.c nr-svp.h nr-svp-private.h \
-	nr-svp-uncross.c nr-svp-uncross.h \
-	nr-svp-render.c nr-svp-render.h \
-	nr-stroke.c nr-stroke.h \
-	nr-uta.c nr-uta.h \
-	nr-object.c nr-object.h \
+	nr-gradient.cpp nr-gradient.h \
+	nr-path.cpp nr-path.h \
+	nr-svp.cpp nr-svp.h nr-svp-private.h \
+	nr-svp-uncross.cpp nr-svp-uncross.h \
+	nr-svp-render.cpp nr-svp-render.h \
+	nr-stroke.cpp nr-stroke.h \
+	nr-uta.cpp nr-uta.h \
+	nr-object.cpp nr-object.h \
 	$(mmx_sources)
 
 testnr_SOURCES = \
-	testnr.c
+	testnr.cpp
 
 testnr_LDADD = \
 	libnr.a

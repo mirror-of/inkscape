@@ -17,13 +17,13 @@ check_PROGRAMS = repr-action-test
 noinst_LIBRARIES = libspxml.a
 
 libspxml_a_SOURCES = \
-	repr.c repr.h \
+	repr.cpp repr.h \
 	repr-private.h \
-	repr-util.c \
-	repr-io.c \
-	repr-css.c \
-	repr-action.c repr-action.h
+	repr-util.cpp \
+	repr-io.cpp \
+	repr-css.cpp \
+	repr-action.cpp repr-action.h
 
-repr_action_test_SOURCES = repr-action-test.c repr-action.c repr.c repr-util.c
+repr_action_test_SOURCES = repr-action-test.cpp repr-action.cpp repr.cpp repr-util.cpp
 
 repr_action_test_LDADD = $(INKSCAPE_LIBS)

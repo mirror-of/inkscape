@@ -11,7 +11,7 @@
 
 #if WITH_NEW_RENDER
 #nr_sources = \
-#	nr-uta.c nr-uta.h \
+#	nr-uta.cpp nr-uta.h \
 #	nr-svp.c nr-svp.h \
 #	nr-svp-uncross.c nr-svp-uncross.h \
 #	nr-svp-render.c nr-svp-render.h
@@ -21,7 +21,7 @@
 #	#$(GNOME_LIBDIR) \
 #	#$(GNOMEUI_LIBS)
 #testnr_SOURCES = \
-#	testnr.c \
+#	testnr.cpp \
 #	$(nr_sources)
 #else
 #nr_sources =
@@ -36,10 +36,10 @@ noinst_LIBRARIES = libspdisplay.a
 
 libspdisplay_a_SOURCES = \
 	nr-arena-forward.h \
-	nr-arena.c nr-arena.h \
-	nr-arena-item.c nr-arena-item.h \
-	nr-arena-group.c nr-arena-group.h \
-	nr-arena-image.c nr-arena-image.h \
-	nr-arena-shape.c nr-arena-shape.h \
-	nr-arena-glyphs.c nr-arena-glyphs.h \
-	canvas-arena.c canvas-arena.h
+	nr-arena.cpp nr-arena.h \
+	nr-arena-item.cpp nr-arena-item.h \
+	nr-arena-group.cpp nr-arena-group.h \
+	nr-arena-image.cpp nr-arena-image.h \
+	nr-arena-shape.cpp nr-arena-shape.h \
+	nr-arena-glyphs.cpp nr-arena-glyphs.h \
+	canvas-arena.cpp canvas-arena.h

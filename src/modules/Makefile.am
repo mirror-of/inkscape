@@ -1,6 +1,6 @@
 
 if USE_GNOME_PRINT
-gnome_print_sources = gnome.c gnome.h
+gnome_print_sources = gnome.cpp gnome.h
 endif
 
 extdir = $(libdir)/inkscape/extensions
@@ -19,26 +19,26 @@ INCLUDES = \
 noinst_LIBRARIES = libspmodules.a
 
 libspmodules_a_SOURCES = \
-		init.c \
+		init.cpp \
 		init.h \
-		menu.c \
+		menu.cpp \
 		menu.h \
-		db.c \
+		db.cpp \
 		db.h \
-		system.c \
+		system.cpp \
 		system.h \
 \
-		extension.c \
+		extension.cpp \
 		extension.h \
 \
-		svg.c \
+		svg.cpp \
 		svg.h \
 \
-		ps.c ps.h \
+		ps.cpp ps.h \
 		$(kdeprivsources) \
 		$(gnome_print_sources)
 
 EXTRA_DIST = \
 	$(gnome_print_sources) \
-	win32.c win32.h
+	win32.cpp win32.h
 

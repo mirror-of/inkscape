@@ -15,27 +15,27 @@ INCLUDES = \
 libspchelp_a_SOURCES = \
 	sp-intl.h \
 	helper-forward.h \
-	window.c window.h \
+	window.cpp window.h \
 	sp-marshal.c sp-marshal.h \
-	sp-canvas.c sp-canvas.h \
-	sp-canvas-util.c sp-canvas-util.h \
-	gnome-utils.c gnome-utils.h \
-	curve.c curve.h \
-	gnome-canvas-acetate.c gnome-canvas-acetate.h \
-	sodipodi-ctrl.c sodipodi-ctrl.h \
-	sodipodi-ctrlrect.c sodipodi-ctrlrect.h \
-	sp-ctrlline.c sp-ctrlline.h \
-	guideline.c guideline.h \
-	canvas-grid.c canvas-grid.h \
-	canvas-bpath.c canvas-bpath.h \
-	png-write.c png-write.h \
-	nr-plain-stuff.c nr-plain-stuff.h \
-	nr-plain-stuff-gdk.c nr-plain-stuff-gdk.h \
-	nr-gradient-gpl.c nr-gradient-gpl.h \
-	action.c action.h \
-	bezier-utils.c bezier-utils.h \
-	units.c units.h \
-	unit-menu.c unit-menu.h
+	sp-canvas.cpp sp-canvas.h \
+	sp-canvas-util.cpp sp-canvas-util.h \
+	gnome-utils.cpp gnome-utils.h \
+	curve.cpp curve.h \
+	gnome-canvas-acetate.cpp gnome-canvas-acetate.h \
+	sodipodi-ctrl.cpp sodipodi-ctrl.h \
+	sodipodi-ctrlrect.cpp sodipodi-ctrlrect.h \
+	sp-ctrlline.cpp sp-ctrlline.h \
+	guideline.cpp guideline.h \
+	canvas-grid.cpp canvas-grid.h \
+	canvas-bpath.cpp canvas-bpath.h \
+	png-write.cpp png-write.h \
+	nr-plain-stuff.cpp nr-plain-stuff.h \
+	nr-plain-stuff-gdk.cpp nr-plain-stuff-gdk.h \
+	nr-gradient-gpl.cpp nr-gradient-gpl.h \
+	action.cpp action.h \
+	bezier-utils.cpp bezier-utils.h \
+	units.cpp units.h \
+	unit-menu.cpp unit-menu.h
 
 #	pathops.c pathops.h
 

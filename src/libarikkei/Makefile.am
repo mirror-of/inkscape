@@ -6,5 +6,5 @@ INCLUDES = \
 	$(INKSCAPE_CFLAGS)
 
 libarikkei_a_SOURCES = \
-	arikkei-dict.c arikkei-dict.h \
-	arikkei-token.c arikkei-token.h
+	arikkei-dict.cpp arikkei-dict.h \
+	arikkei-token.cpp arikkei-token.h
