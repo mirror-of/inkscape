@@ -401,6 +401,46 @@ fi
 
 AM_CONDITIONAL(USE_MMX, test x$use_mmx_asm = xyes)
 
+dnl Test for broken g_ascii_strtod
+AC_MSG_CHECKING(broken g_ascii_strtod)
+sp_save_LIBS=$LIBS
+LIBS="$CFLAGS $INKSCAPE_CFLAGS $LIBS $INKSCAPE_LIBS"
+AC_RUN_IFELSE([AC_LANG_SOURCE([[
+#include <stdio.h>
+#include <glib.h>
+#include <locale.h>
+int
+main(void)
+{
+	/* portions borrowed from glib tests */
+	char *locales[] = {"sv_SE", "en_US", "fa_IR", "C", "ru_RU", "fr_FR"};
+	unsigned int l;
+	char * str="5,4";
+	char * end=NULL;
+	double value;
+
+	for (l = 0; l < G_N_ELEMENTS (locales); l++)
+	{
+		/* better way to force "," as the decimal separator...? */
+		fprintf(stderr,"set %s\n",setlocale(LC_NUMERIC,locales[l]));
+
+		value=g_ascii_strtod(str,&end);
+		if (value != 5.0) {
+			fprintf(stderr,"got %f != 5.0\n",value);
+			return 1;
+		}
+		fprintf(stderr,"correctly got exactly 5.0\n");
+	}
+	return 0;
+}
+]])],
+	[AC_MSG_RESULT(no)],
+	[
+	 dnl AC_DEFINE(BROKEN_G_ASCII_STRTOD, 1, [Pre-1.107 gstrfuncs.c version of g_ascii_strtod])
+	 AC_DEFINE(g_ascii_strtod, fixed_g_ascii_strtod, [Pre-1.107 gstrfuncs.c version of g_ascii_strtod])
+	 AC_MSG_RESULT(yes)],
+	[])
+LIBS=$sp_save_LIBS
 
 dnl Figure out where the datadir actually is
 if test "x${datadir}" = 'x${prefix}/share'; then

@@ -1,6 +1,18 @@
 2004-05-08  Kees Cook <kees@outflux.net>
 
-	* src/extension/internal/gdkpixbuf-input.cpp: skip SVG files.
+	* src/extension/internal/gdkpixbuf-input.cpp: skip SVG files. (open bug)
+	* configure.in, src/Makefile_insert, src/fixes.cpp: added replacement
+	  for g_ascii_strtod, since it has locale-related bugs in gnome 2.0.
+	  The upstream version is fixed, so some day, we won't need this any
+	  more.  (fixes "ugly icons" bug)
+	* src/dyna-draw-context.cpp, src/rect-context.cpp, src/sp-namedview.cpp,
+	  src/sp-object.cpp, src/sp-object.h, src/sp-pattern.cpp,
+	  src/sp-polygon.cpp, src/sp-polyline.cpp, src/sp-root.cpp,
+	  src/sp-spiral.cpp, src/sp-star.cpp, src/sp-symbol.cpp,
+	  src/sp-text.cpp, src/spiral-context.cpp, src/star-context.cpp,
+	  src/svg/ftos.cpp, src/svg/svg-affine.cpp, src/svg/svg-color.cpp,
+	  src/svg/svg-length.cpp: adding "config.h", making a few extra
+	  locale-sensitive functions use g_ascii versions.
 
 2004-05-08  MenTaLguY <mental@rydia.net>
 

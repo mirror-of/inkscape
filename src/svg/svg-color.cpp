@@ -249,10 +249,10 @@ sp_svg_read_color (const gchar *str, guint32 def)
 		} else {
 			hasd = TRUE;
 		}
-		while (*s && isspace (*s)) s += 1;
+		while (*s && g_ascii_isspace (*s)) s += 1;
 		if (*s != ',') return def;
 		s += 1;
-		while (*s && isspace (*s)) s += 1;
+		while (*s && g_ascii_isspace (*s)) s += 1;
 		g = g_ascii_strtod (s, &e);
 		if (s == e) return def;
 		s = e;
@@ -262,10 +262,10 @@ sp_svg_read_color (const gchar *str, guint32 def)
 		} else {
 			hasd = TRUE;
 		}
-		while (*s && isspace (*s)) s += 1;
+		while (*s && g_ascii_isspace (*s)) s += 1;
 		if (*s != ',') return def;
 		s += 1;
-		while (*s && isspace (*s)) s += 1;
+		while (*s && g_ascii_isspace (*s)) s += 1;
 		b = g_ascii_strtod (s, &e);
 		if (s == e) return def;
 		s = e;
@@ -295,7 +295,7 @@ sp_svg_read_color (const gchar *str, guint32 def)
 				c[i] = '\0';
 				break;
 			}
-			c[i] = tolower (str[i]);
+			c[i] = g_ascii_tolower (str[i]);
 			if (!str[i]) break;
 		}
 		c[31] = '\0';

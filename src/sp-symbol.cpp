@@ -11,6 +11,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "config.h"
+
 #include <string.h>
 #include "svg/svg.h"
 #include "display/nr-arena-group.h"

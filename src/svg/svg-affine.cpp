@@ -53,14 +53,14 @@ sp_svg_transform_read (const gchar *str, NRMatrix *transform)
 	idx = 0;
 	while (str[idx]) {
 		/* skip initial whitespace */
-		while (isspace (str[idx])) idx++;
+		while (g_ascii_isspace (str[idx])) idx++;
 
 		/* parse keyword */
 		for (key_len = 0; key_len < sizeof (keyword); key_len++) {
 			char c;
 
 			c = str[idx];
-			if (isalpha (c) || c == '-') {
+			if (g_ascii_isalpha (c) || c == '-') {
 				keyword[key_len] = str[idx++];
 			} else {
 				break;
@@ -70,7 +70,7 @@ sp_svg_transform_read (const gchar *str, NRMatrix *transform)
 		keyword[key_len] = '\0';
 
 		/* skip whitespace */
-		while (isspace (str[idx])) idx++;
+		while (g_ascii_isspace (str[idx])) idx++;
 
 		if (str[idx] != '(') return 0;
 		idx++;
@@ -80,14 +80,21 @@ sp_svg_transform_read (const gchar *str, NRMatrix *transform)
 			char *end_ptr;
 
 			/* skip whitespace */
-			while (isspace (str[idx])) idx++;
+			while (g_ascii_isspace (str[idx])) idx++;
 			c = str[idx];
-			if (isdigit (c) || c == '+' || c == '-' || c == '.') {
+			if (g_ascii_isdigit (c) || c == '+' || c == '-' || c == '.') {
 				if (n_args == sizeof (args) / sizeof (args[0])) return 0; /* Too many args */
 				args[n_args] = g_ascii_strtod (str + idx, &end_ptr);
+				/*
+				printf("took %d chars from '%s' to make %f\n",
+						end_ptr-(str+idx),
+						str+idx,
+						args[n_args]);
+				*/
+
 				idx = end_ptr - (char *) str;
 
-				while (isspace (str[idx])) idx++;
+				while (g_ascii_isspace (str[idx])) idx++;
 
 				/* skip optional comma */
 				if (str[idx] == ',') idx++;
@@ -153,7 +160,7 @@ sp_svg_transform_read (const gchar *str, NRMatrix *transform)
 			return 0; /* unknown keyword */
 		}
 		/* Skip trailing whitespace */
-             while (isspace (str[idx])) idx++;
+             while (g_ascii_isspace (str[idx])) idx++;
 	}
 
 	transform->c[0] = a.c[0];

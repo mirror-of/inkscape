@@ -57,6 +57,7 @@ libinkpre_a_SOURCES =	\
 	extract-uri.cpp extract-uri.h	\
 	file.cpp file.h	\
 	forward.h	\
+	fixes.cpp \
 	geom.cpp geom.h	\
 	help.cpp help.h	\
 	inkscape.cpp inkscape.h inkscape-private.h	\

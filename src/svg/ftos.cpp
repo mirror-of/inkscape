@@ -241,9 +241,9 @@ string ftos(double val, char mode, int sigfig, int precision, int options)
 
     // Determine the case for the 'e' (if used)
     char E = (forcex10)? 'x' : 'e';
-    if (isupper(mode)) {
-        E = toupper(E);
-        mode = tolower(mode);
+    if (g_ascii_isupper(mode)) {
+        E = g_ascii_toupper(E);
+        mode = g_ascii_tolower(mode);
     }
 
     // Determine how many decimals we're interested in

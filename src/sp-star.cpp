@@ -13,7 +13,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <config.h>
+#include "config.h"
 
 #include <math.h>
 #include <string.h>

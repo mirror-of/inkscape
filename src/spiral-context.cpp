@@ -13,7 +13,8 @@
  * Released under GNU GPL
  */
 
-#include <config.h>
+#include "config.h"
+
 #include <math.h>
 #include <string.h>
 #include <glib.h>

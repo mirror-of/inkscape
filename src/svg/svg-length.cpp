@@ -10,7 +10,7 @@
  *
  * This code is in public domain
  */
-#include <config.h>
+#include "config.h"
 
 #include <math.h>
 #include <stdlib.h>
@@ -272,11 +272,11 @@ sp_svg_length_read_lff (const gchar *str, SPSVGLengthUnit *unit, float *val, flo
 		if (computed) *computed = v;
 		if (next) *next = NULL; // no more values
 		return 1;
-	} else if (!isalnum (e[0])) {
+	} else if (!g_ascii_isalnum (e[0])) {
 		/* Unitless or percent */
 		if (e[0] == '%') {
 			/* Percent */
-			if (e[1] && isalnum (e[1])) return 0;
+			if (e[1] && g_ascii_isalnum (e[1])) return 0;
 			if (unit) *unit = SP_SVG_UNIT_PERCENT;
 			if (val) *val = v * 0.01;
 			if (next) *next = (char *) e + 1; 
@@ -289,7 +289,7 @@ sp_svg_length_read_lff (const gchar *str, SPSVGLengthUnit *unit, float *val, flo
 			if (next) *next = (char *) e; 
 			return 1;
 		}
-	} else if (e[1] && !isalnum (e[2])) {
+	} else if (e[1] && !g_ascii_isalnum (e[2])) {
 		unsigned int uval;
 		/* Units */
 		uval = UVAL (e[0], e[1]);
