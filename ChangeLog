@@ -1,3 +1,6 @@
+2005-04-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+    * src/sp-gradient.cpp: Fix crash with cycles in gradient hrefs.
+
 2005-04-01  Jon A. Cruz  <jon@joncruz.org>
     * src/ui/widget/panel.h, src/ui/widget/panel.cpp, src/ui/previewholder.h,
       src/ui/previewholder.cpp,src/dialogs/swatches.cpp,

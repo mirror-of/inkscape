@@ -1,9 +1,10 @@
 #define __SP_GRADIENT_C__
 
+/** \file
+ * SVG \<stop\> \<linearGradient\> and \<radialGradient\> implementation.
+ */
 /*
- * SVG <stop> <linearGradient> and <radialGradient> implementation
- *
- * Author:
+ * Initial author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
  * Copyright (C) 1999-2002 Lauris Kaplinski
@@ -218,7 +219,7 @@ static Inkscape::XML::Node *sp_gradient_write(SPObject *object, Inkscape::XML::N
 
 static void gradient_ref_modified(SPObject *href, guint flags, SPGradient *gradient);
 
-static void sp_gradient_invalidate_vector(SPGradient *gr);
+static bool sp_gradient_invalidate_vector(SPGradient *gr);
 static void sp_gradient_rebuild_vector(SPGradient *gr);
 
 static void gradient_ref_changed(SPObject *old_ref, SPObject *ref, SPGradient *gradient);
@@ -421,7 +422,9 @@ gradient_ref_changed(SPObject *old_ref, SPObject *ref, SPGradient *gr)
     if (old_ref) {
         sp_signal_disconnect_by_data(old_ref, gr);
     }
-    if (SP_IS_GRADIENT(ref)) {
+    if ( SP_IS_GRADIENT(ref)
+         && ref != gr )
+    {
         g_signal_connect(G_OBJECT(ref), "modified", G_CALLBACK(gradient_ref_modified), gr);
     }
     /* Fixme: what should the flags (second) argument be? */
@@ -548,6 +551,9 @@ sp_gradient_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     }
 
     if ((flags & SP_OBJECT_WRITE_ALL) || gr->spread_set) {
+        /* FIXME: Ensure that gr->spread is the inherited value
+         * if !gr->spread_set.  Not currently happening: see sp_gradient_modified.
+         */
         switch (gr->spread) {
             case SP_GRADIENT_SPREAD_REFLECT:
                 sp_repr_set_attr(repr, "spreadMethod", "reflect");
@@ -597,8 +603,63 @@ sp_gradient_set_spread(SPGradient *gr, SPGradientSpread spread)
 }
 
 /**
+ * Returns the first of {src, src-\>ref-\>getObject(),
+ * src-\>ref-\>getObject()-\>ref-\>getObject(), ...}
+ * for which \a match is true, or NULL if none found.
+ *
+ * The raison d'être of this routine is that it correctly handles cycles in the href chain (e.g. if
+ * a gradient gives itself as its href, or if each of two gradients gives the other as its href).
+ *
+ * @precondition src != NULL.
+ */
+static SPGradient *
+chase_hrefs(SPGradient *const src, bool (*match)(SPGradient const *))
+{
+    /* Use a pair of pointers for detecting loops: p1 advances half as fast as p2.  If there is a
+       loop, then once p1 has entered the loop, we'll detect it the next time the distance between
+       p1 and p2 is a multiple of the loop size. */
+    SPGradient *p1 = src, *p2 = src;
+    bool do1 = false;
+    for (;;) {
+        if (match(p2)) {
+            return p2;
+        }
+
+        p2 = p2->ref->getObject();
+        if (!p2) {
+            return p2;
+        }
+        if (do1) {
+            p1 = p1->ref->getObject();
+        }
+        do1 = !do1;
+
+        if ( p2 == p1 ) {
+            /* We've been here before, so return NULL to indicate that no matching gradient found
+             * in the chain. */
+            return NULL;
+        }
+    }
+}
+
+static bool
+has_stops(SPGradient const *gr)
+{
+    return SP_GRADIENT_HAS_STOPS(gr);
+}
+
+static bool
+has_spread_set(SPGradient const *gr)
+{
+    return gr->spread_set;
+}
+
+
+/**
  * Returns private vector of given gradient (the gradient at the end of the href chain which has
- * stops), optionally normalizing it
+ * stops), optionally normalizing it.
+ *
+ * @precondition There exists a gradient in the chain that has stops.
  */
 SPGradient *
 sp_gradient_get_vector(SPGradient *gradient, gboolean force_vector)
@@ -606,15 +667,10 @@ sp_gradient_get_vector(SPGradient *gradient, gboolean force_vector)
     g_return_val_if_fail(gradient != NULL, NULL);
     g_return_val_if_fail(SP_IS_GRADIENT(gradient), NULL);
 
-    /* follow the chain of references to find the first gradient
-     * with gradient stops */
-    SPGradient *ref = gradient;
-    while ( !SP_GRADIENT_HAS_STOPS(gradient) && ref ) {
-        gradient = ref;
-        ref = gradient->ref->getObject();
-    }
-
-    return (force_vector) ? sp_gradient_ensure_vector_normalized(gradient) : gradient;
+    SPGradient *const src = chase_hrefs(gradient, has_stops);
+    return ( force_vector
+             ? sp_gradient_ensure_vector_normalized(src)
+             : src );
 }
 
 /**
@@ -623,15 +679,10 @@ sp_gradient_get_vector(SPGradient *gradient, gboolean force_vector)
 SPGradientSpread
 sp_gradient_get_spread(SPGradient *gradient)
 {
-    /* follow the chain of references to find the first gradient
-     * with spread_set */
-    SPGradient *ref;
-    for (ref = gradient;
-         ref && !ref->spread_set;
-         ref = ref->ref->getObject()) {
-    }
-
-    return (ref) ? ref->spread : SP_GRADIENT_SPREAD_PAD; // pad is the default
+    SPGradient const *src = chase_hrefs(gradient, has_spread_set);
+    return ( src
+             ? src->spread
+             : SP_GRADIENT_SPREAD_PAD ); // pad is the default
 }
 
 /**
@@ -699,22 +750,31 @@ sp_gradient_repr_write_vector(SPGradient *gr)
 static void
 gradient_ref_modified(SPObject *href, guint flags, SPGradient *gradient)
 {
-    sp_gradient_invalidate_vector(gradient);
-    SP_OBJECT(gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    if (sp_gradient_invalidate_vector(gradient)) {
+        SP_OBJECT(gradient)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        /* Conditional to avoid causing infinite loop if there's a cycle in the href chain. */
+    }
 }
 
-static void
+/** Return true iff change made. */
+static bool
 sp_gradient_invalidate_vector(SPGradient *gr)
 {
+    bool ret = false;
+
     if (gr->color) {
         g_free(gr->color);
         gr->color = NULL;
+        ret = true;
     }
 
     if (gr->vector.built) {
         gr->vector.built = false;
         gr->vector.stops.clear();
+        ret = true;
     }
+
+    return ret;
 }
 
 /** Creates normalized color vector */
@@ -737,10 +797,13 @@ sp_gradient_rebuild_vector(SPGradient *gr)
     SPGradient *ref = gr->ref->getObject();
     if ( !gr->has_stops && ref ) {
         /* Copy vector from referenced gradient */
+        gr->vector.built = true;   // Prevent infinite recursion.
         sp_gradient_ensure_vector(ref);
-        gr->vector.built = ref->vector.built;
-        gr->vector.stops.assign(ref->vector.stops.begin(), ref->vector.stops.end());
-        return;
+        if (!ref->vector.stops.empty()) {
+            gr->vector.built = ref->vector.built;
+            gr->vector.stops.assign(ref->vector.stops.begin(), ref->vector.stops.end());
+            return;
+        }
     }
 
     for (SPObject *child = sp_object_first_child(SP_OBJECT(gr)) ;
@@ -823,6 +886,7 @@ sp_gradient_ensure_colors(SPGradient *gr)
     if (!gr->vector.built) {
         sp_gradient_rebuild_vector(gr);
     }
+    g_return_if_fail(!gr->vector.stops.empty());
 
     if (!gr->color) {
         gr->color = g_new(guchar, 4 * NCOLORS);
