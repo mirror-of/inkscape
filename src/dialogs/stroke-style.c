@@ -684,11 +684,8 @@ sp_stroke_style_line_widget_new (void)
 #ifdef MARKERS
 	/* Start Marker */
 	spw_label(t, _("Start Markers:"), 0, i);
-
-	hb = gtk_hbox_new (FALSE, 4);
-	gtk_widget_show (hb);
-	gtk_table_attach (GTK_TABLE (t), hb, 1, 4, i, i+1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 
-			  (GtkAttachOptions)0, 0, 0);
+	hb = spw_hbox(t, 3, 1, i);
+	g_assert(hb != NULL);
 	
 	tb = NULL;
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_NONE,
@@ -700,6 +697,40 @@ sp_stroke_style_line_widget_new (void)
 	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_START_HOLLOW_ARROW,
 			       INKSCAPE_GLADEDIR "/cap_square.xpm",
 			       hb, spw, "start_marker", "mArrow");
+	i++;
+
+	/* Mid Marker */
+	spw_label(t, _("Mid Markers:"), 0, i);
+	hb = spw_hbox(t, 3, 1, i);
+	g_assert(hb != NULL);
+	
+	tb = NULL;
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_MID_NONE,
+			       INKSCAPE_GLADEDIR "/cap_butt.xpm",
+			       hb, spw, "mid_marker", "none");
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_MID_FILLED_ARROW,
+			       INKSCAPE_GLADEDIR "/cap_round.xpm",
+			       hb, spw, "mid_marker", "mTriangle");
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_MID_HOLLOW_ARROW,
+			       INKSCAPE_GLADEDIR "/cap_square.xpm",
+			       hb, spw, "mid_marker", "mArrow");
+	i++;
+
+	/* End Marker */
+	spw_label(t, _("End Markers:"), 0, i);
+	hb = spw_hbox(t, 3, 1, i);
+	g_assert(hb != NULL);
+	
+	tb = NULL;
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_END_NONE,
+			       INKSCAPE_GLADEDIR "/cap_butt.xpm",
+			       hb, spw, "end_marker", "none");
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_END_FILLED_ARROW,
+			       INKSCAPE_GLADEDIR "/cap_round.xpm",
+			       hb, spw, "end_marker", "mTriangle");
+	tb = sp_stroke_radio_button(tb, INKSCAPE_STOCK_END_HOLLOW_ARROW,
+			       INKSCAPE_GLADEDIR "/cap_square.xpm",
+			       hb, spw, "end_marker", "mArrow");
 	i++;
 #endif
 
@@ -1340,3 +1371,4 @@ sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active)
   g_assert(tb != NULL);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
 }
+

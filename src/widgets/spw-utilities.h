@@ -18,21 +18,24 @@
    SPObject, that reacts to modification.
 */
 
-void
+GtkWidget *
 spw_label(GtkWidget * table, const gchar *label_text, int col, int row);
 
-void
+GtkWidget *
+spw_hbox(GtkWidget * table, int width, int col, int row);
+
+GtkWidget *
 spw_checkbutton(GtkWidget * dialog, GtkWidget * table,
 		const gchar * label, gchar * key, int col, int row,
 		int sensitive, GCallback cb);
 
-void
+GtkWidget *
 spw_dropdown(GtkWidget * dialog, GtkWidget * table,
 	     const gchar * label, gchar * key, int row,
 	     GtkWidget * selector
 	     );
 
-void
+GtkWidget *
 spw_unit_selector(GtkWidget * dialog, GtkWidget * table,
 		  const gchar * label, gchar * key, int row,
 		  GtkWidget * us, GCallback cb);

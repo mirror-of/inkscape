@@ -44,7 +44,7 @@
 #include "helper/unit-menu.h"
 #include "spw-utilities.h"
 
-void 
+GtkWidget *
 spw_label(GtkWidget * table, const gchar *label_text, int col, int row)
 {
   GtkWidget *label_widget;
@@ -55,17 +55,35 @@ spw_label(GtkWidget * table, const gchar *label_text, int col, int row)
   gtk_widget_show (label_widget);
   gtk_table_attach (GTK_TABLE (table), label_widget, col, col+1, row, row+1, 
 		    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 4, 0);
+  return label_widget;
 }
 
-void
-spw_checkbutton(GtkWidget * dialog, GtkWidget * t,
+/**
+ * Creates a horizontal layout manager with 4-pixel spacing between children
+ * and space for 'width' columns.
+ */
+GtkWidget *
+spw_hbox(GtkWidget * table, int width, int col, int row)
+{
+  GtkWidget *hb;
+  /* Create a new hbox with a 4-pixel spacing between children */
+  hb = gtk_hbox_new (FALSE, 4);
+  g_assert(hb != NULL);
+  gtk_widget_show (hb);
+  gtk_table_attach (GTK_TABLE (table), hb, col, col+width, row, row+1, 
+		    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+  return hb;
+}
+
+GtkWidget *
+spw_checkbutton(GtkWidget * dialog, GtkWidget * table,
 		const gchar * label, gchar * key, int col, int row,
 		int sensitive, GCallback cb)
 {
   GtkWidget *b;
   b = gtk_check_button_new_with_label (label);
   gtk_widget_show (b);
-  gtk_table_attach (GTK_TABLE (t), b, col, col+1, row, row+1,
+  gtk_table_attach (GTK_TABLE (table), b, col, col+1, row, row+1,
 		    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
   gtk_object_set_data (GTK_OBJECT (b), "key", key);
   gtk_object_set_data (GTK_OBJECT (dialog), key, b);
@@ -74,9 +92,10 @@ spw_checkbutton(GtkWidget * dialog, GtkWidget * t,
   if (sensitive == 1) {
     gtk_widget_set_sensitive (b, FALSE);
   }
+  return b;
 }
 
-void
+GtkWidget *
 spw_dropdown(GtkWidget * dialog, GtkWidget * table,
 	     const gchar * label_text, gchar * key, int row,
 	     GtkWidget * selector
@@ -88,9 +107,10 @@ spw_dropdown(GtkWidget * dialog, GtkWidget * table,
   gtk_table_attach (GTK_TABLE (table), selector, 1, 2, row, row+1, 
 		    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
   gtk_object_set_data (GTK_OBJECT (dialog), key, selector);
+  return selector;
 }
 
-void
+GtkWidget *
 spw_unit_selector(GtkWidget * dialog, GtkWidget * table,
 		  const gchar * label_text, gchar * key, int row,
 		  GtkWidget * us, GCallback cb)
@@ -110,6 +130,7 @@ spw_unit_selector(GtkWidget * dialog, GtkWidget * table,
   gtk_table_attach (GTK_TABLE (table), sb, 1, 2, row, row+1, 
 		    (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
   g_signal_connect (G_OBJECT (a), "value_changed", cb, dialog);
+  return sb;
 }
 
 
