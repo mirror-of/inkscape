@@ -264,11 +264,15 @@ void Rect::expandTo(Point p) {
 }
 
 /** Returns the set of points shared by both rectangles. */
-Rect Rect::intersection(const Rect &a, const Rect &b) {
+Maybe<Rect> Rect::intersection(const Rect &a, const Rect &b) {
 	Rect r;
-	for(int i=0; i < 2; i++) {
+	for ( int i=0 ; i < 2 ; i++ ) {
 		r._min[i] = MAX(a._min[i], b._min[i]);
 		r._max[i] = MIN(a._max[i], b._max[i]);
+
+		if ( r._min[i] > r._max[i] ) {
+			return Nothing();
+		}
 	}
 	return r;
 }

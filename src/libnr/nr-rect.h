@@ -101,7 +101,7 @@ public:
 	 *  winding order */
 	Point corner(unsigned i) const;
 	
-	/** returns a vector from topleft to bottom right. */
+	/** returns a vector from min to max. */
 	Point dimensions() const;
 
 	/** returns the midpoint of this rect. */
@@ -155,7 +155,7 @@ public:
 	void expandTo(const Rect &r);
 	
 	/** Returns the set of points shared by both rectangles. */
-	static Rect intersection(const Rect &a, const Rect &b);
+	static Maybe<Rect> intersection(const Rect &a, const Rect &b);
 
 	/** Returns the smallest rectangle that encloses both rectangles. */
 	static Rect union_bounds(const Rect &a, const Rect &b);
@@ -189,26 +189,9 @@ private:
 	}
 
 	Point _min, _max;
-};
 
-class ConvexHull {
-public:
-	ConvexHull(const Point &p) : _bounds(p, p) {}
-	ConvexHull(const ConvexHull &h) : _bounds(h._bounds) {}
-													
-	void add(const Point &p) {
-		_bounds.expandTo(p);
-	}
-	void add(const ConvexHull &h) {
-		_bounds.expandTo(h._bounds);
-	}
-		
-	const Rect &getBounds() const {
-		return _bounds;
-	}
-	
-private:
-	Rect _bounds;
+    /* evil, but temporary */
+    friend class Maybe<Rect>;
 };
 
 } /* namespace NR */

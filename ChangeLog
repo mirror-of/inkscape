@@ -1,3 +1,12 @@
+2004-03-06  MenTaLguY  <mental@rydia.net>
+
+    * src/ast/*: initial work on AST code
+
+	* src/libnr/nr-convex-hull-ops.h, src/libnr/nr-convex-hull.h,
+	  src/libnr/nr-matrix-fns.h, src/libnr/nr-maybe.h,
+	  src/libnr/nr-rect-ops.h:
+	  basic cleanups and work on NR::ConvexHull
+
 2004-03-05  bulia byak <bulia@users.sourceforge.net>
 
 	* src/desktop.cpp src/preferences-skeleton.h: Autoscroll now accepts
