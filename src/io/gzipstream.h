@@ -17,6 +17,7 @@
 
 
 #include "inkscapestream.h"
+#include <zlib.h>
 
 namespace Inkscape
 {
@@ -49,16 +50,25 @@ public:
 private:
 
     bool load();
+    int fetchMore();
+
     bool loaded;
     
     long totalIn;
     long totalOut;
-    
-    unsigned char *outputBuf;
 
+    unsigned char *outputBuf;
+    unsigned char *srcBuf;
+
+    unsigned long crc;
+    unsigned long srcCrc;
+    unsigned long srcSiz;
+    unsigned long srcConsumed;
+    unsigned long srcLen;
     long outputBufPos;
     long outputBufLen;
 
+    z_stream d_stream;
 }; // class GzipInputStream
 
 

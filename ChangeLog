@@ -1,3 +1,8 @@
+2005-02-17  Jon A. Cruz  <jon@joncruz.org>
+
+	* src/io/gzipinputstream.h, src/io/gzipinputstream.cpp: Changed
+	  decompression to be streammed and removed hardcoded limit.
+
 2005-02-17  MenTaLguY  <mental@rydia.net>
 
 	* src/inkscape.h, src/inkscape.cpp, src/desktop.cpp:

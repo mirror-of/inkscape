@@ -26,22 +26,26 @@ namespace IO
 //# G Z I P    I N P U T    S T R E A M
 //#########################################################################
 
+#define OUT_SIZE 4000
 
 /**
  *
  */ 
 GzipInputStream::GzipInputStream(InputStream &sourceStream)
-                    : BasicInputStream(sourceStream)
+                    : BasicInputStream(sourceStream),
+                      loaded(false),
+                      totalIn(0),
+                      totalOut(0),
+                      outputBuf(NULL),
+                      crc(0),
+                      srcCrc(0),
+                      srcSiz(0),
+                      srcConsumed(0),
+                      srcLen(0),
+                      outputBufPos(0),
+                      outputBufLen(0)
 {
-
-    outputBufPos       = 0;
-    outputBufLen       = 0;
-    outputBuf          = NULL;
-
-    totalIn            = 0;
-    totalOut           = 0;
-    
-    loaded = false;
+    memset( &d_stream, 0, sizeof(d_stream) );
 }
 
 /**
@@ -50,6 +54,14 @@ GzipInputStream::GzipInputStream(InputStream &sourceStream)
 GzipInputStream::~GzipInputStream()
 {
     close();
+    if ( srcBuf ) {
+      free(srcBuf);
+      srcBuf = 0;
+    }
+    if ( outputBuf ) {
+        free(outputBuf);
+        outputBuf = 0;
+    }
 }
 
 /**
@@ -73,8 +85,17 @@ void GzipInputStream::close()
 {
     if (closed)
         return;
-    if (outputBuf)
-    {
+
+    int zerr = inflateEnd(&d_stream);
+    if (zerr != Z_OK) {
+        printf("inflateEnd: Some kind of problem: %d\n", zerr);
+    }
+
+    if ( srcBuf ) {
+      free(srcBuf);
+      srcBuf = 0;
+    }
+    if ( outputBuf ) {
         free(outputBuf);
         outputBuf = 0;
     }
@@ -86,20 +107,26 @@ void GzipInputStream::close()
  */ 
 int GzipInputStream::get()
 {
-    if (closed)
-        return -1;
-    if (!loaded && !load())
-        {
+    int ch = -1;
+    if (closed) {
+        // leave return value -1
+    }
+    else if (!loaded && !load()) {
         closed=true;
-        return -1;
+    } else {
+        loaded = true;
+
+        int zerr = Z_OK;
+        if ( outputBufPos >= outputBufLen ) {
+            // time to read more, if we can
+            zerr = fetchMore();
         }
 
-    loaded = true;
+        if ( outputBufPos < outputBufLen ) {
+            ch = (int)outputBuf[outputBufPos++];
+        }
+    }
 
-    if (outputBufPos >= outputBufLen)
-        return -1;
-        
-    int ch = (int) outputBuf[outputBufPos++];
     return ch;
 }
 
@@ -111,7 +138,7 @@ int GzipInputStream::get()
 
 bool GzipInputStream::load()
 {
-    unsigned long crc = crc32(0L, Z_NULL, 0);
+    crc = crc32(0L, Z_NULL, 0);
     
     std::vector<Byte> inputBuf;
     while (true)
@@ -128,13 +155,20 @@ bool GzipInputStream::load()
         return false;
         }
 
-    uLong srcLen = inputBuf.size();
-    Bytef *srcBuf = (Bytef *)malloc(srcLen * sizeof(Byte));
-    if (!srcBuf)
-        {
+    srcLen = inputBuf.size();
+    srcBuf = (Bytef *)malloc(srcLen * sizeof(Byte));
+    if (!srcBuf) {
         return false;
-        }
-        
+    }
+
+    outputBuf = (unsigned char *)malloc(OUT_SIZE);
+    if ( !outputBuf ) {
+        free(srcBuf);
+        srcBuf = 0;
+        return false;
+    }
+    outputBufLen = 0; // Not filled in yet
+
     std::vector<unsigned char>::iterator iter;
     Bytef *p = srcBuf;
     for (iter=inputBuf.begin() ; iter != inputBuf.end() ; iter++)
@@ -144,13 +178,13 @@ bool GzipInputStream::load()
 
     //Magic
     int val = (int)srcBuf[0];
-    printf("val:%x\n", val);
+    //printf("val:%x\n", val);
     val = (int)srcBuf[1];
-    printf("val:%x\n", val);
+    //printf("val:%x\n", val);
 
     //Method
     val = (int)srcBuf[2];
-    printf("val:%x\n", val);
+    //printf("val:%x\n", val);
 
     //flags
     int flags = (int)srcBuf[3];
@@ -181,71 +215,74 @@ bool GzipInputStream::load()
         headerLen++;
     }
 
-    
-    unsigned long crc0   = (unsigned long )srcBuf[srcLen-8];
-    unsigned long crc1   = (unsigned long )srcBuf[srcLen-7];
-    unsigned long crc2   = (unsigned long )srcBuf[srcLen-6];
-    unsigned long crc3   = (unsigned long )srcBuf[srcLen-5];
-    unsigned long srcCrc = crc3 << 24 | crc2 << 16 | crc1 << 8 | crc0;
+
+    srcCrc = ((0x0ff & srcBuf[srcLen - 5]) << 24)
+           | ((0x0ff & srcBuf[srcLen - 6]) << 16)
+           | ((0x0ff & srcBuf[srcLen - 7]) <<  8)
+           | ((0x0ff & srcBuf[srcLen - 8]) <<  0);
     //printf("srcCrc:%lx\n", srcCrc);
     
-    unsigned long siz0   = (unsigned long )srcBuf[srcLen-4];
-    unsigned long siz1   = (unsigned long )srcBuf[srcLen-3];
-    unsigned long siz2   = (unsigned long )srcBuf[srcLen-2];
-    unsigned long siz3   = (unsigned long )srcBuf[srcLen-1];
-    unsigned long srcSiz = siz3 << 24 | siz2 << 16 | siz1 << 8 | siz0;
+    srcSiz = ((0x0ff & srcBuf[srcLen - 1]) << 24)
+           | ((0x0ff & srcBuf[srcLen - 2]) << 16)
+           | ((0x0ff & srcBuf[srcLen - 3]) <<  8)
+           | ((0x0ff & srcBuf[srcLen - 4]) <<  0);
     //printf("srcSiz:%lx/%ld\n", srcSiz, srcSiz);
     
-    if (srcSiz <=0 || srcSiz > 1000000L)
-        {
+    if ( srcSiz <= 0 ) {
         return false;
-        }
-        
-    outputBufLen = srcSiz + srcSiz/100 + 14;
-    outputBuf = (unsigned char *)malloc(outputBufLen * sizeof(unsigned char));
-    if (!outputBuf)
-        {
-        free(srcBuf);
-        return false;
-        }
+    }
+
+    //outputBufLen = srcSiz + srcSiz/100 + 14;
     
     unsigned char *data = srcBuf + headerLen;
     unsigned long dataLen = srcLen - (headerLen + 8);
     //printf("%x %x\n", data[0], data[dataLen-1]);
     
-    z_stream d_stream;
     d_stream.zalloc    = (alloc_func)0;
     d_stream.zfree     = (free_func)0;
     d_stream.opaque    = (voidpf)0;
     d_stream.next_in   = data;
     d_stream.avail_in  = dataLen;
     d_stream.next_out  = outputBuf;
-    d_stream.avail_out = outputBufLen;
+    d_stream.avail_out = OUT_SIZE;
     
-    int zerr = inflateInit2(&(d_stream), -MAX_WBITS);
-    zerr = inflate(&d_stream, Z_FINISH);
-    
-    if (zerr != Z_OK && zerr != Z_STREAM_END)
-        {
-        printf("inflate: Some kind of problem: %d\n", zerr);
-        }
-    zerr = inflateEnd(&d_stream);
-    if (zerr != Z_OK)
-        {
-        printf("inflateEnd: Some kind of problem: %d\n", zerr);
-        }
-        
-    outputBufLen -= d_stream.avail_out;
+    int zerr = inflateInit2(&d_stream, -MAX_WBITS);
+    if ( zerr == Z_OK )
+    {
+        zerr = fetchMore();
+    } else {
+        printf("inflateInit2: Some kind of problem: %d\n", zerr);
+    }
 
-    crc = crc32(crc, (const Bytef *)outputBuf, outputBufLen);
-   
-    printf("crc:%lx\n", crc);
-    
-    free(srcBuf);
-    
-    return true;
+        
+    return (zerr == Z_OK) || (zerr == Z_STREAM_END);
 }
 
+
+int GzipInputStream::fetchMore()
+{
+    int zerr = Z_OK;
+
+    // TODO assumes we aren't called till the buffer is empty
+    d_stream.next_out  = outputBuf;
+    d_stream.avail_out = OUT_SIZE;
+    outputBufLen = 0;
+    outputBufPos = 0;
+
+    zerr = inflate( &d_stream, Z_SYNC_FLUSH );
+    if ( zerr == Z_OK || zerr == Z_STREAM_END ) {
+        outputBufLen = OUT_SIZE - d_stream.avail_out;
+        if ( outputBufLen ) {
+            crc = crc32(crc, (const Bytef *)outputBuf, outputBufLen);
+        }
+        //printf("crc:%lx\n", crc);
+//     } else if ( zerr != Z_STREAM_END ) {
+//         // TODO check to be sure this won't happen for partial end reads
+//         printf("inflate: Some kind of problem: %d\n", zerr);
+    }
+
+    return zerr;
+}
 
 //#########################################################################
 //# G Z I P   O U T P U T    S T R E A M
@@ -376,7 +413,7 @@ void GzipOutputStream::flush()
     free(srcbuf);
     free(destbuf);
     
-    printf("done\n");
+    //printf("done\n");
     
 }
 
@@ -409,3 +446,14 @@ void GzipOutputStream::put(int ch)
 //#########################################################################
 //# E N D    O F    F I L E
 //#########################################################################
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
