@@ -446,7 +446,7 @@ NR::Point sp_spiral_get_xy (SPSpiral const *spiral, gdouble t)
 	g_assert (t >= 0.0);
 	/* Any callers passing -ve t will have a bug for non-integral values of exp. */
 
-	double const rad = spiral->rad * pow(t, spiral->exp);
+	double const rad = spiral->rad * pow(t, (double) spiral->exp);
 	double const arg = 2.0 * M_PI * spiral->revo * t + spiral->arg;
 
 	return NR::Point(rad * cos (arg) + spiral->cx,
@@ -524,7 +524,7 @@ sp_spiral_get_polar (SPSpiral const *spiral, gdouble t, gdouble *rad, gdouble *a
 	g_return_if_fail (SP_IS_SPIRAL(spiral));
 
 	if (rad)
-		*rad = spiral->rad * pow(t, spiral->exp);
+		*rad = spiral->rad * pow(t, (double) spiral->exp);
 	if (arg)
 		*arg = 2.0 * M_PI * spiral->revo * t + spiral->arg;
 }
