@@ -363,9 +363,6 @@ sp_item_write(SPObject *object, SPRepr *repr, guint flags)
             g_free(s);
         }
     }
-    //else {
-    //    sp_repr_set_attr(repr, "style", NULL);
-    //}
 
     if (flags & SP_OBJECT_WRITE_EXT) {
         sp_repr_set_attr(repr, "sodipodi:insensitive", item->sensitive ? NULL : "true");
