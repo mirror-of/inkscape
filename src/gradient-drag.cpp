@@ -25,6 +25,7 @@
 #include "prefs-utils.h"
 #include "sp-item.h"
 #include "style.h"
+#include "knot.h"
 #include "sp-gradient.h"
 #include "sp-linear-gradient.h"
 #include "gradient-chemistry.h"
@@ -52,6 +53,7 @@ GrDrag::GrDrag(SPDesktop *desktop) {
 	this->selection = SP_DT_SELECTION(desktop);
 
         this->draggers = NULL;
+        this->lines = NULL;
 
 	this->sel_changed_connection = this->selection->connectChanged(
             sigc::bind (
@@ -73,11 +75,18 @@ GrDrag::~GrDrag() {
 	this->sel_modified_connection.disconnect();
 
 	for (GSList *l = this->draggers; l != NULL; l = l->next) {
-      //delete ((GrDragger) l->data);
-		gtk_object_destroy( GTK_OBJECT (l->data));
+          delete ((GrDragger *) l->data);
+         //gtk_object_destroy( GTK_OBJECT (l->data));
 	}
 	g_slist_free (this->draggers);
 	this->draggers = NULL;
+
+	for (GSList *l = this->lines; l != NULL; l = l->next) {
+         gtk_object_destroy( GTK_OBJECT (l->data));
+	}
+	g_slist_free (this->lines);
+	this->lines = NULL;
+
 }
 
 // debugging, show a dragger as a simple canvas control
@@ -100,26 +109,73 @@ drag_mark (GrDrag *d, NR::Point p)
     d->draggers = g_slist_append (d->draggers, box);
 }
 
-void
-drag_line (GrDrag *d, NR::Point p1, NR::Point p2) 
+GrDraggable::GrDraggable (SPItem *item, guint point_num, bool fill_or_stroke)
 {
-    SPCanvasItem *line = sp_canvas_item_new(SP_DT_CONTROLS(d->desktop),
+    this->item = item;
+    this->point_num = point_num;
+    this->fill_or_stroke = fill_or_stroke;
+
+	g_object_ref (G_OBJECT (this->item));
+}
+
+GrDraggable::~GrDraggable ()
+{
+	g_object_unref (G_OBJECT (this->item));
+}
+
+GrDragger::GrDragger (SPDesktop *desktop, NR::Point p, gchar const *tip, GrDraggable *draggable) 
+{
+    this->draggables = NULL;
+
+	this->knot = sp_knot_new (desktop, tip);
+	g_object_set (G_OBJECT (this->knot->item), "shape", SP_KNOT_SHAPE_SQUARE, NULL);
+	g_object_set (G_OBJECT (this->knot->item), "mode", SP_KNOT_MODE_XOR, NULL);
+
+	/* Move to current point. */
+	sp_knot_set_position (this->knot, &p, SP_KNOT_STATE_NORMAL);
+	sp_knot_show (this->knot);
+
+  this->draggables = g_slist_prepend (this->draggables, draggable);
+}
+
+GrDragger::~GrDragger ()
+{
+			/* unref should call destroy */
+			g_object_unref (G_OBJECT (this->knot));
+
+    for (GSList const* l = this->draggables; l != NULL; l = l->next) {
+        delete ((GrDraggable *) l->data);
+    }
+    g_slist_free (this->draggables);
+    this->draggables = NULL;
+}
+
+void
+GrDrag::addLine (NR::Point p1, NR::Point p2) 
+{
+    SPCanvasItem *line = sp_canvas_item_new(SP_DT_CONTROLS(this->desktop),
                                                             SP_TYPE_CTRLLINE, NULL);
     sp_ctrlline_set_coords(SP_CTRLLINE(line), p1, p2);
     sp_canvas_item_show (line);
     sp_canvas_item_move_to_z (line, 0); // just low enough to not get in the way of other draggable knots
-    d->draggers = g_slist_append (d->draggers, line);
+    this->lines = g_slist_append (this->lines, line);
 }
 
 void
 GrDrag::updateDraggers ()
 {
     for (GSList const* l = this->draggers; l != NULL; l = l->next) {
-        //delete ((GrDragger) l->data);
-		gtk_object_destroy( GTK_OBJECT (l->data));
+        delete ((GrDragger *) l->data);
+        //gtk_object_destroy( GTK_OBJECT (l->data));
     }
     g_slist_free (this->draggers);
     this->draggers = NULL;
+
+	for (GSList *l = this->lines; l != NULL; l = l->next) {
+         gtk_object_destroy( GTK_OBJECT (l->data));
+	}
+	g_slist_free (this->lines);
+	this->lines = NULL;
 
     g_return_if_fail (this->selection != NULL);
 
@@ -138,9 +194,9 @@ GrDrag::updateDraggers ()
                 p1 *= NR::Matrix (lg->gradientTransform) * sp_item_i2d_affine (item);
                 p2 *= NR::Matrix (lg->gradientTransform) * sp_item_i2d_affine (item);
 
-                drag_mark (this, p1);
-                drag_mark (this, p2);
-                drag_line (this, p1, p2);
+                this->draggers = g_slist_prepend (this->draggers, new GrDragger(this->desktop, p1, "drag1", new GrDraggable (item, POINT_LG_P1, true)));
+                this->draggers = g_slist_prepend (this->draggers, new GrDragger(this->desktop, p2, "drag2", new GrDraggable (item, POINT_LG_P2, true)));
+                this->addLine (p1, p2);
             }
         }
     }

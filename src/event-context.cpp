@@ -42,6 +42,7 @@
 #include "prefs-utils.h"
 #include "message-context.h"
 #include "widgets/spw-utilities.h"
+#include "gradient-drag.h"
 
 #include "event-context.h"
 

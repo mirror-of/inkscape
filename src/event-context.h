@@ -20,11 +20,12 @@
 #include <glib-object.h>
 #include <gtk/gtkwidget.h>
 #include "selcue.h"
-#include "gradient-drag.h"
 
 #include "forward.h"
 
 class SPRepr;
+
+struct GrDrag;
 
 namespace Inkscape { class MessageContext; }
 

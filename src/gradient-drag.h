@@ -24,16 +24,16 @@ class Point;
 }
 
 struct GrDraggable {
-	GrDraggable();
+	GrDraggable(SPItem *item, guint point_num, bool fill_or_stroke);
 	~GrDraggable();
 
 	SPItem *item;
-	guint fill_or_stroke;
 	guint point_num;
+	bool fill_or_stroke;
 };
 
 struct GrDragger {
-	GrDragger();
+	GrDragger (SPDesktop *desktop, NR::Point p, gchar const *tip, GrDraggable *draggable);
 	~GrDragger();
 
     SPKnot *knot;
@@ -66,6 +66,8 @@ struct GrDrag {
 	GrDrag(SPDesktop *desktop);
 	~GrDrag();
 
+	void addLine (NR::Point p1, NR::Point p2);
+
 	void updateDraggers ();
 
 	SPDesktop *desktop;
@@ -73,6 +75,7 @@ struct GrDrag {
 	sigc::connection sel_changed_connection;
 	sigc::connection sel_modified_connection;
 	GSList *draggers;
+	GSList *lines;
 };
 
 #endif
