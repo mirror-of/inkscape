@@ -302,7 +302,7 @@ main(int argc, char const **argv)
     }
 
 #ifdef HAVE_FPSETMASK
-    fpresetsticky(FP_X_DZ|FP_X_INV);
+    fpsetsticky(FP_X_DZ|FP_X_INV);
     fpsetmask(FP_X_DZ|FP_X_INV);
 #endif
     return result;
