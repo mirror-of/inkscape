@@ -674,13 +674,19 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
         NRRect bbox;
         doc = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
         
+        /* Notice how the switch is used to 'fall through' here to get
+           various backups.  If you modify this without noticing you'll
+           probabaly screw something up.
         switch (key) {
-            case SELECTION_PAGE:
-                bbox.x0 = 0.0;
-                bbox.y0 = 0.0;
-                bbox.x1 = sp_document_width (doc);
-                bbox.y1 = sp_document_height (doc);
-                break;
+            case SELECTION_SELECTION:
+                if ((SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty() == false)
+                {
+                    (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))->bounds(&bbox);
+                    /* Only if there is a selection that we can set
+                       do we break, otherwise we fall through to the
+                       drawing */
+                    break;
+                }
             case SELECTION_DRAWING:
                 /* 
                  * TODO: this returns wrong values if the document has a 
@@ -688,33 +694,19 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
                  */
                 sp_item_bbox_desktop (SP_ITEM (SP_DOCUMENT_ROOT (doc)), &bbox);
                 
-                // there's no drawing, set area to page
-                if (bbox.x0 > bbox.x1 && bbox.y0 > bbox.y1) { 
-                    bbox.x0 = 0.0;
-                    bbox.y0 = 0.0;
-                    bbox.x1 = sp_document_width (doc);
-                    bbox.y1 = sp_document_height (doc);
+                /* If the drawing is valid, then we'll use it and break
+                   otherwise we drop through to the page settings */
+                if (!(bbox.x0 > bbox.x1 && bbox.y0 > bbox.y1)) { 
+                    break;
                 }
-                break;
-            case SELECTION_SELECTION:
-                if ((SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty() == false)
-                {
-                    (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))->bounds(&bbox);
-                // there's no selection, set area to page
-                } else { 
-                    bbox.x0 = 0.0;
-                    bbox.y0 = 0.0;
-                    bbox.x1 = sp_document_width (doc);
-                    bbox.y1 = sp_document_height (doc);
-                }
-                break;
-            case SELECTION_CUSTOM:
-                break;
-            default:
+            case SELECTION_PAGE:
                 bbox.x0 = 0.0;
                 bbox.y0 = 0.0;
                 bbox.x1 = sp_document_width (doc);
                 bbox.y1 = sp_document_height (doc);
+                break;
+            case SELECTION_CUSTOM:
+            default:
                 break;
         } // switch
         
