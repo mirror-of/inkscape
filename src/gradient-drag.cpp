@@ -48,19 +48,19 @@
 SPKnotShapeType gr_knot_shapes [] = {
         SP_KNOT_SHAPE_SQUARE, //POINT_LG_P1
         SP_KNOT_SHAPE_SQUARE,
-        SP_KNOT_SHAPE_CROSS,
+        SP_KNOT_SHAPE_DIAMOND,
         SP_KNOT_SHAPE_CIRCLE,
         SP_KNOT_SHAPE_CIRCLE,
-        SP_KNOT_SHAPE_DIAMOND // POINT_RG_FOCUS
+        SP_KNOT_SHAPE_CROSS // POINT_RG_FOCUS
 };
 
 const gchar *gr_knot_descr [] = {
-    N_("Linear gradient start"), //POINT_LG_P1
-    N_("Linear gradient end"),
-    N_("Radial gradient center"),
-    N_("Radial gradient radius"),
-    N_("Radial gradient radius"),
-    N_("Radial gradient focus") // POINT_RG_FOCUS
+    N_("Linear gradient <b>start</b>"), //POINT_LG_P1
+    N_("Linear gradient <b>end</b>"),
+    N_("Radial gradient <b>center</b>"),
+    N_("Radial gradient <b>radius</b>"),
+    N_("Radial gradient <b>radius</b>"),
+    N_("Radial gradient <b>focus</b>") // POINT_RG_FOCUS
 };
 
 static void 
@@ -214,7 +214,13 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer da
             dragger->parent->draggers = g_slist_remove (dragger->parent->draggers, dragger);
             delete dragger;
             d_new->parent->updateLines();
+            d_new->parent->setSelected (d_new);
             sp_document_done (SP_DT_DOCUMENT (d_new->parent->desktop));
+            // do the same as on ungrabbing
+            if (d_new->isA(POINT_RG_R1) || d_new->isA(POINT_RG_R2) || d_new->isA(POINT_RG_CENTER)) {
+                // only if this is center or one of the radii; focus does not affect other draggers
+                d_new->parent->updateDraggersReselect();
+            }
             return;
         }
     }
@@ -249,25 +255,9 @@ gr_knot_ungrabbed_handler (SPKnot *knot, unsigned int state, gpointer data)
     // be updated until mouse is released, 2) we'll need to clumsily save and restore selected
     // dragger, 3) others will unsnap without warning; 4) the order of draggables may change which
     // affects knot shape. However, this is by far the simplest method.
-    bool has_dependencies = false;
-    for (GSList const* i = dragger->draggables; i != NULL; i = i->next) {
-        GrDraggable *draggable = (GrDraggable *) i->data;
+    if (dragger->isA(POINT_RG_R1) || dragger->isA(POINT_RG_R2) || dragger->isA(POINT_RG_CENTER)) {
         // only if this is center or one of the radii; focus does not affect other draggers
-        if (draggable->point_num >= POINT_RG_CENTER && draggable->point_num <= POINT_RG_R2) {
-            has_dependencies = true; 
-            break;
-        }
-    }
-
-    if (has_dependencies) {
-        // remember the first draggable of the selected knot
-        GrDraggable *select = (GrDraggable *) dragger->draggables->data;
-        GrDraggable *select_copy = new GrDraggable (select->item, select->point_num, select->fill_or_stroke);
-        GrDrag *drag = dragger->parent;
-        // update all knots; this destroys dragger!
-        drag->updateDraggers();
-        // restore selection
-        drag->restoreSelected(select_copy);
+        dragger->parent->updateDraggersReselect();
     }
 }
 
@@ -280,6 +270,36 @@ gr_knot_clicked_handler(SPKnot *knot, guint state, gpointer data)
    GrDragger *dragger = (GrDragger *) data;
 
    dragger->parent->setSelected (dragger);
+}
+
+/**
+Checks if the dragger has a draggable with this point_num
+ */
+bool
+GrDragger::isA (guint point_num)
+{
+    for (GSList const* i = this->draggables; i != NULL; i = i->next) {
+        GrDraggable *draggable = (GrDraggable *) i->data;
+        if (draggable->point_num == point_num) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+Checks if the dragger has a draggable with this item, point_num, fill_or_stroke
+ */
+bool
+GrDragger::isA (SPItem *item, guint point_num, bool fill_or_stroke)
+{
+    for (GSList const* i = this->draggables; i != NULL; i = i->next) {
+        GrDraggable *draggable = (GrDraggable *) i->data;
+        if (draggable->point_num == point_num && draggable->item == item && draggable->fill_or_stroke == fill_or_stroke) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /**
@@ -388,8 +408,10 @@ GrDrag::setSelected (GrDragger *dragger)
        this->selected->knot->fill [SP_KNOT_STATE_NORMAL] = GR_KNOT_COLOR_NORMAL;
        g_object_set (G_OBJECT (this->selected->knot->item), "fill_color", GR_KNOT_COLOR_NORMAL, NULL);
     }
-    if (dragger)
+    if (dragger) {
         dragger->knot->fill [SP_KNOT_STATE_NORMAL] = GR_KNOT_COLOR_SELECTED;
+        g_object_set (G_OBJECT (dragger->knot->item), "fill_color", GR_KNOT_COLOR_SELECTED, NULL);
+    }
     this->selected = dragger;
 }
 
@@ -445,6 +467,26 @@ GrDrag::addDraggersLinear (SPLinearGradient *lg, SPItem *item, bool fill_or_stro
 {
     addDragger (sp_lg_get_p1 (item, lg), new GrDraggable (item, POINT_LG_P1, fill_or_stroke), gr_knot_shapes[POINT_LG_P1]);
     addDragger (sp_lg_get_p2 (item, lg), new GrDraggable (item, POINT_LG_P2, fill_or_stroke), gr_knot_shapes[POINT_LG_P2]);
+}
+
+
+/**
+Same as updateDraggers, but also restores selection, if possible, to the same dragger
+*/
+void
+GrDrag::updateDraggersReselect ()
+{
+    if (selected) {
+        // remember the first draggable of the selected knot
+        GrDraggable *select = (GrDraggable *) selected->draggables->data;
+        GrDraggable *select_copy = new GrDraggable (select->item, select->point_num, select->fill_or_stroke);
+        // update all knots; this destroys dragger!
+        updateDraggers();
+        // restore selection
+        restoreSelected(select_copy);
+    } else {
+        updateDraggers();
+    }
 }
 
 /**

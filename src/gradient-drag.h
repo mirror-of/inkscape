@@ -49,6 +49,8 @@ struct GrDragger {
 	GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable, SPKnotShapeType shape);
 	~GrDragger();
 
+	GrDrag *parent;
+
 	SPKnot *knot;
 
 	NR::Point point;
@@ -58,9 +60,11 @@ struct GrDragger {
 
 	GSList *draggables;
 
-	GrDrag *parent;
 
 	void addDraggable(GrDraggable *draggable);
+
+	bool isA (guint point_num);
+	bool isA (SPItem *item, guint point_num, bool fill_or_stroke);
 
 	void updateTip();
 };
@@ -80,12 +84,13 @@ struct GrDrag {
 
 	void addDragger (NR::Point p, GrDraggable *draggable, SPKnotShapeType shape);
 
-	void GrDrag::addDraggersRadial (SPRadialGradient *rg, SPItem *item, bool fill_or_stroke);
-	void GrDrag::addDraggersLinear (SPLinearGradient *lg, SPItem *item, bool fill_or_stroke);
+	void addDraggersRadial (SPRadialGradient *rg, SPItem *item, bool fill_or_stroke);
+	void addDraggersLinear (SPLinearGradient *lg, SPItem *item, bool fill_or_stroke);
 
 	GrDragger *selected;
 	void setSelected (GrDragger *dragger);
-	void GrDrag::restoreSelected (GrDraggable *da1);
+	void restoreSelected (GrDraggable *da1);
+	void updateDraggersReselect ();
 
 	bool local_change;
 
