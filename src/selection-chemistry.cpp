@@ -19,6 +19,7 @@
 #include <gtk/gtk.h>
 #include "svg/svg.h"
 #include "xml/repr-private.h"
+#include "xml/repr-private.h"
 #include "document.h"
 #include "inkscape.h"
 #include "desktop.h"
@@ -34,6 +35,9 @@
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-ops.h"
 #include "style.h"
+#include "document-private.h"
+#include "sp-gradient.h"
+#include "sp-pattern.h"
 using NR::X;
 using NR::Y;
 
@@ -41,6 +45,8 @@ using NR::Y;
 
 /* fixme: find a better place */
 GSList *clipboard = NULL;
+GSList *gradient_clipboard = NULL;
+
 
 static void sp_matrix_d_set_rotate (NRMatrix *m, double theta);
 
@@ -555,6 +561,62 @@ void sp_selection_copy()
 		return;
 	}
 
+    const GSList *items = sp_selection_item_list (SP_DT_SELECTION (desktop));
+
+     /* Clear old gradient clipboard */
+    while (gradient_clipboard) {
+            sp_repr_unref ((SPRepr *) gradient_clipboard->data);
+            gradient_clipboard = g_slist_remove (gradient_clipboard, gradient_clipboard->data);
+        }
+
+    for (; items != NULL; items = items->next){
+        SPRepr *repr = SP_OBJECT_REPR(items->data);
+        SPRepr *grad_repr;
+        SPStyle *style = sp_style_new ();
+        sp_style_read_from_repr (style, repr);
+
+        if (style && style->fill.type == SP_PAINT_TYPE_PAINTSERVER) {    /* Object has pattern or gradient fill*/
+            if (SP_IS_LINEARGRADIENT (SP_OBJECT_STYLE_FILL_SERVER (items->data)) ||
+                SP_IS_RADIALGRADIENT (SP_OBJECT_STYLE_FILL_SERVER (items->data))) {
+                    SPGradient *gradient = SP_GRADIENT (SP_OBJECT_STYLE_FILL_SERVER (items->data));
+                    SPGradient *ref = gradient;
+                    while ( !SP_GRADIENT_HAS_STOPS(gradient) && ref ) {
+                                grad_repr =sp_repr_duplicate(SP_OBJECT_REPR(gradient));
+                                gradient_clipboard = g_slist_prepend (gradient_clipboard, grad_repr);
+                                gradient = ref;
+                                ref = gradient->ref->getObject();
+                            }
+                    grad_repr =sp_repr_duplicate(SP_OBJECT_REPR(gradient));
+                    gradient_clipboard = g_slist_prepend (gradient_clipboard, grad_repr);
+                }
+            else if (SP_IS_PATTERN (SP_OBJECT_STYLE_FILL_SERVER (items->data))){
+                 SPPattern *pattern = SP_PATTERN(SP_OBJECT_STYLE_FILL_SERVER (items->data));
+                 grad_repr =sp_repr_duplicate(SP_OBJECT_REPR(pattern));
+                 gradient_clipboard = g_slist_prepend (gradient_clipboard, grad_repr);
+               }
+            }
+        if (style && style->stroke.type == SP_PAINT_TYPE_PAINTSERVER) {    /* Object has pattern or gradient fill*/
+            if (SP_IS_LINEARGRADIENT (SP_OBJECT_STYLE_STROKE_SERVER (items->data)) ||
+                SP_IS_RADIALGRADIENT (SP_OBJECT_STYLE_STROKE_SERVER (items->data))) {
+                    SPGradient *gradient = SP_GRADIENT (SP_OBJECT_STYLE_STROKE_SERVER (items->data));
+                    SPGradient *ref = gradient;
+                    while ( !SP_GRADIENT_HAS_STOPS(gradient) && ref ) {
+                                grad_repr =sp_repr_duplicate(SP_OBJECT_REPR(gradient));
+                                gradient_clipboard = g_slist_prepend (gradient_clipboard, grad_repr);
+                                gradient = ref;
+                                ref = gradient->ref->getObject();
+                            }
+                    grad_repr =sp_repr_duplicate(SP_OBJECT_REPR(gradient));
+                    gradient_clipboard = g_slist_prepend (gradient_clipboard, grad_repr);
+                }
+            else if (SP_IS_PATTERN (SP_OBJECT_STYLE_STROKE_SERVER (items->data))){
+                 SPPattern *pattern = SP_PATTERN(SP_OBJECT_STYLE_STROKE_SERVER (items->data));
+                 grad_repr =sp_repr_duplicate(SP_OBJECT_REPR(pattern));
+                 gradient_clipboard = g_slist_prepend (gradient_clipboard, grad_repr);
+               }
+            }
+    }
+
 	GSList *sl;
 	sl = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
 	sl = g_slist_sort (sl, (GCompareFunc) sp_repr_compare_position);
@@ -577,6 +639,7 @@ void sp_selection_copy()
 	}
 
 	clipboard = g_slist_reverse (clipboard);
+    gradient_clipboard = g_slist_reverse (gradient_clipboard);
 }
 
 void sp_selection_paste(bool in_place)
@@ -596,13 +659,33 @@ void sp_selection_paste(bool in_place)
 	}
 
 	sp_selection_empty (selection);
+	SPDocument *doc = SP_DT_DOCUMENT (desktop);
+	SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS (doc);
+	// add gradients referenced by copied objects to defs
+	for (GSList *gl = gradient_clipboard; gl != NULL; gl = gl->next) {
+		SPRepr *repr = (SPRepr *) gl->data;
+		SPObject *exists = sp_document_lookup_id (doc, sp_repr_attr (repr, "id"));
+		if (!exists){
+			SPRepr *copy = sp_repr_duplicate(repr);
+			sp_repr_add_child (SP_OBJECT_REPR (defs), copy, NULL);
+			sp_repr_unref (copy);
+		}
+	}
 
+	GSList *copied = NULL;
+	// add objects to document
 	for (GSList *l = clipboard; l != NULL; l = l->next) {
 		SPRepr *repr = (SPRepr *) l->data;
 		SPRepr *copy = sp_repr_duplicate(repr);
 		sp_document_add_repr (SP_DT_DOCUMENT (desktop), copy);
-		sp_selection_add_repr (selection, copy);
+		copied = g_slist_append (copied, copy);
 		sp_repr_unref (copy);
+	}
+
+	// add new documents to selection (would have done this above but screws with fill/stroke dialog)
+	for (GSList *l = copied; l != NULL; l = l->next) {
+		SPRepr *repr = (SPRepr *) l->data;
+		sp_selection_add_repr (selection, repr);
 	}
 
 	if (!in_place) {
@@ -642,12 +725,27 @@ void sp_selection_paste_style()
 	}
 
 	GSList *selected = g_slist_copy ((GSList *) sp_selection_item_list (selection));
+	SPDocument *doc = SP_DT_DOCUMENT (desktop);
 
 	for (GSList *l = selected; l != NULL; l = l->next) {
 
 		// take the style from first object on clipboard
 		SPStyle *style = sp_style_new ();
 		sp_style_read_from_repr (style, (SPRepr *) clipboard->data);
+		// if its using a gradient we need the def too
+		if (style && style->fill.type == SP_PAINT_TYPE_PAINTSERVER) {    /* Object has pattern or gradient fill*/
+			SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS (SP_DT_DOCUMENT (desktop));
+			// add gradients referenced by clipboard objects to defs
+			for (GSList *gl = gradient_clipboard; gl != NULL; gl = gl->next) {
+				SPRepr *repr = (SPRepr *) gl->data;
+				SPObject *exists = sp_document_lookup_id (doc, sp_repr_attr (repr, "id"));
+				if (!exists){
+					SPRepr *copy = sp_repr_duplicate(repr);
+					sp_repr_add_child (SP_OBJECT_REPR (defs), copy, NULL);
+					sp_repr_unref (copy);
+				}
+			}
+		}
 
 		// merge it with the current object's style
 		sp_style_merge_from_style_string (style, sp_repr_attr (SP_OBJECT_REPR (l->data), "style"));
