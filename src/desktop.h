@@ -121,6 +121,8 @@ struct SPDesktop : public SPView {
 	bool isWithinViewport(SPItem *item) const;
 	bool itemIsHidden(SPItem const *item) const;
 
+	void startRenameLayer();
+
 	static void _set_status_message(SPView *view, Inkscape::MessageType type, gchar const *message);
 	static void _layer_activated(SPObject *layer, SPDesktop *desktop);
 	static void _layer_deactivated(SPObject *layer, SPDesktop *desktop);

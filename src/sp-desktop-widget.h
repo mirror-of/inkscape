@@ -56,6 +56,7 @@ struct SPDesktopWidget {
     Inkscape::Widgets::LayerSelector *layer_selector;
 
     void setMessage(Inkscape::MessageType type, gchar const *message);
+    void startRenameLayer();
 };
 
 struct SPDesktopWidgetClass {
