@@ -25,6 +25,12 @@
 #include "style.h"
 #include "attributes.h"
 
+#include "document.h"
+#include "selection.h"
+#include "inkscape.h"
+#include "desktop.h"
+#include "desktop-handles.h"
+
 #include "sp-root.h"
 #include "sp-use.h"
 #include "sp-typeset.h"
@@ -742,7 +748,7 @@ void sp_typeset_ditch_dest(SPTypeset *typeset)
 
 // the listening functions
 static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
-                               const gchar * /*oldval*/, const gchar * newval,
+                               const gchar * /*oldval*/, const gchar * /*newval*/,
                                bool /*is_interactive*/, void * data)
 {
   SPTypeset *typeset = (SPTypeset *) data;
@@ -971,4 +977,117 @@ void   refresh_typeset_source(SPTypeset *typeset,path_dest *nDst)
 
   sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
 }
+
+
+/*
+ * creation/manipulation
+ */
+
+void        sp_typeset_set_text(SPObject* object,char* in_text,int text_type)
+{
+	SPTypeset *typeset = SP_TYPESET (object);
+  if ( typeset == NULL ) return;
+  if ( SP_IS_TYPESET(SP_OBJECT_PARENT(object)) ) {
+    sp_typeset_set_text(SP_OBJECT_PARENT(object),in_text,text_type);
+    return;
+  }
+  
+  SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+  if (!SP_IS_DESKTOP (desktop)) return;
+
+  if ( in_text == NULL || in_text[0] == 0 ) {
+    sp_repr_set_attr(SP_OBJECT_REPR(object), "inkscape:srcNoMarkup", NULL);
+    sp_repr_set_attr(SP_OBJECT_REPR(object), "inkscape:srcPango", NULL);
+  } else {
+    if ( text_type == 0 || text_type == 1 ) {
+      GSList *l=NULL;
+      for (	SPObject * child = sp_object_first_child(object) ; child != NULL ; child = SP_OBJECT_NEXT(child) ) {
+        if ( SP_IS_TYPESET(child) ) {
+          l=g_slist_prepend(l,child);
+        } else {
+        }
+      }
+      while ( l ) {
+        SPObject *child=(SPObject*)l->data;
+        //      sp_object_unref(child, SP_OBJECT(typeset));
+        child->deleteObject();
+        l=g_slist_remove(l,child);
+      }
+    }
+    if ( text_type == 0 ) {
+      int   p_st=0,p_en=0,t_len=strlen(in_text);
+      while ( p_st < t_len ) {
+        p_en=p_st;
+        while ( p_en < t_len && in_text[p_en] != '\n' && in_text[p_en] != '\r' ) p_en++;
+        while ( p_en < t_len && ( in_text[p_en] == '\n' || in_text[p_en] == '\r' ) ) p_en++;
+        char  sav_c=in_text[p_en];
+        in_text[p_en]=0;
+        
+        SPRepr *repr = sp_repr_new ("g");
+        sp_repr_set_attr (repr, "sodipodi:type", "typeset");
+        sp_repr_set_attr (repr, "inkscape:srcNoMarkup", in_text+p_st);
+        
+        sp_repr_append_child (SP_OBJECT_REPR(object), repr);        
+        sp_repr_unref (repr);
+        
+        in_text[p_en]=sav_c;
+      }
+      sp_document_done (SP_DT_DOCUMENT (desktop));
+    } else if ( text_type == 1 ) {
+      int   p_st=0,p_en=0,t_len=strlen(in_text);
+      while ( p_st < t_len ) {
+        p_en=p_st;
+        while ( p_en < t_len && in_text[p_en] != '\n' && in_text[p_en] != '\r' ) p_en++;
+        while ( p_en < t_len && ( in_text[p_en] == '\n' || in_text[p_en] == '\r' ) ) p_en++;
+        char  sav_c=in_text[p_en];
+        in_text[p_en]=0;
+        
+        SPRepr *repr = sp_repr_new ("g");
+        sp_repr_set_attr (repr, "sodipodi:type", "typeset");
+        sp_repr_set_attr (repr, "inkscape:srcPango", in_text+p_st);
+        
+        sp_repr_append_child (SP_OBJECT_REPR(object), repr);        
+        sp_repr_unref (repr);
+        
+        in_text[p_en]=sav_c;
+      }
+      sp_document_done (SP_DT_DOCUMENT (desktop));
+    } else {
+    }
+  }
+}
+void        sp_typeset_chain_shape(SPObject* object,char* shapeID)
+{
+	SPTypeset *typeset = SP_TYPESET (object);
+  if ( typeset == NULL ) return;
+  if ( SP_IS_TYPESET(SP_OBJECT_PARENT(typeset)) ) {
+    sp_typeset_chain_shape(SP_OBJECT_PARENT(typeset),shapeID);
+    return;
+  }
+  if ( shapeID == NULL || shapeID[0] == 0 ) return;
+  
+  SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+  if (!SP_IS_DESKTOP (desktop)) return;
+
+  sp_repr_set_attr(SP_OBJECT_REPR(object), "inkscape:dstPath", NULL);
+  sp_repr_set_attr(SP_OBJECT_REPR(object), "inkscape:dstBox", NULL);
+  sp_repr_set_attr(SP_OBJECT_REPR(object), "inkscape:dstColumn", NULL);
+  char* n_dst_shape=strdup(sp_repr_attr(SP_OBJECT_REPR(object),"inkscape:dstShape"));
+  if ( n_dst_shape == NULL ) {
+    n_dst_shape=(char*)malloc((2+strlen(shapeID))*sizeof(char));
+    n_dst_shape[0]='#';
+    memcpy(n_dst_shape+1,shapeID,strlen(shapeID)*sizeof(char));
+    n_dst_shape[1+strlen(shapeID)]=0;
+  } else {
+    int len=strlen(n_dst_shape);
+    n_dst_shape=(char*)realloc(n_dst_shape,(3+len+strlen(shapeID))*sizeof(char));
+    n_dst_shape[len]=' ';
+    n_dst_shape[len+1]='#';
+    memcpy(n_dst_shape+(len+2),shapeID,strlen(shapeID)*sizeof(char));
+    n_dst_shape[2+len+strlen(shapeID)]=0;
+  }
+  sp_repr_set_attr(SP_OBJECT_REPR(object), "inkscape:dstShape", n_dst_shape);
+  free(n_dst_shape);
+}
+
 

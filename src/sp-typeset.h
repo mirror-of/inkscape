@@ -216,5 +216,7 @@ struct SPTypesetClass {
 
 GType sp_typeset_get_type (void);
 
+void        sp_typeset_set_text(SPObject* object,char* in_text,int text_type);
+void        sp_typeset_chain_shape(SPObject* object,char* shapeID);
 
 #endif

@@ -329,7 +329,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
   typeset->theSrc=NULL;
   if ( combined_type == has_std_txt ) {
     SPCSSAttr *css;
-    css = sp_repr_css_attr (SP_OBJECT_REPR (SP_OBJECT(typeset)), "style");
+    css = sp_repr_css_attr (SP_OBJECT_REPR (SP_OBJECT(typeset)), "inkscape:layoutOptions");
     const gchar *val_size = sp_repr_css_property (css, "font-size", NULL);
     double  fsize=12.0;
     if ( val_size ) fsize = sp_repr_css_double_property (css, "font-size", 12.0);
@@ -342,7 +342,7 @@ void   sp_typeset_rekplayout(SPTypeset *typeset)
     if ( css ) sp_repr_css_attr_unref(css);
   } else if ( combined_type == has_pango_txt ) {
     SPCSSAttr *css;
-    css = sp_repr_css_attr (SP_OBJECT_REPR (SP_OBJECT(typeset)), "style");
+    css = sp_repr_css_attr (SP_OBJECT_REPR (SP_OBJECT(typeset)), "inkscape:layoutOptions");
     const gchar *val_size = sp_repr_css_property (css, "font-size", NULL);
     double  fsize=12.0;
     if ( val_size ) fsize = sp_repr_css_double_property (css, "font-size", 12.0);
