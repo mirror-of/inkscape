@@ -9,9 +9,15 @@
 
 # Should work in either automake1.7 or 1.8, but 1.6 doesn't
 # handle foo/libfoo_a_CPPFLAGS properly (if at all).
+# Update: We now avoid setting foo/libfoo_a_CPPFLAGS,
+# so perhaps 1.6 will work.
 AUTOMAKE_OPTIONS = 1.7 subdir-objects
 
 INCLUDES =	\
+	$(FREETYPE_CFLAGS)	\
+	$(GNOME_PRINT_CFLAGS)	\
+	$(XFT_CFLAGS)	\
+	-DPOTRACE=\"potrace\"	\
 	$(INKSCAPE_CFLAGS)
 
 include Makefile_insert

@@ -5,10 +5,6 @@ extension/all: extension/libextension.a extension/implementation/all extension/i
 extension/clean: extension/implementation/clean extension/internal/clean
 	rm -f extension/libextension.a $(extension_libextension_a_OBJECTS)
 
-extension_libextension_a_CPPFLAGS =	\
-	-I$(srcdir)/extension	\
-	$(GNOME_PRINT_CFLAGS)
-
 extension_libextension_a_SOURCES =	\
 	extension/extension.cpp	\
 	extension/extension.h	\

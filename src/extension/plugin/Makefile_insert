@@ -8,10 +8,6 @@ plugin_LTLIBRARIES = \
 extension/plugin/clean:
 	rm -f $(plugin_LTLIBRARIES)
 
-extension_plugin_libgimpgrad_la_CPPFLAGS = \
-	-Iextension	\
-	-I$(top_srcdir)/src/extension
-
 extension_plugin_libgimpgrad_la_SOURCES = \
 	extension/plugin/gimpgrad.cpp
 

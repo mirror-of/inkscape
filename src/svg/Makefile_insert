@@ -13,10 +13,6 @@ svg/all: svg/libspsvg.a
 svg/clean:
 	rm -f svg/libspsvg.a $(svg_libspsvg_a_OBJECTS)
 
-svg_libspsvg_a_CPPFLAGS =	\
-	-I$(srcdir)/svg	\
-	-I$(includedir)
-
 svg_libspsvg_a_SOURCES =	\
 	svg/ftos.cpp	\
 	svg/ftos.h	\

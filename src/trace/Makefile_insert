@@ -5,11 +5,6 @@ trace/all: trace/libtrace.a
 trace/clean:
 	rm -f trace/libtrace.a $(trace_libtrace_a_OBJECTS)
 
-trace_libtrace_a_CPPFLAGS =	\
-	-I$(srcdir)/trace	 \
-	-I$(srcdir)/trace/potrace \
-	-DPOTRACE=\"potrace\"
-
 trace_libtrace_a_SOURCES =	\
 	trace/trace.h \
 	trace/trace.cpp \

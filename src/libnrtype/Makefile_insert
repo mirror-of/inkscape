@@ -5,11 +5,6 @@ libnrtype/all: libnrtype/libnrtype.a
 libnrtype/clean:
 	rm -f libnrtype/libnrtype.a $(libnrtype_libnrtype_a_OBJECTS)
 
-libnrtype_libnrtype_a_CPPFLAGS =	\
-	$(FREETYPE_CFLAGS)	\
-	$(GNOME_PRINT_CFLAGS)	\
-	$(XFT_CFLAGS)
-
 libnrtype_libnrtype_a_SOURCES =	\
 	libnrtype/font-style-to-pos.cpp	\
 	libnrtype/font-style-to-pos.h	\
