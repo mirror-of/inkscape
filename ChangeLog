@@ -17,6 +17,7 @@
 	* SF Patch #843170: freetype include corrections
 	* SF Patch #843326: fixups for g++ compilation from joncruz
 	* Adding some more missing "extern C" sections for g++ compiles
+	* Small type corrections to quite g++ during -Wall
 
 2003-11-16  MenTaLguY <mental@rydia.net>
 

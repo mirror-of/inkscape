@@ -40,7 +40,7 @@ struct _SPTextContext {
 
 	gchar uni[5];
 	gchar unimode;
-	gchar unipos;
+	guint unipos;
 
 	SPCanvasItem *cursor;
 	SPCanvasItem *indicator;
