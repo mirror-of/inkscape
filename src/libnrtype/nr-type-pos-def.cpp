@@ -2,6 +2,9 @@
 #include <glib.h>
 #include <string.h>
 
+/**
+Given a font name or style name, returns a constant describing its apparent weight.
+*/
 int
 parse_name_for_weight (char const *cc)
 {
@@ -48,6 +51,9 @@ parse_name_for_weight (char const *cc)
 	return weight;
 }
 
+/**
+Given a font name or style name, returns a constant describing its apparent stretch.
+*/
 int
 parse_name_for_stretch (char const *cc)
 {
@@ -77,6 +83,9 @@ parse_name_for_stretch (char const *cc)
 	return stretch;
 }
 
+/**
+Given a weight constant, returns the CSS value for font-weight.
+*/
 const char *
 weight_to_css (int weight)
 {
@@ -114,6 +123,9 @@ weight_to_css (int weight)
 	return NULL;
 }
 
+/**
+Given a stretch constant, returns the CSS value for font-stretch.
+*/
 const char *
 stretch_to_css (int stretch)
 {
