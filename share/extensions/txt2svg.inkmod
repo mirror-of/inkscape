@@ -4,7 +4,7 @@
     <input>
         <extension>.txt</extension>
         <mimetype>text/html</mimetype>
-        <filetypename>Text File</filetypename>
+        <filetypename>Text File (*.txt)</filetypename>
         <filetypetooltip>ASCII Text</filetypetooltip>
     </input>
     <extension>

@@ -51,7 +51,7 @@ Svg::init(void)
 			"<input>\n"
 				"<extension>.svg</extension>\n"
 				"<mimetype>image/x-svg</mimetype>\n"
-				"<filetypename>Scalable Vector Graphic (SVG)</filetypename>\n"
+				"<filetypename>Scalable Vector Graphic (*.svg)</filetypename>\n"
 				"<filetypetooltip>Inkscape native file format and W3C standard</filetypetooltip>\n"
 				"<output_extension>" SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "</output_extension>\n"
 			"</input>\n"

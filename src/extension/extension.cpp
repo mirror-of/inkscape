@@ -208,6 +208,11 @@ Extension::deactivate (void)
 {
 	_deactivated = TRUE;
 
+	/* Removing the old implementation, and making this use the default. */
+	/* This should save some memory */
+	delete imp;
+	imp = new Implementation::Implementation();
+
 	return;
 }
 

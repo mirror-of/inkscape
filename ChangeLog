@@ -1,3 +1,13 @@
+2004-04-26  Ted Gould  <ted@gould.cx>
+
+	* share/extensions/ai_input.inkmod, share/extensions/dia.inkmod,
+	share/extensions/txt2svg.inkmod, src/extension/extension.cpp,
+	src/extension/internal/svg.cpp:
+
+	Making the names of the input extensions look like the output ones.
+	Also, threw in a slight memory savings in removing the implementation on
+	deactivated extensions.
+
 2004-04-26  MenTaLguY  <mental@rydia.net>
 
 	* src/selection.cpp: migrate to new glib idle API

@@ -4,7 +4,7 @@
     <input>
         <extension>.ai</extension>
         <mimetype>image/x-adobe-illustrator</mimetype>
-        <filetypename>Adobe Illustrator</filetypename>
+        <filetypename>Adobe Illustrator (*.ai)</filetypename>
         <filetypetooltip>Open files saved with Adobe Illustrator</filetypetooltip>
 		<output_extension>modules.output.ai</output_extension>
     </input>
