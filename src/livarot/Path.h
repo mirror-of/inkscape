@@ -67,7 +67,6 @@ public:
   typedef struct path_descr_moveto
   {
     NR::Point  p;
-    int pathLength;		// number of description for this subpath
   }
   path_descr_moveto;
 
@@ -142,7 +141,7 @@ public:
   int         ddata_max,ddata_nb;
   NR::Point   *descr_data;
 
-  // polyline storage: a serie of coordinates (and maybe weights)
+  // polyline storage: a series of coordinates (and maybe weights)
   typedef struct path_lineto
   {
     int isMoveTo;
@@ -167,9 +166,6 @@ public:
   // creation of the path description
   void Reset (void);		// reset to the empty description
   void Copy (Path * who);
-
-  // dumps the path description on the standard output
-  void Affiche (void);
 
   // the commands...
   int ForcePoint (void);
@@ -242,12 +238,10 @@ public:
 private:
   void AlloueDCmd (int addNb);
   void AlloueDData (int addNb);
-  int  SizeForData(int typ);
   void CancelBezier (void);
-  void CloseSubpath (int add);
-  
+  void CloseSubpath();
 
-  // fonctions utilisees par la conversion
+  // Functions used by the conversion.
   void DoArc ( NR::Point const &iS,  NR::Point const &iE, double rx, double ry,
 	      double angle, bool large, bool wise, double tresh);
   void RecCubicTo ( NR::Point const &iS,  NR::Point const &iSd,  NR::Point const &iE,  NR::Point const &iEd, double tresh, int lev,

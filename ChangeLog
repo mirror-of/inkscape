@@ -1,5 +1,26 @@
 2004-01-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/livarot/Path.h, src/livarot/Path.cpp (Path::Affiche): remove
+	unused function.
+	Doing so allows removal of path_descr_moveto::pathLength field and the
+	code for calculating its value.
+
+	* src/livarot/Path.cpp (SizeForData): Change from private method to
+	  static function.
+	  Use new function roundup_div instead of `%' calculation.
+
+	  (Path::CloseSubpath): Remove loop that calculated pathLength.
+	  Consequently remove the no-longer-used argument.  Update callers.
+
+	  (Path::MoveTo, Path::LineTo, Path::CubicTo, Path::ArcTo,
+	  Path::TempBezierTo, Path::EndBezierTo, Path::IntermBezierTo,
+	  Path::BezierTo, Path::AddPoint, Path::PointAt,
+	  Path::PointAndTangentAt):
+	  Change some C-style casts to reinterpret_cast's.
+
+	  (Path::PointAt, Path::PointAndTangentAt): code transformations
+	  in preparation for merging some branches.
+
 	* src/libnr/nr-types-test.cpp (main): Update for NR::Point .pt
 	privateness change.
 
