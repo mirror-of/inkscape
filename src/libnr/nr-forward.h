@@ -19,6 +19,7 @@ class scale;
 class translate;
 }
 
+struct NRBPath;
 struct NRPixBlock;
 struct NRMatrix;
 struct NRPoint;
