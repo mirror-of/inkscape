@@ -298,7 +298,9 @@ sp_unit_selector_set_unit (SPUnitSelector *us, const SPUnit *unit)
 
     g_return_if_fail (us != NULL);
     g_return_if_fail (SP_IS_UNIT_SELECTOR (us));
-    g_return_if_fail (unit != NULL);
+
+    if (unit == NULL)
+	return; // silently return, by default a newly created selector uses pt
 
     if (unit == us->unit) return;
 
