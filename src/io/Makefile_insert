@@ -8,15 +8,15 @@ io/clean:
 io_libio_a_SOURCES = \
 	io/ftos.cpp \
 	io/ftos.h \
-	io/GzipStream.cpp \
-	io/GzipStream.h \
-	io/InkscapeStream.cpp \
-	io/InkscapeStream.h \
+	io/gzipstream.cpp \
+	io/gzipstream.h \
+	io/inkscapestream.cpp \
+	io/inkscapestream.h \
 	io/streamtest.cpp \
-	io/StringStream.cpp \
-	io/StringStream.h \
-	io/UriStream.cpp \
-	io/UriStream.h \
-	io/XsltStream.cpp \
-	io/XsltStream.h
+	io/stringstream.cpp \
+	io/stringstream.h \
+	io/uristream.cpp \
+	io/uristream.h \
+	io/xsltstream.cpp \
+	io/xsltstream.h
 
