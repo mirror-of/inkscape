@@ -249,6 +249,7 @@ sp_key_name (guint keyval)
 	else if (!strcmp (n, "Page_Down"  ))  return "PgDn";
 	else if (!strcmp (n, "grave"      ))  return "`";
 	else if (!strcmp (n, "numbersign" ))  return "#";
+	else if (!strcmp (n, "bar" ))  return "|";
 	else return n;
 }
 
@@ -488,6 +489,7 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
 
 	sp_ui_menu_append_item (menu, NULL, NULL, NULL, NULL);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_GRID, view);
+	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_GUIDES, view);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_RULERS, view);
 	sp_ui_menu_append_item_from_verb (GTK_MENU (menu), SP_VERB_TOGGLE_SCROLLBARS, view);
 

@@ -681,7 +681,7 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_TOGGLE_RULERS, "ToggleRulers", N_("Rulers"), N_("Show/hide rulers"), NULL},
 	{SP_VERB_TOGGLE_SCROLLBARS, "ToggleScrollbars", N_("Scrollbars"), N_("Show/hide scrollbars"), NULL},
 	{SP_VERB_TOGGLE_GRID, "ToggleGrid", N_("Grid"), N_("Show/hide grid"), NULL},
-	{SP_VERB_TOGGLE_GUIDES, "ToggleGuides", N_("Guides"), N_("Show/hide guides"), "toggle_guides"},
+	{SP_VERB_TOGGLE_GUIDES, "ToggleGuides", N_("Guides"), N_("Show/hide guides"), NULL},
 	{SP_VERB_ZOOM_NEXT, "ZoomNext", N_("Nex_t zoom"), N_("Next zoom"), NULL},
 	{SP_VERB_ZOOM_PREV, "ZoomPrev", N_("Pre_v zoom"), N_("Previous zoom"), NULL},
 	{SP_VERB_ZOOM_1_1, "Zoom1:0", N_("Zoom 1:_1"), N_("Zoom to 1:1"), "zoom_1_to_1"},
