@@ -306,7 +306,6 @@ static gint
 sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 {
 	SPTextContext *tc;
-	SPDesktop *dt;
 	SPStyle *style;
 
 	tc = SP_TEXT_CONTEXT (ec);
@@ -351,18 +350,18 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					case GDK_space:
 						/* No-break space */
 						tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, "\302\240");
-						sp_view_set_statusf(SP_VIEW (ec->desktop), "No-break space");
+						sp_view_set_statusf_flash (SP_VIEW(ec->desktop), "No-break space");
 						sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 						return TRUE;
 					case GDK_U:
 					case GDK_u:
 						if (tc->unimode) {
 							tc->unimode = FALSE;
-							sp_view_clear_status(SP_VIEW(ec->desktop));
+							sp_view_clear_status (SP_VIEW(ec->desktop));
 						} else {
 							tc->unimode = TRUE;
 							tc->unipos = 0;
-							sp_view_set_statusf(SP_VIEW (ec->desktop), "Unicode: ");
+							sp_view_set_statusf (SP_VIEW(ec->desktop), "Unicode: ");
 						}
 						if (tc->imc) {
 							gtk_im_context_reset (tc->imc);
@@ -375,21 +374,25 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 					if (tc->unimode) {
 						if (isxdigit ((guchar) event->key.keyval)) {
 							tc->uni[tc->unipos] = event->key.keyval;
-							sp_view_set_statusf(SP_VIEW (ec->desktop), "Unicode: %c%c%c%c", 
+							sp_view_set_statusf (SP_VIEW(ec->desktop), 
+                                                        "Unicode: %c%c%c%c", 
                                                         tc->uni[0], 
                                                         tc->unipos > 0 ? tc->uni[1] : ' ', 
                                                         tc->unipos > 1 ? tc->uni[2] : ' ', 
-                                                        tc->unipos > 2 ? tc->uni[3] : ' ' );
+                                                        tc->unipos > 2 ? tc->uni[3] : ' ');
 							if (tc->unipos == 3) {
 								gchar u[7];
 								guint uv, len;
 								sscanf (tc->uni, "%x", &uv);
 								len = g_unichar_to_utf8 (uv, u);
 								u[len] = '\0';
-								tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, u);
 								tc->unipos = 0;
-								sp_document_done (SP_DT_DOCUMENT (ec->desktop));
-								sp_view_set_statusf(SP_VIEW (ec->desktop), "Unicode: ");
+								if (!g_unichar_isprint ((gunichar) uv)) {
+									sp_view_set_statusf_error (SP_VIEW(ec->desktop), "Non-printable character"); // this may be due to bad input, so it goes to statusbar
+								} else {
+									tc->ipos = sp_text_insert (SP_TEXT (tc->text), tc->ipos, u);
+									sp_document_done (SP_DT_DOCUMENT (ec->desktop));
+								}
 								return TRUE;
 							} else {
 								tc->unipos += 1;
@@ -398,7 +401,7 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 						} else { // non-hex-digit, canceling unimode
 							tc->unimode = FALSE;
 							gtk_im_context_reset (tc->imc);
-							sp_view_clear_status(SP_VIEW(ec->desktop));
+							sp_view_clear_status (SP_VIEW(ec->desktop));
 							return TRUE;
 						}
 					}
