@@ -1146,25 +1146,20 @@ void
 Path::TangentOnSegAt (double at, NR::Point const &iS, path_descr_lineto & fin,
                       NR::Point & pos, NR::Point & tgt, double &len)
 {
-  NR::Point iE;
-  iE = fin.p;
-  NR::Point seg;
-  seg = iE-iS;
-  double l = L2(seg);
-  if (l <= 0.000001)
-  {
-    pos = iS;
-    tgt.pt[0] = 0;
-    tgt.pt[1] = 0;
-    len = 0;
-  }
-  else
-  {
-    tgt = seg / l;
-    pos = (1 - at) * iS + at * iE;
-    len = l;
-  }
+	NR::Point iE = fin.p;
+	NR::Point seg = iE - iS;
+	double l = L2(seg);
+	if (l <= 0.000001) {
+		pos = iS;
+		tgt = NR::Point(0, 0);
+		len = 0;
+	} else {
+		tgt = seg / l;
+		pos = (1 - at)*iS + at*iE;
+		len = l;
+	}
 }
+
 void
 Path::TangentOnArcAt (double at, const NR::Point &iS, path_descr_arcto & fin,
                       NR::Point & pos, NR::Point & tgt, double &len, double &rad)
@@ -1321,94 +1316,53 @@ Path::TangentOnCubAt (double at, NR::Point const &iS, path_descr_cubicto & fin,
                       bool before, NR::Point & pos, NR::Point & tgt, double &len,
                       double &rad)
 {
-  double ex, ey;
-  ex = fin.p.pt[0];
-  ey = fin.p.pt[1];
-  double sdx, sdy, edx, edy;
-  edx = fin.enD.pt[0];
-  edy = fin.enD.pt[1];
-  sdx = fin.stD.pt[0];
-  sdy = fin.stD.pt[1];
-  
-  pos = iS;
-  tgt.pt[0] = 0;
-  tgt.pt[1] = 0;
-  len = rad = 0;
-  
-  double ax, bx, cx, dx;
-  double ay, by, cy, dy;
-  ax = sdx + edx - 2 * ex + 2 * iS.pt[0];
-  bx = 0.5 * (edx - sdx);
-  cx = 0.25 * (6 * ex - 6 * iS.pt[0] - sdx - edx);
-  dx = 0.125 * (4 * iS.pt[0] + 4 * ex - edx + sdx);
-  ay = sdy + edy - 2 * ey + 2 * iS.pt[1];
-  by = 0.5 * (edy - sdy);
-  cy = 0.25 * (6 * ey - 6 * iS.pt[1] - sdy - edy);
-  dy = 0.125 * (4 * iS.pt[1] + 4 * ey - edy + sdy);
-  double atb = at - 0.5;
-  pos.pt[0] = ax * atb * atb * atb + bx * atb * atb + cx * atb + dx;
-  pos.pt[1] = ay * atb * atb * atb + by * atb * atb + cy * atb + dy;
-  NR::Point der, dder, ddder;
-  der.pt[0] = 3 * ax * atb * atb + 2 * bx * atb + cx;
-  der.pt[1] = 3 * ay * atb * atb + 2 * by * atb + cy;
-  dder.pt[0] = 6 * ax * atb + 2 * bx;
-  dder.pt[1] = 6 * ay * atb + 2 * by;
-  ddder.pt[0] = 6 * ax;
-  ddder.pt[1] = 6 * ay;
-  /*	ax=sdx+edx+2*sx-2*ex;
-	bx=3*ex-3*sx-2*sdx-edx;
-	cx=sdx;
-	dx=sx;
-	ay=sdy+edy+2*sy-2*ey;
-	by=3*ey-3*sy-2*sdy-edy;
-	cy=sdy;
-	dy=sy;
+	const NR::Point E = fin.p;
+	const NR::Point Sd = fin.stD;
+	const NR::Point Ed = fin.enD;
 	
-	pos.x=ax*at*at*at+bx*at*at+cx*at+dx;
-	pos.y=ay*at*at*at+by*at*at+cy*at+dy;
-	NR::Point  der,dder,ddder;
-	der.x=3*ax*at*at+2*bx*at+cx;
-	der.y=3*ay*at*at+2*by*at+cy;
-	dder.x=6*ax*at+2*bx;
-	dder.y=6*ay*at+2*by;
-	ddder.x=6*ax;
-	ddder.y=6*ay;*/
-  double l = NR::L2 (der);
-  if (l <= 0.0001)
-  {
-    len = 0;
-    l = L2(dder);
-    if (l <= 0.0001)
-    {
-      l = L2(ddder);
-      if (l <= 0.0001)
-	    {
-	      // pas de segment....
-	      return;
-	    }
-      rad = 100000000;
-      tgt = ddder / l;
-      if (before)
-	    {
-	      tgt = -tgt;
-	    }
-      return;
-    }
-    rad =
-      -l * (dot(dder,dder)) / (cross(ddder,dder));
-    tgt = dder / l;
-    if (before)
-    {
-      tgt = -tgt;
-    }
-    return;
-  }
-  len = l;
-  
-  rad =
-    -l * (dot(der,der)) / (cross(dder,der));
-  
-  tgt = der / l;
+	pos = iS;
+	tgt = NR::Point(0,0);
+	len = rad = 0;
+	
+	const NR::Point A = Sd + Ed - 2*E + 2*iS;
+	const NR::Point B = 0.5*(Ed - Sd);
+	const NR::Point C = 0.25*(6*E - 6*iS - Sd - Ed);
+	const NR::Point D = 0.125*(4*iS + 4*E - Ed + Sd);
+	const double atb = at - 0.5;
+	pos = (atb * atb * atb)*A + (atb * atb)*B + atb*C + D;
+	const NR::Point der = (3 * atb * atb)*A  + (2 * atb)*B + C;
+	const NR::Point dder = (6 * atb)*A + 2*B;
+	const NR::Point ddder = 6 * A;
+	
+	double l = NR::L2 (der);
+	if (l <= 0.0001) {
+		len = 0;
+		l = L2(dder);
+		if (l <= 0.0001) {
+			l = L2(ddder);
+			if (l <= 0.0001) {
+				// pas de segment....
+				return;
+			}
+			rad = 100000000;
+			tgt = ddder / l;
+			if (before) {
+				tgt = -tgt;
+			}
+			return;
+		}
+		rad = -l * (dot(dder,dder)) / (cross(ddder,dder));
+		tgt = dder / l;
+		if (before) {
+			tgt = -tgt;
+		}
+		return;
+	}
+	len = l;
+	
+	rad = -l * (dot(der,der)) / (cross(dder,der));
+	
+	tgt = der / l;
 }
 
 void
@@ -1417,163 +1371,124 @@ Path::TangentOnBezAt (double at, NR::Point const &iS,
                       path_descr_bezierto & fin, bool before, NR::Point & pos,
                       NR::Point & tgt, double &len, double &rad)
 {
-  double ex, ey;
-  ex = fin.p.pt[0];
-  ey = fin.p.pt[1];
-  double mx, my;
-  mx = mid.p.pt[0];
-  my = mid.p.pt[1];
-  
-  pos = iS;
-  tgt.pt[0] = tgt.pt[1] = 0;
-  len = rad = 0;
-  double ax, bx, cx;
-  double ay, by, cy;
-  ax = ex + iS.pt[0] - 2 * mx;
-  bx = 2 * mx - 2 * iS.pt[0];
-  cx = iS.pt[0];
-  ay = ey + iS.pt[1] - 2 * my;
-  by = 2 * my - 2 * iS.pt[1];
-  cy = iS.pt[1];
-  
-  pos.pt[0] = ax * at * at + bx * at + cx;
-  pos.pt[1] = ay * at * at + by * at + cy;
-  NR::Point der, dder;
-  der.pt[0] = 2 * ax * at + bx;
-  der.pt[1] = 2 * ay * at + by;
-  dder.pt[0] = 2 * ax;
-  dder.pt[1] = 2 * ay;
-  double l = NR::L2(der);
-  if (l <= 0.0001)
-  {
-    len = 0;
-    l = NR::L2(dder);
-    if (l <= 0.0001)
-    {
-      // pas de segment....
-      return;
-    }
-    rad = 100000000;
-    tgt = dder / l;
-    if (before)
-    {
-      tgt = -tgt;
-    }
-    return;
-  }
-  len = l;
-  rad =
-    -l * (dot(der,der)) / (cross(dder,der));
-  
-  tgt = der / l;
+	pos = iS;
+	tgt = NR::Point(0,0);
+	len = rad = 0;
+	
+	const NR::Point A = fin.p + iS - 2*mid.p;
+	const NR::Point B = 2*mid.p - 2 * iS;
+	const NR::Point C = iS;
+	
+	pos = at * at * A + at * B + C;
+	const NR::Point der = 2 * at * A + B;
+	const NR::Point dder = 2 * A;
+	double l = NR::L2(der);
+	
+	if (l <= 0.0001) {
+		l = NR::L2(dder);
+		if (l <= 0.0001) {
+			// pas de segment....
+			// Not a segment.
+			return;
+		}
+		rad = 100000000; // Why this number?
+		tgt = dder / l;
+		if (before) {
+			tgt = -tgt;
+		}
+		return;
+	}
+	len = l;
+	rad = -l * (dot(der,der)) / (cross(dder,der));
+	
+	tgt = der / l;
 }
 
 void
 Path::OutlineJoin (Path * dest, NR::Point pos, NR::Point stNor, NR::Point enNor, double width,
                    JoinType join, double miter)
 {
-  double angSi = cross (enNor,stNor);
-  double angCo = dot (stNor, enNor);
-  // 1/1000 est tres grossier, mais sinon ca merde tout azimut
-  if ((width >= 0 && angSi > -0.001) || (width < 0 && angSi < 0.001))
-  {
-    if (angCo > 0.999)
-    {
-      // tout droit
-    }
-    else if (angCo < -0.999)
-    {
-      // demit-tour
-      NR::Point tmp=pos+width*enNor;
-      dest->LineTo (tmp);
-    }
-    else
-    {
-      dest->LineTo (pos);
-      NR::Point tmp=pos+width*enNor;
-      dest->LineTo (tmp);
-    }
-  }
-  else
-  {
-    if (join == join_round)
-    {
-      // utiliser des bouts de cubique: approximation de l'arc (au point ou on en est...), et supporte mieux 
-      // l'arrondi des coordonnees des extremites
-      /*			double   angle=acos(angCo);
-			if ( angCo >= 0 ) {
-				NR::Point   stTgt,enTgt;
-				RotCCWTo(stNor,stTgt);
-				RotCCWTo(enNor,enTgt);
-				dest->CubicTo(pos.x+width*enNor.x,pos.y+width*enNor.y,angle*width*stTgt.x,angle*width*stTgt.y,angle*width*enTgt.x,angle*width*enTgt.y);
+	const double angSi = cross (enNor,stNor);
+	const double angCo = dot (stNor, enNor);
+	// 1/1000 is very big/ugly, but otherwise it stuffs things up a little...
+	// 1/1000 est tres grossier, mais sinon ca merde tout azimut
+	if ((width >= 0 && angSi > -0.001) 
+	    || (width < 0 && angSi < 0.001)) {
+		if (angCo > 0.999) {
+			// straight ahead
+			// tout droit
+		} else if (angCo < -0.999) {
+			// half turn
+			// demit-tour
+			dest->LineTo (pos + width*enNor);
+		} else {
+			dest->LineTo (pos);
+			dest->LineTo (pos + width*enNor);
+		}
+	} else {
+		if (join == join_round) {
+			// Use the ends of the cubic: approximate the arc at the
+			// point where .., and support better the rounding of
+			// coordinates of the end points.
+
+			// utiliser des bouts de cubique: approximation de l'arc (au point ou on en est...), et supporte mieux 
+			// l'arrondi des coordonnees des extremites
+			/* double   angle=acos(angCo);
+			   if ( angCo >= 0 ) {
+			   NR::Point   stTgt,enTgt;
+			   RotCCWTo(stNor,stTgt);
+			   RotCCWTo(enNor,enTgt);
+			   dest->CubicTo(pos.x+width*enNor.x,pos.y+width*enNor.y,
+			   angle*width*stTgt.x,angle*width*stTgt.y,
+			   angle*width*enTgt.x,angle*width*enTgt.y);
+			   } else {
+			   NR::Point   biNor;
+			   NR::Point   stTgt,enTgt,biTgt;
+			   biNor.x=stNor.x+enNor.x;
+			   biNor.y=stNor.y+enNor.y;
+			   double  biL=sqrt(biNor.x*biNor.x+biNor.y*biNor.y);
+			   biNor.x/=biL;
+			   biNor.y/=biL;
+			   RotCCWTo(stNor,stTgt);
+			   RotCCWTo(enNor,enTgt);
+			   RotCCWTo(biNor,biTgt);
+			   dest->CubicTo(pos.x+width*biNor.x,pos.y+width*biNor.y,
+			   angle*width*stTgt.x,angle*width*stTgt.y,
+			   angle*width*biTgt.x,angle*width*biTgt.y);
+			   dest->CubicTo(pos.x+width*enNor.x,pos.y+width*enNor.y,
+			   angle*width*biTgt.x,angle*width*biTgt.y,
+			   angle*width*enTgt.x,angle*width*enTgt.y);
+			   }*/
+			if (width > 0) {
+				dest->ArcTo (pos + width*enNor,
+					     1.0001 * width, 1.0001 * width, 0.0, false, true);
 			} else {
-				NR::Point   biNor;
-				NR::Point   stTgt,enTgt,biTgt;
-				biNor.x=stNor.x+enNor.x;
-				biNor.y=stNor.y+enNor.y;
-				double  biL=sqrt(biNor.x*biNor.x+biNor.y*biNor.y);
-				biNor.x/=biL;
-				biNor.y/=biL;
-				RotCCWTo(stNor,stTgt);
-				RotCCWTo(enNor,enTgt);
-				RotCCWTo(biNor,biTgt);
-				dest->CubicTo(pos.x+width*biNor.x,pos.y+width*biNor.y,angle*width*stTgt.x,angle*width*stTgt.y,angle*width*biTgt.x,angle*width*biTgt.y);
-				dest->CubicTo(pos.x+width*enNor.x,pos.y+width*enNor.y,angle*width*biTgt.x,angle*width*biTgt.y,angle*width*enTgt.x,angle*width*enTgt.y);
-			}*/
-      if (width > 0)
-	    {
-        NR::Point tmp=pos+width*enNor;
-	      dest->ArcTo (tmp,
-                     1.0001 * width, 1.0001 * width, 0.0, false, true);
-	    }
-      else
-	    {
-        NR::Point tmp=pos+width*enNor;
-	      dest->ArcTo (tmp,
-                     -1.0001 * width, -1.0001 * width, 0.0, false,
-                     false);
-	    }
-    }
-    else if (join == join_pointy)
-    {
-      NR::Point biss;
-      biss = stNor + enNor;
-      double lb = NR::L2(biss);
-      biss /= lb;
-      double angCo = dot (biss, enNor);
-      double angSi = cross (biss, stNor);
-      double l = width / angCo;
-      if (miter < 0.5 * lb)
-        miter = 0.5 * lb;
-      if (l > miter)
-	    {
-	      double r = (l - miter) * angCo / angSi;
-        NR::Point tmp;
-        tmp.pt[0]=miter*biss.pt[0]-r*biss.pt[1];
-        tmp.pt[1]=miter*biss.pt[1]+r*biss.pt[0];
-        tmp+=pos;
-	      dest->LineTo (tmp);
-        tmp.pt[0]=miter*biss.pt[0]+r*biss.pt[1];
-        tmp.pt[1]=miter*biss.pt[1]-r*biss.pt[0];
-        tmp+=pos;
-	      dest->LineTo (tmp);
-        tmp=pos+width*enNor;
-	      dest->LineTo (tmp);
-	    }
-      else
-	    {
-        NR::Point tmp=pos+l*biss;
-	      dest->LineTo (tmp);
-        tmp=pos+width*enNor;
-	      dest->LineTo (tmp);
-	    }
-    }
-    else
-    {
-      NR::Point tmp=pos+width*enNor;
-      dest->LineTo (tmp);
-    }
-  }
+				dest->ArcTo (pos + width*enNor,
+					     -1.0001 * width, -1.0001 * width, 0.0, false,
+					     false);
+			}
+		} else if (join == join_pointy) {
+			NR::Point biss = stNor + enNor;
+			const double lb = NR::L2(biss);
+			biss /= lb;
+			const double angCo = dot (biss, enNor);
+			const double l = width / angCo;
+			miter = std::max(miter, 0.5 * lb);
+			if (l > miter) {
+				const double angSi = cross (biss, stNor);
+				const double r = (l - miter) * angCo / angSi;
+				NR::Point corner = miter*biss + pos;
+				dest->LineTo (corner + r*biss.ccw());
+				dest->LineTo (corner - r*biss.ccw());
+				dest->LineTo (pos + width*enNor);
+			} else {
+				dest->LineTo (pos+l*biss);
+				dest->LineTo (pos+width*enNor);
+			}
+		} else {
+			dest->LineTo (pos + width*enNor);
+		}
+	}
 }
 
 // les callbacks
@@ -1589,20 +1504,15 @@ Path::RecStdCubicTo (outline_callback_data * data, double tol, double width,
   // un cubic
   {
     path_descr_cubicto temp;
-    temp.p.pt[0] = data->x2;
-    temp.p.pt[1] = data->y2;
-    temp.stD.pt[0] = data->d.c.dx1;
-    temp.stD.pt[1] = data->d.c.dy1;
-    temp.enD.pt[0] = data->d.c.dx2;
-    temp.enD.pt[1] = data->d.c.dy2;
-    NR::Point tmp;
-    tmp.pt[0]=data->x1;
-    tmp.pt[1]=data->y1;
-    TangentOnCubAt (0.0, tmp, temp, false, stPos, stTgt, stTle,
+    temp.p = NR::Point(data->x2, data->y2);
+    temp.stD = NR::Point(data->d.c.dx1, data->d.c.dy1);
+    temp.enD = NR::Point(data->d.c.dx2, data->d.c.dy2);
+    NR::Point initial_point(data->x1, data->y1);
+    TangentOnCubAt (0.0, initial_point, temp, false, stPos, stTgt, stTle,
                     stRad);
-    TangentOnCubAt (0.5, tmp, temp, false, miPos, miTgt, miTle,
+    TangentOnCubAt (0.5, initial_point, temp, false, miPos, miTgt, miTle,
                     miRad);
-    TangentOnCubAt (1.0, tmp, temp, true, enPos, enTgt, enTle,
+    TangentOnCubAt (1.0, initial_point, temp, true, enPos, enTgt, enTle,
                     enRad);
     stNor=stTgt.cw();
     miNor=miTgt.cw();
@@ -1621,24 +1531,20 @@ Path::RecStdCubicTo (outline_callback_data * data, double tol, double width,
   enGue *= enTle;
   
   
-  if (lev <= 0)
-  {
-    NR::Point  tmp=enPos+width*enNor;
-    NR::Point tms=stGue*stTgt;
-    NR::Point tme=enGue*enTgt;
-    int n_d =
-      data->dest->CubicTo (tmp,tms,tme);
-    if (n_d >= 0)
-    {
-      data->dest->descr_data[n_d].associated = data->piece;
-      data->dest->descr_data[n_d].tSt = data->tSt;
-      data->dest->descr_data[n_d].tEn = data->tEn;
-    }
-    return;
+  if (lev <= 0) {
+	  int n_d = data->dest->CubicTo (enPos + width*enNor, 
+					 stGue*stTgt,
+					 enGue*enTgt);
+	  if (n_d >= 0) {
+		  data->dest->descr_data[n_d].associated = data->piece;
+		  data->dest->descr_data[n_d].tSt = data->tSt;
+		  data->dest->descr_data[n_d].tEn = data->tEn;
+	  }
+	  return;
   }
   
-  NR::Point req, chk;
-  req = miPos + width * miNor;
+  NR::Point chk;
+  const NR::Point req = miPos + width * miNor;
   {
     path_descr_cubicto temp;
     double chTle, chRad;
@@ -1650,50 +1556,43 @@ Path::RecStdCubicTo (outline_callback_data * data, double tol, double width,
     TangentOnCubAt (0.5, tmp,
                     temp, false, chk, chTgt, chTle, chRad);
   }
-  NR::Point diff;
-  diff = req - chk;
-  double err = (dot(diff,diff));
-  if (err <= tol * tol)
-  {
-    NR::Point  tmp=enPos+width*enNor;
-    NR::Point tms=stGue*stTgt;
-    NR::Point tme=enGue*enTgt;
-    int n_d =
-      data->dest->CubicTo (tmp,tms,tme);
-    if (n_d >= 0)
-    {
-      data->dest->descr_data[n_d].associated = data->piece;
-      data->dest->descr_data[n_d].tSt = data->tSt;
-      data->dest->descr_data[n_d].tEn = data->tEn;
-    }
-  }
-  else
-  {
-    outline_callback_data desc = *data;
-    
-    desc.tSt = data->tSt;
-    desc.tEn = (data->tSt + data->tEn) / 2;
-    desc.x1 = data->x1;
-    desc.y1 = data->y1;
-    desc.x2 = miPos.pt[0];
-    desc.y2 = miPos.pt[1];
-    desc.d.c.dx1 = 0.5 * stTle * stTgt.pt[0];
-    desc.d.c.dy1 = 0.5 * stTle * stTgt.pt[1];
-    desc.d.c.dx2 = 0.5 * miTle * miTgt.pt[0];
-    desc.d.c.dy2 = 0.5 * miTle * miTgt.pt[1];
-    RecStdCubicTo (&desc, tol, width, lev - 1);
-    
-    desc.tSt = (data->tSt + data->tEn) / 2;
-    desc.tEn = data->tEn;
-    desc.x1 = miPos.pt[0];
-    desc.y1 = miPos.pt[1];
-    desc.x2 = data->x2;
-    desc.y2 = data->y2;
-    desc.d.c.dx1 = 0.5 * miTle * miTgt.pt[0];
-    desc.d.c.dy1 = 0.5 * miTle * miTgt.pt[1];
-    desc.d.c.dx2 = 0.5 * enTle * enTgt.pt[0];
-    desc.d.c.dy2 = 0.5 * enTle * enTgt.pt[1];
-    RecStdCubicTo (&desc, tol, width, lev - 1);
+  const NR::Point diff = req - chk;
+  const double err = dot(diff,diff);
+  if (err <= tol * tol) {
+	  int n_d = data->dest->CubicTo (enPos + width*enNor,
+					 stGue*stTgt,
+					 enGue*enTgt);
+	  if (n_d >= 0) {
+		  data->dest->descr_data[n_d].associated = data->piece;
+		  data->dest->descr_data[n_d].tSt = data->tSt;
+		  data->dest->descr_data[n_d].tEn = data->tEn;
+	  }
+  } else {
+	  outline_callback_data desc = *data;
+	  
+	  desc.tSt = data->tSt;
+	  desc.tEn = (data->tSt + data->tEn) / 2;
+	  desc.x1 = data->x1;
+	  desc.y1 = data->y1;
+	  desc.x2 = miPos.pt[0];
+	  desc.y2 = miPos.pt[1];
+	  desc.d.c.dx1 = 0.5 * stTle * stTgt.pt[0];
+	  desc.d.c.dy1 = 0.5 * stTle * stTgt.pt[1];
+	  desc.d.c.dx2 = 0.5 * miTle * miTgt.pt[0];
+	  desc.d.c.dy2 = 0.5 * miTle * miTgt.pt[1];
+	  RecStdCubicTo (&desc, tol, width, lev - 1);
+	  
+	  desc.tSt = (data->tSt + data->tEn) / 2;
+	  desc.tEn = data->tEn;
+	  desc.x1 = miPos.pt[0];
+	  desc.y1 = miPos.pt[1];
+	  desc.x2 = data->x2;
+	  desc.y2 = data->y2;
+	  desc.d.c.dx1 = 0.5 * miTle * miTgt.pt[0];
+	  desc.d.c.dy1 = 0.5 * miTle * miTgt.pt[1];
+	  desc.d.c.dx2 = 0.5 * enTle * enTgt.pt[0];
+	  desc.d.c.dy2 = 0.5 * enTle * enTgt.pt[1];
+	  RecStdCubicTo (&desc, tol, width, lev - 1);
   }
 }
 
@@ -1710,10 +1609,8 @@ Path::StdBezierTo (Path::outline_callback_data * data, double tol, double width)
   path_descr_bezierto tempb;
   path_descr_intermbezierto tempi;
   tempb.nb = 1;
-  tempb.p.pt[0] = data->x2;
-  tempb.p.pt[1] = data->y2;
-  tempi.p.pt[0] = data->d.b.mx;
-  tempi.p.pt[1] = data->d.b.my;
+  tempb.p = NR::Point(data->x2, data->y2);
+  tempi.p = NR::Point(data->d.b.mx, data->d.b.my);
   NR::Point stPos, enPos, stTgt, enTgt;
   double stRad, enRad, stTle, enTle;
   NR::Point  tmp(data->x1,data->y1);
@@ -1784,22 +1681,19 @@ Path::RecStdArcTo (outline_callback_data * data, double tol, double width,
   
   if (lev <= 0)
   {
-    NR::Point  tmp=enPos+width*enNor;
-    NR::Point tms=stGue*scal*stTgt;
-    NR::Point tme=enGue*scal*enTgt;
-    int n_d =
-      data->dest->CubicTo (tmp,tms,tme);
-    if (n_d >= 0)
-    {
-      data->dest->descr_data[n_d].associated = data->piece;
-      data->dest->descr_data[n_d].tSt = data->d.a.stA;
-      data->dest->descr_data[n_d].tEn = data->d.a.enA;
-    }
-    return;
+	  int n_d = data->dest->CubicTo (enPos + width*enNor,
+					 stGue*scal*stTgt,
+					 enGue*scal*enTgt);
+	  if (n_d >= 0) {
+		  data->dest->descr_data[n_d].associated = data->piece;
+		  data->dest->descr_data[n_d].tSt = data->d.a.stA;
+		  data->dest->descr_data[n_d].tEn = data->d.a.enA;
+	  }
+	  return;
   }
   
-  NR::Point req, chk;
-  req = miPos + width * miNor;
+  NR::Point chk;
+  const NR::Point req = miPos + width*miNor;
   {
     path_descr_cubicto temp;
     double chTle, chRad;
@@ -1807,40 +1701,34 @@ Path::RecStdArcTo (outline_callback_data * data, double tol, double width,
     temp.p = enPos + width * enNor;
     temp.stD = stGue * scal * stTgt;
     temp.enD = enGue * scal * enTgt;
-    NR::Point tmp=stPos+width*stNor;
-    TangentOnCubAt (0.5, tmp,
+    TangentOnCubAt (0.5, stPos+width*stNor,
                     temp, false, chk, chTgt, chTle, chRad);
   }
-  NR::Point diff;
-  diff = req - chk;
-  double err = (dot(diff,diff));
+  const NR::Point diff = req - chk;
+  const double err = (dot(diff,diff));
   if (err <= tol * tol)
   {
-    NR::Point  tmp=enPos+width*enNor;
-    NR::Point tms=stGue*scal*stTgt;
-    NR::Point tme=enGue*scal*enTgt;
-    int n_d =
-      data->dest->CubicTo (tmp,tms,tme);
-    if (n_d >= 0)
-    {
-      data->dest->descr_data[n_d].associated = data->piece;
-      data->dest->descr_data[n_d].tSt = data->d.a.stA;
-      data->dest->descr_data[n_d].tEn = data->d.a.enA;
-    }
-  }
-  else
-  {
-    outline_callback_data desc = *data;
-    
-    desc.d.a.stA = data->d.a.stA;
-    desc.d.a.enA = (data->d.a.stA + data->d.a.enA) / 2;
-    RecStdArcTo (&desc, tol, width, lev - 1);
-    
-    desc.d.a.stA = (data->d.a.stA + data->d.a.enA) / 2;
-    desc.d.a.enA = data->d.a.enA;
-    RecStdArcTo (&desc, tol, width, lev - 1);
+	  int n_d = data->dest->CubicTo (enPos + width*enNor,
+					 stGue*scal*stTgt,
+					 enGue*scal*enTgt);
+	  if (n_d >= 0) {
+		  data->dest->descr_data[n_d].associated = data->piece;
+		  data->dest->descr_data[n_d].tSt = data->d.a.stA;
+		  data->dest->descr_data[n_d].tEn = data->d.a.enA;
+	  }
+  } else {
+	  outline_callback_data desc = *data;
+	  
+	  desc.d.a.stA = data->d.a.stA;
+	  desc.d.a.enA = (data->d.a.stA + data->d.a.enA) / 2;
+	  RecStdArcTo (&desc, tol, width, lev - 1);
+	  
+	  desc.d.a.stA = (data->d.a.stA + data->d.a.enA) / 2;
+	  desc.d.a.enA = data->d.a.enA;
+	  RecStdArcTo (&desc, tol, width, lev - 1);
   }
 }
+
 void
 Path::StdArcTo (Path::outline_callback_data * data, double tol, double width)
 {
