@@ -355,6 +355,15 @@ uri_or_enum_val(char const prop[], char const *const vals[])
     /* todo: uri's */
 }
 
+static void
+suppress_warning_log_handler(gchar const *log_domain, GLogLevelFlags /*log_level*/,
+                             gchar const *message,
+                             gpointer /*user_data*/)
+{
+    /* todo: We could strncpy message to a static buffer for later testing with
+     * UTEST_ASSERT(streq(prev_message, exp_message)). */
+}
+
 static bool
 test_style()
 {
@@ -417,17 +426,54 @@ test_style()
         sp_style_unref(style);
     }
 
-    UTEST_TEST("sp_style_merge_from_style_string(whitespace): ifset") {
+    UTEST_TEST("sp_style_merge_from_style_string(whitespace, ifset") {
         gchar *str0_set = merge_then_write_string("   \t            \t\t", SP_STYLE_FLAG_IFSET);
         UTEST_ASSERT(*str0_set == '\0');
         g_free(str0_set);
     }
 
-    UTEST_TEST("sp_style_merge_from_style_string(whitespace): always") {
+    UTEST_TEST("sp_style_merge_from_style_string(whitespace, always") {
         gchar *str0_all = merge_then_write_string("   \t            \t\t", SP_STYLE_FLAG_ALWAYS);
         UTEST_ASSERT(streq(str0_all, str0_all_exp));
         g_free(str0_all);
     }
+
+    /* Some tests for invalid style strings.  We temporarily suppress all g_warning's.  (The
+       current code uses g_warning instead of proper SVG error handling.) */
+    guint const log_handler_id = g_log_set_handler(NULL, G_LOG_LEVEL_WARNING,
+                                                   suppress_warning_log_handler, NULL);
+    UTEST_TEST("sp_style_merge_from_style_string(\"fill:\", ifset)") {
+        gchar *str0_set = merge_then_write_string("fill:", SP_STYLE_FLAG_IFSET);
+        UTEST_ASSERT(*str0_set == '\0');
+        g_free(str0_set);
+    }
+
+    UTEST_TEST("sp_style_merge_from_style_string(\"font-family:\", always)") {
+        gchar *str0_all = merge_then_write_string("font-family:", SP_STYLE_FLAG_ALWAYS);
+        UTEST_ASSERT(streq(str0_all, str0_all_exp));
+        g_free(str0_all);
+    }
+
+    UTEST_TEST("sp_style_merge_from_style_string(\"fill:  \", ifset)") {
+        gchar *str0_set = merge_then_write_string("fill:  ", SP_STYLE_FLAG_IFSET);
+        UTEST_ASSERT(*str0_set == '\0');
+        g_free(str0_set);
+    }
+
+    UTEST_TEST("sp_style_merge_from_style_string(\"font-family:  \", always)") {
+        gchar *str0_all = merge_then_write_string("font-family:  ", SP_STYLE_FLAG_ALWAYS);
+        UTEST_ASSERT(streq(str0_all, str0_all_exp));
+        g_free(str0_all);
+    }
+
+    UTEST_TEST("sp_style_merge_from_style_string(\":none\", ifset)") {
+        gchar *str0_set = merge_then_write_string(":none", SP_STYLE_FLAG_IFSET);
+        UTEST_ASSERT(*str0_set == '\0');
+        g_free(str0_set);
+    }
+    g_log_remove_handler(NULL, log_handler_id);
+    /* End of invalid style string examples. */
+
 
 #if 0 /* fails because of dashoffset:0 vs dashoffset:0.00000000 */
     UTEST_TEST("sp_style_merge_from_style_string(default): ifset") {
