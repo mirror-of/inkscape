@@ -14,9 +14,9 @@ clean:
 	$(MSGFMT) -o $@ $<
 
 
-dist:
-	-$(foreach a, $(INKLANG), $(shell $(MKDIR) ..$(S)inkscape$(S)locale$(S)$(a)))
-	-$(foreach a, $(INKLANG), $(shell $(MKDIR) ..$(S)inkscape$(S)locale$(S)$(a)$(S)LC_MESSAGES))
+dist: $(LOBJ)
+	$(foreach a, $(INKLANG), $(shell $(MKDIR) ..$(S)inkscape$(S)locale$(S)$(a)))
+	$(foreach a, $(INKLANG), $(shell $(MKDIR) ..$(S)inkscape$(S)locale$(S)$(a)$(S)LC_MESSAGES))
 	-$(foreach a, $(INKLANG), $(shell $(CP) $(a).mo ..$(S)inkscape$(S)locale$(S)$(a)$(S)LC_MESSAGES$(S)inkscape.mo))
 
 
