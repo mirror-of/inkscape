@@ -1,5 +1,9 @@
 2004-01-06 Nathan Hurst <njh@mail.csse.monash.edu.au>
 
+	* src/desktop-snap.{h,cpp} is now built using NR::Point.
+
+2004-01-06 Nathan Hurst <njh@mail.csse.monash.edu.au>
+
 	* src/draw-context.cpp closing a segment now remains snapped.
 	Lots of snapping fixes.
 	

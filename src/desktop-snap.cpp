@@ -12,29 +12,42 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+/* TODO:
+ * Sort out 1e18, 1e15 mess (handle large numbers gracefully
+ * Circular snap, path snap?
+ */
+
 #include <math.h>
 #include "sp-guide.h"
 #include "sp-namedview.h"
 #include "desktop-snap.h"
+#include "geom.h"
 
 /* minimal distance to norm before point is considered for snap */
 #define MIN_DIST_NORM 1.0
 
 #define SNAP_ON(d) (((d)->gridsnap > 0.0) || ((d)->guidesnap > 0.0))
 
+gdouble sp_desktop_dim_snap(SPDesktop const *dt, NR::Point& req, const int dim) {
+	if(dim == NR::X)
+		return sp_desktop_vector_snap (dt, req, NR::Point(1.0, 0.0));
+	else
+		return sp_desktop_vector_snap (dt, req, NR::Point(0.0, 1.0));
+}
+
 /* Snap a point in horizontal and vertical direction */
 
 double
-sp_desktop_free_snap (SPDesktop *desktop, NRPoint *req)
+sp_desktop_free_snap (SPDesktop const *desktop, NR::Point& req)
 {
 	double dh, dv;
-	NRPoint result = *req;
-
-	/* fixme: If allowing arbitrary snap targtes, free snap is not the sum of h and v */
-	dh = sp_desktop_vector_snap (desktop, &result, 1.0, 0.0);
-	result.y = req->y;
-	dv = sp_desktop_vector_snap (desktop, &result, 0.0, 1.0);
-	*req = result;
+	NR::Point result = req;
+	
+	/* fixme: If allowing arbitrary snap targets, free snap is not the sum of h and v */
+	dh = sp_desktop_dim_snap (desktop, result, NR::X);
+	result.pt[NR::Y] = req.pt[NR::Y];
+	dv = sp_desktop_dim_snap (desktop, result, NR::Y);
+	req = result;
 	
 	if ((dh < 1e18) && (dv < 1e18)) return hypot (dh, dv);
 	if (dh < 1e18) return dh;
@@ -42,198 +55,66 @@ sp_desktop_free_snap (SPDesktop *desktop, NRPoint *req)
 	return 1e18;
 }
 
-/* Intersect two lines */
-
-typedef enum sp_intersector_kind{
-	intersects = 0,
-	parallel,
-	coincident,
-	no_intersection
-} sp_intersector_kind;
-
-sp_intersector_kind
-sp_intersector_line_intersection(NRPoint *n0, double d0, NRPoint *n1, double d1, NRPoint* result)
-/* This function finds the intersection of the two lines (infinite)
- * defined by n0.X = d0 and x1.X = d1.  The algorithm is as follows:
- * To compute the intersection point use kramer's rule:
- * 
- * convert lines to form
- * ax + by = c
- * dx + ey = f
- * 
- * (
- *  e.g. a = (x2 - x1), b = (y2 - y1), c = (x2 - x1)*x1 + (y2 - y1)*y1
- * )
- * 
- * In our case we use:
- *   a = n0->x     d = n1->x
- *   b = n0->y     e = n1->y
- *   c = d0        f = d1
- * 
- * so:
- * 
- * adx + bdy = cd
- * adx + aey = af
- * 
- * bdy - aey = cd - af
- * (bd - ae)y = cd - af
- * 
- * y = (cd - af)/(bd - ae)
- * 
- * repeat for x and you get:
- * 
- * x = (fb - ce)/(bd - ae)
- * 
- * if the denominator (bd-ae) is 0 then the lines are parallel, if the
- * numerators are then 0 then the lines coincide. */
-{
-	double denominator;
-	double X, Y;
-
-	g_assert(n0);
-	g_assert(n1);
-	denominator = n0->y*n1->x - n0->x*n1->y;
-	if(denominator == 0) {
-		/*printf("Parallel!  So (%f, %f) should equal k(%f %f)\n", 
-		       n0->x, n0->y,
-		       n1->x, n1->y);*/
-		if(d1*n0->y - d0*n1->y == 0)
-			return coincident;
-		return parallel;
-	}
-	denominator = 1.0/denominator;
-	X = d1*n0->y - d0*n1->y;
-	Y = d0*n1->x - d1*n0->x;
-	g_assert(result != 0);
-	result->x = X*denominator;
-	result->y = Y*denominator;
-	return intersects;
-}
-
-/* ccw exists as a building block */
-static int
-sp_intersector_ccw(NRPoint p0, NRPoint p1, NRPoint p2)
-/* Determine which way a set of three points winds. */
-{
-	float dx1 = (p1.x - p0.x);
-	float dy1 = (p1.y - p0.y);
-	float dx2 = (p2.x - p0.x);
-	float dy2 = (p2.y - p0.y);
-/* compare slopes but avoid division operation */
-	if(dx1*dy2 > dy1*dx2)
-		return +1; // ccw
-	if(dx1*dy2 < dy1*dx2)
-		return -1; // cw
-	if(dx1*dx2 < 0 || dy1*dy2 < 0)
-		return -1; // p2 p0 p1 colinear
-	if(dx1*dx1 + dy1*dy1 < dx2*dx2 + dy2*dy2)
-		return +1;// p0 p1 p2 colinear
-	return 0; // p0 p2 p1 collinear
-}
-
-
-int
-sp_intersector_segment_intersectp(NRPoint p00, NRPoint p01, NRPoint p10, NRPoint p11)
-/* Determine whether two line segments intersect.  This doesn't find
-   the intersection, use the line_intersect funcction above */
-{
-	return ((sp_intersector_ccw(p00,p01, p10)
-		 *sp_intersector_ccw(p00, p01, p11)) <=0 )
-		&&
-		((sp_intersector_ccw(p10,p11, p00)
-		  *sp_intersector_ccw(p10, p11, p01)) <=0 );
-}
-
-sp_intersector_kind
-sp_intersector_segment_intersect(NRPoint p00, NRPoint p01, NRPoint p10, NRPoint p11, NRPoint* result)
-/* Determine whether two line segments intersect.  This doesn't find
-   the intersection, use the line_intersect funcction above */
-{
-	if(sp_intersector_segment_intersectp(p00, p01, p10, p11)) {
-		double d0, d1;
-
-		NRPoint n0, n1;
-		n0.x = p00.y - p01.y;
-		n0.y = -(p00.x - p01.x);
-		d0 = n0.x*p00.x + n0.y*p00.y;
-		n1.x = p10.y - p11.y;
-		n1.y = -(p10.x - p11.x);
-		d1 = n1.x*p10.x + n1.y*p10.y;
-		return sp_intersector_line_intersection(&n0, d0, &n1, d1, result);
-	} else {
-		return no_intersection;
-	}
-}
-
-
-/* Snap a point along a line to another line. */
+/* Snap a point along a line n.X = d to another line X(t) = t*v + . */
 double
-sp_intersector_a_vector_snap (NRPoint * req, NRPoint * v, 
-			NRPoint * n, double d)
+sp_intersector_a_vector_snap (NR::Point& req, const NR::Point v, 
+			const NR::Point n, double d)
 /* This function returns the snap position and the distance from the
    starting point for doing a snap to arbitrary line. */
 {
-	NRPoint starting;
-	NRPoint vperp; /* Perpendicular vector to v */
-	double d0;
-
-	vperp.x = v->y;
-	vperp.y = -v->x;
-	starting.x = req->x;
-	starting.y = req->y;
-	d0 = vperp.x*req->x + vperp.y*req->y;
-	if(sp_intersector_line_intersection(&vperp, d0, n, d, req) != intersects)
+	NR::Point starting = req;
+	NR::Point vperp = v.ccw();
+	double d0 = dot(vperp, req);
+	if(sp_intersector_line_intersection(vperp, d0, n, d, req) != intersects)
 		return 1e18;
-	return hypot(req->x - starting.x, req->y - starting.y);
+	return L2(req - starting);
 }
 
 /* Look for snappoint along a line given by req and the vector (dx,dy) */
 
 double
-sp_desktop_vector_snap (SPDesktop * desktop, NRPoint *req, double dx, double dy)
+sp_desktop_vector_snap (SPDesktop const * desktop, NR::Point& req, const NR::Point d)
 {
-	SPNamedView * nv;
-	NRPoint actual;
-	double len, best = 1e18, upper = 1e18;
-	GSList * l;
-	NRPoint v;
-	NRPoint horizontal;
-	NRPoint vertical;
-
-	horizontal.x = 1; horizontal.y = 0;
-	vertical.x = 0; vertical.y = 1;
+	double best = 1e18, upper = 1e18;
+	const NR::Point horizontal(1, 0);
+	const NR::Point vertical(0, 1);
 
 	g_assert (desktop != NULL);
 	g_assert (SP_IS_DESKTOP (desktop));
-	g_assert (req != NULL);
 
-	len = hypot (dx, dy);
-	if (len < 1e-18) return sp_desktop_free_snap (desktop, req);
-	v.x = dx/len; v.y = dy/len;
+	double len = L2(d);
+	if (len < 1e-18)
+		return sp_desktop_free_snap (desktop, req);
+	NR::Point v = d;
+	v.normalize();
 
-	nv = desktop->namedview;
-	actual = *req;
-
+	SPNamedView * nv = desktop->namedview;
+	NR::Point actual = req;
+	
+	printf("snaptoguids %d, snaptogrid %d\n", desktop->guidesnap, nv->snaptogrid);
+	printf("requested point %f, %f\n", req.pt[0], req.pt[1]);
 	if (nv->snaptoguides) {
 		upper = desktop->guidesnap;
-		for (l = nv->vguides; l != NULL; l = l->next) {
-			NRPoint trial = *req;
-			gdouble dist = sp_intersector_a_vector_snap (&trial, 
-								 &v, 
-								 &horizontal,
-								 SP_GUIDE (l->data)->position);
+		for (GSList * l = nv->vguides; l != NULL; l = l->next) {
+			NR::Point trial = req;
+			SPGuide* g = SP_GUIDE (l->data);
+			gdouble dist = sp_intersector_a_vector_snap (trial, 
+								 v, 
+								 horizontal,
+								 g->position);
 			
 			if (dist < upper) {
 				upper = best = dist;
 				actual = trial;
 			}
 		}
-		for (l = nv->hguides; l != NULL; l = l->next) {
-			NRPoint trial = *req;
-			gdouble dist = sp_intersector_a_vector_snap (&trial, 
-								 &v, 
-								 &vertical,
-								 SP_GUIDE (l->data)->position);
+		for (GSList * l = nv->hguides; l != NULL; l = l->next) {
+			NR::Point trial = req;
+			SPGuide* g = SP_GUIDE (l->data);
+			gdouble dist = sp_intersector_a_vector_snap (trial, 
+								 v, 
+								 vertical,
+								 g->position);
 			
 			if (dist < upper) {
 				upper = best = dist;
@@ -243,35 +124,43 @@ sp_desktop_vector_snap (SPDesktop * desktop, NRPoint *req, double dx, double dy)
 	}
 
 	if (nv->snaptogrid) {
-		double iv, ih, dist, upper;
-		NRPoint trial = *req;
 /*  find nearest grid line (either H or V whatever is closer) along
  *  the vector to the requested point.  If the distance along the
  *  vector is less than the snap distance then snap. */
-		iv = floor(((req->y - nv->gridorigin.pt[NR::Y]) / nv->gridspacingy)+0.5);
-		dist = sp_intersector_a_vector_snap (&trial,
-							 &v,
-							 &vertical,
-							 iv*nv->gridspacingy + nv->gridorigin.pt[NR::Y]);
-		upper = MIN(best, desktop->gridsnap);
-		if (dist < upper) {
-			upper = best = dist;
-			actual = trial;
+		{
+			NR::Point trial = req;
+			double iv = floor(((req.pt[NR::Y] - nv->gridorigin.pt[NR::Y]) / nv->gridspacingy)+0.5);
+			printf("vertical grid (%f, %f) %f\n", trial.pt[0], trial.pt[1], iv);
+			double dist = sp_intersector_a_vector_snap (trial,
+							     v,
+							     vertical,
+							     iv*nv->gridspacingy + nv->gridorigin.pt[NR::Y]);
+			printf("vertical grid (%f, %f) %f\n", trial.pt[0], trial.pt[1], dist);
+			upper = MIN(best, desktop->gridsnap);
+			if (dist < upper) {
+				upper = best = dist;
+				actual = trial;
+			}
 		}
-		ih = floor(((req->x - nv->gridorigin.pt[NR::X]) / 
-			nv->gridspacingx)+0.5);
-		
-		trial = *req;
-		dist = sp_intersector_a_vector_snap (&trial,
-						 &v,
-						 &horizontal,
-						 ih*nv->gridspacingx + nv->gridorigin.pt[NR::X]);
-		if (dist < upper) {
-			upper = best = dist;
-			actual = trial;
+		{
+			double ih = floor(((req.pt[NR::X] - nv->gridorigin.pt[NR::X]) / 
+					   nv->gridspacingx)+0.5);
+			
+			NR::Point trial = req;
+			printf("horizontal grid (%f, %f) %f\n", trial.pt[0], trial.pt[1], ih);
+			double dist = sp_intersector_a_vector_snap (trial,
+							     v,
+							     horizontal,
+							     ih*nv->gridspacingx + nv->gridorigin.pt[NR::X]);
+			printf("horizontal grid (%f, %f) %f\n", trial.pt[0], trial.pt[1], dist);
+			if (dist < upper) {
+				upper = best = dist;
+				actual = trial;
+			}
 		}
 	}
-	* req = actual;
+	req = actual;
+	printf("requested point %f, %f\n", req.pt[0], req.pt[1]);
 	return best;
 }
 
@@ -279,220 +168,32 @@ sp_desktop_vector_snap (SPDesktop * desktop, NRPoint *req, double dx, double dy)
 // fixme: replace with line+circle intersector.
 
 double
-sp_desktop_circular_snap (SPDesktop * desktop, NRPoint * req, double cx, double cy)
+sp_desktop_circular_snap (SPDesktop const * desktop, NR::Point& req, const NR::Point center)
 {
-	SPNamedView * nv;
-	NRPoint actual;
-	gdouble best = 1e18, dist, h, dx, dy;
-	gboolean snapped;
-	GSList * l;
-
-	g_assert (desktop != NULL);
-	g_assert (SP_IS_DESKTOP (desktop));
-	g_assert (req != NULL);
-
-	nv = desktop->namedview;
-	actual = *req;
-	snapped = FALSE;
-
-	h = (req->x - cx)*(req->x - cx) + (req->y - cy)*(req->y - cy); // h is sqare of hypotenuse
-	if (h < 1e-15) return 1e18;
-
-	if (nv->snaptoguides) {
-		/* snap distance in desktop units */
-		best = desktop->guidesnap;
-		best *= best; // best is square of best distance 
-		// vertical guides
-		for (l = nv->vguides; l != NULL; l = l->next) {
-			dx = fabs(SP_GUIDE (l->data)->position - cx);
-			if (dx * dx <= h) {
-				dy = sqrt (h - dx * dx);
-				// down
-				dist = (req->x - SP_GUIDE (l->data)->position) * (req->x - SP_GUIDE (l->data)->position) + 
-					(req->y - (cy - dy)) * (req->y - (cy - dy));
-				if (dist < best) {
-					best = dist;
-					actual.x = SP_GUIDE (l->data)->position;
-					actual.y = cy - dy;
-					snapped = TRUE;
-				}
-				// up
-				dist = (req->x - SP_GUIDE (l->data)->position) * (req->x - SP_GUIDE (l->data)->position) + 
-					(req->y - (cy + dy)) * (req->y - (cy + dy));
-				if (dist < best) {
-					best = dist;
-					actual.x = SP_GUIDE (l->data)->position;
-					actual.y = cy + dy;
-					snapped = TRUE;
-				}
-		    
-			}
-		} // vertical guides
-		// horizontal guides
-		for (l = nv->hguides; l != NULL; l = l->next) {
-			dy = fabs(SP_GUIDE (l->data)->position - cy);
-			if (dy * dy <= h) {
-				dx = sqrt (h - dy * dy);
-				// down
-				dist = (req->y - SP_GUIDE (l->data)->position) * (req->y - SP_GUIDE (l->data)->position) + 
-					(req->x - (cx - dx)) * (req->x - (cx - dx));
-				if (dist < best) {
-					best = dist;
-					actual.y = SP_GUIDE (l->data)->position;
-					actual.x = cx - dx;
-					snapped = TRUE;
-				}
-				// up
-				dist = (req->y - SP_GUIDE (l->data)->position) * (req->y - SP_GUIDE (l->data)->position) + 
-					(req->x - (cx + dx)) * (req->x - (cx + dx));
-				if (dist < best) {
-					best = dist;
-					actual.y = SP_GUIDE (l->data)->position;
-					actual.x = cx + dx;
-					snapped = TRUE;
-				}
-		    
-			}
-		} // horizontal guides
-	} // snaptoguides
-
-	if (nv->snaptogrid) {
-	        gdouble p1, p2;
-		/* snap distance in desktop units */
-		if (best == 1e18) {
-			best = desktop->gridsnap;
-			best *= best; // best is square of best distance 
-		}
-		// horizontal gridlines
-       		p1 = nv->gridorigin.pt[NR::X] + floor ((req->x - nv->gridorigin.pt[NR::X]) / nv->gridspacingx) * nv->gridspacingx;
-		p2 = p1 + nv->gridspacingx;
-		// lower gridline
-		dx = fabs(p1 - cx);
-		if (dx * dx <= h) {
-			dy = sqrt (h - dx * dx);
-			// down
-			dist = (req->x - p1) * (req->x - p1) + (req->y - (cy - dy)) * (req->y - (cy - dy));
-			if (dist < best) {
-				best = dist;
-				actual.x = p1;
-				actual.y = cy - dy;
-				snapped = TRUE;
-			}
-			// up
-			dist = (req->x - p1) * (req->x - p1) + (req->y - (cy + dy)) * (req->y - (cy + dy));
-			if (dist < best) {
-				best = dist;
-				actual.x = p1;
-				actual.y = cy + dy;
-				snapped = TRUE;
-			}
-		}
-		// upper gridline
-		dx = fabs(p2 - cx);
-		if (dx * dx <= h) {
-			dy = sqrt (h - dx * dx);
-			// down
-			dist = (req->x - p2) * (req->x - p2) + (req->y - (cy - dy)) * (req->y - (cy - dy));
-			if (dist < best) {
-				best = dist;
-				actual.x = p2;
-				actual.y = cy - dy;
-				snapped = TRUE;
-			}
-			// up
-			dist = (req->x - p2) * (req->x - p2) + (req->y - (cy + dy)) * (req->y - (cy + dy));
-			if (dist < best) {
-				best = dist;
-				actual.x = p2;
-				actual.y = cy + dy;
-				snapped = TRUE;
-			}
-		}
-		
-		// vertical gridline
-		p1 = nv->gridorigin.pt[NR::Y] + floor ((req->y - nv->gridorigin.pt[NR::Y]) / nv->gridspacingy) * nv->gridspacingy;
-		p2 = p1 + nv->gridspacingy;
-		//lower gridline
-		dy = fabs(p1 - cy);
-		if (dy * dy <= h) {
-			dx = sqrt (h - dy * dy);
-			// down
-			dist = (req->y - p1) * (req->y - p1) + 
-				(req->x - (cx - dx)) * (req->x - (cx - dx));
-			if (dist < best) {
-				best = dist;
-				actual.y = p1;
-				actual.x = cx - dx;
-				snapped = TRUE;
-			}
-		  // up
-		  dist = (req->y - p1) * (req->y - p1) + 
-		         (req->x - (cx + dx)) * (req->x - (cx + dx));
-		  if (dist < best) {
-		    best = dist;
-		    actual.y = p1;
-		    actual.x = cx + dx;
-		    snapped = TRUE;
-		  }
-		}
-		//lower gridline
-		dy = fabs(p2 - cy);
-		if (dy * dy <= h) {
-		  dx = sqrt (h - dy * dy);
-		  // down
-		  dist = (req->y - p2) * (req->y - p2) + 
-		         (req->x - (cx - dx)) * (req->x - (cx - dx));
-		  if (dist < best) {
-		    best = dist;
-		    actual.y = p2;
-		    actual.x = cx - dx;
-		    snapped = TRUE;
-		  }
-		  // up
-		  dist = (req->y - p2) * (req->y - p2) + 
-		         (req->x - (cx + dx)) * (req->x - (cx + dx));
-		  if (dist < best) {
-		    best = dist;
-		    actual.y = p2;
-		    actual.x = cx + dx;
-		    snapped = TRUE;
-		  }
-		}
-	} // snaptogrid
-	
-	dist = (snapped) ? best : 1e18;
-
-	*req = actual;
-
-	return dist;
 }
 
 
 /* 
  * functions for lists of points
  *
- * All functions take a list of NRPoint and parameter indicating the proposed transformation.
+ * All functions take a list of NR::Point and parameter indicating the proposed transformation.
  * They return the updated transformation parameter. 
  */
 
 double
-sp_desktop_horizontal_snap_list (SPDesktop *desktop, NRPoint const *p, int length, double dx)
+sp_desktop_dim_snap_list (SPDesktop const *desktop, NR::Point *p, const int length, const double dx, const int dim)
 {
-	NRPoint q;
-	double xdist, xpre, dist, d;
-	int i;
-
-	dist = NR_HUGE;
-	xdist = dx;
+	gdouble dist = NR_HUGE;
+	gdouble xdist = dx;
 
 	if (SNAP_ON (desktop))
-		for (i = 0; i < length; i++) {
-			q = p[i];
-			xpre = q.x;
-			q.x += dx;
-			d = sp_desktop_vector_snap (desktop, &q, 1, 0);
+		for (int i = 0; i < length; i++) {
+			NR::Point q = p[i];
+			const gdouble pre = q.pt[dim];
+			q.pt[dim] += dx;
+			const gdouble d = sp_desktop_dim_snap (desktop, q, dim);
 			if (d < dist) {
-				xdist = q.x - xpre;
+				xdist = q.pt[dim] - pre;
 				dist = d;
 			}
 		}
@@ -500,87 +201,39 @@ sp_desktop_horizontal_snap_list (SPDesktop *desktop, NRPoint const *p, int lengt
 	return xdist;
 }
 
+/*
 double
-sp_desktop_vertical_snap_list (SPDesktop *desktop, NRPoint const *p, int length, double dy)
+sp_desktop_vector_snap_list (SPDesktop const *desktop, NR::Point *p, int length,const NR::Point norm, NR::Point s)
 {
-	NRPoint q;
-	double ydist, ypre, dist, d;
+	NR::Point check;
+	double dist, d, ratio;
 	int i;
+
+	if (!SNAP_ON (desktop)) return L2(s);
 
 	dist = NR_HUGE;
-	ydist = dy;
-	if(SNAP_ON (desktop))
-		for (i = 0; i < length; i++) {
-			q = p[i];
-			ypre = q.y;
-			q.y += dy;
-			d = sp_desktop_vector_snap (desktop, &q, 0, 1);
-			if (d < dist) {
-				ydist = q.y - ypre;
+	ratio = L2(s);
+
+	for (i = 0; i < length; i++) {
+		NR::Point q = p[i];
+		NR::Point check = (q - norm) * s + norm;
+		if ((fabs (q.y - norm->y) > MIN_DIST_NORM) || (fabs (q.y - norm->y) > MIN_DIST_NORM)) {
+			d = sp_desktop_vector_snap (desktop, &check, check.x - norm->x, check.y - norm->y);
+			if ((d < 1e18) && (d < dist)) {
 				dist = d;
-			}
-		}
-
-	return ydist;
-}
-
-double
-sp_desktop_horizontal_snap_list_scale (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, double sx)
-{
-	NRPoint q, check;
-	double xscale, xdist, d;
-	int i;
-
-	if (!SNAP_ON (desktop)) return sx;
-
-	xdist = NR_HUGE;
-	xscale = sx;
-
-	for (i = 0; i < length; i++) {
-		q = p[i];
-		check.x = sx * (q.x - norm->x) + norm->x;
-		check.y = q.y;
-		if (fabs (q.x - norm->x) > MIN_DIST_NORM) {
-			d = sp_desktop_horizontal_snap (desktop, &check);
-			if ((d < 1e18) && (d < xdist)) {
-				xdist = d;
-				xscale = (check.x - norm->x) / (q.x - norm->x);
+				ratio = (fabs(q.x - norm->x) > fabs(q.y - norm->y)) ? 
+					(check.x - norm->x) / (q.x - norm->x) : 
+					(check.y - norm->y) / (q.y - norm->y); 
 			}
 		}
 	}
-
-	return xscale;
+  
+	return ratio;
 }
+*/
 
 double
-sp_desktop_vertical_snap_list_scale (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, double sy)
-{
-	NRPoint q, check;
-	double yscale, ydist, d;
-	int i;
-
-	if (!SNAP_ON (desktop)) return sy;
-
-	ydist = NR_HUGE;
-	yscale = sy;
-
-	for (i = 0; i < length; i++) {
-		q = p[i];
-		check.y = sy * (q.y - norm->y) + norm->y;
-		if (fabs (q.y - norm->y) > MIN_DIST_NORM) {
-			d = sp_desktop_vertical_snap (desktop, &check);
-			if ((d < 1e18) && (d < fabs (ydist))) {
-				ydist = d;
-				yscale = (check.y - norm->y)/(q.y - norm->y);
-			}
-		}
-	}
-
-	return yscale;
-}
-
-double
-sp_desktop_vector_snap_list (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, double sx, double sy)
+sp_desktop_vector_snap_list (SPDesktop const *desktop, NRPoint *p, int length, NRPoint const *norm, double sx, double sy)
 {
 	NRPoint q, check;
 	double dist, d, ratio;
@@ -610,105 +263,185 @@ sp_desktop_vector_snap_list (SPDesktop *desktop, NRPoint const *p, int length, N
 }
 
 double
-sp_desktop_horizontal_snap_list_skew (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, double sx)
+sp_desktop_dim_snap_list_scale (SPDesktop const *desktop, NR::Point *p, const int length, const NR::Point norm, const double sx, const int dim)
 {
-	NRPoint q, check;
-	double xskew, xdist, d;
-	int i;
+	if (!SNAP_ON (desktop))
+		return sx;
 
-	if (!SNAP_ON (desktop)) return sx;
+	double dist = NR_HUGE;
+	double scale = sx;
 
-	xdist = NR_HUGE;
-	xskew = sx;
-
-	for (i = 0; i < length; i++) {
-		q = p[i];
-		check.x = sx * (q.y - norm->y) + q.x;
-		if (fabs (q.y - norm->y) > MIN_DIST_NORM) {
-			d = sp_desktop_horizontal_snap (desktop, &check);
-			if ((d < 1e18) && (d < fabs (xdist))) {
-				xdist = d;
-				xskew = (check.x - q.x) / (q.y - norm->y);
+	for (int i = 0; i < length; i++) {
+		NR::Point q = p[i];
+		NR::Point check(sx * (q.pt[dim] - norm.pt[dim]) + norm.pt[dim], q.pt[1- dim]);
+		if (fabs (q.pt[dim] - norm.pt[dim]) > MIN_DIST_NORM) {
+			const gdouble d = sp_desktop_dim_snap (desktop, check, dim);
+			if ((d < 1e18) && (d < dist)) {
+				dist = d;
+				scale = (check.pt[dim] - norm.pt[dim]) / (q.pt[dim] - norm.pt[dim]);
 			}
 		}
 	}
 
-	return xskew;
+	return scale;
 }
 
 double
-sp_desktop_vertical_snap_list_skew (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, double sy)
+sp_desktop_dim_snap_list_skew (SPDesktop const *desktop, NR::Point *p, const int length, const NR::Point norm, const double sx, const int dim)
 {
-	NRPoint q, check;
-	gdouble yskew, ydist, d;
-	int i;
+	if (!SNAP_ON (desktop))
+		return sx;
 
-	if (!SNAP_ON (desktop)) return sy;
+	gdouble dist = NR_HUGE;
+	gdouble skew = sx;
 
-	ydist = NR_HUGE;
-	yskew = sy;
-
-	for (i = 0; i < length; i++) {
-		q = p[i];
-		check.y = sy * (q.x - norm->x) + q.y;
-		if (fabs (q.x - norm->x) > MIN_DIST_NORM) {
-			d = sp_desktop_vertical_snap (desktop, &check);
-			if ((d < 1e18) && (d < fabs (ydist))) {
-				ydist = d;
-				yskew = (check.y - q.y)/(q.x - norm->x);
+	for (int i = 0; i < length; i++) {
+		NR::Point q = p[i];
+		NR::Point check(sx * (q.pt[1- dim] - norm.pt[1- dim]) + q.pt[dim], 0);
+		if (fabs (q.pt[1- dim] - norm.pt[1- dim]) > MIN_DIST_NORM) {
+			const gdouble d = sp_desktop_dim_snap (desktop, check, dim);
+			if ((d < 1e18) && (d < fabs (dist))) {
+				dist = d;
+				skew = (check.pt[dim] - q.pt[dim]) / (q.pt[1- dim] - norm.pt[1- dim]);
 			}
 		}
 	}
 
-	return yskew;
+	return skew;
 }
 
-/* 
-   this function takes the whole transformation matrix as parameter
-   working with angles would be too complex
-*/
-NRMatrix *
-sp_desktop_circular_snap_list (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, NRMatrix *rotate)
-{
-	NRPoint q1, q2, q, check;
-	gdouble d, best, h1, h2;
-	int i;
 
-	if (!SNAP_ON (desktop)) return rotate;
 
-	best = NR_HUGE;
 
-	for (i = 0; i < length; i++) {
-		q = p[i];
-		check.x = NR_MATRIX_DF_TRANSFORM_X (rotate, q.x, q.y);
-		check.y = NR_MATRIX_DF_TRANSFORM_Y (rotate, q.x, q.y);
-		d = sp_desktop_circular_snap (desktop, &check, norm->x, norm->y);
-		if (d < best) {
-			q1 = q;
-			q2 = check;
-			best = d;
-		}
-	}
 
-	// compute the new transformation (rotation) from the snapped point
-	if (best < 1e18) {
-		NRMatrix r1, r2, p2n, n2p;
 
-		h1 = hypot (q1.x - norm->x, q1.y - norm->y);
-		q1.x = (q1.x - norm->x) / h1;
-		q1.y = (q1.y - norm->y) / h1;
-		h2 = hypot (q2.x - norm->x, q2.y - norm->y);
-		q2.x = (q2.x - norm->x) / h2;
-		q2.y = (q2.y - norm->y) / h2;
-		r1.c[0] = q1.x;  r1.c[1] = -q1.y;  r1.c[2] =  q1.y;  r1.c[3] = q1.x;  r1.c[4] = 0;  r1.c[5] = 0;
-		r2.c[0] = q2.x;  r2.c[1] =  q2.y;  r2.c[2] = -q2.y;  r2.c[3] = q2.x;  r2.c[4] = 0;  r2.c[5] = 0;
 
-		nr_matrix_set_translate (&n2p, norm->x, norm->y);
-		nr_matrix_invert (&p2n, &n2p);
-		nr_matrix_multiply (rotate, &p2n, &r1);
-		nr_matrix_multiply (rotate, rotate, &r2);
-		nr_matrix_multiply (rotate, rotate, &n2p);
-	}
 
-	return rotate;
+
+
+
+
+/********************
+ * Obsolete methods *
+ ********************/
+
+/* Single point methods */
+double sp_desktop_free_snap (SPDesktop const *desktop, NRPoint *req) {
+	NR::Point r = *req;
+	NR::Coord d = sp_desktop_free_snap(desktop, r);
+	*req = r;
+	return d;
 }
+
+double sp_desktop_vector_snap (SPDesktop const *desktop, NRPoint *req, double dx, double dy) {
+	NR::Point r = *req;
+	NR::Point d(dx, dy);
+	NR::Coord result = sp_desktop_vector_snap(desktop, r, d);
+	*req = r;
+	return result;
+}
+
+gdouble sp_desktop_horizontal_snap(SPDesktop const *dt, NRPoint* req) {
+	NR::Point p = *req;
+	double d = sp_desktop_vector_snap (dt, p, NR::Point(1.0, 0.0));
+	*req = p;
+	return d;
+}
+
+gdouble sp_desktop_vertical_snap(SPDesktop const *dt, NRPoint* req) {
+	NR::Point p = *req;
+	double d = sp_desktop_vector_snap (dt, p, NR::Point(0.0, 1.0));
+	*req = p;
+	return d;
+}
+
+/*
+double sp_desktop_vector_snap_list (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx, const double sy) {
+	NR::Point* l = new NR::Point[length];
+	for(int i = 0; i < length; i++)
+		l[i] = (NR::Point)p[i];
+	double r = sp_desktop_dim_snap_list (desktop, l, length, dx, NR::X);
+	for(int i = 0; i < length; i++)
+		p[i] = l[i];
+	return r;
+	}*/
+
+/*
+double sp_desktop_vector_snap_list (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx, const double sy) {
+	NR::Point* l = new NR::Point[length];
+	for(int i = 0; i < length; i++)
+		l[i] = (NR::Point)p[i];
+	NR::Point n = *norm;
+	double r = sp_desktop_vector_snap_list (desktop, l, length, n, sx, sy);
+	for(int i = 0; i < length; i++)
+		p[i] = l[i];
+	return r;
+	}*/
+
+double sp_desktop_horizontal_snap_list (SPDesktop const *desktop, NRPoint *p, const int length, const double dx) {
+	NR::Point* l = new NR::Point[length];
+	for(int i = 0; i < length; i++)
+		l[i] = (NR::Point)p[i];
+	double r = sp_desktop_dim_snap_list (desktop, l, length, dx, NR::X);
+	for(int i = 0; i < length; i++)
+		p[i] = l[i];
+	return r;
+}
+
+
+double sp_desktop_vertical_snap_list (SPDesktop const *desktop, NRPoint *p, const int length, const double dx) {
+	NR::Point* l = new NR::Point[length];
+	for(int i = 0; i < length; i++)
+		l[i] = (NR::Point)p[i];
+	double r = sp_desktop_dim_snap_list (desktop, l, length, dx, NR::Y);
+	for(int i = 0; i < length; i++)
+		p[i] = l[i];
+	return r;
+}
+
+
+double sp_desktop_horizontal_snap_list_scale (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx) {
+	NR::Point* l = new NR::Point[length];
+	for(int i = 0; i < length; i++)
+		l[i] = (NR::Point)p[i];
+	NR::Point n = *norm;
+	double r = sp_desktop_dim_snap_list_scale (desktop, l, length, n, sx, NR::X);
+	for(int i = 0; i < length; i++)
+		p[i] = l[i];
+	return r;
+}
+
+double sp_desktop_vertical_snap_list_scale (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx) {
+	NR::Point* l = new NR::Point[length];
+	for(int i = 0; i < length; i++)
+		l[i] = (NR::Point)p[i];
+	NR::Point n = *norm;
+	double r = sp_desktop_dim_snap_list_scale (desktop, l, length, n, sx, NR::Y);
+	for(int i = 0; i < length; i++)
+		p[i] = l[i];
+	return r;
+}
+
+
+double sp_desktop_horizontal_snap_list_skew (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx) {
+	NR::Point* l = new NR::Point[length];
+	for(int i = 0; i < length; i++)
+		l[i] = (NR::Point)p[i];
+	NR::Point n = *norm;
+	double r = sp_desktop_dim_snap_list_skew (desktop, l, length, n, sx, NR::X);
+	for(int i = 0; i < length; i++)
+		p[i] = l[i];
+	return r;
+}
+
+double sp_desktop_vertical_snap_list_skew (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx) {
+	NR::Point* l = new NR::Point[length];
+	for(int i = 0; i < length; i++)
+		l[i] = (NR::Point)p[i];
+	NR::Point n = *norm;
+	double r = sp_desktop_dim_snap_list_skew (desktop, l, length, n, sx, NR::Y);
+	for(int i = 0; i < length; i++)
+		p[i] = l[i];
+	return r;
+}
+

@@ -16,23 +16,36 @@
 #include "desktop.h"
 
 /* Single point methods */
-double sp_desktop_free_snap (SPDesktop *desktop, NRPoint *req);
-#define sp_desktop_horizontal_snap(dt,req) sp_desktop_vector_snap (dt, req, 1.0, 0.0);
-#define sp_desktop_vertical_snap(dt,req) sp_desktop_vector_snap (dt, req, 0.0, 1.0);
-double sp_desktop_vector_snap (SPDesktop *desktop, NRPoint *req, double dx, double dy);
-double sp_desktop_circular_snap (SPDesktop *desktop, NRPoint *req, double cx, double cy);
+double sp_desktop_free_snap (SPDesktop const *desktop, NR::Point& req);
+double sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point& req, const NR::Point d);
+
+gdouble sp_desktop_horizontal_snap(SPDesktop const *dt, NRPoint* req);
+
+gdouble sp_desktop_vertical_snap(SPDesktop const *dt, NRPoint* req);
 
 /* List of points methods */
-double sp_desktop_horizontal_snap_list (SPDesktop *desktop, NRPoint const *p, int length, double dx);
-double sp_desktop_vertical_snap_list (SPDesktop *desktop, NRPoint const *p, int length, double dy);
-double sp_desktop_horizontal_snap_list_scale (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, double sx);
-double sp_desktop_vertical_snap_list_scale (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, double sy);
-double sp_desktop_vector_snap_list (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, double sx, double sy);
-double sp_desktop_horizontal_snap_list_skew (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, double sy);
-double sp_desktop_vertical_snap_list_skew (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, double sx);
+double sp_desktop_dim_snap_list (SPDesktop const *desktop, NR::Point *p, const int length, const double dx, const int dim);
+double sp_desktop_dim_snap_list_scale (SPDesktop const *desktop, NR::Point *p, const int length, const NR::Point norm, const double sx, const int dim);
+double sp_desktop_dim_snap_list_skew (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sy, const int dim);
 
-NRMatrix *sp_desktop_circular_snap_list (SPDesktop *desktop, NRPoint const *p, int length, NRPoint const *norm, NRMatrix *rotate);
+double sp_desktop_vector_snap_list (SPDesktop const *desktop, NR::Point *p, const int length, const NR::Point& norm, double sx, const double sy);
+
+// These little functions are only here to provide an edge between NRPoint-land and NR::Point-land.
+
+double sp_desktop_horizontal_snap_list (SPDesktop const *desktop, NRPoint *p, const int length, const double dx);
+double sp_desktop_vertical_snap_list (SPDesktop const *desktop, NRPoint *p, const int length, const double dx);
 
 
+double sp_desktop_horizontal_snap_list_scale (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx);
+double sp_desktop_vertical_snap_list_scale (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx);
+
+double sp_desktop_vector_snap_list (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx, const double sy);
+
+double sp_desktop_horizontal_snap_list_skew (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx);
+double sp_desktop_vertical_snap_list_skew (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx);
+
+/* Single point methods */
+double sp_desktop_free_snap (SPDesktop const *desktop, NRPoint *req);
+double sp_desktop_vector_snap (SPDesktop const *desktop, NRPoint *req, double dx, double dy);
 
 #endif

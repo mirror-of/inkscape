@@ -71,8 +71,8 @@ sp_intersector_line_intersection(const NR::Point n0, const double d0, const NR::
 		return parallel;
 	}
 	denominator = 1.0/denominator;
-	X = -(d0*n1.pt[NR::Y] - d1*n0.pt[NR::Y]); // replace with cross?
-	Y = d0*n1.pt[NR::X] - d1*n0.pt[NR::X];
+	X = (d0*n1.pt[NR::Y] - d1*n0.pt[NR::Y]); // replace with cross?
+	Y = -(d0*n1.pt[NR::X] - d1*n0.pt[NR::X]);
 	result = denominator*NR::Point(X, Y);
 	return intersects;
 }
