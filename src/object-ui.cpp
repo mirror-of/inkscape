@@ -149,7 +149,7 @@ sp_item_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
 	gtk_widget_show (w);
 	gtk_menu_append (GTK_MENU (m), w);
     /* Add Text to shape*/
-    w = gtk_menu_item_new_with_mnemonic (_("_Add Text to shape"));
+    w = gtk_menu_item_new_with_mnemonic (_("_Flow Text into Shape"));
     gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
     gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_item_create_text_shape), item);
     gtk_widget_set_sensitive (w, !SP_IS_IMAGE(item));
@@ -218,14 +218,15 @@ sp_item_toggle_sensitivity (GtkMenuItem * menuitem, SPItem * item)
 static void
 sp_item_create_text_shape (GtkMenuItem *menuitem, SPItem *item)
 {
-    g_assert (SP_IS_ITEM (item));
-    g_assert (!SP_IS_ANCHOR (item));
-
-
     SPDesktop *desktop = (SPDesktop*)gtk_object_get_data (GTK_OBJECT (menuitem), "desktop");
     g_return_if_fail (desktop != NULL);
     g_return_if_fail (SP_IS_DESKTOP (desktop));
     SPDocument *doc = SP_OBJECT_DOCUMENT (item);
+
+	if (!SP_IS_SHAPE(item)) {
+		desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a shape</b> to flow text into."));
+		return;
+	}
 
     SPRepr *root_repr = sp_repr_new ("flowRoot");
     sp_repr_append_child (SP_OBJECT_REPR (SP_OBJECT_PARENT (item)), root_repr);
@@ -254,8 +255,6 @@ sp_item_create_text_shape (GtkMenuItem *menuitem, SPItem *item)
          }
 
     }
-
-
 
     SPRepr *div_repr = sp_repr_new ("flowDiv");
     sp_repr_append_child (root_repr, div_repr);
