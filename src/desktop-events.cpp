@@ -35,6 +35,7 @@
 #include "desktop-affine.h"
 #include "desktop-handles.h"
 #include "event-context.h"
+#include "sp-desktop-widget.h"
 #include "sp-metrics.h"
 #include "sp-item.h"
 #include "desktop-events.h"

@@ -32,6 +32,7 @@
 #include "desktop-affine.h"
 #include "snap.h"
 #include "pixmaps/cursor-arc.xpm"
+#include "sp-desktop-widget.h"
 #include "sp-metrics.h"
 #include "knotholder.h"
 #include "xml/repr.h"

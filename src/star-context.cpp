@@ -37,6 +37,7 @@
 #include "snap.h"
 #include "desktop.h"
 #include "pixmaps/cursor-star.xpm"
+#include "sp-desktop-widget.h"
 #include "sp-metrics.h"
 #include "helper/sp-intl.h"
 #include "prefs-utils.h"

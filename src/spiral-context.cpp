@@ -37,6 +37,7 @@
 #include "desktop.h"
 #include "pixmaps/cursor-spiral.xpm"
 #include "spiral-context.h"
+#include "sp-desktop-widget.h"
 #include "sp-metrics.h"
 #include "helper/sp-intl.h"
 #include "object-edit.h"

@@ -54,6 +54,7 @@
 #include "document.h"
 #include "selection.h"
 #include "select-context.h"
+#include "sp-desktop-widget.h"
 #include "sp-namedview.h"
 #include "sp-text.h"
 #include "sp-item.h"

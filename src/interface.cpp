@@ -40,6 +40,7 @@
 #include "path-chemistry.h"
 #include "zoom-context.h"
 #include "svg-view.h"
+#include "sp-desktop-widget.h"
 #include "sp-namedview.h"
 
 #include "dir-util.h"
@@ -953,6 +954,7 @@ sp_ui_context_menu (SPView *view, SPItem *item)
 
         if ( group && group != dt->currentLayer() ) {
             sp_ui_menu_append_item (GTK_MENU (m), NULL, NULL, NULL, NULL, NULL, NULL);
+            /* TRANSLATORS: #%s is the id of the group e.g. <g id="#g7">, not a number. */
             gchar *label=g_strdup_printf(_("Edit group #%s"), SP_OBJECT_ID(group));
             GtkWidget *w = gtk_menu_item_new_with_label(label);
             g_free(label);
