@@ -187,7 +187,7 @@ sp_dtw_dialog_delete(GtkObject *object, GdkEvent *event, gpointer data)
 static void
 sp_dtw_whatever_toggled(GtkToggleButton *tb, GtkWidget *dialog)
 {
-    if (gtk_object_get_data(GTK_OBJECT(dialog), "update")) {
+    if (gtk_object_get_data(GTK_OBJECT(dlg), "update")) {
         return;
     }
 
@@ -202,19 +202,23 @@ sp_dtw_whatever_toggled(GtkToggleButton *tb, GtkWidget *dialog)
     SPRepr *repr = SP_OBJECT_REPR(dt->namedview);
     gchar const *key = (gchar const *)gtk_object_get_data(GTK_OBJECT(tb), "key");
 
+    gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(TRUE));
+
     gboolean saved = sp_document_get_undo_sensitive(doc);
     sp_document_set_undo_sensitive(doc, FALSE);
     sp_repr_set_boolean(repr, key, gtk_toggle_button_get_active(tb));
     sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
     sp_document_set_undo_sensitive(doc, saved);
     sp_document_done(doc);
+
+    gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(FALSE));
 }
 
 
 static void
 sp_dtw_border_layer_toggled(GtkToggleButton *tb, GtkWidget *dialog)
 {
-    if (gtk_object_get_data(GTK_OBJECT(dialog), "update")) {
+    if (gtk_object_get_data(GTK_OBJECT(dlg), "update")) {
         return;
     }
 
@@ -245,7 +249,7 @@ sp_dtw_border_layer_toggled(GtkToggleButton *tb, GtkWidget *dialog)
 static void
 sp_dtw_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
 {
-    if (gtk_object_get_data(GTK_OBJECT(dialog), "update")) {
+    if (gtk_object_get_data(GTK_OBJECT(dlg), "update")) {
         return;
     }
 
@@ -265,12 +269,16 @@ sp_dtw_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
     if (us != NULL)
         os << sp_unit_selector_get_unit(us)->abbr;
 
+    gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(TRUE));
+
     gboolean saved = sp_document_get_undo_sensitive(doc);
     sp_document_set_undo_sensitive(doc, FALSE);
     sp_repr_set_attr(repr, key, os.str().c_str());
     sp_repr_set_attr (doc->rroot, "sodipodi:modified", "true");
     sp_document_set_undo_sensitive(doc, saved);
     sp_document_done(doc);
+
+    gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(FALSE));
 }
 
 
@@ -342,7 +350,7 @@ sp_doc_dialog_work_entity_changed ( GtkWidget *widget, gpointer data )
 static void
 sp_doc_dialog_whatever_changed(GtkAdjustment *adjustment, GtkWidget *dialog)
 {
-    if (gtk_object_get_data(GTK_OBJECT(dialog), "update")) {
+    if (gtk_object_get_data(GTK_OBJECT(dlg), "update")) {
         return;
     }
 
@@ -405,7 +413,7 @@ static void
 sp_dtw_grid_snap_distance_changed(GtkAdjustment *adjustment,
                                   GtkWidget *dialog)
 {
-    if (gtk_object_get_data(GTK_OBJECT(dialog), "update")) {
+    if (gtk_object_get_data(GTK_OBJECT(dlg), "update")) {
         return;
     }
 
@@ -430,7 +438,7 @@ static void
 sp_dtw_grid_emp_spacing_changed (GtkAdjustment *adjustment,
                                  GtkWidget *dialog)
 {
-    if (gtk_object_get_data(GTK_OBJECT(dialog), "update")) {
+    if (gtk_object_get_data(GTK_OBJECT(dlg), "update")) {
         return;
     }
 
@@ -454,7 +462,7 @@ static void
 sp_dtw_guides_snap_distance_changed(GtkAdjustment *adjustment,
                                     GtkWidget *dialog)
 {
-    if (gtk_object_get_data(GTK_OBJECT(dialog), "update")) {
+    if (gtk_object_get_data(GTK_OBJECT(dlg), "update")) {
         return;
     }
 
@@ -554,6 +562,8 @@ sp_doc_dialog_paper_orientation_selected(GtkWidget *widget, gpointer data)
     {
         t = w; w = h; h = t;
     }
+
+    gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(TRUE));
 
     gtk_adjustment_set_value(aw, w);
     gtk_adjustment_set_value(ah, h);
@@ -1278,7 +1288,7 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
     } else {
         SPNamedView *nv = desktop->namedview;
 
-        gtk_object_set_data(GTK_OBJECT(dialog), "update", GINT_TO_POINTER(TRUE));
+        gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(TRUE));
         gtk_widget_set_sensitive(dialog, TRUE);
 
         GtkObject *o = (GtkObject *)gtk_object_get_data(GTK_OBJECT(dialog), "showgrid");
@@ -1294,19 +1304,19 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
 
         SPUnit const * const pt = &sp_unit_get_by_id(SP_UNIT_PT);
         gdouble val = nv->gridorigin[NR::X];
-        sp_convert_distance(&val, pt, nv->gridunit);
+        val = sp_pixels_get_units (val, *(nv->gridunit));
         o = (GtkObject *)gtk_object_get_data(GTK_OBJECT(dialog), "gridoriginx");
         gtk_adjustment_set_value(GTK_ADJUSTMENT(o), val);
         val = nv->gridorigin[NR::Y];
-        sp_convert_distance(&val, pt, nv->gridunit);
+        val = sp_pixels_get_units (val, *(nv->gridunit));
         o = (GtkObject *)gtk_object_get_data(GTK_OBJECT(dialog), "gridoriginy");
         gtk_adjustment_set_value(GTK_ADJUSTMENT(o), val);
         val = nv->gridspacing[NR::X];
-        sp_convert_distance(&val, pt, nv->gridunit);
+        val = sp_pixels_get_units (val, *(nv->gridunit));
         o = (GtkObject *)gtk_object_get_data(GTK_OBJECT(dialog), "gridspacingx");
         gtk_adjustment_set_value(GTK_ADJUSTMENT(o), val);
         val = nv->gridspacing[NR::Y];
-        sp_convert_distance(&val, pt, nv->gridunit);
+        val = sp_pixels_get_units (val, *(nv->gridunit));
         o = (GtkObject *)gtk_object_get_data(GTK_OBJECT(dialog), "gridspacingy");
         gtk_adjustment_set_value(GTK_ADJUSTMENT(o), val);
 
@@ -1387,12 +1397,8 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
 
         // Start of former "document settings" stuff
 
-        gtk_object_set_data(GTK_OBJECT(dialog), "update", GINT_TO_POINTER(TRUE));
-        gtk_widget_set_sensitive(dialog, TRUE);
-
         gdouble docw = sp_document_width(SP_DT_DOCUMENT(desktop));
         gdouble doch = sp_document_height(SP_DT_DOCUMENT(desktop));
-
 
         GtkWidget *ww = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(dialog), "widthsb");
         GtkWidget *hw = (GtkWidget *) gtk_object_get_data(GTK_OBJECT(dialog), "heightsb");
@@ -1444,10 +1450,10 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         SPUnitSelector *us = (SPUnitSelector *)gtk_object_get_data(GTK_OBJECT(dialog), "units");
         SPUnit const *unit = sp_unit_selector_get_unit(us);
         GtkAdjustment *a = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dialog), "width");
-        sp_convert_distance(&docw, pt, unit);
+        docw = sp_pixels_get_units (docw, *unit);
         gtk_adjustment_set_value(a, docw);
         a = (GtkAdjustment *)gtk_object_get_data(GTK_OBJECT(dialog), "height");
-        sp_convert_distance(&doch, pt, unit);
+        doch = sp_pixels_get_units (doch, *unit);
         gtk_adjustment_set_value(a, doch);
 
         // end of "document settings" stuff
@@ -1482,7 +1488,7 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
                                        license ? FALSE : TRUE ); 
         sp_doc_dialog_update_work_entity( entity );
 
-        gtk_object_set_data(GTK_OBJECT(dialog), "update", GINT_TO_POINTER(FALSE));
+        gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(FALSE));
     }
 }
 
