@@ -1044,17 +1044,22 @@ sp_offset_move_compensate(NR::Matrix const *mp, SPItem *original, SPOffset *self
 
 	// calculate the compensation matrix and the advertized movement matrix
 	SPItem *item = SP_ITEM(self);
+
+	NR::Matrix compensate;
 	NR::Matrix advertized_move;
-	if (mode == SP_CLONE_COMPENSATION_PARALLEL) {
-		item->transform = m * item->transform;
+
+	if (mode == SP_CLONE_COMPENSATION_UNMOVED) {
+		compensate = NR::identity();
 		advertized_move.set_identity();
-	} else if (mode == SP_CLONE_COMPENSATION_UNMOVED) {
-		item->transform = m.inverse() * item->transform * m;
+	} else if (mode == SP_CLONE_COMPENSATION_PARALLEL) {
+		compensate = m;
 		advertized_move = m;
 	} else {
 		g_assert_not_reached();
 	}
-	
+
+	item->transform *= compensate;
+
 	// commit the compensation
 	sp_item_write_transform(item, SP_OBJECT_REPR(item), item->transform, &advertized_move);
 	SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
