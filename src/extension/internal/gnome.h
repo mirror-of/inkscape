@@ -16,7 +16,8 @@
 
 #include <libgnomeprint/gnome-print.h>
 
-#include "../extension.h"
+#include "extension/implementation/implementation.h"
+#include "extension/extension.h"
 
 namespace Inkscape {
 namespace Extension {
