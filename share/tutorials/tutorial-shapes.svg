@@ -20,83 +20,6 @@
   <defs
      id="defs3">
     <linearGradient
-       id="linearGradient2846">
-      <stop
-         style="stop-color:#000000;stop-opacity:1;"
-         offset="0"
-         id="stop2847" />
-      <stop
-         style="stop-color:#000000;stop-opacity:0;"
-         offset="1"
-         id="stop2848" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient4047">
-      <stop
-         style="stop-color:#000000;stop-opacity:1;"
-         offset="0"
-         id="stop4048" />
-      <stop
-         style="stop-color:#000000;stop-opacity:0;"
-         offset="1"
-         id="stop4049" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient4043">
-      <stop
-         style="stop-color:#000000;stop-opacity:1;"
-         offset="0"
-         id="stop4044" />
-      <stop
-         style="stop-color:#000000;stop-opacity:0;"
-         offset="1"
-         id="stop4045" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient4039">
-      <stop
-         style="stop-color:#000000;stop-opacity:1;"
-         offset="0"
-         id="stop4040" />
-      <stop
-         style="stop-color:#000000;stop-opacity:0;"
-         offset="1"
-         id="stop4041" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient4035">
-      <stop
-         style="stop-color:#000000;stop-opacity:1;"
-         offset="0"
-         id="stop4036" />
-      <stop
-         style="stop-color:#000000;stop-opacity:0;"
-         offset="1"
-         id="stop4037" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient4031">
-      <stop
-         style="stop-color:#000000;stop-opacity:1;"
-         offset="0"
-         id="stop4032" />
-      <stop
-         style="stop-color:#000000;stop-opacity:0;"
-         offset="1"
-         id="stop4033" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient4027">
-      <stop
-         style="stop-color:#000000;stop-opacity:1;"
-         offset="0"
-         id="stop4028" />
-      <stop
-         style="stop-color:#000000;stop-opacity:0;"
-         offset="1"
-         id="stop4029" />
-    </linearGradient>
-    <linearGradient
        id="linearGradient2321">
       <stop
          style="stop-color:#e08f0d;stop-opacity:1;"
@@ -412,28 +335,6 @@
        y2="3040.8998"
        gradientUnits="userSpaceOnUse" />
     <linearGradient
-       id="linearGradient3592">
-      <stop
-         style="stop-color:#000000;stop-opacity:1;"
-         offset="0"
-         id="stop3593" />
-      <stop
-         style="stop-color:#000000;stop-opacity:0;"
-         offset="1"
-         id="stop3594" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient3588">
-      <stop
-         style="stop-color:#000000;stop-opacity:1;"
-         offset="0"
-         id="stop3589" />
-      <stop
-         style="stop-color:#000000;stop-opacity:0;"
-         offset="1"
-         id="stop3590" />
-    </linearGradient>
-    <linearGradient
        id="linearGradient666">
       <stop
          style="stop-color:#ffffff;stop-opacity:0.336;"
@@ -452,83 +353,6 @@
        r="0.50000000"
        fx="0.50000000"
        fy="0.50000000" />
-    <linearGradient
-       id="linearGradient1087">
-      <stop
-         style="stop-color:#f56f52;stop-opacity:0;"
-         offset="0.00000000"
-         id="stop1088" />
-      <stop
-         style="stop-color:#aba6a6;stop-opacity:0.243137;"
-         offset="1.00000000"
-         id="stop1089" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient1080">
-      <stop
-         style="stop-color:#7d4ad2;stop-opacity:0.532296;"
-         offset="0.00000000"
-         id="stop1081" />
-      <stop
-         style="stop-color:#ffffff;stop-opacity:0;"
-         offset="1.00000000"
-         id="stop1082" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient1077">
-      <stop
-         style="stop-color:#ff2ee1;stop-opacity:0.529229;"
-         offset="0.00000000"
-         id="stop1078" />
-      <stop
-         style="stop-color:#000000;stop-opacity:0;"
-         offset="1.00000000"
-         id="stop1079" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient1070">
-      <stop
-         style="stop-color:#000000;stop-opacity:0.532296;"
-         offset="0.00000000"
-         id="stop1071" />
-      <stop
-         style="stop-color:#ffffff;stop-opacity:0;"
-         offset="1.00000000"
-         id="stop1072" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient1066">
-      <stop
-         style="stop-color:#65ab00;stop-opacity:0;"
-         offset="0.00000000"
-         id="stop1067" />
-      <stop
-         style="stop-color:#a79782;stop-opacity:1;"
-         offset="1.00000000"
-         id="stop1068" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient1062">
-      <stop
-         style="stop-color:#65ab00;stop-opacity:0;"
-         offset="0.00000000"
-         id="stop1063" />
-      <stop
-         style="stop-color:#a79782;stop-opacity:1;"
-         offset="1.00000000"
-         id="stop1064" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient1056">
-      <stop
-         style="stop-color:#0082ab;stop-opacity:0;"
-         offset="0.00000000"
-         id="stop1057" />
-      <stop
-         style="stop-color:#000000;stop-opacity:1;"
-         offset="1.00000000"
-         id="stop1058" />
-    </linearGradient>
     <linearGradient
        id="linearGradient841">
       <stop
@@ -571,198 +395,11 @@
     </defs>
     <linearGradient
        xlink:href="#linearGradient841"
-       id="linearGradient844"
-       x1="151.09391"
-       y1="998.79024"
-       x2="252.80986"
-       y2="1001.0128"
-       gradientUnits="userSpaceOnUse" />
-    <linearGradient
-       xlink:href="#linearGradient841"
-       id="linearGradient1054"
-       x1="0.43887144"
-       y1="0.06806256"
-       x2="0.49843255"
-       y2="0.98953170" />
-    <linearGradient
-       xlink:href="#linearGradient1056"
-       id="linearGradient1059"
-       x1="0.43887144"
-       y1="0.06806256"
-       x2="0.49843255"
-       y2="0.98953170" />
-    <radialGradient
-       xlink:href="#linearGradient666"
-       id="radialGradient1061" />
-    <radialGradient
-       xlink:href="#linearGradient1070"
-       id="radialGradient1069"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
-    <linearGradient
-       xlink:href="#linearGradient1070"
-       id="linearGradient1074" />
-    <radialGradient
-       xlink:href="#linearGradient1077"
-       id="radialGradient1076"
-       cx="0.65013772"
-       cy="0.22018375"
-       r="0.52504158"
-       fx="0.65013772"
-       fy="0.22018375" />
-    <radialGradient
-       xlink:href="#linearGradient1080"
-       id="radialGradient1083"
-       cx="0.84012544"
-       cy="0.17277412"
-       r="0.84033370"
-       fx="0.84012544"
-       fy="0.17277412" />
-    <radialGradient
-       xlink:href="#linearGradient1056"
-       id="radialGradient1085"
-       cx="0.65564734"
-       cy="0.21559657"
-       r="0.70438540"
-       fx="0.65564734"
-       fy="0.21559657" />
-    <radialGradient
-       xlink:href="#linearGradient1087"
-       id="radialGradient1086"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
-    <radialGradient
-       xlink:href="#linearGradient1070"
-       id="radialGradient1090"
-       cx="0.33855787"
-       cy="0.62303829"
-       r="0.51272756"
-       fx="0.33855787"
-       fy="0.62303829" />
-    <linearGradient
-       xlink:href="#linearGradient841"
-       id="linearGradient1603"
-       x1="0.57446784"
-       y1="0.83246106"
-       x2="0.59574443"
-       y2="-0.32460716" />
-    <linearGradient
-       xlink:href="#linearGradient841"
        id="linearGradient1657"
        x1="0.51618570"
        y1="0.16666391"
        x2="0.51618570"
        y2="0.91666669" />
-    <linearGradient
-       xlink:href="#linearGradient1087"
-       id="linearGradient1658"
-       x1="-0.92160934"
-       y1="-0.01247531"
-       x2="-0.22715668"
-       y2="-0.01247531"
-       gradientTransform="scale(0.986241,1.013951)" />
-    <linearGradient
-       xlink:href="#linearGradient1087"
-       id="linearGradient1659"
-       x1="-0.41402379"
-       y1="0.42326421"
-       x2="0.34901145"
-       y2="0.42326421"
-       gradientTransform="scale(0.970074,1.030849)" />
-    <linearGradient
-       xlink:href="#linearGradient1087"
-       id="linearGradient1660"
-       x1="0.95802730"
-       y1="0.32916057"
-       x2="1.41425300"
-       y2="0.32916057"
-       gradientTransform="scale(0.993467,1.006576)" />
-    <linearGradient
-       xlink:href="#linearGradient1087"
-       id="linearGradient1661"
-       x1="0.36794606"
-       y1="0.59608549"
-       x2="0.81258655"
-       y2="0.59608549"
-       gradientTransform="scale(0.988876,1.011249)" />
-    <linearGradient
-       xlink:href="#linearGradient1087"
-       id="linearGradient1662"
-       x1="0.33251682"
-       y1="1.52830386"
-       x2="0.63266820"
-       y2="1.52830386"
-       gradientTransform="scale(0.966197,1.034985)" />
-    <linearGradient
-       xlink:href="#linearGradient1087"
-       id="linearGradient1663"
-       x1="0.87731606"
-       y1="0.93922377"
-       x2="1.16099572"
-       y2="0.93922377"
-       gradientTransform="scale(0.966885,1.034250)" />
-    <radialGradient
-       xlink:href="#linearGradient841"
-       id="radialGradient1664"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
-    <radialGradient
-       xlink:href="#linearGradient841"
-       id="radialGradient1665"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
-    <radialGradient
-       xlink:href="#linearGradient841"
-       id="radialGradient1666"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
-    <radialGradient
-       xlink:href="#linearGradient841"
-       id="radialGradient1667"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
-    <radialGradient
-       xlink:href="#linearGradient841"
-       id="radialGradient1668"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
-    <radialGradient
-       xlink:href="#linearGradient841"
-       id="radialGradient1669"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
-    <radialGradient
-       xlink:href="#linearGradient841"
-       id="radialGradient1670"
-       cx="0.50000000"
-       cy="0.50000000"
-       r="0.50000000"
-       fx="0.50000000"
-       fy="0.50000000" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient2343"
@@ -898,7 +535,7 @@
      id="base"
      inkscape:zoom="2.2500696"
      inkscape:cx="127.56063"
-     inkscape:cy="5466.5926"
+     inkscape:cy="5467.4815"
      inkscape:window-width="780"
      inkscape:window-height="580"
      inkscape:window-x="0"
@@ -1426,8 +1063,7 @@
      height="33.939529"
      x="17.277002"
      y="1031.4755"
-     ry="7.7445431"
-     rx="7.7445431" />
+     ry="8.3330755" />
   <rect
      style="font-size:12.000000;fill:#0000ff;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999704pt;"
      id="rect1186"
@@ -1435,8 +1071,7 @@
      height="33.939529"
      x="92.003487"
      y="1031.4755"
-     ry="16.969765"
-     rx="16.969765" />
+     ry="16.969765" />
   <rect
      style="font-size:12.000000;fill:#0000ff;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999704pt;"
      id="rect1187"
@@ -1974,7 +1609,7 @@ http://www.inkscape.org/</dc:description>
        sodipodi:role="line"
        id="tspan2397"
        x="8.0460587"
-       y="900.12872">down. All four corner of the rectangle become rounded, and you</tspan><tspan
+       y="900.12872">down. All four corners of the rectangle become rounded, and you</tspan><tspan
        sodipodi:role="line"
        id="tspan3020"
        x="8.0460587"
@@ -2206,7 +1841,7 @@ http://www.inkscape.org/</dc:description>
        id="tspan5495"
        x="7.6632156"
        y="1453.3917">with </tspan><tspan
-       id="tspan2781">the &quot;scale rounded corners&quot; button on:</tspan><tspan
+       id="tspan2781">the &quot;Scale rounded corners&quot; button on:</tspan><tspan
        sodipodi:role="line"
        id="tspan2796"
        x="7.6632156"
@@ -2313,7 +1948,7 @@ http://www.inkscape.org/</dc:description>
        sodipodi:role="line"
        id="tspan2225"
        x="7.6632156"
-       y="1737.3116">    Drag with Ctrl to make the other radius the same (circular).</tspan><tspan
+       y="1737.3116">    Drag with Ctrl to make the other radius the same (circular rounding).</tspan><tspan
        sodipodi:role="line"
        id="tspan2235"
        x="7.6632156"
@@ -2404,7 +2039,7 @@ http://www.inkscape.org/</dc:description>
        sodipodi:role="line"
        id="tspan2268"
        x="7.6632156"
-       y="1966.6316">with Selector and then within its resize handles in Rectangle tool:</tspan><tspan
+       y="1966.6316">with Selector and then with its resize handles in Rectangle tool:</tspan><tspan
        sodipodi:role="line"
        id="tspan2910"
        x="7.6632156"
@@ -2444,7 +2079,7 @@ http://www.inkscape.org/</dc:description>
        sodipodi:role="line"
        id="tspan2928"
        x="7.6632156"
-       y="2075.8316">any direction or even to move it along its sides. Resize handles </tspan><tspan
+       y="2075.8316">any direction or even move it along its sides. Resize handles </tspan><tspan
        sodipodi:role="line"
        id="tspan2941"
        x="7.6632156"
@@ -2894,18 +2529,15 @@ http://www.inkscape.org/</dc:description>
        id="tspan5493"
        x="30.199730"
        y="2290.9507">copied </tspan><tspan
-       sodipodi:role="line"
-       id="tspan5487"
-       x="30.199730"
-       y="2302.7107">and resized</tspan><tspan
+       id="tspan5487">and resized</tspan><tspan
        sodipodi:role="line"
        id="tspan5489"
        x="30.199730"
-       y="2314.4707">by handles,</tspan><tspan
+       y="2302.7107">by handles,</tspan><tspan
        sodipodi:role="line"
        id="tspan5491"
        x="30.199730"
-       y="2326.2307">mostly with Ctrl</tspan></text>
+       y="2314.4707">mostly with Ctrl</tspan></text>
   <rect
      style="opacity:0.27540985;color:#000000;fill:#1c768b;fill-opacity:1.0000000;fill-rule:evenodd;stroke:none;stroke-width:0.012500000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4.0000000;stroke-dashoffset:0.0000000;stroke-opacity:1.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;"
      id="rect1001"
@@ -3157,7 +2789,7 @@ http://www.inkscape.org/</dc:description>
        sodipodi:role="line"
        id="tspan1922"
        x="5.7865233"
-       y="570.38722">    With Ctrl, draw a circle or a integer-ratio (2:1, 3:1, etc.) ellipse.</tspan><tspan
+       y="570.38722">    With Ctrl, draw a circle or an integer-ratio (2:1, 3:1, etc.) ellipse.</tspan><tspan
        sodipodi:role="line"
        id="tspan1924"
        x="5.7865233"
@@ -3386,37 +3018,7 @@ http://www.inkscape.org/</dc:description>
        sodipodi:role="line"
        id="tspan2117"
        x="5.7865233"
-       y="1207.1912">its center. They </tspan><tspan
-       id="tspan2044"></tspan><tspan
-       id="tspan2046"></tspan><tspan
-       id="tspan2048"></tspan><tspan
-       id="tspan2050"></tspan><tspan
-       id="tspan2052"></tspan><tspan
-       id="tspan2054"></tspan><tspan
-       id="tspan2056"></tspan><tspan
-       id="tspan2058"></tspan><tspan
-       id="tspan2060"></tspan><tspan
-       id="tspan2062"></tspan><tspan
-       id="tspan2064"></tspan><tspan
-       id="tspan2066"></tspan><tspan
-       id="tspan2068"></tspan><tspan
-       id="tspan2070"></tspan><tspan
-       id="tspan2072"></tspan><tspan
-       id="tspan2074"></tspan><tspan
-       id="tspan2076"></tspan><tspan
-       id="tspan2078"></tspan><tspan
-       id="tspan2080"></tspan><tspan
-       id="tspan2082"></tspan><tspan
-       id="tspan2084"></tspan><tspan
-       id="tspan2086"></tspan><tspan
-       id="tspan2089"></tspan><tspan
-       id="tspan2091"></tspan><tspan
-       id="tspan2095"></tspan><tspan
-       id="tspan2097"></tspan><tspan
-       id="tspan2099"></tspan><tspan
-       id="tspan2101"></tspan><tspan
-       id="tspan2103"></tspan><tspan
-       id="tspan2105">work similar to the rounding handles of the </tspan><tspan
+       y="1207.1912">its center. They work similar to the rounding handles of the </tspan><tspan
        sodipodi:role="line"
        id="tspan2119"
        x="5.7865233"
@@ -3428,7 +3030,7 @@ http://www.inkscape.org/</dc:description>
        sodipodi:role="line"
        id="tspan2109"
        x="5.7865233"
-       y="1240.7072">    Drag with Ctrl to make a circle.</tspan><tspan
+       y="1240.7072">    Drag with Ctrl to make a circle (make the other radius the same).</tspan><tspan
        sodipodi:role="line"
        id="tspan2111"
        x="5.7865233"
@@ -3940,7 +3542,7 @@ http://www.inkscape.org/</dc:description>
        sodipodi:role="line"
        id="tspan4057"
        x="7.1218786"
-       y="3770.9925">The star tool can create two similar but distinct kinds of objects:</tspan><tspan
+       y="3770.9925">The Star tool can create two similar but distinct kinds of objects:</tspan><tspan
        sodipodi:role="line"
        id="tspan2177"
        x="7.1218786"
@@ -4436,11 +4038,6 @@ http://www.inkscape.org/</dc:description>
        id="tspan4970"
        x="7.1218786"
        y="4983.1124">examples, each indicating its roundedness value:</tspan><tspan
-       id="tspan4964"></tspan><tspan
-       id="tspan4966"></tspan><tspan
-       id="tspan4962"></tspan><tspan
-       id="tspan4958"></tspan><tspan
-       id="tspan4942"></tspan><tspan
        sodipodi:role="line"
        id="tspan4944"
        x="7.1218786"
@@ -5984,7 +5581,7 @@ http://www.inkscape.org/</dc:description>
        sodipodi:role="line"
        id="tspan2893"
        x="5.7865233"
-       y="738.00661">Once drawn, a star has two handles on its inner and outer ends.</tspan><tspan
+       y="738.00661">Once drawn, a spiral has two handles on its inner and outer ends.</tspan><tspan
        sodipodi:role="line"
        id="tspan2895"
        x="5.7865233"
@@ -6062,7 +5659,7 @@ http://www.inkscape.org/</dc:description>
        x="5.7865233"
        y="939.10261"></tspan><tspan
        id="tspan2925"></tspan><tspan
-       id="tspan2927">The divergence of a spiral is the measure of unevenness of its turns.</tspan><tspan
+       id="tspan2927">The divergence of a spiral is the measure of irregularity of its winds.</tspan><tspan
        sodipodi:role="line"
        id="tspan2938"
        x="5.7865233"
@@ -6239,7 +5836,7 @@ http://www.inkscape.org/</dc:description>
      style="font-size:8.0000000;font-style:normal;font-weight:bold;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:3.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;text-anchor:start;writing-mode:lr;"
      x="5.515625"
      y="653.7066"
-     id="text1251"
+     id="text2023"
      sodipodi:linespacing="100%"
      transform="translate(0.000000,5314.953)"><tspan
        x="5.5156250"
