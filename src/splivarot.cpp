@@ -1148,13 +1148,13 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 					theRes->ConvertToShape (theShape, fill_nonZero);
 				}
 
-			Path *originaux[1];
+			// et maintenant: offset
+			// methode inexacte
+/*			Path *originaux[1];
 			originaux[0] = orig;
 			theRes->ConvertToForme (res, 1, originaux);
 
-			// et maintenant: offset
-			// methode inexacte
-/*			if (expand) {
+			if (expand) {
 				res->OutsideOutline (orig, 0.5 * o_width, o_join, o_butt, o_miter);
 			} else {
 				res->OutsideOutline (orig, -0.5 * o_width, o_join, o_butt, o_miter);
@@ -1176,6 +1176,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 				res->Simplify (1.0 * o_width);
 			}    */
 			// methode par makeoffset
+
 			if (expand)
 				{
 					theShape->MakeOffset(theRes, o_width, o_join, o_miter);

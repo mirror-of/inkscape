@@ -1272,11 +1272,13 @@ void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool inve
               dest->DisconnectStart(lEdge);
               dest->ConnectStart(first+lastM,lEdge);
             } else {
-              dest->AddEdge(first+lastM,first+pathEnd);
-              dest->ebData[lEdge].pathID=pathID;
-              dest->ebData[lEdge].pieceID=lm->piece;
-              dest->ebData[lEdge].tSt=1.0;
-              dest->ebData[lEdge].tEn=0.0;
+              lEdge=dest->AddEdge(first+lastM,first+pathEnd);
+              if ( lEdge >= 0 ) {
+                dest->ebData[lEdge].pathID=pathID;
+                dest->ebData[lEdge].pieceID=lm->piece;
+                dest->ebData[lEdge].tSt=1.0;
+                dest->ebData[lEdge].tEn=0.0;
+              }
             }
           }
           lastM=curP;
@@ -1287,14 +1289,16 @@ void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool inve
           if ( NR::LInfty(sbp->p-prp->p) < 0.00001 ) {
           } else {
             lEdge=dest->AddEdge(first+curP,first+pathEnd);
-            dest->ebData[lEdge].pathID=pathID;
-            dest->ebData[lEdge].pieceID=sbp->piece;
-            if ( sbp->piece == prp->piece ) {
-              dest->ebData[lEdge].tSt=sbp->t;
-              dest->ebData[lEdge].tEn=prp->t;
-            } else {
-              dest->ebData[lEdge].tSt=sbp->t;
-              dest->ebData[lEdge].tEn=0.0;
+            if ( lEdge >= 0 ) {
+              dest->ebData[lEdge].pathID=pathID;
+              dest->ebData[lEdge].pieceID=sbp->piece;
+              if ( sbp->piece == prp->piece ) {
+                dest->ebData[lEdge].tSt=sbp->t;
+                dest->ebData[lEdge].tEn=prp->t;
+              } else {
+                dest->ebData[lEdge].tSt=sbp->t;
+                dest->ebData[lEdge].tEn=0.0;
+              }
             }
             pathEnd=curP;
             if ( NR::LInfty(sbp->p-lm->p) < 0.00001 ) {
@@ -1313,10 +1317,12 @@ void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool inve
         } else {
           path_lineto_b*    lm=((path_lineto_b*)pts)+lastM;
           lEdge=dest->AddEdge(first+lastM,first+pathEnd);
-          dest->ebData[lEdge].pathID=pathID;
-          dest->ebData[lEdge].pieceID=lm->piece;
-          dest->ebData[lEdge].tSt=1.0;
-          dest->ebData[lEdge].tEn=0.0;
+          if ( lEdge >= 0 ) {
+            dest->ebData[lEdge].pathID=pathID;
+            dest->ebData[lEdge].pieceID=lm->piece;
+            dest->ebData[lEdge].tSt=1.0;
+            dest->ebData[lEdge].tEn=0.0;
+          }
         }
       }
     }
@@ -1392,11 +1398,13 @@ void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool inve
               dest->DisconnectEnd(lEdge);
               dest->ConnectEnd(first+lastM,lEdge);
             } else {
-              dest->AddEdge(first+pathEnd,first+lastM);
-              dest->ebData[lEdge].pathID=pathID;
-              dest->ebData[lEdge].pieceID=lm->piece;
-              dest->ebData[lEdge].tSt=0.0;
-              dest->ebData[lEdge].tEn=1.0;
+              lEdge=dest->AddEdge(first+pathEnd,first+lastM);
+              if ( lEdge >= 0 ) {
+                dest->ebData[lEdge].pathID=pathID;
+                dest->ebData[lEdge].pieceID=lm->piece;
+                dest->ebData[lEdge].tSt=0.0;
+                dest->ebData[lEdge].tEn=1.0;
+              }
             }
           }
           lastM=curP;
@@ -1433,10 +1441,12 @@ void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool inve
         } else {
           path_lineto_b*    lm=((path_lineto_b*)pts)+lastM;
           lEdge=dest->AddEdge(first+pathEnd,first+lastM);
-          dest->ebData[lEdge].pathID=pathID;
-          dest->ebData[lEdge].pieceID=lm->piece;
-          dest->ebData[lEdge].tSt=0.0;
-          dest->ebData[lEdge].tEn=1.0;
+          if ( lEdge >= 0 ) {
+            dest->ebData[lEdge].pathID=pathID;
+            dest->ebData[lEdge].pieceID=lm->piece;
+            dest->ebData[lEdge].tSt=0.0;
+            dest->ebData[lEdge].tEn=1.0;
+          }
         }
       }
     }
