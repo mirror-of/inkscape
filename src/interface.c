@@ -657,11 +657,11 @@ sp_ui_import_files(gchar * buffer)
 }
 
 static void
-sp_ui_import_one_file_with_check(gchar* filename, gpointer unused)
+sp_ui_import_one_file_with_check(gpointer filename, gpointer unused)
 {
 	if (filename) {
-		if (strlen(filename) > 2)
-			sp_ui_import_one_file(filename);
+		if (strlen((gchar*)filename) > 2)
+			sp_ui_import_one_file((gchar*)filename);
 	}
 }
 
