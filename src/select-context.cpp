@@ -195,6 +195,7 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 	SPSelectContext *sc;
 	SPSelTrans *seltrans;
 	SPSelection *selection;
+	SPItem *item_at_point = NULL, *group_at_point = NULL;
 	GdkCursor *cursor;
 	NRPoint p;
 	gint ret = FALSE;
@@ -250,11 +251,16 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 
 				sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
 				if (!sc->moved) {
-					if (!sp_selection_item_selected (selection, sc->item)) {
+					item_at_point = sp_desktop_item_at_point (desktop, event->button.x, event->button.y, TRUE);
+					group_at_point = sp_desktop_group_at_point (desktop, event->button.x, event->button.y);
+					// if neither a group nor an item (possibly in a group) at point are selected, set selection to the item passed with the event
+					if ((!item_at_point || !sp_selection_item_selected (selection, item_at_point)) && 
+					    (!group_at_point || !sp_selection_item_selected (selection, group_at_point))) {
 						// have to select here since selecting is done when releasing
 						sp_sel_trans_reset_state (seltrans);
-						sp_selection_set_item (selection, sc->item);
-					}
+						if (!sp_selection_item_selected (selection, sc->item))
+							sp_selection_set_item (selection, sc->item);
+					} // otherwise, do not change selection so that dragging selected-within-group items is possible
 					sp_sel_trans_grab (seltrans, &p, -1, -1, FALSE);
 					sc->moved = TRUE;
 				}
