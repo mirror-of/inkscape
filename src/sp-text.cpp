@@ -1291,12 +1291,21 @@ static char *
 sp_text_description (SPItem * item)
 {
 	SPText *text;
+	SPStyle *style;
+	NRTypeFace *tf;
+	NRFont *font;
+	gchar n[256];
 
 	text = (SPText *) item;
+	style = SP_OBJECT_STYLE (text);
 
-	/* fixme: */
+	tf = nr_type_directory_lookup_fuzzy(style->text->font_family.value,
+						    font_style_to_pos(*style));
+	font = nr_font_new_default (tf, NR_TYPEFACE_METRICS_HORIZONTAL, style->font_size.computed);
+	nr_typeface_name_get (NR_FONT_TYPEFACE (font), n, 256);
+	nr_typeface_unref (tf);
 
-	return g_strdup (_("Text object"));
+	return g_strdup_printf (_("Text (%s, %.5gpt)"), n, NR_FONT_SIZE (font));
 }
 
 
