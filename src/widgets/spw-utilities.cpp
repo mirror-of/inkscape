@@ -164,7 +164,7 @@ spw_dropdown(GtkWidget * dialog, GtkWidget * table,
 GtkWidget *
 spw_unit_selector(GtkWidget * dialog, GtkWidget * table,
 		  const gchar * label_text, gchar * key, int row,
-		  GtkWidget * us, GCallback cb)
+		GtkWidget * us, GCallback cb, bool can_be_negative)
 {
   GtkWidget * sb;
   GtkObject * a;
@@ -175,7 +175,7 @@ spw_unit_selector(GtkWidget * dialog, GtkWidget * table,
 
   spw_label(table, label_text, 0, row);
 
-  a = gtk_adjustment_new (0.0, -1e6, 1e6, 1.0, 10.0, 10.0);
+  a = gtk_adjustment_new (0.0, can_be_negative?-1e6:0, 1e6, 1.0, 10.0, 10.0);
   g_assert(a != NULL);
   gtk_object_set_data (GTK_OBJECT (a), "key", key);
   gtk_object_set_data (GTK_OBJECT (a), "unit_selector", us);

@@ -45,7 +45,7 @@ spw_dropdown(GtkWidget *dialog, GtkWidget *table,
 GtkWidget *
 spw_unit_selector(GtkWidget *dialog, GtkWidget *table,
 		  gchar const *label, gchar *key, int row,
-		  GtkWidget *us, GCallback cb);
+		GtkWidget *us, GCallback cb, bool can_be_negative = false);
 
 void sp_set_font_size (GtkWidget *w, guint font);
 
