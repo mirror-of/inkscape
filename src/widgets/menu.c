@@ -12,6 +12,7 @@
  */
 
 #include <gtk/gtkmenuitem.h>
+#include <gtk/gtkseparatormenuitem.h>
 
 #include "helper/sp-marshal.h"
 
