@@ -146,7 +146,6 @@ OBJECTS = \
 	extension/script/js/fdlibm/w_scalb.o \
 	extension/script/js/fdlibm/w_sinh.o \
 	extension/script/js/fdlibm/w_sqrt.o \
-	extension/script/js/js.o \
 	extension/script/js/jsapi.o \
 	extension/script/js/jsarena.o \
 	extension/script/js/jsarray.o \
@@ -192,6 +191,7 @@ OBJECTS = \
 	helper/action.o \
 	helper/gnome-utils.o \
 	helper/png-write.o \
+	helper/sp-marshal.o \
 	helper/sp-marshal.o \
 	helper/stock-items.o \
 	helper/unit-menu.o \
@@ -534,7 +534,6 @@ LINTS = \
 	extension/script/js/fdlibm/w_scalb.lint \
 	extension/script/js/fdlibm/w_sinh.lint \
 	extension/script/js/fdlibm/w_sqrt.lint \
-	extension/script/js/js.lint \
 	extension/script/js/jsapi.lint \
 	extension/script/js/jsarena.lint \
 	extension/script/js/jsarray.lint \
@@ -580,6 +579,7 @@ LINTS = \
 	helper/action.lint \
 	helper/gnome-utils.lint \
 	helper/png-write.lint \
+	helper/sp-marshal.lint \
 	helper/sp-marshal.lint \
 	helper/stock-items.lint \
 	helper/unit-menu.lint \

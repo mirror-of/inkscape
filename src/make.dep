@@ -3110,43 +3110,6 @@ extension/script/js/fdlibm/w_sqrt.o: \
 	extension/script/js/fdlibm/w_sqrt.c \
 	extension/script/js/fdlibm/fdlibm.h
 
-extension/script/js/js.o: \
-	extension/script/js/js.c \
-	extension/script/js/jsapi.h \
-	extension/script/js/jsarena.h \
-	extension/script/js/jsatom.h \
-	extension/script/js/jsautocfg.h \
-	extension/script/js/jsclist.h \
-	extension/script/js/jscntxt.h \
-	extension/script/js/jscompat.h \
-	extension/script/js/jsconfig.h \
-	extension/script/js/jscpucfg.h \
-	extension/script/js/jsdbgapi.h \
-	extension/script/js/jsdhash.h \
-	extension/script/js/jsemit.h \
-	extension/script/js/jsfun.h \
-	extension/script/js/jsgc.h \
-	extension/script/js/jshash.h \
-	extension/script/js/jsinterp.h \
-	extension/script/js/jslock.h \
-	extension/script/js/jslong.h \
-	extension/script/js/jsobj.h \
-	extension/script/js/jsopcode.h \
-	extension/script/js/jsosdep.h \
-	extension/script/js/jsotypes.h \
-	extension/script/js/jsparse.h \
-	extension/script/js/jsprf.h \
-	extension/script/js/jsprvtd.h \
-	extension/script/js/jspubtd.h \
-	extension/script/js/jsregexp.h \
-	extension/script/js/jsscan.h \
-	extension/script/js/jsscope.h \
-	extension/script/js/jsscript.h \
-	extension/script/js/jsstddef.h \
-	extension/script/js/jsstr.h \
-	extension/script/js/jstypes.h \
-	extension/script/js/jsutil.h
-
 extension/script/js/jsapi.o: \
 	extension/script/js/jsapi.c \
 	extension/script/js/jsapi.h \
@@ -4418,6 +4381,10 @@ helper/gnome-utils.o: \
 helper/png-write.o: \
 	helper/png-write.cpp \
 	helper/png-write.h
+
+helper/sp-marshal.o: \
+	helper/sp-marshal.c \
+	helper/sp-marshal.h
 
 helper/sp-marshal.o: \
 	helper/sp-marshal.cpp \

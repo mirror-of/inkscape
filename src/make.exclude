@@ -36,6 +36,7 @@ ecma/svgview.cpp
 ecma/SVGViewer.cpp
 extension/menu.h
 extension/menu.cpp
+extension/script/js/js.c
 extract-uri-test.cpp
 ink-snprintf.cpp
 inkview.cpp

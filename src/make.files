@@ -218,7 +218,6 @@ extension/script/js/fdlibm/w_remainder.c
 extension/script/js/fdlibm/w_scalb.c
 extension/script/js/fdlibm/w_sinh.c
 extension/script/js/fdlibm/w_sqrt.c
-extension/script/js/js.c
 extension/script/js/jsapi.c
 extension/script/js/jsapi.h
 extension/script/js/jsarena.c
@@ -323,6 +322,7 @@ helper/helper-forward.h
 helper/png-write.cpp
 helper/png-write.h
 helper/sp-intl.h
+helper/sp-marshal.c
 helper/sp-marshal.cpp
 helper/sp-marshal.h
 helper/stock-items.cpp
