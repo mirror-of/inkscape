@@ -207,14 +207,15 @@ dnl   Use sigc-2.0 and gtkmm-2.4 only if both present
 dnl ******************************
 ink_sigc_pkg=sigc++-1.2
 ink_gtkmm_pkg=gtkmm-2.0
-if pkg-config --exists gtkmm-2.4; then
-       if pkg-config --exists sigc++-2.0; then
-              ink_sigc_pkg=sigc++-2.0
-              ink_gtkmm_pkg=gtkmm-2.4
-              AC_DEFINE(WITH_SIGC_2_0,  1, [enable sigc++ version 2.0])
-              AC_DEFINE(WITH_GTKMM_2_4, 1, [enable gtkmm version 2.4])
-       fi
-fi
+    # Save this for later.  Too much sigc-1.2-dependent code out there
+    # if pkg-config --exists gtkmm-2.4; then
+    #      if pkg-config --exists sigc++-2.0; then
+    #              ink_sigc_pkg=sigc++-2.0
+    #              ink_gtkmm_pkg=gtkmm-2.4
+    #              AC_DEFINE(WITH_SIGC_2_0,  1, [enable sigc++ version 2.0])
+    #              AC_DEFINE(WITH_GTKMM_2_4, 1, [enable gtkmm version 2.4])
+    #       fi
+    # fi
 
 dnl ******************************
 dnl   Unconditional dependencies
