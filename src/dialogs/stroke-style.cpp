@@ -23,6 +23,7 @@
 
 #include <libnr/nr-values.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
 
 #include <gtk/gtk.h>
 
@@ -309,7 +310,7 @@ sp_stroke_style_paint_update(SPWidget *spw, SPSelection *sel)
             /* TODO: This is plain wrong */
 
             SPLinearGradient *lg = SP_LINEARGRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(object));
-            sp_item_invoke_bbox(SP_ITEM(object), &fbb, NULL, TRUE);
+            sp_item_invoke_bbox(SP_ITEM(object), &fbb, NR::identity(), TRUE);
             NRMatrix fctm;
             sp_item_i2doc_affine(SP_ITEM(object), &fctm);
             NRMatrix gs2d;
@@ -362,7 +363,7 @@ sp_stroke_style_paint_update(SPWidget *spw, SPSelection *sel)
             /* TODO: This is plain wrong */
 
             SPRadialGradient *rg = SP_RADIALGRADIENT(SP_OBJECT_STYLE_STROKE_SERVER(object));
-            sp_item_invoke_bbox(SP_ITEM(object), &fbb, NULL, TRUE);
+            sp_item_invoke_bbox(SP_ITEM(object), &fbb, NR::identity(), TRUE);
             NRMatrix fctm;
             sp_item_i2doc_affine(SP_ITEM(object), &fctm);
             NRMatrix gs2d;
@@ -822,13 +823,12 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
         return NULL; // sandbox broken?
 
     // Find object's bbox in document
-    NRMatrix i2doc;
-    sp_item_i2doc_affine(SP_ITEM(object), &i2doc);
+    NR::Matrix const i2doc(sp_item_i2doc_affine(SP_ITEM(object)));
 
-//    mm_print ("i2doc", NR::Matrix(&i2doc));
+//    mm_print("i2doc", i2doc);
 
     NRRect dbox;
-    sp_item_invoke_bbox(SP_ITEM(object), &dbox, &i2doc, TRUE);
+    sp_item_invoke_bbox(SP_ITEM(object), &dbox, i2doc, TRUE);
 
     if (nr_rect_d_test_empty(&dbox))
         return NULL;

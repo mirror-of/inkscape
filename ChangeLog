@@ -1,5 +1,19 @@
 2004-05-14  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/selection.cpp, src/sp-chars.cpp, src/sp-image.cpp,
+	  src/sp-item-group.cpp, src/sp-item.cpp, src/sp-item.h,
+	  src/sp-marker.cpp, src/sp-root.cpp, src/sp-shape.cpp,
+	  src/sp-symbol.cpp, src/sp-text.cpp, src/sp-typeset.cpp,
+	  src/sp-use.cpp, src/dialogs/fill-style.cpp,
+	  src/dialogs/stroke-style.cpp, src/display/nr-arena-shape.cpp,
+	  src/libnr/nr-path.cpp, src/libnr/nr-path.h,
+	  src/libnrtype/nr-font.cpp, src/libnrtype/nr-rasterfont.cpp,
+	  src/libnrtype/nr-type-gnome.cpp, src/widgets/icon.cpp,
+	  src/widgets/paint-selector.cpp:
+	  Change argument from NRMatrix to NR::Matrix in SPItemClass->bbox,
+	  sp_item_invoke_bbox, sp_item_invoke_bbox_full,
+	  nr_path_matrix_bbox_union.  Users updated.
+
 	* src/libnr/nr-rect.h, src/libnr/nr-rect.cpp (nr_rect_union_pt):
 	  new function.
 

@@ -227,7 +227,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 		bbox.x0 = bbox.y0 = NR_HUGE;
 		bbox.x1 = bbox.y1 = -NR_HUGE;
 		bp.path = shape->curve->bpath;
-		nr_path_matrix_bbox_union(&bp, &gc->transform, &bbox, 1.0);
+		nr_path_matrix_bbox_union(&bp, gc->transform, &bbox, 1.0);
 		item->bbox.x0 = (gint32)(bbox.x0 - 1.0F);
 		item->bbox.y0 = (gint32)(bbox.y0 - 1.0F);
 		item->bbox.x1 = (gint32)(bbox.x1 + 1.9999F);
@@ -261,7 +261,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 	bbox.x0 = bbox.y0 = NR_HUGE;
 	bbox.x1 = bbox.y1 = -NR_HUGE;
 	bp.path = shape->curve->bpath;
-	nr_path_matrix_bbox_union(&bp, &gc->transform, &bbox, 1.0);
+	nr_path_matrix_bbox_union(&bp, gc->transform, &bbox, 1.0);
 	if (shape->stroke.paint.type() != NRArenaShape::Paint::NONE) {
 	    float width, scale;
 	    scale = NR_MATRIX_DF_EXPANSION (&gc->transform);

@@ -18,6 +18,7 @@
 
 #include <libnr/nr-macros.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-ops.h>
 #include <libnr/nr-pixblock.h>
 
 #include "macros.h"
@@ -32,7 +33,7 @@ static void sp_chars_init (SPChars *chars);
 static void sp_chars_release (SPObject *object);
 static void sp_chars_modified (SPObject *object, guint flags);
 
-static void sp_chars_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
+static void sp_chars_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static NRArenaItem *sp_chars_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 
 static SPItemClass *parent_class;
@@ -126,19 +127,15 @@ sp_chars_modified (SPObject *object, unsigned int flags)
 }
 
 static void
-sp_chars_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
+sp_chars_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
-	SPChars *chars;
-	SPCharElement *el;
+	SPChars * const chars = SP_CHARS(item);
 
-	chars = SP_CHARS (item);
-
-	for (el = chars->elements; el != NULL; el = el->next) {
+	for (SPCharElement *el = chars->elements; el != NULL; el = el->next) {
 		NRBPath bpath;
 		if (nr_font_glyph_outline_get (el->font, el->glyph, &bpath, FALSE)) {
-			NRMatrix a;
-			nr_matrix_multiply (&a, &el->transform, transform);
-			nr_path_matrix_bbox_union (&bpath, &a, bbox, 0.25);
+			NR::Matrix const a( el->transform * transform );
+			nr_path_matrix_bbox_union(&bpath, a, bbox, 0.25);
 		}
 	}
 }

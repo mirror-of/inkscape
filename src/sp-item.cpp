@@ -259,7 +259,7 @@ clip_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item)
 	if (SP_IS_CLIPPATH (clip)) {
 		NRRect bbox;
 		SPItemView *v;
-		sp_item_invoke_bbox (item, &bbox, NULL, TRUE);
+		sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE);
 		for (v = item->display; v != NULL; v = v->next) {
 			NRArenaItem *ai;
 			if (!v->arenaitem->key) NR_ARENA_ITEM_SET_KEY (v->arenaitem, sp_item_display_key_new (3));
@@ -285,7 +285,7 @@ mask_ref_changed(SPObject *old_mask, SPObject *mask, SPItem *item)
 	if (SP_IS_MASK (mask)) {
 		NRRect bbox;
 		SPItemView *v;
-		sp_item_invoke_bbox (item, &bbox, NULL, TRUE);
+		sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE);
 		for (v = item->display; v != NULL; v = v->next) {
 			NRArenaItem *ai;
 			if (!v->arenaitem->key) NR_ARENA_ITEM_SET_KEY (v->arenaitem, sp_item_display_key_new (3));
@@ -322,7 +322,7 @@ sp_item_update (SPObject *object, SPCtx *ctx, guint flags)
 		if ( clip_path || mask ) {
 			NRRect bbox;
 
-			sp_item_invoke_bbox (item, &bbox, NULL, TRUE);
+			sp_item_invoke_bbox(item, &bbox, NR::identity(), TRUE);
 			if (clip_path) {
 				for (v = item->display; v != NULL; v = v->next) {
 					sp_clippath_set_bbox (clip_path, NR_ARENA_ITEM_GET_KEY (v->arenaitem), &bbox);
@@ -380,13 +380,13 @@ sp_item_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 void
-sp_item_invoke_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int clear)
+sp_item_invoke_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const clear)
 {
 	sp_item_invoke_bbox_full (item, bbox, transform, 0, clear);
 }
 
 void
-sp_item_invoke_bbox_full (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags, unsigned int clear)
+sp_item_invoke_bbox_full(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags, unsigned const clear)
 {
 	g_assert (item != NULL);
 	g_assert (SP_IS_ITEM (item));
@@ -396,8 +396,6 @@ sp_item_invoke_bbox_full (SPItem *item, NRRect *bbox, const NRMatrix *transform,
 		bbox->x0 = bbox->y0 = 1e18;
 		bbox->x1 = bbox->y1 = -1e18;
 	}
-
-	if (!transform) transform = &NR_MATRIX_IDENTITY;
 
 	if (((SPItemClass *) G_OBJECT_GET_CLASS (item))->bbox)
 		((SPItemClass *) G_OBJECT_GET_CLASS (item))->bbox (item, bbox, transform, flags);
@@ -435,9 +433,7 @@ sp_item_bbox_desktop (SPItem *item, NRRect *bbox)
 	g_assert (SP_IS_ITEM (item));
 	g_assert (bbox != NULL);
 
-	NRMatrix i2d;
-	sp_item_i2d_affine(item, &i2d);
-	sp_item_invoke_bbox(item, bbox, &i2d, TRUE);
+	sp_item_invoke_bbox(item, bbox, sp_item_i2d_affine(item), TRUE);
 }
 
 NR::Rect sp_item_bbox_desktop(SPItem *item)
@@ -450,10 +446,8 @@ NR::Rect sp_item_bbox_desktop(SPItem *item)
 static int sp_item_private_snappoints(SPItem *item, NR::Point p[], int size)
 {
 	if (size < 2) return 0;
-	NRMatrix i2d;
-	sp_item_i2d_affine(item, &i2d);
 	NRRect bbox;
-	sp_item_invoke_bbox(item, &bbox, &i2d, TRUE);
+	sp_item_invoke_bbox(item, &bbox, sp_item_i2d_affine(item), TRUE);
 	NR::Rect const bbox2(bbox);
 	/* Just a pair of opposite corners of the bounding box suffices given that we don't yet
 	   support angled guide lines. */

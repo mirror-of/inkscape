@@ -376,10 +376,9 @@ sp_icon_image_load_svg ( const gchar *name,
         object = sp_document_lookup_id (doc, name);
         if (object && SP_IS_ITEM (object)) {
             /* Find bbox in document */
-            NRMatrix i2doc;
-            sp_item_i2doc_affine(SP_ITEM(object), &i2doc);
+	    NR::Matrix const i2doc(sp_item_i2doc_affine(SP_ITEM(object)));
             NRRect dbox;
-            sp_item_invoke_bbox(SP_ITEM(object), &dbox, &i2doc, TRUE);
+            sp_item_invoke_bbox(SP_ITEM(object), &dbox, i2doc, TRUE);
             /* This is in document coordinates, i.e. pixels */
             if (!nr_rect_d_test_empty (&dbox))
             {

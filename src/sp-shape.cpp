@@ -51,7 +51,7 @@ static void sp_shape_release (SPObject *object);
 static void sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags);
 static void sp_shape_modified (SPObject *object, unsigned int flags);
 
-static void sp_shape_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
+static void sp_shape_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 void sp_shape_print (SPItem * item, SPPrintContext * ctx);
 static NRArenaItem *sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_shape_hide (SPItem *item, unsigned int key);
@@ -228,7 +228,7 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		NRRect paintbox;
 		/* This is suboptimal, because changing parent style schedules recalculation */
 		/* But on the other hand - how can we know that parent does not tie style and transform */
-		sp_item_invoke_bbox (SP_ITEM (object), &paintbox, NULL, TRUE);
+		sp_item_invoke_bbox(SP_ITEM (object), &paintbox, NR::identity(), TRUE);
 		for (SPItemView *v = SP_ITEM (shape)->display; v != NULL; v = v->next) {
 			if (flags & SP_OBJECT_MODIFIED_FLAG) {
 				nr_arena_shape_set_path(NR_ARENA_SHAPE(v->arenaitem), shape->curve,(flags & SP_OBJECT_USER_MODIFIED_FLAG_B));
@@ -475,7 +475,7 @@ sp_shape_modified (SPObject *object, unsigned int flags)
 	}
 }
 
-static void sp_shape_bbox(SPItem *item, NRRect *bbox, NRMatrix const *transform, unsigned flags)
+static void sp_shape_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
     SPShape *shape = SP_SHAPE (item);
 
@@ -493,10 +493,9 @@ static void sp_shape_bbox(SPItem *item, NRRect *bbox, NRMatrix const *transform,
 
         SPStyle* style=SP_OBJECT_STYLE (item);
         if (style->stroke.type != SP_PAINT_TYPE_NONE) {
-            float width, scale;
-            scale = NR_MATRIX_DF_EXPANSION (transform);
+            double const scale = expansion(transform);
             if ( fabsf(style->stroke_width.computed * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
-                width = MAX (0.125, style->stroke_width.computed * scale);
+                double const width = MAX(0.125, style->stroke_width.computed * scale);
                 if ( fabs(cbbox.x1-cbbox.x0) > -0.00001 && fabs(cbbox.y1-cbbox.y0) > -0.00001 ) {
                     cbbox.x0-=0.5*width;
                     cbbox.x1+=0.5*width;
@@ -515,16 +514,15 @@ static void sp_shape_bbox(SPItem *item, NRRect *bbox, NRMatrix const *transform,
 void
 sp_shape_print (SPItem *item, SPPrintContext *ctx)
 {
-	SPShape *shape;
 	NRRect pbox, dbox, bbox;
 	NRMatrix i2d;
 
-	shape = SP_SHAPE (item);
+	SPShape *shape = SP_SHAPE(item);
 
 	if (!shape->curve) return;
 
 	/* fixme: Think (Lauris) */
-	sp_item_invoke_bbox (item, &pbox, NULL, TRUE);
+	sp_item_invoke_bbox(item, &pbox, NR::identity(), TRUE);
 	dbox.x0 = 0.0;
 	dbox.y0 = 0.0;
 	dbox.x1 = sp_document_width (SP_OBJECT_DOCUMENT (item));
@@ -586,7 +584,7 @@ sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 	arenaitem = NRArenaShape::create(arena);
 	nr_arena_shape_set_style (NR_ARENA_SHAPE (arenaitem), object->style);
 	nr_arena_shape_set_path(NR_ARENA_SHAPE(arenaitem), shape->curve,false);
-	sp_item_invoke_bbox (item, &paintbox, NULL, TRUE);
+	sp_item_invoke_bbox(item, &paintbox, NR::identity(), TRUE);
 	nr_arena_shape_set_paintbox (NR_ARENA_SHAPE (arenaitem), &paintbox);
 
         if (sp_shape_has_markers (shape)) {

@@ -401,21 +401,15 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
             NRRect bbox;
             int x0, y0, x1, y1, w, h;
 
-            /* This odd construction replaces
-            ** NRMatrix a = rf->transform;
-            ** to prevent the GCC warning
-            ** "conversion sequence for the argument is better"
-            */
-            NRMatrix a = rf->transform.operator const NRMatrix&();
-            a[4] = 0.0;
-            a[5] = 0.0;
+            NR::Matrix const a(NR::transform(rf->transform));
+
             {
                 NRBPath bp;
                 /* fixme: */
                 bbox.x0 = bbox.y0 = NR_HUGE;
                 bbox.x1 = bbox.y1 = -NR_HUGE;
                 bp.path = gbp.path;
-                nr_path_matrix_bbox_union(&bp, &a, &bbox, 1.0);
+                nr_path_matrix_bbox_union(&bp, a, &bbox, 1.0);
             }
       
             if (!nr_rect_d_test_empty (&bbox)) {
@@ -441,17 +435,11 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
                     slot->glyph.lg.shbbox=bbox;
           
                     slot->glyph.lg.delayed=new Path;
-                    {
-                        NR::Matrix   tempMat(&a);
-                        slot->glyph.lg.delayed->LoadArtBPath(gbp.path,tempMat,true);
-                    }
+                    slot->glyph.lg.delayed->LoadArtBPath(gbp.path, a, true);
  
 /*          Path*  thePath=new Path;
 	    Shape* theShape=new Shape;
-	    {
-            NR::Matrix   tempMat(&a);
-            thePath->LoadArtBPath(gbp.path,tempMat,true);
-	    }
+            thePath->LoadArtBPath(gbp.path, a, true);
 	    thePath->Convert(0.25);
 	    thePath->Fill(theShape,0);
 	    slot->glyph.lg.shp->ConvertToShape(theShape,fill_nonZero);
@@ -474,10 +462,7 @@ nr_rasterfont_ensure_glyph_slot (NRRasterFont *rf, unsigned int glyph, unsigned 
 
                     Path*  thePath=new Path;
                     Shape* theShape=new Shape;
-                    {
-                        NR::Matrix   tempMat(&a);
-                        thePath->LoadArtBPath(gbp.path,tempMat,true);
-                    }
+                    thePath->LoadArtBPath(gbp.path, a, true);
                     thePath->Convert(0.25);
                     thePath->Fill(theShape,0);
           

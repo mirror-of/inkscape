@@ -31,7 +31,7 @@
 #include <gtk/gtktooltips.h>
 
 #include <libnr/nr-values.h>
-
+#include <libnr/nr-matrix-fns.h>
 #include <libnr/nr-path.h>
 
 #include <helper/sp-intl.h>
@@ -425,7 +425,7 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
             /* TODO: This is plain wrong */
             SPLinearGradient *lg = SP_LINEARGRADIENT (SP_OBJECT_STYLE_FILL_SERVER (object));
             NRRect bb;
-            sp_item_invoke_bbox (SP_ITEM (object), &bb, NULL, TRUE);
+            sp_item_invoke_bbox(SP_ITEM(object), &bb, NR::identity(), TRUE);
             NRMatrix fctm;
             sp_item_i2doc_affine (SP_ITEM (object), &fctm);
             NRMatrix gs2d;
@@ -480,7 +480,7 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
             /* TODO: This is plain wrong */
             SPRadialGradient *rg = SP_RADIALGRADIENT (SP_OBJECT_STYLE_FILL_SERVER (object));
             NRRect bb;
-            sp_item_invoke_bbox (SP_ITEM (object), &bb, NULL, TRUE);
+            sp_item_invoke_bbox(SP_ITEM(object), &bb, NR::identity(), TRUE);
             NRMatrix fctm;
             sp_item_i2doc_affine (SP_ITEM (object), &fctm);
             NRMatrix gs2d;

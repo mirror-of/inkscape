@@ -46,7 +46,7 @@ static SPRepr *sp_use_write (SPObject *object, SPRepr *repr, guint flags);
 static void sp_use_update (SPObject *object, SPCtx *ctx, guint flags);
 static void sp_use_modified (SPObject *object, guint flags);
 
-static void sp_use_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
+static void sp_use_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static void sp_use_print (SPItem *item, SPPrintContext *ctx);
 static gchar * sp_use_description (SPItem * item);
 static NRArenaItem *sp_use_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
@@ -278,20 +278,17 @@ sp_use_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_use_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
+sp_use_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
-	SPUse * use;
-
-	use = SP_USE (item);
+	SPUse *use = SP_USE(item);
 
 	if (use->child && SP_IS_ITEM (use->child)) {
-		SPItem *child;
-		NRMatrix ct, t;
-		child = SP_ITEM (use->child);
-		nr_matrix_set_translate (&t, use->x.computed, use->y.computed);
-		nr_matrix_multiply (&ct, &t, transform);
-		nr_matrix_multiply (&ct, &child->transform, &ct);
-		sp_item_invoke_bbox_full (SP_ITEM (use->child), bbox, &ct, flags, FALSE);
+		SPItem *child = SP_ITEM(use->child);
+		NR::Matrix const ct( child->transform
+				     * NR::translate(use->x.computed,
+						     use->y.computed)
+				     * transform );
+		sp_item_invoke_bbox_full(child, bbox, ct, flags, FALSE);
 	}
 }
 

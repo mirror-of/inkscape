@@ -111,7 +111,7 @@ struct SPItemClass {
 	SPObjectClass parent_class;
 
 	/* BBox union in given coordinate system */
-	void (* bbox) (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
+	void (* bbox) (SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 
 	/* Printing method. Assumes ctm is set to item affine matrix */
 	/* fixme: Think about it, and maybe implement generic export method instead (Lauris) */
@@ -139,8 +139,8 @@ struct SPItemClass {
 
 /* Methods */
 
-void sp_item_invoke_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int clear);
-void sp_item_invoke_bbox_full (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags, unsigned int clear);
+void sp_item_invoke_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const clear);
+void sp_item_invoke_bbox_full (SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags, unsigned const clear);
 
 unsigned sp_item_pos_in_parent(SPItem *item);
 

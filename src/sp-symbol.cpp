@@ -14,6 +14,7 @@
 #include "config.h"
 
 #include <string.h>
+#include "libnr/nr-matrix-ops.h"
 #include "svg/svg.h"
 #include "display/nr-arena-group.h"
 #include "attributes.h"
@@ -37,7 +38,7 @@ static SPRepr *sp_symbol_write (SPObject *object, SPRepr *repr, guint flags);
 
 static NRArenaItem *sp_symbol_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_symbol_hide (SPItem *item, unsigned int key);
-static void sp_symbol_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
+static void sp_symbol_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static void sp_symbol_print (SPItem *item, SPPrintContext *ctx);
 
 static SPGroupClass *parent_class;
@@ -438,20 +439,16 @@ sp_symbol_hide (SPItem *item, unsigned int key)
 }
 
 static void
-sp_symbol_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
+sp_symbol_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
-	SPSymbol *symbol;
-	NRMatrix a;
-
-	symbol = SP_SYMBOL (item);
+	SPSymbol *symbol = SP_SYMBOL(item);
 
 	if (SP_OBJECT_IS_CLONED (symbol)) {
 		/* Cloned <symbol> is actually renderable */
 
-		nr_matrix_multiply (&a, &symbol->c2p, transform);
-
 		if (((SPItemClass *) (parent_class))->bbox) {
-			((SPItemClass *) (parent_class))->bbox (item, bbox, &a, flags);
+			NR::Matrix const a( symbol->c2p * transform );
+			((SPItemClass *) (parent_class))->bbox(item, bbox, a, flags);
 		}
 	}
 }

@@ -277,9 +277,9 @@ NRRect *SPSelection::boundsInDocument(NRRect *bbox) const {
 	bbox->x1 = bbox->y1 = -1e18;
 
 	for (GSList *l = _items; l != NULL; l = l-> next) {
-		NRMatrix i2doc;
-		sp_item_i2doc_affine(SP_ITEM(l->data), &i2doc);
-		sp_item_invoke_bbox(SP_ITEM(l->data), bbox, &i2doc, FALSE);
+		SPItem * const item = SP_ITEM(l->data);
+		NR::Matrix const i2doc(sp_item_i2doc_affine(item));
+		sp_item_invoke_bbox(item, bbox, i2doc, FALSE);
 	}
 
 	return bbox;

@@ -42,7 +42,7 @@ static void sp_group_set (SPObject *object, unsigned int key, const gchar *value
 static void sp_group_modified (SPObject *object, guint flags);
 static SPRepr *sp_group_write (SPObject *object, SPRepr *repr, guint flags);
 
-static void sp_group_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
+static void sp_group_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static void sp_group_print (SPItem * item, SPPrintContext *ctx);
 static gchar * sp_group_description (SPItem * item);
 static NRArenaItem *sp_group_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
@@ -298,20 +298,13 @@ sp_group_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_group_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
+sp_group_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
-	SPGroup * group;
-	SPItem * child;
-	SPObject * o;
-
-	group = SP_GROUP (item);
-
-	for (o = sp_object_first_child(SP_OBJECT(item)); o != NULL; o = SP_OBJECT_NEXT(o) ) {
-		if (SP_IS_ITEM (o)) {
-			NRMatrix ct;
-			child = SP_ITEM (o);
-			nr_matrix_multiply (&ct, &child->transform, transform);
-			sp_item_invoke_bbox_full (child, bbox, &ct, flags, FALSE);
+	for (SPObject *o = sp_object_first_child(SP_OBJECT(item)); o != NULL; o = SP_OBJECT_NEXT(o)) {
+		if (SP_IS_ITEM(o)) {
+			SPItem *child = SP_ITEM(o);
+			NR::Matrix const ct(child->transform * transform);
+			sp_item_invoke_bbox_full(child, bbox, ct, flags, FALSE);
 		}
 	}
 }

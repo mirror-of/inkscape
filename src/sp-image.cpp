@@ -46,7 +46,7 @@ static void sp_image_set (SPObject *object, unsigned int key, const gchar *value
 static void sp_image_update (SPObject *object, SPCtx *ctx, unsigned int flags);
 static SPRepr *sp_image_write (SPObject *object, SPRepr *repr, guint flags);
 
-static void sp_image_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
+static void sp_image_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static void sp_image_print (SPItem * item, SPPrintContext *ctx);
 static gchar * sp_image_description (SPItem * item);
 static int sp_image_snappoints(SPItem *item, NR::Point p[], int size);
@@ -267,45 +267,20 @@ sp_image_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_image_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
+sp_image_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
-	SPImage *image;
+	SPImage const &image = *SP_IMAGE(item);
 
-	image = SP_IMAGE (item);
+	if ((image.width.computed > 0.0) && (image.height.computed > 0.0)) {
+		double const x0 = image.x.computed;
+		double const y0 = image.y.computed;
+		double const x1 = x0 + image.width.computed;
+		double const y1 = y0 + image.height.computed;
 
-	if ((image->width.computed > 0.0) && (image->height.computed > 0.0)) {
-		double x0, y0, x1, y1;
-		double x, y;
-
-		x0 = image->x.computed;
-		y0 = image->y.computed;
-		x1 = x0 + image->width.computed;
-		y1 = y0 + image->height.computed;
-
-		x = NR_MATRIX_DF_TRANSFORM_X (transform, x0, y0);
-		y = NR_MATRIX_DF_TRANSFORM_Y (transform, x0, y0);
-		bbox->x0 = MIN (bbox->x0, x);
-		bbox->y0 = MIN (bbox->y0, y);
-		bbox->x1 = MAX (bbox->x1, x);
-		bbox->y1 = MAX (bbox->y1, y);
-		x = NR_MATRIX_DF_TRANSFORM_X (transform, x1, y0);
-		y = NR_MATRIX_DF_TRANSFORM_Y (transform, x1, y0);
-		bbox->x0 = MIN (bbox->x0, x);
-		bbox->y0 = MIN (bbox->y0, y);
-		bbox->x1 = MAX (bbox->x1, x);
-		bbox->y1 = MAX (bbox->y1, y);
-		x = NR_MATRIX_DF_TRANSFORM_X (transform, x1, y1);
-		y = NR_MATRIX_DF_TRANSFORM_Y (transform, x1, y1);
-		bbox->x0 = MIN (bbox->x0, x);
-		bbox->y0 = MIN (bbox->y0, y);
-		bbox->x1 = MAX (bbox->x1, x);
-		bbox->y1 = MAX (bbox->y1, y);
-		x = NR_MATRIX_DF_TRANSFORM_X (transform, x0, y1);
-		y = NR_MATRIX_DF_TRANSFORM_Y (transform, x0, y1);
-		bbox->x0 = MIN (bbox->x0, x);
-		bbox->y0 = MIN (bbox->y0, y);
-		bbox->x1 = MAX (bbox->x1, x);
-		bbox->y1 = MAX (bbox->y1, y);
+		nr_rect_union_pt(bbox, NR::Point(x0, y0) * transform);
+		nr_rect_union_pt(bbox, NR::Point(x1, y0) * transform);
+		nr_rect_union_pt(bbox, NR::Point(x1, y1) * transform);
+		nr_rect_union_pt(bbox, NR::Point(x0, y1) * transform);
 	}
 }
 

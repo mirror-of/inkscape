@@ -19,6 +19,7 @@
 
 #include <libnr/nr-values.h>
 #include <libnr/nr-matrix.h>
+#include <libnr/nr-matrix-fns.h>
 
 #include <gtk/gtksignal.h>
 #include <gtk/gtkhbox.h>
@@ -484,7 +485,7 @@ sp_paint_selector_write_lineargradient (SPPaintSelector *psel, SPLinearGradient 
 	/* Now position */
 	sp_paint_selector_get_gradient_position_floatv (psel, p);
 	/* Calculate raw gradient transform */
-	sp_item_invoke_bbox (item, &fbb, NULL, TRUE);
+	sp_item_invoke_bbox(item, &fbb, NR::identity(), TRUE);
 	sp_item_i2doc_affine (item, &fctm);
 	sp_paint_selector_get_gradient_gs2d_matrix_f (psel, &gs2d);
 	sp_gradient_get_g2d_matrix_f (SP_GRADIENT (lg), &fctm, &fbb, &g2d);
@@ -531,7 +532,7 @@ sp_paint_selector_write_radialgradient (SPPaintSelector *psel, SPRadialGradient 
 	/* Now position */
 	sp_paint_selector_get_gradient_position_floatv (psel, p);
 	/* Calculate raw gradient transform */
-	sp_item_invoke_bbox (item, &fbb, NULL, TRUE);
+	sp_item_invoke_bbox(item, &fbb, NR::identity(), TRUE);
 	sp_item_i2doc_affine (item, &fctm);
 	sp_paint_selector_get_gradient_gs2d_matrix_f (psel, &gs2d);
 	sp_gradient_get_g2d_matrix_f (SP_GRADIENT (rg), &fctm, &fbb, &g2d);

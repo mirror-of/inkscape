@@ -51,7 +51,7 @@ static void sp_typeset_set (SPObject *object, unsigned int key, const gchar *val
 static void sp_typeset_modified (SPObject *object, guint flags);
 static SPRepr *sp_typeset_write (SPObject *object, SPRepr *repr, guint flags);
 
-static void sp_typeset_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
+static void sp_typeset_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static void sp_typeset_print (SPItem * item, SPPrintContext *ctx);
 static gchar * sp_typeset_description (SPItem * item);
 static NRArenaItem *sp_typeset_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
@@ -296,14 +296,10 @@ sp_typeset_write (SPObject *object, SPRepr *repr, guint flags)
 }
 
 static void
-sp_typeset_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
+sp_typeset_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
-	SPTypeset * group;
-
-	group = SP_TYPESET (item);
-
 	if (((SPItemClass *) (parent_class))->bbox)
-		((SPItemClass *) (parent_class))->bbox (item, bbox,transform, flags);
+		((SPItemClass *) (parent_class))->bbox(item, bbox, transform, flags);
 }
 
 static void

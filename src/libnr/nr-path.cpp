@@ -10,10 +10,15 @@
  */
 
 #include "nr-matrix.h"
+#include "nr-matrix-ops.h"
 #include "nr-rect.h"
 #include "nr-path.h"
 
 static void nr_curve_bbox (NR::Coord x000, NR::Coord y000, NR::Coord x001, NR::Coord y001, NR::Coord x011, NR::Coord y011, NR::Coord x111, NR::Coord y111, NRRect *bbox);
+
+static void nr_curve_bbox(NR::Point const p000, NR::Point const p001,
+			  NR::Point const p011, NR::Point const p111,
+			  NRRect *bbox);
 
 NRBPath *nr_path_duplicate_transform(NRBPath *d, NRBPath *s, NRMatrix const *transform)
 {
@@ -274,6 +279,21 @@ nr_path_matrix_point_bbox_wind_distance (NRBPath *bpath, NR::Matrix const &m, NR
 	}
 }
 
+static void
+nr_curve_bbox(NR::Point const p000, NR::Point const p001,
+	      NR::Point const p011, NR::Point const p111,
+	      NRRect *bbox)
+{
+	using NR::X;
+	using NR::Y;
+
+	nr_curve_bbox(p000[X], p000[Y],
+		      p001[X], p001[Y],
+		      p011[X], p011[Y],
+		      p111[X], p111[Y],
+		      bbox);
+}
+
 /* Fast bbox calculation */
 /* Thanks to Nathan Hurst for suggesting it */
 
@@ -389,57 +409,57 @@ nr_curve_bbox (NR::Coord x000, NR::Coord y000, NR::Coord x001, NR::Coord y001, N
 }
 
 void
-nr_path_matrix_bbox_union (NRBPath *bpath, NRMatrix const *m,
-			       NRRect *bbox,
-			       NR::Coord tolerance)
+nr_path_matrix_bbox_union(NRBPath *bpath, NR::Matrix const &m,
+			  NRRect *bbox,
+			  NR::Coord const tolerance)
 {
-	NR::Coord x0, y0, x3, y3;
-	const NArtBpath *p;
+    /* TODO: tolerance is unused.  Consider removing this argument. */
 
-	if (!bpath->path) return;
+    using NR::X;
+    using NR::Y;
 
-	if (!m) m = &NR_MATRIX_IDENTITY;
+    if (!bpath->path) {
+	return;
+    }
 
-	x0 = y0 = 0.0;
-	x3 = y3 = 0.0;
+    NR::Point prev0(0, 0);
+    for (NArtBpath const *p = bpath->path; p->code != NR_END; ++p) {
+	switch (p->code) {
+	    case NR_MOVETO_OPEN:
+	    case NR_MOVETO: {
+		NR::Point const c3(p->x3,
+				   p->y3);
+		prev0 = c3 * m;
+		nr_rect_union_pt(bbox, prev0);
+		break;
+	    }
 
-	for (p = bpath->path; p->code != NR_END; p+= 1) {
-		switch (p->code) {
-		case NR_MOVETO_OPEN:
-		case NR_MOVETO:
-			x0 = m->c[0] * p->x3 + m->c[2] * p->y3 + m->c[4];
-			y0 = m->c[1] * p->x3 + m->c[3] * p->y3 + m->c[5];
-			bbox->x0 = (NR::Coord) MIN (bbox->x0, x0);
-			bbox->y0 = (NR::Coord) MIN (bbox->y0, y0);
-			bbox->x1 = (NR::Coord) MAX (bbox->x1, x0);
-			bbox->y1 = (NR::Coord) MAX (bbox->y1, y0);
-			break;
-		case NR_LINETO:
-			x3 = m->c[0] * p->x3 + m->c[2] * p->y3 + m->c[4];
-			y3 = m->c[1] * p->x3 + m->c[3] * p->y3 + m->c[5];
-			bbox->x0 = (NR::Coord) MIN (bbox->x0, x3);
-			bbox->y0 = (NR::Coord) MIN (bbox->y0, y3);
-			bbox->x1 = (NR::Coord) MAX (bbox->x1, x3);
-			bbox->y1 = (NR::Coord) MAX (bbox->y1, y3);
-			x0 = x3;
-			y0 = y3;
-			break;
-		case NR_CURVETO:
-			x3 = m->c[0] * p->x3 + m->c[2] * p->y3 + m->c[4];
-			y3 = m->c[1] * p->x3 + m->c[3] * p->y3 + m->c[5];
-			nr_curve_bbox (x0, y0,
-				       m->c[0] * p->x1 + m->c[2] * p->y1 + m->c[4],
-				       m->c[1] * p->x1 + m->c[3] * p->y1 + m->c[5],
-				       m->c[0] * p->x2 + m->c[2] * p->y2 + m->c[4],
-				       m->c[1] * p->x2 + m->c[3] * p->y2 + m->c[5],
-				       x3, y3,
-				       bbox);
-			x0 = x3;
-			y0 = y3;
-			break;
-		default:
-			break;
-		}
+	    case NR_LINETO: {
+		NR::Point const c3(p->x3,
+				   p->y3);
+		NR::Point const endPt( c3 * m );
+		nr_rect_union_pt(bbox, endPt);
+		prev0 = endPt;
+		break;
+	    }
+
+	    case NR_CURVETO: {
+		NR::Point const c1(p->x1, p->y1);
+		NR::Point const c2(p->x2, p->y2);
+		NR::Point const c3(p->x3, p->y3);
+		NR::Point const endPt( c3 * m );
+		nr_curve_bbox(prev0,
+			      c1 * m,
+			      c2 * m,
+			      endPt,
+			      bbox);
+		prev0 = endPt;
+		break;
+	    }
+
+	    default:
+	        break;
 	}
+    }
 }
 

@@ -41,7 +41,7 @@ static void sp_root_modified (SPObject *object, guint flags);
 static SPRepr *sp_root_write (SPObject *object, SPRepr *repr, guint flags);
 
 static NRArenaItem *sp_root_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
-static void sp_root_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags);
+static void sp_root_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static void sp_root_print (SPItem *item, SPPrintContext *ctx);
 
 static SPGroupClass *parent_class;
@@ -649,15 +649,15 @@ sp_root_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags
 }
 
 static void
-sp_root_bbox (SPItem *item, NRRect *bbox, const NRMatrix *transform, unsigned int flags)
+sp_root_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags)
 {
 	SPRoot *root = SP_ROOT (item);
 
 	if (((SPItemClass *) (parent_class))->bbox) {
-		NRMatrix const product( root->c2p * NR::Matrix(transform) );
-		((SPItemClass *) (parent_class))->bbox (item, bbox, 
-							&product,
-							flags);
+		NR::Matrix const product( root->c2p * transform );
+		((SPItemClass *) (parent_class))->bbox(item, bbox,
+						       product,
+						       flags);
 	}
 }
 
