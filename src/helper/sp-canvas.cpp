@@ -503,8 +503,7 @@ sp_canvas_item_ungrab (SPCanvasItem *item, guint32 etime)
 }
 
 
-void
-sp_canvas_item_i2w_affine (SPCanvasItem *item, double affine[6])
+void sp_canvas_item_i2w_affine(SPCanvasItem const *item, double affine[6])
 {
 	g_return_if_fail (item != NULL);
 	g_return_if_fail (SP_IS_CANVAS_ITEM (item));
@@ -519,8 +518,7 @@ sp_canvas_item_i2w_affine (SPCanvasItem *item, double affine[6])
 	}
 }
 
-void
-sp_canvas_item_w2i (SPCanvasItem *item, double *x, double *y)
+void sp_canvas_item_w2i(SPCanvasItem const *item, double *x, double *y)
 {
 	double i2w[6], w2i[6];
 	double px, py;
@@ -540,8 +538,7 @@ sp_canvas_item_w2i (SPCanvasItem *item, double *x, double *y)
 	*y = w2i[1] * px + w2i[3] * py + w2i[5];
 }
 
-void
-sp_canvas_item_i2w (SPCanvasItem *item, double *x, double *y)
+void sp_canvas_item_i2w(SPCanvasItem const *item, double *x, double *y)
 {
 	double i2w[6];
 	double px, py;
@@ -560,16 +557,15 @@ sp_canvas_item_i2w (SPCanvasItem *item, double *x, double *y)
 	*y = i2w[1] * px + i2w[3] * py + i2w[5];
 }
 
-static int
-is_descendant (SPCanvasItem *item, SPCanvasItem *parent)
+static bool is_descendant(SPCanvasItem const *item, SPCanvasItem const *parent)
 {
 	while (item) {
 		if (item == parent)
-			return TRUE;
+			return true;
 		item = item->parent;
 	}
 
-	return FALSE;
+	return false;
 }
 
 void
@@ -2027,8 +2023,7 @@ sp_canvas_request_redraw (SPCanvas *canvas, int x0, int y0, int x1, int y1)
 	}
 }
 
-void
-sp_canvas_window_to_world (SPCanvas *canvas, double winx, double winy, double *worldx, double *worldy)
+void sp_canvas_window_to_world(SPCanvas const *canvas, double winx, double winy, double *worldx, double *worldy)
 {
 	g_return_if_fail (canvas != NULL);
 	g_return_if_fail (SP_IS_CANVAS (canvas));
@@ -2037,8 +2032,7 @@ sp_canvas_window_to_world (SPCanvas *canvas, double winx, double winy, double *w
 	if (worldy) *worldy = canvas->y0 + winy;
 }
 
-void
-sp_canvas_world_to_window (SPCanvas *canvas, double worldx, double worldy, double *winx, double *winy)
+void sp_canvas_world_to_window(SPCanvas const *canvas, double worldx, double worldy, double *winx, double *winy)
 {
 	g_return_if_fail (canvas != NULL);
 	g_return_if_fail (SP_IS_CANVAS (canvas));
@@ -2047,7 +2041,7 @@ sp_canvas_world_to_window (SPCanvas *canvas, double worldx, double worldy, doubl
 	if (winy) *winy = worldy - canvas->y0;
 }
 
-NR::Point sp_canvas_window_to_world (SPCanvas *canvas, NR::Point const win)
+NR::Point sp_canvas_window_to_world(SPCanvas const *canvas, NR::Point const win)
 {
 	g_assert (canvas != NULL);
 	g_assert (SP_IS_CANVAS (canvas));
@@ -2055,7 +2049,7 @@ NR::Point sp_canvas_window_to_world (SPCanvas *canvas, NR::Point const win)
 	return NR::Point(canvas->x0 + win[0], canvas->y0 + win[1]);
 }
 
-NR::Point sp_canvas_world_to_window (SPCanvas *canvas, NR::Point const world)
+NR::Point sp_canvas_world_to_window(SPCanvas const *canvas, NR::Point const world)
 {
 	g_assert (canvas != NULL);
 	g_assert (SP_IS_CANVAS (canvas));
@@ -2063,8 +2057,21 @@ NR::Point sp_canvas_world_to_window (SPCanvas *canvas, NR::Point const world)
 	return NR::Point(world[0] - canvas->x0, world[1] - canvas->y0);
 }
 
-NRRect *
-sp_canvas_get_viewbox (SPCanvas *canvas, NRRect *viewbox)
+bool sp_canvas_world_pt_inside_window(SPCanvas const *canvas, NR::Point const &world)
+{
+	g_assert( canvas != NULL );
+	g_assert(SP_IS_CANVAS(canvas));
+
+	using NR::X;
+	using NR::Y;
+	GtkWidget const &w = *GTK_WIDGET(canvas);
+	return ( ( canvas->x0 <= world[X] )  &&
+		 ( canvas->y0 <= world[Y] )  &&
+		 ( world[X] < canvas->x0 + w.allocation.width )  &&
+		 ( world[Y] < canvas->y0 + w.allocation.height ) );
+}
+
+NRRect *sp_canvas_get_viewbox(SPCanvas const *canvas, NRRect *viewbox)
 {
 	g_return_val_if_fail (canvas != NULL, NULL);
 	g_return_val_if_fail (SP_IS_CANVAS (canvas), NULL);

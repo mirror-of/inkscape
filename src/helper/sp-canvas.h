@@ -81,9 +81,9 @@ void sp_canvas_item_hide (SPCanvasItem *item);
 int sp_canvas_item_grab (SPCanvasItem *item, unsigned int event_mask, GdkCursor *cursor, guint32 etime);
 void sp_canvas_item_ungrab (SPCanvasItem *item, guint32 etime);
 
-void sp_canvas_item_w2i (SPCanvasItem *item, double *x, double *y);
-void sp_canvas_item_i2w (SPCanvasItem *item, double *x, double *y);
-void sp_canvas_item_i2w_affine (SPCanvasItem *item, double affine[6]);
+void sp_canvas_item_w2i(SPCanvasItem const *item, double *x, double *y);
+void sp_canvas_item_i2w(SPCanvasItem const *item, double *x, double *y);
+void sp_canvas_item_i2w_affine(SPCanvasItem const *item, double affine[6]);
 
 void sp_canvas_item_grab_focus (SPCanvasItem *item);
 
@@ -154,14 +154,15 @@ void sp_canvas_update_now (SPCanvas *canvas);
 void sp_canvas_request_redraw_uta (SPCanvas *canvas, ArtUta *uta);
 void sp_canvas_request_redraw (SPCanvas *canvas, int x1, int y1, int x2, int y2);
 
-void sp_canvas_window_to_world (SPCanvas *canvas, double winx, double winy, double *worldx, double *worldy);
-void sp_canvas_world_to_window (SPCanvas *canvas, double worldx, double worldy, double *winx, double *winy);
+void sp_canvas_window_to_world(SPCanvas const *canvas, double winx, double winy, double *worldx, double *worldy);
+void sp_canvas_world_to_window(SPCanvas const *canvas, double worldx, double worldy, double *winx, double *winy);
 
-NR::Point sp_canvas_window_to_world (SPCanvas *canvas, NR::Point const win);
-NR::Point sp_canvas_world_to_window (SPCanvas *canvas, NR::Point const world);
+NR::Point sp_canvas_window_to_world(SPCanvas const *canvas, NR::Point const win);
+NR::Point sp_canvas_world_to_window(SPCanvas const *canvas, NR::Point const world);
 
-NRRect *sp_canvas_get_viewbox (SPCanvas *canvas, NRRect *viewbox);
+bool sp_canvas_world_pt_inside_window(SPCanvas const *canvas, NR::Point const &world);
 
+NRRect *sp_canvas_get_viewbox(SPCanvas const *canvas, NRRect *viewbox);
 
 
 #endif
