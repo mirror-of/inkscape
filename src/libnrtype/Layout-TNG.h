@@ -14,6 +14,7 @@
 #include "libnr/nr-rect.h"
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-ops.h"
+#include "libnr/nr-rotate-ops.h"
 #include <glibmm/ustring.h>
 #include <pango/pango-break.h>
 #include <vector>
