@@ -149,6 +149,33 @@ sp_desktop_apply_style_tool (SPDesktop *desktop, SPRepr *repr, const char *tool,
 	}
 }
 
+/**
+Returns the font size (in SVG pixels) of the text tool style (if text tool uses its own style) or desktop style (otherwise)
+*/
+double
+sp_desktop_get_font_size_tool (SPDesktop *desktop)
+{
+    const gchar *desktop_style = sp_repr_attr (inkscape_get_repr (INKSCAPE, "desktop"), "style");
+    const gchar *style_str;
+    if ((prefs_get_int_attribute ("tools.text", "usecurrent", 0) != 0) && desktop_style) {
+        style_str = desktop_style;
+    } else {
+        SPRepr *tool_repr = inkscape_get_repr(INKSCAPE, "tools.text");
+        if (tool_repr) {
+            style_str = sp_repr_attr (tool_repr, "style");
+        }
+    }
+
+    SPStyle *style = sp_style_new();
+    double ret = 12;
+    if (style_str) {
+        sp_style_merge_from_style_string (style, style_str);
+        ret = style->font_size.computed;
+    } 
+    sp_style_unref(style);
+    return ret;
+}
+
 
 /*
   Local Variables:
