@@ -92,12 +92,12 @@ nr_typeface_w32_init (NRTypeFaceW32 *tfw32)
 
     tface->nglyphs = 1;
 
-    tface->fonts = NULL;
-    tface->hgidx = tface->vgidx = NULL;
-    tface->slots = NULL;
-    tface->slots_length = tface->slots_size = 0;
-    tface->logfont = NULL;
-    tface->hfont = 0;
+    tfw32->fonts = NULL;
+    tfw32->hgidx = tfw32->vgidx = NULL;
+    tfw32->slots = NULL;
+    tfw32->slots_length = tfw32->slots_size = 0;
+    tfw32->logfont = NULL;
+    tfw32->hfont = 0;
 }
 
 static unsigned int w32i = FALSE;

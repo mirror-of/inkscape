@@ -1,3 +1,8 @@
+2004-05-17  Carl Hetherington <inkscape@carlh.net>
+
+	* src/libnrtype/nr-type-w32.cpp: Tentative fix for
+	build problems on Win32.
+
 2004-05-17  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-item.h, src/sp-item.cpp: Remove unused
