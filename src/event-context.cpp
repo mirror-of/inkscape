@@ -371,8 +371,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
 
 			if (within_tolerance) {
 				dontgrab ++;
-				NR::Point const event_w(event->button.x,
-							event->button.y);
+				NR::Point const event_w(event->button.x, event->button.y);
 				NR::Point const event_dt(sp_desktop_w2d_xy_point(desktop, event_w));
 				double const zoom_power = ( (event->button.state & GDK_SHIFT_MASK)
 							    ? -dontgrab
@@ -490,7 +489,7 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
 		}
 		break;
 	case GDK_SCROLL:
-		/* ctrl + wheel, pan left--right */
+		/* shift + wheel, pan left--right */
 		if (event->scroll.state & GDK_SHIFT_MASK) {
 			switch (event->scroll.direction) {
 			case GDK_SCROLL_UP:
@@ -502,21 +501,27 @@ static gint sp_event_context_private_root_handler(SPEventContext *event_context,
 			default:
 				break;
 			}
-			/* shift + wheel, zoom in--out */
+
+		/* ctrl + wheel, zoom in--out */
 		} else if (event->scroll.state & GDK_CONTROL_MASK) {
 			double rel_zoom;
 			switch (event->scroll.direction) {
-			case GDK_SCROLL_UP:   rel_zoom = zoom_inc;     break;
-			case GDK_SCROLL_DOWN: rel_zoom = 1 / zoom_inc; break;
-			default:              rel_zoom = 0.0;          break;
+			case GDK_SCROLL_UP:   
+				rel_zoom = 1 / zoom_inc;
+				break;
+			case GDK_SCROLL_DOWN: 
+				rel_zoom = zoom_inc;
+				break;
+			default:              
+				rel_zoom = 0.0;
+				break;
 			}
 			if (rel_zoom != 0.0) {
-				NR::Point const scroll_w(event->scroll.x,
-							 event->scroll.y);
-				NR::Point const scroll_dt(sp_desktop_w2d_xy_point(desktop, scroll_w));
+				NR::Point const scroll_dt = sp_desktop_point(desktop);
 				sp_desktop_zoom_relative_keep_point(desktop, scroll_dt, rel_zoom);
 			}
-			/* no modifier, pan up--down (left--right on multiwheel mice?) */
+
+		/* no modifier, pan up--down (left--right on multiwheel mice?) */
 		} else {
 			switch (event->scroll.direction) {
 			case GDK_SCROLL_UP:
