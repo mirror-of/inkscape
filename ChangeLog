@@ -1,3 +1,8 @@
+2004-12-10  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/sp-conn-end.cpp (sp_conn_end_move_compensate):
+	  Fix for undo/save: wasn't calling updateRepr().
+
 2004-12-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/style.cpp (sp_style_merge_from_style_string):

@@ -101,7 +101,8 @@ sp_conn_end_move_compensate(NR::Matrix const *mp, SPItem *moved_item,
         sp_curve_transform(path->curve,
                            NR::translate(connPt - h2oldEndPt_pcoordsys[att_h]));
     }
-    SP_OBJECT(path)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    path->updateRepr();
 }
 
 static NR::Point
