@@ -47,7 +47,12 @@ DB::register_ext (Extension *module)
 	g_return_if_fail(module->get_id() != NULL);
 
 	// printf("Registering: %s\n", module->get_id());
+	// only add to list if it's a never-before-seen module
+	bool add_to_list=((*moduledict.find(module->get_id())).second == NULL);
+
 	moduledict[module->get_id()] = module;
+
+	if (add_to_list) modulelist.push_back(module);
 }
 
 /**
@@ -61,6 +66,9 @@ DB::unregister_ext (Extension * module)
 
 	// printf("Extension DB: removing %s\n", module->get_id());
 	moduledict.erase(moduledict.find(module->get_id()));
+	// only remove if it's not there any more
+	if ((*moduledict.find(module->get_id())).second == NULL)
+		modulelist.remove(module);
 }
 
 /**
@@ -101,10 +109,11 @@ DB::get (const gchar *key)
 void
 DB::foreach (void (*in_func)(Extension * in_plug, gpointer in_data), gpointer in_data)
 {
-	std::map <const char *, Extension *>::iterator cur;
+	std::list <Extension *>::iterator cur;
 
-	for (cur = moduledict.begin(); cur != moduledict.end(); cur++) {
-		in_func((*cur).second, in_data);
+	for (cur = modulelist.begin(); cur != modulelist.end(); cur++) {
+		// printf("foreach: %s\n", (*cur)->get_id());
+		in_func((*cur), in_data);
 	}
 }
 
@@ -129,7 +138,8 @@ DB::input_internal (Extension * in_plug, gpointer data)
 		imod = dynamic_cast<Input *>(in_plug);
 		ilist = reinterpret_cast<InputList *>(data);
 
-		ilist->push_front(imod);
+		ilist->push_back(imod);
+		// printf("Added to input list: %s\n", imod->get_id());
 	}
 }
 
@@ -154,7 +164,8 @@ DB::output_internal (Extension * in_plug, gpointer data)
 		omod = dynamic_cast<Output *>(in_plug);
 		olist = reinterpret_cast<OutputList *>(data);
 
-		olist->push_front(omod);
+		olist->push_back(omod);
+		// printf("Added to output list: %s\n", omod->get_id());
 	}
 
 	return;
@@ -181,7 +192,8 @@ DB::effect_internal (Extension * in_plug, gpointer data)
 		emod = dynamic_cast<Effect *>(in_plug);
 		elist = reinterpret_cast<EffectList *>(data);
 
-		elist->push_front(emod);
+		elist->push_back(emod);
+		// printf("Added to effect list: %s\n", emod->get_id());
 	}
 
 	return;

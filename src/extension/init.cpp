@@ -103,7 +103,6 @@ init (void)
 	Internal::PsOutput::init();
 	Internal::EpsOutput::init();
 	Internal::PrintPS::init();
-	Internal::GdkpixbufInput::init();
 #ifdef WITH_GNOME_PRINT
 	Internal::PrintGNOME::init();
 #endif
@@ -113,6 +112,12 @@ init (void)
 	Internal::PovOutput::init();
 
 	build_module_from_dir(INKSCAPE_EXTENSIONDIR);
+	
+	/* this is at the very end because it has several catch-alls
+	 * that are possibly over-ridden by other extensions (such as
+	 * svgz)
+	 */
+	Internal::GdkpixbufInput::init();
 
 	/* now we need to check and make sure everyone is happy */
 	check_extensions();

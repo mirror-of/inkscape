@@ -1,3 +1,9 @@
+2005-01-01  Kees Cook  <kees@outflux.net>
+
+	* src/extension/db.h, src/extension/db.cpp, src/extension/init.cpp:
+	created "modulelist" to maintain initialization order for extension
+	lists.
+
 2004-12-31  MenTaLguY  <mental@rydia.net>
 
 	* src/xml/repr-io.cpp, src/xml/repr.h: initial scaffoliding for more

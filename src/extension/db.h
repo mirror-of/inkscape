@@ -37,6 +37,9 @@ private:
     /** This is the actual database.  It has all of the modules in it,
         indexed by their ids.  It's a hash table for faster lookups */
     std::map <const char *, Extension *, ltstr> moduledict;
+    /** Maintain an ordered list of modules for generating the extension
+        lists via "foreach" */
+    std::list <Extension *> modulelist;
 
     static void foreach_internal (gpointer in_key, gpointer in_value, gpointer in_data);
 
