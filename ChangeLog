@@ -1,3 +1,7 @@
+2004-07-16  Kees Cook  <kees@outflux.net>
+
+	* src/verbs.h, src/verbs.cpp: added "sp_verbs_find" function for bryce.
+
 2004-07-15  Ted Gould  <ted@gould.cx>
 
 	* 0.39 Release
