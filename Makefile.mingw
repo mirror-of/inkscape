@@ -10,6 +10,9 @@ all:	config.h
 config.h: config.h.mingw
 	$(CP) config.h.mingw config.h
 
+config.h.mingw: Makefile.mingw Makefile.mingw.common
+	$(TOUCH) config.h.mingw
+
 dist:
 	$(MAKE) -C src -f Makefile.mingw
 	-$(RMDIR) inkscape

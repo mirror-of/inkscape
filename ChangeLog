@@ -1,3 +1,7 @@
+2004-02-11  Kees Cook  <kees@outflux.net>
+
+    * src/Makefile.mingw, src/make.*: win32 compile updates.
+
 2004-02-10  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/inkscape.cpp: Changed from SHGetSpecialFolderPath to
