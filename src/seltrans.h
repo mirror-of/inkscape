@@ -50,7 +50,7 @@ struct _SPSelTrans {
 	unsigned int changed : 1;
 
 	SPItem **items;
-	NRMatrix *transforms;
+	NR::Matrix *transforms;
 	int nitems;
 
 	NRPoint *spp;

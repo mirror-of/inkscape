@@ -241,11 +241,11 @@ sp_sel_trans_grab (SPSelTrans * seltrans, const NR::Point p, gdouble x, gdouble 
 	const GSList *l = sp_selection_item_list (selection);
 	seltrans->nitems = g_slist_length ((GSList *) l);
 	seltrans->items = nr_new (SPItem *, seltrans->nitems);
-	seltrans->transforms = nr_new (NRMatrix, seltrans->nitems);
+	seltrans->transforms = nr_new (NR::Matrix, seltrans->nitems);
 	int n = 0;
 	while (l) {
 		seltrans->items[n] = (SPItem *) sp_object_ref (SP_OBJECT (l->data), NULL);
-		sp_item_i2d_affine (seltrans->items[n], &seltrans->transforms[n]);
+		seltrans->transforms[n] = sp_item_i2d_affine (seltrans->items[n]);
 		l = l->next;
 		n += 1;
 	}
@@ -287,7 +287,7 @@ sp_sel_trans_transform (SPSelTrans * seltrans, NR::Matrix& affine, NR::Point& no
 	        // update the content
 		for (int i = 0; i < seltrans->nitems; i++) {
 			sp_item_set_i2d_affine (seltrans->items[i], 
-						NR::Matrix(&seltrans->transforms[i]) * affine);
+									seltrans->transforms[i] * affine);
 		}
 	} else {
 		NR::Point p[4];
