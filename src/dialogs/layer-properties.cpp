@@ -34,6 +34,21 @@ namespace Inkscape {
 namespace UI {
 namespace Dialogs {
 
+static void hideCallback(GtkObject *object, gpointer dlgPtr)
+{
+    LayerPropertiesDialog *dlg = (LayerPropertiesDialog *) dlgPtr;
+    dlg->hide();
+}
+
+static void unhideCallback(GtkObject *object, gpointer dlgPtr)
+{
+    LayerPropertiesDialog *dlg = (LayerPropertiesDialog *) dlgPtr;
+    if (! dlg->userHidden()) {
+        dlg->show();
+        dlg->raise();
+    }
+}
+
 LayerPropertiesDialog::LayerPropertiesDialog()
 {
     GtkWidget *dlg = GTK_WIDGET(gobj());
@@ -64,6 +79,15 @@ LayerPropertiesDialog::LayerPropertiesDialog()
         ->signal_clicked()
         .connect(sigc::mem_fun(*this, &LayerPropertiesDialog::close));
 
+    // Event Handlers
+    // TODO:  Gtkmmify
+    g_signal_connect( G_OBJECT(dlg), "event", 
+                      GTK_SIGNAL_FUNC(sp_dialog_event_handler), dlg );
+    g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_hide", 
+                      G_CALLBACK(hideCallback), (void *)this );
+    g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_unhide", 
+                      G_CALLBACK(unhideCallback), (void *)this );
+
     set_default_response(Gtk::RESPONSE_APPLY);
     sp_transientize(dlg);
     show_all_children();
@@ -89,6 +113,7 @@ LayerPropertiesDialog::apply()
 void
 LayerPropertiesDialog::close()
 {
+    userHidden(true);
     hide();
 }
 
@@ -126,6 +151,7 @@ void LayerPropertiesDialog::showInstance()
     g_assert(dlg);
     dlg->show();
     dlg->present();
+    dlg->userHidden(false);
 }
 
 void

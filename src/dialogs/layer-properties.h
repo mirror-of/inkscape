@@ -37,10 +37,14 @@ class LayerPropertiesDialog : public Gtk::Dialog {
     static LayerPropertiesDialog *getInstance();
     static void showInstance();
 
+    bool       userHidden() { return _userHidden; }
+    void       userHidden(bool val) { _userHidden = val; }
+
  protected:
     LayerPropertiesDialog(const LayerPropertiesDialog&);
     LayerPropertiesDialog& operator=(const LayerPropertiesDialog&);
 
+    bool              _userHidden;
     Gtk::HBox         _layer_name_hbox;
     Gtk::Label        _layer_name_label;
     Gtk::Entry        _layer_name_entry;
@@ -51,6 +55,7 @@ class LayerPropertiesDialog : public Gtk::Dialog {
 
     void setLayerName(gchar const * name);
     gchar const * getLayerName() const;
+
 };
 
 } // namespace
