@@ -233,7 +233,10 @@ void               flow_res::BBox(NRRect *bbox, NR::Matrix const &transform)
 		}
 	}
 }
-void               flow_res::Print(SPPrintContext* ctx,NRRect *pbox,NRRect *dbox,NRRect *bbox,NRMatrix &ctm)
+
+void flow_res::Print(SPPrintContext *ctx,
+		     NRRect const *pbox, NRRect const *dbox, NRRect const *bbox,
+		     NRMatrix const &ctm)
 {
 	if ( nbGroup <= 0 || nbGlyph <= 0 || nbChar <= 0 ) return;
 	bool text_to_path=ctx->module->textToPath();

@@ -127,7 +127,9 @@ public:
 	
 	void               Show(NRArenaGroup* in_arena);
 	void               BBox(NRRect *bbox, NR::Matrix const &transform);
-	void               Print(SPPrintContext* ctx,NRRect *pbox,NRRect *dbox,NRRect *bbox,NRMatrix &ctm);
+	void               Print(SPPrintContext *ctx,
+				 NRRect const *pbox, NRRect const *dbox, NRRect const *bbox,
+				 NRMatrix const &ctm);
 	SPCurve*           NormalizedBPath(void);
 	void               OffsetToLetter(int offset,int &c,int &s,int &l,bool &l_start,bool &l_end);
 	void               LetterToOffset(int c,int s,int l,bool l_start,bool l_end,int &offset);
