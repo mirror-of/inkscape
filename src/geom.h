@@ -92,7 +92,7 @@ inline double
 cross(Point const &a, Point const &b) {
 	double ret = 0;
 	for(int i = 0; i < 2; i++)
-		ret -= a.pt[i] * b.pt[1-i];
+		ret = a.pt[i] * b.pt[1-i] - ret;
 	return ret;
 }
 
@@ -104,50 +104,17 @@ Point::Normalize() {
 		*this = d**this;
 }
 
-
 typedef double vec2d[2];
 
 typedef struct mat2 {
 	float     xx,xy,yx,yy;
 } mat2;
 
-#define L_VEC_AddMul(a,b,c,r) do { \
-	r.x=a.x+b.x*c.x; \
-		r.y=a.y+b.y*c.y; \
-} while(0)
-
-#define L_VEC_SubMul(a,b,c,r) do { \
-	r.x=a.x-b.x*c.x; \
-		r.y=a.y-b.y*c.y; \
-} while(0)
-
-
-#define L_VEC_Cmp(a,b) ((fabs(a.y - b.y) < 1e-7) \
-			? ((fabs(a.x - b.x) < 1e-7)	\
-			   ? 0		\
-			   : ((a.x > b.x)	\
-			      ? 1	\
-			      : -1))	\
-			: ((a.y > b.y)	\
-			   ? 1		\
-			   : -1))
-
 #define L_VAL_Cmp(a,b) ((fabs(a - b) < 1e-7)	\
 			? 0		\
 			:((a > b)	\
 			  ? 1		\
 			  : -1))
-
-/** See also sp_vector_normalize. */
-#define L_VEC_Normalize(d) do { \
-	double len = sqrt(d.x * d.x + d.y * d.y); \
-	if (len < 0.00000001) { \
-		d.x = d.y = 0; \
-	} else { \
-		d.x /= len; \
-		d.y /= len; \
-	} \
-} while(0)
 
 #define L_VEC_Distance(a,b,d) { \
 	d=sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y)); \
@@ -167,42 +134,10 @@ typedef struct mat2 {
 
 #define	L_MAT(m,a,b) {c[0][0].Set(ica.x);c[0][1].Set(icb.x);c[1][0].Set(ica.y);c[1][1].Set(icb.y);};
 
-#define	L_MAT_Set(m,a00,a10,a01,a11) {m.xx=a00;m.xy=a01;m.yx=a10;m.yy=a11;};
-
 #define L_MAT_SetC(m,a,b) {m.xx=a.x;m.xy=b.x;m.yx=a.y;m.yy=b.y;};
-
-#define L_MAT_SetL(m,a,b) {m.xx=a.x;m.xy=a.y;m.yx=b.x;m.yy=b.y;};
-
-#define L_MAT_Init(m) {m.xx=m.xy=m.yx=m.yy=0;};
-	
-#define L_MAT_Col(m,no,r) { \
-		if ( no == 0 ) { \
-			r.x=m.xx; \
-			r.y=m.yx; \
-		} \
-		if ( no == 0 ) { \
-			r.x=m.xy; \
-			r.y=m.yy; \
-		} \
-	}; 
-
-#define L_MAT_Row(m,no,r) { \
-		if ( no == 0 ) { \
-			r.x=m.xx; \
-			r.y=m.xy; \
-		} \
-		if ( no == 0 ) { \
-			r.x=m.yx; \
-			r.y=m.yy; \
-		} \
-	};
 	
 #define L_MAT_Det(m,d) {d=m.xx*m.yy-m.xy*m.yx;};
 	
-#define L_MAT_Neg(m) {m.xx=-m.xx;m.xy=-m.xy;m.yx=-m.yx;m.yy=-m.yy;};
-
-#define L_MAT_Trs(m) {double t=m.xy;m.xy=m.yx;m.yx=t;};
-
 #define L_MAT_Inv(m) { \
 	double d; \
 	L_MAT_Det(m,d); \
@@ -215,16 +150,6 @@ typedef struct mat2 {
 	m.yy/=d; \
 };
 
-#define L_MAT_Cof(m) { \
-			m.yx=-m.yx; \
-				m.xy=-m.xy; \
-					double t=m.xx;m.xx=m.yy;m.yy=t; \
-};
-
-#define L_MAT_Add(u,v,m) {m.xx=u.xx+v.xx;m.xy=u.xy+v.xy;m.yx=u.yx+v.yx;m.yy=u.yy+v.yy;};
-
-#define L_MAT_Sub(u,v,m) {m.xx=u.xx-v.xx;m.xy=u.xy-v.xy;m.yx=u.yx-v.yx;m.yy=u.yy-v.yy;};
-
 #define L_MAT_Mul(u,v,m) { \
 	mat2d r; \
 	r.xx=u.xx*v.xx+u.xy*v.yx; \
@@ -234,21 +159,10 @@ typedef struct mat2 {
 	m=r; \
 }
 
-#define L_MAT_MulC(u,v,m) {m.xx=u.xx*v;m.xy=u.xy*v;m.yx=u.yx*v;m.yy=u.yy*v;};
-
-#define L_MAT_DivC(u,v,m) {m.xx=u.xx/v;m.xy=u.xy/v;m.yx=u.yx/v;m.yy=u.yy/v;};
-	
 #define L_MAT_MulV(m,v,r) { \
 	vec2d t; \
 	t.x=m.xx*v.x+m.xy*v.y; \
 	t.y=m.yx*v.x+m.yy*v.y; \
-	r=t; \
-};
-
-#define L_MAT_TMulV(m,v,r) { \
-	vec2d t; \
-	t.x=m.xx*v.x+m.yx*v.y; \
-	t.y=m.xy*v.x+m.yy*v.y; \
 	r=t; \
 };
 
