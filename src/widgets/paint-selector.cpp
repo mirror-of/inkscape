@@ -34,16 +34,24 @@
 
 #include "../sp-item.h"
 #include "../sp-gradient.h"
+#include "../sp-pattern.h"
 #include "../helper/sp-intl.h"
 #include "../widgets/icon.h"
 #include "../inkscape-stock.h"
+#include "widgets/widget-sizes.h"
 
 #include "sp-color-selector.h"
 #include "sp-color-notebook.h"
 /* fixme: Move it from dialogs to here */
 #include "gradient-selector.h"
+#include <inkscape.h>
+#include <document-private.h>
+#include <desktop-handles.h>
+#include <selection.h>
+#include <style.h>
 
 #include "paint-selector.h"
+
 
 enum {
 	MODE_CHANGED,
@@ -66,6 +74,8 @@ static void sp_paint_selector_set_mode_multiple (SPPaintSelector *psel);
 static void sp_paint_selector_set_mode_none (SPPaintSelector *psel);
 static void sp_paint_selector_set_mode_color (SPPaintSelector *psel, SPPaintSelectorMode mode);
 static void sp_paint_selector_set_mode_gradient (SPPaintSelector *psel, SPPaintSelectorMode mode);
+static void sp_paint_selector_set_mode_pattern (SPPaintSelector *psel, SPPaintSelectorMode mode);
+
 
 static void sp_paint_selector_set_style_buttons (SPPaintSelector *psel, GtkWidget *active);
 
@@ -157,9 +167,11 @@ sp_paint_selector_init (SPPaintSelector *psel)
 	psel->solid = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_SOLID,
 							  SP_PAINT_SELECTOR_MODE_COLOR_RGB, GTK_RADIO_BUTTON (psel->none), tt, _("Flat color"));
 	psel->gradient = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_GRADIENT,
-							     SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR, GTK_RADIO_BUTTON (psel->solid), tt, _("Linear gradient"));
+						     SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR, GTK_RADIO_BUTTON (psel->solid), tt, _("Linear gradient"));
 	psel->radial = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_RADIAL,
-							   SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL, GTK_RADIO_BUTTON (psel->gradient), tt, _("Radial gradient"));
+							 SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL, GTK_RADIO_BUTTON (psel->gradient), tt, _("Radial gradient")),
+	psel->pattern = sp_paint_selector_style_button_add (psel, INKSCAPE_STOCK_FILL_PATTERN,
+                               SP_PAINT_SELECTOR_MODE_PATTERN, GTK_RADIO_BUTTON (psel->radial), tt, _("Pattern Fill"));
 
 	/* Frame */
 	psel->frame = gtk_frame_new ("");
@@ -250,9 +262,12 @@ sp_paint_selector_set_mode (SPPaintSelector *psel, SPPaintSelectorMode mode)
 			sp_paint_selector_set_mode_color (psel, mode);
 			break;
 		case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
-		case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
-			sp_paint_selector_set_mode_gradient (psel, mode);
-			break;
+        case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
+            sp_paint_selector_set_mode_gradient (psel, mode);
+            break;
+        case SP_PAINT_SELECTOR_MODE_PATTERN:
+            sp_paint_selector_set_mode_pattern (psel, mode);
+            break;
 		default:
 			g_warning ("file %s: line %d: Unknown paint mode %d", __FILE__, __LINE__, mode);
 			break;
@@ -763,5 +778,220 @@ sp_paint_selector_set_style_buttons (SPPaintSelector *psel, GtkWidget *active)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (psel->solid), (active == psel->solid));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (psel->gradient), (active == psel->gradient));
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (psel->radial), (active == psel->radial));
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (psel->pattern), (active == psel->pattern));
+}
+
+static void
+sp_psel_pattern_change (GtkWidget *widget,  SPPaintSelector *psel)
+{
+gtk_signal_emit (GTK_OBJECT (psel), psel_signals[CHANGED]);
+}
+
+static GtkWidget*
+ink_pattern_menu ( GtkWidget *tbl, SPPaintSelector *psel)
+{
+	GtkWidget *mnu = gtk_option_menu_new ();
+	/* Create new menu widget */
+	GtkWidget *m = gtk_menu_new ();
+	gtk_widget_show (m);
+	SPDocument *doc = SP_ACTIVE_DOCUMENT;
+
+	/* Pick up all patterns  */
+	GSList *pl = NULL;
+	const GSList *patterns, *l;
+	patterns = sp_document_get_resource_list (doc, "pattern");
+	for (l = patterns; l != NULL; l = l->next) {
+		// if (SP_PATTERN_HAS_IMAGE (l->data)) {         /* really should check pattern is valid */
+		pl = g_slist_prepend (pl, l->data);
+	}
+
+	pl = g_slist_reverse (pl);
+
+	if (!doc) {
+		GtkWidget *i;
+		i = gtk_menu_item_new_with_label (_("No document selected"));
+		gtk_widget_show (i);
+		gtk_menu_append (GTK_MENU (m), i);
+		gtk_widget_set_sensitive (mnu, FALSE);
+	} else if (!pl) {
+		GtkWidget *i;
+		i = gtk_menu_item_new_with_label (_("No patterns in document"));
+		gtk_widget_show (i);
+		gtk_menu_append (GTK_MENU (m), i);
+		gtk_widget_set_sensitive (mnu, FALSE);
+	} else {
+		for (; pl != NULL; pl = pl->next){
+			SPPattern *pat;
+			GtkWidget *i;
+			if (SP_IS_PATTERN(pl->data)){
+				pat = SP_PATTERN (pl->data);
+				//   pl = g_slist_remove (pl, pat);
+				i = gtk_menu_item_new ();
+				gtk_widget_show (i);
+				g_object_set_data (G_OBJECT (i), "pattern", pat);
+				//        g_signal_connect (G_OBJECT (i), "activate", G_CALLBACK (sp_gvs_gradient_activate), gvs);
+				GtkWidget *hb = gtk_hbox_new (FALSE, 4);
+				gtk_widget_show (hb);
+				SPRepr *repr = SP_OBJECT_REPR((SPItem *) pl->data);
+				GtkWidget *l = gtk_label_new (sp_repr_attr(repr,"id"));
+				gtk_widget_show (l);
+				gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+				gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+				gtk_widget_show (hb);
+				gtk_container_add (GTK_CONTAINER (i), hb);
+				gtk_menu_append (GTK_MENU (m), i);
+			}
+		}
+
+		gtk_widget_set_sensitive (mnu, TRUE);
+	}
+	gtk_option_menu_set_menu (GTK_OPTION_MENU (mnu), m);
+	/* Set history */
+	//gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), 0);
+	return mnu;
+}
+
+static void
+sp_paint_selector_set_mode_pattern (SPPaintSelector *psel, SPPaintSelectorMode mode)
+{
+	if (mode == SP_PAINT_SELECTOR_MODE_PATTERN)
+		sp_paint_selector_set_style_buttons (psel, psel->pattern);
+
+	gtk_widget_set_sensitive (psel->style, TRUE);
+
+	if (psel->mode == SP_PAINT_SELECTOR_MODE_PATTERN){
+		/* Already have gradient selector */
+	} else {
+		if (psel->selector) {
+			gtk_widget_destroy (psel->selector);
+			psel->selector = NULL;
+		}
+
+		/* Create vbox */
+		GtkWidget *tbl = gtk_vbox_new (FALSE, 4);
+		gtk_widget_show (tbl);
+
+		GtkWidget *hb = gtk_hbox_new (FALSE, 1);
+		GtkWidget *mnu = ink_pattern_menu(tbl, psel);
+		gtk_signal_connect (GTK_OBJECT (mnu), "changed", GTK_SIGNAL_FUNC (sp_psel_pattern_change), psel);
+		gtk_widget_show (mnu);
+		gtk_object_set_data (GTK_OBJECT (psel), "patternmenu", mnu);
+		gtk_container_add (GTK_CONTAINER (hb), mnu);
+		gtk_box_pack_start (GTK_BOX (tbl),hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+		gtk_widget_show (hb);
+
+		gtk_container_add (GTK_CONTAINER (psel->frame), tbl);
+
+		gtk_widget_show_all (tbl);
+		psel->selector = tbl;
+		gtk_frame_set_label (GTK_FRAME (psel->frame), _("Pattern Fill"));
+	}
+#ifdef SP_PS_VERBOSE
+	g_print ("Pattern req\n");
+#endif
+}
+
+SPPattern *
+sp_paint_selector_get_pattern (SPPaintSelector *psel)
+{
+	SPPattern *pat;
+
+	g_return_val_if_fail ((psel->mode == SP_PAINT_SELECTOR_MODE_PATTERN) , NULL);
+
+	GtkWidget *patmnu = (GtkWidget *) g_object_get_data (G_OBJECT(psel), "patternmenu");
+	pat = SP_PATTERN(g_object_get_data (G_OBJECT(gtk_menu_get_active (GTK_MENU(gtk_option_menu_get_menu (GTK_OPTION_MENU(patmnu))))), "pattern"));
+
+	return pat;
+}
+
+/*update pattern list*/
+void
+sp_update_pattern_list ( SPPaintSelector *psel,  SPPattern *pattern)
+{
+	if (psel->update) return;
+	SPDocument *doc = SP_ACTIVE_DOCUMENT;
+	GtkWidget *mnu = (GtkWidget *)g_object_get_data (G_OBJECT(psel), "patternmenu");
+	/* Clear existing menu if any */
+	gtk_option_menu_remove_menu (GTK_OPTION_MENU (mnu));
+
+	/* Create new menu widget */
+	GtkWidget *m = gtk_menu_new ();
+	gtk_widget_show (m);
+
+	/* Pick up all patterns  */
+	GSList *pl = NULL;
+	const GSList *patterns, *l;
+	patterns = sp_document_get_resource_list (doc, "pattern");
+	for (l = patterns; l != NULL; l = l->next) {
+		// if (SP_PATTERN_HAS_IMAGE (l->data)) {         /* really should check pattern is valid */
+		pl = g_slist_prepend (pl, l->data);
+	}
+
+	pl = g_slist_reverse (pl);
+
+	if (!doc) {
+		GtkWidget *i;
+		i = gtk_menu_item_new_with_label (_("No document selected"));
+		gtk_widget_show (i);
+		gtk_menu_append (GTK_MENU (m), i);
+		gtk_widget_set_sensitive (mnu, FALSE);
+	} else if (!pl) {
+		GtkWidget *i;
+		i = gtk_menu_item_new_with_label (_("No patterns in document"));
+		gtk_widget_show (i);
+		gtk_menu_append (GTK_MENU (m), i);
+		gtk_widget_set_sensitive (mnu, FALSE);
+	} else {
+		for (; pl != NULL; pl = pl->next){
+			SPPattern *pat;
+			GtkWidget *i;
+			if (SP_IS_PATTERN(pl->data)){
+				pat = SP_PATTERN (pl->data);
+				//   pl = g_slist_remove (pl, pat);
+				i = gtk_menu_item_new ();
+				gtk_widget_show (i);
+				g_object_set_data (G_OBJECT (i), "pattern", pat);
+				//        g_signal_connect (G_OBJECT (i), "activate", G_CALLBACK (sp_gvs_gradient_activate), gvs);
+				GtkWidget *hb = gtk_hbox_new (FALSE, 4);
+				gtk_widget_show (hb);
+				SPRepr *repr = SP_OBJECT_REPR((SPItem *) pl->data);
+				GtkWidget *l = gtk_label_new (sp_repr_attr(repr,"id"));
+				gtk_widget_show (l);
+				gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+				gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+				gtk_widget_show (hb);
+				gtk_container_add (GTK_CONTAINER (i), hb);
+				gtk_menu_append (GTK_MENU (m), i);
+			}
+		}
+
+		gtk_widget_set_sensitive (mnu, TRUE);
+	}
+
+	gtk_option_menu_set_menu (GTK_OPTION_MENU (mnu), m);
+
+	/* Set history */
+
+	if (!gtk_object_get_data(GTK_OBJECT(mnu), "update")) {
+
+		gtk_object_set_data(GTK_OBJECT(mnu), "update", GINT_TO_POINTER(TRUE));
+
+		gchar *patname = (gchar *) sp_repr_attr(SP_OBJECT_REPR(pattern),"id");
+		int patpos = 0;
+		GList *kids = GTK_MENU_SHELL(m)->children;
+		int i = 0;
+		for (; kids != NULL; kids = kids->next) {
+			gchar *men_pat = (gchar *) sp_repr_attr(SP_OBJECT_REPR(g_object_get_data(G_OBJECT(kids->data), "pattern")),"id");
+			if ( strcmp(men_pat,patname) == 0 ) {
+				patpos = i;
+			}
+			i++;
+		}
+
+		gtk_option_menu_set_history(GTK_OPTION_MENU(mnu), patpos);
+		gtk_object_set_data(GTK_OBJECT(mnu), "update", GINT_TO_POINTER(FALSE));
+	}
+	//gtk_option_menu_set_history (GTK_OPTION_MENU (mnu), 0);
 }
 

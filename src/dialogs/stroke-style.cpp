@@ -34,6 +34,7 @@
 #include "widgets/sp-widget.h"
 #include "widgets/spw-utilities.h"
 #include "sp-gradient.h"
+#include <sp-pattern.h>
 #include <widgets/paint-selector.h>
 #include <widgets/dash-selector.h>
 #include "enums.h"
@@ -56,6 +57,7 @@
 #include "prefix.h"
 #include "widgets/icon.h"
 #include "helper/stock-items.h"
+#include <file.h>
 
 #include "dialogs/stroke-style.h"
 
@@ -362,6 +364,14 @@ sp_stroke_style_paint_update(SPWidget *spw, SPSelection *sel)
             break;
         }
 
+        case SP_PAINT_SELECTOR_MODE_PATTERN:
+        {
+            sp_paint_selector_set_mode ( psel, SP_PAINT_SELECTOR_MODE_PATTERN);
+            SPPattern *pat = SP_PATTERN (SP_OBJECT_STYLE_STROKE_SERVER (object));
+            sp_update_pattern_list ( psel, pat );
+            break;
+        }
+
         default:
             sp_paint_selector_set_mode( psel, SP_PAINT_SELECTOR_MODE_MULTIPLE );
             break;
@@ -506,6 +516,11 @@ sp_stroke_style_paint_dragged(SPPaintSelector *psel, SPWidget *spw)
             }
             break;
         }
+
+        case SP_PAINT_SELECTOR_MODE_PATTERN:
+            /*user selected existing pattern from list*/
+            break;
+
 
         default:
             g_warning( "file %s: line %d: Paint selector should not be in "
@@ -669,6 +684,41 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                 sp_document_done(SP_WIDGET_DOCUMENT(spw));
             }
             break;
+
+        case SP_PAINT_SELECTOR_MODE_PATTERN:
+
+            if (items) {
+
+                SPPattern *pattern = sp_paint_selector_get_pattern (psel);
+                if (!pattern) {
+
+                    /* No Pattern in paint selector should mean that we just
+                     * changed mode - dont do jack.
+                     */
+                    pattern = NULL;
+
+
+                } else {
+                    SPRepr *patrepr = SP_OBJECT_REPR(pattern);
+                    SPCSSAttr *css = sp_repr_css_attr_new ();
+                    sp_repr_css_set_property (css, "stroke", g_strdup_printf("url(#%s)", sp_repr_attr(patrepr,"id")));
+
+                    for (GSList const *i = items; i != NULL; i = i->next) {
+                         SPRepr *selrepr = SP_OBJECT_REPR((SPItem *) items->data);
+                         if (selrepr) {
+                               sp_repr_css_change_recursive (selrepr, css, "style");
+                           }
+                     }
+                      sp_repr_css_attr_unref (css);
+
+
+                } // end if
+
+                sp_document_done (SP_WIDGET_DOCUMENT (spw));
+            } // end if
+
+            break;
+
 
         default:
             g_warning( "file %s: line %d: Paint selector should not be in "
@@ -956,7 +1006,7 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
                  child != NULL;
                  child = SP_OBJECT_NEXT(child) )
             {
-                if (sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid") && 
+                if (sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid") &&
                     !strcmp(sp_repr_attr(repr,"inkscape:stockid"), sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid")) &&
                     SP_IS_MARKER(child))
                     continue; // stock item, dont add to list from current doc
@@ -1053,7 +1103,7 @@ ink_marker_menu( GtkWidget *tbl, gchar *menu_id, SPDocument *sandbox)
 
     } else {
 
-        // add "None" 
+        // add "None"
         {
             GtkWidget *i = gtk_menu_item_new();
             gtk_widget_show(i);
@@ -2019,6 +2069,8 @@ sp_stroke_style_determine_paint_selector_mode(SPStyle *style)
                 return SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR;
             } else if (SP_IS_RADIALGRADIENT(SP_STYLE_STROKE_SERVER(style))) {
                 return SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL;
+            } else if (SP_IS_PATTERN(SP_STYLE_STROKE_SERVER(style))) {
+                return SP_PAINT_SELECTOR_MODE_PATTERN;
             }
             return SP_PAINT_SELECTOR_MODE_NONE;
 
@@ -2029,6 +2081,7 @@ sp_stroke_style_determine_paint_selector_mode(SPStyle *style)
     }
 
     return SP_PAINT_SELECTOR_MODE_NONE;
+
 
 } // end of sp_stroke_style_determine_paint_selector_mode()
 
@@ -2082,9 +2135,9 @@ ink_marker_menu_set_current(SPObject *marker, GtkOptionMenu *mnu)
         if (sp_repr_attr(SP_OBJECT_REPR(marker), "inkscape:stockid")) mark_is_stock = true;
 
         gchar *markname;
-        if (mark_is_stock)  
+        if (mark_is_stock)
             markname = g_strdup(sp_repr_attr(SP_OBJECT_REPR(marker), "inkscape:stockid"));
-        else 
+        else
             markname = g_strdup(sp_repr_attr(SP_OBJECT_REPR(marker), "id"));
 
         int markpos = 0;
@@ -2093,9 +2146,9 @@ ink_marker_menu_set_current(SPObject *marker, GtkOptionMenu *mnu)
         for (; kids != NULL; kids = kids->next) {
             gchar *mark = (gchar *) g_object_get_data(G_OBJECT(kids->data), "marker");
             if ( mark && strcmp(mark, markname) == 0 ) {
-                if ( mark_is_stock && !strcmp((gchar *) g_object_get_data(G_OBJECT(kids->data), "stockid"), "true"))  
+                if ( mark_is_stock && !strcmp((gchar *) g_object_get_data(G_OBJECT(kids->data), "stockid"), "true"))
                     markpos = i;
-                if ( !mark_is_stock && !strcmp((gchar *) g_object_get_data(G_OBJECT(kids->data), "stockid"), "false"))  
+                if ( !mark_is_stock && !strcmp((gchar *) g_object_get_data(G_OBJECT(kids->data), "stockid"), "false"))
                     markpos = i;
             }
             i++;

@@ -40,6 +40,7 @@
 #include <svg/stringstream.h>
 #include <widgets/sp-widget.h>
 #include <sp-gradient.h>
+#include <sp-pattern.h>
 #include <widgets/paint-selector.h>
 #include <style.h>
 #include <gradient-chemistry.h>
@@ -48,6 +49,9 @@
 #include <selection.h>
 #include <sp-item.h>
 #include <inkscape.h>
+#include <document-private.h>
+#include <file.h>
+
 
 #include "fill-style.h"
 
@@ -55,48 +59,48 @@
 
 #define ART_WIND_RULE_NONZERO 0
 
-static void sp_fill_style_widget_construct          ( SPWidget *spw, 
+static void sp_fill_style_widget_construct          ( SPWidget *spw,
                                                       SPPaintSelector *psel );
-                                                      
-static void sp_fill_style_widget_modify_selection   ( SPWidget *spw, 
-                                                      SPSelection *selection, 
-                                                      guint flags, 
+
+static void sp_fill_style_widget_modify_selection   ( SPWidget *spw,
+                                                      SPSelection *selection,
+                                                      guint flags,
                                                       SPPaintSelector *psel );
-                                                      
-static void sp_fill_style_widget_change_selection   ( SPWidget *spw, 
-                                                      SPSelection *selection, 
+
+static void sp_fill_style_widget_change_selection   ( SPWidget *spw,
+                                                      SPSelection *selection,
                                                       SPPaintSelector *psel );
-                                                      
-static void sp_fill_style_widget_attr_changed       ( SPWidget *spw, 
-                                                      const gchar *key, 
-                                                      const gchar *oldval, 
+
+static void sp_fill_style_widget_attr_changed       ( SPWidget *spw,
+                                                      const gchar *key,
+                                                      const gchar *oldval,
                                                       const gchar *newval );
-                                                      
-static void sp_fill_style_widget_update             ( SPWidget *spw, 
+
+static void sp_fill_style_widget_update             ( SPWidget *spw,
                                                       SPSelection *sel );
-                                                      
-static void sp_fill_style_widget_update_repr        ( SPWidget *spw, 
+
+static void sp_fill_style_widget_update_repr        ( SPWidget *spw,
                                                       SPRepr *repr );
 
-static void sp_fill_style_widget_paint_mode_changed ( SPPaintSelector *psel, 
-                                                      SPPaintSelectorMode mode, 
+static void sp_fill_style_widget_paint_mode_changed ( SPPaintSelector *psel,
+                                                      SPPaintSelectorMode mode,
                                                       SPWidget *spw );
-                                                      
-static void sp_fill_style_widget_paint_dragged      ( SPPaintSelector *psel, 
+
+static void sp_fill_style_widget_paint_dragged      ( SPPaintSelector *psel,
                                                       SPWidget *spw );
-                                                      
-static void sp_fill_style_widget_paint_changed      ( SPPaintSelector *psel, 
+
+static void sp_fill_style_widget_paint_changed      ( SPPaintSelector *psel,
                                                       SPWidget *spw );
 
 static void sp_fill_style_widget_fill_rule_activate ( GtkWidget *w, SPWidget *spw);
 
-static void sp_fill_style_get_average_color_rgba    ( const GSList *objects, 
-                                                      gfloat *c);
-                                                      
-static void sp_fill_style_get_average_color_cmyka   ( const GSList *objects, 
+static void sp_fill_style_get_average_color_rgba    ( const GSList *objects,
                                                       gfloat *c);
 
-static SPPaintSelectorMode 
+static void sp_fill_style_get_average_color_cmyka   ( const GSList *objects,
+                                                      gfloat *c);
+
+static SPPaintSelectorMode
            sp_fill_style_determine_paint_selector_mode ( SPStyle *style );
 
 static GtkWidget *dialog = NULL;
@@ -117,7 +121,7 @@ sp_fill_style_dialog (void)
 {
     if (!dialog) {
         dialog = sp_window_new (_("Fill style"), TRUE);
-        g_signal_connect ( G_OBJECT (dialog), "destroy", 
+        g_signal_connect ( G_OBJECT (dialog), "destroy",
                            G_CALLBACK (sp_fill_style_dialog_destroy), NULL );
 
         GtkWidget *fs = sp_fill_style_widget_new ();
@@ -125,7 +129,7 @@ sp_fill_style_dialog (void)
         gtk_container_add (GTK_CONTAINER (dialog), fs);
 
         gtk_widget_show (dialog);
-        
+
     }
 
 } // end of sp_fill_style_dialog()
@@ -147,16 +151,16 @@ sp_fill_style_widget_new (void)
     gtk_box_pack_start (GTK_BOX (vb), psel, TRUE, TRUE, 0);
     g_object_set_data (G_OBJECT (spw), "paint-selector", psel);
 
-    g_signal_connect ( G_OBJECT (psel), "mode_changed", 
-                       G_CALLBACK (sp_fill_style_widget_paint_mode_changed), 
+    g_signal_connect ( G_OBJECT (psel), "mode_changed",
+                       G_CALLBACK (sp_fill_style_widget_paint_mode_changed),
                        spw );
-                      
-    g_signal_connect ( G_OBJECT (psel), "dragged", 
-                       G_CALLBACK (sp_fill_style_widget_paint_dragged), 
+
+    g_signal_connect ( G_OBJECT (psel), "dragged",
+                       G_CALLBACK (sp_fill_style_widget_paint_dragged),
                        spw );
-                      
-    g_signal_connect ( G_OBJECT (psel), "changed", 
-                       G_CALLBACK (sp_fill_style_widget_paint_changed), 
+
+    g_signal_connect ( G_OBJECT (psel), "changed",
+                       G_CALLBACK (sp_fill_style_widget_paint_changed),
                        spw );
 
     GtkWidget *hb = gtk_hbox_new (FALSE, 4);
@@ -186,39 +190,40 @@ sp_fill_style_widget_new (void)
     GtkWidget *mi = gtk_menu_item_new_with_label (_("winding"));
     gtk_widget_show (mi);
     gtk_menu_append (GTK_MENU (m), mi);
-    g_object_set_data ( G_OBJECT (mi), "fill-rule", 
+    g_object_set_data ( G_OBJECT (mi), "fill-rule",
                         (void *)"nonzero" );
-    g_signal_connect ( G_OBJECT (mi), "activate", 
-                       G_CALLBACK (sp_fill_style_widget_fill_rule_activate), 
+    g_signal_connect ( G_OBJECT (mi), "activate",
+                       G_CALLBACK (sp_fill_style_widget_fill_rule_activate),
                        spw );
     mi = gtk_menu_item_new_with_label (_("alternating"));
     gtk_widget_show (mi);
     gtk_menu_append (GTK_MENU (m), mi);
     g_object_set_data (G_OBJECT (mi), "fill-rule", (void *)"evenodd");
-    g_signal_connect ( G_OBJECT (mi), "activate", 
-                       G_CALLBACK (sp_fill_style_widget_fill_rule_activate), 
+    g_signal_connect ( G_OBJECT (mi), "activate",
+                       G_CALLBACK (sp_fill_style_widget_fill_rule_activate),
                        spw );
 
     gtk_option_menu_set_menu (GTK_OPTION_MENU (om), m);
 
-    g_signal_connect ( G_OBJECT (spw), "construct", 
+    g_signal_connect ( G_OBJECT (spw), "construct",
                        G_CALLBACK (sp_fill_style_widget_construct), psel);
-                       
-    g_signal_connect ( G_OBJECT (spw), "modify_selection", 
+
+    g_signal_connect ( G_OBJECT (spw), "modify_selection",
                        G_CALLBACK (sp_fill_style_widget_modify_selection), psel);
-                       
-    g_signal_connect ( G_OBJECT (spw), "change_selection", 
+
+    g_signal_connect ( G_OBJECT (spw), "change_selection",
                        G_CALLBACK (sp_fill_style_widget_change_selection), psel);
-                       
-    g_signal_connect ( G_OBJECT (spw), "attr_changed", 
+
+    g_signal_connect ( G_OBJECT (spw), "attr_changed",
                        G_CALLBACK (sp_fill_style_widget_attr_changed), psel);
 
-    sp_fill_style_widget_update (SP_WIDGET (spw), 
+    sp_fill_style_widget_update (SP_WIDGET (spw),
         SP_ACTIVE_DESKTOP ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL);
 
     return spw;
-    
+
 } // end of sp_fill_style_widget_new()
+
 
 
 static void
@@ -226,46 +231,46 @@ sp_fill_style_widget_construct ( SPWidget *spw, SPPaintSelector *psel )
 {
 
 #ifdef SP_FS_VERBOSE
-    g_print ( "Fill style widget constructed: inkscape %p repr %p\n", 
+    g_print ( "Fill style widget constructed: inkscape %p repr %p\n",
               spw->inkscape, spw->repr );
 #endif
     if (spw->inkscape) {
-    
-        sp_fill_style_widget_update ( spw, 
+
+        sp_fill_style_widget_update ( spw,
             SP_ACTIVE_DESKTOP ? SP_DT_SELECTION (SP_ACTIVE_DESKTOP) : NULL );
-    
+
     } else if (spw->repr) {
-        
+
         sp_fill_style_widget_update_repr ( spw, spw->repr );
-    
+
     }
-    
+
 } // end of sp_fill_style_widget_construct()
 
 
 
 
 static void
-sp_fill_style_widget_modify_selection ( SPWidget *spw, 
-                                        SPSelection *selection, 
-                                        guint flags, 
+sp_fill_style_widget_modify_selection ( SPWidget *spw,
+                                        SPSelection *selection,
+                                        guint flags,
                                         SPPaintSelector *psel )
 {
 
-    if (flags & ( SP_OBJECT_MODIFIED_FLAG | 
-                  SP_OBJECT_PARENT_MODIFIED_FLAG | 
+    if (flags & ( SP_OBJECT_MODIFIED_FLAG |
+                  SP_OBJECT_PARENT_MODIFIED_FLAG |
                   SP_OBJECT_STYLE_MODIFIED_FLAG) )
     {
         sp_fill_style_widget_update (spw, selection);
     }
-    
+
 } // end of sp_fill_style_widget_modify_selection()
 
 
 
 static void
-sp_fill_style_widget_change_selection ( SPWidget *spw, 
-                                        SPSelection *selection, 
+sp_fill_style_widget_change_selection ( SPWidget *spw,
+                                        SPSelection *selection,
                                         SPPaintSelector *psel )
 {
 
@@ -276,7 +281,7 @@ sp_fill_style_widget_change_selection ( SPWidget *spw,
 
 
 static void
-sp_fill_style_widget_attr_changed ( SPWidget *spw, const gchar *key, 
+sp_fill_style_widget_attr_changed ( SPWidget *spw, const gchar *key,
                                     const gchar *oldval, const gchar *newval )
 {
 
@@ -284,7 +289,7 @@ sp_fill_style_widget_attr_changed ( SPWidget *spw, const gchar *key,
         /* This sounds interesting */
         sp_fill_style_widget_update_repr (spw, spw->repr);
     }
-    
+
 } // end of sp_fill_style_widget_attr_changed();
 
 
@@ -300,7 +305,7 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
 
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
-    SPPaintSelector *psel = SP_PAINT_SELECTOR (g_object_get_data ( G_OBJECT (spw), 
+    SPPaintSelector *psel = SP_PAINT_SELECTOR (g_object_get_data ( G_OBJECT (spw),
                                                                    "paint-selector"));
 
     if ( !sel || sel->isEmpty() ) {
@@ -316,32 +321,32 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
         sp_fill_style_determine_paint_selector_mode(SP_OBJECT_STYLE (object));
 
     for (const GSList *l = objects->next; l != NULL; l = l->next) {
-        SPPaintSelectorMode nextmode = 
+        SPPaintSelectorMode nextmode =
             sp_fill_style_determine_paint_selector_mode(SP_OBJECT_STYLE (l->data));
-                
+
         if (nextmode != pselmode) {
             /* Multiple styles */
             sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_MULTIPLE);
-            g_object_set_data ( G_OBJECT (spw), "update", 
+            g_object_set_data ( G_OBJECT (spw), "update",
                                 GINT_TO_POINTER (FALSE));
             return;
         }
     }
-    
+
 #ifdef SP_FS_VERBOSE
     g_print ("FillStyleWidget: paint selector mode %d\n", pselmode);
 #endif
-    
+
     switch (pselmode) {
 
         case SP_PAINT_SELECTOR_MODE_NONE:
             /* No paint at all */
             sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_NONE);
             break;
-            
+
         case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
         {
-            sp_paint_selector_set_mode ( psel, 
+            sp_paint_selector_set_mode ( psel,
                                          SP_PAINT_SELECTOR_MODE_COLOR_RGB);
             gfloat c[5];
             sp_fill_style_get_average_color_rgba (objects, c);
@@ -350,10 +355,10 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
             sp_paint_selector_set_color_alpha (psel, &color, c[3]);
             break;
         }
-        
+
         case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
         {
-            sp_paint_selector_set_mode ( psel, 
+            sp_paint_selector_set_mode ( psel,
                                          SP_PAINT_SELECTOR_MODE_COLOR_CMYK);
             gfloat c[5];
             sp_fill_style_get_average_color_cmyka (objects, c);
@@ -362,41 +367,41 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
             sp_paint_selector_set_color_alpha (psel, &color, c[4]);
             break;
         }
-        
+
         case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
         {
             SPObject *object = SP_OBJECT (objects->data);
             /* We know that all objects have lineargradient fill style */
-            SPGradient *vector = 
-                sp_gradient_get_vector ( SP_GRADIENT 
-                                            (SP_OBJECT_STYLE_FILL_SERVER 
-                                                (object)), 
+            SPGradient *vector =
+                sp_gradient_get_vector ( SP_GRADIENT
+                                            (SP_OBJECT_STYLE_FILL_SERVER
+                                                (object)),
                                          FALSE );
-            
+
             for (const GSList *l = objects->next; l != NULL; l = l->next) {
                 const SPObject *next = SP_OBJECT (l->data);
-                
-                if (sp_gradient_get_vector ( SP_GRADIENT 
-                                             (SP_OBJECT_STYLE_FILL_SERVER 
-                                                 (next)), 
+
+                if (sp_gradient_get_vector ( SP_GRADIENT
+                                             (SP_OBJECT_STYLE_FILL_SERVER
+                                                 (next)),
                                              FALSE) != vector )
                 {
                     /* Multiple vectors */
-                    sp_paint_selector_set_mode ( psel, 
+                    sp_paint_selector_set_mode ( psel,
                             SP_PAINT_SELECTOR_MODE_MULTIPLE);
-                            
-                    g_object_set_data ( G_OBJECT (spw), "update", 
+
+                    g_object_set_data ( G_OBJECT (spw), "update",
                                         GINT_TO_POINTER (FALSE));
                     return;
-                    
+
                 } // end of if
-                
+
             } // end of for()
-            
+
             /* TODO: Probably we should set multiple mode here too */
             sp_paint_selector_set_gradient_linear (psel, vector);
             NR::Rect fbb = sel->boundsInDocument();
-            sp_paint_selector_set_gradient_bbox ( psel, fbb.min()[NR::X], fbb.min()[NR::Y], 
+            sp_paint_selector_set_gradient_bbox ( psel, fbb.min()[NR::X], fbb.min()[NR::Y],
                                                   fbb.max()[NR::X], fbb.max()[NR::Y] );
 
             /* TODO: This is plain wrong */
@@ -406,54 +411,54 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
             NRMatrix fctm;
             sp_item_i2doc_affine (SP_ITEM (object), &fctm);
             NRMatrix gs2d;
-            sp_gradient_get_gs2d_matrix_f ( SP_GRADIENT (lg), &fctm, &bb, 
+            sp_gradient_get_gs2d_matrix_f ( SP_GRADIENT (lg), &fctm, &bb,
                                             &gs2d);
             sp_paint_selector_set_gradient_gs2d_matrix_f (psel, &gs2d);
-            sp_paint_selector_set_gradient_properties (psel, 
-                                                       SP_GRADIENT_UNITS (lg), 
+            sp_paint_selector_set_gradient_properties (psel,
+                                                       SP_GRADIENT_UNITS (lg),
                                                        SP_GRADIENT_SPREAD (lg));
-                                                       
-            sp_paint_selector_set_lgradient_position ( psel, lg->x1.computed, 
-                                                       lg->y1.computed, 
-                                                       lg->x2.computed, 
+
+            sp_paint_selector_set_lgradient_position ( psel, lg->x1.computed,
+                                                       lg->y1.computed,
+                                                       lg->x2.computed,
                                                        lg->y2.computed );
             break;
         }
-            
+
         case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
         {
             SPObject *object = SP_OBJECT (objects->data);
-            
+
             /* We know that all objects have radialgradient fill style */
-            SPGradient *vector = 
-                sp_gradient_get_vector ( SP_GRADIENT 
-                                            (SP_OBJECT_STYLE_FILL_SERVER 
-                                                (object)), 
+            SPGradient *vector =
+                sp_gradient_get_vector ( SP_GRADIENT
+                                            (SP_OBJECT_STYLE_FILL_SERVER
+                                                (object)),
                                          FALSE );
-                                         
+
             for (const GSList *l = objects->next; l != NULL; l = l->next) {
                 const SPObject *next = SP_OBJECT (l->data);
-                if (sp_gradient_get_vector ( SP_GRADIENT 
-                                                (SP_OBJECT_STYLE_FILL_SERVER 
-                                                    (next)), 
+                if (sp_gradient_get_vector ( SP_GRADIENT
+                                                (SP_OBJECT_STYLE_FILL_SERVER
+                                                    (next)),
                                              FALSE) != vector )
                 {
                     /* Multiple vectors */
-                    sp_paint_selector_set_mode ( psel, 
+                    sp_paint_selector_set_mode ( psel,
                             SP_PAINT_SELECTOR_MODE_MULTIPLE);
-                    g_object_set_data ( G_OBJECT (spw), 
+                    g_object_set_data ( G_OBJECT (spw),
                                         "update", GINT_TO_POINTER (FALSE) );
                     return;
                 }
-                
+
             } // end of for loop
-            
+
             /* TODO: Probably we should set multiple mode here too */
             sp_paint_selector_set_gradient_radial (psel, vector);
             NR::Rect fbb = sel->boundsInDocument();
-            sp_paint_selector_set_gradient_bbox ( psel, fbb.min()[NR::X], fbb.min()[NR::Y], 
+            sp_paint_selector_set_gradient_bbox ( psel, fbb.min()[NR::X], fbb.min()[NR::Y],
                                                   fbb.max()[NR::X], fbb.max()[NR::Y]);
-            
+
             /* TODO: This is plain wrong */
             SPRadialGradient *rg = SP_RADIALGRADIENT (SP_OBJECT_STYLE_FILL_SERVER (object));
             NRRect bb;
@@ -461,33 +466,45 @@ sp_fill_style_widget_update ( SPWidget *spw, SPSelection *sel )
             NRMatrix fctm;
             sp_item_i2doc_affine (SP_ITEM (object), &fctm);
             NRMatrix gs2d;
-            sp_gradient_get_gs2d_matrix_f ( SP_GRADIENT (rg), &fctm, 
+            sp_gradient_get_gs2d_matrix_f ( SP_GRADIENT (rg), &fctm,
                                             &bb, &gs2d);
             sp_paint_selector_set_gradient_gs2d_matrix_f (psel, &gs2d);
-            sp_paint_selector_set_gradient_properties (psel, 
-                                                       SP_GRADIENT_UNITS (rg), 
+            sp_paint_selector_set_gradient_properties (psel,
+                                                       SP_GRADIENT_UNITS (rg),
                                                        SP_GRADIENT_SPREAD (rg));
-                                                       
-            sp_paint_selector_set_rgradient_position ( psel, 
-                                                        rg->cx.computed, 
-                                                       rg->cy.computed, 
-                                                       rg->fx.computed, 
-                                                       rg->fy.computed, 
+
+            sp_paint_selector_set_rgradient_position ( psel,
+                                                        rg->cx.computed,
+                                                       rg->cy.computed,
+                                                       rg->fx.computed,
+                                                       rg->fy.computed,
                                                        rg->r.computed );
-            
+
             break;
         }
-            
+
+        case SP_PAINT_SELECTOR_MODE_PATTERN:
+        {
+            SPObject *object = SP_OBJECT (objects->data);
+
+            sp_paint_selector_set_mode ( psel,
+                                         SP_PAINT_SELECTOR_MODE_PATTERN);
+
+            sp_update_pattern_list ( psel,SP_PATTERN(SP_OBJECT_STYLE_FILL_SERVER(object)));
+
+            break;
+        }
+
         default:
-            sp_paint_selector_set_mode ( psel, 
+            sp_paint_selector_set_mode ( psel,
                                          SP_PAINT_SELECTOR_MODE_MULTIPLE );
             break;
-    
+
     } // end of switch
 
     GtkWidget *fillrule = GTK_WIDGET(g_object_get_data (G_OBJECT (spw), "fill-rule"));
-    gtk_option_menu_set_history ( GTK_OPTION_MENU (fillrule), 
-            (SP_OBJECT_STYLE 
+    gtk_option_menu_set_history ( GTK_OPTION_MENU (fillrule),
+            (SP_OBJECT_STYLE
                 (object)->fill_rule.computed == ART_WIND_RULE_NONZERO) ? 0 : 1);
 
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
@@ -507,14 +524,14 @@ sp_fill_style_widget_update_repr (SPWidget *spw, SPRepr *repr)
 #ifdef SP_FS_VERBOSE
     g_print ("FillStyleWidget: Set update flag\n");
 #endif
-    SPPaintSelector* psel = SP_PAINT_SELECTOR(g_object_get_data ( G_OBJECT (spw), 
+    SPPaintSelector* psel = SP_PAINT_SELECTOR(g_object_get_data ( G_OBJECT (spw),
                                                                  "paint-selector") );
 
     SPStyle *style = sp_style_new ();
     sp_style_read_from_repr (style, repr);
 
     SPPaintSelectorMode pselmode = sp_fill_style_determine_paint_selector_mode (style);
-    
+
 #ifdef SP_FS_VERBOSE
     g_print ("FillStyleWidget: paint selector mode %d\n", pselmode);
 #endif
@@ -524,7 +541,7 @@ sp_fill_style_widget_update_repr (SPWidget *spw, SPRepr *repr)
             /* No paint at all */
             sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_NONE);
             break;
-            
+
         case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
         {
             sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_COLOR_RGB);
@@ -536,10 +553,10 @@ sp_fill_style_widget_update_repr (SPWidget *spw, SPRepr *repr)
             sp_paint_selector_set_color_alpha (psel, &color, c[3]);
             break;
         }
-            
+
         case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
         {
-            sp_paint_selector_set_mode ( psel, 
+            sp_paint_selector_set_mode ( psel,
                                          SP_PAINT_SELECTOR_MODE_COLOR_CMYK);
             gfloat c[5];
             sp_color_get_cmyk_floatv (&style->fill.value.color, c);
@@ -549,22 +566,31 @@ sp_fill_style_widget_update_repr (SPWidget *spw, SPRepr *repr)
             sp_paint_selector_set_color_alpha (psel, &color, c[4]);
             break;
         }
-            
+
         case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
             break;
-            
+
+        case SP_PAINT_SELECTOR_MODE_PATTERN:
+            {
+            sp_paint_selector_set_mode (psel, SP_PAINT_SELECTOR_MODE_PATTERN);
+            SPObject *object = (SPObject *) sp_document_lookup_id (SP_ACTIVE_DOCUMENT, sp_repr_attr (repr, "id"));
+            SPPattern *pat = SP_PATTERN (SP_OBJECT_STYLE_FILL_SERVER (object));
+            sp_update_pattern_list ( psel, pat);
+            }
+            break;
+
         default:
             break;
     }
 
     GtkWidget *fillrule = GTK_WIDGET(g_object_get_data (G_OBJECT (spw), "fill-rule"));
-    gtk_option_menu_set_history ( GTK_OPTION_MENU (fillrule), 
+    gtk_option_menu_set_history ( GTK_OPTION_MENU (fillrule),
             (style->fill_rule.computed == ART_WIND_RULE_NONZERO) ? 0 : 1);
 
     sp_style_unref (style);
 
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
-    
+
 #ifdef SP_FS_VERBOSE
     g_print ("FillStyleWidget: Cleared update flag\n");
 #endif
@@ -574,8 +600,8 @@ sp_fill_style_widget_update_repr (SPWidget *spw, SPRepr *repr)
 
 
 static void
-sp_fill_style_widget_paint_mode_changed ( SPPaintSelector *psel, 
-                                          SPPaintSelectorMode mode, 
+sp_fill_style_widget_paint_mode_changed ( SPPaintSelector *psel,
+                                          SPPaintSelectorMode mode,
                                           SPWidget *spw )
 {
 
@@ -597,11 +623,11 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
     if (!spw->inkscape) {
         return;
     }
-    
+
     if (g_object_get_data (G_OBJECT (spw), "update")) {
         return;
     }
-    
+
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 #ifdef SP_FS_VERBOSE
     g_print ("FillStyleWidget: paint dragged\n");
@@ -613,7 +639,7 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
             g_warning ( "file %s: line %d: Paint %d should not emit 'dragged'",
                         __FILE__, __LINE__, psel->mode );
             break;
-            
+
         case SP_PAINT_SELECTOR_MODE_COLOR_RGB:
         case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
         {
@@ -622,12 +648,12 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
             sp_paint_selector_get_color_alpha (psel, &color, &alpha);
             const GSList *items = sp_widget_get_item_list (spw);
             for (const GSList *i = items; i != NULL; i = i->next) {
-                sp_style_set_fill_color_alpha ( SP_OBJECT_STYLE (i->data), 
+                sp_style_set_fill_color_alpha ( SP_OBJECT_STYLE (i->data),
                                                 &color, alpha, TRUE, TRUE);
             }
             break;
         }
-            
+
         case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
         {
             SPGradient *vector = sp_paint_selector_get_gradient_vector (psel);
@@ -635,54 +661,54 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
             const GSList *items = sp_widget_get_item_list (spw);
             for (const GSList *i = items; i != NULL; i = i->next) {
                 SPGradient *lg;
-                lg = sp_item_force_fill_lineargradient_vector ( SP_ITEM 
-                                                                    (i->data), 
+                lg = sp_item_force_fill_lineargradient_vector ( SP_ITEM
+                                                                    (i->data),
                                                                 vector );
-                sp_paint_selector_write_lineargradient ( psel, 
+                sp_paint_selector_write_lineargradient ( psel,
                                                          SP_LINEARGRADIENT (lg),
                                                          SP_ITEM (i->data) );
             }
             break;
         }
-            
+
         case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
         {
             SPGradient *vector = sp_paint_selector_get_gradient_vector (psel);
             vector = sp_gradient_ensure_vector_normalized (vector);
             const GSList *items = sp_widget_get_item_list (spw);
             for (const GSList *i = items; i != NULL; i = i->next) {
-                SPGradient *rg = sp_item_force_fill_radialgradient_vector ( SP_ITEM 
+                SPGradient *rg = sp_item_force_fill_radialgradient_vector ( SP_ITEM
                                                                             (i->data),
                                                                             vector );
-                sp_paint_selector_write_radialgradient ( psel, 
+                sp_paint_selector_write_radialgradient ( psel,
                                                          SP_RADIALGRADIENT (rg),
                                                          SP_ITEM (i->data) );
             }
             break;
         }
-            
+
         default:
-            g_warning ( "file %s: line %d: Paint selector should not be in " 
-                        "mode %d", 
+            g_warning ( "file %s: line %d: Paint selector should not be in "
+                        "mode %d",
                         __FILE__, __LINE__, psel->mode);
             break;
-            
+
     } // end of switch
-    
+
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
-    
+
 } // end of sp_fill_style_widget_paint_dragged()
 
 
 
 static void
-sp_fill_style_widget_paint_changed ( SPPaintSelector *psel, 
+sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                                      SPWidget *spw )
 {
     if (g_object_get_data (G_OBJECT (spw), "update")) {
         return;
     }
-    
+
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (TRUE));
 
 #ifdef SP_FS_VERBOSE
@@ -694,7 +720,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
     if (spw->inkscape) {
         /* fixme: */
         if (!SP_WIDGET_DOCUMENT (spw)) {
-            g_object_set_data ( G_OBJECT (spw), "update", 
+            g_object_set_data ( G_OBJECT (spw), "update",
                                 GINT_TO_POINTER (FALSE) );
             return;
         }
@@ -707,20 +733,20 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
     }
 
     switch (psel->mode) {
-    
+
         case SP_PAINT_SELECTOR_MODE_EMPTY:
         case SP_PAINT_SELECTOR_MODE_MULTIPLE:
-            g_warning ( "file %s: line %d: Paint %d should not emit 'changed'", 
+            g_warning ( "file %s: line %d: Paint %d should not emit 'changed'",
                         __FILE__, __LINE__, psel->mode);
             break;
-            
+
         case SP_PAINT_SELECTOR_MODE_NONE:
         {
             SPCSSAttr *css = sp_repr_css_attr_new ();
             sp_repr_css_set_property (css, "fill", "none");
             for (GSList *r = reprs; r != NULL; r = r->next) {
                 sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
-                sp_repr_set_attr_recursive ( (SPRepr *) r->data, 
+                sp_repr_set_attr_recursive ( (SPRepr *) r->data,
                                             "sodipodi:fill-cmyk", NULL);
             }
             sp_repr_css_attr_unref (css);
@@ -741,13 +767,13 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
 
             gchar b[64];
             sp_svg_write_color (b, 64, rgba);
-            
+
             sp_repr_css_set_property (css, "fill", b);
             Inkscape::SVGOStringStream osalpha;
             osalpha << alpha;
             sp_repr_css_set_property (css, "fill-opacity", osalpha.str().c_str());
             for (GSList *r = reprs; r != NULL; r = r->next) {
-                sp_repr_set_attr_recursive ( (SPRepr *) r->data, 
+                sp_repr_set_attr_recursive ( (SPRepr *) r->data,
                                              "sodipodi:fill-cmyk", NULL);
                 sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
             }
@@ -757,7 +783,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
             }
             break;
         }
-            
+
         case SP_PAINT_SELECTOR_MODE_COLOR_CMYK:
         {
             SPCSSAttr *css = sp_repr_css_attr_new ();
@@ -775,9 +801,9 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
             sp_color_get_cmyk_floatv (&color, cmyk);
             Inkscape::SVGOStringStream oscolour;
             oscolour << "(" << cmyk[0] << " " << cmyk[1] << " " << cmyk[2] << " " << cmyk[3] << ")";
-                         
+
             for (GSList *r = reprs; r != NULL; r = r->next) {
-                sp_repr_set_attr_recursive ( (SPRepr *) r->data, 
+                sp_repr_set_attr_recursive ( (SPRepr *) r->data,
                                              "sodipodi:fill-cmyk", oscolour.str().c_str() );
                 sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
             }
@@ -787,79 +813,114 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
             }
             break;
         }
-            
+
         case SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR:
-            
+
             if (items) {
                 SPGradient *vector = sp_paint_selector_get_gradient_vector (psel);
-                
+
                 if (!vector) {
-                    /* No vector in paint selector should mean that we just 
-                     * changed mode 
+                    /* No vector in paint selector should mean that we just
+                     * changed mode
                      */
-                    vector = sp_document_default_gradient_vector 
+                    vector = sp_document_default_gradient_vector
                                  (SP_WIDGET_DOCUMENT (spw));
-                                 
+
                     for (const GSList *i = items; i != NULL; i = i->next) {
-                        sp_item_force_fill_lineargradient_vector 
+                        sp_item_force_fill_lineargradient_vector
                             (SP_ITEM (i->data), vector );
                     }
                 } else {
-                
+
                     vector = sp_gradient_ensure_vector_normalized (vector);
                     for (const GSList *i = items; i != NULL; i = i->next) {
-                        SPGradient *lg = sp_item_force_fill_lineargradient_vector 
+                        SPGradient *lg = sp_item_force_fill_lineargradient_vector
                                  (SP_ITEM (i->data), vector );
-                        sp_paint_selector_write_lineargradient ( psel, 
+                        sp_paint_selector_write_lineargradient ( psel,
                                 SP_LINEARGRADIENT (lg), SP_ITEM (i->data));
-                        sp_object_invoke_write ( SP_OBJECT (lg), 
-                                                 SP_OBJECT_REPR (lg), 
+                        sp_object_invoke_write ( SP_OBJECT (lg),
+                                                 SP_OBJECT_REPR (lg),
                                                  SP_OBJECT_WRITE_EXT );
                     }
                 }
                 sp_document_done (SP_WIDGET_DOCUMENT (spw));
             }
             break;
-            
+
         case SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL:
-        
+
             if (items) {
-                
+
                 SPGradient *vector = sp_paint_selector_get_gradient_vector (psel);
                 if (!vector) {
-                
-                    /* No vector in paint selector should mean that we just 
-                     * changed mode 
+
+                    /* No vector in paint selector should mean that we just
+                     * changed mode
                      */
-                    vector = sp_document_default_gradient_vector 
+                    vector = sp_document_default_gradient_vector
                                  (SP_WIDGET_DOCUMENT (spw));
-                                 
+
                     for (const GSList *i = items; i != NULL; i = i->next) {
-                        sp_item_force_fill_radialgradient_vector 
+                        sp_item_force_fill_radialgradient_vector
                             (SP_ITEM (i->data), vector );
                     }
-                    
+
                 } else {
                     vector = sp_gradient_ensure_vector_normalized (vector);
                     for (const GSList *i = items; i != NULL; i = i->next) {
-                        SPGradient *rg = sp_item_force_fill_radialgradient_vector 
+                        SPGradient *rg = sp_item_force_fill_radialgradient_vector
                             (SP_ITEM (i->data), vector);
-                        sp_paint_selector_write_radialgradient (psel, 
+                        sp_paint_selector_write_radialgradient (psel,
                                 SP_RADIALGRADIENT (rg), SP_ITEM (i->data));
-                        sp_object_invoke_write ( SP_OBJECT (rg), 
-                                                 SP_OBJECT_REPR (rg), 
+                        sp_object_invoke_write ( SP_OBJECT (rg),
+                                                 SP_OBJECT_REPR (rg),
                                                  SP_OBJECT_WRITE_EXT );
                     }
                 } // end if
-                
+
                 sp_document_done (SP_WIDGET_DOCUMENT (spw));
             } // end if
-            
+
             break;
-            
+
+        case SP_PAINT_SELECTOR_MODE_PATTERN:
+
+            if (items) {
+
+                SPPattern *pattern = sp_paint_selector_get_pattern (psel);
+                if (!pattern) {
+
+                    /* No Pattern in paint selector should mean that we just
+                     * changed mode - dont do jack.
+                     */
+                    pattern = NULL;
+
+
+                } else {
+                    SPRepr *patrepr = SP_OBJECT_REPR(pattern);
+                    SPCSSAttr *css = sp_repr_css_attr_new ();
+                    gchar *urltext = g_strconcat ("url(#", sp_repr_attr(patrepr,"id"), ")",NULL);
+                    sp_repr_css_set_property (css, "fill", urltext);
+
+                    for (const GSList *i = items; i != NULL; i = i->next) {
+                         SPRepr *selrepr = SP_OBJECT_REPR((SPItem *) items->data);
+                         if (selrepr) {
+                               sp_repr_css_change_recursive (selrepr, css, "style");
+                           }
+                     }
+                      sp_repr_css_attr_unref (css);
+                    g_free (urltext);
+
+                } // end if
+
+                sp_document_done (SP_WIDGET_DOCUMENT (spw));
+            } // end if
+
+            break;
+
         default:
-            g_warning ( "file %s: line %d: Paint selector should not be in " 
-                        "mode %d", 
+            g_warning ( "file %s: line %d: Paint selector should not be in "
+                        "mode %d",
                         __FILE__, __LINE__, psel->mode );
             break;
     }
@@ -868,7 +929,7 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
 
     g_object_set_data (G_OBJECT (spw), "update", GINT_TO_POINTER (FALSE));
 
-    
+
 } // end of sp_fill_style_widget_paint_changed()
 
 
@@ -882,33 +943,34 @@ sp_fill_style_widget_fill_rule_activate (GtkWidget *w, SPWidget *spw)
     GSList *reprs = NULL;
     const GSList *items = NULL;
     if (spw->inkscape) {
+
         items = sp_widget_get_item_list (spw);
-        
+
         for (const GSList *i = items; i != NULL; i = i->next) {
             reprs = g_slist_prepend (reprs, SP_OBJECT_REPR (i->data));
         }
-        
+
     } else {
         reprs = g_slist_prepend (NULL, spw->repr);
     }
 
     SPCSSAttr *css = sp_repr_css_attr_new ();
-    sp_repr_css_set_property ( css, "fill-rule", 
-                               (const gchar *)g_object_get_data (G_OBJECT (w), 
+    sp_repr_css_set_property ( css, "fill-rule",
+                               (const gchar *)g_object_get_data (G_OBJECT (w),
                                "fill-rule") );
-                               
+
     for (const GSList *r = reprs; r != NULL; r = r->next) {
         sp_repr_css_change_recursive ((SPRepr *) r->data, css, "style");
     }
-    
+
     sp_repr_css_attr_unref (css);
-    
+
     if (spw->inkscape) {
         sp_document_done (SP_WIDGET_DOCUMENT (spw));
     }
 
     g_slist_free (reprs);
-    
+
 } // end of sp_fill_style_widget_fill_rule_activate()
 
 
@@ -941,7 +1003,7 @@ sp_fill_style_get_average_color_rgba (const GSList *objects, gfloat *c)
     c[1] /= num;
     c[2] /= num;
     c[3] /= num;
-    
+
 } // end of sp_fill_style_get_average_color_rgba()
 
 
@@ -986,14 +1048,14 @@ static SPPaintSelectorMode
 sp_fill_style_determine_paint_selector_mode (SPStyle *style)
 {
     switch (style->fill.type) {
-    
+
         case SP_PAINT_TYPE_NONE:
             return SP_PAINT_SELECTOR_MODE_NONE;
-            
+
         case SP_PAINT_TYPE_COLOR:
         {
             SPColorSpaceType cstype = sp_color_get_colorspace_type (&style->fill.value.color);
-            
+
             switch (cstype) {
                 case SP_COLORSPACE_TYPE_RGB:
                     return SP_PAINT_SELECTOR_MODE_COLOR_RGB;
@@ -1005,25 +1067,28 @@ sp_fill_style_determine_paint_selector_mode (SPStyle *style)
                     return SP_PAINT_SELECTOR_MODE_NONE;
             }
         }
-            
+
         case SP_PAINT_TYPE_PAINTSERVER:
-        
+
             if (SP_IS_LINEARGRADIENT (SP_STYLE_FILL_SERVER (style))) {
-                
+
                 return SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR;
-            
+
             } else if (SP_IS_RADIALGRADIENT (SP_STYLE_FILL_SERVER (style))) {
-                
+
                 return SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL;
+            } else if (SP_IS_PATTERN (SP_STYLE_FILL_SERVER (style))) {
+
+                return SP_PAINT_SELECTOR_MODE_PATTERN;
             }
-            
-            g_warning ( "file %s: line %d: Unknown paintserver", 
+
+            g_warning ( "file %s: line %d: Unknown paintserver",
                         __FILE__, __LINE__ );
             return SP_PAINT_SELECTOR_MODE_NONE;
-            
-            
+
+
         default:
-            g_warning ( "file %s: line %d: Unknown paint type %d", 
+            g_warning ( "file %s: line %d: Unknown paint type %d",
                         __FILE__, __LINE__, style->fill.type );
             break;
     }

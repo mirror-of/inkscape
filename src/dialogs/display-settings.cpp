@@ -1166,6 +1166,14 @@ options_checkbox (
             options_changed_int
             );
 
+options_checkbox (
+    _("Import bitmap as <image>"), 
+    _("When on, an imported bitmap creates an <image> element; otherwise it is a rect with bitmap fill"), tt,
+    vb,
+    "options.importbitmapsasimages", "value", 1,
+    options_changed_boolean
+    );
+
         options_sb (
             _("Max recent documents:"), 
             _("The maximum length of the Open Recent list in the File menu"), tt,

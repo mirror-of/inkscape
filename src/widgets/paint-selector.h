@@ -34,7 +34,8 @@ typedef enum {
 	SP_PAINT_SELECTOR_MODE_COLOR_RGB,
 	SP_PAINT_SELECTOR_MODE_COLOR_CMYK,
 	SP_PAINT_SELECTOR_MODE_GRADIENT_LINEAR,
-	SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL
+    SP_PAINT_SELECTOR_MODE_GRADIENT_RADIAL,
+    SP_PAINT_SELECTOR_MODE_PATTERN
 } SPPaintSelectorMode;
 
 struct SPPaintSelector {
@@ -45,7 +46,7 @@ struct SPPaintSelector {
 	SPPaintSelectorMode mode;
 
 	GtkWidget *style;
-	GtkWidget *none, *solid, *gradient, *radial;
+    GtkWidget *none, *solid, *gradient, *radial, *pattern;
 	GtkWidget *frame, *selector;
 
 	SPColor color;
@@ -94,5 +95,10 @@ void sp_paint_selector_get_gradient_position_floatv (SPPaintSelector *psel, gflo
 void sp_paint_selector_write_lineargradient (SPPaintSelector *psel, SPLinearGradient *lg, SPItem *item);
 void sp_paint_selector_write_radialgradient (SPPaintSelector *psel, SPRadialGradient *rg, SPItem *item);
 
+void sp_paint_selector_system_color_set (SPPaintSelector *psel, const SPColor *color, float opacity);
+
+SPPattern * sp_paint_selector_get_pattern (SPPaintSelector *psel);
+
+void sp_update_pattern_list ( SPPaintSelector *psel, SPPattern *pat);
 
 #endif
