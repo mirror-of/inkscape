@@ -262,7 +262,7 @@ sp_star_context_set (SPEventContext *ec, const gchar *key, const gchar *val)
     SPStarContext *sc = SP_STAR_CONTEXT (ec);
     if (!strcmp (key, "magnitude")) {
         sc->magnitude = (val) ? atoi (val) : 5;
-        sc->magnitude = CLAMP (sc->magnitude, 3, 32);
+        sc->magnitude = CLAMP (sc->magnitude, 3, 1024);
     } else if (!strcmp (key, "proportion")) {
         sc->proportion = (val) ? g_ascii_strtod (val, NULL) : 0.5;
         sc->proportion = CLAMP (sc->proportion, 0.01, 2.0);

@@ -206,7 +206,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_ATTR_SODIPODI_REVOLUTION:
 		if (value) {
 			spiral->revo = g_ascii_strtod (value, NULL);
-			spiral->revo = CLAMP (spiral->revo, 0.05, 20.0);
+			spiral->revo = CLAMP (spiral->revo, 0.05, 1024.0);
 		} else {
 			spiral->revo = 3.0;
 		}

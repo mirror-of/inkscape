@@ -175,7 +175,7 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_ATTR_SODIPODI_SIDES:
 		if (value) {
 			star->sides = atoi (value);
-			star->sides = CLAMP (star->sides, 3, 32);
+			star->sides = CLAMP (star->sides, 3, 1024);
 		} else {
 			star->sides = 5;
 		}
@@ -320,8 +320,7 @@ i.e. it is guaranteed to go through all integers < 2^32 (see http://random.mat.s
 guint32
 lcg_next (guint32 prev)
 {
-	guint64 t = (( 69069 * prev + 1 ) % 4294967296ll);
-	return ((guint32) t);
+	return (guint32) (( 69069 * (guint64) prev + 1 ) % 4294967296ll);
 }
 
 /**
@@ -483,7 +482,7 @@ sp_star_position_set (SPStar *star, gint sides, NR::Point center, gdouble r1, gd
 	g_return_if_fail (star != NULL);
 	g_return_if_fail (SP_IS_STAR (star));
 	
-	star->sides = CLAMP (sides, 3, 32);
+	star->sides = CLAMP (sides, 3, 1024);
 	star->center = center;
 	star->r[0] = MAX (r1, 0.001);
 	if (isflat == false) {

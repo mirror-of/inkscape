@@ -1159,7 +1159,7 @@ sp_star_toolbox_new (SPDesktop *desktop)
         GtkWidget *hb = sp_tb_spinbutton (_("Corners:"), _("Number of corners of a polygon or star"), 
                                           "tools.shapes.star", "magnitude", 3,
                                           NULL, (SPWidget *) tbl, TRUE, "altx-star",
-                                          3, 32, 1, 1, 
+                                          3, 1024, 1, 1, 
                                           sp_stb_magnitude_value_changed, 1, 0);
         gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
     }
@@ -1745,7 +1745,7 @@ sp_spiral_toolbox_new (SPDesktop *desktop)
         GtkWidget *hb = sp_tb_spinbutton (_("Turns:"), _("Number of revolutions"), 
                                           "tools.shapes.spiral", "revolution", 3.0,
                                           NULL, (SPWidget *) tbl, TRUE, "altx-spiral",
-                                          0.01, 20.0, 0.1, 1.0, 
+                                          0.01, 1024.0, 0.1, 1.0, 
                                           sp_spl_tb_revolution_value_changed, 1, 2);
         gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
     }
