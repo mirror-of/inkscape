@@ -96,6 +96,7 @@ static const char preferences_skeleton[] =
 "    <group id=\"dragtolerance\" value=\"4.0\"/>"
 "    <group id=\"savewindowgeometry\" value=\"1\"/>"
 "    <group id=\"defaultoffsetwidth\" value=\"2\"/>"
+"    <group id=\"defaultscale\" value=\"2\"/>"
 "    <group id=\"showrulers\" value=\"1\"/>"
 "    <group id=\"showscrollbars\" value=\"1\"/>"
 "    <group id=\"maxrecentdocuments\" value=\"20\"/>"

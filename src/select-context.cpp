@@ -384,7 +384,7 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 	seltrans = &sc->seltrans;
 	selection = SP_DT_SELECTION (desktop);
 	nudge = prefs_get_double_attribute_limited ("options.nudgedistance", "value", 2.8346457, 0, 1000); // default is 1 mm
-	offset = prefs_get_double_attribute_limited ("options.defaultoffsetwidth", "value", 2, 0, 1000); 
+	offset = prefs_get_double_attribute_limited ("options.defaultscale", "value", 2, 0, 1000); 
 	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 

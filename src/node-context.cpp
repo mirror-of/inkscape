@@ -380,7 +380,7 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 	double const nudge = prefs_get_double_attribute_limited("options.nudgedistance", "value", 2.8346457, 0, 1000); // default is 1 mm
 	tolerance = prefs_get_int_attribute_limited ("options.dragtolerance", "value", 0, 0, 100);
 	int const snaps = prefs_get_int_attribute("options.rotationsnapsperpi", "value", 12);
-	double const offset = prefs_get_double_attribute_limited("options.defaultoffsetwidth", "value", 2, 0, 1000);
+	double const offset = prefs_get_double_attribute_limited("options.defaultscale", "value", 2, 0, 1000);
 
 	gint ret = FALSE;
 
