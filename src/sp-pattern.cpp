@@ -468,7 +468,6 @@ pattern_tile (GSList *reprs, NR::Rect bounds, SPDocument *document, NR::Matrix t
 	SPRepr *defsrepr = SP_OBJECT_REPR (SP_DOCUMENT_DEFS (document));
 
 	SPRepr *repr = sp_repr_new ("pattern");
-	sp_repr_set_attr(repr, "inkscape:collect", "always");
 	sp_repr_set_attr (repr, "patternUnits", "userSpaceOnUse");
 	sp_repr_set_double (repr, "width", bounds.extent(NR::X));
 	sp_repr_set_double (repr, "height", bounds.extent(NR::Y));
