@@ -63,8 +63,8 @@ struct _NRTypePosDef {
 
 static void nr_type_directory_build (void);
 static void nr_type_calculate_position (NRTypePosDef *pdef, const gchar *name);
-static float nr_type_distance_family_better (const gchar *ask, const gchar *bid, float best);
-static float nr_type_distance_position_better (NRTypePosDef *ask, NRTypePosDef *bid, float best);
+static unsigned nr_type_distance_family (gchar const *ask, gchar const *bid);
+static double nr_type_distance_position (NRTypePosDef const *ask, NRTypePosDef const *bid);
 
 static void nr_type_read_private_list (void);
 #ifdef WIN32
@@ -101,39 +101,42 @@ NRTypeFace *
 nr_type_directory_lookup_fuzzy (const gchar *family, const gchar *description)
 {
 	NRFamilyDef *fdef, *bestfdef;
-	float best, dist;
 	NRTypeFaceDef *tdef, *besttdef;
 	NRTypePosDef apos;
 
 	if (!typedict) nr_type_directory_build ();
 
-	best = NR_HUGE;
+	unsigned fbest = ~0u;
 	bestfdef = NULL;
 
 	for (fdef = families; fdef; fdef = fdef->next) {
-		dist = nr_type_distance_family_better (family, fdef->name, best);
-		if (dist < best) {
-			best = dist;
+		unsigned const dist = nr_type_distance_family (family, fdef->name);
+		if (dist < fbest) {
+			fbest = dist;
 			bestfdef = fdef;
+			if (dist == 0) {
+				break;
+			}
 		}
-		if (best == 0.0) break;
 	}
 
 	if (!bestfdef) return NULL;
 
-	best = NR_HUGE;
+	double best = NR_HUGE;
 	besttdef = NULL;
 
 	/* fixme: In reality the latter method reqires full qualified name */
 	nr_type_calculate_position (&apos, description);
 
 	for (tdef = bestfdef->faces; tdef; tdef = tdef->next) {
-		dist = nr_type_distance_position_better (&apos, tdef->pdef, best);
+		double dist = nr_type_distance_position (&apos, tdef->pdef);
 		if (dist < best) {
 			best = dist;
 			besttdef = tdef;
+			if (best == 0.0) {
+				break;
+			}
 		}
-		if (best == 0.0) break;
 	}
 
 	if (!besttdef->typeface) {
@@ -352,14 +355,15 @@ nr_type_calculate_position (NRTypePosDef *pdef, const gchar *name)
 		pdef->weight = 160;
 	} else if (strstr (c, "demibold")) {
 		pdef->weight = 160;
-	} else if (strstr (c, "bold")) {
-		pdef->weight = 192;
 	} else if (strstr (c, "ultra bold")) {
 		pdef->weight = 224;
 	} else if (strstr (c, "extra bold")) {
 		pdef->weight = 224;
 	} else if (strstr (c, "black")) {
 		pdef->weight = 255;
+	} else if (strstr (c, "bold")) {
+		/* Must come after the checks for `blah bold'. */
+		pdef->weight = 192;
 	} else {
 		pdef->weight = 128;
 	}
@@ -375,33 +379,27 @@ nr_type_calculate_position (NRTypePosDef *pdef, const gchar *name)
 	}
 }
 
-static float
-nr_type_distance_family_better (const gchar *ask, const gchar *bid, float best)
+static unsigned
+nr_type_distance_family (const gchar *ask, const gchar *bid)
 {
-	int alen, blen;
+	if (!g_ascii_strcasecmp (ask, bid)) {
+		return 0;
+	}
 
-#ifndef WIN32
-	if (!strcasecmp (ask, bid)) return MIN (best, 0.0F);
-#else
-	if (!stricmp (ask, bid)) return MIN (best, 0.0F);
-#endif
-
-	alen = strlen (ask);
-	blen = strlen (bid);
-
-#ifndef WIN32
-	if ((blen < alen) && !strncasecmp (ask, bid, blen)) return MIN (best, 1.0);
-	if (!strcasecmp (bid, "bitstream cyberbit")) return MIN (best, 10.0);
-	if (!strcasecmp (bid, "arial")) return MIN (best, 100.0);
-	if (!strcasecmp (bid, "helvetica")) return MIN (best, 1000.0);
-#else
-	if ((blen < alen) && !strnicmp (ask, bid, blen)) return MIN (best, 1.0);
-	if (!stricmp (bid, "bitstream cyberbit")) return MIN (best, 10.0);
-	if (!stricmp (bid, "arial")) return MIN (best, 100.0);
-	if (!stricmp (bid, "helvetica")) return MIN (best, 1000.0);
-#endif
-
-	return 10000.0;
+	size_t const alen = strlen (ask);
+	size_t const blen = strlen (bid);
+	if ( ( blen < alen )
+	     && !g_ascii_strncasecmp(ask, bid, blen) ) {
+		return 1;
+	} else if (!g_ascii_strcasecmp(bid, "bitstream cyberbit")) {
+		return 10;
+	} else if (!g_ascii_strcasecmp (bid, "arial")) {
+		return 100;
+	} else if (!g_ascii_strcasecmp (bid, "helvetica")) {
+		return 1000;
+	} else {
+		return 10000;
+	}
 }
 
 #define NR_TYPE_ITALIC_SCALE 10000.0F
@@ -409,20 +407,23 @@ nr_type_distance_family_better (const gchar *ask, const gchar *bid, float best)
 #define NR_TYPE_WEIGHT_SCALE 100.0F
 #define NR_TYPE_STRETCH_SCALE 2000.0F
 
-static float
-nr_type_distance_position_better (NRTypePosDef *ask, NRTypePosDef *bid, float best)
+static double
+nr_type_distance_position (NRTypePosDef const *ask, NRTypePosDef const *bid)
 {
-	float ditalic, doblique, dweight, dstretch;
-	float dist;
+	double ditalic, doblique, dweight, dstretch;
+	double dist;
 
 	ditalic = NR_TYPE_ITALIC_SCALE * ((int) ask->italic - (int) bid->italic);
 	doblique = NR_TYPE_OBLIQUE_SCALE * ((int) ask->oblique - (int) bid->oblique);
 	dweight = NR_TYPE_WEIGHT_SCALE * ((int) ask->weight - (int) bid->weight);
 	dstretch = NR_TYPE_STRETCH_SCALE * ((int) ask->stretch - (int) bid->stretch);
 
-	dist = sqrt (ditalic * ditalic + doblique * doblique + dweight * dweight + dstretch * dstretch);
+	dist = sqrt (ditalic * ditalic  +
+		     doblique * doblique  +
+		     dweight * dweight  +
+		     dstretch * dstretch);
 
-	return MIN (dist, best);
+	return dist;
 }
 
 static gchar privatename[] = "/.inkscape/private-fonts";

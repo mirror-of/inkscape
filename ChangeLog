@@ -1,5 +1,16 @@
 2004-01-12  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnrtype/nr-type-directory.cpp
+	(nr_type_calculate_position): Fix bug where `ultra bold' and `extra
+	bold' were getting parsed as `bold'.
+	(nr_type_distance_family_better, nr_type_distance_position_better):
+	Rename to nr_type_distance_family and nr_type_distance_position
+	respectively, and return just the distance.
+	(nr_type_distance_family): Use g_ascii_strcasecmp instead of
+	strcasecmp/stricmp.
+	(nr_type_distance_family): Return unsigned instead of float.
+	(nr_type_distance_position): Use double instead of float.
+
 	* src/libnrtype/nr-rasterfont.cpp
 	(nr_rasterfont_generic_glyph_area_get,
 	nr_rasterfont_generic_glyph_mask_render): Suppress warning:
