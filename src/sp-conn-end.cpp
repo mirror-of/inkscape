@@ -145,10 +145,13 @@ static double signed_one(double const x)
 static void
 change_endpts(SPCurve *const curve, NR::Point const h2endPt[2])
 {
-    /* TODO: Retain curves of existing curve. */
+#if 0
     sp_curve_reset(curve);
     sp_curve_moveto(curve, h2endPt[0]);
     sp_curve_lineto(curve, h2endPt[1]);
+#else
+    sp_curve_stretch_endpoints(curve, h2endPt[0], h2endPt[1]);
+#endif
 }
 
 static void

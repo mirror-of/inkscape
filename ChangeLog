@@ -1,5 +1,12 @@
 2004-08-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-conn-end.cpp (change_endpts):
+	  Use new sp_curve_stretch_endpoints function: i.e. preserve the
+	  shape of the connector path.
+
+	* src/display/curve.h, src/display/curve.cpp
+	  (sp_curve_stretch_endpoints): New function.
+
 	* src/sp-use-reference.cpp: CodingStyle changes.
 
 	* src/sp-item.h, src/sp-item.cpp (sp_item_write_transform):
