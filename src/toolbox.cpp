@@ -767,6 +767,8 @@ sp_tb_spinbutton (
     return hb;
 }
 
+#define MODE_LABEL_WIDTH 70
+
 //########################
 //##       Star         ##
 //########################
@@ -999,7 +1001,7 @@ static SPReprEventVector star_tb_repr_events =
 static void
 sp_star_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
 {
-    int no_stars_selected = 0;
+    int n_selected = 0;
     SPRepr *repr = NULL;
     SPRepr *oldrepr = NULL;
     
@@ -1008,12 +1010,17 @@ sp_star_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
          items = items->next)
     {
         if (SP_IS_STAR ((SPItem *) items->data)) {
-            no_stars_selected++;
+            n_selected++;
             repr = SP_OBJECT_REPR((SPItem *) items->data);
         }
     }
 
-    if (no_stars_selected == 1) {
+    GtkWidget *l = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (tbl), "mode_label"));
+
+    if (n_selected == 0) {
+        gtk_label_set_markup (GTK_LABEL(l), _("<b>New:</b>"));
+    } else if (n_selected == 1) {
+        gtk_label_set_markup (GTK_LABEL(l), _("<b>Change:</b>"));
 
         oldrepr = (SPRepr *) gtk_object_get_data (GTK_OBJECT (tbl), "repr");
         if (oldrepr) { // remove old listener
@@ -1028,6 +1035,10 @@ sp_star_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
             sp_repr_add_listener (repr, &star_tb_repr_events, tbl);
             sp_repr_synthesize_events (repr, &star_tb_repr_events, tbl);
         }
+    } else {
+        // FIXME: implement averaging of all parameters for multiple selected stars
+        //gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
+        gtk_label_set_markup (GTK_LABEL(l), _("<b>Change:</b>"));
     }
 }
 
@@ -1092,6 +1103,16 @@ sp_star_toolbox_new (SPDesktop *desktop)
     gtk_object_set_data (GTK_OBJECT (tbl), "desktop", desktop);
 
     GtkTooltips *tt = gtk_tooltips_new ();
+
+    {
+        GtkWidget *boxl = gtk_hbox_new (FALSE, 0);
+        gtk_widget_set_size_request (boxl, MODE_LABEL_WIDTH, -1);
+        GtkWidget *l = gtk_label_new (NULL);
+        gtk_label_set_markup (GTK_LABEL(l), _("<b>New:</b>"));
+        gtk_box_pack_end (GTK_BOX (boxl), l, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (tbl), boxl, FALSE, FALSE, 0);
+        gtk_object_set_data (GTK_OBJECT (tbl), "mode_label", l);
+    }
 
     /* Magnitude */
     {
@@ -1341,7 +1362,7 @@ static SPReprEventVector rect_tb_repr_events = {
 static void
 sp_rect_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
 {
-    int rects_selected = 0;
+    int n_selected = 0;
     SPRepr *repr = NULL;
     SPItem *item = NULL;
     SPRepr *oldrepr = NULL;
@@ -1350,13 +1371,19 @@ sp_rect_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
          items != NULL;
          items = items->next) {
         if (SP_IS_RECT ((SPItem *) items->data)) {
-            rects_selected++;
+            n_selected++;
             item = (SPItem *) items->data;
             repr = SP_OBJECT_REPR(item);
         }
     }
   
-    if (rects_selected == 1) {
+    GtkWidget *l = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (tbl), "mode_label"));
+
+    if (n_selected == 0) {
+        gtk_label_set_markup (GTK_LABEL(l), _("<b>New:</b>"));
+    } else if (n_selected == 1) {
+        gtk_label_set_markup (GTK_LABEL(l), _("<b>Change:</b>"));
+
         oldrepr = (SPRepr *) gtk_object_get_data (GTK_OBJECT (tbl), "repr");
         if (oldrepr) { // remove old listener
             sp_repr_remove_listener_by_data (oldrepr, tbl);
@@ -1370,6 +1397,10 @@ sp_rect_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
             sp_repr_add_listener (repr, &rect_tb_repr_events, tbl);
             sp_repr_synthesize_events (repr, &rect_tb_repr_events, tbl);
         }
+    } else {
+        // FIXME: implement averaging of all parameters for multiple selected
+        //gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
+        gtk_label_set_markup (GTK_LABEL(l), _("<b>Change:</b>"));
     }
 }
 
@@ -1383,6 +1414,16 @@ sp_rect_toolbox_new (SPDesktop *desktop)
     gtk_object_set_data (GTK_OBJECT (tbl), "desktop", desktop);
 
     GtkTooltips *tt = gtk_tooltips_new ();
+
+    {
+        GtkWidget *boxl = gtk_hbox_new (FALSE, 0);
+        gtk_widget_set_size_request (boxl, MODE_LABEL_WIDTH, -1);
+        GtkWidget *l = gtk_label_new (NULL);
+        gtk_label_set_markup (GTK_LABEL(l), _("<b>New:</b>"));
+        gtk_box_pack_end (GTK_BOX (boxl), l, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (tbl), boxl, FALSE, FALSE, 0);
+        gtk_object_set_data (GTK_OBJECT (tbl), "mode_label", l);
+    }
 
     // rx/ry units menu: create
     GtkWidget *us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
@@ -1588,7 +1629,7 @@ static SPReprEventVector spiral_tb_repr_events = {
 static void
 sp_spiral_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
 {
-    int no_spirals_selected = 0;
+    int n_selected = 0;
     SPRepr *repr = NULL;
     SPRepr *oldrepr = NULL;
   
@@ -1597,12 +1638,17 @@ sp_spiral_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
          items = items->next)
     {
         if (SP_IS_SPIRAL ((SPItem *) items->data)) {
-            no_spirals_selected++;
+            n_selected++;
             repr = SP_OBJECT_REPR((SPItem *) items->data);
         }
     }
   
-    if (no_spirals_selected == 1) {
+    GtkWidget *l = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (tbl), "mode_label"));
+
+    if (n_selected == 0) {
+        gtk_label_set_markup (GTK_LABEL(l), _("<b>New:</b>"));
+    } else if (n_selected == 1) {
+        gtk_label_set_markup (GTK_LABEL(l), _("<b>Change:</b>"));
         
         oldrepr = (SPRepr *) gtk_object_get_data (GTK_OBJECT (tbl), "repr");
         if (oldrepr) { // remove old listener
@@ -1617,6 +1663,10 @@ sp_spiral_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
             sp_repr_add_listener (repr, &spiral_tb_repr_events, tbl);
             sp_repr_synthesize_events (repr, &spiral_tb_repr_events, tbl);
         }
+    } else {
+        // FIXME: implement averaging of all parameters for multiple selected
+        //gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
+        gtk_label_set_markup (GTK_LABEL(l), _("<b>Change:</b>"));
     }
 }
 
@@ -1631,6 +1681,16 @@ sp_spiral_toolbox_new (SPDesktop *desktop)
     gtk_object_set_data (GTK_OBJECT (tbl), "desktop", desktop);
 
     GtkTooltips *tt = gtk_tooltips_new ();
+
+    {
+        GtkWidget *boxl = gtk_hbox_new (FALSE, 0);
+        gtk_widget_set_size_request (boxl, MODE_LABEL_WIDTH, -1);
+        GtkWidget *l = gtk_label_new (NULL);
+        gtk_label_set_markup (GTK_LABEL(l), _("<b>New:</b>"));
+        gtk_box_pack_end (GTK_BOX (boxl), l, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (tbl), boxl, FALSE, FALSE, 0);
+        gtk_object_set_data (GTK_OBJECT (tbl), "mode_label", l);
+    }
 
     /* Revolution */
     {
@@ -2048,7 +2108,7 @@ static SPReprEventVector arc_tb_repr_events = {
 static void
 sp_arc_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
 {
-  int no_arcs_selected = 0;
+  int n_selected = 0;
   SPRepr *repr = NULL;
   SPRepr *oldrepr = NULL;
   
@@ -2057,27 +2117,37 @@ sp_arc_toolbox_selection_changed (SPSelection * selection, GtkObject *tbl)
        items = items->next)
   {
       if (SP_IS_ARC ((SPItem *) items->data)) {
-          no_arcs_selected++;
+          n_selected++;
           repr = SP_OBJECT_REPR((SPItem *) items->data);
       }
   }
   
-  if (no_arcs_selected == 1) {
-     oldrepr = (SPRepr *) gtk_object_get_data (GTK_OBJECT (tbl), "repr");
+    GtkWidget *l = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (tbl), "mode_label"));
+
+    if (n_selected == 0) {
+        gtk_label_set_markup (GTK_LABEL(l), _("<b>New:</b>"));
+    } else if (n_selected == 1) {
+        gtk_label_set_markup (GTK_LABEL(l), _("<b>Change:</b>"));
+
+        oldrepr = (SPRepr *) gtk_object_get_data (GTK_OBJECT (tbl), "repr");
      
-     if (oldrepr) { // remove old listener
-         sp_repr_remove_listener_by_data (oldrepr, tbl);
-         sp_repr_unref (oldrepr);
-         oldrepr = 0;
-     }
+        if (oldrepr) { // remove old listener
+            sp_repr_remove_listener_by_data (oldrepr, tbl);
+            sp_repr_unref (oldrepr);
+            oldrepr = 0;
+        }
      
-     if (repr) {
-         g_object_set_data (G_OBJECT (tbl), "repr", repr);
-         sp_repr_ref (repr);
-         sp_repr_add_listener (repr, &arc_tb_repr_events, tbl);
-         sp_repr_synthesize_events (repr, &arc_tb_repr_events, tbl);
-     }
-  }
+        if (repr) {
+            g_object_set_data (G_OBJECT (tbl), "repr", repr);
+            sp_repr_ref (repr);
+            sp_repr_add_listener (repr, &arc_tb_repr_events, tbl);
+            sp_repr_synthesize_events (repr, &arc_tb_repr_events, tbl);
+        }
+    } else {
+        // FIXME: implement averaging of all parameters for multiple selected
+        //gtk_label_set_markup (GTK_LABEL(l), _("<b>Average:</b>"));
+        gtk_label_set_markup (GTK_LABEL(l), _("<b>Change:</b>"));
+    }
 }
 
 
@@ -2090,6 +2160,16 @@ sp_arc_toolbox_new (SPDesktop *desktop)
     gtk_object_set_data (GTK_OBJECT (tbl), "desktop", desktop);
 
     GtkTooltips *tt = gtk_tooltips_new ();
+
+    {
+        GtkWidget *boxl = gtk_hbox_new (FALSE, 0);
+        gtk_widget_set_size_request (boxl, MODE_LABEL_WIDTH, -1);
+        GtkWidget *l = gtk_label_new (NULL);
+        gtk_label_set_markup (GTK_LABEL(l), _("<b>New:</b>"));
+        gtk_box_pack_end (GTK_BOX (boxl), l, FALSE, FALSE, 0);
+        gtk_box_pack_start (GTK_BOX (tbl), boxl, FALSE, FALSE, 0);
+        gtk_object_set_data (GTK_OBJECT (tbl), "mode_label", l);
+    }
 
     /* Start */
     {
