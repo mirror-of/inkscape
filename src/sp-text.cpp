@@ -96,7 +96,7 @@ static NRArenaItem *sp_text_show (SPItem *item, NRArena *arena, unsigned key, un
 static void sp_text_hide (SPItem *item, unsigned key);
 static char *sp_text_description (SPItem *item);
 static void sp_text_snappoints(SPItem const *item, SnapPointsIter p);
-static NR::Matrix sp_text_set_transform (SPItem *item, NR::Matrix const &xform);
+//static NR::Matrix sp_text_set_transform(SPItem *item, NR::Matrix const &xform);
 static void sp_text_print (SPItem *item, SPPrintContext *gpc);
 
 static void sp_text_request_relayout (SPText *text, guint flags);
@@ -682,6 +682,7 @@ static void sp_text_snappoints(SPItem const *item, SnapPointsIter p)
     }
 }
 
+#if 0 /* set_transform disabled for now (2004-10-13). */
 static NR::Matrix
 sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
 {
@@ -689,6 +690,7 @@ sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
 
     return xform;
 }
+#endif
 
 static void
 sp_text_print (SPItem *item, SPPrintContext *ctx)
