@@ -1,3 +1,9 @@
+2004-06-23  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/inkscape.cpp: Don't connect to SIGBUS on Win32, as
+	it doesn't seem to exist.  Add Emacs mode line.
+	Declaration-to-first-use and coding style cleanups.
+
 2004-06-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* share/extensions/dia2svg.sh: Fix bashism and insecure tempfile usage.
