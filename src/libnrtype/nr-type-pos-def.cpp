@@ -9,6 +9,7 @@
 int
 parse_name_for_style (char const *cc)
 {
+	g_assert ( cc != NULL );
 	gchar *c = g_ascii_strdown (cc, -1);
 
 	gint style;
@@ -33,6 +34,7 @@ parse_name_for_style (char const *cc)
 int
 parse_name_for_weight (char const *cc)
 {
+	g_assert ( cc != NULL );
 	gchar *c = g_ascii_strdown (cc, -1);
 
 	gint weight;
@@ -80,6 +82,7 @@ parse_name_for_weight (char const *cc)
 int
 parse_name_for_stretch (char const *cc)
 {
+	g_assert ( cc != NULL );
 	gchar *c = g_ascii_strdown (cc, -1);
 
 	gint stretch;
@@ -110,6 +113,7 @@ parse_name_for_stretch (char const *cc)
 int
 parse_name_for_variant (char const *cc)
 {
+	g_assert ( cc != NULL );
 	gchar *c = g_ascii_strdown (cc, -1);
 
 	gint variant;
@@ -246,6 +250,7 @@ variant_to_css (int stretch)
  */
 NRTypePosDef::NRTypePosDef(char const *description) {
 	// we cannot use strcasestr, it's linux only... so we must lowercase the string first
+	g_assert ( description != NULL );
 	gchar *c = g_ascii_strdown (description, -1);
 
 	/* copied from nr-type-directory.cpp:nr_type_calculate_position. */
