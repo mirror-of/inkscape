@@ -337,10 +337,8 @@ FileOpenDialogImpl::FileOpenDialogImpl(const char *dir,
          sigc::mem_fun(*this, &FileOpenDialogImpl::fileSelectedCallback) );
 
 
-    
-
-    add_button(Gtk::Stock::OPEN,   GTK_RESPONSE_OK);
     add_button(Gtk::Stock::CANCEL, GTK_RESPONSE_CANCEL);
+    add_button(Gtk::Stock::OPEN,   GTK_RESPONSE_OK);
 
 }
 
@@ -535,8 +533,8 @@ FileSaveDialogImpl::FileSaveDialogImpl(const char *dir,
     //if (extension == NULL)
     //    checkbox.set_sensitive(FALSE);
 
-    add_button(Gtk::Stock::SAVE,   GTK_RESPONSE_OK);
     add_button(Gtk::Stock::CANCEL, GTK_RESPONSE_CANCEL);
+    add_button(Gtk::Stock::SAVE,   GTK_RESPONSE_OK);
 
 }
 
