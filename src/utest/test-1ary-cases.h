@@ -1,8 +1,6 @@
 #ifndef SEEN_UTEST_TEST_CASES_H
 #define SEEN_UTEST_TEST_CASES_H
 
-#include <functional>
-
 #include <utest/utest.h>
 
 
@@ -12,7 +10,8 @@ struct Case1 {
     ValidArg0 valid_arg0;
 };
 
-/** Often, ValidP can be std::equal_to<FRet> and ValidArg0 be FRet. */
+/** Often, ValidP can be std::equal_to\<FRet\> (#include \<functional\>), in which case ValidArg0
+    should equal FRet. */
 template<class FRet, class FArg0, class ValidArg0, class ValidP>
 static void
 test_1ary_cases(char const test_name[],
