@@ -223,6 +223,7 @@ text_remove_all_kerns()
         }
 
         text_remove_all_kerns_recursively(SP_OBJECT(items->data));
+        SP_OBJECT(items->data)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
         did = true;
     }
 
