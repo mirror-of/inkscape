@@ -387,13 +387,6 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 			sp_nodepath_select_prev (nc->nodepath);
 			ret = TRUE;
 			break;
-		case GDK_A:
-		case GDK_a:
-			if (MOD__CTRL_ONLY) {
-				sp_nodepath_select_all (nc->nodepath);
-				ret = TRUE;
-			}
-			break;
 		case GDK_Escape:
 			if (sp_rubberband_rect (&b)) { // cancel rubberband
 				sp_rubberband_stop ();
