@@ -37,8 +37,6 @@
 
 #define noSHAPE_VERBOSE
 
-/*#define DEBUG_MARKERS (1)*/
-
 static void sp_shape_class_init (SPShapeClass *klass);
 static void sp_shape_init (SPShape *shape);
 
@@ -166,7 +164,7 @@ sp_shape_release (SPObject *object)
 	item = (SPItem *) object;
 	shape = (SPShape *) object;
 
-#if DEBUG_MARKERS
+#ifdef DEBUG_MARKERS
 	g_message("sp_shape_release:  Releasing markers");
 #endif
 	for (i=0; i<SP_MARKER_LOC_QTY; i++) {
@@ -206,7 +204,7 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	 * sets it.
 	 */
 	/* TODO:  It would be nice if this could be done at an earlier level */
-#if DEBUG_MARKERS
+#ifdef DEBUG_MARKERS
 	g_message("sp_shape_update:  Creating markers (if necessary)");
 #endif
 	for (i=0; i<SP_MARKER_LOC_QTY; i++) {
@@ -249,7 +247,7 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	/* Note, we're ignoring 'marker' settings, which technically should apply for
 	   all three settings.  This should be fixed later such that if 'marker' is
 	   specified, then all three should appear. */
-#if DEBUG_MARKERS
+#ifdef DEBUG_MARKERS
 	g_message("sp_shape_update:  Updating markers");
 #endif
 	if (shape->curve && (shape->marker[SP_MARKER_LOC_START] 
@@ -301,7 +299,7 @@ sp_shape_update_marker_view (SPShape *shape, NRArenaItem *ai)
 
 	style = ((SPObject *) shape)->style;
 
-#if DEBUG_MARKERS
+#ifdef DEBUG_MARKERS
 	g_message("sp_shape_update_marker_view:  Updating views of markers");
 #endif
 	nstart = 0;
@@ -461,7 +459,7 @@ sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 	sp_item_invoke_bbox (item, &paintbox, NULL, TRUE);
 	nr_arena_shape_set_paintbox (NR_ARENA_SHAPE (arenaitem), &paintbox);
 
-#if DEBUG_MARKERS
+#ifdef DEBUG_MARKERS
 	g_message("sp_shape_show:  Showing markers");
 #endif
 	if (shape->curve && (shape->marker[SP_MARKER_LOC_START] ||
@@ -520,7 +518,7 @@ sp_shape_hide (SPItem *item, unsigned int key)
 
 	shape = (SPShape *) item;
 
-#if DEBUG_MARKERS
+#ifdef DEBUG_MARKERS
 	g_message("sp_shape_hide:  Hiding markers");
 #endif
 	for (i=SP_MARKER_LOC_START; i<SP_MARKER_LOC_QTY; i++) {
@@ -547,7 +545,7 @@ sp_shape_marker_release (SPObject *marker, SPShape *shape)
 
 	item = (SPItem *) shape;
 
-#if DEBUG_MARKERS
+#ifdef DEBUG_MARKERS
 	g_message("sp_shape_marker_release:  Releasing markers");
 #endif
 	for (i=0; i<SP_MARKER_LOC_QTY; i++) {
@@ -583,7 +581,7 @@ sp_shape_set_marker (SPObject *object, unsigned int key, const gchar *value)
 	item = (SPItem *) object;
 	shape = (SPShape *) object;
 
-#if DEBUG_MARKERS
+#ifdef DEBUG_MARKERS
 	g_message("sp_shape_set_marker:  Setting marker '%d' to '%s'", key, value);
 #endif
         if (key < SP_MARKER_LOC_START || key > SP_MARKER_LOC_END) {
