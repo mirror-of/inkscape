@@ -1,15 +1,21 @@
 /*
- * A quick hack to use the print output to write out a file.  This
- * then makes 'save as...' Postscript.
+ * A simple utility for exporting Inkscape svg Shapes as PovRay bezier
+ * prisms.  Note that this is output-only, and would thus seem to be
+ * better placed as an 'export' rather than 'output'.  However, Export
+ * handles all or partial documents, while this outputs ALL shapes in
+ * the current SVG document.
+ *
+ *  For information on the PovRay file format, see:
+ *      http://www.povray.org
  *
  * Authors:
  *   Bob Jamison <rjamison@titan.com>
- *   Ted Gould <ted@gould.cx>
  *
  * Copyright (C) 2004 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
 
 #ifdef HAVE_CONFIG_H
 # include <config.h>
@@ -35,15 +41,29 @@ namespace Inkscape {
 namespace Extension {
 namespace Internal {
 
+
+
+/**
+ * Make sure that we are in the database
+ */
 bool
 PovOutput::check (Inkscape::Extension::Extension * module)
 {
-	//if (NULL == Inkscape::Extension::db.get(SP_MODULE_KEY_PRINT_PS))
-	//	return FALSE;
+    /* We don't need a Key
+    if (NULL == Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_POV))
+        return FALSE;
+    */
 
-	return TRUE;
+    return TRUE;
 }
 
+
+
+
+/**
+ * This function searches the Repr tree recursively from the given node,
+ * and adds refs to all nodes with the given name, to the result vector
+ */
 static void
 findElementsByTagName(std::vector<SPRepr *> &results, SPRepr *node, const char *name)
 {
@@ -58,7 +78,9 @@ findElementsByTagName(std::vector<SPRepr *> &results, SPRepr *node, const char *
 }
 
 
-//used for saving information about shapes
+/**
+ * used for saving information about shapes
+ */
 class PovShapeInfo
 {
     public:
@@ -69,6 +91,9 @@ class PovShapeInfo
     std::string id;
     std::string color;
 };
+
+
+
 
 /**
  * Saves the <paths> of an Inkscape SVG file as PovRay spline definitions
@@ -369,11 +394,9 @@ PovOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar 
 }
 
 /**
-	\brief   A function allocate a copy of this function.
-
-	This is the definition of postscript out.  This function just
-	calls the extension system with the memory allocated XML that
-	describes the data.
+ * This is the definition of PovRay output.  This function just
+ * calls the extension system with the memory allocated XML that
+ * describes the data.
 */
 void
 PovOutput::init (void)
@@ -393,4 +416,14 @@ PovOutput::init (void)
 	return;
 }
 
-};};}; /* namespace Inkscape, Extension, Internal */
+
+
+
+
+}; //namespace Internal
+}; //namespace Extension
+}; //namespace Inkscape
+
+
+
+

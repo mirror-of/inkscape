@@ -1,9 +1,12 @@
 /*
- * A quick hack to use the print output to write out a file.  This
- * then makes 'save as...' Postscript.
+ * A simple utility for exporting Inkscape svg Shapes as PovRay bezier
+ * prisms.  Note that this is output-only, and would thus seem to be
+ * better placed as an 'export' rather than 'output'.  However, Export
+ * handles all or partial documents, while this outputs ALL shapes in
+ * the current SVG document.
  *
  * Authors:
- *   Ted Gould <ted@gould.cx>
+ *   Bob Jamison <rjamison@titan.com>
  *
  * Copyright (C) 2004 Authors
  *
@@ -15,33 +18,36 @@
 
 #include <extension/implementation/implementation.h>
 
-namespace Inkscape {
-namespace Extension {
-namespace Internal {
+namespace Inkscape
+{
+namespace Extension
+{
+namespace Internal
+{
 
-class PovOutput : Inkscape::Extension::Implementation::Implementation {
+class PovOutput : public Inkscape::Extension::Implementation::Implementation
+{
 
-public:
+    public:
+
 	bool check (Inkscape::Extension::Extension * module);
+
 	void          save  (Inkscape::Extension::Output *mod,
 	                     SPDocument *doc,
 	                     const gchar *uri);
+
 	static void   init  (void);
 
 };
 
-};};}; /* namespace Inkscape, Extension, Implementation */
+
+
+
+}; //namespace Internal
+}; //namespace Extension
+}; //namespace Inkscape
+
+
 
 #endif /* EXTENSION_INTERNAL_POV_OUT_H */
-
-/*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
-  indent-tabs-mode:nil
-  fill-column:99
-  End:
-*/
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
 
