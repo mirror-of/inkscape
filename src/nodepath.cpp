@@ -136,8 +136,6 @@ Path::Path *sp_nodepath_new(SPDesktop *desktop, SPItem *item)
 	if (!np)
 		return NULL;
 
-	g_print ("new: %p, %s\n", desktop, SP_IS_DESKTOP(desktop)?"yes":"no");
-
 	// Set defaults
 	np->desktop     = desktop;
 	np->path        = path;
@@ -183,7 +181,6 @@ void sp_nodepath_destroy(Path::Path *np) {
 
 	g_assert (!np->selected);
 
-	g_print ("del: %p, %s\n", np->desktop, SP_IS_DESKTOP(np->desktop)?"yes":"no");
 	np->desktop = NULL;
 
 	g_free (np);
@@ -397,7 +394,6 @@ static void update_repr_internal(Path::Path *np)
 static void update_repr(Path::Path *np)
 {
 	update_repr_internal(np);
-	g_print ("upd: %p, %s\n", np->desktop, SP_IS_DESKTOP(np->desktop)?"yes":"no");
 	sp_document_done(SP_DT_DOCUMENT(np->desktop));
 }
 
