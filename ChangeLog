@@ -10,9 +10,14 @@
 
 2004-04-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* configure.in: Tentatively remove config.h definitions of
+	  INKSCAPE_MARKERSDIR, INKSCAPE_PIXMAPDIR, INKSCAPE_SCREENSDIR,
+	  INKSCAPE_TUTORIALSDIR, with the understanding that these are to be
+	  provided by prefix.h.
+
 	* src/extension/extension.cpp (Extension):
 	* src/extension/init.cpp (check_extensions): 
-	Address warning.
+	  Address warning.
 
 	* src/dialogs/stroke-style.cpp: #include prefix.h.
 

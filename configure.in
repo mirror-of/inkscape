@@ -412,18 +412,9 @@ AC_DEFINE_UNQUOTED([PACKAGE_LOCALE_DIR], "${runtime_datadir}/locale",
 dnl It would be nice to rename "..._PIXMAPDIR" to "..._ICONSDIR" everywhere,
 dnl then this list can be replaced with a nice "for" loop.
 AC_SUBST(INKSCAPE_PIXMAPDIR)
-AC_DEFINE_UNQUOTED([INKSCAPE_PIXMAPDIR], "${inkscape_sharedir}/icons",
-					[Common icon directory])
 AC_SUBST(INKSCAPE_SCREENSDIR)
-AC_DEFINE_UNQUOTED([INKSCAPE_SCREENSDIR], "${inkscape_sharedir}/screens",
-					[Common screens directory])
 AC_SUBST(INKSCAPE_TUTORIALSDIR)
-AC_DEFINE_UNQUOTED([INKSCAPE_TUTORIALSDIR], "${inkscape_sharedir}/tutorials",
-					[Common tutorials directory])
 AC_SUBST(INKSCAPE_MARKERSDIR)
-AC_DEFINE_UNQUOTED([INKSCAPE_MARKERSDIR], "${inkscape_sharedir}/markers",
-					[Common markers directory])
-
 
 dnl Have to add module makefiles (lauris)
 
