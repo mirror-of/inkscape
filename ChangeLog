@@ -1,5 +1,8 @@
 2004-01-23  MenTaLguY  <mental@rydia.net>
 
+	* src/xml/repr-io.cpp: don't complain about not having a namespace
+	  URI for the standard xml: prefix
+
 	* src/desktop-style.cpp, src/desktop.cpp, src/document-undo.cpp,
 	  src/file.cpp, src/gradient-chemistry.cpp, src/inkscape.cpp,
 	  src/interface.cpp, src/nodepath.cpp, src/object-edit.cpp,

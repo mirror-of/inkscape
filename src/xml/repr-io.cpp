@@ -401,13 +401,16 @@ gchar const *qname_local_name(Glib::QueryQuark qname) {
 
 void add_ns_map_entry(NSMap &ns_map, Glib::QueryQuark prefix) {
     using Inkscape::Util::SharedCStringPtr;
+
+    static const Glib::QueryQuark xml_prefix("xml");
+
     NSMap::iterator iter=ns_map.find(prefix);
     if ( iter == ns_map.end() ) {
         if (prefix.id()) {
             gchar const *uri=sp_xml_ns_prefix_uri(g_quark_to_string(prefix));
             if (uri) {
                 ns_map.insert(NSMap::value_type(prefix, SharedCStringPtr::coerce(uri)));
-            } else {
+            } else if ( prefix != xml_prefix ) {
                 g_warning("No namespace known for normalized prefix %s", g_quark_to_string(prefix));
             }
         } else {
