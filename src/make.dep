@@ -221,24 +221,6 @@ desktop.o: \
 	widgets/widget-sizes.h \
 	xml/repr.h
 
-dialogs/FileDialog-win32.o: \
-	dialogs/FileDialog-win32.cpp \
-	dialogs/FileDialog.h \
-	display/nr-arena-forward.h \
-	forward.h \
-	libnr/nr-path.h \
-	libnr/nr-types.h \
-	module.h \
-	modules/menu.h \
-	xml/repr.h
-
-dialogs/FileDialog.o: \
-	dialogs/FileDialog.cpp \
-	dialogs/FileDialog.h \
-	helper/sp-intl.h \
-	modules/menu.h \
-	modules/menu.h
-
 dialogs/align.o: \
 	dialogs/align.cpp \
 	desktop-handles.h \

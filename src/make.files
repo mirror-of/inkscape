@@ -17,8 +17,6 @@ desktop-snap.h
 desktop-units.h
 desktop.cpp
 desktop.h
-dialogs/FileDialog-win32.cpp
-dialogs/FileDialog.cpp
 dialogs/FileDialog.h
 dialogs/InkscapeExtension.h
 dialogs/align.cpp

@@ -10,6 +10,8 @@ bonobo/embeddable-document.h
 bonobo/embeddable-drawing.h
 bonobo/sodipodi-bonobo.h
 bonobo/svg-doc-factory.h
+dialogs/FileDialog.cpp
+dialogs/FileDialog-win32.cpp
 display/nr-uta.cpp
 display/testnr.cpp
 helper/bezier-utils-test.cpp

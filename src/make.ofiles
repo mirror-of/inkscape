@@ -10,8 +10,6 @@ OBJECTS = \
 	desktop-handles.o \
 	desktop-snap.o \
 	desktop.o \
-	dialogs/FileDialog-win32.o \
-	dialogs/FileDialog.o \
 	dialogs/align.o \
 	dialogs/desktop-properties.o \
 	dialogs/dialog-events.o \
@@ -257,8 +255,6 @@ LINTS = \
 	desktop-handles.lint \
 	desktop-snap.lint \
 	desktop.lint \
-	dialogs/FileDialog-win32.lint \
-	dialogs/FileDialog.lint \
 	dialogs/align.lint \
 	dialogs/desktop-properties.lint \
 	dialogs/dialog-events.lint \
