@@ -358,8 +358,8 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
         case GDK_Meta_L:  // Meta is when you press Shift+Alt (at least on my machine)
         case GDK_Meta_R:
             sp_event_show_modifier_tip (event_context->defaultMessageContext(), event,
-                                        _("<b>Ctrl</b>: make square or integer-ratio rect, lock a rounded corner circular"),
-                                        _("<b>Shift</b>: draw around the starting point"),
+                                        _("<b>Ctrl</b>: snap gradient angle"),
+                                        _("<b>Shift</b>: draw gradient around the starting point"),
                                         NULL);
             break;
         case GDK_Up:

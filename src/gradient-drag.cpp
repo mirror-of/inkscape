@@ -298,7 +298,8 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
         }
     }
 
-    if (!(state & GDK_SHIFT_MASK)) { // See if we need to snap to any of the levels
+    if (!((state & GDK_SHIFT_MASK) || ((state & GDK_CONTROL_MASK) && (state & GDK_MOD1_MASK)))) { 
+        // See if we need to snap to any of the levels
         for (guint i = 0; i < dragger->parent->hor_levels.size(); i++) {
             if (fabs(p[NR::Y] - dragger->parent->hor_levels[i]) < snap_dist) {
                 p[NR::Y] = dragger->parent->hor_levels[i];
@@ -467,7 +468,7 @@ GrDragger::updateTip ()
 
     if (g_slist_length (this->draggables) == 1) {
         GrDraggable *draggable = (GrDraggable *) this->draggables->data;
-        this->knot->tip = g_strdup_printf (_("%s for: %s%s; drag with <b>Ctrl</b> to snap angle, with <b>Ctrl+Alt</b> to preserve angle"), 
+        this->knot->tip = g_strdup_printf (_("%s for: %s%s; drag with <b>Ctrl</b> to snap angle, with <b>Ctrl+Alt</b> to preserve angle, with <b>Ctrl+Alt</b> to scale around center"), 
                                            gr_knot_descr[draggable->point_num], sp_item_description (draggable->item), draggable->fill_or_stroke == false ? _(" (stroke)") : "");
     } else if (g_slist_length (draggables) == 2 && isA (POINT_RG_CENTER) && isA (POINT_RG_FOCUS)) {
         this->knot->tip = g_strdup_printf (_("Radial gradient <b>center</b> and <b>focus</b>; drag with <b>Shift</b> to separate focus"));
