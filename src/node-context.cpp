@@ -154,6 +154,10 @@ sp_node_context_dispose (GObject *object)
 		nc->knot_holder = NULL;
 	}
 
+	if (nc->_node_message_context) {
+		delete nc->_node_message_context;
+	}
+
 	G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
@@ -197,11 +201,12 @@ sp_node_context_setup (SPEventContext *ec)
 		}
 	}
 
-	sp_nodepath_update_statusbar (nc->nodepath);
-
 	if (prefs_get_int_attribute("tools.nodes", "selcue", 0) != 0) {
 		ec->enableSelectionCue();
 	}
+
+	nc -> _node_message_context = new Inkscape::MessageContext(SP_VIEW(ec->desktop)->messageStack());
+	sp_nodepath_update_statusbar (nc->nodepath);
 }
 
 /**

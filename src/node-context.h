@@ -41,6 +41,8 @@ struct SPNodeContext {
 	gboolean rightctrl;
 
 	sigc::connection sel_changed_connection;
+
+	Inkscape::MessageContext *_node_message_context;
 };
 
 struct SPNodeContextClass {

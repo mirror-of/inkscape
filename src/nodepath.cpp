@@ -2874,7 +2874,7 @@ sp_nodepath_update_statusbar(Path::Path *nodepath)
     gint selected = g_list_length(nodepath->selected);
     SPEventContext *ec = nodepath->desktop->event_context;
     if (!ec) return;
-    Inkscape::MessageContext *mc = ec->defaultMessageContext();
+    Inkscape::MessageContext *mc = SP_NODE_CONTEXT (ec)->_node_message_context;
     if (!mc) return;
 
     if (selected == 0) {
