@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.33pre\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-08 22:47-0700\n"
+"POT-Creation-Date: 2004-02-09 23:50-0700\n"
 "PO-Revision-Date: 2003-08-14 00:01+0200\n"
 "Last-Translator: Didier Conchaudron <conchaudron@free.fr>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -59,17 +59,17 @@ msgid ""
 "selector (arrow) to move or transform them."
 msgstr ""
 
-#: src/desktop.cpp:879
+#: src/desktop.cpp:878
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:881
+#: src/desktop.cpp:880
 #, c-format
 msgid "%s - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:1009
+#: src/desktop.cpp:1008
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -78,15 +78,15 @@ msgid ""
 "If you close without saving, your changes will be discarded."
 msgstr ""
 
-#: src/desktop.cpp:1018
+#: src/desktop.cpp:1017
 msgid "Close _without saving"
 msgstr ""
 
-#: src/desktop.cpp:1307
+#: src/desktop.cpp:1309
 msgid "No previous zoom."
 msgstr ""
 
-#: src/desktop.cpp:1336
+#: src/desktop.cpp:1338
 msgid "No next zoom."
 msgstr ""
 
@@ -843,17 +843,17 @@ msgstr "Annuler"
 msgid "Create"
 msgstr "Créer"
 
-#: src/document.cpp:388
+#: src/document.cpp:383
 #, c-format
 msgid "New document %d"
 msgstr "Nouveau document %d"
 
-#: src/document.cpp:417
+#: src/document.cpp:412
 #, c-format
 msgid "Memory document %d"
 msgstr "Document d'information %d"
 
-#: src/document.cpp:509
+#: src/document.cpp:499
 #, c-format
 msgid "Unnamed document %d"
 msgstr "Document sans nom %d"
@@ -1160,70 +1160,75 @@ msgstr ""
 "Bien que sodipodi fonctionne, vous ne\n"
 "pourrez pas lire ou enregistrer les préférences."
 
-#: src/interface.cpp:372
+#: src/interface.cpp:373
 msgid "Open _Recent"
 msgstr ""
 
-#: src/interface.cpp:390
+#: src/interface.cpp:391
 msgid "Close View"
 msgstr "Fermer la vue"
 
-#: src/interface.cpp:468
+#: src/interface.cpp:469
 #, fuzzy
 msgid "Cl_eanup"
 msgstr "Nettoyage"
 
-#: src/interface.cpp:502
+#: src/interface.cpp:503
 #, fuzzy
 msgid "_New View"
 msgstr "Nouvelle vue"
 
-#: src/interface.cpp:537
+#: src/interface.cpp:554
+#, fuzzy
+msgid "Autoraise Dialogs"
+msgstr "Fermer la fenêtre de dialogue"
+
+#: src/interface.cpp:568
 msgid "_Tutorial"
 msgstr ""
 
-#: src/interface.cpp:538
+#: src/interface.cpp:569
 msgid "_Keys and Mouse"
 msgstr ""
 
-#: src/interface.cpp:539
+#: src/interface.cpp:570
 msgid "_About Inkscape"
 msgstr ""
 
-#: src/interface.cpp:557
+#: src/interface.cpp:588
 msgid "_File"
 msgstr "_Fichier"
 
-#: src/interface.cpp:563
+#: src/interface.cpp:594
 #, fuzzy
 msgid "_Edit"
 msgstr "Édition"
 
-#: src/interface.cpp:569
+#: src/interface.cpp:600
 #, fuzzy
 msgid "_View"
 msgstr "Vue"
 
-#: src/interface.cpp:575
+#: src/interface.cpp:606
 #, fuzzy
 msgid "_Object"
 msgstr "Objet"
 
-#: src/interface.cpp:581
+#: src/interface.cpp:612
 msgid "_Path"
 msgstr ""
 
-#: src/interface.cpp:587
+#: src/interface.cpp:618
 #, fuzzy
 msgid "_Dialogs"
 msgstr "Dialogues"
 
-#: src/interface.cpp:593
+#: src/interface.cpp:624
 #, fuzzy
 msgid "_Help"
 msgstr "_Aide"
 
-#: src/interface.cpp:693
+#: src/interface.cpp:724
 msgid "Could not parse SVG data"
 msgstr ""
 
@@ -1406,41 +1411,41 @@ msgstr ""
 msgid "write error occured"
 msgstr "Une erreur d'écriture s'est produite"
 
-#: src/nodepath.cpp:2843
+#: src/nodepath.cpp:2691
 #, fuzzy
 msgid "cusp"
 msgstr "nous"
 
-#: src/nodepath.cpp:2845
+#: src/nodepath.cpp:2693
 msgid "smooth"
 msgstr ""
 
-#: src/nodepath.cpp:2847
+#: src/nodepath.cpp:2695
 #, fuzzy
 msgid "symmetric"
 msgstr "Asymétrique"
 
-#: src/nodepath.cpp:2857
+#: src/nodepath.cpp:2705
 msgid "Drag nodes or control points to edit the path"
 msgstr ""
 
-#: src/nodepath.cpp:2871
+#: src/nodepath.cpp:2719
 msgid ""
 "Select one path object with selector first, then switch back to node tool."
 msgstr ""
 
-#: src/nodepath.cpp:2873
+#: src/nodepath.cpp:2721
 #, c-format
 msgid ""
 "0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."
 msgstr ""
 
-#: src/nodepath.cpp:2875
+#: src/nodepath.cpp:2723
 #, c-format
 msgid "%i of %i nodes selected; %s. %s."
 msgstr ""
 
-#: src/nodepath.cpp:2877
+#: src/nodepath.cpp:2725
 #, fuzzy, c-format
 msgid "%i of %i nodes selected. %s."
 msgstr "Joindre les lignes aux noeuds sélectionnés"
@@ -1591,55 +1596,55 @@ msgstr "Couper la sélection"
 msgid "Height of selection"
 msgstr "Zoom vers sélection"
 
-#: src/selection-chemistry.cpp:53
+#: src/selection-chemistry.cpp:49
 msgid "Nothing was cut."
 msgstr ""
 
-#: src/selection-chemistry.cpp:86
+#: src/selection-chemistry.cpp:75
 #, fuzzy
 msgid "Select some objects to duplicate."
 msgstr "Couper les objets sélectionnés vers le presse-papier"
 
-#: src/selection-chemistry.cpp:249
+#: src/selection-chemistry.cpp:213
 #, fuzzy
 msgid "Select two or more objects to group."
 msgstr "Monter les objets sélectionnés au premier plan"
 
-#: src/selection-chemistry.cpp:257
+#: src/selection-chemistry.cpp:221
 #, fuzzy
 msgid "Select at least two objects to group."
 msgstr "Sélectionner tous les objets du document"
 
-#: src/selection-chemistry.cpp:266
+#: src/selection-chemistry.cpp:230
 msgid "You cannot group objects from different groups or layers."
 msgstr ""
 
-#: src/selection-chemistry.cpp:310
+#: src/selection-chemistry.cpp:267
 msgid "Select a group to ungroup."
 msgstr ""
 
-#: src/selection-chemistry.cpp:341
+#: src/selection-chemistry.cpp:301
 msgid "No groups to ungroup in the selection."
 msgstr ""
 
-#: src/selection-chemistry.cpp:569
+#: src/selection-chemistry.cpp:475
 msgid "Nothing to undo."
 msgstr ""
 
-#: src/selection-chemistry.cpp:578
+#: src/selection-chemistry.cpp:484
 msgid "Nothing to redo."
 msgstr ""
 
-#: src/selection-chemistry.cpp:605
+#: src/selection-chemistry.cpp:503
 msgid "Nothing was copied."
 msgstr ""
 
-#: src/selection-chemistry.cpp:650 src/selection-chemistry.cpp:685
+#: src/selection-chemistry.cpp:543 src/selection-chemistry.cpp:572
 #, fuzzy
 msgid "Nothing in the clipboard."
 msgstr "Copier la sélection dans le presse-papiers"
 
-#: src/selection-chemistry.cpp:691
+#: src/selection-chemistry.cpp:578
 #, fuzzy
 msgid "Select objects to paste style to."
 msgstr "Convertir l'objet sélectionné en chemin"
@@ -1717,7 +1722,7 @@ msgstr "Image URI :"
 msgid "Group of %d objects"
 msgstr "Groupe d'objets %d"
 
-#: src/sp-item.cpp:450
+#: src/sp-item.cpp:449
 msgid "Object"
 msgstr "Objet"
 
@@ -2671,59 +2676,59 @@ msgstr "Couleur de départ"
 msgid "End color"
 msgstr "Couleur de fin"
 
-#: src/widgets/paint-selector.cpp:613
+#: src/widgets/paint-selector.cpp:599
 msgid "No objects"
 msgstr "Aucun objet"
 
-#: src/widgets/paint-selector.cpp:627
+#: src/widgets/paint-selector.cpp:613
 msgid "Multiple styles"
 msgstr "Style multiples"
 
-#: src/widgets/paint-selector.cpp:641
+#: src/widgets/paint-selector.cpp:627
 msgid "No paint"
 msgstr "Pas de peinture"
 
 #. Label
-#: src/widgets/paint-selector.cpp:704
+#: src/widgets/paint-selector.cpp:690
 msgid "Mode:"
 msgstr "Mode :"
 
-#: src/widgets/paint-selector.cpp:714 src/widgets/sp-color-scales.cpp:81
+#: src/widgets/paint-selector.cpp:700 src/widgets/sp-color-scales.cpp:81
 msgid "RGB"
 msgstr "RVB"
 
-#: src/widgets/paint-selector.cpp:714
+#: src/widgets/paint-selector.cpp:700
 msgid "RGB Colorspace"
 msgstr "Environnement colorimétrique RVB"
 
 #. sp_menu_append (SP_MENU (m), _("HSV"), _("RGB Colorspace"), GUINT_TO_POINTER (SP_PAINT_SELECTOR_MODE_HSV));
-#: src/widgets/paint-selector.cpp:716 src/widgets/sp-color-scales.cpp:81
+#: src/widgets/paint-selector.cpp:702 src/widgets/sp-color-scales.cpp:81
 msgid "CMYK"
 msgstr "CMJN"
 
-#: src/widgets/paint-selector.cpp:716
+#: src/widgets/paint-selector.cpp:702
 msgid "CMYK Colorspace"
 msgstr "Environnement colorimétrique CMJN"
 
 #. Use dropper
-#: src/widgets/paint-selector.cpp:723
+#: src/widgets/paint-selector.cpp:709
 msgid "Get from dropper"
 msgstr "Obtenir depuis la pipette"
 
-#: src/widgets/paint-selector.cpp:756
+#: src/widgets/paint-selector.cpp:742
 msgid "Color paint"
 msgstr "Couleur de peinture"
 
-#: src/widgets/paint-selector.cpp:826
+#: src/widgets/paint-selector.cpp:812
 msgid "Linear gradient"
 msgstr "Dégradé linéaire"
 
-#: src/widgets/paint-selector.cpp:829
+#: src/widgets/paint-selector.cpp:815
 msgid "Radial gradient"
 msgstr "Dégragé radial"
 
 #: src/widgets/sp-color-gtkselector.cpp:60
-msgid "Wheel"
+msgid "System"
 msgstr ""
 
 #: src/widgets/sp-color-scales.cpp:81
@@ -3417,9 +3422,6 @@ msgstr "Valeur"
 
 #~ msgid "Back One"
 #~ msgstr "Descendre d'un"
-
-#~ msgid "Close dialog"
-#~ msgstr "Fermer la fenêtre de dialogue"
 
 #~ msgid "Convert selected segments to curves"
 #~ msgstr "Convertir les segments sélectionnés en courbes"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-08 22:47-0700\n"
+"POT-Creation-Date: 2004-02-09 23:50-0700\n"
 "PO-Revision-Date: 2002-01-15 13:30+0100\n"
 "Last-Translator: Keld Simonsen <keld@dkuug.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -59,17 +59,17 @@ msgid ""
 "selector (arrow) to move or transform them."
 msgstr ""
 
-#: src/desktop.cpp:879
+#: src/desktop.cpp:878
 #, c-format
 msgid "%s: %d - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:881
+#: src/desktop.cpp:880
 #, c-format
 msgid "%s - Inkscape"
 msgstr ""
 
-#: src/desktop.cpp:1009
+#: src/desktop.cpp:1008
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -78,15 +78,15 @@ msgid ""
 "If you close without saving, your changes will be discarded."
 msgstr ""
 
-#: src/desktop.cpp:1018
+#: src/desktop.cpp:1017
 msgid "Close _without saving"
 msgstr ""
 
-#: src/desktop.cpp:1307
+#: src/desktop.cpp:1309
 msgid "No previous zoom."
 msgstr ""
 
-#: src/desktop.cpp:1336
+#: src/desktop.cpp:1338
 msgid "No next zoom."
 msgstr ""
 
@@ -888,17 +888,17 @@ msgstr "Ændr"
 msgid "Create"
 msgstr "Opret lænke"
 
-#: src/document.cpp:388
+#: src/document.cpp:383
 #, fuzzy, c-format
 msgid "New document %d"
 msgstr "Lagret dokument %d"
 
-#: src/document.cpp:417
+#: src/document.cpp:412
 #, c-format
 msgid "Memory document %d"
 msgstr "Lagret dokument %d"
 
-#: src/document.cpp:509
+#: src/document.cpp:499
 #, c-format
 msgid "Unnamed document %d"
 msgstr "Unavngivet dokument %d"
@@ -1213,69 +1213,74 @@ msgstr ""
 "Selvom sodipodi vil køre, kan du\n"
 "hverken indlæse eller gemme indstillinger."
 
-#: src/interface.cpp:372
+#: src/interface.cpp:373
 msgid "Open _Recent"
 msgstr ""
 
-#: src/interface.cpp:390
+#: src/interface.cpp:391
 #, fuzzy
 msgid "Close View"
 msgstr "Luk vindue"
 
-#: src/interface.cpp:468
+#: src/interface.cpp:469
 msgid "Cl_eanup"
 msgstr ""
 
-#: src/interface.cpp:502
+#: src/interface.cpp:503
 #, fuzzy
 msgid "_New View"
 msgstr "Ny visning"
 
-#: src/interface.cpp:537
+#: src/interface.cpp:554
+#, fuzzy
+msgid "Autoraise Dialogs"
+msgstr "Luk dialog"
+
+#: src/interface.cpp:568
 msgid "_Tutorial"
 msgstr ""
 
-#: src/interface.cpp:538
+#: src/interface.cpp:569
 msgid "_Keys and Mouse"
 msgstr ""
 
-#: src/interface.cpp:539
+#: src/interface.cpp:570
 msgid "_About Inkscape"
 msgstr ""
 
-#: src/interface.cpp:557
+#: src/interface.cpp:588
 msgid "_File"
 msgstr "_Fil"
 
-#: src/interface.cpp:563
+#: src/interface.cpp:594
 #, fuzzy
 msgid "_Edit"
 msgstr "Redigering"
 
-#: src/interface.cpp:569
+#: src/interface.cpp:600
 #, fuzzy
 msgid "_View"
 msgstr "Ny visning"
 
-#: src/interface.cpp:575
+#: src/interface.cpp:606
 #, fuzzy
 msgid "_Object"
 msgstr "Ting"
 
-#: src/interface.cpp:581
+#: src/interface.cpp:612
 msgid "_Path"
 msgstr ""
 
-#: src/interface.cpp:587
+#: src/interface.cpp:618
 msgid "_Dialogs"
 msgstr ""
 
-#: src/interface.cpp:593
+#: src/interface.cpp:624
 #, fuzzy
 msgid "_Help"
 msgstr "_Hjælp"
 
-#: src/interface.cpp:693
+#: src/interface.cpp:724
 msgid "Could not parse SVG data"
 msgstr ""
 
@@ -1446,41 +1451,41 @@ msgstr ""
 msgid "write error occured"
 msgstr ""
 
-#: src/nodepath.cpp:2843
+#: src/nodepath.cpp:2691
 #, fuzzy
 msgid "cusp"
 msgstr "us"
 
-#: src/nodepath.cpp:2845
+#: src/nodepath.cpp:2693
 msgid "smooth"
 msgstr ""
 
-#: src/nodepath.cpp:2847
+#: src/nodepath.cpp:2695
 #, fuzzy
 msgid "symmetric"
 msgstr "Usymmetrisk"
 
-#: src/nodepath.cpp:2857
+#: src/nodepath.cpp:2705
 msgid "Drag nodes or control points to edit the path"
 msgstr ""
 
-#: src/nodepath.cpp:2871
+#: src/nodepath.cpp:2719
 msgid ""
 "Select one path object with selector first, then switch back to node tool."
 msgstr ""
 
-#: src/nodepath.cpp:2873
+#: src/nodepath.cpp:2721
 #, c-format
 msgid ""
 "0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."
 msgstr ""
 
-#: src/nodepath.cpp:2875
+#: src/nodepath.cpp:2723
 #, c-format
 msgid "%i of %i nodes selected; %s. %s."
 msgstr ""
 
-#: src/nodepath.cpp:2877
+#: src/nodepath.cpp:2725
 #, fuzzy, c-format
 msgid "%i of %i nodes selected. %s."
 msgstr "Udjævn linje ved valgte knuder"
@@ -1634,55 +1639,55 @@ msgstr "Klip det markerede"
 msgid "Height of selection"
 msgstr "Zoom til valg"
 
-#: src/selection-chemistry.cpp:53
+#: src/selection-chemistry.cpp:49
 msgid "Nothing was cut."
 msgstr ""
 
-#: src/selection-chemistry.cpp:86
+#: src/selection-chemistry.cpp:75
 #, fuzzy
 msgid "Select some objects to duplicate."
 msgstr "Omform valgte ting til kurver"
 
-#: src/selection-chemistry.cpp:249
+#: src/selection-chemistry.cpp:213
 #, fuzzy
 msgid "Select two or more objects to group."
 msgstr "Hæv det valgte op til toppen"
 
-#: src/selection-chemistry.cpp:257
+#: src/selection-chemistry.cpp:221
 #, fuzzy
 msgid "Select at least two objects to group."
 msgstr "Vend valgte ting"
 
-#: src/selection-chemistry.cpp:266
+#: src/selection-chemistry.cpp:230
 msgid "You cannot group objects from different groups or layers."
 msgstr ""
 
-#: src/selection-chemistry.cpp:310
+#: src/selection-chemistry.cpp:267
 msgid "Select a group to ungroup."
 msgstr ""
 
-#: src/selection-chemistry.cpp:341
+#: src/selection-chemistry.cpp:301
 msgid "No groups to ungroup in the selection."
 msgstr ""
 
-#: src/selection-chemistry.cpp:569
+#: src/selection-chemistry.cpp:475
 msgid "Nothing to undo."
 msgstr ""
 
-#: src/selection-chemistry.cpp:578
+#: src/selection-chemistry.cpp:484
 msgid "Nothing to redo."
 msgstr ""
 
-#: src/selection-chemistry.cpp:605
+#: src/selection-chemistry.cpp:503
 msgid "Nothing was copied."
 msgstr ""
 
-#: src/selection-chemistry.cpp:650 src/selection-chemistry.cpp:685
+#: src/selection-chemistry.cpp:543 src/selection-chemistry.cpp:572
 #, fuzzy
 msgid "Nothing in the clipboard."
 msgstr "Kopiér det markerede til klippebord"
 
-#: src/selection-chemistry.cpp:691
+#: src/selection-chemistry.cpp:578
 #, fuzzy
 msgid "Select objects to paste style to."
 msgstr "Omform valgte ting til kurver"
@@ -1763,7 +1768,7 @@ msgstr "Billede"
 msgid "Group of %d objects"
 msgstr "Gruppe med %d ting"
 
-#: src/sp-item.cpp:450
+#: src/sp-item.cpp:449
 msgid "Object"
 msgstr "Ting"
 
@@ -2733,65 +2738,65 @@ msgstr "Startfarve"
 msgid "End color"
 msgstr "Slutfarve"
 
-#: src/widgets/paint-selector.cpp:613
+#: src/widgets/paint-selector.cpp:599
 #, fuzzy
 msgid "No objects"
 msgstr "Tekstobjekt"
 
-#: src/widgets/paint-selector.cpp:627
+#: src/widgets/paint-selector.cpp:613
 #, fuzzy
 msgid "Multiple styles"
 msgstr "Stíl for fyld"
 
-#: src/widgets/paint-selector.cpp:641
+#: src/widgets/paint-selector.cpp:627
 #, fuzzy
 msgid "No paint"
 msgstr "Punkt"
 
 #. Label
-#: src/widgets/paint-selector.cpp:704
+#: src/widgets/paint-selector.cpp:690
 msgid "Mode:"
 msgstr "Tilstand:"
 
-#: src/widgets/paint-selector.cpp:714 src/widgets/sp-color-scales.cpp:81
+#: src/widgets/paint-selector.cpp:700 src/widgets/sp-color-scales.cpp:81
 msgid "RGB"
 msgstr "RGB"
 
-#: src/widgets/paint-selector.cpp:714
+#: src/widgets/paint-selector.cpp:700
 msgid "RGB Colorspace"
 msgstr ""
 
 #. sp_menu_append (SP_MENU (m), _("HSV"), _("RGB Colorspace"), GUINT_TO_POINTER (SP_PAINT_SELECTOR_MODE_HSV));
-#: src/widgets/paint-selector.cpp:716 src/widgets/sp-color-scales.cpp:81
+#: src/widgets/paint-selector.cpp:702 src/widgets/sp-color-scales.cpp:81
 msgid "CMYK"
 msgstr "CMYK"
 
-#: src/widgets/paint-selector.cpp:716
+#: src/widgets/paint-selector.cpp:702
 msgid "CMYK Colorspace"
 msgstr ""
 
 #. Use dropper
-#: src/widgets/paint-selector.cpp:723
+#: src/widgets/paint-selector.cpp:709
 msgid "Get from dropper"
 msgstr ""
 
-#: src/widgets/paint-selector.cpp:756
+#: src/widgets/paint-selector.cpp:742
 #, fuzzy
 msgid "Color paint"
 msgstr "Farve-bitmap"
 
-#: src/widgets/paint-selector.cpp:826
+#: src/widgets/paint-selector.cpp:812
 #, fuzzy
 msgid "Linear gradient"
 msgstr "Tilføj ny farveovergang"
 
-#: src/widgets/paint-selector.cpp:829
+#: src/widgets/paint-selector.cpp:815
 #, fuzzy
 msgid "Radial gradient"
 msgstr "Tilføj ny farveovergang"
 
 #: src/widgets/sp-color-gtkselector.cpp:60
-msgid "Wheel"
+msgid "System"
 msgstr ""
 
 #: src/widgets/sp-color-scales.cpp:81
@@ -3436,9 +3441,6 @@ msgstr "Værdi"
 
 #~ msgid "Back One"
 #~ msgstr "Et niveau tilbage"
-
-#~ msgid "Close dialog"
-#~ msgstr "Luk dialog"
 
 #~ msgid "Convert selected segments to curves"
 #~ msgstr "Konvertér valgte segmenter til kurver"

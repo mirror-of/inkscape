@@ -1,3 +1,17 @@
+<<<<<<< inkscape.spec.in
+Name:		inkscape
+Summary:	A Vector Drawing Application
+Version:	@VERSION@
+Release:	1
+Copyright:	GPL
+Group:		Applications/Graphics
+Source:		inkscape-%{version}.tar.gz
+URL:		http://inkscape.sourceforge.net/
+Prefix:		%{_prefix}
+Packager:	Automatic
+Vendor:		%{packager}
+BuildRoot:	%{_tmppath}/%{name}-%{version}-root
+=======
 Name:       inkscape
 Summary:    A Vector Drawing Application
 Version:    @VERSION@
@@ -10,6 +24,7 @@ Prefix:     %{_prefix}
 Packager:   Automatic
 Vendor:     %{packager}
 BuildRoot:  %{_tmppath}/%{name}-%{version}-root
+>>>>>>> 1.5
 
 %description
 Inkscape is a SVG based generic vector-drawing program for Linux/Unix/Windows.
