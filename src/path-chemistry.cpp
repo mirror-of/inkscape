@@ -277,7 +277,7 @@ sp_selected_path_to_curves0 (gboolean interactive, guint32 text_grouping_policy)
 		// remember id
 		const char *id = SP_OBJECT_REPR (item)->attribute("id");
 
-		selection->removeItem (item);
+		selection->remove(item);
 
 		// it's going to resurrect, so we delete without advertisement
 		SP_OBJECT (item)->deleteObject(false);

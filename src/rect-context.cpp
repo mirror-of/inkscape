@@ -376,9 +376,9 @@ static gint sp_rect_context_root_handler(SPEventContext *event_context, GdkEvent
             } else if (event_context->item_to_select) {
                 // no dragging, select clicked item if any
                 if (event->button.state & GDK_SHIFT_MASK) {
-                    selection->toggleItem(event_context->item_to_select);
+                    selection->toggle(event_context->item_to_select);
                 } else {
-                    selection->setItem(event_context->item_to_select);
+                    selection->set(event_context->item_to_select);
                 }
             } else {
                 // click in an empty space
@@ -583,7 +583,7 @@ static void sp_rect_finish(SPRectContext *rc)
 
         SP_OBJECT(rc->item)->updateRepr();
 
-        SP_DT_SELECTION(dt)->setItem(rc->item);
+        SP_DT_SELECTION(dt)->set(rc->item);
         sp_document_done(SP_DT_DOCUMENT(dt));
 
         rc->item = NULL;

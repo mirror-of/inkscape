@@ -2,7 +2,7 @@
 #include "sp-root.h"
 #include <glib.h>
 
-/** Returns true iff \a item is suitable to be passed to SPSelection::setItem(), in particular
+/** Returns true iff \a item is suitable to be included in the selection, in particular
     whether it has a bounding box in the desktop coordinate system for rendering resize handles.
 
     Descendents of <defs> nodes (markers etc.) return false, for example.

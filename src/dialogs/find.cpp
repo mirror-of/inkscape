@@ -432,7 +432,7 @@ void sp_find_dialog_find(GObject *, GObject *dlg)
 
         SPSelection *selection = SP_DT_SELECTION (desktop);
         selection->clear();
-        selection->setItemList(n);
+        selection->setList(n);
         scroll_to_show_item (desktop, SP_ITEM(n->data));
     } else {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No objects found"));

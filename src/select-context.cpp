@@ -441,15 +441,15 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                             item_in_group = sp_desktop_item_at_point(desktop, NR::Point(event->button.x, event->button.y), TRUE);
                             group_at_point = sp_desktop_group_at_point(desktop, NR::Point(event->button.x, event->button.y));
                             // if neither a group nor an item (possibly in a group) at point are selected, set selection to the item at point
-                            if ((!item_in_group || !selection->includesItem(item_in_group)) &&
-                                (!group_at_point || !selection->includesItem(group_at_point))
+                            if ((!item_in_group || !selection->includes(item_in_group)) &&
+                                (!group_at_point || !selection->includes(group_at_point))
                                 && !sc->button_press_alt) {
                                 // select what is under cursor
                                 if (!seltrans->empty)
                                     sp_sel_trans_reset_state(seltrans);
                                 // when simply ctrl-dragging, we don't want to go into groups
-                                if (item_at_point && !selection->includesItem(item_at_point))
-                                    selection->setItem(item_at_point);
+                                if (item_at_point && !selection->includes(item_at_point))
+                                    selection->set(item_at_point);
                             } // otherwise, do not change selection so that dragging selected-within-group items, as well as alt-dragging, is possible
                             sp_sel_trans_grab(seltrans, p, -1, -1, FALSE);
                             sc->moved = TRUE;
@@ -483,19 +483,19 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                             if (event->button.state & GDK_SHIFT_MASK) {
                                 // with shift, toggle selection
                                 sp_sel_trans_reset_state(seltrans);
-                                selection->toggleItem(sc->item);
+                                selection->toggle(sc->item);
                             } else {
                                 // without shift, increase state (i.e. toggle scale/rotation handles)
-                                if (selection->includesItem(sc->item)) {
+                                if (selection->includes(sc->item)) {
                                     sp_sel_trans_increase_state(seltrans);
                                 } else {
                                     sp_sel_trans_reset_state(seltrans);
-                                    selection->setItem(sc->item);
+                                    selection->set(sc->item);
                                 }
                             }
                         } else { // simple or shift click, no previous selection
                             sp_sel_trans_reset_state(seltrans);
-                            selection->setItem(sc->item);
+                            selection->set(sc->item);
                         }
                     }
                     sc->dragging = FALSE;
@@ -515,7 +515,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                             selection->addList (items);
                         } else {
                             // without shift, simply select anew
-                            selection->setItemList (items);
+                            selection->setList (items);
                         }
                         g_slist_free (items);
                     } else { // it was just a click, or a too small rubberband
@@ -537,7 +537,7 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                             }
 
                             if (item) {
-                                selection->toggleItem(item);
+                                selection->toggle(item);
                                 item = NULL;
                             }
 
@@ -549,11 +549,11 @@ sp_select_context_root_handler(SPEventContext *event_context, GdkEvent *event)
                                          NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
 
                             if (item) {
-                                if (selection->includesItem(item)) {
+                                if (selection->includes(item)) {
                                     sp_sel_trans_increase_state(seltrans);
                                 } else {
                                     sp_sel_trans_reset_state(seltrans);
-                                    selection->setItem(item);
+                                    selection->set(item);
                                 }
                                 item = NULL;
                             }

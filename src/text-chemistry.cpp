@@ -174,7 +174,7 @@ text_remove_from_path()
     if (!did) {
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No texts-on-paths</b> in the selection."));
     } else {
-        selection->setItemList(g_slist_copy((GSList *) selection->itemList())); // reselect to update statusbar description
+        selection->setList(g_slist_copy((GSList *) selection->itemList())); // reselect to update statusbar description
         sp_document_done(SP_DT_DOCUMENT(desktop));
     }
 }

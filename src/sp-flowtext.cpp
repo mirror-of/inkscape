@@ -526,7 +526,7 @@ void SPFlowtext::convert_to_text()
     SP_OBJECT(new_item)->updateRepr();
 
     sp_repr_unref(repr);
-    selection->setItem(new_item);
+    selection->set(new_item);
     item->deleteObject();
 
     sp_document_done(SP_DT_DOCUMENT(desktop));

@@ -822,7 +822,7 @@ set_dt_select (Inkscape::XML::Node *repr)
             /* TODO: when a tspan is highlighted, set selection to its parent
              * text
              */
-            selection->setItem(SP_ITEM(object));
+            selection->set(SP_ITEM(object));
     }
     blocked--;
 

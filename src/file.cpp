@@ -801,7 +801,7 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
         // select and move the imported item
         if (new_obj && SP_IS_ITEM(new_obj)) {
             SPSelection *selection = SP_DT_SELECTION(desktop);
-            selection->setItem(SP_ITEM(new_obj));
+            selection->set(SP_ITEM(new_obj));
 
             // To move the imported object, we must temporarily set the "transform pattern with
             // object" option.

@@ -24,6 +24,7 @@
 #include "gc-managed.h"
 #include "gc-finalized.h"
 #include "gc-anchored.h"
+#include "util/list.h"
 
 #include <list>
 
@@ -73,13 +74,6 @@ public:
 	void add(SPObject *obj);
 
 	/**
-	 * @brief Add an SPItem to the set of selected objects.
-	 *
-	 * @param item the item to add
-	 */
-	void addItem(SPItem *item) { add(item); }
-
-	/**
 	 * @brief Add an XML node's SPObject to the set of selected objects
 	 *
 	 * @param the xml node of the item to add
@@ -92,13 +86,6 @@ public:
 	 * @param obj the object to select
 	 */
 	void set(SPObject *obj);
-
-	/**
-	 * @brief Set the selection to a single specific object
-	 *
-	 * @param item the item to select
-	 */
-	void setItem(SPItem *item) { set(item); }
 
 	/**
 	 * @brief Set the selection to an XML node's SPObject
@@ -122,16 +109,6 @@ public:
 	 * @param item the item to unselect
 	 */
 	void toggle(SPObject *obj);
-	void toggleItem(SPItem *item) { toggle (item); }
-
-	/**
-	 * @brief Removes an item from the set of selected objects
-	 *
-	 * It is ok to call this method for an unselected item.
-	 *
-	 * @param item the item to unselect
-	 */
-	void removeItem(SPItem *item) { remove(item); }
 
 	/**
 	 * @brief Removes an item from the set of selected objects
@@ -157,23 +134,11 @@ public:
 	void addList(GSList const *objs);
 
 	/**
-	 * @brief Clears the selection and selects the specified objects 
-	 *
-	 * @param items a list of items to select
-	 */
-	void setItemList(GSList const *items) { setList(items); }
-
-	/**
 	 * @brief Clears the selection and selects the specified objects
 	 *
 	 * @param repr a list of xml nodes for the items to select
 	 */
 	void setReprList(GSList const *reprs);
-
-	/** \brief  Set the Items in a selection using an STL list
-		\param  list  The list of items to make into the selection
-	*/
-	void setStlItemList(std::list<SPItem *> &list);
 
 	/** \brief  Add items from an STL list to the selection
 		\param  list  The list of items to be added
@@ -194,11 +159,6 @@ public:
 	 * @brief Returns true if the given object is selected
 	 */
 	bool includes(SPObject *obj) const;
-
-	/**
-	 * @brief Returns true if the given item is selected
-	 */
-	bool includesItem(SPItem *item) const { return includes(item); }
 
 	/**
 	 * @brief Returns true if the given item is selected

@@ -449,7 +449,7 @@ void sp_selection_ungroup()
 
     if (new_select) { // Set new selection.
         selection->clear();
-        selection->setItemList(new_select);
+        selection->setList(new_select);
         g_slist_free(new_select);
     }
     if (!ungrouped) {
@@ -1180,9 +1180,9 @@ void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine,
 #endif
 
         // we're moving both a clone and its original
-        bool move_clone_with_original = (affine.is_translation() && SP_IS_USE(item) && selection->includesItem( sp_use_get_original (SP_USE(item)) ));
-        bool transform_textpath_with_path = (SP_IS_TEXT_TEXTPATH(item) && selection->includesItem( sp_textpath_get_path_item (SP_TEXTPATH(sp_object_first_child(SP_OBJECT(item)))) ));
-        bool move_offset_with_source = (affine.is_translation() && (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref) && selection->includesItem( sp_offset_get_source (SP_OFFSET(item)) ));
+        bool move_clone_with_original = (affine.is_translation() && SP_IS_USE(item) && selection->includes( sp_use_get_original (SP_USE(item)) ));
+        bool transform_textpath_with_path = (SP_IS_TEXT_TEXTPATH(item) && selection->includes( sp_textpath_get_path_item (SP_TEXTPATH(sp_object_first_child(SP_OBJECT(item)))) ));
+        bool move_offset_with_source = (affine.is_translation() && (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref) && selection->includes( sp_offset_get_source (SP_OFFSET(item)) ));
 
         // "clones are unmoved when original is moved" preference
         bool prefs_unmoved = (prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL) == SP_CLONE_COMPENSATION_UNMOVED);
@@ -1569,7 +1569,7 @@ sp_selection_item_next(void)
     SPItem *item=next_item_from_list<Forward>(desktop, selection->itemList(), root, SP_CYCLING == SP_CYCLE_VISIBLE, inlayer, onlyvisible, onlysensitive);
 
     if (item) {
-        selection->setItem(item);
+        selection->set(item);
         if ( SP_CYCLING == SP_CYCLE_FOCUS ) {
             scroll_to_show_item(desktop, item);
         }
@@ -1602,7 +1602,7 @@ sp_selection_item_prev(void)
     SPItem *item=next_item_from_list<Reverse>(desktop, selection->itemList(), root, SP_CYCLING == SP_CYCLE_VISIBLE, inlayer, onlyvisible, onlysensitive);
 
     if (item) {
-        selection->setItem(item);
+        selection->set(item);
         if ( SP_CYCLING == SP_CYCLE_FOCUS ) {
             scroll_to_show_item(desktop, item);
         }
@@ -1793,7 +1793,7 @@ sp_selection_unlink()
 
     if (new_select) { // set new selection
         selection->clear();
-        selection->setItemList(new_select);
+        selection->setList(new_select);
         g_slist_free(new_select);
     }
     if (!unlinked) {
@@ -1848,7 +1848,7 @@ sp_select_clone_original()
 
     if (original) {
         selection->clear();
-        selection->setItem(original);
+        selection->set(original);
         if (SP_CYCLING == SP_CYCLE_FOCUS) {
             scroll_to_show_item(desktop, original);
         }
@@ -1923,7 +1923,7 @@ sp_selection_tile(bool apply)
         sp_repr_unref (rect);
 
         selection->clear();
-        selection->setItem (rectangle);
+        selection->set(rectangle);
     }
 
     g_slist_free (items);
@@ -2000,7 +2000,7 @@ sp_selection_untile()
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No pattern fills</b> in the selection."));
     } else {
         sp_document_done(SP_DT_DOCUMENT(desktop));
-        selection->setItemList (new_select);
+        selection->setList(new_select);
     }
 }
 

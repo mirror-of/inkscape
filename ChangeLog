@@ -1,5 +1,17 @@
+2005-03-18  MenTaLguY  <mental@rydia.net>
+
+	* src/arc-context.cpp, src/file.cpp, src/gradient-context.cpp,
+	  src/node-context.cpp, src/object-ui.cpp, src/path-chemistry.cpp,
+	  src/rect-context.cpp, src/select-context.cpp,
+	  src/selection-chemistry.cpp, src/selection.cpp, src/selection.h,
+	  src/sp-flowtext.cpp, src/spiral-context.cpp, src/splivarot.cpp,
+	  src/star-context.cpp, src/text-chemistry.cpp, src/text-context.cpp,
+	  src/dialogs/find.cpp, src/dialogs/in-dt-coordsys.cpp,
+	  src/dialogs/xml-tree.cpp:
+
+	  cleaned up the selection API slightly
+
 2005-03-14  Jon A. Cruz  <jon@joncruz.org>
-1234567890123456789012345678901234567890123456789012345678901234567890123456
 	* src/dialogs/Makefile_insert, src/dialogs/swatches.cpp,
 	  src/dialogs/swatches.h, src/verbs.h, src/verbs.cpp,
 	  src/interface.cpp:

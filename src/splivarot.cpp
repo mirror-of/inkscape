@@ -707,7 +707,7 @@ sp_selected_path_outline ()
         // remember id
         const char *id = SP_OBJECT_REPR (item)->attribute("id");
 
-        selection->removeItem (item);
+        selection->remove(item);
         SP_OBJECT (item)->deleteObject(false);
 
         if (res->descr_cmd.size() > 1) { // if there's 0 or 1 node left, drop this path altogether
@@ -1028,7 +1028,7 @@ sp_selected_path_create_offset_object (int expand, bool updating)
 
         sp_repr_unref (repr);
 
-        selection->setItem (nitem);
+        selection->set(nitem);
     }
   
     sp_document_done (SP_DT_DOCUMENT (desktop));
@@ -1238,7 +1238,7 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
         // remember id
         const char *id = SP_OBJECT_REPR (item)->attribute("id");
 
-        selection->removeItem (item);
+        selection->remove(item);
         SP_OBJECT (item)->deleteObject(false);
 
         if (res->descr_cmd.size() > 1) { // if there's 0 or 1 node left, drop this path altogether
@@ -1354,7 +1354,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop, SPSelection *selection, SPIte
 
     //If a group was selected, to not change the selection list
     if (modifySelection)
-        selection->removeItem (item);
+        selection->remove(item);
         
     SP_OBJECT (item)->deleteObject(false);
 

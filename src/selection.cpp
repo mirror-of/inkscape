@@ -216,17 +216,13 @@ void SPSelection::addList(GSList const *list) {
     _emitChanged();
 }
 
-void SPSelection::setStlItemList (std::list<SPItem *> &list) {
-    _clear();
-    return addStlItemList(list);
-}
-
 void SPSelection::addStlItemList (std::list<SPItem *> &list) {
     _invalidateCachedLists();
 
     for(std::list<SPItem *>::iterator item = list.begin();
-            item != list.end(); item++) {
-        addItem(*item);
+            item != list.end(); item++)
+    {
+        add(*item);
     }
 
     _emitChanged();

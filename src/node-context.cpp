@@ -389,9 +389,9 @@ sp_node_context_item_handler(SPEventContext *event_context, SPItem *item, GdkEve
                     SPItem *item_ungrouped = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
 
                     if (event->button.state & GDK_SHIFT_MASK) {
-                        selection->toggleItem(item_ungrouped);
+                        selection->toggle(item_ungrouped);
                     } else {
-                        selection->setItem(item_ungrouped);
+                        selection->set(item_ungrouped);
                     }
 
                     ret = TRUE;

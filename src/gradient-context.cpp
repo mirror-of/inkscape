@@ -229,9 +229,9 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
             } else if (event_context->item_to_select) {
                 // no dragging, select clicked item if any
                 if (event->button.state & GDK_SHIFT_MASK) {
-                    selection->toggleItem(event_context->item_to_select);
+                    selection->toggle(event_context->item_to_select);
                 } else {
-                    selection->setItem(event_context->item_to_select);
+                    selection->set(event_context->item_to_select);
                 }
             } else {
                 // click in an empty space; do the same as Esc

@@ -123,7 +123,7 @@ sp_item_menu (SPObject *object, SPDesktop *desktop, GtkMenu *m)
 	gtk_menu_append (GTK_MENU (m), w);
 	/* Select item */
 	w = gtk_menu_item_new_with_mnemonic (_("_Select This"));
-	if (SP_DT_SELECTION (desktop)->includesItem(item)) {
+	if (SP_DT_SELECTION (desktop)->includes(item)) {
 		gtk_widget_set_sensitive (w, FALSE);
 	} else {
 		gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
@@ -163,7 +163,7 @@ sp_item_properties (GtkMenuItem *menuitem, SPItem *item)
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
-	SP_DT_SELECTION(desktop)->setItem(item);
+	SP_DT_SELECTION(desktop)->set(item);
 
 	sp_item_dialog ();
 }
@@ -179,7 +179,7 @@ sp_item_select_this (GtkMenuItem *menuitem, SPItem *item)
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
-	SP_DT_SELECTION(desktop)->setItem(item);
+	SP_DT_SELECTION(desktop)->set(item);
 }
 
 static void
@@ -250,7 +250,7 @@ sp_item_create_text_shape (GtkMenuItem *menuitem, SPItem *item)
 
     sp_document_done (SP_OBJECT_DOCUMENT (object));
 
-    SP_DT_SELECTION(desktop)->setItem(SP_ITEM(root_object));
+    SP_DT_SELECTION(desktop)->set(SP_ITEM(root_object));
 }
 
 
@@ -278,7 +278,7 @@ sp_item_create_link (GtkMenuItem *menuitem, SPItem *item)
 
 	sp_object_attributes_dialog (object, "SPAnchor");
 
-	SP_DT_SELECTION(desktop)->setItem(SP_ITEM(object));
+	SP_DT_SELECTION(desktop)->set(SP_ITEM(object));
 }
 
 /* SPGroup */
@@ -314,7 +314,7 @@ sp_item_group_ungroup_activate (GtkMenuItem *menuitem, SPGroup *group)
 	children = NULL;
 	sp_item_group_ungroup (group, &children);
 
-	SP_DT_SELECTION(desktop)->setItemList(children);
+	SP_DT_SELECTION(desktop)->setList(children);
 	g_slist_free (children);
 }
 
@@ -423,7 +423,7 @@ sp_shape_fill_settings (GtkMenuItem *menuitem, SPItem *item)
 	g_return_if_fail (desktop != NULL);
 	g_return_if_fail (SP_IS_DESKTOP (desktop));
 
-	SP_DT_SELECTION(desktop)->setItem(item);
+	SP_DT_SELECTION(desktop)->set(item);
 
 	sp_object_properties_dialog ();
 }

@@ -342,9 +342,9 @@ static gint sp_arc_context_root_handler(SPEventContext *event_context, GdkEvent 
                 } else if (event_context->item_to_select) {
                     // no dragging, select clicked item if any
                     if (event->button.state & GDK_SHIFT_MASK) {
-                        selection->toggleItem(event_context->item_to_select);
+                        selection->toggle(event_context->item_to_select);
                     } else {
-                        selection->setItem(event_context->item_to_select);
+                        selection->set(event_context->item_to_select);
                     }
                 } else {
                     // click in an empty space
@@ -530,7 +530,7 @@ static void sp_arc_finish(SPArcContext *ac)
 
         SP_OBJECT(ac->item)->updateRepr();
 
-        SP_DT_SELECTION(desktop)->setItem(ac->item);
+        SP_DT_SELECTION(desktop)->set(ac->item);
         sp_document_done(SP_DT_DOCUMENT(desktop));
 
         ac->item = NULL;

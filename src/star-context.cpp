@@ -348,9 +348,9 @@ sp_star_context_root_handler (SPEventContext * event_context, GdkEvent * event)
             } else if (event_context->item_to_select) {
                 // no dragging, select clicked item if any
                 if (event->button.state & GDK_SHIFT_MASK) {
-                    selection->toggleItem(event_context->item_to_select);
+                    selection->toggle(event_context->item_to_select);
                 } else {
-                    selection->setItem(event_context->item_to_select);
+                    selection->set(event_context->item_to_select);
                 }
             } else {
                 // click in an empty space
@@ -502,7 +502,7 @@ sp_star_finish (SPStarContext * sc)
 
         object->updateRepr(NULL, SP_OBJECT_WRITE_EXT);
 
-        SP_DT_SELECTION(desktop)->setItem(sc->item);
+        SP_DT_SELECTION(desktop)->set(sc->item);
         sp_document_done(SP_DT_DOCUMENT(desktop));
 
         sc->item = NULL;
