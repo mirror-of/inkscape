@@ -375,23 +375,19 @@ void SimpleNode::changeOrder(SPRepr *child, SPRepr *ref) {
 }
 
 void SimpleNode::setPosition(int pos) {
-    SPRepr *ref=NULL;
+    g_return_if_fail(_parent != NULL);
 
-    if ( pos < 0 ) {
-        ref = lastChild();
-    } else {
-        for ( SPRepr *sibling = _parent->firstChild() ; 
-              sibling && pos ; sibling = sibling->next() )
-        {
-            if ( sibling == this ) {
-                continue;
-            }
+    SPRepr *ref=NULL;
+    for ( SPRepr *sibling = _parent->firstChild() ;
+          sibling && pos ; sibling = sibling->next() )
+    {
+        if ( sibling != this ) {
             ref = sibling;
             pos--;
         }
     }
 
-    _parent->changeOrder(this, ref);
+    changeOrder(this, ref);
 }
 
 void SimpleNode::synthesizeEvents(SPReprEventVector const *vector, void *data) {
