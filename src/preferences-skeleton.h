@@ -47,7 +47,7 @@ static const char preferences_skeleton[] =
 "      <eventcontext id=\"pencil\" tolerance=\"10.0\"/>"
 "      <eventcontext id=\"pen\" mode=\"drag\"/>"
 "    </group>"
-"    <eventcontext id=\"calligraphic\" style=\"fill:black;fill-rule:nonzero;stroke:none;\""
+"    <eventcontext id=\"calligraphic\" style=\"fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;\""
 "                       mass=\"0.3\" drag=\"0.5\" angle=\"30\" width=\"0.2\"/>"
 "    <eventcontext id=\"text\""
 "                  style=\"fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans;font-style:normal;font-weight:normal;font-size:12px;\"/>"
