@@ -1578,7 +1578,7 @@ Verb * Verb::_base_verbs[] = {
     /* Layer */
     new LayerVerb(SP_VERB_LAYER_NEW, "LayerNew", N_("New Layer"),
         N_("Create a new layer"), NULL),
-    new LayerVerb(SP_VERB_LAYER_RENAME, "LayerRename", N_("Rename Layer"),
+    new LayerVerb(SP_VERB_LAYER_RENAME, "LayerRename", N_("Rename Layer..."),
         N_("Rename the current layer"), NULL),
     new LayerVerb(SP_VERB_LAYER_NEXT, "LayerNext", N_("Move to Next Layer"),
         N_("Switch to the next layer in the document"), NULL),
