@@ -67,6 +67,7 @@
 #include "sp-offset.h"
 #include "file.h"
 #include "dir-util.h"
+#include "layer-fns.h"
 using NR::X;
 using NR::Y;
 
@@ -76,6 +77,19 @@ using NR::Y;
 GSList *clipboard = NULL;
 GSList *defs_clipboard = NULL;
 SPCSSAttr *style_clipboard = NULL;
+
+void sp_selection_delete_impl(const GSList *items)
+{
+    for (const GSList *i = items ; i ; i = i->next ) {
+        sp_object_ref((SPObject *)i->data, NULL);
+    }
+    for (const GSList *i = items; i != NULL; i = i->next) {
+        SPItem *item = (SPItem *) i->data;
+        SP_OBJECT(item)->deleteObject();
+        sp_object_unref((SPObject *)item, NULL);
+    }
+}
+
 
 void sp_selection_delete()
 {
@@ -92,19 +106,10 @@ void sp_selection_delete()
         return;
     }
 
-    GSList *selected = g_slist_copy(const_cast<GSList *>(selection->itemList()));
-    GSList *iter;
-    for ( iter = selected ; iter ; iter = iter->next ) {
-        sp_object_ref((SPObject *)iter->data, NULL);
-    }
+    const GSList *selected = g_slist_copy(const_cast<GSList *>(selection->itemList()));
     selection->clear();
-
-    while (selected) {
-        SPItem *item = (SPItem *)selected->data;
-        SP_OBJECT(item)->deleteObject();
-        sp_object_unref((SPObject *)item, NULL);
-        selected = g_slist_remove(selected, selected->data);
-    }
+    sp_selection_delete_impl (selected);
+    g_slist_free ((GSList *) selected);
 
     /* a tool may have set up private information in it's selection context
      * that depends on desktop items.  I think the only sane way to deal with
@@ -716,49 +721,49 @@ void sp_selection_cut()
     sp_selection_delete();
 }
 
-static void sp_copy_stuff_used_by_item(SPItem *item, const GSList *items);
+static void sp_copy_stuff_used_by_item(GSList **defs_clip, SPItem *item, const GSList *items);
 
-void sp_copy_gradient (SPGradient *gradient)
+void sp_copy_gradient (GSList **defs_clip, SPGradient *gradient)
 {
     SPGradient *ref = gradient;
 
     while (ref) { 
         // climb up the refs, copying each one in the chain
         SPRepr *grad_repr =sp_repr_duplicate (SP_OBJECT_REPR(ref));
-        defs_clipboard = g_slist_prepend (defs_clipboard, grad_repr);
+        *defs_clip = g_slist_prepend (*defs_clip, grad_repr);
 
         ref = ref->ref->getObject();
     }
 }
 
-void sp_copy_pattern (SPPattern *pattern)
+void sp_copy_pattern (GSList **defs_clip, SPPattern *pattern)
 {
     SPPattern *ref = pattern;
 
     while (ref) {
         // climb up the refs, copying each one in the chain
         SPRepr *pattern_repr = sp_repr_duplicate(SP_OBJECT_REPR(ref));
-        defs_clipboard = g_slist_prepend (defs_clipboard, pattern_repr);
+        *defs_clip = g_slist_prepend (*defs_clip, pattern_repr);
 
         // items in the pattern may also use gradients and other patterns, so we need to recurse here as well
         for (SPObject *child = sp_object_first_child(SP_OBJECT(ref)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
             if (!SP_IS_ITEM (child))
                 continue;
-            sp_copy_stuff_used_by_item ((SPItem *) child, NULL);
+            sp_copy_stuff_used_by_item (defs_clip, (SPItem *) child, NULL);
         }
 
         ref = ref->ref->getObject();
     }
 }
 
-void sp_copy_marker (SPMarker *marker)
+void sp_copy_marker (GSList **defs_clip, SPMarker *marker)
 {
     SPRepr *marker_repr = sp_repr_duplicate(SP_OBJECT_REPR(marker));
-    defs_clipboard = g_slist_prepend (defs_clipboard, marker_repr);
+    *defs_clip = g_slist_prepend (*defs_clip, marker_repr);
 }
 
 
-void sp_copy_textpath_path (SPTextPath *tp, const GSList *items)
+void sp_copy_textpath_path (GSList **defs_clip, SPTextPath *tp, const GSList *items)
 {
     SPItem *path = sp_textpath_get_path_item (tp);
     if (!path)
@@ -766,46 +771,46 @@ void sp_copy_textpath_path (SPTextPath *tp, const GSList *items)
     if (items && g_slist_find ((GSList *) items, path)) // do not copy it to defs if it is already in the list of items copied
         return;
     SPRepr *repr = sp_repr_duplicate (SP_OBJECT_REPR(path));
-    defs_clipboard = g_slist_prepend (defs_clipboard, repr);
+    *defs_clip = g_slist_prepend (*defs_clip, repr);
 }
 
-void sp_copy_stuff_used_by_item (SPItem *item, const GSList *items)
+void sp_copy_stuff_used_by_item (GSList **defs_clip, SPItem *item, const GSList *items)
 {
     SPStyle *style = SP_OBJECT_STYLE (item); 
 
     if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
         SPObject *server = SP_OBJECT_STYLE_FILL_SERVER(item);
         if (SP_IS_LINEARGRADIENT (server) || SP_IS_RADIALGRADIENT (server))
-            sp_copy_gradient (SP_GRADIENT(server));
+            sp_copy_gradient (defs_clip, SP_GRADIENT(server));
         if (SP_IS_PATTERN (server))
-            sp_copy_pattern (SP_PATTERN(server));
+            sp_copy_pattern (defs_clip, SP_PATTERN(server));
     }
 
     if (style && (style->stroke.type == SP_PAINT_TYPE_PAINTSERVER)) { 
         SPObject *server = SP_OBJECT_STYLE_STROKE_SERVER(item);
         if (SP_IS_LINEARGRADIENT (server) || SP_IS_RADIALGRADIENT (server))
-            sp_copy_gradient (SP_GRADIENT(server));
+            sp_copy_gradient (defs_clip, SP_GRADIENT(server));
         if (SP_IS_PATTERN (server))
-            sp_copy_pattern (SP_PATTERN(server));
+            sp_copy_pattern (defs_clip, SP_PATTERN(server));
     }
 
     if (SP_IS_SHAPE (item)) { 
         SPShape *shape = SP_SHAPE (item);
         for (int i = 0 ; i < SP_MARKER_LOC_QTY ; i++) {
             if (shape->marker[i]) {
-                sp_copy_marker (SP_MARKER (shape->marker[i]));
+                sp_copy_marker (defs_clip, SP_MARKER (shape->marker[i]));
             }
         }
     }
 
     if (SP_IS_TEXT_TEXTPATH (item)) {
-        sp_copy_textpath_path (SP_TEXTPATH(sp_object_first_child(SP_OBJECT(item))), items);
+        sp_copy_textpath_path (defs_clip, SP_TEXTPATH(sp_object_first_child(SP_OBJECT(item))), items);
     }
 
     // recurse
     for (SPObject *o = SP_OBJECT(item)->children; o != NULL; o = o->next) {
         if (SP_IS_ITEM(o))
-            sp_copy_stuff_used_by_item (SP_ITEM (o), items);
+            sp_copy_stuff_used_by_item (defs_clip, SP_ITEM (o), items);
     }
 }
 
@@ -839,6 +844,56 @@ take_style_from_item (SPItem *item)
     //sp_repr_css_print (style_clipboard);
 
     return css;
+}
+
+void sp_selection_copy_impl (const GSList *items, GSList **clip, GSList **defs_clip, SPCSSAttr **style_clip)
+{
+
+    // Copy stuff referenced by all items to defs_clip:
+    if (defs_clip) {
+        for (GSList *i = (GSList *) items; i != NULL; i = i->next) {
+            sp_copy_stuff_used_by_item (defs_clip, SP_ITEM (i->data), items);
+        }
+        *defs_clip = g_slist_reverse(*defs_clip);
+    }
+
+    // Store style:
+    if (style_clip) {
+        SPItem *item = SP_ITEM (items->data); // take from the first selected item
+        *style_clip = take_style_from_item (item);
+    }
+
+    if (clip) {
+        // Sort items:
+        items = g_slist_sort((GSList *) items, (GCompareFunc) sp_object_compare_position);
+
+        // Copy item reprs:
+        for (GSList *i = (GSList *) items; i != NULL; i = i->next) {
+
+            SPRepr *repr = SP_OBJECT_REPR (i->data);
+
+            SPRepr *copy = sp_repr_duplicate(repr);
+
+            // copy complete inherited style
+            SPCSSAttr *css = sp_repr_css_attr_inherited(repr, "style");
+            sp_repr_css_set(copy, css, "style");
+            sp_repr_css_attr_unref(css);
+
+            // copy complete accummulated transform
+            NR::Matrix full_t = sp_item_i2doc_affine(SP_ITEM(i->data));
+            // (we're dealing with unattached repr, so we write to its attr instead of using sp_item_set_transform)
+            gchar affinestr[80]; 
+            if (sp_svg_transform_write(affinestr, 79, full_t)) {
+                sp_repr_set_attr (copy, "transform", affinestr);
+            } else {
+                sp_repr_set_attr (copy, "transform", NULL);
+            }
+
+            *clip = g_slist_prepend(*clip, copy);
+        }
+
+        *clip = g_slist_reverse(*clip);
+    }
 }
 
 void sp_selection_copy()
@@ -881,71 +936,39 @@ void sp_selection_copy()
         refClipboard->set_text(text);
     }
 
-    // 1.  Store referenced stuff:
     // clear old defs clipboard
     while (defs_clipboard) {
         sp_repr_unref((SPRepr *) defs_clipboard->data);
         defs_clipboard = g_slist_remove (defs_clipboard, defs_clipboard->data);
     }
-    // copy stuff referenced by all items to defs_clipboard
-    for (GSList *i = (GSList *) items; i != NULL; i = i->next) {
-        sp_copy_stuff_used_by_item (SP_ITEM (i->data), items);
-    }
 
-    // 2.  Store style:
+    // clear style clipboard
     if (style_clipboard) {
         sp_repr_css_attr_unref (style_clipboard);
     }
-    SPItem *item = SP_ITEM (items->data); // take from the first selected item
-    style_clipboard = take_style_from_item (item);
-
-    // 3.  Sort items:
-    items = g_slist_sort((GSList *) items, (GCompareFunc) sp_object_compare_position);
-
-    // 4.  Copy item reprs:
-    //clear old clipboard 
+  
+    //clear main clipboard 
     while (clipboard) {
         sp_repr_unref((SPRepr *) clipboard->data);
         clipboard = g_slist_remove(clipboard, clipboard->data);
     }
 
-    for (GSList *i = (GSList *) items; i != NULL; i = i->next) {
-
-        SPRepr *repr = SP_OBJECT_REPR (i->data);
-
-        SPRepr *copy = sp_repr_duplicate(repr);
-
-        // copy complete inherited style
-        SPCSSAttr *css = sp_repr_css_attr_inherited(repr, "style");
-        sp_repr_css_set(copy, css, "style");
-        sp_repr_css_attr_unref(css);
-
-        // copy complete accummulated transform
-        NR::Matrix full_t = sp_item_i2doc_affine(SP_ITEM(i->data));
-        // (we're dealing with unattached repr, so we write to its attr instead of using sp_item_set_transform)
-        gchar affinestr[80]; 
-        if (sp_svg_transform_write(affinestr, 79, full_t)) {
-            sp_repr_set_attr (copy, "transform", affinestr);
-        } else {
-            sp_repr_set_attr (copy, "transform", NULL);
-        }
-
-        clipboard = g_slist_prepend(clipboard, copy);
-    }
-
-    clipboard = g_slist_reverse(clipboard);
-    defs_clipboard = g_slist_reverse(defs_clipboard);
+    sp_selection_copy_impl (items, &clipboard, &defs_clipboard, &style_clipboard);
 
     g_slist_free ((GSList *) items);
 }
+
 
 /**
 Add gradients/patterns/markers referenced by copied objects to defs
 */
 void 
-paste_defs (SPDocument *doc)
+paste_defs (GSList **defs_clip, SPDocument *doc)
 {
-    for (GSList *gl = defs_clipboard; gl != NULL; gl = gl->next) {
+    if (!defs_clip)
+        return;
+
+    for (GSList *gl = *defs_clip; gl != NULL; gl = gl->next) {
         SPDefs *defs= (SPDefs *) SP_DOCUMENT_DEFS(doc);
         SPRepr *repr = (SPRepr *) gl->data;
         gchar const *id = sp_repr_attr(repr, "id");
@@ -955,6 +978,40 @@ paste_defs (SPDocument *doc)
             sp_repr_unref(copy);
         }
     }
+}
+
+GSList *sp_selection_paste_impl (SPDocument *document, SPObject *parent, GSList **clip, GSList **defs_clip)
+{
+    paste_defs (defs_clip, document);
+
+    GSList *copied = NULL;
+    // add objects to document
+    for (GSList *l = *clip; l != NULL; l = l->next) {
+        SPRepr *repr = (SPRepr *) l->data;
+        SPRepr *copy = sp_repr_duplicate(repr);
+
+        // premultiply the item transform by the accumulated parent transform in the paste layer
+        NR::Matrix local = sp_item_i2doc_affine(SP_ITEM(parent));
+        if (!local.test_identity()) {
+            gchar const *t_str = sp_repr_attr (copy, "transform");
+            NR::Matrix item_t (NR::identity());
+            if (t_str)
+                sp_svg_transform_read(t_str, &item_t);
+            item_t *= local.inverse();
+            // (we're dealing with unattached repr, so we write to its attr instead of using sp_item_set_transform)
+            gchar affinestr[80];
+            if (sp_svg_transform_write(affinestr, 79, item_t)) {
+                sp_repr_set_attr (copy, "transform", affinestr);
+            } else {
+                sp_repr_set_attr (copy, "transform", NULL);
+            }
+        }
+
+        parent->appendChildRepr(copy);
+        copied = g_slist_prepend(copied, copy);
+        sp_repr_unref(copy);
+    }
+    return copied;
 }
 
 void sp_selection_paste(bool in_place)
@@ -986,43 +1043,10 @@ void sp_selection_paste(bool in_place)
         return;
     }
 
-    selection->clear();
-
-    paste_defs (SP_DT_DOCUMENT(desktop));
-
-    GSList *copied = NULL;
-    // add objects to document
-    for (GSList *l = clipboard; l != NULL; l = l->next) {
-        SPRepr *repr = (SPRepr *) l->data;
-        SPRepr *copy = sp_repr_duplicate(repr);
-
-        // premultiply the item transform by the accumulated parent transform in the paste layer
-        NR::Matrix local = sp_item_i2doc_affine(SP_ITEM(desktop->currentLayer()));
-        if (!local.test_identity()) {
-            gchar const *t_str = sp_repr_attr (copy, "transform");
-            NR::Matrix item_t (NR::identity());
-            if (t_str)
-                sp_svg_transform_read(t_str, &item_t);
-            item_t *= local.inverse();
-            // (we're dealing with unattached repr, so we write to its attr instead of using sp_item_set_transform)
-            gchar affinestr[80];
-            if (sp_svg_transform_write(affinestr, 79, item_t)) {
-                sp_repr_set_attr (copy, "transform", affinestr);
-            } else {
-                sp_repr_set_attr (copy, "transform", NULL);
-            }
-        }
-
-        desktop->currentLayer()->appendChildRepr(copy);
-        copied = g_slist_append(copied, copy);
-        sp_repr_unref(copy);
-    }
-
-    // add new documents to selection (would have done this above but screws with fill/stroke dialog)
-    for (GSList *l = copied; l != NULL; l = l->next) {
-        SPRepr *repr = (SPRepr *) l->data;
-        selection->addRepr(repr);
-    }
+    GSList *copied = sp_selection_paste_impl (SP_DT_DOCUMENT (desktop), desktop->currentLayer(), &clipboard, &defs_clipboard);
+    // add pasted objects to selection
+    selection->setReprList((GSList const *) copied);
+    g_slist_free (copied);
 
     if (!in_place) {
         sp_document_ensure_up_to_date(SP_DT_DOCUMENT(desktop));
@@ -1061,11 +1085,73 @@ void sp_selection_paste_style()
         return;
     }
 
-    paste_defs (SP_DT_DOCUMENT(desktop));
+    paste_defs (&defs_clipboard, SP_DT_DOCUMENT(desktop));
 
     sp_desktop_set_style (desktop, style_clipboard);
 
     sp_document_done(SP_DT_DOCUMENT (desktop));
+}
+
+void sp_selection_to_next_layer () 
+{
+    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+
+    SPSelection *selection = SP_DT_SELECTION(dt);
+
+    // check if something is selected
+    if (selection->isEmpty()) {
+        dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to move to the layer above."));
+        return;
+    }
+
+    const GSList *items = g_slist_copy ((GSList *) selection->itemList());
+
+    SPObject *next=Inkscape::next_layer(dt->currentRoot(), dt->currentLayer());
+    if (next) {
+        GSList *temp_clip = NULL;
+        sp_selection_copy_impl (items, &temp_clip, NULL, NULL);
+        sp_selection_delete_impl (items);
+        GSList *copied = sp_selection_paste_impl (SP_DT_DOCUMENT (dt), next, &temp_clip, NULL);
+        selection->setReprList((GSList const *) copied);
+        g_slist_free (copied);
+        dt->setCurrentLayer(next);
+        sp_document_done(SP_DT_DOCUMENT (dt));
+    } else {
+        dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No more layers above."));
+    }
+
+    g_slist_free ((GSList *) items);
+}
+
+void sp_selection_to_prev_layer () 
+{
+    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+
+    SPSelection *selection = SP_DT_SELECTION(dt);
+
+    // check if something is selected
+    if (selection->isEmpty()) {
+        dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to move to the layer below."));
+        return;
+    }
+
+    const GSList *items = g_slist_copy ((GSList *) selection->itemList());
+
+    SPObject *next=Inkscape::previous_layer(dt->currentRoot(), dt->currentLayer());
+    if (next) {
+        GSList *temp_clip = NULL;
+        sp_selection_copy_impl (items, &temp_clip, NULL, NULL);
+        sp_selection_delete_impl (items); 
+        GSList *copied = sp_selection_paste_impl (SP_DT_DOCUMENT (dt), next, &temp_clip, NULL);
+        selection->setReprList((GSList const *) copied);
+        g_slist_free (copied);
+        dt->setCurrentLayer(next);
+        sp_document_done(SP_DT_DOCUMENT (dt));
+    } else {
+        dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No more layers below."));
+    }
+
+    g_slist_free ((GSList *) items);
 }
 
 void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine, bool set_i2d)
