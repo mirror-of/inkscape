@@ -1,3 +1,32 @@
+2004-09-14  Carl Hetherington <inkscape@carlh.net>
+
+	* src/display/canvas-bpath.cpp, src/display/nr-arena-shape.cpp,
+	src/livarot/Shape.cpp, src/livarot/Shape.h,
+	src/livarot/ShapeMisc.cpp, src/livarot/ShapeSweep.cpp: move some
+	functions out of Shape that don't need to be members.
+
+2004-09-10  Carl Hetherington <inkscape@carlh.net>
+
+	* src/livarot/Shape.cpp, src/livarot/Shape.h,
+	src/livarot/ShapeDraw.cpp, src/livarot/ShapeMisc.cpp,
+	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp: excise
+	Shape::nbPt.
+
+	* src/sp-offset.cpp, src/splivarot.cpp,
+	src/display/nr-arena-shape.cpp, src/livarot/Shape.h: Make
+	Shape::aretes private and offer a read-only accessor.
+
+	* src/livarot/Shape.cpp, src/livarot/Shape.h,
+	src/livarot/ShapeDraw.cpp, src/livarot/ShapeMisc.cpp,
+	src/livarot/ShapeRaster.cpp, src/livarot/ShapeSweep.cpp,
+	src/livarot/ShapeSweepUtils.cpp: use getEdge() more and excise
+	Shape::nbAr.
+
+	* src/livarot/Shape.cpp, src/livarot/Shape.h,
+	src/livarot/ShapeMisc.cpp, src/livarot/ShapeRaster.cpp,
+	src/livarot/ShapeSweep.cpp, src/livarot/ShapeSweepUtils.cpp: use
+	std::vector for most of the temporary arrays in Shape.
+
 2004-09-11  MenTaLguY <mental@rydia.net>
 
 	* src/render/bezier.cpp, src/render/bezier.h,
