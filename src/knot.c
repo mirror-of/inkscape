@@ -25,6 +25,7 @@
 #include "desktop-affine.h"
 #include "knot.h"
 #include "inkscape.h"
+#include "document.h"
 
 #include "sp-guide.h"
 
