@@ -1,3 +1,18 @@
+2003-12-06  bulia byak <bulia@dr.com>
+
+	* src/dialogs/align.c: tooltip fix (from sodipodi)
+
+	* src/libnr/nr-stroke.c: fix for 853827, rendering of short paths (from sodipodi)
+
+	* src/sp-text.c src/sp-text.h src/text-context.c: enabled home/end in text (from sodipodi)
+
+	* src/document-undo.c: increased MAX_UNDO to 512
+
+	* src/file.c src/dialogs/export.c: fix for 851012: the smallest possible exported png
+	is now 1x1
+
+	* src/widgets/font-selector.c: fix for 851789: no exponential display in font size field
+
 2003-12-06 MenTaLguY <mental@rydia.net>
 
 	* src/desktop.c: permit the canvas widget to take keyboard focus
