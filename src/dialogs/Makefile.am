@@ -28,7 +28,6 @@ libspdialogs_a_SOURCES = \
 	object-properties.cpp object-properties.h \
 	item-properties.cpp item-properties.h \
 	object-attributes.cpp object-attributes.h \
-	tool-options.cpp tool-options.h \
 	fill-style.cpp fill-style.h \
 	stroke-style.cpp stroke-style.h \
 	transformation.cpp transformation.h \
