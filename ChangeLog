@@ -1,6 +1,6 @@
 2004-11-20  Jon A. Cruz  <jon@joncruz.org>
 
-	* src/extension/db.h, src/extension/db.cpp, src/dialogs/filedialog.cpp
+	* src/extension/db.h, src/extension/db.cpp, src/dialogs/filedialog.cpp:
 	  Added extension matching pattern. Fixed bug 1064888.
 
 	* src/dialogs/filedialog.cpp (isValidImageFile):
