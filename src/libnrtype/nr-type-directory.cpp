@@ -567,7 +567,10 @@ nr_type_family_def_compare (const void *a, const void *b)
 
 /**
  * Builds the typeface directory.  On Win32 it uses nr_type_read_w32_list(),
- * whereas for systems using Xft it uses nr_type_read_xft_list().
+ * whereas for systems using Xft it uses nr_type_read_xft_list().  If there
+ * are no families it registers an empty typeface.  Otherwise it sorts the
+ * families, builds the pos definitions for each family, and strips out the
+ * family name from the style if necessary.
  */
 static void
 nr_type_directory_build (void)
@@ -641,10 +644,8 @@ nr_type_directory_build (void)
 }
 
 /**
- * 
- */
-/**
-Return "distance" between two font family names, allowing to choose the closest match or a sensible alternative if there's no match
+ * Return "distance" between two font family names, allowing to choose
+ * the closest match or a sensible alternative if there's no match
  */
 static unsigned
 nr_type_distance_family (const gchar *ask_c, const gchar *bid_c)
@@ -765,7 +766,11 @@ nr_type_distance_family (const gchar *ask_c, const gchar *bid_c)
 #define NR_TYPE_VARIANT_SCALE 10000.0F
 
 /**
- * 
+ * calculates and returns the distance position for the various styles for a font.
+ *
+ * Q:  What are the ask/bid parameters for?
+ * Q:  What is the meaning of the distance this calculates?
+ * Q:  Why doesn't this account for style 'Regular'?
  */
 static double
 nr_type_distance_position (NRTypePosDef const *ask, NRTypePosDef const *bid)
@@ -777,15 +782,15 @@ nr_type_distance_position (NRTypePosDef const *ask, NRTypePosDef const *bid)
 
 	// For oblique, match italic if oblique not found, and vice versa
       if (ask->italic || bid->italic)
-				ditalic = NR_TYPE_ITALIC_SCALE * ((int) ask->italic - (int) bid->italic - 0.5 * bid->oblique);
+	  ditalic = NR_TYPE_ITALIC_SCALE * ((int) ask->italic - (int) bid->italic - 0.5 * bid->oblique);
       if (ask->oblique || bid->oblique)
-				doblique = NR_TYPE_OBLIQUE_SCALE * ((int) ask->oblique - (int) bid->oblique - 0.5 * bid->italic);
+	  doblique = NR_TYPE_OBLIQUE_SCALE * ((int) ask->oblique - (int) bid->oblique - 0.5 * bid->italic);
       if (ask->weight || bid->weight)
-				dweight = NR_TYPE_WEIGHT_SCALE * ((int) ask->weight - (int) bid->weight);
+	  dweight = NR_TYPE_WEIGHT_SCALE * ((int) ask->weight - (int) bid->weight);
       if (ask->stretch || bid->stretch)
-				dstretch = NR_TYPE_STRETCH_SCALE * ((int) ask->stretch - (int) bid->stretch);
+	  dstretch = NR_TYPE_STRETCH_SCALE * ((int) ask->stretch - (int) bid->stretch);
       if (ask->variant || bid->variant)
-				dvariant = NR_TYPE_VARIANT_SCALE * ((int) ask->variant - (int) bid->variant);
+	  dvariant = NR_TYPE_VARIANT_SCALE * ((int) ask->variant - (int) bid->variant);
 
 	dist = sqrt (ditalic * ditalic  +
 		     doblique * doblique  +
@@ -797,7 +802,8 @@ nr_type_distance_position (NRTypePosDef const *ask, NRTypePosDef const *bid)
 }
 
 /**
- * 
+ * Builds a typeface for a given font name and family of the given size
+ * and face.
  */
 NRTypeFace *
 nr_type_build (const gchar *name, const gchar *family,
