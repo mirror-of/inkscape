@@ -84,7 +84,7 @@ public:
 	// delete a portion of the text
 	virtual void      Delete(int i_utf8_st, int i_utf8_en);
 	// set/ add some value at the given position. v_type=0 -> set the 'x' value; 1->'y'; 2->'dx'; 3->'dy'; 4->'rotate'
-	virtual void      AddValue(int utf8_pos, SPSVGLength &val, int v_type, bool increment);
+	virtual void      AddValue(int utf8_pos, SPSVGLength &val, int v_type, bool increment, bool multiply);
 	virtual int       UCS4_2_UTF8(int ucs4_pos);
 	virtual int       UTF8_2_UCS4(int utf8_pos);
 };
@@ -104,7 +104,7 @@ public:
 	virtual void      SetPositions(bool for_text, int &last_utf8, int &last_ucs4, bool &in_white);
 	virtual void      Insert(int utf8_pos, int ucs4_pos, const char* n_text, int n_utf8_len, int n_ucs4_len, bool &done); 
 	virtual void      Delete(int i_utf8_st, int i_utf8_en);
-	virtual void      AddValue(int utf8_pos, SPSVGLength &val, int v_type, bool increment);
+	virtual void      AddValue(int utf8_pos, SPSVGLength &val, int v_type, bool increment, bool multiply);
 	virtual int       UCS4_2_UTF8(int ucs4_pos);
 	virtual int       UTF8_2_UCS4(int utf8_pos);
 };
@@ -143,8 +143,14 @@ public:
 	static char*      WriteArray(int nb,SPSVGLength* array);
 	static void       InsertArray(int l,int at,int &nb,SPSVGLength* &array,bool is_delta);
 	static void       SuppressArray(int l,int at,int &nb,SPSVGLength* &array);
-	static void       ForceVal(int at,SPSVGLength &val,int &nb,SPSVGLength* &array,bool increment);
+	static void       ForceVal(int at,SPSVGLength &val,int &nb,SPSVGLength* &array,bool increment, bool multiply);
 	static void       UpdateArray(double size,double scale,int &nb,SPSVGLength* &array);
+
+	// transform (x_s[i], y_s[i]) points by the matrix t
+	void       TransformXY(NR::Matrix t);
+	// scale dx/dy arrays by ex
+	void       ScaleDXDY(double ex);
+
 	// sets the SPSVGLength 'computed' field of the attributes it holds
 	void              UpdateLength(double size,double scale);
 	// returns the style for this element
@@ -161,7 +167,7 @@ public:
 	char*							GetDY(int st=-1,int en=-1);
 	char*							GetRot(int st=-1,int en=-1);
 	// called by text_flow_src->AddValue(), because only the text element can do the utf8->ucs4 conversion
-	void              DoAddValue(int utf8_pos,int ucs4_pos,SPSVGLength &val,int v_type,bool increment);
+	void              DoAddValue(int utf8_pos,int ucs4_pos,SPSVGLength &val,int v_type,bool increment, bool multiply);
 	
 	int               UCS4Pos(int i_utf8_pos);
 	

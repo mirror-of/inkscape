@@ -15,6 +15,8 @@
 #include "../sp-object.h"
 #include "../style.h"
 
+#include "../libnr/nr-matrix-ops.h"
+
 flow_src::flow_src(void)
 {
 	nbElem=maxElem=0;
@@ -443,7 +445,7 @@ void              one_flow_src::Delete(int /*i_utf8_st*/,int /*i_utf8_en*/)
 void              one_flow_src::DeleteInfo(int /*i_utf8_st*/,int /*i_utf8_en*/,int /*i_ucs4_st*/,int /*i_ucs4_en*/)
 {
 }
-void              one_flow_src::AddValue(int /*utf8_pos*/,SPSVGLength &/*val*/,int /*type*/,bool /*increment*/)
+void              one_flow_src::AddValue(int /*utf8_pos*/,SPSVGLength &/*val*/,int /*type*/,bool /*increment*/, bool /* multiply */)
 {
 }
 
@@ -556,11 +558,11 @@ void              text_flow_src::Delete(int i_utf8_st,int i_utf8_en)
 		cur_dad=cur_dad->dad;
 	}
 }
-void              text_flow_src::AddValue(int utf8_pos,SPSVGLength &val,int v_type,bool increment)
+void              text_flow_src::AddValue(int utf8_pos,SPSVGLength &val,int v_type,bool increment, bool multiply)
 {
 	if ( utf8_pos >= utf8_st && utf8_pos < utf8_en ) {
 		int ucs4_pos=ucs4_st+cleaned_up.UTF8_2_UCS4(utf8_pos-utf8_st);
-		if ( dad ) (dynamic_cast<div_flow_src*>(dad))->DoAddValue(utf8_pos,ucs4_pos,val,v_type,increment);
+		if ( dad ) (dynamic_cast<div_flow_src*>(dad))->DoAddValue(utf8_pos,ucs4_pos,val,v_type, increment, multiply);
 	}
 }
 int               text_flow_src::UCS4_2_UTF8(int ucs4_pos)
@@ -629,7 +631,7 @@ div_flow_src::~div_flow_src(void)
 	if ( style ) sp_style_unref(style);
 }
 
-void              div_flow_src::ReadArray(int &nb,SPSVGLength* &array,const char* value)
+void              div_flow_src::ReadArray(int &nb, SPSVGLength* &array, const char* value)
 {
 	if ( array ) free(array);
 	array=NULL;
@@ -639,11 +641,13 @@ void              div_flow_src::ReadArray(int &nb,SPSVGLength* &array,const char
 		GList* list=sp_svg_length_list_read (value);
 		nb=g_list_length(list);
 		array=(SPSVGLength*)malloc(nb*sizeof(SPSVGLength));
-		for (int i=0;i<nb;i++) sp_svg_length_unset (array+i, SP_SVG_UNIT_NONE, 0.0, 0.0);
+		for (int i = 0; i < nb; i++) 
+			sp_svg_length_unset (array+i, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		int    cur=0;
-		for (GList* l=list;l;l=l->next) {
+		for (GList* l = list; l; l = l->next) {
 			SPSVGLength* nl=(SPSVGLength*)l->data;
-			if ( cur < nb ) array[cur++]=*nl; // overcautious
+			if ( cur < nb ) 
+				array[cur++] = *nl; // overcautious
 			g_free(l->data);
 		}
 		g_list_free(list);
@@ -665,6 +669,41 @@ char*             div_flow_src::WriteArray(int nb,SPSVGLength* array)
 	}
 	return s;
 }
+
+void              div_flow_src::TransformXY(NR::Matrix t)
+{
+	int max = MAX (nb_x, nb_y);
+	x_s = (SPSVGLength*) realloc (x_s, (max) * sizeof(SPSVGLength));
+	y_s = (SPSVGLength*) realloc (y_s, (max)* sizeof(SPSVGLength));
+	nb_x = nb_y = max;
+
+	for (int i = 0; i < max; i++) {
+		NR::Point p (x_s[i].computed, y_s[i].computed);
+		p *= t;
+		x_s[i].computed = p[NR::X];
+		x_s[i].set = TRUE;
+		y_s[i].computed = p[NR::Y];
+		y_s[i].set = TRUE;
+	}
+}
+
+void              div_flow_src::ScaleDXDY(double ex)
+{
+
+    one_flow_src* cur=this;
+    SPSVGLength  by_x,by_y;
+    by_x.set=by_y.set=1;
+    by_x.value = by_x.computed = ex;
+    by_y.value = by_y.computed = ex;
+    while ( cur ) {
+	for (int position = cur->utf8_st; position < cur->utf8_en; position ++ ) {
+			cur->AddValue(position, by_x, 2, false, true);
+			cur->AddValue(position, by_y, 3, false, true);
+	}
+	cur=cur->next;
+    }
+}
+
 void              div_flow_src::InsertArray(int l,int at,int &nb,SPSVGLength* &array,bool is_delta)
 {
 	if ( at < 0 ) {
@@ -722,10 +761,10 @@ void              div_flow_src::UpdateLength(double size,double scale)
 	UpdateArray(size,scale,nb_dy,dy_s);
 	UpdateArray(size,scale,nb_rot,rot_s);
 }
-void              div_flow_src::ForceVal(int at,SPSVGLength &val,int &nb,SPSVGLength* &array,bool increment)
+void              div_flow_src::ForceVal(int at,SPSVGLength &val,int &nb,SPSVGLength* &array,bool increment, bool multiply)
 {
 	if ( at < 0 ) return;
-	if ( at >= nb ) {
+	if ( at >= nb && !multiply) {  // we don't need to extend the array if multiplying, it will stay 0 anyway
 		array=(SPSVGLength*)realloc(array,(at+1)*sizeof(SPSVGLength));
 		for (int i=nb;i<=at;i++) {
 			array[i].set=1;
@@ -733,11 +772,18 @@ void              div_flow_src::ForceVal(int at,SPSVGLength &val,int &nb,SPSVGLe
 		}
 		nb=at+1;
 	}
-	if ( increment == false || array[at].set == 0 ) {
-		array[at]=val;
+	if (multiply) {
+		if (array != NULL && at < nb) {
+			array[at].value *= val.value;
+			array[at].computed *= val.computed;
+		}
 	} else {
-		array[at].value+=val.value;
-		array[at].computed+=val.computed;
+		if ( increment == false || array[at].set == 0 ) {
+			array[at]=val;
+		} else {
+			array[at].value+=val.value;
+			array[at].computed+=val.computed;
+		}
 	}
 }
 void              div_flow_src::SetStyle(SPStyle* i_style)
@@ -903,15 +949,15 @@ void              div_flow_src::Delete(int i_utf8_st,int i_utf8_en)
 		utf8_st=utf8_en; // we mark it as deleted
 	}
 }
-void              div_flow_src::DoAddValue(int /*utf8_pos*/,int ucs4_pos,SPSVGLength &val,int v_type,bool increment)
+void              div_flow_src::DoAddValue(int /*utf8_pos*/,int ucs4_pos,SPSVGLength &val,int v_type, bool increment, bool multiply)
 {
 	int ucs4_offset=ucs4_pos-ucs4_en;
 	if ( ucs4_offset >= 0 ) {
-		if ( v_type == 0 ) ForceVal(ucs4_offset,val,nb_x,x_s,increment);
-		if ( v_type == 1 ) ForceVal(ucs4_offset,val,nb_y,y_s,increment);
-		if ( v_type == 2 ) ForceVal(ucs4_offset,val,nb_dx,dx_s,increment);
-		if ( v_type == 3 ) ForceVal(ucs4_offset,val,nb_dy,dy_s,increment);
-		if ( v_type == 4 ) ForceVal(ucs4_offset,val,nb_rot,rot_s,increment);
+		if ( v_type == 0 ) ForceVal(ucs4_offset,val,nb_x,x_s, increment, multiply);
+		if ( v_type == 1 ) ForceVal(ucs4_offset,val,nb_y,y_s, increment, multiply);
+		if ( v_type == 2 ) ForceVal(ucs4_offset,val,nb_dx,dx_s, increment, multiply);
+		if ( v_type == 3 ) ForceVal(ucs4_offset,val,nb_dy,dy_s, increment, multiply);
+		if ( v_type == 4 ) ForceVal(ucs4_offset,val,nb_rot,rot_s, increment, multiply);
 	}
 }
 void              div_flow_src::DeleteInfo(int /*i_utf8_st*/,int /*i_utf8_en*/,int i_ucs4_st,int i_ucs4_en)
