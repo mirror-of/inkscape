@@ -1,3 +1,19 @@
+2004-10-14  Carl Hetherington <inkscape@carlh.net>
+
+	* src/Path.cpp, src/Path.h, src/PathConversion.cpp,
+	src/PathCutting.cpp, src/PathOutline.cpp, src/PathSimplify.cpp,
+	src/ShapeMisc.cpp: use a vector of pointers for Path::descr_cmd.
+
+	* src/livarot/Ligne.cpp, src/livarot/Ligne.h,
+	src/livarot/int-line.cpp, src/livarot/int-line.h,
+	src/livarot/float-line.cpp, src/livarot/float-line.h,
+	src/livarot/livarot-forward.h, src/livarot/ShapeRaster.cpp,
+	src/sp-flowregion.cpp, src/display/canvas-bpath.cpp,
+	src/display/nr-arena-glyphs.cpp, src/display/nr-arena-shape.cpp,
+	src/display/sp-ctrlline.cpp, src/libnrtype/FlowDest.cpp,
+	src/libnrtype/RasterFont.cpp: split Ligne into float-line and
+	int-line.
+
 2004-10-12  MenTaLguY  <mental@rydia.net>
 
 	* src/Makefile.am: added files
