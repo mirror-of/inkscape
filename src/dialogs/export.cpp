@@ -1023,33 +1023,64 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
         case SELECTION_DRAWING: {
             SPDocument * doc = SP_ACTIVE_DOCUMENT;
             SPRepr * repr = sp_document_repr_root(doc);
+            bool modified = FALSE;
+            const gchar * temp_string;
 
             sp_document_set_undo_sensitive(doc, FALSE);
-            sp_repr_set_attr(repr, "inkscape:export-filename", filename);
-            sp_repr_set_double(repr, "inkscape:export-xdpi", xdpi);
-            sp_repr_set_double(repr, "inkscape:export-ydpi", ydpi);
-            sp_repr_set_attr(repr, "sodipodi:modified", "TRUE");
+
+            temp_string = sp_repr_attr(repr, "inkscape:export-filename");
+            if (temp_string == NULL || strcmp(temp_string, filename)) {
+                sp_repr_set_attr(repr, "inkscape:export-filename", filename);
+                modified = TRUE;
+            }
+            temp_string = sp_repr_attr(repr, "inkscape:export-xdpi");
+            if (temp_string == NULL || xdpi != atof(temp_string)) {
+                sp_repr_set_double(repr, "inkscape:export-xdpi", xdpi);
+                modified = TRUE;
+            }
+            temp_string = sp_repr_attr(repr, "inkscape:export-ydpi");
+            if (temp_string == NULL || xdpi != atof(temp_string)) {
+                sp_repr_set_double(repr, "inkscape:export-ydpi", ydpi);
+                modified = TRUE;
+            }
+            
+            if (modified)
+                sp_repr_set_attr(repr, "sodipodi:modified", "TRUE");
             sp_document_set_undo_sensitive(doc, TRUE);
             break;
         }
         case SELECTION_SELECTION: {
             const GSList * reprlst;
             SPDocument * doc = SP_ACTIVE_DOCUMENT;
+            bool modified = FALSE;
 
             sp_document_set_undo_sensitive(doc, FALSE);
             reprlst = SP_DT_SELECTION(SP_ACTIVE_DESKTOP)->reprList();
 
-            if (reprlst != NULL) {
-                SPRepr * repr = sp_document_repr_root(doc);
-                sp_repr_set_attr(repr, "sodipodi:modified", "TRUE");
-            }
-
             for(; reprlst != NULL; reprlst = reprlst->next) {
                 SPRepr * repr = (SPRepr *)reprlst->data;
+                const gchar * temp_string;
 
-                sp_repr_set_attr(repr, "inkscape:export-filename", filename);
-                sp_repr_set_double(repr, "inkscape:export-xdpi", xdpi);
-                sp_repr_set_double(repr, "inkscape:export-ydpi", ydpi);
+                temp_string = sp_repr_attr(repr, "inkscape:export-filename");
+                if (temp_string == NULL || strcmp(temp_string, filename)) {
+                    sp_repr_set_attr(repr, "inkscape:export-filename", filename);
+                    modified = TRUE;
+                }
+                temp_string = sp_repr_attr(repr, "inkscape:export-xdpi");
+                if (temp_string == NULL || xdpi != atof(temp_string)) {
+                    sp_repr_set_double(repr, "inkscape:export-xdpi", xdpi);
+                    modified = TRUE;
+                }
+                temp_string = sp_repr_attr(repr, "inkscape:export-ydpi");
+                if (temp_string == NULL || xdpi != atof(temp_string)) {
+                    sp_repr_set_double(repr, "inkscape:export-ydpi", ydpi);
+                    modified = TRUE;
+                }
+            }
+
+            if (modified) {
+                SPRepr * repr = sp_document_repr_root(doc);
+                sp_repr_set_attr(repr, "sodipodi:modified", "TRUE");
             }
 
             sp_document_set_undo_sensitive(doc, TRUE);
