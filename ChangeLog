@@ -1,3 +1,8 @@
+2004-12-03  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/dialogs/xml-tree.cpp (on_attr_select_row_set_value_content):
+	  Fix segfault: treat NULL as empty string for display purposes.
+
 2004-11-30  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/svg/svg.h, src/svg/sp-svg.def, src/svg/svg-length.cpp:

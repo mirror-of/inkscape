@@ -1161,6 +1161,9 @@ on_attr_select_row_set_value_content ( GtkCList *list, gint row, gint column,
     tb = gtk_text_view_get_buffer (GTK_TEXT_VIEW (data));
     name = g_quark_to_string (sp_xmlview_attr_list_get_row_key (list, row));
     value = sp_repr_attr (selected_repr, name);
+    if (!value) {
+        value = "";
+    }
     gtk_text_buffer_set_text (tb, value, strlen (value));
 }
 
