@@ -1,5 +1,13 @@
 2004-12-07  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/style.h, src/style.cpp: Support all `display' values
+	  required by SVG 1.1.  (No functional change, insofar as the new
+	  values all have the same behaviour as our existing `block' value
+	  in SVG.)	
+	* src/sp-item.cpp, src/style.cpp: Use `inline' (SP_CSS_DISPLAY_INLINE)
+	  rather than `block' as our generic display value meaning `don't hide
+	  this', as per spec.
+
 	* src/style.cpp: Prefer to write lr-tb etc. rather than the
 	  abbreviations lr etc.  (Also add comment saying why.)
 

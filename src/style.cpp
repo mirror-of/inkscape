@@ -271,11 +271,26 @@ static SPStyleEnum const enum_visibility[] = {
 };
 
 static SPStyleEnum const enum_display[] = {
-    {"block", SP_CSS_DISPLAY_BLOCK},
-    {"none", SP_CSS_DISPLAY_NONE},
+    {"none",      SP_CSS_DISPLAY_NONE},
+    {"inline",    SP_CSS_DISPLAY_INLINE},
+    {"block",     SP_CSS_DISPLAY_BLOCK},
+    {"list-item", SP_CSS_DISPLAY_LIST_ITEM},
+    {"run-in",    SP_CSS_DISPLAY_RUN_IN},
+    {"compact",   SP_CSS_DISPLAY_COMPACT},
+    {"marker",    SP_CSS_DISPLAY_MARKER},
+    {"table",     SP_CSS_DISPLAY_TABLE},
+    {"inline-table",  SP_CSS_DISPLAY_INLINE_TABLE},
+    {"table-row-group",    SP_CSS_DISPLAY_TABLE_ROW_GROUP},
+    {"table-header-group", SP_CSS_DISPLAY_TABLE_HEADER_GROUP},
+    {"table-footer-group", SP_CSS_DISPLAY_TABLE_FOOTER_GROUP},
+    {"table-row",     SP_CSS_DISPLAY_TABLE_ROW},
+    {"table-column-group", SP_CSS_DISPLAY_TABLE_COLUMN_GROUP},
+    {"table-column",  SP_CSS_DISPLAY_TABLE_COLUMN},
+    {"table-cell",    SP_CSS_DISPLAY_TABLE_CELL},
+    {"table-caption", SP_CSS_DISPLAY_TABLE_CAPTION},
     {NULL, -1}
 };
-    
+
 
 /**
  *
@@ -1494,7 +1509,7 @@ sp_style_clear (SPStyle *style)
     style->visibility.set = FALSE;
     style->visibility.value = style->visibility.computed = SP_CSS_VISIBILITY_VISIBLE;
     style->display.set = FALSE;
-    style->display.value = style->display.computed = SP_CSS_DISPLAY_BLOCK;
+    style->display.value = style->display.computed = SP_CSS_DISPLAY_INLINE;
 
     style->color.type = SP_PAINT_TYPE_COLOR;
     sp_color_set_rgb_float (&style->color.value.color, 0.0, 0.0, 0.0);

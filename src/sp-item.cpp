@@ -174,7 +174,7 @@ bool SPItem::isHidden() const {
 
 void SPItem::setHidden(bool hide) {
     style->display.set = TRUE;
-    style->display.value = ( hide ? SP_CSS_DISPLAY_NONE : SP_CSS_DISPLAY_BLOCK );
+    style->display.value = ( hide ? SP_CSS_DISPLAY_NONE : SP_CSS_DISPLAY_INLINE );
     style->display.computed = style->display.value;
     style->display.inherit = FALSE;
     updateRepr();
@@ -211,7 +211,7 @@ SPItem::isExplicitlyHidden() const
 void
 SPItem::setExplicitlyHidden(bool const val) {
     this->style->display.set = val;
-    this->style->display.value = ( val ? SP_CSS_DISPLAY_NONE : SP_CSS_DISPLAY_BLOCK );
+    this->style->display.value = ( val ? SP_CSS_DISPLAY_NONE : SP_CSS_DISPLAY_INLINE );
     this->style->display.computed = this->style->display.value;
     this->updateRepr();
 }
