@@ -34,6 +34,7 @@
 #include "sp-item.h"
 #include "enums.h"
 #include "prefs-utils.h"
+#include "style.h"
 #include "sp-use.h"
 #include "sp-use-reference.h"
 
@@ -623,6 +624,22 @@ sp_use_unlink(SPUse *use)
     // add the duplicate repr just after the existing one
     sp_repr_add_child(parent, copy, repr);
 
+    // retrieve the SPItem of the resulting repr
+    SPObject *unlinked = document->getObjectByRepr(copy);
+
+    // merge style from the use
+    SPStyle *unli_sty = SP_OBJECT_STYLE (unlinked);
+    SPStyle *use_sty = SP_OBJECT_STYLE (use);
+    sp_style_merge_from_parent (unli_sty, use_sty);
+    // special case for opacity: it is not inherited per the spec, but since use's opacity affected
+    // its display, we must not lose it after unlinking
+    unli_sty->opacity.value = SP_SCALE24_FROM_FLOAT (
+        SP_SCALE24_TO_FLOAT (unli_sty->opacity.value) * SP_SCALE24_TO_FLOAT (use_sty->opacity.value));
+    if (unli_sty->opacity.value != SP_SCALE24_MAX) {
+        unli_sty->opacity.set = TRUE;
+    }
+    SP_OBJECT (unlinked)->updateRepr();
+
     // hold onto our SPObject and repr for now
     sp_object_ref(SP_OBJECT(use), NULL);
     sp_repr_ref(repr);
@@ -642,8 +659,6 @@ sp_use_unlink(SPUse *use)
     sp_repr_set_attr(copy, "inkscape:tile-cx", NULL);
     sp_repr_set_attr(copy, "inkscape:tile-cy", NULL);
 
-    // retrieve the SPItem of the resulting repr
-    SPObject *unlinked = document->getObjectByRepr(copy);
     // establish the succession and let go of our object
     SP_OBJECT(use)->setSuccessor(unlinked);
     sp_object_unref(SP_OBJECT(use), NULL);
