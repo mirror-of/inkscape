@@ -1693,7 +1693,7 @@ sp_selection_tile(bool apply)
 
     // check if something is selected
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to tile."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to convert to pattern."));
         return;
     }
 
@@ -1779,7 +1779,7 @@ sp_selection_untile()
 
     // check if something is selected
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select an <b>object with pattern fill</b> to untile."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select an <b>object with pattern fill</b> to extract objects from."));
         return;
     }
 
@@ -1832,7 +1832,7 @@ sp_selection_untile()
     }
 
     if (!did) {
-        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No pattern fills</b> to untile in the selection."));
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No pattern fills</b> in the selection."));
     } else {
         sp_document_done(SP_DT_DOCUMENT(desktop));
         selection->setItemList (new_select);
