@@ -301,6 +301,7 @@ void SPObject::_sendDeleteSignalRecursive() {
 
 void SPObject::deleteObject(bool propagate, bool propagate_descendants)
 {
+	sp_object_ref(this, NULL);
 	if (propagate) {
 		_delete_signal.emit(this);
 	}
@@ -316,6 +317,7 @@ void SPObject::deleteObject(bool propagate, bool propagate_descendants)
 	if (_successor) {
 		_successor->deleteObject(propagate, propagate_descendants);
 	}
+	sp_object_unref(this, NULL);
 }
 
 /*
