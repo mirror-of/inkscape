@@ -515,7 +515,9 @@ static void sp_stroke_style_line_update_repr (SPWidget *spw, SPRepr *repr);
 
 static void sp_stroke_style_set_join_buttons (SPWidget *spw, GtkWidget *active);
 static void sp_stroke_style_set_cap_buttons (SPWidget *spw, GtkWidget *active);
+#ifdef MARKERS
 static void sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active);
+#endif
 static void sp_stroke_style_width_changed (GtkAdjustment *adj, SPWidget *spw);
 static void sp_stroke_style_any_toggled (GtkToggleButton *tb, SPWidget *spw);
 static void sp_stroke_style_line_dash_changed (SPDashSelector *dsel, SPWidget *spw);
@@ -1312,6 +1314,7 @@ sp_stroke_style_set_cap_buttons (SPWidget *spw, GtkWidget *active)
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
 }
 
+#ifdef MARKERS
 /**
  * Creates a set of marker buttons.  This routine creates togglebuttons for the
  * line markers.  Currently it provides just three options - none, filled or
@@ -1340,4 +1343,4 @@ sp_stroke_style_set_marker_buttons (SPWidget *spw, GtkWidget *active)
   g_assert(tb != NULL);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (tb), (active == tb));
 }
-
+#endif
