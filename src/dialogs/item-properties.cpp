@@ -166,7 +166,7 @@ sp_item_widget_new (void)
     gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
     gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
 
-    a = gtk_adjustment_new (1.0, 0.0, 1.0, 0.01, 0.01, 0.01);
+    a = gtk_adjustment_new (1.0, 0.0, 1.0, 0.01, 0.01, 0.0);
 
     s = gtk_hscale_new (GTK_ADJUSTMENT (a));
     gtk_scale_set_draw_value (GTK_SCALE (s), FALSE);
