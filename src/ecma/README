@@ -1,0 +1,65 @@
+//#########################################################################
+//# $Id$
+//#########################################################################
+
+
+README file for EcmaScript DOM binding on SVG.
+==============================================
+
+
+Purpose
+=======
+
+This is the beginning of what might be a long journey toward
+compliance with the World Wide Web Consortium (W3.org)'s
+specification for Scalable Vector Graphics (SVG):
+
+    http://www.w3.org/TR/SVG11/
+
+with regards to binding ECMAScript:
+
+    http://www.ecma-international.org/publications/standards/Ecma-262.htm
+
+as defined in this specification:
+
+    http://www.w3.org/TR/SVG11/ecmascript-binding.html
+
+
+ECMAScript had its origins in Netscape Corporation's Javascript script
+language and interpreter, first designed and implemented by Brendan Eich.
+In our effort to move toward a full binding between ECMAScript and the SVG
+tree, it is fortuitous that the Mozilla Organization (Mozilla.org) provides
+this same Javascript engine for use by projects just like ours.
+
+
+About these files
+=================
+
+This directory is a set of utility classes that provides an ECMAScript
+window to the SVG tree.  It uses the Mozilla.org 'Spidermonkey' C
+JavaScript engine as its ECMA implementation.  Information for this
+fine project can be found here:
+
+    http://www.mozilla.org/js/spidermonkey
+
+
+Our copy of their code, with makefiles conforming to our build architecture,
+is at:
+
+    $PROJECT_ROOT/inkscape/src/extension/script/js
+
+Mozilla.org's license for these files is at:
+
+http://www.mozilla.org/MPL/license-policy.html
+
+...which describes their tri-license scheme, allowing developers to use
+one of:  the Mozilla Public License (MPL), the Gnu Public License (GPL)
+and the Limited Gnu Public License (LGPL).   Since we do not intend to
+modify Mozilla's source code in any fashion, we wish to use their library
+under the LGPL.  Many thanks to Mozilla.org for their generosity.
+
+
+
+==============
+
+More information will be provided here as it becomes available.

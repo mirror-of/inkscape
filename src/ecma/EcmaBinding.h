@@ -4,15 +4,7 @@
 /*
  * Provide the binding of ECMAScript to the SVG Tree
  *
- * This is a set of utility classes that provides an ECMAScript 'window' to the
- * SVG tree.  It uses the Mozilla.org 'Spidermonkey' C JavaScript engine
- * as its ECMA implementation.  Information for this fine project can
- * be found here:
- *     http://www.mozilla.org/js/spidermonkey
- *
- * Our copy of their code, with makefiles conforming to our architecture,
- * is at:
- *     $PROJECT_ROOT/inkscape/src/extension/script/js
+ * See the README file in this directory for more information.
  *
  * Authors:
  *   Bob Jamison <rjamison@titan.com>

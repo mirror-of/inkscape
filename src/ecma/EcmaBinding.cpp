@@ -123,8 +123,9 @@ EcmaScript::~EcmaScript()
 /**
  * Constructor.
  *
- * @param owner The object on whose behalf this URIReference
- *              is holding a reference to the target object.
+ * @param theParent.  The Inkscape application who owns this EcmaBinding
+ * engine.
+ *
  */
 EcmaBinding::EcmaBinding(Inkscape::Application *theParent) throw (EcmaException)
 {
