@@ -1,9 +1,12 @@
 2004-04-11  Kees Cook <kees@outflux.net>
 
 	* src/verbs.h, src/verbs.cpp, src/interface.cpp, src/interface.h: replaced
-	  the rest of the missing menu verbs: "View New", "Cleanup".
+	  the rest of the missing menu verbs: "View New", "Cleanup".  Created
+	  generic function to add icons to a given menu item (for submenu icons
+	  mostly).
 	* share/icons/icons.svg: added "selection_cleanup", "selection_deselect",
-	  "selection_select_all".  Corrected "view_new" and "selection_smooth".
+	  "selection_select_all".  Corrected "view_new" and "selection_smooth",
+	  "dialog_toggle", "dialog_tool_options", "file_open_recent".
 	* src/selection-chemistry.cpp, src/selection-chemistry.h: renamed
 	  "selection_cleanup" function.
 

@@ -211,6 +211,21 @@ sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view)
 }
 
 
+/**
+ * sp_ui_menuitem_add_icon
+ *
+ * Creates and attaches a scaled icon to the given menu item.
+ *
+ */
+void
+sp_ui_menuitem_add_icon ( GtkWidget *item, gchar * icon_name )
+{
+    GtkWidget *icon;
+
+    icon = sp_icon_new_scaled (16, icon_name);
+    gtk_widget_show (icon);
+    gtk_image_menu_item_set_image ((GtkImageMenuItem *) item, icon);
+} // end of sp_ui_menu_add_icon
 
 /**
  * sp_ui_menu_append_item
@@ -382,9 +397,7 @@ sp_ui_menu_append_item_from_verb (GtkMenu *menu, sp_verb_t verb, SPView *view)
             item = gtk_image_menu_item_new_with_mnemonic (action->name);
         }
         if (action->image) {
-            icon = sp_icon_new_scaled (16, action->image);
-            gtk_widget_show (icon);
-            gtk_image_menu_item_set_image ((GtkImageMenuItem *) item, icon);
+            sp_ui_menuitem_add_icon (item, action->image);
         }
         gtk_widget_set_events (item, GDK_KEY_PRESS_MASK);
         g_signal_connect ( G_OBJECT (item), "activate", 
@@ -444,6 +457,7 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
     sp_ui_menu_append (fm, file_verbs_one, view);
 
     item_recent = sp_ui_menu_append_item (fm, NULL, _("Open _Recent"), NULL, NULL);
+    sp_ui_menuitem_add_icon (item_recent, "file_open_recent");
     menu_recent = gtk_menu_new ();
     sp_menu_append_recent_documents (GTK_WIDGET (menu_recent));
     gtk_menu_item_set_submenu (GTK_MENU_ITEM (item_recent), menu_recent);
@@ -670,13 +684,9 @@ sp_ui_help_menu (GtkMenu *fm, SPDocument *doc, SPView *view)
      */
     item_tutorials = sp_ui_menu_append_item (fm, NULL, _("_Tutorials"), NULL, NULL);
     /* should sp_ui_menu_append_item be modified to take an image name? */
-    GtkWidget * icon = sp_icon_new_scaled (16, "help_tutorials");
-    gtk_widget_show (icon);
-    gtk_image_menu_item_set_image ((GtkImageMenuItem *) item_tutorials, icon);
+    sp_ui_menuitem_add_icon (item_tutorials, "help_tutorials");
     menu_tutorials = gtk_menu_new ();
-
     sp_ui_menu_append (GTK_MENU (menu_tutorials), tutorial_verbs, view);
-
     gtk_menu_item_set_submenu (GTK_MENU_ITEM (item_tutorials), menu_tutorials);
 
     sp_ui_menu_append (fm, help_verbs_two, view);
