@@ -865,6 +865,7 @@ LayerVerb::perform (SPAction *action, void *data, void *pdata)
         case SP_VERB_LAYER_NEW: {
             SPObject *layer=Inkscape::create_layer(dt->currentRoot(), dt->currentLayer());
             dt->setCurrentLayer(layer);
+            SP_DT_SELECTION(dt)->clear();
             dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("New layer created."));
             break;
         }
@@ -933,18 +934,19 @@ LayerVerb::perform (SPAction *action, void *data, void *pdata)
         }
         case SP_VERB_LAYER_DELETE: {
             if ( dt->currentLayer() != dt->currentRoot() ) {
-        SPObject *old_layer=dt->currentLayer();
+                SP_DT_SELECTION(dt)->clear();
+                SPObject *old_layer=dt->currentLayer();
 
-        sp_object_ref(old_layer, NULL);
-        SPObject *survivor=Inkscape::next_layer(dt->currentRoot(), old_layer);
-        if (!survivor) {
-            survivor = Inkscape::previous_layer(dt->currentRoot(), old_layer);
-        }
-        if (survivor) {
-            dt->setCurrentLayer(survivor);
-        }
-        old_layer->deleteObject();
-        sp_object_unref(old_layer, NULL);
+                sp_object_ref(old_layer, NULL);
+                SPObject *survivor=Inkscape::next_layer(dt->currentRoot(), old_layer);
+                if (!survivor) {
+                    survivor = Inkscape::previous_layer(dt->currentRoot(), old_layer);
+                }
+                if (survivor) {
+                    dt->setCurrentLayer(survivor);
+                }
+                old_layer->deleteObject();
+                sp_object_unref(old_layer, NULL);
 
                 dt->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Deleted layer."));
             } else {

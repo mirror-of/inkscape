@@ -1,6 +1,6 @@
 2004-10-29  MenTaLguY  <mental@rydia.net>
 
-	* src/widgets/layer-selector.cpp:
+	* src/widgets/layer-selector.cpp, src/verbs.cpp:
 	  unselect objects when layer is manually switched
 
 2004-10-28  Kees Cook  <kees@outflux.net>
