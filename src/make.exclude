@@ -30,9 +30,9 @@ bonobo/svg-doc-factory.h
 dialogs/filedialog.cpp
 display/nr-uta.cpp
 display/testnr.cpp
+display/bezier-utils-test.cpp
 extension/menu.h
 extension/menu.cpp
-helper/bezier-utils-test.cpp
 ink-snprintf.cpp
 inkview.cpp
 libnr/nr-matrix-test.cpp
