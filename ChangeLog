@@ -1,3 +1,12 @@
+2004-01-06  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* distro: Remove some bashisms: change `function f {...}' to
+	  `f () {...}', and invoke self with `sh' rather than `bash'.
+
+	  Also change a strange-looking "tr '  ' ' '" to "tr -s ' '", as
+	  a guess as to the intended meaning.  (The actual meaning of the
+	  original is a noop.)
+
 2004-01-06  bulia byak <bulia@dr.com>
 
         * src/document-undo.cpp src/document.h: Undo and redo now return gbooleans
