@@ -351,7 +351,22 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
         // respective pages.
         os << "%%Pages: 1\n";
 
-        pageLandscape = ( d.y1 - d.y0 < d.x1 - d.x0 );
+        // 2004 Dec 10, BFC:
+        // The point of the following code is (1) to do the thing that's expected by users
+        // who have done File>New>A4_landscape or ...letter_landscape (i.e., rotate
+        // the output), while (2) not messing up users who simply want their output wider
+        // than it is tall (e.g., small figures for inclusion in LaTeX).
+        // The original patch by WQ only had the w>h condition.
+        {
+             double w = fabs (d.x1 - d.x0); // width and height of bounding box, in points
+             double h = fabs (d.y1 - d.y0);
+             pageLandscape = (
+                 ((int) w > 0 && (int) h > 0) // empty documents fail this sanity check
+                 && (w > h)   // implies, but does not prove, the user wanted landscape
+                 && (w > 600) // approximate maximum printable width of an A4
+             )
+             ? true : false;
+        }
 
         if (pageLandscape) {
             os << "%%Orientation: Landscape\n";
