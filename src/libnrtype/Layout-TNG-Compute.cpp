@@ -130,7 +130,7 @@ class Layout::Calculator
         double line_height_multiplier;  /// calculated from the font-height css property
         unsigned text_bytes;
         unsigned char_index_in_para;    /// the index of the first character in this span in the paragraph, for looking up char_attributes
-        // these are copies of the <tspan> attributes. We change our spans when we encounter one.
+        // these are reoriented copies of the <tspan> attributes. We change our spans when we encounter one.
         SPSVGLength x, y, dx, dy, rotate;
     };
 
@@ -245,7 +245,7 @@ class Layout::Calculator
                                 Layout::InputStreamTextSource *text_source = static_cast<Layout::InputStreamTextSource *>(_flow._input_stream[sub_input_index]);
                                 sub_flow->appendText(*text_source->text, text_source->style, text_source->source_cookie, NULL, 0, text_source->text_begin, text_source->text_end);
                                 Layout::InputStreamTextSource *sub_flow_text_source = static_cast<Layout::InputStreamTextSource *>(sub_flow->_input_stream.back());
-                                sub_flow_text_source->x = text_source->x;    // this is easier than going back to GLists for the appendText() call
+                                sub_flow_text_source->x = text_source->x;    // this is easier than going via optionalattrs for the appendText() call
                                 sub_flow_text_source->y = text_source->y;    // should these actually be allowed anyway? You'll almost never get the results you expect
                                 sub_flow_text_source->dx = text_source->dx;  // (not that it's very clear what you should expect, anyway)
                                 sub_flow_text_source->dy = text_source->dy;
@@ -446,10 +446,17 @@ class Layout::Calculator
                     new_span.dx.set = false;
                     new_span.dy.set = false;
                     new_span.rotate.set = false;
-                    if (text_source->x.size()  > char_index_in_source)     new_span.x  = text_source->x[char_index_in_source];
-                    if (text_source->y.size()  > char_index_in_source)     new_span.y  = text_source->y[char_index_in_source];
-                    if (text_source->dx.size() > char_index_in_source)     new_span.dx = text_source->dx[char_index_in_source];
-                    if (text_source->dy.size() > char_index_in_source)     new_span.dy = text_source->dy[char_index_in_source];
+                    if (_block_progression == TOP_TO_BOTTOM || _block_progression == BOTTOM_TO_TOP) {
+                        if (text_source->x.size()  > char_index_in_source)     new_span.x  = text_source->x[char_index_in_source];
+                        if (text_source->y.size()  > char_index_in_source)     new_span.y  = text_source->y[char_index_in_source];
+                        if (text_source->dx.size() > char_index_in_source)     new_span.dx = text_source->dx[char_index_in_source];
+                        if (text_source->dy.size() > char_index_in_source)     new_span.dy = text_source->dy[char_index_in_source];
+                    } else {
+                        if (text_source->x.size()  > char_index_in_source)     new_span.y  = text_source->x[char_index_in_source];
+                        if (text_source->y.size()  > char_index_in_source)     new_span.x  = text_source->y[char_index_in_source];
+                        if (text_source->dx.size() > char_index_in_source)     new_span.dy = text_source->dx[char_index_in_source];
+                        if (text_source->dy.size() > char_index_in_source)     new_span.dx = text_source->dy[char_index_in_source];
+                    }
                     if (text_source->rotate.size() > char_index_in_source) new_span.rotate = text_source->rotate[char_index_in_source];
                     Glib::ustring::const_iterator iter_text = new_span.input_stream_first_character;
                     iter_text++;
@@ -581,8 +588,6 @@ class Layout::Calculator
 
         for (unsigned chunk_index = 0; chunk_index < chunk_info.size() - 1 ; chunk_index++) {
 
-            float glyph_rotate = 0.0;
-
             // add the chunk to the list
             Layout::Chunk new_chunk;
             new_chunk.in_line = _flow._lines.size() - 1;
@@ -604,25 +609,16 @@ class Layout::Calculator
 
                 // if we're not wrapping then we will usually also have move orders
                 if (chunk_info[chunk_index].start_pos != chunk_info.back().start_pos) {
-                    SPSVGLength const *reoriented_y = &chunk_info[chunk_index].start_pos.iter_span->y;
-                    SPSVGLength const *reoriented_dy = &chunk_info[chunk_index].start_pos.iter_span->dy;
-                    if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT) {
-                        reoriented_y = &chunk_info[chunk_index].start_pos.iter_span->x;
-                        reoriented_dy = &chunk_info[chunk_index].start_pos.iter_span->dx;
-                    }
-                    if (reoriented_y->set) {
+                    if (chunk_info[chunk_index].start_pos.iter_span->y.set) {
                         // if this is the start of a line, we should change the baseline rather than each glyph individually
                         if (_flow._characters.empty() || _flow._characters.back().chunk(&_flow).in_line != _flow._lines.size() - 1) {
-                            new_line.baseline_y = reoriented_y->computed;
-                            _flow._lines.back().baseline_y = reoriented_y->computed;
+                            new_line.baseline_y = chunk_info[chunk_index].start_pos.iter_span->y.computed;
+                            _flow._lines.back().baseline_y = chunk_info[chunk_index].start_pos.iter_span->y.computed;
                             _y_offset = 0.0;
-                            _scanline_maker->setNewYCoordinate(reoriented_y->computed - _line.line_height.ascent);
+                            _scanline_maker->setNewYCoordinate(chunk_info[chunk_index].start_pos.iter_span->y.computed - _line.line_height.ascent);
                         } else
-                            _y_offset = reoriented_y->computed - new_line.baseline_y;
+                            _y_offset = chunk_info[chunk_index].start_pos.iter_span->y.computed - new_line.baseline_y;
                     }
-                    if (reoriented_dy->set) _y_offset += reoriented_dy->computed;
-                    if (chunk_info[chunk_index].start_pos.iter_span->rotate.set)
-                        glyph_rotate = chunk_info[chunk_index].start_pos.iter_span->rotate.computed;
                 }
 
             } else {   // back to the alignment adjustment stuff: we are using wrapping this time
@@ -644,7 +640,6 @@ class Layout::Calculator
                         break;
                 }
             }
-            new_chunk.baseline_shift = _y_offset;
             _flow._chunks.push_back(new_chunk);
             // if the chunk doesn't contain any text we just added a chunk with no spans
             // this is necessary for line breaks, which get added to the chunk at the bottom of Calculate(),
@@ -677,6 +672,15 @@ class Layout::Calculator
                 if (iter_span == chunk_info[chunk_index+1].start_pos.iter_span && chunk_info[chunk_index+1].start_pos.char_byte == 0)
                     break;
 
+                float glyph_rotate = 0.0;
+
+                if (iter_span != chunk_info[chunk_index].start_pos.iter_span || chunk_info[chunk_index].start_pos.char_byte == 0) {
+                    // start of a span, we might have dx, dy or rotate still to process (x and y are done per chunk)
+                    if (iter_span->dx.set) x += iter_span->dx.computed;
+                    if (iter_span->dy.set) _y_offset += iter_span->dy.computed;
+                    if (iter_span->rotate.set) glyph_rotate = iter_span->rotate.computed;
+                }
+
                 if (_flow._input_stream[iter_span->input_index]->Type() == TEXT_SOURCE && iter_span->pango_item_index == -1) {
                     // style only, nothing to output
                     continue;
@@ -690,6 +694,7 @@ class Layout::Calculator
                 new_span.line_height = iter_span->line_height;      // except for orthogonal block-progression, done below
                 new_span.in_input_stream_item = iter_span->input_index;
                 new_span.x_start = x;
+                new_span.baseline_shift = _y_offset;
                 if (_flow._input_stream[iter_span->input_index]->Type() == TEXT_SOURCE && iter_span->pango_item_index != -1) {
                     InputStreamTextSource const *text_source = static_cast<InputStreamTextSource const *>(_flow._input_stream[iter_span->input_index]);
 
@@ -886,25 +891,18 @@ class Layout::Calculator
         TRACE("trying chunk from %f to %g", scan_run.x_start, scan_run.x_end);
         for ( ; current_pos.start_pos.iter_span != _para.spans.end() ; ) {
 
-            // force a chunk change at attribute change
-            if (   current_pos.start_pos.iter_span->x.set || current_pos.start_pos.iter_span->y.set
-                || current_pos.start_pos.iter_span->dx.set || current_pos.start_pos.iter_span->dy.set
-                || current_pos.start_pos.iter_span->rotate.set) {
-
+            // force a chunk change at x or y attribute change
+            if (current_pos.start_pos.iter_span->x.set || current_pos.start_pos.iter_span->y.set) {
                 if (current_pos.start_pos.iter_span != start_span_pos->iter_span) {
                     last_break_pos = current_pos;
                     break;
                 }
-
                 // beginning of the current chunk, use the applied x attributes
-                SPSVGLength const *reoriented_x = &current_pos.start_pos.iter_span->x;
-                SPSVGLength const *reoriented_dx = &current_pos.start_pos.iter_span->dx;
                 if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT) {
-                    reoriented_x = &current_pos.start_pos.iter_span->y;
-                    reoriented_dx = &current_pos.start_pos.iter_span->dy;
+                    if (current_pos.start_pos.iter_span->y.set) chunk_info->x = current_pos.start_pos.iter_span->y.computed;
+                } else {
+                    if (current_pos.start_pos.iter_span->x.set) chunk_info->x = current_pos.start_pos.iter_span->x.computed;
                 }
-                if (reoriented_x->set) chunk_info->x = reoriented_x->computed;
-                if (reoriented_dx->set) chunk_info->x += reoriented_dx->computed;
             }
 
             width_at_last_span_start = current_pos.total_width;
@@ -1162,8 +1160,13 @@ public:
                         }
                     }
                     // else empty subsequent para, keep the old _line.line_height (wrong!)
-                } else
-                    _line.line_height = span_pos.iter_span->line_height;
+                } else {
+                    // large negative values that will be increased to the minimum height of the line
+                    // Zero won't do because we allow negative line heights
+                    _line.line_height.ascent = -1.0e10;
+                    _line.line_height.descent = -1.0e10;
+                    _line.line_height.leading = -1.0e10;
+                }
 
                 // keep trying to create a line until the line height stops changing
                 do {

@@ -178,8 +178,8 @@ Layout::iterator Layout::getNearestCursorPositionTo(double x, double y) const
         }
         if (   local_x >= _chunks[_spans[span_index].in_chunk].left_x + span_left
             && local_x <= _chunks[_spans[span_index].in_chunk].left_x + span_right
-            && local_y >= _spans[span_index].line(this).baseline_y + _spans[span_index].chunk(this).baseline_shift - _spans[span_index].line_height.ascent
-            && local_y <= _spans[span_index].line(this).baseline_y + _spans[span_index].chunk(this).baseline_shift + _spans[span_index].line_height.descent) {
+            && local_y >= _spans[span_index].line(this).baseline_y + _spans[span_index].baseline_shift - _spans[span_index].line_height.ascent
+            && local_y <= _spans[span_index].line(this).baseline_y + _spans[span_index].baseline_shift + _spans[span_index].line_height.descent) {
             return _cursorXOnLineToIterator(_chunks[_spans[span_index].in_chunk].in_line, local_x);
         }
     }
@@ -280,13 +280,13 @@ NR::Rect Layout::glyphBoundingBox(iterator const &it, double *rotation) const
 NR::Point Layout::characterAnchorPoint(iterator const &it) const
 {
     if (it._char_index == _characters.size()) {
-        return NR::Point(_chunks.back().left_x + _spans.back().x_end, _lines.back().baseline_y + _chunks.back().baseline_shift);
+        return NR::Point(_chunks.back().left_x + _spans.back().x_end, _lines.back().baseline_y + _spans.back().baseline_shift);
     } else {
         return NR::Point(_characters[it._char_index].chunk(this).left_x
                              + _spans[_characters[it._char_index].in_span].x_start
                              + _characters[it._char_index].x,
                          _characters[it._char_index].line(this).baseline_y
-                             + _characters[it._char_index].chunk(this).baseline_shift);
+                             + _characters[it._char_index].span(this).baseline_shift);
     }
 }
 
@@ -307,7 +307,7 @@ NR::Rect Layout::characterBoundingBox(iterator const &it, double *rotation) cons
             bottom_right[0] = span_x + _characters[it._char_index + 1].x;
     }
 
-    double baseline_y = _characters[char_index].line(this).baseline_y + _characters[char_index].chunk(this).baseline_shift;
+    double baseline_y = _characters[char_index].line(this).baseline_y + _characters[char_index].span(this).baseline_shift;
     top_left[1] = baseline_y + _spans[_characters[char_index].in_span].line_height.ascent;
     bottom_right[1] = baseline_y + _spans[_characters[char_index].in_span].line_height.descent;
 
@@ -391,8 +391,8 @@ void Layout::queryCursorShape(iterator const &it, NR::Point *position, double *h
             NR::Point tangent;
             const_cast<Path*>(_path_fitted)->PointAndTangentAt(path_parameter.piece, path_parameter.t, point, tangent);
             *rotation = atan2(tangent);
-            (*position)[0] = point[0] - tangent[1] * span->chunk(this).baseline_shift;
-            (*position)[1] = point[1] + tangent[0] * span->chunk(this).baseline_shift;
+            (*position)[0] = point[0] - tangent[1] * span->baseline_shift;
+            (*position)[1] = point[1] + tangent[0] * span->baseline_shift;
         } else {
             // text is not on a path
             if (it._char_index >= _characters.size()) {
@@ -409,7 +409,7 @@ void Layout::queryCursorShape(iterator const &it, NR::Point *position, double *h
                 if (it._char_index != 0 && _characters[it._char_index - 1].chunk(this).in_line == _chunks[span->in_chunk].in_line)
                     span = &_spans[_characters[it._char_index - 1].in_span];
             }
-            (*position)[1] = span->line(this).baseline_y + span->chunk(this).baseline_shift;
+            (*position)[1] = span->line(this).baseline_y + span->baseline_shift;
         }
         // up to now *position is the baseline point, not the final point which will be the bottom of the descent
         double caret_slope_run = 0.0, caret_slope_rise = 1.0;

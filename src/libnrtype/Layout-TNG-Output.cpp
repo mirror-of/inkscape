@@ -146,11 +146,11 @@ void Layout::print(SPPrintContext *ctx, NRRect const *pbox, NRRect const *dbox, 
             NR::Point g_pos(0,0);    // huh?
             glyph_matrix = NR::Matrix(NR::scale(1.0, -1.0) * NR::Matrix(NR::rotate(_glyphs[glyph_index].rotation)));
             if (block_progression == LEFT_TO_RIGHT || block_progression == RIGHT_TO_LEFT) {
-                glyph_matrix.c[4] = span.line(this).baseline_y + span.chunk(this).baseline_shift;
+                glyph_matrix.c[4] = span.line(this).baseline_y + span.baseline_shift;
                 glyph_matrix.c[5] = span.chunk(this).left_x + span.x_start + _characters[_glyphs[glyph_index].in_character].x;
             } else {
                 glyph_matrix.c[4] = span.chunk(this).left_x + span.x_start + _characters[_glyphs[glyph_index].in_character].x;
-                glyph_matrix.c[5] = span.line(this).baseline_y + span.chunk(this).baseline_shift;
+                glyph_matrix.c[5] = span.line(this).baseline_y + span.baseline_shift;
             }
             Glib::ustring::const_iterator span_iter = span.input_stream_first_character;
             unsigned char_index = _glyphs[glyph_index].in_character;
@@ -228,7 +228,7 @@ Glib::ustring Layout::dumpAsText() const
                                                                                _lines[_chunks[_spans[span_index].in_chunk].in_line].baseline_y,
                                                                                _lines[_chunks[_spans[span_index].in_chunk].in_line].in_shape);
         result += line;
-        snprintf(line, sizeof(line), "  in chunk %d (x=%f, baselineshift=%f)\n", _spans[span_index].in_chunk, _chunks[_spans[span_index].in_chunk].left_x, _chunks[_spans[span_index].in_chunk].baseline_shift);
+        snprintf(line, sizeof(line), "  in chunk %d (x=%f, baselineshift=%f)\n", _spans[span_index].in_chunk, _chunks[_spans[span_index].in_chunk].left_x, _spans[span_index].baseline_shift);
         result += line;
         if (_spans[span_index].font) {
             snprintf(line, sizeof(line), "    font '%s' %f %s %s\n", pango_font_description_get_family(_spans[span_index].font->descr), _spans[span_index].font_size, style_to_text(pango_font_description_get_style(_spans[span_index].font->descr)), weight_to_text(pango_font_description_get_weight(_spans[span_index].font->descr)));
@@ -304,8 +304,8 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
             const_cast<Path&>(path).PointAndTangentAt(midpoint_otp[0].piece, midpoint_otp[0].t, midpoint, tangent);
             double rotation = atan2(tangent[1], tangent[0]);
             for (int glyph_index = _characters[char_index].in_glyph ; glyph_index < next_char_glyph_index ; glyph_index++) {
-                _glyphs[glyph_index].x = midpoint[0] - _characters[char_index].chunk(this).left_x - tangent[0] * cluster_width * 0.5 - tangent[1] * _characters[char_index].chunk(this).baseline_shift;
-                _glyphs[glyph_index].y = midpoint[1] - _lines.front().baseline_y - tangent[1] * cluster_width * 0.5 + tangent[0] * _characters[char_index].chunk(this).baseline_shift;
+                _glyphs[glyph_index].x = midpoint[0] - _characters[char_index].chunk(this).left_x - tangent[0] * cluster_width * 0.5 - tangent[1] * _characters[char_index].span(this).baseline_shift;
+                _glyphs[glyph_index].y = midpoint[1] - _lines.front().baseline_y - tangent[1] * cluster_width * 0.5 + tangent[0] * _characters[char_index].span(this).baseline_shift;
                 _glyphs[glyph_index].rotation += rotation;
             }
         } else {  // outside the bounds of the path: hide the glyphs

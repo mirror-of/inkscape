@@ -605,6 +605,7 @@ private:
         float x_start;   /// relative to the start of the chunk
         float x_end;     /// relative to the start of the chunk
         LineHeight line_height;
+        double baseline_shift;  /// relative to the line's baseline
         Direction direction;     /// See CSS3 section 3.2. Either rtl or ltr
         Direction block_progression;  /// See CSS3 section 3.2. The direction in which lines go.
         unsigned in_input_stream_item;
@@ -616,7 +617,6 @@ private:
     struct Chunk {
         unsigned in_line;
         double left_x;
-        double baseline_shift;  /// relative to the line's baseline
     };
     struct Line {
         unsigned in_paragraph;
