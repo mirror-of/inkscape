@@ -175,45 +175,42 @@ sp_print_document (SPDocument *doc, unsigned int direct)
 void
 sp_print_document_to_file (SPDocument *doc, const gchar *filename)
 {
-#ifdef lalala
-#ifdef WITH_GNOME_PRINT
-        GnomePrintConfig *config;
-	SPPrintContext ctx;
-        GnomePrintContext *gpc;
-
-	config = gnome_print_config_default ();
-        if (!gnome_print_config_set (config, "Settings.Engine.Backend.Driver", "gnome-print-ps")) return;
-        if (!gnome_print_config_set (config, "Settings.Transport.Backend", "file")) return;
-        if (!gnome_print_config_set (config, GNOME_PRINT_KEY_OUTPUT_FILENAME, filename)) return;
+	Inkscape::Extension::Print *mod;
+	SPPrintContext context;
+	gchar * oldoutput;
+	unsigned int ret;
 
 	sp_document_ensure_up_to_date (doc);
 
-	gpc = gnome_print_context_new (config);
-	ctx.gpc = gpc;
+	mod = sp_module_system_get_print(SP_MODULE_KEY_PRINT_PS);
+	mod->get_param("destination", (gchar **)&oldoutput);
+	oldoutput = g_strdup(oldoutput);
+	mod->set_param("destination", (gchar *)filename);
 
-	g_return_if_fail (gpc != NULL);
-
+/* Start */
+	context.module = mod;
+	/* fixme: This has to go into module constructor somehow */
+	/* Create new arena */
+	mod->base = SP_ITEM (sp_document_root (doc));
+	mod->arena = (NRArena *) nr_object_new (NR_TYPE_ARENA);
+	mod->dkey = sp_item_display_key_new (1);
+	mod->root = sp_item_invoke_show (mod->base, mod->arena, mod->dkey, SP_ITEM_SHOW_PRINT);
 	/* Print document */
-	gnome_print_beginpage (gpc, SP_DOCUMENT_NAME (doc));
-	gnome_print_translate (gpc, 0.0, sp_document_height (doc));
-	/* From desktop points to document pixels */
-	gnome_print_scale (gpc, 0.8, -0.8);
-	sp_item_invoke_print (SP_ITEM (sp_document_root (doc)), &ctx);
-        gnome_print_showpage (gpc);
-        gnome_print_context_close (gpc);
-#else
-	SPPrintContext ctx;
+	ret = mod->begin (doc);
+	sp_item_invoke_print (mod->base, &context);
+	ret = mod->finish ();
+	/* Release arena */
+	sp_item_invoke_hide (mod->base, mod->dkey);
+	mod->base = NULL;
+	nr_arena_item_unref (mod->root);
+	mod->root = NULL;
+	nr_object_unref ((NRObject *) mod->arena);
+	mod->arena = NULL;
+/* end */
 
-	ctx.stream = fopen (filename, "w");
-	if (ctx.stream) {
-		sp_document_ensure_up_to_date (doc);
-		fprintf (ctx.stream, "%g %g translate\n", 0.0, sp_document_height (doc));
-		fprintf (ctx.stream, "0.8 -0.8 scale\n");
-		sp_item_invoke_print (SP_ITEM (sp_document_root (doc)), &ctx);
-		fprintf (ctx.stream, "showpage\n");
-		fclose (ctx.stream);
-	}
-#endif
-#endif
+	mod->set_param("destination", (gchar *)oldoutput);
+	g_free(oldoutput);
+
+	return;
 }
 

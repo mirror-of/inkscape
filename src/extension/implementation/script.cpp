@@ -122,6 +122,8 @@ Script::load (Inkscape::Extension::Extension * module)
 		return TRUE;
 	}
 
+	helper_extension = NULL;
+
 	/* This should probably check to find the executable... */
 	child_repr = sp_repr_children(module->get_repr());
 	while (child_repr != NULL) {
@@ -130,7 +132,9 @@ Script::load (Inkscape::Extension::Extension * module)
 			while (child_repr != NULL) {
 				if (!strcmp(sp_repr_name(child_repr), "command")) {
 					command_text = solve_reldir(child_repr);
-					break;
+				}
+				if (!strcmp(sp_repr_name(child_repr), "helper_extension")) {
+					helper_extension = g_strdup(sp_repr_content(sp_repr_children(child_repr)));
 				}
 				child_repr = sp_repr_next(child_repr);
 			}
@@ -144,6 +148,11 @@ Script::load (Inkscape::Extension::Extension * module)
 
 	g_free(command);
 	command = command_text;
+
+	if (helper_extension != NULL) {
+		g_free(helper_extension);
+		helper_extension = NULL;
+	}
 
 	return TRUE;
 }
@@ -160,6 +169,7 @@ void
 Script::unload (Inkscape::Extension::Extension * module)
 {
 	g_free(command);
+	g_free(helper_extension);
 	return;
 }
 
@@ -254,7 +264,12 @@ Script::open (Inkscape::Extension::Input * module, const gchar * filename)
 
 	execute(command, (gchar *)filename, (gchar *)tempfilename_out);
 
-	mydoc = sp_module_system_open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
+	if (helper_extension == NULL) {
+		mydoc = sp_module_system_open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
+	} else {
+		mydoc = sp_module_system_open(Inkscape::Extension::db.get(helper_extension), tempfilename_out);
+	}
+
 	sp_document_set_uri(mydoc, (const gchar *)filename);
 
 	unlink((char *)tempfilename_out);
@@ -310,7 +325,11 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
 		}
 	}
 
-	sp_module_system_save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE), doc, tempfilename_in);
+	if (helper_extension == NULL) {
+		sp_module_system_save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE), doc, tempfilename_in);
+	} else {
+		sp_module_system_save(Inkscape::Extension::db.get(helper_extension), doc, tempfilename_in);
+	}
 
 	execute(command, (gchar *)tempfilename_in, (gchar *)filename);
 

@@ -1,0 +1,66 @@
+/*
+ * A quick hack to use the print output to write out a file.  This
+ * then makes 'save as...' Postscript.
+ *
+ * Authors:
+ *   Ted Gould <ted@gould.cx>
+ *
+ * Copyright (C) 2004 Authors
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
+#include "ps-out.h"
+#include <print.h>
+#include <extension/system.h>
+
+namespace Inkscape {
+namespace Extension {
+namespace Internal {
+
+/**
+    \brief  This function calls the print system with the filename
+	\param  mod   unused
+	\param  doc   Document to be saved
+    \param  uri   Filename to save to (probably will end in .ps)
+
+	The most interesting thing that this function does is just attach
+	an '>' on the front of the filename.  This is the syntax used to
+	tell the printing system to save to file.
+*/
+void
+PsOutput::save (Inkscape::Extension::Output *mod, SPDocument *doc, const gchar *uri)
+{
+	gchar * final_name;
+	final_name = g_strdup_printf("> %s", uri);
+	sp_print_document_to_file(doc, final_name);
+	g_free(final_name);
+	return;
+}
+
+/**
+	\brief   A function allocate a copy of this function.
+
+	This is the definition of postscript out.  This function just
+	calls the extension system with the memory allocated XML that
+	describes the data.
+*/
+void
+PsOutput::init (void)
+{
+    sp_module_system_build_from_mem(
+		"<spmodule>\n"
+			"<name>Postscript Output</name>\n"
+			"<id>module.output.ps</id>\n"
+			"<output>\n"
+				"<extension>.ps</extension>\n"
+				"<mimetype>image/x-postscript</mimetype>\n"
+				"<filetypename>Postscript (*.ps)</filetypename>\n"
+				"<filetypetooltip>Postscript File</filetypetooltip>\n"
+			"</output>\n"
+		"</spmodule>", new PsOutput());
+
+	return;
+}
+
+};};}; /* namespace Inkscape, Extension, Implementation */

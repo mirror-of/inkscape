@@ -22,6 +22,7 @@ noinst_LIBRARIES = libinternal.a
 libinternal_a_SOURCES = \
 		svg.h svg.cpp \
 		ps.h ps.cpp \
+		ps-out.h ps-out.cpp \
 		$(gnome_print_sources)
 
 EXTRA_DIST = \

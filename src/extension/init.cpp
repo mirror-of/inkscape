@@ -30,6 +30,7 @@
 #ifdef WIN32
 #include "internal/win32.h"
 #endif
+#include "internal/ps-out.h"
 
 /** This is the extention that all files are that are pulled from
     the extension directory and parsed */
@@ -53,6 +54,7 @@ sp_modules_init (void)
 {
 	/* TODO: Change to Internal */
 	Inkscape::Extension::Internal::Svg::init();
+	Inkscape::Extension::Internal::PsOutput::init();
 	Inkscape::Extension::Internal::PrintPS::init();
 #ifdef WITH_GNOME_PRINT
 	Inkscape::Extension::Internal::PrintGNOME::init();

@@ -24,6 +24,10 @@ private:
     gchar *       command;     /**< The command that has been dirived from
                                     the configuration file with appropriate
                                     directories */
+    gchar *       helper_extension;
+                               /**< This is the extension that will be used
+                                    as the helper to read in or write out the
+                                    data */
     /** This function actually does the work, everything else is preparing
         for this function.  It is the core here */
     void          execute      (const gchar * command,

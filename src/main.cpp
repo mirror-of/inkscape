@@ -337,6 +337,8 @@ sp_main_console (int argc, const char **argv)
 	gdk_init (&argc, (char ***) &argv);
 #endif
 
+	sp_modules_init();
+
 	/* We must set LC_NUMERIC to default, or otherwise */
 	/* we'll end with localised SVG files :-( */
 
@@ -361,6 +363,7 @@ sp_main_console (int argc, const char **argv)
 	/* Check for and set up printing path */
 	printer = NULL;
 	if (sp_global_printer != NULL) {
+#if 0
 		if ((sp_global_printer[0] != '|') && (sp_global_printer[0] != '/')) {
 			gchar *cwd;
 			/* Gnome-print appends relative paths to $HOME by default */
@@ -370,6 +373,9 @@ sp_main_console (int argc, const char **argv)
 		} else {
 			printer = g_strdup (sp_global_printer);
 		}
+#else
+		printer = g_strdup (sp_global_printer);
+#endif
 	}
 
 	/* Start up g type system, without requiring X */

@@ -201,7 +201,7 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 	if (response == GTK_RESPONSE_OK) {
 		const gchar *fn;
 		const char *sstr;
-		FILE *osf, *osp;
+
 		_bitmap = gtk_toggle_button_get_active ((GtkToggleButton *) rb);
 		sstr = gtk_entry_get_text (GTK_ENTRY (GTK_COMBO (combo)->entry));
 		_dpi = (unsigned int) MAX ((int)(atof (sstr)), 1);
@@ -212,43 +212,7 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 		mod->set_param("bitmap", (_bitmap) ? (bool)TRUE : (bool)FALSE);
 		mod->set_param("resolution", (gchar *)sstr);
 		mod->set_param("destination", (gchar *)fn);
-
-		osf = NULL;
-		osp = NULL;
-		if (fn) {
-			if (*fn == '|') {
-				fn += 1;
-				while (isspace (*fn)) fn += 1;
-#ifndef WIN32
-				osp = popen (fn, "w");
-#else
-				osp = _popen (fn, "w");
-#endif
-				_stream = osp;
-			} else if (*fn == '>') {
-				fn += 1;
-				while (isspace (*fn)) fn += 1;
-				osf = fopen (fn, "w+");
-				_stream = osf;
-			} else {
-				gchar *qn;
-				qn = g_strdup_printf ("lpr -P %s", fn);
-#ifndef WIN32
-				osp = popen (qn, "w");
-#else
-				osp = _popen (qn, "w");
-#endif
-				g_free (qn);
-				_stream = osp;
-			}
-		}
-		if (_stream) {
-			/* fixme: this is kinda icky */
-#if !defined(_WIN32) && !defined(__WIN32__)
-			(void) signal(SIGPIPE, SIG_IGN);
-#endif
-			ret = TRUE;
-		}
+		ret = TRUE;
 	}
 
 	gtk_widget_destroy (dlg);
@@ -260,6 +224,49 @@ unsigned int
 PrintPS::begin (Inkscape::Extension::Print *mod, SPDocument *doc)
 {
 	int res;
+	FILE *osf, *osp;
+	gchar * fn;
+
+	mod->get_param("destination", (gchar **)&fn);
+
+	osf = NULL;
+	osp = NULL;
+
+	if (fn != NULL) {
+		if (*fn == '|') {
+			fn += 1;
+			while (isspace (*fn)) fn += 1;
+#ifndef WIN32
+			osp = popen (fn, "w");
+#else
+			osp = _popen (fn, "w");
+#endif
+			_stream = osp;
+		} else if (*fn == '>') {
+			fn += 1;
+			while (isspace (*fn)) fn += 1;
+			osf = fopen (fn, "w+");
+			_stream = osf;
+		} else {
+			gchar *qn;
+			/* put cwd stuff in here */
+			qn = g_strdup_printf ("lpr -P %s", fn);
+#ifndef WIN32
+			osp = popen (qn, "w");
+#else
+			osp = _popen (qn, "w");
+#endif
+			g_free (qn);
+			_stream = osp;
+		}
+	}
+
+	if (_stream) {
+		/* fixme: this is kinda icky */
+#if !defined(_WIN32) && !defined(__WIN32__)
+		(void) signal(SIGPIPE, SIG_IGN);
+#endif
+	}
 
 	res = fprintf (_stream, "%%!PS-Adobe-2.0\n");
 	/* flush this to test output stream as early as possible */

@@ -9,5 +9,6 @@
     </output>
     <extension>
         <command reldir="path">gzip -c</command>
+		<helper_extension>module.output.SVG.sodipodi</helper_extension>
     </extension>
 </spmodule>
