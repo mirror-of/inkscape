@@ -3,65 +3,77 @@
 #include <string.h>
 
 int
-parse_name_for_weight (char const *c)
+parse_name_for_weight (char const *cc)
 {
-	gint weight;
+	gchar *c = g_strdup(cc);
+	for (char *p = c ; *p != '\0' ; ++p) {
+		*p = g_ascii_tolower(*p);
+	}
 
-	if (strcasestr (c, "thin")) {
+	gint weight;
+	if (strstr (c, "thin")) {
 		weight = NR_POS_WEIGHT_THIN;
-	} else if (strcasestr (c, "extra light")) {
+	} else if (strstr (c, "extra light")) {
 		weight = NR_POS_WEIGHT_EXTRA_LIGHT;
-	} else if (strcasestr (c, "ultra light")) {
+	} else if (strstr (c, "ultra light")) {
 		weight = NR_POS_WEIGHT_ULTRA_LIGHT;
-	} else if (strcasestr (c, "light")) {
+	} else if (strstr (c, "light")) {
 		weight = NR_POS_WEIGHT_LIGHT;
-	} else if (strcasestr (c, "book")) {
+	} else if (strstr (c, "book")) {
 		weight = NR_POS_WEIGHT_BOOK;
-	} else if (strcasestr (c, "medium")) {
+	} else if (strstr (c, "medium")) {
 		weight = NR_POS_WEIGHT_MEDIUM;
-	} else if (strcasestr (c, "semi bold")) {
+	} else if (strstr (c, "semi bold")) {
 		weight = NR_POS_WEIGHT_SEMIBOLD;
-	} else if (strcasestr (c, "semibold")) {
+	} else if (strstr (c, "semibold")) {
 		weight = NR_POS_WEIGHT_SEMIBOLD;
-	} else if (strcasestr (c, "demi bold")) {
+	} else if (strstr (c, "demi bold")) {
 		weight = NR_POS_WEIGHT_DEMIBOLD;
-	} else if (strcasestr (c, "demibold") || strcasestr (c, "demi")) {
+	} else if (strstr (c, "demibold") || strstr (c, "demi")) {
 		weight = NR_POS_WEIGHT_DEMIBOLD;
-	} else if (strcasestr (c, "ultra bold")) {
+	} else if (strstr (c, "ultra bold")) {
 		weight = NR_POS_WEIGHT_ULTRA_BOLD;
-	} else if (strcasestr (c, "extra bold") || strcasestr (c, "xbold") || strcasestr (c, "xtrabold")) {
+	} else if (strstr (c, "extra bold") || strstr (c, "xbold") || strstr (c, "xtrabold")) {
 		weight = NR_POS_WEIGHT_EXTRA_BOLD;
-	} else if (strcasestr (c, "black") || strcasestr (c, "heavy")) {
+	} else if (strstr (c, "black") || strstr (c, "heavy")) {
 		weight = NR_POS_WEIGHT_BLACK;
-	} else if (strcasestr (c, "bold")) {
+	} else if (strstr (c, "bold")) {
 		/* Must come after the checks for `blah bold'. */
 		weight = NR_POS_WEIGHT_BOLD;
 	} else {
 		weight = NR_POS_WEIGHT_NORMAL;
 	}
+
+	g_free (c);
 	return weight;
 }
 
 int
-parse_name_for_stretch (char const *c)
+parse_name_for_stretch (char const *cc)
 {
-	gint stretch;
+	gchar *c = g_strdup(cc);
+	for (char *p = c ; *p != '\0' ; ++p) {
+		*p = g_ascii_tolower(*p);
+	}
 
-	if (strcasestr (c, "ultra narrow") || strcasestr (c, "ultra condensed") || strcasestr (c, "extra condensed")) {
+	gint stretch;
+	if (strstr (c, "ultra narrow") || strstr (c, "ultra condensed") || strstr (c, "extra condensed")) {
 		stretch = NR_POS_STRETCH_EXTRA_CONDENSED;
-	} else if (strcasestr (c, "ultra wide") || strcasestr (c, "ultra expanded") || strcasestr (c, "ultra extended")  || strcasestr (c, "extra expanded")) {
+	} else if (strstr (c, "ultra wide") || strstr (c, "ultra expanded") || strstr (c, "ultra extended")  || strstr (c, "extra expanded")) {
 		stretch = NR_POS_STRETCH_EXTRA_EXPANDED;
-	} else if (strcasestr (c, "semi condensed") || strcasestr (c, "semicondensed")) {
+	} else if (strstr (c, "semi condensed") || strstr (c, "semicondensed")) {
 		stretch = NR_POS_STRETCH_SEMI_CONDENSED;
-	} else if (strcasestr (c, "semi extended") || strcasestr (c, "semiextended")) {
+	} else if (strstr (c, "semi extended") || strstr (c, "semiextended")) {
 		stretch = NR_POS_STRETCH_SEMI_EXPANDED;
-	} else if (strcasestr (c, "narrow") || strcasestr (c, "condensed")) {
+	} else if (strstr (c, "narrow") || strstr (c, "condensed")) {
 		stretch = NR_POS_STRETCH_CONDENSED;
-	} else if (strcasestr (c, "wide") || strcasestr (c, "expanded") || strcasestr (c, "extended")) {
+	} else if (strstr (c, "wide") || strstr (c, "expanded") || strstr (c, "extended")) {
 		stretch = NR_POS_STRETCH_EXPANDED;
 	} else {
 		stretch = NR_POS_STRETCH_NORMAL;
 	}
+
+	g_free (c);
 	return stretch;
 }
 
@@ -135,12 +147,20 @@ stretch_to_css (int stretch)
 
 
 NRTypePosDef::NRTypePosDef(char const *description) {
+	// we cannot use strcasestr, it's linux only... so we must lowercase the string first
+	gchar *c = g_strdup(description);
+	for (char *p = c ; *p != '\0' ; ++p) {
+		*p = g_ascii_tolower(*p);
+	}
+
 	/* copied from nr-type-directory.cpp:nr_type_calculate_position. */
 
-	italic = (strcasestr (description, "italic") != NULL);
-	oblique = (strcasestr (description, "oblique") != NULL);
+	italic = (strstr (c, "italic") != NULL);
+	oblique = (strstr (c, "oblique") != NULL);
 
-	weight = parse_name_for_weight (description);
+	weight = parse_name_for_weight (c);
 
-	stretch = parse_name_for_stretch (description);
+	stretch = parse_name_for_stretch (c);
+
+	g_free (c);
 }
