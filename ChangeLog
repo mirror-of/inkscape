@@ -1,5 +1,7 @@
 2005-03-05  Bryce Harrington <bryce@bryceharrington.org>
 
+	* src/ui/icons.cpp:  Fixing some paths
+	
 	* src/main.cpp src/application/Makefile_insert,
 	  src/application/app-prototype.h,
 	  src/application/application.cpp src/application/editor.cpp,

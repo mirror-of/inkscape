@@ -615,13 +615,11 @@ Glib::ustring const
 get_icon_path(Glib::ustring const &filename)
 {
     // TODO:  this is a hack, use PIXMAP_PATH when we have a build system
-    std::vector<Glib::ustring> path;
-    path.push_back(Glib::get_current_dir());
-    path.push_back("share");
-    path.push_back("icons");
-    path.push_back(filename);
+    Glib::ustring path("/usr/share/inkscape");
+    path += "/icons/";
+    path += filename;
 
-    return Glib::build_filename(path);
+    return path;
 }
 
 } // namespace Icon
