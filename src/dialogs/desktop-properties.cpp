@@ -364,25 +364,25 @@ sp_desktop_dialog (void)
 		/* Page page */
 		l = gtk_label_new (_("Page"));
 		gtk_widget_show (l);
-		t = gtk_table_new (2, 5, FALSE);
+		t = gtk_table_new (1, 5, FALSE);
 		gtk_widget_show (t);
-		gtk_container_set_border_width (GTK_CONTAINER (t), 4);
-		gtk_table_set_row_spacings (GTK_TABLE (t), 4);
-		gtk_table_set_col_spacings (GTK_TABLE (t), 4);
+		gtk_container_set_border_width (GTK_CONTAINER (t), 6);
+		gtk_table_set_row_spacings (GTK_TABLE (t), 6);
 		gtk_notebook_prepend_page (GTK_NOTEBOOK (nb), t, l);
 		gtk_notebook_set_current_page (GTK_NOTEBOOK (nb), 0);
 
+		sp_color_picker_button (dlg, t, _("Background (also for export):"), "pagecolor", _("Background color"), "inkscape:pageopacity", 0);
+
 		cb = G_CALLBACK(sp_dtw_whatever_toggled);
-		spw_checkbutton(dlg, t, _("Show border"), "showborder", 0, row, 0, cb);
+		spw_checkbutton(dlg, t, _("Show canvas border"), "showborder", 0, 1, 0, cb);
 
 		b = gtk_check_button_new_with_label (_("Border on top of drawing"));
 		gtk_widget_show (b);
-		gtk_table_attach (GTK_TABLE (t), b, 0, 2, 1, 2, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
+		gtk_table_attach (GTK_TABLE (t), b, 0, 2, 2, 3, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 		gtk_object_set_data (GTK_OBJECT (dlg), "borderlayer", b);
 		g_signal_connect (G_OBJECT (b), "toggled", G_CALLBACK (sp_dtw_border_layer_toggled), dlg);
 
-		sp_color_picker_button (dlg, t, _("Page background:"), "pagecolor", _("Page background color"), "inkscape:pageopacity", 2);
-		sp_color_picker_button (dlg, t, _("Page border:"), "bordercolor", _("Page border color"), "borderopacity", 3);
+		sp_color_picker_button (dlg, t, _("Border color:"), "bordercolor", _("Canvas border color"), "borderopacity", 4);
 
 		// The following comes from the former "document settings" dialog
 
@@ -391,7 +391,7 @@ sp_desktop_dialog (void)
 
 		vb = gtk_vbox_new (FALSE, 4);
 		gtk_widget_show (vb);
-		gtk_table_attach (GTK_TABLE (t), vb, 0, 2, 4, 5, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
+		gtk_table_attach (GTK_TABLE (t), vb, 0, 2, 5, 6, (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), (GtkAttachOptions)0, 0, 0);
 
 		hb = gtk_hbox_new (FALSE, 4);
 		gtk_widget_show (hb);
