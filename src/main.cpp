@@ -316,14 +316,38 @@ main(int argc, char **argv)
     return app.run();
 }
 
-int
-sp_main_gui(int argc, char const **argv)
+GSList *fixupFilenameEncoding( GSList* fl )
 {
-    GSList *fl = NULL;
+    GSList *newFl = NULL;
+    int count = 0;
+    while ( fl ) {
+        gchar *fn = static_cast<gchar*>(fl->data);
+        fl = g_slist_remove( fl, fl->data );
 
-    //gtk_init(&argc, const_cast<char ***>(&argv));
-    Gtk::Main main_instance (&argc, const_cast<char ***>(&argv));
+        if ( !g_utf8_validate(fn, -1, NULL) ) {
+            g_message( "file #%d is not valid UTF-8", count);
 
+            GError *error = NULL;
+            gchar *newFileName = g_filename_to_utf8(fn, -1, NULL, NULL, &error);
+            if ( newFileName ) {
+                if ( !g_utf8_validate(newFileName, -1, NULL) ) {
+                    g_warning( "input filename did not yield UTF-8 for #%d", count );
+                }
+                g_free( newFileName );
+                newFileName = 0;
+            } else {
+                g_warning( "input filename conversion failed for #%d", count );
+            }
+        }
+        newFl = g_slist_append( newFl, fn );
+
+        count++;
+    }
+    return newFl;
+}
+
+int sp_common_main( int argc, char const **argv, GSList **flDest )
+{
     /* fixme: Move these to some centralized location (Lauris) */
     sp_object_type_register("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
     sp_object_type_register("sodipodi:guide", SP_TYPE_GUIDE);
@@ -337,12 +361,37 @@ sp_main_gui(int argc, char const **argv)
     poptContext ctx = poptGetContext(NULL, argc, argv, options, 0);
     poptSetOtherOptionHelp(ctx, _("[OPTIONS...] [FILE...]\n\nAvailable options:"));
     g_return_val_if_fail(ctx != NULL, 1);
+
     /* Collect own arguments */
-    fl = sp_process_args(ctx);
+    GSList *fl = sp_process_args(ctx);
     poptFreeContext(ctx);
 
     // now switch gettext back to UTF-8 (for GUI)
     bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+
+    // Now let's see if the file list still holds up
+    fl = fixupFilenameEncoding( fl );
+
+    if ( flDest ) {
+        *flDest = fl;
+        fl = 0;
+    } else {
+        while ( fl ) {
+            g_free( fl->data );
+            fl = g_slist_remove( fl, fl->data );
+        }
+    }
+    return 0;
+}
+
+int
+sp_main_gui(int argc, char const **argv)
+{
+    Gtk::Main main_instance (&argc, const_cast<char ***>(&argv));
+
+    GSList *fl = NULL;
+    int retVal = sp_common_main( argc, argv, &fl );
+    g_return_val_if_fail(retVal == 0, 1);
 
     inkscape_gtk_stock_init();
 
@@ -352,6 +401,7 @@ sp_main_gui(int argc, char const **argv)
         gtk_window_set_default_icon_from_file(filename, NULL);
     }
     g_free (filename);
+    filename = 0;
 
     if (!sp_global_slideshow) {
         gboolean create_new = TRUE;
@@ -394,10 +444,6 @@ sp_main_gui(int argc, char const **argv)
 int
 sp_main_console(int argc, char const **argv)
 {
-    poptContext ctx = NULL;
-    GSList * fl = NULL;
-    gchar *printer;
-
     /* We are started in text mode */
 
     /* Do this g_type_init(), so that we can use Xft/Freetype2 (Pango)
@@ -407,49 +453,15 @@ sp_main_console(int argc, char const **argv)
      */
     g_type_init();
 
-    /* fixme: Move these to some centralized location (Lauris) */
-    sp_object_type_register("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
-    sp_object_type_register("sodipodi:guide", SP_TYPE_GUIDE);
-
-    // temporarily switch gettext encoding to locale, so that help messages can be output properly
-    gchar const *charset;
-    g_get_charset(&charset);
-    bind_textdomain_codeset(GETTEXT_PACKAGE, charset);
-
-    ctx = poptGetContext(NULL, argc, argv, options, 0);
-    poptSetOtherOptionHelp(ctx, _("[OPTIONS...] [FILE...]\n\nAvailable options:"));
-    g_return_val_if_fail(ctx != NULL, 1);
-    fl = sp_process_args(ctx);
-    poptFreeContext(ctx);
-
-    // now switch gettext back to UTF-8 (for GUI)
-    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+    GSList *fl = NULL;
+    int retVal = sp_common_main( argc, argv, &fl );
+    g_return_val_if_fail(retVal == 0, 1);
 
     if (fl == NULL) {
         g_print("Nothing to do!\n");
         exit(0);
     }
 
-    /* Check for and set up printing path */
-    printer = NULL;
-    if (sp_global_printer != NULL) {
-#if 0
-        if ((sp_global_printer[0] != '|') && (sp_global_printer[0] != '/')) {
-            gchar *cwd;
-            /* Gnome-print appends relative paths to $HOME by default */
-            cwd = g_get_current_dir();
-            printer = g_build_filename(cwd, sp_global_printer, NULL);
-            g_free(cwd);
-        } else {
-            printer = g_strdup(sp_global_printer);
-        }
-#else
-        printer = g_strdup(sp_global_printer);
-#endif
-    }
-
-    /* Start up g type system, without requiring X */
-    g_type_init(); /* this is already called above... ? */
     inkscape_application_init(argv[0], false);
 
     while (fl) {
@@ -462,8 +474,8 @@ sp_main_console(int argc, char const **argv)
         if (doc == NULL) {
             g_warning("Specified document %s cannot be opened (is it valid SVG file?)", (gchar *) fl->data);
         } else {
-            if (printer) {
-                sp_print_document_to_file(doc, printer);
+            if (sp_global_printer) {
+                sp_print_document_to_file(doc, sp_global_printer);
             }
             if (sp_export_png || sp_export_id) {
                 sp_do_export_png(doc);
@@ -479,8 +491,6 @@ sp_main_console(int argc, char const **argv)
         }
         fl = g_slist_remove(fl, fl->data);
     }
-
-    g_free(printer);
 
     inkscape_unref();
 
