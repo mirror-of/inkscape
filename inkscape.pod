@@ -18,6 +18,7 @@ options:
     -e, --export-png=FILENAME         
     -a, --export-area=x0:y0:x1:y1     
     -i, --export-id=ID     
+    -j, --export-id-only     
     -t, --export-use-hints
     -b, --export-background=COLOR     
     -y, --export-background-opacity=VALUE     
@@ -109,6 +110,11 @@ This value overrides the --export-dpi setting (or the DPI hint if used with --ex
 
 The id attribute value of the object that you want to export from the document.
 Exported is the bounding box of the object, so with this option, --export-area is ignored. 
+
+=item B<-j>, B<--export-id-only>
+
+Only export the object whose id is given in --export-id. All other objects are hidden and won't 
+show in export even if they overlay the exported object. Without --export-id, this option is ignored.
 
 =item B<-l>, B<--export-plain-svg>=I<FILENAME>
 

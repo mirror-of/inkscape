@@ -809,7 +809,8 @@ sp_export_png_file(SPDocument *doc, gchar const *filename,
                    unsigned width, unsigned height,
                    unsigned long bgcolor,
                    unsigned (*status)(float, void *),
-                   void *data, bool force_overwrite)
+                   void *data, bool force_overwrite,
+                   SPItem *item_only)
 {
     g_return_if_fail(doc != NULL);
     g_return_if_fail(SP_IS_DOCUMENT(doc));
@@ -867,7 +868,11 @@ sp_export_png_file(SPDocument *doc, gchar const *filename,
     unsigned dkey = sp_item_display_key_new(1);
 
     /* Create ArenaItem and set transform */
-    ebp.root = sp_item_invoke_show(SP_ITEM(sp_document_root(doc)), arena, dkey, SP_ITEM_SHOW_PRINT);
+    if (item_only) {
+        ebp.root = sp_item_invoke_show(item_only, arena, dkey, SP_ITEM_SHOW_PRINT);
+    } else {
+        ebp.root = sp_item_invoke_show(SP_ITEM(sp_document_root(doc)), arena, dkey, SP_ITEM_SHOW_PRINT);
+    }
     nr_arena_item_set_transform(ebp.root, &affine);
 
     ebp.status = status;

@@ -103,6 +103,7 @@ enum {
     SP_ARG_EXPORT_WIDTH,
     SP_ARG_EXPORT_HEIGHT,
     SP_ARG_EXPORT_ID,
+    SP_ARG_EXPORT_ID_ONLY,
     SP_ARG_EXPORT_USE_HINTS,
     SP_ARG_EXPORT_BACKGROUND,
     SP_ARG_EXPORT_BACKGROUND_OPACITY,
@@ -134,6 +135,7 @@ static gchar *sp_export_id = NULL;
 static gchar *sp_export_background = NULL;
 static gchar *sp_export_background_opacity = NULL;
 static gboolean sp_export_use_hints = FALSE;
+static gboolean sp_export_id_only = FALSE;
 static gchar *sp_export_svg = NULL;
 
 static GSList *sp_process_args(poptContext ctx);
@@ -191,6 +193,11 @@ struct poptOption options[] = {
     {"export-id", 'i', 
      POPT_ARG_STRING, &sp_export_id, SP_ARG_EXPORT_ID,
      N_("The ID of the object to export (overrides export-area)"), 
+     N_("ID")},
+
+    {"export-id-only", 'j', 
+     POPT_ARG_NONE, &sp_export_id_only, SP_ARG_EXPORT_ID_ONLY,
+     N_("Export just the object with export-id, hide all others (only with export-id)"), 
      N_("ID")},
 
     {"export-use-hints", 't', 
@@ -492,6 +499,8 @@ sp_do_export_png(SPDocument *doc)
         g_warning ("--export-use-hints can only be used with --export-id; ignored.");
     }
 
+    SPItem *item = NULL;
+
     NRRect area;
     if (sp_export_id) {
         SPObject *o = doc->getObjectById(sp_export_id);
@@ -502,6 +511,11 @@ sp_do_export_png(SPDocument *doc)
             }
             if (sp_export_area) {
                 g_warning ("Object with id=\"%s\" is being exported; --export-area is ignored.", sp_export_id);
+            }
+
+            item = SP_ITEM(o);
+            if (sp_export_id_only) {
+                g_print("Exporting only object with id=\"%s\"; all other objects hidden\n", sp_export_id);
             }
 
             if (sp_export_use_hints) {
@@ -647,7 +661,7 @@ sp_do_export_png(SPDocument *doc)
     g_print("Bitmap saved as: %s\n", filename);
 
     if ((width >= 1) && (height >= 1) && (width < 65536) && (height < 65536)) {
-        sp_export_png_file(doc, filename, area.x0, area.y0, area.x1, area.y1, width, height, bgcolor, NULL, NULL, true);
+        sp_export_png_file(doc, filename, area.x0, area.y0, area.x1, area.y1, width, height, bgcolor, NULL, NULL, true, sp_export_id_only ? item : NULL);
     } else {
         g_warning("Calculated bitmap dimensions %d %d are out of range (1 - 65535). Nothing exported.", width, height);
     }
