@@ -1300,6 +1300,9 @@ TutorialVerb::perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_TUTORIAL_BASIC:
             sp_help_open_tutorial (NULL, (gpointer)_("tutorial-basic.svg"));
             break;
+        case SP_VERB_TUTORIAL_SHAPES:
+            sp_help_open_tutorial (NULL, (gpointer)_("tutorial-shapes.svg"));
+            break;
         case SP_VERB_TUTORIAL_ADVANCED:
             sp_help_open_tutorial (NULL, (gpointer)_("tutorial-advanced.svg"));
             break;
@@ -1684,9 +1687,11 @@ Verb * Verb::_base_verbs[] = {
 
     /* Tutorials */
     new TutorialVerb(SP_VERB_TUTORIAL_BASIC, "TutorialsBasic", N_("Inkscape: _Basic"),
-        N_("Basic Inkscape tutorial"), NULL/*"tutorial_basic"*/),
+        N_("Getting started with Inkscape"), NULL/*"tutorial_basic"*/),
+    new TutorialVerb(SP_VERB_TUTORIAL_SHAPES, "TutorialsShapes", N_("Inkscape: _Shapes"),
+        N_("Using shape tools to create and edit shapes"), NULL),
     new TutorialVerb(SP_VERB_TUTORIAL_ADVANCED, "TutorialsAdvanced", N_("Inkscape: _Advanced"),
-        N_("Advanced Inkscape tutorial"), NULL/*"tutorial_advanced"*/),
+        N_("Advanced Inkscape topics"), NULL/*"tutorial_advanced"*/),
     new TutorialVerb(SP_VERB_TUTORIAL_DESIGN, "TutorialsDesign", N_("_Elements of Design"),
         N_("Elements of Design tutorial"), NULL/*"tutorial_design"*/),
     new TutorialVerb(SP_VERB_TUTORIAL_TIPS, "TutorialsTips", N_("_Tips and Tricks"),
