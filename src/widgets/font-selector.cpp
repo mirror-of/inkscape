@@ -93,9 +93,9 @@ static void sp_font_selector_size_changed (GtkEditable *editable, SPFontSelector
 static void sp_font_selector_emit_set (SPFontSelector *fsel);
 
 static const gchar *sizes[] = {
-	"8", "9", "10", "11", "12", "13", "14",
-	"16", "18", "20", "22", "24", "26", "28",
-	"32", "36", "40", "48", "56", "64", "72",
+	"4", "6", "8", "9", "10", "11", "12", "13", "14",
+	"16", "18", "20", "22", "24", "28",
+	"32", "36", "40", "48", "56", "64", "72", "144",
 	NULL
 };
 
@@ -326,6 +326,10 @@ sp_font_selector_emit_set (SPFontSelector *fsel)
 		font = NULL;
 	}
 
+	// FIXME: when a text object uses non-available font, font==NULL and we can't set size
+	// (and the size shown in the widget is invalid). To fix, here we must always get some
+	// default font, exactly the same as sptext uses for on-canvas display, so that
+	// font!=NULL ever.
 	if (font != fsel->font || ( font && fsel->fontsize_dirty ) ) {
 		if ( font ) font->Ref();
 		if ( fsel->font ) fsel->font->Unref();
