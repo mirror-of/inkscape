@@ -1,3 +1,7 @@
+2004-09-19  MenTaLguY <mental@rydia.net>
+
+	* src/gc-core.h: don't defer finalizers
+
 2004-09-18  MenTaLguY <mental@rydia.net>
 
 	* src/dialogs/filedialog.cpp: unref the preview document we created
