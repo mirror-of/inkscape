@@ -504,38 +504,38 @@ sp_desktop_dialog (void)
         
         /* Grid settings */
 
+        GCallback cb = G_CALLBACK(sp_dtw_whatever_toggled);
         
         /* Notebook tab */
         GtkWidget *l = gtk_label_new (_("Grid"));
         gtk_widget_show (l);
-        GtkWidget *t = gtk_table_new (9, 2, FALSE);
-        gtk_widget_show (t);
-        gtk_container_set_border_width (GTK_CONTAINER (t), 4);
-        gtk_table_set_row_spacings (GTK_TABLE (t), 4);
-        gtk_table_set_col_spacings (GTK_TABLE (t), 4);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
+	GtkWidget *v = gtk_vbox_new (FALSE, 0);
+	gtk_widget_show (v);
+	gtk_notebook_append_page (GTK_NOTEBOOK (nb), v, l);
 
         
         /* Checkbuttons */
-        int row = 0;
-        GCallback cb = G_CALLBACK(sp_dtw_whatever_toggled);
-        spw_checkbutton( dlg, t, _("Show grid"), "showgrid", 0, row, 0, cb);
-        spw_checkbutton( dlg, t, _("Snap to grid"), "snaptogrid", 
-                         1, row++, 0, cb);
-
-        spw_checkbutton( dlg, t, _("Horizontal lines"), "vertgrid", 
-                         0, row, 0, cb);
-        spw_checkbutton( dlg, t, _("Vertical lines"), "horizgrid", 
-                         1, row++, 0, cb);
-
+	spw_vbox_checkbutton(dlg, v, _("Show grid"), "showgrid", cb);
+	spw_vbox_checkbutton(dlg, v, _("Snap to grid"), "snaptogrid", cb);
+	spw_vbox_checkbutton(dlg, v, _("Snap bounding boxes to grid"), "inkscape:grid-bbox", cb);
+	spw_vbox_checkbutton(dlg, v, _("Snap points to grid"), "inkscape:grid-points", cb);
+	
         /*   Commenting out until Nathan implements the grids -- bryce
          *   spw_checkbutton(dlg, t, _("Iso grid"), "isogrid", 0, row, 0, cb);
          *   spw_checkbutton(dlg, t, _("Hex grid"), "hexgrid", 1, row++, 0, cb);
          */
+
+	GtkWidget *t = gtk_table_new (8, 2, FALSE);
+	gtk_widget_show (t);
+	gtk_container_set_border_width (GTK_CONTAINER (t), 4);
+	gtk_table_set_row_spacings (GTK_TABLE (t), 4);
+	gtk_table_set_col_spacings (GTK_TABLE (t), 4);
+	gtk_box_pack_start (GTK_BOX (v), t, TRUE, TRUE, 0);
          
         cb = G_CALLBACK(sp_dtw_whatever_changed);
 
         GtkWidget *us = sp_unit_selector_new (SP_UNIT_ABSOLUTE);
+	int row = 0;
         spw_dropdown(dlg, t, _("Grid units:"), "grid_units", row++, us);
 
         spw_unit_selector( dlg, t, _("Origin X:"), "gridoriginx", 
@@ -560,27 +560,29 @@ sp_desktop_dialog (void)
         sp_color_picker_button( dlg, t, _("Grid color:"), "gridcolor",
                                 _("Grid color"), "gridhicolor", row++ );
 
-        row = 0;
-        
         /* Guidelines page */
         
         l = gtk_label_new (_("Guides"));
         gtk_widget_show (l);
-        t = gtk_table_new (5, 2, FALSE);
+	v = gtk_vbox_new (FALSE, 0);
+	gtk_widget_show (v);
+	gtk_notebook_append_page (GTK_NOTEBOOK (nb), v, l);
+
+	/* Checkbuttons */
+        cb = G_CALLBACK(sp_dtw_whatever_toggled);
+	spw_vbox_checkbutton (dlg, v, _("Show guides"), "showguides", cb);
+	spw_vbox_checkbutton (dlg, v, _("Snap to guides"), "snaptoguides", cb);
+	spw_vbox_checkbutton (dlg, v, _("Snap bounding boxes to guides"), "inkscape:guide-bbox", cb);
+	spw_vbox_checkbutton (dlg, v, _("Snap points to guides"), "inkscape:guide-points", cb);
+
+        t = gtk_table_new (4, 2, FALSE);
         gtk_widget_show (t);
         gtk_container_set_border_width (GTK_CONTAINER (t), 4);
         gtk_table_set_row_spacings (GTK_TABLE (t), 4);
         gtk_table_set_col_spacings (GTK_TABLE (t), 4);
-        gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
+	gtk_box_pack_start (GTK_BOX (v), t, TRUE, TRUE, 0);
 
-        cb = G_CALLBACK(sp_dtw_whatever_toggled);
-        
-        spw_checkbutton( dlg, t, _("Show guides"), "showguides", 0, 
-                         row, 0, cb );
-        spw_checkbutton( dlg, t, _("Snap to guides"), "snaptoguides", 1, 
-                         row++, 0, cb);
-
-        cb = G_CALLBACK(sp_dtw_whatever_toggled);
+	row = 0;
         us = sp_unit_selector_new (SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
         spw_dropdown( dlg, t, _("Snap units:"), "guide_snap_units", 
                       row++, us);
@@ -844,6 +846,13 @@ sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop)
         o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "snaptogrid");
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->snaptogrid);
 
+	o = (GtkObject *) gtk_object_get_data (GTK_OBJECT (dialog), "inkscape:grid-bbox");
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->grid_snap_to & SNAP_TO_BBOX);
+	gtk_widget_set_sensitive (GTK_WIDGET (o), nv->snaptogrid);
+	o = (GtkObject *) gtk_object_get_data (GTK_OBJECT (dialog), "inkscape:grid-points");
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->grid_snap_to & SNAP_TO_POINTS);
+	gtk_widget_set_sensitive (GTK_WIDGET (o), nv->snaptogrid);
+
         o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "grid_units");
         sp_unit_selector_set_unit (SP_UNIT_SELECTOR (o), nv->gridunit);
 
@@ -882,6 +891,14 @@ sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop)
 
         o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "snaptoguides");
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->snaptoguides);
+
+	o = (GtkObject *) gtk_object_get_data (GTK_OBJECT (dialog), "inkscape:guide-bbox");
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->guide_snap_to & SNAP_TO_BBOX);
+	gtk_widget_set_sensitive (GTK_WIDGET (o), nv->snaptoguides);
+	o = (GtkObject *) gtk_object_get_data (GTK_OBJECT (dialog), "inkscape:guide-points");
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (o), nv->guide_snap_to &
+				      SNAP_TO_POINTS);
+	gtk_widget_set_sensitive (GTK_WIDGET (o), nv->snaptoguides);
 
         o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "guide_snap_units");
         sp_unit_selector_set_unit (SP_UNIT_SELECTOR (o), nv->guidetoleranceunit);
