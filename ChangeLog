@@ -1,3 +1,11 @@
+2005-03-21  MenTaLguY  <mental@rydia.net>
+
+    * src/util/Makefile_insert, src/util/glib-list.h,
+	  src/util/glib-list-iterators.h:
+
+	  retired old Glib list to Util::List adaptor and replaced it with 
+      new iterator classes that directly wrap the Glib list types
+
 2005-03-21  cyreve  <cyreve@users.sourceforge.net>
 
 	* src/: text-context.cpp, text-context.h: text selection using the
