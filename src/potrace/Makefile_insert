@@ -1,0 +1,31 @@
+## Makefile.am fragment sourced by src/Makefile.am.
+
+potrace/all: potrace/libpotrace.a
+
+potrace/clean:
+	rm -f potrace/libpotrace.a $(potrace_libpotrace_a_OBJECTS)
+
+potrace_libpotrace_a_CPPFLAGS =	\
+	-I$(srcdir)/potrace	\
+	-DPOTRACE=\"potrace\"
+
+potrace_libpotrace_a_SOURCES =	\
+	potrace/bitmap.cpp \
+	potrace/bitmap.h \
+	potrace/bits.cpp \
+	potrace/bits.h \
+	potrace/curve.cpp \
+	potrace/curve.h \
+	potrace/flate.cpp \
+	potrace/flate.h \
+	potrace/greymap.cpp \
+	potrace/greymap.h \
+	potrace/lists.h \
+	potrace/path.cpp \
+	potrace/path.h \
+	potrace/render.cpp \
+	potrace/render.h \
+	potrace/inkscape-potrace.cpp \
+	potrace/inkscape-potrace.h
+
+

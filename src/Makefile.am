@@ -32,6 +32,7 @@ include xml/Makefile_insert
 include traits/Makefile_insert
 include algorithms/Makefile_insert
 include util/Makefile_insert
+include potrace/Makefile_insert
 
 bin_PROGRAMS = inkscape inkview
 
@@ -50,6 +51,7 @@ noinst_LIBRARIES =	\
 	livarot/libvarot.a	\
 	svg/libspsvg.a	\
 	widgets/libspwidgets.a	\
+	potrace/libpotrace.a  \
 	xml/libspxml.a	\
 	libinkpost.a
 
