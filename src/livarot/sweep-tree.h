@@ -11,13 +11,18 @@ class SweepEventQueue;
 
 // the sweepline: a set of edges intersecting the current sweepline
 // stored as an AVL tree
-typedef struct SweepTreeList
+class SweepTreeList
 {
+public:
   int nbTree, maxTree;		// number of nodes in the tree, max number of nodes
   SweepTree *trees;		// the array of nodes
   SweepTree *racine;		// root of the tree
-}
-SweepTreeList;
+
+  SweepTreeList(int s);
+  ~SweepTreeList();
+  
+  SweepTree *add(Shape *iSrc, int iBord, int iWeight, int iStartPoint, Shape *iDst);
+};
 
 // one node in the AVL tree of edges
 // note that these nodes will be stored in a dynamically allocated array, hence the Relocate() function
@@ -45,11 +50,6 @@ public:
   void MakeDelete (void);
 
   // utilites
-  static void CreateList (SweepTreeList & list, int size);
-  static void DestroyList (SweepTreeList & list);
-  static SweepTree *AddInList (Shape * iSrc, int iBord, int iWeight,
-			       int iStartPoint, SweepTreeList & list,
-			       Shape * iDst);
 
   // the find function that was missing in the AVLTrree class
   // the return values are defined in LivarotDefs.h

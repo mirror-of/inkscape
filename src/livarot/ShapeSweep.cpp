@@ -173,7 +173,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
   if (_has_sweep_data == false)
     {
-      SweepTree::CreateList (sTree, a->numberOfEdges());
+      sTree = new SweepTreeList(a->numberOfEdges());
       sEvts = new SweepEventQueue(a->numberOfEdges());
       _has_sweep_data = true;
     }
@@ -355,7 +355,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 	  AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, 2,
 		   intersL->src, intersL->bord, intersR->src, intersR->bord);
 
-	  intersL->SwapWithRight (sTree, *sEvts);
+	  intersL->SwapWithRight (*sTree, *sEvts);
 
 	  TesteIntersection (intersL, true, false);
 	  TesteIntersection (intersR, false, false);
@@ -445,7 +445,7 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 				     SweepTree * >(node->rightElem))->src;
 				}
 
-			      node->Remove (sTree, *sEvts, true);
+			      node->Remove (*sTree, *sEvts, true);
 			      if (onLeftS && onRightS)
 				{
 				  SweepTree *onLeft =
@@ -506,11 +506,9 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 		}
 	      else
 		{
-		  SweepTree *node =
-		    SweepTree::AddInList (ptSh, dnNo, 1, lastPointNo, sTree,
-					  this);
+		  SweepTree *node = sTree->add(ptSh, dnNo, 1, lastPointNo, this);
 		  ptSh->swsData[dnNo].misc = node;
-		  node->Insert (sTree, *sEvts, this, lastPointNo, true);
+		  node->Insert (*sTree, *sEvts, this, lastPointNo, true);
 		  if (doWinding)
 		    {
 		      SweepTree *myLeft =
@@ -548,11 +546,9 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 		    {
 		      if (cb != dnNo)
 			{
-			  SweepTree *node =
-			    SweepTree::AddInList (ptSh, cb, 1, lastPointNo,
-						  sTree, this);
+			  SweepTree *node = sTree->add(ptSh, cb, 1, lastPointNo, this);
 			  ptSh->swsData[cb].misc = node;
-			  node->InsertAt (sTree, *sEvts, this, insertionNode,
+			  node->InsertAt (*sTree, *sEvts, this, insertionNode,
 					  nPt, true);
 			  if (doWinding)
 			    {
@@ -840,7 +836,8 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
 
   if (_has_sweep_data)
     {
-      SweepTree::DestroyList (sTree);
+      delete sTree;
+      sTree = NULL;
       delete sEvts;
       sEvts = NULL;
       _has_sweep_data = false;
@@ -897,7 +894,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 
   if (_has_sweep_data == false)
     {
-      SweepTree::CreateList (sTree, a->numberOfEdges() + b->numberOfEdges());
+      sTree = new SweepTreeList(a->numberOfEdges() + b->numberOfEdges());
       sEvts = new SweepEventQueue(a->numberOfEdges() + b->numberOfEdges());
       _has_sweep_data = true;
     }
@@ -1190,7 +1187,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 	  AddChgt (lastPointNo, lastChgtPt, shapeHead, edgeHead, 2,
 		   intersL->src, intersL->bord, intersR->src, intersR->bord);
 
-	  intersL->SwapWithRight (sTree, *sEvts);
+	  intersL->SwapWithRight (*sTree, *sEvts);
 
 	  TesteIntersection (intersL, true, true);
 	  TesteIntersection (intersR, false, true);
@@ -1282,7 +1279,7 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 				     SweepTree * >(node->rightElem))->src;
 				}
 
-			      node->Remove (sTree, *sEvts, true);
+			      node->Remove (*sTree, *sEvts, true);
 			      if (onLeftS && onRightS)
 				{
 				  SweepTree *onLeft =
@@ -1345,11 +1342,9 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 		}
 	      else
 		{
-		  SweepTree *node =
-		    SweepTree::AddInList (ptSh, dnNo, 1, lastPointNo, sTree,
-					  this);
+		  SweepTree *node = sTree->add(ptSh, dnNo, 1, lastPointNo, this);
 		  ptSh->swsData[dnNo].misc = node;
-		  node->Insert (sTree, *sEvts, this, lastPointNo, true);
+		  node->Insert (*sTree, *sEvts, this, lastPointNo, true);
 
 		  if (doWinding)
 		    {
@@ -1390,12 +1385,10 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
 		    {
 		      if (cb != dnNo)
 			{
-			  SweepTree *node =
-			    SweepTree::AddInList (ptSh, cb, 1, lastPointNo,
-						  sTree, this);
+			  SweepTree *node = sTree->add(ptSh, cb, 1, lastPointNo, this);
 			  ptSh->swsData[cb].misc = node;
 //                                                      node->Insert(sTree,*sEvts,this,lastPointNo,true);
-			  node->InsertAt (sTree, *sEvts, this, insertionNode,
+			  node->InsertAt (*sTree, *sEvts, this, insertionNode,
 					  nPt, true);
 
 			  if (doWinding)
@@ -1685,7 +1678,8 @@ Shape::Booleen (Shape * a, Shape * b, BooleanOp mod,int cutPathID)
   
   if (_has_sweep_data)
     {
-      SweepTree::DestroyList (sTree);
+      delete sTree;
+      sTree = NULL;
       delete sEvts;
       sEvts = NULL;
       _has_sweep_data = false;

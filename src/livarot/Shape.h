@@ -317,8 +317,8 @@ public:
     int maxInc;
 
     incidenceData *iData;
-    // these ones are defined in ShapeUtils.h, allocated at the beginning of each sweep and freed at the end of the sweep
-    SweepTreeList sTree;
+    // these ones are allocated at the beginning of each sweep and freed at the end of the sweep
+    SweepTreeList *sTree;
     SweepEventQueue *sEvts;
     
     // bounding box stuff

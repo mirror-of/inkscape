@@ -4,6 +4,36 @@
 #include "livarot/sweep-tree.h"
 #include "livarot/Shape.h"
 
+
+SweepTreeList::SweepTreeList(int s) : nbTree(0), maxTree(s), racine(NULL)
+{
+    /* FIXME: Use new[] here, but watch out for bad things happening when
+    ** SweepTree::~SweepTree is called.
+    */
+    trees = (SweepTree *) g_malloc(maxTree * sizeof(SweepTree));
+}
+
+
+SweepTreeList::~SweepTreeList()
+{
+    g_free(trees);
+}
+
+
+SweepTree *SweepTreeList::add(Shape *iSrc, int iBord, int iWeight, int iStartPoint, Shape *iDst)
+{
+    if (nbTree >= maxTree) {
+	return NULL;
+    }
+    
+    int const n = nbTree++;
+    trees[n].MakeNew(iSrc, iBord, iWeight, iStartPoint);
+
+    return trees + n;
+}
+
+
+
 /*
  * the AVL tree holding the edges intersecting the sweepline
  * that structure is very sensitive to anything
@@ -72,35 +102,6 @@ SweepTree::MakeDelete (void)
   AVLTree::MakeDelete ();
 }
 
-void
-SweepTree::CreateList (SweepTreeList & list, int size)
-{
-  list.nbTree = 0;
-  list.maxTree = size;
-  list.trees = (SweepTree *) g_malloc(list.maxTree * sizeof (SweepTree));
-  list.racine = NULL;
-}
-
-void
-SweepTree::DestroyList (SweepTreeList & list)
-{
-  g_free(list.trees);
-  list.trees = NULL;
-  list.nbTree = list.maxTree = 0;
-  list.racine = NULL;
-}
-
-SweepTree *
-SweepTree::AddInList (Shape * iSrc, int iBord, int iWeight, int iStartPoint,
-		      SweepTreeList & list, Shape * iDst)
-{
-  if (list.nbTree >= list.maxTree)
-    return NULL;
-  int n = list.nbTree++;
-  list.trees[n].MakeNew (iSrc, iBord, iWeight, iStartPoint);
-
-  return list.trees + n;
-}
 
 // find the position at which node "newOne" should be inserted in the subtree rooted here
 // we want to order with respect to the order of intersections with the sweepline, currently 

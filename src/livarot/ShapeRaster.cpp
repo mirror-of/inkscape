@@ -35,7 +35,7 @@ void Shape::BeginRaster(float &pos, int &curPt)
     MakeEdgeData(true);
 
     if ( _has_sweep_data == false) {
-        SweepTree::CreateList(sTree,numberOfEdges());
+        sTree = new SweepTreeList(numberOfEdges());
         sEvts = new SweepEventQueue(numberOfEdges());
         _has_sweep_data = true;
     }
@@ -63,7 +63,8 @@ void Shape::BeginRaster(float &pos, int &curPt)
 void Shape::EndRaster()
 {
     if ( _has_sweep_data ) {
-        SweepTree::DestroyList(sTree);
+        delete sTree;
+        sTree = NULL;
         delete sEvts;
         sEvts = NULL;
         _has_sweep_data = false;
@@ -165,7 +166,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 							SweepTree* node=swrData[cb].misc;
 							if ( node ) {
 								swrData[cb].misc=NULL;
-								node->Remove(sTree,*sEvts,true);
+								node->Remove(*sTree,*sEvts,true);
 								DestroyEdge(cb,to,step);
 							}
 						}
@@ -189,9 +190,9 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 					insertionNode=node;
 					CreateEdge(dnNo,to,step);
 				} else {
-					SweepTree* node=SweepTree::AddInList(this,dnNo,1,nPt,sTree,this);
+					SweepTree* node = sTree->add(this, dnNo, 1, nPt, this);
 					swrData[dnNo].misc=node;
-					node->Insert(sTree,*sEvts,this,nPt,true);
+					node->Insert(*sTree,*sEvts,this,nPt,true);
 					insertionNode=node;
 					CreateEdge(dnNo,to,step);
 				}
@@ -203,9 +204,9 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
-							SweepTree* node=SweepTree::AddInList(this,cb,1,nPt,sTree,this);
+							SweepTree *node = sTree->add(this, cb, 1, nPt, this);
 							swrData[cb].misc=node;
-							node->InsertAt(sTree,*sEvts,this,insertionNode,nPt,true);
+							node->InsertAt(*sTree,*sEvts,this,insertionNode,nPt,true);
 							CreateEdge(cb,to,step);
 						}
 					}
@@ -253,7 +254,7 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 							SweepTree* node=swrData[cb].misc;
 							if ( node ) {
 								swrData[cb].misc=NULL;
-								node->Remove(sTree,*sEvts,true);
+								node->Remove(*sTree,*sEvts,true);
 								DestroyEdge(cb,to,step);
 							}
 						}
@@ -276,9 +277,9 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 					insertionNode=node;
 					CreateEdge(dnNo,to,step);
 				} else {
-					SweepTree* node=SweepTree::AddInList(this,dnNo,1,nPt,sTree,this);
+					SweepTree* node =  sTree->add(this, dnNo, 1, nPt, this);
 					swrData[dnNo].misc=node;
-					node->Insert(sTree,*sEvts,this,nPt,true,false);
+					node->Insert(*sTree,*sEvts,this,nPt,true,false);
 					node->startPoint=Other(nPt,dnNo);
 					insertionNode=node;
 					CreateEdge(dnNo,to,step);
@@ -290,9 +291,9 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
-							SweepTree* node=SweepTree::AddInList(this,cb,1,nPt,sTree,this);
+							SweepTree* node = sTree->add(this,cb,1,nPt,this);
 							swrData[cb].misc=node;
-							node->InsertAt(sTree,*sEvts,this,insertionNode,nPt,true,false);
+							node->InsertAt(*sTree,*sEvts,this,insertionNode,nPt,true,false);
 							node->startPoint=Other(nPt,cb);
 							CreateEdge(cb,to,step);
 						}
@@ -307,8 +308,8 @@ void              Shape::Scan(float &pos,int &curP,float to,float step)
   // the final touch: edges intersecting the sweepline must be update so that their intersection with
   // said sweepline is correct.
   pos=to;
-	if ( sTree.racine ) {
-		SweepTree* curS=static_cast <SweepTree*> (sTree.racine->Leftmost());
+	if ( sTree->racine ) {
+		SweepTree* curS=static_cast <SweepTree*> (sTree->racine->Leftmost());
 		while ( curS ) {
 			int    cb=curS->bord;
 			AvanceEdge(cb,to,true,step);
@@ -674,7 +675,7 @@ void              Shape::DirectScan(float &pos,int &curP,float to,float step)
       if ( swrData[i].misc ) {
         SweepTree* node=swrData[i].misc;
         swrData[i].misc=NULL;
-        node->Remove(sTree,*sEvts,true);
+        node->Remove(*sTree,*sEvts,true);
         DestroyEdge(i,to,step);
       }
     }
@@ -682,9 +683,9 @@ void              Shape::DirectScan(float &pos,int &curP,float to,float step)
       if ( ( getEdge(i).st < curPt && getEdge(i).en >= curPt ) || ( getEdge(i).en < curPt && getEdge(i).st >= curPt )) {
         // crosses sweepline
         int nPt=(getEdge(i).st<curPt)?getEdge(i).st:getEdge(i).en;
-        SweepTree* node=SweepTree::AddInList(this,i,1,nPt,sTree,this);
+        SweepTree* node = sTree->add(this,i,1,nPt,this);
         swrData[i].misc=node;
-        node->Insert(sTree,*sEvts,this,nPt,true);
+        node->Insert(*sTree,*sEvts,this,nPt,true);
         CreateEdge(i,to,step);
       }
     }
@@ -700,7 +701,7 @@ void              Shape::DirectScan(float &pos,int &curP,float to,float step)
       if ( swrData[i].misc ) {
         SweepTree* node=swrData[i].misc;
         swrData[i].misc=NULL;
-        node->Remove(sTree,*sEvts,true);
+        node->Remove(*sTree,*sEvts,true);
         DestroyEdge(i,to,step);
       }
     }
@@ -708,9 +709,9 @@ void              Shape::DirectScan(float &pos,int &curP,float to,float step)
       if ( ( getEdge(i).st > curPt-1 && getEdge(i).en <= curPt-1 ) || ( getEdge(i).en > curPt-1 && getEdge(i).st <= curPt-1 )) {
         // crosses sweepline
         int nPt=(getEdge(i).st>curPt)?getEdge(i).st:getEdge(i).en;
-        SweepTree* node=SweepTree::AddInList(this,i,1,nPt,sTree,this);
+        SweepTree* node = sTree->add(this,i,1,nPt,this);
         swrData[i].misc=node;
-        node->Insert(sTree,*sEvts,this,nPt,false);
+        node->Insert(*sTree,*sEvts,this,nPt,false);
         node->startPoint=Other(nPt,i);
         CreateEdge(i,to,step);
       }
@@ -722,8 +723,8 @@ void              Shape::DirectScan(float &pos,int &curP,float to,float step)
   // the final touch: edges intersecting the sweepline must be update so that their intersection with
   // said sweepline is correct.
   pos=to;
-	if ( sTree.racine ) {
-		SweepTree* curS=static_cast <SweepTree*> (sTree.racine->Leftmost());
+	if ( sTree->racine ) {
+		SweepTree* curS=static_cast <SweepTree*> (sTree->racine->Leftmost());
 		while ( curS ) {
 			int    cb=curS->bord;
 			AvanceEdge(cb,to,true,step);
@@ -809,8 +810,8 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
     // first step: the rectangles
     // since we read the sweepline left to right, we know the boundaries of the rectangles are appended in a list, hence
     // the AppendBord(). we salvage the guess value for the trapezoids the edges will induce
- 		if ( sTree.racine ) {
-			SweepTree* curS=static_cast <SweepTree*> (sTree.racine->Leftmost());
+ 		if ( sTree->racine ) {
+			SweepTree* curS=static_cast <SweepTree*> (sTree->racine->Leftmost());
 			while ( curS ) {
 				int    lastGuess=-1;
 				int    cb=curS->bord;
@@ -893,7 +894,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 								swrData[cb].misc=NULL;
 								DestroyEdge(cb,to,line,step); // create trapezoid for the chunk of edge intersecting with the line
 
-								node->Remove(sTree,*sEvts,true);
+								node->Remove(*sTree,*sEvts,true);
 							}
 						}
 					}
@@ -920,9 +921,9 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 					CreateEdge(dnNo,to,step);
 					swrData[dnNo].guess=swrData[upNo].guess;
 				} else {
-					SweepTree* node=SweepTree::AddInList(this,dnNo,1,nPt,sTree,this);
+					SweepTree* node=sTree->add(this,dnNo,1,nPt,this);
 					swrData[dnNo].misc=node;
-					node->Insert(sTree,*sEvts,this,nPt,true);
+					node->Insert(*sTree,*sEvts,this,nPt,true);
 					insertionNode=node;
 					CreateEdge(dnNo,to,step);
 				}
@@ -933,9 +934,9 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
-							SweepTree* node=SweepTree::AddInList(this,cb,1,nPt,sTree,this);
+							SweepTree* node=sTree->add(this,cb,1,nPt,this);
 							swrData[cb].misc=node;
-							node->InsertAt(sTree,*sEvts,this,insertionNode,nPt,true);
+							node->InsertAt(*sTree,*sEvts,this,insertionNode,nPt,true);
 							CreateEdge(cb,to,step);
 						}
 					}
@@ -948,8 +949,8 @@ void              Shape::Scan(float &pos,int &curP,float to,FloatLigne* line,boo
 	}
   // update intersections with the sweepline, and add trapezoids for edges crossing the line
   pos=to;
-	if ( sTree.racine ) {
-		SweepTree* curS=static_cast <SweepTree*> (sTree.racine->Leftmost());
+	if ( sTree->racine ) {
+		SweepTree* curS=static_cast <SweepTree*> (sTree->racine->Leftmost());
 		while ( curS ) {
 			int    cb=curS->bord;
 			AvanceEdge(cb,to,line,exact,step);
@@ -962,10 +963,10 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
   if ( numberOfEdges() <= 1 ) return;
 	if ( pos >= to ) return;
 	if ( pos < to ) {
-		if ( sTree.racine ) {
+		if ( sTree->racine ) {
 			int curW=0;
 			float  lastX=0;
-			SweepTree* curS=static_cast <SweepTree*> (sTree.racine->Leftmost());
+			SweepTree* curS=static_cast <SweepTree*> (sTree->racine->Leftmost());
 			if ( directed == fill_oddEven ) {
 				while ( curS ) {
 					int    cb=curS->bord;
@@ -1075,7 +1076,7 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 								swrData[cb].misc=NULL;
 								DestroyEdge(cb,to,line,step);
 
-								node->Remove(sTree,*sEvts,true);
+								node->Remove(*sTree,*sEvts,true);
 							}
 						}
 					}
@@ -1101,9 +1102,9 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 					insertionNode=node;
 					CreateEdge(dnNo,to,step);
 				} else {
-					SweepTree* node=SweepTree::AddInList(this,dnNo,1,nPt,sTree,this);
+					SweepTree* node=sTree->add(this,dnNo,1,nPt,this);
 					swrData[dnNo].misc=node;
-					node->Insert(sTree,*sEvts,this,nPt,true);
+					node->Insert(*sTree,*sEvts,this,nPt,true);
 					insertionNode=node;
 					CreateEdge(dnNo,to,step);
 				}
@@ -1114,9 +1115,9 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
-							SweepTree* node=SweepTree::AddInList(this,cb,1,nPt,sTree,this);
+							SweepTree* node=sTree->add(this,cb,1,nPt,this);
 							swrData[cb].misc=node;
-							node->InsertAt(sTree,*sEvts,this,insertionNode,nPt,true);
+							node->InsertAt(*sTree,*sEvts,this,insertionNode,nPt,true);
 							CreateEdge(cb,to,step);
 						}
 					}
@@ -1128,8 +1129,8 @@ void              Shape::Scan(float &pos,int &curP,float to,FillRule directed,Bi
 		if ( curPt > 0 ) pos=getPoint(curPt-1).x[1]; else pos=to;
 	}
   pos=to;
-	if ( sTree.racine ) {
-		SweepTree* curS=static_cast <SweepTree*> (sTree.racine->Leftmost());
+	if ( sTree->racine ) {
+		SweepTree* curS=static_cast <SweepTree*> (sTree->racine->Leftmost());
 		while ( curS ) {
 			int    cb=curS->bord;
 			AvanceEdge(cb,to,line,exact,step);
@@ -1221,7 +1222,7 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 								swrData[cb].misc=NULL;
 								DestroyEdge(cb,to,line,step);
 
-								node->Remove(sTree,*sEvts,true);
+								node->Remove(*sTree,*sEvts,true);
 							}
 						}
 					}
@@ -1248,9 +1249,9 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 					CreateEdge(dnNo,to,step);
 					swrData[dnNo].guess=swrData[upNo].guess;
 				} else {
-					SweepTree* node=SweepTree::AddInList(this,dnNo,1,nPt,sTree,this);
+					SweepTree* node=sTree->add(this,dnNo,1,nPt,this);
 					swrData[dnNo].misc=node;
-					node->Insert(sTree,*sEvts,this,nPt,true);
+					node->Insert(*sTree,*sEvts,this,nPt,true);
 					insertionNode=node;
 					CreateEdge(dnNo,to,step);
 				}
@@ -1261,9 +1262,9 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 				while ( cb >= 0 && cb < numberOfEdges() ) {
 					if ( ( getEdge(cb).st > getEdge(cb).en && nPt == getEdge(cb).en ) || ( getEdge(cb).st < getEdge(cb).en && nPt == getEdge(cb).st ) ) {
 						if ( cb != dnNo ) {
-							SweepTree* node=SweepTree::AddInList(this,cb,1,nPt,sTree,this);
+							SweepTree* node=sTree->add(this,cb,1,nPt,this);
 							swrData[cb].misc=node;
-							node->InsertAt(sTree,*sEvts,this,insertionNode,nPt,true);
+							node->InsertAt(*sTree,*sEvts,this,insertionNode,nPt,true);
 							CreateEdge(cb,to,step);
 						}
 					}
@@ -1275,8 +1276,8 @@ void              Shape::Scan(float &pos,int &curP,float to,AlphaLigne* line,boo
 		if ( curPt > 0 ) pos=getPoint(curPt-1).x[1]; else pos=to;
 	}
   pos=to;
-	if ( sTree.racine ) {
-		SweepTree* curS=static_cast <SweepTree*> (sTree.racine->Leftmost());
+	if ( sTree->racine ) {
+		SweepTree* curS=static_cast <SweepTree*> (sTree->racine->Leftmost());
 		while ( curS ) {
 			int    cb=curS->bord;
 			AvanceEdge(cb,to,line,exact,step);
