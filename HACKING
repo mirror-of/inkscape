@@ -1,4 +1,4 @@
-If you are interested in hacking Sodipodi's source code, you are
+If you are interested in hacking Inkscape's source code, you are
 welcome to do so. But be cautious, as every single thing in the
 structure/API may change yet. If you ever have a better idea about how
 some subsystem should work, let me too know.
@@ -40,7 +40,7 @@ some details.
 Notably, $CFLAGS are the general compiler flags, $CPPFLAGS are flags
 specific to the preprocessor, and $LDFLAGS are linker flags.
 
-For instance, some do Sodipodi development with CFLAGS="-g -Wall".
+For instance, some do Inkscape development with CFLAGS="-g -Wall".
 
 1. reprs & cousins
 SPRepr, SPCSSAttr ...
