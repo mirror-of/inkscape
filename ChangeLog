@@ -1,3 +1,9 @@
+2004-04-30  MenTaLguY <mental@rydia.net>
+
+    * src/sp-use.cpp: call parent class' write methods rather than
+	  attempting to do everything (wrongly) ourselves; among other
+	  things, <use> transform attributes weren't getting written
+
 2004-04-30 njh <njh@mail.csse.monash.edu.au>
 
 	* main.cpp: replaced gtk_init with g_type_init for console mode.

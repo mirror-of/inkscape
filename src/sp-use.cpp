@@ -261,7 +261,10 @@ sp_use_write (SPObject *object, SPRepr *repr, guint flags)
 		repr = sp_repr_new ("use");
 	}
 
-	sp_repr_set_attr (repr, "id", object->id);
+        if (((SPObjectClass *) (parent_class))->write) {
+		((SPObjectClass *) (parent_class))->write (object, repr, flags);
+	}
+
 	sp_repr_set_double (repr, "x", use->x.computed);
 	sp_repr_set_double (repr, "y", use->y.computed);
 	sp_repr_set_double (repr, "width", use->width.computed);
