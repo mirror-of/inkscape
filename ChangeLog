@@ -1,3 +1,13 @@
+2004-02-05  Jon Phillips <kidproto@users.sf.net>
+
+    *  src/dialogs/item-properties.cpp, src/dialogs/item-properties.h, 
+       src/dialogs/object-attributes.cpp, src/dialogs/object-attributes.h, 
+       src/dialogs/object-properties.cpp, src/dialogs/object-properties.h, 
+       src/dialogs/sp-attribute-widget.cpp, src/dialogs/sp-attribute-widget.h, 
+       src/dialogs/stroke-style.cpp, src/dialogs/stroke-style.h: Converted 
+       the aforementioned to coding style.
+
+
 2004-02-04  Ted Gould <ted@gould.cx>
 
     * src/desktop-snap.cpp: Removing some unused code that had
