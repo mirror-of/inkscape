@@ -7,6 +7,7 @@
 #ifndef BACKEND_GIMPPATH_H
 #define BACKEND_GIMPPATH_H
 
+#include <stdio.h>
 #include "curve.h"
 #include "main.h"
 

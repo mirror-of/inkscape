@@ -7,6 +7,7 @@
 #ifndef BACKEND_SVG_H
 #define BACKEND_SVG_H
 
+#include <stdio.h>
 #include "curve.h"
 #include "main.h"
 

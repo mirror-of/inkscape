@@ -7,6 +7,8 @@
 #ifndef FLATE_H
 #define FLATE_H
 
+#include <stdio.h>
+
 int dummy_xship(FILE *f, int filter, char *s, int len);
 int flate_xship(FILE *f, int filter, char *s, int len);
 int lzw_xship(FILE *f, int filter, char *s, int len);
@@ -16,4 +18,4 @@ int a85init(FILE *f);
 int a85finish(FILE *f);
 int a85write(FILE *f, char *buf, int n);
 
-#endif /* FLATE_H */
+#endif /* !FLATE_H */

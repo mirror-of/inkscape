@@ -7,6 +7,7 @@
 #ifndef BACKEND_EPS_H
 #define BACKEND_EPS_H
 
+#include <stdio.h>
 #include "curve.h"
 #include "main.h"
 
@@ -16,5 +17,5 @@ int term_ps(FILE *fout);
 
 int page_eps(FILE *fout, path_t *plist, imginfo_t *imginfo);
 
-#endif /* BACKEND_EPS_H */
+#endif /* !BACKEND_EPS_H */
 

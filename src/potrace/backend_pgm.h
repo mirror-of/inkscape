@@ -7,6 +7,7 @@
 #ifndef BACKEND_PGM_H
 #define BACKEND_PGM_H
 
+#include <stdio.h>
 #include "curve.h"
 #include "main.h"
 

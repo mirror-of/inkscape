@@ -7,6 +7,7 @@
 #ifndef BACKEND_XFIG_H
 #define BACKEND_XFIG_H
 
+#include <stdio.h>
 #include "curve.h"
 #include "main.h"
 
