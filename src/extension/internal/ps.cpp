@@ -60,6 +60,8 @@
 #include <libnrtype/font-instance.h>
 #include <libnrtype/font-style-to-pos.h>
 
+#include <unit-constants.h>
+
 #include "ps.h"
 #include <extension/system.h>
 #include <extension/extension.h>
@@ -324,8 +326,10 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
         fflush(stdout);
         return 0;
     }
-    _width = sp_document_width(doc);
-    _height = sp_document_height(doc);
+
+    // width and height in pt
+    _width = sp_document_width(doc) * PT_PER_PX;
+    _height = sp_document_height(doc) * PT_PER_PX;
 
     NRRect d;
     bool   pageBoundingBox;
@@ -334,11 +338,16 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
     // printf("Page Bounding Box: %s\n", pageBoundingBox ? "TRUE" : "FALSE");
     if (pageBoundingBox) {
         d.x0 = d.y0 = 0;
-        d.x1 = ceil(sp_document_width(doc));
-        d.y1 = ceil(sp_document_height(doc));
+        d.x1 = ceil(_width);
+        d.y1 = ceil(_height);
     } else {
         SPItem* doc_item = SP_ITEM(sp_document_root(doc));
         sp_item_invoke_bbox(doc_item, &d, sp_item_i2r_affine(doc_item), TRUE);
+        // convert from px to pt
+        d.x0 *= PT_PER_PX;
+        d.x1 *= PT_PER_PX;
+        d.y0 *= PT_PER_PX;
+        d.y1 *= PT_PER_PX;
     }
 
     if (res >= 0) {
@@ -358,7 +367,7 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
         // than it is tall (e.g., small figures for inclusion in LaTeX).
         // The original patch by WQ only had the w>h condition.
         {
-             double w = (d.x1 - d.x0); // width and height of bounding box, in points
+             double w = (d.x1 - d.x0); // width and height of bounding box, in pt
              double h = (d.y1 - d.y0);
              pageLandscape = (
                  (w > 0. && h > 0.) // empty documents fail this sanity check, have w<0, h<0
@@ -413,7 +422,8 @@ PrintPS::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
         }
 
         if (!_bitmap) {
-            os << "1 -1 scale\n";
+            os << PT_PER_PX << " " << -PT_PER_PX << " scale\n";
+            // from now on we can output px, but they will be treated as pt
         }
     }
 
