@@ -1,9 +1,11 @@
 #ifndef SEEN_SNAP_H
 #define SEEN_SNAP_H
 
-/*
+/** \file
  * Snap distance calculation
- *
+ */
+
+/*
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Frank Felfe <innerspace@iname.com>
@@ -29,7 +31,7 @@
  * -- pjrm
  */
 
-///< Parent for classes that can snap points to something
+/// Parent for classes that can snap points to something.
 class Snapper
 {
 public:
@@ -66,7 +68,7 @@ private:
 };
 
 
-///< Snap to grid
+/// Snap to grid.
 class GridSnapper : public Snapper
 {
 public:
@@ -79,7 +81,7 @@ public:
 };
 
 
-///< Snap to guides
+/// Snap to guides.
 class GuideSnapper : public Snapper
 {
 public:
