@@ -281,7 +281,7 @@ sp_fill_dxdy (SPObject *child, guint end)
 	// or delete extra
 	while (g_list_length(dxnew) > end) {
 		if (g_list_length(dxnew) > 1) {
-			g_list_remove (dxnew, g_list_last(dxnew)->data);
+			dxnew = g_list_remove (dxnew, g_list_last(dxnew)->data);
 		} else {
 			dxnew = NULL;
 			break;
@@ -299,7 +299,7 @@ sp_fill_dxdy (SPObject *child, guint end)
 	// or delete extra
 	while (g_list_length(dynew) > end) {
 		if (g_list_length(dynew) > 1)
-			g_list_remove (dynew, g_list_last(dynew)->data);
+			dynew = g_list_remove (dynew, g_list_last(dynew)->data);
 		else {
 			dynew = NULL;
 			break;
@@ -380,21 +380,25 @@ sp_insert_dxdy (SPObject *child, guint pos, float dx_computed, float dy_computed
 	if (g_list_length (dxnew) < pos) {
 		if (dx_computed != 0) {
 			for (guint i = g_list_length(dxnew); i <= pos; i++) {
+
 				SPSVGLength *length = g_new (SPSVGLength, 1);
-				length->value = 0;
+				length->unit = SP_SVG_UNIT_PX;
 				if (i == pos)	
-					length->computed = dx_computed;
+					length->value = length->computed = dx_computed;
 				else 
-					length->computed = 0;
+					length->value = length->computed = 0;
+
 				dxnew = g_list_append (dxnew, length);
 			}
 		}
 	} else {
+
 		SPSVGLength *length = g_new (SPSVGLength, 1);
-		length->value = 0;
-		length->computed = dx_computed;
+		length->unit = SP_SVG_UNIT_PX;
+		length->value = length->computed = dx_computed;
+
 		if (!ins) {
-			g_list_remove (dxnew, g_list_nth_data (dxnew, pos));
+			dxnew = g_list_remove (dxnew, g_list_nth_data (dxnew, pos));
 		}
 		dxnew = g_list_insert (dxnew, (gpointer) length, pos);
 	}
@@ -402,21 +406,25 @@ sp_insert_dxdy (SPObject *child, guint pos, float dx_computed, float dy_computed
 	if (g_list_length (dynew) < pos) {
 		if (dy_computed != 0) {
 			for (guint i = g_list_length(dynew); i <= pos; i++) {
+
 				SPSVGLength *length = g_new (SPSVGLength, 1);
-				length->value = 0;
-				if (i == pos)	
-					length->computed = dy_computed;
+				length->unit = SP_SVG_UNIT_PX;
+				if (i == pos)
+					length->value = length->computed = dy_computed;
 				else 
-					length->computed = 0;
+					length->value = length->computed = 0;
+
 				dynew = g_list_append (dynew, length);
 			}
 		}
 	} else {
+
 		SPSVGLength *length = g_new (SPSVGLength, 1);
-		length->value = 0;
-		length->computed = dy_computed;
+		length->unit = SP_SVG_UNIT_PX;
+		length->value = length->computed = dy_computed;
+
 		if (!ins) {
-			g_list_remove (dynew, g_list_nth_data (dynew, pos));
+			dynew = g_list_remove (dynew, g_list_nth_data (dynew, pos));
 		}
 		dynew = g_list_insert (dynew, (gpointer) length, pos);
 	}
