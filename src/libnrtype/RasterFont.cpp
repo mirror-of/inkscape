@@ -203,7 +203,7 @@ raster_position::~raster_position(void)
   if ( runs ) free(runs);
 }
   
-void      raster_position::AppendRuns(int add,float_ligne_run* src,int y)
+void      raster_position::AppendRuns(std::vector<float_ligne_run> const &r,int y)
 {
   if ( top > bottom ) {
     top=bottom=y;
@@ -222,12 +222,15 @@ void      raster_position::AppendRuns(int add,float_ligne_run* src,int y)
     }
   }
   
-  if ( add <= 0 ) {
-  } else {
-    run_on_line[y-top]=add;
-    runs=(float_ligne_run*)realloc(runs,(nbRun+add)*sizeof(float_ligne_run));
-    memcpy(runs+nbRun,src,add*sizeof(float_ligne_run));
-    nbRun+=add;
+  if ( r.empty() == false) {
+    run_on_line[y - top] = r.size();
+    runs = (float_ligne_run *) realloc(runs, (nbRun + r.size()) * sizeof(float_ligne_run));
+
+    for (int i = 0; i < int(r.size()); i++) {
+      runs[nbRun + i] = r[i];
+    }
+    
+    nbRun += r.size();
   }
 }
 void      raster_position::Blit(float ph,int pv,NRPixBlock &over)
@@ -347,7 +350,7 @@ void      raster_glyph::LoadSubPixelPosition(int no)
     polygon->QuickScan(curY,curPt,((float)(y+1))+sub_delta,theI,1.0);
     theI->Flatten();
     
-    sub_pixel[no].AppendRuns(theI->nbRun,theI->runs,y);
+    sub_pixel[no].AppendRuns(theI->runs, y);
   }
   polygon->EndQuickRaster();
   delete theI;

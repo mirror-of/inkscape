@@ -24,7 +24,7 @@ public:
     ~raster_position();
 
 		// stuff runs into the structure
-    void AppendRuns(int add, float_ligne_run *src, int y);
+    void AppendRuns(std::vector<float_ligne_run> const &r, int y);
 		// blits the trapezoids.
     void Blit(float ph, int pv, NRPixBlock &over);
 };

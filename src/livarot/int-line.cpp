@@ -726,7 +726,7 @@ void             IntLigne::Copy(IntLigne* a)
 //   * How does AddRun() look for optimization potential?
 void             IntLigne::Copy(FloatLigne* a)
 {
-    if ( a->nbRun <= 0 ) {
+    if ( a->runs.empty() ) {
 	Reset();
 	return;
     }
@@ -746,7 +746,7 @@ void             IntLigne::Copy(FloatLigne* a)
     // since the float_ligne_runs are non-overlapping, when a single-pixel run intersects with another runs, 
     // it must intersect with the single-pixel run created for the end of that run. so instead of creating a new
     // int_ligne_run, we just add the coverage to that run.
-    for (int i=0; i<a->nbRun; i++) {
+    for (int i = 0; i < int(a->runs.size()); i++) {
 	float_ligne_run runA = a->runs[i];
 	float curStF = floor(runA.st);
 	float curEnF = floor(runA.en);

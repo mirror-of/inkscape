@@ -8,19 +8,11 @@
  */
 
 #include <cstdio>
-#include <cstring>
-#include <glib/gmem.h>
 #include "livarot/float-line.h"
 #include "livarot/int-line.h"
 
 FloatLigne::FloatLigne()
 {
-    nbBord = maxBord = 0;
-    bords = NULL;
-    
-    nbRun = maxRun = 0;
-    runs = NULL;
-    
     firstAc = lastAc = -1;
     s_first = s_last = -1;
 }
@@ -28,23 +20,14 @@ FloatLigne::FloatLigne()
 
 FloatLigne::~FloatLigne()
 {
-    if ( maxBord > 0 ) {
-        g_free(bords);
-        nbBord = maxBord = 0;
-        bords = NULL;
-    }
-    if ( maxRun > 0 ) {
-        g_free(runs);
-        nbRun = maxRun = 0;
-        runs = NULL;
-    }
+    
 }
 
 
 void FloatLigne::Reset()
 {
-    nbBord = 0;
-    nbRun = 0;
+    bords.clear();
+    runs.clear();
     firstAc = lastAc = -1;
     s_first = s_last = -1;
 }
@@ -56,12 +39,7 @@ int FloatLigne::AddBord(float spos, float sval, float epos, float eval, int gues
     if ( spos >= epos ) {
         return -1;
     }
-    // allocate the boundaries in the array
-    if ( nbBord+1 >= maxBord ) {
-        maxBord = 2 * nbBord + 2;
-        bords = (float_ligne_bord *) g_realloc(bords, maxBord * sizeof(float_ligne_bord));
-    }
-    
+
     float pente = (eval - sval) / (epos - spos);
     
 #ifdef faster_flatten
@@ -72,37 +50,38 @@ int FloatLigne::AddBord(float spos, float sval, float epos, float eval, int gues
     }
 #endif
   
-    if ( guess >= nbBord ) {
+    if ( guess >= int(bords.size()) ) {
         guess = -1;
     }
     
     // add the left boundary
-    int n = nbBord++;
-    bords[n].pos = spos;
-    bords[n].val = sval;
-    bords[n].start = true;
-    bords[n].other = n+1;
-    bords[n].pente = pente;
-    bords[n].prev = bords[n].next = -1;
-    bords[n].s_prev = bords[n].s_next = -1;
-//	bords[n].delta=sval-eval;
+    float_ligne_bord b;
+    int n = bords.size();
+    b.pos = spos;
+    b.val = sval;
+    b.start = true;
+    b.other = n + 1;
+    b.pente = pente;
+    b.prev = b.next = -1;
+    b.s_prev = b.s_next = -1;
+    bords.push_back(b);
 
     // insert it in the doubly-linked list
     InsertBord(n, spos, guess);
     
     // add the right boundary
-    n = nbBord++;
-    bords[n].pos = epos;
-    bords[n].val = eval;
-    bords[n].start = false;
-    bords[n].other = n-1;
-    bords[n].pente = bords[n-1].pente;
-    bords[n].prev = bords[n].next = -1;
-    bords[n].s_prev = bords[n].s_next = -1;
-//	bords[n].delta=eval-sval;
-
-  // insert it in the doubly-linked list, knowing that boundary at index n-1 is not too far before me
-    InsertBord(n,epos,n-1);
+    n = bords.size();
+    b.pos = epos;
+    b.val = eval;
+    b.start = false;
+    b.other = n-1;
+    b.pente = pente;
+    b.prev = b.next = -1;
+    b.s_prev = b.s_next = -1;
+    bords.push_back(b);
+    
+    // insert it in the doubly-linked list, knowing that boundary at index n-1 is not too far before me
+    InsertBord(n, epos, n - 1);
   	
     return n;
 }
@@ -115,11 +94,6 @@ int FloatLigne::AddBord(float spos, float sval, float epos, float eval, float pe
         return -1;
     }
 
-    if ( nbBord + 1 >= maxBord ) {
-        maxBord = 2 * nbBord + 2;
-        bords = (float_ligne_bord*) g_realloc(bords, maxBord * sizeof(float_ligne_bord));
-    }
-    
 #ifdef faster_flatten
     if ( fabsf(epos-spos) < 0.001 || fabsf(pente) > 1000 ) {
         return;
@@ -128,30 +102,30 @@ int FloatLigne::AddBord(float spos, float sval, float epos, float eval, float pe
     }
 #endif
     
-    if ( guess >= nbBord ) {
+    if ( guess >= int(bords.size()) ) {
         guess=-1;
     }
-  
-    int n = nbBord++;
-    bords[n].pos = spos;
-    bords[n].val = sval;
-    bords[n].start = true;
-    bords[n].other = n+1;
-    bords[n].pente = pente;
-    bords[n].prev = bords[n].next = -1;
-    bords[n].s_prev = bords[n].s_next = -1;
-	//	bords[n].delta=sval-eval;
 
+    float_ligne_bord b;
+    int n = bords.size();
+    b.pos = spos;
+    b.val = sval;
+    b.start = true;
+    b.other = n + 1;
+    b.pente = pente;
+    b.prev = b.next = -1;
+    b.s_prev = b.s_next = -1;
+    bords.push_back(b);
 
-    n = nbBord++;
-    bords[n].pos = epos;
-    bords[n].val = eval;
-    bords[n].start = false;
-    bords[n].other = n-1;
-    bords[n].pente = bords[n-1].pente;
-    bords[n].prev = bords[n].next = -1;
-    bords[n].s_prev = bords[n].s_next = -1;
-	//	bords[n].delta=eval-sval;
+    n = bords.size();
+    b.pos = epos;
+    b.val = eval;
+    b.start = false;
+    b.other = n - 1;
+    b.pente = pente;
+    b.prev = b.next = -1;
+    b.s_prev = b.s_next = -1;
+    bords.push_back(b);
 
     InsertBord(n - 1, spos, guess);
     InsertBord(n, epos, n - 1);
@@ -195,11 +169,6 @@ int FloatLigne::AddBordR(float spos, float sval, float epos, float eval, float p
         return -1;
     }
     
-    if ( nbBord + 1 >= maxBord ) {
-        maxBord= 2 * nbBord + 2;
-        bords = (float_ligne_bord *) g_realloc(bords, maxBord * sizeof(float_ligne_bord));
-    }
-
 #ifdef faster_flatten
     if ( fabsf(epos-spos) < 0.001 || fabsf(pente) > 1000 ) {
         return;
@@ -208,30 +177,34 @@ int FloatLigne::AddBordR(float spos, float sval, float epos, float eval, float p
     }
 #endif
 
-    if ( guess >= nbBord ) {
+    if ( guess >= int(bords.size()) ) {
         guess=-1;
     }
-  
-    int n = nbBord++;
-    bords[n].pos = spos;
-    bords[n].val = sval;
-    bords[n].start = true;
-    bords[n].other = n+1;
-    bords[n].pente = pente;
-    bords[n].prev = bords[n].next = -1;
-    bords[n].s_prev = bords[n].s_next = -1;
 
-    n = nbBord++;
-    bords[n].pos = epos;
-    bords[n].val = eval;
-    bords[n].start = false;
-    bords[n].other = n-1;
-    bords[n].pente = bords[n-1].pente;
-    bords[n].prev = bords[n].next = -1;
-    bords[n].s_prev = bords[n].s_next = -1;
+    float_ligne_bord b;
+    int n = bords.size();
+    b.pos = spos;
+    b.val = sval;
+    b.start = true;
+    b.other = n + 1;
+    b.pente = pente;
+    b.prev = b.next = -1;
+    b.s_prev = b.s_next = -1;
+    bords.push_back(b);
+    
+    n = bords.size();
+    b.pos = epos;
+    b.val = eval;
+    b.start = false;
+    b.other = n - 1;
+    b.pente = pente;
+    b.prev = b.next = -1;
+    b.s_prev = b.s_next = -1;
+    bords.push_back(b);
     
     InsertBord(n, epos, guess);
     InsertBord(n - 1, spos, n);
+    
 /*	if ( bords[n].s_prev < 0 ) {
 		bords[n-1].s_prev=-1;
 		s_first=n-1;
@@ -273,11 +246,6 @@ int FloatLigne::AppendBord(float spos, float sval, float epos, float eval, float
         return -1;
     }
     
-    if ( nbBord+1 >= maxBord ) {
-        maxBord = 2 * nbBord + 2;
-        bords = (float_ligne_bord*) g_realloc(bords, maxBord * sizeof(float_ligne_bord));
-    }
-
 #ifdef faster_flatten
     if ( fabsf(epos-spos) < 0.001 || fabsf(pente) > 1000 ) {
         return;
@@ -286,15 +254,17 @@ int FloatLigne::AppendBord(float spos, float sval, float epos, float eval, float
     }
 #endif
     
-    int n = nbBord++;
-    bords[n].pos = spos;
-    bords[n].val = sval;
-    bords[n].start = true;
-    bords[n].other = n + 1;
-    bords[n].pente = pente;
-    bords[n].prev = bords[n].next = -1;
-    bords[n].s_prev = s_last;
-    bords[n].s_next = n + 1;
+    int n = bords.size();
+    float_ligne_bord b;
+    b.pos = spos;
+    b.val = sval;
+    b.start = true;
+    b.other = n + 1;
+    b.pente = pente;
+    b.prev = b.next = -1;
+    b.s_prev = s_last;
+    b.s_next = n + 1;
+    bords.push_back(b);
  
     if ( s_last >=  0 ) {
         bords[s_last].s_next = n;
@@ -304,15 +274,16 @@ int FloatLigne::AppendBord(float spos, float sval, float epos, float eval, float
         s_first = n;
     }
 
-    n = nbBord++;
-    bords[n].pos = epos;
-    bords[n].val = eval;
-    bords[n].start = false;
-    bords[n].other = n - 1;
-    bords[n].pente = bords[n - 1].pente;
-    bords[n].prev = bords[n].next = -1;
-    bords[n].s_prev = n - 1;
-    bords[n].s_next = -1;
+    n = bords.size();
+    b.pos = epos;
+    b.val = eval;
+    b.start = false;
+    b.other = n - 1;
+    b.pente = pente;
+    b.prev = b.next = -1;
+    b.s_prev = n - 1;
+    b.s_next = -1;
+    bords.push_back(b);
 
     s_last = n;
 
@@ -324,7 +295,7 @@ int FloatLigne::AppendBord(float spos, float sval, float epos, float eval, float
 // insertion in a boubly-linked list. nothing interesting here
 void FloatLigne::InsertBord(int no, float p, int guess)
 {
-    if ( no < 0 || no >= nbBord ) {
+    if ( no < 0 || no >= int(bords.size()) ) {
         return;
     }
     
@@ -335,13 +306,13 @@ void FloatLigne::InsertBord(int no, float p, int guess)
         return;
     }
     
-    if ( guess < 0 || guess >= nbBord ) {
+    if ( guess < 0 || guess >= int(bords.size()) ) {
         int c = s_first;
-        while ( c >= 0 && c < nbBord && CmpBord(bords+c,bords+no) < 0 ) {
+        while ( c >= 0 && c < int(bords.size()) && CmpBord(bords[c], bords[no]) < 0 ) {
             c = bords[c].s_next;
         }
         
-        if ( c < 0 || c >= nbBord ) {
+        if ( c < 0 || c >= int(bords.size()) ) {
             bords[no].s_prev = s_last;
             bords[s_last].s_next = no;
             s_last = no;
@@ -357,7 +328,7 @@ void FloatLigne::InsertBord(int no, float p, int guess)
         }
     } else {
         int c = guess;
-        int stTst = CmpBord(bords + c,bords + no);
+        int stTst = CmpBord(bords[c], bords[no]);
 
         if ( stTst == 0 ) {
 
@@ -372,11 +343,11 @@ void FloatLigne::InsertBord(int no, float p, int guess)
             
         } else if ( stTst > 0 ) {
             
-            while ( c >= 0 && c < nbBord && CmpBord(bords+c,bords+no) > 0 ) {
+            while ( c >= 0 && c < int(bords.size()) && CmpBord(bords[c], bords[no]) > 0 ) {
                 c = bords[c].s_prev;
             }
             
-            if ( c < 0 || c >= nbBord ) {
+            if ( c < 0 || c >= int(bords.size()) ) {
                 bords[no].s_next = s_first;
                 bords[s_first].s_prev =no; // s_first != -1
                 s_first = no; 
@@ -393,11 +364,11 @@ void FloatLigne::InsertBord(int no, float p, int guess)
             
         } else {
 
-            while ( c >= 0 && c < nbBord && CmpBord(bords+c,bords+no) < 0 ) {
+            while ( c >= 0 && c < int(bords.size()) && CmpBord(bords[c],bords[no]) < 0 ) {
                 c = bords[c].s_next;
             }
             
-            if ( c < 0 || c >= nbBord ) {
+            if ( c < 0 || c >= int(bords.size()) ) {
                 bords[no].s_prev = s_last;
                 bords[s_last].s_next = no;
                 s_last = no;
@@ -420,7 +391,7 @@ float FloatLigne::RemainingValAt(float at, int pending)
 {
     float sum = 0;
 /*	int     no=firstAc;
-	while ( no >= 0 && no < nbBord ) {
+	while ( no >= 0 && no < bords.size() ) {
 		int   nn=bords[no].other;
 		sum+=bords[nn].val+(at-bords[nn].pos)*bords[nn].pente;
 //				sum+=((at-bords[nn].pos)*bords[no].val+(bords[no].pos-at)*bords[nn].val)/(bords[no].pos-bords[nn].pos);
@@ -482,7 +453,7 @@ void FloatLigne::SortBords(int s, int e)
     }
     
     if (e == s + 1)  {
-        if ( CmpBord(bords+s,bords+e) > 0 ) {
+        if ( CmpBord(bords[s],bords[e]) > 0 ) {
             SwapBords (s, e);
         }
         return;
@@ -497,7 +468,7 @@ void FloatLigne::SortBords(int s, int e)
     while (le < ppos || ri > plast) {
         if (le < ppos) {
             do {
-                int const test = CmpBord(bords+le,&pval);
+                int const test = CmpBord(bords[le], pval);
                 if (test == 0) {
                     // on colle les valeurs egales au pivot ensemble
                     if (le < ppos - 1) {
@@ -521,7 +492,7 @@ void FloatLigne::SortBords(int s, int e)
         
         if (ri > plast) {
             do {
-                int const test = CmpBord(bords+ri,&pval);
+                int const test = CmpBord(bords[ri],pval);
                 if (test == 0) {
                     // on colle les valeurs egales au pivot ensemble
                     if (ri > plast + 1) {
@@ -586,16 +557,16 @@ void FloatLigne::SortBords(int s, int e)
 
 void FloatLigne::Flatten()
 {
-    if ( nbBord <= 1 ) {
+    if ( int(bords.size()) <= 1 ) {
         Reset();
         return;
     }
     
-    nbRun = 0;
+    runs.clear();
     firstAc = lastAc = -1;
 
-//	qsort(bords,nbBord,sizeof(float_ligne_bord),FloatLigne::CmpBord);
-//	SortBords(0,nbBord-1);
+//	qsort(bords,bords.size(),sizeof(float_ligne_bord),FloatLigne::CmpBord);
+//	SortBords(0,bords.size()-1);
   
     float totPente = 0;
     float totStart = 0;
@@ -606,9 +577,9 @@ void FloatLigne::Flatten()
     float lastVal = 0;
     int pending = 0;
     
-//	for (int i=0;i<nbBord;) {
+//	for (int i=0;i<bords.size();) {
     // read the list from left to right, adding a run for each boundary crossed, minus runs with alpha=0
-    for (int i=/*0*/s_first; i>=0 && i < nbBord ;) {
+    for (int i=/*0*/s_first; i>=0 && i < int(bords.size()) ;) {
         
         float cur = bords[i].pos;  // position of the current boundary (there may be several boundaries at this position)
         float leftV = 0;  // deltas in coverage value at this position
@@ -621,13 +592,13 @@ void FloatLigne::Flatten()
         // idem for leftP and rightP
     
         // start by scanning all boundaries that end a portion at this position
-        while ( i >= 0 && i < nbBord && bords[i].pos == cur && bords[i].start == false ) {
+        while ( i >= 0 && i < int(bords.size()) && bords[i].pos == cur && bords[i].start == false ) {
             leftV += bords[i].val;
             leftP += bords[i].pente;
             
 #ifndef faster_flatten
             // we need to remove the boundary that started this coverage portion for the pending list
-            if ( bords[i].other >= 0 && bords[i].other < nbBord ) {
+            if ( bords[i].other >= 0 && bords[i].other < int(bords.size()) ) {
                 // so we use the pend_inv "array"
                 int const k = bords[bords[i].other].pend_inv;
                 if ( k >= 0 && k < pending ) {
@@ -646,7 +617,7 @@ void FloatLigne::Flatten()
         }
         
         // then scan all boundaries that start a portion at this position
-        while ( i >= 0 && i < nbBord && bords[i].pos == cur && bords[i].start == true ) {
+        while ( i >= 0 && i < int(bords.size()) && bords[i].pos == cur && bords[i].start == true ) {
             rightV += bords[i].val;
             rightP += bords[i].pente;
 #ifndef faster_flatten
@@ -691,15 +662,15 @@ void FloatLigne::Flatten()
 
 void FloatLigne::Affiche()
 {
-    printf("%i : \n", nbBord);
-    for (int i = 0; i < nbBord; i++) {
+    printf("%i : \n", bords.size());
+    for (int i = 0; i < int(bords.size()); i++) {
         printf("(%f %f %f %i) ",bords[i].pos,bords[i].val,bords[i].pente,(bords[i].start?1:0)); // localization ok
     }
     
     printf("\n");
-    printf("%i : \n", nbRun);
+    printf("%i : \n", runs.size());
     
-    for (int i = 0; i < nbRun; i++) {
+    for (int i = 0; i < int(runs.size()); i++) {
         printf("(%f %f -> %f %f / %f)",
                runs[i].st, runs[i].vst, runs[i].en, runs[i].ven, runs[i].pente); // localization ok
     }
@@ -714,21 +685,19 @@ int FloatLigne::AddRun(float st, float en, float vst, float ven)
         return -1;
     }
 
-    if ( nbRun >= maxRun ) {
-        maxRun = 2 * nbRun + 1;
-        runs = (float_ligne_run *) g_realloc(runs, maxRun * sizeof(float_ligne_run));
-    }
-    
 /*  if ( nbRun > 0 && st < runs[nbRun-1].en-0.1 ) {
     printf("o");
   }*/
     
-    int n = nbRun++;
-    runs[n].st = st;
-    runs[n].en = en;
-    runs[n].vst = vst;
-    runs[n].ven = ven;
-    runs[n].pente = (ven - vst) / (en - st);
+    int const n = runs.size();
+    float_ligne_run r;
+    r.st = st;
+    r.en = en;
+    r.vst = vst;
+    r.ven = ven;
+    r.pente = (ven - vst) / (en - st);
+    runs.push_back(r);
+    
     return n;
 }
 
@@ -739,56 +708,44 @@ int FloatLigne::AddRun(float st, float en, float vst, float ven, float pente)
         return -1;
     }
 
-    if ( nbRun >= maxRun ) {
-        maxRun = 2 * nbRun + 1;
-        runs = (float_ligne_run*) g_realloc(runs, maxRun * sizeof(float_ligne_run));
-    }
-    
 /*  if ( nbRun > 0 && st < runs[nbRun-1].en-0.1 ) {
     printf("o");
   }*/
     
-    int n = nbRun++;
-    runs[n].st = st;
-    runs[n].en = en;
-    runs[n].vst = vst;
-    runs[n].ven = ven;
-    runs[n].pente = pente;
+    int const n = runs.size();
+    float_ligne_run r;
+    r.st = st;
+    r.en = en;
+    r.vst = vst;
+    r.ven = ven;
+    r.pente = pente;
+    runs.push_back(r);
+    
     return n;
 }
 
 void FloatLigne::Copy(FloatLigne *a)
 {
-    if ( a->nbRun <= 0 ) {
+    if ( a->runs.empty() ) {
         Reset();
         return;
     }
     
-    nbBord = 0;
-    nbRun = a->nbRun;
-    if ( nbRun > maxRun ) {
-        maxRun = nbRun;
-        runs = (float_ligne_run*) g_realloc(runs, maxRun * sizeof(float_ligne_run));
-    }
-    
-    memcpy(runs, a->runs, nbRun * sizeof(float_ligne_run));
+    bords.clear();
+    runs = a->runs;
 }
 
 void FloatLigne::Copy(IntLigne *a)
 {
-    if ( a->nbRun <= 0 ) {
+    if ( a->nbRun ) {
         Reset();
         return;
     }
     
-    nbBord = 0;
-    nbRun = a->nbRun;
-    if ( nbRun > maxRun ) {
-        maxRun = nbRun*2;
-        runs = (float_ligne_run*) g_realloc(runs, maxRun * sizeof(float_ligne_run));
-    }
+    bords.clear();
+    runs.resize(a->nbRun);
     
-    for (int i = 0;i < nbRun; i++) {
+    for (int i = 0; i < int(runs.size()); i++) {
         runs[i].st = a->runs[i].st;
         runs[i].en = a->runs[i].en;
         runs[i].vst = a->runs[i].vst;
@@ -806,18 +763,18 @@ void FloatLigne::Booleen(FloatLigne *a, FloatLigne *b, BooleanOp mod)
 {
     Reset();
     
-    if ( a->nbRun <= 0 && b->nbRun <= 0 ) {
+    if ( a->runs.empty() && b->runs.empty() <= 0 ) {
         return;
     }
     
-    if ( a->nbRun <= 0 ) {
+    if ( a->runs.empty() ) {
         if ( mod == bool_op_union || mod == bool_op_symdiff ) {
             Copy(b);
         }
         return;
     }
     
-    if ( b->nbRun <= 0 ) {
+    if ( b->runs.empty() ) {
         if ( mod == bool_op_union || mod == bool_op_diff || mod == bool_op_symdiff ) {
             Copy(a);
         }
@@ -842,7 +799,7 @@ void FloatLigne::Booleen(FloatLigne *a, FloatLigne *b, BooleanOp mod)
         valB = b->runs[0].vst;
     }
 	
-    while ( curA < a->nbRun && curB < b->nbRun ) {
+    while ( curA < int(a->runs.size()) && curB < int(b->runs.size()) ) {
         float_ligne_run runA = a->runs[curA];
         float_ligne_run runB = b->runs[curB];
         inA = ( curPos >= runA.st && curPos < runA.en );
@@ -942,7 +899,7 @@ void FloatLigne::Booleen(FloatLigne *a, FloatLigne *b, BooleanOp mod)
             inA = false;
             valA = 0;
             curA++;
-            if ( curA < a->nbRun && a->runs[curA].st == curPos ) {
+            if ( curA < int(a->runs.size()) && a->runs[curA].st == curPos ) {
                 valA=a->runs[curA].vst;
             }
         }
@@ -950,13 +907,13 @@ void FloatLigne::Booleen(FloatLigne *a, FloatLigne *b, BooleanOp mod)
             inB = false;
             valB = 0;
             curB++;
-            if ( curB < b->nbRun && b->runs[curB].st == curPos ) {
+            if ( curB < int(b->runs.size()) && b->runs[curB].st == curPos ) {
                 valB = b->runs[curB].vst;
             }
         }
     }
 
-    while ( curA < a->nbRun ) {
+    while ( curA < int(a->runs.size()) ) {
         float_ligne_run runA = a->runs[curA];
         inA = (curPos >= runA.st && curPos < runA.en );
         inB = false;
@@ -1014,13 +971,13 @@ void FloatLigne::Booleen(FloatLigne *a, FloatLigne *b, BooleanOp mod)
             inA = false;
             valA = 0;
             curA++;
-            if ( curA < a->nbRun && a->runs[curA].st == curPos ) {
+            if ( curA < int(a->runs.size()) && a->runs[curA].st == curPos ) {
                 valA=a->runs[curA].vst;
             }
         }
     }
     
-    while ( curB < b->nbRun ) {
+    while ( curB < int(b->runs.size()) ) {
         float_ligne_run runB = b->runs[curB];
         inB = ( curPos >= runB.st && curPos < runB.en );
         inA = false;
@@ -1079,7 +1036,7 @@ void FloatLigne::Booleen(FloatLigne *a, FloatLigne *b, BooleanOp mod)
             inB = false;
             valB = 0;
             curB++;
-            if ( curB < b->nbRun && b->runs[curB].st == curPos ) {
+            if ( curB < int(b->runs.size()) && b->runs[curB].st == curPos ) {
                 valB = b->runs[curB].vst;
             }
         }
@@ -1090,7 +1047,7 @@ void FloatLigne::Booleen(FloatLigne *a, FloatLigne *b, BooleanOp mod)
 void FloatLigne::Min(FloatLigne *a, float tresh, bool addIt)
 {
     Reset();
-    if ( a->nbRun <= 0 ) {
+    if ( a->runs.empty() ) {
         return;
     }
 
@@ -1098,7 +1055,7 @@ void FloatLigne::Min(FloatLigne *a, float tresh, bool addIt)
     float lastStart=0;
     float lastEnd = 0;
     
-    for (int i = 0; i < a->nbRun; i++) {
+    for (int i = 0; i < int(a->runs.size()); i++) {
         float_ligne_run runA = a->runs[i];
         if ( runA.vst <= tresh ) {
             if ( runA.ven <= tresh ) {
@@ -1179,11 +1136,11 @@ void FloatLigne::Min(FloatLigne *a, float tresh, bool addIt)
 void FloatLigne::Split(FloatLigne *a, float tresh, FloatLigne *over)
 {
     Reset();
-    if ( a->nbRun <= 0 ) {
+    if ( a->runs.empty() ) {
         return;
     }
 
-    for (int i = 0; i < a->nbRun; i++) {
+    for (int i = 0; i < int(a->runs.size()); i++) {
         float_ligne_run runA = a->runs[i];
         if ( runA.vst >= tresh ) {
             if ( runA.ven >= tresh ) {
@@ -1215,14 +1172,14 @@ void FloatLigne::Split(FloatLigne *a, float tresh, FloatLigne *over)
 void FloatLigne::Max(FloatLigne *a, float tresh, bool addIt)
 {
     Reset();
-    if ( a->nbRun <= 0 ) {
+    if ( a->runs.empty() <= 0 ) {
         return;
     }
 
     bool startExists = false;
     float lastStart = 0;
     float lastEnd = 0;
-    for (int i = 0; i < a->nbRun; i++) {
+    for (int i = 0; i < int(a->runs.size()); i++) {
         float_ligne_run runA = a->runs[i];
         if ( runA.vst >= tresh ) {
             if ( runA.ven >= tresh ) {
@@ -1303,7 +1260,7 @@ void FloatLigne::Max(FloatLigne *a, float tresh, bool addIt)
 void FloatLigne::Over(FloatLigne *a, float tresh)
 {
     Reset();
-    if ( a->nbRun <= 0 ) {
+    if ( a->runs.empty() ) {
         return;
     }
 
@@ -1311,7 +1268,7 @@ void FloatLigne::Over(FloatLigne *a, float tresh)
     float lastStart = 0;
     float lastEnd = 0;
     
-    for (int i = 0; i < a->nbRun; i++) {
+    for (int i = 0; i < int(a->runs.size()); i++) {
         float_ligne_run runA = a->runs[i];
         if ( runA.vst >= tresh ) {
             if ( runA.ven >= tresh ) {

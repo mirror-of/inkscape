@@ -68,11 +68,11 @@ box_sol   flow_dest::NextBox(box_sol& after,double asc,double desc,double lead,b
     // span on the same line
     ComputeLine(after.y,after.ascent,after.descent); // compute the line (should be cached for speed)
     int  elem=0;                // start on the left
-    while ( elem < tempLine->nbRun && ( tempLine->runs[elem].en < after.x_start+0.1 || (tempLine->runs[elem].en-tempLine->runs[elem].st) < min_length ) ) {
+    while ( elem < int(tempLine->runs.size()) && ( tempLine->runs[elem].en < after.x_start+0.1 || (tempLine->runs[elem].en-tempLine->runs[elem].st) < min_length ) ) {
       // while we're before the end of the last span, go right
       elem++;
     }
-    if ( elem >= 0 && elem < tempLine->nbRun ) {
+    if ( elem >= 0 && elem < int(tempLine->runs.size()) ) {
       // we found a span after the current one->return it
       n_res.before_rgn=false;
       n_res.after_rgn=false;
@@ -103,10 +103,10 @@ box_sol   flow_dest::NextBox(box_sol& after,double asc,double desc,double lead,b
     n_res.y+=n_res.ascent;
     ComputeLine(n_res.y,asc,desc);
     int  elem=0;
-		while ( elem < tempLine->nbRun && (tempLine->runs[elem].en-tempLine->runs[elem].st) < min_length) {
+		while ( elem < int(tempLine->runs.size()) && (tempLine->runs[elem].en-tempLine->runs[elem].st) < min_length) {
 			elem++;
 		}
-    if ( elem < tempLine->nbRun ) {
+    if ( elem < int(tempLine->runs.size()) ) {
       // found something
       n_res.before_rgn=false;
       n_res.after_rgn=false;
@@ -160,12 +160,12 @@ box_sol   flow_dest::TxenBox(box_sol& after,double asc,double desc,double lead,b
     // we want a span that has the same height as the previous one stored in dest -> we can look for a
     // span on the same line
     ComputeLine(after.y,after.ascent,after.descent); // compute the line (should be cached for speed)
-    int  elem=tempLine->nbRun-1;                // start on the left
+    int  elem=tempLine->runs.size()-1;                // start on the left
     while ( elem >= 0 && ( tempLine->runs[elem].st > after.x_start-0.1 || (tempLine->runs[elem].en-tempLine->runs[elem].st) < min_length ) ) {
       // while we're before the end of the last span, go right
       elem--;
     }
-    if ( elem >= 0 && elem < tempLine->nbRun ) {
+    if ( elem >= 0 && elem < int(tempLine->runs.size()) ) {
       // we found a span after the current one->return it
       n_res.before_rgn=false;
       n_res.after_rgn=false;
@@ -195,7 +195,7 @@ box_sol   flow_dest::TxenBox(box_sol& after,double asc,double desc,double lead,b
   while ( n_res.y < b ) {
     n_res.y+=n_res.ascent;
     ComputeLine(n_res.y,asc,desc);
-    int  elem=tempLine->nbRun-1;
+    int  elem=tempLine->runs.size()-1;
 		while ( elem >= 0 && (tempLine->runs[elem].en-tempLine->runs[elem].st) < min_length) {
 			elem--;
 		}
@@ -241,10 +241,10 @@ double         flow_dest::RemainingOnLine(box_sol& after)
   
   ComputeLine(after.y,after.ascent,after.descent);  // get the line
   int  elem=0;
-  while ( elem < tempLine->nbRun && tempLine->runs[elem].en < after.x_end ) elem++;
+  while ( elem < int(tempLine->runs.size()) && tempLine->runs[elem].en < after.x_end ) elem++;
   float  left=0;
   // and add the spaces
-  while ( elem < tempLine->nbRun ) {
+  while ( elem < int(tempLine->runs.size()) ) {
     if ( after.x_end < tempLine->runs[elem].st ) {
       left+=tempLine->runs[elem].en-tempLine->runs[elem].st;
     } else {
@@ -262,7 +262,7 @@ double         flow_dest::RemainingOnEnil(box_sol& after)
 	}
   
   ComputeLine(after.y,after.ascent,after.descent);  // get the line
-  int  elem=tempLine->nbRun-1;
+  int  elem=tempLine->runs.size()-1;
   while ( elem >= 0 && tempLine->runs[elem].st > after.x_start ) elem--;
   float  left=0;
   // and add the spaces

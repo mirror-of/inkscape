@@ -1,6 +1,7 @@
 #ifndef INKSCAPE_LIVAROT_FLOAT_LINE_H
 #define INKSCAPE_LIVAROT_FLOAT_LINE_H
 
+#include <vector>
 #include "livarot/LivarotDefs.h"
 
 /*
@@ -54,15 +55,8 @@ struct float_ligne_bord {
 
 class FloatLigne {
 public:
-    // array of coverage boundaries
-    int nbBord;
-    int maxBord;
-    float_ligne_bord *bords;
-
-    // array of runs
-    int nbRun;
-    int maxRun;
-    float_ligne_run *runs;
+    std::vector<float_ligne_bord> bords; ///< vector of coverage boundaries
+    std::vector<float_ligne_run> runs; ///< vector of runs
 
     // unused
     int firstAc;
@@ -141,20 +135,18 @@ public:
     void SwapBords(int a,int b,int c);
     void SortBords(int s,int e);
 
-    static int CmpBord(void const *p1, void const *p2) {
-        float_ligne_bord const *d1 = reinterpret_cast<float_ligne_bord const *>(p1);
-        float_ligne_bord const *d2 = reinterpret_cast<float_ligne_bord const *>(p2);
-        if ( d1->pos == d2->pos ) {
-            if ( d1->start && !(d2->start) ) {
+    static int CmpBord(float_ligne_bord const &d1, float_ligne_bord const &d2) {
+        if ( d1.pos == d2.pos ) {
+            if ( d1.start && !(d2.start) ) {
                 return 1;
             }
-            if ( !(d1->start) && d2->start ) {
+            if ( !(d1.start) && d2.start ) {
                 return -1;
             }
             return 0;
         }
         
-        return (( d1->pos < d2->pos ) ? -1 : 1);
+        return (( d1.pos < d2.pos ) ? -1 : 1);
     };
 
     // miscanellous
