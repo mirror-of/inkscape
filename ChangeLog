@@ -1,3 +1,7 @@
+2005-01-19  Kees Cook  <kees@outflux.net>
+
+    * configure.ac: trying to correct the -lgc detection.
+
 2005-01-18  Kees Cook  <kees@outflux.net>
 
     * src/inkscape.h, src/inkscape.cpp, src/widgets/icons.cpp:
