@@ -1,3 +1,19 @@
+2004-01-01  bulia byak <bulia@dr.com>
+
+	* src/verbs.cpp src/verbs.h: New verbs for switching desktops
+
+	* src/inkscape.cpp src/inkscape.h: New functions for switching desktops
+
+	* src/nodepath.cpp: Fix crash: Tab when no nodepath
+
+	* src/shortcuts.cpp: Ctrl-Tab, Shift-Ctrl-Tab cycle desktops
+
+	* src/node-context.cpp src/event-context.cpp src/select-context.cpp: Do not consume
+	Ctrl-Tab/Shift-Ctrl-Tab in contexts. Explicitly run the corresponding verb in
+	event-context.cpp because otherwise GTK gobbles it.
+ 
+	* src/splivarot.cpp: Edits in statusbar error messages
+
 2004-01-01  MenTaLguY <mental@rydia.net>
 
 	* src/document-private.h, src/document.h, src/document.cpp,
