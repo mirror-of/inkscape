@@ -32,7 +32,8 @@ modules = \
 	dia.inx \
 	epsi_output.inx \
 	txt2svg.inx \
-	gimpgrad.inx
+	gimpgrad.inx \
+	grid.inx
 
 extension_SCRIPTS = \
 	$(extensions)

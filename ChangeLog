@@ -1,3 +1,16 @@
+2004-12-25  Ted Gould  <ted@gould.cx>
+
+	* share/extensions/Makefile.am, share/extensions/grid.inx,
+	src/extension/implementation/plugin-link.h,
+	src/extension/implementation/plugin.cpp,
+	src/extension/plugin/Makefile_insert, src/extension/plugin/gimpgrad.cpp,
+	src/extension/plugin/grid.cpp:
+
+	Adding in a new effect plugin, grid.  It draws a grid on the canvas which
+	is just an easy way to do some neat things.  It is mostly done, but still
+	needs cleanup.  Some other files required modification to make this
+	possible.
+
 2004-12-25  MenTaLguY  <mental@rydia.net>
 
 	* src/event-context.cpp: removed unused handler

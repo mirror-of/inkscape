@@ -268,6 +268,7 @@ inkscape_plugin_function_table INKSCAPE_PLUGIN_NAME = {
 	load,
 	unload,
 	open,
+	NULL,
 	NULL
 };
 

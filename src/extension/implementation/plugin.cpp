@@ -229,7 +229,11 @@ Plugin::prefs_effect(Inkscape::Extension::Effect *module)
 void 
 Plugin::effect(Inkscape::Extension::Effect *module, SPView *document)
 {
-    return Inkscape::Extension::Implementation::Implementation::effect(module, document);
+    if (_symTable->effect != NULL) {
+        return _symTable->effect((inkscape_extension *)module, document);
+    } else {
+        return Inkscape::Extension::Implementation::Implementation::effect(module, document);
+    }
 }
 
 unsigned

@@ -3,12 +3,16 @@
 plugindir = $(libdir)/inkscape/plugins
 
 plugin_LTLIBRARIES = \
-	extension/plugin/libgimpgrad.la
+	extension/plugin/libgimpgrad.la \
+	extension/plugin/libgrid.la
 
 extension/plugin/clean:
 	rm -f $(plugin_LTLIBRARIES)
 
 extension_plugin_libgimpgrad_la_SOURCES = \
 	extension/plugin/gimpgrad.cpp
+
+extension_plugin_libgrid_la_SOURCES = \
+	extension/plugin/grid.cpp
 
 ## extension_plugin_libtest_la_LDFLAGS = $(PLUGIN_LIBTOOL_FLAGS)

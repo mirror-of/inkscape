@@ -1,0 +1,11 @@
+<inkscape-extension>
+    <name>Grid</name>
+    <id>org.inkscape.effect.grid</id>
+	<dependency type="plugin" location="plugins">grid</dependency>
+    <effect>
+		<object-type>all</object-type>
+    </effect>
+    <plugin>
+		<name>grid</name>
+    </plugin>
+</inkscape-extension>

@@ -19,6 +19,8 @@
 
 /** \todo  This needs to go away eventually. */
 #include <document.h>
+/** \todo  This needs to go away eventually. */
+#include <view.h>
 
 /** \brief  A simple typedef to make it so that inkscape_extension can
             be used before I figure out what makes sense here */
@@ -31,6 +33,8 @@ typedef void (*inkscape_plugin_unload)(inkscape_extension * in_ext);
 typedef SPDocument *(*inkscape_plugin_open)(inkscape_extension * in_ext, const gchar * filename);
 /** \brief  The C prototype of an input prefs function.  */
 typedef GtkDialog * (*inkscape_plugin_prefs_input)(inkscape_extension * in_ext, gchar const * filename);
+/** \brief  The C prototype of an effect function.  */
+typedef void (*inkscape_plugin_effect)(inkscape_extension * in_ext, SPView * view);
 
 /** \brief  The name of the symbol for the plugin.  Should match
             \c INKSCAPE_PLUGIN_NAME_STR (minus the quotes). */
@@ -55,6 +59,8 @@ typedef struct {
 											      for Inkscape */
 	inkscape_plugin_prefs_input prefs_input; /**< Input preferences function, called to get
 											      further parameters for an input plugin. */
+	inkscape_plugin_effect effect;           /**< Effect function, called to cause an effect
+											      on a document. */
 } inkscape_plugin_function_table;
 
 #endif /* __INKSCAPE_EXTENSION_IMPLEMENTATION_PLUGIN_LINK_H__ */
