@@ -11,7 +11,9 @@
 #ifndef INKSCAPE_EXTENSION_EFFECT_H__
 #define INKSCAPE_EXTENSION_EFFECT_H__
 
+#include <gtk/gtkdialog.h>
 #include "extension.h"
+struct SPDocument;
 
 namespace Inkscape {
 namespace Extension {

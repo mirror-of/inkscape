@@ -7,6 +7,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "document.h"
 #include "implementation/implementation.h"
 #include "output.h"
 
@@ -189,9 +190,7 @@ Output::prefs (void)
 void
 Output::save (SPDocument * doc, const gchar * uri)
 {
-	SPRepr * repr;
-
-	repr = sp_document_repr_root(doc);
+	SPRepr * repr = sp_document_repr_root(doc);
 
 	sp_document_set_undo_sensitive (doc, FALSE);
 	sp_repr_set_attr(repr, "inkscape:output_extension", NULL);
