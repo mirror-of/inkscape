@@ -13,6 +13,12 @@ trace_libtrace_a_CPPFLAGS =	\
 trace_libtrace_a_SOURCES =	\
 	trace/trace.h \
 	trace/trace.cpp \
+	trace/imagemap-gdk.cpp	\
+	trace/imagemap-gdk.h	\
+	trace/imagemap.cpp	\
+	trace/imagemap.h	\
+	trace/filterset.cpp	\
+	trace/filterset.h       \
 	trace/potrace/backend_eps.h	\
 	trace/potrace/bitmap.cpp \
 	trace/potrace/bitmap.h \
@@ -32,10 +38,4 @@ trace_libtrace_a_SOURCES =	\
 	trace/potrace/render.cpp \
 	trace/potrace/render.h \
 	trace/potrace/inkscape-potrace.cpp	\
-	trace/potrace/inkscape-potrace.h	\
-	trace/potrace/imagemap-gdk.cpp	\
-	trace/potrace/imagemap-gdk.h	\
-	trace/potrace/imagemap.cpp	\
-	trace/potrace/imagemap.h	\
-	trace/potrace/filterset.cpp	\
-	trace/potrace/filterset.h
+	trace/potrace/inkscape-potrace.h
