@@ -930,7 +930,7 @@ sp_marker_load_from_svg(gchar const *name, SPDocument *current_doc)
       Pick up all markers from source, except those that are in current_doc (if non-NULL), and add items to the m menu
  */
 static void
-sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *source, SPDocument *sandbox, gchar *menu_id)
+sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *source, SPDocument *markers_doc, SPDocument *sandbox, gchar *menu_id)
 {
 
     // search through defs
@@ -949,8 +949,18 @@ sp_marker_list_from_doc (GtkWidget *m, SPDocument *current_doc, SPDocument *sour
 
         SPRepr *repr = SP_OBJECT_REPR((SPItem *) ml->data);
 
-        if (!current_doc && sp_repr_attr(repr,"inkscape:stockid"))
+        if (markers_doc && sp_repr_attr(repr,"inkscape:stockid")) {
+            // find out if markers_doc has a marker with the same stockid, and if so, skip this
+            for (SPObject *child = sp_object_first_child(SP_OBJECT(SP_DOCUMENT_DEFS(markers_doc))) ;
+                 child != NULL;
+                 child = SP_OBJECT_NEXT(child) )
+            {
+                if (sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid") && 
+                    !strcmp(sp_repr_attr(repr,"inkscape:stockid"), sp_repr_attr(SP_OBJECT_REPR(child),"inkscape:stockid")) &&
+                    SP_IS_MARKER(child))
                     continue; // stock item, dont add to list from current doc
+            }
+        }
 
 
         GtkWidget *i = gtk_menu_item_new();
@@ -1042,37 +1052,49 @@ ink_marker_menu( GtkWidget *tbl, gchar *menu_id, SPDocument *sandbox)
 
     } else {
 
-        GtkWidget *i = gtk_menu_item_new();
-        gtk_widget_show(i);
+        // add "None" 
+        {
+            GtkWidget *i = gtk_menu_item_new();
+            gtk_widget_show(i);
 
-        g_object_set_data(G_OBJECT(i), "marker", (void *) "none");
+            g_object_set_data(G_OBJECT(i), "marker", (void *) "none");
 
-        GtkWidget *hb = gtk_hbox_new(FALSE,  MARKER_ITEM_MARGIN);
-        gtk_widget_show(hb);
+            GtkWidget *hb = gtk_hbox_new(FALSE,  MARKER_ITEM_MARGIN);
+            gtk_widget_show(hb);
 
-        GtkWidget *l = gtk_label_new("None");
-        gtk_widget_show(l);
-        gtk_misc_set_alignment(GTK_MISC(l), 0.0, 0.5);
+            GtkWidget *l = gtk_label_new("None");
+            gtk_widget_show(l);
+            gtk_misc_set_alignment(GTK_MISC(l), 0.0, 0.5);
 
-        gtk_box_pack_start(GTK_BOX(hb), l, TRUE, TRUE, 0);
+            gtk_box_pack_start(GTK_BOX(hb), l, TRUE, TRUE, 0);
 
-        gtk_widget_show(hb);
-        gtk_container_add(GTK_CONTAINER(i), hb);
-        gtk_menu_append(GTK_MENU(m), i);
+            gtk_widget_show(hb);
+            gtk_container_add(GTK_CONTAINER(i), hb);
+            gtk_menu_append(GTK_MENU(m), i);
+        }
 
-        // suck in from current doc
-        sp_marker_list_from_doc ( m, NULL, doc, sandbox, menu_id );
-
-        // suck in from markers.svg
+        // find and load  markers.svg
         static SPDocument *markers_doc = NULL;
         char *markers_source = g_build_filename(INKSCAPE_MARKERSDIR, "/markers.svg", NULL);
         if (g_file_test (markers_source, G_FILE_TEST_IS_REGULAR)) {
             markers_doc = sp_document_new(markers_source, FALSE, FALSE);
         }
         g_free(markers_source);
+
+        // suck in from current doc
+        sp_marker_list_from_doc ( m, NULL, doc, markers_doc, sandbox, menu_id );
+
+        // add separator
+        {
+            GtkWidget *i = gtk_separator_menu_item_new();
+            gtk_widget_show(i);
+            gtk_menu_append(GTK_MENU(m), i);
+        }
+
+        // suck in from markers.svg
         if (markers_doc) {
             sp_document_ensure_up_to_date(doc);
-            sp_marker_list_from_doc ( m, doc, markers_doc, sandbox, menu_id );
+            sp_marker_list_from_doc ( m, doc, markers_doc, NULL, sandbox, menu_id );
         }
 
         gtk_widget_set_sensitive(mnu, TRUE);
@@ -2052,32 +2074,37 @@ sp_stroke_style_set_cap_buttons(SPWidget *spw, GtkWidget *active)
 static void
 ink_marker_menu_set_current(SPObject *marker, GtkOptionMenu *mnu)
 {
-        gtk_object_set_data(GTK_OBJECT(mnu), "update", GINT_TO_POINTER(TRUE));
-        GtkMenu *m = GTK_MENU(gtk_option_menu_get_menu(mnu));
-        if (marker != NULL) {
-            bool mark_is_stock = false;
-            if (sp_repr_attr(SP_OBJECT_REPR(marker),"inkscape:stockid")) mark_is_stock = true;
-            gchar *markname;
-            if (mark_is_stock)  markname = g_strdup(sp_repr_attr(SP_OBJECT_REPR(marker),"inkscape:stockid"));
-            else markname = g_strdup(sp_repr_attr(SP_OBJECT_REPR(marker),"id"));
+    gtk_object_set_data(GTK_OBJECT(mnu), "update", GINT_TO_POINTER(TRUE));
+    GtkMenu *m = GTK_MENU(gtk_option_menu_get_menu(mnu));
+    if (marker != NULL) {
+        bool mark_is_stock = false;
+        if (sp_repr_attr(SP_OBJECT_REPR(marker), "inkscape:stockid")) mark_is_stock = true;
 
-            int markpos = 0;
-            GList *kids = GTK_MENU_SHELL(m)->children;
-            int i = 0;
-            for (; kids != NULL; kids = kids->next) {
-                gchar *mark = (gchar *) g_object_get_data(G_OBJECT(kids->data), "marker");
-                if ( strcmp(mark, markname) == 0 ) {
-                if ( mark_is_stock && !strcmp((gchar *) g_object_get_data(G_OBJECT(kids->data), "stockid"), "true"))  markpos = i;
-                if ( !mark_is_stock && !strcmp((gchar *) g_object_get_data(G_OBJECT(kids->data), "stockid"), "false"))  markpos = i;
-                }
-                i++;
+        gchar *markname;
+        if (mark_is_stock)  
+            markname = g_strdup(sp_repr_attr(SP_OBJECT_REPR(marker), "inkscape:stockid"));
+        else 
+            markname = g_strdup(sp_repr_attr(SP_OBJECT_REPR(marker), "id"));
+
+        int markpos = 0;
+        GList *kids = GTK_MENU_SHELL(m)->children;
+        int i = 0;
+        for (; kids != NULL; kids = kids->next) {
+            gchar *mark = (gchar *) g_object_get_data(G_OBJECT(kids->data), "marker");
+            if ( mark && strcmp(mark, markname) == 0 ) {
+                if ( mark_is_stock && !strcmp((gchar *) g_object_get_data(G_OBJECT(kids->data), "stockid"), "true"))  
+                    markpos = i;
+                if ( !mark_is_stock && !strcmp((gchar *) g_object_get_data(G_OBJECT(kids->data), "stockid"), "false"))  
+                    markpos = i;
             }
-            gtk_option_menu_set_history(GTK_OPTION_MENU(mnu), markpos);
+            i++;
         }
-        else {
-                            gtk_option_menu_set_history(GTK_OPTION_MENU(mnu), 0);
-        }
-        gtk_object_set_data(GTK_OBJECT(mnu), "update", GINT_TO_POINTER(FALSE));
+        gtk_option_menu_set_history(GTK_OPTION_MENU(mnu), markpos);
+    }
+    else {
+        gtk_option_menu_set_history(GTK_OPTION_MENU(mnu), 0);
+    }
+    gtk_object_set_data(GTK_OBJECT(mnu), "update", GINT_TO_POINTER(FALSE));
 }
 
 static void
