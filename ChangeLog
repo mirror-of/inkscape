@@ -1,3 +1,31 @@
+2004-02-24  bulia byak <bulia@users.sourceforge.net>
+
+        * src/helper/sodipodi-ctrlrect.cpp: A smart always-visible inversion for ctrlrect border 
+
+        * src/select-toolbar.cpp: Fix for 873723
+ 
+        * src/style.h src/style.cpp: write_difference only writes what is .set in the target style
+ 
+        * src/selection-chemistry.cpp: Paste style merges the style of the clipboard
+        with the object's current style
+ 
+        * src/xml/repr-io.cpp: Do not cut leading/trailing whitespace on text nodes,
+        only reject all-whitespace nodes
+ 
+        * src/pixmaps/handles.xpm src/seltrans.cpp src/knot.cpp src/nodepath.cpp
+        src/helper/sodipodi-ctrl.cpp: Changed xor compositing for ctrls, made seltrans
+        handles inverse, tweaked knot colors
+ 
+        * doc/keys-html.xsl doc/keys.html: keys.html now validates
+
+        * src/desktop.cpp src/desktop.h: New function to autoscroll desktop so a point
+        becomes visible
+
+        * src/rubberband.cpp src/select-context.cpp src/nodepath.cpp: Use the new
+        function to scroll desktop to a point
+
+        * src/desktop.cpp src/preferences-skeleton.h: options.autoscrollspeed 
+
 2004-02-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/selection-chemistry.cpp (sp_selection_apply_affine):
