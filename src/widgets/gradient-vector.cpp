@@ -603,23 +603,37 @@ sp_grad_edit_select (GtkOptionMenu *mnu,  GtkWidget *tbl)
 	csel->base->setColor( color );
 	GtkWidget *offspin = GTK_WIDGET (g_object_get_data (G_OBJECT (tbl), "offspn"));
 	GtkWidget *offslide =GTK_WIDGET (g_object_get_data (G_OBJECT (tbl), "offslide"));
-	if (stop->offset>0 && stop->offset<1) {
+
+	GtkAdjustment *adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "offset");
+
+	bool isEndStop = false;
+
+	SPStop *prev = NULL;
+	prev = sp_prev_stop(stop, gradient);
+	if (prev != NULL )  {
+	  adj->lower = prev->offset;
+	} else {
+	  isEndStop = true;
+	  adj->lower = 0;
+	}
+
+	SPStop *next = NULL;
+	next = sp_next_stop(stop);
+	if (next != NULL ) { 
+	  adj->upper = next->offset;
+	} else {
+	  isEndStop = true;
+	  adj->upper = 1.0;
+	}
+
+	//fixme: does this work on all possible input gradients?
+	if (!isEndStop) {
 		gtk_widget_set_sensitive (offslide, TRUE);
 		gtk_widget_set_sensitive (GTK_WIDGET (offspin), TRUE);
 	} else {
 		gtk_widget_set_sensitive (offslide, FALSE);
 		gtk_widget_set_sensitive (GTK_WIDGET (offspin), FALSE);
 	}
-	GtkAdjustment *adj = (GtkAdjustment*)gtk_object_get_data (GTK_OBJECT (tbl), "offset");
-	SPStop *prev = NULL;
-	prev = sp_prev_stop(stop, gradient);
-	if (prev != NULL )  adj->lower = prev->offset;
-	else adj->lower = 0;
-
-	SPStop *next = NULL;
-	next = sp_next_stop(stop);
-	if (next != NULL )  adj->upper = next->offset;
-	else adj->upper = 1.0;
 
 	sp_repr_set_double (SP_OBJECT_REPR (stop), "offset", stop->offset);
 	gtk_adjustment_set_value (adj, stop->offset);
