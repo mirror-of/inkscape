@@ -49,6 +49,15 @@ enum {
 
 /* stroke-linejoin */
 /* stroke-linecap */
+
+/* markers */
+
+enum {
+  SP_MARKER_NONE,
+  SP_MARKER_TRIANGLE,
+  SP_MARKER_ARROW,
+};
+
 /* fill-rule */
 /* clip-rule */
 

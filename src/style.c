@@ -129,6 +129,13 @@ static const SPStyleEnum enum_font_style[] = {
 	{NULL, -1}
 };
 
+static const SPStyleEnum enum_marker[] = {
+  {"none",                SP_MARKER_NONE},
+  {"url(#mTriangle)",     SP_MARKER_TRIANGLE},
+  {"url(#mArrow)",        SP_MARKER_ARROW},
+  {NULL, -1}
+};
+
 static const SPStyleEnum enum_font_size[] = {
 	{"xx-small", SP_CSS_FONT_SIZE_XX_SMALL},
 	{"x-small", SP_CSS_FONT_SIZE_X_SMALL},
