@@ -747,7 +747,7 @@ sp_shape_set_marker (SPObject *object, unsigned int key, const gchar *value)
 	    g_signal_connect (G_OBJECT (shape->marker[key]), "modified",
 			      G_CALLBACK (sp_shape_marker_modified), shape);
 	  }
-	  sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+	  object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 	}
 }
 
@@ -779,7 +779,7 @@ sp_shape_set_curve (SPShape *shape, SPCurve *curve, unsigned int owner)
 			shape->curve = sp_curve_copy (curve);
 		}
 	}
-	sp_object_request_update (SP_OBJECT (shape), SP_OBJECT_MODIFIED_FLAG);
+        SP_OBJECT(shape)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 /* Return duplicate of curve or NULL */

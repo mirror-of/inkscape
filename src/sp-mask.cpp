@@ -145,7 +145,7 @@ sp_mask_set (SPObject *object, unsigned int key, const gchar *value)
 				mask->maskUnits_set = TRUE;
 			}
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_MASKCONTENTUNITS:
 		mask->maskContentUnits = SP_CONTENT_UNITS_USERSPACEONUSE;
@@ -158,7 +158,7 @@ sp_mask_set (SPObject *object, unsigned int key, const gchar *value)
 				mask->maskContentUnits_set = TRUE;
 			}
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
 		if (((SPObjectClass *) parent_class)->set)
@@ -210,7 +210,7 @@ sp_mask_update (SPObject *object, SPCtx *ctx, guint flags)
 		SPObject *child = SP_OBJECT (l->data);
 		l = g_slist_remove (l, child);
 		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
-			sp_object_invoke_update (child, ctx, flags);
+			child->updateDisplay(ctx, flags);
 		}
 		g_object_unref (G_OBJECT (child));
 	}
@@ -334,7 +334,7 @@ sp_mask_set_bbox (SPMask *mask, unsigned int key, NRRect *bbox)
 			    !NR_DF_TEST_CLOSE (v->bbox.x1, bbox->x1, NR_EPSILON) ||
 			    !NR_DF_TEST_CLOSE (v->bbox.y1, bbox->y1, NR_EPSILON)) {
 				v->bbox = *bbox;
-				sp_object_request_update (SP_OBJECT (mask), SP_OBJECT_MODIFIED_FLAG);
+				SP_OBJECT(mask)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 			}
 			break;
 		}

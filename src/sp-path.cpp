@@ -311,7 +311,7 @@ sp_path_set_transform (SPItem *item, NR::Matrix const &xform)
 	// Adjust pattern fill
 	sp_shape_adjust_pattern (item, NR::identity(), xform);
 
-	sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+	item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
 	// nothing remains - we've written all of the transform, so return identity
 	return NR::identity();

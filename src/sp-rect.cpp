@@ -159,37 +159,37 @@ sp_rect_set (SPObject *object, unsigned int key, const gchar *value)
 		if (!sp_svg_length_read (value, &rect->x)) {
 			sp_svg_length_unset (&rect->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_Y:
 		if (!sp_svg_length_read (value, &rect->y)) {
 			sp_svg_length_unset (&rect->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_WIDTH:
 		if (!sp_svg_length_read (value, &rect->width) || (rect->width.value < 0.0)) {
 			sp_svg_length_unset (&rect->width, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_HEIGHT:
 		if (!sp_svg_length_read (value, &rect->height) || (rect->height.value < 0.0)) {
 			sp_svg_length_unset (&rect->height, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_RX:
 		if (!sp_svg_length_read (value, &rect->rx) || (rect->rx.value < 0.0)) {
 			sp_svg_length_unset (&rect->rx, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_RY:
 		if (!sp_svg_length_read (value, &rect->ry) || (rect->ry.value < 0.0)) {
 			sp_svg_length_unset (&rect->ry, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
 		if (((SPObjectClass *) parent_class)->set)
@@ -336,7 +336,7 @@ sp_rect_position_set (SPRect * rect, gdouble x, gdouble y, gdouble width, gdoubl
 	rect->width.computed = width;
 	rect->height.computed = height;
 
-	sp_object_request_update (SP_OBJECT (rect), SP_OBJECT_MODIFIED_FLAG);
+	SP_OBJECT(rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void
@@ -348,7 +348,7 @@ sp_rect_set_rx (SPRect * rect, gboolean set, gdouble value)
 	rect->rx.set = set;
 	if (set) rect->rx.computed = value;
 
-	sp_object_request_update (SP_OBJECT (rect), SP_OBJECT_MODIFIED_FLAG);
+	SP_OBJECT(rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void
@@ -360,7 +360,7 @@ sp_rect_set_ry (SPRect * rect, gboolean set, gdouble value)
 	rect->ry.set = set;
 	if (set) rect->ry.computed = value;
 
-	sp_object_request_update (SP_OBJECT (rect), SP_OBJECT_MODIFIED_FLAG);
+	SP_OBJECT(rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 static std::vector<NR::Point> sp_rect_snappoints(SPItem *item)
@@ -445,7 +445,7 @@ sp_rect_set_transform (SPItem *item, NR::Matrix const &xform)
 	// Adjust pattern fill
 	sp_shape_adjust_pattern (item, NR::identity(), xform * remaining.inverse());
 
-	sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+	item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
 	return remaining;
 }

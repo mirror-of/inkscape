@@ -241,11 +241,11 @@ void SPObject::_updateTotalHRefCount(int increment) {
 		}
 	}
 	if (topmost_collectable) {
-		topmost_collectable->queueForOrphanCollection();
+		topmost_collectable->requestOrphanCollection();
 	}
 }
 
-void SPObject::queueForOrphanCollection() {
+void SPObject::requestOrphanCollection() {
 	g_return_if_fail(document != NULL);
 	document->queueForOrphanCollection(this);
 }
@@ -643,7 +643,7 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 			parent = object->parent;
 			object->xml_space.value = parent->xml_space.value;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 		break;
 	default:
 		break;
@@ -767,26 +767,31 @@ sp_object_private_write (SPObject *object, SPRepr *repr, guint flags)
 	return repr;
 }
 
-SPRepr *
-sp_object_invoke_write (SPObject *object, SPRepr *repr, guint flags)
-{
-	g_return_val_if_fail (object != NULL, NULL);
-	g_return_val_if_fail (SP_IS_OBJECT (object), NULL);
-
-	if (((SPObjectClass *) G_OBJECT_GET_CLASS(object))->write) {
-		if (!(flags & SP_OBJECT_WRITE_BUILD) && !repr) {
-			repr = SP_OBJECT_REPR (object);
-		}
-		return ((SPObjectClass *) G_OBJECT_GET_CLASS(object))->write (object, repr, flags);
+SPRepr *SPObject::updateRepr() {
+	if (!SP_OBJECT_IS_CLONED(this)) {
+		SPRepr *repr=SP_OBJECT_REPR(this);
+		g_return_val_if_fail(repr != NULL, NULL);
+		updateRepr(repr, SP_OBJECT_WRITE_EXT);
 	} else {
-		g_warning ("Class %s does not implement ::write", G_OBJECT_TYPE_NAME (object));
+		return NULL;
+	}
+}
+
+SPRepr *SPObject::updateRepr(SPRepr *repr, unsigned int flags) {
+	if (((SPObjectClass *) G_OBJECT_GET_CLASS(this))->write) {
+		if (!(flags & SP_OBJECT_WRITE_BUILD) && !repr) {
+			repr = SP_OBJECT_REPR (this);
+		}
+		return ((SPObjectClass *) G_OBJECT_GET_CLASS(this))->write (this, repr, flags);
+	} else {
+		g_warning ("Class %s does not implement ::write", G_OBJECT_TYPE_NAME (this));
 		if (!repr) {
 			if (flags & SP_OBJECT_WRITE_BUILD) {
-				repr = sp_repr_duplicate (SP_OBJECT_REPR (object));
+				repr = sp_repr_duplicate (SP_OBJECT_REPR (this));
 			}
 			/* fixme: else probably error (Lauris) */
 		} else {
-			sp_repr_merge (repr, SP_OBJECT_REPR (object), "id");
+			sp_repr_merge (repr, SP_OBJECT_REPR (this), "id");
 		}
 		return repr;
 	}
@@ -795,108 +800,110 @@ sp_object_invoke_write (SPObject *object, SPRepr *repr, guint flags)
 /* Modification */
 
 void
-sp_object_request_update (SPObject *object, unsigned int flags)
+SPObject::requestDisplayUpdate(unsigned int flags)
 {
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (SP_IS_OBJECT (object));
 	g_return_if_fail (!(flags & SP_OBJECT_PARENT_MODIFIED_FLAG));
 	g_return_if_fail ((flags & SP_OBJECT_MODIFIED_FLAG) || (flags & SP_OBJECT_CHILD_MODIFIED_FLAG));
 	g_return_if_fail (!((flags & SP_OBJECT_MODIFIED_FLAG) && (flags & SP_OBJECT_CHILD_MODIFIED_FLAG)));
 
 	/* Check for propagate before we set any flags */
-	/* Propagate means, that object is not passed through by modification request cascade yet */
-	unsigned int propagate = (!(object->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG)));
+	/* Propagate means, that this is not passed through by modification request cascade yet */
+	unsigned int propagate = (!(this->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG)));
 
-	/* Just set object flags safe even if some have been set before */
-	object->uflags |= flags;
+	/* Just set this flags safe even if some have been set before */
+	this->uflags |= flags;
 
 	if (propagate) {
-		if (object->parent) {
-			sp_object_request_update (object->parent, SP_OBJECT_CHILD_MODIFIED_FLAG);
+		if (this->parent) {
+			this->parent->requestDisplayUpdate(SP_OBJECT_CHILD_MODIFIED_FLAG);
 		} else {
-			sp_document_request_modified (object->document);
+			sp_document_request_modified (this->document);
 		}
 	}
 }
 
 void
-sp_object_invoke_update (SPObject *object, SPCtx *ctx, unsigned int flags)
+SPObject::updateDisplay(SPCtx *ctx, unsigned int flags)
 {
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (SP_IS_OBJECT (object));
 	g_return_if_fail (!(flags & ~SP_OBJECT_MODIFIED_CASCADE));
 
 #ifdef SP_OBJECT_DEBUG_CASCADE
-	g_print("Update %s:%s %x %x %x\n", g_type_name_from_instance ((GTypeInstance *) object), SP_OBJECT_ID (object), flags, object->uflags, object->mflags);
+	g_print("Update %s:%s %x %x %x\n", g_type_name_from_instance ((GTypeInstance *) this), SP_OBJECT_ID (this), flags, this->uflags, this->mflags);
 #endif
 
-	/* Get object flags */
-	flags |= object->uflags;
+	/* Get this flags */
+	flags |= this->uflags;
 	/* Copy flags to modified cascade for later processing */
-	object->mflags |= object->uflags;
+	this->mflags |= this->uflags;
 	/* We have to clear flags here to allow rescheduling update */
-	object->uflags = 0;
+	this->uflags = 0;
 
 	/* Merge style if we have good reasons to think that parent style is changed */
 	/* I am not sure, whether we should check only propagated flag */
 	/* We are currently assuming, that style parsing is done immediately */
 	/* I think this is correct (Lauris) */
 	if ((flags & SP_OBJECT_STYLE_MODIFIED_FLAG) && (flags & SP_OBJECT_PARENT_MODIFIED_FLAG)) {
-		if (object->style && object->parent) {
-			sp_style_merge_from_parent (object->style, object->parent->style);
+		if (this->style && this->parent) {
+			sp_style_merge_from_parent (this->style, this->parent->style);
 		}
 		/* attribute */
-		sp_object_read_attr (object, "xml:space");
+		/* TODO: this should be handled elsewhere */
+		sp_object_read_attr (this, "xml:space");
 	}
 
-	if (((SPObjectClass *) G_OBJECT_GET_CLASS (object))->update)
-		((SPObjectClass *) G_OBJECT_GET_CLASS (object))->update (object, ctx, flags);
+	if (((SPObjectClass *) G_OBJECT_GET_CLASS (this))->update)
+		((SPObjectClass *) G_OBJECT_GET_CLASS (this))->update (this, ctx, flags);
 }
 
 void
-sp_object_request_modified (SPObject *object, unsigned int flags)
+SPObject::requestModified(unsigned int flags)
 {
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (SP_IS_OBJECT (object));
+	/* PARENT_MODIFIED is computed later on and is not intended to be
+	 * "manually" queued */
 	g_return_if_fail (!(flags & SP_OBJECT_PARENT_MODIFIED_FLAG));
+
+	/* we should be setting either MODIFIED or CHILD_MODIFIED... */
 	g_return_if_fail ((flags & SP_OBJECT_MODIFIED_FLAG) || (flags & SP_OBJECT_CHILD_MODIFIED_FLAG));
+
+	/* ...but not both */
 	g_return_if_fail (!((flags & SP_OBJECT_MODIFIED_FLAG) && (flags & SP_OBJECT_CHILD_MODIFIED_FLAG)));
 
-	/* Check for propagate before we set any flags */
-	/* Propagate means, that object is not passed through by modification request cascade yet */
-	unsigned int propagate = (!(object->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG)));
+	unsigned int old_mflags=this->mflags;
+	this->mflags |= flags;
 
-	/* Just set object flags safe even if some have been set before */
-	object->mflags |= flags;
-
-	if (propagate) {
-		if (object->parent) {
-			sp_object_request_modified (object->parent, SP_OBJECT_CHILD_MODIFIED_FLAG);
+	/* If we already had MODIFIED or CHILD_MODIFIED queued, we will
+	 * have already queued CHILD_MODIFIED with our ancestors and
+	 * need not disturb them again.
+	 */
+	if ( old_mflags & ( SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG ) ) {
+		SPObject *parent=SP_OBJECT_PARENT(this);
+		if (parent) {
+			parent->requestModified(SP_OBJECT_CHILD_MODIFIED_FLAG);
 		} else {
-			sp_document_request_modified (object->document);
+			sp_document_request_modified(SP_OBJECT_DOCUMENT(this));
 		}
 	}
 }
 
 void
-sp_object_invoke_modified (SPObject *object, unsigned int flags)
+SPObject::emitModified(unsigned int flags)
 {
-	g_return_if_fail (object != NULL);
-	g_return_if_fail (SP_IS_OBJECT (object));
+	/* only the MODIFIED_CASCADE flag is legal here */
 	g_return_if_fail (!(flags & ~SP_OBJECT_MODIFIED_CASCADE));
 
 #ifdef SP_OBJECT_DEBUG_CASCADE
-	g_print("Modified %s:%s %x %x %x\n", g_type_name_from_instance ((GTypeInstance *) object), SP_OBJECT_ID (object), flags, object->uflags, object->mflags);
+	g_print("Modified %s:%s %x %x %x\n", g_type_name_from_instance ((GTypeInstance *) this), SP_OBJECT_ID (this), flags, this->uflags, this->mflags);
 #endif
 
-	/* Get object flags */
-	flags |= object->mflags;
-	/* We have to clear flags here to allow rescheduling modified */
-	object->mflags = 0;
+	flags |= this->mflags;
+	/* We have to clear mflags beforehand, as signal handlers may
+	 * make changes and therefore queue new modification notifications
+	 * themselves. */
+	this->mflags = 0;
 
-	g_object_ref (G_OBJECT (object));
-	g_signal_emit (G_OBJECT (object), object_signals[MODIFIED], 0, flags);
-	g_object_unref (G_OBJECT (object));
+	g_object_ref(G_OBJECT (this));
+	g_signal_emit(G_OBJECT (this), object_signals[MODIFIED], 0, flags);
+	g_object_unref(G_OBJECT (this));
 }
 
 /*

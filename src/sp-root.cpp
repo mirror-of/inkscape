@@ -223,7 +223,7 @@ sp_root_set (SPObject *object, unsigned int key, const gchar *value)
 			sp_svg_length_unset (&root->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
 		/* fixme: I am almost sure these do not require viewport flag (Lauris) */
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_Y:
 		if (!sp_svg_length_read_absolute (value, &root->y)) {
@@ -231,21 +231,21 @@ sp_root_set (SPObject *object, unsigned int key, const gchar *value)
 			sp_svg_length_unset (&root->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
 		/* fixme: I am almost sure these do not require viewport flag (Lauris) */
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_WIDTH:
 		if (!sp_svg_length_read_absolute (value, &root->width) || !(root->width.computed > 0.0)) {
 		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
 			sp_svg_length_unset (&root->width, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_HEIGHT:
 		if (!sp_svg_length_read_absolute (value, &root->height) || !(root->height.computed > 0.0)) {
 		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
 			sp_svg_length_unset (&root->height, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_VIEWBOX:
 		if (value) {
@@ -275,14 +275,14 @@ sp_root_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			root->viewBox_set = FALSE;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_PRESERVEASPECTRATIO:
 		/* Do setup before, so we can use break to escape */
 		root->aspect_set = FALSE;
 		root->aspect_align = SP_ASPECT_XMID_YMID;
 		root->aspect_clip = SP_ASPECT_MEET;
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		if (value) {
 			int len;
 			gchar c[256];

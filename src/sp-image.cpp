@@ -177,35 +177,35 @@ sp_image_set (SPObject *object, unsigned int key, const gchar *value)
 	case SP_ATTR_XLINK_HREF:
 		g_free (image->href);
 		image->href = (value) ? g_strdup (value) : NULL;
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_IMAGE_HREF_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_IMAGE_HREF_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_X:
 		if (!sp_svg_length_read_absolute (value, &image->x)) {
 		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
 			sp_svg_length_unset (&image->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_Y:
 		if (!sp_svg_length_read_absolute (value, &image->y)) {
 		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
 			sp_svg_length_unset (&image->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_WIDTH:
 		if (!sp_svg_length_read_absolute (value, &image->width)) {
 		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
 			sp_svg_length_unset (&image->width, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_HEIGHT:
 		if (!sp_svg_length_read_absolute (value, &image->height)) {
 		    /* fixme: em, ex, % are probably valid, but require special treatment (Lauris) */
 			sp_svg_length_unset (&image->height, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
 		if (((SPObjectClass *) (parent_class))->set)
@@ -563,7 +563,7 @@ sp_image_set_transform (SPItem *item, NR::Matrix const &xform)
 	image->x = pos[NR::X];
 	image->y = pos[NR::Y];
 
-	sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG);
+	SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
 	return remaining;
 }

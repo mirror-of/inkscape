@@ -375,7 +375,7 @@ sp_pattern_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		sp_object_ref (child, NULL);
 		l = g_slist_remove (l, child);
 		if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
-			sp_object_invoke_update (child, ctx, flags);
+			child->updateDisplay(ctx, flags);
 		}
 		sp_object_unref (child, NULL);
 	}

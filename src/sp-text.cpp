@@ -293,7 +293,7 @@ sp_set_dxdy (SPObject *o, GList *dx, GList *dy)
 		sp_repr_set_attr (SP_OBJECT_REPR(o), "dx", NULL);
     }
 
-    sp_object_request_update (o, SP_OBJECT_MODIFIED_FLAG);
+    o->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 
@@ -736,7 +736,7 @@ sp_string_read_content (SPObject *object)
 
     /* Is this correct? I think so (Lauris) */
     /* Virtual method will be invoked BEFORE signal, so we can update there */
-    sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+    object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 
@@ -1193,28 +1193,28 @@ sp_tspan_set (SPObject *object, unsigned int key, const gchar *value)
             sp_svg_length_unset (&tspan->ly.x, SP_SVG_UNIT_NONE, 0.0, 0.0);
         }
         /* fixme: Re-layout it */
-        if (tspan->role != SP_TSPAN_ROLE_LINE) sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+        if (tspan->role != SP_TSPAN_ROLE_LINE) object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
     case SP_ATTR_Y:
         if (!sp_svg_length_read (value, &tspan->ly.y)) {
             sp_svg_length_unset (&tspan->ly.y, SP_SVG_UNIT_NONE, 0.0, 0.0);
         }
         /* fixme: Re-layout it */
-        if (tspan->role != SP_TSPAN_ROLE_LINE) sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+        if (tspan->role != SP_TSPAN_ROLE_LINE) object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
     case SP_ATTR_DX:
         if (!(tspan->ly.dx = sp_svg_length_list_read (value))) {
             tspan->ly.dx = NULL;
         }
         /* fixme: Re-layout it */
-        sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+        object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
     case SP_ATTR_DY:
         if (!(tspan->ly.dy = sp_svg_length_list_read (value))) {
             tspan->ly.dy = NULL;
         }
         /* fixme: Re-layout it */
-        sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+        object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
     case SP_ATTR_ROTATE:
         /* fixme: Implement SVGNumber or something similar (Lauris) */
@@ -1315,7 +1315,7 @@ sp_tspan_update (SPObject *object, SPCtx *ctx, guint flags)
     SPObject *ochild;
     for ( ochild = sp_object_first_child(object) ; ochild ; ochild = SP_OBJECT_NEXT(ochild) ) {
         if ( flags || ( ochild->uflags & SP_OBJECT_MODIFIED_FLAG )) {
-            sp_object_invoke_update (ochild, ctx, flags);
+	    ochild->updateDisplay(ctx, flags);
         }
     }
 }
@@ -1638,27 +1638,27 @@ sp_text_set (SPObject *object, unsigned int key, const gchar *value)
         if (!sp_svg_length_read (value, &text->ly.x)) {
             sp_svg_length_unset (&text->ly.x, SP_SVG_UNIT_NONE, 0.0, 0.0);
         }
-        sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+        object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
         break;
     case SP_ATTR_Y:
         if (!sp_svg_length_read (value, &text->ly.y)) {
             sp_svg_length_unset (&text->ly.y, SP_SVG_UNIT_NONE, 0.0, 0.0);
         }
-        sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+        object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
         break;
     case SP_ATTR_DX:
         if (!(text->ly.dx = sp_svg_length_list_read (value))) {
             text->ly.dx = NULL;
         }
         /* fixme: Re-layout it */
-        sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+        object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
         break;
     case SP_ATTR_DY:
         if (!(text->ly.dy = sp_svg_length_list_read (value))) {
             text->ly.dy = NULL;
         }
         /* fixme: Re-layout it */
-        sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+        object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
         break;
     case SP_ATTR_ROTATE:
         /* fixme: Implement SVGNumber or something similar (Lauris) */
@@ -1672,7 +1672,7 @@ sp_text_set (SPObject *object, unsigned int key, const gchar *value)
             text->ly.linespacing = sp_svg_read_percentage (value, 1.0);
             text->ly.linespacing = CLAMP (text->ly.linespacing, 0.0, 1000.0);
         }
-        sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+        object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
         break;
     default:
         if (((SPObjectClass *) text_parent_class)->set)
@@ -1787,7 +1787,7 @@ sp_text_update (SPObject *object, SPCtx *ctx, guint flags)
         l = g_slist_remove (l, child);
         if (cflags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             /* fixme: Do we need transform? */
-            sp_object_invoke_update (child, ctx, cflags);
+	    child->updateDisplay(ctx, cflags);
         }
         sp_object_unref (SP_OBJECT (child), object);
     }
@@ -2183,12 +2183,12 @@ sp_text_set_transform (SPItem *item, NR::Matrix const &xform)
 		tspan->ly.x = pos[NR::X];
 		tspan->ly.y = pos[NR::Y];
 
-		sp_object_request_update(SP_OBJECT(tspan), SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+		SP_OBJECT(tspan)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
             }
         }
     }
 
-    sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+    SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 
     return i2p;
 }
@@ -2441,7 +2441,7 @@ sp_text_request_relayout (SPText *text, guint flags)
 {
     text->relayout = TRUE;
 
-    sp_object_request_update (SP_OBJECT (text), flags);
+    SP_OBJECT (text)->requestDisplayUpdate(flags);
 }
 
 
@@ -3040,7 +3040,7 @@ sp_adjust_linespacing_screen (SPText *text, SPDesktop *desktop, gdouble by)
 
 	// set back value
 	text->ly.linespacing = val / style->font_size.computed;
-      sp_object_request_update (SP_OBJECT (text), SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+      SP_OBJECT (text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
       sp_repr_set_double (SP_OBJECT_REPR (text), "sodipodi:linespacing", text->ly.linespacing);
 }
 

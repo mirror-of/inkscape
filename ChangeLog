@@ -1,3 +1,29 @@
+2004-06-11  MenTaLguY  <mental@rydia.net>
+
+	* src/sp-object.h, src/sp-object.cpp:
+
+	  migrated several SPObject methods to C++ methods:
+
+	  sp_object_invoke_write -> SPObject::updateRepr
+	  sp_object_request_update -> SPObject::requestDisplayUpdate
+	  sp_object_invoke_update -> SPObject::updateDisplay
+	  sp_object_request_modified -> SPObject::requestModified
+	  sp_object_invoke_modified -> SPObject::emitModified
+
+      (leaving deprecated wrappers in place for now)
+
+	* src/document.cpp, src/object-edit.cpp, src/sp-clippath.cpp,
+	  src/sp-defs.cpp, src/sp-ellipse.cpp, src/sp-image.cpp,
+	  src/sp-item-group.cpp, src/sp-item.cpp, src/sp-line.cpp,
+	  src/sp-marker.cpp, src/sp-mask.cpp, src/sp-offset.cpp,
+	  src/sp-pattern.cpp, src/sp-rect.cpp, src/sp-root.cpp,
+	  src/sp-shape.cpp, src/sp-spiral.cpp, src/sp-star.cpp,
+	  src/sp-symbol.cpp, src/sp-text.cpp, src/sp-typeset.cpp,
+	  src/sp-use.cpp, src/dialogs/stroke-style.cpp, src/sp-path.cpp:
+
+	  transitioned to SPObject::requestDisplayUpdate and
+	  SPObject::updateDisplay
+
 2004-06-11  Ted Gould  <ted@gould.cx>
 
 	* src/file.cpp, src/inkscape.cpp, src/interface.cpp, src/prefs-utils.cpp,

@@ -404,25 +404,25 @@ sp_ellipse_set (SPObject *object, unsigned int key, const gchar *value)
 		if (!sp_svg_length_read (value, &ellipse->cx)) {
 			sp_svg_length_unset (&ellipse->cx, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_CY:
 		if (!sp_svg_length_read (value, &ellipse->cy)) {
 			sp_svg_length_unset (&ellipse->cy, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_RX:
 		if (!sp_svg_length_read (value, &ellipse->rx) || (ellipse->rx.value <= 0.0)) {
 			sp_svg_length_unset (&ellipse->rx, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_RY:
 		if (!sp_svg_length_read (value, &ellipse->ry) || (ellipse->ry.value <= 0.0)) {
 			sp_svg_length_unset (&ellipse->ry, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
 		if (((SPObjectClass *) ellipse_parent_class)->set)
@@ -452,7 +452,7 @@ sp_ellipse_position_set (SPEllipse *ellipse, gdouble x, gdouble y, gdouble rx, g
 	ge->rx.computed = rx;
 	ge->ry.computed = ry;
 
-	sp_object_request_update ((SPObject *) ge, SP_OBJECT_MODIFIED_FLAG);
+	((SPObject *)ge)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 /* SVG <circle> element */
@@ -554,20 +554,20 @@ sp_circle_set (SPObject *object, unsigned int key, const gchar *value)
 		if (!sp_svg_length_read (value, &ge->cx)) {
 			sp_svg_length_unset (&ge->cx, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_CY:
 		if (!sp_svg_length_read (value, &ge->cy)) {
 			sp_svg_length_unset (&ge->cy, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_R:
 		if (!sp_svg_length_read (value, &ge->rx) || (ge->rx.value <= 0.0)) {
 			sp_svg_length_unset (&ge->rx, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
 		ge->ry = ge->rx;
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
 		if (((SPObjectClass *) circle_parent_class)->set)
@@ -793,25 +793,25 @@ sp_arc_set (SPObject *object, unsigned int key, const gchar *value)
 		if (!sp_svg_length_read (value, &ge->cx)) {
 			sp_svg_length_unset (&ge->cx, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_CY:
 		if (!sp_svg_length_read (value, &ge->cy)) {
 			sp_svg_length_unset (&ge->cy, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_RX:
 		if (!sp_svg_length_read (value, &ge->rx) || (ge->rx.computed <= 0.0)) {
 			sp_svg_length_unset (&ge->rx, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_RY:
 		if (!sp_svg_length_read (value, &ge->ry) || (ge->ry.computed <= 0.0)) {
 			sp_svg_length_unset (&ge->ry, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_START:
 		if (value) {
@@ -819,7 +819,7 @@ sp_arc_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			ge->start = 0;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_END:
 		if (value) {
@@ -827,11 +827,11 @@ sp_arc_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			ge->end = 2 * M_PI;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_OPEN:
 		ge->closed = (!value);
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
 		if (((SPObjectClass *) arc_parent_class)->set)
@@ -874,7 +874,7 @@ sp_arc_position_set (SPArc *arc, gdouble x, gdouble y, gdouble rx, gdouble ry)
 		ge->end = prefs_get_double_attribute ("tools.shapes.arc", "end", 0.0);
 	if (!prefs_get_string_attribute ("tools.shapes.arc", "open")) ge->closed = 1;
 
-	sp_object_request_update ((SPObject *) arc, SP_OBJECT_MODIFIED_FLAG);
+	((SPObject *)arc)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 NR::Point sp_arc_get_xy (SPArc *arc, gdouble arg)

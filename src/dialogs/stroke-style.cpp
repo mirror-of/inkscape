@@ -858,7 +858,7 @@ sp_marker_prev_new (unsigned int size, gchar const *mname, SPDocument *source, S
 
     // object to render; note that the id is the same as that of the menu we're building
     SPObject *object = sp_document_lookup_id (sandbox, menu_id);
-    sp_object_request_update (sp_document_root (sandbox), SP_OBJECT_MODIFIED_FLAG);
+    sp_document_root (sandbox)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
     if (object == NULL || !SP_IS_ITEM(object))
         return NULL; // sandbox broken?
@@ -1177,7 +1177,7 @@ sp_marker_select(GtkOptionMenu *mnu, GtkWidget *spw)
             sp_repr_css_change_recursive(selrepr, css, "style");
         }
         sp_object_request_modified(SP_OBJECT(items->data), SP_OBJECT_MODIFIED_FLAG);
-        sp_object_request_update(SP_OBJECT(items->data), SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+        SP_OBJECT(items->data)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
     }
 
     sp_repr_css_attr_unref(css);

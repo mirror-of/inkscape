@@ -151,7 +151,7 @@ struct SPObject : public GObject {
 	void setCollectionPolicy(CollectionPolicy policy) {
 		_collection_policy = policy;
 	}
-	void queueForOrphanCollection();
+	void requestOrphanCollection();
 	void collectOrphan() {
 		if ( _total_hrefcount == 0 ) {
 			deleteObject(false);
@@ -182,6 +182,15 @@ struct SPObject : public GObject {
 		sp_object_ref(successor, NULL);
 		_successor = successor;
 	}
+
+	SPRepr *updateRepr();
+	SPRepr *updateRepr(SPRepr *repr, unsigned int flags);
+
+	void requestDisplayUpdate(unsigned int flags);
+	void updateDisplay(SPCtx *ctx, unsigned int flags);
+
+	void requestModified(unsigned int flags);
+	void emitModified(unsigned int flags);
 
 	SigC::Signal1<void, SPObject *> _delete_signal;
 	SPObject *_successor;
@@ -238,16 +247,38 @@ void sp_object_read_attr (SPObject *object, const gchar *key);
 
 /* Modification */
 
-/* update arena items */
-void sp_object_request_update (SPObject *object, unsigned int flags);
-void sp_object_invoke_update (SPObject *object, SPCtx *ctx, unsigned int flags);
+inline __attribute__((deprecated)) void sp_object_request_update(SPObject *object, unsigned int flags)
+{
+	g_assert(object != NULL);
+	g_assert(SP_IS_OBJECT(object));
+	object->requestDisplayUpdate(flags);
+}
+inline __attribute__((deprecated)) void sp_object_invoke_update(SPObject *object, SPCtx *ctx, unsigned int flags)
+{
+	g_assert(object != NULL);
+	g_assert(SP_IS_OBJECT(object));
+	object->updateDisplay(ctx, flags);
+}
 
 /* notify any interested listeners of modifications */
-void sp_object_request_modified (SPObject *object, unsigned int flags);
-void sp_object_invoke_modified (SPObject *object, unsigned int flags);
+inline __attribute__((deprecated)) void sp_object_request_modified (SPObject *object, unsigned int flags)
+{
+	g_assert(object != NULL);
+	g_assert(SP_IS_OBJECT(object));
+	object->requestModified(flags);
+}
+inline __attribute__((deprecated)) void sp_object_invoke_modified (SPObject *object, unsigned int flags)
+{
+	g_assert(object != NULL);
+	g_assert(SP_IS_OBJECT(object));
+	object->emitModified(flags);
+}
 
 /* Write object to repr */
-SPRepr *sp_object_invoke_write (SPObject *object, SPRepr *repr, unsigned int flags);
+inline __attribute__((deprecated)) SPRepr *sp_object_invoke_write(SPObject *object, SPRepr *repr, unsigned int flags) {
+	g_assert(object != NULL);
+	return object->updateRepr(repr, flags);
+}
 
 /*
  * Get and set descriptive parameters

@@ -188,7 +188,7 @@ sp_line_set_transform (SPItem *item, NR::Matrix const &xform)
 		style->stroke_width.computed *= sqrt (fabs (sw * sh));
 	}
 
-	sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+	item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
 	return NR::identity();
 }

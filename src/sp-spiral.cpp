@@ -172,13 +172,13 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 		if (!sp_svg_length_read_computed_absolute (value, &spiral->cx)) {
 			spiral->cx = 0.0;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_CY:
 		if (!sp_svg_length_read_computed_absolute (value, &spiral->cy)) {
 			spiral->cy = 0.0;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_EXPANSION:
 		if (value) {
@@ -191,7 +191,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			spiral->exp = 1.0;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_REVOLUTION:
 		if (value) {
@@ -200,13 +200,13 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			spiral->revo = 3.0;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_RADIUS:
 		if (!sp_svg_length_read_computed_absolute (value, &spiral->rad)) {
 			spiral->rad = MAX (spiral->rad, 0.001);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_ARGUMENT:
 		if (value) {
@@ -220,7 +220,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			spiral->arg = 0.0;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_T0:
 		if (value) {
@@ -232,7 +232,7 @@ sp_spiral_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			spiral->t0 = 0.0;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
 		if (((SPObjectClass *) parent_class)->set)
@@ -417,7 +417,7 @@ sp_spiral_position_set       (SPSpiral          *spiral,
 	spiral->arg        = arg;
 	spiral->t0         = t0;
 	
-	sp_object_request_update ((SPObject *) spiral, SP_OBJECT_MODIFIED_FLAG);
+	((SPObject *)spiral)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 static std::vector<NR::Point> sp_spiral_snappoints(SPItem *item)

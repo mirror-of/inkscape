@@ -318,7 +318,7 @@ sp_typeset_update (SPObject *object, SPCtx *ctx, unsigned int flags)
   }
   if ( typeset->layoutDirty ) {
     if ( SP_IS_TYPESET(SP_OBJECT_PARENT(typeset)) ) {
-      sp_object_request_update (SP_OBJECT(SP_OBJECT_PARENT(typeset)), SP_OBJECT_MODIFIED_FLAG);
+      SP_OBJECT(SP_OBJECT_PARENT(typeset))->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     } else {
       if ( typeset->stdLayoutAlgo ) {
         sp_typeset_relayout(typeset);
@@ -686,7 +686,7 @@ sp_typeset_set (SPObject *object, unsigned int key, const gchar *value)
       break;
 	}
   if ( typeset->layoutDirty ) {
-    sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
+    SP_OBJECT(typeset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
   }
 }
 void sp_typeset_ditch_excl(SPTypeset *typeset)
@@ -768,7 +768,7 @@ static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
     if ( l ) {
       //      shape_dest *cur=(shape_dest*)(l->data);
       typeset->exclDirty=true;
-      sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
+      SP_OBJECT(typeset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     } else {
       // repr not used in this typeset
       //      printf("not fount\n");
@@ -785,7 +785,7 @@ static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
     if ( l ) {
 //      shape_dest *cur=(shape_dest*)(l->data);
       typeset->destDirty=true;
-      sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
+      SP_OBJECT(typeset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     } else {
       // repr not used in this typeset
 //      printf("not fount\n");
@@ -800,7 +800,7 @@ static void sp_typeset_source_attr_changed (SPRepr * repr, const gchar * key,
     if ( l ) {
  //     path_dest *cur=(path_dest*)l->data;
       typeset->destDirty=true;
-      sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
+      SP_OBJECT(typeset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     } else {
       // repr not used in this typeset
 //      printf("not fount\n");
@@ -830,7 +830,7 @@ static void sp_typeset_source_destroy (SPRepr * repr, void *data)
       typeset->dstElems=g_slist_remove(typeset->dstElems,cur);
       free(cur);
       typeset->layoutDirty=true;
-      sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
+      SP_OBJECT(typeset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     } else {
       // repr not used in this typeset
 //      printf("not fount\n");
@@ -850,7 +850,7 @@ static void sp_typeset_source_destroy (SPRepr * repr, void *data)
       typeset->dstElems=g_slist_remove(typeset->dstElems,cur);
       free(cur);
       typeset->layoutDirty=true;
-      sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
+      SP_OBJECT(typeset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     } else {
       // repr not used in this typeset
 //      printf("not fount\n");
@@ -942,7 +942,7 @@ void   refresh_typeset_source(SPTypeset *typeset,shape_dest *nDst)
   nDst->bbox=NR::Rect(NR::Point(nDst->theShape->leftX,nDst->theShape->topY),NR::Point(nDst->theShape->rightX,nDst->theShape->bottomY));
   typeset->layoutDirty=true;
   
-  sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
+  SP_OBJECT(typeset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void   refresh_typeset_source(SPTypeset *typeset,path_dest *nDst)
@@ -976,7 +976,7 @@ void   refresh_typeset_source(SPTypeset *typeset,path_dest *nDst)
   nDst->length=nDst->thePath->Length();
   typeset->layoutDirty=true;
 
-  sp_object_request_update (SP_OBJECT(typeset), SP_OBJECT_MODIFIED_FLAG);
+  SP_OBJECT(typeset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 

@@ -107,7 +107,7 @@ sp_defs_update (SPObject *object, SPCtx *ctx, guint flags)
 		child = SP_OBJECT (l->data);
 		l = g_slist_remove (l, child);
 		if (flags || (child->uflags & SP_OBJECT_MODIFIED_FLAG)) {
-			sp_object_invoke_update (child, ctx, flags);
+			child->updateDisplay(ctx, flags);
 		}
 		g_object_unref (G_OBJECT (child));
 	}

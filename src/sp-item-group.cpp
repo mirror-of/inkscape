@@ -210,9 +210,9 @@ sp_group_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 				chi = SP_ITEM (child);
 				nr_matrix_multiply (&cctx.i2doc, &chi->transform, &ictx->i2doc);
 				nr_matrix_multiply (&cctx.i2vp, &chi->transform, &ictx->i2vp);
-				sp_object_invoke_update (child, (SPCtx *) &cctx, flags);
+				child->updateDisplay((SPCtx *)&cctx, flags);
 			} else {
-				sp_object_invoke_update (child, ctx, flags);
+				child->updateDisplay(ctx, flags);
 			}
 		}
 		g_object_unref (G_OBJECT (child));

@@ -165,31 +165,31 @@ sp_marker_set (SPObject *object, unsigned int key, const gchar *value)
 				marker->markerUnits_set = TRUE;
 			}
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_REFX:
 		if (!sp_svg_length_read (value, &marker->refX)) {
 			sp_svg_length_unset (&marker->refX, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_REFY:
 		if (!sp_svg_length_read (value, &marker->refY)) {
 			sp_svg_length_unset (&marker->refX, SP_SVG_UNIT_NONE, 0.0, 0.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_MARKERWIDTH:
 		if (!sp_svg_length_read (value, &marker->markerWidth)) {
 			sp_svg_length_unset (&marker->markerWidth, SP_SVG_UNIT_NONE, 3.0, 3.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_MARKERHEIGHT:
 		if (!sp_svg_length_read (value, &marker->markerHeight)) {
 			sp_svg_length_unset (&marker->markerHeight, SP_SVG_UNIT_NONE, 3.0, 3.0);
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_ORIENT:
 		marker->orient_set = FALSE;
@@ -203,7 +203,7 @@ sp_marker_set (SPObject *object, unsigned int key, const gchar *value)
 				marker->orient_set = TRUE;
 			}
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_VIEWBOX:
 		marker->viewBox_set = FALSE;
@@ -230,14 +230,14 @@ sp_marker_set (SPObject *object, unsigned int key, const gchar *value)
 				marker->viewBox_set = TRUE;
 			}
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_PRESERVEASPECTRATIO:
 		/* Do setup before, so we can use break to escape */
 		marker->aspect_set = FALSE;
 		marker->aspect_align = SP_ASPECT_NONE;
 		marker->aspect_clip = SP_ASPECT_MEET;
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		if (value) {
 			int len;
 			gchar c[256];

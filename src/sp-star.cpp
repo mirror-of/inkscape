@@ -162,7 +162,7 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			star->sides = 5;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_CX:
 		if (!sp_svg_length_read_ldd (value, &unit, NULL, &star->center[NR::X]) ||
@@ -171,7 +171,7 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 		    (unit == SP_SVG_UNIT_PERCENT)) {
 			star->center[NR::X] = 0.0;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_CY:
 		if (!sp_svg_length_read_ldd (value, &unit, NULL, &star->center[NR::Y]) ||
@@ -180,7 +180,7 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 		    (unit == SP_SVG_UNIT_PERCENT)) {
 			star->center[NR::Y] = 0.0;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_R1:
 		if (!sp_svg_length_read_ldd (value, &unit, NULL, &star->r[0]) ||
@@ -190,7 +190,7 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 			star->r[0] = 1.0;
 		}
 		/* fixme: Need CLAMP (Lauris) */
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_R2:
 		if (!sp_svg_length_read_ldd (value, &unit, NULL, &star->r[1]) ||
@@ -199,7 +199,7 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 		    (unit == SP_SVG_UNIT_PERCENT)) {
 			star->r[1] = 0.0;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		return;
 	case SP_ATTR_SODIPODI_ARG1:
 		if (value) {
@@ -207,7 +207,7 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			star->arg[0] = 0.0;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_SODIPODI_ARG2:
 		if (value) {
@@ -215,13 +215,13 @@ sp_star_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			star->arg[1] = 0.0;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_INKSCAPE_FLATSIDED:
 		if (value && !strcmp (value, "true"))
 			star->flatsided = true;
         else star->flatsided = false;
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
 		if (((SPObjectClass *) parent_class)->set)
@@ -295,7 +295,7 @@ sp_star_position_set (SPStar *star, gint sides, NR::Point center, gdouble r1, gd
 	star->arg[0] = arg1;
 	star->arg[1] = arg2;
 	star->flatsided = isflat;
-	sp_object_request_update ((SPObject *) star, SP_OBJECT_MODIFIED_FLAG);
+	SP_OBJECT(star)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 /* fixme: We should use all corners of star (Lauris) */

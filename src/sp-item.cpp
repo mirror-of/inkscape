@@ -233,12 +233,12 @@ sp_item_set(SPObject *object, unsigned key, gchar const *value)
             break;
         case SP_ATTR_STYLE:
             sp_style_read_from_object(object->style, object);
-            sp_object_request_update(object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
         default:
             if (SP_ATTRIBUTE_IS_CSS(key)) {
                 sp_style_read_from_object(object->style, object);
-                sp_object_request_update(object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+                object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             } else {
                 if (((SPObjectClass *) (parent_class))->set) {
                     (* ((SPObjectClass *) (parent_class))->set)(object, key, value);
@@ -767,7 +767,7 @@ static void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform
         item->transform = transform;
         /* The SP_OBJECT_USER_MODIFIED_FLAG_B is used to mark the fact that it's only a
            transformation.  It's apparently not used anywhere else. */
-        sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_USER_MODIFIED_FLAG_B);
+        item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_USER_MODIFIED_FLAG_B);
         sp_item_rm_unsatisfied_cns(*item);
     }
 }

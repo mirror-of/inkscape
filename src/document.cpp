@@ -653,7 +653,7 @@ sp_document_ensure_up_to_date (SPDocument *doc)
 			ctx.vp.x1 = 21.0 / 2.54 * 72.0 * 1.25;
 			ctx.vp.y1 = 29.7 / 2.54 * 72.0 * 1.25;
 			nr_matrix_set_identity (&ctx.i2vp);
-			sp_object_invoke_update (doc->root, (SPCtx *) &ctx, 0);
+			doc->root->updateDisplay((SPCtx *)&ctx, 0);
 		}
 		/* Emit "modified" signal on objects */
 		sp_object_invoke_modified (doc->root, 0);
@@ -692,7 +692,7 @@ sp_document_idle_handler (gpointer data)
 		ctx.vp.x1 = 21.0 / 2.54 * 72.0 * 1.25;
 		ctx.vp.y1 = 29.7 / 2.54 * 72.0 * 1.25;
 		nr_matrix_set_identity (&ctx.i2vp);
-		sp_object_invoke_update (doc->root, (SPCtx *) &ctx, 0);
+		doc->root->updateDisplay((SPCtx *)&ctx, 0);
 		/* if (doc->root->uflags & SP_OBJECT_MODIFIED_FLAG) return TRUE; */
 	}
 

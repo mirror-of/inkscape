@@ -163,14 +163,14 @@ sp_symbol_set (SPObject *object, unsigned int key, const gchar *value)
 		} else {
 			symbol->viewBox_set = FALSE;
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		break;
 	case SP_ATTR_PRESERVEASPECTRATIO:
 		/* Do setup before, so we can use break to escape */
 		symbol->aspect_set = FALSE;
 		symbol->aspect_align = SP_ASPECT_NONE;
 		symbol->aspect_clip = SP_ASPECT_MEET;
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
 		if (value) {
 			int len;
 			gchar c[256];

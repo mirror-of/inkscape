@@ -154,7 +154,7 @@ sp_clippath_set (SPObject *object, unsigned int key, const gchar *value)
 				cp->clipPathUnits_set = TRUE;
 			}
 		}
-		sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
 	default:
 		if (((SPObjectClass *) parent_class)->set)
@@ -214,7 +214,7 @@ sp_clippath_update (SPObject *object, SPCtx *ctx, guint flags)
 		child = SP_OBJECT (l->data);
 		l = g_slist_remove (l, child);
 		if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
-			sp_object_invoke_update (child, ctx, flags);
+			child->updateDisplay(ctx, flags);
 		}
 		g_object_unref (G_OBJECT (child));
 	}
@@ -353,7 +353,7 @@ sp_clippath_set_bbox (SPClipPath *cp, unsigned int key, NRRect *bbox)
 			    !NR_DF_TEST_CLOSE (v->bbox.x1, bbox->x1, NR_EPSILON) ||
 			    !NR_DF_TEST_CLOSE (v->bbox.y1, bbox->y1, NR_EPSILON)) {
 				v->bbox = *bbox;
-				sp_object_request_update (SP_OBJECT (cp), SP_OBJECT_MODIFIED_FLAG);
+				SP_OBJECT(cp)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 			}
 			break;
 		}

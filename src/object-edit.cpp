@@ -76,12 +76,9 @@ sp_pattern_xy_set (SPItem *item, const NR::Point &p, guint state)
          gdouble y = p[NR::Y] - pat->patternTransform[5];
 
          sp_shape_adjust_pattern (item, NULL, NR::Matrix(NR::translate(x,y)));
-
-
      }
 
-    sp_object_request_update ((SPObject *) item, SP_OBJECT_MODIFIED_FLAG);
-
+     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 
@@ -120,7 +117,7 @@ sp_rect_rx_set (SPItem *item, const NR::Point &p, guint state)
 		rect->rx.computed = CLAMP (rect->x.computed + rect->width.computed - p[NR::X], 0.0, rect->width.computed / 2.0);
 		rect->rx.set = TRUE;
 	}
-	sp_object_request_update ((SPObject *) rect, SP_OBJECT_MODIFIED_FLAG);
+	((SPObject*)rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 
@@ -147,7 +144,7 @@ sp_rect_ry_set (SPItem *item, const NR::Point &p, guint state)
 			rect->ry.computed = CLAMP (p[NR::Y] - rect->y.computed, 0.0, rect->height.computed / 2.0);
 		rect->ry.set = TRUE;
 	}
-	sp_object_request_update ((SPObject *) rect, SP_OBJECT_MODIFIED_FLAG);
+	((SPObject *)rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 static NR::Point sp_rect_wh_get (SPItem *item)
@@ -187,7 +184,7 @@ sp_rect_wh_set (SPItem *item, const NR::Point &p, guint state)
 		}
 		rect->width.set = rect->height.set = TRUE;
 	}
-	sp_object_request_update ((SPObject *) rect, SP_OBJECT_MODIFIED_FLAG);
+	((SPObject *)rect)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 
@@ -247,7 +244,7 @@ sp_arc_start_set (SPItem *item, const NR::Point &p, guint state)
 		ge->start = sp_round(ge->start, M_PI/snaps);
 	}
 	sp_genericellipse_normalize (ge);
-	sp_object_request_update ((SPObject *) arc, SP_OBJECT_MODIFIED_FLAG);
+	((SPObject *)arc)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 static NR::Point sp_arc_start_get (SPItem *item)
@@ -277,7 +274,7 @@ sp_arc_end_set (SPItem *item, const NR::Point &p, guint state)
 		ge->end = sp_round(ge->end, M_PI/snaps);
 	}
 	sp_genericellipse_normalize (ge);
-	sp_object_request_update ((SPObject *) arc, SP_OBJECT_MODIFIED_FLAG);
+	((SPObject *)arc)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 static NR::Point sp_arc_end_get (SPItem *item)
@@ -328,7 +325,7 @@ sp_star_knot1_set (SPItem *item, const NR::Point &p, guint state)
 		star->arg[0]  = arg1;
 		star->arg[1] += darg1;
 	}
-	sp_object_request_update ((SPObject *) star, SP_OBJECT_MODIFIED_FLAG);
+	((SPObject *)star)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 static void
@@ -347,7 +344,8 @@ sp_star_knot2_set (SPItem *item, const NR::Point &p, guint state)
 		star->r[1]   = L2(d);
 		star->arg[1] = atan2 (d);
 	}
-	sp_object_request_update ((SPObject *) star, SP_OBJECT_MODIFIED_FLAG);}
+	((SPObject *)star)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    }
 }
 
 static NR::Point sp_star_knot1_get (SPItem *item)
@@ -427,7 +425,7 @@ sp_spiral_inner_set (SPItem *item, const NR::Point &p, guint state)
 
 	spiral->t0 = CLAMP (spiral->t0, 0.0, 0.999);
 
-	sp_object_request_update ((SPObject *) spiral, SP_OBJECT_MODIFIED_FLAG);
+	((SPObject *)spiral)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 /*
@@ -455,7 +453,7 @@ sp_spiral_outer_set (SPItem *item, const NR::Point &p, guint state)
 		spiral->arg = sp_round(spiral->arg, M_PI/snaps);
 	}
 
-	sp_object_request_update ((SPObject *) spiral, SP_OBJECT_MODIFIED_FLAG);
+	((SPObject *)spiral)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 static NR::Point sp_spiral_inner_get (SPItem *item)
@@ -503,7 +501,7 @@ sp_offset_offset_set (SPItem *item, const NR::Point &p, guint state)
 	offset->knot = p;
 	offset->knotSet=true;
 
-	sp_object_request_update ((SPObject *) offset, SP_OBJECT_MODIFIED_FLAG);
+	((SPObject *)offset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 

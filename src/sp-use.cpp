@@ -189,25 +189,25 @@ sp_use_set(SPObject *object, unsigned key, gchar const *value)
             if (!sp_svg_length_read(value, &use->x)) {
                 sp_svg_length_unset(&use->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
             }
-            sp_object_request_update(object, SP_OBJECT_MODIFIED_FLAG);
+            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_Y:
             if (!sp_svg_length_read(value, &use->y)) {
                 sp_svg_length_unset(&use->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
             }
-            sp_object_request_update(object, SP_OBJECT_MODIFIED_FLAG);
+            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_WIDTH:
             if (!sp_svg_length_read(value, &use->width)) {
                 sp_svg_length_unset(&use->width, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
             }
-            sp_object_request_update(object, SP_OBJECT_MODIFIED_FLAG);
+            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
         case SP_ATTR_HEIGHT:
             if (!sp_svg_length_read(value, &use->height)) {
                 sp_svg_length_unset(&use->height, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
             }
-            sp_object_request_update(object, SP_OBJECT_MODIFIED_FLAG);
+            object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
         case SP_ATTR_XLINK_HREF: {
@@ -462,7 +462,7 @@ sp_use_move_compensate(NR::Matrix const *mp, SPItem *original, SPUse *self)
     NRMatrix clone_move_nr = clone_move;
     nr_matrix_multiply(&item->transform, &item->transform, &clone_move_nr);
     sp_item_write_transform(item, SP_OBJECT_REPR(item), &item->transform, &advertized_move);
-    sp_object_request_update(SP_OBJECT(item), SP_OBJECT_MODIFIED_FLAG);
+    SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 static void
@@ -560,9 +560,9 @@ sp_use_update(SPObject *object, SPCtx *ctx, unsigned flags)
                 chi = SP_ITEM(use->child);
                 nr_matrix_multiply(&cctx.i2doc, &chi->transform, &ictx->i2doc);
                 nr_matrix_multiply(&cctx.i2vp, &chi->transform, &ictx->i2vp);
-                sp_object_invoke_update(use->child, (SPCtx *) &cctx, flags);
+                use->child->updateDisplay((SPCtx *)&cctx, flags);
             } else {
-                sp_object_invoke_update(use->child, ctx, flags);
+                use->child->updateDisplay(ctx, flags);
             }
         }
         g_object_unref(G_OBJECT(use->child));

@@ -341,7 +341,7 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
         sp_curve_unref (curve);
         
         offset->knotSet = false;
-        sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+        object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
       }
       break;
     case SP_ATTR_INKSCAPE_RADIUS:
@@ -351,7 +351,7 @@ sp_offset_set (SPObject * object, unsigned int key, const gchar * value)
           offset->rad = (offset->rad < 0) ? -0.01 : 0.01;
         offset->knotSet = false; // knotset=false because it's not set from the context
       }
-      sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
+      object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
       break;
     case SP_ATTR_INKSCAPE_HREF:
     case SP_ATTR_XLINK_HREF:
@@ -1249,7 +1249,7 @@ static void sp_offset_source_child_added (SPRepr *repr, SPRepr *child, SPRepr */
   sp_repr_add_listener (child,&offset_source_child_event_vector, offset);
   
   offset->sourceDirty=true;
-  sp_object_request_update (SP_OBJECT(offset), SP_OBJECT_MODIFIED_FLAG);
+  SP_OBJECT(offset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 static void sp_offset_source_child_removed (SPRepr *repr, SPRepr *child, SPRepr */*ref*/, void * data)
 {
@@ -1262,7 +1262,7 @@ static void sp_offset_source_child_removed (SPRepr *repr, SPRepr *child, SPRepr 
   sp_repr_remove_listener_by_data (child, offset);
   
   offset->sourceDirty=true;
-  sp_object_request_update (SP_OBJECT(offset), SP_OBJECT_MODIFIED_FLAG);
+  SP_OBJECT(offset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 static void sp_offset_source_content_changed (SPRepr */*repr*/, const gchar */*oldcontent*/, const gchar */*newcontent*/, void * data)
 {
@@ -1271,7 +1271,7 @@ static void sp_offset_source_content_changed (SPRepr */*repr*/, const gchar */*o
     return;
   
   offset->sourceDirty=true;
-  sp_object_request_update (SP_OBJECT(offset), SP_OBJECT_MODIFIED_FLAG);
+  SP_OBJECT(offset)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void   refresh_offset_source(SPOffset* offset)
