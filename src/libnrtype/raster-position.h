@@ -1,6 +1,8 @@
 #ifndef SEEN_LIBNRTYPE_RASTER_POSITION_H
 #define SEEN_LIBNRTYPE_RASTER_POSITION_H
 
+#include <vector>
+
 #include <libnr/nr-forward.h>
 #include <libnrtype/nrtype-forward.h>
 #include <livarot/livarot-forward.h>

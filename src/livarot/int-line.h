@@ -2,6 +2,7 @@
 #define INKSCAPE_LIVAROT_INT_LINE_H
 
 #include "livarot/livarot-forward.h"
+#include "livarot/LivarotDefs.h"
 
 /*
  * coverage with integer boundaries: what we want for actual rasterization
