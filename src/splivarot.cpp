@@ -23,6 +23,7 @@
 #include "svg/stringstream.h"
 #include "sp-path.h"
 #include "sp-text.h"
+#include "sp-item-group.h"
 #include "style.h"
 #include "inkscape.h"
 #include "document.h"
@@ -1274,35 +1275,122 @@ sp_selected_path_do_offset (bool expand, double prefOffset)
 
 
 
-// globals for keeping track of accelerated simplify
-static double prev_time = 0;
-static gdouble simplify_multiply = 1;
-
-void
-sp_selected_path_simplify (void)
+//return true if we changed something, else false
+bool
+sp_selected_path_simplify_item(SPDesktop *desktop, SPSelection *selection, SPItem *item,
+                 float threshold,  bool justCoalesce,
+                 float angleLimit, bool breakableAngles,
+                 gdouble size,     bool modifySelection)
 {
-    gdouble simplify_threshold = prefs_get_double_attribute ("options.simplifythreshold","value", 0.003);
-    bool simplify_justcoalesce = (bool) prefs_get_int_attribute ("options.simplifyjustcoalesce","value", 0);
+    if (!(SP_IS_GROUP(item) || SP_IS_SHAPE (item) || SP_IS_TEXT (item)))
+        return false;
 
-    GTimeVal cu;
-    g_get_current_time (&cu);
-    double current = cu.tv_sec * 1000000 + cu.tv_usec; // current time
+    //If this is a group, do the children instead
+    if (SP_IS_GROUP (item)) {
+    
+        bool didSomething = false;
 
-    if (prev_time != 0 && current - prev_time < 500000) { // last call of the command was within 0.5 sec
-        simplify_multiply += 0.5; // add to the threshold 1/2 of its original value
-        simplify_threshold *= simplify_multiply;
-    } else {
-        simplify_multiply = 1; // reset to the default
+        for ( GSList *children = sp_item_group_item_list (SP_GROUP (item));
+                 children  ; children = children->next) {
+                 
+            SPItem *child = (SPItem *) children->data;
+            didSomething |= sp_selected_path_simplify_item(desktop, selection, child, threshold, justCoalesce,
+                   angleLimit, breakableAngles, size, false);
+        }
+        
+        return didSomething;
     }
-    prev_time = current; // remember time
+        
 
-    //g_print ("%g\n", simplify_threshold);
+    SPCurve *curve = NULL;
+    
+    if (SP_IS_SHAPE (item)) {
+        curve = sp_shape_get_curve (SP_SHAPE (item));
+        if (!curve)
+            return false;
+    }
 
-    sp_selected_path_simplify_withparams (simplify_threshold, simplify_justcoalesce, 0.0, false);
+    if (SP_IS_TEXT (item)) {
+        curve = sp_text_normalized_bpath (SP_TEXT (item));
+        if (!curve)
+            return false;
+    }
+
+    // save the transform, to re-apply it after simplification
+    NR::Matrix const transform(item->transform);
+
+    /*
+       reset the transform, effectively transforming the item by transform.inverse();
+       this is necessary so that the item is transformed twice back and forth,
+       allowing all compensations to cancel out regardless of the preferences
+    */
+    sp_item_write_transform(item, SP_OBJECT_REPR(item), NR::identity());
+
+    gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR (item), "style"));
+
+    Path *orig = Path_for_item (item, false);
+    if (orig == NULL) {
+        g_free (style);
+        sp_curve_unref (curve);
+        return false;
+    }
+
+    sp_curve_unref (curve);
+    // remember the position of the item
+    gint pos = sp_repr_position (SP_OBJECT_REPR (item));
+    // remember parent
+    SPRepr *parent = SP_OBJECT_REPR (item)->parent;
+    // remember id
+    const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
+
+    //If a group was selected, to not change the selection list
+    if (modifySelection)
+        selection->removeItem (item);
+        
+    SP_OBJECT (item)->deleteObject(false);
+
+    if ( justCoalesce ) {
+        orig->Coalesce (threshold * size);
+    } else {
+        orig->ConvertEvenLines (threshold * size);
+        orig->Simplify (threshold * size);
+    }
+
+    SPRepr *repr = sp_repr_new ("svg:path");
+
+    sp_repr_set_attr (repr, "style", style);
+
+    gchar *str = orig->svg_dump_path ();
+    sp_repr_set_attr (repr, "d", str);
+    g_free (str);
+
+    // restore id
+    sp_repr_set_attr (repr, "id", id);
+
+    // add the new repr to the parent
+    sp_repr_append_child (parent, repr);
+
+    // move to the saved position 
+    sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+
+    SPItem *newitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
+
+    // reapply the transform
+    sp_item_write_transform (newitem, repr, transform);
+
+    //If we are not in a selected group
+    if (modifySelection)
+        selection->addRepr (repr);
+
+    sp_repr_unref (repr);
+
+    return true;
 }
 
+
 void
-sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float angleLimit, bool breakableAngles)
+sp_selected_path_simplify_selection (float threshold, bool justCoalesce,
+                       float angleLimit, bool breakableAngles)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (!SP_IS_DESKTOP (desktop))
@@ -1311,110 +1399,77 @@ sp_selected_path_simplify_withparams (float threshold, bool justCoalesce, float 
     SPSelection *selection = SP_DT_SELECTION (desktop);
 
     if (selection->isEmpty()) {
-        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>path(s)</b> to simplify."));
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE,
+                         _("Select <b>path(s)</b> to simplify."));
         return;
     }
 
     // remember selection size
     NR::Rect bbox = selection->bounds();
-    gdouble size = L2(bbox.dimensions());
+    gdouble size  = L2(bbox.dimensions());
 
-    bool did = false;
+    bool didSomething = false;
 
+    //Loop through all of the items in the selection
     for (GSList *items = g_slist_copy((GSList *) selection->itemList());
-         items != NULL;
-         items = items->next) {
+                        items != NULL; items = items->next) {
 
         SPItem *item = (SPItem *) items->data;
 
-        if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
+        if (!(SP_IS_GROUP(item) || SP_IS_SHAPE (item) || SP_IS_TEXT (item)))
             continue;
 
-        SPCurve *curve = NULL;
-        if (SP_IS_SHAPE (item)) {
-            curve = sp_shape_get_curve (SP_SHAPE (item));
-            if (curve == NULL)
-                continue;
-        }
-        if (SP_IS_TEXT (item)) {
-            curve = sp_text_normalized_bpath (SP_TEXT (item));
-            if (curve == NULL)
-                continue;
-        }
-
-        // save the transform, to re-apply it after simplification
-        NR::Matrix const transform(item->transform);
-
-        // reset the transform, effectively transforming the item by transform.inverse();
-        // this is necessary so that the item is transformed twice back and forth,
-        // allowing all compensations to cancel out regardless of the preferences
-        sp_item_write_transform(item, SP_OBJECT_REPR(item), NR::identity());
-
-        gchar *style = g_strdup (sp_repr_attr (SP_OBJECT_REPR (item), "style"));
-
-        Path *orig = Path_for_item (item, false);
-        if (orig == NULL) {
-            g_free (style);
-            sp_curve_unref (curve);
-            continue;
-        }
-
-        did = true;
-        sp_curve_unref (curve);
-        // remember the position of the item
-        gint pos = sp_repr_position (SP_OBJECT_REPR (item));
-        // remember parent
-        SPRepr *parent = SP_OBJECT_REPR (item)->parent;
-        // remember id
-        const char *id = sp_repr_attr (SP_OBJECT_REPR (item), "id");
-
-        selection->removeItem (item);
-        SP_OBJECT (item)->deleteObject(false);
-
-        {
-            if ( justCoalesce ) {
-                orig->Coalesce (threshold * size);
-            } else {
-                orig->ConvertEvenLines (threshold * size);
-                orig->Simplify (threshold * size);
-            }
-        }
-
-        {
-            SPRepr *repr = sp_repr_new ("svg:path");
-
-            sp_repr_set_attr (repr, "style", style);
-
-            gchar *str = orig->svg_dump_path ();
-            sp_repr_set_attr (repr, "d", str);
-            g_free (str);
-
-            // restore id
-            sp_repr_set_attr (repr, "id", id);
-
-            // add the new repr to the parent
-            sp_repr_append_child (parent, repr);
-
-            // move to the saved position 
-            sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
-
-            SPItem *newitem = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(repr);
-
-            // reapply the transform
-            sp_item_write_transform (newitem, repr, transform);
-
-            selection->addRepr (repr);
-
-            sp_repr_unref (repr);
-        }
+        didSomething |= sp_selected_path_simplify_item(desktop, selection, item,
+                           threshold, justCoalesce, angleLimit, breakableAngles, size, true);
     }
+        
 
-    if (did) {
+    if (didSomething)
         sp_document_done (SP_DT_DOCUMENT (desktop));
-    } else {
+    else
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No paths</b> to simplify in the selection."));
-        return;
+
+}
+
+
+// globals for keeping track of accelerated simplify
+static double previousTime      = 0.0;
+static gdouble simplifyMultiply = 1.0;
+
+void
+sp_selected_path_simplify (void)
+{
+    gdouble simplifyThreshold =
+        prefs_get_double_attribute ("options.simplifythreshold","value", 0.003);
+    bool simplifyJustCoalesce = 
+        (bool) prefs_get_int_attribute ("options.simplifyjustcoalesce","value", 0);
+
+    //Get the current time
+    GTimeVal currentTimeVal;
+    g_get_current_time (&currentTimeVal);
+    double currentTime = currentTimeVal.tv_sec * 1000000 +
+                currentTimeVal.tv_usec;
+
+    //Was the previous call to this function recent? (<0.5 sec)
+    if (previousTime > 0.0 && currentTime - previousTime < 500000.0) { 
+
+        // add to the threshold 1/2 of its original value
+        simplifyMultiply  += 0.5;
+        simplifyThreshold *= simplifyMultiply;
+
+    } else {
+        // reset to the default
+        simplifyMultiply = 1;
     }
+
+    //remember time for next call
+    previousTime = currentTime;
+
+    //g_print ("%g\n", simplify_threshold);
+
+    //Make the actual call
+    sp_selected_path_simplify_selection(simplifyThreshold,
+                      simplifyJustCoalesce, 0.0, false);
 }
 
 
