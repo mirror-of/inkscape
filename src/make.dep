@@ -1005,6 +1005,7 @@ draw-context.o: \
 	inkscape.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -1052,6 +1053,7 @@ dropper-context.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-object.h \
 	libnr/nr-pixblock.h \
+	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -1083,6 +1085,7 @@ dyna-draw-context.o: \
 	inkscape.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -1243,6 +1246,7 @@ help.o: \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
+	inkscape.h \
 	libnr/nr-forward.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
@@ -1528,6 +1532,7 @@ interface.o: \
 	modules/menu.h \
 	object-ui.h \
 	path-chemistry.h \
+	prefs-utils.h \
 	selection-chemistry.h \
 	shortcuts.h \
 	sp-namedview.h \
@@ -1564,6 +1569,7 @@ knot.o: \
 	knot.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -3928,6 +3934,7 @@ sp-text.o: \
 	sp-text.cpp \
 	attributes.h \
 	color.h \
+	desktop.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-glyphs.h \
@@ -3938,6 +3945,7 @@ sp-text.o: \
 	enums.h \
 	forward.h \
 	helper/curve.h \
+	helper/helper-forward.h \
 	helper/sp-intl.h \
 	helper/units.h \
 	inkscape.h \
@@ -4030,6 +4038,7 @@ spiral-context.o: \
 	knot.h \
 	libnr/nr-macros.h \
 	libnr/nr-matrix.h \
+	libnr/nr-point-fns.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -4637,6 +4646,7 @@ widgets/gradient-position.o: \
 	libnr/nr-matrix.h \
 	libnr/nr-pixblock.h \
 	libnr/nr-pixops.h \
+	libnr/nr-point-fns.h \
 	libnr/nr-render.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -4839,6 +4849,7 @@ widgets/sp-color-gtkselector.o: \
 widgets/sp-color-notebook.o: \
 	widgets/sp-color-notebook.cpp \
 	color.h \
+	color.h \
 	dialogs/dialog-events.h \
 	forward.h \
 	helper/sp-intl.h \
@@ -4848,7 +4859,9 @@ widgets/sp-color-notebook.o: \
 	widgets/sp-color-preview.h \
 	widgets/sp-color-scales.h \
 	widgets/sp-color-selector.h \
-	widgets/sp-color-slider.h
+	widgets/sp-color-slider.h \
+	widgets/sp-color-wheel-selector.h \
+	widgets/sp-color-wheel.h
 
 widgets/sp-color-preview.o: \
 	widgets/sp-color-preview.cpp \
@@ -4879,6 +4892,30 @@ widgets/sp-color-selector.o: \
 widgets/sp-color-slider.o: \
 	widgets/sp-color-slider.cpp \
 	widgets/sp-color-slider.h
+
+widgets/sp-color-wheel-selector.o: \
+	widgets/sp-color-wheel-selector.cpp \
+	color.h \
+	color.h \
+	dialogs/dialog-events.h \
+	forward.h \
+	helper/sp-intl.h \
+	libnr/nr-types.h \
+	widgets/sp-color-preview.h \
+	widgets/sp-color-selector.h \
+	widgets/sp-color-slider.h \
+	widgets/sp-color-wheel-selector.h \
+	widgets/sp-color-wheel.h
+
+widgets/sp-color-wheel.o: \
+	widgets/sp-color-wheel.cpp \
+	color.h \
+	forward.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
+	libnr/nr-types.h \
+	libnr/nr-values.h \
+	widgets/sp-color-wheel.h
 
 widgets/sp-widget.o: \
 	widgets/sp-widget.cpp \

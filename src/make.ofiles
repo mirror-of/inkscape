@@ -229,6 +229,8 @@ OBJECTS = \
 	widgets/sp-color-scales.o \
 	widgets/sp-color-selector.o \
 	widgets/sp-color-slider.o \
+	widgets/sp-color-wheel-selector.o \
+	widgets/sp-color-wheel.o \
 	widgets/sp-widget.o \
 	widgets/sp-xmlview-attr-list.o \
 	widgets/sp-xmlview-content.o \
@@ -473,6 +475,8 @@ LINTS = \
 	widgets/sp-color-scales.lint \
 	widgets/sp-color-selector.lint \
 	widgets/sp-color-slider.lint \
+	widgets/sp-color-wheel-selector.lint \
+	widgets/sp-color-wheel.lint \
 	widgets/sp-widget.lint \
 	widgets/sp-xmlview-attr-list.lint \
 	widgets/sp-xmlview-content.lint \
