@@ -29,6 +29,8 @@
 
 #include "sp-ellipse.h"
 
+#include "prefs-utils.h"
+
 /* Common parent class */
 
 #define noELLIPSE_VERBOSE
@@ -389,7 +391,7 @@ sp_ellipse_write (SPObject *object, SPRepr *repr, guint flags)
 	sp_repr_set_double (repr, "ry", ellipse->ry.computed);
 
 	sp_arc_set_elliptical_path_attribute (SP_ARC (object), repr);
-	
+
 	if (((SPObjectClass *) ellipse_parent_class)->write)
 		(* ((SPObjectClass *) ellipse_parent_class)->write) (object, repr, flags);
 
@@ -539,7 +541,7 @@ sp_circle_write (SPObject *object, SPRepr *repr, guint flags)
 	sp_repr_set_double (repr, "cx", ellipse->cx.computed);
 	sp_repr_set_double (repr, "cy", ellipse->cy.computed);
 	sp_repr_set_double (repr, "r", ellipse->rx.computed);
-	
+
 	if (((SPObjectClass *) circle_parent_class)->write)
 		((SPObjectClass *) circle_parent_class)->write (object, repr, flags);
 
@@ -722,7 +724,7 @@ sp_arc_set_elliptical_path_attribute (SPArc *arc, SPRepr *repr)
 			os << "M " << p1[NR::X] << "," << p1[NR::Y]
 				<< " A " << ge->rx.computed << "," << ge->ry.computed
 				<< " 0 " << fa << " " << fs << " " << p2[NR::X] << "," << p2[NR::Y];
-			
+
 		}
 	}
 	return sp_repr_set_attr (repr, "d", os.str().c_str());
@@ -772,7 +774,7 @@ static void
 sp_arc_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPGenericEllipse *ge = SP_GENERICELLIPSE (object);
-	
+
 	SPVersion version = sp_object_get_sodipodi_version (object);
 
 	if (sp_version_inside_range (version, 0, 0, 0, 25)) {
@@ -871,7 +873,11 @@ sp_arc_position_set (SPArc *arc, gdouble x, gdouble y, gdouble rx, gdouble ry)
 	ge->cx.computed = x;
 	ge->cy.computed = y;
 	ge->rx.computed = rx;
-	ge->ry.computed = ry;
+    ge->ry.computed = ry;
+    if (prefs_get_double_attribute ("tools.shapes.arc", "start", 0.0) > 0)ge->start = prefs_get_double_attribute ("tools.shapes.arc", "start", 0.0);
+    if (prefs_get_double_attribute ("tools.shapes.arc", "end", 0.0) > 0) ge->end = prefs_get_double_attribute ("tools.shapes.arc", "end", 0.0);
+    if (!prefs_get_string_attribute ("tools.shapes.arc", "open")) ge->closed = 1;
+
 
 	sp_object_request_update ((SPObject *) arc, SP_OBJECT_MODIFIED_FLAG);
 }
