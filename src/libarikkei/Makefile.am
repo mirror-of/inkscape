@@ -2,6 +2,7 @@ noinst_LIBRARIES = libarikkei.a
 
 INCLUDES = \
 	-I.. \
+	$(INKSCAPE_CFLAGS) \
 	$(cflags)
 
 libarikkei_a_SOURCES = \
