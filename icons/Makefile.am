@@ -116,7 +116,7 @@ pixmaps = \
     node_join.xpm \
     node_line.xpm \
     node_smooth.xpm \
-    node_symetric.xpm \
+    node_symmetric.xpm \
     object_align.xpm \
     object_fill.xpm \
     object_flip_hor.xpm \

@@ -1,5 +1,5 @@
 /* XPM */
-static char * node_symetric_xpm[] = {
+static char const *node_symmetric_xpm[] = {
 "24 24 6 1",
 " 	c None",
 ".	c #000000",
