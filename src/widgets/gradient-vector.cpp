@@ -760,6 +760,7 @@ sp_gradient_vector_widget_new (SPGradient *gradient)
 
 	/* Add and Remove buttons */
 	GtkWidget *hb = gtk_hbox_new (FALSE, 1);
+	// TRANSLATORS: "Stop" means: a "phase" of a gradient
 	GtkWidget *b = gtk_button_new_with_label (_("Add stop"));
 	gtk_widget_show (b);
 	gtk_container_add (GTK_CONTAINER (hb), b);
@@ -823,6 +824,7 @@ sp_gradient_vector_widget_new (SPGradient *gradient)
 	gtk_widget_show (hb);
 	gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, PAD);
 
+	// TRANSLATORS: "Stop" means: a "phase" of a gradient
 	f = gtk_frame_new (_("Stop Color"));
 	gtk_widget_show (f);
 	gtk_box_pack_start (GTK_BOX (vb), f, TRUE, TRUE, PAD);
