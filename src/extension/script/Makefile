@@ -58,14 +58,16 @@ _inkscape_py.so : inkscape_py_wrap.o $(OBJ)
 	
 inkscape_py_wrap.cpp: InkscapeBinding.h inkscape_py.i
 	swig -c++ -python -o inkscape_py_wrap.cpp inkscape_py.i
-	sh wrap_swig_module.sh inkscape_py.py inkscape_py.py.h
+	#sh wrap_swig_module.sh inkscape_py.py inkscape_py.py.h
+	perl quotefile.pl inkscape_py.py inkscape_py.py.h
 	
 InkscapePython.o: InkscapePython.cpp InkscapePython.h inkscape_py_wrap.o
 	$(CXX) $(CXXFLAGS) $(INC) $(PYINC) -o $@ -c InkscapePython.cpp
 
 inkscape_perl_wrap.cpp: InkscapeBinding.h inkscape_perl.i
 	swig -c++ -perl5 -static -o inkscape_perl_wrap.cpp inkscape_perl.i 
-	sh wrap_swig_module.sh inkscape_perl.pm inkscape_perl.pm.h
+	#sh wrap_swig_module.sh inkscape_perl.pm inkscape_perl.pm.h
+	perl quotefile.pl inkscape_perl.pm inkscape_perl.pm.h
 	
 InkscapePerl.o: InkscapePerl.cpp InkscapePerl.h inkscape_perl_wrap.o
 	$(CXX) $(CXXFLAGS) $(INC) $(PERLINC) -o $@ -c InkscapePerl.cpp
