@@ -48,6 +48,7 @@ void Docker::dock ( Dockable & dockable)
 void Docker::present( Dockable & dockable)
 {
   _notebook.set_current_page(dockable.get_page_num());
+  _window.set_title(dockable.get_title());
   present();
 }
 

@@ -453,13 +453,14 @@ void DialogAlign::addNodeButton(const Glib::ustring &id, const Glib::ustring tip
 }
 
 DialogAlign::DialogAlign():
-    Dockable("Align", "dialogs.align"),
-    _alignFrame("Align"), 
-    _distributeFrame("Distribute"),
-    _nodesFrame("Nodes"),
+    Dockable(_("Layout"), "dialogs.align"),
+    _alignFrame(_("Align")), 
+    _distributeFrame(_("Distribute")),
+    _nodesFrame(_("Align Nodes")),
     _alignTable(2,5, true), 
     _distributeTable(2,4, true), 
-    _nodesTable(1, 4, true)
+    _nodesTable(1, 4, true), 
+    _anchorLabel(_("Relative to: "))
 {
     //Instanciate the align buttons
     addAlignButton("al_left_out", 
@@ -545,9 +546,6 @@ DialogAlign::DialogAlign():
         
     //Rest of the widgetry
         
-    _alignFrame.add(_alignTable);
-    _distributeFrame.add(_distributeTable);
-    _nodesFrame.add(_nodesTable);
 
     _combo.append_text("Last selected");
     _combo.append_text("First selected");
@@ -557,11 +555,20 @@ DialogAlign::DialogAlign():
     _combo.append_text("Drawing");
     _combo.append_text("Selection");
         
-    _combo.set_active(0);
+    _combo.set_active(6);
     _combo.signal_changed().connect(sigc::mem_fun(*this, &DialogAlign::on_ref_change));
-    _combo.show();
-        
-    _widget.pack_start(_combo, false, false, 0);
+
+    _anchorBox.pack_start(_anchorLabel);
+    _anchorBox.pack_start(_combo);
+
+    _alignBox.pack_start(_anchorBox);
+    _alignBox.pack_start(_alignTable);
+
+    _alignFrame.add(_alignBox);
+    _distributeFrame.add(_distributeTable);
+    _nodesFrame.add(_nodesTable);
+
+
     _widget.pack_start(_alignFrame, false, false, 0);
     _widget.pack_start(_distributeFrame, false, false, 0);
     _widget.pack_start(_nodesFrame, false, false, 0);

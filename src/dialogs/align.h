@@ -21,6 +21,7 @@
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/table.h>
 #include <gtkmm/buttonbox.h>
+#include <gtkmm/label.h>
 #include "libnr/nr-dim2.h"
 
 #include "dialogs/dockable.h"
@@ -70,6 +71,9 @@ private :
     Gtk::VBox _widget;
     Gtk::Frame _alignFrame, _distributeFrame, _nodesFrame;
     Gtk::Table _alignTable, _distributeTable, _nodesTable;
+    Gtk::HBox _anchorBox;
+    Gtk::VBox _alignBox;
+    Gtk::Label _anchorLabel;
     Gtk::ComboBoxText _combo;
     Gtk::Tooltips _tooltips;
 };
