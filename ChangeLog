@@ -1,3 +1,8 @@
+2005-02-18  Jon A. Cruz  <jon@joncruz.org>
+	* src/Makefile.am, src/libnr/Makefile_insert,
+	  src/libnr/nr-point-fns-test.h  src/libnr/nr-types-test.h:
+	  Adding initial version of CxxTest test cases.
+
 2005-02-17  Jon A. Cruz  <jon@joncruz.org>
 
 	* src/io/gzipinputstream.h, src/io/gzipinputstream.cpp: Changed

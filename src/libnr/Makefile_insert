@@ -107,6 +107,21 @@ libnr_testnr_LDADD =	\
 	libnr/libnr.a	\
 	-lglib-2.0
 
+
+libnr/testrunnr.cpp: $(libnr_testrunnr_includes)
+	cxxtestgen.pl --error-printer -o libnr/testrunnr.cpp $(libnr_testrunnr_includes)
+
+libnr_testrunnr_includes =	\
+	$(srcdir)/libnr/nr-point-fns-test.h	\
+	$(srcdir)/libnr/nr-types-test.h
+
+libnr_testrunnr_SOURCES =	\
+	libnr/testrunnr.cpp
+
+libnr_testrunnr_LDADD =	\
+	libnr/libnr.a	\
+	-lglib-2.0
+
 libnr_in_svg_plane_test_SOURCES = libnr/in-svg-plane-test.cpp
 libnr_in_svg_plane_test_LDADD = libnr/libnr.a -lglib-2.0
 
