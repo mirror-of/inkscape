@@ -160,6 +160,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer da
             if (incest)
                 continue;
 
+            // Now actually snap:
             for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
                 GrDraggable *draggable = (GrDraggable *) i->data;
                 // copy draggable to d_new:
@@ -168,6 +169,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer da
                 // move to the exact position of d_new, writing to repr:
                 sp_item_gradient_set_coords (da_new->item, da_new->point_num, d_new->point, da_new->fill_or_stroke, true);
             }
+            // unlink and delete this dragger
             dragger->parent->draggers = g_slist_remove (dragger->parent->draggers, dragger);
             delete dragger;
             d_new->parent->updateLines();
@@ -177,22 +179,58 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer da
     }
 }
 
+/**
+Called when the mouse releases a dragger knot; changes gradient writing to repr, updates other draggers if needed
+*/
 static void
 gr_knot_ungrabbed_handler (SPKnot *knot, unsigned int state, gpointer data)
 {
     GrDragger *dragger = (GrDragger *) data;
 
+    // Act upon all draggables of the dragger:
     for (GSList const* i = dragger->draggables; i != NULL; i = i->next) {
         GrDraggable *draggable = (GrDraggable *) i->data;
+        // set local_change flag so that selection_changed callback does not regenerate draggers
         dragger->parent->local_change = true;
+        // change gradient, writing to repr
         sp_item_gradient_set_coords (draggable->item, draggable->point_num, knot->pos, draggable->fill_or_stroke, true);
     }
 
+    // make this dragger selected
     dragger->parent->setSelected (dragger);
 
+    // we did an undoable action
     sp_document_done (SP_DT_DOCUMENT (dragger->parent->desktop));
+
+    // check if this draggable is attached to a radial gradient; if so, we need to regenerate all
+    // draggers because moving this one affects positions of others. BAD because 1) others will not
+    // be updated until mouse is released, 2) we'll need to clumsily save and restore selected
+    // dragger, 3) others will unsnap without warning. However, this is by far the simplest method. 
+    bool has_dependencies = false;
+    for (GSList const* i = dragger->draggables; i != NULL; i = i->next) {
+        GrDraggable *draggable = (GrDraggable *) i->data;
+        // only if this is center or one of the radii; focus does not affect other draggers
+        if (draggable->point_num >= POINT_RG_CENTER && draggable->point_num <= POINT_RG_R2) {
+            has_dependencies = true; 
+            break;
+        }
+    }
+
+    if (has_dependencies) {
+        // remember the first draggable of the selected knot
+        GrDraggable *select = (GrDraggable *) dragger->draggables->data;
+        GrDraggable *select_copy = new GrDraggable (select->item, select->point_num, select->fill_or_stroke);
+        GrDrag *drag = dragger->parent;
+        // update all knots; this destroys dragger!
+        drag->updateDraggers();
+        // restore selection
+        drag->restoreSelected(select_copy);
+    }
 }
 
+/**
+Called when a dragger knot is clicked; selects the dragger
+*/
 static void
 gr_knot_clicked_handler(SPKnot *knot, guint state, gpointer data)
 {
@@ -201,6 +239,9 @@ gr_knot_clicked_handler(SPKnot *knot, guint state, gpointer data)
    dragger->parent->setSelected (dragger);
 }
 
+/**
+Updates the statusbar tip of the dragger knot, based on its draggables
+ */
 void
 GrDragger::updateTip ()
 {
@@ -219,6 +260,9 @@ GrDragger::updateTip ()
     }
 }
 
+/**
+Adds a draggable to the dragger
+ */
 void
 GrDragger::addDraggable (GrDraggable *draggable)
 {
@@ -236,19 +280,22 @@ GrDragger::GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable, SPKno
 
     this->point = p;
 
+    // create the knot
     this->knot = sp_knot_new (parent->desktop, NULL);
     g_object_set (G_OBJECT (this->knot->item), "shape", shape, NULL);
     g_object_set (G_OBJECT (this->knot->item), "mode", SP_KNOT_MODE_XOR, NULL);
     this->knot->fill [SP_KNOT_STATE_NORMAL] = GR_KNOT_COLOR_NORMAL;
 
-    /* Move to current point. */
+    // move knot to the given point
     sp_knot_set_position (this->knot, &p, SP_KNOT_STATE_NORMAL);
     sp_knot_show (this->knot);
 
+    // connect knot's signals
     this->handler_id = g_signal_connect (G_OBJECT (this->knot), "moved", G_CALLBACK (gr_knot_moved_handler), this);
     g_signal_connect (G_OBJECT (this->knot), "clicked", G_CALLBACK (gr_knot_clicked_handler), this);
     g_signal_connect (G_OBJECT (this->knot), "ungrabbed", G_CALLBACK (gr_knot_ungrabbed_handler), this);
 
+    // add the initial draggable
     this->addDraggable (draggable);
 }
 
@@ -257,9 +304,11 @@ GrDragger::~GrDragger ()
     /* unref should call destroy */
     g_object_unref (G_OBJECT (this->knot));
 
+    // unselect if it was selected
     if (this->parent->selected == this)
         this->parent->selected = NULL;
 
+    // delete all draggables
     for (GSList const* i = this->draggables; i != NULL; i = i->next) {
         delete ((GrDraggable *) i->data);
     }
@@ -267,6 +316,27 @@ GrDragger::~GrDragger ()
     this->draggables = NULL;
 }
 
+/**
+Select the dragger which has the given draggable.
+*/
+void
+GrDrag::restoreSelected (GrDraggable *da1) 
+{
+    for (GSList const* i = this->draggers; i != NULL; i = i->next) {
+        GrDragger *dragger = (GrDragger *) i->data;
+        for (GSList const* j = dragger->draggables; j != NULL; j = j->next) {
+            GrDraggable *da2 = (GrDraggable *) j->data;
+            if (da1->item == da2->item && da1->point_num == da2->point_num && da1->fill_or_stroke == da2->fill_or_stroke) {
+                setSelected (dragger);
+                return;
+            }
+        }
+    }
+}
+
+/**
+Set selected dragger
+*/
 void
 GrDrag::setSelected (GrDragger *dragger) 
 {
@@ -279,6 +349,9 @@ GrDrag::setSelected (GrDragger *dragger)
     this->selected = dragger;
 }
 
+/**
+Create a line from p1 to p2 and add it to the lines list
+ */
 void
 GrDrag::addLine (NR::Point p1, NR::Point p2) 
 {
@@ -290,6 +363,10 @@ GrDrag::addLine (NR::Point p1, NR::Point p2)
     this->lines = g_slist_append (this->lines, line);
 }
 
+/**
+If there already exists a dragger within MERGE_DIST of p, add the draggable to it; otherwise create
+new dragger and add it to draggers list
+ */
 void 
 GrDrag::addDragger (NR::Point p, GrDraggable *draggable, SPKnotShapeType shape)
 {
@@ -305,6 +382,9 @@ GrDrag::addDragger (NR::Point p, GrDraggable *draggable, SPKnotShapeType shape)
     this->draggers = g_slist_prepend (this->draggers, new GrDragger(this, p, draggable, shape));
 }
 
+/**
+Add draggers for the radial gradient rg on item
+*/
 void 
 GrDrag::addDraggersRadial (SPRadialGradient *rg, SPItem *item, bool fill_or_stroke)
 {
@@ -313,6 +393,9 @@ GrDrag::addDraggersRadial (SPRadialGradient *rg, SPItem *item, bool fill_or_stro
     addDragger (sp_rg_get_r2(item, rg), new GrDraggable (item, POINT_RG_R2, fill_or_stroke), SP_KNOT_SHAPE_CIRCLE);
 }
 
+/**
+Add draggers for the linear gradient lg on item
+*/
 void 
 GrDrag::addDraggersLinear (SPLinearGradient *lg, SPItem *item, bool fill_or_stroke)
 {
@@ -320,12 +403,16 @@ GrDrag::addDraggersLinear (SPLinearGradient *lg, SPItem *item, bool fill_or_stro
     addDragger (sp_lg_get_p2 (item, lg), new GrDraggable (item, POINT_LG_P2, fill_or_stroke), SP_KNOT_SHAPE_SQUARE);
 }
 
+/**
+Regenerates the draggers list from the current selection; is called when selection is changed or
+modified, also when a radial dragger needs to update positions of other draggers in the gradient
+*/
 void
 GrDrag::updateDraggers ()
 {
+    // delete old draggers and deselect
     for (GSList const* i = this->draggers; i != NULL; i = i->next) {
         delete ((GrDragger *) i->data);
-        //gtk_object_destroy( GTK_OBJECT (l->data));
     }
     g_slist_free (this->draggers);
     this->draggers = NULL;
@@ -336,7 +423,6 @@ GrDrag::updateDraggers ()
     for (GSList const* i = this->selection->itemList(); i != NULL; i = i->next) {
 
         SPItem *item = SP_ITEM(i->data);
-
         SPStyle *style = SP_OBJECT_STYLE (item);
 
         if (style && (style->fill.type == SP_PAINT_TYPE_PAINTSERVER)) { 
@@ -361,14 +447,19 @@ GrDrag::updateDraggers ()
     }
 }
 
+/**
+Regenerates the lines list from the current selection; is called on each move of a dragger, so that
+lines are always in sync with the actual gradient
+*/
 void
 GrDrag::updateLines ()
 {
-	for (GSList const *i = this->lines; i != NULL; i = i->next) {
-         gtk_object_destroy( GTK_OBJECT (i->data));
-	}
-	g_slist_free (this->lines);
-	this->lines = NULL;
+    // delete old lines
+    for (GSList const *i = this->lines; i != NULL; i = i->next) {
+        gtk_object_destroy( GTK_OBJECT (i->data));
+    }
+    g_slist_free (this->lines);
+    this->lines = NULL;
 
     g_return_if_fail (this->selection != NULL);
 

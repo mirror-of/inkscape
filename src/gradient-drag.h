@@ -24,6 +24,11 @@ namespace NR {
 class Point;
 }
 
+/**
+This class represents a single draggable point of a gradient. It remembers the item
+which has the gradient, whether it's fill or stroke, and the point number (from the
+GrPoint enum).
+*/
 struct GrDraggable {
 	GrDraggable(SPItem *item, guint point_num, bool fill_or_stroke);
 	~GrDraggable();
@@ -35,16 +40,21 @@ struct GrDraggable {
 
 struct GrDrag;
 
+/**
+This class holds together a visible on-canvas knot and a list of draggables that need to
+be moved when the knot moves. Normally there's one draggable in the list, but there may
+be more when draggers are snapped together.
+*/
 struct GrDragger {
 	GrDragger (GrDrag *parent, NR::Point p, GrDraggable *draggable, SPKnotShapeType shape);
 	~GrDragger();
 
-    SPKnot *knot;
+	SPKnot *knot;
 
 	NR::Point point;
 
-    /** Connection to \a knot's "moved" signal. */
-    guint   handler_id;
+	/** Connection to \a knot's "moved" signal, for blocking it (unused?). */
+	guint   handler_id;
 
 	GSList *draggables;
 
@@ -53,24 +63,12 @@ struct GrDragger {
 	void addDraggable(GrDraggable *draggable);
 
 	void updateTip();
-
-    /**
-     * Called solely from knot_moved_handler.
-     *
-     * \param p Requested position of the knot, in item coordinates
-     * \param origin Position where the knot started being dragged
-     * \param state GTK event state (for keyboard modifiers)
-     */
-    void (* knot_set) (SPItem *item, NR::Point const &p, NR::Point const &origin, guint state);
-
-    /**
-     * Returns the position of the knot representation, in item coordinates.
-     */
-    NR::Point (* knot_get) (SPItem *item);
-
-    void (* knot_click) (SPItem *item, guint state);
 };
 
+/**
+This is the root class of the gradient dragging machinery. It holds lists of GrDraggers
+and of lines (simple canvas items). It also remembers one of the draggers as selected.
+*/
 struct GrDrag {
 	GrDrag(SPDesktop *desktop);
 	~GrDrag();
@@ -87,6 +85,7 @@ struct GrDrag {
 
 	GrDragger *selected;
 	void setSelected (GrDragger *dragger);
+	void GrDrag::restoreSelected (GrDraggable *da1);
 
 	bool local_change;
 
