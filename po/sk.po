@@ -3389,7 +3389,7 @@ msgstr ""
 
 #: src/text-chemistry.cpp:89
 msgid "Select <b>a text and a path</b> to put text on path."
-msgstr "Vybrať <b>text a cestu<b/> na umiestnenie na cestu."
+msgstr "Vybrať <b>text a cestu</b> na umiestnenie na cestu."
 
 #: src/text-chemistry.cpp:94
 msgid "This text object is <b>already put to a path</b>. Remove it from the path first. Use <b>Shift+D</b> to look up its path."
@@ -3397,7 +3397,7 @@ msgstr ""
 
 #: src/text-chemistry.cpp:141
 msgid "Select <b>a text on path</b> to remove it from path."
-msgstr "Vybrať <b>text a cestu<b/> na odstránenie z cesty."
+msgstr "Vybrať <b>text a cestu</b> na odstránenie z cesty."
 
 #: src/text-chemistry.cpp:181
 msgid "<b>No texts-on-paths</b> in the selection."

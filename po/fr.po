@@ -4169,7 +4169,7 @@ msgstr ""
 msgid ""
 "<b>Drag</b> to paint a calligraphic stroke. <b>Left</b>/<b>right</b> arrow "
 "keys adjust width, <b>up</b>/<b>down</b> adjust angle."
-msgstr "<b>Cliquer-déplacer</b> pour calligraphier. Les flèches <b>gauche<b>"
+msgstr "<b>Cliquer-déplacer</b> pour calligraphier. Les flèches <b>gauche</b>"
 "/<b>droite</b> permettent d'ajuster la largeur de la plume, <b>haut</b>/"
 "<b>bas</b> son angle."
 
