@@ -116,7 +116,12 @@ Path::Copy (Path * who)
 		descr_data = (NR::Point *) g_realloc(descr_data, ddata_max * sizeof (NR::Point));
 	}
 
+        for (std::vector<path_descr*>::iterator i = descr_cmd.begin(); i != descr_cmd.end(); i++) {
+            delete *i;
+        }
+        
         descr_cmd.clear();
+        
         for (std::vector<path_descr*>::const_iterator i = who->descr_cmd.begin();
              i != who->descr_cmd.end();
              i++)
