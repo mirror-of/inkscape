@@ -5,6 +5,9 @@
 	* doc/class-hierarchy.dia: added first shot at documenting the
 	  class hierarchy in Dia
 
+	* src/modules/svg.c: change "...with xmlns:sodipodi namespace" to
+	  "...with extension namespaces"
+
 2003-11-27 Bryce <bryce@osdl.org>
 	* doc/architecture.svg: Added architecture.svg to try to capture
 	  the subsystems at a block layer level.

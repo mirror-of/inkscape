@@ -67,7 +67,7 @@ svg_init(void)
 			"<output>\n"
 				"<extension>svg</extension>\n"
 				"<mimetype>image/x-svg</mimetype>\n"
-				"<filetypename>SVG with &quot;xmlns:sodipodi&quot; namespace</filetypename>\n"
+				"<filetypename>SVG with extension namespaces</filetypename>\n"
 				"<filetypetooltip>Scalable Vector Graphics format with Inkscape extensions</filetypetooltip>\n"
 			"</output>\n"
 		"</spmodule>"));
