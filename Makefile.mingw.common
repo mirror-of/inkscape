@@ -97,7 +97,7 @@ GTK=c:/gtk
 #Same thing, DOS style
 GTKDOS=c:\gtk
 
-MSGFMT = $(GTKDOS)\bin\msgfmt
+MSGFMT = $(GTKDOS)$(S)bin$(S)msgfmt
 
 endif
 
