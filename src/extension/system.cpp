@@ -208,6 +208,13 @@ sp_module_system_save (Inkscape::Extension::Extension * key, SPDocument * doc, c
 		parray[1] = (gpointer)&omod;
 		omod = NULL;
 		Inkscape::Extension::db.foreach(save_internal, (gpointer)&parray);
+
+		/* This is a nasty hack, but it is required to ensure that
+		   autodetect will always save with the Inkscape extensions
+		   if they are available. */
+		if (!strcmp(omod->get_id(), SP_MODULE_KEY_OUTPUT_SVG)) {
+			omod = dynamic_cast<Inkscape::Extension::Output *>(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE));
+		}
 	} else {
 		omod = dynamic_cast<Inkscape::Extension::Output *>(key);
 	}
