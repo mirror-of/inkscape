@@ -277,6 +277,9 @@ sp_desktop_dispose (GObject *object)
     delete dt->_guides_message_context;
     dt->_guides_message_context = NULL;
 
+    sp_signal_disconnect_by_data (G_OBJECT (dt->namedview), dt);
+    sp_signal_disconnect_by_data (G_OBJECT (dt->namedview), dt->owner);
+
     G_OBJECT_CLASS (parent_class)->dispose (object);
 
     g_list_free (dt->zooms_past);
