@@ -730,18 +730,18 @@ sp_curve_append_continuous (SPCurve *c0, SPCurve const *c1, gdouble tolerance)
 		ArtBpath const *bs = sp_curve_first_bpath (c1);
 		if (bs && (fabs (bs->x3 - be->x3) <= tolerance) && (fabs (bs->y3 - be->y3) <= tolerance)) {
 			/* fixme: Strictly we mess in case of multisegment mixed open/close curves */
-			gboolean closed = FALSE;
+			bool closed = false;
 			for (bs = bs + 1; bs->code != ART_END; bs++) {
 				switch (bs->code) {
 				case ART_MOVETO_OPEN:
 					if (closed) sp_curve_closepath (c0);
 					sp_curve_moveto (c0, bs->x3, bs->y3);
-					closed = FALSE;
+					closed = false;
 					break;
 				case ART_MOVETO:
 					if (closed) sp_curve_closepath (c0);
 					sp_curve_moveto (c0, bs->x3, bs->y3);
-					closed = TRUE;
+					closed = true;
 					break;
 				case ART_LINETO:
 					sp_curve_lineto (c0, bs->x3, bs->y3);
