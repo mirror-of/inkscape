@@ -42,6 +42,7 @@
 #include "interface.h"
 #include "object-properties.h"
 #include "inkscape-stock.h"
+#include "prefs-utils.h"
 
 static GtkWidget *dlg = NULL;
 static win_data wd;
