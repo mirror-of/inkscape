@@ -455,9 +455,12 @@ sp_desktop_new (SPNamedView *namedview, SPCanvas *canvas)
        0 is used, then the constructor for a shadow is not initialized.
     */
 
-    if ( desktop->namedview->pageshadow != 0 ) {
-        sp_ctrlrect_set_shadow (SP_CTRLRECT (desktop->page_border), desktop->namedview->pageshadow, 0x3f3f3fff);
+    if ( desktop->namedview->pageshadow != 0 && 
+         desktop->namedview->showpageshadow ) {
+        sp_ctrlrect_set_shadow (SP_CTRLRECT (desktop->page_border), 
+                                desktop->namedview->pageshadow, 0x3f3f3fff);
     }
+    
 
     /* Connect event for page resize */
     desktop->doc2dt[5] = sp_document_height (document);
