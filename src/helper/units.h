@@ -15,7 +15,8 @@
  *
  */
 
-#include <glib.h>
+#include <glib/gslist.h>
+#include <glib/gtypes.h>
 
 
 
@@ -41,16 +42,35 @@ struct SPUnit;
 struct SPDistance;
 
 /*
- * The base absolute unit is 1/72th of an inch (we are gnome PRINT, so sorry SI)
+ * The base linear ("absolute") unit is 1/72th of an inch, i.e. the base unit of postscript.
  */
 
-typedef enum {
+/*
+ * Unit bases
+ */
+enum SPUnitBase {
 	SP_UNIT_DIMENSIONLESS = (1 << 0), /* For percentages and like */
 	SP_UNIT_ABSOLUTE = (1 << 1), /* Real world distances - i.e. mm, cm... */
-	SP_UNIT_DEVICE = (1 << 2), /* Semi-real device-dependent distances i.e. pixels */
-	SP_UNIT_USERSPACE = (1 << 3), /* Mathematical coordinates */
-	SP_UNIT_VOLATILE = (1 << 4) /* em and ex */
-} _SP_Unit_t;
+	SP_UNIT_DEVICE = (1 << 2), /* Pixels in the SVG/CSS sense. */
+	SP_UNIT_VOLATILE = (1 << 3) /* em and ex */
+};
+
+/*
+ * Units: indexes into sp_units.
+ */
+enum SPUnitId {
+	SP_UNIT_SCALE,	// 1.0 == 100%
+	SP_UNIT_PT,	// Postscript points: exactly 72 per inch
+	SP_UNIT_PX,	// "Pixels" in the CSS sense; though Inkscape assumes a constant 90 per inch.
+	SP_UNIT_PERCENT,  /* Note: In Inkscape this often means "relative to current value" (for
+			     users to edit a value), rather than the SVG/CSS use of percentages. */
+	SP_UNIT_MM,	// millimetres
+	SP_UNIT_CM,	// centimetres
+	SP_UNIT_M,	// metres
+	SP_UNIT_IN,	// inches
+	SP_UNIT_EM,	// em of current font
+	SP_UNIT_EX	// x-height of current font
+};
 
 /*
  * Notice, that for correct menus etc. you have to use
@@ -61,9 +81,9 @@ typedef enum {
  */
 
 struct SPUnit {
-	guint version : 8; /* Has to be 0 at moment */
-	guint base : 8; /* Base */
-	gdouble unittobase;
+	SPUnitId unit_id; /* used as sanity check */
+	SPUnitBase base;
+	gdouble unittobase; /* how many base units in this unit */
 	/* I am not absolutely sure, but seems that gettext can do the magic */
 	gchar const *name;
 	gchar const *abbr;
@@ -85,7 +105,7 @@ const SPUnit *sp_unit_get_default (void);
 const SPUnit *sp_unit_get_by_name (const gchar *name);
 const SPUnit *sp_unit_get_by_abbreviation (const gchar *abbreviation);
 
-#define SP_UNITS_ALL (SP_UNIT_DIMENSIONLESS | SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE | SP_UNIT_USERSPACE | SP_UNIT_VOLATILE)
+#define SP_UNITS_ALL (SP_UNIT_DIMENSIONLESS | SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE | SP_UNIT_VOLATILE)
 
 GSList *sp_unit_get_list (guint bases);
 void sp_unit_free_list (GSList *units);

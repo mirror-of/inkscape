@@ -1,5 +1,10 @@
 2004-06-16  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/helper/units.h, src/helper/units.cpp:
+	  SPUnitId: new enum, to allow replacing string lookups.
+	  Get rid of handling for unused SP_UNIT_USERSPACE.
+	  Remove unused SPUnit.version field.
+
 	* src/helper/units-test.cpp (test_bases): Test sp_unit_get_identity.
 
 	* src/helper/Makefile_insert (helper_units_test_LDADD): Fix the previous

@@ -24,61 +24,52 @@
 
 /* fixme: use some fancy unit program */
 
-/*
- * WARNING! Do not mess up with that - we use hardcoded numbers for base units!
- */
-
-enum {
-	SP_UNIT_BASE_DIMENSIONLESS,
-	SP_UNIT_BASE_ABSOLUTE,
-	SP_UNIT_BASE_DEVICE,
-	SP_UNIT_BASE_USERSPACE
-};
-
 static const SPUnit sp_units[] = {
-	/* Do not insert any elements before/between first 4 */
-	{0, SP_UNIT_DIMENSIONLESS, 1.0, N_("Unit"), "", N_("Units"), ""},
-	{0, SP_UNIT_ABSOLUTE, 1.0, N_("Point"), N_("pt"), N_("Points"), N_("Pt")},
-	{0, SP_UNIT_DEVICE, 1.0, N_("Pixel"), N_("px"), N_("Pixels"), N_("Px")},
-	{0, SP_UNIT_USERSPACE, 1.0, N_("Userspace unit"), N_("User"), N_("Userspace units"), N_("User")},
+	/* Do not insert any elements before/between first 3 */
+	{SP_UNIT_SCALE, SP_UNIT_DIMENSIONLESS, 1.0, N_("Unit"), "", N_("Units"), ""},
+	{SP_UNIT_PT, SP_UNIT_ABSOLUTE, 1.0, N_("Point"), N_("pt"), N_("Points"), N_("Pt")},
+	{SP_UNIT_PX, SP_UNIT_DEVICE, 1.0, N_("Pixel"), N_("px"), N_("Pixels"), N_("Px")},
 	/* Volatiles do not have default, so there are none here */
 	/* You can add new elements from this point forward */
-	{0, SP_UNIT_DIMENSIONLESS, 0.01, N_("Percent"), N_("%"), N_("Percents"), N_("%")},
-	{0, SP_UNIT_ABSOLUTE, (72.0 / 25.4), N_("Millimeter"), N_("mm"), N_("Millimeters"), N_("mm")},
-	{0, SP_UNIT_ABSOLUTE, (72.0 / 2.54), N_("Centimeter"), N_("cm"), N_("Centimeters"), N_("cm")},
-	{0, SP_UNIT_ABSOLUTE, (72.0 / 0.0254), N_("Meter"), N_("m"), N_("meters"), N_("m")},
-	{0, SP_UNIT_ABSOLUTE, (72.0), N_("Inch"), N_("in"), N_("Inches"), N_("in")},
+	{SP_UNIT_PERCENT, SP_UNIT_DIMENSIONLESS, 0.01, N_("Percent"), N_("%"), N_("Percents"), N_("%")},
+	{SP_UNIT_MM, SP_UNIT_ABSOLUTE, (72.0 / 25.4), N_("Millimeter"), N_("mm"), N_("Millimeters"), N_("mm")},
+	{SP_UNIT_CM, SP_UNIT_ABSOLUTE, (72.0 / 2.54), N_("Centimeter"), N_("cm"), N_("Centimeters"), N_("cm")},
+	{SP_UNIT_M, SP_UNIT_ABSOLUTE, (72.0 / 0.0254), N_("Meter"), N_("m"), N_("meters"), N_("m")},
+	{SP_UNIT_IN, SP_UNIT_ABSOLUTE, (72.0), N_("Inch"), N_("in"), N_("Inches"), N_("in")},
 	// TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
-	{0, SP_UNIT_VOLATILE, 1.0, N_("Em square"), N_("em"), N_("Em squares"), N_("em")},
+	{SP_UNIT_EM, SP_UNIT_VOLATILE, 1.0, N_("Em square"), N_("em"), N_("Em squares"), N_("em")},
 	// TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
-	{0, SP_UNIT_VOLATILE, 1.0, N_("Ex square"), N_("ex"), N_("Ex squares"), N_("ex")},
+	{SP_UNIT_EX, SP_UNIT_VOLATILE, 1.0, N_("Ex square"), N_("ex"), N_("Ex squares"), N_("ex")},
 };
 
-#define sp_num_units (sizeof (sp_units) / sizeof (sp_units[0]))
+#define sp_num_units G_N_ELEMENTS(sp_units)
 
 /* Base units are the ones used by gnome-print and paper descriptions */
 
+/* todo: Change param to SPUnitBase. */
 const SPUnit *
 sp_unit_get_identity (guint base)
 {
+	SPUnitId ret_id;
 	switch (base) {
 	case SP_UNIT_DIMENSIONLESS:
-		return &sp_units[SP_UNIT_BASE_DIMENSIONLESS];
+		ret_id = SP_UNIT_SCALE;
 		break;
 	case SP_UNIT_ABSOLUTE:
-		return &sp_units[SP_UNIT_BASE_ABSOLUTE];
+		ret_id = SP_UNIT_PT;
 		break;
 	case SP_UNIT_DEVICE:
-		return &sp_units[SP_UNIT_BASE_DEVICE];
-		break;
-	case SP_UNIT_USERSPACE:
-		return &sp_units[SP_UNIT_BASE_USERSPACE];
+		ret_id = SP_UNIT_PX;
 		break;
 	default:
-		g_warning ("file %s: line %d: Illegal unit base %d", __FILE__, __LINE__, base);
+		g_warning ("file %s: line %d: Illegal unit base 0x%x", __FILE__, __LINE__, base);
 		return NULL;
 		break;
 	}
+	SPUnit const &ret = sp_units[ret_id];
+	g_assert(guint(ret.base) == base);
+	g_assert(ret.unittobase == 1.0);
+	return &ret;
 }
 
 /* fixme: */
@@ -91,11 +82,9 @@ sp_unit_get_default (void)
 const SPUnit *
 sp_unit_get_by_name (const gchar *name)
 {
-	gint i;
-
 	g_return_val_if_fail (name != NULL, NULL);
 
-	for (i = 0 ; i < static_cast< gint > sp_num_units ; i++) {
+	for (unsigned i = 0 ; i < sp_num_units ; i++) {
 		if (!g_strcasecmp (name, sp_units[i].name)) return &sp_units[i];
 		if (!g_strcasecmp (name, sp_units[i].plural)) return &sp_units[i];
 	}
@@ -106,11 +95,9 @@ sp_unit_get_by_name (const gchar *name)
 const SPUnit *
 sp_unit_get_by_abbreviation (const gchar *abbreviation)
 {
-	gint i;
-
 	g_return_val_if_fail (abbreviation != NULL, NULL);
 
-	for (i = 0 ; i < static_cast< gint > sp_num_units ; i++) {
+	for (unsigned i = 0 ; i < sp_num_units ; i++) {
 		if (!g_strcasecmp (abbreviation, sp_units[i].abbr)) return &sp_units[i];
 		if (!g_strcasecmp (abbreviation, sp_units[i].abbr_plural)) return &sp_units[i];
 	}
@@ -121,20 +108,14 @@ sp_unit_get_by_abbreviation (const gchar *abbreviation)
 GSList *
 sp_unit_get_list (guint bases)
 {
-	GSList *units;
-	gint i;
-
 	g_return_val_if_fail ((bases & ~SP_UNITS_ALL) == 0, NULL);
 
-	units = NULL;
-
-	for (i = 0; i < static_cast< gint > sp_num_units ; i++) {
+	GSList *units = NULL;
+	for (unsigned i = sp_num_units ; i--; ) {
 		if (bases & sp_units[i].base) {
 			units = g_slist_prepend (units, (gpointer) &sp_units[i]);
 		}
 	}
-
-	units = g_slist_reverse (units);
 
 	return units;
 }
@@ -167,13 +148,12 @@ sp_convert_distance (gdouble *distance, const SPUnit *from, const SPUnit *to)
 	return TRUE;
 }
 
-/* ctm is for userspace, devicetransform is for device units */
+/** @param devicetransform for device units. */
+/* TODO: Remove the ctmscale parameter given that we no longer have SP_UNIT_USERSPACE. */
 gboolean
 sp_convert_distance_full (gdouble *distance, const SPUnit *from, const SPUnit *to,
-				   gdouble ctmscale, gdouble devicescale)
+				   gdouble /*ctmscale*/, gdouble devicescale)
 {
-	gdouble absolute;
-
 	g_return_val_if_fail (distance != NULL, FALSE);
 	g_return_val_if_fail (from != NULL, FALSE);
 	g_return_val_if_fail (to != NULL, FALSE);
@@ -186,6 +166,7 @@ sp_convert_distance_full (gdouble *distance, const SPUnit *from, const SPUnit *t
 	}
 	if ((from->base == SP_UNIT_VOLATILE) || (to->base == SP_UNIT_VOLATILE)) return FALSE;
 
+	gdouble absolute;
 	switch (from->base) {
 	case SP_UNIT_ABSOLUTE:
 		absolute = *distance * from->unittobase;
@@ -193,13 +174,6 @@ sp_convert_distance_full (gdouble *distance, const SPUnit *from, const SPUnit *t
 	case SP_UNIT_DEVICE:
 		if (devicescale) {
 			absolute = *distance * from->unittobase * devicescale;
-		} else {
-			return FALSE;
-		}
-		break;
-	case SP_UNIT_USERSPACE:
-		if (ctmscale) {
-			absolute = *distance * from->unittobase * ctmscale;
 		} else {
 			return FALSE;
 		}
@@ -218,13 +192,6 @@ sp_convert_distance_full (gdouble *distance, const SPUnit *from, const SPUnit *t
 	case SP_UNIT_DEVICE:
 		if (devicescale) {
 			*distance = absolute / (to->unittobase * devicescale);
-		} else {
-			return FALSE;
-		}
-		break;
-	case SP_UNIT_USERSPACE:
-		if (ctmscale) {
-			*distance = absolute / (to->unittobase * ctmscale);
 		} else {
 			return FALSE;
 		}
@@ -263,7 +230,7 @@ sp_distance_get_points (SPDistance *distance)
 	g_return_val_if_fail (distance != NULL, 0.0);
 
 	val = distance->distance;
-	sp_convert_distance (&val, distance->unit, &sp_units[SP_UNIT_BASE_ABSOLUTE]);
+	sp_convert_distance (&val, distance->unit, &sp_units[SP_UNIT_PT]);
 
 	return val;
 }
@@ -271,7 +238,7 @@ sp_distance_get_points (SPDistance *distance)
 gdouble
 sp_points_get_units (gdouble points, const SPUnit *unit)
 {
-	sp_convert_distance (&points, &sp_units[SP_UNIT_BASE_ABSOLUTE], unit);
+	sp_convert_distance (&points, &sp_units[SP_UNIT_PT], unit);
 
 	return points;
 }
@@ -279,7 +246,7 @@ sp_points_get_units (gdouble points, const SPUnit *unit)
 gdouble
 sp_units_get_points (gdouble units, const SPUnit *unit)
 {
-	sp_convert_distance (&units, unit, &sp_units[SP_UNIT_BASE_ABSOLUTE]);
+	sp_convert_distance (&units, unit, &sp_units[SP_UNIT_PT]);
 
 	return units;
 }
