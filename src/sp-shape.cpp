@@ -498,7 +498,7 @@ static void sp_shape_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transfor
         SPStyle* style=SP_OBJECT_STYLE (item);
         if (style->stroke.type != SP_PAINT_TYPE_NONE) {
             double const scale = expansion(transform);
-            if ( fabsf(style->stroke_width.computed * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
+            if ( fabs(style->stroke_width.computed * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
                 double const width = MAX(0.125, style->stroke_width.computed * scale);
                 if ( fabs(cbbox.x1-cbbox.x0) > -0.00001 && fabs(cbbox.y1-cbbox.y0) > -0.00001 ) {
                     cbbox.x0-=0.5*width;

@@ -25,7 +25,7 @@
 
 #include <helper/helper-forward.h>
 
-#include <stdint.h>
+#include <inttypes.h>
 
 enum {
 	SP_CANVAS_UPDATE_REQUESTED  = 1 << 0,

@@ -21,13 +21,12 @@
 #include "sp-offset.h"
 #include "prefs-utils.h"
 
+#include "macros.h"
 #include "object-edit.h"
 
 #include <libnr/nr-point-fns.h>
 #include <libnr/nr-scale.h>
 #include <libnr/nr-scale-ops.h>
-
-#define sp_round(v,m) (((v) < 0.0) ? ((ceil ((v) / (m) - 0.5)) * (m)) : ((floor ((v) / (m) + 0.5)) * (m)))
 
 static SPKnotHolder *sp_rect_knot_holder (SPItem *item, SPDesktop *desktop);
 static SPKnotHolder *sp_arc_knot_holder (SPItem *item, SPDesktop *desktop);
@@ -364,7 +363,7 @@ sp_spiral_inner_set (SPItem *item, const NR::Point &p, guint state)
 	     && ( snaps != 0 ) )
 	{
 		gdouble arg = 2.0*M_PI*spiral->revo*spiral->t0 + spiral->arg;
-		spiral->t0 = (round(arg/(M_PI/snaps))*(M_PI/snaps) - spiral->arg)/(2.0*M_PI*spiral->revo);
+		spiral->t0 = (sp_round(arg, M_PI/snaps) - spiral->arg)/(2.0*M_PI*spiral->revo);
 	}
 
 	spiral->t0 = CLAMP (spiral->t0, 0.0, 0.999);
@@ -394,7 +393,7 @@ sp_spiral_outer_set (SPItem *item, const NR::Point &p, guint state)
 
 	if ( ( state & GDK_CONTROL_MASK )
 	     && snaps ) {
-		spiral->arg = round (spiral->arg/(M_PI/snaps))*(M_PI/snaps);
+		spiral->arg = sp_round(spiral->arg, M_PI/snaps);
 	}
 
 	sp_object_request_update ((SPObject *) spiral, SP_OBJECT_MODIFIED_FLAG);

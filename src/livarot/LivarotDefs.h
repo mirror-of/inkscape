@@ -8,7 +8,7 @@
 
 #ifndef my_defs
 #define my_defs
-#include <stdint.h>
+#include <inttypes.h>
 
 // error codes (mostly obsolete)
 enum

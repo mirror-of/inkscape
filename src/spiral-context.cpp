@@ -419,7 +419,7 @@ sp_spiral_drag (SPSpiralContext * sc, NR::Point p, guint state)
 	gdouble arg = NR::atan2 (delta) - 2.0*M_PI*spiral->revo;
 
   	if (state & GDK_CONTROL_MASK) { 
-		arg = round (arg/(M_PI/snaps))*(M_PI/snaps);
+		arg = sp_round(arg, M_PI/snaps);
 	} 
 	
         /* Fixme: these parameters should be got from dialog box */

@@ -1,3 +1,12 @@
+2004-06-08  MenTaLguY  <mental@rydia.net>
+
+	* src/display/sp-canvas.h, src/livarot/DblLinked.h,
+	  src/livarot/LivarotDefs.h, src/livarot/AVL.h, src/livarot/Shape.h,
+	  src/livarot/ShapeUtils.h, src/livarot/Ligne.h,
+	  src/object-edit.cpp, src/spiral-context.cpp, src/sp-shape.cpp:
+
+	  Portability fixes from Colin Marquardt <colin@marquardt-home.de>.
+
 2004-06-08  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/main.cpp: remove the call to
@@ -12,7 +21,7 @@
 	Added in a version command to our command line args.  This fixes
 	enhancement request 968642.
 
-2004-07-07  MenTaLguY  <mental@rydia.net>
+2004-06-07  MenTaLguY  <mental@rydia.net>
 
 	* src/document.cpp, src/document.h, src/document-undo.cpp,
 	  src/sp-object.h, src/sp-object.cpp:

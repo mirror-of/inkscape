@@ -30,6 +30,8 @@
 
 #define sp_signal_disconnect_by_data(o,d) g_signal_handlers_disconnect_matched (o, G_SIGNAL_MATCH_DATA, 0, 0, 0, 0, d)
 
+#define sp_round(v,m) (((v) < 0.0) ? ((ceil ((v) / (m) - 0.5)) * (m)) : ((floor ((v) / (m) + 0.5)) * (m)))
+
 #endif
 
 // keyboard modifiers in an event
