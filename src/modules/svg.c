@@ -44,47 +44,47 @@ svg_init(void)
 	SPModuleOutput * omod;
 
 	/* SVG in */
-    imod = SP_MODULE_INPUT(sp_module_system_build_from_mem("
-		<spmodule>
-			<name>SVG Input</name>
-			<id>" SP_MODULE_KEY_INPUT_SVG "</id>
-			<input>
-				<extension>svg</extension>
-				<mimetype>image/x-svg</mimetype>
-				<filetypename>Scalable Vector Graphic (SVG)</filetypename>
-				<filetypetooltip>Sodipodi native file format and W3C standard</filetypetooltip>
-			</input>
-		</spmodule>"));
+    imod = SP_MODULE_INPUT(sp_module_system_build_from_mem(
+		"<spmodule>\n"
+			"<name>SVG Input</name>\n"
+			"<id>" SP_MODULE_KEY_INPUT_SVG "</id>\n"
+			"<input>\n"
+				"<extension>svg</extension>\n"
+				"<mimetype>image/x-svg</mimetype>\n"
+				"<filetypename>Scalable Vector Graphic (SVG)</filetypename>\n"
+				"<filetypetooltip>Sodipodi native file format and W3C standard</filetypetooltip>\n"
+			"</input>\n"
+		"</spmodule>"));
 	g_return_if_fail(imod != NULL);
 	imod->open = svg_open;
 
 	/* SVG out Sodipodi*/
-    omod = SP_MODULE_OUTPUT(sp_module_system_build_from_mem("
-		<spmodule>
-			<name>SVG Output Sodipodi</name>
-			<id>" SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "</id>
-			<output>
-				<extension>svg</extension>
-				<mimetype>image/x-svg</mimetype>
-				<filetypename>SVG with &quot;xmlns:sodipodi&quot; namespace</filetypename>
-				<filetypetooltip>Scalable Vector Graphics format with Sodipodi extensions</filetypetooltip>
-			</output>
-		</spmodule>"));
+    omod = SP_MODULE_OUTPUT(sp_module_system_build_from_mem(
+		"<spmodule>\n"
+			"<name>SVG Output Sodipodi</name>\n"
+			"<id>" SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE "</id>\n"
+			"<output>\n"
+				"<extension>svg</extension>\n"
+				"<mimetype>image/x-svg</mimetype>\n"
+				"<filetypename>SVG with &quot;xmlns:sodipodi&quot; namespace</filetypename>\n"
+				"<filetypetooltip>Scalable Vector Graphics format with Sodipodi extensions</filetypetooltip>\n"
+			"</output>\n"
+		"</spmodule>"));
 	g_return_if_fail(omod != NULL);
 	omod->save = svg_save;
 
 	/* SVG out */
-    omod = SP_MODULE_OUTPUT(sp_module_system_build_from_mem("
-		<spmodule>
-			<name>SVG Output Sodipodi</name>
-			<id>" SP_MODULE_KEY_OUTPUT_SVG "</id>
-			<output>
-				<extension>svg</extension>
-				<mimetype>image/x-svg</mimetype>
-				<filetypename>Plain SVG</filetypename>
-				<filetypetooltip>Scalable Vector Graphics format</filetypetooltip>
-			</output>
-		</spmodule>"));
+    omod = SP_MODULE_OUTPUT(sp_module_system_build_from_mem(
+		"<spmodule>\n"
+			"<name>SVG Output Sodipodi</name>\n"
+			"<id>" SP_MODULE_KEY_OUTPUT_SVG "</id>\n"
+			"<output>\n"
+				"<extension>svg</extension>\n"
+				"<mimetype>image/x-svg</mimetype>\n"
+				"<filetypename>Plain SVG</filetypename>\n"
+				"<filetypetooltip>Scalable Vector Graphics format</filetypetooltip>\n"
+			"</output>\n"
+		"</spmodule>"));
 	g_return_if_fail(omod != NULL);
 	omod->save = svg_save;
 
