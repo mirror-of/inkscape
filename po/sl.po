@@ -4,17 +4,16 @@ msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-07-10 01:28-0700\n"
-"PO-Revision-Date: 2004-06-27 12:51+0200\n"
+"PO-Revision-Date: 2004-07-11 02:48+0200\n"
 "Last-Translator: Boštjan Špetič <igzebedze@cyberpipe.org>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: inkscape.desktop.in.h:1
-#, fuzzy
 msgid "Inkscape SVG Vector Illustrator"
-msgstr "Ilustrator vektorjev"
+msgstr "Inkscape Ilustrator vektorjev SVG"
 
 #: inkscape.desktop.in.h:2
 msgid "SVG Vector Illustrator"
@@ -54,9 +53,8 @@ msgid "Cursor coordinates"
 msgstr "Koordinate kazalca"
 
 #: src/desktop.cpp:931
-#, fuzzy
 msgid "Active group"
-msgstr "Aktiven"
+msgstr "Aktivna skupina"
 
 #. display the initial welcome message in the statusbar
 #: src/desktop.cpp:939
@@ -1061,7 +1059,7 @@ msgstr "Območje izbrano za izvoz ni veljavno"
 #: src/dialogs/export.cpp:809
 #, c-format
 msgid "Directory %s does not exist or is not a directory.\n"
-msgstr ""
+msgstr "Mapa %s ne obstaja ali pa ni mapa.\n"
 
 #: src/dialogs/export.cpp:823
 msgid "Export in progress"
@@ -1512,7 +1510,7 @@ msgstr "Naslov"
 
 #: src/dialogs/rdf.cpp:207
 msgid "Name by which this document is formally known."
-msgstr ""
+msgstr "Kako se temu dokumentu uradno reče."
 
 #: src/dialogs/rdf.cpp:209
 msgid "Date"
@@ -1520,25 +1518,23 @@ msgstr "Datum"
 
 #: src/dialogs/rdf.cpp:210
 msgid "Date associated with the creation of this document (YYYY-MM-DD)."
-msgstr ""
+msgstr "Datum stvaritve tega dokumenta (LETO-MM-DD)."
 
 #: src/dialogs/rdf.cpp:212
-#, fuzzy
 msgid "Format"
-msgstr "Običajno"
+msgstr "Oblika"
 
 #: src/dialogs/rdf.cpp:213
 msgid "The physical or digital manifestation of this document (MIME type)."
-msgstr ""
+msgstr "Fizična ali digitalna oblikovanost tega dokumenta (vrsta MIME)."
 
 #: src/dialogs/rdf.cpp:215
-#, fuzzy
 msgid "Type"
-msgstr "Vrsta:"
+msgstr "Vrsta"
 
 #: src/dialogs/rdf.cpp:216
 msgid "Type of document (DCMI Type)."
-msgstr ""
+msgstr "Vrsta dokumenta (vrsta DCMI)."
 
 #: src/dialogs/rdf.cpp:219
 msgid "Creator"
@@ -1547,17 +1543,16 @@ msgstr "Avtor"
 #: src/dialogs/rdf.cpp:220
 msgid ""
 "Name of entity primarily responsible for making the content of this document."
-msgstr ""
+msgstr "Ime osebe, ki je najbolj odgovorna za vsebino tega dokumenta."
 
 #: src/dialogs/rdf.cpp:222
-#, fuzzy
 msgid "Rights"
-msgstr "Višina:"
+msgstr "Desne"
 
 #: src/dialogs/rdf.cpp:223
 msgid ""
 "Name of entity with rights to the Intellectual Property of this document."
-msgstr ""
+msgstr "Ime osebe s pravicami nad intelektualno lastnino tega dokumenta."
 
 #: src/dialogs/rdf.cpp:225
 msgid "Publisher"
@@ -1565,16 +1560,15 @@ msgstr "Založnik"
 
 #: src/dialogs/rdf.cpp:226
 msgid "Name of entity responsible for making this document available."
-msgstr ""
+msgstr "Ime osebe, ki je odgovorna za dostopnost tega dokumenta."
 
 #: src/dialogs/rdf.cpp:229
-#, fuzzy
 msgid "Identifier"
-msgstr "Centimeter"
+msgstr "Označevalec"
 
 #: src/dialogs/rdf.cpp:230
 msgid "Unique URI to reference this document."
-msgstr ""
+msgstr "Unikatna URI za oznako tega dokumenta."
 
 #: src/dialogs/rdf.cpp:232
 msgid "Source"
@@ -1582,27 +1576,25 @@ msgstr "Izvor"
 
 #: src/dialogs/rdf.cpp:233
 msgid "Unique URI to reference the source of this document."
-msgstr ""
+msgstr "Unikatna URI za oznako izvora tega dokumenta."
 
 #: src/dialogs/rdf.cpp:235
-#, fuzzy
 msgid "Relation"
-msgstr "Ločljivost:"
+msgstr "Odnos"
 
 #: src/dialogs/rdf.cpp:236
-#, fuzzy
 msgid "Unique URI to a related document."
-msgstr "Neimenovan dokument"
+msgstr "Unikatna URI do povezanega dokumenta."
 
 #: src/dialogs/rdf.cpp:238
 msgid "Language"
-msgstr ""
+msgstr "Jezik"
 
 #: src/dialogs/rdf.cpp:239
 msgid ""
 "Two-letter language tag with optional subtags for the language of this "
 "document.  (e.g. 'en-GB')"
-msgstr ""
+msgstr "Dvočrkovna oznaka z možno podoznako jezika tega dokumenta.  (npr. 'en-GB')."
 
 #: src/dialogs/rdf.cpp:241
 msgid "Keywords"
@@ -1610,58 +1602,55 @@ msgstr "Ključne besede"
 
 #: src/dialogs/rdf.cpp:242
 msgid "The topic of this document as key words, phrases, or classification."
-msgstr ""
+msgstr "V ključnih besedah, frazah ali klasifikaciji povzeta tema tega dokumenta."
 
 #. TRANSLATORS: "Coverage": the spatial or temporal characteristics of the content.
 #. For info, see Appendix D of http://www.w3.org/TR/1998/WD-rdf-schema-19980409/
 #: src/dialogs/rdf.cpp:246
 msgid "Coverage"
-msgstr ""
+msgstr "Pokritje"
 
 #: src/dialogs/rdf.cpp:247
 msgid "Extent or scope of this document."
-msgstr ""
+msgstr "Obzorje ali doseg tega dokumenta."
 
 #: src/dialogs/rdf.cpp:250
 msgid "Description"
 msgstr "Opis"
 
 #: src/dialogs/rdf.cpp:251
-#, fuzzy
 msgid "A short account of the content of this document."
-msgstr "Odpri nedavno uporabljan dokument"
+msgstr "Kratek opis vsebine dokumenta."
 
 #. FIXME: need to handle 1 agent per line of input
 #: src/dialogs/rdf.cpp:255
-#, fuzzy
 msgid "Contributors"
-msgstr "Centimetri"
+msgstr "Prispevki"
 
 #: src/dialogs/rdf.cpp:256
 msgid ""
 "Names of entities responsible for making contributions to the content of "
 "this document."
-msgstr ""
+msgstr "Imena oseb odgovornih za prispevke k temu dokumentu."
 
 #. TRANSLATORS: URL to a page that defines the license for the document
 #: src/dialogs/rdf.cpp:260
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #. TRANSLATORS: this is where you put a URL to a page that defines the license
 #: src/dialogs/rdf.cpp:262
 msgid "URI to this document's license's namespace definition."
-msgstr ""
+msgstr "URI do definicije licence dokumenta."
 
 #. TRANSLATORS: fragment of XML representing the license of the document
 #: src/dialogs/rdf.cpp:266
-#, fuzzy
 msgid "Fragment"
-msgstr "Argument:"
+msgstr "Delček"
 
 #: src/dialogs/rdf.cpp:267
 msgid "XML fragment for the RDF 'License' section."
-msgstr ""
+msgstr "XML koščki za odsek RDF licenca."
 
 #: src/dialogs/stroke-style.cpp:1075 src/widgets/gradient-vector.cpp:262
 #: src/widgets/paint-selector.cpp:849
@@ -1741,9 +1730,8 @@ msgstr "Kvadraten konec"
 
 #. Dash
 #: src/dialogs/stroke-style.cpp:1508
-#, fuzzy
 msgid "Dashes:"
-msgstr "Masa:"
+msgstr "Črtice:"
 
 #. TRANSLATORS: Path markers are an SVG feature that allows you to attach arbitrary shapes
 #. (arrowheads, bullets, faces, whatever) to the start, end, or middle nodes of a path.
@@ -2366,21 +2354,19 @@ msgstr ""
 #. checkitem_toggled, checkitem_update, 0);
 #: src/interface.cpp:778
 msgid "Commands Bar"
-msgstr ""
+msgstr "Vrstica ukazov"
 
 #: src/interface.cpp:778
-#, fuzzy
 msgid "Show or hide the Commands bar (under the menu)"
-msgstr "Kaži ali skrij zgornjo vrstico (pod meniji)"
+msgstr "Kaži ali skrij vrstico ukazov (pod meniji)"
 
 #: src/interface.cpp:780
 msgid "Tool Controls"
-msgstr ""
+msgstr "Nadzor orodij"
 
 #: src/interface.cpp:780
-#, fuzzy
 msgid "Show or hide the Tool Controls panel"
-msgstr "Kaži ali skrij glavno orodno vrstico (na levi)"
+msgstr "Kaži ali skrij orodno vrstico (na levi)"
 
 #: src/interface.cpp:782
 msgid "_Toolbox"
@@ -2435,18 +2421,17 @@ msgid "_Help"
 msgstr "Pomoč"
 
 #: src/interface.cpp:949
-#, fuzzy, c-format
+#, c-format
 msgid "Edit group #%s"
-msgstr "Uredi"
+msgstr "Uredi skupino #%s"
 
 #: src/interface.cpp:961
 msgid "Edit parent group"
-msgstr ""
+msgstr "Uredi starševsko skupino"
 
 #: src/interface.cpp:967
-#, fuzzy
 msgid "Edit root"
-msgstr "Uredi"
+msgstr "Uredi korenino"
 
 #: src/interface.cpp:1044
 msgid "Could not parse SVG data"
@@ -4427,9 +4412,8 @@ msgstr "Več slogov"
 #. TRANSLATORS: "Clone" is a noun here. This message is to notify the user
 #. that the currently selected object is a clone.
 #: src/widgets/paint-selector.cpp:649
-#, fuzzy
 msgid "Clone Selected"
-msgstr "so izbrisani"
+msgstr "Izbran klon"
 
 #: src/widgets/paint-selector.cpp:855
 msgid "No patterns in document"
