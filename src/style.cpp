@@ -2449,6 +2449,33 @@ sp_css_attr_unset_text (SPCSSAttr *css)
     return css;
 }
 
+bool
+is_url (const char *p)
+{
+    if (p == NULL) 
+        return false;
+// FIXME: I'm not sure if this applies to SVG as well, but CSS2 says any URIs in property values must start with 'url('
+    return (g_ascii_strncasecmp (p, "url(", 4) == 0);
+}
+
+SPCSSAttr *
+sp_css_attr_unset_uris (SPCSSAttr *css)
+{
+// All properties that may hold <uri> or <paint> according to SVG 1.1
+    if (is_url (sp_repr_css_property (css, "clip-path", NULL))) sp_repr_css_set_property (css, "clip-path", NULL);
+    if (is_url (sp_repr_css_property (css, "color-profile", NULL))) sp_repr_css_set_property (css, "color-profile", NULL);
+    if (is_url (sp_repr_css_property (css, "cursor", NULL))) sp_repr_css_set_property (css, "cursor", NULL);
+    if (is_url (sp_repr_css_property (css, "filter", NULL))) sp_repr_css_set_property (css, "filter", NULL);
+    if (is_url (sp_repr_css_property (css, "marker-start", NULL))) sp_repr_css_set_property (css, "marker-start", NULL);
+    if (is_url (sp_repr_css_property (css, "marker-mid", NULL))) sp_repr_css_set_property (css, "marker-mid", NULL);
+    if (is_url (sp_repr_css_property (css, "marker-end", NULL))) sp_repr_css_set_property (css, "marker-end", NULL);
+    if (is_url (sp_repr_css_property (css, "mask", NULL))) sp_repr_css_set_property (css, "mask", NULL);
+    if (is_url (sp_repr_css_property (css, "fill", NULL))) sp_repr_css_set_property (css, "fill", NULL);
+    if (is_url (sp_repr_css_property (css, "stroke", NULL))) sp_repr_css_set_property (css, "stroke", NULL);
+
+    return css;
+}
+
 
 /*
   Local Variables:
