@@ -53,8 +53,12 @@ class Point{
 		return Point(-pt[Y], pt[X]);
 	}
 
+	double L1();
+/** Compute the L1 norm, or manhattan distance, of this vector */
 	double L2();
 /** Compute the L2 or euclidean norm of this vector */
+	double Linfty();
+/** Compute the L infinity or maximum norm of this vector */
 	void Normalize();
 	
 	operator NRPoint() {
