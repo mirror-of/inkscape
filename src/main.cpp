@@ -98,12 +98,15 @@ enum {
 };
 #endif
 
+/** This is located in inkscape.cpp
+ * this really needs to be removed.. Bob
+ */
+extern gboolean sp_bitmap_icons;
+
 int sp_main_gui (int argc, const char **argv);
 int sp_main_console (int argc, const char **argv);
 static void sp_do_export_png (SPDocument *doc);
 
-/* fixme: We need this non-static, but better arrange it another way (Lauris) */
-gboolean sp_bitmap_icons = FALSE;
 
 static gchar *sp_global_printer = NULL;
 static gboolean sp_global_slideshow = FALSE;

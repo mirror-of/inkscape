@@ -34,7 +34,9 @@
 
 #include "icon.h"
 
-/* fixme: (Lauris) */
+/** This is located in inkscape.cpp
+ * this really needs to be removed.. Bob
+ */
 extern gboolean sp_bitmap_icons;
 
 static void sp_icon_class_init (SPIconClass *klass);
