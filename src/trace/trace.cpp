@@ -20,6 +20,7 @@
 
 #include <inkscape.h>
 #include <desktop.h>
+#include <desktop-handles.h>
 #include <document.h>
 #include <helper/sp-intl.h>
 #include <selection.h>
@@ -65,7 +66,7 @@ Trace::getSelectedSPImage()
     SPSelection *sel = desktop->selection;
     if (!sel)
         {
-        char *msg = _("Trace: Nothing selected");
+        char *msg = _("Select an <b>image</b> to trace");
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
         //g_warning(msg);
         return NULL;
@@ -74,7 +75,7 @@ Trace::getSelectedSPImage()
     SPItem *item = sel->singleItem();
     if (!item)
         {
-        char *msg = _("Trace: Nothing selected");  //same as above
+        char *msg = _("Select an <b>image</b> to trace");  //same as above
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
         //g_warning(msg);
         return NULL;
@@ -82,7 +83,7 @@ Trace::getSelectedSPImage()
 
     if (!SP_IS_IMAGE(item))
         {
-        char *msg = _("Trace: Selected object is not an image");
+        char *msg = _("Select an <b>image</b> to trace");
         desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg);
         //g_warning(msg);
         return NULL;
@@ -131,6 +132,8 @@ void Trace::convertImageToPathThread()
         g_warning("Trace: No active desktop\n");
         return;
         }
+
+    SPSelection *selection = SP_DT_SELECTION (desktop);
 
     if (!SP_ACTIVE_DOCUMENT)
         {
@@ -223,6 +226,13 @@ void Trace::convertImageToPathThread()
         SPItem *newItem = SP_ITEM(reprobj);
         sp_item_write_transform(newItem, pathRepr, tf, NULL);
         }
+
+    // Select the new path
+    selection->clear();
+    selection->addRepr(pathRepr);
+
+    // Clean up
+    sp_repr_unref (pathRepr);
 
     //## inform the document, so we can undo
     sp_document_done(doc);
