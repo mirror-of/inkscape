@@ -493,7 +493,7 @@ static void sp_verb_action_layer_perform (SPAction *action, void *data,
             }
 
             if ( SP_OBJECT_NEXT(layer) != old_pos ) {
-                char const *message;
+                char const *message = NULL;
                 switch (verb) {
                     case SP_VERB_LAYER_TO_TOP:
                     case SP_VERB_LAYER_RAISE:
@@ -1060,21 +1060,21 @@ static const SPVerbActionDef props[] = {
 
 
     {SP_VERB_LAYER_NEW, "LayerNew", N_("New Layer"),
-        N_("Create a new layer"), "layer_new"},
+        N_("Create a new layer"), NULL},
     {SP_VERB_LAYER_NEXT, "LayerNext", N_("Switch to Next Layer"),
-        N_("Switch to the next layer in the document"), "layer_next"},
+        N_("Switch to the next layer in the document"), NULL},
     {SP_VERB_LAYER_PREV, "LayerPrev", N_("Switch to Previous Layer"),
-        N_("Switch to the previous layer in the document"), "layer_prev"},
+        N_("Switch to the previous layer in the document"), NULL},
     {SP_VERB_LAYER_TO_TOP, "LayerToTop", N_("Current Layer to Top"),
-        N_("Raise the current layer to the top"), "layer_to_top"},
+        N_("Raise the current layer to the top"), NULL},
     {SP_VERB_LAYER_TO_BOTTOM, "LayerToBottom", N_("Current Layer to Bottom"),
-        N_("Lower the current layer to the bottom"), "layer_to_bottom"},
+        N_("Lower the current layer to the bottom"), NULL},
     {SP_VERB_LAYER_RAISE, "LayerRaise", N_("Raise Current Layer"),
-        N_("Raise the current layer"), "layer_raise"},
+        N_("Raise the current layer"), NULL},
     {SP_VERB_LAYER_LOWER, "LayerLower", N_("Lower Current Layer"),
-        N_("Lower the current layer"), "layer_lower"},
+        N_("Lower the current layer"), NULL},
     {SP_VERB_LAYER_DELETE, "LayerDelete", N_("Delete the Current Layer"),
-        N_("Delete the current layer"), "layer_delete"},
+        N_("Delete the current layer"), NULL},
 
     /* Object */
     {SP_VERB_OBJECT_ROTATE_90_CW, "ObjectRotate90", N_("Rotate _90 deg CW"),
