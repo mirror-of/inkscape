@@ -202,16 +202,12 @@ static void
 sp_rect_update (SPObject *object, SPCtx *ctx, guint flags)
 {
 	if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
-		SPRect *rect;
-		SPStyle *style;
-		SPItemCtx *ictx;
-		double d, w, h;
-		rect = (SPRect *) object;
-		style = object->style;
-		ictx = (SPItemCtx *) ctx;
-		d = 1.0 / NR_MATRIX_DF_EXPANSION (&ictx->i2vp);
-		w = d * (ictx->vp.x1 - ictx->vp.x0);
-		h = d * (ictx->vp.y1 - ictx->vp.y0);
+		SPRect *rect = (SPRect *) object;
+		SPStyle *style = object->style;
+		SPItemCtx *ictx = (SPItemCtx *) ctx;
+		double const d = 1.0 / NR_MATRIX_DF_EXPANSION (&ictx->i2vp);
+		double const w = d * (ictx->vp.x1 - ictx->vp.x0);
+		double const h = d * (ictx->vp.y1 - ictx->vp.y0);
 		sp_svg_length_update (&rect->x, style->font_size.computed, style->font_size.computed * 0.5, w);
 		sp_svg_length_update (&rect->y, style->font_size.computed, style->font_size.computed * 0.5, h);
 		sp_svg_length_update (&rect->width, style->font_size.computed, style->font_size.computed * 0.5, w);
@@ -265,22 +261,28 @@ sp_rect_description (SPItem * item)
 static void
 sp_rect_set_shape (SPShape *shape)
 {
-	SPRect *rect;
-	double x, y, w, h, w2, h2, rx, ry;
-	SPCurve * c;
-
-	rect = (SPRect *) shape;
+	SPRect *rect = (SPRect *) shape;
 
 	if ((rect->height.computed < 1e-18) || (rect->width.computed < 1e-18)) return;
 
-	c = sp_curve_new ();
+	SPCurve *c = sp_curve_new ();
 
-	x = rect->x.computed;
-	y = rect->y.computed;
-	w = rect->width.computed;
-	h = rect->height.computed;
-	w2 = w / 2;
-	h2 = h / 2;
+	double const x = rect->x.computed;
+	double const y = rect->y.computed;
+	double const w = rect->width.computed;
+	double const h = rect->height.computed;
+	double const w2 = w / 2;
+	double const h2 = h / 2;
+
+	/* FIXME: It looks very suspicious that the behaviour for rx.set && !ry.set doesn't mirror
+	 * the behaviour for ry.set && !rx.set.
+	 *
+	 * My reading of the spec (http://www.w3.org/TR/SVG11/shapes.html#RectElementRXAttribute)
+	 * is that we're doing the wrong thing.
+	 *
+	 * It also appears that we do the wrong thing for erroneous (e.g. negative) values.
+	 */
+	double rx;
 	if (rect->rx.set) {
 		rx = CLAMP (rect->rx.computed, 0.0, rect->width.computed / 2);
 	} else if (rect->ry.set) {
@@ -288,6 +290,8 @@ sp_rect_set_shape (SPShape *shape)
 	} else {
 		rx = 0.0;
 	}
+
+	double ry;
 	if (rect->ry.set) {
 		if (rect->rx.set) {
 			ry = CLAMP (rect->ry.computed, 0.0, rect->height.computed / 2);
@@ -372,32 +376,31 @@ sp_rect_set_ry (SPRect * rect, gboolean set, gdouble value)
 /* fixme: Alternately preserve whatever units there are (lauris) */
 
 static NR::Matrix
-sp_rect_set_transform (SPItem *item, NR::Matrix const &xform)
+sp_rect_set_transform(SPItem *item, NR::Matrix const &xform)
 {
-	SPRect *rect = SP_RECT (item);
+	SPRect *rect = SP_RECT(item);
 
-	/* Calculate rect start in parent coords */
-	NR::Point pos=NR::Point(rect->x.computed, rect->y.computed) * xform;
+	/* Calculate rect start in parent coords. */
+	NR::Point pos( NR::Point(rect->x.computed, rect->y.computed) * xform );
 
-	/* Clear translation */
-	NR::Matrix remaining(NR::transform(xform));
-
-	/* Scalers */
-	gdouble sw = sqrt (remaining[0] * remaining[0] + remaining[1] * remaining[1]);
-	gdouble sh = sqrt (remaining[2] * remaining[2] + remaining[3] * remaining[3]);
+	/* This function takes care of translation and scaling, we return whatever parts we can't
+	   handle. */
+	NR::Matrix ret(NR::transform(xform));
+	gdouble const sw = hypot(ret[0], ret[1]);
+	gdouble const sh = hypot(ret[2], ret[3]);
 	if (sw > 1e-9) {
-		remaining[0] = remaining[0] / sw;
-		remaining[1] = remaining[1] / sw;
+		ret[0] /= sw;
+		ret[1] /= sw;
 	} else {
-		remaining[0] = 1.0;
-		remaining[1] = 0.0;
+		ret[0] = 1.0;
+		ret[1] = 0.0;
 	}
 	if (sh > 1e-9) {
-		remaining[2] = remaining[2] / sh;
-		remaining[3] = remaining[3] / sh;
+		ret[2] /= sh;
+		ret[3] /= sh;
 	} else {
-		remaining[2] = 0.0;
-		remaining[3] = 1.0;
+		ret[2] = 0.0;
+		ret[3] = 1.0;
 	}
 
 	/* fixme: Would be nice to preserve units here */
@@ -411,19 +414,19 @@ sp_rect_set_transform (SPItem *item, NR::Matrix const &xform)
 	}
 
 	/* Find start in item coords */
-	pos = pos * remaining.inverse();
+	pos = pos * ret.inverse();
 	rect->x = pos[NR::X];
 	rect->y = pos[NR::Y];
 
 	// Adjust stroke width 
-	sp_shape_adjust_stroke (item, sqrt (fabs (sw * sh)));
+	sp_shape_adjust_stroke(item, sqrt(fabs(sw * sh)));
 
 	// Adjust pattern fill
-	sp_shape_adjust_pattern(item, NR::identity(), xform / remaining);
+	sp_shape_adjust_pattern(item, NR::identity(), xform / ret);
 
 	item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 
-	return remaining;
+	return ret;
 }
 
 
