@@ -1,3 +1,7 @@
+2003-12-10  Ted Gould <ted@gould.cx>
+
+	* configure.in: Changing to 0.37cvs
+
 2003-12-10  bulia byak <bulia@dr.com>
 
 	* src/verbs.c: SELECT_ALL is now tool-sensitive, comments
