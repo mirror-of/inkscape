@@ -428,7 +428,7 @@ void SVGPreview::showTooLarge(long fileLength)
           "</svg>\n\n";
 
     //Fill in the template
-    double floatFileLength = ((double)fileLength) / 1000000.0;
+    double floatFileLength = ((double)fileLength) / 1048576.0;
     //printf("%ld %f\n", fileLength, floatFileLength);
     gchar *xmlBuffer = g_strdup_printf(xformat, 
            previewWidth, previewHeight, floatFileLength,
