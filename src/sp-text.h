@@ -153,6 +153,8 @@ gint sp_text_delete (SPText *text, gint start, gint end);
 
 gint sp_text_up (SPText *text, gint pos);
 gint sp_text_down (SPText *text, gint pos);
+gint sp_text_start_of_line (SPText *text, gint pos);
+gint sp_text_end_of_line (SPText *text, gint pos);
 
 void sp_text_get_cursor_coords (SPText *text, gint position, ArtPoint *p0, ArtPoint *p1);
 

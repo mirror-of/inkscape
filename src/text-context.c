@@ -424,6 +424,14 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
 				}
 				sp_text_context_update_cursor (tc);
 				return TRUE;
+			case GDK_Home:
+				tc->ipos = sp_text_start_of_line (SP_TEXT (tc->text), tc->ipos);
+				sp_text_context_update_cursor (tc);
+				return TRUE;
+			case GDK_End:
+				tc->ipos = sp_text_end_of_line (SP_TEXT (tc->text), tc->ipos);
+				sp_text_context_update_cursor (tc);
+				return TRUE;
 			default:
 				return TRUE;
 				break;
