@@ -2287,7 +2287,7 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
 	gtk_entry_set_width_chars (GTK_ENTRY (dropper_rgb_entry), 7);
         gtk_tooltips_set_tip(tt, dropper_rgb_entry, 
                          _("Hexidecimal representation of last selected "
-                           "dropper pick"), 
+                           "color"), 
                          NULL);
 	gtk_widget_show (dropper_rgb_entry);
         gtk_container_add(GTK_CONTAINER(hb), dropper_rgb_entry);
@@ -2308,7 +2308,7 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
 	gtk_entry_set_max_length (GTK_ENTRY (dropper_opacity_entry), 11);
 	gtk_entry_set_width_chars (GTK_ENTRY (dropper_opacity_entry), 11);
         gtk_tooltips_set_tip(tt, dropper_opacity_entry, 
-                         _("Opacity of last selected dropper pick"), 
+                         _("Opacity of last selected color"), 
                          NULL);
 	gtk_widget_show (dropper_opacity_entry);
         gtk_container_add(GTK_CONTAINER(hb), dropper_opacity_entry);
@@ -2322,7 +2322,8 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
     {
         GtkWidget *hb = gtk_hbox_new(FALSE, 1);
         GtkWidget *b = gtk_button_new_with_label(_("Copy as RGBA"));
-        gtk_tooltips_set_tip(tt, b, _("Copy last saved color as RGBA to "
+        gtk_tooltips_set_tip(tt, b, _("Copy last saved color as hexidecimal "
+				      "RGB + Alpha (RGBA) to "
                                       "clipboard"), 
                              NULL);
         gtk_widget_show(b);
@@ -2338,8 +2339,9 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
     {
         GtkWidget *hb = gtk_hbox_new(FALSE, 1);
         GtkWidget *b = gtk_button_new_with_label(_("Copy as HEX"));
-        gtk_tooltips_set_tip(tt, b, _("Copy last saved color to clipboard as a "                                         
-                                      "Hexidecimal representation"), NULL);
+        gtk_tooltips_set_tip(tt, b, _("Copy last saved color as "
+				      "hexidecimal RGB without alpha " 
+				      "to clipboard"), NULL);
         gtk_widget_show(b);
         gtk_container_add(GTK_CONTAINER(hb), b);
         gtk_signal_connect(GTK_OBJECT(b), "clicked", 
@@ -2358,7 +2360,10 @@ sp_dropper_toolbox_new(SPDesktop *desktop)
                                      SP_BUTTON_TYPE_TOGGLE,
                                      NULL,
                                      "pick_color",
-                                     _("Pick visible color (no alpha)"),
+                                     _("When pressed, picks visible color "
+				       "without alpha and when not pressed, "
+				       "picks color including its "
+				       "alpha"),
                                      tt);
 
         gtk_widget_show(button);
