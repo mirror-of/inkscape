@@ -16,6 +16,10 @@
 #include "../color.h"
 #include "sp-color-slider.h"
 
+#include <glib.h>
+
+G_BEGIN_DECLS
+
 typedef struct _SPColorSelector SPColorSelector;
 typedef struct _SPColorSelectorClass SPColorSelectorClass;
 
@@ -87,5 +91,7 @@ gfloat sp_color_selector_get_b (SPColorSelector *csel);
 gfloat sp_color_selector_get_a (SPColorSelector *csel);
 
 guint32 sp_color_selector_get_rgba32 (SPColorSelector *csel);
+
+G_END_DECLS
 
 #endif
