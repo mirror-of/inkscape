@@ -3,7 +3,7 @@
 libnr/all: libnr/libnr.a
 
 libnr/clean:
-	rm -f libnr/libnr.a $(libnr_libnr_a_OBJECTS)
+	rm -f libnr/libnr.a libnr/libtest-nr.a $(libnr_libnr_a_OBJECTS) $(libnr_libtest_nr_a_OBJECTS)
 
 if USE_MMX
 libnr_mmx_sources =	\
@@ -109,7 +109,7 @@ libnr_testnr_LDADD =	\
 
 
 libnr/test-nr-main.cpp: libnr/test-nr.cpp
-	cxxtestgen.pl --error-printer -root -o libnr/test-nr-main.cpp
+	cxxtestgen.pl --error-printer -root -o libnr/test-nr-main.cpp $(libnr_test_nr_includes)
 
 libnr/test-nr.cpp: $(libnr_test_nr_includes)
 	cxxtestgen.pl -part -o libnr/test-nr.cpp $(libnr_test_nr_includes)
@@ -124,12 +124,15 @@ libnr_test_nr_includes = \
 	$(srcdir)/libnr/in-svg-plane-test.h	\
 	$(srcdir)/libnr/nr-matrix-test.h
 
+libnr_libtest_nr_a_SOURCES =	\
+	libnr/test-nr.cpp
+
 libnr_test_nr_SOURCES =	\
-	libnr/test-nr.cpp	\
 	libnr/test-nr-main.cpp
 
 libnr_test_nr_LDADD =	\
 	libnr/libnr.a	\
+	libnr/libtest-nr.a	\
 	-lglib-2.0
 
 #	-L/usr/X11R6/lib
