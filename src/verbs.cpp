@@ -48,6 +48,7 @@
 #include "dialogs/layer-properties.h"
 #include "dialogs/clonetiler.h"
 #include "ui/widget/panel.h"
+#include "ui/dialog/dialog.h"
 #include "dialogs/iconpreview.h"
 
 #include "extension/effect.h"
@@ -104,13 +105,22 @@ sp_action_get_title (const SPAction *action)
 
 namespace Inkscape {
 
+class PanelDialog : public Inkscape::UI::Dialog::Dialog
+{
+public:
+
+    PanelDialog() : Dialog(true) {}
+    virtual Glib::ustring getName() const {return "foo";}
+    virtual Glib::ustring getDesc() const {return "bar";}
+};
+
 /** \brief Utility function to get a panel displayed. */
 static void show_panel( Inkscape::UI::Widget::Panel &panel )
 {
     Gtk::Container* container = panel.get_toplevel();
     if ( &panel == container ) { // safe check?
         //g_message("Creating new dialog to hold it");
-        Gtk::Dialog* dia = new Gtk::Dialog();
+        PanelDialog* dia = new PanelDialog();
         Gtk::VBox *mainVBox = dia->get_vbox();
         mainVBox->pack_start(panel);
         dia->show_all_children();

@@ -15,8 +15,15 @@
 #endif
 
 #include <gtkmm/stock.h>
+#include <gtk/gtksignal.h>
 
+#include "inkscape.h"
+#include "event-context.h"
+#include "view.h"
 #include "dialog.h"
+#include "dialog-manager.h"
+#include "dialogs/dialog-events.h"
+#include "shortcuts.h"
 
 namespace Inkscape {
 namespace UI {
@@ -47,10 +54,10 @@ Dialog::Dialog()
     int h = 0;
 
     /* TODO:  Hook to preferences...
-    x = prefs_get_int_attribute (prefs_path, "x", 0);
-    y = prefs_get_int_attribute (prefs_path, "y", 0);
-    w = prefs_get_int_attribute (prefs_path, "w", 0);
-    h = prefs_get_int_attribute (prefs_path, "h", 0);
+       x = prefs_get_int_attribute (prefs_path, "x", 0);
+       y = prefs_get_int_attribute (prefs_path, "y", 0);
+       w = prefs_get_int_attribute (prefs_path, "w", 0);
+       h = prefs_get_int_attribute (prefs_path, "h", 0);
     */
 
     // If there are stored values for where the dialog should be
@@ -59,7 +66,7 @@ Dialog::Dialog()
         move(x, y);
     } else {
         // ...otherwise just put it in the middle of the screen
-/* TODO        set_position(GTK_WIN_POS_CENTER); 
+/* TODO        set_position(GTK_WIN_POS_CENTER);
 */
     }
 
@@ -75,11 +82,65 @@ Dialog::Dialog(BaseObjectType *gobj)
 {
 }
 
-Dialog::~Dialog() 
+Dialog::Dialog( bool flag )
+{
+    // This block is a much simplified version of the code used in all other dialogs for
+    // saving/restoring geometry, transientising, passing events to the aplication, and
+    // hiding/unhiding on F12. This code fits badly into gtkmm so it had to be abridged and
+    // mutilated somewhat. This block should be removed when the same functionality is made
+    // available to all gtkmm dialogs via a base class.
+    GtkWidget *dlg = GTK_WIDGET(gobj());
+
+//         gchar title[500];
+//         sp_ui_dialog_title_string (Inkscape::Verb::get(SP_VERB_SELECTION_POTRACE), title);
+//         set_title(title);
+
+    set_position(Gtk::WIN_POS_CENTER);
+
+    sp_transientize(dlg);
+
+    gtk_signal_connect( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC(sp_dialog_event_handler), dlg );
+
+    g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_hide", G_CALLBACK(hideCallback), (void *)this );
+    g_signal_connect( G_OBJECT(INKSCAPE), "dialogs_unhide", G_CALLBACK(unhideCallback), (void *)this );
+
+
+    g_signal_connect_after( gobj(), "key_press_event", (GCallback)windowKeyPress, NULL );
+}
+
+Dialog::~Dialog()
 {
     // TODO:  Should this be invoked prior to the destructor stage?
     onDestroy();
 }
+
+
+gboolean Dialog::windowKeyPress( GtkWidget *widget, GdkEventKey *event )
+{
+    unsigned int shortcut = 0;
+    shortcut = get_group0_keyval (event) |
+        ( event->state & GDK_SHIFT_MASK ?
+          SP_SHORTCUT_SHIFT_MASK : 0 ) |
+        ( event->state & GDK_CONTROL_MASK ?
+          SP_SHORTCUT_CONTROL_MASK : 0 ) |
+        ( event->state & GDK_MOD1_MASK ?
+          SP_SHORTCUT_ALT_MASK : 0 );
+    return sp_shortcut_invoke( shortcut, SP_VIEW(SP_ACTIVE_DESKTOP) );
+}
+
+void Dialog::hideCallback(GtkObject *object, gpointer dlgPtr)
+{
+    Dialog *dlg = (Dialog *)dlgPtr;
+    dlg->onHideF12();
+}
+
+void Dialog::unhideCallback(GtkObject *object, gpointer dlgPtr)
+{
+    Dialog *dlg = (Dialog *)dlgPtr;
+    dlg->onShowF12();
+}
+
+
 
 void
 Dialog::onDestroy()

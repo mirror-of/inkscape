@@ -42,12 +42,18 @@ public:
     void           transientize();
 
 protected:
+    Dialog( bool flag );
+
     SPDesktop      *_desktop;
     bool           _user_hidden;
 
     virtual void   on_response(int response_id);
     virtual void   _apply();
     virtual void   _close();
+
+    static gboolean windowKeyPress( GtkWidget *widget, GdkEventKey *event );
+    static void Dialog::hideCallback(GtkObject *object, gpointer dlgPtr);
+    static void Dialog::unhideCallback(GtkObject *object, gpointer dlgPtr);
 
     Selection*     _getSelection();
     void           _setDesktop(SPDesktop *desktop);
