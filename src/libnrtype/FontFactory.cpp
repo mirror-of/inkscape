@@ -329,31 +329,14 @@ font_instance* font_factory::Face(PangoFontDescription* descr, bool canFail)
 		// not yet loaded
 		PangoFont* nFace=NULL;
 
-                // numeric fonts blow up Pango.  The "1979" font reports
-                // "Normal 512" here, and many other do not.  I'm going to
-                // not allow that name as a work-around for this crash.
-                // See bug #1025565.
-                gchar * workaround = pango_font_description_to_string(descr);
-                /*
-                 * I was checking for all-numeric names, but that doesn't work
-                g_print("font: '%s'\n",workaround);
-                gchar * ptr=workaround;
-                for (glong i=0;
-                     ptr && *ptr;
-                     ptr=g_utf8_offset_to_pointer(workaround,i)) {
-                    if (!g_ascii_isdigit(*ptr)) break;
-                }
-
-                if (ptr && *ptr) {
-                */
-
-                if (strcmp(workaround,"Normal 512")) {
+                // workaround for bug #1025565.
+                // fonts without families blow up Pango.
+                if (pango_font_description_get_family (descr)!=NULL) {
 		    nFace=pango_font_map_load_font(fontServer,fontContext,descr);
                 }
                 else {
                     g_warning(_("Ignoring font that may crash Pango"));
                 }
-                g_free(workaround);
 
 		if ( nFace ) {
 			// duplicate FcPattern, the hard way
