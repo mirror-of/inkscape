@@ -14,7 +14,7 @@ using std::vector;
 void sp_item_rm_unsatisfied_cns(SPItem &item)
 {
     if (item.constraints.empty()) {
-	return;
+        return;
     }
     int const max_n_snappoints = 8;
     NR::Point snappoints[max_n_snappoints];

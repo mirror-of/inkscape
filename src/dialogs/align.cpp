@@ -499,7 +499,7 @@ sp_align_arrange_clicked (GtkWidget *widget, gconstpointer data)
         case SP_ALIGN_BIGGEST:
         
         case SP_ALIGN_SMALLEST:
-	{
+        {
             if (!slist->next)
                 return;
 
@@ -508,12 +508,12 @@ sp_align_arrange_clicked (GtkWidget *widget, gconstpointer data)
                 sp_quick_align_find_master ( slist, 
                                              (a.mx0 != 0.0) || (a.mx1 != 0.0) );
             slist = g_slist_remove (slist, master);
-	    NRRect b;
+            NRRect b;
             sp_item_bbox_desktop (master, &b);
             mp = NR::Point(a.mx0 * b.x0 + a.mx1 * b.x1,
                            a.my0 * b.y0 + a.my1 * b.y1);
             break;
-	}
+        }
             
         case SP_ALIGN_PAGE:
             slist = g_slist_copy (slist);
@@ -522,25 +522,25 @@ sp_align_arrange_clicked (GtkWidget *widget, gconstpointer data)
             break;
         
         case SP_ALIGN_DRAWING:
-	{
+        {
             slist = g_slist_copy (slist);
-	    NRRect b;
+            NRRect b;
             sp_item_bbox_desktop 
                 ( (SPItem *) sp_document_root (SP_DT_DOCUMENT (desktop)), &b );
             mp = NR::Point(a.mx0 * b.x0 + a.mx1 * b.x1,
                            a.my0 * b.y0 + a.my1 * b.y1);
             break;
-	}
+        }
 
         case SP_ALIGN_SELECTION:
-	{
+        {
             slist = g_slist_copy (slist);
-	    NRRect b;
+            NRRect b;
             sp_selection_bbox (selection, &b);
             mp = NR::Point(a.mx0 * b.x0 + a.mx1 * b.x1,
                            a.my0 * b.y0 + a.my1 * b.y1);
             break;
-	}
+        }
 
         default:
             g_assert_not_reached ();
@@ -550,9 +550,9 @@ sp_align_arrange_clicked (GtkWidget *widget, gconstpointer data)
     bool changed = false;
     for (GSList *l = slist; l != NULL; l = l->next) {
         SPItem *item = (SPItem *) l->data;
-	NRRect b;
+        NRRect b;
         sp_item_bbox_desktop (item, &b);
-	NR::Point const sp(a.sx0 * b.x0 + a.sx1 * b.x1,
+        NR::Point const sp(a.sx0 * b.x0 + a.sx1 * b.x1,
                            a.sy0 * b.y0 + a.sy1 * b.y1);
         NR::Point const mp_rel( mp - sp );
         if (LInfty(mp_rel) > 1e-9) {

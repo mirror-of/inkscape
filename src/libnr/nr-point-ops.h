@@ -28,7 +28,7 @@ inline Point operator-(Point const &a, Point const &b)
 inline Point operator^(Point const &a, Point const &b)
 {
     Point const ret(a[0] * b[0] - a[1] * b[1],
-		    a[1] * b[0] + a[0] * b[1]);
+                    a[1] * b[0] + a[0] * b[1]);
     return ret;
 }
 

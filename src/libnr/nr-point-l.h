@@ -4,7 +4,7 @@
 #include <libnr/nr-i-coord.h>
 
 struct NRPointL {
-	NR::ICoord x, y;
+    NR::ICoord x, y;
 };
 
 

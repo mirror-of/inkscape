@@ -22,8 +22,8 @@
 /* Generic containers */
 
 namespace Inkscape {
-	struct Application;
-	struct ApplicationClass;
+struct Application;
+struct ApplicationClass;
 };
 
 /* Editing window */

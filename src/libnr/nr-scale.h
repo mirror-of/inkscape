@@ -7,27 +7,27 @@ namespace NR {
 
 class scale {
 private:
-	Point _p;
+    Point _p;
 
 private:
-	scale();
+    scale();
 
 public:
-	explicit scale(Point const &p) : _p(p) {}
-	scale(double const x, double const y) : _p(x, y) {}
-	inline Coord operator[](Dim2 const d) const { return _p[d]; }
-	inline Coord operator[](unsigned const d) const { return _p[d]; }
+    explicit scale(Point const &p) : _p(p) {}
+    scale(double const x, double const y) : _p(x, y) {}
+    inline Coord operator[](Dim2 const d) const { return _p[d]; }
+    inline Coord operator[](unsigned const d) const { return _p[d]; }
 
-	bool operator==(scale const &o) const {
-		return _p == o._p;
-	}
+    bool operator==(scale const &o) const {
+        return _p == o._p;
+    }
 
-	bool operator!=(scale const &o) const {
-		return _p != o._p;
-	}
-	scale inverse() const {
-		return scale(1/_p[0], 1/_p[1]);
-	}
+    bool operator!=(scale const &o) const {
+        return _p != o._p;
+    }
+    scale inverse() const {
+        return scale(1/_p[0], 1/_p[1]);
+    }
 };
 
 } /* namespace NR */

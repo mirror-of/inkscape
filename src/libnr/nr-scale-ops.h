@@ -7,20 +7,20 @@ namespace NR {
 
 inline Point operator*(Point const &p, scale const &s)
 {
-	return Point(s[X] * p[X],
-		     s[Y] * p[Y]);
+    return Point(p[X] * s[X],
+                 p[Y] * s[Y]);
 }
 
 inline scale operator*(scale const &a, scale const &b)
 {
-	return scale(a[X] * b[X],
-		     a[Y] * b[Y]);
+    return scale(a[X] * b[X],
+                 a[Y] * b[Y]);
 }
 
 inline scale operator/(scale const &numer, scale const &denom)
 {
-	return scale(numer[X] / denom[X],
-		     numer[Y] / denom[Y]);
+    return scale(numer[X] / denom[X],
+                 numer[Y] / denom[Y]);
 }
 
 } /* namespace NR */

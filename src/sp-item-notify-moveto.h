@@ -4,7 +4,7 @@
 #include <forward.h>
 
 void sp_item_notify_moveto(SPItem &item, SPGuide const &g, int const snappoint_ix,
-			   double position, bool const commit);
+                           double position, bool const commit);
 
 
 #endif /* !__SP_ITEM_NOTIFY_MOVETO_H__ */

@@ -4,7 +4,7 @@
 #include <libnr/nr-i-coord.h>
 
 struct NRRectL {
-	NR::ICoord x0, y0, x1, y1;
+    NR::ICoord x0, y0, x1, y1;
 };
 
 
