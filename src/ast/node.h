@@ -38,10 +38,16 @@ public:
         return _lookup(branch, pos);
     }
 
+    List<BranchName> const *selectBranches() const
+    throw(std::bad_alloc)
+    {
+        return _selectBranches(NULL);
+    }
+
     List<BranchName> const *selectBranches(BranchSelector selector) const
     throw(std::bad_alloc)
     {
-        return _selectBranches(selector);
+        return _selectBranches(&selector);
     }
 
     unsigned branchSize(BranchName const &branch) const
@@ -88,7 +94,7 @@ protected:
     virtual Node const *_lookup(BranchName const &branch, unsigned pos) const
     throw(InvalidBranch)=0;
 
-    virtual List<BranchName> const *_selectBranches(BranchSelector selector)
+    virtual List<BranchName> const *_selectBranches(BranchSelector *selector)
     const
     throw(std::bad_alloc)=0;
 

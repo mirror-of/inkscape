@@ -21,7 +21,7 @@ namespace XML {
 
 namespace {
 
-class AttributeNameMatches {
+class AttributeNameMatchesP {
 public:
     AttributeNameMatchesP(Symbol name) : _name(name) {}
     bool operator(List<Attribute> const &list) {
@@ -128,7 +128,7 @@ throw(InvalidBranch)
     }
 }
 
-List<BranchName> const *Element::_selectBranches(Node::BranchSelector selector)
+List<BranchName> const *Element::_selectBranches(Node::BranchSelector *selector)
 const
 throw(std::bad_alloc)
 {
@@ -138,15 +138,15 @@ throw(std::bad_alloc)
     {
         BranchName branch(Element::ATTRIBUTE, iter->value().name());
 
-        if (selector(*this, branch)) {
+        if ( selector && (*selector)(*this, branch) ) {
             branches = new List<BranchName>(branches, branch);
         }
     }
 
-    if (selector(*this, NAME_BRANCH)) {
+    if ( selector && (*selector)(*this, NAME_BRANCH)) {
         branches = new List<BranchName>(branches, NAME_BRANCH);
     }
-    if ( _children && selector(*this, CHILDREN_BRANCH) ) {
+    if ( _children && selector && (*selector)(*this, CHILDREN_BRANCH) ) {
         branches = new List<BranchName>(branches, CHILDREN_BRANCH);
     }
 
@@ -223,7 +223,7 @@ Node const &Element::_reorder(BranchName const &branch, unsigned old_pos, unsign
 throw(InvalidBranch, InvalidTransformation, std::bad_alloc)
 {
     if ( branch.axis() == ATTRIBUTE ) {
-        // reordering on an attribute axis is always a noop,
+        // reordering on an attribute branch is always a noop,
         // since they never exceed one node long
         return *this;
     } else if ( branch.axis() == PROPERTY ) {

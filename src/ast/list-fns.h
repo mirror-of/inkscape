@@ -18,7 +18,7 @@ namespace Inkscape {
 namespace AST {
 
 template <typename T, typename P>
-List<T> const *findLast(List<T> const *list, P predicate)
+T const *findLast(T const *list, P predicate)
 throw()
 {
     for ( ; list ; list = list->prev() ) {
@@ -30,10 +30,10 @@ throw()
 }
 
 template <typename T, typename P>
-List<T>::pointer_type findLastValue(List<T> const *list, P predicate)
+typename T::pointer_type findLastValue(T const *list, P predicate)
 throw()
 {
-    List<T> const *found=findLastElement(list, predicate);
+    T const *found=findLast(list, predicate);
     return found ? &found->value() : NULL;
 }
 
@@ -42,7 +42,7 @@ namespace {
 struct NotFound {};
 
 template <typename T, typename P>
-List<T> const *doRemoveLast(List<T> const *list, P predicate)
+T const *doRemoveLast(T const *list, P predicate)
 throw(NotFound(), std::bad_alloc)
 {
     if (!list) {
@@ -52,12 +52,12 @@ throw(NotFound(), std::bad_alloc)
     } else if (predicate(*list)) {
         return list->prev();
     } else {
-        return new List<T>(removeLast(list->prev, predicate), value());
+        return new T(removeLast(list->prev, predicate), value());
     }
 }
 
 template <typename T, typename P>
-List<T> const *AST::removeLast(List<T> const *list, P predicate)
+T const *AST::removeLast(T const *list, P predicate)
 throw(std::bad_alloc)
 {
     try {

@@ -23,14 +23,28 @@ class Reference;
 
 class Pad : public FinalizedGCObject<::NoGC> {
 public:
-    Pad(Pad &parent, BranchName const &branch, unsigned pos);
-    Pad(Node const &node);
+    explicit Pad(Node const &node)
+    : _parent(NULL), _ref(*(new Reference(node))), _refcount(1) {}
+    virtual ~Pad();
 
-    void Pad
+    void reference() const { _refcount++; }
+    void unreference() const { if (!--_refcount) delete this; }
+
+    Reference const *nodeRef() const { return _ref; }
+
+protected:
+    Reference const *_getRef() const {
+        Reference const *parent_ref=( _parent ? _parent->_getRef() : NULL );
+        if ( _ref->parent() != parent_ref ) {
+            _ref = _ref->reparent_unsafe(parent_ref);
+        }
+        return _ref;
+    }
     
 private:
     Pad *_parent;
     Reference const *_ref;
+    mutable unsigned _refcount;
 };
 
 };

@@ -54,9 +54,10 @@ private:
     static BranchName const NAME_BRANCH(PROPERTY, NAME);
     static BranchName const CHILDREN_BRANCH(PROPERTY, CHILDREN);
 
-    Node const *_lookup(BranchName const &branch, unsigned pos) const throw(InvalidBranch);
+    Node const *_lookup(BranchName const &branch, unsigned pos) const
+    throw(InvalidBranch);
 
-    List<BranchName> const *_selectBranches(BranchSelector selector)
+    List<BranchName> const *_selectBranches(BranchSelector *selector)
     throw(std::bad_alloc);
 
     Node const &_insert(BranchName const &branch, unsigned pos, Node const &node) const throw(InvalidBranch, InvalidTransformation, std::bad_alloc);

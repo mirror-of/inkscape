@@ -13,6 +13,7 @@
 #define SEEN_INKSCAPE_AST_LENGTH_LIST_FNS_H
 
 #include "ast/length-list.h"
+#include "ast/list-fns.h"
 
 namespace Inkscape {
 namespace AST {

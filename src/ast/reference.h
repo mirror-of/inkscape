@@ -21,8 +21,9 @@ namespace Inkscape {
 namespace AST {
 
 class Path;
+class Pad;
 
-class Reference: public SimpleGCObject<> {
+class Reference : public SimpleGCObject<> {
 public:
     explicit Reference(Node const &node)
     throw()
@@ -30,6 +31,9 @@ public:
 
     Path const *path() const throw() { return _path; }
     Node const &node() const throw() { return _node; }
+    Reference const *parent() const throw() {
+        return _path ? &_path->parent() : NULL;
+    }
 
     Reference const *lookup(BranchName const &branch, unsigned pos) const
     throw(InvalidBranch, std::bad_alloc);
@@ -67,12 +71,15 @@ public:
         return reseat(_node.reorder(branch, old_pos, new_pos));
     }
 
-private:
-    Reference(Path const &path, Node const &node)
-    : _path(path), _node(node) {}
+    Reference const &reparent(Reference const *parent) const
+    throw(InvalidBranch, InvalidTransformation, std::bad_alloc);
 
     Reference const &reseat(Node const &node) const
     throw(InvalidBranch, InvalidTransformation, std::bad_alloc);
+
+private:
+    Reference(Path const &path, Node const &node)
+    : _path(path), _node(node) {}
 
     void operator=(Path const &);
 
