@@ -286,9 +286,11 @@ sp_select_context_item_handler (SPEventContext *event_context, SPItem *item, Gdk
 		break;
 	case GDK_KEY_PRESS:
 		if (event->key.keyval == GDK_space) {
+			if (sc->dragging && sc->grabbed) {
 			/* stamping mode: show content mode moving */
-			sp_sel_trans_stamp(seltrans);
-			ret = TRUE;
+				sp_sel_trans_stamp(seltrans);
+				ret = TRUE;
+			}
 		}
 		break;
 	default:
@@ -519,9 +521,10 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 	  case GDK_space:
 	    /* stamping mode: show outline mode moving */
 	    /* FIXME: Is next condition ok? */
-	    if (sc->dragging && sc->grabbed) 
-		    sp_sel_trans_stamp(seltrans);
-	    ret = TRUE;
+	    if (sc->dragging && sc->grabbed) {
+				sp_sel_trans_stamp(seltrans);
+				ret = TRUE;
+			}
 	    break;
           }
 	  break;
