@@ -119,24 +119,13 @@ sp_ctrlrect_hline (SPCanvasBuf *buf, gint y, gint xs, gint xe, guint32 rgba, gui
 		x0 = MAX (buf->rect.x0, xs);
 		x1 = MIN (buf->rect.x1, xe + 1);
 		p = buf->buf + (y - buf->rect.y0) * buf->buf_rowstride + (x0 - buf->rect.x0) * 3;
-                guint dash_on = 1;
-                guint dash_counter = 0;
 		for (x = x0; x < x1; x++) {
-                    if (dash_on) {
+                if (!dashed || ((x / DASH_LENGTH) % 2)) {
 			p[0] = COMPOSE (p[0], r, a);
 			p[1] = COMPOSE (p[1], g, a);
 			p[2] = COMPOSE (p[2], b, a);
-                    }
-
-                    p += 3;
-
-                    if (dashed) {
-                        dash_counter++;
-                        if (dash_counter >= DASH_LENGTH) {
-                            dash_counter = 0;
-                            dash_on = 1 - dash_on;
-                        }
-                    }
+                }
+                p += 3;
 		}
 	}
 }
@@ -158,21 +147,12 @@ sp_ctrlrect_vline (SPCanvasBuf *buf, gint x, gint ys, gint ye, guint32 rgba, gui
                 guint dash_on = 1;
                 guint dash_counter = 0;
 		for (y = y0; y < y1; y++) {
-                    if (dash_on) {
+                if (!dashed || ((y / DASH_LENGTH) % 2)) {
 			p[0] = COMPOSE (p[0], r, a);
 			p[1] = COMPOSE (p[1], g, a);
 			p[2] = COMPOSE (p[2], b, a);
-                    }
-                    
-                    p += buf->buf_rowstride;
-
-                    if (dashed) {
-                        dash_counter++;
-                        if (dash_counter >= DASH_LENGTH) {
-                            dash_counter = 0;
-                            dash_on = 1 - dash_on;
-                        }
-                    }
+                }
+                p += buf->buf_rowstride;
 		}
 	}
 }
@@ -220,24 +200,24 @@ sp_ctrlrect_render (SPCanvasItem *item, SPCanvasBuf *buf)
 			buf->is_buf = TRUE;
 		}
 		/* Top */
-		sp_ctrlrect_hline (buf, cr->area.y0 - 1, cr->area.x0, cr->area.x1, cr->border_color, cr->dashed);
+		sp_ctrlrect_hline (buf, cr->area.y0, cr->area.x0, cr->area.x1, cr->border_color, cr->dashed);
 		/* Bottom */
-		sp_ctrlrect_hline (buf, cr->area.y1 - 1, cr->area.x0, cr->area.x1, cr->border_color, cr->dashed);
+		sp_ctrlrect_hline (buf, cr->area.y1, cr->area.x0, cr->area.x1, cr->border_color, cr->dashed);
 		/* Left */
-		sp_ctrlrect_vline (buf, cr->area.x0, cr->area.y0 - 1, cr->area.y1 - 1, cr->border_color, cr->dashed);
+		sp_ctrlrect_vline (buf, cr->area.x0, cr->area.y0 + 1, cr->area.y1 - 1, cr->border_color, cr->dashed);
 		/* Right */
-		sp_ctrlrect_vline (buf, cr->area.x1, cr->area.y0 - 1, cr->area.y1 - 1, cr->border_color, cr->dashed);
+		sp_ctrlrect_vline (buf, cr->area.x1, cr->area.y0 + 1, cr->area.y1 - 1, cr->border_color, cr->dashed);
 		if (cr->shadow_size > 0) {
 			/* Right shadow */
 			sp_ctrlrect_area (buf, cr->area.x1 + 1, cr->area.y0 + cr->shadow_size,
 					  cr->area.x1 + cr->shadow_size, cr->area.y1 + cr->shadow_size, cr->shadow_color);
 			/* Bottom shadow */
-			sp_ctrlrect_area (buf, cr->area.x0 + cr->shadow_size, cr->area.y1 - 1,
+			sp_ctrlrect_area (buf, cr->area.x0 + cr->shadow_size, cr->area.y1 + 1,
 					  cr->area.x1, cr->area.y1 + cr->shadow_size, cr->shadow_color);
 		}
 		if (cr->has_fill) {
 			/* Fill */
-			sp_ctrlrect_area (buf, cr->area.x0 + 1, cr->area.y0 - 1,
+			sp_ctrlrect_area (buf, cr->area.x0 + 1, cr->area.y0 + 1,
 					  cr->area.x1 - 1, cr->area.y1 - 1, cr->fill_color);
 		}
 	}
