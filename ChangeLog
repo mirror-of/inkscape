@@ -10,6 +10,8 @@
 	* src/xml/repr-action.cpp, src/xml/repr-action.h, src/xml/repr.cpp:
 	  fix lifecycle issues with content and attribute strings
 
+	* src/sp-object.h, src/sp-object.cpp: added SPObject::setId()
+
 2004-05-08  Kees Cook <kees@outflux.net>
 
 	* src/verbs.cpp, src/help.cpp: localizing "about" and "keys" stuff.

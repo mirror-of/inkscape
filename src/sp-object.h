@@ -138,6 +138,8 @@ struct SPObject : public GObject {
 	gchar *id; /* Our very own unique id */
 	SPStyle *style;
 
+	void setId(gchar const *id);
+
 	void deleteObject(bool propagate=true);
 
 	SigC::Connection connectDelete(SigC::Slot1<void, SPObject *> slot) {

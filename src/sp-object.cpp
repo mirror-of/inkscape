@@ -222,6 +222,10 @@ sp_object_hunref (SPObject *object, gpointer owner)
 	return NULL;
 }
 
+void SPObject::setId(gchar const *id) {
+	sp_object_set(this, SP_ATTR_ID, id);
+}
+
 void SPObject::deleteObject(bool propagate)
 {
 	if (propagate) {
