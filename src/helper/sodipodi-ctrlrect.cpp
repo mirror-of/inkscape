@@ -95,8 +95,6 @@ sp_ctrlrect_init (SPCtrlRect *cr)
 static void
 sp_ctrlrect_destroy (GtkObject *object)
 {
-	SPCtrlRect *cr = SP_CTRLRECT (object);
-
 	if (GTK_OBJECT_CLASS (parent_class)->destroy)
 		(* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }

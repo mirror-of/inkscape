@@ -1696,9 +1696,6 @@ uta_clear (ArtUta *uta, ArtIRect *rect)
 static int
 paint (SPCanvas *canvas)
 {
-	ArtIRect *rects;
-	gint n_rects;
-
 	if (canvas->need_update) {
 		sp_canvas_item_invoke_update (canvas->root, NR::identity(), 0);
 		canvas->need_update = FALSE;
@@ -1731,7 +1728,6 @@ paint (SPCanvas *canvas)
 #else 
   for (int j=canvas->tTop&(~3);j<canvas->tBottom;j+=4) {
     for (int i=canvas->tLeft&(~3);i<canvas->tRight;i+=4) {
-      int  ind=(i-canvas->tLeft)+(j-canvas->tTop)*canvas->tileH;
       int  mode=0;
       
       int pl=i+1,pr=i,pt=j+4,pb=j;
@@ -1994,7 +1990,9 @@ uta_union_clip (ArtUta *uta1, ArtUta *uta2, ArtIRect *clip)
 void
 sp_canvas_request_redraw_uta (SPCanvas *canvas, ArtUta *uta)
 {
+#ifndef canvas_tiled_redraw
 	ArtIRect visible;
+#endif	
 
 	g_return_if_fail (canvas != NULL);
 	g_return_if_fail (SP_IS_CANVAS (canvas));
@@ -2036,7 +2034,6 @@ sp_canvas_request_redraw_uta (SPCanvas *canvas, ArtUta *uta)
 void
 sp_canvas_request_redraw (SPCanvas *canvas, int x0, int y0, int x1, int y1)
 {
-	ArtUta *uta;
 	ArtIRect bbox;
 	ArtIRect visible;
 	ArtIRect clip;
