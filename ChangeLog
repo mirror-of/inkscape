@@ -8,6 +8,9 @@
 
 	* src/splivarot.cpp: compilation fix
 
+	* src/widgets/sp-color-notebook.c: minor tweak so selector menu
+	  is a little more obvious
+
 2003-12-12  bulia byak <bulia@dr.com>
 
 	* src/svg/svg-path.c src/desktop.h src/libnr/gen_nr_config.c src/libnr/nr-object.c

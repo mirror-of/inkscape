@@ -28,6 +28,7 @@
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkcheckmenuitem.h>
 #include <gtk/gtkoptionmenu.h>
+#include <gtk/gtkalignment.h>
 #include "../color.h"
 #include "../helper/sp-intl.h"
 #include "../dialogs/dialog-events.h"
@@ -262,23 +263,10 @@ sp_color_notebook_init (SPColorNotebook *colorbook)
 
 
 	gtk_table_attach (GTK_TABLE (table), colorbook->book, 0, 2, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
-	row++;
-
-	/* Create RGBA entry and color preview */
-	colorbook->rgbal = gtk_label_new ("RGBA:");
-/*	   gtk_misc_set_alignment (GTK_MISC (colorbook->l[i]), 1.0, 0.5); */
-	gtk_widget_show (colorbook->rgbal);
-	gtk_table_attach (GTK_TABLE (table), colorbook->rgbal, 0, 1, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
-	colorbook->rgbae = gtk_entry_new ();
-	sp_dialog_defocus_on_enter (colorbook->rgbae);
-	gtk_entry_set_max_length (GTK_ENTRY (colorbook->rgbae), 16);
-	gtk_entry_set_width_chars (GTK_ENTRY (colorbook->rgbae), 10);
-	gtk_widget_show (colorbook->rgbae);
-	gtk_table_attach (GTK_TABLE (table), colorbook->rgbae, 1, 2, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
-
 	{
 		gboolean found = FALSE;
 		GtkWidget* arrow;
+		GtkWidget* align;
 		GtkMenu* menu;
 		GtkWidget* item;
 
@@ -302,15 +290,18 @@ sp_color_notebook_init (SPColorNotebook *colorbook)
 			}
 		}
 
-		colorbook->btn = gtk_button_new ();
-		gtk_widget_show (colorbook->btn);
-
 		arrow = gtk_arrow_new(GTK_ARROW_RIGHT, GTK_SHADOW_ETCHED_OUT);
 		gtk_widget_show (arrow);
 
+		colorbook->btn = gtk_button_new ();
+		gtk_widget_show (colorbook->btn);
 		gtk_container_add (GTK_CONTAINER (colorbook->btn), arrow);
 
-		gtk_table_attach (GTK_TABLE (table), colorbook->btn, 2, 3, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
+		align = gtk_alignment_new (0.0, 0.0, 0.0, 0.0);
+		gtk_widget_show (align);
+		gtk_container_add (GTK_CONTAINER (align), colorbook->btn);
+
+		gtk_table_attach (GTK_TABLE (table), align, 2, 3, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
 
 		gtk_signal_connect_object(GTK_OBJECT(colorbook->btn), "event", GTK_SIGNAL_FUNC (sp_color_notebook_menu_handler), GTK_OBJECT(colorbook));
 		if ( !found )
@@ -318,6 +309,20 @@ sp_color_notebook_init (SPColorNotebook *colorbook)
 			gtk_widget_set_sensitive (colorbook->btn, FALSE);
 		}
 	}
+
+	row++;
+
+	/* Create RGBA entry and color preview */
+	colorbook->rgbal = gtk_label_new ("RGBA:");
+/*	   gtk_misc_set_alignment (GTK_MISC (colorbook->l[i]), 1.0, 0.5); */
+	gtk_widget_show (colorbook->rgbal);
+	gtk_table_attach (GTK_TABLE (table), colorbook->rgbal, 0, 1, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
+	colorbook->rgbae = gtk_entry_new ();
+	sp_dialog_defocus_on_enter (colorbook->rgbae);
+	gtk_entry_set_max_length (GTK_ENTRY (colorbook->rgbae), 16);
+	gtk_entry_set_width_chars (GTK_ENTRY (colorbook->rgbae), 10);
+	gtk_widget_show (colorbook->rgbae);
+	gtk_table_attach (GTK_TABLE (table), colorbook->rgbae, 1, 2, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
 
 #ifdef SPCS_PREVIEW
 	colorbook->p = sp_color_preview_new (0xffffffff);
