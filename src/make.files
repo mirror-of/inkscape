@@ -1,4 +1,3 @@
-ResourceManager.h
 application.cpp
 application.h
 approx-equal.h
@@ -113,6 +112,7 @@ event-context.cpp
 event-context.h
 extension/db.cpp
 extension/db.h
+extension/extension-forward.h
 extension/extension.cpp
 extension/extension.h
 extension/implementation/implementation.cpp
@@ -167,7 +167,6 @@ helper/units.cpp
 helper/units.h
 helper/window.cpp
 helper/window.h
-ink-snprintf.h
 inkjar/jar.cpp
 inkjar/jar.h
 inkscape-private.h
@@ -175,7 +174,6 @@ inkscape-stock.cpp
 inkscape-stock.h
 inkscape.cpp
 inkscape.h
-inkscape_version.h
 interface.cpp
 interface.h
 knot.cpp
@@ -348,6 +346,8 @@ rubberband.cpp
 rubberband.h
 satisfied-guide-cns.cpp
 satisfied-guide-cns.h
+selcue.cpp
+selcue.h
 select-context.cpp
 select-context.h
 select-toolbar.cpp

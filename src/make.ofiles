@@ -173,6 +173,7 @@ OBJECTS = \
 	rect-context.o \
 	rubberband.o \
 	satisfied-guide-cns.o \
+	selcue.o \
 	select-context.o \
 	select-toolbar.o \
 	selection-chemistry.o \
@@ -455,6 +456,7 @@ LINTS = \
 	rect-context.lint \
 	rubberband.lint \
 	satisfied-guide-cns.lint \
+	selcue.lint \
 	select-context.lint \
 	select-toolbar.lint \
 	selection-chemistry.lint \
