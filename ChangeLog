@@ -1,3 +1,13 @@
+2003-11-12  Jon Cruz <jon@joncruz.org>
+	* Fix warnings due to missing casts - nr-rasterfont.c (840539)
+	* Fix warnings due to missing casts - desktop-snap.c (840543)
+	* Fix warnings due to missing casts - help.c (840545)
+
+2003-11-11  Robert Crosbie <swingincelt@hotmail.com>
+
+	* Remove kde option from configure (840504)
+	* Remove icon hash from sp_icon_new_full (840506)
+	
 2003-11-11  magnethead <magnethead@mindspring.com>
 
 	* src/dialogs/transformation.c (sp_transformation_dialog_new):
