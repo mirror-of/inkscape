@@ -22,7 +22,7 @@ ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 
 AC_PROG_RANLIB
 
-AC_PROG_LIBTOOL
+AM_PROG_LIBTOOL
 
 dnl Verify our GCC version
 if test "x$GXX" = "xyes"; then
