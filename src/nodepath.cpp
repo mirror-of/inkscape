@@ -1880,10 +1880,20 @@ node_clicked (SPKnot * knot, guint state, gpointer data)
 	n = (SPPathNode *) data;
 
 	if (state & GDK_CONTROL_MASK) {
-		if (n->type == SP_PATHNODE_CUSP) {
-			sp_nodepath_set_node_type (n, SP_PATHNODE_SMOOTH);
+		if (state & GDK_MOD1_MASK) {
+			if (n->type == SP_PATHNODE_CUSP) {
+				sp_nodepath_set_node_type (n, SP_PATHNODE_SMOOTH);
+			} else if (n->type == SP_PATHNODE_SMOOTH) {
+				sp_nodepath_set_node_type (n, SP_PATHNODE_SYMM);
+			} else {
+				sp_nodepath_set_node_type (n, SP_PATHNODE_CUSP);
+			}
 		} else {
-			sp_nodepath_set_node_type (n, SP_PATHNODE_CUSP);
+			if (n->type == SP_PATHNODE_CUSP) {
+				sp_nodepath_set_node_type (n, SP_PATHNODE_SMOOTH);
+			} else {
+				sp_nodepath_set_node_type (n, SP_PATHNODE_CUSP);
+			}
 		}
 	} else {
 		sp_nodepath_node_select (n, (state & GDK_SHIFT_MASK), FALSE);
