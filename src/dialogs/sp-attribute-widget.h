@@ -49,7 +49,7 @@ struct _SPAttributeWidget {
 		SPObject *object;
 		SPRepr *repr;
 	} src;
-	guchar *attribute;
+	gchar *attribute;
 };
 
 struct _SPAttributeWidgetClass {
@@ -58,10 +58,10 @@ struct _SPAttributeWidgetClass {
 
 GtkType sp_attribute_widget_get_type (void);
 
-GtkWidget *sp_attribute_widget_new (SPObject *object, const guchar *attribute);
-GtkWidget *sp_attribute_widget_new_repr (SPRepr *repr, const guchar *attribute);
-void sp_attribute_widget_set_object (SPAttributeWidget *spw, SPObject *object, const guchar *attribute);
-void sp_attribute_widget_set_repr (SPAttributeWidget *spw, SPRepr *repr, const guchar *attribute);
+GtkWidget *sp_attribute_widget_new (SPObject *object, const gchar *attribute);
+GtkWidget *sp_attribute_widget_new_repr (SPRepr *repr, const gchar *attribute);
+void sp_attribute_widget_set_object (SPAttributeWidget *spw, SPObject *object, const gchar *attribute);
+void sp_attribute_widget_set_repr (SPAttributeWidget *spw, SPRepr *repr, const gchar *attribute);
 
 /* SPAttributeTable */
 
@@ -75,7 +75,7 @@ struct _SPAttributeTable {
 		SPRepr *repr;
 	} src;
 	gint num_attr;
-	guchar **attributes;
+	gchar **attributes;
 	GtkWidget **entries;
 };
 
@@ -85,10 +85,10 @@ struct _SPAttributeTableClass {
 
 GtkType sp_attribute_table_get_type (void);
 
-GtkWidget *sp_attribute_table_new (SPObject *object, gint num_attr, const guchar **labels, const guchar **attributes);
-GtkWidget *sp_attribute_table_new_repr (SPRepr *repr, gint num_attr, const guchar **labels, const guchar **attributes);
-void sp_attribute_table_set_object (SPAttributeTable *spw, SPObject *object, gint num_attr, const guchar **labels, const guchar **attrs);
-void sp_attribute_table_set_repr (SPAttributeTable *spw, SPRepr *repr, gint num_attr, const guchar **labels, const guchar **attrs);
+GtkWidget *sp_attribute_table_new (SPObject *object, gint num_attr, const gchar **labels, const gchar **attributes);
+GtkWidget *sp_attribute_table_new_repr (SPRepr *repr, gint num_attr, const gchar **labels, const gchar **attributes);
+void sp_attribute_table_set_object (SPAttributeTable *spw, SPObject *object, gint num_attr, const gchar **labels, const gchar **attrs);
+void sp_attribute_table_set_repr (SPAttributeTable *spw, SPRepr *repr, gint num_attr, const gchar **labels, const gchar **attrs);
 
 G_END_DECLS
 

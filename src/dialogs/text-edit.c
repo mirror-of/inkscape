@@ -65,7 +65,7 @@ static SPText *sp_ted_get_selected_text_item (void);
 static unsigned sp_ted_get_selected_text_count (void);
 
 
-static const unsigned char *spacings[] = {"90%", "100%", "110%", "120%", "133%", "150%", "200%", NULL};
+static const gchar *spacings[] = {"90%", "100%", "110%", "120%", "133%", "150%", "200%", NULL};
 
 static GtkWidget *dlg = NULL;
 
@@ -141,50 +141,50 @@ sp_text_edit_dialog (void)
 
 		l = gtk_label_new (_("Alignment:"));
 		gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-		gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 0, 1, 0, 0, 4, 0);
+		gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 0, 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 4, 0);
 		px = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_LEFT, GTK_ICON_SIZE_LARGE_TOOLBAR);
 		b = gtk_radio_button_new (NULL);
 		g_signal_connect (G_OBJECT (b), "toggled", G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg);
 		gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
 		gtk_container_add (GTK_CONTAINER (b), px);
-		gtk_table_attach (GTK_TABLE (tbl), b, 1, 2, 0, 1, 0, 0, 0, 0);
+		gtk_table_attach (GTK_TABLE (tbl), b, 1, 2, 0, 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 		g_object_set_data (G_OBJECT (dlg), "text_anchor_start", b);
 		px = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_CENTER, GTK_ICON_SIZE_LARGE_TOOLBAR);
 		b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (b)));
 		g_signal_connect (G_OBJECT (b), "toggled", G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg);
 		gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
 		gtk_container_add (GTK_CONTAINER (b), px);
-		gtk_table_attach (GTK_TABLE (tbl), b, 2, 3, 0, 1, 0, 0, 0, 0);
+		gtk_table_attach (GTK_TABLE (tbl), b, 2, 3, 0, 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 		g_object_set_data (G_OBJECT (dlg), "text_anchor_middle", b);
 		px = gtk_image_new_from_stock (GTK_STOCK_JUSTIFY_RIGHT, GTK_ICON_SIZE_LARGE_TOOLBAR);
 		b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (b)));
 		g_signal_connect (G_OBJECT (b), "toggled", G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg);
 		gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
 		gtk_container_add (GTK_CONTAINER (b), px);
-		gtk_table_attach (GTK_TABLE (tbl), b, 3, 4, 0, 1, 0, 0, 0, 0);
+		gtk_table_attach (GTK_TABLE (tbl), b, 3, 4, 0, 1, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 		g_object_set_data (G_OBJECT (dlg), "text_anchor_end", b);
 
 		l = gtk_label_new (_("Orientation:"));
 		gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-		gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 1, 2, 0, 0, 4, 0);
+		gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 1, 2, (GtkAttachOptions)0, (GtkAttachOptions)0, 4, 0);
 		px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/writing_mode_lr.xpm");
 		b = gtk_radio_button_new (NULL);
 		g_signal_connect (G_OBJECT (b), "toggled", G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg);
 		gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
 		gtk_container_add (GTK_CONTAINER (b), px);
-		gtk_table_attach (GTK_TABLE (tbl), b, 1, 2, 1, 2, 0, 0, 0, 0);
+		gtk_table_attach (GTK_TABLE (tbl), b, 1, 2, 1, 2, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 		g_object_set_data (G_OBJECT (dlg), "writing_mode_lr", b);
 		px = gtk_image_new_from_file (INKSCAPE_GLADEDIR "/writing_mode_tb.xpm");
 		b = gtk_radio_button_new (gtk_radio_button_group (GTK_RADIO_BUTTON (b)));
 		g_signal_connect (G_OBJECT (b), "toggled", G_CALLBACK (sp_text_edit_dialog_any_toggled), dlg);
 		gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (b), FALSE);
 		gtk_container_add (GTK_CONTAINER (b), px);
-		gtk_table_attach (GTK_TABLE (tbl), b, 2, 3, 1, 2, 0, 0, 0, 0);
+		gtk_table_attach (GTK_TABLE (tbl), b, 2, 3, 1, 2, (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0);
 		g_object_set_data (G_OBJECT (dlg), "writing_mode_tb", b);
 
 		l = gtk_label_new (_("Line spacing:"));
 		gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-		gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 2, 3, GTK_EXPAND | GTK_FILL, 0, 4, 0);
+		gtk_table_attach (GTK_TABLE (tbl), l, 0, 1, 2, 3, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 4, 0);
 		c = gtk_combo_new ();
 		gtk_combo_set_value_in_list ((GtkCombo *) c, FALSE, FALSE);
 		gtk_combo_set_use_arrows ((GtkCombo *) c, TRUE);
@@ -199,7 +199,7 @@ sp_text_edit_dialog (void)
 		gtk_combo_set_popdown_strings ((GtkCombo *) c, sl);
 		g_list_free (sl);
 		g_signal_connect ((GObject *) ((GtkCombo *) c)->entry, "changed", (GCallback) sp_text_edit_dialog_line_spacing_changed, dlg);
-		gtk_table_attach (GTK_TABLE (tbl), c, 1, 4, 2, 3, 0, 0, 4, 0);
+		gtk_table_attach (GTK_TABLE (tbl), c, 1, 4, 2, 3, (GtkAttachOptions)0, (GtkAttachOptions)0, 4, 0);
 		g_object_set_data (G_OBJECT (dlg), "line_spacing", c);
 
 		/* Font preview */
@@ -268,9 +268,9 @@ sp_text_edit_dialog_update_object (SPText *text, SPRepr *repr)
 	if (text) {
 		GtkTextBuffer *tb;
 		GtkTextIter start, end;
-		guchar *str;
+		gchar *str;
 
-		tb = g_object_get_data (G_OBJECT (dlg), "text");
+		tb = (GtkTextBuffer*)g_object_get_data (G_OBJECT (dlg), "text");
 
 		/* Content */
 		gtk_text_buffer_get_bounds (tb, &start, &end);
@@ -283,11 +283,11 @@ sp_text_edit_dialog_update_object (SPText *text, SPRepr *repr)
 		GtkWidget *fontsel, *preview, *b, *combo;
 		SPCSSAttr *css;
 		NRFont *font;
-		guchar c[256];
+		gchar c[256];
 		const char *sstr;
 
-		fontsel = g_object_get_data (G_OBJECT (dlg), "fontsel");
-		preview = g_object_get_data (G_OBJECT (dlg), "preview");
+		fontsel = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "fontsel");
+		preview = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "preview");
 
 		css = sp_repr_css_attr_new ();
 
@@ -305,24 +305,24 @@ sp_text_edit_dialog_update_object (SPText *text, SPRepr *repr)
 		sp_repr_css_set_property (css, "font-size", c);
 		nr_font_unref (font);
 		/* Layout */
-		b = g_object_get_data (G_OBJECT (dlg), "text_anchor_start");
+		b = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "text_anchor_start");
 		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (b))) {
 			sp_repr_css_set_property (css, "text-anchor", "start");
 		} else {
-			b = g_object_get_data (G_OBJECT (dlg), "text_anchor_middle");
+			b = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "text_anchor_middle");
 			if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (b))) {
 				sp_repr_css_set_property (css, "text-anchor", "middle");
 			} else {
 				sp_repr_css_set_property (css, "text-anchor", "end");
 			}
 		}
-		b = g_object_get_data (G_OBJECT (dlg), "writing_mode_lr");
+		b = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "writing_mode_lr");
 		if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (b))) {
 			sp_repr_css_set_property (css, "writing-mode", "lr");
 		} else {
 			sp_repr_css_set_property (css, "writing-mode", "tb");
 		}
-		combo = g_object_get_data ((GObject *) dlg, "line_spacing");
+		combo = (GtkWidget*)g_object_get_data ((GObject *) dlg, "line_spacing");
 		sstr = gtk_entry_get_text ((GtkEntry *) ((GtkCombo *) (combo))->entry);
 		sp_repr_set_attr (repr, "sodipodi:linespacing", sstr);
 
@@ -344,7 +344,7 @@ sp_text_edit_dialog_set_default (GtkButton *button, GtkWidget *dlg)
 	GtkWidget *def;
 	SPRepr *repr;
 
-	def = g_object_get_data (G_OBJECT (dlg), "default");
+	def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
 
 	repr = inkscape_get_repr (INKSCAPE, "tools.text");
 
@@ -364,8 +364,8 @@ sp_text_edit_dialog_apply (GtkButton *button, GtkWidget *dlg)
 	
 	g_object_set_data (G_OBJECT (dlg), "blocked", GINT_TO_POINTER (TRUE));
 
-	apply = g_object_get_data (G_OBJECT (dlg), "apply");
-	def = g_object_get_data (G_OBJECT (dlg), "default");
+	apply = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "apply");
+	def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
 
 	text = NULL;
 	items = 0;
@@ -398,11 +398,11 @@ sp_text_edit_dialog_close (GtkButton *button, GtkWidget *dlg)
 	gtk_widget_destroy (GTK_WIDGET (dlg));
 }
 
-static guchar *
+static gchar *
 sp_text_edit_dialog_font_style_to_lookup (SPStyle *style)
 {
-	static guchar c[256];
-	guchar *wstr, *sstr, *p;
+	static gchar c[256];
+	gchar *wstr, *sstr, *p;
 
 	switch (style->font_weight.computed) {
 	case SP_CSS_FONT_WEIGHT_100:
@@ -483,13 +483,13 @@ sp_text_edit_dialog_read_selection (GtkWidget *dlg, gboolean dostyle, gboolean d
 	if (g_object_get_data (G_OBJECT (dlg), "blocked")) return;
 	g_object_set_data (G_OBJECT (dlg), "blocked", GINT_TO_POINTER (TRUE));
 
-	notebook = g_object_get_data (G_OBJECT (dlg), "notebook");
-	textw = g_object_get_data (G_OBJECT (dlg), "textw");
-	tb = g_object_get_data (G_OBJECT (dlg), "text");
-	fontsel = g_object_get_data (G_OBJECT (dlg), "fontsel");
-	preview = g_object_get_data (G_OBJECT (dlg), "preview");
-	apply = g_object_get_data (G_OBJECT (dlg), "apply");
-	def = g_object_get_data (G_OBJECT (dlg), "default");
+	notebook = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "notebook");
+	textw = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "textw");
+	tb = (GtkTextBuffer*)g_object_get_data (G_OBJECT (dlg), "text");
+	fontsel = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "fontsel");
+	preview = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "preview");
+	apply = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "apply");
+	def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
 
 	text = sp_ted_get_selected_text_item ();
 
@@ -504,7 +504,7 @@ sp_text_edit_dialog_read_selection (GtkWidget *dlg, gboolean dostyle, gboolean d
 		gtk_widget_set_sensitive (def, TRUE);
 		style = SP_OBJECT_STYLE (text);
 		if (docontent) {
-			guchar *str;
+			gchar *str;
 			str = sp_text_get_string_multiline (text);
 			if (str) {
 				int pos;
@@ -539,11 +539,11 @@ sp_text_edit_dialog_read_selection (GtkWidget *dlg, gboolean dostyle, gboolean d
 		NRTypeFace *tf;
 		NRFont *font;
 		GtkWidget *b, *combo;
-		guchar *c;
-		const unsigned char *sstr;
+		gchar *c;
+		const gchar *sstr;
 
 		c = sp_text_edit_dialog_font_style_to_lookup (style);
-		tf = nr_type_directory_lookup_fuzzy (style->text->font_family.value, c);
+		tf = nr_type_directory_lookup_fuzzy ((gchar*)style->text->font_family.value, c);
 		font = nr_font_new_default (tf, NR_TYPEFACE_METRICS_HORIZONTAL, style->font_size.computed);
 		nr_typeface_unref (tf);
 
@@ -554,22 +554,22 @@ sp_text_edit_dialog_read_selection (GtkWidget *dlg, gboolean dostyle, gboolean d
 		}
 
 		if (style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_START) {
-			b = g_object_get_data (G_OBJECT (dlg), "text_anchor_start");
+			b = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "text_anchor_start");
 		} else if (style->text_anchor.computed == SP_CSS_TEXT_ANCHOR_MIDDLE) {
-			b = g_object_get_data (G_OBJECT (dlg), "text_anchor_middle");
+			b = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "text_anchor_middle");
 		} else {
-			b = g_object_get_data (G_OBJECT (dlg), "text_anchor_end");
+			b = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "text_anchor_end");
 		}
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (b), TRUE);
 		if (style->writing_mode.computed == SP_CSS_WRITING_MODE_LR) {
-			b = g_object_get_data (G_OBJECT (dlg), "writing_mode_lr");
+			b = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "writing_mode_lr");
 		} else {
-			b = g_object_get_data (G_OBJECT (dlg), "writing_mode_tb");
+			b = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "writing_mode_tb");
 		}
 		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (b), TRUE);
-		combo = g_object_get_data (G_OBJECT (dlg), "line_spacing");
+		combo = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "line_spacing");
 		sstr = (repr) ? sp_repr_attr (repr, "sodipodi:linespacing") : NULL;
-		gtk_entry_set_text ((GtkEntry *) ((GtkCombo *) (combo))->entry, (sstr) ? sstr : (const unsigned char *) "100%");
+		gtk_entry_set_text ((GtkEntry *) ((GtkCombo *) (combo))->entry, (sstr) ? sstr : (const gchar *) "100%");
 	}
 
 	g_object_set_data (G_OBJECT (dlg), "blocked", NULL);
@@ -587,10 +587,10 @@ sp_text_edit_dialog_text_changed (GtkTextBuffer *tb, GtkWidget *dlg)
 
 	text = sp_ted_get_selected_text_item ();
 
-	textw = g_object_get_data (G_OBJECT (dlg), "textw");
-	preview = g_object_get_data (G_OBJECT (dlg), "preview");
-	apply = g_object_get_data (G_OBJECT (dlg), "apply");
-	def = g_object_get_data (G_OBJECT (dlg), "default");
+	textw = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "textw");
+	preview = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "preview");
+	apply = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "apply");
+	def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
 
 	gtk_text_buffer_get_bounds (tb, &start, &end);
 	str = gtk_text_buffer_get_text (tb, &start, &end, TRUE);
@@ -617,9 +617,9 @@ sp_text_edit_dialog_font_changed (SPFontSelector *fsel, NRFont *font, GtkWidget 
 
 	text = sp_ted_get_selected_text_item ();
 
-	preview = g_object_get_data (G_OBJECT (dlg), "preview");
-	apply = g_object_get_data (G_OBJECT (dlg), "apply");
-	def = g_object_get_data (G_OBJECT (dlg), "default");
+	preview = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "preview");
+	apply = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "apply");
+	def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
 
 	sp_font_preview_set_font (SP_FONT_PREVIEW (preview), font);
 
@@ -639,8 +639,8 @@ sp_text_edit_dialog_any_toggled (GtkToggleButton *tb, GtkWidget *dlg)
 
 	text = sp_ted_get_selected_text_item ();
 
-	apply = g_object_get_data (G_OBJECT (dlg), "apply");
-	def = g_object_get_data (G_OBJECT (dlg), "default");
+	apply = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "apply");
+	def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
 
 	if (text) {
 		gtk_widget_set_sensitive (apply, TRUE);
@@ -658,8 +658,8 @@ sp_text_edit_dialog_line_spacing_changed (GtkEditable *editable, GtkWidget *dlg)
 
 	text = sp_ted_get_selected_text_item ();
 
-	apply = g_object_get_data (G_OBJECT (dlg), "apply");
-	def = g_object_get_data (G_OBJECT (dlg), "default");
+	apply = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "apply");
+	def = (GtkWidget*)g_object_get_data (G_OBJECT (dlg), "default");
 
 	if (text) {
 		gtk_widget_set_sensitive (apply, TRUE);

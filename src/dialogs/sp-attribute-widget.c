@@ -64,7 +64,7 @@ sp_attribute_widget_class_init (SPAttributeWidgetClass *klass)
 	widget_class = GTK_WIDGET_CLASS (klass);
 	editable_class = GTK_EDITABLE_CLASS (klass);
 
-	parent_class = gtk_type_class (GTK_TYPE_ENTRY);
+	parent_class = (GtkEntryClass*)gtk_type_class (GTK_TYPE_ENTRY);
 
 	object_class->destroy = sp_attribute_widget_destroy;
 
@@ -140,14 +140,14 @@ sp_attribute_widget_changed (GtkEditable *editable)
 }
 
 GtkWidget *
-sp_attribute_widget_new (SPObject *object, const guchar *attribute)
+sp_attribute_widget_new (SPObject *object, const gchar *attribute)
 {
 	SPAttributeWidget *spaw;
 
 	g_return_val_if_fail (!object || SP_IS_OBJECT (object), NULL);
 	g_return_val_if_fail (!object || attribute, NULL);
 
-	spaw = gtk_type_new (SP_TYPE_ATTRIBUTE_WIDGET);
+	spaw = (SPAttributeWidget*)gtk_type_new (SP_TYPE_ATTRIBUTE_WIDGET);
 
 	sp_attribute_widget_set_object (spaw, object, attribute);
 
@@ -155,11 +155,11 @@ sp_attribute_widget_new (SPObject *object, const guchar *attribute)
 }
 
 GtkWidget *
-sp_attribute_widget_new_repr (SPRepr *repr, const guchar *attribute)
+sp_attribute_widget_new_repr (SPRepr *repr, const gchar *attribute)
 {
 	SPAttributeWidget *spaw;
 
-	spaw = gtk_type_new (SP_TYPE_ATTRIBUTE_WIDGET);
+	spaw = (SPAttributeWidget*)gtk_type_new (SP_TYPE_ATTRIBUTE_WIDGET);
 
 	sp_attribute_widget_set_repr (spaw, repr, attribute);
 
@@ -167,7 +167,7 @@ sp_attribute_widget_new_repr (SPRepr *repr, const guchar *attribute)
 }
 
 void
-sp_attribute_widget_set_object (SPAttributeWidget *spaw, SPObject *object, const guchar *attribute)
+sp_attribute_widget_set_object (SPAttributeWidget *spaw, SPObject *object, const gchar *attribute)
 {
 	g_return_if_fail (spaw != NULL);
 	g_return_if_fail (SP_IS_ATTRIBUTE_WIDGET (spaw));
@@ -194,7 +194,7 @@ sp_attribute_widget_set_object (SPAttributeWidget *spaw, SPObject *object, const
 	spaw->hasobj = TRUE;
 
 	if (object) {
-		const guchar *val;
+		const gchar *val;
 
 		spaw->blocked = TRUE;
 		spaw->src.object = object;
@@ -204,7 +204,7 @@ sp_attribute_widget_set_object (SPAttributeWidget *spaw, SPObject *object, const
 		spaw->attribute = g_strdup (attribute);
 
 		val = sp_repr_attr (SP_OBJECT_REPR (object), attribute);
-		gtk_entry_set_text (GTK_ENTRY (spaw), val ? val : (const guchar *) "");
+		gtk_entry_set_text (GTK_ENTRY (spaw), val ? val : (const gchar *) "");
 		spaw->blocked = FALSE;
 	}
 
@@ -212,7 +212,7 @@ sp_attribute_widget_set_object (SPAttributeWidget *spaw, SPObject *object, const
 }
 
 void
-sp_attribute_widget_set_repr (SPAttributeWidget *spaw, SPRepr *repr, const guchar *attribute)
+sp_attribute_widget_set_repr (SPAttributeWidget *spaw, SPRepr *repr, const gchar *attribute)
 {
 	g_return_if_fail (spaw != NULL);
 	g_return_if_fail (SP_IS_ATTRIBUTE_WIDGET (spaw));
@@ -237,14 +237,14 @@ sp_attribute_widget_set_repr (SPAttributeWidget *spaw, SPRepr *repr, const gucha
 	spaw->hasobj = FALSE;
 
 	if (repr) {
-		const guchar *val;
+		const gchar *val;
 
 		spaw->blocked = TRUE;
 		spaw->src.repr = sp_repr_ref (repr);
 		spaw->attribute = g_strdup (attribute);
 
 		val = sp_repr_attr (repr, attribute);
-		gtk_entry_set_text (GTK_ENTRY (spaw), val ? val : (const guchar *) "");
+		gtk_entry_set_text (GTK_ENTRY (spaw), val ? val : (const gchar *) "");
 		spaw->blocked = FALSE;
 	}
 
@@ -255,14 +255,14 @@ static void
 sp_attribute_widget_object_modified (SPObject *object, guint flags, SPAttributeWidget *spaw)
 {
 	if (flags && SP_OBJECT_MODIFIED_FLAG) {
-		const guchar *val, *text;
+		const gchar *val, *text;
 		val = sp_repr_attr (SP_OBJECT_REPR (spaw->src.object), spaw->attribute);
 		text = gtk_entry_get_text (GTK_ENTRY (spaw));
 		if (val || text) {
 			if (!val || !text || strcmp (val, text)) {
 				/* We are different */
 				spaw->blocked = TRUE;
-				gtk_entry_set_text (GTK_ENTRY (spaw), val ? val : (const guchar *) "");
+				gtk_entry_set_text (GTK_ENTRY (spaw), val ? val : (const gchar *) "");
 				spaw->blocked = FALSE;
 			}
 		}
@@ -314,7 +314,7 @@ sp_attribute_table_class_init (SPAttributeTableClass *klass)
 	object_class = GTK_OBJECT_CLASS (klass);
 	widget_class = GTK_WIDGET_CLASS (klass);
 
-	table_parent_class = gtk_type_class (GTK_TYPE_VBOX);
+	table_parent_class = (GtkVBoxClass*)gtk_type_class (GTK_TYPE_VBOX);
 
 	object_class->destroy = sp_attribute_table_destroy;
 }
@@ -370,7 +370,7 @@ sp_attribute_table_destroy (GtkObject *object)
 }
 
 GtkWidget *
-sp_attribute_table_new (SPObject *object, gint num_attr, const guchar **labels, const guchar **attributes)
+sp_attribute_table_new (SPObject *object, gint num_attr, const gchar **labels, const gchar **attributes)
 {
 	SPAttributeTable *spat;
 
@@ -378,7 +378,7 @@ sp_attribute_table_new (SPObject *object, gint num_attr, const guchar **labels, 
 	g_return_val_if_fail (!object || (num_attr > 0), NULL);
 	g_return_val_if_fail (!num_attr || (labels && attributes), NULL);
 
-	spat = gtk_type_new (SP_TYPE_ATTRIBUTE_TABLE);
+	spat = (SPAttributeTable*)gtk_type_new (SP_TYPE_ATTRIBUTE_TABLE);
 
 	sp_attribute_table_set_object (spat, object, num_attr, labels, attributes);
 
@@ -386,13 +386,13 @@ sp_attribute_table_new (SPObject *object, gint num_attr, const guchar **labels, 
 }
 
 GtkWidget *
-sp_attribute_table_new_repr (SPRepr *repr, gint num_attr, const guchar **labels, const guchar **attributes)
+sp_attribute_table_new_repr (SPRepr *repr, gint num_attr, const gchar **labels, const gchar **attributes)
 {
 	SPAttributeTable *spat;
 
 	g_return_val_if_fail (!num_attr || (labels && attributes), NULL);
 
-	spat = gtk_type_new (SP_TYPE_ATTRIBUTE_TABLE);
+	spat = (SPAttributeTable*)gtk_type_new (SP_TYPE_ATTRIBUTE_TABLE);
 
 	sp_attribute_table_set_repr (spat, repr, num_attr, labels, attributes);
 
@@ -403,7 +403,7 @@ sp_attribute_table_new_repr (SPRepr *repr, gint num_attr, const guchar **labels,
 #define YPAD 0
 
 void
-sp_attribute_table_set_object (SPAttributeTable *spat, SPObject *object, gint num_attr, const guchar **labels, const guchar **attributes)
+sp_attribute_table_set_object (SPAttributeTable *spat, SPObject *object, gint num_attr, const gchar **labels, const gchar **attributes)
 {
 	g_return_if_fail (spat != NULL);
 	g_return_if_fail (SP_IS_ATTRIBUTE_TABLE (spat));
@@ -457,23 +457,23 @@ sp_attribute_table_set_object (SPAttributeTable *spat, SPObject *object, gint nu
 		spat->table = gtk_table_new (num_attr, 2, FALSE);
 		gtk_container_add (GTK_CONTAINER (spat), spat->table);
 		/* Arrays */
-		spat->attributes = g_new0 (guchar *, num_attr);
+		spat->attributes = g_new0 (gchar *, num_attr);
 		spat->entries = g_new0 (GtkWidget *, num_attr);
 		/* Fill rows */
 		for (i = 0; i < num_attr; i++) {
 			GtkWidget *w;
-			const guchar *val;
+			const gchar *val;
 
 			spat->attributes[i] = g_strdup (attributes[i]);
 			w = gtk_label_new (labels[i]);
 			gtk_widget_show (w);
 			gtk_misc_set_alignment (GTK_MISC (w), 1.0, 0.5);
-			gtk_table_attach (GTK_TABLE (spat->table), w, 0, 1, i, i + 1, GTK_FILL, GTK_EXPAND | GTK_FILL, XPAD, YPAD);
+			gtk_table_attach (GTK_TABLE (spat->table), w, 0, 1, i, i + 1, GTK_FILL, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), XPAD, YPAD);
 			w = gtk_entry_new ();
 			gtk_widget_show (w);
 			val = sp_repr_attr (SP_OBJECT_REPR (object), attributes[i]);
-			gtk_entry_set_text (GTK_ENTRY (w), val ? val : (const guchar *) "");
-			gtk_table_attach (GTK_TABLE (spat->table), w, 1, 2, i, i + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, XPAD, YPAD);
+			gtk_entry_set_text (GTK_ENTRY (w), val ? val : (const gchar *) "");
+			gtk_table_attach (GTK_TABLE (spat->table), w, 1, 2, i, i + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), XPAD, YPAD);
 			spat->entries[i] = w;
 			g_signal_connect (G_OBJECT (w), "changed", G_CALLBACK (sp_attribute_table_entry_changed), spat);
 		}
@@ -487,7 +487,7 @@ sp_attribute_table_set_object (SPAttributeTable *spat, SPObject *object, gint nu
 }
 
 void
-sp_attribute_table_set_repr (SPAttributeTable *spat, SPRepr *repr, gint num_attr, const guchar **labels, const guchar **attributes)
+sp_attribute_table_set_repr (SPAttributeTable *spat, SPRepr *repr, gint num_attr, const gchar **labels, const gchar **attributes)
 {
 	g_return_if_fail (spat != NULL);
 	g_return_if_fail (SP_IS_ATTRIBUTE_TABLE (spat));
@@ -537,23 +537,23 @@ sp_attribute_table_set_repr (SPAttributeTable *spat, SPRepr *repr, gint num_attr
 		spat->table = gtk_table_new (num_attr, 2, FALSE);
 		gtk_container_add (GTK_CONTAINER (spat), spat->table);
 		/* Arrays */
-		spat->attributes = g_new0 (guchar *, num_attr);
+		spat->attributes = g_new0 (gchar *, num_attr);
 		spat->entries = g_new0 (GtkWidget *, num_attr);
 		/* Fill rows */
 		for (i = 0; i < num_attr; i++) {
 			GtkWidget *w;
-			const guchar *val;
+			const gchar *val;
 
 			spat->attributes[i] = g_strdup (attributes[i]);
 			w = gtk_label_new (labels[i]);
 			gtk_widget_show (w);
 			gtk_misc_set_alignment (GTK_MISC (w), 1.0, 0.5);
-			gtk_table_attach (GTK_TABLE (spat->table), w, 0, 1, i, i + 1, GTK_FILL, GTK_EXPAND | GTK_FILL, XPAD, YPAD);
+			gtk_table_attach (GTK_TABLE (spat->table), w, 0, 1, i, i + 1, GTK_FILL, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), XPAD, YPAD);
 			w = gtk_entry_new ();
 			gtk_widget_show (w);
 			val = sp_repr_attr (repr, attributes[i]);
-			gtk_entry_set_text (GTK_ENTRY (w), val ? val : (const guchar *) "");
-			gtk_table_attach (GTK_TABLE (spat->table), w, 1, 2, i, i + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, XPAD, YPAD);
+			gtk_entry_set_text (GTK_ENTRY (w), val ? val : (const gchar *) "");
+			gtk_table_attach (GTK_TABLE (spat->table), w, 1, 2, i, i + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), XPAD, YPAD);
 			spat->entries[i] = w;
 			g_signal_connect (G_OBJECT (w), "changed", G_CALLBACK (sp_attribute_table_entry_changed), spat);
 		}
@@ -572,14 +572,14 @@ sp_attribute_table_object_modified (SPObject *object, guint flags, SPAttributeTa
 	if (flags && SP_OBJECT_MODIFIED_FLAG) {
 		gint i;
 		for (i = 0; i < spat->num_attr; i++) {
-			const guchar *val, *text;
+			const gchar *val, *text;
 			val = sp_repr_attr (SP_OBJECT_REPR (spat->src.object), spat->attributes[i]);
 			text = gtk_entry_get_text (GTK_ENTRY (spat->entries[i]));
 			if (val || text) {
 				if (!val || !text || strcmp (val, text)) {
 					/* We are different */
 					spat->blocked = TRUE;
-					gtk_entry_set_text (GTK_ENTRY (spat->entries[i]), val ? val : (const guchar *) "");
+					gtk_entry_set_text (GTK_ENTRY (spat->entries[i]), val ? val : (const gchar *) "");
 					spat->blocked = FALSE;
 				}
 			}
@@ -600,7 +600,7 @@ sp_attribute_table_entry_changed (GtkEditable *editable, SPAttributeTable *spat)
 		gint i;
 		for (i = 0; i < spat->num_attr; i++) {
 			if (GTK_WIDGET (editable) == spat->entries[i]) {
-				const guchar *text;
+				const gchar *text;
 				spat->blocked = TRUE;
 				text = gtk_entry_get_text (GTK_ENTRY (spat->entries[i]));
 				if (!*text) text = NULL;
@@ -608,14 +608,14 @@ sp_attribute_table_entry_changed (GtkEditable *editable, SPAttributeTable *spat)
 					if (!sp_repr_set_attr (SP_OBJECT_REPR (spat->src.object), spat->attributes[i], text)) {
 						/* Cannot set attribute */
 						text = sp_repr_attr (SP_OBJECT_REPR (spat->src.object), spat->attributes[i]);
-						gtk_entry_set_text (GTK_ENTRY (spat->entries[i]), text ? text : (const guchar *) "");
+						gtk_entry_set_text (GTK_ENTRY (spat->entries[i]), text ? text : (const gchar *) "");
 					}
 					sp_document_done (SP_OBJECT_DOCUMENT (spat->src.object));
 				} else if (spat->src.repr) {
 					if (!sp_repr_set_attr (spat->src.repr, spat->attributes[i], text)) {
 						/* Cannot set attribute */
 						text = sp_repr_attr (spat->src.repr, spat->attributes[i]);
-						gtk_entry_set_text (GTK_ENTRY (spat->entries[i]), text ? text : (const guchar *) "");
+						gtk_entry_set_text (GTK_ENTRY (spat->entries[i]), text ? text : (const gchar *) "");
 					}
 					/* fixme: Warning! Undo will not be flushed in given case */
 				}
