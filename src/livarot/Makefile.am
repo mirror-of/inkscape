@@ -3,6 +3,7 @@ noinst_LIBRARIES = libvarot.a
 INCLUDES = \
 	-I.. \
 	$(cflags) \
+	-I$(top_srcdir)/src \
 	$(INKSCAPE_CFLAGS)
 
 libvarot_a_SOURCES = \

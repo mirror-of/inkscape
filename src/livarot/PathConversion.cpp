@@ -10,7 +10,7 @@
 #include "Shape.h"
 //#include "MyMath.h"
 
-#include "../libnr/nr-point-fns.h"
+#include <libnr/nr-point-fns.h>
 
 void            Path::ConvertWithBackData(float treshhold)
 {
