@@ -141,7 +141,9 @@ void sp_selection_duplicate()
     gboolean sort = TRUE;
     for (GSList *i = reprs->next; i; i = i->next) {
         if ((((SPRepr *) i->data)->parent) != parent) {
-            // We can duplicate items from different parents, but we cannot do sorting in this case
+            // We can duplicate items from different parents, but we need not do sorting in this
+            // case because dupes will remain in their own parents. FIXME: However, we need to sort those
+            // subsets of selection which are siblings (how?).
             sort = FALSE;
         }
     }
@@ -1743,27 +1745,20 @@ sp_selection_tile(bool apply)
     move_p *= 1.25;
     NR::Matrix move = NR::Matrix (NR::translate (move_p));
 
-    GSList *reprs = g_slist_copy((GSList *) selection->reprList());
+    GSList *items = g_slist_copy((GSList *) selection->itemList());
 
-    SPRepr *parent = ((SPRepr *) reprs->data)->parent;
-    gboolean sort = TRUE;
-    for (GSList *i = reprs->next; i; i = i->next) {
-        if ((((SPRepr *) i->data)->parent) != parent) {
-            // We can tile items from different parents, but we cannot do sorting in this case
-            sort = FALSE;
-        }
-    }
+    items = g_slist_sort (items, (GCompareFunc) sp_object_compare_position);
 
-    if (sort)
-        reprs = g_slist_sort(reprs, (GCompareFunc) sp_repr_compare_position);
+    // bottommost object, after sorting
+    SPObject *parent = SP_OBJECT_PARENT (items->data);
 
     // remember the position of the first item
-    gint pos = sp_repr_position ((SPRepr *) reprs->data);
+    gint pos = sp_repr_position (SP_OBJECT_REPR (items->data));
 
     // create a list of duplicates
     GSList *repr_copies = NULL;
-    for (GSList *i = reprs; i != NULL; i = i->next) {
-        SPRepr *dup = sp_repr_duplicate (((SPRepr *) i->data));
+    for (GSList *i = items; i != NULL; i = i->next) {
+        SPRepr *dup = sp_repr_duplicate ((SP_OBJECT_REPR (i->data)));
         repr_copies = g_slist_prepend (repr_copies, dup);
     }
     
@@ -1774,8 +1769,8 @@ sp_selection_tile(bool apply)
 
     if (apply) {
         // delete objects so that their clones don't get alerted; this object will be restored shortly 
-        for (GSList *i = reprs; i != NULL; i = i->next) {
-            SPObject *item = document->getObjectByRepr(((SPRepr *) i->data));
+        for (GSList *i = items; i != NULL; i = i->next) {
+            SPObject *item = SP_OBJECT (i->data);
             item->deleteObject (false);
         }
 
@@ -1786,20 +1781,18 @@ sp_selection_tile(bool apply)
         sp_repr_set_double (rect, "x", bounds.min()[NR::X]);
         sp_repr_set_double (rect, "y", bounds.min()[NR::Y]);
 
-        SPItem *rectangle = NULL;    
-        if (sort) { // restore parent and position
-            sp_repr_append_child (parent, rect);
-            sp_repr_set_position_absolute (rect, pos > 0 ? pos : 0);
-            rectangle = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(rect);
-        } else { // just add to the current layer
-            rectangle = SP_ITEM(desktop->currentLayer()->appendChildRepr(rect));
-        } 
+        // restore parent and position
+        sp_repr_append_child (SP_OBJECT_REPR (parent), rect);
+        sp_repr_set_position_absolute (rect, pos > 0 ? pos : 0);
+        SPItem *rectangle = (SPItem *) SP_DT_DOCUMENT (desktop)->getObjectByRepr(rect);
 
         sp_repr_unref (rect);
 
         selection->clear();
         selection->setItem (rectangle);
     }
+
+    g_slist_free (items);
 
     sp_document_done (document);
 }
