@@ -400,6 +400,7 @@ share/extensions/Makefile
 share/icons/Makefile
 share/screens/Makefile
 share/tutorials/Makefile
+share/markers/Makefile
 inkscape.spec
 inkscape.1
 inkview.1
