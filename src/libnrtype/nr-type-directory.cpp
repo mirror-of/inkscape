@@ -123,9 +123,6 @@ nr_type_directory_lookup_fuzzy(gchar const *family, NRTypePosDef apos)
 
 	for (tdef = bestfdef->faces; tdef; tdef = tdef->next) {
 		double dist = nr_type_distance_position (&apos, tdef->pdef);
-
-		//		g_print ("Comparing to  %s/%s,   dist %g\n", tdef->family, tdef->name, dist);
-
 		if (dist < best) {
 			best = dist;
 			besttdef = tdef;

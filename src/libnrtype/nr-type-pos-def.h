@@ -1,9 +1,6 @@
 #ifndef __NR_TYPE_POS_DEF_H__
 #define __NR_TYPE_POS_DEF_H__
 
-/* Constants extracted mechanically from string constructor code. */
-/* No longer used anywhere.
-   TODO: Either use them in the string constructor, or get rid of them. */
 #define NR_POS_WEIGHT_THIN		 32
 #define NR_POS_WEIGHT_EXTRA_LIGHT	 64
 #define NR_POS_WEIGHT_ULTRA_LIGHT	 64
@@ -11,14 +8,22 @@
 #define NR_POS_WEIGHT_BOOK		128
 #define NR_POS_WEIGHT_NORMAL		128
 #define NR_POS_WEIGHT_MEDIUM		144
-#define NR_POS_WEIGHT_SEMI_BOLD		160
 #define NR_POS_WEIGHT_SEMIBOLD		160
-#define NR_POS_WEIGHT_DEMI_BOLD		160
 #define NR_POS_WEIGHT_DEMIBOLD		160
 #define NR_POS_WEIGHT_BOLD		192
 #define NR_POS_WEIGHT_ULTRA_BOLD	224
 #define NR_POS_WEIGHT_EXTRA_BOLD	224
 #define NR_POS_WEIGHT_BLACK		255
+
+#define NR_POS_STRETCH_ULTRA_CONDENSED	  48
+#define NR_POS_STRETCH_EXTRA_CONDENSED	  48
+#define NR_POS_STRETCH_CONDENSED		  88
+#define NR_POS_STRETCH_SEMI_CONDENSED	 108
+#define NR_POS_STRETCH_NORMAL	 	 	 128
+#define NR_POS_STRETCH_SEMI_EXPANDED	 148
+#define NR_POS_STRETCH_EXPANDED	             168
+#define NR_POS_STRETCH_EXTRA_EXPANDED	 228
+#define NR_POS_STRETCH_ULTRA_EXPANDED	 228
 
 /* Mapping from CSS weight numbers.
 
@@ -46,11 +51,6 @@
 #define NR_POS_WEIGHT_CSS800		224
 #define NR_POS_WEIGHT_CSS900		255
 
-#define NR_POS_STRETCH_NARROW		 64
-#define NR_POS_STRETCH_CONDENSED	 64
-#define NR_POS_STRETCH_NORMAL		128
-#define NR_POS_STRETCH_WIDE		192
-
 
 class NRTypePosDef {
 public:
@@ -72,5 +72,10 @@ public:
 	NRTypePosDef(char const *description);
 
 };
+
+int parse_name_for_weight (char const *c);
+int parse_name_for_stretch (char const *c);
+const char *weight_to_css (int weight);
+const char *stretch_to_css (int stretch);
 
 #endif /* __NR_TYPE_POS_DEF_H__ */

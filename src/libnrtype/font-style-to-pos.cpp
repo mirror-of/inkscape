@@ -71,34 +71,34 @@ font_style_to_pos (SPStyle const &style)
 	switch (style.font_stretch.computed) {
 	case SP_CSS_FONT_STRETCH_ULTRA_CONDENSED:
 	case SP_CSS_FONT_STRETCH_EXTRA_CONDENSED:
-		ret.stretch = 48;
+		ret.stretch = NR_POS_STRETCH_EXTRA_CONDENSED;
 		break;
 
 	case SP_CSS_FONT_STRETCH_CONDENSED:
 	case SP_CSS_FONT_STRETCH_NARROWER:
-		ret.stretch = 88;
+		ret.stretch = NR_POS_STRETCH_CONDENSED;
 		break;
 
 	case SP_CSS_FONT_STRETCH_SEMI_CONDENSED:
-		ret.stretch = 108;
+		ret.stretch = NR_POS_STRETCH_SEMI_CONDENSED;
 		break;
 
 	case SP_CSS_FONT_STRETCH_SEMI_EXPANDED:
-		ret.stretch = 148;
+		ret.stretch = NR_POS_STRETCH_SEMI_EXPANDED;
 		break;
 
 	case SP_CSS_FONT_STRETCH_EXPANDED:
 	case SP_CSS_FONT_STRETCH_WIDER:
-		ret.stretch = 168;
+		ret.stretch = NR_POS_STRETCH_EXPANDED;
 		break;
 
 	case SP_CSS_FONT_STRETCH_EXTRA_EXPANDED:
 	case SP_CSS_FONT_STRETCH_ULTRA_EXPANDED:
-		ret.stretch = 228;
+		ret.stretch = NR_POS_STRETCH_EXTRA_EXPANDED;
 		break;
 
 	default:
-		ret.stretch = 128;
+		ret.stretch = NR_POS_STRETCH_NORMAL;
 		break;
 	}
 

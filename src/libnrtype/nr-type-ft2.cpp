@@ -14,6 +14,7 @@
 #include <libnr/nr-macros.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
+#include <libnrtype/nr-type-pos-def.h>
 #include <freetype/ftoutln.h>
 #include <freetype/ftbbox.h>
 #include "nr-type-ft2.h"
@@ -242,13 +243,22 @@ nr_typeface_ft2_attribute_get (NRTypeFace *tf, const gchar *key, gchar *str, uns
 		val = tf->def->name;
 	} else if (!strcmp (key, "family")) {
 		val = tf->def->family;
-	} else if (!strcmp (key, "weight")) {
-		/* fixme: This is just wrong */
-		val = (tff->ft_face->style_flags & FT_STYLE_FLAG_BOLD) ? "bold" : "normal";
 	} else if (!strcmp (key, "style")) {
-		/* fixme: This is just wrong */
 		val = (tff->ft_face->style_flags & FT_STYLE_FLAG_ITALIC) ? "italic" : "normal";
+
+		// The only font style information that FT provides is the italic and bold bits.
+		// We will use the italic bit, but for weight and stretch, the only thing we 
+		// can do is parse the style name.
+
+	} else if (!strcmp (key, "weight")) {
+		//		val = (tff->ft_face->style_flags & FT_STYLE_FLAG_BOLD) ? "bold" : "normal";
+		gint w = parse_name_for_weight (tff->ft_face->style_name);
+		val = weight_to_css (w);
+	} else if (!strcmp (key, "stretch")) {
+		gint w = parse_name_for_stretch (tff->ft_face->style_name);
+		val = stretch_to_css (w);
 	} else {
+		g_warning ("Unknown font attribute requested: %s", key);
 		val = "";
 	}
 
