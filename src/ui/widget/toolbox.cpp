@@ -27,11 +27,9 @@ Toolbox::Toolbox(Gtk::Toolbar *toolbar,
                  Gtk::Orientation orientation)
     : HandleBox(toolbar)
 {
-    g_warning("In Toolbox::Toolbox");
     init_actions();
     init_orientation(orientation);
     init_style(toolbar->get_toolbar_style());
-    g_warning("Done in Toolbox::Toolbox");
 }
 
 Toolbox::Toolbox(Gtk::Toolbar *toolbar,
@@ -39,27 +37,22 @@ Toolbox::Toolbox(Gtk::Toolbar *toolbar,
                  Gtk::Orientation orientation)
     : HandleBox(toolbar)
 {
-    g_warning("In Toolbox::Toolbox");
     init_actions();
     init_orientation(orientation);
     init_style(style);
-    g_warning("Done in Toolbox::Toolbox");
 }
 
 Gtk::Toolbar&
 Toolbox::get_toolbar()
 {
-    g_warning("In Toolbox::get_toolbar");
     return static_cast<Gtk::Toolbar&>(*_widget);
 }
 
 void
 Toolbox::init_actions()
 {
-    g_warning("In Toolbox::init_actions");
     _action_grp = Gtk::ActionGroup::create();
 
-    g_warning("Creating icons");
     Gtk::RadioAction::Group icons;
     _action_grp->add(Gtk::RadioAction::create(icons, "Icons", "Icons Only"),
                      sigc::mem_fun(*this, &Toolbox::on_change_style_icons));
@@ -72,33 +65,27 @@ Toolbox::init_actions()
 
     _detach_grp = Gtk::ActionGroup::create();
 
-    g_warning("Creating orient");
     Gtk::RadioAction::Group orient;
     _detach_grp->add(Gtk::RadioAction::create(orient, "OrientHoriz", "Horizontal"),
                      sigc::mem_fun(*this, &Toolbox::on_change_orient_horiz));
     _detach_grp->add(Gtk::RadioAction::create(orient, "OrientVert", "Vertical"),
                      sigc::mem_fun(*this, &Toolbox::on_change_orient_vert));
 
-    g_warning("Adding ShowArrow");
     _detach_grp->add(Gtk::ToggleAction::create("ShowArrow", "Show Arrow",
                      Glib::ustring(), true),
                      sigc::mem_fun(*this, &Toolbox::on_show_arrow));
 
-    g_warning("Inserting action groups");
     _ui_mgr = Gtk::UIManager::create();
     _ui_mgr->insert_action_group(_action_grp);
     _ui_mgr->insert_action_group(_detach_grp);
     _ui_mgr->add_ui_from_file("/usr/share/inkscape/ui/toolbox.xml");
 
-    g_warning("Creating ToolboxMenu context menu");
     _context_menu = static_cast<Gtk::Menu*>(_ui_mgr->get_widget("/ToolboxMenu"));
 
-    g_warning("Adding signal for context menu");
     static_cast<Gtk::Toolbar*>(_widget)->signal_popup_context_menu()
         .connect(sigc::mem_fun(*this, &Toolbox::on_popup_context_menu));
 
     _detach_grp->set_sensitive(false);
-    g_warning("Done in Toolbox::init_actions");
 }
 
 void
