@@ -73,8 +73,8 @@ libinkpre_a_SOURCES =	\
 	object-ui.cpp object-ui.h	\
 	path-chemistry.cpp path-chemistry.h	\
 	preferences-skeleton.h	\
-	prefs-utils.cpp prefs-utils.h \
-	prefix.cpp prefix.h \
+	prefix.cpp prefix.h	\
+	prefs-utils.cpp prefs-utils.h	\
 	print.cpp print.h	\
 	rect-context.cpp rect-context.h	\
 	rubberband.cpp rubberband.h	\
@@ -203,10 +203,10 @@ inkview_SOURCES = inkview.cpp $(win32_sources)
 inkview_LDADD = $(all_libs)
 
 mod360_test_SOURCES = mod360-test.cpp
-mod360_test_LDADD = libinkscape.a -lglib-2.0
+mod360_test_LDADD = libinkpre.a -lglib-2.0
 
 extract_uri_test_SOURCES = extract-uri-test.cpp
-extract_uri_test_LDADD = libinkscape.a -lglib-2.0
+extract_uri_test_LDADD = libinkpre.a -lglib-2.0
 
 inkscape_version.h: ../configure.in
 	echo '#define INKSCAPE_VERSION "$(VERSION)"' > inkscape_version.h
