@@ -28,5 +28,6 @@ extension_internal_libinternal_a_SOURCES =	\
 	extension/internal/gdkpixbuf-input.h	\
 	extension/internal/gdkpixbuf-input.cpp	\
 	extension/internal/pov-out.cpp	\
+	extension/internal/pov-out.h	\
 	$(extension_internal_gnome_print_sources)
 

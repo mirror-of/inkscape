@@ -81,11 +81,12 @@ EXTRA_DIST =	\
 	extension/internal/win32.cpp	\
 	extension/internal/win32.h	\
 	helper/sp-marshal.list	\
-	utest/utest.h \
+	utest/utest.h	\
+	utest/test-1ary-cases.h	\
 	algorithms/longest-common-suffix.h \
-	traits/function.h \
-	traits/list.h \
-	traits/reference.h \
+	traits/function.h	\
+	traits/list.h	\
+	traits/reference.h	\
 	traits/tree-iterator.h
 
 EXTRA_PROGRAMS =	\

@@ -24,6 +24,7 @@ helper_libspchelp_a_SOURCES =	\
 	helper/sp-intl.h	\
 	helper/sp-marshal.cpp	\
 	helper/sp-marshal.h	\
+	helper/stlport.h	\
 	helper/unit-menu.cpp	\
 	helper/unit-menu.h	\
 	helper/units.cpp	\

@@ -1,3 +1,11 @@
+2004-09-20  Peter Moulder  <pmoulder@bowman.csse.monash.edu.au>
+
+	* src/Makefile.am (EXTRA_DIST), Makefile_insert
+	  dialogs/Makefile_insert extension/implementation/Makefile_insert
+	  extension/internal/Makefile_insert helper/Makefile_insert
+	  livarot/Makefile_insert (blah_SOURCES):
+	  Add some .h files for `make dist'.
+
 2004-09-19  MenTaLguY <mental@rydia.net>
 
 	* src/gc-core.h: don't defer finalizers
