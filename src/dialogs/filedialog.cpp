@@ -858,6 +858,7 @@ FileOpenDialogImpl::FileOpenDialogImpl(char const *dir,
     //###### Add a preview widget
     set_preview_widget(svgPreview);
     set_preview_widget_active(true);
+    set_use_preview_label (false);
 
     //Catch selection-changed events, so we can adjust the text widget
     signal_update_preview().connect(
@@ -1298,6 +1299,7 @@ FileSaveDialogImpl::FileSaveDialogImpl(char const *dir,
     //###### Add a preview widget
     set_preview_widget(svgPreview);
     set_preview_widget_active(true);
+    set_use_preview_label (false);
 
     //Catch selection-changed events, so we can adjust the text widget
     signal_update_preview().connect(
