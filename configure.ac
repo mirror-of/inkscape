@@ -74,11 +74,11 @@ fi
 
 AC_ARG_ENABLE(gc, [  --disable-gc   Disable the garbage collector (for debugging purposes) (default=enabled) ], enable_gc="$enableval", enable_gc=yes)
 if test "x$enable_gc" != "xno"; then
-	AC_CHECK_LIB(gc, GC_malloc, [AC_CHECK_HEADER(gc/gc_cpp.h, gc_ok=yes, gc_ok=no)], gc_ok=no, -ldl -lgccpp)
+	AC_CHECK_LIB(gc, GC_malloc, [AC_CHECK_HEADER(gc.h, gc_ok=yes, gc_ok=no)], gc_ok=no, -lpthread -ldl)
 	if test "x$gc_ok" != "xyes"; then
-		AC_MSG_ERROR([libgc (the Boehm Conservative Collector), built with C++ support, is needed to compile inkscape])
+		AC_MSG_ERROR([libgc (the Boehm Conservative Collector), is needed to compile inkscape])
 	fi
-	LIBS="$LIBS -lgc -lgccpp"
+	LIBS="$LIBS -lgc"
 else
 	CXXFLAGS="$CXXFLAGS -DSUPPRESS_LIBGC"
 fi
