@@ -251,7 +251,7 @@ static gint sp_gradient_context_item_handler(SPEventContext *event_context, SPIt
             event_context->yp = (gint) event->button.y;
             event_context->within_tolerance = true;
 
-            // remember clicked item, disregarding groups
+            // remember clicked item, disregarding groups, honoring Alt
             event_context->item_to_select = sp_event_context_find_item (desktop, NR::Point(event->button.x, event->button.y), event->button.state, TRUE);
 
             ret = TRUE;
@@ -295,7 +295,7 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
             event_context->yp = (gint) button_w[NR::Y];
             event_context->within_tolerance = true;
 
-            // remember clicked item, disregarding groups
+            // remember clicked item, disregarding groups, honoring Alt
             event_context->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state, TRUE);
 
             dragging = true;
