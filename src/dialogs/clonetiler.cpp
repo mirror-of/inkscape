@@ -135,24 +135,31 @@ clonetiler_get_transform (
     double w, double h,
 
     // values from the dialog:
-    double d_x_per_x, double d_y_per_x, double d_x_per_y, double d_y_per_y, double rand_xy,
-    double d_rot_per_x, double d_rot_per_y, double rand_rot,
-    double d_scalex_per_x, double d_scaley_per_x, double d_scalex_per_y, double d_scaley_per_y, double rand_scale
+    double d_x_per_x, double d_y_per_x, double d_x_per_y, double d_y_per_y, int alternate_xy, double rand_xy,
+    double d_rot_per_x, double d_rot_per_y, int alternate_rot, double rand_rot,
+    double d_scalex_per_x, double d_scaley_per_x, double d_scalex_per_y, double d_scaley_per_y, int alternate_scale, double rand_scale
     )
 {
+    int eff_x, eff_y;
 
     // in abs units
-    double dx = d_x_per_x * w * x + d_x_per_y  * w * y + rand_xy * w * g_random_double_range (-1, 1);
-    double dy = d_y_per_x * h * x + d_y_per_y  * h * y + rand_xy * h * g_random_double_range (-1, 1);
+    eff_x = (alternate_xy? (x%2) : (x));
+    eff_y = (alternate_xy? (y%2) : (y));
+    double dx = d_x_per_x * w * eff_x + d_x_per_y  * w * eff_y + rand_xy * w * g_random_double_range (-1, 1);
+    double dy = d_y_per_x * h * eff_x + d_y_per_y  * h * eff_y + rand_xy * h * g_random_double_range (-1, 1);
 
     // in deg
-    double drot = d_rot_per_x * x + d_rot_per_y * y + rand_rot * 180 * g_random_double_range (-1, 1);
+    eff_x = (alternate_rot? (x%2) : (x));
+    eff_y = (alternate_rot? (y%2) : (y));
+    double drot = d_rot_per_x * eff_x + d_rot_per_y * eff_y + rand_rot * 180 * g_random_double_range (-1, 1);
 
     // times the original
+    eff_x = (alternate_scale? (x%2) : (x));
+    eff_y = (alternate_scale? (y%2) : (y));
     double rand_scale_both = rand_scale * 1 * g_random_double_range (-1, 1);
-    double dscalex = 1 + d_scalex_per_x * x + d_scalex_per_y * y + rand_scale_both;
+    double dscalex = 1 + d_scalex_per_x * eff_x + d_scalex_per_y * eff_y + rand_scale_both;
     if (dscalex < 0) dscalex = 0;
-    double dscaley = 1 + d_scaley_per_x * x + d_scaley_per_y * y + rand_scale_both;
+    double dscaley = 1 + d_scaley_per_x * eff_x + d_scaley_per_y * eff_y + rand_scale_both;
     if (dscaley < 0) dscaley = 0;
 
     NR::Matrix rect_translate (NR::translate (w * x + dx, h * y + dy));
@@ -650,14 +657,17 @@ clonetiler_apply (GtkWidget *widget, void *)
     double d_y_per_x = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_y_per_x", 0, -1, 1);
     double d_x_per_y = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_x_per_y", 0, -1, 1);
     double d_y_per_y = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_y_per_y", 0, -1, 1);
+    int alternate_xy = prefs_get_int_attribute ("dialogs.clonetiler", "alternate_xy", 0);
     double rand_xy = prefs_get_double_attribute_limited ("dialogs.clonetiler", "rand_xy", 0, 0, 1);
     double d_rot_per_x = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_rot_per_x", 0, -180, 180);
     double d_rot_per_y = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_rot_per_y", 0, -180, 180);
+    int alternate_rot = prefs_get_int_attribute ("dialogs.clonetiler", "alternate_rot", 0);
     double rand_rot = prefs_get_double_attribute_limited ("dialogs.clonetiler", "rand_rot", 0, 0, 1);
     double d_scalex_per_x = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_scalex_per_x", 0, -1, 1);
     double d_scaley_per_x = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_scaley_per_x", 0, -1, 1);
     double d_scalex_per_y = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_scalex_per_y", 0, -1, 1);
     double d_scaley_per_y = prefs_get_double_attribute_limited ("dialogs.clonetiler", "d_scaley_per_y", 0, -1, 1);
+    int alternate_scale = prefs_get_int_attribute ("dialogs.clonetiler", "alternate_scale", 0);
     double rand_scale = prefs_get_double_attribute_limited ("dialogs.clonetiler", "rand_scale", 0, 0, 1);
 
     int xmax = prefs_get_int_attribute ("dialogs.clonetiler", "xmax", 2);
@@ -710,9 +720,9 @@ clonetiler_apply (GtkWidget *widget, void *)
             sp_repr_set_attr(clone, "xlink:href", id_href);
 
             NR::Matrix t = clonetiler_get_transform (type, x, y, c[NR::X], c[NR::Y], w, h,
-                                                     d_x_per_x, d_y_per_x, d_x_per_y, d_y_per_y, rand_xy,
-                                                     d_rot_per_x, d_rot_per_y, rand_rot,
-                                                     d_scalex_per_x, d_scaley_per_x, d_scalex_per_y, d_scaley_per_y, rand_scale);
+                                                     d_x_per_x, d_y_per_x, d_x_per_y, d_y_per_y, alternate_xy, rand_xy, 
+                                                     d_rot_per_x, d_rot_per_y, alternate_rot, rand_rot,
+                                                     d_scalex_per_x, d_scaley_per_x, d_scalex_per_y, d_scaley_per_y, alternate_scale, rand_scale);
             gchar affinestr[80];
 
             if (sp_svg_transform_write(affinestr, 79, t)) {
@@ -740,49 +750,92 @@ clonetiler_new_tab (GtkWidget *nb, const gchar *label)
 }
 
 static void
+clonetiler_checkbox_toggled (GtkToggleButton *tb, gpointer *data)
+{
+    const gchar *attr = (const gchar *) data;
+    prefs_set_int_attribute ("dialogs.clonetiler", attr, gtk_toggle_button_get_active (tb));
+}
+
+GtkWidget *
+clonetiler_checkbox (const char *label, GtkTooltips *tt, const char *tip, const char *attr)
+{
+    GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+
+    GtkWidget *b = gtk_check_button_new_with_label (label);
+
+    int value = prefs_get_int_attribute ("dialogs.clonetiler", attr, 0);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(b), value);
+
+    gtk_box_pack_end (GTK_BOX (hb), b, FALSE, TRUE, 0);
+    gtk_signal_connect ( GTK_OBJECT (b), "clicked", 
+                         GTK_SIGNAL_FUNC (clonetiler_checkbox_toggled), (gpointer) attr);
+
+    return hb;
+}
+
+
+static void
 clonetiler_percent_changed (GtkAdjustment *adj, gpointer data)
 {
     const gchar *pref = (const gchar *) data;
     prefs_set_double_attribute ("dialogs.clonetiler", pref, 0.01 * adj->value);
 }
 
-GtkWidget *
-clonetiler_percent_spinbox (const char *label, GtkTooltips *tt, const char *tip, const char *attr, bool onlypos = false)
+static void
+clonetiler_angle_changed (GtkAdjustment *adj, gpointer data)
 {
-                GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+    const gchar *pref = (const gchar *) data;
+    prefs_set_double_attribute ("dialogs.clonetiler", pref, adj->value);
+}
 
-                {
-                    GtkWidget *l = gtk_label_new (label);
-                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-                    gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
-                }
+GtkWidget *
+clonetiler_percent_spinbox (const char *label, GtkTooltips *tt, const char *tip, const char *attr, bool onlypos = false, bool angle = false)
+{
+    GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
 
-                {
-                    GtkWidget *l = gtk_label_new ("%");
-                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0);
-                    gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
-                }
+    {
+        GtkWidget *l = gtk_label_new (label);
+        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
+        gtk_box_pack_start (GTK_BOX (hb), l, TRUE, TRUE, 0);
+    }
 
-                {
-                    GtkObject *a;
-                    if (onlypos)
-                        a = gtk_adjustment_new(0.0, 0, 100, 1, 10, 10);
-                    else 
-                        a = gtk_adjustment_new(0.0, -100, 100, 1, 10, 10);
+    {
+        GtkWidget *l = gtk_label_new ("");
+        gtk_label_set_markup (GTK_LABEL(l), angle? "&#176;" : "%");
+        gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0);
+        gtk_box_pack_end (GTK_BOX (hb), l, FALSE, FALSE, 0);
+    }
 
-                    GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 0);
-                    gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, tip, NULL);
-                    gtk_entry_set_width_chars (GTK_ENTRY (sb), 3);
-                    gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
+    {
+        GtkObject *a;
+        if (angle) {
+            a = gtk_adjustment_new(0.0, -180, 180, 1, 10, 10);
+        } else {
+            if (onlypos)
+                a = gtk_adjustment_new(0.0, 0, 100, 1, 10, 10);
+            else 
+                a = gtk_adjustment_new(0.0, -100, 100, 1, 10, 10);
+        }
 
-                    double value = prefs_get_double_attribute_limited ("dialogs.clonetiler", attr, 0, -1, 1);
-                    gtk_adjustment_set_value (GTK_ADJUSTMENT (a), (value * 100));
+        GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 0);
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, tip, NULL);
+        gtk_entry_set_width_chars (GTK_ENTRY (sb), 3);
+        gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
 
-                    gtk_signal_connect(GTK_OBJECT(a), "value_changed",
-                                       GTK_SIGNAL_FUNC(clonetiler_percent_changed), (gpointer) attr);
-                }
+        if (angle) {
+            double value = prefs_get_double_attribute_limited ("dialogs.clonetiler", attr, 0, -180, 180);
+            gtk_adjustment_set_value (GTK_ADJUSTMENT (a), value);
+            gtk_signal_connect(GTK_OBJECT(a), "value_changed",
+                           GTK_SIGNAL_FUNC(clonetiler_angle_changed), (gpointer) attr);
+        } else {
+            double value = prefs_get_double_attribute_limited ("dialogs.clonetiler", attr, 0, -1, 1);
+            gtk_adjustment_set_value (GTK_ADJUSTMENT (a), (value * 100));
+            gtk_signal_connect(GTK_OBJECT(a), "value_changed",
+                           GTK_SIGNAL_FUNC(clonetiler_percent_changed), (gpointer) attr);
+        }
+    }
 
-                return hb;
+    return hb;
 }
 
 static void
@@ -853,6 +906,7 @@ clonetiler_dialog (void)
         GtkTooltips *tt = gtk_tooltips_new();
 
         GtkWidget *mainbox = gtk_vbox_new(FALSE, 4);
+        gtk_container_set_border_width (GTK_CONTAINER (mainbox), 6);
         gtk_container_add (GTK_CONTAINER (dlg), mainbox);
                             
         GtkWidget *nb = gtk_notebook_new ();
@@ -912,115 +966,185 @@ clonetiler_dialog (void)
             gtk_option_menu_set_history ( GTK_OPTION_MENU (om), current);
         }
 
-       {
+        {
             GtkWidget *vb = clonetiler_new_tab (nb, _("Shift"));
 
-            GtkWidget *table = gtk_table_new (5, 2, FALSE);
-            gtk_box_pack_start (GTK_BOX (vb), table, FALSE, FALSE, VB_SKIP);
+            GtkWidget *table = gtk_hbox_new (TRUE, 4);
+            gtk_container_set_border_width (GTK_CONTAINER (table), 4);
+            gtk_box_pack_start (GTK_BOX (vb), table, FALSE, FALSE, 0);
 
             {
-                    GtkWidget *l = gtk_label_new (_("Per row:"));
-                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-                gtk_table_attach (GTK_TABLE (table), l, 1, 2, 1, 2, 
-                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+                GtkWidget *f = gtk_frame_new (_("Per row:"));
+                gtk_box_pack_start (GTK_BOX (table), f, TRUE, TRUE, 0);
+
+                GtkWidget *fvbox = gtk_vbox_new (FALSE, 0);
+                gtk_container_set_border_width (GTK_CONTAINER (fvbox), 4);
+                gtk_container_add(GTK_CONTAINER(f), fvbox);
+
+                {
+                    GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal shift per each row"), "d_x_per_y");
+                    gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
+                }
+
+                {
+                    GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical shift per each row"), "d_y_per_y");
+                    gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
+                }
             }
 
             {
-                    GtkWidget *l = gtk_label_new (_("Per column:"));
-                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-                gtk_table_attach (GTK_TABLE (table), l, 2, 3, 1, 2, 
-                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+                GtkWidget *f = gtk_frame_new (_("Per column:"));
+                gtk_box_pack_start (GTK_BOX (table), f, TRUE, TRUE, 0);
+
+
+                GtkWidget *fvbox = gtk_vbox_new (FALSE, 0);
+                gtk_container_set_border_width (GTK_CONTAINER (fvbox), 4);
+                gtk_container_add(GTK_CONTAINER(f), fvbox);
+
+                {
+                    GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal shift per each column"), "d_x_per_x");
+                    gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
+                }
+
+
+                {
+                    GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical shift per each column"), "d_y_per_x");
+                    gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
+                }
             }
 
-            {
-                GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal shift per each column"), "d_x_per_x");
-                gtk_table_attach (GTK_TABLE (table), l, 1, 2, 2, 3, 
-                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-            }
 
             {
-                GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal shift per each row"), "d_x_per_y");
-                gtk_table_attach (GTK_TABLE (table), l, 2, 3, 2, 3, 
-                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-            }
-
-            {
-                GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical shift per each column"), "d_y_per_x");
-                gtk_table_attach (GTK_TABLE (table), l, 1, 2, 3, 4, 
-                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-            }
-
-            {
-                GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical shift per each row"), "d_y_per_y");
-                gtk_table_attach (GTK_TABLE (table), l, 2, 3, 3, 4, 
-                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+                GtkWidget *l = clonetiler_checkbox (_("Alternate sign"), tt, _("Alternate the sign of the shifts for each row or column"), "alternate_xy");
+                gtk_container_set_border_width (GTK_CONTAINER (l), 4);
+                gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
             }
 
             {
                 GtkWidget *l = clonetiler_percent_spinbox (_("Randomize:"), tt, _("How much to randomize tile positions"),"rand_xy", true);
-                gtk_table_attach (GTK_TABLE (table), l, 2, 3, 4, 5, 
-                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+                gtk_container_set_border_width (GTK_CONTAINER (l), 4);
+                gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
             }
-       }
-
-       {
-            GtkWidget *vb = clonetiler_new_tab (nb, _("Scale"));
-
-            GtkWidget *table = gtk_table_new (4, 2, FALSE);
-            gtk_box_pack_start (GTK_BOX (vb), table, FALSE, FALSE, VB_SKIP);
-
-            {
-                    GtkWidget *l = gtk_label_new (_("Per row:"));
-                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-                gtk_table_attach (GTK_TABLE (table), l, 1, 2, 1, 2, 
-                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-            }
-
-            {
-                    GtkWidget *l = gtk_label_new (_("Per column:"));
-                    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-                gtk_table_attach (GTK_TABLE (table), l, 2, 3, 1, 2, 
-                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-            }
-
-            {
-                GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal scale per each column"), "d_scalex_per_x");
-                gtk_table_attach (GTK_TABLE (table), l, 1, 2, 2, 3, 
-                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-            }
-
-            {
-                GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal scale per each row"), "d_scalex_per_y");
-                gtk_table_attach (GTK_TABLE (table), l, 2, 3, 2, 3, 
-                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-            }
-
-            {
-                GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical scale per each column"), "d_scaley_per_x");
-                gtk_table_attach (GTK_TABLE (table), l, 1, 2, 3, 4, 
-                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-            }
-
-            {
-                GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical scale per each row"), "d_scaley_per_y");
-                gtk_table_attach (GTK_TABLE (table), l, 2, 3, 3, 4, 
-                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-            }
-
-            {
-                GtkWidget *l = clonetiler_percent_spinbox (_("Randomize:"), tt, _("How much to randomize tile sizes"),"rand_scale", true);
-                gtk_table_attach (GTK_TABLE (table), l, 2, 3, 4, 5, 
-                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
-            }
-       }
-
-
-
+        }
 
 
 
         {
-            GtkWidget *table = gtk_table_new (1, 2, FALSE);
+            GtkWidget *vb = clonetiler_new_tab (nb, _("Scale"));
+
+            GtkWidget *table = gtk_hbox_new (TRUE, 4);
+            gtk_container_set_border_width (GTK_CONTAINER (table), 4);
+            gtk_box_pack_start (GTK_BOX (vb), table, FALSE, FALSE, 0);
+
+            {
+                GtkWidget *f = gtk_frame_new (_("Per row:"));
+                gtk_box_pack_start (GTK_BOX (table), f, TRUE, TRUE, 0);
+
+                GtkWidget *fvbox = gtk_vbox_new (FALSE, 0);
+                gtk_container_set_border_width (GTK_CONTAINER (fvbox), 4);
+                gtk_container_add(GTK_CONTAINER(f), fvbox);
+
+                {
+                    GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal scale per each row"), "d_scalex_per_y");
+                    gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
+                }
+
+                {
+                    GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical scale per each row"), "d_scaley_per_y");
+                    gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
+                }
+            }
+
+            {
+                GtkWidget *f = gtk_frame_new (_("Per column:"));
+                gtk_box_pack_start (GTK_BOX (table), f, TRUE, TRUE, 0);
+
+
+                GtkWidget *fvbox = gtk_vbox_new (FALSE, 0);
+                gtk_container_set_border_width (GTK_CONTAINER (fvbox), 4);
+                gtk_container_add(GTK_CONTAINER(f), fvbox);
+
+                {
+                    GtkWidget *l = clonetiler_percent_spinbox (_("X:"), tt, _("Horizontal scale per each column"), "d_scalex_per_x");
+                    gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
+                }
+
+
+                {
+                    GtkWidget *l = clonetiler_percent_spinbox (_("Y:"), tt, _("Vertical scale per each column"), "d_scaley_per_x");
+                    gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
+                }
+            }
+
+
+            {
+                GtkWidget *l = clonetiler_checkbox (_("Alternate sign"), tt, _("Alternate the sign of the scale for each row or column"), "alternate_scale");
+                gtk_container_set_border_width (GTK_CONTAINER (l), 4);
+                gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
+            }
+
+            {
+                GtkWidget *l = clonetiler_percent_spinbox (_("Randomize:"), tt, _("How much to randomize tile sizes"),"rand_scale", true);
+                gtk_container_set_border_width (GTK_CONTAINER (l), 4);
+                gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
+            }
+        }
+
+
+        {
+            GtkWidget *vb = clonetiler_new_tab (nb, _("Rotate"));
+
+            GtkWidget *table = gtk_hbox_new (TRUE, 4);
+            gtk_container_set_border_width (GTK_CONTAINER (table), 4);
+            gtk_box_pack_start (GTK_BOX (vb), table, FALSE, FALSE, 0);
+
+            {
+                GtkWidget *f = gtk_frame_new (_("Per row:"));
+                gtk_box_pack_start (GTK_BOX (table), f, TRUE, TRUE, 0);
+
+                GtkWidget *fvbox = gtk_vbox_new (FALSE, 0);
+                gtk_container_set_border_width (GTK_CONTAINER (fvbox), 4);
+                gtk_container_add(GTK_CONTAINER(f), fvbox);
+
+                {
+                    GtkWidget *l = clonetiler_percent_spinbox (_("Angle:"), tt, _("Rotate tile per each row"), "d_rot_per_y", false, true);
+                    gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
+                }
+            }
+
+            {
+                GtkWidget *f = gtk_frame_new (_("Per column:"));
+                gtk_box_pack_start (GTK_BOX (table), f, TRUE, TRUE, 0);
+
+
+                GtkWidget *fvbox = gtk_vbox_new (FALSE, 0);
+                gtk_container_set_border_width (GTK_CONTAINER (fvbox), 4);
+                gtk_container_add(GTK_CONTAINER(f), fvbox);
+
+                {
+                    GtkWidget *l = clonetiler_percent_spinbox (_("Angle:"), tt, _("Rotate tile per each column"), "d_rot_per_x", false, true);
+                    gtk_box_pack_start (GTK_BOX (fvbox), l, FALSE, FALSE, VB_SKIP);
+                }
+            }
+
+
+            {
+                GtkWidget *l = clonetiler_checkbox (_("Alternate sign"), tt, _("Alternate the rotation direction for each row or column"), "alternate_rot");
+                gtk_container_set_border_width (GTK_CONTAINER (l), 4);
+                gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
+            }
+
+            {
+                GtkWidget *l = clonetiler_percent_spinbox (_("Randomize:"), tt, _("How much to randomize tile rotation"),"rand_rot", true);
+                gtk_container_set_border_width (GTK_CONTAINER (l), 4);
+                gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
+            }
+        }
+
+
+        {
+            GtkWidget *table = gtk_hbox_new (TRUE, 4);
+            gtk_container_set_border_width (GTK_CONTAINER (table), 4);
             gtk_box_pack_start (GTK_BOX (mainbox), table, FALSE, FALSE, VB_SKIP);
 
             {
@@ -1039,19 +1163,17 @@ clonetiler_dialog (void)
                     GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 0);
                     gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, _("How many rows in the tiling"), NULL);
                     gtk_entry_set_width_chars (GTK_ENTRY (sb), 6);
-                    gtk_widget_set_usize (sb, SB_WIDTH, -1);
                     gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
 
                     gtk_signal_connect(GTK_OBJECT(a), "value_changed",
                                        GTK_SIGNAL_FUNC(clonetiler_xy_changed), (gpointer) "ymax");
                 }
 
-                gtk_table_attach (GTK_TABLE (table), hb, 1, 2, 1, 2, 
-                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+                gtk_box_pack_start (GTK_BOX (table), hb, FALSE, FALSE, 0);
             }
 
             {
-                GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+                GtkWidget *hb = gtk_hbox_new(FALSE, 4);
 
                 {
                     GtkWidget *l = gtk_label_new (_("Columns:"));
@@ -1066,15 +1188,13 @@ clonetiler_dialog (void)
                     GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 1.0, 0);
                     gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), sb, _("How many columns in the tiling"), NULL);
                     gtk_entry_set_width_chars (GTK_ENTRY (sb), 6);
-                    gtk_widget_set_usize (sb, SB_WIDTH, -1);
                     gtk_box_pack_end (GTK_BOX (hb), sb, FALSE, FALSE, SB_MARGIN);
 
                     gtk_signal_connect(GTK_OBJECT(a), "value_changed",
                                        GTK_SIGNAL_FUNC(clonetiler_xy_changed), (gpointer) "xmax");
                 }
 
-                gtk_table_attach (GTK_TABLE (table), hb, 2, 3, 1, 2, 
-                                  (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
+                gtk_box_pack_start (GTK_BOX (table), hb, FALSE, FALSE, 0);
             }
         }
 
