@@ -160,7 +160,7 @@ inkscape_LDADD = \
 
 inkscape_LDFLAGS = -Wl,--export-dynamic $(kdeldflags)
 
-noinst_PROGRAMS = spsvgview
+EXTRA_PROGRAMS = spsvgview
 
 spsvgview_SOURCES = \
 	spsvgview.c \
