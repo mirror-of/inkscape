@@ -1124,7 +1124,7 @@ sp_sel_trans_update_item_bboxes (SPSelTrans * seltrans)
                          NULL
                          );
                      
-                     sp_ctrlrect_set_area (SP_CTRLRECT (box), b.x0, b.y0 + 1.0, b.x1, b.y1 + 1.0);
+                     sp_ctrlrect_set_area (SP_CTRLRECT (box), b.x0, b.y0, b.x1, b.y1);
                      sp_ctrlrect_set_color (SP_CTRLRECT (box), 0x000000a0, 0, 0);
                      sp_ctrlrect_set_dashed (SP_CTRLRECT (box), 1);
 		 }

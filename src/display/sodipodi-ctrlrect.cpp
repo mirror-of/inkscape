@@ -259,10 +259,10 @@ sp_ctrlrect_update (SPCanvasItem *item, NR::Matrix const &affine, unsigned int f
 
 	nr_rect_d_matrix_transform (&bbox, &cr->rect, affine);
 
-	cr->area.x0 = (int) (bbox.x0 + 0.5);
-	cr->area.y0 = (int) (bbox.y0 + 0.5);
-	cr->area.x1 = (int) (bbox.x1 + 0.5);
-	cr->area.y1 = (int) (bbox.y1 + 0.5);
+	cr->area.x0 = (int) floor (bbox.x0 + 0.5);
+	cr->area.y0 = (int) floor (bbox.y0 + 0.5);
+	cr->area.x1 = (int) floor (bbox.x1 + 0.5);
+	cr->area.y1 = (int) floor (bbox.y1 + 0.5);
 
 	cr->shadow_size = cr->shadow;
 
