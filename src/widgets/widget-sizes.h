@@ -1,7 +1,11 @@
 #define TOOL_BUTTON_SIZE 28
 
-#define AUX_BUTTON_SIZE 20
-#define AUX_SPACING 3
+// GTK uses 24 for icon sizes by default.  Spacing adjust to keep the
+// toolbar the same as other GTK applications.
+//#define AUX_BUTTON_SIZE 20
+//#define AUX_SPACING 3
+#define AUX_BUTTON_SIZE 24
+#define AUX_SPACING 2
 #define AUX_BETWEEN_BUTTON_GROUPS 7
 #define AUX_BETWEEN_SPINBUTTONS 0
 #define AUX_FONT_SIZE 8000
