@@ -35,15 +35,6 @@ struct _NRArena {
 
 struct _NRArenaClass {
 	NRActiveObjectClass parent_class;
-
-#if 0
-	/* These may be used for bookkeeping, like snooping highlited item */
-	/* void (* item_added) (NRArena *arena, NRArenaItem *item); */
-	/* void (* remove_item) (NRArena *arena, NRArenaItem *item); */
-
-	void (* request_update) (NRArena *arena, NRArenaItem *item);
-	void (* request_render) (NRArena *arena, NRRectL *area);
-#endif
 };
 
 NRType nr_arena_get_type (void);

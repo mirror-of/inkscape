@@ -64,30 +64,6 @@ nr_arena_finalize (NRObject *object)
 	((NRObjectClass *) (parent_class))->finalize (object);
 }
 
-#if 0
-void
-nr_arena_item_added (NRArena *arena, NRArenaItem *item)
-{
-	g_return_if_fail (arena != NULL);
-	g_return_if_fail (NR_IS_ARENA (arena));
-	g_return_if_fail (item != NULL);
-	g_return_if_fail (NR_IS_ARENA_ITEM (item));
-
-	g_signal_emit (G_OBJECT (arena), signals [ITEM_ADDED], 0, item);
-}
-
-void
-nr_arena_remove_item (NRArena *arena, NRArenaItem *item)
-{
-	g_return_if_fail (arena != NULL);
-	g_return_if_fail (NR_IS_ARENA (arena));
-	g_return_if_fail (item != NULL);
-	g_return_if_fail (NR_IS_ARENA_ITEM (item));
-
-	g_signal_emit (G_OBJECT (arena), signals [REMOVE_ITEM], 0, item);
-}
-#endif
-
 void
 nr_arena_request_update (NRArena *arena, NRArenaItem *item)
 {

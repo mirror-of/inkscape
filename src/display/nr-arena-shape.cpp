@@ -285,16 +285,6 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 				NRSVL *svl = nr_svl_from_art_bpath(shape->curve->bpath, &gc->transform, windrule, TRUE, 0.25);
 				shape->fill_svp = nr_svp_from_svl (svl, NULL);
 				nr_svl_free_list (svl);
-			} else if (!NR_MATRIX_DF_TEST_TRANSLATE_CLOSE (&gc->transform, &NR_MATRIX_IDENTITY, NR_EPSILON)) {
-#if 0
-				ArtSVP *svpa;
-				/* Concept test */
-				svpa = art_svp_translate (shape->fill_svp,
-							  gc->transform.c[4] - shape->ctm.c[4],
-							  gc->transform.c[5] - shape->ctm.c[5]);
-				art_svp_free (shape->fill_svp);
-				shape->fill_svp = svpa;
-#endif
 			}
 			shape->ctm = gc->transform;
 		}

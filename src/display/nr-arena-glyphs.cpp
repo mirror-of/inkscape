@@ -206,13 +206,7 @@ nr_arena_glyphs_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb)
 
 	if (!glyphs->font || !glyphs->curve) return item->state;
 
-#if 0
-	/* fixme: Implement */
-	if (glyphs->fill_svp) {
-		art_gray_svp_aa (glyphs->fill_svp, area->x0, area->y0, area->x1, area->y1, b->px, b->rs);
-		b->empty = FALSE;
-	}
-#endif
+	/* TODO : render to greyscale pixblock provided for clipping */
 
 	return item->state;
 }

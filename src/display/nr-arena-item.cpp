@@ -264,10 +264,6 @@ nr_arena_item_invoke_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, u
 #endif
 
 	/* If we are outside bbox just return successfully */
-#if 0
-	/* Shouldn't be needed anymore with new rect logic (Lauris) */
-	if (NR_RECT_DFLS_TEST_EMPTY (&item->bbox)) return item->state | NR_ARENA_ITEM_STATE_RENDER;
-#endif
 	if (!item->visible) return item->state | NR_ARENA_ITEM_STATE_RENDER;
 	nr_rect_l_intersect (&carea, area, &item->bbox);
 	if (nr_rect_l_test_empty (&carea)) return item->state | NR_ARENA_ITEM_STATE_RENDER;
@@ -438,9 +434,10 @@ nr_arena_item_invoke_clip (NRArenaItem *item, NRRectL *area, NRPixBlock *pb)
 {
 	nr_return_val_if_fail (item != NULL, NR_ARENA_ITEM_STATE_INVALID);
 	nr_return_val_if_fail (NR_IS_ARENA_ITEM (item), NR_ARENA_ITEM_STATE_INVALID);
-#if 0
-	nr_return_val_if_fail (item->state & NR_ARENA_ITEM_STATE_CLIP, item->state);
-#endif
+	/* we originally short-circuited if the object state included
+	 * NR_ARENA_ITEM_STATE_CLIP (and showed a warning on the console);
+	 * anyone know why we stopped doing so?
+	 */
 	nr_return_val_if_fail ((pb->area.x1 - pb->area.x0) >= (area->x1 - area->x0), NR_ARENA_ITEM_STATE_INVALID);
 	nr_return_val_if_fail ((pb->area.y1 - pb->area.y0) >= (area->y1 - area->y0), NR_ARENA_ITEM_STATE_INVALID);
 
@@ -494,14 +491,6 @@ nr_arena_item_request_update (NRArenaItem *item, unsigned int reset, unsigned in
 
 	if (item->state & reset) {
 		item->state &= ~reset;
-#if 0
-		if ((reset & NR_ARENA_ITEM_STATE_IMAGE) && item->px) {
-			/* Concept test */
-			/* Clear buffer */
-			nr_free (item->px);
-			item->px = NULL;
-		}
-#endif
 		if (item->parent) {
 			nr_arena_item_request_update (item->parent, reset, FALSE);
 		} else {

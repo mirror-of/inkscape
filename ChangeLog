@@ -1,5 +1,11 @@
 2004-02-07  MenTaLguY <mental@rydia.net>
 
+    * src/display/canvas-arena.cpp, src/display/nr-arena-glyphs.cpp,
+      src/display/nr-arena-item.cpp, src/display/nr-arena-shape.cpp,
+      src/display/nr-arena.cpp, src/display/nr-arena.h:
+
+      cleaned up old code in #if 0 sections
+
     * src/desktop-affine.cpp, src/desktop.cpp, src/draw-context.cpp,
       src/dropper-context.cpp, src/dyna-draw-context.cpp,
       src/seltrans.cpp, src/sp-root.cpp, src/sp-text.cpp,
