@@ -497,6 +497,13 @@ sp_select_context_root_handler (SPEventContext *event_context, GdkEvent * event)
 						}
 						ret = TRUE;
 						break;
+					case GDK_a:
+					case GDK_A:
+						if (MOD__CTRL_ONLY) {
+							sp_edit_select_all(NULL, NULL);
+							ret = TRUE;
+						}
+						break;
 	  case GDK_Tab: // Tab - cycle selection forward
 	    sp_selection_item_next ();
 	    ret = TRUE;
