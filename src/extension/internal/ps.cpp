@@ -664,6 +664,8 @@ PrintPS::fill(Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMat
     if (style->fill.type == SP_PAINT_TYPE_COLOR || SP_IS_GRADIENT (SP_STYLE_FILL_SERVER (style))) {
         Inkscape::SVGOStringStream os;
 
+        os << "gsave\n";
+
         print_fill_style(os, style);
 
         print_bpath(os, bpath->path);
@@ -701,6 +703,9 @@ PrintPS::fill(Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMat
                 }
             }
         }
+
+        os << "grestore\n";
+
         fprintf(_stream, "%s", os.str().c_str());
     }        
 
