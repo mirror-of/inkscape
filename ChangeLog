@@ -1,5 +1,7 @@
 2004-02-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/libnr/nr-translate-ops.h (operator!=): new.
+
 	* src/sp-item.h, src/sp-item.cpp (sp_item_bbox_desktop):
 	Add NR::Rect version.
 

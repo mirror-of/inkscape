@@ -11,6 +11,11 @@ inline bool operator==(translate const &a, translate const &b)
     return a.offset == b.offset;
 }
 
+inline bool operator!=(translate const &a, translate const &b)
+{
+    return !( a == b );
+}
+
 inline translate operator*(translate const &a, translate const &b)
 {
     return translate( a.offset + b.offset );
