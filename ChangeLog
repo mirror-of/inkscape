@@ -28,6 +28,25 @@
 	  Moving units into ui/ subdir.  Dunno if this is the best
 	  location for them, but pjrm thought it'd be ok for now.
 
+2005-03-13  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/sp-text.cpp: allow adjusting letter spacing when cursor is at
+	  eol
+
+	* src/: make.dep, make.files, make.ofiles,
+	  libnrtype/Layout-TNG-Compute.cpp,
+	  libnrtype/Layout-TNG-OutIter.cpp,
+	  libnrtype/Layout-TNG-Output.cpp, libnrtype/Layout-TNG.h: fix
+	  kerning when align != left, and fix linespacing < 100
+
+	* src/: sp-flowtext.cpp, sp-text.cpp, sp-text.h, style.cpp,
+	  style.h, libnrtype/Layout-TNG-Compute.cpp,
+	  libnrtype/Layout-TNG-Input.cpp, libnrtype/Layout-TNG-OutIter.cpp,
+	  libnrtype/Layout-TNG-Output.cpp,
+	  libnrtype/Layout-TNG-Scanline-Maker.h, libnrtype/Layout-TNG.h:
+	  implement line-height css property, & fix percentage handling in
+	  style
+
 2005-03-12  MenTaLguY  <mental@rydia.net>
 
 	* src/node-context.cpp, src/node-context.h, src/nodepath.cpp,
@@ -67,6 +86,17 @@
 	  Initial addition of Panel.
 
 2005-03-12  cyreve  <cyreve@users.sourceforge.net>
+
+	* src/sp-flowtext.cpp: text unflow command losing space characters:
+	  add xml:space to generated elements
+
+	* src/: attributes.cpp, attributes.h, make.dep, make.files,
+	  make.ofiles, sp-flowtext.cpp, sp-text.cpp, style.cpp, style.h,
+	  text-context.cpp, text-editing.cpp, dialogs/text-edit.cpp,
+	  libnrtype/FlowRes.cpp, libnrtype/Layout-TNG-Compute.cpp,
+	  libnrtype/Layout-TNG-Input.cpp: add several new text properties
+	  to SPStyle and rearrange some of the existing ones, also remove
+	  spurious warning on applying kerning
 
 	* src/sp-flowtext.cpp: svg spec requires us to break after flowline
 	  content, not before
