@@ -21,43 +21,37 @@ class Matrix;
 
 class Point {
 public:
-    Point()
+    inline Point()
     { }
 
-    Point(Coord x, Coord y) {
+    inline Point(Coord x, Coord y) {
         _pt[X] = x;
         _pt[Y] = y;
     }
 
-    Point(NRPoint const &p) {
+    inline Point(NRPoint const &p) {
         _pt[X] = p.x;
         _pt[Y] = p.y;
     }
 
-    Point(Point const &p) {
+    inline Point(Point const &p) {
         for (unsigned i = 0; i < 2; ++i) {
             _pt[i] = p._pt[i];
         }
     }
 
-    Point &operator=(Point const &p) {
+    inline Point &operator=(Point const &p) {
         for (unsigned i = 0; i < 2; ++i) {
             _pt[i] = p._pt[i];
         }
         return *this;
     }
 
-    inline Coord operator[](unsigned i) const /*throw(std::out_of_range)*/ {
-//        if ( i > Y ) {
-//            throw std::out_of_range("index out of range");
-//        }
+    inline Coord operator[](unsigned i) const {
         return _pt[i];
     }
 
-    inline Coord &operator[](unsigned i) /*throw(std::out_of_range)*/ {
-//        if ( i > Y ) {
-//            throw std::out_of_range("index out of range");
-//        }
+    inline Coord &operator[](unsigned i) {
         return _pt[i];
     }
 
@@ -105,28 +99,28 @@ public:
         return nrp;
     }
 
-    Point &operator+=(Point const &o) {
+    inline Point &operator+=(Point const &o) {
         for ( unsigned i = 0 ; i < 2 ; ++i ) {
             _pt[i] += o._pt[i];
         }
         return *this;
     }
   
-    Point &operator-=(Point const &o) {
+    inline Point &operator-=(Point const &o) {
         for ( unsigned i = 0 ; i < 2 ; ++i ) {
             _pt[i] -= o._pt[i];
         }
         return *this;
     }
   
-    Point &operator/=(double const s) {
+    inline Point &operator/=(double const s) {
         for ( unsigned i = 0 ; i < 2 ; ++i ) {
             _pt[i] /= s;
         }
         return *this;
     }
 
-    Point &operator*=(double const s) {
+    inline Point &operator*=(double const s) {
         for ( unsigned i = 0 ; i < 2 ; ++i ) {
             _pt[i] *= s;
         }
