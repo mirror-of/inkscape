@@ -1,5 +1,8 @@
 2004-02-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/sp-chars.h, src/sp-chars.cpp (sp_chars_add_element):
+	Add NR::Matrix version.
+
 	* src/selection.cpp (sp_selection_snappoints): Performance fix: add
 	just 4 corner points, not a thousand.
 

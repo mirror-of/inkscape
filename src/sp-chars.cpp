@@ -185,6 +185,12 @@ sp_chars_clear (SPChars *chars)
 	}
 }
 
+void sp_chars_add_element(SPChars *chars, guint glyph, NRFont *font, NR::Matrix const &transform)
+{
+	NRMatrix const ntransform(transform);
+	sp_chars_add_element(chars, glyph, font, &ntransform);
+}
+
 void
 sp_chars_add_element (SPChars *chars, guint glyph, NRFont *font, const NRMatrix *transform)
 {

@@ -46,7 +46,8 @@ GType sp_chars_get_type ();
 
 void sp_chars_clear (SPChars *chars);
 
-void sp_chars_add_element (SPChars *chars, guint glyph, NRFont *font, const NRMatrix *transform);
+void sp_chars_add_element(SPChars *chars, guint glyph, NRFont *font, NR::Matrix const &transform);
+void sp_chars_add_element(SPChars *chars, guint glyph, NRFont *font, NRMatrix const *transform);
 
 SPCurve *sp_chars_normalized_bpath (SPChars *chars);
 
