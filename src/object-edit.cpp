@@ -123,7 +123,7 @@ static NR::Point sp_pattern_angle_get (SPItem *item)
 {
     SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
 
-    gdouble x = (pattern_width(pat)*0.25);
+    gdouble x = (pattern_width(pat)*0.5);
     gdouble y = 0;
     NR::Point delta = NR::Point(x,y);
     gdouble scale = sp_pattern_extract_scale(pat);
@@ -168,7 +168,10 @@ sp_pattern_scale_set (SPItem *item, const NR::Point &p, guint state)
     gdouble dy = p[NR::Y] - pat->patternTransform[5];
     gdouble s = dx * dx + dy * dy;
     s = sqrt(s);
-    gdouble scl = s / (pattern_width(pat)*0.25);
+    gdouble pat_x =pattern_width(pat)*0.5;
+    gdouble pat_y =pattern_height(pat)*0.5;
+    gdouble pat_h = sqrt(pat_x*pat_x + pat_y*pat_y);
+    gdouble scl = s / pat_h;
 
     // get angle from current transform, (need get current scale first to calculate angle)
     gdouble oldscale = sp_pattern_extract_scale(pat);
@@ -187,8 +190,8 @@ static NR::Point sp_pattern_scale_get (SPItem *item)
 {
     SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
 
-    gdouble x = 0;
-    gdouble y = (pattern_width(pat)*0.25);
+    gdouble x = pattern_width(pat)*0.5;
+    gdouble y = pattern_height(pat)*0.5;
     NR::Point delta = NR::Point(x,y);
     NR::Matrix a = pat->patternTransform;
     a[4] = 0;
