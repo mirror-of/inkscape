@@ -114,9 +114,10 @@ struct _SPObject {
 	unsigned int uflags : 8;
 	unsigned int mflags : 8;
 	SPIXmlSpace xml_space;
-	unsigned int hrefcount; /* number os xlink:href references */
+	unsigned int hrefcount; /* number of xlink:href references */
 	SPDocument *document; /* Document we are part of */
 	SPObject *parent; /* Our parent (only one allowed) */
+	SPObject *children; /* Our children */
 	SPObject *next; /* Next object in linked list */
 	SPRepr *repr; /* Our xml representation */
 	gchar *id; /* Our very own unique id */
@@ -174,6 +175,9 @@ SPObject *sp_object_hunref (SPObject *object, gpointer owner);
 SPObject *sp_object_attach_reref (SPObject *parent, SPObject *object, SPObject *next);
 SPObject *sp_object_detach (SPObject *parent, SPObject *object);
 SPObject *sp_object_detach_unref (SPObject *parent, SPObject *object);
+
+SPObject *sp_object_first_child(SPObject *parent);
+SPObject *sp_object_next(SPObject *object);
 
 void sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr, unsigned int cloned);
 void sp_object_invoke_release (SPObject *object);

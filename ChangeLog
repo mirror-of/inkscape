@@ -7,6 +7,9 @@
 	  src/libnr/nr-rect-ops.h:
 	  basic cleanups and work on NR::ConvexHull
 
+    * src/sp-object.h, src/sp-object.cpp: first steps in refactoring
+	  child list code
+
 2004-03-05  bulia byak <bulia@users.sourceforge.net>
 
 	* src/desktop.cpp src/preferences-skeleton.h: Autoscroll now accepts

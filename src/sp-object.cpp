@@ -217,54 +217,68 @@ sp_object_attach_reref (SPObject *parent, SPObject *object, SPObject *next)
 	g_return_val_if_fail (!object->parent, NULL);
 	g_return_val_if_fail (!object->next, NULL);
 
+	SPObject **ref;
+	for ( ref = &parent->children ; *ref ; ref = &(*ref)->next ) {
+		if ( *ref == next ) {
+			break;
+		}
+	}
+	if ( *ref != next ) {
+		g_critical("sp_object_attach_reref: next is not a child of parent");
+	}
+
 	sp_object_ref (object, parent);
 	g_object_unref (G_OBJECT (object));
 	object->parent = parent;
 	object->next = next;
+	*ref = object;
 
 	return object;
 }
 
-SPObject *
-sp_object_detach (SPObject *parent, SPObject *object)
-{
-	SPObject *next;
-
+static SPObject *detach_object(SPObject *parent, SPObject *object, bool unref) {
 	g_return_val_if_fail (parent != NULL, NULL);
 	g_return_val_if_fail (SP_IS_OBJECT (parent), NULL);
 	g_return_val_if_fail (object != NULL, NULL);
 	g_return_val_if_fail (SP_IS_OBJECT (object), NULL);
 	g_return_val_if_fail (object->parent == parent, NULL);
 
-	next = object->next;
-	object->parent = NULL;
+	SPObject **ref;
+	for ( ref = &parent->children ; *ref ; ref = &(*ref)->next ) {
+		if ( *ref == object ) {
+			break;
+		}
+	}
+	g_assert(*ref == object);
+
+	SPObject *next=object->next;
+	*ref = object->next;
 	object->next = NULL;
+	object->parent = NULL;
 
 	sp_object_invoke_release (object);
+
+	if (unref) {
+		sp_object_unref(object, parent);
+	}
 
 	return next;
 }
 
-SPObject *
-sp_object_detach_unref (SPObject *parent, SPObject *object)
-{
-	SPObject *next;
+SPObject *sp_object_detach (SPObject *parent, SPObject *object) {
+	detach_object(parent, object, false);
+}
 
-	g_return_val_if_fail (parent != NULL, NULL);
-	g_return_val_if_fail (SP_IS_OBJECT (parent), NULL);
-	g_return_val_if_fail (object != NULL, NULL);
-	g_return_val_if_fail (SP_IS_OBJECT (object), NULL);
-	g_return_val_if_fail (object->parent == parent, NULL);
+SPObject *sp_object_detach_unref (SPObject *parent, SPObject *object) {
+	detach_object(parent, object, true);
+}
 
-	next = object->next;
-	object->parent = NULL;
-	object->next = NULL;
+SPObject *sp_object_first_child(SPObject *parent) {
+	return parent->children;
+}
 
-	sp_object_invoke_release (object);
-
-	sp_object_unref (object, parent);
-
-	return next;
+SPObject *sp_object_next(SPObject *object) {
+	return object;
 }
 
 /*
