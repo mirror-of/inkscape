@@ -2425,6 +2425,9 @@ sp_css_attr_from_style (SPObject *object, guint flags)
     return css;
 }
 
+/**
+Unset any text-related properties
+*/
 SPCSSAttr *
 sp_css_attr_unset_text (SPCSSAttr *css)
 {
@@ -2458,6 +2461,10 @@ is_url (const char *p)
     return (g_ascii_strncasecmp (p, "url(", 4) == 0);
 }
 
+/**
+Unset any properties that contain URI values. Used for storing style that will be reused across
+documents when carrying the referenced defs is impractical.
+ */
 SPCSSAttr *
 sp_css_attr_unset_uris (SPCSSAttr *css)
 {
@@ -2475,6 +2482,40 @@ sp_css_attr_unset_uris (SPCSSAttr *css)
 
     return css;
 }
+
+void
+sp_css_attr_scale_property_single (SPCSSAttr *css, const gchar *property, double ex)
+{
+    const gchar *w = sp_repr_css_property (css, property, NULL);
+    if (w) {
+        gchar *units = NULL;
+        double wd = g_ascii_strtod (w, &units) * ex;
+        if (w == units) // nothing converted, non-numeric value
+            return;
+        Inkscape::SVGOStringStream os;
+        //g_print ("%s; %g; %g %s\n", w, ex, wd, units);
+        os << wd << units; // reattach units!
+        sp_repr_css_set_property (css, property, os.str().c_str());
+    }
+}
+
+/**
+Scale any properties that may hold <length> by ex
+ */
+SPCSSAttr *
+sp_css_attr_scale (SPCSSAttr *css, double ex)
+{
+    sp_css_attr_scale_property_single (css, "baseline-shift", ex);
+    sp_css_attr_scale_property_single (css, "stroke-width", ex);
+   //FIXME: scale stroke-dashoffset too; but only after making scale_property_list for stroke-dasharray
+    sp_css_attr_scale_property_single (css, "font-size", ex);
+    sp_css_attr_scale_property_single (css, "kerning", ex);
+    sp_css_attr_scale_property_single (css, "letter-spacing", ex);
+    sp_css_attr_scale_property_single (css, "word-spacing", ex);
+
+    return css;
+}
+
 
 
 /*
