@@ -851,8 +851,6 @@ take_style_from_item (SPItem *item)
         css = sp_css_attr_scale (css, ex);
     }
 
-    //sp_repr_css_print (style_clipboard);
-
     return css;
 }
 

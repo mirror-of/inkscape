@@ -18,6 +18,7 @@
 #include <glib/gtypes.h>
 #include "gc-anchored.h"
 #include "util/shared-c-string-ptr.h"
+#include "util/list.h"
 
 namespace Inkscape {
 namespace XML {
@@ -90,7 +91,7 @@ public:
 
     virtual void mergeFrom(Node const *src, gchar const *key)=0;
 
-    virtual AttributeRecord const *attributeList() const=0;
+    virtual Inkscape::Util::List<AttributeRecord const> attributeList() const=0;
 
     virtual void synthesizeEvents(NodeEventVector const *vector, void *data)=0;
     virtual void addListener(NodeEventVector const *vector, void *data)=0;

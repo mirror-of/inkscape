@@ -1,5 +1,5 @@
 /*
- * Inkscape::XML::SimpleNode - generic XML node implementation
+ * SimpleNode - generic XML node implementation
  *
  * Copyright 2004-2005 MenTaLguY <mental@rydia.net>
  *
@@ -25,7 +25,7 @@ namespace Inkscape {
 namespace XML {
 
 class SimpleNode
-: virtual public Inkscape::XML::Node, public Inkscape::GC::Managed<>
+: virtual public Node, public Inkscape::GC::Managed<>
 {
 public:
     Session *session() {
@@ -39,41 +39,41 @@ public:
         _name = code;
     }
 
-    Inkscape::XML::Document *document() { return _document; }
-    Inkscape::XML::Document const *document() const {
+    Document *document() { return _document; }
+    Document const *document() const {
         return const_cast<SimpleNode *>(this)->document();
     }
 
-    Inkscape::XML::Node *duplicate() const { return _duplicate(); }
+    Node *duplicate() const { return _duplicate(); }
 
-    Inkscape::XML::Node *root();
-    Inkscape::XML::Node const *root() const {
+    Node *root();
+    Node const *root() const {
         return const_cast<SimpleNode *>(this)->root();
     }
 
-    Inkscape::XML::Node *parent() { return _parent; }
-    Inkscape::XML::Node const *parent() const { return _parent; }
+    Node *parent() { return _parent; }
+    Node const *parent() const { return _parent; }
 
-    Inkscape::XML::Node *next() { return _next; }
-    Inkscape::XML::Node const *next() const { return _next; }
+    Node *next() { return _next; }
+    Node const *next() const { return _next; }
 
-    Inkscape::XML::Node *firstChild() { return _first_child; }
-    Inkscape::XML::Node const *firstChild() const { return _first_child; }
-    Inkscape::XML::Node *lastChild() { return _last_child; }
-    Inkscape::XML::Node const *lastChild() const { return _last_child; }
+    Node *firstChild() { return _first_child; }
+    Node const *firstChild() const { return _first_child; }
+    Node *lastChild() { return _last_child; }
+    Node const *lastChild() const { return _last_child; }
 
     unsigned childCount() const { return _child_count; }
-    Inkscape::XML::Node *nthChild(unsigned index);
-    Inkscape::XML::Node const *nthChild(unsigned index) const {
+    Node *nthChild(unsigned index);
+    Node const *nthChild(unsigned index) const {
         return const_cast<SimpleNode *>(this)->nthChild(index);
     }
 
-    void addChild(Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
-    void appendChild(Inkscape::XML::Node *child) {
+    void addChild(Node *child, Node *ref);
+    void appendChild(Node *child) {
         SimpleNode::addChild(child, _last_child);
     }
-    void removeChild(Inkscape::XML::Node *child);
-    void changeOrder(Inkscape::XML::Node *child, Inkscape::XML::Node *ref);
+    void removeChild(Node *child);
+    void changeOrder(Node *child, Node *ref);
 
     unsigned position() const;
     void setPosition(int pos);
@@ -85,12 +85,14 @@ public:
     gchar const *content() const;
     void setContent(gchar const *value);
 
-    void mergeFrom(Inkscape::XML::Node const *src, gchar const *key);
+    void mergeFrom(Node const *src, gchar const *key);
 
-    Inkscape::XML::AttributeRecord const *attributeList() const { return _attributes; }
+    Inkscape::Util::List<AttributeRecord const> attributeList() const {
+        return _attributes;
+    }
 
-    void synthesizeEvents(Inkscape::XML::NodeEventVector const *vector, void *data);
-    void addListener(Inkscape::XML::NodeEventVector const *vector, void *data);
+    void synthesizeEvents(NodeEventVector const *vector, void *data);
+    void addListener(NodeEventVector const *vector, void *data);
     void removeListenerByData(void *data);
 
 protected:
@@ -100,39 +102,39 @@ protected:
     virtual SimpleNode *_duplicate() const=0;
 
 public: // ideally these should be protected somehow...
-    void _setParent(Inkscape::XML::Node *parent) { _parent = parent; }
-    void _setNext(Inkscape::XML::Node *next) { _next = next; }
-    void _bindDocument(Inkscape::XML::Document &document);
+    void _setParent(Node *parent) { _parent = parent; }
+    void _setNext(Node *next) { _next = next; }
+    void _bindDocument(Document &document);
     void _bindLogger(TransactionLogger &logger);
 
-    unsigned _childPosition(Inkscape::XML::Node const &child) const;
+    unsigned _childPosition(Node const &child) const;
     unsigned _cachedPosition() const { return _cached_position; }
     void _setCachedPosition(unsigned position) const {
         _cached_position = position;
     }
 
 private:
-    void operator=(Inkscape::XML::Node const &); // no assign
+    void operator=(Node const &); // no assign
+
+    Node *_parent;
+    Node *_next;
+    Document *_document;
+    TransactionLogger *_logger;
+    mutable unsigned _cached_position;
 
     int _name;
 
-    Inkscape::XML::Document *_document;
+    Inkscape::Util::MutableList<AttributeRecord> _attributes;
 
-    TransactionLogger *_logger;
-
-    Inkscape::XML::AttributeRecord *_attributes;
     Inkscape::Util::SharedCStringPtr _content;
-    Inkscape::XML::Node *_parent;
-    Inkscape::XML::Node *_first_child;
-    Inkscape::XML::Node *_last_child;
-    Inkscape::XML::Node *_next;
 
     unsigned _child_count;
     mutable bool _cached_positions_valid;
-    mutable unsigned _cached_position;
+    Node *_first_child;
+    Node *_last_child;
 
-    Inkscape::XML::NodeListener *_listeners;
-    Inkscape::XML::NodeListener *_last_listener;
+    NodeListener *_listeners;
+    NodeListener *_last_listener;
 };
 
 }

@@ -13,16 +13,13 @@ namespace Inkscape {
 namespace XML {
 
 struct AttributeRecord : public Inkscape::GC::Managed<> {
-    AttributeRecord(GQuark k, Inkscape::Util::SharedCStringPtr v,
-                    AttributeRecord *n=NULL)
-    : next(n), key(k), value(v) {}
+    AttributeRecord(GQuark k, Inkscape::Util::SharedCStringPtr v)
+    : key(k), value(v) {}
 
-    AttributeRecord(AttributeRecord const &attr, AttributeRecord *n=NULL)
-    : next(n), key(attr.key), value(attr.value) {}
-
-    AttributeRecord *next;
     GQuark key;
     Inkscape::Util::SharedCStringPtr value;
+
+    // accept default copy constructor and assignment operator
 };
 
 }

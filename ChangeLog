@@ -1,3 +1,12 @@
+2005-02-22  MenTaLguY  <mental@rydia.net>
+
+	* src/desktop-style.cpp, src/selection-chemistry.cpp,
+	  src/xml/attribute-record.h, src/xml/node.h, src/xml/repr-css.cpp,
+	  src/xml/repr-io.cpp, src/xml/simple-node.cpp, src/xml/simple-node.h:
+
+	  use Inkscape::Util::List for attribute lists, and sprinkle some
+	  appropriate 'using's in to make things less verbose
+
 2005-02-22  Jon A. Cruz  <jon@joncruz.org>
 	* src/inkscape.cpp, src/main.cpp, src/extension/input.cpp, src/io/sys.cpp,
 	  src/xml/repr-io.cpp:

@@ -37,16 +37,22 @@
 #include <map>
 #include <glibmm/ustring.h>
 #include <glibmm/quark.h>
+#include "util/list.h"
 #include "util/shared-c-string-ptr.h"
 
 using Inkscape::IO::Writer;
+using Inkscape::Util::List;
+using Inkscape::Util::cons;
+using Inkscape::XML::Document;
+using Inkscape::XML::Node;
+using Inkscape::XML::AttributeRecord;
 
-static Inkscape::XML::Document *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns);
-static Inkscape::XML::Node *sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *prefix_map);
+static Document *sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns);
+static Node *sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *prefix_map);
 static gint sp_repr_qualified_name (gchar *p, gint len, xmlNsPtr ns, const xmlChar *name, const gchar *default_ns, GHashTable *prefix_map);
-static void sp_repr_write_stream_root_element (Inkscape::XML::Node *repr, Writer &out, gboolean add_whitespace, gchar const *default_ns);
-static void sp_repr_write_stream (Inkscape::XML::Node *repr, Writer &out, gint indent_level, gboolean add_whitespace, Glib::QueryQuark elide_prefix);
-static void sp_repr_write_stream_element (Inkscape::XML::Node *repr, Writer &out, gint indent_level, gboolean add_whitespace, Glib::QueryQuark elide_prefix, Inkscape::XML::AttributeRecord const *attributes);
+static void sp_repr_write_stream_root_element (Node *repr, Writer &out, gboolean add_whitespace, gchar const *default_ns);
+static void sp_repr_write_stream (Node *repr, Writer &out, gint indent_level, gboolean add_whitespace, Glib::QueryQuark elide_prefix);
+static void sp_repr_write_stream_element (Node *repr, Writer &out, gint indent_level, gboolean add_whitespace, Glib::QueryQuark elide_prefix, List<AttributeRecord const> attributes);
 
 #ifdef HAVE_LIBWMF
 static xmlDocPtr sp_wmf_convert (const char * file_name);
@@ -196,14 +202,14 @@ int XmlSource::close()
 }
 
 /**
- * Reads XML from a file, including WMF files, and returns the Inkscape::XML::Document.
+ * Reads XML from a file, including WMF files, and returns the Document.
  * The default namespace can also be specified, if desired.
  */
-Inkscape::XML::Document *
+Document *
 sp_repr_read_file (const gchar * filename, const gchar *default_ns)
 {
     xmlDocPtr doc = 0;
-    Inkscape::XML::Document * rdoc = 0;
+    Document * rdoc = 0;
 
     xmlSubstituteEntitiesDefault(1);
 
@@ -264,13 +270,13 @@ sp_repr_read_file (const gchar * filename, const gchar *default_ns)
 }
 
 /**
- * Reads and parses XML from a buffer, returning it as an Inkscape::XML::Document
+ * Reads and parses XML from a buffer, returning it as an Document
  */
-Inkscape::XML::Document *
+Document *
 sp_repr_read_mem (const gchar * buffer, gint length, const gchar *default_ns)
 {
     xmlDocPtr doc;
-    Inkscape::XML::Document * rdoc;
+    Document * rdoc;
 
     xmlSubstituteEntitiesDefault(1);
 
@@ -320,7 +326,7 @@ Glib::QueryQuark qname_prefix(Glib::QueryQuark qname) {
 
 namespace {
 
-void promote_to_svg_namespace(Inkscape::XML::Node *repr) {
+void promote_to_svg_namespace(Node *repr) {
     if ( repr->type() == Inkscape::XML::ELEMENT_NODE ) {
         GQuark code = repr->code();
         if (!qname_prefix(code).id()) {
@@ -328,7 +334,7 @@ void promote_to_svg_namespace(Inkscape::XML::Node *repr) {
             repr->setCodeUnsafe(g_quark_from_string(svg_name));
             g_free(svg_name);
         }
-        for ( Inkscape::XML::Node *child = sp_repr_children(repr) ; child ; child = sp_repr_next(child) ) {
+        for ( Node *child = sp_repr_children(repr) ; child ; child = sp_repr_next(child) ) {
             promote_to_svg_namespace(child);
         }
     }
@@ -337,9 +343,9 @@ void promote_to_svg_namespace(Inkscape::XML::Node *repr) {
 }
 
 /**
- * Reads in a XML file to create a Inkscape::XML::Document
+ * Reads in a XML file to create a Document
  */
-Inkscape::XML::Document *
+Document *
 sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
 {
     if (doc == NULL) return NULL;
@@ -350,11 +356,11 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
     prefix_map = g_hash_table_new (g_str_hash, g_str_equal);
 
     GSList *reprs=NULL;
-    Inkscape::XML::Node *root=NULL;
+    Node *root=NULL;
 
     for ( node = doc->children ; node != NULL ; node = node->next ) {
         if (node->type == XML_ELEMENT_NODE) {
-            Inkscape::XML::Node *repr=sp_repr_svg_read_node (node, default_ns, prefix_map);
+            Node *repr=sp_repr_svg_read_node (node, default_ns, prefix_map);
             reprs = g_slist_append(reprs, repr);
 
             if (!root) {
@@ -364,12 +370,12 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
                 break;
             }
         } else if ( node->type == XML_COMMENT_NODE ) {
-            Inkscape::XML::Node *comment=sp_repr_svg_read_node(node, default_ns, prefix_map);
+            Node *comment=sp_repr_svg_read_node(node, default_ns, prefix_map);
             reprs = g_slist_append(reprs, comment);
         }
     }
 
-    Inkscape::XML::Document *rdoc=NULL;
+    Document *rdoc=NULL;
 
     if (root != NULL) {
         /* promote elements of SVG documents that don't use namespaces
@@ -384,7 +390,7 @@ sp_repr_do_read (xmlDocPtr doc, const gchar *default_ns)
     }
 
     for ( GSList *iter = reprs ; iter ; iter = iter->next ) {
-        Inkscape::XML::Node *repr=(Inkscape::XML::Node *)iter->data;
+        Node *repr=(Node *)iter->data;
         sp_repr_unref(repr);
     }
     g_slist_free(reprs);
@@ -411,10 +417,10 @@ sp_repr_qualified_name (gchar *p, gint len, xmlNsPtr ns, const xmlChar *name, co
         return g_snprintf (p, len, "%s", name);
 }
 
-static Inkscape::XML::Node *
+static Node *
 sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *prefix_map)
 {
-    Inkscape::XML::Node *repr, *crepr;
+    Node *repr, *crepr;
     xmlAttrPtr prop;
     xmlNodePtr child;
     gchar c[256];
@@ -434,7 +440,7 @@ sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *pre
             return NULL; // we do not preserve all-whitespace nodes unless we are asked to
         }
 
-        Inkscape::XML::Node *rdoc = sp_repr_new_text((const gchar *)node->content);
+        Node *rdoc = sp_repr_new_text((const gchar *)node->content);
         return rdoc;
     }
 
@@ -471,9 +477,9 @@ sp_repr_svg_read_node (xmlNodePtr node, const gchar *default_ns, GHashTable *pre
 }
 
 void
-sp_repr_save_stream (Inkscape::XML::Document *doc, FILE *fp, gchar const *default_ns, bool compress)
+sp_repr_save_stream (Document *doc, FILE *fp, gchar const *default_ns, bool compress)
 {
-    Inkscape::XML::Node *repr;
+    Node *repr;
     const gchar *str;
 
     Inkscape::URI dummy("x");
@@ -485,7 +491,7 @@ sp_repr_save_stream (Inkscape::XML::Document *doc, FILE *fp, gchar const *defaul
 
     out->writeString( "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" );
 
-    str = ((Inkscape::XML::Node *)doc)->attribute("doctype");
+    str = ((Node *)doc)->attribute("doctype");
     if (str) {
         out->writeString( str );
     }
@@ -516,7 +522,7 @@ sp_repr_save_stream (Inkscape::XML::Document *doc, FILE *fp, gchar const *defaul
 /* Returns TRUE if file successfully saved; FALSE if not
  */
 gboolean
-sp_repr_save_file (Inkscape::XML::Document *doc, const gchar *filename,
+sp_repr_save_file (Document *doc, const gchar *filename,
                    gchar const *default_ns)
 {
     if (filename == NULL) {
@@ -552,7 +558,7 @@ sp_repr_save_file (Inkscape::XML::Document *doc, const gchar *filename,
 }
 
 void
-sp_repr_print (Inkscape::XML::Node * repr)
+sp_repr_print (Node * repr)
 {
     Inkscape::IO::StdOutputStream bout;
     Inkscape::IO::OutputStreamWriter out(bout);
@@ -620,18 +626,18 @@ void add_ns_map_entry(NSMap &ns_map, Glib::QueryQuark prefix) {
     }
 }
 
-void populate_ns_map(NSMap &ns_map, Inkscape::XML::Node &repr) {
+void populate_ns_map(NSMap &ns_map, Node &repr) {
     if ( repr.type() == Inkscape::XML::ELEMENT_NODE ) {
         add_ns_map_entry(ns_map, qname_prefix(repr.code()));
-        for ( Inkscape::XML::AttributeRecord const *attr=repr.attributeList() ;
-              attr ; attr = attr->next )
+        for ( List<AttributeRecord const> iter=repr.attributeList() ;
+              iter ; ++iter )
         {
-            Glib::QueryQuark prefix=qname_prefix(attr->key);
+            Glib::QueryQuark prefix=qname_prefix(iter->key);
             if (prefix.id()) {
                 add_ns_map_entry(ns_map, prefix);
             }
         }
-        for ( Inkscape::XML::Node *child=sp_repr_children(&repr) ;
+        for ( Node *child=sp_repr_children(&repr) ;
               child ; child = sp_repr_next(child) )
         {
             populate_ns_map(ns_map, *child);
@@ -642,7 +648,7 @@ void populate_ns_map(NSMap &ns_map, Inkscape::XML::Node &repr) {
 }
 
 void
-sp_repr_write_stream_root_element (Inkscape::XML::Node *repr, Writer &out, gboolean add_whitespace, gchar const *default_ns)
+sp_repr_write_stream_root_element (Node *repr, Writer &out, gboolean add_whitespace, gchar const *default_ns)
 {
     using Inkscape::Util::SharedCStringPtr;
     g_assert(repr != NULL);
@@ -655,7 +661,7 @@ sp_repr_write_stream_root_element (Inkscape::XML::Node *repr, Writer &out, gbool
         elide_prefix = g_quark_from_string(sp_xml_ns_uri_prefix(default_ns, NULL));
     }
 
-    Inkscape::XML::AttributeRecord const *attributes=repr->attributeList();
+    List<AttributeRecord const> attributes=repr->attributeList();
     for ( NSMap::iterator iter=ns_map.begin() ; iter != ns_map.end() ; ++iter ) 
     {
         Glib::QueryQuark prefix=(*iter).first;
@@ -663,13 +669,13 @@ sp_repr_write_stream_root_element (Inkscape::XML::Node *repr, Writer &out, gbool
 
         if (prefix.id()) {
             if ( elide_prefix == prefix ) {
-                attributes = new Inkscape::XML::AttributeRecord(g_quark_from_static_string("xmlns"), ns_uri, const_cast<Inkscape::XML::AttributeRecord *>(attributes));
+                attributes = cons(AttributeRecord(g_quark_from_static_string("xmlns"), ns_uri), attributes);
             }
 
             Glib::ustring attr_name="xmlns:";
             attr_name.append(g_quark_to_string(prefix));
             GQuark key = g_quark_from_string(attr_name.c_str());
-            attributes = new Inkscape::XML::AttributeRecord(key, ns_uri, const_cast<Inkscape::XML::AttributeRecord *>(attributes)); 
+            attributes = cons(AttributeRecord(key, ns_uri), attributes);
         } else {
             // if there are non-namespaced elements, we can't globally
             // use a default namespace
@@ -681,7 +687,7 @@ sp_repr_write_stream_root_element (Inkscape::XML::Node *repr, Writer &out, gbool
 }
 
 void
-sp_repr_write_stream (Inkscape::XML::Node *repr, Writer &out, gint indent_level,
+sp_repr_write_stream (Node *repr, Writer &out, gint indent_level,
                       gboolean add_whitespace, Glib::QueryQuark elide_prefix)
 {
     if (repr->type() == Inkscape::XML::TEXT_NODE) {
@@ -696,12 +702,12 @@ sp_repr_write_stream (Inkscape::XML::Node *repr, Writer &out, gint indent_level,
 }
 
 void
-sp_repr_write_stream_element (Inkscape::XML::Node * repr, Writer & out, gint indent_level,
+sp_repr_write_stream_element (Node * repr, Writer & out, gint indent_level,
                               gboolean add_whitespace,
                               Glib::QueryQuark elide_prefix,
-                              Inkscape::XML::AttributeRecord const *attributes)
+                              List<AttributeRecord const> attributes)
 {
-    Inkscape::XML::Node *child;
+    Node *child;
     gboolean loose;
     gint i;
 
@@ -734,16 +740,16 @@ sp_repr_write_stream_element (Inkscape::XML::Node * repr, Writer & out, gint ind
         add_whitespace = FALSE;
     }
 
-    for ( Inkscape::XML::AttributeRecord const *attr = attributes ; attr != NULL ; attr = attr->next ) {
-        gchar const * const key = SP_REPR_ATTRIBUTE_KEY(attr);
-        gchar const * const val = SP_REPR_ATTRIBUTE_VALUE(attr);
-        out.writeString( "\n" );
+    for ( List<AttributeRecord const> iter = attributes ;
+          iter ; ++iter )
+    {
+        out.writeString("\n");
         for ( i = 0 ; i < indent_level + 1 ; i++ ) {
-            out.writeString( "  " );
+            out.writeString("  ");
         }
-        out.printf( " %s=\"", key );
-        repr_quote_write (out, val);
-        out.writeChar( '"' );
+        out.printf(" %s=\"", g_quark_to_string(iter->key));
+        repr_quote_write(out, iter->value);
+        out.writeChar('"');
     }
 
     loose = TRUE;
