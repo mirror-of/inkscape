@@ -430,7 +430,7 @@ FileOpenDialogImpl::FileOpenDialogImpl(const char *dir,
     Gtk::FileFilter topFilter;
     topFilter.set_name(_("Autodetect"));
     extensionMap[Glib::ustring(_("Autodetect"))]=NULL;
-    topFilter.add_pattern("*");
+    //topFilter.add_pattern("*");
     add_filter(topFilter);
 
     GSList *extension_list = Inkscape::Extension::db.get_input_list();
@@ -453,6 +453,7 @@ FileOpenDialogImpl::FileOpenDialogImpl(const char *dir,
         upattern += ioext->file_extension;
         //g_message("ext for %s: '%s'\n", ioext->name,upattern.c_str());
         filter.add_pattern(upattern);
+        topFilter.add_pattern(upattern);
         add_filter(filter);
         extensionMap[uname]=ioext->extension;
 
@@ -689,7 +690,7 @@ FileSaveDialogImpl::FileSaveDialogImpl(const char *dir,
     Gtk::FileFilter topFilter;
     topFilter.set_name(Glib::ustring(_("Autodetect")));
     extensionMap[Glib::ustring(_("Autodetect"))]=NULL;
-    topFilter.add_pattern(Glib::ustring("*"));
+    //topFilter.add_pattern(Glib::ustring("*"));
     add_filter(topFilter);
 
     GSList *extension_list = Inkscape::Extension::db.get_input_list();
@@ -712,6 +713,7 @@ FileSaveDialogImpl::FileSaveDialogImpl(const char *dir,
         upattern += ioext->file_extension;
         //g_message("ext for %s: '%s'\n", ioext->name,upattern.c_str());
         filter.add_pattern(upattern);
+        topFilter.add_pattern(upattern);
         add_filter(filter);
         extensionMap[uname]=ioext->extension;
 
