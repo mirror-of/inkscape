@@ -204,16 +204,6 @@ struct SPObject : public GObject {
     /** Sets the description of this object */
     void setDesc(gchar const *desc) { /* TODO */ }
 
-    /** Retrieves the visibility state of this object */
-        bool visible() const;
-        /** @brief Sets the visibility of this object
-	 * 
-	 * Sets the visibility for the object.
-	 *
-	 * @param 
-	 */
-        void setVisible(bool val);
-
 	/** @brief Set the policy under which this object will be
 	 *         orphan-collected.
 	 *

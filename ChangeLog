@@ -1,3 +1,16 @@
+2004-11-08  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/sp-item.h, src/sp-item.cpp
+	  (isExplicitlyHidden, setExplicitlyHidden): New methods.
+
+	* src/dialogs/item-properties.cpp: Change from having a `Visible'
+	  checkbox that explicitly sets the SVG visibility property to
+	  having a `Hide' checkbox that controls whether or not the
+	  element has visibility:hidden.  (Mitigates #1061934.)
+
+	* src/sp-object.h, src/sp-object.cpp (visible, setVisible):
+	  Remove these methods.
+
 2004-11-07  MenTaLguY  <mental@rydia.net>
 
 	* src/gc-finalized.h: fix for Debian bug #279991 (cast to ptrdiff_t
