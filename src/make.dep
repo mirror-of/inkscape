@@ -27,6 +27,7 @@ arc-context.o: \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
+	macros.h \
 	modules/svg.h \
 	selection.h \
 	sp-ellipse.h \
@@ -37,6 +38,9 @@ arc-context.o: \
 	sp-object.h \
 	sp-shape.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr.h
@@ -217,6 +221,24 @@ desktop.o: \
 	widgets/widget-sizes.h \
 	xml/repr.h
 
+dialogs/FileDialog-win32.o: \
+	dialogs/FileDialog-win32.cpp \
+	dialogs/FileDialog.h \
+	display/nr-arena-forward.h \
+	forward.h \
+	libnr/nr-path.h \
+	libnr/nr-types.h \
+	module.h \
+	modules/menu.h \
+	xml/repr.h
+
+dialogs/FileDialog.o: \
+	dialogs/FileDialog.cpp \
+	dialogs/FileDialog.h \
+	helper/sp-intl.h \
+	modules/menu.h \
+	modules/menu.h
+
 dialogs/align.o: \
 	dialogs/align.cpp \
 	desktop-handles.h \
@@ -340,6 +362,7 @@ dialogs/display-settings.o: \
 dialogs/export.o: \
 	dialogs/export.cpp \
 	desktop-handles.h \
+	desktop.h \
 	dialogs/dialog-events.h \
 	dialogs/export.h \
 	dir-util.h \
@@ -354,17 +377,24 @@ dialogs/export.o: \
 	helper/units.h \
 	helper/units.h \
 	helper/window.h \
+	inkscape-private.h \
 	inkscape.h \
 	interface.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-object.h \
 	libnr/nr-path.h \
+	libnr/nr-rect.h \
 	libnr/nr-types.h \
+	libnr/nr-values.h \
 	macros.h \
 	module.h \
 	modules/menu.h \
 	prefs-utils.h \
 	selection.h \
 	sp-item.h \
+	sp-namedview.h \
+	sp-object-group.h \
 	sp-object.h \
 	verbs.h \
 	verbs.h \
@@ -422,6 +452,7 @@ dialogs/item-properties.o: \
 	dialogs/item-properties.h \
 	display/nr-arena-forward.h \
 	document.h \
+	document.h \
 	enums.h \
 	forward.h \
 	forward.h \
@@ -441,6 +472,9 @@ dialogs/item-properties.o: \
 	sp-object.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	widgets/sp-widget.h \
 	xml/repr.h \
@@ -573,6 +607,7 @@ dialogs/text-edit.o: \
 	dialogs/text-edit.h \
 	display/nr-arena-forward.h \
 	document.h \
+	document.h \
 	enums.h \
 	forward.h \
 	forward.h \
@@ -608,6 +643,9 @@ dialogs/text-edit.o: \
 	sp-text.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	verbs.h \
 	version.h \
@@ -730,6 +768,7 @@ display/nr-arena-glyphs.o: \
 	display/nr-arena-group.h \
 	display/nr-arena-item.h \
 	display/nr-arena.h \
+	document.h \
 	enums.h \
 	forward.h \
 	helper/curve.h \
@@ -754,6 +793,9 @@ display/nr-arena-glyphs.o: \
 	sp-paint-server.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -811,6 +853,7 @@ display/nr-arena-shape.o: \
 	display/nr-arena-item.h \
 	display/nr-arena-shape.h \
 	display/nr-arena.h \
+	document.h \
 	enums.h \
 	forward.h \
 	helper/canvas-bpath.h \
@@ -841,6 +884,9 @@ display/nr-arena-shape.o: \
 	sp-paint-server.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -971,6 +1017,9 @@ draw-context.o: \
 	sp-shape.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr.h
@@ -1003,6 +1052,7 @@ dropper-context.o: \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
+	macros.h \
 	xml/repr.h
 
 dyna-draw-context.o: \
@@ -1033,6 +1083,7 @@ dyna-draw-context.o: \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
+	macros.h \
 	modules/svg.h \
 	selection.h \
 	view.h \
@@ -1182,6 +1233,7 @@ help.o: \
 	help.cpp \
 	display/nr-arena-forward.h \
 	document.h \
+	file.h \
 	forward.h \
 	help.h \
 	helper/curve.h \
@@ -1197,6 +1249,8 @@ help.o: \
 	libnrtype/nr-font.h \
 	libnrtype/nr-rasterfont.h \
 	libnrtype/nr-typeface.h \
+	module.h \
+	modules/menu.h \
 	sp-chars.h \
 	sp-item.h \
 	sp-object.h \
@@ -1538,6 +1592,9 @@ knotholder.o: \
 	sp-object.h \
 	sp-shape.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr.h
@@ -1790,6 +1847,7 @@ libnrtype/font-style-to-pos.o: \
 	libnrtype/font-style-to-pos.cpp \
 	color.h \
 	display/nr-arena-forward.h \
+	document.h \
 	enums.h \
 	forward.h \
 	helper/units.h \
@@ -1802,6 +1860,9 @@ libnrtype/font-style-to-pos.o: \
 	sp-object.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -1942,6 +2003,15 @@ livarot/MySeg.o: \
 	livarot/MyMath.h \
 	livarot/MySeg.h
 
+livarot/Path-test.o: \
+	livarot/Path-test.cpp \
+	libnr/nr-point-fns.h \
+	libnr/nr-types.h \
+	livarot/LivarotDefs.h \
+	livarot/Path.cpp \
+	livarot/Path.h \
+	utest/utest.h
+
 livarot/Path.o: \
 	livarot/Path.cpp \
 	libnr/nr-point-fns.h \
@@ -1951,9 +2021,12 @@ livarot/Path.o: \
 
 livarot/PathConversion.o: \
 	livarot/PathConversion.cpp \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-point-fns.h \
 	libnr/nr-types.h \
 	libnr/nr-types.h \
+	libnr/nr-values.h \
 	livarot/AVL.h \
 	livarot/DblLinked.h \
 	livarot/LivarotDefs.h \
@@ -2041,46 +2114,6 @@ livarot/ShapeSweepUtils.o: \
 	livarot/LivarotDefs.h \
 	livarot/Shape.h \
 	livarot/ShapeUtils.h
-
-main.o: \
-	main.cpp \
-	desktop.h \
-	display/nr-arena-forward.h \
-	document.h \
-	file.h \
-	forward.h \
-	helper/action.h \
-	helper/helper-forward.h \
-	helper/sp-intl.h \
-	helper/units.h \
-	inkscape-private.h \
-	inkscape-stock.h \
-	inkscape.h \
-	interface.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-object.h \
-	libnr/nr-path.h \
-	libnr/nr-rect.h \
-	libnr/nr-types.h \
-	libnr/nr-values.h \
-	macros.h \
-	module.h \
-	modules/init.h \
-	modules/menu.h \
-	modules/svg.h \
-	modules/win32.h \
-	print.h \
-	slideshow.h \
-	sp-guide.h \
-	sp-namedview.h \
-	sp-object-group.h \
-	sp-object-repr.h \
-	sp-object.h \
-	verbs.h \
-	version.h \
-	view.h \
-	xml/repr.h
 
 module.o: \
 	module.cpp \
@@ -2210,6 +2243,9 @@ modules/ps.o: \
 	sp-object.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -2307,6 +2343,9 @@ node-context.o: \
 	sp-path.h \
 	sp-shape.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr-action.h \
@@ -2356,6 +2395,9 @@ nodepath.o: \
 	sp-path.h \
 	sp-shape.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr-action.h \
@@ -2366,6 +2408,7 @@ nodepath.o: \
 object-edit.o: \
 	object-edit.cpp \
 	display/nr-arena-forward.h \
+	document.h \
 	enums.h \
 	forward.h \
 	helper/curve.h \
@@ -2389,6 +2432,9 @@ object-edit.o: \
 	sp-spiral.h \
 	sp-star.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -2428,6 +2474,9 @@ object-ui.o: \
 	sp-spiral.h \
 	sp-star.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr.h
@@ -2470,6 +2519,9 @@ path-chemistry.o: \
 	sp-text.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr.h
@@ -2525,6 +2577,9 @@ prefs-utils.o: \
 	svg/svg-types.h \
 	text-context.h \
 	tools-switch.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	version.h \
 	view.h \
@@ -2565,6 +2620,9 @@ print.o: \
 	sp-paint-server.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -2591,6 +2649,7 @@ rect-context.o: \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
+	macros.h \
 	modules/svg.h \
 	rect-context.h \
 	selection.h \
@@ -2602,6 +2661,9 @@ rect-context.o: \
 	sp-rect.h \
 	sp-shape.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr.h
@@ -2756,6 +2818,9 @@ selection-chemistry.o: \
 	sp-path.h \
 	sp-shape.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr-action.h \
@@ -2801,6 +2866,7 @@ seltrans-handles.o: \
 	helper/sp-canvas.h \
 	knot.h \
 	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
@@ -2924,6 +2990,7 @@ sp-chars.o: \
 	display/nr-arena-glyphs.h \
 	display/nr-arena-group.h \
 	display/nr-arena-item.h \
+	document.h \
 	enums.h \
 	forward.h \
 	helper/curve.h \
@@ -2949,6 +3016,9 @@ sp-chars.o: \
 	sp-paint-server.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -3002,6 +3072,7 @@ sp-ellipse.o: \
 	attributes.h \
 	color.h \
 	display/nr-arena-forward.h \
+	document.h \
 	enums.h \
 	forward.h \
 	helper/curve.h \
@@ -3019,6 +3090,9 @@ sp-ellipse.o: \
 	sp-shape.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -3118,6 +3192,9 @@ sp-image.o: \
 	sp-object.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	version.h \
 	view.h \
@@ -3152,6 +3229,9 @@ sp-item-group.o: \
 	sp-root.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
@@ -3221,6 +3301,7 @@ sp-line.o: \
 	attributes.h \
 	color.h \
 	display/nr-arena-forward.h \
+	document.h \
 	enums.h \
 	forward.h \
 	helper/curve.h \
@@ -3236,6 +3317,9 @@ sp-line.o: \
 	sp-shape.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -3271,6 +3355,9 @@ sp-marker.o: \
 	sp-object-group.h \
 	sp-object.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr.h
@@ -3434,6 +3521,9 @@ sp-object.o: \
 	sp-root.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
@@ -3479,6 +3569,9 @@ sp-offset.o: \
 	sp-shape.h \
 	sp-text.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
@@ -3502,6 +3595,7 @@ sp-path.o: \
 	attributes.h \
 	color.h \
 	display/nr-arena-forward.h \
+	document.h \
 	enums.h \
 	forward.h \
 	helper/curve.h \
@@ -3520,6 +3614,9 @@ sp-path.o: \
 	sp-shape.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -3560,6 +3657,7 @@ sp-polygon.o: \
 	sp-polygon.cpp \
 	attributes.h \
 	display/nr-arena-forward.h \
+	document.h \
 	enums.h \
 	forward.h \
 	helper/curve.h \
@@ -3573,6 +3671,9 @@ sp-polygon.o: \
 	sp-polygon.h \
 	sp-shape.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -3580,6 +3681,7 @@ sp-polyline.o: \
 	sp-polyline.cpp \
 	attributes.h \
 	display/nr-arena-forward.h \
+	document.h \
 	enums.h \
 	forward.h \
 	helper/curve.h \
@@ -3593,6 +3695,9 @@ sp-polyline.o: \
 	sp-polyline.h \
 	sp-shape.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -3623,6 +3728,9 @@ sp-rect.o: \
 	sp-shape.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -3716,6 +3824,7 @@ sp-spiral.o: \
 	attributes.h \
 	dialogs/object-attributes.h \
 	display/nr-arena-forward.h \
+	document.h \
 	enums.h \
 	forward.h \
 	forward.h \
@@ -3733,6 +3842,9 @@ sp-spiral.o: \
 	sp-shape.h \
 	sp-spiral.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	xml/repr.h
 
@@ -3743,6 +3855,7 @@ sp-star.o: \
 	desktop.h \
 	dialogs/object-attributes.h \
 	display/nr-arena-forward.h \
+	document.h \
 	enums.h \
 	forward.h \
 	forward.h \
@@ -3764,6 +3877,9 @@ sp-star.o: \
 	sp-shape.h \
 	sp-star.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr.h
@@ -3847,6 +3963,9 @@ sp-text.o: \
 	sp-text.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr-action.h \
@@ -3910,6 +4029,7 @@ spiral-context.o: \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
+	macros.h \
 	modules/svg.h \
 	selection.h \
 	sp-item-group.h \
@@ -3921,6 +4041,9 @@ spiral-context.o: \
 	sp-spiral.h \
 	spiral-context.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr.h
@@ -3979,6 +4102,9 @@ splivarot.o: \
 	splivarot.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr-action.h \
@@ -4010,6 +4136,7 @@ star-context.o: \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
+	macros.h \
 	modules/svg.h \
 	selection.h \
 	sp-item-group.h \
@@ -4022,6 +4149,9 @@ star-context.o: \
 	sp-star.h \
 	star-context.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr.h
@@ -4152,6 +4282,9 @@ text-context.o: \
 	style.h \
 	svg/svg-types.h \
 	text-context.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr.h
@@ -4207,6 +4340,9 @@ toolbox.o: \
 	sp-shape.h \
 	svg/svg-types.h \
 	toolbox.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	version.h \
 	view.h \
@@ -4270,6 +4406,9 @@ tools-switch.o: \
 	svg/svg-types.h \
 	text-context.h \
 	tools-switch.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	version.h \
 	view.h \
@@ -4359,6 +4498,9 @@ verbs.o: \
 	text-context.h \
 	toolbox.h \
 	tools-switch.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	version.h \
 	view.h \
@@ -4406,6 +4548,7 @@ widgets/dash-selector.o: \
 	color.h \
 	dialogs/dialog-events.h \
 	display/nr-arena-forward.h \
+	document.h \
 	enums.h \
 	forward.h \
 	helper/units.h \
@@ -4418,6 +4561,9 @@ widgets/dash-selector.o: \
 	sp-object.h \
 	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	widgets/dash-selector.h \
 	xml/repr-action.h \
@@ -4764,8 +4910,29 @@ widgets/sp-xmlview-attr-list.o: \
 
 widgets/sp-xmlview-content.o: \
 	widgets/sp-xmlview-content.cpp \
+	desktop-handles.h \
+	display/nr-arena-forward.h \
+	document-private.h \
+	document.h \
+	enums.h \
+	forward.h \
+	helper/helper-forward.h \
+	helper/units.h \
+	inkscape.h \
+	libnr/nr-macros.h \
+	libnr/nr-matrix.h \
+	libnr/nr-types.h \
+	libnr/nr-values.h \
 	macros.h \
+	sp-defs.h \
+	sp-item-group.h \
+	sp-item.h \
+	sp-object.h \
+	sp-root.h \
+	svg/svg-types.h \
+	version.h \
 	widgets/sp-xmlview-content.h \
+	xml/repr-action.h \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
@@ -4826,9 +4993,6 @@ widgets/test-wrapbox.o: \
 	widgets/sp-vwrap-box.h \
 	widgets/sp-wrap-box.h
 
-winmain.o: \
-	winmain.cpp
-
 xml/repr-action-test.o: \
 	xml/repr-action-test.cpp \
 	utest/utest.h \
@@ -4883,6 +5047,7 @@ zoom-context.o: \
 	libnr/nr-rect.h \
 	libnr/nr-types.h \
 	libnr/nr-values.h \
+	macros.h \
 	prefs-utils.h \
 	rubberband.h \
 	selection.h \

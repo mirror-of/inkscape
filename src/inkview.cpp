@@ -42,6 +42,10 @@
 #include "document.h"
 #include "svg-view.h"
 
+#ifndef HAVE_BIND_TEXTDOMAIN_CODESET
+#define bind_textdomain_codeset(p,c)
+#endif
+
 struct _SPSlideShow {
 	char **slides;
 	int size;

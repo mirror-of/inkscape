@@ -10,6 +10,8 @@ OBJECTS = \
 	desktop-handles.o \
 	desktop-snap.o \
 	desktop.o \
+	dialogs/FileDialog-win32.o \
+	dialogs/FileDialog.o \
 	dialogs/align.o \
 	dialogs/desktop-properties.o \
 	dialogs/dialog-events.o \
@@ -123,6 +125,7 @@ OBJECTS = \
 	livarot/AVL.o \
 	livarot/DblLinked.o \
 	livarot/MySeg.o \
+	livarot/Path-test.o \
 	livarot/Path.o \
 	livarot/PathConversion.o \
 	livarot/PathOutline.o \
@@ -133,7 +136,6 @@ OBJECTS = \
 	livarot/ShapeMisc.o \
 	livarot/ShapeSweep.o \
 	livarot/ShapeSweepUtils.o \
-	main.o \
 	module.o \
 	modules/db.o \
 	modules/extension.o \
@@ -237,7 +239,6 @@ OBJECTS = \
 	widgets/spinbutton-events.o \
 	widgets/spw-utilities.o \
 	widgets/test-wrapbox.o \
-	winmain.o \
 	xml/repr-action-test.o \
 	xml/repr-action.o \
 	xml/repr-css.o \
@@ -256,6 +257,8 @@ LINTS = \
 	desktop-handles.lint \
 	desktop-snap.lint \
 	desktop.lint \
+	dialogs/FileDialog-win32.lint \
+	dialogs/FileDialog.lint \
 	dialogs/align.lint \
 	dialogs/desktop-properties.lint \
 	dialogs/dialog-events.lint \
@@ -369,6 +372,7 @@ LINTS = \
 	livarot/AVL.lint \
 	livarot/DblLinked.lint \
 	livarot/MySeg.lint \
+	livarot/Path-test.lint \
 	livarot/Path.lint \
 	livarot/PathConversion.lint \
 	livarot/PathOutline.lint \
@@ -379,7 +383,6 @@ LINTS = \
 	livarot/ShapeMisc.lint \
 	livarot/ShapeSweep.lint \
 	livarot/ShapeSweepUtils.lint \
-	main.lint \
 	module.lint \
 	modules/db.lint \
 	modules/extension.lint \
@@ -483,7 +486,6 @@ LINTS = \
 	widgets/spinbutton-events.lint \
 	widgets/spw-utilities.lint \
 	widgets/test-wrapbox.lint \
-	winmain.lint \
 	xml/repr-action-test.lint \
 	xml/repr-action.lint \
 	xml/repr-css.lint \

@@ -17,6 +17,10 @@ desktop-snap.h
 desktop-units.h
 desktop.cpp
 desktop.h
+dialogs/FileDialog-win32.cpp
+dialogs/FileDialog.cpp
+dialogs/FileDialog.h
+dialogs/InkscapeExtension.h
 dialogs/align.cpp
 dialogs/align.h
 dialogs/desktop-properties.cpp
@@ -241,6 +245,7 @@ livarot/LivarotDefs.h
 livarot/MyMath.h
 livarot/MySeg.cpp
 livarot/MySeg.h
+livarot/Path-test.cpp
 livarot/Path.cpp
 livarot/Path.h
 livarot/PathConversion.cpp
@@ -255,7 +260,6 @@ livarot/ShapeSweep.cpp
 livarot/ShapeSweepUtils.cpp
 livarot/ShapeUtils.h
 macros.h
-main.cpp
 module.cpp
 module.h
 modules/db.cpp
@@ -466,7 +470,6 @@ widgets/spw-utilities.cpp
 widgets/spw-utilities.h
 widgets/test-wrapbox.cpp
 widgets/widget-sizes.h
-winmain.cpp
 xml/repr-action-test.cpp
 xml/repr-action.cpp
 xml/repr-action.h

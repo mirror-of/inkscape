@@ -17,6 +17,7 @@ inkview.cpp
 libnr/nr-types-test.cpp
 libnrtype/nr-type-gnome.cpp
 libnrtype/nr-type-xft.cpp
+main.cpp
 modules/gnome.cpp
 svg/gill-svg-path.cpp
 test.c
@@ -26,4 +27,5 @@ widgets/sp-vwrap-box.cpp
 widgets/sp-toolbox.cpp
 widgets/sp-wrap-box.cpp
 widgets/test-widgets.cpp
+winmain.cpp
 
