@@ -50,12 +50,16 @@ dist:
 	$(MKDIR) inkscape$(S)fonts
 	$(CP) $(GTKDOS)$(S)fonts$(S)*.ttf inkscape$(S)fonts
 	$(CPDIR) share inkscape$(S)share
+	$(RM) inkscape$(S)share$(S)extensions$(S)ai_input.inkmod
+	$(RM) inkscape$(S)share$(S)extensions$(S)ai_output.inkmod
+	$(RM) inkscape$(S)share$(S)extensions$(S)epsi_output.inkmod
+	$(RM) inkscape$(S)share$(S)extensions$(S)svgz_input.inkmod
+	$(RM) inkscape$(S)share$(S)extensions$(S)svgz_output.inkmod
 	$(CPDIR) $(GTKDOS)$(S)share$(S)themes inkscape$(S)share
 	$(CPDIR) doc inkscape$(S)doc
 	$(MKDIR) inkscape$(S)data
 	$(MKDIR) inkscape$(S)locale
 	$(MAKE) -C po -f Makefile.mingw dist
-	$(MKDIR) inkscape$(S)modules
 	@echo "##################### D O N E ####################"
 
 clean:

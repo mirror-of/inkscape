@@ -93,7 +93,7 @@ FileOpenDialog::~FileOpenDialog() {
         g_free(nativeData);
     }
 
-    g_free(filename);
+    if (filename) g_free(filename);
     extension = NULL;
 }
 
@@ -324,7 +324,7 @@ FileSaveDialog::~FileSaveDialog() {
 
   //do any cleanup here
   g_free(nativeData);
-  g_free(filename);
+  if (filename) g_free(filename);
   extension = NULL;
 }
 
