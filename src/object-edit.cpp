@@ -161,7 +161,7 @@ sp_pattern_scale_set (SPItem *item, const NR::Point &p, guint state)
 
     // Get the scale from the position of the knotholder,
     NR::Point d = p - sp_pattern_extract_trans(pat);
-    gdouble s = NR::L2(p);
+    gdouble s = NR::L2(d);
     gdouble pat_x = pattern_width(pat) * 0.5;
     gdouble pat_y = pattern_height(pat) * 0.5;
     gdouble pat_h = hypot(pat_x, pat_y);

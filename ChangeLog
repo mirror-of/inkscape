@@ -1,3 +1,7 @@
+2004-08-15  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/object-edit.cpp: fix a regression in my cleanups from yesterday.
+
 2004-08-15  MenTaLguY  <mental@rydia.net>
 
 	* src/Makefile.am, src/Makefile_insert, src/util/Makefile_insert:
