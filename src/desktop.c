@@ -946,11 +946,13 @@ sp_dtw_desktop_deactivate (SPDesktop *desktop, SPDesktopWidget *dtw)
 #endif
 }
 
+static gint x = 0, y = 0; // the position of the save confirmation dialog
+
 static gboolean
 sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 {
 	SPDocument *doc;
-	gint x = 0, y = 0, x1 = 0, y1 = 0;
+	gint x1 = 0, y1 = 0;
 	doc = SP_VIEW_DOCUMENT (view);
 
 	if (doc && (((GObject *) doc)->ref_count == 1)) {
@@ -964,8 +966,10 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 			gtk_dialog_add_button (GTK_DIALOG (dlg), GTK_STOCK_SAVE, GTK_RESPONSE_YES);
 			gtk_dialog_set_default_response (GTK_DIALOG (dlg), GTK_RESPONSE_YES);
 
-			//position its bottom right curner under the cursor
-			gdk_window_get_pointer (NULL, &x, &y, NULL); // NULL means relative to the root window
+			if (x == 0 && y == 0) { // if no previous position remembered,
+				//position its bottom right curner under the cursor
+				gdk_window_get_pointer (NULL, &x, &y, NULL); // NULL means relative to the root window
+			} // otherwise put this dialog where the previous one was
 			gtk_window_get_size ((GtkWindow *) dlg, &x1, &y1);
 			gtk_window_move((GtkWindow *) dlg, MAX(x-x1, 0), MAX(y-y1, 0));
 			sp_transientize (dlg);
@@ -981,6 +985,7 @@ sp_dtw_desktop_shutdown (SPView *view, SPDesktopWidget *dtw)
 			case GTK_RESPONSE_NO:
 				break;
 			default: // cancel pressed, or dialog was closed
+				x = y = 0; // forget the position of the dialog
 				return TRUE;
 				break;
 			}
