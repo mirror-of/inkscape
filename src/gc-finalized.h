@@ -17,59 +17,63 @@
 #define SEEN_INKSCAPE_GC_FINALIZED_H
 
 #include <new>
-#include <cstddef>
 #include "gc-core.h"
 
 namespace Inkscape {
 
 namespace GC {
 
-// @brief a mix-in ensuring that a object's destructor will get called before
-//        the garbage collector destroys it
-//
-// Normally, the garbage collector does not call destructors before destroying
-// an object.  On construction, this "mix-in" will register a finalizer
-// function to call destructors before derived objects are destroyed.
-// 
-// This works pretty well, with the following caveats:
-//
-//   1. The garbage collector uses strictly topologically-ordered
-//      finalization; if objects with finalizers reference each other
-//      directly or indirectly, the collector will refuse to finalize (and
-//      therefor free) them.
-//
-//      The best way to limit this effect is to only make "leaf" objects
-//      finalizable, or to register some of pointer members as
-//      "disappearing links" which will be cleared to break cycles
-//      before finalization.
-//
-//   2. Because there is no guarantee when the collector will destroy
-//      objects, there is no guarantee when the destructor will get called.
-//
-//      It may not get called until the very end of the program, or never.
-//
-//   3. If allocated in arrays, only the first object in the array will
-//      have its destructor called, unless you make other arrangements by
-//      registering your own finalizer instead.
-//
-//   4. Similarly, making multiple GC::Finalized-derived objects members
-//      of a non-finalized but garbage-collected object generally won't
-//      work unless you take care of registering finalizers yourself.
-//
-// [n.b., by "member", I mean an actual by-value-member of a type that
-//  derives from GC::Finalized, not simply a member that's a pointer or a
-//  reference to such a type]
-//
-// Your best choice is to use either non-garbage-collected immediate values,
-// (C++'s standard RAII idiom), and otherwise avoid the use of non-trivial
-// destructors as much as is reasonably possible.  With the garbage collector,
-// it's not as hard as it sounds.
-//
+/* @brief a mix-in ensuring that a object's destructor will get called before
+ *        the garbage collector destroys it
+ *
+ * Normally, the garbage collector does not call destructors before destroying
+ * an object.  On construction, this "mix-in" will register a finalizer
+ * function to call destructors before derived objects are destroyed.
+ * 
+ * This works pretty well, with the following caveats:
+ *
+ *   1. The garbage collector uses strictly topologically-ordered
+ *      finalization; if objects with finalizers reference each other
+ *      directly or indirectly, the collector will refuse to finalize (and
+ *      therefor free) them.  You'll see a warning on the console if this
+ *      happens.
+ *
+ *      The best way to limit this effect is to only make "leaf" objects
+ *      (i.e. those that don't point to other finalizaable objects)
+ *      finalizable, or if the object also derives from GC::Managed<>,
+ *      use GC::Managed<>::clearOnceInaccessible to register those links
+ *      to be cleared once the object is made inacecssible (and before it's
+ *      finalized).
+ *
+ *      In a tree structure that has parent links and finalized nodes,
+ *      you will almost always want to do this with the parent links
+ *      if you can't avoid having them.
+ *
+ *      @see Inkscape::GC::Managed<>::clearOnceInaccessible
+ *      @see Inkscape::GC::Managed<>::cancelClearOnceInacessible
+ *
+ *   2. Because there is no guarantee when the collector will destroy
+ *      objects, there is no guarantee when the destructor will get called.
+ *
+ *      It may not get called until the very end of the program, or never.
+ *
+ *   3. If allocated in arrays, only the first object in the array will
+ *      have its destructor called, unless you make other arrangements by
+ *      registering your own finalizer instead.
+ *
+ *   4. Similarly, making multiple GC::Finalized-derived objects members
+ *      of a non-finalized but garbage-collected object generally won't
+ *      work unless you take care of registering finalizers yourself.
+ *
+ * [n.b., by "member", I mean an actual by-value-member of a type that
+ *  derives from GC::Finalized, not simply a member that's a pointer or a
+ *  reference to such a type]
+ *
+ */
 class Finalized {
 public:
     Finalized() {
-#ifndef SUPPRESS_LIBGC
-        void *base=GC_base(this);
+        void *base=ops.base(this);
         if (base) { // only if we are managed by the collector
             CleanupFunc old_cleanup;
             void *old_data;
@@ -79,9 +83,9 @@ public:
             // ourselves would pin us forever and prevent us from being
             // finalized; instead we use an offset-from-base-address
 
-            GC_register_finalizer_ignore_self(base, _invoke_dtor,
-                                                    _offset(base, this),
-                                                    &old_cleanup, &old_data);
+            ops.register_finalizer_ignore_self(base, _invoke_dtor,
+                                                     _offset(base, this),
+                                                     &old_cleanup, &old_data);
 
             if (old_cleanup) {
                 // If there was already a finalizer registered for our
@@ -99,23 +103,22 @@ public:
                 // after ours (e.g. via placement new).  Don't do that.
 
                 if ( old_cleanup != _invoke_dtor ) {
-                    GC_register_finalizer_ignore_self(base,
-                                                      old_cleanup, old_data,
-                                                      NULL, NULL);
+                    ops.register_finalizer_ignore_self(base,
+                                                       old_cleanup, old_data,
+                                                       NULL, NULL);
                 }
             }
         }
-#endif
     }
 
     virtual ~Finalized() {
-#ifndef SUPPRESS_LIBGC
         // make sure the destructor won't get invoked twice
-        GC_register_finalizer_ignore_self(GC_base(this), NULL, NULL, NULL, NULL);
-#endif
+        ops.register_finalizer_ignore_self(ops.base(this),
+                                           NULL, NULL, NULL, NULL);
     }
 
 private:
+    /// invoke the destructor for an object given a base and offset pair
     static void _invoke_dtor(void *base, void *offset) {
         _unoffset(base, offset)->~Finalized();
     }

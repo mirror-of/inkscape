@@ -34,6 +34,10 @@ namespace GC {
  * A newly created anchored object begins with a refcount of one, and
  * will not be collected unless the refcount is zero.
  *
+ * Note that a cycle involving an anchored object (with nonzero refcount)
+ * cannot be collected.  To avoid this, don't increment refcounts for
+ * pointers between two garbage-collected objects.
+ *
  * @see Inkscape::GC::Managed
  * @see Inkscape::GC::Finalized
  * @see Inkscape::GC::anchor
@@ -62,9 +66,7 @@ protected:
 private:
     struct Anchor : public Managed<SCANNED, MANUAL> {
         Anchor(Anchored const *obj) : refcount(0) {
-#ifndef SUPPRESS_LIBGC
-            base = GC_base(const_cast<Anchored *>(obj));
-#endif
+            base = ops.base(const_cast<Anchored *>(obj));
         }
         int refcount;
         void const *base;

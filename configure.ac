@@ -72,17 +72,11 @@ if test "x$png_ok" != "xyes"; then
 	AC_MSG_ERROR([libpng >= 1.2 is needed to compile inkscape])
 fi
 
-AC_ARG_ENABLE(gc, [  --disable-gc   Disable the garbage collector (for debugging purposes) (default=enabled) ], enable_gc="$enableval", enable_gc=yes)
-if test "x$enable_gc" != "xno"; then
-	AC_CHECK_LIB(gc, GC_malloc, [AC_CHECK_HEADERS([gc.h gc/gc.h], gc_ok=yes, gc_ok=no)], gc_ok=no, -lpthread -ldl)
-	if test "x$gc_ok" != "xyes"; then
-		AC_MSG_ERROR([libgc (the Boehm Conservative Collector), is needed to compile inkscape])
-	fi
-	LIBS="$LIBS -lgc"
-else
-	CXXFLAGS="$CXXFLAGS -DSUPPRESS_LIBGC"
+AC_CHECK_LIB(gc, GC_malloc, [AC_CHECK_HEADERS([gc.h gc/gc.h], gc_ok=yes, gc_ok=no)], gc_ok=no, -lpthread -ldl)
+if test "x$gc_ok" != "xyes"; then
+	AC_MSG_ERROR([libgc (the Boehm Conservative Collector), is needed to compile inkscape])
 fi
-
+LIBS="$LIBS -lgc"
 
 AC_PATH_PROG(FREETYPE_CONFIG, freetype-config, no)
 if test "x$FREETYPE_CONFIG" = "xno"; then

@@ -21,21 +21,34 @@ namespace Inkscape {
 
 namespace GC {
 
+/** @brief A base class for objects for whom the normal new and delete
+  *        operators should use the garbage-collected allocator
+  */
 template <ScanPolicy default_scan=SCANNED,
           CollectionPolicy default_collect=AUTO>
 class Managed {
 public:
+    /** @brief Registers a pointer to be cleared when this object becomes
+      *        inaccessible.
+      */
     template <typename T>
     void clearOnceInaccessible(T **p_ptr) {
-        GC_general_register_disappearing_link((GC_PTR *)p_ptr, GC_base(this));
+        ops.general_register_disappearing_link(
+            reinterpret_cast<void **>(p_ptr), ops.base(this)
+        );
     }
 
+    /** @brief Cancels the registration of a pointer, so it will not be
+      *        cleared when this object becomes inacessible.
+      */
     template <typename T>
     void cancelClearOnceInaccessible(T **p_ptr) {
-        GC_unregister_disappearing_link((GC_PTR *)p_ptr);
+        ops.unregister_disappearing_link(
+            reinterpret_cast<void **>(p_ptr)
+        );
     }
 
-    void *operator new(size_t size,
+    void *operator new(std::size_t size,
                        ScanPolicy scan=default_scan,
                        CollectionPolicy collect=default_collect)
     throw (std::bad_alloc)
@@ -43,7 +56,7 @@ public:
         return ::operator new(size, scan, collect);
     }
 
-    void *operator new[](size_t size,
+    void *operator new[](std::size_t size,
                          ScanPolicy scan=default_scan,
                          CollectionPolicy collect=default_collect)
     throw (std::bad_alloc)

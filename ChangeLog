@@ -1,3 +1,16 @@
+2004-11-14  MenTaLguY  <mental@rydia.net>
+
+	* configure.ac, src/gc-core.h, src/gc-managed.h, src/gc-anchored.h,
+	  src/gc-finalized.h, src/gc.cpp:
+
+	  make disabling the collector a run-time rather than a compile-time
+	  option; there are now three garbage collector options, selectable
+	  by setting the _INKSCAPE_GC environment variable:
+
+	   * enable - the normal collector (default)
+	   * debug - the debugging collector
+	   * disable - use standard malloc in place of the libgc allocator
+
 2004-11-14  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/display/bezier-utils.cpp: Make end tangent/s be unconstrained for

@@ -171,10 +171,10 @@ NRObject *NRObject::alloc(NRType type)
 	g_error("Cannot instantiate NRObject class %s which has not registered a C++ constructor\n", c->name);
     }
 
-    NRObject *object = reinterpret_cast<NRObject *>(::operator new(c->isize,
-								   Inkscape::GC::SCANNED,
-								   Inkscape::GC::AUTO,
-								   &finalize_object, NULL));
+    NRObject *object = reinterpret_cast<NRObject *>(
+        ::operator new(c->isize, Inkscape::GC::SCANNED, Inkscape::GC::AUTO,
+                       &finalize_object, NULL)
+    );
     memset(object, 0xf0, c->isize);
 
     object->klass = c;

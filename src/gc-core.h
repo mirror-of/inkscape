@@ -18,6 +18,7 @@
 
 #include <new>
 #include <cstdlib>
+#include <cstddef>
 #ifdef HAVE_GC_GC_H
 # include <gc/gc.h>
 #else
@@ -25,10 +26,7 @@
 #endif
 #include <glib/gmain.h>
 
-//#define SUPPRESS_LIBGC
-
 namespace Inkscape {
-
 namespace GC {
 
 void init();
@@ -49,28 +47,45 @@ enum Delete {
 
 typedef void (*CleanupFunc)(void *mem, void *data);
 
-}
+struct Ops {
+    void *(*malloc)(std::size_t size);
+    void *(*malloc_atomic)(std::size_t size);
+    void *(*malloc_uncollectable)(std::size_t size);
+    void *(*base)(void *ptr);
+    void (*register_finalizer_ignore_self)(void *base,
+                                           CleanupFunc func, void *data,
+                                           CleanupFunc *old_func,
+                                           void **old_data);
+    int (*general_register_disappearing_link)(void **p_ptr,
+                                                void *base);
+    int (*unregister_disappearing_link)(void **p_ptr);
+    void (*free)(void *ptr);
+};
+
+extern Ops ops;
 
 }
+}
 
-inline void *operator new(size_t size,
+inline void *operator new(std::size_t size,
                           Inkscape::GC::ScanPolicy scan,
                           Inkscape::GC::CollectionPolicy collect,
                           Inkscape::GC::CleanupFunc cleanup=NULL,
                           void *data=NULL)
 throw(std::bad_alloc)
 {
-#ifndef SUPPRESS_LIBGC
+    using Inkscape::GC::ops;
+
     void *mem;
     if ( collect == Inkscape::GC::AUTO ) {
         if ( scan == Inkscape::GC::SCANNED ) {
-            mem = GC_MALLOC(size);
+            mem = ops.malloc(size);
         } else {
-            mem = GC_MALLOC_ATOMIC(size);
+            mem = ops.malloc_atomic(size);
         }
     } else {
         if ( scan == Inkscape::GC::SCANNED ) {
-            mem = GC_MALLOC_UNCOLLECTABLE(size);
+            mem = ops.malloc_uncollectable(size);
         } else {
             abort(); // can't use g_assert as g++ doesn't like to inline it
         }
@@ -79,15 +94,12 @@ throw(std::bad_alloc)
         throw std::bad_alloc();
     }
     if (cleanup) {
-        GC_REGISTER_FINALIZER_IGNORE_SELF(mem, cleanup, data, NULL, NULL);
+        ops.register_finalizer_ignore_self(mem, cleanup, data, NULL, NULL);
     }
     return mem;
-#else
-    return ::operator new(size);
-#endif
 }
 
-inline void *operator new(size_t size,
+inline void *operator new(std::size_t size,
                           Inkscape::GC::ScanPolicy scan,
                           Inkscape::GC::CleanupFunc cleanup=NULL,
                           void *data=NULL)
@@ -96,7 +108,7 @@ throw(std::bad_alloc)
     return operator new(size, scan, Inkscape::GC::AUTO, cleanup, data);
 }
 
-inline void *operator new[](size_t size,
+inline void *operator new[](std::size_t size,
                             Inkscape::GC::ScanPolicy scan,
                             Inkscape::GC::CollectionPolicy collect,
                             Inkscape::GC::CleanupFunc cleanup=NULL,
@@ -106,7 +118,7 @@ throw(std::bad_alloc)
     return operator new(size, scan, collect, cleanup, data);
 }
 
-inline void *operator new[](size_t size,
+inline void *operator new[](std::size_t size,
                             Inkscape::GC::ScanPolicy scan,
                             Inkscape::GC::CleanupFunc cleanup=NULL,
                             void *data=NULL)
@@ -116,11 +128,7 @@ throw(std::bad_alloc)
 }
 
 inline void operator delete(void *mem, Inkscape::GC::Delete) {
-#ifndef SUPPRESS_LIBGC
-    GC_FREE(mem);
-#else
-    ::operator delete(mem);
-#endif
+    Inkscape::GC::ops.free(mem);
 }
 
 inline void operator delete[](void *mem, Inkscape::GC::Delete) {
