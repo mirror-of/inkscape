@@ -127,46 +127,32 @@ Path::Outline (Path * dest, double width, JoinType join, ButtType butt,
                                    join, butt, miter, false, false, endPos, endButt);
           NR::Point endNor=endButt.ccw();
           if (butt == butt_round) {
-            NR::Point tmp=endPos+width*endNor;
-            dest->ArcTo (tmp,  1.0001 * width, 1.0001 * width, 0.0, true, true);
+            dest->ArcTo (endPos+width*endNor,  1.0001 * width, 1.0001 * width, 0.0, true, true);
           }  else if (butt == butt_square) {
-            NR::Point tmp=endPos-width*endNor+width*endButt;
-            dest->LineTo (tmp);
-            tmp=endPos+width*endNor+width*endButt;
-            dest->LineTo (tmp);
-            tmp=endPos+width*endNor;
-            dest->LineTo (tmp);
+            dest->LineTo (endPos-width*endNor+width*endButt);
+            dest->LineTo (endPos+width*endNor+width*endButt);
+            dest->LineTo (endPos+width*endNor);
           }  else if (butt == butt_pointy) {
-            NR::Point tmp=endPos+width*endButt;
-            dest->LineTo (tmp);
-            tmp=endPos+width*endNor;
-            dest->LineTo (tmp);
+            dest->LineTo (endPos+width*endButt);
+            dest->LineTo (endPos+width*endNor);
           } else {
-            NR::Point tmp=endPos+width*endNor;
-            dest->LineTo (tmp);
+            dest->LineTo (endPos+width*endNor);
           }
           descr_cmd = sav_descr + lastM;
           descr_nb = realP - lastM;
           SubContractOutline (dest, calls, 0.0025 * width * width,  width, join, butt, miter, false, true, endPos, endButt);
           endNor=endButt.ccw();
           if (butt == butt_round) {
-            NR::Point tmp=endPos+width*endNor;
-            dest->ArcTo (tmp, 1.0001 * width, 1.0001 * width, 0.0, true, true);
+            dest->ArcTo (endPos+width*endNor, 1.0001 * width, 1.0001 * width, 0.0, true, true);
           } else if (butt == butt_square) {
-            NR::Point tmp=endPos-width*endNor+width*endButt;
-            dest->LineTo (tmp);
-            tmp=endPos+width*endNor+width*endButt;
-            dest->LineTo (tmp);
-            tmp=endPos+width*endNor;
-            dest->LineTo (tmp);
+            dest->LineTo (endPos-width*endNor+width*endButt);
+            dest->LineTo (endPos+width*endNor+width*endButt);
+            dest->LineTo (endPos+width*endNor);
           } else if (butt == butt_pointy) {
-            NR::Point tmp=endPos+width*endButt;
-            dest->LineTo (tmp);
-            tmp=endPos+width*endNor;
-            dest->LineTo (tmp);
+            dest->LineTo (endPos+width*endButt);
+            dest->LineTo (endPos+width*endNor);
           } else {
-            NR::Point tmp=endPos+width*endNor;
-            dest->LineTo (tmp);
+            dest->LineTo (endPos+width*endNor);
           }
           dest->Close ();
         }
@@ -367,8 +353,7 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
       if (doFirst) {
 	    } else {
 	      if (closeIfNeeded) {
-          if (fabsf (curX.pt[0] - firstP.pt[0]) < 0.0001
-              && fabsf (curX.pt[1] - firstP.pt[1]) < 0.0001) {
+          if ( NR::LInfty (curX- firstP) < 0.0001 ) {
             OutlineJoin (dest, firstP, curT, firstT, width, join,
                          miter);
             dest->Close ();
@@ -390,8 +375,7 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
               OutlineJoin (dest, pos, curT, stNor, width, join,
                            miter);
             }
-            NR::Point  tmp=enPos+width*enNor;
-            dest->LineTo (tmp);
+            dest->LineTo (enPos+width*enNor);
             
             // jointure
             {
@@ -411,8 +395,7 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
     {
       if (doFirst == false)
 	    {
-	      if (fabsf (curX.pt[0] - firstP.pt[0]) < 0.0001
-            && fabsf (curX.pt[1] - firstP.pt[1]) < 0.0001)
+	      if (NR::LInfty (curX - firstP) < 0.0001)
         {
           OutlineJoin (dest, firstP, curT, firstT, width, join,
                        miter);
@@ -435,8 +418,7 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
                          miter);
           }
           
-          NR::Point tmp=enPos+width*enNor;
-          dest->LineTo (tmp);
+          dest->LineTo (enPos+width*enNor);
           
           // jointure
           {
@@ -473,13 +455,12 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
 	      doFirst = false;
 	      firstP = stPos;
 	      firstT = stNor;
-        NR::Point  tmp=curX+width*stNor;
 	      if (skipMoveto)
         {
           skipMoveto = false;
         }
 	      else
-          dest->MoveTo (tmp);
+          dest->MoveTo (curX+width*stNor);
 	    }
       else
 	    {
@@ -489,9 +470,7 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
 	      OutlineJoin (dest, pos, curT, stNor, width, join, miter);
 	    }
       
-      NR::Point  tmp=nextX+width*enNor;
-      int n_d =
-        dest->LineTo (tmp);
+      int n_d = dest->LineTo (nextX+width*enNor);
       if (n_d >= 0)
 	    {
 	      dest->descr_cmd[n_d].associated = curP;
@@ -526,13 +505,12 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
 	      doFirst = false;
 	      firstP = stPos;
 	      firstT = stNor;
-        NR::Point  tmp=curX+width*stNor;
 	      if (skipMoveto)
         {
           skipMoveto = false;
         }
 	      else
-          dest->MoveTo (tmp);
+          dest->MoveTo (curX+width*stNor);
 	    }
       else
 	    {
@@ -583,13 +561,12 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
 	      doFirst = false;
 	      firstP = stPos;
 	      firstT = stNor;
-        NR::Point  tmp=curX+width*stNor;
 	      if (skipMoveto)
         {
           skipMoveto = false;
         }
 	      else
-          dest->MoveTo (tmp);
+          dest->MoveTo (curX+width*stNor);
 	    }
       else
 	    {
@@ -648,18 +625,16 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
           doFirst = false;
           firstP = stPos;
           firstT = stNor;
-          NR::Point  tmp=curX+width*stNor;
           if (skipMoveto) {
             skipMoveto = false;
-          } else dest->MoveTo (tmp);
+          } else dest->MoveTo (curX+width*stNor);
         } else {
           // jointure
           NR::Point pos;
           pos = curX;
           if (stTle > 0) OutlineJoin (dest, pos, curT, stNor, width, join, miter);
         }
-        NR::Point  tmp=nextX+width*enNor;
-	      int n_d = dest->LineTo (tmp);
+	      int n_d = dest->LineTo (nextX+width*enNor);
 	      if (n_d >= 0) {
           dest->descr_cmd[n_d].associated = curP - 1;
           dest->descr_cmd[n_d].tSt = 0.0;
@@ -681,10 +656,9 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
           doFirst = false;
           firstP = stPos;
           firstT = stNor;
-          NR::Point  tmp=curX+width*stNor;
           if (skipMoveto) {
             skipMoveto = false;
-          } else dest->MoveTo (tmp);
+          } else dest->MoveTo (curX+width*stNor);
         }  else {
           // jointure
           NR::Point pos;
@@ -720,10 +694,9 @@ Path::SubContractOutline (Path * dest, outline_callbacks & calls,
             doFirst = false;
             firstP = stPos;
             firstT = stNor;
-            NR::Point  tmp=curX+width*stNor;
             if (skipMoveto) {
               skipMoveto = false;
-            } else  dest->MoveTo (tmp);
+            } else  dest->MoveTo (curX+width*stNor);
           } else {
             // jointure
             NR::Point pos=curX;
@@ -1297,8 +1270,7 @@ Path::RecStdCubicTo (outline_callback_data * data, double tol, double width,
     temp.p = enPos + width * enNor;
     temp.stD = stGue * stTgt;
     temp.enD = enGue * enTgt;
-    NR::Point tmp=stPos+width*stNor;
-    TangentOnCubAt (0.5, tmp,
+    TangentOnCubAt (0.5, stPos+width*stNor,
                     temp, false, chk, chTgt, chTle, chRad);
   }
   const NR::Point diff = req - chk;

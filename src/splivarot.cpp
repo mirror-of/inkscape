@@ -39,7 +39,7 @@
 #include "livarot/Shape.h"
 #include "livarot/LivarotDefs.h"
 
-Path   *Path_for_item (SPItem * item);
+Path   *Path_for_item (SPItem * item,bool doTransformation);
 gchar  *liv_svg_dump_path (Path * path);
 SPRepr *LCA (SPRepr * a, SPRepr * b);
 bool   Ancetre (SPRepr * a, SPRepr * who);
@@ -170,7 +170,7 @@ sp_selected_path_boolop (bool_op bop)
     curOrig = 0;
     for (l = il; l != NULL; l = l->next)
     {
-      originaux[curOrig] = Path_for_item ((SPItem *) l->data);
+      originaux[curOrig] = Path_for_item ((SPItem *) l->data,true);
       if (originaux[curOrig] == NULL || originaux[curOrig]->descr_nb <= 1)
       {
         for (int i = curOrig; i >= 0; i--)
@@ -195,7 +195,7 @@ sp_selected_path_boolop (bool_op bop)
     originaux[0]->ConvertWithBackData (1.0);
      
     originaux[0]->Fill (theShape, 0);
-    {
+ /*   { // fait dans PathForItem
       NRMatrix i2root;
       sp_item_i2root_affine (SP_ITEM (il->data), &i2root);
       for (int i = 0; i < theShape->nbPt; i++)
@@ -210,7 +210,7 @@ sp_selected_path_boolop (bool_op bop)
         theShape->pts[i].x.pt[0] = x.pt[0];
         theShape->pts[i].x.pt[1] = x.pt[1];
       }
-    }
+    }*/
     css = sp_repr_css_attr (SP_OBJECT_REPR (il->data), "style");
     val = sp_repr_css_property (css, "fill-rule", NULL);
     if (val && strcmp (val, "nonzero") == 0)
@@ -237,7 +237,7 @@ sp_selected_path_boolop (bool_op bop)
     
     originaux[curOrig]->Fill (theShape, curOrig);
     
-    {
+/*    {
       NRMatrix i2root;
       sp_item_i2root_affine (SP_ITEM (l->data), &i2root);
       for (int i = 0; i < theShape->nbPt; i++)
@@ -252,7 +252,7 @@ sp_selected_path_boolop (bool_op bop)
         theShape->pts[i].x.pt[0] = x.pt[0];
         theShape->pts[i].x.pt[1] = x.pt[1];
       }
-    }
+    }*/
     css = sp_repr_css_attr (SP_OBJECT_REPR (l->data), "style");
     val = sp_repr_css_property (css, "fill-rule", NULL);
     if (val && strcmp (val, "nonzero") == 0)
@@ -448,7 +448,7 @@ sp_selected_path_outline ()
     o_miter = 4 * o_width;
   }
   
-  Path *orig = Path_for_item (item);
+  Path *orig = Path_for_item (item,false);
   if (orig == NULL)
   {
     g_free (style);
@@ -723,7 +723,7 @@ sp_selected_path_create_offset_object (int expand,bool updating)
     o_miter = 4 * o_width;
   }
   
-  Path *orig = Path_for_item (item);
+  Path *orig = Path_for_item (item,true);
   if (orig == NULL)
   {
     g_free (style);
@@ -819,14 +819,15 @@ sp_selected_path_create_offset_object (int expand,bool updating)
       sp_repr_set_attr (repr, "inkscape:href", NULL);
     }
     
-    if (sp_svg_transform_write (tstr, 80, &i2root))
+    // pas de transformation, sinon offset pas correct
+/*    if (sp_svg_transform_write (tstr, 80, &i2root))
     {
       sp_repr_set_attr (repr, "transform", tstr);
     }
     else
     {
       sp_repr_set_attr (repr, "transform", NULL);
-    }
+    }*/
     
     sp_repr_set_attr (repr, "style", style);
     SPItem* nitem = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
@@ -953,7 +954,7 @@ sp_selected_path_do_offset (bool expand)
     o_miter = 4 * o_width;
   }
   
-  Path *orig = Path_for_item (item);
+  Path *orig = Path_for_item (item,true);
   if (orig == NULL)
   {
     g_free (style);
@@ -1075,14 +1076,14 @@ sp_selected_path_do_offset (bool expand)
     tstr[79] = '\0';
     
     repr = sp_repr_new ("path");
-    if (sp_svg_transform_write (tstr, 80, &i2root))
+/*    if (sp_svg_transform_write (tstr, 80, &i2root))
     {
       sp_repr_set_attr (repr, "transform", tstr);
     }
     else
     {
       sp_repr_set_attr (repr, "transform", NULL);
-    }
+    }*/
     
     sp_repr_set_attr (repr, "style", style);
     str = liv_svg_dump_path (res);
@@ -1144,7 +1145,7 @@ sp_selected_path_simplify ()
   sp_item_i2root_affine (item, &i2root);
   style = g_strdup (sp_repr_attr (SP_OBJECT (item)->repr, "style"));
   
-  Path *orig = Path_for_item (item);
+  Path *orig = Path_for_item (item,false);
   if (orig == NULL)
   {
     g_free (style);
@@ -1232,7 +1233,7 @@ LCA (SPRepr * a, SPRepr * b)
   return t;
 }
 Path *
-Path_for_item (SPItem * item)
+Path_for_item (SPItem * item,bool doTransformation)
 {
   SPCurve *curve;
   
@@ -1258,6 +1259,16 @@ Path_for_item (SPItem * item)
   if (bpath == NULL)
     return NULL;
   
+  if ( doTransformation ) {
+    NRMatrix i2root;
+    sp_item_i2root_affine (item, &i2root);
+ 		bpath = art_bpath_affine_transform (curve->bpath, NR_MATRIX_D_TO_DOUBLE (&i2root));
+    sp_curve_unref (curve);
+    curve=NULL;
+  } else {
+    bpath=curve->bpath;
+  }
+
   Path *dest = new Path;
   dest->SetBackData (false);
   {
@@ -1265,8 +1276,6 @@ Path_for_item (SPItem * item)
     bool  closed = false;
     float lastX  = 0.0;
     float lastY  = 0.0;
-    
-    
     
     for (i = 0; bpath[i].code != ART_END; i++)
     {
@@ -1316,8 +1325,11 @@ Path_for_item (SPItem * item)
       dest->Close ();
   }
   
-  sp_curve_unref (curve);
-  
+  if ( doTransformation ) {
+    if ( bpath ) art_free (bpath);
+  } else {
+    sp_curve_unref(curve);
+  }
   return dest;
 }
 

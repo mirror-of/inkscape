@@ -198,8 +198,7 @@ Path::DoSimplify (double treshhold)
     curP = lastP;
   }
   
-  if (fabs (endToPt.pt[0] - moveToPt.pt[0]) < 0.00001
-      && fabs (endToPt.pt[1] - moveToPt.pt[1]) < 0.00001)
+  if (NR::LInfty (endToPt - moveToPt) < 0.00001)
     Close ();
   
   pts = savPts;

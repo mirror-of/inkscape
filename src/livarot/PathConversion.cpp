@@ -703,7 +703,7 @@ void            Path::ConvertEvenLines(double treshhold)
 			// et on avance
 			curP+=nbInterm;
 		}
-		if ( fabsf(curX.pt[0]-nextX.pt[0]) > 0.00001 || fabsf(curX.pt[1]-nextX.pt[1]) > 0.00001 ) {
+		if ( NR::LInfty(curX-nextX) > 0.00001 ) {
 			curX=nextX;
 		}
 	}
@@ -1225,7 +1225,7 @@ void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool inve
 						closed=false;
 						lEdge=-1;
 					} else {
-						if ( fabs(sbp->p.pt[0]-prp->p.pt[0]) < 0.00001 && fabs(sbp->p.pt[1]-prp->p.pt[1]) < 0.00001 ) {
+						if ( NR::LInfty(sbp->p-prp->p) < 0.00001 ) {
 						} else {
 							lEdge=dest->AddEdge(first+pathEnd,first+curP);
 							dest->ebData[lEdge].pathID=pathID;
@@ -1238,7 +1238,7 @@ void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool inve
 								dest->ebData[lEdge].tEn=sbp->t;
 							}
 							pathEnd=curP;
-							if ( fabs(sbp->p.pt[0]-lm->p.pt[0]) < 0.00001 && fabs(sbp->p.pt[1]-lm->p.pt[1]) < 0.00001 ) {
+							if ( NR::LInfty(sbp->p-lm->p) < 0.00001 ) {
 								closed=true;
 							} else {
 								closed=false;
@@ -1288,11 +1288,11 @@ void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool inve
 						closed=false;
 						lEdge=-1;
 					} else {
-						if ( fabs(sbp->p.pt[0]-prp->p.pt[0]) < 0.00001 && fabs(sbp->p.pt[1]-prp->p.pt[1]) < 0.00001 ) {
+						if ( NR::LInfty(sbp->p-prp->p) < 0.00001 ) {
 						} else {
 							lEdge=dest->AddEdge(first+pathEnd,first+curP);
 							pathEnd=curP;
-							if ( fabs(sbp->p.pt[0]-lm->p.pt[0]) < 0.00001 && fabs(sbp->p.pt[1]-lm->p.pt[1]) < 0.00001 ) {
+							if ( NR::LInfty(sbp->p-lm->p) < 0.00001 ) {
 								closed=true;
 							} else {
 								closed=false;
