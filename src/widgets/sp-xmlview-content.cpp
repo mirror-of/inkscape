@@ -18,10 +18,13 @@
 #include <gtk/gtkmarshal.h>
 #include <gtk/gtkadjustment.h>
 
-#include "macros.h"
 #include "xml/repr.h"
 #include "xml/repr-private.h"
 #include "sp-xmlview-content.h"
+#include "macros.h"
+#include "desktop-handles.h"
+#include "document-private.h"
+#include "inkscape.h"
 
 static void sp_xmlview_content_class_init (SPXMLViewContentClass * klass);
 static void sp_xmlview_content_init (SPXMLViewContent * text);
@@ -185,5 +188,6 @@ sp_xmlview_content_changed (GtkTextBuffer *tb, SPXMLViewContent *text)
 		sp_repr_set_content (text->repr, data);
 		g_free (data);
 		text->blocked = FALSE;
+		sp_document_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP));
 	}
 }
