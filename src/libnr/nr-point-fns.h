@@ -43,6 +43,15 @@ inline Coord dot(Point const &a, Point const &b)
     return ret;
 }
 
+inline Coord distance (Point const &a, Point const &b)
+{
+    Coord ret = 0;
+    for ( int i = 0 ; i < 2 ; i++ ) {
+        ret += (a[i] - b[i]) * (a[i] - b[i]);
+    }
+    return sqrt (ret);
+}
+
 /** Defined as dot(a, b.cw()). */
 inline Coord cross(Point const &a, Point const &b)
 {
