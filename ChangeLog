@@ -1,3 +1,10 @@
+2004-11-14  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/display/bezier-utils.cpp (generate_bezier): Better handling
+	  of the case of infinite solutions for the lengths of the two
+	  tangent vectors: try requiring that the lengths equal each other,
+	  and solving for that length (just one variable).
+
 2004-11-13  Kees Cook  <kees@outflux.net>
 
 	* src/document.cpp: wrapped updateDisplay call in undo insensitivity.
@@ -27,7 +34,7 @@
 
 2004-11-11  Kees Cook  <kees@outflux.net>
 
-    * src/seltrans.cpp, src/select-context.cpp: ref counting SPObjects
+	* src/seltrans.cpp, src/select-context.cpp: ref counting SPObjects
 	  correctly so undo's don't blow up an active resize/move.  Closes
 	  bug #1018756.
 

@@ -284,9 +284,6 @@ generate_bezier(NR::Point bezier[],
 {
     double C[2][2];   /* Matrix C. */
     double X[2];      /* Matrix X. */
-    double det_C0_C1,  /* Determinants of matrices. */
-           det_C0_X,
-           det_X_C1;
 
     /* Create the C and X matrices. */
     C[0][0] = 0.0;
@@ -327,17 +324,40 @@ generate_bezier(NR::Point bezier[],
         X[1] += dot(a2, shortfall);
     }
 
-    /* Compute the determinants of C and X. */
-    det_C0_C1 = C[0][0] * C[1][1] - C[1][0] * C[0][1];
-    det_C0_X  = C[0][0] * X[1]    - C[0][1] * X[0];
-    det_X_C1  = X[0]    * C[1][1] - X[1]    * C[0][1];
+    /* We've constructed a pair of equations in the form of a matrix product C * alpha = X.
+       Now solve for alpha. */
+    double alpha_l, alpha_r;
 
-    /* Finally, derive left & right alpha values. */
-    if ( det_C0_C1 == 0.0 ) {
-        det_C0_C1 = ( C[0][0] * C[1][1] ) * 10e-12;
+    /* Compute the determinants of C and X. */
+    double const det_C0_C1 = C[0][0] * C[1][1] - C[1][0] * C[0][1];
+    if ( det_C0_C1 != 0 ) {
+        /* Apparently Kramer's rule. */
+        double const det_C0_X  = C[0][0] * X[1]    - C[0][1] * X[0];
+        double const det_X_C1  = X[0]    * C[1][1] - X[1]    * C[0][1];
+        alpha_l = det_X_C1 / det_C0_C1;
+        alpha_r = det_C0_X / det_C0_C1;
+    } else {
+        /* The matrix is under-determined.  Try requiring alpha_l == alpha_r.
+         *
+         * One way of implementing the constraint alpha_l == alpha_r is to treat them as the same
+         * variable in the equations.  We can do this by adding the columns of C to form a single
+         * column, to be multiplied by alpha to give the column vector X.
+         *
+         * We try each row in turn.
+         */
+        double const c0 = C[0][0] + C[0][1];
+        if (c0 != 0) {
+            alpha_l = alpha_r = X[0] / c0;
+        } else {
+            double const c1 = C[1][0] + C[1][1];
+            if (c1 != 0) {
+                alpha_l = alpha_r = X[1] / c1;
+            } else {
+                /* Let the below code handle this. */
+                alpha_l = alpha_r = 0.;
+            }
+        }
     }
-    double alpha_l = det_X_C1 / det_C0_C1;
-    double alpha_r = det_C0_X / det_C0_C1;
 
     /* If alpha negative, use the Wu/Barsky heuristic (see text).  (If alpha is 0, you get
        coincident control points that lead to divide by zero in any subsequent
