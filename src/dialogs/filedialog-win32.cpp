@@ -151,8 +151,17 @@ FileOpenDialog::show() {
         };
 
         retval = GetOpenFileNameA (&ofn);
-        if ( retval )
-            result = g_strdup(fnbuf);
+        if ( retval ) {
+            result = g_strdup( fnbuf );
+            /* ### We need to try something like this instead:
+            GError *err = NULL;
+            result = g_filename_to_utf8(fnbuf, -1, NULL, NULL, &err);
+            if ( !result && err ) {
+                g_warning("Charset conversion in show()[%d]%s\n",
+                           err->code, err->message);
+            }
+            */
+        }
     }
 
     if ( !retval ) {
