@@ -1,3 +1,7 @@
+2003-11-28 MenTaLguY <mental@rydia.net>
+
+	* doc/architecture.svg: reworked architecture diagram a bit
+
 2003-11-27 MenTaLguY <mental@rydia.net>
 
 	* src/desktop.c: the coord status bar area should not have a
