@@ -35,8 +35,8 @@ struct SPRectContext {
 	SPKnotHolder *knot_holder;
 	SPRepr *repr;
 	
-  	gdouble rx_ratio;	/* roundness ratio (x direction) */
-  	gdouble ry_ratio;	/* roundness ratio (y direction) */
+  	gdouble rx;	/* roundness radius (x direction) */
+  	gdouble ry;	/* roundness radius (y direction) */
 
 	SigC::Connection sel_changed_connection;
 };

@@ -53,6 +53,6 @@ void sp_rect_position_set (SPRect * rect, gdouble x, gdouble y, gdouble width, g
 void sp_rect_set_rx(SPRect * rect, gboolean set, gdouble value);
 void sp_rect_set_ry(SPRect * rect, gboolean set, gdouble value);
 
-
+void sp_rect_compensate_rxry (SPRect *rect, NR::Matrix xform);
 
 #endif

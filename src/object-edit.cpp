@@ -132,7 +132,15 @@ sp_rect_wh_set (SPItem *item, const NR::Point &p, guint state)
 		rect->width.set = rect->height.set = TRUE;
 	} else {
 		rect->width.computed = fabs (p[NR::X] - rect->x.computed);
+		if (2 * rect->rx.computed > rect->width.computed) {
+			rect->rx.computed = 0.5 * rect->width.computed;
+			rect->rx.set = TRUE;
+		}
 		rect->height.computed = fabs (p[NR::Y] - rect->y.computed);
+		if (2 * rect->ry.computed > rect->height.computed) {
+			rect->ry.computed = 0.5 * rect->height.computed;
+			rect->ry.set = TRUE;
+		}
 		rect->width.set = rect->height.set = TRUE;
 	}
 	sp_object_request_update ((SPObject *) rect, SP_OBJECT_MODIFIED_FLAG);

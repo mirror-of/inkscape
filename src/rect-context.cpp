@@ -109,8 +109,8 @@ static void sp_rect_context_init(SPRectContext *rect_context)
     rect_context->repr = NULL;
     rect_context->knot_holder = NULL;
 
-    rect_context->rx_ratio = 0.0;
-    rect_context->ry_ratio = 0.0;
+    rect_context->rx = 0.0;
+    rect_context->ry = 0.0;
 
     new (&rect_context->sel_changed_connection) SigC::Connection();
 }
@@ -237,8 +237,8 @@ static void sp_rect_context_setup(SPEventContext *ec)
         SigC::bind(SigC::slot(&sp_rect_context_selection_changed), (gpointer)rc)
     );
 
-    sp_event_context_read(ec, "rx_ratio");
-    sp_event_context_read(ec, "ry_ratio");
+    sp_event_context_read(ec, "rx");
+    sp_event_context_read(ec, "ry");
 
     if (prefs_get_int_attribute("tools.shapes", "selcue", 0) != 0)
 		sp_sel_cue_init(&(ec->selcue), ec->desktop);
@@ -250,16 +250,14 @@ static void sp_rect_context_set(SPEventContext *ec, gchar const *key, gchar cons
 
     /* fixme: Proper error handling for non-numeric data.  Use a locale-independent function like
      * g_ascii_strtod (or a thin wrapper that does the right thing for invalid values inf/nan). */
-    if ( strcmp(key, "rx_ratio") == 0 ) {
-        rc->rx_ratio = ( val
+    if ( strcmp(key, "rx") == 0 ) {
+        rc->rx = ( val
                          ? g_ascii_strtod (val, NULL)
                          : 0.0 );
-        rc->rx_ratio = CLAMP(rc->rx_ratio, 0.0, 1.0);
-    } else if ( strcmp(key, "ry_ratio") == 0 ) {
-        rc->ry_ratio = ( val
+    } else if ( strcmp(key, "ry") == 0 ) {
+        rc->ry = ( val
                          ? g_ascii_strtod (val, NULL)
                          : 0.0 );
-        rc->ry_ratio = CLAMP(rc->ry_ratio, 0.0, 1.0);
     }
 }
 
@@ -494,26 +492,22 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
     // TODO: use NR::Rect
     using NR::X;
     using NR::Y;
-    NR::Coord const x0 = MIN(p0[X],
-                             p1[X]);
-    NR::Coord const y0 = MIN(p0[Y],
-                             p1[Y]);
-    NR::Coord const x1 = MAX(p0[X],
-                             p1[X]);
-    NR::Coord const y1 = MAX(p0[Y],
-                             p1[Y]);
+    NR::Coord const x0 = MIN(p0[X], p1[X]);
+    NR::Coord const y0 = MIN(p0[Y], p1[Y]);
+    NR::Coord const x1 = MAX(p0[X], p1[X]);
+    NR::Coord const y1 = MAX(p0[Y], p1[Y]);
     NR::Coord const w  = x1 - x0;
     NR::Coord const h  = y1 - y0;
 
     sp_rect_position_set(SP_RECT(rc.item), x0, y0, w, h);
-    if ( rc.rx_ratio != 0.0 ) {
-        sp_rect_set_rx(SP_RECT(rc.item), TRUE, 0.5 * rc.rx_ratio * w);
+    if ( rc.rx != 0.0 ) {
+        sp_rect_set_rx (SP_RECT(rc.item), TRUE, rc.rx);
     }
-    if ( rc.ry_ratio != 0.0 ) {
-        if (rc.rx_ratio == 0.0)
-            sp_rect_set_ry(SP_RECT(rc.item), TRUE, CLAMP(0.5 * rc.ry_ratio * MAX(w, h), 0, MIN(w, h)/2));
+    if ( rc.ry != 0.0 ) {
+        if (rc.rx == 0.0)
+            sp_rect_set_ry (SP_RECT(rc.item), TRUE, CLAMP(rc.ry, 0, MIN(w, h)/2));
         else 
-            sp_rect_set_ry(SP_RECT(rc.item), TRUE, 0.5 * rc.ry_ratio * h);
+            sp_rect_set_ry (SP_RECT(rc.item), TRUE, CLAMP(rc.ry, 0, h));
     }
 
     // status text

@@ -282,12 +282,16 @@ sp_rect_set_shape (SPShape *shape)
 	if (rect->rx.set) {
 		rx = CLAMP (rect->rx.computed, 0.0, rect->width.computed / 2);
 	} else if (rect->ry.set) {
-		rx = CLAMP (rect->ry.computed, 0.0, rect->width.computed / 2);
+		rx = CLAMP (rect->ry.computed, 0.0, MIN (rect->width.computed, rect->height.computed) / 2);
 	} else {
 		rx = 0.0;
 	}
 	if (rect->ry.set) {
-		ry = CLAMP (rect->ry.computed, 0.0, rect->height.computed / 2);
+		if (rect->rx.set) {
+			ry = CLAMP (rect->ry.computed, 0.0, rect->height.computed / 2);
+		} else {
+			ry = CLAMP (rect->ry.computed, 0.0, MIN (rect->width.computed, rect->height.computed) / 2);
+		}
 	} else if (rect->rx.set) {
 		ry = CLAMP (rect->rx.computed, 0.0, rect->height.computed / 2);
 	} else {
@@ -467,6 +471,20 @@ sp_rect_set_transform (SPItem *item, NR::Matrix const &xform)
 	return remaining;
 }
 
+void
+sp_rect_compensate_rxry (SPRect *rect, NR::Matrix xform)
+{
+	if (rect->rx.computed != 0) {
+		rect->rx.computed = CLAMP (rect->rx.computed / xform.expansionX(), 0, 0.5 * rect->width.computed);
+	}
+      if (rect->ry.computed != 0) {
+		if (rect->rx.computed == 0) {
+			rect->ry.computed = CLAMP (rect->ry.computed / xform.expansionY(), 0, 0.5 * MIN (rect->height.computed, rect->width.computed));
+		} else {
+			rect->ry.computed = CLAMP (rect->ry.computed / xform.expansionY(), 0, 0.5 * rect->height.computed);
+		}
+      }
+}
 
 /*
   Local Variables:

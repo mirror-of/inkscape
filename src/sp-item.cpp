@@ -33,6 +33,7 @@
 #include "sp-anchor.h"
 #include "sp-clippath.h"
 #include "sp-mask.h"
+#include "sp-rect.h"
 #include "sp-item.h"
 #include "sp-item-rm-unsatisfied-cns.h"
 #include "prefs-utils.h"
@@ -685,10 +686,16 @@ sp_item_write_transform(SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Mat
     if (!transform) {
         sp_item_set_item_transform(item, NR::identity());
     } else {
+        NR::Matrix transform_attr (NR::identity());
         if (((SPItemClass *) G_OBJECT_GET_CLASS(item))->set_transform && !preserve) {
-            xform = ((SPItemClass *) G_OBJECT_GET_CLASS(item))->set_transform(item, xform);
+            transform_attr = ((SPItemClass *) G_OBJECT_GET_CLASS(item))->set_transform(item, xform);
         }
-        sp_item_set_item_transform(item, xform);
+        sp_item_set_item_transform(item, transform_attr);
+    }
+
+    // reset rx/ry of a rect if possible
+    if (SP_IS_RECT (item)) {
+        sp_rect_compensate_rxry (SP_RECT(item), xform);
     }
 
     // send the relative transform with a _transformed_signal
