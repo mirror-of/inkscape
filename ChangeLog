@@ -1,7 +1,8 @@
 2004-09-10  MenTaLguY <mental@rydia.net>
 
 	* src/render/polygon.h, src/render/shape-builder.h,
-	  src/render/shape-builder.cpp:
+	  src/render/shape-builder.cpp, src/render/stroke.h,
+	  src/render/dash.h:
 
 	  beginnings of a simple alternate renderer
 

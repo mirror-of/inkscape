@@ -34,21 +34,21 @@ void ShapeBuilder::moveTo(NR::Point const &pt) {
 
 void ShapeBuilder::lineTo(NR::Point const &pt) {
     _startSegment();
-    _vertices = cons(pt, _vertices);
+    _vertices = cons_mutable(pt, _vertices);
 }
 
 void ShapeBuilder::quadTo(NR::Point const &c, NR::Point const &pt,
                           double smoothness)
 {
     _startSegment();
-    _vertices = cons(pt, cons(c, _vertices));
+    _vertices = cons_mutable(pt, cons_mutable(c, _vertices));
 }
 
 void ShapeBuilder::curveTo(NR::Point const &c0, NR::Point const &c1,
                            NR::Point const &pt, double smoothness)
 {
     _startSegment();
-    _vertices = cons(pt, cons(c1, cons(c0, _vertices)));
+    _vertices = cons_mutable(pt, cons_mutable(c1, cons_mutable(c0, _vertices)));
 }
 
 void ShapeBuilder::closePath() {
@@ -56,16 +56,15 @@ void ShapeBuilder::closePath() {
     _endPolygon(true);
 }
 
-ShapeBuilder::VertexList const *ShapeBuilder::finishVertices() {
-    _endPolygon(false);
-    VertexList const *vertices=_vertices;
+ShapeBuilder::VertexList *ShapeBuilder::finishVertices() {
+    VertexList *vertices=_vertices;
     discard();
     return vertices;
 }
 
-ShapeBuilder::PolygonList const *ShapeBuilder::finish() {
+ShapeBuilder::PolygonList *ShapeBuilder::finish() {
     _endPolygon(false);
-    PolygonList const *polygons=_polygons;
+    PolygonList *polygons=_polygons;
     discard();
     return polygons;
 }
@@ -84,7 +83,7 @@ void ShapeBuilder::_startSegment() {
 
 void ShapeBuilder::_endPolygon(bool close) {
     if (_vertices) {
-        _polygons = cons(Polygon(_vertices, close), _polygons);
+        _polygons = cons_mutable(Polygon(_vertices, close), _polygons);
     }
     _vertices = NULL;
 }

@@ -43,17 +43,17 @@ public:
     void curveTo(NR::Point const &c0, NR::Point const &c1, NR::Point const &pt, double smoothness);
     void closePath();
 
-    VertexList const *finishVertices();
-    PolygonList const *finish();
+    VertexList *finishVertices();
+    PolygonList *finish();
     void discard();
 
 private:
     inline void _startSegment();
     inline void _endPolygon(bool close);
     
-    VertexList const *_start;
-    VertexList const *_vertices;
-    PolygonList const *_polygons;
+    VertexList *_start;
+    VertexList *_vertices;
+    PolygonList *_polygons;
 };
 
 }
