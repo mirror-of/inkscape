@@ -475,6 +475,7 @@ sp_xml_tree_dialog (void)
 
         attr_name = GTK_EDITABLE (gtk_entry_new ());
         gtk_tooltips_set_tip ( tooltips, GTK_WIDGET (attr_name),
+                               // TRANSLATORS: "Attribute" is a noun here
                                _("Attribute name"), NULL );
 
         gtk_signal_connect ( GTK_OBJECT (attributes), "select_row",
@@ -494,6 +495,7 @@ sp_xml_tree_dialog (void)
 
         set_attr = gtk_button_new ();
         gtk_tooltips_set_tip ( tooltips, GTK_WIDGET (set_attr),
+                               // TRANSLATORS: "Set" is a verb here
                                _("Set attribute"), NULL );
         gtk_container_add (GTK_CONTAINER (set_attr),
                     gtk_image_new_from_stock ( INKSCAPE_STOCK_SET,
@@ -515,6 +517,7 @@ sp_xml_tree_dialog (void)
 
         attr_value = (GtkTextView *) gtk_text_view_new ();
         gtk_tooltips_set_tip ( tooltips, GTK_WIDGET (attr_value),
+                               // TRANSLATORS: "Attribute" is a noun here
                                _("Attribute value"), NULL );
         gtk_signal_connect ( GTK_OBJECT (attributes), "select_row",
                              (GCallback) on_attr_select_row_set_value_content,
