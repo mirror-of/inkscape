@@ -14,8 +14,12 @@
 #include <locale>
 #include <sstream>
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
+#include <gtk/gtk.h>
+/*
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
@@ -29,6 +33,7 @@
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkframe.h>
+*/
 
 #include "macros.h"
 #include "helper/sp-intl.h"
@@ -511,10 +516,11 @@ sp_doc_dialog_paper_orientation_selected(GtkWidget *widget, gpointer data)
 
 static void
 sp_doc_dialog_add_work_entity( struct rdf_work_entity_t * entity,
-                         GtkWidget * t, int row )
+                               GtkWidget * t, GtkTooltips * tt, int row )
 {
     g_assert ( entity != NULL );
     g_assert ( t != NULL );
+    g_assert ( tt != NULL );
 
     if (dlg) {
         /* translation code for including a ":" 
@@ -533,6 +539,7 @@ sp_doc_dialog_add_work_entity( struct rdf_work_entity_t * entity,
                           (GtkAttachOptions)( GTK_SHRINK ),
                           (GtkAttachOptions)0, 0, 0 );
         GtkWidget *e = gtk_entry_new ();
+        gtk_tooltips_set_tip (GTK_TOOLTIPS (tt), e, entity->tip, NULL );
         gtk_widget_show (e);
         g_signal_connect ( G_OBJECT (e), "changed",
                            G_CALLBACK (sp_doc_dialog_work_entity_changed),
@@ -869,9 +876,12 @@ sp_desktop_dialog(void)
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), t, l);
 
         row=0;
+        GtkTooltips * tip = gtk_tooltips_new ();
         for (struct rdf_work_entity_t * entity = rdf_work_entities;
              entity && entity->name; entity++) {
-            sp_doc_dialog_add_work_entity( entity, t, row++ );
+            if ( entity->interactive ) {
+                sp_doc_dialog_add_work_entity( entity, t, tip, row++ );
+            }
         }
         /* TODO: load the license info */
 
@@ -1168,7 +1178,9 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
         /* load the RDF entities */
         for (struct rdf_work_entity_t * entity = rdf_work_entities;
              entity && entity->name; entity++) {
-            sp_doc_dialog_update_work_entity( entity );
+            if ( entity->interactive ) {
+                sp_doc_dialog_update_work_entity( entity );
+            }
         }
         /* TODO: load the license info */
 

@@ -373,8 +373,7 @@ sp_document_create (SPReprDoc *rdoc,
 	}
 
 	/* Default RDF */
-	rdf_set_work_entity ( document, rdf_find_entity ( "description" ),
-                        "Created with Inkscape (http://www.inkscape.org/)" );
+	rdf_set_defaults ( document );
 
 	if (keepalive) {
 		inkscape_ref ();

@@ -11,7 +11,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <config.h>
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 
 #include <stdio.h>
 
@@ -19,7 +21,6 @@
 #include <glib.h>
 
 #include "inkscape.h"
-#include "document.h"
 #include "xml/repr.h"
 #include "rdf.h"
 
@@ -139,6 +140,30 @@ struct rdf_license_t rdf_licenses [] = {
 ",
     },
 
+    { "GNU General Public License", 
+          "http://creativecommons.org/licenses/GPL/2.0/",
+      "\
+   <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
+   <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
+   <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
+   <permits rdf:resource=\"http://web.resource.org/cc/DerivativeWorks\" />\
+   <requires rdf:resource=\"http://web.resource.org/cc/ShareAlike\" />\
+   <requires rdf:resource=\"http://web.resource.org/cc/SourceCode\" />\
+",
+    },
+
+    { "GNU Lesser General Public License", 
+          "http://creativecommons.org/licenses/LGPL/2.1/",
+      "\
+   <permits rdf:resource=\"http://web.resource.org/cc/Reproduction\" />\
+   <permits rdf:resource=\"http://web.resource.org/cc/Distribution\" />\
+   <requires rdf:resource=\"http://web.resource.org/cc/Notice\" />\
+   <permits rdf:resource=\"http://web.resource.org/cc/DerivativeWorks\" />\
+   <requires rdf:resource=\"http://web.resource.org/cc/ShareAlike\" />\
+   <requires rdf:resource=\"http://web.resource.org/cc/SourceCode\" />\
+",
+    },
+
     { "Public Domain",
       "http://web.resource.org/cc/PublicDomain",
       "\
@@ -156,24 +181,66 @@ struct rdf_license_t rdf_licenses [] = {
 #define XML_TAG_NAME_WORK     "cc:Work"
 
 struct rdf_work_entity_t rdf_work_entities [] = {
-    { "title", N_("Title"), "dc:title", RDF_CONTENT },
-    { "date", N_("Date"), "dc:date", RDF_CONTENT },
+    { "title", N_("Title"), "dc:title", RDF_CONTENT,
+      N_("Name by which this document is formally known."), TRUE,
+    },
+    { "date", N_("Date"), "dc:date", RDF_CONTENT,
+      N_("Date associated with the creation of this document (YYYY-MM-DD)."), TRUE,
+    },
+    { "format", N_("Format"), "dc:format", RDF_CONTENT,
+      N_("The physical or digital manifestation of this document (MIME type)."), FALSE,
+    },
+    { "type", N_("Type"), "dc:type", RDF_RESOURCE,
+      N_("Type of document (DCMI Type)."), FALSE,
+    },
 
-    /* these are "agent" tags actually... */
-    { "creator", N_("Creator"), "dc:creator", RDF_AGENT },
-    { "owner", N_("Owner"), "dc:rights", RDF_AGENT },
-    { "publisher", N_("Publisher"), "dc:publisher", RDF_AGENT },
+    { "creator", N_("Creator"), "dc:creator", RDF_AGENT,
+      N_("Name of entity primarily responsible for making the content of this document."), TRUE,
+    },
+    { "rights", N_("Rights"), "dc:rights", RDF_AGENT,
+      N_("Name of entity with rights to the Intellectual Property of this document."), TRUE,
+    },
+    { "publisher", N_("Publisher"), "dc:publisher", RDF_AGENT,
+      N_("Name of entity responsible for making this document available."), TRUE,
+    },
 
-    { "source", N_("Source"), "dc:source", RDF_CONTENT },
-    { "keywords", N_("Keywords"), "dc:subject", RDF_CONTENT },
+    /* this should be a multi-line tag */
+    { "contributor", N_("Contributors"), "dc:contributor", RDF_AGENT,
+      N_("Names of entities responsible for making contributions to the content of this document."), TRUE,
+    },
 
-    /* this is a multi-line tag */
-    { "description", N_("Description"), "dc:description", RDF_CONTENT },
+    { "identifier", N_("Identifier"), "dc:identifier", RDF_CONTENT,
+      N_("Unique URI to reference this document."), TRUE,
+    },
+    { "source", N_("Source"), "dc:source", RDF_CONTENT,
+      N_("Unique URI to reference the source of this document."), TRUE,
+    },
+    { "relation", N_("Relation"), "dc:relation", RDF_CONTENT,
+      N_("Unique URI to a related document."), TRUE,
+    },
+    { "language", N_("Language"), "dc:language", RDF_CONTENT,
+      N_("Two-letter language tag with optional subtags for the language of this document.  (e.g. 'en-GB')"), TRUE,
+    },
+    { "subject", N_("Keywords"), "dc:subject", RDF_CONTENT,
+      N_("The topic of this document as key words, phrases, or classication."), TRUE,
+    },
+    { "coverage", N_("Coverage"), "dc:coverage", RDF_CONTENT,
+      N_("Extent or scope of this document."), TRUE,
+    },
+
+    /* this should be a multi-line tag */
+    { "description", N_("Description"), "dc:description", RDF_CONTENT,
+      N_("A short account of the content of this document."), TRUE,
+    },
 
     /* this uses an element */
-    { "license", N_("License"), "cc:license", RDF_RESOURCE },
+    { "license", N_("License"), "cc:license", RDF_RESOURCE,
+      N_("URI to the License namespace definition."), FALSE,
+    },
     
-    { NULL, NULL, NULL, RDF_CONTENT }
+    { NULL, NULL, NULL, RDF_CONTENT,
+      NULL, FALSE,
+    }
 };
 
 /**
@@ -183,7 +250,7 @@ struct rdf_work_entity_t rdf_work_entities [] = {
  *  
  */
 struct rdf_work_entity_t *
-rdf_find_entity(char * name)
+rdf_find_entity(gchar const * name)
 {
     struct rdf_work_entity_t *entity;
     for (entity=rdf_work_entities; entity->name; entity++) {
@@ -331,26 +398,24 @@ rdf_get_repr_text ( SPRepr * repr, struct rdf_work_entity_t * entity )
     switch (entity->datatype) {
         case RDF_CONTENT:
             temp = sp_repr_children(repr);
-            if ( temp == NULL ) return "";
-            //g_return_val_if_fail (temp != NULL, NULL);
+            if ( temp == NULL ) return NULL;
+            
             return sp_repr_content(temp);
         case RDF_AGENT:
             temp = sp_repr_lookup_name ( repr, "cc:Agent" );
-            if ( temp == NULL ) return "";
-            //g_return_val_if_fail (temp != NULL, NULL);
+            if ( temp == NULL ) return NULL;
 
             temp = sp_repr_lookup_name ( temp, "dc:title" );
-            if ( temp == NULL ) return "";
-            //g_return_val_if_fail (temp != NULL, NULL);
+            if ( temp == NULL ) return NULL;
 
             temp = sp_repr_children(temp);
-            if ( temp == NULL ) return "";
-            //g_return_val_if_fail (temp != NULL, NULL);
+            if ( temp == NULL ) return NULL;
+
             return sp_repr_content(temp);
         case RDF_RESOURCE:
             return sp_repr_attr(repr, "rdf:resource");
     }
-    return "";
+    return NULL;
 }
 
 unsigned int
@@ -503,7 +568,7 @@ rdf_get_work_repr( SPDocument * doc, gchar const * name, bool build )
 
 /**
  *  \brief   Retrieves a known RDF/Work entity's contents from the document XML by name
- *  \return  A pointer to the entity's static contents as a string
+ *  \return  A pointer to the entity's static contents as a string, or NULL if no entity exists
  *  \param   entity  The desired RDF/Work entity
  *  
  */
@@ -511,12 +576,11 @@ const gchar *
 rdf_get_work_entity(SPDocument * doc, struct rdf_work_entity_t * entity)
 {
     g_return_val_if_fail (doc    != NULL, NULL);
-    g_return_val_if_fail (entity != NULL, NULL);
+    if ( entity == NULL ) return NULL;
     //printf("want '%s'\n",entity->title);
 
     SPRepr * item = rdf_get_work_repr( doc, entity->tag, FALSE );
-    if ( item == NULL ) return "";
-    //g_return_val_if_fail (item != NULL, NULL);
+    if ( item == NULL ) return NULL;
 
     const gchar * result = rdf_get_repr_text ( item, entity );
     //printf("found '%s' == '%s'\n", entity->title, result );
@@ -571,6 +635,42 @@ void
 rdf_set_license(struct rdf_license_t * license)
 {
 }
+
+struct rdf_entity_default_t {
+    gchar const * name;
+    gchar const * text;
+};
+struct rdf_entity_default_t rdf_defaults[] = {
+    { "description",
+      "Created with Inkscape (http://www.inkscape.org/)",
+    },
+    { "format",
+      "image/svg+xml",
+    },
+    { "type",
+      "http://purl.org/dc/dcmitype/StillImage",
+    },
+    { NULL, NULL, }
+};
+
+void
+rdf_set_defaults ( SPDocument * document )
+{
+    g_assert ( document != NULL );
+
+    /* install defaults */
+    for ( struct rdf_entity_default_t * rdf_default = rdf_defaults;
+          rdf_default->name;
+          rdf_default++) {
+        struct rdf_work_entity_t * entity = rdf_find_entity ( rdf_default->name );
+        g_assert ( entity != NULL );
+
+        if ( rdf_get_work_entity ( document, entity ) == NULL ) {
+            rdf_set_work_entity ( document, entity, rdf_default->text );
+        }
+    }
+}
+
 
 /*
   Local Variables:

@@ -1,3 +1,10 @@
+2004-07-03  Kees Cook  <kees@outflux.net>
+
+	* src/document.cpp, src/dialogs/desktop-properties.cpp, 
+	  src/dialogs/rdf.cpp, src/dialogs/rdf.h:
+	  Added several more RDF entities.  Created entry tooltips.  Set
+	  a few RDF defaults for the document.
+
 2004-07-03  MenTaLguY  <mental@rydia.net>
 
 	* src/desktop.cpp, src/document.cpp: 
