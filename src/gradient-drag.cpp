@@ -145,18 +145,18 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer da
             continue;
         if (NR::L2 (d_new->point - *p) < snap_dist) {
 
-            bool conflict = false;
+            bool incest = false;
             for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
                 GrDraggable *d1 = (GrDraggable *) i->data;
                 for (GSList const* j = d_new->draggables; j != NULL; j = j->next) { // for all draggables of dragger
                     GrDraggable *d2 = (GrDraggable *) j->data;
                     if ((d1->item == d2->item) && (d1->fill_or_stroke == d2->fill_or_stroke)) {
                         // we must not snap together the points of the same gradient!
-                        conflict = true;
+                        incest = true;
                     }
                 }
             }
-            if (conflict)
+            if (incest)
                 continue;
 
             for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
@@ -181,8 +181,8 @@ gr_knot_ungrabbed_handler (SPKnot *knot, unsigned int state, gpointer data)
 {
     GrDragger *dragger = (GrDragger *) data;
 
-    for (GSList const* l = dragger->draggables; l != NULL; l = l->next) {
-        GrDraggable *draggable = (GrDraggable *) l->data;
+    for (GSList const* i = dragger->draggables; i != NULL; i = i->next) {
+        GrDraggable *draggable = (GrDraggable *) i->data;
         dragger->parent->local_change = true;
         sp_item_gradient_set_coords (draggable->item, draggable->point_num, knot->pos, draggable->fill_or_stroke, true);
     }
@@ -259,8 +259,8 @@ GrDragger::~GrDragger ()
     if (this->parent->selected == this)
         this->parent->selected = NULL;
 
-    for (GSList const* l = this->draggables; l != NULL; l = l->next) {
-        delete ((GrDraggable *) l->data);
+    for (GSList const* i = this->draggables; i != NULL; i = i->next) {
+        delete ((GrDraggable *) i->data);
     }
     g_slist_free (this->draggables);
     this->draggables = NULL;
@@ -292,8 +292,8 @@ GrDrag::addLine (NR::Point p1, NR::Point p2)
 void 
 GrDrag::addDragger (NR::Point p, GrDraggable *draggable)
 {
-    for (GSList *l = this->draggers; l != NULL; l = l->next) {
-        GrDragger *dragger = (GrDragger *) l->data;
+    for (GSList *i = this->draggers; i != NULL; i = i->next) {
+        GrDragger *dragger = (GrDragger *) i->data;
         if (NR::L2 (dragger->point - p) < MERGE_DIST) {
             // distance is small, merge this draggable into dragger, no need to create new dragger
             dragger->addDraggable (draggable);
@@ -307,8 +307,8 @@ GrDrag::addDragger (NR::Point p, GrDraggable *draggable)
 void
 GrDrag::updateDraggers ()
 {
-    for (GSList const* l = this->draggers; l != NULL; l = l->next) {
-        delete ((GrDragger *) l->data);
+    for (GSList const* i = this->draggers; i != NULL; i = i->next) {
+        delete ((GrDragger *) i->data);
         //gtk_object_destroy( GTK_OBJECT (l->data));
     }
     g_slist_free (this->draggers);
@@ -317,9 +317,9 @@ GrDrag::updateDraggers ()
 
     g_return_if_fail (this->selection != NULL);
 
-    for (GSList const* l = this->selection->itemList(); l != NULL; l = l->next) {
+    for (GSList const* i = this->selection->itemList(); i != NULL; i = i->next) {
 
-        SPItem *item = SP_ITEM(l->data);
+        SPItem *item = SP_ITEM(i->data);
 
         SPStyle *style = SP_OBJECT_STYLE (item);
 
@@ -350,17 +350,17 @@ GrDrag::updateDraggers ()
 void
 GrDrag::updateLines ()
 {
-	for (GSList *l = this->lines; l != NULL; l = l->next) {
-         gtk_object_destroy( GTK_OBJECT (l->data));
+	for (GSList const *i = this->lines; i != NULL; i = i->next) {
+         gtk_object_destroy( GTK_OBJECT (i->data));
 	}
 	g_slist_free (this->lines);
 	this->lines = NULL;
 
     g_return_if_fail (this->selection != NULL);
 
-    for (GSList const* l = this->selection->itemList(); l != NULL; l = l->next) {
+    for (GSList const* i = this->selection->itemList(); i != NULL; i = i->next) {
 
-        SPItem *item = SP_ITEM(l->data);
+        SPItem *item = SP_ITEM(i->data);
 
         SPStyle *style = SP_OBJECT_STYLE (item);
 
