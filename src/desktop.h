@@ -240,7 +240,7 @@ struct SPDesktopWidget {
 
 	GtkWidget *hscrollbar, *vscrollbar, *vscrollbar_box;
 
-	GtkWidget *tool_toolbox, *aux_toolbox;
+	GtkWidget *tool_toolbox, *aux_toolbox, *commands_toolbox;
 
 	/* Rulers */
 	GtkWidget *hruler, *vruler;

@@ -783,6 +783,9 @@ sp_desktop_widget_init (SPDesktopWidget *dtw)
     dtw->aux_toolbox = sp_aux_toolbox_new ();
     gtk_box_pack_end (GTK_BOX (dtw->vbox), dtw->aux_toolbox, FALSE, TRUE, 0);
 
+    dtw->commands_toolbox = sp_commands_toolbox_new ();
+    gtk_box_pack_end (GTK_BOX (dtw->vbox), dtw->commands_toolbox, FALSE, TRUE, 0);
+
     dtw->tool_toolbox = sp_tool_toolbox_new ();
     gtk_box_pack_start (GTK_BOX (hbox), dtw->tool_toolbox, FALSE, TRUE, 0);
 
@@ -1186,6 +1189,12 @@ sp_desktop_widget_layout (SPDesktopWidget *dtw)
         gtk_widget_show_all (dtw->menubar);
     }
 
+    if (prefs_get_int_attribute (fullscreen ? "fullscreen.commands" : "window.commands", "state", 1) == 0) {
+        gtk_widget_hide_all (dtw->commands_toolbox);
+    } else {
+        gtk_widget_show_all (dtw->commands_toolbox);
+    }
+
     if (prefs_get_int_attribute (fullscreen ? "fullscreen.toppanel" : "window.toppanel", "state", 1) == 0) {
         gtk_widget_hide_all (dtw->aux_toolbox);
     } else {
@@ -1260,6 +1269,7 @@ sp_desktop_widget_new (SPNamedView *namedview)
 
     sp_tool_toolbox_set_desktop (dtw->tool_toolbox, dtw->desktop);
     sp_aux_toolbox_set_desktop (dtw->aux_toolbox, dtw->desktop);
+    sp_commands_toolbox_set_desktop (dtw->commands_toolbox, dtw->desktop);
        
     return SP_VIEW_WIDGET (dtw);
 }

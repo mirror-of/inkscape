@@ -26,6 +26,9 @@ void sp_tool_toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop);
 GtkWidget *sp_aux_toolbox_new(void);
 void sp_aux_toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop);
 
+GtkWidget *sp_commands_toolbox_new(void);
+void sp_commands_toolbox_set_desktop(GtkWidget *toolbox, SPDesktop *desktop);
+
 void show_aux_toolbox(GtkWidget *toolbox);
 
 GtkWidget *sp_toolbox_button_normal_new_from_verb(GtkWidget *t,

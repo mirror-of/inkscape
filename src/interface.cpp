@@ -773,9 +773,11 @@ sp_ui_view_menu (GtkMenu *menu, SPDocument *doc, SPView *view)
     GtkWidget *item_showhide = sp_ui_menu_append_item (menu, NULL, _("_Show/Hide"), _("Show or hide parts of the document window (differently for normal and fullscreen modes)"), view, NULL, NULL);
     GtkMenu *m = (GtkMenu *) gtk_menu_new ();
 
-    sp_ui_menu_append_check_item_from_verb (m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
+//    sp_ui_menu_append_check_item_from_verb (m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
+//                                  checkitem_toggled, checkitem_update, 0);
+    sp_ui_menu_append_check_item_from_verb (m, view, _("Commands Bar"), _("Show or hide the Commands bar (under the menu)"), "commands",
                                   checkitem_toggled, checkitem_update, 0);
-    sp_ui_menu_append_check_item_from_verb (m, view, _("Top _Panel"), _("Show or hide the top panel (under the menu)"), "toppanel",
+    sp_ui_menu_append_check_item_from_verb (m, view, _("Tool Controls"), _("Show or hide the Tool Controls panel"), "toppanel",
                                   checkitem_toggled, checkitem_update, 0);
     sp_ui_menu_append_check_item_from_verb (m, view, _("_Toolbox"), _("Show or hide the main toolbox (on the left)"), "toolbox",
                                   checkitem_toggled, checkitem_update, 0);
@@ -877,12 +879,6 @@ sp_ui_main_menubar (SPView *view)
 	sp_ui_path_menu (GTK_MENU (menu), NULL, view);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
-
-// 	mitem = gtk_menu_item_new_with_mnemonic (_("_Dialogs"));
-// 	menu = gtk_menu_new ();
-// 	sp_ui_dialogs_menu (GTK_MENU (menu), NULL, view);
-// 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (mitem), GTK_WIDGET (menu));
-// 	gtk_menu_shell_append (GTK_MENU_SHELL (mbar), mitem);
 
 	mitem = gtk_menu_item_new_with_mnemonic (_("_Help"));
 	menu = gtk_menu_new ();

@@ -138,7 +138,8 @@ static void setup_tool_toolbox (GtkWidget *toolbox, SPDesktop *desktop);
 static void update_tool_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
 static void setup_aux_toolbox (GtkWidget *toolbox, SPDesktop *desktop);
 static void update_aux_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
-
+static void setup_commands_toolbox (GtkWidget *toolbox, SPDesktop *desktop);
+static void update_commands_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox);
 
 static void delete_connection(GObject *obj, SigC::Connection *connection) {
 	connection->disconnect();
@@ -247,6 +248,39 @@ sp_aux_toolbox_new ()
 
 	g_signal_connect(G_OBJECT(hb), "child_attached", G_CALLBACK(aux_toolbox_attached), (gpointer)tb);
 	g_signal_connect(G_OBJECT(hb), "child_detached", G_CALLBACK(aux_toolbox_detached), (gpointer)tb);
+
+    gtk_container_add (GTK_CONTAINER (hb), tb);
+    gtk_widget_show (GTK_WIDGET (tb));
+
+    return hb;
+}
+
+//####################################
+//# Commands Bar
+//####################################
+
+GtkWidget *
+sp_commands_toolbox_new ()
+{
+    GtkWidget *tb = gtk_vbox_new (FALSE, 0);
+
+    GtkWidget *tb_s = gtk_vbox_new (FALSE, 0);
+    GtkWidget *tb_e = gtk_vbox_new (FALSE, 0);
+    gtk_box_set_spacing (GTK_BOX (tb), AUX_SPACING);
+    gtk_box_pack_start (GTK_BOX (tb), GTK_WIDGET (tb_s), FALSE, FALSE, 0);
+    gtk_box_pack_end (GTK_BOX (tb), GTK_WIDGET (tb_e), FALSE, FALSE, 0);
+
+    g_object_set_data (G_OBJECT (tb), "desktop", NULL);
+    gtk_widget_set_sensitive (tb, FALSE);
+    g_signal_connect_after(G_OBJECT(tb), "size_request", G_CALLBACK(aux_toolbox_size_request), NULL);
+
+    GtkWidget *hb = gtk_handle_box_new ();
+    gtk_handle_box_set_handle_position (GTK_HANDLE_BOX (hb), GTK_POS_LEFT);
+    gtk_handle_box_set_shadow_type (GTK_HANDLE_BOX (hb), GTK_SHADOW_OUT);
+    gtk_handle_box_set_snap_edge (GTK_HANDLE_BOX (hb), GTK_POS_LEFT);
+
+    g_signal_connect(G_OBJECT(hb), "child_attached", G_CALLBACK(aux_toolbox_attached), (gpointer)tb);
+    g_signal_connect(G_OBJECT(hb), "child_detached", G_CALLBACK(aux_toolbox_detached), (gpointer)tb);
 
     gtk_container_add (GTK_CONTAINER (hb), tb);
     gtk_widget_show (GTK_WIDGET (tb));
@@ -451,6 +485,12 @@ sp_aux_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop)
     toolbox_set_desktop (gtk_bin_get_child (GTK_BIN (toolbox)), desktop, setup_aux_toolbox, update_aux_toolbox);
 }
 
+void
+sp_commands_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop)
+{
+    toolbox_set_desktop (gtk_bin_get_child (GTK_BIN (toolbox)), desktop, setup_commands_toolbox, update_commands_toolbox);
+}
+
 
 static void
 toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup_func, UpdateFunction update_func)
@@ -553,6 +593,84 @@ update_aux_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget 
             gtk_widget_hide (sub_toolbox);
         }
     }
+}
+
+static void
+setup_commands_toolbox (GtkWidget *toolbox, SPDesktop *desktop)
+{
+    SPView *view=SP_VIEW (desktop);
+
+    GtkTooltips *tt = gtk_tooltips_new ();
+    GtkWidget *tb = gtk_hbox_new (FALSE, 0);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_NEW, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_OPEN, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_SAVE, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_PRINT, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_QUIT, view, tt);
+
+    gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_IMPORT, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_FILE_EXPORT, view, tt);
+
+    gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_UNDO, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_REDO, view, tt);
+
+    gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_COPY, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_CUT, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_PASTE, view, tt);
+
+    gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_DUPLICATE, view, tt);
+
+// find
+
+//     gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+//     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_CLONE, view, tt);
+//     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_UNLINK_CLONE, view, tt);
+
+//     gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+//     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_TILE, view, tt);
+//     sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_EDIT_UNTILE, view, tt);
+
+    gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_SELECTION, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_DRAWING, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_ZOOM_PAGE, view, tt);
+
+    gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_DIALOG_DISPLAY, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_DIALOG_NAMEDVIEW, view, tt);
+
+    gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_DIALOG_FILL_STROKE, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_DIALOG_TEXT, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_DIALOG_XML_EDITOR, view, tt);
+
+    gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
+
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_DIALOG_ALIGN_DISTRIBUTE, view, tt);
+    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, SP_VERB_DIALOG_TRANSFORM, view, tt);
+
+    gtk_widget_show_all (tb);
+
+    gtk_container_add (GTK_CONTAINER (toolbox), tb);
+}
+
+static void
+update_commands_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox)
+{
 }
 
 void show_aux_toolbox (GtkWidget *toolbox_toplevel)
