@@ -137,7 +137,7 @@ sp_verb_get_action (sp_verb_t verb, SPView * view)
 }
 
 /*
-	Return the name without underscores, for use in dialog titles, etc
+	Return the name without underscores and ellipsis, for use in dialog titles, etc
 	Allocated memory must be freed by caller
 */
 gchar *
