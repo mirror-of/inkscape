@@ -906,7 +906,7 @@ options_checkbox (
     );
 
 options_checkbox (
-    _("Dialogs are hidden in taksbar"), 
+    _("Dialogs are hidden in taskbar"), 
     _("Whether dialog windows are to be hidden in the window manager taskbar"), tt,
     vb,
     "options.dialogsskiptaskbar", "value", 1,
