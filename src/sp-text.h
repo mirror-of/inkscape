@@ -90,6 +90,12 @@ public:
     be unset but sp_svg_length_list_read() can't cope with that. */
     void insert(unsigned start_index, unsigned n);
 
+    /** divides the stored attributes into two, at the given index. The
+    first section (0..index-1) stay in this object, the second section
+    (index..end) go in \a second. This function is generally used when
+    line breaking. */
+    void split(unsigned index, TextTagAttributes *second);
+
     /** applies the given transformation to the stored coordinates. Pairs
     of x and y coordinates are multiplied by the matrix and the dx and dy
     vectors are multiplied by the given parameters. rotate is not altered. */
@@ -122,6 +128,9 @@ private:
 
     /// does the work for insert()
     static void insertSingleAttribute(std::vector<SPSVGLength> *attr_vector, unsigned start_index, unsigned n, bool is_xy);
+
+    /// does the work for split()
+    static void splitSingleAttribute(std::vector<SPSVGLength> *first_vector, unsigned index, std::vector<SPSVGLength> *second_vector, bool trimZeros);
 };
 
 

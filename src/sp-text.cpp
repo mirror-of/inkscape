@@ -787,6 +787,29 @@ void TextTagAttributes::insertSingleAttribute(std::vector<SPSVGLength> *attr_vec
     }
 }
 
+void TextTagAttributes::split(unsigned index, TextTagAttributes *second)
+{
+    if (!singleXYCoordinates()) {
+        splitSingleAttribute(&attributes.x, index, &second->attributes.x, false);
+        splitSingleAttribute(&attributes.y, index, &second->attributes.y, false);
+    }
+    splitSingleAttribute(&attributes.dx, index, &second->attributes.dx, true);
+    splitSingleAttribute(&attributes.dy, index, &second->attributes.dy, true);
+    splitSingleAttribute(&attributes.rotate, index, &second->attributes.rotate, true);
+}
+
+void TextTagAttributes::splitSingleAttribute(std::vector<SPSVGLength> *first_vector, unsigned index, std::vector<SPSVGLength> *second_vector, bool trimZeros)
+{
+    second_vector->clear();
+    if (first_vector->size() <= index) return;
+    second_vector->resize(first_vector->size() - index);
+    std::copy(first_vector->begin() + index, first_vector->end(), second_vector->begin());
+    first_vector->resize(index);
+    if (trimZeros)
+        while (!first_vector->empty() && (!first_vector->back().set || first_vector->back().value == 0.0))
+            first_vector->resize(first_vector->size() - 1);
+}
+
 void TextTagAttributes::transform(NR::Matrix const &matrix, double scale_x, double scale_y)
 {
     SPSVGLength zero_length;

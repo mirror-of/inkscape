@@ -207,31 +207,61 @@ static Inkscape::XML::Node* duplicate_node_without_children(Inkscape::XML::Node 
     return NULL;
 }
 
+/** returns the sum of the (recursive) lengths of all the SPStrings prior
+to \a item at the same level. */
+static unsigned sum_sibling_text_lengths_before(SPObject *item)
+{
+    unsigned char_index = 0;
+    for (SPObject *sibling = SP_OBJECT_PARENT(item)->firstChild() ; sibling && sibling != item ; sibling = SP_OBJECT_NEXT(sibling))
+        char_index += sp_text_get_length(sibling);
+    return char_index;
+}
+
+/** splits the attributes for the first object at the given \a char_index
+and moves the ones after that point into \a second_item. */
+static void split_attributes(SPObject *first_item, SPObject *second_item, unsigned char_index)
+{
+    TextTagAttributes *first_attrs = NULL, *second_attrs;
+    if (SP_IS_TEXT(first_item)) {
+        first_attrs = &SP_TEXT(first_item)->attributes;
+        second_attrs = &SP_TEXT(second_item)->attributes;
+    } else if (SP_IS_TSPAN(first_item)) {
+        first_attrs = &SP_TSPAN(first_item)->attributes;
+        second_attrs = &SP_TSPAN(second_item)->attributes;
+    } else if (SP_IS_TEXTPATH(first_item)) {
+        first_attrs = &SP_TEXTPATH(first_item)->attributes;
+        second_attrs = &SP_TEXTPATH(second_item)->attributes;
+    } else
+        return;
+
+    first_attrs->split(char_index, second_attrs);
+}
+
 /** recursively divides the XML node tree into two objects: the original will
 contain all objects up to and including \a split_obj and the returned value
 will be the new leaf which represents the copy of \a split_obj and extends
 down the tree with new elements all the way to the common root which is the
 parent of the first line break node encountered.
 */
-static SPObject* split_text_object_tree_at(SPObject *split_obj)
+static SPObject* split_text_object_tree_at(SPObject *split_obj, unsigned char_index)
 {
     if (is_line_break_object(split_obj)) {
         Inkscape::XML::Node *new_node = duplicate_node_without_children(SP_OBJECT_REPR(split_obj));
         SP_OBJECT_REPR(SP_OBJECT_PARENT(split_obj))->addChild(new_node, SP_OBJECT_REPR(split_obj));
         sp_repr_unref(new_node);
+        split_attributes(split_obj, SP_OBJECT_NEXT(split_obj), char_index);
         return SP_OBJECT_NEXT(split_obj);
     }
 
-    SPObject *duplicate_obj = split_text_object_tree_at(SP_OBJECT_PARENT(split_obj));
+    unsigned char_count_before = sum_sibling_text_lengths_before(split_obj);
+    SPObject *duplicate_obj = split_text_object_tree_at(SP_OBJECT_PARENT(split_obj), char_index + char_count_before);
     // copy the split node
-    if (SP_IS_TSPAN(duplicate_obj) && duplicate_obj->hasChildren()) {
-        // workaround for the old code adding a string child we don't want
-        SP_OBJECT_REPR(duplicate_obj)->removeChild(SP_OBJECT_REPR(duplicate_obj->firstChild()));
-    }
     Inkscape::XML::Node *new_node = duplicate_node_without_children(SP_OBJECT_REPR(split_obj));
     SP_OBJECT_REPR(duplicate_obj)->appendChild(new_node);
     sp_repr_unref(new_node);
-    // TODO: I think this an appropriate place to sort out the copied attributes (x/y/dx/dy/rotate)
+
+    // sort out the copied attributes (x/y/dx/dy/rotate)
+    split_attributes(split_obj, duplicate_obj->firstChild(), char_index);
 
     // then move all the subsequent nodes
     split_obj = SP_OBJECT_NEXT(split_obj);
@@ -273,8 +303,11 @@ bool sp_te_insert_line (SPItem *item, gint i_ucs4_pos)
         }
     } else if (SP_IS_STRING(split_obj)) {
         Glib::ustring *string = &SP_STRING(split_obj)->string;
+        unsigned char_index = 0;
+        for (Glib::ustring::iterator it = string->begin() ; it != split_text_iter ; it++)
+            char_index++;
         // we need to split the entire text tree into two
-        SPString *new_string = SP_STRING(split_text_object_tree_at(split_obj));
+        SPString *new_string = SP_STRING(split_text_object_tree_at(split_obj, char_index));
         SP_OBJECT_REPR(new_string)->setContent(&*split_text_iter.base());   // a little ugly
         string->erase(split_text_iter, string->end());
         SP_OBJECT_REPR(split_obj)->setContent(string->c_str());
@@ -283,6 +316,7 @@ bool sp_te_insert_line (SPItem *item, gint i_ucs4_pos)
         // TODO
         // I think the only case to put here is arbitrary gaps, which nobody uses yet
     }
+    SP_OBJECT(item)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(item)),SP_OBJECT_WRITE_EXT);
     SP_OBJECT(item)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     return 1;
 }
@@ -325,8 +359,7 @@ static void insert_into_spstring(SPString *string_item, Glib::ustring::iterator 
         else break;
 
         attributes->insert(char_index, char_count);
-        for (SPObject *sibling = SP_OBJECT_PARENT(parent_item)->firstChild() ; sibling && sibling != parent_item ; sibling = SP_OBJECT_NEXT(sibling))
-            char_index += sp_text_get_length(sibling);
+        char_index += sum_sibling_text_lengths_before(parent_item);
     }
 }
 
@@ -394,6 +427,28 @@ static void move_child_nodes(Inkscape::XML::Node *from_repr, Inkscape::XML::Node
     }
 }
 
+/** returns the attributes for an object, or NULL if it isn't a text,
+tspan or textpath. */
+static TextTagAttributes* attributes_for_object(SPObject *object)
+{
+    if (SP_IS_TSPAN(object))    // actually in these cases it would be possible to move the attributes over to the preceding element
+        return &SP_TSPAN(object)->attributes;
+    if (SP_IS_TEXT(object))
+        return &SP_TEXT(object)->attributes;
+    if (SP_IS_TEXTPATH(object))
+        return &SP_TEXTPATH(object)->attributes;
+    return NULL;
+}
+
+/** returns true if there are any x/y/dx/dy/rotate attributes set on the
+given object. */
+static bool any_attributes_set(SPObject *object)
+{
+    TextTagAttributes *attrs = attributes_for_object(object);
+    if (attrs) return attrs->anyAttributesSet();
+    return false;
+}
+
 /** if \a object and \a other are the same type and the same style and \a other
 isn't needed for layout reasons (ie it's a line break) then all the children
 of \a other are removed and put in to object and other is deleted. It works
@@ -423,15 +478,8 @@ static bool merge_nodes_if_possible(SPObject *object, SPObject *other)
     if (!((object_style == NULL && other_style == NULL)
           || (object_style != NULL && other_style != NULL && !strcmp(object_style, other_style))))
         return false;
-    if (SP_IS_TSPAN(other))    // actually in these cases it would be possible to move the attributes over to the preceding element
-        if (SP_TSPAN(other)->attributes.anyAttributesSet())
-            return false;
-    if (SP_IS_TEXT(other))
-        if (SP_TEXT(other)->attributes.anyAttributesSet())
-            return false;
-    if (SP_IS_TEXTPATH(other))
-        if (SP_TEXTPATH(other)->attributes.anyAttributesSet())
-            return false;
+    if (any_attributes_set(other))
+        return false;    // actually in these cases it would be possible to move the attributes over to the preceding element
     // all our tests passed: do the merge
     move_child_nodes(other_repr, object_repr);
     other_repr->parent()->removeChild(other_repr);
@@ -457,6 +505,8 @@ static SPObject* delete_line_break(SPObject *root, SPObject *item, bool *next_is
     Inkscape::XML::Node *this_repr = SP_OBJECT_REPR(item);
     SPObject *next_item = NULL;
     bool done = false;
+    unsigned moved_char_count = sp_text_get_length(item) - 1;   // the -1 is because it's going to count the line break
+
     if (SP_OBJECT_NEXT(item) && !SP_IS_STRING(SP_OBJECT_NEXT(item))) {
         Inkscape::XML::Node *next_repr = SP_OBJECT_REPR(SP_OBJECT_NEXT(item));
         gchar const *this_style = this_repr->attribute("style");
@@ -469,6 +519,9 @@ static SPObject* delete_line_break(SPObject *root, SPObject *item, bool *next_is
                 next_item = SP_OBJECT_NEXT(item);
                 *next_is_sibling = false;
             }
+            TextTagAttributes *attributes = attributes_for_object(SP_OBJECT_NEXT(item));
+            if (attributes)
+                attributes->insert(0, moved_char_count);
             move_child_nodes(this_repr, next_repr, true);
             done = true;
         }
@@ -509,6 +562,9 @@ static SPObject* delete_line_break(SPObject *root, SPObject *item, bool *next_is
         gchar *style = sp_style_write_difference(SP_OBJECT_STYLE(new_parent_item), SP_OBJECT_STYLE(item));
         new_span_repr->setAttribute("style", style);
         g_free(style);
+        TextTagAttributes *attributes = attributes_for_object(new_parent_item);
+        if (attributes)
+            attributes->insert(0, moved_char_count);
         move_child_nodes(this_repr, new_span_repr);
     }
     while (!item->hasChildren()) {
@@ -537,11 +593,8 @@ static void erase_from_spstring(SPString *string_item, Glib::ustring::iterator i
     SPObject *parent_item = string_item;
     for ( ; ; ) {
         parent_item = SP_OBJECT_PARENT(parent_item);
-        TextTagAttributes *attributes;
-        if (SP_IS_TEXT(parent_item)) attributes = &SP_TEXT(parent_item)->attributes;
-        else if(SP_IS_TSPAN(parent_item)) attributes = &SP_TSPAN(parent_item)->attributes;
-        else if(SP_IS_TEXTPATH(parent_item)) attributes = &SP_TEXTPATH(parent_item)->attributes;
-        else break;
+        TextTagAttributes *attributes = attributes_for_object(parent_item);
+        if (attributes == NULL) break;
 
         attributes->erase(char_index, char_count);
         for (SPObject *sibling = SP_OBJECT_PARENT(parent_item)->firstChild() ; sibling && sibling != parent_item ; sibling = SP_OBJECT_NEXT(sibling))
@@ -761,9 +814,8 @@ sp_te_adjust_kerning_screen (SPItem *item, gint i_position, SPDesktop *desktop, 
     by = factor * by;
 
     source_item = SP_OBJECT_PARENT(source_item);
-    if (SP_IS_TEXT(source_item)) SP_TEXT(source_item)->attributes.addToDxDy(char_index, by);
-    else if(SP_IS_TSPAN(source_item)) SP_TSPAN(source_item)->attributes.addToDxDy(char_index, by);
-    else if(SP_IS_TEXTPATH(source_item)) SP_TEXTPATH(source_item)->attributes.addToDxDy(char_index, by);
+    TextTagAttributes *attributes = attributes_for_object(source_item);
+    if (attributes) attributes->addToDxDy(char_index, by);
 
     text->updateRepr();
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
