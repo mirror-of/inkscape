@@ -853,7 +853,7 @@ sp_desktop_dialog(void)
         sp_color_picker_button(dlg, t, _("Minor grid line color:"), "gridcolor",
                                _("Grid color"), "gridopacity", row++);
 
-        sp_color_picker_button(dlg, t, _("Minor grid line color:"), "gridempcolor",
+        sp_color_picker_button(dlg, t, _("Major grid line color:"), "gridempcolor",
                                _("Grid emphasis color"), "gridempopacity", row++);
 
         if (1) {
