@@ -92,31 +92,22 @@ sp_selected_path_slice ()
 void
 sp_selected_path_boolop (bool_op bop)
 {
-    SPDesktop *desktop;
-    SPSelection *selection;
-    GSList *il;
-    GSList *l;
-    SPRepr *repr;
-    SPItem *item;
-    gchar *d, *style;
-  
-    desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (!SP_IS_DESKTOP (desktop))
         return;
-    selection = SP_DT_SELECTION (desktop);
+
+    SPSelection *selection = SP_DT_SELECTION (desktop);
   
-    il = (GSList *) selection->itemList();
+    GSList *il = (GSList *) selection->itemList();
   
     if (g_slist_length (il) < 2) {
         sp_view_set_statusf_error(SP_VIEW(desktop), _("Select at least 2 paths to perform a boolean operation."));
         return;
     }
   
-    if (g_slist_length (il) > 2)
-    {
-        if (bop == bool_op_diff || bop == bool_op_symdiff || bop == bool_op_cut || bop == bool_op_slice )
-        {
-            sp_view_set_statusf_error(SP_VIEW(desktop), _("Select exactly 2 paths to perform difference or XOR."));
+    if (g_slist_length (il) > 2) {
+        if (bop == bool_op_diff || bop == bool_op_symdiff || bop == bool_op_cut || bop == bool_op_slice ) {
+            sp_view_set_statusf_error(SP_VIEW(desktop), _("Select exactly 2 paths to perform difference, XOR, division, or path cut."));
             return;
         }
     }
@@ -125,46 +116,47 @@ sp_selected_path_boolop (bool_op bop)
     // it's only used when there are 2 objects, and for operations who need to know the
     // topmost object (differences, cuts)
     bool reverseOrderForOp = false;
+
     // mettre les elements de la liste dans l'ordre pour ces operations
-    if (bop == bool_op_diff || bop == bool_op_symdiff|| bop == bool_op_cut || bop == bool_op_slice)
-    {
-        // ugly check in the tree to find which element of the selection list is topmost (only 2 elements)
+    if (bop == bool_op_diff || bop == bool_op_symdiff || bop == bool_op_cut || bop == bool_op_slice) {
+        // check in the tree to find which element of the selection list is topmost (for 2-operand commands only)
         SPRepr *a = SP_OBJECT_REPR (il->data);
         SPRepr *b = SP_OBJECT_REPR (il->next->data);
-        if (a == NULL || b == NULL)
-        {
-            sp_view_set_statusf_error(SP_VIEW(desktop), _("Unable to determine the z-order of the objects selected for difference."));
+
+        if (a == NULL || b == NULL) {
+            sp_view_set_statusf_error(SP_VIEW(desktop), _("Unable to determine the z-order of the objects selected for difference, XOR, division, or path cut."));
             return;
         }
-        if (Ancetre (a, b))
-        {
-        }
-        else if (Ancetre (b, a))
-        {
-            // mauvais sens
+
+        if (Ancetre (a, b)) {
+            // a is the parent of b, already in the proper order
+        } else if (Ancetre (b, a)) {
+            // reverse order
             reverseOrderForOp = true;
-        }
-        else
-        {
+        } else {
+
+            // objects are not in parent/child relationship;
+            // find their lowest common ancestor
             SPRepr *dad = LCA (a, b);
-            if (dad == NULL)
-	    {
-                sp_view_set_statusf_error(SP_VIEW(desktop), _("Unable to determine the z-order of the objects selected for difference."));
+            if (dad == NULL) {
+                sp_view_set_statusf_error(SP_VIEW(desktop), _("Unable to determine the z-order of the objects selected for difference, XOR, division, or path cut."));
                 return;
-	    }
+            }
+
+            // find the children of the LCA that lead from it to the a and b
             SPRepr *as = AncetreFils (a, dad);
             SPRepr *bs = AncetreFils (b, dad);
-            for (SPRepr * child = dad->children; child; child = child->next)
-	    {
-                if (child == as)
-                {
+
+            // find out which comes first
+            for (SPRepr * child = dad->children; child; child = child->next) {
+                if (child == as) {
                     // a en premier->mauvais sens
                     reverseOrderForOp = true;
                     break;
                 }
                 if (child == bs)
                     break;
-	    }
+            }
         }
     }
   
@@ -172,9 +164,9 @@ sp_selected_path_boolop (bool_op bop)
   
     // first check if all the input objects have shapes
     // otherwise bail out
-    for (l = il; l != NULL; l = l->next)
+    for (GSList *l = il; l != NULL; l = l->next)
     {
-        item = (SPItem *) l->data;
+        SPItem *item = SP_ITEM (l->data);
         if (!SP_IS_SHAPE (item) && !SP_IS_TEXT (item))
         {
             sp_view_set_statusf_error(SP_VIEW(desktop), _("One of the objects is not a path, cannot perform boolean operation."));
@@ -191,7 +183,7 @@ sp_selected_path_boolop (bool_op bop)
     int curOrig;
     {
         curOrig = 0;
-        for (l = il; l != NULL; l = l->next)
+        for (GSList *l = il; l != NULL; l = l->next)
         {
             SPCSSAttr *css;
             const gchar *val;
@@ -242,7 +234,7 @@ sp_selected_path_boolop (bool_op bop)
         theShapeA->ConvertToShape (theShape, origWind[0]);
     
         curOrig = 1;
-        for (l = il->next; l != NULL; l = l->next) {    
+        for (GSList *l = il->next; l != NULL; l = l->next) {    
             originaux[curOrig]->ConvertWithBackData (1.0);
       
             originaux[curOrig]->Fill (theShape, curOrig);
@@ -259,11 +251,13 @@ sp_selected_path_boolop (bool_op bop)
             }
             curOrig++;
         }
+
         {
             Shape *swap = theShape;
             theShape = theShapeA;
             theShapeA = swap;
         }
+
     } else if ( bop == bool_op_cut ) {
         // cuts= sort of a bastard boolean operation, thus not the axact same modus operandi
         // technically, the cut path is not necessarily a polygon (thus has no winding rule)
@@ -394,12 +388,13 @@ sp_selected_path_boolop (bool_op bop)
     delete theShapeA;
     delete theShapeB;
     for (int i = 0; i < nbOriginaux; i++)  delete originaux[i];
-  
+ 
     if (res->descr_nb <= 1)
     {
         // only one command, presumably a moveto: it isn't a path
-        for (l = il; l != NULL; l = l->next)
+        for (GSList *l = il; l != NULL; l = l->next)
         {
+            // FIXME: use mega-kill API
             sp_repr_unparent (SP_OBJECT_REPR (l->data));
         }
         sp_document_done (SP_DT_DOCUMENT (desktop));
@@ -410,30 +405,36 @@ sp_selected_path_boolop (bool_op bop)
         return;
     }
   
-    // now that we have the result, add it on the canvas
+    // remember important aspects of the source path, to be restored
+    SPRepr *repr_source;
     if ( bop == bool_op_diff || bop == bool_op_symdiff || bop == bool_op_cut || bop == bool_op_slice ) {
-        if (reverseOrderForOp)
-        {
-            style = g_strdup (sp_repr_attr ((SP_OBJECT (il->data))->repr, "style"));
-        }
-        else
-        {
-            style = g_strdup (sp_repr_attr ((SP_OBJECT (il->next->data))->repr, "style"));
+        if (reverseOrderForOp) {
+             repr_source = SP_OBJECT_REPR (il->data);
+        } else {
+             repr_source = SP_OBJECT_REPR (il->next->data);
         }
     } else {
-        // on prend le style du premier
-        style = g_strdup (sp_repr_attr ((SP_OBJECT (il->data))->repr, "style"));
+        // find out the bottom object
+        GSList *sorted = 	g_slist_copy ((GSList *) selection->reprList());
+        sorted = g_slist_sort (sorted, (GCompareFunc) sp_repr_compare_position);
+        repr_source = ((SPRepr *) sorted->data);
+        g_slist_free (sorted);
     }
-  
-    for (l = il; l != NULL; l = l->next)
-    {
+    gint pos = sp_repr_position (repr_source);
+    SPRepr *parent = sp_repr_parent (repr_source);
+    const char *id = sp_repr_attr (repr_source, "id");
+    const char *style = sp_repr_attr (repr_source, "style");
+    
+
+    // remove source paths
+    selection->clear();
+    for (GSList *l = il; l != NULL; l = l->next) {
+        // FIXME: use mega-kill API
         sp_repr_unparent (SP_OBJECT_REPR (l->data));
     }
-  
     g_slist_free (il);
-  
-    selection->clear();
 
+    // now that we have the result, add it on the canvas
     if ( bop == bool_op_cut || bop == bool_op_slice ) {
         int    nbRP=0;
         Path** resPath;
@@ -441,60 +442,78 @@ sp_selected_path_boolop (bool_op bop)
             // there are moveto's at each intersection, but it's still one unique path
             // so break it down and add each subpath independently
             // we could call break_apart to do this, but while we have the description...
-            resPath=res->SubPaths(nbRP,false);
+            resPath=res->SubPaths(nbRP, false);
         } else {
             // cut operation is a bit wicked: you need to keep holes
             // that's why you needed the nesting
             // ConvertToFormeNested() dumped all the subpath in a single Path "res", so we need
             // to get the path for each part of the polygon. that's why you need the nesting info:
             // to know in wich subpath to add a subpath
-            resPath=res->SubPathsWithNesting(nbRP,true,nbNest,nesting,conts);
+            resPath=res->SubPathsWithNesting(nbRP, true, nbNest, nesting, conts);
       
             // cleaning
-            if ( conts ) free(conts);
-            if ( nesting ) free(nesting);
+            if ( conts ) free (conts);
+            if ( nesting ) free (nesting);
         }
+
+        // add all the pieces resulting from cut or slice
         for (int i=0;i<nbRP;i++) {
-            d = liv_svg_dump_path (resPath[i]);
+            gchar *d = liv_svg_dump_path (resPath[i]);
       
-            repr = sp_repr_new ("path");
+            SPRepr *repr = sp_repr_new ("path");
             sp_repr_set_attr (repr, "style", style);
             sp_repr_set_attr (repr, "d", d);
             g_free (d);
-            item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
-            sp_repr_unref (repr);
-      
-            selection->addItem (item);
-      
+
+            // for slice, remove fill
             if (bop == bool_op_slice) {
                 SPCSSAttr *css;        
         
                 css = sp_repr_css_attr_new ();
                 sp_repr_css_set_property (css, "fill", "none");
  
-                sp_repr_css_change (SP_OBJECT_REPR (item), css, "style");
+                sp_repr_css_change (repr, css, "style");
         
                 sp_repr_css_attr_unref (css);
             }
+
+            // we assign the same id on all pieces, but it on adding to document, it will be changed on all except one
+            // this means it's basically random which of the pieces inherits the original's id and clones
+            // a better algorithm might figure out e.g. the biggest piece
+            sp_repr_set_attr (repr, "id", id);
+
+            // add the new repr to the parent
+            sp_repr_append_child (parent, repr);
+
+            // move to the saved position 
+            sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+      
+            selection->addRepr(repr);
+            sp_repr_unref (repr);
+
             delete resPath[i];
         }
-        sp_document_done (SP_DT_DOCUMENT (desktop));
         if ( resPath ) free(resPath);
-        g_free (style);
-    } else {
-        d = liv_svg_dump_path (res);
 
-        repr = sp_repr_new ("path");
+    } else {
+        gchar *d = liv_svg_dump_path (res);
+
+        SPRepr *repr = sp_repr_new ("path");
         sp_repr_set_attr (repr, "style", style);
-        g_free (style);
+
         sp_repr_set_attr (repr, "d", d);
         g_free (d);
-        item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
-        sp_document_done (SP_DT_DOCUMENT (desktop));
+
+        sp_repr_set_attr (repr, "id", id);
+        sp_repr_append_child (parent, repr);
+        sp_repr_set_position_absolute (repr, pos > 0 ? pos : 0);
+     
+        selection->addRepr(repr);
         sp_repr_unref (repr);
-  
-        selection->setItem (item);
     }
+
+    sp_document_done (SP_DT_DOCUMENT (desktop));
+
     delete res;
 }
 
@@ -1377,8 +1396,9 @@ LCA (SPRepr * a, SPRepr * b)
         t = sp_repr_parent (t);
     return t;
 }
+
 Path *
-Path_for_item (SPItem * item,bool doTransformation)
+Path_for_item (SPItem * item, bool doTransformation)
 {
     SPCurve *curve;
   
