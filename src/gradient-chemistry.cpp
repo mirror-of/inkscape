@@ -484,12 +484,12 @@ sp_gradient_set_coords (SPGradient *gradient, guint point_num, NR::Point p, bool
 				double move_angle = NR::atan2(p_w - c_w) - r1_angle;
 				double move_stretch = NR::L2(p_w - c_w) / NR::L2(r1_w - c_w);
 
-				NR::Matrix move (NR::Matrix (NR::translate (-c_w)) *
+				NR::Matrix move = NR::Matrix (NR::translate (-c_w)) *
 												 NR::Matrix (NR::rotate(-r1_angle)) * 
 												 NR::Matrix (NR::scale(move_stretch, 1)) *
 												 NR::Matrix (NR::rotate(r1_angle)) * 
 												 NR::Matrix (NR::rotate(move_angle)) * 
-												 NR::Matrix (NR::translate (c_w)));
+												 NR::Matrix (NR::translate (c_w));
 
 				new_transform = gradient->gradientTransform * i2d * move * i2d.inverse(); 
 				transform_set = true;
@@ -503,12 +503,12 @@ sp_gradient_set_coords (SPGradient *gradient, guint point_num, NR::Point p, bool
 				double move_angle = NR::atan2(p_w - c_w) - r2_angle;
 				double move_stretch = NR::L2(p_w - c_w) / NR::L2(r2_w - c_w);
 
-				NR::Matrix move (NR::Matrix (NR::translate (-c_w)) *
+				NR::Matrix move = NR::Matrix (NR::translate (-c_w)) *
 												 NR::Matrix (NR::rotate(-r2_angle)) * 
 												 NR::Matrix (NR::scale(move_stretch, 1)) *
 												 NR::Matrix (NR::rotate(r2_angle)) * 
 												 NR::Matrix (NR::rotate(move_angle)) * 
-												 NR::Matrix (NR::translate (c_w)));
+												 NR::Matrix (NR::translate (c_w));
 
 				new_transform = gradient->gradientTransform * i2d * move * i2d.inverse(); 
 				transform_set = true;
