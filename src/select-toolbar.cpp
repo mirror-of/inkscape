@@ -305,6 +305,8 @@ sp_select_toolbox_new (SPDesktop *desktop)
 	gtk_container_add (GTK_CONTAINER (vb),
 		sp_select_toolbox_spinbutton ("H", "height", 1e-3, us, spw, _("Height of selection"), FALSE));
 
+	aux_toolbox_space (vb, 2);
+
 	// add the units menu
 	gtk_widget_show (us);
 	gtk_container_add (GTK_CONTAINER (vb), us);
