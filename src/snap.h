@@ -1,5 +1,5 @@
-#ifndef SEEN_DESKTOP_SNAP_H
-#define SEEN_DESKTOP_SNAP_H
+#ifndef SEEN_SNAP_H
+#define SEEN_SNAP_H
 
 /*
  * Snap distance calculation
@@ -42,12 +42,10 @@ public:
     };
 
     void setSnapTo(PointType t, bool s);
-    void setEnabled(bool s);
     void setDistance(NR::Coord d);
 
     bool getSnapTo(PointType t) const;
     bool getSnapToBBox() const;
-    bool getEnabled() const;
     NR::Coord getDistance() const;
 
     bool will_snap_something() const;
@@ -64,7 +62,6 @@ protected:
     
 private:
     NR::Coord _distance;
-    bool _enabled;
     std::map<PointType, bool> _snap_to;
 };
 
@@ -126,9 +123,10 @@ NR::Coord namedview_dim_snap_list_skew(SPNamedView const *nv, Snapper::PointType
 */
 NR::Coord namedview_free_snap_all_types(SPNamedView const *nv, NR::Point &req);
 NR::Coord namedview_vector_snap_all_types(SPNamedView const *nv, NR::Point &req, NR::Point const &d);
+NR::Coord namedview_dim_snap_all_types(SPNamedView const *nv, NR::Point& req, NR::Dim2 const dim);
 
 
-#endif /* !SEEN_DESKTOP_SNAP_H */
+#endif /* !SEEN_SNAP_H */
 
 /*
   Local Variables:

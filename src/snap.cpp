@@ -290,21 +290,11 @@ bool namedview_will_snap_something(SPNamedView const *nv)
             
 
 
-Snapper::Snapper(SPNamedView const *nv, NR::Coord const d) : _named_view(nv), _distance(d), _enabled(false)
+Snapper::Snapper(SPNamedView const *nv, NR::Coord const d) : _named_view(nv), _distance(d)
 {
     g_assert (_named_view != NULL);
     g_assert (SP_IS_NAMEDVIEW (_named_view));
     setSnapTo(BBOX_POINT, true);
-}
-
-void Snapper::setEnabled(bool s)
-{
-    _enabled = s;
-}
-
-bool Snapper::getEnabled() const
-{
-    return _enabled;
 }
 
 void Snapper::setDistance(NR::Coord const d)
@@ -365,10 +355,6 @@ NR::Coord Snapper::intersector_a_vector_snap(NR::Point &req, NR::Point const &mv
 
 bool Snapper::will_snap_something() const
 {
-    if (_enabled == false) {
-        return false;
-    }
-
     std::map<PointType, bool>::const_iterator i = _snap_to.begin();
     while (i != _snap_to.end() && i->second == false) {
         i++;
@@ -385,7 +371,7 @@ GridSnapper::GridSnapper(SPNamedView const *nv, NR::Coord const d) : Snapper(nv,
 
 NR::Coord GridSnapper::vector_snap(PointType t, NR::Point &req, NR::Point const &d) const
 {
-    if (getEnabled() == false || getSnapTo(t) == false) {
+    if (getSnapTo(t) == false) {
         return NR_HUGE;
     }
     
@@ -434,7 +420,7 @@ GuideSnapper::GuideSnapper(SPNamedView const *nv, NR::Coord const d) : Snapper(n
 
 NR::Coord GuideSnapper::vector_snap(PointType t, NR::Point &req, NR::Point const &d) const
 {
-    if (getEnabled() == false || getSnapTo(t) == false) {
+    if (getSnapTo(t) == false) {
         return NR_HUGE;
     }
     
@@ -491,6 +477,17 @@ NR::Coord namedview_vector_snap_all_types(SPNamedView const *nv, NR::Point &req,
     return std::min(snap_dist, bbox_dist);
 }
 
+NR::Coord namedview_dim_snap_all_types(SPNamedView const *nv, NR::Point &req, NR::Dim2 const dim)
+{
+    NR::Point snap_req = req;
+    NR::Coord snap_dist = namedview_dim_snap(nv, Snapper::SNAP_POINT, snap_req, dim);
+    NR::Point bbox_req = req;
+    NR::Coord bbox_dist = namedview_dim_snap(nv, Snapper::BBOX_POINT, bbox_req, dim);
+
+    req = snap_dist < bbox_dist ? snap_req : bbox_req;
+    return std::min(snap_dist, bbox_dist);
+}
+
 /*
   Local Variables:
   mode:c++
@@ -501,3 +498,4 @@ NR::Coord namedview_vector_snap_all_types(SPNamedView const *nv, NR::Point &req,
   End:
 */
 // vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+
