@@ -35,7 +35,12 @@
 #include "selection.h"
 #include "xml/repr.h"
 #include "document.h"
+#include "sp-item.h"
 
+
+#include "libnr/nr-matrix.h"
+#include "libnr/nr-matrix-fns.h"
+#include "libnr/nr-matrix-ops.h"
 
 #include <glib.h>
 
@@ -152,11 +157,9 @@ void TileDialogImpl::Grid_Arrange ()
 {
 
     int cnt;
-    double grid_left,grid_top,widest,tallest,paddingx,paddingy,width, height, item_x, item_y;;
+    double grid_left,grid_top,widest,tallest,paddingx,paddingy,width, height, item_x, item_y, new_x, new_y;
     widest = 0;
     tallest = 0;
-    grid_left = 0;
-    grid_top = 0;
     paddingx = XPadSpinner.get_value();
     paddingy = YPadSpinner.get_value();
     grid_left = 9999;
@@ -167,20 +170,17 @@ void TileDialogImpl::Grid_Arrange ()
     SPSelection *selection = SP_DT_SELECTION (desktop);
     const GSList *items = selection->itemList();
     for (; items != NULL; items = items->next) {
-        SPRepr *repr = SP_OBJECT_REPR((SPItem *) items->data);
-        //
-        //  FIXME: need to use bbox width and hieght rather than width and hieght properties as only rect and image have those.
-        //
-        width = sp_repr_get_double_attribute (repr, "width", 1.0);
-        height = sp_repr_get_double_attribute (repr, "height", 1.0);
-        item_x = sp_repr_get_double_attribute (repr, "x", 0.0);
-        item_y = sp_repr_get_double_attribute (repr, "y", 0.0);
-        if (item_x < grid_left) grid_left = item_x;
-        if (item_y < grid_top) grid_top = item_y;
+        NRRect b;
+        sp_item_bbox_desktop((SPItem *) items->data, &b);
+        width = b.x1 - b.x0;
+        height = b.y1 - b.y0;
+        item_x = b.x0;
+        item_y = b.y0;
+        if (b.x0 < grid_left) grid_left = b.x0;
+        if (b.y0 < grid_top) grid_top = b.y0;
         if (width > widest) widest = width;
         if (height > tallest) tallest = height;
     }
-
     cnt=0;
     const GSList *items2 = selection->itemList();
     GSList *rev = g_slist_copy((GSList *) items2);
@@ -188,17 +188,23 @@ void TileDialogImpl::Grid_Arrange ()
     int noPerRow = NoPerRowSpinner.get_value_as_int();
     for (; rev != NULL; rev = rev->next) {
             SPRepr *repr = SP_OBJECT_REPR((SPItem *) rev->data);
-            //
-            //  FIXME: need to use bbox width and hieght rather than width and hieght properties as only rect and image have those.
-            //
-            width = sp_repr_get_double_attribute (repr, "width", 1.0);
-            height = sp_repr_get_double_attribute (repr, "height", 1.0);
-            sp_repr_set_double (repr, "x", grid_left + ((widest - width)/2) + (( widest + paddingx ) * (cnt % noPerRow)));
-            sp_repr_set_double (repr, "y", grid_top + ((tallest - height)/2) +(( tallest + paddingy ) * (cnt / noPerRow)));
+            SPItem *item=SP_ITEM(rev->data);
+            NRRect b;
+            // FIXME: In changing from setting x&y on images to using transforms, I've somehow changed the
+            // order that rows are being oput on the page. They should go down, but the go up. wierd.
+
+            sp_item_bbox_desktop((SPItem *) rev->data, &b);
+            width = b.x1 - b.x0;
+            height = b.y1 - b.y0;
+            new_x = grid_left + ((widest - width)/2) + (( widest + paddingx ) * (cnt % noPerRow));
+            new_y =grid_top + ((tallest - height)/2) +(( tallest + paddingy ) * (cnt / noPerRow));
+            NR::Point move = NR::Point(new_x-b.x0, new_y-b.y0);
+            NR::Matrix const &affine = NR::Matrix(NR::translate(move));
+            sp_item_set_i2d_affine(item, sp_item_i2d_affine(item) * affine);
+            sp_item_write_transform(item, repr, item->transform,  NULL);
             SP_OBJECT (rev->data)->updateRepr(repr, SP_OBJECT_WRITE_EXT);
             cnt +=1;
     }
-
     sp_document_done (SP_DT_DOCUMENT (desktop));
 
 }
@@ -293,7 +299,7 @@ void TileDialogImpl::on_xpad_spinbutton_changed()
 {
 
     prefs_set_double_attribute ("dialogs.gridtiler", "XPad", XPadSpinner.get_value());
-    g_print("x padding %f \n",XPadSpinner.get_value());
+  //  g_print("x padding %f \n",XPadSpinner.get_value());
 
 }
 
@@ -304,7 +310,7 @@ void TileDialogImpl::on_ypad_spinbutton_changed()
 {
 
     prefs_set_double_attribute ("dialogs.gridtiler", "YPad", YPadSpinner.get_value());
-    g_print("y padding %f \n",YPadSpinner.get_value());
+  //  g_print("y padding %f \n",YPadSpinner.get_value());
 
 }
 
@@ -379,7 +385,7 @@ TileDialogImpl::TileDialogImpl()
     int selcount = g_slist_length((GSList *)items);
 
     /*#### Number of columns ####*/
-    NoPerRowSpinner.set_digits(3);
+    NoPerRowSpinner.set_digits(0);
     NoPerRowSpinner.set_increments(1, 5);
     NoPerRowSpinner.set_range(1.0, 100.0);
     double PerRow = prefs_get_double_attribute ("dialogs.gridtiler", "NoPerRow", 3);
@@ -397,7 +403,7 @@ TileDialogImpl::TileDialogImpl()
 
     /*#### Number of Rows ####*/
 
-    NoPerColSpinner.set_digits(3);
+    NoPerColSpinner.set_digits(0);
     NoPerColSpinner.set_increments(1, 5);
     NoPerColSpinner.set_range(1.0, 100.0);
     double PerCol = selcount / PerRow;
@@ -421,7 +427,7 @@ TileDialogImpl::TileDialogImpl()
     double XPad = prefs_get_double_attribute ("dialogs.gridtiler", "XPad", 15);
     XPadSpinner.set_value(XPad);
     XPadBox.pack_end(XPadSpinner, false, false, MARGIN);
-    tips.set_tip(XPadSpinner, _("Horizontal Padding between columns"));
+    tips.set_tip(XPadSpinner, _("Horizontal spacing between columns"));
     XPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_xpad_spinbutton_changed));
 
 
@@ -439,7 +445,7 @@ TileDialogImpl::TileDialogImpl()
     double YPad = prefs_get_double_attribute ("dialogs.gridtiler", "YPad", 15);
     YPadSpinner.set_value(YPad);
     YPadBox.pack_end(YPadSpinner, false, false, MARGIN);
-    tips.set_tip(YPadSpinner, _("Vertical Padding between Rows"));
+    tips.set_tip(YPadSpinner, _("Vertical spacing between Rows"));
     YPadSpinner.signal_changed().connect(sigc::mem_fun(*this, &TileDialogImpl::on_ypad_spinbutton_changed));
 
     YPadLabel.set_label(_("Row spacing:"));
