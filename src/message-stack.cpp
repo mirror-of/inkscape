@@ -34,10 +34,9 @@ MessageId MessageStack::push(MessageType type, gchar const *message) {
 
 MessageId MessageStack::pushF(MessageType type, gchar const *format, ...)
 {
-    MessageId id;
     va_list args;
     va_start(args, format);
-    id = pushVF(type, format, args);
+    MessageId id=pushVF(type, format, args);
     va_end(args);
     return id;
 }
@@ -62,30 +61,31 @@ void MessageStack::cancel(MessageId id) {
     }
 }
 
-void MessageStack::flash(MessageType type, gchar const *message) {
+MessageId MessageStack::flash(MessageType type, gchar const *message) {
     switch (type) {
     case ERROR_MESSAGE:
     case WARNING_MESSAGE:
-        _push(type, 5000, message);
+        return _push(type, 5000, message);
         break;
     default:
-        _push(type, 2000, message);
+        return _push(type, 2000, message);
     }
 }
 
-void MessageStack::flashF(MessageType type, gchar const *format, ...)
-{
+MessageId MessageStack::flashF(MessageType type, gchar const *format, ...) {
     va_list args;
     va_start(args, format);
-    flashVF(type, format, args);
+    MessageId id = flashVF(type, format, args);
     va_end(args);
+    return id;
 }
 
-void MessageStack::flashVF(MessageType type, gchar const *format, va_list args)
+MessageId MessageStack::flashVF(MessageType type, gchar const *format, va_list args)
 {
     gchar *message=g_strdup_vprintf(format, args);
-    flash(type, message);
+    MessageId id = flash(type, message);
     g_free(message);
+    return id;
 }
 
 MessageId MessageStack::_push(MessageType type, guint lifetime, gchar const *message)

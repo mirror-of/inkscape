@@ -98,6 +98,7 @@ public:
 private:
     MessageStack *_stack; ///< the message stack to use
     MessageId _message_id; ///< our current message id, or 0
+    MessageId _flash_message_id; ///< current flashed message id, or 0
 };
 
 }

@@ -17,7 +17,7 @@
 namespace Inkscape {
 
 MessageContext::MessageContext(MessageStack *stack)
-: _stack(stack), _message_id(0)
+: _stack(stack), _message_id(0), _flash_message_id(0)
 {
     GC::anchor(_stack);
 }
@@ -29,7 +29,9 @@ MessageContext::~MessageContext() {
 }
 
 void MessageContext::set(MessageType type, gchar const *message) {
-    clear();
+    if (_message_id) {
+        _stack->cancel(_message_id);
+    }
     _message_id = _stack->push(type, message);
 }
 
@@ -49,24 +51,33 @@ void MessageContext::setVF(MessageType type, gchar const *format, va_list args)
 }
 
 void MessageContext::flash(MessageType type, gchar const *message) {
-    _stack->flash(type, message);
+    if (_flash_message_id) {
+        _stack->cancel(_flash_message_id);
+    }
+    _flash_message_id = _stack->flash(type, message);
 }
 
 void MessageContext::flashF(MessageType type, gchar const *format, ...) {
     va_list args;
     va_start(args, format);
-    _stack->flashVF(type, format, args);
+    flashVF(type, format, args);
     va_end(args);
 }
 
 void MessageContext::flashVF(MessageType type, gchar const *format, va_list args) {
-    _stack->flashVF(type, format, args);
+    gchar *message=g_strdup_vprintf(format, args);
+    flash(type, message);
+    g_free(message);
 }
 
 void MessageContext::clear() {
     if (_message_id) {
         _stack->cancel(_message_id);
         _message_id = 0;
+    }
+    if (_flash_message_id) {
+        _stack->cancel(_flash_message_id);
+        _flash_message_id = 0;
     }
 }
 

@@ -1,5 +1,14 @@
 2004-09-23  MenTaLguY <mental@rydia.net>
 
+	* src/message-stack.h, src/message-stack.cpp:
+
+	  return id of flashed messages so they are cancellable
+
+	* src/message-context.h, src/message-context.cpp:
+
+	  message context flashes now supercede one another, as regular
+	  messages do (they do not supercede regular messages though)
+
 	* src/interface.cpp, src/layer-fns.cpp, src/layer-fns.h, src/verbs.cpp:
 
 	  initial stab at layers menu; not everything works the way it should

@@ -108,16 +108,20 @@ public:
       *
       * @param type the message type
       * @param message the message text
+      *
+      * @return the id of the pushed message
       */
-    void flash(MessageType type, gchar const *message);
+    MessageId flash(MessageType type, gchar const *message);
 
     /** @brief temporarily pushes a message onto the stack using
       *        printf-like formatting
       *
       * @param type the message type
       * @param format a printf-style format string
+      *
+      * @return the id of the pushed message
       */
-    void flashF(MessageType type, gchar const *format, ...);
+    MessageId flashF(MessageType type, gchar const *format, ...);
 
     /** @brief temporarily pushes a message onto the stack using
       *        printf-like formatting, using a stdarg argument list
@@ -125,8 +129,10 @@ public:
       * @param type the message type
       * @param format a printf-style format string
       * @param args the printf-style arguments
+      *
+      * @return the id of the pushed message
       */
-    void flashVF(MessageType type, gchar const *format, va_list args);
+    MessageId flashVF(MessageType type, gchar const *format, va_list args);
 
 private:
     struct Message {
