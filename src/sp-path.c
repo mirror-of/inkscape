@@ -39,6 +39,9 @@ static void sp_path_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *tran
 
 static SPShapeClass *parent_class;
 
+/**
+ * Gets the GType object for SPPathClass
+ */
 GType
 sp_path_get_type (void)
 {
@@ -82,6 +85,9 @@ sp_path_class_init (SPPathClass * klass)
 	item_class->write_transform = sp_path_write_transform;
 }
 
+/**
+ * Initializes an SPPath.  Currently does nothing.
+ */
 static void
 sp_path_init (SPPath *path)
 {
@@ -224,6 +230,9 @@ sp_path_write (SPObject *object, SPRepr *repr, guint flags)
 	return repr;
 }
 
+/**
+ * Writes the given transform into the repr for the given item.
+ */
 static void
 sp_path_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *transform)
 {
@@ -237,15 +246,18 @@ sp_path_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *transform)
 	path = (SPPath *) item;
 	shape = (SPShape *) item;
 
+	/* Calculate the DF */
 	ex = NR_MATRIX_DF_EXPANSION (transform);
 
+	/* Take the path for the shape, write it as an svgpath, and add it to the repr */
 	spath.path = shape->curve->bpath;
 	nr_path_duplicate_transform (&dpath, &spath, transform);
 	svgpath = sp_svg_write_path (dpath.path);
 	sp_repr_set_attr (repr, "d", svgpath);
 	g_free (svgpath);
 	nr_free (dpath.path);
-	/* And last but not least */
+
+	/* Wrte the style info into the repr */
 	style = SP_OBJECT_STYLE (item);
 	if (style->stroke.type != SP_PAINT_TYPE_NONE) {
 		if (!NR_DF_TEST_CLOSE (ex, 1.0, NR_EPSILON_D)) {
