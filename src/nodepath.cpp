@@ -2247,11 +2247,11 @@ node_rotate_internal (SPPathNode *n, gdouble angle, Radial &rme, Radial &rother,
 }
 
 void
-node_rotate_internal_screen (SPPathNode *n, gdouble const ang, Radial &rme, Radial &rother, gboolean both)
+node_rotate_internal_screen (SPPathNode *n, gdouble const angle, Radial &rme, Radial &rother, gboolean both)
 {
 	gdouble r;
 
-	gdouble const norm_angle = ang / SP_DESKTOP_ZOOM (n->subpath->nodepath->desktop);
+	gdouble const norm_angle = angle / SP_DESKTOP_ZOOM (n->subpath->nodepath->desktop);
 
 	if (both || n->type == SP_PATHNODE_SMOOTH || n->type == SP_PATHNODE_SYMM) 
 		r = MAX (rme.r, rother.r);
@@ -2259,9 +2259,9 @@ node_rotate_internal_screen (SPPathNode *n, gdouble const ang, Radial &rme, Radi
 		r = rme.r;
 
 	gdouble const weird_angle = atan2 (norm_angle, r);
-/* If anyone can explain this to me...  It seems to be assuming
- * norm_angle is quite small and a reasonable approximation to the
- * normal to r.  Or something.*/
+/* Bulia says norm_angle is just the visible distance that the
+ * object's end must travel on the screen.  Left as 'angle' for want of
+ * a better name.*/
 
 	rme.a += weird_angle; 
 	if (both || n->type == SP_PATHNODE_SMOOTH || n->type == SP_PATHNODE_SYMM)  
