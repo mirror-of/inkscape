@@ -195,12 +195,12 @@ Output::save (SPDocument * doc, const gchar * uri)
 	sp_document_set_undo_sensitive (doc, FALSE);
 	sp_repr_set_attr(repr, "inkscape:output_extension", NULL);
 	sp_repr_set_attr(repr, "inkscape:dataloss", NULL);
-	sp_repr_set_attr(repr, "sodipodi:modified", NULL);
 	sp_document_set_undo_sensitive (doc, TRUE);
 
     imp->save(this, doc, uri);
 
 	sp_document_set_undo_sensitive (doc, FALSE);
+	sp_repr_set_attr(repr, "sodipodi:modified", NULL);
 	sp_repr_set_attr(repr, "inkscape:output_extension", get_id());
 	if (dataloss) {
 		sp_repr_set_attr(repr, "inkscape:dataloss", "TRUE");
