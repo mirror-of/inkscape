@@ -437,7 +437,15 @@ sp_text_edit_dialog_update_object ( SPText *text, SPRepr *repr )
 
         nr_typeface_attribute_get (NR_FONT_TYPEFACE (font), "stretch", c, 256);
         g_strdown (c);
-        sp_repr_css_set_property (css, "font-stretch", c);
+        if (strcmp(c, "normal")) {
+            sp_repr_css_set_property (css, "font-stretch", c);
+        }
+
+        nr_typeface_attribute_get (NR_FONT_TYPEFACE (font), "variant", c, 256);
+        g_strdown (c);
+        if (strcmp(c, "normal")) {
+            sp_repr_css_set_property (css, "font-variant", c);
+        }
 
         g_snprintf (c, 64, "%g", NR_FONT_SIZE (font));
         sp_repr_css_set_property (css, "font-size", c);
