@@ -283,6 +283,7 @@ static double ddist(dpoint_t p, dpoint_t q) {
   return sqrt(sq(p.x-q.x)+sq(p.y-q.y));
 }
 
+#if 0
 /* calculate point of a bezier curve */
 static dpoint_t bezier(double t, dpoint_t p0, dpoint_t p1, dpoint_t p2, dpoint_t p3) {
   double s = 1-t;
@@ -292,6 +293,25 @@ static dpoint_t bezier(double t, dpoint_t p0, dpoint_t p1, dpoint_t p2, dpoint_t
   res.y = s*s*s*p0.y + 3*s*s*t*p1.y + 3*s*t*t*p2.y + t*t*t*p3.y;
   return res;
 }
+#else
+/* calculate point of a bezier curve */
+static dpoint_t bezier(double t, dpoint_t p0, dpoint_t p1, dpoint_t p2, dpoint_t p3) {
+  double s = 1.0-t;
+  dpoint_t res;
+  double s2 = s  * s;
+  double s3 = s2 * s;
+
+  double t2 = t  * t;
+  double t3 = t2 * t;
+
+  double s2t_3 = 3.0 * s2 * t;
+  double t2s_3 = 3.0 * t2 * s;
+
+  res.x = s3*p0.x  + s2t_3*p1.x + t2s_3*p2.x + t3*p3.x;
+  res.y = s3*p0.y  + s2t_3*p1.y + t2s_3*p2.y + t3*p3.y;
+  return res;
+}
+#endif
 
 /* calculate the point t in [0..1] on the (convex) bezier curve
    (p0,p1,p2,p3) which is tangent to q1-q0. Return -1.0 if there is no
