@@ -818,6 +818,9 @@ SPRepr *SPObject::updateRepr(SPRepr *repr, unsigned int flags) {
 
 /* Modification */
 
+/** Add \a flags to \a object's as dirtiness flags, and recursively add CHILD_MODIFIED flag to
+ *  parent and ancestors (as far up as necessary).
+ */
 void
 SPObject::requestDisplayUpdate(unsigned int flags)
 {
