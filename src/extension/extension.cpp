@@ -270,7 +270,7 @@ Extension::check (void)
 void
 Extension::printFailure (Glib::ustring reason)
 {
-	error_file << _("Extension \"") << name << _("\" failed to load beacuse ");
+	error_file << _("Extension \"") << name << _("\" failed to load because ");
 	error_file << reason;
 	error_file << std::endl;
 	return;
