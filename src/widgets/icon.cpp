@@ -45,7 +45,7 @@ static void sp_icon_size_request (GtkWidget *widget, GtkRequisition *requisition
 static void sp_icon_size_allocate (GtkWidget *widget, GtkAllocation *allocation);
 static int sp_icon_expose (GtkWidget *widget, GdkEventExpose *event);
 
-static void sp_icon_paint (SPIcon *icon, GdkRectangle *area);
+static void sp_icon_paint(SPIcon *icon, GdkRectangle const *area);
 
 static guchar *sp_icon_image_load_pixmap (const gchar *name, unsigned int size, unsigned int scale);
 static guchar *sp_icon_image_load_svg (const gchar *name, unsigned int size, unsigned int scale);
@@ -136,8 +136,7 @@ sp_icon_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 	}
 }
 
-static int
-sp_icon_expose (GtkWidget *widget, GdkEventExpose *event)
+static int sp_icon_expose(GtkWidget *widget, GdkEventExpose *event)
 {
 	if (GTK_WIDGET_DRAWABLE (widget)) {
 		sp_icon_paint (SP_ICON (widget), &event->area);
@@ -248,33 +247,29 @@ sp_icon_image_load_gtk (GtkWidget *widget, const gchar *name, unsigned int size,
 	}
 }
 
-static void
-sp_icon_paint (SPIcon *icon, GdkRectangle *area)
+static void sp_icon_paint(SPIcon *icon, GdkRectangle const *area)
 {
-	GtkWidget *widget;
-	int padx, pady;
-	int x0, y0, x1, y1, x, y;
+	GtkWidget &widget = *GTK_WIDGET(icon);
 
-	widget = GTK_WIDGET (icon);
+	int const padx = ( ( widget.allocation.width > icon->size )
+			   ? ( widget.allocation.width - icon->size ) / 2
+			   : 0 );
+	int const pady = ( ( widget.allocation.height > icon->size )
+			   ? ( widget.allocation.height - icon->size ) / 2
+			   : 0 );
 
-	if ( widget->allocation.width > icon->size ) {
-		padx = (widget->allocation.width - icon->size) / 2;
-	} else {
-		padx = 0;
-	}
-	if ( widget->allocation.height > icon->size ) {
-		pady = (widget->allocation.height - icon->size) / 2;
-	} else {
-		pady = 0;
-	}
-
-	x0 = MAX (area->x, widget->allocation.x + padx);
-	y0 = MAX (area->y, widget->allocation.y + pady);
-	x1 = MIN (area->x + area->width,  widget->allocation.x + padx + static_cast< int > (icon->size) );
-	y1 = MIN (area->y + area->height, widget->allocation.y + pady + static_cast< int > (icon->size) );
+	int const x0 = std::max(area->x, widget.allocation.x + padx);
+	int const y0 = std::max(area->y, widget.allocation.y + pady);
+	int const x1 = std::min(area->x + area->width,  widget.allocation.x + padx + static_cast<int>(icon->size) );
+	int const y1 = std::min(area->y + area->height, widget.allocation.y + pady + static_cast<int>(icon->size) );
 
 	if (icon->pb) {
-		gdk_draw_pixbuf(GDK_DRAWABLE(widget->window), NULL, icon->pb, x0 - widget->allocation.x - padx, y0 - widget->allocation.y - pady, x0, y0, x1 - x0, y1 - y0, GDK_RGB_DITHER_NORMAL, x0, y0);
+		gdk_draw_pixbuf(GDK_DRAWABLE(widget.window), NULL, icon->pb,
+				x0 - widget.allocation.x - padx,
+				y0 - widget.allocation.y - pady,
+				x0, y0,
+				x1 - x0, y1 - y0,
+				GDK_RGB_DITHER_NORMAL, x0, y0);
 	}	
 }
 

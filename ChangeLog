@@ -1,5 +1,7 @@
 2004-02-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/widgets/icon.cpp (sp_icon_paint): Cleanup.
+
 	* src/libnr/nr-types.h: Change deprecated-cast warning from runtime
 	to compile-time.
 
