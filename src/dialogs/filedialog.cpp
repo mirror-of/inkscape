@@ -2,7 +2,8 @@
  * Implementation of the file dialog interfaces defined in filedialog.h
  *
  * Authors:
- *   The Inkscape Organization
+ *   Bob Jamison
+ *   Other dudes from The Inkscape Organization
  *
  * Copyright (C) 2004 The Inkscape Organization
  *
@@ -20,6 +21,7 @@
 #include <gtkmm/menubar.h>
 #include <gtkmm/menu.h>
 #include <gtkmm/entry.h>
+#include <gdkmm/pixbuf.h>
 
 #include <map>
 
@@ -64,7 +66,9 @@ class SVGPreview : public Gtk::VBox
 
         bool setDocument(SPDocument *doc);
 
-        bool SVGPreview::setFileName(const char *filename);
+        bool setFileName(const char *filename);
+
+        bool setFromMem(const char *xmlBuffer);
 
         bool setURI(URI &uri);
 
@@ -115,10 +119,31 @@ bool SVGPreview::setFileName(const char *filename)
     return true;
 }
 
+
+
+bool SVGPreview::setFromMem(const char *xmlBuffer)
+{ 
+    gint len = (gint)strlen(xmlBuffer);
+    SPDocument *doc = sp_document_new_from_mem (xmlBuffer, len, 0, 0);
+    if (!doc)
+        {
+        g_warning("SVGView: error loading buffer '%s'\n",xmlBuffer);
+        return false;
+        }
+
+    setDocument(doc);
+
+    return true;
+}
+
+
+
 bool SVGPreview::setURI(URI &uri)
 { 
     return setFileName(uri.toString());
 }
+
+
 
 SVGPreview::SVGPreview()
 {
@@ -166,10 +191,16 @@ class FileOpenDialogImpl : public FileOpenDialog, public Gtk::FileChooserDialog
 
     private:
 
+
+        /**
+         * What type of 'open' are we? (open, import, place, etc)
+         */
+        FileDialogType dialogType;
+
         /**
          * Our svg preview widget
          */
-       SVGPreview svgPreview;
+        SVGPreview svgPreview;
 
         /**
          * Callback for seeing if the preview needs to be drawn
@@ -209,6 +240,10 @@ class FileOpenDialogImpl : public FileOpenDialog, public Gtk::FileChooserDialog
 
 };
 
+
+
+
+
 /**
  * Callback for checking if the preview needs to be redrawn
  */
@@ -219,20 +254,114 @@ void FileOpenDialogImpl::updatePreviewCallback()
         return;
     //g_message("User hit return.  Text is '%s'\n", fName);
 
-    if (!(  g_file_test(fName, G_FILE_TEST_EXISTS) && 
-           (g_str_has_suffix(fName, ".svg") ||   g_str_has_suffix(fName, ".svgz")
-         )))
+    if (!g_file_test(fName, G_FILE_TEST_EXISTS))
+        return;
+
+    if (dialogType == SVG_TYPES &&
+           (g_str_has_suffix(fName, ".svg") ||   g_str_has_suffix(fName, ".svgz"))
+         )
         {
-        set_preview_widget_active(false);
+        bool retval = svgPreview.setFileName(fName);
+        set_preview_widget_active(retval);
+        return;
+        }
+    else if (dialogType == IMPORT_TYPES &&
+                 (
+                  g_str_has_suffix(fName, ".bmp" ) ||
+                  g_str_has_suffix(fName, ".gif" ) ||
+                  g_str_has_suffix(fName, ".jpg" ) ||
+                  g_str_has_suffix(fName, ".jpeg") ||
+                  g_str_has_suffix(fName, ".png" ) ||
+                  g_str_has_suffix(fName, ".tif" ) ||
+                  g_str_has_suffix(fName, ".tiff")
+                 )
+             )
+        {
+
+        /*#####################################
+        # LET'S HAVE SOME FUN WITH SVG!
+        # Instead of just loading an image, why
+        # don't we make a lovely little svg and
+        # display it nicely?
+        #####################################*/
+
+        //Arbitrary size of svg doc -- rather 'portrait' shaped
+        gint previewWidth  = 400;
+        gint previewHeight = 600;
+
+        //Get some image info. Smart pointer does not need to be deleted
+        Glib::RefPtr<Gdk::Pixbuf> img = Gdk::Pixbuf::create_from_file(fName);
+        gint imgWidth  = img->get_width();
+        gint imgHeight = img->get_height();
+
+        //Find the minimum scale to fit the image inside the preview area
+        double scaleFactorX = (0.9 *(double)previewWidth)  / ((double)imgWidth);
+        double scaleFactorY = (0.9 *(double)previewHeight) / ((double)imgHeight);
+        double scaleFactor = scaleFactorX;
+        if (scaleFactorX > scaleFactorY)
+            scaleFactor = scaleFactorY;
+
+        //Now get the resized values
+        gint scaledImgWidth  = (int) (scaleFactor * (double)imgWidth);
+        gint scaledImgHeight = (int) (scaleFactor * (double)imgHeight);
+
+        //center the image on the area
+        gint imgX = (previewWidth  - scaledImgWidth)  / 2;        
+        gint imgY = (previewHeight - scaledImgHeight) / 2;
+
+        //wrap a rectangle around the image
+        gint rectX      = imgX-1;        
+        gint rectY      = imgY-1;        
+        gint rectWidth  = scaledImgWidth +2;        
+        gint rectHeight = scaledImgHeight+2;        
+
+        //Our template.  Modify to taste
+        gchar *xformat =
+          "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+          "<svg\n"
+          "xmlns=\"http://www.w3.org/2000/svg\"\n"
+          "xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n"
+          "width=\"%d\" height=\"%d\">\n"
+          "<image x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\"\n"
+          "xlink:href=\"%s\"/>\n"
+          "<rect\n"
+            "style=\"fill:none;fill-opacity:0.75000000;fill-rule:evenodd;"
+              "stroke:#000000;stroke-width:4.0;stroke-linecap:butt;"
+              "stroke-linejoin:miter;stroke-opacity:1.0000000;"
+              "stroke-miterlimit:4.0000000;stroke-dasharray:none;\"\n"
+            "x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\"/>\n"
+          "<text\n"
+            "style=\"font-size:24.000000;font-style:normal;font-weight:normal;"
+              "fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;"
+              "stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;"
+              "font-family:Bitstream Vera Sans;\"\n"
+            "x=\"10\" y=\"26\">%d x %d</text>\n"
+          "</svg>\n\n";
+
+        //Fill in the template
+        gchar *xmlBuffer = g_strdup_printf(xformat, 
+               previewWidth, previewHeight,
+               imgX, imgY, scaledImgWidth, scaledImgHeight,
+               fName,
+               rectX, rectY, rectWidth, rectHeight,
+               imgWidth, imgHeight);
+
+        //g_message("%s\n", xmlBuffer);
+
+        //now show it!
+        bool retval = svgPreview.setFromMem(xmlBuffer);
+        set_preview_widget_active(retval);
+        g_free(xmlBuffer);
         return;
         }
 
-    if (svgPreview.setFileName(fName))
-        set_preview_widget_active(true);
-    else
-        set_preview_widget_active(false);
+    set_preview_widget_active(false);
 
 }
+
+
+
+
 
 /**
  * Callback for fileNameEntry widget
@@ -253,6 +382,10 @@ void FileOpenDialogImpl::fileNameEntryChangedCallback()
 
 }
 
+
+
+
+
 /**
  * Callback for fileNameEntry widget
  */
@@ -263,6 +396,9 @@ void FileOpenDialogImpl::fileSelectedCallback()
 
     fileNameEntry.set_text(get_filename());
 }
+
+
+
 
 
 
@@ -279,6 +415,9 @@ FileOpenDialogImpl::FileOpenDialogImpl(const char *dir,
     extension = NULL;
     /* No filename to start out with */
     myFilename  = "";
+
+    /* Set our dialog type (open, import, etc...)*/
+    dialogType = fileTypes;
 
 
     /* Set the pwd and/or the filename */
@@ -348,6 +487,8 @@ FileOpenDialogImpl::FileOpenDialogImpl(const char *dir,
 
 
 
+
+
 /**
  * Public factory.  Called by file.cpp, among others.
  */
@@ -360,6 +501,8 @@ FileOpenDialog * FileOpenDialog::create(const char *path,
 }
 
 
+
+
 /**
  * Destructor
  */
@@ -367,6 +510,8 @@ FileOpenDialogImpl::~FileOpenDialogImpl()
 {
 
 }
+
+
 
 
 /**
@@ -457,6 +602,11 @@ class FileSaveDialogImpl : public FileSaveDialog, public Gtk::FileChooserDialog
     private:
 
         /**
+         * What type of 'open' are we? (save, export, etc)
+         */
+        FileDialogType dialogType;
+
+        /**
          * Filter name->extension lookup
          */
         std::map<Glib::ustring, Inkscape::Extension::Extension *> extensionMap;
@@ -496,6 +646,9 @@ FileSaveDialogImpl::FileSaveDialogImpl(const char *dir,
     extension = NULL;
     /* No filename to start out with */
     myFilename  = "";
+
+    /* Set our dialog type (save, export, etc...)*/
+    dialogType = fileTypes;
 
     /* Set the pwd and/or the filename */
     if (dir != NULL)
@@ -564,6 +717,7 @@ FileSaveDialog * FileSaveDialog::create(const char *path,
 
 
 
+
 /**
  * Destructor
  */
@@ -571,6 +725,7 @@ FileSaveDialogImpl::~FileSaveDialogImpl()
 {
 
 }
+
 
 
 
