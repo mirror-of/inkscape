@@ -28,8 +28,7 @@
 class SPSpiralContext;
 class SPSpiralContextClass;
 
-struct SPSpiralContext {
-	SPEventContext event_context;
+struct SPSpiralContext : public SPEventContext {
 	SPItem * item;
 	NR::Point center;
 	gdouble revo;
