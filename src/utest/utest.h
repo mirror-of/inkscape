@@ -24,7 +24,7 @@ const char *utest__name;
   * \param name A descriptive label for this series of tests.
   */
 void utest_start(const char *name) {
-	fprintf(stderr, "Testing %s...\n", name);
+	printf("Testing %s...\n", name);
 	utest__name = name;
 	utest__tests = utest__passed = 0;
 	utest__running = 0;
@@ -33,7 +33,7 @@ void utest_start(const char *name) {
 void utest__pass(void) {
 	utest__passed++;
 	utest__running = 0;
-	fprintf(stderr, "OK\n");
+	printf("OK\n");
 }
 
 
@@ -49,10 +49,12 @@ int
 utest__fail(const char *a, const char *b, const char *c)
 {
 	utest__running = 0;
+	fflush(stdout);
 	fprintf (stderr, "%s%s%s\n",
 		 (a ? a : ""),
 		 (b ? b : ""),
 		 (c ? c : ""));
+	fflush(stderr);
 	longjmp(utest__jmp_buf, 0);
 	return 0;
 }
@@ -85,15 +87,15 @@ int utest__test(const char *name) {
 	if (utest__running) {
 		utest__pass();
 	}
-	fprintf(stderr, "\t%s...", name);
-	fflush(stderr);
+	printf("\t%s...", name);
+	fflush(stdout);
 	utest__running = 1;
 	return 1;
 }
 
 /** \brief Ends a series of tests, reporting test statistics.
   *
-  * Test statistics are printed to stderr, then the function returns
+  * Test statistics are printed to stdout or stderr, then the function returns
   * nonzero iff all the tests have passed, zero otherwise.
   */
 int utest_end(void) {
@@ -101,12 +103,14 @@ int utest_end(void) {
 		utest__pass();
 	}
 	if ( utest__passed == utest__tests ) {
-		fprintf(stderr, "%s: OK (all %d passed)\n",
-		                utest__name, utest__tests);
+		printf("%s: OK (all %d passed)\n",
+		       utest__name, utest__tests);
 		return 1;
 	} else {
+		fflush(stdout);
 		fprintf(stderr, "%s: FAILED (%d/%d tests passed)\n",
 		                utest__name, utest__passed, utest__tests);
+		fflush(stderr);
 		return 0;
 	}
 }
