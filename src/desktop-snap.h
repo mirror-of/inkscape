@@ -13,6 +13,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <vector>
 #include "desktop.h"
 
 /* Single point methods */
@@ -23,21 +24,21 @@ gdouble sp_desktop_dim_snap(SPDesktop const *dt, NR::Point& req, NR::Dim2 const 
 
 /* List of points methods */
 
-NR::Coord sp_desktop_vector_snap_list(SPDesktop const *desktop, NR::Point const p[], int const length,
+NR::Coord sp_desktop_vector_snap_list(SPDesktop const *desktop, const std::vector<NR::Point> &p,
 				      NR::Point const &norm, NR::scale const &s);
 
-NR::Coord sp_desktop_dim_snap_list(SPDesktop const *desktop, NR::Point const p[], int const length,
+NR::Coord sp_desktop_dim_snap_list(SPDesktop const *desktop, const std::vector<NR::Point> &p,
 				   double const dx, unsigned const dim);
 
-NR::Coord sp_desktop_dim_snap_list_scale(SPDesktop const *desktop, NR::Point const p[], int const length,
+NR::Coord sp_desktop_dim_snap_list_scale(SPDesktop const *desktop, const std::vector<NR::Point> &p,
 					 NR::Point const &norm, double const sx, NR::Dim2 const dim);
 
-NR::Coord sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, NR::Point const p[], int const length,
+NR::Coord sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, const std::vector<NR::Point> &p,
 					NR::Point const &norm, double const sx, NR::Dim2 const dim);
 
 // These little functions are only here to provide an edge between NR::Point-land and NR::Point-land.
 
-NR::Coord sp_desktop_dim_snap_list(SPDesktop const *desktop, NR::Point const p[], int const length,
+NR::Coord sp_desktop_dim_snap_list(SPDesktop const *desktop, const std::vector<NR::Point> &p,
 				   double const dx, NR::Dim2 const dim);
 
 

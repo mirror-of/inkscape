@@ -1494,7 +1494,7 @@ static void sp_text_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform
 static NRArenaItem *sp_text_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_text_hide (SPItem *item, unsigned int key);
 static char * sp_text_description (SPItem *item);
-static int sp_text_snappoints(SPItem *item, NR::Point p[], int size);
+static std::vector<NR::Point> sp_text_snappoints(SPItem *item);
 static NR::Matrix sp_text_set_transform (SPItem *item, NR::Matrix const &xform);
 static void sp_text_print (SPItem *item, SPPrintContext *gpc);
 
@@ -2134,16 +2134,19 @@ sp_text_set_shape (SPText *text)
 /**
  *
  */
-static int
-sp_text_snappoints(SPItem *item, NR::Point p[], int size)
+static std::vector<NR::Point>
+sp_text_snappoints(SPItem *item)
 {
     /* We use corners of item. */
     /* (An older version of this file added a snappoint at the baseline of the first line.
        Maybe we should have a snappoint at the baseline of each line?) */
-    int pos = 0;
-    if (((SPItemClass *) text_parent_class)->snappoints)
-        pos = ((SPItemClass *) text_parent_class)->snappoints (item, p, size);
-    return pos;
+     std::vector<NR::Point> p;
+   
+     if (((SPItemClass *) text_parent_class)->snappoints) {
+         p = ((SPItemClass *) text_parent_class)->snappoints (item);
+     }
+     
+     return p;
 }
 
 

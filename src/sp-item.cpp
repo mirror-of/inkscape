@@ -56,7 +56,7 @@ static SPRepr *sp_item_write(SPObject *object, SPRepr *repr, guint flags);
 static void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform);
 
 static gchar *sp_item_private_description(SPItem *item);
-static int sp_item_private_snappoints(SPItem *item, NR::Point p[], int size);
+static std::vector<NR::Point> sp_item_private_snappoints(SPItem *item);
 
 static SPItemView *sp_item_view_new_prepend(SPItemView *list, SPItem *item, unsigned flags, unsigned key, NRArenaItem *arenaitem);
 static SPItemView *sp_item_view_list_remove(SPItemView *list, SPItemView *view);
@@ -443,33 +443,32 @@ NR::Rect sp_item_bbox_desktop(SPItem *item)
     return NR::Rect(ret);
 }
 
-static int sp_item_private_snappoints(SPItem *item, NR::Point p[], int size)
+static std::vector<NR::Point> sp_item_private_snappoints(SPItem *item)
 {
-    if (size < 2) {
-        return 0;
-    }
     NRRect bbox;
     sp_item_invoke_bbox(item, &bbox, sp_item_i2d_affine(item), TRUE);
     NR::Rect const bbox2(bbox);
     /* Just a pair of opposite corners of the bounding box suffices given that we don't yet
        support angled guide lines. */
-    int i = 0;
-    p[i++] = bbox2.min();
-    p[i++] = bbox2.max();
-    return i;
+    
+    std::vector<NR::Point> p;
+    p.push_back(bbox2.min());
+    p.push_back(bbox2.max());
+    return p;
 }
 
-int sp_item_snappoints(SPItem *item, NR::Point p[], int size)
+std::vector<NR::Point> sp_item_snappoints(SPItem *item)
 {
-    g_return_val_if_fail(item != NULL, 0);
-    g_return_val_if_fail(SP_IS_ITEM(item), 0);
+    g_assert (item != NULL);
+    g_assert (SP_IS_ITEM(item));
 
+    std::vector<NR::Point> p;
     SPItemClass const &item_class = *(SPItemClass const *) G_OBJECT_GET_CLASS(item);
     if (item_class.snappoints) {
-        return item_class.snappoints(item, p, size);
+        p = item_class.snappoints(item);
     }
 
-    return 0;
+    return p;
 }
 
 void

@@ -76,7 +76,7 @@ static void sp_offset_update (SPObject * object, SPCtx * ctx, guint flags);
 static void sp_offset_release (SPObject * object);
 
 static gchar *sp_offset_description (SPItem * item);
-static int sp_offset_snappoints(SPItem *item, NR::Point p[], int size);
+static std::vector<NR::Point> sp_offset_snappoints(SPItem *item);
 static void sp_offset_set_shape (SPShape * shape);
 
 Path *bpath_to_liv_path (NArtBpath * bpath);
@@ -863,12 +863,14 @@ sp_offset_set_shape (SPShape * shape)
 }
 
 
-static int sp_offset_snappoints(SPItem *item, NR::Point p[], int size)
+static std::vector<NR::Point> sp_offset_snappoints(SPItem *item)
 {
-  if (((SPItemClass *) parent_class)->snappoints)
-    return ((SPItemClass *) parent_class)->snappoints (item, p, size);
+  std::vector<NR::Point> p;
+  if (((SPItemClass *) parent_class)->snappoints) {
+    p = ((SPItemClass *) parent_class)->snappoints (item);
+  }
   
-  return 0;
+  return p;
 }
 
 

@@ -35,8 +35,6 @@ enum {
 	SP_SELTRANS_STATE_ROTATE
 };
 
-#define SP_SELTRANS_SPP_SIZE 1024
-
 struct SPSelTrans {
 	SPDesktop *desktop;
 
@@ -54,8 +52,7 @@ struct SPSelTrans {
 	
 	std::vector<std::pair<SPItem *,NR::Matrix> > items;
 	
-	NR::Point *spp;
-	int spp_length;
+	std::vector<NR::Point> snap_points;
 
 	NR::Rect box;
 	NR::Matrix current;

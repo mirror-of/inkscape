@@ -97,8 +97,6 @@ void sp_sel_trans_init(SPSelTrans *seltrans, SPDesktop *desktop)
 	seltrans->state = SP_SELTRANS_STATE_SCALE;
 	seltrans->show = SP_SELTRANS_SHOW_CONTENT;
 
-	seltrans->spp = nr_new(NR::Point, SP_SELTRANS_SPP_SIZE);
-
 	seltrans->grabbed = FALSE;
 	seltrans->show_handles = TRUE;
 	for (i = 0; i < 8; i++) seltrans->shandle[i] = NULL;
@@ -177,6 +175,7 @@ sp_sel_trans_shutdown (SPSelTrans *seltrans)
 	/* destructors are not called automatically */
 	seltrans->sel_changed_connection.~Connection();
 	seltrans->sel_modified_connection.~Connection();
+	seltrans->snap_points.~vector();
 
 	for (unsigned i = 0; i < 8; i++) {
 		if (seltrans->shandle[i]) {
@@ -207,8 +206,6 @@ sp_sel_trans_shutdown (SPSelTrans *seltrans)
 			seltrans->l[i] = NULL;
 		}
 	}
-
-	nr_free (seltrans->spp);
 
 	for (unsigned i = 0; i < seltrans->items.size(); i++)
 			sp_object_unref (SP_OBJECT (seltrans->items[i].first), NULL);
@@ -264,7 +261,7 @@ void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const &p, gdouble x, gdou
 
 	seltrans->point = p;
 
-	seltrans->spp_length = selection->getSnapPoints (seltrans->spp, SP_SELTRANS_SPP_SIZE);
+	seltrans->snap_points = selection->getSnapPoints ();
 
 	seltrans->opposit = ( seltrans->box.min()
 			      + ( seltrans->box.dimensions()
@@ -733,14 +730,14 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
 				break;
 			}
 		}
-		r = fabs(sp_desktop_vector_snap_list(desktop, seltrans->spp, seltrans->spp_length, norm, s));
+		r = fabs(sp_desktop_vector_snap_list(desktop, seltrans->snap_points, norm, s));
 		for ( unsigned i = 0 ; i < 2 ; i++ ) {
 			s[i] = r * sign(s[i]);
 		}
 	} else {
 		for ( unsigned i = 0 ; i < 2 ; i++ ) {
 			if (d[i]) {
-				s[i] = sp_desktop_dim_snap_list_scale(desktop, seltrans->spp, seltrans->spp_length, norm, s[i], s[i] ? NR::X : NR::Y);
+				s[i] = sp_desktop_dim_snap_list_scale(desktop, seltrans->snap_points, norm, s[i], s[i] ? NR::X : NR::Y);
 			}
 		}
 	}
@@ -797,11 +794,11 @@ gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle con
 	}
 	if ( state & GDK_CONTROL_MASK ) {
 		s[perp] = fabs(s[axis]);
-		ratio = sp_desktop_vector_snap_list(desktop, seltrans->spp, seltrans->spp_length, norm, s);
+		ratio = sp_desktop_vector_snap_list(desktop, seltrans->snap_points, norm, s);
 		s[axis] = fabs(ratio) * sign(s[axis]);
 		s[perp] = fabs(s[axis]);
 	} else {
-		s[axis] = sp_desktop_dim_snap_list_scale(desktop, seltrans->spp, seltrans->spp_length, norm, s[axis], axis);
+		s[axis] = sp_desktop_dim_snap_list_scale(desktop, seltrans->snap_points, norm, s[axis], axis);
 	}
 
 	pt = ( point - norm ) * NR::scale(s) + norm;
@@ -839,11 +836,11 @@ gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const 
 	case GDK_SB_V_DOUBLE_ARROW:
 	  if (fabs (point[X] - norm[X]) < 1e-15) return FALSE;
 	  skew[1] = ( pt[Y] - point[Y] ) / ( point[X] - norm[X] );
-	  skew[1] = sp_desktop_dim_snap_list_skew(desktop, seltrans->spp, seltrans->spp_length, norm, skew[1], Y);
+	  skew[1] = sp_desktop_dim_snap_list_skew(desktop, seltrans->snap_points, norm, skew[1], Y);
 	  pt[Y] = ( point[X] - norm[X] ) * skew[1] + point[Y];
 	  sx = ( pt[X] - norm[X] ) / ( point[X] - norm[X] );
 	  if (state & GDK_CONTROL_MASK) {
-	    sx = sp_desktop_dim_snap_list_scale(desktop, seltrans->spp, seltrans->spp_length, norm, sx, X);
+	    sx = sp_desktop_dim_snap_list_scale(desktop, seltrans->snap_points, norm, sx, X);
 	  } else {
 	    if ( fabs(sx) < 1e-15 ) sx = 1e-15;
 	    if ( fabs(sx) < 1 ) sx = sign(sx);
@@ -857,12 +854,12 @@ gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const 
 	case GDK_SB_H_DOUBLE_ARROW:
 	  if (fabs (point[Y] - norm[Y]) < 1e-15) return FALSE;
 	  skew[2] = ( pt[X] - point[X] ) / ( point[Y] - norm[Y] );
-	  skew[2] = sp_desktop_dim_snap_list_skew(desktop, seltrans->spp, seltrans->spp_length, norm, skew[2], X);
+	  skew[2] = sp_desktop_dim_snap_list_skew(desktop, seltrans->snap_points, norm, skew[2], X);
 	  pt[X] = ( point[Y] - norm[Y] ) * skew[2] + point[X];
 	  sy = ( pt[Y] - norm[Y] ) / ( point[Y] - norm[Y] );
 	  
 	  if (state & GDK_CONTROL_MASK) {
-	    sy = sp_desktop_dim_snap_list_scale(desktop, seltrans->spp, seltrans->spp_length, norm, sy, Y);
+	    sy = sp_desktop_dim_snap_list_scale(desktop, seltrans->snap_points, norm, sy, Y);
 	  } else {
 	    if ( fabs(sy) < 1e-15 ) sy = 1e-15;
 	    if ( fabs(sy) < 1 ) sy = sign(sy);

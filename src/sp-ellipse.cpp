@@ -69,7 +69,7 @@ static void sp_genericellipse_init (SPGenericEllipse *ellipse);
 
 static void sp_genericellipse_update (SPObject *object, SPCtx *ctx, guint flags);
 
-static int sp_genericellipse_snappoints(SPItem *item, NR::Point p[], int size);
+static std::vector<NR::Point> sp_genericellipse_snappoints(SPItem *item);
 
 static void sp_genericellipse_set_shape (SPShape *shape);
 static SPRepr *sp_genericellipse_write (SPObject *object, SPRepr *repr, guint flags);
@@ -248,22 +248,20 @@ g_print ("step %d s %f e %f coords %f %f %f %f %f %f\n",
 	sp_curve_unref (c);
 }
 
-static int sp_genericellipse_snappoints(SPItem *item, NR::Point p[], int size)
+static std::vector<NR::Point> sp_genericellipse_snappoints(SPItem *item)
 {
 	SPGenericEllipse *ge = SP_GENERICELLIPSE (item);
 
-	/* We use corners of item and center of ellipse. */
-	int pos = 0;
-	if (((SPItemClass *) ge_parent_class)->snappoints) {
-		pos = ((SPItemClass *) ge_parent_class)->snappoints (item, p, size);
-	}
-	if (pos < size) {
-		p[pos++] = ( NR::Point(ge->cx.computed,
-				       ge->cy.computed)
-			     * sp_item_i2d_affine(item) );
-	}
+	std::vector<NR::Point> p;
 
-	return pos;
+	/* We use corners of item and center of ellipse. */
+	if (((SPItemClass *) ge_parent_class)->snappoints) {
+		p = ((SPItemClass *) ge_parent_class)->snappoints (item);
+	}
+	
+	p.push_back(NR::Point(ge->cx.computed, ge->cy.computed) * sp_item_i2d_affine(item));
+
+	return p;
 }
 
 void

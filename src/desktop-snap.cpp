@@ -197,15 +197,15 @@ round_to_nearest_multiple_plus(double x, double const c1, double const c0)
  * They return the updated transformation parameter. 
  */
 
-double sp_desktop_dim_snap_list(SPDesktop const *desktop, NR::Point const p[], int const length,
+double sp_desktop_dim_snap_list(SPDesktop const *desktop, const std::vector<NR::Point> &p,
 				double const dx, NR::Dim2 const dim)
 {
     gdouble dist = NR_HUGE;
     gdouble xdist = dx;
     
     if (SNAP_ON (desktop)) {
-        for (int i = 0; i < length; i++) {
-            NR::Point q = p[i];
+        for (std::vector<NR::Point>::const_iterator i = p.begin(); i != p.end(); i++) {
+            NR::Point q = *i;
             NR::Coord const pre = q[dim];
             q[dim] += dx;
             NR::Coord const d = sp_desktop_dim_snap (desktop, q, dim);
@@ -219,7 +219,7 @@ double sp_desktop_dim_snap_list(SPDesktop const *desktop, NR::Point const p[], i
     return xdist;
 }
 
-double sp_desktop_vector_snap_list(SPDesktop const *desktop, NR::Point const p[], int const length,
+double sp_desktop_vector_snap_list(SPDesktop const *desktop, const std::vector<NR::Point> &p,
 				   NR::Point const &norm, NR::scale const &s)
 {
     using NR::X;
@@ -231,8 +231,8 @@ double sp_desktop_vector_snap_list(SPDesktop const *desktop, NR::Point const p[]
     
     NR::Coord dist = NR_HUGE;
     double ratio = fabs(s[X]);
-    for (int i = 0 ; i < length ; i++) {
-        NR::Point const &q = p[i];
+    for (std::vector<NR::Point>::const_iterator i = p.begin(); i != p.end(); i++) {
+        NR::Point const &q = *i;
         NR::Point check = ( q - norm ) * s + norm;
         if (NR::LInfty( q - norm ) > MIN_DIST_NORM) {
             NR::Coord d = sp_desktop_vector_snap(desktop, check, check - norm);
@@ -251,7 +251,7 @@ double sp_desktop_vector_snap_list(SPDesktop const *desktop, NR::Point const p[]
     return ratio;
 }
 
-double sp_desktop_dim_snap_list_scale(SPDesktop const *desktop, NR::Point const p[], int const length,
+double sp_desktop_dim_snap_list_scale(SPDesktop const *desktop, const std::vector<NR::Point> &p,
 				      NR::Point const &norm, double const sx, NR::Dim2 dim)
 {
     g_assert( dim < 2 );
@@ -262,8 +262,8 @@ double sp_desktop_dim_snap_list_scale(SPDesktop const *desktop, NR::Point const 
     NR::Coord dist = NR_HUGE;
     double scale = sx;
 
-    for (int i = 0; i < length; i++) {
-        NR::Point q = p[i];
+    for (std::vector<NR::Point>::const_iterator i = p.begin(); i != p.end(); i++) {
+        NR::Point q = *i;
         NR::Point check = q;
         check[dim] = (sx * (q - norm) + norm)[dim];
         if (fabs (q[dim] - norm[dim]) > MIN_DIST_NORM) {
@@ -278,7 +278,7 @@ double sp_desktop_dim_snap_list_scale(SPDesktop const *desktop, NR::Point const 
     return scale;
 }
 
-double sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, NR::Point const p[], int const length,
+double sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, const std::vector<NR::Point> &p,
 				     NR::Point const &norm, double const sx, NR::Dim2 const dim)
 {
     g_assert( dim < 2 );
@@ -289,8 +289,8 @@ double sp_desktop_dim_snap_list_skew(SPDesktop const *desktop, NR::Point const p
     gdouble dist = NR_HUGE;
     gdouble skew = sx;
     
-    for (int i = 0; i < length; i++) {
-        NR::Point q = p[i];
+    for (std::vector<NR::Point>::const_iterator i = p.begin(); i != p.end(); i++) {
+        NR::Point q = *i;
         NR::Point check = q;
         // apply shear
         check[dim] += sx * (q[!dim] - norm[!dim]);

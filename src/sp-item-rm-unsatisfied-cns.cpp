@@ -16,14 +16,12 @@ void sp_item_rm_unsatisfied_cns(SPItem &item)
     if (item.constraints.empty()) {
         return;
     }
-    int const max_n_snappoints = 8;
-    NR::Point snappoints[max_n_snappoints];
-    int const n_snappoints = sp_item_snappoints(&item, snappoints, max_n_snappoints);
+    vector<NR::Point> snappoints = sp_item_snappoints(&item);
     for (unsigned i = item.constraints.size(); i--;) {
         g_assert( i < item.constraints.size() );
         SPGuideConstraint const &cn = item.constraints[i];
         int const snappoint_ix = cn.snappoint_ix;
-        g_assert( snappoint_ix < n_snappoints );
+        g_assert( snappoint_ix < int(snappoints.size()) );
         if (!approx_equal(dot(cn.g->normal, snappoints[snappoint_ix]), cn.g->position)) {
             remove_last(cn.g->attached_items, SPGuideAttachment(&item, cn.snappoint_ix));
             g_assert( i < item.constraints.size() );

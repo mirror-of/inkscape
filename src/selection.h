@@ -226,16 +226,9 @@ public:
 
 	/**
 	 * @brief Gets the selection's snap points.
-	 *
-	 * This method populates the given NR::Point array with the
-	 * selection's snap points.
-	 *
-	 * @param points the array to populate
-	 * @param max_points the size of the array
-	 *
-	 * @return the number of snap points placed in the array
+	 * @return Selection's snap points
 	 */
-	int getSnapPoints(NR::Point points[], int max_points) const;
+	std::vector<NR::Point> getSnapPoints() const;
 
 	/**
 	 * @brief Connects a slot to be notified of selection changes

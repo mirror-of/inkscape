@@ -49,7 +49,7 @@ static SPRepr *sp_image_write (SPObject *object, SPRepr *repr, guint flags);
 static void sp_image_bbox(SPItem *item, NRRect *bbox, NR::Matrix const &transform, unsigned const flags);
 static void sp_image_print (SPItem * item, SPPrintContext *ctx);
 static gchar * sp_image_description (SPItem * item);
-static int sp_image_snappoints(SPItem *item, NR::Point p[], int size);
+static std::vector<NR::Point> sp_image_snappoints(SPItem *item);
 static NRArenaItem *sp_image_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static NR::Matrix sp_image_set_transform (SPItem *item, NR::Matrix const &xform);
 
@@ -499,7 +499,7 @@ sp_image_update_canvas_image (SPImage *image)
 	}
 }
 
-static int sp_image_snappoints (SPItem *item, NR::Point p[], int size)
+static std::vector<NR::Point> sp_image_snappoints (SPItem *item)
 {
 	SPImage *image = SP_IMAGE(item);
 
@@ -513,15 +513,11 @@ static int sp_image_snappoints (SPItem *item, NR::Point p[], int size)
 	NR::Coord x1 = x0 + image->width.computed;
 	NR::Coord y1 = y0 + image->height.computed;
 
-	int i = 0;
-	if (i < size) {
-		p[i++] = NR::Point(x0, y0) * i2d;
-	}
-	if (i < size) {
-		p[i++] = NR::Point(x1, y1) * i2d;
-	}
+	std::vector<NR::Point> p;
+	p.push_back(NR::Point(x0, y0) * i2d);
+	p.push_back(NR::Point(x1, y1) * i2d);
 
-	return i;
+	return p;
 }
 
 /*

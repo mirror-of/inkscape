@@ -121,8 +121,7 @@ struct SPItemClass {
 	NRArenaItem * (* show) (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 	void (* hide) (SPItem *item, unsigned int key);
 
-	/* Returns the number of points used. */
-	int (* snappoints) (SPItem *item, NR::Point points[], int size);
+	std::vector<NR::Point> (* snappoints) (SPItem *item);
 
 	/* Apply the transform optimally, and return any residual transformation */
 	NR::Matrix (* set_transform)(SPItem *item, NR::Matrix const &transform);
@@ -150,7 +149,7 @@ unsigned int sp_item_display_key_new (unsigned int numkeys);
 NRArenaItem *sp_item_invoke_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 void sp_item_invoke_hide (SPItem *item, unsigned int key);
 
-int sp_item_snappoints(SPItem *item, NR::Point points[], int size);
+std::vector<NR::Point> sp_item_snappoints(SPItem *item);
 
 void sp_item_write_transform (SPItem *item, SPRepr *repr, NRMatrix *transform, NR::Matrix *adv = NULL);
 

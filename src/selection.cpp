@@ -299,27 +299,22 @@ NR::Rect SPSelection::boundsInDocument() const {
 /**
  * Compute the list of points in the selection that are to be considered for snapping.
  */
-int SPSelection::getSnapPoints(NR::Point points[], int size) const {
-    GSList const *items=const_cast<SPSelection *>(this)->itemList();
-    if (!items) { // no items
-        return 0;
-    } else if (!items->next) { // one item
+std::vector<NR::Point> SPSelection::getSnapPoints() const {
+    GSList const *items = const_cast<SPSelection *>(this)->itemList();
+    std::vector<NR::Point> p;
+    if (!items->next) { // one item
         /* selection has only one item -> take snappoints of item */
-        return sp_item_snappoints(const_cast<SPSelection *>(this)->singleItem(), points, size);
+        p = sp_item_snappoints(const_cast<SPSelection *>(this)->singleItem());
     } else { // multiple items
         /* selection has more than one item -> take corners of selection */
         /* Just a pair of opposite corners of the bounding box suffices given that we don't
            yet support angled guide lines. */
         NR::Rect bbox = bounds();
-        int pos = 0;
-        if ( pos < size ) {
-            points[pos++] = bbox.min();
-        }
-        if ( pos < size ) {
-            points[pos++] = bbox.max();
-        }
-        return pos;
+	p.push_back(bbox.min());
+	p.push_back(bbox.max());
     }
+
+    return p;
 }
 
 void SPSelection::_removeObjectChildren(SPObject *obj) {

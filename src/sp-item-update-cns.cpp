@@ -13,12 +13,10 @@ using std::vector;
 
 void sp_item_update_cns(SPItem &item, SPDesktop const &desktop)
 {
-    int const max_n_snappoints = 8;
-    NR::Point snappoints[max_n_snappoints];
-    int const n_snappoints = sp_item_snappoints(&item, snappoints, max_n_snappoints);
+    vector<NR::Point> snappoints = sp_item_snappoints(&item);
     /* TODO: Implement the ordering. */
     vector<SPGuideConstraint> found_cns;
-    satisfied_guide_cns(desktop, n_snappoints, snappoints, found_cns);
+    satisfied_guide_cns(desktop, snappoints, found_cns);
     /* effic: It might be nice to avoid an n^2 algorithm, but in practice n will be
        small enough that it's still usually more efficient. */
 

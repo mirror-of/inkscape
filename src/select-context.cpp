@@ -769,9 +769,8 @@ static void sp_selection_moveto(SPSelTrans *seltrans, NR::Point const &xy, guint
     } else if ((state & GDK_MOD1_MASK) == 0) {
         /* Snap as normal.  Alt-drag will not snap to the grid even if it is enabled. */
         for (unsigned int dim = 0 ; dim < 2 ; ++dim) {
-            dxy[dim] = sp_desktop_dim_snap_list(desktop, seltrans->spp,
-                                                seltrans->spp_length, dxy[dim],
-                                                NR::Dim2(dim));
+            dxy[dim] = sp_desktop_dim_snap_list(desktop, seltrans->snap_points,
+                                                dxy[dim], NR::Dim2(dim));
         }
     }
 

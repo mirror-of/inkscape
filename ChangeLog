@@ -1,4 +1,17 @@
-2004-0609   Carl Hetherington  <inkscape@carlh.net>
+2004-06-10  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/desktop-snap.cpp, src/desktop-snap.h,
+	src/satisfied-guide-cns.cpp, src/satisfied-guide-cns.h,
+	select-context.cpp, selection.cpp, selection.h, seltrans.cpp,
+	seltrans.h, sp-ellipse.cpp, sp-image.cpp,
+	sp-item-notify-moveto.cpp, sp-item-rm-unsatisfied-cns.cpp,
+	sp-item-update-cns.cpp, sp-item.cpp, sp-item.h, sp-offset.cpp,
+	sp-rect.cpp, sp-spiral.cpp, sp-star.cpp, sp-text.cpp:
+
+	Use a std::vector to store snap points, rather than a fixed-size
+	array.
+
+2004-06-09  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/desktop-snap.cpp, src/desktop-snap.h: Coding style fixes.
 	Use NR::Coord rather than double where appropriate.  Added some
