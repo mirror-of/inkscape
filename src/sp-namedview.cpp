@@ -564,7 +564,9 @@ sp_namedview_write (SPObject *object, Inkscape::XML::Node *repr, guint flags)
 
 	nv = SP_NAMEDVIEW (object);
 
-	if (flags & SP_OBJECT_WRITE_EXT) {
+	if ( ( flags & SP_OBJECT_WRITE_EXT ) &&
+	     repr != SP_OBJECT_REPR(object) )
+	{
 		if (repr) {
 			repr->mergeFrom(SP_OBJECT_REPR (object), "id");
 		} else {

@@ -1,5 +1,10 @@
 2005-03-12  MenTaLguY  <mental@rydia.net>
 
+	* src/sp-namedview.cpp, src/sp-metadata.cpp: it's valid for an SPObject
+	  'write' method to be passed the object's own XML node; account for this.
+
+2005-03-12  MenTaLguY  <mental@rydia.net>
+
     * src/xml/simple-node.cpp: assert that src != this in
 	  SimpleNode::mergeFrom
 

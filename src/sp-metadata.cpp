@@ -179,9 +179,8 @@ sp_metadata_write(SPObject *object, Inkscape::XML::Node *repr, guint flags)
     //SPMetadata *metadata = SP_METADATA(object);
 
     // only create a repr when we're writing out an Inkscape SVG
-    if (flags & SP_OBJECT_WRITE_EXT) {
+    if ( flags & SP_OBJECT_WRITE_EXT && repr != SP_OBJECT_REPR(object) ) {
         if (repr) {
-            // is this sane?
             repr->mergeFrom(SP_OBJECT_REPR (object), "id");
         } else {
             repr = SP_OBJECT_REPR (object)->duplicate();
