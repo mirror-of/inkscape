@@ -24,7 +24,7 @@ python_sources = \
 	extension/script/InkscapePython.cpp \
 	extension/script/inkscape_py_wrap.cpp \
 	extension/script/inkscape_py.py \
-	extension/script/iinkscape_py.py.h
+	extension/script/inkscape_py.py.h
 endif
 
 extension_script_libscript_a_SOURCES =	\
