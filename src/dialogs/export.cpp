@@ -523,7 +523,7 @@ sp_export_dialog (void)
         gtk_box_pack_end (GTK_BOX (vb), hs, FALSE, FALSE, 0);
     
     } // end of if (!dlg)
-    
+
     sp_export_find_default_selection(dlg);
 
     gtk_window_present ((GtkWindow *) dlg);
@@ -562,12 +562,9 @@ sp_export_find_default_selection(GtkWidget * dlg)
         key = SELECTION_SELECTION;
     }
 
-    if (key != SELECTION_NUMBER_OF) {
-        GtkWidget *button;
-    
-        button = (GtkWidget *)g_object_get_data(G_OBJECT(dlg), selection_names[key]);
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-    }
+    GtkWidget *button = (GtkWidget *)g_object_get_data(G_OBJECT(dlg),
+                                                       selection_names[key]);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 
     return;
 }
@@ -651,35 +648,29 @@ sp_export_selection_modified ( Inkscape::Application *inkscape,
 static void
 sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
 {
-    selection_type key;
+    selection_type key, old_key;
     key = (selection_type)((int)gtk_object_get_data (GTK_OBJECT (tb), "key"));
+    old_key = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
 
-    /* We're going to have to toggle the other buttons, but we
-       only care about the one that is depressed */
+    /* Ignore all "turned off" events unless we're the only active button */
     if (!gtk_toggle_button_get_active (tb) ) {
-        selection_type current_key;
-        current_key = (selection_type)((int)gtk_object_get_data(GTK_OBJECT(base), "selection-type"));
 
         /* Don't let the current selection be deactived - but rerun the
            activate to allow the user to renew the values */
-        if (key == current_key) {
-            gtk_toggle_button_set_active 
-                ( GTK_TOGGLE_BUTTON ( gtk_object_get_data (base, selection_names[key])), 
-                  TRUE );
+        if (key == old_key) {
+            gtk_toggle_button_set_active ( tb, TRUE );
         }
 
         return;
     }
-        
+
+    /* Turn off the currently active button unless it's us */
     gtk_object_set_data(GTK_OBJECT(base), "selection-type", (gpointer)key);
 
-    for (int i = 0; i < SELECTION_NUMBER_OF; i++) {
-        if (i != key) {
-            gtk_toggle_button_set_active 
-                ( GTK_TOGGLE_BUTTON ( gtk_object_get_data (base, selection_names[i])), 
-                  FALSE );
-            /* printf("Pushing up: %s\n", selection_names[i]); */
-        }
+    if (old_key != key) {
+        gtk_toggle_button_set_active 
+            ( GTK_TOGGLE_BUTTON ( gtk_object_get_data (base, selection_names[old_key])), 
+              FALSE );
     }
 
     if (SP_ACTIVE_DESKTOP && !gtk_object_get_data(GTK_OBJECT(base), "filename-modified")) {
@@ -1170,6 +1161,18 @@ sp_export_browse_store (GtkButton *button, gpointer userdata)
     return;
 } // end of sp_export_browse_store()
 
+/*
+ * Looks like there is a stack/register bug under certain situations
+ * where the doubles of the NR::Rect don't get set up correctly, so
+ * an inline == fails.  Instead, we have to call this function to
+ * get everything to flush.
+ */
+static bool
+sp_export_bbox_equal(NR::Rect &one, NR::Rect &two)
+{
+    return one == two;
+}
+
 /**
     \brief  This function is used to detect the current selection setting
             based on the values in the x0, y0, x1 and y0 fields.
@@ -1221,29 +1224,25 @@ sp_export_detect_size(GtkObject * base) {
         switch (this_test[i]) {
             case SELECTION_SELECTION:
                 if ((SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty() == false) {
-                    NRRect bbox;
+                    NR::Rect bbox = (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))->bounds();
 
-                    (SP_DT_SELECTION (SP_ACTIVE_DESKTOP))->bounds(&bbox);
-                    NR::Rect bbox2(bbox);
-
-                    bbox2.round(2);
+                    bbox.round(2);
                     // std::cout << "Selection " << bbox2;
-                    if (bbox2 == current_bbox) {
+                    //if (bbox == current_bbox) {
+                    if (sp_export_bbox_equal(bbox,current_bbox)) {
                         key = SELECTION_SELECTION;
                     }
                 }
                 break;
             case SELECTION_DRAWING: {
-                SPDocument *doc;
-                NRRect bbox;
-                doc = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
+                SPDocument *doc = SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP);
 
-                sp_item_bbox_desktop (SP_ITEM (SP_DOCUMENT_ROOT (doc)), &bbox);
-                NR::Rect bbox2(bbox);
+                NR::Rect bbox = sp_item_bbox_desktop (SP_ITEM (SP_DOCUMENT_ROOT (doc)));
 
-                bbox2.round(2);
+                bbox.round(2);
                 // std::cout << "Drawing " << bbox2;
-                if (bbox2 == current_bbox) {
+                //if (bbox == current_bbox) {
+                if (sp_export_bbox_equal(bbox,current_bbox)) {
                     key = SELECTION_DRAWING;
                 }
                 break;
@@ -1261,7 +1260,8 @@ sp_export_detect_size(GtkObject * base) {
                 bbox.round(2);
 
                 // std::cout << "Page " << bbox;
-                if (bbox == current_bbox) {
+                if (sp_export_bbox_equal(bbox,current_bbox)) {
+                //if (bbox == current_bbox) {
                     key = SELECTION_PAGE;
                 }
 

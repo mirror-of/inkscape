@@ -140,7 +140,7 @@ public:
     Point &operator*=(Matrix const &m);
 
     inline int operator == (const Point &in_pnt) {
-        return ((_pt[0] == in_pnt[0]) && (_pt[1] == in_pnt[1]));
+        return ((_pt[X] == in_pnt[X]) && (_pt[Y] == in_pnt[Y]));
     }
 
     friend inline std::ostream &operator<< (std::ostream &out_file, const NR::Point &in_pnt);
@@ -152,7 +152,7 @@ private:
 /** A function to print out the Point.  It just prints out the coords
     on the given output stream */
 inline std::ostream &operator<< (std::ostream &out_file, const NR::Point &in_pnt) {
-    out_file << "X: " << in_pnt[0] << "  Y: " << in_pnt[1];
+    out_file << "X: " << in_pnt[X] << "  Y: " << in_pnt[Y];
     return out_file;
 }
 

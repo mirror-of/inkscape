@@ -1,3 +1,9 @@
+2004-10-27  Kees Cook  <kees@outflux.net>
+
+	* src/libnr/nr-point.h: use NR::X and NR::Y instead of "0" and "1".
+	* src/dialogs/export.cpp: stack/register weirdness requires a function
+	  call to get true == comparison of NR::Rect's.  Closes bug #1048614.
+
 2004-10-27  Carl Hetherington  <inkscape@carlh.net>
 
 	* src/extension/output.cpp: better fix for 1004134 after advice
