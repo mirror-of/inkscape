@@ -195,4 +195,8 @@ inline __attribute__((deprecated)) void sp_view_set_status(SPView *view, gchar c
 	view->legacyMessageContext()->set(Inkscape::NORMAL_MESSAGE, status);
 }
 
+
+/* Create a new SPViewWidget (which happens to be a SPDesktopWidget). */
+SPViewWidget *sp_desktop_widget_new (SPNamedView *namedview);
+
 #endif
