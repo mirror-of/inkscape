@@ -89,6 +89,7 @@ void Layout::show(NRArenaGroup *in_arena, NRRect const *paintbox) const
 void Layout::getBoundingBox(NRRect *bounding_box, NR::Matrix const &transform) const
 {
     for (unsigned glyph_index = 0 ; glyph_index < _glyphs.size() ; glyph_index++) {
+        if (_characters[_glyphs[glyph_index].in_character].in_glyph == -1) continue;
         // this could be faster
         NRMatrix glyph_matrix;
         _getGlyphTransformMatrix(glyph_index, &glyph_matrix);
@@ -325,7 +326,7 @@ void Layout::fitToPathAlign(SPSVGLength const &startOffset, Path const &path)
         double midpoint_offset = (offset + end_offset) * 0.5;
             // as far as I know these functions are const, they're just not marked as such
         Path::cut_position *midpoint_otp = const_cast<Path&>(path).CurvilignToPosition(1, &midpoint_offset, unused);
-        if (midpoint_otp != NULL && midpoint_otp[0].piece >= 0) {
+        if (midpoint_offset >= 0.0 && midpoint_otp != NULL && midpoint_otp[0].piece >= 0) {
             NR::Point midpoint;
             NR::Point tangent;
 
