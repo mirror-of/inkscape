@@ -28,7 +28,6 @@
 #include "svg/stringstream.h"
 #include "display/nr-arena-shape.h"
 #include "uri-references.h"
-#include "attributes.h"
 #include "print.h"
 #include "document.h"
 #include "desktop.h"

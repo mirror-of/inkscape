@@ -21,7 +21,6 @@
 #include "desktop-handles.h"
 #include "document.h"
 #include "style.h"
-#include "attributes.h"
 
 #include "sp-root.h"
 #include "sp-use.h"
