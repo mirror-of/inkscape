@@ -49,7 +49,7 @@ namespace Dialogs
 //#########################################################################
 
 /**
- * A dialog that displays log messages
+ * A dialog for adjusting bitmap->vector tracing parameters
  */
 class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
 {
@@ -60,7 +60,7 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
     /**
      * Constructor
      */
-	TraceDialogImpl();
+    TraceDialogImpl();
 
     /**
      * Destructor
@@ -361,7 +361,7 @@ TraceDialogImpl::TraceDialogImpl()
     potraceBrightnessSpinner.set_digits(3);
     potraceBrightnessSpinner.set_increments(0.01, 0.1);
     potraceBrightnessSpinner.set_range(0.0, 1.0);
-    potraceBrightnessSpinner.set_value(0.5);
+    potraceBrightnessSpinner.set_value(0.45);
     potraceBrightnessBox.pack_end(potraceBrightnessSpinner, false, false, MARGIN);
 
     potraceBrightnessSpinnerLabel.set_label(_("Threshold:"));
@@ -413,7 +413,7 @@ TraceDialogImpl::TraceDialogImpl()
 
     potraceQuantNrColorSpinner.set_digits(2);
     potraceQuantNrColorSpinner.set_increments(1.0, 4.0);
-    potraceQuantNrColorSpinner.set_range(4.0, 64.0);
+    potraceQuantNrColorSpinner.set_range(2.0, 64.0);
     potraceQuantNrColorSpinner.set_value(8.0);
     potraceQuantBox.pack_end(potraceQuantNrColorSpinner, false, false, MARGIN);
 
