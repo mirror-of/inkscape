@@ -42,7 +42,6 @@
 #include "inkscape-private.h"
 #include "document.h"
 #include "inkscape.h"
-#include "sp-item-transform.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "interface.h"

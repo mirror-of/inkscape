@@ -1,5 +1,10 @@
 2004-02-20  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/select-toolbar.cpp:
+	* src/toolbox.cpp:
+	* src/widgets/spw-utilities.cpp:
+	Remove unused #include sp-item-transform.h.
+
 	* src/sp-item-transform.cpp (sp_item_rotate_rel): NR::Matrix'ification.
 
 	* src/sp-item-transform.h, src/sp-item-transform.cpp

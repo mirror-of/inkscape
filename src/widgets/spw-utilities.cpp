@@ -39,7 +39,6 @@
 #include "inkscape.h"
 #include "document.h"
 #include "desktop-handles.h"
-#include "sp-item-transform.h"
 #include "selection.h"
 
 #include "helper/unit-menu.h"
