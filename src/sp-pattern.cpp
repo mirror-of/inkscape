@@ -276,7 +276,7 @@ sp_pattern_set (SPObject *object, unsigned int key, const gchar *value)
 			href = sp_document_lookup_id (object->document, value + 1);
 			if (SP_IS_PATTERN (href)) {
 				pat->href = (SPPattern *) sp_object_href (href, object);
-				g_signal_connect (G_OBJECT (href), "destroy", G_CALLBACK (sp_pattern_href_destroy), pat);
+				//g_signal_connect (G_OBJECT (href), "destroy", G_CALLBACK (sp_pattern_href_destroy), pat);
 				g_signal_connect (G_OBJECT (href), "modified", G_CALLBACK (sp_pattern_href_modified), pat);
 			}
 		}
@@ -502,13 +502,14 @@ sp_pattern_painter_new (SPPaintServer *ps, NR::Matrix const &full_transform, NR:
 	pp->root = NRArenaGroup::create(pp->arena);
 
 	/* fixme: Show items */
-	/* fixme: Among other thing we want to traverse href here */
-	for (child = sp_object_first_child(SP_OBJECT(pat)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-		if (SP_IS_ITEM (child)) {
-			NRArenaItem *cai;
-			cai = sp_item_invoke_show (SP_ITEM (child), pp->arena, pp->dkey, SP_ITEM_REFERENCE_FLAGS);
-			nr_arena_item_append_child (pp->root, cai);
-			nr_arena_item_unref (cai);
+	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->href) {
+		for (child = sp_object_first_child(SP_OBJECT(pat_i)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+			if (SP_IS_ITEM (child)) {
+				NRArenaItem *cai;
+				cai = sp_item_invoke_show (SP_ITEM (child), pp->arena, pp->dkey, SP_ITEM_REFERENCE_FLAGS);
+				nr_arena_item_append_child (pp->root, cai);
+				nr_arena_item_unref (cai);
+			}
 		}
 	}
 
@@ -529,10 +530,12 @@ sp_pattern_painter_free (SPPaintServer *ps, SPPainter *painter)
 	pp = (SPPatPainter *) painter;
 	pat = pp->pat;
 
-	/* fixme: Among other thing we want to traverse href here */
-	for (child = sp_object_first_child(SP_OBJECT(pat)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
-		if (SP_IS_ITEM (child)) {
-			sp_item_invoke_hide (SP_ITEM (child), pp->dkey);
+	for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->href) {
+		for (child = sp_object_first_child(SP_OBJECT(pat_i)) ; child != NULL; child = SP_OBJECT_NEXT(child) ) {
+			if (SP_IS_ITEM (child)) {
+				g_print ("item %p\n", child);
+				sp_item_invoke_hide (SP_ITEM (child), pp->dkey);
+			}
 		}
 	}
 
