@@ -53,7 +53,7 @@
 
 #define SP_EXPORT_MIN_SIZE 1.0
 
-
+#define DPI_BASE 90.0
 
 static void sp_export_area_toggled   ( GtkToggleButton *tb, GtkObject *base );
 static void sp_export_export_clicked ( GtkButton *button, GtkObject *base );
@@ -91,10 +91,10 @@ static void sp_export_set_area      ( GtkObject *base, float x0, float y0,
                                       float x1, float y1 );
 static void sp_export_value_set     ( GtkObject *base, const gchar *key, 
                                       float val );
-static void sp_export_value_set_pt  ( GtkObject *base, const gchar *key, 
+static void sp_export_value_set_px  ( GtkObject *base, const gchar *key, 
                                       float val );
 static float sp_export_value_get    ( GtkObject *base, const gchar *key );
-static float sp_export_value_get_pt ( GtkObject *base, const gchar *key );
+static float sp_export_value_get_px ( GtkObject *base, const gchar *key );
 
 static void sp_export_filename_modified (GtkObject * object, gpointer data);
 static inline void sp_export_find_default_selection(GtkWidget * dlg);
@@ -416,7 +416,7 @@ sp_export_dialog (void)
         sp_export_spinbutton_new ( "xdpi", 
                                    prefs_get_double_attribute 
                                        ( "dialogs.export.defaultxdpi", 
-                                         "value", 72.0), 
+                                         "value", DPI_BASE), 
                                    1.0, 9600.0, 0.1, 1.0, NULL, t, 3, 0,
                                    NULL, _("dpi"), 2, 1,
                                    G_CALLBACK (sp_export_xdpi_value_changed), 
@@ -432,7 +432,7 @@ sp_export_dialog (void)
          */
         sp_export_spinbutton_new ( "ydpi", prefs_get_double_attribute 
                                                ( "dialogs.export.defaultxdpi", 
-                                                 "value", 72.0), 
+                                                 "value", DPI_BASE), 
                                    1.0, 9600.0, 0.1, 1.0, NULL, t, 3, 1,
                                    NULL, _("dpi"), 2, 0, NULL, dlg );
 
@@ -946,10 +946,10 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
     fe = (GtkWidget *)gtk_object_get_data (base, "filename");
     filename = gtk_entry_get_text (GTK_ENTRY (fe));
 
-    x0 = sp_export_value_get_pt (base, "x0");
-    y0 = sp_export_value_get_pt (base, "y0");
-    x1 = sp_export_value_get_pt (base, "x1");
-    y1 = sp_export_value_get_pt (base, "y1");
+    x0 = sp_export_value_get_px (base, "x0");
+    y0 = sp_export_value_get_px (base, "y0");
+    x1 = sp_export_value_get_px (base, "x1");
+    y1 = sp_export_value_get_px (base, "y1");
     xdpi = sp_export_value_get (base, "xdpi");
     ydpi = sp_export_value_get (base, "ydpi");
     width = (int) (sp_export_value_get (base, "bmwidth") + 0.5);
@@ -1214,10 +1214,10 @@ sp_export_detect_size(GtkObject * base) {
     selection_type this_test[SELECTION_NUMBER_OF + 1];
     selection_type key = SELECTION_NUMBER_OF;
 
-    NR::Point x(sp_export_value_get_pt (base, "x0"),
-                sp_export_value_get_pt (base, "y0"));
-    NR::Point y(sp_export_value_get_pt (base, "x1"),
-                sp_export_value_get_pt (base, "y1"));
+    NR::Point x(sp_export_value_get_px (base, "x0"),
+                sp_export_value_get_px (base, "y0"));
+    NR::Point y(sp_export_value_get_px (base, "x1"),
+                sp_export_value_get_px (base, "y1"));
     NR::Rect current_bbox(x, y);
     current_bbox.round(2);
     // std::cout << "Current " << current_bbox;
@@ -1315,11 +1315,11 @@ sp_export_area_x_value_changed (GtkAdjustment *adj, GtkObject *base)
     
     gtk_object_set_data ( base, "update", GUINT_TO_POINTER (TRUE) );
 
-    x0 = sp_export_value_get_pt (base, "x0");
-    x1 = sp_export_value_get_pt (base, "x1");
+    x0 = sp_export_value_get_px (base, "x0");
+    x1 = sp_export_value_get_px (base, "x1");
     xdpi = sp_export_value_get (base, "xdpi");
 
-    width = floor ((x1 - x0) * xdpi / 72.0 + 0.5);
+    width = floor ((x1 - x0) * xdpi / DPI_BASE + 0.5);
 
     if (width < SP_EXPORT_MIN_SIZE) {
         const gchar *key;
@@ -1327,15 +1327,15 @@ sp_export_area_x_value_changed (GtkAdjustment *adj, GtkObject *base)
         key = (const gchar *)gtk_object_get_data (GTK_OBJECT (adj), "key");
         
         if (!strcmp (key, "x0")) {
-            x1 = x0 + width * 72.0 / xdpi;
-            sp_export_value_set_pt (base, "x1", x1);
+            x1 = x0 + width * DPI_BASE / xdpi;
+            sp_export_value_set_px (base, "x1", x1);
         } else {
-            x0 = x1 - width * 72.0 / xdpi;
-            sp_export_value_set_pt (base, "x0", x0);
+            x0 = x1 - width * DPI_BASE / xdpi;
+            sp_export_value_set_px (base, "x0", x0);
         }
     }
 
-    sp_export_value_set_pt (base, "width", x1 - x0);
+    sp_export_value_set_px (base, "width", x1 - x0);
     sp_export_value_set (base, "bmwidth", width);
 
     sp_export_detect_size(base);
@@ -1362,26 +1362,26 @@ sp_export_area_y_value_changed (GtkAdjustment *adj, GtkObject *base)
        
     gtk_object_set_data (base, "update", GUINT_TO_POINTER (TRUE));
 
-    y0 = sp_export_value_get_pt (base, "y0");
-    y1 = sp_export_value_get_pt (base, "y1");
+    y0 = sp_export_value_get_px (base, "y0");
+    y1 = sp_export_value_get_px (base, "y1");
     ydpi = sp_export_value_get (base, "ydpi");
 
-    height = floor ((y1 - y0) * ydpi / 72.0 + 0.5);
+    height = floor ((y1 - y0) * ydpi / DPI_BASE + 0.5);
 
     if (height < SP_EXPORT_MIN_SIZE) {
         const gchar *key;
         height = SP_EXPORT_MIN_SIZE;
         key = (const gchar *)gtk_object_get_data (GTK_OBJECT (adj), "key");
         if (!strcmp (key, "y0")) {
-            y1 = y0 + height * 72.0 / ydpi;
-            sp_export_value_set_pt (base, "y1", y1);
+            y1 = y0 + height * DPI_BASE / ydpi;
+            sp_export_value_set_px (base, "y1", y1);
         } else {
-            y0 = y1 - height * 72.0 / ydpi;
-            sp_export_value_set_pt (base, "y0", y0);
+            y0 = y1 - height * DPI_BASE / ydpi;
+            sp_export_value_set_px (base, "y0", y0);
         }
     }
 
-    sp_export_value_set_pt (base, "height", y1 - y0);
+    sp_export_value_set_px (base, "height", y1 - y0);
     sp_export_value_set (base, "bmheight", height);
 
     sp_export_detect_size(base);
@@ -1407,20 +1407,20 @@ sp_export_area_width_value_changed (GtkAdjustment *adj, GtkObject *base)
     
     gtk_object_set_data (base, "update", GUINT_TO_POINTER (TRUE));
 
-    x0 = sp_export_value_get_pt (base, "x0");
-    x1 = sp_export_value_get_pt (base, "x1");
+    x0 = sp_export_value_get_px (base, "x0");
+    x1 = sp_export_value_get_px (base, "x1");
     xdpi = sp_export_value_get (base, "xdpi");
-    width = sp_export_value_get_pt (base, "width");
-    bmwidth = floor (width * xdpi / 72.0 + 0.5);
+    width = sp_export_value_get_px (base, "width");
+    bmwidth = floor (width * xdpi / DPI_BASE + 0.5);
 
     if (bmwidth < SP_EXPORT_MIN_SIZE) {
     
         bmwidth = SP_EXPORT_MIN_SIZE;
-        width = bmwidth * 72.0 / xdpi;
-        sp_export_value_set_pt (base, "width", width);
+        width = bmwidth * DPI_BASE / xdpi;
+        sp_export_value_set_px (base, "width", width);
     }
 
-    sp_export_value_set_pt (base, "x1", x0 + width);
+    sp_export_value_set_px (base, "x1", x0 + width);
     sp_export_value_set (base, "bmwidth", bmwidth);
 
     gtk_object_set_data (base, "update", GUINT_TO_POINTER (FALSE));
@@ -1445,19 +1445,19 @@ sp_export_area_height_value_changed (GtkAdjustment *adj, GtkObject *base)
     
     gtk_object_set_data (base, "update", GUINT_TO_POINTER (TRUE));
 
-    y0 = sp_export_value_get_pt (base, "y0");
-    y1 = sp_export_value_get_pt (base, "y1");
+    y0 = sp_export_value_get_px (base, "y0");
+    y1 = sp_export_value_get_px (base, "y1");
     ydpi = sp_export_value_get (base, "ydpi");
-    height = sp_export_value_get_pt (base, "height");
-    bmheight = floor (height * ydpi / 72.0 + 0.5);
+    height = sp_export_value_get_px (base, "height");
+    bmheight = floor (height * ydpi / DPI_BASE + 0.5);
 
     if (bmheight < SP_EXPORT_MIN_SIZE) {
         bmheight = SP_EXPORT_MIN_SIZE;
-        height = bmheight * 72.0 / ydpi;
-        sp_export_value_set_pt (base, "height", height);
+        height = bmheight * DPI_BASE / ydpi;
+        sp_export_value_set_px (base, "height", height);
     }
 
-    sp_export_value_set_pt (base, "y1", y0 + height);
+    sp_export_value_set_px (base, "y1", y0 + height);
     sp_export_value_set (base, "bmheight", bmheight);
 
     gtk_object_set_data (base, "update", GUINT_TO_POINTER (FALSE));
@@ -1478,12 +1478,12 @@ sp_export_set_image_y (GtkObject *base)
 {
     float y0, y1, xdpi;
 
-    y0 = sp_export_value_get_pt (base, "y0");
-    y1 = sp_export_value_get_pt (base, "y1");
+    y0 = sp_export_value_get_px (base, "y0");
+    y1 = sp_export_value_get_px (base, "y1");
     xdpi = sp_export_value_get (base, "xdpi");
 
     sp_export_value_set (base, "ydpi", xdpi);
-    sp_export_value_set (base, "bmheight", (y1 - y0) * xdpi / 72.0);
+    sp_export_value_set (base, "bmheight", (y1 - y0) * xdpi / DPI_BASE);
 
     return;
 } // end of sp_export_set_image_y()
@@ -1504,8 +1504,8 @@ sp_export_bitmap_width_value_changed (GtkAdjustment *adj, GtkObject *base)
     
     gtk_object_set_data (base, "update", GUINT_TO_POINTER (TRUE));
 
-    x0 = sp_export_value_get_pt (base, "x0");
-    x1 = sp_export_value_get_pt (base, "x1");
+    x0 = sp_export_value_get_px (base, "x0");
+    x1 = sp_export_value_get_px (base, "x1");
     bmwidth = sp_export_value_get (base, "bmwidth");
 
     if (bmwidth < SP_EXPORT_MIN_SIZE) {
@@ -1513,7 +1513,7 @@ sp_export_bitmap_width_value_changed (GtkAdjustment *adj, GtkObject *base)
         sp_export_value_set (base, "bmwidth", bmwidth);
     }
 
-    xdpi = bmwidth * 72.0 / (x1 - x0);
+    xdpi = bmwidth * DPI_BASE / (x1 - x0);
     sp_export_value_set (base, "xdpi", xdpi);
 
     sp_export_set_image_y (base);
@@ -1566,21 +1566,21 @@ sp_export_xdpi_value_changed (GtkAdjustment *adj, GtkObject *base)
     
     gtk_object_set_data (base, "update", GUINT_TO_POINTER (TRUE));
 
-    x0 = sp_export_value_get_pt (base, "x0");
-    x1 = sp_export_value_get_pt (base, "x1");
+    x0 = sp_export_value_get_px (base, "x0");
+    x1 = sp_export_value_get_px (base, "x1");
     xdpi = sp_export_value_get (base, "xdpi");
 
     // remember xdpi setting
     prefs_set_double_attribute ("dialogs.export.defaultxdpi", "value", xdpi);
 
-    bmwidth = (x1 - x0) * xdpi / 72.0;
+    bmwidth = (x1 - x0) * xdpi / DPI_BASE;
 
     if (bmwidth < SP_EXPORT_MIN_SIZE) {
         bmwidth = SP_EXPORT_MIN_SIZE;
         if (x1 != x0) 
-            xdpi = bmwidth * 72.0 / (x1 - x0);
+            xdpi = bmwidth * DPI_BASE / (x1 - x0);
         else 
-            xdpi = 72.0;
+            xdpi = DPI_BASE;
         sp_export_value_set (base, "xdpi", xdpi);
     }
 
@@ -1603,7 +1603,7 @@ sp_export_xdpi_value_changed (GtkAdjustment *adj, GtkObject *base)
     \param  x1    Horizontal lower right hand corner of the picture in points
     \param  y1    Vertical lower right hand corner of the picture in points
 
-    This function just calls \c sp_export_value_set_pt for each of the
+    This function just calls \c sp_export_value_set_px for each of the
     parameters that is passed in.  This allows for setting them all in
     one convient area.
 
@@ -1617,10 +1617,10 @@ static void
 sp_export_set_area ( GtkObject *base, float x0, float y0, float x1, float y1 )
 {
     gtk_object_set_data ( base, "update", GUINT_TO_POINTER (TRUE) );
-    sp_export_value_set_pt (base, "x1", x1);
-    sp_export_value_set_pt (base, "y1", y1);
-    sp_export_value_set_pt (base, "x0", x0);
-    sp_export_value_set_pt (base, "y0", y0);
+    sp_export_value_set_px (base, "x1", x1);
+    sp_export_value_set_px (base, "y1", y1);
+    sp_export_value_set_px (base, "x0", x0);
+    sp_export_value_set_px (base, "y0", y0);
     gtk_object_set_data ( base, "update", GUINT_TO_POINTER (FALSE) );
 
     sp_export_area_x_value_changed ((GtkAdjustment *)gtk_object_get_data (base, "x1"), base);
@@ -1661,18 +1661,14 @@ sp_export_value_set ( GtkObject *base, const gchar *key, float val )
     value and sets the adjustment.
 */
 static void
-sp_export_value_set_pt (GtkObject *base, const gchar *key, float val)
+sp_export_value_set_px (GtkObject *base, const gchar *key, float val)
 {
-    const SPUnit *unit;
+    const SPUnit *unit = sp_unit_selector_get_unit ((SPUnitSelector *)gtk_object_get_data (base, "units") );
 
-    unit = 
-        sp_unit_selector_get_unit ((SPUnitSelector *)gtk_object_get_data 
-            (base, "units") );
-
-    sp_export_value_set (base, key, sp_points_get_units (val, unit));
+    sp_export_value_set (base, key, sp_pixels_get_units (val, *unit));
 
     return;
-} // end of sp_export_value_set_pt()
+} // end of sp_export_value_set_px()
 
 /**
     \brief  Get the value of an adjustment in the export dialog
@@ -1706,17 +1702,13 @@ sp_export_value_get ( GtkObject *base, const gchar *key )
     dialog.  Using that it converts the returned value into points.
 */
 static float
-sp_export_value_get_pt ( GtkObject *base, const gchar *key )
+sp_export_value_get_px ( GtkObject *base, const gchar *key )
 {
-    float value;
-    const SPUnit *unit;
+    float value = sp_export_value_get(base, key);
+    const SPUnit *unit = sp_unit_selector_get_unit ((SPUnitSelector *)gtk_object_get_data (base, "units"));
 
-    value = sp_export_value_get(base, key);
-
-    unit = sp_unit_selector_get_unit ((SPUnitSelector *)gtk_object_get_data (base, "units"));
-
-    return sp_units_get_points (value, unit);
-} // end of sp_export_value_get_pt()
+    return sp_units_get_pixels (value, *unit);
+} // end of sp_export_value_get_px()
 
 /**
     \brief  This function is called when the filename is changed by
