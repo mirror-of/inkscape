@@ -6,10 +6,7 @@
 
 include ../Makefile.mingw.common
 
-include ./make.ofiles
-include ./make.dep
 
-OBJ = $(OBJECTS)
 
 #Check for 'generated' files
 all: helper/sp-marshal.h inkscape.exe
@@ -18,6 +15,12 @@ helper/sp-marshal.h:
 	make -C helper     -f Makefile.mingw
 
 
+include ./make.ofiles
+include ./make.dep
+
+INC += $(INCLUDEPATH)
+
+OBJ = $(OBJECTS)
 
 #RES=inkres.o
 RES=
@@ -36,6 +39,7 @@ libinkscape.a: $(OBJ)
 
 clean:
 	$(RM) *.o
+	$(RM) $(OBJ)
 	$(RM) *.a
 
 

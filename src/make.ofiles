@@ -4,12 +4,6 @@ OBJECTS = \
 	application.o \
 	arc-context.o \
 	attributes.o \
-	bonobo/canvas-translator.o \
-	bonobo/embeddable-desktop.o \
-	bonobo/embeddable-document.o \
-	bonobo/embeddable-drawing.o \
-	bonobo/sodipodi-bonobo.o \
-	bonobo/svg-doc-factory.o \
 	color.o \
 	desktop-affine.o \
 	desktop-events.o \
@@ -42,8 +36,6 @@ OBJECTS = \
 	display/nr-arena-item.o \
 	display/nr-arena-shape.o \
 	display/nr-arena.o \
-	display/nr-uta.o \
-	display/testnr.o \
 	document-undo.o \
 	document.o \
 	draw-context.o \
@@ -55,7 +47,6 @@ OBJECTS = \
 	gradient-chemistry.o \
 	help.o \
 	helper/action.o \
-	helper/bezier-utils-test.o \
 	helper/bezier-utils.o \
 	helper/canvas-bpath.o \
 	helper/canvas-grid.o \
@@ -78,7 +69,6 @@ OBJECTS = \
 	helper/window.o \
 	inkscape-stock.o \
 	inkscape.o \
-	inkview.o \
 	interface.o \
 	knot.o \
 	knotholder.o \
@@ -129,10 +119,8 @@ OBJECTS = \
 	libnrtype/nr-rasterfont.o \
 	libnrtype/nr-type-directory.o \
 	libnrtype/nr-type-ft2.o \
-	libnrtype/nr-type-gnome.o \
 	libnrtype/nr-type-primitives.o \
 	libnrtype/nr-type-w32.o \
-	libnrtype/nr-type-xft.o \
 	libnrtype/nr-typeface.o \
 	livarot/AVL.o \
 	livarot/DblLinked.o \
@@ -151,7 +139,6 @@ OBJECTS = \
 	module.o \
 	modules/db.o \
 	modules/extension.o \
-	modules/gnome.o \
 	modules/init.o \
 	modules/menu.o \
 	modules/ps.o \
@@ -215,12 +202,12 @@ OBJECTS = \
 	star-context.o \
 	style.o \
 	svg-view.o \
-	svg/gill-svg-path.o \
 	svg/gnome-canvas-bpath-util.o \
 	svg/svg-affine.o \
 	svg/svg-color.o \
 	svg/svg-length.o \
 	svg/svg-path.o \
+	test.o \
 	text-context.o \
 	toolbox.o \
 	tools-switch.o \
@@ -246,16 +233,11 @@ OBJECTS = \
 	widgets/sp-color-scales.o \
 	widgets/sp-color-selector.o \
 	widgets/sp-color-slider.o \
-	widgets/sp-hwrap-box.o \
-	widgets/sp-toolbox.o \
-	widgets/sp-vwrap-box.o \
 	widgets/sp-widget.o \
-	widgets/sp-wrap-box.o \
 	widgets/sp-xmlview-attr-list.o \
 	widgets/sp-xmlview-content.o \
 	widgets/sp-xmlview-tree.o \
 	widgets/spw-utilities.o \
-	widgets/test-widgets.o \
 	widgets/test-wrapbox.o \
 	winmain.o \
 	xml/repr-action-test.o \
@@ -270,12 +252,6 @@ LINTS = \
 	application.lint \
 	arc-context.lint \
 	attributes.lint \
-	bonobo/canvas-translator.lint \
-	bonobo/embeddable-desktop.lint \
-	bonobo/embeddable-document.lint \
-	bonobo/embeddable-drawing.lint \
-	bonobo/sodipodi-bonobo.lint \
-	bonobo/svg-doc-factory.lint \
 	color.lint \
 	desktop-affine.lint \
 	desktop-events.lint \
@@ -308,8 +284,6 @@ LINTS = \
 	display/nr-arena-item.lint \
 	display/nr-arena-shape.lint \
 	display/nr-arena.lint \
-	display/nr-uta.lint \
-	display/testnr.lint \
 	document-undo.lint \
 	document.lint \
 	draw-context.lint \
@@ -321,7 +295,6 @@ LINTS = \
 	gradient-chemistry.lint \
 	help.lint \
 	helper/action.lint \
-	helper/bezier-utils-test.lint \
 	helper/bezier-utils.lint \
 	helper/canvas-bpath.lint \
 	helper/canvas-grid.lint \
@@ -344,7 +317,6 @@ LINTS = \
 	helper/window.lint \
 	inkscape-stock.lint \
 	inkscape.lint \
-	inkview.lint \
 	interface.lint \
 	knot.lint \
 	knotholder.lint \
@@ -395,10 +367,8 @@ LINTS = \
 	libnrtype/nr-rasterfont.lint \
 	libnrtype/nr-type-directory.lint \
 	libnrtype/nr-type-ft2.lint \
-	libnrtype/nr-type-gnome.lint \
 	libnrtype/nr-type-primitives.lint \
 	libnrtype/nr-type-w32.lint \
-	libnrtype/nr-type-xft.lint \
 	libnrtype/nr-typeface.lint \
 	livarot/AVL.lint \
 	livarot/DblLinked.lint \
@@ -417,7 +387,6 @@ LINTS = \
 	module.lint \
 	modules/db.lint \
 	modules/extension.lint \
-	modules/gnome.lint \
 	modules/init.lint \
 	modules/menu.lint \
 	modules/ps.lint \
@@ -481,12 +450,12 @@ LINTS = \
 	star-context.lint \
 	style.lint \
 	svg-view.lint \
-	svg/gill-svg-path.lint \
 	svg/gnome-canvas-bpath-util.lint \
 	svg/svg-affine.lint \
 	svg/svg-color.lint \
 	svg/svg-length.lint \
 	svg/svg-path.lint \
+	test.lint \
 	text-context.lint \
 	toolbox.lint \
 	tools-switch.lint \
@@ -512,16 +481,11 @@ LINTS = \
 	widgets/sp-color-scales.lint \
 	widgets/sp-color-selector.lint \
 	widgets/sp-color-slider.lint \
-	widgets/sp-hwrap-box.lint \
-	widgets/sp-toolbox.lint \
-	widgets/sp-vwrap-box.lint \
 	widgets/sp-widget.lint \
-	widgets/sp-wrap-box.lint \
 	widgets/sp-xmlview-attr-list.lint \
 	widgets/sp-xmlview-content.lint \
 	widgets/sp-xmlview-tree.lint \
 	widgets/spw-utilities.lint \
-	widgets/test-widgets.lint \
 	widgets/test-wrapbox.lint \
 	winmain.lint \
 	xml/repr-action-test.lint \
@@ -533,26 +497,15 @@ LINTS = \
 	zoom-context.lint
 
 INCLUDEPATH = \
-	-Ibonobo \
-	-I \
 	-Idialogs \
-	-I \
 	-Idisplay \
-	-I \
 	-Ihelper \
-	-I \
 	-Ilibarikkei \
 	-Ilibnr \
 	-Ilibnrtype \
 	-Ilivarot \
-	-I \
 	-Imodules \
-	-I \
 	-Isvg \
-	-I \
 	-Iutest \
-	-I \
 	-Iwidgets \
-	-I \
 	-Ixml \
-	-I

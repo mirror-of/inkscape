@@ -45,110 +45,6 @@ attributes.o: \
 	attributes.cpp \
 	attributes.h
 
-bonobo/canvas-translator.o: \
-	bonobo/canvas-translator.cpp \
-	bonobo/canvas-translator.h
-
-bonobo/embeddable-desktop.o: \
-	bonobo/embeddable-desktop.cpp \
-	bonobo/embeddable-desktop.h \
-	bonobo/embeddable-document.h \
-	desktop.h \
-	display/nr-arena-forward.h \
-	document.h \
-	forward.h \
-	forward.h \
-	helper/helper-forward.h \
-	helper/units.h \
-	inkscape.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-path.h \
-	libnr/nr-rect.h \
-	libnr/nr-types.h \
-	libnr/nr-values.h \
-	module.h \
-	modules/gnome.h \
-	modules/menu.h \
-	view.h \
-	xml/repr.h
-
-bonobo/embeddable-document.o: \
-	bonobo/embeddable-document.cpp \
-	bonobo/embeddable-desktop.h \
-	bonobo/embeddable-document.h \
-	bonobo/embeddable-drawing.h \
-	bonobo/sodipodi-bonobo.h \
-	desktop.h \
-	display/nr-arena-forward.h \
-	document.h \
-	forward.h \
-	forward.h \
-	helper/helper-forward.h \
-	helper/units.h \
-	inkscape.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-path.h \
-	libnr/nr-rect.h \
-	libnr/nr-types.h \
-	libnr/nr-values.h \
-	module.h \
-	modules/gnome.h \
-	modules/menu.h \
-	sp-item.h \
-	sp-object.h \
-	sp-object.h \
-	version.h \
-	view.h \
-	xml/repr.h
-
-bonobo/embeddable-drawing.o: \
-	bonobo/embeddable-drawing.cpp \
-	bonobo/canvas-translator.h \
-	bonobo/embeddable-document.h \
-	bonobo/embeddable-drawing.h \
-	display/nr-arena-forward.h \
-	document.h \
-	forward.h \
-	forward.h \
-	helper/units.h \
-	libnr/nr-path.h \
-	libnr/nr-types.h \
-	module.h \
-	modules/gnome.h \
-	modules/menu.h \
-	sp-item.h \
-	sp-object.h \
-	version.h \
-	xml/repr.h
-
-bonobo/sodipodi-bonobo.o: \
-	bonobo/sodipodi-bonobo.cpp \
-	bonobo/sodipodi-bonobo.h \
-	display/nr-arena-forward.h \
-	forward.h \
-	libnr/nr-path.h \
-	libnr/nr-types.h \
-	module.h \
-	modules/gnome.h \
-	modules/menu.h \
-	xml/repr.h
-
-bonobo/svg-doc-factory.o: \
-	bonobo/svg-doc-factory.cpp \
-	bonobo/embeddable-document.h \
-	bonobo/svg-doc-factory.h \
-	display/nr-arena-forward.h \
-	forward.h \
-	forward.h \
-	libnr/nr-path.h \
-	libnr/nr-types.h \
-	module.h \
-	modules/gnome.h \
-	modules/menu.h \
-	xml/repr.h
-
 color.o: \
 	color.cpp \
 	color.h \
@@ -1016,13 +912,6 @@ display/nr-arena.o: \
 	libnr/nr-types.h \
 	libnr/nr-values.h
 
-display/nr-uta.o: \
-	display/nr-uta.cpp \
-	display/nr-uta.h
-
-display/testnr.o: \
-	display/testnr.cpp
-
 document-undo.o: \
 	document-undo.cpp \
 	display/nr-arena-forward.h \
@@ -1377,14 +1266,6 @@ helper/action.o: \
 	libnr/nr-types.h \
 	view.h
 
-helper/bezier-utils-test.o: \
-	helper/bezier-utils-test.cpp \
-	helper/bezier-utils.cpp \
-	helper/bezier-utils.h \
-	libnr/nr-point-fns.h \
-	libnr/nr-types.h \
-	utest/utest.h
-
 helper/bezier-utils.o: \
 	helper/bezier-utils.cpp \
 	helper/bezier-utils.h \
@@ -1536,7 +1417,7 @@ helper/sp-ctrlline.o: \
 	libnr/nr-values.h
 
 helper/sp-marshal.o: \
-	helper/sp-marshal.c \
+	helper/sp-marshal.cpp \
 	helper/sp-marshal.h
 
 helper/unit-menu.o: \
@@ -1599,19 +1480,6 @@ inkscape.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
-
-inkview.o: \
-	inkview.cpp \
-	document.h \
-	forward.h \
-	helper/helper-forward.h \
-	helper/sp-intl.h \
-	libnr/nr-macros.h \
-	libnr/nr-types.h \
-	modules/menu.h \
-	svg-view.h \
-	view.h \
 	xml/repr.h
 
 interface.o: \
@@ -1898,7 +1766,9 @@ libnr/nr-types.o: \
 
 libnr/nr-uta.o: \
 	libnr/nr-uta.cpp \
-	display/nr-uta.h
+	display/nr-uta.h \
+	libnr/nr-macros.h \
+	libnr/nr-types.h
 
 libnr/nr-values.o: \
 	libnr/nr-values.cpp \
@@ -1919,7 +1789,14 @@ libnr/nr_mmx_R8G8B8_R8G8B8_R8G8B8A8_P.o: \
 	libnr/nr_mmx_R8G8B8_R8G8B8_R8G8B8A8_P.S
 
 libnr/testnr.o: \
-	libnr/testnr.cpp
+	libnr/testnr.cpp \
+	libnr/nr-blit.h \
+	libnr/nr-forward.h \
+	libnr/nr-path.h \
+	libnr/nr-pixblock.h \
+	libnr/nr-pixblock.h \
+	libnr/nr-types.h \
+	libnr/nr-types.h
 
 libnrtype/cp1250.o: \
 	libnrtype/cp1250.cpp
@@ -2036,25 +1913,6 @@ libnrtype/nr-type-ft2.o: \
 	libnrtype/nr-type-ft2.h \
 	libnrtype/nr-typeface.h
 
-libnrtype/nr-type-gnome.o: \
-	libnrtype/nr-type-gnome.cpp \
-	libnr/nr-forward.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-object.h \
-	libnr/nr-path.h \
-	libnr/nr-pixblock.h \
-	libnr/nr-rect.h \
-	libnr/nr-types.h \
-	libnr/nr-values.h \
-	libnrtype/nr-font.h \
-	libnrtype/nr-rasterfont.h \
-	libnrtype/nr-type-directory.h \
-	libnrtype/nr-type-directory.h \
-	libnrtype/nr-type-gnome.h \
-	libnrtype/nr-type-primitives.h \
-	libnrtype/nr-typeface.h
-
 libnrtype/nr-type-primitives.o: \
 	libnrtype/nr-type-primitives.cpp \
 	libnr/nr-macros.h \
@@ -2077,23 +1935,6 @@ libnrtype/nr-type-w32.o: \
 	libnrtype/nr-type-directory.h \
 	libnrtype/nr-type-primitives.h \
 	libnrtype/nr-type-w32.h \
-	libnrtype/nr-typeface.h
-
-libnrtype/nr-type-xft.o: \
-	libnrtype/nr-type-xft.cpp \
-	libnr/nr-forward.h \
-	libnr/nr-macros.h \
-	libnr/nr-object.h \
-	libnr/nr-path.h \
-	libnr/nr-pixblock.h \
-	libnr/nr-types.h \
-	libnrtype/nr-font.h \
-	libnrtype/nr-rasterfont.h \
-	libnrtype/nr-type-directory.h \
-	libnrtype/nr-type-ft2.h \
-	libnrtype/nr-type-primitives.h \
-	libnrtype/nr-type-primitives.h \
-	libnrtype/nr-type-xft.h \
 	libnrtype/nr-typeface.h
 
 libnrtype/nr-typeface.o: \
@@ -2314,36 +2155,6 @@ modules/extension.o: \
 	xml/repr-action.h \
 	xml/repr-private.h \
 	xml/repr.h \
-	xml/repr.h
-
-modules/gnome.o: \
-	modules/gnome.cpp \
-	color.h \
-	display/nr-arena-forward.h \
-	document.h \
-	enums.h \
-	forward.h \
-	helper/sp-intl.h \
-	helper/units.h \
-	libnr/nr-forward.h \
-	libnr/nr-macros.h \
-	libnr/nr-matrix.h \
-	libnr/nr-path.h \
-	libnr/nr-pixblock.h \
-	libnr/nr-rect.h \
-	libnr/nr-types.h \
-	libnr/nr-values.h \
-	module.h \
-	modules/gnome.h \
-	modules/menu.h \
-	sp-item-group.h \
-	sp-item.h \
-	sp-marker.h \
-	sp-object.h \
-	sp-paint-server.h \
-	style.h \
-	svg/svg-types.h \
-	version.h \
 	xml/repr.h
 
 modules/init.o: \
@@ -4251,18 +4062,6 @@ svg-view.o: \
 	view.h \
 	xml/repr.h
 
-svg/gill-svg-path.o: \
-	svg/gill-svg-path.cpp \
-	display/nr-arena-forward.h \
-	forward.h \
-	libnr/nr-path.h \
-	libnr/nr-types.h \
-	module.h \
-	modules/gnome.h \
-	modules/menu.h \
-	svg/gnome-canvas-bpath-util.h \
-	xml/repr.h
-
 svg/gnome-canvas-bpath-util.o: \
 	svg/gnome-canvas-bpath-util.cpp \
 	svg/gnome-canvas-bpath-util.h
@@ -4287,6 +4086,9 @@ svg/svg-path.o: \
 	svg/svg-path.cpp \
 	modules/svg.h \
 	svg/gnome-canvas-bpath-util.h
+
+test.o: \
+	test.c
 
 text-context.o: \
 	text-context.cpp \
@@ -4875,28 +4677,6 @@ widgets/sp-color-slider.o: \
 	widgets/sp-color-slider.cpp \
 	widgets/sp-color-slider.h
 
-widgets/sp-hwrap-box.o: \
-	widgets/sp-hwrap-box.cpp \
-	widgets/sp-hwrap-box.h \
-	widgets/sp-wrap-box.h
-
-widgets/sp-toolbox.o: \
-	widgets/sp-toolbox.cpp \
-	forward.h \
-	helper/action.h \
-	helper/sp-intl.h \
-	helper/sp-marshal.h \
-	helper/window.h \
-	libnr/nr-object.h \
-	view.h \
-	widgets/button.h \
-	widgets/icon.h
-
-widgets/sp-vwrap-box.o: \
-	widgets/sp-vwrap-box.cpp \
-	widgets/sp-vwrap-box.h \
-	widgets/sp-wrap-box.h
-
 widgets/sp-widget.o: \
 	widgets/sp-widget.cpp \
 	desktop-handles.h \
@@ -4921,10 +4701,6 @@ widgets/sp-widget.o: \
 	xml/repr.h \
 	xml/repr.h \
 	xml/repr.h
-
-widgets/sp-wrap-box.o: \
-	widgets/sp-wrap-box.cpp \
-	widgets/sp-wrap-box.h
 
 widgets/sp-xmlview-attr-list.o: \
 	widgets/sp-xmlview-attr-list.cpp \
@@ -4979,13 +4755,6 @@ widgets/spw-utilities.o: \
 	widgets/button.h \
 	widgets/spw-utilities.h \
 	xml/repr.h
-
-widgets/test-widgets.o: \
-	widgets/test-widgets.cpp \
-	color.h \
-	forward.h \
-	libnr/nr-types.h \
-	widgets/sp-color-selector.h
 
 widgets/test-wrapbox.o: \
 	widgets/test-wrapbox.cpp \
