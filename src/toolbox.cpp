@@ -221,8 +221,8 @@ aux_toolbox_size_request (GtkWidget *widget,
                         GtkRequisition *requisition,
                         gpointer user_data)
 {
-	if ( requisition->height < AUX_BUTTON_SIZE + 6 + 2 * AUX_SPACING) {
-		requisition->height = AUX_BUTTON_SIZE + 6 + 2 * AUX_SPACING;
+	if ( requisition->height < AUX_BUTTON_SIZE + 10 + 2 * AUX_SPACING) {
+		requisition->height = AUX_BUTTON_SIZE + 10 + 2 * AUX_SPACING;
     }
     if (!g_object_get_data(G_OBJECT(widget), "is_detached")) {
         requisition->width = 0; // allow aux toolbar to be cut
