@@ -63,6 +63,7 @@ libinkpre_a_SOURCES =	\
 	inkscape.cpp inkscape.h inkscape-private.h	\
 	inkscape-stock.cpp inkscape-stock.h\
 	interface.cpp interface.h	\
+	isnan.h \
 	knot.cpp knot.h	\
 	knotholder.cpp knotholder.h	\
 	macros.h	\
