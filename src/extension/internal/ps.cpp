@@ -177,9 +177,8 @@ PrintPS::setup (Inkscape::Extension::Print * mod)
 	gtk_container_add (GTK_CONTAINER (f), vb);
 	gtk_container_set_border_width (GTK_CONTAINER (vb), 4);
 
-	l = gtk_label_new (_("Enter destination lpr queue.\n"
-			     "Use '> filename' to print to file.\n"
-			     "Use '| prog arg...' to pipe to program"));
+	l = gtk_label_new (_("Use '> filename' to print to file.\n"
+			     "Use '| prog arg...' to pipe to a program."));
 	gtk_box_pack_start (GTK_BOX (vb), l, FALSE, FALSE, 0);
 
 	e = gtk_entry_new ();
