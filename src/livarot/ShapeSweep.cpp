@@ -735,7 +735,6 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
     {
       pts[i].oldDegree = pts[i].dI + pts[i].dO;
     }
-
 //      Validate();
 
   SetFlag (need_edges_sorting, true);
@@ -900,20 +899,26 @@ Shape::ConvertToShape (Shape * a, FillRule directed, bool invert)
       SweepEvent::DestroyQueue (sEvts);
       SetFlag (has_sweep_data, false);
     }
+  if ( directed == fill_justDont ) {
+  } else {
+    if (Eulerian (true) == false)
+    {
+//      Validate();
+      //              printf( "pas euclidian2");
+      MakePointData (false);
+      MakeEdgeData (false);
+      MakeSweepSrcData (false);
+      MakeSweepDestData (false);
+      a->CleanupSweep ();
+      nbPt = nbAr = 0;
+      return shape_euler_err;
+    }
+  }
   MakePointData (false);
   MakeEdgeData (false);
   MakeSweepSrcData (false);
   MakeSweepDestData (false);
   a->CleanupSweep ();
-  if ( directed == fill_justDont ) {
-  } else {
-    if (Eulerian (true) == false)
-    {
-      //              printf( "pas euclidian2");
-      nbPt = nbAr = 0;
-      return shape_euler_err;
-    }
-  }
   type = shape_polygon;
   return 0;
 }
@@ -2870,7 +2875,8 @@ Shape::TesteAdjacency (Shape * a, int no, const NR::Point atx, int nPt,
   double e = IHalfRound ((cross (diff,adir)) * a->eData[no].isqlength);
   if (-3 < e && e < 3)
     {
-      double rad = HalfRound (0.505);
+      double rad = HalfRound (0.501); // when using single precision, 0.505 is better (0.5 would be the correct value, 
+                                      // but it produces lots of bugs)
       diff1[0] = diff[0] - rad;
       diff1[1] = diff[1] - rad;
       diff2[0] = diff[0] + rad;
@@ -3245,7 +3251,7 @@ Shape::Validate (void)
         double   atL, atR;
 	  if (TesteIntersection (this, this, i, j, atx, atL, atR, false))
 	    {
-	      printf ("%i %i  %f %f \n", i, j, atx[0],atx[1]);
+	      printf ("%i %i  %f %f di=%f %f  dj=%f %f\n", i, j, atx[0],atx[1],aretes[i].dx[0],aretes[i].dx[1],aretes[j].dx[0],aretes[j].dx[1]);
 	    }
 	}
     }

@@ -335,9 +335,11 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
         thePath->Fill(theShape,0);
         if ( shape->fill_shp == NULL ) shape->fill_shp=new Shape;
         if ( shape->style->fill_rule.value == SP_WIND_RULE_EVENODD ) {
-          shape->fill_shp->ConvertToShape(theShape,fill_oddEven);
+          if ( shape->fill_shp->ConvertToShape(theShape,fill_oddEven) ) {
+          }
         } else {
-          shape->fill_shp->ConvertToShape(theShape,fill_nonZero);
+          if ( shape->fill_shp->ConvertToShape(theShape,fill_nonZero) ) {
+          }
         }
         delete theShape;
         delete thePath;
@@ -449,7 +451,8 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
       nr_svl_free_list (svl);
       art_free (bp.path);
 #else
-      shape->stroke_shp->ConvertToShape(theShape,fill_nonZero);
+      if ( shape->stroke_shp->ConvertToShape(theShape,fill_nonZero) ) {
+      }
       delete thePath;
       delete theShape;
 #endif

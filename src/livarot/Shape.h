@@ -508,7 +508,9 @@ private:
   void DoEdgeTo (Shape * iS, int iB, int iTo, bool direct, bool sens);
   void GetWindings (Shape * a, Shape * b = NULL, BooleanOp mod =
 		    bool_op_union, bool brutal = false);
+
   void Validate (void);
+
   int Winding (int nPt) const ;
   void SortPointsRounded (void);
   void SortPointsRounded (int s, int e);
