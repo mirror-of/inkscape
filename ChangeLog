@@ -1,3 +1,8 @@
+2004-02-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/libnr/nr-matrix-ops.h (operator*: Matrix*rotate, translate*scale,
+	scale*translate, Matrix*scale): New functions.
+
 2004-02-22  Ted Gould <ted@gould.cx>
 
 	* src/extension/Makefile.am, src/extension/implementation/Makefile.am,
@@ -289,7 +294,7 @@
 
 2004-02-13  Johan Ceuppens  <jceuppen@easynet.be>
 	
-	* src/inkjar/[jar.cpp|jar.h]: changed some file offsets,
+	* src/inkjar/{jar.cpp,jar.h}: changed some file offsets,
 	uncompressing multiple files in a jar works now. There
 	is an improved testing program at the end of jar.cpp.
 	
