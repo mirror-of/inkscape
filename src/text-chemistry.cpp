@@ -31,6 +31,7 @@
 #include "selection.h"
 #include "desktop.h"
 #include "desktop-handles.h"
+#include "text-editing.h"
 
 
 SPItem *
@@ -103,6 +104,9 @@ text_put_on_path()
         return;
     }
 
+    Inkscape::Text::Layout const *layout = te_get_layout(text);
+    Inkscape::Text::Layout::Alignment text_alignment = layout->paragraphAlignment(layout->begin());
+
     // remove transform from text, but recursively scale text's fontsize by the expansion
     scale_text_recursive(text, NR::expansion(SP_ITEM(text)->transform));
     sp_repr_set_attr(SP_OBJECT_REPR(text), "transform", NULL);
@@ -117,6 +121,10 @@ text_put_on_path()
     Inkscape::XML::Node *textpath = sp_repr_new("svg:textPath");
     // reference the shape
     sp_repr_set_attr(textpath, "xlink:href", g_strdup_printf("#%s", SP_OBJECT_REPR(shape)->attribute("id")));
+    if (text_alignment == Inkscape::Text::Layout::RIGHT)
+        sp_repr_set_attr(textpath, "startOffset", "100%");
+    else if (text_alignment == Inkscape::Text::Layout::CENTER)
+        sp_repr_set_attr(textpath, "startOffset", "50%");
     sp_repr_add_child(SP_OBJECT_REPR(text), textpath, NULL);
 
     for ( GSList *i = text_reprs ; i ; i = i->next ) {

@@ -165,6 +165,11 @@ public:
         ARBITRARY_GAP       /// inserts an arbitrarily-sized hole in the flow in line with the current text.
     };
 
+    /** For expressing paragraph alignment. These values are rotated in the
+    case of vertical text, but are not dependent on whether the paragraph is
+    rtl or ltr, thus LEFT is always either left or top. */
+    enum Alignment {LEFT, CENTER, RIGHT, FULL};
+
     /** The CSS spec allows line-height:normal to be whatever the user agent
     thinks will look good. This is our value, as a multiple of font-size. */
     static const double LINE_HEIGHT_NORMAL;
@@ -467,6 +472,8 @@ public:
 
     inline unsigned paragraphIndex(iterator const &it) const;
 
+    inline Alignment paragraphAlignment(iterator const &it) const;
+
     //@}
 
     /// it's useful for this to be public so that ScanlineMaker can use it
@@ -494,8 +501,6 @@ private:
     void _clearOutputObjects();
 
     static const gunichar UNICODE_SOFT_HYPHEN;
-
-    enum Alignment {LEFT, CENTER, RIGHT, FULL};
 
     // ******************* input flow
 
@@ -899,6 +904,9 @@ inline bool Layout::isEndOfSentence(iterator const &it) const
 
 inline unsigned Layout::paragraphIndex(iterator const &it) const
     {return it._char_index == _characters.size() ? _paragraphs.size() - 1 : _characters[it._char_index].line(this).in_paragraph;}
+
+inline Layout::Alignment Layout::paragraphAlignment(iterator const &it) const
+    {return _paragraphs[paragraphIndex(it)].alignment;}
 
 inline bool Layout::iterator::nextGlyph()
 {
