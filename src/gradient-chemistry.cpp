@@ -755,7 +755,7 @@ sp_object_ensure_fill_gradient_normalized (SPObject *object)
 		/* We have to clone gradient */
 		sp_gradient_ensure_vector (SP_GRADIENT (lg));
 		repr = sp_lineargradient_build_repr (lg, TRUE);
-		lg = (SPLinearGradient *) sp_document_add_repr (SP_OBJECT_DOCUMENT (object), repr);
+		lg = (SPLinearGradient *)SP_DOCUMENT_DEFS(SP_OBJECT_DOCUMENT(object))->appendChildRepr(repr);
 		sp_repr_unref (repr);
 		val = g_strdup_printf ("url(#%s)", SP_OBJECT_ID (lg));
 		sstr = sp_object_getAttribute (object, "style", NULL);

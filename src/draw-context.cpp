@@ -627,7 +627,7 @@ spdc_flush_white(SPDrawContext *dc, SPCurve *gc)
 
         if (!dc->white_item) {
             /* Attach repr */
-            sp_document_add_repr(SP_DT_DOCUMENT(dt), repr);
+            dt->currentLayer()->appendChildRepr(repr);
             dc->selection->setRepr(repr);
             sp_repr_unref(repr);
         }

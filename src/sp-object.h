@@ -144,9 +144,12 @@ struct SPObject : public GObject {
 	gchar *id; /* Our very own unique id */
 	SPStyle *style;
 
-	void _updateTotalHRefCount(int increment);
-
 	void setId(gchar const *id);
+
+	SPObject *firstChild() { return children; }
+
+	SPObject *appendChildRepr(SPRepr *repr);
+
 	CollectionPolicy collectionPolicy() const { return _collection_policy; }
 	void setCollectionPolicy(CollectionPolicy policy) {
 		_collection_policy = policy;
@@ -157,8 +160,6 @@ struct SPObject : public GObject {
 			deleteObject(false);
 		}
 	}
-
-	void _sendDeleteSignalRecursive();
 
 	void deleteObject(bool propagate, bool propagate_descendants);
 	void deleteObject(bool propagate=true) {
@@ -277,6 +278,9 @@ struct SPObject : public GObject {
 	 *  @param flags indicating what has been modified
 	 */
 	void emitModified(unsigned int flags);
+
+	void _sendDeleteSignalRecursive();
+	void _updateTotalHRefCount(int increment);
 
 	SigC::Signal1<void, SPObject *> _delete_signal;
 	SPObject *_successor;

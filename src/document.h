@@ -131,18 +131,6 @@ void sp_document_cancel (SPDocument *document);
 gboolean sp_document_undo (SPDocument * document);
 gboolean sp_document_redo (SPDocument * document);
 
-/* Adds repr to document, returning created object (if any) */
-/* Items will be added to root (fixme: should be namedview root) */
-/* Non-item objects will go to root-level defs group */
-SPObject *sp_document_add_repr (SPDocument *document, SPRepr *repr);
-
-#if 0
-/* Deletes repr from document */
-/* fixme: This is not needed anymore - remove it (Lauris) */
-/* Instead simply unparent repr */
-void sp_document_del_repr (SPDocument *document, SPRepr *repr);
-#endif
-
 /* Resource management */
 gboolean sp_document_add_resource (SPDocument *document, const gchar *key, SPObject *object);
 gboolean sp_document_remove_resource (SPDocument *document, const gchar *key, SPObject *object);

@@ -527,16 +527,14 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
                 }
             }
 
-            sp_document_add_repr(in_doc, newgroup);
-            new_obj = in_doc->getObjectByRepr(newgroup);
+            new_obj = SP_DOCUMENT_ROOT(in_doc)->appendChildRepr(newgroup);
             sp_repr_unref(newgroup);
         } else {
             // just add one item
             for (SPObject *child = sp_object_first_child(SP_DOCUMENT_ROOT(doc)); child != NULL; child = SP_OBJECT_NEXT(child) ) {
                 if (SP_IS_ITEM(child)) {
                     SPRepr *newitem = sp_repr_duplicate(SP_OBJECT_REPR(child));
-                    sp_document_add_repr(in_doc, newitem);
-                    new_obj = in_doc->getObjectByRepr(newitem);
+                    new_obj = SP_DOCUMENT_ROOT(in_doc)->appendChildRepr(newitem);
                 }
             }
         }

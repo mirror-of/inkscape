@@ -431,7 +431,7 @@ static void sp_rect_drag(SPRectContext &rc, NR::Point const pt, guint state)
             sp_repr_css_set(repr, css, "style");
             sp_repr_css_attr_unref(css);
         }
-        rc.item = (SPItem *) sp_document_add_repr(SP_DT_DOCUMENT(desktop), repr);
+        rc.item = (SPItem *) desktop->currentLayer()->appendChildRepr(repr);
         sp_repr_unref(repr);
     }
 

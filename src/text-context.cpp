@@ -311,7 +311,7 @@ sp_text_context_setup_text (SPTextContext *tc)
 	SPRepr *rstring = sp_xml_document_createTextNode (sp_repr_document (rtext), "");
 	sp_repr_add_child (rtspan, rstring, NULL);
 	sp_repr_unref (rstring);
-	SPItem *text_item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (ec->desktop), rtext);
+	SPItem *text_item = SP_ITEM(ec->desktop->currentLayer()->appendChildRepr(rtext));
 	/* fixme: Is selection::changed really immediate? */
 	/* yes, it's immediate .. why does it matter? */
 	SP_DT_SELECTION(ec->desktop)->setItem(text_item);

@@ -245,13 +245,23 @@ void SPObject::_updateTotalHRefCount(int increment) {
 	}
 }
 
+void SPObject::setId(gchar const *id) {
+	sp_object_set(this, SP_ATTR_ID, id);
+}
+
+SPObject *SPObject::appendChildRepr(SPRepr *repr) {
+	if (!SP_OBJECT_IS_CLONED(this)) {
+		sp_repr_append_child(SP_OBJECT_REPR(this), repr);
+		return SP_OBJECT_DOCUMENT(this)->getObjectByRepr(repr);
+	} else {
+		g_critical("Attempt to append repr as child of cloned object");
+		return NULL;
+	}
+}
+
 void SPObject::requestOrphanCollection() {
 	g_return_if_fail(document != NULL);
 	document->queueForOrphanCollection(this);
-}
-
-void SPObject::setId(gchar const *id) {
-	sp_object_set(this, SP_ATTR_ID, id);
 }
 
 void SPObject::_sendDeleteSignalRecursive() {

@@ -392,7 +392,7 @@ static void sp_arc_drag(SPArcContext *ac, NR::Point pt, guint state)
 			sp_repr_css_set (repr, css, "style");
 			sp_repr_css_attr_unref (css);
 		}
-		ac->item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
+		ac->item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
 		sp_repr_unref (repr);
 	}
 

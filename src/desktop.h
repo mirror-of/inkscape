@@ -88,9 +88,9 @@ struct StopOnTrue {
 };
 
 
-struct SPDesktop {
-	SPView view;
+class SPSelection;
 
+struct SPDesktop : public SPView {
 	SPDesktopWidget *owner;
 	Inkscape::Application *inkscape;
 
@@ -129,6 +129,9 @@ struct SPDesktop {
 	ColorRGBA fill_color;
 	ColorRGBA stroke_color;
 	gdouble stroke_width;
+
+	SPObject *currentRoot();
+	SPObject *currentLayer();
 
 	SigC::Signal4<bool, ColorComponent, float, bool, bool> _set_colorcomponent_signal;
 	SigC::Signal3<bool, const ColorRGBA &, bool, bool, StopOnTrue> _set_color_signal;

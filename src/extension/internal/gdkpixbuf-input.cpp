@@ -70,7 +70,7 @@ GdkpixbufInput::open (Inkscape::Extension::Input * mod, const char * uri)
             sp_repr_set_double (repr, "height", gdk_pixbuf_get_height (pb));
         }
 
-        sp_document_add_repr (doc, repr);
+        SP_DOCUMENT_ROOT(doc)->appendChildRepr(repr);
         sp_repr_unref (repr);
         sp_document_done (doc);
         gdk_pixbuf_unref (pb);

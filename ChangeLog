@@ -1,3 +1,27 @@
+2004-06-13  MenTaLguY  <mental@rydia.net>
+
+	* src/arc-context.cpp, src/desktop.cpp, src/desktop.h, src/document.cpp,
+	  src/document.h, src/draw-context.cpp, src/dyna-draw-context.cpp,
+	  src/file.cpp, src/gradient-chemistry.cpp, src/interface.cpp,
+	  src/rect-context.cpp, src/selection-chemistry.cpp, src/sp-object.cpp,
+	  src/sp-object.h, src/spiral-context.cpp, src/splivarot.cpp,
+	  src/star-context.cpp, src/svg-view.h, src/text-context.cpp,
+	  src/extension/internal/gdkpixbuf-input.cpp:
+
+	  added SPDesktop::currentRoot() and SPDesktop::currentLayer(), which
+	  report the current "view" root and current "editing" layer,
+	  respectively; I've also added SPObject::appendReprChild().
+
+	  Between the two of them, they replace sp_document_add_repr, which
+	  has been removed.  Generally to add a repr to a document, you would
+	  now use either:
+
+	   SP_DOCUMENT_DEFS(document)->appendReprChild(repr);
+
+	  or:
+
+	   desktop->currentLayer()->appendReprChild(repr);
+
 2004-06-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/sp-clippath.h, src/sp-gradient.h, src/sp-marker.h, src/sp-mask.h, src/sp-pattern.h:

@@ -715,26 +715,6 @@ sp_document_idle_handler (gpointer data)
 	return repeat;
 }
 
-SPObject *
-sp_document_add_repr (SPDocument *document, SPRepr *repr)
-{
-	GType type;
-
-	g_return_val_if_fail (document != NULL, NULL);
-	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
-	g_return_val_if_fail (repr != NULL, NULL);
-
-	type = sp_repr_type_lookup (repr);
-
-	if (g_type_is_a (type, SP_TYPE_ITEM)) {
-		sp_repr_append_child (sp_document_repr_root(document), repr);
-	} else if (g_type_is_a (type, SP_TYPE_OBJECT)) {
-		sp_repr_append_child (SP_OBJECT_REPR (SP_DOCUMENT_DEFS(document)), repr);
-	}
-
-	return document->getObjectByRepr(repr);
-}
-
 static int
 is_within (const NRRect *what, const NRRect *box)
 {

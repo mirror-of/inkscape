@@ -978,7 +978,7 @@ sp_selected_path_create_offset_object (int expand,bool updating)
         }
       
         sp_repr_set_attr (repr, "style", style);
-        SPItem* nitem = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
+        SPItem* nitem = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
 
         // The object just created from a temporary repr is only a seed. 
         // We need to invoke its write which will update its real repr (in particular adding d=)

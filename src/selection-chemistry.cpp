@@ -124,9 +124,6 @@ void sp_selection_duplicate()
 
         sp_repr_append_child(parent, copy);
 
-        //item = (SPItem *) sp_document_add_repr(SP_DT_DOCUMENT(desktop), copy);
-        //g_assert(item != NULL);
-
         newsel = g_slist_prepend(newsel, copy);
         reprs = g_slist_remove(reprs, reprs->data);
         sp_repr_unref(copy);
@@ -739,7 +736,7 @@ void sp_selection_paste(bool in_place)
     for (GSList *l = clipboard; l != NULL; l = l->next) {
         SPRepr *repr = (SPRepr *) l->data;
         SPRepr *copy = sp_repr_duplicate(repr);
-        sp_document_add_repr(SP_DT_DOCUMENT(desktop), copy);
+        desktop->currentLayer()->appendChildRepr(copy);
         copied = g_slist_append(copied, copy);
         sp_repr_unref(copy);
     }
@@ -1407,9 +1404,7 @@ sp_selection_tile()
                                  NR::Rect (sp_desktop_d2doc_xy_point(desktop, r.min()), sp_desktop_d2doc_xy_point(desktop, r.max())),
                                  document, NR::Matrix(NR::translate(sp_desktop_d2doc_xy_point (desktop, r.min()))));
 
-    // FIXME: to current layer!
-    sp_document_add_repr (document, rect);
-    SPItem *rectangle = SP_ITEM (document->getObjectByRepr(rect));
+    SPItem *rectangle = SP_ITEM(desktop->currentLayer()->appendChildRepr(rect));
     sp_repr_unref (rect);
 
     selection->clear();

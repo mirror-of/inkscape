@@ -402,7 +402,7 @@ sp_spiral_drag (SPSpiralContext * sc, NR::Point p, guint state)
                 else
                   g_print ("sp_spiral_drag: cant get style\n");
 
-		sc->item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
+		sc->item = (SPItem *) desktop->currentLayer()->appendChildRepr(repr);
 		sp_repr_unref (repr);
 	}
 

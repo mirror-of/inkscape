@@ -579,7 +579,7 @@ set_to_accumulated(SPDynaDrawContext *dc)
             }
             dc->repr = repr;
 
-            sp_document_add_repr(SP_DT_DOCUMENT(desktop), dc->repr);
+            desktop->currentLayer()->appendChildRepr(dc->repr);
             sp_repr_unref(dc->repr);
             SP_DT_SELECTION(desktop)->setRepr(dc->repr);
         }

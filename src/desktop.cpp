@@ -238,6 +238,14 @@ sp_desktop_dispose (GObject *object)
     dt->sel_modified_connection.~Connection();
 }
 
+SPObject *SPDesktop::currentRoot() {
+    return SP_DOCUMENT_ROOT(SP_VIEW_DOCUMENT(this));
+}
+
+SPObject *SPDesktop::currentLayer() {
+    return currentRoot();
+}
+
 static void
 sp_desktop_request_redraw (SPView *view)
 {

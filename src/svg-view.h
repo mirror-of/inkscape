@@ -27,9 +27,7 @@ class SPSVGViewClass;
 
 
 
-struct SPSVGView {
-	SPView view;
-
+struct SPSVGView : public SPView {
 	unsigned int dkey;
 
 	SPCanvasGroup *parent;

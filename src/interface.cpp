@@ -1012,7 +1012,7 @@ sp_ui_drag_data_received (GtkWidget * widget,
 
 		sp_repr_document_unref (rnewdoc);
 
-		sp_document_add_repr (doc, newgroup);
+                SP_DOCUMENT_ROOT(doc)->appendChildRepr(newgroup);
 		sp_repr_unref (newgroup);
 		sp_document_done (doc);
 		
@@ -1087,7 +1087,7 @@ sp_ui_import_one_file(gchar * filename)
 
 		sp_repr_document_unref (rnewdoc);
 
-		sp_document_add_repr (doc, newgroup);
+                SP_DOCUMENT_ROOT(doc)->appendChildRepr(newgroup);
 		sp_repr_unref (newgroup);
 		sp_document_done (doc);
 		return;
@@ -1119,7 +1119,7 @@ sp_ui_import_one_file(gchar * filename)
 			sp_repr_set_attr (repr, "sodipodi:absref", filename);
 			sp_repr_set_double (repr, "width", gdk_pixbuf_get_width (pb));
 			sp_repr_set_double (repr, "height", gdk_pixbuf_get_height (pb));
-			sp_document_add_repr (doc, repr);
+                        SP_DOCUMENT_ROOT(doc)->appendChildRepr(repr);
 			sp_repr_unref (repr);
 			sp_document_done (doc);
 			gdk_pixbuf_unref (pb);

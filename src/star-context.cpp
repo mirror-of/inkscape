@@ -435,7 +435,7 @@ sp_star_drag(SPStarContext *sc, NR::Point p, guint state)
             sp_repr_css_set (repr, css, "style");
             sp_repr_css_attr_unref (css);
         }
-        sc->item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (desktop), repr);
+        sc->item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
         sp_repr_unref (repr);
     }
 
