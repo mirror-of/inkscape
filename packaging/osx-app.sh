@@ -26,6 +26,13 @@ if [ ! -x $binary ]; then
         echo "Not executable: $binary" >&2
         exit 1
 fi
+shift
+
+plist=$1
+if [ ! -f $plist ]; then
+	echo "Need plist file" >&2
+	exit 1
+fi
 
 
 # Fix a given executable or library to be relocatable
@@ -83,6 +90,7 @@ done
 
 # Pull down all the share files
 rsync -av `dirname $binary`/../share/$binname/* $package/Contents/Resources/
+cp $plist $package/Contents/Info.plist
 
 # Make an image
 /usr/bin/hdiutil create -srcfolder $pkg.app $pkg.dmg
