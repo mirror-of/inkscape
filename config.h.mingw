@@ -28,6 +28,9 @@
 #define ENABLE_NLS                    1
 #define HAVE_BIND_TEXTDOMAIN_CODESET  1
 
+/* keep binreloc off */
+#define BR_PTHREADS 0
+#undef ENABLE_BINRELOC
 
 #define PANGO_ENABLE_ENGINE           1
 
