@@ -224,9 +224,6 @@ sp_fill_style_widget_update (SPWidget *spw, SPSelection *sel)
 	gfloat c[5];
 	SPLinearGradient *lg;
 	SPRadialGradient *rg;
-#if 0
-	NRPoint p0, p1, p2;
-#endif
 	NRMatrix fctm, gs2d;
 	NRRect fbb;
 

@@ -409,18 +409,6 @@ sp_desktop_dialog (void)
 		m = gtk_menu_new ();
 		gtk_widget_show (m);
 
-		// FIXME: try to enable the following (it's from gnome-print I think)
-#if 0
-		if (!papers) papers = gnome_print_paper_get_list ();
-		for (ll = papers; ll != NULL; ll = ll->next) {
-			const GnomePrintPaper * paper = (GnomePrintPaper *)ll->data;
-			i = gtk_menu_item_new_with_label (paper->name);
-			gtk_widget_show (i);
-			g_signal_connect (G_OBJECT (i), "activate", G_CALLBACK (sp_doc_dialog_paper_selected), (gpointer) paper);
-			gtk_menu_append (GTK_MENU (m), i);
-		}
-#endif
-
 		i = gtk_menu_item_new_with_label (_("Custom"));
 		gtk_widget_show (i);
 		g_signal_connect (G_OBJECT (i), "activate", G_CALLBACK (sp_doc_dialog_paper_selected), NULL);
@@ -621,19 +609,7 @@ sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop)
 		doch = sp_document_height (SP_DT_DOCUMENT (desktop));
 
 		pos = 1;
-
-#if 0
-		for (l = papers; l != NULL; l = l->next) {
-			gdouble pw, ph;
-			const GnomePrintPaper *paper = (GnomePrintPaper *)l->data;
-			pw = paper->width;
-			ph = paper->height;
-			if ((fabs (docw - pw) < 1.0) && (fabs (doch - ph) < 1.0)) break;
-			pos += 1;
-		}
-#else
 		l = NULL;
-#endif
 
 		ww = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dialog), "widthsb");
 		hw = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dialog), "heightsb");
@@ -692,6 +668,9 @@ sp_color_picker_destroy (GtkObject *cp, gpointer data)
 	if (w) gtk_object_destroy (w);
 }
 
+/**
+ * Creates a new color picker for the desktop properties dialog.
+ */
 static GtkWidget *
 sp_color_picker_new (gchar *colorkey, gchar *alphakey, gchar *title, guint32 rgba)
 {
@@ -702,9 +681,7 @@ sp_color_picker_new (gchar *colorkey, gchar *alphakey, gchar *title, guint32 rgb
 	g_object_set_data (G_OBJECT (b), "title", title);
 
 	cpv = sp_color_preview_new (rgba);
-#if 0
-	sp_color_preview_set_show_solid  (SP_COLOR_PREVIEW (rgba), FALSE);
-#endif
+
 	gtk_widget_show (cpv);
 	gtk_container_add (GTK_CONTAINER (b), cpv);
 	g_object_set_data (G_OBJECT (b), "preview", cpv);

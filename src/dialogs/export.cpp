@@ -464,11 +464,7 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
 	if (!SP_ACTIVE_DESKTOP) return;
 
 	fe = (GtkWidget *)gtk_object_get_data (base, "filename");
-#if 0
-	filename = gnome_file_entry_get_full_path (GNOME_FILE_ENTRY (fe), FALSE);
-#else
 	filename = gtk_entry_get_text (GTK_ENTRY (fe));
-#endif
 
 	x0 = sp_export_value_get_pt (base, "x0");
 	y0 = sp_export_value_get_pt (base, "y0");
