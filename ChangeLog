@@ -1,3 +1,7 @@
+2003-11-16  MenTaLguY <mental@rydia.net>
+
+	* src/document.c: reworked sp_desktop_items_*in_box family to be layer-aware
+
 2003-11-16  Kees Cook <inkscape@outflux.net>
 
 	* Cleaned up "desactivate" into "deactivate"

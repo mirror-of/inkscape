@@ -614,6 +614,50 @@ sp_document_add_repr (SPDocument *document, SPRepr *repr)
 	return sp_document_lookup_id (document, sp_repr_attr (repr, "id"));
 }
 
+static int
+is_within (const NRRectD *what, const NRRectF *box)
+{
+	return (box->x0 > what->x0) && (box->x1 < what->x1)
+	    && (box->y0 > what->y0) && (box->y1 < what->y1);
+}
+
+static int
+overlaps (const NRRectD *what, const NRRectF *box)
+{
+	return (((box->x0 > what->x0) && (box->x0 < what->x1)) ||
+	        ((box->x1 > what->x0) && (box->x1 < what->x1))) &&
+	       (((box->y0 > what->y0) && (box->y0 < what->y1)) ||
+	        ((box->y1 > what->y0) && (box->y1 < what->y1)));
+}
+
+static GSList *
+find_items_in_area (GSList *s, SPGroup *group, NRRectD *area,
+                    int (*test)(const NRRectD *, const NRRectF *))
+{
+	SPObject * o;
+
+	g_return_val_if_fail (SP_IS_GROUP (group), s);
+
+	for ( o = group->children ; o != NULL ; o = o->next ) {
+		if (!SP_IS_ITEM (o)) continue;
+		if (SP_IS_GROUP (o) &&
+		    SP_GROUP (o)->mode == SP_GROUP_MODE_LAYER)
+		{
+			s = find_items_in_area (s, SP_GROUP (o), area, test);
+		} else {
+			NRRectF box;
+			SPItem * child = SP_ITEM (o);
+
+			sp_item_bbox_desktop (child, &box);
+			if (test (area, &box)) {
+				s = g_slist_append (s, child);
+			}
+		}
+	}
+
+	return s;
+}
+
 /*
  * Return list of items, contained in box
  *
@@ -624,33 +668,13 @@ sp_document_add_repr (SPDocument *document, SPRepr *repr)
 GSList *
 sp_document_items_in_box (SPDocument *document, NRRectD *box)
 {
-	SPGroup * group;
-	SPItem * child;
-	SPObject * o;
-	NRRectF b;
-	GSList * s;
-
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
 	g_return_val_if_fail (document->priv != NULL, NULL);
 	g_return_val_if_fail (box != NULL, NULL);
 
-	group = SP_GROUP (document->root);
-
-	s = NULL;
-
-	for (o = group->children; o != NULL; o = o->next) {
-		if (SP_IS_ITEM (o)) {
-			child = SP_ITEM (o);
-			sp_item_bbox_desktop (child, &b);
-			if ((b.x0 > box->x0) && (b.x1 < box->x1) &&
-			    (b.y0 > box->y0) && (b.y1 < box->y1)) {
-				s = g_slist_append (s, child);
-			}
-		}
-	}
-
-	return s;
+	return find_items_in_area (NULL, SP_GROUP (document->root),
+	                           box, is_within);
 }
 
 /*
@@ -663,36 +687,13 @@ sp_document_items_in_box (SPDocument *document, NRRectD *box)
 GSList *
 sp_document_partial_items_in_box (SPDocument *document, NRRectD *box)
 {
-	SPGroup * group;
-	SPItem * child;
-	SPObject * o;
-	NRRectF b;
-	GSList * s;
-
 	g_return_val_if_fail (document != NULL, NULL);
 	g_return_val_if_fail (SP_IS_DOCUMENT (document), NULL);
 	g_return_val_if_fail (document->priv != NULL, NULL);
 	g_return_val_if_fail (box != NULL, NULL);
 
-	group = SP_GROUP (document->root);
-
-	s = NULL;
-
-	for (o = group->children; o != NULL; o = o->next) {
-		if (SP_IS_ITEM (o)) {
-			child = SP_ITEM (o);
-			sp_item_bbox_desktop (child, &b);
-			if ((((b.x0 > box->x0) && (b.x0 < box->x1)) ||
-			     ((b.x1 > box->x0) && (b.x1 < box->x1)))
-			    &&
-			    (((b.y0 > box->y0) && (b.y0 < box->y1)) ||
-			     ((b.y1 > box->y0) && (b.y1 < box->y1)))) {
-				s = g_slist_append (s, child);
-			}
-		}
-	}
-
-	return s;
+	return find_items_in_area (NULL, SP_GROUP (document->root),
+	                           box, overlaps);
 }
 
 /* Resource management */
