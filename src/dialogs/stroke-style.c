@@ -572,6 +572,9 @@ sp_stroke_radio_button(GtkWidget* tb, const char* n, const char* xpm,
 }
 
 
+/**
+ * Creates a new widget for the line stroke style.
+ */
 GtkWidget *
 sp_stroke_style_line_widget_new (void)
 {

@@ -5,6 +5,16 @@
 	* doc/class-hierarchy.dia: added first shot at documenting the
 	  class hierarchy in Dia
 
+2003-11-27 Bryce <bryce@osdl.org>
+	* doc/architecture.svg: Added architecture.svg to try to capture
+	  the subsystems at a block layer level.
+	* Adding defines, functions, etc. for allowing markers into
+	  inkscape-stock.h, sp-marker.*, sp-path.c, sp-shape.h, style.*,
+	  and dialogs/stroke-style.c
+	* Added some new UI utility functions to spw-utilities.* and
+	  changed dialog/stroke-style.c to use them, in order to simplify
+	  redundancies in the code a bit.
+
 2003-11-27 MenTaLguY <mental@rydia.net>
 
 	* src/desktop.c: the coord status bar area should not have a
