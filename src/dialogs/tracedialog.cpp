@@ -141,6 +141,15 @@ class TraceDialogImpl : public TraceDialog, public Gtk::Dialog
     Gtk::Label            potraceQuantNrColorLabel;
     Gtk::SpinButton       potraceQuantNrColorSpinner;
 
+    //quantized multiple path scanning
+    Gtk::Frame            potraceQuantScanFrame;
+    Gtk::HBox             potraceQuantScanBox;
+    Gtk::VBox             potraceQuantScanVBox;
+    Gtk::RadioButton      potraceQuantScanColorRadioButton;
+    Gtk::RadioButton      potraceQuantScanMonoRadioButton;
+    Gtk::Label            potraceQuantScanNrColorLabel;
+    Gtk::SpinButton       potraceQuantScanNrColorSpinner;
+
     //preview
     Gtk::Frame            potracePreviewFrame;
     Gtk::HBox             potracePreviewBox;
@@ -175,19 +184,30 @@ void TraceDialogImpl::potraceProcess(bool do_i_trace)
     //##### Get the tracer and engine
     Inkscape::Trace::Potrace::PotraceTracingEngine pte;
 
-    //##### Get the settings
+    //##### Get the single-scan settings
     /* which one? */
-    pte.setUseBrightness(potraceBrightnessRadioButton.get_active());
-    pte.setUseCanny(potraceCannyRadioButton.get_active());
-    pte.setUseQuantization(potraceQuantRadioButton.get_active());
+    if (potraceBrightnessRadioButton.get_active())
+        pte.setTraceType(Inkscape::Trace::Potrace::TRACE_BRIGHTNESS);
+    else if (potraceCannyRadioButton.get_active())
+        pte.setTraceType(Inkscape::Trace::Potrace::TRACE_CANNY);
+    else if (potraceQuantRadioButton.get_active())
+        pte.setTraceType(Inkscape::Trace::Potrace::TRACE_QUANT);
+    else if (potraceQuantScanColorRadioButton.get_active())
+        {
+        pte.setTraceType(Inkscape::Trace::Potrace::TRACE_QUANT_COLOR);
+        pte.setInvert(false);
+        }
+    else if (potraceQuantScanMonoRadioButton.get_active())
+        {
+        pte.setTraceType(Inkscape::Trace::Potrace::TRACE_QUANT_MONO);
+        pte.setInvert(false);
+        }
 
     /* brightness */
     double brightnessThreshold = potraceBrightnessSpinner.get_value();
     pte.setBrightnessThreshold(brightnessThreshold);
 
     /* canny */
-    //double cannyLowThreshold = potraceCannyLoSpinner.get_value();
-    //pte.setCannyLowThreshold(cannyLowThreshold);
     double cannyHighThreshold = potraceCannyHiSpinner.get_value();
     pte.setCannyHighThreshold(cannyHighThreshold);
 
@@ -198,6 +218,10 @@ void TraceDialogImpl::potraceProcess(bool do_i_trace)
     /* inversion */
     bool invert = potraceInvertButton.get_active();
     pte.setInvert(invert);
+
+    //##### Get multiple-scan settings
+    int quantScanNrColors = potraceQuantScanNrColorSpinner.get_value_as_int();
+    pte.setQuantScanNrColors(quantScanNrColors);
 
     //##### Get intermediate bitmap image
     GdkPixbuf *pixbuf = tracer.getSelectedImage();

@@ -26,6 +26,15 @@ namespace Trace {
 
 namespace Potrace {
 
+typedef enum
+    {
+    TRACE_BRIGHTNESS,
+    TRACE_CANNY,
+    TRACE_QUANT,
+    TRACE_QUANT_COLOR,
+    TRACE_QUANT_MONO
+    } TraceType;
+
 
 class PotraceTracingEngine : public TracingEngine
 {
@@ -43,27 +52,25 @@ class PotraceTracingEngine : public TracingEngine
     virtual ~PotraceTracingEngine()
         {}
 
+    void setTraceType(TraceType val)
+        {
+        traceType = val;
+        }
+    TraceType getTraceType()
+        {
+        return traceType;
+        }
+
     /**
-     * Sets whether I invert the product of the other filter(s)
+     * Sets/gets whether I invert the product of the other filter(s)
      */
     void setInvert(bool val)
         {
         invert = val;
         }
-    int getInvert()
+    bool getInvert()
         {
         return invert;
-        }
-    /**
-     * Do I use the brightness threshold to make line art?
-     */
-    void setUseQuantization(bool val)
-        {
-        useQuantization = val;
-        }
-    bool getUseQuantization()
-        {
-        return useQuantization;
         }
 
     /**
@@ -78,19 +85,6 @@ class PotraceTracingEngine : public TracingEngine
         return quantizationNrColors;
         }
 
-
-    /**
-     * Do I use the brightness threshold to make line art?
-     */
-    void setUseBrightness(bool val)
-        {
-        useBrightness = val;
-        }
-    bool getUseBrightness()
-        {
-        return useBrightness;
-        }
-
     /**
      * Sets the halfway point for black/white
      */
@@ -101,33 +95,6 @@ class PotraceTracingEngine : public TracingEngine
     double getBrightnessThreshold()
         {
         return brightnessThreshold;
-        }
-
-
-
-    /**
-     * Do I use Canny filtering
-     */
-    void setUseCanny(bool val)
-        {
-        useCanny = val;
-        }
-    bool getUseCanny()
-        {
-        return useCanny;
-        }
-
-
-    /**
-     * Sets lower cutoff for canny non-maximalizing
-     */
-    void setCannyLowThreshold(double val)
-        {
-        cannyLowThreshold = val;
-        }
-    double getCannyLowThreshold()
-        {
-        return cannyLowThreshold;
         }
 
     /**
@@ -141,6 +108,19 @@ class PotraceTracingEngine : public TracingEngine
         {
         return cannyHighThreshold;
         }
+
+    /**
+     * Sets the number of colors for quant multiscan
+     */
+    void setQuantScanNrColors(int val)
+        {
+        quantScanNrColors = val;
+        }
+    int getQuantScanNrColors()
+        {
+        return quantScanNrColors;
+        }
+
 
     /**
      *  This is the working method of this implementing class, and all
@@ -169,21 +149,25 @@ class PotraceTracingEngine : public TracingEngine
 
     private:
 
+    TraceType traceType;
+
     //## do i invert at the end?
     bool invert;
 
-    //## quantization items
-    bool useQuantization;
+    //## Color-->b&w quantization
     int quantizationNrColors;
 
     //## brightness items
-    bool useBrightness;
     double brightnessThreshold;
 
     //## canny items
-    bool useCanny;
-    double cannyLowThreshold;
     double cannyHighThreshold;
+
+    //## Color-->multiscan quantization
+    int quantScanNrColors;
+
+    TracingEngineResult *traceMultiple(GdkPixbuf *pixbuf, int *nrPaths);
+    TracingEngineResult *traceSingle(GdkPixbuf *pixbuf, int *nrPaths);
 
 
 };//class PotraceTracingEngine

@@ -180,21 +180,18 @@ void Tracer::traceThread()
         }
 
     int nrPaths;
-    TracingEngineResult *result = engine->trace(pixbuf, &nrPaths);
-    char *d = result->getPathData();
+    TracingEngineResult *results = engine->trace(pixbuf, &nrPaths);
 
-    //## EXAMPLE:  Check if we should stop
-    if (!keepGoing)
+    //### Check if we should stop
+    if (!keepGoing || !results || nrPaths<1)
         {
         engine = NULL;
         return;
         }
 
-
-    SPRepr *pathRepr    = sp_repr_new("svg:path");
-    SPRepr *imgRepr     = SP_OBJECT(img)->repr;
-    sp_repr_set_attr(pathRepr, "d", d);
-    sp_repr_set_attr(pathRepr, "d", d);
+    //### Get pointers to the <image> and its parent
+    SPRepr *imgRepr   = SP_OBJECT(img)->repr;
+    SPRepr *par       = sp_repr_parent(imgRepr);
 
     //### Get some information for the new transform()
     double x      = 0.0;
@@ -229,26 +226,54 @@ void Tracer::traceThread()
     tf *= selectedItem->transform;
 
 
-    //#Add to tree
-    SPRepr *par = sp_repr_parent(imgRepr);
-    sp_repr_add_child(par, pathRepr, imgRepr);
+    //#OK.  Now let's start making new nodes
 
-    delete result;
+    SPRepr *groupRepr = NULL;
 
-    //### Apply the transform from the image to the new shape
-    SPObject *reprobj = doc->getObjectByRepr(pathRepr);
-    if (reprobj)
+    //# if more than 1, make a <g>roup of <path>s
+    if (nrPaths > 1)
         {
-        SPItem *newItem = SP_ITEM(reprobj);
-        sp_item_write_transform(newItem, pathRepr, tf, NULL);
+        groupRepr = sp_repr_new("svg:g");
+        sp_repr_add_child(par, groupRepr, imgRepr);
         }
 
-    // Select the new path
-    selection->clear();
-    selection->addRepr(pathRepr);
+    for (TracingEngineResult *result=results ;
+                  result ; result=result->next)
+        {
+        SPRepr *pathRepr = sp_repr_new("svg:path");
+        sp_repr_set_attr(pathRepr, "style", result->getStyle());
+        sp_repr_set_attr(pathRepr, "d",     result->getPathData());
 
-    // Clean up
-    sp_repr_unref (pathRepr);
+        if (nrPaths > 1)
+            sp_repr_add_child(groupRepr, pathRepr, NULL);
+        else
+            sp_repr_add_child(par, pathRepr, imgRepr);
+
+        //### Apply the transform from the image to the new shape
+        SPObject *reprobj = doc->getObjectByRepr(pathRepr);
+        if (reprobj)
+            {
+            SPItem *newItem = SP_ITEM(reprobj);
+            sp_item_write_transform(newItem, pathRepr, tf, NULL);
+            }
+        if (nrPaths == 1)
+            {
+            selection->clear();
+            selection->addRepr(pathRepr);
+            }
+        sp_repr_unref (pathRepr);
+        }
+
+
+    delete results;
+
+    // If we have a group, then focus on, then forget it
+    if (nrPaths > 1)
+        {
+        selection->clear();
+        selection->addRepr(groupRepr);
+        sp_repr_unref (groupRepr);
+        }
 
     //## inform the document, so we can undo
     sp_document_done(doc);

@@ -35,18 +35,37 @@ extern "C" {
 #endif
 
 
+/**
+ *
+ */
 GrayMap *grayMapGaussian(GrayMap *me);
 
+/**
+ *
+ */
 RgbMap *rgbMapGaussian(RgbMap *me);
 
-
+/**
+ *
+ */
 GrayMap *grayMapCanny(GrayMap *gm, 
              double lowThreshold, double highThreshold);
 
+/**
+ *
+ */
 GdkPixbuf *gdkCanny(GdkPixbuf *img,
             double lowThreshold, double highThreshold);
 
+/**
+ * Quantize an RGB image to a reduced number of colors.  bitsPerSample
+ * is usually 3 - 5 out of 8 to conserve cpu and memory
+ */
+RgbMap *rgbMapQuantize(RgbMap *rgbMap, int bitsPerSample, int nrColors);
 
+/**
+ *
+ */
 GrayMap *quantizeBand(RgbMap *rgbmap, int nrColors);
 
 

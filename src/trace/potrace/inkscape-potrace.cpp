@@ -87,17 +87,14 @@ PotraceTracingEngine::PotraceTracingEngine()
 {
 
     //##### Our defaults
-    invert = false;
+    invert    = false;
+    traceType = TRACE_BRIGHTNESS;
 
-    useQuantization      = false;
     quantizationNrColors = 8;
 
-    useBrightness        = true;
     brightnessThreshold  = 0.45;
 
-    useCanny             = false;
     cannyHighThreshold   = 0.65;
-    cannyLowThreshold    = 0.1;
 
 
     //##### Potrace's defaults
@@ -249,7 +246,7 @@ filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
     GrayMap *newGm = NULL;
 
     /*### Color quantization -- banding ###*/
-    if (engine.getUseQuantization())
+    if (engine.getTraceType() == TRACE_QUANT)
         {
         RgbMap *rgbmap = gdkPixbufToRgbMap(pixbuf);
         //rgbMap->writePPM(rgbMap, "rgb.ppm");
@@ -260,7 +257,7 @@ filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
         }
 
     /*### Brightness threshold ###*/
-    else if (engine.getUseBrightness())
+    else if (engine.getTraceType() == TRACE_BRIGHTNESS)
         {
         GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
 
@@ -285,11 +282,10 @@ filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
         }
 
     /*### Canny edge detection ###*/
-    else if (engine.getUseCanny())
+    else if (engine.getTraceType() == TRACE_CANNY)
         {
         GrayMap *gm = gdkPixbufToGrayMap(pixbuf);
-        newGm = grayMapCanny(gm, 
-               engine.getCannyLowThreshold(), engine.getCannyHighThreshold());
+        newGm = grayMapCanny(gm, 0.1, engine.getCannyHighThreshold());
         gm->destroy(gm);
         //newGm->writePPM(newGm, "canny.ppm");
         //return newGm;
@@ -313,32 +309,82 @@ filter(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
 }
 
 
+static RgbMap *
+filterColor(PotraceTracingEngine &engine, GdkPixbuf * pixbuf)
+{
+    if (!pixbuf)
+        return NULL;
+
+    RgbMap *newGm = NULL;
+
+    /*### Color quant multiscan ###*/
+    if (engine.getTraceType() == TRACE_QUANT_COLOR)
+        {
+        RgbMap *gm = gdkPixbufToRgbMap(pixbuf);
+        newGm = rgbMapQuantize(gm, 4, engine.getQuantScanNrColors());
+
+        }
+
+    /*### Quant multiscan ###*/
+    else if (engine.getTraceType() == TRACE_QUANT_MONO)
+        {
+        RgbMap *gm    = gdkPixbufToRgbMap(pixbuf);
+        RgbMap *newGm = rgbMapQuantize(gm, 4, engine.getQuantScanNrColors());
+        //Turn to grays
+        for (int y=0 ; y<newGm->height ; y++)
+            {
+            for (int x=0 ; x<newGm->width ; x++)
+                {
+                RGB rgb = newGm->getPixel(newGm, x, y);
+                int grayVal = (rgb.r + rgb.g + rgb.b) / 3;
+                rgb.r = rgb.g = rgb.b = grayVal;
+                newGm->setPixelRGB(newGm, x, y, rgb);
+                }
+            }
+        }
+
+    return newGm;//none of the above
+}
+
+
 
 
 GdkPixbuf *
 PotraceTracingEngine::preview(GdkPixbuf * pixbuf)
 {
-    GrayMap *gm = filter(*this, pixbuf);
-    if (!gm)
-        return NULL;
+    if ( traceType == TRACE_QUANT_COLOR ||
+         traceType == TRACE_QUANT_MONO   )
+        {
+        RgbMap *gm = filterColor(*this, pixbuf);
+        if (!gm)
+            return NULL;
 
-    GdkPixbuf *newBuf = grayMapToGdkPixbuf(gm);
+        GdkPixbuf *newBuf = rgbMapToGdkPixbuf(gm);
 
-    gm->destroy(gm);
+        gm->destroy(gm);
 
-    return newBuf;
+        return newBuf;
+        }
+    else
+        {
+        GrayMap *gm = filter(*this, pixbuf);
+        if (!gm)
+            return NULL;
 
+        GdkPixbuf *newBuf = grayMapToGdkPixbuf(gm);
+
+        gm->destroy(gm);
+
+        return newBuf;
+        }
 }
 
 
 /**
- *  This is the working method of this interface, and all
- *  implementing classes.  Take a GdkPixbuf, trace it, and
- *  return the path data that is compatible with the d="" attribute
- *  of an SVG <path> element.
+ *  This is called for a single scan
  */
 TracingEngineResult *
-PotraceTracingEngine::trace(GdkPixbuf * thePixbuf, int *nrPaths)
+PotraceTracingEngine::traceSingle(GdkPixbuf * thePixbuf, int *nrPaths)
 {
 
     if (!thePixbuf)
@@ -347,11 +393,6 @@ PotraceTracingEngine::trace(GdkPixbuf * thePixbuf, int *nrPaths)
     GrayMap *grayMap = filter(*this, thePixbuf);
     if (!grayMap)
         return NULL;
-
-    //Set up for messages
-    keepGoing            = 1;
-    potraceStatusFunc     = potraceStatus;
-    potraceStatusUserData = (void *)this;
 
     bitmap_t *bm = bm_new(grayMap->width, grayMap->height);
     bm_clear(bm, 0);
@@ -431,6 +472,53 @@ PotraceTracingEngine::trace(GdkPixbuf * thePixbuf, int *nrPaths)
     return result;
 }
 
+
+/**
+ *  Called for multiple-scanning algorithms
+ */
+TracingEngineResult *
+PotraceTracingEngine::traceMultiple(GdkPixbuf * thePixbuf, int *nrPaths)
+{
+
+    if (!thePixbuf)
+        return NULL;
+
+    RgbMap *rgbMap = filterColor(*this, thePixbuf);
+    if (!rgbMap)
+        return NULL;
+
+    TracingEngineResult *results = NULL;
+
+    return results;
+}
+
+
+
+/**
+ *  This is the working method of this interface, and all
+ *  implementing classes.  Take a GdkPixbuf, trace it, and
+ *  return the path data that is compatible with the d="" attribute
+ *  of an SVG <path> element.
+ */
+TracingEngineResult *
+PotraceTracingEngine::trace(GdkPixbuf * thePixbuf, int *nrPaths)
+{
+
+    //Set up for messages
+    keepGoing             = 1;
+    potraceStatusFunc     = potraceStatus;
+    potraceStatusUserData = (void *)this;
+
+    if ( traceType == TRACE_QUANT_COLOR ||
+         traceType == TRACE_QUANT_MONO   )
+        {
+        return traceMultiple(thePixbuf, nrPaths);
+        }
+    else
+        {
+        return traceSingle(thePixbuf, nrPaths);
+        }
+}
 
 
 
