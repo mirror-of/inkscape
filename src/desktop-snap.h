@@ -34,7 +34,7 @@
 class Snapper
 {
 public:
-    Snapper(NR::Coord const d);
+    Snapper(SPNamedView const *nv, NR::Coord const d);
     virtual ~Snapper() {}
 
     enum PointType {
@@ -53,8 +53,7 @@ public:
 
     bool will_snap_something() const;
 
-    virtual NR::Coord vector_snap(SPDesktop const *dt,
-                                  PointType t,
+    virtual NR::Coord vector_snap(PointType t,
                                   NR::Point &req,
                                   NR::Point const &d) const = 0;
 protected:
@@ -62,6 +61,7 @@ protected:
     NR::Coord intersector_a_vector_snap(NR::Point &req, NR::Point const &mv,
                                         NR::Point const &n, NR::Coord const d) const;
 
+    SPNamedView const *_named_view;
     
 private:
     NR::Coord _distance;
@@ -74,10 +74,9 @@ private:
 class GridSnapper : public Snapper
 {
 public:
-    GridSnapper(NR::Coord const d);
+    GridSnapper(SPNamedView const *nv, NR::Coord const d);
 
-    NR::Coord vector_snap(SPDesktop const *dt,
-                          PointType t,
+    NR::Coord vector_snap(PointType t,
                           NR::Point &req,
                           NR::Point const &d) const;
     
@@ -88,34 +87,33 @@ public:
 class GuideSnapper : public Snapper
 {
 public:
-    GuideSnapper(NR::Coord const d);
+    GuideSnapper(SPNamedView const *nv, NR::Coord const d);
 
-    NR::Coord vector_snap(SPDesktop const *dt,
-                          PointType t,
+    NR::Coord vector_snap(PointType t,
                           NR::Point &req,
                           NR::Point const &d) const;
 };
 
 
 /* Single point methods */
-double sp_desktop_free_snap(SPDesktop const *dt, Snapper::PointType t, NR::Point &req);
-double sp_desktop_vector_snap(SPDesktop const *dt, Snapper::PointType t, NR::Point &req, NR::Point const &d);
-gdouble sp_desktop_dim_snap(SPDesktop const *dt, Snapper::PointType t, NR::Point& req, NR::Dim2 const dim);
+double namedview_free_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point &req);
+double namedview_vector_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point &req, NR::Point const &d);
+gdouble namedview_dim_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point& req, NR::Dim2 const dim);
 
 /* List of points methods */
 
-NR::Coord sp_desktop_vector_snap_list(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
-                                      NR::Point const &norm, NR::scale const &s);
+NR::Coord namedview_vector_snap_list(SPNamedView const *nv, Snapper::PointType t, const std::vector<NR::Point> &p,
+                                     NR::Point const &norm, NR::scale const &s);
 
-std::pair<NR::Coord, bool> sp_desktop_dim_snap_list(SPDesktop const *dt,
-                                                    Snapper::PointType t, const std::vector<NR::Point> &p,
-                                                    double const dx, NR::Dim2 const dim);
+std::pair<NR::Coord, bool> namedview_dim_snap_list(SPNamedView const *nv,
+                                                   Snapper::PointType t, const std::vector<NR::Point> &p,
+                                                   double const dx, NR::Dim2 const dim);
 
-NR::Coord sp_desktop_dim_snap_list_scale(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
-                                         NR::Point const &norm, double const sx, NR::Dim2 const dim);
-
-NR::Coord sp_desktop_dim_snap_list_skew(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
+NR::Coord namedview_dim_snap_list_scale(SPNamedView const *nv, Snapper::PointType t, const std::vector<NR::Point> &p,
                                         NR::Point const &norm, double const sx, NR::Dim2 const dim);
+
+NR::Coord namedview_dim_snap_list_skew(SPNamedView const *nv, Snapper::PointType t, const std::vector<NR::Point> &p,
+                                       NR::Point const &norm, double const sx, NR::Dim2 const dim);
 
 
 #endif /* !SEEN_DESKTOP_SNAP_H */

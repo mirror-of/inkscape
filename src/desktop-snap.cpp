@@ -13,7 +13,6 @@
  */
 
 /* TODO:
- * Sort out 1e18, 1e15 mess (handle large numbers gracefully
  * Circular snap, path snap?
  */
 
@@ -22,17 +21,15 @@
 #include <utility>
 #include "sp-guide.h"
 #include "sp-namedview.h"
-#include "desktop.h"
 #include "desktop-snap.h"
-#include "desktop.h"
 #include "geom.h"
 #include <libnr/nr-point-fns.h>
 #include <libnr/nr-scale.h>
 #include <libnr/nr-scale-ops.h>
 #include <libnr/nr-values.h>
 
-static std::list<const Snapper*> desktop_get_snappers(SPDesktop const *dt);
-static bool desktop_will_snap_something(SPDesktop const *dt);
+static std::list<const Snapper*> namedview_get_snappers(SPNamedView const *nv);
+static bool namedview_will_snap_something(SPNamedView const *nv);
 
 /* Minimal distance to norm before point is considered for snap. */
 static const double MIN_DIST_NORM = 1.0;
@@ -40,34 +37,34 @@ static const double MIN_DIST_NORM = 1.0;
 /**
  *    Try to snap `req' in one dimension.
  *
- *    \param dt Desktop to use.
+ *    \param nv NamedView to use.
  *    \param req Point to snap; updated to the snapped point if a snap occurred.
  *    \param dim Dimension to snap in.
  *    \return Distance to the snap point along the `dim' axis, or NR_HUGE
  *    if no snap occurred.
  */
 
-NR::Coord sp_desktop_dim_snap(SPDesktop const *dt, Snapper::PointType t, NR::Point &req, NR::Dim2 const dim)
+NR::Coord namedview_dim_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point &req, NR::Dim2 const dim)
 {
-    return sp_desktop_vector_snap (dt, t, req, component_vectors[dim]);
+    return namedview_vector_snap (nv, t, req, component_vectors[dim]);
 }
 
 /**
  *    Try to snap `req' in both dimensions.
  *
- *    \param dt Desktop to use.
+ *    \param nv NamedView to use.
  *    \param req Point to snap; updated to the snapped point if a snap occurred.
  *    \return Distance to the snap point, or NR_HUGE if no snap occurred.
  */
 
-NR::Coord sp_desktop_free_snap(SPDesktop const *dt, Snapper::PointType t, NR::Point& req)
+NR::Coord namedview_free_snap(SPNamedView const *nv, Snapper::PointType t, NR::Point& req)
 {
     /* fixme: If allowing arbitrary snap targets, free snap is not the sum of h and v */
     NR::Point result = req;
 	
-    NR::Coord dh = sp_desktop_dim_snap(dt, t, result, NR::X);
+    NR::Coord dh = namedview_dim_snap(nv, t, result, NR::X);
     result[NR::Y] = req[NR::Y];
-    NR::Coord dv = sp_desktop_dim_snap(dt, t, result, NR::Y);
+    NR::Coord dv = namedview_dim_snap(nv, t, result, NR::Y);
     req = result;
 	
     if (dh < NR_HUGE && dv < NR_HUGE) {
@@ -97,17 +94,17 @@ NR::Coord sp_desktop_free_snap(SPDesktop const *dt, Snapper::PointType t, NR::Po
  * Requires: d != (0, 0).
  */
 
-NR::Coord sp_desktop_vector_snap (SPDesktop const *dt, Snapper::PointType t, NR::Point &req, NR::Point const &d)
+NR::Coord namedview_vector_snap (SPNamedView const *nv, Snapper::PointType t, NR::Point &req, NR::Point const &d)
 {
-    g_assert(dt != NULL);
-    g_assert(SP_IS_DESKTOP(dt));
+    g_assert(nv != NULL);
+    g_assert(SP_IS_NAMEDVIEW(nv));
 
-    std::list<const Snapper*> snappers = desktop_get_snappers(dt);
+    std::list<const Snapper*> snappers = namedview_get_snappers(nv);
 
     NR::Coord best = NR_HUGE;
     for (std::list<const Snapper*>::const_iterator i = snappers.begin(); i != snappers.end(); i++) {
         NR::Point trial_req = req;
-        NR::Coord dist = (*i)->vector_snap(dt, t, trial_req, d);
+        NR::Coord dist = (*i)->vector_snap(t, trial_req, d);
 
         if (dist < best) {
             req = trial_req;
@@ -139,19 +136,19 @@ round_to_nearest_multiple_plus(double x, double const c1, double const c0)
  * They return the updated transformation parameter. 
  */
 
-std::pair<NR::Coord, bool> sp_desktop_dim_snap_list(SPDesktop const *dt,
+std::pair<NR::Coord, bool> namedview_dim_snap_list(SPNamedView const *nv,
                                                     Snapper::PointType t, const std::vector<NR::Point> &p,
                                                     NR::Coord const dx, NR::Dim2 const dim)
 {
     NR::Coord dist = NR_HUGE;
     NR::Coord xdist = dx;
     
-    if (desktop_will_snap_something(dt)) {
+    if (namedview_will_snap_something(nv)) {
         for (std::vector<NR::Point>::const_iterator i = p.begin(); i != p.end(); i++) {
             NR::Point q = *i;
             NR::Coord const pre = q[dim];
             q[dim] += dx;
-            NR::Coord const d = sp_desktop_dim_snap(dt, t, q, dim);
+            NR::Coord const d = namedview_dim_snap(nv, t, q, dim);
             if (d < dist) {
                 xdist = q[dim] - pre;
                 dist = d;
@@ -162,13 +159,13 @@ std::pair<NR::Coord, bool> sp_desktop_dim_snap_list(SPDesktop const *dt,
     return std::make_pair(xdist, dist < NR_HUGE);
 }
 
-double sp_desktop_vector_snap_list(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
+double namedview_vector_snap_list(SPNamedView const *nv, Snapper::PointType t, const std::vector<NR::Point> &p,
 				   NR::Point const &norm, NR::scale const &s)
 {
     using NR::X;
     using NR::Y;
 
-    if (desktop_will_snap_something(dt) == false) {
+    if (namedview_will_snap_something(nv) == false) {
         return s[X];
     }
     
@@ -178,7 +175,7 @@ double sp_desktop_vector_snap_list(SPDesktop const *dt, Snapper::PointType t, co
         NR::Point const &q = *i;
         NR::Point check = ( q - norm ) * s + norm;
         if (NR::LInfty( q - norm ) > MIN_DIST_NORM) {
-            NR::Coord d = sp_desktop_vector_snap(dt, t, check, check - norm);
+            NR::Coord d = namedview_vector_snap(nv, t, check, check - norm);
             if ((d < NR_HUGE) && (d < dist)) {
                 dist = d;
                 NR::Dim2 const dominant = ( ( fabs( q[X] - norm[X] )  >
@@ -194,10 +191,10 @@ double sp_desktop_vector_snap_list(SPDesktop const *dt, Snapper::PointType t, co
     return ratio;
 }
 
-double sp_desktop_dim_snap_list_scale(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
+double namedview_dim_snap_list_scale(SPNamedView const *nv, Snapper::PointType t, const std::vector<NR::Point> &p,
 				      NR::Point const &norm, double const sx, NR::Dim2 dim)
 {
-    if (desktop_will_snap_something(dt) == false) {
+    if (namedview_will_snap_something(nv) == false) {
         return sx;
     }
 
@@ -211,7 +208,7 @@ double sp_desktop_dim_snap_list_scale(SPDesktop const *dt, Snapper::PointType t,
         NR::Point check = q;
         check[dim] = (sx * (q - norm) + norm)[dim];
         if (fabs (q[dim] - norm[dim]) > MIN_DIST_NORM) {
-            const gdouble d = sp_desktop_dim_snap (dt, t, check, dim);
+            const gdouble d = namedview_dim_snap (nv, t, check, dim);
             if (d < NR_HUGE && d < dist) {
                 dist = d;
                 scale = (check[dim] - norm[dim]) / (q[dim] - norm[dim]);
@@ -222,10 +219,10 @@ double sp_desktop_dim_snap_list_scale(SPDesktop const *dt, Snapper::PointType t,
     return scale;
 }
 
-double sp_desktop_dim_snap_list_skew(SPDesktop const *dt, Snapper::PointType t, const std::vector<NR::Point> &p,
+double namedview_dim_snap_list_skew(SPNamedView const *nv, Snapper::PointType t, const std::vector<NR::Point> &p,
 				     NR::Point const &norm, double const sx, NR::Dim2 const dim)
 {
-    if (desktop_will_snap_something(dt) == false) {
+    if (namedview_will_snap_something(nv) == false) {
         return sx;
     }
 
@@ -240,7 +237,7 @@ double sp_desktop_dim_snap_list_skew(SPDesktop const *dt, Snapper::PointType t, 
         // apply shear
         check[dim] += sx * (q[!dim] - norm[!dim]);
         if (fabs (q[!dim] - norm[!dim]) > MIN_DIST_NORM) {
-            const gdouble d = sp_desktop_dim_snap (dt, t, check, dim);
+            const gdouble d = namedview_dim_snap (nv, t, check, dim);
             if (d < NR_HUGE && d < fabs (dist)) {
                 dist = d;
                 skew = (check[dim] - q[dim]) / (q[!dim] - norm[!dim]);
@@ -253,18 +250,17 @@ double sp_desktop_dim_snap_list_skew(SPDesktop const *dt, Snapper::PointType t, 
 
 
 /* FIXME: this should probably be in SPNamedView */
-static std::list<const Snapper*> desktop_get_snappers(SPDesktop const *dt)
+static std::list<const Snapper*> namedview_get_snappers(SPNamedView const *nv)
 {
     std::list<const Snapper*> s;
-    SPNamedView const &nv = *dt->namedview;
-    s.push_back(&nv.grid_snapper);
-    s.push_back(&nv.guide_snapper);
+    s.push_back(&nv->grid_snapper);
+    s.push_back(&nv->guide_snapper);
     return s;
 }
 
-bool desktop_will_snap_something(SPDesktop const *dt)
+bool namedview_will_snap_something(SPNamedView const *nv)
 {
-    std::list<const Snapper*> s = desktop_get_snappers(dt);
+    std::list<const Snapper*> s = namedview_get_snappers(nv);
     std::list<const Snapper*>::iterator i = s.begin();
     while (i != s.end() && (*i)->will_snap_something() == false) {
         i++;
@@ -275,8 +271,10 @@ bool desktop_will_snap_something(SPDesktop const *dt)
             
 
 
-Snapper::Snapper(NR::Coord const d) : _distance(d), _enabled(false)
+Snapper::Snapper(SPNamedView const *nv, NR::Coord const d) : _named_view(nv), _distance(d), _enabled(false)
 {
+    g_assert (_named_view != NULL);
+    g_assert (SP_IS_NAMEDVIEW (_named_view));
     setSnapTo(BBOX_POINT, true);
 }
 
@@ -361,28 +359,24 @@ bool Snapper::will_snap_something() const
 }
 
 
-GridSnapper::GridSnapper(NR::Coord const d) : Snapper(d)
+GridSnapper::GridSnapper(SPNamedView const *nv, NR::Coord const d) : Snapper(nv, d)
 {
 
 }
 
-NR::Coord GridSnapper::vector_snap(SPDesktop const *dt, PointType t, NR::Point &req, NR::Point const &d) const
+NR::Coord GridSnapper::vector_snap(PointType t, NR::Point &req, NR::Point const &d) const
 {
     if (getEnabled() == false || getSnapTo(t) == false) {
         return NR_HUGE;
     }
     
-    g_assert(dt != NULL);
-    g_assert(SP_IS_DESKTOP(dt));
-
     NR::Coord len = L2(d);
     if (len < NR_EPSILON) {
-        return sp_desktop_free_snap(dt, t, req);
+        return namedview_free_snap(_named_view, t, req);
     }
 
     NR::Point const v = NR::unit_vector(d);
 
-    SPNamedView const &nv = *dt->namedview;
     NR::Point snapped = req;
     NR::Coord best = NR_HUGE;
     NR::Coord upper = NR_HUGE;
@@ -396,8 +390,8 @@ NR::Coord GridSnapper::vector_snap(SPDesktop const *dt, PointType t, NR::Point &
     for (unsigned int i = 0; i < 2; ++i) {
         NR::Point trial(req);
         NR::Coord const rounded = round_to_nearest_multiple_plus(req[i],
-                                                                 nv.gridspacing[i],
-                                                                 nv.gridorigin[i]);
+                                                                 _named_view->gridspacing[i],
+                                                                 _named_view->gridorigin[i]);
             
         NR::Coord const dist = intersector_a_vector_snap (trial,
                                                           v,
@@ -414,34 +408,30 @@ NR::Coord GridSnapper::vector_snap(SPDesktop const *dt, PointType t, NR::Point &
     return best;
 }
 
-GuideSnapper::GuideSnapper(NR::Coord const d) : Snapper(d)
+GuideSnapper::GuideSnapper(SPNamedView const *nv, NR::Coord const d) : Snapper(nv, d)
 {
 
 }
 
-NR::Coord GuideSnapper::vector_snap(SPDesktop const *dt, PointType t, NR::Point &req, NR::Point const &d) const
+NR::Coord GuideSnapper::vector_snap(PointType t, NR::Point &req, NR::Point const &d) const
 {
     if (getEnabled() == false || getSnapTo(t) == false) {
         return NR_HUGE;
     }
     
-    g_assert(dt != NULL);
-    g_assert(SP_IS_DESKTOP(dt));
-
     NR::Coord len = L2(d);
     if (len < NR_EPSILON) {
-        return sp_desktop_free_snap (dt, t, req);
+        return namedview_free_snap (_named_view, t, req);
     }
 
     NR::Point const v = NR::unit_vector(d);
 
-    SPNamedView const &nv = *dt->namedview;
     NR::Point snapped = req;
     NR::Coord best = NR_HUGE;
     NR::Coord upper = NR_HUGE;
 
-    upper = nv.guide_snapper.getDistance();
-    for (GSList const *l = nv.guides; l != NULL; l = l->next) {
+    upper = _named_view->guide_snapper.getDistance();
+    for (GSList const *l = _named_view->guides; l != NULL; l = l->next) {
         SPGuide const &g = *SP_GUIDE(l->data);
         NR::Point trial(req);
         NR::Coord const dist = intersector_a_vector_snap(trial,
