@@ -668,7 +668,9 @@ nr_type_w32_inner_enum_proc (ENUMLOGFONTEX *elfex, NEWTEXTMETRICEX *tmex, DWORD 
         namelist = g_slist_prepend (namelist, name);
         g_hash_table_insert (namedict, name, plf);
 
+        /*This needs to be logged instead
         g_print ("%s | ", name);
+        */
     } else {
         g_free (name);
     }
@@ -697,7 +699,9 @@ nr_type_w32_init (void)
     GSList *l;
     int pos;
 
+    /*This needs to be logged instead
     g_print ("Loading W32 type directory...\n");
+    */
 
     hdc = CreateDC ("DISPLAY", NULL, NULL, NULL);
 
