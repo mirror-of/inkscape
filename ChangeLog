@@ -1,3 +1,7 @@
+2005-02-26  MenTaLguY  <mental@rydia.net>
+
+	* cxxtest: imported cxxtest tree
+
 2005-02-24  Jon A. Cruz  <jon@joncruz.org>
 	* src/main.cpp, io/sys.h, io/sys.cpp:
 	  Refactoring input filename conversion and fallback.
