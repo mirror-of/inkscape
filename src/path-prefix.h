@@ -42,6 +42,17 @@ extern "C" {
 #    define INKSCAPE_TUTORIALSDIR "share\\tutorials"
 #    define INKSCAPE_PLUGINDIR    "plugins"
 #    define INKSCAPE_TEMPLATESDIR "share\\templates"
+#  elif defined ENABLE_OSX_APP_LOCATIONS
+#    define INKSCAPE_APPICONDIR   "Inkscape.app/Resources/pixmaps"
+#    define INKSCAPE_EXTENSIONDIR "Inkscape.app/Resources/extensions"
+#    define INKSCAPE_GRADIENTSDIR "Inkscape.app/Resources/gradients"
+#    define INKSCAPE_PIXMAPDIR    "Inkscape.app/Resources/icons"
+#    define INKSCAPE_MARKERSDIR   "Inkscape.app/Resources/markers"
+#    define INKSCAPE_PATTERNSDIR  "Inkscape.app/Resources/patterns"
+#    define INKSCAPE_SCREENSDIR   "Inkscape.app/Resources/screens"
+#    define INKSCAPE_TUTORIALSDIR "Inkscape.app/Resources/tutorials"
+#    define INKSCAPE_PLUGINDIR    "Inkscape.app/Resources/plugins"
+#    define INKSCAPE_TEMPLATESDIR "Inkscape.app/Resources/templates"
 #  else
 #    define INKSCAPE_APPICONDIR   INKSCAPE_DATADIR "/pixmaps"
 #    define INKSCAPE_EXTENSIONDIR INKSCAPE_DATADIR "/inkscape/extensions"

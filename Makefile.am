@@ -33,6 +33,8 @@ EXTRA_DIST = \
 	inkscape.pod		\
 	inkscape.spec.in	\
 	inkscape.spec		\
+	Info.plist.in	\
+	Info.plist		\
 	inkscape.nsi		\
 	Makefile.mingw	\
 	Makefile.mingw.common	\

@@ -373,8 +373,7 @@ dnl Check for binary relocation support
 dnl Hongli Lai <h.lai@chello.nl>
 
 AC_ARG_ENABLE(binreloc,
-       [  --enable-binreloc       compile with binary relocation support
-                          (default=enable when available)],
+       [  --enable-binreloc       compile with binary relocation support],
        enable_binreloc=$enableval,enable_binreloc=no)
 
 AC_MSG_CHECKING(whether binary relocation support should be enabled)
@@ -422,6 +421,13 @@ fi
 AC_DEFINE(BR_PTHREADS,[0],[Use binreloc thread support?])
 if test "$enable_binreloc" = "yes"; then
    AC_DEFINE(ENABLE_BINRELOC,,[Use AutoPackage?])
+fi
+
+AC_ARG_ENABLE(osxapp,
+       [  --enable-osxapp         compile with OSX .app data dir paths],
+       enable_osxapp=$enableval,enable_osxapp=no)
+if test "$enable_osxapp" = "yes"; then
+   AC_DEFINE(ENABLE_OSX_APP_LOCATIONS,,[Build with OSX .app data dir paths?])
 fi
 
 dnl ******************************
@@ -655,6 +661,7 @@ share/screens/Makefile
 share/templates/Makefile
 share/tutorials/Makefile
 inkscape.spec
+Info.plist
 inkview.1
 ])
 
