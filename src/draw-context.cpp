@@ -427,7 +427,7 @@ spdc_endpoint_snap_internal(SPDrawContext *dc, NR::Point &p, NR::Point const o, 
 \brief  Snaps new node relative to the previous node
 */
 static void
-spdc_endpoint_snap(SPDrawContext *dc, NR::Point &p, guint state)
+spdc_endpoint_snap(SPDrawContext *dc, NR::Point &p, guint const state)
 {
     spdc_endpoint_snap_internal(dc, p, dc->p[0], state);
 }
@@ -1111,16 +1111,16 @@ spdc_set_startpoint(SPPencilContext *pc, NR::Point p, guint state)
     dc->red_curve_is_valid = false;
 }
 
-/*
- * Change moving enpoint position
+/**
+ * Change moving endpoint position.
+ * <ul>
+ * <li>Ctrl constrains to moving to H/V direction, snapping in given direction.
+ * <li>Otherwise we snap freely to whatever attractors are available.
+ * </ul>
  *
- * - Ctrl constraints moving to H/V direction, snapping in given direction
- * - otherwise we snap freely to whatever attractors are available
- *
- * Number of points is (re)set to 2 always, 2nd point is modified
- * We change RED curve
+ * Number of points is (re)set to 2 always, 2nd point is modified.
+ * We change RED curve.
  */
-
 static void
 spdc_set_endpoint(SPPencilContext *pc, NR::Point p, guint state)
 {
