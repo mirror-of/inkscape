@@ -1,9 +1,9 @@
 
-extensiondir = $(libdir)/inkscape/extensions
+extensiondir = $(datadir)/inkscape/extensions
 
 otherstuffdir = $(datadir)/inkscape/extensions
 
-moduledir = $(datadir)/inkscape/modules
+moduledir = $(datadir)/inkscape/extensions
 
 extensions = \
 	roundhole \
