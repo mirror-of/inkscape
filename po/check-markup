@@ -1,0 +1,21 @@
+#! /usr/bin/perl -w
+# Try to detect markup typos in translations.
+# Currently it doesn't start by joining up strings spread over multiple lines.
+
+# egrep version.
+# (As written, it can't detect problems that span a line, e.g. unterminated `<b>'.
+# One way of doing the s/"\n"//g thing would be with tr and sed, but that requires
+# a sed that allows arbitrary line lengths, which many seds don't.)
+#mydir=`dirname "$0"`
+#egrep '<b>[^<>]*(>|<([^/]|/([^b"]|b[^>])))' "$mydir"/*.po
+
+use strict;
+
+$/ = '';
+while(<>) {
+	s/"\n"//g;
+	if (m{<b>[^<>]*($|>|<([^/]|/([^b"]|b[^>])))}) {
+		print "$ARGV: $_";
+	}
+}
+	
