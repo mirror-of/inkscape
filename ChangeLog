@@ -1,3 +1,8 @@
+2004-05-05  MenTaLguY  <mental@rydia.net>
+
+	* src/libnrtype/nr-type-dictionary.cpp: removed 'private-fonts'
+	  feature (we should rely on fontconfig for "custom" font stuff)
+
 2004-05-05 Nathan Hurst <njh@mail.csse.monash.edu.au>
 
 	* src/dialogs/text-edit.cpp, configure.in: Added support for spell

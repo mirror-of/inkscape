@@ -24,7 +24,6 @@
 #endif
 #include <stdio.h>
 #include <ctype.h>
-#include <libarikkei/arikkei-token.h>
 #include <libnr/nr-macros.h>
 #include <libnr/nr-values.h>
 #include "nr-type-primitives.h"
@@ -57,7 +56,6 @@ static void nr_type_directory_build (void);
 static unsigned nr_type_distance_family (gchar const *ask, gchar const *bid);
 static double nr_type_distance_position (NRTypePosDef const *ask, NRTypePosDef const *bid);
 
-static void nr_type_read_private_list (void);
 #ifdef WIN32
 void nr_type_read_w32_list (void);
 #endif
@@ -471,8 +469,6 @@ nr_type_directory_build (void)
 	typedict = nr_type_dict_new ();
 	familydict = nr_type_dict_new ();
 
-	nr_type_read_private_list ();
-
 #ifdef WIN32
 	nr_type_read_w32_list ();
 #endif
@@ -686,178 +682,6 @@ nr_type_distance_position (NRTypePosDef const *ask, NRTypePosDef const *bid)
                   dvariant * dvariant);
 
 	return dist;
-}
-
-static gchar privatename[] = "/.inkscape/private-fonts";
-
-#if defined (_WIN32) || defined(__WIN32__)
-static unsigned int
-nr_type_next_token (const gchar *img, unsigned int len, unsigned int p, int *tokenp)
-{
-	/* Skip whitespace */
-	while (((img[p] == ' ') || (img[p] == '\t')) && (p < len)) p++;
-	if (p >= len) return p;
-	if (!isalnum (img[p]) && (img[p] != '/')) return p;
-	*tokenp = p;
-	while (!iscntrl (img[p]) && (img[p] != ',') && (p < len)) p++;
-	return p;
-}
-#endif
-
-#include <unistd.h>
-#if !defined (_WIN32) && !defined(__WIN32__)
-#include <sys/mman.h>
-#else
-#endif
-
-static void
-nr_type_read_private_list (void)
-{
-	gchar *homedir, *filename;
-	int len;
-	struct stat st;
-
-	homedir = getenv ("HOME");
-	if (!homedir) return;
-	len = strlen (homedir);
-	filename = nr_new (gchar, len + sizeof (privatename) + 1);
-	strcpy (filename, homedir);
-	strcpy (filename + len, privatename);
-
-#ifndef S_ISREG
-#define S_ISREG(st) 1
-#endif
-
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
-#if !defined (_WIN32) && !defined(__WIN32__)
-	if (!stat (filename, &st) && S_ISREG (st.st_mode) && (st.st_size > 8)) {
-		gchar *cdata;
-		ArikkeiToken ft, lt;
-		int fd;
-		fd = open (filename, O_RDONLY | O_BINARY);
-		if (!fd) return;
-		cdata = (gchar*)mmap (NULL, st.st_size, PROT_READ, MAP_SHARED, fd, 0);
-		close (fd);
-		if ((cdata == NULL) || (cdata == (gchar *) -1)) return;
-		arikkei_token_set_from_data (&ft, cdata, 0, st.st_size);
-		arikkei_token_get_first_line (&ft, &lt);
-		while (lt.start < lt.end) {
-			if (!arikkei_token_is_empty (&lt) && (lt.cdata[lt.start] != '#')) {
-				ArikkeiToken tokens[4];
-				int ntokens;
-				ntokens = arikkei_token_tokenize_ws (&lt, tokens, 4, ",", FALSE);
-				if (ntokens >= 3) {
-					ArikkeiToken fnt[2];
-					ArikkeiToken filet, namet, familyt;
-					int nfnt, face;
-					nfnt = arikkei_token_tokenize_ws (&tokens[0], fnt, 2, ":", FALSE);
-					arikkei_token_strip (&fnt[0], &filet);
-					arikkei_token_strip (&tokens[1], &namet);
-					arikkei_token_strip (&tokens[2], &familyt);
-					face = 0;
-					if (nfnt > 0) {
-						gchar b[32];
-						arikkei_token_strncpy (&fnt[1], b, 32);
-						face = atoi (b);
-					}
-					if (!arikkei_token_is_empty (&filet) &&
-					    !arikkei_token_is_empty (&namet) &&
-					    !arikkei_token_is_empty (&familyt)) {
-						NRTypeFaceDefFT2 *dft2;
-						gchar f[1024], n[1024], m[1024];
-						dft2 = nr_new (NRTypeFaceDefFT2, 1);
-						dft2->def.next = NULL;
-						dft2->def.pdef = NULL;
-						arikkei_token_strncpy (&filet, f, 1024);
-						arikkei_token_strncpy (&namet, n, 1024);
-						arikkei_token_strncpy (&familyt, m, 1024);
-						nr_type_ft2_build_def (dft2, f, n, m, face);
-						nr_type_register ((NRTypeFaceDef *) dft2);
-						printf ("Regstered %s : %d, %s, %s\n", f, face, n, m);
-					}
-				}
-			}
-			arikkei_token_next_line (&ft, &lt, &lt);
-		}
-		munmap (cdata, st.st_size);
-	}
-#else
-	if (!stat (filename, &st) && S_ISREG (st.st_mode) && (st.st_size > 8)) {
-		gchar *img;
-		int fh, rbytes, nentries, p;
-		img = nr_new (gchar, st.st_size + 1);
-		if (!img) return;
-		fh = open (filename, O_RDONLY);
-		if (fh < 1) return;
-		rbytes = read (fh, img, st.st_size);
-		close (fh);
-		if (rbytes < st.st_size) return;
-		*(img + st.st_size) = 0;
-
-		/* format: file, name, family */
-		nentries = 0;
-		p = 0;
-		while (p < st.st_size) {
-			int filep, namep, familyp;
-			int e0, e1, e2;
-			filep = -1;
-			namep = -1;
-			familyp = -1;
-			/* File */
-			p = nr_type_next_token (img, st.st_size, p, &filep);
-			if (p >= st.st_size) break;
-			if (!iscntrl (img[p])) {
-				e0 = p;
-				p += 1;
-				/* Name */
-				p = nr_type_next_token (img, st.st_size, p, &namep);
-				if (p >= st.st_size) break;
-				if (!iscntrl (img[p])) {
-					e1 = p;
-					p += 1;
-					/* Family */
-					p = nr_type_next_token (img, st.st_size, p, &familyp);
-					e2 = p;
-					p += 1;
-					if ((filep >= 0) && (namep >= 0) && (familyp >= 0)) {
-						struct stat st;
-						if (!stat (filename, &st) && S_ISREG (st.st_mode)) {
-							NRTypeFaceDefFT2 *dft2;
-							int face;
-							char *cp;
-							img[e0] = 0;
-							img[e1] = 0;
-							img[e2] = 0;
-							cp = strchr (img + filep, ':');
-							if (cp) {
-								*cp = 0;
-								face = atoi (cp + 1);
-							} else {
-								face = 0;
-							}
-							/* printf ("Found %s | %d | %s | %s\n", img + filep, face, img + namep, img + familyp); */
-							dft2 = nr_new (NRTypeFaceDefFT2, 1);
-							dft2->def.next = NULL;
-							dft2->def.pdef = NULL;
-							nr_type_ft2_build_def (dft2, img + namep, img + familyp, img + filep, face);
-							nr_type_register ((NRTypeFaceDef *) dft2);
-							nentries += 1;
-						}
-					}
-				}
-			}
-			while (iscntrl (img[p]) && (p < st.st_size)) p++;
-		}
-
-		if (nentries > 0) {
-		}
-	}
-#endif
-
-	nr_free (filename);
 }
 
 NRTypeFace *
