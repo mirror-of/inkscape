@@ -891,6 +891,7 @@ static void sp_canvas_size_request (GtkWidget *widget, GtkRequisition *req);
 static void sp_canvas_size_allocate (GtkWidget *widget, GtkAllocation *allocation);
 
 static gint sp_canvas_button (GtkWidget *widget, GdkEventButton *event);
+static gint sp_canvas_scroll (GtkWidget *widget, GdkEventScroll *event);
 static gint sp_canvas_motion (GtkWidget *widget, GdkEventMotion *event);
 static gint sp_canvas_expose (GtkWidget *widget, GdkEventExpose *event);
 static gint sp_canvas_key (GtkWidget *widget, GdkEventKey *event);
@@ -950,6 +951,7 @@ sp_canvas_class_init (SPCanvasClass *klass)
 	widget_class->button_press_event = sp_canvas_button;
 	widget_class->button_release_event = sp_canvas_button;
 	widget_class->motion_notify_event = sp_canvas_motion;
+	widget_class->scroll_event = sp_canvas_scroll;
 	widget_class->expose_event = sp_canvas_expose;
 	widget_class->key_press_event = sp_canvas_key;
 	widget_class->key_release_event = sp_canvas_key;
@@ -1219,6 +1221,9 @@ emit_event (SPCanvas *canvas, GdkEvent *event)
 		case GDK_KEY_RELEASE:
 			mask = GDK_KEY_RELEASE_MASK;
 			break;
+		case GDK_SCROLL:
+			mask = GDK_SCROLL;
+			break;
 		default:
 			mask = 0;
 			break;
@@ -1256,7 +1261,9 @@ emit_event (SPCanvas *canvas, GdkEvent *event)
 	item = canvas->current_item;
 
 	if (canvas->focused_item &&
-	    ((event->type == GDK_KEY_PRESS) || (event->type == GDK_KEY_RELEASE) || (event->type == GDK_FOCUS_CHANGE))) {
+	    ((event->type == GDK_KEY_PRESS) ||
+	     (event->type == GDK_KEY_RELEASE) ||
+	     (event->type == GDK_FOCUS_CHANGE))) {
 		item = canvas->focused_item;
 	}
 
@@ -1480,6 +1487,18 @@ sp_canvas_button (GtkWidget *widget, GdkEventButton *event)
 	}
 
 	return retval;
+}
+
+/* Scroll event handler for the canvas */
+/* FIXME: generate motion events to re-select items */
+static gint
+sp_canvas_scroll (GtkWidget *widget, GdkEventScroll *event)
+{
+	SPCanvas *canvas;
+
+	canvas = SP_CANVAS (widget);
+
+	return emit_event (canvas, (GdkEvent *) event);
 }
 
 /* Motion event handler for the canvas */

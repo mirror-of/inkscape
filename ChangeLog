@@ -1,6 +1,7 @@
 2003-11-16  Kees Cook <inkscape@outflux.net>
 
 	* Cleaned up "desactivate" into "deactivate"
+	* Fixed GDK_SCROLL event from mouse wheel scrolling
 
 2003-11-16  MenTaLguY <mental@rydia.net>
 
