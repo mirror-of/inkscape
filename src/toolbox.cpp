@@ -109,9 +109,7 @@ static void update_aux_toolbox (SPDesktop *desktop, SPEventContext *eventcontext
 static GtkWidget *
 sp_toolbox_button_new (GtkWidget *t, unsigned int size, const gchar *pxname, GtkSignalFunc handler, GtkTooltips *tt, const gchar *tip)
 {
-	GtkWidget *b;
-
-	b = sp_button_new_from_data (size, SP_BUTTON_TYPE_NORMAL, NULL, pxname, tip, tt);
+	GtkWidget *b = sp_button_new_from_data (size, SP_BUTTON_TYPE_NORMAL, NULL, pxname, tip, tt);
 	gtk_widget_show (b);
 	if (handler) gtk_signal_connect (GTK_OBJECT (b), "clicked", handler, NULL);
 	gtk_box_pack_start (GTK_BOX (t), b, FALSE, FALSE, 0);
@@ -122,14 +120,11 @@ sp_toolbox_button_new (GtkWidget *t, unsigned int size, const gchar *pxname, Gtk
 GtkWidget *
 sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, SPButtonType type, sp_verb_t verb, SPView *view, GtkTooltips *tt)
 {
-	SPAction *action;
-	GtkWidget *b;
-
-	action = sp_verb_get_action (verb, view);
+	SPAction *action = sp_verb_get_action (verb, view);
 	if (!action) return NULL;
 	/* fixme: Handle sensitive/unsensitive */
 	/* fixme: Implement sp_button_new_from_action */
-	b = sp_button_new (size, type, action, tt);
+	GtkWidget *b = sp_button_new (size, type, action, tt);
 	gtk_widget_show (b);
 	gtk_box_pack_start (GTK_BOX (t), b, FALSE, FALSE, 0);
 	return b;
@@ -143,18 +138,15 @@ GtkWidget * sp_toolbox_button_normal_new_from_verb (GtkWidget *t, unsigned int s
 GtkWidget *
 sp_tool_toolbox_new ()
 {
-	GtkWidget *tb, *hb;
-	GtkTooltips *tt;
-	
-	tt = gtk_tooltips_new ();
-	tb = gtk_vbox_new (FALSE, 0);
+	GtkTooltips *tt = gtk_tooltips_new ();
+	GtkWidget *tb = gtk_vbox_new (FALSE, 0);
 
 	g_object_set_data (G_OBJECT (tb), "desktop", NULL);
 	g_object_set_data (G_OBJECT (tb), "tooltips", tt);
 
 	gtk_widget_set_sensitive (tb, FALSE);
 
-	hb = gtk_handle_box_new ();
+	GtkWidget *hb = gtk_handle_box_new ();
 	gtk_handle_box_set_handle_position (GTK_HANDLE_BOX (hb), GTK_POS_TOP);
 	gtk_handle_box_set_shadow_type (GTK_HANDLE_BOX (hb), GTK_SHADOW_OUT);
 	gtk_handle_box_set_snap_edge (GTK_HANDLE_BOX (hb), GTK_POS_LEFT);
@@ -195,12 +187,10 @@ aux_toolbox_detached(GtkHandleBox *toolbox, GtkWidget *child)
 GtkWidget *
 sp_aux_toolbox_new ()
 {
-	GtkWidget *tb, *tb_s, *tb_e, *hb;
+	GtkWidget *tb = gtk_vbox_new (FALSE, 0);
 
-	tb = gtk_vbox_new (FALSE, 0);
-
-	tb_s = gtk_vbox_new (FALSE, 0);
-	tb_e = gtk_vbox_new (FALSE, 0);
+	GtkWidget *tb_s = gtk_vbox_new (FALSE, 0);
+	GtkWidget *tb_e = gtk_vbox_new (FALSE, 0);
 	gtk_box_set_spacing (GTK_BOX (tb), AUX_BETWEEN_BUTTON_GROUPS);
 	gtk_box_pack_start (GTK_BOX (tb), GTK_WIDGET (tb_s), FALSE, FALSE, 0);
 	gtk_box_pack_end (GTK_BOX (tb), GTK_WIDGET (tb_e), FALSE, FALSE, 0);
@@ -211,7 +201,7 @@ sp_aux_toolbox_new ()
 
 	g_signal_connect_after(G_OBJECT(tb), "size_request", G_CALLBACK(aux_toolbox_size_request), NULL);
 
-	hb = gtk_handle_box_new ();
+	GtkWidget *hb = gtk_handle_box_new ();
 	gtk_handle_box_set_handle_position (GTK_HANDLE_BOX (hb), GTK_POS_LEFT);
 	gtk_handle_box_set_shadow_type (GTK_HANDLE_BOX (hb), GTK_SHADOW_OUT);
 	gtk_handle_box_set_snap_edge (GTK_HANDLE_BOX (hb), GTK_POS_LEFT);
@@ -291,7 +281,7 @@ sp_node_path_edit_smooth (void)
 }
 
 void
-sp_node_path_edit_symmetric (void)
+sp_node_path_edit_symmetrical (void)
 {
 	sp_node_selected_set_type (SP_PATHNODE_SYMM);
 }
@@ -305,12 +295,10 @@ sp_node_path_edit_symmetric (void)
 static GtkWidget *
 sp_node_toolbox_new (SPDesktop *desktop)
 {
-	GtkWidget *tb;
-	GtkTooltips *tt;
 	SPView *view=SP_VIEW (desktop);
 
-	tt = gtk_tooltips_new ();
-	tb = gtk_hbox_new (FALSE, 0);
+	GtkTooltips *tt = gtk_tooltips_new ();
+	GtkWidget *tb = gtk_hbox_new (FALSE, 0);
 
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
@@ -336,6 +324,8 @@ sp_node_toolbox_new (SPDesktop *desktop)
 		GTK_SIGNAL_FUNC (sp_node_path_edit_cusp), tt, _("Make selected nodes corner"));
 	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_smooth",
 		GTK_SIGNAL_FUNC (sp_node_path_edit_smooth), tt, _("Make selected nodes smooth"));
+	sp_toolbox_button_new (tb, AUX_BUTTON_SIZE, "node_symetric",
+		GTK_SIGNAL_FUNC (sp_node_path_edit_symmetrical), tt, _("Make selected nodes symmetrical"));
 
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
@@ -355,12 +345,10 @@ sp_node_toolbox_new (SPDesktop *desktop)
 static GtkWidget *
 sp_zoom_toolbox_new (SPDesktop *desktop)
 {
-	GtkWidget *tb;
-	GtkTooltips *tt;
 	SPView *view=SP_VIEW (desktop);
 
-	tt = gtk_tooltips_new ();
-	tb = gtk_hbox_new (FALSE, 0);
+	GtkTooltips *tt = gtk_tooltips_new ();
+	GtkWidget *tb = gtk_hbox_new (FALSE, 0);
 
 	gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
@@ -399,11 +387,8 @@ sp_aux_toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop)
 static void
 toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup_func, UpdateFunction update_func)
 {
-	gpointer ptr;
-	SPDesktop *old_desktop;
-
-	ptr = g_object_get_data (G_OBJECT (toolbox), "desktop");
-	old_desktop = SP_IS_DESKTOP (ptr) ? SP_DESKTOP (ptr) : NULL;
+	gpointer ptr = g_object_get_data (G_OBJECT (toolbox), "desktop");
+	SPDesktop *old_desktop = SP_IS_DESKTOP (ptr) ? SP_DESKTOP (ptr) : NULL;
 
 	if (old_desktop) {
 		GList *children, *iter;
@@ -430,12 +415,10 @@ toolbox_set_desktop (GtkWidget *toolbox, SPDesktop *desktop, SetupFunction setup
 static void 
 setup_tool_toolbox (GtkWidget *toolbox, SPDesktop *desktop)
 {
-	int i;
 	GtkTooltips *tooltips=GTK_TOOLTIPS (g_object_get_data (G_OBJECT (toolbox), "tooltips"));
 
-	for ( i = 0 ; tools[i].type_name ; i++ ) {
-		GtkWidget *button;
-		button = sp_toolbox_button_new_from_verb (toolbox, TOOL_BUTTON_SIZE, SP_BUTTON_TYPE_TOGGLE, tools[i].verb, SP_VIEW (desktop), tooltips);
+	for (int i = 0 ; tools[i].type_name ; i++ ) {
+		GtkWidget *button = sp_toolbox_button_new_from_verb (toolbox, TOOL_BUTTON_SIZE, SP_BUTTON_TYPE_TOGGLE, tools[i].verb, SP_VIEW (desktop), tooltips);
 		g_object_set_data (G_OBJECT (toolbox), tools[i].data_name, (gpointer)button);
 	}
 
@@ -445,7 +428,6 @@ static void
 update_tool_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox)
 {
 	const gchar *tname;
-	int i;
 
 	if (eventcontext != NULL) {
 		tname = gtk_type_name (GTK_OBJECT_TYPE (eventcontext));
@@ -453,7 +435,7 @@ update_tool_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget
 		tname = NULL;
 	}
 
-	for ( i = 0 ; tools[i].type_name ; i++ ) {
+	for (int i = 0 ; tools[i].type_name ; i++ ) {
 		SPButton *button=SP_BUTTON (g_object_get_data (G_OBJECT (toolbox), tools[i].data_name));
 		sp_button_toggle_set_down (button, tname && !strcmp(tname, tools[i].type_name));
 	}
@@ -462,8 +444,7 @@ update_tool_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget
 static void
 setup_aux_toolbox (GtkWidget *toolbox, SPDesktop *desktop)
 {
-	int i;
-	for ( i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
+	for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
 		GtkWidget *sub_toolbox=aux_toolboxes[i].create_func (desktop);
 		gtk_container_add (GTK_CONTAINER (toolbox), sub_toolbox);
 		g_object_set_data (G_OBJECT (toolbox), aux_toolboxes[i].data_name, sub_toolbox);
@@ -474,7 +455,6 @@ static void
 update_aux_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget *toolbox)
 {
 	const gchar *tname;
-	int i;
 
 	if (eventcontext != NULL) {
 		tname = gtk_type_name (GTK_OBJECT_TYPE (eventcontext));
@@ -482,7 +462,7 @@ update_aux_toolbox (SPDesktop *desktop, SPEventContext *eventcontext, GtkWidget 
 		tname = NULL;
 	}
 
-	for ( i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
+	for (int i = 0 ; aux_toolboxes[i].type_name ; i++ ) {
 		GtkWidget *sub_toolbox = GTK_WIDGET (g_object_get_data (G_OBJECT (toolbox), aux_toolboxes[i].data_name));
 		if (tname && !strcmp(tname, aux_toolboxes[i].type_name)) {
 			gtk_widget_show (sub_toolbox);
