@@ -170,7 +170,9 @@ nr_type_xft_init (void)
 			len = strlen (file);
 			/* fixme: This is silly and evil */
 			/* But Freetype just does not load pfa reliably (Lauris) */
+			/* Changed to exclude pfa, better for OSX */
 			if ((len > 4) &&
+			/*
 			    (!strcmp (file + len - 4, ".ttf") ||
 			     !strcmp (file + len - 4, ".TTF") ||
 			     !strcmp (file + len - 4, ".ttc") ||
@@ -179,6 +181,9 @@ nr_type_xft_init (void)
 			     !strcmp (file + len - 4, ".OTF") ||
 			     !strcmp (file + len - 4, ".pfb") ||
 			     !strcmp (file + len - 4, ".PFB"))) {
+			  */
+			     strcmp (file + len - 4, ".pfa") &&
+			     strcmp (file + len - 4, ".PFA")) {
 				char *fn, *wn, *sn, *name;
 				int weight;
 				int slant;

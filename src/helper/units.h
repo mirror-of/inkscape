@@ -44,13 +44,13 @@ typedef struct _SPDistance SPDistance;
  * The base absolute unit is 1/72th of an inch (we are gnome PRINT, so sorry SI)
  */
 
-enum {
+typedef enum {
 	SP_UNIT_DIMENSIONLESS = (1 << 0), /* For percentages and like */
 	SP_UNIT_ABSOLUTE = (1 << 1), /* Real world distances - i.e. mm, cm... */
 	SP_UNIT_DEVICE = (1 << 2), /* Semi-real device-dependent distances i.e. pixels */
 	SP_UNIT_USERSPACE = (1 << 3), /* Mathematical coordinates */
 	SP_UNIT_VOLATILE = (1 << 4) /* em and ex */
-};
+} _SP_Unit_t;
 
 /*
  * Notice, that for correct menus etc. you have to use
