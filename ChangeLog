@@ -1,3 +1,7 @@
+2004-07-09  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/draw-context.cpp: remove some debugging g_prints.
+
 2004-07-08  MenTaLguY  <mental@rydia.net>
 
 	* src/interface.cpp: fixed crash on desktop context menu
@@ -21,6 +25,13 @@
 
 	* src/libnrtype/FontFactory.cpp: disable printing of debug
 	messages.
+
+	* src/sp-item-group.cpp: give it a snappoints method to fix
+	937318.
+
+	* src/draw-context.cpp: fix a couple of places where Shift isn't
+	checked before snapping.
+	
 
 2004-07-07  MenTaLguY  <mental@rydia.net>
 
