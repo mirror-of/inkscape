@@ -17,7 +17,7 @@
 
 #include <libnr/nr-macros.h>
 
-#include "action.h"
+#include "helper/action.h"
 
 static void sp_action_class_init (SPActionClass *klass);
 static void sp_action_init (SPAction *action);

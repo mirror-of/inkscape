@@ -17,7 +17,7 @@
 #include "inkscape.h"
 #include "shortcuts.h"
 #include "view.h"
-#include "window.h"
+#include "helper/window.h"
 
 static gboolean
 sp_window_key_press (GtkWidget *widget, GdkEventKey *event)

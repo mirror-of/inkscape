@@ -25,7 +25,7 @@
 #include <xml/repr.h>
 #include <helper/sp-intl.h>
 
-#include <extension.h>
+#include "extenstion/extension.h"
 #include "system.h"
 #include "db.h"
 #include "implementation/script.h"
