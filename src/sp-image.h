@@ -6,8 +6,9 @@
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Edward Flick (EAF)
  *
- * Copyright (C) 1999-2002 Lauris Kaplinski
+ * Copyright (C) 1999-2005 Authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -26,8 +27,6 @@ class SPImageClass;
 
 #include <glib.h>
 
-
-
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include "svg/svg-types.h"
 #include "sp-item.h"
@@ -39,6 +38,13 @@ struct SPImage : public SPItem {
 	SPSVGLength y;
 	SPSVGLength width;
 	SPSVGLength height;
+
+	// Added by EAF
+	/* preserveAspectRatio */
+	unsigned int aspect_align : 4;
+	unsigned int aspect_clip : 1;
+	int trimx, trimy, trimwidth, trimheight;
+	double viewx, viewy, viewwidth, viewheight;
 
 	gchar *href;
 

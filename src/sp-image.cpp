@@ -5,8 +5,9 @@
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Edward Flick (EAF)
  *
- * Copyright (C) 1999-2002 Lauris Kaplinski
+ * Copyright (C) 1999-2005 Authors
  * Copyright (C) 2000-2001 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -24,7 +25,11 @@
 //#include <gdk-pixbuf/gdk-pixbuf-io.h>
 #include "display/nr-arena-image.h"
 #include "svg/svg.h"
+
+//Added for preserveAspectRatio support -- EAF
+#include "enums.h"
 #include "attributes.h"
+
 #include "print.h"
 #include "style.h"
 #include "brokenimage.xpm"
@@ -465,6 +470,7 @@ sp_image_init (SPImage *image)
 	sp_svg_length_unset (&image->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
 	sp_svg_length_unset (&image->width, SP_SVG_UNIT_NONE, 0.0, 0.0);
 	sp_svg_length_unset (&image->height, SP_SVG_UNIT_NONE, 0.0, 0.0);
+	image->aspect_align = SP_ASPECT_NONE;
 }
 
 static void
@@ -478,6 +484,7 @@ sp_image_build (SPObject *object, SPDocument *document, SPRepr *repr)
 	sp_object_read_attr (object, "y");
 	sp_object_read_attr (object, "width");
 	sp_object_read_attr (object, "height");
+	sp_object_read_attr (object, "preserveAspectRatio");
 
 	/* Register */
 	sp_document_add_resource (document, "image", object);
@@ -550,6 +557,64 @@ sp_image_set (SPObject *object, unsigned int key, const gchar *value)
 		}
 		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 		break;
+	case SP_ATTR_PRESERVEASPECTRATIO:
+		/* Do setup before, so we can use break to escape */
+		image->aspect_align = SP_ASPECT_NONE;
+		image->aspect_clip = SP_ASPECT_MEET;
+		object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG);
+		if (value) {
+			int len;
+			gchar c[256];
+			const gchar *p, *e;
+			unsigned int align, clip;
+			p = value;
+			while (*p && *p == 32) p += 1;
+			if (!*p) break;
+			e = p;
+			while (*e && *e != 32) e += 1;
+			len = e - p;
+			if (len > 8) break;
+			memcpy (c, value, len);
+			c[len] = 0;
+			/* Now the actual part */
+			if (!strcmp (c, "none")) {
+				align = SP_ASPECT_NONE;
+			} else if (!strcmp (c, "xMinYMin")) {
+				align = SP_ASPECT_XMIN_YMIN;
+			} else if (!strcmp (c, "xMidYMin")) {
+				align = SP_ASPECT_XMID_YMIN;
+			} else if (!strcmp (c, "xMaxYMin")) {
+				align = SP_ASPECT_XMAX_YMIN;
+			} else if (!strcmp (c, "xMinYMid")) {
+				align = SP_ASPECT_XMIN_YMID;
+			} else if (!strcmp (c, "xMidYMid")) {
+				align = SP_ASPECT_XMID_YMID;
+			} else if (!strcmp (c, "xMaxYMid")) {
+				align = SP_ASPECT_XMAX_YMID;
+			} else if (!strcmp (c, "xMinYMax")) {
+				align = SP_ASPECT_XMIN_YMAX;
+			} else if (!strcmp (c, "xMidYMax")) {
+				align = SP_ASPECT_XMID_YMAX;
+			} else if (!strcmp (c, "xMaxYMax")) {
+				align = SP_ASPECT_XMAX_YMAX;
+			} else {
+				break;
+			}
+			clip = SP_ASPECT_MEET;
+			while (*e && *e == 32) e += 1;
+			if (e) {
+				if (!strcmp (e, "meet")) {
+					clip = SP_ASPECT_MEET;
+				} else if (!strcmp (e, "slice")) {
+					clip = SP_ASPECT_SLICE;
+				} else {
+					break;
+				}
+			}
+			image->aspect_align = align;
+			image->aspect_clip = clip;
+		}
+		break;
 	default:
 		if (((SPObjectClass *) (parent_class))->set)
 			((SPObjectClass *) (parent_class))->set (object, key, value);
@@ -581,7 +646,97 @@ sp_image_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 			}
 		}
 	}
+	// preserveAspectRatio calculate bounds / clipping rectangle -- EAF
+	if (image->pixbuf && (image->aspect_align != SP_ASPECT_NONE)) {
+		        int imagewidth, imageheight;
+			double x,y;
 
+		        imagewidth = gdk_pixbuf_get_width (image->pixbuf);
+		        imageheight = gdk_pixbuf_get_height (image->pixbuf);
+
+			switch (image->aspect_align) {
+			case SP_ASPECT_XMIN_YMIN:
+				x = 0.0;
+				y = 0.0;
+				break;
+			case SP_ASPECT_XMID_YMIN:
+				x = 0.5;
+				y = 0.0;
+				break;
+			case SP_ASPECT_XMAX_YMIN:
+				x = 1.0;
+				y = 0.0;
+				break;
+			case SP_ASPECT_XMIN_YMID:
+				x = 0.0;
+				y = 0.5;
+				break;
+			case SP_ASPECT_XMID_YMID:
+				x = 0.5;
+				y = 0.5;
+				break;
+			case SP_ASPECT_XMAX_YMID:
+				x = 1.0;
+				y = 0.5;
+				break;
+			case SP_ASPECT_XMIN_YMAX:
+				x = 0.0;
+				y = 1.0;
+				break;
+			case SP_ASPECT_XMID_YMAX:
+				x = 0.5;
+				y = 1.0;
+				break;
+			case SP_ASPECT_XMAX_YMAX:
+				x = 1.0;
+				y = 1.0;
+				break;
+			default:
+				x = 0.0;
+				y = 0.0;
+				break;
+			}
+
+			if (image->aspect_clip == SP_ASPECT_SLICE) {
+				image->viewx = image->x.computed;
+				image->viewy = image->y.computed;
+				image->viewwidth = image->width.computed;
+				image->viewheight = image->height.computed;
+				if ((imagewidth*image->height.computed)>(image->width.computed*imageheight)) {
+					// Pixels aspect is wider than bounding box
+					image->trimheight = imageheight;
+					image->trimwidth = static_cast<int>(static_cast<double>(imageheight) * image->width.computed / image->height.computed);
+					image->trimy = 0;
+					image->trimx = static_cast<int>(static_cast<double>(imagewidth - image->trimwidth) * x);
+				} else {
+					// Pixels aspect is taller than bounding box
+					image->trimwidth = imagewidth;
+					image->trimheight = static_cast<int>(static_cast<double>(imagewidth) * image->height.computed / image->width.computed);
+					image->trimx = 0;
+					image->trimy = static_cast<int>(static_cast<double>(imageheight - image->trimheight) * y);
+				}
+			} else {
+				// Otherwise, assume SP_ASPECT_MEET
+				image->trimx = 0;
+				image->trimy = 0;
+				image->trimwidth = imagewidth;
+				image->trimheight = imageheight;
+				if ((imagewidth*image->height.computed)>(image->width.computed*imageheight)) {
+					// Pixels aspect is wider than bounding boz
+					image->viewwidth = image->width.computed;
+					image->viewheight = image->viewwidth * imageheight / imagewidth;
+					image->viewx=image->x.computed;
+					image->viewy=(image->height.computed - image->viewheight) * y + image->y.computed;
+				} else {
+					// Pixels aspect is taller than bounding box
+					image->viewheight = image->height.computed;
+					image->viewwidth = image->viewheight * imagewidth / imageheight;
+					image->viewy=image->y.computed;
+					image->viewx=(image->width.computed - image->viewwidth) * x + image->x.computed;
+				}
+			}
+	}
+	
 	sp_image_update_canvas_image ((SPImage *) object);
 }
 
@@ -602,6 +757,7 @@ sp_image_write (SPObject *object, SPRepr *repr, guint flags)
 	if (image->y.set) sp_repr_set_double (repr, "y", image->y.computed);
 	if (image->width.set) sp_repr_set_double (repr, "width", image->width.computed);
 	if (image->height.set) sp_repr_set_double (repr, "height", image->height.computed);
+	sp_repr_set_attr (repr, "preserveAspectRatio", sp_repr_attr (object->repr, "preserveAspectRatio"));
 
 	if (((SPObjectClass *) (parent_class))->write)
 		((SPObjectClass *) (parent_class))->write (object, repr, flags);
@@ -633,27 +789,37 @@ sp_image_print (SPItem *item, SPPrintContext *ctx)
 	SPImage *image;
 	NRMatrix tp, ti, s, t;
 	guchar *px;
-	int w, h, rs;
+	int w, h, rs, pixskip;
 
 	image = SP_IMAGE (item);
 
 	if (!image->pixbuf) return;
 	if ((image->width.computed <= 0.0) || (image->height.computed <= 0.0)) return;
-
+	
 	px = gdk_pixbuf_get_pixels (image->pixbuf);
 	w = gdk_pixbuf_get_width (image->pixbuf);
 	h = gdk_pixbuf_get_height (image->pixbuf);
 	rs = gdk_pixbuf_get_rowstride (image->pixbuf);
-
-	/* fixme: (Lauris) */
-	nr_matrix_set_translate (&tp, image->x.computed, image->y.computed);
-	nr_matrix_set_scale (&s, image->width.computed, -image->height.computed);
-	nr_matrix_set_translate (&ti, 0.0, -1.0);
+	pixskip = gdk_pixbuf_get_n_channels (image->pixbuf) * gdk_pixbuf_get_bits_per_sample (image->pixbuf) / 8;
+       
+	if (image->aspect_align == SP_ASPECT_NONE) {
+		/* fixme: (Lauris) */
+		nr_matrix_set_translate (&tp, image->x.computed, image->y.computed);
+		nr_matrix_set_scale (&s, image->width.computed, -image->height.computed);
+		nr_matrix_set_translate (&ti, 0.0, -1.0);
+	} else { // preserveAspectRatio
+		nr_matrix_set_translate (&tp, image->viewx, image->viewy);
+		nr_matrix_set_scale (&s, image->viewwidth, -image->viewheight);
+		nr_matrix_set_translate (&ti, 0.0, -1.0);
+	}
 
 	nr_matrix_multiply (&t, &s, &tp);
 	nr_matrix_multiply (&t, &ti, &t);
 
-	sp_print_image_R8G8B8A8_N (ctx, px, w, h, rs, &t, SP_OBJECT_STYLE (item));
+	if (image->aspect_align == SP_ASPECT_NONE)
+		sp_print_image_R8G8B8A8_N (ctx, px, w, h, rs, &t, SP_OBJECT_STYLE (item));
+	else // preserveAspectRatio
+		sp_print_image_R8G8B8A8_N (ctx, px + image->trimx*pixskip + image->trimy*rs, image->trimwidth, image->trimheight, rs, &t, SP_OBJECT_STYLE (item));
 }
 
 static gchar *
@@ -676,6 +842,7 @@ sp_image_description (SPItem * item)
 static NRArenaItem *
 sp_image_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags)
 {
+	int pixskip, rs;
 	SPImage * image;
 	NRArenaItem *ai;
 
@@ -684,15 +851,27 @@ sp_image_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 	ai = NRArenaImage::create(arena);
 
 	if (image->pixbuf) {
-		nr_arena_image_set_pixels (NR_ARENA_IMAGE (ai),
+	        pixskip = gdk_pixbuf_get_n_channels (image->pixbuf) * gdk_pixbuf_get_bits_per_sample (image->pixbuf) / 8;
+		rs = gdk_pixbuf_get_rowstride (image->pixbuf);
+	        if (image->aspect_align == SP_ASPECT_NONE)
+			nr_arena_image_set_pixels (NR_ARENA_IMAGE (ai),
 					   gdk_pixbuf_get_pixels (image->pixbuf),
 					   gdk_pixbuf_get_width (image->pixbuf),
 					   gdk_pixbuf_get_height (image->pixbuf),
-					   gdk_pixbuf_get_rowstride (image->pixbuf));
+					   rs);
+		else // preserveAspectRatio
+			nr_arena_image_set_pixels (NR_ARENA_IMAGE (ai),
+					   gdk_pixbuf_get_pixels (image->pixbuf) + image->trimx*pixskip + image->trimy*rs,
+					   image->trimwidth,
+					   image->trimheight,
+					   rs);
 	} else {
 		nr_arena_image_set_pixels (NR_ARENA_IMAGE (ai), NULL, 0, 0, 0);
 	}
-	nr_arena_image_set_geometry (NR_ARENA_IMAGE (ai), image->x.computed, image->y.computed, image->width.computed, image->height.computed);
+	if (image->aspect_align == SP_ASPECT_NONE)
+		nr_arena_image_set_geometry (NR_ARENA_IMAGE (ai), image->x.computed, image->y.computed, image->width.computed, image->height.computed);
+	else // preserveAspectRatio
+		nr_arena_image_set_geometry (NR_ARENA_IMAGE (ai), image->viewx, image->viewy, image->viewwidth, image->viewheight);
 
 	return ai;
 }
@@ -775,6 +954,7 @@ sp_image_pixbuf_force_rgba (GdkPixbuf * pixbuf)
 static void
 sp_image_update_canvas_image (SPImage *image)
 {
+	int rs, pixskip;
 	SPItem *item;
 	SPItemView *v;
 
@@ -791,14 +971,27 @@ sp_image_update_canvas_image (SPImage *image)
 	}
 
 	for (v = item->display; v != NULL; v = v->next) {
-		nr_arena_image_set_pixels (NR_ARENA_IMAGE (v->arenaitem),
+	        pixskip = gdk_pixbuf_get_n_channels (image->pixbuf) * gdk_pixbuf_get_bits_per_sample (image->pixbuf) / 8;
+		rs = gdk_pixbuf_get_rowstride (image->pixbuf);
+		if (image->aspect_align == SP_ASPECT_NONE) {
+			nr_arena_image_set_pixels (NR_ARENA_IMAGE (v->arenaitem),
 					   gdk_pixbuf_get_pixels (image->pixbuf),
 					   gdk_pixbuf_get_width (image->pixbuf),
 					   gdk_pixbuf_get_height (image->pixbuf),
-					   gdk_pixbuf_get_rowstride (image->pixbuf));
-		nr_arena_image_set_geometry (NR_ARENA_IMAGE (v->arenaitem),
+					   rs);
+			nr_arena_image_set_geometry (NR_ARENA_IMAGE (v->arenaitem),
 					     image->x.computed, image->y.computed,
 					     image->width.computed, image->height.computed);
+		} else { // preserveAspectRatio
+			nr_arena_image_set_pixels (NR_ARENA_IMAGE (v->arenaitem),
+					   gdk_pixbuf_get_pixels (image->pixbuf) + image->trimx*pixskip + image->trimy*rs,
+					   image->trimwidth,
+					   image->trimheight,
+					   rs);
+			nr_arena_image_set_geometry (NR_ARENA_IMAGE (v->arenaitem),
+					     image->viewx, image->viewy,
+					     image->viewwidth, image->viewheight);
+		}
 	}
 }
 
