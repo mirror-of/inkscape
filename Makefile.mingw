@@ -28,6 +28,7 @@ dist:
 	$(CP) $(GTKDOS)$(S)bin$(S)libgthread-2.0-0.dll inkscape
 #	$(CP) $(GTKDOS)$(S)bin$(S)libiconv-2.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libpango-1.0-0.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)libpangoft2-1.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libpangowin32-1.0-0.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)freetype6.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libfontconfig-1.dll inkscape
@@ -38,6 +39,7 @@ dist:
 	$(CP) $(GTKDOS)$(S)bin$(S)zlib1.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)iconv.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)intl.dll inkscape
+	$(CP) $(GTKDOS)$(S)bin$(S)xmlparse.dll inkscape
 	$(CPDIR) $(GTKDOS)$(S)etc inkscape$(S)etc
 	echo "#### Inserted by Inkscape Makefile.mingw" > inkscape$(S)etc$(S)gtk-2.0$(S)gtkrc
 	echo "gtk-font-name=\"verdana 6.5\""           >> inkscape$(S)etc$(S)gtk-2.0$(S)gtkrc
@@ -58,6 +60,7 @@ dist:
 	$(MKDIR) inkscape$(S)modules
 	$(MKDIR) inkscape$(S)plugins
 	-$(CP) src$(S)extension$(S)plugin$(S)*.dll inkscape$(S)plugins
+	$(CP) $(GTKDOS)$(S)bin$(S)gdb.exe inkscape
 	@echo "##################### D O N E ####################"
 
 clean:
