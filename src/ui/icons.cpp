@@ -630,7 +630,7 @@ get_icon_path(char const *const utf8_basename)
 
     g_assert(g_utf8_validate(utf8_basename, -1, NULL));
     char *const opsys_basename = g_filename_from_utf8(utf8_basename, -1, NULL, NULL, NULL);
-    char *const ret_cstr = g_build_filename(opsys_iconsdir, opsys_basename);
+    char *const ret_cstr = g_build_filename(opsys_iconsdir, opsys_basename, NULL);
     Glib::ustring const ret(ret_cstr);
     g_free(ret_cstr);
     g_free(opsys_basename);
