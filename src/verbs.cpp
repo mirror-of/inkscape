@@ -1029,7 +1029,7 @@ ContextVerb::perform (SPAction *action, void * data, void * pdata)
     /* TODO !!! hopefully this can go away soon and actions can look after
      * themselves
      */
-    for (vidx = SP_VERB_CONTEXT_SELECT; vidx <= SP_VERB_CONTEXT_DROPPER; vidx++)
+    for (vidx = SP_VERB_CONTEXT_SELECT; vidx <= SP_VERB_CONTEXT_DROPPER_PREFS; vidx++)
     {
         SPAction *tool_action= get((sp_verb_t)vidx)->get_action(SP_VIEW (dt));
         if (tool_action) {
@@ -1074,6 +1074,70 @@ ContextVerb::perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_CONTEXT_DROPPER:
             tools_switch_current (TOOLS_DROPPER);
             break;
+
+        case SP_VERB_CONTEXT_SELECT_PREFS:
+            prefs_set_int_attribute ("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
+            prefs_set_int_attribute ("dialogs.preferences", "page_tools", PREFS_PAGE_TOOLS_SELECTOR);
+            sp_display_dialog ();
+            break;
+        case SP_VERB_CONTEXT_NODE_PREFS:
+            prefs_set_int_attribute ("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
+            prefs_set_int_attribute ("dialogs.preferences", "page_tools", PREFS_PAGE_TOOLS_NODE);
+            sp_display_dialog ();
+            break;
+        case SP_VERB_CONTEXT_RECT_PREFS:
+            prefs_set_int_attribute ("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
+            prefs_set_int_attribute ("dialogs.preferences", "page_tools", PREFS_PAGE_TOOLS_SHAPES);
+            prefs_set_int_attribute ("dialogs.preferences", "page_shapes", PREFS_PAGE_TOOLS_SHAPES_RECT);
+            sp_display_dialog ();
+            break;
+        case SP_VERB_CONTEXT_ARC_PREFS:
+            prefs_set_int_attribute ("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
+            prefs_set_int_attribute ("dialogs.preferences", "page_tools", PREFS_PAGE_TOOLS_SHAPES);
+            prefs_set_int_attribute ("dialogs.preferences", "page_shapes", PREFS_PAGE_TOOLS_SHAPES_ELLIPSE);
+            sp_display_dialog ();
+            break;
+        case SP_VERB_CONTEXT_STAR_PREFS:
+            prefs_set_int_attribute ("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
+            prefs_set_int_attribute ("dialogs.preferences", "page_tools", PREFS_PAGE_TOOLS_SHAPES);
+            prefs_set_int_attribute ("dialogs.preferences", "page_shapes", PREFS_PAGE_TOOLS_SHAPES_STAR);
+            sp_display_dialog ();
+            break;
+        case SP_VERB_CONTEXT_SPIRAL_PREFS:
+            prefs_set_int_attribute ("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
+            prefs_set_int_attribute ("dialogs.preferences", "page_tools", PREFS_PAGE_TOOLS_SHAPES);
+            prefs_set_int_attribute ("dialogs.preferences", "page_shapes", PREFS_PAGE_TOOLS_SHAPES_SPIRAL);
+            sp_display_dialog ();
+            break;
+        case SP_VERB_CONTEXT_PENCIL_PREFS:
+            prefs_set_int_attribute ("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
+            prefs_set_int_attribute ("dialogs.preferences", "page_tools", PREFS_PAGE_TOOLS_PENCIL);
+            sp_display_dialog ();
+            break;
+        case SP_VERB_CONTEXT_PEN_PREFS:
+            prefs_set_int_attribute ("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
+            prefs_set_int_attribute ("dialogs.preferences", "page_tools", PREFS_PAGE_TOOLS_PEN);
+            sp_display_dialog ();
+            break;
+        case SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS:
+            // no prefs for this tool
+            break;
+        case SP_VERB_CONTEXT_TEXT_PREFS:
+            prefs_set_int_attribute ("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
+            prefs_set_int_attribute ("dialogs.preferences", "page_tools", PREFS_PAGE_TOOLS_TEXT);
+            sp_display_dialog ();
+            break;
+        case SP_VERB_CONTEXT_ZOOM_PREFS:
+            prefs_set_int_attribute ("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
+            prefs_set_int_attribute ("dialogs.preferences", "page_tools", PREFS_PAGE_TOOLS_ZOOM);
+            sp_display_dialog ();
+            break;
+        case SP_VERB_CONTEXT_DROPPER_PREFS:
+            prefs_set_int_attribute ("dialogs.preferences", "page_top", PREFS_PAGE_TOOLS);
+            prefs_set_int_attribute ("dialogs.preferences", "page_tools", PREFS_PAGE_TOOLS_DROPPER);
+            sp_display_dialog ();
+            break;
+
         default:
             break;
     }
@@ -1508,8 +1572,7 @@ Verb * Verb::_base_verbs[] = {
         N_("Flip _Vertically"), N_("Flip selection vertically"),
         "object_flip_ver"),
 
-    /* Event contexts */
-    // TODO: add shortcuts to tooltips automatically!
+    /* Tools */
     new ContextVerb(SP_VERB_CONTEXT_SELECT, "DrawSelect", N_("Select"),
         N_("Select and transform objects"), "draw_select"),
     new ContextVerb(SP_VERB_CONTEXT_NODE, "DrawNode", N_("Node Edit"),
@@ -1534,6 +1597,32 @@ Verb * Verb::_base_verbs[] = {
         N_("Zoom in or out"), "draw_zoom"),
     new ContextVerb(SP_VERB_CONTEXT_DROPPER, "DrawDropper", N_("Dropper"),
         N_("Pick averaged colors from image"), "draw_dropper"),
+
+    /* Tool prefs */
+    new ContextVerb(SP_VERB_CONTEXT_SELECT_PREFS, "SelectPrefs", N_("Selector Preferences"),
+        N_("Open Inkscape Preferences for the Selector tool"), NULL),
+    new ContextVerb(SP_VERB_CONTEXT_NODE_PREFS, "NodePrefs", N_("Node Tool Preferences"),
+        N_("Open Inkscape Preferences for the Node tool"), NULL),
+    new ContextVerb(SP_VERB_CONTEXT_RECT_PREFS, "RectPrefs", N_("Rectangle Preferences"),
+        N_("Open Inkscape Preferences for the Rectangle tool"), NULL),
+    new ContextVerb(SP_VERB_CONTEXT_ARC_PREFS, "ArcPrefs", N_("Ellipse Preferences"),
+        N_("Open Inkscape Preferences for the Ellipse tool"), NULL),
+    new ContextVerb(SP_VERB_CONTEXT_STAR_PREFS, "StarPrefs", N_("Star Preferences"),
+        N_("Open Inkscape Preferences for the Star tool"), NULL),
+    new ContextVerb(SP_VERB_CONTEXT_SPIRAL_PREFS, "SpiralPrefs", N_("Spiral Preferences"),
+        N_("Open Inkscape Preferences for the Spiral tool"), NULL),
+    new ContextVerb(SP_VERB_CONTEXT_PENCIL_PREFS, "PencilPrefs", N_("Pencil Preferences"),
+        N_("Open Inkscape Preferences for the Pencil tool"), NULL),
+    new ContextVerb(SP_VERB_CONTEXT_PEN_PREFS, "PenPrefs", N_("Pen Preferences"),
+        N_("Open Inkscape Preferences for the Pen tool"), NULL),
+    new ContextVerb(SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS, "CalligraphicPrefs", N_("Calligraphic Preferences"),
+        N_("Open Inkscape Preferences for the Calligraphy tool"), NULL),
+    new ContextVerb(SP_VERB_CONTEXT_TEXT_PREFS, "TextPrefs", N_("Text Preferences"),
+        N_("Open Inkscape Preferences for the Text tool"), NULL),
+    new ContextVerb(SP_VERB_CONTEXT_ZOOM_PREFS, "ZoomPrefs", N_("Zoom Preferences"),
+        N_("Open Inkscape Preferences for the Zoom tool"), NULL),
+    new ContextVerb(SP_VERB_CONTEXT_DROPPER_PREFS, "DropperPrefs", N_("Dropper Preferences"),
+        N_("Open Inkscape Preferences for the Dropper tool"), NULL),
 
     /* Zooming */
     new ZoomVerb(SP_VERB_ZOOM_IN, "ZoomIn", N_("Zoom In"), N_("Zoom in"), "zoom_in"),

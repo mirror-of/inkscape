@@ -100,20 +100,21 @@ static const struct {
     const gchar *type_name;
     const gchar *data_name;
     sp_verb_t verb;
+    sp_verb_t doubleclick_verb;
 } tools[] = {
-    { "SPSelectContext",   "select_tool",    SP_VERB_CONTEXT_SELECT },
-    { "SPNodeContext",     "node_tool",      SP_VERB_CONTEXT_NODE },
-    { "SPZoomContext",     "zoom_tool",      SP_VERB_CONTEXT_ZOOM },
-    { "SPRectContext",     "rect_tool",      SP_VERB_CONTEXT_RECT },
-    { "SPArcContext",      "arc_tool",       SP_VERB_CONTEXT_ARC },
-    { "SPStarContext",     "star_tool",      SP_VERB_CONTEXT_STAR },
-    { "SPSpiralContext",   "spiral_tool",    SP_VERB_CONTEXT_SPIRAL },
-    { "SPPencilContext",   "pencil_tool",    SP_VERB_CONTEXT_PENCIL },
-    { "SPPenContext",      "pen_tool",       SP_VERB_CONTEXT_PEN },
-    { "SPDynaDrawContext", "dyna_draw_tool", SP_VERB_CONTEXT_CALLIGRAPHIC },
-    { "SPTextContext",     "text_tool",      SP_VERB_CONTEXT_TEXT },
-    { "SPDropperContext",  "dropper_tool",   SP_VERB_CONTEXT_DROPPER },
-    { NULL, NULL, 0 }
+    { "SPSelectContext",   "select_tool",    SP_VERB_CONTEXT_SELECT,  SP_VERB_CONTEXT_SELECT_PREFS},
+    { "SPNodeContext",     "node_tool",      SP_VERB_CONTEXT_NODE, SP_VERB_CONTEXT_NODE_PREFS },
+    { "SPZoomContext",     "zoom_tool",      SP_VERB_CONTEXT_ZOOM, SP_VERB_CONTEXT_ZOOM_PREFS },
+    { "SPRectContext",     "rect_tool",      SP_VERB_CONTEXT_RECT, SP_VERB_CONTEXT_RECT_PREFS },
+    { "SPArcContext",      "arc_tool",       SP_VERB_CONTEXT_ARC, SP_VERB_CONTEXT_ARC_PREFS },
+    { "SPStarContext",     "star_tool",      SP_VERB_CONTEXT_STAR, SP_VERB_CONTEXT_STAR_PREFS },
+    { "SPSpiralContext",   "spiral_tool",    SP_VERB_CONTEXT_SPIRAL, SP_VERB_CONTEXT_SPIRAL_PREFS },
+    { "SPPencilContext",   "pencil_tool",    SP_VERB_CONTEXT_PENCIL, SP_VERB_CONTEXT_PENCIL_PREFS },
+    { "SPPenContext",      "pen_tool",       SP_VERB_CONTEXT_PEN, SP_VERB_CONTEXT_PEN_PREFS },
+    { "SPDynaDrawContext", "dyna_draw_tool", SP_VERB_CONTEXT_CALLIGRAPHIC, SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS },
+    { "SPTextContext",     "text_tool",      SP_VERB_CONTEXT_TEXT, SP_VERB_CONTEXT_TEXT_PREFS },
+    { "SPDropperContext",  "dropper_tool",   SP_VERB_CONTEXT_DROPPER, SP_VERB_CONTEXT_DROPPER_PREFS },
+    { NULL, NULL, 0, 0 }
 };
 
 static const struct {
@@ -163,18 +164,29 @@ sp_toolbox_button_new (GtkWidget *t, unsigned int size, const gchar *pxname, Gtk
 
 
 GtkWidget *
-sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, SPButtonType type, Inkscape::Verb * verb, SPView *view, GtkTooltips *tt)
+sp_toolbox_button_new_from_verb_with_doubleclick (GtkWidget *t, unsigned int size, SPButtonType type, Inkscape::Verb *verb, Inkscape::Verb *doubleclick_verb, SPView *view, GtkTooltips *tt)
 {
     SPAction *action = verb->get_action(view);
     if (!action) return NULL;
+
+    SPAction *doubleclick_action;
+    if (doubleclick_verb)
+        doubleclick_action = doubleclick_verb->get_action(view);
+    else 
+        doubleclick_action = NULL;
+
 	/* fixme: Handle sensitive/unsensitive */
 	/* fixme: Implement sp_button_new_from_action */
-    GtkWidget *b = sp_button_new (size, type, action, tt);
+    GtkWidget *b = sp_button_new (size, type, action, doubleclick_action, tt);
     gtk_widget_show (b);
     gtk_box_pack_start (GTK_BOX (t), b, FALSE, FALSE, 0);
 
-
     return b;
+}
+
+GtkWidget * sp_toolbox_button_new_from_verb (GtkWidget *t, unsigned int size, SPButtonType type, Inkscape::Verb * verb, SPView *view, GtkTooltips *tt)
+{
+	return sp_toolbox_button_new_from_verb_with_doubleclick (t, size, type, verb, NULL, view, tt);
 }
 
 GtkWidget * sp_toolbox_button_normal_new_from_verb (GtkWidget *t, unsigned int size, Inkscape::Verb * verb, SPView *view, GtkTooltips *tt)
@@ -422,9 +434,9 @@ sp_node_toolbox_new (SPDesktop *desktop)
 
     gtk_box_pack_start (GTK_BOX (tb), gtk_hbox_new(FALSE, 0), FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_OBJECT_TO_CURVE), view, tt);
+    sp_toolbox_button_normal_new_from_verb (tb, AUX_BUTTON_SIZE, Inkscape::Verb::get(SP_VERB_OBJECT_TO_CURVE), view, tt);
 
-    sp_toolbox_button_new_from_verb(tb, AUX_BUTTON_SIZE, SP_BUTTON_TYPE_NORMAL, Inkscape::Verb::get(SP_VERB_SELECTION_OUTLINE), view, tt);
+    sp_toolbox_button_normal_new_from_verb (tb, AUX_BUTTON_SIZE, Inkscape::Verb::get(SP_VERB_SELECTION_OUTLINE), view, tt);
 
     gtk_widget_show_all (tb);
 
@@ -536,9 +548,11 @@ setup_tool_toolbox (GtkWidget *toolbox, SPDesktop *desktop)
 
     for (int i = 0 ; tools[i].type_name ; i++ ) {
         GtkWidget *button =
-            sp_toolbox_button_new_from_verb ( toolbox, TOOL_BUTTON_SIZE,
+            sp_toolbox_button_new_from_verb_with_doubleclick ( toolbox, TOOL_BUTTON_SIZE,
                                               SP_BUTTON_TYPE_TOGGLE,
-                                              Inkscape::Verb::get(tools[i].verb), SP_VIEW (desktop),
+                                              Inkscape::Verb::get(tools[i].verb), 
+                                              Inkscape::Verb::get(tools[i].doubleclick_verb), 
+                                              SP_VIEW (desktop),
                                               tooltips );
 
         g_object_set_data ( G_OBJECT (toolbox), tools[i].data_name,

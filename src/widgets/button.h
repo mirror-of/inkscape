@@ -40,6 +40,7 @@ struct SPButton {
 	SPButtonType type;
 	unsigned int size;
 	SPAction *action;
+	SPAction *doubleclick_action;
 	GtkTooltips *tooltips;
 };
 
@@ -51,7 +52,7 @@ struct SPButtonClass {
 
 GType sp_button_get_type (void);
 
-GtkWidget *sp_button_new (unsigned int size, SPButtonType type, SPAction *action, GtkTooltips *tooltips);
+GtkWidget *sp_button_new (unsigned int size, SPButtonType type, SPAction *action, SPAction *doubleclick_action, GtkTooltips *tooltips);
 
 void sp_button_toggle_set_down (SPButton *button, gboolean down);
 

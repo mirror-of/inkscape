@@ -1091,7 +1091,7 @@ sp_display_dialog (void)
             gtk_notebook_set_current_page (GTK_NOTEBOOK (nb_shapes), prefs_get_int_attribute ("dialogs.preferences", "page_shapes", 0));
         }
 
-        // Freehand
+        // Pencil
         {
             GtkWidget *vb_tool = new_tab (nb_tools, _("Pencil"));
 

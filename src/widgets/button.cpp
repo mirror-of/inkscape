@@ -46,8 +46,10 @@ static void sp_button_destroy (GtkObject *object);
 static void sp_button_size_request (GtkWidget *widget, GtkRequisition *requisition);
 static void sp_button_clicked (GtkButton *button);
 static void sp_button_perform_action (SPButton *button, gpointer data);
+static gint sp_button_process_event (SPButton *button, GdkEvent *event);
 
 static void sp_button_set_action (SPButton *button, SPAction *action);
+static void sp_button_set_doubleclick_action (SPButton *button, SPAction *action);
 static void sp_button_action_set_active (SPAction *action, unsigned int active, void *data);
 static void sp_button_action_set_sensitive (SPAction *action, unsigned int sensitive, void *data);
 static void sp_button_action_set_shortcut (SPAction *action, unsigned int shortcut, void *data);
@@ -98,6 +100,7 @@ static void
 sp_button_init (SPButton *button)
 {
 	button->action = NULL;
+	button->doubleclick_action = NULL;
 	button->tooltips = NULL;
 
 	gtk_container_set_border_width (GTK_CONTAINER (button), 0);
@@ -106,6 +109,7 @@ sp_button_init (SPButton *button)
 	GTK_WIDGET_UNSET_FLAGS (GTK_WIDGET (button), GTK_CAN_DEFAULT);
 
 	g_signal_connect_after (G_OBJECT (button), "clicked", G_CALLBACK (sp_button_perform_action), NULL);
+	g_signal_connect_after (G_OBJECT (button), "event", G_CALLBACK (sp_button_process_event), NULL);
 }
 
 static void
@@ -122,6 +126,10 @@ sp_button_destroy (GtkObject *object)
 
 	if (button->action) {
 		sp_button_set_action (button, NULL);
+	}
+
+	if (button->doubleclick_action) {
+		sp_button_set_doubleclick_action (button, NULL);
 	}
 
 	((GtkObjectClass *) (parent_class))->destroy (object);
@@ -154,6 +162,23 @@ sp_button_clicked (GtkButton *button)
 	}
 }
 
+static gint 
+sp_button_process_event (SPButton *button, GdkEvent *event)
+{
+	switch (event->type) {
+	case GDK_2BUTTON_PRESS:
+		if (button->doubleclick_action) {
+			sp_action_perform (button->doubleclick_action, NULL);
+		}
+		return TRUE;
+		break;
+	default:
+		break;
+	}
+
+	return FALSE;
+}
+
 static void
 sp_button_perform_action (SPButton *button, gpointer data)
 {
@@ -162,8 +187,9 @@ sp_button_perform_action (SPButton *button, gpointer data)
 	}
 }
 
+
 GtkWidget *
-sp_button_new (unsigned int size, SPButtonType type, SPAction *action, GtkTooltips *tooltips)
+sp_button_new (unsigned int size, SPButtonType type, SPAction *action, SPAction *doubleclick_action, GtkTooltips *tooltips)
 {
 	SPButton *button;
 
@@ -174,7 +200,10 @@ sp_button_new (unsigned int size, SPButtonType type, SPAction *action, GtkToolti
 	button->tooltips = tooltips;
 
 	if (tooltips) g_object_ref ((GObject *) tooltips);
+
 	sp_button_set_action (button, action);
+	if (doubleclick_action)
+		sp_button_set_doubleclick_action (button, doubleclick_action);
 
 	// The Inkscape style is no-relief buttons
 	gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
@@ -189,6 +218,18 @@ sp_button_toggle_set_down (SPButton *button, gboolean down)
 	g_signal_handlers_block_by_func (G_OBJECT (button), (gpointer)G_CALLBACK (sp_button_perform_action), NULL);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), (unsigned int)down);
 	g_signal_handlers_unblock_by_func (G_OBJECT (button), (gpointer)G_CALLBACK (sp_button_perform_action), NULL);
+}
+
+static void
+sp_button_set_doubleclick_action (SPButton *button, SPAction *action)
+{
+	if (button->doubleclick_action) {
+		nr_object_unref ((NRObject *) button->doubleclick_action);
+	}
+	button->doubleclick_action = action;
+	if (action) {
+		button->doubleclick_action = (SPAction *) nr_object_ref ((NRObject *) action);
+	}
 }
 
 static void
@@ -284,8 +325,8 @@ sp_button_new_from_data (unsigned int size,
 			 GtkTooltips *tooltips)
 {
 	GtkWidget *button;
-	SPAction *action=sp_action_new(view, name, name, tip, name, 0); // no parent verb (and thus no shortcuts?)
-	button = sp_button_new (size, type, action, tooltips);
+	SPAction *action=sp_action_new(view, name, name, tip, name, 0);
+	button = sp_button_new (size, type, action, NULL, tooltips);
 	nr_object_unref ((NRObject *) action);
 	return button;
 }
