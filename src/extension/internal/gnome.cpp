@@ -21,6 +21,7 @@
 #include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
 #include <libnr/nr-matrix-fns.h>
+#include <libnr/nr-path.h>
 #include <libnr/nr-pixblock.h>
 #include <display/canvas-bpath.h>
 
@@ -183,8 +184,9 @@ PrintGNOME::release (Inkscape::Extension::Print *mod)
 }
 
 unsigned int
-PrintGNOME::fill (Inkscape::Extension::Print *mod, const NRBPath *bpath, const NRMatrix *ctm, const SPStyle *style,
-			    const NRRect *pbox, const NRRect *dbox, const NRRect *bbox)
+PrintGNOME::fill(Inkscape::Extension::Print *mod,
+		 NRBPath const *bpath, NRMatrix const *ctm, SPStyle const *style,
+		 NRRect const *pbox, NRRect const *dbox, NRRect const *bbox)
 {
     gdouble t[6];
 
