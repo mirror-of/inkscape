@@ -24,6 +24,12 @@
 #include <extension/extension.h>
 #include <extension/db.h>
 
+//for the preview widget
+#include "document.h"
+#include "inkscape.h"
+#include "svg-view.h"
+#include "uri.h"
+
 
 namespace Inkscape
 {
@@ -31,6 +37,89 @@ namespace UI
 {
 namespace Dialogs
 {
+
+/*#########################################################################
+### SVG Preview Widget
+#########################################################################*/
+class SVGPreview : public Gtk::VBox
+{
+    public:
+        SVGPreview();
+        ~SVGPreview();
+
+        bool setDocument(SPDocument *doc);
+
+        bool SVGPreview::setFileName(const char *filename);
+
+        bool setURI(URI &uri);
+
+    private:
+
+        SPDocument *document;
+
+        GtkWidget *viewerGtk;
+
+};
+
+
+bool SVGPreview::setDocument(SPDocument *doc)
+{
+    if (document)
+        sp_document_unref(document);
+
+    sp_document_ref(doc);
+    document = doc;
+
+    //This should remove it from the box, and free resources
+    if (viewerGtk)
+        {
+        gtk_widget_destroy(viewerGtk);
+        }
+
+     viewerGtk  = sp_svg_view_widget_new(doc);
+     GtkWidget *vbox = (GtkWidget *)gobj();
+     gtk_box_pack_start (GTK_BOX (vbox), viewerGtk, TRUE, TRUE, 0);
+     gtk_widget_show(viewerGtk);
+
+
+
+    return true;
+}
+
+bool SVGPreview::setFileName(const char *filename)
+{ 
+    SPDocument *doc = sp_document_new (filename, 0, 0);
+    if (!doc)
+        {
+        g_warning("SVGView: error loading document '%s'\n",filename);
+        return false;
+        }
+
+    setDocument(doc);
+
+    return true;
+}
+
+bool SVGPreview::setURI(URI &uri)
+{ 
+    return setFileName(uri.toString());
+}
+
+SVGPreview::SVGPreview()
+{
+    if (!INKSCAPE)
+        inkscape_application_init("");
+    document = NULL;
+    viewerGtk = NULL;
+    set_size_request(180,180);
+}
+
+SVGPreview::~SVGPreview()
+{
+
+}
+
+
 
 /*#########################################################################
 ### F I L E    O P E N
@@ -61,6 +150,16 @@ class FileOpenDialogImpl : public FileOpenDialog, public Gtk::FileChooserDialog
 
 
     private:
+
+        /**
+         * Our svg preview widget
+         */
+       SVGPreview svgPreview;
+
+        /**
+         * Callback for seeing if the preview needs to be drawn
+         */
+        void updatePreviewCallback();
 
         /**
          * Fix to allow typing of the file name 
@@ -96,14 +195,36 @@ class FileOpenDialogImpl : public FileOpenDialog, public Gtk::FileChooserDialog
 };
 
 /**
+ * Callback for checking if the preview needs to be redrawn
+ */
+void FileOpenDialogImpl::updatePreviewCallback()
+{
+    gchar *fName = (gchar *)get_preview_filename().c_str();
+    if (!fName)
+        return;
+    //g_message("User hit return.  Text is '%s'\n", fName);
+
+    if (!(  g_file_test(fName, G_FILE_TEST_EXISTS) && 
+           (g_str_has_suffix(fName, ".svg") ||   g_str_has_suffix(fName, ".svgz")
+         )))
+        return;
+
+    if (svgPreview.setFileName(fName))
+        set_preview_widget_active(true);
+    else
+        set_preview_widget_active(false);
+
+}
+
+/**
  * Callback for fileNameEntry widget
  */
 void FileOpenDialogImpl::fileNameEntryChangedCallback()
 {
-    gchar *fName = (gchar *)fileNameEntry.get_text().c_str();
+    gchar *fName = (gchar *)fileNameEntry.get_text().c_str(); 
     //g_message("User hit return.  Text is '%s'\n", fName);
 
-    if (g_file_test(fName, G_FILE_TEST_EXISTS))
+    if (g_file_test(fName, G_FILE_TEST_IS_REGULAR))
        {
        //dialog with either (1) select a regular file or (2) cd to dir
        set_filename(fileNameEntry.get_text());
@@ -175,7 +296,16 @@ FileOpenDialogImpl::FileOpenDialogImpl(const char *dir,
 
     Inkscape::Extension::db.free_list(extension_list);
 
-    //#####Add a text entry bar, and tie it to file chooser events
+    //###### Add a preview widget
+    set_preview_widget(svgPreview);
+
+    //Catch selection-changed events, so we can adjust the text widget
+    signal_update_preview().connect( 
+         sigc::mem_fun(*this, &FileOpenDialogImpl::updatePreviewCallback) );
+
+
+
+    //###### Add a text entry bar, and tie it to file chooser events
     fileNameEntry.set_text(get_current_folder());
     set_extra_widget(fileNameEntry);
     fileNameEntry.grab_focus();
