@@ -24,6 +24,9 @@ typedef struct {
 } win_data;
 
 gboolean sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data);
+void sp_dialog_defocus (GtkWindow *win);
+void sp_dialog_defocus_callback (GtkWindow *win, gpointer data);
+void sp_dialog_defocus_on_enter (GtkWidget *w);
 void sp_transientize (GtkWidget *win);
 void sp_transientize_callback (Inkscape *inkscape, SPDesktop *desktop, win_data *wd);
 

@@ -36,6 +36,36 @@ sp_allow_again (gpointer *wd)
 	return FALSE; // so that it is only called once
 }
 
+/**
+\brief remove focus from window to whoever it is transient for
+*/
+void
+sp_dialog_defocus (GtkWindow *win)
+{
+	GtkWindow *w;
+	//find out the document window we're transient for
+	w = gtk_window_get_transient_for ((GtkWindow *) win);
+	//switch to it
+	if (w) {
+		gtk_window_present (w);
+	}
+}
+
+/**
+\brief callback to defocus a widget's parent dialog
+*/
+void
+sp_dialog_defocus_callback (GtkWindow *win, gpointer data)
+{
+	sp_dialog_defocus ((GtkWindow *) gtk_widget_get_toplevel ((GtkWidget *) data));
+}
+
+void
+sp_dialog_defocus_on_enter (GtkWidget *w)
+{
+	g_signal_connect (G_OBJECT (w), "activate", G_CALLBACK (sp_dialog_defocus_callback), w);
+}
+
 gboolean
 sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 {
@@ -47,11 +77,7 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 	case GDK_KEY_PRESS:
 		switch (event->key.keyval) {
 		case GDK_Escape: 
-			// send focus to the canvas
-			w = w = gtk_window_get_transient_for ((GtkWindow *) win);
-			if (w) {
-				gtk_window_present (w);
-			}
+			sp_dialog_defocus (win);
 			ret = TRUE; 
 			break;
 		case GDK_F4:
@@ -74,13 +100,6 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 			}
 			break;
 		default: // pass keypress to the canvas
-			w = gtk_window_get_transient_for ((GtkWindow *) win);
-			if (w) {
-				dtw = (SPDesktopWidget *)g_object_get_data (G_OBJECT (w), "desktopwidget");
-				inkscape_activate_desktop (dtw->desktop);
-				gtk_propagate_event (GTK_WIDGET (dtw->canvas), event);
-				ret = TRUE; 
-			}
 			break;
 		}
 	default:
@@ -92,14 +111,19 @@ sp_dialog_event_handler (GtkWindow *win, GdkEvent *event, gpointer data)
 void
 sp_transientize (GtkWidget *dialog)
 {
-	// if there's an active canvas, attach dialog to it as a transient:
+	// transientzing does not work on windows; when you minimize a document and then open it back, 
+	// only its transient emerges and you cannot access the document window 
+#ifndef WIN32
+	// if there's an active document window, attach dialog to it as a transient:
 	if (SP_ACTIVE_DESKTOP && g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window")) 
 		gtk_window_set_transient_for ((GtkWindow *) dialog, (GtkWindow *) g_object_get_data (G_OBJECT (SP_ACTIVE_DESKTOP), "window"));
+#endif
 }
 
 void
 sp_transientize_callback (Inkscape *inkscape, SPDesktop *desktop, win_data *wd)
 {
+#ifndef WIN32
 	if (wd->stop) { // if retransientizing of this dialog is still forbidden after previous call
 		// warning turned off because it was confusingly fired when loading many files from command line
 		//		g_warning("Retranzientize aborted! You're switching windows too fast!"); 
@@ -116,5 +140,6 @@ sp_transientize_callback (Inkscape *inkscape, SPDesktop *desktop, win_data *wd)
 	}
 	// we're done, allow next retransientizing not sooner than after 10 msec
 	gtk_timeout_add (6, (GtkFunction) sp_allow_again, (gpointer) wd);  
+#endif
 }
 
