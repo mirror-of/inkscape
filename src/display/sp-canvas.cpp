@@ -1074,10 +1074,26 @@ emit_event (SPCanvas *canvas, GdkEvent *event)
 {
     guint mask;
 
+    /* This check is part of the cause of the Win32 drag-to-border
+    ** freeze bug.  Lauris removed it from SP sometime between 0.32
+    ** and 0.33, saying:
+    **     `This does not work under Windows.  Basically current_item
+    **      becomes NULL if pointer leaves canvas.  And moving it back
+    **      picks up something else as current item.'
+    ** This is true: current_item does go NULL on Win32 when the pointer
+    ** leaves the canvas.
+    **
+    ** I'm not sure whether the check has any value on Linux, so
+    ** I'm leaving it in for non-Win32.  We should probably work
+    ** out what it achieves, and perhaps we can remove it altogether.
+    */
+#ifndef WIN32    
     /* Perform checks for grabbed items */
     if (canvas->grabbed_item && 
-        !is_descendant (canvas->current_item, canvas->grabbed_item))
+        !is_descendant (canvas->current_item, canvas->grabbed_item)) {
         return FALSE;
+    }
+#endif
 
     if (canvas->grabbed_item) {
         switch (event->type) {
@@ -1141,7 +1157,20 @@ emit_event (SPCanvas *canvas, GdkEvent *event)
 
     /* Choose where we send the event */
 
+#ifdef WIN32
+    /* As discussed above, canvas->current_item becomes NULL in some
+    ** cases under Win32.  So this is a hack that Lauris applied
+    ** to SP to get around the problem.
+    */
+    SPCanvasItem* item = NULL;
+    if (canvas->grabbed_item && !is_descendant (canvas->current_item, canvas->grabbed_item)) {
+        item = canvas->grabbed_item;
+    } else {
+        item = canvas->current_item;
+    }
+#else    
     SPCanvasItem *item = canvas->current_item;
+#endif    
 
     if (canvas->focused_item &&
         ((event->type == GDK_KEY_PRESS) ||
