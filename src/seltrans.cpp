@@ -35,19 +35,19 @@
 #include "prefs-utils.h"
 #include <libnr/nr-point-fns.h>
 
-static void sp_sel_trans_update_handles (SPSelTrans * seltrans);
-static void sp_sel_trans_update_volatile_state (SPSelTrans * seltrans);
+static void sp_sel_trans_update_handles(SPSelTrans *seltrans);
+static void sp_sel_trans_update_volatile_state(SPSelTrans *seltrans);
 
-static void sp_remove_handles (SPKnot * knot[], gint num);
-static void sp_show_handles (SPSelTrans * seltrans, SPKnot * knot[], const SPSelTransHandle handle[], gint num);
+static void sp_remove_handles(SPKnot *knot[], gint num);
+static void sp_show_handles(SPSelTrans *seltrans, SPKnot *knot[], SPSelTransHandle const handle[], gint num);
 
-static void sp_sel_trans_handle_grab (SPKnot * knot, guint state, gpointer data);
-static void sp_sel_trans_handle_ungrab (SPKnot * knot, guint state, gpointer data);
-static void sp_sel_trans_handle_new_event (SPKnot * knot, NRPoint *position, guint32 state, gpointer data);
-static gboolean sp_sel_trans_handle_request (SPKnot * knot, NRPoint *p, guint state, gboolean * data);
+static void sp_sel_trans_handle_grab(SPKnot *knot, guint state, gpointer data);
+static void sp_sel_trans_handle_ungrab(SPKnot *knot, guint state, gpointer data);
+static void sp_sel_trans_handle_new_event(SPKnot *knot, NRPoint *position, guint32 state, gpointer data);
+static gboolean sp_sel_trans_handle_request(SPKnot *knot, NRPoint *p, guint state, gboolean *data);
 
-static void sp_sel_trans_sel_changed (SPSelection * selection, gpointer data);
-static void sp_sel_trans_sel_modified (SPSelection * selection, guint flags, gpointer data);
+static void sp_sel_trans_sel_changed(SPSelection *selection, gpointer data);
+static void sp_sel_trans_sel_modified(SPSelection *selection, guint flags, gpointer data);
 
 extern GdkPixbuf *handles[];
 
@@ -487,8 +487,6 @@ sp_sel_trans_origin_desktop (SPSelTrans *seltrans, NRPoint *p)
 static void
 sp_sel_trans_update_handles (SPSelTrans * seltrans)
 {
-	NRPoint p;
-
 	g_return_if_fail (seltrans != NULL);
 
       	if ((!seltrans->show_handles) || (seltrans->empty)) {
@@ -576,13 +574,9 @@ sp_remove_handles (SPKnot * knot[], gint num)
 	}
 }
 
-static void
-sp_show_handles (SPSelTrans * seltrans, SPKnot * knot[], const SPSelTransHandle handle[], gint num)
+static void sp_show_handles (SPSelTrans *seltrans, SPKnot *knot[], SPSelTransHandle const handle[], gint num)
 {
-	NRPoint p;
-	gint i;
-
-	for (i = 0; i < num; i++) {
+	for (gint i = 0; i < num; i++) {
 		if (knot[i] == NULL) {
 			knot[i] = sp_knot_new (seltrans->desktop);
 			g_object_set (G_OBJECT (knot[i]),
@@ -613,11 +607,14 @@ sp_show_handles (SPSelTrans * seltrans, SPKnot * knot[], const SPSelTransHandle 
 		}
 		sp_knot_show (knot[i]);
 
-		p = seltrans->box.topleft() + NR::scale(NR::Point(handle[i].x, handle[i].y)) * (seltrans->box.dimensions());
+		NR::Point const handle_pt(handle[i].x, handle[i].y);
+		NR::Point const p( seltrans->box.topleft()
+				   + ( NR::scale(handle_pt)
+				       * (seltrans->box.dimensions()) ) );
 
 		//gtk_signal_handler_block_by_func (GTK_OBJECT (knot[i]),
 		//				  GTK_SIGNAL_FUNC (sp_sel_trans_handle_new_event), &handle[i]);
-		sp_knot_set_position (knot[i], &p, 0);	    
+		sp_knot_set_position(knot[i], p, 0);
 		//gtk_signal_handler_unblock_by_func (GTK_OBJECT (knot[i]),
 		//				    GTK_SIGNAL_FUNC (sp_sel_trans_handle_new_event), &handle[i]);
 
@@ -695,6 +692,8 @@ sp_sel_trans_handle_new_event (SPKnot * knot, NRPoint *position, guint state, gp
 static gboolean
 sp_sel_trans_handle_request (SPKnot * knot, NRPoint *position, guint state, gboolean * data)
 {
+	using NR::X;
+	using NR::Y;
 	SPDesktop * desktop;
 	SPSelTrans * seltrans;
 	SPSelTransHandle * handle;
@@ -725,7 +724,7 @@ sp_sel_trans_handle_request (SPKnot * knot, NRPoint *position, guint state, gboo
 		*position = p;
 		sp_knot_set_position (knot, position, state);
 		sp_ctrl_moveto (SP_CTRL (seltrans->grip), position->x, position->y);
-		sp_ctrl_moveto (SP_CTRL (seltrans->norm), seltrans->origin[NR::X], seltrans->origin[NR::Y]);
+		sp_ctrl_moveto (SP_CTRL (seltrans->norm), seltrans->origin[X], seltrans->origin[Y]);
 	}
 	
 	return TRUE;
@@ -765,37 +764,32 @@ sp_sel_trans_sel_modified (SPSelection *selection, guint flags, gpointer data)
  * handlers for handle move-request
  */
 
-gboolean
-sp_sel_trans_scale_request (SPSelTrans *seltrans, SPSelTransHandle *handle, NR::Point& pt, guint state)
+gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle *handle, NR::Point &pt, guint state)
 {
+	using NR::X;
+	using NR::Y;
 	NRPoint norm, point;
 	gdouble sx, sy;
-	gchar status[80];
 	SPDesktop *desktop;
-	int xd, yd;
 
-	NRPoint pp = pt;
-	NRPoint* p = &pp;
 	desktop = seltrans->desktop;
 
 	sp_sel_trans_point_desktop (seltrans, &point);
 	sp_sel_trans_origin_desktop (seltrans, &norm);
 
-	if (fabs (point.x - norm.x) > 0.001) {
-	        sx = (pp.x - norm.x) / (point.x - norm.x);
+	bool const xd = ( fabs( point.x - norm.x ) > 0.001 );
+	if (xd) {
+	        sx = (pt[X] - norm.x) / (point.x - norm.x);
 	        if (fabs (sx) < 1e-9) sx = 1e-9;
-	        xd = TRUE;
 	} else {
 	        sx = 0.0;
-	        xd = FALSE;
 	}
-	if (fabs (point.y - norm.y) > 0.001) {
-	        sy = (pp.y - norm.y) / (point.y - norm.y);
+	bool const yd = ( fabs( point.y - norm.y ) > 0.001 );
+	if (yd) {
+	        sy = (pt[Y] - norm.y) / (point.y - norm.y);
 	        if (fabs (sy) < 1e-9) sy = 1e-9;
-	        yd = TRUE;
 	} else {
 	        sy = 0.0;
-	        yd = FALSE;
 	}
 
 	if (state & GDK_CONTROL_MASK) {
@@ -811,27 +805,24 @@ sp_sel_trans_scale_request (SPSelTrans *seltrans, SPSelTransHandle *handle, NR::
 	        if (yd) sy = sp_desktop_vertical_snap_list_scale (desktop, seltrans->spp, seltrans->spp_length, &norm, sy);
 	}
 
-	pp.x = (point.x - norm.x) * sx + norm.x;
-	pp.y = (point.y - norm.y) * sy + norm.y;
+	pt[X] = (point.x - norm.x) * sx + norm.x;
+	pt[Y] = (point.y - norm.y) * sy + norm.y;
 
 	// status text
+	char status[80];
 	sprintf (status, "Scale  %0.2f%c, %0.2f%c", 100 * sx, '%', 100 * sy, '%');
 	sp_view_set_status (SP_VIEW (seltrans->desktop), status, FALSE);
 
-	pt = pp;
 	return TRUE;
 }
 
-gboolean
-sp_sel_trans_stretch_request (SPSelTrans * seltrans, SPSelTransHandle * handle, NR::Point& pt, guint state)
+gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle *handle, NR::Point &pt, guint state)
 {
+	using NR::X;
+	using NR::Y;
 	double sx = 1.0, sy = 1.0, ratio;
-	gchar status[80];	
 	NRPoint norm, point;
 	SPDesktop * desktop;
-		NRPoint pp = pt;
-	NRPoint* p = &pp;
-
 
 	desktop = seltrans->desktop;
  
@@ -842,7 +833,7 @@ sp_sel_trans_stretch_request (SPSelTrans * seltrans, SPSelTransHandle * handle, 
 	case GDK_TOP_SIDE:
 	case GDK_BOTTOM_SIDE:
 		if (fabs (point.y - norm.y) < 1e-15) return FALSE;
-		sy = (pp.y - norm.y) / (point.y - norm.y);	    
+		sy = ( pt[Y] - norm.y ) / ( point.y - norm.y );
 		if (fabs (sy) < 1e-15) sy = 1e-15;
 		if (state & GDK_CONTROL_MASK) {
 			if (fabs (sy) > 1) sy = sy / fabs (sy);
@@ -857,7 +848,7 @@ sp_sel_trans_stretch_request (SPSelTrans * seltrans, SPSelTransHandle * handle, 
 	case GDK_LEFT_SIDE:
 	case GDK_RIGHT_SIDE:
 		if (fabs (point.x - norm.x) < 1e-5) return FALSE;
-		sx = (pp.x - norm.x) / (point.x - norm.x);
+		sx = ( pt[X] - norm.x ) / ( point.x - norm.x );
 		if (fabs (sx) < 1e-5) sx = 1e-15;
 		if (state & GDK_CONTROL_MASK) {
 			if (fabs (sx) > 1) sx = sx / fabs (sx);
@@ -873,34 +864,30 @@ sp_sel_trans_stretch_request (SPSelTrans * seltrans, SPSelTransHandle * handle, 
 		break;
 	}
 
-	pp.x = (point.x - norm.x)* sx + norm.x;
-	pp.y = (point.y - norm.y)* sy + norm.y;
+	pt[X] = ( point.x - norm.x ) * sx + norm.x;
+	pt[Y] = ( point.y - norm.y ) * sy + norm.y;
 
 	// status text
+	gchar status[80];
 	sprintf (status, "Scale  %0.2f%c, %0.2f%c", 100 * sx, '%', 100 * sy, '%');
 	sp_view_set_status (SP_VIEW (seltrans->desktop), status, FALSE);
 
-	pt = pp;
 	return TRUE;
 }
 
-gboolean
-sp_sel_trans_skew_request (SPSelTrans * seltrans, SPSelTransHandle * handle, NR::Point& pt, guint state)
+gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle *handle, NR::Point &pt, guint state)
 {
+	using NR::X;
+	using NR::Y;
         double skew[6], sx = 1.0, sy = 1.0;
-        gchar status[80];
 	NRPoint norm, point;
 	SPDesktop * desktop;
-		NRPoint pp = pt;
-	NRPoint* p = &pp;
-
 
 	desktop = seltrans->desktop;
 
 	sp_sel_trans_point_desktop (seltrans, &point);
 	sp_sel_trans_origin_desktop (seltrans, &norm);
 
-  
 	skew[4]=0;
 	skew[5]=0;
 	skew[0]=1;
@@ -909,10 +896,10 @@ sp_sel_trans_skew_request (SPSelTrans * seltrans, SPSelTransHandle * handle, NR:
 	switch (handle->cursor) {
 	case GDK_SB_V_DOUBLE_ARROW:
 	  if (fabs (point.x - norm.x) < 1e-15) return FALSE;
-	  skew[1] = (pp.y - point.y) / (point.x - norm.x);
+	  skew[1] = ( pt[Y] - point.y ) / ( point.x - norm.x );
 	  skew[1] = sp_desktop_vertical_snap_list_skew (desktop, seltrans->spp, seltrans->spp_length, &norm, skew[1]);
-	  pp.y = (point.x - norm.x) * skew[1] + point.y; 
-	  sx = (pp.x - norm.x) / (point.x - norm.x);
+	  pt[Y] = ( point.x - norm.x ) * skew[1] + point.y;
+	  sx = ( pt[X] - norm.x ) / ( point.x - norm.x );
 	  if (state & GDK_CONTROL_MASK) {
 	    sx = sp_desktop_horizontal_snap_list_scale (desktop, seltrans->spp, seltrans->spp_length, &norm, sx);
 	  } else {
@@ -921,16 +908,16 @@ sp_sel_trans_skew_request (SPSelTrans * seltrans, SPSelTransHandle * handle, NR:
 	    sx = (double)((int)(sx + 0.5*(fabs(sx)/sx)));
 	  }
 	  if (fabs (sx) < 1e-15) sx = 1e-15;
-	  pp.x = (point.x - norm.x) * sx + norm.x;
+	  pt[X] = ( point.x - norm.x ) * sx + norm.x;
 	  
 	  skew[2] = 0;
 	  break;
 	case GDK_SB_H_DOUBLE_ARROW:
 	  if (fabs (point.y - norm.y) < 1e-15) return FALSE;
-	  skew[2] = (pp.x - point.x) / (point.y - norm.y);
+	  skew[2] = ( pt[X] - point.x ) / ( point.y - norm.y );
 	  skew[2] = sp_desktop_horizontal_snap_list_skew (desktop, seltrans->spp, seltrans->spp_length, &norm, skew[2]);
-	  pp.x = (point.y - norm.y) * skew[2] + point.x; 
-	  sy = (pp.y - norm.y) / (point.y - norm.y);
+	  pt[X] = ( point.y - norm.y ) * skew[2] + point.x;
+	  sy = ( pt[Y] - norm.y ) / ( point.y - norm.y );
 	  
 	  if (state & GDK_CONTROL_MASK) {
 	    sy = sp_desktop_vertical_snap_list_scale (desktop, seltrans->spp, seltrans->spp_length, &norm, sy);
@@ -940,31 +927,29 @@ sp_sel_trans_skew_request (SPSelTrans * seltrans, SPSelTransHandle * handle, NR:
 	    sy = (double)((int)(sy + 0.5*(fabs(sy)/sy)));
 	  }
 	  if (fabs (sy) < 1e-15) sy = 1e-15;
-	  pp.y = (point.y - norm.y) * sy + norm.y;
-	  
+	  pt[Y] = ( point.y - norm.y ) * sy + norm.y;
+
 	  skew[1] = 0;
 	  break;
 	default:
 		break;
 	}
+
 	// status text
+        gchar status[80];
 	sprintf (status, "Skew  %0.2f%c %0.2f%c", 100 * fabs(skew[2]), '%', 100 * fabs(skew[1]), '%');
 	sp_view_set_status (SP_VIEW (seltrans->desktop), status, FALSE);
 
-	pt = pp;
 	return TRUE;
 }
 
-gboolean
-sp_sel_trans_rotate_request (SPSelTrans * seltrans, SPSelTransHandle * handle, NR::Point& pt, guint state)
+gboolean sp_sel_trans_rotate_request(SPSelTrans *seltrans, SPSelTransHandle *handle, NR::Point &pt, guint state)
 {
 	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
-	SPDesktop *desktop = seltrans->desktop;
-
-	const NR::Point point = seltrans->point;
+	NR::Point const point = seltrans->point;
 	NR::Point norm = seltrans->origin;
-	
+
 	// rotate affine in rotate
 	NR::Point d1 = point - norm;
 	NR::Point d2 = pt    - norm;
@@ -1010,41 +995,37 @@ sp_sel_trans_rotate_request (SPSelTrans * seltrans, SPSelTransHandle * handle, N
 	return TRUE;
 }
 
-gboolean
-sp_sel_trans_center_request (SPSelTrans * seltrans, SPSelTransHandle * handle, NR::Point& pt, guint state)
+gboolean sp_sel_trans_center_request(SPSelTrans *seltrans, SPSelTransHandle *handle, NR::Point &pt, guint state)
 {
-	gchar status[80];
-	GString * xs, * ys;
-	SPDesktop * desktop;
-	NRPoint point;
-
-	
-	desktop  = seltrans->desktop;
-	sp_desktop_free_snap (desktop, pt);
-	NRPoint pp = pt;
-	NRPoint* p = &pp;
+	using NR::X;
+	using NR::Y;
+	SPDesktop *desktop = seltrans->desktop;
+	sp_desktop_free_snap(desktop, pt);
 
 	if (state & GDK_CONTROL_MASK) {
+		NRPoint point;
 	        sp_sel_trans_point_desktop (seltrans, &point);
-	        if (fabs (point.x - pp.x) > fabs (point.y - pp.y)) 
-		  pp.y = point.y;
-		else 
-		  pp.x = point.x;
+	        if ( fabs( point.x - pt[X] )  >
+		     fabs( point.y - pt[Y] ) ) {
+			pt[Y] = point.y;
+		} else {
+			pt[X] = point.x;
+		}
 	}
 
 	if (state & GDK_SHIFT_MASK) {
-		pp = seltrans->box.centre();
+		pt = seltrans->box.centre();
 	}
 
 	// status text
-	xs = SP_PT_TO_METRIC_STRING (pp.x, SP_DEFAULT_METRIC);
-	ys = SP_PT_TO_METRIC_STRING (pp.y, SP_DEFAULT_METRIC);
-	sprintf (status, "Center  %s, %s", xs->str, ys->str);
+	GString *xs = SP_PT_TO_METRIC_STRING(pt[X], SP_DEFAULT_METRIC);
+	GString *ys = SP_PT_TO_METRIC_STRING(pt[Y], SP_DEFAULT_METRIC);
+	gchar *status = g_strdup_printf("Center  %s, %s", xs->str, ys->str);
 	sp_view_set_status (SP_VIEW (seltrans->desktop), status, FALSE);
+	g_free(status);
 	g_string_free (xs, FALSE);
 	g_string_free (ys, FALSE);
 
-	pt = pp;
 	return TRUE;
 }
 
@@ -1053,18 +1034,20 @@ sp_sel_trans_center_request (SPSelTrans * seltrans, SPSelTransHandle * handle, N
  *
  */
 
-void
-sp_sel_trans_stretch (SPSelTrans * seltrans, SPSelTransHandle * handle, NR::Point& pt, guint state)
+void sp_sel_trans_stretch(SPSelTrans *seltrans, SPSelTransHandle *handle, NR::Point &pt, guint state)
 {
-	int dim;
+	using NR::X;
+	using NR::Y;
+
+	NR::Dim2 dim;
 	switch (handle->cursor) {
 	case GDK_LEFT_SIDE:
 	case GDK_RIGHT_SIDE:
-		dim = NR::X;
+		dim = X;
 		break;
 	case GDK_TOP_SIDE:
 	case GDK_BOTTOM_SIDE:
-		dim = NR::Y;
+		dim = Y;
 		break;
 	}
 	
@@ -1093,8 +1076,7 @@ sp_sel_trans_stretch (SPSelTrans * seltrans, SPSelTransHandle * handle, NR::Poin
 	sp_sel_trans_transform (seltrans, stretch, norm);
 }
 
-void
-sp_sel_trans_scale (SPSelTrans * seltrans, SPSelTransHandle * handle, NR::Point& pt, guint state) 
+void sp_sel_trans_scale(SPSelTrans *seltrans, SPSelTransHandle *handle, NR::Point &pt, guint state)
 {
 	const NR::Point point = seltrans->point;
 	NR::Point norm = seltrans->origin;
@@ -1111,14 +1093,13 @@ sp_sel_trans_scale (SPSelTrans * seltrans, SPSelTransHandle * handle, NR::Point&
 	sp_sel_trans_transform (seltrans, scale, norm);
 }
 
-void
-sp_sel_trans_skew (SPSelTrans * seltrans, SPSelTransHandle * handle, NR::Point& pt, guint state)
+void sp_sel_trans_skew(SPSelTrans *seltrans, SPSelTransHandle *handle, NR::Point &pt, guint state)
 {
 	const NR::Point point = seltrans->point;
 	NR::Point norm = seltrans->origin;
 	const NR::Point offset = point - norm;
-  
-	int dim;
+
+	unsigned dim;
 	switch (handle->cursor) {
 	case GDK_SB_H_DOUBLE_ARROW:
 		dim = NR::Y;

@@ -1,5 +1,8 @@
 2004-01-28  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/seltrans.cpp: Various cleanups, including addressing some
+	warnings, and doing some more NR::Point'ification.
+
 	* src/knot.h, src/knot.cpp (sp_knot_set_position): Change from
 	pass-by-value to pass-by-const-reference.
 
