@@ -354,7 +354,8 @@ sp_text_write (SPObject *object, SPRepr *repr, guint flags)
 
     // when stamping, _write is called on the newly created object before _set_shape, so we need to
     // reflow here too (bug 1077559)
-    text->UpdateFlowSource();
+    if (flags & SP_OBJECT_WRITE_EXT)
+        text->UpdateFlowSource();
 
     if (flags & SP_OBJECT_WRITE_BUILD) {
         if (!repr)
@@ -1203,7 +1204,7 @@ sp_adjust_kerning_screen (SPText *text, gint i_position, SPDesktop *desktop, NR:
         cur->AddValue(position, by_y, 3, true, false);
         cur=cur->next;
     }
-    SP_OBJECT(text)->updateRepr(SP_OBJECT_REPR(SP_OBJECT(text)),SP_OBJECT_WRITE_EXT);
+    SP_OBJECT(text)->updateRepr();
     SP_OBJECT(text)->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
