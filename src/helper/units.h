@@ -101,7 +101,6 @@ struct SPDistance {
 #define SP_PS_UNIT (sp_unit_get_identity (SP_UNIT_ABSOLUTE))
 
 const SPUnit *sp_unit_get_identity (guint base);
-const SPUnit *sp_unit_get_by_name (const gchar *name);
 const SPUnit *sp_unit_get_by_abbreviation (const gchar *abbreviation);
 SPUnit const &sp_unit_get_by_id(SPUnitId const id);
 

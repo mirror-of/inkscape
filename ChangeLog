@@ -16,7 +16,7 @@
 	  (sp_convert_distance_full): Change arguments & return value.
 	  Call g_log if no conversion possible.
 	  Callers updated.
-	  (sp_unit_get_default): Remove unused function.
+	  (sp_unit_get_default, sp_unit_get_by_name): Remove unused functions.
 	  sp_units: Less rounding error in unittobase.
 
 2004-06-16  Carl Hetherington  <inkscape@carlh.net>

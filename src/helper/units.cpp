@@ -87,19 +87,6 @@ sp_unit_get_identity (guint base)
 }
 
 const SPUnit *
-sp_unit_get_by_name (const gchar *name)
-{
-	g_return_val_if_fail (name != NULL, NULL);
-
-	for (unsigned i = 0 ; i < sp_num_units ; i++) {
-		if (!g_strcasecmp (name, sp_units[i].name)) return &sp_units[i];
-		if (!g_strcasecmp (name, sp_units[i].plural)) return &sp_units[i];
-	}
-
-	return NULL;
-}
-
-const SPUnit *
 sp_unit_get_by_abbreviation (const gchar *abbreviation)
 {
 	g_return_val_if_fail (abbreviation != NULL, NULL);
