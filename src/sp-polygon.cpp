@@ -127,6 +127,9 @@ sp_polygon_write (SPObject *object, SPRepr *repr, guint flags)
         gchar *str;
 
 	shape = SP_SHAPE (object);
+	// Tolerable workaround: we need to update the object's curve before we set points=
+	// because it's out of sync when e.g. some extension attrs of the polygon or star are changed in XML editor
+	sp_shape_set_shape (shape);
 
 	if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
 		repr = sp_repr_new ("polygon");
