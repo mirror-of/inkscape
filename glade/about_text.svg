@@ -1,0 +1,333 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"
+[
+ <!ATTLIST svg
+  xmlns:xlink CDATA #FIXED "http://www.w3.org/1999/xlink">
+]>
+<!-- Created with Sodipodi ("http://www.sodipodi.com/") -->
+<svg
+   id="svg559"
+   sodipodi:version="0.28pre2"
+   width="600pt"
+   height="500pt"
+   sodipodi:docname="about2.svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs
+     id="defs561">
+    <linearGradient
+       id="linearGradient583">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0.000000"
+         id="stop584" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1.000000"
+         id="stop585" />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#linearGradient583"
+       id="linearGradient586"
+       x1="0.497940"
+       y1="0.009092"
+       x2="0.485597"
+       y2="0.972727" />
+  </defs>
+  <sodipodi:namedview
+     id="base" />
+  <rect
+     style="font-size:12;fill:#0083ab;fill-rule:evenodd;stroke:#000000;stroke-width:6.86497;"
+     id="rect582"
+     width="480.000031"
+     height="605.026863"
+     x="11.250000"
+     y="11.250000"
+     ry="54.020255"
+     rx="0.000000" />
+  <rect
+     style="fill-rule:evenodd;stroke:none;fill:#fdffff;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;"
+     id="rect133"
+     x="165.887863"
+     y="217.289717"
+     width="123.052948"
+     height="91.900313"
+     rx="0.000000"
+     ry="0.000000" />
+  <path
+     style="font-size:12;fill-rule:evenodd;stroke-width:1pt;"
+     d="M 364.356 345.595 C 382.828 349.289 386.524 362.22 382.828 365.914 C 379.135 369.609 369.899 373.303 362.51 367.761 C 355.119 362.22 355.119 349.289 364.356 345.595 z "
+     id="path580" />
+  <path
+     style="font-size:12;fill-rule:evenodd;stroke-width:1pt;"
+     d="M 177.423 346.829 C 175.623 347.309 160.586 334.351 148.678 340.357 C 136.773 346.362 128.781 359.809 139.903 365.327 C 151.026 370.845 158.977 364.482 168.728 357.635 C 178.48 350.789 178.128 349.47 177.423 346.829 z "
+     id="path582" />
+  <path
+     style="font-size:12;fill-rule:evenodd;stroke-width:1pt;"
+     d="M 397.131 313.955 C 407.177 311.443 430.383 313.955 426.687 328.731 C 422.994 343.511 391.592 337.967 371.27 330.581 C 369.423 315.802 392.396 315.138 397.131 313.955 z "
+     id="path583" />
+  <path
+     style="font-size:12;fill:#ffffff;fill-rule:evenodd;stroke-width:1pt;fill-opacity:1;"
+     d="M 237.765 41.2639 L 119.324 161.472 L 377.418 155.285 L 256.326 41.2639 L 237.765 41.2639 z "
+     id="path615"
+     sodipodi:nodetypes="ccccc" />
+  <path
+     style="font-size:12;fill-rule:evenodd;stroke-width:1pt;fill:#000000;fill-opacity:1;"
+     d="M 66.9532 197.665 C 58.4462 206.172 54.1922 217.273 54.1922 228.375 L 443.511 228.375 C 443.511 217.273 439.258 206.172 430.751 197.665 L 279.562 46.4764 C 262.548 29.4624 235.155 29.4624 218.141 46.4764 L 66.9532 197.665 z M 204.84 80.411 C 187.477 89.226 158.953 126.261 158.953 131.55 L 158.412 153.573 L 207.87 148.613 L 225.583 107.145 L 239.327 154.566 L 275.293 130.558 L 298.561 141.47 L 302.782 109.526 L 345.097 129.962 C 345.097 129.301 345.049 128.64 344.951 127.981 C 344.853 127.323 344.707 126.666 344.511 126.015 C 344.316 125.363 344.072 124.717 343.779 124.077 C 343.486 123.438 343.144 122.806 342.753 122.183 C 342.363 121.561 341.923 120.948 341.435 120.347 C 340.946 119.746 340.409 119.158 339.823 118.584 C 339.237 118.009 338.602 117.45 337.918 116.907 C 337.234 116.364 336.501 115.838 335.719 115.331 L 264.28 62.3498 C 251.775 54.2438 249.101 49.4818 236.596 57.5878 L 204.84 80.411 z "
+     id="path588" />
+  <path
+     style="font-size:12;fill-rule:evenodd;stroke-width:1pt;fill:#000000;fill-opacity:1;"
+     d="M 140.451 261.767 C 131.944 253.26 54.1922 238.818 54.1922 227.716 L 443.511 227.716 C 443.511 238.818 446.287 247.813 419.944 259.777 C 367.092 283.779 342.593 277.385 329.994 289.984 C 317.395 302.583 352.722 309.729 363.508 326.504 C 336.711 356.642 304.902 356.713 292.303 369.312 C 279.704 381.911 316.477 380.805 303.878 393.404 C 280.11 410.418 244.611 418.524 227.597 401.51 C 235.262 368.647 192.943 384.417 180.344 371.818 C 167.745 359.219 206.094 345.784 193.495 333.185 C 180.895 320.586 117.349 308.822 104.75 296.223 C 92.1512 283.624 153.05 274.366 140.451 261.767 z M 181.808 269.495 C 204.323 275.334 229.361 282.98 249.459 283.117 L 250.328 292.171 C 233.118 290.397 196.696 282.097 188.11 277.711 L 181.808 269.495 z "
+     id="path591" />
+  <text
+     style="fill:#ffffff;stroke:none;font-family:Century Schoolbook L;font-style:normal;font-weight:normal;font-size:40;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+     x="63.1319341"
+     y="458.750000"
+     id="text567"
+     sodipodi:linespacing="100%"
+     transform="matrix(1.22224,0,0,1,-6.51054,0)">
+    <tspan
+       x="63.1319"
+       y="458.75"
+       sodipodi:role="line"
+       id="tspan605"
+       style="fill:#ffffff;fill-opacity:1;">
+I  N  K  S  C  A  P  E</tspan>
+  </text>
+  <text
+     style="fill:#ffffff;stroke:none;font-family:Helvetica;font-style:normal;font-weight:normal;font-size:28;text-anchor:start;writing-mode:lr;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;"
+     x="104.478210"
+     y="583.243831"
+     id="text137"
+     transform="translate(-1.88019,0)">
+    <tspan
+       x="104.478"
+       y="583.244"
+       sodipodi:role="line"
+       id="tspan156"
+       style="fill:#ffffff;fill-opacity:1;">
+http://www.inkscape.org</tspan>
+  </text>
+  <text
+     style="fill:#000000;stroke:none;font-family:Helvetica;font-style:normal;font-weight:normal;font-size:32;text-anchor:start;writing-mode:lr;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;"
+     x="98.824421"
+     y="544.598877"
+     id="text140"
+     transform="translate(-3.0944,0)">
+    <tspan
+       x="98.8244"
+       y="544.599"
+       sodipodi:role="line"
+       id="tspan184"
+       style="fill:#000000;fill-opacity:1;">
+Expand your horizons</tspan>
+  </text>
+  <text
+     style="fill:#ffffff;stroke:none;font-family:Century Schoolbook L;font-style:normal;font-weight:normal;font-size:32;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+     x="62.440569"
+     y="504.380693"
+     id="text186"
+     sodipodi:linespacing="100%"
+     transform="matrix(1.22224,0,0,1,137.112,0)">
+    <tspan
+       x="62.4406"
+       y="504.381"
+       sodipodi:role="line"
+       id="tspan195">
+0.35</tspan>
+  </text>
+  <text
+     style="fill:black;stroke:none;font-family:Helvetica;font-style:normal;font-weight:bold;font-size:26;text-anchor:start;writing-mode:lr;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;"
+     x="512.850464"
+     y="37.967300"
+     id="text28">
+    <tspan
+       x="512.85"
+       y="37.9673"
+       sodipodi:role="line"
+       id="tspan74">
+Contributors:</tspan>
+    <tspan
+       x="512.85"
+       y="63.9673"
+       sodipodi:role="line"
+       id="tspan76">
+</tspan>
+  </text>
+  <text
+     style="fill:black;stroke:none;font-family:Helvetica;font-style:normal;font-weight:normal;font-size:20;text-anchor:start;writing-mode:lr;fill-opacity:1;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;"
+     x="510.903404"
+     y="80.802193"
+     id="text53">
+    <tspan
+       x="510.903"
+       y="80.8022"
+       sodipodi:role="line"
+       id="tspan91">
+Hans Breuer</tspan>
+    <tspan
+       x="510.903"
+       y="100.802"
+       sodipodi:role="line"
+       id="tspan93">
+Bulia Byak</tspan>
+    <tspan
+       x="510.903"
+       y="120.802"
+       sodipodi:role="line"
+       id="tspan95">
+Chema Celorio</tspan>
+    <tspan
+       x="510.903"
+       y="140.802"
+       sodipodi:role="line"
+       id="tspan97">
+Zbigniew Chyla</tspan>
+    <tspan
+       x="510.903"
+       y="160.802"
+       sodipodi:role="line"
+       id="tspan99">
+Robert Crosbie</tspan>
+    <tspan
+       x="510.903"
+       y="180.802"
+       sodipodi:role="line"
+       id="tspan101">
+Danilo Egan</tspan>
+    <tspan
+       x="510.903"
+       y="200.802"
+       sodipodi:role="line"
+       id="tspan103">
+Frank Felfe</tspan>
+    <tspan
+       x="510.903"
+       y="220.802"
+       sodipodi:role="line"
+       id="tspan105">
+Ted Gould</tspan>
+    <tspan
+       x="510.903"
+       y="240.802"
+       sodipodi:role="line"
+       id="tspan107">
+Bryce Harrington</tspan>
+    <tspan
+       x="510.903"
+       y="260.802"
+       sodipodi:role="line"
+       id="tspan109">
+Nathan Hurst</tspan>
+    <tspan
+       x="510.903"
+       y="280.802"
+       sodipodi:role="line"
+       id="tspan111">
+Bob Jamison</tspan>
+    <tspan
+       x="510.903"
+       y="300.802"
+       sodipodi:role="line"
+       id="tspan113">
+Lauris Kaplinski</tspan>
+    <tspan
+       x="510.903"
+       y="320.802"
+       sodipodi:role="line"
+       id="tspan115">
+Lynn Kerby</tspan>
+    <tspan
+       x="510.903"
+       y="340.802"
+       sodipodi:role="line"
+       id="tspan117">
+Petr Kovar</tspan>
+    <tspan
+       x="510.903"
+       y="360.802"
+       sodipodi:role="line"
+       id="tspan119">
+Raph Levien</tspan>
+    <tspan
+       x="510.903"
+       y="380.802"
+       sodipodi:role="line"
+       id="tspan121">
+Vitaly Lipatov</tspan>
+    <tspan
+       x="510.903"
+       y="400.802"
+       sodipodi:role="line"
+       id="tspan123">
+Dmitry G. Mastrukov</tspan>
+    <tspan
+       x="510.903"
+       y="420.802"
+       sodipodi:role="line"
+       id="tspan125">
+Michael Meeks</tspan>
+    <tspan
+       x="510.903"
+       y="440.802"
+       sodipodi:role="line"
+       id="tspan127">
+Frederico Mena</tspan>
+    <tspan
+       x="510.903"
+       y="460.802"
+       sodipodi:role="line"
+       id="tspan129">
+MenTaLguY</tspan>
+    <tspan
+       x="510.903"
+       y="480.802"
+       sodipodi:role="line"
+       id="tspan131">
+Yukihiro Nakai</tspan>
+    <tspan
+       x="510.903"
+       y="500.802"
+       sodipodi:role="line"
+       id="tspan133">
+Christian Neumair</tspan>
+    <tspan
+       x="510.903"
+       y="520.802"
+       sodipodi:role="line"
+       id="tspan135">
+Mitsuru Oka</tspan>
+    <tspan
+       x="510.903"
+       y="540.802"
+       sodipodi:role="line"
+       id="tspan137">
+Christian Schaller</tspan>
+    <tspan
+       x="510.903"
+       y="560.802"
+       sodipodi:role="line"
+       id="tspan139">
+Tom von Schwerdtner</tspan>
+    <tspan
+       x="510.903"
+       y="580.802"
+       sodipodi:role="line"
+       id="tspan142">
+Daniel Yacob</tspan>
+    <tspan
+       x="510.903"
+       y="600.802"
+       sodipodi:role="line"
+       id="tspan144">
+Masatake Yamato</tspan>
+    <tspan
+       x="510.903"
+       y="620.802"
+       sodipodi:role="line"
+       id="tspan146">
+</tspan>
+  </text>
+</svg>
