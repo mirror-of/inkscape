@@ -449,7 +449,7 @@ NewtonRaphsonRootFind(BezierCurve Q, NR::Point const &P, gdouble u)
 		if(numerator > 0.) {
 			improved_u = u * .98 - .01;
 		} else if(numerator < 0.) {
-			/* Deliberately asymetrical, to reduce the
+			/* Deliberately asymmetrical, to reduce the
 			   chance of cycling. */
 			improved_u = .031 + u * .98;
 		} else {
