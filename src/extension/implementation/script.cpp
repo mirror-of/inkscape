@@ -87,7 +87,7 @@ Script::solve_reldir (SPRepr * reprin) {
 	}
 
 	if (!strcmp(reldir, "extensions")) {
-		return g_strdup_printf("%s/%s", INKSCAPE_EXTENSIONDIR, sp_repr_content(sp_repr_children(reprin)));
+		return g_build_filename(INKSCAPE_EXTENSIONDIR, sp_repr_content(sp_repr_children(reprin)), NULL);
 	} else {
 		return g_strdup(sp_repr_content(sp_repr_children(reprin)));
 	}
