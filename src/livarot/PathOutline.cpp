@@ -334,16 +334,6 @@ Path::InsideOutline (Path * dest, double width, JoinType join, ButtType butt,
 	delete rev;
 }
 
-// decoys
-void
-Path::DoOutsideOutline (Path * dest, double width, JoinType join, ButtType butt, double miter, int &stNo, int &enNo)
-{
-}
-void
-Path::DoInsideOutline (Path * dest, double width, JoinType join, ButtType butt, double miter, int &stNo, int &enNo)
-{
-}
-
 
 // the offset
 // take each command and offset it.

@@ -122,8 +122,6 @@ public:
   void ConvertEvenLines (double treshhold);	// decomposes line segments too, for later recomposition
   // same function for use when you want to later recompose the curves from the polyline
   void ConvertWithBackData (double treshhold);
-  // bad naughty evil useless function
-  void ConvertForOffset (double treshhold, Path * orig, double off_dec);
 
   // creation of the polyline (you can tinker with these function if you want)
   void SetBackData (bool nVal);	// has back data?
@@ -314,10 +312,6 @@ private:
 			   double tolerance, double width, JoinType join,
 			   ButtType butt, double miter, bool closeIfNeeded,
 			   bool skipMoveto, NR::Point & lastP, NR::Point & lastT);
-  void DoOutsideOutline (Path * dest, double width, JoinType join,
-			 ButtType butt, double miter, int &stNo, int &enNo);
-  void DoInsideOutline (Path * dest, double width, JoinType join,
-			ButtType butt, double miter, int &stNo, int &enNo);
   void DoStroke(int off, int N, Shape *dest, bool doClose, double width, JoinType join,
 		ButtType butt, double miter, bool justAdd = false);
   void DoStroke(int off, int N, Shape *dest, bool doClose, double width, JoinType join,
