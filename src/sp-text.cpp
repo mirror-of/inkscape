@@ -637,13 +637,13 @@ sp_string_class_init (SPStringClass *classname)
 static void
 sp_string_init (SPString *string)
 {
-    /*    string->text = NULL;
+    string->text = NULL;
     string->p = NULL;
     string->start = 0;
     string->length = 0;
     string->bbox.x0 = string->bbox.y0 = 0.0;
     string->bbox.x1 = string->bbox.y1 = 0.0;
-    string->advance = NR::Point(0, 0);*/
+    string->advance = NR::Point(0, 0);
 }
 
 
@@ -709,6 +709,7 @@ sp_string_read_content (SPObject *object)
     g_free (string->text);
     const gchar *t = sp_repr_content (object->repr);
     string->text = (t) ? g_strdup (t) : NULL;
+    string->length = (t) ? g_utf8_strlen(t, -1) : 0;
 
     /* Is this correct? I think so (Lauris) */
     /* Virtual method will be invoked BEFORE signal, so we can update there */
@@ -2360,10 +2361,11 @@ sp_text_update_immediate_state (SPText *text)
             string = SP_STRING (child);
         }
         string->start = start;
-        string->length = (string->text) ? g_utf8_strlen (string->text, -1) : 0;
         start += string->length;
         /* Count newlines as well */
-        if (child->next) start += 1;
+        if (SP_OBJECT_NEXT(child)) {
+            start += 1;
+        }
     }
 }
 
