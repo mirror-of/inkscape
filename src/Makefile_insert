@@ -145,6 +145,7 @@ libinkpre_a_SOURCES =	\
 	sp-object.cpp sp-object.h	\
 	sp-object-group.cpp sp-object-group.h	\
 	sp-object-repr.cpp sp-object-repr.h	\
+	sp-object-tree-iterator.h	\
 	sp-offset.cpp sp-offset.h	\
 	sp-paint-server.cpp sp-paint-server.h	\
 	sp-path.cpp sp-path.h	\
