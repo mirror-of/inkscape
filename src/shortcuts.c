@@ -134,6 +134,10 @@ sp_shortcut_table_load (const unsigned char *name)
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_D, SP_VERB_EDIT_DUPLICATE, FALSE);
 	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_c, SP_VERB_OBJECT_TO_CURVE, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_SHIFT_MASK | SP_SHORTCUT_CONTROL_MASK | GDK_C, SP_VERB_OBJECT_TO_CURVE, FALSE);
+	sp_shortcut_set_verb (GDK_h, SP_VERB_OBJECT_FLIP_HORIZONTAL, TRUE);
+	sp_shortcut_set_verb (GDK_H, SP_VERB_OBJECT_FLIP_HORIZONTAL, FALSE);
+	sp_shortcut_set_verb (GDK_v, SP_VERB_OBJECT_FLIP_VERTICAL, TRUE);
+	sp_shortcut_set_verb (GDK_V, SP_VERB_OBJECT_FLIP_VERTICAL, FALSE);
 	/* Selection */
 	sp_shortcut_set_verb (GDK_Home, SP_VERB_SELECTION_TO_FRONT, TRUE);
 	sp_shortcut_set_verb (GDK_KP_Home, SP_VERB_SELECTION_TO_FRONT, FALSE);
@@ -143,6 +147,8 @@ sp_shortcut_table_load (const unsigned char *name)
 	sp_shortcut_set_verb (GDK_KP_Page_Up, SP_VERB_SELECTION_RAISE, FALSE);
 	sp_shortcut_set_verb (GDK_Page_Down, SP_VERB_SELECTION_LOWER, TRUE);
 	sp_shortcut_set_verb (GDK_KP_Page_Down, SP_VERB_SELECTION_LOWER, FALSE);
+	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_a, SP_VERB_EDIT_SELECT_ALL, TRUE);
+	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_A, SP_VERB_EDIT_SELECT_ALL, FALSE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_g, SP_VERB_SELECTION_GROUP, TRUE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_G, SP_VERB_SELECTION_GROUP, FALSE);
 	sp_shortcut_set_verb (SP_SHORTCUT_CONTROL_MASK | GDK_u, SP_VERB_SELECTION_UNGROUP, TRUE);
