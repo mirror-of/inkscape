@@ -1,5 +1,5 @@
 #!/bin/sh
-# Report the version of distro and tools building sodipodi
+# Report the version of distro and tools building inkscape
 #
 # You can get the latest distro command from 
 # distro web page: http://distro.pipfield.ca/ 
@@ -12,7 +12,7 @@ srcdir=`dirname $0`
 test -z "$srcdir" && srcdir=.
 
 echo '============================================================================='
-echo 'When you report a trouble about building CVS version of sodipodi,            '
+echo 'When you report a trouble about building CVS version of inkscape,            '
 echo 'Please report following information about distro and tools version, too.     '
 echo 
 (echo '--1. distribution------------------------------------------------------------'
