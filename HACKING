@@ -1,106 +1,40 @@
-If you are interested in hacking Inkscape's source code, you are
-welcome to do so. But be cautious, as every single thing in the
-structure/API may change yet. If you ever have a better idea about how
-some subsystem should work, let me too know.
 
-Some things that should be done (in random order):
-- printing from command line, without display (worked, but is broken now)
-- bonobo support (Skeleton is present, needs more flesh)
-- plugin support
-- good and clean API for dealing with selection changes (there is SODIPODI
-  object - we need similar signalling for desktops, documents)
-- gradient fills
-- 'fast_art' rendering of svp-s (vpaths?) (without antialiasing)
-- exporting bitmaps from command line
-- all fancy filling types (fractals & so on)
-- import and export filters
-- port reprs to real XML (libxml, gdome)
+Contributing to Inkscape
+------------------------
+Inkscape welcomes your contributions to help turn it into a fully
+SVG-compliant drawing program for the Open Source community. 
 
-Please consult the individual HACKING files in the respective
-subdirs.  Some modules are only placeholders for something better and
-more standardized (repr et al.)
+While many developers work on fixing bugs and creating new features, it
+is worth strong emphasis that even non-programmers can help make
+Inkscape more powerful and successful. You probably already have an idea
+of something you'd like to work on. If not, here are just a few ways you
+can help: 
 
-You are always welcome to correct my spelling (except in variable names,
-of course ;-)).
-
-As far as translating, first be sure that the english phrases are correct
-and meaningful (if they are not, somebody should replace these with better
-ones.)
-
-This code should be quite modular and will become even more so in the
-future.  Consult the file doc/architecture.txt for more info, but here
-is a rough plan:
-
-0. Development compilation tips
-
-You can do some customization with options to configure; it also lets
-you specify additional options via env variables.  The INSTALL file has
-some details.
-
-Notably, $CFLAGS are the general compiler flags, $CPPFLAGS are flags
-specific to the preprocessor, and $LDFLAGS are linker flags.
-
-For instance, some do Inkscape development with CFLAGS="-g -Wall".
-
-1. reprs & cousins
-SPRepr, SPCSSAttr ...
-
-These are temporary wrappers around the xml backbone. As soon as gdome
-is usable for such tasks I'll replace these with DOM.  Currently reprs
-(Representation Objects) hold all of the item attributes.  The object
-tree is also constructed of reprs. They emit signals (to be exact -
-call functions), if modified, deleted etc. Most editing should be done
-directly to the repr attributes.
-
-2. Items
-
-These are typed backbone of everything under the Sun. They know both
-about the reprs and canvas things, update themselves (at least they
-should) if reprs change and update canvas items, if they themselves
-change.
-
-3. Graphics layout
-desktop.c, drawing.c
-
-Canvas root
-Acetate, Desktop
-Grid, Guides, Drawarea, Sketch, Controls
-
-Acetate is borrowed from gill - it is basically an infinite empty
-item, which serves as a mouse target.
-
-grid & guides groups
-drawing - this is of particular interest
-sketch - simply a group I created for temporary items
-controls - group which holds resizing buttons, rubberband etc.
-
-Primary coordinate system for all items is desktop. This is mirrored
-vertically to produce postscript coordinates. I.e. desktop unit = 1/72 in.
-While reading svg, the drawing group will be mirrored once more, to produce
-svg coords (y grows downwards)
-
-The desktop will probably be broken into hierarchical trees of things like:
-Desktop
-    EditableDesktop
-    PreviewDesktop
-    BonoboContainer
-& so on.
-
-4. Selection
-
-This is a per desktop object, that keeps track of which items are
-currently selected. It is capable of emitting "changed" signal
-(probably in the future, "attrmodified" too), to notify all interested
-parties about selection changes (fill & stroke dialogs, for example,
-use this method)
-
-5. Context
-
-This object (hierarchy) defines how mouse events on the desktop are
-interpreted.  Every desktop has its own context (select, node, rect &
-so on).
+   * Pick a bug, fix it, and send in a patch
+   * Choose a feature you want to see developed, and make it
+   * If you speak a language in addition to English, work on your
+     language's i18n file in the po/ directory
+   * Find a new bug and report it
+   * Help answer questions for new Inkscapers on Jabber, IRC or the
+     mailing lists
+   * Write an article advocating Inkscape
+   * Author a HOWTO describing a trick or technique you've figured out
 
 
-Lauris Kaplinski
-<lauris@helixcode.com>
+CVS Access
+==========
+We give CVS access out to people with proven interest in helping develop
+the codebase.  Proving your interest is straightforward:  Make two
+contributions and request access.
+
+
+Patch Decisions
+===============
+Our motto for changes to the codebase is "Patch first, ask questions
+later".  When someone has an idea, rather than endlessly debating it, we
+encourage folks to go ahead and code something up (even prototypish).
+This is then incorporated into the development branch of the code for
+folks to try out, poke and prod, and tinker with.  We figure, the best
+way to see if an idea fits is to try it on for size.
+
 
