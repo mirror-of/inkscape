@@ -14,6 +14,7 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkvbox.h>
 #include <gtk/gtktable.h>
