@@ -1,5 +1,9 @@
 2004-03-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/display/nr-arena-shape.cpp (nr_arena_shape_set_path):
+	Remove affine argument (all current callers were passing NULL) and
+	unused `lieutenant' argument.  Update callers.
+
 	* src/selection-chemistry.h, src/selection-chemistry.cpp
 	(sp_selection_delete, sp_selection_duplicate, sp_edit_clear_all,
 	sp_edit_select_all, sp_selection_group, sp_selection_ungroup,

@@ -774,12 +774,10 @@ nr_arena_shape_pick (NRArenaItem *item, double x, double y, double delta, unsign
  *
  *  Requests a render of the shape, then if the shape is already a curve it
  *  unrefs the old curve; if the new curve is valid it creates a copy of the
- *  curve and adds it to the shape, applying any required transformation
- *  indicated by affine.  Finally, it requests an update of the arena for the
- *  shape.
+ *  curve and adds it to the shape.  Finally, it requests an update of the
+ *  arena for the shape.
  */
-void
-nr_arena_shape_set_path (NRArenaShape *shape, SPCurve *curve, unsigned int lieutenant, const double *affine)
+void nr_arena_shape_set_path(NRArenaShape *shape, SPCurve *curve)
 {
 	g_return_if_fail (shape != NULL);
 	g_return_if_fail (NR_IS_ARENA_SHAPE (shape));
@@ -792,15 +790,8 @@ nr_arena_shape_set_path (NRArenaShape *shape, SPCurve *curve, unsigned int lieut
 	}
 
 	if (curve) {
-		if (affine) {
-			ArtBpath *abp;
-			abp = art_bpath_affine_transform (curve->bpath, affine);
-			curve = sp_curve_new_from_bpath (abp);
-			shape->curve = curve;
-		} else {
-			shape->curve = curve;
-			sp_curve_ref (curve);
-		}
+		shape->curve = curve;
+		sp_curve_ref (curve);
 	}
 
 	nr_arena_item_request_update (NR_ARENA_ITEM (shape), NR_ARENA_ITEM_STATE_ALL, FALSE);
