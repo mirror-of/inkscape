@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-14 20:47+0200\n"
+"POT-Creation-Date: 2004-07-15 22:14-0700\n"
 "PO-Revision-Date: 2004-03-19 00:55+0900\n"
 "Last-Translator: shivken <shivaken@owls-nest.net>\n"
 "Language-Team: Japanese <shivaken@owls-nest.net>\n"
@@ -822,7 +822,7 @@ msgid ""
 msgstr ""
 
 #. Clones
-#: src/dialogs/display-settings.cpp:1024 src/dialogs/find.cpp:561
+#: src/dialogs/display-settings.cpp:1024 src/dialogs/find.cpp:564
 #, fuzzy
 msgid "Clones"
 msgstr "閉じる"
@@ -1122,201 +1122,201 @@ msgid "alternating"
 msgstr "彩度:"
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-#: src/dialogs/find.cpp:317
+#: src/dialogs/find.cpp:320
 #, c-format
 msgid "%d object(s) found (out of %d), %s match."
 msgstr ""
 
-#: src/dialogs/find.cpp:318
+#: src/dialogs/find.cpp:321
 #, fuzzy
 msgid "exact"
 msgstr "テキスト"
 
-#: src/dialogs/find.cpp:318
+#: src/dialogs/find.cpp:321
 #, fuzzy
 msgid "partial"
 msgstr "螺旋"
 
-#: src/dialogs/find.cpp:325
+#: src/dialogs/find.cpp:328
 #, fuzzy
 msgid "No objects found"
 msgstr "オブジェクト無し"
 
-#: src/dialogs/find.cpp:483
+#: src/dialogs/find.cpp:486
 #, fuzzy
 msgid "T_ype: "
 msgstr "タイプ:"
 
-#: src/dialogs/find.cpp:490
+#: src/dialogs/find.cpp:493
 msgid "Search in all object types"
 msgstr ""
 
-#: src/dialogs/find.cpp:490
+#: src/dialogs/find.cpp:493
 #, fuzzy
 msgid "All types"
 msgstr "フィルスタイル"
 
-#: src/dialogs/find.cpp:501
+#: src/dialogs/find.cpp:504
 msgid "Search all shapes"
 msgstr ""
 
-#: src/dialogs/find.cpp:501
+#: src/dialogs/find.cpp:504
 #, fuzzy
 msgid "All shapes"
 msgstr "全てのシェイプツール"
 
-#: src/dialogs/find.cpp:518
+#: src/dialogs/find.cpp:521
 #, fuzzy
 msgid "Search rectangles"
 msgstr "矩形"
 
-#: src/dialogs/find.cpp:518
+#: src/dialogs/find.cpp:521
 #, fuzzy
 msgid "Rectangles"
 msgstr "矩形"
 
-#: src/dialogs/find.cpp:523
+#: src/dialogs/find.cpp:526
 msgid "Search ellipses, arcs, circles"
 msgstr ""
 
-#: src/dialogs/find.cpp:523
+#: src/dialogs/find.cpp:526
 #, fuzzy
 msgid "Ellipses"
 msgstr "楕円"
 
-#: src/dialogs/find.cpp:528
+#: src/dialogs/find.cpp:531
 #, fuzzy
 msgid "Search stars and polygons"
 msgstr "星型やポリゴンを作成 (*)"
 
-#: src/dialogs/find.cpp:528
+#: src/dialogs/find.cpp:531
 #, fuzzy
 msgid "Stars"
 msgstr "星"
 
-#: src/dialogs/find.cpp:533
+#: src/dialogs/find.cpp:536
 #, fuzzy
 msgid "Search spirals"
 msgstr "螺旋の作製 (F9)"
 
-#: src/dialogs/find.cpp:533
+#: src/dialogs/find.cpp:536
 #, fuzzy
 msgid "Spirals"
 msgstr "螺旋"
 
 #. TRANSLATORS: polyline is a set of connected straight line segments
 #. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
-#: src/dialogs/find.cpp:546
+#: src/dialogs/find.cpp:549
 msgid "Search paths, lines, polylines"
 msgstr ""
 
-#: src/dialogs/find.cpp:546
+#: src/dialogs/find.cpp:549
 #, fuzzy
 msgid "Paths"
 msgstr "パス"
 
-#: src/dialogs/find.cpp:551
+#: src/dialogs/find.cpp:554
 #, fuzzy
 msgid "Search text objects"
 msgstr "選択オブジェクト"
 
-#: src/dialogs/find.cpp:551
+#: src/dialogs/find.cpp:554
 #, fuzzy
 msgid "Texts"
 msgstr "テキスト"
 
-#: src/dialogs/find.cpp:556
+#: src/dialogs/find.cpp:559
 msgid "Search groups"
 msgstr ""
 
-#: src/dialogs/find.cpp:556
+#: src/dialogs/find.cpp:559
 #, fuzzy
 msgid "Groups"
 msgstr "グループ化"
 
-#: src/dialogs/find.cpp:561
+#: src/dialogs/find.cpp:564
 msgid "Search clones"
 msgstr ""
 
-#: src/dialogs/find.cpp:566
+#: src/dialogs/find.cpp:569
 msgid "Search images"
 msgstr ""
 
-#: src/dialogs/find.cpp:566
+#: src/dialogs/find.cpp:569
 #, fuzzy
 msgid "Images"
 msgstr "画像 URI:"
 
-#: src/dialogs/find.cpp:571
+#: src/dialogs/find.cpp:574
 #, fuzzy
 msgid "Search offset objects"
 msgstr "選択オブジェクト"
 
-#: src/dialogs/find.cpp:571
+#: src/dialogs/find.cpp:574
 msgid "Offsets"
 msgstr ""
 
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 #, fuzzy
 msgid "_Text: "
 msgstr "テキスト"
 
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 msgid "Find objects by their text content (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:632
+#: src/dialogs/find.cpp:635
 msgid "_ID: "
 msgstr ""
 
-#: src/dialogs/find.cpp:632
+#: src/dialogs/find.cpp:635
 msgid "Find objects by the value of the id attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:633
+#: src/dialogs/find.cpp:636
 #, fuzzy
 msgid "_Style: "
 msgstr " スタイル"
 
-#: src/dialogs/find.cpp:633
+#: src/dialogs/find.cpp:636
 msgid ""
 "Find objects by the value of the style attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:634
+#: src/dialogs/find.cpp:637
 #, fuzzy
 msgid "_Attribute: "
 msgstr "属性"
 
-#: src/dialogs/find.cpp:634
+#: src/dialogs/find.cpp:637
 msgid "Find objects by the name of an attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:647
+#: src/dialogs/find.cpp:650
 #, fuzzy
 msgid "Search in s_election"
 msgstr "選択オブジェクトの高さ"
 
-#: src/dialogs/find.cpp:651
+#: src/dialogs/find.cpp:654
 msgid "Limit search to the current selection"
 msgstr ""
 
-#: src/dialogs/find.cpp:660
+#: src/dialogs/find.cpp:663
 #, fuzzy
 msgid "_Clear"
 msgstr "閉じる"
 
-#: src/dialogs/find.cpp:660
+#: src/dialogs/find.cpp:663
 #, fuzzy
 msgid "Clear values"
 msgstr "全て消去"
 
-#: src/dialogs/find.cpp:661
+#: src/dialogs/find.cpp:664
 #, fuzzy
 msgid "_Find"
 msgstr "グリッド"
 
-#: src/dialogs/find.cpp:661
+#: src/dialogs/find.cpp:664
 msgid "Select objects matching all of the fields you filled in"
 msgstr ""
 
@@ -3110,31 +3110,31 @@ msgid "Select some paths to outline."
 msgstr "選択オブジェクトはパスではないのでinset/outsetできません"
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:737
+#: src/splivarot.cpp:741
 #, fuzzy
 msgid "No stroked paths to outline in the selection."
 msgstr "解除するグループがありません"
 
-#: src/splivarot.cpp:823
+#: src/splivarot.cpp:827
 msgid "Selected object is not a path, cannot inset/outset."
 msgstr "選択オブジェクトはパスではないのでinset/outsetできません"
 
-#: src/splivarot.cpp:1041
+#: src/splivarot.cpp:1045
 #, fuzzy
 msgid "Select some paths to inset/outset."
 msgstr "選択オブジェクトはパスではないのでinset/outsetできません"
 
-#: src/splivarot.cpp:1249
+#: src/splivarot.cpp:1257
 #, fuzzy
 msgid "No paths to inset/outset in the selection."
 msgstr "解除するグループがありません"
 
-#: src/splivarot.cpp:1293
+#: src/splivarot.cpp:1301
 #, fuzzy
 msgid "Select some paths to simplify."
 msgstr "複製するオブジェクトを選択してください"
 
-#: src/splivarot.cpp:1385
+#: src/splivarot.cpp:1393
 #, fuzzy
 msgid "No paths to simplify in the selection."
 msgstr "解除するグループがありません"

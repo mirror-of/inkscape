@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi.HEAD.sk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-14 20:47+0200\n"
+"POT-Creation-Date: 2004-07-15 22:14-0700\n"
 "PO-Revision-Date: 2003-09-06 13:26+0100\n"
 "Last-Translator: Zdenko Podobný <zdpo@mailbox.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -820,7 +820,7 @@ msgid ""
 msgstr ""
 
 #. Clones
-#: src/dialogs/display-settings.cpp:1024 src/dialogs/find.cpp:561
+#: src/dialogs/display-settings.cpp:1024 src/dialogs/find.cpp:564
 #, fuzzy
 msgid "Clones"
 msgstr "Zatvoriť"
@@ -1123,200 +1123,200 @@ msgid "alternating"
 msgstr "Sýtosť:"
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-#: src/dialogs/find.cpp:317
+#: src/dialogs/find.cpp:320
 #, c-format
 msgid "%d object(s) found (out of %d), %s match."
 msgstr ""
 
-#: src/dialogs/find.cpp:318
+#: src/dialogs/find.cpp:321
 #, fuzzy
 msgid "exact"
 msgstr "Text"
 
-#: src/dialogs/find.cpp:318
+#: src/dialogs/find.cpp:321
 #, fuzzy
 msgid "partial"
 msgstr "Špirála"
 
-#: src/dialogs/find.cpp:325
+#: src/dialogs/find.cpp:328
 #, fuzzy
 msgid "No objects found"
 msgstr "Bez objektov"
 
-#: src/dialogs/find.cpp:483
+#: src/dialogs/find.cpp:486
 #, fuzzy
 msgid "T_ype: "
 msgstr "Typ:"
 
-#: src/dialogs/find.cpp:490
+#: src/dialogs/find.cpp:493
 msgid "Search in all object types"
 msgstr ""
 
-#: src/dialogs/find.cpp:490
+#: src/dialogs/find.cpp:493
 #, fuzzy
 msgid "All types"
 msgstr "Štýl výplne"
 
-#: src/dialogs/find.cpp:501
+#: src/dialogs/find.cpp:504
 msgid "Search all shapes"
 msgstr ""
 
-#: src/dialogs/find.cpp:501
+#: src/dialogs/find.cpp:504
 #, fuzzy
 msgid "All shapes"
 msgstr "Nástroje všetkých tvarov"
 
-#: src/dialogs/find.cpp:518
+#: src/dialogs/find.cpp:521
 #, fuzzy
 msgid "Search rectangles"
 msgstr "Obdĺžnik"
 
-#: src/dialogs/find.cpp:518
+#: src/dialogs/find.cpp:521
 #, fuzzy
 msgid "Rectangles"
 msgstr "Obdĺžnik"
 
-#: src/dialogs/find.cpp:523
+#: src/dialogs/find.cpp:526
 msgid "Search ellipses, arcs, circles"
 msgstr ""
 
-#: src/dialogs/find.cpp:523
+#: src/dialogs/find.cpp:526
 #, fuzzy
 msgid "Ellipses"
 msgstr "Elipsa"
 
-#: src/dialogs/find.cpp:528
+#: src/dialogs/find.cpp:531
 #, fuzzy
 msgid "Search stars and polygons"
 msgstr "Tvorba hviezd a mnohouholníkov"
 
-#: src/dialogs/find.cpp:528
+#: src/dialogs/find.cpp:531
 #, fuzzy
 msgid "Stars"
 msgstr "Hviezda"
 
-#: src/dialogs/find.cpp:533
+#: src/dialogs/find.cpp:536
 #, fuzzy
 msgid "Search spirals"
 msgstr "Tvorba špirál"
 
-#: src/dialogs/find.cpp:533
+#: src/dialogs/find.cpp:536
 #, fuzzy
 msgid "Spirals"
 msgstr "Špirála"
 
 #. TRANSLATORS: polyline is a set of connected straight line segments
 #. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
-#: src/dialogs/find.cpp:546
+#: src/dialogs/find.cpp:549
 msgid "Search paths, lines, polylines"
 msgstr ""
 
-#: src/dialogs/find.cpp:546
+#: src/dialogs/find.cpp:549
 msgid "Paths"
 msgstr ""
 
-#: src/dialogs/find.cpp:551
+#: src/dialogs/find.cpp:554
 #, fuzzy
 msgid "Search text objects"
 msgstr "Zvolené objekty"
 
-#: src/dialogs/find.cpp:551
+#: src/dialogs/find.cpp:554
 #, fuzzy
 msgid "Texts"
 msgstr "Text"
 
-#: src/dialogs/find.cpp:556
+#: src/dialogs/find.cpp:559
 msgid "Search groups"
 msgstr ""
 
-#: src/dialogs/find.cpp:556
+#: src/dialogs/find.cpp:559
 #, fuzzy
 msgid "Groups"
 msgstr "Zoskupiť"
 
-#: src/dialogs/find.cpp:561
+#: src/dialogs/find.cpp:564
 msgid "Search clones"
 msgstr ""
 
-#: src/dialogs/find.cpp:566
+#: src/dialogs/find.cpp:569
 msgid "Search images"
 msgstr ""
 
-#: src/dialogs/find.cpp:566
+#: src/dialogs/find.cpp:569
 #, fuzzy
 msgid "Images"
 msgstr "Obrázok"
 
-#: src/dialogs/find.cpp:571
+#: src/dialogs/find.cpp:574
 #, fuzzy
 msgid "Search offset objects"
 msgstr "Tvorba a úprava textových objektov"
 
-#: src/dialogs/find.cpp:571
+#: src/dialogs/find.cpp:574
 msgid "Offsets"
 msgstr ""
 
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 #, fuzzy
 msgid "_Text: "
 msgstr "Text"
 
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 msgid "Find objects by their text content (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:632
+#: src/dialogs/find.cpp:635
 msgid "_ID: "
 msgstr ""
 
-#: src/dialogs/find.cpp:632
+#: src/dialogs/find.cpp:635
 msgid "Find objects by the value of the id attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:633
+#: src/dialogs/find.cpp:636
 #, fuzzy
 msgid "_Style: "
 msgstr " Štýl "
 
-#: src/dialogs/find.cpp:633
+#: src/dialogs/find.cpp:636
 msgid ""
 "Find objects by the value of the style attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:634
+#: src/dialogs/find.cpp:637
 #, fuzzy
 msgid "_Attribute: "
 msgstr "Atribút:"
 
-#: src/dialogs/find.cpp:634
+#: src/dialogs/find.cpp:637
 msgid "Find objects by the name of an attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:647
+#: src/dialogs/find.cpp:650
 #, fuzzy
 msgid "Search in s_election"
 msgstr "Zobraziť zvolené"
 
-#: src/dialogs/find.cpp:651
+#: src/dialogs/find.cpp:654
 msgid "Limit search to the current selection"
 msgstr ""
 
-#: src/dialogs/find.cpp:660
+#: src/dialogs/find.cpp:663
 #, fuzzy
 msgid "_Clear"
 msgstr "Zatvoriť"
 
-#: src/dialogs/find.cpp:660
+#: src/dialogs/find.cpp:663
 #, fuzzy
 msgid "Clear values"
 msgstr "Všetko zmazať"
 
-#: src/dialogs/find.cpp:661
+#: src/dialogs/find.cpp:664
 #, fuzzy
 msgid "_Find"
 msgstr "Mriežka"
 
-#: src/dialogs/find.cpp:661
+#: src/dialogs/find.cpp:664
 msgid "Select objects matching all of the fields you filled in"
 msgstr ""
 
@@ -3146,29 +3146,29 @@ msgid "Select some paths to outline."
 msgstr "Vystrihnúť vybrané objekty do schránky"
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:737
+#: src/splivarot.cpp:741
 msgid "No stroked paths to outline in the selection."
 msgstr ""
 
-#: src/splivarot.cpp:823
+#: src/splivarot.cpp:827
 msgid "Selected object is not a path, cannot inset/outset."
 msgstr ""
 
-#: src/splivarot.cpp:1041
+#: src/splivarot.cpp:1045
 #, fuzzy
 msgid "Select some paths to inset/outset."
 msgstr "Vystrihnúť vybrané objekty do schránky"
 
-#: src/splivarot.cpp:1249
+#: src/splivarot.cpp:1257
 msgid "No paths to inset/outset in the selection."
 msgstr ""
 
-#: src/splivarot.cpp:1293
+#: src/splivarot.cpp:1301
 #, fuzzy
 msgid "Select some paths to simplify."
 msgstr "Vystrihnúť vybrané objekty do schránky"
 
-#: src/splivarot.cpp:1385
+#: src/splivarot.cpp:1393
 msgid "No paths to simplify in the selection."
 msgstr ""
 

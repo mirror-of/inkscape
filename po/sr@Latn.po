@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.39cvs20040709\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-14 20:47+0200\n"
+"POT-Creation-Date: 2004-07-15 22:14-0700\n"
 "PO-Revision-Date: 2004-07-09 22:11+0200\n"
 "Last-Translator: Aleksandar Urošević <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -829,7 +829,7 @@ msgstr ""
 "svaki prozor pomoću dugmeta u desnom uglu iznad trake za pomeranje)"
 
 #. Clones
-#: src/dialogs/display-settings.cpp:1024 src/dialogs/find.cpp:561
+#: src/dialogs/display-settings.cpp:1024 src/dialogs/find.cpp:564
 msgid "Clones"
 msgstr "Klonovi"
 
@@ -1132,177 +1132,177 @@ msgid "alternating"
 msgstr "Delimična popuna"
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-#: src/dialogs/find.cpp:317
+#: src/dialogs/find.cpp:320
 #, c-format
 msgid "%d object(s) found (out of %d), %s match."
 msgstr "%d objekat(a) pronađeno (od ukupno %d), odgovara uslovu: %s"
 
-#: src/dialogs/find.cpp:318
+#: src/dialogs/find.cpp:321
 msgid "exact"
 msgstr "apsolutno"
 
-#: src/dialogs/find.cpp:318
+#: src/dialogs/find.cpp:321
 msgid "partial"
 msgstr "delimično"
 
-#: src/dialogs/find.cpp:325
+#: src/dialogs/find.cpp:328
 msgid "No objects found"
 msgstr "Nema pronađenih objekata"
 
-#: src/dialogs/find.cpp:483
+#: src/dialogs/find.cpp:486
 msgid "T_ype: "
 msgstr "_Vrsta: "
 
-#: src/dialogs/find.cpp:490
+#: src/dialogs/find.cpp:493
 msgid "Search in all object types"
 msgstr "Traži u svim vrstama objekata"
 
-#: src/dialogs/find.cpp:490
+#: src/dialogs/find.cpp:493
 msgid "All types"
 msgstr "Sve vrste"
 
-#: src/dialogs/find.cpp:501
+#: src/dialogs/find.cpp:504
 msgid "Search all shapes"
 msgstr "Traži među oblicima"
 
-#: src/dialogs/find.cpp:501
+#: src/dialogs/find.cpp:504
 msgid "All shapes"
 msgstr "Svi oblici"
 
-#: src/dialogs/find.cpp:518
+#: src/dialogs/find.cpp:521
 msgid "Search rectangles"
 msgstr "Traži među pravougaonicima"
 
-#: src/dialogs/find.cpp:518
+#: src/dialogs/find.cpp:521
 msgid "Rectangles"
 msgstr "Pravougaonici"
 
-#: src/dialogs/find.cpp:523
+#: src/dialogs/find.cpp:526
 msgid "Search ellipses, arcs, circles"
 msgstr "Traži među elipsama, uglovima i kružnicama"
 
-#: src/dialogs/find.cpp:523
+#: src/dialogs/find.cpp:526
 msgid "Ellipses"
 msgstr "Elipse"
 
-#: src/dialogs/find.cpp:528
+#: src/dialogs/find.cpp:531
 msgid "Search stars and polygons"
 msgstr "Traži među zvezdama i poligonima"
 
-#: src/dialogs/find.cpp:528
+#: src/dialogs/find.cpp:531
 msgid "Stars"
 msgstr "Zvezde"
 
-#: src/dialogs/find.cpp:533
+#: src/dialogs/find.cpp:536
 msgid "Search spirals"
 msgstr "Traži među spiralama"
 
-#: src/dialogs/find.cpp:533
+#: src/dialogs/find.cpp:536
 msgid "Spirals"
 msgstr "Spirale"
 
 #. TRANSLATORS: polyline is a set of connected straight line segments
 #. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
-#: src/dialogs/find.cpp:546
+#: src/dialogs/find.cpp:549
 msgid "Search paths, lines, polylines"
 msgstr "Traži među krivama, linijama i sastavnim linijama"
 
-#: src/dialogs/find.cpp:546
+#: src/dialogs/find.cpp:549
 msgid "Paths"
 msgstr "Krive"
 
-#: src/dialogs/find.cpp:551
+#: src/dialogs/find.cpp:554
 msgid "Search text objects"
 msgstr "Traži među tekstualnim objektima"
 
-#: src/dialogs/find.cpp:551
+#: src/dialogs/find.cpp:554
 msgid "Texts"
 msgstr "Tekst"
 
-#: src/dialogs/find.cpp:556
+#: src/dialogs/find.cpp:559
 msgid "Search groups"
 msgstr "Traži među grupama"
 
-#: src/dialogs/find.cpp:556
+#: src/dialogs/find.cpp:559
 msgid "Groups"
 msgstr "Grupe"
 
-#: src/dialogs/find.cpp:561
+#: src/dialogs/find.cpp:564
 msgid "Search clones"
 msgstr "Traži među klonovima"
 
-#: src/dialogs/find.cpp:566
+#: src/dialogs/find.cpp:569
 msgid "Search images"
 msgstr "Traži među slikama"
 
-#: src/dialogs/find.cpp:566
+#: src/dialogs/find.cpp:569
 msgid "Images"
 msgstr "Slike"
 
-#: src/dialogs/find.cpp:571
+#: src/dialogs/find.cpp:574
 msgid "Search offset objects"
 msgstr "Traži među razmaknutim objektima"
 
-#: src/dialogs/find.cpp:571
+#: src/dialogs/find.cpp:574
 msgid "Offsets"
 msgstr "Razmaknuti"
 
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 msgid "_Text: "
 msgstr "_Tekst: "
 
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 msgid "Find objects by their text content (exact or partial match)"
 msgstr "Traži objekte po sadržaju teksta (apsolutno ili delimično poklapanje)"
 
-#: src/dialogs/find.cpp:632
+#: src/dialogs/find.cpp:635
 msgid "_ID: "
 msgstr "_ID: "
 
-#: src/dialogs/find.cpp:632
+#: src/dialogs/find.cpp:635
 msgid "Find objects by the value of the id attribute (exact or partial match)"
 msgstr ""
 "Traži objekte po sadržaju osobine „ID“ (apsolutno ili delimično poklapanje)"
 
-#: src/dialogs/find.cpp:633
+#: src/dialogs/find.cpp:636
 msgid "_Style: "
 msgstr "_Stil: "
 
-#: src/dialogs/find.cpp:633
+#: src/dialogs/find.cpp:636
 msgid ""
 "Find objects by the value of the style attribute (exact or partial match)"
 msgstr ""
 "Traži objekte po sadržaju osobine „stil“ (apsolutno ili delimično poklapanje)"
 
-#: src/dialogs/find.cpp:634
+#: src/dialogs/find.cpp:637
 msgid "_Attribute: "
 msgstr "_Osobina: "
 
-#: src/dialogs/find.cpp:634
+#: src/dialogs/find.cpp:637
 msgid "Find objects by the name of an attribute (exact or partial match)"
 msgstr "Traži objekte po nazivu osobine (apsolutno ili delimično poklapanje)"
 
-#: src/dialogs/find.cpp:647
+#: src/dialogs/find.cpp:650
 msgid "Search in s_election"
 msgstr "Traži u _izboru"
 
-#: src/dialogs/find.cpp:651
+#: src/dialogs/find.cpp:654
 msgid "Limit search to the current selection"
 msgstr "Ograniči pretragu na trenutni izbor"
 
-#: src/dialogs/find.cpp:660
+#: src/dialogs/find.cpp:663
 msgid "_Clear"
 msgstr "_Očisti"
 
-#: src/dialogs/find.cpp:660
+#: src/dialogs/find.cpp:663
 msgid "Clear values"
 msgstr "Očisti vrednosti"
 
-#: src/dialogs/find.cpp:661
+#: src/dialogs/find.cpp:664
 msgid "_Find"
 msgstr "_Traži"
 
-#: src/dialogs/find.cpp:661
+#: src/dialogs/find.cpp:664
 msgid "Select objects matching all of the fields you filled in"
 msgstr "Izaberi objekte koji ispunjavaju sve zadate uslove"
 
@@ -3088,27 +3088,27 @@ msgid "Select some paths to outline."
 msgstr "Izaberite neke poteze za pretvaranje u krive."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:737
+#: src/splivarot.cpp:741
 msgid "No stroked paths to outline in the selection."
 msgstr "U izboru nema iscrtanih poteza za pretvaranje u krive."
 
-#: src/splivarot.cpp:823
+#: src/splivarot.cpp:827
 msgid "Selected object is not a path, cannot inset/outset."
 msgstr "Izabrani objekat nije kriva, ne može da se skuplja ili širi."
 
-#: src/splivarot.cpp:1041
+#: src/splivarot.cpp:1045
 msgid "Select some paths to inset/outset."
 msgstr "Izaberite neku krivu za skupljanje ili širenje."
 
-#: src/splivarot.cpp:1249
+#: src/splivarot.cpp:1257
 msgid "No paths to inset/outset in the selection."
 msgstr "U izboru nema kriva za skupljanje ili širenje."
 
-#: src/splivarot.cpp:1293
+#: src/splivarot.cpp:1301
 msgid "Select some paths to simplify."
 msgstr "Izaberite neku krivu za pojednostavljivanje."
 
-#: src/splivarot.cpp:1385
+#: src/splivarot.cpp:1393
 msgid "No paths to simplify in the selection."
 msgstr "U izboru nema kriva za pojednostavljivanje."
 

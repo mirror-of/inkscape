@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-14 20:47+0200\n"
+"POT-Creation-Date: 2004-07-15 22:14-0700\n"
 "PO-Revision-Date: 2002-03-17 15:51+0800\n"
 "Last-Translator: wang li <charlesw1234@163.com>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -823,7 +823,7 @@ msgid ""
 msgstr ""
 
 #. Clones
-#: src/dialogs/display-settings.cpp:1024 src/dialogs/find.cpp:561
+#: src/dialogs/display-settings.cpp:1024 src/dialogs/find.cpp:564
 #, fuzzy
 msgid "Clones"
 msgstr "关闭视图"
@@ -1129,198 +1129,198 @@ msgid "alternating"
 msgstr "饱和度："
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-#: src/dialogs/find.cpp:317
+#: src/dialogs/find.cpp:320
 #, c-format
 msgid "%d object(s) found (out of %d), %s match."
 msgstr ""
 
-#: src/dialogs/find.cpp:318
+#: src/dialogs/find.cpp:321
 #, fuzzy
 msgid "exact"
 msgstr "文本"
 
-#: src/dialogs/find.cpp:318
+#: src/dialogs/find.cpp:321
 #, fuzzy
 msgid "partial"
 msgstr "螺旋形"
 
-#: src/dialogs/find.cpp:325
+#: src/dialogs/find.cpp:328
 #, fuzzy
 msgid "No objects found"
 msgstr "无对象"
 
-#: src/dialogs/find.cpp:483
+#: src/dialogs/find.cpp:486
 #, fuzzy
 msgid "T_ype: "
 msgstr "类型："
 
-#: src/dialogs/find.cpp:490
+#: src/dialogs/find.cpp:493
 msgid "Search in all object types"
 msgstr ""
 
-#: src/dialogs/find.cpp:490
+#: src/dialogs/find.cpp:493
 #, fuzzy
 msgid "All types"
 msgstr "填充模式"
 
-#: src/dialogs/find.cpp:501
+#: src/dialogs/find.cpp:504
 msgid "Search all shapes"
 msgstr ""
 
-#: src/dialogs/find.cpp:501
+#: src/dialogs/find.cpp:504
 msgid "All shapes"
 msgstr ""
 
-#: src/dialogs/find.cpp:518
+#: src/dialogs/find.cpp:521
 #, fuzzy
 msgid "Search rectangles"
 msgstr "长方形"
 
-#: src/dialogs/find.cpp:518
+#: src/dialogs/find.cpp:521
 #, fuzzy
 msgid "Rectangles"
 msgstr "长方形"
 
-#: src/dialogs/find.cpp:523
+#: src/dialogs/find.cpp:526
 msgid "Search ellipses, arcs, circles"
 msgstr ""
 
-#: src/dialogs/find.cpp:523
+#: src/dialogs/find.cpp:526
 #, fuzzy
 msgid "Ellipses"
 msgstr "椭圆"
 
-#: src/dialogs/find.cpp:528
+#: src/dialogs/find.cpp:531
 msgid "Search stars and polygons"
 msgstr ""
 
-#: src/dialogs/find.cpp:528
+#: src/dialogs/find.cpp:531
 #, fuzzy
 msgid "Stars"
 msgstr "星形"
 
-#: src/dialogs/find.cpp:533
+#: src/dialogs/find.cpp:536
 #, fuzzy
 msgid "Search spirals"
 msgstr "绘制螺旋"
 
-#: src/dialogs/find.cpp:533
+#: src/dialogs/find.cpp:536
 #, fuzzy
 msgid "Spirals"
 msgstr "螺旋形"
 
 #. TRANSLATORS: polyline is a set of connected straight line segments
 #. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
-#: src/dialogs/find.cpp:546
+#: src/dialogs/find.cpp:549
 msgid "Search paths, lines, polylines"
 msgstr ""
 
-#: src/dialogs/find.cpp:546
+#: src/dialogs/find.cpp:549
 msgid "Paths"
 msgstr ""
 
-#: src/dialogs/find.cpp:551
+#: src/dialogs/find.cpp:554
 #, fuzzy
 msgid "Search text objects"
 msgstr "翻转选中对象"
 
-#: src/dialogs/find.cpp:551
+#: src/dialogs/find.cpp:554
 #, fuzzy
 msgid "Texts"
 msgstr "文本"
 
-#: src/dialogs/find.cpp:556
+#: src/dialogs/find.cpp:559
 msgid "Search groups"
 msgstr ""
 
-#: src/dialogs/find.cpp:556
+#: src/dialogs/find.cpp:559
 #, fuzzy
 msgid "Groups"
 msgstr "组"
 
-#: src/dialogs/find.cpp:561
+#: src/dialogs/find.cpp:564
 msgid "Search clones"
 msgstr ""
 
-#: src/dialogs/find.cpp:566
+#: src/dialogs/find.cpp:569
 msgid "Search images"
 msgstr ""
 
-#: src/dialogs/find.cpp:566
+#: src/dialogs/find.cpp:569
 #, fuzzy
 msgid "Images"
 msgstr "图像"
 
-#: src/dialogs/find.cpp:571
+#: src/dialogs/find.cpp:574
 #, fuzzy
 msgid "Search offset objects"
 msgstr "翻转选中对象"
 
-#: src/dialogs/find.cpp:571
+#: src/dialogs/find.cpp:574
 msgid "Offsets"
 msgstr ""
 
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 #, fuzzy
 msgid "_Text: "
 msgstr "文本"
 
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 msgid "Find objects by their text content (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:632
+#: src/dialogs/find.cpp:635
 msgid "_ID: "
 msgstr ""
 
-#: src/dialogs/find.cpp:632
+#: src/dialogs/find.cpp:635
 msgid "Find objects by the value of the id attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:633
+#: src/dialogs/find.cpp:636
 #, fuzzy
 msgid "_Style: "
 msgstr " 风格 "
 
-#: src/dialogs/find.cpp:633
+#: src/dialogs/find.cpp:636
 msgid ""
 "Find objects by the value of the style attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:634
+#: src/dialogs/find.cpp:637
 #, fuzzy
 msgid "_Attribute: "
 msgstr "属性："
 
-#: src/dialogs/find.cpp:634
+#: src/dialogs/find.cpp:637
 msgid "Find objects by the name of an attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:647
+#: src/dialogs/find.cpp:650
 #, fuzzy
 msgid "Search in s_election"
 msgstr "缩放到选中内容"
 
-#: src/dialogs/find.cpp:651
+#: src/dialogs/find.cpp:654
 msgid "Limit search to the current selection"
 msgstr ""
 
-#: src/dialogs/find.cpp:660
+#: src/dialogs/find.cpp:663
 #, fuzzy
 msgid "_Clear"
 msgstr "关闭视图"
 
-#: src/dialogs/find.cpp:660
+#: src/dialogs/find.cpp:663
 #, fuzzy
 msgid "Clear values"
 msgstr "色彩填充"
 
-#: src/dialogs/find.cpp:661
+#: src/dialogs/find.cpp:664
 #, fuzzy
 msgid "_Find"
 msgstr "栅格"
 
-#: src/dialogs/find.cpp:661
+#: src/dialogs/find.cpp:664
 msgid "Select objects matching all of the fields you filled in"
 msgstr ""
 
@@ -3153,29 +3153,29 @@ msgid "Select some paths to outline."
 msgstr "将选定对象转换为曲线"
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:737
+#: src/splivarot.cpp:741
 msgid "No stroked paths to outline in the selection."
 msgstr ""
 
-#: src/splivarot.cpp:823
+#: src/splivarot.cpp:827
 msgid "Selected object is not a path, cannot inset/outset."
 msgstr ""
 
-#: src/splivarot.cpp:1041
+#: src/splivarot.cpp:1045
 #, fuzzy
 msgid "Select some paths to inset/outset."
 msgstr "将选定对象转换为曲线"
 
-#: src/splivarot.cpp:1249
+#: src/splivarot.cpp:1257
 msgid "No paths to inset/outset in the selection."
 msgstr ""
 
-#: src/splivarot.cpp:1293
+#: src/splivarot.cpp:1301
 #, fuzzy
 msgid "Select some paths to simplify."
 msgstr "将选定对象转换为曲线"
 
-#: src/splivarot.cpp:1385
+#: src/splivarot.cpp:1393
 msgid "No paths to simplify in the selection."
 msgstr ""
 

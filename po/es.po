@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-14 20:47+0200\n"
+"POT-Creation-Date: 2004-07-15 22:14-0700\n"
 "PO-Revision-Date: 2004-07-13 09:16+0200\n"
 "Last-Translator: Lucas Vieites <lucas@asixinformatica.com>\n"
 "Language-Team: Spanish/Spain <traductores@es.gnome.org>\n"
@@ -832,7 +832,7 @@ msgstr ""
 "deplazamiento de la derecha)."
 
 #. Clones
-#: src/dialogs/display-settings.cpp:1024 src/dialogs/find.cpp:561
+#: src/dialogs/display-settings.cpp:1024 src/dialogs/find.cpp:564
 msgid "Clones"
 msgstr "Clones"
 
@@ -1136,180 +1136,180 @@ msgid "alternating"
 msgstr "alternado"
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-#: src/dialogs/find.cpp:317
+#: src/dialogs/find.cpp:320
 #, c-format
 msgid "%d object(s) found (out of %d), %s match."
 msgstr "%d objeto(s) encontrado (de %d), %s coinciden."
 
-#: src/dialogs/find.cpp:318
+#: src/dialogs/find.cpp:321
 msgid "exact"
 msgstr "exacto"
 
-#: src/dialogs/find.cpp:318
+#: src/dialogs/find.cpp:321
 msgid "partial"
 msgstr "parcial"
 
-#: src/dialogs/find.cpp:325
+#: src/dialogs/find.cpp:328
 msgid "No objects found"
 msgstr "No se han encontrado objetos"
 
-#: src/dialogs/find.cpp:483
+#: src/dialogs/find.cpp:486
 msgid "T_ype: "
 msgstr "T_ipo: "
 
-#: src/dialogs/find.cpp:490
+#: src/dialogs/find.cpp:493
 msgid "Search in all object types"
 msgstr "Buscar en todos los tipos de objeto"
 
-#: src/dialogs/find.cpp:490
+#: src/dialogs/find.cpp:493
 msgid "All types"
 msgstr "Todos los tipos"
 
-#: src/dialogs/find.cpp:501
+#: src/dialogs/find.cpp:504
 msgid "Search all shapes"
 msgstr "Buscar en todas las formas"
 
-#: src/dialogs/find.cpp:501
+#: src/dialogs/find.cpp:504
 msgid "All shapes"
 msgstr "Todas las formas"
 
-#: src/dialogs/find.cpp:518
+#: src/dialogs/find.cpp:521
 msgid "Search rectangles"
 msgstr "Buscar rectángulos"
 
-#: src/dialogs/find.cpp:518
+#: src/dialogs/find.cpp:521
 msgid "Rectangles"
 msgstr "Rectángulos"
 
-#: src/dialogs/find.cpp:523
+#: src/dialogs/find.cpp:526
 msgid "Search ellipses, arcs, circles"
 msgstr "Buscar en elipses, arcos, círculos."
 
-#: src/dialogs/find.cpp:523
+#: src/dialogs/find.cpp:526
 msgid "Ellipses"
 msgstr "Elipses"
 
-#: src/dialogs/find.cpp:528
+#: src/dialogs/find.cpp:531
 msgid "Search stars and polygons"
 msgstr "Buscar estrellas y polígonos"
 
-#: src/dialogs/find.cpp:528
+#: src/dialogs/find.cpp:531
 msgid "Stars"
 msgstr "Estrellas"
 
-#: src/dialogs/find.cpp:533
+#: src/dialogs/find.cpp:536
 msgid "Search spirals"
 msgstr "Buscar espirales"
 
-#: src/dialogs/find.cpp:533
+#: src/dialogs/find.cpp:536
 msgid "Spirals"
 msgstr "Espirales"
 
 #. TRANSLATORS: polyline is a set of connected straight line segments
 #. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
-#: src/dialogs/find.cpp:546
+#: src/dialogs/find.cpp:549
 msgid "Search paths, lines, polylines"
 msgstr "Buscar en trazos, líneas, pilolíneas."
 
-#: src/dialogs/find.cpp:546
+#: src/dialogs/find.cpp:549
 msgid "Paths"
 msgstr "Trazos"
 
-#: src/dialogs/find.cpp:551
+#: src/dialogs/find.cpp:554
 msgid "Search text objects"
 msgstr "Buscar objetos de texto"
 
-#: src/dialogs/find.cpp:551
+#: src/dialogs/find.cpp:554
 msgid "Texts"
 msgstr "Textos"
 
-#: src/dialogs/find.cpp:556
+#: src/dialogs/find.cpp:559
 msgid "Search groups"
 msgstr "Buscar en grupos."
 
-#: src/dialogs/find.cpp:556
+#: src/dialogs/find.cpp:559
 msgid "Groups"
 msgstr "Grupos"
 
-#: src/dialogs/find.cpp:561
+#: src/dialogs/find.cpp:564
 msgid "Search clones"
 msgstr "Buscar en clones"
 
-#: src/dialogs/find.cpp:566
+#: src/dialogs/find.cpp:569
 msgid "Search images"
 msgstr "Buscar en imágenes"
 
-#: src/dialogs/find.cpp:566
+#: src/dialogs/find.cpp:569
 msgid "Images"
 msgstr "Imágenes"
 
-#: src/dialogs/find.cpp:571
+#: src/dialogs/find.cpp:574
 msgid "Search offset objects"
 msgstr "Buscar objetos de offset"
 
-#: src/dialogs/find.cpp:571
+#: src/dialogs/find.cpp:574
 msgid "Offsets"
 msgstr "Offsets"
 
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 msgid "_Text: "
 msgstr "_Texto:"
 
-#: src/dialogs/find.cpp:631
+#: src/dialogs/find.cpp:634
 msgid "Find objects by their text content (exact or partial match)"
 msgstr ""
 "Buscar objetos por su contenido de texto (coincidencia exacta o parcial)"
 
-#: src/dialogs/find.cpp:632
+#: src/dialogs/find.cpp:635
 msgid "_ID: "
 msgstr "_ID: "
 
-#: src/dialogs/find.cpp:632
+#: src/dialogs/find.cpp:635
 msgid "Find objects by the value of the id attribute (exact or partial match)"
 msgstr ""
 "Buscar objetos por el valor del atributo «id» (coincidencia exacta o parcial)"
 
-#: src/dialogs/find.cpp:633
+#: src/dialogs/find.cpp:636
 msgid "_Style: "
 msgstr "E_stilo:"
 
-#: src/dialogs/find.cpp:633
+#: src/dialogs/find.cpp:636
 msgid ""
 "Find objects by the value of the style attribute (exact or partial match)"
 msgstr ""
 "Buscar objetos por el valor del atributo «style» (coincidencia exacta o "
 "parcial)"
 
-#: src/dialogs/find.cpp:634
+#: src/dialogs/find.cpp:637
 msgid "_Attribute: "
 msgstr "_Atributo:"
 
-#: src/dialogs/find.cpp:634
+#: src/dialogs/find.cpp:637
 msgid "Find objects by the name of an attribute (exact or partial match)"
 msgstr ""
 "Buscar objetos por el nombre de un atributo (coincidencia exacta o parcial)"
 
-#: src/dialogs/find.cpp:647
+#: src/dialogs/find.cpp:650
 msgid "Search in s_election"
 msgstr "Buscar en la s_elección"
 
-#: src/dialogs/find.cpp:651
+#: src/dialogs/find.cpp:654
 msgid "Limit search to the current selection"
 msgstr "Limitar la búsqueda a la selección actual"
 
-#: src/dialogs/find.cpp:660
+#: src/dialogs/find.cpp:663
 msgid "_Clear"
 msgstr "_Limpiar"
 
-#: src/dialogs/find.cpp:660
+#: src/dialogs/find.cpp:663
 msgid "Clear values"
 msgstr "Limpiar valores"
 
-#: src/dialogs/find.cpp:661
+#: src/dialogs/find.cpp:664
 msgid "_Find"
 msgstr "_Buscar"
 
-#: src/dialogs/find.cpp:661
+#: src/dialogs/find.cpp:664
 msgid "Select objects matching all of the fields you filled in"
 msgstr "Seleccionar los objetos que coincidan con todos los campos rellenados"
 
@@ -3104,27 +3104,27 @@ msgid "Select some paths to outline."
 msgstr "Seleccione trazos para contornear."
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
-#: src/splivarot.cpp:737
+#: src/splivarot.cpp:741
 msgid "No stroked paths to outline in the selection."
 msgstr "No hay trazos para contornear en la selección."
 
-#: src/splivarot.cpp:823
+#: src/splivarot.cpp:827
 msgid "Selected object is not a path, cannot inset/outset."
 msgstr "El objeto seleccionado no es un trazo, no se puede reducir/ampliar."
 
-#: src/splivarot.cpp:1041
+#: src/splivarot.cpp:1045
 msgid "Select some paths to inset/outset."
 msgstr "Seleccione trazos para reducir/ampliar."
 
-#: src/splivarot.cpp:1249
+#: src/splivarot.cpp:1257
 msgid "No paths to inset/outset in the selection."
 msgstr "No hay trazos para reducir/ampliar en la selección."
 
-#: src/splivarot.cpp:1293
+#: src/splivarot.cpp:1301
 msgid "Select some paths to simplify."
 msgstr "Seleccione objetos para simplificar."
 
-#: src/splivarot.cpp:1385
+#: src/splivarot.cpp:1393
 msgid "No paths to simplify in the selection."
 msgstr "No hay grupos simplificables en la selección."
 

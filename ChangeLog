@@ -1,3 +1,7 @@
+2004-07-15  Ted Gould  <ted@gould.cx>
+
+	* 0.39 Release
+
 2004-07-14  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-object.cpp: disable recursive update warning for release
