@@ -44,3 +44,19 @@ Please refer to the Coding Style Guidelines if you have specific
 questions on the style to use for code.  If reading style guidelines
 doesn't interest you, just follow the general style of the surrounding
 code, so that it is at least consistent.
+
+
+Makefiles
+=========
+Makefiles under the src directory are all more or less merged into one
+src/Makefile.am that sources the Makefile_insert files from each directory.
+
+Note that it's still logically just one file, so variable definitions
+(including INCLUDES etc.) are shared, and variables defined in one
+Makefile_insert can be used in another.
+
+Thus, consider either adding a `blah_' prefix to the name of any variables you
+define in blah/Makefile_insert (if it's intended to be local to that
+Makefile_insert), or putting the definition in src/Makefile.am.  In particular,
+note that check_PROGRAMS, DISTCLEANFILES, etc. are in src/Makefile.am.
+

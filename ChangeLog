@@ -1,6 +1,11 @@
+2004-04-22  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/Makefile.am: Make non-recursive.  Now sources */Makefile_insert.
+	See HACKING or discussion on mailing list.
+
 2004-04-21  MenTaLguY <mental@rydia.net>
 
-    * src/libnrtype/nr-type-w32.h: fixed unremoved underscores
+	* src/libnrtype/nr-type-w32.h: fixed unremoved underscores
 
 	* src/select-context.cpp, src/selection.cpp, src/selection.h,
 	  src/seltrans.cpp, src/tools-switch.cpp, src/dialogs/align.cpp:
@@ -8,7 +13,7 @@
 	  some additional work is now required in SPSelectContext to update
 	  the message properly in all cases.
 
-    * src/selection.h, src/selection.cpp: touched up and documented
+	* src/selection.h, src/selection.cpp: touched up and documented
 	  SPSelection
 
 	* src/uri-references.h: documentation touch-ups
@@ -21,9 +26,9 @@
 
 2004-04-20  MenTaLguY <mental@rydia.net>
 
-    * src/text-context.cpp: merged Carl's fix for signal cleanup
+	* src/text-context.cpp: merged Carl's fix for signal cleanup
 
-    * src/selection.h: marked wrappers for old API as deprecated
+	* src/selection.h: marked wrappers for old API as deprecated
 
 2004-04-20  Carl Hetherington <inkscape@carlh.net>
 
@@ -42,7 +47,7 @@
 
 2004-04-19  MenTaLguY <mental@rydia.net>
 
-    * src/arc-context.cpp, src/desktop-handles.h, src/desktop.h,
+	* src/arc-context.cpp, src/desktop-handles.h, src/desktop.h,
 	  src/draw-context.cpp, src/draw-context.h, src/forward.h,
 	  src/inkscape-private.h, src/inkscape.cpp, src/node-context.cpp,
 	  src/node-context.h, src/rect-context.cpp, src/selection-chemistry.cpp,
@@ -53,7 +58,7 @@
 
 	  finished GObject removal from SPSelection
 
-    * src/arc-context.h, src/arc-context.cpp, src/desktop.cpp, src/desktop.h,
+	* src/arc-context.h, src/arc-context.cpp, src/desktop.cpp, src/desktop.h,
 	  src/draw-context.cpp, src/draw-context.h, src/node-context.cpp,
 	  src/node-context.h, src/rect-context.cpp, src/rect-context.h,
 	  src/selection.cpp, src/selection.h, src/seltrans.cpp, src/seltrans.h,
@@ -63,7 +68,7 @@
 	  migrated SPSelection to SigC++ signals (though it's a bit messy
 	  right now)
 
-2004-04-19  Peter  <pmoulder@mail.csse.monash.edu.au>
+2004-04-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/dialogs/stroke-style.cpp: Cleanups: greater conformance to
 	CodingStyle.  Moved some declarations to their first use.
