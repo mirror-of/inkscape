@@ -34,6 +34,8 @@
 #include "document.h"
 #include "selcue.h"
 
+#include "pixmaps/cursor-dropper.xpm"
+
 #include "dropper-context.h"
 #include <libnr/nr-point-fns.h>
 #include <libnr/nr-matrix-ops.h>
@@ -95,6 +97,10 @@ sp_dropper_context_class_init (SPDropperContextClass * klass)
 static void
 sp_dropper_context_init (SPDropperContext *dc)
 {
+    SPEventContext *event_context = SP_EVENT_CONTEXT (dc);
+    event_context->cursor_shape = cursor_dropper_xpm;
+    event_context->hot_x = 7;
+    event_context->hot_y = 7;
 }
 
 static void
