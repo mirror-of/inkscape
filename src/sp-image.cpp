@@ -514,6 +514,8 @@ static int sp_image_snappoints (SPItem *item, NR::Point p[], int size)
 	NR::Matrix const i2d(sp_item_i2d_affine(item));
 
 	/* we use corners of image only */
+	/* Just a pair of opposite corners of the bounding box suffices given that we don't yet
+	   support angled guide lines. */
 	NR::Coord x0 = image->x.computed;
 	NR::Coord y0 = image->y.computed;
 	NR::Coord x1 = x0 + image->width.computed;
@@ -524,13 +526,7 @@ static int sp_image_snappoints (SPItem *item, NR::Point p[], int size)
 		p[i++] = NR::Point(x0, y0) * i2d;
 	}
 	if (i < size) {
-		p[i++] = NR::Point(x1, y0) * i2d;
-	}
-	if (i < size) {
 		p[i++] = NR::Point(x1, y1) * i2d;
-	}
-	if (i < size) {
-		p[i++] = NR::Point(x0, y1) * i2d;
 	}
 
 	return i;

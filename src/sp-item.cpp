@@ -404,16 +404,18 @@ sp_item_bbox_desktop (SPItem *item, NRRect *bbox)
 
 static int sp_item_private_snappoints(SPItem *item, NR::Point p[], int size)
 {
-	if (size < 4) return 0;
+	if (size < 2) return 0;
 	NRMatrix i2d;
 	sp_item_i2d_affine(item, &i2d);
 	NRRect bbox;
 	sp_item_invoke_bbox(item, &bbox, &i2d, TRUE);
 	NR::Rect const bbox2(bbox);
-	for(unsigned i = 0; i < 4; i++) {
-		p[i] = bbox2.corner(i);
-	}
-	return 4;
+	/* Just a pair of opposite corners of the bounding box suffices given that we don't yet
+	   support angled guide lines. */
+	int i = 0;
+	p[i++] = bbox2.topleft();
+	p[i++] = bbox2.bottomright();
+	return i;
 }
 
 int sp_item_snappoints(SPItem *item, NR::Point p[], int size)

@@ -1,5 +1,10 @@
 2004-02-13  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/selection.cpp (sp_selection_snappoints):
+	* src/sp-image.cpp (sp_image_snappoints):
+	* src/sp-item.cpp (sp_item_private_snappoints):
+	Don't use more than two opposite points of bounding box.
+
 	* src/seltrans.cpp (sp_show_handles): Add precondition !seltrans.empty.
 	* src/proofs: Update accordingly.
 	* src/seltrans.cpp: Change seltrans from pointer to reference in

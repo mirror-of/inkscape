@@ -553,10 +553,15 @@ int sp_selection_snappoints(SPSelection *selection, NR::Point points[], int size
 		return sp_item_snappoints (SP_ITEM (l->data), points, size);
 	} else {
 		/* selection has more than one item -> take corners of selection */
+		/* Just a pair of opposite corners of the bounding box suffices given that we don't
+		   yet support angled guide lines. */
 		NR::Rect bbox = sp_selection_bbox (selection);
 		int pos = 0;
-		for (int n = std::min(size, 4); pos < n ; pos++) {
-			points[pos] = bbox.corner(pos);
+		if ( pos < size ) {
+			points[pos++] = bbox.topleft();
+		}
+		if ( pos < size ) {
+			points[pos++] = bbox.bottomright();
 		}
 		return pos;
 	}
