@@ -342,6 +342,8 @@ sp_ui_menu_key_press (GtkMenuItem *item, GdkEventKey *event, void *data)
 static gchar const *
 sp_key_name (guint keyval)
 {
+    /* TODO: Compare with the definition of gtk_accel_label_refetch in gtk/gtkaccellabel.c (or
+       simply use GtkAccelLabel as the TODO comment in sp_ui_shortcut_string suggests). */
     gchar const *n = gdk_keyval_name (gdk_keyval_to_upper (keyval));
 
     if      (!strcmp (n, "asciicircum"))  return "^";
@@ -362,17 +364,46 @@ sp_key_name (guint keyval)
 }
 
 
+/**
+ * \param shortcut A GDK keyval OR'd with SP_SHORTCUT_blah_MASK values.
+ * \param c Points to a buffer at least 256 bytes long.
+ */
 void
-sp_ui_shortcut_string (unsigned int shortcut, gchar* c)
+sp_ui_shortcut_string(unsigned const shortcut, gchar *const c)
 {
-    const gchar *altStr, *ctrlStr, *shiftStr;
+    /* TODO: This function shouldn't exist.  Our callers should use GtkAccelLabel instead of
+     * a generic GtkLabel containing this string, and should call gtk_widget_add_accelerator.
+     * Will probably need to change sp_shortcut_invoke callers and sp_ui_menu_key_press.
+     *
+     * The existing gtk_label_new_with_mnemonic call can be replaced with
+     * g_object_new(GTK_TYPE_ACCEL_LABEL, NULL) followed by
+     * gtk_label_set_text_with_mnemonic(lbl, str).
+     */
+    static GtkAccelLabelClass const &accel_lbl_cls
+        = *(GtkAccelLabelClass const *) g_type_class_peek_static(GTK_TYPE_ACCEL_LABEL);
 
-    altStr   = (shortcut & SP_SHORTCUT_ALT_MASK    ) ? "Alt+"   : "";
-    ctrlStr  = (shortcut & SP_SHORTCUT_CONTROL_MASK) ? "Ctrl+"  : "";
-    shiftStr = (shortcut & SP_SHORTCUT_SHIFT_MASK  ) ? "Shift+" : "";
+    struct { unsigned test; char const *name; } const modifier_tbl[] = {
+        { SP_SHORTCUT_SHIFT_MASK,   accel_lbl_cls.mod_name_shift   },
+        { SP_SHORTCUT_CONTROL_MASK, accel_lbl_cls.mod_name_control },
+        { SP_SHORTCUT_ALT_MASK,     accel_lbl_cls.mod_name_alt     }
+    };
 
-    g_snprintf (c, 256, "%s%s%s%s", shiftStr, ctrlStr, altStr,
-         sp_key_name (shortcut & 0xffffff));
+    gchar *p = c;
+    gchar *end = p + 256;
+
+    for (unsigned i = 0; i < G_N_ELEMENTS(modifier_tbl); ++i) {
+        if ((shortcut & modifier_tbl[i].test)
+            && (p < end))
+        {
+            p += g_snprintf(p, end - p, "%s%s",
+                            modifier_tbl[i].name,
+                            accel_lbl_cls.mod_separator);
+        }
+    }
+    if (p < end) {
+        p += g_snprintf(p, end - p, "%s", sp_key_name(shortcut & 0xffffff));
+    }
+    end[-1] = '\0';  // snprintf doesn't guarantee to nul-terminate the string.
 }
 
 void
@@ -431,15 +462,14 @@ sp_ui_menu_append_item_from_verb (GtkMenu *menu, Inkscape::Verb * verb, SPView *
         shortcut = sp_shortcut_get_primary (verb);
         if (shortcut) {
             gchar c[256];
-            GtkWidget *hb, *l;
             sp_ui_shortcut_string (shortcut, c);
-            hb = gtk_hbox_new (FALSE, 16);
-            l = gtk_label_new_with_mnemonic (action->name);
-            gtk_misc_set_alignment ((GtkMisc *) l, 0.0, 0.5);
-            gtk_box_pack_start ((GtkBox *) hb, l, TRUE, TRUE, 0);
-            l = gtk_label_new (c);
-            gtk_misc_set_alignment ((GtkMisc *) l, 1.0, 0.5);
-            gtk_box_pack_end ((GtkBox *) hb, l, FALSE, FALSE, 0);
+            GtkWidget *const hb = gtk_hbox_new(FALSE, 16);
+            GtkWidget *const name_lbl = gtk_label_new_with_mnemonic(action->name);
+            gtk_misc_set_alignment((GtkMisc *) name_lbl, 0.0, 0.5);
+            gtk_box_pack_start((GtkBox *) hb, name_lbl, TRUE, TRUE, 0);
+            GtkWidget *const accel_lbl = gtk_label_new(c);
+            gtk_misc_set_alignment((GtkMisc *) accel_lbl, 1.0, 0.5);
+            gtk_box_pack_end((GtkBox *) hb, accel_lbl, FALSE, FALSE, 0);
             gtk_widget_show_all (hb);
             item = gtk_image_menu_item_new ();
             gtk_container_add ((GtkContainer *) item, hb);
