@@ -553,12 +553,11 @@ inkscape_application_init (const gchar *argv0)
 {
     inkscape = (Inkscape::Application *)g_object_new (SP_TYPE_INKSCAPE, NULL);
     /* fixme: load application defaults */
-
-#ifndef WIN32
+  
     segv_handler = signal (SIGSEGV, inkscape_segv_handler);
     signal (SIGFPE, inkscape_segv_handler);
     signal (SIGILL, inkscape_segv_handler);
-#endif
+
 
     inkscape->argv0 = g_strdup(argv0);
 
