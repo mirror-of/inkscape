@@ -32,22 +32,6 @@ sp_relative_path_from_path (const gchar * path, const gchar * base)
 }
 
 const gchar *
-sp_filename_from_path (const gchar * path)
-{
-	const gchar * p;
-
-	if (path == NULL) return NULL;
-
-	p = path;
-	while (* p != '\0') p++;
-
-	while ((* p != G_DIR_SEPARATOR) && (p >= path)) p--;
-	p++;
-
-	return p;
-}
-
-const gchar *
 sp_extension_from_path (const gchar * path)
 {
 	const gchar * p;

@@ -425,8 +425,9 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
 			sp_transientize (dlg);
 			gtk_window_set_resizable (GTK_WINDOW (dlg), FALSE);
 			g_object_set_data ((GObject *) base, "progress", prg);
-			fn = sp_filename_from_path (filename);
+			fn = g_path_get_basename (filename);
 			text = g_strdup_printf (_("Exporting [%d x %d] %s"), width, height, fn);
+			g_free (fn);
 			gtk_progress_bar_set_text ((GtkProgressBar *) prg, text);
 			g_free (text);
 			gtk_progress_bar_set_orientation ((GtkProgressBar *) prg, GTK_PROGRESS_LEFT_TO_RIGHT);

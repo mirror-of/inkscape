@@ -14,6 +14,9 @@
 	* src/inkscape.cpp, src/widgets/icon.cpp, src/monostd.h: cleaning up
 	  more platform stuff
 
+	* src/dir-util.cpp, src/dir-util.h, src/dialogs/export.cpp:
+	  remove sp_filename_from_path(); use g_path_from_filename instead
+
 2004-01-02  Alexander Clausen <alex@skip86.com>
 	
 	* src/spsvgview.cpp src/inkview.cpp src/Makefile.am: re-enabled svg viewer,

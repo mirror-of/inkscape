@@ -992,7 +992,7 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
 
 	fn = g_build_filename (g_get_home_dir (), INKSCAPE_PROFILE_DIR, config_name, NULL);
 
-	fh = fopen(fn, "r+t");
+	fh = fopen(fn, "r+");
 	if (!fh) {
 		/* Cannot create file */
 		w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_ccf, fn);
