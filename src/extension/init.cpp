@@ -44,6 +44,7 @@
 #include "internal/gdkpixbuf-input.h"
 #include "prefs-utils.h"
 #include "error-file.h"
+#include "io/sys.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -158,7 +159,9 @@ build_module_from_dir (const gchar * dirname)
         GError *err;
 	GDir *directory = g_dir_open(dirname, 0, &err);
 	if (!directory) {
-		g_warning(_("Modules directory (%s) is unavailable.  External modules in that directory will not be loaded."), dirname);
+		gchar *safeDir = Inkscape::IO::sanitizeString(dirname);
+		g_warning(_("Modules directory (%s) is unavailable.	 External modules in that directory will not be loaded."), safeDir);
+		g_free(safeDir);
 		return;
 	}
 

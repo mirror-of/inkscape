@@ -1,3 +1,8 @@
+2005-01-31  Jon A. Cruz  <jon@joncruz.org>
+	* src/file.cpp, src/inkscape.cpp, src/interface.cpp,
+	  src/dialogs/export.cpp, src/extension/init.cpp:
+	  sanitize messages before passing to display dialogs.
+
 2005-01-31  Kees Cook  <kees@outflux.net>
 
     * src/libnrtype/FontFactory.cpp: added a crude font name detection

@@ -180,9 +180,11 @@ sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key, bool add_to_
 
         return TRUE;
     } else {
-        gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), uri);
+        gchar *safeUri = Inkscape::IO::sanitizeString(uri);
+        gchar *text = g_strdup_printf(_("Failed to load the requested file %s"), safeUri);
         sp_ui_error_dialog(text);
         g_free(text);
+        g_free(safeUri);
         return FALSE;
     }
 }
@@ -472,16 +474,20 @@ file_save(SPDocument *doc, gchar const *uri, Inkscape::Extension::Extension *key
                                   saveas && prefs_get_int_attribute("dialogs.save_as", "append_extension", 1),
                                   saveas, TRUE); // save officially, with inkscape: attributes set
     } catch (Inkscape::Extension::Output::no_extension_found &e) {
-        gchar *text = g_strdup_printf(_("No Inkscape extension found to save document (%s).  This may have been caused by an unknown filename extension."), uri);
+        gchar *safeUri = Inkscape::IO::sanitizeString(uri);
+        gchar *text = g_strdup_printf(_("No Inkscape extension found to save document (%s).  This may have been caused by an unknown filename extension."), safeUri);
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
         sp_ui_error_dialog(text);
         g_free(text);
+        g_free(safeUri);
         return FALSE;
     } catch (Inkscape::Extension::Output::save_failed &e) {
-        gchar *text = g_strdup_printf(_("File %s could not be saved."), uri);
+        gchar *safeUri = Inkscape::IO::sanitizeString(uri);
+        gchar *text = g_strdup_printf(_("File %s could not be saved."), safeUri);
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
         sp_ui_error_dialog(text);
         g_free(text);
+        g_free(safeUri);
         return FALSE;
     } catch (Inkscape::Extension::Output::no_overwrite &e) {
         return sp_file_save_dialog(doc);

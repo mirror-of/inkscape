@@ -1318,13 +1318,15 @@ void
 sp_ui_error_dialog (const gchar * message)
 {
 	GtkWidget *dlg;
+	gchar *safeMsg = Inkscape::IO::sanitizeString(message);
 
 	dlg = gtk_message_dialog_new (NULL, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_ERROR,
-			GTK_BUTTONS_CLOSE, message);
+			GTK_BUTTONS_CLOSE, safeMsg);
 	sp_transientize (dlg);
 	gtk_window_set_resizable (GTK_WINDOW (dlg), FALSE);
 	gtk_dialog_run (GTK_DIALOG (dlg));
 	gtk_widget_destroy (dlg);
+	g_free(safeMsg);
 }
 
 bool

@@ -971,8 +971,10 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
     gchar * dirname = g_dirname(filename);
     if (dirname == NULL || !Inkscape::IO::file_test(dirname, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
         gchar * error;
-        error = g_strdup_printf(_("Directory %s does not exist or is not a directory.\n"), dirname);
+        gchar * safeDir = Inkscape::IO::sanitizeString(dirname);
+        error = g_strdup_printf(_("Directory %s does not exist or is not a directory.\n"), safeDir);
         sp_ui_error_dialog(error);
+        g_free(safeDir);
         g_free(error);
         g_free(dirname);
         return;
@@ -1017,8 +1019,10 @@ sp_export_export_clicked (GtkButton *button, GtkObject *base)
                              nv->pagecolor, 
                              sp_export_progress_callback, base)) {
         gchar * error;
-        error = g_strdup_printf(_("Could not export to filename %s.\n"), filename);
+        gchar * safeFile = Inkscape::IO::sanitizeString(filename);
+        error = g_strdup_printf(_("Could not export to filename %s.\n"), safeFile);
         sp_ui_error_dialog(error);
+        g_free(safeFile);
         g_free(error);
     }
             

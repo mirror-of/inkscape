@@ -619,9 +619,11 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
 
     if (!Inkscape::IO::file_test(fn, G_FILE_TEST_IS_REGULAR)) {
         /* Not a regular file */
-        GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notreg, fn, warn);
+        gchar *safeFn = Inkscape::IO::sanitizeString(fn);
+        GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notreg, safeFn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
+        g_free(safeFn);
         g_free (fn);
         return FALSE;
     }
@@ -629,19 +631,23 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
     SPReprDoc *doc = sp_repr_read_file (fn, NULL);
     if (doc == NULL) {
         /* Not an valid xml file */
-        GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notxml, fn, warn);
+        gchar *safeFn = Inkscape::IO::sanitizeString(fn);
+        GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notxml, safeFn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
+        g_free(safeFn);
         g_free (fn);
         return FALSE;
     }
 
     SPRepr *root = sp_repr_document_root (doc);
     if (strcmp (sp_repr_name (root), "inkscape")) {
-        GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notsp, fn, warn);
+        gchar *safeFn = Inkscape::IO::sanitizeString(fn);
+        GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notsp, safeFn, warn);
         gtk_dialog_run (GTK_DIALOG (w));
         gtk_widget_destroy (w);
         sp_repr_document_unref (doc);
+        g_free(safeFn);
         g_free (fn);
         return FALSE;
     }
@@ -1112,9 +1118,11 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
         {
             if (inkscape->use_gui) {
                 // Cannot create directory
-                GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_mkdir, dn, warn);
+                gchar *safeDn = Inkscape::IO::sanitizeString(dn);
+                GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_mkdir, safeDn, warn);
                 gtk_dialog_run (GTK_DIALOG (w));
                 gtk_widget_destroy (w);
+                g_free(safeDn);
                 g_free (dn);
                 return;
             } else {
@@ -1126,9 +1134,11 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
     } else if (!Inkscape::IO::file_test(dn, G_FILE_TEST_IS_DIR)) {
         if (inkscape->use_gui) {
             // Not a directory
-            GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notdir, dn, warn);
+            gchar *safeDn = Inkscape::IO::sanitizeString(dn);
+            GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_notdir, safeDn, warn);
             gtk_dialog_run (GTK_DIALOG (w));
             gtk_widget_destroy (w);
+            g_free( safeDn );
             g_free (dn);
             return;
         } else {
@@ -1146,9 +1156,11 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
     if (!fh) {
         if (inkscape->use_gui) {
             /* Cannot create file */
-            GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_ccf, fn, warn);
+            gchar *safeFn = Inkscape::IO::sanitizeString(fn);
+            GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_ccf, safeFn, warn);
             gtk_dialog_run (GTK_DIALOG (w));
             gtk_widget_destroy (w);
+            g_free(safeFn);
             g_free (fn);
             return;
         } else {
@@ -1160,9 +1172,11 @@ inkscape_init_config (SPReprDoc *doc, const gchar *config_name, const gchar *ske
     if ( fwrite(skeleton, 1, skel_size, fh) != skel_size ) {
         if (inkscape->use_gui) {
             /* Cannot create file */
-            GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_cwf, fn, warn);
+            gchar *safeFn = Inkscape::IO::sanitizeString(fn);
+            GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, e_cwf, safeFn, warn);
             gtk_dialog_run (GTK_DIALOG (w));
             gtk_widget_destroy (w);
+            g_free(safeFn);
             g_free (fn);
             fclose(fh);
             return;
