@@ -304,7 +304,7 @@ void           flow_dest::Prepare(void)
 	b=rgn_flow->bottomY;
 	curY=t-1.0;
 	curPt=0;
-  rgn_flow->BeginRaster(curY,curPt,1.0);
+  rgn_flow->BeginRaster(curY, curPt);
 	// empty line cache
 	for (int i=0;i<nbCache;i++) delete caches[i].theLine;
 	nbCache=0;

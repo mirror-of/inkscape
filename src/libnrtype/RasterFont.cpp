@@ -335,7 +335,7 @@ void      raster_glyph::LoadSubPixelPosition(int no)
   // version par FloatLigne
   int    curPt;
   float  curY;
-  polygon->BeginQuickRaster(curY,curPt,1.0);
+  polygon->BeginQuickRaster(curY, curPt);
   
   FloatLigne* theI=new FloatLigne();
   

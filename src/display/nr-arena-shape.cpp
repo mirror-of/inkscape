@@ -1158,7 +1158,7 @@ void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS)
     // version par FloatLigne
     int    curPt;
     float  curY;
-    theS->BeginQuickRaster(curY,curPt,1.0);
+    theS->BeginQuickRaster(curY, curPt);
   
     FloatLigne* theI=new FloatLigne();
     IntLigne*   theIL=new IntLigne();

@@ -280,10 +280,10 @@ public:
     int Winding(const NR::Point px) const;
   
     // rasterization
-    void BeginRaster(float &pos, int &curPt, float step);
+    void BeginRaster(float &pos, int &curPt);
     void EndRaster();
-    void BeginQuickRaster(float &pos, int &curPt, float step);
-    void EndQuickRaster(void);
+    void BeginQuickRaster(float &pos, int &curPt);
+    void EndQuickRaster();
   
     void Scan(float &pos, int &curP, float to, float step);
     void QuickScan(float &pos, int &curP, float to, bool doSort, float step);

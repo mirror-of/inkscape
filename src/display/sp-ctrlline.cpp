@@ -360,7 +360,7 @@ void nr_pixblock_render_ctrl_rgba (Shape* theS,uint32_t color,NRRectL &area,char
     // version par BitLigne directe
     int    curPt;
     float  curY;
-    theS->BeginQuickRaster(curY,curPt,1.0);
+    theS->BeginQuickRaster(curY, curPt);
   
     BitLigne*   theI[4];
     for (int i=0;i<4;i++) theI[i]=new BitLigne(il,ir);
