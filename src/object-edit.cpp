@@ -19,6 +19,7 @@
 #include "sp-star.h"
 #include "sp-spiral.h"
 #include "sp-offset.h"
+#include "prefs-utils.h"
 
 #include "object-edit.h"
 
@@ -157,6 +158,8 @@ sp_arc_start_set (SPItem *item, const NRPoint *p, guint state)
 	SPArc *arc;
 	gdouble dx, dy;
 
+	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
+
 	ge = SP_GENERICELLIPSE (item);
 	arc = SP_ARC(item);
 
@@ -167,7 +170,7 @@ sp_arc_start_set (SPItem *item, const NRPoint *p, guint state)
 
 	ge->start = atan2 (dy / ge->ry.computed, dx / ge->rx.computed);
 	if (state & GDK_CONTROL_MASK) {
-		ge->start = sp_round(ge->start, M_PI_4);
+		ge->start = sp_round(ge->start, M_PI/snaps);
 	}
 	sp_genericellipse_normalize (ge);
 	sp_object_request_update ((SPObject *) arc, SP_OBJECT_MODIFIED_FLAG);
@@ -192,6 +195,8 @@ sp_arc_end_set (SPItem *item, const NRPoint *p, guint state)
 	SPArc *arc;
 	gdouble dx, dy;
 
+	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
+
 	ge = SP_GENERICELLIPSE (item);
 	arc = SP_ARC(item);
 
@@ -201,7 +206,7 @@ sp_arc_end_set (SPItem *item, const NRPoint *p, guint state)
 	dy = p->y - ge->cy.computed;
 	ge->end = atan2 (dy / ge->ry.computed, dx / ge->rx.computed);
 	if (state & GDK_CONTROL_MASK) {
-		ge->end = sp_round(ge->end, M_PI_4);
+		ge->end = sp_round(ge->end, M_PI/snaps);
 	}
 	sp_genericellipse_normalize (ge);
 	sp_object_request_update ((SPObject *) arc, SP_OBJECT_MODIFIED_FLAG);
@@ -337,24 +342,25 @@ sp_spiral_inner_set (SPItem *item, const NRPoint *p, guint state)
 	gdouble   arg_t0;
 	gdouble   arg_t0_new;
 
+	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
+
 	spiral = SP_SPIRAL (item);
 
 	dx = p->x - spiral->cx;
 	dy = p->y - spiral->cy;
 	sp_spiral_get_polar (spiral, spiral->t0, NULL, &arg_t0);
-/*  	arg_t0 = 2.0*M_PI*spiral->revo * spiral->t0 + spiral->arg; */
+	arg_t0 = 2.0*M_PI*spiral->revo * spiral->t0 + spiral->arg; //
 	arg_tmp = atan2(dy, dx) - arg_t0;
 	arg_t0_new = arg_tmp - floor((arg_tmp+M_PI)/(2.0*M_PI))*2.0*M_PI + arg_t0;
 	spiral->t0 = (arg_t0_new - spiral->arg) / (2.0*M_PI*spiral->revo);
-#if 0				/* we need round function */
-	/* round inner arg per PI/4, if CTRL is pressed */
+
+	/* round inner arg per PI/snaps, if CTRL is pressed */
 	if ((state & GDK_CONTROL_MASK) &&
 	    (fabs(spiral->revo) > SP_EPSILON_2)) {
 		gdouble arg = 2.0*M_PI*spiral->revo*spiral->t0 + spiral->arg;
-		t0 = (round(arg/(0.25*M_PI))*0.25*M_PI
-		      - spiral->arg)/(2.0*M_PI*spiral->revo);
+		spiral->t0 = (round(arg/(M_PI/snaps))*(M_PI/snaps) - spiral->arg)/(2.0*M_PI*spiral->revo);
 	}
-#endif
+
 	spiral->t0 = CLAMP (spiral->t0, 0.0, 0.999);
 
 #if 0
@@ -377,24 +383,24 @@ sp_spiral_outer_set (SPItem *item, const NRPoint *p, guint state)
 {
 	SPSpiral *spiral;
 	gdouble   dx, dy;
-/*  	gdouble arg; */
+  	gdouble arg; 
+
+	int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
 
 	spiral = SP_SPIRAL (item);
 
 	dx = p->x - spiral->cx;
 	dy = p->y - spiral->cy;
 	spiral->arg = atan2(dy, dx) - 2.0*M_PI*spiral->revo;
-	spiral->rad = MAX (hypot (dx, dy), 0.001);
-#if 0
- /* we need round function */
-/*  	arg  = -atan2(p->y, p->x) - spiral->arg; */
-	if (state & GDK_CONTROL_MASK) {
-		spiral->revo = (round(arg/(0.25*M_PI))*0.25*M_PI)/(2.0*M_PI);
-	} else {
-		spiral->revo = arg/(2.0*M_PI);
+
+	if (!(state & GDK_MOD1_MASK)) {
+		spiral->rad = MAX (hypot (dx, dy), 0.001);
 	}
-	spiral->revo = arg/(2.0*M_PI);
-#endif
+
+	if (state & GDK_CONTROL_MASK) {
+		spiral->arg = round (spiral->arg/(M_PI/snaps))*(M_PI/snaps);
+	}
+
 	sp_object_request_update ((SPObject *) spiral, SP_OBJECT_MODIFIED_FLAG);
 }
 
