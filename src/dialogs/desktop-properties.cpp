@@ -926,14 +926,14 @@ sp_desktop_dialog(void)
         spw_unit_selector(dlg, t, _("Snap distance:"), "gridtolerance", row++, us,
                           G_CALLBACK(sp_dtw_grid_snap_distance_changed));
 
-        sp_color_picker_button(NULL, true, dlg, t, _("Minor grid line color:"), "gridcolor",
-                               _("Grid color"), "gridopacity", row++);
+        sp_color_picker_button(NULL, true, dlg, t, _("Grid line color:"), "gridcolor",
+                               _("Grid line color"), _("Color of grid lines"), "gridopacity", row++);
 
         sp_color_picker_button(NULL, true, dlg, t, _("Major grid line color:"), "gridempcolor",
-                               _("Grid emphasis color"), "gridempopacity", row++);
+                               _("Major grid line color"), _("Color of the major (highlighted) grid lines"), "gridempopacity", row++);
 
         if (1) {
-            spw_label(t, _("Major grid line spacing:"), 0, row);
+            spw_label(t, _("Major grid line every:"), 0, row);
             GtkObject * a = gtk_adjustment_new (0.0, 0.0, 25.0, 1.0, 1.0, 1.0);
             gtk_object_set_data(GTK_OBJECT(a), (const gchar *)"key", (gpointer)"gridempspacing");
             gtk_object_set_data(GTK_OBJECT(dlg), "gridempspacing", a);
@@ -989,10 +989,10 @@ sp_desktop_dialog(void)
                           G_CALLBACK(sp_dtw_guides_snap_distance_changed));
 
         sp_color_picker_button(NULL, true, dlg, t, _("Guide color:"), "guidecolor",
-                               _("Guideline color"), "guideopacity", row++);
+                               _("Guideline color"), _("Color of guidelines"), "guideopacity", row++);
 
         sp_color_picker_button(NULL, true, dlg, t, _("Highlight color:"), "guidehicolor",
-                               _("Highlighted guideline color"),
+                               _("Highlighted guideline color"), _("Color of a guideline when it is under mouse"),
                                "guidehiopacity", row++);
 
         row=0;
@@ -1007,8 +1007,9 @@ sp_desktop_dialog(void)
         gtk_notebook_prepend_page(GTK_NOTEBOOK(nb), t, l);
         gtk_notebook_set_current_page(GTK_NOTEBOOK(nb), 0);
 
-        sp_color_picker_button(NULL, true, dlg, t, _("Background (also for export):"),
-                               "pagecolor", _("Background color"),
+        sp_color_picker_button(NULL, true, dlg, t, _("Background:"),
+                               "pagecolor", _("Background color"), 
+                               _("Color and transparency of the page background (also used for bitmap export)"),
                                "inkscape:pageopacity", 0);
 
         cb = G_CALLBACK(sp_dtw_whatever_toggled);
@@ -1021,6 +1022,7 @@ sp_desktop_dialog(void)
 
         sp_color_picker_button(NULL, true, dlg, t, _("Border color:"),
                                "bordercolor", _("Canvas border color"),
+                               _("Color of the canvas border"),
                                "borderopacity", 4);
 
 	/* Page Shadow toggle */
