@@ -2877,6 +2877,7 @@ static gchar const *sp_node_type_description(Path::Node *n)
             // TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
             return _("cusp");
         case Path::NODE_SMOOTH:
+            // TRANSLATORS: "smooth" is an adjective here
             return _("smooth");
         case Path::NODE_SYMM:
             return _("symmetric");
