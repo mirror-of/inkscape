@@ -86,8 +86,7 @@ void IconPreviewPanel::on_button_clicked(int which)
 IconPreviewPanel::IconPreviewPanel() :
     Panel(),
     hot(1),
-    refreshButton(0),
-    magnified(0)
+    refreshButton(0)
 {
     numEntries = 4;
     sizes = new int[numEntries];
@@ -111,9 +110,13 @@ IconPreviewPanel::IconPreviewPanel() :
     }
 
 
+    magLabel.set_label( *labels[hot] );
+
     Gtk::VBox* magBox = new Gtk::VBox();
-    magnified = new Gtk::Image();
-    magBox->add( *magnified );
+
+    magBox->pack_start( magnified );
+    magBox->pack_start( magLabel, Gtk::PACK_SHRINK );
+
 
     Gtk::VBox * verts = new Gtk::VBox();
     for ( int i = 0; i < numEntries; i++ ) {
@@ -229,9 +232,10 @@ void IconPreviewPanel::renderPreview( SPObject* obj )
 void IconPreviewPanel::updateMagnify()
 {
     Glib::RefPtr<Gdk::Pixbuf> buf = images[hot]->get_pixbuf()->scale_simple( 128, 128, Gdk::INTERP_NEAREST );
-    magnified->set( buf );
-    magnified->queue_draw();
-    magnified->get_parent()->queue_draw();
+    magLabel.set_label( *labels[hot] );
+    magnified.set( buf );
+    magnified.queue_draw();
+    magnified.get_parent()->queue_draw();
 }
 
 

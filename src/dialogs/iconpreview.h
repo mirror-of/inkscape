@@ -16,6 +16,7 @@
 #include <gtkmm.h>
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
+#include <gtkmm/label.h>
 #include <gtkmm/toggletoolbutton.h>
 
 #include "sp-object.h"
@@ -59,11 +60,13 @@ private:
     int numEntries;
     int* sizes;
 
+    Gtk::Image      magnified;
+    Gtk::Label      magLabel;
+
     Gtk::Button           *refreshButton;
 
     guchar** pixMem;
     Gtk::Image** images;
-    Gtk::Image* magnified;
     Glib::ustring** labels;
     Gtk::ToggleToolButton** buttons;
 };
