@@ -43,9 +43,11 @@ struct _SPSelTransHandle {
 };
 
 #ifndef SP_SELTRANS_HANDLES_C
+extern "C" {
 extern const SPSelTransHandle handles_scale[9];
 extern const SPSelTransHandle handles_rotate[9];
 extern const SPSelTransHandle handle_center;
+};
 #endif
 
 #endif

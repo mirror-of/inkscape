@@ -38,9 +38,11 @@ const  char *sp_xml_ns_prefix_uri (const gchar *prefix);
 
 /* SPXMLDocument */
 
+extern "C" {
 SPXMLText *sp_xml_document_createTextNode (SPXMLDocument *doc, const gchar *content);
 SPXMLElement *sp_xml_document_createElement (SPXMLDocument *doc, const gchar *name);
 SPXMLElement *sp_xml_document_createElementNS (SPXMLDocument *doc, const gchar *ns, const  char *qname);
+};
 
 /* SPXMLNode */
 
@@ -58,11 +60,13 @@ typedef struct _SPRepr SPRepr;
 
 /* Create new repr & similar */
 
+extern "C" {
 SPRepr *sp_repr_new (const gchar *name);
 SPRepr *sp_repr_new_text (const gchar *content);
 SPRepr *sp_repr_ref (SPRepr *repr);
 SPRepr *sp_repr_unref (SPRepr *repr);
 SPRepr *sp_repr_duplicate (const SPRepr *repr);
+};
 
 /* Documents - 1st step in migrating to real XML */
 
@@ -112,6 +116,7 @@ SPRepr *sp_repr_parent (SPRepr *repr);
 SPRepr *sp_repr_children (SPRepr *repr);
 SPRepr *sp_repr_next (SPRepr *repr);
 
+extern "C" {
 unsigned int sp_repr_add_child (SPRepr * repr, SPRepr * child, SPRepr * ref);
 unsigned int sp_repr_remove_child (SPRepr * repr, SPRepr * child);
 void sp_repr_write_stream (SPRepr * repr, FILE * file, int level);
@@ -134,7 +139,6 @@ void sp_repr_print (SPRepr * repr);
 
 typedef struct _SPCSSAttr SPCSSAttr;
 
-extern "C" {
 SPCSSAttr * sp_repr_css_attr_new (void);
 void sp_repr_css_attr_unref (SPCSSAttr * css);
 SPCSSAttr * sp_repr_css_attr (SPRepr * repr, const gchar * attr);
@@ -164,13 +168,13 @@ unsigned int sp_repr_set_double (SPRepr *repr, const  gchar *key, double val);
 /* Defaults */
 unsigned int sp_repr_set_double_default (SPRepr *repr, const  gchar *key, double val, double def, double e);
 
-};
-
 /* Deprecated */
 double sp_repr_get_double_attribute (SPRepr * repr, const gchar * key, double def);
 int sp_repr_get_int_attribute (SPRepr * repr, const gchar * key, int def);
 unsigned int sp_repr_set_double_attribute (SPRepr * repr, const gchar * key, double value);
 unsigned int sp_repr_set_int_attribute (SPRepr * repr, const gchar * key, int value);
+
+};
 
 int sp_repr_compare_position (SPRepr * first, SPRepr * second);
 
