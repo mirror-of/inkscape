@@ -40,6 +40,12 @@
 	but it's hard to make it impossible, so it shouldn't be g_assert.)
 	Reported by bulia byak.
 
+2003-12-22 Nathan Hurst <njh@mail.csse.monash.edu.au>
+
+	* Added a new class NR::Point which will replace NRPoint
+	throughout the code, and replace things like .cx, .cx in the
+	circle structure.
+
 2003-12-21  MenTaLguY <mental@rydia.net>
 
 	* Finally cleaned up the linker issues
