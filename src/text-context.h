@@ -18,7 +18,7 @@
 #include <gtk/gtkimcontext.h>
 
 #include "event-context.h"
-#include <helper/helper-forward.h>
+#include <display/display-forward.h>
 #include <libnr/nr-point.h>
 
 #define SP_TYPE_TEXT_CONTEXT (sp_text_context_get_type ())

@@ -15,7 +15,7 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
-#include "helper/helper-forward.h"
+#include "display/display-forward.h"
 #include "forward.h"
 #include <libnr/nr-point.h>
 

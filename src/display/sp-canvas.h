@@ -23,7 +23,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtklayout.h>
 
-#include <helper/helper-forward.h>
+#include <display/display-forward.h>
 
 #include <inttypes.h>
 
@@ -32,7 +32,6 @@ enum {
 	SP_CANVAS_UPDATE_AFFINE     = 1 << 1
 };
 
-struct SPCanvas;
 
 struct SPCanvasBuf{
 	guchar *buf;

@@ -14,7 +14,7 @@
 
 #include <libnr/nr-point.h>
 
-#include "helper/helper-forward.h"
+#include "display/display-forward.h"
 #include "event-context.h"
 
 #define SP_TYPE_DROPPER_CONTEXT (sp_dropper_context_get_type ())

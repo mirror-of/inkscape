@@ -13,7 +13,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "helper/helper-forward.h"
+#include "display/display-forward.h"
 #include "forward.h"
 
 #define SP_DT_IS_EDITABLE(d) (TRUE)

@@ -18,7 +18,7 @@
 #include "display/curve.h"
 #include "event-context.h"
 #include <forward.h>
-#include <helper/helper-forward.h>
+#include <display/display-forward.h>
 #include <libnr/nr-point.h>
 
 /* Freehand context */

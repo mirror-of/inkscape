@@ -10,10 +10,11 @@
  *
  */
 
-#include "helper/helper-forward.h"
-#include "sp-object.h"
-#include "libnr/nr-point.h"
 #include <vector>
+
+#include "display/display-forward.h"
+#include "libnr/nr-point.h"
+#include "sp-object.h"
 class SPGuideAttachment;
 
 #define SP_TYPE_GUIDE            (sp_guide_get_type ())

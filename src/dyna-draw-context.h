@@ -20,7 +20,7 @@
 
 #include "display/curve.h"
 #include "event-context.h"
-#include <helper/helper-forward.h>
+#include <display/display-forward.h>
 #include <libnr/nr-point.h>
 
 #define SP_TYPE_DYNA_DRAW_CONTEXT (sp_dyna_draw_context_get_type())
