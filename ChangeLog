@@ -6,6 +6,8 @@
 	* src/libnr/nr-point-fns.h, src/libnr/nr-point-fns.cpp (unit_vector):
 	New function.
 
+	* src/livarot/Path.h: Trim unnecessary includes.
+
 	* src/livarot/LivarotDefs.h: #include <stdint.h> (moved from Path.h).
 
 	* src/livarot/PathOutline.cpp, src/livarot/PathSimplify.cpp,

@@ -9,16 +9,9 @@
 #ifndef my_path
 #define my_path
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <string.h>
-
 #include "LivarotDefs.h"
 
 #include "libnr/nr-types.h"
-#include "libnr/nr-point-fns.h"
-#include <algorithm>
 
 enum
 {
