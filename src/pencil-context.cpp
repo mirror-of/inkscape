@@ -295,7 +295,7 @@ spdc_endpoint_snap(SPPencilContext *pc, NR::Point &p, guint const state)
  * Reset points and set new starting point.
  */
 static void
-spdc_set_startpoint(SPPencilContext *const pc, NR::Point const p, guint const state)
+spdc_set_startpoint(SPPencilContext *const pc, NR::Point p, guint const state)
 {
     if ((state & GDK_SHIFT_MASK) == 0) {
         namedview_free_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(pc)->namedview, p);
@@ -401,7 +401,7 @@ fit_and_split(SPPencilContext *pc)
     NR::Point b[4];
     int const n_segs = sp_bezier_fit_cubic(b, pc->p, pc->npoints, tolerance_sq);
     if ( n_segs > 0
-         && pc->npoints < SP_DRAW_POINTS_MAX )
+         && unsigned(pc->npoints) < G_N_ELEMENTS(pc->p) )
     {
         /* Fit and draw and reset state */
         sp_curve_reset(pc->red_curve);

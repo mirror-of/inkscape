@@ -18,13 +18,13 @@ enum {
     SP_PENCIL_CONTEXT_FREEHAND
 };
 
-struct SPPencilContext : public SPDrawContext{
-    NR::Point p[SP_DRAW_POINTS_MAX];
+struct SPPencilContext : public SPDrawContext {
+    NR::Point p[16];
     gint npoints;
     guint state : 2;
 };
 
-struct SPPencilContextClass : public SPEventContextClass{};
+struct SPPencilContextClass : public SPEventContextClass { };
 
 GType sp_pencil_context_get_type();
 

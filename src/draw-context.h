@@ -31,8 +31,6 @@
 
 struct SPDrawAnchor;
 
-#define SP_DRAW_POINTS_MAX 16
-
 struct SPDrawContext : public SPEventContext{
     SPSelection *selection;
     SPCanvasItem *grab;
