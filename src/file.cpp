@@ -636,7 +636,7 @@ sp_export_png_file (SPDocument *doc, const gchar *filename,
 	affine.c[4] = -affine.c[0] * x0 * 1.25;
 	affine.c[5] = -affine.c[3] * y0 * 1.25;
 
-	SP_PRINT_MATRIX ("SVG2PNG", &affine);
+	//SP_PRINT_MATRIX ("SVG2PNG", &affine);
 
 	ebp.width = width;
 	ebp.height = height;
