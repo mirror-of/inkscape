@@ -16,7 +16,7 @@
 
 #include <string.h>
 #include <libnrtype/FontFactory.h>
-#include <libnrtype/FontInstance.h>
+#include <libnrtype/font-instance.h>
 
 #include <glib.h>
 #include <gtk/gtksignal.h>

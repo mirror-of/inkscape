@@ -23,7 +23,7 @@
 #include "livarot/LivarotDefs.h"
 
 #include "libnrtype/FontFactory.h"
-#include "libnrtype/FontInstance.h"
+#include "libnrtype/font-instance.h"
 #include "libnrtype/TextWrapper.h"
 #include "libnrtype/nr-type-pos-def.h"
 
