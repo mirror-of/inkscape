@@ -11,27 +11,6 @@ display/all: display/libspdisplay.a
 display/clean:
 	rm -f display/libspdisplay.a $(display_libspdisplay_a_OBJECTS)
 
-#if WITH_ARENA
-#SUBDIRS = nr
-#endif
-
-#if WITH_NEW_RENDER
-#nr_sources = \
-#	nr-svp.c nr-svp.h \
-#	nr-svp-uncross.c nr-svp-uncross.h \
-#	nr-svp-render.c nr-svp-render.h
-#
-#noinst_PROGRAMS = testnr
-#testnr_LDADD = \
-#	#$(GNOME_LIBDIR) \
-#	#$(GNOMEUI_LIBS)
-#testnr_SOURCES = \
-#	testnr.cpp \
-#	$(nr_sources)
-#else
-#nr_sources =
-#endif
-
 canvas-arena.$(OBJEXT) display/canvas-arena.$(OBJEXT): helper/sp-marshal.h
 sp-canvas.$(OBJEXT) display/sp-canvas.$(OBJEXT): helper/sp-marshal.h
 
