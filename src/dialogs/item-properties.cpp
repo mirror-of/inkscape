@@ -554,15 +554,14 @@ sp_item_widget_label_changed (GtkWidget *widget, SPWidget *spw)
     /* Retrieve the title */
     w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "title"));
     gchar *title = (gchar *)gtk_entry_get_text (GTK_ENTRY (w));
-    if (!obj->title() || strcmp(title, obj->title())!=0) {
+    if (title != NULL) {
         obj->setTitle(title);
         sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "title");
     }
 
     /* Retrieve the description */
-    w = GTK_WIDGET(gtk_object_get_data (GTK_OBJECT (spw), "desc"));
-    gchar *desc = (gchar *)gtk_entry_get_text (GTK_ENTRY (w));
-    if (!obj->desc() || strcmp(desc, obj->desc())!=0) {
+    gchar *desc = NULL; /* TODO:  get text from text buffer */
+    if (desc != NULL) {
         obj->setDesc(desc);
         sp_document_maybe_done (SP_WIDGET_DOCUMENT (spw), "desc");
     }

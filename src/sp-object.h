@@ -195,12 +195,12 @@ struct SPObject : public GObject {
 	void setLabel(gchar const *label);
 
     /** Retrieves the title of this object */
-    gchar const *title() const { return "unimplemented"; /* TODO */ }
+    gchar const *title() const { return NULL; /* TODO */ }
     /** Sets the title of this object */
     void setTitle(gchar const *title) { /* TODO */ }
 
     /** Retrieves the description of this object */
-    gchar const *desc() const { return "unimplemented"; /* TODO */ }
+    gchar const *desc() const { return NULL; /* TODO */ }
     /** Sets the description of this object */
     void setDesc(gchar const *desc) { /* TODO */ }
 
