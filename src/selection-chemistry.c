@@ -607,6 +607,7 @@ sp_selection_paste_style (GtkWidget * widget)
 	g_assert (SP_IS_SELECTION (selection));
 
 	if (sp_selection_is_empty (selection)) return;
+	if (clipboard == NULL) return;
 
 	selected = g_slist_copy ((GSList *) sp_selection_repr_list (selection));
 
