@@ -226,7 +226,7 @@ sp_file_open_dialog(gpointer object, gpointer data)
         g_free(open_path);
         open_path = NULL;
     }
-    if (!g_file_test(open_path, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
+    if (open_path && !g_file_test(open_path, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))) {
         g_free(open_path);
         open_path = NULL;
     }
