@@ -232,9 +232,6 @@ struct poptOption options[] = {
 int
 main(int argc, char **argv)
 {
-    gboolean use_gui;
-    gint result, i;
-
 #ifdef HAVE_FPSETMASK
     /* This is inherited from Sodipodi code, where it was in #ifdef __FreeBSD__.  It's probably
        safe to remove: the default mask is already 0 in C99, and in current FreeBSD according to
@@ -262,6 +259,7 @@ main(int argc, char **argv)
 
     Inkscape::GC::init();
 
+    gboolean use_gui;
 #ifndef WIN32
     use_gui = (getenv("DISPLAY") != NULL);
 #else
@@ -280,7 +278,7 @@ main(int argc, char **argv)
     use_gui = TRUE;
 #endif
     /* Test whether with/without GUI is forced */
-    for (i = 1; i < argc; i++) {
+    for (int i = 1; i < argc; i++) {
         if (!strcmp(argv[i], "-z")
             || !strcmp(argv[i], "--without-gui")
             || !strcmp(argv[i], "-p")
