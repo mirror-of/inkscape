@@ -892,7 +892,7 @@ sp_color_wheel_paint (SPColorWheel *wheel, GdkRectangle *area)
         //gdouble start, end;
         //start = get_time();
         gdk_draw_rgb_image (widget->window, widget->style->black_gc,
-                            cpaint.x, cpaint.y,
+                            0, 0,//cpaint.x, cpaint.y,
                             //cpaint.width, cpaint.height,
                             wheel->_center * 2, wheel->_center * 2,
                             GDK_RGB_DITHER_MAX,
