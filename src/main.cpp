@@ -185,6 +185,7 @@ main (int argc, const char **argv)
     We use relative paths on win32.
     HKCR\svgfile\shell\open\command is a good example
     */
+    // FIXME BROKEN - non-UTF-8 sneaks in here.
     char *homedir = g_path_get_dirname( argv[0] );
     SetCurrentDirectory( homedir );
     g_free( homedir );
@@ -266,6 +267,7 @@ sp_main_gui (int argc, const char **argv)
 	if (!sp_global_slideshow) {
 		gboolean create_new = TRUE; 
 		
+		// FIXME BROKEN - non-UTF-8 sneaks in here.
 		inkscape_application_init (argv[0]);
 
 		if (fl) { // no documents on command line
@@ -299,6 +301,7 @@ sp_main_gui (int argc, const char **argv)
 	} else {
 		if (fl) {
 			GtkWidget *ss;
+			// FIXME BROKEN - non-UTF-8 sneaks in here.
 			inkscape_application_init (argv[0]);
 			ss = sp_slideshow_new (fl);
 			if (ss) gtk_widget_show (ss);
@@ -513,7 +516,16 @@ sp_process_args (poptContext ctx)
 		case SP_ARG_FILE:
 			fn = poptGetOptArg (ctx);
 			if (fn != NULL) {
-				fl = g_slist_append (fl, g_strdup (fn));
+				// TODO: bulia, please look over
+				gsize bytesRead = 0;
+				gsize bytesWritten = 0;
+				GError *error = NULL;
+				gchar *newFileName = g_filename_to_utf8( fn,
+														 -1,
+														 &bytesRead,
+														 &bytesWritten,
+														 &error);
+				fl = g_slist_append (fl, (newFileName != NULL) ? newFileName : g_strdup (fn));
 			}
 			break;
 		default:
@@ -523,7 +535,17 @@ sp_process_args (poptContext ctx)
 	args = poptGetArgs (ctx);
 	if (args != NULL) {
 		for (i = 0; args[i] != NULL; i++) {
-			fl = g_slist_append (fl, (gpointer) args[i]);
+			// TODO: bulia, please look over
+			gsize bytesRead = 0;
+			gsize bytesWritten = 0;
+			GError *error = NULL;
+			// fixme: check to see if this will leak args[i]
+			gchar *newFileName = g_filename_to_utf8( args[i],
+													 -1,
+													 &bytesRead,
+													 &bytesWritten,
+													 &error);
+			fl = g_slist_append (fl, (newFileName != NULL) ? newFileName : (gpointer) args[i]);
 		}
 	}
 
