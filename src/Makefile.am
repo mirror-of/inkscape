@@ -140,7 +140,6 @@ inkscape_SOURCES = \
 	splivarot.cpp splivarot.h \
 	\
 	file.cpp file.h \
-	FilePath.cpp FilePath.h \
 	print.cpp print.h \
 	interface.cpp interface.h \
 	object-ui.cpp object-ui.h \
