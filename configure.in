@@ -211,7 +211,7 @@ dnl ******************************
 dnl   Unconditional dependencies
 dnl ******************************
 
-PKG_CHECK_MODULES(INKSCAPE, gtk+-2.0 >= 2.4.0  libxml-2.0 >= 2-2.4.24  sigc++-2.0  gtkmm-2.4  $ink_spell_pkg)
+PKG_CHECK_MODULES(INKSCAPE, gtk+-2.0 >= 2.4.0  libxml-2.0 >= 2-2.4.24  sigc++-2.0 >= 2.0.3  gtkmm-2.4  $ink_spell_pkg)
 
 dnl Shouldn't we test for libpng and libz?
 INKSCAPE_LIBS="$INKSCAPE_LIBS -lpng -lz"

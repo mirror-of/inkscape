@@ -1,3 +1,8 @@
+2004-08-02  MenTaLguY  <mental@rydia.net>
+
+	* configure.in: sigc++ 2.0.2 (and before?) has a bug that
+	  causes us to crash.  require >= 2.0.3
+
 2004-08-02  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/display/curve.cpp, src/display/curve.h:
