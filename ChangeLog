@@ -1,5 +1,7 @@
 2004-01-26  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* config.h.win32: Remove this outdated and apparently-unused file.
+
 	* src/livarot/Path-test.cpp: new file.
 	* src/livarot/Makefile.am: New test program Path-test.
 	  Remove $(cflags) from INCLUDES.
