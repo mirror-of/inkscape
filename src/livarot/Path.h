@@ -278,6 +278,7 @@ public:
   Path**      SubPathsWithNesting(int &outNb,bool killNoSurf,int nbNest,int* nesting,int* conts);
   // surface du chemin (considéré comme fermé)
   double      Surface(void);
+  void        PolylineBoundingBox(double &l,double &t,double &r,double &b);
   
   void        ConvertForcedToMoveTo(void);
   typedef struct cut_position {

@@ -814,6 +814,35 @@ Path::AddForcedPoint (NR::Point const &iPt, int ip, double it)
 	return n;
 }
 
+void        
+Path::PolylineBoundingBox(double &l,double &t,double &r,double &b)
+{
+  l=t=r=b=0.0;
+  if ( nbPt <= 0 ) return;
+  if ( back ) {
+    path_lineto_b*  tp=(path_lineto_b*)pts;
+    l=r=tp[0].p[0];
+    t=b=tp[0].p[1];
+    if ( nbPt <= 1 ) return;
+    for (int i=1;i<nbPt;i++) {
+      if ( tp[i].p[0] > r ) r=tp[i].p[0];
+      if ( tp[i].p[0] < l ) l=tp[i].p[0];
+      if ( tp[i].p[1] > b ) b=tp[i].p[1];
+      if ( tp[i].p[1] < t ) t=tp[i].p[1];
+    }
+  } else {
+    path_lineto*  tp=(path_lineto_b*)pts;
+    l=r=tp[0].p[0];
+    t=b=tp[0].p[1];
+    if ( nbPt <= 1 ) return;
+    for (int i=1;i<nbPt;i++) {
+      if ( tp[i].p[0] > r ) r=tp[i].p[0];
+      if ( tp[i].p[0] < l ) l=tp[i].p[0];
+      if ( tp[i].p[1] > b ) b=tp[i].p[1];
+      if ( tp[i].p[1] < t ) t=tp[i].p[1];
+    }
+  }
+}
 
 // utilities
 void

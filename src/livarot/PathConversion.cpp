@@ -869,7 +869,7 @@ static void ArcAnglesAndCenter(NR::Point const &iS, NR::Point const &iE,
 
 void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
                  double const rx, double const ry, double const angle,
-                 bool const large, bool const wise, double const tresh)
+                 bool const large, bool const wise, double const /*tresh*/)
 {
 	/* TODO: Check that our behaviour is standards-conformant if iS and iE are (much) further
 	   apart than the diameter.  Also check that we do the right thing for negative radius.
@@ -986,7 +986,7 @@ void Path::RecBezierTo(const NR::Point &iP,
 
 void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
                  double const rx, double const ry, double const angle,
-                 bool const large, bool const wise, double const tresh, int const piece)
+                 bool const large, bool const wise, double const /*tresh*/, int const piece)
 {
 	/* TODO: Check that our behaviour is standards-conformant if iS and iE are (much) further
 	   apart than the diameter.  Also check that we do the right thing for negative radius.
@@ -1078,8 +1078,8 @@ void Path::RecBezierTo(NR::Point const &iP,
 
 void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
                  double const rx, double const ry, double const angle,
-                 bool const large, bool const wise, double const tresh,
-                 int const piece, offset_orig &orig)
+                 bool const large, bool const wise, double const /*tresh*/,
+                 int const piece, offset_orig &/*orig*/)
 {
 	// Will never arrive here, as offsets are made of cubics.
 	// [on n'arrivera jamais ici, puisque les offsets sont fait de cubiques]
@@ -1253,125 +1253,244 @@ void Path::Fill(Shape* dest,int pathID,bool justAdd,bool closeIfNeeded,bool inve
 	if ( back ) dest->MakeBackData(true);
 	
 	if ( invert ) {
-	} else {
 		if ( back ) {
-      {
-				// !invert && back && !weighted
-				for (int i=0;i<nbPt;i++) dest->AddPoint(((path_lineto_b*)pts)[i].p);
-				int               lastM=0;
-				int								curP=1;
-				int               pathEnd=0;
-				bool              closed=false;
-				int               lEdge=-1;
-				while ( curP < nbPt ) {
-					path_lineto_b*    sbp=((path_lineto_b*)pts)+curP;
-					path_lineto_b*    lm=((path_lineto_b*)pts)+lastM;
-					path_lineto_b*    prp=((path_lineto_b*)pts)+pathEnd;
-					if ( sbp->isMoveTo == polyline_moveto ) {
-						if ( closeIfNeeded ) {
-							if ( closed && lEdge >= 0 ) {
-								dest->DisconnectEnd(lEdge);
-								dest->ConnectEnd(first+lastM,lEdge);
-							} else {
-								dest->AddEdge(first+pathEnd,first+lastM);
-								dest->ebData[lEdge].pathID=pathID;
-								dest->ebData[lEdge].pieceID=lm->piece;
-								dest->ebData[lEdge].tSt=0.0;
-								dest->ebData[lEdge].tEn=1.0;
-							}
-						}
-						lastM=curP;
-						pathEnd=curP;
-						closed=false;
-						lEdge=-1;
-					} else {
-						if ( NR::LInfty(sbp->p-prp->p) < 0.00001 ) {
-						} else {
-							lEdge=dest->AddEdge(first+pathEnd,first+curP);
-							dest->ebData[lEdge].pathID=pathID;
-							dest->ebData[lEdge].pieceID=sbp->piece;
-							if ( sbp->piece == prp->piece ) {
-								dest->ebData[lEdge].tSt=prp->t;
-								dest->ebData[lEdge].tEn=sbp->t;
-							} else {
-								dest->ebData[lEdge].tSt=0.0;
-								dest->ebData[lEdge].tEn=sbp->t;
-							}
-							pathEnd=curP;
-							if ( NR::LInfty(sbp->p-lm->p) < 0.00001 ) {
-								closed=true;
-							} else {
-								closed=false;
-							}
-						}
-					}
-					curP++;
-				}
-				if ( closeIfNeeded ) {
-					if ( closed && lEdge >= 0 ) {
-						dest->DisconnectEnd(lEdge);
-						dest->ConnectEnd(first+lastM,lEdge);
-					} else {
-						path_lineto_b*    lm=((path_lineto_b*)pts)+lastM;
-						lEdge=dest->AddEdge(first+pathEnd,first+lastM);
-						dest->ebData[lEdge].pathID=pathID;
-						dest->ebData[lEdge].pieceID=lm->piece;
-						dest->ebData[lEdge].tSt=0.0;
-						dest->ebData[lEdge].tEn=1.0;
-					}
-				}
-			}
+    {
+      // invert && back && !weighted
+      for (int i=0;i<nbPt;i++) dest->AddPoint(((path_lineto_b*)pts)[i].p);
+      int               lastM=0;
+      int								curP=1;
+      int               pathEnd=0;
+      bool              closed=false;
+      int               lEdge=-1;
+      while ( curP < nbPt ) {
+        path_lineto_b*    sbp=((path_lineto_b*)pts)+curP;
+        path_lineto_b*    lm=((path_lineto_b*)pts)+lastM;
+        path_lineto_b*    prp=((path_lineto_b*)pts)+pathEnd;
+        if ( sbp->isMoveTo == polyline_moveto ) {
+          if ( closeIfNeeded ) {
+            if ( closed && lEdge >= 0 ) {
+              dest->DisconnectStart(lEdge);
+              dest->ConnectStart(first+lastM,lEdge);
+            } else {
+              dest->AddEdge(first+lastM,first+pathEnd);
+              dest->ebData[lEdge].pathID=pathID;
+              dest->ebData[lEdge].pieceID=lm->piece;
+              dest->ebData[lEdge].tSt=1.0;
+              dest->ebData[lEdge].tEn=0.0;
+            }
+          }
+          lastM=curP;
+          pathEnd=curP;
+          closed=false;
+          lEdge=-1;
+        } else {
+          if ( NR::LInfty(sbp->p-prp->p) < 0.00001 ) {
+          } else {
+            lEdge=dest->AddEdge(first+curP,first+pathEnd);
+            dest->ebData[lEdge].pathID=pathID;
+            dest->ebData[lEdge].pieceID=sbp->piece;
+            if ( sbp->piece == prp->piece ) {
+              dest->ebData[lEdge].tSt=sbp->t;
+              dest->ebData[lEdge].tEn=prp->t;
+            } else {
+              dest->ebData[lEdge].tSt=sbp->t;
+              dest->ebData[lEdge].tEn=0.0;
+            }
+            pathEnd=curP;
+            if ( NR::LInfty(sbp->p-lm->p) < 0.00001 ) {
+              closed=true;
+            } else {
+              closed=false;
+            }
+          }
+        }
+        curP++;
+      }
+      if ( closeIfNeeded ) {
+        if ( closed && lEdge >= 0 ) {
+          dest->DisconnectStart(lEdge);
+          dest->ConnectStart(first+lastM,lEdge);
+        } else {
+          path_lineto_b*    lm=((path_lineto_b*)pts)+lastM;
+          lEdge=dest->AddEdge(first+lastM,first+pathEnd);
+          dest->ebData[lEdge].pathID=pathID;
+          dest->ebData[lEdge].pieceID=lm->piece;
+          dest->ebData[lEdge].tSt=1.0;
+          dest->ebData[lEdge].tEn=0.0;
+        }
+      }
+    }
 		} else {
     {
-				// !invert && !back && !weighted
-				for (int i=0;i<nbPt;i++) dest->AddPoint(((path_lineto*)pts)[i].p);
-				int               lastM=0;
-				int								curP=1;
-				int               pathEnd=0;
-				bool              closed=false;
-				int               lEdge=-1;
-				while ( curP < nbPt ) {
-					path_lineto*    sbp=((path_lineto*)pts)+curP;
-					path_lineto*    lm=((path_lineto*)pts)+lastM;
-					path_lineto*    prp=((path_lineto*)pts)+pathEnd;
-					if ( sbp->isMoveTo == polyline_moveto ) {
-						if ( closeIfNeeded ) {
-							if ( closed && lEdge >= 0 ) {
-								dest->DisconnectEnd(lEdge);
-								dest->ConnectEnd(first+lastM,lEdge);
-							} else {
-								dest->AddEdge(first+pathEnd,first+lastM);
-							}
-						}
-						lastM=curP;
-						pathEnd=curP;
-						closed=false;
-						lEdge=-1;
-					} else {
-						if ( NR::LInfty(sbp->p-prp->p) < 0.00001 ) {
-						} else {
-							lEdge=dest->AddEdge(first+pathEnd,first+curP);
-							pathEnd=curP;
-							if ( NR::LInfty(sbp->p-lm->p) < 0.00001 ) {
-								closed=true;
-							} else {
-								closed=false;
-							}
-						}
-					}
-					curP++;
-				}
-				
-				if ( closeIfNeeded ) {
-					if ( closed && lEdge >= 0 ) {
-						dest->DisconnectEnd(lEdge);
-						dest->ConnectEnd(first+lastM,lEdge);
-					} else {
-						dest->AddEdge(first+pathEnd,first+lastM);
-					}
-				}
-				
-			}
+      // invert && !back && !weighted
+      for (int i=0;i<nbPt;i++) dest->AddPoint(((path_lineto*)pts)[i].p);
+      int               lastM=0;
+      int								curP=1;
+      int               pathEnd=0;
+      bool              closed=false;
+      int               lEdge=-1;
+      while ( curP < nbPt ) {
+        path_lineto*    sbp=((path_lineto*)pts)+curP;
+        path_lineto*    lm=((path_lineto*)pts)+lastM;
+        path_lineto*    prp=((path_lineto*)pts)+pathEnd;
+        if ( sbp->isMoveTo == polyline_moveto ) {
+          if ( closeIfNeeded ) {
+            if ( closed && lEdge >= 0 ) {
+              dest->DisconnectStart(lEdge);
+              dest->ConnectStart(first+lastM,lEdge);
+            } else {
+              dest->AddEdge(first+lastM,first+pathEnd);
+            }
+          }
+          lastM=curP;
+          pathEnd=curP;
+          closed=false;
+          lEdge=-1;
+        } else {
+          if ( NR::LInfty(sbp->p-prp->p) < 0.00001 ) {
+          } else {
+            lEdge=dest->AddEdge(first+curP,first+pathEnd);
+            pathEnd=curP;
+            if ( NR::LInfty(sbp->p-lm->p) < 0.00001 ) {
+              closed=true;
+            } else {
+              closed=false;
+            }
+          }
+        }
+        curP++;
+      }
+      
+      if ( closeIfNeeded ) {
+        if ( closed && lEdge >= 0 ) {
+          dest->DisconnectStart(lEdge);
+          dest->ConnectStart(first+lastM,lEdge);
+        } else {
+          dest->AddEdge(first+lastM,first+pathEnd);
+        }
+      }
+      
+    }
+		}
+	} else {
+		if ( back ) {
+    {
+      // !invert && back && !weighted
+      for (int i=0;i<nbPt;i++) dest->AddPoint(((path_lineto_b*)pts)[i].p);
+      int               lastM=0;
+      int								curP=1;
+      int               pathEnd=0;
+      bool              closed=false;
+      int               lEdge=-1;
+      while ( curP < nbPt ) {
+        path_lineto_b*    sbp=((path_lineto_b*)pts)+curP;
+        path_lineto_b*    lm=((path_lineto_b*)pts)+lastM;
+        path_lineto_b*    prp=((path_lineto_b*)pts)+pathEnd;
+        if ( sbp->isMoveTo == polyline_moveto ) {
+          if ( closeIfNeeded ) {
+            if ( closed && lEdge >= 0 ) {
+              dest->DisconnectEnd(lEdge);
+              dest->ConnectEnd(first+lastM,lEdge);
+            } else {
+              dest->AddEdge(first+pathEnd,first+lastM);
+              dest->ebData[lEdge].pathID=pathID;
+              dest->ebData[lEdge].pieceID=lm->piece;
+              dest->ebData[lEdge].tSt=0.0;
+              dest->ebData[lEdge].tEn=1.0;
+            }
+          }
+          lastM=curP;
+          pathEnd=curP;
+          closed=false;
+          lEdge=-1;
+        } else {
+          if ( NR::LInfty(sbp->p-prp->p) < 0.00001 ) {
+          } else {
+            lEdge=dest->AddEdge(first+pathEnd,first+curP);
+            dest->ebData[lEdge].pathID=pathID;
+            dest->ebData[lEdge].pieceID=sbp->piece;
+            if ( sbp->piece == prp->piece ) {
+              dest->ebData[lEdge].tSt=prp->t;
+              dest->ebData[lEdge].tEn=sbp->t;
+            } else {
+              dest->ebData[lEdge].tSt=0.0;
+              dest->ebData[lEdge].tEn=sbp->t;
+            }
+            pathEnd=curP;
+            if ( NR::LInfty(sbp->p-lm->p) < 0.00001 ) {
+              closed=true;
+            } else {
+              closed=false;
+            }
+          }
+        }
+        curP++;
+      }
+      if ( closeIfNeeded ) {
+        if ( closed && lEdge >= 0 ) {
+          dest->DisconnectEnd(lEdge);
+          dest->ConnectEnd(first+lastM,lEdge);
+        } else {
+          path_lineto_b*    lm=((path_lineto_b*)pts)+lastM;
+          lEdge=dest->AddEdge(first+pathEnd,first+lastM);
+          dest->ebData[lEdge].pathID=pathID;
+          dest->ebData[lEdge].pieceID=lm->piece;
+          dest->ebData[lEdge].tSt=0.0;
+          dest->ebData[lEdge].tEn=1.0;
+        }
+      }
+    }
+		} else {
+    {
+      // !invert && !back && !weighted
+      for (int i=0;i<nbPt;i++) dest->AddPoint(((path_lineto*)pts)[i].p);
+      int               lastM=0;
+      int								curP=1;
+      int               pathEnd=0;
+      bool              closed=false;
+      int               lEdge=-1;
+      while ( curP < nbPt ) {
+        path_lineto*    sbp=((path_lineto*)pts)+curP;
+        path_lineto*    lm=((path_lineto*)pts)+lastM;
+        path_lineto*    prp=((path_lineto*)pts)+pathEnd;
+        if ( sbp->isMoveTo == polyline_moveto ) {
+          if ( closeIfNeeded ) {
+            if ( closed && lEdge >= 0 ) {
+              dest->DisconnectEnd(lEdge);
+              dest->ConnectEnd(first+lastM,lEdge);
+            } else {
+              dest->AddEdge(first+pathEnd,first+lastM);
+            }
+          }
+          lastM=curP;
+          pathEnd=curP;
+          closed=false;
+          lEdge=-1;
+        } else {
+          if ( NR::LInfty(sbp->p-prp->p) < 0.00001 ) {
+          } else {
+            lEdge=dest->AddEdge(first+pathEnd,first+curP);
+            pathEnd=curP;
+            if ( NR::LInfty(sbp->p-lm->p) < 0.00001 ) {
+              closed=true;
+            } else {
+              closed=false;
+            }
+          }
+        }
+        curP++;
+      }
+      
+      if ( closeIfNeeded ) {
+        if ( closed && lEdge >= 0 ) {
+          dest->DisconnectEnd(lEdge);
+          dest->ConnectEnd(first+lastM,lEdge);
+        } else {
+          dest->AddEdge(first+pathEnd,first+lastM);
+        }
+      }
+      
+    }
 		}
 	}
 }

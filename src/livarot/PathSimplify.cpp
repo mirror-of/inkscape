@@ -642,7 +642,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
       diff=midAppP-midP;
       midDist=dot(diff,diff);
      
-      delta+=0.3333*(curDist+prevDist+midDist)*lk[i];
+      delta+=0.3333*(curDist+prevDist+midDist)/**lk[i]*/;
 #else
       delta+=curDist;
 #endif
@@ -658,7 +658,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
       prevDist=curDist;
     }
 #ifdef with_splotch_killer
-    delta/=totLen;
+//    delta/=totLen;
 #endif
   }
   
@@ -794,7 +794,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
         diff=midAppP-midP;
         midDist=dot(diff,diff);
         
-        ndelta+=0.3333*(curDist+prevDist+midDist)*lk[i];
+        ndelta+=0.3333*(curDist+prevDist+midDist)/**lk[i]*/;
 #else
         ndelta+=curDist;
 #endif
@@ -810,7 +810,7 @@ bool Path::AttemptSimplify (double treshhold, path_descr_cubicto & res,int &wors
         prevDist=curDist;
       }
 #ifdef with_splotch_killer
-      ndelta/=totLen;
+//      ndelta/=totLen;
 #endif
     }
     

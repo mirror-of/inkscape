@@ -639,31 +639,138 @@ sp_offset_set_shape (SPShape * shape)
       o_width = -offset->rad;
     }
     
+    // il faudrait avoir une mesure des details
     if (o_width >= 1.0)
     {
-      orig->ConvertWithBackData (1.0);
+      orig->ConvertWithBackData (0.5);
     }
     else
     {
-      orig->ConvertWithBackData (1.0*o_width);
+      orig->ConvertWithBackData (0.5*o_width);
     }
     orig->Fill (theShape, 0);
     theRes->ConvertToShape (theShape, fill_positive);
-    theShape->MakeOffset(theRes,offset->rad,join_round,20.0);
-    theRes->ConvertToShape (theShape, fill_positive);
-    theRes->ConvertToForme (orig);
-    
-    if (o_width >= 1.0)
+    Path *originaux[1];
+    originaux[0]=orig;
+    Path *res = new Path;
+    theRes->ConvertToForme (res, 1, originaux);
+    int    nbPart=0;
+    Path** parts=res->SubPaths(nbPart,true);
+    char   *holes=(char*)malloc(nbPart*sizeof(char));
+    // we offsets contours separately, because we can.
+    // this way, we avoid doing a unique big ConvertToShape when dealing with big shapes with lots of holes
     {
+      Shape* onePart=new Shape;
+      Shape* oneCleanPart=new Shape;
+      theShape->Reset();
+      for (int i=0;i<nbPart;i++) {
+        double partSurf=parts[i]->Surface();
+        parts[i]->Convert(1.0);
+        {
+          // raffiner si besoin
+          double  bL,bT,bR,bB;
+          parts[i]->PolylineBoundingBox(bL,bT,bR,bB);
+          double  mesure=((bR-bL)+(bB-bT))*0.5;
+          if ( mesure < 10.0 ) {
+            parts[i]->Convert(0.02*mesure);
+          }
+        }
+        if ( partSurf < 0 ) { // inverse par rapport a la realite
+          // plein
+          holes[i]=0;
+          parts[i]->Fill(oneCleanPart,0);
+          onePart->ConvertToShape(oneCleanPart,fill_positive); // there aren't intersections in that one, but maybe duplicate points and null edges
+          oneCleanPart->MakeOffset(onePart,offset->rad,join_round,20.0);
+          onePart->ConvertToShape(oneCleanPart,fill_positive);
+          
+          onePart->CalcBBox();
+          double  typicalSize=0.5*((onePart->rightX-onePart->leftX)+(onePart->bottomY-onePart->topY));
+          if ( typicalSize < 0.05 ) typicalSize=0.05;
+          typicalSize*=0.01;
+          if ( typicalSize > 1.0 ) typicalSize=1.0;
+          onePart->ConvertToForme (parts[i]);
+          parts[i]->ConvertEvenLines (typicalSize);
+          parts[i]->Simplify (typicalSize);
+          double nPartSurf=parts[i]->Surface();
+          if ( nPartSurf >= 0 ) {
+            // inversion de la surface -> disparait
+            delete parts[i];
+            parts[i]=NULL;
+          } else {
+          }
+/*          int  firstP=theShape->nbPt;
+          for (int j=0;j<onePart->nbPt;j++) theShape->AddPoint(onePart->pts[j].x);
+          for (int j=0;j<onePart->nbAr;j++) theShape->AddEdge(firstP+onePart->aretes[j].st,firstP+onePart->aretes[j].en);*/
+        } else {
+          // trou
+          holes[i]=1;
+          parts[i]->Fill(oneCleanPart,0,false,true,true);
+          onePart->ConvertToShape(oneCleanPart,fill_positive);
+          oneCleanPart->MakeOffset(onePart,-offset->rad,join_round,20.0);
+          onePart->ConvertToShape(oneCleanPart,fill_positive);
+//          for (int j=0;j<onePart->nbAr;j++) onePart->Inverse(j); // pas oublier de reinverser
+          
+          onePart->CalcBBox();
+          double  typicalSize=0.5*((onePart->rightX-onePart->leftX)+(onePart->bottomY-onePart->topY));
+          if ( typicalSize < 0.05 ) typicalSize=0.05;
+          typicalSize*=0.01;
+          if ( typicalSize > 1.0 ) typicalSize=1.0;
+          onePart->ConvertToForme (parts[i]);
+          parts[i]->ConvertEvenLines (typicalSize);
+          parts[i]->Simplify (typicalSize);
+          double nPartSurf=parts[i]->Surface();
+          if ( nPartSurf >= 0 ) {
+            // inversion de la surface -> disparait
+            delete parts[i];
+            parts[i]=NULL;
+          } else {
+          }
+          
+ /*         int  firstP=theShape->nbPt;
+          for (int j=0;j<onePart->nbPt;j++) theShape->AddPoint(onePart->pts[j].x);
+          for (int j=0;j<onePart->nbAr;j++) theShape->AddEdge(firstP+onePart->aretes[j].en,firstP+onePart->aretes[j].st);*/
+        }
+//        delete parts[i];
+      }
+//      theShape->MakeOffset(theRes,offset->rad,join_round,20.0);
+      delete onePart;
+      delete oneCleanPart;
+    }
+    if ( nbPart > 1 ) {
+      theShape->Reset();
+      for (int i=0;i<nbPart;i++) {
+        if ( parts[i] ) {
+          parts[i]->ConvertWithBackData(1.0);
+          if ( holes[i] ) {
+            parts[i]->Fill(theShape,i,true,true,true);        
+          } else {
+            parts[i]->Fill(theShape,i,true,true,false);        
+          }
+        }
+      }
+      theRes->ConvertToShape (theShape, fill_positive);
+      theRes->ConvertToForme (orig,nbPart,parts);
+      for (int i=0;i<nbPart;i++) if ( parts[i] ) delete parts[i];
+    } else if ( nbPart == 1 ) {
+      orig->Copy(parts[0]);
+      for (int i=0;i<nbPart;i++) if ( parts[i] ) delete parts[i];
+    } else {
+      orig->Reset();
+    }
+//    theRes->ConvertToShape (theShape, fill_positive);
+//    theRes->ConvertToForme (orig);
+    
+/*    if (o_width >= 1.0) {
       orig->ConvertEvenLines (1.0);
       orig->Simplify (1.0);
-    }
-    else
-    {
+    } else {
       orig->ConvertEvenLines (1.0*o_width);
       orig->Simplify (1.0 * o_width);
-    }
+    }*/
     
+    if ( parts ) free(parts);
+    if ( holes ) free(holes);
+    delete res;
     delete theShape;
     delete theRes;
   } 
@@ -915,7 +1022,7 @@ sp_offset_top_point (SPOffset * offset, NR::Point *px)
 
 static void
 sp_offset_source_attr_changed (SPRepr * repr, const gchar * key,
-                               const gchar * oldval, const gchar * newval,
+                               const gchar * /*oldval*/, const gchar * newval,
                                void *data)
 {
   SPOffset *offset = (SPOffset *) data;
@@ -1039,7 +1146,7 @@ sp_offset_source_destroy (SPRepr * repr, void *data)
     // pas besoin d'enlever le listener
   }
 }
-static void sp_offset_source_child_added (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data)
+static void sp_offset_source_child_added (SPRepr *repr, SPRepr *child, SPRepr */*ref*/, void * data)
 {
   SPOffset *offset = (SPOffset *) data;
   if (offset == NULL)
@@ -1052,7 +1159,7 @@ static void sp_offset_source_child_added (SPRepr *repr, SPRepr *child, SPRepr *r
   offset->sourceDirty=true;
   sp_object_request_update (SP_OBJECT(offset), SP_OBJECT_MODIFIED_FLAG);
 }
-static void sp_offset_source_child_removed (SPRepr *repr, SPRepr *child, SPRepr *ref, void * data)
+static void sp_offset_source_child_removed (SPRepr *repr, SPRepr *child, SPRepr */*ref*/, void * data)
 {
   SPOffset *offset = (SPOffset *) data;
   if (offset == NULL)
@@ -1065,7 +1172,7 @@ static void sp_offset_source_child_removed (SPRepr *repr, SPRepr *child, SPRepr 
   offset->sourceDirty=true;
   sp_object_request_update (SP_OBJECT(offset), SP_OBJECT_MODIFIED_FLAG);
 }
-static void sp_offset_source_content_changed (SPRepr *repr, const gchar *oldcontent, const gchar *newcontent, void * data)
+static void sp_offset_source_content_changed (SPRepr */*repr*/, const gchar */*oldcontent*/, const gchar */*newcontent*/, void * data)
 {
   SPOffset *offset = (SPOffset *) data;
   if (offset == NULL)
