@@ -995,7 +995,7 @@ shape_run_A8_OR (raster_info &dest,void */*data*/,int st,float vst,int en,float 
 	} else {
 	    dv/=len;
 	    sv+=0.5*dv; // correction trapezoidale
-	    sv*=16777216; // ARGH!!! not magic numbers, isn't this 1<<24?
+	    sv*=16777216;
 	    dv*=16777216;
 	    int c0_24 = static_cast<int>(CLAMP(sv, 0, 16777216));
 	    int s0_24 = static_cast<int>(dv);
