@@ -18,6 +18,7 @@
 #include <gtkmm/cellrenderertext.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/liststore.h>
+#include "util/list.h"
 
 class SPDesktop;
 class SPDocument;
@@ -50,6 +51,7 @@ private:
         LayerModelColumns() { add(is_selected); add(label); add(object); }
     };
 
+    LayerModelColumns _model_columns;
     Gtk::CellRendererToggle _selected_column_renderer;
     Gtk::CellRendererText _name_column_renderer;
     Glib::RefPtr<Gtk::ListStore> _layer_model;
@@ -59,6 +61,12 @@ private:
     SPDesktop *_desktop;
 
     void _updateLayer(SPObject *layer);
+    void _buildEntry(unsigned depth, SPObject &object);
+    void _buildEntries(unsigned depth,
+                       Inkscape::Util::List<SPObject &> hierarchy);
+    void _buildSiblingEntries(unsigned depth,
+                              SPObject &parent,
+                              Inkscape::Util::List<SPObject &> hierarchy);
 };
 
 }

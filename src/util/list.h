@@ -201,17 +201,30 @@ private:
 };
 
 template <typename T>
+inline
 List<T> cons(typename Traits::Reference<T>::RValue value, List<T> const &next)
 {
     return List<T>(value, next);
 }
 
 template <typename T>
+inline
 MutableList<T> cons(typename Traits::Reference<T>::RValue value,
                     MutableList<T> const &next)
 {
     return MutableList<T>(value, next);
 }
+
+template <typename T>
+List<T> rest(List<T> const &list) {
+    return list.next();
+}
+
+template <typename T>
+MutableList<T> rest(MutableList<T> const &list) {
+    return list.next();
+}
+
 
 }
 

@@ -39,8 +39,7 @@ reverse_list_in_place(MutableList<T> start,
                       MutableList<T> end=MutableList<T>())
 {
     MutableList<T> reversed(end); 
-    MutableList<T> iter(start);
-    while ( iter != end ) {
+    while ( start != end ) {
         MutableList<T> temp(start);
         ++start;
         temp.setNext(reversed);
