@@ -51,8 +51,17 @@ Application::Application(int argc, char **argv, gboolean use_gui, gboolean new_g
         _argv = argv;   // TODO:  Is this correct?
     }
 
-    // TODO:  Determine class by arguments
-    _app_impl = (AppPrototype*)new Editor(_argc, _argv);
+    if (new_gui) {
+        g_warning("Creating new Gtk::Main");
+        _gtk_main = new Gtk::Main(argc, argv, true);
+
+        // TODO:  Determine class by arguments
+        _app_impl = (AppPrototype*)new Editor(_argc, _argv);
+    } else if (use_gui) {
+        // No op - we'll use the old interface
+    } else {
+        _app_impl = NULL; // = Cmdline(_argc, _argv);
+    }
 
     // TODO:  Initialize _preferences with the preferences skeleton
     _save_preferences = loadPreferences();
@@ -63,10 +72,6 @@ Application::Application(int argc, char **argv, gboolean use_gui, gboolean new_g
     _path_etc   = "/etc/inkscape";
     _path_share = "/usr/share/inkscape";
 */
-
-    if (new_gui) {
-        _gtk_main = new Gtk::Main(argc, argv, true);
-    }
 
 }
 
@@ -111,12 +116,12 @@ Application::run()
 {
     gint result = 0;
 
-    g_assert(_app_impl != NULL);
-
     /* Note:  This if loop should be replaced by calls to the
      * various subclasses of I::A::AppPrototype.
      */
     if (_gtk_main != NULL) {
+        g_assert(_app_impl != NULL);
+
         Gtk::Window *win = _app_impl->getWindow();
         g_assert(win != NULL);
         _gtk_main->run(*win);
