@@ -911,15 +911,20 @@ void sp_selection_apply_affine(SPSelection *selection, NR::Matrix const &affine,
 #endif
 
         // we're moving both a clone and its original
-        bool move_clone_with_original = (affine.is_translation() && SP_IS_USE(item) && selection->includesItem(SP_USE(item)->ref->getObject()));
+        bool move_clone_with_original = (affine.is_translation() && SP_IS_USE(item) && selection->includesItem( sp_use_get_original (SP_USE(item)) ));
+        bool transform_textpath_with_path = (SP_IS_TEXT_TEXTPATH(item) && selection->includesItem( sp_textpath_get_path_item (SP_TEXTPATH(sp_object_first_child(SP_OBJECT(item)))) ));
+        bool move_offset_with_source = (affine.is_translation() && (SP_IS_OFFSET(item) && SP_OFFSET (item)->sourceHref) && selection->includesItem( sp_offset_get_source (SP_OFFSET(item)) ));
 
         // "clones are unmoved when original is moved" preference
         bool prefs_unmoved = (prefs_get_int_attribute("options.clonecompensation", "value", SP_CLONE_COMPENSATION_PARALLEL) == SP_CLONE_COMPENSATION_UNMOVED);
 
 	// If this is a clone and it's selected along with its original, do not move it; it will feel the
-	// transform of its original and respond to it itself. WIthout this, a clone is doubly
+	// transform of its original and respond to it itself. Without this, a clone is doubly
 	// transformed, very unintuitive.
-        if (move_clone_with_original && !prefs_unmoved) {
+      // Same for textpath if we are also doing ANY transform to its path: do not touch textpath,
+      // letters cannot be squeezed or rotated anyway, they only refill the changed path.
+      // Same for linked offset if we are also moving its source: do not move it.
+        if ((move_clone_with_original && !prefs_unmoved) || transform_textpath_with_path || move_offset_with_source) {
 		// just restore the transform field from the repr
             sp_object_read_attr (SP_OBJECT (item), "transform");
         } else {
