@@ -62,8 +62,7 @@ inkscapelib_src = \
 	document.c document.h document-private.h \
 	document-undo.c \
 	uri-references.c uri-references.h \
-	version.c version.h \
-	extension.h
+	version.c version.h
 
 noinst_LTLIBRARIES = libinkscape.la
 libinkscape_la_SOURCES = $(inkscapelib_src)

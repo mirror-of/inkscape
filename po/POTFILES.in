@@ -1,6 +1,6 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
-sodipodi.desktop.in
+inkscape.desktop.in
 src/bonobo/svg-doc-factory.c
 src/desktop.c
 src/dialogs/align.c
