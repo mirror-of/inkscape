@@ -12,6 +12,7 @@
 #include <config.h>
 
 #include <string.h>
+#include <stdio.h>
 #include "nr-pixops.h"
 #include "nr-compose.h"
 
@@ -73,22 +74,10 @@ nr_R8G8B8A8_N_EMPTY_R8G8B8A8_P (unsigned char *px, int w, int h, int rs, const u
 			for (c = 0; c < w; c++) {
 				unsigned int a;
 				a = NR_PREMUL (s[3], alpha);
-				if (a == 0) {
-					d[0] = s[0];
-					d[1] = s[1];
-					d[2] = s[2];
-					d[3] = 0x0;
-				} else if (a == 255) {
-					d[0] = s[0];
-					d[1] = s[1];
-					d[2] = s[2];
-					d[3] = 255;
-				} else {
-					d[0] = (s[0] * 255 + (a >> 1)) / a;
-					d[1] = (s[1] * 255 + (a >> 1)) / a;
-					d[2] = (s[2] * 255 + (a >> 1)) / a;
-					d[3] = a;
-				}
+				d[0] = s[0];
+				d[1] = s[1];
+				d[2] = s[2];
+				d[3] = a;
 				d += 4;
 				s += 4;
 			}
@@ -218,16 +207,16 @@ nr_R8G8B8A8_N_R8G8B8A8_N_R8G8B8A8_P (unsigned char *px, int w, int h, int rs, co
 					d[2] = NR_COMPOSEPNN_A7 (s[2], s[3], d[2], d[3], ca);
 					d[3] = (65025 - (255 - s[3]) * (255 - d[3]) + 127) / 255;
 				} else {
-					unsigned int ca, c;
-					/* fixme: Full composition */
-					ca = 65025 - (255 - s[3]) * (255 - d[3]);
-					c = NR_PREMUL (s[0], alpha);
-					d[0] = NR_COMPOSEPNN_A7 (c, a, d[0], d[3], ca);
-					c = NR_PREMUL (s[1], alpha);
-					d[1] = NR_COMPOSEPNN_A7 (c, a, d[1], d[3], ca);
-					c = NR_PREMUL (s[2], alpha);
-					d[2] = NR_COMPOSEPNN_A7 (c, a, d[2], d[3], ca);
+					// calculate premultiplied from two premultiplieds:
+					d[0] = NR_COMPOSEPPP(NR_PREMUL (s[0], alpha), a, NR_PREMUL (d[0], d[3]), 0); // last parameter not used
+					d[1] = NR_COMPOSEPPP(NR_PREMUL (s[1], alpha), a, NR_PREMUL (d[1], d[3]), 0); 
+					d[2] = NR_COMPOSEPPP(NR_PREMUL (s[2], alpha), a, NR_PREMUL (d[2], d[3]), 0); 
+					// total opacity:
 					d[3] = (65025 - (255 - a) * (255 - d[3]) + 127) / 255;
+					// un-premultiply channels:
+					d[0] = d[0]*255/d[3];
+					d[1] = d[1]*255/d[3];
+					d[2] = d[2]*255/d[3];
 				}
 			}
 			d += 4;
@@ -506,16 +495,16 @@ nr_R8G8B8A8_N_R8G8B8A8_N_R8G8B8A8_P_A8 (unsigned char *px, int w, int h, int rs,
 					d[2] = NR_COMPOSEPNN_A7 (s[2], s[3], d[2], d[3], ca);
 					d[3] = (65025 - (255 - s[3]) * (255 - d[3]) + 127) / 255;
 				} else {
-					unsigned int ca, c;
-					/* fixme: Full composition */
-					ca = 65025 - (255 - s[3]) * (255 - d[3]);
-					c = NR_PREMUL (s[0], m[0]);
-					d[0] = NR_COMPOSEPNN_A7 (c, a, d[0], d[3], ca);
-					c = NR_PREMUL (s[1], m[0]);
-					d[1] = NR_COMPOSEPNN_A7 (c, a, d[1], d[3], ca);
-					c = NR_PREMUL (s[2], m[0]);
-					d[2] = NR_COMPOSEPNN_A7 (c, a, d[2], d[3], ca);
+					// calculate premultiplied from two premultiplieds:
+					d[0] = NR_COMPOSEPPP(NR_PREMUL (s[0], m[0]), a, NR_PREMUL (d[0], d[3]), 0); // last parameter not used
+					d[1] = NR_COMPOSEPPP(NR_PREMUL (s[1], m[0]), a, NR_PREMUL (d[1], d[3]), 0); 
+					d[2] = NR_COMPOSEPPP(NR_PREMUL (s[2], m[0]), a, NR_PREMUL (d[2], d[3]), 0); 
+					// total opacity:
 					d[3] = (65025 - (255 - a) * (255 - d[3]) + 127) / 255;
+					// un-premultiply channels:
+					d[0] = d[0]*255/d[3];
+					d[1] = d[1]*255/d[3];
+					d[2] = d[2]*255/d[3];
 				}
 			}
 			d += 4;
