@@ -10,14 +10,9 @@ config.h: config.h.mingw
 	$(CP) config.h.mingw config.h
 
 dist:
-	deltree /y inkscape
-	mkdir inkscape
+	$(RMDIR) inkscape
+	$(MKDIR) inkscape
 	$(CP) src$(S)inkscape.exe inkscape
-#	$(CP) $(GTKDOS)$(S)bin$(S)libgtkmm-2.0-1.dll inkscape
-#	$(CP) $(GTKDOS)$(S)bin$(S)libgdkmm-2.0-1.dll inkscape
-#	$(CP) $(GTKDOS)$(S)bin$(S)libglibmm-2.0-1.dll inkscape
-#	$(CP) $(GTKDOS)$(S)bin$(S)libatkmm-1.0-1.dll inkscape
-#	$(CP) $(GTKDOS)$(S)bin$(S)libpangomm-1.0-1.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libsigc-1.2-5.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)freetype-6.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)libart_lgpl_2-2.dll inkscape
@@ -35,25 +30,25 @@ dist:
 	$(CP) $(GTKDOS)$(S)bin$(S)msvcr70.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)zlib-1.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)zlib.dll inkscape
-	strip -g inkscape/*.dll
+#	strip -g inkscape/*.dll
 #These two don't like 'strip'
 	$(CP) $(GTKDOS)$(S)bin$(S)iconv.dll inkscape
 	$(CP) $(GTKDOS)$(S)bin$(S)intl.dll inkscape
-	xcopy /e /i $(GTKDOS)$(S)etc inkscape$(S)etc
-	mkdir inkscape$(S)lib
-	xcopy /e /i $(GTKDOS)$(S)lib$(S)gtk-2.0 inkscape$(S)lib$(S)gtk-2.0
-	xcopy /e /i $(GTKDOS)$(S)lib$(S)glib-2.0 inkscape$(S)lib$(S)glib-2.0
-	xcopy /e /i $(GTKDOS)$(S)lib$(S)locale inkscape$(S)lib$(S)locale
-	xcopy /e /i $(GTKDOS)$(S)lib$(S)pango inkscape$(S)lib$(S)pango
-	mkdir inkscape$(S)pixmaps
+	$(CPDIR) $(GTKDOS)$(S)etc inkscape$(S)etc
+	$(MKDIR) inkscape$(S)lib
+	$(CPDIR) $(GTKDOS)$(S)lib$(S)gtk-2.0 inkscape$(S)lib$(S)gtk-2.0
+	$(CPDIR) $(GTKDOS)$(S)lib$(S)glib-2.0 inkscape$(S)lib$(S)glib-2.0
+	$(CPDIR) $(GTKDOS)$(S)lib$(S)locale inkscape$(S)lib$(S)locale
+	$(CPDIR) $(GTKDOS)$(S)lib$(S)pango inkscape$(S)lib$(S)pango
+	$(MKDIR) inkscape$(S)pixmaps
 	$(CP) glade$(S)*.xpm inkscape$(S)pixmaps
 	$(CP) glade$(S)*.png inkscape$(S)pixmaps
 	$(CP) glade$(S)*.svg inkscape$(S)pixmaps
-	mkdir inkscape$(S)data
-	mkdir inkscape$(S)extensions
-	mkdir inkscape$(S)locale
-	mkdir inkscape$(S)modules
-	mkdir inkscape$(S)samples
+	$(MKDIR) inkscape$(S)data
+	$(MKDIR) inkscape$(S)extensions
+	$(MKDIR) inkscape$(S)locale
+	$(MKDIR) inkscape$(S)modules
+	$(MKDIR) inkscape$(S)samples
 	$(CP) samples$(S)*.svg inkscape$(S)samples
 	$(CP) samples$(S)*.png inkscape$(S)samples
 

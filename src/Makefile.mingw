@@ -34,7 +34,7 @@ inkres.o: inkscape.rc
 
 libinkscape.a: $(OBJ)
 	ar crv libinkscape.a $(OBJ)
-	ranlib libinkscape.a
+	$(RANLIB) libinkscape.a
 
 
 clean:

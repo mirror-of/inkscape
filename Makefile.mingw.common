@@ -1,12 +1,21 @@
 
-CC = gcc
-CXX = g++
-WINDRES = windres
+#CC = gcc
+#CXX = g++
+#WINDRES = windres
+
+CC      = i686-pc-mingw32-gcc
+CXX     = i686-pc-mingw32-g++
+AS      = i686-pc-mingw32-as
+AR      = i686-pc-mingw32-ar
+RANLIB  = i686-pc-mingw32-ranlib
+WINDRES = i686-pc-mingw32-windres
 
 ###### DYNAMIC LINKING
-GTK=c:/gtk
+#GTK=c:/gtk
+GTK=$(HOME)/xmingw32/gtk
 #Same thing, DOS style
-GTKDOS=c:\gtk
+#GTKDOS=c:\gtk
+GTKDOS=$(HOME)/xmingw32/gtk
 
 GTKINC = -I$(GTK)/include/gtkmm-2.0 -I$(GTK)/lib/gtkmm-2.0/include \
 -I$(GTK)/include/sigc++-1.2 -I$(GTK)/lib/sigc++-1.2/include \
@@ -15,8 +24,7 @@ GTKINC = -I$(GTK)/include/gtkmm-2.0 -I$(GTK)/lib/gtkmm-2.0/include \
 -I$(GTK)/include/glib-2.0 -I$(GTK)/lib/glib-2.0/include
 
 GTKLIB = -L$(GTK)/lib \
--lgtkmm-2.0.dll -lgdkmm-2.0.dll -lglibmm-2.0.dll \
--lpangomm-1.0.dll -latkmm-1.0.dll -lsigc-1.2.dll\
+-lsigc-1.2.dll\
 -lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 \
 -lgdk_pixbuf-2.0 -lm -lpangoft2-1.0 -lpangowin32-1.0 -lpango-1.0 \
 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0
@@ -30,7 +38,8 @@ LIBS = $(GTKLIB) -lxml2 $(GTK)/lib/art_lgpl_2.lib $(GTK)/lib/iconv.lib \
 
 
 ##### STATIC LINKING
-GTKS=c:/ink/gtk2
+#GTKS=c:/ink/gtk2
+GTKS=$(HOME)/xmingw32/gtk2
 #Same thing, DOS style
 GTKSDOS=c:\ink\gtk2
 
@@ -71,9 +80,15 @@ CFLAGS = -O3  -Wall -mms-bitfields
 
 BSLASH := \\#
 FSLASH := /
-S = $(BSLASH)
+S = $(FSLASH)
 
-CP = copy
+#CP = copy
+CP = cp
+#RMDIR = deltree /y
+RMDIR = rm -rf 
+MKDIR = mkdir
+#CPDIR = xcopy /e /i
+CPDIR = cp -rf 
 
 .cpp.o:
 	$(CXX) $(CFLAGS) $(INC) -c -o $@ $<
