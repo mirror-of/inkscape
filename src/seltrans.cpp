@@ -270,10 +270,21 @@ void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const &p, gdouble x, gdou
 	seltrans->snap_points = selection->getSnapPoints ();
 	seltrans->bbox_points = selection->getBBoxPoints ();
 
-	seltrans->opposit = ( seltrans->box.min()
-			      + ( seltrans->box.dimensions()
-				  * NR::scale(1-x, 1-y) ) );
+        gchar const *scale_origin = prefs_get_string_attribute ("tools.select", "scale_origin");
+        bool const origin_on_bbox = (scale_origin == NULL || !strcmp(scale_origin, "bbox"));
+        NR::Rect op_box = seltrans->box;
+        if (origin_on_bbox == false && seltrans->snap_points.empty() == false) {
+            std::vector<NR::Point>::iterator i = seltrans->snap_points.begin();
+            op_box = NR::Rect(*i, *i);
+            i++;
+            while (i != seltrans->snap_points.end()) {
+                op_box.expandTo(*i);
+                i++;
+            }
+        }
 
+        seltrans->opposite = ( op_box.min() + ( op_box.dimensions() * NR::scale(1-x, 1-y) ) );
+                         
 	if ((x != -1) && (y != -1)) {
 		sp_canvas_item_show (seltrans->norm);
 		sp_canvas_item_show (seltrans->grip);
@@ -642,7 +653,7 @@ static gboolean sp_sel_trans_handle_request(SPKnot *knot, NR::Point *position, g
 	}
 
 	if (!(state & GDK_SHIFT_MASK) == !(seltrans->state == SP_SELTRANS_STATE_ROTATE)) {
-		seltrans->origin = seltrans->opposit;
+		seltrans->origin = seltrans->opposite;
 	} else {
 		seltrans->origin = seltrans->center;
 	}
@@ -711,17 +722,15 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
     NR::Point const norm(seltrans->origin);
 
     NR::Point d = point - norm;
-    NR::scale s(d);
+    NR::scale s(0, 0);
 
     /* Work out the new scale factors `s' */
     for ( unsigned int i = 0 ; i < 2 ; i++ ) {
-        if ( fabs(s[i]) > 0.001 ) {
-            s[i] = ( pt[i] - norm[i] ) / ( point[i] - norm[i] );
+        if ( fabs(d[i]) > 0.001 ) {
+            s[i] = ( pt[i] - norm[i] ) / d[i];
             if ( fabs(s[i]) < 1e-9 ) {
                 s[i] = 1e-9;
             }
-        } else {
-            s[i] = 0.0;
         }
     }
 
@@ -730,11 +739,6 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
 
     if ((state & GDK_CONTROL_MASK) || gtk_toggle_button_get_active (lock)) {
         /* Scale is locked to a 1:1 aspect ratio, so that s[X] must be made to equal s[Y] */
-
-        /* Abort if the scale factor is zero in either direction */
-        if ( !d[NR::X] || !d[NR::Y] ) {
-            return FALSE;
-        }
 
         /* Lock aspect ratio, using the smaller of the x and y factors */
         if (fabs(s[NR::X]) > fabs(s[NR::Y])) {
@@ -755,11 +759,17 @@ gboolean sp_sel_trans_scale_request(SPSelTrans *seltrans, SPSelTransHandle const
     } else {
         /* Scale aspect ratio is unlocked */
         for ( unsigned int i = 0 ; i < 2 ; i++ ) {
-            if (d[i]) {
-                s[i] = namedview_dim_snap_list_scale(desktop->namedview,
-                                                     Snapper::SNAP_POINT, seltrans->snap_points,
-                                                     norm, s[i], s[i] ? NR::X : NR::Y);
-            }
+            std::pair<double, bool> bb = namedview_dim_snap_list_scale(desktop->namedview,
+                                                                       Snapper::BBOX_POINT, seltrans->bbox_points,
+                                                                       norm, s[i], NR::Dim2(i));
+            std::pair<double, bool> sn = namedview_dim_snap_list_scale(desktop->namedview,
+                                                                       Snapper::SNAP_POINT, seltrans->snap_points,
+                                                                       norm, s[i], NR::Dim2(i));
+
+            /* Pick the snap that puts us closest to the original scale */
+            NR::Coord bd = bb.second ? fabs(bb.first - s[i]) : NR_HUGE;
+            NR::Coord sd = sn.second ? fabs(sn.first - s[i]) : NR_HUGE;
+            s[i] = (bd < sd) ? bb.first : sn.first;
         }
     }
 
@@ -818,7 +828,9 @@ gboolean sp_sel_trans_stretch_request(SPSelTrans *seltrans, SPSelTransHandle con
 		s[axis] = fabs(ratio) * sign(s[axis]);
 		s[perp] = fabs(s[axis]);
 	} else {
-		s[axis] = namedview_dim_snap_list_scale(desktop->namedview, Snapper::SNAP_POINT, seltrans->snap_points, norm, s[axis], axis);
+            std::pair<NR::Coord, bool> sn = namedview_dim_snap_list_scale(desktop->namedview, Snapper::SNAP_POINT,
+                                                                          seltrans->snap_points, norm, s[axis], axis);
+            s[axis] = sn.first;
 	}
 
 	pt = ( point - norm ) * NR::scale(s) + norm;
@@ -872,10 +884,10 @@ gboolean sp_sel_trans_skew_request(SPSelTrans *seltrans, SPSelTransHandle const 
     pt[dim_b] = ( point[dim_a] - norm[dim_a] ) * skew[dim_a] + point[dim_b];
     s[dim_a] = ( pt[dim_a] - norm[dim_a] ) / ( point[dim_a] - norm[dim_a] );
     if (state & GDK_CONTROL_MASK) {
-        s[dim_a] = namedview_dim_snap_list_scale(desktop->namedview,
-                                                 Snapper::SNAP_POINT,
-                                                 seltrans->snap_points,
-                                                 norm, s[dim_a], dim_a);
+        std::pair<NR::Coord, bool> sn = namedview_dim_snap_list_scale(desktop->namedview,
+                                                                      Snapper::SNAP_POINT, seltrans->snap_points,
+                                                                      norm, s[dim_a], dim_a);
+        s[dim_a] = sn.first;
     } else {
         if ( fabs(s[dim_a]) < NR_EPSILON ) {
             s[dim_a] = NR_EPSILON;
