@@ -1,3 +1,17 @@
+2003-12-10  bulia byak <bulia@dr.com>
+
+	* src/verbs.c: SELECT_ALL is now tool-sensitive, comments
+
+	* src/shortcuts.c: ctrl-a for the SELECT_ALL global verb; h and v for flips
+
+	* src/interface.c: split edit menu into edit and object
+
+	* src/node-context.c: removed ctrl-a, now taken care of by the global verb
+
+	* src/nodepath.c: select_all silently returns if given null arg
+
+	* doc/keyboard-shortcuts.txt: new shortcuts from wiki
+
 2003-12-09  bulia byak <bulia@dr.com>
 
 	* src/helper/png-write.c: fix for png comments (from sodipodi)
