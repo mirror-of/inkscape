@@ -162,7 +162,7 @@ can leave your ideas and requests there.</p>
 <group>
 <title>Scrolling (panning)</title>
 <mouse><key><ctrl/><arrows/></key>  <action>scroll canvas</action></mouse>
-<note>Scrolling by keys is accelerated, i.e. it speeds up when you press Ctrl+arrows in quick succession.</note>
+<note>Scrolling by keys is accelerated, i.e. it speeds up when you press Ctrl+arrows in quick succession, or press and hold.</note>
 <mouse><key><mid-drag/></key>  <action>scroll canvas</action></mouse>
 <mouse><key><shift/><right-drag/></key> <key><ctrl/><right-drag/></key> <action>scroll canvas</action></mouse>
 <mouse><key><wheel/></key> <action>scroll canvas vertically</action></mouse>
