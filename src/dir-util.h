@@ -12,5 +12,7 @@
 const char *sp_relative_path_from_path (const char * path, const char * base);
 const char *sp_filename_from_path (const char * path);
 const char *sp_extension_from_path (const char * path);
+char *inkscape_rel2abs (const char *path, const char *base, char *result, const size_t size);
+char *inkscape_abs2rel (const char *path, const char *base, char *result, const size_t size);
 
 #endif
