@@ -12,6 +12,7 @@
  */
 
 #define DASH_PREVIEW_WIDTH 2
+#define DASH_PREVIEW_LENGTH 80
 
 #include <config.h>
 #include <string.h>
@@ -232,33 +233,122 @@ sp_dash_selector_get_dash (SPDashSelector *dsel, int *ndash, double **dash, doub
 	}
 }
 
+bool
+all_even_are_zero (double *pattern, int n)
+{
+	for (int i = 0; i < n; i += 2) {
+		if (pattern[i] != 0)
+			return false;
+	}
+	return true;
+}
+
+bool
+all_odd_are_zero (double *pattern, int n)
+{
+	for (int i = 1; i < n; i += 2) {
+		if (pattern[i] != 0)
+			return false;
+	}
+	return true;
+}
+
 static GtkWidget *
 sp_dash_selector_menu_item_new (SPDashSelector *dsel, double *pattern)
 {
 	GtkWidget *mi = gtk_menu_item_new ();
 
-	GdkPixmap *pixmap = gdk_pixmap_new (GTK_WIDGET (dsel)->window, 64, 16, gdk_visual_get_best_depth ());
+	GdkPixmap *pixmap = gdk_pixmap_new (GTK_WIDGET (dsel)->window, DASH_PREVIEW_LENGTH + 4, 16, gdk_visual_get_best_depth ());
 	GdkGC *gc = gdk_gc_new (pixmap);
 
 	gdk_rgb_gc_set_foreground (gc, 0xffffffff);
-	gdk_draw_rectangle (pixmap, gc, TRUE, 0, 0, 64, 16);
-	gdk_rgb_gc_set_foreground (gc, 0x00000000);
+	gdk_draw_rectangle (pixmap, gc, TRUE, 0, 0, DASH_PREVIEW_LENGTH + 4, 16);
+
+	// FIXME: all of the below twibblering is due to the limitations of gdk_gc_set_dashes (only integers, no zeroes).
+	// Perhaps would make sense to rework this with manually drawn dashes.
 	
-	int ndash = 0;
-	gint8 idash[32];
-	for (; pattern[ndash] >= 0.0; ndash ++)
-		idash[ndash] = (gint8) (DASH_PREVIEW_WIDTH * pattern[ndash] + 0.5);
-	if (ndash > 0) {
-		gdk_gc_set_line_attributes (gc, DASH_PREVIEW_WIDTH, 
-									GDK_LINE_ON_OFF_DASH, GDK_CAP_BUTT, 
-									GDK_JOIN_MITER);
-		gdk_gc_set_dashes (gc, 0, idash, ndash);
+	// Fill in the integer array of pixel-lengths, for display
+	gint8 pixels_i[64];
+	gdouble pixels_d[64];
+	int n_source_dashes = 0;
+	int n_pixel_dashes = 0;
+
+	signed int i_s, i_p;
+	for (i_s = 0, i_p = 0; pattern[i_s] >= 0.0; i_s ++, i_p ++) {
+		pixels_d[i_p] = 0.0;
+	}
+
+	n_source_dashes = i_s;
+
+	for (i_s = 0, i_p = 0; i_s < n_source_dashes; i_s ++, i_p ++) {
+
+		// calculate the pixel length corresponding to the current dash
+		gdouble pixels = DASH_PREVIEW_WIDTH * pattern[i_s];
+
+		if (pixels > 0.0)
+			pixels_d [i_p] += pixels; 
+		else {
+			if (i_p >= 1) {
+				// dash is zero, skip this element in the array, and set pointer backwards so the next dash is added to the previous
+				i_p -= 2;
+			} else {
+				// the first dash is zero; bad luck, gdk cannot start pattern with non-stroke, so we put a 1-pixel stub here
+				// (it may turn out not shown, though, see special cases below)
+				pixels_d [i_p] = 1.0;
+			}
+		}
+	}
+
+	n_pixel_dashes = i_p;
+
+	gdouble longest_dash = 0.0;
+	
+	// after summation, convert double dash lengths to ints
+	for (i_p = 0; i_p <= n_pixel_dashes; i_p ++) {
+		pixels_i [i_p] = (gint8) (pixels_d [i_p] + 0.5);
+		// zero-length dashes are already eliminated, so the <1 dash is short but not zero;
+		// we approximate it with a one-pixel mark
+		if (pixels_i [i_p] < 1) 
+			pixels_i [i_p] = 1;
+		if (i_p % 2 == 0) { // it's a dash
+			if (pixels_d [i_p] > longest_dash)
+				longest_dash = pixels_d [i_p];
+		}
+	}
+
+	if (longest_dash > 1e-18 && longest_dash < 0.5) {
+		// fake "shortening" of one-pixel marks by painting them lighter-than-black
+		gint rgb = 255 - (gint) (255 * longest_dash / 0.5);
+		gdk_rgb_gc_set_foreground (gc, SP_RGBA32_U_COMPOSE (rgb, rgb, rgb, rgb));
 	} else {
+		gdk_rgb_gc_set_foreground (gc, 0x00000000);
+	}
+
+	if (n_source_dashes > 0) {
+		// special cases:
+		if (all_even_are_zero (pattern, n_source_dashes)) {
+			; // do not draw anything, only gaps are non-zero
+		} else if (all_odd_are_zero (pattern, n_source_dashes)) {
+			// draw solid line, only dashes are non-zero
+			gdk_gc_set_line_attributes (gc, DASH_PREVIEW_WIDTH,
+										GDK_LINE_SOLID, GDK_CAP_BUTT, 
+										GDK_JOIN_MITER);
+			gdk_draw_line (pixmap, gc, 4, 8, DASH_PREVIEW_LENGTH, 8);
+		} else {
+			// regular pattern with both gaps and dashes non-zero
+			gdk_gc_set_line_attributes (gc, DASH_PREVIEW_WIDTH, 
+										GDK_LINE_ON_OFF_DASH, GDK_CAP_BUTT, 
+										GDK_JOIN_MITER);
+			gdk_gc_set_dashes (gc, 0, pixels_i, n_pixel_dashes);
+			gdk_draw_line (pixmap, gc, 4, 8, DASH_PREVIEW_LENGTH, 8);
+		}
+	} else {
+		// no pattern, draw solid line
 		gdk_gc_set_line_attributes (gc, DASH_PREVIEW_WIDTH, 
 									GDK_LINE_SOLID, GDK_CAP_BUTT, 
 									GDK_JOIN_MITER);
+		gdk_draw_line (pixmap, gc, 4, 8, DASH_PREVIEW_LENGTH, 8);
 	}
-	gdk_draw_line (pixmap, gc, 4, 8, 60, 8);
 
 	gdk_gc_unref (gc);
 
@@ -270,8 +360,7 @@ sp_dash_selector_menu_item_new (SPDashSelector *dsel, double *pattern)
 	gtk_container_add (GTK_CONTAINER (mi), px);
 
 	gtk_object_set_data (GTK_OBJECT (mi), "pattern", pattern);
-	gtk_signal_connect (GTK_OBJECT (mi), "activate",
-			    G_CALLBACK (sp_dash_selector_dash_activate), dsel);
+	gtk_signal_connect (GTK_OBJECT (mi), "activate", G_CALLBACK (sp_dash_selector_dash_activate), dsel);
 
 	return mi;
 }
