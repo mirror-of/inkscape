@@ -741,16 +741,16 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
 /* Line */
 
 static void sp_stroke_style_line_construct(SPWidget *spw, gpointer data);
-static void sp_stroke_style_line_modify_selection(SPWidget *spw,
+static void sp_stroke_style_line_selection_modified (SPWidget *spw,
                                                   SPSelection *selection,
                                                   guint flags,
                                                   gpointer data);
 
-static void sp_stroke_style_line_change_selection( SPWidget *spw,
+static void sp_stroke_style_line_selection_changed (SPWidget *spw,
                                                    SPSelection *selection,
                                                    gpointer data );
 
-static void sp_stroke_style_line_attr_changed(SPWidget *spw,
+static void sp_stroke_style_line_attr_changed (SPWidget *spw,
                                               gchar const *key,
                                               gchar const *oldval,
                                               gchar const *newval);
@@ -1559,10 +1559,10 @@ sp_stroke_style_line_widget_new(void)
                         GTK_SIGNAL_FUNC(sp_stroke_style_line_construct),
                         NULL );
     gtk_signal_connect( GTK_OBJECT(spw), "modify_selection",
-                        GTK_SIGNAL_FUNC(sp_stroke_style_line_modify_selection),
+                        GTK_SIGNAL_FUNC(sp_stroke_style_line_selection_modified),
                         NULL );
     gtk_signal_connect( GTK_OBJECT(spw), "change_selection",
-                        GTK_SIGNAL_FUNC(sp_stroke_style_line_change_selection),
+                        GTK_SIGNAL_FUNC(sp_stroke_style_line_selection_changed),
                         NULL );
     gtk_signal_connect( GTK_OBJECT(spw), "attr_changed",
                         GTK_SIGNAL_FUNC(sp_stroke_style_line_attr_changed),
@@ -1598,13 +1598,13 @@ sp_stroke_style_line_construct(SPWidget *spw, gpointer data)
 
 
 static void
-sp_stroke_style_line_modify_selection( SPWidget *spw,
+sp_stroke_style_line_selection_modified ( SPWidget *spw,
                                        SPSelection *selection,
                                        guint flags,
                                        gpointer data )
 {
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_PARENT_MODIFIED_FLAG)) {
-        sp_stroke_style_line_update(spw, selection);
+        sp_stroke_style_line_update (spw, selection);
     }
 
 }
@@ -1612,11 +1612,11 @@ sp_stroke_style_line_modify_selection( SPWidget *spw,
 
 
 static void
-sp_stroke_style_line_change_selection( SPWidget *spw,
+sp_stroke_style_line_selection_changed ( SPWidget *spw,
                                        SPSelection *selection,
                                        gpointer data )
 {
-    sp_stroke_style_line_update(spw, selection);
+    sp_stroke_style_line_update (spw, selection);
 }
 
 
@@ -1732,11 +1732,20 @@ sp_stroke_style_line_update(SPWidget *spw, SPSelection *sel)
         return;
     }
 
+    const SPUnit *unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
+
     if (stroke_width_varying (objects)) {
         sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PERCENT));
+    } else { 
+        // only one object; no sense to keep percent, switch to absolute
+        if (unit->base != SP_UNIT_ABSOLUTE) {
+            // FIXME: use some other default absolute unit
+            sp_unit_selector_set_unit(SP_UNIT_SELECTOR(us), &sp_unit_get_by_id(SP_UNIT_PT));
+        }
     }
 
-    const SPUnit *unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
+    unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (us));
+
     if (unit->base == SP_UNIT_ABSOLUTE) {
         sp_convert_distance(&avgwidth, SP_PS_UNIT, sp_unit_selector_get_unit(SP_UNIT_SELECTOR(us)));
         gtk_adjustment_set_value(GTK_ADJUSTMENT(width), avgwidth);
