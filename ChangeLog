@@ -1,5 +1,8 @@
 2004-02-23  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/dropper-context.cpp (sp_dropper_context_root_handler):
+	Cleanup: use translate rather than setting individual matrix elements.
+
 	* src/libnr/nr-matrix-ops.h (operator*: Matrix*rotate, translate*scale,
 	scale*translate, Matrix*scale): New functions.
 
