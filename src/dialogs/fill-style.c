@@ -423,7 +423,6 @@ sp_fill_style_widget_paint_dragged (SPPaintSelector *psel, SPWidget *spw)
 	SPGradient *vector;
 	SPColor color;
 	gfloat alpha;
-	gfloat c[5];
 
 	if (!spw->inkscape) return;
 	if (g_object_get_data (G_OBJECT (spw), "update")) return;
