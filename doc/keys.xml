@@ -193,9 +193,12 @@ can leave your ideas and requests there.</p>
 
 *<section title="Layers" color="f6f9d9">
 <group>
-<keys><key><shift/><misc f="PgUp"/></key> <action>move to next layer</action></keys>
+
+<!-- NOT IMPLEMENTED YET: -->
+<!--<keys><key><shift/><misc f="PgUp"/></key> <action>move to next layer</action></keys>
 <keys><key><shift/><misc f="PgDn"/></key> <action>move to previous layer</action></keys>
-<note>These commands move the selected objects from one layer to another.</note>
+<note>These commands move the selected objects from one layer to another.</note>-->
+
 <keys><key><shift/><ctrl/><misc f="PgUp"/></key> <action>raise layer</action></keys>
 <keys><key><shift/><ctrl/><misc f="PgDn"/></key> <action>lower layer</action></keys>
 <keys><key><shift/><ctrl/><misc f="Home"/></key> <action>raise layer to top</action></keys>
@@ -745,9 +748,12 @@ can leave your ideas and requests there.</p>
 <group>
 <title>Editing</title>
 <mouse><key><left-click/></key> <action>click a rectangle to select</action></mouse>
-<mouse><key><left-drag/></key> <action>drag a handle to round corners</action></mouse>
-<mouse><key><ctrl/><left-drag/></key> <action>lock the rounded corner circular</action></mouse>
-<note>When rounding corners of a rectangle, dragging only one handle (with the other at the corner) keeps the corner circular.</note>
+<mouse><key><left-drag/></key> <action>drag a handle to resize or round corners</action></mouse>
+<note>Initially, the two rounding handles are in the top right corner; two resize handles are in top left and bottom right corners.</note>
+<mouse><key><ctrl/><left-drag/></key> <action>lock width, height, or ratio (resize handles)</action></mouse>
+<mouse><key><ctrl/><left-drag/></key> <action>lock the corner circular (rounding handles)</action></mouse>
+<note>Resize handles change the width and height of the rectangle in its own coordinate system, before any transforms are applied.</note>
+<note>When rounding corners, dragging only one rounding handle (with the other at the corner) keeps the corner circular.</note>
 <note>You can drag both handles for an elliptic rounded corner, or drag one with Ctrl to make sure the other one is synchronized.</note>
 <keys><key><misc f="Esc"/></key> <action>deselect</action></keys>
 </group>
@@ -765,8 +771,11 @@ can leave your ideas and requests there.</p>
 <group>
 <title>Editing</title>
 <mouse><key><left-click/></key> <action>click an ellipse to select</action></mouse>
-<mouse><key><left-drag/></key> <action>drag a handle to make arc or segment</action></mouse>
-<mouse><key><ctrl/><left-drag/></key> <action>restrict the arc or segment to angle steps</action></mouse>
+<mouse><key><left-drag/></key> <action>drag a handle to resize, make arc or segment</action></mouse>
+<note>Initially, the two arc/segment handles are in the rightmost point; two resize handles are at the topmost and leftmost points.</note>
+<mouse><key><ctrl/><left-drag/></key> <action>lock circle (resize handles)</action></mouse>
+<mouse><key><ctrl/><left-drag/></key> <action>snap to angle steps (arc/segment handles)</action></mouse>
+<note>Resize handles change the width and height of the ellipse in its own coordinate system, before any transforms are applied.</note>
 <note>The default angle step is 15 degrees.</note>
 <keys><key><misc f="Esc"/></key> <action>deselect</action></keys>
 </group>
