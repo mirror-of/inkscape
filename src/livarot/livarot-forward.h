@@ -4,6 +4,7 @@
 class Path;
 class Shape;
 struct float_ligne_run;
+class FloatLigne;
 
 
 #endif /* !SEEN_LIVAROT_FORWARD_H */
