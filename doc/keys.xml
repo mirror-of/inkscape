@@ -79,6 +79,7 @@ can leave your ideas and requests there.</p>
 <keys><key><shift/><ctrl/>P</key> <action>Inkscape Preferences</action></keys>
 <keys><key><shift/><ctrl/>E</key>	 <action>Export to PNG</action></keys>
 <keys><key><ctrl/>F</key>	 <action>Find</action></keys>
+<keys><key><shift/><alt/>B</key>	 <action>Trace bitmap</action></keys>
 <note>These open a new dialog window if it wasn't open yet, otherwise the corresponding dialog gets focus.</note>
 </group>
 
@@ -235,6 +236,7 @@ can leave your ideas and requests there.</p>
 <title>Bitmaps</title>
 <keys><key><alt/>B</key> <action>create a bitmap copy</action></keys>
 <note>This exports the selected object(s) (all other objects hidden) as PNG in the document's directory and imports it back.</note>
+<note>The imported bitmap is placed over the original selection and is selected.</note>
 <keys><key><shift/><alt/>B</key> <action>trace bitmap</action></keys>
 <note>This opens the Trace Bitmap dialog allowing you to convert a bitmap object to path(s).</note> 
 </group>
