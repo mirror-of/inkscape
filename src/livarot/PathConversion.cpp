@@ -11,6 +11,7 @@
 //#include "MyMath.h"
 
 #include <libnr/nr-point-fns.h>
+#include <libnr/nr-matrix.h>
 
 void            Path::ConvertWithBackData(double treshhold)
 {
@@ -855,23 +856,25 @@ void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
 	NR::Point   dr;
 	ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
   
-	NR::Point  ca(cos(angle),sin(angle));
+  double     incr=0.1;
 	if ( wise ) {
 		if ( sang < eang ) sang+=2*M_PI;
-		for (double b=sang-0.1;b>eang;b-=0.1) {
-			NR::Point  cb(cos(b),sin(b));
-			NR::Point  ar(rx,ry);
-			NR::Point  u=ca^cb;
-			u*=ar;
+    NR::rotate omega(-incr);
+    NR::rotate cb(angle+sang);
+    NR::scale  ar(NR::Point(rx,ry));
+		for (double b=sang-incr;b>eang;b-=incr) {
+      cb=omega*cb;
+			NR::Point  u=ar*cb;
 			AddPoint(u+dr);
 		}
 	} else {
 		if ( sang > eang ) sang-=2*M_PI;
-		for (double b=sang+0.1;b<eang;b+=0.1) {
-			NR::Point  cb(cos(b),sin(b));
-			NR::Point  ar(rx,ry);
-			NR::Point  u=ca^cb;
-			u*=ar;
+    NR::rotate omega(incr);
+    NR::rotate cb(angle+sang);
+    NR::scale  ar(NR::Point(rx,ry));
+		for (double b=sang+incr;b<eang;b+=incr) {
+      cb=omega*cb;
+			NR::Point  u=ar*cb;
 			AddPoint(u + dr);
 		}
 	}
@@ -964,26 +967,27 @@ void Path::DoArc(NR::Point const &iS, NR::Point const &iE,
 	NR::Point   dr;
 	ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
   
-	NR::Point  ca(cos(angle),sin(angle));
+  
+  double     incr=0.1;
 	if ( wise ) {
 		if ( sang < eang ) sang+=2*M_PI;
-		for (double b=sang-0.1;b>eang;b-=0.1) {
-			NR::Point  cb(cos(b),sin(b));
-			NR::Point  ar(rx,ry);
-			NR::Point  u=ca^cb;
-			u*=ar;
-			u+=dr;
-			AddPoint(u,piece,(sang-b)/(sang-eang));
+    NR::rotate omega(-incr);
+    NR::rotate cb(angle+sang);
+    NR::scale  ar(NR::Point(rx,ry));
+		for (double b=sang-incr;b>eang;b-=incr) {
+      cb=omega*cb;
+			NR::Point  u=ar*cb;
+			AddPoint(u+dr,piece,(sang-b)/(sang-eang));
 		}
 	} else {
 		if ( sang > eang ) sang-=2*M_PI;
-		for (double b=sang+0.1;b<eang;b+=0.1) {
-			NR::Point  cb(cos(b),sin(b));
-			NR::Point  ar(rx,ry);
-			NR::Point  u=ca^cb;
-			u*=ar;
-			u+=dr;
-			AddPoint(u,piece,(b-sang)/(eang-sang));
+    NR::rotate omega(incr);
+    NR::rotate cb(angle+sang);
+    NR::scale  ar(NR::Point(rx,ry));
+		for (double b=sang+incr;b<eang;b+=incr) {
+      cb=omega*cb;
+			NR::Point  u=ar*cb;
+			AddPoint(u+dr,piece,(b-sang)/(eang-sang));
 		}
 	}
 }
@@ -1051,7 +1055,7 @@ void Path::DoArc(NR::Point const &iS,NR::Point const &iE,
 	NR::Point   dr;
 	ArcAnglesAndCenter(iS,iE,rx,ry,angle,large,wise,sang,eang,dr);
   
-	NR::Point  ca(cos(angle),sin(angle));
+  /*	NR::Point  ca(cos(angle),sin(angle));
 	if ( wise ) {
 		if ( sang < eang ) sang+=2*M_PI;
 		for (double b=sang-0.1;b>eang;b-=0.1) {
@@ -1068,6 +1072,28 @@ void Path::DoArc(NR::Point const &iS,NR::Point const &iE,
 			NR::Point  ar(rx,ry);
 			NR::Point  u=ca^cb;
 			u*=ar;
+			AddPoint(u + dr,piece,(b-sang)/(eang-sang));
+		}
+	}*/
+  double   incr=0.1;
+	if ( wise ) {
+		if ( sang < eang ) sang+=2*M_PI;
+    NR::rotate   omega(-incr);
+    NR::rotate   cb(angle+sang);
+    NR::scale    ar(NR::Point(rx,ry));
+		for (double b=sang-incr;b>eang;b-=incr) {
+      cb=omega*cb;
+			NR::Point  u=ar*cb;
+			AddPoint(u + dr,piece,(sang-b)/(sang-eang));
+		}
+	} else {
+		if ( sang > eang ) sang-=2*M_PI;
+    NR::rotate   omega(incr);
+    NR::rotate   cb(angle+sang);
+    NR::scale    ar(NR::Point(rx,ry));
+		for (double b=sang+incr;b<eang;b+=incr) {
+      cb=omega*cb;
+			NR::Point  u=ar*cb;
 			AddPoint(u + dr,piece,(b-sang)/(eang-sang));
 		}
 	}

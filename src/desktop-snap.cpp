@@ -67,7 +67,7 @@ sp_intersector_a_vector_snap (NR::Point &req, NR::Point const &v,
 	NR::Point const starting(req);
 	NR::Point vperp = v.ccw();
 	double d0 = dot(vperp, req);
-	if(sp_intersector_line_intersection(vperp, d0, n, d, req) != intersects)
+	if(sp_intersector_line_intersection(vperp, -d0, n, -d, req) != intersects)
 		return 1e18;
 	return L2(req - starting);
 }
