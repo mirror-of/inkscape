@@ -48,6 +48,12 @@ We assume that integer overflow doesn't occur during that increment,
 so we get pc->npoints > 1.
 
 
+src/pencil-context.cpp:spdc_set_endpoint
+
+Very loose proof of npoints > 0: Should be preceded by spdc_set_startpoint(pc) according to state
+transitions.  spdc_set_startpoint sets pc->npoints to 0 (handled at beginning of function) or 1.
+
+
 src/display/bezier-utils.cpp:compute_max_error
 
 Proof of postcondition: *splitPoint is set only from i, which goes from 1 to less than last.
