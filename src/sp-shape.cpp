@@ -242,8 +242,8 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 	/* Note, we're ignoring 'marker' settings, which technically should apply for
 	   all three settings.  This should be fixed later such that if 'marker' is
 	   specified, then all three should appear. */
-	if (shape->curve && (shape->marker[SP_MARKER_LOC_START] 
-			     || shape->marker[SP_MARKER_LOC_MID] 
+	if (shape->curve && (shape->marker[SP_MARKER_LOC_START]
+			     || shape->marker[SP_MARKER_LOC_MID]
 			     || shape->marker[SP_MARKER_LOC_END])) {
 		SPItemView *v;
 		ArtBpath *bp;
@@ -273,7 +273,7 @@ sp_shape_update (SPObject *object, SPCtx *ctx, unsigned int flags)
 		      sp_item_display_key_new (SP_MARKER_LOC_QTY)
 		      );
 		  }
-			
+
 		  for (int i = 0 ; i < SP_MARKER_LOC_QTY ; i++) {
 			  if (shape->marker[i]) {
 			    sp_marker_show_dimension ((SPMarker *) shape->marker[i],
@@ -312,7 +312,7 @@ sp_shape_marker_required (SPShape* shape, int m, ArtBpath* bp)
         return 1;
 
     if (m == SP_MARKER_LOC_MID && ((bp->code != ART_MOVETO && bp->code != ART_MOVETO_OPEN)
-                && ((bp[1].code == ART_LINETO) || (bp[1].code == ART_CURVETO))))
+                && (((bp + 1)->code == ART_LINETO) || ((bp + 1)->code == ART_CURVETO))))
         return 1;
 
     return 0;
@@ -336,7 +336,7 @@ static NRMatrix
 sp_shape_marker_get_transform (SPShape* shape, int m, ArtBpath* bp)
 {
     NRMatrix t;
-    
+
     switch (m)
     {
         case SP_MARKER_LOC_START:
@@ -370,11 +370,11 @@ sp_shape_marker_get_transform (SPShape* shape, int m, ArtBpath* bp)
         {
 			float dx, dy, h;
 			if ((bp->code == ART_LINETO) && (bp > shape->curve->bpath)) {
-				dx = bp->x3 - (bp - 1)->x3;
-				dy = bp->y3 - (bp - 1)->y3;
+                dx = (bp - 1)->x3 - bp->x3;
+                dy = (bp - 1)->y3 - bp->y3 ;
             } else if (bp->code == ART_CURVETO) {
-				dx = bp->x3 - bp->x2;
-				dy = bp->y3 - bp->y2;
+                dx = bp->x2 - bp->x3;
+                dy = bp->y2 - bp->y3 ;
 
                 /* If the second Bezier control point x2 and the end y3
                 ** are coincident, the arrow will not be rotated in a
@@ -384,8 +384,8 @@ sp_shape_marker_get_transform (SPShape* shape, int m, ArtBpath* bp)
                 ** be in spec for SVG...
                 */
                 if (hypot (dx, dy) < 1e-9 && (bp > shape->curve->bpath)) {
-                    dx = (bp - 1)->x2 - bp->x3;
-                    dy = (bp - 1)->y2 - bp->y3;
+                    dx = bp->x3 - (bp - 1)->x2;
+                    dy = bp->y3 - (bp - 1)->y2;
                 }
 			} else {
 				dx = 1.0;
@@ -453,7 +453,7 @@ sp_shape_marker_get_transform (SPShape* shape, int m, ArtBpath* bp)
     return t;
 }
 
-  
+
 
 /* Marker views have to be scaled already */
 
@@ -540,7 +540,7 @@ static void sp_shape_bbox(SPItem *item, NRRect *bbox, NRMatrix const *transform,
           cbbox.x1+=0.5*width;
           cbbox.y0-=0.5*width;
           cbbox.y1+=0.5*width;
-        }      
+        }
       }
     }
     if ( fabs(cbbox.x1-cbbox.x0) > -0.00001 && fabs(cbbox.y1-cbbox.y0) > -0.00001 ) {
@@ -619,7 +619,7 @@ sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 	nr_arena_shape_set_paintbox (NR_ARENA_SHAPE (arenaitem), &paintbox);
 
 	if (shape->curve && (shape->marker[SP_MARKER_LOC_START] ||
-			     shape->marker[SP_MARKER_LOC_MID] || 
+			     shape->marker[SP_MARKER_LOC_MID] ||
 			     shape->marker[SP_MARKER_LOC_END])) {
 		ArtBpath *bp;
 		int nstart, nmid, nend;
@@ -642,19 +642,19 @@ sp_shape_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flag
 		}
 		if (shape->marker[SP_MARKER_LOC_START]) {
 		  sp_marker_show_dimension ((SPMarker *) shape->marker[SP_MARKER_LOC_START],
-					    NR_ARENA_ITEM_GET_KEY (arenaitem) 
+					    NR_ARENA_ITEM_GET_KEY (arenaitem)
 					    + SP_MARKER_LOC_START - SP_MARKER_LOC,
 					    nstart);
 		}
 		if (shape->marker[SP_MARKER_LOC_MID]) {
 		  sp_marker_show_dimension ((SPMarker *) shape->marker[SP_MARKER_LOC_MID],
-					    NR_ARENA_ITEM_GET_KEY (arenaitem) 
+					    NR_ARENA_ITEM_GET_KEY (arenaitem)
 					    + SP_MARKER_LOC_MID - SP_MARKER_LOC,
 					    nmid);
 		}
 		if (shape->marker[SP_MARKER_LOC_END]) {
 		  sp_marker_show_dimension ((SPMarker *) shape->marker[SP_MARKER_LOC_END],
-					    NR_ARENA_ITEM_GET_KEY (arenaitem) 
+					    NR_ARENA_ITEM_GET_KEY (arenaitem)
 					    + SP_MARKER_LOC_END - SP_MARKER_LOC,
 					    nend);
 		}
@@ -678,13 +678,13 @@ sp_shape_hide (SPItem *item, unsigned int key)
 	  if (shape->marker[i]) {
 	    for (v = item->display; v != NULL; v = v->next) {
                 if (key == v->key) {
-	      sp_marker_hide ((SPMarker *) shape->marker[i], 
+	      sp_marker_hide ((SPMarker *) shape->marker[i],
                                     NR_ARENA_ITEM_GET_KEY (v->arenaitem) + i);
                 }
 	    }
 	  }
 	}
-	
+
 	if (((SPItemClass *) parent_class)->hide) {
 	  ((SPItemClass *) parent_class)->hide (item, key);
 	}
@@ -746,7 +746,7 @@ sp_shape_set_marker (SPObject *object, unsigned int key, const gchar *value)
 	    sp_signal_disconnect_by_data (shape->marker[key], item);
 	    /* Hide marker */
 	    for (v = item->display; v != NULL; v = v->next) {
-	      sp_marker_hide ((SPMarker *) (shape->marker[key]), 
+	      sp_marker_hide ((SPMarker *) (shape->marker[key]),
 			      NR_ARENA_ITEM_GET_KEY (v->arenaitem) + key);
 	      /* fixme: Do we need explicit remove here? (Lauris) */
 	      /* nr_arena_item_set_mask (v->arenaitem, NULL); */
@@ -755,9 +755,9 @@ sp_shape_set_marker (SPObject *object, unsigned int key, const gchar *value)
 	  }
 	  if (SP_IS_MARKER (mrk)) {
 	    shape->marker[key] = sp_object_href (mrk, object);
-	    g_signal_connect (G_OBJECT (shape->marker[key]), "release", 
+	    g_signal_connect (G_OBJECT (shape->marker[key]), "release",
 			      G_CALLBACK (sp_shape_marker_release), shape);
-	    g_signal_connect (G_OBJECT (shape->marker[key]), "modified", 
+	    g_signal_connect (G_OBJECT (shape->marker[key]), "modified",
 			      G_CALLBACK (sp_shape_marker_modified), shape);
 	  }
 	  sp_object_request_update (object, SP_OBJECT_MODIFIED_FLAG);
