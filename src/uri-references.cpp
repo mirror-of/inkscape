@@ -29,10 +29,8 @@ URIReference::URIReference(SPDocument *rel_document, const gchar *uri) {
 		throw UnsupportedURIException();
 	}
 
-	_obj = sp_document_lookup_id(rel_document, id);
-	if (_obj) {
-		sp_object_href(_obj, NULL);
-	}
+	_obj = NULL;
+	_setObject(sp_document_lookup_id(rel_document, id));
 
 	_connection = sp_document_id_changed_connect(rel_document, id, SigC::slot(*this, &URIReference::_setObject));
 

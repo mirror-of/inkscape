@@ -234,39 +234,17 @@ static void
 sp_group_menu (SPObject *object, SPDesktop *desktop, GtkMenu * menu)
 {
 	SPItem *item;
-	GtkWidget * i, * m, * w;
+	GtkWidget *w;
 
-	item = (SPItem *) object;
+	item = (SPItem *)object;
 
-	i = gtk_menu_item_new_with_mnemonic (_("_Group"));
-	m = gtk_menu_new ();
-
-	/* Group dialog */
-	w = gtk_menu_item_new_with_mnemonic (_("_Group Properties"));
-	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
-#if 0
-	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_item_properties), item);
-#endif
-	gtk_widget_set_sensitive (w, FALSE);
-	gtk_widget_show (w);
-	gtk_menu_append (GTK_MENU (m), w);
-	/* Separator */
-	w = gtk_menu_item_new ();
-	gtk_widget_show (w);
-	gtk_menu_append (GTK_MENU (m), w);
 	/* "Ungroup" */
 	w = gtk_menu_item_new_with_mnemonic (_("_Ungroup"));
 	gtk_object_set_data (GTK_OBJECT (w), "desktop", desktop);
 	gtk_signal_connect (GTK_OBJECT (w), "activate", GTK_SIGNAL_FUNC (sp_item_group_ungroup_activate), item);
 	gtk_widget_show (w);
 
-	gtk_menu_append (GTK_MENU (m), w);
-	gtk_widget_show (m);
-
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (i), m);
-
-	gtk_menu_append (menu, i);
-	gtk_widget_show (i);
+	gtk_menu_append (GTK_MENU (menu), w);
 }
 
 static void

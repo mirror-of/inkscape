@@ -1,3 +1,11 @@
+2004-01-04 MenTaLguY <mental@rydia.net>
+
+	* src/object-ui.cpp: flattened group submenu
+
+	* src/uri-references.cpp: fixed initialization bug; for
+	  pre-existing references, the "release" signal wasn't being
+	  connected
+
 2004-01-04  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/helper/curve.h, src/helper/curve.cpp (sp_curve_moveto,
