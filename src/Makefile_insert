@@ -104,6 +104,7 @@ libinkpre_a_SOURCES =	\
 	sp-clippath.cpp sp-clippath.h	\
 	sp-cursor.cpp sp-cursor.h	\
 	sp-defs.cpp sp-defs.h	\
+	sp-desktop-widget.h	\
 	sp-ellipse.cpp sp-ellipse.h	\
 	sp-gradient.cpp sp-gradient.h	\
 	sp-guide-attachment.h	\
