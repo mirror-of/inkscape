@@ -511,7 +511,8 @@ sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop)
         /* Show/hide page background */
         if (nv->pagecolor & 0xff) {
             sp_canvas_item_show (desktop->table);
-            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->table, 0x00000000, TRUE, nv->pagecolor);
+            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->table, 0x00000000, 
+                TRUE, nv->pagecolor);
             sp_canvas_item_move_to_z (desktop->table, 0);
         } else {
             sp_canvas_item_hide (desktop->table);
@@ -522,22 +523,41 @@ sp_dt_namedview_modified (SPNamedView *nv, guint flags, SPDesktop *desktop)
             // show
             sp_canvas_item_show (desktop->page_border);
             // set color and shadow
-            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->page_border, nv->bordercolor, FALSE, 0x00000000);
+            sp_ctrlrect_set_color ((SPCtrlRect *) desktop->page_border, 
+			    nv->bordercolor, FALSE, 0x00000000);
             if (nv->pageshadow)
-                sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border, nv->pageshadow, nv->bordercolor);
+                sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border, 
+				nv->pageshadow, nv->bordercolor);
             // place in the z-order stack
             if (nv->borderlayer == SP_BORDER_LAYER_BOTTOM) {
                  sp_canvas_item_move_to_z (desktop->page_border, 2);
             } else {
                 int order = sp_canvas_item_order (desktop->page_border);
                 int morder = sp_canvas_item_order (desktop->drawing);
-                if (morder > order) sp_canvas_item_raise (desktop->page_border, morder - order);
+                if (morder > order) sp_canvas_item_raise (desktop->page_border,
+				    morder - order);
             }
         } else {
                 sp_canvas_item_hide (desktop->page_border);
                 if (nv->pageshadow)
-                    sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page, 0, 0x00000000);
+                    sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page, 0, 
+				    0x00000000);
         }
+	
+        /* Show/hide page shadow */
+        if (nv->showpageshadow && nv->pageshadow) {
+            // show
+            sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border, 
+                            nv->pageshadow, nv->bordercolor);
+        } else {
+            // hide
+            sp_ctrlrect_set_shadow ((SPCtrlRect *)desktop->page_border, 0, 
+                            0x00000000);
+        }
+
+        
+        
+        
     }
 }
 

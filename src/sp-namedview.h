@@ -35,6 +35,7 @@ struct SPNamedView : public SPObjectGroup {
     unsigned int showgrid : 1;
     unsigned int showguides : 1;
     unsigned int showborder : 1;
+    unsigned int showpageshadow : 1;
     unsigned int borderlayer : 2;
 
     int snap_grid_bbox;

@@ -303,6 +303,7 @@ sp_dtw_border_layer_toggled(GtkToggleButton *tb, GtkWidget *dialog)
 }
 
 
+
 /**
  * \brief  Writes the change into the corresponding attribute of the
  *         sodipodi:namedview element.
@@ -1052,24 +1053,30 @@ sp_desktop_dialog(void)
                                "bordercolor", _("Canvas border color"),
                                "borderopacity", 4);
 
+	/* Page Shadow toggle */
+        cb = G_CALLBACK(sp_dtw_whatever_toggled);
+        spw_checkbutton(dlg, t, _("Show Page Shadow"),
+		                  "showpageshadow", 0, 5, 0, cb);
+
+	
         l = gtk_label_new(_("Default units:"));
         gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
         gtk_widget_show(l);
-        gtk_table_attach (GTK_TABLE (t), l, 0, 1, 5, 6,
+        gtk_table_attach (GTK_TABLE (t), l, 0, 1, 6, 7,
                     (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
         GtkWidget *doc_units = sp_unit_selector_new(SP_UNIT_ABSOLUTE | SP_UNIT_DEVICE);
         gtk_tooltips_set_tip(tooltips, doc_units, _("Units for the tool controls, ruler, and the statusbar"), NULL);
         g_signal_connect(G_OBJECT(doc_units), "set_unit", G_CALLBACK(set_doc_units), NULL);
         gtk_object_set_data (GTK_OBJECT (dlg), "doc_units", doc_units);
         gtk_widget_show(doc_units);
-        gtk_table_attach (GTK_TABLE (t), doc_units, 1, 2, 5, 6,
+        gtk_table_attach (GTK_TABLE (t), doc_units, 1, 2, 6, 7,
                     (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), (GtkAttachOptions)0, 0, 0);
 
         // The following comes from the former "document settings" dialog
 
         GtkWidget *vb = gtk_vbox_new(FALSE, 4);
         gtk_widget_show(vb);
-        gtk_table_attach(GTK_TABLE(t), vb, 0, 2, 6, 7,
+        gtk_table_attach(GTK_TABLE(t), vb, 0, 2, 7, 8,
                          (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ),
                          (GtkAttachOptions)0, 0, 0);
 
@@ -1471,6 +1478,10 @@ sp_dtw_update(GtkWidget *dialog, SPDesktop *desktop)
             gtk_widget_set_sensitive(GTK_WIDGET(w), TRUE);
         }
 
+        o = (GtkObject *)gtk_object_get_data(GTK_OBJECT(dialog), 
+		"showpageshadow");
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(o), nv->showpageshadow);
+	
         cp = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(dialog), "pagecolor"));
         sp_color_picker_set_rgba32(cp, nv->pagecolor);
         w = GTK_WIDGET(g_object_get_data(G_OBJECT(cp), "window"));

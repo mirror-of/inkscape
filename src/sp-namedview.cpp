@@ -117,6 +117,7 @@ sp_namedview_init (SPNamedView * nv)
 	nv->showgrid = FALSE;
 	nv->showguides = TRUE;
 	nv->showborder = TRUE;
+        nv->showpageshadow = TRUE;
 
 	nv->guides = NULL;
 	nv->viewcount = 0;
@@ -160,6 +161,7 @@ sp_namedview_build (SPObject * object, SPDocument * document, Inkscape::XML::Nod
 	sp_object_read_attr (object, "guidehicolor");
 	sp_object_read_attr (object, "guidehiopacity");
 	sp_object_read_attr (object, "showborder");
+	sp_object_read_attr (object, "showpageshadow");
 	sp_object_read_attr (object, "borderlayer");
 	sp_object_read_attr (object, "bordercolor");
 	sp_object_read_attr (object, "borderopacity");
@@ -407,6 +409,10 @@ sp_namedview_set (SPObject *object, unsigned int key, const gchar *value)
 		nv->pageshadow = value? atoi (value) : 2; // 2 is the default
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);
 		break;
+        case SP_ATTR_SHOWPAGESHADOW:
+		nv->showpageshadow = (value) ? sp_str_to_bool (value) : TRUE;
+	        object->requestModified(SP_OBJECT_MODIFIED_FLAG);
+	        break;
 	case SP_ATTR_INKSCAPE_ZOOM:
 		nv->zoom = value? g_ascii_strtod (value, NULL) : 0; // zero means not set
 		object->requestModified(SP_OBJECT_MODIFIED_FLAG);

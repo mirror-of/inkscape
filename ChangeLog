@@ -1,3 +1,10 @@
+2005-03-14  Jon Phillips <jon@rejon.org>
+	* src/attributes-test.cpp, src/attributes.cpp, src/attributes.h,
+	  src/desktop.cpp, src/sp-namedview.cpp, src/sp-namedview.h,
+	  src/dialogs/desktop-properties.cpp: 
+	  Added showpageshadow preference to document preferences. Set to 
+	  on automatically and saves with document if off.
+
 2005-03-14  MenTaLguY  <mental@rydia.net>
 
 	* src/display/nr-arena-item.h, src/display/nr-arena-item.cpp,
