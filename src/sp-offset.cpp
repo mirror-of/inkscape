@@ -870,17 +870,17 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
           {
             // one angle
             NR::Point prx, nex;
-            prx = theRes->aretes[pb].dx;
+            prx = theRes->getEdge(pb).dx;
             nlen = sqrt (dot(prx, prx));
             prx /= nlen;
-            nex = theRes->aretes[cb].dx;
+            nex = theRes->getEdge(cb).dx;
             nlen = sqrt (dot(nex , nex));
             nex /= nlen;
-            if (theRes->aretes[pb].en == i)
+            if (theRes->getEdge(pb).en == i)
             {
               prx = -prx;
             }
-            if (theRes->aretes[cb].en == i)
+            if (theRes->getEdge(cb).en == i)
             {
               nex = -nex;
             }
@@ -888,7 +888,7 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
             if (vectors_are_clockwise (nex, nx, prx))
             {
               // we're in that angle. set the sign, and exit that loop
-              if (theRes->aretes[cb].st == i)
+              if (theRes->getEdge(cb).st == i)
               {
                 ptDist = -ndist;
                 ptSet = true;
@@ -910,8 +910,8 @@ sp_offset_distance_to_original (SPOffset * offset, NR::Point px)
     // loop over the edges to try to improve the distance
     for (int i = 0; i < theRes->numberOfEdges(); i++)
     {
-      NR::Point sx = theRes->getPoint(theRes->aretes[i].st).x;
-      NR::Point ex = theRes->getPoint(theRes->aretes[i].en).x;
+      NR::Point sx = theRes->getPoint(theRes->getEdge(i).st).x;
+      NR::Point ex = theRes->getPoint(theRes->getEdge(i).en).x;
       NR::Point nx = ex - sx;
       double len = sqrt (dot(nx,nx));
       if (len > 0.0001)

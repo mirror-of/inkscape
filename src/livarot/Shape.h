@@ -70,7 +70,6 @@ public:
   // lists of the nodes and edges
   int maxPt; // [FIXME: remove this]
   int maxAr; // [FIXME: remove this]
-  std::vector<dg_arete> aretes;
 
   // flags
   int type;
@@ -86,10 +85,12 @@ public:
   bool hasBackData() const { return _has_back_data; }
 
   dg_point const &getPoint(int n) const { return _pts[n]; }
+  dg_arete const &getEdge(int n) const { return aretes[n]; }
 
 private:
 
   std::vector<dg_point> _pts;
+  std::vector<dg_arete> aretes; /* FIXME: rename to _aretes, or maybe _edges */
   
   int nbAr; ///< number of edges (aretes) [FIXME: remove this in favour of aretes.size()]
 

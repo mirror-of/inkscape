@@ -335,7 +335,7 @@ sp_selected_path_boolop (bool_op bop)
                             if ( theShape->ebData[cb].pathID == 0 ) {
                                 // the source has an edge incident to the point, get its position on the path
                                 piece=theShape->ebData[cb].pieceID;
-                                if ( theShape->aretes[cb].st == i ) {
+                                if ( theShape->getEdge(cb).st == i ) {
                                     t=theShape->ebData[cb].tSt;
                                 } else {
                                     t=theShape->ebData[cb].tEn;

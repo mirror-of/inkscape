@@ -449,12 +449,12 @@ nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
 			shape->fill_shp->AddPoint(shape->cached_fill->getPoint(i).x * cached_to_new);
 		    if ( isometry == 1 ) {
 			for (int i = 0; i < shape->cached_fill->numberOfEdges(); i++) 
-			    shape->fill_shp->AddEdge(shape->cached_fill->aretes[i].st,
-						     shape->cached_fill->aretes[i].en);
+			    shape->fill_shp->AddEdge(shape->cached_fill->getEdge(i).st,
+						     shape->cached_fill->getEdge(i).en);
 		    } else if ( isometry == -1 ) { // need to flip poly.
 			for (int i = 0; i < shape->cached_fill->numberOfEdges(); i++)
-			    shape->fill_shp->AddEdge(shape->cached_fill->aretes[i].en,
-						     shape->cached_fill->aretes[i].st);
+			    shape->fill_shp->AddEdge(shape->cached_fill->getEdge(i).en,
+						     shape->cached_fill->getEdge(i).st);
 		    }
 		    shape->fill_shp->ForceToPolygon();
 		    shape->fill_shp->needPointsSorting();
@@ -561,12 +561,12 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
 		    shape->stroke_shp->AddPoint(shape->cached_stroke->getPoint(i).x * cached_to_new);
 		if ( isometry == 1 ) {
 		    for (int i = 0; i < shape->cached_stroke->numberOfEdges(); i++)
-			shape->stroke_shp->AddEdge(shape->cached_stroke->aretes[i].st,
-						   shape->cached_stroke->aretes[i].en);
+			shape->stroke_shp->AddEdge(shape->cached_stroke->getEdge(i).st,
+						   shape->cached_stroke->getEdge(i).en);
 		} else if ( isometry == -1 ) {
 		    for (int i = 0; i < shape->cached_stroke->numberOfEdges(); i++)
-			shape->stroke_shp->AddEdge(shape->cached_stroke->aretes[i].en,
-						   shape->cached_stroke->aretes[i].st);
+			shape->stroke_shp->AddEdge(shape->cached_stroke->getEdge(i).en,
+						   shape->cached_stroke->getEdge(i).st);
 		}
 		shape->stroke_shp->ForceToPolygon();
 		shape->stroke_shp->needPointsSorting();
