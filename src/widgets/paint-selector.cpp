@@ -29,7 +29,7 @@
 #include <gtk/gtkframe.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkoptionmenu.h>
-#include "menu.h"
+#include <gtk/gtktooltips.h>
 #include <gtk/gtkmenuitem.h>
 #include <gtk/gtkimage.h>
 

@@ -27,8 +27,6 @@ widgets_libspwidgets_a_SOURCES =	\
 	widgets/icon.h	\
 	widgets/layer-selector.h \
 	widgets/layer-selector.cpp \
-	widgets/menu.cpp	\
-	widgets/menu.h	\
 	widgets/paint-selector.cpp	\
 	widgets/paint-selector.h	\
 	widgets/ruler.cpp	\

@@ -467,8 +467,6 @@ void inkscape_unref (void) {}
 void inkscape_add_document (SPDocument *document) {}
 void inkscape_remove_document (SPDocument *document) {}
 Inkscape::XML::Node *inkscape_get_repr (Inkscape::Application *inkscape, const gchar *key) {return NULL;}
-#include "widgets/menu.h"
-void sp_menu_append (SPMenu *menu, const gchar *name, const gchar *tip, const void *data) {}
 #endif
 
 
