@@ -188,14 +188,13 @@ struct SPStyle {
 	unsigned int clip_set : 1;
 	unsigned int color_set : 1;
 	unsigned int cursor_set : 1;
-	unsigned int display_set : 1;
 	unsigned int overflow_set : 1;
 	unsigned int clip_path_set : 1;
 	unsigned int clip_rule_set : 1;
 	unsigned int mask_set : 1;
 
 	/** display */
-	unsigned int display : 1;
+	SPIEnum display;
 
 	/* visibility */
 	SPIEnum visibility;
@@ -309,7 +308,7 @@ void sp_style_set_opacity (SPStyle *style, float opacity, unsigned int opacity_s
 
 /* SPTextStyle */
 
-typedef enum {
+enum SPCSSFontSize {
 	SP_CSS_FONT_SIZE_XX_SMALL,
 	SP_CSS_FONT_SIZE_X_SMALL,
 	SP_CSS_FONT_SIZE_SMALL,
@@ -319,20 +318,20 @@ typedef enum {
 	SP_CSS_FONT_SIZE_XX_LARGE,
 	SP_CSS_FONT_SIZE_SMALLER,
 	SP_CSS_FONT_SIZE_LARGER
-} SPCSSFontSize;
+};
 
-typedef enum {
+enum SPCSSFontStyle {
 	SP_CSS_FONT_STYLE_NORMAL,
 	SP_CSS_FONT_STYLE_ITALIC,
 	SP_CSS_FONT_STYLE_OBLIQUE
-} SPCSSFontStyle;
+};
 
-typedef enum {
+enum SPCSSFontVariant {
 	SP_CSS_FONT_VARIANT_NORMAL,
 	SP_CSS_FONT_VARIANT_SMALL_CAPS
-} SPCSSFontVariant;
+};
 
-typedef enum {
+enum SPCSSFontWeight {
 	SP_CSS_FONT_WEIGHT_100,
 	SP_CSS_FONT_WEIGHT_200,
 	SP_CSS_FONT_WEIGHT_300,
@@ -346,9 +345,9 @@ typedef enum {
 	SP_CSS_FONT_WEIGHT_BOLD,
 	SP_CSS_FONT_WEIGHT_LIGHTER,
 	SP_CSS_FONT_WEIGHT_DARKER
-} SPCSSFontWeight;
+};
 
-typedef enum {
+enum SPCSSFontStretch {
 	SP_CSS_FONT_STRETCH_ULTRA_CONDENSED,
 	SP_CSS_FONT_STRETCH_EXTRA_CONDENSED,
 	SP_CSS_FONT_STRETCH_CONDENSED,
@@ -360,24 +359,30 @@ typedef enum {
 	SP_CSS_FONT_STRETCH_ULTRA_EXPANDED,
 	SP_CSS_FONT_STRETCH_NARROWER,
 	SP_CSS_FONT_STRETCH_WIDER
-} SPCSSFontStretch;
+};
 
-typedef enum {
+enum SPTextAnchor {
 	SP_CSS_TEXT_ANCHOR_START,
 	SP_CSS_TEXT_ANCHOR_MIDDLE,
 	SP_CSS_TEXT_ANCHOR_END
-} SPTextAnchor;
+};
 
-typedef enum {
+enum SPWritingMode {
 	SP_CSS_WRITING_MODE_LR,
 	SP_CSS_WRITING_MODE_RL,
 	SP_CSS_WRITING_MODE_TB
-} SPWritingMode;
+};
 
 enum SPVisibility {
 	SP_CSS_VISIBILITY_HIDDEN,
 	SP_CSS_VISIBILITY_COLLAPSE,
 	SP_CSS_VISIBILITY_VISIBLE
+};
+
+// TODO: more display types
+enum SPCSSDisplay {
+	SP_CSS_DISPLAY_BLOCK,
+	SP_CSS_DISPLAY_NONE
 };
 
 struct SPTextStyle {

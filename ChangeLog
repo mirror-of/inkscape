@@ -1,3 +1,9 @@
+2004-11-09  MenTaLguY  <mental@rydia.net>
+
+	* src/sp-item.cpp, src/style.cpp, src/style.h:
+	  use 'display' rather than 'visibility' for hiding, and give display
+	  a more "modern" representation in SPStyle like visibility's
+
 2004-11-09  Kees Cook  <kees@outflux.net>
 
 	* src/dialogs/xml-tree.cpp: added better context to the status bar.

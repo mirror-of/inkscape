@@ -145,8 +145,6 @@ static gint sp_style_write_ilength (gchar *p, gint len, const gchar *key, SPILen
 static gint sp_style_write_ipaint (gchar *b, gint len, const gchar *key, SPIPaint *paint, SPIPaint *base, guint flags);
 static gint sp_style_write_ifontsize (gchar *p, gint len, const gchar *key, SPIFontSize *val, SPIFontSize *base, guint flags);
 
-static SPColor *sp_style_read_color_cmyk (SPColor *color, const gchar *str);
-
 static void sp_style_paint_clear (SPStyle *style, SPIPaint *paint, unsigned int hunref, unsigned int unset);
 
 #define SPS_READ_IENUM_IF_UNSET(v,s,d,i) if (!(v)->set) {sp_style_read_ienum ((v), (s), (d), (i));}
@@ -262,6 +260,12 @@ static SPStyleEnum const enum_visibility[] = {
     {"hidden", SP_CSS_VISIBILITY_HIDDEN},
     {"collapse", SP_CSS_VISIBILITY_COLLAPSE},
     {"visible", SP_CSS_VISIBILITY_VISIBLE},
+    {NULL, -1}
+};
+
+static SPStyleEnum const enum_display[] = {
+    {"block", SP_CSS_DISPLAY_BLOCK},
+    {"none", SP_CSS_DISPLAY_NONE},
     {NULL, -1}
 };
     
@@ -388,13 +392,14 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
 
     /* 4. Presentation attributes */
     /* CSS2 */
+    SPS_READ_PENUM_IF_UNSET (&style->visibility, repr, "visibility", enum_visibility, TRUE);
+    SPS_READ_PENUM_IF_UNSET (&style->visibility, repr, "display", enum_display, FALSE);
     /* Font */
     SPS_READ_PFONTSIZE_IF_UNSET (&style->font_size, repr, "font-size");
     SPS_READ_PENUM_IF_UNSET (&style->font_style, repr, "font-style", enum_font_style, TRUE);
     SPS_READ_PENUM_IF_UNSET (&style->font_variant, repr, "font-variant", enum_font_variant, TRUE);
     SPS_READ_PENUM_IF_UNSET (&style->font_weight, repr, "font-weight", enum_font_weight, TRUE);
     SPS_READ_PENUM_IF_UNSET (&style->font_stretch, repr, "font-stretch", enum_font_stretch, TRUE);
-    SPS_READ_PENUM_IF_UNSET (&style->visibility, repr, "visibility", enum_visibility, TRUE);
 
     /* opacity */
     if (!style->opacity.set) {
@@ -645,11 +650,7 @@ sp_style_merge_property (SPStyle *style, gint id, const gchar *val)
         g_warning ("Unimplemented style property SP_PROP_CURSOR: value: %s", val);
         break;
     case SP_PROP_DISPLAY:
-        if (!style->display_set) {
-            /* fixme: */
-            style->display = strncmp (val, "none", 4);
-            style->display_set = TRUE;
-        }
+        SPS_READ_IENUM_IF_UNSET(&style->display, val, enum_display, FALSE);
         break;
     case SP_PROP_OVERFLOW:
         // FIXME: temporaily disabled, for our markers.svg uses overflow: visible to show properly in batik.
@@ -1297,13 +1298,14 @@ sp_style_write_string (SPStyle *style, guint flags)
 
     p += sp_style_write_iscale24 (p, c + BMAX - p, "stroke-opacity", &style->stroke_opacity, NULL, flags);
 
+    p += sp_style_write_ienum (p, c + BMAX - p, "visibility", enum_visibility, &style->visibility, NULL, flags);
+    p += sp_style_write_ienum (p, c + BMAX - p, "display", enum_display, &style->display, NULL, flags);
+
     /* fixme: */
     p += sp_text_style_write (p, c + BMAX - p, style->text, flags);
 
     p += sp_style_write_ienum (p, c + BMAX - p, "text-anchor", enum_text_anchor, &style->text_anchor, NULL, flags);
     p += sp_style_write_ienum (p, c + BMAX - p, "writing-mode", enum_writing_mode, &style->writing_mode, NULL, flags);
-
-    p += sp_style_write_ienum (p, c + BMAX - p, "visibility", enum_visibility, &style->visibility, NULL, flags);
 
     /* Get rid of trailing `;'. */
     if (p != c) {
@@ -1392,13 +1394,15 @@ sp_style_write_difference (SPStyle *from, SPStyle *to)
         p += g_snprintf (p, c + BMAX - p, "marker-end:%s;",   from->marker[SP_MARKER_LOC_END].value);
     }
 
+    p += sp_style_write_ienum (p, c + BMAX - p, "visibility", enum_visibility, &from->visibility, &to->visibility, SP_STYLE_FLAG_IFSET);
+    p += sp_style_write_ienum (p, c + BMAX - p, "display", enum_display, &from->display, &to->display, SP_STYLE_FLAG_IFSET);
+
     /* fixme: */
     p += sp_text_style_write (p, c + BMAX - p, from->text, SP_STYLE_FLAG_IFDIFF);
 
     p += sp_style_write_ienum (p, c + BMAX - p, "text-anchor", enum_text_anchor, &from->text_anchor, &to->text_anchor, SP_STYLE_FLAG_IFDIFF);
     p += sp_style_write_ienum (p, c + BMAX - p, "writing-mode", enum_writing_mode, &from->writing_mode, &to->writing_mode, SP_STYLE_FLAG_IFDIFF);
 
-    p += sp_style_write_ienum (p, c + BMAX - p, "visibility", enum_visibility, &from->visibility, &to->visibility, SP_STYLE_FLAG_IFSET);
     /* The reason we use IFSET rather than IFDIFF is the belief that the IFDIFF
      * flag is mainly only for attributes that don't handle explicit unset well.
      * We may need to revisit the behaviour of this routine. */
@@ -1468,9 +1472,10 @@ sp_style_clear (SPStyle *style)
     style->font_stretch.value = style->font_stretch.computed = SP_CSS_FONT_STRETCH_NORMAL;
 
     style->opacity.value = SP_SCALE24_MAX;
-    style->display = TRUE;
     style->visibility.set = FALSE;
     style->visibility.value = style->visibility.computed = SP_CSS_VISIBILITY_VISIBLE;
+    style->display.set = FALSE;
+    style->display.value = style->display.computed = SP_CSS_DISPLAY_BLOCK;
 
     style->color.type = SP_PAINT_TYPE_COLOR;
     sp_color_set_rgb_float (&style->color.value.color, 0.0, 0.0, 0.0);
@@ -2344,43 +2349,6 @@ sp_style_write_ifontsize (gchar *p, gint len, const gchar *key, SPIFontSize *val
     }
     return 0;
 }
-
-
-
-/**
- * (C M Y K) tetraplet
- */
-static SPColor *
-sp_style_read_color_cmyk (SPColor *color, const gchar *str)
-{
-    gdouble c, m, y, k;
-    gchar *cptr, *eptr;
-
-    g_return_val_if_fail (str != NULL, NULL);
-
-    c = m = y = k = 0.0;
-    cptr = (gchar *) str + 1;
-    c = g_ascii_strtod (cptr, &eptr);
-    if (eptr && (eptr != cptr)) {
-        cptr = eptr;
-        m = g_ascii_strtod (cptr, &eptr);
-        if (eptr && (eptr != cptr)) {
-            cptr = eptr;
-            y = g_ascii_strtod (cptr, &eptr);
-            if (eptr && (eptr != cptr)) {
-                cptr = eptr;
-                k = g_ascii_strtod (cptr, &eptr);
-                if (eptr && (eptr != cptr)) {
-                    sp_color_set_cmyk_float (color, c, m, y, k);
-                    return color;
-                }
-            }
-        }
-    }
-
-    return NULL;
-}
-
 
 
 /**

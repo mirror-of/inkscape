@@ -164,15 +164,14 @@ void SPItem::setLocked(bool locked) {
 }
 
 bool SPItem::isHidden() const {
-    return style->visibility.computed != SP_CSS_VISIBILITY_VISIBLE;
+    return style->display.computed == SP_CSS_DISPLAY_NONE;
 }
 
 void SPItem::setHidden(bool hide) {
-    style->visibility.set = TRUE;
-    style->visibility.computed = style->visibility.value = ( hide
-                                                             ? SP_CSS_VISIBILITY_HIDDEN
-                                                             : SP_CSS_VISIBILITY_VISIBLE );
-    style->visibility.inherit = FALSE;
+    style->display.set = TRUE;
+    style->display.value = ( hide ? SP_CSS_DISPLAY_NONE : SP_CSS_DISPLAY_BLOCK );
+    style->display.computed = style->display.value;
+    style->display.inherit = FALSE;
     updateRepr();
 }
 
@@ -199,23 +198,16 @@ bool SPItem::isHidden(unsigned display_key) const {
 bool
 SPItem::isExplicitlyHidden() const
 {
-    return (this->style->visibility.set
-	    && !this->style->visibility.inherit
-	    && this->style->visibility.value != SP_CSS_VISIBILITY_VISIBLE);
+    return (this->style->display.set
+	    && this->style->display.value == SP_CSS_DISPLAY_NONE);
 }
 
-/** Sets the visibility CSS property to `hidden' if \a val is true, otherwise makes it unset and
- *  recalculates visibility from the parent. */
+/** Sets the display CSS property to `hidden' if \a val is true, otherwise makes it unset */
 void
 SPItem::setExplicitlyHidden(bool const val) {
-    this->style->visibility.set = val;
-    if (val) {
-	this->style->visibility.inherit = false;
-        this->style->visibility.computed = this->style->visibility.value = SP_CSS_VISIBILITY_HIDDEN;
-    } else {
-        this->style->visibility.computed = this->parent->style->visibility.computed;
-    }
-
+    this->style->display.set = val;
+    this->style->display.value = ( val ? SP_CSS_DISPLAY_NONE : SP_CSS_DISPLAY_BLOCK );
+    this->style->display.computed = this->style->display.value;
     this->updateRepr();
 }
 
