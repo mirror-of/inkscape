@@ -149,6 +149,7 @@ sp_node_context_setup (SPEventContext *ec)
 			nc->knot_holder = sp_item_knot_holder (item, ec->desktop);
 		}
 	}
+	sp_nodepath_update_statusbar (nc->nodepath);
 }
 
 static gint
@@ -435,6 +436,7 @@ sp_node_context_selection_changed (SPSelection * selection, gpointer data)
 		if (! nc->nodepath)
 			nc->knot_holder = sp_item_knot_holder (item, desktop);
 	}
+	sp_nodepath_update_statusbar (nc->nodepath);
 }
 
 static gboolean
