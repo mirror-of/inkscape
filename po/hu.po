@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-29 19:18+0200\n"
+"POT-Creation-Date: 2004-07-03 00:24+0200\n"
 "PO-Revision-Date: 2004-06-29 19:11+0200\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
@@ -385,7 +385,7 @@ msgstr "Mértékegység:"
 #: src/dialogs/desktop-properties.cpp:810 src/dialogs/export.cpp:321
 #: src/dialogs/export.cpp:356 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1378
-#: src/toolbox.cpp:1748
+#: src/toolbox.cpp:1753
 msgid "Width:"
 msgstr "Szélesség:"
 
@@ -403,15 +403,16 @@ msgstr "Magasság:"
 msgid "Metadata"
 msgstr "Metaadatok"
 
-#: src/dialogs/desktop-properties.cpp:884
-msgid "License:"
-msgstr "Licenc:"
+#. this uses an element
+#: src/dialogs/desktop-properties.cpp:884 src/dialogs/rdf.cpp:168
+msgid "License"
+msgstr "Licenc"
 
 #: src/dialogs/desktop-properties.cpp:906
 msgid "Proprietary"
 msgstr "Zárt (proprietary)"
 
-#: src/dialogs/desktop-properties.cpp:1379
+#: src/dialogs/desktop-properties.cpp:1380
 msgid "Close"
 msgstr "Bezárás"
 
@@ -1549,44 +1550,39 @@ msgid "Calligraphic line"
 msgstr "Mûvészi rajz"
 
 # May contain a short, human readable description of the resource as plain, unmarked text.
-#: src/dialogs/rdf.cpp:149
+#: src/dialogs/rdf.cpp:153
 msgid "Title"
 msgstr "Cím"
 
-#: src/dialogs/rdf.cpp:150
+#: src/dialogs/rdf.cpp:154
 msgid "Date"
 msgstr "Dátum"
 
 #. these are "agent" tags actually...
-#: src/dialogs/rdf.cpp:153
+#: src/dialogs/rdf.cpp:157
 msgid "Creator"
 msgstr "Készítõ"
 
-#: src/dialogs/rdf.cpp:154
+#: src/dialogs/rdf.cpp:158
 msgid "Owner"
 msgstr "Tulajdonos"
 
-#: src/dialogs/rdf.cpp:155
+#: src/dialogs/rdf.cpp:159
 msgid "Publisher"
 msgstr "Kiadó"
 
-#: src/dialogs/rdf.cpp:157
+#: src/dialogs/rdf.cpp:161
 msgid "Source"
 msgstr "Forrás"
 
-#: src/dialogs/rdf.cpp:158
+#: src/dialogs/rdf.cpp:162
 msgid "Keywords"
 msgstr "Kulcsszavak"
 
 #. this is a multi-line tag
-#: src/dialogs/rdf.cpp:161
+#: src/dialogs/rdf.cpp:165
 msgid "Description"
 msgstr "Leírás"
-
-#. this uses an element
-#: src/dialogs/rdf.cpp:164
-msgid "License"
-msgstr "Licenc"
 
 #: src/dialogs/stroke-style.cpp:1075 src/widgets/gradient-vector.cpp:262
 #: src/widgets/paint-selector.cpp:832
@@ -3078,67 +3074,67 @@ msgstr "Unicode: %c%c%c%c"
 msgid "Non-printable character"
 msgstr "Nem nyomtatható karakter"
 
-#: src/toolbox.cpp:379
+#: src/toolbox.cpp:380
 msgid "Insert new nodes into selected segments"
 msgstr "Új csomópontok felvétele a kijelölt szakaszokra"
 
-#: src/toolbox.cpp:381
+#: src/toolbox.cpp:382
 msgid "Delete selected nodes"
 msgstr "A kijelölt csomópontok törlése"
 
-#: src/toolbox.cpp:386
+#: src/toolbox.cpp:387
 msgid "Join paths at selected nodes"
 msgstr "Láncok összekapcsolása a kijelölt csomópontoknál"
 
-#: src/toolbox.cpp:388
+#: src/toolbox.cpp:389
 msgid "Join paths at selected nodes with new segment"
 msgstr "Láncok összekapcsolása új szakasszal a kijelölt csomópontoknál"
 
-#: src/toolbox.cpp:391
+#: src/toolbox.cpp:392
 msgid "Split path between two non-endpoint nodes"
 msgstr "Lánc elvágása szakasztörléssel két, nem végponti csomópont közt"
 
-#: src/toolbox.cpp:394
+#: src/toolbox.cpp:395
 msgid "Break path at selected nodes"
 msgstr "Lánc elvágása a kijelölt csomópontoknál"
 
-#: src/toolbox.cpp:399
+#: src/toolbox.cpp:400
 msgid "Make selected nodes corner"
 msgstr "A kijelölt csomópontok csúccsá tétele"
 
-#: src/toolbox.cpp:402
+#: src/toolbox.cpp:403
 msgid "Make selected nodes smooth"
 msgstr "A kijelölt csomópontok ívessé tétele"
 
-#: src/toolbox.cpp:405
+#: src/toolbox.cpp:406
 msgid "Make selected nodes symmetric"
 msgstr "A kijelölt csomópontok szimmetrikussá tétele"
 
-#: src/toolbox.cpp:410
+#: src/toolbox.cpp:411
 msgid "Make selected segments lines"
 msgstr "A kijelölt szakaszok egyenesekké alakítása"
 
-#: src/toolbox.cpp:413
+#: src/toolbox.cpp:414
 msgid "Make selected segments curves"
 msgstr "A kijelölt szakaszok görbékké alakítása"
 
-#: src/toolbox.cpp:1088
+#: src/toolbox.cpp:1093
 msgid "Corners:"
 msgstr "Csúcsok:"
 
-#: src/toolbox.cpp:1088
+#: src/toolbox.cpp:1093
 msgid "Number of corners of a polygon or star"
 msgstr "A sokszög illetve csillag csúcsainak száma"
 
-#: src/toolbox.cpp:1101
+#: src/toolbox.cpp:1106
 msgid "Polygon"
 msgstr "Sokszög"
 
-#: src/toolbox.cpp:1108
+#: src/toolbox.cpp:1113
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr "Csillag helyett (1 vezérlõelemmel rendelkezõ) szabályos sokszög"
 
-#: src/toolbox.cpp:1118
+#: src/toolbox.cpp:1123
 msgid "Spoke ratio:"
 msgstr "Ágarány:"
 
@@ -3146,23 +3142,23 @@ msgstr "Ágarány:"
 # Base radius is the same for closest handle.
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
-#: src/toolbox.cpp:1121
+#: src/toolbox.cpp:1126
 msgid "Base radius to tip radius ratio"
 msgstr "Az alapponti és a csúcsponti sugár aránya"
 
-#: src/toolbox.cpp:1136
+#: src/toolbox.cpp:1141
 msgid "Roundedness:"
 msgstr "Lekerekítettség:"
 
-#: src/toolbox.cpp:1136
+#: src/toolbox.cpp:1141
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr "Mennyire lekerekítettek a sarkok (0: hegyesek)"
 
-#: src/toolbox.cpp:1149 src/toolbox.cpp:1662 src/toolbox.cpp:1791
+#: src/toolbox.cpp:1154 src/toolbox.cpp:1667 src/toolbox.cpp:1796
 msgid "Defaults"
 msgstr "Alapértelmezések"
 
-#: src/toolbox.cpp:1152 src/toolbox.cpp:1663 src/toolbox.cpp:1792
+#: src/toolbox.cpp:1157 src/toolbox.cpp:1668 src/toolbox.cpp:1797
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -3171,116 +3167,116 @@ msgstr ""
 "alapértelmezések módosítása az Inkscape-beállítások > Eszközök funkcióval "
 "lehetséges)"
 
-#: src/toolbox.cpp:1387
+#: src/toolbox.cpp:1392
 msgid "Rx:"
 msgstr "Rx:"
 
-#: src/toolbox.cpp:1387
+#: src/toolbox.cpp:1392
 msgid "Horizontal radius of rounded corner"
 msgstr "A lekerekített csúcs vízszintes sugara"
 
-#: src/toolbox.cpp:1397
+#: src/toolbox.cpp:1402
 msgid "Ry:"
 msgstr "Ry:"
 
-#: src/toolbox.cpp:1397
+#: src/toolbox.cpp:1402
 msgid "Vertical radius of rounded corner"
 msgstr "A lekerekített csúcs függõleges sugara"
 
-#: src/toolbox.cpp:1413
+#: src/toolbox.cpp:1418
 msgid "Not rounded"
 msgstr "Nem lekerekített"
 
-#: src/toolbox.cpp:1414
+#: src/toolbox.cpp:1419
 msgid "Make corners sharp"
 msgstr "A csúcsok szögletessé tétele"
 
-#: src/toolbox.cpp:1631
+#: src/toolbox.cpp:1636
 msgid "Turns:"
 msgstr "Fordulatok:"
 
-#: src/toolbox.cpp:1631
+#: src/toolbox.cpp:1636
 msgid "Number of revolutions"
 msgstr "A körbefordulások száma"
 
-#: src/toolbox.cpp:1641
+#: src/toolbox.cpp:1646
 msgid "Divergence:"
 msgstr "Tágulás:"
 
-#: src/toolbox.cpp:1641
+#: src/toolbox.cpp:1646
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr ""
 "Mennyivel sûrûbbek illetve ritkábbak a külsõ fordulatok; 1 = egyenletes"
 
-#: src/toolbox.cpp:1651
+#: src/toolbox.cpp:1656
 msgid "Inner radius:"
 msgstr "Belsõ sugár:"
 
-#: src/toolbox.cpp:1651
+#: src/toolbox.cpp:1656
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "A legbelsõ fordulat sugara (a spirál méretéhez viszonyítva)"
 
-#: src/toolbox.cpp:1748
+#: src/toolbox.cpp:1753
 msgid "The width of the calligraphic pen"
 msgstr "A mûvészi toll szélessége"
 
-#: src/toolbox.cpp:1758
+#: src/toolbox.cpp:1763
 msgid "Angle:"
 msgstr "Szög:"
 
-#: src/toolbox.cpp:1758
+#: src/toolbox.cpp:1763
 msgid "The angle of the calligraphic pen (in degrees)"
 msgstr "A mûvészi toll szöge (fokban)"
 
-#: src/toolbox.cpp:1768
+#: src/toolbox.cpp:1773
 msgid "Mass:"
 msgstr "Tömeg:"
 
-#: src/toolbox.cpp:1768
+#: src/toolbox.cpp:1773
 msgid "How much inertia affects the movement of the pen"
 msgstr "Mekkora tehetetlenség hat a toll mozgására"
 
 #. TRANSLATORS: "drag" means "resistance" here
-#: src/toolbox.cpp:1779
+#: src/toolbox.cpp:1784
 msgid "Drag:"
 msgstr "Ellenállás:"
 
-#: src/toolbox.cpp:1779
+#: src/toolbox.cpp:1784
 msgid "How much resistance affects the movement of the pen"
 msgstr "Mekkora ellenállás hat a toll mozgására"
 
-#: src/toolbox.cpp:2091
+#: src/toolbox.cpp:2096
 msgid "Start:"
 msgstr "Kezdet:"
 
-#: src/toolbox.cpp:2091
+#: src/toolbox.cpp:2096
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "Az ellipszisív kezdõpontjának szöge a vízszintestõl számítva (fokban)"
 
-#: src/toolbox.cpp:2101
+#: src/toolbox.cpp:2106
 msgid "End:"
 msgstr "Vég:"
 
-#: src/toolbox.cpp:2101
+#: src/toolbox.cpp:2106
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr "Az ellipszisív végpontjának szöge a vízszintestõl számítva (fokban)"
 
-#: src/toolbox.cpp:2112
+#: src/toolbox.cpp:2117
 msgid "Open arc"
 msgstr "Nyitott ellipszisív"
 
-#: src/toolbox.cpp:2113
+#: src/toolbox.cpp:2118
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 "Váltás ellipszisív (nem lezárt alakzat) és -cikk (lezárt alakzat két "
 "sugárral) közt"
 
-#: src/toolbox.cpp:2140
+#: src/toolbox.cpp:2145
 msgid "Make whole"
 msgstr "Kiegészítés"
 
-#: src/toolbox.cpp:2141
+#: src/toolbox.cpp:2146
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Az alakzat teljes ellipszissé tétele (hogy ne ív illetve cikk legyen)"
 
@@ -4543,6 +4539,9 @@ msgstr "Attribútum"
 #: src/widgets/sp-xmlview-attr-list.cpp:59
 msgid "Value"
 msgstr "Érték"
+
+#~ msgid "License:"
+#~ msgstr "Licenc:"
 
 #~ msgid "_Menu"
 #~ msgstr "_Menü"

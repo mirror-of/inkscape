@@ -3,13 +3,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-29 19:18+0200\n"
+"POT-Creation-Date: 2004-07-03 00:24+0200\n"
 "PO-Revision-Date: 2004-06-30 09:24+0200\n"
 "Last-Translator: Lucas Vieites <lucas@asixinformatica.com>\n"
 "Language-Team: Spanish/Spain <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: inkscape.desktop.in.h:1
 msgid "Inkscape"
@@ -377,7 +377,7 @@ msgstr "Unidades:"
 #: src/dialogs/desktop-properties.cpp:810 src/dialogs/export.cpp:321
 #: src/dialogs/export.cpp:356 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1378
-#: src/toolbox.cpp:1748
+#: src/toolbox.cpp:1753
 msgid "Width:"
 msgstr "Ancho:"
 
@@ -395,15 +395,16 @@ msgstr "Alto:"
 msgid "Metadata"
 msgstr "Metadatos"
 
-#: src/dialogs/desktop-properties.cpp:884
-msgid "License:"
-msgstr "Licencia:"
+#. this uses an element
+#: src/dialogs/desktop-properties.cpp:884 src/dialogs/rdf.cpp:168
+msgid "License"
+msgstr "Licencia"
 
 #: src/dialogs/desktop-properties.cpp:906
 msgid "Proprietary"
 msgstr "Propietaria"
 
-#: src/dialogs/desktop-properties.cpp:1379
+#: src/dialogs/desktop-properties.cpp:1380
 msgid "Close"
 msgstr "Cerrar"
 
@@ -1521,44 +1522,39 @@ msgstr "A mano alzada y pluma"
 msgid "Calligraphic line"
 msgstr "L�nea caligr�fica"
 
-#: src/dialogs/rdf.cpp:149
+#: src/dialogs/rdf.cpp:153
 msgid "Title"
 msgstr "T�tulo"
 
-#: src/dialogs/rdf.cpp:150
+#: src/dialogs/rdf.cpp:154
 msgid "Date"
 msgstr "Fecha"
 
 #. these are "agent" tags actually...
-#: src/dialogs/rdf.cpp:153
+#: src/dialogs/rdf.cpp:157
 msgid "Creator"
 msgstr "Creador"
 
-#: src/dialogs/rdf.cpp:154
+#: src/dialogs/rdf.cpp:158
 msgid "Owner"
 msgstr "Propietario"
 
-#: src/dialogs/rdf.cpp:155
+#: src/dialogs/rdf.cpp:159
 msgid "Publisher"
 msgstr "Editor"
 
-#: src/dialogs/rdf.cpp:157
+#: src/dialogs/rdf.cpp:161
 msgid "Source"
 msgstr "Fuente"
 
-#: src/dialogs/rdf.cpp:158
+#: src/dialogs/rdf.cpp:162
 msgid "Keywords"
 msgstr "Palabras clave"
 
 #. this is a multi-line tag
-#: src/dialogs/rdf.cpp:161
+#: src/dialogs/rdf.cpp:165
 msgid "Description"
 msgstr "Descripci�n"
-
-#. this uses an element
-#: src/dialogs/rdf.cpp:164
-msgid "License"
-msgstr "Licencia"
 
 #: src/dialogs/stroke-style.cpp:1075 src/widgets/gradient-vector.cpp:262
 #: src/widgets/paint-selector.cpp:832
@@ -3032,89 +3028,89 @@ msgstr "Unicode: %c%c%c%c"
 msgid "Non-printable character"
 msgstr "Car�cter no imprimible"
 
-#: src/toolbox.cpp:379
+#: src/toolbox.cpp:380
 msgid "Insert new nodes into selected segments"
 msgstr "Insertar los nuevos nodos entre los segmentos seleccionados"
 
-#: src/toolbox.cpp:381
+#: src/toolbox.cpp:382
 msgid "Delete selected nodes"
 msgstr "Suprimir los nodos seleccionados"
 
-#: src/toolbox.cpp:386
+#: src/toolbox.cpp:387
 msgid "Join paths at selected nodes"
 msgstr "Unir los trazos en los nodos seleccionados."
 
-#: src/toolbox.cpp:388
+#: src/toolbox.cpp:389
 msgid "Join paths at selected nodes with new segment"
 msgstr "Unir los trazos en los nodos seleccionados con un segmento nuevo"
 
-#: src/toolbox.cpp:391
+#: src/toolbox.cpp:392
 msgid "Split path between two non-endpoint nodes"
 msgstr "Separar el trazo entre dos nodos."
 
-#: src/toolbox.cpp:394
+#: src/toolbox.cpp:395
 msgid "Break path at selected nodes"
 msgstr "Romper el trazo en los nodos seleccionados"
 
-#: src/toolbox.cpp:399
+#: src/toolbox.cpp:400
 msgid "Make selected nodes corner"
 msgstr "Convertir en esquina los nodos seleccionados"
 
-#: src/toolbox.cpp:402
+#: src/toolbox.cpp:403
 msgid "Make selected nodes smooth"
 msgstr "Suavizar los nodos seleccionados"
 
-#: src/toolbox.cpp:405
+#: src/toolbox.cpp:406
 msgid "Make selected nodes symmetric"
 msgstr "Hacer sim�tricos los nodos seleccionados."
 
-#: src/toolbox.cpp:410
+#: src/toolbox.cpp:411
 msgid "Make selected segments lines"
 msgstr "Convertir los segmentos seleccionados en l�neas"
 
-#: src/toolbox.cpp:413
+#: src/toolbox.cpp:414
 msgid "Make selected segments curves"
 msgstr "Convertir los segmentos seleccionados a curvas"
 
-#: src/toolbox.cpp:1088
+#: src/toolbox.cpp:1093
 msgid "Corners:"
 msgstr "Esquinas:"
 
-#: src/toolbox.cpp:1088
+#: src/toolbox.cpp:1093
 msgid "Number of corners of a polygon or star"
 msgstr "N�mero de esquinas de un pol�gono o estrella"
 
-#: src/toolbox.cpp:1101
+#: src/toolbox.cpp:1106
 msgid "Polygon"
 msgstr "Pol�gono"
 
-#: src/toolbox.cpp:1108
+#: src/toolbox.cpp:1113
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr "Crear pol�gonos (con un manejador) en vez de estrellas"
 
-#: src/toolbox.cpp:1118
+#: src/toolbox.cpp:1123
 msgid "Spoke ratio:"
 msgstr "longitud del radio:"
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
-#: src/toolbox.cpp:1121
+#: src/toolbox.cpp:1126
 msgid "Base radius to tip radius ratio"
 msgstr "Relaci�n entre el radio base y el radio de la punta"
 
-#: src/toolbox.cpp:1136
+#: src/toolbox.cpp:1141
 msgid "Roundedness:"
 msgstr "Redondez:"
 
-#: src/toolbox.cpp:1136
+#: src/toolbox.cpp:1141
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr "Lo redondos que son las esquinas (0 para agudo)"
 
-#: src/toolbox.cpp:1149 src/toolbox.cpp:1662 src/toolbox.cpp:1791
+#: src/toolbox.cpp:1154 src/toolbox.cpp:1667 src/toolbox.cpp:1796
 msgid "Defaults"
 msgstr "Predeterminados"
 
-#: src/toolbox.cpp:1152 src/toolbox.cpp:1663 src/toolbox.cpp:1792
+#: src/toolbox.cpp:1157 src/toolbox.cpp:1668 src/toolbox.cpp:1797
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -3122,116 +3118,116 @@ msgstr ""
 "Reiniciar los par�metros de las formas a predeterminados (use �Preferencias "
 "> Herramientas� para cambiar los predeterminados)"
 
-#: src/toolbox.cpp:1387
+#: src/toolbox.cpp:1392
 msgid "Rx:"
 msgstr "Rx:"
 
-#: src/toolbox.cpp:1387
+#: src/toolbox.cpp:1392
 msgid "Horizontal radius of rounded corner"
 msgstr "Radio horizontal de la esquina redondeada"
 
-#: src/toolbox.cpp:1397
+#: src/toolbox.cpp:1402
 msgid "Ry:"
 msgstr "Ry:"
 
-#: src/toolbox.cpp:1397
+#: src/toolbox.cpp:1402
 msgid "Vertical radius of rounded corner"
 msgstr "Radio vertical de la esquina redondeada"
 
-#: src/toolbox.cpp:1413
+#: src/toolbox.cpp:1418
 msgid "Not rounded"
 msgstr "No redondeado"
 
-#: src/toolbox.cpp:1414
+#: src/toolbox.cpp:1419
 msgid "Make corners sharp"
 msgstr "Afilar las esquinas"
 
-#: src/toolbox.cpp:1631
+#: src/toolbox.cpp:1636
 msgid "Turns:"
 msgstr "Vueltas:"
 
-#: src/toolbox.cpp:1631
+#: src/toolbox.cpp:1636
 msgid "Number of revolutions"
 msgstr "N�mero de revoluciones"
 
-#: src/toolbox.cpp:1641
+#: src/toolbox.cpp:1646
 msgid "Divergence:"
 msgstr "Divergencia:"
 
-#: src/toolbox.cpp:1641
+#: src/toolbox.cpp:1646
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr ""
 "Cu�nto m�s densas/difusas son las revoluciones exteriores; 1 = uniforme"
 
-#: src/toolbox.cpp:1651
+#: src/toolbox.cpp:1656
 msgid "Inner radius:"
 msgstr "Radio interior:"
 
-#: src/toolbox.cpp:1651
+#: src/toolbox.cpp:1656
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr "Radio de la revoluci�n m�s interior (relativa al tama�o de la espiral)"
 
-#: src/toolbox.cpp:1748
+#: src/toolbox.cpp:1753
 msgid "The width of the calligraphic pen"
 msgstr "El ancho de la pluma caligr�fica"
 
-#: src/toolbox.cpp:1758
+#: src/toolbox.cpp:1763
 msgid "Angle:"
 msgstr "�ngulo:"
 
-#: src/toolbox.cpp:1758
+#: src/toolbox.cpp:1763
 msgid "The angle of the calligraphic pen (in degrees)"
 msgstr "El �ngulo de la pluma caligr�fica (en grados)"
 
-#: src/toolbox.cpp:1768
+#: src/toolbox.cpp:1773
 msgid "Mass:"
 msgstr "Masa:"
 
-#: src/toolbox.cpp:1768
+#: src/toolbox.cpp:1773
 msgid "How much inertia affects the movement of the pen"
 msgstr "Cu�nta inercia afecta al movimiento de la pluma"
 
 #. TRANSLATORS: "drag" means "resistance" here
-#: src/toolbox.cpp:1779
+#: src/toolbox.cpp:1784
 msgid "Drag:"
 msgstr "Resistencia:"
 
-#: src/toolbox.cpp:1779
+#: src/toolbox.cpp:1784
 msgid "How much resistance affects the movement of the pen"
 msgstr "Cu�nta resistencia afecta al movimiento de la pluma"
 
-#: src/toolbox.cpp:2091
+#: src/toolbox.cpp:2096
 msgid "Start:"
 msgstr "Inicio:"
 
-#: src/toolbox.cpp:2091
+#: src/toolbox.cpp:2096
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "El �ngulo (en grados) desde la horizontal al punto inicial del arco"
 
-#: src/toolbox.cpp:2101
+#: src/toolbox.cpp:2106
 msgid "End:"
 msgstr "Fin:"
 
-#: src/toolbox.cpp:2101
+#: src/toolbox.cpp:2106
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr ""
 "El �ngulo (en grados) desde la horizontal hasta el punto final del arco"
 
-#: src/toolbox.cpp:2112
+#: src/toolbox.cpp:2117
 msgid "Open arc"
 msgstr "Arco abierto"
 
-#: src/toolbox.cpp:2113
+#: src/toolbox.cpp:2118
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 "Cambiar entre arco (forma abierta) y segmento (forma cerrada con dos radios)"
 
-#: src/toolbox.cpp:2140
+#: src/toolbox.cpp:2145
 msgid "Make whole"
 msgstr "Completar"
 
-#: src/toolbox.cpp:2141
+#: src/toolbox.cpp:2146
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Hacer una elipse completa, no un arco o segmento"
 
@@ -4476,6 +4472,9 @@ msgstr "Atributo"
 msgid "Value"
 msgstr "Valor"
 
+#~ msgid "License:"
+#~ msgstr "Licencia:"
+
 #~ msgid "_Menu"
 #~ msgstr "_Menú"
 
@@ -4511,9 +4510,9 @@ msgstr "Valor"
 #~ "as they did before the move.  Shift+drag selects the alternative "
 #~ "behaviour."
 #~ msgstr ""
-#~ "La acciÃ³n predeterminada es ajustar los objetos para que tengan el mismo "
-#~ "offset de la rejilla que tenÃ­an antes de moverlos. MayÃºs+arrastrar "
-#~ "selecciona el comportamiento alternativo."
+#~ "La acciÃ³n predeterminada es ajustar los objetos para que tengan el "
+#~ "mismo offset de la rejilla que tenÃ­an antes de moverlos. MayÃºs"
+#~ "+arrastrar selecciona el comportamiento alternativo."
 
 #~ msgid "Sharpness:"
 #~ msgstr "Agudeza:"
@@ -4531,10 +4530,14 @@ msgstr "Valor"
 #~ msgstr "Zoom an_terior"
 
 #~ msgid "Horizontal lines"
-#~ msgstr "LÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ­neas horizontales"
+#~ msgstr ""
+#~ "LÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ­neas "
+#~ "horizontales"
 
 #~ msgid "Vertical lines"
-#~ msgstr "LÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ­neas verticales"
+#~ msgstr ""
+#~ "LÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ­neas "
+#~ "verticales"
 
 #~ msgid "Userspace unit"
 #~ msgstr "Unidad del espacio de usuario"
@@ -4561,17 +4564,20 @@ msgstr "Valor"
 #~ msgid "Click to pick, click and drag to pick the average color of an area."
 #~ msgstr ""
 #~ "Haga clic para seleccionar un color, clic y arrastre para seleccionar la "
-#~ "media de color de un ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡rea."
+#~ "media de color de un "
+#~ "ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡rea."
 
 #~ msgid "Corner radius to half-width ratio"
 #~ msgstr ""
-#~ "Radio de la esquina a relaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n de mitad "
-#~ "de ancho"
+#~ "Radio de la esquina a "
+#~ "relaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n "
+#~ "de mitad de ancho"
 
 #~ msgid "Corner radius to half-height ratio"
 #~ msgstr ""
-#~ "Radio de la esquina a relaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n de mitad "
-#~ "de alto"
+#~ "Radio de la esquina a "
+#~ "relaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n "
+#~ "de mitad de alto"
 
 #, fuzzy
 #~ msgid "_New Window"
@@ -4609,7 +4615,9 @@ msgstr "Valor"
 
 #~ msgid "Autoraise Dialogs"
 #~ msgstr ""
-#~ "Mostrar diÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡logos de "
+#~ "Mostrar "
+#~ "diÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡logos "
+#~ "de "
 #~ "confirmaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n"
 
 #~ msgid "Quit"
@@ -4622,7 +4630,10 @@ msgstr "Valor"
 #~ msgstr "Cortar el trazo del fondo en pedazos"
 
 #~ msgid "Combine multiple paths"
-#~ msgstr "Combinar mÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂºltiples trazos"
+#~ msgstr ""
+#~ "Combinar "
+#~ "mÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂºltiples "
+#~ "trazos"
 
 #~ msgid "Next zoom"
 #~ msgstr "Zoom siguiente"
@@ -4645,12 +4656,16 @@ msgstr "Valor"
 
 #~ msgid "Text editing and font settings"
 #~ msgstr ""
-#~ "Propiedades de ediciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n de texto y "
+#~ "Propiedades de "
+#~ "ediciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n "
+#~ "de texto y "
 #~ "tipografÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ­a"
 
 #, fuzzy
 #~ msgid "Display help for Keys and Mouse"
-#~ msgstr "_Teclas y ratÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n"
+#~ msgstr ""
+#~ "_Teclas y "
+#~ "ratÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n"
 
 #, fuzzy
 #~ msgid "Tutorial for the Advanced"
@@ -4670,8 +4685,9 @@ msgstr "Valor"
 
 #~ msgid "Use the extension of the file to choose a filetype"
 #~ msgstr ""
-#~ "Utilizar la extensiÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n del archivo para "
-#~ "elegir el tipo de archivo"
+#~ "Utilizar la "
+#~ "extensiÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n "
+#~ "del archivo para elegir el tipo de archivo"
 
 #~ msgid "Roundness ratio for x:"
 #~ msgstr "Radio de curvatura para x:"
@@ -4680,7 +4696,9 @@ msgstr "Valor"
 #~ msgstr "Radio de curvatura para y:"
 
 #~ msgid "Visual transformation"
-#~ msgstr "TransformaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n visual"
+#~ msgstr ""
+#~ "TransformaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n "
+#~ "visual"
 
 #~ msgid "Show content"
 #~ msgstr "Mostrar contenido"
@@ -4716,7 +4734,9 @@ msgstr "Valor"
 #~ msgstr "Unidades de gradiente"
 
 #~ msgid "gradientSpread"
-#~ msgstr "SeparaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n de gradiente"
+#~ msgstr ""
+#~ "SeparaciÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ³n "
+#~ "de gradiente"
 
 #~ msgid "nonzero"
 #~ msgstr "no cero"
@@ -4730,8 +4750,11 @@ msgstr "Valor"
 #~ "neither load nor save preferences\n"
 #~ msgstr ""
 #~ "%s no es un archivo normal.\n"
-#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
-#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias\n"
+#~ "Aunque Inkscape se "
+#~ "ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, "
+#~ "no\n"
+#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ "
+#~ "cargar ni guardar sus preferencias\n"
 
 #~ msgid ""
 #~ "%s either is not valid xml file or\n"
@@ -4740,10 +4763,14 @@ msgstr "Valor"
 #~ "are neither able to load nor save\n"
 #~ "preferences."
 #~ msgstr ""
-#~ "%s o no es archivo xml vÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡lido\n"
+#~ "%s o no es archivo xml "
+#~ "vÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡lido\n"
 #~ "o no tiene permisos para leerlo.\n"
-#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
-#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias."
+#~ "Aunque Inkscape se "
+#~ "ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, "
+#~ "no\n"
+#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ "
+#~ "cargar ni guardar sus preferencias."
 
 #~ msgid ""
 #~ "%s is not valid inkscape preferences file.\n"
@@ -4753,8 +4780,11 @@ msgstr "Valor"
 #~ msgstr ""
 #~ "%s no es un archivo de preferencias "
 #~ "vÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡lido.\n"
-#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
-#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias."
+#~ "Aunque Inkscape se "
+#~ "ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, "
+#~ "no\n"
+#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ "
+#~ "cargar ni guardar sus preferencias."
 
 #~ msgid ""
 #~ "Cannot create directory %s.\n"
@@ -4763,8 +4793,11 @@ msgstr "Valor"
 #~ "%s."
 #~ msgstr ""
 #~ "No se pudo crear el directorio %s.\n"
-#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
-#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar %s."
+#~ "Aunque Inkscape se "
+#~ "ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, "
+#~ "no\n"
+#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ "
+#~ "cargar ni guardar %s."
 
 #~ msgid ""
 #~ "%s is not a valid directory.\n"
@@ -4772,9 +4805,13 @@ msgstr "Valor"
 #~ "are neither able to load nor save\n"
 #~ "preferences."
 #~ msgstr ""
-#~ "%s no es un directorio vÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡lido.\n"
-#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
-#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias."
+#~ "%s no es un directorio "
+#~ "vÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡lido.\n"
+#~ "Aunque Inkscape se "
+#~ "ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, "
+#~ "no\n"
+#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ "
+#~ "cargar ni guardar sus preferencias."
 
 #~ msgid ""
 #~ "Cannot create file %s.\n"
@@ -4783,8 +4820,11 @@ msgstr "Valor"
 #~ "preferences."
 #~ msgstr ""
 #~ "No se pudo crear el fichero %s.\n"
-#~ "Aunque Inkscape seejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
-#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias."
+#~ "Aunque Inkscape "
+#~ "seejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, "
+#~ "no\n"
+#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ "
+#~ "cargar ni guardar sus preferencias."
 
 #~ msgid ""
 #~ "Cannot write file %s.\n"
@@ -4793,8 +4833,11 @@ msgstr "Valor"
 #~ "preferences."
 #~ msgstr ""
 #~ "No se pudo escribir el fichero %s.\n"
-#~ "Aunque Inkscape se ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, no\n"
-#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ cargar ni guardar sus preferencias."
+#~ "Aunque Inkscape se "
+#~ "ejecutarÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡, "
+#~ "no\n"
+#~ "podrÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¡ "
+#~ "cargar ni guardar sus preferencias."
 
 #~ msgid "Make sides flat"
 #~ msgstr "Aplanar lados"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.39cvs20040603\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-29 19:18+0200\n"
+"POT-Creation-Date: 2004-07-03 00:24+0200\n"
 "PO-Revision-Date: 2004-06-03 19:37+0200\n"
 "Last-Translator: Александар Урошевић <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -388,7 +388,7 @@ msgstr "Јединица мере:"
 #: src/dialogs/desktop-properties.cpp:810 src/dialogs/export.cpp:321
 #: src/dialogs/export.cpp:356 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1378
-#: src/toolbox.cpp:1748
+#: src/toolbox.cpp:1753
 msgid "Width:"
 msgstr "Ширина:"
 
@@ -406,15 +406,16 @@ msgstr "Висина:"
 msgid "Metadata"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:884
-msgid "License:"
+#. this uses an element
+#: src/dialogs/desktop-properties.cpp:884 src/dialogs/rdf.cpp:168
+msgid "License"
 msgstr ""
 
 #: src/dialogs/desktop-properties.cpp:906
 msgid "Proprietary"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:1379
+#: src/dialogs/desktop-properties.cpp:1380
 msgid "Close"
 msgstr "Затвори"
 
@@ -1544,48 +1545,43 @@ msgstr "Слободна рука и оловка"
 msgid "Calligraphic line"
 msgstr "Калиграфска линија"
 
-#: src/dialogs/rdf.cpp:149
+#: src/dialogs/rdf.cpp:153
 #, fuzzy
 msgid "Title"
 msgstr "Наслов:"
 
-#: src/dialogs/rdf.cpp:150
+#: src/dialogs/rdf.cpp:154
 #, fuzzy
 msgid "Date"
 msgstr "У_баци"
 
 #. these are "agent" tags actually...
-#: src/dialogs/rdf.cpp:153
+#: src/dialogs/rdf.cpp:157
 #, fuzzy
 msgid "Creator"
 msgstr "Направи"
 
-#: src/dialogs/rdf.cpp:154
+#: src/dialogs/rdf.cpp:158
 msgid "Owner"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:155
+#: src/dialogs/rdf.cpp:159
 msgid "Publisher"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:157
+#: src/dialogs/rdf.cpp:161
 msgid "Source"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:158
+#: src/dialogs/rdf.cpp:162
 msgid "Keywords"
 msgstr ""
 
 #. this is a multi-line tag
-#: src/dialogs/rdf.cpp:161
+#: src/dialogs/rdf.cpp:165
 #, fuzzy
 msgid "Description"
 msgstr "Избор"
-
-#. this uses an element
-#: src/dialogs/rdf.cpp:164
-msgid "License"
-msgstr ""
 
 #: src/dialogs/stroke-style.cpp:1075 src/widgets/gradient-vector.cpp:262
 #: src/widgets/paint-selector.cpp:832
@@ -3077,91 +3073,91 @@ msgstr "Уникод: %c%c%c%c"
 msgid "Non-printable character"
 msgstr "Знакови који се не штампају"
 
-#: src/toolbox.cpp:379
+#: src/toolbox.cpp:380
 msgid "Insert new nodes into selected segments"
 msgstr "Убаци нове чворове у изабране делове"
 
-#: src/toolbox.cpp:381
+#: src/toolbox.cpp:382
 msgid "Delete selected nodes"
 msgstr "Обриши изабране чворове"
 
-#: src/toolbox.cpp:386
+#: src/toolbox.cpp:387
 msgid "Join paths at selected nodes"
 msgstr "Споји линије на изабраним чворовима"
 
-#: src/toolbox.cpp:388
+#: src/toolbox.cpp:389
 msgid "Join paths at selected nodes with new segment"
 msgstr "Споји линије новим деловима на изабраним чворовима"
 
-#: src/toolbox.cpp:391
+#: src/toolbox.cpp:392
 msgid "Split path between two non-endpoint nodes"
 msgstr "Подели линију између два незавршавајућа чвора"
 
-#: src/toolbox.cpp:394
+#: src/toolbox.cpp:395
 msgid "Break path at selected nodes"
 msgstr "Раздвој линију на изабраним чворовима"
 
-#: src/toolbox.cpp:399
+#: src/toolbox.cpp:400
 msgid "Make selected nodes corner"
 msgstr "Направи ћошкове од изабраних чворова"
 
 # глатка крива се прецизно математички дефинише, и управо делује као „глатка“
-#: src/toolbox.cpp:402
+#: src/toolbox.cpp:403
 msgid "Make selected nodes smooth"
 msgstr "Направи глатку криву од изабраних чворова"
 
-#: src/toolbox.cpp:405
+#: src/toolbox.cpp:406
 msgid "Make selected nodes symmetric"
 msgstr "Направи симетричну глатку криву од изабраних чворова"
 
-#: src/toolbox.cpp:410
+#: src/toolbox.cpp:411
 msgid "Make selected segments lines"
 msgstr "Направи линије од изабраних делова"
 
-#: src/toolbox.cpp:413
+#: src/toolbox.cpp:414
 msgid "Make selected segments curves"
 msgstr "Направи криву од изабраних делова"
 
-#: src/toolbox.cpp:1088
+#: src/toolbox.cpp:1093
 msgid "Corners:"
 msgstr "Углови:"
 
-#: src/toolbox.cpp:1088
+#: src/toolbox.cpp:1093
 msgid "Number of corners of a polygon or star"
 msgstr "Број углова полигона или звезде"
 
-#: src/toolbox.cpp:1101
+#: src/toolbox.cpp:1106
 msgid "Polygon"
 msgstr "Полигон"
 
-#: src/toolbox.cpp:1108
+#: src/toolbox.cpp:1113
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr "Нормалан полигон (са једном ручком) уместо звезде"
 
-#: src/toolbox.cpp:1118
+#: src/toolbox.cpp:1123
 #, fuzzy
 msgid "Spoke ratio:"
 msgstr "Памћење трансформација"
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
-#: src/toolbox.cpp:1121
+#: src/toolbox.cpp:1126
 msgid "Base radius to tip radius ratio"
 msgstr "Однос основног полупречника до ручке"
 
-#: src/toolbox.cpp:1136
+#: src/toolbox.cpp:1141
 msgid "Roundedness:"
 msgstr ""
 
-#: src/toolbox.cpp:1136
+#: src/toolbox.cpp:1141
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr ""
 
-#: src/toolbox.cpp:1149 src/toolbox.cpp:1662 src/toolbox.cpp:1791
+#: src/toolbox.cpp:1154 src/toolbox.cpp:1667 src/toolbox.cpp:1796
 msgid "Defaults"
 msgstr "Подразумевано"
 
-#: src/toolbox.cpp:1152 src/toolbox.cpp:1663 src/toolbox.cpp:1792
+#: src/toolbox.cpp:1157 src/toolbox.cpp:1668 src/toolbox.cpp:1797
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
@@ -3169,115 +3165,115 @@ msgstr ""
 "Враћање параметара облика на подразумеване вредности (користите ИнкСкејп "
 "Подешавања > Алати за промене подразумевано)"
 
-#: src/toolbox.cpp:1387
+#: src/toolbox.cpp:1392
 msgid "Rx:"
 msgstr "Rx:"
 
-#: src/toolbox.cpp:1387
+#: src/toolbox.cpp:1392
 msgid "Horizontal radius of rounded corner"
 msgstr "Водоравни угао правоугаоника са заобљеним угловима"
 
-#: src/toolbox.cpp:1397
+#: src/toolbox.cpp:1402
 msgid "Ry:"
 msgstr "Ry:"
 
-#: src/toolbox.cpp:1397
+#: src/toolbox.cpp:1402
 msgid "Vertical radius of rounded corner"
 msgstr "Усправни угао правоугаоника са заобљеним угловима"
 
-#: src/toolbox.cpp:1413
+#: src/toolbox.cpp:1418
 msgid "Not rounded"
 msgstr "Није раобљено"
 
-#: src/toolbox.cpp:1414
+#: src/toolbox.cpp:1419
 msgid "Make corners sharp"
 msgstr "Направи угласту линију"
 
-#: src/toolbox.cpp:1631
+#: src/toolbox.cpp:1636
 msgid "Turns:"
 msgstr "Трансформација:"
 
-#: src/toolbox.cpp:1631
+#: src/toolbox.cpp:1636
 msgid "Number of revolutions"
 msgstr "Број револуција"
 
-#: src/toolbox.cpp:1641
+#: src/toolbox.cpp:1646
 msgid "Divergence:"
 msgstr "Одступање:"
 
-#: src/toolbox.cpp:1641
+#: src/toolbox.cpp:1646
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr "Колики је скупљач/растављач изван револуције; 1 = непроменљив"
 
-#: src/toolbox.cpp:1651
+#: src/toolbox.cpp:1656
 msgid "Inner radius:"
 msgstr "Унутрашњи полупречник:"
 
-#: src/toolbox.cpp:1651
+#: src/toolbox.cpp:1656
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr ""
 "Полупречник најмање унутрашње револуције (односи се на величину спирале)"
 
-#: src/toolbox.cpp:1748
+#: src/toolbox.cpp:1753
 msgid "The width of the calligraphic pen"
 msgstr "Ширина калиграфске оловке"
 
-#: src/toolbox.cpp:1758
+#: src/toolbox.cpp:1763
 msgid "Angle:"
 msgstr "Угао:"
 
-#: src/toolbox.cpp:1758
+#: src/toolbox.cpp:1763
 msgid "The angle of the calligraphic pen (in degrees)"
 msgstr "Угао калиграфске оловке (у степенима)"
 
-#: src/toolbox.cpp:1768
+#: src/toolbox.cpp:1773
 msgid "Mass:"
 msgstr "Маса:"
 
-#: src/toolbox.cpp:1768
+#: src/toolbox.cpp:1773
 msgid "How much inertia affects the movement of the pen"
 msgstr "Колико се инерција одражава на потез оловке"
 
 #. TRANSLATORS: "drag" means "resistance" here
-#: src/toolbox.cpp:1779
+#: src/toolbox.cpp:1784
 msgid "Drag:"
 msgstr "Повлачење:"
 
-#: src/toolbox.cpp:1779
+#: src/toolbox.cpp:1784
 msgid "How much resistance affects the movement of the pen"
 msgstr "Колико се отпор одражава на потез оловке"
 
-#: src/toolbox.cpp:2091
+#: src/toolbox.cpp:2096
 msgid "Start:"
 msgstr "Почетак:"
 
-#: src/toolbox.cpp:2091
+#: src/toolbox.cpp:2096
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr "Угао (у степенима) од водоравне до лучне почетне тачке"
 
-#: src/toolbox.cpp:2101
+#: src/toolbox.cpp:2106
 msgid "End:"
 msgstr "Завршетак:"
 
-#: src/toolbox.cpp:2101
+#: src/toolbox.cpp:2106
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr "Угао (у степенима) од водоравне до лучне крајње тачке"
 
-#: src/toolbox.cpp:2112
+#: src/toolbox.cpp:2117
 msgid "Open arc"
 msgstr "Отворени лук"
 
-#: src/toolbox.cpp:2113
+#: src/toolbox.cpp:2118
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 "Промена између лука (отворене линије) и дела (затворена линија са два угла)"
 
-#: src/toolbox.cpp:2140
+#: src/toolbox.cpp:2145
 msgid "Make whole"
 msgstr "Употпуни"
 
-#: src/toolbox.cpp:2141
+#: src/toolbox.cpp:2146
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr "Затвори линију у елипсу, не као лук или део"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-29 19:18+0200\n"
+"POT-Creation-Date: 2004-07-03 00:24+0200\n"
 "PO-Revision-Date: 2003-07-28 23:20+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -387,7 +387,7 @@ msgstr "Unidades:"
 #: src/dialogs/desktop-properties.cpp:810 src/dialogs/export.cpp:321
 #: src/dialogs/export.cpp:356 src/dialogs/object-attributes.cpp:76
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1378
-#: src/toolbox.cpp:1748
+#: src/toolbox.cpp:1753
 msgid "Width:"
 msgstr "Largura:"
 
@@ -405,15 +405,17 @@ msgstr "Altura:"
 msgid "Metadata"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:884
-msgid "License:"
-msgstr ""
+#. this uses an element
+#: src/dialogs/desktop-properties.cpp:884 src/dialogs/rdf.cpp:168
+#, fuzzy
+msgid "License"
+msgstr "polegadas"
 
 #: src/dialogs/desktop-properties.cpp:906
 msgid "Proprietary"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:1379
+#: src/dialogs/desktop-properties.cpp:1380
 msgid "Close"
 msgstr "Fechar"
 
@@ -1530,50 +1532,44 @@ msgstr "Mão livre e caneta"
 msgid "Calligraphic line"
 msgstr "Linha caligráfica"
 
-#: src/dialogs/rdf.cpp:149
+#: src/dialogs/rdf.cpp:153
 #, fuzzy
 msgid "Title"
 msgstr "Título:"
 
-#: src/dialogs/rdf.cpp:150
+#: src/dialogs/rdf.cpp:154
 #, fuzzy
 msgid "Date"
 msgstr "Escrever texto"
 
 #. these are "agent" tags actually...
-#: src/dialogs/rdf.cpp:153
+#: src/dialogs/rdf.cpp:157
 #, fuzzy
 msgid "Creator"
 msgstr "Criar"
 
-#: src/dialogs/rdf.cpp:154
+#: src/dialogs/rdf.cpp:158
 #, fuzzy
 msgid "Owner"
 msgstr "Ordenar"
 
-#: src/dialogs/rdf.cpp:155
+#: src/dialogs/rdf.cpp:159
 msgid "Publisher"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:157
+#: src/dialogs/rdf.cpp:161
 msgid "Source"
 msgstr ""
 
-#: src/dialogs/rdf.cpp:158
+#: src/dialogs/rdf.cpp:162
 msgid "Keywords"
 msgstr ""
 
 #. this is a multi-line tag
-#: src/dialogs/rdf.cpp:161
+#: src/dialogs/rdf.cpp:165
 #, fuzzy
 msgid "Description"
 msgstr "Posição"
-
-#. this uses an element
-#: src/dialogs/rdf.cpp:164
-#, fuzzy
-msgid "License"
-msgstr "polegadas"
 
 #: src/dialogs/stroke-style.cpp:1075 src/widgets/gradient-vector.cpp:262
 #: src/widgets/paint-selector.cpp:832
@@ -3079,216 +3075,216 @@ msgstr ""
 msgid "Non-printable character"
 msgstr ""
 
-#: src/toolbox.cpp:379
+#: src/toolbox.cpp:380
 msgid "Insert new nodes into selected segments"
 msgstr "Inserir novos nós nos segmentos seleccionados"
 
-#: src/toolbox.cpp:381
+#: src/toolbox.cpp:382
 msgid "Delete selected nodes"
 msgstr "Apagar nós seleccionados"
 
-#: src/toolbox.cpp:386
+#: src/toolbox.cpp:387
 #, fuzzy
 msgid "Join paths at selected nodes"
 msgstr "Juntar linhas nos nós seleccionados"
 
-#: src/toolbox.cpp:388
+#: src/toolbox.cpp:389
 #, fuzzy
 msgid "Join paths at selected nodes with new segment"
 msgstr "Juntar linhas nos nós seleccionados"
 
-#: src/toolbox.cpp:391
+#: src/toolbox.cpp:392
 msgid "Split path between two non-endpoint nodes"
 msgstr ""
 
-#: src/toolbox.cpp:394
+#: src/toolbox.cpp:395
 #, fuzzy
 msgid "Break path at selected nodes"
 msgstr "Quebrar o nó seleccionado"
 
-#: src/toolbox.cpp:399
+#: src/toolbox.cpp:400
 msgid "Make selected nodes corner"
 msgstr "Converter nós seleccionados num canto"
 
-#: src/toolbox.cpp:402
+#: src/toolbox.cpp:403
 msgid "Make selected nodes smooth"
 msgstr "Suavizar os nós seleccionados"
 
-#: src/toolbox.cpp:405
+#: src/toolbox.cpp:406
 #, fuzzy
 msgid "Make selected nodes symmetric"
 msgstr "Suavizar os nós seleccionados"
 
-#: src/toolbox.cpp:410
+#: src/toolbox.cpp:411
 msgid "Make selected segments lines"
 msgstr "Converter segmentos seleccionados em linhas"
 
-#: src/toolbox.cpp:413
+#: src/toolbox.cpp:414
 msgid "Make selected segments curves"
 msgstr "Converter segmentos seleccionados em curvas"
 
-#: src/toolbox.cpp:1088
+#: src/toolbox.cpp:1093
 msgid "Corners:"
 msgstr "Cantos:"
 
-#: src/toolbox.cpp:1088
+#: src/toolbox.cpp:1093
 #, fuzzy
 msgid "Number of corners of a polygon or star"
 msgstr "Número de cantos:"
 
-#: src/toolbox.cpp:1101
+#: src/toolbox.cpp:1106
 msgid "Polygon"
 msgstr ""
 
-#: src/toolbox.cpp:1108
+#: src/toolbox.cpp:1113
 msgid "Regular polygon (with one handle) instead of a star"
 msgstr ""
 
-#: src/toolbox.cpp:1118
+#: src/toolbox.cpp:1123
 #, fuzzy
 msgid "Spoke ratio:"
 msgstr "Bloquear aspecto"
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
-#: src/toolbox.cpp:1121
+#: src/toolbox.cpp:1126
 msgid "Base radius to tip radius ratio"
 msgstr ""
 
-#: src/toolbox.cpp:1136
+#: src/toolbox.cpp:1141
 #, fuzzy
 msgid "Roundedness:"
 msgstr "Terminação arredondada"
 
-#: src/toolbox.cpp:1136
+#: src/toolbox.cpp:1141
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr ""
 
-#: src/toolbox.cpp:1149 src/toolbox.cpp:1662 src/toolbox.cpp:1791
+#: src/toolbox.cpp:1154 src/toolbox.cpp:1667 src/toolbox.cpp:1796
 msgid "Defaults"
 msgstr "Por Omissão"
 
-#: src/toolbox.cpp:1152 src/toolbox.cpp:1663 src/toolbox.cpp:1792
+#: src/toolbox.cpp:1157 src/toolbox.cpp:1668 src/toolbox.cpp:1797
 msgid ""
 "Reset shape parameters to defaults (use Inkscape Preferences > Tools to "
 "change defaults)"
 msgstr ""
 
-#: src/toolbox.cpp:1387
+#: src/toolbox.cpp:1392
 #, fuzzy
 msgid "Rx:"
 msgstr "x0:"
 
-#: src/toolbox.cpp:1387
+#: src/toolbox.cpp:1392
 #, fuzzy
 msgid "Horizontal radius of rounded corner"
 msgstr "Valor horizontal do centro"
 
-#: src/toolbox.cpp:1397
+#: src/toolbox.cpp:1402
 #, fuzzy
 msgid "Ry:"
 msgstr "y0:"
 
-#: src/toolbox.cpp:1397
+#: src/toolbox.cpp:1402
 msgid "Vertical radius of rounded corner"
 msgstr ""
 
-#: src/toolbox.cpp:1413
+#: src/toolbox.cpp:1418
 msgid "Not rounded"
 msgstr ""
 
-#: src/toolbox.cpp:1414
+#: src/toolbox.cpp:1419
 msgid "Make corners sharp"
 msgstr ""
 
-#: src/toolbox.cpp:1631
+#: src/toolbox.cpp:1636
 #, fuzzy
 msgid "Turns:"
 msgstr "Transformação:"
 
-#: src/toolbox.cpp:1631
+#: src/toolbox.cpp:1636
 #, fuzzy
 msgid "Number of revolutions"
 msgstr "Número de cantos:"
 
-#: src/toolbox.cpp:1641
+#: src/toolbox.cpp:1646
 #, fuzzy
 msgid "Divergence:"
 msgstr "Grau"
 
-#: src/toolbox.cpp:1641
+#: src/toolbox.cpp:1646
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
 msgstr ""
 
-#: src/toolbox.cpp:1651
+#: src/toolbox.cpp:1656
 msgid "Inner radius:"
 msgstr "Raio interior:"
 
-#: src/toolbox.cpp:1651
+#: src/toolbox.cpp:1656
 msgid "Radius of the innermost revolution (relative to the spiral size)"
 msgstr ""
 
-#: src/toolbox.cpp:1748
+#: src/toolbox.cpp:1753
 msgid "The width of the calligraphic pen"
 msgstr ""
 
-#: src/toolbox.cpp:1758
+#: src/toolbox.cpp:1763
 msgid "Angle:"
 msgstr "Ângulo:"
 
-#: src/toolbox.cpp:1758
+#: src/toolbox.cpp:1763
 msgid "The angle of the calligraphic pen (in degrees)"
 msgstr ""
 
-#: src/toolbox.cpp:1768
+#: src/toolbox.cpp:1773
 msgid "Mass:"
 msgstr "Massa:"
 
-#: src/toolbox.cpp:1768
+#: src/toolbox.cpp:1773
 msgid "How much inertia affects the movement of the pen"
 msgstr ""
 
 #. TRANSLATORS: "drag" means "resistance" here
-#: src/toolbox.cpp:1779
+#: src/toolbox.cpp:1784
 msgid "Drag:"
 msgstr "Arrastar:"
 
-#: src/toolbox.cpp:1779
+#: src/toolbox.cpp:1784
 msgid "How much resistance affects the movement of the pen"
 msgstr ""
 
-#: src/toolbox.cpp:2091
+#: src/toolbox.cpp:2096
 #, fuzzy
 msgid "Start:"
 msgstr "Estrela"
 
-#: src/toolbox.cpp:2091
+#: src/toolbox.cpp:2096
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
 msgstr ""
 
-#: src/toolbox.cpp:2101
+#: src/toolbox.cpp:2106
 msgid "End:"
 msgstr ""
 
-#: src/toolbox.cpp:2101
+#: src/toolbox.cpp:2106
 msgid "The angle (in degrees) from the horizontal to the arc's end point"
 msgstr ""
 
-#: src/toolbox.cpp:2112
+#: src/toolbox.cpp:2117
 #, fuzzy
 msgid "Open arc"
 msgstr "Abrir"
 
-#: src/toolbox.cpp:2113
+#: src/toolbox.cpp:2118
 msgid ""
 "Switch between arc (unclosed shape) and segment (closed shape with two radii)"
 msgstr ""
 
-#: src/toolbox.cpp:2140
+#: src/toolbox.cpp:2145
 msgid "Make whole"
 msgstr ""
 
-#: src/toolbox.cpp:2141
+#: src/toolbox.cpp:2146
 msgid "Make the shape a whole ellipse, not arc or segment"
 msgstr ""
 
