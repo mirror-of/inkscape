@@ -38,6 +38,9 @@ receives the image filename as the first parameter and the
 filter_param1 as the second parameter (more parameters can be 
 added). This particular script interprets that as the blur radius 
 in pixels, but of course that depends on the script you use.
+
+The inkscape-shadow-white.sh script is the same but creates all-white
+blurred shadows ("glows") instead of all-black.
  
 NOTE: I'm not going to provide a GUI for the blurred shadows feature,
 for these reasons:
