@@ -1340,7 +1340,7 @@ sp_node_selected_delete_segment (void)
 
 	if (g_list_length (nodepath->selected) != 2) {
 		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop),
-                "You must select two nodes on a path between which to delete segments.");
+                "You must select two non-endpoint nodes on a path between which to delete segments.");
 		return;
 	}
 
@@ -1348,60 +1348,123 @@ sp_node_selected_delete_segment (void)
 	b = (SPPathNode *) nodepath->selected->next->data;
 
 	if ( ( a==b)                       ||  //same node
-	     (a->subpath->closed        )  ||
              (a->subpath  != b->subpath )  ||  //not the same path
              (!a->p.other || !a->n.other)  ||  //one of a's sides does not have a segment
              (!b->p.other || !b->n.other) )    //one of b's sides does not have a segment
 		{
 		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop),
-		"You must select two nodes on a path between which to delete segments.");
+		"You must select two non-endpoint nodes on a path between which to delete segments.");
 		return;
 		}
 
+	//###########################################
+	//# BEGIN EDITS
+	//###########################################
+	//##################################
+	//# CLOSED PATH
+	//##################################
+	if (a->subpath->closed) {
 
-	//We need to get the direction of the list between A and B
-	//Can we walk from a to b?
-	start = NULL;
-	for (curr = a->n.other ; curr && curr!=a ; curr=curr->n.other) {
-		if (curr==b) {
-			start = a;  //did it!  we go from a to b
-			end   = b;
-			//printf("A to B\n");
-			break;
+
+		//Since we can go in a circle, we need to find the shorter distance.
+		//  a->b or b->a
+		start = end = NULL;
+		int distance    = 0;
+		int minDistance = 0;
+		for (curr = a->n.other ; curr && curr!=a ; curr=curr->n.other) {
+			if (curr==b) {
+				//printf("a to b:%d\n", distance);
+				start = a;//go from a to b
+				end   = b;
+				minDistance = distance;
+				//printf("A to B :\n");
+				break;
+			}
+			distance++;
 		}
-	}
-	if (!start) {//didn't work?  let's try the other direction
+
+		//try again, the other direction
+		distance = 0;
 		for (curr = b->n.other ; curr && curr!=b ; curr=curr->n.other) {
 			if (curr==a) {
-				start = b;  //did it!  we go from b to a
-				end   = a;
-				//printf("B to A\n");
+				//printf("b to a:%d\n", distance);
+				if (distance < minDistance) {
+					start = b;  //we go from b to a
+					end   = a;
+					//printf("B to A\n");
+				}
+				break;
+			}
+			distance++;
+		}
+
+		
+		//Copy everything from 'end' to 'start' to a new subpath
+		SPNodeSubPath *t = sp_nodepath_subpath_new (nodepath);
+		for (curr=end ; curr ; curr=curr->n.other) {
+			sp_nodepath_node_new (t, NULL, (SPPathNodeType)curr->type, (ArtPathcode)curr->code,
+				&curr->p.pos, &curr->pos, &curr->n.pos);
+			if (curr == start)
+				break;
+		}
+		sp_nodepath_subpath_destroy(a->subpath);
+
+
+	}
+
+
+
+	//##################################
+	//# OPEN PATH
+	//##################################
+	else {
+
+		//We need to get the direction of the list between A and B
+		//Can we walk from a to b?
+		start = end = NULL;
+		for (curr = a->n.other ; curr && curr!=a ; curr=curr->n.other) {
+			if (curr==b) {
+				start = a;  //did it!  we go from a to b
+				end   = b;
+				//printf("A to B\n");
 				break;
 			}
 		}
-	}
-	if (!start) {
-		sp_view_set_statusf_error (SP_VIEW(nodepath->desktop),
-		"Cannot find path between nodes.");
-		return;
-	}
+		if (!start) {//didn't work?  let's try the other direction
+			for (curr = b->n.other ; curr && curr!=b ; curr=curr->n.other) {
+				if (curr==a) {
+					start = b;  //did it!  we go from b to a
+					end   = a;
+					//printf("B to A\n");
+					break;
+				}
+			}
+		}
+		if (!start) {
+			sp_view_set_statusf_error (SP_VIEW(nodepath->desktop),
+			"Cannot find path between nodes.");
+			return;
+		}
 
 
 
-	//Copy everything after 'end' to a new subpath
-	ArtPathcode code = (ArtPathcode)start->subpath->first->n.other->code;
-	SPNodeSubPath *t = sp_nodepath_subpath_new (nodepath);
-	//sp_nodepath_node_new (t, NULL, SP_PATHNODE_CUSP, ART_MOVETO, &end->n.pos, &end->pos, &end->p.pos);
-	for (curr=end ; curr ; curr=curr->n.other) {
-		sp_nodepath_node_new (t, NULL, (SPPathNodeType)curr->type, (ArtPathcode)curr->code,
+		//Copy everything after 'end' to a new subpath
+		SPNodeSubPath *t = sp_nodepath_subpath_new (nodepath);
+		for (curr=end ; curr ; curr=curr->n.other) {
+			sp_nodepath_node_new (t, NULL, (SPPathNodeType)curr->type, (ArtPathcode)curr->code,
 			&curr->p.pos, &curr->pos, &curr->n.pos);
-	}
+		}
 
-	//Now let us do our deletion.  Since the tail has been saved, go all the way to the end of the list
-	for (curr = start->n.other ; curr  ; curr=next) {
-		next = curr->n.other;
-		sp_nodepath_node_destroy (curr);
+		//Now let us do our deletion.  Since the tail has been saved, go all the way to the end of the list
+		for (curr = start->n.other ; curr  ; curr=next) {
+			next = curr->n.other;
+			sp_nodepath_node_destroy (curr);
+		}
+
 	}
+	//###########################################
+	//# END EDITS
+	//###########################################
 
 	sp_nodepath_ensure_ctrls (nodepath);
 
