@@ -174,6 +174,7 @@ sp_fill_style_widget_new (void)
     gtk_widget_show (hb);
     gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
 
+    // TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
     l = gtk_label_new (_("Fill Rule"));
     gtk_widget_show (l);
     gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
