@@ -51,9 +51,6 @@ void inkscape_load_preferences (Inkscape * inkscape);
 void inkscape_save_preferences (Inkscape * inkscape);
 SPRepr *inkscape_get_repr (Inkscape *inkscape, const gchar *key);
 
-/* Extension management */
-void inkscape_load_extensions (Inkscape *inkscape);
-
 #define SP_ACTIVE_EVENTCONTEXT inkscape_active_event_context ()
 SPEventContext * inkscape_active_event_context (void);
 

@@ -2,7 +2,10 @@
 
 	* src/svg/svg-length.c, src/helper/units.c: removed #ifdef WIN32 insanity
 
-	* src/extension.c: removed _some_ #ifdef WIN32 insanity (we still need a portable popen())
+	* src/Makefile.am, src/extension.c,
+	  src/extension.h, src/extensions-skeleton.h,
+	  src/main.c, src/inkscape.c, src/toolbox.c: Removed dead code left
+	  over from first extensions implementation
 
 	* configure.in, src/main.c: removed freebsd-specific test and just check for fpsetmask() instead
 

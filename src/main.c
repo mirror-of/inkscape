@@ -249,7 +249,6 @@ sp_main_gui (int argc, const char **argv)
 	if (!sp_global_slideshow) {
 		inkscape = inkscape_application_new ();
 		inkscape_load_preferences (inkscape);
-		inkscape_load_extensions (inkscape);
 
 		if (!fl) // no documents on command line, create empty
 			sp_file_new();
@@ -274,7 +273,6 @@ sp_main_gui (int argc, const char **argv)
 			GtkWidget *ss;
 			inkscape = inkscape_application_new ();
 			inkscape_load_preferences (inkscape);
-			inkscape_load_extensions (inkscape);
 			ss = sp_slideshow_new (fl);
 			if (ss) gtk_widget_show (ss);
 			inkscape_unref ();
@@ -348,7 +346,6 @@ sp_main_console (int argc, const char **argv)
 	g_type_init();
 	inkscape = inkscape_application_new ();
 	inkscape_load_preferences (inkscape);
-	inkscape_load_extensions (inkscape);
 
 	while (fl) {
 		SPDocument *doc;

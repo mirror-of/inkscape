@@ -50,7 +50,6 @@
 
 /* Backbones of configuration xml data */
 #include "preferences-skeleton.h"
-#include "extensions-skeleton.h"
 
 enum {
 	MODIFY_SELECTION,
@@ -83,14 +82,12 @@ static void inkscape_init_config (SPReprDoc *doc, const gchar *config_name, cons
 				  const gchar *e_ccf,
 				  const gchar *e_cwf);
 static void inkscape_init_preferences (Inkscape *inkscape);
-static void inkscape_init_extensions (Inkscape *inkscape);
 
 static void inkscape_init_preferences (Inkscape * inkscape);
 
 struct _Inkscape {
 	GObject object;
 	SPReprDoc *preferences;
-	SPReprDoc *extensions;
 	GSList *documents;
 	GSList *desktops;
 };
@@ -121,7 +118,6 @@ Inkscape *inkscape = NULL;
 static void (* segv_handler) (int) = NULL;
 
 const gchar* preferences_file = "preferences.xml";
-const gchar* extensions_file = "extensions.xml";
 
 GType
 inkscape_get_type (void)
@@ -264,8 +260,6 @@ inkscape_init (SPObject * object)
 
 	inkscape->preferences = sp_repr_read_mem (preferences_skeleton, PREFERENCES_SKELETON_SIZE, NULL);
 
-	inkscape->extensions = sp_repr_read_mem (extensions_skeleton, EXTENSIONS_SKELETON_SIZE, NULL);
-
 	/* Initialize shortcuts */
 	sp_shortcut_table_load (NULL);
 
@@ -285,11 +279,6 @@ inkscape_dispose (GObject *object)
 	}
 
 	g_assert (!inkscape->desktops);
-
-	if (inkscape->extensions) {
-		sp_repr_document_unref (inkscape->extensions);
-		inkscape->extensions = NULL;
-	}
 
 	if (inkscape->preferences) {
 		/* fixme: This is not the best place */
@@ -528,12 +517,7 @@ inkscape_load_config (const gchar *filename, SPReprDoc *config, const gchar *ske
 #endif
 	if (stat (fn, &s)) {
 		/* No such file */
-		/* fixme: Think out something (Lauris) */
-		if (!strcmp ((char*)filename, extensions_file)) {
-			inkscape_init_extensions (INKSCAPE);
-		} else {
-			inkscape_init_preferences (INKSCAPE);
-		}
+		inkscape_init_preferences (INKSCAPE);
 		g_free (fn);
 		return;
 	}
@@ -592,24 +576,6 @@ inkscape_load_preferences (Inkscape *inkscape)
 				"preferences."));
 }
 
-/* Extensions management */
-
-void
-inkscape_load_extensions (Inkscape *inkscape)
-{
-	inkscape_load_config (extensions_file, inkscape->extensions, extensions_skeleton, EXTENSIONS_SKELETON_SIZE,
-			      _("%s is not regular file.\n"
-				"Although inkscape will run, you are\n"
-				"not able to use extensions (plugins)\n"),
-			      _("%s either is not valid xml file or\n"
-				"you do not have read premissions on it.\n"
-				"Although inkscape will run, you are\n"
-				"not able to use extensions (plugins)\n"),
-			      _("%s is not valid inkscape extensions file.\n"
-				"Although inkscape will run, you are\n"
-				"not able to use extensions (plugins)\n"));
-}
-
 void
 inkscape_save_preferences (Inkscape * inkscape)
 {
@@ -639,11 +605,7 @@ inkscape_get_repr (Inkscape *inkscape, const gchar *key)
 
 	if (key == NULL) return NULL;
 
-	if (!strncmp (key, "extensions", 10) && (!key[10] || (key[10] == '.'))) {
-		repr = sp_repr_document_root (inkscape->extensions);
-	} else {
-		repr = sp_repr_document_root (inkscape->preferences);
-	}
+	repr = sp_repr_document_root (inkscape->preferences);
 	g_assert (!(strcmp (sp_repr_name (repr), "inkscape")));
 
 	s = key;
@@ -982,24 +944,6 @@ inkscape_init_preferences (Inkscape *inkscape)
 				"Although inkscape will run, you\n"
 				"are neither able to load nor save\n"
 				"preferences."));
-}
-
-static void
-inkscape_init_extensions (Inkscape *inkscape)
-{
-	inkscape_init_config (inkscape->extensions, extensions_file, extensions_skeleton, EXTENSIONS_SKELETON_SIZE,
-			      _("Cannot create directory %s.\n"
-				"Although inkscape will run, you are\n"
-				"not able to use extensions (plugins)\n"),
-			      _("%s is not a valid directory.\n"
-				"Although inkscape will run, you are\n"
-				"not able to use extensions (plugins)\n"),
-			      _("Cannot create file %s.\n"
-				"Although inkscape will run, you are\n"
-				"not able to use extensions (plugins)\n"),
-			      _("Cannot write file %s.\n"
-				"Although inkscape will run, you are\n"
-				"not able to use extensions (plugins)\n"));
 }
 
 void

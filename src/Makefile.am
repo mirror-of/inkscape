@@ -131,10 +131,8 @@ inkscape_SOURCES = \
 	object-ui.c object-ui.h \
 	slideshow.c slideshow.h \
 	$(module_src) \
-	$(extensions_src) \
 	\
-	preferences-skeleton.h \
-	extensions-skeleton.h
+	preferences-skeleton.h
 
 inkscape_private_libs = \
 	$(spproglibs) \
