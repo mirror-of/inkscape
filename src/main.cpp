@@ -256,12 +256,7 @@ sp_main_gui (int argc, const char **argv)
 	// now switch gettext back to UTF-8 (for GUI)
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 
-
-#ifdef WIN32
-	Inkscape::Extension::Internal::PrintWin32::init();
-#endif
-
-    inkscape_gtk_stock_init();
+	inkscape_gtk_stock_init();
 
 	/* Set default icon */
 	if (g_file_test (INKSCAPE_DATADIR "/pixmaps/inkscape.png", (GFileTest)(G_FILE_TEST_IS_REGULAR | G_FILE_TEST_IS_SYMLINK))) {
@@ -298,6 +293,11 @@ sp_main_gui (int argc, const char **argv)
 		}
 	}
 
+
+#ifdef WIN32
+	Inkscape::Extension::Internal::PrintWin32::init();
+#endif	
+	
 	gtk_main();
 
 #ifdef WIN32
