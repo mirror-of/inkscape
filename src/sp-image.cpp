@@ -20,6 +20,8 @@
 #include <libnr/nr-matrix-fns.h>
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#define GDK_PIXBUF_ENABLE_BACKEND 1
+#include <gdk-pixbuf/gdk-pixbuf-io.h>
 #include "display/nr-arena-image.h"
 #include "svg/svg.h"
 #include "attributes.h"
@@ -32,6 +34,9 @@
 #include "helper/sp-intl.h"
 #include <libnr/nr-matrix-ops.h>
 #include <xml/repr.h>
+
+#include "file.h"
+#include <png.h>
 
 /*
  * SPImage
@@ -66,6 +71,341 @@ static GdkPixbuf * sp_image_repr_read_dataURI (const gchar * uri_data);
 static GdkPixbuf * sp_image_repr_read_b64 (const gchar * uri_data);
 
 static SPItemClass *parent_class;
+
+
+extern "C"
+{
+    void user_read_data( png_structp png_ptr, png_bytep data, png_size_t length );
+    void user_write_data( png_structp png_ptr, png_bytep data, png_size_t length );
+    void user_flush_data( png_structp png_ptr );
+
+}
+
+namespace Inkscape
+{
+namespace IO
+{
+
+class PushPull
+{
+public:
+    gboolean    first;
+    FILE*       fp;
+    guchar*     scratch;
+    gsize       size;
+    gsize       used;
+    gsize       offset;
+    GdkPixbufLoader *loader;
+
+    PushPull() : first(TRUE),
+                 fp(0),
+                 scratch(0),
+                 size(0),
+                 used(0),
+                 offset(0),
+                 loader(0) {};
+
+    gboolean readMore()
+    {
+        gboolean good = FALSE;
+        if ( offset )
+        {
+            g_memmove( scratch, scratch + offset, used - offset );
+            used -= offset;
+            offset = 0;
+        }
+        if ( used < size )
+        {
+            gsize space = size - used;
+            gsize got = fread( scratch + used, 1, space, fp );
+            if ( got )
+            {
+                if ( loader )
+                {
+                    GError *err = NULL;
+                    //g_message( " __read %d bytes", (int)got );
+                    if ( !gdk_pixbuf_loader_write( loader, scratch + used, got, &err ) )
+                    {
+                        //g_message("_error writing pixbuf data"); 
+                    }
+                }
+
+                used += got;
+                good = TRUE;
+            }
+            else
+            {
+                good = FALSE;
+            }
+        }
+        return good;
+    }
+
+    gsize available() const
+    {
+        return (used - offset);
+    }
+
+    gsize readOut( gpointer data, gsize length )
+    {
+        gsize giving = available();
+        if ( length < giving )
+        {
+            giving = length;
+        }
+        g_memmove( data, scratch + offset, giving );
+        offset += giving;
+        if ( offset >= used )
+        {
+            offset = 0;
+            used = 0;
+        }
+        return giving;
+    }
+
+    void clear()
+    {
+        offset = 0;
+        used = 0;
+    }
+
+private:
+    PushPull& operator = (const PushPull& other);
+    PushPull(const PushPull& other);
+};
+
+void user_read_data( png_structp png_ptr, png_bytep data, png_size_t length )
+{
+//    g_message( "user_read_data(%d)", length );
+
+    PushPull* youme = (PushPull*)png_get_io_ptr(png_ptr);
+
+    gsize filled = 0;
+    gboolean canRead = TRUE;
+
+    while ( filled < length && canRead )
+    {
+        gsize some = youme->readOut( data + filled, length - filled );
+        filled += some;
+        if ( filled < length )
+        {
+            canRead &= youme->readMore();
+        }
+    }
+//    g_message("things out");
+}
+
+void user_write_data( png_structp png_ptr, png_bytep data, png_size_t length )
+{
+    //g_message( "user_write_data(%d)", length );
+}
+
+void user_flush_data( png_structp png_ptr )
+{
+    //g_message( "user_flush_data" );
+}
+
+GdkPixbuf*  pixbuf_new_from_file( const char *filename, GError **error )
+{
+    GdkPixbuf* buf = NULL;
+    PushPull youme;
+    gint dpiX = 0;
+    gint dpiY = 0;
+
+    //buf = gdk_pixbuf_new_from_file( filename, error );
+    dump_fopen_call( filename, "bloopie" );
+    FILE* fp = fopen_utf8name( filename, "r" );
+    if ( fp )
+    {
+        GdkPixbufLoader *loader = gdk_pixbuf_loader_new();
+        if ( loader )
+        {
+            GError *err = NULL;
+
+            // short buffer
+            guchar scratch[1024];
+            gboolean latter = FALSE;
+            gboolean isPng = FALSE;
+            png_structp pngPtr = NULL;
+            png_infop infoPtr = NULL;
+            //png_infop endPtr = NULL;
+
+            youme.fp = fp;
+            youme.scratch = scratch;
+            youme.size = sizeof(scratch);
+            youme.used = 0;
+            youme.offset = 0;
+            youme.loader = loader;
+
+            while ( !feof(fp) )
+            {
+                if ( youme.readMore() )
+                {
+                    if ( youme.first )
+                    {
+                        //g_message( "First data chunk" );
+                        youme.first = FALSE;
+                        isPng = !png_sig_cmp( scratch + youme.offset, 0, youme.available() );
+                        //g_message( "  png? %s", (isPng ? "Yes":"No") );
+                        if ( isPng )
+                        {
+                            pngPtr = png_create_read_struct( PNG_LIBPNG_VER_STRING,
+                                                             NULL,//(png_voidp)user_error_ptr,
+                                                             NULL,//user_error_fn,
+                                                             NULL//user_warning_fn
+                                );
+                            if ( pngPtr )
+                            {
+                                infoPtr = png_create_info_struct( pngPtr );
+                                //endPtr = png_create_info_struct( pngPtr );
+
+                                png_set_read_fn( pngPtr, &youme, user_read_data );
+                                //g_message( "In" );
+
+                                //png_read_info( pngPtr, infoPtr );
+                                png_read_png( pngPtr, infoPtr, PNG_TRANSFORM_IDENTITY, NULL );
+
+                                //g_message("out");
+
+                                //png_read_end(pngPtr, endPtr);
+
+                                /*
+                                if ( png_get_valid( pngPtr, infoPtr, PNG_INFO_pHYs ) )
+                                {
+                                    g_message("pHYs chunk now valid" );
+                                }
+                                if ( png_get_valid( pngPtr, infoPtr, PNG_INFO_sCAL ) )
+                                {
+                                    g_message("sCAL chunk now valid" );
+                                }
+                                */
+
+                                png_uint_32 res_x = 0;
+                                png_uint_32 res_y = 0;
+                                int unit_type = 0;
+                                if ( png_get_pHYs( pngPtr, infoPtr, &res_x, &res_y, &unit_type) )
+                                {
+//                                     g_message( "pHYs yes (%d, %d) %d (%s)", (int)res_x, (int)res_y, unit_type,
+//                                                (unit_type == 1? "per meter" : "unknown")
+//                                         );
+
+//                                     g_message( "    dpi: (%d, %d)",
+//                                                (int)(0.5 + ((double)res_x)/39.37),
+//                                                (int)(0.5 + ((double)res_y)/39.37) );
+                                    if ( unit_type == PNG_RESOLUTION_METER )
+                                    {
+                                        // TODO come up with a more accurate DPI setting
+                                        dpiX = (int)(0.5 + ((double)res_x)/39.37);
+                                        dpiY = (int)(0.5 + ((double)res_y)/39.37);
+                                    }
+                                }
+                                else
+                                {
+//                                     g_message( "pHYs no" );
+                                }
+
+/*
+                                double width = 0;
+                                double height = 0;
+                                int unit = 0;
+                                if ( png_get_sCAL(pngPtr, infoPtr, &unit, &width, &height) )
+                                {
+                                    gchar* vals[] = {
+                                        "unknown", // PNG_SCALE_UNKNOWN
+                                        "meter", // PNG_SCALE_METER
+                                        "radian", // PNG_SCALE_RADIAN
+                                        "last", // 
+                                        NULL
+                                    };
+
+                                    g_message( "sCAL: (%f, %f) %d (%s)",
+                                               width, height, unit,
+                                               ((unit >= 0 && unit < 3) ? vals[unit]:"???")
+                                        );
+                                }
+*/
+
+                                // now clean it up.
+                                png_destroy_read_struct( &pngPtr, &infoPtr, NULL );//&endPtr );
+                            }
+                            else
+                            {
+                                //g_message("d'oh on png");
+                            }
+                        }
+                    }
+                    else if ( !latter )
+                    {
+                        latter = TRUE;
+                        //g_message("  READing latter");
+                    }
+                    // Now clear out the buffer so we can read more.
+                    // (dumping out unused)
+                    youme.clear();
+                }
+            }
+
+            gboolean ok = gdk_pixbuf_loader_close(loader, &err);
+            if ( ok )
+            {
+                buf = gdk_pixbuf_loader_get_pixbuf( loader );
+                if ( buf )
+                {
+                    g_object_ref(buf);
+
+                    if ( dpiX )
+                    {
+                        gchar *tmp = g_strdup_printf( "%d", dpiX );
+                        if ( tmp )
+                        {
+                            gdk_pixbuf_set_option( buf, "Inkscape::DpiX", tmp );
+                            g_free( tmp );
+                        }
+                    }
+                    if ( dpiY )
+                    {
+                        gchar *tmp = g_strdup_printf( "%d", dpiY );
+                        if ( tmp )
+                        {
+                            gdk_pixbuf_set_option( buf, "Inkscape::DpiY", tmp );
+                            g_free( tmp );
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // do something
+                //g_message("error loading pixbuf");
+            }
+        }
+        fclose( fp );
+        fp = NULL;
+    }
+    else
+    {
+        //g_message("unable to open file");
+    }
+
+    if ( buf )
+    {
+        const gchar* bloop = gdk_pixbuf_get_option( buf, "Inkscape::DpiX" );
+        if ( bloop )
+        {
+            g_message("DPI X is [%s]", bloop);
+        }
+        bloop = gdk_pixbuf_get_option( buf, "Inkscape::DpiY" );
+        if ( bloop )
+        {
+            g_message("DPI Y is [%s]", bloop);
+        }
+    }
+
+    return buf;
+}
+
+}
+}
 
 GType
 sp_image_get_type (void)
@@ -377,7 +717,7 @@ sp_image_repr_read_image (SPRepr * repr)
 			fullname = g_filename_from_uri(filename, NULL, NULL);
 			if (fullname) {
 				// TODO check this. Was doing a UTF-8 to filename conversion here.
-				pixbuf = gdk_pixbuf_new_from_file (fullname, NULL);
+				pixbuf = Inkscape::IO::pixbuf_new_from_file (fullname, NULL);
 				if (pixbuf != NULL) return pixbuf;
 			}
 		} else if (strncmp (filename,"data:",5) == 0) {
@@ -399,7 +739,7 @@ sp_image_repr_read_image (SPRepr * repr)
 														  &bytesRead,
 														  &bytesWritten,
 														  &error);
-			pixbuf = gdk_pixbuf_new_from_file (localFilename, NULL);
+			pixbuf = Inkscape::IO::pixbuf_new_from_file (localFilename, NULL);
 			g_free (localFilename);
 			g_free (fullname);
 			if (pixbuf != NULL) return pixbuf;
@@ -414,7 +754,7 @@ sp_image_repr_read_image (SPRepr * repr)
 														  &bytesRead,
 														  &bytesWritten,
 														  &error);
-			pixbuf = gdk_pixbuf_new_from_file (localFilename, NULL);
+			pixbuf = Inkscape::IO::pixbuf_new_from_file (localFilename, NULL);
 			g_free (localFilename);
 			if (pixbuf != NULL) return pixbuf;
 		}
@@ -431,7 +771,7 @@ sp_image_repr_read_image (SPRepr * repr)
 													  &bytesRead,
 													  &bytesWritten,
 													  &error);
-		pixbuf = gdk_pixbuf_new_from_file (localFilename, NULL);
+		pixbuf = Inkscape::IO::pixbuf_new_from_file (localFilename, NULL);
 		g_free (localFilename);
 		if (pixbuf != NULL) return pixbuf;
 	}
