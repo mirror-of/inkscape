@@ -146,23 +146,102 @@ GrDraggable::~GrDraggable ()
     g_object_unref (G_OBJECT (this->item));
 }
 
+NR::Point *
+get_snap_vector (NR::Point p, NR::Point o, double snap, double initial)
+{
+    double angle = NR::atan2 (p - o);
+    double r = NR::L2 (p - o);
+    // snap angle to snaps increments, starting from initial:
+    double a_snapped = initial + floor((angle - initial)/snap + 0.5) * snap;
+    // calculate the new position and subtract p to get the vector:
+    return new NR::Point (o + r * NR::Point(cos(a_snapped), sin(a_snapped)) - p);
+}
+
 static void
-gr_knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer data)
+gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpointer data)
 {
     GrDragger *dragger = (GrDragger *) data;
 
-    dragger->point = *p;
+    NR::Point p = *ppointer;
+
+    if (state & GDK_CONTROL_MASK) {
+        unsigned snaps = abs(prefs_get_int_attribute("options.rotationsnapsperpi", "value", 12));
+        /* 0 means no snapping. */
+
+        // This list will store snap vectors from all draggables of dragger
+        GSList *snap_vectors = NULL;
+
+        for (GSList const* i = dragger->draggables; i != NULL; i = i->next) {
+            GrDraggable *draggable = (GrDraggable *) i->data;
+
+            GrDragger *dr_snap = NULL;
+
+            if (draggable->point_num == POINT_LG_P1 || draggable->point_num == POINT_LG_P2) {
+                for (GSList *di = dragger->parent->draggers; di != NULL; di = di->next) {
+                    GrDragger *d_new = (GrDragger *) di->data;
+                    if (d_new == dragger)
+                        continue;
+                    if (d_new->isA (draggable->item, 
+                                    draggable->point_num == POINT_LG_P1? POINT_LG_P2 : POINT_LG_P1,
+                                    draggable->fill_or_stroke)) {
+                        // found the other end of the linear gradient;
+                        dr_snap = d_new;
+                    }
+                }
+            } else if (draggable->point_num == POINT_RG_R1 || draggable->point_num == POINT_RG_R2) {
+                for (GSList *di = dragger->parent->draggers; di != NULL; di = di->next) {
+                    GrDragger *d_new = (GrDragger *) di->data;
+                    if (d_new == dragger)
+                        continue;
+                    if (d_new->isA (draggable->item, 
+                                    POINT_RG_CENTER,
+                                    draggable->fill_or_stroke)) {
+                        // found the center of the radial gradient;
+                        dr_snap = d_new;
+                    }
+                }
+            }
+
+            NR::Point *snap_vector = NULL;
+            if (dr_snap) {
+                if (state & GDK_MOD1_MASK) {
+                    // with Alt, snap to the original angle and its perpendiculars
+                    snap_vector = get_snap_vector (p, dr_snap->point, M_PI/2, NR::atan2 (p - dr_snap->point));
+                } else {
+                    // with Ctrl, snap to M_PI/snaps
+                    snap_vector = get_snap_vector (p, dr_snap->point, M_PI/snaps, 0);
+                }
+            }
+            if (snap_vector) {
+                snap_vectors = g_slist_prepend (snap_vectors, snap_vector);
+            }
+        }
+
+        // Move by the smallest of vectors:
+        NR::Point move(9999, 9999);
+        for (GSList const *i = snap_vectors; i != NULL; i = i->next) {
+            NR::Point *snap_vector = (NR::Point *) i->data;
+            if (NR::L2(*snap_vector) < NR::L2(move))
+                move = *snap_vector;
+        }
+        if (move[NR::X] < 9999) {
+            p += move;
+            sp_knot_moveto (knot, &p);
+        }
+    }
+
+    dragger->point = p;
 
     for (GSList const* i = dragger->draggables; i != NULL; i = i->next) {
         GrDraggable *draggable = (GrDraggable *) i->data;
         dragger->parent->local_change = true;
-        sp_item_gradient_set_coords (draggable->item, draggable->point_num, *p, draggable->fill_or_stroke, false);
+        sp_item_gradient_set_coords (draggable->item, draggable->point_num, p, draggable->fill_or_stroke, false);
     }
 
     if (state & GDK_SHIFT_MASK) {
         if (dragger->draggables && dragger->draggables->next) {
             // create a new dragger
-            GrDragger *dr_new = new GrDragger (dragger->parent, *p, NULL, 
+            GrDragger *dr_new = new GrDragger (dragger->parent, p, NULL, 
                                                gr_knot_shapes[((GrDraggable *) dragger->draggables->next->data)->point_num]);
             dragger->parent->draggers = g_slist_prepend (dragger->parent->draggers, dr_new);
             // relink to it all but the first draggable in the list
@@ -176,16 +255,14 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *p, guint state, gpointer da
         }
     } else {
     // without Shift
-
     // TODO: snap to bboxes, centers of all selected objects; lower priority than dragger snap
-
     // see if we need to snap to another dragger
     double snap_dist = SNAP_DIST / SP_DESKTOP_ZOOM (dragger->parent->desktop);
     for (GSList *di = dragger->parent->draggers; di != NULL; di = di->next) {
         GrDragger *d_new = (GrDragger *) di->data;
         if (d_new == dragger)
             continue;
-        if (NR::L2 (d_new->point - *p) < snap_dist) {
+        if (NR::L2 (d_new->point - p) < snap_dist) {
 
             bool incest = false;
             for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
