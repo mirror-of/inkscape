@@ -3,6 +3,7 @@
 arc-context.o: \
 	arc-context.cpp \
 	arc-context.h \
+	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
 	desktop-snap.h \
@@ -59,6 +60,7 @@ arc-context.o: \
 	sp-metrics.h \
 	sp-object.h \
 	sp-shape.h \
+	style.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
@@ -83,6 +85,7 @@ color.o: \
 
 desktop-affine.o: \
 	desktop-affine.cpp \
+	color.h \
 	desktop-affine.h \
 	desktop.h \
 	display/nr-arena-forward.h \
@@ -114,15 +117,21 @@ desktop-affine.o: \
 	refcounted.h \
 	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-object.h \
 	sp-root.h \
+	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/xml-forward.h
 
 desktop-events.o: \
 	desktop-events.cpp \
+	color.h \
 	desktop-affine.h \
 	desktop-events.h \
 	desktop-handles.h \
@@ -133,6 +142,7 @@ desktop-events.o: \
 	display/nr-arena-forward.h \
 	display/sp-canvas.h \
 	document.h \
+	enums.h \
 	event-context.h \
 	extension/extension-forward.h \
 	extension/implementation/implementation.h \
@@ -171,11 +181,18 @@ desktop-events.o: \
 	require-config.h \
 	selcue.h \
 	sp-guide.h \
+	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-metrics.h \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	widgets/icon.h \
@@ -184,9 +201,12 @@ desktop-events.o: \
 
 desktop-handles.o: \
 	desktop-handles.cpp \
+	color.h \
 	desktop-handles.h \
 	desktop.h \
+	display/nr-arena-forward.h \
 	display/sp-canvas.h \
+	enums.h \
 	forward.h \
 	helper/helper-forward.h \
 	libnr/nr-coord.h \
@@ -212,7 +232,18 @@ desktop-handles.o: \
 	message-stack.h \
 	message.h \
 	refcounted.h \
-	view.h
+	sp-item-group.h \
+	sp-item.h \
+	sp-marker.h \
+	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
+	version.h \
+	view.h \
+	xml/xml-forward.h
 
 desktop-snap.o: \
 	desktop-snap.cpp \
@@ -300,6 +331,7 @@ desktop.o: \
 	message-context.h \
 	message-stack.h \
 	message.h \
+	object-hierarchy.h \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
@@ -310,15 +342,20 @@ desktop.o: \
 	seltrans.h \
 	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-metrics.h \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object.h \
 	sp-root.h \
+	style.h \
 	svg/ftos.h \
 	svg/stringstream.h \
 	svg/svg-types.h \
 	toolbox.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	version.h \
 	view.h \
@@ -388,13 +425,16 @@ dialogs/align.o: \
 dialogs/desktop-properties.o: \
 	dialogs/desktop-properties.cpp \
 	color.h \
+	color.h \
 	desktop-handles.h \
 	desktop-snap.h \
 	desktop.h \
 	dialogs/desktop-properties.h \
 	dialogs/dialog-events.h \
 	dialogs/rdf.h \
+	display/nr-arena-forward.h \
 	document.h \
+	enums.h \
 	extension/extension-forward.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
@@ -432,11 +472,19 @@ dialogs/desktop-properties.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	sp-item-group.h \
+	sp-item.h \
+	sp-marker.h \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object.h \
+	style.h \
 	svg/ftos.h \
 	svg/stringstream.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	verbs.h \
 	version.h \
@@ -454,10 +502,13 @@ dialogs/desktop-properties.o: \
 
 dialogs/dialog-events.o: \
 	dialogs/dialog-events.cpp \
+	color.h \
 	desktop-events.h \
 	desktop-handles.h \
 	desktop.h \
 	dialogs/dialog-events.h \
+	display/nr-arena-forward.h \
+	enums.h \
 	forward.h \
 	forward.h \
 	helper/helper-forward.h \
@@ -488,6 +539,16 @@ dialogs/dialog-events.o: \
 	message.h \
 	prefs-utils.h \
 	refcounted.h \
+	sp-item-group.h \
+	sp-item.h \
+	sp-marker.h \
+	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
+	version.h \
 	view.h \
 	widgets/sp-widget.h \
 	xml/repr.h \
@@ -542,6 +603,7 @@ dialogs/display-settings.o: \
 
 dialogs/export.o: \
 	dialogs/export.cpp \
+	color.h \
 	desktop-handles.h \
 	desktop-snap.h \
 	desktop.h \
@@ -550,6 +612,7 @@ dialogs/export.o: \
 	dir-util.h \
 	display/nr-arena-forward.h \
 	document.h \
+	enums.h \
 	extension/extension-forward.h \
 	extension/extension.h \
 	file.h \
@@ -590,10 +653,17 @@ dialogs/export.o: \
 	refcounted.h \
 	require-config.h \
 	selection.h \
+	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	verbs.h \
 	version.h \
@@ -674,6 +744,7 @@ dialogs/fill-style.o: \
 	sp-paint-server.h \
 	sp-pattern.h \
 	sp-root.h \
+	sp-use.h \
 	style.h \
 	svg/ftos.h \
 	svg/stringstream.h \
@@ -692,6 +763,7 @@ dialogs/fill-style.o: \
 
 dialogs/find.o: \
 	dialogs/find.cpp \
+	color.h \
 	desktop-handles.h \
 	desktop.h \
 	dialogs/dialog-events.h \
@@ -761,6 +833,7 @@ dialogs/find.o: \
 	sp-star.h \
 	sp-text.h \
 	sp-use.h \
+	style.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
@@ -1041,6 +1114,7 @@ dialogs/stroke-style.o: \
 	sp-pattern.h \
 	sp-root.h \
 	sp-text.h \
+	sp-use.h \
 	style.h \
 	svg/ftos.h \
 	svg/stringstream.h \
@@ -1140,11 +1214,13 @@ dialogs/text-edit.o: \
 
 dialogs/transformation.o: \
 	dialogs/transformation.cpp \
+	color.h \
 	desktop-handles.h \
 	desktop.h \
 	dialogs/dialog-events.h \
 	display/nr-arena-forward.h \
 	document.h \
+	enums.h \
 	forward.h \
 	helper/action.h \
 	helper/helper-forward.h \
@@ -1183,8 +1259,15 @@ dialogs/transformation.o: \
 	require-config.h \
 	selection-chemistry.h \
 	selection.h \
+	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	verbs.h \
 	version.h \
@@ -1919,6 +2002,7 @@ document-undo.o: \
 
 document.o: \
 	document.cpp \
+	color.h \
 	desktop-handles.h \
 	desktop-snap.h \
 	desktop.h \
@@ -1969,12 +2053,17 @@ document.o: \
 	sp-defs.h \
 	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object-repr.h \
 	sp-object.h \
 	sp-root.h \
+	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr-action.h \
@@ -2112,16 +2201,24 @@ dropper-context.o: \
 	require-config.h \
 	selcue.h \
 	selection.h \
+	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/xml-forward.h
 
 dyna-draw-context.o: \
 	dyna-draw-context.cpp \
+	color.h \
 	desktop-affine.h \
 	desktop-events.h \
 	desktop-handles.h \
@@ -2174,8 +2271,15 @@ dyna-draw-context.o: \
 	require-config.h \
 	selcue.h \
 	selection.h \
+	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	widgets/spw-utilities.h \
@@ -2225,12 +2329,14 @@ ecma/SVGViewer.o: \
 
 event-context.o: \
 	event-context.cpp \
+	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
 	desktop.h \
 	dialogs/desktop-properties.h \
 	display/nr-arena-forward.h \
 	display/sp-canvas.h \
+	enums.h \
 	event-context.h \
 	extension/extension-forward.h \
 	extension/extension.h \
@@ -2277,9 +2383,16 @@ event-context.o: \
 	seltrans.h \
 	shortcuts.h \
 	sp-cursor.h \
+	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
 	tools-switch.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	version.h \
 	view.h \
@@ -2352,11 +2465,13 @@ extension/implementation/implementation.o: \
 
 extension/implementation/script.o: \
 	extension/implementation/script.cpp \
+	color.h \
 	desktop-handles.h \
 	desktop-snap.h \
 	desktop.h \
 	display/nr-arena-forward.h \
 	document.h \
+	enums.h \
 	extension/db.h \
 	extension/extension-forward.h \
 	extension/extension.h \
@@ -2395,10 +2510,17 @@ extension/implementation/script.o: \
 	refcounted.h \
 	require-config.h \
 	selection.h \
+	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	version.h \
 	view.h \
@@ -4048,6 +4170,7 @@ extract-uri.o: \
 
 file.o: \
 	file.cpp \
+	color.h \
 	desktop-handles.h \
 	desktop-snap.h \
 	desktop.h \
@@ -4111,11 +4234,16 @@ file.o: \
 	sp-image.h \
 	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object.h \
 	sp-root.h \
+	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	version.h \
 	view.h \
@@ -4366,10 +4494,12 @@ inkscape-stock.o: \
 
 inkscape.o: \
 	inkscape.cpp \
+	color.h \
 	desktop-handles.h \
 	desktop.h \
 	display/nr-arena-forward.h \
 	document.h \
+	enums.h \
 	event-context.h \
 	extension/extension-forward.h \
 	extension/extension.h \
@@ -4412,8 +4542,15 @@ inkscape.o: \
 	selcue.h \
 	selection.h \
 	shortcuts.h \
+	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	version.h \
 	view.h \
@@ -4426,6 +4563,7 @@ inkscape.o: \
 
 interface.o: \
 	interface.cpp \
+	color.h \
 	desktop-handles.h \
 	desktop-snap.h \
 	desktop.h \
@@ -4433,6 +4571,7 @@ interface.o: \
 	dir-util.h \
 	display/nr-arena-forward.h \
 	document.h \
+	enums.h \
 	event-context.h \
 	extension/db.h \
 	extension/extension-forward.h \
@@ -4478,11 +4617,19 @@ interface.o: \
 	selcue.h \
 	selection-chemistry.h \
 	shortcuts.h \
+	sp-item-group.h \
+	sp-item.h \
+	sp-marker.h \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object.h \
+	style.h \
 	svg-view.h \
+	svg/svg-types.h \
 	toolbox.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	version.h \
 	view.h \
@@ -4497,14 +4644,17 @@ interface.o: \
 
 knot.o: \
 	knot.cpp \
+	color.h \
 	desktop-affine.h \
 	desktop-events.h \
 	desktop-handles.h \
 	desktop.h \
+	display/nr-arena-forward.h \
 	display/sodipodi-ctrl.h \
 	display/sp-canvas-util.h \
 	display/sp-canvas.h \
 	document.h \
+	enums.h \
 	forward.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
@@ -4537,13 +4687,22 @@ knot.o: \
 	refcounted.h \
 	require-config.h \
 	sp-guide.h \
+	sp-item-group.h \
+	sp-item.h \
+	sp-marker.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/xml-forward.h
 
 knotholder.o: \
 	knotholder.cpp \
+	color.h \
 	desktop.h \
 	display/curve.h \
 	display/nr-arena-forward.h \
@@ -4581,6 +4740,7 @@ knotholder.o: \
 	sp-marker.h \
 	sp-object.h \
 	sp-shape.h \
+	style.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
@@ -5480,6 +5640,7 @@ mod360.o: \
 
 node-context.o: \
 	node-context.cpp \
+	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
 	desktop.h \
@@ -5537,6 +5698,7 @@ node-context.o: \
 	sp-object.h \
 	sp-path.h \
 	sp-shape.h \
+	style.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
@@ -5551,6 +5713,7 @@ node-context.o: \
 
 nodepath.o: \
 	nodepath.cpp \
+	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
 	desktop-snap.h \
@@ -5612,6 +5775,7 @@ nodepath.o: \
 	sp-object.h \
 	sp-path.h \
 	sp-shape.h \
+	style.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
@@ -5683,8 +5847,17 @@ object-edit.o: \
 	version.h \
 	xml/xml-forward.h
 
+object-hierarchy.o: \
+	object-hierarchy.cpp \
+	forward.h \
+	object-hierarchy.h \
+	sp-object.h \
+	version.h \
+	xml/xml-forward.h
+
 object-ui.o: \
 	object-ui.cpp \
+	color.h \
 	desktop-handles.h \
 	desktop.h \
 	dialogs/fill-style.h \
@@ -5735,6 +5908,7 @@ object-ui.o: \
 	sp-shape.h \
 	sp-spiral.h \
 	sp-star.h \
+	style.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
@@ -5881,6 +6055,7 @@ print.o: \
 
 rect-context.o: \
 	rect-context.cpp \
+	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
 	desktop-snap.h \
@@ -5938,6 +6113,7 @@ rect-context.o: \
 	sp-object.h \
 	sp-rect.h \
 	sp-shape.h \
+	style.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
@@ -5953,10 +6129,13 @@ rect-context.o: \
 
 rubberband.o: \
 	rubberband.cpp \
+	color.h \
 	desktop-handles.h \
 	desktop.h \
+	display/nr-arena-forward.h \
 	display/sodipodi-ctrlrect.h \
 	display/sp-canvas.h \
+	enums.h \
 	forward.h \
 	helper/helper-forward.h \
 	libnr/nr-coord.h \
@@ -5984,13 +6163,27 @@ rubberband.o: \
 	message.h \
 	refcounted.h \
 	rubberband.h \
-	view.h
+	sp-item-group.h \
+	sp-item.h \
+	sp-marker.h \
+	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
+	version.h \
+	view.h \
+	xml/xml-forward.h
 
 satisfied-guide-cns.o: \
 	satisfied-guide-cns.cpp \
 	approx-equal.h \
+	color.h \
 	desktop-snap.h \
 	desktop.h \
+	display/nr-arena-forward.h \
+	enums.h \
 	forward.h \
 	helper/helper-forward.h \
 	libnr/nr-coord.h \
@@ -6018,15 +6211,24 @@ satisfied-guide-cns.o: \
 	sp-guide-attachment.h \
 	sp-guide-constraint.h \
 	sp-guide.h \
+	sp-item-group.h \
+	sp-item.h \
+	sp-marker.h \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/xml-forward.h
 
 selcue.o: \
 	selcue.cpp \
+	color.h \
 	desktop-handles.h \
 	desktop.h \
 	display/nr-arena-forward.h \
@@ -6034,6 +6236,7 @@ selcue.o: \
 	display/sodipodi-ctrlrect.h \
 	display/sp-canvas.h \
 	display/sp-canvas.h \
+	enums.h \
 	forward.h \
 	helper/helper-forward.h \
 	libnr/nr-coord.h \
@@ -6062,14 +6265,22 @@ selcue.o: \
 	refcounted.h \
 	selcue.h \
 	selection.h \
+	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/xml-forward.h
 
 select-context.o: \
 	select-context.cpp \
+	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
 	desktop-snap.h \
@@ -6080,6 +6291,7 @@ select-context.o: \
 	display/sp-canvas-util.h \
 	display/sp-canvas.h \
 	document.h \
+	enums.h \
 	event-context.h \
 	extension/extension-forward.h \
 	extension/implementation/implementation.h \
@@ -6126,9 +6338,16 @@ select-context.o: \
 	seltrans-handles.h \
 	seltrans.h \
 	sp-cursor.h \
+	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-metrics.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	widgets/spw-utilities.h \
@@ -6136,11 +6355,13 @@ select-context.o: \
 
 select-toolbar.o: \
 	select-toolbar.cpp \
+	color.h \
 	desktop-handles.h \
 	desktop-handles.h \
 	desktop.h \
 	display/nr-arena-forward.h \
 	document.h \
+	enums.h \
 	extension/extension-forward.h \
 	extension/extension.h \
 	file.h \
@@ -6189,10 +6410,17 @@ select-toolbar.o: \
 	select-toolbar.h \
 	selection-chemistry.h \
 	selection.h \
+	sp-item-group.h \
 	sp-item-transform.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
 	toolbox.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	verbs.h \
 	version.h \
 	view.h \
@@ -6254,6 +6482,7 @@ selection-chemistry.o: \
 	libnr/nr-scale.h \
 	libnr/nr-translate.h \
 	libnr/nr-values.h \
+	libnrtype/nrtype-forward.h \
 	message-context.h \
 	message-stack.h \
 	message.h \
@@ -6262,6 +6491,7 @@ selection-chemistry.o: \
 	require-config.h \
 	selection-chemistry.h \
 	selection.h \
+	sp-chars.h \
 	sp-defs.h \
 	sp-gradient.h \
 	sp-item-group.h \
@@ -6276,6 +6506,7 @@ selection-chemistry.o: \
 	sp-pattern.h \
 	sp-root.h \
 	sp-shape.h \
+	sp-text.h \
 	sp-use-reference.h \
 	sp-use.h \
 	style.h \
@@ -6325,10 +6556,12 @@ selection-describer.o: \
 
 selection.o: \
 	selection.cpp \
+	color.h \
 	desktop-handles.h \
 	desktop.h \
 	display/nr-arena-forward.h \
 	document.h \
+	enums.h \
 	forward.h \
 	helper/helper-forward.h \
 	helper/sp-intl.h \
@@ -6361,8 +6594,14 @@ selection.o: \
 	selection.h \
 	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
 	tools-switch.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr.h \
@@ -6399,6 +6638,7 @@ seltrans-handles.o: \
 
 seltrans.o: \
 	seltrans.cpp \
+	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
 	desktop-snap.h \
@@ -6409,6 +6649,7 @@ seltrans.o: \
 	display/sp-canvas.h \
 	display/sp-ctrlline.h \
 	document.h \
+	enums.h \
 	event-context.h \
 	extension/extension-forward.h \
 	extension/implementation/implementation.h \
@@ -6455,11 +6696,14 @@ seltrans.o: \
 	selection.h \
 	seltrans-handles.h \
 	seltrans.h \
+	sp-item-group.h \
 	sp-item-update-cns.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-metrics.h \
 	sp-object.h \
 	sp-use.h \
+	style.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
@@ -7214,6 +7458,7 @@ sp-line.o: \
 sp-marker.o: \
 	sp-marker.cpp \
 	attributes.h \
+	color.h \
 	desktop-snap.h \
 	desktop.h \
 	display/nr-arena-forward.h \
@@ -7262,6 +7507,7 @@ sp-marker.o: \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object.h \
+	style.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
@@ -7327,6 +7573,7 @@ sp-metrics.o: \
 sp-namedview.o: \
 	sp-namedview.cpp \
 	attributes.h \
+	color.h \
 	desktop-events.h \
 	desktop-handles.h \
 	desktop-snap.h \
@@ -7335,6 +7582,7 @@ sp-namedview.o: \
 	display/nr-arena-forward.h \
 	display/sp-canvas.h \
 	document.h \
+	enums.h \
 	extension/extension-forward.h \
 	extension/implementation/implementation.h \
 	extension/internal/svg.h \
@@ -7368,9 +7616,15 @@ sp-namedview.o: \
 	sp-guide.h \
 	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/repr.h \
@@ -7825,6 +8079,7 @@ sp-rect.o: \
 sp-root.o: \
 	sp-root.cpp \
 	attributes.h \
+	color.h \
 	desktop.h \
 	display/nr-arena-forward.h \
 	display/nr-arena-forward.h \
@@ -7870,9 +8125,14 @@ sp-root.o: \
 	sp-defs.h \
 	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-object.h \
 	sp-root.h \
+	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	widgets/menu.h \
@@ -8011,6 +8271,7 @@ sp-spiral.o: \
 sp-star.o: \
 	sp-star.cpp \
 	attributes.h \
+	color.h \
 	desktop-affine.h \
 	desktop.h \
 	dialogs/object-attributes.h \
@@ -8055,6 +8316,7 @@ sp-star.o: \
 	sp-polygon.h \
 	sp-shape.h \
 	sp-star.h \
+	style.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
@@ -8067,6 +8329,7 @@ sp-star.o: \
 sp-symbol.o: \
 	sp-symbol.cpp \
 	attributes.h \
+	color.h \
 	desktop-snap.h \
 	desktop.h \
 	display/nr-arena-forward.h \
@@ -8112,11 +8375,16 @@ sp-symbol.o: \
 	sp-defs.h \
 	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-namedview.h \
 	sp-object-group.h \
 	sp-object.h \
 	sp-symbol.h \
+	style.h \
 	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	widgets/menu.h \
@@ -8518,6 +8786,7 @@ sp-use-reference.o: \
 sp-use.o: \
 	sp-use.cpp \
 	attributes.h \
+	color.h \
 	desktop-events.h \
 	desktop.h \
 	display/nr-arena-forward.h \
@@ -8561,11 +8830,14 @@ sp-use.o: \
 	prefs-utils.h \
 	refcounted.h \
 	require-config.h \
+	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-object-repr.h \
 	sp-object.h \
 	sp-use-reference.h \
 	sp-use.h \
+	style.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
@@ -8580,6 +8852,7 @@ sp-use.o: \
 
 spiral-context.o: \
 	spiral-context.cpp \
+	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
 	desktop-snap.h \
@@ -8637,6 +8910,7 @@ spiral-context.o: \
 	sp-shape.h \
 	sp-spiral.h \
 	spiral-context.h \
+	style.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
@@ -8731,6 +9005,7 @@ splivarot.o: \
 
 star-context.o: \
 	star-context.cpp \
+	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
 	desktop-snap.h \
@@ -8789,6 +9064,7 @@ star-context.o: \
 	sp-shape.h \
 	sp-star.h \
 	star-context.h \
+	style.h \
 	svg/svg-types.h \
 	uri-references.h \
 	uri.h \
@@ -9058,6 +9334,7 @@ text-context.o: \
 
 toolbox.o: \
 	toolbox.cpp \
+	color.h \
 	desktop-handles.h \
 	desktop-handles.h \
 	desktop.h \
@@ -9145,6 +9422,7 @@ toolbox.o: \
 	sp-star.h \
 	spiral-context.h \
 	star-context.h \
+	style.h \
 	svg/svg-types.h \
 	toolbox.h \
 	uri-references.h \
@@ -9171,6 +9449,7 @@ toolbox.o: \
 tools-switch.o: \
 	tools-switch.cpp \
 	arc-context.h \
+	color.h \
 	desktop-handles.h \
 	desktop.h \
 	display/curve.h \
@@ -9235,6 +9514,7 @@ tools-switch.o: \
 	sp-shape.h \
 	spiral-context.h \
 	star-context.h \
+	style.h \
 	svg/svg-types.h \
 	text-context.h \
 	tools-switch.h \
@@ -9269,6 +9549,7 @@ uri.o: \
 verbs.o: \
 	verbs.cpp \
 	arc-context.h \
+	color.h \
 	desktop-handles.h \
 	desktop-snap.h \
 	desktop.h \
@@ -9351,6 +9632,7 @@ verbs.o: \
 	spiral-context.h \
 	splivarot.h \
 	star-context.h \
+	style.h \
 	svg/svg-types.h \
 	text-context.h \
 	toolbox.h \
@@ -9950,10 +10232,12 @@ widgets/sp-color-wheel.o: \
 
 widgets/sp-widget.o: \
 	widgets/sp-widget.cpp \
+	color.h \
 	desktop-handles.h \
 	desktop.h \
 	display/nr-arena-forward.h \
 	document.h \
+	enums.h \
 	forward.h \
 	forward.h \
 	helper/helper-forward.h \
@@ -9981,8 +10265,15 @@ widgets/sp-widget.o: \
 	message.h \
 	refcounted.h \
 	selection.h \
+	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	widgets/sp-widget.h \
@@ -10164,11 +10455,13 @@ xml/repr.o: \
 
 zoom-context.o: \
 	zoom-context.cpp \
+	color.h \
 	desktop-affine.h \
 	desktop-handles.h \
 	desktop.h \
 	display/nr-arena-forward.h \
 	document.h \
+	enums.h \
 	event-context.h \
 	forward.h \
 	helper/helper-forward.h \
@@ -10199,8 +10492,15 @@ zoom-context.o: \
 	rubberband.h \
 	selcue.h \
 	selection.h \
+	sp-item-group.h \
 	sp-item.h \
+	sp-marker.h \
 	sp-object.h \
+	style.h \
+	svg/svg-types.h \
+	uri-references.h \
+	uri.h \
+	uri.h \
 	version.h \
 	view.h \
 	xml/xml-forward.h \

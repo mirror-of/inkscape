@@ -270,6 +270,7 @@ OBJECTS = \
 	node-context.o \
 	nodepath.o \
 	object-edit.o \
+	object-hierarchy.o \
 	object-ui.o \
 	path-chemistry.o \
 	prefix.o \
@@ -660,6 +661,7 @@ LINTS = \
 	node-context.lint \
 	nodepath.lint \
 	object-edit.lint \
+	object-hierarchy.lint \
 	object-ui.lint \
 	path-chemistry.lint \
 	prefix.lint \
