@@ -69,8 +69,6 @@ struct SPDrawContext : public SPEventContext{
     sigc::connection sel_changed_connection;
     sigc::connection sel_modified_connection;
 
-    NR::Point p[SP_DRAW_POINTS_MAX];
-    gint npoints;
     bool red_curve_is_valid;
 };
 
@@ -79,7 +77,6 @@ struct SPDrawContextClass : public SPEventContextClass{};
 GType sp_draw_context_get_type(void);
 SPDrawAnchor *spdc_test_inside(SPDrawContext *dc, NR::Point p);
 void spdc_concat_colors_and_flush(SPDrawContext *dc, gboolean forceclosed);
-void spdc_endpoint_snap(SPDrawContext *dc, NR::Point &p, guint const state);
 void spdc_endpoint_snap_internal(SPDrawContext *dc, NR::Point &p, NR::Point const o, guint state);
 
 

@@ -1,5 +1,10 @@
 2004-10-11  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/draw-context.cpp, src/draw-context.h, src/pen-context.cpp,
+	  src/pen-context.h, src/pencil-context.cpp, src/pencil-context.h:
+	  Move npoints,p from SPDrawContext to both SPPenContext and
+	  SPPencilContext.
+
 	* src/draw-context.cpp, src/draw-context.h: Split off new files
 	  pen-context.h, pen-context.cpp, pencil-context.h, pencil-context.cpp,
 	  draw-anchor.h, draw-anchor.cpp.

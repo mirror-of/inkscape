@@ -19,6 +19,8 @@ enum {
 };
 
 struct SPPencilContext : public SPDrawContext{
+    NR::Point p[SP_DRAW_POINTS_MAX];
+    gint npoints;
     guint state : 2;
 };
 

@@ -49,7 +49,7 @@ static gint pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion cons
 static gint pen_handle_button_release(SPPenContext *const pc, GdkEventButton const &revent);
 static gint pen_handle_2button_press(SPPenContext *const pc);
 static gint pen_handle_key_press(SPPenContext *const pc, guint const keyval);
-static void spdc_reset_colors(SPDrawContext *dc);
+static void spdc_reset_colors(SPPenContext *pc);
 
 
 static NR::Point pen_drag_origin_w(0, 0);
@@ -100,8 +100,8 @@ sp_pen_context_class_init(SPPenContextClass *klass)
 static void
 sp_pen_context_init(SPPenContext *pc)
 {
+    pc->npoints = 0;
     pc->mode = SP_PEN_CONTEXT_MODE_CLICK;
-
     pc->state = SP_PEN_CONTEXT_POINT;
 
     pc->c0 = NULL;
@@ -194,6 +194,13 @@ sp_pen_context_set(SPEventContext *ec, gchar const *key, gchar const *val)
     }
 }
 
+
+/** Snaps new node relative to the previous node. */
+static void
+spdc_endpoint_snap(SPPenContext *pc, NR::Point &p, guint const state)
+{
+    spdc_endpoint_snap_internal(pc, p, pc->p[0], state);
+}
 
 /** Snaps new node's handle relative to the new node. */
 static void
@@ -352,10 +359,10 @@ pen_handle_motion_notify(SPPenContext *const pc, GdkEventMotion const &mevent)
             return FALSE;   // Do not drag if we're within tolerance from origin.
         }
     }
-    // Once the user has moved farther than tolerance from the original location 
-    // (indicating they intend to move the object, not click), then always process the 
+    // Once the user has moved farther than tolerance from the original location
+    // (indicating they intend to move the object, not click), then always process the
     // motion notify coordinates as given (no snapping back to origin)
-    pen_within_tolerance = false; 
+    pen_within_tolerance = false;
 
     SPDesktop *const dt = pc->desktop;
     if ( ( mevent.state & GDK_BUTTON1_MASK ) && !pc->grab ) {
@@ -612,40 +619,39 @@ pen_handle_key_press(SPPenContext *const pc, guint const keyval)
 }
 
 static void
-spdc_reset_colors(SPDrawContext *dc)
+spdc_reset_colors(SPPenContext *pc)
 {
     /* Red */
-    sp_curve_reset(dc->red_curve);
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), NULL);
+    sp_curve_reset(pc->red_curve);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), NULL);
     /* Blue */
-    sp_curve_reset(dc->blue_curve);
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->blue_bpath), NULL);
+    sp_curve_reset(pc->blue_curve);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->blue_bpath), NULL);
     /* Green */
-    while (dc->green_bpaths) {
-        gtk_object_destroy(GTK_OBJECT(dc->green_bpaths->data));
-        dc->green_bpaths = g_slist_remove(dc->green_bpaths, dc->green_bpaths->data);
+    while (pc->green_bpaths) {
+        gtk_object_destroy(GTK_OBJECT(pc->green_bpaths->data));
+        pc->green_bpaths = g_slist_remove(pc->green_bpaths, pc->green_bpaths->data);
     }
-    sp_curve_reset(dc->green_curve);
-    if (dc->green_anchor) {
-        dc->green_anchor = sp_draw_anchor_destroy(dc->green_anchor);
+    sp_curve_reset(pc->green_curve);
+    if (pc->green_anchor) {
+        pc->green_anchor = sp_draw_anchor_destroy(pc->green_anchor);
     }
-    dc->sa = NULL;
-    dc->ea = NULL;
-    dc->npoints = 0;
-    dc->red_curve_is_valid = false;
+    pc->sa = NULL;
+    pc->ea = NULL;
+    pc->npoints = 0;
+    pc->red_curve_is_valid = false;
 }
 
 
 static void
-spdc_pen_set_initial_point(SPPenContext *pc, NR::Point const p)
+spdc_pen_set_initial_point(SPPenContext *const pc, NR::Point const p)
 {
-    SPDrawContext *dc = SP_DRAW_CONTEXT(pc);
-    g_assert( dc->npoints == 0 );
+    g_assert( pc->npoints == 0 );
 
-    dc->p[0] = p;
-    dc->p[1] = p;
-    dc->npoints = 2;
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), NULL);
+    pc->p[0] = p;
+    pc->p[1] = p;
+    pc->npoints = 2;
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), NULL);
 }
 
 static void
@@ -671,77 +677,72 @@ spdc_pen_set_subsequent_point(SPPenContext *const pc, NR::Point const p)
 }
 
 static void
-spdc_pen_set_ctrl(SPPenContext *pc, NR::Point const p, guint state)
+spdc_pen_set_ctrl(SPPenContext *const pc, NR::Point const p, guint const state)
 {
-    SPDrawContext *dc = SP_DRAW_CONTEXT(pc);
-
     sp_canvas_item_show(pc->c1);
     sp_canvas_item_show(pc->cl1);
 
-    if ( dc->npoints == 2 ) {
-        dc->p[1] = p;
+    if ( pc->npoints == 2 ) {
+        pc->p[1] = p;
         sp_canvas_item_hide(pc->c0);
         sp_canvas_item_hide(pc->cl0);
-        SP_CTRL(pc->c1)->moveto(dc->p[1]);
-        sp_ctrlline_set_coords(SP_CTRLLINE(pc->cl1), dc->p[0], dc->p[1]);
-    } else if ( dc->npoints == 5 ) {
-        dc->p[4] = p;
+        SP_CTRL(pc->c1)->moveto(pc->p[1]);
+        sp_ctrlline_set_coords(SP_CTRLLINE(pc->cl1), pc->p[0], pc->p[1]);
+    } else if ( pc->npoints == 5 ) {
+        pc->p[4] = p;
         sp_canvas_item_show(pc->c0);
         sp_canvas_item_show(pc->cl0);
         if ( ( ( pc->mode == SP_PEN_CONTEXT_MODE_CLICK ) && ( state & GDK_CONTROL_MASK ) ) ||
              ( ( pc->mode == SP_PEN_CONTEXT_MODE_DRAG ) &&  !( state & GDK_SHIFT_MASK  ) ) ) {
-            NR::Point delta = p - dc->p[3];
-            dc->p[2] = dc->p[3] - delta;
-            sp_curve_reset(dc->red_curve);
-            sp_curve_moveto(dc->red_curve, dc->p[0]);
-            sp_curve_curveto(dc->red_curve, dc->p[1], dc->p[2], dc->p[3]);
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->red_bpath), dc->red_curve);
+            NR::Point delta = p - pc->p[3];
+            pc->p[2] = pc->p[3] - delta;
+            sp_curve_reset(pc->red_curve);
+            sp_curve_moveto(pc->red_curve, pc->p[0]);
+            sp_curve_curveto(pc->red_curve, pc->p[1], pc->p[2], pc->p[3]);
+            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(pc->red_bpath), pc->red_curve);
         }
-        SP_CTRL(pc->c0)->moveto(dc->p[2]);
-        sp_ctrlline_set_coords(SP_CTRLLINE(pc->cl0), dc->p[3], dc->p[2]);
-        SP_CTRL(pc->c1)->moveto(dc->p[4]);
-        sp_ctrlline_set_coords(SP_CTRLLINE(pc->cl1), dc->p[3], dc->p[4]);
+        SP_CTRL(pc->c0)->moveto(pc->p[2]);
+        sp_ctrlline_set_coords(SP_CTRLLINE(pc->cl0), pc->p[3], pc->p[2]);
+        SP_CTRL(pc->c1)->moveto(pc->p[4]);
+        sp_ctrlline_set_coords(SP_CTRLLINE(pc->cl1), pc->p[3], pc->p[4]);
     } else {
-        g_warning("Something bad happened - npoints is %d", dc->npoints);
+        g_warning("Something bad happened - npoints is %d", pc->npoints);
     }
 }
 
 static void
 spdc_pen_finish_segment(SPPenContext *const pc, NR::Point const p, guint const state)
 {
-    SPDrawContext *const dc = SP_DRAW_CONTEXT(pc);
-
-    if (!sp_curve_empty(dc->red_curve)) {
-        sp_curve_append_continuous(dc->green_curve, dc->red_curve, 0.0625);
-        SPCurve *curve = sp_curve_copy(dc->red_curve);
+    if (!sp_curve_empty(pc->red_curve)) {
+        sp_curve_append_continuous(pc->green_curve, pc->red_curve, 0.0625);
+        SPCurve *curve = sp_curve_copy(pc->red_curve);
         /* fixme: */
         SPCanvasItem *cshape = sp_canvas_bpath_new(SP_DT_SKETCH(pc->desktop), curve);
         sp_curve_unref(curve);
-        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(cshape), dc->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(cshape), pc->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 
-        dc->green_bpaths = g_slist_prepend(dc->green_bpaths, cshape);
+        pc->green_bpaths = g_slist_prepend(pc->green_bpaths, cshape);
 
-        dc->p[0] = dc->p[3];
-        dc->p[1] = dc->p[4];
-        dc->npoints = 2;
+        pc->p[0] = pc->p[3];
+        pc->p[1] = pc->p[4];
+        pc->npoints = 2;
 
-        sp_curve_reset(dc->red_curve);
+        sp_curve_reset(pc->red_curve);
     }
 }
 
 static void
 spdc_pen_finish(SPPenContext *const pc, gboolean const closed)
 {
-    SPDrawContext *const dc = SP_DRAW_CONTEXT(pc);
     SPDesktop *const desktop = pc->desktop;
     desktop->messageStack()->flash(Inkscape::NORMAL_MESSAGE, _("Finishing pen"));
 
-    sp_curve_reset(dc->red_curve);
-    spdc_concat_colors_and_flush(dc, closed);
-    dc->sa = NULL;
-    dc->ea = NULL;
+    sp_curve_reset(pc->red_curve);
+    spdc_concat_colors_and_flush(pc, closed);
+    pc->sa = NULL;
+    pc->ea = NULL;
 
-    dc->npoints = 0;
+    pc->npoints = 0;
     pc->state = SP_PEN_CONTEXT_POINT;
 
     sp_canvas_item_hide(pc->c0);
@@ -749,8 +750,8 @@ spdc_pen_finish(SPPenContext *const pc, gboolean const closed)
     sp_canvas_item_hide(pc->cl0);
     sp_canvas_item_hide(pc->cl1);
 
-    if (dc->green_anchor) {
-        dc->green_anchor = sp_draw_anchor_destroy(dc->green_anchor);
+    if (pc->green_anchor) {
+        pc->green_anchor = sp_draw_anchor_destroy(pc->green_anchor);
     }
 }
 

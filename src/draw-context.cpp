@@ -118,8 +118,6 @@ sp_draw_context_init(SPDrawContext *dc)
     dc->red_color = 0xff00007f;
     dc->blue_color = 0x0000ff7f;
     dc->green_color = 0x00ff007f;
-
-    dc->npoints = 0;
     dc->red_curve_is_valid = false;
 
     new (&dc->sel_changed_connection) sigc::connection();
@@ -394,15 +392,6 @@ spdc_endpoint_snap_internal(SPDrawContext *dc, NR::Point &p, NR::Point const o, 
         /* Free */
         namedview_free_snap_all_types(SP_EVENT_CONTEXT_DESKTOP(dc)->namedview, p);
     }
-}
-
-/**
-\brief  Snaps new node relative to the previous node
-*/
-void
-spdc_endpoint_snap(SPDrawContext *dc, NR::Point &p, guint const state)
-{
-    spdc_endpoint_snap_internal(dc, p, dc->p[0], state);
 }
 
 
