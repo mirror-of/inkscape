@@ -1,3 +1,7 @@
+2004-11-09  Bryce Harrington <bryce@bryceharrington.org>
+
+	* src/dialogs/item-properties.cpp
+
 2004-11-09  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-item.cpp, src/style.cpp, src/style.h:
