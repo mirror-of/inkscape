@@ -278,6 +278,10 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
     SPGradientContext *rc = SP_GRADIENT_CONTEXT(event_context);
 
     event_context->tolerance = prefs_get_int_attribute_limited("options.dragtolerance", "value", 0, 0, 100);
+    double const nudge = prefs_get_double_attribute_limited("options.nudgedistance", "value", 2, 0, 1000); // in px
+
+    GrDrag *drag = event_context->_grdrag;
+    g_assert (drag);
 
     gint ret = FALSE;
     switch (event->type) {
@@ -362,14 +366,6 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
                                         _("<b>Shift</b>: draw gradient around the starting point"),
                                         NULL);
             break;
-        case GDK_Up:
-        case GDK_Down:
-        case GDK_KP_Up:
-        case GDK_KP_Down:
-            // prevent the zoom field from activation
-            if (!MOD__CTRL_ONLY)
-                ret = TRUE;
-            break;
 
         case GDK_x:
         case GDK_X:
@@ -385,6 +381,81 @@ static gint sp_gradient_context_root_handler(SPEventContext *event_context, GdkE
         case GDK_Escape:
             SP_DT_SELECTION(desktop)->clear();
             //TODO: make dragging escapable by Esc
+            break;
+
+        case GDK_Tab: // Tab - cycle selection forward
+            if (!(MOD__CTRL_ONLY || (MOD__CTRL && MOD__SHIFT))) {
+                drag->select_next();
+                ret = TRUE;
+            }
+            break;
+        case GDK_ISO_Left_Tab:  // Shift Tab - cycle selection backward
+            if (!(MOD__CTRL_ONLY || (MOD__CTRL && MOD__SHIFT))) {
+                drag->select_prev();
+                ret = TRUE;
+            }
+            break;
+
+        case GDK_Left: // move handle left
+        case GDK_KP_Left:
+        case GDK_KP_4:
+            if (!MOD__CTRL) { // not ctrl
+                if (MOD__ALT) { // alt
+                    if (MOD__SHIFT) drag->selected_move_screen(-10, 0); // shift
+                    else drag->selected_move_screen(-1, 0); // no shift
+                }
+                else { // no alt
+                    if (MOD__SHIFT) drag->selected_move(-10*nudge, 0); // shift
+                    else drag->selected_move(-nudge, 0); // no shift
+                }
+                ret = TRUE;
+            }
+            break;
+        case GDK_Up: // move handle up
+        case GDK_KP_Up:
+        case GDK_KP_8:
+            if (!MOD__CTRL) { // not ctrl
+                if (MOD__ALT) { // alt
+                    if (MOD__SHIFT) drag->selected_move_screen(0, 10); // shift
+                    else drag->selected_move_screen(0, 1); // no shift
+                }
+                else { // no alt
+                    if (MOD__SHIFT) drag->selected_move(0, 10*nudge); // shift
+                    else drag->selected_move(0, nudge); // no shift
+                }
+                ret = TRUE;
+            }
+            break;
+        case GDK_Right: // move handle right
+        case GDK_KP_Right:
+        case GDK_KP_6:
+            if (!MOD__CTRL) { // not ctrl
+                if (MOD__ALT) { // alt
+                    if (MOD__SHIFT) drag->selected_move_screen(10, 0); // shift
+                    else drag->selected_move_screen(1, 0); // no shift
+                }
+                else { // no alt
+                    if (MOD__SHIFT) drag->selected_move(10*nudge, 0); // shift
+                    else drag->selected_move(nudge, 0); // no shift
+                }
+                ret = TRUE;
+            }
+            break;
+        case GDK_Down: // move handle down
+        case GDK_KP_Down:
+        case GDK_KP_2:
+            if (!MOD__CTRL) { // not ctrl
+                if (MOD__ALT) { // alt
+                    if (MOD__SHIFT) drag->selected_move_screen(0, -10); // shift
+                    else drag->selected_move_screen(0, -1); // no shift
+                }
+                else { // no alt
+                    if (MOD__SHIFT) drag->selected_move(0, -10*nudge); // shift
+                    else drag->selected_move(0, -nudge); // no shift
+                }
+                ret = TRUE;
+            }
+            break;
         default:
             break;
         }

@@ -121,12 +121,18 @@ struct GrDrag {
 	std::vector<double> hor_levels;
 	std::vector<double> vert_levels;
 
-	GSList *draggers;
+	GList *draggers;
 	GSList *lines;
 
 	void updateDraggers ();
 	void updateLines ();
 	void updateLevels ();
+
+	void selected_move (double x, double y);
+	void selected_move_screen (double x, double y);
+
+	void select_next ();
+	void select_prev ();
 };
 
 #endif

@@ -123,10 +123,10 @@ GrDrag::~GrDrag()
 	this->sel_changed_connection.disconnect();
 	this->sel_modified_connection.disconnect();
 
-	for (GSList *l = this->draggers; l != NULL; l = l->next) {
+	for (GList *l = this->draggers; l != NULL; l = l->next) {
           delete ((GrDragger *) l->data);
 	}
-	g_slist_free (this->draggers);
+	g_list_free (this->draggers);
 	this->draggers = NULL;
 	this->selected = NULL;
 
@@ -180,7 +180,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
         if (dragger->draggables && dragger->draggables->next) {
             // create a new dragger
             GrDragger *dr_new = new GrDragger (dragger->parent, dragger->point, NULL);
-            dragger->parent->draggers = g_slist_prepend (dragger->parent->draggers, dr_new);
+            dragger->parent->draggers = g_list_prepend (dragger->parent->draggers, dr_new);
             // relink to it all but the first draggable in the list
             for (GSList const* i = dragger->draggables->next; i != NULL; i = i->next) {
                 GrDraggable *draggable = (GrDraggable *) i->data;
@@ -194,7 +194,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
         }
     } else {
         // without Shift; see if we need to snap to another dragger
-        for (GSList *di = dragger->parent->draggers; di != NULL; di = di->next) {
+        for (GList *di = dragger->parent->draggers; di != NULL; di = di->next) {
             GrDragger *d_new = (GrDragger *) di->data;
             if (dragger->mayMerge(d_new) && NR::L2 (d_new->point - p) < snap_dist) {
 
@@ -207,7 +207,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
                 }
 
                 // unlink and delete this dragger
-                dragger->parent->draggers = g_slist_remove (dragger->parent->draggers, dragger);
+                dragger->parent->draggers = g_list_remove (dragger->parent->draggers, dragger);
                 delete dragger;
 
                 // update the new merged dragger
@@ -236,7 +236,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
             NR::Point *dr_snap = NULL;
 
             if (draggable->point_num == POINT_LG_P1 || draggable->point_num == POINT_LG_P2) {
-                for (GSList *di = dragger->parent->draggers; di != NULL; di = di->next) {
+                for (GList *di = dragger->parent->draggers; di != NULL; di = di->next) {
                     GrDragger *d_new = (GrDragger *) di->data;
                     if (d_new == dragger)
                         continue;
@@ -246,7 +246,8 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
                         // found the other end of the linear gradient;
                         if (state & GDK_SHIFT_MASK) {
                             // moving linear around center
-                            dr_snap = &(NR::Point (0.5*(d_new->point + dragger->point)));
+                            NR::Point center = NR::Point (0.5*(d_new->point + dragger->point));
+                            dr_snap = &center;
                         } else {
                             // moving linear around the other end
                             dr_snap = &d_new->point;
@@ -254,7 +255,7 @@ gr_knot_moved_handler(SPKnot *knot, NR::Point const *ppointer, guint state, gpoi
                     }
                 }
             } else if (draggable->point_num == POINT_RG_R1 || draggable->point_num == POINT_RG_R2 || draggable->point_num == POINT_RG_FOCUS) {
-                for (GSList *di = dragger->parent->draggers; di != NULL; di = di->next) {
+                for (GList *di = dragger->parent->draggers; di != NULL; di = di->next) {
                     GrDragger *d_new = (GrDragger *) di->data;
                     if (d_new == dragger)
                         continue;
@@ -620,7 +621,7 @@ Select the dragger which has the given draggable.
 GrDragger *
 GrDrag::getDraggerFor (SPItem *item, guint point_num, bool fill_or_stroke)
 {
-    for (GSList const* i = this->draggers; i != NULL; i = i->next) {
+    for (GList const* i = this->draggers; i != NULL; i = i->next) {
         GrDragger *dragger = (GrDragger *) i->data;
         for (GSList const* j = dragger->draggables; j != NULL; j = j->next) {
             GrDraggable *da2 = (GrDraggable *) j->data;
@@ -683,7 +684,7 @@ GrDrag::addDragger (GrDraggable *draggable)
 {
     NR::Point p = sp_item_gradient_get_coords (draggable->item, draggable->point_num, draggable->fill_or_stroke);
 
-    for (GSList *i = this->draggers; i != NULL; i = i->next) {
+    for (GList *i = this->draggers; i != NULL; i = i->next) {
         GrDragger *dragger = (GrDragger *) i->data;
         if (dragger->mayMerge (draggable) && NR::L2 (dragger->point - p) < MERGE_DIST) {
             // distance is small, merge this draggable into dragger, no need to create new dragger
@@ -694,7 +695,7 @@ GrDrag::addDragger (GrDraggable *draggable)
     }
 
     GrDragger *new_dragger = new GrDragger(this, p, draggable);
-    this->draggers = g_slist_prepend (this->draggers, new_dragger);
+    this->draggers = g_list_prepend (this->draggers, new_dragger);
 }
 
 /**
@@ -739,10 +740,10 @@ void
 GrDrag::updateDraggers ()
 {
     // delete old draggers and deselect
-    for (GSList const* i = this->draggers; i != NULL; i = i->next) {
+    for (GList const* i = this->draggers; i != NULL; i = i->next) {
         delete ((GrDragger *) i->data);
     }
-    g_slist_free (this->draggers);
+    g_list_free (this->draggers);
     this->draggers = NULL;
     this->selected = NULL;
 
@@ -844,6 +845,57 @@ GrDrag::updateLevels ()
         vert_levels.push_back(0.5 * (rect.min()[NR::X] + rect.max()[NR::X]));
     }
 }
+
+void
+GrDrag::selected_move (double x, double y)
+{
+    if (selected == NULL)
+        return;
+
+    selected->point += NR::Point (x, y);
+    selected->point_original = selected->point;
+    sp_knot_moveto (selected->knot, &(selected->point));
+
+    selected->fireDraggables (true);
+
+    selected->updateDependencies(true);
+
+    // we did an undoable action
+    sp_document_done (SP_DT_DOCUMENT (desktop));
+}
+
+void
+GrDrag::selected_move_screen (double x, double y)
+{
+    gdouble zoom = SP_DESKTOP_ZOOM(desktop);
+    gdouble zx = x / zoom;
+    gdouble zy = y / zoom;
+
+    selected_move (zx, zy);
+}
+
+void
+GrDrag::select_next ()
+{
+    if (selected == NULL || g_list_find(draggers, selected)->next == NULL) {
+        if (draggers)
+            setSelected ((GrDragger *) draggers->data);
+    } else {
+        setSelected ((GrDragger *) g_list_find(draggers, selected)->next->data);
+    }
+}
+
+void
+GrDrag::select_prev ()
+{
+    if (selected == NULL || g_list_find(draggers, selected)->prev == NULL) {
+        if (draggers)
+            setSelected ((GrDragger *) g_list_last (draggers)->data);
+    } else {
+        setSelected ((GrDragger *) g_list_find(draggers, selected)->prev->data);
+    }
+}
+
 
 /*
   Local Variables:
