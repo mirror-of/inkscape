@@ -214,6 +214,7 @@ struct rdf_license_t rdf_licenses [] = {
     { NULL, NULL, rdf_license_empty, }
 };
 
+#define XML_TAG_NAME_SVG      "svg:svg"
 #define XML_TAG_NAME_METADATA "svg:metadata"
 #define XML_TAG_NAME_RDF      "rdf:RDF"
 #define XML_TAG_NAME_WORK     "cc:Work"
@@ -639,7 +640,7 @@ rdf_get_rdf_root_repr ( SPDocument * doc, bool build )
         //printf("missing XML '%s'\n",XML_TAG_NAME_RDF);
         if (!build) return NULL;
 
-        SPRepr * svg = sp_repr_lookup_name ( doc->rroot, "svg" );
+        SPRepr * svg = sp_repr_lookup_name ( doc->rroot, XML_TAG_NAME_SVG );
         g_return_val_if_fail ( svg != NULL, NULL );
 
         SPRepr * parent = sp_repr_lookup_name ( svg, XML_TAG_NAME_METADATA );
