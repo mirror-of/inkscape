@@ -32,18 +32,18 @@ public:
            Glib::ustring const &icon = "",
            bool mnemonic = false);
     Scalar(Glib::ustring const &label,
-           int unsigned digits,
+           unsigned digits,
            Glib::ustring const &suffix = "",
            Glib::ustring const &icon = "",
            bool mnemonic = false);
     Scalar(Glib::ustring const &label,
            Gtk::Adjustment &adjust,
-           int unsigned digits = 0,
+           unsigned digits = 0,
            Glib::ustring const &suffix = "",
            Glib::ustring const &icon = "",
            bool mnemonic = false);
 
-    int unsigned getDigits() const;
+    unsigned getDigits() const;
     double  getStep() const;
     double  getPage() const;
     double  getRangeMin() const;
@@ -52,7 +52,7 @@ public:
     double  getValue() const;
     int     getValueAsInt() const;
 
-    void    setDigits(int unsigned digits);
+    void    setDigits(unsigned digits);
     void    setIncrements(double step, double page);
     void    setRange(double min, double max);
     void    setValue(double value);
@@ -66,13 +66,13 @@ public:
 
 #endif // INKSCAPE_UI_WIDGET_SCALAR_H
 
-/* 
+/*
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :

@@ -54,7 +54,7 @@ Scalar::Scalar(Glib::ustring const &label,
  *                  mnemonic accelerator key (defaults to false).
  */
 Scalar::Scalar(Glib::ustring const &label,
-               int unsigned digits,
+               unsigned digits,
                Glib::ustring const &suffix,
                Glib::ustring const &icon,
                bool mnemonic)
@@ -76,7 +76,7 @@ Scalar::Scalar(Glib::ustring const &label,
  */
 Scalar::Scalar(Glib::ustring const &label,
                Gtk::Adjustment &adjust,
-               int unsigned digits,
+               unsigned digits,
                Glib::ustring const &suffix,
                Glib::ustring const &icon,
                bool mnemonic)
@@ -85,7 +85,7 @@ Scalar::Scalar(Glib::ustring const &label,
 }
 
 /** Fetches the precision of the spin buton */
-int unsigned
+unsigned
 Scalar::getDigits() const
 {
     g_assert(_widget != NULL);
@@ -151,7 +151,7 @@ Scalar::getValueAsInt() const
 
 /** Sets the precision to be displayed by the spin button */
 void
-Scalar::setDigits(int unsigned digits)
+Scalar::setDigits(unsigned digits)
 {
     g_assert(_widget != NULL);
     static_cast<Gtk::SpinButton*>(_widget)->set_digits(digits);
@@ -196,9 +196,9 @@ Scalar::update() {
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=99 :
