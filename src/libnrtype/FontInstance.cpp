@@ -4,6 +4,9 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
 #include "FontFactory.h"
 #include <libnr/nr-rect.h>
 #include <libnrtype/font-glyph.h>
@@ -25,7 +28,6 @@
 #endif
 
 #ifdef WIN32
-# include <config.h>
 # include <pango/pangowin32.h>
 # include <windows.h>
 #endif
