@@ -16,15 +16,14 @@
 #include "desktop.h"
 
 /* Single point methods */
-double sp_desktop_free_snap (SPDesktop const *desktop, NR::Point& req);
-double sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point& req, const NR::Point d);
+double sp_desktop_free_snap (SPDesktop const *desktop, NR::Point &req);
+double sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point &req, NR::Point const &d);
 
 gdouble sp_desktop_horizontal_snap(SPDesktop const *dt, NRPoint* req);
 
 gdouble sp_desktop_vertical_snap(SPDesktop const *dt, NRPoint* req);
 
 /* List of points methods */
-double sp_desktop_dim_snap_list_scale (SPDesktop const *desktop, NR::Point *p, const int length, const NR::Point norm, const double sx, const int dim);
 double sp_desktop_dim_snap_list_skew (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sy, const int dim);
 
 double sp_desktop_vector_snap_list (SPDesktop const *desktop, NR::Point *p, const int length, const NR::Point& norm, double sx, const double sy);

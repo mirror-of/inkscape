@@ -27,5 +27,8 @@ extern NRRect   NR_RECT_EMPTY;
 extern NRRectL  NR_RECT_L_EMPTY;
 extern NRRectL  NR_RECT_S_EMPTY;
 
+/** component_vectors[i] has 1.0 at position i, and 0.0 elsewhere
+    (i.e. in the other position). */
+extern NR::Point const component_vectors[2];
 
 #endif

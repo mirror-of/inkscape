@@ -389,11 +389,11 @@ sp_dtw_update (GtkWidget *dialog, SPDesktop *desktop)
 		sp_convert_distance (&val, pt, nv->gridunit);
 		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "gridoriginy");
 		gtk_adjustment_set_value (GTK_ADJUSTMENT (o), val);
-		val = nv->gridspacingx;
+		val = nv->gridspacing[NR::X];
 		sp_convert_distance (&val, pt, nv->gridunit);
 		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "gridspacingx");
 		gtk_adjustment_set_value (GTK_ADJUSTMENT (o), val);
-		val = nv->gridspacingy;
+		val = nv->gridspacing[NR::Y];
 		sp_convert_distance (&val, pt, nv->gridunit);
 		o = (GtkObject *)gtk_object_get_data (GTK_OBJECT (dialog), "gridspacingy");
 		gtk_adjustment_set_value (GTK_ADJUSTMENT (o), val);

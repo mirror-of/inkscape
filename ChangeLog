@@ -1,3 +1,32 @@
+2004-01-08  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/libnr/nr-values.h, src/libnr/nr-values.cpp: Add `Point
+	  component_vectors[2]' global constant (moved from desktop-snap.cpp).
+
+	* src/sp-namedview.cpp:
+	  Combine SPNamedview .hguides & .vguides into .guides.
+	  Combine .gridspacingx, .gridspacingy scalars into .gridspacing Point.
+	  Consequently reduce copy&paste code both here & in callers.
+
+	* src/sp-guide.h, src/sp-guide.cpp (sp_guide_moveto,
+	  sp_guide_position_set): Take a scalar (.position value) as argument,
+	  not a point.
+	  (sp_guide_position_from_pt): new function.  Adapt callers.
+	  (sp_guide_description): New function.
+	  (sp_guide_compare): Remove, not used.
+	  Change SPGuide.orientation (horizontal/vertical enum) to .normal (a
+	  Point to be used with dot product), as a step towards allowing
+	  arbitrary-direction guide lines.
+
+	* src/desktop-events.cpp: Adapt to SPGuide change.
+	  Remove some #if 0'ed code that would otherwise require updating.
+
+	* src/desktop-snap.h, src/desktop-snap.cpp: Convert some pass-by-value
+	  Point arguments to const references.  Unexport
+	  sp_desktop_dim_snap_list_scale.  Adapt to above changes.
+
+	* src/dialogs/desktop-properties.cpp: Adapt to .gridspacing change.
+
 2004-01-07  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/geom.h, src/geom.cpp (sp_intersector_line_intersection):

@@ -18,3 +18,8 @@ NRRectL  NR_RECT_L_EMPTY =
 NRRectL  NR_RECT_S_EMPTY =
        {NR_HUGE_S, NR_HUGE_S, -NR_HUGE_S, -NR_HUGE_S};
 
+/** component_vectors[i] is like $e_i$ in common mathematical usage;
+    or equivalently $I_i$ (where $I$ is the identity matrix). */
+NR::Point const component_vectors[] = {NR::Point(1., 0.),
+				       NR::Point(0., 1.)};
+

@@ -12,11 +12,7 @@
 
 #include "helper/helper-forward.h"
 #include "sp-object.h"
-
-typedef enum {
-	SP_GUIDE_HORIZONTAL,
-	SP_GUIDE_VERTICAL
-} SPGuideOrientation;
+#include "libnr/nr-types.h"
 
 #define SP_TYPE_GUIDE            (sp_guide_get_type ())
 #define SP_GUIDE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_GUIDE, SPGuide))
@@ -24,9 +20,10 @@ typedef enum {
 #define SP_IS_GUIDE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_GUIDE))
 #define SP_IS_GUIDE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_GUIDE))
 
+/* Represents the constraint on p that dot(g.direction, p) == g.position. */
 struct _SPGuide {
 	SPObject object;
-	SPGuideOrientation orientation;
+	NR::Point normal;
 	gdouble position;
 	guint32 color;
 	guint32 hicolor;
@@ -43,11 +40,12 @@ void sp_guide_show (SPGuide * guide, SPCanvasGroup * group, GCallback handler);
 void sp_guide_hide (SPGuide * guide, SPCanvas * canvas);
 void sp_guide_sensitize (SPGuide * guide, SPCanvas * canvas, gboolean sensitive);
 
-void sp_guide_moveto (SPGuide * guide, gdouble x, gdouble y);
-void sp_guide_position_set (SPGuide * guide, gdouble x, gdouble y);
+double sp_guide_position_from_pt(SPGuide const *guide, NR::Point const &pt);
+void sp_guide_moveto (SPGuide const *guide, double position);
+void sp_guide_position_set (SPGuide *guide, double position);
 void sp_guide_remove (SPGuide * guide);
 
-gint sp_guide_compare (gconstpointer a, gconstpointer b);
+char *sp_guide_description(SPGuide const *guide);
 
 #endif
 

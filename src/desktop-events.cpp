@@ -33,6 +33,7 @@
 #include "sp-metrics.h"
 #include "sp-item.h"
 #include "desktop-events.h"
+#include "helper/sp-intl.h"
 
 static void sp_dt_simple_guide_dialog (SPGuide * guide, SPDesktop * desktop);
 
@@ -164,7 +165,6 @@ sp_dt_guide_event (SPCanvasItem * item, GdkEvent * event, gpointer data)
 	SPGuide * guide;
 	SPDesktop * desktop;
 	gint ret = FALSE;
-	GString * msg;
 
 	guide = SP_GUIDE (data);
 	desktop = SP_DESKTOP (gtk_object_get_data (GTK_OBJECT (item->canvas), "SPDesktop"));
@@ -190,16 +190,9 @@ sp_dt_guide_event (SPCanvasItem * item, GdkEvent * event, gpointer data)
 		if (dragging) {
 			NRPoint p;
 			sp_desktop_w2d_xy_point (desktop, &p, event->motion.x, event->motion.y);
-			sp_guide_moveto (guide, p.x, p.y);
+			sp_guide_moveto(guide, sp_guide_position_from_pt(guide, p));
 			moved = TRUE;
-			switch (guide->orientation){
-			case SP_GUIDE_HORIZONTAL:
-				sp_desktop_set_coordinate_status (desktop, p.x, p.y, SP_COORDINATES_UNDERLINE_Y);
-				break;
-			case SP_GUIDE_VERTICAL:
-				sp_desktop_set_coordinate_status (desktop, p.x, p.y, SP_COORDINATES_UNDERLINE_X);
-				break;
-			}
+			sp_desktop_set_coordinate_status (desktop, p.x, p.y, 0);
 			sp_view_set_position (SP_VIEW (desktop), p.x, p.y);
 			ret=TRUE;
 		}
@@ -216,7 +209,7 @@ sp_dt_guide_event (SPCanvasItem * item, GdkEvent * event, gpointer data)
 				if ((winx >= 0) && (winy >= 0) &&
 				    (winx < w->allocation.width) &&
 				    (winy < w->allocation.height)) {
-					sp_guide_position_set (guide, p.x, p.y);
+					sp_guide_position_set(guide, sp_guide_position_from_pt(guide, p));
 				} else {
 					sp_guide_remove(guide);
 				}
@@ -230,19 +223,16 @@ sp_dt_guide_event (SPCanvasItem * item, GdkEvent * event, gpointer data)
 			ret=TRUE;
 		}
 	case GDK_ENTER_NOTIFY:
+	{
 		sp_guideline_set_color (SP_GUIDELINE (item), guide->hicolor);
-		msg = SP_PT_TO_METRIC_STRING (guide->position, SP_DEFAULT_METRIC);
-		switch (guide->orientation) {
-		case SP_GUIDE_HORIZONTAL:
-			g_string_prepend(msg, "horizontal guideline at ");
-			break;
-		case SP_GUIDE_VERTICAL:
-			g_string_prepend(msg, "vertical guideline at ");
-			break;
-		}
-		sp_view_set_status (SP_VIEW (desktop), msg->str, FALSE);
-		g_string_free (msg, FALSE);
+		GString *position_string = SP_PT_TO_METRIC_STRING (guide->position, SP_DEFAULT_METRIC);
+		char *guide_description = sp_guide_description(guide);
+		char *msg = g_strdup_printf(_("%s at %s"), guide_description, position_string->str);
+		g_free(guide_description);
+		g_string_free(position_string, TRUE);
+		sp_view_set_status (SP_VIEW (desktop), msg, FALSE);
        		break;
+	}
 	case GDK_LEAVE_NOTIFY:
 		sp_guideline_set_color (SP_GUIDELINE (item), guide->color);
 		sp_view_set_status (SP_VIEW (desktop), NULL, FALSE);
@@ -265,53 +255,6 @@ static gdouble oldpos;
 static gboolean mode;
 static gpointer g;
 
-#if 0
-static gdouble
-get_document_len (SPGuideOrientation orientation)
-{
-  SPDocument * document = NULL;
-  gdouble len =0;
-
-  document = SP_ACTIVE_DOCUMENT;
-  g_return_val_if_fail (SP_IS_DOCUMENT (document),0);
-  switch (orientation) {
-  case SP_GUIDE_VERTICAL:
-    len = sp_document_width (document);
-    break;
-  case SP_GUIDE_HORIZONTAL:
-    len = sp_document_height (document);
-    break;
-  }    
-  return len;
-}
-#endif
-
-#if 0
-static void
-guide_dialog_unit_changed (SPUnitMenu * u, SPSVGUnit system, SPMetric metric, SPGuide * guide)
-{
-  gdouble len = 0, pos = 0;
-  GString * st = NULL;
-
-  switch (system) {
-  case SP_SVG_UNIT_ABSOLUTE:
-    st = SP_PT_TO_METRIC_STRING (oldpos, metric);
-    g_string_prepend (st,"from ");
-    break;
-  case SP_SVG_UNIT_PERCENT:
-    len = get_document_len (guide->orientation);
-    pos = 100 * oldpos / len;
-    st = g_string_new ("");
-    g_string_sprintf (st, "from %0.2f %s", pos, "%");    
-    break;
-  default:
-    g_print("unit not allowed (should not happen)\n");
-    break;
-  }
-  gtk_label_set (GTK_LABEL (l2), st->str);
-  g_string_free (st, TRUE);
-}
-#endif
 
 static void
 guide_dialog_mode_changed (GtkWidget * widget)
@@ -349,7 +292,7 @@ guide_dialog_apply (GtkWidget * widget, SPGuide ** g)
 	} else {
 		newpos = guide->position + distance;
 	}
-	sp_guide_position_set (guide, newpos, newpos);
+	sp_guide_position_set (guide, newpos);
 	sp_document_done (SP_OBJECT_DOCUMENT (guide));
 }
 
@@ -489,33 +432,18 @@ sp_dt_simple_guide_dialog (SPGuide *guide, SPDesktop *desktop)
 	// initialize dialog
 	g = guide;
 	oldpos = guide->position;
-	switch (guide->orientation) {
-	case SP_GUIDE_VERTICAL:
-		gtk_label_set (GTK_LABEL (l1), "Move vertical guideline");
-		break;
-	case SP_GUIDE_HORIZONTAL:
-		gtk_label_set (GTK_LABEL (l1), "Move horizontal guideline");
-		break;
+	{
+		char *guide_description = sp_guide_description(guide);
+		char *label = g_strdup_printf(_("Move %s"), guide_description);
+		g_free(guide_description);
+		gtk_label_set (GTK_LABEL (l1), label);
+		g_free(label);
 	}
 
 	val = oldpos;
 	unit = sp_unit_selector_get_unit (SP_UNIT_SELECTOR (u));
 	sp_convert_distance_full (&val, sp_unit_get_identity (SP_UNIT_ABSOLUTE), unit, 1.0, 1.0);
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (e), val);
-#if 0
-	switch (system) {
-	case SP_SVG_UNIT_ABSOLUTE:
-		val = SP_PT_TO_METRIC (oldpos, metric);
-		break;
-	case SP_SVG_UNIT_PERCENT:
-		len = get_document_len (guide->orientation);
-		val = 100 * guide->position /len;
-		break;
-	default:
-		g_print("unit not allowed (should not happen\n");
-		break;
-	}
-#endif
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (e), val);
 	gtk_widget_grab_focus (e);
 	gtk_editable_select_region (GTK_EDITABLE (e), 0, 20);

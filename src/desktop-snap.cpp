@@ -23,16 +23,12 @@
 #include "desktop-snap.h"
 #include "geom.h"
 #include <libnr/nr-point-fns.h>
+#include <libnr/nr-values.h>
 
 /* minimal distance to norm before point is considered for snap */
 #define MIN_DIST_NORM 1.0
 
 #define SNAP_ON(d) (((d)->gridsnap > 0.0) || ((d)->guidesnap > 0.0))
-
-static NR::Point const horizontal(1, 0);
-static NR::Point const vertical(0, 1);
-static NR::Point const component_vectors[] = {NR::Point(1., 0.),
-					      NR::Point(0., 1.)};
 
 static gdouble sp_desktop_dim_snap(SPDesktop const *dt, NR::Point &req, unsigned const dim) {
 	g_assert(dim < 2);
@@ -59,14 +55,16 @@ sp_desktop_free_snap (SPDesktop const *desktop, NR::Point& req)
 	return 1e18;
 }
 
-/* Snap a point along a line n.X = d to another line X(t) = t*v + . */
+/** Add some multiple of v to req to make it satisfy dot(n, req) == d (within rounding error);
+    unless that isn't possible (i.e. v and n are orthogonal), in which case req remains unchanged.
+*/
 static double
-sp_intersector_a_vector_snap (NR::Point& req, const NR::Point v, 
-			const NR::Point n, double d)
+sp_intersector_a_vector_snap (NR::Point &req, NR::Point const &v,
+			      NR::Point const &n, double d)
 /* This function returns the snap position and the distance from the
    starting point for doing a snap to arbitrary line. */
 {
-	NR::Point starting = req;
+	NR::Point const starting(req);
 	NR::Point vperp = v.ccw();
 	double d0 = dot(vperp, req);
 	if(sp_intersector_line_intersection(vperp, d0, n, d, req) != intersects)
@@ -74,10 +72,15 @@ sp_intersector_a_vector_snap (NR::Point& req, const NR::Point v,
 	return L2(req - starting);
 }
 
-/* Look for snappoint along a line given by req and the vector (dx,dy) */
+static double round_to_nearest_multiple_plus(double x, double const c1, double const c0);
 
+/**
+ * Look for snappoint along a line given by \a req and the vector \a d.
+ *
+ * Requires: d != (0, 0).
+ */
 double
-sp_desktop_vector_snap (SPDesktop const * desktop, NR::Point& req, const NR::Point d)
+sp_desktop_vector_snap (SPDesktop const *desktop, NR::Point &req, NR::Point const &d)
 {
 	double best = 1e18, upper = 1e18;
 
@@ -95,25 +98,12 @@ sp_desktop_vector_snap (SPDesktop const * desktop, NR::Point& req, const NR::Poi
 	
 	if (nv->snaptoguides) {
 		upper = desktop->guidesnap;
-		for (GSList * l = nv->vguides; l != NULL; l = l->next) {
-			NR::Point trial = req;
-			SPGuide* g = SP_GUIDE (l->data);
+		for (GSList * l = nv->guides; l != NULL; l = l->next) {
+			NR::Point trial(req);
+			SPGuide const *g = SP_GUIDE (l->data);
 			gdouble dist = sp_intersector_a_vector_snap (trial, 
 								 v, 
-								 horizontal,
-								 g->position);
-			
-			if (dist < upper) {
-				upper = best = dist;
-				actual = trial;
-			}
-		}
-		for (GSList * l = nv->hguides; l != NULL; l = l->next) {
-			NR::Point trial = req;
-			SPGuide* g = SP_GUIDE (l->data);
-			gdouble dist = sp_intersector_a_vector_snap (trial, 
-								 v, 
-								 vertical,
+								 g->normal,
 								 g->position);
 			
 			if (dist < upper) {
@@ -127,31 +117,18 @@ sp_desktop_vector_snap (SPDesktop const * desktop, NR::Point& req, const NR::Poi
 /*  find nearest grid line (either H or V whatever is closer) along
  *  the vector to the requested point.  If the distance along the
  *  vector is less than the snap distance then snap. */
-		{
-			NR::Point trial = req;
-			double iv = floor(((req.pt[NR::Y] - nv->gridorigin.pt[NR::Y]) / nv->gridspacingy)+0.5);
+		upper = MIN(best, desktop->gridsnap);
+		for(unsigned d = 0; d < 2; ++d) {
+			NR::Point trial(req);
+			double const rounded
+				= round_to_nearest_multiple_plus(req.pt[d],
+								 nv->gridspacing[d],
+								 nv->gridorigin[d]);
 
-			double dist = sp_intersector_a_vector_snap (trial,
-							     v,
-							     vertical,
-							     iv*nv->gridspacingy + nv->gridorigin.pt[NR::Y]);
-
-			upper = MIN(best, desktop->gridsnap);
-			if (dist < upper) {
-				upper = best = dist;
-				actual = trial;
-			}
-		}
-		{
-			double ih = floor(((req.pt[NR::X] - nv->gridorigin.pt[NR::X]) / 
-					   nv->gridspacingx)+0.5);
-			
-			NR::Point trial = req;
-
-			double dist = sp_intersector_a_vector_snap (trial,
-							     v,
-							     horizontal,
-							     ih*nv->gridspacingx + nv->gridorigin.pt[NR::X]);
+			double const dist = sp_intersector_a_vector_snap (trial,
+									  v,
+									  component_vectors[d],
+									  rounded);
 
 			if (dist < upper) {
 				upper = best = dist;
@@ -161,6 +138,17 @@ sp_desktop_vector_snap (SPDesktop const * desktop, NR::Point& req, const NR::Poi
 	}
 	req = actual;
 	return best;
+}
+
+/**
+ * If c1==0 (and c0 is finite), then returns +/-inf.  This makes grid spacing of zero
+ * mean "ignore the grid in this dimention".  We're currently discussing "good" semantics
+ * for guide/grid snapping.
+ */
+static double
+round_to_nearest_multiple_plus(double x, double const c1, double const c0)
+{
+	return floor((x - c0) / c1 + .5) * c1 + c0;
 }
 
 /* look for snappoint on a circle given by center (cx,cy) and distance center-req) */
@@ -182,7 +170,7 @@ sp_desktop_circular_snap (SPDesktop const * desktop, NR::Point& req, const NR::P
  */
 
 static double
-sp_desktop_dim_snap_list (SPDesktop const *desktop, NR::Point *p, const int length, const double dx, const int dim)
+sp_desktop_dim_snap_list (SPDesktop const *desktop, NR::Point *p, int const length, double const dx, int const dim)
 {
 	gdouble dist = NR_HUGE;
 	gdouble xdist = dx;
@@ -202,7 +190,16 @@ sp_desktop_dim_snap_list (SPDesktop const *desktop, NR::Point *p, const int leng
 	return xdist;
 }
 
-/*
+#if 0
+static inline NR::Point
+map_mul(NR::Point const &a, NR::Point const &b)
+{
+	using NR::X;
+	using NR::Y;
+	return NR::Point(a[X] * b[X],
+			 a[Y] * b[Y]);
+}
+
 double
 sp_desktop_vector_snap_list (SPDesktop const *desktop, NR::Point *p, int length,const NR::Point norm, NR::Point s)
 {
@@ -216,22 +213,25 @@ sp_desktop_vector_snap_list (SPDesktop const *desktop, NR::Point *p, int length,
 	ratio = L2(s);
 
 	for (i = 0; i < length; i++) {
-		NR::Point q = p[i];
-		NR::Point check = (q - norm) * s + norm;
-		if ((fabs (q.y - norm->y) > MIN_DIST_NORM) || (fabs (q.y - norm->y) > MIN_DIST_NORM)) {
+		NR::Point p_from_norm = p[i] - norm;
+		NR::Point check = map_mul(p_from_norm, s) + norm;
+		if ( ( fabs p_from_norm[X] > MIN_DIST_NORM )  ||
+		     ( fabs p_from_norm[Y] > MIN_DIST_NORM ) ) {
 			d = sp_desktop_vector_snap (desktop, &check, check.x - norm->x, check.y - norm->y);
 			if ((d < 1e18) && (d < dist)) {
 				dist = d;
-				ratio = (fabs(q.x - norm->x) > fabs(q.y - norm->y)) ? 
-					(check.x - norm->x) / (q.x - norm->x) : 
-					(check.y - norm->y) / (q.y - norm->y); 
+				unsigned dominant = ( ( fabs(p_from_norm[X]) > fabs(p_from_norm[Y]) )
+						      ? X
+						      : Y );
+				ratio = ( ( check[dominant] - norm[dominant] )
+					  / p_from_norm[dominant] );
 			}
 		}
 	}
   
 	return ratio;
 }
-*/
+#endif /* to be deleted */
 
 double
 sp_desktop_vector_snap_list (SPDesktop const *desktop, NRPoint *p, int length, NRPoint const *norm, double sx, double sy)
@@ -263,8 +263,8 @@ sp_desktop_vector_snap_list (SPDesktop const *desktop, NRPoint *p, int length, N
 	return ratio;
 }
 
-double
-sp_desktop_dim_snap_list_scale (SPDesktop const *desktop, NR::Point *p, const int length, const NR::Point norm, const double sx, const int dim)
+static double
+sp_desktop_dim_snap_list_scale (SPDesktop const *desktop, NR::Point *p, int const length, NR::Point const &norm, double const sx, int const dim)
 {
 	if (!SNAP_ON (desktop))
 		return sx;
@@ -288,8 +288,8 @@ sp_desktop_dim_snap_list_scale (SPDesktop const *desktop, NR::Point *p, const in
 	return scale;
 }
 
-double
-sp_desktop_dim_snap_list_skew (SPDesktop const *desktop, NR::Point *p, const int length, const NR::Point norm, const double sx, const int dim)
+static double
+sp_desktop_dim_snap_list_skew (SPDesktop const *desktop, NR::Point *p, int const length, NR::Point const &norm, double const sx, int const dim)
 {
 	if (!SNAP_ON (desktop))
 		return sx;
@@ -380,7 +380,7 @@ double sp_desktop_vertical_snap_list (SPDesktop const *desktop, NRPoint *p, cons
 }
 
 
-double sp_desktop_dim_snap_list_scale (SPDesktop const *desktop, NRPoint *p, const int length, const NRPoint* norm, const double sx, int dim) {
+static double sp_desktop_dim_snap_list_scale (SPDesktop const *desktop, NRPoint *p, const int length, NRPoint const * norm, const double sx, int dim) {
 	NR::Point* l = new NR::Point[length];
 	for(int i = 0; i < length; i++)
 		l[i] = (NR::Point)p[i];
