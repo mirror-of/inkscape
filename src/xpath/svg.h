@@ -205,7 +205,7 @@ class SVGAnimatedString
 
 
 /*#########################################################################
-## 
+## SVGStringList
 #########################################################################*/
 
 /**
@@ -273,7 +273,7 @@ class SVGStringList
 
 
 /*#########################################################################
-## 
+## SVGAnimatedEnumeration
 #########################################################################*/
 
 /**
@@ -308,7 +308,7 @@ class SVGAnimatedEnumeration
 
 
 /*#########################################################################
-## 
+## SVGAnimatedInteger
 #########################################################################*/
 
 /**
@@ -341,7 +341,7 @@ class SVGAnimatedInteger
 
 
 /*#########################################################################
-## 
+## SVGNumber
 #########################################################################*/
 
 /**
@@ -371,7 +371,7 @@ class SVGNumber
 
 
 /*#########################################################################
-## 
+## SVGAnimatedNumber
 #########################################################################*/
 
 /**
@@ -405,7 +405,7 @@ class SVGAnimatedNumber
 
 
 /*#########################################################################
-## 
+## SVGNumberList
 #########################################################################*/
 
 /**
@@ -426,45 +426,44 @@ class SVGNumberList
     /**
      *
      */
-    virtual void   clear (  )
-                    throw( DOMException ) =0;
+    virtual void clear (  ) throw( DOMException ) =0;
 
     /**
      *
      */
-    virtual SVGNumber initialize ( SVGNumber *newItem )
+    virtual SVGNumber *initialize ( SVGNumber *newItem )
                     throw( DOMException, SVGException ) =0;
 
     /**
      *
      */
-    virtual SVGNumber getItem ( unsigned long index )
-                    throw( DOMException ) =0;
+    virtual SVGNumber *getItem ( unsigned long index )
+                                  throw( DOMException ) =0;
 
     /**
      *
      */
-    virtual SVGNumber insertItemBefore ( SVGNumber *newItem,
+    virtual SVGNumber *insertItemBefore ( SVGNumber *newItem,
                                          unsigned long index )
-                    throw( DOMException, SVGException ) =0;
+                                         throw( DOMException, SVGException ) =0;
 
     /**
      *
      */
-    virtual SVGNumber replaceItem ( SVGNumber *newItem, 
+    virtual SVGNumber *replaceItem ( SVGNumber *newItem, 
                                     unsigned long index )
                                     throw( DOMException, SVGException ) =0;
 
     /**
      *
      */
-    virtual SVGNumber removeItem ( unsigned long index )
+    virtual SVGNumber *removeItem ( unsigned long index )
                                   throw( DOMException ) =0;
 
     /**
      *
      */
-    virtual SVGNumber appendItem ( SVGNumber *newItem )
+    virtual SVGNumber *appendItem ( SVGNumber *newItem )
                                    throw( DOMException, SVGException ) =0;
 
 
@@ -474,7 +473,7 @@ class SVGNumberList
 
 
 /*#########################################################################
-## 
+## SVGAnimatedNumberList
 #########################################################################*/
 
 /**
@@ -487,12 +486,12 @@ class SVGAnimatedNumberList
     /**
      *
      */
-    virtual SVGNumberList getBaseVal() =0;
+    virtual SVGNumberList *getBaseVal() =0;
 
     /**
      *
      */
-    virtual SVGNumberList getAnimVal() =0;
+    virtual SVGNumberList *getAnimVal() =0;
 
 
 
@@ -503,7 +502,7 @@ class SVGAnimatedNumberList
 
 
 /*#########################################################################
-## 
+## SVGLength
 #########################################################################*/
 
 /**
@@ -532,20 +531,53 @@ class SVGLength
         SVG_LENGTHTYPE_PC         = 10
         };
 
-   virtual unsigned short getUnitType() =0;
+    /**
+     *
+     */
+    virtual unsigned short getUnitType( ) =0;
 
-   virtual float getValue() =0;
-   virtual void setValue(float val) throw (DOMException) =0;
+    /**
+     *
+     */
+    virtual float getValue( ) =0;
 
-             attribute float          valueInSpecifiedUnits;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual void setValue( float value )  throw (DOMException) =0;
 
-    virtual DOMString getvalueAsString() =0;
-    virtual void setvalueAsString(DOMString& val) throw (DOMException) =0;
+    /**
+     *
+     */
+    virtual float getValueInSpecifiedUnits( ) =0;
+ 
+    /**
+     *
+     */
+    virtual void setValueInSpecifiedUnits( float val )
+                                           throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual DOMString getValueAsString( ) =0;
+
+    /**
+     *
+     */
+    virtual void setValueAsString( DOMString& val )
+                                   throw (DOMException) =0;
 
 
-    void newValueSpecifiedUnits ( in unsigned short unitType, in float valueInSpecifiedUnits );
-    void convertToSpecifiedUnits ( in unsigned short unitType );
+    /**
+     *
+     */
+    virtual void newValueSpecifiedUnits ( unsigned short unitType, float val ) =0;
+
+    /**
+     *
+     */
+    virtual void convertToSpecifiedUnits ( unsigned short unitType ) =0;
 
 
 
@@ -556,7 +588,7 @@ class SVGLength
 
 
 /*#########################################################################
-## 
+## SVGAnimatedLength
 #########################################################################*/
 
 /**
@@ -565,10 +597,15 @@ class SVGLength
 class SVGAnimatedLength 
 {
 
+    /**
+     *
+     */
+    virtual SVGLength *getBaseVal() =0;
 
-
-    readonly attribute SVGLength baseVal;
-    readonly attribute SVGLength animVal;
+    /**
+     *
+     */
+    virtual SVGLength *getAnimVal() =0;
 
 
 
@@ -579,7 +616,7 @@ class SVGAnimatedLength
 
 
 /*#########################################################################
-## 
+## SVGLengthList
 #########################################################################*/
 
 /**
@@ -590,22 +627,54 @@ class SVGLengthList
 
 
 
-    readonly attribute unsigned long numberOfItems;
 
-    void   clear (  )
-                    throw( DOMException );
-    SVGLength initialize ( in SVGLength newItem )
-                    throw( DOMException, SVGException );
-    SVGLength getItem ( in unsigned long index )
-                    throw( DOMException );
-    SVGLength insertItemBefore ( in SVGLength newItem, in unsigned long index )
-                    throw( DOMException, SVGException );
-    SVGLength replaceItem ( in SVGLength newItem, in unsigned long index )
-                    throw( DOMException, SVGException );
-    SVGLength removeItem ( in unsigned long index )
-                    throw( DOMException );
-    SVGLength appendItem ( in SVGLength newItem )
-                    throw( DOMException, SVGException );
+    /**
+     *
+     */
+    virtual unsigned long getNumberOfItems() =0;
+
+
+    /**
+     *
+     */
+    virtual void   clear (  )
+                    throw( DOMException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGLength *initialize (SVGLength *newItem )
+                    throw( DOMException, SVGException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGLength *getItem (unsigned long index )
+                    throw( DOMException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGLength *insertItemBefore (SVGLength *newItem, unsigned long index )
+                    throw( DOMException, SVGException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGLength *replaceItem (SVGLength *newItem, unsigned long index )
+                    throw( DOMException, SVGException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGLength *removeItem (unsigned long index )
+                    throw( DOMException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGLength *appendItem (SVGLength *newItem )
+                    throw( DOMException, SVGException ) =0;
 
 
 
@@ -616,7 +685,7 @@ class SVGLengthList
 
 
 /*#########################################################################
-## 
+## SVGAnimatedLengthList
 #########################################################################*/
 
 /**
@@ -625,10 +694,15 @@ class SVGLengthList
 class SVGAnimatedLengthList 
 {
 
+    /**
+     *
+     */
+    virtual SVGLengthList *getBaseVal() =0;
 
-
-    readonly attribute SVGLengthList baseVal;
-    readonly attribute SVGLengthList animVal;
+    /**
+     *
+     */
+    virtual SVGLengthList *getAnimVal() =0;
 
 
 
@@ -639,7 +713,7 @@ class SVGAnimatedLengthList
 
 
 /*#########################################################################
-## 
+## SVGAngle
 #########################################################################*/
 
 /**
@@ -650,23 +724,66 @@ class SVGAngle
 
 
 
-    // Angle Unit Types
-    const unsigned short SVG_ANGLETYPE_UNKNOWN     = 0;
-    const unsigned short SVG_ANGLETYPE_UNSPECIFIED = 1;
-    const unsigned short SVG_ANGLETYPE_DEG         = 2;
-    const unsigned short SVG_ANGLETYPE_RAD         = 3;
-    const unsigned short SVG_ANGLETYPE_GRAD        = 4;
+    /**
+     *  Angle Unit Types
+     */
+    enum
+        {
+        SVG_ANGLETYPE_UNKNOWN     = 0,
+        SVG_ANGLETYPE_UNSPECIFIED = 1,
+        SVG_ANGLETYPE_DEG         = 2,
+        SVG_ANGLETYPE_RAD         = 3,
+        SVG_ANGLETYPE_GRAD        = 4
+        };
 
-    readonly attribute unsigned short unitType;
-             attribute float          value;
-                         // throw DOMException on setting
-             attribute float          valueInSpecifiedUnits;
-                         // throw DOMException on setting
-             attribute DOMString      valueAsString;
-                         // throw DOMException on setting
 
-    void newValueSpecifiedUnits ( in unsigned short unitType, in float valueInSpecifiedUnits );
-    void convertToSpecifiedUnits ( in unsigned short unitType );
+
+    /**
+     *
+     */
+    virtual unsigned short getUnitType() =0;
+
+    /**
+     *
+     */
+    virtual float getValue() =0;
+
+    /**
+     *
+     */
+    virtual void setValue(float val) throw (DOMException) = 0;
+
+    /**
+     *
+     */
+    virtual float getValueInSpecifiedUnits() =0;
+
+    /**
+     *
+     */
+    virtual void setValueInSpecifiedUnits(float val) throw (DOMException) = 0;
+
+    /**
+     *
+     */
+    virtual DOMString getValueAsString() =0;
+
+    /**
+     *
+     */
+    virtual void setValueAsString(DOMString& val) throw (DOMException) = 0;
+
+
+    /**
+     *
+     */
+    virtual void newValueSpecifiedUnits (unsigned short unitType,
+                                 float valueInSpecifiedUnits ) =0;
+
+    /**
+     *
+     */
+    virtual void convertToSpecifiedUnits (unsigned short unitType ) =0;
 
 
 
@@ -677,7 +794,7 @@ class SVGAngle
 
 
 /*#########################################################################
-## 
+## SVGAnimatedAngle
 #########################################################################*/
 
 /**
@@ -688,8 +805,16 @@ class SVGAnimatedAngle
 
 
 
-    readonly attribute SVGAngle baseVal;
-    readonly attribute SVGAngle animVal;
+    /**
+     *
+     */
+    virtual SVGAngle *getBaseVal() =0;
+
+    /**
+     *
+     */
+    virtual SVGAngle *getAnimVal() =0;
+
 
 
 
@@ -700,7 +825,7 @@ class SVGAnimatedAngle
 
 
 /*#########################################################################
-## 
+## SVGColor
 #########################################################################*/
 
 /**
@@ -710,22 +835,54 @@ class SVGColor : css::CSSValue
 {
 
 
-    // Color Types
-    const unsigned short SVG_COLORTYPE_UNKNOWN           = 0;
-    const unsigned short SVG_COLORTYPE_RGBCOLOR          = 1;
-    const unsigned short SVG_COLORTYPE_RGBCOLOR_ICCCOLOR = 2;
-    const unsigned short SVG_COLORTYPE_CURRENTCOLOR      = 3;
+    /**
+     * Color Types
+     */
+    enum
+        {
+        SVG_COLORTYPE_UNKNOWN           = 0,
+        SVG_COLORTYPE_RGBCOLOR          = 1,
+        SVG_COLORTYPE_RGBCOLOR_ICCCOLOR = 2,
+        SVG_COLORTYPE_CURRENTCOLOR      = 3
+        };
 
-    readonly attribute unsigned short colorType;
-    readonly attribute css::RGBColor  rgbColor;
-    readonly attribute SVGICCColor    iccColor;
 
-    void        setRGBColor ( in DOMString rgbColor )
-                    throw( SVGException );
-    void        setRGBColorICCColor ( in DOMString rgbColor, in DOMString iccColor )
-                    throw( SVGException );
-    void        setColor ( in unsigned short colorType, in DOMString rgbColor, in DOMString iccColor )
-                    throw( SVGException );
+    /**
+     *
+     */
+    virtual unsigned short getColorType() =0;
+
+    /**
+     *
+     */
+    virtual css::RGBColor *getRgbColor() =0;
+
+    /**
+     *
+     */
+    virtual SVGICCColor *getIccColor() =0;
+
+
+    /**
+     *
+     */
+    virtual void setRGBColor (DOMString& rgbColor )
+                              throw( SVGException ) =0;
+
+    /**
+     *
+     */
+    virtual void setRGBColorICCColor (DOMString& rgbColor,
+                                      DOMString& iccColor )
+                                      throw( SVGException ) =0;
+
+    /**
+     *
+     */
+    virtual void setColor (unsigned short colorType, 
+                           DOMString& rgbColor,
+                           DOMString& iccColor )
+                           throw( SVGException ) =0;
 
 
 
@@ -736,7 +893,7 @@ class SVGColor : css::CSSValue
 
 
 /*#########################################################################
-## 
+## SVGICCColor
 #########################################################################*/
 
 /**
@@ -745,11 +902,20 @@ class SVGColor : css::CSSValue
 class SVGICCColor 
 {
 
+    /**
+     *
+     */
+    virtual DOMString getColorProfile() =0;
 
+    /**
+     *
+     */
+    virtual void setColorProfile() throw (DOMException) =0;
 
-             attribute DOMString      colorProfile;
-                         // throw DOMException on setting
-    readonly attribute SVGNumberList colors;
+    /**
+     *
+     */
+    virtual SVGNumberList *getColors() =0;
 
 
 
@@ -760,7 +926,7 @@ class SVGICCColor
 
 
 /*#########################################################################
-## 
+## SVGRect
 #########################################################################*/
 
 /**
@@ -769,17 +935,45 @@ class SVGICCColor
 class SVGRect 
 {
 
+    /**
+     *
+     */
+    virtual float getX() =0;
 
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
-             attribute float x;
-                         // throw DOMException on setting
-             attribute float y;
-                         // throw DOMException on setting
-             attribute float width;
-                         // throw DOMException on setting
-             attribute float height;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual float getY() =0;
 
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getWidth() =0;
+
+    /**
+     *
+     */
+    virtual void setWidth(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getHeight() =0;
+
+    /**
+     *
+     */
+    virtual void setHeight(float val) throw (DOMException) =0;
 
 
 };//
@@ -789,7 +983,7 @@ class SVGRect
 
 
 /*#########################################################################
-## 
+## SVGAnimatedRect
 #########################################################################*/
 
 /**
@@ -798,10 +992,15 @@ class SVGRect
 class SVGAnimatedRect 
 {
 
+    /**
+     *
+     */
+    virtual SVGRect *getBaseVal() =0;
 
-
-    readonly attribute SVGRect baseVal;
-    readonly attribute SVGRect animVal;
+    /**
+     *
+     */
+    virtual SVGRect *getAnimVal() =0;
 
 
 
@@ -812,7 +1011,7 @@ class SVGAnimatedRect
 
 
 /*#########################################################################
-## 
+## SVGUnitTypes
 #########################################################################*/
 
 /**
@@ -821,12 +1020,15 @@ class SVGAnimatedRect
 class SVGUnitTypes 
 {
 
-
-
-    // Unit Types
-    const unsigned short SVG_UNIT_TYPE_UNKNOWN           = 0;
-    const unsigned short SVG_UNIT_TYPE_USERSPACEONUSE    = 1;
-    const unsigned short SVG_UNIT_TYPE_OBJECTBOUNDINGBOX = 2;
+    /**
+     * Unit Types
+     */
+    enum
+        {
+        SVG_UNIT_TYPE_UNKNOWN           = 0,
+        SVG_UNIT_TYPE_USERSPACEONUSE    = 1,
+        SVG_UNIT_TYPE_OBJECTBOUNDINGBOX = 2
+        };
 
 
 
@@ -837,7 +1039,7 @@ class SVGUnitTypes
 
 
 /*#########################################################################
-## 
+## SVGStylable
 #########################################################################*/
 
 /**
@@ -846,13 +1048,21 @@ class SVGUnitTypes
 class SVGStylable 
 {
 
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getClassName() =0;
+
+    /**
+     *
+     */
+    virtual css::CSSStyleDeclaration *getStyle() =0;
 
 
-    readonly attribute SVGAnimatedString className;
-    readonly attribute css::CSSStyleDeclaration style;
-
-    css::CSSValue getPresentationAttribute ( in DOMString name );
-
+    /**
+     *
+     */
+    css::CSSValue *getPresentationAttribute (DOMString& name ) =0;
 
 
 };//
@@ -862,7 +1072,7 @@ class SVGStylable
 
 
 /*#########################################################################
-## 
+## SVGLocatable
 #########################################################################*/
 
 /**
@@ -871,16 +1081,36 @@ class SVGStylable
 class SVGLocatable 
 {
 
+    /**
+     *
+     */
+    virtual SVGElement *getNearestViewportElement() =0;
 
+    /**
+     *
+     */
+    virtual SVGElement *getFarthestViewportElement() =0;
 
-    readonly attribute SVGElement              nearestViewportElement;
-    readonly attribute SVGElement              farthestViewportElement;
+    /**
+     *
+     */
+    virtual SVGRect   *getBBox (  ) =0;
 
-    SVGRect   getBBox (  );
-    SVGMatrix getCTM (  );
-    SVGMatrix getScreenCTM (  );
-    SVGMatrix getTransformToElement ( in SVGElement element )
-                    throw( SVGException );
+    /**
+     *
+     */
+    virtual SVGMatrix *getCTM (  ) =0;
+
+    /**
+     *
+     */
+    virtual SVGMatrix *getScreenCTM (  ) =0;
+
+    /**
+     *
+     */
+    virtual SVGMatrix *getTransformToElement (SVGElement element )
+                    throw( SVGException ) =0;
 
 
 
@@ -891,7 +1121,7 @@ class SVGLocatable
 
 
 /*#########################################################################
-## 
+## SVGTransformable
 #########################################################################*/
 
 /**
@@ -901,7 +1131,10 @@ class SVGTransformable : SVGLocatable
 {
 
 
-    readonly attribute SVGAnimatedTransformList transform;
+    /**
+     *
+     */
+    virtual SVGAnimatedTransformList *getTransform() =0;
 
 
 
@@ -912,7 +1145,7 @@ class SVGTransformable : SVGLocatable
 
 
 /*#########################################################################
-## 
+## SVGTests
 #########################################################################*/
 
 /**
@@ -923,11 +1156,26 @@ class SVGTests
 
 
 
-    readonly attribute SVGStringList requiredFeatures;
-    readonly attribute SVGStringList requiredExtensions;
-    readonly attribute SVGStringList systemLanguage;
+    /**
+     *
+     */
+    virtual SVGStringList *getRequiredFeatures() =0;
 
-    boolean hasExtension ( in DOMString extension );
+    /**
+     *
+     */
+    virtual SVGStringList *getRequiredExtensions() =0;
+
+    /**
+     *
+     */
+    virtual SVGStringList *getSystemLanguage() =0;
+
+    
+    /**
+     *
+     */
+    virtual bool hasExtension (DOMString& extension ) =0;
 
 
 
@@ -938,7 +1186,7 @@ class SVGTests
 
 
 /*#########################################################################
-## 
+## SVGLangSpace
 #########################################################################*/
 
 /**
@@ -949,10 +1197,25 @@ class SVGLangSpace
 
 
 
-             attribute DOMString xmllang;
-                         // throw DOMException on setting
-             attribute DOMString xmlspace;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual DOMString getXmllang() =0;
+
+    /**
+     *
+     */
+    virtual void setXmllang(DOMString& val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual DOMString getXmlspace() =0;
+
+    /**
+     *
+     */
+    virtual void setXmlspace(DOMString& val) throw (DOMException) =0;
 
 
 
@@ -963,7 +1226,7 @@ class SVGLangSpace
 
 
 /*#########################################################################
-## 
+## SVGExternalResourcesRequired
 #########################################################################*/
 
 /**
@@ -973,8 +1236,10 @@ class SVGExternalResourcesRequired
 {
 
 
-
-    readonly attribute SVGAnimatedBoolean externalResourcesRequired;
+    /**
+     *
+     */
+    virtual SVGAnimatedBoolean *getExternalResourcesRequired() =0;
 
 
 
@@ -985,7 +1250,7 @@ class SVGExternalResourcesRequired
 
 
 /*#########################################################################
-## 
+## SVGFitToViewBox
 #########################################################################*/
 
 /**
@@ -994,10 +1259,15 @@ class SVGExternalResourcesRequired
 class SVGFitToViewBox 
 {
 
+    /**
+     *
+     */
+    virtual SVGAnimatedRect getViewBox() =0;
 
-
-    readonly attribute SVGAnimatedRect                viewBox;
-    readonly attribute SVGAnimatedPreserveAspectRatio preserveAspectRatio;
+    /**
+     *
+     */
+    virtual SVGAnimatedPreserveAspectRatio getPreserveAspectRatio() =0;
 
 
 
@@ -1008,7 +1278,7 @@ class SVGFitToViewBox
 
 
 /*#########################################################################
-## 
+## SVGZoomAndPan
 #########################################################################*/
 
 /**
@@ -1018,15 +1288,26 @@ class SVGZoomAndPan
 {
 
 
+    /**
+     * Zoom and Pan Types
+     */
+    enum
+        {
+        SVG_ZOOMANDPAN_UNKNOWN = 0,
+        SVG_ZOOMANDPAN_DISABLE = 1,
+        SVG_ZOOMANDPAN_MAGNIFY = 2
+        };
 
-    // Zoom and Pan Types
-    const unsigned short SVG_ZOOMANDPAN_UNKNOWN   = 0;
-    const unsigned short SVG_ZOOMANDPAN_DISABLE = 1;
-    const unsigned short SVG_ZOOMANDPAN_MAGNIFY = 2;
 
-             attribute unsigned short zoomAndPan;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual unsigned short getZoomAndPan() =0;
 
+    /**
+     *
+     */
+    virtual void setZoomAndPan(unsigned short val) throw (DOMException) =0;
 
 
 };//
@@ -1036,7 +1317,7 @@ class SVGZoomAndPan
 
 
 /*#########################################################################
-## 
+## SVGViewSpec
 #########################################################################*/
 
 /**
@@ -1049,12 +1330,36 @@ class SVGViewSpec :
 
 
 
-    readonly attribute SVGTransformList transform;
-    readonly attribute SVGElement       viewTarget;
-    readonly attribute DOMString        viewBoxString;
-    readonly attribute DOMString        preserveAspectRatioString;
-    readonly attribute DOMString        transformString;
-    readonly attribute DOMString        viewTargetString;
+
+    /**
+     *
+     */
+    virtual SVGTransformList *getTransform() =0;
+
+    /**
+     *
+     */
+    virtual SVGElement *getViewTarget() =0;
+
+    /**
+     *
+     */
+    virtual DOMString getViewBoxString() =0;
+
+    /**
+     *
+     */
+    virtual DOMString getPreserveAspectRatioString() =0;
+
+    /**
+     *
+     */
+    virtual DOMString getTransformString() =0;
+
+    /**
+     *
+     */
+    virtual DOMString getViewTargetString() =0;
 
 
 
@@ -1065,7 +1370,7 @@ class SVGViewSpec :
 
 
 /*#########################################################################
-## 
+## SVGURIReference
 #########################################################################*/
 
 /**
@@ -1074,9 +1379,10 @@ class SVGViewSpec :
 class SVGURIReference 
 {
 
-
-
-    readonly attribute SVGAnimatedString href;
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getHref() =0;
 
 
 
@@ -1087,7 +1393,7 @@ class SVGURIReference
 
 
 /*#########################################################################
-## 
+## SVGCSSRule
 #########################################################################*/
 
 /**
@@ -1097,10 +1403,13 @@ class SVGCSSRule : css::CSSRule
 {
 
 
-    // Additional CSS RuleType to support ICC color specifications
-    const unsigned short COLOR_PROFILE_RULE = 7;
-
-
+    /**
+     * Additional CSS RuleType to support ICC color specifications
+     */
+    enum
+        {
+        COLOR_PROFILE_RULE = 7
+        };
 
 };//
 
@@ -1109,7 +1418,7 @@ class SVGCSSRule : css::CSSRule
 
 
 /*#########################################################################
-## 
+## SVGRenderingIntent
 #########################################################################*/
 
 /**
@@ -1118,15 +1427,18 @@ class SVGCSSRule : css::CSSRule
 class SVGRenderingIntent 
 {
 
-
-
-    // Rendering Intent Types
-    const unsigned short RENDERING_INTENT_UNKNOWN               = 0;
-    const unsigned short RENDERING_INTENT_AUTO                  = 1;
-    const unsigned short RENDERING_INTENT_PERCEPTUAL            = 2;
-    const unsigned short RENDERING_INTENT_RELATIVE_COLORIMETRIC = 3;
-    const unsigned short RENDERING_INTENT_SATURATION            = 4;
-    const unsigned short RENDERING_INTENT_ABSOLUTE_COLORIMETRIC = 5;
+    /**
+     * Rendering Intent Types
+     */
+    enum
+        {
+        RENDERING_INTENT_UNKNOWN               = 0,
+        RENDERING_INTENT_AUTO                  = 1,
+        RENDERING_INTENT_PERCEPTUAL            = 2,
+        RENDERING_INTENT_RELATIVE_COLORIMETRIC = 3,
+        RENDERING_INTENT_SATURATION            = 4,
+        RENDERING_INTENT_ABSOLUTE_COLORIMETRIC = 5
+        };
 
 
 
@@ -1137,7 +1449,7 @@ class SVGRenderingIntent
 
 
 /*#########################################################################
-## 
+## SVGDocument
 #########################################################################*/
 
 /**
@@ -1150,12 +1462,31 @@ class SVGDocument :
 
 
 
-    readonly attribute DOMString    title;
-    readonly attribute DOMString     referrer;
-    readonly attribute DOMString      domain;
-    readonly attribute DOMString      URL;
-    readonly attribute SVGSVGElement rootElement;
 
+    /**
+     *
+     */
+    virtual DOMString getTitle() =0;
+
+    /**
+     *
+     */
+    virtual DOMString getReferrer() =0;
+
+    /**
+     *
+     */
+    virtual DOMString getDomain() =0;
+
+    /**
+     *
+     */
+    virtual DOMString getURL() =0;
+
+    /**
+     *
+     */
+    virtual SVGSVGElement *getRootElement() =0;
 
 
 };//
@@ -1165,7 +1496,7 @@ class SVGDocument :
 
 
 /*#########################################################################
-## 
+## SVGSVGElement
 #########################################################################*/
 
 /**
@@ -1188,50 +1519,224 @@ class SVGSVGElement :
 
 
 
-    readonly attribute SVGAnimatedLength x;
-    readonly attribute SVGAnimatedLength y;
-    readonly attribute SVGAnimatedLength width;
-    readonly attribute SVGAnimatedLength height;
-             attribute DOMString         contentScriptType;
-                         // throw DOMException on setting
-             attribute DOMString         contentStyleType;
-                         // throw DOMException on setting
-    readonly attribute SVGRect           viewport;
-    readonly attribute float pixelUnitToMillimeterX;
-    readonly attribute float pixelUnitToMillimeterY;
-    readonly attribute float screenPixelToMillimeterX;
-    readonly attribute float screenPixelToMillimeterY;
-             attribute boolean useCurrentView;
-                         // throw DOMException on setting
-    readonly attribute SVGViewSpec currentView;
-             attribute float currentScale;
-                         // throw DOMException on setting
-    readonly attribute SVGPoint currentTranslate;
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getX() =0;
 
-    unsigned long suspendRedraw ( in unsigned long max_wait_milliseconds );
-    void          unsuspendRedraw ( in unsigned long suspend_handle_id )
-                    throw( DOMException );
-    void          unsuspendRedrawAll (  );
-    void          forceRedraw (  );
-    void          pauseAnimations (  );
-    void          unpauseAnimations (  );
-    boolean       animationsPaused (  );
-    float         getCurrentTime (  );
-    void          setCurrentTime ( in float seconds );
-    NodeList      getIntersectionList ( in SVGRect rect, in SVGElement referenceElement );
-    NodeList      getEnclosureList ( in SVGRect rect, in SVGElement referenceElement );
-    boolean       checkIntersection ( in SVGElement element, in SVGRect rect );
-    boolean       checkEnclosure ( in SVGElement element, in SVGRect rect );
-    void          deselectAll (  );
-    SVGNumber              createSVGNumber (  );
-    SVGLength              createSVGLength (  );
-    SVGAngle               createSVGAngle (  );
-    SVGPoint               createSVGPoint (  );
-    SVGMatrix              createSVGMatrix (  );
-    SVGRect                createSVGRect (  );
-    SVGTransform           createSVGTransform (  );
-    SVGTransform     createSVGTransformFromMatrix ( in SVGMatrix matrix );
-    Element         getElementById ( in DOMString elementId );
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getWidth() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getHeight() =0;
+
+    /**
+     *
+     */
+    virtual DOMString getContentScriptType() =0;
+
+    /**
+     *
+     */
+    virtual void setContentScriptType(DOMString& val) throw (DOMException) =0;
+
+
+    /**
+     *
+     */
+    virtual DOMString getContentStyleType() =0;
+
+    /**
+     *
+     */
+    virtual void setContentStyleType(DOMString& val) throw (DOMException) =0;
+
+
+    /**
+     *
+     */
+    virtual SVGRect *getViewport() =0;
+
+    /**
+     *
+     */
+    virtual float getPixelUnitToMillimeterX() =0;
+
+    /**
+     *
+     */
+    virtual float getPixelUnitToMillimeterY() =0;
+
+    /**
+     *
+     */
+    virtual float getScreenPixelToMillimeterX() =0;
+
+    /**
+     *
+     */
+    virtual float getScreenPixelToMillimeterY() =0;
+
+
+    /**
+     *
+     */
+    virtual bool getUseCurrentView() =0;
+
+    /**
+     *
+     */
+    virtual void setUseCurrentView(bool val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual SVGViewSpec *getCurrentView() =0;
+
+
+    /**
+     *
+     */
+    virtual float getCurrentScale() =0;
+
+    /**
+     *
+     */
+    virtual void setCurrentScale(float val) throw (DOMException) =0;
+
+
+    /**
+     *
+     */
+    virtual SVGPoint *getCurrentTranslate() =0;
+
+    
+    /**
+     *
+     */
+    virtual unsigned long suspendRedraw (unsigned long max_wait_milliseconds ) =0;
+    
+    /**
+     *
+     */
+    virtual void unsuspendRedraw (unsigned long suspend_handle_id )
+                                  throw( DOMException ) =0;
+    
+    /**
+     *
+     */
+    virtual void unsuspendRedrawAll (  ) =0;
+    
+    /**
+     *
+     */
+    virtual void forceRedraw (  ) =0;
+    
+    /**
+     *
+     */
+    virtual void pauseAnimations (  ) =0;
+    
+    /**
+     *
+     */
+    virtual void unpauseAnimations (  ) =0;
+    
+    /**
+     *
+     */
+    virtual boolean animationsPaused (  ) =0;
+    
+    /**
+     *
+     */
+    virtual float getCurrentTime (  ) =0;
+    
+    /**
+     *
+     */
+    virtual void setCurrentTime (float seconds ) =0;
+    
+    /**
+     *
+     */
+    virtual NodeList *getIntersectionList (SVGRect *rect, 
+                                           SVGElement *referenceElement ) =0;
+    
+    /**
+     *
+     */
+    virtual NodeList *getEnclosureList (SVGRect *rect,
+                                        SVGElement *referenceElement ) =0;
+    
+    /**
+     *
+     */
+    virtual bool checkIntersection (SVGElement *element, SVGRect *rect ) =0;
+    
+    /**
+     *
+     */
+    virtual bool checkEnclosure (SVGElement *element, SVGRect *rect ) =0;
+    
+    /**
+     *
+     */
+    virtual void deselectAll (  ) =0;
+    
+    /**
+     *
+     */
+    virtual SVGNumber *createSVGNumber (  ) =0;
+    
+    /**
+     *
+     */
+    virtual SVGLength *createSVGLength (  ) =0;
+    
+    /**
+     *
+     */
+    virtual SVGAngle *createSVGAngle (  ) =0;
+    
+    /**
+     *
+     */
+    virtual SVGPoint *createSVGPoint (  ) =0;
+    
+    /**
+     *
+     */
+    virtual SVGMatrix *createSVGMatrix (  ) =0;
+    
+    /**
+     *
+     */
+    virtual SVGRect *createSVGRect (  ) =0;
+    
+    /**
+     *
+     */
+    virtual SVGTransform *createSVGTransform (  ) =0;
+    
+    /**
+     *
+     */
+    virtual SVGTransform *createSVGTransformFromMatrix (SVGMatrix *matrix ) =0;
+    
+    /**
+     *
+     */
+    virtual Element *getElementById (DOMString& elementId ) =0;
 
 
 
@@ -1242,7 +1747,7 @@ class SVGSVGElement :
 
 
 /*#########################################################################
-## 
+## SVGGElement
 #########################################################################*/
 
 /**
@@ -1263,7 +1768,7 @@ class SVGGElement :
 
 
 /*#########################################################################
-## 
+## SVGDefsElement
 #########################################################################*/
 
 /**
@@ -1284,7 +1789,7 @@ class SVGDefsElement :
 
 
 /*#########################################################################
-## 
+## SVGDescElement
 #########################################################################*/
 
 /**
@@ -1301,7 +1806,7 @@ class SVGDescElement :
 
 
 /*#########################################################################
-## 
+## SVGTitleElement
 #########################################################################*/
 
 /**
@@ -1318,7 +1823,7 @@ class SVGTitleElement :
 
 
 /*#########################################################################
-## 
+## SVGSymbolElement
 #########################################################################*/
 
 /**
@@ -1338,7 +1843,7 @@ class SVGSymbolElement :
 
 
 /*#########################################################################
-## 
+## SVGUseElement
 #########################################################################*/
 
 /**
@@ -1357,12 +1862,36 @@ class SVGUseElement :
 
 
 
-    readonly attribute SVGAnimatedLength   x;
-    readonly attribute SVGAnimatedLength   y;
-    readonly attribute SVGAnimatedLength   width;
-    readonly attribute SVGAnimatedLength   height;
-    readonly attribute SVGElementInstance instanceRoot;
-    readonly attribute SVGElementInstance animatedInstanceRoot;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getX() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getWidth() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getHeight() =0;
+
+    /**
+     *
+     */
+    virtual SVGElementInstance *getInstanceRoot() =0;
+
+    /**
+     *
+     */
+    virtual SVGElementInstance *getAnimatedInstanceRoot() =0;
 
 
 
@@ -1373,7 +1902,7 @@ class SVGUseElement :
 
 
 /*#########################################################################
-## 
+## SVGElementInstance
 #########################################################################*/
 
 /**
@@ -1382,15 +1911,45 @@ class SVGUseElement :
 class SVGElementInstance : events::EventTarget 
 {
 
+    /**
+     *
+     */
+    virtual SVGElement *getCorrespondingElement() =0;
 
-    readonly attribute SVGElement correspondingElement;
-    readonly attribute SVGUseElement correspondingUseElement;
-    readonly attribute SVGElementInstance parentNode;
-    readonly attribute SVGElementInstanceList childNodes;
-    readonly attribute SVGElementInstance firstChild;
-    readonly attribute SVGElementInstance lastChild;
-    readonly attribute SVGElementInstance previousSibling;
-    readonly attribute SVGElementInstance nextSibling;
+    /**
+     *
+     */
+    virtual SVGUseElement *getCorrespondingUseElement() =0;
+
+    /**
+     *
+     */
+    virtual SVGElementInstance *getParentNode() =0;
+
+    /**
+     *
+     */
+    virtual SVGElementInstanceList *getChildNodes() =0;
+
+    /**
+     *
+     */
+    virtual SVGElementInstance *getFirstChild() =0;
+
+    /**
+     *
+     */
+    virtual SVGElementInstance *getLastChild() =0;
+
+    /**
+     *
+     */
+    virtual SVGElementInstance *getPreviousSibling() =0;
+
+    /**
+     *
+     */
+    virtual SVGElementInstance *getNextSibling() =0;
 
 
 
@@ -1401,7 +1960,7 @@ class SVGElementInstance : events::EventTarget
 
 
 /*#########################################################################
-## 
+## SVGElementInstanceList
 #########################################################################*/
 
 /**
@@ -1411,10 +1970,15 @@ class SVGElementInstanceList
 {
 
 
+    /**
+     *
+     */
+    virtual unsigned long getLength() =0;
 
-    readonly attribute unsigned long length;
-
-    SVGElementInstance item ( in unsigned long index );
+    /**
+     *
+     */
+    virtual SVGElementInstance *item (unsigned long index ) =0;
 
 
 
@@ -1425,7 +1989,7 @@ class SVGElementInstanceList
 
 
 /*#########################################################################
-## 
+## SVGImageElement
 #########################################################################*/
 
 /**
@@ -1443,12 +2007,31 @@ class SVGImageElement :
 {
 
 
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getX() =0;
 
-    readonly attribute SVGAnimatedLength x;
-    readonly attribute SVGAnimatedLength y;
-    readonly attribute SVGAnimatedLength width;
-    readonly attribute SVGAnimatedLength height;
-    readonly attribute SVGAnimatedPreserveAspectRatio preserveAspectRatio;
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getWidth() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getHeight() =0;
+
+
+    /**
+     *
+     */
+    virtual SVGAnimatedPreserveAspectRatio *getPreserveAspectRatio() =0;
 
 
 
@@ -1459,7 +2042,7 @@ class SVGImageElement :
 
 
 /*#########################################################################
-## 
+## SVGSwitchElement
 #########################################################################*/
 
 /**
@@ -1480,7 +2063,7 @@ class SVGSwitchElement :
 
 
 /*#########################################################################
-## 
+## GetSVGDocument
 #########################################################################*/
 
 /**
@@ -1489,12 +2072,11 @@ class SVGSwitchElement :
 class GetSVGDocument 
 {
 
-
-
-    SVGDocument getSVGDocument (  )
-                    throw( DOMException );
-
-
+    /**
+     *
+     */
+    virtual SVGDocument *getSVGDocument (  )
+                    throw( DOMException ) =0;
 
 };//
 
@@ -1503,7 +2085,7 @@ class GetSVGDocument
 
 
 /*#########################################################################
-## 
+## SVGStyleElement
 #########################################################################*/
 
 /**
@@ -1512,15 +2094,45 @@ class GetSVGDocument
 class SVGStyleElement : SVGElement 
 {
 
+    /**
+     *
+     */
+    virtual DOMString getXmlspace() = 0;
 
-             attribute DOMString xmlspace;
-                         // throw DOMException on setting
-             attribute DOMString type;
-                         // throw DOMException on setting
-             attribute DOMString media;
-                         // throw DOMException on setting
-             attribute DOMString title;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual void setXmlspace(DOMString& val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual DOMString getType() = 0;
+
+    /**
+     *
+     */
+    virtual void setType(DOMString& val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual DOMString getMedia() = 0;
+
+    /**
+     *
+     */
+    virtual void setMedia(DOMString& val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual DOMString getTitle() = 0;
+
+    /**
+     *
+     */
+    virtual void setTitle(DOMString& val) throw (DOMException) =0;
 
 
 
@@ -1531,7 +2143,7 @@ class SVGStyleElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGPoint
 #########################################################################*/
 
 /**
@@ -1542,12 +2154,30 @@ class SVGPoint
 
 
 
-             attribute float x;
-                         // throw DOMException on setting
-             attribute float y;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
-    SVGPoint matrixTransform ( in SVGMatrix matrix );
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getY() = 0;
+
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual SVGPoint *matrixTransform (SVGMatrix *matrix ) =0;
 
 
 
@@ -1558,7 +2188,7 @@ class SVGPoint
 
 
 /*#########################################################################
-## 
+## SVGPointList
 #########################################################################*/
 
 /**
@@ -1567,24 +2197,51 @@ class SVGPoint
 class SVGPointList 
 {
 
+    /**
+     *
+     */
+    virtual unsigned long getNumberOfItems() =0;
 
+    /**
+     *
+     */
+    virtual void clear (  ) throw( DOMException ) =0;
 
-    readonly attribute unsigned long numberOfItems;
+    /**
+     *
+     */
+    virtual SVGPoint *initialize (SVGPoint *newItem )
+                                 throw( DOMException, SVGException ) =0;
 
-    void   clear (  )
-                    throw( DOMException );
-    SVGPoint initialize ( in SVGPoint newItem )
-                    throw( DOMException, SVGException );
-    SVGPoint getItem ( in unsigned long index )
-                    throw( DOMException );
-    SVGPoint insertItemBefore ( in SVGPoint newItem, in unsigned long index )
-                    throw( DOMException, SVGException );
-    SVGPoint replaceItem ( in SVGPoint newItem, in unsigned long index )
-                    throw( DOMException, SVGException );
-    SVGPoint removeItem ( in unsigned long index )
-                    throw( DOMException );
-    SVGPoint appendItem ( in SVGPoint newItem )
-                    throw( DOMException, SVGException );
+    /**
+     *
+     */
+    virtual SVGPoint *getItem (unsigned long index )
+                               throw( DOMException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPoint *insertItemBefore (SVGPoint *newItem, unsigned long index )
+                                        throw( DOMException, SVGException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPoint *replaceItem (SVGPoint *newItem, unsigned long index )
+                                   throw( DOMException, SVGException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPoint *removeItem (unsigned long index )
+                                  throw( DOMException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPoint *appendItem (SVGPoint *newItem )
+                                  throw( DOMException, SVGException ) =0;
 
 
 
@@ -1595,7 +2252,7 @@ class SVGPointList
 
 
 /*#########################################################################
-## 
+## SVGMatrix
 #########################################################################*/
 
 /**
@@ -1605,33 +2262,125 @@ class SVGMatrix
 {
 
 
+    /**
+     *
+     */
+    virtual float getA() = 0;
 
-             attribute float a;
-                         // throw DOMException on setting
-             attribute float b;
-                         // throw DOMException on setting
-             attribute float c;
-                         // throw DOMException on setting
-             attribute float d;
-                         // throw DOMException on setting
-             attribute float e;
-                         // throw DOMException on setting
-             attribute float f;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual void setA(float val) throw (DOMException) =0;
 
-    SVGMatrix multiply ( in SVGMatrix secondMatrix );
-    SVGMatrix inverse (  )
-                    throw( SVGException );
-    SVGMatrix translate ( in float x, in float y );
-    SVGMatrix scale ( in float scaleFactor );
-    SVGMatrix scaleNonUniform ( in float scaleFactorX, in float scaleFactorY );
-    SVGMatrix rotate ( in float angle );
-    SVGMatrix rotateFromVector ( in float x, in float y )
-                    throw( SVGException );
-    SVGMatrix flipX (  );
-    SVGMatrix flipY (  );
-    SVGMatrix skewX ( in float angle );
-    SVGMatrix skewY ( in float angle );
+    /**
+     *
+     */
+    virtual float getB() = 0;
+
+    /**
+     *
+     */
+    virtual void setB(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getC() = 0;
+
+    /**
+     *
+     */
+    virtual void setC(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getD() = 0;
+
+    /**
+     *
+     */
+    virtual void setD(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getE() = 0;
+
+    /**
+     *
+     */
+    virtual void setE(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getF() = 0;
+
+    /**
+     *
+     */
+    virtual void setF(float val) throw (DOMException) =0;
+
+
+
+
+    /**
+     *
+     */
+    virtual SVGMatrix *multiply (SVGMatrix *secondMatrix ) =0;
+
+    /**
+     *
+     */
+    virtual SVGMatrix *inverse (  )
+                    throw( SVGException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGMatrix *translate (float x, float y ) =0;
+
+    /**
+     *
+     */
+    virtual SVGMatrix *scale (float scaleFactor ) =0;
+
+    /**
+     *
+     */
+    virtual SVGMatrix *scaleNonUniform (float scaleFactorX, float scaleFactorY ) =0;
+
+    /**
+     *
+     */
+    virtual SVGMatrix *rotate (float angle ) =0;
+
+    /**
+     *
+     */
+    virtual SVGMatrix *rotateFromVector (float x, float y )
+                    throw( SVGException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGMatrix *flipX (  ) =0;
+
+    /**
+     *
+     */
+    virtual SVGMatrix *flipY (  ) =0;
+
+    /**
+     *
+     */
+    virtual SVGMatrix *skewX (float angle ) =0;
+
+    /**
+     *
+     */
+    virtual SVGMatrix *skewY (float angle ) =0;
 
 
 
@@ -1642,7 +2391,7 @@ class SVGMatrix
 
 
 /*#########################################################################
-## 
+## SVGTransform
 #########################################################################*/
 
 /**
@@ -1653,25 +2402,65 @@ class SVGTransform
 
 
 
-    // Transform Types
-    const unsigned short SVG_TRANSFORM_UNKNOWN   = 0;
-    const unsigned short SVG_TRANSFORM_MATRIX    = 1;
-    const unsigned short SVG_TRANSFORM_TRANSLATE = 2;
-    const unsigned short SVG_TRANSFORM_SCALE     = 3;
-    const unsigned short SVG_TRANSFORM_ROTATE    = 4;
-    const unsigned short SVG_TRANSFORM_SKEWX     = 5;
-    const unsigned short SVG_TRANSFORM_SKEWY     = 6;
+    /**
+     * Transform Types
+     */
+    enum
+        {
+        SVG_TRANSFORM_UNKNOWN   = 0,
+        SVG_TRANSFORM_MATRIX    = 1,
+        SVG_TRANSFORM_TRANSLATE = 2,
+        SVG_TRANSFORM_SCALE     = 3,
+        SVG_TRANSFORM_ROTATE    = 4,
+        SVG_TRANSFORM_SKEWX     = 5,
+        SVG_TRANSFORM_SKEWY     = 6,
+        };
 
-    readonly attribute unsigned short type;
-    readonly attribute SVGMatrix matrix;
-    readonly attribute float angle;
+    /**
+     *
+     */
+    virtual unsigned short getType() =0;
 
-    void setMatrix ( in SVGMatrix matrix );
-    void setTranslate ( in float tx, in float ty );
-    void setScale ( in float sx, in float sy );
-    void setRotate ( in float angle, in float cx, in float cy );
-    void setSkewX ( in float angle );
-    void setSkewY ( in float angle );
+    /**
+     *
+     */
+    virtual SVGMatrix *matrix() =0;
+
+    /**
+     *
+     */
+    virtual float angle() =0;
+
+
+    /**
+     *
+     */
+    virtual void setMatrix (SVGMatrix *matrix )=0;
+
+    /**
+     *
+     */
+    virtual void setTranslate (float tx, float ty )=0;
+
+    /**
+     *
+     */
+    virtual void setScale (float sx, float sy )=0;
+
+    /**
+     *
+     */
+    virtual void setRotate (float angle, float cx, float cy )=0;
+
+    /**
+     *
+     */
+    virtual void setSkewX (float angle ) =0;
+
+    /**
+     *
+     */
+    virtual void setSkewY (float angle ) =0;
 
 
 
@@ -1682,7 +2471,7 @@ class SVGTransform
 
 
 /*#########################################################################
-## 
+## SVGTransformList
 #########################################################################*/
 
 /**
@@ -1692,25 +2481,63 @@ class SVGTransformList
 {
 
 
+    /**
+     *
+     */
+    virtual unsigned long numberOfItems;
 
-    readonly attribute unsigned long numberOfItems;
 
-    void   clear (  )
-                    throw( DOMException );
-    SVGTransform initialize ( in SVGTransform newItem )
-                    throw( DOMException, SVGException );
-    SVGTransform getItem ( in unsigned long index )
-                    throw( DOMException );
-    SVGTransform insertItemBefore ( in SVGTransform newItem, in unsigned long index )
-                    throw( DOMException, SVGException );
-    SVGTransform replaceItem ( in SVGTransform newItem, in unsigned long index )
-                    throw( DOMException, SVGException );
-    SVGTransform removeItem ( in unsigned long index )
-                    throw( DOMException );
-    SVGTransform appendItem ( in SVGTransform newItem )
-                    throw( DOMException, SVGException );
-    SVGTransform createSVGTransformFromMatrix ( in SVGMatrix matrix );
-    SVGTransform consolidate (  );
+    /**
+     *
+     */
+    virtual void   clear (  )
+                    throw( DOMException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGTransform *initialize (SVGTransform *newItem )
+                    throw( DOMException, SVGException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGTransform *getItem (unsigned long index )
+                    throw( DOMException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGTransform *insertItemBefore (SVGTransform *newItem, unsigned long index )
+                    throw( DOMException, SVGException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGTransform *replaceItem (SVGTransform *newItem, unsigned long index )
+                    throw( DOMException, SVGException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGTransform *removeItem (unsigned long index )
+                    throw( DOMException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGTransform *appendItem (SVGTransform *newItem )
+                    throw( DOMException, SVGException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGTransform *createSVGTransformFromMatrix (SVGMatrix *matrix ) =0;
+
+    /**
+     *
+     */
+    virtual SVGTransform consolidate (  ) =0;
 
 
 
@@ -1721,7 +2548,7 @@ class SVGTransformList
 
 
 /*#########################################################################
-## 
+## SVGAnimatedTransformList
 #########################################################################*/
 
 /**
@@ -1730,10 +2557,15 @@ class SVGTransformList
 class SVGAnimatedTransformList 
 {
 
+    /**
+     *
+     */
+    virtual SVGTransformList *getBaseVal() =0;
 
-
-    readonly attribute SVGTransformList baseVal;
-    readonly attribute SVGTransformList animVal;
+    /**
+     *
+     */
+    virtual SVGTransformList *getAnimVal() =0;
 
 
 
@@ -1744,7 +2576,7 @@ class SVGAnimatedTransformList
 
 
 /*#########################################################################
-## 
+## SVGPreserveAspectRatio
 #########################################################################*/
 
 /**
@@ -1755,27 +2587,55 @@ class SVGPreserveAspectRatio
 
 
 
-    // Alignment Types
-    const unsigned short SVG_PRESERVEASPECTRATIO_UNKNOWN   = 0;
-    const unsigned short SVG_PRESERVEASPECTRATIO_NONE     = 1;
-    const unsigned short SVG_PRESERVEASPECTRATIO_XMINYMIN = 2;
-    const unsigned short SVG_PRESERVEASPECTRATIO_XMIDYMIN = 3;
-    const unsigned short SVG_PRESERVEASPECTRATIO_XMAXYMIN = 4;
-    const unsigned short SVG_PRESERVEASPECTRATIO_XMINYMID = 5;
-    const unsigned short SVG_PRESERVEASPECTRATIO_XMIDYMID = 6;
-    const unsigned short SVG_PRESERVEASPECTRATIO_XMAXYMID = 7;
-    const unsigned short SVG_PRESERVEASPECTRATIO_XMINYMAX = 8;
-    const unsigned short SVG_PRESERVEASPECTRATIO_XMIDYMAX = 9;
-    const unsigned short SVG_PRESERVEASPECTRATIO_XMAXYMAX = 10;
-    // Meet-or-slice Types
-    const unsigned short SVG_MEETORSLICE_UNKNOWN   = 0;
-    const unsigned short SVG_MEETORSLICE_MEET  = 1;
-    const unsigned short SVG_MEETORSLICE_SLICE = 2;
+    /**
+     * Alignment Types
+     */
+    enum
+        {
+        SVG_PRESERVEASPECTRATIO_UNKNOWN  = 0,
+        SVG_PRESERVEASPECTRATIO_NONE     = 1,
+        SVG_PRESERVEASPECTRATIO_XMINYMIN = 2,
+        SVG_PRESERVEASPECTRATIO_XMIDYMIN = 3,
+        SVG_PRESERVEASPECTRATIO_XMAXYMIN = 4,
+        SVG_PRESERVEASPECTRATIO_XMINYMID = 5,
+        SVG_PRESERVEASPECTRATIO_XMIDYMID = 6,
+        SVG_PRESERVEASPECTRATIO_XMAXYMID = 7,
+        SVG_PRESERVEASPECTRATIO_XMINYMAX = 8,
+        SVG_PRESERVEASPECTRATIO_XMIDYMAX = 9,
+        SVG_PRESERVEASPECTRATIO_XMAXYMAX = 10
+        };
 
-             attribute unsigned short align;
-                         // throw DOMException on setting
-             attribute unsigned short meetOrSlice;
-                         // throw DOMException on setting
+
+    /**
+     * Meet-or-slice Types
+     */
+    enum
+        {
+        SVG_MEETORSLICE_UNKNOWN  = 0,
+        SVG_MEETORSLICE_MEET     = 1,
+        SVG_MEETORSLICE_SLICE    = 2
+        };
+
+
+    /**
+     *
+     */
+    virtual unsigned short getALign() = 0;
+
+    /**
+     *
+     */
+    virtual void setAlign(unsigned short val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual unsigned short getMeetOrSlice() = 0;
+
+    /**
+     *
+     */
+    virtual void setMeetOrSlice(unsigned short val) throw (DOMException) =0;
 
 
 
@@ -1786,7 +2646,7 @@ class SVGPreserveAspectRatio
 
 
 /*#########################################################################
-## 
+## SVGAnimatedPreserveAspectRatio
 #########################################################################*/
 
 /**
@@ -1796,9 +2656,15 @@ class SVGAnimatedPreserveAspectRatio
 {
 
 
+    /**
+     *
+     */
+    virtual SVGPreserveAspectRatio *getBaseVal() =0;
 
-    readonly attribute SVGPreserveAspectRatio baseVal;
-    readonly attribute SVGPreserveAspectRatio animVal;
+    /**
+     *
+     */
+    virtual SVGPreserveAspectRatio *getAnimVal() =0;
 
 
 
@@ -1809,7 +2675,7 @@ class SVGAnimatedPreserveAspectRatio
 
 
 /*#########################################################################
-## 
+## SVGPathSeg
 #########################################################################*/
 
 /**
@@ -1820,30 +2686,42 @@ class SVGPathSeg
 
 
 
-    // Path Segment Types
-    const unsigned short PATHSEG_UNKNOWN                      = 0;
-    const unsigned short PATHSEG_CLOSEPATH                    = 1;
-    const unsigned short PATHSEG_MOVETO_ABS                   = 2;
-    const unsigned short PATHSEG_MOVETO_REL                   = 3;
-    const unsigned short PATHSEG_LINETO_ABS                   = 4;
-    const unsigned short PATHSEG_LINETO_REL                   = 5;
-    const unsigned short PATHSEG_CURVETO_CUBIC_ABS            = 6;
-    const unsigned short PATHSEG_CURVETO_CUBIC_REL            = 7;
-    const unsigned short PATHSEG_CURVETO_QUADRATIC_ABS        = 8;
-    const unsigned short PATHSEG_CURVETO_QUADRATIC_REL        = 9;
-    const unsigned short PATHSEG_ARC_ABS                      = 10;
-    const unsigned short PATHSEG_ARC_REL                      = 11;
-    const unsigned short PATHSEG_LINETO_HORIZONTAL_ABS        = 12;
-    const unsigned short PATHSEG_LINETO_HORIZONTAL_REL        = 13;
-    const unsigned short PATHSEG_LINETO_VERTICAL_ABS          = 14;
-    const unsigned short PATHSEG_LINETO_VERTICAL_REL          = 15;
-    const unsigned short PATHSEG_CURVETO_CUBIC_SMOOTH_ABS     = 16;
-    const unsigned short PATHSEG_CURVETO_CUBIC_SMOOTH_REL     = 17;
-    const unsigned short PATHSEG_CURVETO_QUADRATIC_SMOOTH_ABS = 18;
-    const unsigned short PATHSEG_CURVETO_QUADRATIC_SMOOTH_REL = 19;
+    /**
+     *  Path Segment Types
+     */
+    enum
+        {
+        PATHSEG_UNKNOWN                      = 0,
+        PATHSEG_CLOSEPATH                    = 1,
+        PATHSEG_MOVETO_ABS                   = 2,
+        PATHSEG_MOVETO_REL                   = 3,
+        PATHSEG_LINETO_ABS                   = 4,
+        PATHSEG_LINETO_REL                   = 5,
+        PATHSEG_CURVETO_CUBIC_ABS            = 6,
+        PATHSEG_CURVETO_CUBIC_REL            = 7,
+        PATHSEG_CURVETO_QUADRATIC_ABS        = 8,
+        PATHSEG_CURVETO_QUADRATIC_REL        = 9,
+        PATHSEG_ARC_ABS                      = 10,
+        PATHSEG_ARC_REL                      = 11,
+        PATHSEG_LINETO_HORIZONTAL_ABS        = 12,
+        PATHSEG_LINETO_HORIZONTAL_REL        = 13,
+        PATHSEG_LINETO_VERTICAL_ABS          = 14,
+        PATHSEG_LINETO_VERTICAL_REL          = 15,
+        PATHSEG_CURVETO_CUBIC_SMOOTH_ABS     = 16,
+        PATHSEG_CURVETO_CUBIC_SMOOTH_REL     = 17,
+        PATHSEG_CURVETO_QUADRATIC_SMOOTH_ABS = 18,
+        PATHSEG_CURVETO_QUADRATIC_SMOOTH_REL = 19
+        };
 
-    readonly attribute unsigned short pathSegType;
-    readonly attribute DOMString      pathSegTypeAsLetter;
+    /**
+     *
+     */
+    virtual unsigned short getPathSegType() =0;
+
+    /**
+     *
+     */
+    virtual DOMString getPathSegTypeAsLetter() =0;
 
 
 
@@ -1854,7 +2732,7 @@ class SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegClosePath
 #########################################################################*/
 
 /**
@@ -1868,7 +2746,7 @@ class SVGPathSegClosePath : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegMovetoAbs
 #########################################################################*/
 
 /**
@@ -1876,14 +2754,25 @@ class SVGPathSegClosePath : SVGPathSeg
  */
 class SVGPathSegMovetoAbs : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
-             attribute float   x;
-                         // throw DOMException on setting
-             attribute float   y;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual float getY() = 0;
 
-
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
 
 };//
 
@@ -1892,7 +2781,7 @@ class SVGPathSegMovetoAbs : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegMovetoRel
 #########################################################################*/
 
 /**
@@ -1900,14 +2789,25 @@ class SVGPathSegMovetoAbs : SVGPathSeg
  */
 class SVGPathSegMovetoRel : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
-             attribute float   x;
-                         // throw DOMException on setting
-             attribute float   y;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual float getY() = 0;
 
-
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
 
 };//
 
@@ -1916,7 +2816,7 @@ class SVGPathSegMovetoRel : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegLinetoAbs
 #########################################################################*/
 
 /**
@@ -1924,14 +2824,25 @@ class SVGPathSegMovetoRel : SVGPathSeg
  */
 class SVGPathSegLinetoAbs : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
-             attribute float   x;
-                         // throw DOMException on setting
-             attribute float   y;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual float getY() = 0;
 
-
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
 
 };//
 
@@ -1940,7 +2851,7 @@ class SVGPathSegLinetoAbs : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegLinetoRel
 #########################################################################*/
 
 /**
@@ -1948,14 +2859,25 @@ class SVGPathSegLinetoAbs : SVGPathSeg
  */
 class SVGPathSegLinetoRel : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
-             attribute float   x;
-                         // throw DOMException on setting
-             attribute float   y;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual float getY() = 0;
 
-
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
 
 };//
 
@@ -1964,7 +2886,7 @@ class SVGPathSegLinetoRel : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegCurvetoCubicAbs
 #########################################################################*/
 
 /**
@@ -1972,22 +2894,65 @@ class SVGPathSegLinetoRel : SVGPathSeg
  */
 class SVGPathSegCurvetoCubicAbs : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
-             attribute float   x;
-                         // throw DOMException on setting
-             attribute float   y;
-                         // throw DOMException on setting
-             attribute float   x1;
-                         // throw DOMException on setting
-             attribute float   y1;
-                         // throw DOMException on setting
-             attribute float   x2;
-                         // throw DOMException on setting
-             attribute float   y2;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual float getY() = 0;
 
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
 
+    /**
+     *
+     */
+    virtual float getX1() = 0;
+
+    /**
+     *
+     */
+    virtual void setX1(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getY1() = 0;
+
+    /**
+     *
+     */
+    virtual void setY1(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getX2() = 0;
+
+    /**
+     *
+     */
+    virtual void setX2(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getY2() = 0;
+
+    /**
+     *
+     */
+    virtual void setY2(float val) throw (DOMException) =0;
 
 };//
 
@@ -1996,7 +2961,7 @@ class SVGPathSegCurvetoCubicAbs : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegCurvetoCubicRel
 #########################################################################*/
 
 /**
@@ -2004,22 +2969,65 @@ class SVGPathSegCurvetoCubicAbs : SVGPathSeg
  */
 class SVGPathSegCurvetoCubicRel : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
-             attribute float   x;
-                         // throw DOMException on setting
-             attribute float   y;
-                         // throw DOMException on setting
-             attribute float   x1;
-                         // throw DOMException on setting
-             attribute float   y1;
-                         // throw DOMException on setting
-             attribute float   x2;
-                         // throw DOMException on setting
-             attribute float   y2;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual float getY() = 0;
 
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
 
+    /**
+     *
+     */
+    virtual float getX1() = 0;
+
+    /**
+     *
+     */
+    virtual void setX1(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getY1() = 0;
+
+    /**
+     *
+     */
+    virtual void setY1(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getX2() = 0;
+
+    /**
+     *
+     */
+    virtual void setX2(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getY2() = 0;
+
+    /**
+     *
+     */
+    virtual void setY2(float val) throw (DOMException) =0;
 
 };//
 
@@ -2028,7 +3036,7 @@ class SVGPathSegCurvetoCubicRel : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegCurvetoQuadraticAbs
 #########################################################################*/
 
 /**
@@ -2036,18 +3044,45 @@ class SVGPathSegCurvetoCubicRel : SVGPathSeg
  */
 class SVGPathSegCurvetoQuadraticAbs : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
-             attribute float   x;
-                         // throw DOMException on setting
-             attribute float   y;
-                         // throw DOMException on setting
-             attribute float   x1;
-                         // throw DOMException on setting
-             attribute float   y1;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual float getY() = 0;
 
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
 
+    /**
+     *
+     */
+    virtual float getX1() = 0;
+
+    /**
+     *
+     */
+    virtual void setX1(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getY1() = 0;
+
+    /**
+     *
+     */
+    virtual void setY1(float val) throw (DOMException) =0;
 
 };//
 
@@ -2056,7 +3091,7 @@ class SVGPathSegCurvetoQuadraticAbs : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegCurvetoQuadraticRel
 #########################################################################*/
 
 /**
@@ -2064,18 +3099,45 @@ class SVGPathSegCurvetoQuadraticAbs : SVGPathSeg
  */
 class SVGPathSegCurvetoQuadraticRel : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
-             attribute float   x;
-                         // throw DOMException on setting
-             attribute float   y;
-                         // throw DOMException on setting
-             attribute float   x1;
-                         // throw DOMException on setting
-             attribute float   y1;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual float getY() = 0;
 
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
 
+    /**
+     *
+     */
+    virtual float getX1() = 0;
+
+    /**
+     *
+     */
+    virtual void setX1(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getY1() = 0;
+
+    /**
+     *
+     */
+    virtual void setY1(float val) throw (DOMException) =0;
 
 };//
 
@@ -2084,7 +3146,7 @@ class SVGPathSegCurvetoQuadraticRel : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegArcAbs
 #########################################################################*/
 
 /**
@@ -2094,22 +3156,75 @@ class SVGPathSegArcAbs : SVGPathSeg
 {
 
 
-             attribute float   x;
-                         // throw DOMException on setting
-             attribute float   y;
-                         // throw DOMException on setting
-             attribute float   r1;
-                         // throw DOMException on setting
-             attribute float   r2;
-                         // throw DOMException on setting
-             attribute float   angle;
-                         // throw DOMException on setting
-             attribute boolean largeArcFlag;
-                         // throw DOMException on setting
-             attribute boolean sweepFlag;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
+    /**
+     *
+     */
+    virtual float getY() = 0;
+
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getR1() = 0;
+
+    /**
+     *
+     */
+    virtual void setR1(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getR2() = 0;
+
+    /**
+     *
+     */
+    virtual void setR2(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getAngle() = 0;
+
+    /**
+     *
+     */
+    virtual void setAngle(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual bool getLargeArcFlag() = 0;
+
+    /**
+     *
+     */
+    virtual void setLargeArcFlag(bool val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual bool getSweepFlag() = 0;
+
+    /**
+     *
+     */
+    virtual void setSweepFlag(bool val) throw (DOMException) =0;
 
 };//
 
@@ -2118,7 +3233,7 @@ class SVGPathSegArcAbs : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegArcRel
 #########################################################################*/
 
 /**
@@ -2126,24 +3241,75 @@ class SVGPathSegArcAbs : SVGPathSeg
  */
 class SVGPathSegArcRel : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
-             attribute float   x;
-                         // throw DOMException on setting
-             attribute float   y;
-                         // throw DOMException on setting
-             attribute float   r1;
-                         // throw DOMException on setting
-             attribute float   r2;
-                         // throw DOMException on setting
-             attribute float   angle;
-                         // throw DOMException on setting
-             attribute boolean largeArcFlag;
-                         // throw DOMException on setting
-             attribute boolean sweepFlag;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual float getY() = 0;
 
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
 
+    /**
+     *
+     */
+    virtual float getR1() = 0;
+
+    /**
+     *
+     */
+    virtual void setR1(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getR2() = 0;
+
+    /**
+     *
+     */
+    virtual void setR2(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getAngle() = 0;
+
+    /**
+     *
+     */
+    virtual void setAngle(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual bool getLargeArcFlag() = 0;
+
+    /**
+     *
+     */
+    virtual void setLargeArcFlag(bool val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual bool getSweepFlag() = 0;
+
+    /**
+     *
+     */
+    virtual void setSweepFlag(bool val) throw (DOMException) =0;
 
 };//
 
@@ -2152,7 +3318,7 @@ class SVGPathSegArcRel : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegLinetoHorizontalAbs
 #########################################################################*/
 
 /**
@@ -2160,12 +3326,15 @@ class SVGPathSegArcRel : SVGPathSeg
  */
 class SVGPathSegLinetoHorizontalAbs : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
-
-             attribute float   x;
-                         // throw DOMException on setting
-
-
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
 };//
 
@@ -2174,7 +3343,7 @@ class SVGPathSegLinetoHorizontalAbs : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegLinetoHorizontalRel
 #########################################################################*/
 
 /**
@@ -2182,12 +3351,15 @@ class SVGPathSegLinetoHorizontalAbs : SVGPathSeg
  */
 class SVGPathSegLinetoHorizontalRel : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
-
-             attribute float   x;
-                         // throw DOMException on setting
-
-
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
 };//
 
@@ -2196,7 +3368,7 @@ class SVGPathSegLinetoHorizontalRel : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegLinetoVerticalAbs
 #########################################################################*/
 
 /**
@@ -2204,12 +3376,15 @@ class SVGPathSegLinetoHorizontalRel : SVGPathSeg
  */
 class SVGPathSegLinetoVerticalAbs : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getY() = 0;
 
-
-             attribute float   y;
-                         // throw DOMException on setting
-
-
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
 
 };//
 
@@ -2218,7 +3393,7 @@ class SVGPathSegLinetoVerticalAbs : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegLinetoVerticalRel
 #########################################################################*/
 
 /**
@@ -2226,12 +3401,15 @@ class SVGPathSegLinetoVerticalAbs : SVGPathSeg
  */
 class SVGPathSegLinetoVerticalRel : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getY() = 0;
 
-
-             attribute float   y;
-                         // throw DOMException on setting
-
-
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
 
 };//
 
@@ -2240,7 +3418,7 @@ class SVGPathSegLinetoVerticalRel : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegCurvetoCubicSmoothAbs
 #########################################################################*/
 
 /**
@@ -2248,18 +3426,45 @@ class SVGPathSegLinetoVerticalRel : SVGPathSeg
  */
 class SVGPathSegCurvetoCubicSmoothAbs : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
-             attribute float   x;
-                         // throw DOMException on setting
-             attribute float   y;
-                         // throw DOMException on setting
-             attribute float   x2;
-                         // throw DOMException on setting
-             attribute float   y2;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual float getY() = 0;
 
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
 
+    /**
+     *
+     */
+    virtual float getX2() = 0;
+
+    /**
+     *
+     */
+    virtual void setX2(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getY2() = 0;
+
+    /**
+     *
+     */
+    virtual void setY2(float val) throw (DOMException) =0;
 
 };//
 
@@ -2268,7 +3473,7 @@ class SVGPathSegCurvetoCubicSmoothAbs : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegCurvetoCubicSmoothRel
 #########################################################################*/
 
 /**
@@ -2276,18 +3481,45 @@ class SVGPathSegCurvetoCubicSmoothAbs : SVGPathSeg
  */
 class SVGPathSegCurvetoCubicSmoothRel : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
-             attribute float   x;
-                         // throw DOMException on setting
-             attribute float   y;
-                         // throw DOMException on setting
-             attribute float   x2;
-                         // throw DOMException on setting
-             attribute float   y2;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual float getY() = 0;
 
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
 
+    /**
+     *
+     */
+    virtual float getX2() = 0;
+
+    /**
+     *
+     */
+    virtual void setX2(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getY2() = 0;
+
+    /**
+     *
+     */
+    virtual void setY2(float val) throw (DOMException) =0;
 
 };//
 
@@ -2296,7 +3528,7 @@ class SVGPathSegCurvetoCubicSmoothRel : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegCurvetoQuadraticSmoothAbs
 #########################################################################*/
 
 /**
@@ -2304,14 +3536,25 @@ class SVGPathSegCurvetoCubicSmoothRel : SVGPathSeg
  */
 class SVGPathSegCurvetoQuadraticSmoothAbs : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
-             attribute float   x;
-                         // throw DOMException on setting
-             attribute float   y;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual float getY() = 0;
 
-
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
 
 };//
 
@@ -2320,7 +3563,7 @@ class SVGPathSegCurvetoQuadraticSmoothAbs : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegCurvetoQuadraticSmoothRel
 #########################################################################*/
 
 /**
@@ -2328,14 +3571,25 @@ class SVGPathSegCurvetoQuadraticSmoothAbs : SVGPathSeg
  */
 class SVGPathSegCurvetoQuadraticSmoothRel : SVGPathSeg 
 {
+    /**
+     *
+     */
+    virtual float getX() = 0;
 
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
 
-             attribute float   x;
-                         // throw DOMException on setting
-             attribute float   y;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual float getY() = 0;
 
-
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
 
 };//
 
@@ -2344,7 +3598,7 @@ class SVGPathSegCurvetoQuadraticSmoothRel : SVGPathSeg
 
 
 /*#########################################################################
-## 
+## SVGPathSegList
 #########################################################################*/
 
 /**
@@ -2355,22 +3609,54 @@ class SVGPathSegList
 
 
 
-    readonly attribute unsigned long numberOfItems;
 
-    void   clear (  )
-                    throw( DOMException );
-    SVGPathSeg initialize ( in SVGPathSeg newItem )
-                    throw( DOMException, SVGException );
-    SVGPathSeg getItem ( in unsigned long index )
-                    throw( DOMException );
-    SVGPathSeg insertItemBefore ( in SVGPathSeg newItem, in unsigned long index )
-                    throw( DOMException, SVGException );
-    SVGPathSeg replaceItem ( in SVGPathSeg newItem, in unsigned long index )
-                    throw( DOMException, SVGException );
-    SVGPathSeg removeItem ( in unsigned long index )
-                    throw( DOMException );
-    SVGPathSeg appendItem ( in SVGPathSeg newItem )
-                    throw( DOMException, SVGException );
+    /**
+     *
+     */
+    virtual unsigned long getNumberOfItems() =0;
+
+
+    /**
+     *
+     */
+    virtual void   clear (  )
+                    throw( DOMException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSeg *initialize (SVGPathSeg *newItem )
+                    throw( DOMException, SVGException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSeg *getItem (unsigned long index )
+                    throw( DOMException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSeg *insertItemBefore (SVGPathSeg *newItem, unsigned long index )
+                    throw( DOMException, SVGException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSeg *replaceItem (SVGPathSeg *newItem, unsigned long index )
+                    throw( DOMException, SVGException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSeg *removeItem (unsigned long index )
+                    throw( DOMException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSeg *appendItem (SVGPathSeg *newItem )
+                    throw( DOMException, SVGException ) =0;
 
 
 
@@ -2381,7 +3667,7 @@ class SVGPathSegList
 
 
 /*#########################################################################
-## 
+## SVGAnimatedPathData
 #########################################################################*/
 
 /**
@@ -2390,12 +3676,25 @@ class SVGPathSegList
 class SVGAnimatedPathData 
 {
 
+    /**
+     *
+     */
+    virtual SVGPathSegList *getPathSegList() =0;
 
+    /**
+     *
+     */
+    virtual SVGPathSegList *getNormalizedPathSegList() =0;
 
-    readonly attribute SVGPathSegList   pathSegList;
-    readonly attribute SVGPathSegList   normalizedPathSegList;
-    readonly attribute SVGPathSegList   animatedPathSegList;
-    readonly attribute SVGPathSegList   animatedNormalizedPathSegList;
+    /**
+     *
+     */
+    virtual SVGPathSegList *getAnimatedPathSegList() =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegList *getAnimatedNormalizedPathSegList() =0;
 
 
 
@@ -2406,7 +3705,7 @@ class SVGAnimatedPathData
 
 
 /*#########################################################################
-## 
+## SVGPathElement
 #########################################################################*/
 
 /**
@@ -2425,30 +3724,150 @@ class SVGPathElement :
 
 
 
-    readonly attribute SVGAnimatedNumber pathLength;
 
-    float         getTotalLength (  );
-    SVGPoint      getPointAtLength ( in float distance );
-    unsigned long getPathSegAtLength ( in float distance );
-    SVGPathSegClosePath    createSVGPathSegClosePath (  );
-    SVGPathSegMovetoAbs    createSVGPathSegMovetoAbs ( in float x, in float y );
-    SVGPathSegMovetoRel    createSVGPathSegMovetoRel ( in float x, in float y );
-    SVGPathSegLinetoAbs    createSVGPathSegLinetoAbs ( in float x, in float y );
-    SVGPathSegLinetoRel    createSVGPathSegLinetoRel ( in float x, in float y );
-    SVGPathSegCurvetoCubicAbs    createSVGPathSegCurvetoCubicAbs ( in float x, in float y, in float x1, in float y1, in float x2, in float y2 );
-    SVGPathSegCurvetoCubicRel    createSVGPathSegCurvetoCubicRel ( in float x, in float y, in float x1, in float y1, in float x2, in float y2 );
-    SVGPathSegCurvetoQuadraticAbs    createSVGPathSegCurvetoQuadraticAbs ( in float x, in float y, in float x1, in float y1 );
-    SVGPathSegCurvetoQuadraticRel    createSVGPathSegCurvetoQuadraticRel ( in float x, in float y, in float x1, in float y1 );
-    SVGPathSegArcAbs    createSVGPathSegArcAbs ( in float x, in float y, in float r1, in float r2, in float angle, in boolean largeArcFlag, in boolean sweepFlag );
-    SVGPathSegArcRel    createSVGPathSegArcRel ( in float x, in float y, in float r1, in float r2, in float angle, in boolean largeArcFlag, in boolean sweepFlag );
-    SVGPathSegLinetoHorizontalAbs    createSVGPathSegLinetoHorizontalAbs ( in float x );
-    SVGPathSegLinetoHorizontalRel    createSVGPathSegLinetoHorizontalRel ( in float x );
-    SVGPathSegLinetoVerticalAbs    createSVGPathSegLinetoVerticalAbs ( in float y );
-    SVGPathSegLinetoVerticalRel    createSVGPathSegLinetoVerticalRel ( in float y );
-    SVGPathSegCurvetoCubicSmoothAbs    createSVGPathSegCurvetoCubicSmoothAbs ( in float x, in float y, in float x2, in float y2 );
-    SVGPathSegCurvetoCubicSmoothRel    createSVGPathSegCurvetoCubicSmoothRel ( in float x, in float y, in float x2, in float y2 );
-    SVGPathSegCurvetoQuadraticSmoothAbs    createSVGPathSegCurvetoQuadraticSmoothAbs ( in float x, in float y );
-    SVGPathSegCurvetoQuadraticSmoothRel    createSVGPathSegCurvetoQuadraticSmoothRel ( in float x, in float y );
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getPathLength() =0;
+
+    /**
+     *
+     */
+    virtual float getTotalLength (  ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPoint *getPointAtLength (float distance ) =0;
+
+    /**
+     *
+     */
+    virtual unsigned long getPathSegAtLength (float distance ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegClosePath 
+              *createSVGPathSegClosePath (  ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegMovetoAbs 
+              *createSVGPathSegMovetoAbs (float x, float y ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegMovetoRel 
+              *createSVGPathSegMovetoRel (float x, float y ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegLinetoAbs 
+              *createSVGPathSegLinetoAbs (float x, float y ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegLinetoRel 
+              *createSVGPathSegLinetoRel (float x, float y ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegCurvetoCubicAbs 
+              *createSVGPathSegCurvetoCubicAbs (float x, float y,
+                        float x1, float y1, float x2, float y2 ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegCurvetoCubicRel 
+              *createSVGPathSegCurvetoCubicRel (float x, float y,
+                        float x1, float y1, float x2, float y2 ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegCurvetoQuadraticAbs 
+              *createSVGPathSegCurvetoQuadraticAbs (float x, float y,
+                         float x1, float y1 ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegCurvetoQuadraticRel 
+              *createSVGPathSegCurvetoQuadraticRel (float x, float y,
+                         float x1, float y1 ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegArcAbs 
+              *createSVGPathSegArcAbs (float x, float y,
+                         float r1, float r2, float angle,
+                         boolean largeArcFlag, boolean sweepFlag ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegArcRel 
+              *createSVGPathSegArcRel (float x, float y, float r1, 
+                         float r2, float angle, boolean largeArcFlag,
+                         boolean sweepFlag ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegLinetoHorizontalAbs 
+              *createSVGPathSegLinetoHorizontalAbs (float x ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegLinetoHorizontalRel 
+              *createSVGPathSegLinetoHorizontalRel (float x ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegLinetoVerticalAbs 
+              *createSVGPathSegLinetoVerticalAbs (float y ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegLinetoVerticalRel 
+              *createSVGPathSegLinetoVerticalRel (float y ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegCurvetoCubicSmoothAbs 
+              *createSVGPathSegCurvetoCubicSmoothAbs (float x, float y,
+                                             float x2, float y2 ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegCurvetoCubicSmoothRel 
+              *createSVGPathSegCurvetoCubicSmoothRel (float x, float y,
+                                                      float x2, float y2 ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegCurvetoQuadraticSmoothAbs 
+              *createSVGPathSegCurvetoQuadraticSmoothAbs (float x, float y ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPathSegCurvetoQuadraticSmoothRel 
+              *createSVGPathSegCurvetoQuadraticSmoothRel (float x, float y ) =0;
 
 
 
@@ -2459,7 +3878,7 @@ class SVGPathElement :
 
 
 /*#########################################################################
-## 
+## SVGRectElement
 #########################################################################*/
 
 /**
@@ -2477,12 +3896,37 @@ class SVGRectElement :
 
 
 
-    readonly attribute SVGAnimatedLength x;
-    readonly attribute SVGAnimatedLength y;
-    readonly attribute SVGAnimatedLength width;
-    readonly attribute SVGAnimatedLength height;
-    readonly attribute SVGAnimatedLength rx;
-    readonly attribute SVGAnimatedLength ry;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getX() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getWidth() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getHeight() =0;
+
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getRx() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getRy() =0;
 
 
 
@@ -2493,7 +3937,7 @@ class SVGRectElement :
 
 
 /*#########################################################################
-## 
+## SVGCircleElement
 #########################################################################*/
 
 /**
@@ -2510,10 +3954,20 @@ class SVGCircleElement :
 {
 
 
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getCx() =0;
 
-    readonly attribute SVGAnimatedLength cx;
-    readonly attribute SVGAnimatedLength cy;
-    readonly attribute SVGAnimatedLength r;
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getCy() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getR() =0;
 
 
 
@@ -2524,7 +3978,7 @@ class SVGCircleElement :
 
 
 /*#########################################################################
-## 
+## SVGLineElement
 #########################################################################*/
 
 /**
@@ -2539,16 +3993,25 @@ class SVGEllipseElement :
                 SVGTransformable,
                 events::EventTarget 
 {
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getCx() =0;
 
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getCy() =0;
 
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getRx() =0;
 
-    readonly attribute SVGAnimatedLength cx;
-    readonly attribute SVGAnimatedLength cy;
-    readonly attribute SVGAnimatedLength rx;
-    readonly attribute SVGAnimatedLength ry;
-
-
-
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getRy() =0;
 };//
 
 
@@ -2556,7 +4019,7 @@ class SVGEllipseElement :
 
 
 /*#########################################################################
-## 
+## SVGLineElement
 #########################################################################*/
 
 /**
@@ -2571,15 +4034,25 @@ class SVGLineElement :
                 SVGTransformable,
                 events::EventTarget 
 {
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getX1() =0;
 
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getY1() =0;
 
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getX2() =0;
 
-    readonly attribute SVGAnimatedLength x1;
-    readonly attribute SVGAnimatedLength y1;
-    readonly attribute SVGAnimatedLength x2;
-    readonly attribute SVGAnimatedLength y2;
-
-
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getY2() =0;
 
 };//
 
@@ -2588,7 +4061,7 @@ class SVGLineElement :
 
 
 /*#########################################################################
-## 
+## SVGAnimatedPoints
 #########################################################################*/
 
 /**
@@ -2597,10 +4070,15 @@ class SVGLineElement :
 class SVGAnimatedPoints 
 {
 
+    /**
+     *
+     */
+    virtual SVGPointList *getPoints() =0;
 
-
-    readonly attribute SVGPointList   points;
-    readonly attribute SVGPointList   animatedPoints;
+    /**
+     *
+     */
+    virtual SVGPointList *getAnimatedPoints() =0;
 
 
 
@@ -2611,7 +4089,7 @@ class SVGAnimatedPoints
 
 
 /*#########################################################################
-## 
+## SVGPolylineElement
 #########################################################################*/
 
 /**
@@ -2633,7 +4111,7 @@ class SVGPolylineElement :
 
 
 /*#########################################################################
-## 
+## SVGPolygonElement
 #########################################################################*/
 
 /**
@@ -2655,7 +4133,7 @@ class SVGPolygonElement :
 
 
 /*#########################################################################
-## 
+## SVGTextContentElement
 #########################################################################*/
 
 /**
@@ -2672,29 +4150,79 @@ class SVGTextContentElement :
 
 
 
-    // lengthAdjust Types
-    const unsigned short LENGTHADJUST_UNKNOWN   = 0;
-    const unsigned short LENGTHADJUST_SPACING     = 1;
-    const unsigned short LENGTHADJUST_SPACINGANDGLYPHS     = 2;
+    /**
+     * lengthAdjust Types
+     */
+    enum
+        {
+        LENGTHADJUST_UNKNOWN          = 0,
+        LENGTHADJUST_SPACING          = 1,
+        LENGTHADJUST_SPACINGANDGLYPHS = 2
+        };
 
-    readonly attribute SVGAnimatedLength      textLength;
-    readonly attribute SVGAnimatedEnumeration lengthAdjust;
 
-    long     getNumberOfChars (  );
-    float    getComputedTextLength (  );
-    float    getSubStringLength ( in unsigned long charnum, in unsigned long nchars )
-                    throw( DOMException );
-    SVGPoint getStartPositionOfChar ( in unsigned long charnum )
-                    throw( DOMException );
-    SVGPoint getEndPositionOfChar ( in unsigned long charnum )
-                    throw( DOMException );
-    SVGRect  getExtentOfChar ( in unsigned long charnum )
-                    throw( DOMException );
-    float    getRotationOfChar ( in unsigned long charnum )
-                    throw( DOMException );
-    long     getCharNumAtPosition ( in SVGPoint point );
-    void     selectSubString ( in unsigned long charnum, in unsigned long nchars )
-                    throw( DOMException );
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getTextLength() =0;
+
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getLengthAdjust() =0;
+
+
+    /**
+     *
+     */
+    virtual long getNumberOfChars (  ) =0;
+
+    /**
+     *
+     */
+    virtual float getComputedTextLength (  ) =0;
+
+    /**
+     *
+     */
+    virtual float getSubStringLength (unsigned long charnum, unsigned long nchars )
+                                     throw( DOMException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPoint *getStartPositionOfChar (unsigned long charnum )
+                                              throw( DOMException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGPoint *getEndPositionOfChar (unsigned long charnum )
+                                           throw( DOMException ) =0;
+
+    /**
+     *
+     */
+    virtual SVGRect *getExtentOfChar (unsigned long charnum )
+                                      throw( DOMException ) =0;
+
+    /**
+     *
+     */
+    virtual float getRotationOfChar (unsigned long charnum )
+                                     throw( DOMException ) =0;
+
+    /**
+     *
+     */
+    virtual long getCharNumAtPosition (SVGPoint point ) =0;
+
+    /**
+     *
+     */
+    virtual void selectSubString (unsigned long charnum, unsigned long nchars )
+                                  throw( DOMException ) =0;
 
 
 
@@ -2705,7 +4233,7 @@ class SVGTextContentElement :
 
 
 /*#########################################################################
-## 
+## SVGTextPositioningElement
 #########################################################################*/
 
 /**
@@ -2715,11 +4243,32 @@ class SVGTextPositioningElement : SVGTextContentElement
 {
 
 
-    readonly attribute SVGAnimatedLengthList x;
-    readonly attribute SVGAnimatedLengthList y;
-    readonly attribute SVGAnimatedLengthList dx;
-    readonly attribute SVGAnimatedLengthList dy;
-    readonly attribute SVGAnimatedNumberList rotate;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getX() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getDx() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getDy() =0;
+
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumberList *getRotate() =0;
 
 
 
@@ -2730,7 +4279,7 @@ class SVGTextPositioningElement : SVGTextContentElement
 
 
 /*#########################################################################
-## 
+## SVGTextElement
 #########################################################################*/
 
 /**
@@ -2746,7 +4295,7 @@ class SVGTextElement :
 
 
 /*#########################################################################
-## 
+## SVGTSpanElement
 #########################################################################*/
 
 /**
@@ -2760,7 +4309,7 @@ class SVGTSpanElement : SVGTextPositioningElement
 
 
 /*#########################################################################
-## 
+## SVGTRefElement
 #########################################################################*/
 
 /**
@@ -2776,7 +4325,7 @@ class SVGTRefElement :
 
 
 /*#########################################################################
-## 
+## SVGTextPathElement
 #########################################################################*/
 
 /**
@@ -2789,18 +4338,41 @@ class SVGTextPathElement :
 
 
 
-    // textPath Method Types
-    const unsigned short TEXTPATH_METHODTYPE_UNKNOWN   = 0;
-    const unsigned short TEXTPATH_METHODTYPE_ALIGN     = 1;
-    const unsigned short TEXTPATH_METHODTYPE_STRETCH     = 2;
-    // textPath Spacing Types
-    const unsigned short TEXTPATH_SPACINGTYPE_UNKNOWN   = 0;
-    const unsigned short TEXTPATH_SPACINGTYPE_AUTO     = 1;
-    const unsigned short TEXTPATH_SPACINGTYPE_EXACT     = 2;
+    /**
+     * textPath Method Types
+     */
+    enum
+        {
+        TEXTPATH_METHODTYPE_UNKNOWN   = 0,
+        TEXTPATH_METHODTYPE_ALIGN     = 1,
+        TEXTPATH_METHODTYPE_STRETCH   = 2
+        };
 
-    readonly attribute SVGAnimatedLength              startOffset;
-    readonly attribute SVGAnimatedEnumeration method;
-    readonly attribute SVGAnimatedEnumeration spacing;
+    /**
+     * textPath Spacing Types
+     */
+    enum
+        {
+        TEXTPATH_SPACINGTYPE_UNKNOWN  = 0,
+        TEXTPATH_SPACINGTYPE_AUTO     = 1,
+        TEXTPATH_SPACINGTYPE_EXACT    = 2
+        };
+
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getStartOffset() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getMethod() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getSpacing() =0;
 
 
 
@@ -2811,7 +4383,7 @@ class SVGTextPathElement :
 
 
 /*#########################################################################
-## 
+## SVGAltGlyphElement
 #########################################################################*/
 
 /**
@@ -2822,12 +4394,26 @@ class SVGAltGlyphElement :
                 SVGURIReference 
 {
 
+    /**
+     *
+     */
+    virtual DOMString getGlyphRef() =0;
 
+    /**
+     *
+     */
+    virtual void setGlyphRef(DOMString& val) throw (DOMException) =0;
 
-             attribute DOMString glyphRef;
-                         // throw DOMException on setting
-             attribute DOMString format;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual DOMString getFormat() =0;
+
+    /**
+     *
+     */
+    virtual void setFormat(DOMString& val) throw (DOMException) =0;
+
 
 
 
@@ -2838,7 +4424,7 @@ class SVGAltGlyphElement :
 
 
 /*#########################################################################
-## 
+## SVGAltGlyphDefElement
 #########################################################################*/
 
 /**
@@ -2852,7 +4438,7 @@ class SVGAltGlyphDefElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGAltGlyphItemElement
 #########################################################################*/
 
 /**
@@ -2866,7 +4452,7 @@ class SVGAltGlyphItemElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGGlyphRefElement
 #########################################################################*/
 
 /**
@@ -2877,21 +4463,66 @@ class SVGGlyphRefElement :
                 SVGURIReference,
                 SVGStylable 
 {
+    /**
+     *
+     */
+    virtual DOMString getGlyphRef() =0;
 
+    /**
+     *
+     */
+    virtual void setGlyphRef(DOMString& val) throw (DOMException) =0;
 
+    /**
+     *
+     */
+    virtual DOMString getFormat() =0;
 
-             attribute DOMString glyphRef;
-                         // throw DOMException on setting
-             attribute DOMString format;
-                         // throw DOMException on setting
-             attribute float    x;
-                         // throw DOMException on setting
-             attribute float    y;
-                         // throw DOMException on setting
-             attribute float    dx;
-                         // throw DOMException on setting
-             attribute float    dy;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual void setFormat(DOMString& val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getX() = 0;
+
+    /**
+     *
+     */
+    virtual void setX(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getY() = 0;
+
+    /**
+     *
+     */
+    virtual void setY(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getDx() = 0;
+
+    /**
+     *
+     */
+    virtual void setDx(float val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual float getDy() = 0;
+
+    /**
+     *
+     */
+    virtual void setDy(float val) throw (DOMException) =0;
+
 
 
 
@@ -2902,7 +4533,7 @@ class SVGGlyphRefElement :
 
 
 /*#########################################################################
-## 
+## SVGPaint
 #########################################################################*/
 
 /**
@@ -2912,24 +4543,45 @@ class SVGPaint : SVGColor
 {
 
 
-    // Paint Types
-    const unsigned short SVG_PAINTTYPE_UNKNOWN               = 0;
-    const unsigned short SVG_PAINTTYPE_RGBCOLOR              = 1;
-    const unsigned short SVG_PAINTTYPE_RGBCOLOR_ICCCOLOR     = 2;
-    const unsigned short SVG_PAINTTYPE_NONE                  = 101;
-    const unsigned short SVG_PAINTTYPE_CURRENTCOLOR          = 102;
-    const unsigned short SVG_PAINTTYPE_URI_NONE              = 103;
-    const unsigned short SVG_PAINTTYPE_URI_CURRENTCOLOR      = 104;
-    const unsigned short SVG_PAINTTYPE_URI_RGBCOLOR          = 105;
-    const unsigned short SVG_PAINTTYPE_URI_RGBCOLOR_ICCCOLOR = 106;
-    const unsigned short SVG_PAINTTYPE_URI                   = 107;
+    /**
+     * Paint Types
+     */
+    enum
+        {
+        SVG_PAINTTYPE_UNKNOWN               = 0,
+        SVG_PAINTTYPE_RGBCOLOR              = 1,
+        SVG_PAINTTYPE_RGBCOLOR_ICCCOLOR     = 2,
+        SVG_PAINTTYPE_NONE                  = 101,
+        SVG_PAINTTYPE_CURRENTCOLOR          = 102,
+        SVG_PAINTTYPE_URI_NONE              = 103,
+        SVG_PAINTTYPE_URI_CURRENTCOLOR      = 104,
+        SVG_PAINTTYPE_URI_RGBCOLOR          = 105,
+        SVG_PAINTTYPE_URI_RGBCOLOR_ICCCOLOR = 106,
+        SVG_PAINTTYPE_URI                   = 107
+        };
 
-    readonly attribute unsigned short paintType;
-    readonly attribute DOMString      uri;
 
-    void setUri ( in DOMString uri );
-    void setPaint ( in unsigned short paintType, in DOMString uri, in DOMString rgbColor, in DOMString iccColor )
-                    throw( SVGException );
+    /**
+     *
+     */
+    virtual unsigned short paintType() =0;
+
+    /**
+     *
+     */
+    virtual DOMString getUri() =0;
+
+    /**
+     *
+     */
+    virtual void setUri (DOMString& uri ) =0;
+
+    /**
+     *
+     */
+    virtual void setPaint (unsigned short paintType, DOMString& uri,
+                           DOMString& rgbColor, DOMString& iccColor )
+                           throw( SVGException ) =0;
 
 
 
@@ -2940,7 +4592,7 @@ class SVGPaint : SVGColor
 
 
 /*#########################################################################
-## 
+## SVGMarkerElement
 #########################################################################*/
 
 /**
@@ -2956,25 +4608,72 @@ class SVGMarkerElement :
 
 
 
-    // Marker Unit Types
-    const unsigned short SVG_MARKERUNITS_UNKNOWN        = 0;
-    const unsigned short SVG_MARKERUNITS_USERSPACEONUSE = 1;
-    const unsigned short SVG_MARKERUNITS_STROKEWIDTH    = 2;
-    // Marker Orientation Types
-    const unsigned short SVG_MARKER_ORIENT_UNKNOWN      = 0;
-    const unsigned short SVG_MARKER_ORIENT_AUTO         = 1;
-    const unsigned short SVG_MARKER_ORIENT_ANGLE        = 2;
+    /**
+     * Marker Unit Types
+     */
+    enum
+        {
+        SVG_MARKERUNITS_UNKNOWN        = 0,
+        SVG_MARKERUNITS_USERSPACEONUSE = 1,
+        SVG_MARKERUNITS_STROKEWIDTH    = 2
+        };
 
-    readonly attribute SVGAnimatedLength      refX;
-    readonly attribute SVGAnimatedLength      refY;
-    readonly attribute SVGAnimatedEnumeration markerUnits;
-    readonly attribute SVGAnimatedLength      markerWidth;
-    readonly attribute SVGAnimatedLength      markerHeight;
-    readonly attribute SVGAnimatedEnumeration orientType;
-    readonly attribute SVGAnimatedAngle      orientAngle;
+    /**
+     * Marker Orientation Types
+     */
+    enum
+        {
+        SVG_MARKER_ORIENT_UNKNOWN      = 0,
+        SVG_MARKER_ORIENT_AUTO         = 1,
+        SVG_MARKER_ORIENT_ANGLE        = 2
+        };
 
-    void setOrientToAuto (  );
-    void setOrientToAngle ( in SVGAngle angle );
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getRefX() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getRefY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getMarkerUnits() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getMarkerWidth() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getMarkerHeight() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getOrientType() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedAngle *getOrientAngle() =0;
+
+
+    /**
+     *
+     */
+    virtual void setOrientToAuto (  ) =0;
+
+    /**
+     *
+     */
+    virtual void setOrientToAngle (SVGAngle *angle ) =0;
 
 
 
@@ -2985,7 +4684,7 @@ class SVGMarkerElement :
 
 
 /*#########################################################################
-## 
+## SVGColorProfileElement
 #########################################################################*/
 
 /**
@@ -2996,15 +4695,35 @@ class SVGColorProfileElement :
                 SVGURIReference,
                 SVGRenderingIntent 
 {
+    /**
+     *
+     */
+    virtual DOMString getLocal() =0;
 
+    /**
+     *
+     */
+    virtual void setLocal(DOMString& val) throw (DOMException) =0;
 
+    /**
+     *
+     */
+    virtual DOMString getName() =0;
 
-             attribute DOMString      local;
-                         // throw DOMException on setting
-             attribute DOMString      name;
-                         // throw DOMException on setting
-             attribute unsigned short renderingIntent;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual void setName(DOMString& val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual unsigned short getRenderingIntent() =0;
+
+    /**
+     *
+     */
+    virtual void setRenderingIntent(unsigned short val) throw (DOMException) =0;
 
 
 
@@ -3015,7 +4734,7 @@ class SVGColorProfileElement :
 
 
 /*#########################################################################
-## 
+## SVGColorProfileRule
 #########################################################################*/
 
 /**
@@ -3025,15 +4744,35 @@ class SVGColorProfileRule :
                 SVGCSSRule,
                 SVGRenderingIntent 
 {
+   /**
+     *
+     */
+    virtual DOMString getSrc() =0;
 
+    /**
+     *
+     */
+    virtual void setSrc(DOMString& val) throw (DOMException) =0;
 
+    /**
+     *
+     */
+    virtual DOMString getName() =0;
 
-             attribute DOMString      src;
-                         // throw DOMException on setting
-             attribute DOMString      name;
-                         // throw DOMException on setting
-             attribute unsigned short renderingIntent;
-                         // throw DOMException on setting
+    /**
+     *
+     */
+    virtual void setName(DOMString& val) throw (DOMException) =0;
+
+    /**
+     *
+     */
+    virtual unsigned short getRenderingIntent() =0;
+
+    /**
+     *
+     */
+    virtual void setRenderingIntent(unsigned short val) throw (DOMException) =0;
 
 
 
@@ -3044,7 +4783,7 @@ class SVGColorProfileRule :
 
 
 /*#########################################################################
-## 
+## SVGGradientElement
 #########################################################################*/
 
 /**
@@ -3060,15 +4799,32 @@ class SVGGradientElement :
 
 
 
-    // Spread Method Types
-    const unsigned short SVG_SPREADMETHOD_UNKNOWN = 0;
-    const unsigned short SVG_SPREADMETHOD_PAD     = 1;
-    const unsigned short SVG_SPREADMETHOD_REFLECT = 2;
-    const unsigned short SVG_SPREADMETHOD_REPEAT  = 3;
+    /**
+     * Spread Method Types
+     */
+    enum
+        {
+        SVG_SPREADMETHOD_UNKNOWN = 0,
+        SVG_SPREADMETHOD_PAD     = 1,
+        SVG_SPREADMETHOD_REFLECT = 2,
+        SVG_SPREADMETHOD_REPEAT  = 3
+        };
 
-    readonly attribute SVGAnimatedEnumeration   gradientUnits;
-    readonly attribute SVGAnimatedTransformList gradientTransform;
-    readonly attribute SVGAnimatedEnumeration   spreadMethod;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getGradientUnits() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedTransformList *getGradientTransform() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getSpreadMethod() =0;
 
 
 
@@ -3079,7 +4835,7 @@ class SVGGradientElement :
 
 
 /*#########################################################################
-## 
+## SVGLinearGradientElement
 #########################################################################*/
 
 /**
@@ -3089,11 +4845,25 @@ class SVGLinearGradientElement : SVGGradientElement
 {
 
 
-    readonly attribute SVGAnimatedLength x1;
-    readonly attribute SVGAnimatedLength y1;
-    readonly attribute SVGAnimatedLength x2;
-    readonly attribute SVGAnimatedLength y2;
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getX1() =0;
 
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getY1() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getX2() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getY2() =0;
 
 
 };//
@@ -3103,7 +4873,7 @@ class SVGLinearGradientElement : SVGGradientElement
 
 
 /*#########################################################################
-## 
+## SVGRadialGradientElement
 #########################################################################*/
 
 /**
@@ -3113,11 +4883,35 @@ class SVGRadialGradientElement : SVGGradientElement
 {
 
 
-    readonly attribute SVGAnimatedLength cx;
-    readonly attribute SVGAnimatedLength cy;
-    readonly attribute SVGAnimatedLength r;
-    readonly attribute SVGAnimatedLength fx;
-    readonly attribute SVGAnimatedLength fy;
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getCx() =0;
+
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getCy() =0;
+
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getR() =0;
+
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getFx() =0;
+
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getFy() =0;
+
 
 
 
@@ -3128,7 +4922,7 @@ class SVGRadialGradientElement : SVGGradientElement
 
 
 /*#########################################################################
-## 
+## SVGStopElement
 #########################################################################*/
 
 /**
@@ -3139,9 +4933,10 @@ class SVGStopElement :
                 SVGStylable 
 {
 
-
-
-    readonly attribute SVGAnimatedNumber offset;
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getOffset() =0;
 
 
 
@@ -3152,7 +4947,7 @@ class SVGStopElement :
 
 
 /*#########################################################################
-## 
+## SVGPatternElement
 #########################################################################*/
 
 /**
@@ -3171,13 +4966,41 @@ class SVGPatternElement :
 
 
 
-    readonly attribute SVGAnimatedEnumeration   patternUnits;
-    readonly attribute SVGAnimatedEnumeration   patternContentUnits;
-    readonly attribute SVGAnimatedTransformList patternTransform;
-    readonly attribute SVGAnimatedLength        x;
-    readonly attribute SVGAnimatedLength        y;
-    readonly attribute SVGAnimatedLength        width;
-    readonly attribute SVGAnimatedLength        height;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getPatternUnits() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getPatternContentUnits() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedTransformList *getPatternTransform() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getX() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getWidth() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getHeight() =0;
 
 
 
@@ -3188,7 +5011,7 @@ class SVGPatternElement :
 
 
 /*#########################################################################
-## 
+## SVGClipPathElement
 #########################################################################*/
 
 /**
@@ -3203,10 +5026,11 @@ class SVGClipPathElement :
                 SVGTransformable,
                 SVGUnitTypes 
 {
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getClipPathUnits() =0;
 
-
-
-    readonly attribute SVGAnimatedEnumeration clipPathUnits;
 
 
 
@@ -3217,7 +5041,7 @@ class SVGClipPathElement :
 
 
 /*#########################################################################
-## 
+## SVGMaskElement
 #########################################################################*/
 
 /**
@@ -3234,14 +5058,35 @@ class SVGMaskElement :
 
 
 
-    readonly attribute SVGAnimatedEnumeration maskUnits;
-    readonly attribute SVGAnimatedEnumeration maskContentUnits;
-    readonly attribute SVGAnimatedLength      x;
-    readonly attribute SVGAnimatedLength      y;
-    readonly attribute SVGAnimatedLength      width;
-    readonly attribute SVGAnimatedLength      height;
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getMaskUnits() =0;
 
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getMaskContentUnits() =0;
 
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getX() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getWidth() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getHeight() =0;
 
 };//
 
@@ -3250,7 +5095,7 @@ class SVGMaskElement :
 
 
 /*#########################################################################
-## 
+## SVGFilterElement
 #########################################################################*/
 
 /**
@@ -3267,16 +5112,52 @@ class SVGFilterElement :
 
 
 
-    readonly attribute SVGAnimatedEnumeration filterUnits;
-    readonly attribute SVGAnimatedEnumeration primitiveUnits;
-    readonly attribute SVGAnimatedLength      x;
-    readonly attribute SVGAnimatedLength      y;
-    readonly attribute SVGAnimatedLength      width;
-    readonly attribute SVGAnimatedLength      height;
-    readonly attribute SVGAnimatedInteger    filterResX;
-    readonly attribute SVGAnimatedInteger    filterResY;
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getFilterUnits() =0;
 
-    void setFilterRes ( in unsigned long filterResX, in unsigned long filterResY );
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getPrimitiveUnits() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getX() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getWidth() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getHeight() =0;
+
+
+    /**
+     *
+     */
+    virtual SVGAnimatedInteger *getFilterResX() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedInteger *getFilterResY() =0;
+
+    /**
+     *
+     */
+    virtual void setFilterRes (unsigned long filterResX, 
+                               unsigned long filterResY ) =0;
 
 
 
@@ -3287,7 +5168,7 @@ class SVGFilterElement :
 
 
 /*#########################################################################
-## 
+## SVGFilterPrimitiveStandardAttributes
 #########################################################################*/
 
 /**
@@ -3297,11 +5178,31 @@ class SVGFilterPrimitiveStandardAttributes : SVGStylable
 {
 
 
-    readonly attribute SVGAnimatedLength x;
-    readonly attribute SVGAnimatedLength y;
-    readonly attribute SVGAnimatedLength width;
-    readonly attribute SVGAnimatedLength height;
-    readonly attribute SVGAnimatedString result;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getX() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getWidth() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getHeight() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getResult() =0;
 
 
 
@@ -3312,7 +5213,7 @@ class SVGFilterPrimitiveStandardAttributes : SVGStylable
 
 
 /*#########################################################################
-## 
+## SVGFEBlendElement
 #########################################################################*/
 
 /**
@@ -3324,19 +5225,33 @@ class SVGFEBlendElement :
 {
 
 
+    /**
+     * Blend Mode Types
+     */
+    enum
+        {
+        SVG_FEBLEND_MODE_UNKNOWN  = 0,
+        SVG_FEBLEND_MODE_NORMAL   = 1,
+        SVG_FEBLEND_MODE_MULTIPLY = 2,
+        SVG_FEBLEND_MODE_SCREEN   = 3,
+        SVG_FEBLEND_MODE_DARKEN   = 4,
+        SVG_FEBLEND_MODE_LIGHTEN  = 5
+        );
 
-    // Blend Mode Types
-    const unsigned short SVG_FEBLEND_MODE_UNKNOWN  = 0;
-    const unsigned short SVG_FEBLEND_MODE_NORMAL   = 1;
-    const unsigned short SVG_FEBLEND_MODE_MULTIPLY = 2;
-    const unsigned short SVG_FEBLEND_MODE_SCREEN   = 3;
-    const unsigned short SVG_FEBLEND_MODE_DARKEN   = 4;
-    const unsigned short SVG_FEBLEND_MODE_LIGHTEN  = 5;
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getIn1() =0;
 
-    readonly attribute SVGAnimatedString      in1;
-    readonly attribute SVGAnimatedString      in2;
-    readonly attribute SVGAnimatedEnumeration mode;
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getIn2() =0;
 
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getMode() =0;
 
 
 };//
@@ -3346,7 +5261,7 @@ class SVGFEBlendElement :
 
 
 /*#########################################################################
-## 
+## SVGFEColorMatrixElement
 #########################################################################*/
 
 /**
@@ -3359,16 +5274,33 @@ class SVGFEColorMatrixElement :
 
 
 
-    // Color Matrix Types
-    const unsigned short SVG_FECOLORMATRIX_TYPE_UNKNOWN          = 0;
-    const unsigned short SVG_FECOLORMATRIX_TYPE_MATRIX           = 1;
-    const unsigned short SVG_FECOLORMATRIX_TYPE_SATURATE         = 2;
-    const unsigned short SVG_FECOLORMATRIX_TYPE_HUEROTATE        = 3;
-    const unsigned short SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA = 4;
+    /**
+     * Color Matrix Types
+     */
+    enum
+        {
+        SVG_FECOLORMATRIX_TYPE_UNKNOWN          = 0,
+        SVG_FECOLORMATRIX_TYPE_MATRIX           = 1,
+        SVG_FECOLORMATRIX_TYPE_SATURATE         = 2,
+        SVG_FECOLORMATRIX_TYPE_HUEROTATE        = 3,
+        SVG_FECOLORMATRIX_TYPE_LUMINANCETOALPHA = 4
+        };
 
-    readonly attribute SVGAnimatedString      in1;
-    readonly attribute SVGAnimatedEnumeration type;
-    readonly attribute SVGAnimatedNumberList  values;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getIn1() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getType() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumberList *getValues() =0;
 
 
 
@@ -3379,7 +5311,7 @@ class SVGFEColorMatrixElement :
 
 
 /*#########################################################################
-## 
+## SVGFEComponentTransferElement
 #########################################################################*/
 
 /**
@@ -3389,12 +5321,10 @@ class SVGFEComponentTransferElement :
                 SVGElement,
                 SVGFilterPrimitiveStandardAttributes 
 {
-
-
-
-    readonly attribute SVGAnimatedString in1;
-
-
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getIn1() =0;
 
 };//
 
@@ -3403,7 +5333,7 @@ class SVGFEComponentTransferElement :
 
 
 /*#########################################################################
-## 
+## SVGComponentTransferFunctionElement
 #########################################################################*/
 
 /**
@@ -3413,22 +5343,54 @@ class SVGComponentTransferFunctionElement : SVGElement
 {
 
 
-    // Component Transfer Types
-    const unsigned short SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN  = 0;
-    const unsigned short SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY = 1;
-    const unsigned short SVG_FECOMPONENTTRANSFER_TYPE_TABLE    = 2;
-    const unsigned short SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE    = 3;
-    const unsigned short SVG_FECOMPONENTTRANSFER_TYPE_LINEAR   = 4;
-    const unsigned short SVG_FECOMPONENTTRANSFER_TYPE_GAMMA    = 5;
+    /**
+     * Component Transfer Types
+     */
+    enum
+        {
+        SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN  = 0,
+        SVG_FECOMPONENTTRANSFER_TYPE_IDENTITY = 1,
+        SVG_FECOMPONENTTRANSFER_TYPE_TABLE    = 2,
+        SVG_FECOMPONENTTRANSFER_TYPE_DISCRETE = 3,
+        SVG_FECOMPONENTTRANSFER_TYPE_LINEAR   = 4,
+        SVG_FECOMPONENTTRANSFER_TYPE_GAMMA    = 5
+        };
 
-    readonly attribute SVGAnimatedEnumeration type;
-    readonly attribute SVGAnimatedNumberList  tableValues;
-    readonly attribute SVGAnimatedNumber      slope;
-    readonly attribute SVGAnimatedNumber      intercept;
-    readonly attribute SVGAnimatedNumber      amplitude;
-    readonly attribute SVGAnimatedNumber      exponent;
-    readonly attribute SVGAnimatedNumber      offset;
 
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getType() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumberList *getTableValues() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getSlope() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getIntercept() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getAmplitude() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getExponent() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getOffset() =0;
 
 
 };//
@@ -3438,7 +5400,7 @@ class SVGComponentTransferFunctionElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGFEFuncRElement
 #########################################################################*/
 
 /**
@@ -3452,7 +5414,7 @@ class SVGFEFuncRElement : SVGComponentTransferFunctionElement
 
 
 /*#########################################################################
-## 
+## SVGFEFuncGElement
 #########################################################################*/
 
 /**
@@ -3466,7 +5428,7 @@ class SVGFEFuncGElement : SVGComponentTransferFunctionElement
 
 
 /*#########################################################################
-## 
+## SVGFEFuncBElement
 #########################################################################*/
 
 /**
@@ -3480,7 +5442,7 @@ class SVGFEFuncBElement : SVGComponentTransferFunctionElement
 
 
 /*#########################################################################
-## 
+## SVGFEFuncAElement
 #########################################################################*/
 
 /**
@@ -3494,7 +5456,7 @@ class SVGFEFuncAElement : SVGComponentTransferFunctionElement
 
 
 /*#########################################################################
-## 
+## SVGFECompositeElement
 #########################################################################*/
 
 /**
@@ -3507,22 +5469,54 @@ class SVGFECompositeElement :
 
 
 
-    // Composite Operators
-    const unsigned short SVG_FECOMPOSITE_OPERATOR_UNKNOWN    = 0;
-    const unsigned short SVG_FECOMPOSITE_OPERATOR_OVER       = 1;
-    const unsigned short SVG_FECOMPOSITE_OPERATOR_IN         = 2;
-    const unsigned short SVG_FECOMPOSITE_OPERATOR_OUT        = 3;
-    const unsigned short SVG_FECOMPOSITE_OPERATOR_ATOP       = 4;
-    const unsigned short SVG_FECOMPOSITE_OPERATOR_XOR        = 5;
-    const unsigned short SVG_FECOMPOSITE_OPERATOR_ARITHMETIC = 6;
+    /**
+     *  Composite Operators
+     */
+    enum
+        {
+        SVG_FECOMPOSITE_OPERATOR_UNKNOWN    = 0,
+        SVG_FECOMPOSITE_OPERATOR_OVER       = 1,
+        SVG_FECOMPOSITE_OPERATOR_IN         = 2,
+        SVG_FECOMPOSITE_OPERATOR_OUT        = 3,
+        SVG_FECOMPOSITE_OPERATOR_ATOP       = 4,
+        SVG_FECOMPOSITE_OPERATOR_XOR        = 5,
+        SVG_FECOMPOSITE_OPERATOR_ARITHMETIC = 6
+        };
 
-    readonly attribute SVGAnimatedString      in1;
-    readonly attribute SVGAnimatedString      in2;
-    readonly attribute SVGAnimatedEnumeration operator;
-    readonly attribute SVGAnimatedNumber      k1;
-    readonly attribute SVGAnimatedNumber      k2;
-    readonly attribute SVGAnimatedNumber      k3;
-    readonly attribute SVGAnimatedNumber      k4;
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getIn1() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getIn2() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getOperator() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getK1() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getK2() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getK3() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getK4() =0;
 
 
 
@@ -3533,7 +5527,7 @@ class SVGFECompositeElement :
 
 
 /*#########################################################################
-## 
+## SVGFEConvolveMatrixElement
 #########################################################################*/
 
 /**
@@ -3546,23 +5540,72 @@ class SVGFEConvolveMatrixElement :
 
 
 
-    // Edge Mode Values
-    const unsigned short SVG_EDGEMODE_UNKNOWN   = 0;
-    const unsigned short SVG_EDGEMODE_DUPLICATE = 1;
-    const unsigned short SVG_EDGEMODE_WRAP      = 2;
-    const unsigned short SVG_EDGEMODE_NONE      = 3;
+    /**
+     * Edge Mode Values
+     */
+    enum
+        {
+        SVG_EDGEMODE_UNKNOWN   = 0,
+        SVG_EDGEMODE_DUPLICATE = 1,
+        SVG_EDGEMODE_WRAP      = 2,
+        SVG_EDGEMODE_NONE      = 3
+        };
 
-    readonly attribute SVGAnimatedInteger     orderX;
-    readonly attribute SVGAnimatedInteger     orderY;
-    readonly attribute SVGAnimatedNumberList  kernelMatrix;
-    readonly attribute SVGAnimatedNumber      divisor;
-    readonly attribute SVGAnimatedNumber      bias;
-    readonly attribute SVGAnimatedInteger     targetX;
-    readonly attribute SVGAnimatedInteger     targetY;
-    readonly attribute SVGAnimatedEnumeration edgeMode;
-    readonly attribute SVGAnimatedLength      kernelUnitLengthX;
-    readonly attribute SVGAnimatedLength      kernelUnitLengthY;
-    readonly attribute SVGAnimatedBoolean     preserveAlpha;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedInteger *getOrderX() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedInteger *getOrderY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumberList *getKernelMatrix() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getDivisor() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getBias() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedInteger *getTargetX() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedInteger *getTargetY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getEdgeMode() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getKernelUnitLengthX() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getKernelUnitLengthY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedBoolean *getPreserveAlpha() =0;
 
 
 
@@ -3573,7 +5616,7 @@ class SVGFEConvolveMatrixElement :
 
 
 /*#########################################################################
-## 
+## SVGFEDiffuseLightingElement
 #########################################################################*/
 
 /**
@@ -3584,11 +5627,20 @@ class SVGFEDiffuseLightingElement :
                 SVGFilterPrimitiveStandardAttributes 
 {
 
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getIn1() =0;
 
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getSurfaceScale() =0;
 
-    readonly attribute SVGAnimatedString in1;
-    readonly attribute SVGAnimatedNumber surfaceScale;
-    readonly attribute SVGAnimatedNumber diffuseConstant;
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getDiffuseConstant() =0;
 
 
 
@@ -3599,7 +5651,7 @@ class SVGFEDiffuseLightingElement :
 
 
 /*#########################################################################
-## 
+## SVGFEDistantLightElement
 #########################################################################*/
 
 /**
@@ -3608,9 +5660,16 @@ class SVGFEDiffuseLightingElement :
 class SVGFEDistantLightElement : SVGElement 
 {
 
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getAzimuth() =0;
 
-    readonly attribute SVGAnimatedNumber azimuth;
-    readonly attribute SVGAnimatedNumber elevation;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getElevation() =0;
 
 
 
@@ -3621,7 +5680,7 @@ class SVGFEDistantLightElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGFEPointLightElement
 #########################################################################*/
 
 /**
@@ -3629,13 +5688,21 @@ class SVGFEDistantLightElement : SVGElement
  */
 class SVGFEPointLightElement : SVGElement 
 {
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getX() =0;
 
 
-    readonly attribute SVGAnimatedNumber x;
-    readonly attribute SVGAnimatedNumber y;
-    readonly attribute SVGAnimatedNumber z;
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getY() =0;
 
-
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getZ() =0;
 
 };//
 
@@ -3644,7 +5711,7 @@ class SVGFEPointLightElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGFESpotLightElement
 #########################################################################*/
 
 /**
@@ -3653,15 +5720,46 @@ class SVGFEPointLightElement : SVGElement
 class SVGFESpotLightElement : SVGElement 
 {
 
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getX() =0;
 
-    readonly attribute SVGAnimatedNumber x;
-    readonly attribute SVGAnimatedNumber y;
-    readonly attribute SVGAnimatedNumber z;
-    readonly attribute SVGAnimatedNumber pointsAtX;
-    readonly attribute SVGAnimatedNumber pointsAtY;
-    readonly attribute SVGAnimatedNumber pointsAtZ;
-    readonly attribute SVGAnimatedNumber specularExponent;
-    readonly attribute SVGAnimatedNumber limitingConeAngle;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getZ() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getPointsAtX() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getPointsAtY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getPointsAtZ() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getSpecularExponent() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getLimitingConeAngle() =0;
 
 
 
@@ -3672,7 +5770,7 @@ class SVGFESpotLightElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGFEDisplacementMapElement
 #########################################################################*/
 
 /**
@@ -3685,18 +5783,43 @@ class SVGFEDisplacementMapElement :
 
 
 
-    // Channel Selectors
-    const unsigned short SVG_CHANNEL_UNKNOWN = 0;
-    const unsigned short SVG_CHANNEL_R       = 1;
-    const unsigned short SVG_CHANNEL_G       = 2;
-    const unsigned short SVG_CHANNEL_B       = 3;
-    const unsigned short SVG_CHANNEL_A       = 4;
+    /**
+     *  Channel Selectors
+     */
+    enum
+        {
+        SVG_CHANNEL_UNKNOWN = 0,
+        SVG_CHANNEL_R       = 1,
+        SVG_CHANNEL_G       = 2,
+        SVG_CHANNEL_B       = 3,
+        SVG_CHANNEL_A       = 4
+        };
 
-    readonly attribute SVGAnimatedString      in1;
-    readonly attribute SVGAnimatedString      in2;
-    readonly attribute SVGAnimatedNumber      scale;
-    readonly attribute SVGAnimatedEnumeration xChannelSelector;
-    readonly attribute SVGAnimatedEnumeration yChannelSelector;
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getIn1() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getIn2() =0;
+
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getScale() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getXChannelSelector() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getYChannelSelector() =0;
 
 
 
@@ -3707,7 +5830,7 @@ class SVGFEDisplacementMapElement :
 
 
 /*#########################################################################
-## 
+## SVGFEFloodElement
 #########################################################################*/
 
 /**
@@ -3717,11 +5840,10 @@ class SVGFEFloodElement :
                 SVGElement,
                 SVGFilterPrimitiveStandardAttributes 
 {
-
-
-
-    readonly attribute SVGAnimatedString      in1;
-
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getIn1() =0;
 
 
 };//
@@ -3731,7 +5853,7 @@ class SVGFEFloodElement :
 
 
 /*#########################################################################
-## 
+## SVGFEGaussianBlurElement
 #########################################################################*/
 
 /**
@@ -3741,14 +5863,27 @@ class SVGFEGaussianBlurElement :
                 SVGElement,
                 SVGFilterPrimitiveStandardAttributes 
 {
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getIn1() =0;
 
 
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getStdDeviationX() =0;
 
-    readonly attribute SVGAnimatedString in1;
-    readonly attribute SVGAnimatedNumber stdDeviationX;
-    readonly attribute SVGAnimatedNumber stdDeviationY;
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getStdDeviationY() =0;
 
-    void setStdDeviation ( in float stdDeviationX, in float stdDeviationY );
+
+    /**
+     *
+     */
+    virtual void setStdDeviation (float stdDeviationX, float stdDeviationY ) =0;
 
 
 
@@ -3759,7 +5894,7 @@ class SVGFEGaussianBlurElement :
 
 
 /*#########################################################################
-## 
+## SVGFEImageElement
 #########################################################################*/
 
 /**
@@ -3778,7 +5913,7 @@ class SVGFEImageElement :
 
 
 /*#########################################################################
-## 
+## SVGFEMergeElement
 #########################################################################*/
 
 /**
@@ -3794,7 +5929,7 @@ class SVGFEMergeElement :
 
 
 /*#########################################################################
-## 
+## SVGFEMergeNodeElement
 #########################################################################*/
 
 /**
@@ -3802,10 +5937,10 @@ class SVGFEMergeElement :
  */
 class SVGFEMergeNodeElement : SVGElement 
 {
-
-
-    readonly attribute SVGAnimatedString in1;
-
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getIn1() =0;
 
 
 };//
@@ -3815,7 +5950,7 @@ class SVGFEMergeNodeElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGFEMorphologyElement
 #########################################################################*/
 
 /**
@@ -3828,15 +5963,37 @@ class SVGFEMorphologyElement :
 
 
 
-    // Morphology Operators
-    const unsigned short SVG_MORPHOLOGY_OPERATOR_UNKNOWN = 0;
-    const unsigned short SVG_MORPHOLOGY_OPERATOR_ERODE   = 1;
-    const unsigned short SVG_MORPHOLOGY_OPERATOR_DILATE  = 2;
+    /**
+     *  Morphology Operators
+     */
+    enum
+        {
+        SVG_MORPHOLOGY_OPERATOR_UNKNOWN = 0,
+        SVG_MORPHOLOGY_OPERATOR_ERODE   = 1,
+        SVG_MORPHOLOGY_OPERATOR_DILATE  = 2
+        };
 
-    readonly attribute SVGAnimatedString      in1;
-    readonly attribute SVGAnimatedEnumeration operator;
-    readonly attribute SVGAnimatedLength      radiusX;
-    readonly attribute SVGAnimatedLength      radiusY;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getIn1() =0;
+
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getOperator() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getRadiusX() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getRadiusY() =0;
 
 
 
@@ -3847,7 +6004,7 @@ class SVGFEMorphologyElement :
 
 
 /*#########################################################################
-## 
+## SVGFEOffsetElement
 #########################################################################*/
 
 /**
@@ -3860,9 +6017,21 @@ class SVGFEOffsetElement :
 
 
 
-    readonly attribute SVGAnimatedString in1;
-    readonly attribute SVGAnimatedNumber dx;
-    readonly attribute SVGAnimatedNumber dy;
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getIn1() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getDx() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getDy() =0;
+
 
 
 
@@ -3873,7 +6042,7 @@ class SVGFEOffsetElement :
 
 
 /*#########################################################################
-## 
+## SVGFESpecularLightingElement
 #########################################################################*/
 
 /**
@@ -3884,13 +6053,25 @@ class SVGFESpecularLightingElement :
                 SVGFilterPrimitiveStandardAttributes 
 {
 
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getIn1() =0;
 
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getSurfaceScale() =0;
 
-    readonly attribute SVGAnimatedString in1;
-    readonly attribute SVGAnimatedNumber surfaceScale;
-    readonly attribute SVGAnimatedNumber specularConstant;
-    readonly attribute SVGAnimatedNumber specularExponent;
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getSpecularConstant() =0;
 
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getSpecularExponent() =0;
 
 
 };//
@@ -3900,7 +6081,7 @@ class SVGFESpecularLightingElement :
 
 
 /*#########################################################################
-## 
+## SVGFETileElement
 #########################################################################*/
 
 /**
@@ -3912,8 +6093,10 @@ class SVGFETileElement :
 {
 
 
-
-    readonly attribute SVGAnimatedString in1;
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getIn1() =0;
 
 
 
@@ -3924,7 +6107,7 @@ class SVGFETileElement :
 
 
 /*#########################################################################
-## 
+## SVGFETurbulenceElement
 #########################################################################*/
 
 /**
@@ -3937,21 +6120,57 @@ class SVGFETurbulenceElement :
 
 
 
-    // Turbulence Types
-    const unsigned short SVG_TURBULENCE_TYPE_UNKNOWN      = 0;
-    const unsigned short SVG_TURBULENCE_TYPE_FRACTALNOISE = 1;
-    const unsigned short SVG_TURBULENCE_TYPE_TURBULENCE   = 2;
-    // Stitch Options
-    const unsigned short SVG_STITCHTYPE_UNKNOWN  = 0;
-    const unsigned short SVG_STITCHTYPE_STITCH   = 1;
-    const unsigned short SVG_STITCHTYPE_NOSTITCH = 2;
+    /**
+     *  Turbulence Types
+     */
+    enum
+        {
+        SVG_TURBULENCE_TYPE_UNKNOWN      = 0,
+        SVG_TURBULENCE_TYPE_FRACTALNOISE = 1,
+        SVG_TURBULENCE_TYPE_TURBULENCE   = 2
+        };
 
-    readonly attribute SVGAnimatedNumber      baseFrequencyX;
-    readonly attribute SVGAnimatedNumber      baseFrequencyY;
-    readonly attribute SVGAnimatedInteger     numOctaves;
-    readonly attribute SVGAnimatedNumber      seed;
-    readonly attribute SVGAnimatedEnumeration stitchTiles;
-    readonly attribute SVGAnimatedEnumeration type;
+    /**
+     *  Stitch Options
+     */
+    enum
+        {
+        SVG_STITCHTYPE_UNKNOWN  = 0,
+        SVG_STITCHTYPE_STITCH   = 1,
+        SVG_STITCHTYPE_NOSTITCH = 2
+        };
+
+
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getBaseFrequencyX() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getBaseFrequencyY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedInteger  *getNumOctaves() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedNumber *getSeed() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getStitchTiles() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedEnumeration *getType() =0;
 
 
 
@@ -3962,7 +6181,7 @@ class SVGFETurbulenceElement :
 
 
 /*#########################################################################
-## 
+## SVGCursorElement
 #########################################################################*/
 
 /**
@@ -3974,13 +6193,15 @@ class SVGCursorElement :
                 SVGTests,
                 SVGExternalResourcesRequired 
 {
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getX() =0;
 
-
-
-    readonly attribute SVGAnimatedLength x;
-    readonly attribute SVGAnimatedLength y;
-
-
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getY() =0;
 
 };//
 
@@ -3989,7 +6210,7 @@ class SVGCursorElement :
 
 
 /*#########################################################################
-## 
+## SVGAElement
 #########################################################################*/
 
 /**
@@ -4006,9 +6227,10 @@ class SVGAElement :
                 events::EventTarget 
 {
 
-
-
-    readonly attribute SVGAnimatedString target;
+    /**
+     *
+     */
+    virtual SVGAnimatedString *getTarget() =0;
 
 
 
@@ -4019,7 +6241,7 @@ class SVGAElement :
 
 
 /*#########################################################################
-## 
+## SVGViewElement
 #########################################################################*/
 
 /**
@@ -4032,9 +6254,10 @@ class SVGViewElement :
                 SVGZoomAndPan 
 {
 
-
-
-    readonly attribute SVGStringList viewTarget;
+    /**
+     *
+     */
+    virtual SVGStringList *getViewTarget() =0;
 
 
 
@@ -4045,7 +6268,7 @@ class SVGViewElement :
 
 
 /*#########################################################################
-## 
+## SVGScriptElement
 #########################################################################*/
 
 /**
@@ -4057,11 +6280,15 @@ class SVGScriptElement :
                 SVGExternalResourcesRequired 
 {
 
+    /**
+     *
+     */
+    virtual DOMString getType() =0;
 
-
-             attribute DOMString type;
-                         // throw DOMException on setting
-
+    /**
+     *
+     */
+    virtual void setType(DOMString& val) throw (DOMException) =0;
 
 
 };//
@@ -4071,7 +6298,7 @@ class SVGScriptElement :
 
 
 /*#########################################################################
-## 
+## SVGEvent
 #########################################################################*/
 
 /**
@@ -4085,7 +6312,7 @@ class SVGEvent : events::Event
 
 
 /*#########################################################################
-## 
+## SVGZoomEvent
 #########################################################################*/
 
 /**
@@ -4094,12 +6321,30 @@ class SVGEvent : events::Event
 class SVGZoomEvent : events::UIEvent 
 {
 
+    /**
+     *
+     */
+    virtual SVGRect *getZoomRectScreen() =0;
 
-    readonly attribute SVGRect zoomRectScreen;
-    readonly attribute float previousScale;
-    readonly attribute SVGPoint previousTranslate;
-    readonly attribute float newScale;
-    readonly attribute SVGPoint newTranslate;
+    /**
+     *
+     */
+    virtual float getPreviousScale() =0;
+
+    /**
+     *
+     */
+    virtual SVGPoint *getPreviousTranslate() =0;
+
+    /**
+     *
+     */
+    virtual float getNewScale() =0;
+ 
+   /**
+     *
+     */
+    virtual SVGPoint *getNewTranslate() =0;
 
 
 
@@ -4110,7 +6355,7 @@ class SVGZoomEvent : events::UIEvent
 
 
 /*#########################################################################
-## 
+## SVGAnimationElement
 #########################################################################*/
 
 /**
@@ -4125,13 +6370,28 @@ class SVGAnimationElement :
 {
 
 
+    /**
+     *
+     */
+    virtual SVGElement getTargetElement() =0;
 
-    readonly attribute SVGElement targetElement;
 
-    float getStartTime (  );
-    float getCurrentTime (  );
-    float getSimpleDuration (  )
-                    throw( DOMException );
+    /**
+     *
+     */
+    virtual float getStartTime (  ) =0;
+
+    /**
+     *
+     */
+    virtual float getCurrentTime (  ) =0;
+
+    /**
+     *
+     */
+    virtual float getSimpleDuration (  )
+                    throw( DOMException ) =0;
+;
 
 
 
@@ -4142,7 +6402,7 @@ class SVGAnimationElement :
 
 
 /*#########################################################################
-## 
+## SVGAnimateElement
 #########################################################################*/
 
 /**
@@ -4156,7 +6416,7 @@ class SVGAnimateElement : SVGAnimationElement
 
 
 /*#########################################################################
-## 
+## SVGSetElement
 #########################################################################*/
 
 /**
@@ -4170,7 +6430,7 @@ class SVGSetElement : SVGAnimationElement
 
 
 /*#########################################################################
-## 
+## SVGAnimateMotionElement
 #########################################################################*/
 
 /**
@@ -4184,7 +6444,7 @@ class SVGAnimateMotionElement : SVGAnimationElement
 
 
 /*#########################################################################
-## 
+## SVGMPathElement
 #########################################################################*/
 
 /**
@@ -4201,7 +6461,7 @@ class SVGMPathElement :
 
 
 /*#########################################################################
-## 
+## SVGAnimateColorElement
 #########################################################################*/
 
 /**
@@ -4215,7 +6475,7 @@ class SVGAnimateColorElement : SVGAnimationElement
 
 
 /*#########################################################################
-## 
+## SVGAnimateTransformElement
 #########################################################################*/
 
 /**
@@ -4229,7 +6489,7 @@ class SVGAnimateTransformElement : SVGAnimationElement
 
 
 /*#########################################################################
-## 
+## SVGFontElement
 #########################################################################*/
 
 /**
@@ -4246,7 +6506,7 @@ class SVGFontElement :
 
 
 /*#########################################################################
-## 
+## SVGGlyphElement
 #########################################################################*/
 
 /**
@@ -4262,7 +6522,7 @@ class SVGGlyphElement :
 
 
 /*#########################################################################
-## 
+## SVGMissingGlyphElement
 #########################################################################*/
 
 /**
@@ -4278,7 +6538,7 @@ class SVGMissingGlyphElement :
 
 
 /*#########################################################################
-## 
+## SVGHKernElement
 #########################################################################*/
 
 /**
@@ -4292,7 +6552,7 @@ class SVGHKernElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGVKernElement
 #########################################################################*/
 
 /**
@@ -4306,7 +6566,7 @@ class SVGVKernElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGFontFaceElement
 #########################################################################*/
 
 /**
@@ -4320,7 +6580,7 @@ class SVGFontFaceElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGFontFaceSrcElement
 #########################################################################*/
 
 /**
@@ -4334,7 +6594,7 @@ class SVGFontFaceSrcElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGFontFaceUriElement
 #########################################################################*/
 
 /**
@@ -4348,7 +6608,7 @@ class SVGFontFaceUriElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGFontFaceFormatElement
 #########################################################################*/
 
 /**
@@ -4362,7 +6622,7 @@ class SVGFontFaceFormatElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGFontFaceNameElement
 #########################################################################*/
 
 /**
@@ -4376,7 +6636,7 @@ class SVGFontFaceNameElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGDefinitionSrcElement
 #########################################################################*/
 
 /**
@@ -4390,7 +6650,7 @@ class SVGDefinitionSrcElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGMetadataElement
 #########################################################################*/
 
 /**
@@ -4403,7 +6663,7 @@ class SVGMetadataElement : SVGElement
 
 
 /*#########################################################################
-## 
+## SVGForeignObjectElement
 #########################################################################*/
 
 /**
@@ -4420,11 +6680,25 @@ class SVGForeignObjectElement :
 {
 
 
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getX() =0;
 
-    readonly attribute SVGAnimatedLength x;
-    readonly attribute SVGAnimatedLength y;
-    readonly attribute SVGAnimatedLength width;
-    readonly attribute SVGAnimatedLength height;
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getY() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getWidth() =0;
+
+    /**
+     *
+     */
+    virtual SVGAnimatedLength *getHeight() =0;
 
 
 
