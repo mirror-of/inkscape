@@ -152,6 +152,10 @@ DebugDialogImpl::DebugDialogImpl()
     menuBar.items().push_back( Gtk::Menu_Helpers::MenuElem("_File", fileMenu) );
     fileMenu.items().push_back( Gtk::Menu_Helpers::MenuElem("_Clear",
            sigc::mem_fun(*this, &DebugDialogImpl::clear) ) );
+    fileMenu.items().push_back( Gtk::Menu_Helpers::MenuElem("Capture log messages",
+           sigc::mem_fun(*this, &DebugDialogImpl::captureLogMessages) ) );
+    fileMenu.items().push_back( Gtk::Menu_Helpers::MenuElem("Release log messages",
+           sigc::mem_fun(*this, &DebugDialogImpl::releaseLogMessages) ) );
     mainVBox->pack_start(menuBar, Gtk::PACK_SHRINK);
     
 
@@ -325,7 +329,7 @@ void DebugDialogImpl::releaseLogMessages()
         }
     if ( handlerPangomm )
         {
-        g_log_remove_handler("atkmm", handlerPangomm);
+        g_log_remove_handler("pangomm", handlerPangomm);
         handlerPangomm = 0;
         }
     if ( handlerGdkmm )
