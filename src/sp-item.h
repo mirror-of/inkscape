@@ -101,12 +101,7 @@ struct SPItem : public SPObject {
 
 	NR::Matrix getRelativeTransform(SPObject const *obj) const;
 
-
-
 	sigc::connection connectTransformed(sigc::slot<void, NR::Matrix const *, SPItem *> slot)  {
-
-
-
                 return _transformed_signal.connect(slot);
         }
 };
@@ -172,6 +167,9 @@ NRArenaItem *sp_item_get_arenaitem (SPItem *item, unsigned int key);
 void sp_item_bbox_desktop (SPItem *item, NRRect *bbox);
 NR::Rect sp_item_bbox_desktop(SPItem *item);
 
+NR::Matrix i2anc_affine(SPObject const *item, SPObject const *ancestor);
+NR::Matrix i2i_affine(SPObject const *src, SPObject const *dest);
+
 NR::Matrix sp_item_i2doc_affine(SPItem const *item);
 NR::Matrix sp_item_i2root_affine(SPItem const *item);
 
@@ -193,6 +191,7 @@ NR::Matrix sp_item_i2d_affine(SPItem const *item);
 
 void sp_item_set_i2d_affine(SPItem *item, NR::Matrix const &transform);
 
+NR::Matrix sp_item_dt2i_affine(SPItem const *item, SPDesktop *dt);
 NRMatrix *sp_item_dt2i_affine(SPItem const *item, SPDesktop *dt, NRMatrix *transform);
 
 int sp_item_repr_compare_position(SPItem *first, SPItem *second);

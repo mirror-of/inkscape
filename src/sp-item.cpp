@@ -129,31 +129,6 @@ sp_item_init(SPItem *item)
     new (&item->_transformed_signal) sigc::signal<void, NR::Matrix const *, SPItem *>();
 }
 
-namespace {
-
-/** Requires: \a ancestor really is an ancestor (>=) of \a object.
- * ("Ancestor (>=)" here includes as far as \a object itself.)
- */
-NR::Matrix partial_xform(SPObject const *object, SPObject const *ancestor) {
-    NR::Matrix xform = NR::identity();
-    while ( object != ancestor ) {
-        if (SP_IS_ITEM(object)) {
-            xform *= SP_ITEM(object)->transform;
-        }
-        object = SP_OBJECT_PARENT(object);
-    }
-    return xform;
-}
-
-/* todo: Consider moving this and nearestCommonAncestor to be functions on SPObject. */
-NR::Matrix SPItem::getRelativeTransform(SPObject const *object) const {
-    g_return_val_if_fail(object != NULL, NR::identity());
-    SPObject const *ancestor = this->nearestCommonAncestor(object);
-    return partial_xform(this, ancestor) / partial_xform(object, ancestor);
-}
-
-}
-
 static void
 sp_item_build(SPObject *object, SPDocument *document, SPRepr *repr)
 {
@@ -786,6 +761,45 @@ static void sp_item_set_item_transform(SPItem *item, NR::Matrix const &transform
     }
 }
 
+
+/**
+ * Requires: \a ancestor really is an ancestor (>=) of \a object.
+ *   ("Ancestor (>=)" here includes as far as \a object itself.)
+ *
+ * Requires: in_same_coordsys_as_anc(object, ancestor).
+ */
+NR::Matrix
+i2anc_affine(SPObject const *object, SPObject const *const ancestor) {
+    NR::Matrix ret(NR::identity());
+    g_return_val_if_fail(object != NULL && ancestor != NULL, ret);
+
+    while ( object != ancestor ) {
+        g_return_val_if_fail(SP_IS_ITEM(object), ret);
+        /* g_error is correct if object is <defs> or a non-SVG element type.
+         *
+         * I wonder if there are cases (perhaps involving a nested <svg> inside a foreignObject)
+         * where some different behaviour is appropriate.  We'll wait for a bug report and example
+         * document to decide what to do.
+         */
+
+        ret *= SP_ITEM(object)->transform;
+        object = SP_OBJECT_PARENT(object);
+    }
+    return ret;
+}
+
+NR::Matrix
+i2i_affine(SPObject const *src, SPObject const *dest) {
+    g_return_val_if_fail(src != NULL && dest != NULL, NR::identity());
+    SPObject const *ancestor = src->nearestCommonAncestor(dest);
+    return i2anc_affine(src, ancestor) / i2anc_affine(dest, ancestor);
+}
+
+NR::Matrix SPItem::getRelativeTransform(SPObject const *dest) const {
+    return i2i_affine(this, dest);
+}
+
+
 /**
  * Returns the accumulated transformation of the item and all its ancestors, including root's viewport.
  * Requires: item != NULL && SP_IS_ITEM(item).
@@ -916,6 +930,13 @@ void sp_item_set_i2d_affine(SPItem *item, NR::Matrix const &i2dt)
     sp_item_set_item_transform(item, i2p);
 }
 
+
+NR::Matrix
+sp_item_dt2i_affine(SPItem const *item, SPDesktop *)
+{
+    /* fixme: Implement the right way (Lauris) */
+    return sp_item_i2d_affine(item).inverse();
+}
 
 NRMatrix *
 sp_item_dt2i_affine(SPItem const *item, SPDesktop *dt, NRMatrix *affine)
