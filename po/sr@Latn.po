@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape 0.39cvs20040709\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 20:16+0100\n"
+"POT-Creation-Date: 2004-11-22 22:59+0100\n"
 "PO-Revision-Date: 2004-07-09 22:11+0200\n"
 "Last-Translator: Aleksandar Urošević <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <gnom@prevod.org>\n"
@@ -1009,7 +1009,8 @@ msgid "Clones"
 msgstr "Klonovi"
 
 #: src/dialogs/display-settings.cpp:1217
-msgid "When the original moves, its clones:"
+#, fuzzy
+msgid "When the original moves, its clones and linked offsets:"
 msgstr "Kada se pomeri original, klon se"
 
 #: src/dialogs/display-settings.cpp:1229
@@ -4013,7 +4014,8 @@ msgid "Base radius to tip radius ratio"
 msgstr "Odnos osnovnog poluprečnika do ručke"
 
 #: src/toolbox.cpp:1217
-msgid "Roundedness:"
+#, fuzzy
+msgid "Rounded:"
 msgstr "Zaobljenost uglova:"
 
 #: src/toolbox.cpp:1217
@@ -4021,7 +4023,7 @@ msgid "How much rounded are the corners (0 for sharp)"
 msgstr "Koliko će biti zaobljeni uglovi (0 za oštar ugao)"
 
 #: src/toolbox.cpp:1227
-msgid "Randomization:"
+msgid "Randomized:"
 msgstr ""
 
 #: src/toolbox.cpp:1227

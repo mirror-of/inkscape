@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Sodipodi cvs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 20:16+0100\n"
+"POT-Creation-Date: 2004-11-22 22:59+0100\n"
 "PO-Revision-Date: 2003-09-24 22:13+0200\n"
 "Last-Translator: Jeroen van der Vegt <jeroen@dirck.mine.nu>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -993,7 +993,7 @@ msgid "Clones"
 msgstr "Sluiten"
 
 #: src/dialogs/display-settings.cpp:1217
-msgid "When the original moves, its clones:"
+msgid "When the original moves, its clones and linked offsets:"
 msgstr ""
 
 #: src/dialogs/display-settings.cpp:1229
@@ -4014,15 +4014,16 @@ msgid "Base radius to tip radius ratio"
 msgstr ""
 
 #: src/toolbox.cpp:1217
-msgid "Roundedness:"
-msgstr ""
+#, fuzzy
+msgid "Rounded:"
+msgstr "Rol:"
 
 #: src/toolbox.cpp:1217
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr ""
 
 #: src/toolbox.cpp:1227
-msgid "Randomization:"
+msgid "Randomized:"
 msgstr ""
 
 #: src/toolbox.cpp:1227

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: be\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 20:16+0100\n"
+"POT-Creation-Date: 2004-11-22 22:59+0100\n"
 "PO-Revision-Date: 2003-07-20 16:00+0300\n"
 "Last-Translator: Vital Khilko <dojlid@mova.org>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -992,7 +992,7 @@ msgid "Clones"
 msgstr "Закрыць"
 
 #: src/dialogs/display-settings.cpp:1217
-msgid "When the original moves, its clones:"
+msgid "When the original moves, its clones and linked offsets:"
 msgstr ""
 
 #: src/dialogs/display-settings.cpp:1229
@@ -3999,15 +3999,16 @@ msgid "Base radius to tip radius ratio"
 msgstr ""
 
 #: src/toolbox.cpp:1217
-msgid "Roundedness:"
-msgstr ""
+#, fuzzy
+msgid "Rounded:"
+msgstr "Роля:"
 
 #: src/toolbox.cpp:1217
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr ""
 
 #: src/toolbox.cpp:1227
-msgid "Randomization:"
+msgid "Randomized:"
 msgstr ""
 
 #: src/toolbox.cpp:1227

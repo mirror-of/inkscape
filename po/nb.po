@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 20:16+0100\n"
+"POT-Creation-Date: 2004-11-22 22:59+0100\n"
 "PO-Revision-Date: 2003-01-25 00:49+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
@@ -997,7 +997,7 @@ msgid "Clones"
 msgstr "Lukk"
 
 #: src/dialogs/display-settings.cpp:1217
-msgid "When the original moves, its clones:"
+msgid "When the original moves, its clones and linked offsets:"
 msgstr ""
 
 #: src/dialogs/display-settings.cpp:1229
@@ -3985,15 +3985,16 @@ msgid "Base radius to tip radius ratio"
 msgstr ""
 
 #: src/toolbox.cpp:1217
-msgid "Roundedness:"
-msgstr ""
+#, fuzzy
+msgid "Rounded:"
+msgstr "Rolle:"
 
 #: src/toolbox.cpp:1217
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr ""
 
 #: src/toolbox.cpp:1227
-msgid "Randomization:"
+msgid "Randomized:"
 msgstr ""
 
 #: src/toolbox.cpp:1227

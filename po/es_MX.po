@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 20:16+0100\n"
+"POT-Creation-Date: 2004-11-22 22:59+0100\n"
 "PO-Revision-Date: 2004-04-05 01:29-0600\n"
 "Last-Translator: Daniel Díaz <yosoy@danieldiaz.org>\n"
 "Language-Team: none <none>\n"
@@ -1005,7 +1005,7 @@ msgid "Clones"
 msgstr "Cerrar"
 
 #: src/dialogs/display-settings.cpp:1217
-msgid "When the original moves, its clones:"
+msgid "When the original moves, its clones and linked offsets:"
 msgstr ""
 
 #: src/dialogs/display-settings.cpp:1229
@@ -4045,15 +4045,16 @@ msgid "Base radius to tip radius ratio"
 msgstr "Relación entre el radio base y el radio de la punta"
 
 #: src/toolbox.cpp:1217
-msgid "Roundedness:"
-msgstr ""
+#, fuzzy
+msgid "Rounded:"
+msgstr "No redondeado"
 
 #: src/toolbox.cpp:1217
 msgid "How much rounded are the corners (0 for sharp)"
 msgstr ""
 
 #: src/toolbox.cpp:1227
-msgid "Randomization:"
+msgid "Randomized:"
 msgstr ""
 
 #: src/toolbox.cpp:1227

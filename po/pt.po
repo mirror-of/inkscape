@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 20:16+0100\n"
+"POT-Creation-Date: 2004-11-22 22:59+0100\n"
 "PO-Revision-Date: 2003-07-28 23:20+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -994,7 +994,7 @@ msgid "Clones"
 msgstr "Fechar"
 
 #: src/dialogs/display-settings.cpp:1217
-msgid "When the original moves, its clones:"
+msgid "When the original moves, its clones and linked offsets:"
 msgstr ""
 
 #: src/dialogs/display-settings.cpp:1229
@@ -4031,7 +4031,7 @@ msgstr ""
 
 #: src/toolbox.cpp:1217
 #, fuzzy
-msgid "Roundedness:"
+msgid "Rounded:"
 msgstr "Terminação arredondada"
 
 #: src/toolbox.cpp:1217
@@ -4039,7 +4039,7 @@ msgid "How much rounded are the corners (0 for sharp)"
 msgstr ""
 
 #: src/toolbox.cpp:1227
-msgid "Randomization:"
+msgid "Randomized:"
 msgstr ""
 
 #: src/toolbox.cpp:1227

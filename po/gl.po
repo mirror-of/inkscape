@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.23\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 20:16+0100\n"
+"POT-Creation-Date: 2004-11-22 22:59+0100\n"
 "PO-Revision-Date: 2001-11-10 16:49GMT\n"
 "Last-Translator: Francisco Xosé Vázquez Grandal <fxvazquez@arrakis.es>\n"
 "Language-Team: Galician <trasno@trasno.net>\n"
@@ -1014,7 +1014,7 @@ msgid "Clones"
 msgstr "Nova vista"
 
 #: src/dialogs/display-settings.cpp:1217
-msgid "When the original moves, its clones:"
+msgid "When the original moves, its clones and linked offsets:"
 msgstr ""
 
 #: src/dialogs/display-settings.cpp:1229
@@ -4070,7 +4070,7 @@ msgstr ""
 # [*] Revisar
 #: src/toolbox.cpp:1217
 #, fuzzy
-msgid "Roundedness:"
+msgid "Rounded:"
 msgstr "Redondear puntos finais"
 
 #: src/toolbox.cpp:1217
@@ -4078,7 +4078,7 @@ msgid "How much rounded are the corners (0 for sharp)"
 msgstr ""
 
 #: src/toolbox.cpp:1227
-msgid "Randomization:"
+msgid "Randomized:"
 msgstr ""
 
 #: src/toolbox.cpp:1227

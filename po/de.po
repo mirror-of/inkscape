@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape 0.39\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 20:16+0100\n"
+"POT-Creation-Date: 2004-11-22 22:59+0100\n"
 "PO-Revision-Date: 2004-11-03 01:17+0100\n"
 "Last-Translator: adib <theadib@yahoo.com>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -1015,7 +1015,8 @@ msgid "Clones"
 msgstr "Klone"
 
 #: src/dialogs/display-settings.cpp:1217
-msgid "When the original moves, its clones:"
+#, fuzzy
+msgid "When the original moves, its clones and linked offsets:"
 msgstr "Wenn das Original verschoben wird, werden die Klone:"
 
 #: src/dialogs/display-settings.cpp:1229
@@ -4066,7 +4067,8 @@ msgid "Base radius to tip radius ratio"
 msgstr "Verhältnis vom Radius des Grundkörpers zum Radius der Spitzen"
 
 #: src/toolbox.cpp:1217
-msgid "Roundedness:"
+#, fuzzy
+msgid "Rounded:"
 msgstr "Abrundung:"
 
 #: src/toolbox.cpp:1217
@@ -4074,7 +4076,8 @@ msgid "How much rounded are the corners (0 for sharp)"
 msgstr "Wie stark werden die Ecken abgerundet (0 für harte Kante)"
 
 #: src/toolbox.cpp:1227
-msgid "Randomization:"
+#, fuzzy
+msgid "Randomized:"
 msgstr "Zufallsänderung:"
 
 #: src/toolbox.cpp:1227

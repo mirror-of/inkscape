@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape-sk-0.40\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 20:16+0100\n"
+"POT-Creation-Date: 2004-11-22 22:59+0100\n"
 "PO-Revision-Date: 2004-11-16 16:35+0100\n"
 "Last-Translator: Zdenko Podobný <zdpo@mailbox.sk>\n"
 "Language-Team: Slovak <<sk-i18n@lists.linux.sk>>\n"
@@ -989,7 +989,8 @@ msgid "Clones"
 msgstr "Klony"
 
 #: src/dialogs/display-settings.cpp:1217
-msgid "When the original moves, its clones:"
+#, fuzzy
+msgid "When the original moves, its clones and linked offsets:"
 msgstr "Keď sa posunie originál, jeho klony:"
 
 #: src/dialogs/display-settings.cpp:1229
@@ -3869,7 +3870,8 @@ msgid "Base radius to tip radius ratio"
 msgstr "Základný polomer k vrcholu koeficientu polomeru"
 
 #: src/toolbox.cpp:1217
-msgid "Roundedness:"
+#, fuzzy
+msgid "Rounded:"
 msgstr "Oblosť"
 
 #: src/toolbox.cpp:1217
@@ -3877,7 +3879,8 @@ msgid "How much rounded are the corners (0 for sharp)"
 msgstr ""
 
 #: src/toolbox.cpp:1227
-msgid "Randomization:"
+#, fuzzy
+msgid "Randomized:"
 msgstr "Náhodnosť:"
 
 #: src/toolbox.cpp:1227

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 20:16+0100\n"
+"POT-Creation-Date: 2004-11-22 22:59+0100\n"
 "PO-Revision-Date: 2000-04-08 16:21+0200\n"
 "Last-Translator: Lauris Kaplinski <lauris@ariman.ee>\n"
 "Language-Team: Estonian\n"
@@ -971,7 +971,7 @@ msgid "Clones"
 msgstr "Uus aken"
 
 #: src/dialogs/display-settings.cpp:1217
-msgid "When the original moves, its clones:"
+msgid "When the original moves, its clones and linked offsets:"
 msgstr ""
 
 #: src/dialogs/display-settings.cpp:1229
@@ -3952,7 +3952,7 @@ msgstr ""
 
 #: src/toolbox.cpp:1217
 #, fuzzy
-msgid "Roundedness:"
+msgid "Rounded:"
 msgstr "Grupeerib valitud objektid"
 
 #: src/toolbox.cpp:1217
@@ -3960,7 +3960,7 @@ msgid "How much rounded are the corners (0 for sharp)"
 msgstr ""
 
 #: src/toolbox.cpp:1227
-msgid "Randomization:"
+msgid "Randomized:"
 msgstr ""
 
 #: src/toolbox.cpp:1227

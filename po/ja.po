@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 20:16+0100\n"
+"POT-Creation-Date: 2004-11-22 22:59+0100\n"
 "PO-Revision-Date: 2004-10-26 23:26+0900\n"
 "Last-Translator: shivaken <shivaken@owls-nest.net>\n"
 "Language-Team: Japanese <shivaken@owls-nest.net>\n"
@@ -959,7 +959,8 @@ msgid "Clones"
 msgstr "クローン"
 
 #: src/dialogs/display-settings.cpp:1217
-msgid "When the original moves, its clones:"
+#, fuzzy
+msgid "When the original moves, its clones and linked offsets:"
 msgstr "オリジナルを移動したら"
 
 #: src/dialogs/display-settings.cpp:1229
@@ -3851,7 +3852,8 @@ msgid "Base radius to tip radius ratio"
 msgstr "中心へ指向する度合"
 
 #: src/toolbox.cpp:1217
-msgid "Roundedness:"
+#, fuzzy
+msgid "Rounded:"
 msgstr "まるめ度"
 
 #: src/toolbox.cpp:1217
@@ -3859,7 +3861,8 @@ msgid "How much rounded are the corners (0 for sharp)"
 msgstr "どれくらい角をまるめるか"
 
 #: src/toolbox.cpp:1227
-msgid "Randomization:"
+#, fuzzy
+msgid "Randomized:"
 msgstr "ランダム度"
 
 #: src/toolbox.cpp:1227

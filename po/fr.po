@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape_fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 20:16+0100\n"
+"POT-Creation-Date: 2004-11-22 22:59+0100\n"
 "PO-Revision-Date: 2004-11-19 14:36+1100\n"
 "Last-Translator: Matiphas <matiphas _a_ free _point_ fr>\n"
 "Language-Team: Français\n"
@@ -1006,7 +1006,8 @@ msgid "Clones"
 msgstr "Clones"
 
 #: src/dialogs/display-settings.cpp:1217
-msgid "When the original moves, its clones:"
+#, fuzzy
+msgid "When the original moves, its clones and linked offsets:"
 msgstr "Lorsque l'original est déplacé, ses clones :"
 
 #: src/dialogs/display-settings.cpp:1229
@@ -4044,7 +4045,8 @@ msgid "Base radius to tip radius ratio"
 msgstr "Rapport du rayon principal au rayon éloigné"
 
 #: src/toolbox.cpp:1217
-msgid "Roundedness:"
+#, fuzzy
+msgid "Rounded:"
 msgstr "Arrondi :"
 
 #: src/toolbox.cpp:1217
@@ -4052,7 +4054,8 @@ msgid "How much rounded are the corners (0 for sharp)"
 msgstr "Quantité d'arrondi des coins (0 pour pointu)"
 
 #: src/toolbox.cpp:1227
-msgid "Randomization:"
+#, fuzzy
+msgid "Randomized:"
 msgstr "Randomisation :"
 
 #: src/toolbox.cpp:1227

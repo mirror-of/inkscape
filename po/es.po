@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 20:16+0100\n"
-"PO-Revision-Date: 2004-11-15 19:39+0100\n"
+"POT-Creation-Date: 2004-11-22 22:59+0100\n"
+"PO-Revision-Date: 2004-11-22 11:53+0100\n"
 "Last-Translator: Lucas Vieites <lucas@asixinformatica.com>\n"
 "Language-Team: Spanish/Spain <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1005,7 +1005,8 @@ msgid "Clones"
 msgstr "Clones"
 
 #: src/dialogs/display-settings.cpp:1217
-msgid "When the original moves, its clones:"
+#, fuzzy
+msgid "When the original moves, its clones and linked offsets:"
 msgstr "Cuando se mueve el original, sus clones:"
 
 #: src/dialogs/display-settings.cpp:1229
@@ -1124,45 +1125,48 @@ msgstr ""
 
 #. Selecting
 #: src/dialogs/display-settings.cpp:1355
-#, fuzzy
 msgid "Selecting"
 msgstr "Selección"
 
 #: src/dialogs/display-settings.cpp:1357
 msgid "Ctrl+A, Tab, Shift+Tab:"
-msgstr ""
+msgstr "Ctrl+A, Tab, Mayús+Tab:"
 
 #: src/dialogs/display-settings.cpp:1366
-#, fuzzy
 msgid "Select only within current layer"
-msgstr "Eliminar la capa actual"
+msgstr "Solamente seleccionar dentro de la capa actual"
 
 #: src/dialogs/display-settings.cpp:1367
 msgid ""
 "Uncheck this to make keyboard selection commands work on objects in all "
 "layers"
 msgstr ""
+"Desmarque esto para que los comandos de selección del teclado funcionen en "
+"objetos de todas las capas."
 
 #: src/dialogs/display-settings.cpp:1374
 msgid "Ignore hidden objects"
-msgstr ""
+msgstr "Ignorar objetos ocultos"
 
 #: src/dialogs/display-settings.cpp:1375
 msgid ""
 "Uncheck this to be able to select objects that are hidden (either by "
 "themselves or by being in a hidden group or layer)"
 msgstr ""
+"Desmarque esto para poder seleccionar objetos ocultos (tanto por sí mismos "
+"como por estar en un grupo o capa ocultos)"
 
 #: src/dialogs/display-settings.cpp:1382
-#, fuzzy
 msgid "Ignore locked objects"
-msgstr "Objetos seleccionados"
+msgstr "Ignorar objetos bloqueados"
 
 #: src/dialogs/display-settings.cpp:1383
 msgid ""
 "Uncheck this to be able to select objects that are locked (either by "
 "themselves or by being in a locked group or layer)"
 msgstr ""
+"Desmarque esto para poder seleccionar objetos bloqueados (tanto por sí "
+"mismos como por estar en un grupo o capa bloqueados)"
 
 #. To be broken into: Display, Save, Export, SVG, Commands
 #: src/dialogs/display-settings.cpp:1391
@@ -1568,8 +1572,9 @@ msgid "Include _hidden"
 msgstr ""
 
 #: src/dialogs/find.cpp:783
+#, fuzzy
 msgid "Include hidden objects in search"
-msgstr ""
+msgstr "Ignorar objetos ocultos"
 
 #: src/dialogs/find.cpp:788
 msgid "Include l_ocked"
@@ -1578,7 +1583,7 @@ msgstr ""
 #: src/dialogs/find.cpp:792
 #, fuzzy
 msgid "Include locked objects in search"
-msgstr "Objetos seleccionados"
+msgstr "Ignorar objetos bloqueados"
 
 #: src/dialogs/find.cpp:803
 msgid "Clear values"
@@ -1676,19 +1681,17 @@ msgid "Label invalid"
 msgstr "Etiqueta no válida"
 
 #: src/dialogs/layer-properties.cpp:57
-#, fuzzy
 msgid "Layer Properties"
-msgstr "_Propiedades de la estrella"
+msgstr "Propiedades de la capa"
 
 #: src/dialogs/layer-properties.cpp:70
 msgid "Layer Name:"
-msgstr ""
+msgstr "Nombre de la capa:"
 
 #. TRANSLATORS: This means "The layer has been renamed"
 #: src/dialogs/layer-properties.cpp:174
-#, fuzzy
 msgid "Renamed layer"
-msgstr "Cambiar nombre a capa"
+msgstr "Capa renombrada"
 
 #: src/dialogs/object-attributes.cpp:31
 msgid "Href:"
@@ -3288,8 +3291,9 @@ msgstr "_Crear enlace"
 
 #. Add Text to shape
 #: src/object-ui.cpp:152
+#, fuzzy
 msgid "_Flow Text into Shape"
-msgstr ""
+msgstr "_Añadir texto a la forma"
 
 #: src/object-ui.cpp:227
 #, fuzzy
@@ -3683,9 +3687,8 @@ msgid "<b>Link</b> to %s"
 msgstr "<b>Enlazar</b> a %s"
 
 #: src/sp-anchor.cpp:180
-#, fuzzy
 msgid "<b>Link</b> without URI"
-msgstr "<b>Enlazar</b> a %s"
+msgstr "<b>Enlace</b> sin URI"
 
 #: src/sp-ellipse.cpp:437
 msgid "<b>Ellipse</b>"
@@ -4039,7 +4042,8 @@ msgid "Base radius to tip radius ratio"
 msgstr "Relación entre el radio base y el radio de la punta"
 
 #: src/toolbox.cpp:1217
-msgid "Roundedness:"
+#, fuzzy
+msgid "Rounded:"
 msgstr "Redondez:"
 
 #: src/toolbox.cpp:1217
@@ -4047,7 +4051,8 @@ msgid "How much rounded are the corners (0 for sharp)"
 msgstr "Lo redondos que son las esquinas (0 para agudo)"
 
 #: src/toolbox.cpp:1227
-msgid "Randomization:"
+#, fuzzy
+msgid "Randomized:"
 msgstr "Aleatorización:"
 
 #: src/toolbox.cpp:1227
@@ -4903,18 +4908,16 @@ msgstr "Separar los trazos seleccionados en subtrazos"
 
 #. Layer
 #: src/verbs.cpp:1581
-#, fuzzy
 msgid "_New Layer..."
-msgstr "Capa nueva"
+msgstr "Capa _nueva..."
 
 #: src/verbs.cpp:1582
 msgid "Create a new layer"
 msgstr "Crear una capa nueva"
 
 #: src/verbs.cpp:1583
-#, fuzzy
 msgid "Ren_ame Layer..."
-msgstr "Cambiar nombre a capa"
+msgstr "C_ambiar nombre a capa..."
 
 #: src/verbs.cpp:1584
 msgid "Rename the current layer"
@@ -4937,45 +4940,40 @@ msgid "Switch to the previous layer in the document"
 msgstr "Cambiar a la capa anterior del documento"
 
 #: src/verbs.cpp:1589
-#, fuzzy
 msgid "Layer to _Top"
-msgstr "Traer la capa al frente"
+msgstr "Traer la capa al fren_te"
 
 #: src/verbs.cpp:1590
 msgid "Raise the current layer to the top"
 msgstr "Elevar la capa actual a primer plano"
 
 #: src/verbs.cpp:1591
-#, fuzzy
 msgid "Layer to _Bottom"
-msgstr "Bajar capa al fondo"
+msgstr "Bajar capa al _fondo"
 
 #: src/verbs.cpp:1592
 msgid "Lower the current layer to the bottom"
 msgstr "Bajar la capa actual al fondo"
 
 #: src/verbs.cpp:1593
-#, fuzzy
 msgid "_Raise Layer"
-msgstr "Elevar capa"
+msgstr "Eleva_r capa"
 
 #: src/verbs.cpp:1594
 msgid "Raise the current layer"
 msgstr "Elevar la capa actual"
 
 #: src/verbs.cpp:1595
-#, fuzzy
 msgid "_Lower Layer"
-msgstr "Bajar capa"
+msgstr "Ba_jar capa"
 
 #: src/verbs.cpp:1596
 msgid "Lower the current layer"
 msgstr "Enviar la capa actual hacia abajo"
 
 #: src/verbs.cpp:1597
-#, fuzzy
 msgid "_Delete Current Layer"
-msgstr "Borrar la capa actual"
+msgstr "_Borrar la capa actual"
 
 #: src/verbs.cpp:1598
 msgid "Delete the current layer"
@@ -5634,7 +5632,6 @@ msgstr "Estilos múltiples"
 #. TRANSLATORS: "Clone" is a noun here. This message is to notify the user
 #. that the currently selected object is a clone.
 #: src/widgets/paint-selector.cpp:676
-#, fuzzy
 msgid "Clone selected"
 msgstr "Clon seleccionado"
 

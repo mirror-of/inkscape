@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 20:16+0100\n"
+"POT-Creation-Date: 2004-11-22 22:59+0100\n"
 "PO-Revision-Date: 2004-11-09 22:46+0100\n"
 "Last-Translator: Boštjan Špetič <igzebedze@cyberpipe.org>\n"
 "Language-Team: sl_SI <sl@li.org>\n"
@@ -983,7 +983,8 @@ msgid "Clones"
 msgstr "Kloni"
 
 #: src/dialogs/display-settings.cpp:1217
-msgid "When the original moves, its clones:"
+#, fuzzy
+msgid "When the original moves, its clones and linked offsets:"
 msgstr "Če premaknem izvirnik, se kloni:"
 
 #: src/dialogs/display-settings.cpp:1229
@@ -3939,7 +3940,8 @@ msgid "Base radius to tip radius ratio"
 msgstr "Razmerje med bližnjo in oddaljeno točko"
 
 #: src/toolbox.cpp:1217
-msgid "Roundedness:"
+#, fuzzy
+msgid "Rounded:"
 msgstr "Zaobljenost:"
 
 #: src/toolbox.cpp:1217
@@ -3947,7 +3949,8 @@ msgid "How much rounded are the corners (0 for sharp)"
 msgstr "Koliko so koti zaobljeni (0 za ostre)"
 
 #: src/toolbox.cpp:1227
-msgid "Randomization:"
+#, fuzzy
+msgid "Randomized:"
 msgstr "Naključnost:"
 
 #: src/toolbox.cpp:1227

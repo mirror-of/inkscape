@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 20:16+0100\n"
+"POT-Creation-Date: 2004-11-22 22:59+0100\n"
 "PO-Revision-Date: 2004-10-30 19:59+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
@@ -998,7 +998,8 @@ msgid "Clones"
 msgstr "Klonar"
 
 #: src/dialogs/display-settings.cpp:1217
-msgid "When the original moves, its clones:"
+#, fuzzy
+msgid "When the original moves, its clones and linked offsets:"
 msgstr "Ved flytting av opphavet skal klonane:"
 
 #: src/dialogs/display-settings.cpp:1229
@@ -3978,7 +3979,8 @@ msgid "Base radius to tip radius ratio"
 msgstr "Grunnradius til spissradius-forhold."
 
 #: src/toolbox.cpp:1217
-msgid "Roundedness:"
+#, fuzzy
+msgid "Rounded:"
 msgstr "Rundheit:"
 
 #: src/toolbox.cpp:1217
@@ -3986,7 +3988,8 @@ msgid "How much rounded are the corners (0 for sharp)"
 msgstr "Kor runde hjørnene skal vera (0 for heilt spisse)."
 
 #: src/toolbox.cpp:1227
-msgid "Randomization:"
+#, fuzzy
+msgid "Randomized:"
 msgstr "Slumpverdi:"
 
 #: src/toolbox.cpp:1227
