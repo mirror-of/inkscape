@@ -6,6 +6,7 @@
 #include <gtk/gtkoptionmenu.h>
 #include <gtk/gtkwidget.h>
 
+#include <display/display-forward.h>
 #include <libnr/nr-point.h>
 #include "forward.h"
 #include "message.h"
