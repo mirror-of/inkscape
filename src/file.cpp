@@ -124,12 +124,10 @@ void
 sp_file_open (const gchar *uri, const gchar *key)
 {
 
-    SPDocument *doc = NULL;
-
     if (!key)
         key = SP_MODULE_KEY_INPUT_DEFAULT;
 
-    doc = sp_module_system_open (key, uri);
+    SPDocument *doc = sp_module_system_open (key, uri);
     if (doc) {
         SPViewWidget *dtw = sp_desktop_widget_new (sp_document_namedview (doc, NULL));
         sp_document_unref (doc);
@@ -258,11 +256,11 @@ sp_file_open_dialog (gpointer object, gpointer data)
 static void
 file_save (SPDocument *doc, const gchar *uri, const gchar *key)
 {
-    if (!doc) return;
-    if (!uri) return;
-
-    if (!key) key = SP_MODULE_KEY_OUTPUT_DEFAULT;
-     return sp_module_system_save (key, doc, uri);
+    if (!doc || !uri) //Safety check
+        return;
+    if (!key)
+        key = SP_MODULE_KEY_OUTPUT_DEFAULT;
+    return sp_module_system_save (key, doc, uri);
 }
 
 /**
@@ -382,11 +380,10 @@ sp_file_save_document (SPDocument *doc)
             g_free ((void *) fn);
         }
 
-        if (success) {
+        if (success)
             sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), "Document saved.");
-        } else {
+        else
             sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), "Document not saved.");
-        }
 
     } else {
         sp_view_set_statusf_flash (SP_VIEW(SP_ACTIVE_DESKTOP), "No changes need to be saved.");
@@ -466,17 +463,22 @@ file_import (SPDocument *doc, const gchar *filename)
 
     if ((e == NULL) || (strcmp (e, "svg") == 0) || (strcmp (e, "xml") == 0)) {
 
-        SPRepr * child;
-
         SPReprDoc *rnewdoc = sp_repr_read_file (filename, SP_SVG_NS_URI);
-        if (rnewdoc == NULL) return;
+        if (rnewdoc == NULL)
+            {
+            /*
+              We might need an error dialog here
+              for failing to load an SVG document
+            */
+            return;
+            }
         SPRepr *repr = sp_repr_document_root (rnewdoc);
         const gchar *style = sp_repr_attr (repr, "style");
 
         SPRepr *newgroup = sp_repr_new ("g");
         sp_repr_set_attr (newgroup, "style", style);
 
-        for (child = repr->children; child != NULL; child = child->next) {
+        for (SPRepr *child = repr->children; child != NULL; child = child->next) {
             SPRepr * newchild;
             newchild = sp_repr_duplicate (child);
             sp_repr_append_child (newgroup, newchild);
@@ -497,6 +499,7 @@ file_import (SPDocument *doc, const gchar *filename)
         (strcmp (e, "gif" ) == 0) ||
         (strcmp (e, "tiff") == 0) ||
         (strcmp (e, "xpm" ) == 0)) {
+
         /* Try pixbuf */
         GError *err = NULL;
         GdkPixbuf *pb = gdk_pixbuf_new_from_file (filename, &err);
