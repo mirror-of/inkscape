@@ -470,11 +470,11 @@ fit_and_split(SPPencilContext *pc)
 
         pc->green_bpaths = g_slist_prepend(pc->green_bpaths, cshape);
 
-        g_assert( 2 <= pc->npoints );
-        for (int i = 0; i < 2; i++) {
-            pc->p[i] = pc->p[pc->npoints - 2 + i];
+        g_assert( 3 <= pc->npoints );
+        for (int i = 0; i < 3; i++) {
+            pc->p[i] = pc->p[pc->npoints - 3 + i];
         }
-        pc->npoints = 2;
+        pc->npoints = 3;
         pc->red_curve_is_valid = false;
     }
 }
