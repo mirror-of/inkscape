@@ -11,7 +11,7 @@ msgstr ""
 "Last-Translator: Alastair McKinstry <mckinstry@computer.org>\n"
 "Language-Team: Irish <ga@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: inkscape.desktop.in.h:1
@@ -40,7 +40,7 @@ msgstr ""
 #: src/desktop-events.cpp:446
 #, fuzzy, c-format
 msgid "Move %s"
-msgstr "NÛd"
+msgstr "N√≥d"
 
 #: src/desktop.cpp:876
 msgid "Zoom drawing if window size changes"
@@ -131,7 +131,7 @@ msgstr ""
 #: src/dialogs/align.cpp:290
 #, fuzzy
 msgid "Center horizontally"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/dialogs/align.cpp:292
 msgid "Right side of aligned objects to right side of anchor"
@@ -148,7 +148,7 @@ msgstr ""
 #: src/dialogs/align.cpp:299
 #, fuzzy
 msgid "Top of aligned objects to top of anchor"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/dialogs/align.cpp:301
 msgid "Center vertically"
@@ -161,7 +161,7 @@ msgstr ""
 #: src/dialogs/align.cpp:305
 #, fuzzy
 msgid "Top of aligned objects to bottom of anchor"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/dialogs/align.cpp:320
 msgid "Align"
@@ -339,7 +339,7 @@ msgstr ""
 #: src/dialogs/desktop-properties.cpp:913
 #, fuzzy
 msgid "Paper size:"
-msgstr "Meid picti˙r"
+msgstr "Meid picti√∫r"
 
 #: src/dialogs/desktop-properties.cpp:937 src/dialogs/export.cpp:123
 #, fuzzy
@@ -349,7 +349,7 @@ msgstr "Gearr"
 #: src/dialogs/desktop-properties.cpp:948
 #, fuzzy
 msgid "Paper orientation:"
-msgstr "Meid picti˙r"
+msgstr "Meid picti√∫r"
 
 #: src/dialogs/desktop-properties.cpp:960
 #, fuzzy
@@ -359,7 +359,7 @@ msgstr "Sodipodi"
 #: src/dialogs/desktop-properties.cpp:966
 #, fuzzy
 msgid "Portrait"
-msgstr "Priont·il"
+msgstr "Priont√°il"
 
 #. Custom paper frame
 #: src/dialogs/desktop-properties.cpp:975
@@ -518,7 +518,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:624
 #, fuzzy
 msgid "Show selection cue"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/dialogs/display-settings.cpp:625
 msgid ""
@@ -553,7 +553,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:752
 #, fuzzy
 msgid "Mouse"
-msgstr "NÛd"
+msgstr "N√≥d"
 
 #: src/dialogs/display-settings.cpp:755
 msgid "Grab sensitivity:"
@@ -609,7 +609,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:810
 #, fuzzy
 msgid "Acceleration:"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/dialogs/display-settings.cpp:811
 msgid ""
@@ -683,7 +683,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:888
 #, fuzzy
 msgid "Zoom in/out by:"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/dialogs/display-settings.cpp:889
 msgid ""
@@ -703,17 +703,17 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:907
 #, fuzzy
 msgid "Selector"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/dialogs/display-settings.cpp:916
 msgid "Node"
-msgstr "NÛd"
+msgstr "N√≥d"
 
 #. The 4 shape tools
 #: src/dialogs/display-settings.cpp:929
 #, fuzzy
 msgid "Shapes"
-msgstr "S·bh·il\t"
+msgstr "S√°bh√°il\t"
 
 #. Rect
 #: src/dialogs/display-settings.cpp:936 src/sp-rect.cpp:259 src/verbs.cpp:953
@@ -736,7 +736,7 @@ msgstr ""
 #: src/verbs.cpp:959
 #, fuzzy
 msgid "Spiral"
-msgstr "SpÈisialta"
+msgstr "Sp√©isialta"
 
 #: src/dialogs/display-settings.cpp:953 src/verbs.cpp:961
 msgid "Pencil"
@@ -755,7 +755,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:971 src/verbs.cpp:963
 #, fuzzy
 msgid "Pen"
-msgstr "Priont·il"
+msgstr "Priont√°il"
 
 #: src/dialogs/display-settings.cpp:978 src/dialogs/object-properties.cpp:287
 #: src/verbs.cpp:967
@@ -853,7 +853,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:1078
 #, fuzzy
 msgid "Are deleted"
-msgstr "ScrÌos"
+msgstr "Scr√≠os"
 
 #: src/dialogs/display-settings.cpp:1078
 msgid "Orphaned clones are deleted along with their original."
@@ -868,7 +868,7 @@ msgstr "Roghanna Oaf"
 #: src/dialogs/display-settings.cpp:1096
 #, fuzzy
 msgid "Scale stroke width"
-msgstr "Priont·il"
+msgstr "Priont√°il"
 
 #: src/dialogs/display-settings.cpp:1097
 msgid "When scaling objects, scale the stroke width by the same proportion"
@@ -946,7 +946,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:1168
 #, fuzzy
 msgid "Max recent documents:"
-msgstr "S·bh·il Comhad"
+msgstr "S√°bh√°il Comhad"
 
 #: src/dialogs/display-settings.cpp:1169
 msgid "The maximum length of the Open Recent list in the File menu"
@@ -1009,7 +1009,7 @@ msgstr "1:1"
 #: src/dialogs/export.cpp:387
 #, fuzzy
 msgid "Bitmap size"
-msgstr "Meid picti˙r"
+msgstr "Meid picti√∫r"
 
 #: src/dialogs/export.cpp:397 src/dialogs/export.cpp:412
 msgid "pixels"
@@ -1113,12 +1113,12 @@ msgstr "Teacs"
 #: src/dialogs/find.cpp:321
 #, fuzzy
 msgid "partial"
-msgstr "SpÈisialta"
+msgstr "Sp√©isialta"
 
 #: src/dialogs/find.cpp:328
 #, fuzzy
 msgid "No objects found"
-msgstr "S·bh·il Comhad"
+msgstr "S√°bh√°il Comhad"
 
 #: src/dialogs/find.cpp:486
 msgid "T_ype: "
@@ -1148,7 +1148,7 @@ msgstr ""
 #: src/dialogs/find.cpp:521
 #, fuzzy
 msgid "Rectangles"
-msgstr "Priont·il"
+msgstr "Priont√°il"
 
 #: src/dialogs/find.cpp:526
 msgid "Search ellipses, arcs, circles"
@@ -1170,12 +1170,12 @@ msgstr "Dath"
 #: src/dialogs/find.cpp:536
 #, fuzzy
 msgid "Search spirals"
-msgstr "SpÈisialta"
+msgstr "Sp√©isialta"
 
 #: src/dialogs/find.cpp:536
 #, fuzzy
 msgid "Spirals"
-msgstr "SpÈisialta"
+msgstr "Sp√©isialta"
 
 #. TRANSLATORS: polyline is a set of connected straight line segments
 #. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
@@ -1190,7 +1190,7 @@ msgstr ""
 #: src/dialogs/find.cpp:554
 #, fuzzy
 msgid "Search text objects"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/dialogs/find.cpp:554
 #, fuzzy
@@ -1217,12 +1217,12 @@ msgstr ""
 #: src/dialogs/find.cpp:569
 #, fuzzy
 msgid "Images"
-msgstr "Meid picti˙r"
+msgstr "Meid picti√∫r"
 
 #: src/dialogs/find.cpp:574
 #, fuzzy
 msgid "Search offset objects"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/dialogs/find.cpp:574
 msgid "Offsets"
@@ -1266,7 +1266,7 @@ msgstr ""
 #: src/dialogs/find.cpp:650
 #, fuzzy
 msgid "Search in s_election"
-msgstr "ScrÌos"
+msgstr "Scr√≠os"
 
 #: src/dialogs/find.cpp:654
 msgid "Limit search to the current selection"
@@ -1285,7 +1285,7 @@ msgstr "Dath 1"
 #: src/dialogs/find.cpp:664
 #, fuzzy
 msgid "_Find"
-msgstr "Leas˙"
+msgstr "Leas√∫"
 
 #: src/dialogs/find.cpp:664
 msgid "Select objects matching all of the fields you filled in"
@@ -1315,7 +1315,7 @@ msgstr ""
 #: src/dialogs/item-properties.cpp:178
 #, fuzzy
 msgid "Printable"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/dialogs/item-properties.cpp:196
 msgid "Opacity:"
@@ -1467,7 +1467,7 @@ msgstr "Comhad Nua"
 #: src/dialogs/object-properties.cpp:212
 #, fuzzy
 msgid "Stroke paint"
-msgstr "Priont·il"
+msgstr "Priont√°il"
 
 #: src/dialogs/object-properties.cpp:217
 #, fuzzy
@@ -1481,7 +1481,7 @@ msgstr ""
 #: src/dialogs/object-properties.cpp:239
 #, fuzzy
 msgid "Selected objects"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/dialogs/object-properties.cpp:245
 msgid "All shape tools"
@@ -1524,7 +1524,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:209
 #, fuzzy
 msgid "Date"
-msgstr "ScrÌobh teacs"
+msgstr "Scr√≠obh teacs"
 
 #: src/dialogs/rdf.cpp:210
 msgid "Date associated with the creation of this document (YYYY-MM-DD)."
@@ -1593,7 +1593,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:235
 #, fuzzy
 msgid "Relation"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/dialogs/rdf.cpp:236
 msgid "Unique URI to a related document."
@@ -1673,7 +1673,7 @@ msgstr ""
 #: src/dialogs/stroke-style.cpp:1387
 #, fuzzy
 msgid "Stroke width"
-msgstr "Priont·il"
+msgstr "Priont√°il"
 
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
@@ -1790,7 +1790,7 @@ msgstr ""
 #: src/dialogs/transformation.cpp:321 src/dialogs/transformation.cpp:467
 #, fuzzy
 msgid "Move"
-msgstr "NÛd"
+msgstr "N√≥d"
 
 #. Scale page
 #: src/dialogs/transformation.cpp:329 src/dialogs/transformation.cpp:666
@@ -1831,7 +1831,7 @@ msgstr ""
 #: src/dialogs/xml-tree.cpp:299
 #, fuzzy
 msgid "Delete node"
-msgstr "ScrÌos"
+msgstr "Scr√≠os"
 
 #: src/dialogs/xml-tree.cpp:315
 msgid "Unindent node"
@@ -1972,28 +1972,28 @@ msgstr ""
 #: src/extension/internal/eps-out.cpp:90
 #, fuzzy
 msgid "Convert text to path"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/extension/internal/gnome.cpp:73
 #, fuzzy
 msgid "Select printer"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/extension/internal/gnome.cpp:124
 #, fuzzy
 msgid "Inkscape: Print Preview"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/extension/internal/ps.cpp:110
 #, fuzzy
 msgid "Print Destination"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #. Print properties frame
 #: src/extension/internal/ps.cpp:124
 #, fuzzy
 msgid "Print properties"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/extension/internal/ps.cpp:132
 msgid "Print using PostScript operators"
@@ -2029,7 +2029,7 @@ msgstr ""
 #: src/extension/internal/ps.cpp:174
 #, fuzzy
 msgid "Print destination"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/extension/internal/ps.cpp:180
 msgid ""
@@ -2113,7 +2113,7 @@ msgstr ""
 #: src/file.cpp:404
 #, fuzzy
 msgid "Select file to save to"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/file.cpp:481
 msgid "No changes need to be saved."
@@ -2142,12 +2142,12 @@ msgstr ""
 #: src/helper/units.cpp:35
 #, fuzzy
 msgid "Point"
-msgstr "Priont·il"
+msgstr "Priont√°il"
 
 #: src/helper/units.cpp:35
 #, fuzzy
 msgid "Points"
-msgstr "Priont·il"
+msgstr "Priont√°il"
 
 #: src/helper/units.cpp:35
 msgid "Pt"
@@ -2172,12 +2172,12 @@ msgstr ""
 #: src/helper/units.cpp:39
 #, fuzzy
 msgid "Percent"
-msgstr "Priont·il"
+msgstr "Priont√°il"
 
 #: src/helper/units.cpp:39
 #, fuzzy
 msgid "Percents"
-msgstr "Priont·il"
+msgstr "Priont√°il"
 
 #: src/helper/units.cpp:40
 msgid "Millimeter"
@@ -2408,7 +2408,7 @@ msgstr "Comhad _Nua"
 #: src/interface.cpp:866
 #, fuzzy
 msgid "_Edit"
-msgstr "Eagar NÛd"
+msgstr "Eagar N√≥d"
 
 #: src/interface.cpp:872
 #, fuzzy
@@ -2430,7 +2430,7 @@ msgstr ""
 #: src/interface.cpp:956
 #, fuzzy, c-format
 msgid "Edit group #%s"
-msgstr "Eagar NÛd"
+msgstr "Eagar N√≥d"
 
 #: src/interface.cpp:968
 msgid "Edit parent group"
@@ -2439,7 +2439,7 @@ msgstr ""
 #: src/interface.cpp:974
 #, fuzzy
 msgid "Edit root"
-msgstr "Eagar NÛd"
+msgstr "Eagar N√≥d"
 
 #: src/interface.cpp:1051
 msgid "Could not parse SVG data"
@@ -2564,7 +2564,7 @@ msgstr ""
 #: src/nodepath.cpp:1342
 #, fuzzy
 msgid "Cannot find path between nodes."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
 #: src/nodepath.cpp:2719
@@ -2609,13 +2609,13 @@ msgstr ""
 #: src/object-ui.cpp:107
 #, fuzzy
 msgid "Item _Properties"
-msgstr "Meid picti˙r"
+msgstr "Meid picti√∫r"
 
 #. Select item
 #: src/object-ui.cpp:117
 #, fuzzy
 msgid "_Select This"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #. Reset transformations
 #: src/object-ui.cpp:127
@@ -2646,7 +2646,7 @@ msgstr "_Grupa"
 #: src/object-ui.cpp:282
 #, fuzzy
 msgid "Link _Properties"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #. Select item
 #: src/object-ui.cpp:292
@@ -2662,7 +2662,7 @@ msgstr ""
 #: src/object-ui.cpp:346
 #, fuzzy
 msgid "Image _Properties"
-msgstr "Meid picti˙r"
+msgstr "Meid picti√∫r"
 
 #. Autotrace dialog
 #: src/object-ui.cpp:354
@@ -2679,13 +2679,13 @@ msgstr "Roghanna Dath"
 #: src/object-ui.cpp:415
 #, fuzzy
 msgid "Rectangle _Properties"
-msgstr "Meid picti˙r"
+msgstr "Meid picti√∫r"
 
 #. Link dialog
 #: src/object-ui.cpp:441
 #, fuzzy
 msgid "Star _Properties"
-msgstr "Meid picti˙r"
+msgstr "Meid picti√∫r"
 
 #. Link dialog
 #: src/object-ui.cpp:467
@@ -2696,12 +2696,12 @@ msgstr "Roghanna Dath"
 #: src/path-chemistry.cpp:58
 #, fuzzy
 msgid "Select at least 2 objects to combine."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/path-chemistry.cpp:65
 #, fuzzy
 msgid "One of the objects is not a path, cannot combine."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/path-chemistry.cpp:73
 msgid "You cannot combine objects from different groups or layers."
@@ -2710,7 +2710,7 @@ msgstr ""
 #: src/path-chemistry.cpp:157
 #, fuzzy
 msgid "Select some path(s) to break apart."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/path-chemistry.cpp:233
 msgid "No paths to break apart in the selection."
@@ -2719,7 +2719,7 @@ msgstr ""
 #: src/path-chemistry.cpp:256
 #, fuzzy
 msgid "Select some object(s) to convert to path."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/path-chemistry.cpp:301
 msgid "No objects to convert to path in the selection."
@@ -2728,7 +2728,7 @@ msgstr ""
 #: src/path-chemistry.cpp:402
 #, fuzzy
 msgid "Select one or more paths to reverse."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/path-chemistry.cpp:427
 msgid "No paths to reverse in the selection."
@@ -2746,12 +2746,12 @@ msgstr ""
 #: src/select-context.cpp:655
 #, fuzzy
 msgid "Selection canceled."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/select-context.cpp:804
 #, fuzzy, c-format
 msgid "Move by %s, %s"
-msgstr "NÛd"
+msgstr "N√≥d"
 
 #: src/select-toolbar.cpp:383
 msgid "Horizontal coordinate of selection"
@@ -2780,17 +2780,17 @@ msgstr ""
 #: src/selection-chemistry.cpp:113
 #, fuzzy
 msgid "Select some objects to duplicate."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/selection-chemistry.cpp:248
 #, fuzzy
 msgid "Select two or more objects to group."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/selection-chemistry.cpp:256
 #, fuzzy
 msgid "Select at least two objects to group."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/selection-chemistry.cpp:265
 msgid "You cannot group objects from different groups or layers."
@@ -2807,7 +2807,7 @@ msgstr ""
 #: src/selection-chemistry.cpp:414
 #, fuzzy
 msgid "Select some objects to raise."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/selection-chemistry.cpp:420 src/selection-chemistry.cpp:498
 msgid "You cannot raise/lower objects from different groups or layers."
@@ -2816,17 +2816,17 @@ msgstr ""
 #: src/selection-chemistry.cpp:464
 #, fuzzy
 msgid "Select some objects to raise to top."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/selection-chemistry.cpp:492
 #, fuzzy
 msgid "Select some objects to lower."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/selection-chemistry.cpp:548
 #, fuzzy
 msgid "Select some objects to lower to bottom."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/selection-chemistry.cpp:582
 msgid "Nothing to undo."
@@ -2843,17 +2843,17 @@ msgstr ""
 #: src/selection-chemistry.cpp:778 src/selection-chemistry.cpp:829
 #, fuzzy
 msgid "Nothing on the clipboard."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/selection-chemistry.cpp:835
 #, fuzzy
 msgid "Select objects to paste style to."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/selection-chemistry.cpp:1350
 #, fuzzy
 msgid "Select an object to clone."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/selection-chemistry.cpp:1356
 msgid "If you want to clone several objects, group them and clone the group."
@@ -2862,7 +2862,7 @@ msgstr ""
 #: src/selection-chemistry.cpp:1387
 #, fuzzy
 msgid "Select a clone to unlink."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/selection-chemistry.cpp:1418
 msgid "No clones to unlink in the selection."
@@ -2879,12 +2879,12 @@ msgstr ""
 #: src/selection-chemistry.cpp:1470
 #, fuzzy
 msgid "Select an object to tile."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/selection-chemistry.cpp:1534
 #, fuzzy
 msgid "Select an object with pattern fill to untile."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/selection-chemistry.cpp:1585
 msgid "No pattern fills to untile in the selection."
@@ -2951,7 +2951,7 @@ msgstr ""
 #: src/sp-guide.cpp:310
 #, fuzzy
 msgid "horizontal guideline"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/sp-image.cpp:324
 #, c-format
@@ -2988,7 +2988,7 @@ msgstr ""
 #: src/sp-image.cpp:939
 #, fuzzy
 msgid "Image URI:"
-msgstr "Meid picti˙r"
+msgstr "Meid picti√∫r"
 
 #: src/sp-item-group.cpp:330
 #, c-format
@@ -3023,7 +3023,7 @@ msgstr ""
 #: src/sp-typeset.cpp:388
 #, fuzzy
 msgid "typeset object"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/sp-typeset.cpp:1121
 msgid "Select at least 1 text and 1 shape to build a typeset object."
@@ -3074,7 +3074,7 @@ msgstr ""
 #: src/splivarot.cpp:540
 #, fuzzy
 msgid "Select some paths to outline."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
 #: src/splivarot.cpp:741
@@ -3088,7 +3088,7 @@ msgstr ""
 #: src/splivarot.cpp:1045
 #, fuzzy
 msgid "Select some paths to inset/outset."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/splivarot.cpp:1257
 msgid "No paths to inset/outset in the selection."
@@ -3097,7 +3097,7 @@ msgstr ""
 #: src/splivarot.cpp:1301
 #, fuzzy
 msgid "Select some paths to simplify."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/splivarot.cpp:1393
 msgid "No paths to simplify in the selection."
@@ -3111,7 +3111,7 @@ msgstr ""
 #: src/star-context.cpp:472
 #, fuzzy, c-format
 msgid "Draw star at (%s,%s)"
-msgstr "ScrÌobh teacs"
+msgstr "Scr√≠obh teacs"
 
 #: src/text-context.cpp:394
 msgid "No-break space"
@@ -3141,7 +3141,7 @@ msgstr ""
 #: src/toolbox.cpp:387
 #, fuzzy
 msgid "Join paths at selected nodes"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/toolbox.cpp:389
 msgid "Join paths at selected nodes with new segment"
@@ -3257,7 +3257,7 @@ msgstr ""
 #: src/toolbox.cpp:1646
 #, fuzzy
 msgid "Divergence:"
-msgstr "ScrÌos"
+msgstr "Scr√≠os"
 
 #: src/toolbox.cpp:1646
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
@@ -3320,7 +3320,7 @@ msgstr ""
 #: src/toolbox.cpp:2117
 #, fuzzy
 msgid "Open arc"
-msgstr "Osc·il"
+msgstr "Osc√°il"
 
 #: src/toolbox.cpp:2118
 msgid ""
@@ -3418,12 +3418,12 @@ msgstr "Nua"
 #: src/verbs.cpp:800
 #, fuzzy
 msgid "Create new document"
-msgstr "S·bh·il Comhad"
+msgstr "S√°bh√°il Comhad"
 
 #: src/verbs.cpp:802
 #, fuzzy
 msgid "_Open..."
-msgstr "Osc·il"
+msgstr "Osc√°il"
 
 #: src/verbs.cpp:803
 msgid "Open existing document"
@@ -3440,7 +3440,7 @@ msgstr ""
 #: src/verbs.cpp:806
 #, fuzzy
 msgid "_Save"
-msgstr "S·bh·il\t"
+msgstr "S√°bh√°il\t"
 
 #: src/verbs.cpp:806
 msgid "Save document"
@@ -3449,7 +3449,7 @@ msgstr ""
 #: src/verbs.cpp:808
 #, fuzzy
 msgid "Save _As..."
-msgstr "S·bh·il Comhad"
+msgstr "S√°bh√°il Comhad"
 
 #: src/verbs.cpp:809
 msgid "Save document under new name"
@@ -3458,7 +3458,7 @@ msgstr ""
 #: src/verbs.cpp:810
 #, fuzzy
 msgid "_Print..."
-msgstr "Priont·il"
+msgstr "Priont√°il"
 
 #: src/verbs.cpp:810
 msgid "Print document"
@@ -3467,7 +3467,7 @@ msgstr ""
 #: src/verbs.cpp:812
 #, fuzzy
 msgid "Print _Direct"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/verbs.cpp:813
 msgid "Print directly to file or pipe"
@@ -3476,7 +3476,7 @@ msgstr ""
 #: src/verbs.cpp:814
 #, fuzzy
 msgid "Print Previe_w"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/verbs.cpp:815
 msgid "Preview document printout"
@@ -3539,7 +3539,7 @@ msgstr "Sodipodi"
 #: src/verbs.cpp:829
 #, fuzzy
 msgid "_Undo"
-msgstr "Leas˙"
+msgstr "Leas√∫"
 
 #: src/verbs.cpp:829
 msgid "Undo last action"
@@ -3561,17 +3561,17 @@ msgstr "Gearr"
 #: src/verbs.cpp:834
 #, fuzzy
 msgid "Cut selection to clipboard"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:835
 #, fuzzy
 msgid "_Copy"
-msgstr "CÛip"
+msgstr "C√≥ip"
 
 #: src/verbs.cpp:836
 #, fuzzy
 msgid "Copy selection to clipboard"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:837
 #, fuzzy
@@ -3590,7 +3590,7 @@ msgstr "Greamaigh"
 #: src/verbs.cpp:840
 #, fuzzy
 msgid "Apply style of the copied object to selection"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:841
 #, fuzzy
@@ -3600,16 +3600,16 @@ msgstr "Greamaigh"
 #: src/verbs.cpp:842
 #, fuzzy
 msgid "Paste object(s) from clipboard to the original location"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:843
 msgid "_Delete"
-msgstr "_ScrÌos"
+msgstr "_Scr√≠os"
 
 #: src/verbs.cpp:844
 #, fuzzy
 msgid "Delete selection"
-msgstr "ScrÌos"
+msgstr "Scr√≠os"
 
 #: src/verbs.cpp:845
 msgid "Duplic_ate"
@@ -3618,7 +3618,7 @@ msgstr ""
 #: src/verbs.cpp:846
 #, fuzzy
 msgid "Duplicate selected object(s)"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:847
 #, fuzzy
@@ -3640,12 +3640,12 @@ msgstr ""
 #: src/verbs.cpp:851
 #, fuzzy
 msgid "Select _Original"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:852
 #, fuzzy
 msgid "Select the object to which the clone is linked"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:853
 #, fuzzy
@@ -3677,43 +3677,43 @@ msgstr ""
 #: src/verbs.cpp:859
 #, fuzzy
 msgid "Select Al_l"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:860
 #, fuzzy
 msgid "Select all objects or all nodes"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:861
 #, fuzzy
 msgid "D_eselect"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:862
 #, fuzzy
 msgid "Deselect any selected objects or nodes"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #. Selection
 #: src/verbs.cpp:865
 #, fuzzy
 msgid "Raise to _Top"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:866
 #, fuzzy
 msgid "Raise selection to top"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:867
 #, fuzzy
 msgid "Lower to _Bottom"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:868
 #, fuzzy
 msgid "Lower selection to bottom"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:869
 #, fuzzy
@@ -3723,7 +3723,7 @@ msgstr "Greamaigh"
 #: src/verbs.cpp:870
 #, fuzzy
 msgid "Raise selection one step"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:871
 msgid "_Lower"
@@ -3732,7 +3732,7 @@ msgstr ""
 #: src/verbs.cpp:872
 #, fuzzy
 msgid "Lower selection one step"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:873
 msgid "_Group"
@@ -3754,7 +3754,7 @@ msgstr "Tada"
 #: src/verbs.cpp:879
 #, fuzzy
 msgid "Union of selected objects"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:880
 msgid "_Intersection"
@@ -3763,17 +3763,17 @@ msgstr ""
 #: src/verbs.cpp:881
 #, fuzzy
 msgid "Intersection of selected objects"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:882
 #, fuzzy
 msgid "_Difference"
-msgstr "ScrÌos"
+msgstr "Scr√≠os"
 
 #: src/verbs.cpp:883
 #, fuzzy
 msgid "Difference of selected objects (bottom minus top)"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:884
 msgid "E_xclusion"
@@ -3782,7 +3782,7 @@ msgstr ""
 #: src/verbs.cpp:885
 #, fuzzy
 msgid "Exclusive OR of selected objects"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:886
 msgid "Di_vision"
@@ -3795,7 +3795,7 @@ msgstr ""
 #: src/verbs.cpp:888
 #, fuzzy
 msgid "Cut _Path"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:889
 msgid "Cut the bottom object's stroke into pieces, removing fill"
@@ -3807,32 +3807,32 @@ msgstr ""
 #: src/verbs.cpp:893
 #, fuzzy
 msgid "Ou_tset"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:894
 #, fuzzy
 msgid "Outset selected path(s)"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:896
 #, fuzzy
 msgid "O_utset Path by 1px"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:897
 #, fuzzy
 msgid "Outset selected path(s) by 1px"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:899
 #, fuzzy
 msgid "O_utset Path by 10px"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:900
 #, fuzzy
 msgid "Outset selected path(s) by 10px"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #. TRANSLATORS: "inset": contract a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
@@ -3844,7 +3844,7 @@ msgstr ""
 #: src/verbs.cpp:905
 #, fuzzy
 msgid "Inset selected path(s)"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:907
 msgid "I_nset Path by 1px"
@@ -3853,7 +3853,7 @@ msgstr ""
 #: src/verbs.cpp:908
 #, fuzzy
 msgid "Inset selected path(s) by 1px"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:910
 msgid "I_nset Path by 10px"
@@ -3862,7 +3862,7 @@ msgstr ""
 #: src/verbs.cpp:911
 #, fuzzy
 msgid "Inset selected path(s) by 10px"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:913
 msgid "D_ynamic Offset"
@@ -3888,7 +3888,7 @@ msgstr "Roghanna Dath"
 #: src/verbs.cpp:919
 #, fuzzy
 msgid "Convert selected stroke(s) to path(s)"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:920
 msgid "Si_mplify"
@@ -3905,7 +3905,7 @@ msgstr ""
 #: src/verbs.cpp:923
 #, fuzzy
 msgid "Clean up selected path(s)"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:924
 #, fuzzy
@@ -3915,7 +3915,7 @@ msgstr "Comhad Nua"
 #: src/verbs.cpp:925
 #, fuzzy
 msgid "Reverses the direction of selected path(s); useful for flipping markers"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:926
 msgid "_Combine"
@@ -3932,7 +3932,7 @@ msgstr ""
 #: src/verbs.cpp:929
 #, fuzzy
 msgid "Break selected path(s) into subpaths"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #. Object
 #: src/verbs.cpp:932
@@ -3969,43 +3969,43 @@ msgstr "Roghanna Oaf"
 #: src/verbs.cpp:939
 #, fuzzy
 msgid "Convert selected object(s) to path(s)"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:941
 #, fuzzy
 msgid "Flip _Horizontally"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:941
 #, fuzzy
 msgid "Flip selection horizontally"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:944
 #, fuzzy
 msgid "Flip _Vertically"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:944
 #, fuzzy
 msgid "Flip selection vertically"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #. Event contexts
 #. TODO: add shortcuts to tooltips automatically!
 #: src/verbs.cpp:949
 msgid "Select"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:950
 #, fuzzy
 msgid "Select and transform objects (F1)"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:951
 #, fuzzy
 msgid "Node Edit"
-msgstr "Eagar NÛd"
+msgstr "Eagar N√≥d"
 
 #: src/verbs.cpp:952
 msgid "Edit path nodes or control handles (F2)"
@@ -4059,22 +4059,22 @@ msgstr ""
 #: src/verbs.cpp:975
 #, fuzzy
 msgid "Zoom In"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/verbs.cpp:975
 #, fuzzy
 msgid "Zoom in"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/verbs.cpp:976
 #, fuzzy
 msgid "Zoom Out"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/verbs.cpp:976
 #, fuzzy
 msgid "Zoom out"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/verbs.cpp:977
 #, fuzzy
@@ -4128,7 +4128,7 @@ msgstr ""
 #: src/verbs.cpp:985
 #, fuzzy
 msgid "Zoom 1:_1"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/verbs.cpp:985
 msgid "Zoom to 1:1"
@@ -4137,7 +4137,7 @@ msgstr ""
 #: src/verbs.cpp:987
 #, fuzzy
 msgid "Zoom 1:_2"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/verbs.cpp:987
 msgid "Zoom to 1:2"
@@ -4146,7 +4146,7 @@ msgstr ""
 #: src/verbs.cpp:989
 #, fuzzy
 msgid "_Zoom 2:1"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/verbs.cpp:989
 msgid "Zoom to 2:1"
@@ -4208,7 +4208,7 @@ msgstr ""
 #: src/verbs.cpp:1005
 #, fuzzy
 msgid "_Selection"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:1006
 msgid "Zoom to fit selection in window"
@@ -4256,12 +4256,12 @@ msgstr "Roghanna Oaf"
 #: src/verbs.cpp:1016
 #, fuzzy
 msgid "_Align and Distribute..."
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:1017
 #, fuzzy
 msgid "Align and Distribute dialog"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/verbs.cpp:1018
 #, fuzzy
@@ -4284,12 +4284,12 @@ msgstr ""
 #: src/verbs.cpp:1022
 #, fuzzy
 msgid "_Find..."
-msgstr "Priont·il"
+msgstr "Priont√°il"
 
 #: src/verbs.cpp:1023
 #, fuzzy
 msgid "Find objects in document"
-msgstr "S·bh·il Comhad"
+msgstr "S√°bh√°il Comhad"
 
 #: src/verbs.cpp:1024
 msgid "Show/_Hide Dialogs"
@@ -4302,12 +4302,12 @@ msgstr ""
 #: src/verbs.cpp:1026
 #, fuzzy
 msgid "_Object Properties..."
-msgstr "Meid picti˙r"
+msgstr "Meid picti√∫r"
 
 #: src/verbs.cpp:1027
 #, fuzzy
 msgid "Object Properties dialog"
-msgstr "Meid picti˙r"
+msgstr "Meid picti√∫r"
 
 #. Help
 #: src/verbs.cpp:1030
@@ -4364,12 +4364,12 @@ msgstr ""
 #: src/widgets/dash-selector.cpp:104
 #, fuzzy
 msgid "Dash pattern"
-msgstr "Priont·il"
+msgstr "Priont√°il"
 
 #: src/widgets/dash-selector.cpp:119
 #, fuzzy
 msgid "Pattern offset"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #. Family frame
 #: src/widgets/font-selector.cpp:154
@@ -4392,7 +4392,7 @@ msgstr ""
 #: src/widgets/gradient-selector.cpp:138
 #, fuzzy
 msgid "Edit"
-msgstr "Eagar NÛd"
+msgstr "Eagar N√≥d"
 
 #: src/widgets/gradient-selector.cpp:143
 msgid "Add"
@@ -4409,7 +4409,7 @@ msgstr ""
 #: src/widgets/gradient-selector.cpp:172
 #, fuzzy
 msgid "object"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/widgets/gradient-selector.cpp:176
 msgid "user space"
@@ -4437,12 +4437,12 @@ msgstr "Tada"
 #: src/widgets/gradient-selector.cpp:207
 #, fuzzy
 msgid "reflected"
-msgstr "ScrÌos"
+msgstr "Scr√≠os"
 
 #: src/widgets/gradient-selector.cpp:211
 #, fuzzy
 msgid "direct"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/widgets/gradient-selector.cpp:219
 msgid "Repeat:"
@@ -4455,7 +4455,7 @@ msgstr ""
 #: src/widgets/gradient-vector.cpp:274
 #, fuzzy
 msgid "No gradient selected"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/widgets/gradient-vector.cpp:536
 msgid "No stops in gradient"
@@ -4472,7 +4472,7 @@ msgstr ""
 #: src/widgets/gradient-vector.cpp:762
 #, fuzzy
 msgid "Delete stop"
-msgstr "ScrÌos"
+msgstr "Scr√≠os"
 
 #: src/widgets/gradient-vector.cpp:765
 msgid "Delete current control stop from gradient"
@@ -4491,12 +4491,12 @@ msgstr "Dath"
 #: src/widgets/gradient-vector.cpp:846
 #, fuzzy
 msgid "Gradient editor"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/widgets/paint-selector.cpp:168 src/widgets/paint-selector.cpp:660
 #, fuzzy
 msgid "No paint"
-msgstr "Priont·il"
+msgstr "Priont√°il"
 
 #: src/widgets/paint-selector.cpp:170 src/widgets/paint-selector.cpp:728
 #, fuzzy
@@ -4514,7 +4514,7 @@ msgstr ""
 #: src/widgets/paint-selector.cpp:176
 #, fuzzy
 msgid "Pattern Fill"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/widgets/paint-selector.cpp:625
 msgid "No objects"
@@ -4529,17 +4529,17 @@ msgstr ""
 #: src/widgets/paint-selector.cpp:649
 #, fuzzy
 msgid "Clone Selected"
-msgstr "TÛg"
+msgstr "T√≥g"
 
 #: src/widgets/paint-selector.cpp:855
 #, fuzzy
 msgid "No patterns in document"
-msgstr "S·bh·il Comhad"
+msgstr "S√°bh√°il Comhad"
 
 #: src/widgets/paint-selector.cpp:983
 #, fuzzy
 msgid "Pattern fill"
-msgstr "Priont·il comhad"
+msgstr "Priont√°il comhad"
 
 #: src/widgets/sp-color-gtkselector.cpp:60
 msgid "System"
@@ -4678,23 +4678,23 @@ msgstr "Luach"
 
 #, fuzzy
 #~ msgid "_Menu"
-#~ msgstr "Osc·il"
+#~ msgstr "Osc√°il"
 
 #, fuzzy
 #~ msgid "Pattern:"
-#~ msgstr "Priont·il comhad"
+#~ msgstr "Priont√°il comhad"
 
 #, fuzzy
 #~ msgid "Sharpness:"
-#~ msgstr "S·bh·il\t"
+#~ msgstr "S√°bh√°il\t"
 
 #, fuzzy
 #~ msgid "Rect"
-#~ msgstr "TÛg"
+#~ msgstr "T√≥g"
 
 #, fuzzy
 #~ msgid "Horizontal lines"
-#~ msgstr "TÛg"
+#~ msgstr "T√≥g"
 
 #, fuzzy
 #~ msgid "Ru_lers"
@@ -4702,7 +4702,7 @@ msgstr "Luach"
 
 #, fuzzy
 #~ msgid "Mode:"
-#~ msgstr "NÛd"
+#~ msgstr "N√≥d"
 
 #~ msgid "Value:"
 #~ msgstr "Luach:"
@@ -4717,7 +4717,7 @@ msgstr "Luach"
 
 #, fuzzy
 #~ msgid "Delete selected objects"
-#~ msgstr "TÛg"
+#~ msgstr "T√≥g"
 
 #, fuzzy
 #~ msgid "New View"
@@ -4733,7 +4733,7 @@ msgstr "Luach"
 
 #, fuzzy
 #~ msgid "Align and distribute objects"
-#~ msgstr "TÛg"
+#~ msgstr "T√≥g"
 
 #, fuzzy
 #~ msgid "Text editing and font settings"
@@ -4749,11 +4749,11 @@ msgstr "Luach"
 
 #, fuzzy
 #~ msgid "Selected object is not stroked, cannot outline."
-#~ msgstr "TÛg"
+#~ msgstr "T√≥g"
 
 #, fuzzy
 #~ msgid "Selected object has no curve, cannot outline."
-#~ msgstr "TÛg"
+#~ msgstr "T√≥g"
 
 #, fuzzy
 #~ msgid "Inkscape _Options"
@@ -4769,7 +4769,7 @@ msgstr "Luach"
 
 #, fuzzy
 #~ msgid "gradientUnits"
-#~ msgstr "Priont·il comhad"
+#~ msgstr "Priont√°il comhad"
 
 #, fuzzy
 #~ msgid "nonzero"
@@ -4788,7 +4788,7 @@ msgstr "Luach"
 
 #, fuzzy
 #~ msgid "Lower selected objects one position"
-#~ msgstr "TÛg"
+#~ msgstr "T√≥g"
 
 #, fuzzy
 #~ msgid "Out"
@@ -4815,7 +4815,7 @@ msgstr "Luach"
 #~ msgstr "Roghanna Dath"
 
 #~ msgid "Nodes"
-#~ msgstr "NÛdanna"
+#~ msgstr "N√≥danna"
 
 #, fuzzy
 #~ msgid "Display"
@@ -4835,11 +4835,11 @@ msgstr "Luach"
 
 #, fuzzy
 #~ msgid "Open SVG file"
-#~ msgstr "Osc·il comhad"
+#~ msgstr "Osc√°il comhad"
 
 #, fuzzy
 #~ msgid "Raise selected objects one level"
-#~ msgstr "TÛg"
+#~ msgstr "T√≥g"
 
 #, fuzzy
 #~ msgid " Color fill "
@@ -4863,7 +4863,7 @@ msgstr "Luach"
 
 #, fuzzy
 #~ msgid "Gradient fill"
-#~ msgstr "Priont·il comhad"
+#~ msgstr "Priont√°il comhad"
 
 #~ msgid "1.0MB"
 #~ msgstr "1.0MB"
@@ -4872,7 +4872,7 @@ msgstr "Luach"
 #~ msgstr "Airde"
 
 #~ msgid "Image size"
-#~ msgstr "Meid picti˙r"
+#~ msgstr "Meid picti√∫r"
 
 #~ msgid "X0"
 #~ msgstr "X0"
@@ -4892,7 +4892,7 @@ msgstr "Luach"
 
 #, fuzzy
 #~ msgid "Undo "
-#~ msgstr "Leas˙"
+#~ msgstr "Leas√∫"
 
 #, fuzzy
 #~ msgid "Height: "
@@ -4907,23 +4907,23 @@ msgstr "Luach"
 
 #, fuzzy
 #~ msgid "No"
-#~ msgstr "NÛd"
+#~ msgstr "N√≥d"
 
 #, fuzzy
 #~ msgid "Pixels\n"
 #~ msgstr "pixelanna"
 
 #~ msgid "Del"
-#~ msgstr "ScrÌos"
+#~ msgstr "Scr√≠os"
 
 #~ msgid "Up"
 #~ msgstr "Suas"
 
 #~ msgid "Down"
-#~ msgstr "SÌos"
+#~ msgstr "S√≠os"
 
 #~ msgid "Color2"
 #~ msgstr "Dath 2"
 
 #~ msgid "left"
-#~ msgstr "clÈ"
+#~ msgstr "cl√©"

@@ -12,7 +12,7 @@ msgstr ""
 "Last-Translator: Keld Simonsen <keld@dkuug.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: inkscape.desktop.in.h:1
@@ -128,7 +128,7 @@ msgstr "Valg"
 #: src/dialogs/align.cpp:286
 #, fuzzy
 msgid "Right side of aligned objects to left side of anchor"
-msgstr "Justér indre objekt til venstre kant"
+msgstr "JustÃ©r indre objekt til venstre kant"
 
 #: src/dialogs/align.cpp:288
 msgid "Left side of aligned objects to left side of anchor"
@@ -142,7 +142,7 @@ msgstr "vend vandret"
 #: src/dialogs/align.cpp:292
 #, fuzzy
 msgid "Right side of aligned objects to right side of anchor"
-msgstr "Justér indre objekt til højre kant"
+msgstr "JustÃ©r indre objekt til hÃ¸jre kant"
 
 #: src/dialogs/align.cpp:294
 msgid "Left side of aligned objects to right side of anchor"
@@ -155,7 +155,7 @@ msgstr ""
 #: src/dialogs/align.cpp:299
 #, fuzzy
 msgid "Top of aligned objects to top of anchor"
-msgstr "Justér indre objekt til topkant"
+msgstr "JustÃ©r indre objekt til topkant"
 
 #: src/dialogs/align.cpp:301
 #, fuzzy
@@ -165,16 +165,16 @@ msgstr "vend lodret"
 #: src/dialogs/align.cpp:303
 #, fuzzy
 msgid "Bottom of aligned objects to bottom of anchor"
-msgstr "Justér indre objekt til bundkant"
+msgstr "JustÃ©r indre objekt til bundkant"
 
 #: src/dialogs/align.cpp:305
 #, fuzzy
 msgid "Top of aligned objects to bottom of anchor"
-msgstr "Justér indre objekt til topkant"
+msgstr "JustÃ©r indre objekt til topkant"
 
 #: src/dialogs/align.cpp:320
 msgid "Align"
-msgstr "Justér"
+msgstr "JustÃ©r"
 
 #: src/dialogs/align.cpp:341
 msgid "Distribute left sides of objects at even distances"
@@ -219,11 +219,11 @@ msgstr "Sidste valgt"
 
 #: src/dialogs/align.cpp:436
 msgid "First selected"
-msgstr "Første valgt"
+msgstr "FÃ¸rste valgt"
 
 #: src/dialogs/align.cpp:439
 msgid "Biggest item"
-msgstr "Største element"
+msgstr "StÃ¸rste element"
 
 #: src/dialogs/align.cpp:442
 msgid "Smallest item"
@@ -242,12 +242,12 @@ msgstr "Vis gitter"
 #: src/dialogs/desktop-properties.cpp:787
 #, fuzzy
 msgid "Snap bounding boxes to grid"
-msgstr "Fastsæt til gitter"
+msgstr "FastsÃ¦t til gitter"
 
 #: src/dialogs/desktop-properties.cpp:788
 #, fuzzy
 msgid "Snap points to grid"
-msgstr "Fastsæt til gitter"
+msgstr "FastsÃ¦t til gitter"
 
 #: src/dialogs/desktop-properties.cpp:806
 msgid "Grid units:"
@@ -272,12 +272,12 @@ msgstr "Afstand Y:"
 #: src/dialogs/desktop-properties.cpp:821
 #: src/dialogs/desktop-properties.cpp:853
 msgid "Snap units:"
-msgstr "Fastsætnings enheder:"
+msgstr "FastsÃ¦tnings enheder:"
 
 #: src/dialogs/desktop-properties.cpp:824
 #: src/dialogs/desktop-properties.cpp:856
 msgid "Snap distance:"
-msgstr "Fastgørelsesafstand"
+msgstr "FastgÃ¸relsesafstand"
 
 #: src/dialogs/desktop-properties.cpp:827
 msgid "Grid color:"
@@ -285,44 +285,44 @@ msgstr "Gitterfarve:"
 
 #: src/dialogs/desktop-properties.cpp:828
 msgid "Grid color"
-msgstr "Hjælpelinjefarve"
+msgstr "HjÃ¦lpelinjefarve"
 
 #. Guidelines page
 #: src/dialogs/desktop-properties.cpp:832
 msgid "Guides"
-msgstr "Hjælpelinjer"
+msgstr "HjÃ¦lpelinjer"
 
 #: src/dialogs/desktop-properties.cpp:840
 msgid "Show guides"
-msgstr "Vis hjælpelinier"
+msgstr "Vis hjÃ¦lpelinier"
 
 #: src/dialogs/desktop-properties.cpp:841
 #, fuzzy
 msgid "Snap bounding boxes to guides"
-msgstr "Fastsæt til hjælpelinier"
+msgstr "FastsÃ¦t til hjÃ¦lpelinier"
 
 #: src/dialogs/desktop-properties.cpp:842
 #, fuzzy
 msgid "Snap points to guides"
-msgstr "Fastsæt til gitter"
+msgstr "FastsÃ¦t til gitter"
 
 #: src/dialogs/desktop-properties.cpp:860
 #, fuzzy
 msgid "Guide color:"
-msgstr "Farve for hjælpelinjer:"
+msgstr "Farve for hjÃ¦lpelinjer:"
 
 #: src/dialogs/desktop-properties.cpp:861
 msgid "Guideline color"
-msgstr "Farver for hjælpelinier"
+msgstr "Farver for hjÃ¦lpelinier"
 
 #: src/dialogs/desktop-properties.cpp:863
 msgid "Highlight color:"
-msgstr "Farve for fremhævning:"
+msgstr "Farve for fremhÃ¦vning:"
 
 #: src/dialogs/desktop-properties.cpp:864
 #, fuzzy
 msgid "Highlighted guideline color"
-msgstr "Farve for fremhævede hjælpelinjer"
+msgstr "Farve for fremhÃ¦vede hjÃ¦lpelinjer"
 
 #: src/dialogs/desktop-properties.cpp:878
 msgid "Background (also for export):"
@@ -354,7 +354,7 @@ msgstr ""
 
 #: src/dialogs/desktop-properties.cpp:913
 msgid "Paper size:"
-msgstr "Papirstørrelse:"
+msgstr "PapirstÃ¸rrelse:"
 
 #: src/dialogs/desktop-properties.cpp:937 src/dialogs/export.cpp:123
 msgid "Custom"
@@ -363,7 +363,7 @@ msgstr "Tilpas"
 #: src/dialogs/desktop-properties.cpp:948
 #, fuzzy
 msgid "Paper orientation:"
-msgstr "Mætning:"
+msgstr "MÃ¦tning:"
 
 #: src/dialogs/desktop-properties.cpp:960
 #, fuzzy
@@ -398,7 +398,7 @@ msgstr "Bredde:"
 #: src/dialogs/export.cpp:412 src/dialogs/object-attributes.cpp:77
 #: src/dialogs/object-attributes.cpp:85
 msgid "Height:"
-msgstr "Højde:"
+msgstr "HÃ¸jde:"
 
 #. end of former "document settings" stuff
 #.
@@ -440,7 +440,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:218
 #, fuzzy
 msgid "Box outline"
-msgstr "Vis hjælpelinier"
+msgstr "Vis hjÃ¦lpelinier"
 
 #: src/dialogs/display-settings.cpp:218
 msgid "Show only a box outline of the objects when moving or transforming"
@@ -485,7 +485,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:262
 #, fuzzy
 msgid "Opposite bounding box edge"
-msgstr "Fastsæt til gitter"
+msgstr "FastsÃ¦t til gitter"
 
 #: src/dialogs/display-settings.cpp:263
 msgid "Default scale origin will be on the bounding box of the item"
@@ -546,7 +546,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:642
 #, fuzzy
 msgid "Picking colors:"
-msgstr "Vælg en farve"
+msgstr "VÃ¦lg en farve"
 
 #: src/dialogs/display-settings.cpp:653
 msgid "Pick visible color (no alpha)"
@@ -577,7 +577,7 @@ msgstr "Flyt"
 #: src/dialogs/display-settings.cpp:755
 #, fuzzy
 msgid "Grab sensitivity:"
-msgstr "Gør følsom"
+msgstr "GÃ¸r fÃ¸lsom"
 
 #: src/dialogs/display-settings.cpp:756
 msgid ""
@@ -644,7 +644,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:828
 #, fuzzy
 msgid "Speed:"
-msgstr "Rød:"
+msgstr "RÃ¸d:"
 
 #: src/dialogs/display-settings.cpp:829
 msgid ""
@@ -666,7 +666,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:850
 #, fuzzy
 msgid "Steps"
-msgstr " Stíl "
+msgstr " StÃ­l "
 
 #: src/dialogs/display-settings.cpp:853
 msgid "Arrow keys move by:"
@@ -724,7 +724,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:907
 #, fuzzy
 msgid "Selector"
-msgstr "Vælg"
+msgstr "VÃ¦lg"
 
 #: src/dialogs/display-settings.cpp:916
 msgid "Node"
@@ -873,7 +873,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:1078
 #, fuzzy
 msgid "Are deleted"
-msgstr "Første valgt"
+msgstr "FÃ¸rste valgt"
 
 #: src/dialogs/display-settings.cpp:1078
 msgid "Orphaned clones are deleted along with their original."
@@ -888,7 +888,7 @@ msgstr "Transformation"
 #: src/dialogs/display-settings.cpp:1096
 #, fuzzy
 msgid "Scale stroke width"
-msgstr "Bredde på strøg"
+msgstr "Bredde pÃ¥ strÃ¸g"
 
 #: src/dialogs/display-settings.cpp:1097
 msgid "When scaling objects, scale the stroke width by the same proportion"
@@ -985,7 +985,7 @@ msgstr ""
 
 #: src/dialogs/display-settings.cpp:1195
 msgid "Oversample bitmaps:"
-msgstr "Flere tilfælde af bitmap:"
+msgstr "Flere tilfÃ¦lde af bitmap:"
 
 #: src/dialogs/display-settings.cpp:1212
 msgid "2x2"
@@ -1032,7 +1032,7 @@ msgstr "R1:"
 #: src/dialogs/export.cpp:387
 #, fuzzy
 msgid "Bitmap size"
-msgstr "Billedstørrelse"
+msgstr "BilledstÃ¸rrelse"
 
 #: src/dialogs/export.cpp:397 src/dialogs/export.cpp:412
 msgid "pixels"
@@ -1050,7 +1050,7 @@ msgstr ""
 
 #: src/dialogs/export.cpp:510
 msgid "Export"
-msgstr "Eksportér"
+msgstr "EksportÃ©r"
 
 #: src/dialogs/export.cpp:953
 #, fuzzy
@@ -1079,7 +1079,7 @@ msgstr ""
 #: src/dialogs/export.cpp:1108
 #, fuzzy
 msgid "Select a filename for exporting"
-msgstr "Vælg fil der skal importeres"
+msgstr "VÃ¦lg fil der skal importeres"
 
 #: src/dialogs/filedialog.cpp:191 src/dialogs/filedialog.cpp:325
 #: src/extension/db.cpp:183 src/extension/db.cpp:196
@@ -1089,7 +1089,7 @@ msgstr ""
 #: src/dialogs/filedialog.cpp:216 src/dialogs/filedialog.cpp:364
 #, fuzzy
 msgid "File type:"
-msgstr "Stíl for fyld"
+msgstr "StÃ­l for fyld"
 
 #: src/dialogs/filedialog.cpp:368
 msgid "Append filename extension automatically"
@@ -1101,7 +1101,7 @@ msgstr ""
 
 #: src/dialogs/fill-style.cpp:124
 msgid "Fill style"
-msgstr "Stíl for fyld"
+msgstr "StÃ­l for fyld"
 
 #: src/dialogs/fill-style.cpp:172
 #, fuzzy
@@ -1125,7 +1125,7 @@ msgstr "Tegning"
 #: src/dialogs/fill-style.cpp:199
 #, fuzzy
 msgid "alternating"
-msgstr "Mætning:"
+msgstr "MÃ¦tning:"
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
 #: src/dialogs/find.cpp:320
@@ -1160,7 +1160,7 @@ msgstr ""
 #: src/dialogs/find.cpp:493
 #, fuzzy
 msgid "All types"
-msgstr "Stíl for fyld"
+msgstr "StÃ­l for fyld"
 
 #: src/dialogs/find.cpp:504
 msgid "Search all shapes"
@@ -1235,7 +1235,7 @@ msgstr ""
 #: src/dialogs/find.cpp:559
 #, fuzzy
 msgid "Groups"
-msgstr "Gruppér"
+msgstr "GruppÃ©r"
 
 #: src/dialogs/find.cpp:564
 msgid "Search clones"
@@ -1279,7 +1279,7 @@ msgstr ""
 #: src/dialogs/find.cpp:636
 #, fuzzy
 msgid "_Style: "
-msgstr " Stíl "
+msgstr " StÃ­l "
 
 #: src/dialogs/find.cpp:636
 msgid ""
@@ -1335,7 +1335,7 @@ msgstr ""
 
 #: src/dialogs/item-properties.cpp:149
 msgid "Sensitive"
-msgstr "følsom"
+msgstr "fÃ¸lsom"
 
 #: src/dialogs/item-properties.cpp:160
 msgid "Visible"
@@ -1377,7 +1377,7 @@ msgstr "Href:"
 
 #: src/dialogs/object-attributes.cpp:32
 msgid "Target:"
-msgstr "Mål:"
+msgstr "MÃ¥l:"
 
 #: src/dialogs/object-attributes.cpp:33
 msgid "Type:"
@@ -1393,7 +1393,7 @@ msgstr "Rolle:"
 #. For situations where the nature/role alone isn't enough, this offers an additional URI defining the purpose of the link.
 #: src/dialogs/object-attributes.cpp:39
 msgid "Arcrole:"
-msgstr "Ærkerolle:"
+msgstr "Ã†rkerolle:"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkTitleAttribute
 #: src/dialogs/object-attributes.cpp:41
@@ -1407,7 +1407,7 @@ msgstr "Vis:"
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkActuateAttribute
 #: src/dialogs/object-attributes.cpp:44
 msgid "Actuate:"
-msgstr "Igangsæt:"
+msgstr "IgangsÃ¦t:"
 
 #: src/dialogs/object-attributes.cpp:49
 msgid "Sides:"
@@ -1415,11 +1415,11 @@ msgstr "Sider:"
 
 #: src/dialogs/object-attributes.cpp:50 src/dialogs/object-attributes.cpp:61
 msgid "Center X:"
-msgstr "Centrér X:"
+msgstr "CentrÃ©r X:"
 
 #: src/dialogs/object-attributes.cpp:51 src/dialogs/object-attributes.cpp:62
 msgid "Center Y:"
-msgstr "Centrér Y:"
+msgstr "CentrÃ©r Y:"
 
 #: src/dialogs/object-attributes.cpp:52
 msgid "R1:"
@@ -1496,7 +1496,7 @@ msgstr "Fyld"
 #: src/dialogs/object-properties.cpp:212
 #, fuzzy
 msgid "Stroke paint"
-msgstr "Bredde på strøg"
+msgstr "Bredde pÃ¥ strÃ¸g"
 
 #: src/dialogs/object-properties.cpp:217
 #, fuzzy
@@ -1524,7 +1524,7 @@ msgstr "Firkant"
 #: src/dialogs/object-properties.cpp:257
 #, fuzzy
 msgid "Arc tool"
-msgstr "Ærkerolle:"
+msgstr "Ã†rkerolle:"
 
 #: src/dialogs/object-properties.cpp:263
 #, fuzzy
@@ -1539,7 +1539,7 @@ msgstr "Spiral"
 #: src/dialogs/object-properties.cpp:275
 #, fuzzy
 msgid "Freehand and pen"
-msgstr "Frihånd"
+msgstr "FrihÃ¥nd"
 
 #: src/dialogs/object-properties.cpp:281
 msgid "Calligraphic line"
@@ -1583,7 +1583,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:219
 #, fuzzy
 msgid "Creator"
-msgstr "Opret lænke"
+msgstr "Opret lÃ¦nke"
 
 #: src/dialogs/rdf.cpp:220
 msgid ""
@@ -1593,7 +1593,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:222
 #, fuzzy
 msgid "Rights"
-msgstr "Højde"
+msgstr "HÃ¸jde"
 
 #: src/dialogs/rdf.cpp:223
 msgid ""
@@ -1611,7 +1611,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:229
 #, fuzzy
 msgid "Identifier"
-msgstr "Centrér"
+msgstr "CentrÃ©r"
 
 #: src/dialogs/rdf.cpp:230
 msgid "Unique URI to reference this document."
@@ -1714,14 +1714,14 @@ msgstr "Lagret dokument %d"
 #: src/dialogs/stroke-style.cpp:1387
 #, fuzzy
 msgid "Stroke width"
-msgstr "Bredde på strøg"
+msgstr "Bredde pÃ¥ strÃ¸g"
 
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
 #. corners of paths. It can be "miter", "round" or "bevel".
 #: src/dialogs/stroke-style.cpp:1407
 msgid "Join:"
-msgstr "Sammenlæg:"
+msgstr "SammenlÃ¦g:"
 
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
@@ -1729,21 +1729,21 @@ msgstr "Sammenlæg:"
 #: src/dialogs/stroke-style.cpp:1421
 #, fuzzy
 msgid "Miter join"
-msgstr "Mitter sammenlægning"
+msgstr "Mitter sammenlÃ¦gning"
 
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
 #: src/dialogs/stroke-style.cpp:1431
 msgid "Round join"
-msgstr "Rund sammenlægning"
+msgstr "Rund sammenlÃ¦gning"
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
 #. "Join" option (in the Fill and Stroke dialog).
 #: src/dialogs/stroke-style.cpp:1441
 msgid "Bevel join"
-msgstr "Kantet sammenlægning"
+msgstr "Kantet sammenlÃ¦gning"
 
 #. Miterlimit
 #. TRANSLATORS: Miter limit: only for "miter join", this limits the length
@@ -1755,7 +1755,7 @@ msgstr "Kantet sammenlægning"
 #: src/dialogs/stroke-style.cpp:1452
 #, fuzzy
 msgid "Miter limit:"
-msgstr "Mitter sammenlægning"
+msgstr "Mitter sammenlÃ¦gning"
 
 #: src/dialogs/stroke-style.cpp:1460
 msgid "Maximum length of the miter (in units of stroke width)"
@@ -1779,7 +1779,7 @@ msgstr ""
 #: src/dialogs/stroke-style.cpp:1495
 #, fuzzy
 msgid "Round cap"
-msgstr "Rund sammenlægning"
+msgstr "Rund sammenlÃ¦gning"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
@@ -1821,7 +1821,7 @@ msgstr "Basis for justering"
 #: src/dialogs/text-edit.cpp:288
 #, fuzzy
 msgid "Orientation:"
-msgstr "Mætning:"
+msgstr "MÃ¦tning:"
 
 #: src/dialogs/text-edit.cpp:313
 #, fuzzy
@@ -1844,12 +1844,12 @@ msgstr "Flyt"
 #. Scale page
 #: src/dialogs/transformation.cpp:329 src/dialogs/transformation.cpp:666
 msgid "Scale"
-msgstr "Skalér"
+msgstr "SkalÃ©r"
 
 #. Rotate page
 #: src/dialogs/transformation.cpp:337 src/dialogs/transformation.cpp:806
 msgid "Rotate"
-msgstr "Rotér"
+msgstr "RotÃ©r"
 
 #. Relative moves
 #: src/dialogs/transformation.cpp:528
@@ -1877,7 +1877,7 @@ msgstr ""
 #: src/dialogs/xml-tree.cpp:278
 #, fuzzy
 msgid "Duplicate node"
-msgstr "Duplikér"
+msgstr "DuplikÃ©r"
 
 #: src/dialogs/xml-tree.cpp:299
 #, fuzzy
@@ -1887,12 +1887,12 @@ msgstr "Slet"
 #: src/dialogs/xml-tree.cpp:315
 #, fuzzy
 msgid "Unindent node"
-msgstr "Redigér noder"
+msgstr "RedigÃ©r noder"
 
 #: src/dialogs/xml-tree.cpp:330
 #, fuzzy
 msgid "Indent node"
-msgstr "Redigér noder"
+msgstr "RedigÃ©r noder"
 
 #: src/dialogs/xml-tree.cpp:342
 #, fuzzy
@@ -1929,12 +1929,12 @@ msgstr ""
 #: src/dialogs/xml-tree.cpp:1193
 #, fuzzy
 msgid "Cancel"
-msgstr "Ændr"
+msgstr "Ã†ndr"
 
 #: src/dialogs/xml-tree.cpp:1199
 #, fuzzy
 msgid "Create"
-msgstr "Opret lænke"
+msgstr "Opret lÃ¦nke"
 
 #: src/document.cpp:428
 #, fuzzy, c-format
@@ -1979,7 +1979,7 @@ msgstr ""
 #: src/draw-context.cpp:1060
 #, fuzzy
 msgid "Finishing freehand"
-msgstr "Frihånd"
+msgstr "FrihÃ¥nd"
 
 #: src/draw-context.cpp:1826
 msgid "Finishing pen"
@@ -2042,7 +2042,7 @@ msgstr "Valg"
 #: src/extension/internal/gnome.cpp:124
 #, fuzzy
 msgid "Inkscape: Print Preview"
-msgstr "Sodipodi (dokumentnavn %s..): Udskriv forhåndsvisning"
+msgstr "Sodipodi (dokumentnavn %s..): Udskriv forhÃ¥ndsvisning"
 
 #: src/extension/internal/ps.cpp:110
 #, fuzzy
@@ -2053,7 +2053,7 @@ msgstr "Udskriv tegning"
 #: src/extension/internal/ps.cpp:124
 #, fuzzy
 msgid "Print properties"
-msgstr "Egenskaber for lænke"
+msgstr "Egenskaber for lÃ¦nke"
 
 #: src/extension/internal/ps.cpp:132
 msgid "Print using PostScript operators"
@@ -2069,7 +2069,7 @@ msgstr ""
 #: src/extension/internal/ps.cpp:139
 #, fuzzy
 msgid "Print as bitmap"
-msgstr "Eksportér fil"
+msgstr "EksportÃ©r fil"
 
 #: src/extension/internal/ps.cpp:141
 msgid ""
@@ -2138,7 +2138,7 @@ msgstr ""
 
 #: src/file.cpp:240
 msgid "Select file to open"
-msgstr "Vælg fil der skal åbnes"
+msgstr "VÃ¦lg fil der skal Ã¥bnes"
 
 #: src/file.cpp:312
 #, c-format
@@ -2175,7 +2175,7 @@ msgstr "Tegning"
 #: src/file.cpp:404
 #, fuzzy
 msgid "Select file to save to"
-msgstr "Vælg fil der skal åbnes"
+msgstr "VÃ¦lg fil der skal Ã¥bnes"
 
 #: src/file.cpp:481
 msgid "No changes need to be saved."
@@ -2183,7 +2183,7 @@ msgstr ""
 
 #: src/file.cpp:618
 msgid "Select file to import"
-msgstr "Vælg fil der skal importeres"
+msgstr "VÃ¦lg fil der skal importeres"
 
 #: src/help.cpp:58
 msgid "about.svg"
@@ -2265,7 +2265,7 @@ msgstr "Centimeter"
 #: src/helper/units.cpp:42
 #, fuzzy
 msgid "Meter"
-msgstr "Centrér"
+msgstr "CentrÃ©r"
 
 #: src/helper/units.cpp:42
 #, fuzzy
@@ -2275,7 +2275,7 @@ msgstr "em"
 #: src/helper/units.cpp:42
 #, fuzzy
 msgid "Meters"
-msgstr "Centrér"
+msgstr "CentrÃ©r"
 
 #: src/helper/units.cpp:43
 msgid "Inch"
@@ -2408,7 +2408,7 @@ msgstr ""
 #: src/interface.cpp:780
 #, fuzzy
 msgid "_Show/Hide"
-msgstr "Vis hjælpelinier"
+msgstr "Vis hjÃ¦lpelinier"
 
 #: src/interface.cpp:780
 msgid ""
@@ -2425,7 +2425,7 @@ msgstr ""
 #: src/interface.cpp:785
 #, fuzzy
 msgid "Show or hide the Commands bar (under the menu)"
-msgstr "Vis hjælpelinier"
+msgstr "Vis hjÃ¦lpelinier"
 
 #: src/interface.cpp:787
 #, fuzzy
@@ -2435,7 +2435,7 @@ msgstr "Oaf valg"
 #: src/interface.cpp:787
 #, fuzzy
 msgid "Show or hide the Tool Controls panel"
-msgstr "Vis hjælpelinier"
+msgstr "Vis hjÃ¦lpelinier"
 
 #: src/interface.cpp:789
 msgid "_Toolbox"
@@ -2491,12 +2491,12 @@ msgstr ""
 #: src/interface.cpp:890
 #, fuzzy
 msgid "_Help"
-msgstr "_Hjælp"
+msgstr "_HjÃ¦lp"
 
 #: src/interface.cpp:956
 #, fuzzy, c-format
 msgid "Edit group #%s"
-msgstr "Redigér noder"
+msgstr "RedigÃ©r noder"
 
 #: src/interface.cpp:968
 msgid "Edit parent group"
@@ -2505,7 +2505,7 @@ msgstr ""
 #: src/interface.cpp:974
 #, fuzzy
 msgid "Edit root"
-msgstr "Redigér noder"
+msgstr "RedigÃ©r noder"
 
 #: src/interface.cpp:1051
 msgid "Could not parse SVG data"
@@ -2542,7 +2542,7 @@ msgstr ""
 #: src/main.cpp:138
 #, fuzzy
 msgid "Open specified document(s) (option string may be excluded)"
-msgstr "Åbn specificeret fil (streng med alternativer kan udelukkes)"
+msgstr "Ã…bn specificeret fil (streng med alternativer kan udelukkes)"
 
 #: src/main.cpp:139 src/main.cpp:142 src/main.cpp:145 src/main.cpp:159
 msgid "FILENAME"
@@ -2551,12 +2551,12 @@ msgstr "FILNAVN"
 #: src/main.cpp:141
 #, fuzzy
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
-msgstr "Udskriv filer til specificeret uddatafil (brug '| program' for rør)"
+msgstr "Udskriv filer til specificeret uddatafil (brug '| program' for rÃ¸r)"
 
 #: src/main.cpp:144
 #, fuzzy
 msgid "Export document to a PNG file"
-msgstr "Eksportér billede til png"
+msgstr "EksportÃ©r billede til png"
 
 #: src/main.cpp:147
 msgid "The resolution used for converting SVG into bitmap (default 72.0)"
@@ -2607,7 +2607,7 @@ msgstr ""
 #: src/main.cpp:161
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
-"Vis givne filer en-efter-en, skift til næste ved enhver taste/muse-hændelse"
+"Vis givne filer en-efter-en, skift til nÃ¦ste ved enhver taste/muse-hÃ¦ndelse"
 
 #: src/main.cpp:163
 msgid "Prefer bitmap (XPM) icons to SVG ones"
@@ -2634,7 +2634,7 @@ msgstr ""
 #: src/nodepath.cpp:1342
 #, fuzzy
 msgid "Cannot find path between nodes."
-msgstr "Udjævn linje ved valgte knuder"
+msgstr "UdjÃ¦vn linje ved valgte knuder"
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
 #: src/nodepath.cpp:2719
@@ -2675,7 +2675,7 @@ msgstr ""
 #: src/nodepath.cpp:2758
 #, fuzzy, c-format
 msgid "%i of %i nodes selected. %s."
-msgstr "Udjævn linje ved valgte knuder"
+msgstr "UdjÃ¦vn linje ved valgte knuder"
 
 #. Item dialog
 #: src/object-ui.cpp:107
@@ -2687,7 +2687,7 @@ msgstr "Egenskaber for element"
 #: src/object-ui.cpp:117
 #, fuzzy
 msgid "_Select This"
-msgstr "Vælg dette"
+msgstr "VÃ¦lg dette"
 
 #. Reset transformations
 #: src/object-ui.cpp:127
@@ -2698,18 +2698,18 @@ msgstr "Nulstil transformation"
 #: src/object-ui.cpp:133
 #, fuzzy
 msgid "Make s_ensitive"
-msgstr "Gør følsom"
+msgstr "GÃ¸r fÃ¸lsom"
 
 #: src/object-ui.cpp:133
 #, fuzzy
 msgid "Make i_nsensitive"
-msgstr "Gør ufølsom"
+msgstr "GÃ¸r ufÃ¸lsom"
 
 #. Create link
 #: src/object-ui.cpp:138
 #, fuzzy
 msgid "_Create Link"
-msgstr "Opret lænke"
+msgstr "Opret lÃ¦nke"
 
 #. "Ungroup"
 #: src/object-ui.cpp:241 src/verbs.cpp:875
@@ -2720,19 +2720,19 @@ msgstr "_Opdel gruppe"
 #: src/object-ui.cpp:282
 #, fuzzy
 msgid "Link _Properties"
-msgstr "Egenskaber for lænke"
+msgstr "Egenskaber for lÃ¦nke"
 
 #. Select item
 #: src/object-ui.cpp:292
 #, fuzzy
 msgid "_Follow Link"
-msgstr "Følg lænke"
+msgstr "FÃ¸lg lÃ¦nke"
 
 #. Reset transformations
 #: src/object-ui.cpp:297
 #, fuzzy
 msgid "_Remove Link"
-msgstr "Fjern lænke"
+msgstr "Fjern lÃ¦nke"
 
 #. Link dialog
 #: src/object-ui.cpp:346
@@ -2804,7 +2804,7 @@ msgstr ""
 #: src/path-chemistry.cpp:402
 #, fuzzy
 msgid "Select one or more paths to reverse."
-msgstr "Hæv det valgte op til toppen"
+msgstr "HÃ¦v det valgte op til toppen"
 
 #: src/path-chemistry.cpp:427
 msgid "No paths to reverse in the selection."
@@ -2833,7 +2833,7 @@ msgstr "Flyt"
 #: src/select-toolbar.cpp:383
 #, fuzzy
 msgid "Horizontal coordinate of selection"
-msgstr "Vandret centreringsværdi"
+msgstr "Vandret centreringsvÃ¦rdi"
 
 #: src/select-toolbar.cpp:386
 msgid "Vertical coordinate of selection"
@@ -2865,7 +2865,7 @@ msgstr "Omform valgte ting til kurver"
 #: src/selection-chemistry.cpp:248
 #, fuzzy
 msgid "Select two or more objects to group."
-msgstr "Hæv det valgte op til toppen"
+msgstr "HÃ¦v det valgte op til toppen"
 
 #: src/selection-chemistry.cpp:256
 #, fuzzy
@@ -2923,7 +2923,7 @@ msgstr ""
 #: src/selection-chemistry.cpp:778 src/selection-chemistry.cpp:829
 #, fuzzy
 msgid "Nothing on the clipboard."
-msgstr "Kopiér det markerede til klippebord"
+msgstr "KopiÃ©r det markerede til klippebord"
 
 #: src/selection-chemistry.cpp:835
 #, fuzzy
@@ -2942,7 +2942,7 @@ msgstr ""
 #: src/selection-chemistry.cpp:1387
 #, fuzzy
 msgid "Select a clone to unlink."
-msgstr "Vælg fil der skal åbnes"
+msgstr "VÃ¦lg fil der skal Ã¥bnes"
 
 #: src/selection-chemistry.cpp:1418
 msgid "No clones to unlink in the selection."
@@ -3014,7 +3014,7 @@ msgstr "Sodipodi: %s: %s: %d"
 #: src/sp-anchor.cpp:197
 #, c-format
 msgid "Link to %s"
-msgstr "Lænke til %s"
+msgstr "LÃ¦nke til %s"
 
 #: src/sp-ellipse.cpp:588
 msgid "Circle"
@@ -3027,7 +3027,7 @@ msgstr ""
 #: src/sp-guide.cpp:308
 #, fuzzy
 msgid "vertical guideline"
-msgstr "Lodret centreringsværdi"
+msgstr "Lodret centreringsvÃ¦rdi"
 
 #: src/sp-guide.cpp:310
 #, fuzzy
@@ -3215,7 +3215,7 @@ msgstr ""
 #: src/toolbox.cpp:380
 #, fuzzy
 msgid "Insert new nodes into selected segments"
-msgstr "Inkludér en knude i valgte segmenter"
+msgstr "InkludÃ©r en knude i valgte segmenter"
 
 #: src/toolbox.cpp:382
 msgid "Delete selected nodes"
@@ -3224,12 +3224,12 @@ msgstr "Slet valgte knuder"
 #: src/toolbox.cpp:387
 #, fuzzy
 msgid "Join paths at selected nodes"
-msgstr "Udjævn linje ved valgte knuder"
+msgstr "UdjÃ¦vn linje ved valgte knuder"
 
 #: src/toolbox.cpp:389
 #, fuzzy
 msgid "Join paths at selected nodes with new segment"
-msgstr "Udjævn linje ved valgte knuder"
+msgstr "UdjÃ¦vn linje ved valgte knuder"
 
 #: src/toolbox.cpp:392
 msgid "Split path between two non-endpoint nodes"
@@ -3258,12 +3258,12 @@ msgstr "Slet valgte knuder"
 #: src/toolbox.cpp:411
 #, fuzzy
 msgid "Make selected segments lines"
-msgstr "Konvertér valgte segmenter til linier"
+msgstr "KonvertÃ©r valgte segmenter til linier"
 
 #: src/toolbox.cpp:414
 #, fuzzy
 msgid "Make selected segments curves"
-msgstr "Konvertér valgte segmenter til kurver"
+msgstr "KonvertÃ©r valgte segmenter til kurver"
 
 #: src/toolbox.cpp:1093
 msgid "Corners:"
@@ -3284,7 +3284,7 @@ msgstr ""
 #: src/toolbox.cpp:1123
 #, fuzzy
 msgid "Spoke ratio:"
-msgstr "Lås aspektraten"
+msgstr "LÃ¥s aspektraten"
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
@@ -3319,7 +3319,7 @@ msgstr "T0:"
 #: src/toolbox.cpp:1392
 #, fuzzy
 msgid "Horizontal radius of rounded corner"
-msgstr "Vandret centreringsværdi"
+msgstr "Vandret centreringsvÃ¦rdi"
 
 #: src/toolbox.cpp:1402
 #, fuzzy
@@ -3416,7 +3416,7 @@ msgstr ""
 #: src/toolbox.cpp:2117
 #, fuzzy
 msgid "Open arc"
-msgstr "_Åbn"
+msgstr "_Ã…bn"
 
 #: src/toolbox.cpp:2118
 msgid ""
@@ -3518,7 +3518,7 @@ msgstr "Lagret dokument %d"
 #: src/verbs.cpp:802
 #, fuzzy
 msgid "_Open..."
-msgstr "_Åbn"
+msgstr "_Ã…bn"
 
 #: src/verbs.cpp:803
 #, fuzzy
@@ -3567,7 +3567,7 @@ msgstr "Unavngivet dokument %d"
 #: src/verbs.cpp:812
 #, fuzzy
 msgid "Print _Direct"
-msgstr "Egenskaber for lænke"
+msgstr "Egenskaber for lÃ¦nke"
 
 #: src/verbs.cpp:813
 msgid "Print directly to file or pipe"
@@ -3586,7 +3586,7 @@ msgstr "Smugkig udskriftstegning"
 #: src/verbs.cpp:816
 #, fuzzy
 msgid "_Import..."
-msgstr "Importér"
+msgstr "ImportÃ©r"
 
 #: src/verbs.cpp:817
 msgid "Import bitmap or SVG image into document"
@@ -3595,12 +3595,12 @@ msgstr ""
 #: src/verbs.cpp:818
 #, fuzzy
 msgid "_Export Bitmap..."
-msgstr "Eksportér fil"
+msgstr "EksportÃ©r fil"
 
 #: src/verbs.cpp:819
 #, fuzzy
 msgid "Export document or selection as PNG bitmap"
-msgstr "Eksportér billede til png"
+msgstr "EksportÃ©r billede til png"
 
 #: src/verbs.cpp:820
 #, fuzzy
@@ -3673,42 +3673,42 @@ msgstr "Omform valgte ting til kurver"
 #: src/verbs.cpp:835
 #, fuzzy
 msgid "_Copy"
-msgstr "Kopiér"
+msgstr "KopiÃ©r"
 
 #: src/verbs.cpp:836
 #, fuzzy
 msgid "Copy selection to clipboard"
-msgstr "Kopiér det markerede til klippebord"
+msgstr "KopiÃ©r det markerede til klippebord"
 
 #: src/verbs.cpp:837
 #, fuzzy
 msgid "_Paste"
-msgstr "Indsæt"
+msgstr "IndsÃ¦t"
 
 #: src/verbs.cpp:838
 #, fuzzy
 msgid "Paste object(s) from clipboard to mouse point"
-msgstr "Indsæt fra klippebord"
+msgstr "IndsÃ¦t fra klippebord"
 
 #: src/verbs.cpp:839
 #, fuzzy
 msgid "Paste _Style"
-msgstr "Bredde på strøg"
+msgstr "Bredde pÃ¥ strÃ¸g"
 
 #: src/verbs.cpp:840
 #, fuzzy
 msgid "Apply style of the copied object to selection"
-msgstr "Kopiér det markerede til klippebord"
+msgstr "KopiÃ©r det markerede til klippebord"
 
 #: src/verbs.cpp:841
 #, fuzzy
 msgid "Paste _In Place"
-msgstr "Bredde på strøg"
+msgstr "Bredde pÃ¥ strÃ¸g"
 
 #: src/verbs.cpp:842
 #, fuzzy
 msgid "Paste object(s) from clipboard to the original location"
-msgstr "Justér objekter til vandret midte"
+msgstr "JustÃ©r objekter til vandret midte"
 
 #: src/verbs.cpp:843
 #, fuzzy
@@ -3718,12 +3718,12 @@ msgstr "Slet"
 #: src/verbs.cpp:844
 #, fuzzy
 msgid "Delete selection"
-msgstr "Duplikér det markerede"
+msgstr "DuplikÃ©r det markerede"
 
 #: src/verbs.cpp:845
 #, fuzzy
 msgid "Duplic_ate"
-msgstr "Duplikér"
+msgstr "DuplikÃ©r"
 
 #: src/verbs.cpp:846
 #, fuzzy
@@ -3750,7 +3750,7 @@ msgstr ""
 #: src/verbs.cpp:851
 #, fuzzy
 msgid "Select _Original"
-msgstr "Vælg"
+msgstr "VÃ¦lg"
 
 #: src/verbs.cpp:852
 #, fuzzy
@@ -3787,7 +3787,7 @@ msgstr ""
 #: src/verbs.cpp:859
 #, fuzzy
 msgid "Select Al_l"
-msgstr "Vælg"
+msgstr "VÃ¦lg"
 
 #: src/verbs.cpp:860
 #, fuzzy
@@ -3797,7 +3797,7 @@ msgstr "Vend valgte ting"
 #: src/verbs.cpp:861
 #, fuzzy
 msgid "D_eselect"
-msgstr "Vælg"
+msgstr "VÃ¦lg"
 
 #: src/verbs.cpp:862
 #, fuzzy
@@ -3808,22 +3808,22 @@ msgstr "Slet valgte knuder"
 #: src/verbs.cpp:865
 #, fuzzy
 msgid "Raise to _Top"
-msgstr "Hæv det valgte op til toppen"
+msgstr "HÃ¦v det valgte op til toppen"
 
 #: src/verbs.cpp:866
 #, fuzzy
 msgid "Raise selection to top"
-msgstr "Hæv det valgte op til toppen"
+msgstr "HÃ¦v det valgte op til toppen"
 
 #: src/verbs.cpp:867
 #, fuzzy
 msgid "Lower to _Bottom"
-msgstr "Sænk det valgte til bunden"
+msgstr "SÃ¦nk det valgte til bunden"
 
 #: src/verbs.cpp:868
 #, fuzzy
 msgid "Lower selection to bottom"
-msgstr "Sænk det valgte til bunden"
+msgstr "SÃ¦nk det valgte til bunden"
 
 #: src/verbs.cpp:869
 #, fuzzy
@@ -3833,7 +3833,7 @@ msgstr "Radius:"
 #: src/verbs.cpp:870
 #, fuzzy
 msgid "Raise selection one step"
-msgstr "Hæv det valgte op ét lag"
+msgstr "HÃ¦v det valgte op Ã©t lag"
 
 #: src/verbs.cpp:871
 msgid "_Lower"
@@ -3842,15 +3842,15 @@ msgstr ""
 #: src/verbs.cpp:872
 #, fuzzy
 msgid "Lower selection one step"
-msgstr "Sænk det valgte ét lag"
+msgstr "SÃ¦nk det valgte Ã©t lag"
 
 #: src/verbs.cpp:873
 msgid "_Group"
-msgstr "_Gruppér"
+msgstr "_GruppÃ©r"
 
 #: src/verbs.cpp:874
 msgid "Group selected objects"
-msgstr "Gruppér valgte ting"
+msgstr "GruppÃ©r valgte ting"
 
 #: src/verbs.cpp:876
 #, fuzzy
@@ -3895,7 +3895,7 @@ msgstr "Ekspansion:"
 #: src/verbs.cpp:885
 #, fuzzy
 msgid "Exclusive OR of selected objects"
-msgstr "Redigér udformning for valgte ting"
+msgstr "RedigÃ©r udformning for valgte ting"
 
 #: src/verbs.cpp:886
 #, fuzzy
@@ -3998,7 +3998,7 @@ msgstr ""
 #: src/verbs.cpp:918
 #, fuzzy
 msgid "_Stroke to Path"
-msgstr "Bredde på strøg"
+msgstr "Bredde pÃ¥ strÃ¸g"
 
 #: src/verbs.cpp:919
 #, fuzzy
@@ -4036,7 +4036,7 @@ msgstr "Slet valgte knuder"
 
 #: src/verbs.cpp:926
 msgid "_Combine"
-msgstr "_Kombinér"
+msgstr "_KombinÃ©r"
 
 #: src/verbs.cpp:927
 msgid "Combine several paths into one"
@@ -4056,22 +4056,22 @@ msgstr "Opbryd valgte knude"
 #: src/verbs.cpp:932
 #, fuzzy
 msgid "Rotate _90 deg CW"
-msgstr "Sæt vinkel til 90°"
+msgstr "SÃ¦t vinkel til 90Â°"
 
 #: src/verbs.cpp:933
 #, fuzzy
 msgid "Rotate selection 90 degrees clockwise"
-msgstr "Drej valgte ting 90° med uret"
+msgstr "Drej valgte ting 90Â° med uret"
 
 #: src/verbs.cpp:934
 #, fuzzy
 msgid "Rotate 9_0 deg CCW"
-msgstr "Sæt vinkel til 90°"
+msgstr "SÃ¦t vinkel til 90Â°"
 
 #: src/verbs.cpp:935
 #, fuzzy
 msgid "Rotate selection 90 degrees counter-clockwise"
-msgstr "Drej valgte ting 90° med uret"
+msgstr "Drej valgte ting 90Â° med uret"
 
 #: src/verbs.cpp:936
 #, fuzzy
@@ -4117,12 +4117,12 @@ msgstr "Vend valgte ting"
 #. TODO: add shortcuts to tooltips automatically!
 #: src/verbs.cpp:949
 msgid "Select"
-msgstr "Vælg"
+msgstr "VÃ¦lg"
 
 #: src/verbs.cpp:950
 #, fuzzy
 msgid "Select and transform objects (F1)"
-msgstr "Vælg og transformér"
+msgstr "VÃ¦lg og transformÃ©r"
 
 #: src/verbs.cpp:951
 #, fuzzy
@@ -4153,12 +4153,12 @@ msgstr "Tegn spiral"
 #: src/verbs.cpp:962
 #, fuzzy
 msgid "Draw freehand lines (F6)"
-msgstr "Tegn frihåndslinje"
+msgstr "Tegn frihÃ¥ndslinje"
 
 #: src/verbs.cpp:964
 #, fuzzy
 msgid "Draw Bezier curves and straight lines (Shift+F6)"
-msgstr "Tegn frihåndslinje"
+msgstr "Tegn frihÃ¥ndslinje"
 
 #: src/verbs.cpp:965
 msgid "Calligraphy"
@@ -4207,7 +4207,7 @@ msgstr "Fil"
 #: src/verbs.cpp:977
 #, fuzzy
 msgid "Show or hide the canvas rulers"
-msgstr "Vis hjælpelinier"
+msgstr "Vis hjÃ¦lpelinier"
 
 #: src/verbs.cpp:978
 msgid "Scroll_bars"
@@ -4216,7 +4216,7 @@ msgstr ""
 #: src/verbs.cpp:978
 #, fuzzy
 msgid "Show or hide the canvas scrollbars"
-msgstr "Vis hjælpelinier"
+msgstr "Vis hjÃ¦lpelinier"
 
 #: src/verbs.cpp:979
 #, fuzzy
@@ -4231,12 +4231,12 @@ msgstr "Vis gitter"
 #: src/verbs.cpp:980
 #, fuzzy
 msgid "G_uides"
-msgstr "Hjælpelinjer"
+msgstr "HjÃ¦lpelinjer"
 
 #: src/verbs.cpp:980
 #, fuzzy
 msgid "Show or hide guides"
-msgstr "Vis hjælpelinier"
+msgstr "Vis hjÃ¦lpelinier"
 
 #: src/verbs.cpp:981
 msgid "Nex_t Zoom"
@@ -4292,7 +4292,7 @@ msgstr ""
 #: src/verbs.cpp:995
 #, fuzzy
 msgid "D_uplicate Window"
-msgstr "Duplikér"
+msgstr "DuplikÃ©r"
 
 #: src/verbs.cpp:995
 #, fuzzy
@@ -4317,17 +4317,17 @@ msgstr "_Side"
 #: src/verbs.cpp:1000
 #, fuzzy
 msgid "Zoom to fit page in window"
-msgstr "Sæt sidebredde"
+msgstr "SÃ¦t sidebredde"
 
 #: src/verbs.cpp:1001
 #, fuzzy
 msgid "Page _Width"
-msgstr "Sæt sidebredde"
+msgstr "SÃ¦t sidebredde"
 
 #: src/verbs.cpp:1002
 #, fuzzy
 msgid "Zoom to fit page width in window"
-msgstr "Sæt sidebredde"
+msgstr "SÃ¦t sidebredde"
 
 #: src/verbs.cpp:1003
 msgid "_Drawing"
@@ -4345,7 +4345,7 @@ msgstr "_Udvalg"
 #: src/verbs.cpp:1006
 #, fuzzy
 msgid "Zoom to fit selection in window"
-msgstr "Hæv det valgte op til toppen"
+msgstr "HÃ¦v det valgte op til toppen"
 
 #. Dialogs
 #: src/verbs.cpp:1008
@@ -4356,7 +4356,7 @@ msgstr "Sodipodi: %s: %s: %d"
 #: src/verbs.cpp:1009
 #, fuzzy
 msgid "Global Inkscape preferences"
-msgstr "Indstillinger for skærm"
+msgstr "Indstillinger for skÃ¦rm"
 
 #: src/verbs.cpp:1010
 msgid "_Document Preferences..."
@@ -4500,12 +4500,12 @@ msgstr ""
 #: src/widgets/dash-selector.cpp:104
 #, fuzzy
 msgid "Dash pattern"
-msgstr "Bredde på strøg"
+msgstr "Bredde pÃ¥ strÃ¸g"
 
 #: src/widgets/dash-selector.cpp:119
 #, fuzzy
 msgid "Pattern offset"
-msgstr "Mønsterfyld"
+msgstr "MÃ¸nsterfyld"
 
 #. Family frame
 #: src/widgets/font-selector.cpp:154
@@ -4516,7 +4516,7 @@ msgstr ""
 #: src/widgets/font-selector.cpp:182
 #, fuzzy
 msgid "Style"
-msgstr " Stíl "
+msgstr " StÃ­l "
 
 #: src/widgets/font-selector.cpp:217
 #, fuzzy
@@ -4533,7 +4533,7 @@ msgstr "Redigering"
 
 #: src/widgets/gradient-selector.cpp:143
 msgid "Add"
-msgstr "Tilføj"
+msgstr "TilfÃ¸j"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientUnitsAttribute
 #: src/widgets/gradient-selector.cpp:167
@@ -4575,7 +4575,7 @@ msgstr "Ingen"
 #: src/widgets/gradient-selector.cpp:207
 #, fuzzy
 msgid "reflected"
-msgstr "Første valgt"
+msgstr "FÃ¸rste valgt"
 
 #: src/widgets/gradient-selector.cpp:211
 #, fuzzy
@@ -4599,7 +4599,7 @@ msgstr "Sidste valgt"
 #: src/widgets/gradient-vector.cpp:536
 #, fuzzy
 msgid "No stops in gradient"
-msgstr "Tilføj ny farveovergang"
+msgstr "TilfÃ¸j ny farveovergang"
 
 #: src/widgets/gradient-vector.cpp:757
 #, fuzzy
@@ -4647,17 +4647,17 @@ msgstr "Ensfarvet"
 #: src/widgets/paint-selector.cpp:172 src/widgets/paint-selector.cpp:795
 #, fuzzy
 msgid "Linear gradient"
-msgstr "Tilføj ny farveovergang"
+msgstr "TilfÃ¸j ny farveovergang"
 
 #: src/widgets/paint-selector.cpp:174 src/widgets/paint-selector.cpp:798
 #, fuzzy
 msgid "Radial gradient"
-msgstr "Tilføj ny farveovergang"
+msgstr "TilfÃ¸j ny farveovergang"
 
 #: src/widgets/paint-selector.cpp:176
 #, fuzzy
 msgid "Pattern Fill"
-msgstr "Mønsterfyld"
+msgstr "MÃ¸nsterfyld"
 
 #: src/widgets/paint-selector.cpp:625
 #, fuzzy
@@ -4667,7 +4667,7 @@ msgstr "Tekstobjekt"
 #: src/widgets/paint-selector.cpp:636
 #, fuzzy
 msgid "Multiple styles"
-msgstr "Stíl for fyld"
+msgstr "StÃ­l for fyld"
 
 #. TRANSLATORS: "Clone" is a noun here. This message is to notify the user
 #. that the currently selected object is a clone.
@@ -4684,7 +4684,7 @@ msgstr "Unavngivet dokument %d"
 #: src/widgets/paint-selector.cpp:983
 #, fuzzy
 msgid "Pattern fill"
-msgstr "Mønsterfyld"
+msgstr "MÃ¸nsterfyld"
 
 #: src/widgets/sp-color-gtkselector.cpp:60
 msgid "System"
@@ -4709,7 +4709,7 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:380 src/widgets/sp-color-scales.cpp:381
 #, fuzzy
 msgid "Red"
-msgstr "Rød:"
+msgstr "RÃ¸d:"
 
 #: src/widgets/sp-color-scales.cpp:382
 msgid "_G"
@@ -4718,7 +4718,7 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:383 src/widgets/sp-color-scales.cpp:384
 #, fuzzy
 msgid "Green"
-msgstr "Grøn:"
+msgstr "GrÃ¸n:"
 
 #: src/widgets/sp-color-scales.cpp:385
 msgid "_B"
@@ -4727,7 +4727,7 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:386 src/widgets/sp-color-scales.cpp:387
 #, fuzzy
 msgid "Blue"
-msgstr "Blå:"
+msgstr "BlÃ¥:"
 
 #. Label
 #: src/widgets/sp-color-scales.cpp:388 src/widgets/sp-color-scales.cpp:413
@@ -4751,7 +4751,7 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:405 src/widgets/sp-color-scales.cpp:406
 #, fuzzy
 msgid "Hue"
-msgstr "Glød:"
+msgstr "GlÃ¸d:"
 
 #: src/widgets/sp-color-scales.cpp:407
 msgid "_S"
@@ -4760,7 +4760,7 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:408 src/widgets/sp-color-scales.cpp:409
 #, fuzzy
 msgid "Saturation"
-msgstr "Mætning:"
+msgstr "MÃ¦tning:"
 
 #: src/widgets/sp-color-scales.cpp:410
 msgid "_V"
@@ -4822,13 +4822,13 @@ msgstr "Attributter"
 
 #: src/widgets/sp-xmlview-attr-list.cpp:59
 msgid "Value"
-msgstr "Værdi"
+msgstr "VÃ¦rdi"
 
 #~ msgid "Snap to grid"
-#~ msgstr "Fastsæt til gitter"
+#~ msgstr "FastsÃ¦t til gitter"
 
 #~ msgid "Snap to guides"
-#~ msgstr "Fastsæt til hjælpelinier"
+#~ msgstr "FastsÃ¦t til hjÃ¦lpelinier"
 
 #, fuzzy
 #~ msgid "Inkscape"
@@ -4836,19 +4836,19 @@ msgstr "Værdi"
 
 #, fuzzy
 #~ msgid "Owner"
-#~ msgstr "Rækkefølge"
+#~ msgstr "RÃ¦kkefÃ¸lge"
 
 #, fuzzy
 #~ msgid "_Menu"
-#~ msgstr "_Åbn"
+#~ msgstr "_Ã…bn"
 
 #, fuzzy
 #~ msgid "Pattern:"
-#~ msgstr "Mønsterfyld"
+#~ msgstr "MÃ¸nsterfyld"
 
 #, fuzzy
 #~ msgid "Snap points to the grid"
-#~ msgstr "Fastsæt til gitter"
+#~ msgstr "FastsÃ¦t til gitter"
 
 #, fuzzy
 #~ msgid "Sharpness:"
@@ -4872,7 +4872,7 @@ msgstr "Værdi"
 
 #, fuzzy
 #~ msgid "Vertical lines"
-#~ msgstr "Lodret centreringsværdi"
+#~ msgstr "Lodret centreringsvÃ¦rdi"
 
 #, fuzzy
 #~ msgid "Userspace unit"
@@ -4892,7 +4892,7 @@ msgstr "Værdi"
 
 #, fuzzy
 #~ msgid "Show or hide rulers"
-#~ msgstr "Vis hjælpelinier"
+#~ msgstr "Vis hjÃ¦lpelinier"
 
 #, fuzzy
 #~ msgid "_New Window"
@@ -4905,7 +4905,7 @@ msgstr "Værdi"
 #~ msgstr "Alfa:"
 
 #~ msgid "Value:"
-#~ msgstr "Værdi:"
+#~ msgstr "VÃ¦rdi:"
 
 #, fuzzy
 #~ msgid "Stroke settings"
@@ -4944,7 +4944,7 @@ msgstr "Værdi"
 
 #, fuzzy
 #~ msgid "Align and distribute objects"
-#~ msgstr "Tilføj attribut"
+#~ msgstr "TilfÃ¸j attribut"
 
 #, fuzzy
 #~ msgid "Text editing and font settings"
@@ -4952,7 +4952,7 @@ msgstr "Værdi"
 
 #, fuzzy
 #~ msgid "Fill Rule"
-#~ msgstr "Stíl for fyld"
+#~ msgstr "StÃ­l for fyld"
 
 #, fuzzy
 #~ msgid "Tool has no options"
@@ -4980,7 +4980,7 @@ msgstr "Værdi"
 
 #, fuzzy
 #~ msgid "Reset tool options to defaults"
-#~ msgstr "Gensæt dialog til standard - ctrl+r"
+#~ msgstr "GensÃ¦t dialog til standard - ctrl+r"
 
 #, fuzzy
 #~ msgid "Inkscape _Options"
@@ -5013,8 +5013,8 @@ msgstr "Værdi"
 #~ "neither load nor save preferences\n"
 #~ msgstr ""
 #~ "%s er ikke en almindelig fil.\n"
-#~ "Selvom sodipodi vil køre, kan du\n"
-#~ "hverken indlæse eller gemme indstillinger\n"
+#~ "Selvom sodipodi vil kÃ¸re, kan du\n"
+#~ "hverken indlÃ¦se eller gemme indstillinger\n"
 
 #, fuzzy
 #~ msgid ""
@@ -5025,9 +5025,9 @@ msgstr "Værdi"
 #~ "preferences."
 #~ msgstr ""
 #~ "%s er ikke en gyldig xml-fil eller\n"
-#~ "du har ikke læserettigheder til den.\n"
-#~ "Selvom sodipodi vil køre, kan du\n"
-#~ "hverken indlæse eller gemme indstillinger."
+#~ "du har ikke lÃ¦serettigheder til den.\n"
+#~ "Selvom sodipodi vil kÃ¸re, kan du\n"
+#~ "hverken indlÃ¦se eller gemme indstillinger."
 
 #, fuzzy
 #~ msgid ""
@@ -5037,8 +5037,8 @@ msgstr "Værdi"
 #~ "preferences."
 #~ msgstr ""
 #~ "%s er ikke en gyldig sodipodi-indstillingsfil.\n"
-#~ "Selvom sodipodi vil køre, kan du\n"
-#~ "hverken indlæse eller gemme indstillinger."
+#~ "Selvom sodipodi vil kÃ¸re, kan du\n"
+#~ "hverken indlÃ¦se eller gemme indstillinger."
 
 #, fuzzy
 #~ msgid ""
@@ -5048,8 +5048,8 @@ msgstr "Værdi"
 #~ "%s."
 #~ msgstr ""
 #~ "Kan ikke oprette kataloget %s.\n"
-#~ "Selvom sodipodi vil køre, kan du\n"
-#~ "hverken indlæse eller gemme indstillinger."
+#~ "Selvom sodipodi vil kÃ¸re, kan du\n"
+#~ "hverken indlÃ¦se eller gemme indstillinger."
 
 #, fuzzy
 #~ msgid ""
@@ -5059,8 +5059,8 @@ msgstr "Værdi"
 #~ "preferences."
 #~ msgstr ""
 #~ "%s er ikke et gyldigt katalog.\n"
-#~ "Selvom sodipodi vil køre, kan du\n"
-#~ "hverken indlæse eller gemme indstillinger."
+#~ "Selvom sodipodi vil kÃ¸re, kan du\n"
+#~ "hverken indlÃ¦se eller gemme indstillinger."
 
 #, fuzzy
 #~ msgid ""
@@ -5070,8 +5070,8 @@ msgstr "Værdi"
 #~ "preferences."
 #~ msgstr ""
 #~ "Kan ikke oprette fil %s.\n"
-#~ "Selvom sodipodi vil køre, kan du\n"
-#~ "hverken indlæse eller gemme indstillinger."
+#~ "Selvom sodipodi vil kÃ¸re, kan du\n"
+#~ "hverken indlÃ¦se eller gemme indstillinger."
 
 #, fuzzy
 #~ msgid ""
@@ -5081,15 +5081,15 @@ msgstr "Værdi"
 #~ "preferences."
 #~ msgstr ""
 #~ "Kan ikke skrive fil %s.\n"
-#~ "Selvom sodipodi vil køre, kan du\n"
-#~ "hverken indlæse eller gemme indstillinger."
+#~ "Selvom sodipodi vil kÃ¸re, kan du\n"
+#~ "hverken indlÃ¦se eller gemme indstillinger."
 
 #~ msgid "End color"
 #~ msgstr "Slutfarve"
 
 #, fuzzy
 #~ msgid "Make sides flat"
-#~ msgstr "Gør følsom"
+#~ msgstr "GÃ¸r fÃ¸lsom"
 
 #~ msgid "Bring to _Front"
 #~ msgstr "Hent til _front"
@@ -5105,7 +5105,7 @@ msgstr "Værdi"
 #~ msgstr "Sodipodi: %s: %s: %d"
 
 #~ msgid "Document %s has unsaved changes, save them?"
-#~ msgstr "Dokument %s har ugemte ændringer, skal de gemmes?"
+#~ msgstr "Dokument %s har ugemte Ã¦ndringer, skal de gemmes?"
 
 #, fuzzy
 #~ msgid "Object Size and Position"
@@ -5144,14 +5144,14 @@ msgstr "Værdi"
 #~ msgstr "Opdel gruppe"
 
 #~ msgid "Link"
-#~ msgstr "Lænke"
+#~ msgstr "LÃ¦nke"
 
 #~ msgid "Fill settings"
 #~ msgstr "Indstillinger for fyld"
 
 #, fuzzy
 #~ msgid "Break line at selected nodes"
-#~ msgstr "Krøl linje ved valgte knuder"
+#~ msgstr "KrÃ¸l linje ved valgte knuder"
 
 #~ msgid "New"
 #~ msgstr "Ny"
@@ -5166,27 +5166,27 @@ msgstr "Værdi"
 
 #, fuzzy
 #~ msgid "Lower selected objects to bottom"
-#~ msgstr "Sænk det valgte til bunden"
+#~ msgstr "SÃ¦nk det valgte til bunden"
 
 #, fuzzy
 #~ msgid "Raise selected objects one position"
-#~ msgstr "Hæv det valgte op til toppen"
+#~ msgstr "HÃ¦v det valgte op til toppen"
 
 #, fuzzy
 #~ msgid "Lower selected objects one position"
-#~ msgstr "Sænk det valgte til bunden"
+#~ msgstr "SÃ¦nk det valgte til bunden"
 
 #, fuzzy
 #~ msgid "Combine"
-#~ msgstr "_Kombinér"
+#~ msgstr "_KombinÃ©r"
 
 #, fuzzy
 #~ msgid "Edit path nodes in selected object"
-#~ msgstr "Redigér udformning for valgte ting"
+#~ msgstr "RedigÃ©r udformning for valgte ting"
 
 #, fuzzy
 #~ msgid "Draw freehand curves and straight lines"
-#~ msgstr "Tegn frihåndslinje"
+#~ msgstr "Tegn frihÃ¥ndslinje"
 
 #, fuzzy
 #~ msgid "In"
@@ -5215,7 +5215,7 @@ msgstr "Værdi"
 
 #, fuzzy
 #~ msgid "Editing window properties"
-#~ msgstr "Egenskaber for lænke"
+#~ msgstr "Egenskaber for lÃ¦nke"
 
 #, fuzzy
 #~ msgid "Tool Attributes"
@@ -5240,11 +5240,11 @@ msgstr "Værdi"
 #~ msgstr "Vis gitter"
 
 #~ msgid "Display settings"
-#~ msgstr "Indstillinger for skærm"
+#~ msgstr "Indstillinger for skÃ¦rm"
 
 #, fuzzy
 #~ msgid "Export png file"
-#~ msgstr "Eksportér fil"
+#~ msgstr "EksportÃ©r fil"
 
 #, fuzzy
 #~ msgid "Object style"
@@ -5263,11 +5263,11 @@ msgstr "Værdi"
 
 #, fuzzy
 #~ msgid "New Docked Toolbox"
-#~ msgstr "Vis Værktøjskasse"
+#~ msgstr "Vis VÃ¦rktÃ¸jskasse"
 
 #, fuzzy
 #~ msgid "Drawing Mode"
-#~ msgstr "Tegnesammenhæng"
+#~ msgstr "TegnesammenhÃ¦ng"
 
 #, fuzzy
 #~ msgid ""
@@ -5276,8 +5276,8 @@ msgstr "Værdi"
 #~ "not able to use extensions (plugins)\n"
 #~ msgstr ""
 #~ "%s er ikke en almindelig fil.\n"
-#~ "Selvom sodipodi vil køre, kan du\n"
-#~ "hverken indlæse eller gemme indstillinger\n"
+#~ "Selvom sodipodi vil kÃ¸re, kan du\n"
+#~ "hverken indlÃ¦se eller gemme indstillinger\n"
 
 #, fuzzy
 #~ msgid ""
@@ -5287,9 +5287,9 @@ msgstr "Værdi"
 #~ "not able to use extensions (plugins)\n"
 #~ msgstr ""
 #~ "%s er ikke en gyldig xml-fil eller\n"
-#~ "du har ikke læserettigheder til den.\n"
-#~ "Selvom sodipodi vil køre, kan du\n"
-#~ "hverken indlæse eller gemme indstillinger."
+#~ "du har ikke lÃ¦serettigheder til den.\n"
+#~ "Selvom sodipodi vil kÃ¸re, kan du\n"
+#~ "hverken indlÃ¦se eller gemme indstillinger."
 
 #, fuzzy
 #~ msgid ""
@@ -5298,8 +5298,8 @@ msgstr "Værdi"
 #~ "not able to use extensions (plugins)\n"
 #~ msgstr ""
 #~ "%s er ikke en gyldig sodipodi-indstillingsfil.\n"
-#~ "Selvom sodipodi vil køre, kan du\n"
-#~ "hverken indlæse eller gemme indstillinger."
+#~ "Selvom sodipodi vil kÃ¸re, kan du\n"
+#~ "hverken indlÃ¦se eller gemme indstillinger."
 
 #, fuzzy
 #~ msgid ""
@@ -5308,8 +5308,8 @@ msgstr "Værdi"
 #~ "not able to use extensions (plugins)\n"
 #~ msgstr ""
 #~ "Kan ikke oprette kataloget %s.\n"
-#~ "Selvom sodipodi vil køre, kan du\n"
-#~ "hverken indlæse eller gemme indstillinger."
+#~ "Selvom sodipodi vil kÃ¸re, kan du\n"
+#~ "hverken indlÃ¦se eller gemme indstillinger."
 
 #, fuzzy
 #~ msgid ""
@@ -5318,8 +5318,8 @@ msgstr "Værdi"
 #~ "not able to use extensions (plugins)\n"
 #~ msgstr ""
 #~ "%s er ikke et gyldigt katalog.\n"
-#~ "Selvom sodipodi vil køre, kan du\n"
-#~ "hverken indlæse eller gemme indstillinger."
+#~ "Selvom sodipodi vil kÃ¸re, kan du\n"
+#~ "hverken indlÃ¦se eller gemme indstillinger."
 
 #, fuzzy
 #~ msgid ""
@@ -5328,8 +5328,8 @@ msgstr "Værdi"
 #~ "not able to use extensions (plugins)\n"
 #~ msgstr ""
 #~ "Kan ikke oprette fil %s.\n"
-#~ "Selvom sodipodi vil køre, kan du\n"
-#~ "hverken indlæse eller gemme indstillinger."
+#~ "Selvom sodipodi vil kÃ¸re, kan du\n"
+#~ "hverken indlÃ¦se eller gemme indstillinger."
 
 #, fuzzy
 #~ msgid ""
@@ -5338,8 +5338,8 @@ msgstr "Værdi"
 #~ "not able to use extensions (plugins)\n"
 #~ msgstr ""
 #~ "Kan ikke skrive fil %s.\n"
-#~ "Selvom sodipodi vil køre, kan du\n"
-#~ "hverken indlæse eller gemme indstillinger."
+#~ "Selvom sodipodi vil kÃ¸re, kan du\n"
+#~ "hverken indlÃ¦se eller gemme indstillinger."
 
 #~ msgid "Unknown item :-("
 #~ msgstr "Ukendt element :-("
@@ -5360,7 +5360,7 @@ msgstr "Værdi"
 
 #, fuzzy
 #~ msgid "Convert to Curves"
-#~ msgstr "Konvertér til ku_rver"
+#~ msgstr "KonvertÃ©r til ku_rver"
 
 #, fuzzy
 #~ msgid "Zoom in drawing"
@@ -5379,7 +5379,7 @@ msgstr "Værdi"
 #~ msgstr "Zoom til 2:1"
 
 #~ msgid "Display"
-#~ msgstr "Skærm"
+#~ msgstr "SkÃ¦rm"
 
 #~ msgid "Document"
 #~ msgstr "Dokument"
@@ -5420,7 +5420,7 @@ msgstr "Værdi"
 #~ msgstr "_Bryd op"
 
 #~ msgid "Dynahand"
-#~ msgstr "Dynamisk frihånd"
+#~ msgstr "Dynamisk frihÃ¥nd"
 
 #, fuzzy
 #~ msgid "Align Objects"
@@ -5432,7 +5432,7 @@ msgstr "Værdi"
 
 #, fuzzy
 #~ msgid "Raise selected objects one level"
-#~ msgstr "Drej valgte ting 90° med uret"
+#~ msgstr "Drej valgte ting 90Â° med uret"
 
 #, fuzzy
 #~ msgid "Lower selected objects one level"
@@ -5440,14 +5440,14 @@ msgstr "Værdi"
 
 #, fuzzy
 #~ msgid "Select tool - select and transform objects"
-#~ msgstr "Vælg og transformér"
+#~ msgstr "VÃ¦lg og transformÃ©r"
 
 #, fuzzy
 #~ msgid "Save as:"
 #~ msgstr "Gem"
 
 #~ msgid "A path - whatever it means"
-#~ msgstr "En sti - hvad det så end betyder"
+#~ msgstr "En sti - hvad det sÃ¥ end betyder"
 
 #~ msgid "Welcome !"
 #~ msgstr "Velkommen!"
@@ -5459,31 +5459,31 @@ msgstr "Værdi"
 #~ msgstr "Sodipodi SVG-dokument fabrik"
 
 #~ msgid "Align objects to vertical mid"
-#~ msgstr "Justér objekter til lodret midte"
+#~ msgstr "JustÃ©r objekter til lodret midte"
 
 #~ msgid "Align outside object to bottom border"
-#~ msgstr "Justér ydre objekt til bundkant"
+#~ msgstr "JustÃ©r ydre objekt til bundkant"
 
 #~ msgid "Align outside object to left border"
-#~ msgstr "Justér ydre objekt til venstre kant"
+#~ msgstr "JustÃ©r ydre objekt til venstre kant"
 
 #~ msgid "Align outside object to right border"
-#~ msgstr "Justér ydre objekt til højre kant"
+#~ msgstr "JustÃ©r ydre objekt til hÃ¸jre kant"
 
 #~ msgid "Align outside object to top border"
-#~ msgstr "Justér ydre objekt til topkant"
+#~ msgstr "JustÃ©r ydre objekt til topkant"
 
 #~ msgid "Alignment base"
 #~ msgstr "Basis for justering"
 
 #~ msgid "Choose align type"
-#~ msgstr "Vælg justeringstype"
+#~ msgstr "VÃ¦lg justeringstype"
 
 #~ msgid "Parent X ="
-#~ msgstr "Forælder X ="
+#~ msgstr "ForÃ¦lder X ="
 
 #~ msgid "Parent Y ="
-#~ msgstr "Forælder Y ="
+#~ msgstr "ForÃ¦lder Y ="
 
 #~ msgid "X +"
 #~ msgstr "X +"
@@ -5498,7 +5498,7 @@ msgstr "Værdi"
 #~ msgstr " Generelt "
 
 #~ msgid "Add new gradient"
-#~ msgstr "Tilføj ny farveovergang"
+#~ msgstr "TilfÃ¸j ny farveovergang"
 
 #~ msgid "Behind fill"
 #~ msgstr "Baggrundsfyld"
@@ -5507,10 +5507,10 @@ msgstr "Værdi"
 #~ msgstr "Afstumpede endepunkter"
 
 #~ msgid "Choose fill color"
-#~ msgstr "Vælg farve for udfyldning"
+#~ msgstr "VÃ¦lg farve for udfyldning"
 
 #~ msgid "Choose stroke color"
-#~ msgstr "Vælg farve for strøg"
+#~ msgstr "VÃ¦lg farve for strÃ¸g"
 
 #~ msgid "Color fill"
 #~ msgstr "Farvefyld"
@@ -5537,16 +5537,16 @@ msgstr "Værdi"
 #~ msgstr "Uden fyld"
 
 #~ msgid "Pick fill color"
-#~ msgstr "Vælg farve for udfyldning"
+#~ msgstr "VÃ¦lg farve for udfyldning"
 
 #~ msgid "Pick stroke color"
-#~ msgstr "Vælg en farve for streger"
+#~ msgstr "VÃ¦lg en farve for streger"
 
 #~ msgid "Reread"
-#~ msgstr "Genlæs"
+#~ msgstr "GenlÃ¦s"
 
 #~ msgid "Scale with object"
-#~ msgstr "Skalér med objekt"
+#~ msgstr "SkalÃ©r med objekt"
 
 #~ msgid "Stroke"
 #~ msgstr "Skravering"
@@ -5570,22 +5570,22 @@ msgstr "Værdi"
 #~ msgstr "Et niveau tilbage"
 
 #~ msgid "Convert selected segments to curves"
-#~ msgstr "Konvertér valgte segmenter til kurver"
+#~ msgstr "KonvertÃ©r valgte segmenter til kurver"
 
 #~ msgid "Convert selected segments to lines"
-#~ msgstr "Konvertér valgte segmenter til linier"
+#~ msgstr "KonvertÃ©r valgte segmenter til linier"
 
 #~ msgid "Cusp line at selected nodes"
-#~ msgstr "Krøl linje ved valgte knuder"
+#~ msgstr "KrÃ¸l linje ved valgte knuder"
 
 #~ msgid "Desktop"
 #~ msgstr "Skrivebord"
 
 #~ msgid "Drawing Context"
-#~ msgstr "Tegnesammenhæng"
+#~ msgstr "TegnesammenhÃ¦ng"
 
 #~ msgid "Export picture to png"
-#~ msgstr "Eksportér billede til png"
+#~ msgstr "EksportÃ©r billede til png"
 
 #~ msgid "Exported as"
 #~ msgstr "Eksporteret som"
@@ -5594,10 +5594,10 @@ msgstr "Værdi"
 #~ msgstr "Et niveau frem"
 
 #~ msgid "Image size"
-#~ msgstr "Billedstørrelse"
+#~ msgstr "BilledstÃ¸rrelse"
 
 #~ msgid "Include one node into selected segments"
-#~ msgstr "Inkludér en knude i valgte segmenter"
+#~ msgstr "InkludÃ©r en knude i valgte segmenter"
 
 #~ msgid "Join 2 selected endpoints"
 #~ msgstr "Forbind 2 valgte endepunkter"
@@ -5606,19 +5606,19 @@ msgstr "Værdi"
 #~ msgstr "Png filnavn"
 
 #~ msgid "Set dimensions"
-#~ msgstr "Sæt dimensioner"
+#~ msgstr "SÃ¦t dimensioner"
 
 #~ msgid "Smooth line at selected nodes"
-#~ msgstr "Udjævn linje ved valgte knuder"
+#~ msgstr "UdjÃ¦vn linje ved valgte knuder"
 
 #~ msgid "Symmetric "
 #~ msgstr "Symmetrisk"
 
 #~ msgid "Uncompressed file size:"
-#~ msgstr "Ukomprimeret filstørrelse:"
+#~ msgstr "Ukomprimeret filstÃ¸rrelse:"
 
 #~ msgid "Where to export"
-#~ msgstr "Eksportmål"
+#~ msgstr "EksportmÃ¥l"
 
 #~ msgid "Width"
 #~ msgstr "Bredde"
@@ -5630,7 +5630,7 @@ msgstr "Værdi"
 #~ msgstr "X1"
 
 #~ msgid "XML Tree"
-#~ msgstr "XML-træ"
+#~ msgstr "XML-trÃ¦"
 
 #~ msgid "Y0"
 #~ msgstr "Y0"
@@ -5639,28 +5639,28 @@ msgstr "Værdi"
 #~ msgstr "Y1"
 
 #~ msgid "_Align"
-#~ msgstr "_Justér"
+#~ msgstr "_JustÃ©r"
 
 #~ msgid "Align dialog"
-#~ msgstr "Justér dialog"
+#~ msgstr "JustÃ©r dialog"
 
 #~ msgid "Break apart selected paths"
 #~ msgstr "Opbryd valgte knude"
 
 #~ msgid "Drawing context"
-#~ msgstr "Tegnesammenhæng"
+#~ msgstr "TegnesammenhÃ¦ng"
 
 #~ msgid "Edit fill style of selected objects"
-#~ msgstr "Redigér udfyldningsstil for valgte ting"
+#~ msgstr "RedigÃ©r udfyldningsstil for valgte ting"
 
 #~ msgid "Edit font style of selected objects"
-#~ msgstr "Redigér skriftsnitstil for valgte ting"
+#~ msgstr "RedigÃ©r skriftsnitstil for valgte ting"
 
 #~ msgid "Edit stroke style of selected objects"
-#~ msgstr "Redigér stregningsstil for valgte ting"
+#~ msgstr "RedigÃ©r stregningsstil for valgte ting"
 
 #~ msgid "Import "
-#~ msgstr "Importér "
+#~ msgstr "ImportÃ©r "
 
 #~ msgid "New drawing"
 #~ msgstr "Ny tegning"
@@ -5672,10 +5672,10 @@ msgstr "Værdi"
 #~ msgstr "Niks!"
 
 #~ msgid "Open new drawing"
-#~ msgstr "Åben ny tegning"
+#~ msgstr "Ã…ben ny tegning"
 
 #~ msgid "Paste from clipboard"
-#~ msgstr "Indsæt fra klippebord"
+#~ msgstr "IndsÃ¦t fra klippebord"
 
 #~ msgid "Preview print drawing"
 #~ msgstr "Smugkig udskriftstegning"
@@ -5688,7 +5688,7 @@ msgstr "Værdi"
 
 #, fuzzy
 #~ msgid "Rotate selected objects 90deg clockwise"
-#~ msgstr "Drej valgte ting 90° med uret"
+#~ msgstr "Drej valgte ting 90Â° med uret"
 
 #~ msgid "Save drawing "
 #~ msgstr "Gem tegning "
@@ -5701,43 +5701,43 @@ msgstr "Værdi"
 
 #~ msgid "Yes quick! I want to leave sodipodi and come back later."
 #~ msgstr ""
-#~ "Ja, hurtigt! Jeg ønsker at forlade Sodipodi og komme tilbage senere."
+#~ "Ja, hurtigt! Jeg Ã¸nsker at forlade Sodipodi og komme tilbage senere."
 
 #~ msgid "Zoom to page"
 #~ msgstr "Zoom til side"
 
 #~ msgid "Align to bottom left"
-#~ msgstr "Justér til nederst til venstre"
+#~ msgstr "JustÃ©r til nederst til venstre"
 
 #~ msgid "Align to bottom middle"
-#~ msgstr "Justér til nederst for midten"
+#~ msgstr "JustÃ©r til nederst for midten"
 
 #~ msgid "Align to bottom right"
-#~ msgstr "Justér til nederst til højre"
+#~ msgstr "JustÃ©r til nederst til hÃ¸jre"
 
 #~ msgid "Align to center"
-#~ msgstr "Justér til center"
+#~ msgstr "JustÃ©r til center"
 
 #~ msgid "Align to left middle"
-#~ msgstr "Justér til venstre for midte"
+#~ msgstr "JustÃ©r til venstre for midte"
 
 #~ msgid "Align to right middle"
-#~ msgstr "Justér til højre midte"
+#~ msgstr "JustÃ©r til hÃ¸jre midte"
 
 #~ msgid "Align to top left"
-#~ msgstr "Justér til øverst til venstre"
+#~ msgstr "JustÃ©r til Ã¸verst til venstre"
 
 #~ msgid "Align to top middle"
-#~ msgstr "Justér til øverst på midten"
+#~ msgstr "JustÃ©r til Ã¸verst pÃ¥ midten"
 
 #~ msgid "Align to top right"
-#~ msgstr "Justér til øverst til højre"
+#~ msgstr "JustÃ©r til Ã¸verst til hÃ¸jre"
 
 #~ msgid "Apply transformation to copy Ctl+m"
 #~ msgstr "Anvend transformation ved kopiering - ctrl+m"
 
 #~ msgid "Choose metric for center"
-#~ msgstr "Vælg måleenhed for centrering"
+#~ msgstr "VÃ¦lg mÃ¥leenhed for centrering"
 
 #~ msgid "Close dialog - Ctl+c"
 #~ msgstr "Luk dialog - ctrl+c"
@@ -5746,13 +5746,13 @@ msgstr "Værdi"
 #~ msgstr "Udvid dialog - ctrl+e"
 
 #~ msgid "Height: "
-#~ msgstr "Højde: "
+#~ msgstr "HÃ¸jde: "
 
 #~ msgid "Keep height of selection during transformation"
-#~ msgstr "Behold højde på det valgte under transformering"
+#~ msgstr "Behold hÃ¸jde pÃ¥ det valgte under transformering"
 
 #~ msgid "Keep width of selection during transformation"
-#~ msgstr "Behold bredde på det valgte under transformering"
+#~ msgstr "Behold bredde pÃ¥ det valgte under transformering"
 
 #~ msgid "Orig. Width: "
 #~ msgstr "Oprindelig bredde: "
@@ -5761,13 +5761,13 @@ msgstr "Værdi"
 #~ msgstr "Udgangspunkt X: "
 
 #~ msgid "Set angle to 0 degrees"
-#~ msgstr "Sæt vinkel til 0°"
+#~ msgstr "SÃ¦t vinkel til 0Â°"
 
 #~ msgid "Set angle to 180 degrees"
-#~ msgstr "Sæt vinkel til 180°"
+#~ msgstr "SÃ¦t vinkel til 180Â°"
 
 #~ msgid "Set angle to 270 degrees"
-#~ msgstr "Sæt vinkel til 270°"
+#~ msgstr "SÃ¦t vinkel til 270Â°"
 
 #~ msgid "Skew"
 #~ msgstr "Drej"
@@ -5791,25 +5791,25 @@ msgstr "Værdi"
 #~ msgstr "absolut"
 
 #~ msgid "horizontal scale value"
-#~ msgstr "vandret skalaværdi"
+#~ msgstr "vandret skalavÃ¦rdi"
 
 #~ msgid "keep aspect"
 #~ msgstr "behold aspekt"
 
 #~ msgid "lock/unlock horizontal and vertical scale"
-#~ msgstr "lås/åbn vandret og lodret skala"
+#~ msgstr "lÃ¥s/Ã¥bn vandret og lodret skala"
 
 #~ msgid "select direction"
-#~ msgstr "vælg retning"
+#~ msgstr "vÃ¦lg retning"
 
 #~ msgid "select direction (horizontal/vertical skew)"
-#~ msgstr "vælg retning (vandret/lodret drejning)"
+#~ msgstr "vÃ¦lg retning (vandret/lodret drejning)"
 
 #~ msgid "select metric for scale"
-#~ msgstr "vælg måleenged for skala"
+#~ msgstr "vÃ¦lg mÃ¥leenged for skala"
 
 #~ msgid "select metric for values"
-#~ msgstr "vælg måleenhed for værdier"
+#~ msgstr "vÃ¦lg mÃ¥leenhed for vÃ¦rdier"
 
 #~ msgid "skew"
 #~ msgstr "drej"
@@ -5821,40 +5821,40 @@ msgstr "Værdi"
 #~ msgstr "skift mellem absolut/relativ skala"
 
 #~ msgid "vertical scale value"
-#~ msgstr "lodret skalaværdi"
+#~ msgstr "lodret skalavÃ¦rdi"
 
 #~ msgid "Change"
-#~ msgstr "Ændr"
+#~ msgstr "Ã†ndr"
 
 #~ msgid "Change Attribute"
-#~ msgstr "Ændr attribut"
+#~ msgstr "Ã†ndr attribut"
 
 #, fuzzy
 #~ msgid "Change Content"
-#~ msgstr "Tegnesammenhæng"
+#~ msgstr "TegnesammenhÃ¦ng"
 
 #~ msgid "Content"
 #~ msgstr "Indhold"
 
 #~ msgid "Do you want to delete attribute?"
-#~ msgstr "Ønsker du at slette attributten?"
+#~ msgstr "Ã˜nsker du at slette attributten?"
 
 #~ msgid "Hierarchy"
 #~ msgstr "Hierarki"
 
 #~ msgid "Key"
-#~ msgstr "Nøgle"
+#~ msgstr "NÃ¸gle"
 
 #~ msgid "Don't save"
 #~ msgstr "Gem ikke"
 
 #, fuzzy
 #~ msgid "You can't delete 'id' attribute!"
-#~ msgstr "Ønsker du at slette attributten?"
+#~ msgstr "Ã˜nsker du at slette attributten?"
 
 #, fuzzy
 #~ msgid "Do you want to delete attribute %s?"
-#~ msgstr "Ønsker du at slette attributten?"
+#~ msgstr "Ã˜nsker du at slette attributten?"
 
 #, fuzzy
 #~ msgid "No"
@@ -5862,55 +5862,55 @@ msgstr "Værdi"
 
 #, fuzzy
 #~ msgid "Do you want to delete element %s?"
-#~ msgstr "Ønsker du at slette attributten?"
+#~ msgstr "Ã˜nsker du at slette attributten?"
 
 #~ msgid "\""
 #~ msgstr "\""
 
 #~ msgid "Choose base unit system for grid"
-#~ msgstr "Vælg basismåleenhed for gitter"
+#~ msgstr "VÃ¦lg basismÃ¥leenhed for gitter"
 
 #~ msgid "Choose color for grid"
-#~ msgstr "Vælg farve for gitter"
+#~ msgstr "VÃ¦lg farve for gitter"
 
 #~ msgid "Choose color for guidelines"
-#~ msgstr "Vælg farve for hjælpelinjer"
+#~ msgstr "VÃ¦lg farve for hjÃ¦lpelinjer"
 
 #~ msgid "Choose color for highlighted guidelines"
-#~ msgstr "Vælg farve for fremhævede hjælpelinjer"
+#~ msgstr "VÃ¦lg farve for fremhÃ¦vede hjÃ¦lpelinjer"
 
 #~ msgid "Choose unit system for grid snapping"
-#~ msgstr "Vælg måleenhed for fastgørelse til gitter"
+#~ msgstr "VÃ¦lg mÃ¥leenhed for fastgÃ¸relse til gitter"
 
 #~ msgid "Choose unit system for guideline snapping"
-#~ msgstr "Vælg måleenhed for fastgørelse til hjælpelinjer"
+#~ msgstr "VÃ¦lg mÃ¥leenhed for fastgÃ¸relse til hjÃ¦lpelinjer"
 
 #~ msgid "Set distance between horizontal grid lines"
-#~ msgstr "Sæt afstanden mellem vandrette gitterlinjer"
+#~ msgstr "SÃ¦t afstanden mellem vandrette gitterlinjer"
 
 #~ msgid "Set distance between vertical grid lines"
-#~ msgstr "Sæt afstanden mellem lodrette gitterlinjer"
+#~ msgstr "SÃ¦t afstanden mellem lodrette gitterlinjer"
 
 #~ msgid "Set maximum distance for grid snapping"
-#~ msgstr "Sæt største afstand for påsættelse til gitter"
+#~ msgstr "SÃ¦t stÃ¸rste afstand for pÃ¥sÃ¦ttelse til gitter"
 
 #~ msgid "Set maximum distance for guideline snapping"
-#~ msgstr "Vælg største afstand for fastgørelse til hjælpelinjer"
+#~ msgstr "VÃ¦lg stÃ¸rste afstand for fastgÃ¸relse til hjÃ¦lpelinjer"
 
 #~ msgid "Set origin of page coordinate system"
-#~ msgstr "Sæt udgangspunkt for koordinatsystem for siden"
+#~ msgstr "SÃ¦t udgangspunkt for koordinatsystem for siden"
 
 #~ msgid "A4"
 #~ msgstr "A4"
 
 #~ msgid "Choose paper size"
-#~ msgstr "Vælg papirstørrelse"
+#~ msgstr "VÃ¦lg papirstÃ¸rrelse"
 
 #~ msgid "Choose unit system"
-#~ msgstr "Vælg måleenhed"
+#~ msgstr "VÃ¦lg mÃ¥leenhed"
 
 #~ msgid "Set page height"
-#~ msgstr "Sæt sidehøjde"
+#~ msgstr "SÃ¦t sidehÃ¸jde"
 
 #~ msgid "Draw ellipse"
 #~ msgstr "Tegn ellipse"
@@ -5928,7 +5928,7 @@ msgstr "Værdi"
 #~ msgstr "Tom"
 
 #~ msgid "Do not use GUI. NB! if exist, should be FIRST argument!"
-#~ msgstr "Brug ikke GUI. NB! hvis det angives bør dette være FØRSTE argument!"
+#~ msgstr "Brug ikke GUI. NB! hvis det angives bÃ¸r dette vÃ¦re FÃ˜RSTE argument!"
 
 #~ msgid "Could not initialize Bonobo"
 #~ msgstr "Kunne ikke initialisere Bonobo"

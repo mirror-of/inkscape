@@ -11,7 +11,7 @@ msgstr ""
 "Last-Translator: Lauris Kaplinski <lauris@ariman.ee>\n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-15\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: inkscape.desktop.in.h:1
@@ -112,7 +112,7 @@ msgstr ""
 #: src/dialogs/desktop-properties.cpp:869 src/dialogs/export.cpp:123
 #, fuzzy
 msgid "Page"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/desktop.cpp:2006 src/dialogs/align.cpp:448 src/dialogs/export.cpp:123
 #, fuzzy
@@ -357,7 +357,7 @@ msgstr "Sodipodi"
 #: src/dialogs/desktop-properties.cpp:966
 #, fuzzy
 msgid "Portrait"
-msgstr "Trüki"
+msgstr "TrÃ¼ki"
 
 #. Custom paper frame
 #: src/dialogs/desktop-properties.cpp:975
@@ -718,7 +718,7 @@ msgstr "Salvesta"
 #: src/dialogs/display-settings.cpp:936 src/sp-rect.cpp:259 src/verbs.cpp:953
 #, fuzzy
 msgid "Rectangle"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #. Ellipse
 #: src/dialogs/display-settings.cpp:939 src/sp-ellipse.cpp:443
@@ -755,7 +755,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:971 src/verbs.cpp:963
 #, fuzzy
 msgid "Pen"
-msgstr "Trüki"
+msgstr "TrÃ¼ki"
 
 #: src/dialogs/display-settings.cpp:978 src/dialogs/object-properties.cpp:287
 #: src/verbs.cpp:967
@@ -868,7 +868,7 @@ msgstr "_Selektsioon"
 #: src/dialogs/display-settings.cpp:1096
 #, fuzzy
 msgid "Scale stroke width"
-msgstr "Trüki"
+msgstr "TrÃ¼ki"
 
 #: src/dialogs/display-settings.cpp:1097
 msgid "When scaling objects, scale the stroke width by the same proportion"
@@ -1018,7 +1018,7 @@ msgstr ""
 #: src/dialogs/export.cpp:429
 #, fuzzy
 msgid "Filename"
-msgstr "Trükib faili"
+msgstr "TrÃ¼kib faili"
 
 #: src/dialogs/export.cpp:491
 msgid "Browse..."
@@ -1083,7 +1083,7 @@ msgstr "Shrift"
 #: src/dialogs/fill-style.cpp:172
 #, fuzzy
 msgid "Fill:"
-msgstr "Värv"
+msgstr "VÃ¤rv"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
 #: src/dialogs/fill-style.cpp:183
@@ -1147,12 +1147,12 @@ msgstr ""
 #: src/dialogs/find.cpp:521
 #, fuzzy
 msgid "Search rectangles"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/dialogs/find.cpp:521
 #, fuzzy
 msgid "Rectangles"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/dialogs/find.cpp:526
 msgid "Search ellipses, arcs, circles"
@@ -1174,7 +1174,7 @@ msgstr "Piirjoon"
 #: src/dialogs/find.cpp:536
 #, fuzzy
 msgid "Search spirals"
-msgstr "Üldine"
+msgstr "Ãœldine"
 
 #: src/dialogs/find.cpp:536
 msgid "Spirals"
@@ -1220,7 +1220,7 @@ msgstr ""
 #: src/dialogs/find.cpp:569
 #, fuzzy
 msgid "Images"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/dialogs/find.cpp:574
 #, fuzzy
@@ -1317,7 +1317,7 @@ msgstr ""
 #: src/dialogs/item-properties.cpp:178
 #, fuzzy
 msgid "Printable"
-msgstr "Trükib faili"
+msgstr "TrÃ¼kib faili"
 
 #: src/dialogs/item-properties.cpp:196
 msgid "Opacity:"
@@ -1369,7 +1369,7 @@ msgstr ""
 #: src/dialogs/object-attributes.cpp:41
 #, fuzzy
 msgid "Title:"
-msgstr "Värv"
+msgstr "VÃ¤rv"
 
 #: src/dialogs/object-attributes.cpp:42
 msgid "Show:"
@@ -1387,12 +1387,12 @@ msgstr ""
 #: src/dialogs/object-attributes.cpp:50 src/dialogs/object-attributes.cpp:61
 #, fuzzy
 msgid "Center X:"
-msgstr "Üldine"
+msgstr "Ãœldine"
 
 #: src/dialogs/object-attributes.cpp:51 src/dialogs/object-attributes.cpp:62
 #, fuzzy
 msgid "Center Y:"
-msgstr "Üldine"
+msgstr "Ãœldine"
 
 #: src/dialogs/object-attributes.cpp:52
 #, fuzzy
@@ -1465,12 +1465,12 @@ msgstr ""
 
 #: src/dialogs/object-properties.cpp:207
 msgid "Fill"
-msgstr "Värv"
+msgstr "VÃ¤rv"
 
 #: src/dialogs/object-properties.cpp:212
 #, fuzzy
 msgid "Stroke paint"
-msgstr "Trüki"
+msgstr "TrÃ¼ki"
 
 #: src/dialogs/object-properties.cpp:217
 #, fuzzy
@@ -1493,7 +1493,7 @@ msgstr ""
 #: src/dialogs/object-properties.cpp:251
 #, fuzzy
 msgid "Rectangle tool"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/dialogs/object-properties.cpp:257
 msgid "Arc tool"
@@ -1518,7 +1518,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:206
 #, fuzzy
 msgid "Title"
-msgstr "Värv"
+msgstr "VÃ¤rv"
 
 #: src/dialogs/rdf.cpp:207
 msgid "Name by which this document is formally known."
@@ -1536,7 +1536,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:212
 #, fuzzy
 msgid "Format"
-msgstr "Värvimine"
+msgstr "VÃ¤rvimine"
 
 #: src/dialogs/rdf.cpp:213
 msgid "The physical or digital manifestation of this document (MIME type)."
@@ -1553,7 +1553,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:219
 #, fuzzy
 msgid "Creator"
-msgstr "Üldine"
+msgstr "Ãœldine"
 
 #: src/dialogs/rdf.cpp:220
 msgid ""
@@ -1580,7 +1580,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:229
 #, fuzzy
 msgid "Identifier"
-msgstr "Üldine"
+msgstr "Ãœldine"
 
 #: src/dialogs/rdf.cpp:230
 msgid "Unique URI to reference this document."
@@ -1606,7 +1606,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:238
 #, fuzzy
 msgid "Language"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/dialogs/rdf.cpp:239
 msgid ""
@@ -1645,7 +1645,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:255
 #, fuzzy
 msgid "Contributors"
-msgstr "Üldine"
+msgstr "Ãœldine"
 
 #: src/dialogs/rdf.cpp:256
 msgid ""
@@ -1680,7 +1680,7 @@ msgstr ""
 #: src/dialogs/stroke-style.cpp:1387
 #, fuzzy
 msgid "Stroke width"
-msgstr "Trüki"
+msgstr "TrÃ¼ki"
 
 #. Join type
 #. TRANSLATORS: The line join style specifies the shape to be used at the
@@ -1816,7 +1816,7 @@ msgstr ""
 #: src/dialogs/transformation.cpp:528
 #, fuzzy
 msgid "Relative move"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/dialogs/transformation.cpp:829
 msgid "deg"
@@ -1856,7 +1856,7 @@ msgstr ""
 #: src/dialogs/xml-tree.cpp:342
 #, fuzzy
 msgid "Raise node"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/dialogs/xml-tree.cpp:354
 msgid "Lower node"
@@ -1886,12 +1886,12 @@ msgstr "Uus fail"
 #: src/dialogs/xml-tree.cpp:1193
 #, fuzzy
 msgid "Cancel"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/dialogs/xml-tree.cpp:1199
 #, fuzzy
 msgid "Create"
-msgstr "Üldine"
+msgstr "Ãœldine"
 
 #: src/document.cpp:428
 #, fuzzy, c-format
@@ -1998,18 +1998,18 @@ msgstr "_Selektsioon"
 #: src/extension/internal/gnome.cpp:124
 #, fuzzy
 msgid "Inkscape: Print Preview"
-msgstr "Trükib faili"
+msgstr "TrÃ¼kib faili"
 
 #: src/extension/internal/ps.cpp:110
 #, fuzzy
 msgid "Print Destination"
-msgstr "Trükib faili"
+msgstr "TrÃ¼kib faili"
 
 #. Print properties frame
 #: src/extension/internal/ps.cpp:124
 #, fuzzy
 msgid "Print properties"
-msgstr "Trükib faili"
+msgstr "TrÃ¼kib faili"
 
 #: src/extension/internal/ps.cpp:132
 msgid "Print using PostScript operators"
@@ -2047,7 +2047,7 @@ msgstr "_Selektsioon"
 #: src/extension/internal/ps.cpp:174
 #, fuzzy
 msgid "Print destination"
-msgstr "Trükib faili"
+msgstr "TrÃ¼kib faili"
 
 #: src/extension/internal/ps.cpp:180
 msgid ""
@@ -2161,12 +2161,12 @@ msgstr ""
 #: src/helper/units.cpp:35
 #, fuzzy
 msgid "Point"
-msgstr "Trüki"
+msgstr "TrÃ¼ki"
 
 #: src/helper/units.cpp:35
 #, fuzzy
 msgid "Points"
-msgstr "Trüki"
+msgstr "TrÃ¼ki"
 
 #: src/helper/units.cpp:35
 msgid "Pt"
@@ -2189,12 +2189,12 @@ msgstr ""
 #: src/helper/units.cpp:39
 #, fuzzy
 msgid "Percent"
-msgstr "Trüki"
+msgstr "TrÃ¼ki"
 
 #: src/helper/units.cpp:39
 #, fuzzy
 msgid "Percents"
-msgstr "Trüki"
+msgstr "TrÃ¼ki"
 
 #: src/helper/units.cpp:40
 msgid "Millimeter"
@@ -2219,12 +2219,12 @@ msgstr ""
 #: src/helper/units.cpp:41
 #, fuzzy
 msgid "Centimeters"
-msgstr "Üldine"
+msgstr "Ãœldine"
 
 #: src/helper/units.cpp:42
 #, fuzzy
 msgid "Meter"
-msgstr "Üldine"
+msgstr "Ãœldine"
 
 #: src/helper/units.cpp:42
 msgid "m"
@@ -2233,7 +2233,7 @@ msgstr ""
 #: src/helper/units.cpp:42
 #, fuzzy
 msgid "Meters"
-msgstr "Üldine"
+msgstr "Ãœldine"
 
 #: src/helper/units.cpp:43
 msgid "Inch"
@@ -2627,7 +2627,7 @@ msgstr "Kustutab valitud objekti(d)"
 #: src/object-ui.cpp:107
 #, fuzzy
 msgid "Item _Properties"
-msgstr "Trükib faili"
+msgstr "TrÃ¼kib faili"
 
 #. Select item
 #: src/object-ui.cpp:117
@@ -2652,7 +2652,7 @@ msgstr ""
 #: src/object-ui.cpp:138
 #, fuzzy
 msgid "_Create Link"
-msgstr "Üldine"
+msgstr "Ãœldine"
 
 #. "Ungroup"
 #: src/object-ui.cpp:241 src/verbs.cpp:875
@@ -2664,7 +2664,7 @@ msgstr "Vabasta"
 #: src/object-ui.cpp:282
 #, fuzzy
 msgid "Link _Properties"
-msgstr "Trükib faili"
+msgstr "TrÃ¼kib faili"
 
 #. Select item
 #: src/object-ui.cpp:292
@@ -2680,7 +2680,7 @@ msgstr ""
 #: src/object-ui.cpp:346
 #, fuzzy
 msgid "Image _Properties"
-msgstr "Värvimine"
+msgstr "VÃ¤rvimine"
 
 #. Autotrace dialog
 #: src/object-ui.cpp:354
@@ -2697,19 +2697,19 @@ msgstr "Piirjoon"
 #: src/object-ui.cpp:415
 #, fuzzy
 msgid "Rectangle _Properties"
-msgstr "Trükib faili"
+msgstr "TrÃ¼kib faili"
 
 #. Link dialog
 #: src/object-ui.cpp:441
 #, fuzzy
 msgid "Star _Properties"
-msgstr "Värvimine"
+msgstr "VÃ¤rvimine"
 
 #. Link dialog
 #: src/object-ui.cpp:467
 #, fuzzy
 msgid "Spiral _Properties"
-msgstr "Värvimine"
+msgstr "VÃ¤rvimine"
 
 #: src/path-chemistry.cpp:58
 #, fuzzy
@@ -3307,7 +3307,7 @@ msgstr ""
 #: src/toolbox.cpp:1763
 #, fuzzy
 msgid "Angle:"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/toolbox.cpp:1763
 msgid "The angle of the calligraphic pen (in degrees)"
@@ -3491,7 +3491,7 @@ msgstr ""
 #: src/verbs.cpp:810
 #, fuzzy
 msgid "_Print..."
-msgstr "Trüki"
+msgstr "TrÃ¼ki"
 
 #: src/verbs.cpp:810
 #, fuzzy
@@ -3501,7 +3501,7 @@ msgstr "Shrift"
 #: src/verbs.cpp:812
 #, fuzzy
 msgid "Print _Direct"
-msgstr "Trükib faili"
+msgstr "TrÃ¼kib faili"
 
 #: src/verbs.cpp:813
 msgid "Print directly to file or pipe"
@@ -3510,7 +3510,7 @@ msgstr ""
 #: src/verbs.cpp:814
 #, fuzzy
 msgid "Print Previe_w"
-msgstr "Trükib faili"
+msgstr "TrÃ¼kib faili"
 
 #: src/verbs.cpp:815
 #, fuzzy
@@ -3611,7 +3611,7 @@ msgstr "Tee jooneks"
 #: src/verbs.cpp:837
 #, fuzzy
 msgid "_Paste"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/verbs.cpp:838
 msgid "Paste object(s) from clipboard to mouse point"
@@ -3753,7 +3753,7 @@ msgstr "Kustutab valitud objekti(d)"
 #: src/verbs.cpp:869
 #, fuzzy
 msgid "_Raise"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/verbs.cpp:870
 #, fuzzy
@@ -3782,7 +3782,7 @@ msgstr "Kustutab valitud objekti(d)"
 #: src/verbs.cpp:876
 #, fuzzy
 msgid "Ungroup selected group(s)"
-msgstr "Lõhub valitud grupi objektideks"
+msgstr "LÃµhub valitud grupi objektideks"
 
 #: src/verbs.cpp:878
 msgid "_Union"
@@ -3791,7 +3791,7 @@ msgstr ""
 #: src/verbs.cpp:879
 #, fuzzy
 msgid "Union of selected objects"
-msgstr "Lõhub valitud grupi objektideks"
+msgstr "LÃµhub valitud grupi objektideks"
 
 #: src/verbs.cpp:880
 #, fuzzy
@@ -3951,7 +3951,7 @@ msgstr "Grupeerib valitud objektid"
 #: src/verbs.cpp:924
 #, fuzzy
 msgid "_Reverse"
-msgstr "Värv"
+msgstr "VÃ¤rv"
 
 #: src/verbs.cpp:925
 #, fuzzy
@@ -3960,7 +3960,7 @@ msgstr "Kustutab valitud objekti(d)"
 
 #: src/verbs.cpp:926
 msgid "_Combine"
-msgstr "Ühenda"
+msgstr "Ãœhenda"
 
 #: src/verbs.cpp:927
 msgid "Combine several paths into one"
@@ -4070,7 +4070,7 @@ msgstr ""
 #: src/verbs.cpp:960
 #, fuzzy
 msgid "Create spirals (F9)"
-msgstr "Üldine"
+msgstr "Ãœldine"
 
 #: src/verbs.cpp:962
 msgid "Draw freehand lines (F6)"
@@ -4124,7 +4124,7 @@ msgstr "Suurendus"
 #: src/verbs.cpp:977
 #, fuzzy
 msgid "_Rulers"
-msgstr "Värv"
+msgstr "VÃ¤rv"
 
 #: src/verbs.cpp:977
 msgid "Show or hide the canvas rulers"
@@ -4231,7 +4231,7 @@ msgstr "Uus aken"
 #. "view_new_preview"
 #: src/verbs.cpp:999
 msgid "_Page"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/verbs.cpp:1000
 msgid "Zoom to fit page in window"
@@ -4273,7 +4273,7 @@ msgstr "Sodipodi"
 #: src/verbs.cpp:1009
 #, fuzzy
 msgid "Global Inkscape preferences"
-msgstr "Värvimine"
+msgstr "VÃ¤rvimine"
 
 #: src/verbs.cpp:1010
 msgid "_Document Preferences..."
@@ -4335,7 +4335,7 @@ msgstr ""
 #: src/verbs.cpp:1022
 #, fuzzy
 msgid "_Find..."
-msgstr "Trüki"
+msgstr "TrÃ¼ki"
 
 #: src/verbs.cpp:1023
 #, fuzzy
@@ -4353,12 +4353,12 @@ msgstr ""
 #: src/verbs.cpp:1026
 #, fuzzy
 msgid "_Object Properties..."
-msgstr "Trükib faili"
+msgstr "TrÃ¼kib faili"
 
 #: src/verbs.cpp:1027
 #, fuzzy
 msgid "Object Properties dialog"
-msgstr "Trükib faili"
+msgstr "TrÃ¼kib faili"
 
 #. Help
 #: src/verbs.cpp:1030
@@ -4415,12 +4415,12 @@ msgstr ""
 #: src/widgets/dash-selector.cpp:104
 #, fuzzy
 msgid "Dash pattern"
-msgstr "Trüki"
+msgstr "TrÃ¼ki"
 
 #: src/widgets/dash-selector.cpp:119
 #, fuzzy
 msgid "Pattern offset"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #. Family frame
 #: src/widgets/font-selector.cpp:154
@@ -4469,7 +4469,7 @@ msgstr ""
 #: src/widgets/gradient-selector.cpp:184
 #, fuzzy
 msgid "Coordinates:"
-msgstr "Värvimine"
+msgstr "VÃ¤rvimine"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
 #: src/widgets/gradient-selector.cpp:197
@@ -4492,7 +4492,7 @@ msgstr "Grupeerib valitud objektid"
 #: src/widgets/gradient-selector.cpp:211
 #, fuzzy
 msgid "direct"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/widgets/gradient-selector.cpp:219
 msgid "Repeat:"
@@ -4540,12 +4540,12 @@ msgstr ""
 #: src/widgets/gradient-vector.cpp:846
 #, fuzzy
 msgid "Gradient editor"
-msgstr "Trüki"
+msgstr "TrÃ¼ki"
 
 #: src/widgets/paint-selector.cpp:168 src/widgets/paint-selector.cpp:660
 #, fuzzy
 msgid "No paint"
-msgstr "Trüki"
+msgstr "TrÃ¼ki"
 
 #: src/widgets/paint-selector.cpp:170 src/widgets/paint-selector.cpp:728
 msgid "Flat color"
@@ -4562,7 +4562,7 @@ msgstr ""
 #: src/widgets/paint-selector.cpp:176
 #, fuzzy
 msgid "Pattern Fill"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/widgets/paint-selector.cpp:625
 #, fuzzy
@@ -4588,7 +4588,7 @@ msgstr "Shrift"
 #: src/widgets/paint-selector.cpp:983
 #, fuzzy
 msgid "Pattern fill"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/widgets/sp-color-gtkselector.cpp:60
 msgid "System"
@@ -4679,7 +4679,7 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:432 src/widgets/sp-color-scales.cpp:433
 #, fuzzy
 msgid "Cyan"
-msgstr "Lehekülg"
+msgstr "LehekÃ¼lg"
 
 #: src/widgets/sp-color-scales.cpp:434
 msgid "_M"
@@ -4704,7 +4704,7 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:441 src/widgets/sp-color-scales.cpp:442
 #, fuzzy
 msgid "Black"
-msgstr "Vii kõige taha"
+msgstr "Vii kÃµige taha"
 
 #: src/widgets/sp-color-selector.cpp:66
 msgid "Unnamed"
@@ -4729,7 +4729,7 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "Owner"
-#~ msgstr "Järjekord"
+#~ msgstr "JÃ¤rjekord"
 
 #, fuzzy
 #~ msgid "_Menu"
@@ -4737,7 +4737,7 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "Pattern:"
-#~ msgstr "Lehekülg"
+#~ msgstr "LehekÃ¼lg"
 
 #, fuzzy
 #~ msgid "Sharpness:"
@@ -4745,7 +4745,7 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "Rect"
-#~ msgstr "Lehekülg"
+#~ msgstr "LehekÃ¼lg"
 
 #, fuzzy
 #~ msgid "Rects"
@@ -4753,7 +4753,7 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "meters"
-#~ msgstr "Üldine"
+#~ msgstr "Ãœldine"
 
 #, fuzzy
 #~ msgid "Horizontal lines"
@@ -4761,7 +4761,7 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "Ru_lers"
-#~ msgstr "Värv"
+#~ msgstr "VÃ¤rv"
 
 #, fuzzy
 #~ msgid "Mode:"
@@ -4776,7 +4776,7 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "Color paint"
-#~ msgstr "Värvimine"
+#~ msgstr "VÃ¤rvimine"
 
 #, fuzzy
 #~ msgid "Delete selected objects"
@@ -4807,7 +4807,7 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "Fill Rule"
-#~ msgstr "Värv"
+#~ msgstr "VÃ¤rv"
 
 #, fuzzy
 #~ msgid "Selected object is not stroked, cannot outline."
@@ -4827,13 +4827,13 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "gradientUnits"
-#~ msgstr "Trüki"
+#~ msgstr "TrÃ¼ki"
 
 #~ msgid "Bring to _Front"
-#~ msgstr "Too kõige ette"
+#~ msgstr "Too kÃµige ette"
 
 #~ msgid "Send to _Back"
-#~ msgstr "Vii kõige taha"
+#~ msgstr "Vii kÃµige taha"
 
 #, fuzzy
 #~ msgid "Save file"
@@ -4841,11 +4841,11 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "Angle"
-#~ msgstr "Lehekülg"
+#~ msgstr "LehekÃ¼lg"
 
 #, fuzzy
 #~ msgid "File"
-#~ msgstr "Värv"
+#~ msgstr "VÃ¤rv"
 
 #, fuzzy
 #~ msgid "Ungroup"
@@ -4871,11 +4871,11 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "Bring to Front"
-#~ msgstr "Too kõige ette"
+#~ msgstr "Too kÃµige ette"
 
 #, fuzzy
 #~ msgid "Send to Back"
-#~ msgstr "Vii kõige taha"
+#~ msgstr "Vii kÃµige taha"
 
 #, fuzzy
 #~ msgid "Lower selected objects one position"
@@ -4883,7 +4883,7 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "Combine"
-#~ msgstr "Ühenda"
+#~ msgstr "Ãœhenda"
 
 #, fuzzy
 #~ msgid "Edit path nodes in selected object"
@@ -4907,7 +4907,7 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "Display settings"
-#~ msgstr "Värvimine"
+#~ msgstr "VÃ¤rvimine"
 
 #, fuzzy
 #~ msgid "Export png file"
@@ -4931,7 +4931,7 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "Zoom in drawing"
-#~ msgstr "Trükib faili"
+#~ msgstr "TrÃ¼kib faili"
 
 #, fuzzy
 #~ msgid "Set zoom factor to 1:2"
@@ -4943,7 +4943,7 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "Display"
-#~ msgstr "Värvimine"
+#~ msgstr "VÃ¤rvimine"
 
 #, fuzzy
 #~ msgid "Document"
@@ -4979,7 +4979,7 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid " General "
-#~ msgstr "Üldine"
+#~ msgstr "Ãœldine"
 
 #, fuzzy
 #~ msgid "Butt endpoints"
@@ -4987,15 +4987,15 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "Endpoints:"
-#~ msgstr "Trüki"
+#~ msgstr "TrÃ¼ki"
 
 #, fuzzy
 #~ msgid "Fractal fill"
-#~ msgstr "Värvimine"
+#~ msgstr "VÃ¤rvimine"
 
 #, fuzzy
 #~ msgid "Gradient fill"
-#~ msgstr "Trüki"
+#~ msgstr "TrÃ¼ki"
 
 #~ msgid "Is stroked"
 #~ msgstr "Piirjoon"
@@ -5005,11 +5005,11 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "centimeter"
-#~ msgstr "Üldine"
+#~ msgstr "Ãœldine"
 
 #, fuzzy
 #~ msgid "points"
-#~ msgstr "Trüki"
+#~ msgstr "TrÃ¼ki"
 
 #~ msgid "Back One"
 #~ msgstr "Tahapoole"
@@ -5047,7 +5047,7 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "Png file name"
-#~ msgstr "Trükib faili"
+#~ msgstr "TrÃ¼kib faili"
 
 #, fuzzy
 #~ msgid "Smooth line at selected nodes"
@@ -5091,7 +5091,7 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "absolute"
-#~ msgstr "Lehekülg"
+#~ msgstr "LehekÃ¼lg"
 
 #, fuzzy
 #~ msgid "select direction"
@@ -5135,7 +5135,7 @@ msgstr "Skaala"
 #~ msgstr "Korraldus"
 
 #~ msgid "_Order"
-#~ msgstr "Järjekord"
+#~ msgstr "JÃ¤rjekord"
 
 #, fuzzy
 #~ msgid "Groups selected items"
@@ -5150,11 +5150,11 @@ msgstr "Skaala"
 
 #, fuzzy
 #~ msgid "To Front"
-#~ msgstr "Too kõige ette"
+#~ msgstr "Too kÃµige ette"
 
 #~ msgid ""
 #~ "Feature not yet implemented :-(\n"
 #~ "Maybe in next release?"
 #~ msgstr ""
-#~ "Seda võimalust pole veel tehtud :-(\n"
-#~ "Ehk järgmises versioonis..."
+#~ "Seda vÃµimalust pole veel tehtud :-(\n"
+#~ "Ehk jÃ¤rgmises versioonis..."

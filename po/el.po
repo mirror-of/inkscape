@@ -11,7 +11,7 @@ msgstr ""
 "Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-7\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: inkscape.desktop.in.h:1
@@ -25,13 +25,13 @@ msgstr ""
 #: src/arc-context.cpp:467
 #, fuzzy, c-format
 msgid "Draw arc: %s x %s"
-msgstr "Ημέρα έναρξης:"
+msgstr "Ξ—ΞΌΞ­ΟΞ± Ξ­Ξ½Ξ±ΟΞΎΞ·Ο‚:"
 
 #. TRANSLATORS: object factory is an object that produces other objects
 #: src/bonobo/svg-doc-factory.cpp:39
 #, fuzzy
 msgid "Could not create sodipodi-svg-doc factory"
-msgstr "Δεν ήταν δυνατή η δημιουργία του εργοστασίου επεξεργασίας συστατικού"
+msgstr "Ξ”ΞµΞ½ Ξ®Ο„Ξ±Ξ½ Ξ΄Ο…Ξ½Ξ±Ο„Ξ® Ξ· Ξ΄Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ο„ΞΏΟ… ΞµΟΞ³ΞΏΟƒΟ„Ξ±ΟƒΞ―ΞΏΟ… ΞµΟ€ΞµΞΎΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚ ΟƒΟ…ΟƒΟ„Ξ±Ο„ΞΉΞΊΞΏΟ"
 
 #: src/desktop-events.cpp:252
 #, c-format
@@ -41,16 +41,16 @@ msgstr ""
 #: src/desktop-events.cpp:446
 #, fuzzy, c-format
 msgid "Move %s"
-msgstr "Μετακίνηση"
+msgstr "ΞΞµΟ„Ξ±ΞΊΞ―Ξ½Ξ·ΟƒΞ·"
 
 #: src/desktop.cpp:876
 #, fuzzy
 msgid "Zoom drawing if window size changes"
-msgstr "Αλλαγή κλίμακας για _ταίριασμα"
+msgstr "Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® ΞΊΞ»Ξ―ΞΌΞ±ΞΊΞ±Ο‚ Ξ³ΞΉΞ± _Ο„Ξ±Ξ―ΟΞΉΞ±ΟƒΞΌΞ±"
 
 #: src/desktop.cpp:898 src/dialogs/display-settings.cpp:923 src/verbs.cpp:969
 msgid "Zoom"
-msgstr "Εστίαση"
+msgstr "Ξ•ΟƒΟ„Ξ―Ξ±ΟƒΞ·"
 
 #. FIXME: gtk seems to be unable to display tooltips for labels, let's hope they'll fix it sometime
 #: src/desktop.cpp:922
@@ -61,7 +61,7 @@ msgstr ""
 #: src/desktop.cpp:929
 #, fuzzy
 msgid "Active group"
-msgstr "Ενεργό"
+msgstr "Ξ•Ξ½ΞµΟΞ³Ο"
 
 #. display the initial welcome message in the statusbar
 #: src/desktop.cpp:937
@@ -114,15 +114,15 @@ msgstr ""
 #: src/desktop.cpp:2002 src/dialogs/align.cpp:445
 #: src/dialogs/desktop-properties.cpp:869 src/dialogs/export.cpp:123
 msgid "Page"
-msgstr "Σελίδα"
+msgstr "Ξ£ΞµΞ»Ξ―Ξ΄Ξ±"
 
 #: src/desktop.cpp:2006 src/dialogs/align.cpp:448 src/dialogs/export.cpp:123
 msgid "Drawing"
-msgstr "Σχεδίαση"
+msgstr "Ξ£Ο‡ΞµΞ΄Ξ―Ξ±ΟƒΞ·"
 
 #: src/desktop.cpp:2010 src/dialogs/align.cpp:451 src/dialogs/export.cpp:123
 msgid "Selection"
-msgstr "Επιλογή"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®"
 
 #: src/dialogs/align.cpp:286
 msgid "Right side of aligned objects to left side of anchor"
@@ -135,7 +135,7 @@ msgstr ""
 #: src/dialogs/align.cpp:290
 #, fuzzy
 msgid "Center horizontally"
-msgstr "Οριζόντια αντιστροφή"
+msgstr "ΞΟΞΉΞ¶ΟΞ½Ο„ΞΉΞ± Ξ±Ξ½Ο„ΞΉΟƒΟ„ΟΞΏΟ†Ξ®"
 
 #: src/dialogs/align.cpp:292
 msgid "Right side of aligned objects to right side of anchor"
@@ -152,12 +152,12 @@ msgstr ""
 #: src/dialogs/align.cpp:299
 #, fuzzy
 msgid "Top of aligned objects to top of anchor"
-msgstr "Προσθήκη νέου αντικειμένου στη βάση"
+msgstr "Ξ ΟΞΏΟƒΞΈΞ®ΞΊΞ· Ξ½Ξ­ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ… ΟƒΟ„Ξ· Ξ²Ξ¬ΟƒΞ·"
 
 #: src/dialogs/align.cpp:301
 #, fuzzy
 msgid "Center vertically"
-msgstr "Κατακόρυφη αντιστροφή"
+msgstr "ΞΞ±Ο„Ξ±ΞΊΟΟΟ…Ο†Ξ· Ξ±Ξ½Ο„ΞΉΟƒΟ„ΟΞΏΟ†Ξ®"
 
 #: src/dialogs/align.cpp:303
 msgid "Bottom of aligned objects to bottom of anchor"
@@ -166,11 +166,11 @@ msgstr ""
 #: src/dialogs/align.cpp:305
 #, fuzzy
 msgid "Top of aligned objects to bottom of anchor"
-msgstr "Προσθήκη νέου αντικειμένου στη βάση"
+msgstr "Ξ ΟΞΏΟƒΞΈΞ®ΞΊΞ· Ξ½Ξ­ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ… ΟƒΟ„Ξ· Ξ²Ξ¬ΟƒΞ·"
 
 #: src/dialogs/align.cpp:320
 msgid "Align"
-msgstr "Στοίχιση"
+msgstr "Ξ£Ο„ΞΏΞ―Ο‡ΞΉΟƒΞ·"
 
 #: src/dialogs/align.cpp:341
 msgid "Distribute left sides of objects at even distances"
@@ -207,141 +207,141 @@ msgstr ""
 #: src/dialogs/align.cpp:396
 #, fuzzy
 msgid "Distribute"
-msgstr "Ιδιότητες"
+msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #
 #: src/dialogs/align.cpp:433
 #, fuzzy
 msgid "Last selected"
-msgstr "Επιλέχθησαν \"%s\""
+msgstr "Ξ•Ο€ΞΉΞ»Ξ­Ο‡ΞΈΞ·ΟƒΞ±Ξ½ \"%s\""
 
 #
 #: src/dialogs/align.cpp:436
 #, fuzzy
 msgid "First selected"
-msgstr "Επιλέχθησαν \"%s\""
+msgstr "Ξ•Ο€ΞΉΞ»Ξ­Ο‡ΞΈΞ·ΟƒΞ±Ξ½ \"%s\""
 
 #: src/dialogs/align.cpp:439
 #, fuzzy
 msgid "Biggest item"
-msgstr "Ρυθμός bit"
+msgstr "Ξ΅Ο…ΞΈΞΌΟΟ‚ bit"
 
 #: src/dialogs/align.cpp:442
 #, fuzzy
 msgid "Smallest item"
-msgstr "Μικρή καταιγίδα με χαλάζι"
+msgstr "ΞΞΉΞΊΟΞ® ΞΊΞ±Ο„Ξ±ΞΉΞ³Ξ―Ξ΄Ξ± ΞΌΞµ Ο‡Ξ±Ξ»Ξ¬Ξ¶ΞΉ"
 
 #. Notebook tab
 #: src/dialogs/desktop-properties.cpp:778
 msgid "Grid"
-msgstr "Πλέγμα"
+msgstr "Ξ Ξ»Ξ­Ξ³ΞΌΞ±"
 
 #. Checkbuttons
 #: src/dialogs/desktop-properties.cpp:786
 msgid "Show grid"
-msgstr "Εμφάνιση πλέγματος"
+msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· Ο€Ξ»Ξ­Ξ³ΞΌΞ±Ο„ΞΏΟ‚"
 
 #: src/dialogs/desktop-properties.cpp:787
 #, fuzzy
 msgid "Snap bounding boxes to grid"
-msgstr "Τοπο_θέτηση Σε Πλέγμα"
+msgstr "Ξ¤ΞΏΟ€ΞΏ_ΞΈΞ­Ο„Ξ·ΟƒΞ· Ξ£Ξµ Ξ Ξ»Ξ­Ξ³ΞΌΞ±"
 
 #: src/dialogs/desktop-properties.cpp:788
 #, fuzzy
 msgid "Snap points to grid"
-msgstr "Τοπο_θέτηση Σε Πλέγμα"
+msgstr "Ξ¤ΞΏΟ€ΞΏ_ΞΈΞ­Ο„Ξ·ΟƒΞ· Ξ£Ξµ Ξ Ξ»Ξ­Ξ³ΞΌΞ±"
 
 #
 #: src/dialogs/desktop-properties.cpp:806
 #, fuzzy
 msgid "Grid units:"
-msgstr "Γραμματοσειρά Πλέγματος"
+msgstr "Ξ“ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΞ¬ Ξ Ξ»Ξ­Ξ³ΞΌΞ±Ο„ΞΏΟ‚"
 
 #: src/dialogs/desktop-properties.cpp:808
 #, fuzzy
 msgid "Origin X:"
-msgstr "Προέλευση:"
+msgstr "Ξ ΟΞΏΞ­Ξ»ΞµΟ…ΟƒΞ·:"
 
 #: src/dialogs/desktop-properties.cpp:811
 #, fuzzy
 msgid "Origin Y:"
-msgstr "Προέλευση:"
+msgstr "Ξ ΟΞΏΞ­Ξ»ΞµΟ…ΟƒΞ·:"
 
 #
 #: src/dialogs/desktop-properties.cpp:814
 #, fuzzy
 msgid "Spacing X:"
-msgstr "Διάστιχο:"
+msgstr "Ξ”ΞΉΞ¬ΟƒΟ„ΞΉΟ‡ΞΏ:"
 
 #
 #: src/dialogs/desktop-properties.cpp:817
 #, fuzzy
 msgid "Spacing Y:"
-msgstr "Διάστιχο:"
+msgstr "Ξ”ΞΉΞ¬ΟƒΟ„ΞΉΟ‡ΞΏ:"
 
 #: src/dialogs/desktop-properties.cpp:821
 #: src/dialogs/desktop-properties.cpp:853
 #, fuzzy
 msgid "Snap units:"
-msgstr "Τοποθέτηση σε:"
+msgstr "Ξ¤ΞΏΟ€ΞΏΞΈΞ­Ο„Ξ·ΟƒΞ· ΟƒΞµ:"
 
 #: src/dialogs/desktop-properties.cpp:824
 #: src/dialogs/desktop-properties.cpp:856
 #, fuzzy
 msgid "Snap distance:"
-msgstr "Ίσες Αποστάσεις"
+msgstr "ΞΟƒΞµΟ‚ Ξ‘Ο€ΞΏΟƒΟ„Ξ¬ΟƒΞµΞΉΟ‚"
 
 #: src/dialogs/desktop-properties.cpp:827
 #, fuzzy
 msgid "Grid color:"
-msgstr " χρώμα"
+msgstr " Ο‡ΟΟΞΌΞ±"
 
 #: src/dialogs/desktop-properties.cpp:828
 #, fuzzy
 msgid "Grid color"
-msgstr " χρώμα"
+msgstr " Ο‡ΟΟΞΌΞ±"
 
 #. Guidelines page
 #: src/dialogs/desktop-properties.cpp:832
 #, fuzzy
 msgid "Guides"
-msgstr "Γουϊνέα"
+msgstr "Ξ“ΞΏΟ…ΟΞ½Ξ­Ξ±"
 
 #
 #: src/dialogs/desktop-properties.cpp:840
 #, fuzzy
 msgid "Show guides"
-msgstr "Εμφάνιση κόμβων-δ"
+msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· ΞΊΟΞΌΞ²Ο‰Ξ½-Ξ΄"
 
 #: src/dialogs/desktop-properties.cpp:841
 #, fuzzy
 msgid "Snap bounding boxes to guides"
-msgstr "Τοπο_θέτηση Σε Πλέγμα"
+msgstr "Ξ¤ΞΏΟ€ΞΏ_ΞΈΞ­Ο„Ξ·ΟƒΞ· Ξ£Ξµ Ξ Ξ»Ξ­Ξ³ΞΌΞ±"
 
 #: src/dialogs/desktop-properties.cpp:842
 #, fuzzy
 msgid "Snap points to guides"
-msgstr "Τοπο_θέτηση Σε Πλέγμα"
+msgstr "Ξ¤ΞΏΟ€ΞΏ_ΞΈΞ­Ο„Ξ·ΟƒΞ· Ξ£Ξµ Ξ Ξ»Ξ­Ξ³ΞΌΞ±"
 
 #: src/dialogs/desktop-properties.cpp:860
 #, fuzzy
 msgid "Guide color:"
-msgstr "Χρώμα μη-ολοκληρωμένων εγγραφών:"
+msgstr "Ξ§ΟΟΞΌΞ± ΞΌΞ·-ΞΏΞ»ΞΏΞΊΞ»Ξ·ΟΟ‰ΞΌΞ­Ξ½Ο‰Ξ½ ΞµΞ³Ξ³ΟΞ±Ο†ΟΞ½:"
 
 #: src/dialogs/desktop-properties.cpp:861
 #, fuzzy
 msgid "Guideline color"
-msgstr "Επιλογή χρώματος"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ο‡ΟΟΞΌΞ±Ο„ΞΏΟ‚"
 
 #: src/dialogs/desktop-properties.cpp:863
 #, fuzzy
 msgid "Highlight color:"
-msgstr "Χρώμα Μαρκαρίσματος"
+msgstr "Ξ§ΟΟΞΌΞ± ΞΞ±ΟΞΊΞ±ΟΞ―ΟƒΞΌΞ±Ο„ΞΏΟ‚"
 
 #: src/dialogs/desktop-properties.cpp:864
 #, fuzzy
 msgid "Highlighted guideline color"
-msgstr "Χρώμα Ψευδωνύμου σε Έμφαση"
+msgstr "Ξ§ΟΟΞΌΞ± Ξ¨ΞµΟ…Ξ΄Ο‰Ξ½ΟΞΌΞΏΟ… ΟƒΞµ ΞΞΌΟ†Ξ±ΟƒΞ·"
 
 #: src/dialogs/desktop-properties.cpp:878
 msgid "Background (also for export):"
@@ -350,22 +350,22 @@ msgstr ""
 #: src/dialogs/desktop-properties.cpp:879
 #, fuzzy
 msgid "Background color"
-msgstr " χρώμα"
+msgstr " Ο‡ΟΟΞΌΞ±"
 
 #: src/dialogs/desktop-properties.cpp:883
 #, fuzzy
 msgid "Show canvas border"
-msgstr "Εμφάνιση πλέγματος"
+msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· Ο€Ξ»Ξ­Ξ³ΞΌΞ±Ο„ΞΏΟ‚"
 
 #: src/dialogs/desktop-properties.cpp:886
 #, fuzzy
 msgid "Border on top of drawing"
-msgstr "Αλλαγή κλίμακας για _ταίριασμα"
+msgstr "Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® ΞΊΞ»Ξ―ΞΌΞ±ΞΊΞ±Ο‚ Ξ³ΞΉΞ± _Ο„Ξ±Ξ―ΟΞΉΞ±ΟƒΞΌΞ±"
 
 #: src/dialogs/desktop-properties.cpp:896
 #, fuzzy
 msgid "Border color:"
-msgstr " χρώμα"
+msgstr " Ο‡ΟΟΞΌΞ±"
 
 #: src/dialogs/desktop-properties.cpp:897
 msgid "Canvas border color"
@@ -374,41 +374,41 @@ msgstr ""
 #: src/dialogs/desktop-properties.cpp:913
 #, fuzzy
 msgid "Paper size:"
-msgstr "Μέγ. _χαρτιού:"
+msgstr "ΞΞ­Ξ³. _Ο‡Ξ±ΟΟ„ΞΉΞΏΟ:"
 
 # Translation of "custom" sucks!  ("kata paraggelia"???  nah!)
 #: src/dialogs/desktop-properties.cpp:937 src/dialogs/export.cpp:123
 msgid "Custom"
-msgstr "Προσαρμοσμένο"
+msgstr "Ξ ΟΞΏΟƒΞ±ΟΞΌΞΏΟƒΞΌΞ­Ξ½ΞΏ"
 
 #
 #: src/dialogs/desktop-properties.cpp:948
 #, fuzzy
 msgid "Paper orientation:"
-msgstr "Κορεσμός:"
+msgstr "ΞΞΏΟΞµΟƒΞΌΟΟ‚:"
 
 #: src/dialogs/desktop-properties.cpp:960
 #, fuzzy
 msgid "Landscape"
-msgstr "Συμπαγές"
+msgstr "Ξ£Ο…ΞΌΟ€Ξ±Ξ³Ξ­Ο‚"
 
 #: src/dialogs/desktop-properties.cpp:966
 #, fuzzy
 msgid "Portrait"
-msgstr "Σημείο"
+msgstr "Ξ£Ξ·ΞΌΞµΞ―ΞΏ"
 
 #. Custom paper frame
 #: src/dialogs/desktop-properties.cpp:975
 #, fuzzy
 msgid "Custom paper"
-msgstr "Διαστάσεις"
+msgstr "Ξ”ΞΉΞ±ΟƒΟ„Ξ¬ΟƒΞµΞΉΟ‚"
 
 #. Unit selector
 #: src/dialogs/desktop-properties.cpp:987 src/dialogs/export.cpp:250
 #: src/dialogs/transformation.cpp:519 src/dialogs/transformation.cpp:716
 #, fuzzy
 msgid "Units:"
-msgstr "&Μονάδες:"
+msgstr "&ΞΞΏΞ½Ξ¬Ξ΄ΞµΟ‚:"
 
 #. Stroke width
 #: src/dialogs/desktop-properties.cpp:989 src/dialogs/export.cpp:290
@@ -416,13 +416,13 @@ msgstr "&Μονάδες:"
 #: src/dialogs/object-attributes.cpp:84 src/dialogs/stroke-style.cpp:1380
 #: src/toolbox.cpp:1753
 msgid "Width:"
-msgstr "Πλάτος:"
+msgstr "Ξ Ξ»Ξ¬Ο„ΞΏΟ‚:"
 
 #: src/dialogs/desktop-properties.cpp:1011 src/dialogs/export.cpp:306
 #: src/dialogs/export.cpp:412 src/dialogs/object-attributes.cpp:77
 #: src/dialogs/object-attributes.cpp:85
 msgid "Height:"
-msgstr "Ύψος:"
+msgstr "ΞΟΞΏΟ‚:"
 
 #. end of former "document settings" stuff
 #.
@@ -436,7 +436,7 @@ msgstr ""
 #: src/dialogs/desktop-properties.cpp:1056
 #, fuzzy
 msgid "License"
-msgstr "ίντσα"
+msgstr "Ξ―Ξ½Ο„ΟƒΞ±"
 
 #: src/dialogs/desktop-properties.cpp:1086
 msgid "Proprietary"
@@ -445,18 +445,18 @@ msgstr ""
 #: src/dialogs/desktop-properties.cpp:1586
 #, fuzzy
 msgid "Close"
-msgstr "Νέα Προβολή"
+msgstr "ΞΞ­Ξ± Ξ ΟΞΏΞ²ΞΏΞ»Ξ®"
 
 #: src/dialogs/display-settings.cpp:201
 #, fuzzy
 msgid "When transforming, show:"
-msgstr "Μετασχηματισμός"
+msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #
 #: src/dialogs/display-settings.cpp:212
 #, fuzzy
 msgid "Objects"
-msgstr "Αντικείμενο"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞΊΞµΞ―ΞΌΞµΞ½ΞΏ"
 
 #: src/dialogs/display-settings.cpp:212
 msgid "Show the actual objects when moving or transforming"
@@ -466,7 +466,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:218
 #, fuzzy
 msgid "Box outline"
-msgstr "Εμφάνιση κόμβων-δ"
+msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· ΞΊΟΞΌΞ²Ο‰Ξ½-Ξ΄"
 
 #: src/dialogs/display-settings.cpp:218
 msgid "Show only a box outline of the objects when moving or transforming"
@@ -476,7 +476,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:223
 #, fuzzy
 msgid "Per-object selection cue:"
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #
 #. sorationsnapsperpi == 0 means no snapping
@@ -484,7 +484,7 @@ msgstr "Διαγραφή επιλεγμένου αντικειμένου"
 #: src/dialogs/display-settings.cpp:420 src/dialogs/display-settings.cpp:1206
 #: src/interface.cpp:1015 src/verbs.cpp:797
 msgid "None"
-msgstr "Κανένα"
+msgstr "ΞΞ±Ξ½Ξ­Ξ½Ξ±"
 
 #: src/dialogs/display-settings.cpp:234
 msgid "No per-object selection indication"
@@ -513,7 +513,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:262
 #, fuzzy
 msgid "Opposite bounding box edge"
-msgstr "Τοπο_θέτηση Σε Πλέγμα"
+msgstr "Ξ¤ΞΏΟ€ΞΏ_ΞΈΞ­Ο„Ξ·ΟƒΞ· Ξ£Ξµ Ξ Ξ»Ξ­Ξ³ΞΌΞ±"
 
 #: src/dialogs/display-settings.cpp:263
 msgid "Default scale origin will be on the bounding box of the item"
@@ -565,7 +565,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:624
 #, fuzzy
 msgid "Show selection cue"
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #: src/dialogs/display-settings.cpp:625
 msgid ""
@@ -576,7 +576,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:642
 #, fuzzy
 msgid "Picking colors:"
-msgstr "Διαλέξτε χρώμα"
+msgstr "Ξ”ΞΉΞ±Ξ»Ξ­ΞΎΟ„Ξµ Ο‡ΟΟΞΌΞ±"
 
 #: src/dialogs/display-settings.cpp:653
 msgid "Pick visible color (no alpha)"
@@ -602,12 +602,12 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:752
 #, fuzzy
 msgid "Mouse"
-msgstr "Μετακίνηση"
+msgstr "ΞΞµΟ„Ξ±ΞΊΞ―Ξ½Ξ·ΟƒΞ·"
 
 #: src/dialogs/display-settings.cpp:755
 #, fuzzy
 msgid "Grab sensitivity:"
-msgstr "Πεζά/κεφαλαία διαφέρουν"
+msgstr "Ξ ΞµΞ¶Ξ¬/ΞΊΞµΟ†Ξ±Ξ»Ξ±Ξ―Ξ± Ξ΄ΞΉΞ±Ο†Ξ­ΟΞΏΟ…Ξ½"
 
 #: src/dialogs/display-settings.cpp:756
 msgid ""
@@ -659,7 +659,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:810
 #, fuzzy
 msgid "Acceleration:"
-msgstr "Επιλογή"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®"
 
 #: src/dialogs/display-settings.cpp:811
 msgid ""
@@ -675,7 +675,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:828
 #, fuzzy
 msgid "Speed:"
-msgstr "Κόκκινο:"
+msgstr "ΞΟΞΊΞΊΞΉΞ½ΞΏ:"
 
 #: src/dialogs/display-settings.cpp:829
 msgid ""
@@ -697,7 +697,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:850
 #, fuzzy
 msgid "Steps"
-msgstr "Στυλ: "
+msgstr "Ξ£Ο„Ο…Ξ»: "
 
 #: src/dialogs/display-settings.cpp:853
 msgid "Arrow keys move by:"
@@ -713,7 +713,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:877 src/helper/units.cpp:35
 #, fuzzy
 msgid "pt"
-msgstr "στιγ."
+msgstr "ΟƒΟ„ΞΉΞ³."
 
 #: src/dialogs/display-settings.cpp:864
 msgid "> and < scale by:"
@@ -736,7 +736,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:888
 #, fuzzy
 msgid "Zoom in/out by:"
-msgstr "Σμίκρυνση"
+msgstr "Ξ£ΞΌΞ―ΞΊΟΟ…Ξ½ΟƒΞ·"
 
 #: src/dialogs/display-settings.cpp:889
 msgid ""
@@ -757,43 +757,43 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:907
 #, fuzzy
 msgid "Selector"
-msgstr "Επιλογή"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®"
 
 #
 #: src/dialogs/display-settings.cpp:916
 #, fuzzy
 msgid "Node"
-msgstr "Κανένα"
+msgstr "ΞΞ±Ξ½Ξ­Ξ½Ξ±"
 
 #. The 4 shape tools
 #: src/dialogs/display-settings.cpp:929
 #, fuzzy
 msgid "Shapes"
-msgstr "Σκίαση"
+msgstr "Ξ£ΞΊΞ―Ξ±ΟƒΞ·"
 
 #. Rect
 #: src/dialogs/display-settings.cpp:936 src/sp-rect.cpp:259 src/verbs.cpp:953
 msgid "Rectangle"
-msgstr "Ορθογώνιο"
+msgstr "ΞΟΞΈΞΏΞ³ΟΞ½ΞΉΞΏ"
 
 #
 #. Ellipse
 #: src/dialogs/display-settings.cpp:939 src/sp-ellipse.cpp:443
 #: src/verbs.cpp:955
 msgid "Ellipse"
-msgstr "Έλλειψη"
+msgstr "ΞΞ»Ξ»ΞµΞΉΟΞ·"
 
 #. Star
 #: src/dialogs/display-settings.cpp:942 src/verbs.cpp:957
 msgid "Star"
-msgstr "Αστερίσκος"
+msgstr "Ξ‘ΟƒΟ„ΞµΟΞ―ΟƒΞΊΞΏΟ‚"
 
 #. Spiral
 #: src/dialogs/display-settings.cpp:945 src/sp-spiral.cpp:268
 #: src/verbs.cpp:959
 #, fuzzy
 msgid "Spiral"
-msgstr "Ειδικό"
+msgstr "Ξ•ΞΉΞ΄ΞΉΞΊΟ"
 
 #: src/dialogs/display-settings.cpp:953 src/verbs.cpp:961
 msgid "Pencil"
@@ -812,13 +812,13 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:971 src/verbs.cpp:963
 #, fuzzy
 msgid "Pen"
-msgstr "Ποσοστό"
+msgstr "Ξ ΞΏΟƒΞΏΟƒΟ„Ο"
 
 #
 #: src/dialogs/display-settings.cpp:978 src/dialogs/object-properties.cpp:287
 #: src/verbs.cpp:967
 msgid "Text"
-msgstr "Κείμενο"
+msgstr "ΞΞµΞ―ΞΌΞµΞ½ΞΏ"
 
 #: src/dialogs/display-settings.cpp:985 src/verbs.cpp:971
 msgid "Dropper"
@@ -833,7 +833,7 @@ msgstr "window1"
 #: src/dialogs/display-settings.cpp:999
 #, fuzzy
 msgid "Save window geometry"
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/dialogs/display-settings.cpp:1000
 msgid ""
@@ -864,7 +864,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:1024 src/dialogs/find.cpp:564
 #, fuzzy
 msgid "Clones"
-msgstr "Νέα Προβολή"
+msgstr "ΞΞ­Ξ± Ξ ΟΞΏΞ²ΞΏΞ»Ξ®"
 
 #: src/dialogs/display-settings.cpp:1028
 msgid "When the original moves, its clones:"
@@ -913,7 +913,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:1078
 #, fuzzy
 msgid "Are deleted"
-msgstr "Επιλέχθησαν \"%s\""
+msgstr "Ξ•Ο€ΞΉΞ»Ξ­Ο‡ΞΈΞ·ΟƒΞ±Ξ½ \"%s\""
 
 #: src/dialogs/display-settings.cpp:1078
 msgid "Orphaned clones are deleted along with their original."
@@ -923,12 +923,12 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:1093
 #, fuzzy
 msgid "Transforms"
-msgstr "Μετασχηματισμός"
+msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #: src/dialogs/display-settings.cpp:1096
 #, fuzzy
 msgid "Scale stroke width"
-msgstr "Καπνός με άνεμο"
+msgstr "ΞΞ±Ο€Ξ½ΟΟ‚ ΞΌΞµ Ξ¬Ξ½ΞµΞΌΞΏ"
 
 #: src/dialogs/display-settings.cpp:1097
 msgid "When scaling objects, scale the stroke width by the same proportion"
@@ -945,7 +945,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:1112
 #, fuzzy
 msgid "Transform pattern fill"
-msgstr "Μετασχηματισμός"
+msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #: src/dialogs/display-settings.cpp:1113
 msgid "Apply the transform of an object to its pattern fill"
@@ -954,7 +954,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:1121
 #, fuzzy
 msgid "Store transformation:"
-msgstr "Μετασχηματισμός"
+msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #: src/dialogs/display-settings.cpp:1132
 msgid "Optimized"
@@ -1006,7 +1006,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:1168
 #, fuzzy
 msgid "Max recent documents:"
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/dialogs/display-settings.cpp:1169
 msgid "The maximum length of the Open Recent list in the File menu"
@@ -1046,7 +1046,7 @@ msgstr "16x16"
 #: src/dialogs/export.cpp:239
 #, fuzzy
 msgid "Export area"
-msgstr "Το %s εισήχθη"
+msgstr "Ξ¤ΞΏ %s ΞµΞΉΟƒΞ®Ο‡ΞΈΞ·"
 
 #: src/dialogs/export.cpp:280
 msgid "x0:"
@@ -1072,19 +1072,19 @@ msgstr "1:1"
 #: src/dialogs/export.cpp:387
 #, fuzzy
 msgid "Bitmap size"
-msgstr "Μέγεθος Εικόνας:"
+msgstr "ΞΞ­Ξ³ΞµΞΈΞΏΟ‚ Ξ•ΞΉΞΊΟΞ½Ξ±Ο‚:"
 
 #
 #: src/dialogs/export.cpp:397 src/dialogs/export.cpp:412
 #, fuzzy
 msgid "pixels"
-msgstr "Εικονοστοιχεία"
+msgstr "Ξ•ΞΉΞΊΞΏΞ½ΞΏΟƒΟ„ΞΏΞΉΟ‡ΞµΞ―Ξ±"
 
 #. File entry
 #: src/dialogs/export.cpp:429
 #, fuzzy
 msgid "Filename"
-msgstr "Όνομα Αρχείου:"
+msgstr "ΞΞ½ΞΏΞΌΞ± Ξ‘ΟΟ‡ΞµΞ―ΞΏΟ…:"
 
 #: src/dialogs/export.cpp:491
 msgid "Browse..."
@@ -1093,12 +1093,12 @@ msgstr ""
 #
 #: src/dialogs/export.cpp:510
 msgid "Export"
-msgstr "Εξαγωγή"
+msgstr "Ξ•ΞΎΞ±Ξ³Ο‰Ξ³Ξ®"
 
 #: src/dialogs/export.cpp:953
 #, fuzzy
 msgid "You have to enter a filename"
-msgstr "Αποθήκευση ως γνήσιο όνομα αρχείου"
+msgstr "Ξ‘Ο€ΞΏΞΈΞ®ΞΊΞµΟ…ΟƒΞ· Ο‰Ο‚ Ξ³Ξ½Ξ®ΟƒΞΉΞΏ ΟΞ½ΞΏΞΌΞ± Ξ±ΟΟ‡ΞµΞ―ΞΏΟ…"
 
 #: src/dialogs/export.cpp:958
 msgid "The chosen area to be exported is invalid"
@@ -1112,7 +1112,7 @@ msgstr ""
 #: src/dialogs/export.cpp:979
 #, fuzzy
 msgid "Export in progress"
-msgstr "Το %s εισήχθη"
+msgstr "Ξ¤ΞΏ %s ΞµΞΉΟƒΞ®Ο‡ΞΈΞ·"
 
 #: src/dialogs/export.cpp:985
 #, c-format
@@ -1122,7 +1122,7 @@ msgstr ""
 #: src/dialogs/export.cpp:1108
 #, fuzzy
 msgid "Select a filename for exporting"
-msgstr "Επιλογή αρχείου για φόρτωση"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ξ±ΟΟ‡ΞµΞ―ΞΏΟ… Ξ³ΞΉΞ± Ο†ΟΟΟ„Ο‰ΟƒΞ·"
 
 #: src/dialogs/filedialog.cpp:191 src/dialogs/filedialog.cpp:325
 #: src/extension/db.cpp:183 src/extension/db.cpp:196
@@ -1132,7 +1132,7 @@ msgstr ""
 #: src/dialogs/filedialog.cpp:216 src/dialogs/filedialog.cpp:364
 #, fuzzy
 msgid "File type:"
-msgstr "Όλες οι ρυθμίσεις"
+msgstr "ΞΞ»ΞµΟ‚ ΞΏΞΉ ΟΟ…ΞΈΞΌΞ―ΟƒΞµΞΉΟ‚"
 
 #: src/dialogs/filedialog.cpp:368
 msgid "Append filename extension automatically"
@@ -1145,12 +1145,12 @@ msgstr ""
 #: src/dialogs/fill-style.cpp:124
 #, fuzzy
 msgid "Fill style"
-msgstr "Όλες οι ρυθμίσεις"
+msgstr "ΞΞ»ΞµΟ‚ ΞΏΞΉ ΟΟ…ΞΈΞΌΞ―ΟƒΞµΞΉΟ‚"
 
 #: src/dialogs/fill-style.cpp:172
 #, fuzzy
 msgid "Fill:"
-msgstr "Γέμισμα"
+msgstr "Ξ“Ξ­ΞΌΞΉΟƒΞΌΞ±"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/painting.html#FillRuleProperty
 #: src/dialogs/fill-style.cpp:183
@@ -1170,7 +1170,7 @@ msgstr "3D Rendering"
 #: src/dialogs/fill-style.cpp:199
 #, fuzzy
 msgid "alternating"
-msgstr "Κορεσμός:"
+msgstr "ΞΞΏΟΞµΟƒΞΌΟΟ‚:"
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
 #: src/dialogs/find.cpp:320
@@ -1182,17 +1182,17 @@ msgstr ""
 #: src/dialogs/find.cpp:321
 #, fuzzy
 msgid "exact"
-msgstr "Κείμενο"
+msgstr "ΞΞµΞ―ΞΌΞµΞ½ΞΏ"
 
 #: src/dialogs/find.cpp:321
 #, fuzzy
 msgid "partial"
-msgstr "Ειδικό"
+msgstr "Ξ•ΞΉΞ΄ΞΉΞΊΟ"
 
 #: src/dialogs/find.cpp:328
 #, fuzzy
 msgid "No objects found"
-msgstr "Επιλέξτε αντικείμενο"
+msgstr "Ξ•Ο€ΞΉΞ»Ξ­ΞΎΟ„Ξµ Ξ±Ξ½Ο„ΞΉΞΊΞµΞ―ΞΌΞµΞ½ΞΏ"
 
 #: src/dialogs/find.cpp:486
 msgid "T_ype: "
@@ -1205,7 +1205,7 @@ msgstr ""
 #: src/dialogs/find.cpp:493
 #, fuzzy
 msgid "All types"
-msgstr "Όλες οι ρυθμίσεις"
+msgstr "ΞΞ»ΞµΟ‚ ΞΏΞΉ ΟΟ…ΞΈΞΌΞ―ΟƒΞµΞΉΟ‚"
 
 #: src/dialogs/find.cpp:504
 msgid "Search all shapes"
@@ -1218,12 +1218,12 @@ msgstr ""
 #: src/dialogs/find.cpp:521
 #, fuzzy
 msgid "Search rectangles"
-msgstr "Ορθογώνιο"
+msgstr "ΞΟΞΈΞΏΞ³ΟΞ½ΞΉΞΏ"
 
 #: src/dialogs/find.cpp:521
 #, fuzzy
 msgid "Rectangles"
-msgstr "Ορθογώνιο"
+msgstr "ΞΟΞΈΞΏΞ³ΟΞ½ΞΉΞΏ"
 
 #: src/dialogs/find.cpp:526
 msgid "Search ellipses, arcs, circles"
@@ -1233,7 +1233,7 @@ msgstr ""
 #: src/dialogs/find.cpp:526
 #, fuzzy
 msgid "Ellipses"
-msgstr "Έλλειψη"
+msgstr "ΞΞ»Ξ»ΞµΞΉΟΞ·"
 
 #: src/dialogs/find.cpp:531
 msgid "Search stars and polygons"
@@ -1242,18 +1242,18 @@ msgstr ""
 #: src/dialogs/find.cpp:531
 #, fuzzy
 msgid "Stars"
-msgstr "Αστερίσκος"
+msgstr "Ξ‘ΟƒΟ„ΞµΟΞ―ΟƒΞΊΞΏΟ‚"
 
 #
 #: src/dialogs/find.cpp:536
 #, fuzzy
 msgid "Search spirals"
-msgstr "Δημιουργία γραμμής"
+msgstr "Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ξ³ΟΞ±ΞΌΞΌΞ®Ο‚"
 
 #: src/dialogs/find.cpp:536
 #, fuzzy
 msgid "Spirals"
-msgstr "Ειδικό"
+msgstr "Ξ•ΞΉΞ΄ΞΉΞΊΟ"
 
 #. TRANSLATORS: polyline is a set of connected straight line segments
 #. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
@@ -1268,13 +1268,13 @@ msgstr ""
 #: src/dialogs/find.cpp:554
 #, fuzzy
 msgid "Search text objects"
-msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #
 #: src/dialogs/find.cpp:554
 #, fuzzy
 msgid "Texts"
-msgstr "Κείμενο"
+msgstr "ΞΞµΞ―ΞΌΞµΞ½ΞΏ"
 
 #: src/dialogs/find.cpp:559
 msgid "Search groups"
@@ -1283,7 +1283,7 @@ msgstr ""
 #: src/dialogs/find.cpp:559
 #, fuzzy
 msgid "Groups"
-msgstr "Ομάδα"
+msgstr "ΞΞΌΞ¬Ξ΄Ξ±"
 
 #: src/dialogs/find.cpp:564
 msgid "Search clones"
@@ -1297,12 +1297,12 @@ msgstr ""
 #: src/dialogs/find.cpp:569
 #, fuzzy
 msgid "Images"
-msgstr "Εικόνα"
+msgstr "Ξ•ΞΉΞΊΟΞ½Ξ±"
 
 #: src/dialogs/find.cpp:574
 #, fuzzy
 msgid "Search offset objects"
-msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #: src/dialogs/find.cpp:574
 msgid "Offsets"
@@ -1312,7 +1312,7 @@ msgstr ""
 #: src/dialogs/find.cpp:634
 #, fuzzy
 msgid "_Text: "
-msgstr "Κείμενο"
+msgstr "ΞΞµΞ―ΞΌΞµΞ½ΞΏ"
 
 #: src/dialogs/find.cpp:634
 msgid "Find objects by their text content (exact or partial match)"
@@ -1329,7 +1329,7 @@ msgstr ""
 #: src/dialogs/find.cpp:636
 #, fuzzy
 msgid "_Style: "
-msgstr "Στυλ: "
+msgstr "Ξ£Ο„Ο…Ξ»: "
 
 #: src/dialogs/find.cpp:636
 msgid ""
@@ -1339,7 +1339,7 @@ msgstr ""
 #: src/dialogs/find.cpp:637
 #, fuzzy
 msgid "_Attribute: "
-msgstr "Ιδιότητα:"
+msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„Ξ±:"
 
 #: src/dialogs/find.cpp:637
 msgid "Find objects by the name of an attribute (exact or partial match)"
@@ -1348,7 +1348,7 @@ msgstr ""
 #: src/dialogs/find.cpp:650
 #, fuzzy
 msgid "Search in s_election"
-msgstr "Αντιγραφή ώρας στο επιλεγμένο"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΟΟΞ±Ο‚ ΟƒΟ„ΞΏ ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏ"
 
 #: src/dialogs/find.cpp:654
 msgid "Limit search to the current selection"
@@ -1357,18 +1357,18 @@ msgstr ""
 #: src/dialogs/find.cpp:663
 #, fuzzy
 msgid "_Clear"
-msgstr "Νέα Προβολή"
+msgstr "ΞΞ­Ξ± Ξ ΟΞΏΞ²ΞΏΞ»Ξ®"
 
 #
 #: src/dialogs/find.cpp:663
 #, fuzzy
 msgid "Clear values"
-msgstr "Αρχείο core"
+msgstr "Ξ‘ΟΟ‡ΞµΞ―ΞΏ core"
 
 #: src/dialogs/find.cpp:664
 #, fuzzy
 msgid "_Find"
-msgstr "Πλέγμα"
+msgstr "Ξ Ξ»Ξ­Ξ³ΞΌΞ±"
 
 #: src/dialogs/find.cpp:664
 msgid "Select objects matching all of the fields you filled in"
@@ -1387,31 +1387,31 @@ msgstr ""
 
 #: src/dialogs/item-properties.cpp:149
 msgid "Sensitive"
-msgstr "Ευαίσθητο"
+msgstr "Ξ•Ο…Ξ±Ξ―ΟƒΞΈΞ·Ο„ΞΏ"
 
 #: src/dialogs/item-properties.cpp:160
 msgid "Visible"
-msgstr "Ορατό"
+msgstr "ΞΟΞ±Ο„Ο"
 
 #
 #: src/dialogs/item-properties.cpp:170
 msgid "Active"
-msgstr "Ενεργό"
+msgstr "Ξ•Ξ½ΞµΟΞ³Ο"
 
 #: src/dialogs/item-properties.cpp:178
 #, fuzzy
 msgid "Printable"
-msgstr "Εγγράψιμο"
+msgstr "Ξ•Ξ³Ξ³ΟΞ¬ΟΞΉΞΌΞΏ"
 
 #
 #: src/dialogs/item-properties.cpp:196
 msgid "Opacity:"
-msgstr "Διαφάνεια:"
+msgstr "Ξ”ΞΉΞ±Ο†Ξ¬Ξ½ΞµΞΉΞ±:"
 
 #: src/dialogs/item-properties.cpp:217
 #, fuzzy
 msgid "Transformation matrix"
-msgstr "Μετασχηματισμός"
+msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #: src/dialogs/item-properties.cpp:387
 msgid "Ref"
@@ -1420,7 +1420,7 @@ msgstr ""
 #: src/dialogs/item-properties.cpp:534
 #, fuzzy
 msgid "ID invalid"
-msgstr "¶κυρη κίνηση."
+msgstr "Ξ†ΞΊΟ…ΟΞ· ΞΊΞ―Ξ½Ξ·ΟƒΞ·."
 
 #: src/dialogs/item-properties.cpp:536
 msgid "ID exists"
@@ -1430,12 +1430,12 @@ msgstr ""
 #: src/dialogs/object-attributes.cpp:31
 #, fuzzy
 msgid "Href:"
-msgstr "Απόχρωση:"
+msgstr "Ξ‘Ο€ΟΟ‡ΟΟ‰ΟƒΞ·:"
 
 #: src/dialogs/object-attributes.cpp:32
 #, fuzzy
 msgid "Target:"
-msgstr "μώβ"
+msgstr "ΞΌΟΞ²"
 
 #: src/dialogs/object-attributes.cpp:33
 msgid "Type:"
@@ -1447,7 +1447,7 @@ msgstr ""
 #: src/dialogs/object-attributes.cpp:36
 #, fuzzy
 msgid "Role:"
-msgstr "Κόκκινο:"
+msgstr "ΞΟΞΊΞΊΞΉΞ½ΞΏ:"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/linking.html#AElementXLinkArcRoleAttribute
 #. For situations where the nature/role alone isn't enough, this offers an additional URI defining the purpose of the link.
@@ -1460,7 +1460,7 @@ msgstr ""
 #: src/dialogs/object-attributes.cpp:41
 #, fuzzy
 msgid "Title:"
-msgstr "Αρχείο"
+msgstr "Ξ‘ΟΟ‡ΞµΞ―ΞΏ"
 
 #: src/dialogs/object-attributes.cpp:42
 msgid "Show:"
@@ -1470,22 +1470,22 @@ msgstr ""
 #: src/dialogs/object-attributes.cpp:44
 #, fuzzy
 msgid "Actuate:"
-msgstr "Ιδιότητα:"
+msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„Ξ±:"
 
 #: src/dialogs/object-attributes.cpp:49
 #, fuzzy
 msgid "Sides:"
-msgstr "Γουϊνέα"
+msgstr "Ξ“ΞΏΟ…ΟΞ½Ξ­Ξ±"
 
 #: src/dialogs/object-attributes.cpp:50 src/dialogs/object-attributes.cpp:61
 #, fuzzy
 msgid "Center X:"
-msgstr "Κέντρο"
+msgstr "ΞΞ­Ξ½Ο„ΟΞΏ"
 
 #: src/dialogs/object-attributes.cpp:51 src/dialogs/object-attributes.cpp:62
 #, fuzzy
 msgid "Center Y:"
-msgstr "Κέντρο"
+msgstr "ΞΞ­Ξ½Ο„ΟΞΏ"
 
 #
 #: src/dialogs/object-attributes.cpp:52
@@ -1510,7 +1510,7 @@ msgstr ""
 #: src/dialogs/object-attributes.cpp:56
 #, fuzzy
 msgid "Flatsides:"
-msgstr "Γουϊνέα"
+msgstr "Ξ“ΞΏΟ…ΟΞ½Ξ­Ξ±"
 
 #: src/dialogs/object-attributes.cpp:63
 msgid "Expansion:"
@@ -1519,7 +1519,7 @@ msgstr ""
 #: src/dialogs/object-attributes.cpp:64
 #, fuzzy
 msgid "Revolutions:"
-msgstr "Επιλογή"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®"
 
 #: src/dialogs/object-attributes.cpp:65
 msgid "Radius:"
@@ -1540,40 +1540,40 @@ msgstr ""
 
 #: src/dialogs/object-attributes.cpp:74 src/dialogs/object-attributes.cpp:82
 msgid "X:"
-msgstr "Χ:"
+msgstr "Ξ§:"
 
 #: src/dialogs/object-attributes.cpp:75 src/dialogs/object-attributes.cpp:83
 msgid "Y:"
-msgstr "Ψ:"
+msgstr "Ξ¨:"
 
 #: src/dialogs/object-attributes.cpp:86
 #, fuzzy
 msgid "RX:"
-msgstr "Χ:"
+msgstr "Ξ§:"
 
 #: src/dialogs/object-attributes.cpp:87
 #, fuzzy
 msgid "RY:"
-msgstr "Ψ:"
+msgstr "Ξ¨:"
 
 #: src/dialogs/object-attributes.cpp:130
 #, fuzzy, c-format
 msgid "%s attributes"
-msgstr "Ιδιότητες"
+msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #: src/dialogs/object-properties.cpp:207
 msgid "Fill"
-msgstr "Γέμισμα"
+msgstr "Ξ“Ξ­ΞΌΞΉΟƒΞΌΞ±"
 
 #: src/dialogs/object-properties.cpp:212
 #, fuzzy
 msgid "Stroke paint"
-msgstr "Καπνός με άνεμο"
+msgstr "ΞΞ±Ο€Ξ½ΟΟ‚ ΞΌΞµ Ξ¬Ξ½ΞµΞΌΞΏ"
 
 #: src/dialogs/object-properties.cpp:217
 #, fuzzy
 msgid "Stroke style"
-msgstr "Ρυθμίσεις επιφάνειας εργασίας"
+msgstr "Ξ΅Ο…ΞΈΞΌΞ―ΟƒΞµΞΉΟ‚ ΞµΟ€ΞΉΟ†Ξ¬Ξ½ΞµΞΉΞ±Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/dialogs/object-properties.cpp:229
 msgid "Apply to:"
@@ -1582,7 +1582,7 @@ msgstr ""
 #: src/dialogs/object-properties.cpp:239
 #, fuzzy
 msgid "Selected objects"
-msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #: src/dialogs/object-properties.cpp:245
 msgid "All shape tools"
@@ -1591,7 +1591,7 @@ msgstr ""
 #: src/dialogs/object-properties.cpp:251
 #, fuzzy
 msgid "Rectangle tool"
-msgstr "Ορθογώνιο"
+msgstr "ΞΟΞΈΞΏΞ³ΟΞ½ΞΉΞΏ"
 
 #: src/dialogs/object-properties.cpp:257
 msgid "Arc tool"
@@ -1600,17 +1600,17 @@ msgstr ""
 #: src/dialogs/object-properties.cpp:263
 #, fuzzy
 msgid "Star tool"
-msgstr " χρώμα"
+msgstr " Ο‡ΟΟΞΌΞ±"
 
 #: src/dialogs/object-properties.cpp:269
 #, fuzzy
 msgid "Spiral tool"
-msgstr "Ειδικό"
+msgstr "Ξ•ΞΉΞ΄ΞΉΞΊΟ"
 
 #: src/dialogs/object-properties.cpp:275
 #, fuzzy
 msgid "Freehand and pen"
-msgstr "Γροιλανδία"
+msgstr "Ξ“ΟΞΏΞΉΞ»Ξ±Ξ½Ξ΄Ξ―Ξ±"
 
 #: src/dialogs/object-properties.cpp:281
 msgid "Calligraphic line"
@@ -1620,7 +1620,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:206
 #, fuzzy
 msgid "Title"
-msgstr "Αρχείο"
+msgstr "Ξ‘ΟΟ‡ΞµΞ―ΞΏ"
 
 #: src/dialogs/rdf.cpp:207
 msgid "Name by which this document is formally known."
@@ -1629,7 +1629,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:209
 #, fuzzy
 msgid "Date"
-msgstr "Αλλα_γή γραμμής"
+msgstr "Ξ‘Ξ»Ξ»Ξ±_Ξ³Ξ® Ξ³ΟΞ±ΞΌΞΌΞ®Ο‚"
 
 #: src/dialogs/rdf.cpp:210
 msgid "Date associated with the creation of this document (YYYY-MM-DD)."
@@ -1655,7 +1655,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:219
 #, fuzzy
 msgid "Creator"
-msgstr "Δημιουργία γραμμής"
+msgstr "Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ξ³ΟΞ±ΞΌΞΌΞ®Ο‚"
 
 #: src/dialogs/rdf.cpp:220
 msgid ""
@@ -1665,7 +1665,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:222
 #, fuzzy
 msgid "Rights"
-msgstr "Ύψος"
+msgstr "ΞΟΞΏΟ‚"
 
 #: src/dialogs/rdf.cpp:223
 msgid ""
@@ -1683,7 +1683,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:229
 #, fuzzy
 msgid "Identifier"
-msgstr "Κέντρο"
+msgstr "ΞΞ­Ξ½Ο„ΟΞΏ"
 
 #: src/dialogs/rdf.cpp:230
 msgid "Unique URI to reference this document."
@@ -1700,7 +1700,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:235
 #, fuzzy
 msgid "Relation"
-msgstr "Επιλογή"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®"
 
 #: src/dialogs/rdf.cpp:236
 msgid "Unique URI to a related document."
@@ -1709,7 +1709,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:238
 #, fuzzy
 msgid "Language"
-msgstr "Διάστημα"
+msgstr "Ξ”ΞΉΞ¬ΟƒΟ„Ξ·ΞΌΞ±"
 
 #: src/dialogs/rdf.cpp:239
 msgid ""
@@ -1738,7 +1738,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:250
 #, fuzzy
 msgid "Description"
-msgstr "Θέση"
+msgstr "ΞΞ­ΟƒΞ·"
 
 #: src/dialogs/rdf.cpp:251
 msgid "A short account of the content of this document."
@@ -1748,7 +1748,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:255
 #, fuzzy
 msgid "Contributors"
-msgstr "εκατοστά"
+msgstr "ΞµΞΊΞ±Ο„ΞΏΟƒΟ„Ξ¬"
 
 #: src/dialogs/rdf.cpp:256
 msgid ""
@@ -1770,7 +1770,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:266
 #, fuzzy
 msgid "Fragment"
-msgstr "μώβ"
+msgstr "ΞΌΟΞ²"
 
 #: src/dialogs/rdf.cpp:267
 msgid "XML fragment for the RDF 'License' section."
@@ -1781,12 +1781,12 @@ msgstr ""
 #: src/widgets/paint-selector.cpp:849
 #, fuzzy
 msgid "No document selected"
-msgstr "Επιλέχθησαν \"%s\""
+msgstr "Ξ•Ο€ΞΉΞ»Ξ­Ο‡ΞΈΞ·ΟƒΞ±Ξ½ \"%s\""
 
 #: src/dialogs/stroke-style.cpp:1387
 #, fuzzy
 msgid "Stroke width"
-msgstr "Καπνός με άνεμο"
+msgstr "ΞΞ±Ο€Ξ½ΟΟ‚ ΞΌΞµ Ξ¬Ξ½ΞµΞΌΞΏ"
 
 #
 #. Join type
@@ -1795,7 +1795,7 @@ msgstr "Καπνός με άνεμο"
 #: src/dialogs/stroke-style.cpp:1407
 #, fuzzy
 msgid "Join:"
-msgstr "Όνομα χρήστη:"
+msgstr "ΞΞ½ΞΏΞΌΞ± Ο‡ΟΞ®ΟƒΟ„Ξ·:"
 
 #. TRANSLATORS: Miter join: joining lines with a sharp (pointed) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
@@ -1803,7 +1803,7 @@ msgstr "Όνομα χρήστη:"
 #: src/dialogs/stroke-style.cpp:1421
 #, fuzzy
 msgid "Miter join"
-msgstr "Πρωτεύον Μονοφωνικό"
+msgstr "Ξ ΟΟ‰Ο„ΞµΟΞΏΞ½ ΞΞΏΞ½ΞΏΟ†Ο‰Ξ½ΞΉΞΊΟ"
 
 #
 #. TRANSLATORS: Round join: joining lines with a rounded corner.
@@ -1812,7 +1812,7 @@ msgstr "Πρωτεύον Μονοφωνικό"
 #: src/dialogs/stroke-style.cpp:1431
 #, fuzzy
 msgid "Round join"
-msgstr "Εκτέλεση σε:"
+msgstr "Ξ•ΞΊΟ„Ξ­Ξ»ΞµΟƒΞ· ΟƒΞµ:"
 
 #. TRANSLATORS: Bevel join: joining lines with a blunted (flattened) corner.
 #. For an example, draw a triangle with a large stroke width and modify the
@@ -1820,7 +1820,7 @@ msgstr "Εκτέλεση σε:"
 #: src/dialogs/stroke-style.cpp:1441
 #, fuzzy
 msgid "Bevel join"
-msgstr "Πρώτο επίπεδο"
+msgstr "Ξ ΟΟΟ„ΞΏ ΞµΟ€Ξ―Ο€ΞµΞ΄ΞΏ"
 
 #. Miterlimit
 #. TRANSLATORS: Miter limit: only for "miter join", this limits the length
@@ -1832,7 +1832,7 @@ msgstr "Πρώτο επίπεδο"
 #: src/dialogs/stroke-style.cpp:1452
 #, fuzzy
 msgid "Miter limit:"
-msgstr "Πρωτεύον Μονοφωνικό"
+msgstr "Ξ ΟΟ‰Ο„ΞµΟΞΏΞ½ ΞΞΏΞ½ΞΏΟ†Ο‰Ξ½ΞΉΞΊΟ"
 
 #: src/dialogs/stroke-style.cpp:1460
 msgid "Maximum length of the miter (in units of stroke width)"
@@ -1843,7 +1843,7 @@ msgstr ""
 #: src/dialogs/stroke-style.cpp:1473
 #, fuzzy
 msgid "Cap:"
-msgstr "Κυανό"
+msgstr "ΞΟ…Ξ±Ξ½Ο"
 
 #. TRANSLATORS: Butt cap: the line shape does not extend beyond the end point
 #. of the line; the ends of the line are square
@@ -1857,14 +1857,14 @@ msgstr ""
 #: src/dialogs/stroke-style.cpp:1495
 #, fuzzy
 msgid "Round cap"
-msgstr "Εκτέλεση σε:"
+msgstr "Ξ•ΞΊΟ„Ξ­Ξ»ΞµΟƒΞ· ΟƒΞµ:"
 
 #. TRANSLATORS: Square cap: the line shape extends beyond the end point of the
 #. line; the ends of the line are square
 #: src/dialogs/stroke-style.cpp:1504
 #, fuzzy
 msgid "Square cap"
-msgstr "Λίστα Τετραγώνων"
+msgstr "Ξ›Ξ―ΟƒΟ„Ξ± Ξ¤ΞµΟ„ΟΞ±Ξ³ΟΞ½Ο‰Ξ½"
 
 #. Dash
 #: src/dialogs/stroke-style.cpp:1510
@@ -1876,7 +1876,7 @@ msgstr ""
 #: src/dialogs/stroke-style.cpp:1531
 #, fuzzy
 msgid "Start Markers:"
-msgstr " Ιδιότητες"
+msgstr " Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #: src/dialogs/stroke-style.cpp:1541
 msgid "Mid Markers:"
@@ -1889,24 +1889,24 @@ msgstr ""
 #. Layout
 #: src/dialogs/text-edit.cpp:244
 msgid "Layout"
-msgstr "Διάταξη"
+msgstr "Ξ”ΞΉΞ¬Ο„Ξ±ΞΎΞ·"
 
 #: src/dialogs/text-edit.cpp:253
 #, fuzzy
 msgid "Alignment:"
-msgstr "Στοίχιση"
+msgstr "Ξ£Ο„ΞΏΞ―Ο‡ΞΉΟƒΞ·"
 
 #
 #: src/dialogs/text-edit.cpp:288
 #, fuzzy
 msgid "Orientation:"
-msgstr "Κορεσμός:"
+msgstr "ΞΞΏΟΞµΟƒΞΌΟΟ‚:"
 
 #
 #: src/dialogs/text-edit.cpp:313
 #, fuzzy
 msgid "Line spacing:"
-msgstr "Διάστιχο:"
+msgstr "Ξ”ΞΉΞ¬ΟƒΟ„ΞΉΟ‡ΞΏ:"
 
 #: src/dialogs/text-edit.cpp:344
 msgid "Text and font"
@@ -1919,24 +1919,24 @@ msgstr ""
 #. Move page
 #: src/dialogs/transformation.cpp:321 src/dialogs/transformation.cpp:467
 msgid "Move"
-msgstr "Μετακίνηση"
+msgstr "ΞΞµΟ„Ξ±ΞΊΞ―Ξ½Ξ·ΟƒΞ·"
 
 #
 #. Scale page
 #: src/dialogs/transformation.cpp:329 src/dialogs/transformation.cpp:666
 msgid "Scale"
-msgstr "Κλιμάκωση"
+msgstr "ΞΞ»ΞΉΞΌΞ¬ΞΊΟ‰ΟƒΞ·"
 
 #. Rotate page
 #: src/dialogs/transformation.cpp:337 src/dialogs/transformation.cpp:806
 msgid "Rotate"
-msgstr "Περιστροφή"
+msgstr "Ξ ΞµΟΞΉΟƒΟ„ΟΞΏΟ†Ξ®"
 
 #. Relative moves
 #: src/dialogs/transformation.cpp:528
 #, fuzzy
 msgid "Relative move"
-msgstr "κάθετο"
+msgstr "ΞΊΞ¬ΞΈΞµΟ„ΞΏ"
 
 #: src/dialogs/transformation.cpp:829
 #, fuzzy
@@ -1950,7 +1950,7 @@ msgstr ""
 #: src/dialogs/xml-tree.cpp:235
 #, fuzzy
 msgid "New element node"
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/dialogs/xml-tree.cpp:257
 msgid "New text node"
@@ -1959,28 +1959,28 @@ msgstr ""
 #: src/dialogs/xml-tree.cpp:278
 #, fuzzy
 msgid "Duplicate node"
-msgstr "Δημιουργία αντιγράφου"
+msgstr "Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ξ±Ξ½Ο„ΞΉΞ³ΟΞ¬Ο†ΞΏΟ…"
 
 #
 #: src/dialogs/xml-tree.cpp:299
 #, fuzzy
 msgid "Delete node"
-msgstr "Διαγραφή"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ®"
 
 #: src/dialogs/xml-tree.cpp:315
 #, fuzzy
 msgid "Unindent node"
-msgstr "Επεξεργασία Φακέλων"
+msgstr "Ξ•Ο€ΞµΞΎΞµΟΞ³Ξ±ΟƒΞ―Ξ± Ξ¦Ξ±ΞΊΞ­Ξ»Ο‰Ξ½"
 
 #: src/dialogs/xml-tree.cpp:330
 #, fuzzy
 msgid "Indent node"
-msgstr "Επεξεργασία Φακέλων"
+msgstr "Ξ•Ο€ΞµΞΎΞµΟΞ³Ξ±ΟƒΞ―Ξ± Ξ¦Ξ±ΞΊΞ­Ξ»Ο‰Ξ½"
 
 #: src/dialogs/xml-tree.cpp:342
 #, fuzzy
 msgid "Raise node"
-msgstr "Αρχικοποίηση"
+msgstr "Ξ‘ΟΟ‡ΞΉΞΊΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ·"
 
 #: src/dialogs/xml-tree.cpp:354
 msgid "Lower node"
@@ -1989,22 +1989,22 @@ msgstr ""
 #: src/dialogs/xml-tree.cpp:397
 #, fuzzy
 msgid "Delete attribute"
-msgstr "εμφάνιση ιδιοτήτων"
+msgstr "ΞµΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· ΞΉΞ΄ΞΉΞΏΟ„Ξ®Ο„Ο‰Ξ½"
 
 #: src/dialogs/xml-tree.cpp:441
 #, fuzzy
 msgid "Attribute name"
-msgstr "Ιδιότητα:"
+msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„Ξ±:"
 
 #: src/dialogs/xml-tree.cpp:460
 #, fuzzy
 msgid "Set attribute"
-msgstr "εμφάνιση ιδιοτήτων"
+msgstr "ΞµΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· ΞΉΞ΄ΞΉΞΏΟ„Ξ®Ο„Ο‰Ξ½"
 
 #: src/dialogs/xml-tree.cpp:481
 #, fuzzy
 msgid "Attribute value"
-msgstr "Ιδιότητες"
+msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #: src/dialogs/xml-tree.cpp:1172
 msgid "New element node..."
@@ -2014,18 +2014,18 @@ msgstr ""
 #: src/dialogs/xml-tree.cpp:1193
 #, fuzzy
 msgid "Cancel"
-msgstr "Αλλαγή"
+msgstr "Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ®"
 
 #
 #: src/dialogs/xml-tree.cpp:1199
 #, fuzzy
 msgid "Create"
-msgstr "Δημιουργία γραμμής"
+msgstr "Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ξ³ΟΞ±ΞΌΞΌΞ®Ο‚"
 
 #: src/document.cpp:428
 #, fuzzy, c-format
 msgid "New document %d"
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/document.cpp:457
 #, c-format
@@ -2040,7 +2040,7 @@ msgstr ""
 #: src/draw-context.cpp:292
 #, fuzzy
 msgid "Appending to selection"
-msgstr "Αντιγραφή ώρας στο επιλεγμένο"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΟΟΞ±Ο‚ ΟƒΟ„ΞΏ ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏ"
 
 #: src/draw-context.cpp:296
 msgid "Creating new curve"
@@ -2065,7 +2065,7 @@ msgstr ""
 #: src/draw-context.cpp:1060
 #, fuzzy
 msgid "Finishing freehand"
-msgstr "Γροιλανδία"
+msgstr "Ξ“ΟΞΏΞΉΞ»Ξ±Ξ½Ξ΄Ξ―Ξ±"
 
 #: src/draw-context.cpp:1826
 msgid "Finishing pen"
@@ -2109,7 +2109,7 @@ msgstr ""
 #: src/extension/internal/eps-out.cpp:70
 #, fuzzy
 msgid "EPS Output Settings"
-msgstr "Δοκιμή ρυθμίσεων"
+msgstr "Ξ”ΞΏΞΊΞΉΞΌΞ® ΟΟ…ΞΈΞΌΞ―ΟƒΞµΟ‰Ξ½"
 
 #: src/extension/internal/eps-out.cpp:82
 msgid "Make bounding box around full page"
@@ -2119,29 +2119,29 @@ msgstr ""
 #: src/extension/internal/eps-out.cpp:90
 #, fuzzy
 msgid "Convert text to path"
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #: src/extension/internal/gnome.cpp:73
 #, fuzzy
 msgid "Select printer"
-msgstr "Επιλογή"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®"
 
 #: src/extension/internal/gnome.cpp:124
 #, fuzzy
 msgid "Inkscape: Print Preview"
-msgstr "GHex (%s): Προεπισκόπηση Εκτύπωσης"
+msgstr "GHex (%s): Ξ ΟΞΏΞµΟ€ΞΉΟƒΞΊΟΟ€Ξ·ΟƒΞ· Ξ•ΞΊΟ„ΟΟ€Ο‰ΟƒΞ·Ο‚"
 
 #
 #: src/extension/internal/ps.cpp:110
 #, fuzzy
 msgid "Print Destination"
-msgstr "Σε εκτύπωση"
+msgstr "Ξ£Ξµ ΞµΞΊΟ„ΟΟ€Ο‰ΟƒΞ·"
 
 #. Print properties frame
 #: src/extension/internal/ps.cpp:124
 #, fuzzy
 msgid "Print properties"
-msgstr " Ιδιότητες"
+msgstr " Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #: src/extension/internal/ps.cpp:132
 msgid "Print using PostScript operators"
@@ -2157,7 +2157,7 @@ msgstr ""
 #: src/extension/internal/ps.cpp:139
 #, fuzzy
 msgid "Print as bitmap"
-msgstr "Εξαγωγή Αρχείου"
+msgstr "Ξ•ΞΎΞ±Ξ³Ο‰Ξ³Ξ® Ξ‘ΟΟ‡ΞµΞ―ΞΏΟ…"
 
 #: src/extension/internal/ps.cpp:141
 msgid ""
@@ -2173,14 +2173,14 @@ msgstr ""
 #: src/extension/internal/ps.cpp:170
 #, fuzzy
 msgid "Resolution:"
-msgstr "Επιλογή"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®"
 
 #
 #. Print destination frame
 #: src/extension/internal/ps.cpp:174
 #, fuzzy
 msgid "Print destination"
-msgstr "Σε εκτύπωση"
+msgstr "Ξ£Ξµ ΞµΞΊΟ„ΟΟ€Ο‰ΟƒΞ·"
 
 #: src/extension/internal/ps.cpp:180
 msgid ""
@@ -2204,7 +2204,7 @@ msgstr ""
 #: src/file.cpp:177
 #, fuzzy
 msgid "Document not saved yet.  Cannot revert."
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/file.cpp:184
 #, c-format
@@ -2214,12 +2214,12 @@ msgstr ""
 #: src/file.cpp:203
 #, fuzzy
 msgid "Document reverted."
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/file.cpp:206
 #, fuzzy
 msgid "Document not reverted."
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/file.cpp:210
 msgid "Document not modified.  No need to revert."
@@ -2228,7 +2228,7 @@ msgstr ""
 #: src/file.cpp:240
 #, fuzzy
 msgid "Select file to open"
-msgstr "Επιλογή αρχείου προς ανάγνωση"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ξ±ΟΟ‡ΞµΞ―ΞΏΟ… Ο€ΟΞΏΟ‚ Ξ±Ξ½Ξ¬Ξ³Ξ½Ο‰ΟƒΞ·"
 
 #: src/file.cpp:312
 #, c-format
@@ -2240,7 +2240,7 @@ msgstr ""
 #: src/file.cpp:313 src/file.cpp:319
 #, fuzzy
 msgid "Document not saved."
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/file.cpp:318
 #, c-format
@@ -2250,22 +2250,22 @@ msgstr ""
 #: src/file.cpp:327
 #, fuzzy
 msgid "Document saved."
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/file.cpp:372
 #, fuzzy, c-format
 msgid "drawing%s"
-msgstr "Σχεδίαση"
+msgstr "Ξ£Ο‡ΞµΞ΄Ξ―Ξ±ΟƒΞ·"
 
 #: src/file.cpp:378
 #, fuzzy, c-format
 msgid "drawing-%d%s"
-msgstr "Σχεδίαση"
+msgstr "Ξ£Ο‡ΞµΞ΄Ξ―Ξ±ΟƒΞ·"
 
 #: src/file.cpp:404
 #, fuzzy
 msgid "Select file to save to"
-msgstr "Επιλογή αρχείου προς ανάγνωση"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ξ±ΟΟ‡ΞµΞ―ΞΏΟ… Ο€ΟΞΏΟ‚ Ξ±Ξ½Ξ¬Ξ³Ξ½Ο‰ΟƒΞ·"
 
 #: src/file.cpp:481
 msgid "No changes need to be saved."
@@ -2274,7 +2274,7 @@ msgstr ""
 #: src/file.cpp:618
 #, fuzzy
 msgid "Select file to import"
-msgstr "Επιλογή αρχείου για φόρτωση"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ξ±ΟΟ‡ΞµΞ―ΞΏΟ… Ξ³ΞΉΞ± Ο†ΟΟΟ„Ο‰ΟƒΞ·"
 
 #: src/help.cpp:58
 msgid "about.svg"
@@ -2287,21 +2287,21 @@ msgstr ""
 #: src/helper/units.cpp:34
 #, fuzzy
 msgid "Unit"
-msgstr "&Μονάδες:"
+msgstr "&ΞΞΏΞ½Ξ¬Ξ΄ΞµΟ‚:"
 
 #: src/helper/units.cpp:34
 #, fuzzy
 msgid "Units"
-msgstr "&Μονάδες:"
+msgstr "&ΞΞΏΞ½Ξ¬Ξ΄ΞµΟ‚:"
 
 #: src/helper/units.cpp:35
 msgid "Point"
-msgstr "Σημείο"
+msgstr "Ξ£Ξ·ΞΌΞµΞ―ΞΏ"
 
 #
 #: src/helper/units.cpp:35
 msgid "Points"
-msgstr "Στιγμές"
+msgstr "Ξ£Ο„ΞΉΞ³ΞΌΞ­Ο‚"
 
 #: src/helper/units.cpp:35
 msgid "Pt"
@@ -2309,12 +2309,12 @@ msgstr ""
 
 #: src/helper/units.cpp:36
 msgid "Pixel"
-msgstr "Εικονοστοιχείο"
+msgstr "Ξ•ΞΉΞΊΞΏΞ½ΞΏΟƒΟ„ΞΏΞΉΟ‡ΞµΞ―ΞΏ"
 
 #
 #: src/helper/units.cpp:36
 msgid "Pixels"
-msgstr "Εικονοστοιχεία"
+msgstr "Ξ•ΞΉΞΊΞΏΞ½ΞΏΟƒΟ„ΞΏΞΉΟ‡ΞµΞ―Ξ±"
 
 #: src/helper/units.cpp:36
 msgid "Px"
@@ -2324,17 +2324,17 @@ msgstr ""
 #. You can add new elements from this point forward
 #: src/helper/units.cpp:39
 msgid "Percent"
-msgstr "Ποσοστό"
+msgstr "Ξ ΞΏΟƒΞΏΟƒΟ„Ο"
 
 #: src/helper/units.cpp:39
 #, fuzzy
 msgid "Percents"
-msgstr "Ποσοστό"
+msgstr "Ξ ΞΏΟƒΞΏΟƒΟ„Ο"
 
 #: src/helper/units.cpp:40
 #, fuzzy
 msgid "Millimeter"
-msgstr "χιλιοστά"
+msgstr "Ο‡ΞΉΞ»ΞΉΞΏΟƒΟ„Ξ¬"
 
 #: src/helper/units.cpp:40
 msgid "mm"
@@ -2343,12 +2343,12 @@ msgstr "mm"
 #: src/helper/units.cpp:40
 #, fuzzy
 msgid "Millimeters"
-msgstr "χιλιοστά"
+msgstr "Ο‡ΞΉΞ»ΞΉΞΏΟƒΟ„Ξ¬"
 
 #: src/helper/units.cpp:41
 #, fuzzy
 msgid "Centimeter"
-msgstr "εκατοστά"
+msgstr "ΞµΞΊΞ±Ο„ΞΏΟƒΟ„Ξ¬"
 
 #: src/helper/units.cpp:41
 msgid "cm"
@@ -2357,70 +2357,70 @@ msgstr "cm"
 #: src/helper/units.cpp:41
 #, fuzzy
 msgid "Centimeters"
-msgstr "εκατοστά"
+msgstr "ΞµΞΊΞ±Ο„ΞΏΟƒΟ„Ξ¬"
 
 #: src/helper/units.cpp:42
 #, fuzzy
 msgid "Meter"
-msgstr "Κέντρο"
+msgstr "ΞΞ­Ξ½Ο„ΟΞΏ"
 
 #: src/helper/units.cpp:42
 #, fuzzy
 msgid "m"
-msgstr "Δείγμα"
+msgstr "Ξ”ΞµΞ―Ξ³ΞΌΞ±"
 
 #: src/helper/units.cpp:42
 #, fuzzy
 msgid "Meters"
-msgstr "Κέντρο"
+msgstr "ΞΞ­Ξ½Ο„ΟΞΏ"
 
 #: src/helper/units.cpp:43
 #, fuzzy
 msgid "Inch"
-msgstr "ίντσα"
+msgstr "Ξ―Ξ½Ο„ΟƒΞ±"
 
 #
 #: src/helper/units.cpp:43
 #, fuzzy
 msgid "in"
-msgstr "ημ"
+msgstr "Ξ·ΞΌ"
 
 #: src/helper/units.cpp:43
 #, fuzzy
 msgid "Inches"
-msgstr "Αύξηση"
+msgstr "Ξ‘ΟΞΎΞ·ΟƒΞ·"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
 #: src/helper/units.cpp:45
 #, fuzzy
 msgid "Em square"
-msgstr "Τετράγωνο"
+msgstr "Ξ¤ΞµΟ„ΟΞ¬Ξ³Ο‰Ξ½ΞΏ"
 
 #: src/helper/units.cpp:45
 #, fuzzy
 msgid "em"
-msgstr "Δείγμα"
+msgstr "Ξ”ΞµΞ―Ξ³ΞΌΞ±"
 
 #: src/helper/units.cpp:45
 #, fuzzy
 msgid "Em squares"
-msgstr "Τετράγωνο"
+msgstr "Ξ¤ΞµΟ„ΟΞ¬Ξ³Ο‰Ξ½ΞΏ"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/REC-CSS2/syndata.html#length-units
 #: src/helper/units.cpp:47
 #, fuzzy
 msgid "Ex square"
-msgstr "Τετράγωνο"
+msgstr "Ξ¤ΞµΟ„ΟΞ¬Ξ³Ο‰Ξ½ΞΏ"
 
 #: src/helper/units.cpp:47
 #, fuzzy
 msgid "ex"
-msgstr "Δεκαεξαδικό"
+msgstr "Ξ”ΞµΞΊΞ±ΞµΞΎΞ±Ξ΄ΞΉΞΊΟ"
 
 #: src/helper/units.cpp:47
 #, fuzzy
 msgid "Ex squares"
-msgstr "Τετράγωνο"
+msgstr "Ξ¤ΞµΟ„ΟΞ¬Ξ³Ο‰Ξ½ΞΏ"
 
 #: src/inkscape.cpp:464
 msgid "Untitled document"
@@ -2515,7 +2515,7 @@ msgstr ""
 #: src/interface.cpp:780
 #, fuzzy
 msgid "_Show/Hide"
-msgstr "Εμφάνιση κόμβων-δ"
+msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· ΞΊΟΞΌΞ²Ο‰Ξ½-Ξ΄"
 
 #: src/interface.cpp:780
 msgid ""
@@ -2533,18 +2533,18 @@ msgstr ""
 #: src/interface.cpp:785
 #, fuzzy
 msgid "Show or hide the Commands bar (under the menu)"
-msgstr "Εμφάνιση κόμβων-δ"
+msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· ΞΊΟΞΌΞ²Ο‰Ξ½-Ξ΄"
 
 #: src/interface.cpp:787
 #, fuzzy
 msgid "Tool Controls"
-msgstr "Επιλογές Oaf"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ­Ο‚ Oaf"
 
 #
 #: src/interface.cpp:787
 #, fuzzy
 msgid "Show or hide the Tool Controls panel"
-msgstr "Εμφάνιση κόμβων-δ"
+msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· ΞΊΟΞΌΞ²Ο‰Ξ½-Ξ΄"
 
 #: src/interface.cpp:789
 msgid "_Toolbox"
@@ -2577,24 +2577,24 @@ msgstr ""
 #
 #: src/interface.cpp:860
 msgid "_File"
-msgstr "_Αρχείο"
+msgstr "_Ξ‘ΟΟ‡ΞµΞ―ΞΏ"
 
 #
 #: src/interface.cpp:866
 #, fuzzy
 msgid "_Edit"
-msgstr "Επεξεργασία"
+msgstr "Ξ•Ο€ΞµΞΎΞµΟΞ³Ξ±ΟƒΞ―Ξ±"
 
 #: src/interface.cpp:872
 #, fuzzy
 msgid "_View"
-msgstr "Νέα Προβολή"
+msgstr "ΞΞ­Ξ± Ξ ΟΞΏΞ²ΞΏΞ»Ξ®"
 
 #
 #: src/interface.cpp:878
 #, fuzzy
 msgid "_Object"
-msgstr "Αντικείμενο"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞΊΞµΞ―ΞΌΞµΞ½ΞΏ"
 
 #: src/interface.cpp:884
 msgid "_Path"
@@ -2604,12 +2604,12 @@ msgstr ""
 #: src/interface.cpp:890
 #, fuzzy
 msgid "_Help"
-msgstr "_Βοήθεια"
+msgstr "_Ξ’ΞΏΞ®ΞΈΞµΞΉΞ±"
 
 #: src/interface.cpp:956
 #, fuzzy, c-format
 msgid "Edit group #%s"
-msgstr "Επεξεργασία Φακέλων"
+msgstr "Ξ•Ο€ΞµΞΎΞµΟΞ³Ξ±ΟƒΞ―Ξ± Ξ¦Ξ±ΞΊΞ­Ξ»Ο‰Ξ½"
 
 #: src/interface.cpp:968
 msgid "Edit parent group"
@@ -2618,7 +2618,7 @@ msgstr ""
 #: src/interface.cpp:974
 #, fuzzy
 msgid "Edit root"
-msgstr "Επεξεργασία Φακέλων"
+msgstr "Ξ•Ο€ΞµΞΎΞµΟΞ³Ξ±ΟƒΞ―Ξ± Ξ¦Ξ±ΞΊΞ­Ξ»Ο‰Ξ½"
 
 #: src/interface.cpp:1051
 msgid "Could not parse SVG data"
@@ -2659,7 +2659,7 @@ msgstr ""
 # gconf/gconftool.c:219
 #: src/main.cpp:139 src/main.cpp:142 src/main.cpp:145 src/main.cpp:159
 msgid "FILENAME"
-msgstr "ΟΝΟΜΑ ΑΡΧΕΙΟΥ"
+msgstr "ΞΞΞΞΞ‘ Ξ‘Ξ΅Ξ§Ξ•Ξ™ΞΞ¥"
 
 #: src/main.cpp:141
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
@@ -2745,13 +2745,13 @@ msgstr ""
 #: src/nodepath.cpp:1342
 #, fuzzy
 msgid "Cannot find path between nodes."
-msgstr "Εκκίνηση επιλεγμένου παροχέα"
+msgstr "Ξ•ΞΊΞΊΞ―Ξ½Ξ·ΟƒΞ· ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ο€Ξ±ΟΞΏΟ‡Ξ­Ξ±"
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
 #: src/nodepath.cpp:2719
 #, fuzzy
 msgid "cusp"
-msgstr "Εργ."
+msgstr "Ξ•ΟΞ³."
 
 #: src/nodepath.cpp:2721
 msgid "smooth"
@@ -2760,7 +2760,7 @@ msgstr ""
 #: src/nodepath.cpp:2723
 #, fuzzy
 msgid "symmetric"
-msgstr "Χρήση Μετρικού Συστήματος"
+msgstr "Ξ§ΟΞ®ΟƒΞ· ΞΞµΟ„ΟΞΉΞΊΞΏΟ Ξ£Ο…ΟƒΟ„Ξ®ΞΌΞ±Ο„ΞΏΟ‚"
 
 #: src/nodepath.cpp:2733
 msgid "Drag nodes or control points to edit the path"
@@ -2787,71 +2787,71 @@ msgstr ""
 #: src/nodepath.cpp:2758
 #, fuzzy, c-format
 msgid "%i of %i nodes selected. %s."
-msgstr "Εκκίνηση επιλεγμένου παροχέα"
+msgstr "Ξ•ΞΊΞΊΞ―Ξ½Ξ·ΟƒΞ· ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ο€Ξ±ΟΞΏΟ‡Ξ­Ξ±"
 
 #. Item dialog
 #: src/object-ui.cpp:107
 #, fuzzy
 msgid "Item _Properties"
-msgstr " Ιδιότητες"
+msgstr " Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #. Select item
 #: src/object-ui.cpp:117
 #, fuzzy
 msgid "_Select This"
-msgstr "Επιλογή θέματος:"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® ΞΈΞ­ΞΌΞ±Ο„ΞΏΟ‚:"
 
 #. Reset transformations
 #: src/object-ui.cpp:127
 #, fuzzy
 msgid "Reset _Transformation"
-msgstr "Μετασχηματισμός"
+msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #: src/object-ui.cpp:133
 #, fuzzy
 msgid "Make s_ensitive"
-msgstr "Πεζά/κεφαλαία διαφέρουν"
+msgstr "Ξ ΞµΞ¶Ξ¬/ΞΊΞµΟ†Ξ±Ξ»Ξ±Ξ―Ξ± Ξ΄ΞΉΞ±Ο†Ξ­ΟΞΏΟ…Ξ½"
 
 #: src/object-ui.cpp:133
 #, fuzzy
 msgid "Make i_nsensitive"
-msgstr "Πεζά/κεφαλαία διαφέρουν"
+msgstr "Ξ ΞµΞ¶Ξ¬/ΞΊΞµΟ†Ξ±Ξ»Ξ±Ξ―Ξ± Ξ΄ΞΉΞ±Ο†Ξ­ΟΞΏΟ…Ξ½"
 
 #
 #. Create link
 #: src/object-ui.cpp:138
 #, fuzzy
 msgid "_Create Link"
-msgstr "Δημιουργία γραμμής"
+msgstr "Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ξ³ΟΞ±ΞΌΞΌΞ®Ο‚"
 
 #. "Ungroup"
 #: src/object-ui.cpp:241 src/verbs.cpp:875
 msgid "_Ungroup"
-msgstr "_Απομαδοποίηση"
+msgstr "_Ξ‘Ο€ΞΏΞΌΞ±Ξ΄ΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ·"
 
 #. Link dialog
 #: src/object-ui.cpp:282
 #, fuzzy
 msgid "Link _Properties"
-msgstr " Ιδιότητες"
+msgstr " Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #. Select item
 #: src/object-ui.cpp:292
 #, fuzzy
 msgid "_Follow Link"
-msgstr "Ακολούθηση συμβολικών συνδέσμων"
+msgstr "Ξ‘ΞΊΞΏΞ»ΞΏΟΞΈΞ·ΟƒΞ· ΟƒΟ…ΞΌΞ²ΞΏΞ»ΞΉΞΊΟΞ½ ΟƒΟ…Ξ½Ξ΄Ξ­ΟƒΞΌΟ‰Ξ½"
 
 #. Reset transformations
 #: src/object-ui.cpp:297
 #, fuzzy
 msgid "_Remove Link"
-msgstr "Διαγραφή συνδέσμου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΟƒΟ…Ξ½Ξ΄Ξ­ΟƒΞΌΞΏΟ…"
 
 #. Link dialog
 #: src/object-ui.cpp:346
 #, fuzzy
 msgid "Image _Properties"
-msgstr "Ιδιότητες Εικόνας"
+msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚ Ξ•ΞΉΞΊΟΞ½Ξ±Ο‚"
 
 #. Autotrace dialog
 #: src/object-ui.cpp:354
@@ -2862,36 +2862,36 @@ msgstr ""
 #: src/object-ui.cpp:395
 #, fuzzy
 msgid "_Fill and Stroke"
-msgstr "Ρυθμίσεις επιφάνειας εργασίας"
+msgstr "Ξ΅Ο…ΞΈΞΌΞ―ΟƒΞµΞΉΟ‚ ΞµΟ€ΞΉΟ†Ξ¬Ξ½ΞµΞΉΞ±Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #. Link dialog
 #: src/object-ui.cpp:415
 #, fuzzy
 msgid "Rectangle _Properties"
-msgstr " Ιδιότητες"
+msgstr " Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #. Link dialog
 #: src/object-ui.cpp:441
 #, fuzzy
 msgid "Star _Properties"
-msgstr " Ιδιότητες"
+msgstr " Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #. Link dialog
 #: src/object-ui.cpp:467
 #, fuzzy
 msgid "Spiral _Properties"
-msgstr " Ιδιότητες"
+msgstr " Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #: src/path-chemistry.cpp:58
 #, fuzzy
 msgid "Select at least 2 objects to combine."
-msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #
 #: src/path-chemistry.cpp:65
 #, fuzzy
 msgid "One of the objects is not a path, cannot combine."
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #: src/path-chemistry.cpp:73
 msgid "You cannot combine objects from different groups or layers."
@@ -2901,7 +2901,7 @@ msgstr ""
 #: src/path-chemistry.cpp:157
 #, fuzzy
 msgid "Select some path(s) to break apart."
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #: src/path-chemistry.cpp:233
 msgid "No paths to break apart in the selection."
@@ -2911,7 +2911,7 @@ msgstr ""
 #: src/path-chemistry.cpp:256
 #, fuzzy
 msgid "Select some object(s) to convert to path."
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #: src/path-chemistry.cpp:301
 msgid "No objects to convert to path in the selection."
@@ -2920,7 +2920,7 @@ msgstr ""
 #: src/path-chemistry.cpp:402
 #, fuzzy
 msgid "Select one or more paths to reverse."
-msgstr "Αποθήκευση επιλογής"
+msgstr "Ξ‘Ο€ΞΏΞΈΞ®ΞΊΞµΟ…ΟƒΞ· ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #: src/path-chemistry.cpp:427
 msgid "No paths to reverse in the selection."
@@ -2930,27 +2930,27 @@ msgstr ""
 #: src/rect-context.cpp:517
 #, fuzzy, c-format
 msgid "Draw rectangle: %s x %s"
-msgstr "Δημιουργία ορθογωνίου"
+msgstr "Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± ΞΏΟΞΈΞΏΞ³Ο‰Ξ½Ξ―ΞΏΟ…"
 
 #: src/select-context.cpp:649
 #, fuzzy
 msgid "Move canceled."
-msgstr "Επιλογή"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®"
 
 #: src/select-context.cpp:655
 #, fuzzy
 msgid "Selection canceled."
-msgstr "Επιλογή"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®"
 
 #: src/select-context.cpp:804
 #, fuzzy, c-format
 msgid "Move by %s, %s"
-msgstr "Μετακίνηση"
+msgstr "ΞΞµΟ„Ξ±ΞΊΞ―Ξ½Ξ·ΟƒΞ·"
 
 #: src/select-toolbar.cpp:383
 #, fuzzy
 msgid "Horizontal coordinate of selection"
-msgstr "Οριζόντιες Ρίγες"
+msgstr "ΞΟΞΉΞ¶ΟΞ½Ο„ΞΉΞµΟ‚ Ξ΅Ξ―Ξ³ΞµΟ‚"
 
 #: src/select-toolbar.cpp:386
 msgid "Vertical coordinate of selection"
@@ -2960,7 +2960,7 @@ msgstr ""
 #: src/select-toolbar.cpp:390
 #, fuzzy
 msgid "Width of selection"
-msgstr "Αποκοπή της επιλογής"
+msgstr "Ξ‘Ο€ΞΏΞΊΞΏΟ€Ξ® Ο„Ξ·Ο‚ ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #: src/select-toolbar.cpp:398
 msgid "Change both width and height by the same proportion"
@@ -2969,7 +2969,7 @@ msgstr ""
 #: src/select-toolbar.cpp:405
 #, fuzzy
 msgid "Height of selection"
-msgstr "Αντιγραφή ώρας στο επιλεγμένο"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΟΟΞ±Ο‚ ΟƒΟ„ΞΏ ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏ"
 
 #: src/selection-chemistry.cpp:73
 msgid "Nothing was deleted."
@@ -2979,17 +2979,17 @@ msgstr ""
 #: src/selection-chemistry.cpp:113
 #, fuzzy
 msgid "Select some objects to duplicate."
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #: src/selection-chemistry.cpp:248
 #, fuzzy
 msgid "Select two or more objects to group."
-msgstr "Αποθήκευση επιλογής"
+msgstr "Ξ‘Ο€ΞΏΞΈΞ®ΞΊΞµΟ…ΟƒΞ· ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #: src/selection-chemistry.cpp:256
 #, fuzzy
 msgid "Select at least two objects to group."
-msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #: src/selection-chemistry.cpp:265
 msgid "You cannot group objects from different groups or layers."
@@ -3007,7 +3007,7 @@ msgstr ""
 #: src/selection-chemistry.cpp:414
 #, fuzzy
 msgid "Select some objects to raise."
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #: src/selection-chemistry.cpp:420 src/selection-chemistry.cpp:498
 msgid "You cannot raise/lower objects from different groups or layers."
@@ -3017,19 +3017,19 @@ msgstr ""
 #: src/selection-chemistry.cpp:464
 #, fuzzy
 msgid "Select some objects to raise to top."
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #
 #: src/selection-chemistry.cpp:492
 #, fuzzy
 msgid "Select some objects to lower."
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #
 #: src/selection-chemistry.cpp:548
 #, fuzzy
 msgid "Select some objects to lower to bottom."
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #: src/selection-chemistry.cpp:582
 msgid "Nothing to undo."
@@ -3047,19 +3047,19 @@ msgstr ""
 #: src/selection-chemistry.cpp:778 src/selection-chemistry.cpp:829
 #, fuzzy
 msgid "Nothing on the clipboard."
-msgstr "Αντιγραφή επιλογής στο τεμάχιο"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚ ΟƒΟ„ΞΏ Ο„ΞµΞΌΞ¬Ο‡ΞΉΞΏ"
 
 #
 #: src/selection-chemistry.cpp:835
 #, fuzzy
 msgid "Select objects to paste style to."
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #
 #: src/selection-chemistry.cpp:1350
 #, fuzzy
 msgid "Select an object to clone."
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #: src/selection-chemistry.cpp:1356
 msgid "If you want to clone several objects, group them and clone the group."
@@ -3068,7 +3068,7 @@ msgstr ""
 #: src/selection-chemistry.cpp:1387
 #, fuzzy
 msgid "Select a clone to unlink."
-msgstr "Επιλογή αρχείου προς ανάγνωση"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ξ±ΟΟ‡ΞµΞ―ΞΏΟ… Ο€ΟΞΏΟ‚ Ξ±Ξ½Ξ¬Ξ³Ξ½Ο‰ΟƒΞ·"
 
 #: src/selection-chemistry.cpp:1418
 msgid "No clones to unlink in the selection."
@@ -3086,13 +3086,13 @@ msgstr ""
 #: src/selection-chemistry.cpp:1470
 #, fuzzy
 msgid "Select an object to tile."
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #
 #: src/selection-chemistry.cpp:1534
 #, fuzzy
 msgid "Select an object with pattern fill to untile."
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #: src/selection-chemistry.cpp:1585
 msgid "No pattern fills to untile in the selection."
@@ -3137,12 +3137,12 @@ msgstr ""
 #: src/slideshow.cpp:88
 #, fuzzy
 msgid "Inkscape slideshow"
-msgstr "Συμπαγές"
+msgstr "Ξ£Ο…ΞΌΟ€Ξ±Ξ³Ξ­Ο‚"
 
 #: src/sp-anchor.cpp:197
 #, fuzzy, c-format
 msgid "Link to %s"
-msgstr "σύνδεσμος στο %s"
+msgstr "ΟƒΟΞ½Ξ΄ΞµΟƒΞΌΞΏΟ‚ ΟƒΟ„ΞΏ %s"
 
 #: src/sp-ellipse.cpp:588
 msgid "Circle"
@@ -3155,18 +3155,18 @@ msgstr ""
 #: src/sp-guide.cpp:308
 #, fuzzy
 msgid "vertical guideline"
-msgstr "Κατακόρυφες Ρίγες"
+msgstr "ΞΞ±Ο„Ξ±ΞΊΟΟΟ…Ο†ΞµΟ‚ Ξ΅Ξ―Ξ³ΞµΟ‚"
 
 #: src/sp-guide.cpp:310
 #, fuzzy
 msgid "horizontal guideline"
-msgstr "οριζόντιο"
+msgstr "ΞΏΟΞΉΞ¶ΟΞ½Ο„ΞΉΞΏ"
 
 #
 #: src/sp-image.cpp:324
 #, fuzzy, c-format
 msgid "Image with bad reference: %s"
-msgstr "Προτιμίσεις Ναυτίλου"
+msgstr "Ξ ΟΞΏΟ„ΞΉΞΌΞ―ΟƒΞµΞΉΟ‚ ΞΞ±Ο…Ο„Ξ―Ξ»ΞΏΟ…"
 
 #: src/sp-image.cpp:326
 #, c-format
@@ -3189,29 +3189,29 @@ msgstr ""
 #: src/sp-image.cpp:920
 #, fuzzy
 msgid "Document Name:"
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/sp-image.cpp:933
 #, fuzzy
 msgid "Unknown"
-msgstr "¶γνωστο σύστημα"
+msgstr "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ ΟƒΟΟƒΟ„Ξ·ΞΌΞ±"
 
 #
 #: src/sp-image.cpp:939
 #, fuzzy
 msgid "Image URI:"
-msgstr "Εικόνα"
+msgstr "Ξ•ΞΉΞΊΟΞ½Ξ±"
 
 #
 #: src/sp-item-group.cpp:330
 #, fuzzy, c-format
 msgid "Group of %d objects"
-msgstr "Εισαγωγή αντικειμένων"
+msgstr "Ξ•ΞΉΟƒΞ±Ξ³Ο‰Ξ³Ξ® Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #
 #: src/sp-item.cpp:515
 msgid "Object"
-msgstr "Αντικείμενο"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞΊΞµΞ―ΞΌΞµΞ½ΞΏ"
 
 #: src/sp-path.cpp:115
 #, c-format
@@ -3237,7 +3237,7 @@ msgstr ""
 #: src/sp-typeset.cpp:388
 #, fuzzy
 msgid "typeset object"
-msgstr "Επιλέξτε αντικείμενο"
+msgstr "Ξ•Ο€ΞΉΞ»Ξ­ΞΎΟ„Ξµ Ξ±Ξ½Ο„ΞΉΞΊΞµΞ―ΞΌΞµΞ½ΞΏ"
 
 #: src/sp-typeset.cpp:1121
 msgid "Select at least 1 text and 1 shape to build a typeset object."
@@ -3289,7 +3289,7 @@ msgstr ""
 #: src/splivarot.cpp:540
 #, fuzzy
 msgid "Select some paths to outline."
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #. TRANSLATORS: "to outline" means "to convert stroke to path"
 #: src/splivarot.cpp:741
@@ -3304,7 +3304,7 @@ msgstr ""
 #: src/splivarot.cpp:1045
 #, fuzzy
 msgid "Select some paths to inset/outset."
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #: src/splivarot.cpp:1257
 msgid "No paths to inset/outset in the selection."
@@ -3314,7 +3314,7 @@ msgstr ""
 #: src/splivarot.cpp:1301
 #, fuzzy
 msgid "Select some paths to simplify."
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #: src/splivarot.cpp:1393
 msgid "No paths to simplify in the selection."
@@ -3328,7 +3328,7 @@ msgstr ""
 #: src/star-context.cpp:472
 #, fuzzy, c-format
 msgid "Draw star at (%s,%s)"
-msgstr "Ημέρα έναρξης:"
+msgstr "Ξ—ΞΌΞ­ΟΞ± Ξ­Ξ½Ξ±ΟΞΎΞ·Ο‚:"
 
 #: src/text-context.cpp:394
 msgid "No-break space"
@@ -3350,24 +3350,24 @@ msgstr ""
 #: src/toolbox.cpp:380
 #, fuzzy
 msgid "Insert new nodes into selected segments"
-msgstr "Ξε-διαγραφή των επιλεγμένων μηνυμάτων"
+msgstr "ΞΞµ-Ξ΄ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® Ο„Ο‰Ξ½ ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ ΞΌΞ·Ξ½Ο…ΞΌΞ¬Ο„Ο‰Ξ½"
 
 #: src/toolbox.cpp:382
 #, fuzzy
 msgid "Delete selected nodes"
-msgstr "Διαγραφή επιλογής"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #
 #: src/toolbox.cpp:387
 #, fuzzy
 msgid "Join paths at selected nodes"
-msgstr "Εκκίνηση επιλεγμένου παροχέα"
+msgstr "Ξ•ΞΊΞΊΞ―Ξ½Ξ·ΟƒΞ· ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ο€Ξ±ΟΞΏΟ‡Ξ­Ξ±"
 
 #
 #: src/toolbox.cpp:389
 #, fuzzy
 msgid "Join paths at selected nodes with new segment"
-msgstr "Εκκίνηση επιλεγμένου παροχέα"
+msgstr "Ξ•ΞΊΞΊΞ―Ξ½Ξ·ΟƒΞ· ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ο€Ξ±ΟΞΏΟ‡Ξ­Ξ±"
 
 #: src/toolbox.cpp:392
 msgid "Split path between two non-endpoint nodes"
@@ -3377,32 +3377,32 @@ msgstr ""
 #: src/toolbox.cpp:395
 #, fuzzy
 msgid "Break path at selected nodes"
-msgstr "Εκκίνηση επιλεγμένου παροχέα"
+msgstr "Ξ•ΞΊΞΊΞ―Ξ½Ξ·ΟƒΞ· ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ο€Ξ±ΟΞΏΟ‡Ξ­Ξ±"
 
 #: src/toolbox.cpp:400
 #, fuzzy
 msgid "Make selected nodes corner"
-msgstr "Διαγραφή επιλογής"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #: src/toolbox.cpp:403
 #, fuzzy
 msgid "Make selected nodes smooth"
-msgstr "Διαγραφή επιλογής"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #: src/toolbox.cpp:406
 #, fuzzy
 msgid "Make selected nodes symmetric"
-msgstr "Διαγραφή επιλογής"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #: src/toolbox.cpp:411
 #, fuzzy
 msgid "Make selected segments lines"
-msgstr "Μετακίνιση επιλεγμένου μενού πρός τα κάτω"
+msgstr "ΞΞµΟ„Ξ±ΞΊΞ―Ξ½ΞΉΟƒΞ· ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… ΞΌΞµΞ½ΞΏΟ Ο€ΟΟΟ‚ Ο„Ξ± ΞΊΞ¬Ο„Ο‰"
 
 #: src/toolbox.cpp:414
 #, fuzzy
 msgid "Make selected segments curves"
-msgstr "Μετακίνηση επιλεγμένου μενού πρoς τα επάνω"
+msgstr "ΞΞµΟ„Ξ±ΞΊΞ―Ξ½Ξ·ΟƒΞ· ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… ΞΌΞµΞ½ΞΏΟ Ο€ΟoΟ‚ Ο„Ξ± ΞµΟ€Ξ¬Ξ½Ο‰"
 
 #: src/toolbox.cpp:1093
 msgid "Corners:"
@@ -3423,7 +3423,7 @@ msgstr ""
 #: src/toolbox.cpp:1123
 #, fuzzy
 msgid "Spoke ratio:"
-msgstr "Διατήρηση αναλογιών"
+msgstr "Ξ”ΞΉΞ±Ο„Ξ®ΟΞ·ΟƒΞ· Ξ±Ξ½Ξ±Ξ»ΞΏΞ³ΞΉΟΞ½"
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
@@ -3434,7 +3434,7 @@ msgstr ""
 #: src/toolbox.cpp:1141
 #, fuzzy
 msgid "Roundedness:"
-msgstr "Σημείο προσάρτησης"
+msgstr "Ξ£Ξ·ΞΌΞµΞ―ΞΏ Ο€ΟΞΏΟƒΞ¬ΟΟ„Ξ·ΟƒΞ·Ο‚"
 
 #: src/toolbox.cpp:1141
 msgid "How much rounded are the corners (0 for sharp)"
@@ -3459,7 +3459,7 @@ msgstr "1:1"
 #: src/toolbox.cpp:1392
 #, fuzzy
 msgid "Horizontal radius of rounded corner"
-msgstr "Οριζόντιες Ρίγες"
+msgstr "ΞΟΞΉΞ¶ΟΞ½Ο„ΞΉΞµΟ‚ Ξ΅Ξ―Ξ³ΞµΟ‚"
 
 #
 #: src/toolbox.cpp:1402
@@ -3482,7 +3482,7 @@ msgstr ""
 #: src/toolbox.cpp:1636
 #, fuzzy
 msgid "Turns:"
-msgstr "Μετασχηματισμός"
+msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #: src/toolbox.cpp:1636
 msgid "Number of revolutions"
@@ -3491,7 +3491,7 @@ msgstr ""
 #: src/toolbox.cpp:1646
 #, fuzzy
 msgid "Divergence:"
-msgstr "πράσινο"
+msgstr "Ο€ΟΞ¬ΟƒΞΉΞ½ΞΏ"
 
 #: src/toolbox.cpp:1646
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
@@ -3512,7 +3512,7 @@ msgstr ""
 #: src/toolbox.cpp:1763
 #, fuzzy
 msgid "Angle:"
-msgstr "Διάστημα"
+msgstr "Ξ”ΞΉΞ¬ΟƒΟ„Ξ·ΞΌΞ±"
 
 #: src/toolbox.cpp:1763
 msgid "The angle of the calligraphic pen (in degrees)"
@@ -3530,7 +3530,7 @@ msgstr ""
 #: src/toolbox.cpp:1784
 #, fuzzy
 msgid "Drag:"
-msgstr "Συρτάρι"
+msgstr "Ξ£Ο…ΟΟ„Ξ¬ΟΞΉ"
 
 #: src/toolbox.cpp:1784
 msgid "How much resistance affects the movement of the pen"
@@ -3539,7 +3539,7 @@ msgstr ""
 #: src/toolbox.cpp:2096
 #, fuzzy
 msgid "Start:"
-msgstr "Αστερίσκος"
+msgstr "Ξ‘ΟƒΟ„ΞµΟΞ―ΟƒΞΊΞΏΟ‚"
 
 #: src/toolbox.cpp:2096
 msgid "The angle (in degrees) from the horizontal to the arc's start point"
@@ -3557,7 +3557,7 @@ msgstr ""
 #: src/toolbox.cpp:2117
 #, fuzzy
 msgid "Open arc"
-msgstr "_¶νοιγμα"
+msgstr "_Ξ†Ξ½ΞΏΞΉΞ³ΞΌΞ±"
 
 #: src/toolbox.cpp:2118
 msgid ""
@@ -3650,23 +3650,23 @@ msgstr ""
 #. File
 #: src/verbs.cpp:800
 msgid "_New"
-msgstr "_Νέο"
+msgstr "_ΞΞ­ΞΏ"
 
 #: src/verbs.cpp:800
 #, fuzzy
 msgid "Create new document"
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #
 #: src/verbs.cpp:802
 #, fuzzy
 msgid "_Open..."
-msgstr "_¶νοιγμα"
+msgstr "_Ξ†Ξ½ΞΏΞΉΞ³ΞΌΞ±"
 
 #: src/verbs.cpp:803
 #, fuzzy
 msgid "Open existing document"
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/verbs.cpp:804
 msgid "Re_vert"
@@ -3679,37 +3679,37 @@ msgstr ""
 #: src/verbs.cpp:806
 #, fuzzy
 msgid "_Save"
-msgstr "Σκίαση"
+msgstr "Ξ£ΞΊΞ―Ξ±ΟƒΞ·"
 
 #: src/verbs.cpp:806
 #, fuzzy
 msgid "Save document"
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/verbs.cpp:808
 #, fuzzy
 msgid "Save _As..."
-msgstr "Αποθήκευση αρχείου"
+msgstr "Ξ‘Ο€ΞΏΞΈΞ®ΞΊΞµΟ…ΟƒΞ· Ξ±ΟΟ‡ΞµΞ―ΞΏΟ…"
 
 #: src/verbs.cpp:809
 #, fuzzy
 msgid "Save document under new name"
-msgstr "Αποθήκευση ως γνήσιο όνομα αρχείου"
+msgstr "Ξ‘Ο€ΞΏΞΈΞ®ΞΊΞµΟ…ΟƒΞ· Ο‰Ο‚ Ξ³Ξ½Ξ®ΟƒΞΉΞΏ ΟΞ½ΞΏΞΌΞ± Ξ±ΟΟ‡ΞµΞ―ΞΏΟ…"
 
 #: src/verbs.cpp:810
 #, fuzzy
 msgid "_Print..."
-msgstr "Σημείο"
+msgstr "Ξ£Ξ·ΞΌΞµΞ―ΞΏ"
 
 #: src/verbs.cpp:810
 #, fuzzy
 msgid "Print document"
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/verbs.cpp:812
 #, fuzzy
 msgid "Print _Direct"
-msgstr " Ιδιότητες"
+msgstr " Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #: src/verbs.cpp:813
 msgid "Print directly to file or pipe"
@@ -3718,18 +3718,18 @@ msgstr ""
 #: src/verbs.cpp:814
 #, fuzzy
 msgid "Print Previe_w"
-msgstr "Χρήση Προεπισκόπησης"
+msgstr "Ξ§ΟΞ®ΟƒΞ· Ξ ΟΞΏΞµΟ€ΞΉΟƒΞΊΟΟ€Ξ·ΟƒΞ·Ο‚"
 
 #: src/verbs.cpp:815
 #, fuzzy
 msgid "Preview document printout"
-msgstr "Προεπισκόπηση δεδομένων προς εκτύπωση"
+msgstr "Ξ ΟΞΏΞµΟ€ΞΉΟƒΞΊΟΟ€Ξ·ΟƒΞ· Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½ Ο€ΟΞΏΟ‚ ΞµΞΊΟ„ΟΟ€Ο‰ΟƒΞ·"
 
 #
 #: src/verbs.cpp:816
 #, fuzzy
 msgid "_Import..."
-msgstr "Εισαγωγή"
+msgstr "Ξ•ΞΉΟƒΞ±Ξ³Ο‰Ξ³Ξ®"
 
 #: src/verbs.cpp:817
 msgid "Import bitmap or SVG image into document"
@@ -3738,7 +3738,7 @@ msgstr ""
 #: src/verbs.cpp:818
 #, fuzzy
 msgid "_Export Bitmap..."
-msgstr "Εξαγωγή Αρχείου"
+msgstr "Ξ•ΞΎΞ±Ξ³Ο‰Ξ³Ξ® Ξ‘ΟΟ‡ΞµΞ―ΞΏΟ…"
 
 #: src/verbs.cpp:819
 msgid "Export document or selection as PNG bitmap"
@@ -3747,7 +3747,7 @@ msgstr ""
 #: src/verbs.cpp:820
 #, fuzzy
 msgid "N_ext Window"
-msgstr "Κλείσιμο καταγραφών"
+msgstr "ΞΞ»ΞµΞ―ΟƒΞΉΞΌΞΏ ΞΊΞ±Ο„Ξ±Ξ³ΟΞ±Ο†ΟΞ½"
 
 #: src/verbs.cpp:821
 msgid "Switch to the next document window"
@@ -3756,7 +3756,7 @@ msgstr ""
 #: src/verbs.cpp:822
 #, fuzzy
 msgid "P_revious Window"
-msgstr "Κλείσιμο καταγραφών"
+msgstr "ΞΞ»ΞµΞ―ΟƒΞΉΞΌΞΏ ΞΊΞ±Ο„Ξ±Ξ³ΟΞ±Ο†ΟΞ½"
 
 #: src/verbs.cpp:823
 msgid "Switch to the previous document window"
@@ -3765,40 +3765,40 @@ msgstr ""
 #: src/verbs.cpp:824
 #, fuzzy
 msgid "_Close"
-msgstr "Νέα Προβολή"
+msgstr "ΞΞ­Ξ± Ξ ΟΞΏΞ²ΞΏΞ»Ξ®"
 
 #: src/verbs.cpp:825
 #, fuzzy
 msgid "Close window"
-msgstr "Νέα Προβολή"
+msgstr "ΞΞ­Ξ± Ξ ΟΞΏΞ²ΞΏΞ»Ξ®"
 
 #: src/verbs.cpp:826
 #, fuzzy
 msgid "_Quit"
-msgstr "_Τέλος"
+msgstr "_Ξ¤Ξ­Ξ»ΞΏΟ‚"
 
 #: src/verbs.cpp:826
 #, fuzzy
 msgid "Quit Inkscape"
-msgstr "Συμπαγές"
+msgstr "Ξ£Ο…ΞΌΟ€Ξ±Ξ³Ξ­Ο‚"
 
 #
 #. Edit
 #: src/verbs.cpp:829
 #, fuzzy
 msgid "_Undo"
-msgstr "Ακύρωση"
+msgstr "Ξ‘ΞΊΟΟΟ‰ΟƒΞ·"
 
 #: src/verbs.cpp:829
 #, fuzzy
 msgid "Undo last action"
-msgstr "Μετασχηματισμός"
+msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #
 #: src/verbs.cpp:831
 #, fuzzy
 msgid "_Redo"
-msgstr "Επανεκτέλεση"
+msgstr "Ξ•Ο€Ξ±Ξ½ΞµΞΊΟ„Ξ­Ξ»ΞµΟƒΞ·"
 
 #: src/verbs.cpp:832
 msgid "Do again last undone action"
@@ -3808,85 +3808,85 @@ msgstr ""
 #: src/verbs.cpp:833
 #, fuzzy
 msgid "Cu_t"
-msgstr "Αποκοπή"
+msgstr "Ξ‘Ο€ΞΏΞΊΞΏΟ€Ξ®"
 
 #
 #: src/verbs.cpp:834
 #, fuzzy
 msgid "Cut selection to clipboard"
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #
 #: src/verbs.cpp:835
 #, fuzzy
 msgid "_Copy"
-msgstr "Αντιγραφή"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ®"
 
 #
 #: src/verbs.cpp:836
 #, fuzzy
 msgid "Copy selection to clipboard"
-msgstr "Αντιγραφή επιλογής στο τεμάχιο"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚ ΟƒΟ„ΞΏ Ο„ΞµΞΌΞ¬Ο‡ΞΉΞΏ"
 
 #
 #: src/verbs.cpp:837
 #, fuzzy
 msgid "_Paste"
-msgstr "Επικόλληση"
+msgstr "Ξ•Ο€ΞΉΞΊΟΞ»Ξ»Ξ·ΟƒΞ·"
 
 #
 #: src/verbs.cpp:838
 #, fuzzy
 msgid "Paste object(s) from clipboard to mouse point"
-msgstr "Επικόλληση από το τεμάχιο"
+msgstr "Ξ•Ο€ΞΉΞΊΟΞ»Ξ»Ξ·ΟƒΞ· Ξ±Ο€Ο Ο„ΞΏ Ο„ΞµΞΌΞ¬Ο‡ΞΉΞΏ"
 
 #: src/verbs.cpp:839
 #, fuzzy
 msgid "Paste _Style"
-msgstr "Καπνός με άνεμο"
+msgstr "ΞΞ±Ο€Ξ½ΟΟ‚ ΞΌΞµ Ξ¬Ξ½ΞµΞΌΞΏ"
 
 #
 #: src/verbs.cpp:840
 #, fuzzy
 msgid "Apply style of the copied object to selection"
-msgstr "Αντιγραφή επιλογής στο τεμάχιο"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚ ΟƒΟ„ΞΏ Ο„ΞµΞΌΞ¬Ο‡ΞΉΞΏ"
 
 #: src/verbs.cpp:841
 #, fuzzy
 msgid "Paste _In Place"
-msgstr "Καπνός με άνεμο"
+msgstr "ΞΞ±Ο€Ξ½ΟΟ‚ ΞΌΞµ Ξ¬Ξ½ΞµΞΌΞΏ"
 
 #: src/verbs.cpp:842
 #, fuzzy
 msgid "Paste object(s) from clipboard to the original location"
-msgstr "Ορι_ζόντια Στοίχιση"
+msgstr "ΞΟΞΉ_Ξ¶ΟΞ½Ο„ΞΉΞ± Ξ£Ο„ΞΏΞ―Ο‡ΞΉΟƒΞ·"
 
 #
 #: src/verbs.cpp:843
 #, fuzzy
 msgid "_Delete"
-msgstr "Διαγραφή"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ®"
 
 #
 #: src/verbs.cpp:844
 #, fuzzy
 msgid "Delete selection"
-msgstr "Καθαρισμός της επιλογής"
+msgstr "ΞΞ±ΞΈΞ±ΟΞΉΟƒΞΌΟΟ‚ Ο„Ξ·Ο‚ ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #: src/verbs.cpp:845
 #, fuzzy
 msgid "Duplic_ate"
-msgstr "Δημιουργία αντιγράφου"
+msgstr "Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ξ±Ξ½Ο„ΞΉΞ³ΟΞ¬Ο†ΞΏΟ…"
 
 #: src/verbs.cpp:846
 #, fuzzy
 msgid "Duplicate selected object(s)"
-msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #: src/verbs.cpp:847
 #, fuzzy
 msgid "Clo_ne"
-msgstr "Νέα Προβολή"
+msgstr "ΞΞ­Ξ± Ξ ΟΞΏΞ²ΞΏΞ»Ξ®"
 
 #: src/verbs.cpp:848
 msgid "Create a clone of selected object (a copy linked to the original)"
@@ -3904,19 +3904,19 @@ msgstr ""
 #: src/verbs.cpp:851
 #, fuzzy
 msgid "Select _Original"
-msgstr "Επιλογή"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®"
 
 #
 #: src/verbs.cpp:852
 #, fuzzy
 msgid "Select the object to which the clone is linked"
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #
 #: src/verbs.cpp:853
 #, fuzzy
 msgid "_Tile"
-msgstr "_Αρχείο"
+msgstr "_Ξ‘ΟΟ‡ΞµΞ―ΞΏ"
 
 #: src/verbs.cpp:854
 msgid "Convert selection to a rectangle with tiled pattern fill"
@@ -3926,7 +3926,7 @@ msgstr ""
 #: src/verbs.cpp:855
 #, fuzzy
 msgid "_Untile"
-msgstr "_Αρχείο"
+msgstr "_Ξ‘ΟΟ‡ΞµΞ―ΞΏ"
 
 #: src/verbs.cpp:856
 msgid "Extract objects from a tiled pattern fill"
@@ -3936,7 +3936,7 @@ msgstr ""
 #: src/verbs.cpp:857
 #, fuzzy
 msgid "Clea_r All"
-msgstr "Αρχείο core"
+msgstr "Ξ‘ΟΟ‡ΞµΞ―ΞΏ core"
 
 #: src/verbs.cpp:858
 msgid "Delete all objects from document"
@@ -3946,56 +3946,56 @@ msgstr ""
 #: src/verbs.cpp:859
 #, fuzzy
 msgid "Select Al_l"
-msgstr "Επιλογή"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®"
 
 #: src/verbs.cpp:860
 #, fuzzy
 msgid "Select all objects or all nodes"
-msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #
 #: src/verbs.cpp:861
 #, fuzzy
 msgid "D_eselect"
-msgstr "Επιλογή"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®"
 
 #: src/verbs.cpp:862
 #, fuzzy
 msgid "Deselect any selected objects or nodes"
-msgstr "Διαγραφή επιλογής"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #. Selection
 #: src/verbs.cpp:865
 #, fuzzy
 msgid "Raise to _Top"
-msgstr "Αποθήκευση επιλογής"
+msgstr "Ξ‘Ο€ΞΏΞΈΞ®ΞΊΞµΟ…ΟƒΞ· ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #: src/verbs.cpp:866
 #, fuzzy
 msgid "Raise selection to top"
-msgstr "Αποθήκευση επιλογής"
+msgstr "Ξ‘Ο€ΞΏΞΈΞ®ΞΊΞµΟ…ΟƒΞ· ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #
 #: src/verbs.cpp:867
 #, fuzzy
 msgid "Lower to _Bottom"
-msgstr "Αντιγραφή επιλογής στο τεμάχιο"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚ ΟƒΟ„ΞΏ Ο„ΞµΞΌΞ¬Ο‡ΞΉΞΏ"
 
 #
 #: src/verbs.cpp:868
 #, fuzzy
 msgid "Lower selection to bottom"
-msgstr "Αντιγραφή επιλογής στο τεμάχιο"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚ ΟƒΟ„ΞΏ Ο„ΞµΞΌΞ¬Ο‡ΞΉΞΏ"
 
 #: src/verbs.cpp:869
 #, fuzzy
 msgid "_Raise"
-msgstr "Αρχικοποίηση"
+msgstr "Ξ‘ΟΟ‡ΞΉΞΊΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ·"
 
 #: src/verbs.cpp:870
 #, fuzzy
 msgid "Raise selection one step"
-msgstr "Μόνον επιλογή"
+msgstr "ΞΟΞ½ΞΏΞ½ ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®"
 
 #: src/verbs.cpp:871
 msgid "_Lower"
@@ -4004,63 +4004,63 @@ msgstr ""
 #: src/verbs.cpp:872
 #, fuzzy
 msgid "Lower selection one step"
-msgstr "Δεν έγινε επιλογή"
+msgstr "Ξ”ΞµΞ½ Ξ­Ξ³ΞΉΞ½Ξµ ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®"
 
 #: src/verbs.cpp:873
 msgid "_Group"
-msgstr "_Ομαδοποίηση"
+msgstr "_ΞΞΌΞ±Ξ΄ΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ·"
 
 #
 #: src/verbs.cpp:874
 #, fuzzy
 msgid "Group selected objects"
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #: src/verbs.cpp:876
 #, fuzzy
 msgid "Ungroup selected group(s)"
-msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #
 #: src/verbs.cpp:878
 #, fuzzy
 msgid "_Union"
-msgstr "κανένα"
+msgstr "ΞΊΞ±Ξ½Ξ­Ξ½Ξ±"
 
 #: src/verbs.cpp:879
 #, fuzzy
 msgid "Union of selected objects"
-msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #: src/verbs.cpp:880
 #, fuzzy
 msgid "_Intersection"
-msgstr "Δ_ιεπιφάνεια"
+msgstr "Ξ”_ΞΉΞµΟ€ΞΉΟ†Ξ¬Ξ½ΞµΞΉΞ±"
 
 #: src/verbs.cpp:881
 #, fuzzy
 msgid "Intersection of selected objects"
-msgstr "Διαγραφή επιλογής"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #: src/verbs.cpp:882
 #, fuzzy
 msgid "_Difference"
-msgstr "πράσινο"
+msgstr "Ο€ΟΞ¬ΟƒΞΉΞ½ΞΏ"
 
 #: src/verbs.cpp:883
 #, fuzzy
 msgid "Difference of selected objects (bottom minus top)"
-msgstr "Διαγραφή επιλογής"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #: src/verbs.cpp:884
 #, fuzzy
 msgid "E_xclusion"
-msgstr "Διάσταση"
+msgstr "Ξ”ΞΉΞ¬ΟƒΟ„Ξ±ΟƒΞ·"
 
 #: src/verbs.cpp:885
 #, fuzzy
 msgid "Exclusive OR of selected objects"
-msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #: src/verbs.cpp:886
 msgid "Di_vision"
@@ -4073,7 +4073,7 @@ msgstr ""
 #: src/verbs.cpp:888
 #, fuzzy
 msgid "Cut _Path"
-msgstr "Αντιγραφή επιλεγμένης εργασίας"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ·Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/verbs.cpp:889
 msgid "Cut the bottom object's stroke into pieces, removing fill"
@@ -4085,32 +4085,32 @@ msgstr ""
 #: src/verbs.cpp:893
 #, fuzzy
 msgid "Ou_tset"
-msgstr "Αντιγραφή επιλεγμένης εργασίας"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ·Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/verbs.cpp:894
 #, fuzzy
 msgid "Outset selected path(s)"
-msgstr "Αντιγραφή επιλεγμένης εργασίας"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ·Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/verbs.cpp:896
 #, fuzzy
 msgid "O_utset Path by 1px"
-msgstr "Αντιγραφή επιλεγμένης εργασίας"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ·Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/verbs.cpp:897
 #, fuzzy
 msgid "Outset selected path(s) by 1px"
-msgstr "Αντιγραφή επιλεγμένης εργασίας"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ·Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/verbs.cpp:899
 #, fuzzy
 msgid "O_utset Path by 10px"
-msgstr "Αντιγραφή επιλεγμένης εργασίας"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ·Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/verbs.cpp:900
 #, fuzzy
 msgid "Outset selected path(s) by 10px"
-msgstr "Αντιγραφή επιλεγμένης εργασίας"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ·Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #. TRANSLATORS: "inset": contract a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
@@ -4122,7 +4122,7 @@ msgstr ""
 #: src/verbs.cpp:905
 #, fuzzy
 msgid "Inset selected path(s)"
-msgstr "Αντιγραφή επιλεγμένης εργασίας"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ·Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/verbs.cpp:907
 msgid "I_nset Path by 1px"
@@ -4131,7 +4131,7 @@ msgstr ""
 #: src/verbs.cpp:908
 #, fuzzy
 msgid "Inset selected path(s) by 1px"
-msgstr "Αντιγραφή επιλεγμένης εργασίας"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ·Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/verbs.cpp:910
 msgid "I_nset Path by 10px"
@@ -4140,7 +4140,7 @@ msgstr ""
 #: src/verbs.cpp:911
 #, fuzzy
 msgid "Inset selected path(s) by 10px"
-msgstr "Αντιγραφή επιλεγμένης εργασίας"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ·Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/verbs.cpp:913
 msgid "D_ynamic Offset"
@@ -4161,23 +4161,23 @@ msgstr ""
 #: src/verbs.cpp:918
 #, fuzzy
 msgid "_Stroke to Path"
-msgstr "Καπνός με άνεμο"
+msgstr "ΞΞ±Ο€Ξ½ΟΟ‚ ΞΌΞµ Ξ¬Ξ½ΞµΞΌΞΏ"
 
 #
 #: src/verbs.cpp:919
 #, fuzzy
 msgid "Convert selected stroke(s) to path(s)"
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #: src/verbs.cpp:920
 #, fuzzy
 msgid "Si_mplify"
-msgstr "Αντιγραφή επιλεγμένης εργασίας"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ·Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/verbs.cpp:921
 #, fuzzy
 msgid "Simplify selected path(s) by removing extra nodes"
-msgstr "Αντιγραφή επιλεγμένης εργασίας"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ·Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/verbs.cpp:922
 msgid "Cl_eanup"
@@ -4186,23 +4186,23 @@ msgstr ""
 #: src/verbs.cpp:923
 #, fuzzy
 msgid "Clean up selected path(s)"
-msgstr "Αντιγραφή επιλεγμένης εργασίας"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ·Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #
 #: src/verbs.cpp:924
 #, fuzzy
 msgid "_Reverse"
-msgstr "Αρχείο"
+msgstr "Ξ‘ΟΟ‡ΞµΞ―ΞΏ"
 
 #: src/verbs.cpp:925
 #, fuzzy
 msgid "Reverses the direction of selected path(s); useful for flipping markers"
-msgstr "Διαγραφή επιλογής"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #: src/verbs.cpp:926
 #, fuzzy
 msgid "_Combine"
-msgstr "_Μεταγλώττιση"
+msgstr "_ΞΞµΟ„Ξ±Ξ³Ξ»ΟΟ„Ο„ΞΉΟƒΞ·"
 
 #: src/verbs.cpp:927
 msgid "Combine several paths into one"
@@ -4211,96 +4211,96 @@ msgstr ""
 #: src/verbs.cpp:928
 #, fuzzy
 msgid "Break _Apart"
-msgstr "πραγματική διαδρομή"
+msgstr "Ο€ΟΞ±Ξ³ΞΌΞ±Ο„ΞΉΞΊΞ® Ξ΄ΞΉΞ±Ξ΄ΟΞΏΞΌΞ®"
 
 #: src/verbs.cpp:929
 #, fuzzy
 msgid "Break selected path(s) into subpaths"
-msgstr "Επανεκκίνηση επιλεγμένων αρχείων"
+msgstr "Ξ•Ο€Ξ±Ξ½ΞµΞΊΞΊΞ―Ξ½Ξ·ΟƒΞ· ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±ΟΟ‡ΞµΞ―Ο‰Ξ½"
 
 #
 #. Object
 #: src/verbs.cpp:932
 #, fuzzy
 msgid "Rotate _90 deg CW"
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #
 #: src/verbs.cpp:933
 #, fuzzy
 msgid "Rotate selection 90 degrees clockwise"
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #
 #: src/verbs.cpp:934
 #, fuzzy
 msgid "Rotate 9_0 deg CCW"
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #
 #: src/verbs.cpp:935
 #, fuzzy
 msgid "Rotate selection 90 degrees counter-clockwise"
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #: src/verbs.cpp:936
 #, fuzzy
 msgid "Remove _Transformations"
-msgstr "Μετασχηματισμός"
+msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #: src/verbs.cpp:937
 #, fuzzy
 msgid "Remove transformations from object"
-msgstr "Μετασχηματισμός"
+msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #: src/verbs.cpp:938
 #, fuzzy
 msgid "_Object to Path"
-msgstr "Μετασχηματισμός"
+msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #
 #: src/verbs.cpp:939
 #, fuzzy
 msgid "Convert selected object(s) to path(s)"
-msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #: src/verbs.cpp:941
 #, fuzzy
 msgid "Flip _Horizontally"
-msgstr "Οριζόντια αντιστροφή"
+msgstr "ΞΟΞΉΞ¶ΟΞ½Ο„ΞΉΞ± Ξ±Ξ½Ο„ΞΉΟƒΟ„ΟΞΏΟ†Ξ®"
 
 #: src/verbs.cpp:941
 #, fuzzy
 msgid "Flip selection horizontally"
-msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #: src/verbs.cpp:944
 #, fuzzy
 msgid "Flip _Vertically"
-msgstr "Κατακόρυφη αντιστροφή"
+msgstr "ΞΞ±Ο„Ξ±ΞΊΟΟΟ…Ο†Ξ· Ξ±Ξ½Ο„ΞΉΟƒΟ„ΟΞΏΟ†Ξ®"
 
 #: src/verbs.cpp:944
 #, fuzzy
 msgid "Flip selection vertically"
-msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #
 #. Event contexts
 #. TODO: add shortcuts to tooltips automatically!
 #: src/verbs.cpp:949
 msgid "Select"
-msgstr "Επιλογή"
+msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®"
 
 #
 #: src/verbs.cpp:950
 #, fuzzy
 msgid "Select and transform objects (F1)"
-msgstr "Επιλέξτε ενέργεια"
+msgstr "Ξ•Ο€ΞΉΞ»Ξ­ΞΎΟ„Ξµ ΞµΞ½Ξ­ΟΞ³ΞµΞΉΞ±"
 
 #: src/verbs.cpp:951
 #, fuzzy
 msgid "Node Edit"
-msgstr " Επεξεργασία "
+msgstr " Ξ•Ο€ΞµΞΎΞµΟΞ³Ξ±ΟƒΞ―Ξ± "
 
 #: src/verbs.cpp:952
 msgid "Edit path nodes or control handles (F2)"
@@ -4322,17 +4322,17 @@ msgstr ""
 #: src/verbs.cpp:960
 #, fuzzy
 msgid "Create spirals (F9)"
-msgstr "Δημιουργία γραμμής"
+msgstr "Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ξ³ΟΞ±ΞΌΞΌΞ®Ο‚"
 
 #: src/verbs.cpp:962
 #, fuzzy
 msgid "Draw freehand lines (F6)"
-msgstr "Λαβή συρταριού"
+msgstr "Ξ›Ξ±Ξ²Ξ® ΟƒΟ…ΟΟ„Ξ±ΟΞΉΞΏΟ"
 
 #: src/verbs.cpp:964
 #, fuzzy
 msgid "Draw Bezier curves and straight lines (Shift+F6)"
-msgstr "Λαβή συρταριού"
+msgstr "Ξ›Ξ±Ξ²Ξ® ΟƒΟ…ΟΟ„Ξ±ΟΞΉΞΏΟ"
 
 #: src/verbs.cpp:965
 msgid "Calligraphy"
@@ -4358,32 +4358,32 @@ msgstr ""
 #: src/verbs.cpp:975
 #, fuzzy
 msgid "Zoom In"
-msgstr "Μεγέθυνση"
+msgstr "ΞΞµΞ³Ξ­ΞΈΟ…Ξ½ΟƒΞ·"
 
 #: src/verbs.cpp:975
 msgid "Zoom in"
-msgstr "Μεγέθυνση"
+msgstr "ΞΞµΞ³Ξ­ΞΈΟ…Ξ½ΟƒΞ·"
 
 #: src/verbs.cpp:976
 #, fuzzy
 msgid "Zoom Out"
-msgstr "Σμίκρυνση"
+msgstr "Ξ£ΞΌΞ―ΞΊΟΟ…Ξ½ΟƒΞ·"
 
 #: src/verbs.cpp:976
 msgid "Zoom out"
-msgstr "Σμίκρυνση"
+msgstr "Ξ£ΞΌΞ―ΞΊΟΟ…Ξ½ΟƒΞ·"
 
 #
 #: src/verbs.cpp:977
 #, fuzzy
 msgid "_Rulers"
-msgstr "Αρχείο"
+msgstr "Ξ‘ΟΟ‡ΞµΞ―ΞΏ"
 
 #
 #: src/verbs.cpp:977
 #, fuzzy
 msgid "Show or hide the canvas rulers"
-msgstr "Εμφάνιση κόμβων-δ"
+msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· ΞΊΟΞΌΞ²Ο‰Ξ½-Ξ΄"
 
 #: src/verbs.cpp:978
 msgid "Scroll_bars"
@@ -4393,28 +4393,28 @@ msgstr ""
 #: src/verbs.cpp:978
 #, fuzzy
 msgid "Show or hide the canvas scrollbars"
-msgstr "Εμφάνιση κόμβων-δ"
+msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· ΞΊΟΞΌΞ²Ο‰Ξ½-Ξ΄"
 
 #: src/verbs.cpp:979
 #, fuzzy
 msgid "_Grid"
-msgstr "Πλέγμα"
+msgstr "Ξ Ξ»Ξ­Ξ³ΞΌΞ±"
 
 #: src/verbs.cpp:979
 #, fuzzy
 msgid "Show or hide grid"
-msgstr "Εμφάνιση πλέγματος"
+msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· Ο€Ξ»Ξ­Ξ³ΞΌΞ±Ο„ΞΏΟ‚"
 
 #: src/verbs.cpp:980
 #, fuzzy
 msgid "G_uides"
-msgstr "Γουϊνέα"
+msgstr "Ξ“ΞΏΟ…ΟΞ½Ξ­Ξ±"
 
 #
 #: src/verbs.cpp:980
 #, fuzzy
 msgid "Show or hide guides"
-msgstr "Εμφάνιση κόμβων-δ"
+msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· ΞΊΟΞΌΞ²Ο‰Ξ½-Ξ΄"
 
 #: src/verbs.cpp:981
 msgid "Nex_t Zoom"
@@ -4436,33 +4436,33 @@ msgstr ""
 #: src/verbs.cpp:985
 #, fuzzy
 msgid "Zoom 1:_1"
-msgstr "Μεγέθυνση _1:1"
+msgstr "ΞΞµΞ³Ξ­ΞΈΟ…Ξ½ΟƒΞ· _1:1"
 
 #
 #: src/verbs.cpp:985
 #, fuzzy
 msgid "Zoom to 1:1"
-msgstr "Μεγέθυνση _1:1"
+msgstr "ΞΞµΞ³Ξ­ΞΈΟ…Ξ½ΟƒΞ· _1:1"
 
 #: src/verbs.cpp:987
 #, fuzzy
 msgid "Zoom 1:_2"
-msgstr "Κλίμακα 125%"
+msgstr "ΞΞ»Ξ―ΞΌΞ±ΞΊΞ± 125%"
 
 #: src/verbs.cpp:987
 #, fuzzy
 msgid "Zoom to 1:2"
-msgstr "Κλίμακα 125%"
+msgstr "ΞΞ»Ξ―ΞΌΞ±ΞΊΞ± 125%"
 
 #: src/verbs.cpp:989
 #, fuzzy
 msgid "_Zoom 2:1"
-msgstr "Κλίμακα 25%"
+msgstr "ΞΞ»Ξ―ΞΌΞ±ΞΊΞ± 25%"
 
 #: src/verbs.cpp:989
 #, fuzzy
 msgid "Zoom to 2:1"
-msgstr "Κλίμακα 25%"
+msgstr "ΞΞ»Ξ―ΞΌΞ±ΞΊΞ± 25%"
 
 #: src/verbs.cpp:992
 msgid "_Fullscreen"
@@ -4475,73 +4475,73 @@ msgstr ""
 #: src/verbs.cpp:995
 #, fuzzy
 msgid "D_uplicate Window"
-msgstr "Δημιουργία αντιγράφου"
+msgstr "Ξ”Ξ·ΞΌΞΉΞΏΟ…ΟΞ³Ξ―Ξ± Ξ±Ξ½Ο„ΞΉΞ³ΟΞ¬Ο†ΞΏΟ…"
 
 #: src/verbs.cpp:995
 #, fuzzy
 msgid "Open a new window with the same document"
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/verbs.cpp:997
 #, fuzzy
 msgid "_New View Preview"
-msgstr "Χρήση Προεπισκόπησης"
+msgstr "Ξ§ΟΞ®ΟƒΞ· Ξ ΟΞΏΞµΟ€ΞΉΟƒΞΊΟΟ€Ξ·ΟƒΞ·Ο‚"
 
 #: src/verbs.cpp:998
 #, fuzzy
 msgid "New View Preview"
-msgstr "Χρήση Προεπισκόπησης"
+msgstr "Ξ§ΟΞ®ΟƒΞ· Ξ ΟΞΏΞµΟ€ΞΉΟƒΞΊΟΟ€Ξ·ΟƒΞ·Ο‚"
 
 #. "view_new_preview"
 #: src/verbs.cpp:999
 msgid "_Page"
-msgstr "_Σελίδα"
+msgstr "_Ξ£ΞµΞ»Ξ―Ξ΄Ξ±"
 
 #: src/verbs.cpp:1000
 #, fuzzy
 msgid "Zoom to fit page in window"
-msgstr "Πλάτος &Σελίδας"
+msgstr "Ξ Ξ»Ξ¬Ο„ΞΏΟ‚ &Ξ£ΞµΞ»Ξ―Ξ΄Ξ±Ο‚"
 
 #: src/verbs.cpp:1001
 #, fuzzy
 msgid "Page _Width"
-msgstr "Πλάτος &Σελίδας"
+msgstr "Ξ Ξ»Ξ¬Ο„ΞΏΟ‚ &Ξ£ΞµΞ»Ξ―Ξ΄Ξ±Ο‚"
 
 #: src/verbs.cpp:1002
 #, fuzzy
 msgid "Zoom to fit page width in window"
-msgstr "Πλάτος &Σελίδας"
+msgstr "Ξ Ξ»Ξ¬Ο„ΞΏΟ‚ &Ξ£ΞµΞ»Ξ―Ξ΄Ξ±Ο‚"
 
 #: src/verbs.cpp:1003
 #, fuzzy
 msgid "_Drawing"
-msgstr "Σχεδίαση"
+msgstr "Ξ£Ο‡ΞµΞ΄Ξ―Ξ±ΟƒΞ·"
 
 #: src/verbs.cpp:1004
 #, fuzzy
 msgid "Zoom to fit drawing in window"
-msgstr "Αλλαγή κλίμακας για _ταίριασμα"
+msgstr "Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® ΞΊΞ»Ξ―ΞΌΞ±ΞΊΞ±Ο‚ Ξ³ΞΉΞ± _Ο„Ξ±Ξ―ΟΞΉΞ±ΟƒΞΌΞ±"
 
 #
 #: src/verbs.cpp:1005
 msgid "_Selection"
-msgstr "_Επιλογή"
+msgstr "_Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ®"
 
 #: src/verbs.cpp:1006
 #, fuzzy
 msgid "Zoom to fit selection in window"
-msgstr "Αποθήκευση επιλογής"
+msgstr "Ξ‘Ο€ΞΏΞΈΞ®ΞΊΞµΟ…ΟƒΞ· ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #. Dialogs
 #: src/verbs.cpp:1008
 #, fuzzy
 msgid "In_kscape Preferences..."
-msgstr "Συμπαγές"
+msgstr "Ξ£Ο…ΞΌΟ€Ξ±Ξ³Ξ­Ο‚"
 
 #: src/verbs.cpp:1009
 #, fuzzy
 msgid "Global Inkscape preferences"
-msgstr "Εμφάνιση Σταθμών:"
+msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· Ξ£Ο„Ξ±ΞΈΞΌΟΞ½:"
 
 #: src/verbs.cpp:1010
 msgid "_Document Preferences..."
@@ -4550,52 +4550,52 @@ msgstr ""
 #: src/verbs.cpp:1011
 #, fuzzy
 msgid "Preferences saved with the document"
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/verbs.cpp:1012
 #, fuzzy
 msgid "_Fill and Stroke..."
-msgstr "Ρυθμίσεις επιφάνειας εργασίας"
+msgstr "Ξ΅Ο…ΞΈΞΌΞ―ΟƒΞµΞΉΟ‚ ΞµΟ€ΞΉΟ†Ξ¬Ξ½ΞµΞΉΞ±Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/verbs.cpp:1013
 #, fuzzy
 msgid "Fill and Stroke dialog"
-msgstr "Ρυθμίσεις επιφάνειας εργασίας"
+msgstr "Ξ΅Ο…ΞΈΞΌΞ―ΟƒΞµΞΉΟ‚ ΞµΟ€ΞΉΟ†Ξ¬Ξ½ΞµΞΉΞ±Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/verbs.cpp:1014
 #, fuzzy
 msgid "Transfor_m..."
-msgstr "Μετασχηματισμός"
+msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #: src/verbs.cpp:1015
 #, fuzzy
 msgid "Transform dialog"
-msgstr "Μετασχηματισμός"
+msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #: src/verbs.cpp:1016
 #, fuzzy
 msgid "_Align and Distribute..."
-msgstr "Ιδιότητες"
+msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #: src/verbs.cpp:1017
 #, fuzzy
 msgid "Align and Distribute dialog"
-msgstr "Ιδιότητες"
+msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #: src/verbs.cpp:1018
 #, fuzzy
 msgid "Text and _Font..."
-msgstr "Ρυθμίσεις επιφάνειας εργασίας"
+msgstr "Ξ΅Ο…ΞΈΞΌΞ―ΟƒΞµΞΉΟ‚ ΞµΟ€ΞΉΟ†Ξ¬Ξ½ΞµΞΉΞ±Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/verbs.cpp:1019
 #, fuzzy
 msgid "Text and Font dialog"
-msgstr "Ρυθμίσεις επιφάνειας εργασίας"
+msgstr "Ξ΅Ο…ΞΈΞΌΞ―ΟƒΞµΞΉΟ‚ ΞµΟ€ΞΉΟ†Ξ¬Ξ½ΞµΞΉΞ±Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/verbs.cpp:1020
 #, fuzzy
 msgid "_XML Editor..."
-msgstr "Επεξεργασία..."
+msgstr "Ξ•Ο€ΞµΞΎΞµΟΞ³Ξ±ΟƒΞ―Ξ±..."
 
 #: src/verbs.cpp:1021
 msgid "XML Editor"
@@ -4604,17 +4604,17 @@ msgstr ""
 #: src/verbs.cpp:1022
 #, fuzzy
 msgid "_Find..."
-msgstr "Σημείο"
+msgstr "Ξ£Ξ·ΞΌΞµΞ―ΞΏ"
 
 #: src/verbs.cpp:1023
 #, fuzzy
 msgid "Find objects in document"
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/verbs.cpp:1024
 #, fuzzy
 msgid "Show/_Hide Dialogs"
-msgstr "Κλείσιμο καταγραφών"
+msgstr "ΞΞ»ΞµΞ―ΟƒΞΉΞΌΞΏ ΞΊΞ±Ο„Ξ±Ξ³ΟΞ±Ο†ΟΞ½"
 
 #: src/verbs.cpp:1025
 msgid "Show or hide all active dialogs"
@@ -4624,13 +4624,13 @@ msgstr ""
 #: src/verbs.cpp:1026
 #, fuzzy
 msgid "_Object Properties..."
-msgstr "Ιδιότητες αντικειμένου"
+msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #
 #: src/verbs.cpp:1027
 #, fuzzy
 msgid "Object Properties dialog"
-msgstr "Ιδιότητες αντικειμένου"
+msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #. Help
 #: src/verbs.cpp:1030
@@ -4650,7 +4650,7 @@ msgstr ""
 #: src/verbs.cpp:1036
 #, fuzzy
 msgid "Inkscape: _Basic"
-msgstr "Συμπαγές"
+msgstr "Ξ£Ο…ΞΌΟ€Ξ±Ξ³Ξ­Ο‚"
 
 #: src/verbs.cpp:1037
 msgid "Basic Inkscape tutorial"
@@ -4660,7 +4660,7 @@ msgstr ""
 #: src/verbs.cpp:1038
 #, fuzzy
 msgid "Inkscape: _Advanced"
-msgstr "Συμπαγές"
+msgstr "Ξ£Ο…ΞΌΟ€Ξ±Ξ³Ξ­Ο‚"
 
 #: src/verbs.cpp:1039
 msgid "Advanced Inkscape tutorial"
@@ -4687,12 +4687,12 @@ msgstr ""
 #: src/widgets/dash-selector.cpp:104
 #, fuzzy
 msgid "Dash pattern"
-msgstr "Καπνός με άνεμο"
+msgstr "ΞΞ±Ο€Ξ½ΟΟ‚ ΞΌΞµ Ξ¬Ξ½ΞµΞΌΞΏ"
 
 #: src/widgets/dash-selector.cpp:119
 #, fuzzy
 msgid "Pattern offset"
-msgstr "Σχέδιο"
+msgstr "Ξ£Ο‡Ξ­Ξ΄ΞΉΞΏ"
 
 #. Family frame
 #: src/widgets/font-selector.cpp:154
@@ -4703,7 +4703,7 @@ msgstr ""
 #: src/widgets/font-selector.cpp:182
 #, fuzzy
 msgid "Style"
-msgstr "Στυλ: "
+msgstr "Ξ£Ο„Ο…Ξ»: "
 
 #: src/widgets/font-selector.cpp:217
 msgid "Font size:"
@@ -4716,12 +4716,12 @@ msgstr ""
 #
 #: src/widgets/gradient-selector.cpp:138
 msgid "Edit"
-msgstr "Επεξεργασία"
+msgstr "Ξ•Ο€ΞµΞΎΞµΟΞ³Ξ±ΟƒΞ―Ξ±"
 
 #
 #: src/widgets/gradient-selector.cpp:143
 msgid "Add"
-msgstr "Προσθήκη"
+msgstr "Ξ ΟΞΏΟƒΞΈΞ®ΞΊΞ·"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientUnitsAttribute
 #: src/widgets/gradient-selector.cpp:167
@@ -4735,17 +4735,17 @@ msgstr ""
 #: src/widgets/gradient-selector.cpp:172
 #, fuzzy
 msgid "object"
-msgstr "Αντικείμενο"
+msgstr "Ξ‘Ξ½Ο„ΞΉΞΊΞµΞ―ΞΌΞµΞ½ΞΏ"
 
 #: src/widgets/gradient-selector.cpp:176
 #, fuzzy
 msgid "user space"
-msgstr "Κατειλλημένος χώρος"
+msgstr "ΞΞ±Ο„ΞµΞΉΞ»Ξ»Ξ·ΞΌΞ­Ξ½ΞΏΟ‚ Ο‡ΟΟΞΏΟ‚"
 
 #: src/widgets/gradient-selector.cpp:184
 #, fuzzy
 msgid "Coordinates:"
-msgstr "Κολομβία"
+msgstr "ΞΞΏΞ»ΞΏΞΌΞ²Ξ―Ξ±"
 
 #. TRANSLATORS: for info, see http://www.w3.org/TR/2000/CR-SVG-20000802/pservers.html#LinearGradientSpreadMethodAttribute
 #: src/widgets/gradient-selector.cpp:197
@@ -4760,24 +4760,24 @@ msgstr ""
 #: src/widgets/gradient-selector.cpp:203
 #, fuzzy
 msgid "none"
-msgstr "Κανένα"
+msgstr "ΞΞ±Ξ½Ξ­Ξ½Ξ±"
 
 #
 #: src/widgets/gradient-selector.cpp:207
 #, fuzzy
 msgid "reflected"
-msgstr "Επιλέχθησαν \"%s\""
+msgstr "Ξ•Ο€ΞΉΞ»Ξ­Ο‡ΞΈΞ·ΟƒΞ±Ξ½ \"%s\""
 
 #
 #: src/widgets/gradient-selector.cpp:211
 #, fuzzy
 msgid "direct"
-msgstr "Ορθογ."
+msgstr "ΞΟΞΈΞΏΞ³."
 
 #: src/widgets/gradient-selector.cpp:219
 #, fuzzy
 msgid "Repeat:"
-msgstr "Αναγνωσμένα"
+msgstr "Ξ‘Ξ½Ξ±Ξ³Ξ½Ο‰ΟƒΞΌΞ­Ξ½Ξ±"
 
 #: src/widgets/gradient-vector.cpp:268
 msgid "No gradients in document"
@@ -4787,19 +4787,19 @@ msgstr ""
 #: src/widgets/gradient-vector.cpp:274
 #, fuzzy
 msgid "No gradient selected"
-msgstr "Επιλέχθησαν \"%s\""
+msgstr "Ξ•Ο€ΞΉΞ»Ξ­Ο‡ΞΈΞ·ΟƒΞ±Ξ½ \"%s\""
 
 #
 #: src/widgets/gradient-vector.cpp:536
 #, fuzzy
 msgid "No stops in gradient"
-msgstr "Προσθήκη νέου παροχέα"
+msgstr "Ξ ΟΞΏΟƒΞΈΞ®ΞΊΞ· Ξ½Ξ­ΞΏΟ… Ο€Ξ±ΟΞΏΟ‡Ξ­Ξ±"
 
 #
 #: src/widgets/gradient-vector.cpp:757
 #, fuzzy
 msgid "Add stop"
-msgstr "Επιφάνεια εργασίας"
+msgstr "Ξ•Ο€ΞΉΟ†Ξ¬Ξ½ΞµΞΉΞ± ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #: src/widgets/gradient-vector.cpp:760
 msgid "Add another control stop to gradient"
@@ -4808,7 +4808,7 @@ msgstr ""
 #: src/widgets/gradient-vector.cpp:762
 #, fuzzy
 msgid "Delete stop"
-msgstr "Διαγραφή επιλογής"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #: src/widgets/gradient-vector.cpp:765
 msgid "Delete current control stop from gradient"
@@ -4822,44 +4822,44 @@ msgstr ""
 #: src/widgets/gradient-vector.cpp:820
 #, fuzzy
 msgid "Stop Color"
-msgstr " χρώμα"
+msgstr " Ο‡ΟΟΞΌΞ±"
 
 #: src/widgets/gradient-vector.cpp:846
 #, fuzzy
 msgid "Gradient editor"
-msgstr "Βαθμίδα"
+msgstr "Ξ’Ξ±ΞΈΞΌΞ―Ξ΄Ξ±"
 
 #: src/widgets/paint-selector.cpp:168 src/widgets/paint-selector.cpp:660
 #, fuzzy
 msgid "No paint"
-msgstr "Σημείο"
+msgstr "Ξ£Ξ·ΞΌΞµΞ―ΞΏ"
 
 #: src/widgets/paint-selector.cpp:170 src/widgets/paint-selector.cpp:728
 #, fuzzy
 msgid "Flat color"
-msgstr " χρώμα"
+msgstr " Ο‡ΟΟΞΌΞ±"
 
 #
 #: src/widgets/paint-selector.cpp:172 src/widgets/paint-selector.cpp:795
 #, fuzzy
 msgid "Linear gradient"
-msgstr "Προσθήκη νέου παροχέα"
+msgstr "Ξ ΟΞΏΟƒΞΈΞ®ΞΊΞ· Ξ½Ξ­ΞΏΟ… Ο€Ξ±ΟΞΏΟ‡Ξ­Ξ±"
 
 #
 #: src/widgets/paint-selector.cpp:174 src/widgets/paint-selector.cpp:798
 #, fuzzy
 msgid "Radial gradient"
-msgstr "Προσθήκη νέου παροχέα"
+msgstr "Ξ ΟΞΏΟƒΞΈΞ®ΞΊΞ· Ξ½Ξ­ΞΏΟ… Ο€Ξ±ΟΞΏΟ‡Ξ­Ξ±"
 
 #: src/widgets/paint-selector.cpp:176
 #, fuzzy
 msgid "Pattern Fill"
-msgstr "Σχέδιο"
+msgstr "Ξ£Ο‡Ξ­Ξ΄ΞΉΞΏ"
 
 #: src/widgets/paint-selector.cpp:625
 #, fuzzy
 msgid "No objects"
-msgstr "Επιλέξτε αντικείμενο"
+msgstr "Ξ•Ο€ΞΉΞ»Ξ­ΞΎΟ„Ξµ Ξ±Ξ½Ο„ΞΉΞΊΞµΞ―ΞΌΞµΞ½ΞΏ"
 
 #: src/widgets/paint-selector.cpp:636
 msgid "Multiple styles"
@@ -4870,17 +4870,17 @@ msgstr ""
 #: src/widgets/paint-selector.cpp:649
 #, fuzzy
 msgid "Clone Selected"
-msgstr "Διαγραφή επιλογής"
+msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #: src/widgets/paint-selector.cpp:855
 #, fuzzy
 msgid "No patterns in document"
-msgstr "Έγγραφο"
+msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #: src/widgets/paint-selector.cpp:983
 #, fuzzy
 msgid "Pattern fill"
-msgstr "Σχέδιο"
+msgstr "Ξ£Ο‡Ξ­Ξ΄ΞΉΞΏ"
 
 #: src/widgets/sp-color-gtkselector.cpp:60
 msgid "System"
@@ -4906,7 +4906,7 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:380 src/widgets/sp-color-scales.cpp:381
 #, fuzzy
 msgid "Red"
-msgstr "Κόκκινο:"
+msgstr "ΞΟΞΊΞΊΞΉΞ½ΞΏ:"
 
 #: src/widgets/sp-color-scales.cpp:382
 msgid "_G"
@@ -4916,7 +4916,7 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:383 src/widgets/sp-color-scales.cpp:384
 #, fuzzy
 msgid "Green"
-msgstr "Πράσινο:"
+msgstr "Ξ ΟΞ¬ΟƒΞΉΞ½ΞΏ:"
 
 #: src/widgets/sp-color-scales.cpp:385
 msgid "_B"
@@ -4926,7 +4926,7 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:386 src/widgets/sp-color-scales.cpp:387
 #, fuzzy
 msgid "Blue"
-msgstr "Μπλε:"
+msgstr "ΞΟ€Ξ»Ξµ:"
 
 #. Label
 #: src/widgets/sp-color-scales.cpp:388 src/widgets/sp-color-scales.cpp:413
@@ -4951,7 +4951,7 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:405 src/widgets/sp-color-scales.cpp:406
 #, fuzzy
 msgid "Hue"
-msgstr "Απόχρωση:"
+msgstr "Ξ‘Ο€ΟΟ‡ΟΟ‰ΟƒΞ·:"
 
 #: src/widgets/sp-color-scales.cpp:407
 msgid "_S"
@@ -4961,7 +4961,7 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:408 src/widgets/sp-color-scales.cpp:409
 #, fuzzy
 msgid "Saturation"
-msgstr "Κορεσμός:"
+msgstr "ΞΞΏΟΞµΟƒΞΌΟΟ‚:"
 
 #: src/widgets/sp-color-scales.cpp:410
 msgid "_V"
@@ -4978,7 +4978,7 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:432 src/widgets/sp-color-scales.cpp:433
 #, fuzzy
 msgid "Cyan"
-msgstr "Κυανό"
+msgstr "ΞΟ…Ξ±Ξ½Ο"
 
 #: src/widgets/sp-color-scales.cpp:434
 msgid "_M"
@@ -4987,7 +4987,7 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:435 src/widgets/sp-color-scales.cpp:436
 #, fuzzy
 msgid "Magenta"
-msgstr "μώβ"
+msgstr "ΞΌΟΞ²"
 
 #: src/widgets/sp-color-scales.cpp:437
 msgid "_Y"
@@ -4996,7 +4996,7 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:438 src/widgets/sp-color-scales.cpp:439
 #, fuzzy
 msgid "Yellow"
-msgstr "Κίτρινο"
+msgstr "ΞΞ―Ο„ΟΞΉΞ½ΞΏ"
 
 #: src/widgets/sp-color-scales.cpp:440
 msgid "_K"
@@ -5005,13 +5005,13 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:441 src/widgets/sp-color-scales.cpp:442
 #, fuzzy
 msgid "Black"
-msgstr "Μαύρο:"
+msgstr "ΞΞ±ΟΟΞΏ:"
 
 #
 #: src/widgets/sp-color-selector.cpp:66
 #, fuzzy
 msgid "Unnamed"
-msgstr "όνομα"
+msgstr "ΟΞ½ΞΏΞΌΞ±"
 
 #: src/widgets/sp-color-wheel-selector.cpp:67
 msgid "Wheel"
@@ -5020,333 +5020,333 @@ msgstr ""
 #: src/widgets/sp-xmlview-attr-list.cpp:58
 #, fuzzy
 msgid "Attribute"
-msgstr "Ιδιότητες"
+msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #
 #: src/widgets/sp-xmlview-attr-list.cpp:59
 msgid "Value"
-msgstr "Τιμή"
+msgstr "Ξ¤ΞΉΞΌΞ®"
 
 #, fuzzy
 #~ msgid "Snap to grid"
-#~ msgstr "Τοπο_θέτηση Σε Πλέγμα"
+#~ msgstr "Ξ¤ΞΏΟ€ΞΏ_ΞΈΞ­Ο„Ξ·ΟƒΞ· Ξ£Ξµ Ξ Ξ»Ξ­Ξ³ΞΌΞ±"
 
 #, fuzzy
 #~ msgid "Snap to guides"
-#~ msgstr "Τοπο_θέτηση Σε Πλέγμα"
+#~ msgstr "Ξ¤ΞΏΟ€ΞΏ_ΞΈΞ­Ο„Ξ·ΟƒΞ· Ξ£Ξµ Ξ Ξ»Ξ­Ξ³ΞΌΞ±"
 
 #, fuzzy
 #~ msgid "Inkscape"
-#~ msgstr "Συμπαγές"
+#~ msgstr "Ξ£Ο…ΞΌΟ€Ξ±Ξ³Ξ­Ο‚"
 
 #, fuzzy
 #~ msgid "Owner"
-#~ msgstr "Διάταξη"
+#~ msgstr "Ξ”ΞΉΞ¬Ο„Ξ±ΞΎΞ·"
 
 #
 #, fuzzy
 #~ msgid "_Menu"
-#~ msgstr "_¶νοιγμα"
+#~ msgstr "_Ξ†Ξ½ΞΏΞΉΞ³ΞΌΞ±"
 
 #, fuzzy
 #~ msgid "Pattern:"
-#~ msgstr "Σχέδιο"
+#~ msgstr "Ξ£Ο‡Ξ­Ξ΄ΞΉΞΏ"
 
 #, fuzzy
 #~ msgid "Snap points to the grid"
-#~ msgstr "Τοπο_θέτηση Σε Πλέγμα"
+#~ msgstr "Ξ¤ΞΏΟ€ΞΏ_ΞΈΞ­Ο„Ξ·ΟƒΞ· Ξ£Ξµ Ξ Ξ»Ξ­Ξ³ΞΌΞ±"
 
 #, fuzzy
 #~ msgid "Sharpness:"
-#~ msgstr "Σκίαση"
+#~ msgstr "Ξ£ΞΊΞ―Ξ±ΟƒΞ·"
 
 #, fuzzy
 #~ msgid "Rect"
-#~ msgstr "Ορθογώνιο"
+#~ msgstr "ΞΟΞΈΞΏΞ³ΟΞ½ΞΉΞΏ"
 
 #
 #, fuzzy
 #~ msgid "Rects"
-#~ msgstr "Αντικείμενο"
+#~ msgstr "Ξ‘Ξ½Ο„ΞΉΞΊΞµΞ―ΞΌΞµΞ½ΞΏ"
 
 #, fuzzy
 #~ msgid "meters"
-#~ msgstr "χιλιοστά"
+#~ msgstr "Ο‡ΞΉΞ»ΞΉΞΏΟƒΟ„Ξ¬"
 
 #, fuzzy
 #~ msgid "Horizontal lines"
-#~ msgstr "οριζόντιο"
+#~ msgstr "ΞΏΟΞΉΞ¶ΟΞ½Ο„ΞΉΞΏ"
 
 #, fuzzy
 #~ msgid "Vertical lines"
-#~ msgstr "Κατακόρυφες Ρίγες"
+#~ msgstr "ΞΞ±Ο„Ξ±ΞΊΟΟΟ…Ο†ΞµΟ‚ Ξ΅Ξ―Ξ³ΞµΟ‚"
 
 #, fuzzy
 #~ msgid "Userspace unit"
-#~ msgstr "Κατειλλημένος χώρος"
+#~ msgstr "ΞΞ±Ο„ΞµΞΉΞ»Ξ»Ξ·ΞΌΞ­Ξ½ΞΏΟ‚ Ο‡ΟΟΞΏΟ‚"
 
 #, fuzzy
 #~ msgid "User"
-#~ msgstr "Κατειλλημένος χώρος"
+#~ msgstr "ΞΞ±Ο„ΞµΞΉΞ»Ξ»Ξ·ΞΌΞ­Ξ½ΞΏΟ‚ Ο‡ΟΟΞΏΟ‚"
 
 #, fuzzy
 #~ msgid "Userspace units"
-#~ msgstr "Κατειλλημένος χώρος"
+#~ msgstr "ΞΞ±Ο„ΞµΞΉΞ»Ξ»Ξ·ΞΌΞ­Ξ½ΞΏΟ‚ Ο‡ΟΟΞΏΟ‚"
 
 #
 #, fuzzy
 #~ msgid "Ru_lers"
-#~ msgstr "Αρχείο"
+#~ msgstr "Ξ‘ΟΟ‡ΞµΞ―ΞΏ"
 
 #
 #, fuzzy
 #~ msgid "Show or hide rulers"
-#~ msgstr "Εμφάνιση κόμβων-δ"
+#~ msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· ΞΊΟΞΌΞ²Ο‰Ξ½-Ξ΄"
 
 #, fuzzy
 #~ msgid "_New Window"
-#~ msgstr "Νέα Προβολή"
+#~ msgstr "ΞΞ­Ξ± Ξ ΟΞΏΞ²ΞΏΞ»Ξ®"
 
 #, fuzzy
 #~ msgid "Mode:"
-#~ msgstr "Μετακίνηση"
+#~ msgstr "ΞΞµΟ„Ξ±ΞΊΞ―Ξ½Ξ·ΟƒΞ·"
 
 #~ msgid "Alpha:"
-#~ msgstr "¶λφα:"
+#~ msgstr "Ξ†Ξ»Ο†Ξ±:"
 
 #
 #~ msgid "Value:"
-#~ msgstr "Τιμή:"
+#~ msgstr "Ξ¤ΞΉΞΌΞ®:"
 
 #, fuzzy
 #~ msgid "Stroke settings"
-#~ msgstr "Ρυθμίσεις επιφάνειας εργασίας"
+#~ msgstr "Ξ΅Ο…ΞΈΞΌΞ―ΟƒΞµΞΉΟ‚ ΞµΟ€ΞΉΟ†Ξ¬Ξ½ΞµΞΉΞ±Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #, fuzzy
 #~ msgid "Color paint"
-#~ msgstr "Κολομβία"
+#~ msgstr "ΞΞΏΞ»ΞΏΞΌΞ²Ξ―Ξ±"
 
 #, fuzzy
 #~ msgid "Item properties"
-#~ msgstr "Ιδιότητες μενού"
+#~ msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚ ΞΌΞµΞ½ΞΏΟ"
 
 #, fuzzy
 #~ msgid "Quit"
-#~ msgstr "_Τέλος"
+#~ msgstr "_Ξ¤Ξ­Ξ»ΞΏΟ‚"
 
 #, fuzzy
 #~ msgid "Delete selected objects"
-#~ msgstr "Διαγραφή επιλογής"
+#~ msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #, fuzzy
 #~ msgid "Combine multiple paths"
-#~ msgstr "Αντιγραφή επιλεγμένης εργασίας"
+#~ msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ξ·Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #, fuzzy
 #~ msgid "New View"
-#~ msgstr "Νέα Προβολή"
+#~ msgstr "ΞΞ­Ξ± Ξ ΟΞΏΞ²ΞΏΞ»Ξ®"
 
 #, fuzzy
 #~ msgid "Fill and stroke settings"
-#~ msgstr "Ρυθμίσεις επιφάνειας εργασίας"
+#~ msgstr "Ξ΅Ο…ΞΈΞΌΞ―ΟƒΞµΞΉΟ‚ ΞµΟ€ΞΉΟ†Ξ¬Ξ½ΞµΞΉΞ±Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #, fuzzy
 #~ msgid "Object transformations"
-#~ msgstr "Μετασχηματισμός"
+#~ msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #
 #, fuzzy
 #~ msgid "Align and distribute objects"
-#~ msgstr "Ιδιότητα"
+#~ msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„Ξ±"
 
 #, fuzzy
 #~ msgid "Text editing and font settings"
-#~ msgstr "Ρυθμίσεις επιφάνειας εργασίας"
+#~ msgstr "Ξ΅Ο…ΞΈΞΌΞ―ΟƒΞµΞΉΟ‚ ΞµΟ€ΞΉΟ†Ξ¬Ξ½ΞµΞΉΞ±Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #, fuzzy
 #~ msgid "Fill Rule"
-#~ msgstr "Γέμισμα"
+#~ msgstr "Ξ“Ξ­ΞΌΞΉΟƒΞΌΞ±"
 
 #, fuzzy
 #~ msgid "Tool has no options"
-#~ msgstr "Επιλογές Oaf"
+#~ msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ­Ο‚ Oaf"
 
 #, fuzzy
 #~ msgid "Visual transformation"
-#~ msgstr "Μετασχηματισμός"
+#~ msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #, fuzzy
 #~ msgid "Show content"
-#~ msgstr "Περιεχόμενο"
+#~ msgstr "Ξ ΞµΟΞΉΞµΟ‡ΟΞΌΞµΞ½ΞΏ"
 
 #
 #, fuzzy
 #~ msgid "Selected object is not stroked, cannot outline."
-#~ msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+#~ msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #
 #, fuzzy
 #~ msgid "Selected object has no curve, cannot outline."
-#~ msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+#~ msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #, fuzzy
 #~ msgid "Proportion:"
-#~ msgstr "Θέση"
+#~ msgstr "ΞΞ­ΟƒΞ·"
 
 #, fuzzy
 #~ msgid "Inkscape _Options"
-#~ msgstr "Συμπαγές"
+#~ msgstr "Ξ£Ο…ΞΌΟ€Ξ±Ξ³Ξ­Ο‚"
 
 #, fuzzy
 #~ msgid "_Document Options"
-#~ msgstr "Δοκιμή ρυθμίσεων"
+#~ msgstr "Ξ”ΞΏΞΊΞΉΞΌΞ® ΟΟ…ΞΈΞΌΞ―ΟƒΞµΟ‰Ξ½"
 
 #, fuzzy
 #~ msgid "Tool Optio_ns"
-#~ msgstr "Επιλογές Oaf"
+#~ msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ­Ο‚ Oaf"
 
 #, fuzzy
 #~ msgid "gradientUnits"
-#~ msgstr "Βαθμίδα"
+#~ msgstr "Ξ’Ξ±ΞΈΞΌΞ―Ξ΄Ξ±"
 
 #
 #, fuzzy
 #~ msgid "nonzero"
-#~ msgstr "κανένα"
+#~ msgstr "ΞΊΞ±Ξ½Ξ­Ξ½Ξ±"
 
 #, fuzzy
 #~ msgid "End color"
-#~ msgstr " χρώμα"
+#~ msgstr " Ο‡ΟΟΞΌΞ±"
 
 #, fuzzy
 #~ msgid "Make sides flat"
-#~ msgstr "Πεζά/κεφαλαία διαφέρουν"
+#~ msgstr "Ξ ΞµΞ¶Ξ¬/ΞΊΞµΟ†Ξ±Ξ»Ξ±Ξ―Ξ± Ξ΄ΞΉΞ±Ο†Ξ­ΟΞΏΟ…Ξ½"
 
 #~ msgid "Bring to _Front"
-#~ msgstr "Ανύ_ψωση"
+#~ msgstr "Ξ‘Ξ½Ο_ΟΟ‰ΟƒΞ·"
 
 # # FIX??  (see above)
 #~ msgid "Send to _Back"
-#~ msgstr "_Βύθιση"
+#~ msgstr "_Ξ’ΟΞΈΞΉΟƒΞ·"
 
 #~ msgid "Save file"
-#~ msgstr "Αποθήκευση αρχείου"
+#~ msgstr "Ξ‘Ο€ΞΏΞΈΞ®ΞΊΞµΟ…ΟƒΞ· Ξ±ΟΟ‡ΞµΞ―ΞΏΟ…"
 
 #, fuzzy
 #~ msgid "Document %s has unsaved changes, save them?"
-#~ msgstr "Το βιβλίο %s έχει μη αποθηκευμένες αλλαγές, αποθήκευση;"
+#~ msgstr "Ξ¤ΞΏ Ξ²ΞΉΞ²Ξ»Ξ―ΞΏ %s Ξ­Ο‡ΞµΞΉ ΞΌΞ· Ξ±Ο€ΞΏΞΈΞ·ΞΊΞµΟ…ΞΌΞ­Ξ½ΞµΟ‚ Ξ±Ξ»Ξ»Ξ±Ξ³Ξ­Ο‚, Ξ±Ο€ΞΏΞΈΞ®ΞΊΞµΟ…ΟƒΞ·;"
 
 #, fuzzy
 #~ msgid "Object Size and Position"
-#~ msgstr "Θέση"
+#~ msgstr "ΞΞ­ΟƒΞ·"
 
 #, fuzzy
 #~ msgid "Size and Position"
-#~ msgstr "Θέση"
+#~ msgstr "ΞΞ­ΟƒΞ·"
 
 #, fuzzy
 #~ msgid "Tool attributes"
-#~ msgstr "Ιδιότητες"
+#~ msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #, fuzzy
 #~ msgid "Proportion"
-#~ msgstr "Θέση"
+#~ msgstr "ΞΞ­ΟƒΞ·"
 
 #, fuzzy
 #~ msgid "Angle"
-#~ msgstr "Διάστημα"
+#~ msgstr "Ξ”ΞΉΞ¬ΟƒΟ„Ξ·ΞΌΞ±"
 
 #
 #, fuzzy
 #~ msgid "Tool has no attributes"
-#~ msgstr "Ιδιότητα"
+#~ msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„Ξ±"
 
 #
 #~ msgid "File"
-#~ msgstr "Αρχείο"
+#~ msgstr "Ξ‘ΟΟ‡ΞµΞ―ΞΏ"
 
 #, fuzzy
 #~ msgid "Item"
-#~ msgstr "Επιλογή ένα"
+#~ msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ξ­Ξ½Ξ±"
 
 #, fuzzy
 #~ msgid "Group Properties"
-#~ msgstr " Ιδιότητες"
+#~ msgstr " Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #, fuzzy
 #~ msgid "Ungroup"
-#~ msgstr "_Απομαδοποίηση"
+#~ msgstr "_Ξ‘Ο€ΞΏΞΌΞ±Ξ΄ΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ·"
 
 #
 #~ msgid "Link"
-#~ msgstr "Σύνδεση"
+#~ msgstr "Ξ£ΟΞ½Ξ΄ΞµΟƒΞ·"
 
 #, fuzzy
 #~ msgid "Fill settings"
-#~ msgstr "Όλες οι ρυθμίσεις"
+#~ msgstr "ΞΞ»ΞµΟ‚ ΞΏΞΉ ΟΟ…ΞΈΞΌΞ―ΟƒΞµΞΉΟ‚"
 
 #
 #, fuzzy
 #~ msgid "Break line at selected nodes"
-#~ msgstr "Καθαρισμός όλων των επιλεγμένων γραμμών"
+#~ msgstr "ΞΞ±ΞΈΞ±ΟΞΉΟƒΞΌΟΟ‚ ΟΞ»Ο‰Ξ½ Ο„Ο‰Ξ½ ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ³ΟΞ±ΞΌΞΌΟΞ½"
 
 #
 #~ msgid "New"
-#~ msgstr "Νέο"
+#~ msgstr "ΞΞ­ΞΏ"
 
 #, fuzzy
 #~ msgid "Bring to Front"
-#~ msgstr "Ανύ_ψωση"
+#~ msgstr "Ξ‘Ξ½Ο_ΟΟ‰ΟƒΞ·"
 
 # # FIX??  (see above)
 #, fuzzy
 #~ msgid "Send to Back"
-#~ msgstr "_Βύθιση"
+#~ msgstr "_Ξ’ΟΞΈΞΉΟƒΞ·"
 
 #
 #, fuzzy
 #~ msgid "Lower selected objects to bottom"
-#~ msgstr "Αντιγραφή επιλογής στο τεμάχιο"
+#~ msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚ ΟƒΟ„ΞΏ Ο„ΞµΞΌΞ¬Ο‡ΞΉΞΏ"
 
 #, fuzzy
 #~ msgid "Raise selected objects one position"
-#~ msgstr "Αποθήκευση επιλογής"
+#~ msgstr "Ξ‘Ο€ΞΏΞΈΞ®ΞΊΞµΟ…ΟƒΞ· ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚"
 
 #
 #, fuzzy
 #~ msgid "Lower selected objects one position"
-#~ msgstr "Αντιγραφή επιλογής στο τεμάχιο"
+#~ msgstr "Ξ‘Ξ½Ο„ΞΉΞ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞΏΞ³Ξ®Ο‚ ΟƒΟ„ΞΏ Ο„ΞµΞΌΞ¬Ο‡ΞΉΞΏ"
 
 #, fuzzy
 #~ msgid "Combine"
-#~ msgstr "_Μεταγλώττιση"
+#~ msgstr "_ΞΞµΟ„Ξ±Ξ³Ξ»ΟΟ„Ο„ΞΉΟƒΞ·"
 
 #, fuzzy
 #~ msgid "Edit path nodes in selected object"
-#~ msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+#~ msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #, fuzzy
 #~ msgid "Draw freehand curves and straight lines"
-#~ msgstr "Λαβή συρταριού"
+#~ msgstr "Ξ›Ξ±Ξ²Ξ® ΟƒΟ…ΟΟ„Ξ±ΟΞΉΞΏΟ"
 
 #, fuzzy
 #~ msgid "In"
-#~ msgstr "ίντσα"
+#~ msgstr "Ξ―Ξ½Ο„ΟƒΞ±"
 
 #
 #, fuzzy
 #~ msgid "Out"
-#~ msgstr "Αποκοπή"
+#~ msgstr "Ξ‘Ο€ΞΏΞΊΞΏΟ€Ξ®"
 
 #
 #, fuzzy
 #~ msgid "Toggle grid"
-#~ msgstr "Πλαίσιο Πίνακα"
+#~ msgstr "Ξ Ξ»Ξ±Ξ―ΟƒΞΉΞΏ Ξ Ξ―Ξ½Ξ±ΞΊΞ±"
 
 #
 #, fuzzy
 #~ msgid "Toggle guides"
-#~ msgstr "Πλαίσιο Πίνακα"
+#~ msgstr "Ξ Ξ»Ξ±Ξ―ΟƒΞΉΞΏ Ξ Ξ―Ξ½Ξ±ΞΊΞ±"
 
 #
 #~ msgid "1:1"
@@ -5362,281 +5362,281 @@ msgstr "Τιμή"
 
 #, fuzzy
 #~ msgid "Editing window properties"
-#~ msgstr " Ιδιότητες"
+#~ msgstr " Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #, fuzzy
 #~ msgid "Tool Attributes"
-#~ msgstr "Ιδιότητες"
+#~ msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #, fuzzy
 #~ msgid "Object size and position"
-#~ msgstr "Θέση"
+#~ msgstr "ΞΞ­ΟƒΞ·"
 
 #, fuzzy
 #~ msgid "Sodipodi"
-#~ msgstr "Συμπαγές"
+#~ msgstr "Ξ£Ο…ΞΌΟ€Ξ±Ξ³Ξ­Ο‚"
 
 #
 #, fuzzy
 #~ msgid "Align objects"
-#~ msgstr "Αντικείμενο"
+#~ msgstr "Ξ‘Ξ½Ο„ΞΉΞΊΞµΞ―ΞΌΞµΞ½ΞΏ"
 
 #, fuzzy
 #~ msgid "Desktop settings"
-#~ msgstr "Ρυθμίσεις επιφάνειας εργασίας"
+#~ msgstr "Ξ΅Ο…ΞΈΞΌΞ―ΟƒΞµΞΉΟ‚ ΞµΟ€ΞΉΟ†Ξ¬Ξ½ΞµΞΉΞ±Ο‚ ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #, fuzzy
 #~ msgid "Iso grid"
-#~ msgstr "Εμφάνιση πλέγματος"
+#~ msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· Ο€Ξ»Ξ­Ξ³ΞΌΞ±Ο„ΞΏΟ‚"
 
 #, fuzzy
 #~ msgid "Display settings"
-#~ msgstr "Εμφάνιση Σταθμών:"
+#~ msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· Ξ£Ο„Ξ±ΞΈΞΌΟΞ½:"
 
 #, fuzzy
 #~ msgid "Export png file"
-#~ msgstr "Εξαγωγή Αρχείου"
+#~ msgstr "Ξ•ΞΎΞ±Ξ³Ο‰Ξ³Ξ® Ξ‘ΟΟ‡ΞµΞ―ΞΏΟ…"
 
 #
 #, fuzzy
 #~ msgid "Object style"
-#~ msgstr "Αντικείμενο"
+#~ msgstr "Ξ‘Ξ½Ο„ΞΉΞΊΞµΞ―ΞΌΞµΞ½ΞΏ"
 
 #, fuzzy
 #~ msgid "Text properties"
-#~ msgstr " Ιδιότητες"
+#~ msgstr " Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #, fuzzy
 #~ msgid "Transform selection"
-#~ msgstr "Μετασχηματισμός"
+#~ msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #, fuzzy
 #~ msgid "New Docked Toolbox"
-#~ msgstr "Εμφάνιση _Εργαλειοθήκης"
+#~ msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ· _Ξ•ΟΞ³Ξ±Ξ»ΞµΞΉΞΏΞΈΞ®ΞΊΞ·Ο‚"
 
 #
 #, fuzzy
 #~ msgid "Drawing Mode"
-#~ msgstr "Εκτύπωση περιεχομένων πλέγματος"
+#~ msgstr "Ξ•ΞΊΟ„ΟΟ€Ο‰ΟƒΞ· Ο€ΞµΟΞΉΞµΟ‡ΞΏΞΌΞ­Ξ½Ο‰Ξ½ Ο€Ξ»Ξ­Ξ³ΞΌΞ±Ο„ΞΏΟ‚"
 
 #, fuzzy
 #~ msgid "Unknown item :-("
-#~ msgstr "¶γνωστο σύστημα"
+#~ msgstr "Ξ†Ξ³Ξ½Ο‰ΟƒΟ„ΞΏ ΟƒΟΟƒΟ„Ξ·ΞΌΞ±"
 
 #, fuzzy
 #~ msgid "Draw"
-#~ msgstr "Συρτάρι"
+#~ msgstr "Ξ£Ο…ΟΟ„Ξ¬ΟΞΉ"
 
 #, fuzzy
 #~ msgid "Nodes"
-#~ msgstr "Σημειώσεις"
+#~ msgstr "Ξ£Ξ·ΞΌΞµΞΉΟΟƒΞµΞΉΟ‚"
 
 #, fuzzy
 #~ msgid "Flatten object"
-#~ msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+#~ msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #, fuzzy
 #~ msgid "Convert to Curves"
-#~ msgstr "Σύνδεση με %s"
+#~ msgstr "Ξ£ΟΞ½Ξ΄ΞµΟƒΞ· ΞΌΞµ %s"
 
 #, fuzzy
 #~ msgid "Zoom in drawing"
-#~ msgstr "Αλλαγή κλίμακας για _ταίριασμα"
+#~ msgstr "Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® ΞΊΞ»Ξ―ΞΌΞ±ΞΊΞ±Ο‚ Ξ³ΞΉΞ± _Ο„Ξ±Ξ―ΟΞΉΞ±ΟƒΞΌΞ±"
 
 #
 #, fuzzy
 #~ msgid "Set zoom factor to 1:1"
-#~ msgstr "Μεγέθυνση _1:1"
+#~ msgstr "ΞΞµΞ³Ξ­ΞΈΟ…Ξ½ΟƒΞ· _1:1"
 
 #, fuzzy
 #~ msgid "Set zoom factor to 1:2"
-#~ msgstr "Κλίμακα 125%"
+#~ msgstr "ΞΞ»Ξ―ΞΌΞ±ΞΊΞ± 125%"
 
 #, fuzzy
 #~ msgid "Set zoom factor to 2:1"
-#~ msgstr "Κλίμακα 25%"
+#~ msgstr "ΞΞ»Ξ―ΞΌΞ±ΞΊΞ± 25%"
 
 #
 #~ msgid "Display"
-#~ msgstr "Εμφάνιση"
+#~ msgstr "Ξ•ΞΌΟ†Ξ¬Ξ½ΞΉΟƒΞ·"
 
 #~ msgid "Document"
-#~ msgstr "Έγγραφο"
+#~ msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #, fuzzy
 #~ msgid "Document variant:"
-#~ msgstr "Έγγραφο"
+#~ msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #, fuzzy
 #~ msgid "Save document as"
-#~ msgstr "Έγγραφο"
+#~ msgstr "ΞΞ³Ξ³ΟΞ±Ο†ΞΏ"
 
 #, fuzzy
 #~ msgid "About sodipodi"
-#~ msgstr "Συμπαγές"
+#~ msgstr "Ξ£Ο…ΞΌΟ€Ξ±Ξ³Ξ­Ο‚"
 
 #, fuzzy
 #~ msgid "About Sodipodi"
-#~ msgstr "Συμπαγές"
+#~ msgstr "Ξ£Ο…ΞΌΟ€Ξ±Ξ³Ξ­Ο‚"
 
 #
 #, fuzzy
 #~ msgid "Item is reference"
-#~ msgstr "Προτιμίσεις Ναυτίλου"
+#~ msgstr "Ξ ΟΞΏΟ„ΞΉΞΌΞ―ΟƒΞµΞΉΟ‚ ΞΞ±Ο…Ο„Ξ―Ξ»ΞΏΟ…"
 
 #, fuzzy
 #~ msgid "The SVG ID of item"
-#~ msgstr "Το Παιχνίδι της Ζωής"
+#~ msgstr "Ξ¤ΞΏ Ξ Ξ±ΞΉΟ‡Ξ½Ξ―Ξ΄ΞΉ Ο„Ξ·Ο‚ Ξ–Ο‰Ξ®Ο‚"
 
 #, fuzzy
 #~ msgid "The ID is not valid"
-#~ msgstr "Ένα iid με τιμή NULL δεν είναι έγκυρο"
+#~ msgstr "ΞΞ½Ξ± iid ΞΌΞµ Ο„ΞΉΞΌΞ® NULL Ξ΄ΞµΞ½ ΞµΞ―Ξ½Ξ±ΞΉ Ξ­Ξ³ΞΊΟ…ΟΞΏ"
 
 #
 #, fuzzy
 #~ msgid "The ID is already defined"
-#~ msgstr "To %s είναι ήδη εγκατεστημένο"
+#~ msgstr "To %s ΞµΞ―Ξ½Ξ±ΞΉ Ξ®Ξ΄Ξ· ΞµΞ³ΞΊΞ±Ο„ΞµΟƒΟ„Ξ·ΞΌΞ­Ξ½ΞΏ"
 
 #, fuzzy
 #~ msgid "Position and size"
-#~ msgstr "Θέση"
+#~ msgstr "ΞΞ­ΟƒΞ·"
 
 #, fuzzy
 #~ msgid "Break apart"
-#~ msgstr "πραγματική διαδρομή"
+#~ msgstr "Ο€ΟΞ±Ξ³ΞΌΞ±Ο„ΞΉΞΊΞ® Ξ΄ΞΉΞ±Ξ΄ΟΞΏΞΌΞ®"
 
 #
 #, fuzzy
 #~ msgid "Align Objects"
-#~ msgstr "Αντικείμενο"
+#~ msgstr "Ξ‘Ξ½Ο„ΞΉΞΊΞµΞ―ΞΌΞµΞ½ΞΏ"
 
 #, fuzzy
 #~ msgid "Display Properties"
-#~ msgstr " Ιδιότητες"
+#~ msgstr " Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„ΞµΟ‚"
 
 #
 #, fuzzy
 #~ msgid "Raise selected objects one level"
-#~ msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+#~ msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #
 #, fuzzy
 #~ msgid "Lower selected objects one level"
-#~ msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+#~ msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #
 #, fuzzy
 #~ msgid "Select tool - select and transform objects"
-#~ msgstr "Επιλέξτε ενέργεια"
+#~ msgstr "Ξ•Ο€ΞΉΞ»Ξ­ΞΎΟ„Ξµ ΞµΞ½Ξ­ΟΞ³ΞµΞΉΞ±"
 
 #, fuzzy
 #~ msgid "Alignment base"
-#~ msgstr "Στοίχιση"
+#~ msgstr "Ξ£Ο„ΞΏΞ―Ο‡ΞΉΟƒΞ·"
 
 #, fuzzy
 #~ msgid "Choose align type"
-#~ msgstr "Επιλογή Τρέχουσας Συνεδρίας"
+#~ msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ξ¤ΟΞ­Ο‡ΞΏΟ…ΟƒΞ±Ο‚ Ξ£Ο…Ξ½ΞµΞ΄ΟΞ―Ξ±Ο‚"
 
 #, fuzzy
 #~ msgid "Parent X ="
-#~ msgstr "Πατρική Ομάδα"
+#~ msgstr "Ξ Ξ±Ο„ΟΞΉΞΊΞ® ΞΞΌΞ¬Ξ΄Ξ±"
 
 #, fuzzy
 #~ msgid "Parent Y ="
-#~ msgstr "Πατρική Ομάδα"
+#~ msgstr "Ξ Ξ±Ο„ΟΞΉΞΊΞ® ΞΞΌΞ¬Ξ΄Ξ±"
 
 #
 #, fuzzy
 #~ msgid " Color fill "
-#~ msgstr "Αρχείο core"
+#~ msgstr "Ξ‘ΟΟ‡ΞµΞ―ΞΏ core"
 
 #
 #~ msgid " General "
-#~ msgstr " Γενικά "
+#~ msgstr " Ξ“ΞµΞ½ΞΉΞΊΞ¬ "
 
 #
 #, fuzzy
 #~ msgid "Add new gradient"
-#~ msgstr "Προσθήκη νέου παροχέα"
+#~ msgstr "Ξ ΟΞΏΟƒΞΈΞ®ΞΊΞ· Ξ½Ξ­ΞΏΟ… Ο€Ξ±ΟΞΏΟ‡Ξ­Ξ±"
 
 #
 #, fuzzy
 #~ msgid "Behind fill"
-#~ msgstr "Δυαδικό αρχείο"
+#~ msgstr "Ξ”Ο…Ξ±Ξ΄ΞΉΞΊΟ Ξ±ΟΟ‡ΞµΞ―ΞΏ"
 
 #, fuzzy
 #~ msgid "Butt endpoints"
-#~ msgstr "Kουμπιά"
+#~ msgstr "KΞΏΟ…ΞΌΟ€ΞΉΞ¬"
 
 #, fuzzy
 #~ msgid "Choose fill color"
-#~ msgstr "Επιλέξτε Πιλότου"
+#~ msgstr "Ξ•Ο€ΞΉΞ»Ξ­ΞΎΟ„Ξµ Ξ ΞΉΞ»ΟΟ„ΞΏΟ…"
 
 #, fuzzy
 #~ msgid "Choose stroke color"
-#~ msgstr "Επιλογή Ειδικού Χρώματος"
+#~ msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ξ•ΞΉΞ΄ΞΉΞΊΞΏΟ Ξ§ΟΟΞΌΞ±Ο„ΞΏΟ‚"
 
 #
 #, fuzzy
 #~ msgid "Color fill"
-#~ msgstr "Αρχείο core"
+#~ msgstr "Ξ‘ΟΟ‡ΞµΞ―ΞΏ core"
 
 #~ msgid "Color:"
-#~ msgstr "Χρώμα:"
+#~ msgstr "Ξ§ΟΟΞΌΞ±:"
 
 #, fuzzy
 #~ msgid "Endpoints:"
-#~ msgstr "σημεία"
+#~ msgstr "ΟƒΞ·ΞΌΞµΞ―Ξ±"
 
 #, fuzzy
 #~ msgid "Fill Color:"
-#~ msgstr "Με Χρώμα"
+#~ msgstr "ΞΞµ Ξ§ΟΟΞΌΞ±"
 
 #, fuzzy
 #~ msgid "Fractal fill"
-#~ msgstr "Τοπικά αρχεία"
+#~ msgstr "Ξ¤ΞΏΟ€ΞΉΞΊΞ¬ Ξ±ΟΟ‡ΞµΞ―Ξ±"
 
 #, fuzzy
 #~ msgid "Gradient fill"
-#~ msgstr "Βαθμίδα"
+#~ msgstr "Ξ’Ξ±ΞΈΞΌΞ―Ξ΄Ξ±"
 
 #
 #, fuzzy
 #~ msgid "Is stroked"
-#~ msgstr "ε χρήση"
+#~ msgstr "Ξµ Ο‡ΟΞ®ΟƒΞ·"
 
 #, fuzzy
 #~ msgid "No fill"
-#~ msgstr "Χωρίς Αρχείο"
+#~ msgstr "Ξ§Ο‰ΟΞ―Ο‚ Ξ‘ΟΟ‡ΞµΞ―ΞΏ"
 
 #
 #, fuzzy
 #~ msgid "Pick fill color"
-#~ msgstr "Διαλέξτε χρώμα"
+#~ msgstr "Ξ”ΞΉΞ±Ξ»Ξ­ΞΎΟ„Ξµ Ο‡ΟΟΞΌΞ±"
 
 #
 #, fuzzy
 #~ msgid "Pick stroke color"
-#~ msgstr "Διαλέξτε χρώμα"
+#~ msgstr "Ξ”ΞΉΞ±Ξ»Ξ­ΞΎΟ„Ξµ Ο‡ΟΟΞΌΞ±"
 
 #
 #, fuzzy
 #~ msgid "Scale with object"
-#~ msgstr "Αποθήκευση με περιεχόμενα"
+#~ msgstr "Ξ‘Ο€ΞΏΞΈΞ®ΞΊΞµΟ…ΟƒΞ· ΞΌΞµ Ο€ΞµΟΞΉΞµΟ‡ΟΞΌΞµΞ½Ξ±"
 
 #, fuzzy
 #~ msgid "Stroke"
-#~ msgstr "Καπνός"
+#~ msgstr "ΞΞ±Ο€Ξ½ΟΟ‚"
 
 #~ msgid "centimeter"
-#~ msgstr "εκατοστά"
+#~ msgstr "ΞµΞΊΞ±Ο„ΞΏΟƒΟ„Ξ¬"
 
 #, fuzzy
 #~ msgid "millimeters"
-#~ msgstr "χιλιοστά"
+#~ msgstr "Ο‡ΞΉΞ»ΞΉΞΏΟƒΟ„Ξ¬"
 
 #~ msgid "points"
-#~ msgstr "σημεία"
+#~ msgstr "ΟƒΞ·ΞΌΞµΞ―Ξ±"
 
 #~ msgid "1.0MB"
 #~ msgstr "1.0MB"
@@ -5644,73 +5644,73 @@ msgstr "Τιμή"
 #
 #, fuzzy
 #~ msgid "Back One"
-#~ msgstr "Πίσω"
+#~ msgstr "Ξ Ξ―ΟƒΟ‰"
 
 #, fuzzy
 #~ msgid "Convert selected segments to curves"
-#~ msgstr "Μετακίνηση επιλεγμένου μενού πρoς τα επάνω"
+#~ msgstr "ΞΞµΟ„Ξ±ΞΊΞ―Ξ½Ξ·ΟƒΞ· ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… ΞΌΞµΞ½ΞΏΟ Ο€ΟoΟ‚ Ο„Ξ± ΞµΟ€Ξ¬Ξ½Ο‰"
 
 #, fuzzy
 #~ msgid "Convert selected segments to lines"
-#~ msgstr "Μετακίνιση επιλεγμένου μενού πρός τα κάτω"
+#~ msgstr "ΞΞµΟ„Ξ±ΞΊΞ―Ξ½ΞΉΟƒΞ· ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… ΞΌΞµΞ½ΞΏΟ Ο€ΟΟΟ‚ Ο„Ξ± ΞΊΞ¬Ο„Ο‰"
 
 #
 #, fuzzy
 #~ msgid "Cusp line at selected nodes"
-#~ msgstr "Καθαρισμός όλων των επιλεγμένων γραμμών"
+#~ msgstr "ΞΞ±ΞΈΞ±ΟΞΉΟƒΞΌΟΟ‚ ΟΞ»Ο‰Ξ½ Ο„Ο‰Ξ½ ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ³ΟΞ±ΞΌΞΌΟΞ½"
 
 #
 #~ msgid "Desktop"
-#~ msgstr "Επιφάνεια εργασίας"
+#~ msgstr "Ξ•Ο€ΞΉΟ†Ξ¬Ξ½ΞµΞΉΞ± ΞµΟΞ³Ξ±ΟƒΞ―Ξ±Ο‚"
 
 #, fuzzy
 #~ msgid "Drawing Context"
-#~ msgstr "Σχεδίαση"
+#~ msgstr "Ξ£Ο‡ΞµΞ΄Ξ―Ξ±ΟƒΞ·"
 
 #, fuzzy
 #~ msgid "Exported as"
-#~ msgstr "Το %s εισήχθη"
+#~ msgstr "Ξ¤ΞΏ %s ΞµΞΉΟƒΞ®Ο‡ΞΈΞ·"
 
 #
 #, fuzzy
 #~ msgid "Forward One"
-#~ msgstr "Προώθηση"
+#~ msgstr "Ξ ΟΞΏΟΞΈΞ·ΟƒΞ·"
 
 #, fuzzy
 #~ msgid "Image size"
-#~ msgstr "Μέγεθος Εικόνας:"
+#~ msgstr "ΞΞ­Ξ³ΞµΞΈΞΏΟ‚ Ξ•ΞΉΞΊΟΞ½Ξ±Ο‚:"
 
 #, fuzzy
 #~ msgid "Include one node into selected segments"
-#~ msgstr "Ξε-διαγραφή των επιλεγμένων μηνυμάτων"
+#~ msgstr "ΞΞµ-Ξ΄ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® Ο„Ο‰Ξ½ ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ ΞΌΞ·Ξ½Ο…ΞΌΞ¬Ο„Ο‰Ξ½"
 
 #, fuzzy
 #~ msgid "Join 2 selected endpoints"
-#~ msgstr "Εκτύπωση επιλεγμένων επαφών"
+#~ msgstr "Ξ•ΞΊΟ„ΟΟ€Ο‰ΟƒΞ· ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ ΞµΟ€Ξ±Ο†ΟΞ½"
 
 #, fuzzy
 #~ msgid "Png file name"
-#~ msgstr "όνομα αρχείου"
+#~ msgstr "ΟΞ½ΞΏΞΌΞ± Ξ±ΟΟ‡ΞµΞ―ΞΏΟ…"
 
 #, fuzzy
 #~ msgid "Set dimensions"
-#~ msgstr "Διαστάσεις:"
+#~ msgstr "Ξ”ΞΉΞ±ΟƒΟ„Ξ¬ΟƒΞµΞΉΟ‚:"
 
 #
 #, fuzzy
 #~ msgid "Smooth line at selected nodes"
-#~ msgstr "Εκκίνηση επιλεγμένου παροχέα"
+#~ msgstr "Ξ•ΞΊΞΊΞ―Ξ½Ξ·ΟƒΞ· ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ο€Ξ±ΟΞΏΟ‡Ξ­Ξ±"
 
 #, fuzzy
 #~ msgid "Uncompressed file size:"
-#~ msgstr "Συμπίεση αρχείων:"
+#~ msgstr "Ξ£Ο…ΞΌΟ€Ξ―ΞµΟƒΞ· Ξ±ΟΟ‡ΞµΞ―Ο‰Ξ½:"
 
 #, fuzzy
 #~ msgid "Where to export"
-#~ msgstr "Συγχώνευση στο πιλότο"
+#~ msgstr "Ξ£Ο…Ξ³Ο‡ΟΞ½ΞµΟ…ΟƒΞ· ΟƒΟ„ΞΏ Ο€ΞΉΞ»ΟΟ„ΞΏ"
 
 #~ msgid "Width"
-#~ msgstr "Πλάτος"
+#~ msgstr "Ξ Ξ»Ξ¬Ο„ΞΏΟ‚"
 
 #, fuzzy
 #~ msgid "X0"
@@ -5718,7 +5718,7 @@ msgstr "Τιμή"
 
 #, fuzzy
 #~ msgid "XML Tree"
-#~ msgstr "Δένδρο"
+#~ msgstr "Ξ”Ξ­Ξ½Ξ΄ΟΞΏ"
 
 #, fuzzy
 #~ msgid "Y0"
@@ -5726,293 +5726,293 @@ msgstr "Τιμή"
 
 #, fuzzy
 #~ msgid "_Align"
-#~ msgstr "Στοίχιση"
+#~ msgstr "Ξ£Ο„ΞΏΞ―Ο‡ΞΉΟƒΞ·"
 
 #, fuzzy
 #~ msgid "Align dialog"
-#~ msgstr "Κατακόρυ_φη Στοίχιση"
+#~ msgstr "ΞΞ±Ο„Ξ±ΞΊΟΟΟ…_Ο†Ξ· Ξ£Ο„ΞΏΞ―Ο‡ΞΉΟƒΞ·"
 
 #, fuzzy
 #~ msgid "Break apart selected paths"
-#~ msgstr "Επανεκκίνηση επιλεγμένων αρχείων"
+#~ msgstr "Ξ•Ο€Ξ±Ξ½ΞµΞΊΞΊΞ―Ξ½Ξ·ΟƒΞ· ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±ΟΟ‡ΞµΞ―Ο‰Ξ½"
 
 #
 #, fuzzy
 #~ msgid "Drawing context"
-#~ msgstr "Εκτύπωση περιεχομένων πλέγματος"
+#~ msgstr "Ξ•ΞΊΟ„ΟΟ€Ο‰ΟƒΞ· Ο€ΞµΟΞΉΞµΟ‡ΞΏΞΌΞ­Ξ½Ο‰Ξ½ Ο€Ξ»Ξ­Ξ³ΞΌΞ±Ο„ΞΏΟ‚"
 
 #, fuzzy
 #~ msgid "Edit fill style of selected objects"
-#~ msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+#~ msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #, fuzzy
 #~ msgid "Edit font style of selected objects"
-#~ msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+#~ msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #, fuzzy
 #~ msgid "Edit stroke style of selected objects"
-#~ msgstr "Διαγραφή επιλεγμένων αντικειμένων"
+#~ msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½Ο‰Ξ½ Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½Ο‰Ξ½"
 
 #
 #, fuzzy
 #~ msgid "Import "
-#~ msgstr "Εισαγωγή"
+#~ msgstr "Ξ•ΞΉΟƒΞ±Ξ³Ο‰Ξ³Ξ®"
 
 #
 #, fuzzy
 #~ msgid "New drawing"
-#~ msgstr "Νέο επίθημα:"
+#~ msgstr "ΞΞ­ΞΏ ΞµΟ€Ξ―ΞΈΞ·ΞΌΞ±:"
 
 #, fuzzy
 #~ msgid "Nope !"
-#~ msgstr "Σημειώματα GNOME!"
+#~ msgstr "Ξ£Ξ·ΞΌΞµΞΉΟΞΌΞ±Ο„Ξ± GNOME!"
 
 #, fuzzy
 #~ msgid "Open new drawing"
-#~ msgstr "¶νοιγμα νέου παραθύρου"
+#~ msgstr "Ξ†Ξ½ΞΏΞΉΞ³ΞΌΞ± Ξ½Ξ­ΞΏΟ… Ο€Ξ±ΟΞ±ΞΈΟΟΞΏΟ…"
 
 #
 #~ msgid "Paste from clipboard"
-#~ msgstr "Επικόλληση από το τεμάχιο"
+#~ msgstr "Ξ•Ο€ΞΉΞΊΟΞ»Ξ»Ξ·ΟƒΞ· Ξ±Ο€Ο Ο„ΞΏ Ο„ΞµΞΌΞ¬Ο‡ΞΉΞΏ"
 
 #, fuzzy
 #~ msgid "Preview print drawing"
-#~ msgstr "Προεπισκόπηση δεδομένων προς εκτύπωση"
+#~ msgstr "Ξ ΟΞΏΞµΟ€ΞΉΟƒΞΊΟΟ€Ξ·ΟƒΞ· Ξ΄ΞµΞ΄ΞΏΞΌΞ­Ξ½Ο‰Ξ½ Ο€ΟΞΏΟ‚ ΞµΞΊΟ„ΟΟ€Ο‰ΟƒΞ·"
 
 #
 #, fuzzy
 #~ msgid "Rotate selected objects 90deg clockwise"
-#~ msgstr "Διαγραφή επιλεγμένου αντικειμένου"
+#~ msgstr "Ξ”ΞΉΞ±Ξ³ΟΞ±Ο†Ξ® ΞµΟ€ΞΉΞ»ΞµΞ³ΞΌΞ­Ξ½ΞΏΟ… Ξ±Ξ½Ο„ΞΉΞΊΞµΞΉΞΌΞ­Ξ½ΞΏΟ…"
 
 #, fuzzy
 #~ msgid "Save drawing "
-#~ msgstr "Αποθήκευση τροποποιήσεων"
+#~ msgstr "Ξ‘Ο€ΞΏΞΈΞ®ΞΊΞµΟ…ΟƒΞ· Ο„ΟΞΏΟ€ΞΏΟ€ΞΏΞΉΞ®ΟƒΞµΟ‰Ξ½"
 
 #
 #, fuzzy
 #~ msgid "Undo "
-#~ msgstr "Ακύρωση"
+#~ msgstr "Ξ‘ΞΊΟΟΟ‰ΟƒΞ·"
 
 #, fuzzy
 #~ msgid "Yep !"
-#~ msgstr " Ναι "
+#~ msgstr " ΞΞ±ΞΉ "
 
 #, fuzzy
 #~ msgid "Zoom to page"
-#~ msgstr "Αλλαγή κλίμακας ώστε να ταιριάξει η σελίδα"
+#~ msgstr "Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ® ΞΊΞ»Ξ―ΞΌΞ±ΞΊΞ±Ο‚ ΟΟƒΟ„Ξµ Ξ½Ξ± Ο„Ξ±ΞΉΟΞΉΞ¬ΞΎΞµΞΉ Ξ· ΟƒΞµΞ»Ξ―Ξ΄Ξ±"
 
 #, fuzzy
 #~ msgid "Align to bottom left"
-#~ msgstr "άδεια θέση στον πάτο"
+#~ msgstr "Ξ¬Ξ΄ΞµΞΉΞ± ΞΈΞ­ΟƒΞ· ΟƒΟ„ΞΏΞ½ Ο€Ξ¬Ο„ΞΏ"
 
 #, fuzzy
 #~ msgid "Align to bottom middle"
-#~ msgstr "Χρώμα δεξιά ή κάτω"
+#~ msgstr "Ξ§ΟΟΞΌΞ± Ξ΄ΞµΞΎΞΉΞ¬ Ξ® ΞΊΞ¬Ο„Ο‰"
 
 #, fuzzy
 #~ msgid "Align to bottom right"
-#~ msgstr "Χρώμα δεξιά ή κάτω"
+#~ msgstr "Ξ§ΟΟΞΌΞ± Ξ΄ΞµΞΎΞΉΞ¬ Ξ® ΞΊΞ¬Ο„Ο‰"
 
 #, fuzzy
 #~ msgid "Align to center"
-#~ msgstr "Στοίχιση"
+#~ msgstr "Ξ£Ο„ΞΏΞ―Ο‡ΞΉΟƒΞ·"
 
 #, fuzzy
 #~ msgid "Align to left middle"
-#~ msgstr "Εκτύπωση σε αρχείο"
+#~ msgstr "Ξ•ΞΊΟ„ΟΟ€Ο‰ΟƒΞ· ΟƒΞµ Ξ±ΟΟ‡ΞµΞ―ΞΏ"
 
 #, fuzzy
 #~ msgid "Align to top left"
-#~ msgstr "Δεξιά προς αριστερά"
+#~ msgstr "Ξ”ΞµΞΎΞΉΞ¬ Ο€ΟΞΏΟ‚ Ξ±ΟΞΉΟƒΟ„ΞµΟΞ¬"
 
 #, fuzzy
 #~ msgid "Align to top middle"
-#~ msgstr "Εκτύπωση σε αρχείο"
+#~ msgstr "Ξ•ΞΊΟ„ΟΟ€Ο‰ΟƒΞ· ΟƒΞµ Ξ±ΟΟ‡ΞµΞ―ΞΏ"
 
 #, fuzzy
 #~ msgid "Align to top right"
-#~ msgstr "Κύλιση από αριστερά προς δεξιά"
+#~ msgstr "ΞΟΞ»ΞΉΟƒΞ· Ξ±Ο€Ο Ξ±ΟΞΉΟƒΟ„ΞµΟΞ¬ Ο€ΟΞΏΟ‚ Ξ΄ΞµΞΎΞΉΞ¬"
 
 #, fuzzy
 #~ msgid "Choose metric for center"
-#~ msgstr "Επιλέξτε γραμματοσειρά"
+#~ msgstr "Ξ•Ο€ΞΉΞ»Ξ­ΞΎΟ„Ξµ Ξ³ΟΞ±ΞΌΞΌΞ±Ο„ΞΏΟƒΞµΞΉΟΞ¬"
 
 #, fuzzy
 #~ msgid "Close dialog - Ctl+c"
-#~ msgstr "Κλείσιμο διαλόγου"
+#~ msgstr "ΞΞ»ΞµΞ―ΟƒΞΉΞΌΞΏ Ξ΄ΞΉΞ±Ξ»ΟΞ³ΞΏΟ…"
 
 #~ msgid "Height: "
-#~ msgstr "Ύψος: "
+#~ msgstr "ΞΟΞΏΟ‚: "
 
 #, fuzzy
 #~ msgid "Orig. Width: "
-#~ msgstr "Πλάτος: "
+#~ msgstr "Ξ Ξ»Ξ¬Ο„ΞΏΟ‚: "
 
 #, fuzzy
 #~ msgid "Orig. X: "
 #~ msgstr ""
 #~ "\n"
-#~ "Οργ: "
+#~ "ΞΟΞ³: "
 
 #, fuzzy
 #~ msgid "Skew"
-#~ msgstr "Καπνός"
+#~ msgstr "ΞΞ±Ο€Ξ½ΟΟ‚"
 
 #, fuzzy
 #~ msgid "Start transformation - Ctl+a"
-#~ msgstr "Μετασχηματισμός"
+#~ msgstr "ΞΞµΟ„Ξ±ΟƒΟ‡Ξ·ΞΌΞ±Ο„ΞΉΟƒΞΌΟΟ‚"
 
 #, fuzzy
 #~ msgid "Toggle center given in selection/desktop coordiantes"
-#~ msgstr "Σημείο βάσει των συντεταγμένων του"
+#~ msgstr "Ξ£Ξ·ΞΌΞµΞ―ΞΏ Ξ²Ξ¬ΟƒΞµΞΉ Ο„Ο‰Ξ½ ΟƒΟ…Ξ½Ο„ΞµΟ„Ξ±Ξ³ΞΌΞ­Ξ½Ο‰Ξ½ Ο„ΞΏΟ…"
 
 #, fuzzy
 #~ msgid "Use alignment during transformation"
-#~ msgstr "Πληροφορίες Συνάντησης"
+#~ msgstr "Ξ Ξ»Ξ·ΟΞΏΟ†ΞΏΟΞ―ΞµΟ‚ Ξ£Ο…Ξ½Ξ¬Ξ½Ο„Ξ·ΟƒΞ·Ο‚"
 
 #, fuzzy
 #~ msgid "Y: "
-#~ msgstr "Υ:"
+#~ msgstr "Ξ¥:"
 
 #, fuzzy
 #~ msgid "absolute"
-#~ msgstr "Εκτός χρήσης"
+#~ msgstr "Ξ•ΞΊΟ„ΟΟ‚ Ο‡ΟΞ®ΟƒΞ·Ο‚"
 
 #, fuzzy
 #~ msgid "horizontal scale value"
-#~ msgstr "οριζόντιο"
+#~ msgstr "ΞΏΟΞΉΞ¶ΟΞ½Ο„ΞΉΞΏ"
 
 #, fuzzy
 #~ msgid "keep aspect"
-#~ msgstr "Διατήρηση αναλογιών"
+#~ msgstr "Ξ”ΞΉΞ±Ο„Ξ®ΟΞ·ΟƒΞ· Ξ±Ξ½Ξ±Ξ»ΞΏΞ³ΞΉΟΞ½"
 
 #
 #, fuzzy
 #~ msgid "select direction"
-#~ msgstr "Επιλογή λεξικού"
+#~ msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ξ»ΞµΞΎΞΉΞΊΞΏΟ"
 
 #, fuzzy
 #~ msgid "select metric for scale"
-#~ msgstr "Επιλογή τοπικών ρυθμίσεων"
+#~ msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ο„ΞΏΟ€ΞΉΞΊΟΞ½ ΟΟ…ΞΈΞΌΞ―ΟƒΞµΟ‰Ξ½"
 
 #, fuzzy
 #~ msgid "select metric for values"
-#~ msgstr "Επιλογή εικονιδίου για προσαρτημένο"
+#~ msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® ΞµΞΉΞΊΞΏΞ½ΞΉΞ΄Ξ―ΞΏΟ… Ξ³ΞΉΞ± Ο€ΟΞΏΟƒΞ±ΟΟ„Ξ·ΞΌΞ­Ξ½ΞΏ"
 
 #, fuzzy
 #~ msgid "skew"
-#~ msgstr "υποδοχή"
+#~ msgstr "Ο…Ο€ΞΏΞ΄ΞΏΟ‡Ξ®"
 
 #, fuzzy
 #~ msgid "vertical scale value"
-#~ msgstr "Μερικό μικρό χαλάζι"
+#~ msgstr "ΞΞµΟΞΉΞΊΟ ΞΌΞΉΞΊΟΟ Ο‡Ξ±Ξ»Ξ¬Ξ¶ΞΉ"
 
 #
 #~ msgid "Change"
-#~ msgstr "Αλλαγή"
+#~ msgstr "Ξ‘Ξ»Ξ»Ξ±Ξ³Ξ®"
 
 #
 #, fuzzy
 #~ msgid "Change Attribute"
-#~ msgstr "Ιδιότητα"
+#~ msgstr "Ξ™Ξ΄ΞΉΟΟ„Ξ·Ο„Ξ±"
 
 #, fuzzy
 #~ msgid "Change Content"
-#~ msgstr "Σχεδίαση"
+#~ msgstr "Ξ£Ο‡ΞµΞ΄Ξ―Ξ±ΟƒΞ·"
 
 #~ msgid "Content"
-#~ msgstr "Περιεχόμενο"
+#~ msgstr "Ξ ΞµΟΞΉΞµΟ‡ΟΞΌΞµΞ½ΞΏ"
 
 #, fuzzy
 #~ msgid "Do you want to delete attribute?"
-#~ msgstr "Εάν θέλετε αποσφαλμάτωση των ιδιοτήτων εγγραφών"
+#~ msgstr "Ξ•Ξ¬Ξ½ ΞΈΞ­Ξ»ΞµΟ„Ξµ Ξ±Ο€ΞΏΟƒΟ†Ξ±Ξ»ΞΌΞ¬Ο„Ο‰ΟƒΞ· Ο„Ο‰Ξ½ ΞΉΞ΄ΞΉΞΏΟ„Ξ®Ο„Ο‰Ξ½ ΞµΞ³Ξ³ΟΞ±Ο†ΟΞ½"
 
 #, fuzzy
 #~ msgid "Hierarchy"
-#~ msgstr "ιεραρχία"
+#~ msgstr "ΞΉΞµΟΞ±ΟΟ‡Ξ―Ξ±"
 
 #~ msgid "Key"
-#~ msgstr "Πλήκτρο"
+#~ msgstr "Ξ Ξ»Ξ®ΞΊΟ„ΟΞΏ"
 
 #, fuzzy
 #~ msgid "You can't delete 'id' attribute!"
-#~ msgstr "Εάν θέλετε αποσφαλμάτωση των ιδιοτήτων εγγραφών"
+#~ msgstr "Ξ•Ξ¬Ξ½ ΞΈΞ­Ξ»ΞµΟ„Ξµ Ξ±Ο€ΞΏΟƒΟ†Ξ±Ξ»ΞΌΞ¬Ο„Ο‰ΟƒΞ· Ο„Ο‰Ξ½ ΞΉΞ΄ΞΉΞΏΟ„Ξ®Ο„Ο‰Ξ½ ΞµΞ³Ξ³ΟΞ±Ο†ΟΞ½"
 
 #, fuzzy
 #~ msgid "Do you want to delete attribute %s?"
-#~ msgstr "Εάν θέλετε αποσφαλμάτωση των ιδιοτήτων εγγραφών"
+#~ msgstr "Ξ•Ξ¬Ξ½ ΞΈΞ­Ξ»ΞµΟ„Ξµ Ξ±Ο€ΞΏΟƒΟ†Ξ±Ξ»ΞΌΞ¬Ο„Ο‰ΟƒΞ· Ο„Ο‰Ξ½ ΞΉΞ΄ΞΉΞΏΟ„Ξ®Ο„Ο‰Ξ½ ΞµΞ³Ξ³ΟΞ±Ο†ΟΞ½"
 
 #
 #, fuzzy
 #~ msgid "No"
-#~ msgstr "Κανένα"
+#~ msgstr "ΞΞ±Ξ½Ξ­Ξ½Ξ±"
 
 #, fuzzy
 #~ msgid "Do you want to delete element %s?"
-#~ msgstr "Εάν θέλετε αποσφαλμάτωση των ιδιοτήτων εγγραφών"
+#~ msgstr "Ξ•Ξ¬Ξ½ ΞΈΞ­Ξ»ΞµΟ„Ξµ Ξ±Ο€ΞΏΟƒΟ†Ξ±Ξ»ΞΌΞ¬Ο„Ο‰ΟƒΞ· Ο„Ο‰Ξ½ ΞΉΞ΄ΞΉΞΏΟ„Ξ®Ο„Ο‰Ξ½ ΞµΞ³Ξ³ΟΞ±Ο†ΟΞ½"
 
 #~ msgid "\""
 #~ msgstr "\""
 
 #, fuzzy
 #~ msgid "Millimeters\n"
-#~ msgstr "χιλιοστά"
+#~ msgstr "Ο‡ΞΉΞ»ΞΉΞΏΟƒΟ„Ξ¬"
 
 #, fuzzy
 #~ msgid "Choose color for grid"
-#~ msgstr "Επιλογή χρώματος οθόνης για το Abiword"
+#~ msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ο‡ΟΟΞΌΞ±Ο„ΞΏΟ‚ ΞΏΞΈΟΞ½Ξ·Ο‚ Ξ³ΞΉΞ± Ο„ΞΏ Abiword"
 
 #
 #, fuzzy
 #~ msgid "Pixels\n"
-#~ msgstr "Εικονοστοιχεία"
+#~ msgstr "Ξ•ΞΉΞΊΞΏΞ½ΞΏΟƒΟ„ΞΏΞΉΟ‡ΞµΞ―Ξ±"
 
 #, fuzzy
 #~ msgid "Set distance between vertical grid lines"
-#~ msgstr "η απόσταση μεταξύ των %1 και %2"
+#~ msgstr "Ξ· Ξ±Ο€ΟΟƒΟ„Ξ±ΟƒΞ· ΞΌΞµΟ„Ξ±ΞΎΟ Ο„Ο‰Ξ½ %1 ΞΊΞ±ΞΉ %2"
 
 #, fuzzy
 #~ msgid "Set distance between horizontal grid lines"
-#~ msgstr "η απόσταση μεταξύ των %1 και %2"
+#~ msgstr "Ξ· Ξ±Ο€ΟΟƒΟ„Ξ±ΟƒΞ· ΞΌΞµΟ„Ξ±ΞΎΟ Ο„Ο‰Ξ½ %1 ΞΊΞ±ΞΉ %2"
 
 #, fuzzy
 #~ msgid "Choose color for guidelines"
-#~ msgstr "Επιλογή χρώματος οθόνης για το Abiword"
+#~ msgstr "Ξ•Ο€ΞΉΞ»ΞΏΞ³Ξ® Ο‡ΟΟΞΌΞ±Ο„ΞΏΟ‚ ΞΏΞΈΟΞ½Ξ·Ο‚ Ξ³ΞΉΞ± Ο„ΞΏ Abiword"
 
 #, fuzzy
 #~ msgid "Choose paper size"
-#~ msgstr "Το μέγεθος σελίδας"
+#~ msgstr "Ξ¤ΞΏ ΞΌΞ­Ξ³ΞµΞΈΞΏΟ‚ ΟƒΞµΞ»Ξ―Ξ΄Ξ±Ο‚"
 
 #
 #~ msgid "A4\n"
-#~ msgstr "Διαστάσεις Α4\n"
+#~ msgstr "Ξ”ΞΉΞ±ΟƒΟ„Ξ¬ΟƒΞµΞΉΟ‚ Ξ‘4\n"
 
 #
 #, fuzzy
 #~ msgid "Set page height"
-#~ msgstr "Επιπλέον ύψος:"
+#~ msgstr "Ξ•Ο€ΞΉΟ€Ξ»Ξ­ΞΏΞ½ ΟΟΞΏΟ‚:"
 
 #~ msgid "window2"
 #~ msgstr "window2"
 
 #
 #~ msgid "_About ..."
-#~ msgstr "_Περί ..."
+#~ msgstr "_Ξ ΞµΟΞ― ..."
 
 #, fuzzy
 #~ msgid "Draw ellipse"
-#~ msgstr "Νέα Έλλειψη"
+#~ msgstr "ΞΞ­Ξ± ΞΞ»Ξ»ΞµΞΉΟΞ·"
 
 #, fuzzy
 #~ msgid "Dup"
-#~ msgstr "Τμήμ."
+#~ msgstr "Ξ¤ΞΌΞ®ΞΌ."
 
 #~ msgid "Del"
-#~ msgstr "Διαγρ."
+#~ msgstr "Ξ”ΞΉΞ±Ξ³Ο."
 
 #~ msgid "Could not initialize Bonobo"
-#~ msgstr "Αδύνατη η αρχικοποίηση του Bonobo"
+#~ msgstr "Ξ‘Ξ΄ΟΞ½Ξ±Ο„Ξ· Ξ· Ξ±ΟΟ‡ΞΉΞΊΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ· Ο„ΞΏΟ… Bonobo"
 
 #, fuzzy
 #~ msgid "Broken bitmap"
-#~ msgstr "Διακοπείσα σωλήνωση"
+#~ msgstr "Ξ”ΞΉΞ±ΞΊΞΏΟ€ΞµΞ―ΟƒΞ± ΟƒΟ‰Ξ»Ξ®Ξ½Ο‰ΟƒΞ·"

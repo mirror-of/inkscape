@@ -1,12 +1,12 @@
-# Traducción ó Galego de Sodipodi
-# Copyright (C) 2000 Francisco Xosé Vázquez Grandal.
-# Francisco Xosé Vázquez Grandal <fxvazquez@arrakis.es>, 2001.
+# TraducciÃ³n Ã³ Galego de Sodipodi
+# Copyright (C) 2000 Francisco XosÃ© VÃ¡zquez Grandal.
+# Francisco XosÃ© VÃ¡zquez Grandal <fxvazquez@arrakis.es>, 2001.
 #
-#  O teu SO en Galego ¿en que se non?.      ¡¡MOITO TRASNO!!
+#  O teu SO en Galego Â¿en que se non?.      Â¡Â¡MOITO TRASNO!!
 #
-#  ESTA TRADUCCIÓN MELLORA COS ANOS. AMIGUIÑO, OS GALEGOS SOMOSCHE ASI.
+#  ESTA TRADUCCIÃ“N MELLORA COS ANOS. AMIGUIÃ‘O, OS GALEGOS SOMOSCHE ASI.
 #
-#   ()   \\ Fco. Xosé Vázquez Grandal
+#   ()   \\ Fco. XosÃ© VÃ¡zquez Grandal
 # ^ (o_   \\ mailto:fxvazquez@arrakis.es
 # | /)\c{} \\ http://www.arrakis.es/~fxvazquez/
 # `-V__)_   \\ http://www.trasno.net
@@ -17,10 +17,10 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-07-15 23:06-0700\n"
 "PO-Revision-Date: 2001-11-10 16:49GMT\n"
-"Last-Translator: Francisco Xosé Vázquez Grandal <fxvazquez@arrakis.es>\n"
+"Last-Translator: Francisco XosÃ© VÃ¡zquez Grandal <fxvazquez@arrakis.es>\n"
 "Language-Team: Galician <trasno@trasno.net>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 0.9.5\n"
 
@@ -40,7 +40,7 @@ msgstr "Debuxar"
 #. TRANSLATORS: object factory is an object that produces other objects
 #: src/bonobo/svg-doc-factory.cpp:39
 msgid "Could not create sodipodi-svg-doc factory"
-msgstr "Non se puido crea-la factoría sodipodi-svg-doc"
+msgstr "Non se puido crea-la factorÃ­a sodipodi-svg-doc"
 
 #: src/desktop-events.cpp:252
 #, c-format
@@ -55,7 +55,7 @@ msgstr "Mover"
 #: src/desktop.cpp:876
 #, fuzzy
 msgid "Zoom drawing if window size changes"
-msgstr "Zoom ó debuxo"
+msgstr "Zoom Ã³ debuxo"
 
 #: src/desktop.cpp:898 src/dialogs/display-settings.cpp:923 src/verbs.cpp:969
 msgid "Zoom"
@@ -122,7 +122,7 @@ msgstr ""
 #: src/desktop.cpp:2002 src/dialogs/align.cpp:445
 #: src/dialogs/desktop-properties.cpp:869 src/dialogs/export.cpp:123
 msgid "Page"
-msgstr "Páxina"
+msgstr "PÃ¡xina"
 
 #: src/desktop.cpp:2006 src/dialogs/align.cpp:448 src/dialogs/export.cpp:123
 msgid "Drawing"
@@ -130,12 +130,12 @@ msgstr "Debuxando"
 
 #: src/desktop.cpp:2010 src/dialogs/align.cpp:451 src/dialogs/export.cpp:123
 msgid "Selection"
-msgstr "Selección"
+msgstr "SelecciÃ³n"
 
 #: src/dialogs/align.cpp:286
 #, fuzzy
 msgid "Right side of aligned objects to left side of anchor"
-msgstr "Aliña-lo interior do obxecto á beira esquerda"
+msgstr "AliÃ±a-lo interior do obxecto Ã¡ beira esquerda"
 
 #: src/dialogs/align.cpp:288
 msgid "Left side of aligned objects to left side of anchor"
@@ -149,7 +149,7 @@ msgstr "voltear horizontal"
 #: src/dialogs/align.cpp:292
 #, fuzzy
 msgid "Right side of aligned objects to right side of anchor"
-msgstr "Aliña-lo interior do obxecto á beira dereita"
+msgstr "AliÃ±a-lo interior do obxecto Ã¡ beira dereita"
 
 #: src/dialogs/align.cpp:294
 msgid "Left side of aligned objects to right side of anchor"
@@ -162,7 +162,7 @@ msgstr ""
 #: src/dialogs/align.cpp:299
 #, fuzzy
 msgid "Top of aligned objects to top of anchor"
-msgstr "Aliña-lo interior do obxecto á beira superior"
+msgstr "AliÃ±a-lo interior do obxecto Ã¡ beira superior"
 
 #: src/dialogs/align.cpp:301
 #, fuzzy
@@ -172,16 +172,16 @@ msgstr "voltear vertical"
 #: src/dialogs/align.cpp:303
 #, fuzzy
 msgid "Bottom of aligned objects to bottom of anchor"
-msgstr "Aliña-lo interior do obxecto á beira inferior"
+msgstr "AliÃ±a-lo interior do obxecto Ã¡ beira inferior"
 
 #: src/dialogs/align.cpp:305
 #, fuzzy
 msgid "Top of aligned objects to bottom of anchor"
-msgstr "Aliña-lo interior do obxecto á beira superior"
+msgstr "AliÃ±a-lo interior do obxecto Ã¡ beira superior"
 
 #: src/dialogs/align.cpp:320
 msgid "Align"
-msgstr "Aliñar"
+msgstr "AliÃ±ar"
 
 #: src/dialogs/align.cpp:341
 msgid "Distribute left sides of objects at even distances"
@@ -222,7 +222,7 @@ msgstr "Atributos"
 
 #: src/dialogs/align.cpp:433
 msgid "Last selected"
-msgstr "Último seleccionado"
+msgstr "Ãšltimo seleccionado"
 
 #: src/dialogs/align.cpp:436
 msgid "First selected"
@@ -249,12 +249,12 @@ msgstr "Amosa-la reixa"
 #: src/dialogs/desktop-properties.cpp:787
 #, fuzzy
 msgid "Snap bounding boxes to grid"
-msgstr "Enganchar á reixa"
+msgstr "Enganchar Ã¡ reixa"
 
 #: src/dialogs/desktop-properties.cpp:788
 #, fuzzy
 msgid "Snap points to grid"
-msgstr "Enganchar á reixa"
+msgstr "Enganchar Ã¡ reixa"
 
 #: src/dialogs/desktop-properties.cpp:806
 msgid "Grid units:"
@@ -270,11 +270,11 @@ msgstr "Orixe Y:"
 
 #: src/dialogs/desktop-properties.cpp:814
 msgid "Spacing X:"
-msgstr "Separación X:"
+msgstr "SeparaciÃ³n X:"
 
 #: src/dialogs/desktop-properties.cpp:817
 msgid "Spacing Y:"
-msgstr "Separación Y:"
+msgstr "SeparaciÃ³n Y:"
 
 #: src/dialogs/desktop-properties.cpp:821
 #: src/dialogs/desktop-properties.cpp:853
@@ -298,30 +298,30 @@ msgstr "Cor da reixa:"
 #. Guidelines page
 #: src/dialogs/desktop-properties.cpp:832
 msgid "Guides"
-msgstr "Guías"
+msgstr "GuÃ­as"
 
 #: src/dialogs/desktop-properties.cpp:840
 msgid "Show guides"
-msgstr "Amosar guías"
+msgstr "Amosar guÃ­as"
 
 #: src/dialogs/desktop-properties.cpp:841
 #, fuzzy
 msgid "Snap bounding boxes to guides"
-msgstr "Enganchar ás guías"
+msgstr "Enganchar Ã¡s guÃ­as"
 
 #: src/dialogs/desktop-properties.cpp:842
 #, fuzzy
 msgid "Snap points to guides"
-msgstr "Enganchar á reixa"
+msgstr "Enganchar Ã¡ reixa"
 
 #: src/dialogs/desktop-properties.cpp:860
 #, fuzzy
 msgid "Guide color:"
-msgstr "Cor das guías"
+msgstr "Cor das guÃ­as"
 
 #: src/dialogs/desktop-properties.cpp:861
 msgid "Guideline color"
-msgstr "Cor da guía liña"
+msgstr "Cor da guÃ­a liÃ±a"
 
 #: src/dialogs/desktop-properties.cpp:863
 msgid "Highlight color:"
@@ -330,7 +330,7 @@ msgstr "Cor de destaque"
 #: src/dialogs/desktop-properties.cpp:864
 #, fuzzy
 msgid "Highlighted guideline color"
-msgstr "Cor da liña guía destacada"
+msgstr "Cor da liÃ±a guÃ­a destacada"
 
 #: src/dialogs/desktop-properties.cpp:878
 msgid "Background (also for export):"
@@ -349,7 +349,7 @@ msgstr "Amosa-la reixa"
 #: src/dialogs/desktop-properties.cpp:886
 #, fuzzy
 msgid "Border on top of drawing"
-msgstr "Zoom ó debuxo"
+msgstr "Zoom Ã³ debuxo"
 
 #: src/dialogs/desktop-properties.cpp:896
 #, fuzzy
@@ -362,7 +362,7 @@ msgstr ""
 
 #: src/dialogs/desktop-properties.cpp:913
 msgid "Paper size:"
-msgstr "Tamaño do Papel:"
+msgstr "TamaÃ±o do Papel:"
 
 #: src/dialogs/desktop-properties.cpp:937 src/dialogs/export.cpp:123
 msgid "Custom"
@@ -371,7 +371,7 @@ msgstr "Persoalizado"
 #: src/dialogs/desktop-properties.cpp:948
 #, fuzzy
 msgid "Paper orientation:"
-msgstr "Tamaño do Papel:"
+msgstr "TamaÃ±o do Papel:"
 
 #: src/dialogs/desktop-properties.cpp:960
 #, fuzzy
@@ -434,7 +434,7 @@ msgstr "Nova vista"
 #: src/dialogs/display-settings.cpp:201
 #, fuzzy
 msgid "When transforming, show:"
-msgstr "Reinicia-la transformación"
+msgstr "Reinicia-la transformaciÃ³n"
 
 #: src/dialogs/display-settings.cpp:212
 #, fuzzy
@@ -448,7 +448,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:218
 #, fuzzy
 msgid "Box outline"
-msgstr "Amosar guías"
+msgstr "Amosar guÃ­as"
 
 #: src/dialogs/display-settings.cpp:218
 msgid "Show only a box outline of the objects when moving or transforming"
@@ -493,7 +493,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:262
 #, fuzzy
 msgid "Opposite bounding box edge"
-msgstr "Enganchar á reixa"
+msgstr "Enganchar Ã¡ reixa"
 
 #: src/dialogs/display-settings.cpp:263
 msgid "Default scale origin will be on the bounding box of the item"
@@ -637,7 +637,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:810
 #, fuzzy
 msgid "Acceleration:"
-msgstr "Selección"
+msgstr "SelecciÃ³n"
 
 #: src/dialogs/display-settings.cpp:811
 msgid ""
@@ -748,7 +748,7 @@ msgstr "Peza"
 #. Rect
 #: src/dialogs/display-settings.cpp:936 src/sp-rect.cpp:259 src/verbs.cpp:953
 msgid "Rectangle"
-msgstr "Rectángulo"
+msgstr "RectÃ¡ngulo"
 
 #. Ellipse
 #: src/dialogs/display-settings.cpp:939 src/sp-ellipse.cpp:443
@@ -894,7 +894,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:1093
 #, fuzzy
 msgid "Transforms"
-msgstr "Transformación"
+msgstr "TransformaciÃ³n"
 
 #: src/dialogs/display-settings.cpp:1096
 #, fuzzy
@@ -916,7 +916,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:1112
 #, fuzzy
 msgid "Transform pattern fill"
-msgstr "Transformación"
+msgstr "TransformaciÃ³n"
 
 #: src/dialogs/display-settings.cpp:1113
 msgid "Apply the transform of an object to its pattern fill"
@@ -925,7 +925,7 @@ msgstr ""
 #: src/dialogs/display-settings.cpp:1121
 #, fuzzy
 msgid "Store transformation:"
-msgstr "Reinicia-la transformación"
+msgstr "Reinicia-la transformaciÃ³n"
 
 #: src/dialogs/display-settings.cpp:1132
 msgid "Optimized"
@@ -1041,7 +1041,7 @@ msgstr "1:1"
 #: src/dialogs/export.cpp:387
 #, fuzzy
 msgid "Bitmap size"
-msgstr "Tamaño da imaxe"
+msgstr "TamaÃ±o da imaxe"
 
 #: src/dialogs/export.cpp:397 src/dialogs/export.cpp:412
 msgid "pixels"
@@ -1098,7 +1098,7 @@ msgstr ""
 #: src/dialogs/filedialog.cpp:216 src/dialogs/filedialog.cpp:364
 #, fuzzy
 msgid "File type:"
-msgstr "Configuración do recheo"
+msgstr "ConfiguraciÃ³n do recheo"
 
 #: src/dialogs/filedialog.cpp:368
 msgid "Append filename extension automatically"
@@ -1111,7 +1111,7 @@ msgstr ""
 #: src/dialogs/fill-style.cpp:124
 #, fuzzy
 msgid "Fill style"
-msgstr "Configuración do recheo"
+msgstr "ConfiguraciÃ³n do recheo"
 
 #: src/dialogs/fill-style.cpp:172
 #, fuzzy
@@ -1167,7 +1167,7 @@ msgstr ""
 #: src/dialogs/find.cpp:493
 #, fuzzy
 msgid "All types"
-msgstr "Configuración do recheo"
+msgstr "ConfiguraciÃ³n do recheo"
 
 #: src/dialogs/find.cpp:504
 msgid "Search all shapes"
@@ -1180,12 +1180,12 @@ msgstr ""
 #: src/dialogs/find.cpp:521
 #, fuzzy
 msgid "Search rectangles"
-msgstr "Rectángulo"
+msgstr "RectÃ¡ngulo"
 
 #: src/dialogs/find.cpp:521
 #, fuzzy
 msgid "Rectangles"
-msgstr "Rectángulo"
+msgstr "RectÃ¡ngulo"
 
 #: src/dialogs/find.cpp:526
 msgid "Search ellipses, arcs, circles"
@@ -1257,7 +1257,7 @@ msgstr "Escalar coa imaxe"
 #: src/dialogs/find.cpp:569
 #, fuzzy
 msgid "Images"
-msgstr "Tamaño da imaxe"
+msgstr "TamaÃ±o da imaxe"
 
 # [*] Revisar
 #: src/dialogs/find.cpp:574
@@ -1308,7 +1308,7 @@ msgstr ""
 #: src/dialogs/find.cpp:650
 #, fuzzy
 msgid "Search in s_election"
-msgstr "Zoom á selección"
+msgstr "Zoom Ã¡ selecciÃ³n"
 
 #: src/dialogs/find.cpp:654
 msgid "Limit search to the current selection"
@@ -1366,7 +1366,7 @@ msgstr "Opacidade:"
 #: src/dialogs/item-properties.cpp:217
 #, fuzzy
 msgid "Transformation matrix"
-msgstr "Transformación"
+msgstr "TransformaciÃ³n"
 
 #: src/dialogs/item-properties.cpp:387
 msgid "Ref"
@@ -1375,7 +1375,7 @@ msgstr ""
 #: src/dialogs/item-properties.cpp:534
 #, fuzzy
 msgid "ID invalid"
-msgstr "O ID é válido"
+msgstr "O ID Ã© vÃ¡lido"
 
 #: src/dialogs/item-properties.cpp:536
 msgid "ID exists"
@@ -1425,7 +1425,7 @@ msgstr "Atributo:"
 #: src/dialogs/object-attributes.cpp:49
 #, fuzzy
 msgid "Sides:"
-msgstr "Guías"
+msgstr "GuÃ­as"
 
 #: src/dialogs/object-attributes.cpp:50 src/dialogs/object-attributes.cpp:61
 #, fuzzy
@@ -1458,7 +1458,7 @@ msgstr ""
 #: src/dialogs/object-attributes.cpp:56
 #, fuzzy
 msgid "Flatsides:"
-msgstr "Guías"
+msgstr "GuÃ­as"
 
 #: src/dialogs/object-attributes.cpp:63
 msgid "Expansion:"
@@ -1467,7 +1467,7 @@ msgstr ""
 #: src/dialogs/object-attributes.cpp:64
 #, fuzzy
 msgid "Revolutions:"
-msgstr "Selección"
+msgstr "SelecciÃ³n"
 
 #: src/dialogs/object-attributes.cpp:65
 msgid "Radius:"
@@ -1521,7 +1521,7 @@ msgstr "Ancho do trazado"
 #: src/dialogs/object-properties.cpp:217
 #, fuzzy
 msgid "Stroke style"
-msgstr "Configuración do escritorio"
+msgstr "ConfiguraciÃ³n do escritorio"
 
 #: src/dialogs/object-properties.cpp:229
 msgid "Apply to:"
@@ -1540,7 +1540,7 @@ msgstr ""
 #: src/dialogs/object-properties.cpp:251
 #, fuzzy
 msgid "Rectangle tool"
-msgstr "Rectángulo"
+msgstr "RectÃ¡ngulo"
 
 #: src/dialogs/object-properties.cpp:257
 msgid "Arc tool"
@@ -1646,7 +1646,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:235
 #, fuzzy
 msgid "Relation"
-msgstr "Selección"
+msgstr "SelecciÃ³n"
 
 #: src/dialogs/rdf.cpp:236
 msgid "Unique URI to a related document."
@@ -1655,7 +1655,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:238
 #, fuzzy
 msgid "Language"
-msgstr "ángulo"
+msgstr "Ã¡ngulo"
 
 #: src/dialogs/rdf.cpp:239
 msgid ""
@@ -1684,7 +1684,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:250
 #, fuzzy
 msgid "Description"
-msgstr "Posición"
+msgstr "PosiciÃ³n"
 
 #: src/dialogs/rdf.cpp:251
 msgid "A short account of the content of this document."
@@ -1694,7 +1694,7 @@ msgstr ""
 #: src/dialogs/rdf.cpp:255
 #, fuzzy
 msgid "Contributors"
-msgstr "Centímetros"
+msgstr "CentÃ­metros"
 
 #: src/dialogs/rdf.cpp:256
 msgid ""
@@ -1725,7 +1725,7 @@ msgstr ""
 #: src/widgets/paint-selector.cpp:849
 #, fuzzy
 msgid "No document selected"
-msgstr "Último seleccionado"
+msgstr "Ãšltimo seleccionado"
 
 #: src/dialogs/stroke-style.cpp:1387
 #, fuzzy
@@ -1840,7 +1840,7 @@ msgstr "Equipamento"
 #: src/dialogs/text-edit.cpp:253
 #, fuzzy
 msgid "Alignment:"
-msgstr "Aliñar"
+msgstr "AliÃ±ar"
 
 #: src/dialogs/text-edit.cpp:288
 msgid "Orientation:"
@@ -1849,7 +1849,7 @@ msgstr ""
 #: src/dialogs/text-edit.cpp:313
 #, fuzzy
 msgid "Line spacing:"
-msgstr "Separación X:"
+msgstr "SeparaciÃ³n X:"
 
 #: src/dialogs/text-edit.cpp:344
 msgid "Text and font"
@@ -1977,7 +1977,7 @@ msgstr ""
 #: src/draw-context.cpp:292
 #, fuzzy
 msgid "Appending to selection"
-msgstr "Zoom á selección"
+msgstr "Zoom Ã¡ selecciÃ³n"
 
 #: src/draw-context.cpp:296
 msgid "Creating new curve"
@@ -2046,7 +2046,7 @@ msgstr ""
 #: src/extension/internal/eps-out.cpp:70
 #, fuzzy
 msgid "EPS Output Settings"
-msgstr "Configuración do documento"
+msgstr "ConfiguraciÃ³n do documento"
 
 #: src/extension/internal/eps-out.cpp:82
 msgid "Make bounding box around full page"
@@ -2060,12 +2060,12 @@ msgstr "Converti-los obxectos seleccionados a curvas"
 #: src/extension/internal/gnome.cpp:73
 #, fuzzy
 msgid "Select printer"
-msgstr "Selección"
+msgstr "SelecciÃ³n"
 
 #: src/extension/internal/gnome.cpp:124
 #, fuzzy
 msgid "Inkscape: Print Preview"
-msgstr "Sodipodi (nome do doc. %s..): Previsualización da impresión"
+msgstr "Sodipodi (nome do doc. %s..): PrevisualizaciÃ³n da impresiÃ³n"
 
 #: src/extension/internal/ps.cpp:110
 #, fuzzy
@@ -2108,7 +2108,7 @@ msgstr ""
 #: src/extension/internal/ps.cpp:170
 #, fuzzy
 msgid "Resolution:"
-msgstr "Selección"
+msgstr "SelecciÃ³n"
 
 #. Print destination frame
 #: src/extension/internal/ps.cpp:174
@@ -2263,7 +2263,7 @@ msgstr "Porcentaxe"
 
 #: src/helper/units.cpp:40
 msgid "Millimeter"
-msgstr "Milímetro"
+msgstr "MilÃ­metro"
 
 #: src/helper/units.cpp:40
 msgid "mm"
@@ -2271,11 +2271,11 @@ msgstr "mm"
 
 #: src/helper/units.cpp:40
 msgid "Millimeters"
-msgstr "Milímetros"
+msgstr "MilÃ­metros"
 
 #: src/helper/units.cpp:41
 msgid "Centimeter"
-msgstr "Centímetro"
+msgstr "CentÃ­metro"
 
 #: src/helper/units.cpp:41
 msgid "cm"
@@ -2283,7 +2283,7 @@ msgstr "cm"
 
 #: src/helper/units.cpp:41
 msgid "Centimeters"
-msgstr "Centímetros"
+msgstr "CentÃ­metros"
 
 #: src/helper/units.cpp:42
 #, fuzzy
@@ -2435,7 +2435,7 @@ msgstr ""
 #: src/interface.cpp:780
 #, fuzzy
 msgid "_Show/Hide"
-msgstr "Amosar guías"
+msgstr "Amosar guÃ­as"
 
 #: src/interface.cpp:780
 msgid ""
@@ -2452,17 +2452,17 @@ msgstr ""
 #: src/interface.cpp:785
 #, fuzzy
 msgid "Show or hide the Commands bar (under the menu)"
-msgstr "Amosar guías"
+msgstr "Amosar guÃ­as"
 
 #: src/interface.cpp:787
 #, fuzzy
 msgid "Tool Controls"
-msgstr "Opcións de Oaf"
+msgstr "OpciÃ³ns de Oaf"
 
 #: src/interface.cpp:787
 #, fuzzy
 msgid "Show or hide the Tool Controls panel"
-msgstr "Amosar guías"
+msgstr "Amosar guÃ­as"
 
 #: src/interface.cpp:789
 msgid "_Toolbox"
@@ -2569,7 +2569,7 @@ msgstr ""
 #: src/main.cpp:138
 #, fuzzy
 msgid "Open specified document(s) (option string may be excluded)"
-msgstr "Abri-lo ficheiro especificado (débese exclui-la cadea de opcion)"
+msgstr "Abri-lo ficheiro especificado (dÃ©bese exclui-la cadea de opcion)"
 
 #: src/main.cpp:139 src/main.cpp:142 src/main.cpp:145 src/main.cpp:159
 msgid "FILENAME"
@@ -2579,8 +2579,8 @@ msgstr "NOME DO FICHEIRO"
 #, fuzzy
 msgid "Print document(s) to specified output file (use '| program' for pipe)"
 msgstr ""
-"Imprimi-los ficheiros ó ficheiro de saida especificado (use '| programa' "
-"para canalización)"
+"Imprimi-los ficheiros Ã³ ficheiro de saida especificado (use '| programa' "
+"para canalizaciÃ³n)"
 
 #: src/main.cpp:144
 #, fuzzy
@@ -2636,7 +2636,7 @@ msgstr ""
 #: src/main.cpp:161
 msgid "Show given files one-by-one, switch to next on any key/mouse event"
 msgstr ""
-"Amosa-los ficheiros un a un, cambiar ó seguinte nun evento de teclado/rato"
+"Amosa-los ficheiros un a un, cambiar Ã³ seguinte nun evento de teclado/rato"
 
 #: src/main.cpp:163
 msgid "Prefer bitmap (XPM) icons to SVG ones"
@@ -2663,7 +2663,7 @@ msgstr ""
 #: src/nodepath.cpp:1342
 #, fuzzy
 msgid "Cannot find path between nodes."
-msgstr "Suaviza-la liña nos nodos seleccionados"
+msgstr "Suaviza-la liÃ±a nos nodos seleccionados"
 
 #. TRANSLATORS: "cusp" means "sharp" (cusp node); see also the Advanced Tutorial
 #: src/nodepath.cpp:2719
@@ -2678,7 +2678,7 @@ msgstr ""
 #: src/nodepath.cpp:2723
 #, fuzzy
 msgid "symmetric"
-msgstr "Asimétrico"
+msgstr "AsimÃ©trico"
 
 #: src/nodepath.cpp:2733
 msgid "Drag nodes or control points to edit the path"
@@ -2704,7 +2704,7 @@ msgstr ""
 #: src/nodepath.cpp:2758
 #, fuzzy, c-format
 msgid "%i of %i nodes selected. %s."
-msgstr "Suaviza-la liña nos nodos seleccionados"
+msgstr "Suaviza-la liÃ±a nos nodos seleccionados"
 
 #. Item dialog
 #: src/object-ui.cpp:107
@@ -2722,7 +2722,7 @@ msgstr "Seleccionar esto"
 #: src/object-ui.cpp:127
 #, fuzzy
 msgid "Reset _Transformation"
-msgstr "Reinicia-la transformación"
+msgstr "Reinicia-la transformaciÃ³n"
 
 #: src/object-ui.cpp:133
 #, fuzzy
@@ -2755,7 +2755,7 @@ msgstr "Propiedades do elemento"
 #: src/object-ui.cpp:292
 #, fuzzy
 msgid "_Follow Link"
-msgstr "liña completa"
+msgstr "liÃ±a completa"
 
 #. Reset transformations
 #: src/object-ui.cpp:297
@@ -2777,7 +2777,7 @@ msgstr ""
 #: src/object-ui.cpp:395
 #, fuzzy
 msgid "_Fill and Stroke"
-msgstr "Configuración do escritorio"
+msgstr "ConfiguraciÃ³n do escritorio"
 
 #. Link dialog
 #: src/object-ui.cpp:415
@@ -2833,7 +2833,7 @@ msgstr ""
 #: src/path-chemistry.cpp:402
 #, fuzzy
 msgid "Select one or more paths to reverse."
-msgstr "Eleva-la selección ó tope"
+msgstr "Eleva-la selecciÃ³n Ã³ tope"
 
 #: src/path-chemistry.cpp:427
 msgid "No paths to reverse in the selection."
@@ -2847,12 +2847,12 @@ msgstr "Debuxar rectangulo"
 #: src/select-context.cpp:649
 #, fuzzy
 msgid "Move canceled."
-msgstr "Selección"
+msgstr "SelecciÃ³n"
 
 #: src/select-context.cpp:655
 #, fuzzy
 msgid "Selection canceled."
-msgstr "Selección"
+msgstr "SelecciÃ³n"
 
 #: src/select-context.cpp:804
 #, fuzzy, c-format
@@ -2871,7 +2871,7 @@ msgstr ""
 #: src/select-toolbar.cpp:390
 #, fuzzy
 msgid "Width of selection"
-msgstr "Corta-la selección"
+msgstr "Corta-la selecciÃ³n"
 
 #: src/select-toolbar.cpp:398
 msgid "Change both width and height by the same proportion"
@@ -2880,7 +2880,7 @@ msgstr ""
 #: src/select-toolbar.cpp:405
 #, fuzzy
 msgid "Height of selection"
-msgstr "Zoom á selección"
+msgstr "Zoom Ã¡ selecciÃ³n"
 
 #: src/selection-chemistry.cpp:73
 msgid "Nothing was deleted."
@@ -2894,7 +2894,7 @@ msgstr "Converti-los obxectos seleccionados a curvas"
 #: src/selection-chemistry.cpp:248
 #, fuzzy
 msgid "Select two or more objects to group."
-msgstr "Eleva-la selección ó tope"
+msgstr "Eleva-la selecciÃ³n Ã³ tope"
 
 # [*] Revisar
 #: src/selection-chemistry.cpp:256
@@ -2953,7 +2953,7 @@ msgstr ""
 #: src/selection-chemistry.cpp:778 src/selection-chemistry.cpp:829
 #, fuzzy
 msgid "Nothing on the clipboard."
-msgstr "Copia-la selección ó portarretallos"
+msgstr "Copia-la selecciÃ³n Ã³ portarretallos"
 
 #: src/selection-chemistry.cpp:835
 #, fuzzy
@@ -3067,7 +3067,7 @@ msgstr "movemento horizontal"
 #: src/sp-image.cpp:324
 #, fuzzy, c-format
 msgid "Image with bad reference: %s"
-msgstr "O elemento é de referencia"
+msgstr "O elemento Ã© de referencia"
 
 #: src/sp-image.cpp:326
 #, c-format
@@ -3095,12 +3095,12 @@ msgstr "Documento"
 #: src/sp-image.cpp:933
 #, fuzzy
 msgid "Unknown"
-msgstr "Elemento descoñecido :-("
+msgstr "Elemento descoÃ±ecido :-("
 
 #: src/sp-image.cpp:939
 #, fuzzy
 msgid "Image URI:"
-msgstr "Tamaño da imaxe"
+msgstr "TamaÃ±o da imaxe"
 
 #: src/sp-item-group.cpp:330
 #, c-format
@@ -3254,12 +3254,12 @@ msgstr "Borra-los nodos seleccionados"
 #: src/toolbox.cpp:387
 #, fuzzy
 msgid "Join paths at selected nodes"
-msgstr "Suaviza-la liña nos nodos seleccionados"
+msgstr "Suaviza-la liÃ±a nos nodos seleccionados"
 
 #: src/toolbox.cpp:389
 #, fuzzy
 msgid "Join paths at selected nodes with new segment"
-msgstr "Suaviza-la liña nos nodos seleccionados"
+msgstr "Suaviza-la liÃ±a nos nodos seleccionados"
 
 #: src/toolbox.cpp:392
 msgid "Split path between two non-endpoint nodes"
@@ -3289,7 +3289,7 @@ msgstr "Borra-los nodos seleccionados"
 #: src/toolbox.cpp:411
 #, fuzzy
 msgid "Make selected segments lines"
-msgstr "Converti-los segmentos seleccionados a liñas"
+msgstr "Converti-los segmentos seleccionados a liÃ±as"
 
 #: src/toolbox.cpp:414
 #, fuzzy
@@ -3315,7 +3315,7 @@ msgstr ""
 #: src/toolbox.cpp:1123
 #, fuzzy
 msgid "Spoke ratio:"
-msgstr "Bloquea-la relación de aspecto"
+msgstr "Bloquea-la relaciÃ³n de aspecto"
 
 #. TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
 #. Base radius is the same for the closest handle.
@@ -3374,7 +3374,7 @@ msgstr ""
 #: src/toolbox.cpp:1636
 #, fuzzy
 msgid "Turns:"
-msgstr "Transformación"
+msgstr "TransformaciÃ³n"
 
 #: src/toolbox.cpp:1636
 msgid "Number of revolutions"
@@ -3404,7 +3404,7 @@ msgstr ""
 #: src/toolbox.cpp:1763
 #, fuzzy
 msgid "Angle:"
-msgstr "ángulo"
+msgstr "Ã¡ngulo"
 
 #: src/toolbox.cpp:1763
 msgid "The angle of the calligraphic pen (in degrees)"
@@ -3612,7 +3612,7 @@ msgstr "Imprimi-lo debuxo"
 #: src/verbs.cpp:815
 #, fuzzy
 msgid "Preview document printout"
-msgstr "Previsualiza-la impresión do debuxo"
+msgstr "Previsualiza-la impresiÃ³n do debuxo"
 
 #: src/verbs.cpp:816
 #, fuzzy
@@ -3664,7 +3664,7 @@ msgstr "Nova vista"
 #: src/verbs.cpp:826
 #, fuzzy
 msgid "_Quit"
-msgstr "_Saír"
+msgstr "_SaÃ­r"
 
 #: src/verbs.cpp:826
 #, fuzzy
@@ -3680,7 +3680,7 @@ msgstr "Desfacer "
 #: src/verbs.cpp:829
 #, fuzzy
 msgid "Undo last action"
-msgstr "Reinicia-la transformación"
+msgstr "Reinicia-la transformaciÃ³n"
 
 #: src/verbs.cpp:831
 #, fuzzy
@@ -3709,7 +3709,7 @@ msgstr "Copiar"
 #: src/verbs.cpp:836
 #, fuzzy
 msgid "Copy selection to clipboard"
-msgstr "Copia-la selección ó portarretallos"
+msgstr "Copia-la selecciÃ³n Ã³ portarretallos"
 
 #: src/verbs.cpp:837
 #, fuzzy
@@ -3729,7 +3729,7 @@ msgstr "Ancho do trazado"
 #: src/verbs.cpp:840
 #, fuzzy
 msgid "Apply style of the copied object to selection"
-msgstr "Copia-la selección ó portarretallos"
+msgstr "Copia-la selecciÃ³n Ã³ portarretallos"
 
 #: src/verbs.cpp:841
 #, fuzzy
@@ -3739,7 +3739,7 @@ msgstr "Ancho do trazado"
 #: src/verbs.cpp:842
 #, fuzzy
 msgid "Paste object(s) from clipboard to the original location"
-msgstr "Aliñar obxectos á metade horizontal"
+msgstr "AliÃ±ar obxectos Ã¡ metade horizontal"
 
 #: src/verbs.cpp:843
 #, fuzzy
@@ -3749,7 +3749,7 @@ msgstr "Borrar"
 #: src/verbs.cpp:844
 #, fuzzy
 msgid "Delete selection"
-msgstr "Duplica-la selección"
+msgstr "Duplica-la selecciÃ³n"
 
 #: src/verbs.cpp:845
 #, fuzzy
@@ -3841,22 +3841,22 @@ msgstr "Borra-los nodos seleccionados"
 #: src/verbs.cpp:865
 #, fuzzy
 msgid "Raise to _Top"
-msgstr "Eleva-la selección ó tope"
+msgstr "Eleva-la selecciÃ³n Ã³ tope"
 
 #: src/verbs.cpp:866
 #, fuzzy
 msgid "Raise selection to top"
-msgstr "Eleva-la selección ó tope"
+msgstr "Eleva-la selecciÃ³n Ã³ tope"
 
 #: src/verbs.cpp:867
 #, fuzzy
 msgid "Lower to _Bottom"
-msgstr "Baixa-la selección ó fondo"
+msgstr "Baixa-la selecciÃ³n Ã³ fondo"
 
 #: src/verbs.cpp:868
 #, fuzzy
 msgid "Lower selection to bottom"
-msgstr "Baixa-la selección ó fondo"
+msgstr "Baixa-la selecciÃ³n Ã³ fondo"
 
 #: src/verbs.cpp:869
 #, fuzzy
@@ -3866,7 +3866,7 @@ msgstr "Pegar"
 #: src/verbs.cpp:870
 #, fuzzy
 msgid "Raise selection one step"
-msgstr "Eleva-la selección unha capa"
+msgstr "Eleva-la selecciÃ³n unha capa"
 
 #: src/verbs.cpp:871
 msgid "_Lower"
@@ -3875,7 +3875,7 @@ msgstr ""
 #: src/verbs.cpp:872
 #, fuzzy
 msgid "Lower selection one step"
-msgstr "Baixa-la selección unha capa"
+msgstr "Baixa-la selecciÃ³n unha capa"
 
 #: src/verbs.cpp:873
 msgid "_Group"
@@ -3893,7 +3893,7 @@ msgstr "Desagrupa-los obxectos seleccionados"
 #: src/verbs.cpp:878
 #, fuzzy
 msgid "_Union"
-msgstr "ningún"
+msgstr "ningÃºn"
 
 #: src/verbs.cpp:879
 #, fuzzy
@@ -3923,7 +3923,7 @@ msgstr "Borra-los nodos seleccionados"
 #: src/verbs.cpp:884
 #, fuzzy
 msgid "E_xclusion"
-msgstr "Dimensión"
+msgstr "DimensiÃ³n"
 
 # [*] Revisar Layout
 #: src/verbs.cpp:885
@@ -4089,37 +4089,37 @@ msgstr "Fragmenta-las curvas seleccionadas"
 #: src/verbs.cpp:932
 #, fuzzy
 msgid "Rotate _90 deg CW"
-msgstr "Poñe-lo ángulo a 90°"
+msgstr "PoÃ±e-lo Ã¡ngulo a 90Â°"
 
 #: src/verbs.cpp:933
 #, fuzzy
 msgid "Rotate selection 90 degrees clockwise"
-msgstr "Rota-los obxectos seleccionados 90° en sentido horario"
+msgstr "Rota-los obxectos seleccionados 90Â° en sentido horario"
 
 #: src/verbs.cpp:934
 #, fuzzy
 msgid "Rotate 9_0 deg CCW"
-msgstr "Poñe-lo ángulo a 90°"
+msgstr "PoÃ±e-lo Ã¡ngulo a 90Â°"
 
 #: src/verbs.cpp:935
 #, fuzzy
 msgid "Rotate selection 90 degrees counter-clockwise"
-msgstr "Rota-los obxectos seleccionados 90° en sentido horario"
+msgstr "Rota-los obxectos seleccionados 90Â° en sentido horario"
 
 #: src/verbs.cpp:936
 #, fuzzy
 msgid "Remove _Transformations"
-msgstr "Elimina-la transformación"
+msgstr "Elimina-la transformaciÃ³n"
 
 #: src/verbs.cpp:937
 #, fuzzy
 msgid "Remove transformations from object"
-msgstr "Elimina-la transformación"
+msgstr "Elimina-la transformaciÃ³n"
 
 #: src/verbs.cpp:938
 #, fuzzy
 msgid "_Object to Path"
-msgstr "Reinicia-la transformación"
+msgstr "Reinicia-la transformaciÃ³n"
 
 #: src/verbs.cpp:939
 #, fuzzy
@@ -4157,12 +4157,12 @@ msgstr "Seleccionar"
 #: src/verbs.cpp:950
 #, fuzzy
 msgid "Select and transform objects (F1)"
-msgstr "Reinicia-la transformación"
+msgstr "Reinicia-la transformaciÃ³n"
 
 #: src/verbs.cpp:951
 #, fuzzy
 msgid "Node Edit"
-msgstr "Edición de nodos"
+msgstr "EdiciÃ³n de nodos"
 
 #: src/verbs.cpp:952
 msgid "Edit path nodes or control handles (F2)"
@@ -4188,12 +4188,12 @@ msgstr "Debuxar rectangulo"
 #: src/verbs.cpp:962
 #, fuzzy
 msgid "Draw freehand lines (F6)"
-msgstr "Debuxar liña a man alzada"
+msgstr "Debuxar liÃ±a a man alzada"
 
 #: src/verbs.cpp:964
 #, fuzzy
 msgid "Draw Bezier curves and straight lines (Shift+F6)"
-msgstr "Debuxar liña a man alzada"
+msgstr "Debuxar liÃ±a a man alzada"
 
 #: src/verbs.cpp:965
 msgid "Calligraphy"
@@ -4242,7 +4242,7 @@ msgstr "Ficheiro"
 #: src/verbs.cpp:977
 #, fuzzy
 msgid "Show or hide the canvas rulers"
-msgstr "Amosar guías"
+msgstr "Amosar guÃ­as"
 
 #: src/verbs.cpp:978
 msgid "Scroll_bars"
@@ -4251,7 +4251,7 @@ msgstr ""
 #: src/verbs.cpp:978
 #, fuzzy
 msgid "Show or hide the canvas scrollbars"
-msgstr "Amosar guías"
+msgstr "Amosar guÃ­as"
 
 #: src/verbs.cpp:979
 #, fuzzy
@@ -4266,12 +4266,12 @@ msgstr "Amosa-la reixa"
 #: src/verbs.cpp:980
 #, fuzzy
 msgid "G_uides"
-msgstr "Guías"
+msgstr "GuÃ­as"
 
 #: src/verbs.cpp:980
 #, fuzzy
 msgid "Show or hide guides"
-msgstr "Amosar guías"
+msgstr "Amosar guÃ­as"
 
 #: src/verbs.cpp:981
 msgid "Nex_t Zoom"
@@ -4349,22 +4349,22 @@ msgstr "Nova vista"
 #. "view_new_preview"
 #: src/verbs.cpp:999
 msgid "_Page"
-msgstr "_Páxina"
+msgstr "_PÃ¡xina"
 
 #: src/verbs.cpp:1000
 #, fuzzy
 msgid "Zoom to fit page in window"
-msgstr "Configura-lo ancho da páxina"
+msgstr "Configura-lo ancho da pÃ¡xina"
 
 #: src/verbs.cpp:1001
 #, fuzzy
 msgid "Page _Width"
-msgstr "Configura-lo ancho da páxina"
+msgstr "Configura-lo ancho da pÃ¡xina"
 
 #: src/verbs.cpp:1002
 #, fuzzy
 msgid "Zoom to fit page width in window"
-msgstr "Configura-lo ancho da páxina"
+msgstr "Configura-lo ancho da pÃ¡xina"
 
 #: src/verbs.cpp:1003
 msgid "_Drawing"
@@ -4373,16 +4373,16 @@ msgstr "_Debuxando"
 #: src/verbs.cpp:1004
 #, fuzzy
 msgid "Zoom to fit drawing in window"
-msgstr "Zoom ó debuxo"
+msgstr "Zoom Ã³ debuxo"
 
 #: src/verbs.cpp:1005
 msgid "_Selection"
-msgstr "_Selección"
+msgstr "_SelecciÃ³n"
 
 #: src/verbs.cpp:1006
 #, fuzzy
 msgid "Zoom to fit selection in window"
-msgstr "Eleva-la selección ó tope"
+msgstr "Eleva-la selecciÃ³n Ã³ tope"
 
 #. Dialogs
 #: src/verbs.cpp:1008
@@ -4393,7 +4393,7 @@ msgstr "Sodipodi"
 #: src/verbs.cpp:1009
 #, fuzzy
 msgid "Global Inkscape preferences"
-msgstr "Configuración da visualización"
+msgstr "ConfiguraciÃ³n da visualizaciÃ³n"
 
 #: src/verbs.cpp:1010
 msgid "_Document Preferences..."
@@ -4407,22 +4407,22 @@ msgstr "Documento"
 #: src/verbs.cpp:1012
 #, fuzzy
 msgid "_Fill and Stroke..."
-msgstr "Configuración do escritorio"
+msgstr "ConfiguraciÃ³n do escritorio"
 
 #: src/verbs.cpp:1013
 #, fuzzy
 msgid "Fill and Stroke dialog"
-msgstr "Configuración do escritorio"
+msgstr "ConfiguraciÃ³n do escritorio"
 
 #: src/verbs.cpp:1014
 #, fuzzy
 msgid "Transfor_m..."
-msgstr "Transformación"
+msgstr "TransformaciÃ³n"
 
 #: src/verbs.cpp:1015
 #, fuzzy
 msgid "Transform dialog"
-msgstr "Formulario de transformacións"
+msgstr "Formulario de transformaciÃ³ns"
 
 #: src/verbs.cpp:1016
 #, fuzzy
@@ -4437,12 +4437,12 @@ msgstr "Atributos"
 #: src/verbs.cpp:1018
 #, fuzzy
 msgid "Text and _Font..."
-msgstr "Configuración do escritorio"
+msgstr "ConfiguraciÃ³n do escritorio"
 
 #: src/verbs.cpp:1019
 #, fuzzy
 msgid "Text and Font dialog"
-msgstr "Configuración do escritorio"
+msgstr "ConfiguraciÃ³n do escritorio"
 
 #: src/verbs.cpp:1020
 #, fuzzy
@@ -4542,7 +4542,7 @@ msgstr "Ancho do trazado"
 #: src/widgets/dash-selector.cpp:119
 #, fuzzy
 msgid "Pattern offset"
-msgstr "Recheo de patrón"
+msgstr "Recheo de patrÃ³n"
 
 #. Family frame
 #: src/widgets/font-selector.cpp:154
@@ -4616,7 +4616,7 @@ msgstr "Primeiro seleccionado"
 #: src/widgets/gradient-selector.cpp:211
 #, fuzzy
 msgid "direct"
-msgstr "Rectángulo"
+msgstr "RectÃ¡ngulo"
 
 #: src/widgets/gradient-selector.cpp:219
 #, fuzzy
@@ -4630,7 +4630,7 @@ msgstr ""
 #: src/widgets/gradient-vector.cpp:274
 #, fuzzy
 msgid "No gradient selected"
-msgstr "Último seleccionado"
+msgstr "Ãšltimo seleccionado"
 
 #: src/widgets/gradient-vector.cpp:536
 #, fuzzy
@@ -4649,7 +4649,7 @@ msgstr ""
 #: src/widgets/gradient-vector.cpp:762
 #, fuzzy
 msgid "Delete stop"
-msgstr "Borra-la selección"
+msgstr "Borra-la selecciÃ³n"
 
 #: src/widgets/gradient-vector.cpp:765
 msgid "Delete current control stop from gradient"
@@ -4693,7 +4693,7 @@ msgstr "Engadir novo degradado"
 #: src/widgets/paint-selector.cpp:176
 #, fuzzy
 msgid "Pattern Fill"
-msgstr "Patrón"
+msgstr "PatrÃ³n"
 
 #: src/widgets/paint-selector.cpp:625
 #, fuzzy
@@ -4719,7 +4719,7 @@ msgstr "Documento"
 #: src/widgets/paint-selector.cpp:983
 #, fuzzy
 msgid "Pattern fill"
-msgstr "Patrón"
+msgstr "PatrÃ³n"
 
 #: src/widgets/sp-color-gtkselector.cpp:60
 msgid "System"
@@ -4836,7 +4836,7 @@ msgstr ""
 #: src/widgets/sp-color-scales.cpp:441 src/widgets/sp-color-scales.cpp:442
 #, fuzzy
 msgid "Black"
-msgstr "Un atrás"
+msgstr "Un atrÃ¡s"
 
 #: src/widgets/sp-color-selector.cpp:66
 #, fuzzy
@@ -4857,10 +4857,10 @@ msgid "Value"
 msgstr "Valor"
 
 #~ msgid "Snap to grid"
-#~ msgstr "Enganchar á reixa"
+#~ msgstr "Enganchar Ã¡ reixa"
 
 #~ msgid "Snap to guides"
-#~ msgstr "Enganchar ás guías"
+#~ msgstr "Enganchar Ã¡s guÃ­as"
 
 #, fuzzy
 #~ msgid "Inkscape"
@@ -4876,11 +4876,11 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Pattern:"
-#~ msgstr "Patrón"
+#~ msgstr "PatrÃ³n"
 
 #, fuzzy
 #~ msgid "Snap points to the grid"
-#~ msgstr "Enganchar á reixa"
+#~ msgstr "Enganchar Ã¡ reixa"
 
 #, fuzzy
 #~ msgid "Sharpness:"
@@ -4888,7 +4888,7 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Rect"
-#~ msgstr "Rectángulo"
+#~ msgstr "RectÃ¡ngulo"
 
 #, fuzzy
 #~ msgid "Rects"
@@ -4924,7 +4924,7 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Show or hide rulers"
-#~ msgstr "Amosar guías"
+#~ msgstr "Amosar guÃ­as"
 
 #, fuzzy
 #~ msgid "_New Window"
@@ -4942,7 +4942,7 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Stroke settings"
-#~ msgstr "Configuración do escritorio"
+#~ msgstr "ConfiguraciÃ³n do escritorio"
 
 #, fuzzy
 #~ msgid "Color paint"
@@ -4953,7 +4953,7 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Quit"
-#~ msgstr "_Saír"
+#~ msgstr "_SaÃ­r"
 
 #, fuzzy
 #~ msgid "Delete selected objects"
@@ -4969,11 +4969,11 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Fill and stroke settings"
-#~ msgstr "Configuración do escritorio"
+#~ msgstr "ConfiguraciÃ³n do escritorio"
 
 #, fuzzy
 #~ msgid "Object transformations"
-#~ msgstr "Reinicia-la transformación"
+#~ msgstr "Reinicia-la transformaciÃ³n"
 
 #, fuzzy
 #~ msgid "Align and distribute objects"
@@ -4981,7 +4981,7 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Text editing and font settings"
-#~ msgstr "Configuración do escritorio"
+#~ msgstr "ConfiguraciÃ³n do escritorio"
 
 #, fuzzy
 #~ msgid "Fill Rule"
@@ -4989,11 +4989,11 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Tool has no options"
-#~ msgstr "Opcións de Oaf"
+#~ msgstr "OpciÃ³ns de Oaf"
 
 #, fuzzy
 #~ msgid "Visual transformation"
-#~ msgstr "Reinicia-la transformación"
+#~ msgstr "Reinicia-la transformaciÃ³n"
 
 #, fuzzy
 #~ msgid "Show content"
@@ -5009,11 +5009,11 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Proportion:"
-#~ msgstr "Posición"
+#~ msgstr "PosiciÃ³n"
 
 #, fuzzy
 #~ msgid "Reset tool options to defaults"
-#~ msgstr "Reinicia-lo formulario ós valores por defecto - Ctrl+r"
+#~ msgstr "Reinicia-lo formulario Ã³s valores por defecto - Ctrl+r"
 
 #, fuzzy
 #~ msgid "Inkscape _Options"
@@ -5021,11 +5021,11 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "_Document Options"
-#~ msgstr "Configuración do documento"
+#~ msgstr "ConfiguraciÃ³n do documento"
 
 #, fuzzy
 #~ msgid "Tool Optio_ns"
-#~ msgstr "Opcións de Oaf"
+#~ msgstr "OpciÃ³ns de Oaf"
 
 #, fuzzy
 #~ msgid "gradientUnits"
@@ -5033,7 +5033,7 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "nonzero"
-#~ msgstr "ningún"
+#~ msgstr "ningÃºn"
 
 #, fuzzy
 #~ msgid ""
@@ -5041,9 +5041,9 @@ msgstr "Valor"
 #~ "Although inkscape will run, you can\n"
 #~ "neither load nor save preferences\n"
 #~ msgstr ""
-#~ "%s non é un ficheiro regular.\n"
+#~ "%s non Ã© un ficheiro regular.\n"
 #~ "Ainda asi sodipodi vai funcionar, non\n"
-#~ "poderá cargar nin salva-las preferencias\n"
+#~ "poderÃ¡ cargar nin salva-las preferencias\n"
 
 #, fuzzy
 #~ msgid ""
@@ -5053,10 +5053,10 @@ msgstr "Valor"
 #~ "are neither able to load nor save\n"
 #~ "preferences."
 #~ msgstr ""
-#~ "%s non é un ficheiro xml válido ou\n"
+#~ "%s non Ã© un ficheiro xml vÃ¡lido ou\n"
 #~ "non tes permisos de lectura nel.\n"
 #~ "Ainda asi sodipodi vai funcionar, non\n"
-#~ "poderá cargar nin salva-las\n"
+#~ "poderÃ¡ cargar nin salva-las\n"
 #~ "preferencias."
 
 #, fuzzy
@@ -5066,9 +5066,9 @@ msgstr "Valor"
 #~ "are neither able to load nor save\n"
 #~ "preferences."
 #~ msgstr ""
-#~ "%s non é un ficheiro de preferencias de sodipodi válido.\n"
+#~ "%s non Ã© un ficheiro de preferencias de sodipodi vÃ¡lido.\n"
 #~ "Ainda asi sodipodi vai funcionar, non\n"
-#~ "poderá cargar nin salva-las\n"
+#~ "poderÃ¡ cargar nin salva-las\n"
 #~ "preferencias."
 
 #, fuzzy
@@ -5080,7 +5080,7 @@ msgstr "Valor"
 #~ msgstr ""
 #~ "Non se puido crea-lo directorio %s.\n"
 #~ "Ainda asi sodipodi vai funcionar, non\n"
-#~ "poderá cargar nin salva-las\n"
+#~ "poderÃ¡ cargar nin salva-las\n"
 #~ "preferencias."
 
 #, fuzzy
@@ -5090,9 +5090,9 @@ msgstr "Valor"
 #~ "are neither able to load nor save\n"
 #~ "preferences."
 #~ msgstr ""
-#~ "%s non é un directorio válido.\n"
+#~ "%s non Ã© un directorio vÃ¡lido.\n"
 #~ "Ainda asi sodipodi vai funcionar, non\n"
-#~ "poderá cargar nin salva-las\n"
+#~ "poderÃ¡ cargar nin salva-las\n"
 #~ "preferencias."
 
 #, fuzzy
@@ -5104,7 +5104,7 @@ msgstr "Valor"
 #~ msgstr ""
 #~ "Imposible crea-lo ficheiro %s\n"
 #~ "Ainda asi sodipodi vai funcionar, non\n"
-#~ "poderá cargar nin salva-las\n"
+#~ "poderÃ¡ cargar nin salva-las\n"
 #~ "preferencias."
 
 #, fuzzy
@@ -5116,7 +5116,7 @@ msgstr "Valor"
 #~ msgstr ""
 #~ "Imposible escribi-lo ficheiro %s\n"
 #~ "Ainda asi sodipodi vai funcionar, non\n"
-#~ "poderá cargar nin salva-las\n"
+#~ "poderÃ¡ cargar nin salva-las\n"
 #~ "preferencias."
 
 #, fuzzy
@@ -5128,24 +5128,24 @@ msgstr "Valor"
 #~ msgstr "Facer sensible"
 
 #~ msgid "Bring to _Front"
-#~ msgstr "Traer á _Fronte"
+#~ msgstr "Traer Ã¡ _Fronte"
 
 #~ msgid "Send to _Back"
-#~ msgstr "Mandar ó F_ondo"
+#~ msgstr "Mandar Ã³ F_ondo"
 
 #~ msgid "Save file"
 #~ msgstr "Garda-lo ficheiro"
 
 #~ msgid "Document %s has unsaved changes, save them?"
-#~ msgstr "O documento %s ten cambios sen gardar, ¿quere gardalos?"
+#~ msgstr "O documento %s ten cambios sen gardar, Â¿quere gardalos?"
 
 #, fuzzy
 #~ msgid "Object Size and Position"
-#~ msgstr "Posición"
+#~ msgstr "PosiciÃ³n"
 
 #, fuzzy
 #~ msgid "Size and Position"
-#~ msgstr "Posición"
+#~ msgstr "PosiciÃ³n"
 
 #, fuzzy
 #~ msgid "Tool attributes"
@@ -5153,11 +5153,11 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Proportion"
-#~ msgstr "Posición"
+#~ msgstr "PosiciÃ³n"
 
 #, fuzzy
 #~ msgid "Angle"
-#~ msgstr "ángulo"
+#~ msgstr "Ã¡ngulo"
 
 #, fuzzy
 #~ msgid "Tool has no attributes"
@@ -5182,34 +5182,34 @@ msgstr "Valor"
 #~ msgstr "in"
 
 #~ msgid "Fill settings"
-#~ msgstr "Configuración do recheo"
+#~ msgstr "ConfiguraciÃ³n do recheo"
 
 #, fuzzy
 #~ msgid "Break line at selected nodes"
-#~ msgstr "Liña cúspide no nodo seleccionado"
+#~ msgstr "LiÃ±a cÃºspide no nodo seleccionado"
 
 #~ msgid "New"
 #~ msgstr "Novo"
 
 #, fuzzy
 #~ msgid "Bring to Front"
-#~ msgstr "Traer á _Fronte"
+#~ msgstr "Traer Ã¡ _Fronte"
 
 #, fuzzy
 #~ msgid "Send to Back"
-#~ msgstr "Mandar ó F_ondo"
+#~ msgstr "Mandar Ã³ F_ondo"
 
 #, fuzzy
 #~ msgid "Lower selected objects to bottom"
-#~ msgstr "Baixa-la selección ó fondo"
+#~ msgstr "Baixa-la selecciÃ³n Ã³ fondo"
 
 #, fuzzy
 #~ msgid "Raise selected objects one position"
-#~ msgstr "Eleva-la selección ó tope"
+#~ msgstr "Eleva-la selecciÃ³n Ã³ tope"
 
 #, fuzzy
 #~ msgid "Lower selected objects one position"
-#~ msgstr "Baixa-la selección ó fondo"
+#~ msgstr "Baixa-la selecciÃ³n Ã³ fondo"
 
 #, fuzzy
 #~ msgid "Combine"
@@ -5222,7 +5222,7 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Draw freehand curves and straight lines"
-#~ msgstr "Debuxar liña a man alzada"
+#~ msgstr "Debuxar liÃ±a a man alzada"
 
 #, fuzzy
 #~ msgid "In"
@@ -5259,7 +5259,7 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Object size and position"
-#~ msgstr "Posición"
+#~ msgstr "PosiciÃ³n"
 
 #~ msgid "Sodipodi"
 #~ msgstr "Sodipodi"
@@ -5269,14 +5269,14 @@ msgstr "Valor"
 #~ msgstr "Obxecto"
 
 #~ msgid "Desktop settings"
-#~ msgstr "Configuración do escritorio"
+#~ msgstr "ConfiguraciÃ³n do escritorio"
 
 #, fuzzy
 #~ msgid "Iso grid"
 #~ msgstr "Amosa-la reixa"
 
 #~ msgid "Display settings"
-#~ msgstr "Configuración da visualización"
+#~ msgstr "ConfiguraciÃ³n da visualizaciÃ³n"
 
 #, fuzzy
 #~ msgid "Export png file"
@@ -5291,7 +5291,7 @@ msgstr "Valor"
 #~ msgstr "Propiedades do texto"
 
 #~ msgid "Transform selection"
-#~ msgstr "Transforma-la selección"
+#~ msgstr "Transforma-la selecciÃ³n"
 
 #, fuzzy
 #~ msgid "New Docked Toolbox"
@@ -5307,9 +5307,9 @@ msgstr "Valor"
 #~ "Although inkscape will run, you are\n"
 #~ "not able to use extensions (plugins)\n"
 #~ msgstr ""
-#~ "%s non é un ficheiro regular.\n"
+#~ "%s non Ã© un ficheiro regular.\n"
 #~ "Ainda asi sodipodi vai funcionar, non\n"
-#~ "poderá cargar nin salva-las preferencias\n"
+#~ "poderÃ¡ cargar nin salva-las preferencias\n"
 
 #, fuzzy
 #~ msgid ""
@@ -5318,10 +5318,10 @@ msgstr "Valor"
 #~ "Although inkscape will run, you are\n"
 #~ "not able to use extensions (plugins)\n"
 #~ msgstr ""
-#~ "%s non é un ficheiro xml válido ou\n"
+#~ "%s non Ã© un ficheiro xml vÃ¡lido ou\n"
 #~ "non tes permisos de lectura nel.\n"
 #~ "Ainda asi sodipodi vai funcionar, non\n"
-#~ "poderá cargar nin salva-las\n"
+#~ "poderÃ¡ cargar nin salva-las\n"
 #~ "preferencias."
 
 #, fuzzy
@@ -5330,9 +5330,9 @@ msgstr "Valor"
 #~ "Although inkscape will run, you are\n"
 #~ "not able to use extensions (plugins)\n"
 #~ msgstr ""
-#~ "%s non é un ficheiro de preferencias de sodipodi válido.\n"
+#~ "%s non Ã© un ficheiro de preferencias de sodipodi vÃ¡lido.\n"
 #~ "Ainda asi sodipodi vai funcionar, non\n"
-#~ "poderá cargar nin salva-las\n"
+#~ "poderÃ¡ cargar nin salva-las\n"
 #~ "preferencias."
 
 #, fuzzy
@@ -5343,7 +5343,7 @@ msgstr "Valor"
 #~ msgstr ""
 #~ "Non se puido crea-lo directorio %s.\n"
 #~ "Ainda asi sodipodi vai funcionar, non\n"
-#~ "poderá cargar nin salva-las\n"
+#~ "poderÃ¡ cargar nin salva-las\n"
 #~ "preferencias."
 
 #, fuzzy
@@ -5352,9 +5352,9 @@ msgstr "Valor"
 #~ "Although inkscape will run, you are\n"
 #~ "not able to use extensions (plugins)\n"
 #~ msgstr ""
-#~ "%s non é un directorio válido.\n"
+#~ "%s non Ã© un directorio vÃ¡lido.\n"
 #~ "Ainda asi sodipodi vai funcionar, non\n"
-#~ "poderá cargar nin salva-las\n"
+#~ "poderÃ¡ cargar nin salva-las\n"
 #~ "preferencias."
 
 #, fuzzy
@@ -5365,7 +5365,7 @@ msgstr "Valor"
 #~ msgstr ""
 #~ "Imposible crea-lo ficheiro %s\n"
 #~ "Ainda asi sodipodi vai funcionar, non\n"
-#~ "poderá cargar nin salva-las\n"
+#~ "poderÃ¡ cargar nin salva-las\n"
 #~ "preferencias."
 
 #, fuzzy
@@ -5376,11 +5376,11 @@ msgstr "Valor"
 #~ msgstr ""
 #~ "Imposible escribi-lo ficheiro %s\n"
 #~ "Ainda asi sodipodi vai funcionar, non\n"
-#~ "poderá cargar nin salva-las\n"
+#~ "poderÃ¡ cargar nin salva-las\n"
 #~ "preferencias."
 
 #~ msgid "Unknown item :-("
-#~ msgstr "Elemento descoñecido :-("
+#~ msgstr "Elemento descoÃ±ecido :-("
 
 #~ msgid "Draw"
 #~ msgstr "Debuxar"
@@ -5399,7 +5399,7 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Zoom in drawing"
-#~ msgstr "Zoom ó debuxo"
+#~ msgstr "Zoom Ã³ debuxo"
 
 #, fuzzy
 #~ msgid "Set zoom factor to 1:1"
@@ -5414,7 +5414,7 @@ msgstr "Valor"
 #~ msgstr "Zoom a 1:1"
 
 #~ msgid "Display"
-#~ msgstr "Visualización"
+#~ msgstr "VisualizaciÃ³n"
 
 #~ msgid "Document"
 #~ msgstr "Documento"
@@ -5436,20 +5436,20 @@ msgstr "Valor"
 #~ msgstr "Sodipodi"
 
 #~ msgid "Item is reference"
-#~ msgstr "O elemento é de referencia"
+#~ msgstr "O elemento Ã© de referencia"
 
 #~ msgid "The SVG ID of item"
 #~ msgstr "A ID SVG do elemento"
 
 #~ msgid "The ID is not valid"
-#~ msgstr "O ID non é válido"
+#~ msgstr "O ID non Ã© vÃ¡lido"
 
 #~ msgid "The ID is already defined"
-#~ msgstr "O ID xa está definido"
+#~ msgstr "O ID xa estÃ¡ definido"
 
 #, fuzzy
 #~ msgid "Position and size"
-#~ msgstr "Posición"
+#~ msgstr "PosiciÃ³n"
 
 #, fuzzy
 #~ msgid "Break apart"
@@ -5461,11 +5461,11 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Display Properties"
-#~ msgstr "Configuración da visualización"
+#~ msgstr "ConfiguraciÃ³n da visualizaciÃ³n"
 
 #, fuzzy
 #~ msgid "Raise selected objects one level"
-#~ msgstr "Rota-los obxectos seleccionados 90° en sentido horario"
+#~ msgstr "Rota-los obxectos seleccionados 90Â° en sentido horario"
 
 #, fuzzy
 #~ msgid "Lower selected objects one level"
@@ -5473,29 +5473,29 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Select tool - select and transform objects"
-#~ msgstr "Reinicia-la transformación"
+#~ msgstr "Reinicia-la transformaciÃ³n"
 
 #~ msgid "A path - whatever it means"
 #~ msgstr "Unha curva - o que queira que signifique"
 
 #~ msgid "Align objects to vertical mid"
-#~ msgstr "Aliñar obxectos á metade vertical"
+#~ msgstr "AliÃ±ar obxectos Ã¡ metade vertical"
 
 #~ msgid "Align outside object to bottom border"
-#~ msgstr "Aliña-lo exterior do obxecto á beira inferior"
+#~ msgstr "AliÃ±a-lo exterior do obxecto Ã¡ beira inferior"
 
 #~ msgid "Align outside object to left border"
-#~ msgstr "Aliña-lo exterior do obxecto á beira esquerda"
+#~ msgstr "AliÃ±a-lo exterior do obxecto Ã¡ beira esquerda"
 
 #~ msgid "Align outside object to right border"
-#~ msgstr "Aliña-lo exterior do obxecto á beira dereita"
+#~ msgstr "AliÃ±a-lo exterior do obxecto Ã¡ beira dereita"
 
 #~ msgid "Align outside object to top border"
-#~ msgstr "Aliña-lo exterior do obxecto á beira superior"
+#~ msgstr "AliÃ±a-lo exterior do obxecto Ã¡ beira superior"
 
 #, fuzzy
 #~ msgid "Alignment base"
-#~ msgstr "Aliñar ó centro"
+#~ msgstr "AliÃ±ar Ã³ centro"
 
 #, fuzzy
 #~ msgid "Choose align type"
@@ -5524,7 +5524,7 @@ msgstr "Valor"
 #~ msgstr "Engadir novo degradado"
 
 #~ msgid "Behind fill"
-#~ msgstr "Detrás do recheo"
+#~ msgstr "DetrÃ¡s do recheo"
 
 # [*] Revisar
 #~ msgid "Butt endpoints"
@@ -5555,7 +5555,7 @@ msgstr "Valor"
 #~ msgstr "Recheo de degradado"
 
 #~ msgid "Is stroked"
-#~ msgstr "Está trazado"
+#~ msgstr "EstÃ¡ trazado"
 
 #~ msgid "No fill"
 #~ msgstr "Sen recheo"
@@ -5565,7 +5565,7 @@ msgstr "Valor"
 #~ msgstr "Escoller unha cor"
 
 #~ msgid "Pick stroke color"
-#~ msgstr "Escolle-la cor da liña"
+#~ msgstr "Escolle-la cor da liÃ±a"
 
 #~ msgid "Scale with object"
 #~ msgstr "Escalar co obxecto"
@@ -5574,10 +5574,10 @@ msgstr "Valor"
 #~ msgstr "Trazo"
 
 #~ msgid "centimeter"
-#~ msgstr "centímetro"
+#~ msgstr "centÃ­metro"
 
 #~ msgid "millimeters"
-#~ msgstr "milímetros"
+#~ msgstr "milÃ­metros"
 
 #~ msgid "points"
 #~ msgstr "puntos"
@@ -5589,10 +5589,10 @@ msgstr "Valor"
 #~ msgstr "Converti-los segmentos seleccionados a curvas"
 
 #~ msgid "Convert selected segments to lines"
-#~ msgstr "Converti-los segmentos seleccionados a liñas"
+#~ msgstr "Converti-los segmentos seleccionados a liÃ±as"
 
 #~ msgid "Cusp line at selected nodes"
-#~ msgstr "Liña cúspide no nodo seleccionado"
+#~ msgstr "LiÃ±a cÃºspide no nodo seleccionado"
 
 #~ msgid "Desktop"
 #~ msgstr "Escritorio"
@@ -5610,7 +5610,7 @@ msgstr "Valor"
 #~ msgstr "Un adiante"
 
 #~ msgid "Image size"
-#~ msgstr "Tamaño da imaxe"
+#~ msgstr "TamaÃ±o da imaxe"
 
 #~ msgid "Include one node into selected segments"
 #~ msgstr "Incluir un nodo nos segmentos seleccionados"
@@ -5622,16 +5622,16 @@ msgstr "Valor"
 #~ msgstr "Nome do ficheiro png"
 
 #~ msgid "Set dimensions"
-#~ msgstr "Configura-las dimensións"
+#~ msgstr "Configura-las dimensiÃ³ns"
 
 #~ msgid "Smooth line at selected nodes"
-#~ msgstr "Suaviza-la liña nos nodos seleccionados"
+#~ msgstr "Suaviza-la liÃ±a nos nodos seleccionados"
 
 #~ msgid "Symmetric "
-#~ msgstr "Simétrico "
+#~ msgstr "SimÃ©trico "
 
 #~ msgid "Uncompressed file size:"
-#~ msgstr "Tamaño do ficheiro sen comprimir:"
+#~ msgstr "TamaÃ±o do ficheiro sen comprimir:"
 
 #~ msgid "Where to export"
 #~ msgstr "Adonde exportar"
@@ -5655,10 +5655,10 @@ msgstr "Valor"
 #~ msgstr "Y1"
 
 #~ msgid "_Align"
-#~ msgstr "_Aliñar"
+#~ msgstr "_AliÃ±ar"
 
 #~ msgid "Align dialog"
-#~ msgstr "Formulario de aliñacións"
+#~ msgstr "Formulario de aliÃ±aciÃ³ns"
 
 # [*] Mirar
 #~ msgid "Break apart selected paths"
@@ -5686,7 +5686,7 @@ msgstr "Valor"
 #~ msgstr "Non, Prefiro seguir a facer xeniais debuxos vectoriais co Sodipodi."
 
 #~ msgid "Nope !"
-#~ msgstr "¡ Nopi !"
+#~ msgstr "Â¡ Nopi !"
 
 #~ msgid "Open new drawing"
 #~ msgstr "Abrir novo debuxo"
@@ -5695,17 +5695,17 @@ msgstr "Valor"
 #~ msgstr "Pegar do portarretallos"
 
 #~ msgid "Preview print drawing"
-#~ msgstr "Previsualiza-la impresión do debuxo"
+#~ msgstr "Previsualiza-la impresiÃ³n do debuxo"
 
 #~ msgid "Quit or not quit ?"
-#~ msgstr "Saír ou non saír"
+#~ msgstr "SaÃ­r ou non saÃ­r"
 
 #~ msgid "Really wanna quit sodipodi ?"
-#~ msgstr "¿Pero de verdade que queres saír do Sodipodi?"
+#~ msgstr "Â¿Pero de verdade que queres saÃ­r do Sodipodi?"
 
 #, fuzzy
 #~ msgid "Rotate selected objects 90deg clockwise"
-#~ msgstr "Rota-los obxectos seleccionados 90° en sentido horario"
+#~ msgstr "Rota-los obxectos seleccionados 90Â° en sentido horario"
 
 #~ msgid "Save drawing "
 #~ msgstr "Garda-lo debuxo "
@@ -5714,61 +5714,61 @@ msgstr "Valor"
 #~ msgstr "Desfacer "
 
 #~ msgid "Yep !"
-#~ msgstr "¡ Sipi !"
+#~ msgstr "Â¡ Sipi !"
 
 #~ msgid "Yes quick! I want to leave sodipodi and come back later."
-#~ msgstr "¡Si, saír! Quero saír de Sodipodi, e voltar maís tarde."
+#~ msgstr "Â¡Si, saÃ­r! Quero saÃ­r de Sodipodi, e voltar maÃ­s tarde."
 
 #~ msgid "Zoom to page"
-#~ msgstr "Zoom á páxina"
+#~ msgstr "Zoom Ã¡ pÃ¡xina"
 
 #~ msgid "Align to bottom left"
-#~ msgstr "Aliñar abaixo á esquerda"
+#~ msgstr "AliÃ±ar abaixo Ã¡ esquerda"
 
 #~ msgid "Align to bottom middle"
-#~ msgstr "Aliñar abaixo ó medio"
+#~ msgstr "AliÃ±ar abaixo Ã³ medio"
 
 #~ msgid "Align to bottom right"
-#~ msgstr "Aliñar abaixo á dereita"
+#~ msgstr "AliÃ±ar abaixo Ã¡ dereita"
 
 #~ msgid "Align to center"
-#~ msgstr "Aliñar ó centro"
+#~ msgstr "AliÃ±ar Ã³ centro"
 
 #~ msgid "Align to left middle"
-#~ msgstr "Aliñar á esquerda ó medio"
+#~ msgstr "AliÃ±ar Ã¡ esquerda Ã³ medio"
 
 #~ msgid "Align to right middle"
-#~ msgstr "Aliñar á dereita ó medio"
+#~ msgstr "AliÃ±ar Ã¡ dereita Ã³ medio"
 
 #~ msgid "Align to top left"
-#~ msgstr "Aliñar arriba á esqueda"
+#~ msgstr "AliÃ±ar arriba Ã¡ esqueda"
 
 #~ msgid "Align to top middle"
-#~ msgstr "Aliñar arriba ó medio"
+#~ msgstr "AliÃ±ar arriba Ã³ medio"
 
 #~ msgid "Align to top right"
-#~ msgstr "Aliñar arriba á dereita"
+#~ msgstr "AliÃ±ar arriba Ã¡ dereita"
 
 #~ msgid "Apply transformation to copy Ctl+m"
-#~ msgstr "Aplica-la transformación á copia - Ctrl+m"
+#~ msgstr "Aplica-la transformaciÃ³n Ã¡ copia - Ctrl+m"
 
 #~ msgid "Choose metric for center"
-#~ msgstr "Escolle-la metría para o centro"
+#~ msgstr "Escolle-la metrÃ­a para o centro"
 
 #~ msgid "Close dialog - Ctl+c"
-#~ msgstr "Pecha-lo diálogo - Ctrl+c"
+#~ msgstr "Pecha-lo diÃ¡logo - Ctrl+c"
 
 #~ msgid "Expand dialog - Ctl+e"
-#~ msgstr "Expandi-lo diálogo - Ctrl+e"
+#~ msgstr "Expandi-lo diÃ¡logo - Ctrl+e"
 
 #~ msgid "Height: "
 #~ msgstr "Alto:"
 
 #~ msgid "Keep height of selection during transformation"
-#~ msgstr "Mante-lo alto da selección durante a transformación"
+#~ msgstr "Mante-lo alto da selecciÃ³n durante a transformaciÃ³n"
 
 #~ msgid "Keep width of selection during transformation"
-#~ msgstr "Mante-lo ancho da selección durante a transformación"
+#~ msgstr "Mante-lo ancho da selecciÃ³n durante a transformaciÃ³n"
 
 #~ msgid "Orig. Width: "
 #~ msgstr "Ancho Orixe:"
@@ -5778,30 +5778,30 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Set angle to 0 degrees"
-#~ msgstr "Poñe-lo ángulo a 0°"
+#~ msgstr "PoÃ±e-lo Ã¡ngulo a 0Â°"
 
 #, fuzzy
 #~ msgid "Set angle to 180 degrees"
-#~ msgstr "Poñe-lo ángulo a 180°"
+#~ msgstr "PoÃ±e-lo Ã¡ngulo a 180Â°"
 
 #, fuzzy
 #~ msgid "Set angle to 270 degrees"
-#~ msgstr "Poñe-lo ángulo a 270°"
+#~ msgstr "PoÃ±e-lo Ã¡ngulo a 270Â°"
 
 #~ msgid "Skew"
 #~ msgstr "Inclinar"
 
 #~ msgid "Start transformation - Ctl+a"
-#~ msgstr "Comeza-la transformación - Ctrl+a"
+#~ msgstr "Comeza-la transformaciÃ³n - Ctrl+a"
 
 #~ msgid "Toggle center given in selection/desktop coordiantes"
-#~ msgstr "Conmuta-lo centro dado en coordenadas de selección/escritorio"
+#~ msgstr "Conmuta-lo centro dado en coordenadas de selecciÃ³n/escritorio"
 
 #~ msgid "Use alignment during transformation"
-#~ msgstr "Usa-lo aliñamento durante a transformación"
+#~ msgstr "Usa-lo aliÃ±amento durante a transformaciÃ³n"
 
 #~ msgid "Use center as transformation fixpoint"
-#~ msgstr "Usa-lo centro coma punto fixo da transformación"
+#~ msgstr "Usa-lo centro coma punto fixo da transformaciÃ³n"
 
 #~ msgid "Y: "
 #~ msgstr "Y:"
@@ -5819,16 +5819,16 @@ msgstr "Valor"
 #~ msgstr "bloquear/desbloquea-la escala horizontal"
 
 #~ msgid "select direction"
-#~ msgstr "selecciona-la dirección"
+#~ msgstr "selecciona-la direcciÃ³n"
 
 #~ msgid "select direction (horizontal/vertical skew)"
-#~ msgstr "selecciona-la dirección (inclinación horizontal/vertical)"
+#~ msgstr "selecciona-la direcciÃ³n (inclinaciÃ³n horizontal/vertical)"
 
 #~ msgid "select metric for scale"
-#~ msgstr "selecciona-la metría para a escala"
+#~ msgstr "selecciona-la metrÃ­a para a escala"
 
 #~ msgid "select metric for values"
-#~ msgstr "seleccionar-la metría para os valores"
+#~ msgstr "seleccionar-la metrÃ­a para os valores"
 
 #~ msgid "skew"
 #~ msgstr "inclinar"
@@ -5856,10 +5856,10 @@ msgstr "Valor"
 #~ msgstr "Contido"
 
 #~ msgid "Do you want to delete attribute?"
-#~ msgstr "¿Quere borra-los atributos?"
+#~ msgstr "Â¿Quere borra-los atributos?"
 
 #~ msgid "Hierarchy"
-#~ msgstr "Xerarquía"
+#~ msgstr "XerarquÃ­a"
 
 # [*] mirar
 #~ msgid "Key"
@@ -5867,11 +5867,11 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "You can't delete 'id' attribute!"
-#~ msgstr "¿Quere borra-los atributos?"
+#~ msgstr "Â¿Quere borra-los atributos?"
 
 #, fuzzy
 #~ msgid "Do you want to delete attribute %s?"
-#~ msgstr "¿Quere borra-los atributos?"
+#~ msgstr "Â¿Quere borra-los atributos?"
 
 #, fuzzy
 #~ msgid "No"
@@ -5879,7 +5879,7 @@ msgstr "Valor"
 
 #, fuzzy
 #~ msgid "Do you want to delete element %s?"
-#~ msgstr "¿Quere borra-los atributos?"
+#~ msgstr "Â¿Quere borra-los atributos?"
 
 #~ msgid "\""
 #~ msgstr "\""
@@ -5888,49 +5888,49 @@ msgstr "Valor"
 #~ msgstr "Escolle-lo sistema base de unidades para a reixa"
 
 #~ msgid "Millimeters\n"
-#~ msgstr "Milímetros\n"
+#~ msgstr "MilÃ­metros\n"
 
 #~ msgid "Choose color for grid"
 #~ msgstr "Escolle-la cor da reixa"
 
 #~ msgid "Set maximum distance for grid snapping"
-#~ msgstr "Configura-la distancia máxima para o enganche á reixa"
+#~ msgstr "Configura-la distancia mÃ¡xima para o enganche Ã¡ reixa"
 
 #~ msgid "Choose unit system for grid snapping"
-#~ msgstr "Escolle-lo sistema de unidades para o enganche á reixa"
+#~ msgstr "Escolle-lo sistema de unidades para o enganche Ã¡ reixa"
 
 #~ msgid "Pixels\n"
 #~ msgstr "Pixeles\n"
 
 #~ msgid "Set distance between vertical grid lines"
-#~ msgstr "Configura-la distancia entre liñas verticais da reixa"
+#~ msgstr "Configura-la distancia entre liÃ±as verticais da reixa"
 
 #~ msgid "Set distance between horizontal grid lines"
-#~ msgstr "Configura-la distancia entre liñas horizontais da reixa"
+#~ msgstr "Configura-la distancia entre liÃ±as horizontais da reixa"
 
 #~ msgid "Set origin of page coordinate system"
-#~ msgstr "Configura-la orixe do sistema de coordeadas da páxina"
+#~ msgstr "Configura-la orixe do sistema de coordeadas da pÃ¡xina"
 
 #~ msgid "Choose unit system for guideline snapping"
-#~ msgstr "Escolle-lo sistema de unidades para o enganche as liñas guía"
+#~ msgstr "Escolle-lo sistema de unidades para o enganche as liÃ±as guÃ­a"
 
 #~ msgid "Set maximum distance for guideline snapping"
-#~ msgstr "Configura-la distancia máxima para o enganche ás liñas guía"
+#~ msgstr "Configura-la distancia mÃ¡xima para o enganche Ã¡s liÃ±as guÃ­a"
 
 #~ msgid "Choose color for guidelines"
-#~ msgstr "Escolle-las cores para as liñas guía"
+#~ msgstr "Escolle-las cores para as liÃ±as guÃ­a"
 
 #~ msgid "Choose color for highlighted guidelines"
-#~ msgstr "Escolle-la cor para as liñas guía destacadas"
+#~ msgstr "Escolle-la cor para as liÃ±as guÃ­a destacadas"
 
 #~ msgid "Choose paper size"
-#~ msgstr "Escolle-lo tamaño do papel"
+#~ msgstr "Escolle-lo tamaÃ±o do papel"
 
 #~ msgid "A4\n"
 #~ msgstr "A4\n"
 
 #~ msgid "Set page height"
-#~ msgstr "Configura-la altura da páxina"
+#~ msgstr "Configura-la altura da pÃ¡xina"
 
 #~ msgid "window2"
 #~ msgstr "fiestra2"
@@ -5959,7 +5959,7 @@ msgstr "Valor"
 #~ msgstr "Borrar"
 
 #~ msgid "Do not use GUI. NB! if exist, should be FIRST argument!"
-#~ msgstr "¡Non usa-lo IGU. NB! ¡se existe, debe se-lo PRIMEIRO argumento!"
+#~ msgstr "Â¡Non usa-lo IGU. NB! Â¡se existe, debe se-lo PRIMEIRO argumento!"
 
 #~ msgid "Could not initialize Bonobo"
 #~ msgstr "Non se puido iniciar Bonobo"
@@ -5978,13 +5978,13 @@ msgstr "Valor"
 #~ "inches\n"
 #~ msgstr ""
 #~ "pixeles\n"
-#~ "milímetros\n"
-#~ "centímetros\n"
+#~ "milÃ­metros\n"
+#~ "centÃ­metros\n"
 #~ "puntos\n"
 #~ "polgadas\n"
 
 #~ msgid " Line "
-#~ msgstr " Liña "
+#~ msgstr " LiÃ±a "
 
 #~ msgid "double"
 #~ msgstr "doble"
