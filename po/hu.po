@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: inkscape\n"
-"POT-Creation-Date: 2004-04-06 21:13+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-04-08 23:23-0700\n"
 "PO-Revision-Date: 2004-04-06 21:19+0200\n"
 "Last-Translator: Arpad Biro <biro_arpad@yahoo.com>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "X-Generator: KBabel 1.0.2\n"
 
 #: inkscape.desktop.in.h:1
@@ -180,7 +180,8 @@ msgstr "Az objektumok bal oldalainak egyenletes távolságban való elrendezése"
 
 #: src/dialogs/align.cpp:352
 msgid "Distribute centers of objects at even distances horizontally"
-msgstr "Az objektumok közepének egyenletes távolságban való vízszintes elrendezése"
+msgstr ""
+"Az objektumok közepének egyenletes távolságban való vízszintes elrendezése"
 
 #: src/dialogs/align.cpp:359
 msgid "Distribute right sides of objects at even distances"
@@ -196,7 +197,8 @@ msgstr "Az objektumok tetejének egyenletes távolságban való elrendezése"
 
 #: src/dialogs/align.cpp:381
 msgid "Distribute centers of objects at even distances vertically"
-msgstr "Az objektumok közepének egyenletes távolságban való függõleges elrendezése"
+msgstr ""
+"Az objektumok közepének egyenletes távolságban való függõleges elrendezése"
 
 #: src/dialogs/align.cpp:388
 msgid "Distribute bottom sides of objects at even distances"
@@ -361,7 +363,7 @@ msgstr "Mértékegység:"
 #. Stroke width
 #: src/dialogs/desktop-properties.cpp:611 src/dialogs/export.cpp:317
 #: src/dialogs/export.cpp:352 src/dialogs/object-attributes.cpp:69
-#: src/dialogs/object-attributes.cpp:77 src/dialogs/stroke-style.cpp:830
+#: src/dialogs/object-attributes.cpp:77 src/dialogs/stroke-style.cpp:829
 #: src/dyna-draw-context.cpp:943
 msgid "Width:"
 msgstr "Szélesség:"
@@ -727,37 +729,37 @@ msgstr "Mûvészi rajz"
 msgid "Text"
 msgstr "Szöveg"
 
-#: src/dialogs/stroke-style.cpp:815
+#: src/dialogs/stroke-style.cpp:814
 msgid "Stroke settings"
 msgstr "Körvonal-beállítások"
 
 #. Join type
-#: src/dialogs/stroke-style.cpp:854
+#: src/dialogs/stroke-style.cpp:853
 msgid "Join:"
 msgstr "Sarok:"
 
 #. Cap type
-#: src/dialogs/stroke-style.cpp:872
+#: src/dialogs/stroke-style.cpp:871
 msgid "Cap:"
 msgstr "Vonalvég:"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:890
+#: src/dialogs/stroke-style.cpp:889
 msgid "Pattern:"
 msgstr "Minta:"
 
 #. Start Marker
-#: src/dialogs/stroke-style.cpp:906
+#: src/dialogs/stroke-style.cpp:905
 msgid "Start Markers:"
 msgstr "Kezdet jelölése:"
 
 #. Mid Marker
-#: src/dialogs/stroke-style.cpp:926
+#: src/dialogs/stroke-style.cpp:925
 msgid "Mid Markers:"
 msgstr "Közép jelölése:"
 
 #. End Marker
-#: src/dialogs/stroke-style.cpp:946
+#: src/dialogs/stroke-style.cpp:945
 msgid "End Markers:"
 msgstr "Vég jelölése:"
 
@@ -952,7 +954,7 @@ msgstr "Nem sikerült betölteni a kért fájlt (%s)"
 msgid "Select file to open"
 msgstr "Válassza ki a megnyitandó fájlt"
 
-#: src/file.cpp:216
+#: src/file.cpp:214
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
@@ -961,11 +963,11 @@ msgstr ""
 "Nem található a dokumentum (%s) mentésére használható Inkscape-kiterjesztés. "
 "Elképzelhetõ, hogy a fájlkiterjesztés ismeretlen."
 
-#: src/file.cpp:217 src/file.cpp:223
+#: src/file.cpp:215 src/file.cpp:221
 msgid "Document not saved."
 msgstr "A dokumentum nem lett elmentve."
 
-#: src/file.cpp:222
+#: src/file.cpp:220
 #, c-format
 msgid "File %s could not be saved."
 msgstr "Nem sikerült elmenteni a(z) %s fájlt."
@@ -978,16 +980,16 @@ msgstr "A dokumentum elmentve."
 msgid "Select file to save"
 msgstr "Adja meg a mentési fájlnevet"
 
-#: src/file.cpp:331
+#: src/file.cpp:325
 msgid "No changes need to be saved."
 msgstr "Nincs elmentést igénylõ módosítás."
 
-#: src/file.cpp:466
+#: src/file.cpp:460
 #, c-format
 msgid "Unable to import image '%s': %s"
 msgstr "Nem sikerült importálni a(z) '%s' képet: %s"
 
-#: src/file.cpp:496
+#: src/file.cpp:490
 msgid "Select file to import"
 msgstr "Válassza ki az importálandó fájlt"
 
@@ -1151,12 +1153,14 @@ msgid "Inkscape encountered an internal error and will close now.\n"
 msgstr "Az Inkscape belsõ hibába ütközött. A program bezárásra kerül.\n"
 
 #: src/inkscape.cpp:503
-msgid "Automatic backups of unsaved documents were done to following locations:\n"
+msgid ""
+"Automatic backups of unsaved documents were done to following locations:\n"
 msgstr "A nem mentett dokumentumokról mentés készült a következõ helyekre:\n"
 
 #: src/inkscape.cpp:504
 msgid "Automatic backup of following documents failed:\n"
-msgstr "Nem sikerült automatikus mentést készíteni a következõ dokumentumokról:\n"
+msgstr ""
+"Nem sikerült automatikus mentést készíteni a következõ dokumentumokról:\n"
 
 #: src/inkscape.cpp:661
 #, c-format
@@ -1370,7 +1374,9 @@ msgstr "Fájltípus kiválasztása a fájlkiterjesztés alapján"
 
 #: src/extension/system.cpp:102
 msgid "Format autodetect failed. The file is being opened as SVG."
-msgstr "Az automatikus formátumazonosítás nem járt sikerrel. A fájl SVG-ként lesz megnyitva."
+msgstr ""
+"Az automatikus formátumazonosítás nem járt sikerrel. A fájl SVG-ként lesz "
+"megnyitva."
 
 #: src/extension/internal/gnome.cpp:71
 msgid "Select printer"
@@ -1441,13 +1447,14 @@ msgstr ""
 "a kimenetnek egy program számára való átadásához pedig a\n"
 "következõt: '| programnév argumentum ...'."
 
-#: src/extension/internal/ps.cpp:808
+#: src/extension/internal/ps.cpp:817
 msgid "write error occurred"
 msgstr "írási hiba történt"
 
 #: src/main.cpp:130
 msgid "Do not use X server (only process files from console)"
-msgstr "Az X grafikus rendszer ne legyen használva (fájlok feldolgozása a konzolról)"
+msgstr ""
+"Az X grafikus rendszer ne legyen használva (fájlok feldolgozása a konzolról)"
 
 #: src/main.cpp:133
 msgid "Try to use X server (even if $DISPLAY is not set)"
@@ -1497,7 +1504,8 @@ msgstr "x0:y0:x1:y1"
 
 #: src/main.cpp:151
 msgid "The width of generated bitmap in pixels (overwrites dpi)"
-msgstr "A létrehozott bitkép szélessége képpontban (felülbírálja a DPI értéket)"
+msgstr ""
+"A létrehozott bitkép szélessége képpontban (felülbírálja a DPI értéket)"
 
 #: src/main.cpp:151
 msgid "WIDTH"
@@ -1568,17 +1576,20 @@ msgstr "szimmetrikus"
 
 #: src/nodepath.cpp:2709
 msgid "Drag nodes or control points to edit the path"
-msgstr "A lánc szerkesztéséhez helyezze át a csomópontokat vagy a kontrollpontokat"
+msgstr ""
+"A lánc szerkesztéséhez helyezze át a csomópontokat vagy a kontrollpontokat"
 
 #: src/nodepath.cpp:2723
-msgid "Select one path object with selector first, then switch back to node tool."
+msgid ""
+"Select one path object with selector first, then switch back to node tool."
 msgstr ""
 "Jelöljön ki egy láncot a kijelölõeszközzel, majd váltson vissza a "
 "csomóponteszközre."
 
 #: src/nodepath.cpp:2725
 #, c-format
-msgid "0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."
+msgid ""
+"0 out of %i nodes selected. Click, Shift+click, drag around nodes to select."
 msgstr ""
 "%i csomópontból 0 van kijelölve. Kijelölés: kattintással (ha szükséges, "
 "Shifttel) vagy egy terület kijelölésével."
@@ -1775,7 +1786,8 @@ msgstr "Jelöljön ki legalább 2 objektumot a csoportosításhoz."
 
 #: src/selection-chemistry.cpp:239
 msgid "You cannot group objects from different groups or layers."
-msgstr "Eltérõ csoportban illetve szinten levõ objektumok nem foglalhatók csoportba."
+msgstr ""
+"Eltérõ csoportban illetve szinten levõ objektumok nem foglalhatók csoportba."
 
 #: src/selection-chemistry.cpp:284
 msgid "Select a group to ungroup."
@@ -1829,7 +1841,8 @@ msgstr "Jelöljön ki objektumokat a stílus beillesztéséhez."
 
 #: src/selection.cpp:197
 msgid "Click selection to toggle scale/rotation handles"
-msgstr "A méretezési és az elforgatási mód közti váltáshoz kattintson a kijelölésre"
+msgstr ""
+"A méretezési és az elforgatási mód közti váltáshoz kattintson a kijelölésre"
 
 #: src/selection.cpp:202
 msgid "No objects selected. Click, Shift+click, drag around objects to select."
@@ -1979,7 +1992,8 @@ msgstr "Logikai mûveletekhez legalább 2 láncot ki kell jelölni."
 
 #: src/splivarot.cpp:119
 msgid "Select exactly 2 paths to perform difference or XOR."
-msgstr "Különbségképzés illetve kizáró VAGY esetén pontosan 2 láncot kell kijelölni."
+msgstr ""
+"Különbségképzés illetve kizáró VAGY esetén pontosan 2 láncot kell kijelölni."
 
 #: src/splivarot.cpp:136 src/splivarot.cpp:152
 msgid "Unable to determine the z-order of the objects selected for difference."
@@ -2011,7 +2025,8 @@ msgstr "Az objektum körvonala nem határozható meg."
 
 #: src/splivarot.cpp:837
 msgid "Selected object is not a path, cannot inset/outset."
-msgstr "A kijelölt objektum nem lánc; zsugorítás illetve nyújtás nem végezhetõ."
+msgstr ""
+"A kijelölt objektum nem lánc; zsugorítás illetve nyújtás nem végezhetõ."
 
 #: src/splivarot.cpp:1038
 msgid "Select some paths to inset/outset."
@@ -2158,7 +2173,8 @@ msgstr "Tágulás:"
 
 #: src/toolbox.cpp:1326
 msgid "How much denser/sparser are outer revolutions; 1 = uniform"
-msgstr "Mennyivel sûrûbbek illetve ritkábbak a külsõ fordulatok; 1 = egyenletes"
+msgstr ""
+"Mennyivel sûrûbbek illetve ritkábbak a külsõ fordulatok; 1 = egyenletes"
 
 #: src/toolbox.cpp:1344
 msgid "Radius of the innermost revolution"
@@ -2222,13 +2238,15 @@ msgstr ""
 "módosítása pedig gépeléssel."
 
 #: src/tools-switch.cpp:172
-msgid "Click to zoom in, Shift+click to zoom out, drag around the area to zoom in."
+msgid ""
+"Click to zoom in, Shift+click to zoom out, drag around the area to zoom in."
 msgstr ""
 "Nagyítás kattintással vagy a kívánt terület kijelölésével végezhetõ, "
 "kicsinyítés pedig Shift+kattintással."
 
 #: src/tools-switch.cpp:178
-msgid "Click to pick a color, click and drag to pick the average color of an area."
+msgid ""
+"Click to pick a color, click and drag to pick the average color of an area."
 msgstr ""
 "Egy adott szín kattintással választható ki, egy terület átlagszíne pedig a "
 "terület kijelölésével."
@@ -2632,7 +2650,8 @@ msgstr "Elfo_rgatás -90 fokkal"
 
 #: src/verbs.cpp:829
 msgid "Rotate selection 90 degrees clockwise"
-msgstr "A kijelölt objektumok elforgatása az óramutató járásának irányában 90 fokkal"
+msgstr ""
+"A kijelölt objektumok elforgatása az óramutató járásának irányában 90 fokkal"
 
 #: src/verbs.cpp:830
 msgid "Rotate 9_0 deg CCW"
@@ -3149,4 +3168,3 @@ msgstr "Érték"
 
 #~ msgid "evenodd"
 #~ msgstr "páros-páratlan"
-

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-05 22:49-0700\n"
+"POT-Creation-Date: 2004-04-08 23:23-0700\n"
 "PO-Revision-Date: 2003-07-23 16:58+0200\n"
 "Last-Translator: Miloslav Trmac <mitr@volny.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -356,7 +356,7 @@ msgstr "Jednotky:"
 #. Stroke width
 #: src/dialogs/desktop-properties.cpp:611 src/dialogs/export.cpp:317
 #: src/dialogs/export.cpp:352 src/dialogs/object-attributes.cpp:69
-#: src/dialogs/object-attributes.cpp:77 src/dialogs/stroke-style.cpp:830
+#: src/dialogs/object-attributes.cpp:77 src/dialogs/stroke-style.cpp:829
 #: src/dyna-draw-context.cpp:943
 msgid "Width:"
 msgstr "Šířka:"
@@ -725,38 +725,38 @@ msgstr "Kaligrafická linie"
 msgid "Text"
 msgstr "Text"
 
-#: src/dialogs/stroke-style.cpp:815
+#: src/dialogs/stroke-style.cpp:814
 msgid "Stroke settings"
 msgstr "Nastavení tahu"
 
 #. Join type
-#: src/dialogs/stroke-style.cpp:854
+#: src/dialogs/stroke-style.cpp:853
 msgid "Join:"
 msgstr "Spojení:"
 
 #. Cap type
-#: src/dialogs/stroke-style.cpp:872
+#: src/dialogs/stroke-style.cpp:871
 msgid "Cap:"
 msgstr "Víčko:"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:890
+#: src/dialogs/stroke-style.cpp:889
 msgid "Pattern:"
 msgstr "Vzorek:"
 
 #. Start Marker
-#: src/dialogs/stroke-style.cpp:906
+#: src/dialogs/stroke-style.cpp:905
 #, fuzzy
 msgid "Start Markers:"
 msgstr "Vlastnosti hvězdy"
 
 #. Mid Marker
-#: src/dialogs/stroke-style.cpp:926
+#: src/dialogs/stroke-style.cpp:925
 msgid "Mid Markers:"
 msgstr ""
 
 #. End Marker
-#: src/dialogs/stroke-style.cpp:946
+#: src/dialogs/stroke-style.cpp:945
 msgid "End Markers:"
 msgstr ""
 
@@ -952,19 +952,19 @@ msgstr ""
 msgid "Select file to open"
 msgstr "Vyberte soubor pro otevření"
 
-#: src/file.cpp:216
+#: src/file.cpp:214
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
 msgstr ""
 
-#: src/file.cpp:217 src/file.cpp:223
+#: src/file.cpp:215 src/file.cpp:221
 #, fuzzy
 msgid "Document not saved."
 msgstr "Název dokumentu:"
 
-#: src/file.cpp:222
+#: src/file.cpp:220
 #, c-format
 msgid "File %s could not be saved."
 msgstr ""
@@ -979,16 +979,16 @@ msgstr "Název dokumentu:"
 msgid "Select file to save"
 msgstr "Vyberte soubor pro otevření"
 
-#: src/file.cpp:331
+#: src/file.cpp:325
 msgid "No changes need to be saved."
 msgstr ""
 
-#: src/file.cpp:466
+#: src/file.cpp:460
 #, c-format
 msgid "Unable to import image '%s': %s"
 msgstr ""
 
-#: src/file.cpp:496
+#: src/file.cpp:490
 msgid "Select file to import"
 msgstr "Vyberte soubor pro import"
 
@@ -1431,7 +1431,7 @@ msgstr ""
 "Použijte '> soubor', chcete-li tisk do souboru.\n"
 "Použijte '| prog arg...', chcete-li směrovat tisk do programu"
 
-#: src/extension/internal/ps.cpp:808
+#: src/extension/internal/ps.cpp:817
 #, fuzzy
 msgid "write error occurred"
 msgstr "vyskytla se chyba při zápisu"

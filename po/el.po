@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi 0.25\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-05 22:49-0700\n"
+"POT-Creation-Date: 2004-04-08 23:23-0700\n"
 "PO-Revision-Date: 2001-12-28 21:07+0000\n"
 "Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -390,7 +390,7 @@ msgstr "&Μονάδες:"
 #. Stroke width
 #: src/dialogs/desktop-properties.cpp:611 src/dialogs/export.cpp:317
 #: src/dialogs/export.cpp:352 src/dialogs/object-attributes.cpp:69
-#: src/dialogs/object-attributes.cpp:77 src/dialogs/stroke-style.cpp:830
+#: src/dialogs/object-attributes.cpp:77 src/dialogs/stroke-style.cpp:829
 #: src/dyna-draw-context.cpp:943
 msgid "Width:"
 msgstr "Πλάτος:"
@@ -806,43 +806,43 @@ msgstr ""
 msgid "Text"
 msgstr "Κείμενο"
 
-#: src/dialogs/stroke-style.cpp:815
+#: src/dialogs/stroke-style.cpp:814
 #, fuzzy
 msgid "Stroke settings"
 msgstr "Ρυθμίσεις επιφάνειας εργασίας"
 
 #
 #. Join type
-#: src/dialogs/stroke-style.cpp:854
+#: src/dialogs/stroke-style.cpp:853
 #, fuzzy
 msgid "Join:"
 msgstr "Όνομα χρήστη:"
 
 #. Cap type
-#: src/dialogs/stroke-style.cpp:872
+#: src/dialogs/stroke-style.cpp:871
 #, fuzzy
 msgid "Cap:"
 msgstr "Κυανό"
 
 #. Dash
-#: src/dialogs/stroke-style.cpp:890
+#: src/dialogs/stroke-style.cpp:889
 #, fuzzy
 msgid "Pattern:"
 msgstr "Σχέδιο"
 
 #. Start Marker
-#: src/dialogs/stroke-style.cpp:906
+#: src/dialogs/stroke-style.cpp:905
 #, fuzzy
 msgid "Start Markers:"
 msgstr " Ιδιότητες"
 
 #. Mid Marker
-#: src/dialogs/stroke-style.cpp:926
+#: src/dialogs/stroke-style.cpp:925
 msgid "Mid Markers:"
 msgstr ""
 
 #. End Marker
-#: src/dialogs/stroke-style.cpp:946
+#: src/dialogs/stroke-style.cpp:945
 msgid "End Markers:"
 msgstr ""
 
@@ -1066,19 +1066,19 @@ msgstr ""
 msgid "Select file to open"
 msgstr "Επιλογή αρχείου προς ανάγνωση"
 
-#: src/file.cpp:216
+#: src/file.cpp:214
 #, c-format
 msgid ""
 "No Inkscape extension found to save document (%s).  This may have been "
 "caused by an unknown filename extension."
 msgstr ""
 
-#: src/file.cpp:217 src/file.cpp:223
+#: src/file.cpp:215 src/file.cpp:221
 #, fuzzy
 msgid "Document not saved."
 msgstr "Έγγραφο"
 
-#: src/file.cpp:222
+#: src/file.cpp:220
 #, c-format
 msgid "File %s could not be saved."
 msgstr ""
@@ -1093,16 +1093,16 @@ msgstr "Έγγραφο"
 msgid "Select file to save"
 msgstr "Επιλογή αρχείου προς ανάγνωση"
 
-#: src/file.cpp:331
+#: src/file.cpp:325
 msgid "No changes need to be saved."
 msgstr ""
 
-#: src/file.cpp:466
+#: src/file.cpp:460
 #, c-format
 msgid "Unable to import image '%s': %s"
 msgstr ""
 
-#: src/file.cpp:496
+#: src/file.cpp:490
 #, fuzzy
 msgid "Select file to import"
 msgstr "Επιλογή αρχείου για φόρτωση"
@@ -1569,7 +1569,7 @@ msgid ""
 "Use '| prog arg...' to pipe to a program."
 msgstr ""
 
-#: src/extension/internal/ps.cpp:808
+#: src/extension/internal/ps.cpp:817
 msgid "write error occurred"
 msgstr ""
 
