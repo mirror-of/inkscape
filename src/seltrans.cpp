@@ -950,7 +950,7 @@ gboolean sp_sel_trans_rotate_request(SPSelTrans *seltrans, SPSelTransHandle cons
 	if (fabs (h2) < 1e-15) return FALSE;
 	NR::Point q2 = d2 / h2;
 
-      double theta;
+      double theta = 0.0;
 
 	if (state & GDK_CONTROL_MASK) {
 		/* Have to restrict movement. */
