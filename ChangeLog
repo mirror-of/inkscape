@@ -16,6 +16,9 @@
 	  ID is currently used.  Documenting.  Switching from "label" to
 	  "inkscape:label" where appropriate.  Adding
 	  visible()/setVisible() functions and activating checkbox.
+	* dialogs/item-properties.cpp:  Adding title and desc boxes.
+	  Adjusting layout of dialog a bit.  Changing to use of tables
+	  instead of horiz/vert boxes for layout.
 	
 2004-10-29  Kees Cook  <kees@outflux.net>
 

@@ -26,6 +26,8 @@
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkframe.h>
+#include <gtk/gtktextview.h>
+#include <gtk/gtktextbuffer.h>
 
 #include "helper/sp-intl.h"
 #include "helper/window.h"
@@ -97,8 +99,9 @@ GtkWidget *
 sp_item_widget_new (void)
 {
 
-    GtkWidget *spw, *vb, *hb, *t, *cb, *l, *sb, *f, *tf, *pb;
+    GtkWidget *spw, *vb, *t, *cb, *l, *sb, *f, *tf, *pb;
     GtkObject *a;
+    GtkTextBuffer *desc_buffer;
 
     /* Create container widget */
     spw = sp_widget_new_global (INKSCAPE);
@@ -113,36 +116,84 @@ sp_item_widget_new (void)
     gtk_widget_show (vb);
     gtk_container_add (GTK_CONTAINER (spw), vb);
 
+    t = gtk_table_new (3, 4, FALSE);
+    gtk_container_set_border_width(GTK_CONTAINER(t), 10);
+    gtk_widget_show (t);
+    gtk_box_pack_start (GTK_BOX (vb), t, TRUE, TRUE, 0);
+
     /* Create the label for the object label */
-    hb = gtk_hbox_new (FALSE, 0);
-    gtk_widget_show (hb);
-    gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
     l = gtk_label_new (_("Label"));
     gtk_widget_show (l);
-    gtk_misc_set_alignment (GTK_MISC (l), 1.0, 0.5);
-    gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
+    gtk_misc_set_alignment (GTK_MISC (l), 0, 0.5);
+    gtk_table_attach ( GTK_TABLE (t), l, 0, 1, 0, 1, 
+                       (GtkAttachOptions)( GTK_SHRINK | GTK_FILL ), 
+                       (GtkAttachOptions)0, 0, 0 );
     gtk_object_set_data (GTK_OBJECT (spw), "label_label", l);
-
 
     /* Create the entry box for the object label */
     tf = gtk_entry_new ();
     gtk_entry_set_max_length (GTK_ENTRY (tf), 64);
     gtk_widget_show (tf);
-    gtk_box_pack_start (GTK_BOX (hb), tf, TRUE, TRUE, 0);
+    gtk_table_attach ( GTK_TABLE (t), tf, 1, 2, 0, 1, 
+                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
+                       (GtkAttachOptions)0, 0, 0 );
     gtk_object_set_data (GTK_OBJECT (spw), "label", tf);
 
     /* Create the button for setting the object label */
     pb = gtk_button_new_with_label (_("Set Label"));
-    gtk_box_pack_start (GTK_BOX (hb), pb, TRUE, TRUE, 0);
-    
+    gtk_table_attach ( GTK_TABLE (t), pb, 2, 3, 0, 1, 
+                       (GtkAttachOptions)( GTK_SHRINK | GTK_FILL ), 
+                       (GtkAttachOptions)0, 0, 0 );
     gtk_signal_connect ( GTK_OBJECT (pb), "clicked", 
                          GTK_SIGNAL_FUNC (sp_item_widget_label_changed), 
                          spw );
     gtk_widget_show (pb);
 
 
+    /* Create the label for the object title */
+    l = gtk_label_new (_("Title"));
+    gtk_widget_show (l);
+    gtk_misc_set_alignment (GTK_MISC (l), 0, 0.5);
+    gtk_table_attach ( GTK_TABLE (t), l, 0, 1, 1, 2, 
+                       (GtkAttachOptions)( GTK_SHRINK | GTK_FILL ), 
+                       (GtkAttachOptions)0, 0, 0 );
+    gtk_object_set_data (GTK_OBJECT (spw), "title_label", l);
+
+    /* Create the entry box for the object title */
+    tf = gtk_entry_new ();
+    gtk_entry_set_max_length (GTK_ENTRY (tf), 256);
+    gtk_widget_show (tf);
+    gtk_table_attach ( GTK_TABLE (t), tf, 1, 3, 1, 2, 
+                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
+                       (GtkAttachOptions)0, 0, 0 );
+    gtk_object_set_data (GTK_OBJECT (spw), "title", tf);
+
+
+    /* Create the frame for the object description */
+    f = gtk_frame_new (_("Description"));
+    gtk_widget_show (f);
+    gtk_table_attach ( GTK_TABLE (t), f, 0, 3, 2, 3, 
+                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 
+                       (GtkAttachOptions)( GTK_EXPAND | GTK_FILL ), 0, 0 );
+    gtk_object_set_data (GTK_OBJECT (spw), "desc_frame", l);
+
+    /* Create the entry box for the object description */
+    GtkWidget *textframe = gtk_frame_new(NULL);
+    gtk_container_set_border_width(GTK_CONTAINER(textframe), 3);
+    gtk_widget_show (textframe);
+    gtk_container_add (GTK_CONTAINER (f), textframe);
+    gtk_frame_set_shadow_type (GTK_FRAME (textframe), GTK_SHADOW_IN);
+    tf = gtk_text_view_new();
+    desc_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(tf));
+    gtk_text_buffer_set_text(desc_buffer, "Default description", -1);
+    gtk_widget_show (tf); 
+    gtk_container_add (GTK_CONTAINER (textframe), tf);
+    gtk_object_set_data (GTK_OBJECT (spw), "desc", tf);
+
+
     /* Check boxes */
     t = gtk_table_new (2, 2, TRUE);
+    gtk_container_set_border_width(GTK_CONTAINER(t), 10);
     gtk_widget_show (t);
     gtk_box_pack_start (GTK_BOX (vb), t, FALSE, FALSE, 0);
 
@@ -182,13 +233,16 @@ sp_item_widget_new (void)
                          spw );
     gtk_object_set_data (GTK_OBJECT (spw), "printable", cb);
 
-    
+
+    /* Transformation matrix */
     f = gtk_frame_new (_("Transformation matrix"));
     gtk_widget_show (f);
+    gtk_container_set_border_width(GTK_CONTAINER(f), 10);
     gtk_box_pack_start (GTK_BOX (vb), f, FALSE, FALSE, 0);
 
     t = gtk_table_new (2, 3, TRUE);
     gtk_widget_show (t);
+    gtk_container_set_border_width(GTK_CONTAINER(t), 2);
     gtk_container_add (GTK_CONTAINER (f), t);
 
     a = gtk_adjustment_new (1.0, -NR_HUGE, NR_HUGE, 0.01, 0.1, 0.1);
