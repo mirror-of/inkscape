@@ -484,7 +484,7 @@ void font_instance::LoadGlyph(int glyph_id)
 			
 			SelectFont (wDev,wFont);
 
-			g_scale=(daddy)?1.0/daddy->fontSize:1.0/512/*((double)otm.otmEMSquare)*/;
+			g_scale=1.0/512/*((double)otm.otmEMSquare)*/;
 			
 			int   outl_size=GetGlyphOutline(wDev,glyph_id,GGO_NATIVE | GGO_GLYPH_INDEX,&gmetrics,0,NULL,&mat);
 			char* buffer=(char*)malloc(outl_size*sizeof(char));
