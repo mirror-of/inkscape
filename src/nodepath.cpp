@@ -2716,7 +2716,7 @@ sp_nodepath_node_new(Path::SubPath *sp, Path::Node *next, Path::NodeType type, N
                  "fill_mouseover", KNOT_FILL_HI,
                  "stroke", KNOT_STROKE,
                  "stroke_mouseover", KNOT_STROKE_HI,
-                 "tip", _("<b>Node handle</b>: drag to shape the curve; with <b>Ctrl</b> to snap angle; with <b>Alt</b> to lock length, with <b>Shift</b> to rotate the opposite handle in sync"),
+                 "tip", _("<b>Node handle</b>: drag to shape the curve; with <b>Ctrl</b> to snap angle; with <b>Alt</b> to lock length; with <b>Shift</b> to rotate the opposite handle in sync"),
                  NULL);
     g_signal_connect(G_OBJECT(n->p.knot), "clicked", G_CALLBACK(node_ctrl_clicked), n);
     g_signal_connect(G_OBJECT(n->p.knot), "grabbed", G_CALLBACK(node_ctrl_grabbed), n);
@@ -2740,7 +2740,7 @@ sp_nodepath_node_new(Path::SubPath *sp, Path::Node *next, Path::NodeType type, N
                  "fill_mouseover", KNOT_FILL_HI,
                  "stroke", KNOT_STROKE,
                  "stroke_mouseover", KNOT_STROKE_HI,
-                 "tip", _("<b>Node handle</b>: drag to shape the curve; with <b>Ctrl</b> to snap angle; with <b>Alt</b> to lock length, with <b>Shift</b> to rotate the opposite handle in sync"),
+                 "tip", _("<b>Node handle</b>: drag to shape the curve; with <b>Ctrl</b> to snap angle; with <b>Alt</b> to lock length; with <b>Shift</b> to rotate the opposite handle in sync"),
                  NULL);
     g_signal_connect(G_OBJECT(n->n.knot), "clicked", G_CALLBACK(node_ctrl_clicked), n);
     g_signal_connect(G_OBJECT(n->n.knot), "grabbed", G_CALLBACK(node_ctrl_grabbed), n);
