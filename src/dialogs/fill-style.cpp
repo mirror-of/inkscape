@@ -834,26 +834,29 @@ sp_fill_style_widget_paint_changed ( SPPaintSelector *psel,
                                                        : SP_GRADIENT_TYPE_RADIAL );
 
                 // HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider for all tabs
-                SPCSSAttr *css = sp_repr_css_attr_new ();
-                sp_repr_css_set_property (css, "fill-opacity", "1.0");
+                SPCSSAttr *css = sp_repr_css_attr_new();
+                sp_repr_css_set_property(css, "fill-opacity", "1.0");
 
-                SPGradient *vector = sp_paint_selector_get_gradient_vector (psel);
+                SPGradient *vector = sp_paint_selector_get_gradient_vector(psel);
                 if (!vector) {
                     /* No vector in paint selector should mean that we just
                      * changed mode
                      */
 
-                    bool same = items_have_same_color (items, true);
-                    if (same) {
-                        vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (items->data), true);
+                    guint32 common_rgb = objects_get_common_rgb(items, FILL);
+                    if (common_rgb != DIFFERENT_COLORS) {
+                        if (common_rgb == NO_COLOR) {
+                            common_rgb = sp_desktop_get_color(desktop, true);
+                        }
+                        vector = sp_document_default_gradient_vector(SP_WIDGET_DOCUMENT(spw), common_rgb);
                     }
 
                     for (GSList const *i = items; i != NULL; i = i->next) {
                         //FIXME: see above
-                        sp_repr_css_change_recursive (SP_OBJECT_REPR (i->data), css, "style");
+                        sp_repr_css_change_recursive(SP_OBJECT_REPR(i->data), css, "style");
 
-                        if (!same) {
-                            vector = sp_gradient_vector_for_object (SP_WIDGET_DOCUMENT (spw), desktop, SP_OBJECT (i->data), true);
+                        if (common_rgb == DIFFERENT_COLORS) {
+                            vector = sp_gradient_vector_for_object(SP_WIDGET_DOCUMENT(spw), desktop, SP_OBJECT(i->data), true);
                         }
 
                         sp_item_set_gradient(SP_ITEM(i->data), vector, gradient_type, true);

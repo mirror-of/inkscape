@@ -637,14 +637,18 @@ sp_stroke_style_paint_changed(SPPaintSelector *psel, SPWidget *spw)
                      * changed mode
                      */
 
-                    bool same = items_have_same_color(items, false);
-                    if (same) {
-                        vector = sp_gradient_vector_for_object(SP_WIDGET_DOCUMENT(spw), desktop, SP_OBJECT(items->data), false);
+                    guint32 common_rgb = objects_get_common_rgb(items, STROKE);
+                    if (common_rgb != DIFFERENT_COLORS) {
+                        if (common_rgb == NO_COLOR) {
+                            common_rgb = sp_desktop_get_color(desktop, false);
+                        }
+                        vector = sp_document_default_gradient_vector(SP_WIDGET_DOCUMENT(spw), common_rgb);
                     }
 
                     for (GSList const *i = items; i != NULL; i = i->next) {
-                        if (!same)
+                        if (common_rgb == DIFFERENT_COLORS) {
                             vector = sp_gradient_vector_for_object(SP_WIDGET_DOCUMENT(spw), desktop, SP_OBJECT(i->data), false);
+                        }
                         sp_item_set_gradient(SP_ITEM(i->data), vector, gradient_type, false);
                     }
                 } else {
