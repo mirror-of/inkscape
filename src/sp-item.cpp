@@ -455,8 +455,8 @@ static int sp_item_private_snappoints(SPItem *item, NR::Point p[], int size)
 	/* Just a pair of opposite corners of the bounding box suffices given that we don't yet
 	   support angled guide lines. */
 	int i = 0;
-	p[i++] = bbox2.topleft();
-	p[i++] = bbox2.bottomright();
+	p[i++] = bbox2.min();
+	p[i++] = bbox2.max();
 	return i;
 }
 

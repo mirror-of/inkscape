@@ -131,15 +131,15 @@ Rect::Rect(const Point &p0, const Point &p1)
 
 /** returns the four corners of the rectangle in the correct winding order */
 Point Rect::corner(unsigned i) const {
-	switch(i % 4) {
+	switch (i % 4) {
 	case 0:
-		return topleft();
+		return _min;
 	case 1:
-		return topright();
+		return Point(_max[X], _min[Y]);
 	case 2:
-		return bottomright();
+		return _max;
 	default: /* i.e. 3 */
-		return bottomleft();
+		return Point(_min[X], _max[Y]);
 	}
 }
 

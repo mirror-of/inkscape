@@ -20,10 +20,12 @@
 
 struct SPSelection : public GObject {
 public:
-	SPDesktop *desktop;
 	GSList *reprs;
 	GSList *items;
-	guint flags;
+
+	SPDesktop *desktop() { return _desktop; }
+
+	static SPSelection *create(SPDesktop *desktop);
 
 	static GType gobject_type();
 	static void item_modified(SPItem *item, guint flags, SPSelection *selection);
@@ -31,6 +33,7 @@ public:
 
 private:
 	SPSelection();
+	~SPSelection();
 	SPSelection(SPSelection const &);
 	void operator=(SPSelection const &);
 
@@ -40,6 +43,8 @@ private:
 
 	static gboolean _idle_handler(SPSelection *selection);
 
+	SPDesktop *_desktop;
+	guint _flags;
 	guint _idle;
 };
 
@@ -54,7 +59,9 @@ struct SPSelectionClass {
 
 /* Constructor */
 
-SPSelection *sp_selection_new(SPDesktop *desktop);
+inline SPSelection *sp_selection_new(SPDesktop *desktop) {
+	return SPSelection::create(desktop);
+}
 
 /* This are private methods & will be removed from this file */
 

@@ -732,7 +732,7 @@ inkscape_selection_modified (SPSelection *selection, guint flags)
     g_return_if_fail (selection != NULL);
     g_return_if_fail (SP_IS_SELECTION (selection));
 
-    if (DESKTOP_IS_ACTIVE (selection->desktop)) {
+    if (DESKTOP_IS_ACTIVE (selection->desktop())) {
         g_signal_emit (G_OBJECT (inkscape), inkscape_signals[MODIFY_SELECTION], 0, selection, flags);
     }
 }
@@ -745,7 +745,7 @@ inkscape_selection_changed (SPSelection * selection)
     g_return_if_fail (selection != NULL);
     g_return_if_fail (SP_IS_SELECTION (selection));
 
-    if (DESKTOP_IS_ACTIVE (selection->desktop)) {
+    if (DESKTOP_IS_ACTIVE (selection->desktop())) {
         g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, selection);
     }
 }
@@ -758,7 +758,7 @@ inkscape_selection_set (SPSelection * selection)
     g_return_if_fail (selection != NULL);
     g_return_if_fail (SP_IS_SELECTION (selection));
 
-    if (DESKTOP_IS_ACTIVE (selection->desktop)) {
+    if (DESKTOP_IS_ACTIVE (selection->desktop())) {
         g_signal_emit (G_OBJECT (inkscape), inkscape_signals[SET_SELECTION], 0, selection);
         g_signal_emit (G_OBJECT (inkscape), inkscape_signals[CHANGE_SELECTION], 0, selection);
     }

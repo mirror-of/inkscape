@@ -619,7 +619,7 @@ static void sp_transformation_move_apply(GObject *dlg, SPSelection *selection)
     }
 
     if (selection)
-        sp_document_done ( SP_DT_DOCUMENT (selection->desktop) );
+        sp_document_done ( SP_DT_DOCUMENT (selection->desktop()) );
 }
 
 
@@ -833,7 +833,7 @@ static void sp_transformation_scale_apply(GObject *dlg, SPSelection *selection)
     }
 
     if (selection) {
-        sp_document_done(SP_DT_DOCUMENT(selection->desktop));
+        sp_document_done(SP_DT_DOCUMENT(selection->desktop()));
     }
 }
 
@@ -921,7 +921,7 @@ static void sp_transformation_rotate_apply(GObject *dlg, SPSelection *selection)
     sp_selection_rotate_relative (selection, center, a->value);
 
     if (selection)
-        sp_document_done (SP_DT_DOCUMENT (selection->desktop));
+        sp_document_done (SP_DT_DOCUMENT (selection->desktop()));
 }
 
 static void sp_transformation_skew_apply(GObject *dlg, SPSelection *selection)

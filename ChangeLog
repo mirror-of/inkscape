@@ -1,4 +1,9 @@
 2004-04-17  MenTaLguY <mental@rydia.net>
+	* src/inkscape.cpp, src/node-context.cpp, src/selection-chemistry.cpp,
+	  src/selection.cpp, src/selection.h, src/seltrans.cpp, src/sp-gradient.cpp,
+	  src/sp-item.cpp, src/sp-offset.cpp, src/dialogs/transformation.cpp,
+	  src/libnr/nr-rect.cpp, src/libnr/nr-rect.h:
+      Cleaned up NR::Rect API and made SPSelection's desktop pointer private.
 
 	* src/display/sp-canvas.cpp, src/libnr/nr-convex-hull.h,
 	  src/libnr/nr-rect.h: 

@@ -656,7 +656,7 @@ sp_offset_set_shape (SPShape * shape)
 
 		SPItem *item = &(shape->item);
 		NR::Rect bbox = sp_item_bbox_desktop (item);
-		if (bbox.topleft()[NR::X] < bbox.bottomright()[NR::X]) { // otherwise the bbox is invalid
+		if (!bbox.isEmpty()) {
 			gdouble size = L2(bbox.dimensions());
 			gdouble exp = NR::expansion(NR::Matrix(item->transform));
 			if (exp != 0) 

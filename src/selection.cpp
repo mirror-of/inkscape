@@ -94,8 +94,19 @@ SPSelection::_class_init(SPSelectionClass *klass)
 }
 
 SPSelection::SPSelection()
-: reprs(NULL), items(NULL), flags(0), _idle(0)
+: reprs(NULL), items(NULL), _desktop(NULL), _flags(0), _idle(0)
 {
+}
+
+SPSelection::~SPSelection() {
+	sp_selection_frozen_empty(this);
+
+	_desktop = NULL;
+
+	if (_idle) {
+		gtk_idle_remove(_idle);
+		_idle = 0;
+	}
 }
 
 void
@@ -107,16 +118,9 @@ SPSelection::_init(void *mem)
 void
 SPSelection::_dispose(GObject *object)
 {
-	SPSelection *selection = SP_SELECTION (object);
-
-	sp_selection_frozen_empty (selection);
-
-	if (selection->_idle) {
-		gtk_idle_remove (selection->_idle);
-		selection->_idle = 0;
-	}
-
-	G_OBJECT_CLASS (parent_class)->dispose (object);
+	SPSelection *selection=(SPSelection *)(object);
+	selection->~SPSelection();
+	G_OBJECT_CLASS(parent_class)->dispose(object);
 }
 
 static void sp_selection_private_changed(SPSelection *selection)
@@ -154,7 +158,7 @@ SPSelection::item_modified(SPItem *item, guint flags, SPSelection *selection)
 	}
 
 	/* Collect all flags */
-	selection->flags |= flags;
+	selection->_flags |= flags;
 }
 
 /* Our _idle loop handler */
@@ -164,8 +168,8 @@ SPSelection::_idle_handler(SPSelection *selection)
 {
 	/* Clear our id, so next request will be rescheduled */
 	selection->_idle = 0;
-	guint flags = selection->flags;
-	selection->flags = 0;
+	guint flags = selection->_flags;
+	selection->_flags = 0;
 	/* Emit our own "modified" signal */
 	g_signal_emit (G_OBJECT (selection), selection_signals [MODIFIED], 0, flags);
 
@@ -198,11 +202,11 @@ void sp_selection_update_statusbar(SPSelection *selection)
 	gint len = g_slist_length (selection->items);
 
 	if (len == 0) {
-		sp_view_set_statusf (SP_VIEW (selection->desktop), _("No objects selected. Click, Shift+click, drag around objects to select."));
+		sp_view_set_statusf (SP_VIEW (selection->desktop()), _("No objects selected. Click, Shift+click, drag around objects to select."));
 	} else if (len == 1) {
-		sp_view_set_statusf (SP_VIEW (selection->desktop), "%s. %s.", sp_item_description (SP_ITEM (selection->items->data)), when_selected);
+		sp_view_set_statusf (SP_VIEW (selection->desktop()), "%s. %s.", sp_item_description (SP_ITEM (selection->items->data)), when_selected);
 	} else {
-		sp_view_set_statusf (SP_VIEW (selection->desktop), _("%i objects selected. %s."), len, when_selected);
+		sp_view_set_statusf (SP_VIEW (selection->desktop()), _("%i objects selected. %s."), len, when_selected);
 	}
 }
 
@@ -213,17 +217,17 @@ void sp_selection_changed(SPSelection *selection)
 
 	g_signal_emit (G_OBJECT (selection), selection_signals [CHANGED], 0);
 
-	if (selection->desktop && tools_isactive (selection->desktop, TOOLS_SELECT)) {
+	if (selection->desktop() && tools_isactive (selection->desktop(), TOOLS_SELECT)) {
 		// this function gets called not only when selector is active!
 		sp_selection_update_statusbar (selection);
 	}
 }
 
-SPSelection *sp_selection_new(SPDesktop *desktop)
+SPSelection *SPSelection::create(SPDesktop *desktop)
 {
 	SPSelection *selection = (SPSelection*)g_object_new (SP_TYPE_SELECTION, NULL);
 
-	selection->desktop = desktop;
+	selection->_desktop = desktop;
 
 	return selection;
 }
@@ -302,7 +306,7 @@ void sp_selection_add_repr(SPSelection *selection, SPRepr *repr)
 	gchar const *id = sp_repr_attr(repr, "id");
 	g_return_if_fail (id != NULL);
 
-	SPObject *object = sp_document_lookup_id(SP_DT_DOCUMENT(selection->desktop), id);
+	SPObject *object = sp_document_lookup_id(SP_DT_DOCUMENT(selection->desktop()), id);
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (SP_IS_ITEM (object));
 
@@ -330,7 +334,7 @@ void sp_selection_set_repr(SPSelection *selection, SPRepr *repr)
 	gchar const *id = sp_repr_attr(repr, "id");
 	g_return_if_fail (id != NULL);
 
-	SPObject *object = sp_document_lookup_id (SP_DT_DOCUMENT (selection->desktop), id);
+	SPObject *object = sp_document_lookup_id (SP_DT_DOCUMENT (selection->desktop()), id);
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (SP_IS_ITEM (object));
 
@@ -363,7 +367,7 @@ void sp_selection_remove_repr(SPSelection *selection, SPRepr *repr)
 	gchar const *id = sp_repr_attr(repr, "id");
 	g_return_if_fail (id != NULL);
 
-	SPObject *object = sp_document_lookup_id (SP_DT_DOCUMENT (selection->desktop), id);
+	SPObject *object = sp_document_lookup_id (SP_DT_DOCUMENT (selection->desktop()), id);
 	g_return_if_fail (object != NULL);
 	g_return_if_fail (SP_IS_ITEM (object));
 
@@ -405,7 +409,7 @@ void sp_selection_set_repr_list(SPSelection *selection, GSList const *list)
 		gchar const *id = sp_repr_attr(repr, "id");
 		g_return_if_fail (id != NULL);
 
-		SPObject *object = sp_document_lookup_id (SP_DT_DOCUMENT (selection->desktop), id);
+		SPObject *object = sp_document_lookup_id (SP_DT_DOCUMENT (selection->desktop()), id);
 		g_return_if_fail (object != NULL);
 		g_return_if_fail (SP_IS_ITEM (object));
 
@@ -562,10 +566,10 @@ int sp_selection_snappoints(SPSelection *selection, NR::Point points[], int size
 		NR::Rect bbox = sp_selection_bbox (selection);
 		int pos = 0;
 		if ( pos < size ) {
-			points[pos++] = bbox.topleft();
+			points[pos++] = bbox.min();
 		}
 		if ( pos < size ) {
-			points[pos++] = bbox.bottomright();
+			points[pos++] = bbox.max();
 		}
 		return pos;
 	}

@@ -78,17 +78,12 @@ public:
 	Rect(const NRRect& r) : _min(r.x0, r.y0), _max(r.x1, r.y1) {}
 	Rect(const Rect& r) : _min(r._min), _max(r._max) {}
 	Rect(const Point &p0, const Point &p1);
-	
-	const Point &topleft() const { return _min; }
-	Point topright() const { return Point(_max[X], _min[Y]); }
-	Point bottomleft() const { return Point(_min[X], _max[Y]); }
-	const Point &bottomright() const { return _max; }
 
 	const Point &min() const { return _min; }
 	const Point &max() const { return _max; }
 
-	/** returns the four corners of the rectangle in the correct
-	 *  winding order */
+	/** returns the four corners of the rectangle in order
+	 *  (clockwise if +Y is up, anticlockwise if +Y is down) */
 	Point corner(unsigned i) const;
 	
 	/** returns a vector from min to max. */
@@ -99,7 +94,7 @@ public:
 	
 	/** does this rectangle have zero area? */
 	bool isEmpty() const {
-		return isEmpty<X>() && isEmpty<Y>();
+		return isEmpty<X>() || isEmpty<Y>();
 	}
 
 	bool intersects(const Rect &r) const {

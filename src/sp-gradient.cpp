@@ -1535,7 +1535,7 @@ sp_radialgradient_painter_new (SPPaintServer *ps, const gdouble *ctm, const NRRe
 		/* gradientTransform goes here (Lauris) */
 
 		/* BBox to user coordinate system */
-		// translate(bbox.topleft()) * scale(bbox.dimension())
+		// translate(bbox.min()) * scale(bbox.dimension())
 		bbox2user.c[0] = bbox->x1 - bbox->x0;
 		bbox2user.c[1] = 0.0;
 		bbox2user.c[2] = 0.0;

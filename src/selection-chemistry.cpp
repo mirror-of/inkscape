@@ -934,9 +934,9 @@ sp_selection_rotate (SPSelection *selection, gdouble angle_degrees)
 	sp_selection_rotate_relative (selection, center, angle_degrees);
 
 	if ( angle_degrees > 0 )
-		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:rotate:ccw");
+		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop()), "selector:rotate:ccw");
 	else
-		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:rotate:cw");
+		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop()), "selector:rotate:cw");
 }
 
 /**
@@ -952,7 +952,7 @@ sp_selection_rotate_screen (SPSelection *selection, gdouble angle)
 	NR::Rect bbox(bbox_compat);
 	NR::Point center = bbox.midpoint();
 
-	zoom = SP_DESKTOP_ZOOM (selection->desktop);
+	zoom = SP_DESKTOP_ZOOM (selection->desktop());
 	zmove = angle / zoom;
 	r = NR::L2(bbox.max() - center);
 
@@ -961,9 +961,9 @@ sp_selection_rotate_screen (SPSelection *selection, gdouble angle)
 	sp_selection_rotate_relative (selection, center, zangle);
 
 	if (angle > 0)
-		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:rotate:ccw");
+		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop()), "selector:rotate:ccw");
 	else
-		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop), "selector:rotate:cw");
+		sp_document_maybe_done (SP_DT_DOCUMENT (selection->desktop()), "selector:rotate:cw");
 
 }
 
@@ -982,7 +982,7 @@ sp_selection_scale (SPSelection *selection, gdouble grow)
 	double const times = 1.0 + grow / max_len;
 	sp_selection_scale_relative (selection, center, NR::scale(times, times));
 
-	sp_document_maybe_done(SP_DT_DOCUMENT(selection->desktop),
+	sp_document_maybe_done(SP_DT_DOCUMENT(selection->desktop()),
 			       ( (grow > 0)
 				 ? "selector:scale:larger"
 				 : "selector:scale:smaller" ));
@@ -992,7 +992,7 @@ void
 sp_selection_scale_screen (SPSelection *selection, gdouble grow_pixels)
 {
 	sp_selection_scale(selection,
-			   grow_pixels / SP_DESKTOP_ZOOM(selection->desktop));
+			   grow_pixels / SP_DESKTOP_ZOOM(selection->desktop()));
 }
 
 void
@@ -1000,7 +1000,7 @@ sp_selection_scale_times (SPSelection *selection, gdouble times)
 {
 	NR::Point const center(sp_selection_bbox(selection).midpoint());
 	sp_selection_scale_relative(selection, center, NR::scale(times, times));
-	sp_document_done(SP_DT_DOCUMENT(selection->desktop));
+	sp_document_done(SP_DT_DOCUMENT(selection->desktop()));
 }
 
 void

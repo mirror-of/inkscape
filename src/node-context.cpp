@@ -232,7 +232,7 @@ sp_node_context_selection_changed (SPSelection * selection, gpointer data)
 
 	item = sp_selection_item (selection);
 	
-	desktop = selection->desktop;
+	desktop = selection->desktop();
 	nc->nodepath = NULL;
 	nc->knot_holder = NULL;
 	if (item) {

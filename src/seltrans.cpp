@@ -251,7 +251,7 @@ void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const &p, gdouble x, gdou
 
 	seltrans->spp_length = sp_selection_snappoints (selection, seltrans->spp, SP_SELTRANS_SPP_SIZE);
 
-	seltrans->opposit = ( seltrans->box.topleft()
+	seltrans->opposit = ( seltrans->box.min()
 			      + ( seltrans->box.dimensions()
 				  * NR::scale(1-x, 1-y) ) );
 
@@ -541,7 +541,7 @@ static void sp_show_handles(SPSelTrans &seltrans, SPKnot *knot[], SPSelTransHand
 		sp_knot_show (knot[i]);
 
 		NR::Point const handle_pt(handle[i].x, handle[i].y);
-		NR::Point p( seltrans.box.topleft()
+		NR::Point p( seltrans.box.min()
 			     + ( seltrans.box.dimensions()
 				 * NR::scale(handle_pt) ) );
 
