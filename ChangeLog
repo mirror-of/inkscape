@@ -1,10 +1,14 @@
 2004-04-22  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/Makefile.am: Make non-recursive.  Now sources */Makefile_insert.
-	See HACKING or discussion on mailing list.
+	  See HACKING or discussion on mailing list.
 	* autogen.sh: Bump requirement from automake-1.6 to automake-1.7.
 	* configure.in: Don't generate src/blah/Makefile, but do generate
-	src/blah/makefile stubs.
+	  src/blah/makefile.
+	* src/*/Makefile.am: Remove.
+	* src/*/makefile.in: New wrapper makefiles to allow typing `make' from
+	  subdirectories of src.  (Not used by compiles started from top-level
+	  or from src/.)
 
 2004-04-21  MenTaLguY <mental@rydia.net>
 
