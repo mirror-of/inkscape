@@ -1392,8 +1392,11 @@ sp_pen_context_root_handler(SPEventContext *ec, GdkEvent *event)
     }
 
     if (!ret) {
-        if (((SPEventContextClass *) pen_parent_class)->root_handler)
-            return ((SPEventContextClass *) pen_parent_class)->root_handler(ec, event);
+        gint (*const parent_root_handler)(SPEventContext *, GdkEvent *)
+            = ((SPEventContextClass *) pen_parent_class)->root_handler;
+        if (parent_root_handler) {
+            ret = parent_root_handler(ec, event);
+        }
     }
 
     return ret;
@@ -1409,11 +1412,10 @@ pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
             pen_drag_origin_w = event_w;
             pen_within_tolerance = true;
 
-            NR::Point p = sp_desktop_w2d_xy_point(pc->desktop, event_w);
-
             /* Test whether we hit any anchor. */
             SPDrawAnchor *anchor = test_inside(pc, event_w);
 
+            NR::Point const event_dt(sp_desktop_w2d_xy_point(pc->desktop, event_w));
             switch (pc->mode) {
             case SP_PEN_CONTEXT_MODE_CLICK:
                 /* In click mode we add point on release */
@@ -1438,11 +1440,13 @@ pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
                     if ( pc->npoints == 0 ) {
                         /* Set start anchor */
                         pc->sa = anchor;
+                        NR::Point p;
                         if (anchor) {
                             /* Adjust point to anchor if needed */
                             p = anchor->dp;
                         } else {
                             /* Create green anchor */
+                            p = event_dt;
                             spdc_endpoint_snap(pc, p, bevent.state);
                             pc->green_anchor = sp_draw_anchor_new(pc, pc->green_curve, TRUE, p);
                         }
@@ -1450,10 +1454,12 @@ pen_handle_button_press(SPPenContext *const pc, GdkEventButton const &bevent)
                     } else {
                         /* Set end anchor */
                         pc->ea = anchor;
-                        if (!anchor) {   /* Snap node only if not hitting anchor */
-                            spdc_endpoint_snap(pc, p, bevent.state);
-                        } else {
+                        NR::Point p;
+                        if (anchor) {   /* Snap node only if not hitting anchor. */
                             p = anchor->dp;
+                        } else {
+                            p = event_dt;
+                            spdc_endpoint_snap(pc, p, bevent.state);
                         }
                         spdc_pen_set_subsequent_point(pc, p);
                         if ( pc->green_anchor && pc->green_anchor->active ) {
