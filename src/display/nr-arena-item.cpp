@@ -692,7 +692,7 @@ nr_arena_item_invoke_pick (NRArenaItem *item, NR::Point p, double delta, unsigne
 	if (!(item->state & NR_ARENA_ITEM_STATE_BBOX) || !(item->state & NR_ARENA_ITEM_STATE_PICK))
 		return NULL;
 
-	if (!sticky && !item->sensitive) return NULL;
+	if (!sticky && !(item->visible && item->sensitive)) return NULL;
 	
 	// TODO: rewrite using NR::Rect
 	const double x = p[NR::X];
