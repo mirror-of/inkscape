@@ -47,7 +47,7 @@ SPRepr *AncetreFils (SPRepr * a, SPRepr * d);
 
 void sp_selected_path_boolop (bool_op bop);
 void sp_selected_path_do_offset (bool expand);
-void sp_selected_path_create_offset_object (bool expand,bool updating);
+void sp_selected_path_create_offset_object (int expand,bool updating);
 
 void
 sp_selected_path_union ()
@@ -596,33 +596,43 @@ void
 sp_selected_path_offset ()
 {
   sp_selected_path_do_offset (true);
-  //  sp_selected_path_create_offset();
 }
 void
 sp_selected_path_inset ()
 {
   sp_selected_path_do_offset (false);
-  //  sp_selected_path_create_inset();
 }
+
+void sp_selected_path_create_offset_object_zero ()
+{
+  sp_selected_path_create_offset_object (0, false);
+}
+
 void sp_selected_path_create_offset ()
 {
-  sp_selected_path_create_offset_object (true,false);
+  sp_selected_path_create_offset_object (1, false);
 }
 void sp_selected_path_create_inset ()
 {
-  sp_selected_path_create_offset_object (false,false);
+  sp_selected_path_create_offset_object (-1, false);
 }
+
+void sp_selected_path_create_updating_offset_object_zero ()
+{
+  sp_selected_path_create_offset_object (0, true);
+}
+
 void sp_selected_path_create_updating_offset ()
 {
-  sp_selected_path_create_offset_object (true,true);
+  sp_selected_path_create_offset_object (1,true);
 }
 void sp_selected_path_create_updating_inset ()
 {
-  sp_selected_path_create_offset_object (false,true);
+  sp_selected_path_create_offset_object (-1,true);
 }
 
 void
-sp_selected_path_create_offset_object (bool expand,bool updating)
+sp_selected_path_create_offset_object (int expand,bool updating)
 {
   SPSelection *selection;
   SPRepr *repr;
@@ -787,13 +797,17 @@ sp_selected_path_create_offset_object (bool expand,bool updating)
 
     repr = sp_repr_new ("path");
     sp_repr_set_attr (repr, "sodipodi:type", "offset");
-    if (expand)
+    if (expand > 0)
       {
 	sp_repr_set_double_attribute (repr, "sodipodi:radius", o_width);
       }
-    else
+    else if (expand < 0)
       {
 	sp_repr_set_double_attribute (repr, "sodipodi:radius", -o_width);
+      }
+    else 
+      {
+	sp_repr_set_double_attribute (repr, "sodipodi:radius", 0);
       }
     str = liv_svg_dump_path (res);
     sp_repr_set_attr (repr, "sodipodi:original", str);

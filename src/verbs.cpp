@@ -295,12 +295,20 @@ sp_verb_action_selection_perform (SPAction *action, void * data, void * pdata)
 	case SP_VERB_SELECTION_SYMDIFF:
 		sp_selected_path_symdiff ();
 		break;
+
 	case SP_VERB_SELECTION_OFFSET:
 		sp_selected_path_offset ();
 		break;
 	case SP_VERB_SELECTION_INSET:
 		sp_selected_path_inset ();
 		break;
+	case SP_VERB_SELECTION_DYNAMIC_OFFSET:
+		sp_selected_path_create_offset_object_zero ();
+		break;
+	case SP_VERB_SELECTION_LINKED_OFFSET:
+		sp_selected_path_create_updating_offset_object_zero ();
+		break;
+
 	case SP_VERB_SELECTION_OUTLINE:
 		sp_selected_path_outline ();
 		break;
@@ -617,6 +625,8 @@ static const SPVerbActionDef props[] = {
 	{SP_VERB_SELECTION_SYMDIFF, "SelectionSymDiff", N_("E_xclusion"), N_("Exclusive OR of selected objects"), NULL},
 	{SP_VERB_SELECTION_OFFSET, "SelectionOffset", N_("O_utset Path"), N_("Outset selected paths"), NULL},
 	{SP_VERB_SELECTION_INSET, "SelectionInset", N_("I_nset Path"), N_("Inset selected paths"), NULL},
+	{SP_VERB_SELECTION_DYNAMIC_OFFSET, "SelectionDynOffset", N_("D_ynamic Offset"), N_("Create a dynamic offset object"), NULL},
+	{SP_VERB_SELECTION_LINKED_OFFSET, "SelectionLinkedOffset", N_("_Linked Offset"), N_("Create a dynamic offset object linked to the original path"), NULL},
 	{SP_VERB_SELECTION_OUTLINE, "SelectionOutline", N_("_Stroke to Path"), N_("Convert selected stroke to path"), NULL},
 	{SP_VERB_SELECTION_SIMPLIFY, "SelectionSimplify", N_("Simp_lify Path"), N_("Simplify selected path"), NULL},
 	{SP_VERB_SELECTION_COMBINE, "SelectionCombine", N_("_Combine"), N_("Combine multiple paths"), "selection_combine"},

@@ -26,6 +26,10 @@ void sp_selected_path_create_offset ();
 void sp_selected_path_create_inset ();
 void sp_selected_path_create_updating_offset ();
 void sp_selected_path_create_updating_inset ();
+
+void sp_selected_path_create_offset_object_zero ();
+void sp_selected_path_create_updating_offset_object_zero ();
+
 // outline of a curve
 // uses the stroke-width
 void sp_selected_path_outline ();
