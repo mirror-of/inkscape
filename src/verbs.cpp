@@ -21,8 +21,6 @@
 
 #include <gtk/gtkstock.h>
 
-#include <ext/hash_map>
-
 #include "helper/sp-intl.h"
 
 #include "dialogs/text-edit.h"
@@ -68,7 +66,17 @@
 static SPAction *make_action (sp_verb_t verb, SPView *view);
 
 /* FIXME !!! we should probably go ahead and use GHashTables, actually -- more portable */
+
+#if defined(__GNUG__) && (__GNUG__ >= 3)
+# include <ext/hash_map>
+using __gnu_cxx::hash_map;
+#else
+# include <hash_map.h>
+#endif
+
+#if defined(__GNUG__) && (__GNUG__ >= 3)
 namespace __gnu_cxx {
+#endif
 
 template <>
 class hash<SPView *> {
@@ -79,11 +87,13 @@ public:
 	}
 };
 
-};
+#if defined(__GNUG__) && (__GNUG__ >= 3)
+}; /* namespace __gnu_cxx */
+#endif
 
-typedef __gnu_cxx::hash_map<sp_verb_t, SPAction *> ActionTable;
-typedef __gnu_cxx::hash_map<SPView *, ActionTable *> VerbTable;
-typedef __gnu_cxx::hash_map<sp_verb_t, SPVerbActionFactory *> FactoryTable;
+typedef hash_map<sp_verb_t, SPAction *> ActionTable;
+typedef hash_map<SPView *, ActionTable *> VerbTable;
+typedef hash_map<sp_verb_t, SPVerbActionFactory *> FactoryTable;
 
 static VerbTable verb_tables;
 static FactoryTable factories;

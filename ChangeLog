@@ -1,5 +1,7 @@
 2004-02-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/verbs.cpp: Add g++-2.95 portability for hash_map.
+
 	* src/uri-references.h (operator=): Remove definition, forcing link
 	errors for accidental usage.
 
