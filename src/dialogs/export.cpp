@@ -43,6 +43,9 @@
 #include "../verbs.h"
 #include "../interface.h"
 
+#include "extension/extension.h"
+#include "extension/db.h"
+
 #include "export.h"
 
 #define SP_EXPORT_MIN_SIZE 1.0
@@ -424,12 +427,38 @@ sp_export_dialog (void)
         if (SP_ACTIVE_DOCUMENT && SP_DOCUMENT_URI (SP_ACTIVE_DOCUMENT))
         {
             gchar *name;
-            const gchar *uri = SP_DOCUMENT_URI (SP_ACTIVE_DOCUMENT);
+            SPDocument * doc = SP_ACTIVE_DOCUMENT;
+            const gchar *uri = SP_DOCUMENT_URI (doc);
+            SPRepr * repr = sp_document_repr_root(doc);
+            const gchar * text_extension = sp_repr_attr(repr, "inkscape:output_extension");
+            Inkscape::Extension::Output * oextension = NULL;
 
-            name = g_strconcat(uri, ".png", NULL);
-            gtk_entry_set_text (GTK_ENTRY (fe), name);
-            g_free(name);
-            
+            if (text_extension != NULL) {
+                oextension = dynamic_cast<Inkscape::Extension::Output *>(Inkscape::Extension::db.get(text_extension));
+            }
+
+            if (oextension != NULL) {
+                gchar * old_extension = oextension->get_extension();
+                if (g_str_has_suffix(uri, old_extension)) {
+                    gchar * uri_copy;
+                    gchar * extension_point;
+                    gchar * final_name;
+
+                    uri_copy = g_strdup(uri);
+                    extension_point = g_strrstr(uri_copy, old_extension);
+                    extension_point[0] = '\0';
+
+                    final_name = g_strconcat(uri_copy, ".png", NULL);
+                    gtk_entry_set_text (GTK_ENTRY (fe), final_name);
+
+                    g_free(final_name);
+                    g_free(uri_copy);
+                }
+            } else {
+                name = g_strconcat(uri, ".png", NULL);
+                gtk_entry_set_text (GTK_ENTRY (fe), name);
+                g_free(name);
+            } 
         }
         g_signal_connect ( G_OBJECT (fe), "changed", 
                            G_CALLBACK (sp_export_filename_modified), dlg);
@@ -676,7 +705,7 @@ sp_export_area_toggled (GtkToggleButton *tb, GtkObject *base)
         
         /* Notice how the switch is used to 'fall through' here to get
            various backups.  If you modify this without noticing you'll
-           probabaly screw something up.
+           probabaly screw something up. */
         switch (key) {
             case SELECTION_SELECTION:
                 if ((SP_DT_SELECTION(SP_ACTIVE_DESKTOP))->isEmpty() == false)
