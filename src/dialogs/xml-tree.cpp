@@ -301,7 +301,7 @@ sp_xml_tree_dialog (void)
                 NULL,
                 _("New element node"),
                 NULL,
-                sp_icon_new_scaled( GTK_ICON_SIZE_LARGE_TOOLBAR, 
+                sp_icon_new( GTK_ICON_SIZE_LARGE_TOOLBAR,
                                     INKSCAPE_STOCK_ADD_XML_ELEMENT_NODE ),
                 G_CALLBACK (cmd_new_element_node),
                 NULL);
@@ -322,7 +322,7 @@ sp_xml_tree_dialog (void)
 
         button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
                 NULL, _("New text node"), NULL,
-                sp_icon_new_scaled( GTK_ICON_SIZE_LARGE_TOOLBAR, 
+                sp_icon_new( GTK_ICON_SIZE_LARGE_TOOLBAR,
                              INKSCAPE_STOCK_ADD_XML_TEXT_NODE ),
                 G_CALLBACK (cmd_new_text_node),
                 NULL);
@@ -343,7 +343,7 @@ sp_xml_tree_dialog (void)
 
         button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
                 NULL, _("Duplicate node"), NULL,
-                sp_icon_new_scaled( GTK_ICON_SIZE_LARGE_TOOLBAR, 
+                sp_icon_new( GTK_ICON_SIZE_LARGE_TOOLBAR,
                              INKSCAPE_STOCK_DUPLICATE_XML_NODE ),
                 G_CALLBACK (cmd_duplicate_node),
                 NULL);
@@ -364,7 +364,7 @@ sp_xml_tree_dialog (void)
 
         button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
                 NULL, _("Delete node"), NULL,
-                sp_icon_new_scaled( GTK_ICON_SIZE_LARGE_TOOLBAR, 
+                sp_icon_new( GTK_ICON_SIZE_LARGE_TOOLBAR,
                              INKSCAPE_STOCK_DELETE_XML_NODE ),
                                            G_CALLBACK (cmd_delete_node), NULL );
 
@@ -464,7 +464,7 @@ sp_xml_tree_dialog (void)
 
         button = gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
                 NULL, _("Delete attribute"), NULL,
-                sp_icon_new_scaled( GTK_ICON_SIZE_LARGE_TOOLBAR, 
+                sp_icon_new( GTK_ICON_SIZE_LARGE_TOOLBAR,
                              INKSCAPE_STOCK_DELETE_XML_ATTRIBUTE ),
                 (GCallback) cmd_delete_attr, NULL);
 
@@ -691,7 +691,7 @@ set_tree_document (SPDocument * document)
     }
     current_document = document;
     if (current_document) {
-        
+
         document_uri_set_connection = current_document->connectURISet(sigc::bind(sigc::ptr_fun(&on_document_uri_set), current_document));
         on_document_uri_set(SP_DOCUMENT_URI (current_document), current_document);
         set_tree_repr (sp_document_repr_root (current_document));
@@ -1015,7 +1015,7 @@ xml_tree_node_mutable ( GtkCTreeNode * node )
 
     // if not in base level (where namedview, defs, etc go), we're mutable
     if (GTK_CTREE_ROW(GTK_CTREE_ROW (node)->parent)->parent) {
-        return true; 
+        return true;
     }
 
     Inkscape::XML::Node * repr;

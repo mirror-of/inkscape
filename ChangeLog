@@ -1,4 +1,12 @@
 2005-03-05  Jon A. Cruz  <jon@joncruz.org>
+	* src/widgets/layer-selector.cpp, src/widgets/icon.h,
+	  src/widgets/icon.cpp, src/dialogs/align.cpp, src/dialogs/find.cpp,
+	  src/dialogs/object-properties.cpp, src/dialogs/stroke-style.cpp,
+	  src/dialogs/text-edit.cpp, src/dialogs/transformation.cpp,
+	  src/dialogs/xml-tree.cpp, src/interface.cpp:
+	  Purging PixBufFactory and sp_icon_new_scaled.
+
+2005-03-05  Jon A. Cruz  <jon@joncruz.org>
 	* src/widgets/icon.cpp, src/widgets/icon.cpp: Switched icon loading
 	  to be deferred and react to theme changes on-the-fly.
 

@@ -45,7 +45,7 @@ static GtkWidget *dlg = NULL;
 static win_data wd;
 
 // impossible original values to make sure they are read from prefs
-static gint x = -1000, y = -1000, w = 0, h = 0; 
+static gint x = -1000, y = -1000, w = 0, h = 0;
 static gchar *prefs_path = "dialogs.fillstroke";
 
 
@@ -60,14 +60,14 @@ sp_object_properties_dialog_destroy (GtkObject *object, gpointer data)
     sp_signal_disconnect_by_data (INKSCAPE, dlg);
     wd.win = dlg = NULL;
     wd.stop = 0;
-    
+
 }
 
 
 
 static gboolean
-sp_object_properties_dialog_delete ( GtkObject *object, 
-                                     GdkEvent *event, 
+sp_object_properties_dialog_delete ( GtkObject *object,
+                                     GdkEvent *event,
                                      gpointer data )
 {
 
@@ -85,10 +85,10 @@ sp_object_properties_dialog_delete ( GtkObject *object,
 
 
 int
-sp_object_properties_page( GtkWidget *nb, 
+sp_object_properties_page( GtkWidget *nb,
                            GtkWidget *page,
-                           char *label, 
-                           char *dlg_name, 
+                           char *label,
+                           char *dlg_name,
                            char *label_image )
 {
 
@@ -97,7 +97,7 @@ sp_object_properties_page( GtkWidget *nb,
     hb = gtk_hbox_new (FALSE, 0);
     gtk_widget_show (hb);
 
-    px = sp_icon_new_scaled (GTK_ICON_SIZE_MENU, label_image);
+    px = sp_icon_new( GTK_ICON_SIZE_MENU, label_image );
     gtk_widget_show (px);
     gtk_box_pack_start (GTK_BOX (hb), px, FALSE, FALSE, 0);
 
@@ -108,9 +108,9 @@ sp_object_properties_page( GtkWidget *nb,
     gtk_widget_show (page);
     gtk_notebook_append_page (GTK_NOTEBOOK (nb), page, hb);
     gtk_object_set_data (GTK_OBJECT (dlg), dlg_name, page);
-    
+
     return 0;
-    
+
 }
 
 
@@ -130,7 +130,7 @@ sp_object_properties_dialog (void)
             w = prefs_get_int_attribute (prefs_path, "w", 0);
             h = prefs_get_int_attribute (prefs_path, "h", 0);
         }
-        if (x != 0 || y != 0) 
+        if (x != 0 || y != 0)
             gtk_window_move ((GtkWindow *) dlg, x, y);
         else
             gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
@@ -138,21 +138,21 @@ sp_object_properties_dialog (void)
         sp_transientize (dlg);
         wd.win = dlg;
         wd.stop = 0;
-        
+
         g_signal_connect ( G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd );
-                           
+
         gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
 
         gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_object_properties_dialog_destroy), dlg );
         gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_object_properties_dialog_delete), dlg );
         g_signal_connect ( G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_object_properties_dialog_delete), dlg );
-                           
+
         g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg );
         g_signal_connect ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg );
 
         GtkWidget *vb = gtk_vbox_new (FALSE, 0);
         gtk_widget_show (vb);
-        gtk_container_add (GTK_CONTAINER (dlg), vb); 
+        gtk_container_add (GTK_CONTAINER (dlg), vb);
 
         GtkWidget *nb = gtk_notebook_new ();
         gtk_widget_show (nb);
@@ -191,7 +191,7 @@ sp_object_properties_dialog (void)
     gtk_misc_set_alignment (GTK_MISC (l), 0.0, 1.0);
     gtk_box_pack_start (GTK_BOX (l_hb), l, FALSE, FALSE, 4);
     gtk_box_pack_start (GTK_BOX (o_vb), l_hb, FALSE, FALSE, 0);
-    
+
     GtkWidget *hb = gtk_hbox_new (FALSE, 4);
     gtk_box_pack_start (GTK_BOX (o_vb), hb, FALSE, FALSE, 0);
 
@@ -205,7 +205,7 @@ sp_object_properties_dialog (void)
     GtkWidget *sb = gtk_spin_button_new (GTK_ADJUSTMENT (a), 0.01, 2);
     gtk_box_pack_start (GTK_BOX (hb), sb, FALSE, FALSE, 0);
 
-    gtk_signal_connect ( a, "value_changed", 
+    gtk_signal_connect ( a, "value_changed",
                          GTK_SIGNAL_FUNC (sp_fillstroke_opacity_changed),
                          dlg );
 
@@ -219,9 +219,9 @@ sp_object_properties_dialog (void)
         sp_fillstroke_selection_changed ( NULL, NULL, NULL );
 
         gtk_widget_show (dlg);
-        
+
     } else {
-        
+
         gtk_window_present (GTK_WINDOW (dlg));
     }
 
@@ -251,23 +251,23 @@ void sp_object_properties_fill (void)
     nb = (GtkWidget *)gtk_object_get_data (GTK_OBJECT (dlg), "notebook");
 
     gtk_notebook_set_page (GTK_NOTEBOOK (nb), 0);
-    
+
 }
 
 
 static void
-sp_fillstroke_selection_modified ( Inkscape::Application *inkscape, 
-                              SPDesktop *desktop, 
+sp_fillstroke_selection_modified ( Inkscape::Application *inkscape,
+                              SPDesktop *desktop,
                               guint flags,
                               GtkObject *base )
 {
-    sp_fillstroke_selection_changed ( NULL, NULL, NULL ); 
+    sp_fillstroke_selection_changed ( NULL, NULL, NULL );
 }
 
 
 static void
-sp_fillstroke_selection_changed ( Inkscape::Application *inkscape, 
-                              SPDesktop *desktop, 
+sp_fillstroke_selection_changed ( Inkscape::Application *inkscape,
+                              SPDesktop *desktop,
                               GtkObject *base )
 {
     if (gtk_object_get_data (GTK_OBJECT (dlg), "blocked"))
@@ -311,8 +311,8 @@ sp_fillstroke_opacity_changed (GtkAdjustment *a, SPWidget *dlg)
     gtk_object_set_data (GTK_OBJECT (dlg), "blocked", GUINT_TO_POINTER (TRUE));
 
     SPCSSAttr *css = sp_repr_css_attr_new ();
-    
-    Inkscape::SVGOStringStream os;	
+
+    Inkscape::SVGOStringStream os;
     os << CLAMP (a->value, 0.0, 1.0);
     sp_repr_css_set_property (css, "opacity", os.str().c_str());
 
@@ -323,7 +323,7 @@ sp_fillstroke_opacity_changed (GtkAdjustment *a, SPWidget *dlg)
     sp_document_maybe_done (SP_DT_DOCUMENT (SP_ACTIVE_DESKTOP), "fillstroke:opacity");
 
     gtk_object_set_data (GTK_OBJECT (dlg), "blocked", GUINT_TO_POINTER (FALSE));
-} 
+}
 
 
 /*

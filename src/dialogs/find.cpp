@@ -35,10 +35,10 @@ public :
     virtual Gtk::Container & get_main_widget() {return _widget;}
 
 private :
-    DialogFind();    
+    DialogFind();
     virtual ~DialogFind(){};
     void addSearchField(Glib::ustring label, Glib::ustring tiptext, int line);
-    Gtk::VBox _widget; 
+    Gtk::VBox _widget;
     Gtk::Table _fieldsTable;
     Docker *_pDocker;
     Gtk::Tooltips _tooltips;
@@ -72,12 +72,9 @@ DialogFind::DialogFind():
     _fieldsTable(5, 4, true),
     _pDocker(0)
 {
-    PixBufFactory::ID id ("inkscape_options", GTK_ICON_SIZE_LARGE_TOOLBAR, 20);
-    Gtk::Image*  pImage = 
-        Gtk::manage( new Gtk::Image(
-                         PixBufFactory::get().
-                         getIcon(id)));
-    _widget.pack_start(*pImage);
+    Glib::ustring id("inkscape_options");
+    Gtk::Widget*  pIcon = Gtk::manage( sp_icon_get_icon(id, GTK_ICON_SIZE_LARGE_TOOLBAR) );
+    _widget.pack_start(*pIcon);
     _widget.pack_start(_fieldsTable);
     addSearchField("_Text", _("Find objects by their text content (exact or partial match)"), 0);
     addSearchField("_ID", _("Find objects by the value of the id attribute (exact or partial match)"), 1);
@@ -90,7 +87,7 @@ DialogFind::DialogFind():
 
 DialogFind & DialogFind::get()
 {
-    static DialogFind &da = *(new DialogFind());    
+    static DialogFind &da = *(new DialogFind());
     return da;
 }
 
@@ -272,13 +269,13 @@ filter_onefield (GSList *l, GObject *dlg, const gchar *field, bool (*match_funct
 }
 
 
-bool 
+bool
 type_checkbox (GtkWidget *widget, const gchar *data)
 {
     return  gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (widget), data)));
 }
 
-bool 
+bool
 item_type_match (SPItem *item, GtkWidget *widget)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
@@ -323,9 +320,9 @@ filter_types (GSList *l, GObject *dlg, bool (*match_function)(SPItem *, GtkWidge
     GtkWidget *widget = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (dlg), "types"));
 
     GtkWidget *alltypes = GTK_WIDGET (gtk_object_get_data (GTK_OBJECT (widget), "all"));
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (alltypes))) 
+    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (alltypes)))
         return l;
-    
+
 
     GSList *n = NULL;
     for (GSList *i = l; i != NULL; i = i->next) {
@@ -356,7 +353,7 @@ all_items (SPObject *r, GSList *l, bool hidden, bool locked)
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     if (SP_IS_DEFS(r))
-        return l; // we're not interested in items in defs 
+        return l; // we're not interested in items in defs
 
     if (!strcmp (SP_OBJECT_REPR (r)->name(), "svg:metadata"))
         return l; // we're not interested in metadata
@@ -505,7 +502,7 @@ toggle_alltypes (GtkToggleButton *tb, gpointer data)
         gtk_widget_hide_all (alltypes_pane);
     } else {
         gtk_widget_show_all (alltypes_pane);
-        
+
         // excplicit toggle to make sure its handler gets called, no matter what was the original state
         gtk_toggle_button_toggled (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "shapes")));
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gtk_object_get_data (GTK_OBJECT (data), "shapes")), TRUE);
@@ -538,7 +535,7 @@ toggle_shapes (GtkToggleButton *tb, gpointer data)
 
 
 GtkWidget *
-sp_find_types_checkbox (GtkWidget *w, const gchar *data, gboolean active, 
+sp_find_types_checkbox (GtkWidget *w, const gchar *data, gboolean active,
                         GtkTooltips *tt, const gchar *tip,
                         const gchar *label,
                         void (*toggled)(GtkToggleButton *, gpointer))
@@ -561,7 +558,7 @@ sp_find_types_checkbox (GtkWidget *w, const gchar *data, gboolean active,
 }
 
 GtkWidget *
-sp_find_types_checkbox_indented (GtkWidget *w, const gchar *data, gboolean active, 
+sp_find_types_checkbox_indented (GtkWidget *w, const gchar *data, gboolean active,
                                  GtkTooltips *tt, const gchar *tip,
                                  const gchar *label,
                                  void (*toggled)(GtkToggleButton *, gpointer), guint indent)
@@ -605,7 +602,7 @@ sp_find_types ()
 
         GtkWidget *alltypes = sp_find_types_checkbox (vb, "all", TRUE, tt, _("Search in all object types"), _("All types"), toggle_alltypes);
         gtk_box_pack_start (GTK_BOX (hb), alltypes, FALSE, FALSE, 0);
-   
+
         gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
     }
 
@@ -719,20 +716,20 @@ sp_find_dialog_old (void)
         } else {
             gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
         }
-        if (w && h) 
+        if (w && h)
             gtk_window_resize ((GtkWindow *) dlg, w, h);
-        
+
         sp_transientize (dlg);
         wd.win = dlg;
         wd.stop = 0;
         g_signal_connect   ( G_OBJECT (INKSCAPE), "activate_desktop", G_CALLBACK (sp_transientize_callback), &wd );
-                             
+
         gtk_signal_connect ( GTK_OBJECT (dlg), "event", GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg);
-                             
+
         gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", G_CALLBACK (sp_find_dialog_destroy), NULL );
         gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", G_CALLBACK (sp_find_dialog_delete), dlg);
         g_signal_connect   ( G_OBJECT (INKSCAPE), "shut_down", G_CALLBACK (sp_find_dialog_delete), dlg);
-                             
+
         g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_hide", G_CALLBACK (sp_dialog_hide), dlg);
         g_signal_connect   ( G_OBJECT (INKSCAPE), "dialogs_unhide", G_CALLBACK (sp_dialog_unhide), dlg);
 
@@ -756,7 +753,7 @@ sp_find_dialog_old (void)
         gtk_box_pack_start (GTK_BOX (vb), types, FALSE, FALSE, 0);
 
         {
-            GtkWidget *w = gtk_hseparator_new (); 
+            GtkWidget *w = gtk_hseparator_new ();
             gtk_widget_show (w);
             gtk_box_pack_start (GTK_BOX (vb), w, FALSE, FALSE, 3);
 
@@ -811,7 +808,7 @@ sp_find_dialog_old (void)
     gtk_widget_show((GtkWidget *) dlg);
     gtk_window_present ((GtkWindow *) dlg);
     sp_find_dialog_reset (NULL, G_OBJECT (dlg));
-    
+
     return dlg;
 }
 

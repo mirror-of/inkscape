@@ -60,36 +60,36 @@
  * - more aligns (30 % left from center ...)
  * - aligns for nodes
  *
- */ 
- 
+ */
+
 class Action {
 public :
     Action(const Glib::ustring &id,
            const Glib::ustring &tiptext,
            guint row, guint column,
-           Gtk::Table &parent, 
+           Gtk::Table &parent,
            Gtk::Tooltips &tooltips):
-        _id(id),         
+        _id(id),
         _parent(parent)
     {
-        Gtk::Image*  pImage = Gtk::manage( new Gtk::Image(PixBufFactory::get().getIcon(_id, GTK_ICON_SIZE_LARGE_TOOLBAR)));
-	Gtk::Button * pButton = Gtk::manage(new Gtk::Button());
+        Gtk::Widget*  pIcon = Gtk::manage( sp_icon_get_icon( _id, GTK_ICON_SIZE_LARGE_TOOLBAR) );
+        Gtk::Button * pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
-	pImage->show();
-	pButton->add(*pImage);
-	pButton->show();
+        pIcon->show();
+        pButton->add(*pIcon);
+        pButton->show();
 
         pButton->signal_clicked()
             .connect(sigc::mem_fun(*this, &Action::on_button_click));
         tooltips.set_tip(*pButton, tiptext);
-	parent.attach(*pButton, column, column+1, row, row+1, Gtk::FILL, Gtk::FILL);
+        parent.attach(*pButton, column, column+1, row, row+1, Gtk::FILL, Gtk::FILL);
     }
     virtual ~Action(){}
-private :    
+private :
 
     virtual void on_button_click(){}
 
-    Glib::ustring _id;    
+    Glib::ustring _id;
     Gtk::Table &_parent;
 };
 
@@ -99,23 +99,23 @@ class ActionAlign : public Action {
 public :
     struct Coeffs {
        double mx0, mx1, my0, my1;
-	double sx0, sx1, sy0, sy1; 
+	double sx0, sx1, sy0, sy1;
     };
     ActionAlign(const Glib::ustring &id,
                 const Glib::ustring &tiptext,
                 guint row, guint column,
-                DialogAlign &dialog, 
+                DialogAlign &dialog,
                 guint coeffIndex):
-        Action(id, tiptext, row, column, 
-               dialog.align_table(), dialog.tooltips()), 
-        _index(coeffIndex), 
+        Action(id, tiptext, row, column,
+               dialog.align_table(), dialog.tooltips()),
+        _index(coeffIndex),
         _dialog(dialog)
     {}
-    
-private :    
+
+private :
 
     virtual void on_button_click() {
-        //Retreive selected objects        
+        //Retreive selected objects
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         if (!desktop) return;
 
@@ -129,23 +129,23 @@ private :
         NR::Point mp; //Anchor point
         DialogAlign::AlignTarget target = _dialog.getAlignTarget();
         const Coeffs &a= _allCoeffs[_index];
-        switch (target) 
-        {            
+        switch (target)
+        {
         case DialogAlign::LAST:
         case DialogAlign::FIRST:
-        case DialogAlign::BIGGEST:        
+        case DialogAlign::BIGGEST:
         case DialogAlign::SMALLEST:
         {
             //Check 2 or more selected objects
             std::list<SPItem *>::iterator second(selected.begin());
             ++second;
             if (second == selected.end())
-                return;            
+                return;
             //Find the master (anchor on which the other objects are aligned)
             std::list<SPItem *>::iterator master(
-                _dialog.find_master ( 
-                    selected, 
-                    (a.mx0 != 0.0) || 
+                _dialog.find_master (
+                    selected,
+                    (a.mx0 != 0.0) ||
                     (a.mx1 != 0.0) )
                 );
             //remove the master from the selection
@@ -157,15 +157,15 @@ private :
                            a.my0 * b.min()[NR::Y] + a.my1 * b.max()[NR::Y]);
             break;
         }
-            
+
         case DialogAlign::PAGE:
             mp = NR::Point(a.mx1 * sp_document_width(SP_DT_DOCUMENT(desktop)),
                            a.my1 * sp_document_height(SP_DT_DOCUMENT(desktop)));
             break;
-        
+
         case DialogAlign::DRAWING:
         {
-            NR::Rect b = sp_item_bbox_desktop 
+            NR::Rect b = sp_item_bbox_desktop
                 ( (SPItem *) sp_document_root (SP_DT_DOCUMENT (desktop)) );
             mp = NR::Point(a.mx0 * b.min()[NR::X] + a.mx1 * b.max()[NR::X],
                            a.my0 * b.min()[NR::Y] + a.my1 * b.max()[NR::Y]);
@@ -188,8 +188,8 @@ private :
         bool changed = false;
         //Move each item in the selected list
         for (std::list<SPItem *>::iterator it(selected.begin());
-             it != selected.end(); 
-             it++) 
+             it != selected.end();
+             it++)
         {
             NR::Rect b = sp_item_bbox_desktop (*it);
             NR::Point const sp(a.sx0 * b.min()[NR::X] + a.sx1 * b.max()[NR::X],
@@ -205,17 +205,17 @@ private :
         if (changed) {
             sp_document_done ( SP_DT_DOCUMENT (desktop) );
         }
-   
+
 
     }
     guint _index;
     DialogAlign &_dialog;
-    
+
     static const Coeffs _allCoeffs[10];
-    
+
 };
 ActionAlign::Coeffs const ActionAlign::_allCoeffs[10] = {
-    {1., 0., 0., 0., 0., 1., 0., 0.}, 
+    {1., 0., 0., 0., 0., 1., 0., 0.},
     {1., 0., 0., 0., 1., 0., 0., 0.},
     {.5, .5, 0., 0., .5, .5, 0., 0.},
     {0., 1., 0., 0., 0., 1., 0., 0.},
@@ -231,13 +231,13 @@ ActionAlign::Coeffs const ActionAlign::_allCoeffs[10] = {
 };
 
 
-struct BBoxSort 
-{    
+struct BBoxSort
+{
     SPItem *item;
     float anchor;
     NR::Rect bbox;
-    BBoxSort(SPItem *pItem, NR::Dim2 orientation, double kBegin, double kEnd) : 
-        item(pItem), 
+    BBoxSort(SPItem *pItem, NR::Dim2 orientation, double kBegin, double kEnd) :
+        item(pItem),
         bbox (sp_item_bbox_desktop (pItem))
     {
         anchor = kBegin * bbox.min()[orientation] + kEnd * bbox.max()[orientation];
@@ -259,23 +259,23 @@ public :
     ActionDistribute(const Glib::ustring &id,
                      const Glib::ustring &tiptext,
                      guint row, guint column,
-                     DialogAlign &dialog, 
+                     DialogAlign &dialog,
                      bool onInterSpace,
                      NR::Dim2 orientation,
                      double kBegin, double kEnd
         ):
-        Action(id, tiptext, row, column, 
-               dialog.ditribute_table(), dialog.tooltips()), 
-        _dialog(dialog), 
+        Action(id, tiptext, row, column,
+               dialog.ditribute_table(), dialog.tooltips()),
+        _dialog(dialog),
         _onInterSpace(onInterSpace),
-        _orientation(orientation),        
-        _kBegin(kBegin), 
+        _orientation(orientation),
+        _kBegin(kBegin),
         _kEnd( kEnd)
     {}
 
-private :    
+private :
     virtual void on_button_click() {
-        //Retreive selected objects        
+        //Retreive selected objects
         SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         if (!desktop) return;
 
@@ -289,7 +289,7 @@ private :
         //Check 2 or more selected objects
         std::list<SPItem *>::iterator second(selected.begin());
         ++second;
-        if (second == selected.end()) return;   
+        if (second == selected.end()) return;
 
 
         std::vector< BBoxSort  > sorted;
@@ -311,7 +311,7 @@ private :
                           sorted.front().bbox.min()[_orientation]);
             //space eaten by bboxes
             float span = 0;
-            for (unsigned int i = 0; i < len; i++) 
+            for (unsigned int i = 0; i < len; i++)
             {
                 span += sorted[i].bbox.extent(_orientation);
             }
@@ -369,19 +369,19 @@ class ActionNode : public Action {
 public :
     ActionNode(const Glib::ustring &id,
                const Glib::ustring &tiptext,
-               guint column, 
-               DialogAlign &dialog, 
+               guint column,
+               DialogAlign &dialog,
                NR::Dim2 orientation, bool distribute):
-        Action(id, tiptext, 0, column, 
-               dialog.nodes_table(), dialog.tooltips()), 
+        Action(id, tiptext, 0, column,
+               dialog.nodes_table(), dialog.tooltips()),
         _orientation(orientation),
         _distribute(distribute)
     {}
-    
-private :    
+
+private :
     NR::Dim2 _orientation;
     bool _distribute;
-    virtual void on_button_click() 
+    virtual void on_button_click()
     {
 
         if (!SP_ACTIVE_DESKTOP) return;
@@ -406,148 +406,148 @@ void DialogAlign::on_ref_change(){
 /* verb here is not really a verb (not a Inkscape::Verb) */
 void DialogAlign::on_tool_changed(unsigned int verb)
 {
-    setMode(verb == TOOLS_NODES) ;       
+    setMode(verb == TOOLS_NODES) ;
 }
 
-void DialogAlign::setMode(bool nodeEdit) 
+void DialogAlign::setMode(bool nodeEdit)
 {
     //Act on widgets used in node mode
-    void ( Gtk::Widget::*mNode) ()  = nodeEdit ? 
+    void ( Gtk::Widget::*mNode) ()  = nodeEdit ?
         &Gtk::Widget::show_all : &Gtk::Widget::hide_all;
-    
+
     //Act on widgets used in selection mode
-  void ( Gtk::Widget::*mSel) ()  = nodeEdit ? 
+  void ( Gtk::Widget::*mSel) ()  = nodeEdit ?
       &Gtk::Widget::hide_all : &Gtk::Widget::show_all;
-        
-    
+
+
     ((_alignFrame).*(mSel))();
     ((_distributeFrame).*(mSel))();
     ((_nodesFrame).*(mNode))();
-    
+
 }
-void DialogAlign::addAlignButton(const Glib::ustring &id, const Glib::ustring tiptext, 
+void DialogAlign::addAlignButton(const Glib::ustring &id, const Glib::ustring tiptext,
                                  guint row, guint col)
 {
     _actionList.push_back(
         new ActionAlign(
-            id, tiptext, row, col, 
+            id, tiptext, row, col,
             *this , col + row * 5));
 }
-void DialogAlign::addDistributeButton(const Glib::ustring &id, const Glib::ustring tiptext, 
-                                      guint row, guint col, bool onInterSpace, 
+void DialogAlign::addDistributeButton(const Glib::ustring &id, const Glib::ustring tiptext,
+                                      guint row, guint col, bool onInterSpace,
                                       NR::Dim2 orientation, float kBegin, float kEnd)
 {
     _actionList.push_back(
         new ActionDistribute(
-            id, tiptext, row, col, *this ,  
-            onInterSpace, orientation, 
+            id, tiptext, row, col, *this ,
+            onInterSpace, orientation,
             kBegin, kEnd
             )
         );
 }
-void DialogAlign::addNodeButton(const Glib::ustring &id, const Glib::ustring tiptext, 
+void DialogAlign::addNodeButton(const Glib::ustring &id, const Glib::ustring tiptext,
                    guint col, NR::Dim2 orientation, bool distribute)
 {
     _actionList.push_back(
         new ActionNode(
-            id, tiptext, col, 
+            id, tiptext, col,
             *this, orientation, distribute));
 }
 
 DialogAlign::DialogAlign():
     Dockable(_("Layout"), "dialogs.align"),
-    _alignFrame(_("Align")), 
+    _alignFrame(_("Align")),
     _distributeFrame(_("Distribute")),
     _nodesFrame(_("Align Nodes")),
-    _alignTable(2,5, true), 
-    _distributeTable(2,4, true), 
-    _nodesTable(1, 4, true), 
+    _alignTable(2,5, true),
+    _distributeTable(2,4, true),
+    _nodesTable(1, 4, true),
     _anchorLabel(_("Relative to: "))
 {
     //Instanciate the align buttons
-    addAlignButton("al_left_out", 
-                   _("Right side of aligned objects to left side of anchor"), 
-                   0, 0); 
+    addAlignButton("al_left_out",
+                   _("Right side of aligned objects to left side of anchor"),
+                   0, 0);
     addAlignButton("al_left_in",
-                   _("Left side of aligned objects to left side of anchor"), 
-                   0, 1); 
+                   _("Left side of aligned objects to left side of anchor"),
+                   0, 1);
     addAlignButton("al_center_hor",
-                   _("Center horizontally"), 
-                   0, 2); 
+                   _("Center horizontally"),
+                   0, 2);
     addAlignButton("al_right_in",
-                   _("Right side of aligned objects to right side of anchor"), 
-                   0, 3); 
-    addAlignButton("al_right_out", 
-                   _("Left side of aligned objects to right side of anchor"), 
-                   0, 4); 
-    addAlignButton("al_top_out", 
-                   _("Bottom of aligned objects to top of anchor"), 
-                   1, 0); 
-    addAlignButton("al_top_in", 
-                   _("Top of aligned objects to top of anchor"), 
-                   1, 1); 
-    addAlignButton("al_center_ver", 
-                   _("Center vertically"), 
-                   1, 2); 
+                   _("Right side of aligned objects to right side of anchor"),
+                   0, 3);
+    addAlignButton("al_right_out",
+                   _("Left side of aligned objects to right side of anchor"),
+                   0, 4);
+    addAlignButton("al_top_out",
+                   _("Bottom of aligned objects to top of anchor"),
+                   1, 0);
+    addAlignButton("al_top_in",
+                   _("Top of aligned objects to top of anchor"),
+                   1, 1);
+    addAlignButton("al_center_ver",
+                   _("Center vertically"),
+                   1, 2);
     addAlignButton("al_bottom_in",
-                   _("Bottom of aligned objects to bottom of anchor"), 
-                   1, 3); 
+                   _("Bottom of aligned objects to bottom of anchor"),
+                   1, 3);
     addAlignButton("al_bottom_out",
-                   _("Top of aligned objects to bottom of anchor"), 
-                   1, 4); 
-        
-    
-        
+                   _("Top of aligned objects to bottom of anchor"),
+                   1, 4);
+
+
+
     //The distribute buttons
     addDistributeButton("distribute_left",
                         _("Distribute left sides of objects "
-                          "at even distances"), 
-                        0, 0, false, NR::X, 1., 0.); 
+                          "at even distances"),
+                        0, 0, false, NR::X, 1., 0.);
     addDistributeButton("distribute_hcentre",
                         _("Distribute centers of objects at even "
                           "distances horizontally"),
-                        0, 1, false, NR::X, .5, .5); 
+                        0, 1, false, NR::X, .5, .5);
     addDistributeButton("distribute_right",
-                        _("Distribute right sides of objects at even " 
-                          "distances"), 
-                        0, 2, false, NR::X, 0., 1.); 
-    addDistributeButton("distribute_hdist", 
-                        _("Distribute horizontal distance between " 
+                        _("Distribute right sides of objects at even "
+                          "distances"),
+                        0, 2, false, NR::X, 0., 1.);
+    addDistributeButton("distribute_hdist",
+                        _("Distribute horizontal distance between "
                           "objects equally"),
-                        0, 3, true, NR::X, .5, .5); 
+                        0, 3, true, NR::X, .5, .5);
     addDistributeButton("distribute_bottom",
-                        _("Distribute bottom sides of objects at even " 
-                          "distances"), 
-                        1, 0, false, NR::Y, 1., 0.); 
+                        _("Distribute bottom sides of objects at even "
+                          "distances"),
+                        1, 0, false, NR::Y, 1., 0.);
     addDistributeButton("distribute_vcentre",
-                        _("Distribute centers of objects at even " 
+                        _("Distribute centers of objects at even "
                           "distances vertically"),
-                        1, 1, false, NR::Y, .5, .5); 
+                        1, 1, false, NR::Y, .5, .5);
     addDistributeButton("distribute_top",
-                        _("Distribute top sides of objects at even " 
-                          "distances"), 
-                        1, 2, false, NR::Y, 0, 1); 
+                        _("Distribute top sides of objects at even "
+                          "distances"),
+                        1, 2, false, NR::Y, 0, 1);
     addDistributeButton("distribute_vdist",
                         _("Distribute vertical distance between objects "
-                          "equally"), 
-                        1, 3, true, NR::Y, .5, .5); 
+                          "equally"),
+                        1, 3, true, NR::Y, .5, .5);
 
     //Node Mode buttons
-    addNodeButton("node_halign", 
-                  _("Align selected nodes horizontally"), 
+    addNodeButton("node_halign",
+                  _("Align selected nodes horizontally"),
                   0, NR::X, false);
-    addNodeButton("node_valign", 
-                  _("Align selected nodes vertically"), 
+    addNodeButton("node_valign",
+                  _("Align selected nodes vertically"),
                   1, NR::Y, false);
-    addNodeButton("node_hdistribute", 
-                  _("Distribute selected nodes horizontally"), 
+    addNodeButton("node_hdistribute",
+                  _("Distribute selected nodes horizontally"),
                   2, NR::X, true);
-    addNodeButton("node_vdistribute", 
-                  _("Distribute selected nodes vertically"), 
+    addNodeButton("node_vdistribute",
+                  _("Distribute selected nodes vertically"),
                   3, NR::Y, true);
-        
+
     //Rest of the widgetry
-        
+
 
     _combo.append_text(_("Last selected"));
     _combo.append_text(_("First selected"));
@@ -556,7 +556,7 @@ DialogAlign::DialogAlign():
     _combo.append_text(_("Page"));
     _combo.append_text(_("Drawing"));
     _combo.append_text(_("Selection"));
-        
+
     _combo.set_active(6);
     _combo.signal_changed().connect(sigc::mem_fun(*this, &DialogAlign::on_ref_change));
 
@@ -587,7 +587,7 @@ DialogAlign::DialogAlign():
     }
     setMode(in_node_mode);
 }
-    
+
 DialogAlign::~DialogAlign(){
     for (std::list<Action *>::iterator it = _actionList.begin();
          it != _actionList.end();
@@ -595,10 +595,10 @@ DialogAlign::~DialogAlign(){
         delete *it;
 };
 
- 
+
 DialogAlign & DialogAlign::get()
 {
-    static DialogAlign &da = *(new DialogAlign());    
+    static DialogAlign &da = *(new DialogAlign());
     return da;
 }
 
@@ -609,11 +609,11 @@ std::list<SPItem *>::iterator DialogAlign::find_master( std::list<SPItem *> &lis
     case LAST:
         return list.begin();
         break;
-        
-    case FIRST: 
+
+    case FIRST:
         return --(list.end());
         break;
-        
+
     case BIGGEST:
     {
         gdouble max = -1e18;
@@ -628,11 +628,11 @@ std::list<SPItem *>::iterator DialogAlign::find_master( std::list<SPItem *> &lis
         return master;
         break;
     }
-        
+
     case SMALLEST:
     {
         gdouble max = 1e18;
-        for (std::list<SPItem *>::iterator it = list.begin(); it != list.end(); it++) {            
+        for (std::list<SPItem *>::iterator it = list.begin(); it != list.end(); it++) {
             NR::Rect b = sp_item_bbox_desktop (*it);
             gdouble dim = b.extent(horizontal ? NR::X : NR::Y);
             if (dim < max) {
@@ -643,11 +643,11 @@ std::list<SPItem *>::iterator DialogAlign::find_master( std::list<SPItem *> &lis
         return master;
         break;
     }
-        
+
     default:
         g_assert_not_reached ();
         break;
-            
+
     } // end of switch statement
     return NULL;
 }
@@ -659,7 +659,7 @@ void sp_quick_align_dialog (void)
 {
     DialogAlign::get().present();
 }
- 
+
 
 
 
@@ -707,7 +707,7 @@ void sp_quick_align_dialog (void)
  * - more aligns (30 % left from center ...)
  * - aligns for nodes
  *
- */ 
+ */
 
 enum {
     SP_ALIGN_LAST,
@@ -782,19 +782,19 @@ static const gchar vdist[4][3] = {
     {1, 1, 1}
 };
 
-static void sp_align_arrange_clicked 
+static void sp_align_arrange_clicked
 (GtkWidget *widget, gconstpointer data);
 
-static void sp_align_distribute_h_clicked 
+static void sp_align_distribute_h_clicked
 (GtkWidget *widget, const gchar *layout);
 
-static void sp_align_distribute_v_clicked 
+static void sp_align_distribute_v_clicked
 (GtkWidget *widget, const gchar *layout);
 
 static GtkWidget *sp_align_dialog_create_base_menu (void);
 static void set_base (GtkMenuItem * menuitem, gpointer data);
 
-static SPItem * sp_quick_align_find_master 
+static SPItem * sp_quick_align_find_master
 (const GSList * slist, gboolean horizontal);
 
 static GtkWidget *dlg = NULL;
@@ -815,7 +815,7 @@ sp_quick_align_dialog_destroy (void)
 
     wd.win = dlg = NULL;
     wd.stop = 0;
-    
+
 } // end of sp_quick_align_dialog_destroy()
 
 
@@ -837,19 +837,19 @@ static gboolean sp_align_dialog_delete(GtkObject *, GdkEvent *, gpointer data)
 
 
 static void
-sp_align_add_button ( GtkWidget *t, int col, int row, 
-                      GCallback handler, 
-                      gconstpointer data, 
+sp_align_add_button ( GtkWidget *t, int col, int row,
+                      GCallback handler,
+                      gconstpointer data,
                       const gchar *px, const gchar *tip,
                       GtkTooltips * tt )
 {
     GtkWidget *b;
-    b = sp_button_new_from_data ( 24, SP_BUTTON_TYPE_NORMAL, NULL, 
+    b = sp_button_new_from_data ( 24, SP_BUTTON_TYPE_NORMAL, NULL,
                                   px, tip, tt );
     gtk_widget_show (b);
-    if (handler) g_signal_connect ( G_OBJECT (b), "clicked", 
+    if (handler) g_signal_connect ( G_OBJECT (b), "clicked",
                                     handler, (gpointer) data );
-    gtk_table_attach ( GTK_TABLE (t), b, col, col + 1, row, row + 1, 
+    gtk_table_attach ( GTK_TABLE (t), b, col, col + 1, row, row + 1,
                        (GtkAttachOptions)0, (GtkAttachOptions)0, 0, 0 );
 
 } // end of sp_align_add_button()
@@ -870,44 +870,44 @@ sp_quick_align_dialog (void)
             x = prefs_get_int_attribute (prefs_path, "x", 0);
             y = prefs_get_int_attribute (prefs_path, "y", 0);
         }
-        
+
         if (w == 0 || h == 0) {
             w = prefs_get_int_attribute (prefs_path, "w", 0);
             h = prefs_get_int_attribute (prefs_path, "h", 0);
         }
-        
+
         if (x != 0 || y != 0) {
             gtk_window_move ((GtkWindow *) dlg, x, y);
         } else {
             gtk_window_set_position(GTK_WINDOW(dlg), GTK_WIN_POS_CENTER);
         }
-        
+
         if (w && h) {
             gtk_window_resize (GTK_WINDOW (dlg), w, h);
         }
         sp_transientize (dlg);
         wd.win = dlg;
         wd.stop = 0;
-        
-        g_signal_connect (   G_OBJECT (INKSCAPE), "activate_desktop", 
+
+        g_signal_connect (   G_OBJECT (INKSCAPE), "activate_desktop",
                              G_CALLBACK (sp_transientize_callback), &wd );
-        
-        gtk_signal_connect ( GTK_OBJECT (dlg), "event", 
+
+        gtk_signal_connect ( GTK_OBJECT (dlg), "event",
                              GTK_SIGNAL_FUNC (sp_dialog_event_handler), dlg );
-        
-        gtk_signal_connect ( GTK_OBJECT (dlg), "destroy", 
+
+        gtk_signal_connect ( GTK_OBJECT (dlg), "destroy",
                              G_CALLBACK (sp_quick_align_dialog_destroy), dlg );
-        
-        gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event", 
+
+        gtk_signal_connect ( GTK_OBJECT (dlg), "delete_event",
                              G_CALLBACK (sp_align_dialog_delete), dlg );
-        
-        g_signal_connect (   G_OBJECT (INKSCAPE), "shut_down", 
+
+        g_signal_connect (   G_OBJECT (INKSCAPE), "shut_down",
                              G_CALLBACK (sp_align_dialog_delete), dlg );
-        
-        g_signal_connect (   G_OBJECT (INKSCAPE), "dialogs_hide", 
+
+        g_signal_connect (   G_OBJECT (INKSCAPE), "dialogs_hide",
                              G_CALLBACK (sp_dialog_hide), dlg);
-                             
-        g_signal_connect (   G_OBJECT (INKSCAPE), "dialogs_unhide", 
+
+        g_signal_connect (   G_OBJECT (INKSCAPE), "dialogs_unhide",
                              G_CALLBACK (sp_dialog_unhide), dlg);
 
         GtkWidget *nb = gtk_notebook_new ();
@@ -920,47 +920,47 @@ sp_quick_align_dialog (void)
 
         GtkWidget *om = gtk_option_menu_new ();
         gtk_box_pack_start (GTK_BOX (vb), om, FALSE, FALSE, 0);
-        gtk_option_menu_set_menu ( GTK_OPTION_MENU (om), 
+        gtk_option_menu_set_menu ( GTK_OPTION_MENU (om),
                                    sp_align_dialog_create_base_menu () );
 
         GtkWidget *t = gtk_table_new (2, 5, TRUE);
         gtk_box_pack_start (GTK_BOX (vb), t, FALSE, FALSE, 0);
 
         struct {
-        
+
             int col;
             int row;
             align_ixT ix;
             gchar const *px;
             gchar const *tip;
-            
+
         } const align_buttons[] = {
-            {0, 0, SP_ALIGN_LEFT_OUT, "al_left_out", 
+            {0, 0, SP_ALIGN_LEFT_OUT, "al_left_out",
              _("Right side of aligned objects to left side of anchor")},
-            {1, 0, SP_ALIGN_LEFT_IN, "al_left_in", 
+            {1, 0, SP_ALIGN_LEFT_IN, "al_left_in",
              _("Left side of aligned objects to left side of anchor")},
-            {2, 0, SP_ALIGN_CENTER_HOR, "al_center_hor", 
+            {2, 0, SP_ALIGN_CENTER_HOR, "al_center_hor",
              _("Center horizontally")},
-            {3, 0, SP_ALIGN_RIGHT_IN, "al_right_in", 
+            {3, 0, SP_ALIGN_RIGHT_IN, "al_right_in",
              _("Right side of aligned objects to right side of anchor")},
-            {4, 0, SP_ALIGN_RIGHT_OUT, "al_right_out", 
+            {4, 0, SP_ALIGN_RIGHT_OUT, "al_right_out",
              _("Left side of aligned objects to right side of anchor")},
 
-            {0, 1, SP_ALIGN_TOP_OUT, "al_top_out", 
+            {0, 1, SP_ALIGN_TOP_OUT, "al_top_out",
              _("Bottom of aligned objects to top of anchor")},
-            {1, 1, SP_ALIGN_TOP_IN, "al_top_in", 
+            {1, 1, SP_ALIGN_TOP_IN, "al_top_in",
              _("Top of aligned objects to top of anchor")},
-            {2, 1, SP_ALIGN_CENTER_VER, "al_center_ver", 
+            {2, 1, SP_ALIGN_CENTER_VER, "al_center_ver",
              _("Center vertically")},
-            {3, 1, SP_ALIGN_BOTTOM_IN, "al_bottom_in", 
+            {3, 1, SP_ALIGN_BOTTOM_IN, "al_bottom_in",
              _("Bottom of aligned objects to bottom of anchor")},
-            {4, 1, SP_ALIGN_BOTTOM_OUT, "al_bottom_out", 
+            {4, 1, SP_ALIGN_BOTTOM_OUT, "al_bottom_out",
              _("Top of aligned objects to bottom of anchor")},
-                
+
         };
-        
+
         for (unsigned int i = 0 ; i < G_N_ELEMENTS(align_buttons) ; ++i) {
-        
+
             sp_align_add_button ( t, align_buttons[i].col,
                                   align_buttons[i].row,
                                   G_CALLBACK( sp_align_arrange_clicked ),
@@ -981,66 +981,66 @@ sp_quick_align_dialog (void)
 
         om = gtk_option_menu_new ();
         gtk_box_pack_start ( GTK_BOX (vb), om, FALSE, FALSE, 0 );
-        gtk_option_menu_set_menu ( GTK_OPTION_MENU (om), 
+        gtk_option_menu_set_menu ( GTK_OPTION_MENU (om),
                                    sp_align_dialog_create_base_menu () );
         gtk_widget_set_sensitive ( om, FALSE );
 
         t = gtk_table_new (2, 4, TRUE);
         gtk_box_pack_start (GTK_BOX (vb), t, FALSE, FALSE, 0);
 
-        sp_align_add_button ( t, 0, 0, 
-                              G_CALLBACK (sp_align_distribute_h_clicked), 
+        sp_align_add_button ( t, 0, 0,
+                              G_CALLBACK (sp_align_distribute_h_clicked),
                               hdist[SP_DISTRIBUTE_LEFT], "distribute_left",
-                              _("Distribute left sides of objects at even " 
+                              _("Distribute left sides of objects at even "
                                 "distances"),
                               tt );
-                              
-        sp_align_add_button ( t, 1, 0, 
-                              G_CALLBACK (sp_align_distribute_h_clicked), 
-                              hdist[SP_DISTRIBUTE_HCENTRE], 
+
+        sp_align_add_button ( t, 1, 0,
+                              G_CALLBACK (sp_align_distribute_h_clicked),
+                              hdist[SP_DISTRIBUTE_HCENTRE],
                               "distribute_hcentre",
-                              _("Distribute centers of objects at even " 
+                              _("Distribute centers of objects at even "
                                 "distances horizontally"),
                               tt );
-                              
-        sp_align_add_button ( t, 2, 0, 
-                              G_CALLBACK (sp_align_distribute_h_clicked), 
+
+        sp_align_add_button ( t, 2, 0,
+                              G_CALLBACK (sp_align_distribute_h_clicked),
                               hdist[SP_DISTRIBUTE_RIGHT], "distribute_right",
-                              _("Distribute right sides of objects at even " 
+                              _("Distribute right sides of objects at even "
                                 "distances"),
                               tt );
-                              
-        sp_align_add_button ( t, 3, 0, 
-                              G_CALLBACK (sp_align_distribute_h_clicked), 
+
+        sp_align_add_button ( t, 3, 0,
+                              G_CALLBACK (sp_align_distribute_h_clicked),
                               hdist[SP_DISTRIBUTE_HDIST], "distribute_hdist",
-                              _("Distribute horizontal distance between " 
+                              _("Distribute horizontal distance between "
                                 "objects equally"),
                               tt );
 
-        sp_align_add_button ( t, 0, 1, 
-                              G_CALLBACK (sp_align_distribute_v_clicked), 
+        sp_align_add_button ( t, 0, 1,
+                              G_CALLBACK (sp_align_distribute_v_clicked),
                               vdist[SP_DISTRIBUTE_TOP], "distribute_top",
-                              _("Distribute top sides of objects at even " 
+                              _("Distribute top sides of objects at even "
                                 "distances"),
                               tt );
-                              
-        sp_align_add_button ( t, 1, 1, 
-                              G_CALLBACK (sp_align_distribute_v_clicked), 
-                              vdist[SP_DISTRIBUTE_VCENTRE], 
+
+        sp_align_add_button ( t, 1, 1,
+                              G_CALLBACK (sp_align_distribute_v_clicked),
+                              vdist[SP_DISTRIBUTE_VCENTRE],
                               "distribute_vcentre",
-                              _("Distribute centers of objects at even " 
+                              _("Distribute centers of objects at even "
                                 "distances vertically"),
                               tt );
-                              
-        sp_align_add_button ( t, 2, 1, 
-                              G_CALLBACK (sp_align_distribute_v_clicked), 
+
+        sp_align_add_button ( t, 2, 1,
+                              G_CALLBACK (sp_align_distribute_v_clicked),
                               vdist[SP_DISTRIBUTE_BOTTOM], "distribute_bottom",
-                              _("Distribute bottom sides of objects at even " 
+                              _("Distribute bottom sides of objects at even "
                                 "distances"),
                               tt );
-                              
-        sp_align_add_button ( t, 3, 1, 
-                              G_CALLBACK (sp_align_distribute_v_clicked), 
+
+        sp_align_add_button ( t, 3, 1,
+                              G_CALLBACK (sp_align_distribute_v_clicked),
                               vdist[SP_DISTRIBUTE_VDIST], "distribute_vdist",
                               _("Distribute vertical distance between objects "
                                 "equally"),
@@ -1051,27 +1051,27 @@ sp_quick_align_dialog (void)
         gtk_notebook_append_page (GTK_NOTEBOOK (nb), vb, l);
 
         gtk_widget_show_all (nb);
-    
+
     } // end of if (!dlg)
 
     gtk_window_present ((GtkWindow *) dlg);
-    
+
 } // end of sp_quick_align_dialog()
 
 
 
 static void
-sp_align_add_menuitem ( GtkWidget *menu, const gchar *label, 
+sp_align_add_menuitem ( GtkWidget *menu, const gchar *label,
                         GCallback handler, int value )
 {
     GtkWidget *menuitem = gtk_menu_item_new_with_label (label);
     gtk_widget_show (menuitem);
-    
+
     if (handler) {
-        g_signal_connect ( G_OBJECT (menuitem), "activate", 
+        g_signal_connect ( G_OBJECT (menuitem), "activate",
                            handler, GINT_TO_POINTER (value) );
     }
-    
+
     gtk_menu_append (GTK_MENU (menu), menuitem);
 
 } // end of sp_align_add_menuitem()
@@ -1083,31 +1083,31 @@ sp_align_dialog_create_base_menu (void)
 {
     GtkWidget *menu = gtk_menu_new ();
 
-    sp_align_add_menuitem ( menu, _("Last selected"), 
+    sp_align_add_menuitem ( menu, _("Last selected"),
                             G_CALLBACK (set_base), SP_ALIGN_LAST);
-                            
-    sp_align_add_menuitem ( menu, _("First selected"), 
+
+    sp_align_add_menuitem ( menu, _("First selected"),
                             G_CALLBACK (set_base), SP_ALIGN_FIRST);
-                            
-    sp_align_add_menuitem ( menu, _("Biggest item"), 
+
+    sp_align_add_menuitem ( menu, _("Biggest item"),
                             G_CALLBACK (set_base), SP_ALIGN_BIGGEST);
-                            
-    sp_align_add_menuitem ( menu, _("Smallest item"), 
+
+    sp_align_add_menuitem ( menu, _("Smallest item"),
                             G_CALLBACK (set_base), SP_ALIGN_SMALLEST);
-                            
-    sp_align_add_menuitem ( menu, _("Page"), 
+
+    sp_align_add_menuitem ( menu, _("Page"),
                             G_CALLBACK (set_base), SP_ALIGN_PAGE);
-                            
-    sp_align_add_menuitem ( menu, _("Drawing"), 
+
+    sp_align_add_menuitem ( menu, _("Drawing"),
                             G_CALLBACK (set_base), SP_ALIGN_DRAWING);
-                            
-    sp_align_add_menuitem ( menu, _("Selection"), 
+
+    sp_align_add_menuitem ( menu, _("Selection"),
                             G_CALLBACK (set_base), SP_ALIGN_SELECTION);
 
     gtk_widget_show (menu);
 
     return menu;
-    
+
 } // end of sp_align_dialog_create_base_menu()
 
 
@@ -1130,18 +1130,18 @@ static void sp_align_arrange_clicked(GtkWidget *, gconstpointer data)
 
     SPSelection *selection = SP_DT_SELECTION(desktop);
     GSList *slist = (GSList *) selection->itemList();
-    
+
     if (!slist) {
         return;
     }
 
     NR::Point mp;
     switch (base) {
-    
+
     case SP_ALIGN_LAST:
     case SP_ALIGN_FIRST:
     case SP_ALIGN_BIGGEST:
-        
+
     case SP_ALIGN_SMALLEST:
     {
         if (!slist->next)
@@ -1149,7 +1149,7 @@ static void sp_align_arrange_clicked(GtkWidget *, gconstpointer data)
 
         slist = g_slist_copy (slist);
         SPItem *master =
-            sp_quick_align_find_master ( slist, 
+            sp_quick_align_find_master ( slist,
                                          (a.mx0 != 0.0) || (a.mx1 != 0.0) );
         slist = g_slist_remove (slist, master);
         NR::Rect b = sp_item_bbox_desktop (master);
@@ -1157,17 +1157,17 @@ static void sp_align_arrange_clicked(GtkWidget *, gconstpointer data)
                        a.my0 * b.min()[NR::Y] + a.my1 * b.max()[NR::Y]);
         break;
     }
-            
+
     case SP_ALIGN_PAGE:
         slist = g_slist_copy (slist);
         mp = NR::Point(a.mx1 * sp_document_width(SP_DT_DOCUMENT(desktop)),
                        a.my1 * sp_document_height(SP_DT_DOCUMENT(desktop)));
         break;
-        
+
     case SP_ALIGN_DRAWING:
     {
         slist = g_slist_copy (slist);
-        NR::Rect b = sp_item_bbox_desktop 
+        NR::Rect b = sp_item_bbox_desktop
             ( (SPItem *) sp_document_root (SP_DT_DOCUMENT (desktop)) );
         mp = NR::Point(a.mx0 * b.min()[NR::X] + a.mx1 * b.max()[NR::X],
                        a.my0 * b.min()[NR::Y] + a.my1 * b.max()[NR::Y]);
@@ -1206,7 +1206,7 @@ static void sp_align_arrange_clicked(GtkWidget *, gconstpointer data)
     if (changed) {
         sp_document_done ( SP_DT_DOCUMENT (desktop) );
     }
-    
+
 } // end of sp_align_arrange_clicked()
 
 
@@ -1218,11 +1218,11 @@ sp_quick_align_find_master (const GSList *slist, gboolean horizontal)
     case SP_ALIGN_LAST:
         return (SPItem *) slist->data;
         break;
-        
-    case SP_ALIGN_FIRST: 
+
+    case SP_ALIGN_FIRST:
         return (SPItem *) g_slist_last ((GSList *) slist)->data;
         break;
-        
+
     case SP_ALIGN_BIGGEST:
     {
         gdouble max = -1e18;
@@ -1239,7 +1239,7 @@ sp_quick_align_find_master (const GSList *slist, gboolean horizontal)
         return master;
         break;
     }
-        
+
     case SP_ALIGN_SMALLEST:
     {
         gdouble max = 1e18;
@@ -1256,15 +1256,15 @@ sp_quick_align_find_master (const GSList *slist, gboolean horizontal)
         return master;
         break;
     }
-        
+
     default:
         g_assert_not_reached ();
         break;
-            
+
     } // end of switch statement
 
     return NULL;
-    
+
 } //end of sp_quick_align_find_master()
 
 
@@ -1282,13 +1282,13 @@ sp_align_bbox_sort ( const void *a, const void *b )
 {
     const SPBBoxSort *bbsa = (SPBBoxSort *) a;
     const SPBBoxSort *bbsb = (SPBBoxSort *) b;
-    
-    if (bbsa->anchor < bbsb->anchor) 
+
+    if (bbsa->anchor < bbsb->anchor)
         return -1;
-    
+
     if (bbsa->anchor > bbsb->anchor)
         return 1;
-    
+
     return 0;
 } // end of sp_align_bbox_sort()
 
@@ -1296,24 +1296,24 @@ sp_align_bbox_sort ( const void *a, const void *b )
 static void sp_align_distribute_h_or_v_clicked(GtkWidget *, gchar const *layout, NR::Dim2 dim)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    
+
     if (!desktop)
         return;
 
     const GSList* slist = SP_DT_SELECTION(desktop)->itemList();
     if (!slist)
         return;
-    
+
     if (!slist->next)
         return;
-    
+
 //Sort bounding boxes by anchor (ie position on the canvas, horizontally or vertically)
     int len = g_slist_length ((GSList *) slist);
     SPBBoxSort *bbs = g_new (SPBBoxSort, len);
-    
+
     {
         unsigned int pos = 0;
-        
+
         for (const GSList *l = slist; l != NULL; l = l->next) {
             bbs[pos].item = SP_ITEM (l->data);
             bbs[pos].bbox = sp_item_bbox_desktop (bbs[pos].item);
@@ -1323,7 +1323,7 @@ static void sp_align_distribute_h_or_v_clicked(GtkWidget *, gchar const *layout,
             ++pos;
         }
     }
-    
+
 
     qsort (bbs, len, sizeof (SPBBoxSort), sp_align_bbox_sort);
 
@@ -1370,7 +1370,7 @@ static void sp_align_distribute_h_or_v_clicked(GtkWidget *, gchar const *layout,
             pos += bbs[i].bbox.extent(dim);
             pos += step;
         }
-        
+
     } // end of if (!layout[2])
 
     g_free (bbs);
@@ -1378,7 +1378,7 @@ static void sp_align_distribute_h_or_v_clicked(GtkWidget *, gchar const *layout,
     if ( changed ) {
         sp_document_done ( SP_DT_DOCUMENT (desktop) );
     }
-    
+
 
 }
 
