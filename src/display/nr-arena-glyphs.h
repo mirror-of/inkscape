@@ -26,7 +26,7 @@
 #include "sp-paint-server.h"
 #include "nr-arena-item.h"
 
-//#define test_glyph_liv
+#define test_glyph_liv
 
 #ifdef test_glyph_liv
 class Shape;
@@ -46,6 +46,11 @@ struct _NRArenaGlyphs {
 	float x, y;
 
 #ifdef test_glyph_liv
+  NRMatrix cached_tr;
+  Shape  *cached_shp;
+  bool   cached_shp_dirty;
+  bool   cached_style_dirty;
+  
   Shape  *stroke_shp;
 #else
 	ArtSVP *stroke_svp;

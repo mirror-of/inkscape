@@ -40,6 +40,7 @@
 #include "../livarot/Path.h"
 #include "../livarot/Shape.h"
 #include "../livarot/Ligne.h"
+#include <libnr/nr-matrix-ops.h>
 
 // defined in nr-arena-shape.cpp
 void nr_pixblock_render_shape_mask_or (NRPixBlock &m,Shape* theS);
@@ -96,6 +97,9 @@ nr_arena_glyphs_init (NRArenaGlyphs *glyphs)
 
 #ifdef test_glyph_liv
   glyphs->stroke_shp=NULL;
+  glyphs->cached_shp=NULL;
+  glyphs->cached_shp_dirty=false;
+  glyphs->cached_style_dirty=false;
 #else
 	glyphs->stroke_svp = NULL;
 #endif
@@ -109,6 +113,10 @@ nr_arena_glyphs_finalize (NRObject *object)
 	glyphs = NR_ARENA_GLYPHS (object);
 
 #ifdef test_glyph_liv
+	if (glyphs->cached_shp) {
+		delete glyphs->cached_shp;
+		glyphs->cached_shp = NULL;
+	}
 	if (glyphs->stroke_shp) {
 		delete glyphs->stroke_shp;
 		glyphs->stroke_shp = NULL;
@@ -197,32 +205,96 @@ nr_arena_glyphs_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state,
 	if (glyphs->style->stroke.type != SP_PAINT_TYPE_NONE) {
 		/* Build state data */
 #ifdef test_glyph_liv
-    Path*  thePath=new Path;
-    Shape* theShape=new Shape;    
-    if ( glyphs->stroke_shp == NULL ) glyphs->stroke_shp=new Shape;
-    {
-      NR::Matrix   tempMat(gc->transform);
-      thePath->LoadArtBPath(glyphs->curve->bpath,tempMat,true);
+    bool   recache=false;
+    bool   antiIsometry=false;
+    if ( glyphs->cached_shp == NULL || glyphs->cached_shp_dirty || glyphs->cached_style_dirty ) {
+      recache=true;
+    } else {
+      NR::Matrix   oMat(glyphs->cached_tr);
+      NR::Matrix   nMat(gc->transform);
+      oMat=oMat.inverse();
+      NR::Matrix   p=oMat*nMat;
+      NR::Matrix   tp;
+      // trasnposition
+      tp[0]=p[0];
+      tp[1]=p[2];
+      tp[2]=p[1];
+      tp[3]=p[3];
+      NR::Matrix   isom=tp*p;
+      if ( fabs(isom[0]-1.0) < 0.01 && fabs(isom[3]-1.0) < 0.01 &&
+           fabs(isom[1]) < 0.01 && fabs(isom[2]) < 0.01 ) {
+        // the changed wrt the cached version is an isometry-> no need to recompute
+        // the uncrossed polygon
+        antiIsometry=(p.det()<0)?true:false;
+        recache=false;
+      } else {
+        recache=true;
+      }
     }
-    thePath->Convert(0.25);
-
-    gdouble width;
-    width = glyphs->style->stroke_width.computed * NR_MATRIX_DF_EXPANSION (&gc->transform);
-    width = MAX (0.125, width);
-
-    JoinType join=join_straight;
-    ButtType butt=butt_straight;
-    if ( glyphs->style->stroke_linecap.value == SP_STROKE_LINECAP_BUTT ) butt=butt_straight;
-    if ( glyphs->style->stroke_linecap.value == SP_STROKE_LINECAP_ROUND ) butt=butt_round;
-    if ( glyphs->style->stroke_linecap.value == SP_STROKE_LINECAP_SQUARE ) butt=butt_square;
-    if ( glyphs->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_MITER ) join=join_pointy;
-    if ( glyphs->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_ROUND ) join=join_round;
-    if ( glyphs->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_BEVEL ) join=join_straight;
-    thePath->Stroke(theShape,false,0.5*width, join,butt,width*glyphs->style->stroke_miterlimit.value);
-
-    glyphs->stroke_shp->ConvertToShape(theShape,fill_nonZero);
-    delete thePath;
-    delete theShape;
+    if ( recache ) {
+//      printf("r: %i %i\n",(glyphs->cached_shp_dirty)?1:0,(glyphs->cached_style_dirty)?1:0);
+      glyphs->cached_shp_dirty=glyphs->cached_style_dirty=false;
+      Path*  thePath=new Path;
+      Shape* theShape=new Shape;    
+      if ( glyphs->cached_shp == NULL ) glyphs->cached_shp=new Shape;
+      {
+        NR::Matrix   tempMat(gc->transform);
+        thePath->LoadArtBPath(glyphs->curve->bpath,tempMat,true);
+      }
+      thePath->Convert(0.25);
+      
+      gdouble width;
+      width = glyphs->style->stroke_width.computed * NR_MATRIX_DF_EXPANSION (&gc->transform);
+      glyphs->cached_tr=gc->transform;
+      width = MAX (0.125, width);
+      
+      JoinType join=join_straight;
+      ButtType butt=butt_straight;
+      if ( glyphs->style->stroke_linecap.value == SP_STROKE_LINECAP_BUTT ) butt=butt_straight;
+      if ( glyphs->style->stroke_linecap.value == SP_STROKE_LINECAP_ROUND ) butt=butt_round;
+      if ( glyphs->style->stroke_linecap.value == SP_STROKE_LINECAP_SQUARE ) butt=butt_square;
+      if ( glyphs->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_MITER ) join=join_pointy;
+      if ( glyphs->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_ROUND ) join=join_round;
+      if ( glyphs->style->stroke_linejoin.value == SP_STROKE_LINEJOIN_BEVEL ) join=join_straight;
+      thePath->Stroke(theShape,false,0.5*width, join,butt,width*glyphs->style->stroke_miterlimit.value);
+      
+      glyphs->cached_shp->ConvertToShape(theShape,fill_nonZero);
+      delete thePath;
+      delete theShape;
+    }
+    if ( glyphs->cached_shp == NULL ) {
+      if ( glyphs->stroke_shp == NULL ) glyphs->stroke_shp=new Shape;
+      glyphs->stroke_shp->Reset();
+    } else {
+      if ( glyphs->stroke_shp == NULL ) glyphs->stroke_shp=new Shape;
+      NR::Matrix   oMat(glyphs->cached_tr);
+      NR::Matrix   nMat(gc->transform);
+      oMat=oMat.inverse();
+      NR::Matrix   p=oMat*nMat; // attention a pas le mettre dans le sens inverse
+      bool antiIsometry=(p.det()<0)?true:false;
+      glyphs->stroke_shp->Reset(glyphs->cached_shp->nbPt,glyphs->cached_shp->nbAr);
+      for (int i=0;i<glyphs->cached_shp->nbPt;i++) {
+        glyphs->stroke_shp->AddPoint(glyphs->cached_shp->pts[i].x*p); // matrix * point multiplication is in reverse order?
+      }
+      if ( antiIsometry ) {
+        for (int i=0;i<glyphs->cached_shp->nbAr;i++) {
+          if ( glyphs->cached_shp->aretes[i].st < 0 || glyphs->cached_shp->aretes[i].en < 0 ) {
+            printf("inv\n");
+          }
+          glyphs->stroke_shp->AddEdge(glyphs->cached_shp->aretes[i].en,glyphs->cached_shp->aretes[i].st);
+        }
+      } else {
+        for (int i=0;i<glyphs->cached_shp->nbAr;i++) {
+          if ( glyphs->cached_shp->aretes[i].st < 0 || glyphs->cached_shp->aretes[i].en < 0 ) {
+            printf("inv\n");
+          }
+          glyphs->stroke_shp->AddEdge(glyphs->cached_shp->aretes[i].st,glyphs->cached_shp->aretes[i].en);
+        }
+      }
+      glyphs->stroke_shp->ForceToPolygon();
+      glyphs->stroke_shp->flags|=need_points_sorting;
+      glyphs->stroke_shp->flags|=need_edges_sorting;
+    }
 #else
 		abp = art_bpath_affine_transform (glyphs->curve->bpath, NR_MATRIX_D_TO_DOUBLE (&gc->transform));
 		vp = art_bez_path_to_vec (abp, 0.25);
@@ -332,6 +404,8 @@ nr_arena_glyphs_set_path (NRArenaGlyphs *glyphs, SPCurve *curve, unsigned int li
 	nr_return_if_fail (NR_IS_ARENA_GLYPHS (glyphs));
 
 	nr_arena_item_request_render (NR_ARENA_ITEM (glyphs));
+  
+  glyphs->cached_shp_dirty=true;
 
 	if (glyphs->curve) {
 		sp_curve_unref (glyphs->curve);
@@ -372,6 +446,8 @@ nr_arena_glyphs_set_style (NRArenaGlyphs *glyphs, SPStyle *style)
 	nr_return_if_fail (glyphs != NULL);
 	nr_return_if_fail (NR_IS_ARENA_GLYPHS (glyphs));
 
+  glyphs->cached_style_dirty=true;
+  
 	if (style) sp_style_ref (style);
 	if (glyphs->style) sp_style_unref (glyphs->style);
 	glyphs->style = style;

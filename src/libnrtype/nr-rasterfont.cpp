@@ -23,7 +23,7 @@
 #include <libnr/nr-svp.h>
 #include <libnr/nr-svp-render.h>
 
-//#define test_rf_liv
+#define test_rf_liv
 #include "../livarot/Shape.h"
 #include "../livarot/Path.h"
 #include "../livarot/Ligne.h"

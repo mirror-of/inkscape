@@ -437,7 +437,7 @@ SweepTree::Find (NR::Point &px, SweepTree * newOne, SweepTree * &insertL,
   y = dot (bNorm, diff);
   //      }
   //      y*=invDirLength;
-  if (y == 0)
+  if (fabs(y) < 0.000001)
     {
     // that damn point px lies on me, so i need to consider to direction of the edge in
     // newOne to know if it goes toward my left side or my right side
