@@ -1,3 +1,7 @@
+2004-01-24  bryce <brycehar@bryceharrington.com>
+	* src/dialogs/stroke-style.cpp:  Hooking up marker buttons to
+	underlying marker style setting code, & etc.  
+
 2004-01-24  bulia byak <bulia@users.sourceforge.net>
 
 	* src/document.cpp src/sp-namedview.cpp: Desensitize undo for changing document uri
