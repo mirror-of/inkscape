@@ -50,12 +50,18 @@ public:
 	 * @see sp_object_hunref
 	 */
 	URIReference(SPDocument *rel_document, const gchar *uri);
+
 	/**
-	 * Destructor.  Emits the changed signal indicating the
-	 * reference has gone away before the current object is
-	 * unreffed.
+	 * Destructor.  Calls shutdown() if the reference has not been
+	 * shut down yet.
 	 */
 	virtual ~URIReference();
+
+	/**
+	 * Shuts down the reference, reporting the current object
+	 * as NULL.  No further changes will be reported.
+	 */
+	void shutdown();
 
 	/**
 	 * Accessor for the reference's change notification signal.

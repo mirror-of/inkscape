@@ -19,9 +19,14 @@
 #include "display/nr-arena-forward.h"
 
 #include "forward.h"
-#include "uri-references.h"
 
 #include "sp-object.h"
+
+namespace Inkscape {
+
+class URIReference;
+
+};
 
 /* fixme: This is just placeholder */
 /*
