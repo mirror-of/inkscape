@@ -93,6 +93,9 @@ nr_arena_shape_class_init (NRArenaShapeClass *klass)
 static void
 nr_arena_shape_init (NRArenaShape *shape)
 {
+    new (&shape->fill.paint) NRArenaShape::Paint();
+    new (&shape->stroke.paint) NRArenaShape::Paint();
+
     shape->curve = NULL;
     shape->style = NULL;
     shape->paintbox.x0 = shape->paintbox.y0 = 0.0F;
@@ -123,8 +126,12 @@ nr_arena_shape_finalize (NRObject *object)
     if (shape->cached_stroke) delete shape->cached_stroke;
     if (shape->fill_painter) sp_painter_free (shape->fill_painter);
     if (shape->stroke_painter) sp_painter_free (shape->stroke_painter);
+
     if (shape->style) sp_style_unref (shape->style);
     if (shape->curve) sp_curve_unref (shape->curve);
+
+    shape->fill.paint.~Paint();
+    shape->stroke.paint.~Paint();
 
     ((NRObjectClass *) shape_parent_class)->finalize (object);
 }
@@ -255,7 +262,7 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 	bbox.x1 = bbox.y1 = -NR_HUGE;
 	bp.path = shape->curve->bpath;
 	nr_path_matrix_bbox_union(&bp, &gc->transform, &bbox, 1.0);
-	if (style->stroke.type != SP_PAINT_TYPE_NONE) {
+	if (shape->stroke.paint.type() != NRArenaShape::Paint::NONE) {
 	    float width, scale;
 	    scale = NR_MATRIX_DF_EXPANSION (&gc->transform);
 	    width = MAX (0.125, style->stroke_width.computed * scale);
@@ -306,7 +313,11 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
 
     if (!shape->curve || !shape->style) return NR_ARENA_ITEM_STATE_ALL;
     if (sp_curve_is_empty (shape->curve)) return NR_ARENA_ITEM_STATE_ALL;
-    if ((shape->style->fill.type == SP_PAINT_TYPE_NONE) && (shape->style->stroke.type == SP_PAINT_TYPE_NONE)) return NR_ARENA_ITEM_STATE_ALL;
+    if ( ( shape->fill.paint.type() == NRArenaShape::Paint::NONE ) &&
+         ( shape->stroke.paint.type() == NRArenaShape::Paint::NONE ) )
+    {
+        return NR_ARENA_ITEM_STATE_ALL;
+    }
 
     /* Build state data */
     if ( shape->delayed_shp ) {
@@ -333,19 +344,22 @@ nr_arena_shape_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state, 
     nr_arena_request_render_rect (item->arena, &item->bbox);
 
     item->render_opacity = TRUE;
-    if (shape->style->fill.type == SP_PAINT_TYPE_PAINTSERVER) {
-	shape->fill_painter = sp_paint_server_painter_new (SP_STYLE_FILL_SERVER (shape->style),
+    if ( shape->fill.paint.type() == NRArenaShape::Paint::SERVER ) {
+	shape->fill_painter = sp_paint_server_painter_new (shape->fill.paint.server(),
 							   NR_MATRIX_D_TO_DOUBLE (&gc->transform), 
 							   &shape->paintbox);
 	item->render_opacity = FALSE;
     }
-    if (shape->style->stroke.type == SP_PAINT_TYPE_PAINTSERVER) {
-	shape->stroke_painter = sp_paint_server_painter_new (SP_STYLE_STROKE_SERVER (shape->style),
+    if ( shape->stroke.paint.type() == NRArenaShape::Paint::SERVER ) {
+	shape->stroke_painter = sp_paint_server_painter_new (shape->stroke.paint.server(),
 							     NR_MATRIX_D_TO_DOUBLE (&gc->transform), 
 							     &shape->paintbox);
 	item->render_opacity = FALSE;
     }
-    if ( item->render_opacity == TRUE && style->fill.type != SP_PAINT_TYPE_NONE && style->stroke.type != SP_PAINT_TYPE_NONE ) {
+    if ( item->render_opacity == TRUE &&
+         shape->fill.paint.type()   != NRArenaShape::Paint::NONE &&
+         shape->stroke.paint.type() != NRArenaShape::Paint::NONE )
+    {
 	// don't merge item opacity with paint opacity if there is a stroke on the fill
 	item->render_opacity = FALSE;    
     }
@@ -385,7 +399,7 @@ void
 nr_arena_shape_update_fill(NRArenaShape *shape,NRGC *gc)
 {
     shape->delayed_shp = false;
-    if (shape->style->fill.type != SP_PAINT_TYPE_NONE) {
+    if (shape->fill.paint.type() != NRArenaShape::Paint::NONE) {
 	if ((shape->curve->end > 2) || (shape->curve->bpath[1].code == NR_CURVETO)) {
 	    if (TRUE || !shape->fill_shp) {
 		//unsigned int windrule = (shape->style->fill_rule.value == SP_WIND_RULE_EVENODD) ? NR_WIND_RULE_EVENODD : NR_WIND_RULE_NONZERO;
@@ -452,7 +466,7 @@ nr_arena_shape_update_stroke(NRArenaShape *shape,NRGC* gc)
   
     shape->delayed_shp = false;
 
-    if (style->stroke.type != SP_PAINT_TYPE_NONE) {
+    if (shape->stroke.paint.type() != NRArenaShape::Paint::NONE) {
 	const float scale = NR_MATRIX_DF_EXPANSION (&gc->transform);
 	if ( fabsf(style->stroke_width.computed * scale) > 0.01 ) { // sinon c'est 0=oon veut pas de bord
 	    const float width = MAX (0.125, style->stroke_width.computed * scale);
@@ -647,20 +661,20 @@ nr_arena_shape_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
 	nr_pixblock_render_shape_mask_or (m,shape->fill_shp);
 	m.empty = FALSE;
 
-	switch (style->fill.type) {
-	case SP_PAINT_TYPE_COLOR:
+	switch (shape->fill.paint.type()) {
+	case NRArenaShape::Paint::COLOR:
 	    if ( item->render_opacity ) {
-		rgba = sp_color_get_rgba32_falpha (&style->fill.value.color,
+		rgba = sp_color_get_rgba32_falpha (&shape->fill.paint.color(),
 						   SP_SCALE24_TO_FLOAT (style->fill_opacity.value) *
 						   SP_SCALE24_TO_FLOAT (style->opacity.value));
 	    } else {
-		rgba = sp_color_get_rgba32_falpha (&style->fill.value.color,
+		rgba = sp_color_get_rgba32_falpha (&shape->fill.paint.color(),
 						   SP_SCALE24_TO_FLOAT (style->fill_opacity.value) );
 	    }
 	    nr_blit_pixblock_mask_rgba32 (pb, &m, rgba);
 	    pb->empty = FALSE;
 	    break;
-	case SP_PAINT_TYPE_PAINTSERVER:
+	case NRArenaShape::Paint::SERVER:
 	    if (shape->fill_painter) {
 		NRPixBlock cb;
 		/* Need separate gradient buffer */
@@ -687,20 +701,20 @@ nr_arena_shape_render (NRArenaItem *item, NRRectL *area, NRPixBlock *pb, unsigne
 	nr_pixblock_render_shape_mask_or (m,shape->stroke_shp);
 	m.empty = FALSE;
 
-	switch (style->stroke.type) {
-	case SP_PAINT_TYPE_COLOR:
+	switch (shape->stroke.paint.type()) {
+	case NRArenaShape::Paint::COLOR:
 	    if ( item->render_opacity ) {
-		rgba = sp_color_get_rgba32_falpha (&style->stroke.value.color,
+		rgba = sp_color_get_rgba32_falpha (&shape->stroke.paint.color(),
 						   SP_SCALE24_TO_FLOAT (style->stroke_opacity.value) *
 						   SP_SCALE24_TO_FLOAT (style->opacity.value));
 	    } else {
-		rgba = sp_color_get_rgba32_falpha (&style->stroke.value.color,
+		rgba = sp_color_get_rgba32_falpha (&shape->stroke.paint.color(),
 						   SP_SCALE24_TO_FLOAT (style->stroke_opacity.value));
 	    }
 	    nr_blit_pixblock_mask_rgba32 (pb, &m, rgba);
 	    pb->empty = FALSE;
 	    break;
-	case SP_PAINT_TYPE_PAINTSERVER:
+	case NRArenaShape::Paint::SERVER:
 	    if (shape->stroke_painter) {
 		NRPixBlock cb;
 		/* Need separate gradient buffer */
@@ -813,17 +827,17 @@ nr_arena_shape_pick (NRArenaItem *item, NR::Point p, double delta, unsigned int 
     }
 
     if (item->state & NR_ARENA_ITEM_STATE_RENDER) {
-	if (shape->fill_shp && (shape->style->fill.type != SP_PAINT_TYPE_NONE)) {
+	if (shape->fill_shp && (shape->fill.paint.type() != NRArenaShape::Paint::NONE)) {
 	    if (shape->fill_shp->PtWinding(p) > 0 ) return item;
 	}
-	if (shape->stroke_shp && (shape->style->stroke.type != SP_PAINT_TYPE_NONE)) {
+	if (shape->stroke_shp && (shape->stroke.paint.type() != NRArenaShape::Paint::NONE)) {
 	    if (shape->stroke_shp->PtWinding(p) > 0 ) return item;
 	}
 	if (delta > 1e-3) {
-	    if (shape->fill_shp && (shape->style->fill.type != SP_PAINT_TYPE_NONE)) {
+	    if (shape->fill_shp && (shape->fill.paint.type() != NRArenaShape::Paint::NONE)) {
 		if (shape->fill_shp->DistanceLE(p, delta)) return item;
 	    }
-	    if (shape->stroke_shp && (shape->style->stroke.type != SP_PAINT_TYPE_NONE)) {
+	    if (shape->stroke_shp && (shape->stroke.paint.type() != NRArenaShape::Paint::NONE)) {
 		if ( shape->stroke_shp->DistanceLE(p, delta)) return item;
 	    }
 	}
@@ -833,14 +847,14 @@ nr_arena_shape_pick (NRArenaItem *item, NR::Point p, double delta, unsigned int 
 	double dist = NR_HUGE;
 	int wind = 0;
 	nr_path_matrix_point_bbox_wind_distance(&bp, shape->ctm, p, NULL, &wind, &dist, NR_EPSILON);
-	if (shape->style->fill.type != SP_PAINT_TYPE_NONE) {
+	if (shape->fill.paint.type() != NRArenaShape::Paint::NONE) {
 	    if (!shape->style->fill_rule.value) {
 		if (wind != 0) return item;
 	    } else {
 		if (wind & 0x1) return item;
 	    }
 	}
-	if (shape->style->stroke.type != SP_PAINT_TYPE_NONE) {
+	if (shape->stroke.paint.type() != NRArenaShape::Paint::NONE) {
 	    /* fixme: We do not take stroke width into account here (Lauris) */
 	    if (dist < delta) return item;
 	}
@@ -888,6 +902,23 @@ void nr_arena_shape_set_path(NRArenaShape *shape, SPCurve *curve,bool justTrans)
     nr_arena_item_request_update (NR_ARENA_ITEM (shape), NR_ARENA_ITEM_STATE_ALL, FALSE);
 }
 
+static void set_paint_from_ipaint(NRArenaShape::Paint &paint, SPIPaint const &ipaint)
+{
+    switch (ipaint.type) {
+    case SP_PAINT_TYPE_NONE:
+        paint.clear();
+        break;
+    case SP_PAINT_TYPE_COLOR:
+        paint.set(ipaint.value.color);
+        break;
+    case SP_PAINT_TYPE_PAINTSERVER:
+        paint.set(ipaint.value.paint.server);
+        break;
+    default:
+        g_assert_not_reached();
+    }
+}
+
 /** nr_arena_shape_set_style
  *
  * Unrefs any existing style and ref's to the given one, then requests an update of the arena
@@ -901,7 +932,10 @@ nr_arena_shape_set_style (NRArenaShape *shape, SPStyle *style)
     if (style) sp_style_ref (style);
     if (shape->style) sp_style_unref (shape->style);
     shape->style = style;
-  
+
+    set_paint_from_ipaint(shape->fill.paint, style->fill);
+    set_paint_from_ipaint(shape->stroke.paint, style->stroke);
+
     // dirty cached versions
     if ( shape->cached_fill ) {
 	delete shape->cached_fill;

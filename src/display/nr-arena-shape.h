@@ -25,11 +25,76 @@
 #include "sp-paint-server.h"
 #include "nr-arena-item.h"
 
+#include "../color.h"
+
 #include "../livarot/Shape.h"
 
 NRType nr_arena_shape_get_type (void);
 
-struct NRArenaShape : public NRArenaItem{
+struct NRArenaShape : public NRArenaItem {
+	class Paint {
+	public:
+		enum Type {
+			NONE,
+			COLOR,
+			SERVER
+		};
+
+		Paint() : _type(NONE), _server(NULL) {
+			sp_color_set_rgb_rgba32(&_color, 0);
+		}
+		Paint(Paint const &p) { _assign(p); }
+		~Paint() { clear(); }
+
+		Type type() const { return _type; }
+		SPPaintServer *server() const { return _server; }
+		SPColor const &color() const { return _color; }
+
+		Paint &operator=(Paint const &p) {
+			set(p);
+			return *this;
+		}
+
+		void set(Paint const &p) {
+			clear();
+			_assign(p);
+		}
+		void set(SPColor const &color) {
+			clear();
+			_type = COLOR;
+			sp_color_copy(&_color, &color);
+		}
+		void set(SPPaintServer *server) {
+			clear();
+			if (server) {
+				_type = SERVER;
+				_server = server;
+				sp_object_ref(_server, NULL);
+			}
+		}
+		void clear() {
+			if ( _type == SERVER ) {
+				sp_object_unref(_server, NULL);
+				_server = NULL;
+			}
+			_type = NONE;
+		}
+
+	private:
+		Type _type;
+		SPColor _color;
+		SPPaintServer *_server;
+
+		void _assign(Paint const &p) {
+			_type = p._type;
+			_server = p._server;
+			sp_color_copy(&_color, &p._color);
+			if (_server) {
+				sp_object_ref(_server, NULL);
+			}
+		}
+	};
+
 	/* Shape data */
 	SPCurve *curve;
 	SPStyle *style;
@@ -37,6 +102,13 @@ struct NRArenaShape : public NRArenaItem{
 	/* State data */
 	NR::Matrix ctm;
 	
+	struct {
+		Paint paint;
+	} fill;
+	struct {
+		Paint paint;
+	} stroke;
+
 	SPPainter *fill_painter;
 	SPPainter *stroke_painter;
 	// the 2 cached polygons, for rasterizations uses

@@ -46,8 +46,7 @@ struct SPPainter {
 	SPPainterFillFunc fill;
 };
 
-struct SPPaintServer {
-	SPObject object;
+struct SPPaintServer : public SPObject {
 	/* List of paints */
 	SPPainter *painters;
 };
