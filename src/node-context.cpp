@@ -43,8 +43,6 @@ static void sp_node_context_setup (SPEventContext *ec);
 static gint sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event);
 static gint sp_node_context_item_handler (SPEventContext * event_context, SPItem * item, GdkEvent * event);
 
-static gboolean sp_node_context_stamp (SPNodeContext * node_context);
-
 static void nodepath_event_attr_changed (SPRepr * repr, const gchar * name, const gchar * old_value, const gchar * new_value, bool is_interactive, gpointer data);
 static SPReprEventVector nodepath_repr_events = {
 	NULL, /* destroy */
@@ -173,7 +171,8 @@ sp_node_context_setup (SPEventContext *ec)
 	nc->sel_changed_connection.disconnect();
 	nc->sel_changed_connection = SP_DT_SELECTION(ec->desktop)->connectChanged(SigC::bind(SigC::slot(&sp_node_context_selection_changed), (gpointer)nc));
 
-	item = sp_selection_item (SP_DT_SELECTION (ec->desktop));
+	SPSelection *selection = SP_DT_SELECTION (ec->desktop);
+	item = selection->singleItem();
 
 	nc->nodepath = NULL;
 	nc->knot_holder = NULL;
@@ -231,7 +230,7 @@ sp_node_context_selection_changed (SPSelection * selection, gpointer data)
 		sp_repr_unref (old_repr);
 	}
 
-	item = sp_selection_item (selection);
+	item = selection->singleItem();
 	
 	desktop = selection->desktop();
 	nc->nodepath = NULL;
@@ -274,7 +273,8 @@ sp_nodepath_update_from_item (SPNodeContext *nc, SPItem *item)
 		sp_knot_holder_destroy (nc->knot_holder);
 	}
 
-	item = sp_selection_item (SP_DT_SELECTION (desktop));
+	SPSelection *selection = SP_DT_SELECTION (desktop);
+	item = selection->singleItem();
 
 	nc->nodepath = NULL;
 	nc->knot_holder = NULL;
@@ -355,7 +355,7 @@ sp_node_context_item_handler (SPEventContext * event_context, SPItem * item, Gdk
 				if (!nc->drag) {
 					// find out clicked item, disregarding groups
 					item_ungrouped = sp_desktop_item_at_point (desktop, NR::Point(event->button.x, event->button.y), TRUE);
-					sp_selection_set_item (SP_DT_SELECTION (desktop), item_ungrouped);
+					SP_DT_SELECTION (desktop)->setItem (item_ungrouped);
 					ret = FALSE;
 				}
 				break;
@@ -510,19 +510,7 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 				ret = TRUE;
 			}
 			break;
-		case GDK_space:
-			// stamping when node-editing is a strange idea - the entire shape is duplicated 
-			// it may be useful however, so let it be 
-			if ((event->key.state & GDK_BUTTON1_MASK)
-					&& (nc->nodepath == NULL)) {
-				ret = sp_node_context_stamp(nc);
-			}
-			break;
 
-			// arrow keys:
-			// this was copied over from select-context.c, 
-			// with "sp_selection_" replaced by "sp_node_selected"; 
-			// maybe we could make this a shared function?
 		case GDK_Left: // move selection left
 		case GDK_KP_Left: 
 		case GDK_KP_4: 
@@ -736,30 +724,3 @@ sp_node_context_root_handler (SPEventContext * event_context, GdkEvent * event)
 	return ret;
 }
 
-static gboolean
-sp_node_context_stamp (SPNodeContext * nc)
-{
-	SPItem * original_item, * copy_item;
-	SPRepr * original_repr, * copy_repr;
-	gchar tstr[80];
-	SPEventContext * ec;
-	
-	ec = SP_EVENT_CONTEXT(nc);
-	original_item = sp_selection_item (SP_DT_SELECTION (ec->desktop));
-	if (original_item) {
-		original_repr = (SPRepr *)(SP_OBJECT (original_item)->repr);
-		copy_repr = sp_repr_duplicate (original_repr);
-		copy_item = (SPItem *) sp_document_add_repr (SP_DT_DOCUMENT (ec->desktop), 
-							     copy_repr);
-		
-		if (sp_svg_transform_write (tstr, 80, &original_item->transform)) {
-			sp_repr_set_attr (copy_repr, "transform", tstr);
-		} else {
-			sp_repr_set_attr (copy_repr, "transform", NULL);
-		}
-		
-		sp_repr_unref (copy_repr);
-		sp_document_done (SP_DT_DOCUMENT (ec->desktop));
-	}
-	return TRUE;
-}

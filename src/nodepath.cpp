@@ -409,6 +409,11 @@ static void stamp_repr(Path::Path *np)
 
 	SPRepr *old_repr = SP_OBJECT(np->path)->repr;
 	SPRepr *new_repr = sp_repr_duplicate(old_repr);
+
+	// remember the position of the item
+	gint pos = sp_repr_position (old_repr);
+	// remember parent
+	SPRepr *parent = sp_repr_parent (old_repr);
 	
 	SPCurve *curve = create_curve(np);
 	gchar *typestr = create_typestr(np);
@@ -418,8 +423,11 @@ static void stamp_repr(Path::Path *np)
 	sp_repr_set_attr (new_repr, "d", svgpath);
 	sp_repr_set_attr (new_repr, "sodipodi:nodetypes", typestr);
 
-	sp_document_add_repr(SP_DT_DOCUMENT (np->desktop),
-			     new_repr);
+	// add the new repr to the parent
+	sp_repr_append_child (parent, new_repr);
+	// move to the saved position 
+	sp_repr_set_position_absolute (new_repr, pos > 0 ? pos : 0);
+
 	sp_document_done (SP_DT_DOCUMENT (np->desktop));
 
 	sp_repr_unref (new_repr);
