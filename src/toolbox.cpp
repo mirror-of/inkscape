@@ -1802,8 +1802,8 @@ static void sp_ddc_defaults(GtkWidget *, SPWidget *tbl)
         {"mass", 0.02},
         {"drag", 1.0},
         {"angle", 30.0},
-        {"width", 0.2},
-        {"thinning", 0.25},
+        {"width", 0.15},
+        {"thinning", 0.1},
         {"flatness", 0.9}
     };
 
@@ -1829,7 +1829,7 @@ sp_calligraphy_toolbox_new (SPDesktop *desktop)
     /* Width */
     {
         GtkWidget *hb = sp_tb_spinbutton (_("Width:"), _("The width of the calligraphic pen (relative to the visible canvas area)"), 
-                                          "tools.calligraphic", "width", 0.2,
+                                          "tools.calligraphic", "width", 0.15,
                                           NULL, (SPWidget *) tbl, TRUE, "altx-calligraphy",
                                           0.01, 1.0, 0.01, 0.1, 
                                           sp_ddc_width_value_changed);
@@ -1839,7 +1839,7 @@ sp_calligraphy_toolbox_new (SPDesktop *desktop)
     /* Thinning */
     {
         GtkWidget *hb = sp_tb_spinbutton (_("Thinning:"), _("How much velocity thins the stroke (> 0 makes fast strokes thinner, < 0 makes them broader, 0 makes width independent of velocity)"), 
-                                          "tools.calligraphic", "thinning", 0.25,
+                                          "tools.calligraphic", "thinning", 0.1,
                                           NULL, (SPWidget *) tbl, FALSE, NULL,
                                           -1.0, 1.0, 0.01, 0.1, 
                                           sp_ddc_velthin_value_changed);
@@ -1860,8 +1860,8 @@ sp_calligraphy_toolbox_new (SPDesktop *desktop)
     {
         GtkWidget *hb = sp_tb_spinbutton (_("Angle:"), _("The angle of the pen's nib (in degrees; 0 = horizontal; has no effect if flatness = 0)"), 
                                           "tools.calligraphic", "angle", 30,
-                                          NULL, (SPWidget *) tbl, FALSE, NULL,
-                                          -90.0, 90.0, 5.0, 15.0,
+                                          NULL, (SPWidget *) tbl, TRUE, "calligraphy-angle",
+                                          -90.0, 90.0, 1.0, 10.0,
                                           sp_ddc_angle_value_changed, 1, 0);
         gtk_box_pack_start (GTK_BOX (tbl), hb, FALSE, FALSE, AUX_BETWEEN_BUTTON_GROUPS);
     }
