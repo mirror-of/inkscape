@@ -2468,6 +2468,7 @@ node_ctrl_moved (SPKnot *knot, NRPoint *p, guint state, gpointer data)
 		double a_snapped, a_ortho;
 
 		int snaps = prefs_get_int_attribute ("options.rotationsnapsperpi", "value", 12);
+		/* 0 interpreted as "no snapping". */
 
 		// the closest PI/snaps angle, starting from zero
 		a_snapped = floor (rnew.a/(M_PI/snaps) + 0.5) * (M_PI/snaps);
