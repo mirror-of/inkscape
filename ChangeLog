@@ -1,3 +1,8 @@
+2004-10-26  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/extension/output.cpp: don't reset modified flag until after
+	save has happened, in case it fails.  Fixes 1004134.
+
 2004-10-25  Bryce Harringotn <bryce@bryceharrington.org>
 
 	* file.cpp, file.h, dialogs/export.cpp: Adding error return logic
