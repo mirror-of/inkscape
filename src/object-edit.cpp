@@ -88,8 +88,7 @@ static gdouble sp_pattern_extract_scale (SPPattern *pat)
 
 static NR::Point sp_pattern_extract_trans (SPPattern *pat)
 {
-    NR::Point trans = NR::Point( pat->patternTransform[4],pat->patternTransform[5]);
-    return  trans;
+    return NR::Point(pat->patternTransform[4], pat->patternTransform[5]);
 }
 
 static void
@@ -98,10 +97,8 @@ sp_pattern_xy_set (SPItem *item, const NR::Point &p, guint state)
     SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
 
      if (state)  {
-         gdouble x = p[NR::X] - pat->patternTransform[4];
-         gdouble y = p[NR::Y] - pat->patternTransform[5];
-
-         sp_shape_adjust_pattern (item, NULL, NR::Matrix(NR::translate(x,y)));
+	 const NR::Point q = p - sp_pattern_extract_trans(pat);
+         sp_shape_adjust_pattern (item, NULL, NR::Matrix(NR::translate(q)));
      }
 
      item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -110,12 +107,8 @@ sp_pattern_xy_set (SPItem *item, const NR::Point &p, guint state)
 
 static NR::Point sp_pattern_xy_get (SPItem *item)
 {
-    SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
-
-    gdouble x = pat->patternTransform[4];
-    gdouble y = pat->patternTransform[5];
-
-    return  NR::Point(x, y);
+    const SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
+    return sp_pattern_extract_trans(pat);
 
 }
 
@@ -129,7 +122,7 @@ static NR::Point sp_pattern_angle_get (SPItem *item)
     gdouble scale = sp_pattern_extract_scale(pat);
     gdouble theta = sp_pattern_extract_theta(pat, scale);
     delta = delta * NR::Matrix(NR::rotate(theta))*NR::Matrix(NR::scale(scale,scale));
-    delta = delta + NR::Point(pat->patternTransform[4], pat->patternTransform[5]);
+    delta = delta + sp_pattern_extract_trans(pat);
     return  delta;
 
 }
@@ -142,7 +135,7 @@ sp_pattern_angle_set (SPItem *item, const NR::Point &p, guint state)
     SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
 
     // get the angle from pattern 0,0 to the cursor pos
-    NR::Point delta = p - NR::Point( pat->patternTransform[4], pat->patternTransform[5]);
+    NR::Point delta = p - sp_pattern_extract_trans(pat);
     gdouble theta = atan2 (delta );
 
 	if ( state & GDK_CONTROL_MASK ) {
@@ -152,8 +145,9 @@ sp_pattern_angle_set (SPItem *item, const NR::Point &p, guint state)
     // get the scale from the current transform so we can keep it.
     gdouble scl = sp_pattern_extract_scale(pat);
     NR::Matrix rot =  NR::Matrix(NR::rotate(theta)) * NR::Matrix(NR::scale(scl,scl));
-    rot[4]= pat->patternTransform[4];
-    rot[5]= pat->patternTransform[5];
+    const NR::Point t = sp_pattern_extract_trans(pat);
+    rot[4] = t[NR::X];
+    rot[5] = t[NR::Y];
     sp_shape_set_pattern (item, NULL,  rot);
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -164,13 +158,11 @@ sp_pattern_scale_set (SPItem *item, const NR::Point &p, guint state)
     SPPattern *pat = SP_PATTERN (SP_STYLE_FILL_SERVER (SP_OBJECT(item)->style));
 
     // Get the scale from the position of the knotholder,
-    gdouble dx = p[NR::X] - pat->patternTransform[4];
-    gdouble dy = p[NR::Y] - pat->patternTransform[5];
-    gdouble s = dx * dx + dy * dy;
-    s = sqrt(s);
-    gdouble pat_x =pattern_width(pat)*0.5;
-    gdouble pat_y =pattern_height(pat)*0.5;
-    gdouble pat_h = sqrt(pat_x*pat_x + pat_y*pat_y);
+    NR::Point d = p - sp_pattern_extract_trans(pat);
+    gdouble s = NR::L2(p);
+    gdouble pat_x = pattern_width(pat) * 0.5;
+    gdouble pat_y = pattern_height(pat) * 0.5;
+    gdouble pat_h = hypot(pat_x, pat_y);
     gdouble scl = s / pat_h;
 
     // get angle from current transform, (need get current scale first to calculate angle)
@@ -178,8 +170,9 @@ sp_pattern_scale_set (SPItem *item, const NR::Point &p, guint state)
     gdouble theta = sp_pattern_extract_theta(pat,oldscale);
 
     NR::Matrix rot =  NR::Matrix(NR::rotate(theta)) * NR::Matrix(NR::scale(scl,scl));
-    rot[4]= pat->patternTransform[4];
-    rot[5]= pat->patternTransform[5];
+    const NR::Point t = sp_pattern_extract_trans(pat);
+    rot[4] = t[NR::X];
+    rot[5] = t[NR::Y];
     sp_shape_set_pattern (item, NULL, rot);
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
@@ -197,7 +190,7 @@ static NR::Point sp_pattern_scale_get (SPItem *item)
     a[4] = 0;
     a[5] = 0;
     delta = delta * a;
-    delta = delta + NR::Point(pat->patternTransform[4], pat->patternTransform[5]);
+    delta = delta + sp_pattern_extract_trans(pat);
     return  delta;
 
 }
