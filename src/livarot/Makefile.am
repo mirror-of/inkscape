@@ -30,4 +30,4 @@ libvarot_a_SOURCES = \
 	MySeg.cpp MySeg.h
 
 Path_test_SOURCES = Path-test.cpp
-Path_test_LDADD = ../libnr/libnr.a -lglib-2.0 libvarot.a
+Path_test_LDADD = libvarot.a ../libnr/libnr.a -lglib-2.0

@@ -1,5 +1,7 @@
 2004-02-24  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/livarot/Makefile.am (Path_test_LDADD): Fix order of libs.
+
 	* src/select-toolbar.cpp (sp_object_layout_any_value_changed):
 	NR::Matrix'ification.
 
