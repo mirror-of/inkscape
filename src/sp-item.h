@@ -1,9 +1,11 @@
 #ifndef __SP_ITEM_H__
 #define __SP_ITEM_H__
 
+/** \file
+ * Some things pertinent to all visible shapes: SPItem, SPItemView, SPItemCtx, SPItemClass, SPEvent.
+ */
+
 /*
- * Abstract base class for all nodes
- *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
@@ -83,6 +85,7 @@ struct SPItemCtx {
 	NRMatrix i2vp;
 };
 
+/** Abstract base class for all visible shapes. */
 struct SPItem : public SPObject {
 	unsigned int sensitive : 1;
 	unsigned int printable : 1;

@@ -1,6 +1,8 @@
-/*
+/** \file
  * Inkscape::MessageContext - class for message tracking
- *
+ */
+
+/*
  * Authors:
  *   MenTaLguY <mental@rydia.net>
  *

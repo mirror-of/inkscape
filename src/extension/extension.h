@@ -1,9 +1,11 @@
 #ifndef __INK_EXTENSION_H__
 #define __INK_EXTENSION_H__
 
+/** \file
+ * Frontend to certain, possibly pluggable, actions.
+ */
+
 /*
- * Frontend to certain, possibly pluggable, actions
- *
  * Authors:
  *   Ted Gould <ted@gould.cx>
  *

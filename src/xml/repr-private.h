@@ -1,9 +1,11 @@
 #ifndef __SP_REPR_PRIVATE_H__
 #define __SP_REPR_PRIVATE_H__
 
-/*
+/** \file
  * Fuzzy DOM-like tree implementation
- *
+ */
+
+/*
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Frank Felfe <innerspace@iname.com>

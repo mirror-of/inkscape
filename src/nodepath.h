@@ -1,9 +1,11 @@
 #ifndef __SP_NODEPATH_H__
 #define __SP_NODEPATH_H__
 
-/**
+/** \file
  * Path handler in node edit mode
- *
+ */
+
+/*
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *

@@ -1,6 +1,8 @@
 #ifndef SEEN_NR_POINT_H
 #define SEEN_NR_POINT_H
 
+/** \file */
+
 #include <math.h>
 #include <stdexcept>
 #include <iostream>

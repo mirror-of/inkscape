@@ -7,7 +7,6 @@
 
 class NArtBpath {
 public:
-    /*< public >*/
     NRPathcode code;
     double x1, y1;
     double x2, y2;

@@ -121,11 +121,11 @@ public:
 	 * text being appended.  This can probably be addressed fairly easily (see comments in
 	 * code) if this is an issue for new callers.
 	 *
-	 * Requires: text is valid UTF8, or null.
-	 *           Formally: text==NULL || g_utf8_validate(text,len,NULL).
+	 * \pre text is valid UTF-8, or null.
+	 *      Formally: text==NULL || g_utf8_validate(text,len,NULL).
 	 *
-	 * @param len Our sole existing caller (widgets/font_selector.cpp) uses len=-1.  N.B. The current
-	 *   implementation may be buggy for len >= 0, especially for len==0.
+	 * \param len Our sole existing caller (widgets/font_selector.cpp) uses len=-1.  N.B. The current
+	 *   implementation may be buggy for non-negative len, especially for len==0.
 	 */
 	void            AppendUTF8(char const *text, int len);
 

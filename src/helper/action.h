@@ -1,9 +1,11 @@
 #ifndef __SP_ACTION_H__
 #define __SP_ACTION_H__
 
-/*
+/** \file
  * Inkscape UI action implementation
- *
+ */
+
+/*
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *

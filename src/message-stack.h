@@ -1,6 +1,8 @@
+/** \file
+ * Inkscape::MessageStack - class for managing current status messages
+ */
+
 /*
- * Inkscape::MessageStack - class for mangaging current status messages
- *
  * Authors:
  *   MenTaLguY <mental@rydia.net>
  *

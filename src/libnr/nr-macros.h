@@ -37,7 +37,7 @@
 #ifndef CLAMP
 /** Returns v bounded to within [a, b].  If v is NaN then returns a. 
  *
- *  Requires: a <= b.
+ *  \pre \a a \<= \a b.
  */
 # define CLAMP(v,a,b)	\
 	(assert (a <= b),	\
