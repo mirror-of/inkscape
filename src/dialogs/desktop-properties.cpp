@@ -184,10 +184,10 @@ static PaperSize const inkscape_papers[] = {
 #endif
 
     { "CSE", 462, 649, SP_UNIT_PT },
-    { "US #10 Commercial Envelope", 4.125, 9.5, SP_UNIT_IN },
+    { "US #10 Envelope", 4.125, 9.5, SP_UNIT_IN }, // TODO: Select landscape by default.
     /* See http://www.hbp.com/content/PCR_envelopes.cfm for a much larger list of US envelope
        sizes. */
-    { "DLE", 312, 624, SP_UNIT_PT },
+    { "DL Envelope", 110, 220, SP_UNIT_MM }, // TODO: Select landscape by default.
     { "Ledger/Tabloid", 11, 17, SP_UNIT_IN },
     /* Note that `Folio' (used in QPrinter/KPrinter) is deliberately absent from this list, as it
        means different sizes to different people: different people may expect the width to be
@@ -622,12 +622,8 @@ sp_doc_dialog_paper_orientation_selected(GtkWidget *widget, gpointer data)
         std::swap(w, h);
     }
 
-    gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(TRUE));
-
     gtk_adjustment_set_value(aw, w);
     gtk_adjustment_set_value(ah, h);
-
-    gtk_object_set_data(GTK_OBJECT(dlg), "update", GINT_TO_POINTER(FALSE));
 }
 
 /**
