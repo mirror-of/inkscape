@@ -502,10 +502,8 @@ sp_font_preview_destroy (GtkObject *object)
 		fprev->font=NULL;
 	}
 	
-	if (fprev->phrase) {
-		g_free (fprev->phrase);
-		fprev->phrase = NULL;
-	}
+	g_free(fprev->phrase);
+	fprev->phrase = NULL;
 	
 	if (GTK_OBJECT_CLASS (fp_parent_class)->destroy)
 		GTK_OBJECT_CLASS (fp_parent_class)->destroy (object);
@@ -523,9 +521,7 @@ sp_font_preview_size_request (GtkWidget *widget, GtkRequisition *req)
 static gint
 sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 {
-	SPFontPreview *fprev;
-	
-	fprev = SP_FONT_PREVIEW (widget);
+	SPFontPreview *fprev = SP_FONT_PREVIEW(widget);
 	
 	if (GTK_WIDGET_DRAWABLE (widget)) {
 		if (fprev->rfont) {
@@ -537,7 +533,7 @@ sp_font_preview_expose (GtkWidget *widget, GdkEventExpose *event)
 			
 			double theSize = NR_MATRIX_DF_EXPANSION (&fprev->rfont->style.transform);
 			
-			gchar *p;
+			gchar const *p;
 			if (fprev->phrase) {
 				p = fprev->phrase;
 			} else {
