@@ -408,7 +408,7 @@ sp_verb_action_selection_perform (SPAction *action, void * data, void * pdata)
             sp_selected_path_reverse ();
             break;
         case SP_VERB_SELECTION_POTRACE:
-            Inkscape::Potrace::Potrace::convertImageToPath();
+            Inkscape::Trace::convertImageToPath();
             break;
 
         case SP_VERB_SELECTION_COMBINE:

@@ -1,11 +1,10 @@
 /*
- * A quick hack to use the print output to write out a file.  This
- * then makes 'save as...' Postscript.
+ * A simple integration of Potrace into Inkscape.
  *
  * Authors:
- *   Ted Gould <ted@gould.cx>
+ *   Bob Jamison <rjamison@titan.com>
  *
- * Copyright (C) 2004 Authors
+ * Copyright (C) 2004 Bob Jamison
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -14,6 +13,7 @@
 #define __INKSCAPE_POTRACE_H__
 
 #include <glib.h>
+#include <trace.h>
 
 namespace Inkscape
 {
@@ -21,22 +21,29 @@ namespace Potrace
 {
 
 
-class Potrace
+class PotraceTracingEngine : public TracingEngine
 {
 
     public:
 
-    Potrace()
+    /**
+     *
+     */
+    PotraceTracingEngine()
         {}
 
-    virtual ~Potrace()
+    /**
+     *
+     */
+    virtual ~PotraceTracingEngine()
         {}
 
-    
-    static gboolean convertImageToPath();
+    /**
+     *
+     */
+    virtual char *getPathDataFromPixbuf(GdkPixbuf *pixbuf);
 
-
-};//class Potrace
+};//class PotraceTracingEngine
 
 
 

@@ -29,24 +29,6 @@ namespace Potrace
 {
 
 
-class PotraceImpl : public Potrace
-{
-
-    public:
-
-    PotraceImpl()
-        {}
-
-    virtual ~PotraceImpl()
-        {}
-
-    //## Cutoff brightness for black/white
-    double threshold;
-
-
-};//class PotraceImpl
-
-
 static void
 writePaths(path_t *plist, Inkscape::SVGOStringStream& data)
 {
@@ -91,14 +73,13 @@ writePaths(path_t *plist, Inkscape::SVGOStringStream& data)
 
 
 
-static char *
-getPathDataFromPixbuf(GdkPixbuf * pixbuf)
+char *
+PotraceTracingEngine::getPathDataFromPixbuf(GdkPixbuf * pixbuf)
 {
     if (!pixbuf)
         return NULL;
 
-    PotraceImpl potrace;
-    potrace.threshold = 0.5;
+    double threshold = 0.5;
 
     //##Get the dimensions
     int width       = gdk_pixbuf_get_width(pixbuf);
@@ -112,7 +93,9 @@ getPathDataFromPixbuf(GdkPixbuf * pixbuf)
 
     bitmap_t *bm = bm_new(width, height);
     bm_clear(bm, 0);
-    double cutoff =  3.0 * ( potrace.threshold * 256.0 );
+
+    double cutoff =  3.0 * ( threshold * 256.0 );
+
     //##Read the data out of the Pixbuf
     int x,y;
     int row=0;
@@ -121,8 +104,8 @@ getPathDataFromPixbuf(GdkPixbuf * pixbuf)
         guchar *p = pixdata + row;
         for (x=0 ; x<width ; x++)
             {
-            double sum = (double)p[0]+(double)p[1]+(double)p[2];
-            BM_UPUT(bm, x, y, sum > cutoff ? 0 : 1);
+            double brightness = (double)p[0]+(double)p[1]+(double)p[2];
+            BM_UPUT(bm, x, y, brightness > cutoff ? 0 : 1);
             p += n_channels;
             }
         row += rowstride;
@@ -173,70 +156,6 @@ getPathDataFromPixbuf(GdkPixbuf * pixbuf)
     return d;
 }
 
-
-
-gboolean
-Potrace::convertImageToPath()
-{
-    if (!SP_ACTIVE_DESKTOP)
-        {
-        g_warning("Potrace::convertImageToPath: no active desktop\n");
-        return false;
-        }
-    SPSelection *sel = SP_ACTIVE_DESKTOP->selection;
-    if (!sel)
-        {
-        g_warning("Potrace::convertImageToPath: nothing selected\n");
-        return false;
-        }
-
-    if (!SP_ACTIVE_DOCUMENT)
-        {
-        g_warning("Potrace::convertImageToPath: no active document\n");
-        return false;
-        }
-    SPDocument *doc = SP_ACTIVE_DOCUMENT;
-
-    SPItem *item = sel->singleItem();
-    if (!item)
-        {
-        g_warning("Potrace::convertImageToPath: null image\n");
-        return false;
-        }
-
-    if (!SP_IS_IMAGE(item))
-        {
-        g_warning("Potrace::convertImageToPath: object not an image\n");
-        return false;
-        }
-
-    SPImage *img = SP_IMAGE(item);
-
-    GdkPixbuf *pixbuf = img->pixbuf;
-
-    if (!pixbuf)
-        {
-        g_warning("Potrace::convertImageToPath: image has no bitmap data\n");
-        return false;
-        }
-
-    char *d = getPathDataFromPixbuf(pixbuf);
-
-    SPRepr   *pathRepr  = sp_repr_new("path");
-    sp_repr_set_attr(pathRepr, "d", d);
-    //SPObject *reprobj   = doc->getObjectByRepr(pathRepr);
-
-    //#Add to tree
-    SPRepr *par         = sp_repr_parent(SP_OBJECT(img)->repr);
-    sp_repr_add_child(par, pathRepr, SP_OBJECT(img)->repr);
-
-    free(d);
-
-    //## inform the document, so we can undo
-    sp_document_done(doc);
-
-    return true;
-}
 
 
 
