@@ -16,10 +16,8 @@
 #define noSP_DOCUMENT_DEBUG_UNDO
 
 #include <config.h>
-#include <string.h>
 #include <glib.h>
-#include <errno.h>
-#include <stdlib.h>
+#include <string.h>
 #include <gtk/gtkmain.h>
 #include "xml/repr.h"
 #include "xml/repr-action.h"
@@ -32,6 +30,7 @@
 #include "document-private.h"
 #include "desktop.h"
 #include "version.h"
+#include "dir-util.h"
 
 #include "display/nr-arena-item.h"
 #include "display/nr-arena.h"
@@ -55,8 +54,6 @@ static void sp_document_init (SPDocument *document);
 static void sp_document_dispose (GObject *object);
 
 static gint sp_document_idle_handler (gpointer data);
-
-char *inkscape_rel2abs (const char *path, const char *base, char *result, const size_t size);
 
 gboolean sp_document_resource_list_free (gpointer key, gpointer value, gpointer data);
 
@@ -452,6 +449,8 @@ sp_document_height (SPDocument * document)
 void
 sp_document_set_uri (SPDocument *document, const gchar *uri)
 {
+	SPRepr *repr;
+
 	g_return_if_fail (document != NULL);
 	g_return_if_fail (SP_IS_DOCUMENT (document));
 
@@ -492,6 +491,11 @@ sp_document_set_uri (SPDocument *document, const gchar *uri)
 		document->base = NULL;
 		document->name = g_strdup (document->uri);
 	}
+
+	// update saveable repr attributes
+	repr = sp_document_repr_root (document);
+	sp_repr_set_attr (repr, "sodipodi:docbase", document->base);
+	sp_repr_set_attr (repr, "sodipodi:docname", document->name);
 
 	g_signal_emit (G_OBJECT (document), signals [URI_SET], 0, document->uri);
 }
@@ -836,109 +840,4 @@ sp_document_resource_list_free (gpointer key, gpointer value, gpointer data)
 {
 	g_slist_free ((GSList *) value);
 	return TRUE;
-}
-
-
-// based on g_rel2abs function by Shigio Yamaguchi
-
-/* current == "./", parent == "../" */
-static char dots[] = {'.', '.', G_DIR_SEPARATOR, '\0'};
-static char *parent = dots;
-static char *current = dots + 1;
-
-/**
- * \brief   Convert an relative path name into absolute.
- *
- *	\param path	relative path
- *	\param base	base directory (must be absolute path)
- *	\param result	result buffer
- *	\param size	size of result buffer
- *	\return		!= NULL: absolute path
- *			== NULL: error
- */
-char *
-inkscape_rel2abs (const char *path, const char *base, char *result, const size_t size)
-{
-  const char *pp, *bp;
-  /* endp points the last position which is safe in the result buffer. */
-  const char *endp = result + size - 1;
-  char *rp;
-  int length;
-  if (*path == G_DIR_SEPARATOR)
-    {
-      if (strlen (path) >= size)
-	goto erange;
-      strcpy (result, path);
-      goto finish;
-    }
-  else if (*base != G_DIR_SEPARATOR || !size)
-    {
-      errno = EINVAL;
-      return (NULL);
-    }
-  else if (size == 1)
-    goto erange;
-  if (!strcmp (path, ".") || !strcmp (path, current))
-    {
-      if (strlen (base) >= size)
-	goto erange;
-      strcpy (result, base);
-      /* rp points the last char. */
-      rp = result + strlen (base) - 1;
-      if (*rp == G_DIR_SEPARATOR)
-	*rp = 0;
-      else
-	rp++;
-      /* rp point NULL char */
-      if (*++path == G_DIR_SEPARATOR)
-	{
-	  /* Append G_DIR_SEPARATOR to the tail of path name. */
-	  *rp++ = G_DIR_SEPARATOR;
-	  if (rp > endp)
-	    goto erange;
-	  *rp = 0;
-	}
-      goto finish;
-    }
-  bp = base + strlen (base);
-  if (*(bp - 1) == G_DIR_SEPARATOR)
-    --bp;
-  /* up to root. */
-  for (pp = path; *pp && *pp == '.';)
-    {
-      if (!strncmp (pp, parent, 3))
-	{
-	  pp += 3;
-	  while (bp > base && *--bp != G_DIR_SEPARATOR)
-	    ;
-	}
-      else if (!strncmp (pp, current, 2))
-	{
-	  pp += 2;
-	}
-      else if (!strncmp (pp, "..\0", 3))
-	{
-	  pp += 2;
-	  while (bp > base && *--bp != G_DIR_SEPARATOR)
-	    ;
-	}
-      else
-	break;
-    }
-  /* down to leaf. */
-  length = bp - base;
-  if (length >= size)
-    goto erange;
-  strncpy (result, base, length);
-  rp = result + length;
-  if (*pp || *(pp - 1) == G_DIR_SEPARATOR || length == 0)
-    *rp++ = G_DIR_SEPARATOR;
-  if (rp + strlen (pp) > endp)
-    goto erange;
-  strcpy (rp, pp);
-finish:
-  return result;
-erange:
-  errno = ERANGE;
-  return (NULL);
 }
