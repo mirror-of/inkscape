@@ -197,7 +197,7 @@ all_libs = \
 
 
 inkscape_SOURCES = \
-	$(libinkscape_a_SOURCES) = \
+	$(libinkscape_a_SOURCES) \
 	main.cpp
 
 inkscape_LDADD = \
@@ -218,7 +218,7 @@ EXTRA_PROGRAMS = inkview
 
 
 inkview_SOURCES = \
-	$(libinkscape_a_SOURCES) = \
+	$(libinkscape_a_SOURCES) \
 	inkview.cpp
 
 
