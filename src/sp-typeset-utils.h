@@ -18,6 +18,8 @@
 #include "livarot/Shape.h"
 #include "livarot/LivarotDefs.h"
 
+#include "libnrtype/nr-font.h"
+
 #include <pango/pango.h>
 #include <glib.h>
 
@@ -202,7 +204,7 @@ public:
   virtual void                 GlyphsAndPositions(int start_ind,int end_ind,to_SVG_context *hungry);
   virtual void                 GlyphsInfo(int start_ind,int end_ind,int &nbG,double &totLength);
 
-  void                         AddBox(int st,int en,bool whit,bool retu,PangoGlyphString* from,int offset,PangoFont* theFont,NR::Point &cumul);
+  void                         AddBox(int st,int en,bool whit,bool retu,PangoGlyphString* from,int offset,PangoFont* theFont,NRFont* inkFont,NR::Point &cumul);
   void                         SetTextWithAttrs(text_with_info* inText,int flags);
   void                         AddDullGlyphs(to_SVG_context *hungry,double &cumul,int c_st,int c_en);
   void                         AddAttributedGlyphs(to_SVG_context *hungry,double &cumul,int c_st,int c_en,PangoAttrIterator *theIt);

@@ -170,7 +170,7 @@ sp_typeset_init (SPTypeset *object)
   typeset->layoutDirty=false;
   typeset->destDirty=false;
   typeset->exclDirty=false;
-  typeset->stdLayoutAlgo=false;
+  typeset->stdLayoutAlgo=true;
   
   typeset->theSrc=NULL;
   typeset->theDst=NULL;
@@ -211,7 +211,7 @@ static void sp_typeset_build (SPObject *object, SPDocument * document, SPRepr * 
 	sp_object_read_attr (object, "inkscape:dstPath");
 	sp_object_read_attr (object, "inkscape:dstBox");
 	sp_object_read_attr (object, "inkscape:dstColumn");
-	sp_object_read_attr (object, "inkscape:layoutOption");
+	sp_object_read_attr (object, "inkscape:layoutOptions");
 
 	if (((SPObjectClass *) (parent_class))->build)
 		(* ((SPObjectClass *) (parent_class))->build) (object, document, repr);

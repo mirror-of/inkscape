@@ -22,6 +22,11 @@
 #include "livarot/Shape.h"
 #include "livarot/LivarotDefs.h"
 
+#include "libnrtype/nr-type-directory.h"
+#include "libnrtype/nr-typeface.h"
+#include "libnrtype/nr-font.h"
+#include "libnrtype/nr-type-pos-def.h"
+
 #include "xml/repr.h"
 
 #include <pango/pango.h>
@@ -267,7 +272,7 @@ void         text_with_info::AppendPangoText(char* inText)
           add++;
           pos=g_utf8_next_char(pos);
         }
-        char_offset[unicode_length]=olen;
+        char_offset[unicode_length]=olen+slen;
         if ( kern_x ) {
           for (int i=0;i<len;i++) kern_x[at+i]=0;
         }
@@ -842,15 +847,15 @@ box_solution   dest_shape_chunker::NextLine(box_solution& after,double asc,doubl
  */
 
 #ifdef WITH_XFT
-//PangoFontMap  *theFontMap=NULL;
+PangoFontMap  *theFontMap=NULL;
 #endif
 
 pango_text_chunker::pango_text_chunker(text_with_info* inText,char* font_family,double font_size,int flags):text_chunker(inText->UTF8Text())
 {
 #ifdef WITH_XFT
-//  if ( theFontMap ) {
- //   theFontMap=pango_ft2_font_map_new();
-//  }
+  if ( theFontMap == NULL ) {
+    theFontMap=pango_ft2_font_map_new();
+  }
 #endif
   
   theText=inText;
@@ -1100,12 +1105,12 @@ void                 pango_text_chunker::GlyphsAndPositions(int start_ind,int en
   }
   if ( theIt ) pango_attr_iterator_destroy(theIt);
 }
-void                         pango_text_chunker::AddBox(int st,int en,bool whit,bool retu,PangoGlyphString* from,int offset,PangoFont* theFont,NR::Point &cumul)
+void                         pango_text_chunker::AddBox(int st,int en,bool whit,bool retu,PangoGlyphString* from,int offset,PangoFont* theFont,NRFont* inkFont,NR::Point &cumul)
 {
   if ( en < st ) return;
-  PangoRectangle ink_rect,logical_rect;
-  int   cd_offset=charas[offset].code_point;
-  pango_glyph_string_extents_range(from,charas[st].code_point-cd_offset,charas[en].code_point-cd_offset+1,theFont,&ink_rect,&logical_rect);
+//  PangoRectangle ink_rect,logical_rect;
+//  int   cd_offset=charas[offset].code_point;
+//  pango_glyph_string_extents_range(from,charas[st].code_point-cd_offset,charas[en].code_point-cd_offset+1,theFont,&ink_rect,&logical_rect);
   
   if ( retu ) whit=false; // so that returns don't get aggregated
   
@@ -1133,7 +1138,7 @@ void                         pango_text_chunker::AddBox(int st,int en,bool whit,
     int n_en=i;
     while ( n_en <= en && charas[n_en].code_point == cd_p ) n_en++;
     while ( cur_g < from->num_glyphs-1 && from->log_clusters[cur_g+1] <= i-offset ) cur_g++;
-    pango_glyph_string_extents_range(from,charas[i].code_point-cd_offset,charas[i].code_point-cd_offset+1,theFont,&ink_rect,&logical_rect);
+//    pango_glyph_string_extents_range(from,charas[i].code_point-cd_offset,charas[i].code_point-cd_offset+1,theFont,&ink_rect,&logical_rect);
     if ( theText->kern_x ) {
       cur_pos+=theText->kern_x[cd_p];
     }
@@ -1142,13 +1147,16 @@ void                         pango_text_chunker::AddBox(int st,int en,bool whit,
     }
     for (int j=i;j<n_en;j++) {
       charas[j].x_pos=cur_pos;
-      charas[j].x_adv=pango_to_ink*((double)(logical_rect.width));
+      charas[j].x_adv=0/*pango_to_ink*((double)(logical_rect.width))*/;
       charas[j].y_pos=cumul[1];
       if ( cumul[1] < min_y ) min_y=cumul[1];
       if ( cumul[1] > max_y ) max_y=cumul[1];
       charas[j].x_dpos=pango_to_ink*((double)(from->glyphs[cur_g].geometry.x_offset));
       charas[j].y_dpos=pango_to_ink*((double)(from->glyphs[cur_g].geometry.y_offset));
     }
+    NR::Point t_adv=nr_font_glyph_advance_get (inkFont, from->glyphs[cur_g].glyph);
+    charas[i].x_adv=t_adv[0];
+//    charas[i].x_adv=pango_to_ink*((double)(from->glyphs[cur_g].geometry.width));
     cur_pos+=charas[i].x_adv;
     i=n_en;
   }
@@ -1178,11 +1186,11 @@ void                         pango_text_chunker::SetTextWithAttrs(text_with_info
   PangoLogAttr*         pAttrs;
   
 #ifdef WITH_XFT
-//  if ( theFontMap ) {
-//    pContext=pango_ft2_font_map_create_context((PangoFT2FontMap*)theFontMap);
-//  } else {
+  if ( theFontMap ) {
+    pContext=pango_ft2_font_map_create_context((PangoFT2FontMap*)theFontMap);
+  } else {
     pContext=gdk_pango_context_get();
-//  }
+  }
 #else
   pContext=gdk_pango_context_get();
 #endif
@@ -1199,6 +1207,16 @@ void                         pango_text_chunker::SetTextWithAttrs(text_with_info
   } else {
     tAttr=pango_attr_list_new();
   }
+  
+  int       next_par_end=0;
+  int       next_par_start=0;
+  {
+    for (int i=0;i<=srcLen;i++) charas[i].code_point=0;
+    for (int i=0;i<theText->UnicodeLength();i++) {
+      for (int j=theText->char_offset[i];j<theText->char_offset[i+1];j++) charas[j].code_point=i;
+    }
+    charas[theText->UTF8Length()].code_point=theText->UnicodeLength();
+  }
   GList*  pItems=pango_itemize(pContext,theText->UTF8Text(),0,theText->UTF8Length(),tAttr,NULL);
   GList*  pGlyphs=NULL;
   for (GList* l=pItems;l;l=l->next) {
@@ -1207,19 +1225,13 @@ void                         pango_text_chunker::SetTextWithAttrs(text_with_info
     PangoGlyphString*  nGl=pango_glyph_string_new();
     pango_shape((theText->UTF8Text())+theItem->offset,theItem->length,&theItem->analysis,nGl);
     pGlyphs=g_list_append(pGlyphs,nGl);
-  }
-  {
-    for (int i=0;i<=srcLen;i++) charas[i].code_point=0;
-    for (int i=0;i<theText->UnicodeLength();i++) {
-      for (int j=theText->char_offset[i];j<theText->char_offset[i+1];j++) charas[j].code_point=i;
-    }
-    charas[theText->UTF8Length()].code_point=theText->UnicodeLength();
     
-    for (int i=srcLen;i>=0;i--) {
+    int start_c=charas[theItem->offset].code_point;
+    for (int i=theItem->offset+theItem->length;i>=theItem->offset;i--) {
       int cur_c=charas[i].code_point;
       if ( cur_c < 0 ) cur_c=0;
       if ( cur_c > srcLen ) cur_c=srcLen;
-      pAttrs[i]=pAttrs[cur_c];
+      pAttrs[i]=pAttrs[cur_c-start_c+theItem->offset];
       if ( pAttrs[i].is_word_start ) {
         if ( i > 0 && charas[i-1].code_point == charas[i].code_point ) {
           pAttrs[i].is_word_start=0;
@@ -1238,8 +1250,8 @@ void                         pango_text_chunker::SetTextWithAttrs(text_with_info
   double    pango_rise=0;
 //  bool      inWhite=false;
   
-  int       next_par_end=0;
-  int       next_par_start=0;
+  next_par_end=0;
+  next_par_start=0;
   pango_find_paragraph_boundary(theText->UTF8Text(),-1,&next_par_end,&next_par_start);
   
   PangoAttrIterator* theIt=(tAttr)?pango_attr_list_get_iterator (tAttr):NULL;
@@ -1278,7 +1290,21 @@ void                         pango_text_chunker::SetTextWithAttrs(text_with_info
       while ( h_pos < t_pos+theItem->length && pAttrs[h_pos].is_white == false && pAttrs[h_pos].is_word_end == false && pAttrs[h_pos].is_word_start == false ) h_pos++;
       if ( pAttrs[h_pos].is_white || pAttrs[h_pos].is_word_start ) h_pos--;
       bool  is_retu=(h_pos>=next_par_end);
-      AddBox(g_pos,h_pos,pAttrs[g_pos].is_white,is_retu,theGlyphs,theItem->offset,theItem->analysis.font,cumul);
+      NRFont*  nrt_font=NULL;
+      NRTypeFace *nrt_face =NULL;
+      
+      if ( theItem->analysis.font ) {
+        PangoFontDescription*  cur_descr=pango_font_describe (theItem->analysis.font);
+        char*                  pf_descr=pango_font_description_to_string(cur_descr);
+        double                 theS=pango_to_ink*((double)pango_font_description_get_size(cur_descr));
+        nrt_face= nr_type_directory_lookup_fuzzy(pango_font_description_get_family(cur_descr), NRTypePosDef(pf_descr));
+        nrt_font = nr_font_new_default (nrt_face, NR_TYPEFACE_METRICS_HORIZONTAL, theS);
+        if ( pf_descr ) g_free(pf_descr);
+        if ( cur_descr ) pango_font_description_free(cur_descr);
+      }
+      AddBox(g_pos,h_pos,pAttrs[g_pos].is_white,is_retu,theGlyphs,theItem->offset,theItem->analysis.font,nrt_font,cumul);
+      if ( nrt_font ) nr_font_unref (nrt_font);
+      if ( nrt_face ) nr_typeface_unref (nrt_face);
       if ( h_pos >= next_par_end ) {
         int old_dec=next_par_start;
         pango_find_paragraph_boundary((theText->UTF8Text())+old_dec,-1,&next_par_end,&next_par_start);
