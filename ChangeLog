@@ -1,3 +1,15 @@
+2004-11-03  MenTaLguY  <mental@rydia.net>
+
+	* src/widgets/Makefile_insert, src/widgets/shrink-wrap-button.cpp,
+	  src/widgets/shrink-wrap-button.h:
+
+	  added Inkscape::Widgets::shrink_wrap_button, to make any gtk button
+	  an SPButton-like shrink-wrapped button
+
+	* src/widgets/layer-selector.h, src/widgets/layer-selector.cpp:
+
+	  abandon SPButton for layer selector buttons
+
 2004-11-03  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* po/check-markup: New script: detects <b>markup<b> <b>problems<7b>

@@ -16,16 +16,16 @@
 #include <algorithm>
 #include <functional>
 #include <gtkmm/liststore.h>
-#include <gtk/gtktooltips.h>
 
 #include "desktop-handles.h"
 #include "selection.h"
 #include "widgets/layer-selector.h"
 #include "widgets/document-tree-model.h"
+#include "widgets/shrink-wrap-button.h"
 #include "util/list.h"
 #include "util/reverse-list.h"
 #include "util/filter-list.h"
-#include "widgets/button.h"
+#include "widgets/icon.h"
 #include "sp-object.h"
 #include "desktop.h"
 #include "xml/repr.h"
@@ -42,21 +42,24 @@ namespace Widgets {
 LayerSelector::LayerSelector(SPDesktop *desktop)
 : _desktop(NULL)
 {
-    Gtk::Widget *button;
+    Gtk::Widget *icon;
 
-    GtkTooltips *tooltips = gtk_tooltips_new();
+    icon = Glib::wrap(sp_icon_new(11, "visible"));
+    _visibility_toggle.add(*icon);
+    _visibility_toggle.set_relief(Gtk::RELIEF_NONE);
+    shrink_wrap_button(_visibility_toggle);
+    _tooltips.set_tip(_visibility_toggle, _("Toggle current layer visibility"));
+    pack_start(_visibility_toggle, Gtk::PACK_EXPAND_PADDING);
 
-    button = Glib::wrap(sp_button_new_from_data(11, SP_BUTTON_TYPE_TOGGLE, desktop, "visible", _("Toggle visibility of current layer"), tooltips));
-    pack_start(*button, Gtk::PACK_EXPAND_PADDING);
+    icon = Glib::wrap(sp_icon_new(11, "width_height_lock"));
+    _lock_toggle.add(*icon);
+    _lock_toggle.set_relief(Gtk::RELIEF_NONE);
+    shrink_wrap_button(_lock_toggle);
+    _tooltips.set_tip(_lock_toggle, _("Lock or unlock current layer"));
+    pack_start(_lock_toggle, Gtk::PACK_EXPAND_PADDING);
 
-    button = Glib::wrap(sp_button_new_from_data(11, SP_BUTTON_TYPE_TOGGLE, desktop, "width_height_lock", _("Lock or unlock current layer"), tooltips));
-    pack_start(*button, Gtk::PACK_EXPAND_PADDING);
-
+    _tooltips.set_tip(_selector, _("Current layer"));
     pack_start(_selector, Gtk::PACK_EXPAND_WIDGET);
-    gtk_tooltips_set_tip(tooltips, GTK_WIDGET(_selector.gobj()), _("Current layer"), NULL);
-
-    // SPButtons will keep it referenced
-    g_object_unref(G_OBJECT(tooltips));
 
     _layer_model = Gtk::ListStore::create(_model_columns);
     _selector.set_model(_layer_model);

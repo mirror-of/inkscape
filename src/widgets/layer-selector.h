@@ -15,6 +15,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/togglebutton.h>
+#include <gtkmm/tooltips.h>
 #include <gtkmm/cellrenderertext.h>
 #include <gtkmm/treemodel.h>
 #include <gtkmm/liststore.h>
@@ -56,7 +57,10 @@ private:
 
     SPDesktop *_desktop;
 
+    Gtk::Tooltips _tooltips;
     Gtk::ComboBox _selector;
+    Gtk::ToggleButton _visibility_toggle;
+    Gtk::ToggleButton _lock_toggle;
 
     LayerModelColumns _model_columns;
     Gtk::CellRendererText _label_renderer;

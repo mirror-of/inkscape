@@ -37,6 +37,8 @@ widgets_libspwidgets_a_SOURCES =	\
 	widgets/paint-selector.h	\
 	widgets/ruler.cpp	\
 	widgets/ruler.h	\
+	widgets/shrink-wrap-button.cpp	\
+	widgets/shrink-wrap-button.h	\
 	widgets/sp-color-gtkselector.cpp	\
 	widgets/sp-color-gtkselector.h	\
 	widgets/sp-color-notebook.cpp	\
