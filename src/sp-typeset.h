@@ -40,6 +40,7 @@ creates a child text object with the text properly 'typeset'
 
 
 #include "sp-item-group.h"
+#include "livarot/livarot-forward.h"
 #include "xml/repr.h"
 
 #define SP_TYPE_TYPESET          (sp_typeset_get_type ())
@@ -63,8 +64,6 @@ enum {
   has_shape_dest= 8
 };
 
-class Path;
-class Shape;
 class text_wrapper;
 
 // structs used by the typeset element to hold the info about destination
