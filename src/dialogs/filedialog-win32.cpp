@@ -7,6 +7,9 @@
 
 #include <glib.h>
 
+#include <extension/extension.h>
+#include <extension/db.h>
+
 #define UNSAFE_SCRATCH_BUFFER_SIZE 4096
 
 namespace Inkscape
@@ -287,13 +290,13 @@ FileSaveDialog::show() {
     int retval = GetSaveFileName (&(nativeData->ofn));
     if (!retval) {
         //int errcode = CommDlgExtendedError();
-        return NULL;
+        return FALSE;
         }
 
     if (nativeData->ofn.nFilterIndex != 2)
-        selectionType = SVG_NAMESPACE_WITH_EXTENSIONS;
+        extension = Inkscape::Extension::db.get(SVG_MODULE_KEY_OUTPUT_SVG_INKSCAPE);
     else
-        selectionType = SVG_NAMESPACE;
+        extension = Inkscape::Extension::db.get(SVG_MODULE_KEY_OUTPUT_SVG);
 
     filename = g_strdup (nativeData->fnbuf);
 	return TRUE;
