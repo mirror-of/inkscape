@@ -1,6 +1,9 @@
 2004-08-20  Carl Hetherington <inkscape@carlh.net>
 
-	* src/zoom-context.cpp, src/view.cpp, src/version.cpp: coding style cleanups.
+	* src/zoom-context.cpp, src/view.cpp, src/version.cpp: coding
+	style cleanups.
+
+	* src/sp-polygon.cpp: coding style and a few other small cleanups.
 
 2004-08-18  Bryce Harrington <bryce@bryceharrington.com>
 
