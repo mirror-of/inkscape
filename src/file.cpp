@@ -737,7 +737,7 @@ sp_file_export_dialog(void *widget)
 struct SPEBP {
     int width, height, sheight;
     guchar r, g, b, a;
-    NRArenaItem *root;
+    GSList *arenaitems; // list of NRArenaItem * to show; if NULL, show document root (i.e. everything)
     guchar *px;
     unsigned (*status) (float, void *);
     void *data;
@@ -768,7 +768,10 @@ sp_export_get_rows(guchar const **rows, int row, int num_rows, void *data)
     /* Update to renderable state */
     NRGC gc(NULL);
     nr_matrix_set_identity(&gc.transform);
-    nr_arena_item_invoke_update(ebp->root, &bbox, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
+
+    for (GSList *i = ebp->arenaitems; i; i = i->next) {
+        nr_arena_item_invoke_update(NR_ARENA_ITEM (i->data), &bbox, &gc, NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
+    }
 
     NRPixBlock pb;
     nr_pixblock_setup_extern(&pb, NR_PIXBLOCK_MODE_R8G8B8A8N,
@@ -786,7 +789,9 @@ sp_export_get_rows(guchar const **rows, int row, int num_rows, void *data)
     }
 
     /* Render */
-    nr_arena_item_invoke_render(ebp->root, &bbox, &pb, 0);
+    for (GSList *i = ebp->arenaitems; i; i = i->next) {
+        nr_arena_item_invoke_render(NR_ARENA_ITEM (i->data), &bbox, &pb, 0);
+    }
 
     for (int r = 0; r < num_rows; r++) {
         rows[r] = NR_PIXBLOCK_PX(&pb) + r * pb.rs;
@@ -810,7 +815,7 @@ sp_export_png_file(SPDocument *doc, gchar const *filename,
                    unsigned long bgcolor,
                    unsigned (*status)(float, void *),
                    void *data, bool force_overwrite,
-                   SPItem *item_only)
+                   GSList *items_only)
 {
     g_return_if_fail(doc != NULL);
     g_return_if_fail(SP_IS_DOCUMENT(doc));
@@ -867,13 +872,19 @@ sp_export_png_file(SPDocument *doc, gchar const *filename,
     NRArena *arena = NRArena::create();
     unsigned dkey = sp_item_display_key_new(1);
 
-    /* Create ArenaItem and set transform */
-    if (item_only) {
-        ebp.root = sp_item_invoke_show(item_only, arena, dkey, SP_ITEM_SHOW_PRINT);
+    /* Create ArenaItem(s) and set transform */
+    ebp.arenaitems = NULL;
+    if (items_only) {
+        for (GSList *i = items_only; i; i = i->next) {
+            if (!SP_IS_ITEM(i->data))
+                continue;
+            ebp.arenaitems = g_slist_prepend (ebp.arenaitems, sp_item_invoke_show(SP_ITEM(i->data), arena, dkey, SP_ITEM_SHOW_PRINT));
+            nr_arena_item_set_transform(NR_ARENA_ITEM (ebp.arenaitems->data), &affine);
+        }
     } else {
-        ebp.root = sp_item_invoke_show(SP_ITEM(sp_document_root(doc)), arena, dkey, SP_ITEM_SHOW_PRINT);
+        ebp.arenaitems = g_slist_prepend (ebp.arenaitems, sp_item_invoke_show(SP_ITEM(sp_document_root(doc)), arena, dkey, SP_ITEM_SHOW_PRINT));
+        nr_arena_item_set_transform(NR_ARENA_ITEM (ebp.arenaitems->data), &affine);
     }
-    nr_arena_item_set_transform(ebp.root, &affine);
 
     ebp.status = status;
     ebp.data   = data;
@@ -890,9 +901,22 @@ sp_export_png_file(SPDocument *doc, gchar const *filename,
         nr_free(ebp.px);
     }
 
-    /* Free Arena and ArenaItem */
-    sp_item_invoke_hide(SP_ITEM(sp_document_root(doc)), dkey);
-    nr_arena_item_unref(ebp.root);
+    // Hide items
+    if (items_only) {
+        for (GSList *i = items_only; i; i = i->next) {
+            if (!SP_IS_ITEM(i->data))
+                continue;
+            sp_item_invoke_hide(SP_ITEM(i->data), dkey);
+        }
+    } else {
+        sp_item_invoke_hide(SP_ITEM(sp_document_root(doc)), dkey);
+    }
+
+    /* Free Arena and ArenaItem(s) */
+    for (GSList *i = ebp.arenaitems; i; i = i->next) {
+        nr_arena_item_unref(NR_ARENA_ITEM(i->data));
+    }
+
     nr_object_unref((NRObject *) arena);
 }
 

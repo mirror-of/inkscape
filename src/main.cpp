@@ -499,7 +499,7 @@ sp_do_export_png(SPDocument *doc)
         g_warning ("--export-use-hints can only be used with --export-id; ignored.");
     }
 
-    SPItem *item = NULL;
+    GSList *items = NULL;
 
     NRRect area;
     if (sp_export_id) {
@@ -513,7 +513,8 @@ sp_do_export_png(SPDocument *doc)
                 g_warning ("Object with id=\"%s\" is being exported; --export-area is ignored.", sp_export_id);
             }
 
-            item = SP_ITEM(o);
+            items = g_slist_prepend (items, SP_ITEM(o));
+
             if (sp_export_id_only) {
                 g_print("Exporting only object with id=\"%s\"; all other objects hidden\n", sp_export_id);
             }
@@ -661,7 +662,7 @@ sp_do_export_png(SPDocument *doc)
     g_print("Bitmap saved as: %s\n", filename);
 
     if ((width >= 1) && (height >= 1) && (width < 65536) && (height < 65536)) {
-        sp_export_png_file(doc, filename, area.x0, area.y0, area.x1, area.y1, width, height, bgcolor, NULL, NULL, true, sp_export_id_only ? item : NULL);
+        sp_export_png_file(doc, filename, area.x0, area.y0, area.x1, area.y1, width, height, bgcolor, NULL, NULL, true, sp_export_id_only ? items : NULL);
     } else {
         g_warning("Calculated bitmap dimensions %d %d are out of range (1 - 65535). Nothing exported.", width, height);
     }
