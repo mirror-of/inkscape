@@ -665,7 +665,7 @@ static void sp_align_distribute_h_or_v_clicked(GtkWidget *, gchar const *layout,
             bbs[pos].bbox = sp_item_bbox_desktop (bbs[pos].item);
             bbs[pos].anchor =
                 0.5 * layout[0] * bbs[pos].bbox.min()[dim] +
-                0.5 * layout[0] * bbs[pos].bbox.max()[dim];
+                0.5 * layout[1] * bbs[pos].bbox.max()[dim];
             ++pos;
         }
     }
