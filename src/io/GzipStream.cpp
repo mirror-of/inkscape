@@ -1,8 +1,9 @@
 /**
  * Zlib-enabled input and output streams
  *
- * This is a thin wrapper of 'gzstreams', to
- * allow our customizations.
+ * This is a thin wrapper of libz calls, in order
+ * to provide a simple interface to our developers
+ * for gzip input and output.
  *
  * Authors:
  *   Bob Jamison <rjamison@titan.com>
@@ -14,7 +15,6 @@
 #include "GzipStream.h"
 
 #include  <zlib.h>
-#include  <zutil.h>
 
 namespace Inkscape
 {
@@ -253,7 +253,9 @@ GzipOutputStream::GzipOutputStream(OutputStream &destinationStream)
     destination.put(0);
 
     //OS code - from zutil.h
-    destination.put(OS_CODE);
+    //destination.put(OS_CODE);
+    //apparently, we should not explicitly include zutil.h
+    destination.put(0);
 
 }
 
