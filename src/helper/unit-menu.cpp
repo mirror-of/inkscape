@@ -14,6 +14,7 @@
 #define noUNIT_SELECTOR_VERBOSE
 
 #include <config.h>
+#include <glib.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkhbox.h>
@@ -104,6 +105,13 @@ sp_unit_selector_init (SPUnitSelector *us)
 	us->plural = TRUE;
 
 	us->menu = gtk_option_menu_new ();
+
+	// fixme
+	PangoFontDescription* pan = pango_font_description_new ();
+	pango_font_description_set_size (pan, 8000);
+	gtk_widget_modify_font (us->menu, pan);
+	pango_font_description_free (pan);
+
 	gtk_widget_show (us->menu);
 	gtk_box_pack_start (GTK_BOX (us), us->menu, TRUE, TRUE, 0);
 }
@@ -204,25 +212,44 @@ spus_rebuild_menu (SPUnitSelector *us)
 	GSList *l;
 	gint pos, p;
 
+	//fixme
+	PangoFontDescription* pan = pango_font_description_new ();
+	pango_font_description_set_size (pan, 8000);
+
 	if (GTK_OPTION_MENU (us->menu)->menu) {
 		gtk_option_menu_remove_menu (GTK_OPTION_MENU (us->menu));
 	}
 
 	m = gtk_menu_new ();
+
+	//fixme
+	gtk_widget_modify_font (m, pan);
+
 	gtk_widget_show (m);
 
 	pos = p = 0;
 	for (l = us->units; l != NULL; l = l->next) {
 		const SPUnit *u;
 		u = (SPUnit*)l->data;
-		i = gtk_menu_item_new_with_label ((us->abbr) ? (us->plural) ? u->abbr_plural : u->abbr : (us->plural) ? u->plural : u->name);
+
+		// use only abbreviations in the menu
+		//		i = gtk_menu_item_new_with_label ((us->abbr) ? (us->plural) ? u->abbr_plural : u->abbr : (us->plural) ? u->plural : u->name);
+		i = gtk_menu_item_new_with_label ( u->abbr );
+
+		//fixme
+		gtk_widget_modify_font (i, pan);
+
 		gtk_object_set_data (GTK_OBJECT (i), "unit", (gpointer) u);
 		gtk_signal_connect (GTK_OBJECT (i), "activate", GTK_SIGNAL_FUNC (spus_unit_activate), us);
 		gtk_widget_show (i);
+
 		gtk_menu_shell_append (GTK_MENU_SHELL (m), i);
 		if (u == us->unit) pos = p;
 		p += 1;
 	}
+
+	//fixme
+	pango_font_description_free (pan);
 
 	gtk_option_menu_set_menu (GTK_OPTION_MENU (us->menu), m);
 
