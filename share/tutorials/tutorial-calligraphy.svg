@@ -4,11 +4,11 @@
 <svg
    id="svg1"
    sodipodi:version="0.32"
-   inkscape:version="0.39cvs"
+   inkscape:version="0.40cvs"
    width="256pt"
    height="3012.0000pt"
    sodipodi:docname="tutorial-calligraphy.svg"
-   sodipodi:docbase="C:\cvs\inkscape\inkscape\share\tutorials"
+   sodipodi:docbase="/home/mental/cvs/inkscape/share/tutorials"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:cc="http://web.resource.org/cc/"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -377,7 +377,7 @@
      id="base"
      inkscape:zoom="2.5000000"
      inkscape:cx="128.37209"
-     inkscape:cy="2935.9311"
+     inkscape:cy="2726.1289"
      inkscape:window-width="780"
      inkscape:window-height="580"
      showguides="true"
@@ -2772,7 +2772,8 @@ http://www.inkscape.org/</dc:description>
            sodipodi:role="line"
            id="tspan2106"
            x="11.150325"
-           y="294.02885">styles of calligraphy: </tspan><tspan
+           y="294.02885"
+           style="stroke-dashoffset:0.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none">styles of calligraphy: </tspan><tspan
            x="11.150325"
            y="304.94885"
            sodipodi:role="line"
@@ -2837,7 +2838,7 @@ http://www.inkscape.org/</dc:description>
            id="tspan1592"
            x="11.150325"
            y="435.98883"
-           style="stroke-dashoffset:0.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none">ruined. Inkscape's clligraphy tool also allows some techniques </tspan><tspan
+           style="stroke-dashoffset:0.0000000;marker:none;marker-start:none;marker-mid:none;marker-end:none">ruined. Inkscape's calligraphy tool also allows some techniques </tspan><tspan
            sodipodi:role="line"
            id="tspan1595"
            x="11.150325"
