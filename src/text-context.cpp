@@ -486,16 +486,17 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
                     case GDK_b:
                         if (tc->text) {
                             SPStyle const *style = sp_te_style_at_position(tc->text, std::min(tc->text_sel_start, tc->text_sel_end));
-                            gchar const *apply_style;
+                            SPCSSAttr *css = sp_repr_css_attr_new ();
                             if (style->font_weight.computed == SP_CSS_FONT_WEIGHT_NORMAL
                                 || style->font_weight.computed == SP_CSS_FONT_WEIGHT_100
                                 || style->font_weight.computed == SP_CSS_FONT_WEIGHT_200
                                 || style->font_weight.computed == SP_CSS_FONT_WEIGHT_300
                                 || style->font_weight.computed == SP_CSS_FONT_WEIGHT_400)
-                                apply_style = "font-weight:bold";
+                                sp_repr_css_set_property (css, "font-weight", "bold");
                             else
-                                apply_style = "font-weight:normal";
-                            sp_te_apply_style(tc->text, tc->text_sel_start, tc->text_sel_end, apply_style);
+                                sp_repr_css_set_property (css, "font-weight", "normal");
+                            sp_te_apply_style(tc->text, tc->text_sel_start, tc->text_sel_end, css);
+                            sp_repr_css_attr_unref(css);
 							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 							sp_text_context_update_cursor (tc);
                             sp_text_context_update_text_selection (tc);
@@ -506,12 +507,13 @@ sp_text_context_root_handler (SPEventContext *ec, GdkEvent *event)
                     case GDK_i:
                         if (tc->text) {
                             SPStyle const *style = sp_te_style_at_position(tc->text, std::min(tc->text_sel_start, tc->text_sel_end));
-                            gchar const *apply_style;
+                            SPCSSAttr *css = sp_repr_css_attr_new ();
                             if (style->font_style.computed == SP_CSS_FONT_STYLE_NORMAL)
-                                apply_style = "font-style:italic";
+                                sp_repr_css_set_property (css, "font-style", "italic");
                             else
-                                apply_style = "font-style:normal";
-                            sp_te_apply_style(tc->text, tc->text_sel_start, tc->text_sel_end, apply_style);
+                                sp_repr_css_set_property (css, "font-style", "normal");
+                            sp_te_apply_style(tc->text, tc->text_sel_start, tc->text_sel_end, css);
+                            sp_repr_css_attr_unref(css);
 							sp_document_done (SP_DT_DOCUMENT (ec->desktop));
 							sp_text_context_update_cursor (tc);
                             sp_text_context_update_text_selection (tc);
@@ -856,18 +858,7 @@ sp_text_context_style_set (const SPCSSAttr *css, SPTextContext *tc)
     if (tc->text_sel_start == tc->text_sel_end)
         return false;    // will get picked up by the parent and applied to the whole text object
 
-    // convert SPCSSAttr to a string
-    Glib::ustring style_string;
-
-    Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attributes = css->attributeList();
-    for ( ; attributes ; attributes++) {
-        if (!style_string.empty())
-            style_string += ';';
-        style_string += g_quark_to_string(attributes->key);
-        style_string += ':';
-        style_string += attributes->value.cString();
-    }
-    sp_te_apply_style(tc->text, tc->text_sel_start, tc->text_sel_end, style_string.c_str());
+    sp_te_apply_style(tc->text, tc->text_sel_start, tc->text_sel_end, css);
 	sp_document_done (SP_DT_DOCUMENT (tc->event_context.desktop));
 	sp_text_context_update_cursor (tc);
     sp_text_context_update_text_selection (tc);

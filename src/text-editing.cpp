@@ -12,48 +12,25 @@
 
 #include "config.h"
 
-#include <string.h>
-
-#include <libnr/nr-rect.h>
 #include <libnr/nr-matrix.h>
-#include <libnr/nr-matrix-ops.h>
-#include <libnr/nr-matrix-fns.h>
-#include <libnr/nr-rotate.h>
-
-#include <livarot/LivarotDefs.h>
-#include <livarot/Shape.h>
-#include <livarot/Path.h>
 
 #include <glib.h>
-//#include <gtk/gtk.h>
 
-#include <glibmm/i18n.h>
 #include "svg/svg.h"
-#include "svg/stringstream.h"
-#include "display/curve.h"
-#include "display/nr-arena-group.h"
-#include "display/nr-arena-glyphs.h"
-#include "attributes.h"
-#include "document.h"
 #include "desktop.h"
 #include "style.h"
-#include "version.h"
-#include "inkscape.h"
-#include "view.h"
-#include "print.h"
+#include "desktop-style.h"
 #include "unit-constants.h"
 
 #include "xml/repr.h"
 #include "xml/attribute-record.h"
 
-#include "sp-shape.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
 #include "sp-flowdiv.h"
 #include "sp-flowregion.h"
 #include "sp-tspan.h"
 #include "sp-string.h"
-#include "display/nr-arena-shape.h"
 
 #include "text-editing.h"
 
@@ -1066,21 +1043,25 @@ static bool objects_have_equal_style(SPObject const *parent, SPObject const *chi
     return equal;
 }
 
-/** apply the given style string to \a root and all of its children
-recursively. This is necessary because when the user applies a particular
-style, they want to overrule any existing style, which includes that
-applied to leaf elements. */
-static void overwrite_styles_in_tree_with_string(SPObject *root, gchar const *style)
+/** returns true if \a first and \a second contain all the same attributes
+with the same values as each other. Note that we have to compare both
+forwards and backwards to make sure we don't miss any attributes that are
+in one but not the other. */
+static bool css_attrs_are_equal(SPCSSAttr const *first, SPCSSAttr const *second)
 {
-    for (SPObject *child = root->firstChild() ; child != NULL ; child = SP_OBJECT_NEXT(child)) {
-        if (SP_IS_STRING(child) || SP_IS_FLOWREGION(child) || SP_IS_FLOWREGIONEXCLUDE(child))
-            continue;
-        if (child->hasChildren())
-            overwrite_styles_in_tree_with_string(child, style);
-        else
-            overwrite_style_with_string(child, style);
+    Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attrs = first->attributeList();
+    for ( ; attrs ; attrs++) {
+        gchar const *other_attr = second->attribute(g_quark_to_string(attrs->key));
+        if (other_attr == NULL || strcmp(attrs->value, other_attr))
+            return false;
     }
-    overwrite_style_with_string(root, style);
+    attrs = second->attributeList();
+    for ( ; attrs ; attrs++) {
+        gchar const *other_attr = first->attribute(g_quark_to_string(attrs->key));
+        if (other_attr == NULL || strcmp(attrs->value, other_attr))
+            return false;
+    }
+    return true;
 }
 
 /** applies the given style to all the objects at the given level and below
@@ -1088,7 +1069,7 @@ which are between \a start_item and \a end_item, creating spans as necessary.
 If \a start_item or \a end_item are NULL then the style is applied to all
 objects to the beginning or end respectively. \a span_object_name is the
 name of the xml for a text span (ie tspan or flowspan). */
-static void recursively_apply_style(SPObject *common_ancestor, gchar const *style, SPObject *start_item, Glib::ustring::iterator start_text_iter, SPObject *end_item, Glib::ustring::iterator end_text_iter, char const *span_object_name)
+static void recursively_apply_style(SPObject *common_ancestor, SPCSSAttr const *css, SPObject *start_item, Glib::ustring::iterator start_text_iter, SPObject *end_item, Glib::ustring::iterator end_text_iter, char const *span_object_name)
 {
     bool passed_start = start_item == NULL ? true : false;
 
@@ -1098,7 +1079,7 @@ static void recursively_apply_style(SPObject *common_ancestor, gchar const *styl
 
         if (passed_start) {
             if (end_item && child->isAncestorOf(end_item)) {
-                recursively_apply_style(child, style, NULL, start_text_iter, end_item, end_text_iter, span_object_name);
+                recursively_apply_style(child, css, NULL, start_text_iter, end_item, end_text_iter, span_object_name);
                 break;
             }
             // apply style
@@ -1110,7 +1091,7 @@ static void recursively_apply_style(SPObject *common_ancestor, gchar const *styl
                 bool surround_entire_string = true;
 
                 Inkscape::XML::Node *child_span = sp_repr_new(span_object_name);
-                child_span->setAttribute("style", style);
+                sp_repr_css_set(child_span, const_cast<SPCSSAttr*>(css), "style");   // better hope that prototype wasn't nonconst for a good reason
                 SPObject *prev_item = SP_OBJECT_PREV(child);
                 Inkscape::XML::Node *prev_repr = prev_item ? SP_OBJECT_REPR(prev_item) : NULL;
 
@@ -1171,12 +1152,12 @@ static void recursively_apply_style(SPObject *common_ancestor, gchar const *styl
                 sp_repr_unref(child_span);
 
             } else if (child != end_item) {   // not a string and we're applying to the entire object. This is easy
-                overwrite_styles_in_tree_with_string(child, style);
+                sp_desktop_apply_css_recursive(child, const_cast<SPCSSAttr*>(css), false);
             }
 
         } else {  // !passed_start
             if (child->isAncestorOf(start_item)) {
-                recursively_apply_style(child, style, start_item, start_text_iter, end_item, end_text_iter, span_object_name);
+                recursively_apply_style(child, css, start_item, start_text_iter, end_item, end_text_iter, span_object_name);
                 if (end_item && child->isAncestorOf(end_item))
                     break;   // only happens when start_item == end_item (I think)
                 passed_start = true;
@@ -1328,9 +1309,8 @@ static bool tidy_operator_redundant_double_nesting(SPObject **item)
 }
 
 /** helper for tidy_operator_redundant_semi_nesting(). Checks a few things,
-then dumps the full style string for \a child, and predicts the full style
-string if \a child were a child of the parent of *item and compares the
-two. */
+then compares the styles for item+child versus just child. If they're equal,
+tidying is possible. */
 static bool redundant_semi_nesting_processor(SPObject **item, SPObject *child, bool prepend)
 {
     if (SP_IS_FLOWREGION(child) || SP_IS_FLOWREGIONEXCLUDE(child))
@@ -1342,17 +1322,22 @@ static bool redundant_semi_nesting_processor(SPObject **item, SPObject *child, b
     if (attrs && attrs->anyAttributesSet()) return false;
     attrs = attributes_for_object(*item);
     if (attrs && attrs->anyAttributesSet()) return false;
-    gchar *child_style_all = sp_style_write_string(SP_OBJECT_STYLE(child), SP_STYLE_FLAG_ALWAYS);
+
+    SPCSSAttr *css_child_and_item = sp_repr_css_attr_new();
+    SPCSSAttr *css_child_only = sp_repr_css_attr_new();
     gchar const *child_style = SP_OBJECT_REPR(child)->attribute("style");
-    SPStyle *style_skipping_item = sp_style_new();
-    sp_style_merge_from_style_string(style_skipping_item, child_style);
-    sp_style_merge_from_parent(style_skipping_item, SP_OBJECT_STYLE(SP_OBJECT_PARENT(*item)));
-    gchar *style_skipping_item_all = sp_style_write_string(style_skipping_item, SP_STYLE_FLAG_ALWAYS);
-    sp_style_unref(style_skipping_item);
-    bool styles_differ = strcmp(style_skipping_item_all, child_style_all) != 0;
-    g_free(style_skipping_item_all);
-    g_free(child_style_all);
-    if (styles_differ) return false;
+    if (child_style && *child_style) {
+        sp_repr_css_attr_add_from_string(css_child_and_item, child_style);
+        sp_repr_css_attr_add_from_string(css_child_only, child_style);
+    }
+    gchar const *item_style = SP_OBJECT_REPR(*item)->attribute("style");
+    if (item_style && *item_style) {
+        sp_repr_css_attr_add_from_string(css_child_and_item, item_style);
+    }
+    bool equal = css_attrs_are_equal(css_child_only, css_child_and_item);
+    sp_repr_css_attr_unref(css_child_and_item);
+    sp_repr_css_attr_unref(css_child_only);
+    if (!equal) return false;
 
     Inkscape::XML::Node *new_span = sp_repr_new(SP_OBJECT_REPR(*item)->name());
     if (prepend)
@@ -1440,7 +1425,7 @@ static bool tidy_xml_tree_recursively(SPObject *root)
 /** Applies the given CSS fragment to the characters of the given text or
 flowtext object between \a start and \a end, creating or removing span
 elements as necessary and optimal. */
-void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, gchar const *style)
+void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator const &start, Inkscape::Text::Layout::iterator const &end, SPCSSAttr const *css)
 {
     // in the comments in the code below, capital letters are inside the application region, lowercase are outside
     if (start == end) return;
@@ -1483,7 +1468,7 @@ void sp_te_apply_style(SPItem *text, Inkscape::Text::Layout::iterator const &sta
     }
     start_item = ascend_while_first(start_item, start_text_iter, common_ancestor);
     end_item = ascend_while_first(end_item, end_text_iter, common_ancestor);
-    recursively_apply_style(common_ancestor, style, start_item, start_text_iter, end_item, end_text_iter, span_name_for_text_object(text));
+    recursively_apply_style(common_ancestor, css, start_item, start_text_iter, end_item, end_text_iter, span_name_for_text_object(text));
 
     /* stage 2: cleanup the xml tree (of which there are multiple passes) */
     /* discussion: this stage requires a certain level of inventiveness because
