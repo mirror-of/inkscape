@@ -1,5 +1,9 @@
 #! /bin/sh
+# delautogen.sh: Remove files created by autogen.sh, and files created by make
+# if compiling in the source directory.
+#
 # Requires gnu find, gnu xargs.
+
 set -e
 mydir=`dirname "$0"`
 cd "$mydir"
