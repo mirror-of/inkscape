@@ -1231,9 +1231,9 @@ profile_path(const char *filename)
     static const gchar *homedir = NULL;
     if (!homedir) {
 #ifdef HAS_SHGetSpecialFolderPath
-        // prefer c:\Documents and Settings\UserName\Application Data\
-        // to c:\Documents and Settings\userName\
-        // Closes bug #933461
+        // prefer c:\Documents and Settings\UserName\Application Data\ to
+        // c:\Documents and Settings\userName\; this
+        // closes bug #933461
         if (!homedir) {
             char pathBuf[MAX_PATH+1];
             if (SHGetSpecialFolderPath(NULL, pathBuf, CSIDL_APPDATA, 1))
