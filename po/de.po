@@ -5,19 +5,20 @@
 # Christian Meyer <chrisime@gnome.org>, 2000-2002.
 # Christian Neumair <chris@gnome-de.org>, 2002, 2003.
 # Colin Marquardt <colin@marquardt-home.de>, 2004.
-# Jörg Müller <jfm@ram-brand.de>, 2004.
 # Adib Taraben <theadib@yahoo.com>, 2004.
+# Jörg Müller <jfm@ram-brand.de>, 2005.
+# 
 msgid ""
 msgstr ""
-"Project-Id-Version: inkscape 0.40\n"
+"Project-Id-Version: inkscape 0.41\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-30 12:27+0100\n"
-"PO-Revision-Date: 2005-01-21 18:33+0100\n"
-"Last-Translator: jfm <jfm@ram-brand.de>\n"
+"PO-Revision-Date: 2005-02-01 17:32+0100\n"
+"Last-Translator: Jörg Müller <jfm@ram-brand.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: inkscape.desktop.in.h:1
 msgid "Inkscape SVG Vector Illustrator"
@@ -323,7 +324,6 @@ msgstr ""
 "als Gruppe geklont werden."
 
 #: src/dialogs/clonetiler.cpp:969
-#, fuzzy
 msgid "_Symmetry"
 msgstr "Symmetrie"
 
@@ -403,7 +403,6 @@ msgid "<b>P6M</b>: reflection + 60&#176; rotation"
 msgstr "<b>P6M</b>: Reflektion + 60&#176; Rotation"
 
 #: src/dialogs/clonetiler.cpp:1026
-#, fuzzy
 msgid "S_hift"
 msgstr "Umschalt"
 
@@ -471,7 +470,6 @@ msgid "How much to randomize tile positions"
 msgstr "Stärke der Zufallsänderung bei der Kachelpositionierung"
 
 #: src/dialogs/clonetiler.cpp:1094
-#, fuzzy
 msgid "Sc_ale"
 msgstr "Maßstab"
 
@@ -500,7 +498,6 @@ msgid "How much to randomize tile sizes"
 msgstr "Stärke der Zufallsänderung der Kachelgrößen"
 
 #: src/dialogs/clonetiler.cpp:1157
-#, fuzzy
 msgid "_Rotation"
 msgstr "Rotation"
 
@@ -526,7 +523,6 @@ msgid "How much to randomize tile rotation"
 msgstr "Stärke der Zufallsänderung der Rotation von Kacheln"
 
 #: src/dialogs/clonetiler.cpp:1209
-#, fuzzy
 msgid "_Opacity"
 msgstr "Deckkraft"
 
@@ -579,7 +575,6 @@ msgstr ""
 "Musterfüllung vorgeben"
 
 #: src/dialogs/clonetiler.cpp:1340
-#, fuzzy
 msgid " <b>_Create</b> "
 msgstr " <b>Erzeugen</b> "
 
@@ -588,7 +583,6 @@ msgid "Create and tile the clones of the selection"
 msgstr "Klone der Auswahl erzeugen und kacheln"
 
 #: src/dialogs/clonetiler.cpp:1348
-#, fuzzy
 msgid " Re_move "
 msgstr "Entfernen"
 
@@ -599,13 +593,11 @@ msgstr ""
 "Verwandte)"
 
 #: src/dialogs/clonetiler.cpp:1355
-#, fuzzy
 msgid " R_eset "
 msgstr " Zurücksetzen "
 
 #. TRANSLATORS: "change" is a noun here
 #: src/dialogs/clonetiler.cpp:1357
-#, fuzzy
 msgid "Reset all shifts, scales, rotates, and opacity changes to zero"
 msgstr ""
 "Rücksetzen aller Verschiebungen, Skalierungen, Rotationen und Deckkraft"
@@ -1170,25 +1162,23 @@ msgid "Arrow keys move by:"
 msgstr "Pfeiltasten bewegen um:"
 
 #: src/dialogs/display-settings.cpp:1013
-#, fuzzy
 msgid ""
 "Pressing an arrow key moves selected object(s) or node(s) by this distance "
 "(in SVG pixels)"
 msgstr ""
-"Beim Drücken einer Pfeiltaste werden die ausgewählten Elemente (Objekte oder "
-"Knoten) um diese Entfernung verschoben (in Punkt)"
+"Drücken einer Pfeiltaste verschiebt die ausgewählten Elemente (Objekte oder "
+"Knoten) um diese Entfernung (in SVG-Pixeln)"
 
 #: src/dialogs/display-settings.cpp:1023
 msgid "> and < scale by:"
 msgstr "> und < skalieren um:"
 
 #: src/dialogs/display-settings.cpp:1024
-#, fuzzy
 msgid ""
 "Pressing > or < scales selection up or down by this increment (in SVG pixels)"
 msgstr ""
-"Beim Drücken von > oder < werden die ausgewählten Elemente um diesen Wert "
-"(in Punkt) größer oder kleiner skaliert"
+"Drücken von > oder < skaliert die ausgewählten Elemente um diesen Wert "
+"größer oder kleiner (in SVG-Pixeln) "
 
 # !!! maybe not the best translation
 #: src/dialogs/display-settings.cpp:1034
@@ -1196,12 +1186,11 @@ msgid "Inset/Outset by:"
 msgstr "Schrumpfen/Vergrößern um:"
 
 #: src/dialogs/display-settings.cpp:1035
-#, fuzzy
 msgid ""
 "Inset and Outset commands displace the path by this distance (in SVG pixels)"
 msgstr ""
 "Schrumpfungs- und Vergrößerungsbefehle verändern den Pfad um diese Distanz "
-"(in Punkten)"
+"(in SVG-Pixeln)"
 
 #: src/dialogs/display-settings.cpp:1047
 msgid "Zoom in/out by:"
@@ -1738,11 +1727,9 @@ msgstr ""
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
 #: src/dialogs/find.cpp:431
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%d</b> object found (out of <b>%d</b>), %s match."
-msgid_plural "<b>%d</b> objects found (out of <b>%d</b>), %s match."
-msgstr[0] "<b>%d</b>  (von <b>%d</b>) Objekt(e) gefunden, %s passend."
-msgstr[1] "<b>%d</b>  (von <b>%d</b>) Objekt(e) gefunden, %s passend."
+msgstr "<b>%d</b> (von <b>%d</b>) Objekt(en) gefunden, %s passend."
 
 #: src/dialogs/find.cpp:434
 msgid "exact"
@@ -2833,62 +2820,53 @@ msgstr ""
 "Radius."
 
 #: src/extension/dependency.cpp:29
-#, fuzzy
 msgid "executable"
-msgstr "Rechteck"
+msgstr "ausführbare Datei"
 
 #: src/extension/dependency.cpp:30
-#, fuzzy
 msgid "file"
-msgstr "Titel"
+msgstr "Datei"
 
 #: src/extension/dependency.cpp:31
-#, fuzzy
 msgid "extension"
-msgstr "Ausdehnung:"
+msgstr "Erweiterung"
 
 #: src/extension/dependency.cpp:32
 msgid "plugin"
-msgstr ""
+msgstr "Plugin"
 
 #. TRANSLATORS: "path" refers to "filesystem path" here
 #: src/extension/dependency.cpp:37
-#, fuzzy
 msgid "path"
-msgstr "_Pfad"
+msgstr "Dateipfad"
 
 #: src/extension/dependency.cpp:38
-#, fuzzy
 msgid "extensions"
-msgstr "Ausdehnung:"
+msgstr "Erweiterungen"
 
 #: src/extension/dependency.cpp:39
-#, fuzzy
 msgid "absolute"
 msgstr " absolut zu "
 
 #: src/extension/dependency.cpp:238
 msgid "Dependency::"
-msgstr ""
+msgstr "Abhängigkeit::"
 
 #: src/extension/dependency.cpp:239
-#, fuzzy
 msgid "  type: "
 msgstr "T_yp:"
 
 #: src/extension/dependency.cpp:240
-#, fuzzy
 msgid "  location: "
-msgstr "Beziehung"
+msgstr "..Speicherort: "
 
 #: src/extension/dependency.cpp:241
 msgid "  string: "
-msgstr ""
+msgstr "  Zeichenkette: "
 
 #: src/extension/dependency.cpp:244
-#, fuzzy
 msgid "  description: "
-msgstr "Beschreibung"
+msgstr " Beschreibung: "
 
 #. static int i = 0;
 #. std::cout << "Checking module[" << i++ << "]: " << name << std::endl;
@@ -2897,37 +2875,38 @@ msgid ""
 "  This is caused by an improper .inx file for this extension.  An improper ."
 "inx file could have been caused by a faulty installation of Inkscape."
 msgstr ""
+" Dies wurde durch eine fehlerhafte .inx Datei der Erweiterung verursacht.  "
+"Eine fehlerhafte .inx Datei kann Folge einer Fehlinstallation von Inkscape "
+"sein."
 
 #: src/extension/extension.cpp:234
 msgid "an ID was not defined for it."
-msgstr ""
+msgstr "es wurde hierfür keine ID definiert."
 
 #: src/extension/extension.cpp:238
 msgid "there was no name defined for it."
-msgstr ""
+msgstr "hierfür wurde kein Name definiert."
 
 #: src/extension/extension.cpp:242
 msgid "the XML description of it got lost."
-msgstr ""
+msgstr "Zugehörige XML-Beschreibung ist nicht auffindbar."
 
 #: src/extension/extension.cpp:246
 msgid "no implementation was defined for the extension."
-msgstr ""
+msgstr "Für diese Erweiterung existiert keine Implementierung."
 
 #. std::cout << "Failed: " << *(_deps[i]) << std::endl;
 #: src/extension/extension.cpp:253
 msgid "a dependency was not met."
-msgstr ""
+msgstr "die Abhängigkeiten konnten nicht aufgelöst werden."
 
 #: src/extension/extension.cpp:273
-#, fuzzy
 msgid "Extension \""
-msgstr "Ausdehnung:"
+msgstr "Erweiterung \""
 
 #: src/extension/extension.cpp:273
-#, fuzzy
 msgid "\" failed to load because "
-msgstr "Laden der gewünschten Datei %s fehlgeschlagen"
+msgstr "\" Laden fehlgeschlagen wegen "
 
 #. This is some filler text, needs to change before relase
 #: src/extension/error-file.cpp:54
@@ -2939,11 +2918,17 @@ msgid ""
 "normally but those extensions will be unavailable.  For details to "
 "troubleshoot this problem, please refer to the error log located at:"
 msgstr ""
+"<span weight=\"bold\" size=\"larger\">Eine oder mehrere Erweiterungen "
+"konnten nicht geladen werden.</span>\n"
+"\n"
+"Nicht verfügbare Eweiterungen wurden ausgelassen. Inkscape setzt seinen "
+"normalen Ablauf fort, doch diese Erweiterungen sind nicht anwendbar. Details "
+"zum Beheben des Problems finden sich in der Logdatei unter:"
 
 #. This is some filler text, needs to change before relase
 #: src/extension/error-file.cpp:63
 msgid "Show dialog on startup"
-msgstr ""
+msgstr "Dialog beim Starten des Programmes zeigen"
 
 #: src/extension/init.cpp:152
 msgid "Null external module directory name.  Modules will not be loaded."
@@ -3043,34 +3028,28 @@ msgid "write error occurred"
 msgstr "Schreibfehler aufgetreten"
 
 #: src/extension/plugin/grid.cpp:221
-#, fuzzy
 msgid "Line Width"
-msgstr "Seiten_breite"
+msgstr "Linienstärke"
 
 #: src/extension/plugin/grid.cpp:222
-#, fuzzy
 msgid "Horizontal Spacing"
-msgstr "Horizontale Textausrichtung"
+msgstr "Horizontale Abstände"
 
 #: src/extension/plugin/grid.cpp:223
-#, fuzzy
 msgid "Vertical Spacing"
-msgstr "Vertikale Textausrichtung"
+msgstr "Vertikale Abstände"
 
 #: src/extension/plugin/grid.cpp:224
-#, fuzzy
 msgid "Horizontal Offset"
-msgstr "Horizontale Textausrichtung"
+msgstr "Horizontaler Versatz"
 
 #: src/extension/plugin/grid.cpp:225
-#, fuzzy
 msgid "Vertical Offset"
-msgstr "Vertikale Textausrichtung"
+msgstr "Vertikaler Versatz"
 
 #: src/extension/prefdialog.cpp:19
-#, fuzzy
 msgid " Preferences"
-msgstr "Linienwerkzeug Einstellungen"
+msgstr " Einstellungen"
 
 #. We can't call sp_ui_error_dialog because we may be
 #. running from the console, in which case calling sp_ui
@@ -3111,11 +3090,9 @@ msgid "Select file to open"
 msgstr "Wählen Sie die zu öffnende Datei"
 
 #: src/file.cpp:444
-#, fuzzy, c-format
+#, c-format
 msgid "Removed <b>%i</b> unused item in &lt;defs&gt;."
-msgid_plural "Removed <b>%i</b> unused items in &lt;defs&gt;."
-msgstr[0] "<b>%i</b> überflüssige Elemente aus &lt;defs&gt; entfernt."
-msgstr[1] "<b>%i</b> überflüssige Elemente aus &lt;defs&gt; entfernt."
+msgstr "<b>%i</b> überflüssige Elemente aus &lt;defs&gt; entfernt."
 
 #: src/file.cpp:449
 msgid "No unused items in &lt;defs&gt;."
@@ -3765,33 +3742,25 @@ msgstr ""
 "Knotenwerkzeug (F2) umstellen."
 
 #: src/nodepath.cpp:2915
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>0</b> out of <b>%i</b> node selected. Click, Shift+click, or drag around "
-"nodes to select."
-msgid_plural ""
-"<b>0</b> out of <b>%i</b> nodes selected. Click, Shift+click, or drag around "
-"nodes to select."
-msgstr[0] ""
-"0 von %i Knoten ausgewählt. Klick, Umsch+Klick oder Ziehen, um Knoten "
-"auszuwählen."
-msgstr[1] ""
-"0 von %i Knoten ausgewählt. Klick, Umsch+Klick oder Ziehen, um Knoten "
-"auszuwählen."
+"nodes to select.<b>0</b> out of <b>%i</b> nodes selected. Click, Shift"
+"+click, or drag around nodes to select."
+msgstr ""
+"<b>0</b> von <b>%i</b> Knoten ausgewählt. Klick, Umsch+Klick oder Ziehen, um "
+"Knoten auszuwählen.<b>0</b> von <b>%i</b> Knoten ausgewählt. Klick, Umsch"
+"+Klick oder Ziehen, um Knoten auszuwählen."
 
 #: src/nodepath.cpp:2922
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected; %s. %s."
-msgid_plural "<b>%i</b> of <b>%i</b> nodes selected; %s. %s."
-msgstr[0] "<b>%i</b> von <b>%i</b> Knoten ausgewählt; %s. %s."
-msgstr[1] "<b>%i</b> von <b>%i</b> Knoten ausgewählt; %s. %s."
+msgstr "<b>%i</b> von <b>%i</b> Knoten ausgewählt; %s. %s."
 
 #: src/nodepath.cpp:2928
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%i</b> of <b>%i</b> node selected. %s."
-msgid_plural "<b>%i</b> of <b>%i</b> nodes selected. %s."
-msgstr[0] "<b>%i</b> von <b>%i</b> Knoten ausgewählt. %s."
-msgstr[1] "<b>%i</b> von <b>%i</b> Knoten ausgewählt. %s."
+msgstr "<b>%i</b> von <b>%i</b> Knoten ausgewählt. %s."
 
 #: src/object-edit.cpp:430
 msgid ""
@@ -4266,11 +4235,9 @@ msgid "Use <b>Shift+D</b> to look up original"
 msgstr "<b>Umschalt+D</b> zum finden des Originals"
 
 #: src/selection-describer.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid "<b>%i</b> object selected"
-msgid_plural "<b>%i</b> objects selected"
-msgstr[0] "<b>%i</b> Objekte ausgewählt %s. %s."
-msgstr[1] "<b>%i</b> Objekte ausgewählt %s. %s."
+msgstr "<b>%i</b> Objekte ausgewählt"
 
 #: src/selection-describer.cpp:68
 #, c-format
@@ -4278,11 +4245,9 @@ msgid "%s%s. %s."
 msgstr ""
 
 #: src/selection-describer.cpp:72
-#, fuzzy, c-format
+#, c-format
 msgid "%s in <b>%i</b> layer. %s."
-msgid_plural "%s in <b>%i</b> layers. %s."
-msgstr[0] "<b>%i</b> Objekte in <b>%i</b> Ebenen ausgewählt. %s."
-msgstr[1] "<b>%i</b> Objekte in <b>%i</b> Ebenen ausgewählt. %s."
+msgstr "%s in <b>%i</b> Ebene. %s."
 
 #: src/seltrans.cpp:462
 msgid ""
@@ -4340,9 +4305,9 @@ msgstr "<b>Verzerren</b> %0.2f%% x %0.2f%%"
 
 #. TRANSLATORS: don't modify the first ";" (it will NOT be displayed as ";" - only the second one will be)
 #: src/seltrans.cpp:978
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Rotate</b>: %0.2f&#176;; with <b>Ctrl</b> to snap angle"
-msgstr "<b>Drehen</b>: %0.2f Grad; Winkel mit <b>Strg</b> einrasten"
+msgstr "<b>Drehen</b>: %0.2f &#176;; Winkel mit <b>Strg</b> einrasten"
 
 #: src/seltrans.cpp:1007
 #, c-format
@@ -4393,11 +4358,9 @@ msgid "<b>Image</b> %d x %d: %s"
 msgstr "Farbbild %d x %d: %s"
 
 #: src/sp-item-group.cpp:366
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Group</b> of <b>%d</b> object"
-msgid_plural "<b>Group</b> of <b>%d</b> objects"
-msgstr[0] "<b>Gruppe</b> von <b>%d</b> Objekten"
-msgstr[1] "<b>Gruppe</b> von <b>%d</b> Objekten"
+msgstr "<b>Gruppe</b> von <b>%d</b> Objekten"
 
 #: src/sp-item.cpp:650
 msgid "Object"
@@ -4424,11 +4387,9 @@ msgid "<b>Dynamic offset</b>, %s by %f pt"
 msgstr "<b>Dynamischer Versatz</b>, %s bei %f pt"
 
 #: src/sp-path.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Path</b> (%i node)"
-msgid_plural "<b>Path</b> (%i nodes)"
-msgstr[0] "<b>Pfad</b> (%i Knoten)"
-msgstr[1] "<b>Pfad</b> (%i Knoten)"
+msgstr "<b>Pfad</b> (%i Knoten)"
 
 #: src/sp-rect.cpp:245
 msgid "<b>Rectangle</b>"
@@ -4442,18 +4403,14 @@ msgid "<b>Spiral</b> with %3f turns"
 msgstr "<b>Spirale</b> mit %3f Windungen"
 
 #: src/sp-star.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Star</b> with %d vertex"
-msgid_plural "<b>Star</b> with %d vertices"
-msgstr[0] "<b>Stern</b> mit %d Eckpunkten"
-msgstr[1] "<b>Stern</b> mit %d Eckpunkten"
+msgstr "<b>Stern</b> mit %d Eckpunkten"
 
 #: src/sp-star.cpp:293
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Polygon</b> with %d vertex"
-msgid_plural "<b>Polygon</b> with %d vertices"
-msgstr[0] "<b>Polygon</b> mit %d Eckpunkten"
-msgstr[1] "<b>Polygon</b> mit %d Eckpunkten"
+msgstr "<b>Polygon</b> mit %d Eckpunkten"
 
 #: src/sp-text.cpp:484
 msgid "<no name found>"
@@ -5725,9 +5682,8 @@ msgid "_Unflow Text"
 msgstr "Formtext aufheben"
 
 #: src/verbs.cpp:1724
-#, fuzzy
 msgid "Convert selected flowed text(s) to regular text objects"
-msgstr "Ausgewählten Formtext in Text umwandeln"
+msgstr "Ausgewählte Formtexte in gewöhnliche Textobjekte umwandeln"
 
 #: src/verbs.cpp:1726
 msgid "Flip _Horizontally"
@@ -6563,7 +6519,7 @@ msgstr "Wert"
 #~ msgstr "Automatisch erkennen"
 
 #~ msgid "Document not modified.  No need to revert."
-#~ msgstr "Dokument nicht verändert. Muss nicht zurücksetzen."
+#~ msgstr "Dokument nicht verÃ¤ndert. Muss nicht zurÃ¼cksetzen."
 
 #~ msgid "Make s_ensitive"
 #~ msgstr "Empfindlich machen"
