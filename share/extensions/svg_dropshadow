@@ -76,10 +76,10 @@ sub make_shadow {
     $shadow =~ s/(stroke|fill):[^;]+;/$1:$color;/ig;
 
     my $svg = <<EOF;
-        <g id="fooz" style="opacity:$opacity;" transform="translate($offset,
+        <svg:g id="fooz" style="opacity:$opacity;" transform="translate($offset,
 $offset)">
             $shadow
-        </g>
+        </svg:g>
         $element
 EOF
     return $svg;

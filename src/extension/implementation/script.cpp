@@ -25,7 +25,7 @@
 #include <xml/repr-private.h>
 #include <interface.h>
 #include <document.h>
-/* #include <inkscape.h> */
+#include <inkscape.h>
 #include <desktop.h>
 #include <desktop-handles.h>
 #include <selection.h>
@@ -522,14 +522,12 @@ Script::save (Inkscape::Extension::Output * module, SPDocument * doc, const gcha
     point both should be full, and the second one is loaded.
 */
 void
-Script::effect (Inkscape::Extension::Effect * module, SPDocument * doc)
+Script::effect (Inkscape::Extension::Effect * module, SPView * doc)
 {
     char tempfilename_in_x[] = "/tmp/ink_ext_XXXXXX";
     gchar * tempfilename_in;
     char tempfilename_out_x[] = "/tmp/ink_ext_XXXXXX";
     gchar * tempfilename_out;
-    char * command = NULL;
-    SPItem * selected;
     SPDocument * mydoc;
 
     tempfilename_in = (char *)tempfilename_in_x;
@@ -568,24 +566,28 @@ Script::effect (Inkscape::Extension::Effect * module, SPDocument * doc)
         }
     }
 
-    Inkscape::Extension::save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE), doc, tempfilename_in, FALSE, FALSE, FALSE);
+    Inkscape::Extension::save(Inkscape::Extension::db.get(SP_MODULE_KEY_OUTPUT_SVG_INKSCAPE), doc->doc, tempfilename_in, FALSE, FALSE, FALSE);
 
-    /* TODO: I don't think this is the best way to do this, plus,
-             it needs to handle all of the cases where there is more
-             than one object selected.  This is a start though. */
-    /* selected = sp_selection_item (SP_DT_SELECTION (SP_ACTIVE_DESKTOP)); */
-    /* TODO: fix this */
-    selected = NULL;
-    if (selected != NULL && !SP_OBJECT_IS_CLONED(selected)) {
-        command = g_strdup_printf("%s --id=%s",
-                                  command,
-                                  SP_OBJECT_ID(selected));
-    } else {
-        command = g_strdup_printf("%s", command);
+    Glib::ustring local_command(command);
+
+    /** \todo Should be some sort of checking here.. don't know how to
+              do this with structs instead of classes */
+    SPDesktop * desktop = (SPDesktop *)doc;
+    if (desktop != NULL) {
+        std::list<SPItem *> selected;
+        desktop->selection->list(selected);
+
+        if (!selected.empty()) {
+            for (std::list<SPItem *>::iterator currentItem = selected.begin();
+                 currentItem != selected.end(); currentItem++) {
+
+                local_command += " --id=";
+                local_command += SP_OBJECT_ID(*currentItem);
+            }
+        }
     }
 
-    execute(command, tempfilename_in, tempfilename_out);
-    g_free(command);
+    execute(local_command.c_str(), tempfilename_in, tempfilename_out);
 
     mydoc = Inkscape::Extension::open(Inkscape::Extension::db.get(SP_MODULE_KEY_INPUT_SVG), tempfilename_out);
 
@@ -683,8 +685,11 @@ Script::execute (const gchar * in_command, const gchar * filein, const gchar * f
     /* TODO:  Perhaps replace with a sprintf? */
     command = g_strdup_printf("%s \"%s\"", in_command, filein);
 
-        bool open_success = pipe.open(command, pipe_t::mode_read);
-        g_free(command);
+    // std::cout << "Command to run: " << command << std::endl;
+
+    bool open_success = pipe.open(command, pipe_t::mode_read);
+    g_free(command);
+
     /* Run script */
     if (!open_success) {
       /* Error - could not open pipe - check errno */

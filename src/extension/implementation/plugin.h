@@ -62,7 +62,7 @@ public:
     /* TODO: need to figure out what we need here */
 
     virtual void effect(Inkscape::Extension::Effect *module,
-                        SPDocument *document);
+                        SPView *document);
 
     /* ----- Print functions ----- */
     virtual unsigned setup(Inkscape::Extension::Print *module);

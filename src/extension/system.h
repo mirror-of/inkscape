@@ -25,7 +25,6 @@ namespace Extension {
 SPDocument *open(Extension *key, gchar const *filename);
 void save(Extension *key, SPDocument *doc, gchar const *filename,
           bool setextension, bool check_overwrite, bool official);
-void filter(GtkObject *object, gchar const *key);
 Print *get_print(gchar const *key);
 Extension *build_from_file(gchar const *filename);
 Extension *build_from_mem(gchar const *buffer, Implementation::Implementation *in_imp);

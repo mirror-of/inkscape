@@ -1,3 +1,23 @@
+2004-12-25  Ted Gould  <ted@gould.cx>
+
+	* share/extensions/svg_dropshadow:
+
+	Changing to use "svg:g" instead of "g" for the group.
+
+	* src/verbs.cpp, src/extension/effect.cpp, src/extension/effect.h,
+	src/extension/system.cpp, src/extension/system.h,
+	src/extension/implementation/implementation.cpp,
+	src/extension/implementation/implementation.h,
+	src/extension/implementation/plugin.cpp,
+	src/extension/implementation/plugin.h,
+	src/extension/implementation/script.cpp,
+	src/extension/implementation/script.h:
+
+	Final stuff to get Effects working as well as the did before, which
+	is okay, but not great.  This involved changing the API to get an SPView
+	instead of an SPDocument because then I can get the selection information
+	from the view that is being used.
+
 2004-12-24  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-object-repr.cpp, src/sp-tspan.cpp, src/splivarot.cpp,

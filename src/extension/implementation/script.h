@@ -54,7 +54,7 @@ public:
                                         gchar const *filename);
     virtual GtkDialog *   prefs_effect (Inkscape::Extension::Effect *module);
     virtual void          effect       (Inkscape::Extension::Effect *module,
-                                        SPDocument *doc);
+                                        SPView *doc);
 
 };
 

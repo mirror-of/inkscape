@@ -227,7 +227,7 @@ Plugin::prefs_effect(Inkscape::Extension::Effect *module)
 }
 
 void 
-Plugin::effect(Inkscape::Extension::Effect *module, SPDocument *document)
+Plugin::effect(Inkscape::Extension::Effect *module, SPView *document)
 {
     return Inkscape::Extension::Implementation::Implementation::effect(module, document);
 }

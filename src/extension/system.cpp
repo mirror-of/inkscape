@@ -310,34 +310,6 @@ save_internal(Extension *in_plug, gpointer in_data)
     return;
 }
 
-/**
- * \return   None
- * \brief    A function that can be attached to a menu item to
- *           execute a effect.
- * \param    object   unused (for prototype matching)
- * \param    key      Key of effect to be used
- *
- * This function just looks up the effect from the module database and then makes sure it is
- * loaded.  After that, it calls the effect function for the module.  Really, it is more of a
- * generic wrapper function.
- */
-void
-filter(GtkObject *object, gchar const *key)
-{
-    g_return_if_fail(key != NULL);
-
-    Effect *fmod = dynamic_cast<Effect *>(db.get(key));
-    g_return_if_fail(fmod != NULL);
-
-    fmod->set_state(Extension::STATE_LOADED);
-    g_return_if_fail(fmod->loaded());
-
-    SPDocument *doc = SP_DT_DOCUMENT(SP_ACTIVE_DESKTOP);
-    g_return_if_fail(doc != NULL);
-
-    return fmod->effect(doc);
-}
-
 Print *
 get_print(gchar const *key)
 {

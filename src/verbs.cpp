@@ -1492,18 +1492,18 @@ EffectLastVerb::perform (SPAction *action, void * data, void *pdata)
     /* These aren't used, but are here to remind people not to use
        the CURRENT_DOCUMENT macros unless they really have to. */
     SPView * current_view = sp_action_get_view(action);
-    SPDocument * current_document = SP_VIEW_DOCUMENT(current_view);
+    // SPDocument * current_document = SP_VIEW_DOCUMENT(current_view);
     Inkscape::Extension::Effect * effect = Inkscape::Extension::Effect::get_last_effect();
 
     if (effect == NULL) return;
-    if (current_document == NULL) return;
+    if (current_view == NULL) return;
 
     switch ((long) data) {
         case SP_VERB_EFFECT_LAST_PREF:
-            if (!effect->prefs(current_document))
+            if (!effect->prefs(current_view))
                 return;
         case SP_VERB_EFFECT_LAST:
-            effect->effect(current_document);
+            effect->effect(current_view);
             break;
         default:
             return;

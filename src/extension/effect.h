@@ -50,8 +50,8 @@ public:
                           Implementation::Implementation * in_imp);
     virtual     ~Effect  (void);
     virtual bool check                (void);
-    bool         prefs   (SPDocument * doc);
-    void         effect  (SPDocument * doc);
+    bool         prefs   (SPView * doc);
+    void         effect  (SPView * doc);
     Inkscape::Verb * get_verb (void) { return &_verb; };
 
     static Effect *  get_last_effect (void) { return _last_effect; };

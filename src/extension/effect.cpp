@@ -39,9 +39,13 @@ Effect::check (void)
 }
 
 bool
-Effect::prefs (SPDocument * doc)
+Effect::prefs (SPView * doc)
 {
     GtkDialog * dialog;
+
+    if (!loaded())
+        set_state(Extension::STATE_LOADED);
+    if (!loaded()) return false;
 
     dialog = imp->prefs_effect(this);
     if (dialog == NULL)
@@ -56,8 +60,12 @@ Effect::prefs (SPDocument * doc)
 }
 
 void
-Effect::effect (SPDocument * doc)
+Effect::effect (SPView * doc)
 {
+    if (!loaded())
+        set_state(Extension::STATE_LOADED);
+    if (!loaded()) return;
+
     _last_effect = this;
     return imp->effect(this, doc);
 }
@@ -80,15 +88,15 @@ void
 Effect::EffectVerb::perform (SPAction *action, void * data, void *pdata)
 {
     SPView * current_view = sp_action_get_view(action);
-    SPDocument * current_document = SP_VIEW_DOCUMENT(current_view);
+//  SPDocument * current_document = SP_VIEW_DOCUMENT(current_view);
     Effect * effect = reinterpret_cast<Effect *>(data);
 
     if (effect == NULL) return;
-    if (current_document == NULL) return;
+    if (current_view == NULL) return;
 
-    std::cout << "Executing: " << effect->get_name() << std::endl;
-    if (effect->prefs(current_document))
-        effect->effect(current_document);
+    // std::cout << "Executing: " << effect->get_name() << std::endl;
+    if (effect->prefs(current_view))
+        effect->effect(current_view);
 
     return;
 }

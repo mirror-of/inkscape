@@ -71,7 +71,7 @@ Implementation::prefs_effect (Inkscape::Extension::Effect * module) {
 } /* Implementation::prefs_effect */
 
 void
-Implementation::effect (Inkscape::Extension::Effect * module, SPDocument * document) {
+Implementation::effect (Inkscape::Extension::Effect * module, SPView * document) {
 	/* throw filter_fail */
 	return;
 } /* Implementation::filter */
