@@ -332,7 +332,8 @@ sp_ui_file_menu (GtkMenu *fm, SPDocument *doc)
 #ifdef WITH_GNOME_PRINT
 	sp_ui_menu_append_item_from_verb (fm, SP_VERB_FILE_PRINT_DIRECT);
 #endif
-	sp_ui_menu_append_item_from_verb (fm, SP_VERB_FILE_PRINT_PREVIEW);
+/* commented out until implemented */
+/*	sp_ui_menu_append_item_from_verb (fm, SP_VERB_FILE_PRINT_PREVIEW);*/
 
 	sp_ui_menu_append_item_from_verb (fm, SP_VERB_NONE);
 
