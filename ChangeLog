@@ -1,5 +1,8 @@
 2004-02-09  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
+	* src/selection.cpp (sp_selection_snappoints): Performance fix: add
+	just 4 corner points, not a thousand.
+
 	* src/print.h, src/print.cpp (sp_print_bind): Add NR::Matrix version.
 
 	* src/inkscape.cpp: #include sys/types.h, sys/stat.h.
@@ -7,9 +10,9 @@
 	* src/desktop.h (SP_DESKTOP_ZOOM): Define in terms of expansion()
 	function instead of implicit casting.
 
-	* src/arc-context.cpp: Cleanups: greater conformance to
-	Coding_Style, combine declaration and first assignment of some
-	vars.
+	* src/arc-context.cpp, src/selection.cpp:
+	Cleanups: greater conformance to Coding_Style, combine declaration
+	and first assignment of some vars.
 
 2004-02-07 Johan Ceuppens <jceuppen@easynet.be> 
     * src/libnrtype/nr-type-gnome.cpp src/libnrtype/nr-type-directory
