@@ -16,10 +16,12 @@
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/label.h>
 #include <gtkmm/stock.h>
+#include <gtkmm/paned.h>
 
 #include <inkscape.h>
 #include <prefs-utils.h>
-#include <extension/extension.h>
+#include "extension/extension.h"
+#include "dialogs/extensions.h"
 
 #include "error-file.h"
 
@@ -61,11 +63,19 @@ ErrorFileNotice::ErrorFileNotice (void) :
 
     /* This is some filler text, needs to change before relase */
     checkbutton = new Gtk::CheckButton(_("Show dialog on startup"));
-    vbox->pack_start(*checkbutton, true, true, 5);
+    vbox->pack_start(*checkbutton, true, false, 5);
     checkbutton->show();
     checkbutton->set_active(prefs_get_int_attribute(PREFERENCE_ID, 1) == 0 ? false : true);
 
     checkbutton->signal_toggled().connect(sigc::mem_fun(this, &ErrorFileNotice::checkbox_toggle));
+
+    set_resizable(true);
+
+    //Gtk::HPaned *splitter = new Gtk::HPaned();
+    Inkscape::UI::Dialogs::ExtensionsPanel* extens = new Inkscape::UI::Dialogs::ExtensionsPanel();
+    extens->set_full(false);
+    vbox->pack_start( *extens, true, true );
+    extens->show();
 
     return;
 }
