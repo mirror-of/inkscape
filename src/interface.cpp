@@ -48,6 +48,7 @@
 #include "sp-namedview.h"
 
 #include "dir-util.h"
+#include "memeq.h"
 #include "xml/repr-private.h"
 #include "helper/action.h"
 #include "helper/gnome-utils.h"
@@ -77,7 +78,7 @@ static GtkTargetEntry ui_drop_target_entries [] = {
 #define ENTRIES_SIZE(n) sizeof(n)/sizeof(n[0]) 
 static guint nui_drop_target_entries = ENTRIES_SIZE(ui_drop_target_entries);
 static void sp_ui_import_files(gchar * buffer);
-static void sp_ui_import_one_file(gchar * filename);
+static void sp_ui_import_one_file(char const *filename);
 static void sp_ui_import_one_file_with_check(gpointer filename, gpointer unused);
 static void sp_ui_drag_data_received (GtkWidget * widget,
 				      GdkDragContext * drag_context,
@@ -1216,18 +1217,81 @@ static void
 sp_ui_import_one_file_with_check(gpointer filename, gpointer unused)
 {
 	if (filename) {
-		if (strlen((gchar*)filename) > 2)
-			sp_ui_import_one_file((gchar*)filename);
+		if (strlen((char const *)filename) > 2)
+			sp_ui_import_one_file((char const *)filename);
 	}
+}
+
+/**
+ * Returns true iff \a filename appears to reference an SVG file.
+ *
+ * The current implementation looks solely at the filename string rather than at the content of the
+ * file.
+ *
+ * Hence, it currently doesn't matter whether \a filename is a utf8name or a filename in whatever
+ * charset, so long as the charset includes ASCII as a subset (specifically [a-z.]).  Our current
+ * sole caller passes a utf8name.
+ */
+static bool
+is_svg_filename(char const *filename)
+{
+    /* TODO: Consider looking at content rather than just filename.  Maybe libxml could be used to
+     * do so. */
+    size_t const filename_len = strlen(filename);
+    if (filename_len < 5) {
+        return false;
+    }
+    char const *extension = filename + filename_len - 4;
+    return ((memcmp(extension, ".svg", 4) == 0) ||
+            (memcmp(extension, ".xml", 4) == 0)   );
+}
+
+/**
+ * Returns true iff \a filename appears to reference a bitmap file suitable for \<image\>.
+ *
+ * The current implementation looks solely at the filename string rather than at the content of the
+ * file (see TODO comment in code).
+ *
+ * Hence, it currently doesn't matter whether \a filename is a utf8name or a filename in whatever
+ * charset, so long as the charset includes ASCII as a subset (specifically [a-z.]).  Our current
+ * sole caller passes a utf8name.
+ */
+static bool
+is_bitmap_filename(char const *filename)
+{
+    /* TODO: Look at content rather than just filename.  See the `magic' file from the file(1)
+     * program / libmagic.
+     *
+     * (We could instead link against libmagic, but we only need to support the small number of
+     * formats allowed by SVG.  Note that libmagic isn't appropriate for detecting SVG files, at
+     * the time of writing.) */
+    size_t const filename_len = strlen(filename);
+    if (filename_len < 5) {
+        return false;
+    }
+    if (filename[filename_len - 4] == '.') {
+        char const *ext = filename + filename_len - 3;
+        return (memeq(ext, "png", 3) ||
+                memeq(ext, "jpg", 3) ||
+                memeq(ext, "bmp", 3) ||
+                memeq(ext, "gif", 3) ||
+                memeq(ext, "xpm", 3)   );
+    }
+    if (filename_len >= 6
+        && filename[filename_len - 5] == '.') {
+        char const *ext = filename + filename_len - 4;
+        return (memeq(ext, "jpeg", 4) ||
+                memeq(ext, "tiff", 4)   );
+    }
+    return false;
 }
 
 /* Cut&Paste'ed from file.c:file_import_ok */
 static void
-sp_ui_import_one_file(gchar * filename)
+sp_ui_import_one_file(char const *filename)
 {
 	SPDocument * doc;
 	SPRepr * rdoc;
-	const gchar * e, * docbase, * relname;
 	SPRepr * repr;
 	SPReprDoc * rnewdoc;
 
@@ -1238,12 +1302,10 @@ sp_ui_import_one_file(gchar * filename)
 
 	rdoc = sp_document_repr_root (doc);
 
-	docbase = sp_repr_attr (rdoc, "sodipodi:docbase");
-	relname = sp_relative_path_from_path (filename, docbase);
-	/* fixme: this should be implemented with mime types */
-	e = sp_extension_from_path (filename);
+	gchar const *docbase = sp_repr_attr(rdoc, "sodipodi:docbase");
+	char const *relname = sp_relative_path_from_path(filename, docbase);
 
-	if ((e == NULL) || (strcmp (e, "svg") == 0) || (strcmp (e, "xml") == 0)) {
+	if (is_svg_filename(filename)) {
 		SPRepr * newgroup;
 		const gchar * style;
 		SPRepr * child;
@@ -1270,13 +1332,7 @@ sp_ui_import_one_file(gchar * filename)
 		return;
 	}
 
-	if ((strcmp (e, "png") == 0) ||
-	    (strcmp (e, "jpg") == 0) ||
-	    (strcmp (e, "jpeg") == 0) ||
-	    (strcmp (e, "bmp") == 0) ||
-	    (strcmp (e, "gif") == 0) ||
-	    (strcmp (e, "tiff") == 0) ||
-	    (strcmp (e, "xpm") == 0)) {
+	if (is_bitmap_filename(filename)) {
 		/* Try pixbuf */
 		GdkPixbuf *pb;
 		// TODO: bulia, please look over
