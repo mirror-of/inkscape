@@ -33,6 +33,7 @@
 #include "display/sp-canvas.h"
 #include "path-chemistry.h"
 #include "desktop-affine.h"
+#include "desktop-snap.h"
 #include "libnr/nr-matrix.h"
 #include "libnr/nr-matrix-ops.h"
 #include "style.h"
@@ -719,12 +720,18 @@ void sp_selection_paste(bool in_place)
 	if (!in_place) {
 		sp_document_ensure_up_to_date (SP_DT_DOCUMENT (desktop));
 
-		NRRect bbox;
-		selection->bounds(&bbox);
+		NR::Rect bbox = selection->bounds();
 
 		NR::Point m = sp_desktop_point (desktop);
+		m -= bbox.midpoint();
 
-		sp_selection_move_relative (selection, m[NR::X] - (bbox.x0 + bbox.x1)*0.5, m[NR::Y] - (bbox.y0 + bbox.y1)*0.5);
+		/* Snap the offset of the new item(s) to the grid */
+		/* FIXME: this gridsnap fiddling is a hack. */
+		gdouble curr_gridsnap = desktop->gridsnap;
+		desktop->gridsnap = 1e18;
+		sp_desktop_free_snap (desktop, m);
+		desktop->gridsnap = curr_gridsnap;
+		sp_selection_move_relative (selection, m[NR::X], m[NR::Y]);
 	}
 
 	sp_document_done (SP_DT_DOCUMENT (desktop));
