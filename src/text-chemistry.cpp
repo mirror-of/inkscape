@@ -185,6 +185,52 @@ text_remove_from_path (void)
     }
 }
 
+void 
+text_remove_all_kerns_recursively (SPObject *o)
+{
+    sp_repr_set_attr (SP_OBJECT_REPR(o), "dx", NULL);
+    sp_repr_set_attr (SP_OBJECT_REPR(o), "dy", NULL);
+    sp_repr_set_attr (SP_OBJECT_REPR(o), "rotate", NULL); 
+
+    for (SPObject *i = sp_object_first_child (o); i != NULL; i = SP_OBJECT_NEXT(i)) {
+        text_remove_all_kerns_recursively (i);
+    }
+}
+
+//FIXME: must work with text selection
+void 
+text_remove_all_kerns (void)
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
+    SPSelection *selection = SP_DT_SELECTION(desktop);
+
+    if (selection->isEmpty()) {
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>text(s)</b> to remove kerns from."));
+        return;
+    }
+
+    bool did = false;
+
+    for (GSList *items = g_slist_copy((GSList *) selection->itemList());
+         items != NULL;
+         items = items->next) {
+
+        if (!SP_IS_TEXT (SP_OBJECT (items->data))) {
+            continue;
+        }
+
+        text_remove_all_kerns_recursively (SP_OBJECT (items->data));
+        did = true;
+    }
+
+    if (!did) {
+        desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Select <b>text(s)</b> to remove kerns from."));
+    } else {
+        sp_document_done(SP_DT_DOCUMENT(desktop));
+    }
+}
+
 
 /*
   Local Variables:

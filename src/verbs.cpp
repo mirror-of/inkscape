@@ -772,6 +772,9 @@ SelectionVerb::perform (SPAction *action, void * data, void * pdata)
         case SP_VERB_SELECTION_TEXTFROMPATH:
             text_remove_from_path ();
             break;
+        case SP_VERB_SELECTION_REMOVE_KERNS:
+            text_remove_all_kerns ();
+            break;
 
         case SP_VERB_SELECTION_UNION:
             sp_selected_path_union ();
@@ -1478,10 +1481,14 @@ Verb * Verb::_base_verbs[] = {
         N_("Group selected objects"), "selection_group"),
     new SelectionVerb(SP_VERB_SELECTION_UNGROUP, "SelectionUnGroup", N_("_Ungroup"),
         N_("Ungroup selected group(s)"), "selection_ungroup"),
-    new SelectionVerb(SP_VERB_SELECTION_TEXTTOPATH, "SelectionTextToPath", N_("_Put on path"),
+
+    new SelectionVerb(SP_VERB_SELECTION_TEXTTOPATH, "SelectionTextToPath", N_("_Put on Path"),
         N_("Put text on path"), NULL),
-    new SelectionVerb(SP_VERB_SELECTION_TEXTFROMPATH, "SelectionTextFromPath", N_("_Remove from path"),
+    new SelectionVerb(SP_VERB_SELECTION_TEXTFROMPATH, "SelectionTextFromPath", N_("_Remove from Path"),
         N_("Remove text from path"), NULL),
+    new SelectionVerb(SP_VERB_SELECTION_REMOVE_KERNS, "SelectionTextRemoveKerns", N_("Remove All _Kerns"),
+        N_("Remove all kerns from a text object"), NULL),
+
     new SelectionVerb(SP_VERB_SELECTION_UNION, "SelectionUnion", N_("_Union"),
         N_("Union of selected objects"), "union"),
     new SelectionVerb(SP_VERB_SELECTION_INTERSECT, "SelectionIntersect", N_("_Intersection"),
@@ -1530,9 +1537,9 @@ Verb * Verb::_base_verbs[] = {
         N_("Clean up selected path(s)"), "selection_cleanup"),
     new SelectionVerb(SP_VERB_SELECTION_REVERSE, "SelectionReverse", N_("_Reverse"),
         N_("Reverses the direction of selected path(s); useful for flipping markers"), NULL),
-    new SelectionVerb(SP_VERB_SELECTION_POTRACE, "SelectionPotrace", N_("_Trace bitmap"),
+    new SelectionVerb(SP_VERB_SELECTION_POTRACE, "SelectionPotrace", N_("_Trace Bitmap"),
         N_("Convert bitmap object to paths"), NULL),
-    new SelectionVerb(SP_VERB_SELECTION_CREATE_BITMAP, "SelectionCreateBitmap", N_("_Make a bitmap copy"),
+    new SelectionVerb(SP_VERB_SELECTION_CREATE_BITMAP, "SelectionCreateBitmap", N_("_Make a Bitmap Copy"),
         N_("Export selection to a bitmap and insert it into document"), NULL),
     new SelectionVerb(SP_VERB_SELECTION_COMBINE, "SelectionCombine", N_("_Combine"),
         N_("Combine several paths into one"), "selection_combine"),
@@ -1566,7 +1573,7 @@ Verb * Verb::_base_verbs[] = {
         N_("Remove transformations from object"), "object_reset"),
     new ObjectVerb(SP_VERB_OBJECT_TO_CURVE, "ObjectToCurve", N_("_Object to Path"),
         N_("Convert selected object(s) to path(s)"), "object_tocurve"),
-    new ObjectVerb(SP_VERB_OBJECT_FLOWTEXT_TO_TEXT, "ObjectFlowtextToText", N_("_Unflow text"),
+    new ObjectVerb(SP_VERB_OBJECT_FLOWTEXT_TO_TEXT, "ObjectFlowtextToText", N_("_Unflow Text"),
         N_("Convert selected flowtext to text"), NULL),
     new ObjectVerb(SP_VERB_OBJECT_FLIP_HORIZONTAL, "ObjectFlipHorizontally",
         N_("Flip _Horizontally"), N_("Flip selection horizontally"),
@@ -1672,7 +1679,7 @@ Verb * Verb::_base_verbs[] = {
         N_("Transform dialog"), "object_trans"),
     new DialogVerb(SP_VERB_DIALOG_ALIGN_DISTRIBUTE, "DialogAlignDistribute", N_("_Align and Distribute..."), 
         N_("Align and Distribute dialog"), "object_align"),
-    new DialogVerb(SP_VERB_DIALOG_TEXT, "Dialogtext", N_("Text and _Font..."),
+    new DialogVerb(SP_VERB_DIALOG_TEXT, "Dialogtext", N_("_Text and Font..."),
         N_("Text and Font dialog"), "object_font"),
     new DialogVerb(SP_VERB_DIALOG_XML_EDITOR, "DialogXMLEditor", N_("_XML Editor..."),
         N_("XML Editor"), "xml_editor"),
