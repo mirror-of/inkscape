@@ -14,6 +14,10 @@
 
 2004-01-23  MenTaLguY  <mental@rydia.net>
 
+	* src/sp-object.cpp: fix for id binding bug
+
+2004-01-23  MenTaLguY  <mental@rydia.net>
+
 	* src/xml/repr-io.cpp: don't complain about not having a namespace
 	  URI for the standard xml: prefix
 

@@ -664,7 +664,7 @@ sp_object_invoke_build (SPObject * object, SPDocument * document, SPRepr * repr,
 			if ((id == NULL) || (strcmp (id, realid) != 0)) {
 				gboolean undo_sensitive=sp_document_get_undo_sensitive(document);
 				sp_document_set_undo_sensitive(document, FALSE);
-				sp_repr_set_attr (object->repr, "id", realid);
+				sp_repr_set_attr(object->repr, "id", realid);
 				sp_document_set_undo_sensitive(document, undo_sensitive);
 			}
 		}
@@ -770,7 +770,7 @@ sp_object_private_set (SPObject *object, unsigned int key, const gchar *value)
 			if (value) {
 				conflict = object->document->getObjectById((const char *)value);
 			}
-			if (conflict) {
+			if ( conflict && conflict != object ) {
 				sp_object_ref(conflict, NULL);
 				// give the conflicting object a new ID
 				gchar *new_conflict_id = sp_object_get_unique_id(conflict, NULL);
