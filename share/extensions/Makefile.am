@@ -12,6 +12,7 @@ extensions = \
 	dia2svg.sh \
 	sk2svg.sh \
 	ps2epsi.sh \
+	ps2pdf.sh \
 	txt2svg.pl \
 	inkscape-shadow.sh \
 	inkscape-shadow-white.sh \
@@ -31,6 +32,7 @@ modules = \
 	dropshadow.inx \
 	dia.inx \
 	epsi_output.inx \
+	pdf_output.inx \
 	txt2svg.inx \
 	gimpgrad.inx \
 	grid.inx \
