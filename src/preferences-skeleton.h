@@ -37,7 +37,7 @@ static const char preferences_skeleton[] =
 "    <eventcontext id=\"calligraphic\" style=\"fill:black;fill-rule:nonzero;stroke:none;\""
 "                       mass=\"0.3\" drag=\"0.5\" angle=\"30\" width=\"0.2\"/>"
 "    <eventcontext id=\"text\""
-"                  style=\"fill:black;stroke:none;font-family:helvetica;font-style:normal;font-weight:normal;font-size:12px;\"/>"
+"                  style=\"fill:black;fill-opacity:1;stroke:none;font-family:helvetica;font-style:normal;font-weight:normal;font-size:12px;\"/>"
 "    <eventcontext id=\"nodes\"/>"
 "    <eventcontext id=\"zoom\"/>"
 "    <eventcontext id=\"dropper\"/>"
