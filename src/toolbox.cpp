@@ -852,6 +852,8 @@ sp_star_toolbox_new (SPDesktop *desktop)
     proportion_adj = gtk_adjustment_new (prefs_get_double_attribute ("tools.shapes.star", "proportion", .5), 0.01, 1.0, 0.01, 0.1, 0.1);
     gtk_object_set_data (GTK_OBJECT (tbl), "proportion", proportion_adj);
     sb2 = gtk_spin_button_new (GTK_ADJUSTMENT (proportion_adj), 0.1, 2);
+    // TRANSLATORS: Tip radius of a star is the distance from the center to the farthest handle.
+    // Base radius is the same for the closest handle.
     gtk_tooltips_set_tip (tt, sb2, _("Base radius to tip radius ratio"), NULL);
     gtk_widget_set_size_request (sb2, AUX_SPINBUTTON_WIDTH, AUX_SPINBUTTON_HEIGHT);
     gtk_widget_show (sb2);

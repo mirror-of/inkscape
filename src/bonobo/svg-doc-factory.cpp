@@ -35,6 +35,7 @@ sp_svg_doc_factory_init (void)
         sp_svg_factory, NULL);
 
     if (doc_factory == NULL) {
+	// TRANSLATORS: object factory is an object that produces other objects
         g_error (_("Could not create sodipodi-svg-doc factory"));
     }
 }
