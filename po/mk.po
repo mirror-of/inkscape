@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: sodipodi.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-22 00:29+0100\n"
+"POT-Creation-Date: 2004-11-22 20:16+0100\n"
 "PO-Revision-Date: 2003-06-15 09:44+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <mk@li.org>\n"
@@ -78,7 +78,7 @@ msgid "Zoom drawing if window size changes"
 msgstr ""
 
 #: src/desktop.cpp:936 src/dialogs/display-settings.cpp:1081
-#: src/verbs.cpp:1638
+#: src/verbs.cpp:1639
 #, fuzzy
 msgid "Zoom"
 msgstr "Зум"
@@ -292,27 +292,27 @@ msgstr ""
 msgid "Smallest item"
 msgstr ""
 
-#: src/dialogs/debugdialog.cpp:146
+#: src/dialogs/debugdialog.cpp:141
 msgid "Messages"
 msgstr ""
 
 #. ## Add a menu for clear()
-#: src/dialogs/debugdialog.cpp:152 src/interface.cpp:1002
+#: src/dialogs/debugdialog.cpp:147 src/interface.cpp:1002
 #, fuzzy
 msgid "_File"
 msgstr "Датотека"
 
 #. TRANSLATORS: "Clear" is a verb here
-#: src/dialogs/debugdialog.cpp:153 src/dialogs/find.cpp:749
+#: src/dialogs/debugdialog.cpp:148 src/dialogs/find.cpp:803
 #, fuzzy
 msgid "_Clear"
 msgstr "Затвори"
 
-#: src/dialogs/debugdialog.cpp:155
+#: src/dialogs/debugdialog.cpp:150
 msgid "Capture log messages"
 msgstr ""
 
-#: src/dialogs/debugdialog.cpp:157
+#: src/dialogs/debugdialog.cpp:152
 msgid "Release log messages"
 msgstr ""
 
@@ -528,7 +528,7 @@ msgstr ""
 msgid "Proprietary"
 msgstr ""
 
-#: src/dialogs/desktop-properties.cpp:1659 src/dialogs/layer-properties.cpp:57
+#: src/dialogs/desktop-properties.cpp:1659
 #, fuzzy
 msgid "Close"
 msgstr "Затвори"
@@ -561,7 +561,7 @@ msgstr ""
 #. sorationsnapsperpi == 0 means no snapping
 #: src/dialogs/display-settings.cpp:257 src/dialogs/display-settings.cpp:393
 #: src/dialogs/display-settings.cpp:448 src/dialogs/display-settings.cpp:1454
-#: src/dialogs/stroke-style.cpp:1071 src/interface.cpp:660 src/verbs.cpp:1427
+#: src/dialogs/stroke-style.cpp:1071 src/interface.cpp:661 src/verbs.cpp:1426
 #, fuzzy
 msgid "None"
 msgstr "Ништо"
@@ -896,26 +896,26 @@ msgstr "Ништо"
 msgid "Shapes"
 msgstr "Облик"
 
-#: src/dialogs/display-settings.cpp:1095 src/verbs.cpp:1622
+#: src/dialogs/display-settings.cpp:1095 src/verbs.cpp:1623
 #, fuzzy
 msgid "Rectangle"
 msgstr "Правоаголник"
 
-#: src/dialogs/display-settings.cpp:1101 src/verbs.cpp:1624
+#: src/dialogs/display-settings.cpp:1101 src/verbs.cpp:1625
 #, fuzzy
 msgid "Ellipse"
 msgstr "Елипса"
 
-#: src/dialogs/display-settings.cpp:1107 src/verbs.cpp:1626
+#: src/dialogs/display-settings.cpp:1107 src/verbs.cpp:1627
 msgid "Star"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1113 src/verbs.cpp:1628
+#: src/dialogs/display-settings.cpp:1113 src/verbs.cpp:1629
 #, fuzzy
 msgid "Spiral"
 msgstr "Спирала"
 
-#: src/dialogs/display-settings.cpp:1126 src/verbs.cpp:1630
+#: src/dialogs/display-settings.cpp:1126 src/verbs.cpp:1631
 msgid "Pencil"
 msgstr ""
 
@@ -929,22 +929,22 @@ msgid ""
 "values produce more uneven paths with more nodes"
 msgstr ""
 
-#: src/dialogs/display-settings.cpp:1146 src/verbs.cpp:1632
+#: src/dialogs/display-settings.cpp:1146 src/verbs.cpp:1633
 #, fuzzy
 msgid "Pen"
 msgstr "Пенкало"
 
-#: src/dialogs/display-settings.cpp:1155 src/verbs.cpp:1634
+#: src/dialogs/display-settings.cpp:1155 src/verbs.cpp:1635
 msgid "Calligraphy"
 msgstr ""
 
 #: src/dialogs/display-settings.cpp:1162 src/dialogs/text-edit.cpp:345
-#: src/verbs.cpp:1636
+#: src/verbs.cpp:1637
 #, fuzzy
 msgid "Text"
 msgstr "Текст"
 
-#: src/dialogs/display-settings.cpp:1171 src/verbs.cpp:1640
+#: src/dialogs/display-settings.cpp:1171 src/verbs.cpp:1641
 msgid "Dropper"
 msgstr ""
 
@@ -984,7 +984,7 @@ msgid ""
 msgstr ""
 
 #. Clones
-#: src/dialogs/display-settings.cpp:1213 src/dialogs/find.cpp:649
+#: src/dialogs/display-settings.cpp:1213 src/dialogs/find.cpp:674
 #, fuzzy
 msgid "Clones"
 msgstr "Затвори"
@@ -1366,192 +1366,218 @@ msgstr ""
 msgid "alternating"
 msgstr ""
 
-#: src/dialogs/find.cpp:82 src/dialogs/find.cpp:719
+#: src/dialogs/find.cpp:82 src/dialogs/find.cpp:744
 msgid "Find objects by their text content (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:83 src/dialogs/find.cpp:720
+#: src/dialogs/find.cpp:83 src/dialogs/find.cpp:745
 msgid "Find objects by the value of the id attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:84 src/dialogs/find.cpp:721
+#: src/dialogs/find.cpp:84 src/dialogs/find.cpp:746
 msgid ""
 "Find objects by the value of the style attribute (exact or partial match)"
 msgstr ""
 
-#: src/dialogs/find.cpp:85 src/dialogs/find.cpp:722
+#: src/dialogs/find.cpp:85 src/dialogs/find.cpp:747
 msgid "Find objects by the name of an attribute (exact or partial match)"
 msgstr ""
 
 #. TRANSLATORS: "%s" is replaced with "exact" or "partial" when this string is displayed
-#: src/dialogs/find.cpp:405
+#: src/dialogs/find.cpp:430
 #, c-format
-msgid "%d object(s) found (out of %d), %s match."
+msgid "<b>%d</b> object(s) found (out of <b>%d</b>), %s match."
 msgstr ""
 
-#: src/dialogs/find.cpp:406
+#: src/dialogs/find.cpp:431
 #, fuzzy
 msgid "exact"
 msgstr "Текст"
 
-#: src/dialogs/find.cpp:406
+#: src/dialogs/find.cpp:431
 #, fuzzy
 msgid "partial"
 msgstr "Спирала"
 
-#: src/dialogs/find.cpp:413
+#: src/dialogs/find.cpp:438
 #, fuzzy
 msgid "No objects found"
 msgstr "Зачувај документ"
 
-#: src/dialogs/find.cpp:571
+#: src/dialogs/find.cpp:596
 #, fuzzy
 msgid "T_ype: "
 msgstr "Тип:"
 
-#: src/dialogs/find.cpp:578
+#: src/dialogs/find.cpp:603
 msgid "Search in all object types"
 msgstr ""
 
-#: src/dialogs/find.cpp:578
+#: src/dialogs/find.cpp:603
 msgid "All types"
 msgstr ""
 
-#: src/dialogs/find.cpp:589
+#: src/dialogs/find.cpp:614
 msgid "Search all shapes"
 msgstr ""
 
-#: src/dialogs/find.cpp:589
+#: src/dialogs/find.cpp:614
 msgid "All shapes"
 msgstr ""
 
-#: src/dialogs/find.cpp:606
+#: src/dialogs/find.cpp:631
 #, fuzzy
 msgid "Search rectangles"
 msgstr "Правоаголник"
 
-#: src/dialogs/find.cpp:606
+#: src/dialogs/find.cpp:631
 #, fuzzy
 msgid "Rectangles"
 msgstr "Правоаголник"
 
-#: src/dialogs/find.cpp:611
+#: src/dialogs/find.cpp:636
 msgid "Search ellipses, arcs, circles"
 msgstr ""
 
-#: src/dialogs/find.cpp:611
+#: src/dialogs/find.cpp:636
 #, fuzzy
 msgid "Ellipses"
 msgstr "Елипса"
 
-#: src/dialogs/find.cpp:616
+#: src/dialogs/find.cpp:641
 msgid "Search stars and polygons"
 msgstr ""
 
-#: src/dialogs/find.cpp:616
+#: src/dialogs/find.cpp:641
 #, fuzzy
 msgid "Stars"
 msgstr "Стил"
 
-#: src/dialogs/find.cpp:621
+#: src/dialogs/find.cpp:646
 #, fuzzy
 msgid "Search spirals"
 msgstr "Спирала"
 
-#: src/dialogs/find.cpp:621
+#: src/dialogs/find.cpp:646
 #, fuzzy
 msgid "Spirals"
 msgstr "Спирала"
 
 #. TRANSLATORS: polyline is a set of connected straight line segments
 #. http://www.w3.org/TR/SVG11/shapes.html#PolylineElement
-#: src/dialogs/find.cpp:634
+#: src/dialogs/find.cpp:659
 msgid "Search paths, lines, polylines"
 msgstr ""
 
-#: src/dialogs/find.cpp:634
+#: src/dialogs/find.cpp:659
 #, fuzzy
 msgid "Paths"
 msgstr "Вметни"
 
-#: src/dialogs/find.cpp:639
+#: src/dialogs/find.cpp:664
 msgid "Search text objects"
 msgstr ""
 
-#: src/dialogs/find.cpp:639
+#: src/dialogs/find.cpp:664
 #, fuzzy
 msgid "Texts"
 msgstr "Текст"
 
-#: src/dialogs/find.cpp:644
+#: src/dialogs/find.cpp:669
 msgid "Search groups"
 msgstr ""
 
-#: src/dialogs/find.cpp:644
+#: src/dialogs/find.cpp:669
 #, fuzzy
 msgid "Groups"
 msgstr "Група"
 
-#: src/dialogs/find.cpp:649
+#: src/dialogs/find.cpp:674
 msgid "Search clones"
 msgstr ""
 
-#: src/dialogs/find.cpp:654
+#: src/dialogs/find.cpp:679
 msgid "Search images"
 msgstr ""
 
-#: src/dialogs/find.cpp:654
+#: src/dialogs/find.cpp:679
 #, fuzzy
 msgid "Images"
 msgstr "Слика"
 
-#: src/dialogs/find.cpp:659
+#: src/dialogs/find.cpp:684
 msgid "Search offset objects"
 msgstr ""
 
-#: src/dialogs/find.cpp:659
+#: src/dialogs/find.cpp:684
 msgid "Offsets"
 msgstr ""
 
-#: src/dialogs/find.cpp:719
+#: src/dialogs/find.cpp:744
 #, fuzzy
 msgid "_Text: "
 msgstr "Текст"
 
-#: src/dialogs/find.cpp:720
+#: src/dialogs/find.cpp:745
 msgid "_ID: "
 msgstr ""
 
-#: src/dialogs/find.cpp:721
+#: src/dialogs/find.cpp:746
 #, fuzzy
 msgid "_Style: "
 msgstr "Стил"
 
-#: src/dialogs/find.cpp:722
+#: src/dialogs/find.cpp:747
 #, fuzzy
 msgid "_Attribute: "
 msgstr "Атрибут"
 
-#: src/dialogs/find.cpp:735
+#: src/dialogs/find.cpp:761
 #, fuzzy
 msgid "Search in s_election"
 msgstr "Избор"
 
-#: src/dialogs/find.cpp:739
+#: src/dialogs/find.cpp:765
 msgid "Limit search to the current selection"
 msgstr ""
 
-#: src/dialogs/find.cpp:749
+#: src/dialogs/find.cpp:770
+#, fuzzy
+msgid "Search in current _layer"
+msgstr "Документ"
+
+#: src/dialogs/find.cpp:774
+#, fuzzy
+msgid "Limit search to the current layer"
+msgstr "Документ"
+
+#: src/dialogs/find.cpp:779
+msgid "Include _hidden"
+msgstr ""
+
+#: src/dialogs/find.cpp:783
+msgid "Include hidden objects in search"
+msgstr ""
+
+#: src/dialogs/find.cpp:788
+msgid "Include l_ocked"
+msgstr ""
+
+#: src/dialogs/find.cpp:792
+msgid "Include locked objects in search"
+msgstr ""
+
+#: src/dialogs/find.cpp:803
 #, fuzzy
 msgid "Clear values"
 msgstr "Исчисти ги сите"
 
-#: src/dialogs/find.cpp:750
+#: src/dialogs/find.cpp:804
 #, fuzzy
 msgid "_Find"
 msgstr "Решетка"
 
-#: src/dialogs/find.cpp:750
+#: src/dialogs/find.cpp:804
 msgid "Select objects matching all of the fields you filled in"
 msgstr ""
 
@@ -1639,19 +1665,20 @@ msgstr ""
 msgid "Label invalid"
 msgstr ""
 
-#: src/dialogs/layer-properties.cpp:41
+#: src/dialogs/layer-properties.cpp:57
 #, fuzzy
 msgid "Layer Properties"
 msgstr "Правоаголник"
 
-#: src/dialogs/layer-properties.cpp:49
+#: src/dialogs/layer-properties.cpp:70
 msgid "Layer Name:"
 msgstr ""
 
-#. Buttons
-#: src/dialogs/layer-properties.cpp:55
-msgid "Apply"
-msgstr ""
+#. TRANSLATORS: This means "The layer has been renamed"
+#: src/dialogs/layer-properties.cpp:174
+#, fuzzy
+msgid "Renamed layer"
+msgstr "Избриши"
 
 #: src/dialogs/object-attributes.cpp:31
 msgid "Href:"
@@ -2242,21 +2269,21 @@ msgstr "Избор"
 msgid "Attribute value"
 msgstr ""
 
-#: src/dialogs/xml-tree.cpp:1322
+#: src/dialogs/xml-tree.cpp:1351
 msgid "New element node..."
 msgstr ""
 
-#: src/dialogs/xml-tree.cpp:1343
+#: src/dialogs/xml-tree.cpp:1372
 #, fuzzy
 msgid "Cancel"
 msgstr "Откажи"
 
-#: src/dialogs/xml-tree.cpp:1349
+#: src/dialogs/xml-tree.cpp:1378
 #, fuzzy
 msgid "Create"
 msgstr "Создади"
 
-#: src/dialogs/xml-tree.cpp:1469
+#: src/dialogs/xml-tree.cpp:1498
 #, c-format
 msgid ""
 "Cannot set <b>%s</b>: Another element with value <b>%s</b> already exists!"
@@ -2520,7 +2547,7 @@ msgstr ""
 msgid "about.svg"
 msgstr ""
 
-#: src/help.cpp:81 src/verbs.cpp:1731
+#: src/help.cpp:81 src/verbs.cpp:1732
 msgid "About Inkscape"
 msgstr ""
 
@@ -2740,29 +2767,29 @@ msgid ""
 "and any changes made in preferences will not be saved."
 msgstr ""
 
-#: src/interface.cpp:670
+#: src/interface.cpp:671
 #, fuzzy
 msgid "_New"
 msgstr "Ново"
 
-#: src/interface.cpp:670
+#: src/interface.cpp:671
 #, fuzzy
 msgid "Create new document"
 msgstr "Зачувај документ"
 
-#: src/interface.cpp:679
+#: src/interface.cpp:680
 msgid "Open _Recent"
 msgstr ""
 
-#: src/interface.cpp:679
+#: src/interface.cpp:680
 msgid "Open one of the recently visited documents"
 msgstr ""
 
-#: src/interface.cpp:904
+#: src/interface.cpp:905
 msgid "_Show/Hide"
 msgstr ""
 
-#: src/interface.cpp:904
+#: src/interface.cpp:905
 msgid ""
 "Show or hide parts of the document window (differently for normal and "
 "fullscreen modes)"
@@ -2770,35 +2797,35 @@ msgstr ""
 
 #. sp_ui_menu_append_check_item_from_verb (m, view, _("_Menu"), _("Show or hide the menu bar"), "menu",
 #. checkitem_toggled, checkitem_update, 0);
-#: src/interface.cpp:909
+#: src/interface.cpp:910
 msgid "Commands Bar"
 msgstr ""
 
-#: src/interface.cpp:909
+#: src/interface.cpp:910
 msgid "Show or hide the Commands bar (under the menu)"
 msgstr ""
 
-#: src/interface.cpp:911
+#: src/interface.cpp:912
 msgid "Tool Controls"
 msgstr ""
 
-#: src/interface.cpp:911
+#: src/interface.cpp:912
 msgid "Show or hide the Tool Controls panel"
 msgstr ""
 
-#: src/interface.cpp:913
+#: src/interface.cpp:914
 msgid "_Toolbox"
 msgstr ""
 
-#: src/interface.cpp:913
+#: src/interface.cpp:914
 msgid "Show or hide the main toolbox (on the left)"
 msgstr ""
 
-#: src/interface.cpp:919
+#: src/interface.cpp:920
 msgid "_Statusbar"
 msgstr ""
 
-#: src/interface.cpp:919
+#: src/interface.cpp:920
 msgid "Show or hide the statusbar (at the bottom of the window)"
 msgstr ""
 
@@ -2849,30 +2876,30 @@ msgid "_Help"
 msgstr ""
 
 #. TRANSLATORS: #%s is the id of the group e.g. <g id="#g7">, not a number.
-#: src/interface.cpp:1111
+#: src/interface.cpp:1116
 #, fuzzy, c-format
-msgid "Edit group #%s"
+msgid "Enter group #%s"
 msgstr "Уреди"
 
-#: src/interface.cpp:1123
-msgid "Edit parent group"
+#: src/interface.cpp:1127
+msgid "Go to parent"
 msgstr ""
 
-#: src/interface.cpp:1129
+#: src/interface.cpp:1133
 #, fuzzy
-msgid "Edit root"
+msgid "Go to root"
 msgstr "Уреди"
 
-#: src/interface.cpp:1167
+#: src/interface.cpp:1171
 msgid "Could not parse SVG data"
 msgstr ""
 
-#: src/interface.cpp:1329
+#: src/interface.cpp:1333
 #, c-format
 msgid "Overwrite %s"
 msgstr ""
 
-#: src/interface.cpp:1347
+#: src/interface.cpp:1351
 #, c-format
 msgid ""
 "The file %s already exists.  Do you want to overwrite that file with the "
@@ -3190,53 +3217,57 @@ msgstr "Создади"
 
 #. Add Text to shape
 #: src/object-ui.cpp:152
-msgid "_Add Text to shape"
+msgid "_Flow Text into Shape"
+msgstr ""
+
+#: src/object-ui.cpp:227
+msgid "Select <b>a shape</b> to flow text into."
 msgstr ""
 
 #. "Ungroup"
-#: src/object-ui.cpp:318 src/verbs.cpp:1508
+#: src/object-ui.cpp:317 src/verbs.cpp:1509
 #, fuzzy
 msgid "_Ungroup"
 msgstr "Одгрупирај"
 
 #. Link dialog
-#: src/object-ui.cpp:359
+#: src/object-ui.cpp:358
 msgid "Link _Properties"
 msgstr ""
 
 #. Select item
-#: src/object-ui.cpp:369
+#: src/object-ui.cpp:368
 msgid "_Follow Link"
 msgstr ""
 
 #. Reset transformations
-#: src/object-ui.cpp:374
+#: src/object-ui.cpp:373
 msgid "_Remove Link"
 msgstr ""
 
 #. Link dialog
-#: src/object-ui.cpp:423
+#: src/object-ui.cpp:422
 msgid "Image _Properties"
 msgstr ""
 
 #. Item dialog
-#: src/object-ui.cpp:463
+#: src/object-ui.cpp:462
 msgid "_Fill and Stroke"
 msgstr ""
 
 #. Link dialog
-#: src/object-ui.cpp:483
+#: src/object-ui.cpp:482
 #, fuzzy
 msgid "Rectangle _Properties"
 msgstr "Правоаголник"
 
 #. Link dialog
-#: src/object-ui.cpp:509
+#: src/object-ui.cpp:508
 msgid "Star _Properties"
 msgstr ""
 
 #. Link dialog
-#: src/object-ui.cpp:535
+#: src/object-ui.cpp:534
 msgid "Spiral _Properties"
 msgstr ""
 
@@ -3457,15 +3488,15 @@ msgid ""
 msgstr ""
 
 #: src/selection-chemistry.cpp:1696
-msgid "Select <b>object(s)</b> to tile."
+msgid "Select <b>object(s)</b> to convert to pattern."
 msgstr ""
 
 #: src/selection-chemistry.cpp:1782
-msgid "Select an <b>object with pattern fill</b> to untile."
+msgid "Select an <b>object with pattern fill</b> to extract objects from."
 msgstr ""
 
 #: src/selection-chemistry.cpp:1835
-msgid "<b>No pattern fills</b> to untile in the selection."
+msgid "<b>No pattern fills</b> in the selection."
 msgstr ""
 
 #: src/selection-chemistry.cpp:1855
@@ -4115,1233 +4146,1237 @@ msgstr "Зачувај документ"
 msgid "Trace: Image has no bitmap data"
 msgstr ""
 
-#: src/verbs.cpp:879
+#: src/verbs.cpp:878
 msgid "New layer created."
 msgstr ""
 
-#: src/verbs.cpp:893
+#: src/verbs.cpp:892
 msgid "Moved to next layer."
 msgstr ""
 
-#: src/verbs.cpp:895
+#: src/verbs.cpp:894
 msgid "Can't move past last layer."
 msgstr ""
 
-#: src/verbs.cpp:905
+#: src/verbs.cpp:904
 msgid "Moved to previous layer."
 msgstr ""
 
-#: src/verbs.cpp:907
+#: src/verbs.cpp:906
 msgid "Can't move past first layer."
 msgstr ""
 
-#: src/verbs.cpp:916 src/verbs.cpp:980
+#: src/verbs.cpp:915 src/verbs.cpp:979
 #, fuzzy
 msgid "No current layer."
 msgstr "Документ"
 
-#: src/verbs.cpp:945
+#: src/verbs.cpp:944
 msgid "Raised layer."
 msgstr ""
 
-#: src/verbs.cpp:949
+#: src/verbs.cpp:948
 msgid "Lowered layer."
 msgstr ""
 
-#: src/verbs.cpp:955
+#: src/verbs.cpp:954
 msgid "Can't move layer any further."
 msgstr ""
 
-#: src/verbs.cpp:978
+#: src/verbs.cpp:977
 #, fuzzy
 msgid "Deleted layer."
 msgstr "Избриши"
 
-#: src/verbs.cpp:1318
+#: src/verbs.cpp:1317
 msgid "keys.svg"
 msgstr ""
 
-#: src/verbs.cpp:1334
+#: src/verbs.cpp:1333
 msgid "tutorial-basic.svg"
 msgstr ""
 
-#: src/verbs.cpp:1337
+#: src/verbs.cpp:1336
 msgid "tutorial-shapes.svg"
 msgstr ""
 
-#: src/verbs.cpp:1340
+#: src/verbs.cpp:1339
 msgid "tutorial-advanced.svg"
 msgstr ""
 
-#: src/verbs.cpp:1343
+#: src/verbs.cpp:1342
 msgid "elementsofdesign.svg"
 msgstr ""
 
-#: src/verbs.cpp:1346
+#: src/verbs.cpp:1345
 msgid "tipsandtricks.svg"
 msgstr ""
 
-#: src/verbs.cpp:1427
+#: src/verbs.cpp:1426
 msgid "Does nothing"
 msgstr ""
 
 #. File
-#: src/verbs.cpp:1430
+#: src/verbs.cpp:1429
 #, fuzzy
 msgid "Default"
 msgstr "Номинални"
 
-#: src/verbs.cpp:1430
+#: src/verbs.cpp:1429
 #, fuzzy
 msgid "Create new document from default template"
 msgstr "Зачувај документ"
 
-#: src/verbs.cpp:1432
+#: src/verbs.cpp:1431
 #, fuzzy
 msgid "_Open..."
 msgstr "Отвори..."
 
-#: src/verbs.cpp:1433
+#: src/verbs.cpp:1432
 msgid "Open existing document"
 msgstr ""
 
-#: src/verbs.cpp:1434
+#: src/verbs.cpp:1433
 msgid "Re_vert"
 msgstr ""
 
-#: src/verbs.cpp:1435
+#: src/verbs.cpp:1434
 msgid "Revert to the last saved version of document (changes will be lost)"
 msgstr ""
 
-#: src/verbs.cpp:1436
+#: src/verbs.cpp:1435
 #, fuzzy
 msgid "_Save"
 msgstr "Зачувај"
 
-#: src/verbs.cpp:1436
+#: src/verbs.cpp:1435
 #, fuzzy
 msgid "Save document"
 msgstr "Зачувај документ"
 
-#: src/verbs.cpp:1438
+#: src/verbs.cpp:1437
 #, fuzzy
 msgid "Save _As..."
 msgstr "Зачувај како..."
 
-#: src/verbs.cpp:1439
+#: src/verbs.cpp:1438
 msgid "Save document under new name"
 msgstr ""
 
-#: src/verbs.cpp:1440
+#: src/verbs.cpp:1439
 #, fuzzy
 msgid "_Print..."
 msgstr "Печати..."
 
-#: src/verbs.cpp:1440
+#: src/verbs.cpp:1439
 msgid "Print document"
 msgstr ""
 
 #. TRANSLATORS: "Vacuum Defs" means "Clean up defs" (so as to remove unused definitions)
-#: src/verbs.cpp:1443
+#: src/verbs.cpp:1442
 msgid "Vac_uum Defs"
 msgstr ""
 
-#: src/verbs.cpp:1443
+#: src/verbs.cpp:1442
 msgid "Remove unused stuff from the &lt;defs&gt; of the document"
 msgstr ""
 
-#: src/verbs.cpp:1445
+#: src/verbs.cpp:1444
 #, fuzzy
 msgid "Print _Direct"
 msgstr "Печати на екран"
 
-#: src/verbs.cpp:1446
+#: src/verbs.cpp:1445
 msgid "Print directly to file or pipe"
 msgstr ""
 
-#: src/verbs.cpp:1447
+#: src/verbs.cpp:1446
 #, fuzzy
 msgid "Print Previe_w"
 msgstr "Печати на екран"
 
-#: src/verbs.cpp:1448
+#: src/verbs.cpp:1447
 msgid "Preview document printout"
 msgstr ""
 
-#: src/verbs.cpp:1449
+#: src/verbs.cpp:1448
 #, fuzzy
 msgid "_Import..."
 msgstr "Увези"
 
-#: src/verbs.cpp:1450
+#: src/verbs.cpp:1449
 msgid "Import bitmap or SVG image into document"
 msgstr ""
 
-#: src/verbs.cpp:1451
+#: src/verbs.cpp:1450
 msgid "_Export Bitmap..."
 msgstr ""
 
-#: src/verbs.cpp:1452
+#: src/verbs.cpp:1451
 msgid "Export document or selection as PNG bitmap"
 msgstr ""
 
-#: src/verbs.cpp:1453
+#: src/verbs.cpp:1452
 #, fuzzy
 msgid "N_ext Window"
 msgstr "Преглед"
 
-#: src/verbs.cpp:1454
+#: src/verbs.cpp:1453
 msgid "Switch to the next document window"
 msgstr ""
 
-#: src/verbs.cpp:1455
+#: src/verbs.cpp:1454
 #, fuzzy
 msgid "P_revious Window"
 msgstr "Преглед"
 
-#: src/verbs.cpp:1456
+#: src/verbs.cpp:1455
 msgid "Switch to the previous document window"
 msgstr ""
 
-#: src/verbs.cpp:1457
+#: src/verbs.cpp:1456
 #, fuzzy
 msgid "_Close"
 msgstr "Затвори"
 
-#: src/verbs.cpp:1458
+#: src/verbs.cpp:1457
 msgid "Close window"
 msgstr ""
 
-#: src/verbs.cpp:1459
+#: src/verbs.cpp:1458
 msgid "_Quit"
 msgstr ""
 
-#: src/verbs.cpp:1459
+#: src/verbs.cpp:1458
 msgid "Quit Inkscape"
 msgstr ""
 
 #. Edit
-#: src/verbs.cpp:1462
+#: src/verbs.cpp:1461
 #, fuzzy
 msgid "_Undo"
 msgstr "Врати"
 
-#: src/verbs.cpp:1462
+#: src/verbs.cpp:1461
 msgid "Undo last action"
 msgstr ""
 
-#: src/verbs.cpp:1464
+#: src/verbs.cpp:1463
 #, fuzzy
 msgid "_Redo"
 msgstr "Повтори"
 
-#: src/verbs.cpp:1465
+#: src/verbs.cpp:1464
 msgid "Do again last undone action"
 msgstr ""
 
-#: src/verbs.cpp:1466
+#: src/verbs.cpp:1465
 #, fuzzy
 msgid "Cu_t"
 msgstr "Исечи"
 
-#: src/verbs.cpp:1467
+#: src/verbs.cpp:1466
 msgid "Cut selection to clipboard"
 msgstr ""
 
-#: src/verbs.cpp:1468
+#: src/verbs.cpp:1467
 #, fuzzy
 msgid "_Copy"
 msgstr "Копирај"
 
-#: src/verbs.cpp:1469
+#: src/verbs.cpp:1468
 msgid "Copy selection to clipboard"
 msgstr ""
 
-#: src/verbs.cpp:1470
+#: src/verbs.cpp:1469
 #, fuzzy
 msgid "_Paste"
 msgstr "Вметни"
 
-#: src/verbs.cpp:1471
+#: src/verbs.cpp:1470
 msgid "Paste object(s) from clipboard to mouse point"
 msgstr ""
 
-#: src/verbs.cpp:1472
+#: src/verbs.cpp:1471
 msgid "Paste _Style"
 msgstr ""
 
-#: src/verbs.cpp:1473
+#: src/verbs.cpp:1472
 msgid "Apply style of the copied object to selection"
 msgstr ""
 
-#: src/verbs.cpp:1474
+#: src/verbs.cpp:1473
 msgid "Paste _In Place"
 msgstr ""
 
-#: src/verbs.cpp:1475
+#: src/verbs.cpp:1474
 msgid "Paste object(s) from clipboard to the original location"
 msgstr ""
 
-#: src/verbs.cpp:1476
+#: src/verbs.cpp:1475
 #, fuzzy
 msgid "_Delete"
 msgstr "Избриши"
 
-#: src/verbs.cpp:1477
+#: src/verbs.cpp:1476
 #, fuzzy
 msgid "Delete selection"
 msgstr "Избриши"
 
-#: src/verbs.cpp:1478
+#: src/verbs.cpp:1477
 #, fuzzy
 msgid "Duplic_ate"
 msgstr "Дуплицирај"
 
-#: src/verbs.cpp:1479
+#: src/verbs.cpp:1478
 msgid "Duplicate selected object(s)"
 msgstr ""
 
-#: src/verbs.cpp:1480
+#: src/verbs.cpp:1479
 #, fuzzy
 msgid "Clo_ne"
 msgstr "Затвори"
 
-#: src/verbs.cpp:1481
+#: src/verbs.cpp:1480
 msgid "Create a clone of selected object (a copy linked to the original)"
 msgstr ""
 
-#: src/verbs.cpp:1482
+#: src/verbs.cpp:1481
 msgid "Unlin_k Clone"
 msgstr ""
 
-#: src/verbs.cpp:1483
+#: src/verbs.cpp:1482
 msgid "Cut the clone's link to its original"
 msgstr ""
 
-#: src/verbs.cpp:1484
+#: src/verbs.cpp:1483
 #, fuzzy
 msgid "Select _Original"
 msgstr "Избор"
 
-#: src/verbs.cpp:1485
+#: src/verbs.cpp:1484
 msgid "Select the object to which the clone is linked"
 msgstr ""
 
+#. TRANSLATORS: Convert selection to a rectangle with tiled pattern fill
 #: src/verbs.cpp:1486
-#, fuzzy
-msgid "_Tile"
-msgstr "Датотека"
+msgid "O_bject(s) to Pattern"
+msgstr ""
 
 #: src/verbs.cpp:1487
 msgid "Convert selection to a rectangle with tiled pattern fill"
 msgstr ""
 
-#: src/verbs.cpp:1488
-#, fuzzy
-msgid "_Untile"
-msgstr "Безимено"
-
+#. TRANSLATORS: Extract objects from a tiled pattern fill
 #: src/verbs.cpp:1489
-msgid "Extract objects from a tiled pattern fill"
+msgid "Pattern to Ob_ject(s)"
 msgstr ""
 
 #: src/verbs.cpp:1490
+msgid "Extract objects from a tiled pattern fill"
+msgstr ""
+
+#: src/verbs.cpp:1491
 #, fuzzy
 msgid "Clea_r All"
 msgstr "Исчисти ги сите"
 
-#: src/verbs.cpp:1491
+#: src/verbs.cpp:1492
 msgid "Delete all objects from document"
 msgstr ""
 
-#: src/verbs.cpp:1492
+#: src/verbs.cpp:1493
 #, fuzzy
 msgid "Select Al_l"
 msgstr "Избери ги сите"
 
-#: src/verbs.cpp:1493
+#: src/verbs.cpp:1494
 msgid "Select all objects or all nodes"
 msgstr ""
 
-#: src/verbs.cpp:1494
+#: src/verbs.cpp:1495
 #, fuzzy
 msgid "D_eselect"
 msgstr "Избор"
 
-#: src/verbs.cpp:1495
+#: src/verbs.cpp:1496
 msgid "Deselect any selected objects or nodes"
 msgstr ""
 
 #. Selection
-#: src/verbs.cpp:1498
+#: src/verbs.cpp:1499
 msgid "Raise to _Top"
 msgstr ""
 
-#: src/verbs.cpp:1499
+#: src/verbs.cpp:1500
 msgid "Raise selection to top"
 msgstr ""
 
-#: src/verbs.cpp:1500
+#: src/verbs.cpp:1501
 msgid "Lower to _Bottom"
 msgstr ""
 
-#: src/verbs.cpp:1501
+#: src/verbs.cpp:1502
 msgid "Lower selection to bottom"
 msgstr ""
 
-#: src/verbs.cpp:1502
+#: src/verbs.cpp:1503
 #, fuzzy
 msgid "_Raise"
 msgstr "Крени"
 
-#: src/verbs.cpp:1503
+#: src/verbs.cpp:1504
 msgid "Raise selection one step"
 msgstr ""
 
-#: src/verbs.cpp:1504
+#: src/verbs.cpp:1505
 #, fuzzy
 msgid "_Lower"
 msgstr "Долни"
 
-#: src/verbs.cpp:1505
+#: src/verbs.cpp:1506
 msgid "Lower selection one step"
 msgstr ""
 
-#: src/verbs.cpp:1506
+#: src/verbs.cpp:1507
 #, fuzzy
 msgid "_Group"
 msgstr "Група"
 
-#: src/verbs.cpp:1507
+#: src/verbs.cpp:1508
 msgid "Group selected objects"
 msgstr ""
 
-#: src/verbs.cpp:1509
+#: src/verbs.cpp:1510
 msgid "Ungroup selected group(s)"
 msgstr ""
 
-#: src/verbs.cpp:1511
+#: src/verbs.cpp:1512
 msgid "_Put on Path"
 msgstr ""
 
-#: src/verbs.cpp:1512
+#: src/verbs.cpp:1513
 msgid "Put text on path"
 msgstr ""
 
-#: src/verbs.cpp:1513
+#: src/verbs.cpp:1514
 msgid "_Remove from Path"
 msgstr ""
 
-#: src/verbs.cpp:1514
+#: src/verbs.cpp:1515
 msgid "Remove text from path"
 msgstr ""
 
-#: src/verbs.cpp:1515
+#: src/verbs.cpp:1516
 msgid "Remove Manual _Kerns"
 msgstr ""
 
-#: src/verbs.cpp:1516
+#: src/verbs.cpp:1517
 msgid "Remove all manual kerns from a text object"
 msgstr ""
 
-#: src/verbs.cpp:1518
+#: src/verbs.cpp:1519
 #, fuzzy
 msgid "_Union"
 msgstr "Непознато"
 
-#: src/verbs.cpp:1519
+#: src/verbs.cpp:1520
 msgid "Union of selected objects"
 msgstr ""
 
-#: src/verbs.cpp:1520
+#: src/verbs.cpp:1521
 #, fuzzy
 msgid "_Intersection"
 msgstr "Избор"
 
-#: src/verbs.cpp:1521
+#: src/verbs.cpp:1522
 msgid "Intersection of selected objects"
 msgstr ""
 
-#: src/verbs.cpp:1522
+#: src/verbs.cpp:1523
 msgid "_Difference"
 msgstr ""
 
-#: src/verbs.cpp:1523
+#: src/verbs.cpp:1524
 msgid "Difference of selected objects (bottom minus top)"
 msgstr ""
 
-#: src/verbs.cpp:1524
+#: src/verbs.cpp:1525
 #, fuzzy
 msgid "E_xclusion"
 msgstr "Наставка"
 
-#: src/verbs.cpp:1525
+#: src/verbs.cpp:1526
 msgid "Exclusive OR of selected objects"
 msgstr ""
 
-#: src/verbs.cpp:1526
+#: src/verbs.cpp:1527
 msgid "Di_vision"
 msgstr ""
 
-#: src/verbs.cpp:1527
+#: src/verbs.cpp:1528
 msgid "Cut the bottom object into pieces"
 msgstr ""
 
 #. TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
 #. Advanced tutorial for more info
-#: src/verbs.cpp:1530
+#: src/verbs.cpp:1531
 msgid "Cut _Path"
 msgstr ""
 
-#: src/verbs.cpp:1531
+#: src/verbs.cpp:1532
 msgid "Cut the bottom object's stroke into pieces, removing fill"
 msgstr ""
 
 #. TRANSLATORS: "outset": expand a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
 #. See also the Advanced Tutorial for explanation.
-#: src/verbs.cpp:1535
+#: src/verbs.cpp:1536
 #, fuzzy
 msgid "Ou_tset"
 msgstr "Надвор"
 
-#: src/verbs.cpp:1536
+#: src/verbs.cpp:1537
 msgid "Outset selected path(s)"
 msgstr ""
 
-#: src/verbs.cpp:1538
+#: src/verbs.cpp:1539
 msgid "O_utset Path by 1px"
 msgstr ""
 
-#: src/verbs.cpp:1539
+#: src/verbs.cpp:1540
 msgid "Outset selected path(s) by 1px"
 msgstr ""
 
-#: src/verbs.cpp:1541
+#: src/verbs.cpp:1542
 msgid "O_utset Path by 10px"
 msgstr ""
 
-#: src/verbs.cpp:1542
+#: src/verbs.cpp:1543
 msgid "Outset selected path(s) by 10px"
 msgstr ""
 
 #. TRANSLATORS: "inset": contract a shape by offsetting the object's path,
 #. i.e. by displacing it perpendicular to the path in each point.
 #. See also the Advanced Tutorial for explanation.
-#: src/verbs.cpp:1546
+#: src/verbs.cpp:1547
 msgid "I_nset"
 msgstr ""
 
-#: src/verbs.cpp:1547
+#: src/verbs.cpp:1548
 msgid "Inset selected path(s)"
 msgstr ""
 
-#: src/verbs.cpp:1549
+#: src/verbs.cpp:1550
 msgid "I_nset Path by 1px"
 msgstr ""
 
-#: src/verbs.cpp:1550
+#: src/verbs.cpp:1551
 msgid "Inset selected path(s) by 1px"
 msgstr ""
 
-#: src/verbs.cpp:1552
+#: src/verbs.cpp:1553
 msgid "I_nset Path by 10px"
 msgstr ""
 
-#: src/verbs.cpp:1553
+#: src/verbs.cpp:1554
 msgid "Inset selected path(s) by 10px"
 msgstr ""
 
-#: src/verbs.cpp:1555
+#: src/verbs.cpp:1556
 msgid "D_ynamic Offset"
 msgstr ""
 
-#: src/verbs.cpp:1555
+#: src/verbs.cpp:1556
 msgid "Create a dynamic offset object"
 msgstr ""
 
-#: src/verbs.cpp:1557
+#: src/verbs.cpp:1558
 msgid "_Linked Offset"
 msgstr ""
 
-#: src/verbs.cpp:1558
+#: src/verbs.cpp:1559
 msgid "Create a dynamic offset object linked to the original path"
 msgstr ""
 
-#: src/verbs.cpp:1560
+#: src/verbs.cpp:1561
 msgid "_Stroke to Path"
 msgstr ""
 
-#: src/verbs.cpp:1561
+#: src/verbs.cpp:1562
 msgid "Convert selected stroke(s) to path(s)"
 msgstr ""
 
-#: src/verbs.cpp:1562
+#: src/verbs.cpp:1563
 msgid "Si_mplify"
 msgstr ""
 
-#: src/verbs.cpp:1563
+#: src/verbs.cpp:1564
 msgid "Simplify selected path(s) by removing extra nodes"
 msgstr ""
 
-#: src/verbs.cpp:1564
+#: src/verbs.cpp:1565
 msgid "Cl_eanup"
 msgstr ""
 
-#: src/verbs.cpp:1565
+#: src/verbs.cpp:1566
 msgid "Clean up selected path(s)"
 msgstr ""
 
-#: src/verbs.cpp:1566
+#: src/verbs.cpp:1567
 #, fuzzy
 msgid "_Reverse"
 msgstr "Филтри"
 
-#: src/verbs.cpp:1567
+#: src/verbs.cpp:1568
 msgid "Reverses the direction of selected path(s); useful for flipping markers"
 msgstr ""
 
-#: src/verbs.cpp:1568
+#: src/verbs.cpp:1569
 msgid "_Trace Bitmap"
 msgstr ""
 
-#: src/verbs.cpp:1569
+#: src/verbs.cpp:1570
 msgid "Convert bitmap object to paths"
 msgstr ""
 
-#: src/verbs.cpp:1570
+#: src/verbs.cpp:1571
 msgid "_Make a Bitmap Copy"
 msgstr ""
 
-#: src/verbs.cpp:1571
+#: src/verbs.cpp:1572
 msgid "Export selection to a bitmap and insert it into document"
 msgstr ""
 
-#: src/verbs.cpp:1572
+#: src/verbs.cpp:1573
 #, fuzzy
 msgid "_Combine"
 msgstr "Комбинирај"
 
-#: src/verbs.cpp:1573
+#: src/verbs.cpp:1574
 msgid "Combine several paths into one"
 msgstr ""
 
 #. TRANSLATORS: "to cut a path" is not the same as "to break a path apart" - see the
 #. Advanced tutorial for more info
-#: src/verbs.cpp:1576
+#: src/verbs.cpp:1577
 msgid "Break _Apart"
 msgstr ""
 
-#: src/verbs.cpp:1577
+#: src/verbs.cpp:1578
 msgid "Break selected path(s) into subpaths"
 msgstr ""
 
 #. Layer
-#: src/verbs.cpp:1580
-msgid "New Layer"
-msgstr ""
-
 #: src/verbs.cpp:1581
+#, fuzzy
+msgid "_New Layer..."
+msgstr "Долни"
+
+#: src/verbs.cpp:1582
 #, fuzzy
 msgid "Create a new layer"
 msgstr "Зачувај документ"
 
-#: src/verbs.cpp:1582
-msgid "Rename Layer"
+#: src/verbs.cpp:1583
+msgid "Ren_ame Layer..."
 msgstr ""
 
-#: src/verbs.cpp:1583
+#: src/verbs.cpp:1584
 #, fuzzy
 msgid "Rename the current layer"
 msgstr "Документ"
 
-#: src/verbs.cpp:1584
+#: src/verbs.cpp:1585
 msgid "Move to Next Layer"
 msgstr ""
 
-#: src/verbs.cpp:1585
+#: src/verbs.cpp:1586
 msgid "Switch to the next layer in the document"
 msgstr ""
 
-#: src/verbs.cpp:1586
+#: src/verbs.cpp:1587
 msgid "Move to Previous Layer"
 msgstr ""
 
-#: src/verbs.cpp:1587
+#: src/verbs.cpp:1588
 msgid "Switch to the previous layer in the document"
 msgstr ""
 
-#: src/verbs.cpp:1588
-msgid "Layer to Top"
-msgstr ""
-
 #: src/verbs.cpp:1589
-msgid "Raise the current layer to the top"
+msgid "Layer to _Top"
 msgstr ""
 
 #: src/verbs.cpp:1590
-msgid "Layer to Bottom"
+msgid "Raise the current layer to the top"
 msgstr ""
 
 #: src/verbs.cpp:1591
-msgid "Lower the current layer to the bottom"
+msgid "Layer to _Bottom"
 msgstr ""
 
 #: src/verbs.cpp:1592
-msgid "Raise Layer"
+msgid "Lower the current layer to the bottom"
 msgstr ""
 
 #: src/verbs.cpp:1593
+#, fuzzy
+msgid "_Raise Layer"
+msgstr "Крени"
+
+#: src/verbs.cpp:1594
 msgid "Raise the current layer"
 msgstr ""
 
-#: src/verbs.cpp:1594
-msgid "Lower Layer"
-msgstr ""
-
 #: src/verbs.cpp:1595
+#, fuzzy
+msgid "_Lower Layer"
+msgstr "Долни"
+
+#: src/verbs.cpp:1596
 msgid "Lower the current layer"
 msgstr ""
 
-#: src/verbs.cpp:1596
-msgid "Delete Current Layer"
-msgstr ""
-
 #: src/verbs.cpp:1597
+#, fuzzy
+msgid "_Delete Current Layer"
+msgstr "Документ"
+
+#: src/verbs.cpp:1598
 msgid "Delete the current layer"
 msgstr ""
 
 #. Object
-#: src/verbs.cpp:1600
+#: src/verbs.cpp:1601
 #, fuzzy
 msgid "Rotate _90 deg CW"
 msgstr "Ротирај за 90 степени"
 
-#: src/verbs.cpp:1601
+#: src/verbs.cpp:1602
 #, fuzzy
 msgid "Rotate selection 90 degrees clockwise"
 msgstr "Ротирај за 90 степени"
 
-#: src/verbs.cpp:1602
+#: src/verbs.cpp:1603
 #, fuzzy
 msgid "Rotate 9_0 deg CCW"
 msgstr "Ротирај за 90 степени"
 
-#: src/verbs.cpp:1603
+#: src/verbs.cpp:1604
 msgid "Rotate selection 90 degrees counter-clockwise"
 msgstr ""
 
-#: src/verbs.cpp:1604
+#: src/verbs.cpp:1605
 msgid "Remove _Transformations"
 msgstr ""
 
-#: src/verbs.cpp:1605
+#: src/verbs.cpp:1606
 msgid "Remove transformations from object"
 msgstr ""
 
-#: src/verbs.cpp:1606
+#: src/verbs.cpp:1607
 msgid "_Object to Path"
 msgstr ""
 
-#: src/verbs.cpp:1607
+#: src/verbs.cpp:1608
 msgid "Convert selected object(s) to path(s)"
 msgstr ""
 
-#: src/verbs.cpp:1608
+#: src/verbs.cpp:1609
 msgid "_Unflow Text"
 msgstr ""
 
-#: src/verbs.cpp:1609
+#: src/verbs.cpp:1610
 msgid "Convert selected flowtext to text"
 msgstr ""
 
-#: src/verbs.cpp:1611
+#: src/verbs.cpp:1612
 #, fuzzy
 msgid "Flip _Horizontally"
 msgstr "Преврти хоризонтално"
 
-#: src/verbs.cpp:1611
+#: src/verbs.cpp:1612
 #, fuzzy
 msgid "Flip selection horizontally"
 msgstr "Преврти хоризонтално"
 
-#: src/verbs.cpp:1614
+#: src/verbs.cpp:1615
 #, fuzzy
 msgid "Flip _Vertically"
 msgstr "Преврти вертикално"
 
-#: src/verbs.cpp:1614
+#: src/verbs.cpp:1615
 #, fuzzy
 msgid "Flip selection vertically"
 msgstr "Преврти вертикално"
 
 #. Tools
-#: src/verbs.cpp:1618
+#: src/verbs.cpp:1619
 #, fuzzy
 msgid "Select"
 msgstr "Избор"
 
-#: src/verbs.cpp:1619
+#: src/verbs.cpp:1620
 msgid "Select and transform objects"
 msgstr ""
 
-#: src/verbs.cpp:1620
+#: src/verbs.cpp:1621
 #, fuzzy
 msgid "Node Edit"
 msgstr "Уреди"
 
-#: src/verbs.cpp:1621
+#: src/verbs.cpp:1622
 msgid "Edit path nodes or control handles"
 msgstr ""
 
-#: src/verbs.cpp:1623
+#: src/verbs.cpp:1624
 msgid "Create rectangles and squares"
 msgstr ""
 
-#: src/verbs.cpp:1625
+#: src/verbs.cpp:1626
 msgid "Create circles, ellipses, and arcs"
 msgstr ""
 
-#: src/verbs.cpp:1627
+#: src/verbs.cpp:1628
 msgid "Create stars and polygons"
 msgstr ""
 
-#: src/verbs.cpp:1629
+#: src/verbs.cpp:1630
 #, fuzzy
 msgid "Create spirals"
 msgstr "Спирала"
 
-#: src/verbs.cpp:1631
+#: src/verbs.cpp:1632
 msgid "Draw freehand lines"
 msgstr ""
 
-#: src/verbs.cpp:1633
+#: src/verbs.cpp:1634
 msgid "Draw Bezier curves and straight lines"
 msgstr ""
 
-#: src/verbs.cpp:1635
+#: src/verbs.cpp:1636
 msgid "Draw calligraphic lines"
 msgstr ""
 
-#: src/verbs.cpp:1637
+#: src/verbs.cpp:1638
 msgid "Create and edit text objects"
 msgstr ""
 
-#: src/verbs.cpp:1639
+#: src/verbs.cpp:1640
 #, fuzzy
 msgid "Zoom in or out"
 msgstr "Зум"
 
-#: src/verbs.cpp:1641
+#: src/verbs.cpp:1642
 msgid "Pick averaged colors from image"
 msgstr ""
 
 #. Tool prefs
-#: src/verbs.cpp:1644
+#: src/verbs.cpp:1645
 msgid "Selector Preferences"
 msgstr ""
 
-#: src/verbs.cpp:1645
+#: src/verbs.cpp:1646
 msgid "Open Inkscape Preferences for the Selector tool"
 msgstr ""
 
-#: src/verbs.cpp:1646
+#: src/verbs.cpp:1647
 msgid "Node Tool Preferences"
 msgstr ""
 
-#: src/verbs.cpp:1647
+#: src/verbs.cpp:1648
 msgid "Open Inkscape Preferences for the Node tool"
 msgstr ""
 
-#: src/verbs.cpp:1648
+#: src/verbs.cpp:1649
 #, fuzzy
 msgid "Rectangle Preferences"
 msgstr "Правоаголник"
 
-#: src/verbs.cpp:1649
+#: src/verbs.cpp:1650
 msgid "Open Inkscape Preferences for the Rectangle tool"
 msgstr ""
 
-#: src/verbs.cpp:1650
+#: src/verbs.cpp:1651
 msgid "Ellipse Preferences"
 msgstr ""
 
-#: src/verbs.cpp:1651
+#: src/verbs.cpp:1652
 msgid "Open Inkscape Preferences for the Ellipse tool"
 msgstr ""
 
-#: src/verbs.cpp:1652
+#: src/verbs.cpp:1653
 msgid "Star Preferences"
 msgstr ""
 
-#: src/verbs.cpp:1653
+#: src/verbs.cpp:1654
 msgid "Open Inkscape Preferences for the Star tool"
 msgstr ""
 
-#: src/verbs.cpp:1654
+#: src/verbs.cpp:1655
 msgid "Spiral Preferences"
 msgstr ""
 
-#: src/verbs.cpp:1655
+#: src/verbs.cpp:1656
 msgid "Open Inkscape Preferences for the Spiral tool"
 msgstr ""
 
-#: src/verbs.cpp:1656
+#: src/verbs.cpp:1657
 msgid "Pencil Preferences"
 msgstr ""
 
-#: src/verbs.cpp:1657
+#: src/verbs.cpp:1658
 msgid "Open Inkscape Preferences for the Pencil tool"
 msgstr ""
 
-#: src/verbs.cpp:1658
+#: src/verbs.cpp:1659
 msgid "Pen Preferences"
 msgstr ""
 
-#: src/verbs.cpp:1659
+#: src/verbs.cpp:1660
 msgid "Open Inkscape Preferences for the Pen tool"
 msgstr ""
 
-#: src/verbs.cpp:1660
+#: src/verbs.cpp:1661
 msgid "Calligraphic Preferences"
 msgstr ""
 
-#: src/verbs.cpp:1661
+#: src/verbs.cpp:1662
 msgid "Open Inkscape Preferences for the Calligraphy tool"
 msgstr ""
 
-#: src/verbs.cpp:1662
+#: src/verbs.cpp:1663
 msgid "Text Preferences"
 msgstr ""
 
-#: src/verbs.cpp:1663
+#: src/verbs.cpp:1664
 msgid "Open Inkscape Preferences for the Text tool"
 msgstr ""
 
-#: src/verbs.cpp:1664
+#: src/verbs.cpp:1665
 msgid "Zoom Preferences"
 msgstr ""
 
-#: src/verbs.cpp:1665
+#: src/verbs.cpp:1666
 msgid "Open Inkscape Preferences for the Zoom tool"
 msgstr ""
 
-#: src/verbs.cpp:1666
+#: src/verbs.cpp:1667
 msgid "Dropper Preferences"
 msgstr ""
 
-#: src/verbs.cpp:1667
+#: src/verbs.cpp:1668
 msgid "Open Inkscape Preferences for the Dropper tool"
 msgstr ""
 
 #. Zooming
-#: src/verbs.cpp:1670
+#: src/verbs.cpp:1671
 #, fuzzy
 msgid "Zoom In"
 msgstr "Зум"
 
-#: src/verbs.cpp:1670
+#: src/verbs.cpp:1671
 #, fuzzy
 msgid "Zoom in"
 msgstr "Зум"
 
-#: src/verbs.cpp:1671
+#: src/verbs.cpp:1672
 #, fuzzy
 msgid "Zoom Out"
 msgstr "Зум"
 
-#: src/verbs.cpp:1671
+#: src/verbs.cpp:1672
 #, fuzzy
 msgid "Zoom out"
 msgstr "Зум"
 
-#: src/verbs.cpp:1672
+#: src/verbs.cpp:1673
 #, fuzzy
 msgid "_Rulers"
 msgstr "Филтри"
 
-#: src/verbs.cpp:1672
+#: src/verbs.cpp:1673
 msgid "Show or hide the canvas rulers"
 msgstr ""
 
-#: src/verbs.cpp:1673
+#: src/verbs.cpp:1674
 msgid "Scroll_bars"
 msgstr ""
 
-#: src/verbs.cpp:1673
+#: src/verbs.cpp:1674
 msgid "Show or hide the canvas scrollbars"
 msgstr ""
 
-#: src/verbs.cpp:1674
+#: src/verbs.cpp:1675
 #, fuzzy
 msgid "_Grid"
 msgstr "Решетка"
 
-#: src/verbs.cpp:1674
+#: src/verbs.cpp:1675
 msgid "Show or hide grid"
 msgstr ""
 
-#: src/verbs.cpp:1675
+#: src/verbs.cpp:1676
 #, fuzzy
 msgid "G_uides"
 msgstr "Водичи"
 
-#: src/verbs.cpp:1675
+#: src/verbs.cpp:1676
 msgid "Show or hide guides"
 msgstr ""
 
-#: src/verbs.cpp:1676
+#: src/verbs.cpp:1677
 msgid "Nex_t Zoom"
 msgstr ""
 
-#: src/verbs.cpp:1676
+#: src/verbs.cpp:1677
 msgid "Next zoom (from the history of zooms)"
 msgstr ""
 
-#: src/verbs.cpp:1678
+#: src/verbs.cpp:1679
 msgid "Pre_vious Zoom"
 msgstr ""
 
-#: src/verbs.cpp:1678
+#: src/verbs.cpp:1679
 msgid "Previous zoom (from the history of zooms)"
 msgstr ""
 
-#: src/verbs.cpp:1680
+#: src/verbs.cpp:1681
 #, fuzzy
 msgid "Zoom 1:_1"
 msgstr "Зум"
 
-#: src/verbs.cpp:1680
+#: src/verbs.cpp:1681
 msgid "Zoom to 1:1"
 msgstr ""
 
-#: src/verbs.cpp:1682
+#: src/verbs.cpp:1683
 #, fuzzy
 msgid "Zoom 1:_2"
 msgstr "Зум"
 
-#: src/verbs.cpp:1682
+#: src/verbs.cpp:1683
 msgid "Zoom to 1:2"
 msgstr ""
 
-#: src/verbs.cpp:1684
+#: src/verbs.cpp:1685
 #, fuzzy
 msgid "_Zoom 2:1"
 msgstr "Зум"
 
-#: src/verbs.cpp:1684
+#: src/verbs.cpp:1685
 msgid "Zoom to 2:1"
 msgstr ""
 
-#: src/verbs.cpp:1687
+#: src/verbs.cpp:1688
 msgid "_Fullscreen"
 msgstr ""
 
-#: src/verbs.cpp:1687
+#: src/verbs.cpp:1688
 msgid "Stretch this document window to full screen"
 msgstr ""
 
-#: src/verbs.cpp:1690
+#: src/verbs.cpp:1691
 #, fuzzy
 msgid "D_uplicate Window"
 msgstr "Дуплицирај"
 
-#: src/verbs.cpp:1690
+#: src/verbs.cpp:1691
 msgid "Open a new window with the same document"
 msgstr ""
 
-#: src/verbs.cpp:1692
+#: src/verbs.cpp:1693
 #, fuzzy
 msgid "_New View Preview"
 msgstr "Печати на екран"
 
-#: src/verbs.cpp:1693
+#: src/verbs.cpp:1694
 #, fuzzy
 msgid "New View Preview"
 msgstr "Печати на екран"
 
 #. "view_new_preview"
-#: src/verbs.cpp:1694
+#: src/verbs.cpp:1695
 #, fuzzy
 msgid "_Page"
 msgstr "Страница"
 
-#: src/verbs.cpp:1695
+#: src/verbs.cpp:1696
 msgid "Zoom to fit page in window"
 msgstr ""
 
-#: src/verbs.cpp:1696
+#: src/verbs.cpp:1697
 msgid "Page _Width"
 msgstr ""
 
-#: src/verbs.cpp:1697
+#: src/verbs.cpp:1698
 msgid "Zoom to fit page width in window"
 msgstr ""
 
-#: src/verbs.cpp:1698
+#: src/verbs.cpp:1699
 #, fuzzy
 msgid "_Drawing"
 msgstr "Цртеж"
 
-#: src/verbs.cpp:1699
+#: src/verbs.cpp:1700
 msgid "Zoom to fit drawing in window"
 msgstr ""
 
-#: src/verbs.cpp:1700
+#: src/verbs.cpp:1701
 #, fuzzy
 msgid "_Selection"
 msgstr "Избор"
 
-#: src/verbs.cpp:1701
+#: src/verbs.cpp:1702
 msgid "Zoom to fit selection in window"
 msgstr ""
 
 #. Dialogs
-#: src/verbs.cpp:1704
+#: src/verbs.cpp:1705
 msgid "In_kscape Preferences..."
 msgstr ""
 
-#: src/verbs.cpp:1705
+#: src/verbs.cpp:1706
 msgid "Global Inkscape preferences"
 msgstr ""
 
-#: src/verbs.cpp:1706
+#: src/verbs.cpp:1707
 msgid "_Document Preferences..."
 msgstr ""
 
-#: src/verbs.cpp:1707
+#: src/verbs.cpp:1708
 msgid "Preferences saved with the document"
 msgstr ""
 
-#: src/verbs.cpp:1708
+#: src/verbs.cpp:1709
 msgid "_Fill and Stroke..."
 msgstr ""
 
-#: src/verbs.cpp:1709
+#: src/verbs.cpp:1710
 msgid "Fill and Stroke dialog"
 msgstr ""
 
-#: src/verbs.cpp:1710
+#: src/verbs.cpp:1711
 msgid "Transfor_m..."
 msgstr ""
 
-#: src/verbs.cpp:1711
+#: src/verbs.cpp:1712
 msgid "Transform dialog"
 msgstr ""
 
-#: src/verbs.cpp:1712
+#: src/verbs.cpp:1713
 msgid "_Align and Distribute..."
 msgstr ""
 
-#: src/verbs.cpp:1713
+#: src/verbs.cpp:1714
 msgid "Align and Distribute dialog"
 msgstr ""
 
-#: src/verbs.cpp:1714
+#: src/verbs.cpp:1715
 msgid "_Text and Font..."
 msgstr ""
 
-#: src/verbs.cpp:1715
+#: src/verbs.cpp:1716
 msgid "Text and Font dialog"
 msgstr ""
 
-#: src/verbs.cpp:1716
+#: src/verbs.cpp:1717
 msgid "_XML Editor..."
 msgstr ""
 
-#: src/verbs.cpp:1717
+#: src/verbs.cpp:1718
 msgid "XML Editor"
 msgstr ""
 
-#: src/verbs.cpp:1718
+#: src/verbs.cpp:1719
 #, fuzzy
 msgid "_Find..."
 msgstr "Печати..."
 
-#: src/verbs.cpp:1719
+#: src/verbs.cpp:1720
 #, fuzzy
 msgid "Find objects in document"
 msgstr "Зачувај документ"
 
-#: src/verbs.cpp:1720
+#: src/verbs.cpp:1721
 msgid "_Messages..."
 msgstr ""
 
-#: src/verbs.cpp:1721
+#: src/verbs.cpp:1722
 msgid "View debug messages"
 msgstr ""
 
-#: src/verbs.cpp:1722
+#: src/verbs.cpp:1723
 msgid "Show/_Hide Dialogs"
 msgstr ""
 
-#: src/verbs.cpp:1723
+#: src/verbs.cpp:1724
 msgid "Show or hide all active dialogs"
 msgstr ""
 
-#: src/verbs.cpp:1724
+#: src/verbs.cpp:1725
 msgid "_Object Properties..."
 msgstr ""
 
-#: src/verbs.cpp:1725
+#: src/verbs.cpp:1726
 msgid "Object Properties dialog"
 msgstr ""
 
 #. Help
-#: src/verbs.cpp:1728
+#: src/verbs.cpp:1729
 msgid "_Keys and Mouse"
 msgstr ""
 
-#: src/verbs.cpp:1729
+#: src/verbs.cpp:1730
 msgid "Key and mouse shortcuts reference"
 msgstr ""
 
-#: src/verbs.cpp:1730
+#: src/verbs.cpp:1731
 msgid "_About Inkscape"
 msgstr ""
 
 #. "help_about"
 #. Tutorials
-#: src/verbs.cpp:1734
+#: src/verbs.cpp:1735
 msgid "Inkscape: _Basic"
 msgstr ""
 
-#: src/verbs.cpp:1735
+#: src/verbs.cpp:1736
 msgid "Getting started with Inkscape"
 msgstr ""
 
 #. "tutorial_basic"
-#: src/verbs.cpp:1736
+#: src/verbs.cpp:1737
 msgid "Inkscape: _Shapes"
 msgstr ""
 
-#: src/verbs.cpp:1737
+#: src/verbs.cpp:1738
 msgid "Using shape tools to create and edit shapes"
 msgstr ""
 
-#: src/verbs.cpp:1738
+#: src/verbs.cpp:1739
 msgid "Inkscape: _Advanced"
 msgstr ""
 
-#: src/verbs.cpp:1739
+#: src/verbs.cpp:1740
 msgid "Advanced Inkscape topics"
 msgstr ""
 
 #. "tutorial_advanced"
-#: src/verbs.cpp:1740
+#: src/verbs.cpp:1741
 msgid "_Elements of Design"
 msgstr ""
 
-#: src/verbs.cpp:1741
+#: src/verbs.cpp:1742
 msgid "Elements of Design tutorial"
 msgstr ""
 
 #. "tutorial_design"
-#: src/verbs.cpp:1742
+#: src/verbs.cpp:1743
 msgid "_Tips and Tricks"
 msgstr ""
 
-#: src/verbs.cpp:1743
+#: src/verbs.cpp:1744
 msgid "Miscellaneous Tips and Tricks"
 msgstr ""
 
@@ -5514,7 +5549,9 @@ msgid "No patterns in document"
 msgstr "Зачувај документ"
 
 #: src/widgets/paint-selector.cpp:1000
-msgid "Use <b>Edit &gt; Tile</b> to create a new pattern from selection."
+msgid ""
+"Use <b>Edit &gt; Object(s) to Pattern</b> to create a new pattern from "
+"selection."
 msgstr ""
 
 #: src/widgets/paint-selector.cpp:1013
@@ -5655,6 +5692,14 @@ msgstr "Атрибут"
 #, fuzzy
 msgid "Value"
 msgstr "Вредност"
+
+#, fuzzy
+#~ msgid "_Tile"
+#~ msgstr "Датотека"
+
+#, fuzzy
+#~ msgid "_Untile"
+#~ msgstr "Безимено"
 
 #, fuzzy
 #~ msgid "Active"
