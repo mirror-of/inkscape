@@ -1,3 +1,15 @@
+2004-06-06  Ted Gould  <ted@gould.cx>
+
+	* src/main.cpp, src/preferences-skeleton.h, src/extension/extension.cpp:
+
+	Making it so that the extension parameters get saved in the Inkscape
+	preferences.  Most people will notice that their printer gets saved now.
+	But this does alot more than that.  Added an "extensions" group to the
+	preferences skeleton for all these settings.  All settings get saved as
+	"module ID"."param name".  Also had to change where the extensions get
+	init'd in the startup to put it behind the Inkscape application so that
+	prerefences could be used.
+
 2004-06-03  Ted Gould  <ted@gould.cx>
 
 	* src/file.cpp, src/dialog/filedialog.cpp:

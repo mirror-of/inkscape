@@ -236,8 +236,6 @@ sp_main_gui (int argc, const char **argv)
 
 	gtk_init(&argc, const_cast<char ***>(&argv));
 
-	Inkscape::Extension::init();
-
 	/* fixme: Move these to some centralized location (Lauris) */
 	sp_object_type_register ("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
 	sp_object_type_register ("sodipodi:guide", SP_TYPE_GUIDE);
@@ -300,6 +298,8 @@ sp_main_gui (int argc, const char **argv)
 		}
 	}
 
+	Inkscape::Extension::init();
+
 	gtk_main();
 
 #ifdef WIN32
@@ -327,8 +327,6 @@ sp_main_console (int argc, const char **argv)
 	 * http://mail.gnome.org/archives/gtk-list/2003-December/msg00063.html */
 	g_type_init();
 #endif
-
-	Inkscape::Extension::init();
 
 	/* fixme: Move these to some centralized location (Lauris) */
 	sp_object_type_register ("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
@@ -374,6 +372,8 @@ sp_main_console (int argc, const char **argv)
 	/* Start up g type system, without requiring X */
 	g_type_init();
 	inkscape_application_init (argv[0]);
+
+	Inkscape::Extension::init();
 
 	while (fl) {
 		SPDocument *doc;

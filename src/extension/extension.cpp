@@ -286,6 +286,7 @@ Extension::make_param (SPRepr * paramrepr)
     const char * name;
     const char * type;
     const char * defaultval;
+	gchar * param_name;
     Extension::param_t * param;
 
     name = sp_repr_attr(paramrepr, "name");
@@ -300,6 +301,7 @@ Extension::make_param (SPRepr * paramrepr)
 
     param = new param_t();
     param->name = g_strdup(name);
+	param_name = g_strdup_printf("%s.%s", id, name);
     if (!strcmp(type, "boolean")) {
         param->type = Extension::PARAM_BOOL;
         if (defaultval != NULL && !strcmp(defaultval, "TRUE")) {
@@ -307,6 +309,7 @@ Extension::make_param (SPRepr * paramrepr)
         } else {
             param->val.t_bool = FALSE;
         }
+		param->val.t_bool = prefs_get_int_attribute("extensions", param_name, (gint)param->val.t_bool);
     } else if (!strcmp(type, "int")) { 
         param->type = Extension::PARAM_INT;
         if (defaultval != NULL) {
@@ -314,12 +317,21 @@ Extension::make_param (SPRepr * paramrepr)
         } else {
             param->val.t_int = 0;
         }
+		param->val.t_int = prefs_get_int_attribute("extensions", param_name, (gint)param->val.t_int);
     } else if (!strcmp(type, "string")) { 
+		const gchar * temp_str;
         param->type = Extension::PARAM_STRING;
-        param->val.t_string = g_strdup(defaultval);
+
+		temp_str = prefs_get_string_attribute("extensions", param_name);
+		if (temp_str == NULL)
+			temp_str = defaultval;
+
+        param->val.t_string = g_strdup(temp_str);
     } else {
+		g_free(param_name);
         return;
     }
+	g_free(param_name);
 
     parameters = g_slist_append(parameters, param);
     return;
@@ -536,6 +548,7 @@ bool
 Extension::set_param (gchar * name, bool value)
 {
     Extension::param_t * param;
+	gchar * param_name;
     
     param = Extension::param_shared(name, parameters);
 
@@ -544,6 +557,11 @@ Extension::set_param (gchar * name, bool value)
     }
 
     param->val.t_bool = value;
+
+	param_name = g_strdup_printf("%s.%s", id, name);
+	prefs_set_int_attribute("extensions", param_name, value == TRUE ? 1 : 0);
+	g_free(param_name);
+
     return value;
 }
 
@@ -571,6 +589,7 @@ int
 Extension::set_param (gchar * name, int value)
 {
     Extension::param_t * param;
+	gchar * param_name;
     
     param = Extension::param_shared(name, parameters);
 
@@ -579,6 +598,11 @@ Extension::set_param (gchar * name, int value)
     }
 
     param->val.t_int = value;
+
+	param_name = g_strdup_printf("%s.%s", id, name);
+	prefs_set_int_attribute("extensions", param_name, value);
+	g_free(param_name);
+
     return value;
 }
 
@@ -609,6 +633,7 @@ gchar *
 Extension::set_param (gchar * name, gchar * value)
 {
     Extension::param_t * param;
+	gchar * param_name;
     
     if (value == NULL) {
         /* This probably isn't a good error, but the calling function
@@ -624,6 +649,11 @@ Extension::set_param (gchar * name, gchar * value)
 
     g_free(param->val.t_string);
     param->val.t_string = g_strdup(value);
+
+	param_name = g_strdup_printf("%s.%s", id, name);
+	prefs_set_string_attribute("extensions", param_name, value);
+	g_free(param_name);
+
     return value;
 }
 

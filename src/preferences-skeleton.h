@@ -158,6 +158,9 @@ static char const preferences_skeleton[] =
 "    <group id=\"transform\" stroke=\"1\" rectcorners=\"0\" pattern=\"1\" gradient=\"1\" />\n"
 "  </group>\n"
 "\n"
+"  <group id=\"extensions\">"
+"  </group>\n"
+"\n"
 "</inkscape>\n";
 
 #define PREFERENCES_SKELETON_SIZE (sizeof(preferences_skeleton) - 1)
