@@ -1994,7 +1994,7 @@ sp_text_append (SPText *text, const gchar *utf8)
 /* Returns position after inserted */
 
 gint
-sp_text_insert (SPText *text, gint pos, const gchar *utf8, gboolean preservews)
+sp_text_insert (SPText *text, gint pos, const gchar *utf8)
 {
 	SPObject *child;
 	SPString *string;
@@ -2024,12 +2024,6 @@ sp_text_insert (SPText *text, gint pos, const gchar *utf8, gboolean preservews)
 	string = SP_TEXT_CHILD_STRING (child);
 
 	ip = g_utf8_offset_to_pointer (string->text, pos - string->start);
-
-	/* fixme: Do it the right way (Lauris) */
-	// perhaps this can be removed now, as well as the preservews argument, as we now have xml:space support
-	if (!preservews && !strcmp (utf8, " ") && (ip > string->text) && *(ip - 1) == ' ') {
-		return pos;
-	}
 
 	slen = ip - string->text;
 	ulen = strlen (utf8);

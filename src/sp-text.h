@@ -147,7 +147,7 @@ SPTSpan *sp_text_insert_line (SPText *text, gint pos);
 gint sp_text_get_length (SPText *text);
 gint sp_text_append (SPText *text, const gchar *utf8);
 /* Returns position after inserted */
-gint sp_text_insert (SPText *text, gint pos, const gchar *utf8, gboolean preservews);
+gint sp_text_insert (SPText *text, gint pos, const gchar *utf8);
 /* Returns start position */
 gint sp_text_delete (SPText *text, gint start, gint end);
 
