@@ -491,13 +491,20 @@ sp_repr_remove_attribute(SPRepr *repr, SPReprAttr *attr)
 }
 
 SPRepr *
-sp_repr_parent(SPRepr *repr)
+sp_repr_parent(SPRepr const *repr)
 {
     g_assert(repr != NULL);
 
     return repr->parent;
 }
 
+/** Make \a child a child of \a repr, inserting after \a ref if non-null, or as the first
+ *  child if \a ref is null.
+ *
+ *  Requires: See block of g_asserts.
+ *            In addition: ( child->doc == repr->doc
+ *                           || all of child's children (recursively) have null doc ).
+ */
 unsigned
 sp_repr_add_child(SPRepr *repr, SPRepr *child, SPRepr *ref)
 {
@@ -650,11 +657,13 @@ sp_repr_change_order(SPRepr *repr, SPRepr *child, SPRepr *ref)
     }
 
     if (allowed) {
+        /* Remove from old position. */
         if (prev) {
             prev->next = child->next;
         } else {
             repr->children = child->next;
         }
+        /* Insert at new position. */
         if (ref) {
             child->next = ref->next;
             ref->next = child;
@@ -677,6 +686,14 @@ sp_repr_change_order(SPRepr *repr, SPRepr *child, SPRepr *ref)
     return allowed;
 }
 
+/** Note: Many if not all existing callers would be better off calling sp_repr_get_prev_sibling in
+ *  place of sp_repr_position, and passing that prev sibling to sp_repr_add_child or
+ *  sp_repr_change_order.  The main thing to watch for is if that prev sibling gets removed between
+ *  the sp_repr_get_prev_sibling / sp_repr_position call and the sp_repr_add_child /
+ *  sp_repr_change_order call; though of course this presumably already needs handling for the
+ *  sp_repr_position-based code (decrementing the position number), unless that removed prev
+ *  sibling were replaced with a different SPRepr object.
+ */
 void
 sp_repr_set_position_absolute(SPRepr *repr, int pos)
 {
@@ -684,18 +701,25 @@ sp_repr_set_position_absolute(SPRepr *repr, int pos)
 
     if (pos < 0) {
         pos = 0x7fffffff;
-        /* fixme: Would INT__MAX be better?  Better yet, should pos be unsigned?  -- pjrm. */
+        /* fixme: Would INT__MAX be better?  Better yet, should pos be unsigned?  Perhaps
+           call g_warning?  -- pjrm. */
     }
 
+    /* Find the child before child pos of parent (or NULL if pos==0). */
     SPRepr *ref = NULL;
-    SPRepr *cur = parent->children;
-    while (pos > 0 && cur) {
-        ref = cur;
-        cur = cur->next;
-        pos -= 1;
+    {
+        SPRepr *cur = parent->children;
+        while (pos > 0 && cur) {
+            ref = cur;
+            cur = cur->next;
+            pos -= 1;
+        }
     }
 
     if (ref == repr) {
+        /* FIXME: I think this test should be moved into the above loop, i.e.  we want prev to be
+           number (pos-1) of the children other than repr.  I.e. only decrement pos if ref != repr.
+           Consider the case of repr==parent->children && pos==2. */
         ref = repr->next;
         if (!ref) {
             return;
@@ -789,18 +813,6 @@ sp_repr_remove_listener_by_data(SPRepr *repr, void *data)
     }
 }
 
-SPRepr *
-sp_repr_nth_child(SPRepr const *repr, int n)
-{
-    SPRepr *child = repr->children;
-
-    while (n > 0 && child) {
-        child = child->next;
-        n -= 1;
-    }
-
-    return child;
-}
 
 /* Documents - 1st step in migrating to real XML */
 /* fixme: Do this somewhere, somehow The Right Way (TM) */

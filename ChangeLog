@@ -1,3 +1,11 @@
+2004-05-19  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
+
+	* src/xml/repr-private.h, src/xml/repr.cpp (sp_repr_nth_child):
+	  Remove this unused function.
+
+	* src/xml/repr.h, src/xml/repr.cpp (sp_repr_parent):
+	  Mark pointer as not written through (const).
+
 2004-05-18  Peter Moulder  <pmoulder@mail.csse.monash.edu.au>
 
 	* src/xml/repr.cpp: Cleanup: greater conformance to CodingStyle.
