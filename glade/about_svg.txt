@@ -1,11 +1,13 @@
 To create the about.svg from the about_svg.tmpl, do this:
 
-   * Edit the template and replace [% Release %] with the
-     current release number and [% Contributors %] with the contents of
-     the AUTHORS file.  Save as about.svg.
+   * Edit the template in a text editor and replace [% Release %] with
+     the current release number and [% Contributors %] with the contents
+     of the AUTHORS file.  Save as about.svg.
 
    * Load the about.svg in an SVG editor.  Resize the Contributors block
-     to fit in the page.  Center the revision with the other text.
+     to fit in the page.  You may need to open the text editor once on
+     the block in order for it to catch the line wrapping properly.
+     Center the revision with the other text.
 
    * Convert the text to curves, so that if someone using the program
      doesn't happen to have the proper fonts installed, the page layout
