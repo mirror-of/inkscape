@@ -1397,18 +1397,12 @@ sp_text_set_shape (SPText *text)
 
 static int sp_text_snappoints(SPItem *item, NR::Point p[], int size)
 {
-	/* We use corners of item and x,y coordinates of ellipse. */
-	/* FIXME: Update above comment once we work out what it does.  Also add changelog entry for pos++. */
+	/* We use corners of item. */
+	/* (An older version of this file added a snappoint at the baseline of the first line.
+	   Maybe we should have a snappoint at the baseline of each line?) */
 	int pos = 0;
 	if (((SPItemClass *) text_parent_class)->snappoints)
 		pos = ((SPItemClass *) text_parent_class)->snappoints (item, p, size);
-
-	if (pos < size) {
-		SPLayoutData *ly = &SP_TEXT(item)->ly;
-		p[pos++] = sp_item_i2d_affine(item) * NR::Point(ly->x.computed,
-								ly->y.computed);
-	}
-
 	return pos;
 }
 
