@@ -297,10 +297,6 @@ sp_color_rgb_to_hsl_floatv (float *hsl, float r, float g, float b)
         else 
             hsl[1] = delta / (2 - max - min);
 
-        float d_r = (((max - r ) / 6 ) + (delta / 2 ) ) / delta;
-        float d_g = (((max - g) / 6 ) + (delta / 2 ) ) / delta;
-        float d_b = (((max - b) / 6 ) + (delta / 2 ) ) / delta;
-
         if (r == max) hsl[0] = (g - b) / delta;
         else if (g == max) hsl[0] = 2.0 + (b - r) / delta;
         else if (b == max) hsl[0] = 4.0 + (r - g) / delta;
