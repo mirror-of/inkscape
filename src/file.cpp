@@ -63,9 +63,9 @@
 /* #include "extension/menu.h"  */
 #include "extension/system.h"
 
+#include "uri.h"
 
 #ifdef WIN32
-#include "uri.h"
 
 // For now to get at is_os_wide().
 #include "extension/internal/win32.h"
@@ -89,6 +89,35 @@ static gchar *import_path = NULL;
 
 void ::dump_str( const gchar* str, const gchar* prefix );
 void ::dump_ustr( const Glib::ustring& ustr );
+
+
+extern guint update_in_progress;
+
+#define DEBUG_MESSAGE(key, ...) \
+{\
+    gint dump = prefs_get_int_attribute_limited("options.bulia", #key, 0, 0, 1);\
+    gint dumpD = prefs_get_int_attribute_limited("options.bulia", #key"D", 0, 0, 1);\
+    gint dumpD2 = prefs_get_int_attribute_limited("options.bulia", #key"D2", 0, 0, 1);\
+    dumpD &= ( (update_in_progress == 0) || dumpD2 );\
+    if ( dump )\
+    {\
+        g_message( __VA_ARGS__ );\
+\
+    }\
+    if ( dumpD )\
+    {\
+        GtkWidget *dialog = gtk_message_dialog_new (NULL,\
+                                                    GTK_DIALOG_DESTROY_WITH_PARENT,\
+                                                    GTK_MESSAGE_INFO,\
+                                                    GTK_BUTTONS_OK,\
+                                                    __VA_ARGS__\
+                                                    );\
+        g_signal_connect_swapped (dialog, "response",\
+                                  G_CALLBACK (gtk_widget_destroy),\
+                                  dialog);\
+        gtk_widget_show_all( dialog );\
+    }\
+}
 
 
 /*######################
@@ -172,7 +201,7 @@ sp_file_open(gchar const *uri, Inkscape::Extension::Extension *key, bool add_to_
             desktop = SP_DESKTOP(dtw->view);
         }
         // everyone who cares now has a reference, get rid of ours
-        sp_document_unref(doc); 
+        sp_document_unref(doc);
         // resize the window to match the document properties
         // (this may be redundant for new windows... if so, move to the "virgin"
         //  section above)
@@ -372,7 +401,7 @@ sp_file_open_dialog(gpointer object, gpointer data)
 
     if (!openDialogInstance)
         {
-        openDialogInstance = 
+        openDialogInstance =
               Inkscape::UI::Dialogs::FileOpenDialog::create(
                  (char const *)open_path,
                  Inkscape::UI::Dialogs::SVG_TYPES,
@@ -674,11 +703,11 @@ sp_file_save_document(SPDocument *doc)
 
     gchar const *fn = sp_repr_attr(repr, "sodipodi:modified");
     if (fn != NULL) {
-        if (doc->uri == NULL || 
+        if (doc->uri == NULL ||
             sp_repr_attr(repr, "inkscape:output_extension") == NULL) {
             return sp_file_save_dialog(doc);
         } else {
-            fn = g_strdup(doc->uri);			
+            fn = g_strdup(doc->uri);
             gchar const *ext = sp_repr_attr(repr, "inkscape:output_extension");
             success = file_save(doc, fn, Inkscape::Extension::db.get(ext), FALSE);
             g_free((void *) fn);
@@ -687,7 +716,7 @@ sp_file_save_document(SPDocument *doc)
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No changes need to be saved."));
         success = TRUE;
     }
-    
+
     return success;
 }
 
@@ -727,10 +756,11 @@ sp_file_save_as(gpointer object, gpointer data)
 /**
  *  Import a resource.  Called by sp_file_import()
  */
-static void
+void
 file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension *key)
 {
-    SPDocument *doc;	
+    DEBUG_MESSAGE( fileImport, "file_import( in_doc:%p uri:[%s], key:%p", in_doc, uri, key );
+    SPDocument *doc;
     try {
         doc = Inkscape::Extension::open(key, uri);
     } catch (Inkscape::Extension::Input::no_extension_found &e) {
@@ -741,6 +771,15 @@ file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension
 
     if (doc != NULL) {
         // the import extension has passed us a document, now we need to embed it into our document
+        if ( 0 ) {
+//            const gchar *docbase = sp_repr_attr( sp_repr_document_root( sp_repr_document( repr ) ), "sodipodi:docbase" );
+            g_message(" settings  uri  [%s]", doc->uri );
+            g_message("           base [%s]", doc->base );
+            g_message("           name [%s]", doc->name );
+            Inkscape::IO::fixupHrefs( doc, doc->base, TRUE );
+            g_message("        mid-fixup");
+            Inkscape::IO::fixupHrefs( doc, in_doc->base, TRUE );
+        }
 
         // move imported defs to our document's defs
         SPObject *in_defs = SP_DOCUMENT_DEFS(in_doc);
@@ -982,7 +1021,7 @@ hide_other_items_recursively (SPObject *o, GSList *list, unsigned dkey)
 
 /**
  *  Render the SVG drawing onto a PNG raster image, then save to
- *  a file.  Returns TRUE if succeeded in writing the file, 
+ *  a file.  Returns TRUE if succeeded in writing the file,
  *  FALSE otherwise.
  */
 int
@@ -1156,54 +1195,174 @@ void Inkscape::IO::dump_fopen_call( char const *utf8name, char const *id )
 
 FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
 {
+    static gint counter = 0;
     FILE* fp = NULL;
 
+    DEBUG_MESSAGE( dumpOne, "entering fopen_utf8name( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
+
 #ifndef WIN32
+    DEBUG_MESSAGE( dumpOne, "           STEP 0              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
     gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
     if ( filename )
     {
+        DEBUG_MESSAGE( dumpOne, "           STEP 1              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
         fp = std::fopen(filename, mode);
+        DEBUG_MESSAGE( dumpOne, "           STEP 2              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
         g_free(filename);
+        DEBUG_MESSAGE( dumpOne, "           STEP 3              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
         filename = 0;
     }
 #else
     Glib::ustring how( mode );
     how.append("b");
+    DEBUG_MESSAGE( dumpOne, "   calling is_os_wide()       ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
     if ( PrintWin32::is_os_wide() )
     {
+        DEBUG_MESSAGE( dumpOne, "           is_os_wide() true   ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
         gunichar2 *wideName = g_utf8_to_utf16( utf8name, -1, NULL, NULL, NULL );
+        DEBUG_MESSAGE( dumpOne, "           STEP 1              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
         if ( wideName )
         {
+            DEBUG_MESSAGE( dumpOne, "           STEP 2              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
             gunichar2 *wideMode = g_utf8_to_utf16( how.c_str(), -1, NULL, NULL, NULL );
+            DEBUG_MESSAGE( dumpOne, "           STEP 3              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
             if ( wideMode )
             {
+                DEBUG_MESSAGE( dumpOne, "           STEP 4              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
                 fp = _wfopen( (wchar_t*)wideName, (wchar_t*)wideMode );
+                DEBUG_MESSAGE( dumpOne, "           STEP 5              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
                 g_free( wideMode );
+                DEBUG_MESSAGE( dumpOne, "           STEP 6              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
                 wideMode = 0;
             }
             else
             {
+                DEBUG_MESSAGE( dumpOne, "           STEP 7              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
                 g_message("Unable to convert mode from UTF-8 to UTF-16");
             }
+            DEBUG_MESSAGE( dumpOne, "           STEP 8              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
             g_free( wideName );
+            DEBUG_MESSAGE( dumpOne, "           STEP 9              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
             wideName = 0;
         }
         else
         {
+            DEBUG_MESSAGE( dumpOne, "           STEP A              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
             g_message("Unable to convert filename from UTF-8 to UTF-16");
         }
     }
     else
     {
+        DEBUG_MESSAGE( dumpOne, "           is_os_wide() false  ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
         gchar *filename = Inkscape::URI::to_native_filename(utf8name);
+        DEBUG_MESSAGE( dumpOne, "           STEP 1              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
         fp = std::fopen(filename, how.c_str());
+        DEBUG_MESSAGE( dumpOne, "           STEP 2              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
         g_free(filename);
+        DEBUG_MESSAGE( dumpOne, "           STEP 3              ( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
         filename = 0;
     }
 #endif
+
+    DEBUG_MESSAGE( dumpOne, "leaving fopen_utf8name( '%s', '%s' )[%d]", utf8name, mode, (counter++) );
+
     return fp;
 }
 
+void Inkscape::IO::fixupHrefs( SPDocument *doc, const gchar *base, gboolean spns )
+{
+    g_message("Inkscape::IO::fixupHrefs( , [%s], )", base );
+
+    if ( 0 ) {
+        gchar const* things[] = {
+            "data:foo,bar",
+            "http://www.google.com/image.png",
+            "ftp://ssd.com/doo",
+            "/foo/dee/bar.svg",
+            "foo.svg",
+            "file:/foo/dee/bar.svg",
+            "file:///foo/dee/bar.svg",
+            "file:foo.svg",
+            "/foo/bar\xe1\x84\x92.svg",
+            "file:///foo/bar\xe1\x84\x92.svg",
+            "file:///foo/bar%e1%84%92.svg",
+            "/foo/bar%e1%84%92.svg",
+            "bar\xe1\x84\x92.svg",
+            "bar%e1%84%92.svg",
+            NULL
+        };
+        g_message("+------");
+        for ( int i = 0; things[i]; i++ )
+        {
+            try
+            {
+                URI uri(things[i]);
+                gboolean isAbs = g_path_is_absolute( things[i] );
+                gchar *str = uri.toString();
+                g_message( "abs:%d  isRel:%d  scheme:[%s]  path:[%s][%s]   uri[%s] / [%s]", (int)isAbs,
+                           (int)uri.isRelative(),
+                           uri.getScheme(),
+                           uri.getPath(),
+                           uri.getOpaque(),
+                           things[i],
+                           str );
+                g_free(str);
+            }
+            catch ( MalformedURIException err )
+            {
+                dump_str( things[i], "MalformedURIException" );
+                xmlChar *redo = xmlURIEscape((xmlChar const *)things[i]);
+                g_message("    gone from [%s] to [%s]", things[i], redo );
+                if ( redo == NULL )
+                {
+                    URI again = URI::fromUtf8( things[i] );
+                    gboolean isAbs = g_path_is_absolute( things[i] );
+                    gchar *str = again.toString();
+                    g_message( "abs:%d  isRel:%d  scheme:[%s]  path:[%s][%s]   uri[%s] / [%s]", (int)isAbs,
+                               (int)again.isRelative(),
+                               again.getScheme(),
+                               again.getPath(),
+                               again.getOpaque(),
+                               things[i],
+                               str );
+                    g_free(str);
+                    g_message("    ----");
+                }
+            }
+        }
+        g_message("+------");
+    }
+
+    GSList const *images = sp_document_get_resource_list (doc, "image");
+    for (GSList const *l = images; l != NULL; l = l->next) {
+        SPRepr *ir = SP_OBJECT_REPR (l->data);
+
+        const gchar *href = sp_repr_attr (ir, "xlink:href");
+
+        // First try to figure out an absolute path to the asset
+        g_message("image href [%s]", href );
+        if (spns && !g_path_is_absolute (href)) {
+            const gchar *absref = sp_repr_attr (ir, "sodipodi:absref");
+            g_message("      absr [%s]", absref );
+
+            if ( absref && g_file_test(absref, G_FILE_TEST_EXISTS) )
+            {
+                // only switch over if the absref is still valid
+                href = absref;
+                g_message("     copied absref to href");
+            }
+        }
+
+        // Once we have an absolute path, convert it relative to the new location
+        if (href && g_path_is_absolute (href)) {
+            const gchar *relname = sp_relative_path_from_path (href, base);
+            g_message("     setting to [%s]", relname );
+            sp_repr_set_attr (ir, "xlink:href", relname);
+        }
+// TODO next refinement is to make the first choice keeping the relative path as-is if
+//      based on the new location it gives us a valid file.
+    }
+}
 
 
 /*

@@ -94,6 +94,10 @@ gboolean sp_file_save_dialog (SPDocument *doc);
  */
 void sp_file_import (GtkWidget * widget);
 
+/**
+ * Imports a resource
+ */
+void file_import(SPDocument *in_doc, gchar const *uri, Inkscape::Extension::Extension *key);
 
 /*######################
 ## E X P O R T
@@ -156,6 +160,9 @@ namespace IO {
 
 void dump_fopen_call( char const *utf8name, char const *id );
 FILE *fopen_utf8name( char const *utf8name, char const *mode );
+
+void fixupHrefs( SPDocument *doc, const gchar *uri, gboolean spns );
+
 }
 }
 
