@@ -1,7 +1,77 @@
+2004-04-07  bulia byak <bulia@users.sourceforge.net>
+
+	* icons.svg: Alignment fix
+
+	* src/select-toolbar.cpp: Swapped rotate buttons
+
+	* share/tutorials/: Cleanup, added Russian translation of basic
+
+	* extension/extension.cpp extension/system.cpp extension/internal/ps.cpp
+	extension/implementation/script/cpp: Fixes to make non-ascii filenames work again
+
+	* src/verbs.cpp: Remove xpm icon that causes trouble on win32
+
+	* share/examples/: new gradient.svg, tiger.svgz, cleanup
+
+	* src/widgets/gradient-vector.cpp: Crash fix: loading new gradient into the
+	editor does not completely reset it
+
+	* share/icons/icons.svg: New dialog icons, draw tool icons, changed colors
+
+	* src/dialogs/align.cpp src/helper/bezier-utils.cpp: remove pjrm's debug output 
+
+	* share/tutorials/: SVG cleanup: remove unused font properties, wrong radius
+	paths in ellipses (leftovers from old versions). Expanded & updated tips & tricks.
+
+	* file.cpp: Set uri on save in one place; save 'offcially' from here only
+
+	* system.cpp system.h: Remove redundant uri-setting on open and save, add
+	official arg to sp_module_system_save to prevent docname/docbase changing on
+	temporary saves
+
+	* many files: _() fixes, edits in labels, messages, tooltips, mnemonics
+
+	* src/inkscape.cpp: remove redundancy in error messages for failing to load prefs
+ 
+	* share/extensions src/extension/internal: Renaming file formats to include (*.ext)
+
+	* src/interface.cpp src/dialogs/filedialog.cpp: Transientize, make modal
+	open/save dialogs, ditto for warning overwrite and make it unresizeable
+
+	* src/dialogs/xml-tree.cpp: Do not deselect item on canvas when a non-selectable
+	thing is highlighted in xml editor
+
+	* src/sp-guide.cpp: Guide position updated after undo
+ 
+	* src/widgets/sp-xmlview-attr-list.cpp: Max length of viewable attributes
+	increased
+
+	* many files: Adib's svgostringstream patches to remove printfs
+
+	* src/selection-chemistry.cpp: Crash fix when pasting style to an object that
+	has none (e.g. group)
+
+	* src/knot.cpp: Knot dragging autoscrolls
+ 
+	* src/sp-text.cpp src/text-context.cpp: Cursor movements autoscroll
+ 
+	* src/desktop.h src/desktop.cpp: autoscrollspeed can be overridden in call to
+	sp_desktop_scroll_to_point
+
+	* src/text-context.cpp src/sp-text.cpp: Text cursor made inverse. Initial cursor
+	after click is no longer horizontal.
+
+	* src/helper/sp-ctrlline.cpp: Always-visible inversion for ctrlline
+ 
+	* src/libnrtype/nr-type-w32.cpp: Fix stretch and variant on win32 
+
+	* src/widgets/gradient-vector.cpp: Undo fix; new stop takes average of its
+	neighbors' colors; is between stops even when the last stop is selected
+
 2004-04-06  Ted Gould <ted@gould.cx>
 
 	* src/file.cpp, src/dialogs/filedialog.cpp, src/extension/extension.cpp,
-      src/extension/system.cpp:
+	src/extension/system.cpp:
 	Moving code around so that the filename extension gets put on by
 	the extension that is saving the file.  This adds a couple complications
 	in that the extension now needs to check for overwriting the file
