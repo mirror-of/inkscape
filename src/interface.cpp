@@ -57,7 +57,7 @@ static gint sp_ui_delete (GtkWidget *widget, GdkEvent *event, SPView *view);
 typedef enum {
   URI_LIST,
   SVG_XML_DATA,
-  SVG_DATA,
+  SVG_DATA
 } ui_drop_target_info;
 
 static GtkTargetEntry ui_drop_target_entries [] = {
