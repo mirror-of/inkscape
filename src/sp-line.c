@@ -21,11 +21,11 @@
 
 #define hypot(a,b) sqrt ((a) * (a) + (b) * (b))
 
-static void sp_line_class_init (SPLineClass *class);
+static void sp_line_class_init (SPLineClass *klass);
 static void sp_line_init (SPLine *line);
 
 static void sp_line_build (SPObject * object, SPDocument * document, SPRepr * repr);
-static void sp_line_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_line_set (SPObject *object, unsigned int key, const gchar *value);
 static SPRepr *sp_line_write (SPObject *object, SPRepr *repr, guint flags);
 
 static gchar *sp_line_description (SPItem * item);
@@ -46,29 +46,29 @@ sp_line_get_type (void)
 			NULL,	/* base_init */
 			NULL,	/* base_finalize */
 			(GClassInitFunc) sp_line_class_init,
-			NULL,	/* class_finalize */
-			NULL,	/* class_data */
+			NULL,	/* klass_finalize */
+			NULL,	/* klass_data */
 			sizeof (SPLine),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_line_init,
 		};
-		line_type = g_type_register_static (SP_TYPE_SHAPE, "SPLine", &line_info, 0);
+		line_type = g_type_register_static (SP_TYPE_SHAPE, "SPLine", &line_info, (GTypeFlags)0);
 	}
 	return line_type;
 }
 
 static void
-sp_line_class_init (SPLineClass *class)
+sp_line_class_init (SPLineClass *klass)
 {
 	GObjectClass * gobject_class;
 	SPObjectClass * sp_object_class;
 	SPItemClass * item_class;
 
-	gobject_class = (GObjectClass *) class;
-	sp_object_class = (SPObjectClass *) class;
-	item_class = (SPItemClass *) class;
+	gobject_class = (GObjectClass *) klass;
+	sp_object_class = (SPObjectClass *) klass;
+	item_class = (SPItemClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_SHAPE);
+	parent_class = (SPShapeClass *)g_type_class_ref (SP_TYPE_SHAPE);
 
 	sp_object_class->build = sp_line_build;
 	sp_object_class->set = sp_line_set;
@@ -102,7 +102,7 @@ sp_line_build (SPObject * object, SPDocument * document, SPRepr * repr)
 }
 
 static void
-sp_line_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_line_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPLine * line;
 
@@ -190,7 +190,7 @@ sp_line_write_transform (SPItem *item, SPRepr *repr, NRMatrixF *t)
 	/* And last but not least */
 	if ((fabs (sw - 1.0) > 1e-9) || (fabs (sh - 1.0) > 1e-9)) {
 		SPStyle *style;
-		guchar *str;
+		gchar *str;
 		/* Scale changed, so we have to adjust stroke width */
 		style = SP_OBJECT_STYLE (item);
 		style->stroke_width.computed *= sqrt (fabs (sw * sh));

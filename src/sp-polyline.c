@@ -18,11 +18,11 @@
 #include "sp-polyline.h"
 #include "helper/sp-intl.h"
 
-static void sp_polyline_class_init (SPPolyLineClass *class);
+static void sp_polyline_class_init (SPPolyLineClass *klass);
 static void sp_polyline_init (SPPolyLine *polyline);
 
 static void sp_polyline_build (SPObject * object, SPDocument * document, SPRepr * repr);
-static void sp_polyline_set (SPObject *object, unsigned int key, const unsigned char *value);
+static void sp_polyline_set (SPObject *object, unsigned int key, const gchar *value);
 static SPRepr *sp_polyline_write (SPObject *object, SPRepr *repr, guint flags);
 
 static gchar * sp_polyline_description (SPItem * item);
@@ -40,29 +40,29 @@ sp_polyline_get_type (void)
 			NULL,	/* base_init */
 			NULL,	/* base_finalize */
 			(GClassInitFunc) sp_polyline_class_init,
-			NULL,	/* class_finalize */
-			NULL,	/* class_data */
+			NULL,	/* klass_finalize */
+			NULL,	/* klass_data */
 			sizeof (SPPolyLine),
 			16,	/* n_preallocs */
 			(GInstanceInitFunc) sp_polyline_init,
 		};
-		polyline_type = g_type_register_static (SP_TYPE_SHAPE, "SPPolyLine", &polyline_info, 0);
+		polyline_type = g_type_register_static (SP_TYPE_SHAPE, "SPPolyLine", &polyline_info, (GTypeFlags)0);
 	}
 	return polyline_type;
 }
 
 static void
-sp_polyline_class_init (SPPolyLineClass *class)
+sp_polyline_class_init (SPPolyLineClass *klass)
 {
 	GObjectClass * gobject_class;
 	SPObjectClass * sp_object_class;
 	SPItemClass * item_class;
 
-	gobject_class = (GObjectClass *) class;
-	sp_object_class = (SPObjectClass *) class;
-	item_class = (SPItemClass *) class;
+	gobject_class = (GObjectClass *) klass;
+	sp_object_class = (SPObjectClass *) klass;
+	item_class = (SPItemClass *) klass;
 
-	parent_class = g_type_class_ref (SP_TYPE_SHAPE);
+	parent_class = (SPShapeClass *)g_type_class_ref (SP_TYPE_SHAPE);
 
 	sp_object_class->build = sp_polyline_build;
 	sp_object_class->set = sp_polyline_set;
@@ -88,7 +88,7 @@ sp_polyline_build (SPObject * object, SPDocument * document, SPRepr * repr)
 }
 
 static void
-sp_polyline_set (SPObject *object, unsigned int key, const unsigned char *value)
+sp_polyline_set (SPObject *object, unsigned int key, const gchar *value)
 {
 	SPPolyLine *polyline;
 
