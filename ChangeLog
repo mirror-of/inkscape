@@ -1,3 +1,28 @@
+2004-07-11  Carl Hetherington  <inkscape@carlh.net>
+
+	* src/attributes.cpp, src/attributes.h: remove confusing
+	snaptogrid and snaptoguides options.
+
+	* src/desktop-events.cpp: use inkscape:guide-bbox instead of
+	snaptoguides to turn guides on.
+
+	* src/desktop.cpp: no need to worry about Snapper::getEnabled().
+
+	* src/snap.cpp, src/snap.h: Remove explicit enabled flag from
+	Snapper, as itconfuses people.  Added
+	namedview_dim_snap_all_types().  Return useful stuff from
+	vector_snap_list.
+
+	* src/rect-context.cpp: Use hack to make snapping kind of work
+	even with snap-to-bbox enabled.
+
+	* src/sp-namedview.cpp, src/dialogs/desktop-properties.cpp: remove
+	snaptogrid and snaptoguides options as they confuse people.  Use
+	better names for the scale origin radio buttons, as suggested by
+	Bulia.
+
+	* src/seltrans.cpp: Fix some cases where snap wasn't correctly applied.
+
 2004-07-10  MenTaLguY  <mental@rydia.net>
 
 	* src/sp-image.cpp: prospective fix for bug #979858
