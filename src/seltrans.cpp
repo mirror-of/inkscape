@@ -263,7 +263,7 @@ void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const &p, gdouble x, gdou
 
 	if (seltrans->empty) return;
 
-	for(const GSList *l = sp_selection_item_list (selection); l; l = l->next) {
+	for(const GSList *l = selection->itemList(); l; l = l->next) {
 		SPItem* it = (SPItem*)sp_object_ref (SP_OBJECT (l->data), NULL);
 		seltrans->items.push_back(std::pair<SPItem *,NR::Matrix>(it, sp_item_i2d_affine (it)));
 	}
@@ -272,7 +272,7 @@ void sp_sel_trans_grab(SPSelTrans *seltrans, NR::Point const &p, gdouble x, gdou
 
 	seltrans->point = p;
 
-	seltrans->spp_length = sp_selection_snappoints (selection, seltrans->spp, SP_SELTRANS_SPP_SIZE);
+	seltrans->spp_length = selection->getSnapPoints (seltrans->spp, SP_SELTRANS_SPP_SIZE);
 
 	seltrans->opposit = ( seltrans->box.min()
 			      + ( seltrans->box.dimensions()
@@ -404,27 +404,37 @@ sp_object_compare_position (SPObject *a, SPObject *b)
 
 void sp_sel_trans_stamp (SPSelTrans *seltrans)
 {
+	SPSelection *selection = SP_DT_SELECTION (seltrans->desktop);
+
 	/* stamping mode */
 	if (!seltrans->empty) {
 		GSList *l;
-                if (seltrans->stamp_cache) {
-                        l = seltrans->stamp_cache;
-                } else {
-                        /* Build cache */
-                        l  = (GSList *) sp_selection_item_list (SP_DT_SELECTION (seltrans->desktop));
-                        l  = g_slist_copy (l);
-                        l  = g_slist_sort (l, (GCompareFunc) sp_object_compare_position);
-                        seltrans->stamp_cache = l;
-                }
+		if (seltrans->stamp_cache) {
+			l = seltrans->stamp_cache;
+		} else {
+			/* Build cache */
+			l  = g_slist_copy ((GSList *) selection->itemList ());
+			l  = g_slist_sort (l, (GCompareFunc) sp_object_compare_position);
+			seltrans->stamp_cache = l;
+		}
 
-		gchar tstr[80];
-		tstr[79] = '\0';
 		while (l) {
 			SPItem *original_item = SP_ITEM(l->data);
-			SPRepr *original_repr = (SPRepr *) (SP_OBJECT(original_item)->repr);
-			SPRepr *copy_repr = sp_repr_duplicate(original_repr);
-			SPItem *copy_item = (SPItem *) sp_document_add_repr(SP_DT_DOCUMENT(seltrans->desktop),
-									    copy_repr);
+			SPRepr *original_repr = SP_OBJECT_REPR (original_item);
+
+			// remember the position of the item
+			gint pos = sp_repr_position (original_repr);
+			// remember parent
+			SPRepr *parent = sp_repr_parent (original_repr);
+
+			SPRepr *copy_repr = sp_repr_duplicate (original_repr);
+
+			// add the new repr to the parent
+			sp_repr_append_child (parent, copy_repr);
+			// move to the saved position 
+			sp_repr_set_position_absolute (copy_repr, pos > 0 ? pos : 0);
+
+			SPItem *copy_item = (SPItem *) sp_document_lookup_id (SP_DT_DOCUMENT(seltrans->desktop), sp_repr_attr (copy_repr, "id"));
 
 			NRMatrix *new_affine;
 			if (seltrans->show == SP_SELTRANS_SHOW_OUTLINE) {
@@ -436,11 +446,8 @@ void sp_sel_trans_stamp (SPSelTrans *seltrans)
 				new_affine = &original_item->transform;
 			}
 
-			if (sp_svg_transform_write (tstr, 80, new_affine)) {
-				sp_repr_set_attr (copy_repr, "transform", tstr);
-			} else {
-				sp_repr_set_attr (copy_repr, "transform", NULL);
-			}
+			sp_item_write_transform (copy_item, copy_repr, new_affine);
+
 			sp_repr_unref (copy_repr);
 			l = l->next;
 		}
@@ -503,13 +510,13 @@ static void sp_sel_trans_update_handles(SPSelTrans &seltrans)
 static void sp_sel_trans_update_volatile_state(SPSelTrans &seltrans)
 {
 	SPSelection *selection = SP_DT_SELECTION(seltrans.desktop);
-	seltrans.empty = sp_selection_is_empty(selection);
+	seltrans.empty = selection->isEmpty();
 
 	if (seltrans.empty) {
 		return;
 	}
 
-	seltrans.box = sp_selection_bbox(selection);
+	seltrans.box = selection->bounds();
 	if (seltrans.box.isEmpty()) {
 		seltrans.empty = TRUE;
 		return;
