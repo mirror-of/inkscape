@@ -333,7 +333,8 @@ sp_main_console (int argc, const char **argv)
 
 #ifdef WITH_XFT
 	/* Still have to init gdk, or Xft does not work */
-	gdk_init (&argc, (char ***) &argv);
+	//gdk_init (&argc, (char ***) &argv);
+	g_type_init();
 #endif
 
 	Inkscape::Extension::init();
