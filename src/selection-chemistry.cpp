@@ -65,14 +65,18 @@ void sp_selection_delete()
 		return;
 	}
 
-	GSList *selected = g_slist_copy ((GSList *) selection->reprList());
+	GSList *selected = g_slist_copy(const_cast<GSList *>(selection->itemList()));
+	GSList *iter;
+	for ( iter = selected ; iter ; iter = iter->next ) {
+		sp_object_ref((SPObject *)iter->data, NULL);
+	}
 	selection->clear();
 
 	while (selected) {
-		SPRepr *repr = (SPRepr *) selected->data;
-		if (sp_repr_parent (repr))
-		  sp_repr_unparent (repr);
-		selected = g_slist_remove (selected, selected->data);
+		SPItem *item = (SPItem *)selected->data;
+		SP_OBJECT(item)->deleteObject();
+		sp_object_unref((SPObject *)item, NULL);
+		selected = g_slist_remove(selected, selected->data);
 	}
 
 	sp_document_done (SP_DT_DOCUMENT (desktop));

@@ -37,6 +37,7 @@
 
 static void sp_use_class_init (SPUseClass *classname);
 static void sp_use_init (SPUse *use);
+static void sp_use_finalize (GObject *obj);
 
 static void sp_use_build (SPObject * object, SPDocument * document, SPRepr * repr);
 static void sp_use_release (SPObject *object);
@@ -51,8 +52,9 @@ static gchar * sp_use_description (SPItem * item);
 static NRArenaItem *sp_use_show (SPItem *item, NRArena *arena, unsigned int key, unsigned int flags);
 static void sp_use_hide (SPItem *item, unsigned int key);
 
-//static void sp_use_href_changed (SPUse * use);
 static void sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use);
+
+static void sp_use_delete_self(SPObject *deleted, SPUse *self);
 
 static SPItemClass * parent_class;
 
@@ -94,6 +96,8 @@ sp_use_class_init (SPUseClass *classname)
 
 	parent_class = (SPItemClass*)g_type_class_ref (SP_TYPE_ITEM);
 
+	gobject_class->finalize = sp_use_finalize;
+
 	sp_object_class->build = sp_use_build;
 	sp_object_class->release = sp_use_release;
 	sp_object_class->set = sp_use_set;
@@ -111,15 +115,30 @@ sp_use_class_init (SPUseClass *classname)
 static void
 sp_use_init (SPUse * use)
 {
-	use->ref = new SPUseReference(SP_OBJECT(use));
-	use->ref->changedSignal().connect(SigC::bind(SigC::slot(sp_use_href_changed), use));
-
 	sp_svg_length_unset (&use->x, SP_SVG_UNIT_NONE, 0.0, 0.0);
 	sp_svg_length_unset (&use->y, SP_SVG_UNIT_NONE, 0.0, 0.0);
 	sp_svg_length_unset (&use->width, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 	sp_svg_length_unset (&use->height, SP_SVG_UNIT_PERCENT, 1.0, 1.0);
 	use->href = NULL;
 	use->original_repr_changed = false;
+
+	new (&use->_delete_connection) SigC::Connection();
+	new (&use->_changed_connection) SigC::Connection();
+
+	use->ref = new SPUseReference(SP_OBJECT(use));
+
+	use->_changed_connection = use->ref->changedSignal().connect(SigC::bind(SigC::slot(sp_use_href_changed), use));
+}
+
+static void
+sp_use_finalize(GObject *obj)
+{
+	SPUse *use=(SPUse *)obj;
+
+	delete use->ref;
+
+	use->_delete_connection.~Connection();
+	use->_changed_connection.~Connection();
 }
 
 static void
@@ -150,13 +169,13 @@ sp_use_release (SPObject *object)
 
 	use->child = NULL;
 
-	g_free (use->href);
+	use->_delete_connection.disconnect();
+	use->_changed_connection.disconnect();
 
-	if (use->ref) {
-		use->ref->detach();
-		delete use->ref;
-		use->ref = NULL;
-	}
+	g_free (use->href);
+	use->href = NULL;
+
+	use->ref->detach();
 }
 
 static void
@@ -536,6 +555,8 @@ sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use)
 {
 	SPItem *item = SP_ITEM (use);
 
+	use->_delete_connection.disconnect();
+
 	if (use->child) {
 		sp_object_detach_unref (SP_OBJECT (use), use->child);
 		use->child = NULL;
@@ -562,6 +583,7 @@ sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use)
 				}
 
 			}
+			use->_delete_connection = SP_OBJECT(refobj)->connectDelete(SigC::bind(SigC::slot(&sp_use_delete_self), use));
 		}
 	}
 
@@ -578,6 +600,12 @@ sp_use_href_changed (SPObject *old_ref, SPObject *ref, SPUse * use)
                  sp_repr_add_listener (use->repr, &use_repr_events, use); 	 
                  sp_repr_synthesize_events (use->repr, &use_repr_events, use); 	 
          }
+}
+
+static void
+sp_use_delete_self(SPObject *deleted, SPUse *self)
+{
+	SP_OBJECT(self)->deleteObject();
 }
 
 static void

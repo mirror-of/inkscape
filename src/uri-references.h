@@ -66,12 +66,19 @@ public:
 	void detach();
 
 	/**
-	 * Returns a pointer to the current referrent of the attached
-	 * URI, or NULL.
+	 * @brief Returns a pointer to the current referrent of the
+	 * attached URI, or NULL.
 	 *
 	 * @return a pointer to the referenced SPObject or NULL
 	 */
 	SPObject *getObject() const { return _obj; }
+
+	/**
+	 * @brief Returns a pointer to the URIReference's owner
+	 *
+	 * @return a pointer to the URIReference's owner
+	 */
+	SPObject *getOwner() const { return _obj; }
 
 	/**
 	 * Accessor for the referrent change notification signal;

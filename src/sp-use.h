@@ -13,6 +13,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <sigc++/sigc++.h>
 #include "svg/svg-types.h"
 #include "sp-item.h"
 
@@ -24,7 +25,18 @@ public:
 	}
 protected:
 	bool _acceptObject(SPObject *obj) const {
-		return SP_IS_ITEM(obj);
+		if (SP_IS_ITEM(obj)) {
+			SPObject *owner=getOwner();
+			/* refuse references to us or to an ancestor */
+			for ( SPObject *iter=obj ; obj ; obj = SP_OBJECT_PARENT(obj) ) {
+				if ( iter == owner ) {
+					return false;
+				}
+			}
+			return true;
+		} else {
+			return false;
+		}
 	}
 };
 
@@ -55,6 +67,10 @@ struct SPUse {
 
 	// the reference to the original object
 	SPUseReference *ref;
+
+	// a sigc connection for delete notifications
+	SigC::Connection _delete_connection;
+	SigC::Connection _changed_connection;
 
 	// the bbox of the original, for sensing its movements and compensation
 	NR::Rect original;

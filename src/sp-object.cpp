@@ -146,18 +146,20 @@ sp_object_init (SPObject * object)
 	object->repr = NULL;
 	object->id = NULL;
 	object->style = NULL;
+
+	new (&object->_delete_signal) SigC::Signal1<void, SPObject *>();
 }
 
 static void
 sp_object_finalize (GObject * object)
 {
-	SPObject *spobject;
-
-	spobject = (SPObject *) object;
+	SPObject *spobject=(SPObject *)object;
 
 	if (((GObjectClass *) (parent_class))->finalize) {
 		(* ((GObjectClass *) (parent_class))->finalize) (object);
 	}
+
+	spobject->_delete_signal.~Signal1();
 }
 
 /*
@@ -212,6 +214,16 @@ sp_object_hunref (SPObject *object, gpointer owner)
 	object->hrefcount--;
 
 	return NULL;
+}
+
+void SPObject::deleteObject(bool propagate) {
+	if (propagate) {
+		_delete_signal.emit(this);
+	}
+	SPRepr *repr=SP_OBJECT_REPR(this);
+	if (sp_repr_parent(repr)) {
+		sp_repr_unparent(repr);
+	}
 }
 
 /*

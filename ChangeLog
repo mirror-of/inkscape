@@ -16,6 +16,28 @@
 	  removed dead assertion (it's always valid to retrieve the
 	  translation component of a matrix)
 
+    * src/selection-chemistry.cpp:
+
+	  delete items via SPItem (SPObject), not repr
+
+	* src/sp-object.h, src/sp-object.cpp:
+
+	  added SPObject::deleteObject() and a delete notification signal;
+	  SPObject now inherits from GObject in the C++ sense
+
+    * src/sp-use.h:
+
+	  don't accept references to the use or its ancestors (preventing
+	  infinite loops)
+
+	* src/sp-use.cpp, src/sp-use.h:
+
+	  added automatic deletion when referrent is deleted
+
+    * src/uri-reference.h:
+
+	  added URIReference::getOwner()
+
 2004-04-29  Carl Hetherington <inkscape@carlh.net>
 
 	* src/extension/internal/win32.cpp: add textToPath parameter to

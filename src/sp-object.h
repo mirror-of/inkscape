@@ -55,6 +55,7 @@
 #define SP_OBJECT_TITLE(o) sp_object_title_get ((SPObject *) (o))
 #define SP_OBJECT_DESCRIPTION(o) sp_object_description_get ((SPObject *) (o))
 
+#include <sigc++/sigc++.h>
 #include <glib-object.h>
 #include "xml/repr.h"
 #include "forward.h"
@@ -108,8 +109,7 @@ struct SPIXmlSpace {
 	guint value : 1;
 };
 
-struct SPObject {
-	GObject object;
+struct SPObject : public GObject {
 	unsigned int cloned : 1;
 	unsigned int uflags : 8;
 	unsigned int mflags : 8;
@@ -122,6 +122,14 @@ struct SPObject {
 	SPRepr *repr; /* Our xml representation */
 	gchar *id; /* Our very own unique id */
 	SPStyle *style;
+
+	void deleteObject(bool propagate=true);
+
+	SigC::Connection connectDelete(SigC::Slot1<void, SPObject *> slot) {
+		return _delete_signal.connect(slot);
+	}
+
+	SigC::Signal1<void, SPObject *> _delete_signal;
 };
 
 struct SPObjectClass {
