@@ -491,8 +491,10 @@ sp_style_read (SPStyle *style, SPObject *object, SPRepr *repr)
     }
     if (!style->stroke_dasharray_set) {
         val = sp_repr_attr (repr, "stroke-dasharray");
+			if ( val ) {
         sp_style_read_dash (&style->stroke_dash, val);
         style->stroke_dasharray_set = TRUE;
+			}
     }
     if (!style->stroke_dashoffset_set) {
         /* fixme */

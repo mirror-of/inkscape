@@ -219,7 +219,6 @@ nr_arena_glyphs_update (NRArenaItem *item, NRRectL *area, NRGC *gc, guint state,
         nstyl.dashes=(double*)malloc(nstyl.nbDash*sizeof(double));
 		    for (int i = 0; i < nstyl.nbDash; i++) nstyl.dashes[i]= glyphs->style->stroke_dash.dash[i] * scale;
   		}
-      
 		  rfont = glyphs->font->RasterFont( nstyl);
       if ( nstyl.dashes ) free(nstyl.dashes);
 		  if (glyphs->sfont) glyphs->sfont->Unref();
@@ -375,7 +374,7 @@ nr_arena_glyphs_pick (NRArenaItem *item, NR::Point p, gdouble delta, unsigned in
 	const double x = p[NR::X];
 	const double y = p[NR::Y];
 	/* fixme: pt in rect*/
-	if ((x >= item->bbox.x0) && (y >= item->bbox.y0) && (x < item->bbox.x1) && (y < item->bbox.y1)) return item;
+	if ((x >= item->bbox.x0) && (y >= item->bbox.y0) && (x <= item->bbox.x1) && (y <= item->bbox.y1)) return item;
 
 /*	NR::Point const thePt = p;
 		if (glyphs->stroke_shp && (glyphs->style->stroke.type != SP_PAINT_TYPE_NONE)) {

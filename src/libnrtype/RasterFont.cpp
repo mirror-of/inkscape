@@ -71,6 +71,7 @@ raster_font::~raster_font(void)
 	if ( daddy ) daddy->RemoveRasterFont(this);
 	daddy=NULL;
   if ( style.dashes ) free(style.dashes);
+	style.dashes=NULL;
 	for (int i=0;i<nbBase;i++) delete bases[i];
   if ( bases ) free(bases);
 }

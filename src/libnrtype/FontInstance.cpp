@@ -694,25 +694,30 @@ raster_font* font_instance::RasterFont(const NR::Matrix &trs,double stroke_width
 	return RasterFont(nStyle);
 }
 
-raster_font* font_instance::RasterFont(const font_style &nStyle)
+raster_font* font_instance::RasterFont(const font_style &inStyle)
 {
 	raster_font  *res=NULL;
+	double *savDashes=NULL;
+	font_style nStyle=inStyle;
+	if ( nStyle.stroke_width > 0 && nStyle.nbDash > 0 && nStyle.dashes ) {
+		savDashes=nStyle.dashes;
+		nStyle.dashes=(double*)malloc(nStyle.nbDash*sizeof(double));
+		memcpy(nStyle.dashes,savDashes,nStyle.nbDash*sizeof(double));
+	}
 	if ( loadedStyles.find(nStyle) == loadedStyles.end() ) {
 		raster_font  *nR=new raster_font;
 		nR->style=nStyle;
-		if ( nStyle.stroke_width > 0 && nStyle.nbDash > 0 && nStyle.dashes ) {
-			nR->style.dashes=(double*)malloc(nStyle.nbDash*sizeof(double));
-			memcpy(nR->style.dashes,nStyle.dashes,nStyle.nbDash*sizeof(double));
-		}
 		nR->Ref();
 		nR->daddy=this;
 		loadedStyles[nStyle]=nR;
 		res=nR;
 		if ( res ) Ref();
 	} else {
+		if ( nStyle.dashes ) free(nStyle.dashes); // since they're not taken by a new rasterfont
 		res=loadedStyles[nStyle];
 		res->Ref();
 	}
+	nStyle.dashes=savDashes;
 	return res;
 }
 
@@ -720,7 +725,7 @@ void font_instance::RemoveRasterFont(raster_font* who)
 {
 	if ( who == NULL ) return;
 	if ( loadedStyles.find(who->style) == loadedStyles.end() ) {
-		printf("RemoveRasterFont failed\n");
+		printf("RemoveRasterFont failed \n");
 		// not found
 	} else {
 		loadedStyles.erase(loadedStyles.find(who->style));
